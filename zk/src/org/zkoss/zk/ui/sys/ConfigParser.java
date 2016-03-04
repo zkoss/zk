@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
@@ -89,19 +90,17 @@ public class ConfigParser {
 	 * It is the same as checkVersion(url, doc, false).
 	 * @since 3.5.0
 	 */
-	public static boolean checkVersion(URL url, Document doc)
-	throws Exception {
+	public static boolean checkVersion(URL url, Document doc) throws Exception {
 		return checkVersion(url, doc, false);
 	}
+
 	/** Checks and returns whether the loaded document's version is correct.
 	 * @param zk5required whether ZK 5 or later is required.
 	 * If true and zk-version is earlier than 5, doc will be ignored
 	 * (and false is returned).
 	 * @since 5.0.0
 	 */
-	public static
-	boolean checkVersion(URL url, Document doc, boolean zk5required)
-	throws Exception {
+	public static boolean checkVersion(URL url, Document doc, boolean zk5required) throws Exception {
 		final Element el = doc.getRootElement().getElement("version");
 		if (el == null)
 			return true; //version is optional (3.0.5)
@@ -113,11 +112,11 @@ public class ConfigParser {
 		if (s != null) {
 			final int[] reqzkver = Utils.parseVersion(s);
 			if (Utils.compareVersion(_zkver, reqzkver) < 0) {
-				log.info("Ignore "+url+"\nCause: ZK version must be "+s+" or later, not "+Version.UID);
+				log.info("Ignore " + url + "\nCause: ZK version must be " + s + " or later, not " + Version.UID);
 				return false;
 			}
 			if (zk5required && reqzkver.length > 0 && reqzkver[0] < 5) {
-				log.info("Ingore "+url+"\nCause: version "+s+" not supported");
+				log.info("Ingore " + url + "\nCause: version " + s + " not supported");
 				return false;
 			}
 		}
@@ -126,16 +125,16 @@ public class ConfigParser {
 		if (clsnm == null) {
 			return true; //version is optional 3.0.5
 		}
-		
+
 		if (clsnm.length() == 0)
-			log.warn("Ignored: empty version-class, "+el.getLocator());
+			log.warn("Ignored: empty version-class, " + el.getLocator());
 
 		final String uid = IDOMs.getRequiredElementValue(el, "version-uid");
 		final Class cls = Classes.forNameByThread(clsnm);
 		final Field fld = cls.getField("UID");
-		final String uidInClass = (String)fld.get(null);
+		final String uidInClass = (String) fld.get(null);
 		if (!uid.equals(uidInClass)) {
-			log.info("Ignore "+url+"\nCause: version not matched; expected="+uidInClass+", xml="+uid);
+			log.info("Ignore " + url + "\nCause: version not matched; expected=" + uidInClass + ", xml=" + uid);
 			return false;
 		}
 
@@ -161,12 +160,9 @@ public class ConfigParser {
 		synchronized (ConfigParser.class) {
 			syscfgLoaded = _syscfgLoaded;
 			_syscfgLoaded = true;
-			syscfgLoadedConfig = config != null ?
-				_syscfgLoadedConfigs.put(
-					new Integer(System.identityHashCode(config)),
-						//chance of two instances with same code is almost zero
-					Boolean.TRUE) != null:
-				syscfgLoaded;
+			syscfgLoadedConfig = config != null ? _syscfgLoadedConfigs.put(new Integer(System.identityHashCode(config)),
+					//chance of two instances with same code is almost zero
+					Boolean.TRUE) != null : syscfgLoaded;
 		}
 		if (!syscfgLoaded)
 			log.info("Loading system default");
@@ -174,14 +170,14 @@ public class ConfigParser {
 			return; //nothing to do
 
 		try {
-			final XMLResourcesLocator locator =
-				org.zkoss.zk.ui.impl.Utils.getXMLResourcesLocator();
-			final List<XMLResourcesLocator.Resource> xmls = locator.getDependentXMLResources(
-				"metainfo/zk/config.xml", "config-name", "depends");
+			final XMLResourcesLocator locator = org.zkoss.zk.ui.impl.Utils.getXMLResourcesLocator();
+			final List<XMLResourcesLocator.Resource> xmls = locator.getDependentXMLResources("metainfo/zk/config.xml",
+					"config-name", "depends");
 
 			Registry reg = Registry.getInstance();
-			for (XMLResourcesLocator.Resource res: xmls) {
-				if (log.isDebugEnabled()) log.debug("Loading "+res.url);
+			for (XMLResourcesLocator.Resource res : xmls) {
+				if (log.isDebugEnabled())
+					log.debug("Loading " + res.url);
 				try {
 					if (checkVersion(res.url, res.document)) {
 						try {
@@ -190,21 +186,21 @@ public class ConfigParser {
 							if (end >= 0) {
 								InputStream inputStream = null;
 								try {
-									path = path.substring(0, end + 1)
-											+ Strings.toString(Registry.PREFS_0);
+									path = path.substring(0, end + 1) + Strings.toString(Registry.PREFS_0);
 									inputStream = new URL(path).openStream();
 									if (inputStream != null) {
 										Properties props = new Properties();
 										props.load(inputStream);
 										for (Map.Entry<Object, Object> me : props.entrySet())
-											reg.addKeys((String)me.getKey(), (String)me.getValue());
+											reg.addKeys((String) me.getKey(), (String) me.getValue());
 									}
 								} finally {
 									if (inputStream != null)
 										inputStream.close();
 								}
 							}
-						} catch (Exception e) {}
+						} catch (Exception e) {
+						}
 						final Element el = res.document.getRootElement();
 						if (!syscfgLoaded) {
 							parseSubZScriptConfig(el);
@@ -223,38 +219,38 @@ public class ConfigParser {
 							parseListeners(config, el);
 							parsePreferences(config, el);
 							//F80 - store subtree's binder annotation count
-							if (config.getBinderInitAttribute() == null && "zkbind".equals(el.getElement("config-name").getText()))
+							if (config.getBinderInitAttribute() == null
+									&& "zkbind".equals(el.getElement("config-name").getText()))
 								parseBinderConfig(config, el);
 						}
 					}
 				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex, "Failed to load "+res.url);
-						//abort since it is hardly to work then
+					throw UiException.Aide.wrap(ex, "Failed to load " + res.url);
+					//abort since it is hardly to work then
 				}
 			}
 		} catch (java.io.IOException ex) {
 			throw UiException.Aide.wrap(ex); //abort
 		}
 	}
+
 	private static void parseSubZScriptConfig(Element root) {
-		for (Iterator it = root.getElements("zscript-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Iterator it = root.getElements("zscript-config").iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 			Interpreters.add(el);
-				//Note: zscript-config is applied to the whole system, not just langdef
+			//Note: zscript-config is applied to the whole system, not just langdef
 		}
 	}
+
 	private static void parseSubDeviceConfig(Element root) {
-		for (Iterator it = root.getElements("device-config").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Iterator it = root.getElements("device-config").iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 			Devices.add(el);
 		}
 	}
-	private static
-	void parseSubSystemConfig(Configuration config, Element root)
-	throws Exception {
-		for (Element el: root.getElements("system-config")) {
+
+	private static void parseSubSystemConfig(Configuration config, Element root) throws Exception {
+		for (Element el : root.getElements("system-config")) {
 			if (config != null) {
 				parseSystemConfig(config, el);
 			} else {
@@ -270,27 +266,27 @@ public class ConfigParser {
 			}
 		}
 	}
+
 	/** Unlike other private parseXxx, config might be null. */
-	private static
-	void parseSubClientConfig(Configuration config, Element root)
-	throws Exception {
-		for (Element el: root.getElements("client-config")) {
+	private static void parseSubClientConfig(Configuration config, Element root) throws Exception {
+		for (Element el : root.getElements("client-config")) {
 			if (config != null) {
 				parseClientConfig(config, el);
 			}
 		}
 	}
-	private static void parseListeners(Configuration config, Element root)
-	throws Exception {
-		for (Element el: root.getElements("listener")) {
+
+	private static void parseListeners(Configuration config, Element root) throws Exception {
+		for (Element el : root.getElements("listener")) {
 			parseListener(config, el);
 		}
 	}
+
 	private static void parseListener(Configuration config, Element el) {
 		try {
 			config.addListener(parseClass(el, "listener-class", null, true));
 		} catch (Exception ex) {
-			log.error("Unable to load a listener, "+el.getLocator(), ex);
+			log.error("Unable to load a listener, " + el.getLocator(), ex);
 		}
 	}
 
@@ -298,33 +294,29 @@ public class ConfigParser {
 	 *
 	 * @param url the URL of zk.xml.
 	 */
-	public void parse(URL url, Configuration config, Locator locator)
-	throws Exception {
+	public void parse(URL url, Configuration config, Locator locator) throws Exception {
 		if (url == null || config == null)
 			throw new IllegalArgumentException("null");
-		log.info("Parsing "+url);
-		parse(new SAXBuilder(true, false, true).build(url).getRootElement(),
-			config, locator);
+		log.info("Parsing " + url);
+		parse(new SAXBuilder(true, false, true).build(url).getRootElement(), config, locator);
 	}
+
 	/** Parses zk.xml from an input stream into the configuration.
 	 * @param is the input stream of zk.xml
 	 * @since 5.0.7
 	 */
-	public void parse(InputStream is, Configuration config, Locator locator)
-	throws Exception {
+	public void parse(InputStream is, Configuration config, Locator locator) throws Exception {
 		if (is == null || config == null)
 			throw new IllegalArgumentException("null");
-		parse(new SAXBuilder(true, false, true).build(is).getRootElement(),
-			config, locator);
+		parse(new SAXBuilder(true, false, true).build(is).getRootElement(), config, locator);
 	}
+
 	/** Parses zk.xml, specified by the root element.
 	 * @since 3.0.1
 	 */
-	public void parse(Element root, Configuration config, Locator locator)
-	throws Exception {
-		l_out:
-		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
-			final Element el = (Element)it.next();
+	public void parse(Element root, Configuration config, Locator locator) throws Exception {
+		l_out: for (Iterator it = root.getElements().iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 			final String elnm = el.getName();
 			// B65-ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml may get overridden by default
 			//   config-name/depends elements were introduced to enforce that default configurations are  
@@ -332,21 +324,18 @@ public class ConfigParser {
 			//   and ThemeResolver will not get overridden by using flag variables. But multiple such
 			//   configurations in different metainfo/zk/zk.xml still needs to be resolved by the assistance
 			//   of config-name/depends.
-			if ("config-name".equals(elnm) ||
-				"depends".equals(elnm))
+			if ("config-name".equals(elnm) || "depends".equals(elnm))
 				// known elements; not actual config items
 				continue;
 			else if ("listener".equals(elnm)) {
 				parseListener(config, el);
 			} else if ("richlet".equals(elnm)) {
-				final String clsnm =
-					IDOMs.getRequiredElementValue(el, "richlet-class");
-				final Map<String, String> params =
-					IDOMs.parseParams(el, "init-param", "param-name", "param-value");
+				final String clsnm = IDOMs.getRequiredElementValue(el, "richlet-class");
+				final Map<String, String> params = IDOMs.parseParams(el, "init-param", "param-name", "param-value");
 
 				String path = el.getElementValue("richlet-url", true);
 				if (path != null) {
-				//deprecated since 2.4.0, but backward compatible
+					//deprecated since 2.4.0, but backward compatible
 					final int cnt;
 					synchronized (this) {
 						cnt = _richletnm++;
@@ -356,140 +345,141 @@ public class ConfigParser {
 						config.addRichlet(name, clsnm, params);
 						config.addRichletMapping(name, path);
 					} catch (Throwable ex) {
-						log.error("Illegal richlet definition at "+el.getLocator(), ex);
+						log.error("Illegal richlet definition at " + el.getLocator(), ex);
 					}
 				} else { //syntax since 2.4.0
-					final String nm =
-						IDOMs.getRequiredElementValue(el, "richlet-name");
+					final String nm = IDOMs.getRequiredElementValue(el, "richlet-name");
 					try {
 						config.addRichlet(nm, clsnm, params);
 					} catch (Throwable ex) {
-						log.error("Illegal richlet definition at "+el.getLocator(), ex);
+						log.error("Illegal richlet definition at " + el.getLocator(), ex);
 					}
 				}
 			} else if ("richlet-mapping".equals(elnm)) { //syntax since 2.4.0
-				final String nm =
-					IDOMs.getRequiredElementValue(el, "richlet-name");
-				final String path =
-					IDOMs.getRequiredElementValue(el, "url-pattern");
+				final String nm = IDOMs.getRequiredElementValue(el, "richlet-name");
+				final String path = IDOMs.getRequiredElementValue(el, "url-pattern");
 				try {
 					config.addRichletMapping(nm, path);
 				} catch (Throwable ex) {
-					log.error("Illegal richlet mapping at "+el.getLocator(), ex);
+					log.error("Illegal richlet mapping at " + el.getLocator(), ex);
 				}
 			} else if ("desktop-config".equals(elnm)) {
-			//desktop-config
-			//	desktop-timeout
-			//  disable-theme-uri
-			//	file-check-period
-			//	extendlet-check-period
-			//	theme-provider-class
-			//	theme-registry-class	/// since 6.5.2
-			//	theme-resolver-class	/// since 6.5.2
-			//	theme-uri
-			//	repeat-uuid
+				//desktop-config
+				//	desktop-timeout
+				//  disable-theme-uri
+				//	file-check-period
+				//	extendlet-check-period
+				//	theme-provider-class
+				//	theme-registry-class	/// since 6.5.2
+				//	theme-resolver-class	/// since 6.5.2
+				//	theme-uri
+				//	repeat-uuid
 				parseDesktopConfig(config, el);
 				parseClientConfig(config, el); //backward compatible with 2.4
 
 			} else if ("client-config".equals(elnm)) { //since 3.0.0
-			//client-config
-			//  keep-across-visits
-			//  processing-prompt-delay
-			//	error-reload
-			//	tooltip-delay
-			//  resend-delay
-			//  debug-js
-			//  auto-resend-timeout
+				//client-config
+				//  keep-across-visits
+				//  processing-prompt-delay
+				//	error-reload
+				//	tooltip-delay
+				//  resend-delay
+				//  debug-js
+				//  auto-resend-timeout
 				parseClientConfig(config, el);
 
 			} else if ("session-config".equals(elnm)) {
-			//session-config
-			//	session-timeout
-			//	max-desktops-per-session
-			//  max-requests-per-session
-			//	max-pushes-per-session
-			//  timer-keep-alive
-			//	timeout-uri
-			//  automatic-timeout
+				//session-config
+				//	session-timeout
+				//	max-desktops-per-session
+				//  max-requests-per-session
+				//	max-pushes-per-session
+				//  timer-keep-alive
+				//	timeout-uri
+				//  automatic-timeout
 				Integer v = parseInteger(el, "session-timeout", ANY_VALUE);
-				if (v != null) config.setSessionMaxInactiveInterval(v.intValue());
+				if (v != null)
+					config.setSessionMaxInactiveInterval(v.intValue());
 
 				v = parseInteger(el, "max-desktops-per-session", ANY_VALUE);
-				if (v != null) config.setSessionMaxDesktops(v.intValue());
+				if (v != null)
+					config.setSessionMaxDesktops(v.intValue());
 
 				v = parseInteger(el, "max-requests-per-session", ANY_VALUE);
-				if (v != null) config.setSessionMaxRequests(v.intValue());
+				if (v != null)
+					config.setSessionMaxRequests(v.intValue());
 
 				v = parseInteger(el, "max-pushes-per-session", ANY_VALUE);
-				if (v != null) config.setSessionMaxPushes(v.intValue());
+				if (v != null)
+					config.setSessionMaxPushes(v.intValue());
 
 				String s = el.getElementValue("timer-keep-alive", true);
-				if (s != null) config.setTimerKeepAlive("true".equals(s));
+				if (s != null)
+					config.setTimerKeepAlive("true".equals(s));
 
 				parseTimeoutURI(config, el);
 			} else if ("language-config".equals(elnm)) {
-			//language-config
-			//	addon-uri
+				//language-config
+				//	addon-uri
 				parseLangConfig(locator, el);
 			} else if ("language-mapping".equals(elnm)) {
-			//language-mapping
-			//	language-name/extension
-				DefinitionLoaders.addExtension(
-					IDOMs.getRequiredElementValue(el, "extension"),
-					IDOMs.getRequiredElementValue(el, "language-name"));
+				//language-mapping
+				//	language-name/extension
+				DefinitionLoaders.addExtension(IDOMs.getRequiredElementValue(el, "extension"),
+						IDOMs.getRequiredElementValue(el, "language-name"));
 				//Note: we don't add it to LanguageDefinition now
 				//since addon-uri might be specified later
 				//(so we cannot load definitions now)
 			} else if ("system-config".equals(elnm)) {
-			//system-config
-			//  disable-event-thread
-			//	disable-zscript
-			//	max-spare-threads
-			//  max-suspended-threads
-			//	event-time-warning
-			//  max-upload-size
-			//  upload-charset
-			//  upload-charset-finder-class
-			//  max-process-time
-			//	response-charset
-			//  cache-provider-class
-			//  ui-factory-class
-			//  failover-manager-class
-			//	engine-class
-			//	id-generator-class
-			//  web-app-class
-			//	method-cache-class
-			//	url-encoder-class
-			//	au-writer-class
-			//	au-decoder-class
+				//system-config
+				//  disable-event-thread
+				//	disable-zscript
+				//	max-spare-threads
+				//  max-suspended-threads
+				//	event-time-warning
+				//  max-upload-size
+				//  upload-charset
+				//  upload-charset-finder-class
+				//  max-process-time
+				//	response-charset
+				//  cache-provider-class
+				//  ui-factory-class
+				//  failover-manager-class
+				//	engine-class
+				//	id-generator-class
+				//  web-app-class
+				//	method-cache-class
+				//	url-encoder-class
+				//	au-writer-class
+				//	au-decoder-class
 				parseSystemConfig(config, el);
 			} else if ("xel-config".equals(elnm)) {
-			//xel-config
-			//	evaluator-class
+				//xel-config
+				//	evaluator-class
 				Class<? extends ExpressionFactory> cls = parseClass(el, "evaluator-class", ExpressionFactory.class);
-				if (cls != null) config.setExpressionFactoryClass(cls);
+				if (cls != null)
+					config.setExpressionFactoryClass(cls);
 			} else if ("zscript-config".equals(elnm)) {
-			//zscript-config
+				//zscript-config
 				Interpreters.add(el);
-					//Note: zscript-config is applied to the whole system, not just langdef
+				//Note: zscript-config is applied to the whole system, not just langdef
 			} else if ("device-config".equals(elnm)) {
-			//device-config
+				//device-config
 				Devices.add(el);
-					//Note: device-config is applied to the whole system, not just langdef
+				//Note: device-config is applied to the whole system, not just langdef
 				parseTimeoutURI(config, el);
-					//deprecated since 3.6.3, but to be backward-compatible
+				//deprecated since 3.6.3, but to be backward-compatible
 			} else if ("log".equals(elnm)) {
 				log.warn("Ingored. Use the library property called org.zkoss.util.logging.config.file instead");
 			} else if ("error-page".equals(elnm)) {
-			//error-page
-				final Class cls =
-					parseClass(el, "exception-type", Throwable.class, true);
-				final String loc =
-					IDOMs.getRequiredElementValue(el, "location");
+				//error-page
+				final Class cls = parseClass(el, "exception-type", Throwable.class, true);
+				final String loc = IDOMs.getRequiredElementValue(el, "location");
 				String deviceType = el.getElementValue("device-type", true);
-				if (deviceType == null) deviceType = "ajax";
+				if (deviceType == null)
+					deviceType = "ajax";
 				else if (deviceType.length() == 0)
-					log.error("device-type not specified at "+el.getLocator());
+					log.error("device-type not specified at " + el.getLocator());
 
 				config.addErrorPage(deviceType, cls, loc);
 			} else if ("preference".equals(elnm)) {
@@ -500,41 +490,42 @@ public class ConfigParser {
 				parseSysProperty(el);
 			} else {
 				if (_parsers != null)
-					for (org.zkoss.zk.ui.util.ConfigParser parser: _parsers) {
+					for (org.zkoss.zk.ui.util.ConfigParser parser : _parsers) {
 						if (parser.parse(config, el))
 							continue l_out;
 					}
-				log.error("Unknown element: "+elnm+", at "+el.getLocator());
+				log.error("Unknown element: " + elnm + ", at " + el.getLocator());
 			}
 		}
 	}
 
 	private static void parseProperties(Element root) {
-		for (Iterator it = root.getElements("library-property").iterator();
-		it.hasNext();) {
-			parseLibProperty((Element)it.next());
+		for (Iterator it = root.getElements("library-property").iterator(); it.hasNext();) {
+			parseLibProperty((Element) it.next());
 		}
-		for (Iterator it = root.getElements("system-property").iterator();
-		it.hasNext();) {
-			parseSysProperty((Element)it.next());
+		for (Iterator it = root.getElements("system-property").iterator(); it.hasNext();) {
+			parseSysProperty((Element) it.next());
 		}
 	}
+
 	private static void parseLibProperty(Element el) {
 		final String nm = IDOMs.getRequiredElementValue(el, "name");
 		final String val = IDOMs.getRequiredElementValue(el, "value");
 		Library.setProperty(nm, val);
 	}
+
 	private static void parseSysProperty(Element el) {
 		final String nm = IDOMs.getRequiredElementValue(el, "name");
 		final String val = IDOMs.getRequiredElementValue(el, "value");
 		System.setProperty(nm, val);
 	}
+
 	private static void parsePreferences(Configuration config, Element root) {
-		for (Iterator it = root.getElements("preference").iterator();
-		it.hasNext();) {
-			parsePreference(config, (Element)it.next());
+		for (Iterator it = root.getElements("preference").iterator(); it.hasNext();) {
+			parsePreference(config, (Element) it.next());
 		}
 	}
+
 	private static void parsePreference(Configuration config, Element el) {
 		final String nm = IDOMs.getRequiredElementValue(el, "name");
 		final String val = IDOMs.getRequiredElementValue(el, "value");
@@ -542,8 +533,7 @@ public class ConfigParser {
 	}
 
 	/** Parses timeout-uri an other info. */
-	private static void parseTimeoutURI(Configuration config, Element conf)
-	throws Exception {
+	private static void parseTimeoutURI(Configuration config, Element conf) throws Exception {
 		String deviceType = conf.getElementValue("device-type", true);
 		String s = conf.getElementValue("timeout-uri", true);
 		if (s != null)
@@ -559,22 +549,21 @@ public class ConfigParser {
 	}
 
 	/** Parses desktop-config. */
-	private static void parseDesktopConfig(Configuration config, Element conf)
-	throws Exception {
+	private static void parseDesktopConfig(Configuration config, Element conf) throws Exception {
 		//theme-uri
-		for (Iterator<Element> it = conf.getElements("theme-uri").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Iterator<Element> it = conf.getElements("theme-uri").iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 			final String uri = el.getText(true);
-			if (uri.length() != 0) config.addThemeURI(uri);
+			if (uri.length() != 0)
+				config.addThemeURI(uri);
 		}
 
 		//disable-theme-uri
-		for (Iterator<Element> it = conf.getElements("disable-theme-uri").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Iterator<Element> it = conf.getElements("disable-theme-uri").iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 			final String uri = el.getText(true);
-			if (uri.length() != 0) config.addDisabledThemeURI(uri);
+			if (uri.length() != 0)
+				config.addDisabledThemeURI(uri);
 		}
 
 		// ZK-1671
@@ -585,11 +574,12 @@ public class ConfigParser {
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
 					config.setCustomThemeProvider(true);
-				if (log.isDebugEnabled()) log.debug("ThemeProvider: " + cls.getName());
-				config.setThemeProvider((ThemeProvider)cls.newInstance());
+				if (log.isDebugEnabled())
+					log.debug("ThemeProvider: " + cls.getName());
+				config.setThemeProvider((ThemeProvider) cls.newInstance());
 			}
 		}
-		
+
 		//theme-registry-class
 		//since 6.5.2
 		if (!config.isCustomThemeRegistry()) {
@@ -597,11 +587,12 @@ public class ConfigParser {
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
 					config.setCustomThemeRegistry(true);
-				if (log.isDebugEnabled()) log.debug("ThemeRegistry: " + cls.getName());
-				ThemeFns.setThemeRegistry((ThemeRegistry)cls.newInstance());
+				if (log.isDebugEnabled())
+					log.debug("ThemeRegistry: " + cls.getName());
+				ThemeFns.setThemeRegistry((ThemeRegistry) cls.newInstance());
 			}
 		}
-		
+
 		//theme-resolver-class
 		//since 6.5.2
 		if (!config.isCustomThemeResolver()) {
@@ -609,37 +600,41 @@ public class ConfigParser {
 			if (cls != null) {
 				if (!cls.getName().startsWith("org.zkoss."))
 					config.setCustomThemeResolver(true);
-				if (log.isDebugEnabled()) log.debug("ThemeResolver: " + cls.getName());
-				ThemeFns.setThemeResolver((ThemeResolver)cls.newInstance());
+				if (log.isDebugEnabled())
+					log.debug("ThemeResolver: " + cls.getName());
+				ThemeFns.setThemeResolver((ThemeResolver) cls.newInstance());
 			}
 		}
-		
+
 		//desktop-timeout
 		Integer v = parseInteger(conf, "desktop-timeout", ANY_VALUE);
-		if (v != null) config.setDesktopMaxInactiveInterval(v.intValue());
+		if (v != null)
+			config.setDesktopMaxInactiveInterval(v.intValue());
 
 		//file-check-period
 		v = parseInteger(conf, "file-check-period", POSITIVE_ONLY);
 		if (v != null)
 			Library.setProperty("org.zkoss.util.resource.checkPeriod", v.toString());
-			//library-wide property
+		//library-wide property
 
 		//extendlet-check-period
 		v = parseInteger(conf, "extendlet-check-period", POSITIVE_ONLY);
 		if (v != null)
 			Library.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
-			//library-wide property
+		//library-wide property
 
 		String s = conf.getElementValue("repeat-uuid", true);
-		if (s != null) config.setRepeatUuid(!"false".equals(s));
+		if (s != null)
+			config.setRepeatUuid(!"false".equals(s));
 	}
+
 	/** Parses client-config. */
-	private static void parseSystemConfig(Configuration config, Element el)
-	throws Exception {
+	private static void parseSystemConfig(Configuration config, Element el) throws Exception {
 		String s = el.getElementValue("disable-event-thread", true);
 		if (s != null) {
 			final boolean enable = "false".equals(s);
-			if (!enable) log.info("The event processing thread is disabled");
+			if (!enable)
+				log.info("The event processing thread is disabled");
 			config.enableEventThread(enable);
 		}
 		s = el.getElementValue("disable-zscript", true);
@@ -647,31 +642,40 @@ public class ConfigParser {
 			config.enableZScript(!"true".equals(s));
 
 		Integer v = parseInteger(el, "max-spare-threads", ANY_VALUE);
-		if (v != null) config.setMaxSpareThreads(v.intValue());
-		
+		if (v != null)
+			config.setMaxSpareThreads(v.intValue());
+
 		v = parseInteger(el, "max-suspended-threads", ANY_VALUE);
-		if (v != null) config.setMaxSuspendedThreads(v.intValue());
+		if (v != null)
+			config.setMaxSuspendedThreads(v.intValue());
 
 		v = parseInteger(el, "event-time-warning", ANY_VALUE);
-		if (v != null) config.setEventTimeWarning(v.intValue());
-		
+		if (v != null)
+			config.setEventTimeWarning(v.intValue());
+
 		v = parseInteger(el, "max-upload-size", ANY_VALUE);
-		if (v != null) config.setMaxUploadSize(v.intValue());
+		if (v != null)
+			config.setMaxUploadSize(v.intValue());
 
 		v = parseInteger(el, "file-size-threshold", ANY_VALUE);
-		if (v != null) config.setFileSizeThreshold(v.intValue());
+		if (v != null)
+			config.setFileSizeThreshold(v.intValue());
 
 		v = parseInteger(el, "max-process-time", POSITIVE_ONLY);
-		if (v != null) config.setMaxProcessTime(v.intValue());
+		if (v != null)
+			config.setMaxProcessTime(v.intValue());
 
 		s = el.getElementValue("upload-charset", true);
-		if (s != null) config.setUploadCharset(s);
+		if (s != null)
+			config.setUploadCharset(s);
 
 		s = el.getElementValue("response-charset", true);
-		if (s != null) config.setResponseCharset(s);
+		if (s != null)
+			config.setResponseCharset(s);
 
 		s = el.getElementValue("crawlable", true);
-		if (s != null) config.setCrawlable(!"false".equals(s));
+		if (s != null)
+			config.setCrawlable(!"false".equals(s));
 
 		// ZK-3105
 		s = el.getElementValue("file-repository", true);
@@ -679,109 +683,123 @@ public class ConfigParser {
 			config.setFileRepository(s);
 
 		//bug B50-3316543
-		for (Iterator it = el.getElements("label-location").iterator();it.hasNext();) {
-			final Element elinner = (Element)it.next();
+		for (Iterator it = el.getElements("label-location").iterator(); it.hasNext();) {
+			final Element elinner = (Element) it.next();
 			final String path = elinner.getText(true);
 			if (!Strings.isEmpty(path))
 				config.addLabelLocation(path);
 		}
-		
-		Class cls = parseClass(el, "upload-charset-finder-class",
-			CharsetFinder.class);
-		if (cls != null)
-			config.setUploadCharsetFinder((CharsetFinder)cls.newInstance());
 
-		cls = parseClass(el, "cache-provider-class",
-			DesktopCacheProvider.class);
-		if (cls != null) config.setDesktopCacheProviderClass(cls);
+		Class cls = parseClass(el, "upload-charset-finder-class", CharsetFinder.class);
+		if (cls != null)
+			config.setUploadCharsetFinder((CharsetFinder) cls.newInstance());
+
+		cls = parseClass(el, "cache-provider-class", DesktopCacheProvider.class);
+		if (cls != null)
+			config.setDesktopCacheProviderClass(cls);
 
 		cls = parseClass(el, "ui-factory-class", UiFactory.class);
-		if (cls != null) config.setUiFactoryClass(cls);
+		if (cls != null)
+			config.setUiFactoryClass(cls);
 
 		cls = parseClass(el, "failover-manager-class", FailoverManager.class);
-		if (cls != null) config.setFailoverManagerClass(cls);
+		if (cls != null)
+			config.setFailoverManagerClass(cls);
 
 		cls = parseClass(el, "engine-class", UiEngine.class);
-		if (cls != null) config.setUiEngineClass(cls);
+		if (cls != null)
+			config.setUiEngineClass(cls);
 
 		cls = parseClass(el, "id-generator-class", IdGenerator.class);
-		if (cls != null) config.setIdGeneratorClass(cls);
+		if (cls != null)
+			config.setIdGeneratorClass(cls);
 
 		cls = parseClass(el, "session-cache-class", SessionCache.class);
-		if (cls != null) config.setSessionCacheClass(cls);
+		if (cls != null)
+			config.setSessionCacheClass(cls);
 
 		// ZK-3105
 		cls = parseClass(el, "file-item-factory-class", DiskFileItemFactory.class);
-		if (cls != null) config.setFileItemFactoryClass(cls);
+		if (cls != null)
+			config.setFileItemFactoryClass(cls);
 
 		cls = parseClass(el, "au-decoder-class", AuDecoder.class);
-		if (cls != null) config.setAuDecoderClass(cls);
+		if (cls != null)
+			config.setAuDecoderClass(cls);
 
 		cls = parseClass(el, "web-app-class", WebApp.class);
-		if (cls != null) config.setWebAppClass(cls);
+		if (cls != null)
+			config.setWebAppClass(cls);
 
 		cls = parseClass(el, "web-app-factory-class", WebAppFactory.class);
-		if (cls != null) config.setWebAppFactoryClass(cls);
+		if (cls != null)
+			config.setWebAppFactoryClass(cls);
 
 		cls = parseClass(el, "method-cache-class", Cache.class);
 		if (cls != null)
-			ComponentsCtrl.setEventMethodCache((Cache)cls.newInstance());
+			ComponentsCtrl.setEventMethodCache((Cache) cls.newInstance());
 
 		cls = parseClass(el, "au-writer-class", AuWriter.class);
 		if (cls != null)
 			AuWriters.setImplementationClass(cls);
 	}
+
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {
 		Integer v = parseInteger(conf, "processing-prompt-delay", POSITIVE_ONLY);
-		if (v != null) config.setProcessingPromptDelay(v.intValue());
+		if (v != null)
+			config.setProcessingPromptDelay(v.intValue());
 
 		v = parseInteger(conf, "tooltip-delay", POSITIVE_ONLY);
-		if (v != null) config.setTooltipDelay(v.intValue());
+		if (v != null)
+			config.setTooltipDelay(v.intValue());
 
 		v = parseInteger(conf, "auto-resend-timeout", POSITIVE_ONLY);
-		if (v != null) config.setAutoResendTimeout(v.intValue());
-		
+		if (v != null)
+			config.setAutoResendTimeout(v.intValue());
+
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)
 			config.setKeepDesktopAcrossVisits(!"false".equals(s));
 
 		s = conf.getElementValue("debug-js", true);
-		if (s != null) config.setDebugJS(!"false".equals(s));
-		
+		if (s != null)
+			config.setDebugJS(!"false".equals(s));
+
 		//F70-ZK-2495: add new config to customize crash script
 		s = conf.getElementValue("init-crash-script", true);
-		if (s != null) config.setInitCrashScript(s);
-		
+		if (s != null)
+			config.setInitCrashScript(s);
+
 		//F70-ZK-2495: add new config to customize timeout
 		v = parseInteger(conf, "init-crash-timeout", NON_NEGATIVE);
-		if (v != null) config.setInitCrashTimeout(v.intValue());
+		if (v != null)
+			config.setInitCrashTimeout(v.intValue());
 
 		//client (JS) packages
-		for (Iterator it = conf.getElements("package").iterator();
-		it.hasNext();) {
-			config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
+		for (Iterator it = conf.getElements("package").iterator(); it.hasNext();) {
+			config.addClientPackage(IDOMs.getRequiredElementValue((Element) it.next(), "package-name"));
 		}
-		
+
 		//client data-attr handlers
-		for (Iterator<Element> it = conf.getElements("data-handler").iterator();
-		it.hasNext();) {
+		for (Iterator<Element> it = conf.getElements("data-handler").iterator(); it.hasNext();) {
 			//config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
 			final Element el = it.next();
 			String dataName = IDOMs.getRequiredElementValue(el, "name");
-            List<Element> elements = el.getElements("script");
-            List<Pair<String, String>> scripts = null;
-            if (!elements.isEmpty()) {
-                scripts = new LinkedList<Pair<String, String>>();
-                for (Iterator<Element> itt = elements.iterator(); itt.hasNext();) {
-                    Element e = itt.next();
-                    scripts.add(new Pair<String, String>(e.getAttribute("src"), e.getText(true)));
-                }
-            }
-            if (scripts == null)
-                throw new IllegalSyntaxException(MCommon.XML_ELEMENT_REQUIRED, new Object[] {"script", el.getLocator()});
+			List<Element> elements = el.getElements("script");
+			List<Pair<String, String>> scripts = null;
+			if (!elements.isEmpty()) {
+				scripts = new LinkedList<Pair<String, String>>();
+				for (Iterator<Element> itt = elements.iterator(); itt.hasNext();) {
+					Element e = itt.next();
+					scripts.add(new Pair<String, String>(e.getAttribute("src"), e.getText(true)));
+				}
+			}
+			if (scripts == null)
+				throw new IllegalSyntaxException(MCommon.XML_ELEMENT_REQUIRED,
+						new Object[] { "script", el.getLocator() });
 
-            boolean override = Boolean.parseBoolean(el.getElementValue("override", true));
+			boolean override = Boolean.parseBoolean(el.getElementValue("override", true));
 
 			elements = el.getElements("link");
 			List<Map<String, String>> links = null;
@@ -790,7 +808,8 @@ public class ConfigParser {
 				for (Iterator<Element> itt = elements.iterator(); itt.hasNext();) {
 					Element e = itt.next();
 					List<Attribute> attrs = e.getAttributeItems();
-					if (attrs == null || attrs.isEmpty()) continue;
+					if (attrs == null || attrs.isEmpty())
+						continue;
 					Map<String, String> attrMap = new LinkedHashMap<String, String>();
 					for (Attribute a : attrs)
 						attrMap.put(a.getName(), a.getValue());
@@ -800,9 +819,8 @@ public class ConfigParser {
 			config.addDataHandler(new DataHandlerInfo(dataName, scripts, override, links));
 		}
 		//error-reload
-		for (Iterator it = conf.getElements("error-reload").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Iterator it = conf.getElements("error-reload").iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 
 			String deviceType = el.getElementValue("device-type", true);
 			String connType = el.getElementValue("connection-type", true);
@@ -810,55 +828,55 @@ public class ConfigParser {
 			if (v == null)
 				throw new UiException(message("error-code is required", el));
 			String uri = IDOMs.getRequiredElementValue(el, "reload-uri");
-			if ("false".equals(uri)) uri = null;
+			if ("false".equals(uri))
+				uri = null;
 
 			config.setClientErrorReload(deviceType, v.intValue(), uri, connType);
 		}
 	}
 
 	private static String message(String message, org.zkoss.idom.Item el) {
-		return org.zkoss.xml.Locators.format(message, el != null ? el.getLocator(): null);
+		return org.zkoss.xml.Locators.format(message, el != null ? el.getLocator() : null);
 	}
 
 	/** Parse language-config */
 	private static void parseLangConfigs(Locator locator, Element root) {
-		for (Iterator it = root.getElements("language-config").iterator();
-		it.hasNext();) {
-			parseLangConfig(locator, (Element)it.next());
+		for (Iterator it = root.getElements("language-config").iterator(); it.hasNext();) {
+			parseLangConfig(locator, (Element) it.next());
 		}
 	}
+
 	/** Parse language-config/addon-uri. */
 	private static void parseLangConfig(Locator locator, Element conf) {
-		for (Iterator it = conf.getElements("addon-uri").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Iterator it = conf.getElements("addon-uri").iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 			final String path = el.getText(true);
 
 			final URL url = locator.getResource(path);
 			if (url == null)
-				log.error("File not found: "+path+", at "+el.getLocator());
+				log.error("File not found: " + path + ", at " + el.getLocator());
 			else
 				DefinitionLoaders.addAddon(locator, url);
 		}
-		for (Iterator it = conf.getElements("language-uri").iterator();
-		it.hasNext();) {
-			final Element el = (Element)it.next();
+		for (Iterator it = conf.getElements("language-uri").iterator(); it.hasNext();) {
+			final Element el = (Element) it.next();
 			final String path = el.getText(true);
 
 			final URL url = locator.getResource(path);
 			if (url == null)
-				log.error("File not found: "+path+", at "+el.getLocator());
+				log.error("File not found: " + path + ", at " + el.getLocator());
 			else
 				DefinitionLoaders.addLanguage(locator, url);
 		}
 	}
+
 	/** Parse a class, if specified, whether it implements cls.
 	 */
 	private static <T> Class<T> parseClass(Element el, String elnm, Class cls) {
 		return parseClass(el, elnm, cls, false);
 	}
-	private static
-	<T> Class<T> parseClass(Element el, String elnm, Class<?> cls, boolean required) {
+
+	private static <T> Class<T> parseClass(Element el, String elnm, Class<?> cls, boolean required) {
 		//Note: we throw exception rather than warning to make sure
 		//the developer correct it
 		final String clsnm = el.getElementValue(elnm, true);
@@ -866,17 +884,16 @@ public class ConfigParser {
 			try {
 				final Class<?> klass = Classes.forNameByThread(clsnm);
 				if (cls != null && !cls.isAssignableFrom(klass)) {
-					String msg = message(clsnm+" must implement "+cls.getName(), el);
+					String msg = message(clsnm + " must implement " + cls.getName(), el);
 					if (required)
 						throw new UiException(msg);
 					log.error(msg);
 					return null;
 				}
-//				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
+				//				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
 				return cast(klass);
 			} catch (Throwable ex) {
-				String msg = ex instanceof ClassNotFoundException ?
-					clsnm + " not found": "Unable to load "+clsnm;
+				String msg = ex instanceof ClassNotFoundException ? clsnm + " not found" : "Unable to load " + clsnm;
 				msg = message(msg, el);
 				if (required)
 					throw new UiException(msg, ex);
@@ -884,37 +901,37 @@ public class ConfigParser {
 				return null;
 			}
 		} else if (required)
-			throw new UiException(message(elnm+" required", el));
+			throw new UiException(message(elnm + " required", el));
 		return null;
 	}
 
 	/** Configures an integer.
 	 * @param flag one of POSTIVE_ONLY, NON_NEGATIVE and ANY_VALUE.
 	 */
-	private static Integer parseInteger(Element el, String subnm,
-	int flag) throws UiException {
+	private static Integer parseInteger(Element el, String subnm, int flag) throws UiException {
 		//Note: we throw exception rather than warning to make sure
 		//the developer correct it
 		String val = el.getElementValue(subnm, true);
 		if (val != null && val.length() > 0) {
-			try { 
+			try {
 				final int v = Integer.parseInt(val);
-				if ((flag == POSITIVE_ONLY && v <= 0)
-				|| (flag == NON_NEGATIVE && v < 0))
-					throw new UiException(message("The "+subnm+" element must be a "
-						+(flag == POSITIVE_ONLY ? "positive": "non-negative")
-						+" number, not "+val, el));
+				if ((flag == POSITIVE_ONLY && v <= 0) || (flag == NON_NEGATIVE && v < 0))
+					throw new UiException(message(
+							"The " + subnm + " element must be a "
+									+ (flag == POSITIVE_ONLY ? "positive" : "non-negative") + " number, not " + val,
+							el));
 				return new Integer(v);
 			} catch (NumberFormatException ex) { //eat
-				throw new UiException(message("The "+subnm+" element must be a number, not "+val, el));
+				throw new UiException(message("The " + subnm + " element must be a number, not " + val, el));
 			}
 		}
 		return null;
 	}
+
 	private static final int POSITIVE_ONLY = 2;
 	private static final int NON_NEGATIVE = 1;
 	private static final int ANY_VALUE = 0;
-	
+
 	//F80 - store subtree's binder annotation count
 	private static void parseBinderConfig(Configuration config, Element conf) {
 		Element binderConf = conf.getElement("binder-config");

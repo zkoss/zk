@@ -22,7 +22,6 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
-
 import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
 
@@ -44,18 +43,20 @@ public class PagingEvent extends Event {
 		final Component comp = request.getComponent();
 		final Map<String, Object> data = request.getData();
 		int pgi = AuRequests.getInt(data, "", 0);
-		final Pageable pageable = (Pageable)comp;
-		if (pgi < 0) pgi = 0;
+		final Pageable pageable = (Pageable) comp;
+		if (pgi < 0)
+			pgi = 0;
 		else {
 			final int pgcnt = pageable.getPageCount();
 			if (pgi >= pgcnt) {
 				pgi = pgcnt - 1;
-				if (pgi < 0) pgi = 0;
+				if (pgi < 0)
+					pgi = 0;
 			}
 		}
 		return new PagingEvent(request.getCommand(), comp, pgi);
 	}
-	
+
 	/** Construct a paging event.
 	 *
 	 * @param target the target must be a paginal component, i.e.,
@@ -64,9 +65,10 @@ public class PagingEvent extends Event {
 	 */
 	public PagingEvent(String name, Component target, int actpg) {
 		super(name, target);
-		_pgi = (Pageable)target;
+		_pgi = (Pageable) target;
 		_actpg = actpg;
 	}
+
 	/** Construct a paging event that the target is different
 	 * from the page controller.
 	 *
@@ -74,8 +76,7 @@ public class PagingEvent extends Event {
 	 * @param pageable the paging controller. In other words,
 	 * it is usually {@link Paginal}.
 	 */
-	public PagingEvent(String name, Component target, Pageable pageable,
-	int actpg) {
+	public PagingEvent(String name, Component target, Pageable pageable, int actpg) {
 		super(name, target);
 		_pgi = pageable;
 		_actpg = actpg;

@@ -17,7 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import org.zkoss.util.media.Media;
-
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -35,14 +34,16 @@ public class UploadEvent extends Event {
 	 */
 	public UploadEvent(String name, Component target, Media[] meds) {
 		super(name, target);
-		_meds = meds != null && meds.length > 0 ? meds: null;
+		_meds = meds != null && meds.length > 0 ? meds : null;
 	}
+
 	/** Returns the first media being uploaded, or null if no file
 	 * is uploaded.
 	 */
 	public final Media getMedia() {
-		return _meds != null ? _meds[0]: null;
+		return _meds != null ? _meds[0] : null;
 	}
+
 	/** Returns the array of media being uploaded, or null
 	 * if the user uploaded no file at all.
 	 * If non-null is returned, the array length must be at least one.

@@ -21,10 +21,9 @@ import java.util.TimeZone;
 
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
@@ -51,16 +50,17 @@ public class ExecutionCarryOver {
 	public ExecutionCarryOver(Desktop desktop) {
 		_exec = Executions.getCurrent();
 		if (_exec == null || _exec.getDesktop() != desktop)
-			throw new IllegalStateException("Wrong execution: "+_exec);
+			throw new IllegalStateException("Wrong execution: " + _exec);
 		_locale = Locales.getCurrent();
 		_timeZone = TimeZones.getCurrent();
 	}
+
 	/** Carry over the info stored in the constructor to
 	 * the current thread.
 	 */
 	public void carryOver() {
 		ExecutionsCtrl.setCurrent(_exec);
-		final ExecutionCtrl execCtrl = (ExecutionCtrl)_exec;
+		final ExecutionCtrl execCtrl = (ExecutionCtrl) _exec;
 		execCtrl.onActivate();
 
 		if (Locales.getThreadLocal() == null)
@@ -77,12 +77,13 @@ public class ExecutionCarryOver {
 		if (page != null)
 			execCtrl.setCurrentPage(page);
 	}
+
 	/** Cleans up the info carried from onPiggyback to the current thread.
 	 * <p>Note: {@link #carryOver} and {@link #cleanup} must be
 	 * called in the same thread.
 	 */
 	public void cleanup() {
-		((ExecutionCtrl)_exec).onDeactivate();
+		((ExecutionCtrl) _exec).onDeactivate();
 		ExecutionsCtrl.setCurrent(null);
 
 		if (_locale != null)

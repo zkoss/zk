@@ -32,9 +32,11 @@ public interface AuExtensionRequest {
 	 * @param create whether to create one if not available.
 	 */
 	public Session getSession(boolean create);
+
 	/** Returns the request (never null).
 	 */
 	public HttpServletRequest getRequest();
+
 	/** Returns the response (never null).
 	 */
 	public HttpServletResponse getResponse();

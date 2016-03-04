@@ -22,21 +22,20 @@ import org.zkoss.zul.ext.Selectable;
  * @author dennis
  * @since 6.0.0
  */
-public class ListboxModelConverter extends AbstractListModelConverter<Listbox>{
+public class ListboxModelConverter extends AbstractListModelConverter<Listbox> {
 	private static final long serialVersionUID = 1463169907348730644L;
-	
+
 	protected ListModel<?> getComponentModel(Listbox comp) {
 		return comp.getListModel();
 	}
-	
-	
-	protected ListModel<?> handleWrappedModel(BindContext ctx, Listbox comp, ListModel<?> model){
-		if(model instanceof Selectable){
-			if(((Selectable<?>)model).isMultiple() != comp.isMultiple()){
+
+	protected ListModel<?> handleWrappedModel(BindContext ctx, Listbox comp, ListModel<?> model) {
+		if (model instanceof Selectable) {
+			if (((Selectable<?>) model).isMultiple() != comp.isMultiple()) {
 				//since the model was wrapped. I should respect the setting on the component
 				//user might set the multiple on the listbox by <listbox multiple="true" 
 				//or <listbox multiple="@bind(true)" or <listbox multiple="@bind(vm.multiple)"
-				((Selectable<?>)model).setMultiple(comp.isMultiple());
+				((Selectable<?>) model).setMultiple(comp.isMultiple());
 			}
 		}
 		return model;

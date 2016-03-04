@@ -27,6 +27,7 @@ public interface AbortingReason {
 	/** Returns whether to abort the execution.
 	 */
 	public boolean isAborting();
+
 	/** Called to process this aborting reason.
 	 * It is called after {@link UiEngine} processes all events,
 	 * before generating the responses to the client.
@@ -44,6 +45,7 @@ public interface AbortingReason {
 	 * @see #getResponse
 	 */
 	public void execute();
+
 	/** Returns the response representing this aborting reason.
 	 * It is called when {@link UiEngine} generates the responses to
 	 * client. Actually, it is called as the last step after
@@ -63,6 +65,7 @@ public interface AbortingReason {
 	 * @see #execute
 	 */
 	public AuResponse getResponse();
+
 	/** Called after all processing is done, and just before deactivating
 	 * the execution.
 	 *

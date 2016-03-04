@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -41,7 +42,7 @@ import org.zkoss.zul.impl.XulElement;
  * @since 5.0.0
  */
 public abstract class LayoutRegion extends XulElement {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(LayoutRegion.class);
 
 	private String _border = "normal";
@@ -49,7 +50,7 @@ public abstract class LayoutRegion extends XulElement {
 	private boolean _flex;
 	private boolean _autoscroll;
 
-	private String _title = null;	
+	private String _title = null;
 	private int _maxsize = 2000;
 	private int _minsize = 0;
 	private int[] _cmargins;
@@ -60,7 +61,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	static {
 		addClientEvent(LayoutRegion.class, Events.ON_OPEN, CE_IMPORTANT);
-		addClientEvent(LayoutRegion.class, Events.ON_SIZE, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
+		addClientEvent(LayoutRegion.class, Events.ON_SIZE, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
 	public LayoutRegion() {
@@ -73,7 +74,7 @@ public abstract class LayoutRegion extends XulElement {
 	public Caption getCaption() {
 		return _caption;
 	}
-	
+
 	/**
 	 * Returns the border.
 	 * <p>
@@ -177,7 +178,7 @@ public abstract class LayoutRegion extends XulElement {
 	 * @see Borderlayout#WEST
 	 * @see Borderlayout#CENTER
 	 */
-	abstract public String getPosition();
+	public abstract String getPosition();
 
 	/**
 	 * Sets the size of this region. This method is shortcut for
@@ -187,7 +188,7 @@ public abstract class LayoutRegion extends XulElement {
 	 * {@link East}, this method will invoke {@link #setWidth(String)}.
 	 * Otherwise it will throw a {@link UnsupportedOperationException}.
 	 */
-	abstract public void setSize(String size);
+	public abstract void setSize(String size);
 
 	/**
 	 * Returns the size of this region. This method is shortcut for
@@ -197,8 +198,7 @@ public abstract class LayoutRegion extends XulElement {
 	 * this method will invoke {@link #getWidth()}. Otherwise it will throw a
 	 * {@link UnsupportedOperationException}.
 	 */
-	abstract public String getSize();
-	
+	public abstract String getSize();
 
 	/** 
 	 * Returns the title.
@@ -207,7 +207,7 @@ public abstract class LayoutRegion extends XulElement {
 	public String getTitle() {
 		return _title;
 	}
-	
+
 	/**
 	 * Sets the title.
 	 */
@@ -305,7 +305,7 @@ public abstract class LayoutRegion extends XulElement {
 	/** Returns the default collapsed margin.
 	 * @since 5.0.5
 	 */
-	abstract protected int[] getDefaultCmargins();
+	protected abstract int[] getDefaultCmargins();
 
 	/**
 	 * Returns whether set the initial display to collapse.
@@ -361,7 +361,7 @@ public abstract class LayoutRegion extends XulElement {
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Caption) {
 			if (_caption != null && _caption != child)
-				throw new UiException("Only one caption is allowed: "+this);
+				throw new UiException("Only one caption is allowed: " + this);
 		} else {
 			int size = getChildren().size();
 			if ((size > 0 && _caption == null) || size > 1)
@@ -369,19 +369,19 @@ public abstract class LayoutRegion extends XulElement {
 		}
 		super.beforeChildAdded(child, refChild);
 	}
-	
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Borderlayout))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Caption) {
 			refChild = getFirstChild();
-				//always makes caption as the first child
+			//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
-				_caption = (Caption)child;
+				_caption = (Caption) child;
 				invalidate();
 				return true;
 			}
@@ -389,7 +389,7 @@ public abstract class LayoutRegion extends XulElement {
 		}
 		return super.insertBefore(child, refChild);
 	}
-	
+
 	public void onChildRemoved(Component child) {
 		if (child instanceof Caption) {
 			_caption = null;
@@ -398,8 +398,7 @@ public abstract class LayoutRegion extends XulElement {
 		super.onChildRemoved(child);
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		if (!"normal".equals(_border))
@@ -426,14 +425,14 @@ public abstract class LayoutRegion extends XulElement {
 				break;
 			}
 
-			//always generate since different region might have different default
+		//always generate since different region might have different default
 		if (!_open)
 			renderer.render("open", _open);
 
 		if (isNativeScrollbar())
 			renderer.render("_nativebar", true);
 	}
-	
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link org.zkoss.zul.LayoutRegion#service},
@@ -448,26 +447,27 @@ public abstract class LayoutRegion extends XulElement {
 		} else
 			super.service(request, everError);
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final LayoutRegion clone = (LayoutRegion)super.clone();
-		if (clone._caption != null) clone.afterUnmarshal();
+		final LayoutRegion clone = (LayoutRegion) super.clone();
+		if (clone._caption != null)
+			clone.afterUnmarshal();
 		return clone;
 	}
+
 	private void afterUnmarshal() {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Caption) {
-				_caption = (Caption)child;
+				_caption = (Caption) child;
 				break;
 			}
 		}
 	}
 
 	//Serializable//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		afterUnmarshal();
 	}

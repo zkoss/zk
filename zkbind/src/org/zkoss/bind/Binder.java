@@ -24,18 +24,17 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.0
  */
 public interface Binder {
-	
-	
+
 	/**
 	 * Component annotation of ZKBind
 	 */
 	public static final String ZKBIND = "ZKBIND"; //system binding annotation name
-	
+
 	/**
 	 * Attribute of {@link Binder#ZKBIND} annotation, the special renderer for binding 
 	 */
 	public static final String RENDERER = "RENDERER"; //system renderer for binding
-	
+
 	/**
 	 * Attribute of {@link Binder#ZKBIND} annotation, the load trigger event; meaningful only when ACCESS is "both" or "load" or not found(default to "load").
 	 */
@@ -88,8 +87,8 @@ public interface Binder {
 	 * @param viewModel viewModel object
 	 * @deprecated use {@link #init(Component, Object, Map)} instead
 	 */
-	public void init(Component root,Object viewModel);
-	
+	public void init(Component root, Object viewModel);
+
 	/**
 	 * Initializes the binder with a root component and viewModel object. 
 	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
@@ -99,7 +98,7 @@ public interface Binder {
 	 * @since 6.0.1
 	 */
 	public void init(Component root, Object viewModel, Map<String, Object> initArgs);
-	
+
 	/**
 	 * Load the load-binding of the component. <br/>
 	 * By calling this method, all load-bindings in the component (including load-bindings in its descendant) will reload the value to components. 
@@ -107,8 +106,8 @@ public interface Binder {
 	 * @param comp the component to reload
 	 * @param loadinit true if should also load the init-binding
 	 */
-	public void loadComponent(Component comp,boolean loadinit);	
-	
+	public void loadComponent(Component comp, boolean loadinit);
+
 	/**
 	 * Returns the {@link BindEvaluatorX} used by this Binder. 
 	 * @return the EvaluatorX.
@@ -123,7 +122,7 @@ public interface Binder {
 	 * @param commandArgs other key-value pairs pairs for command
 	 */
 	public void addCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> commandArgs);
-	
+
 	/**
 	 * Add a new global-command binding.
 	 * @param comp the associated component
@@ -131,9 +130,9 @@ public interface Binder {
 	 * @param commandExpr the command expression
 	 * @param commandArgs other key-value pairs pairs for command
 	 */
-	public void addGlobalCommandBinding(Component comp, String evtnm, String commandExpr, Map<String, Object> commandArgs);
-	
-	
+	public void addGlobalCommandBinding(Component comp, String evtnm, String commandExpr,
+			Map<String, Object> commandArgs);
+
 	/**
 	 * set template to a component property by an expression
 	 * 
@@ -142,8 +141,8 @@ public interface Binder {
 	 * @param templateExpr template expression, must not null
 	 * @param templateArgs args key-value pairs for template, nullable
 	 */
-	public void setTemplate(Component comp,String attr, String templateExpr, Map<String,Object> templateArgs);
-	
+	public void setTemplate(Component comp, String attr, String templateExpr, Map<String, Object> templateArgs);
+
 	/**
 	 * init a component property by a expression, it only execute once
 	 * 
@@ -154,10 +153,9 @@ public interface Binder {
 	 * @param converterExpr the converter expression, nullable
 	 * @param converterArgs args key-value pairs for converter, nullable
 	 */
-	public void addPropertyInitBinding(Component comp,String attr, String initExpr, Map<String,Object> initArgs, 
+	public void addPropertyInitBinding(Component comp, String attr, String initExpr, Map<String, Object> initArgs,
 			String converterExpr, Map<String, Object> converterArgs);
-	
-	
+
 	/**
 	 * Add new property-load-bindings.
 	 * It creates a prompt|conditional property-load-binding depends on beforeCmds and afterCmds.
@@ -172,10 +170,10 @@ public interface Binder {
 	 * @param converterExpr the converter expression, nullable
 	 * @param converterArgs args key-value pairs for converter, nullable
 	 */
-	public void addPropertyLoadBindings(Component comp,String attr,
-			String loadExpr, String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
-			String converterExpr, Map<String, Object> converterArgs);
-	
+	public void addPropertyLoadBindings(Component comp, String attr, String loadExpr, String[] beforeCmds,
+			String[] afterCmds, Map<String, Object> bindingArgs, String converterExpr,
+			Map<String, Object> converterArgs);
+
 	/**
 	 * Add new property-save-bindings. 
 	 * It creates a prompt|conditional property-save-binding depends on beforeCmds and afterCmds.
@@ -192,11 +190,10 @@ public interface Binder {
 	 * @param validatorExpr the converter expression, nullable
 	 * @param validatorArgs args key-value pairs for validator, nullable
 	 */
-	public void addPropertySaveBindings(Component comp, String attr,
-			String saveExpr,String[] beforeCmds, String[] afterCmds, Map<String, Object> bindingArgs,
-			String converterExpr, Map<String, Object> converterArgs,
-			String validatorExpr, Map<String, Object> validatorArgs);
-	
+	public void addPropertySaveBindings(Component comp, String attr, String saveExpr, String[] beforeCmds,
+			String[] afterCmds, Map<String, Object> bindingArgs, String converterExpr,
+			Map<String, Object> converterArgs, String validatorExpr, Map<String, Object> validatorArgs);
+
 	/**
 	 * init a component form by expression, it only execute once
 	 * 
@@ -205,8 +202,8 @@ public interface Binder {
 	 * @param initExpr init expression, nullable
 	 * @param initArgs args key-value pairs for this init, nullable
 	 */
-	public void addFormInitBinding(Component comp,String id,String initExpr, Map<String, Object> initArgs);
-	
+	public void addFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs);
+
 	/**
 	 * Add new form-load-bindings.
 	 * It create a prompt|conditional form-load-binding depends on beforeCmds and afterCmds.
@@ -218,10 +215,10 @@ public interface Binder {
 	 * @param beforeCmds load before these commands, the command here is not a EL expression. nullable
 	 * @param afterCmds load after these commands, the command here is not a EL expression. nullable
 	 * @param bindingArgs args key-value pairs for this binding, nullable
-	 */	
-	public void addFormLoadBindings(Component comp,String id,
-			String loadExpr,String[] beforeCmds,String[] afterCmds, Map<String, Object> bindingArgs);
-	
+	 */
+	public void addFormLoadBindings(Component comp, String id, String loadExpr, String[] beforeCmds, String[] afterCmds,
+			Map<String, Object> bindingArgs);
+
 	/**
 	 * Add new form-save-bindings. 
 	 * It create a conditional form-save-binding depends on beforeCmds and afterCmds.
@@ -237,12 +234,9 @@ public interface Binder {
 	 * @param validatorArgs args key-value pairs for validator, nullable
 	 * @throws IllegalArgumentException if beforeCmds or afterCmds are both null or empty
 	 */
-	public void addFormSaveBindings(Component comp,String id,
-			String saveExpr,String[] beforeCmds,String[] afterCmds, Map<String, Object> bindingArgs,
-			String validatorExpr, Map<String, Object> validatorArgs);
+	public void addFormSaveBindings(Component comp, String id, String saveExpr, String[] beforeCmds, String[] afterCmds,
+			Map<String, Object> bindingArgs, String validatorExpr, Map<String, Object> validatorArgs);
 
-	
-	
 	/**
 	 * init children of a component by an expression, it only execute once
 	 * 
@@ -251,8 +245,8 @@ public interface Binder {
 	 * @param initArgs args key-value pairs for initial, nullable
 	 * @deprecated use {@link Binder#addChildrenInitBinding(Component, String, Map, String, Map)} instead. 
 	 */
-	public void addChildrenInitBinding(Component comp, String initExpr, Map<String,Object> initArgs);
-	
+	public void addChildrenInitBinding(Component comp, String initExpr, Map<String, Object> initArgs);
+
 	/**
 	 * init children of a component by an expression, it only execute once
 	 * 
@@ -263,8 +257,9 @@ public interface Binder {
 	 * @param converterArgs args key-value pairs for converter, nullable
 	 * @since 6.0.1
 	 */
-	public void addChildrenInitBinding(Component comp, String initExpr, Map<String,Object> initArgs,String converterExpr, Map<String, Object> converterArgs);
-	
+	public void addChildrenInitBinding(Component comp, String initExpr, Map<String, Object> initArgs,
+			String converterExpr, Map<String, Object> converterArgs);
+
 	/**
 	 * Add new children-load-bindings.
 	 * It creates a prompt|conditional children-load-binding depends on beforeCmds and afterCmds.
@@ -277,9 +272,9 @@ public interface Binder {
 	 * @param bindingArgs args key-value pairs for this binding, nullable
 	 * @deprecated use {@link #addChildrenLoadBindings(Component, String, String[], String[], Map, String, Map)} instead.
 	 */
-	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, 
+	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds,
 			Map<String, Object> bindingArgs);
-	
+
 	/**
 	 * Add new children-load-bindings.
 	 * It creates a prompt|conditional children-load-binding depends on beforeCmds and afterCmds.
@@ -294,10 +289,9 @@ public interface Binder {
 	 * @param converterArgs args key-value pairs for converter, nullable
 	 * @since 6.0.1
 	 */
-	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds, 
-			Map<String, Object> bindingArgs,String converterExpr, Map<String, Object> converterArgs);
-	
-	
+	public void addChildrenLoadBindings(Component comp, String loadExpr, String[] beforeCmds, String[] afterCmds,
+			Map<String, Object> bindingArgs, String converterExpr, Map<String, Object> converterArgs);
+
 	/**
 	 * Add a new reference-binding.
 	 * It creates an attribute as the reference of the expression in the component. 
@@ -308,21 +302,21 @@ public interface Binder {
 	 * @param bindingArgs args key-value pairs for this binding, nullable
 	 * @since 6.0.1
 	 */
-	public void addReferenceBinding(Component comp,String attr, String loadExpr,Map<String, Object> bindingArgs);
-	
+	public void addReferenceBinding(Component comp, String attr, String loadExpr, Map<String, Object> bindingArgs);
+
 	/**
 	 * Remove all managed bindings that associated with the specified component.
 	 * @param comp
 	 */
 	public void removeBindings(Component comp);
-	
+
 	/**
 	 * Remove all managed bindings that associated with the specified components.
 	 * @param comps
 	 * @since 7.0.2
 	 */
 	public void removeBindings(Set<Component> comps);
-	
+
 	/**
 	 * Remove all managed Binding that associated with the specified 
 	 * component and attribute name, event name, or form id. 
@@ -330,29 +324,28 @@ public interface Binder {
 	 * @param key the associated attribute name, event name, or form id
 	 */
 	public void removeBindings(Component comp, String key);
-	
+
 	/**
 	 * Returns the _converter of the given _converter name.
 	 * @param name _converter name
 	 * @return the _converter of the given _converter name.
 	 */
 	public Converter getConverter(String name);
-	
+
 	/**
 	 * Returns the _validator of the given _validator name.
 	 * @param name _validator name
 	 * @return the _validator of the given _validator name.
 	 */
 	public Validator getValidator(String name);
-	
+
 	/**
 	 * Notify change of the property.
 	 * @param bean the backing bean object.
 	 * @param property the property of the bean that change the value 
 	 */
 	public void notifyChange(Object bean, String property);
-	
-	
+
 	/**
 	 * send command fired to this binder and process the command immediately
 	 * @param command command name
@@ -367,13 +360,13 @@ public interface Binder {
 	 * @param args , arguments when notifying this command, it will be passed as a arguments of execution method of vm
 	 */
 	public void postCommand(String command, Map<String, Object> args);
-	
+
 	/**
 	 * Returns associated ViewModel of this binder.
 	 * @return associated ViewModel of this binder.
 	 */
 	public Object getViewModel();
-	
+
 	/**
 	 * Sets associated ViewModel of this binder.
 	 * @param viewModel the associated view model of this binder.
@@ -385,11 +378,11 @@ public interface Binder {
 	 * @param listener the associated phase listener.
 	 */
 	public void setPhaseListener(PhaseListener listener);
-	
+
 	/**
 	 * Returns associated root component of this binder.
 	 * @return associated root component of this binder.
 	 */
 	public Component getView();
-	
+
 }

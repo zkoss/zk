@@ -17,7 +17,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.ext;
 
 import java.util.Comparator;
-import org.zkoss.zul.*;
+
+import org.zkoss.zul.Column;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.GroupsModel;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listheader;
 
 /**
  * An extra interface that can be implemented with {@link GroupsModel}

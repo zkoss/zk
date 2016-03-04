@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
  * Represents a UI template that is used to create components.
@@ -39,8 +40,8 @@ public interface Template {
 	 * Ignored if null.
 	 * @exception NullPointerException if parent is null
 	 */
-	public Component[] create(Component parent, Component insertBefore,
-	VariableResolver resolver, Composer composer);
+	public Component[] create(Component parent, Component insertBefore, VariableResolver resolver, Composer composer);
+
 	/** Returns a readonly map of the parameters that are assigned
 	 * to the template.
 	 * <p>Notice that if a parameter's value contains EL expression, it will

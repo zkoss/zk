@@ -28,30 +28,38 @@ public class OperationException extends UiException implements Expectable {
 	public OperationException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public OperationException(String s) {
 		super(s);
 	}
+
 	public OperationException(Throwable cause) {
 		super(cause);
 	}
+
 	public OperationException() {
 	}
 
 	public OperationException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public OperationException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public OperationException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public OperationException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public OperationException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public OperationException(int code) {
 		super(code);
 	}

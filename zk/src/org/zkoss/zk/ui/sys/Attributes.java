@@ -47,9 +47,9 @@ public class Attributes {
 	 * <p>This control can also be specified as a request parameter called
 	 * <code>zk.redrawCtrl</code>. For example, if you are using
 	 * other technology, say jQuery, and want to load a ZUL page dynamically; as shown below:
-<pre><code>
+	<pre><code>
 	$("#pos").load("frag.zul?zk.redrawCtrl=page");
-</code></pre>
+	</code></pre>
 	 *
 	 * <p>If you prefer to draw the desktop with the page, you can set the
 	 * value to <code>desktop</code>. By drawing the desktop, it means HTML and BODY
@@ -120,7 +120,7 @@ public class Attributes {
 	 * @since 3.5.1
 	 */
 	public static final String RENEW_NATIVE_SESSION = "org.zkoss.zk.ui.renewNativeSession";
-	
+
 	//Library//
 	/** A library property to indicate whether UUID shall not be recycled.
 	 * <p>Default: false (i.e., not disabled).
@@ -199,7 +199,7 @@ public class Attributes {
 	 * @since 5.0.6
 	 */
 	public static final String STUB_NATIVE = "org.zkoss.zk.ui.stub.native";
-	
+
 	/** A session attribute used to store the ZK session in the native session. 
 	 * @since 5.0.8
 	 */

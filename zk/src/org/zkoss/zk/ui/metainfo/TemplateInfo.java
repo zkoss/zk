@@ -12,13 +12,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ConditionImpl;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Represent a template element.
@@ -36,18 +36,17 @@ public class TemplateInfo extends BranchInfo {
 	 * @param name the name of the template (never null)
 	 * @param params the map of parameters. Igored if null.
 	 */
-	public TemplateInfo(NodeInfo parent, String name, String src,
-	Map<String, String> params, ConditionImpl cond) {
+	public TemplateInfo(NodeInfo parent, String name, String src, Map<String, String> params, ConditionImpl cond) {
 		super(parent, cond);
 
 		if (name == null) // support "" an empty string for ZK 8.0.0 shadow element
 			throw new IllegalArgumentException("null");
 		_name = name;
-		_src = src != null ? new ExValue(src, String.class): null;
+		_src = src != null ? new ExValue(src, String.class) : null;
 
 		if (params != null && !params.isEmpty()) {
 			_params = new LinkedHashMap<String, ExValue>();
-			for (Map.Entry<String, String> me: params.entrySet())
+			for (Map.Entry<String, String> me : params.entrySet())
 				_params.put(me.getKey(), new ExValue(me.getValue(), Object.class));
 		} else
 			_params = null;
@@ -58,11 +57,13 @@ public class TemplateInfo extends BranchInfo {
 	public String getName() {
 		return _name;
 	}
+
 	/** Returns the URI to create the template from, or null if not specified.
 	 */
 	public String getSrc(Component comp) {
-		return _src != null ? (String)_src.getValue(_evalr, comp): null;
+		return _src != null ? (String) _src.getValue(_evalr, comp) : null;
 	}
+
 	/** Evaluates and returns a readonly map of parameters assigned
 	 * to this template (never null).
 	 */
@@ -71,9 +72,8 @@ public class TemplateInfo extends BranchInfo {
 			return Collections.emptyMap();
 
 		final Map<String, Object> params = new LinkedHashMap<String, Object>(); //eval order is important
-		for (Map.Entry<String, ExValue> me: _params.entrySet())
-			params.put(me.getKey(),
-				(me.getValue()).getValue(_evalr, comp));
+		for (Map.Entry<String, ExValue> me : _params.entrySet())
+			params.put(me.getKey(), (me.getValue()).getValue(_evalr, comp));
 		return params;
 	}
 

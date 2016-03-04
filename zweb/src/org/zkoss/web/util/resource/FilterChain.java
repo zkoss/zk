@@ -17,6 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.util.resource;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +41,5 @@ public interface FilterChain {
 	 * @param request the request (never null).
 	 * @param response the response (never null).
 	 */
-	public void doFilter(HttpServletRequest request,
-	HttpServletResponse response)
-	throws ServletException, IOException;
+	public void doFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 }

@@ -31,10 +31,10 @@ import org.zkoss.zk.ui.Component;
  * @since 6.5.2
  */
 public class AfterSizeEvent extends Event {
-	
+
 	private static final long serialVersionUID = 20130313144641L;
 	private final int _width, _height;
-	
+
 	/** Constructs an AfterSizeEvent.
 	 */
 	public AfterSizeEvent(String name, Component target, int width, int height) {
@@ -42,24 +42,23 @@ public class AfterSizeEvent extends Event {
 		_width = width;
 		_height = height;
 	}
-	
+
 	/**
 	 * Converts an AU request to a AfterSizeEvent.
 	 */
 	public static AfterSizeEvent getAfterSizeEvent(AuRequest request) {
 		Map<String, Object> data = request.getData();
-		return new AfterSizeEvent(request.getCommand(), request.getComponent(),
-				AuRequests.getInt(data, "width" , 0),
+		return new AfterSizeEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "width", 0),
 				AuRequests.getInt(data, "height", 0));
 	}
-	
+
 	/**
 	 * @return the offsetWidth of the component after sized
 	 */
 	public int getWidth() {
 		return _width;
 	}
-	
+
 	/**
 	 * @return the offsetHeight of the component after sized
 	 */

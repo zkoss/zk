@@ -15,15 +15,15 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
-import java.util.Map;
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,23 +48,37 @@ public abstract class GenericFilter implements Filter {
 	 */
 	protected void init() throws ServletException {
 	}
+	
+	/** Called by the web container to indicate to a filter that it is
+	 * being placed into service.
+	 * However, deriving class usually doesn't override this method
+	 * but overriding {@link #init()}.
+	 */
+	public final void init(FilterConfig config) throws ServletException {
+		_config = config;
+		init();
+	}
+
 	/** Returns a String containing the value of the named initialization
 	 * parameter, or null if the parameter does not exist.
 	 */
 	public final String getInitParameter(String name) {
 		return _config.getInitParameter(name);
 	}
+
 	/** Returns a String containing the value of the named initialization
 	 * parameter, or null if the parameter does not exist.
 	 */
 	public final Enumeration getInitParameterNames() {
 		return _config.getInitParameterNames();
 	}
+
 	/** Returns the filter's name.
 	 */
 	public final String getFilterName() {
 		return _config.getFilterName();
 	}
+
 	/** Returns the servlet context in which this filter is running.
 	 */
 	public final ServletContext getServletContext() {
@@ -86,12 +100,11 @@ public abstract class GenericFilter implements Filter {
 	 * mode is used only if both uri contains query string and params is
 	 * not empty.
 	 */
-	protected void sendRedirect(HttpServletRequest request,
-	HttpServletResponse response, String page, Map params, int mode)
-	throws ServletException, java.io.IOException {
-		Https.sendRedirect(getServletContext(),
-			request, response, page, params, mode);
+	protected void sendRedirect(HttpServletRequest request, HttpServletResponse response, String page, Map params,
+			int mode) throws ServletException, java.io.IOException {
+		Https.sendRedirect(getServletContext(), request, response, page, params, mode);
 	}
+
 	/** Forward to the specified page.
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
@@ -100,11 +113,11 @@ public abstract class GenericFilter implements Filter {
 	 * for details. 
 	 * @since 3.6.3
 	 */
-	protected final void forward(
-	ServletRequest request, ServletResponse response, String uri)
-	throws ServletException, java.io.IOException {
+	protected final void forward(ServletRequest request, ServletResponse response, String uri)
+			throws ServletException, java.io.IOException {
 		Https.forward(getServletContext(), request, response, uri, null, 0);
 	}
+
 	/** Forward to the specified page with parameters.
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
@@ -113,11 +126,11 @@ public abstract class GenericFilter implements Filter {
 	 * for details. 
 	 * @since 3.6.3
 	 */
-	protected final void forward(ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
-	throws ServletException, java.io.IOException {
+	protected final void forward(ServletRequest request, ServletResponse response, String uri, Map params, int mode)
+			throws ServletException, java.io.IOException {
 		Https.forward(getServletContext(), request, response, uri, params, mode);
 	}
+
 	/** Includes the specified page.
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
@@ -126,11 +139,11 @@ public abstract class GenericFilter implements Filter {
 	 * for details. 
 	 * @since 3.6.3
 	 */
-	protected final void include(ServletRequest request,
-	ServletResponse response, String uri)
-	throws ServletException, java.io.IOException {
+	protected final void include(ServletRequest request, ServletResponse response, String uri)
+			throws ServletException, java.io.IOException {
 		Https.include(getServletContext(), request, response, uri, null, 0);
 	}
+
 	/** Includes the specified page with parameters.
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
@@ -139,9 +152,8 @@ public abstract class GenericFilter implements Filter {
 	 * for details. 
 	 * @since 3.6.3
 	 */
-	protected final void include(ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
-	throws ServletException, java.io.IOException {
+	protected final void include(ServletRequest request, ServletResponse response, String uri, Map params, int mode)
+			throws ServletException, java.io.IOException {
 		Https.include(getServletContext(), request, response, uri, params, mode);
 	}
 
@@ -152,14 +164,5 @@ public abstract class GenericFilter implements Filter {
 	 * <p>This implementation does nothing.
 	 */
 	public void destroy() {
-	}
-	/** Called by the web container to indicate to a filter that it is
-	 * being placed into service.
-	 * However, deriving class usually doesn't override this method
-	 * but overriding {@link #init()}.
-	 */
-	public final void init(FilterConfig config) throws ServletException {
-		_config = config;
-		init();
 	}
 }

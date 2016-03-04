@@ -16,9 +16,9 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event caused by a component whose z-index is modified
@@ -26,7 +26,7 @@ import org.zkoss.zk.au.AuRequests;
  *
  * @author tomyeh
  */
-public class ZIndexEvent  extends Event {
+public class ZIndexEvent extends Event {
 	private final int _zIndex;
 
 	/** Converts an AU request to a z-index event.
@@ -34,15 +34,16 @@ public class ZIndexEvent  extends Event {
 	 */
 	public static final ZIndexEvent getZIndexEvent(AuRequest request) {
 		final java.util.Map<String, Object> data = request.getData();
-		return new ZIndexEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getInt(data, "", -1));
+		return new ZIndexEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "", -1));
 	}
+
 	/** Constructs a mouse relevant event.
 	 */
 	public ZIndexEvent(String name, Component target, int zIndex) {
 		super(name, target);
 		_zIndex = zIndex;
 	}
+
 	/** Returns the z-index of the component after moved.
 	 */
 	public final int getZIndex() {

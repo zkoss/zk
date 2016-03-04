@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -32,9 +31,11 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Caption extends LabelImageElement {
 	public Caption() {
 	}
+
 	public Caption(String label) {
 		super(label);
 	}
+
 	public Caption(String label, String src) {
 		super(label, src);
 	}
@@ -46,10 +47,9 @@ public class Caption extends LabelImageElement {
 
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
-		if (parent != null && !(parent instanceof Window)
-		&& !(parent instanceof Groupbox) && !(parent instanceof Panel)
-		&& !(parent instanceof Tab) && !(parent instanceof LayoutRegion))
-			throw new UiException("Wrong parent: "+parent);
+		if (parent != null && !(parent instanceof Window) && !(parent instanceof Groupbox) && !(parent instanceof Panel)
+				&& !(parent instanceof Tab) && !(parent instanceof LayoutRegion))
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
 }

@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -32,35 +31,38 @@ public class Foot extends XulElement {
 	 * It is the same as {@link #getParent}.
 	 */
 	public Grid getGrid() {
-		return (Grid)getParent();
+		return (Grid) getParent();
 	}
 
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Footer))
-			throw new UiException("Unsupported child for foot: "+child);
+			throw new UiException("Unsupported child for foot: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-foot" : _zclass;
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setHflex(String flex) {
 	}
-	
+
 }

@@ -11,7 +11,6 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.bind.sys.debugger;
 
-
 /**
  * the collector to collect runtime binding execution information
  * 
@@ -29,7 +28,7 @@ public interface BindingExecutionInfoCollector {
 	 * pop the execution stack
 	 */
 	String popStack();
-	
+
 	/**
 	 * add an execution information
 	 */

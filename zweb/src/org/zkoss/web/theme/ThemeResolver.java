@@ -43,7 +43,7 @@ public interface ThemeResolver {
 	 * @return the current intended theme name
 	 */
 	public String getTheme(HttpServletRequest request);
-	
+
 	/**
 	 * Set the current intended theme name to the given one.
 	 * 

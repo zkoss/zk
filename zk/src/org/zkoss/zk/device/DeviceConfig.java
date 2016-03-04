@@ -29,11 +29,13 @@ public interface DeviceConfig {
 	 * @return the unavailable message, or null if no such message
 	 */
 	public String getUnavailableMessage();
+
 	/** Returns the class that implements the server-push feature
 	 * ({@link org.zkoss.zk.ui.sys.ServerPush}) for this device, or null if the default is used.
 	 * @since 3.0.0
 	 */
 	public Class getServerPushClass();
+
 	/** Returns the content that shall be embedded to the output being
 	 * generated to the client, or null if no embedded content.
 	 *

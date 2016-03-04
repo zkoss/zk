@@ -12,11 +12,10 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import org.zkoss.zk.xel.ExValue;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.EvaluatorRef;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Represents a DOM attribute of the peer widget.
@@ -42,7 +41,7 @@ public class WidgetAttribute extends ConditionValue {
 		if (name == null || value == null)
 			throw new IllegalArgumentException();
 		_name = name;
-		_value = value != null ? new ExValue(value, String.class): null;
+		_value = value != null ? new ExValue(value, String.class) : null;
 	}
 
 	/** Returns the event name, such as, onClick.
@@ -50,16 +49,18 @@ public class WidgetAttribute extends ConditionValue {
 	public String getName() {
 		return _name;
 	}
+
 	/** Returns the value associated with this event handler.
 	 */
 	public String getValue(Component comp) {
-		return _value != null ? (String)_value.getValue(_evalr, comp): null;
+		return _value != null ? (String) _value.getValue(_evalr, comp) : null;
 	}
+
 	/** Returns the value passed to the constructor.
 	 * In other words, it might contains EL. 
 	 */
 	public String getRawValue() {
-		return _value != null ? _value.getRawValue(): null;
+		return _value != null ? _value.getRawValue() : null;
 	}
 
 	public void assign(Component comp) {

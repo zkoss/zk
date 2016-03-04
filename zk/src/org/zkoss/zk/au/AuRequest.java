@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Map;
-import java.text.ParseException;
 
 import org.zkoss.json.JSONs;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
@@ -65,8 +65,7 @@ public class AuRequest {
 	 * @param data the data; might be null.
 	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, String uuid,
-	String cmd, Map<String, Object> data) {
+	public AuRequest(Desktop desktop, String uuid, String cmd, Map<String, Object> data) {
 		if (desktop == null || uuid == null || cmd == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
@@ -77,6 +76,7 @@ public class AuRequest {
 		else
 			_data = Collections.emptyMap();
 	}
+
 	/** Constructor for a general request sent from client.
 	 * This is usually used to ask server to log or report status.
 	 *
@@ -94,21 +94,22 @@ public class AuRequest {
 		else
 			_data = Collections.emptyMap();
 	}
+
 	private static Map<String, Object> parseType(Map<String, Object> data) {
-		for (Map.Entry<String, Object> me: data.entrySet()) {
+		for (Map.Entry<String, Object> me : data.entrySet()) {
 			final Object val = me.getValue();
 			final String sval;
 			//Format: $z!t#d:xxx
-			if (val instanceof String && (sval = (String)val).startsWith("$z!t#")
-			&& sval.length() >= 7 && sval.charAt(6) == ':') {
+			if (val instanceof String && (sval = (String) val).startsWith("$z!t#") && sval.length() >= 7
+					&& sval.charAt(6) == ':') {
 				switch (sval.charAt(5)) {
 				case 'd':
 					try {
 						me.setValue(JSONs.j2d(sval.substring(7)));
 					} catch (ParseException ex) {
-						throw new UiException("Failed to convert the value of "+me.getKey()+": "+val);
+						throw new UiException("Failed to convert the value of " + me.getKey() + ": " + val);
 					}
-				//default: ignore since it could be user's value
+					//default: ignore since it could be user's value
 				}
 			}
 		}
@@ -121,8 +122,7 @@ public class AuRequest {
 	 * method.
 	 * @since 3.0.5
 	 */
-	public void activate()
-	throws ComponentNotFoundException {
+	public void activate() throws ComponentNotFoundException {
 		if (_uuid != null) {
 			_comp = _desktop.getComponentByUuidIfAny(_uuid);
 
@@ -131,7 +131,7 @@ public class AuRequest {
 			} else {
 				_page = _desktop.getPageIfAny(_uuid); //it could be page UUID
 				if (_page == null)
-					throw new ComponentNotFoundException("Component not found: "+_uuid);
+					throw new ComponentNotFoundException("Component not found: " + _uuid);
 			}
 		}
 	}
@@ -142,6 +142,7 @@ public class AuRequest {
 	public String getCommand() {
 		return _cmd;
 	}
+
 	/** Returns the options,
 	 * a combination of {@link #BUSY_IGNORE},
 	 * {@link #DUPLICATE_IGNORE} and {@link #REPEAT_IGNORE}.
@@ -150,17 +151,19 @@ public class AuRequest {
 	public int getOptions() {
 		if (_opts == null) {
 			if (_comp != null)
-				_opts = ((ComponentCtrl)_comp).getClientEvents().get(_cmd);
+				_opts = ((ComponentCtrl) _comp).getClientEvents().get(_cmd);
 			if (_opts == null)
 				_opts = new Integer(0);
 		}
 		return _opts.intValue();
 	}
+
 	/** Returns the desktop; never null.
 	 */
 	public Desktop getDesktop() {
 		return _desktop;
 	}
+
 	/** Returns the page that this request is applied for, or null
 	 * if this request is a general request -- regardless any page or
 	 * component.
@@ -168,6 +171,7 @@ public class AuRequest {
 	public Page getPage() {
 		return _page;
 	}
+
 	/** Returns the component that this request is applied for, or null
 	 * if it applies to the whole page or a general request.
 	 * @exception ComponentNotFoundException if the component is not found
@@ -175,6 +179,7 @@ public class AuRequest {
 	public Component getComponent() {
 		return _comp;
 	}
+
 	/** Returns the UUID.
 	 * In most case, it is the same as {@link #getComponent}'s {@link #getUuid}.
 	 * However, they are not the same if the component of the UUID has been
@@ -185,6 +190,7 @@ public class AuRequest {
 	public String getUuid() {
 		return _uuid;
 	}
+
 	/** Returns the data of this request.
 	 * If the client sends a string, a number or an array as data,
 	 * the data can be retrieved by the key, "". For example,
@@ -214,15 +220,17 @@ public class AuRequest {
 		}
 		return hash;
 	}
+
 	public final boolean equals(Object o) { //prevent override
 		return this == o;
 	}
+
 	public String toString() {
 		if (_comp != null)
-			return "[comp="+_comp+", uuid="+_uuid+", cmd="+_cmd+']';
+			return "[comp=" + _comp + ", uuid=" + _uuid + ", cmd=" + _cmd + ']';
 		else if (_page != null)
-			return "[page="+_page+", cmd="+_cmd+']';
+			return "[page=" + _page + ", cmd=" + _cmd + ']';
 		else
-			return "[uuid="+_uuid+", cmd="+_cmd+']';
+			return "[uuid=" + _uuid + ", cmd=" + _cmd + ']';
 	}
 }

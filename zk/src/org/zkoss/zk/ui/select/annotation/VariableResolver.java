@@ -28,11 +28,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface VariableResolver {
-	
+
 	/**
 	 * Variable resolver class names. It is assumed each class specified here 
 	 * has a default constructor.
 	 */
 	Class<? extends org.zkoss.xel.VariableResolver>[] value();
-	
+
 }

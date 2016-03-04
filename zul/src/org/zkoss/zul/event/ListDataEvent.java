@@ -26,9 +26,9 @@ import org.zkoss.zul.ListModel;
 public class ListDataEvent {
 	/** Identifies one or more changes in the lists contents. */
 	public static final int CONTENTS_CHANGED = 0;
-    /** Identifies the addition of one or more contiguous items to the list. */    
+	/** Identifies the addition of one or more contiguous items to the list. */
 	public static final int INTERVAL_ADDED = 1;
-    /** Identifies the removal of one or more contiguous items from the list. */   
+	/** Identifies the removal of one or more contiguous items from the list. */
 	public static final int INTERVAL_REMOVED = 2;
 	/** Identifies the structure of the lists has changed. @since 5.0.7*/
 	public static final int STRUCTURE_CHANGED = 3;
@@ -75,17 +75,20 @@ public class ListDataEvent {
 		_index0 = index0;
 		_index1 = index1;
 	}
+
 	/** Returns the list model that fires this event.
 	 */
 	public ListModel getModel() {
 		return _model;
 	}
+
 	/** Returns the event type. One of {@link #CONTENTS_CHANGED},
 	 * {@link #INTERVAL_ADDED}, {@link #INTERVAL_REMOVED}.
 	 */
 	public int getType() {
 		return _type;
 	}
+
 	/** Returns the lower index of the change range.
 	 * For a single element, this value is the same as that returned by
 	 * {@link #getIndex1}.
@@ -93,6 +96,7 @@ public class ListDataEvent {
 	public int getIndex0() {
 		return _index0;
 	}
+
 	/** Returns the upper index of the change range.
 	 * For a single element, this value is the same as that returned by
 	 * {@link #getIndex0}.
@@ -103,6 +107,6 @@ public class ListDataEvent {
 
 	//Object//
 	public String toString() {
-		return "[ListDataEvent type=" + _type +", index="+_index0+", "+_index1+']';
+		return "[ListDataEvent type=" + _type + ", index=" + _index0 + ", " + _index1 + ']';
 	}
 }

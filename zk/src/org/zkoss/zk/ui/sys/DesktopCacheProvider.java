@@ -16,8 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.WebApp;
 
 /**
  * Used to retrieve a desktop cache ({@link DesktopCache}).
@@ -31,6 +31,7 @@ public interface DesktopCacheProvider {
 	 * instead. Moreover, it might implement a cache supporting clustering.
 	 */
 	public DesktopCache getDesktopCache(Session session);
+
 	/** Called when a session is destroyed.
 	 * If the provider is session-based, it has to remove relevant desktops.
 	 * If not, it might ignore this method.
@@ -45,6 +46,7 @@ public interface DesktopCacheProvider {
 	 * <p>It is called when {@link org.zkoss.zk.ui.sys.WebAppCtrl#sessionWillPassivate} is called.
 	 */
 	public void sessionWillPassivate(Session sess);
+
 	/** Notification that the session has just been activated
 	 * (a.k.a., deserialized).
 	 *
@@ -55,6 +57,7 @@ public interface DesktopCacheProvider {
 	/** Starts the provider.
 	 */
 	public void start(WebApp wapp);
+
 	/** Stops the provider.
 	 */
 	public void stop(WebApp wapp);

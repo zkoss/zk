@@ -11,7 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.annotation;
 
-
 /**
  * The implicit scopes of zk for {@link ScopeParam}. <br/>
  * The {@linkplain #AUTO} scope means searching the value from components to page, desktop one bye one automatically...until find a value 
@@ -50,18 +49,17 @@ public enum Scope {
 	 * Search the value from the implicit applicationScope
 	 */
 	APPLICATION("applicationScope");
-	
-	
+
 	private String _name;
-	
-	private Scope(String name){
+
+	private Scope(String name) {
 		this._name = name;
 	}
-	
+
 	/**
 	 * the zk implicit scope name
 	 */
-	public String getName(){
+	public String getName() {
 		return _name;
 	}
 }

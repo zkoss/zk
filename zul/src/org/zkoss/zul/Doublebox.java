@@ -24,8 +24,8 @@ import org.zkoss.zk.ui.ArithmeticWrongValueException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.PropertyAccess;
-import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.impl.NumberInputElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * An edit box for holding an float point value (double).
@@ -37,10 +37,12 @@ public class Doublebox extends NumberInputElement {
 	public Doublebox() {
 		setCols(11);
 	}
+
 	public Doublebox(double value) throws WrongValueException {
 		this();
 		setValue(value);
 	}
+
 	public Doublebox(Double value) throws WrongValueException {
 		this();
 		setValue(value);
@@ -51,32 +53,37 @@ public class Doublebox extends NumberInputElement {
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Double getValue() throws WrongValueException {
-		return (Double)getTargetValue();
+		return (Double) getTargetValue();
 	}
+
 	/** Returns the value in double. If null, zero is returned.
 	 */
 	public double doubleValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Double)val).doubleValue(): 0.0;
+		return val != null ? ((Double) val).doubleValue() : 0.0;
 	}
+
 	/** Returns the value in integer. If null, zero is returned.
 	 */
 	public int intValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Double)val).intValue(): 0;
+		return val != null ? ((Double) val).intValue() : 0;
 	}
+
 	/** Returns the value in long. If null, zero is returned.
 	 */
 	public long longValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Double)val).longValue(): 0;
+		return val != null ? ((Double) val).longValue() : 0;
 	}
+
 	/** Returns the value in short. If null, zero is returned.
 	 */
 	public short shortValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Double)val).shortValue(): 0;
+		return val != null ? ((Double) val).shortValue() : 0;
 	}
+
 	/** Sets the value (in Double).
 	 * @exception WrongValueException if value is wrong
 	 */
@@ -84,6 +91,7 @@ public class Doublebox extends NumberInputElement {
 		validate(value);
 		setRawValue(value);
 	}
+
 	/** Sets the value (in double)
 	 * @exception WrongValueException if value is wrong
 	 */
@@ -95,42 +103,43 @@ public class Doublebox extends NumberInputElement {
 	public String getZclass() {
 		return _zclass == null ? "z-doublebox" : _zclass;
 	}
+
 	public Object unmarshall(Object value) {
 		return value instanceof Number ? //sometimes JSON might interpret value to Integer
-			new Double(((Number)value).doubleValue()) : value;
+				new Double(((Number) value).doubleValue()) : value;
 	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
-		final String val = (String)vals[0];
+		final String val = (String) vals[0];
 		if (val == null || val.length() == 0)
 			return null;
 
 		try {
 			double v = Double.parseDouble(val);
-			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
+			int divscale = vals[1] != null ? ((Integer) vals[1]).intValue() : 0;
 			if (divscale > 0)
 				v /= Math.pow(10, divscale);
 			return new Double(v);
 		} catch (NumberFormatException ex) {
-			throw showCustomError(
-				new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
+			throw showCustomError(new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
+
 	protected String coerceToString(Object value) {
-		try{
-			return value != null && getFormat() == null ?
-				value instanceof Double ?
-					toLocaleString((Double)value, getDefaultLocale()):
-				value.toString()/*just in case*/: formatNumber(value, null);
+		try {
+			return value != null && getFormat() == null
+					? value instanceof Double ? toLocaleString((Double) value, getDefaultLocale()) : value.toString()
+					/*just in case*/ : formatNumber(value, null);
 		} catch (ArithmeticException ex) {
 			throw new ArithmeticWrongValueException(this, ex.getMessage(), ex, value);
 		}
 	}
+
 	/*package*/ static String toLocaleString(Double v, java.util.Locale locale) {
 		// B65-ZK-1909: Remove .0 part
 		final DecimalFormat df = new DecimalFormat("#.#");
-		final DecimalFormatSymbols symbols =
-			new DecimalFormatSymbols(locale);
+		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
 		final char DECIMAL = symbols.getDecimalSeparator();
 		final char MINUS = symbols.getMinusSign();
 		// only replace MINUS and DECIMAL as toPlainString() implementation
@@ -140,14 +149,17 @@ public class Doublebox extends NumberInputElement {
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+
 	static {
 		_properties.put("value", new PropertyAccess<Double>() {
 			public void setValue(Component cmp, Double value) {
 				((Doublebox) cmp).setValue(value);
 			}
+
 			public Class<Double> getType() {
 				return Double.class;
 			}
+
 			public Double getValue(Component cmp) {
 				return ((Doublebox) cmp).getValue();
 			}

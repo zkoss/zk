@@ -39,21 +39,25 @@ public interface Openable<E> {
 	 * @since 6.0.0
 	 */
 	public Set<E> getOpenObjects();
+
 	/**
 	 * Replace the current set of opened objects with the given set.
 	 * @since 6.0.0
 	 */
 	public void setOpenObjects(Collection<? extends E> opens);
+
 	/**
 	 * Returns whether the specified object be opened.
 	 * @param obj
 	 */
 	public boolean isObjectOpened(Object obj);
+
 	/**
 	 * Returns true if the open is currently empty.
 	 * @since 6.0.0
 	 */
 	public boolean isOpenEmpty();
+
 	/**
 	 * Add the specified object into the collection of opened objects.
 	 * @param obj the object to be as selection.
@@ -62,6 +66,7 @@ public interface Openable<E> {
 	 * @since 6.0.0
 	 */
 	public boolean addOpenObject(E obj);
+
 	/**
 	 * Remove the specified object from selection.
 	 * @param obj the object to be remove from selection.
@@ -69,6 +74,7 @@ public interface Openable<E> {
 	 * @since 6.0.0
 	 */
 	public boolean removeOpenObject(Object obj);
+
 	/**
 	 * Clear all open status.
 	 * <p>Notice that this method is designed to be called by a component

@@ -16,28 +16,28 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.SerializableEventListener;
-import org.zkoss.zk.ui.util.ComponentCloneListener;
-import org.zkoss.zul.impl.ChartEngine;
-import org.zkoss.zul.event.ChartDataEvent;
-import org.zkoss.zul.event.ChartDataListener;
-import org.zkoss.zul.event.ChartAreaListener;
-import org.zkoss.image.AImage;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Library;
-
 import java.awt.Font;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
+
+import org.zkoss.image.AImage;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
+import org.zkoss.zul.event.ChartAreaListener;
+import org.zkoss.zul.event.ChartDataEvent;
+import org.zkoss.zul.event.ChartDataListener;
+import org.zkoss.zul.impl.ChartEngine;
 
 /**
  * The generic chart component. Developers set proper chart type, data model,
@@ -105,8 +105,9 @@ public class Chart extends Imagemap {
 	public static final String GANTT = "gantt"; //@since 3.5.0
 	public static final String WIND = "wind"; //@since 3.5.0
 	public static final String DIAL = "dial"; //@since 3.6.3
-	
+
 	private static final Map<String, String> DEFAULT_MODEL = new HashMap<String, String>();
+
 	static {
 		DEFAULT_MODEL.put(PIE, "org.zkoss.zul.SimplePieModel");
 		DEFAULT_MODEL.put(RING, "org.zkoss.zul.SimplePieModel");
@@ -130,7 +131,7 @@ public class Chart extends Imagemap {
 		DEFAULT_MODEL.put(WIND, "org.zkoss.zul.SimpleXYZModel"); //@since 3.5.0
 		DEFAULT_MODEL.put(DIAL, "org.zkoss.zul.DialModel"); //@since 3.6.3 
 	}
-	
+
 	//Time Series Chart Period
 	public static final String YEAR = "year";
 	public static final String QUARTER = "quarter";
@@ -141,7 +142,7 @@ public class Chart extends Imagemap {
 	public static final String MINUTE = "minute";
 	public static final String SECOND = "second";
 	public static final String MILLISECOND = "millisecond";
-	
+
 	//control variable
 	private boolean _smartDrawChart; //whether post the smartDraw event already?
 	private EventListener<Event> _smartDrawChartListener; //the smartDrawListner
@@ -149,7 +150,7 @@ public class Chart extends Imagemap {
 
 	private String _type = PIE; //chart type (pie, ring, bar, line, xy, etc)
 	private boolean _threeD; //whether a 3D chart
-	
+
 	//chart related attributes
 	private String _title; //chart title
 	private int _intWidth = 400; //default to 400
@@ -160,27 +161,27 @@ public class Chart extends Imagemap {
 	private boolean _showTooltiptext = true; //wether show tooltiptext
 	private String _orient = "vertical"; //orient
 	private ChartAreaListener _areaListener; //callback function when chart area changed
-    private String _paneColor; // pane's color
-    private int[] _paneRGB = new int[] {0xEE,0xEE,0xEE}; //pane red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
-    private int _paneAlpha = 255; //pane alpha transparency (0 ~ 255, default to 255)
-	
+	private String _paneColor; // pane's color
+	private int[] _paneRGB = new int[] { 0xEE, 0xEE, 0xEE }; //pane red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private int _paneAlpha = 255; //pane alpha transparency (0 ~ 255, default to 255)
+
 	//plot related attributes
 	private int _fgAlpha = 255; //foreground alpha transparency (0 ~ 255, default to 255)
 	private String _bgColor;
-	private int[] _bgRGB = new int[] {0xFF,0xFF,0xFF}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private int[] _bgRGB = new int[] { 0xFF, 0xFF, 0xFF }; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private int _bgAlpha = 255; //background alpha transparency (0 ~ 255, default to 255)
-	
+
 	//Time Series Chart related attributes
 	private TimeZone _tzone;
 	private String _period;
 	private String _dateFormat;
-	
+
 	//chart data model
 	private ChartModel _model; //chart data model
-	
+
 	//chart engine
 	private ChartEngine _engine; //chart engine. model and engine is related
-	
+
 	//chart Font
 	private Font _titleFont; //chart's title font
 	private Font _legendFont; //chart's lengend font
@@ -188,16 +189,16 @@ public class Chart extends Imagemap {
 	private Font _xAxisFont; //chart's x axis font
 	private Font _yAxisTickFont; //chart's y axis tick number font
 	private Font _yAxisFont; //chart's y axis font
-	
+
 	public Chart() {
 		init();
 		setWidth("500px");
 		setHeight("250px");
 	}
-	
+
 	private ChartModel createDefaultModel() {
 		if (WAFERMAP.equals(getType())) {
-			return new WaferMapModel(100,100);
+			return new WaferMapModel(100, 100);
 		}
 		final String klass = DEFAULT_MODEL.get(getType());
 		if (klass != null) {
@@ -207,24 +208,25 @@ public class Chart extends Imagemap {
 				throw UiException.Aide.wrap(e);
 			}
 		} else {
-			throw new UiException("unknown chart type: "+getType());
+			throw new UiException("unknown chart type: " + getType());
 		}
 	}
-	
+
 	private void init() {
 		if (_smartDrawChartListener == null) {
 			_smartDrawChartListener = new SmartDrawListener();
 			addEventListener("onSmartDrawChart", _smartDrawChartListener);
 		}
 	}
-	
+
 	private class SmartDrawListener implements SerializableEventListener<Event> {
 		private static final long serialVersionUID = 20091008183610L;
+
 		public void onEvent(Event event) throws Exception {
 			doSmartDraw();
 		}
 	}
-	
+
 	private void doSmartDraw() {
 		if (Strings.isBlank(getType()))
 			throw new UiException("chart must specify type (pie, bar, line, ...)");
@@ -235,20 +237,20 @@ public class Chart extends Imagemap {
 
 		if (Strings.isBlank(getWidth()))
 			throw new UiException("chart must specify width");
-			
+
 		if (Strings.isBlank(getHeight()))
 			throw new UiException("chart must specify height");
-			
+
 		try {
-			final AImage image = new AImage("chart"+new Date().getTime(), getEngine().drawChart(Chart.this));
+			final AImage image = new AImage("chart" + new Date().getTime(), getEngine().drawChart(Chart.this));
 			setContent(image);
-		} catch(java.io.IOException ex) {
+		} catch (java.io.IOException ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
 			_smartDrawChart = false;
 		}
 	}
-	
+
 	/**
 	 * Set the chart's type (Chart.PIE, Chart.BAR, Chart.LINE, etc.).
 	 *
@@ -262,7 +264,7 @@ public class Chart extends Imagemap {
 		_type = type;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the chart's type.
 	 */
@@ -280,7 +282,7 @@ public class Chart extends Imagemap {
 		_threeD = b;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Whether a 3d chart.
 	 */
@@ -300,14 +302,14 @@ public class Chart extends Imagemap {
 		_title = title;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the chart's title.
 	 */
 	public String getTitle() {
 		return _title;
 	}
-	
+
 	/**
 	 * Override super class to prepare the int width.
 	 */
@@ -327,13 +329,14 @@ public class Chart extends Imagemap {
 	public void setHflex(String flex) {
 		super.setHflex0(flex);
 	}
+
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.
 	 */
 	public int getIntWidth() {
 		return _intWidth;
 	}
-	
+
 	/**
 	 * Override super class to prepare the int height.
 	 */
@@ -353,13 +356,14 @@ public class Chart extends Imagemap {
 	public void setVflex(String flex) {
 		super.setVflex0(flex);
 	}
+
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.
 	 */
 	public int getIntHeight() {
 		return _intHeight;
 	}
-	
+
 	/**
 	 * Set the label in xAxis.
 	 * @param label label in xAxis.
@@ -371,14 +375,14 @@ public class Chart extends Imagemap {
 		_xAxis = label;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the label in xAxis.
 	 */
 	public String getXAxis() {
 		return _xAxis;
 	}
-	
+
 	/**
 	 * Set the label in yAxis.
 	 * @param label label in yAxis.
@@ -390,7 +394,7 @@ public class Chart extends Imagemap {
 		_yAxis = label;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the label in yAxis.
 	 */
@@ -409,14 +413,14 @@ public class Chart extends Imagemap {
 		_showLegend = showLegend;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Check whether show the legend of the chart.
 	 */
 	public boolean isShowLegend() {
 		return _showLegend;
 	}
-		
+
 	/**
 	 * whether show the chart's tooltip.
 	 * @param showTooltiptext true if want to pop the tooltiptext (default to true).
@@ -428,14 +432,14 @@ public class Chart extends Imagemap {
 		_showTooltiptext = showTooltiptext;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Check whether show the tooltiptext.
 	 */
 	public boolean isShowTooltiptext() {
 		return _showTooltiptext;
 	}
-	
+
 	/**
 	 * Set the pane alpha (transparency, 0 ~ 255).
 	 * @param alpha the transparency of pane color (0 ~ 255, default to 255 opaque).
@@ -450,7 +454,7 @@ public class Chart extends Imagemap {
 		_paneAlpha = alpha;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the pane alpha (transparency, 0 ~ 255, opacue).
 	 */
@@ -475,7 +479,7 @@ public class Chart extends Imagemap {
 		}
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the pane color of the chart (in string as #RRGGBB).
 	 * null means default.
@@ -483,7 +487,7 @@ public class Chart extends Imagemap {
 	public String getPaneColor() {
 		return _paneColor;
 	}
-	
+
 	/**
 	 * Get the pane color in int array (0: red, 1: green, 2:blue).
 	 * null means default.
@@ -500,7 +504,7 @@ public class Chart extends Imagemap {
 		if (alpha == _fgAlpha) {
 			return;
 		}
-		
+
 		if (alpha > 255 || alpha < 0) {
 			alpha = 255;
 		}
@@ -529,7 +533,7 @@ public class Chart extends Imagemap {
 		_bgAlpha = alpha;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the background alpha (transparency, 0 ~ 255, opaque).
 	 */
@@ -554,7 +558,7 @@ public class Chart extends Imagemap {
 		}
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the background color of the chart (in string as #RRGGBB).
 	 * null means default.
@@ -562,7 +566,7 @@ public class Chart extends Imagemap {
 	public String getBgColor() {
 		return _bgColor;
 	}
-	
+
 	/**
 	 * Get the background color in int array (0: red, 1: green, 2:blue).
 	 * null means default.
@@ -570,7 +574,7 @@ public class Chart extends Imagemap {
 	public int[] getBgRGB() {
 		return _bgRGB;
 	}
-	
+
 	/**
 	 * Set the chart orientation.
 	 * @param orient vertical or horizontal (default to vertical)
@@ -582,14 +586,14 @@ public class Chart extends Imagemap {
 		_orient = orient;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Get the chart orientation (vertical or horizontal)
 	 */
 	public String getOrient() {
 		return _orient;
 	}
-	
+
 	/** Returns the time zone that this Time Series Chart belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link org.zkoss.util.TimeZones#getCurrent}.
@@ -597,6 +601,7 @@ public class Chart extends Imagemap {
 	public TimeZone getTimeZone() {
 		return _tzone;
 	}
+
 	/** Sets the time zone that this Time Series Chart belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link org.zkoss.util.TimeZones#getCurrent}.
@@ -616,7 +621,7 @@ public class Chart extends Imagemap {
 	public String getPeriod() {
 		return _period;
 	}
-	
+
 	/** Sets the period used in Time Series Chart. The value can be
 	 * "millisecond", "second", "minute", "hour", "day", "week", "month", "quarter", and "year".
 	 */
@@ -627,7 +632,7 @@ public class Chart extends Imagemap {
 		_period = period;
 		smartDrawChart();
 	}
-	
+
 	/**
 	 * Returns the date format used by date related Chart.
 	 * @return the date format used by date related Chart..
@@ -635,7 +640,7 @@ public class Chart extends Imagemap {
 	public String getDateFormat() {
 		return _dateFormat;
 	}
-	
+
 	/**
 	 * Sets the date format used by date related Chart.
 	 * @param format
@@ -647,7 +652,7 @@ public class Chart extends Imagemap {
 		_dateFormat = format;
 		smartDrawChart();
 	}
-	
+
 	/** Returns the chart model associated with this chart, or null
 	 * if this chart is not associated with any chart data model.
 	 */
@@ -671,9 +676,19 @@ public class Chart extends Imagemap {
 			_model = model;
 			initDataListener();
 		}
-		
+
 		//Always redraw
 		smartDrawChart();
+	}
+	
+	/** Sets the model by use of a class name.
+	 * It creates an instance automatically.
+	 */
+	public void setModel(String clsnm) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+	InstantiationException, java.lang.reflect.InvocationTargetException {
+		if (clsnm != null) {
+			setModel((ChartModel) Classes.newInstanceByThread(clsnm));
+		}
 	}
 
 	/**
@@ -827,17 +842,6 @@ public class Chart extends Imagemap {
 		_yAxisFont = axisFont;
 		smartDrawChart();
 	}
-	
-	/** Sets the model by use of a class name.
-	 * It creates an instance automatically.
-	 */
-	public void setModel(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-	InstantiationException, java.lang.reflect.InvocationTargetException {
-		if (clsnm != null) {
-			setModel((ChartModel)Classes.newInstanceByThread(clsnm));
-		}
-	}
 
 	/** Returns the implementation chart engine.
 	 * @exception UiException if failed to load the engine.
@@ -847,6 +851,7 @@ public class Chart extends Imagemap {
 			_engine = newChartEngine();
 		return _engine;
 	}
+
 	/** Instantiates the default chart engine.
 	 * It is called, if {@link #setEngine} is not called with non-null
 	 * engine.
@@ -868,7 +873,7 @@ public class Chart extends Imagemap {
 		final String PROP = "org.zkoss.zul.chart.engine.class";
 		final String klass = Library.getProperty(PROP);
 		if (klass == null)
-			throw new UiException("Library property,  "+PROP+", required");
+			throw new UiException("Library property,  " + PROP + ", required");
 
 		final Object v;
 		try {
@@ -877,16 +882,17 @@ public class Chart extends Imagemap {
 			throw UiException.Aide.wrap(ex);
 		}
 		if (!(v instanceof ChartEngine))
-			throw new UiException(ChartEngine.class + " must be implemented by "+v);
-		return (ChartEngine)v;
+			throw new UiException(ChartEngine.class + " must be implemented by " + v);
+		return (ChartEngine) v;
 	}
+
 	/** Sets the chart engine.
 	 */
 	public void setEngine(ChartEngine engine) {
 		if (_engine != engine) {
 			_engine = engine;
 		}
-		
+
 		//Always redraw
 		smartDrawChart();
 	}
@@ -894,21 +900,20 @@ public class Chart extends Imagemap {
 	/** Sets the chart engine by use of a class name.
 	 * It creates an instance automatically.
 	 */
-	public void setEngine(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-	InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setEngine(String clsnm) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+			InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
-			setEngine((ChartEngine)Classes.newInstanceByThread(clsnm));
+			setEngine((ChartEngine) Classes.newInstanceByThread(clsnm));
 		}
 	}
-				
+
 	private void initDataListener() {
 		if (_dataListener == null) {
 			_dataListener = new MyChartDataListener();
 			_model.addChartDataListener(_dataListener);
 		}
 	}
-	
+
 	private class MyChartDataListener implements ChartDataListener, Serializable {
 		private static final long serialVersionUID = 20091008183622L;
 
@@ -923,6 +928,7 @@ public class Chart extends Imagemap {
 	public ChartAreaListener getAreaListener() {
 		return _areaListener;
 	}
+
 	/** Sets the renderer which is used to render each area.
 	 *
 	 * <p>Note: changing a render will not cause the chart to re-render.
@@ -936,14 +942,14 @@ public class Chart extends Imagemap {
 			_areaListener = listener;
 		}
 	}
+
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
 	 */
-	public void setAreaListener(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-	InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setAreaListener(String clsnm) throws ClassNotFoundException, NoSuchMethodException,
+			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
-			setAreaListener((ChartAreaListener)Classes.newInstanceByThread(clsnm));
+			setAreaListener((ChartAreaListener) Classes.newInstanceByThread(clsnm));
 		}
 	}
 
@@ -957,27 +963,27 @@ public class Chart extends Imagemap {
 		_smartDrawChart = true;
 		Events.postEvent("onSmartDrawChart", this, null);
 	}
-		
+
 	//-- utilities --//
 	/*package*/ static void decode(String color, int[] rgb) {
 		if (color == null) {
 			return;
 		}
 		if (color.length() != 7 || color.charAt(0) != '#') {
-			throw new UiException("Incorrect color format (#RRGGBB) : "+color);
+			throw new UiException("Incorrect color format (#RRGGBB) : " + color);
 		}
 		rgb[0] = Integer.parseInt(color.substring(1, 3), 16);
 		rgb[1] = Integer.parseInt(color.substring(3, 5), 16);
 		rgb[2] = Integer.parseInt(color.substring(5, 7), 16);
 	}
-	
+
 	/*package*/ static int stringToInt(String str) {
 		int j = str.lastIndexOf("px");
 		if (j > 0) {
 			final String num = str.substring(0, j);
 			return Integer.parseInt(num);
 		}
-		
+
 		j = str.lastIndexOf("pt");
 		if (j > 0) {
 			final String num = str.substring(0, j);
@@ -1001,7 +1007,7 @@ public class Chart extends Imagemap {
 
 	//Cloneable//
 	public Object clone() {
-		final Chart clone = (Chart)super.clone();
+		final Chart clone = (Chart) super.clone();
 
 		// Due to the not unique ID of the area component creating in JFreeChartEngine, we have to clear
 		// all its children first.
@@ -1019,7 +1025,7 @@ public class Chart extends Imagemap {
 			clone._dataListener = null;
 			clone.initDataListener();
 		}
-		
+
 		return clone;
 	}
 }

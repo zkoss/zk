@@ -16,11 +16,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.LinkedList;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
-import java.lang.reflect.Array;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
@@ -55,38 +55,38 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * @see ComponentCloneListener
  */
 public class GroupsModelArray<D, H, F, E> extends AbstractGroupsModel<D, H, F, E>
-implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
-	
+		implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
+
 	/**
 	 * member field to store native (original) array data
 	 */
 	protected D[] _nativedata;
-	
+
 	/**
 	 * member field to store Comparator for initial grouping.
 	 */
 	protected Comparator<D> _comparator;
-	
+
 	/**
 	 * member field to store group data
 	 */
 	protected D[][] _data;
-	
+
 	/**
 	 * member field to store group head data (generated in {@link #organizeGroup})
 	 */
 	protected Object[] _heads;
-	
+
 	/**
 	 * member field to store group foot data (generated in {@link #organizeGroup})
 	 */
 	protected Object[] _foots;
-	
+
 	/**
 	 * member field to store group close status
 	 */
 	protected boolean[] _opens;
-	
+
 	/**
 	 * Constructor with an array of data.
 	 * @param data an array data to be grouping.
@@ -96,9 +96,10 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 */
-	public GroupsModelArray(D[] data, Comparator<D> cmpr){
-		this(data,cmpr,0);
+	public GroupsModelArray(D[] data, Comparator<D> cmpr) {
+		this(data, cmpr, 0);
 	}
+
 	/**
 	 * Constructor with an array of data.
 	 * It is the same as GroupsModelArray(data, cmpr, col, true), i.e.,
@@ -115,6 +116,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	public GroupsModelArray(D[] data, Comparator<D> cmpr, int col) {
 		this(data, cmpr, col, true); //clone
 	}
+
 	/**
 	 * Constructor with an array of data.
 	 * @param data an array data to be grouping.
@@ -131,17 +133,19 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	public GroupsModelArray(D[] data, Comparator<D> cmpr, int col, boolean clone) {
 		if (data == null || cmpr == null)
 			throw new IllegalArgumentException("null parameter");
-		_nativedata = clone ? (D[])ArraysX.duplicate(data): data;
+		_nativedata = clone ? (D[]) ArraysX.duplicate(data) : data;
 		_comparator = cmpr;
-		group(_comparator,true,col);
+		group(_comparator, true, col);
 	}
+
 	/** @deprecated As of release 6.0.1, there is no way to instantiate
 	 * the array with the correct type.
 	 */
 	@SuppressWarnings("unchecked")
 	public GroupsModelArray(List<D> data, Comparator cmpr, int col) {
-		this((D[])data.toArray(), cmpr, col, false); //no need to clone
+		this((D[]) data.toArray(), cmpr, col, false); //no need to clone
 	}
+
 	/** @deprecated As of release 6.0.1, there is no way to instantiate
 	 * the array with the correct type.
 	 */
@@ -159,7 +163,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 
 	@SuppressWarnings("unchecked")
 	public H getGroup(int groupIndex) {
-		return (H)_heads[groupIndex];
+		return (H) _heads[groupIndex];
 	}
 
 	public int getGroupCount() {
@@ -168,37 +172,37 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 
 	@SuppressWarnings("unchecked")
 	public F getGroupfoot(int groupIndex) {
-		return (F)_foots[groupIndex];
+		return (F) _foots[groupIndex];
 	}
 
 	public boolean hasGroupfoot(int groupIndex) {
-		return _foots == null ? false:_foots[groupIndex]!=null;
+		return _foots == null ? false : _foots[groupIndex] != null;
 	}
 
 	public void sort(Comparator<D> cmpr, boolean ascending, int col) {
-		sortAllGroupData(cmpr,ascending,col);
+		sortAllGroupData(cmpr, ascending, col);
 
-		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED,-1,-1,-1);
+		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED, -1, -1, -1);
 	}
 
 	public void group(final Comparator<D> cmpr, boolean ascending, int col) {
 		Comparator<D> cmprx;
-		if(cmpr instanceof GroupComparator){
-			cmprx = new Comparator<D>(){
+		if (cmpr instanceof GroupComparator) {
+			cmprx = new Comparator<D>() {
 				public int compare(D o1, D o2) {
-					return ((GroupComparator<D>)cmpr).compareGroup(o1, o2);
+					return ((GroupComparator<D>) cmpr).compareGroup(o1, o2);
 				}
 			};
-		}else{
+		} else {
 			cmprx = cmpr;
 		}
-		
-		sortDataInGroupOrder(cmprx, ascending,col);//use comparator from constructor to sort native data
+
+		sortDataInGroupOrder(cmprx, ascending, col); //use comparator from constructor to sort native data
 		organizeGroup(cmprx, col);
 		if (cmprx != cmpr)
-			sortAllGroupData(cmpr, ascending,col);//sort by original comparator
+			sortAllGroupData(cmpr, ascending, col); //sort by original comparator
 
-		fireEvent(GroupsDataEvent.GROUPS_RESET,-1,-1,-1);
+		fireEvent(GroupsDataEvent.GROUPS_RESET, -1, -1, -1);
 	}
 
 	/**
@@ -216,14 +220,14 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		setOpenGroup0(groupIndex, !close);
 	}
 
-	
 	public boolean addOpenGroup(int groupIndex) {
 		return setOpenGroup0(groupIndex, true);
 	}
-	
+
 	public boolean removeOpenGroup(int groupIndex) {
 		return setOpenGroup0(groupIndex, false);
 	}
+
 	private boolean setOpenGroup0(int groupIndex, boolean open) {
 		if (_opens == null) {
 			if (open)
@@ -240,21 +244,20 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		}
 		return false;
 	}
-	
-	
+
 	public boolean isGroupOpened(int groupIndex) {
 		return _opens == null || _opens[groupIndex];
 	}
-	
+
 	/**
 	 * Sorts data in each group, the group order will not change. invoke this method doesn't fire event.
 	 */
-	private void sortAllGroupData(Comparator<D> cmpr,boolean ascending, int col) {
-		for(int i=0;i<_data.length;i++){
-			sortGroupData(getGroup(i),_data[i],cmpr,ascending,col);
+	private void sortAllGroupData(Comparator<D> cmpr, boolean ascending, int col) {
+		for (int i = 0; i < _data.length; i++) {
+			sortGroupData(getGroup(i), _data[i], cmpr, ascending, col);
 		}
 	}
-	
+
 	/**
 	 * Sorts data within a group. Notice that this method doesn't fire event.
 	 * <p>There are three steps to re-group data:
@@ -264,7 +267,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	 * <p>It is the last step of grouping. It sorts data in the specified
 	 * group.
 	 */
-	protected void sortGroupData(H group,D[] groupdata,Comparator<D> cmpr,boolean ascending, int col){
+	protected void sortGroupData(H group, D[] groupdata, Comparator<D> cmpr, boolean ascending, int col) {
 		Arrays.sort(groupdata, cmpr);
 	}
 
@@ -291,38 +294,37 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		List<D> gdata = null;
 		D last = null;
 		D curr = null;
-		
+
 		//regroup native
-		for(int i=0;i<_nativedata.length;i++){
+		for (int i = 0; i < _nativedata.length; i++) {
 			curr = _nativedata[i];
-			if(last==null || cmpr.compare(last,curr)!=0){
+			if (last == null || cmpr.compare(last, curr) != 0) {
 				gdata = new LinkedList<D>();
 				group.add(gdata);
 			}
 			gdata.add(curr);
 			last = _nativedata[i];
 		}
-		
+
 		//prepare data,head & foot
 		List<D>[] gd = new List[group.size()];
 		group.toArray(gd);
 
 		Class<?> classD = _nativedata.getClass().getComponentType();
-		_data = (D[][])Array.newInstance(classD, gd.length, 0); //new D[gd.length][];
+		_data = (D[][]) Array.newInstance(classD, gd.length, 0); //new D[gd.length][];
 		_foots = new Object[gd.length];
 		_heads = new Object[gd.length];
 		_opens = new boolean[_data.length];
-		
-		for(int i=0;i<gd.length;i++){
+
+		for (int i = 0; i < gd.length; i++) {
 			gdata = gd[i];
-			_data[i] = (D[])Array.newInstance(classD, gdata.size());
+			_data[i] = (D[]) Array.newInstance(classD, gdata.size());
 			gdata.toArray(_data[i]);
-			_heads[i] = createGroupHead(_data[i],i,col);
-			_foots[i] = createGroupFoot(_data[i],i,col);
-			_opens[i] = createGroupOpen(_data[i],i,col);
+			_heads[i] = createGroupHead(_data[i], i, col);
+			_foots[i] = createGroupFoot(_data[i], i, col);
+			_opens[i] = createGroupOpen(_data[i], i, col);
 		}
 	}
-
 
 	/**
 	 * create group head Object, default implementation return first element of groupdata.
@@ -334,8 +336,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	@SuppressWarnings("unchecked")
 	protected H createGroupHead(D[] groupdata, int index, int col) {
 		final D o = groupdata[0];
-		return o != null && o.getClass().isArray() && col < Array.getLength(o) ?
-			(H)Array.get(o, col): (H)o;
+		return o != null && o.getClass().isArray() && col < Array.getLength(o) ? (H) Array.get(o, col) : (H) o;
 	}
 
 	/**
@@ -345,7 +346,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	 * @param index group index
 	 * @param col column to group
 	 */
-	protected F createGroupFoot(D[] groupdata,int index,int col) {
+	protected F createGroupFoot(D[] groupdata, int index, int col) {
 		return null;
 	}
 
@@ -364,7 +365,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	 * the data.
 	 */
 	protected void sortDataInGroupOrder(Comparator<D> cmpr, boolean ascending, int colIndex) {
-		Arrays.sort(_nativedata,cmpr);
+		Arrays.sort(_nativedata, cmpr);
 	}
 
 	/**
@@ -375,14 +376,13 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	 * @param col column to group
 	 * @since 6.0.0
 	 */
-	protected boolean createGroupOpen(D[] groupdata,int index,int col) {
+	protected boolean createGroupOpen(D[] groupdata, int index, int col) {
 		return true;
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	public Object clone() {
-		GroupsModelArray clone = (GroupsModelArray)super.clone();
+		GroupsModelArray clone = (GroupsModelArray) super.clone();
 		if (_nativedata != null)
 			clone._nativedata = ArraysX.duplicate(_nativedata);
 		if (_data != null)
@@ -392,9 +392,10 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 		if (_foots != null)
 			clone._foots = ArraysX.duplicate(_foots);
 		if (_opens != null)
-			clone._opens = (boolean[])ArraysX.duplicate(_opens);
+			clone._opens = (boolean[]) ArraysX.duplicate(_opens);
 		return clone;
 	}
+
 	/**
 	 * Allows the model to clone
 	 * @since 6.0.0
@@ -402,19 +403,21 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable{
 	public Object willClone(Component comp) {
 		return clone();
 	}
-	
+
 	//Object//
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o instanceof GroupsModelArray) {
-			return Arrays.equals(_nativedata, ((GroupsModelArray)o)._nativedata);
+			return Arrays.equals(_nativedata, ((GroupsModelArray) o)._nativedata);
 		}
 		return false;
 	}
+
 	public int hashCode() {
 		return Arrays.hashCode(_nativedata);
 	}
+
 	public String toString() {
 		return Objects.toString(_nativedata);
 	}

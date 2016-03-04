@@ -23,25 +23,26 @@ import org.zkoss.bind.Validator;
  * @author dennis
  * @since 6.0.0
  */
-public class CompositeValidator implements Validator,Serializable{
+public class CompositeValidator implements Validator, Serializable {
 	private static final long serialVersionUID = 6545009126528775045L;
 	private List<Validator> _validators;
-	
+
 	//I don't provide addValidator method since this class might be share between binders, 
 	//if we provide addValidator, then we have to consider the thread-safe issue in validate();
-	
-	public CompositeValidator(List<Validator> validator){
+
+	public CompositeValidator(List<Validator> validator) {
 		_validators = new ArrayList<Validator>(validator);
 	}
-	public CompositeValidator(Validator... validators){
+
+	public CompositeValidator(Validator... validators) {
 		_validators = new ArrayList<Validator>();
-		for(Validator v:validators){
+		for (Validator v : validators) {
 			_validators.add(v);
 		}
 	}
-	
+
 	public void validate(ValidationContext ctx) {
-		for(Validator v:_validators){
+		for (Validator v : _validators) {
 			v.validate(ctx);
 		}
 	}

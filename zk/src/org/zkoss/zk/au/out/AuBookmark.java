@@ -33,11 +33,12 @@ public class AuBookmark extends AuResponse {
 	public AuBookmark(String name) {
 		this(name, false); //component-independent
 	}
+
 	/**
 	 * @param name the bookmark name.
 	 */
 	public AuBookmark(String name, boolean replace) {
-		super("bookmark", new Object[] {name, Boolean.valueOf(replace)}); //component-independent
+		super("bookmark", new Object[] { name, Boolean.valueOf(replace) }); //component-independent
 	}
 
 	/** Default: zk.bookmark (i.e., only one response of this class will

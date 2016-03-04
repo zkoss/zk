@@ -28,7 +28,7 @@ public interface Padding {
 	 * @param height the padding height in px.
 	 */
 	public void setHeight(int height);
-	
+
 	/**
 	 * Returns the padding height in px.
 	 * @return the padding height in px.

@@ -25,7 +25,7 @@ public class Color {
 	private int green;
 	private int blue;
 	private int alpha;
-	
+
 	/**
 	 * All color channel should be in 0-255 range, alpha will default to 255 if not given
 	 * @param r red
@@ -70,7 +70,7 @@ public class Color {
 			gotError = true;
 			wrongColors += " \"alpha\"";
 		}
-		if(gotError) {
+		if (gotError) {
 			throw new IllegalArgumentException(wrongColors + " color value outside of expected range 0-255");
 		}
 	}

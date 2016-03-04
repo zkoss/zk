@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp;
 
-import java.util.Map;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -56,8 +56,8 @@ public interface DspContext extends RequestContext {
 	 * this extended resource.
 	 * @since 3.5.2
 	 */
-	public String encodeURL(String uri)
-	throws ServletException, IOException;
+	public String encodeURL(String uri) throws ServletException, IOException;
+
 	/** Includes the specified URI and render the result to the specified
 	 * output.
 	 *
@@ -69,8 +69,8 @@ public interface DspContext extends RequestContext {
 	 * The map is passed thru the request attribute called arg.
 	 * @since 3.5.2
 	 */
-	public void include(String uri, Map params)
-	throws ServletException, IOException;
+	public void include(String uri, Map params) throws ServletException, IOException;
+
 	/** Returns whether this page is included.
 	 * @since 3.5.2
 	 */

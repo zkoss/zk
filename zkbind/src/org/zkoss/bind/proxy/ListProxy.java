@@ -14,11 +14,8 @@ package org.zkoss.bind.proxy;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import org.zkoss.bind.BindContext;
 
 /**
  * A list proxy
@@ -28,16 +25,16 @@ import org.zkoss.bind.BindContext;
 public class ListProxy<E> extends AbstractCollectionProxy<E> implements List<E> {
 	private static final long serialVersionUID = 20141225150833L;
 	private Annotation[] _callerAnnots;
-	
+
 	public ListProxy(Collection<E> origin, Annotation[] callerAnnots) {
 		super(origin, callerAnnots);
 		_callerAnnots = callerAnnots;
 		resetFromOrigin();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected Collection<E> initCache() {
-		return new ArrayList<E>(((Collection<E>)getOriginObject()).size());
+		return new ArrayList<E>(((Collection<E>) getOriginObject()).size());
 	}
 
 	public boolean addAll(int index, Collection<? extends E> c) {

@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  * @author jumperchen
  * @since 8.0.1
  */
-@Target(value={ElementType.TYPE, ElementType.METHOD})
+@Target(value = { ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface ImmutableFields {

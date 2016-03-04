@@ -37,6 +37,7 @@ public interface ComponentSerializationListener {
 	/** Called when a component is going to serialize this object.
 	 */
 	public void willSerialize(Component comp);
+
 	/** Called when a component has de-serialized this object back.
 	 */
 	public void didDeserialize(Component comp);

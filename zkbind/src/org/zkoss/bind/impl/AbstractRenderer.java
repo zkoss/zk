@@ -48,40 +48,46 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected static final String RENDERED_COMPONENTS = "$RENDERED_COMPONENTS$";
 
 	private String _attributeName;
-	
-	
+
 	public void setAttributeName(String name) {
 		_attributeName = name;
 	}
 
 	private Template lookupTemplate(Component comp, String name) {
-		if(comp==null) return null;
+		if (comp == null)
+			return null;
 		Template template = comp.getTemplate(name);
-		return template==null?lookupTemplate(comp.getParent(),name):template;
+		return template == null ? lookupTemplate(comp.getParent(), name) : template;
 	}
-	protected Template resolveTemplate(Component templateComp, Component comp, Object data, int index, int size, String defaultName) {
-		return resolveTemplate(templateComp,comp,data,index,size,defaultName,null);
+
+	protected Template resolveTemplate(Component templateComp, Component comp, Object data, int index, int size,
+			String defaultName) {
+		return resolveTemplate(templateComp, comp, data, index, size, defaultName, null);
 	}
-	protected Template resolveTemplate(Component templateComp, Component comp, Object data, int index, int size, String defaultName, String subType) {
+
+	protected Template resolveTemplate(Component templateComp, Component comp, Object data, int index, int size,
+			String defaultName, String subType) {
 		//a detached component(ex,grid.onInitRender) will still call the render, see test case collection-template-grid.zul
 		//TODO need to check is this a zk bug and report it
-		if(comp.getPage()==null) return null;//no template
-		
+		if (comp.getPage() == null)
+			return null; //no template
+
 		final Binder binder = BinderUtil.getBinder(comp, true);
-		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
+		final TemplateResolver resolver = ((BinderCtrl) binder).getTemplateResolver(templateComp, _attributeName);
 		Template template = null;
-		if(resolver!=null){
-			template = resolver.resolveTemplate(comp,data,index,size,subType);
-			if(template==null){
-				throw new UiException("template not found for component "+comp+" by resolver "+resolver);
+		if (resolver != null) {
+			template = resolver.resolveTemplate(comp, data, index, size, subType);
+			if (template == null) {
+				throw new UiException("template not found for component " + comp + " by resolver " + resolver);
 			}
-		}else{
-			template = lookupTemplate(comp, subType==null?defaultName:defaultName+":"+subType);
+		} else {
+			template = lookupTemplate(comp, subType == null ? defaultName : defaultName + ":" + subType);
 		}
 		return template;
 	}
 
 	private boolean isFirstTime = false;
+
 	protected void recordRenderedIndex(Component owner, int itemSize) {
 
 		// clean up first for first time to invoke
@@ -94,8 +100,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 			indexes = new LinkedHashMap<String, Integer>();
 			owner.setAttribute(RENDERED_COMPONENTS, indexes);
 		}
-		int index = indexes.isEmpty() ? 0 :
-					new LinkedList<Integer>(indexes.values()).getLast().intValue() + 1;
+		int index = indexes.isEmpty() ? 0 : new LinkedList<Integer>(indexes.values()).getLast().intValue() + 1;
 		for (int size = indexes.size(), start = 0; start < itemSize; start++) {
 			indexes.put(String.valueOf(size + start), index);
 		}
@@ -111,6 +116,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		}
 		return childIndex;
 	}
+
 	private boolean checkShadowElementAndCreateSubChildren(Component parent) {
 		boolean hasShadow = false;
 		if (parent instanceof ComponentCtrl) {
@@ -136,6 +142,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		}
 		return hasShadow;
 	}
+
 	protected Component[] filterOutShadows(Component parent, Component[] items) {
 		boolean hasShadow = checkShadowElementAndCreateSubChildren(parent);
 
@@ -143,28 +150,32 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		for (Component item : items) {
 			checkShadowElementAndCreateSubChildren(item);
 		}
-		return  hasShadow ? ShadowElementsCtrl.filterOutShadows(items) : items;
+		return hasShadow ? ShadowElementsCtrl.filterOutShadows(items) : items;
 	}
-    //ZK-739: Allow dynamic template for collection binding.
-	protected void addTemplateTracking(Component templateComp, final Component eachComp,final Object data, final int index, final int size) {
+
+	//ZK-739: Allow dynamic template for collection binding.
+	protected void addTemplateTracking(Component templateComp, final Component eachComp, final Object data,
+			final int index, final int size) {
 		final Binder binder = BinderUtil.getBinder(eachComp, true);
-		if(binder == null) return; //no binder
-		final TemplateResolver resolver = ((BinderCtrl)binder).getTemplateResolver(templateComp, _attributeName);
-		if(resolver == null) return;//no resolver
+		if (binder == null)
+			return; //no binder
+		final TemplateResolver resolver = ((BinderCtrl) binder).getTemplateResolver(templateComp, _attributeName);
+		if (resolver == null)
+			return; //no resolver
 		Object old = null;
 		Object oldStatus = null;
 		try {
 			old = eachComp.setAttribute(EACH_VAR, data); //kept the value for template resolving
-			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus(){//provide iteration status in this context
+			oldStatus = eachComp.setAttribute(EACH_STATUS_VAR, new AbstractForEachStatus() { //provide iteration status in this context
 				private static final long serialVersionUID = 1L;
-				
+
 				public int getIndex() {
 					return index;
 				}
-				
-				public Integer getEnd(){
-					if(size<0){
-						throw new UiException("end attribute is not supported");// the tree case
+
+				public Integer getEnd() {
+					if (size < 0) {
+						throw new UiException("end attribute is not supported"); // the tree case
 					}
 					return size;
 				}
@@ -173,12 +184,13 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 					return data;
 				}
 			});
-			resolver.addTemplateTracking(eachComp,data,index,size);
+			resolver.addTemplateTracking(eachComp, data, index, size);
 		} finally {
 			eachComp.setAttribute(EACH_STATUS_VAR, oldStatus);
 			eachComp.setAttribute(TemplateResolver.EACH_VAR, old);
 		}
 	}
+
 	//ZK-758: Unable to NotifyChange with indirect reference on an Array/List
 	protected void addItemReference(Component modelOwner, final Component comp, int index, String varnm) {
 		// ZK-2456: if comp is native, add reference to all of its children
@@ -188,13 +200,14 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 			}
 		} else {
 			final Binder binder = BinderUtil.getBinder(comp, true);
-			if (binder == null) return; //no binder
+			if (binder == null)
+				return; //no binder
 			// ZK-2552: use an expression instead of solid number to represent index
 			final String expression;
 			if (comp.hasAttribute(IS_TEMPLATE_MODEL_ENABLED_ATTR)) {
 				expression = CURRENT_INDEX_RESOLVER_ATTR;
 			} else {
-				expression = BindELContext.getModelName(modelOwner)+"["+index+"]";
+				expression = BindELContext.getModelName(modelOwner) + "[" + index + "]";
 			}
 			//should not use binder.addReferenceBinding(comp, varnm, expression, null); here, it will mark comp bound.
 			//it is safe that we set to comp attr here since the component is created by renderer/binder. 

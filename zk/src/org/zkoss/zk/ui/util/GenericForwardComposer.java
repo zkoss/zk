@@ -17,7 +17,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ConventionWires;
 
 /**
  * <p>A skeletal composer that you can extend and write intuitive onXxx$myid 
@@ -79,7 +78,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
  * @since 3.0.7
  * @see ConventionWires
  */
-abstract public class GenericForwardComposer<T extends Component> extends GenericAutowireComposer<T> {
+public abstract class GenericForwardComposer<T extends Component> extends GenericAutowireComposer<T> {
 	private static final long serialVersionUID = 20091006115726L;
 
 	/** The default constructor.
@@ -102,6 +101,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	 */
 	protected GenericForwardComposer() {
 	}
+
 	/** Constructor with a custom separator.
 	 * The separator is used to separate the component ID and event name.
 	 * By default, it is '$'. For Groovy and other environment that '$'
@@ -127,6 +127,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	protected GenericForwardComposer(char separator) {
 		super(separator);
 	}
+
 	/** Constructor with full control.
 	 * @param separator the separator used to separate the component ID and event name.
 	 * Refer to {@link #_separator} for details.
@@ -136,8 +137,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	 * ({@link org.zkoss.zk.ui.Page#addVariableResolver}) when wiring a member.
 	 * @since 5.0.3
 	 */
-	protected GenericForwardComposer(char separator, boolean ignoreZScript,
-	boolean ignoreXel) {
+	protected GenericForwardComposer(char separator, boolean ignoreZScript, boolean ignoreXel) {
 		super(separator, ignoreZScript, ignoreXel);
 	}
 
@@ -149,7 +149,7 @@ abstract public class GenericForwardComposer<T extends Component> extends Generi
 	 */
 	public void doAfterCompose(T comp) throws Exception {
 		super.doAfterCompose(comp);
-		
+
 		//add forward conditions to the components as defined in this composer
 		//onXxx$myid
 		ConventionWires.addForwards(comp, this, _separator);

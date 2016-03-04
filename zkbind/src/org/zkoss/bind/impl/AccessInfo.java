@@ -31,45 +31,50 @@ import org.zkoss.xel.ExpressionX;
  * @author henrichen
  * @since 6.0.0
  */
-public class AccessInfo implements Serializable{
-	
+public class AccessInfo implements Serializable {
+
 	private static final long serialVersionUID = 1463169907348730644L;
-	
+
 	final String commandName; //command name
 	final ExpressionX property; //property expression
 	final ConditionType type; //the condition type, prompt, before command or after command
-	
-	public AccessInfo(ExpressionX property,ConditionType type, String command) {
+
+	public AccessInfo(ExpressionX property, ConditionType type, String command) {
 		this.property = property;
 		this.type = type;
 		this.commandName = command;
 	}
+
 	public String getCommandName() {
 		return this.commandName;
 	}
+
 	public ConditionType getConditionType() {
 		return this.type;
 	}
+
 	public ExpressionX getProperty() {
 		return this.property;
 	}
 
-
-	public static AccessInfo create(Binding binding, String accessExpr, Class<?> expectedType, ConditionType type, String command,boolean ignoreTracker) {
+	public static AccessInfo create(Binding binding, String accessExpr, Class<?> expectedType, ConditionType type,
+			String command, boolean ignoreTracker) {
 		final Binder binder = binding.getBinder();
-		if(ConditionType.PROMPT != type && Strings.isEmpty(command)){
-			throw new IllegalArgumentException(MiscUtil.formatLocationMessage("condition type is "+type+", but command is null",binding.getComponent()));
+		if (ConditionType.PROMPT != type && Strings.isEmpty(command)) {
+			throw new IllegalArgumentException(MiscUtil.formatLocationMessage(
+					"condition type is " + type + ", but command is null", binding.getComponent()));
 		}
 
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		//ZK-1066 Incorrect form value if inner binding waiting a command
 		//ignore when non-prompt and binding marked ignored
-		final BindContext ctx = BindContextUtil.newBindContext(binder, binding, false, null, binding.getComponent(), null);
-		if(ConditionType.PROMPT != type || ignoreTracker){ 
+		final BindContext ctx = BindContextUtil.newBindContext(binder, binding, false, null, binding.getComponent(),
+				null);
+		if (ConditionType.PROMPT != type || ignoreTracker) {
 			ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);
 		}
 		final ExpressionX prop = eval.parseExpressionX(ctx, accessExpr, expectedType);
 		return new AccessInfo(prop, type, command);
 	}
-	
+
 }

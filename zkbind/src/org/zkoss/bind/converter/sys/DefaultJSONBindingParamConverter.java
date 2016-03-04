@@ -25,15 +25,14 @@ import org.zkoss.zk.ui.Component;
  * @author jumperchen
  * @since 8.0.0
  */
-public class DefaultJSONBindingParamConverter implements Converter,
-		Serializable {
+public class DefaultJSONBindingParamConverter implements Converter, Serializable {
 
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
 		return JSONValue.toJSONString(val);
 	}
 
 	public Object coerceToBean(Object val, Component component, BindContext ctx) {
-		return Classes.coerce((Class)ctx.getAttribute(ParamCall.BINDING_PARAM_CALL_TYPE), val);	
+		return Classes.coerce((Class) ctx.getAttribute(ParamCall.BINDING_PARAM_CALL_TYPE), val);
 	}
 
 }

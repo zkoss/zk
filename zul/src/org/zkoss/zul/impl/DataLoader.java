@@ -33,17 +33,17 @@ public interface DataLoader {
 	 * @param owner the owner component of this DataLoader.
 	 */
 	public void init(Component owner, int offset, int limit);
-	
+
 	/**
 	 * Callback from the owner component and give a chance to reset things.
 	 */
 	public void reset();
-	
+
 	/**
 	 * Returns the associated owner component of this DataLoader. 
 	 */
 	public Component getOwner();
-	
+
 	/**
 	 * Returns the requested <b>visible</b> offset of the current loaded data chunk.
 	 * @return the requested <b>visible</b> offset of the current loaded data chunk.
@@ -55,34 +55,34 @@ public interface DataLoader {
 	 * @return the required <b>visible</b> limit size of the current loaded data chunk to be shown on the screen.
 	 */
 	public int getLimit();
-	
+
 	/**
 	 * Handle event when ListDataEvent is fired from owner component.
 	 */
 	public void doListDataChange(ListDataEvent event);
-	
+
 	/**
 	 * Returns the total size of the data.
 	 * @return the total size of the data.
 	 */
 	public int getTotalSize();
-	
+
 	/** Synchronizes the owner component to be consistent with the specified model.
 	 * 
 	 * @param offset the starting index of the range to do data synchronize.
 	 * @param limit the size of the range to do data synchronize. -1 means the current range.
 	 */
 	public void syncModel(int offset, int limit);
-	
+
 	/** Used to update some extra control information to the client.
 	 */
 	public void updateModelInfo();
-	
+
 	/** Return the renderer to do rendering.
 	 * 
 	 */
 	public Object getRealRenderer();
-	
+
 	/**
 	 * Sets whether to always load all items from ListModel. 
 	 */

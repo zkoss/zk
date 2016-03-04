@@ -28,6 +28,7 @@ public interface TabboxRenderer<T> {
 	 * @param index the index of the data that is currently being rendered 
 	 */
 	public void renderTab(Tab tab, T data, int index) throws Exception;
+
 	/** Renders the data to the specified tabpanel.
 	 *
 	 * @param tabpanel the tabpanel to render the result.

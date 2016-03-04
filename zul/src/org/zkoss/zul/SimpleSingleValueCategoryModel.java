@@ -38,7 +38,7 @@ public class SimpleSingleValueCategoryModel extends AbstractChartModel implement
 	private static final long serialVersionUID = 20091008183556L;
 	private List<Comparable<?>> _categoryList = new ArrayList<Comparable<?>>();
 	private Map<Comparable<?>, Number> _categoryMap = new HashMap<Comparable<?>, Number>();
-	
+
 	//-- SingleValueCategoryModel --//
 	public Comparable<?> getCategory(int index) {
 		return _categoryList.get(index);
@@ -47,7 +47,7 @@ public class SimpleSingleValueCategoryModel extends AbstractChartModel implement
 	public Collection<Comparable<?>> getCategories() {
 		return _categoryList;
 	}
-	
+
 	public Number getValue(Comparable<?> category) {
 		return _categoryMap.get(category);
 	}
@@ -68,23 +68,22 @@ public class SimpleSingleValueCategoryModel extends AbstractChartModel implement
 			fireEvent(ChartDataEvent.CHANGED, null, category, 0, cIndex, value);
 		}
 	}
-	
+
 	public void removeValue(Comparable<?> category) {
 		_categoryMap.remove(category);
 
 		final int cIndex = _categoryList.indexOf(category);
-		
+
 		Comparable<?> value = _categoryList.remove(category);
 		fireEvent(ChartDataEvent.REMOVED, null, category, 0, cIndex, value);
 	}
-	
+
 	public void clear() {
 		_categoryMap.clear();
 		_categoryList.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 	}
 
-	
 	public Object clone() {
 		SimpleSingleValueCategoryModel clone = (SimpleSingleValueCategoryModel) super.clone();
 		if (_categoryList != null)
@@ -94,4 +93,3 @@ public class SimpleSingleValueCategoryModel extends AbstractChartModel implement
 		return clone;
 	}
 }
-

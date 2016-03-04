@@ -28,7 +28,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
-
 /**
  * <p>Composition manager that compose the given components into a whole page per 
  * the "insert" components and "define" components annotations. The "define" 
@@ -71,7 +70,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 public class Composition implements Initiator, InitiatorExt {
 	private static final String RESOLVE_COMPOSITION = "zk.ui.util.RESOLVE_COMPOSITION";
 	public static final String PARENT = "zk.ui.util.PARENT";
-	
+
 	public boolean doCatch(Throwable ex) throws Exception {
 		// do nothing
 		return false;
@@ -88,8 +87,8 @@ public class Composition implements Initiator, InitiatorExt {
 			exec.setAttribute(RESOLVE_COMPOSITION, this);
 		}
 		final Component parent = (Component) exec.getAttribute(PARENT);
-		for (Object arg: args.values())
-			exec.createComponents((String)arg, parent, null);
+		for (Object arg : args.values())
+			exec.createComponents((String) arg, parent, null);
 	}
 
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
@@ -100,7 +99,7 @@ public class Composition implements Initiator, InitiatorExt {
 			return;
 		}
 		exec.removeAttribute(RESOLVE_COMPOSITION);
-		
+
 		// resolve insert components
 		final Map<String, Component> insertMap = new HashMap<String, Component>(); //(insert name, insert component)
 		final Component parent = (Component) exec.getAttribute(PARENT);
@@ -109,14 +108,14 @@ public class Composition implements Initiator, InitiatorExt {
 		//B65-ZK-2072: Resolves define components recursively.
 		resolveDefineComponents(roots, insertMap);
 	}
-	
+
 	private void resolveDefineComponents(Collection<Component> comps, Map<String, Component> map) {
 		if (!comps.isEmpty()) {
 			Component comp = comps.iterator().next();
 			// join "define" components as children of "insert" component
 			do {
 				final Component nextRoot = comp.getNextSibling();
-				final Annotation annt = ((ComponentCtrl)comp).getAnnotation(null, "define");
+				final Annotation annt = ((ComponentCtrl) comp).getAnnotation(null, "define");
 				if (annt != null) {
 					final String joinId = annt.getAttribute("value");
 					final Component insertComp = map.get(joinId);
@@ -131,14 +130,14 @@ public class Composition implements Initiator, InitiatorExt {
 			} while (comp != null);
 		}
 	}
-	
+
 	private void resolveInsertComponents(Collection<Component> comps, Map<String, Component> map) {
-		for (Component comp: comps) {
-			final Annotation annt = ((ComponentCtrl)comp).getAnnotation(null, "insert");
+		for (Component comp : comps) {
+			final Annotation annt = ((ComponentCtrl) comp).getAnnotation(null, "insert");
 			if (annt != null) {
 				final String insertName = annt.getAttribute("value");
 				if (map.containsKey(insertName)) {
-					throw new UiException("Duplicate insert name: "+insertName+" at Component "+comp);
+					throw new UiException("Duplicate insert name: " + insertName + " at Component " + comp);
 				}
 				map.put(insertName, comp);
 			}

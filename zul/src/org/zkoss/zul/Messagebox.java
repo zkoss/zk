@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.mesg.Messages;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -56,7 +57,7 @@ public class Messagebox {
 	 * a yellow background
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
-	public static final String EXCLAMATION  = "z-messagebox-icon z-messagebox-exclamation";
+	public static final String EXCLAMATION = "z-messagebox-icon z-messagebox-exclamation";
 	/** A symbol of a lower case letter i in a circle.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
@@ -64,7 +65,7 @@ public class Messagebox {
 	/** A symbol consisting of a white X in a circle with a red background.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
-	public static final String ERROR = "z-messagebox-icon z-messagebox-error";		
+	public static final String ERROR = "z-messagebox-icon z-messagebox-error";
 	/** Contains no symbols. */
 	public static final String NONE = null;
 
@@ -148,13 +149,11 @@ public class Messagebox {
 	 * <code>sclass</code>: the CSS class name of the top level Window (since 7.0.1)
 	 * @since 6.0.0
 	 */
-	public static Button show(String message, String title,
-	Button[] buttons, String[] btnLabels, String icon,
-	Button focus, EventListener<ClickEvent> listener, Map<String, String> params) {
+	public static Button show(String message, String title, Button[] buttons, String[] btnLabels, String icon,
+			Button focus, EventListener<ClickEvent> listener, Map<String, String> params) {
 		final Map<String, Object> arg = new HashMap<String, Object>();
 		arg.put("message", message);
-		arg.put("title", title != null ? title:
-			Executions.getCurrent().getDesktop().getWebApp().getAppName());
+		arg.put("title", title != null ? title : Executions.getCurrent().getDesktop().getWebApp().getAppName());
 		arg.put("icon", icon);
 
 		if (buttons == null)
@@ -163,7 +162,7 @@ public class Messagebox {
 		int btnmask = 0;
 		for (int j = 0; j < buttons.length; ++j) {
 			if (buttons[j] == null)
-				throw new IllegalArgumentException("The "+j+"-th button is null");
+				throw new IllegalArgumentException("The " + j + "-th button is null");
 
 			//Backward compatible to ZK 5: put buttons and id to arg
 			btnmask += buttons[j].id;
@@ -174,11 +173,11 @@ public class Messagebox {
 		if (params != null)
 			arg.putAll(params);
 
-		final MessageboxDlg dlg = (MessageboxDlg)
-			Executions.createComponents(_templ, null, arg);
+		final MessageboxDlg dlg = (MessageboxDlg) Executions.createComponents(_templ, null, arg);
 		dlg.setEventListener(listener);
 		dlg.setButtons(buttons, btnLabels);
-		if (focus != null) dlg.setFocus(focus);
+		if (focus != null)
+			dlg.setFocus(focus);
 
 		if (dlg.getDesktop().getWebApp().getConfiguration().isEventThreadEnabled()) {
 			try {
@@ -197,6 +196,7 @@ public class Messagebox {
 			return Button.OK;
 		}
 	}
+
 	/** Shows a message box and returns what button is pressed.
 	 *
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
@@ -226,13 +226,12 @@ public class Messagebox {
 	 * returns {@link Button#OK}.
 	 * @since 6.0.0
 	 */
-	public static Button show(String message, String title,
-	Button[] buttons, String[] btnLabels, String icon,
-	Button focus, EventListener<ClickEvent> listener) {
+	public static Button show(String message, String title, Button[] buttons, String[] btnLabels, String icon,
+			Button focus, EventListener<ClickEvent> listener) {
 		return show(message, title, buttons, btnLabels, icon, focus, listener, null);
 	}
-	private static final Messagebox.Button[] DEFAULT_BUTTONS
-		= new Messagebox.Button[] {Messagebox.Button.OK};
+
+	private static final Messagebox.Button[] DEFAULT_BUTTONS = new Messagebox.Button[] { Messagebox.Button.OK };
 
 	/** Shows a message box and returns what button is pressed.
 	 *
@@ -261,26 +260,25 @@ public class Messagebox {
 	 * returns {@link Button#OK}.
 	 * @since 6.0.0
 	 */
-	public static Button show(String message, String title,
-	Button[] buttons, String icon,
-	Button focus, EventListener<ClickEvent> listener) {
+	public static Button show(String message, String title, Button[] buttons, String icon, Button focus,
+			EventListener<ClickEvent> listener) {
 		return show(message, title, buttons, null, icon, focus, listener, null);
 	}
+
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, title, buttons, icon, null, listener).
 	 * @since 6.0.0
 	 */
-	public static Button show(String message, String title,
-	Button[] buttons, String icon,
-	EventListener<ClickEvent> listener) {
+	public static Button show(String message, String title, Button[] buttons, String icon,
+			EventListener<ClickEvent> listener) {
 		return show(message, title, buttons, null, icon, null, listener, null);
 	}
+
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, buttons, INFORMATION, null, listener).
 	 * @since 6.0.0
 	 */
-	public static Button show(String message,
-	Button[] buttons, EventListener<ClickEvent> listener) {
+	public static Button show(String message, Button[] buttons, EventListener<ClickEvent> listener) {
 		return show(message, null, buttons, null, INFORMATION, null, listener, null);
 	}
 
@@ -299,10 +297,10 @@ public class Messagebox {
 	 * Note: if the event processing thread is disabled, it always
 	 * returns {@link #OK}.
 	 */
-	public static 
-	int show(String message, String title, int buttons, String icon) {
+	public static int show(String message, String title, int buttons, String icon) {
 		return show(message, title, buttons, icon, 0, null);
 	}
+
 	/** Shows a message box and returns what button is pressed.
 	 *
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
@@ -342,10 +340,10 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static int show(String message, String title, int buttons, String icon,
-	EventListener<Event> listener) {
+	public static int show(String message, String title, int buttons, String icon, EventListener<Event> listener) {
 		return show(message, title, buttons, icon, 0, listener);
 	}
+
 	/** Shows a message box and returns what button is pressed.
 	 *
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
@@ -369,6 +367,7 @@ public class Messagebox {
 	public static int show(String message, String title, int buttons, String icon, int focus) {
 		return show(message, title, buttons, icon, focus, null);
 	}
+
 	/** Shows a message box and returns what button is pressed.
 	 *
 	 * @param title the title. If null, {@link WebApp#getAppName} is used.
@@ -412,52 +411,20 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static int show(String message, String title, int buttons, String icon,
-	int focus, EventListener<Event> listener) {
-		Button res = show(message, title, toButtonTypes(buttons), null, icon,
-				focus != 0 ? toButtonType(focus): null, toButtonListener(listener), null);
+	public static int show(String message, String title, int buttons, String icon, int focus,
+			EventListener<Event> listener) {
+		Button res = show(message, title, toButtonTypes(buttons), null, icon, focus != 0 ? toButtonType(focus) : null,
+				toButtonListener(listener), null);
 		return res != null ? res.id : 0; // B60-ZK-946: NPE
 	}
-	private static Button toButtonType(int btn) {
-		switch (btn) {
-		case CANCEL: return Button.CANCEL;
-		case YES: return Button.YES;
-		case NO: return Button.NO;
-		case ABORT: return Button.ABORT;
-		case RETRY: return Button.RETRY;
-		case IGNORE: return Button.IGNORE;
-		default: return Button.OK;
-		}
-	}
-	private static Button[] toButtonTypes(int buttons) {
-		final List<Button> btntypes = new ArrayList<Button>();
-		if ((buttons & OK) != 0)
-			btntypes.add(toButtonType(OK));
-		if ((buttons & CANCEL) != 0)
-			btntypes.add(toButtonType(CANCEL));
-		if ((buttons & YES) != 0)
-			btntypes.add(toButtonType(YES));
-		if ((buttons & NO) != 0)
-			btntypes.add(toButtonType(NO));
-		if ((buttons & RETRY) != 0)
-			btntypes.add(toButtonType(RETRY));
-		if ((buttons & ABORT) != 0)
-			btntypes.add(toButtonType(ABORT));
-		if ((buttons & IGNORE) != 0)
-			btntypes.add(toButtonType(IGNORE));
-		return btntypes.toArray(new Button[btntypes.size()]);
-	}
-	private static
-	EventListener<ClickEvent> toButtonListener(EventListener<Event> listener) {
-		return listener != null ? new ButtonListener(listener): null;
-	}
-
+	
 	/** Shows a message box and returns what button is pressed.
 	 * A shortcut to show(message, null, OK, INFORMATION).
 	 */
 	public static int show(String message) {
 		return show(message, null, OK, INFORMATION, 0, null);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -469,10 +436,10 @@ public class Messagebox {
 	 * Note: if the event processing thread is disabled, it always
 	 * returns {@link #OK}.
 	 */
-	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
-	String icon) {
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons, String icon) {
 		return show(messageCode, args, titleCode, buttons, icon, 0, null);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -489,10 +456,10 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
-	String icon, int focus) {
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons, String icon, int focus) {
 		return show(messageCode, args, titleCode, buttons, icon, focus, null);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -532,12 +499,12 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static int show(int messageCode, Object[] args, int titleCode, int buttons,
-	String icon, int focus, EventListener<Event> listener) {
-		return show(Messages.get(messageCode, args),
-			titleCode > 0 ? Messages.get(titleCode): null, buttons,
-			icon, focus, listener);
+	public static int show(int messageCode, Object[] args, int titleCode, int buttons, String icon, int focus,
+			EventListener<Event> listener) {
+		return show(Messages.get(messageCode, args), titleCode > 0 ? Messages.get(titleCode) : null, buttons, icon,
+				focus, listener);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -552,6 +519,7 @@ public class Messagebox {
 	public static int show(int messageCode, Object arg, int titleCode, int buttons, String icon) {
 		return show(messageCode, arg, titleCode, buttons, icon, 0, null);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -568,10 +536,10 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.0
 	 */
-	public static int show(int messageCode, Object arg, int titleCode, int buttons,
-	String icon, int focus) {
+	public static int show(int messageCode, Object arg, int titleCode, int buttons, String icon, int focus) {
 		return show(messageCode, arg, titleCode, buttons, icon, focus, null);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -611,12 +579,12 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static int show(int messageCode, Object arg, int titleCode, int buttons,
-	String icon, int focus, EventListener<Event> listener) {
-		return show(Messages.get(messageCode, arg),
-			titleCode > 0 ? Messages.get(titleCode): null, buttons,
-			icon, focus, listener);
+	public static int show(int messageCode, Object arg, int titleCode, int buttons, String icon, int focus,
+			EventListener<Event> listener) {
+		return show(Messages.get(messageCode, arg), titleCode > 0 ? Messages.get(titleCode) : null, buttons, icon,
+				focus, listener);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -626,6 +594,7 @@ public class Messagebox {
 	public static int show(int messageCode, int titleCode, int buttons, String icon) {
 		return show(messageCode, titleCode, buttons, icon, 0);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -637,10 +606,10 @@ public class Messagebox {
 	 * and {@link #IGNORE}.
 	 * @since 3.0.0
 	 */
-	public static int show(int messageCode, int titleCode, int buttons, String icon,
-	int focus) {
+	public static int show(int messageCode, int titleCode, int buttons, String icon, int focus) {
 		return show(messageCode, titleCode, buttons, icon, focus, null);
 	}
+	
 	/** Shows a message box by specifying a message code, and returns what
 	 * button is pressed.
 	 *
@@ -681,11 +650,52 @@ public class Messagebox {
 	 * returns {@link #OK}.
 	 * @since 3.0.4
 	 */
-	public static int show(int messageCode, int titleCode, int buttons, String icon,
-	int focus, EventListener<Event> listener) {
-		return show(Messages.get(messageCode),
-			titleCode > 0 ? Messages.get(titleCode): null, buttons,
-			icon, focus, listener);
+	public static int show(int messageCode, int titleCode, int buttons, String icon, int focus,
+			EventListener<Event> listener) {
+		return show(Messages.get(messageCode), titleCode > 0 ? Messages.get(titleCode) : null, buttons, icon, focus,
+				listener);
+	}
+
+	private static Button toButtonType(int btn) {
+		switch (btn) {
+		case CANCEL:
+			return Button.CANCEL;
+		case YES:
+			return Button.YES;
+		case NO:
+			return Button.NO;
+		case ABORT:
+			return Button.ABORT;
+		case RETRY:
+			return Button.RETRY;
+		case IGNORE:
+			return Button.IGNORE;
+		default:
+			return Button.OK;
+		}
+	}
+
+	private static Button[] toButtonTypes(int buttons) {
+		final List<Button> btntypes = new ArrayList<Button>();
+		if ((buttons & OK) != 0)
+			btntypes.add(toButtonType(OK));
+		if ((buttons & CANCEL) != 0)
+			btntypes.add(toButtonType(CANCEL));
+		if ((buttons & YES) != 0)
+			btntypes.add(toButtonType(YES));
+		if ((buttons & NO) != 0)
+			btntypes.add(toButtonType(NO));
+		if ((buttons & RETRY) != 0)
+			btntypes.add(toButtonType(RETRY));
+		if ((buttons & ABORT) != 0)
+			btntypes.add(toButtonType(ABORT));
+		if ((buttons & IGNORE) != 0)
+			btntypes.add(toButtonType(IGNORE));
+		return btntypes.toArray(new Button[btntypes.size()]);
+	}
+
+	private static EventListener<ClickEvent> toButtonListener(EventListener<Event> listener) {
+		return listener != null ? new ButtonListener(listener) : null;
 	}
 
 	/** Sets the template used to create the message dialog.
@@ -701,6 +711,7 @@ public class Messagebox {
 			throw new IllegalArgumentException("empty");
 		_templ = uri;
 	}
+
 	/** Returns the template used to create the message dialog.
 	 */
 	public static String getTemplate() {
@@ -712,19 +723,19 @@ public class Messagebox {
 	 */
 	public static enum Button {
 		/** A OK button. */
-		OK (Messagebox.OK, ON_OK, MZul.OK, "OK"),
+		OK(Messagebox.OK, ON_OK, MZul.OK, "OK"),
 		/** A Cancel button. */
-		CANCEL (Messagebox.CANCEL, ON_CANCEL, MZul.CANCEL, "CANCEL"),
+		CANCEL(Messagebox.CANCEL, ON_CANCEL, MZul.CANCEL, "CANCEL"),
 		/** A Yes button. */
-		YES (Messagebox.YES, ON_YES, MZul.YES, "YES"),
+		YES(Messagebox.YES, ON_YES, MZul.YES, "YES"),
 		/** A No button. */
-		NO (Messagebox.NO, ON_NO, MZul.NO, "NO"),
+		NO(Messagebox.NO, ON_NO, MZul.NO, "NO"),
 		/** A Abort button. */
-		ABORT (Messagebox.ABORT, ON_ABORT, MZul.ABORT, "ABORT"),
+		ABORT(Messagebox.ABORT, ON_ABORT, MZul.ABORT, "ABORT"),
 		/** A Retry button. */
-		RETRY (Messagebox.RETRY, ON_RETRY, MZul.RETRY, "RETRY"),
+		RETRY(Messagebox.RETRY, ON_RETRY, MZul.RETRY, "RETRY"),
 		/** A IGNORE button. */
-		IGNORE (Messagebox.IGNORE, ON_IGNORE, MZul.IGNORE, "IGNORE");
+		IGNORE(Messagebox.IGNORE, ON_IGNORE, MZul.IGNORE, "IGNORE");
 
 		/** The unique ID to represent this button type. */
 		public final int id;
@@ -744,6 +755,7 @@ public class Messagebox {
 			this.stringId = stringId;
 		}
 	}
+
 	/** The event that will be received by the listener when the user clicks a button.
 	 * @since 6.0.0
 	 */
@@ -751,26 +763,28 @@ public class Messagebox {
 		public ClickEvent(String name, Component target, Button button) {
 			super(name, target, button);
 		}
+
 		/** Returns the button being clicked. If the close button on the
 		 * title is clicked, this method returns null (and {@link #getName} returns
 		 * onClose).
 		 */
 		public Button getButton() {
-			return (Button)getData();
+			return (Button) getData();
 		}
 	}
 
 	private static class ButtonListener implements SerializableEventListener<ClickEvent> {
 		private final EventListener<Event> _listener;
+
 		private ButtonListener(EventListener<Event> listener) {
 			_listener = listener;
 		}
+
 		public void onEvent(ClickEvent event) throws Exception {
 			final Button btn = event.getButton();
-			_listener.onEvent(
-				new Event(event.getName(), event.getTarget(),
-					btn != null ? btn.id: -1));
+			_listener.onEvent(new Event(event.getName(), event.getTarget(), btn != null ? btn.id : -1));
 		}
+
 		public String toString() {
 			return _listener.toString();
 		}

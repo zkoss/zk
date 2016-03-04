@@ -29,6 +29,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.PotentialDeadLockException;
@@ -87,44 +88,34 @@ import org.zkoss.zk.ui.sys.WebAppFactory;
 public class Configuration {
 	private static final Logger log = LoggerFactory.getLogger(Configuration.class);
 
-	private static final String PROP_EXPRESS_FACTORY
-		= "org.zkoss.xel.ExpressionFactory.class";
+	private static final String PROP_EXPRESS_FACTORY = "org.zkoss.xel.ExpressionFactory.class";
 
 	private WebApp _wapp;
 	/** List of classes. */
-	private final FastReadArray<Class<?>>
-		_evtInits = new FastReadArray<Class<?>>(Class.class),
-		_evtCleans = new FastReadArray<Class<?>>(Class.class),
-		_evtSusps = new FastReadArray<Class<?>>(Class.class),
-		_evtResus = new FastReadArray<Class<?>>(Class.class),
-		_appInits = new FastReadArray<Class<?>>(Class.class),
-		_appCleans = new FastReadArray<Class<?>>(Class.class),
-		_sessInits = new FastReadArray<Class<?>>(Class.class),
-		_sessCleans = new FastReadArray<Class<?>>(Class.class),
-		_dtInits = new FastReadArray<Class<?>>(Class.class),
-		_dtCleans = new FastReadArray<Class<?>>(Class.class),
-		_execInits = new FastReadArray<Class<?>>(Class.class),
-		_execCleans = new FastReadArray<Class<?>>(Class.class),
-		_composers = new FastReadArray<Class<?>>(Class.class),
-		_initiators = new FastReadArray<Class<?>>(Class.class),
-		_seoRends = new FastReadArray<Class<?>>(Class.class),
-		_resolvers = new FastReadArray<Class<?>>(Class.class),
-		_parsers = new FastReadArray<Class<?>>(Class.class);
-		//since it is called frequently, we use array to avoid synchronization
+	private final FastReadArray<Class<?>> _evtInits = new FastReadArray<Class<?>>(Class.class),
+			_evtCleans = new FastReadArray<Class<?>>(Class.class), _evtSusps = new FastReadArray<Class<?>>(Class.class),
+			_evtResus = new FastReadArray<Class<?>>(Class.class), _appInits = new FastReadArray<Class<?>>(Class.class),
+			_appCleans = new FastReadArray<Class<?>>(Class.class),
+			_sessInits = new FastReadArray<Class<?>>(Class.class),
+			_sessCleans = new FastReadArray<Class<?>>(Class.class), _dtInits = new FastReadArray<Class<?>>(Class.class),
+			_dtCleans = new FastReadArray<Class<?>>(Class.class), _execInits = new FastReadArray<Class<?>>(Class.class),
+			_execCleans = new FastReadArray<Class<?>>(Class.class),
+			_composers = new FastReadArray<Class<?>>(Class.class),
+			_initiators = new FastReadArray<Class<?>>(Class.class),
+			_seoRends = new FastReadArray<Class<?>>(Class.class), _resolvers = new FastReadArray<Class<?>>(Class.class),
+			_parsers = new FastReadArray<Class<?>>(Class.class);
+	//since it is called frequently, we use array to avoid synchronization
 	/** List of objects. */
-	private final FastReadArray<AggregationListener>
-	_aggregations = new FastReadArray<AggregationListener>(AggregationListener.class); // since 8.0
-	private final FastReadArray<URIInterceptor>
-		_uriIntcps = new FastReadArray<URIInterceptor>(URIInterceptor.class);
-	private final FastReadArray<RequestInterceptor>
-		_reqIntcps = new FastReadArray<RequestInterceptor>(RequestInterceptor.class);
-	private final FastReadArray<UiLifeCycle>
-		_uiCycles = new FastReadArray<UiLifeCycle>(UiLifeCycle.class);
-	private final FastReadArray<PropertiesRenderer>
-		_propRends = new FastReadArray<PropertiesRenderer>(PropertiesRenderer.class);
-	private final FastReadArray<String>
-		_labellocs = new FastReadArray<String>(String.class);
-	private final Map<String, String> _prefs  = Collections.synchronizedMap(new HashMap<String,String>());
+	private final FastReadArray<AggregationListener> _aggregations = new FastReadArray<AggregationListener>(
+			AggregationListener.class); // since 8.0
+	private final FastReadArray<URIInterceptor> _uriIntcps = new FastReadArray<URIInterceptor>(URIInterceptor.class);
+	private final FastReadArray<RequestInterceptor> _reqIntcps = new FastReadArray<RequestInterceptor>(
+			RequestInterceptor.class);
+	private final FastReadArray<UiLifeCycle> _uiCycles = new FastReadArray<UiLifeCycle>(UiLifeCycle.class);
+	private final FastReadArray<PropertiesRenderer> _propRends = new FastReadArray<PropertiesRenderer>(
+			PropertiesRenderer.class);
+	private final FastReadArray<String> _labellocs = new FastReadArray<String>(String.class);
+	private final Map<String, String> _prefs = Collections.synchronizedMap(new HashMap<String, String>());
 	/** Map(String name, [Class richlet, Map params] or Richilet richlet). */
 	private final Map<String, Object> _richlets = new HashMap<String, Object>();
 	/** Map(String path, [String name, boolean wildcard]). */
@@ -132,12 +123,13 @@ public class Configuration {
 	/** Map(String deviceType, List(ErrorPage)). */
 	private final Map<String, List<ErrorPage>> _errpgs = new HashMap<String, List<ErrorPage>>(4);
 	/** Map(String deviceType+connType, Map(errorCode, uri)) */
-	private final Map<String, Map<Integer,String>> _errURIs = new HashMap<String, Map<Integer,String>>();
+	private final Map<String, Map<Integer, String>> _errURIs = new HashMap<String, Map<Integer, String>>();
 	/** Map(String deviceType, TimeoutURIInfo ti) */
-	private final Map<String, TimeoutURIInfo> _timeoutURIs = Collections.synchronizedMap(new HashMap<String, TimeoutURIInfo>());
+	private final Map<String, TimeoutURIInfo> _timeoutURIs = Collections
+			.synchronizedMap(new HashMap<String, TimeoutURIInfo>());
 	/** Since 8.0.0 Map(String String) */
 	private final Map<String, DataHandlerInfo> _dataHandlers = new HashMap<String, DataHandlerInfo>();
-	
+
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
 	private ExecutionMonitor _execmon;
@@ -148,13 +140,11 @@ public class Configuration {
 	private Set<String> _disThemeURIs;
 	/** A list of client packages. */
 	private final FastReadArray<String> _clientpkgs = new FastReadArray<String>(String.class);
-	private Class<?> _wappcls, _wappftycls, _uiengcls, _dcpcls, _uiftycls,
-		_failmancls, _idgencls, _sesscachecls, _audeccls, _fileFactory;
-	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
-		_sessPushMax = -1,
-		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
-		_maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _autoResendTimeout = 200;
+	private Class<?> _wappcls, _wappftycls, _uiengcls, _dcpcls, _uiftycls, _failmancls, _idgencls, _sesscachecls,
+			_audeccls, _fileFactory;
+	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5, _sessPushMax = -1, _sessTimeout = 0,
+			_sparThdMax = 100, _suspThdMax = -1, _maxUploadSize = 5120, _fileSizeThreshold, _maxProcTime = 3000,
+			_promptDelay = 900, _tooltipDelay = 800, _autoResendTimeout = 200;
 	/** since 8.0.2 */
 	private String _fileRepository;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
@@ -185,7 +175,7 @@ public class Configuration {
 	private boolean _customThemeProvider = false;
 	private boolean _customThemeRegistry = false;
 	private boolean _customThemeResolver = false;
-	
+
 	//F70-ZK-2495: init crash script and timeout
 	private String _initCrashScript;
 	private int _initCrashTimeout = -1;
@@ -193,7 +183,7 @@ public class Configuration {
 	//F80 - store subtree's binder annotation count
 	private String _binderInitAttribute = null;
 	private Set<String> _binderAnnotations;
-	
+
 	/** Constructor.
 	 */
 	public Configuration() {
@@ -205,6 +195,7 @@ public class Configuration {
 	public WebApp getWebApp() {
 		return _wapp;
 	}
+
 	/** Associates it with a web application.
 	 */
 	public void setWebApp(WebApp wapp) {
@@ -254,25 +245,25 @@ public class Configuration {
 		if (Monitor.class.isAssignableFrom(klass)) {
 			if (_monitor != null)
 				throw new UiException(onlyOnce(Monitor.class));
-			_monitor = (Monitor)(listener = getInstance(klass, listener));
+			_monitor = (Monitor) (listener = getInstance(klass, listener));
 			added = true;
 		}
 		if (PerformanceMeter.class.isAssignableFrom(klass)) {
 			if (_pfmeter != null)
 				throw new UiException(onlyOnce(PerformanceMeter.class));
-			_pfmeter = (PerformanceMeter)(listener = getInstance(klass, listener));
+			_pfmeter = (PerformanceMeter) (listener = getInstance(klass, listener));
 			added = true;
 		}
 		if (ExecutionMonitor.class.isAssignableFrom(klass)) {
 			if (_execmon != null)
 				throw new UiException(onlyOnce(ExecutionMonitor.class));
-			_execmon = (ExecutionMonitor)(listener = getInstance(klass, listener));
+			_execmon = (ExecutionMonitor) (listener = getInstance(klass, listener));
 			added = true;
 		}
 		if (DesktopRecycle.class.isAssignableFrom(klass)) {
 			if (_dtRecycle != null)
 				throw new UiException(onlyOnce(DesktopRecycle.class));
-			_dtRecycle = (DesktopRecycle)(listener = getInstance(klass, listener));
+			_dtRecycle = (DesktopRecycle) (listener = getInstance(klass, listener));
 			added = true;
 		}
 
@@ -348,59 +339,52 @@ public class Configuration {
 		//for better performance, the following listeners are instantiated
 		//here and shared in the whole application
 
-
 		if (AggregationListener.class.isAssignableFrom(klass)) {
 			try {
-				_aggregations.add((AggregationListener)
-					(listener = getInstance(klass, listener)));
+				_aggregations.add((AggregationListener) (listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
-				log.error("Failed to instantiate "+klass, ex);
+				log.error("Failed to instantiate " + klass, ex);
 			}
 			added = true;
 		}
-		
+
 		if (URIInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_uriIntcps.add((URIInterceptor)
-					(listener = getInstance(klass, listener)));
+				_uriIntcps.add((URIInterceptor) (listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
-				log.error("Failed to instantiate "+klass, ex);
+				log.error("Failed to instantiate " + klass, ex);
 			}
 			added = true;
 		}
 		if (RequestInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_reqIntcps.add((RequestInterceptor)
-					(listener = getInstance(klass, listener)));
+				_reqIntcps.add((RequestInterceptor) (listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
-				log.error("Failed to instantiate "+klass, ex);
+				log.error("Failed to instantiate " + klass, ex);
 			}
 			added = true;
 		}
 		if (EventInterceptor.class.isAssignableFrom(klass)) {
 			try {
-				_eis.addEventInterceptor((EventInterceptor)
-					(listener = getInstance(klass, listener)));
+				_eis.addEventInterceptor((EventInterceptor) (listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
-				log.error("Failed to instantiate "+klass, ex);
+				log.error("Failed to instantiate " + klass, ex);
 			}
 			added = true;
 		}
 		if (UiLifeCycle.class.isAssignableFrom(klass)) {
 			try {
-				_uiCycles.add((UiLifeCycle)
-					(listener = getInstance(klass, listener)));
+				_uiCycles.add((UiLifeCycle) (listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
-				log.error("Failed to instantiate "+klass, ex);
+				log.error("Failed to instantiate " + klass, ex);
 			}
 			added = true;
 		}
 		if (PropertiesRenderer.class.isAssignableFrom(klass)) {
 			try {
-				_propRends.add((PropertiesRenderer)
-					(listener = getInstance(klass, listener)));
+				_propRends.add((PropertiesRenderer) (listener = getInstance(klass, listener)));
 			} catch (Throwable ex) {
-				log.error("Failed to instantiate "+klass, ex);
+				log.error("Failed to instantiate " + klass, ex);
 			}
 			added = true;
 		}
@@ -408,27 +392,28 @@ public class Configuration {
 			_parsers.add(klass);
 			added = true;
 		}
-		
+
 		if (!added) {
-			for (AggregationListener al : (List<AggregationListener>)Arrays.asList(_aggregations.toArray())) {
+			for (AggregationListener al : (List<AggregationListener>) Arrays.asList(_aggregations.toArray())) {
 				if (al.isHandled(klass)) {
 					added = true;
 					break;
 				}
 			}
 		}
-		
 
 		if (!added)
-			throw new UiException("Unknown listener: "+klass);
+			throw new UiException("Unknown listener: " + klass);
 	}
+
 	private static final String onlyOnce(Class<?> cls) {
 		return cls + " can be assigned only once";
 	}
-	private static Object getInstance(Class<?> klass, Object listener)
-	throws Exception {
-		return listener != null ? listener: klass.newInstance();
+
+	private static Object getInstance(Class<?> klass, Object listener) throws Exception {
+		return listener != null ? listener : klass.newInstance();
 	}
+
 	/** Removes a listener class.
 	 * @see Desktop#removeListener
 	 */
@@ -489,17 +474,16 @@ public class Configuration {
 	 * constructed in this method (and their {@link EventThreadInit#prepare}
 	 * are called successfully), or null.
 	 */
-	public List<EventThreadInit> newEventThreadInits(Component comp, Event evt)
-	throws UiException {
+	public List<EventThreadInit> newEventThreadInits(Component comp, Event evt) throws UiException {
 		final Class<?>[] ary = _evtInits.toArray();
-		if (ary.length == 0) return null;
+		if (ary.length == 0)
+			return null;
 
 		final List<EventThreadInit> inits = new LinkedList<EventThreadInit>();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				final EventThreadInit init =
-					(EventThreadInit)klass.newInstance();
+				final EventThreadInit init = (EventThreadInit) klass.newInstance();
 				init.prepare(comp, evt);
 				inits.add(init);
 			} catch (Throwable ex) {
@@ -509,10 +493,11 @@ public class Configuration {
 		}
 		return inits;
 	}
+
 	/** Invokes {@link EventThreadInit#init} for each instance returned
 	 * by {@link #newEventThreadInits}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * @param inits a list of {@link EventThreadInit} instances returned from
 	 * {@link #newEventThreadInits}, or null if no instance at all.
@@ -523,11 +508,11 @@ public class Configuration {
 	 * @return false if you want to ignore the event, i.e., not to proceed
 	 * any event processing for the specified event (evt).
 	 */
-	public boolean invokeEventThreadInits(List<EventThreadInit> inits, Component comp, Event evt) 
-	throws UiException {
-		if (inits == null || inits.isEmpty()) return true; //not to ignore
+	public boolean invokeEventThreadInits(List<EventThreadInit> inits, Component comp, Event evt) throws UiException {
+		if (inits == null || inits.isEmpty())
+			return true; //not to ignore
 
-		for (EventThreadInit fn: inits) {
+		for (EventThreadInit fn : inits) {
 			try {
 				if (!fn.init(comp, evt))
 					return false; //ignore the event
@@ -538,10 +523,11 @@ public class Configuration {
 		}
 		return true;
 	}
+
 	/** Invokes {@link EventThreadCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link EventThreadCleanup} is constructed first,
 	 * and then invoke {@link EventThreadCleanup#cleanup}.
@@ -560,31 +546,33 @@ public class Configuration {
 	 * @return a list of {@link EventThreadCleanup}, or null
 	 * @since 3.6.3
 	 */
-	public List<EventThreadCleanup> newEventThreadCleanups(Component comp, Event evt, List<Throwable> errs, boolean silent) {
+	public List<EventThreadCleanup> newEventThreadCleanups(Component comp, Event evt, List<Throwable> errs,
+			boolean silent) {
 		final Class<?>[] ary = _evtCleans.toArray();
-		if (ary.length == 0) return null;
+		if (ary.length == 0)
+			return null;
 
 		final List<EventThreadCleanup> cleanups = new LinkedList<EventThreadCleanup>();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				final EventThreadCleanup cleanup =
-					(EventThreadCleanup)klass.newInstance();
+				final EventThreadCleanup cleanup = (EventThreadCleanup) klass.newInstance();
 				cleanup.cleanup(comp, evt, errs);
 				cleanups.add(cleanup);
 			} catch (Throwable t) {
-				if (errs != null) errs.add(t);
+				if (errs != null)
+					errs.add(t);
 				if (!silent)
-					log.error("Failed to invoke "+klass, t);
+					log.error("Failed to invoke " + klass, t);
 			}
 		}
-		return cleanups.isEmpty() ? null: cleanups;
+		return cleanups.isEmpty() ? null : cleanups;
 	}
 
 	/** Invoke {@link EventThreadCleanup#complete} for each instance returned by
 	 * {@link #newEventThreadCleanups}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
@@ -598,16 +586,18 @@ public class Configuration {
 	 * @since 3.6.3
 	 */
 	public void invokeEventThreadCompletes(List<EventThreadCleanup> cleanups, Component comp, Event evt,
-	List<Throwable> errs, boolean silent) {
-		if (cleanups == null || cleanups.isEmpty()) return;
+			List<Throwable> errs, boolean silent) {
+		if (cleanups == null || cleanups.isEmpty())
+			return;
 
-		for (EventThreadCleanup fn: cleanups) {
+		for (EventThreadCleanup fn : cleanups) {
 			try {
 				fn.complete(comp, evt);
 			} catch (Throwable ex) {
-				if (errs != null) errs.add(ex);
+				if (errs != null)
+					errs.add(ex);
 				if (!silent)
-					log.error("Failed to invoke "+fn, ex);
+					log.error("Failed to invoke " + fn, ex);
 			}
 		}
 	}
@@ -616,8 +606,8 @@ public class Configuration {
 	 * {@link EventThreadSuspend#beforeSuspend} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
- 	 *
+	 * <p>Used only internally.
+	 *
 	 * <p>Note: caller shall execute in the event processing thread.
 	 *
 	 * @param comp the component which the event is targeting
@@ -629,14 +619,14 @@ public class Configuration {
 	 */
 	public List<EventThreadSuspend> newEventThreadSuspends(Component comp, Event evt, Object obj) {
 		final Class<?>[] ary = _evtSusps.toArray();
-		if (ary.length == 0) return null;
+		if (ary.length == 0)
+			return null;
 
 		final List<EventThreadSuspend> suspends = new LinkedList<EventThreadSuspend>();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				final EventThreadSuspend suspend =
-					(EventThreadSuspend)klass.newInstance();
+				final EventThreadSuspend suspend = (EventThreadSuspend) klass.newInstance();
 				suspend.beforeSuspend(comp, evt, obj);
 				suspends.add(suspend);
 			} catch (Throwable ex) {
@@ -646,12 +636,13 @@ public class Configuration {
 		}
 		return suspends;
 	}
+
 	/** Invokes {@link EventThreadSuspend#afterSuspend} for each relevant
 	 * listener registered by {@link #addListener}.
 	 * Unlike {@link #invokeEventThreadSuspends}, caller shall execute in
 	 * the main thread (a.k.a., servlet thread).
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>Unlike {@link #invokeEventThreadSuspends}, exceptions are logged
 	 * and ignored.
@@ -662,14 +653,15 @@ public class Configuration {
 	 * @param evt the event to process
 	 */
 	public void invokeEventThreadSuspends(List<EventThreadSuspend> suspends, Component comp, Event evt)
-	throws UiException {
-		if (suspends == null || suspends.isEmpty()) return;
+			throws UiException {
+		if (suspends == null || suspends.isEmpty())
+			return;
 
-		for (EventThreadSuspend fn: suspends) {
+		for (EventThreadSuspend fn : suspends) {
 			try {
 				fn.afterSuspend(comp, evt);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+fn+" after suspended", ex);
+				log.error("Failed to invoke " + fn + " after suspended", ex);
 			}
 		}
 	}
@@ -690,17 +682,16 @@ public class Configuration {
 	 * in this method (and their {@link EventThreadResume#beforeResume}
 	 * are called successfully), or null.
 	 */
-	public List<EventThreadResume> newEventThreadResumes(Component comp, Event evt)
-	throws UiException {
+	public List<EventThreadResume> newEventThreadResumes(Component comp, Event evt) throws UiException {
 		final Class<?>[] ary = _evtResus.toArray();
-		if (ary.length == 0) return null;
+		if (ary.length == 0)
+			return null;
 
 		final List<EventThreadResume> resumes = new LinkedList<EventThreadResume>();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				final EventThreadResume resume =
-					(EventThreadResume)klass.newInstance();
+				final EventThreadResume resume = (EventThreadResume) klass.newInstance();
 				resume.beforeResume(comp, evt);
 				resumes.add(resume);
 			} catch (Throwable ex) {
@@ -710,10 +701,11 @@ public class Configuration {
 		}
 		return resumes;
 	}
+
 	/** Invokes {@link EventThreadResume#afterResume} for each instance returned
 	 * by {@link #newEventThreadResumes}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
@@ -725,10 +717,11 @@ public class Configuration {
 	 * If null, all exceptions are ignored (but logged)
 	 */
 	public void invokeEventThreadResumes(List<EventThreadResume> resumes, Component comp, Event evt)
-	throws UiException {
-		if (resumes == null || resumes.isEmpty()) return;
+			throws UiException {
+		if (resumes == null || resumes.isEmpty())
+			return;
 
-		for (EventThreadResume fn: resumes) {
+		for (EventThreadResume fn : resumes) {
 			try {
 				fn.afterResume(comp, evt);
 			} catch (Throwable ex) {
@@ -736,10 +729,11 @@ public class Configuration {
 			}
 		}
 	}
+
 	/** Invokes {@link EventThreadResume#abortResume} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link EventThreadResume} is constructed first,
 	 * and then invoke {@link EventThreadResume#abortResume}.
@@ -754,10 +748,9 @@ public class Configuration {
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				((EventThreadResume)klass.newInstance())
-					.abortResume(comp, evt);
+				((EventThreadResume) klass.newInstance()).abortResume(comp, evt);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+klass+" for aborting", ex);
+				log.error("Failed to invoke " + klass + " for aborting", ex);
 			}
 		}
 	}
@@ -765,7 +758,7 @@ public class Configuration {
 	/** Invokes {@link WebAppInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link WebAppInit} is constructed first,
 	 * and then invoke {@link WebAppInit#init}.
@@ -778,16 +771,17 @@ public class Configuration {
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				((WebAppInit)klass.newInstance()).init(_wapp);
+				((WebAppInit) klass.newInstance()).init(_wapp);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+klass, ex);
+				log.error("Failed to invoke " + klass, ex);
 			}
 		}
 	}
+
 	/** Invokes {@link WebAppCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link WebAppCleanup} is constructed first,
 	 * and then invoke {@link WebAppCleanup#cleanup}.
@@ -799,10 +793,10 @@ public class Configuration {
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				((WebAppCleanup)klass.newInstance()).cleanup(_wapp);
+				((WebAppCleanup) klass.newInstance()).cleanup(_wapp);
 			} catch (NoClassDefFoundError ex) { //Bug 3046360
 			} catch (Throwable ex) {
-				log.error("Ignored: failed to invoke "+klass, ex);
+				log.error("Ignored: failed to invoke " + klass, ex);
 			}
 		}
 	}
@@ -810,7 +804,7 @@ public class Configuration {
 	/** Invokes {@link SessionInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link SessionInit} is constructed first,
 	 * and then invoke {@link SessionInit#init}.
@@ -821,13 +815,12 @@ public class Configuration {
 	 * @exception UiException to prevent a session from being created
 	 * @since 3.0.1
 	 */
-	public void invokeSessionInits(Session sess, Object request)
-	throws UiException {
+	public void invokeSessionInits(Session sess, Object request) throws UiException {
 		final Class<?>[] ary = _sessInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				final SessionInit fn = (SessionInit)klass.newInstance();
+				final SessionInit fn = (SessionInit) klass.newInstance();
 				fn.init(sess, request);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
@@ -835,10 +828,11 @@ public class Configuration {
 			}
 		}
 	}
+
 	/** Invokes {@link SessionCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link SessionCleanup} is constructed first,
 	 * and then invoke {@link SessionCleanup#cleanup}.
@@ -852,9 +846,9 @@ public class Configuration {
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				((SessionCleanup)klass.newInstance()).cleanup(sess);
+				((SessionCleanup) klass.newInstance()).cleanup(sess);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+klass, ex);
+				log.error("Failed to invoke " + klass, ex);
 			}
 		}
 	}
@@ -862,7 +856,7 @@ public class Configuration {
 	/** Invokes {@link DesktopInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link DesktopInit} is constructed first,
 	 * and then invoke {@link DesktopInit#init}.
@@ -873,13 +867,12 @@ public class Configuration {
 	 * @exception UiException to prevent a desktop from being created
 	 * @since 3.0.1
 	 */
-	public void invokeDesktopInits(Desktop desktop, Object request)
-	throws UiException {
+	public void invokeDesktopInits(Desktop desktop, Object request) throws UiException {
 		final Class<?>[] ary = _dtInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			final Class<?> klass = ary[j];
 			try {
-				final DesktopInit fn = (DesktopInit)klass.newInstance();
+				final DesktopInit fn = (DesktopInit) klass.newInstance();
 				fn.init(desktop, request);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
@@ -887,10 +880,11 @@ public class Configuration {
 			}
 		}
 	}
+
 	/** Invokes {@link DesktopCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link DesktopCleanup} is constructed first,
 	 * and then invoke {@link DesktopCleanup#cleanup}.
@@ -903,9 +897,9 @@ public class Configuration {
 		final Class<?>[] ary = _dtCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
-				((DesktopCleanup)ary[j].newInstance()).cleanup(desktop);
+				((DesktopCleanup) ary[j].newInstance()).cleanup(desktop);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
@@ -913,7 +907,7 @@ public class Configuration {
 	/** Invokes {@link ExecutionInit#init} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link ExecutionInit} is constructed first,
 	 * and then invoke {@link ExecutionInit#init}.
@@ -922,22 +916,22 @@ public class Configuration {
 	 * @param parent the previous execution, or null if no previous at all
 	 * @exception UiException to prevent an execution from being created
 	 */
-	public void invokeExecutionInits(Execution exec, Execution parent)
-	throws UiException {
+	public void invokeExecutionInits(Execution exec, Execution parent) throws UiException {
 		final Class<?>[] ary = _execInits.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
-				((ExecutionInit)ary[j].newInstance()).init(exec, parent);
+				((ExecutionInit) ary[j].newInstance()).init(exec, parent);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 				//Don't intercept; to prevent the creation of a session
 			}
 		}
 	}
+
 	/** Invokes {@link ExecutionCleanup#cleanup} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>An instance of {@link ExecutionCleanup} is constructed first,
 	 * and then invoke {@link ExecutionCleanup#cleanup}.
@@ -957,11 +951,11 @@ public class Configuration {
 		final Class<?>[] ary = _execCleans.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
-				((ExecutionCleanup)ary[j].newInstance())
-					.cleanup(exec, parent, errs);
+				((ExecutionCleanup) ary[j].newInstance()).cleanup(exec, parent, errs);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
-				if (errs != null) errs.add(ex);
+				log.error("Failed to invoke " + ary[j], ex);
+				if (errs != null)
+					errs.add(ex);
 			}
 		}
 	}
@@ -969,7 +963,7 @@ public class Configuration {
 	/** Invokes {@link URIInterceptor#request} for each relevant listener
 	 * registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>If any of them throws an exception, the exception is propagated to
 	 * the caller.
@@ -987,10 +981,11 @@ public class Configuration {
 			}
 		}
 	}
+
 	/** Invokes {@link RequestInterceptor#request} for each relevant listener
 	 * registered by {@link #addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>If any of them throws an exception, the exception is propagated to
 	 * the caller.
@@ -998,8 +993,7 @@ public class Configuration {
 	 * @exception UiException if it is rejected by the interceptor.
 	 * Use {@link UiException#getCause} to retrieve the cause.
 	 */
-	public void invokeRequestInterceptors(Session sess, Object request,
-	Object response) {
+	public void invokeRequestInterceptors(Session sess, Object request, Object response) {
 		RequestInterceptor[] ary = _reqIntcps.toArray();
 		for (int j = 0; j < ary.length; ++j) {
 			try {
@@ -1021,6 +1015,7 @@ public class Configuration {
 			throw new IllegalArgumentException();
 		_labellocs.add(location);
 	}
+
 	/** Returns an array of the locations of properties files registered
 	 * by {@link #addLabelLocation}.
 	 * @since 5.0.7
@@ -1052,7 +1047,7 @@ public class Configuration {
 		final List<Initiator> inits = new LinkedList<Initiator>();
 		for (int j = 0; j < initclses.length; ++j) {
 			try {
-				inits.add((Initiator)initclses[j].newInstance());
+				inits.add((Initiator) initclses[j].newInstance());
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate " + initclses[j]);
 			}
@@ -1074,13 +1069,14 @@ public class Configuration {
 		final List<NamespaceParser> inits = new LinkedList<NamespaceParser>();
 		for (int j = 0; j < initclses.length; ++j) {
 			try {
-				inits.add((NamespaceParser)initclses[j].newInstance());
+				inits.add((NamespaceParser) initclses[j].newInstance());
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate " + initclses[j]);
 			}
 		}
 		return inits;
 	}
+
 	/** Returns a readonly list of the system-level SEO renderer.
 	 * It is empty if none is registered.
 	 * To register a system-level SEO renderers, use {@link #addListener}.
@@ -1096,14 +1092,14 @@ public class Configuration {
 		final List<SEORenderer> sds = new LinkedList<SEORenderer>();
 		for (int j = 0; j < sdclses.length; ++j) {
 			try {
-				sds.add((SEORenderer)sdclses[j].newInstance());
+				sds.add((SEORenderer) sdclses[j].newInstance());
 			} catch (Throwable ex) {
 				log.error("Failed to instantiate " + sdclses[j]);
 			}
 		}
 		return sds.toArray(new SEORenderer[sds.size()]);
 	}
-	
+
 	/** Initializes the given page with the variable resolvers registered
 	 * by {@link #addListener}.
 	 * It must be called before accessing a page (actually in {@link org.zkoss.zk.ui.sys.PageCtrl#preInit}).
@@ -1113,9 +1109,9 @@ public class Configuration {
 		final Class<?>[] classes = _resolvers.toArray();
 		for (int j = 0; j < classes.length; ++j) {
 			try {
-				page.addVariableResolver((VariableResolver)classes[j].newInstance());
+				page.addVariableResolver((VariableResolver) classes[j].newInstance());
 			} catch (Throwable ex) {
-				log.error("Failed to instantiate "+classes[j], ex);
+				log.error("Failed to instantiate " + classes[j], ex);
 			}
 		}
 	}
@@ -1130,6 +1126,7 @@ public class Configuration {
 	public PropertiesRenderer[] getPropertiesRenderers() {
 		return _propRends.toArray();
 	}
+
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}
 	 * when a component is attached to a page.
 	 * @since 3.0.6
@@ -1140,10 +1137,11 @@ public class Configuration {
 			try {
 				ary[j].afterComponentAttached(comp, page);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
+
 	/** Invokes {@link UiLifeCycle#afterComponentDetached}
 	 * when a component is detached from a page.
 	 * @since 3.0.6
@@ -1154,10 +1152,11 @@ public class Configuration {
 			try {
 				ary[j].afterComponentDetached(comp, prevpage);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
+
 	/** Invokes {@link UiLifeCycle#afterShadowAttached(ShadowElement, Component)}
 	 * when a shadow is attached to a host.
 	 * @since 8.0.0
@@ -1168,10 +1167,11 @@ public class Configuration {
 			try {
 				ary[j].afterShadowAttached(shadow, host);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
+
 	/** Invokes {@link UiLifeCycle#afterShadowDetached(ShadowElement, Component)}
 	 * when a shadow is detached from a host.
 	 * @since 8.0.0
@@ -1182,10 +1182,11 @@ public class Configuration {
 			try {
 				ary[j].afterShadowDetached(shadow, prevhost);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
+
 	/** Invokes {@link UiLifeCycle#afterComponentMoved}
 	 * when a component is moved (a.k.a., page changed).
 	 * @since 3.0.6
@@ -1196,10 +1197,11 @@ public class Configuration {
 			try {
 				ary[j].afterComponentMoved(parent, child, prevparent);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
+
 	/** Invokes {@link UiLifeCycle#afterPageAttached}
 	 * when a compnent's parent is changed.
 	 * @since 3.0.6
@@ -1210,10 +1212,11 @@ public class Configuration {
 			try {
 				ary[j].afterPageAttached(page, desktop);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
+
 	/** Invokes {@link UiLifeCycle#afterPageDetached}
 	 * when a compnent's parent is changed.
 	 * @since 3.0.6
@@ -1224,7 +1227,7 @@ public class Configuration {
 			try {
 				ary[j].afterPageDetached(page, prevdesktop);
 			} catch (Throwable ex) {
-				log.error("Failed to invoke "+ary[j], ex);
+				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
 	}
@@ -1239,6 +1242,7 @@ public class Configuration {
 			throw new IllegalArgumentException("empty");
 		_themeURIs.add(uri);
 	}
+
 	/** Returns a readonly list of the URI of the CSS resources that will be
 	 * generated for each ZUML desktop (never null).
 	 *
@@ -1247,6 +1251,7 @@ public class Configuration {
 	public String[] getThemeURIs() {
 		return _themeURIs.toArray();
 	}
+
 	/** Specifies what theme URI to be disabled.
 	 *
 	 * <p>Note: if {@link ThemeProvider} is used ({@link #setThemeProvider}),
@@ -1265,6 +1270,7 @@ public class Configuration {
 		}
 		_disThemeURIs.add(uri);
 	}
+
 	/** Returns a set of the theme URIs that are disabled (never null).
 	 *
 	 * @since 3.0.0
@@ -1292,6 +1298,7 @@ public class Configuration {
 	public ThemeProvider getThemeProvider() {
 		return _themeProvider;
 	}
+
 	/** Sets the theme provider for the current execution,
 	 * or null if not available.
 	 *
@@ -1310,9 +1317,10 @@ public class Configuration {
 	 */
 	public void setUiEngineClass(Class<?> cls) {
 		if (cls != null && !UiEngine.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("UiEngine not implemented: "+cls);
+			throw new IllegalArgumentException("UiEngine not implemented: " + cls);
 		_uiengcls = cls;
 	}
+
 	/** Returns the class used to handle UI loading and updates,
 	 * or null if default is used.
 	 * It must implement {@link UiEngine}.
@@ -1329,11 +1337,11 @@ public class Configuration {
 	 * Otherwise, it won't have any effect.
 	 */
 	public void setWebAppClass(Class<?> cls) {
-		if (cls != null && (!WebApp.class.isAssignableFrom(cls)
-		|| !WebAppCtrl.class.isAssignableFrom(cls)))
-			throw new IllegalArgumentException("WebApp or WebAppCtrl not implemented: "+cls);
+		if (cls != null && (!WebApp.class.isAssignableFrom(cls) || !WebAppCtrl.class.isAssignableFrom(cls)))
+			throw new IllegalArgumentException("WebApp or WebAppCtrl not implemented: " + cls);
 		_wappcls = cls;
 	}
+
 	/** Returns the class used to represent this Web application,
 	 * or null if default is used.
 	 * It must implement {@link WebApp} and {@link WebAppCtrl}
@@ -1353,9 +1361,10 @@ public class Configuration {
 	 */
 	public void setWebAppFactoryClass(Class<?> cls) {
 		if (cls != null && !WebAppFactory.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("WebAppFactory not implemented: "+cls);
+			throw new IllegalArgumentException("WebAppFactory not implemented: " + cls);
 		_wappftycls = cls;
 	}
+
 	/** Returns the class used to instantiate an instance representing this Web application,
 	 * or null if default is used.
 	 * It must implement {@link WebAppFactory}.
@@ -1375,9 +1384,10 @@ public class Configuration {
 	 */
 	public void setDesktopCacheProviderClass(Class<?> cls) {
 		if (cls != null && !DesktopCacheProvider.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("DesktopCacheProvider not implemented: "+cls);
+			throw new IllegalArgumentException("DesktopCacheProvider not implemented: " + cls);
 		_dcpcls = cls;
 	}
+
 	/** Returns the class used to provide the desktop cache, or null
 	 * if default is used.
 	 * It must implement {@link DesktopCacheProvider}.
@@ -1395,9 +1405,10 @@ public class Configuration {
 	 */
 	public void setUiFactoryClass(Class<?> cls) {
 		if (cls != null && !UiFactory.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("UiFactory not implemented: "+cls);
+			throw new IllegalArgumentException("UiFactory not implemented: " + cls);
 		_uiftycls = cls;
 	}
+
 	/** Returns the class used to instantiate desktops, pages and components,
 	 * or null if default is used.
 	 * It must implement {@link UiFactory},
@@ -1415,9 +1426,10 @@ public class Configuration {
 	 */
 	public void setFailoverManagerClass(Class<?> cls) {
 		if (cls != null && !FailoverManager.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("FailoverManager not implemented: "+cls);
+			throw new IllegalArgumentException("FailoverManager not implemented: " + cls);
 		_failmancls = cls;
 	}
+
 	/** Returns the class used to handle the failover mechanism,
 	 * or null if no custom failover mechanism.
 	 * It must implement {@link FailoverManager}.
@@ -1436,9 +1448,10 @@ public class Configuration {
 	 */
 	public void setIdGeneratorClass(Class<?> cls) {
 		if (cls != null && !IdGenerator.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("IdGenerator not implemented: "+cls);
+			throw new IllegalArgumentException("IdGenerator not implemented: " + cls);
 		_idgencls = cls;
 	}
+
 	/** Returns the class used to generate UUID/ID for desktop,
 	 * page and components, or null if the default shall be used.
 	 * It must implement {@link IdGenerator}
@@ -1458,9 +1471,10 @@ public class Configuration {
 	 */
 	public void setSessionCacheClass(Class<?> cls) {
 		if (cls != null && !SessionCache.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("SessionCache not implemented: "+cls);
+			throw new IllegalArgumentException("SessionCache not implemented: " + cls);
 		_sesscachecls = cls;
 	}
+
 	/** Returns the class used to store ZK sessions, or null
 	 * if the default shall be used.
 	 * It must implement {@link SessionCache}.
@@ -1478,7 +1492,7 @@ public class Configuration {
 	 */
 	public void setFileItemFactoryClass(Class<?> cls) {
 		if (cls != null && !DiskFileItemFactory.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("DiskFileItemFactory not implemented: "+cls);
+			throw new IllegalArgumentException("DiskFileItemFactory not implemented: " + cls);
 		_fileFactory = cls;
 	}
 
@@ -1501,9 +1515,10 @@ public class Configuration {
 	 */
 	public void setAuDecoderClass(Class<?> cls) {
 		if (cls != null && !AuDecoder.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("AuDecoder not implemented: "+cls);
+			throw new IllegalArgumentException("AuDecoder not implemented: " + cls);
 		_audeccls = cls;
 	}
+
 	/** Returns the class used to decode AU requests, or null
 	 * if the default shall be used.
 	 * It must implement {@link AuDecoder}.
@@ -1528,6 +1543,7 @@ public class Configuration {
 	public void setMaxProcessTime(int time) {
 		_maxProcTime = time;
 	}
+
 	/** Returns the maximal allowed time to process events, in milliseconds.
 	 * It is always positive.
 	 */
@@ -1545,12 +1561,14 @@ public class Configuration {
 	public void setMaxUploadSize(int sz) {
 		_maxUploadSize = sz;
 	}
+
 	/** Returns the maximal allowed upload size, in kilobytes, or 
 	 * a negative value if no limit.
 	 */
 	public int getMaxUploadSize() {
 		return _maxUploadSize;
 	}
+
 	/** Specifies the threshold at which a temporary file is created as a 
 	 * buffer, in kilobytes.
 	 *
@@ -1563,6 +1581,7 @@ public class Configuration {
 	public void setFileSizeThreshold(int sz) {
 		_fileSizeThreshold = sz;
 	}
+
 	/** Returns the threshold at which a temporary file is created as a 
 	 * buffer, in kilobytes, or a negative value which implies default setting.
 	 * @since 5.0.8
@@ -1598,6 +1617,7 @@ public class Configuration {
 	public String getUploadCharset() {
 		return _charsetUpload;
 	}
+
 	/** Sets the charset used to encode the upload text file.
 	 *
 	 * <p>Note: {@link #setUploadCharsetFinder} has the higher priority.
@@ -1607,8 +1627,9 @@ public class Configuration {
 	 * @see #setUploadCharsetFinder
 	 */
 	public void setUploadCharset(String charset) {
-		_charsetUpload = charset != null && charset.length() > 0 ? charset: "UTF-8";
+		_charsetUpload = charset != null && charset.length() > 0 ? charset : "UTF-8";
 	}
+
 	/** Returns the finder that is used to decide the character set
 	 * for the uploaded text file(s), or null if not available.
 	 *
@@ -1619,6 +1640,7 @@ public class Configuration {
 	public CharsetFinder getUploadCharsetFinder() {
 		return _charsetFinderUpload;
 	}
+
 	/** Sets the finder that is used to decide the character set
 	 * for the uploaded text file(s), or null if not available.
 	 *
@@ -1644,6 +1666,7 @@ public class Configuration {
 	public void setDesktopMaxInactiveInterval(int secs) {
 		_dtTimeout = secs;
 	}
+
 	/** Returns the time, in seconds, between client requests
 	 * before ZK will invalidate the desktop.
 	 *
@@ -1664,12 +1687,14 @@ public class Configuration {
 	public void setProcessingPromptDelay(int minisecs) {
 		_promptDelay = minisecs;
 	}
+
 	/** Returns the time, in milliseconds, before ZK Client Engine shows
 	 * a dialog to prompt users that the request is in processing.
 	 */
 	public int getProcessingPromptDelay() {
 		return _promptDelay;
 	}
+
 	/**
 	 * Specifies the time, in milliseconds, to filter out consecutive
 	 * click events.
@@ -1689,6 +1714,7 @@ public class Configuration {
 	 */
 	public void setClickFilterDelay(int minisecs) {
 	}
+
 	/** Returns the time, in milliseconds, to filter out consecutive
 	 * click events.
 	 * @deprecated As of release 5.0.0, please use {@link org.zkoss.zul.Button#setAutodisable} instead.
@@ -1697,6 +1723,7 @@ public class Configuration {
 	public int getClickFilterDelay() {
 		return 0;
 	}
+
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particular UI components.
 	 *
@@ -1705,12 +1732,14 @@ public class Configuration {
 	public void setTooltipDelay(int minisecs) {
 		_tooltipDelay = minisecs;
 	}
+
 	/** Returns the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particular UI components.
 	 */
 	public int getTooltipDelay() {
 		return _tooltipDelay;
 	}
+
 	/** Specifies the timeout, in milliseconds, to re-send the AU request when
 	 * the server's service unavailable or timeout.
 	 * <p>Default: 200
@@ -1719,6 +1748,7 @@ public class Configuration {
 	public void setAutoResendTimeout(int minisecs) {
 		_autoResendTimeout = minisecs;
 	}
+
 	/** Returns the timeout, in milliseconds, for re-sending the AU request when
 	 * the server's service unavailable or timeout.
 	 * @since 6.5.2
@@ -1727,6 +1757,7 @@ public class Configuration {
 	public int getAutoResendTimeout() {
 		return _autoResendTimeout;
 	}
+
 	/** @deprecated As of release 6.0.0, it is removed without replacement, since
 	 * it is rarely applicable and over complicated.
 	 * Specifies the time, in milliseconds, before ZK Client Engine re-sends
@@ -1748,6 +1779,7 @@ public class Configuration {
 	 */
 	public void setResendDelay(int minisecs) {
 	}
+
 	/** @deprecated As of release 6.0.0, it is removed without replacement, since
 	 * it is rarely applicable and over complicated.
 	 * Returns the time, in milliseconds, before ZK Client Engine re-sends
@@ -1766,6 +1798,7 @@ public class Configuration {
 	public boolean isCrawlable() {
 		return _crawlable;
 	}
+
 	/** Sets whether this Web application is crawlable.
 	 * Make a Web application that allows search engines to crawl the application.
 	 * Notice that there is some performance loss for huge web pages. (EE only)
@@ -1790,11 +1823,13 @@ public class Configuration {
 	 * @since 3.6.3
 	 */
 	public URIInfo getTimeoutURI(String deviceType) {
-		if (deviceType == null) deviceType = "ajax";
+		if (deviceType == null)
+			deviceType = "ajax";
 
 		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
-		return inf != null && inf.uri != null ? inf: null;
+		return inf != null && inf.uri != null ? inf : null;
 	}
+
 	/** Sets the timeout URI.
 	 * It is used to show the error message if the desktop being requested
 	 * is not found. It is usually caused by session timeout.
@@ -1811,12 +1846,14 @@ public class Configuration {
 	 * @since 3.6.3
 	 */
 	public URIInfo setTimeoutURI(String deviceType, String timeoutURI, int type) {
-		if (deviceType == null) deviceType = "ajax";
+		if (deviceType == null)
+			deviceType = "ajax";
 
 		TimeoutURIInfo newi = new TimeoutURIInfo(timeoutURI, type);
 		TimeoutURIInfo oldi = _timeoutURIs.put(deviceType, newi);
-		if (oldi != null) newi.auto = oldi.auto;
-		return oldi != null && oldi.uri != null ? oldi: null;
+		if (oldi != null)
+			newi.auto = oldi.auto;
+		return oldi != null && oldi.uri != null ? oldi : null;
 	}
 
 	/** Returns the timeout message for this device, or null if the default
@@ -1826,11 +1863,13 @@ public class Configuration {
 	 * @see #setTimeoutMessage
 	 */
 	public String getTimeoutMessage(String deviceType) {
-		if (deviceType == null) deviceType = "ajax";
+		if (deviceType == null)
+			deviceType = "ajax";
 
 		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
-		return inf != null ? inf.message: null;
+		return inf != null ? inf.message : null;
 	}
+
 	/** Sets the timeout message for this device, or null if the default
 	 * message is preferred.
 	 * It is used only if {@link #getTimeoutURI} returns null.
@@ -1842,7 +1881,8 @@ public class Configuration {
 	 * @since 5.0.5
 	 */
 	public String setTimeoutMessage(String deviceType, String message) {
-		if (deviceType == null) deviceType = "ajax";
+		if (deviceType == null)
+			deviceType = "ajax";
 
 		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		if (inf != null) {
@@ -1867,11 +1907,13 @@ public class Configuration {
 	 * @since 3.6.3
 	 */
 	public boolean isAutomaticTimeout(String deviceType) {
-		if (deviceType == null) deviceType = "ajax";
+		if (deviceType == null)
+			deviceType = "ajax";
 
 		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		return inf != null && inf.auto;
 	}
+
 	/** Sets whether to automatically trigger the timeout at the client.
 	 *
 	 * <p>Default: false. It means this page is redirected to the timeout URI
@@ -1886,7 +1928,8 @@ public class Configuration {
 	 * @since 3.6.3
 	 */
 	public boolean setAutomaticTimeout(String deviceType, boolean auto) {
-		if (deviceType == null) deviceType = "ajax";
+		if (deviceType == null)
+			deviceType = "ajax";
 
 		TimeoutURIInfo inf = _timeoutURIs.get(deviceType);
 		if (inf != null) {
@@ -1915,8 +1958,7 @@ public class Configuration {
 	 * @return the previous URI associated with the specified error code
 	 * @since 3.6.3
 	 */
-	public String setClientErrorReload(String deviceType, int errCode, String uri,
-	String connType) {
+	public String setClientErrorReload(String deviceType, int errCode, String uri, String connType) {
 		if (uri == null)
 			return removeClientErrorReload(deviceType, errCode, connType);
 
@@ -1928,6 +1970,7 @@ public class Configuration {
 			return map.put(errCode, uri);
 		}
 	}
+
 	/** Removes the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *
@@ -1939,14 +1982,14 @@ public class Configuration {
 	 * @return the previous URI associated with the specified error code
 	 * @since 3.6.3
 	 */
-	public String removeClientErrorReload(String deviceType, int errCode,
-	String connType) {
+	public String removeClientErrorReload(String deviceType, int errCode, String connType) {
 		final String index = deviceConn2Str(deviceType, connType);
 		synchronized (_errURIs) {
 			Map<Integer, String> map = _errURIs.get(index);
-			return map != null ? map.remove(errCode): null;
+			return map != null ? map.remove(errCode) : null;
 		}
 	}
+
 	/** Returns the URI that is associated with the specified error code,
 	 * or null if no URI is associated.
 	 *
@@ -1957,14 +2000,14 @@ public class Configuration {
 	 * If null, "au" is assumed.
 	 * @since 3.6.3
 	 */
-	public String getClientErrorReload(String deviceType, int errCode,
-	String connType) {
+	public String getClientErrorReload(String deviceType, int errCode, String connType) {
 		final String index = deviceConn2Str(deviceType, connType);
 		synchronized (_errURIs) {
 			Map<Integer, String> map = _errURIs.get(index);
-			return map != null ? map.get(errCode): null;
+			return map != null ? map.get(errCode) : null;
 		}
 	}
+
 	/** Returns an array of pairs of the error code and URI info of
 	 * the specified device and connection (never null).
 	 *
@@ -1988,7 +2031,7 @@ public class Configuration {
 			if (map != null) {
 				Object[][] infs = new Object[map.size()][2];
 				int j = 0;
-				for (Map.Entry<Integer, String> me: map.entrySet()) {
+				for (Map.Entry<Integer, String> me : map.entrySet()) {
 					infs[j][0] = me.getKey();
 					infs[j++][1] = new URIInfo(me.getValue());
 				}
@@ -1997,10 +2040,11 @@ public class Configuration {
 		}
 		return new Object[0][0];
 	}
+
 	private static final String deviceConn2Str(String deviceType, String connType) {
-		if (deviceType == null) deviceType = "ajax";
-		return connType != null && "server-push".equals(connType) ?
-			"s:" + deviceType: deviceType;
+		if (deviceType == null)
+			deviceType = "ajax";
+		return connType != null && "server-push".equals(connType) ? "s:" + deviceType : deviceType;
 	}
 
 	/**  Specifies the time, in seconds, between client requests
@@ -2014,6 +2058,7 @@ public class Configuration {
 	public void setSessionMaxInactiveInterval(int secs) {
 		_sessTimeout = secs;
 	}
+
 	/** Returns the time, in seconds, between client requests
 	 * before ZK will invalidate the session.
 	 *
@@ -2040,6 +2085,7 @@ public class Configuration {
 	public void setSessionMaxDesktops(int max) {
 		_sessDktMax = max;
 	}
+
 	/** Returns the maximal allowed number of desktop per session.
 	 *
 	 * <p>A negative value indicates there is no limit.
@@ -2048,6 +2094,7 @@ public class Configuration {
 	public int getSessionMaxDesktops() {
 		return _sessDktMax;
 	}
+
 	/** Specifies the maximal allowed number of concurrent requests
 	 * per session.
 	 *
@@ -2060,6 +2107,7 @@ public class Configuration {
 	public void setSessionMaxRequests(int max) {
 		_sessReqMax = max;
 	}
+
 	/** Returns the maximal allowed number of concurrent requests
 	 * per session.
 	 *
@@ -2083,6 +2131,7 @@ public class Configuration {
 	public void setSessionMaxPushes(int max) {
 		_sessPushMax = max;
 	}
+
 	/** Returns the maximal allowed number of concurrent server-pushes
 	 * per session.
 	 */
@@ -2107,6 +2156,7 @@ public class Configuration {
 	public void setMaxSpareThreads(int max) {
 		_sparThdMax = max;
 	}
+
 	/** Returns the maximal allowed number of the spare pool for
 	 * queuing event processing threads (per Web application).
 	 * @see #isEventThreadEnabled
@@ -2128,6 +2178,7 @@ public class Configuration {
 	public void setMaxSuspendedThreads(int max) {
 		_suspThdMax = max;
 	}
+
 	/** Returns the maximal allowed number of suspended event
 	 * processing threads (per Web application).
 	 *
@@ -2138,6 +2189,7 @@ public class Configuration {
 	public int getMaxSuspendedThreads() {
 		return _suspThdMax;
 	}
+
 	/** Sets whether to use the event processing thread.
 	 *
 	 * <p>Default: false (disabled).
@@ -2147,7 +2199,7 @@ public class Configuration {
 	 */
 	public void enableEventThread(boolean enable) {
 		if (!enable && _wapp != null) {
-			final UiEngine engine = ((WebAppCtrl)_wapp).getUiEngine();
+			final UiEngine engine = ((WebAppCtrl) _wapp).getUiEngine();
 			if (engine != null) {
 				if (engine.hasSuspendedThread())
 					throw new IllegalStateException("Unable to disable due to suspended threads");
@@ -2157,6 +2209,7 @@ public class Configuration {
 			log.warn("Enable event thread has deprecated!");
 		_evtThdEnabled = enable;
 	}
+
 	/** Returns whether to use the event processing thread.
 	 * <p>Default: false (disabled).
 	 */
@@ -2171,6 +2224,7 @@ public class Configuration {
 	public void enableZScript(boolean enable) {
 		_zscriptEnabled = enable;
 	}
+
 	/** Returns whether zscript is allowed.
 	 * <p>Default: true (enabled).
 	 * @since 6.0.0
@@ -2184,6 +2238,7 @@ public class Configuration {
 	public Monitor getMonitor() {
 		return _monitor;
 	}
+
 	/** Sets the monitor for this application, or null to disable it.
 	 *
 	 * <p>Default: null.
@@ -2210,6 +2265,7 @@ public class Configuration {
 	public PerformanceMeter getPerformanceMeter() {
 		return _pfmeter;
 	}
+
 	/** Sets the performance meter for this application, or null to disable it.
 	 *
 	 * <p>Default: null.
@@ -2237,6 +2293,7 @@ public class Configuration {
 	public ExecutionMonitor getExecutionMonitor() {
 		return _execmon;
 	}
+
 	/** Sets the execution monitor for this application, or null to disable it.
 	 *
 	 * <p>Default: null.
@@ -2264,6 +2321,7 @@ public class Configuration {
 	public DesktopRecycle getDesktopRecycle() {
 		return _dtRecycle;
 	}
+
 	/** Sets the desktop recycler for this application, or null to disable it.
 	 *
 	 * <p>Default: null.
@@ -2294,6 +2352,7 @@ public class Configuration {
 	public String getResponseCharset() {
 		return _charsetResp;
 	}
+
 	/** Sets the charset used to generate HTTP response.
 	 * It is currently used by {@link org.zkoss.zk.ui.http.DHtmlLayoutServlet},
 	 *
@@ -2301,7 +2360,7 @@ public class Configuration {
 	 * is used.
 	 */
 	public void setResponseCharset(String charset) {
-		_charsetResp = charset != null && charset.length() > 0 ? charset: null;
+		_charsetResp = charset != null && charset.length() > 0 ? charset : null;
 	}
 
 	/** Returns the value of the preference defined in zk.xml, or by
@@ -2315,8 +2374,9 @@ public class Configuration {
 	 */
 	public String getPreference(String name, String defaultValue) {
 		final String value = _prefs.get(name);
-		return value != null ? value: defaultValue;
+		return value != null ? value : defaultValue;
 	}
+
 	/** Sets the value of the preference.
 	 */
 	public void setPreference(String name, String value) {
@@ -2324,6 +2384,7 @@ public class Configuration {
 			throw new IllegalArgumentException("null");
 		_prefs.put(name, value);
 	}
+
 	/** Returns a readonly set of all preference names.
 	 */
 	public Set<String> getPreferenceNames() {
@@ -2343,10 +2404,12 @@ public class Configuration {
 	 */
 	public Object addRichlet(String name, Class<?> richletClass, Map<String, String> params) {
 		if (!Richlet.class.isAssignableFrom(richletClass))
-			throw new IllegalArgumentException("A richlet class, "+richletClass+", must implement "+Richlet.class.getName());
+			throw new IllegalArgumentException(
+					"A richlet class, " + richletClass + ", must implement " + Richlet.class.getName());
 
 		return addRichlet0(name, richletClass, params);
 	}
+
 	/** Adds the definition of a richlet.
 	 *
 	 * <p>If there was a richlet associated with the same name, the
@@ -2366,6 +2429,7 @@ public class Configuration {
 
 		return addRichlet0(name, richletClassName, params);
 	}
+
 	/** Adds the richlet.
 	 *
 	 * <p>If there was a richlet associated with the same name, the
@@ -2383,13 +2447,14 @@ public class Configuration {
 
 		return addRichlet0(name, richlet, null);
 	}
+
 	private Object addRichlet0(String name, Object richletClass, Map<String, String> params) {
 		Object o;
-		
+
 		for (;;) {
 			// remove previous richlet if it exists
 			o = removeRichlet0(name);
-			
+
 			synchronized (_richlets) {
 				// add new richlet definition only if map does not contain record
 				// with same name
@@ -2397,7 +2462,7 @@ public class Configuration {
 					if (richletClass instanceof Richlet) {
 						_richlets.put(name, richletClass);
 					} else {
-						_richlets.put(name, new Object[] {richletClass, params});
+						_richlets.put(name, new Object[] { richletClass, params });
 					}
 					break;
 				}
@@ -2406,7 +2471,7 @@ public class Configuration {
 
 		return o;
 	}
-	
+
 	/**
 	 * Removes the richlet and associated richlet mappings.
 	 * 
@@ -2418,13 +2483,13 @@ public class Configuration {
 	public Object removeRichlet(String name) {
 		// remove richlet
 		final Object o = removeRichlet0(name);
-		
+
 		// remove associated richlet mappings
 		removeRichletMapping(name);
-		
+
 		return o;
 	}
-	
+
 	/**
 	 * Removes the richlet.
 	 * 
@@ -2444,17 +2509,14 @@ public class Configuration {
 			synchronized (_richlets) {
 				o = _richlets.remove(name);
 			}
-			
+
 			// verify it sth instancing richlet at the moment
 			if (o instanceof WaitLock) {
 				WaitLock lock = (WaitLock) o;
 				if (!lock.waitUntilUnlock(300 * 1000)) { //5 minute
-					String msg = new StringBuilder("Unable to remove richlet ").
-							append(name).
-							append("\nCause: conflict too long.").
-							toString();
-					final PotentialDeadLockException ex =
-						new PotentialDeadLockException(msg);
+					String msg = new StringBuilder("Unable to remove richlet ").append(name)
+							.append("\nCause: conflict too long.").toString();
+					final PotentialDeadLockException ex = new PotentialDeadLockException(msg);
 					log.warn(msg, ex); //very rare, possibly a bug
 					throw ex;
 				}
@@ -2462,7 +2524,7 @@ public class Configuration {
 				break;
 			}
 		}
-		
+
 		if (o == null) {
 			return null;
 		}
@@ -2471,8 +2533,9 @@ public class Configuration {
 			destroy((Richlet) o);
 			return o.getClass();
 		}
-		return ((Object[])o)[0];
+		return ((Object[]) o)[0];
 	}
+
 	/** Adds a richlet mapping.
 	 *
 	 * @param name the name of the richlet.
@@ -2487,27 +2550,26 @@ public class Configuration {
 		if (path == null || path.length() == 0 || "/".equals(path))
 			path = "";
 		else if (path.charAt(0) != '/')
-			throw new IllegalArgumentException("path must start with '/', not "+path);
+			throw new IllegalArgumentException("path must start with '/', not " + path);
 
 		final boolean wildcard = path.endsWith("/*");
 		if (wildcard) //wildcard
 			path = path.substring(0, path.length() - 2);
-				//note it might be empty
-		
+		//note it might be empty
+
 		//richlet mapping cannot be added if richlet is not defined,
 		//so check if richlet with same name exists and then
 		//add richlet mapping
 		synchronized (_richlets) {
 			if (!_richlets.containsKey(name))
-				throw new UiException("Richlet not defined: "+name);
-		
+				throw new UiException("Richlet not defined: " + name);
+
 			synchronized (_richletmaps) {
-				_richletmaps.put(
-					path, new Object[] {name, Boolean.valueOf(wildcard)});
+				_richletmaps.put(path, new Object[] { name, Boolean.valueOf(wildcard) });
 			}
 		}
 	}
-	
+
 	/**
 	 * Removes all richlet mappings for the specified richlet.
 	 * 
@@ -2516,8 +2578,7 @@ public class Configuration {
 	private void removeRichletMapping(String name) {
 		// remove richlet mapping
 		synchronized (_richletmaps) {
-			Iterator<Map.Entry<String, Object[]>> iter = 
-					_richletmaps.entrySet().iterator();
+			Iterator<Map.Entry<String, Object[]>> iter = _richletmaps.entrySet().iterator();
 			while (iter.hasNext()) {
 				Map.Entry<String, Object[]> entry = iter.next();
 				String richletName = (String) entry.getValue()[0];
@@ -2527,14 +2588,15 @@ public class Configuration {
 			}
 		}
 	}
-	
+
 	private static void destroy(Richlet richlet) {
 		try {
 			richlet.destroy();
 		} catch (Throwable ex) {
-			log.error("Unable to destroy "+richlet);
+			log.error("Unable to destroy " + richlet);
 		}
 	}
+
 	/** Returns an instance of richlet of the specified name, or null
 	 * if not found.
 	 */
@@ -2546,11 +2608,11 @@ public class Configuration {
 			synchronized (_richlets) {
 				Object o = _richlets.get(name);
 				if (o == null || (o instanceof Richlet)) { //not found or loaded
-					return (Richlet)o;
+					return (Richlet) o;
 				} else if (o instanceof WaitLock) { //loading by another thread
-					lock = (WaitLock)o;
+					lock = (WaitLock) o;
 				} else {
-					info = (Object[])o;
+					info = (Object[]) o;
 
 					//going to load in this thread
 					_richlets.put(name, lock = new WaitLock());
@@ -2558,10 +2620,9 @@ public class Configuration {
 				}
 			} //sync(_richlets)
 
-			if (!lock.waitUntilUnlock(300*1000)) { //5 minute
-				final PotentialDeadLockException ex =
-					new PotentialDeadLockException(
-					"Unable to load richlet "+name+"\nCause: conflict too long.");
+			if (!lock.waitUntilUnlock(300 * 1000)) { //5 minute
+				final PotentialDeadLockException ex = new PotentialDeadLockException(
+						"Unable to load richlet " + name + "\nCause: conflict too long.");
 				log.warn("", ex); //very rare, possibly a bug
 				throw ex;
 			}
@@ -2571,18 +2632,18 @@ public class Configuration {
 		try {
 			if (info[0] instanceof String) {
 				try {
-					info[0] = Classes.forNameByThread((String)info[0]);
+					info[0] = Classes.forNameByThread((String) info[0]);
 				} catch (Throwable ex) {
-					throw new UiException("Failed to load "+info[0]);
+					throw new UiException("Failed to load " + info[0]);
 				}
 			}
 
-			final Object o = ((Class<?>)info[0]).newInstance();
+			final Object o = ((Class<?>) info[0]).newInstance();
 			if (!(o instanceof Richlet))
-				throw new UiException(Richlet.class+" must be implemented by "+info[0]);
+				throw new UiException(Richlet.class + " must be implemented by " + info[0]);
 
-			final Richlet richlet = (Richlet)o;
-			richlet.init(newRichletConfig((Map<String, String>)info[1]));
+			final Richlet richlet = (Richlet) o;
+			richlet.init(newRichletConfig((Map<String, String>) info[1]));
 
 			synchronized (_richlets) {
 				_richlets.put(name, richlet);
@@ -2592,11 +2653,12 @@ public class Configuration {
 			synchronized (_richlets) {
 				_richlets.put(name, info); //remove lock and restore info
 			}
-			throw UiException.Aide.wrap(ex, "Unable to instantiate "+info[0]);
+			throw UiException.Aide.wrap(ex, "Unable to instantiate " + info[0]);
 		} finally {
 			lock.unlock();
 		}
 	}
+
 	private RichletConfig newRichletConfig(Map<String, String> params) {
 		return new RichletConfigImpl(_wapp, params);
 	}
@@ -2612,22 +2674,22 @@ public class Configuration {
 
 		final int len = path.length();
 		for (int j = len;;) {
-			final Richlet richlet =
-				getRichletByPath0(path.substring(0, j), j != len);
+			final Richlet richlet = getRichletByPath0(path.substring(0, j), j != len);
 			if (richlet != null || j == 0)
 				return richlet;
 			j = path.lastIndexOf('/', j - 1); //j must not -1
 		}
 	}
+
 	private Richlet getRichletByPath0(String path, boolean wildcardOnly) {
 		final Object[] info;
 		synchronized (_richletmaps) {
 			info = _richletmaps.get(path);
 		}
-		return info != null &&
-			(!wildcardOnly || ((Boolean)info[1]).booleanValue()) ?
-				getRichlet((String)info[0]): null;
+		return info != null && (!wildcardOnly || ((Boolean) info[1]).booleanValue()) ? getRichlet((String) info[0])
+				: null;
 	}
+
 	/** Destroyes all richlets.
 	 */
 	public void detroyRichlets() {
@@ -2635,7 +2697,7 @@ public class Configuration {
 			for (Iterator<Object> it = _richlets.values().iterator(); it.hasNext();) {
 				final Object o = it.next();
 				if (o instanceof Richlet)
-					destroy((Richlet)o);
+					destroy((Richlet) o);
 			}
 			_richlets.clear();
 		}
@@ -2650,6 +2712,7 @@ public class Configuration {
 	public void setKeepDesktopAcrossVisits(boolean keep) {
 		_keepDesktop = keep;
 	}
+
 	/** Returns whether to keep the desktops across visits.
 	 * If false, the desktops are removed when an user reloads an URL
 	 * or browses to another URL.
@@ -2680,6 +2743,7 @@ public class Configuration {
 	public void setTimerKeepAlive(boolean alive) {
 		_timerKeepAlive = alive;
 	}
+
 	/** Returns whether to keep the session alive,
 	 * when receiving the onTimer event.
 	 * In other words, it returns whether to reset the session timeout
@@ -2701,6 +2765,7 @@ public class Configuration {
 	public boolean isDebugJS() {
 		return _debugJS;
 	}
+
 	/**Sets whether to debug JavaScript files.
 	 *
 	 * <p>Default: false.
@@ -2738,6 +2803,7 @@ public class Configuration {
 	public boolean isRepeatUuid() {
 		return _repeatUuid;
 	}
+
 	/** Sets whether to use the same UUID sequence for desktops after
 	 * rebooting.
 	 * @since 5.0.0
@@ -2765,6 +2831,7 @@ public class Configuration {
 	public void setExpressionFactoryClass(Class<? extends ExpressionFactory> expfcls) {
 		Expressions.setExpressionFactoryClass(expfcls);
 	}
+
 	/** Returns the implementation of the expression factory that
 	 * is used by the whole system, or null if the sytem default is used.
 	 *
@@ -2784,6 +2851,7 @@ public class Configuration {
 	public Event beforeSendEvent(Event event) {
 		return _eis.beforeSendEvent(event);
 	}
+
 	/** Invokes {@link EventInterceptor#beforePostEvent}
 	 * registered by {@link #addListener} with a class implementing
 	 * {@link EventInterceptor}.
@@ -2793,6 +2861,7 @@ public class Configuration {
 	public Event beforePostEvent(Event event) {
 		return _eis.beforePostEvent(event);
 	}
+
 	/** Invokes {@link EventInterceptor#beforeProcessEvent}
 	 * registered by {@link #addListener} with a class implementing
 	 * {@link EventInterceptor}.
@@ -2802,6 +2871,7 @@ public class Configuration {
 	public Event beforeProcessEvent(Event event) {
 		return _eis.beforeProcessEvent(event);
 	}
+
 	/** Invokes {@link EventInterceptor#afterProcessEvent}
 	 * registered by {@link #addListener} with a class implementing
 	 * {@link EventInterceptor}.
@@ -2818,6 +2888,7 @@ public class Configuration {
 	public Map<String, Object> getAttributes() {
 		return _attrs;
 	}
+
 	/** Returns the value of an application-specific attribute, or
 	 * null if not found.
 	 * @since 5.0.0
@@ -2825,6 +2896,7 @@ public class Configuration {
 	public Object getAttribute(String name) {
 		return _attrs.get(name);
 	}
+
 	/** Returns the value of an application-specific attribute.
 	 * @param value the value of the attribute. If null, it means removal,
 	 * i.e., {@link #removeAttribute}.
@@ -2832,8 +2904,9 @@ public class Configuration {
 	 * @since 5.0.0
 	 */
 	public Object setAttribute(String name, Object value) {
-		return value != null ? _attrs.put(name, value): removeAttribute(name);
+		return value != null ? _attrs.put(name, value) : removeAttribute(name);
 	}
+
 	/** Removes the value of an application-specific attribute.
 	 * @return the previous value, or null if no such value.
 	 * @since 5.0.0
@@ -2858,6 +2931,7 @@ public class Configuration {
 			throw new IllegalArgumentException("empty");
 		_clientpkgs.add(pkg);
 	}
+
 	/** Returns a readonly list of the names of the client pages
 	 * that are provided by this server
 	 *
@@ -2875,6 +2949,7 @@ public class Configuration {
 	public int getEventTimeWarning() {
 		return _evtTimeWarn;
 	}
+
 	/** Set the time, in seconds, to show a warning message
 	 * if an event has been processinged longer than it.
 	 * @param secs the number of seconds.
@@ -2884,6 +2959,7 @@ public class Configuration {
 	public void setEventTimeWarning(int secs) {
 		_evtTimeWarn = secs;
 	}
+
 	/** Adds an error page.
 	 *
 	 * @param deviceType the device type: ajax or mil
@@ -2895,7 +2971,7 @@ public class Configuration {
 	 */
 	public String addErrorPage(String deviceType, Class<?> type, String location) {
 		if (!Throwable.class.isAssignableFrom(type))
-			throw new IllegalArgumentException("Throwable or derived is required: "+type);
+			throw new IllegalArgumentException("Throwable or derived is required: " + type);
 		if (location == null || deviceType == null)
 			throw new IllegalArgumentException();
 
@@ -2921,6 +2997,7 @@ public class Configuration {
 		}
 		return previous;
 	}
+
 	/** Returns the error page that matches the specified error, or null if not found.
 	 *
 	 * @param deviceType the device type: ajax or mil
@@ -2945,44 +3022,55 @@ public class Configuration {
 		}
 		return null;
 	}
+
 	private static class ErrorPage {
 		private final Class<?> type;
 		private final String location;
+
 		private ErrorPage(Class<?> type, String location) {
 			this.type = type;
 			this.location = location;
 		}
 	}
+
 	/** Used with {@link FastReadArray} to check if an object is
 	 * the same class as specified.
 	 */
 	private static class SameClass implements Comparable<Object> {
 		private final Class<?> _klass;
+
 		private SameClass(Class<?> klass) {
 			_klass = klass;
 		}
+
 		public int compareTo(Object o) {
-			return o.getClass().equals(_klass) ? 0: 1;
+			return o.getClass().equals(_klass) ? 0 : 1;
 		}
 
 		//Object//
 		public String toString() {
 			return Objects.toString(_klass);
 		}
+
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			return Objects.equals(_klass, o instanceof SameClass ? ((SameClass)o)._klass: o);
+			if (this == o)
+				return true;
+			return Objects.equals(_klass, o instanceof SameClass ? ((SameClass) o)._klass : o);
 		}
+
 		public int hashCode() {
 			return Objects.hashCode(_klass);
 		}
 	}
+
 	private static class TimeoutURIInfo extends URIInfo {
 		private String message;
 		private boolean auto;
+
 		private TimeoutURIInfo() {
 			super(null);
 		}
+
 		private TimeoutURIInfo(String uri, int type) {
 			super(uri, type);
 		}
@@ -2999,6 +3087,7 @@ public class Configuration {
 	public boolean isCustomThemeProvider() {
 		return _customThemeProvider;
 	}
+
 	/**
 	 * Sets whether to use custom {@link ThemeProvider}.
 	 * <p>Default: false.
@@ -3010,6 +3099,7 @@ public class Configuration {
 	public void setCustomThemeProvider(boolean customThemeProvider) {
 		_customThemeProvider = customThemeProvider;
 	}
+
 	/**
 	 * Returns whether to use custom {@link ThemeRegistry}. If true, it means
 	 * the default ThemeRegistry shall be ignored. It is set to true if declare
@@ -3020,6 +3110,7 @@ public class Configuration {
 	public boolean isCustomThemeRegistry() {
 		return _customThemeRegistry;
 	}
+
 	/**
 	 * Sets whether to use custom {@link ThemeRegistry}.
 	 * <p>Default: false.
@@ -3031,6 +3122,7 @@ public class Configuration {
 	public void setCustomThemeRegistry(boolean customThemeRegistry) {
 		_customThemeRegistry = customThemeRegistry;
 	}
+
 	/**
 	 * Returns whether to use custom {@link ThemeResolver}. If true, it means
 	 * the default ThemeResolver shall be ignored. It is set to true if declare
@@ -3041,6 +3133,7 @@ public class Configuration {
 	public boolean isCustomThemeResolver() {
 		return _customThemeResolver;
 	}
+
 	/**
 	 * Sets whether to use custom {@link ThemeResolver}.
 	 * <p>Default: false.
@@ -3062,6 +3155,7 @@ public class Configuration {
 	public void setInitCrashScript(String script) {
 		_initCrashScript = script;
 	}
+
 	/**
 	 * Sets user customized init crash timeout
 	 * <p>User can customize init crash timeout by simply giving a number(sec).
@@ -3071,6 +3165,7 @@ public class Configuration {
 	public void setInitCrashTimeout(int timeout) {
 		_initCrashTimeout = timeout;
 	}
+
 	/**
 	 * Returns init crash script, if null, use default, see crashmsg.js
 	 * @return String 
@@ -3079,6 +3174,7 @@ public class Configuration {
 	public String getInitCrashScript() {
 		return _initCrashScript;
 	}
+
 	/**
 	 * Returns init crash timeout, if -1, use default, which is 60 sec
 	 * @return int
@@ -3121,7 +3217,7 @@ public class Configuration {
 	public void setBinderAnnotations(Set<String> binderAnnotations) {
 		this._binderAnnotations = new HashSet<String>(binderAnnotations);
 	}
-	
+
 	/**
 	 * Adds client data attribute handler
 	 * @since 8.0.0
@@ -3134,15 +3230,16 @@ public class Configuration {
 				log.warn("The data handler cannot be overridden! Not existing: [" + name + "]");
 		} else {
 			if (old != null)
-				log.warn("The data handler has been defined! [" + name + "]\n Please use <override>true</override> to disable the warning.");
+				log.warn("The data handler has been defined! [" + name
+						+ "]\n Please use <override>true</override> to disable the warning.");
 		}
 	}
-	
+
 	/**
 	 * Returns all of the client data attribute handlers
 	 * @since
 	 */
-	public Map<String,DataHandlerInfo> getDataHandlers() {
+	public Map<String, DataHandlerInfo> getDataHandlers() {
 		return _dataHandlers;
 	}
 }

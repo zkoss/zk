@@ -12,8 +12,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
 
 import org.zkoss.zk.ui.Page;
 
@@ -39,6 +39,7 @@ public interface PageRenderPatch {
 	 * is usually an instance of StringWriter).
 	 */
 	public Writer beforeRender(RequestInfo reqInfo);
+
 	/** Called after rendering to patch the result.
 	 * If {@link #beforeRender} returns null, this method won't be called
 	 * since nothing to patch.
@@ -50,6 +51,5 @@ public interface PageRenderPatch {
 	 * @param out the real output sent to the client. It is the writer
 	 * to write the patched result to.
 	 */
-	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
-	throws IOException;
+	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out) throws IOException;
 }

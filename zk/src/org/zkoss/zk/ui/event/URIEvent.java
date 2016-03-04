@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.au.AuRequest;
 
 /**
  * The URI update event used with <code>onURIChange</code>
@@ -46,19 +46,18 @@ public class URIEvent extends Event {
 	 */
 	public static final URIEvent getURIEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		String uri = (String)data.get("");
+		String uri = (String) data.get("");
 		int urilen = uri.length();
 		if (urilen > 0 && uri.charAt(0) == '/') {
 			//Convert URL to URI if starting with the context path
 			String ctx = Executions.getCurrent().getContextPath();
-			int ctxlen = ctx != null ? ctx.length(): 0;
+			int ctxlen = ctx != null ? ctx.length() : 0;
 			if (ctxlen > 0 && !"/".equals(ctx)) {
 				if (ctx.charAt(0) != '/') { //just in case
 					ctx = '/' + ctx;
 					++ctxlen;
 				}
-				if (uri.startsWith(ctx)
-				&& (urilen == ctxlen || uri.charAt(ctxlen) == '/'))
+				if (uri.startsWith(ctx) && (urilen == ctxlen || uri.charAt(ctxlen) == '/'))
 					uri = uri.substring(ctxlen);
 			}
 		}
@@ -73,7 +72,7 @@ public class URIEvent extends Event {
 	 */
 	public URIEvent(String name, Component target, String uri) {
 		super(name, target);
-		_uri = uri != null ? uri: "";
+		_uri = uri != null ? uri : "";
 	}
 
 	/** Returns the URI (never null).

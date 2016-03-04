@@ -55,7 +55,7 @@ public class WebApps {
 	 */
 	public static WebApp getCurrent() {
 		final Session sess = Sessions.getCurrent(false);
-		return sess != null ? sess.getWebApp(): _wapp;
+		return sess != null ? sess.getWebApp() : _wapp;
 	}
 
 	/** Returns whether the specified feature is supported.
@@ -76,19 +76,20 @@ public class WebApps {
 	 */
 	public static boolean getFeature(String feature) {
 		final String f = feature.toLowerCase(java.util.Locale.ENGLISH);
-		return "pe".equals(f) || "professional".equals(f) ? _pe:
-			"ee".equals(f) || "enterprise".equals(f) ? _ee: false;
+		return "pe".equals(f) || "professional".equals(f) ? _pe
+				: "ee".equals(f) || "enterprise".equals(f) ? _ee : false;
 	}
+
 	/** Returns the edition, such as EE, PE and CE.
 	 * Notice that prior to 5.0.1, the return value is one of
 	 * Enterprise, Professional and Standard.
 	 * @since 3.6.2
 	 */
 	public static String getEdition() {
-		return _ee ? "EE": _pe ? "PE": "CE";
+		return _ee ? "EE" : _pe ? "PE" : "CE";
 	}
+
 	/** Features. */
-	private static final boolean
-		_pe = Classes.existsByThread("org.zkoss.zkex.Version"),
-		_ee = Classes.existsByThread("org.zkoss.zkmax.Version");
+	private static final boolean _pe = Classes.existsByThread("org.zkoss.zkex.Version"),
+			_ee = Classes.existsByThread("org.zkoss.zkmax.Version");
 }

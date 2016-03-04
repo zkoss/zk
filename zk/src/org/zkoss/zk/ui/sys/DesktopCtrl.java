@@ -21,20 +21,20 @@ import java.util.Collection;
 import java.util.List;
 
 import org.zkoss.util.media.Media;
-
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.impl.DesktopEventQueue;
-import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.DesktopUnavailableException;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.impl.DesktopEventQueue;
+import org.zkoss.zk.ui.util.EventInterceptor;
 
 /**
  * An addition interface to {@link Desktop}
@@ -52,6 +52,7 @@ public interface DesktopCtrl {
 	/** Returns the next available key which is unique in the whole desktop.
 	 */
 	public int getNextKey();
+
 	/** Returns the next available UUID for a page.
 	 * The returned UUID is unique in the desktop.
 	 * You can consider it as unique in the whole session, though
@@ -63,6 +64,7 @@ public interface DesktopCtrl {
 	 * @since 5.0.3
 	 */
 	public String getNextUuid(Page page);
+
 	/** Returns the next available UUID for a component.
 	 * The returned UUID is unique in the desktop.
 	 * You can consider it as unique in the whole session, though
@@ -82,6 +84,7 @@ public interface DesktopCtrl {
 	 * the same UUID
 	 */
 	public void addComponent(Component comp);
+
 	/** Maps a component associated with the given UUID to this page.
 	 * Notice that the given uuid can be different from comp's UUID
 	 * ({@link Component#getUuid}).
@@ -114,6 +117,7 @@ public interface DesktopCtrl {
 	 * before activating an execution.
 	 */
 	public void addPage(Page page);
+
 	/** Removes a page from this desktop.
 	 * <p>NOTE: once a page is removed, you can NOT add it back.
 	 * You shall just GC it.
@@ -130,6 +134,7 @@ public interface DesktopCtrl {
 	 * @exception IllegalStateException if it is NOT in recovering.
 	 */
 	public void setId(String id);
+
 	/** Called when the recovering failed.
 	 */
 	public void recoverDidFail(Throwable ex);
@@ -138,6 +143,7 @@ public interface DesktopCtrl {
 	 * is about to be passivated (a.k.a., serialized) by the Web container.
 	 */
 	public void sessionWillPassivate(Session sess);
+
 	/** Notification that the session, which owns this desktop,
 	 * has just been activated (a.k.a., deserialized) by the Web container.
 	 */
@@ -146,6 +152,7 @@ public interface DesktopCtrl {
 	/** Called when the desktop is about to be destroyed.
 	 */
 	public void destroy();
+
 	/** Called when the desktop has been recycled.
 	 * More precisely, it is called when the desktop is no longer used
 	 * and ready to be re-used later.
@@ -166,19 +173,20 @@ public interface DesktopCtrl {
 	 * ({@link Collection#isEmpty}).
 	 *
 	 * <pre><code>
-//Use the following pattern IF it is not in the SAME desktop's listener
-Collection c = otherDesktop.getSuspendedThreads();
-if (c.isEmpty()) {
+	//Use the following pattern IF it is not in the SAME desktop's listener
+	Collection c = otherDesktop.getSuspendedThreads();
+	if (c.isEmpty()) {
 	//do something accordingly
-} else {
-  synchronized (c) {
-    for (Iterator it = c.iterator(); it.hasNext();) {
-      //...
-    }
-  }
-}</code></pre>
+	} else {
+	synchronized (c) {
+	for (Iterator it = c.iterator(); it.hasNext();) {
+	  //...
+	}
+	}
+	}</code></pre>
 	 */
 	public Collection<EventProcessingThread> getSuspendedThreads();
+
 	/** Ceases the specified event thread.
 	 *
 	 * @param cause an arbitrary text to describe the cause.
@@ -213,6 +221,7 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public void onPiggybackListened(Component comp, boolean listen);
+
 	/** Called each time when ZK Update Engine retrieves events.
 	 * It is used to implement the piggyback feature by posting
 	 * the events (see {@link Events#ON_PIGGYBACK}).
@@ -224,10 +233,12 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public void onPiggyback();
+
 	/** Returns the server-push controller, or null if it is not enabled
 	 * yet.
 	 */
 	public ServerPush getServerPush();
+
 	/** Enables the server-push feature with the specified server-push
 	 * controller.
 	 * If you want to use the default serverpush, use {@link Desktop#enableServerPush}
@@ -248,6 +259,17 @@ if (c.isEmpty()) {
 	 */
 	public boolean enableServerPush(ServerPush serverpush);
 
+	/**
+	 * Enable/Disable serverpush using reference counting, so that multiple enablers can 
+	 * use the same serverpush and deregister whenever they want.
+	 * @param enable true/false enable/disable serverpush
+	 * @param enabler the same reference must be used to disable again
+	 * @return Currently only used by {@link DesktopEventQueue} to enable several
+	 * eventqueues to use the same {@link ServerPush} 
+	 * @since 6.5.4
+	 */
+	public boolean enableServerPush(boolean enable, Serializable enabler);
+
 	/** Invokes {@link EventInterceptor#beforeSendEvent}
 	 * registered by {@link Desktop#addListener}.
 	 *
@@ -257,6 +279,7 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public Event beforeSendEvent(Event event);
+
 	/** Invokes {@link EventInterceptor#beforePostEvent}
 	 * registered by {@link Desktop#addListener}.
 	 *
@@ -266,6 +289,7 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public Event beforePostEvent(Event event);
+
 	/** Invokes {@link EventInterceptor#beforeProcessEvent}
 	 * registered by {@link Desktop#addListener}.
 	 *
@@ -275,6 +299,7 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public Event beforeProcessEvent(Event event) throws Exception;
+
 	/** Invokes {@link EventInterceptor#afterProcessEvent}
 	 * registered by {@link Desktop#addListener}.
 	 *
@@ -284,10 +309,11 @@ if (c.isEmpty()) {
 	 * @since 3.0.0
 	 */
 	public void afterProcessEvent(Event event) throws Exception;
+
 	/** Invokes {@link org.zkoss.zk.ui.util.DesktopCleanup#cleanup} for each relevant
 	 * listener registered by {@link Desktop#addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>It never throws an exception.
 	 *
@@ -298,19 +324,19 @@ if (c.isEmpty()) {
 	/** Invokes {@link org.zkoss.zk.ui.util.ExecutionInit#init} for each relevant
 	 * listener registered by {@link Desktop#addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * @param exec the execution that is created
 	 * @param parent the previous execution, or null if no previous at all
 	 * @exception UiException to prevent an execution from being created
 	 * @since 3.0.6
 	 */
-	public void invokeExecutionInits(Execution exec, Execution parent)
-	throws UiException;
+	public void invokeExecutionInits(Execution exec, Execution parent) throws UiException;
+
 	/** Invokes {@link org.zkoss.zk.ui.util.ExecutionCleanup#cleanup} for each relevant
 	 * listener registered by {@link Desktop#addListener}.
 	 *
- 	 * <p>Used only internally.
+	 * <p>Used only internally.
 	 *
 	 * <p>It never throws an exception but logs and adds it to the errs argument,
 	 * if not null.
@@ -330,10 +356,12 @@ if (c.isEmpty()) {
 	 * @since 3.0.6
 	 */
 	public void afterComponentAttached(Component comp, Page page);
+
 	/** Invokes {@link org.zkoss.zk.ui.util.UiLifeCycle#afterComponentDetached}.
 	 * @since 3.0.6
 	 */
 	public void afterComponentDetached(Component comp, Page prevpage);
+
 	/** Invokes {@link org.zkoss.zk.ui.util.UiLifeCycle#afterComponentMoved}.
 	 *
 	 * @param prevparent the previous parent. If it is the same as
@@ -351,6 +379,7 @@ if (c.isEmpty()) {
 	 * @since 5.0.0
 	 */
 	public void responseSent(String reqId, Object resInfo);
+
 	/** Returns the response for the last request, or null
 	 * if no response yet, or the specified request ID doesn't match
 	 * the last one (passed to {@link #responseSent}).
@@ -359,6 +388,7 @@ if (c.isEmpty()) {
 	 * @since 5.0.0
 	 */
 	public Object getLastResponse(String reqId);
+
 	/** Returns the sequence ID of the response.
 	 * The client and server uses the sequence ID to make sure
 	 * the responses are processed in the correct order.
@@ -371,6 +401,7 @@ if (c.isEmpty()) {
 	 * @since 3.5.0
 	 */
 	public int getResponseId(boolean advance);
+
 	/** Sets the sequence ID of the response.
 	 *
 	 * <p>It is rarely called other than in the recovering mode, i.e.,
@@ -381,6 +412,7 @@ if (c.isEmpty()) {
 	 * @since 3.5.0
 	 */
 	public void setResponseId(int resId);
+
 	/** Adds the responses to the so-called piggy-back queue.
 	 * The responses in the piggy-back queue will be sent in
 	 * the next AU request.
@@ -411,6 +443,7 @@ if (c.isEmpty()) {
 	 * @since 5.0.6
 	 */
 	public <T extends Event> void scheduleServerPush(EventListener<T> task, T event);
+
 	/** Returns if there is any scheduled task for server push.
 	 * @since 5.0.6
 	 */
@@ -430,8 +463,8 @@ if (c.isEmpty()) {
 	 * @exception IllegalStateException if the server push is not enabled.
 	 * @since 3.5.2
 	 */
-	public boolean activateServerPush(long timeout)
-	throws InterruptedException;
+	public boolean activateServerPush(long timeout) throws InterruptedException;
+
 	/** Deactivates the thread that has invoked {@link #activateServerPush}
 	 * successfully.
 	 * It is called by {@link org.zkoss.zk.ui.Executions#deactivate}.
@@ -440,18 +473,6 @@ if (c.isEmpty()) {
 	 */
 	public void deactivateServerPush();
 
-	
-	/**
-	 * Enable/Disable serverpush using reference counting, so that multiple enablers can 
-	 * use the same serverpush and deregister whenever they want.
-	 * @param enable true/false enable/disable serverpush
-	 * @param enabler the same reference must be used to disable again
-	 * @return Currently only used by {@link DesktopEventQueue} to enable several
-	 * eventqueues to use the same {@link ServerPush} 
-	 * @since 6.5.4
-	 */
-	public boolean enableServerPush(boolean enable, Serializable enabler);
-	
 	/** Processes an AU request.
 	 * Notice that not only the requests for a desktop but also the requests
 	 * for any component in the desktop will go thru this method.
@@ -502,16 +523,19 @@ if (c.isEmpty()) {
 	 * <p>Used only to implement {@link UiEngine}.
 	 */
 	public void setExecution(Execution exec);
+
 	/** Returns the visualizer associated with this desktop.
 	 * <p>Used only to implement {@link UiEngine}.
 	 * @since 3.6.2
 	 */
 	public Visualizer getVisualizer();
+
 	/** Sets the visualizer associated with is desktop.
 	 * <p>Used only to implement {@link UiEngine}.
 	 * @since 3.6.2
 	 */
 	public void setVisualizer(Visualizer uv);
+
 	/** Returns the lock used to activate an execution.
 	 * Before calling {@link #setVisualizer}, this object returned
 	 * by this method must be locked first.

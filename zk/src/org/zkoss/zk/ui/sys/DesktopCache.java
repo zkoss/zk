@@ -16,8 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
 
 /**
  * The cache used to store desktops.
@@ -36,6 +37,7 @@ public interface DesktopCache {
 	 * is not found
 	 */
 	public Desktop getDesktop(String desktopId);
+
 	/** Returns the desktop for the specified desktop ID, or null if not found.
 	 */
 	public Desktop getDesktopIfAny(String desktopId);
@@ -45,6 +47,7 @@ public interface DesktopCache {
 	 * <p>Application shall never access this method.
 	 */
 	public void addDesktop(Desktop desktop);
+
 	/** Removes a desktop from this session.
 	 * It must be called when a desktop is remove.
 	 * <p>Application shall never access this method.
@@ -55,6 +58,7 @@ public interface DesktopCache {
 	 * (a.k.a., serialized).
 	 */
 	public void sessionWillPassivate(Session sess);
+
 	/** Notification that the session has just been activated
 	 * (a.k.a., deserialized).
 	 */

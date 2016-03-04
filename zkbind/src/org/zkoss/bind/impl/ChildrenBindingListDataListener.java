@@ -28,29 +28,31 @@ import org.zkoss.zul.event.ListDataListener;
  * @author James Chu
  * @since 8.0.0
  */
-public class ChildrenBindingListDataListener implements ListDataListener, java.io.Serializable{
+public class ChildrenBindingListDataListener implements ListDataListener, java.io.Serializable {
 	private static final long serialVersionUID = 20150116151900L;
 	private final Component _owner;
 	private final BindContext _ctx;
 	private final Converter<?, ListModel<?>, Component> _conv;
-	
-	public ChildrenBindingListDataListener(Component comp, BindContext ctx, Converter<?, ListModel<?>, Component> conv) {
+
+	public ChildrenBindingListDataListener(Component comp, BindContext ctx,
+			Converter<?, ListModel<?>, Component> conv) {
 		this._owner = comp;
 		this._ctx = ctx;
 		this._conv = conv;
 	}
-	
+
 	public void onChange(ListDataEvent event) {
 		onListModelDataChange(new ChildrenBindingListModelDataEvent(event));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void onListModelDataChange(ListDataEvent event) {
 		final ListModel<?> model = event.getModel();
 		int type = event.getType();
 		int index0 = event.getIndex0();
 		int index1 = event.getIndex1();
-		List<Component[]> cbrCompsList = (List<Component[]>) _owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		List<Component[]> cbrCompsList = (List<Component[]>) _owner
+				.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
 		int oldsz = cbrCompsList == null ? 0 : cbrCompsList.size();
 		int newsz = model.getSize();
 		boolean refreshOwnerCBAttr = false;
@@ -64,7 +66,7 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 			}
 			renderModelData(model, index0, index1);
 		} else if (type == ListDataEvent.CONTENTS_CHANGED) {
-			if (index0 >= 0 && index1 >=0) {
+			if (index0 >= 0 && index1 >= 0) {
 				renderModelData(model, index0, index1);
 				cbrCompsList = (List<Component[]>) _owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
 				int count = (index1 - index0) + 1;
@@ -95,14 +97,15 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 			}
 			refreshOwnerCBAttr = true;
 		}
-		if (refreshOwnerCBAttr) 
+		if (refreshOwnerCBAttr)
 			_owner.setAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS, cbrCompsList);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void syncModel(ListModel<?> model) {
 		//clear all
-		List<Component[]> cbrCompsList = (List<Component[]>) _owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
+		List<Component[]> cbrCompsList = (List<Component[]>) _owner
+				.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
 		if (cbrCompsList != null) {
 			_owner.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
 			for (Component[] oldComps : cbrCompsList) {
@@ -115,7 +118,7 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 		}
 		renderModelData(model, 0, model.getSize() - 1);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void renderModelData(ListModel<?> model, int from, int to) {
 		BindChildRenderer renderer = new BindChildRenderer();
@@ -124,8 +127,9 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 			BindELContext.addModel(_owner, data);
 			if (data != null) {
 				int size = data.size();
-				if (to >= size) to = size - 1;
-				for(int i = from; i <= to; i++)
+				if (to >= size)
+					to = size - 1;
+				for (int i = from; i <= to; i++)
 					renderer.render(_owner, data.get(i), i, size, true);
 			}
 		}

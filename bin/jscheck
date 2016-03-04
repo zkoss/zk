@@ -1,0 +1,18 @@
+#!/bin/bash
+nodeChecker=`node -v`
+if [ -z "$nodeChecker" ] ; then
+	echo "please install node.js"
+	exit 1
+fi
+
+# install jscs anyway
+echo "installing jscs@latest"
+npm install jscs
+
+OUT="$(jscs $@)"
+
+if [ ! -z "$OUT" ] ; then
+	echo $OUT
+	#Coding Style Error found.
+	exit 1
+fi

@@ -19,9 +19,8 @@ package org.zkoss.zk.ui.impl;
 import java.util.Map;
 
 import org.zkoss.util.CollectionsX;
-
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.RichletConfig;
+import org.zkoss.zk.ui.WebApp;
 
 /**
  * An implementation of {@link RichletConfig}.
@@ -40,16 +39,18 @@ public class RichletConfigImpl implements RichletConfig {
 		if (wapp == null)
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
-		_params = params == null || params.isEmpty() ? null: params;
+		_params = params == null || params.isEmpty() ? null : params;
 	}
 
 	//RichletConfig//
 	public WebApp getWebApp() {
 		return _wapp;
 	}
+
 	public String getInitParameter(String name) {
-		return _params != null ? _params.get(name): null;
+		return _params != null ? _params.get(name) : null;
 	}
+
 	public Iterable<String> getInitParameterNames() {
 		if (_params != null)
 			return _params.keySet();

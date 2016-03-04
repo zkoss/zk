@@ -33,35 +33,40 @@ public class Out extends AbstractAction {
 	private boolean _escapeXML = true;
 	private boolean _nbsp;
 	private boolean _pre;
-	
+
 	/** Returns whether to escape XML.
 	 * Default: true.
 	 */
 	public boolean getEscapeXML() {
 		return _escapeXML;
 	}
+
 	/** Sets whether to escape XML.
 	 */
 	public void setEscapeXML(boolean escapeXML) {
 		_escapeXML = escapeXML;
 	}
+
 	/** Returns whether to generate &amp;nbsp; if the content is empty.
 	 * Default: false.
 	 */
 	public boolean getNbsp() {
 		return _escapeXML;
 	}
+
 	/** Sets whether to generate &amp;nbsp; if the content is empty.
 	 */
 	public void setNbsp(boolean nbsp) {
 		_nbsp = nbsp;
 	}
+
 	/** Returns the value.
 	 * Default: null.
 	 */
 	public String getValue() {
 		return _value;
 	}
+
 	/** Sets the value.
 	 */
 	public void setValue(String value) {
@@ -74,6 +79,7 @@ public class Out extends AbstractAction {
 	public int getMaxlength() {
 		return _maxlength;
 	}
+
 	/** Sets the maxlength to output.
 	 */
 	public void setMaxlength(int maxlength) {
@@ -97,23 +103,22 @@ public class Out extends AbstractAction {
 	public boolean isPre() {
 		return _pre;
 	}
-	
+
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!isEffective())
 			return;
 		if (nested)
 			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
-				new Object[] {this, new Integer(ac.getLineNumber())});
+					new Object[] { this, new Integer(ac.getLineNumber()) });
 
-		int len = _value != null ? _value.length(): 0;
+		int len = _value != null ? _value.length() : 0;
 		if (len == 0 || (_nbsp && _value.trim().length() == 0)) {
 			if (_nbsp)
 				ac.getOut().write("&nbsp;");
 			return;
 		}
-			
+
 		String value = _value;
 		if (_maxlength > 0 && len > _maxlength) {
 			int j = _maxlength;
@@ -128,7 +133,7 @@ public class Out extends AbstractAction {
 			for (int j = 0; j < len; ++j) {
 				final char cc = value.charAt(j);
 				final String replace;
-				
+
 				if (_pre && cc == ' ')
 					replace = "&nbsp;";
 				else

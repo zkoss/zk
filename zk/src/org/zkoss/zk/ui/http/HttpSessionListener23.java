@@ -12,12 +12,19 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextAttributeEvent;
+import javax.servlet.ServletContextAttributeListener;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionEvent;
 
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.sys.Attributes;
 
 /**
@@ -30,15 +37,15 @@ import org.zkoss.zk.ui.sys.Attributes;
  * @author tomyeh
  * @since 5.0.0
  */
-public class HttpSessionListener23 implements
-javax.servlet.http.HttpSessionListener, 
-HttpSessionAttributeListener, ServletContextAttributeListener,
-ServletContextListener {
+public class HttpSessionListener23 implements javax.servlet.http.HttpSessionListener, HttpSessionAttributeListener,
+		ServletContextAttributeListener, ServletContextListener {
 	private WebManager _webman;
 	private boolean _webmanCreated;
+
 	//HttpSessionListener//
 	public void sessionCreated(HttpSessionEvent evt) {
 	}
+
 	public void sessionDestroyed(HttpSessionEvent evt) {
 		//Note: Session Fixation Protection (such as Spring Security)
 		//might invalidate HTTP session and restore with a new one.
@@ -53,59 +60,53 @@ ServletContextListener {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
 			final Session sess = Sessions.getCurrent(false);
-			if (sess instanceof SimpleSession
-			&& evt.getSession().equals(sess.getNativeSession()))
-				((SimpleSession)sess).getScopeListeners()
-					.notifyAdded(name, evt.getValue());
-		}
-	}
-	public void attributeRemoved(HttpSessionBindingEvent evt) {
-		final String name = evt.getName();
-		if (!shallIgnore(name)) {
-			final Session sess = Sessions.getCurrent(false);
-			if (sess instanceof SimpleSession
-			&& evt.getSession().equals(sess.getNativeSession()))
-				((SimpleSession)sess).getScopeListeners()
-					.notifyRemoved(name);
-		}
-	}
-	public void attributeReplaced(HttpSessionBindingEvent evt) {
-		final String name = evt.getName();
-		if (!shallIgnore(name)) {
-			final Session sess = Sessions.getCurrent(false);
-			if (sess instanceof SimpleSession
-			&& evt.getSession().equals(sess.getNativeSession()))
-				((SimpleSession)sess).getScopeListeners()
-					.notifyReplaced(name, evt.getValue());
+			if (sess instanceof SimpleSession && evt.getSession().equals(sess.getNativeSession()))
+				((SimpleSession) sess).getScopeListeners().notifyAdded(name, evt.getValue());
 		}
 	}
 
-	//ServletContextAttributeListener//
 	public void attributeAdded(ServletContextAttributeEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
 			final WebApp wapp = WebManager.getWebAppIfAny(evt.getServletContext());
 			if (wapp instanceof SimpleWebApp)
-				((SimpleWebApp)wapp).getScopeListeners()
-					.notifyAdded(name, evt.getValue());
+				((SimpleWebApp) wapp).getScopeListeners().notifyAdded(name, evt.getValue());
 		}
 	}
+
+	public void attributeRemoved(HttpSessionBindingEvent evt) {
+		final String name = evt.getName();
+		if (!shallIgnore(name)) {
+			final Session sess = Sessions.getCurrent(false);
+			if (sess instanceof SimpleSession && evt.getSession().equals(sess.getNativeSession()))
+				((SimpleSession) sess).getScopeListeners().notifyRemoved(name);
+		}
+	}
+
 	public void attributeRemoved(ServletContextAttributeEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
 			final WebApp wapp = WebManager.getWebAppIfAny(evt.getServletContext());
 			if (wapp instanceof SimpleWebApp)
-				((SimpleWebApp)wapp).getScopeListeners()
-					.notifyRemoved(name);
+				((SimpleWebApp) wapp).getScopeListeners().notifyRemoved(name);
 		}
 	}
+
+	public void attributeReplaced(HttpSessionBindingEvent evt) {
+		final String name = evt.getName();
+		if (!shallIgnore(name)) {
+			final Session sess = Sessions.getCurrent(false);
+			if (sess instanceof SimpleSession && evt.getSession().equals(sess.getNativeSession()))
+				((SimpleSession) sess).getScopeListeners().notifyReplaced(name, evt.getValue());
+		}
+	}
+
 	public void attributeReplaced(ServletContextAttributeEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
 			final WebApp wapp = WebManager.getWebAppIfAny(evt.getServletContext());
 			if (wapp instanceof SimpleWebApp)
-				((SimpleWebApp)wapp).getScopeListeners()
-					.notifyReplaced(name, evt.getValue());
+				((SimpleWebApp) wapp).getScopeListeners().notifyReplaced(name, evt.getValue());
 		}
 	}
 
@@ -113,7 +114,7 @@ ServletContextListener {
 		return name.startsWith("javax.zkoss") || name.startsWith("org.zkoss");
 	}
 	//ServletContextListener//
-	
+
 	public void contextDestroyed(ServletContextEvent arg0) {
 		if (_webman != null) {
 			if (_webmanCreated)
@@ -121,7 +122,7 @@ ServletContextListener {
 			_webman = null;
 		}
 	}
-	
+
 	public void contextInitialized(ServletContextEvent event) {
 		/*
 		 * From latest servlet specification:
@@ -142,4 +143,3 @@ ServletContextListener {
 		}
 	}
 }
-

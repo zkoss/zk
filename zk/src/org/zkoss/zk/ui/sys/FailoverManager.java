@@ -16,11 +16,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 
 /**
  * Represents a class that is able to handle fail-over in the
@@ -57,6 +57,7 @@ public interface FailoverManager {
 	 * @since 5.0.0
 	 */
 	public void start(WebApp wapp);
+
 	/** Stops the failover manager.
 	 * Called only if the server is about to stop.
 	 * @since 5.0.0
@@ -75,6 +76,7 @@ public interface FailoverManager {
 	 * @param desktopId the desktop ID to recover
 	 */
 	public boolean isRecoverable(Session sess, String desktopId);
+
 	/** Recovers the specified desktop.
 	 * It is called only when {@link #isRecoverable} returns true.
 	 * Before calling this method, the desktop and execution
@@ -110,6 +112,5 @@ public interface FailoverManager {
 	 *
 	 * @exception UiException if failed to recover
 	 */
-	public void recover(Session sess, Execution exec, Desktop desktop)
-	throws UiException;
+	public void recover(Session sess, Execution exec, Desktop desktop) throws UiException;
 }

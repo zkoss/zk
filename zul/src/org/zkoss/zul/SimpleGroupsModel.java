@@ -51,28 +51,28 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * @see ComponentCloneListener
  */
 public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object, F, E>
-implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
-	
+		implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
+
 	/**
 	 * member field to store group data
 	 */
 	protected List<List<D>> _data;
-	
+
 	/**
 	 * member field to store group head data
 	 */
 	protected List<H> _heads;
-	
+
 	/**
 	 * member field to store group foot data
 	 */
 	protected List<F> _foots;
-	
+
 	/**
 	 * meMber field to store group close status
 	 */
 	protected boolean[] _opens;
-	
+
 	/**
 	 * Constructs a groups data model with a two-dimensional array of data.
 	 * For example, if you have three groups and each of them have 5 elements,
@@ -87,10 +87,10 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * where data[0] is the array of element of the first group,
 	 * data[1] is of the second group and so on.
 	 */
-	public SimpleGroupsModel(D[][] data){
-		this(data, null, (F[])null);
+	public SimpleGroupsModel(D[][] data) {
+		this(data, null, (F[]) null);
 	}
-	
+
 	/**
 	 * Constructor
 	 * When using this constructor , 
@@ -99,10 +99,10 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * @param data a 2 dimension array to represent groups data
 	 * @param heads an array to represent head data of group
 	 */
-	public SimpleGroupsModel(D[][] data, H[] heads){
-		this(data, heads, (F[])null);
+	public SimpleGroupsModel(D[][] data, H[] heads) {
+		this(data, heads, (F[]) null);
 	}
-	
+
 	/**
 	 * Constructor
 	 * When using this constructor , 
@@ -120,7 +120,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 				heads != null ? ArraysX.asList(heads) : (List<H>) null,
 				foots != null ? ArraysX.asList(foots) : (List<F>) null);
 	}
-	
+
 	/**
 	 * Constructor
 	 * When using this constructor , 
@@ -137,7 +137,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * @param closes an array of boolean to represent close status of group. If not specified, then
 	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)  
 	 */
-	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots, boolean[] closes){
+	public SimpleGroupsModel(D[][] data, H[] heads, F[] foots, boolean[] closes) {
 		this(data != null ? ArraysX.asList(data) : (List<List<D>>) null,
 				heads != null ? ArraysX.asList(heads) : (List<H>) null,
 				foots != null ? ArraysX.asList(foots) : (List<F>) null, closes);
@@ -172,7 +172,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	public SimpleGroupsModel(List<List<D>> data, List<H> heads) {
 		this(data, heads, null);
 	}
-	
+
 	/**
 	 * Constructor
 	 * When using this constructor , 
@@ -211,7 +211,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * {@link #isClose(int)} will return false in corresponding index(i.e. group is default to open)
 	 * @since 6.0.1  
 	 */
-	public SimpleGroupsModel(List<List<D>> data, List<H> heads, List<F> foots, boolean[] closes){
+	public SimpleGroupsModel(List<List<D>> data, List<H> heads, List<F> foots, boolean[] closes) {
 		if (data == null)
 			throw new NullPointerException();
 		_data = data;
@@ -227,11 +227,10 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 				_opens[i] = true;
 		}
 	}
-	
+
 	public D getChild(int groupIndex, int index) {
 		return _data.get(groupIndex).get(index);
 	}
-
 
 	public int getChildCount(int groupIndex) {
 		return _data.get(groupIndex).size();
@@ -242,9 +241,8 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * not specified.
 	 */
 	public Object getGroup(int groupIndex) {
-		return  _heads==null?_data.get(groupIndex):_heads.get(groupIndex);
+		return _heads == null ? _data.get(groupIndex) : _heads.get(groupIndex);
 	}
-
 
 	public int getGroupCount() {
 		return _data.size();
@@ -255,8 +253,7 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	}
 
 	public boolean hasGroupfoot(int groupIndex) {
-		return _foots != null && groupIndex > -1 && 
-			groupIndex < _foots.size() && _foots.get(groupIndex) != null;
+		return _foots != null && groupIndex > -1 && groupIndex < _foots.size() && _foots.get(groupIndex) != null;
 	}
 
 	/**
@@ -273,17 +270,19 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	public void setClose(int groupIndex, boolean close) {
 		setOpenGroup0(groupIndex, !close);
 	}
-	
+
 	public boolean isGroupOpened(int groupIndex) {
 		return _opens == null || _opens[groupIndex];
 	}
-	
+
 	public boolean addOpenGroup(int groupIndex) {
 		return setOpenGroup0(groupIndex, true);
-	}	
+	}
+
 	public boolean removeOpenGroup(int groupIndex) {
 		return setOpenGroup0(groupIndex, false);
 	}
+
 	public boolean setOpenGroup0(int groupIndex, boolean open) {
 		if (_opens == null) {
 			if (open)
@@ -295,12 +294,12 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 		}
 		if (_opens[groupIndex] != open) {
 			_opens[groupIndex] = open;
-			fireEvent(GroupsDataEvent.GROUPS_OPENED,groupIndex, -1, -1);
+			fireEvent(GroupsDataEvent.GROUPS_OPENED, groupIndex, -1, -1);
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Do nothing in default implementation, however developer can override it to 
 	 * re-group by manipulating {@link #_data},{@link #_heads},{@link #_foots}
@@ -316,16 +315,14 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex) {
 		for (int i = 0, j = _data.size(); i < j; i++) {
 			List<D> d = _data.get(i);
-			sortGroupData(_heads == null ? d : _heads.get(i), d, cmpr,
-					ascending, colIndex);
+			sortGroupData(_heads == null ? d : _heads.get(i), d, cmpr, ascending, colIndex);
 		}
-		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED,-1,-1,-1);
+		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED, -1, -1, -1);
 	}
 
 	/** @deprecated As of release 6.0.1, replaced with {@link #sortGroupData(Object, List, Comparator, boolean, int)}.
 	 */
-	protected void sortGroupData(Object group, D[] groupdata,
-	Comparator<D> cmpr, boolean ascending, int colIndex){
+	protected void sortGroupData(Object group, D[] groupdata, Comparator<D> cmpr, boolean ascending, int colIndex) {
 		sortGroupData(group, ArraysX.asList(groupdata), cmpr, ascending, colIndex);
 	}
 
@@ -336,14 +333,13 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	 * @param groupdata the group of data to sort
 	 * @since 6.0.1
 	 */
-	protected void sortGroupData(Object group, List<D> groupdata,
-			Comparator<D> cmpr, boolean ascending, int colIndex) {
+	protected void sortGroupData(Object group, List<D> groupdata, Comparator<D> cmpr, boolean ascending, int colIndex) {
 		Collections.sort(groupdata, cmpr);
 	}
-		
+
 	@SuppressWarnings("unchecked")
 	public Object clone() {
-		SimpleGroupsModel clone = (SimpleGroupsModel)super.clone();
+		SimpleGroupsModel clone = (SimpleGroupsModel) super.clone();
 		if (_data != null)
 			clone._data = new ArrayList(_data);
 		if (_heads != null)
@@ -351,9 +347,10 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 		if (_foots != null)
 			clone._foots = new ArrayList(_foots);
 		if (_opens != null)
-			clone._opens = (boolean[])ArraysX.duplicate(_opens);
+			clone._opens = (boolean[]) ArraysX.duplicate(_opens);
 		return clone;
 	}
+
 	/**
 	 * Allows the model to clone
 	 * @since 6.0.0

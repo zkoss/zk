@@ -30,6 +30,5 @@ package org.zkoss.zk.ui.event;
  * @author tomyeh
  * @since 5.0.6
  */
-public interface SerializableEventListener<T extends Event>
-extends EventListener<T>, java.io.Serializable {
+public interface SerializableEventListener<T extends Event> extends EventListener<T>, java.io.Serializable {
 }

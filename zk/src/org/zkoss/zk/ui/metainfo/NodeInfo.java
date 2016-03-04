@@ -26,6 +26,7 @@ public interface NodeInfo {
 	/** Returns the parent, or null if it has no parent.
 	 */
 	public NodeInfo getParent();
+
 	/** Returns a readonly list of children.
 	 *
 	 * <p>Note: the returned list is readonly. To modify, please use
@@ -36,6 +37,7 @@ public interface NodeInfo {
 	/** Append a child
 	 */
 	public void appendChild(NodeInfo child);
+
 	/** Removes a child.
 	 */
 	public boolean removeChild(NodeInfo child);
@@ -43,11 +45,13 @@ public interface NodeInfo {
 	/** Returns the page definition, i.e., the root node, or null if not available.
 	 */
 	public PageDefinition getPageDefinition();
+
 	/** Returns the evaluator.
 	 * <p>All nodes in the same ZUML tree has the same evaluator reference
 	 * (inherited from the root node, {@link PageDefinition#getEvaluatorRef}).
 	 */
 	public Evaluator getEvaluator();
+
 	/** Returns the evaluator reference.
 	 */
 	public EvaluatorRef getEvaluatorRef();

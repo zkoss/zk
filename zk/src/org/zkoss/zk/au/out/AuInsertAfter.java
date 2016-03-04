@@ -18,11 +18,11 @@ package org.zkoss.zk.au.out;
 
 import java.util.Collection;
 
+import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.StubsComponent;
 import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.sys.StubsComponent;
 
 /**
  * A response to insert an unparsed HTML after the specified component
@@ -44,9 +44,10 @@ public class AuInsertAfter extends AuResponse {
 	public AuInsertAfter(Component anchor, Collection<String> contents) {
 		super("addAft", anchor, toArray(anchor, contents));
 	}
+
 	private static Object[] toArray(Component anchor, Collection<String> contents) {
 		if (anchor instanceof Native || anchor instanceof StubsComponent)
-			throw new UiException("Adding a component after native or stubs not allowed: "+anchor);
+			throw new UiException("Adding a component after native or stubs not allowed: " + anchor);
 
 		return AuAppendChild.toArray(anchor.getUuid(), contents);
 	}

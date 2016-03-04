@@ -27,27 +27,30 @@ public interface FormProxyObject {
 	 * Returns the origin object.
 	 */
 	public Object getOriginObject();
+
 	/**
 	 * Resets all of the changes of this form from the origin object.
 	 */
 	public void resetFromOrigin();
+
 	/**
 	 * Saves all of the changes of this form to the origin object.
 	 * @param ctx
 	 */
 	public void submitToOrigin(BindContext ctx);
+
 	/**
 	 * Returns whether the form proxy object is dirty or not, including all
 	 * of its attributes.
 	 */
 	public boolean isFormDirty();
-	
+
 	/**
 	 * Sets the owner of this form with its binding.
 	 * @param owner the object associated with this form.
 	 */
 	public void setFormOwner(Object owner, FormBinding binding);
-	
+
 	/**
 	 * Add listener
 	 */

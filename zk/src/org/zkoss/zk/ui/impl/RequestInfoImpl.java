@@ -17,11 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import org.zkoss.util.resource.Locator;
-
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.sys.RequestInfo;
 
 /**
@@ -45,8 +44,7 @@ public class RequestInfoImpl implements RequestInfo {
 	 * @param locator the locator used to locate taglib and other resources.
 	 * If null, wapp is used.
 	 */
-	public RequestInfoImpl(WebApp wapp, Session sess,
-	Desktop desktop, Object request, Locator locator) {
+	public RequestInfoImpl(WebApp wapp, Session sess, Desktop desktop, Object request, Locator locator) {
 		if (wapp == null)
 			throw new IllegalArgumentException("null");
 		_wapp = wapp;
@@ -55,6 +53,7 @@ public class RequestInfoImpl implements RequestInfo {
 		_request = request;
 		_locator = locator;
 	}
+
 	/** Constructor.
 	 *
 	 * @param desktop the desktop, never null.
@@ -65,6 +64,7 @@ public class RequestInfoImpl implements RequestInfo {
 	public RequestInfoImpl(Desktop desktop, Object request, Locator locator) {
 		this(desktop.getWebApp(), desktop.getSession(), desktop, request, locator);
 	}
+
 	/** Constructor.
 	 *
 	 * @param exec the current execution, never null
@@ -78,18 +78,23 @@ public class RequestInfoImpl implements RequestInfo {
 	public final WebApp getWebApp() {
 		return _wapp;
 	}
+
 	public final Session getSession() {
 		return _sess;
 	}
+
 	public final Desktop getDesktop() {
 		return _desktop;
 	}
+
 	public final Object getNativeRequest() {
 		return _request;
 	}
+
 	public final Locator getLocator() {
 		return _locator;
 	}
+
 	public final void setLocator(Locator locator) {
 		_locator = locator;
 	}

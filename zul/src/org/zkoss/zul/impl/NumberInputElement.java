@@ -34,18 +34,17 @@ import org.zkoss.util.Locales;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
-import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A skeletal implementation for number-type input box.
  *
  * @author tomyeh
  */
-abstract public class NumberInputElement extends FormatInputElement {
+public abstract class NumberInputElement extends FormatInputElement {
 	/** The rounding mode. */
 	private int _rounding = BigDecimal.ROUND_HALF_EVEN;
 	private Locale _locale;
-	
+
 	/** Sets the rounding mode.
 	 * Note: You cannot change the rounding mode unless you are
 	 * using Java 6 or later.
@@ -66,42 +65,43 @@ abstract public class NumberInputElement extends FormatInputElement {
 			smartUpdate("rounding", mode);
 		}
 	}
+
 	/** Sets the rounding mode by the name.
 	 * Note: You cannot change the rounding mode unless you are
 	 * using Java 6 or later.
 	 *
 	 * @param name the rounding mode's name. Allowed value:
-<dl>
-<dt>CEILING</dt>
+	<dl>
+	<dt>CEILING</dt>
 	<dd>Rounding mode to round towards positive infinity.</dd>
-<dt>DOWN</dt>
+	<dt>DOWN</dt>
 	<dd>Rounding mode to round towards zero.</dd>
-<dt>FLOOR</dt>
+	<dt>FLOOR</dt>
 	<dd>Rounding mode to round towards negative infinity.</dd>
-<dt>HALF_DOWN</dt>
+	<dt>HALF_DOWN</dt>
 	<dd>Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round down.</dd>
-<dt>HALF_EVEN</dt>
+	<dt>HALF_EVEN</dt>
 	<dd>Rounding mode to round towards the "nearest neighbor" unless both neighbors are equidistant, in which case, round towards the even neighbor.</dd>
-<dt>HALF_UP</dt>
+	<dt>HALF_UP</dt>
 	<dd>Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round up.</dd>
-<dt>UNNECESSARY</dt>
+	<dt>UNNECESSARY</dt>
 	<dd>Rounding mode to assert that the requested operation has an exact result, hence no rounding is necessary.</dd>
-<dt>UP</dt>
+	<dt>UP</dt>
 	<dd>Rounding mode to round away from zero.</dd>
-</dl>
+	</dl>
 	 * @exception UnsupportedOperationException if Java 5 or below
 	 * @see RoundingModes
 	 */
 	public void setRoundingMode(String name) {
 		setRoundingMode(RoundingModes.valueOf(name));
 	}
+
 	/** Returns the rounding mode.
 	 * <p>Default: {@link BigDecimal#ROUND_HALF_EVEN}.
 	 */
 	public int getRoundingMode() {
 		return _rounding;
 	}
-
 
 	/** Returns the locale associated with this number input element,
 	 * or null if {@link Locales#getCurrent} is preferred.
@@ -110,6 +110,7 @@ abstract public class NumberInputElement extends FormatInputElement {
 	public Locale getLocale() {
 		return _locale;
 	}
+
 	/** Sets the locale used to identify the symbols of this number input element.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
@@ -120,67 +121,64 @@ abstract public class NumberInputElement extends FormatInputElement {
 	public void setLocale(Locale locale) {
 		if (!Objects.equals(_locale, locale)) {
 			_locale = locale;
-			
+
 			if (getFormat() == null)
 				setFormat(getDefaultFormat());
-			
+
 			invalidate();
 		}
 	}
+
 	/** Sets the locale used to identify the symbols of this number input element.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
 	 * @since 5.0.8
 	 */
 	public void setLocale(String locale) {
-		setLocale(locale != null && locale.length() > 0 ?
-			Locales.getLocale(locale): null);
+		setLocale(locale != null && locale.length() > 0 ? Locales.getLocale(locale) : null);
 	}
-	
+
 	/** Returns the real symbols according to the current locale.
 	 * @since 5.0.8
 	 */
 	private String getRealSymbols() {
 		if (_locale != null) {
 			final String localeName = _locale.toString();
-			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
-					getDesktop(), "org.zkoss.zul.impl.NumberInputElement" + localeName)) {
-				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(
-						_locale);
+			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(getDesktop(),
+					"org.zkoss.zul.impl.NumberInputElement" + localeName)) {
+				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(_locale);
 				Map<String, String> map = new HashMap<String, String>();
-				map.put("GROUPING",
-						String.valueOf(symbols.getGroupingSeparator()));
-				map.put("DECIMAL",
-						String.valueOf(symbols.getDecimalSeparator()));
+				map.put("GROUPING", String.valueOf(symbols.getGroupingSeparator()));
+				map.put("DECIMAL", String.valueOf(symbols.getDecimalSeparator()));
 				map.put("PERCENT", String.valueOf(symbols.getPercent()));
 				map.put("PER_MILL", String.valueOf(symbols.getPerMill()));
 				map.put("MINUS", String.valueOf(symbols.getMinusSign()));
 				return JSONValue.toJSONString(new Object[] { localeName, map });
-			} else return JSONValue.toJSONString(new Object[] { localeName,
-					null });
+			} else
+				return JSONValue.toJSONString(new Object[] { localeName, null });
 		}
 		return null;
 	}
+
 	/** Returns the default locale, either {@link #getLocale} or
 	 * {@link Locales#getCurrent} (never null).
 	 * It is useful when you wan to get a locale for this input.
 	 * @since 5.0.10
 	 */
 	protected Locale getDefaultLocale() {
-		return _locale != null ? _locale : Locales.getCurrent(); 
+		return _locale != null ? _locale : Locales.getCurrent();
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		if (_rounding != BigDecimal.ROUND_HALF_EVEN)
 			renderer.render("_rounding", _rounding);
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols());
 	}
-	
+
 	/**
 	 * Return a default format for the number input element when the locale is specified.
 	 * <p> Default: <code>##,##0.##</code>, you can overwrite this by specifying
@@ -197,6 +195,7 @@ abstract public class NumberInputElement extends FormatInputElement {
 	protected String getDefaultFormat() {
 		return Library.getProperty("org.zkoss.zul.numberFormat", "##,##0.##");
 	}
+
 	//utilities//
 	/** Formats a number (Integer, BigDecimal...) into a string.
 	 * If null, an empty string is returned.
@@ -209,15 +208,16 @@ abstract public class NumberInputElement extends FormatInputElement {
 	 * the system's default format is used.
 	 */
 	protected String formatNumber(Object value, String defaultFormat) {
-		if (value == null) return "";
+		if (value == null)
+			return "";
 
-		final DecimalFormat df = (DecimalFormat)
-			NumberFormat.getInstance(getDefaultLocale());
+		final DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(getDefaultLocale());
 		if (_rounding != BigDecimal.ROUND_HALF_EVEN)
 			df.setRoundingMode(RoundingMode.valueOf(_rounding));
 
 		String fmt = getFormat();
-		if (fmt == null) fmt = defaultFormat;
+		if (fmt == null)
+			fmt = defaultFormat;
 		if (fmt != null) {
 			try {
 				df.applyPattern(fmt); //Bug ZK-1518: should try apply pattern first
@@ -228,6 +228,7 @@ abstract public class NumberInputElement extends FormatInputElement {
 		}
 		return df.format(value);
 	}
+
 	/** Filters out non digit characters, such comma and whitespace,
 	 * from the specified value.
 	 * It is designed to let user enter data in more free style.
@@ -242,16 +243,14 @@ abstract public class NumberInputElement extends FormatInputElement {
 	 * @see #formatNumber
 	 */
 	protected Object[] toNumberOnly(String val) {
-		if (val == null) return new Object[] {null, null};
+		if (val == null)
+			return new Object[] { null, null };
 
-		final DecimalFormatSymbols symbols =
-			new DecimalFormatSymbols(getDefaultLocale());
-		final char GROUPING = symbols.getGroupingSeparator(),
-			DECIMAL = symbols.getDecimalSeparator(),
-			PERCENT = symbols.getPercent(),
-			PER_MILL = symbols.getPerMill(), //1/1000
-			//not support yet: INFINITY = symbols.getInfinity(), NAN = symbols.getNaN(),
-			MINUS = symbols.getMinusSign();
+		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(getDefaultLocale());
+		final char GROUPING = symbols.getGroupingSeparator(), DECIMAL = symbols.getDecimalSeparator(),
+				PERCENT = symbols.getPercent(), PER_MILL = symbols.getPerMill(), //1/1000
+				//not support yet: INFINITY = symbols.getInfinity(), NAN = symbols.getNaN(),
+				MINUS = symbols.getMinusSign();
 		final String fmt = getFormat();
 		StringBuffer sb = null;
 		int divscale = 0; //the second element
@@ -276,16 +275,14 @@ abstract public class NumberInputElement extends FormatInputElement {
 
 			//We don't add if cc shall be ignored (not alphanum but in fmt)
 			if (!ignore)
-				ignore = (cc < '0' || cc > '9')
-				&& cc != DECIMAL && cc != MINUS && cc != '+'
-				&& (Character.isWhitespace(cc) || cc == GROUPING || cc == ')'
-					|| (fmt != null && fmt.indexOf(cc) >= 0));
+				ignore = (cc < '0' || cc > '9') && cc != DECIMAL && cc != MINUS && cc != '+'
+						&& (Character.isWhitespace(cc) || cc == GROUPING || cc == ')'
+								|| (fmt != null && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null)
 					sb = new StringBuffer(len).append(val.substring(0, j));
 			} else {
-				final char c2 = cc == MINUS ? '-':
-					cc == DECIMAL ? '.':  cc;
+				final char c2 = cc == MINUS ? '-' : cc == DECIMAL ? '.' : cc;
 				if (cc != c2) {
 					if (sb == null)
 						sb = new StringBuffer(len).append(val.substring(0, j));
@@ -309,12 +306,13 @@ abstract public class NumberInputElement extends FormatInputElement {
 
 		//handle '%'
 		if (fmt != null && divscale > 0) {
-		l_out:
-			for (int j = 0, k, len = fmt.length(); (k = fmt.indexOf('\'', j)) >= 0;) {
-				while (++k < len){
+			l_out: for (int j = 0, k, len = fmt.length(); (k = fmt.indexOf('\'', j)) >= 0;) {
+				while (++k < len) {
 					final char cc = fmt.charAt(k);
-					if (cc == '%') divscale -= 2;
-					else if (cc == '\u2030') divscale -= 3;
+					if (cc == '%')
+						divscale -= 2;
+					else if (cc == '\u2030')
+						divscale -= 3;
 					else if (cc == '\'') {
 						++k;
 						break;
@@ -328,17 +326,19 @@ abstract public class NumberInputElement extends FormatInputElement {
 			}
 		}
 
-		return new Object[] {
-			(sb != null ? sb.toString(): val), new Integer(divscale)};
+		return new Object[] { (sb != null ? sb.toString() : val), new Integer(divscale) };
 	}
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+
 	static {
 		_properties.put("locale", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object locale) {
-				if(locale instanceof String)((NumberInputElement) cmp).setLocale((String)locale);
-				else if(locale instanceof Locale)((NumberInputElement) cmp).setLocale((Locale)locale);
+				if (locale instanceof String)
+					((NumberInputElement) cmp).setLocale((String) locale);
+				else if (locale instanceof Locale)
+					((NumberInputElement) cmp).setLocale((Locale) locale);
 			}
 
 			public String getValue(Component cmp) {

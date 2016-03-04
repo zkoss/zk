@@ -20,11 +20,10 @@ import java.util.Map;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.xel.VariableResolver;
-
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * A definition of the variable resolver ({@link VariableResolver}).
@@ -39,7 +38,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class VariableResolverInfo extends ArgumentInfo { //directive
-//	private static final Logger log = LoggerFactory.getLogger(VariableResolverInfo.class);
+	//	private static final Logger log = LoggerFactory.getLogger(VariableResolverInfo.class);
 
 	/** A class, an ExValue or an VariableResolver. */
 	private Object _resolver;
@@ -55,14 +54,16 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 		checkClass(cls);
 		_resolver = cls;
 	}
+
 	/** Constructs with a class.
 	 */
 	public VariableResolverInfo(Class<? extends VariableResolver> cls) {
 		this(cls, null);
 	}
+
 	private static void checkClass(Class<?> cls) {
 		if (!VariableResolver.class.isAssignableFrom(cls))
-			throw new UiException(VariableResolver.class+" must be implemented: "+cls);
+			throw new UiException(VariableResolver.class + " must be implemented: " + cls);
 	}
 
 	/** Constructs with a class name.
@@ -70,8 +71,7 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 	 * @param clsnm the class name; it could be an EL expression.
 	 * @since 3.6.2
 	 */
-	public VariableResolverInfo(String clsnm, Map<String, String> args)
-	throws ClassNotFoundException {
+	public VariableResolverInfo(String clsnm, Map<String, String> args) throws ClassNotFoundException {
 		super(args);
 
 		if (clsnm == null || clsnm.length() == 0)
@@ -84,7 +84,7 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 					checkClass(cls);
 					_resolver = cls;
 				} catch (ClassNotFoundException ex) {
-					throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+					throw new ClassNotFoundException("Class not found: " + clsnm, ex);
 				}
 			} else { //it might depend on <?import?>
 				_resolver = clsnm;
@@ -93,6 +93,7 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 			_resolver = new ExValue(clsnm, String.class);
 		}
 	}
+
 	/** Constructs with a class name.
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
@@ -100,6 +101,7 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 	public VariableResolverInfo(String clsnm) throws ClassNotFoundException {
 		this(clsnm, null);
 	}
+
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newVariableResolver} is called.
 	 */
@@ -113,46 +115,43 @@ public class VariableResolverInfo extends ArgumentInfo { //directive
 
 	/** Creates and returns the variable resolver for the specified page.
 	 */
-	public VariableResolver newVariableResolver(PageDefinition pgdef, Page page)
-	throws Exception {
+	public VariableResolver newVariableResolver(PageDefinition pgdef, Page page) throws Exception {
 		return newVariableResolver(pgdef.getEvaluator(), page);
 	}
-		
+
 	/** Creates and returns the variable resolver for the specified page.
 	 * @since 3.6.2
 	 */
-	public VariableResolver newVariableResolver(Evaluator eval, Page page)
-	throws Exception {
+	public VariableResolver newVariableResolver(Evaluator eval, Page page) throws Exception {
 		if (_resolver instanceof VariableResolver)
-			return (VariableResolver)_resolver;
+			return (VariableResolver) _resolver;
 
 		String clsnm = null;
 		if (_resolver instanceof ExValue) {
-			clsnm = (String)((ExValue)_resolver).getValue(eval, page);
+			clsnm = (String) ((ExValue) _resolver).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
-//				if (log.isDebugEnabled()) log.debug("Ignore "+_resolver+" due to empty");
+				//				if (log.isDebugEnabled()) log.debug("Ignore "+_resolver+" due to empty");
 				return null; //ignore it!!
 			}
 		} else if (_resolver instanceof String) {
-			clsnm = (String)_resolver;
+			clsnm = (String) _resolver;
 		}
 
 		final Class<?> cls;
 		if (clsnm != null) {
 			try {
-				cls = page != null ?
-					page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+				cls = page != null ? page.resolveClass(clsnm) : Classes.forNameByThread(clsnm);
 				checkClass(cls);
 			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_resolver+")", ex);
+				throw new ClassNotFoundException("Class not found: " + clsnm + " (" + _resolver + ")", ex);
 			}
 			if (clsnm.equals(_resolver))
 				_resolver = cls; //cache it for better performance
 		} else {
-			cls = (Class<?>)_resolver;
+			cls = (Class<?>) _resolver;
 		}
 
-		return (VariableResolver)newInstance(cls, eval, page);
+		return (VariableResolver) newInstance(cls, eval, page);
 	}
 
 	//Object//

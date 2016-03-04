@@ -49,26 +49,29 @@ public class Splitter extends XulElement {
 
 	public Splitter() {
 	}
+
 	/** Returns if the orientation of this splitter is vertical.
 	 * @since 5.0.0
 	 */
 	public boolean isVertical() {
-		final Box box = (Box)getParent();
+		final Box box = (Box) getParent();
 		return box == null || box.isVertical();
 	}
+
 	/** Returns if the orientation of this splitter is horizontal.
 	 * @since 5.0.0
 	 */
 	public boolean isHorizontal() {
-		final Box box = (Box)getParent();
+		final Box box = (Box) getParent();
 		return box != null && box.isHorizontal();
 	}
+
 	/** Returns the orientation of the splitter.
 	 * It is the same as the parent's orientation ({@link Box#getOrient}.
 	 */
 	public String getOrient() {
-		final Box box = (Box)getParent();
-		return box != null ? box.getOrient(): "vertical";
+		final Box box = (Box) getParent();
+		return box != null ? box.getOrient() : "vertical";
 	}
 
 	/** Returns which side of the splitter is collapsed when its grippy
@@ -99,6 +102,7 @@ public class Splitter extends XulElement {
 	public String getCollapse() {
 		return _collapse;
 	}
+
 	/** Sets which side of the splitter is collapsed when its grippy
 	 * is clicked. If this attribute is not specified, the splitter will
 	 * not cause a collapse.
@@ -110,9 +114,8 @@ public class Splitter extends XulElement {
 	public void setCollapse(String collapse) throws WrongValueException {
 		if (collapse == null || collapse.length() == 0)
 			collapse = "none";
-		else if (!"none".equals(collapse) && !"before".equals(collapse)
-		&& !"after".equals(collapse))
-			throw new WrongValueException("Unknown collpase: "+collapse);
+		else if (!"none".equals(collapse) && !"before".equals(collapse) && !"after".equals(collapse))
+			throw new WrongValueException("Unknown collpase: " + collapse);
 
 		if (!Objects.equals(_collapse, collapse)) {
 			_collapse = collapse;
@@ -126,6 +129,7 @@ public class Splitter extends XulElement {
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Opens or collapses the splitter.
 	 * Meaningful only if {@link #getCollapse} is not "none".
 	 */
@@ -139,23 +143,27 @@ public class Splitter extends XulElement {
 	//super//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Box))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	/** Not allow any children.
 	 */
 	protected boolean isChildable() {
 		return false;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (!_open) renderer.render("open", false);
-		if (!"none".equals(_collapse)) render(renderer, "collapse", _collapse);
+		if (!_open)
+			renderer.render("open", false);
+		if (!"none".equals(_collapse))
+			render(renderer, "collapse", _collapse);
 	}
+
 	public String getZclass() {
-		return _zclass != null ? _zclass: "z-splitter";
+		return _zclass != null ? _zclass : "z-splitter";
 	}
 
 	//-- ComponentCtrl --//

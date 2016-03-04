@@ -47,33 +47,35 @@ public class Spinner extends NumberInputElement {
 		this();
 		setValue(new Integer(value));
 	}
-	
+
 	/** Returns the value (in Integer), might be null unless
 	 * a constraint stops it.
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Integer getValue() throws WrongValueException {
-		return (Integer)getTargetValue();
+		return (Integer) getTargetValue();
 	}
+
 	/** Returns the value in integer. If null, zero is returned.
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public int intValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Integer)val).intValue(): 0;
+		return val != null ? ((Integer) val).intValue() : 0;
 	}
+
 	protected Object getTargetValue() throws WrongValueException {
 		Object val = super.getTargetValue();
-		
+
 		// ZK-1949, we need to accept the null value when invoking getValue()
 		if (val == null)
 			return null;
 		if (val instanceof Integer) {
 			return val;
 		}
-		throw showCustomError(new WrongValueException(this,
-				MZul.INTEGER_REQUIRED, val));
+		throw showCustomError(new WrongValueException(this, MZul.INTEGER_REQUIRED, val));
 	}
+
 	/** Sets the value (in Integer).
 	 * @exception WrongValueException if value is wrong
 	 */
@@ -81,14 +83,14 @@ public class Spinner extends NumberInputElement {
 		validate(value);
 		setRawValue(value);
 	}
-	
+
 	/**
 	 * Return the step of spinner
 	 */
-	public int getStep(){
+	public int getStep() {
 		return _step;
 	}
-	
+
 	/**
 	 * Set the step of spinner
 	 */
@@ -98,13 +100,14 @@ public class Spinner extends NumberInputElement {
 			smartUpdate("step", _step);
 		}
 	}
-	
+
 	/** Returns whether the button (on the right of the textbox) is visible.
 	 * <p>Default: true.
 	 */
 	public boolean isButtonVisible() {
 		return _btnVisible;
 	}
+
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 */
 	public void setButtonVisible(boolean visible) {
@@ -116,18 +119,18 @@ public class Spinner extends NumberInputElement {
 
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-spinner" : _zclass;
+		return _zclass == null ? "z-spinner" : _zclass;
 	}
-	
+
 	/**
 	 * @param constr a list of constraints separated by comma.
 	 * Example: no positive, no zero
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleSpinnerConstraint(constr): null); //Bug 2564298
+		setConstraint(constr != null ? new SimpleSpinnerConstraint(constr) : null); //Bug 2564298
 	}
-	
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String) vals[0];
@@ -141,21 +144,19 @@ public class Spinner extends NumberInputElement {
 				v /= 10;
 			return new Integer(v);
 		} catch (NumberFormatException ex) {
-			throw showCustomError(new WrongValueException(this,
-					MZul.NUMBER_REQUIRED, value));
+			throw showCustomError(new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
 
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ? value.toString()
-				: formatNumber(value, null);
+		return value != null && getFormat() == null ? value.toString() : formatNumber(value, null);
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
-		if(_step != 1)
+		if (_step != 1)
 			renderer.render("step", _step);
-		if(!_btnVisible)
+		if (!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);
 	}
 }

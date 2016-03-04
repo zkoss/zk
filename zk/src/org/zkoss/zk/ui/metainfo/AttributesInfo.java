@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.Utils;
@@ -52,33 +52,31 @@ public class AttributesInfo extends ConditionLeafInfo {
 	 * @exception IllegalArgumentException if the composite type is illegal.
 	 * @since 3.0.6
 	 */
-	public AttributesInfo(NodeInfo parent,
-	Map<String, String> attrs, String scope, String composite, ConditionImpl cond) {
+	public AttributesInfo(NodeInfo parent, Map<String, String> attrs, String scope, String composite,
+			ConditionImpl cond) {
 		super(parent, cond);
 
-		if (composite == null || composite.length() == 0
-		|| composite.equals("none"))
+		if (composite == null || composite.length() == 0 || composite.equals("none"))
 			_composite = Utils.SCALAR;
 		else if (composite.equals("list"))
 			_composite = Utils.LIST;
 		else if (composite.equals("map"))
 			_composite = Utils.MAP;
 		else
-			throw new IllegalArgumentException("Unkonwn composite: "+composite);
+			throw new IllegalArgumentException("Unkonwn composite: " + composite);
 
-		
 		if (attrs != null && !attrs.isEmpty()) {
 			_attrs = new LinkedHashMap<String, Object>();
-			for (Map.Entry<String, String> me: attrs.entrySet()) {
-				_attrs.put(me.getKey(),
-					Utils.parseComposite(me.getValue(), Object.class, _composite));
+			for (Map.Entry<String, String> me : attrs.entrySet()) {
+				_attrs.put(me.getKey(), Utils.parseComposite(me.getValue(), Object.class, _composite));
 			}
 		} else {
 			_attrs = null;
 		}
 
-		_scope = scope == null ? -1: Components.getScope(scope);
+		_scope = scope == null ? -1 : Components.getScope(scope);
 	}
+
 	/** The same as AttributesInfo(parent, attrs, scope, "none", cond).
 	 *
 	 * @param attrs the custom attributes (String name, String value).
@@ -86,8 +84,7 @@ public class AttributesInfo extends ConditionLeafInfo {
 	 * to this object.
 	 * @param scope specifies the scope.
 	 */
-	public AttributesInfo(NodeInfo parent,
-	Map<String, String> attrs, String scope, ConditionImpl cond) {
+	public AttributesInfo(NodeInfo parent, Map<String, String> attrs, String scope, ConditionImpl cond) {
 		this(parent, attrs, scope, null, cond);
 	}
 
@@ -98,14 +95,14 @@ public class AttributesInfo extends ConditionLeafInfo {
 	 * @since 3.0.6
 	 */
 	public String getScope() {
-		return _scope != -1 ? Components.scopeToString(_scope): null;
+		return _scope != -1 ? Components.scopeToString(_scope) : null;
 	}
+
 	/** Returns the composite type: "none", "list" or "map".
 	 * @since 3.0.6
 	 */
 	public String getComposite() {
-		return _composite == Utils.LIST ? "list":
-			_composite == Utils.MAP ? "map": "none";
+		return _composite == Utils.LIST ? "list" : _composite == Utils.MAP ? "map" : "none";
 	}
 
 	/** Applies the custom attributes.
@@ -114,39 +111,38 @@ public class AttributesInfo extends ConditionLeafInfo {
 	public void apply(Component comp) {
 		if (_attrs != null && isEffective(comp)) {
 			final Evaluator eval = getEvaluator();
-			for (Map.Entry<String, Object> me: _attrs.entrySet()) {
+			for (Map.Entry<String, Object> me : _attrs.entrySet()) {
 				final String name = me.getKey();
 				final Object value = me.getValue();
-				comp.setAttribute(
-					name, Utils.evaluateComposite(eval, comp, value),
-					_scope != -1 ? _scope: Component.COMPONENT_SCOPE);
-				
+				comp.setAttribute(name, Utils.evaluateComposite(eval, comp, value),
+						_scope != -1 ? _scope : Component.COMPONENT_SCOPE);
+
 				//bug zk-1298, handle special composerName, see Components#wireController
-				if("composerName".equals(name)){
+				if ("composerName".equals(name)) {
 					Object ctrlnm = comp.getAttribute(name);
-					if(ctrlnm instanceof String){
-						Object controller = comp.removeAttribute("_$composer$_");//get from special attribute
-						if(controller!=null && comp.getAttribute((String)ctrlnm)==null){
-							comp.setAttribute((String)ctrlnm, controller);
+					if (ctrlnm instanceof String) {
+						Object controller = comp.removeAttribute("_$composer$_"); //get from special attribute
+						if (controller != null && comp.getAttribute((String) ctrlnm) == null) {
+							comp.setAttribute((String) ctrlnm, controller);
 						}
 					}
 				}
-				
+
 			}
 		}
 	}
+
 	/** Applies the custom attributes.
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
 	public void apply(Page page) {
 		if (_attrs != null && isEffective(page)) {
 			final Evaluator eval = getEvaluator();
-			for (Map.Entry<String, Object> me: _attrs.entrySet()) {
+			for (Map.Entry<String, Object> me : _attrs.entrySet()) {
 				final String name = me.getKey();
 				final Object value = me.getValue();
-				page.setAttribute(name,
-					Utils.evaluateComposite(eval, page, value),
-					_scope != -1 ? _scope: Component.PAGE_SCOPE);
+				page.setAttribute(name, Utils.evaluateComposite(eval, page, value),
+						_scope != -1 ? _scope : Component.PAGE_SCOPE);
 			}
 		}
 	}
@@ -155,7 +151,7 @@ public class AttributesInfo extends ConditionLeafInfo {
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(40).append("[custom-attributes:");
 		if (_attrs != null)
-			for (String name: _attrs.keySet())
+			for (String name : _attrs.keySet())
 				sb.append(' ').append(name);
 		return sb.append(']').toString();
 	}

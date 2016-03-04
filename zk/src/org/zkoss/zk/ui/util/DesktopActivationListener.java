@@ -34,6 +34,7 @@ public interface DesktopActivationListener {
 	 * (and its value has been deserialized).
 	 */
 	public void didActivate(Desktop desktop);
+
 	/** Called when a session is about to be passivated
 	 * (and then serialize its value).
 	 */

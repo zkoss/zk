@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 
@@ -38,7 +37,9 @@ public class Toolbar extends XulElement {
 	private String _orient = "horizontal";
 	private String _align = "start";
 
-	public Toolbar() {}
+	public Toolbar() {
+	}
+
 	/**
 	 * @param orient either "horizontal" or "vertical".
 	 */
@@ -46,7 +47,7 @@ public class Toolbar extends XulElement {
 		this();
 		setOrient(orient);
 	}
-	
+
 	/** 
 	 * Returns the alignment of any children added to this toolbar. Valid values
 	 * are "start", "end" and "center".
@@ -56,7 +57,7 @@ public class Toolbar extends XulElement {
 	public String getAlign() {
 		return _align;
 	}
-	
+
 	/**
 	 * Sets the alignment of any children added to this toolbar. Valid values
 	 * are "start", "end" and "center".
@@ -65,18 +66,20 @@ public class Toolbar extends XulElement {
 	 * @since 3.5.0
 	 */
 	public void setAlign(String align) {
-		if (align == null) align = "start";
+		if (align == null)
+			align = "start";
 		if (!"start".equals(align) && !"center".equals(align) && !"end".equals(align))
-			throw new WrongValueException("align cannot be "+align);
+			throw new WrongValueException("align cannot be " + align);
 		if (!Objects.equals(_align, align)) {
 			_align = align;
 			smartUpdate("align", _align);
 		}
 	}
+
 	/*package*/ boolean inPanelMold() {
 		return "panel".equals(getMold());
 	}
-	
+
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-toolbar" : _zclass;
@@ -88,6 +91,7 @@ public class Toolbar extends XulElement {
 	public String getOrient() {
 		return _orient;
 	}
+
 	/** Sets the orient.
 	 * @param orient either "horizontal" or "vertical".
 	 */
@@ -101,8 +105,7 @@ public class Toolbar extends XulElement {
 		}
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-			throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);

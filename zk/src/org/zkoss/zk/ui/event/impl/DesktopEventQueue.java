@@ -14,27 +14,26 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event.impl;
 
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Threads;
 import org.zkoss.util.CollectionsX;
-
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.DesktopUnavailableException;
-import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 
 /**
@@ -74,31 +73,35 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			Events.postEvent(ON_QUEUE, _dummyTarget, event);
 		}
 	}
+
 	@SuppressWarnings("unchecked")
 	private static final <W extends Event> AsyncListenerThread<W> currentThread() {
 		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof AsyncListenerThread))
 			throw new IllegalStateException("publish() can be called only in an event listener");
-		return (AsyncListenerThread<W>)thd;
+		return (AsyncListenerThread<W>) thd;
 	}
+
 	public void subscribe(EventListener<T> listener) {
 		subscribe(listener, null, false);
 	}
+
 	public void subscribe(EventListener<T> listener, EventListener<T> callback) {
 		subscribe(listener, callback, true);
 	}
+
 	public void subscribe(EventListener<T> listener, boolean async) {
 		subscribe(listener, null, async);
 	}
-	private void
-	subscribe(EventListener<T> listener, EventListener<T> callback, boolean async) {
+
+	private void subscribe(EventListener<T> listener, EventListener<T> callback, boolean async) {
 		if (async && _nAsync++ == 0) {
 			final Execution exec = Executions.getCurrent();
 			if (exec == null)
 				throw new IllegalStateException("Execution required");
-			((DesktopCtrl)exec.getDesktop()).enableServerPush(true, this);
+			((DesktopCtrl) exec.getDesktop()).enableServerPush(true, this);
 			//B65-ZK-1840 make sure the flag is true after enabling (otherwise disabling will fail) 
-			_serverPushEnabled = true; 
+			_serverPushEnabled = true;
 		}
 
 		if (log.isDebugEnabled()) {
@@ -106,6 +109,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 		}
 		_listenerInfos.add(new ListenerInfo<T>(listener, callback, async));
 	}
+
 	public boolean unsubscribe(EventListener<T> listener) {
 		if (listener != null)
 			for (Iterator<ListenerInfo<T>> it = _listenerInfos.iterator(); it.hasNext();) {
@@ -117,7 +121,7 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 					it.remove();
 					if (inf.async && --_nAsync == 0 && _serverPushEnabled)
 						//B65-ZK-1840 added enabler argument for reference counting  
-						((DesktopCtrl)Executions.getCurrent().getDesktop()).enableServerPush(false, this);
+						((DesktopCtrl) Executions.getCurrent().getDesktop()).enableServerPush(false, this);
 					return true;
 				}
 			}
@@ -126,38 +130,40 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 		}
 		return false;
 	}
+
 	public boolean isSubscribed(EventListener<T> listener) {
 		if (listener != null)
-			for (ListenerInfo<T> li: _listenerInfos)
+			for (ListenerInfo<T> li : _listenerInfos)
 				if (listener.equals(li.listener))
 					return true;
 		return false;
 	}
+
 	public void close() {
 		_closed = true;
 		_listenerInfos.clear();
 		if (_serverPushEnabled) {
 			try {
 				//B65-ZK-1840 added enabler argument for reference counting  
-				((DesktopCtrl)Executions.getCurrent().getDesktop()).enableServerPush(false, this);
+				((DesktopCtrl) Executions.getCurrent().getDesktop()).enableServerPush(false, this);
 			} catch (Throwable ex) {
 				log.warn("Ingored: unable to stop server push", ex);
 			}
 		}
 	}
+
 	public boolean isClose() {
 		return _closed;
 	}
+
 	private class QueueListener implements EventListener<Event>, java.io.Serializable {
 		public void onEvent(Event event) throws Exception {
 			@SuppressWarnings("unchecked")
-			T evt = (T)event.getData();
-			for (Iterator<ListenerInfo<T>> it = CollectionsX.comodifiableIterator(_listenerInfos);
-			it.hasNext();) {
+			T evt = (T) event.getData();
+			for (Iterator<ListenerInfo<T>> it = CollectionsX.comodifiableIterator(_listenerInfos); it.hasNext();) {
 				final ListenerInfo<T> inf = it.next();
 				if (inf.async)
-					new AsyncListenerThread<T>(DesktopEventQueue.this, inf, evt)
-						.start();
+					new AsyncListenerThread<T>(DesktopEventQueue.this, inf, evt).start();
 				else
 					inf.listener.onEvent(evt);
 			}
@@ -167,10 +173,11 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 	/** Info of a listener */
 	private static class ListenerInfo<T extends Event> implements java.io.Serializable {
 		/*package*/ final EventListener<T> listener;
-		/*package*/ final EventListener<T> callback; //used only if async
+		/*package*/ final EventListener<T> callback;
+		//used only if async
 		/*package*/ final boolean async;
-		private ListenerInfo(EventListener<T> listener,
-		EventListener<T> callback, boolean async) {
+
+		private ListenerInfo(EventListener<T> listener, EventListener<T> callback, boolean async) {
 			if (listener == null)
 				throw new IllegalArgumentException();
 			this.listener = listener;
@@ -178,18 +185,20 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			this.async = async;
 		}
 	}
+
 	/** Unlike ServerPushEventQueue, we cannot use Executions.schedule, and
 	 * we have to use a thread and activate/deactivate, since asynchronous listener
 	 * might take too long to execute (that is what it is used for).
 	 */
 	private static class AsyncListenerThread<T extends Event> extends Thread {
 		private static final Logger log = DesktopEventQueue.log;
-	
+
 		/*package*/ final Desktop _desktop;
 		private final EventQueue<T> _que;
 		private final ListenerInfo<T> _inf;
 		private final T _event;
 		private List<T> _pendingEvents;
+
 		private AsyncListenerThread(EventQueue<T> que, ListenerInfo<T> inf, T event) {
 			_desktop = Executions.getCurrent().getDesktop();
 			_que = que;
@@ -197,20 +206,22 @@ public class DesktopEventQueue<T extends Event> implements EventQueue<T>, java.i
 			_event = event;
 			Threads.setDaemon(this, true);
 		}
+
 		/*package*/ void postEvent(T event) {
 			if (_pendingEvents == null)
 				_pendingEvents = new LinkedList<T>();
 			_pendingEvents.add(event);
 		}
+
 		public void run() {
 			try {
 				_inf.listener.onEvent(_event);
-	
+
 				if (_inf.callback != null || _pendingEvents != null) {
 					Executions.activate(_desktop);
 					try {
 						if (_pendingEvents != null)
-							for (T evt: _pendingEvents)
+							for (T evt : _pendingEvents)
 								_que.publish(evt);
 
 						if (_inf.callback != null)

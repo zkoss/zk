@@ -43,9 +43,10 @@ public class Imagemap extends Image {
 	protected boolean isChildable() {
 		return true;
 	}
+
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Area))
-			throw new UiException("Unsupported child for imagemap: "+newChild);
+			throw new UiException("Unsupported child for imagemap: " + newChild);
 		super.beforeChildAdded(newChild, refChild);
 	}
 }

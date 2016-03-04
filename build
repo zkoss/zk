@@ -372,6 +372,8 @@ function invoke_ant
 
 	local deploy=
 	local unziplist=
+	local checkstyleJava=false
+	local checkstyleJs=false
 	if [ -f deploy ] ; then
 		deploy=$(head -1 deploy)
 		if [ "$deploy" = "server" ] || [ "${cmd#utest}" != "$cmd" ] ; then
@@ -402,6 +404,12 @@ function invoke_ant
 		zipcsslist=${zipcsslist#zipcss=}
 		lesslist=$(grep '^less=' deploy)
 		lesslist=${lesslist#less=}
+		if [ "$(grep '^checkstyle=' deploy | grep 'java')" != "" ] ; then
+			checkstyleJava=true
+		fi
+		if [ "$(grep '^checkstyle=' deploy | grep 'js')" != "" ] ; then
+			checkstyleJs=true
+		fi
 	else
 		deploy=unknown
 	fi
@@ -492,6 +500,7 @@ function invoke_ant
 		fi
 		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
 		$doall -Dformat="$format" -Ddeploy="$deploy" \
+		-Dcheckstyle.java="$checkstyleJava" -Dcheckstyle.js="$checkstyleJs" \
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Dtomcat.home="$tomcat_home" \
 		-Dmaindir="$maindir" \

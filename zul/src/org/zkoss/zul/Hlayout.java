@@ -25,7 +25,7 @@ import org.zkoss.lang.Objects;
  * @since 5.0.4
  */
 public class Hlayout extends Layout {
-	
+
 	private String _valign = "top"; // middle, bottom
 
 	/** Returns the vertical-align property used for the inner children.
@@ -35,6 +35,7 @@ public class Hlayout extends Layout {
 	public String getValign() {
 		return _valign;
 	}
+
 	/** Sets the valign.
 	 */
 	public void setValign(String valign) {
@@ -45,13 +46,14 @@ public class Hlayout extends Layout {
 			smartUpdate("valign", valign);
 		}
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (!"top".equals(_valign))
 			renderer.render("valign", _valign);
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-hlayout" : _zclass;
 	}

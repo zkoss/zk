@@ -30,15 +30,16 @@ public interface DynamicPropertied {
 	/** Returns whether a dynamic property is defined.
 	 */
 	public boolean hasDynamicProperty(String name);
+
 	/** Returns the property value of the specified name.
 	 */
 	public Object getDynamicProperty(String name);
+
 	/** Sets a property with the specified name and value.
 	 *
 	 * <p>If a component supports only String-type values, it could
 	 * use org.zkoss.lang.Objects.toString() to convert the value
 	 * to a String instance.
 	 */
-	public void setDynamicProperty(String name, Object value)
-	throws WrongValueException;
+	public void setDynamicProperty(String name, Object value) throws WrongValueException;
 }

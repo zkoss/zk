@@ -17,19 +17,18 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.FileNotFoundException;
 import java.net.URL;
 
-import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
-
+import org.zkoss.util.media.Media;
+import org.zkoss.zk.au.DeferredValue;
+import org.zkoss.zk.au.out.AuDownload;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.au.out.AuDownload;
-import org.zkoss.zk.au.DeferredValue;
 
 /**
  * File download utilities.
@@ -43,6 +42,7 @@ public class Filedownload {
 	public static void save(Media media) {
 		save(media, null);
 	}
+
 	/** Open a download dialog to save the specified content at the client
 	 * with the suggested file name.
 	 *
@@ -52,10 +52,9 @@ public class Filedownload {
 	 */
 	public static void save(Media media, String flnm) {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
-		((WebAppCtrl)desktop.getWebApp())
-			.getUiEngine().addResponse(
-				new AuDownload(new DownloadURL(media, flnm))); //Bug 2114380
+		((WebAppCtrl) desktop.getWebApp()).getUiEngine().addResponse(new AuDownload(new DownloadURL(media, flnm))); //Bug 2114380
 	}
+
 	/** Open a download dialog to save the specified content at the client
 	 * with the suggested file name.
 	 *
@@ -68,6 +67,7 @@ public class Filedownload {
 	public static void save(byte[] content, String contentType, String flnm) {
 		save(new AMedia(flnm, null, contentType, content), flnm);
 	}
+
 	/** Open a download dialog to save the specified content at the client
 	 * with the suggested file name.
 	 *
@@ -80,6 +80,7 @@ public class Filedownload {
 	public static void save(String content, String contentType, String flnm) {
 		save(new AMedia(flnm, null, contentType, content), flnm);
 	}
+
 	/** Open a download dialog to save the specified content at the client
 	 * with the suggested file name.<br/>
 	 * Note: You don't need to close the content (a InputStream), it will be closed automatically after download. 
@@ -92,6 +93,7 @@ public class Filedownload {
 	public static void save(InputStream content, String contentType, String flnm) {
 		save(new AMedia(flnm, null, contentType, content), flnm);
 	}
+
 	/** Open a download dialog to save the specified content at the client
 	 * with the suggested file name.<br/>
 	 * Note: You don't need to close the content (a Reader), it will be closed automatically after download.
@@ -104,6 +106,7 @@ public class Filedownload {
 	public static void save(Reader content, String contentType, String flnm) {
 		save(new AMedia(flnm, null, contentType, content), flnm);
 	}
+
 	/** Open a download dialog to save the specified file at the client.
 	 *
 	 * @param file the file to download to the client
@@ -113,10 +116,10 @@ public class Filedownload {
 	 * @exception FileNotFoundException if the file is not found.
 	 * @since 3.0.8
 	 */
-	public static void save(File file, String contentType)
-	throws FileNotFoundException {
+	public static void save(File file, String contentType) throws FileNotFoundException {
 		save(new AMedia(file, contentType, null), file.getName());
 	}
+
 	/** Open a download dialog to save the resource of the specified URL
 	 * at the client.
 	 * The path must be retrievable by use of {@link org.zkoss.zk.ui.WebApp#getResource}.
@@ -128,14 +131,14 @@ public class Filedownload {
 	 * @exception FileNotFoundException if the resource is not found.
 	 * @since 3.0.8
 	 */
-	public static void save(URL url, String contentType)
-	throws FileNotFoundException {
+	public static void save(URL url, String contentType) throws FileNotFoundException {
 		String name = url.toExternalForm();
 		int j = name.lastIndexOf('/');
 		if (j >= 0 && j < name.length() - 1)
 			name = name.substring(j + 1);
 		save(new AMedia(url, contentType, null), name);
 	}
+
 	/** Open a download dialog to save the resource of the specified path
 	 * at the client.
 	 *
@@ -147,10 +150,8 @@ public class Filedownload {
 	 * @exception FileNotFoundException if the resource is not found.
 	 * @since 3.0.8
 	 */
-	public static void save(String path, String contentType)
-	throws FileNotFoundException {
-		final URL url = Executions.getCurrent().getDesktop().getWebApp()
-			.getResource(path);
+	public static void save(String path, String contentType) throws FileNotFoundException {
+		final URL url = Executions.getCurrent().getDesktop().getWebApp().getResource(path);
 		if (url == null)
 			throw new FileNotFoundException(path);
 		save(url, contentType);
@@ -159,10 +160,12 @@ public class Filedownload {
 	private static class DownloadURL implements DeferredValue {
 		private final Media _media;
 		private final String _path;
+
 		private DownloadURL(Media media, String flnm) {
 			_media = media;
 
-			if (flnm == null) flnm = media.getName();
+			if (flnm == null)
+				flnm = media.getName();
 
 			final StringBuffer sb = new StringBuffer(32);
 			if (flnm != null && flnm.length() != 0) {
@@ -176,9 +179,9 @@ public class Filedownload {
 			}
 			_path = sb.toString();
 		}
+
 		public Object getValue() {
-			return Executions.getCurrent().getDesktop()
-				.getDownloadMediaURI(_media, _path);
+			return Executions.getCurrent().getDesktop().getDownloadMediaURI(_media, _path);
 		}
 	}
 }

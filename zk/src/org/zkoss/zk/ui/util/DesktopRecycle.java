@@ -12,9 +12,9 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Session;
 
 /**
  * Used to recycle the desktop ({@link Desktop}). By recycling the desktop,
@@ -52,6 +52,7 @@ public interface DesktopRecycle {
 	 * if necessary.
 	 */
 	public boolean beforeRemove(Execution exec, Desktop desktop, int cause);
+
 	/** Called after a desktop is removed.
 	 * A desktop is removed for different reasons, such as a session timeout,
 	 * and too many desktops (when the memory is running low).
@@ -81,6 +82,7 @@ public interface DesktopRecycle {
 	 * create a desktop as if this interface is not installed.
 	 */
 	public Desktop beforeService(Execution exec, String uri);
+
 	/** Called after the request is served.
 	 * <p>The implementation usually does nothing in this method, unless
 	 * it wants to re-use it no matter if the same user might open two or more

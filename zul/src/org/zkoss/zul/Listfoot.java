@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -34,14 +33,16 @@ public class Listfoot extends XulElement {
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Listbox getListbox() {
-		return (Listbox)getParent();
+		return (Listbox) getParent();
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
@@ -52,14 +53,16 @@ public class Listfoot extends XulElement {
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Listfooter))
-			throw new UiException("Unsupported child for listfoot: "+child);
+			throw new UiException("Unsupported child for listfoot: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-listfoot" : _zclass;
 	}

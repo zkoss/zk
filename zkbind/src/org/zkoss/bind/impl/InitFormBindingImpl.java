@@ -33,13 +33,14 @@ import org.zkoss.zk.ui.Component;
  */
 public class InitFormBindingImpl extends FormBindingImpl implements InitFormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-	
-	protected boolean ignoreTracker(){
+
+	protected boolean ignoreTracker() {
 		//init only loaded once, so it don't need to add to tracker.
 		return true;
 	}
-	
-	public InitFormBindingImpl(Binder binder, Component comp, String formId, String initExpr, Map<String, Object> bindingArgs) {
+
+	public InitFormBindingImpl(Binder binder, Component comp, String formId, String initExpr,
+			Map<String, Object> bindingArgs) {
 		super(binder, comp, formId, initExpr, ConditionType.PROMPT, null, bindingArgs);
 	}
 
@@ -50,15 +51,16 @@ public class InitFormBindingImpl extends FormBindingImpl implements InitFormBind
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		if (!(value instanceof Form)) {
-			initFormBean(value, (Class<Object>) (value != null ? value.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())), ctx);
-			
-			BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
-			if(collector!=null){
-				collector.addInfo(new LoadInfo(LoadInfo.FORM_INIT,comp,null,
-						getPropertyString(),getFormId(),value,getArgs(),null));
+			initFormBean(value, (Class<Object>) (value != null ? value.getClass()
+					: eval.getType(ctx, comp, _accessInfo.getProperty())), ctx);
+
+			BindingExecutionInfoCollector collector = ((BinderCtrl) getBinder()).getBindingExecutionInfoCollector();
+			if (collector != null) {
+				collector.addInfo(new LoadInfo(LoadInfo.FORM_INIT, comp, null, getPropertyString(), getFormId(), value,
+						getArgs(), null));
 			}
-		}else{
-			((BinderCtrl)binder).storeForm(getComponent(), getFormId(), (Form)value);
+		} else {
+			((BinderCtrl) binder).storeForm(getComponent(), getFormId(), (Form) value);
 		}
 	}
 }

@@ -59,7 +59,7 @@ public class Foo extends AbstractComponent {
  * @since 6.0.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ ElementType.TYPE, ElementType.METHOD })
 public @interface ComponentAnnotation {
 	String[] value();
 }

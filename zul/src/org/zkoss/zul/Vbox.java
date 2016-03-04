@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 public class Vbox extends Box {
 	public Vbox() {
 	}
+
 	/** Constructor a vertical box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added

@@ -30,22 +30,21 @@ public class ClientBinderCommandParser implements NamespaceParser {
 	private static String SCRIPT = "zkbind.Binder.%1s(this,%2s)";
 
 	public boolean isMatched(String nsURI) {
-		return isNative(nsURI) || isClient(nsURI)
-				|| "".equals(nsURI); // if native component without namespace 
+		return isNative(nsURI) || isClient(nsURI) || "".equals(nsURI); // if native component without namespace 
 	}
+
 	private boolean isClient(String nsURI) {
-		return "client".equals(nsURI)
-				|| LanguageDefinition.CLIENT_NAMESPACE.equals(nsURI);
+		return "client".equals(nsURI) || LanguageDefinition.CLIENT_NAMESPACE.equals(nsURI);
 	}
+
 	private boolean isNative(String nsURI) {
-		return "native".equals(nsURI)
-				|| LanguageDefinition.NATIVE_NAMESPACE.equals(nsURI);
+		return "native".equals(nsURI) || LanguageDefinition.NATIVE_NAMESPACE.equals(nsURI);
 	}
-	public boolean parse(Attribute attr, ComponentInfo compInfo,
-			PageDefinition pgdef) throws Exception {
+
+	public boolean parse(Attribute attr, ComponentInfo compInfo, PageDefinition pgdef) throws Exception {
 		if (!(compInfo instanceof NativeInfo) && "".equals(attr.getNamespaceURI()))
 			return false; // not what we care.
-		
+
 		final String name = attr.getLocalName();
 		final String value = attr.getValue();
 		if (Events.isValid(name)) {
@@ -63,7 +62,7 @@ public class ClientBinderCommandParser implements NamespaceParser {
 		}
 		return false;
 	}
-	
+
 	private void addAttribute(ComponentInfo compInfo, Attribute attr, String name, String value) {
 		if (compInfo instanceof NativeInfo || isNative(attr.getNamespaceURI())) {
 			compInfo.addProperty(name, value, null);

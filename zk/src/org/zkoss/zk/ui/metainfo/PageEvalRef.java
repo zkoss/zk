@@ -17,8 +17,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import static org.zkoss.lang.Generics.cast;
-import org.zkoss.xel.FunctionMapper;
+
 import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
@@ -29,8 +30,7 @@ import org.zkoss.zk.xel.impl.SimpleEvaluator;
  * @author tomyeh
  * @since 3.0.0
  */
-/*package*/ class PageEvalRef extends AbstractEvalRef
-implements java.io.Serializable {
+/*package*/ class PageEvalRef extends AbstractEvalRef implements java.io.Serializable {
 	private transient PageDefinition _pagedef;
 	/** Used only if _pagedef == null. */
 	private transient Evaluator _eval;
@@ -55,21 +55,21 @@ implements java.io.Serializable {
 			_eval = new SimpleEvaluator(_mapper, _expfcls);
 		return _eval;
 	}
+
 	public PageDefinition getPageDefinition() {
 		return _pagedef;
 	}
 
 	//Serializable//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
-		s.writeObject(_pagedef != null ? _pagedef.getExpressionFactoryClass(): _expfcls);
-		s.writeObject(_pagedef != null ? _pagedef.getTaglibMapper(): _mapper);
+		s.writeObject(_pagedef != null ? _pagedef.getExpressionFactoryClass() : _expfcls);
+		s.writeObject(_pagedef != null ? _pagedef.getTaglibMapper() : _mapper);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		_expfcls = cast((Class)s.readObject());
-		_mapper = (FunctionMapper)s.readObject();
+		_expfcls = cast((Class) s.readObject());
+		_mapper = (FunctionMapper) s.readObject();
 	}
 }

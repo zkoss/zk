@@ -28,10 +28,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.web.servlet.Servlets;
@@ -62,7 +64,7 @@ import org.zkoss.zk.ui.util.Callback;
  *
  * @author tomyeh
  */
-abstract public class AbstractExecution implements Execution, ExecutionCtrl {
+public abstract class AbstractExecution implements Execution, ExecutionCtrl {
 	private static final Logger _zklog = LoggerFactory.getLogger("org.zkoss.zk.log");
 
 	private Desktop _desktop;
@@ -72,12 +74,12 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	/* A list of EventInfo within the same priority.
 	 */
 	private final Map<Integer, List<EventInfo>> _evtInfos = new TreeMap<Integer, List<EventInfo>>(
-		new Comparator<Integer>() {
-			public int compare(Integer o1, Integer o2) {
-				// reverse it, returning the greater one first.
-				return o2.compareTo(o1);
-			}
-		});
+			new Comparator<Integer>() {
+				public int compare(Integer o1, Integer o2) {
+					// reverse it, returning the greater one first.
+					return o2.compareTo(o1);
+				}
+			});
 
 	/** A stack of args being pushed by {@link #pushArg}. */
 	private List<Map<?, ?>> _args;
@@ -92,8 +94,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private ExecutionInfo _execinf;
 	private List<VariableResolver> _resolvers;
 
-	protected final static String Add_ON_ACTIVATE = "org.zkoss.zk.ui.executions.addOnActivate";
-	protected final static String Add_ON_DEACTIVATE = "org.zkoss.zk.ui.executions.addOnDeactivate";
+	protected static final String Add_ON_ACTIVATE = "org.zkoss.zk.ui.executions.addOnActivate";
+	protected static final String Add_ON_DEACTIVATE = "org.zkoss.zk.ui.executions.addOnDeactivate";
 
 	/** Constructs an execution.
 	 * @param creating which page is being creating for this execution, or
@@ -106,8 +108,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (_curpage == null)
 			_curpage = getPage(desktop);
 	}
+
 	private static Page getPage(Desktop desktop) {
-		return desktop != null ? desktop.getFirstPage(): null;
+		return desktop != null ? desktop.getFirstPage() : null;
 	}
 
 	//-- Execution --//
@@ -117,16 +120,19 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		final Visualizer uv;
 		return (uv = getVisualizer()) != null && uv.isEverAsyncUpdate();
 	}
+
 	public Desktop getDesktop() {
 		return _desktop;
 	}
+
 	public Session getSession() {
-		return _desktop != null ? _desktop.getSession(): Sessions.getCurrent();
+		return _desktop != null ? _desktop.getSession() : Sessions.getCurrent();
 	}
 
 	public void postEvent(Event evt) {
 		postEvent(0, evt);
 	}
+
 	public void postEvent(int priority, Event evt) {
 		if (evt == null)
 			throw new IllegalArgumentException("null");
@@ -144,23 +150,23 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			_evtInfos.put(priority, eventInfos);
 		}
 	}
+
 	public void postEvent(int priority, Component realTarget, Event evt) {
-		postEvent(priority,
-			realTarget != evt.getTarget() ? new ProxyEvent(realTarget, evt): evt);
+		postEvent(priority, realTarget != evt.getTarget() ? new ProxyEvent(realTarget, evt) : evt);
 	}
 
 	//-- ExecutionCtrl --//
 	public Object getAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
 		Desktop desktop;
-		return val != null || !recurse || (desktop=getDesktop()) == null ?
-			val: desktop.getAttribute(name, true);
+		return val != null || !recurse || (desktop = getDesktop()) == null ? val : desktop.getAttribute(name, true);
 	}
+
 	public boolean hasAttribute(String name, boolean recurse) {
 		Desktop desktop;
-		return hasAttribute(name)
-		|| (recurse && (desktop=getDesktop()) != null && desktop.hasAttribute(name, true));
+		return hasAttribute(name) || (recurse && (desktop = getDesktop()) != null && desktop.hasAttribute(name, true));
 	}
+
 	public Object setAttribute(String name, Object value, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			Desktop desktop = getDesktop();
@@ -171,6 +177,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		}
 		return setAttribute(name, value);
 	}
+
 	public Object removeAttribute(String name, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			Desktop desktop = getDesktop();
@@ -188,18 +195,20 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			_curpage = getPage(_desktop);
 		return _curpage;
 	}
+
 	public final void setCurrentPage(Page curpage) {
 		if (_curpage != null && curpage != null && _curpage != curpage) {
-			Desktop _curdt = _curpage.getDesktop(),
-				curdt = curpage.getDesktop();
+			Desktop _curdt = _curpage.getDesktop(), curdt = curpage.getDesktop();
 			if (_curdt != null && curdt != null && _curdt != curdt)
-				throw new IllegalStateException("Change current page to another desktop? "+curpage);
+				throw new IllegalStateException("Change current page to another desktop? " + curpage);
 		}
 		_curpage = curpage;
 	}
+
 	public PageDefinition getCurrentPageDefinition() {
 		return _curpgdef;
 	}
+
 	public void setCurrentPageDefinition(PageDefinition pgdef) {
 		_curpgdef = pgdef;
 	}
@@ -217,7 +226,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		}
 
 		// ZK-770: EventQueue has extra delay if scope is SESSION
-		((DesktopCtrl)_desktop).onPiggyback();
+		((DesktopCtrl) _desktop).onPiggyback();
 
 		if (!_evtInfos.isEmpty()) {
 			for (Map.Entry<Integer, List<EventInfo>> me : _evtInfos.entrySet()) {
@@ -235,6 +244,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public boolean isActivated() {
 		return getVisualizer() != null;
 	}
+
 	@SuppressWarnings("unchecked")
 	public void onActivate() {
 		if (_desktop != null) {
@@ -248,6 +258,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			}
 		}
 	}
+
 	@SuppressWarnings("unchecked")
 	public void onBeforeDeactivate() {
 		if (_desktop != null) {
@@ -261,22 +272,23 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			}
 		}
 	}
+
 	public void onDeactivate() {
 	}
+
 	public boolean isRecovering() {
 		Visualizer uv = getVisualizer();
 		return uv != null && uv.isRecovering();
 	}
 
 	public Visualizer getVisualizer() {
-		return _desktop != null ? ((DesktopCtrl)_desktop).getVisualizer(): null;
+		return _desktop != null ? ((DesktopCtrl) _desktop).getVisualizer() : null;
 	}
 
 	public String toAbsoluteURI(String uri, boolean skipInclude) {
 		if (uri != null && uri.length() > 0) {
 			final char cc = uri.charAt(0);
-			if (cc != '/' && cc != '~' && !(skipInclude && isIncluded())
-			&& !Servlets.isUniversalURL(uri)) {
+			if (cc != '/' && cc != '~' && !(skipInclude && isIncluded()) && !Servlets.isUniversalURL(uri)) {
 				final String dir = getDesktop().getCurrentDirectory();
 				if (dir != null)
 					return dir + uri;
@@ -288,133 +300,131 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	private final UiEngine getUiEngine() {
-		return ((WebAppCtrl)_desktop.getWebApp()).getUiEngine();
+		return ((WebAppCtrl) _desktop.getWebApp()).getUiEngine();
 	}
 
-	public Component createComponents(String uri, Component parent,
-	Map<?, ?> arg) {
+	public Component createComponents(String uri, Component parent, Map<?, ?> arg) {
 		return createComponents0(uri, parent, null, null, arg);
 	}
-	public Component createComponents(String uri, Component parent,
-	Component insertBefore, VariableResolver resolver) {
+
+	public Component createComponents(String uri, Component parent, Component insertBefore, VariableResolver resolver) {
 		return createComponents0(uri, parent, insertBefore, resolver, null);
 	}
-	public Component[] createComponents(String uri, Component parent,
-	Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
-		final Component[] cs = getUiEngine().createComponents(
-				this, getPageDefinition(uri), getCurrentPage(), parent, insertBefore, resolver, arg);
+
+	public Component[] createComponents(String uri, Component parent, Component insertBefore, VariableResolver resolver,
+			Map<?, ?> arg) {
+		final Component[] cs = getUiEngine().createComponents(this, getPageDefinition(uri), getCurrentPage(), parent,
+				insertBefore, resolver, arg);
 		return cs.length > 0 ? cs : null;
 	}
-	private Component createComponents0(String uri, Component parent,
-	Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
-		final Component[] cs = getUiEngine().createComponents(
-			this, getPageDefinition(uri), getCurrentPage(), parent, insertBefore, resolver, arg);
-		return cs.length > 0 ? cs[0]: null;
-	}
 
-	public Component createComponents(PageDefinition pagedef,
-	Component parent, Map<?, ?> arg) {
+	public Component createComponents(PageDefinition pagedef, Component parent, Map<?, ?> arg) {
 		return createComponents0(pagedef, parent, null, null, arg);
 	}
-	public Component createComponents(PageDefinition pagedef,
-	Component parent, Component insertBefore, VariableResolver resolver) {
+
+	public Component createComponents(PageDefinition pagedef, Component parent, Component insertBefore,
+			VariableResolver resolver) {
 		return createComponents0(pagedef, parent, insertBefore, resolver, null);
-	}
-	private Component createComponents0(PageDefinition pagedef,
-	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
-		if (pagedef == null)
-			throw new IllegalArgumentException("pagedef cannot be null");
-		final Component[] cs = getUiEngine().createComponents(
-			this, pagedef, getCurrentPage(), parent, insertBefore, resolver, arg);
-		return cs.length > 0 ? cs[0]: null;
-	}
-
-	public Component createComponentsDirectly(String content, String ext,
-	Component parent, Map<?, ?> arg) {
-		return createComponentsDirectly0(content, ext, parent, null, null, arg);
-	}
-	public Component createComponentsDirectly(String content, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver) {
-		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
-	}
-	private Component createComponentsDirectly0(String content, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
-		final Component[] cs = getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(content, ext),
-			getCurrentPage(), parent, insertBefore, resolver, arg);
-		return cs.length > 0 ? cs[0]: null;
-	}
-
-	public Component createComponentsDirectly(Document content, String ext,
-	Component parent, Map<?, ?> arg) {
-		return createComponentsDirectly0(content, ext, parent, null, null, arg);
-	}
-	public Component createComponentsDirectly(Document content, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver) {
-		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
-	}
-	private Component createComponentsDirectly0(Document content, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg) {
-		final Component[] cs = getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(content, ext),
-			getCurrentPage(), parent, insertBefore, resolver, arg);
-		return cs.length > 0 ? cs[0]: null;
-	}
-
-	public Component createComponentsDirectly(Reader reader, String ext,
-	Component parent, Map<?, ?> arg) throws IOException {
-		return createComponentsDirectly0(reader, ext, parent, null, null, arg);
-	}
-	public Component createComponentsDirectly(Reader reader, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver)
-	throws IOException {
-		return createComponentsDirectly0(reader, ext, parent, insertBefore, resolver, null);
-	}
-	private Component createComponentsDirectly0(Reader reader, String ext,
-	Component parent, Component insertBefore, VariableResolver resolver, Map<?, ?> arg)
-	throws IOException {
-		final Component[] cs = getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(reader, ext),
-			getCurrentPage(), parent, insertBefore, resolver, arg);
-		return cs.length > 0 ? cs[0]: null;
 	}
 
 	public Component[] createComponents(String uri, Map<?, ?> arg) {
-		return getUiEngine().createComponents(
-			this, getPageDefinition(uri), null, null, null, null, arg);
+		return getUiEngine().createComponents(this, getPageDefinition(uri), null, null, null, null, arg);
 	}
 
 	public Component[] createComponents(String uri, Page page, VariableResolver resolver, Map<?, ?> arg) {
-		return getUiEngine().createComponents(
-				this, getPageDefinition(uri), page, null, null, resolver, arg);
+		return getUiEngine().createComponents(this, getPageDefinition(uri), page, null, null, resolver, arg);
 	}
+
 	public Component[] createComponents(PageDefinition pagedef, Map<?, ?> arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
 		return getUiEngine().createComponents(this, pagedef, null, null, null, null, arg);
 	}
-	public Component[] createComponentsDirectly(String content, String ext,
-	Map<?, ?> arg) {
-		return getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(content, ext),
-			null, null, null, null, arg);
+
+	private Component createComponents0(String uri, Component parent, Component insertBefore, VariableResolver resolver,
+			Map<?, ?> arg) {
+		final Component[] cs = getUiEngine().createComponents(this, getPageDefinition(uri), getCurrentPage(), parent,
+				insertBefore, resolver, arg);
+		return cs.length > 0 ? cs[0] : null;
 	}
-	public Component[] createComponentsDirectly(Document content, String ext,
-	Map<?, ?> arg) {
-		return getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(content, ext),
-			null, null, null, null, arg);
+
+	private Component createComponents0(PageDefinition pagedef, Component parent, Component insertBefore,
+			VariableResolver resolver, Map<?, ?> arg) {
+		if (pagedef == null)
+			throw new IllegalArgumentException("pagedef cannot be null");
+		final Component[] cs = getUiEngine().createComponents(this, pagedef, getCurrentPage(), parent, insertBefore,
+				resolver, arg);
+		return cs.length > 0 ? cs[0] : null;
 	}
-	public Component[] createComponentsDirectly(Reader reader, String ext,
-	Map<?, ?> arg) throws IOException {
-		return getUiEngine().createComponents(
-			this, getPageDefinitionDirectly(reader, ext),
-			null, null, null, null, arg);
+
+	public Component createComponentsDirectly(String content, String ext, Component parent, Map<?, ?> arg) {
+		return createComponentsDirectly0(content, ext, parent, null, null, arg);
+	}
+
+	public Component createComponentsDirectly(String content, String ext, Component parent, Component insertBefore,
+			VariableResolver resolver) {
+		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
+	}
+
+	public Component createComponentsDirectly(Document content, String ext, Component parent, Map<?, ?> arg) {
+		return createComponentsDirectly0(content, ext, parent, null, null, arg);
+	}
+
+	public Component createComponentsDirectly(Document content, String ext, Component parent, Component insertBefore,
+			VariableResolver resolver) {
+		return createComponentsDirectly0(content, ext, parent, insertBefore, resolver, null);
+	}
+
+	public Component createComponentsDirectly(Reader reader, String ext, Component parent, Map<?, ?> arg)
+			throws IOException {
+		return createComponentsDirectly0(reader, ext, parent, null, null, arg);
+	}
+
+	public Component createComponentsDirectly(Reader reader, String ext, Component parent, Component insertBefore,
+			VariableResolver resolver) throws IOException {
+		return createComponentsDirectly0(reader, ext, parent, insertBefore, resolver, null);
+	}
+
+	public Component[] createComponentsDirectly(String content, String ext, Map<?, ?> arg) {
+		return getUiEngine().createComponents(this, getPageDefinitionDirectly(content, ext), null, null, null, null,
+				arg);
+	}
+
+	public Component[] createComponentsDirectly(Document content, String ext, Map<?, ?> arg) {
+		return getUiEngine().createComponents(this, getPageDefinitionDirectly(content, ext), null, null, null, null,
+				arg);
+	}
+
+	public Component[] createComponentsDirectly(Reader reader, String ext, Map<?, ?> arg) throws IOException {
+		return getUiEngine().createComponents(this, getPageDefinitionDirectly(reader, ext), null, null, null, null,
+				arg);
+	}
+
+	private Component createComponentsDirectly0(String content, String ext, Component parent, Component insertBefore,
+			VariableResolver resolver, Map<?, ?> arg) {
+		final Component[] cs = getUiEngine().createComponents(this, getPageDefinitionDirectly(content, ext),
+				getCurrentPage(), parent, insertBefore, resolver, arg);
+		return cs.length > 0 ? cs[0] : null;
+	}
+
+	private Component createComponentsDirectly0(Document content, String ext, Component parent, Component insertBefore,
+			VariableResolver resolver, Map<?, ?> arg) {
+		final Component[] cs = getUiEngine().createComponents(this, getPageDefinitionDirectly(content, ext),
+				getCurrentPage(), parent, insertBefore, resolver, arg);
+		return cs.length > 0 ? cs[0] : null;
+	}
+
+	private Component createComponentsDirectly0(Reader reader, String ext, Component parent, Component insertBefore,
+			VariableResolver resolver, Map<?, ?> arg) throws IOException {
+		final Component[] cs = getUiEngine().createComponents(this, getPageDefinitionDirectly(reader, ext),
+				getCurrentPage(), parent, insertBefore, resolver, arg);
+		return cs.length > 0 ? cs[0] : null;
 	}
 
 	public void sendRedirect(String uri) {
 		getUiEngine().sendRedirect(uri, null);
 	}
+
 	public void sendRedirect(String uri, String target) {
 		getUiEngine().sendRedirect(uri, target);
 	}
@@ -429,9 +439,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			try {
 				String destUrl = encodeURL(uri);
 				String destUrlParam = URLEncoder.encode(destUrl, "utf-8");
-				String updateURI = _desktop.getUpdateURI(AuRedirect.URI_PREFIX
-						+ "?" + AuRedirect.REDIRECT_URL_PARAMETER + "="
-						+ destUrlParam);
+				String updateURI = _desktop.getUpdateURI(
+						AuRedirect.URI_PREFIX + "?" + AuRedirect.REDIRECT_URL_PARAMETER + "=" + destUrlParam);
 				updateURI = resp.encodeRedirectURL(updateURI);
 				resp.setHeader("Location", updateURI);
 				resp.setStatus(HttpServletResponse.SC_FOUND);
@@ -446,11 +455,13 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			return _args.get(0);
 		return Collections.emptyMap();
 	}
+
 	public void pushArg(Map<?, ?> arg) {
 		if (_args == null)
 			_args = new LinkedList<Map<?, ?>>();
 		_args.add(0, arg);
 	}
+
 	public void popArg() {
 		if (_args != null) {
 			if (_args.size() == 1)
@@ -459,14 +470,18 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 				_args.remove(0);
 		}
 	}
+
 	public void addAuResponse(AuResponse response) {
 		getUiEngine().addResponse(response);
 	}
+
 	public void addAuResponse(String key, AuResponse response) {
 		getUiEngine().addResponse(key, response);
 	}
+
 	public void setDesktop(Desktop desktop) {
-		if (desktop == null) throw new IllegalArgumentException("null");
+		if (desktop == null)
+			throw new IllegalArgumentException("null");
 		if (_desktop != null && _desktop != desktop)
 			throw new IllegalStateException("assign diff desktop");
 
@@ -476,6 +491,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public void setRequestId(String reqId) {
 		_reqId = reqId;
 	}
+
 	public String getRequestId() {
 		return _reqId;
 	}
@@ -483,6 +499,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public Collection<AuResponse> getResponses() {
 		return _resps;
 	}
+
 	public void setResponses(Collection<AuResponse> responses) {
 		_resps = responses;
 	}
@@ -490,6 +507,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public ExecutionInfo getExecutionInfo() {
 		return _execinf;
 	}
+
 	public void setExecutionInfo(ExecutionInfo execinf) {
 		_execinf = execinf;
 	}
@@ -506,36 +524,35 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		_resolvers.add(0, resolver); //FILO order
 		return true;
 	}
+
 	public boolean removeVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.remove(resolver);
 	}
+
 	public boolean hasVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.contains(resolver);
 	}
-	
+
 	public boolean hasVariableResolver(Class<? extends VariableResolver> cls) {
 		if (_resolvers != null)
-			for (final VariableResolver resolver: _resolvers)
+			for (final VariableResolver resolver : _resolvers)
 				if (cls.isInstance(resolver))
 					return true;
 		return false;
 	}
-	
+
 	public Object getExtraXelVariable(String name) {
 		return getExtraXelVariable(null, null, name);
 	}
-	
+
 	public Object getExtraXelVariable(XelContext ctx, Object base, Object name) {
 		//Note this method searches only _resolvers
 		if (_resolvers != null) {
-			for (Iterator it = CollectionsX.comodifiableIterator(_resolvers);
-			it.hasNext();) {
-				final VariableResolver vr = (VariableResolver)it.next();
-				final Object o =
-					vr instanceof VariableResolverX ?
-						((VariableResolverX)vr).resolveVariable(ctx, base, name):
-					base == null && name != null ?
-						vr.resolveVariable(name.toString()): null;
+			for (Iterator it = CollectionsX.comodifiableIterator(_resolvers); it.hasNext();) {
+				final VariableResolver vr = (VariableResolver) it.next();
+				final Object o = vr instanceof VariableResolverX
+						? ((VariableResolverX) vr).resolveVariable(ctx, base, name)
+						: base == null && name != null ? vr.resolveVariable(name.toString()) : null;
 				if (o != null)
 					return o;
 			}
@@ -543,14 +560,13 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return null;
 	}
 
-	
 	public void log(String msg) {
 		if (_desktop != null)
 			_desktop.getWebApp().log(msg);
 		else
 			_zklog.info(msg);
 	}
-	
+
 	public void log(String msg, Throwable ex) {
 		if (_desktop != null)
 			_desktop.getWebApp().log(msg, ex);
@@ -578,6 +594,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 			callbacks.add(callback);
 		}
 	}
+
 	/**
 	 * Adds a callback method to be executed only once after the execution
 	 * deactivated.
@@ -601,16 +618,18 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 
 	//Object//
 	public String toString() {
-		return "[Exec"+System.identityHashCode(this)+": "+_desktop+']';
+		return "[Exec" + System.identityHashCode(this) + ": " + _desktop + ']';
 	}
 
 	private static class EventInfo {
 		private final int priority;
 		private final Event event;
+
 		private EventInfo(int priority, Event event) {
 			this.priority = priority;
 			this.event = event;
 		}
+
 		public String toString() {
 			return "[" + this.priority + ": " + this.event.toString() + "]";
 		}

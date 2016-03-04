@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  * @since 6.0.0
  */
 public interface ItemRenderer<T> {
-	
+
 	/** Renders the data to the corresponding HTML fragment, and returns
 	 * the HTML fragment.
 	 *

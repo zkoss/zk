@@ -33,10 +33,12 @@ public class Page extends AbstractAction {
 	public String getContentType() {
 		return _ctype;
 	}
+
 	/** Sets the content type. */
 	public void setContentType(String ctype) {
 		_ctype = ctype;
 	}
+
 	/** Sets the optional content type.
 	 * It is the content type generated automatically.
 	 * We will ignore it if the page is included.
@@ -47,13 +49,12 @@ public class Page extends AbstractAction {
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!isEffective())
 			return;
 		if (nested)
 			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
-				new Object[] {this, new Integer(ac.getLineNumber())});
+					new Object[] { this, new Integer(ac.getLineNumber()) });
 		if (_ctype != null)
 			ac.setContentType(_ctype);
 		else if (!ac.isIncluded() && _octype != null)

@@ -16,13 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.xel;
 
-import java.util.Set;
-import java.util.AbstractSet;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Enumeration;
-
 import static org.zkoss.lang.Generics.cast;
+
+import java.util.AbstractSet;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A skeletal implementation for Map to wrap something with enumeration of
@@ -35,18 +35,22 @@ import static org.zkoss.lang.Generics.cast;
  */
 public abstract class AttributesMap extends StringKeysMap<Object> {
 	private Set<Map.Entry<String, Object>> _entries;
+
 	public Set<Map.Entry<String, Object>> entrySet() {
 		if (_entries == null) {
 			_entries = new AbstractSet<Map.Entry<String, Object>>() {
 				public int size() {
 					return AttributesMap.this.size();
 				}
+
 				public boolean contains(Object o) {
 					return AttributesMap.this.containsKey(o);
 				}
+
 				public boolean isEmpty() {
 					return AttributesMap.this.isEmpty();
 				}
+
 				public Iterator<Map.Entry<String, Object>> iterator() {
 					return cast(new EntryIter());
 				}
@@ -61,18 +65,21 @@ public abstract class AttributesMap extends StringKeysMap<Object> {
 			e.nextElement();
 		return sz;
 	}
+
 	public boolean isEmpty() {
 		return !getKeys().hasMoreElements();
 	}
+
 	public Object put(String key, Object val) {
 		final Object o = getValue(key);
 		setValue(key, val);
 		return o;
 	}
+
 	public Object remove(Object key) {
 		if (key != null && !(key instanceof String))
 			return null;
-		final String k = (String)key;
+		final String k = (String) key;
 		final Object o = getValue(k);
 		removeValue(k);
 		return o;

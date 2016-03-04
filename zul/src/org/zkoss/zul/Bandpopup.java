@@ -45,6 +45,7 @@ public class Bandpopup extends XulElement {
 			throw new UnsupportedOperationException("Use Bandbox.setOpen(false) instead");
 		return true;
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Bandbox))
 			throw new UiException("Bandpopup's parent must be Bandbox");

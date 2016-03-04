@@ -34,6 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -117,7 +118,7 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Logger log = LoggerFactory.getLogger(DesktopImpl.class);
-    private static final long serialVersionUID = 20101123L;
+	private static final long serialVersionUID = 20101123L;
 
 	/** Represents media stored with {@link #getDownloadMediaURI}.
 	 * It must be distinguishable from component's ID.
@@ -147,7 +148,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient Map<String, Component> _comps;
 	/** A map of attributes. */
 	private transient SimpleScope _attrs;
-		//don't create it dynamically because PageImp._ip bind it at constructor
+	//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
 	/** A list of ScheduleInfo; must be thread safe */
 	private final List<ScheduleInfo<? extends Event>> _schedInfos = new LinkedList<ScheduleInfo<? extends Event>>();
@@ -207,11 +208,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	/** Whether the server push shall stop after deactivate. */
 	private boolean _spushShallStop;
-	
+
 	/** references of enabling DesktopEventQueues to enable reference counting, when several queues run against one desktop. */
 	private Set<Serializable> enablers = Collections.synchronizedSet(new HashSet<Serializable>());
-	
-
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -222,8 +221,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * If null or empty is specified, "ajax" is assumed.
 	 * @since 3.0.1
 	 */
-	public DesktopImpl(WebApp wapp, String updateURI, String path,
-	String deviceType, Object request) {
+	public DesktopImpl(WebApp wapp, String updateURI, String path, String deviceType, Object request) {
 		if (updateURI == null || wapp == null)
 			throw new IllegalArgumentException("null");
 
@@ -231,7 +229,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//so DesktopInit can access Executions.getCurrent
 		final Execution exec = Executions.getCurrent();
 		if (exec != null)
-			((ExecutionCtrl)exec).setDesktop(this);
+			((ExecutionCtrl) exec).setDesktop(this);
 
 		_wapp = wapp;
 		_updateURI = updateURI;
@@ -242,7 +240,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (path != null) {
 			_path = path;
 			final int j = path.lastIndexOf('/');
-			if (j >= 0) dir = path.substring(0, j + 1);
+			if (j >= 0)
+				dir = path.substring(0, j + 1);
 		} else {
 			_path = "";
 		}
@@ -255,9 +254,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final Configuration config = _wapp.getConfiguration();
 		_exec = exec; //fake
 		try {
-			final WebAppCtrl wappc = (WebAppCtrl)_wapp;
-			final DesktopCache dc = _sess != null ? wappc.getDesktopCache(_sess): null;
-				//_sess is null if in a working thread
+			final WebAppCtrl wappc = (WebAppCtrl) _wapp;
+			final DesktopCache dc = _sess != null ? wappc.getDesktopCache(_sess) : null;
+			//_sess is null if in a working thread
 			final IdGenerator idgen = wappc.getIdGenerator();
 			if (idgen != null)
 				_id = idgen.nextDesktopId(this);
@@ -268,7 +267,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			updateUuidPrefix();
 
 			config.invokeDesktopInits(this, request); //it might throw exception
-			if (exec != null && exec.isVoided()) return; //sendredirect or forward
+			if (exec != null && exec.isVoided())
+				return; //sendredirect or forward
 
 			if (dc != null)
 				dc.addDesktop(this); //add to cache after invokeDesktopInits
@@ -285,19 +285,25 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_exec = null;
 		}
 	}
+
 	private static String getQueryString(Object request) {
 		try {
 			if (request instanceof javax.servlet.http.HttpServletRequest)
-				return ((javax.servlet.http.HttpServletRequest)request).getQueryString();
+				return ((javax.servlet.http.HttpServletRequest) request).getQueryString();
 		} catch (Throwable ex) { //ignore any error (such as no servlet at all)
 		}
 		return null;
 	}
+
+	public String getQueryString() {
+		return _qs;
+	}
+
 	private static final String DESKTOP_ID_PREFIX = "z_";
+
 	private static String nextDesktopId(DesktopCache dc) {
 		if (dc != null)
-			return ComponentsCtrl.encodeId(
-				new StringBuffer(12).append(DESKTOP_ID_PREFIX), dc.getNextKey()).toString();
+			return ComponentsCtrl.encodeId(new StringBuffer(12).append(DESKTOP_ID_PREFIX), dc.getNextKey()).toString();
 
 		final int v;
 		synchronized (DesktopImpl.class) {
@@ -305,6 +311,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return ComponentsCtrl.encodeId(new StringBuffer(12).append("_g"), v).toString();
 	}
+
 	private static int _keyWithoutDC;
 
 	/** Initialization for constructor and de-serialized. */
@@ -313,9 +320,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_rque = newRequestQueue();
 		_comps = new HashMap<String, Component>(64);
 		_attrs = new SynchronizedScope(this);
-			//Use thread-safe scope, Since some class might access asynchronous,
-			//i.e., without locking. Example, AuUploader
+		//Use thread-safe scope, Since some class might access asynchronous,
+		//i.e., without locking. Example, AuUploader
 	}
+
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
 		final StringBuffer sb = new StringBuffer();
@@ -338,15 +346,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		sb.append(toLetter(v));
 		_uuidPrefix = sb.append(toLetter((val % 26) + 10)).toString();
 	}
+
 	private static final char toLetter(int v) {
 		if (v < 10) {
-			return (char)('0' + v);
+			return (char) ('0' + v);
 		} else if (v < 36) {
-			return (char)(v + ('A' - 10));
+			return (char) (v + ('A' - 10));
 		} else {
-			return (char)(v + ('a' - 36));
+			return (char) (v + ('a' - 36));
 		}
 	}
+
 	public String getId() {
 		return _id;
 	}
@@ -369,11 +379,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public String getDeviceType() {
 		return _devType;
 	}
+
 	public Device getDevice() {
 		if (_dev == null)
 			_dev = Devices.getDevice(_devType);
 		return _dev;
 	}
+
 	public void setDeviceType(String deviceType) {
 		//Note: we check _comps.isEmpty() only if device type differs, because
 		//a desktop might have several richlet and each of them will call
@@ -390,15 +402,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_dev = null;
 
 			if (_sess != null) //not in a working thread
-				((SessionCtrl)_sess).setDeviceType(_devType);
+				((SessionCtrl) _sess).setDeviceType(_devType);
 		}
 	}
+
 	public Execution getExecution() {
 		return _exec;
 	}
+
 	public final Session getSession() {
 		return _sess;
 	}
+
 	public String getUpdateURI(String pathInfo) {
 		final String uri;
 		if (pathInfo == null || pathInfo.length() == 0) {
@@ -410,21 +425,23 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return _exec.encodeURL(uri);
 	}
-	public String getDynamicMediaURI(Component comp, String pathInfo) {
-		if (!(((ComponentCtrl)comp).getExtraCtrl() instanceof DynamicMedia))
-			throw new UiException(DynamicMedia.class+" not implemented by getExtraCtrl() of "+comp);
 
-		final StringBuffer sb = new StringBuffer(64)
-			.append("/view/").append(getId())
-			.append('/').append(comp.getUuid()).append('/');
+	public String getDynamicMediaURI(Component comp, String pathInfo) {
+		if (!(((ComponentCtrl) comp).getExtraCtrl() instanceof DynamicMedia))
+			throw new UiException(DynamicMedia.class + " not implemented by getExtraCtrl() of " + comp);
+
+		final StringBuffer sb = new StringBuffer(64).append("/view/").append(getId()).append('/').append(comp.getUuid())
+				.append('/');
 		Strings.encode(sb, System.identityHashCode(comp) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
-			if (pathInfo.charAt(0) != '/') sb.append('/');
+			if (pathInfo.charAt(0) != '/')
+				sb.append('/');
 			sb.append(pathInfo);
 		}
 		return getUpdateURI(sb.toString());
 	}
+
 	public String getDownloadMediaURI(Media media, String pathInfo) {
 		if (media == null)
 			throw new IllegalArgumentException("null media");
@@ -433,47 +450,50 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_meds = new CacheMap<String, Media>();
 			_meds.setMaxSize(500);
 			_meds.setLifetime(15 * 60 * 1000);
-				//15 minutes (CONSIDER: configurable)
+			//15 minutes (CONSIDER: configurable)
 		} else {
 			housekeep();
 		}
 
-		String medId = Strings.encode(
-			new StringBuffer(12).append(DOWNLOAD_PREFIX), _medId++).toString();
+		String medId = Strings.encode(new StringBuffer(12).append(DOWNLOAD_PREFIX), _medId++).toString();
 		_meds.put(medId, media);
 
-		final StringBuffer sb = new StringBuffer(64)
-			.append("/view/").append(getId())
-			.append('/').append(medId).append('/');
+		final StringBuffer sb = new StringBuffer(64).append("/view/").append(getId()).append('/').append(medId)
+				.append('/');
 		Strings.encode(sb, System.identityHashCode(media) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
-			if (pathInfo.charAt(0) != '/') sb.append('/');
+			if (pathInfo.charAt(0) != '/')
+				sb.append('/');
 			sb.append(pathInfo);
 		}
 		return getUpdateURI(sb.toString());
 	}
+
 	public Media getDownloadMedia(String medId, boolean reserved) {
-		return _meds != null ? _meds.get(medId): null;
+		return _meds != null ? _meds.get(medId) : null;
 	}
+
 	/** Cleans up redundant data. */
 	private void housekeep() {
-		if (_meds != null) _meds.expunge();
+		if (_meds != null)
+			_meds.expunge();
 	}
 
 	public Page getPage(String pageId) {
 		//Spec: we allow user to access this method concurrently
 		final Page page = getPageIfAny(pageId);
 		if (page == null)
-			throw new ComponentNotFoundException("Page not found: "+pageId);
+			throw new ComponentNotFoundException("Page not found: " + pageId);
 		return page;
 	}
+
 	public Page getPageIfAny(String pageId) {
 		//Spec: we allow user to access this method concurrently, so
 		//synchronized is required
 		Page page = null;
 		synchronized (_pages) {
-			for (Page pg: _pages) {
+			for (Page pg : _pages) {
 				if (Objects.equals(pageId, pg.getId()))
 					return pg;
 				if (Objects.equals(pageId, pg.getUuid()))
@@ -482,15 +502,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return page;
 	}
+
 	public boolean hasPage(String pageId) {
 		return getPageIfAny(pageId) != null;
 	}
+
 	public Collection<Page> getPages() {
 		//No synchronized is required because it cannot be access concurrently
 		return Collections.unmodifiableCollection(_pages);
 	}
+
 	public Page getFirstPage() {
-		return _pages.isEmpty() ? null: _pages.get(0);
+		return _pages.isEmpty() ? null : _pages.get(0);
 	}
 
 	public String getBookmark() {
@@ -498,9 +521,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//Notice: since the bookmark (#xx) not sent from the HTTP request,
 		//we can only assume "" when the page is loading
 	}
+
 	public void setBookmark(String name) {
 		setBookmark(name, false);
 	}
+
 	public void setBookmark(String name, boolean replace) {
 		if (_exec == null)
 			throw new IllegalStateException("Not the current desktop: " + this);
@@ -511,6 +536,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_bookmark = name;
 		addResponse(new AuBookmark(name, replace));
 	}
+
 	private void addResponse(AuResponse response) {
 		((WebAppCtrl) _wapp).getUiEngine().addResponse(response);
 	}
@@ -518,31 +544,34 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public Collection<Component> getComponents() {
 		return _comps.values();
 	}
+
 	public Component getComponentByUuid(String uuid) {
 		final Component comp = _comps.get(uuid);
 		if (comp == null)
-			throw new ComponentNotFoundException("Component not found: "+uuid);
+			throw new ComponentNotFoundException("Component not found: " + uuid);
 		return comp;
 	}
+
 	public Component getComponentByUuidIfAny(String uuid) {
 		return _comps.get(uuid);
 	}
+
 	public void addComponent(Component comp) {
 		//to avoid misuse, check whether new comp belongs to the same device type
-		final LanguageDefinition langdef =
-			comp.getDefinition().getLanguageDefinition();
+		final LanguageDefinition langdef = comp.getDefinition().getLanguageDefinition();
 		if (langdef != null && !_devType.equals(langdef.getDeviceType()))
-			throw new UiException("Component, "+comp+", does not belong to the same device type of the desktop, "+_devType);
+			throw new UiException(
+					"Component, " + comp + ", does not belong to the same device type of the desktop, " + _devType);
 		final String uuid = comp.getUuid();
 		final Component old = _comps.put(uuid, comp);
 		if (old != comp && old != null) {
 			_comps.put(uuid, old); //recover
-			throw new InternalError("Caller shall prevent it: Register a component twice: "+comp);
-		}/* For performance reason, we don't check if a component is
+			throw new InternalError("Caller shall prevent it: Register a component twice: " + comp);
+		} /* For performance reason, we don't check if a component is
 			detached and attached back (in another execution). Rather, reset
 			_uuid when it is recycled (refer to AbstractComponent.setPage0
 			(the caller of removeComponent has to reset)
-		 else if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
+			else if (_uuidRecycle != null && !_uuidRecycle.isEmpty()) {
 			for (RecycleInfo ri: _uuidRecycle) {
 				final List<String> uuids = ri.uuids;
 				if (uuids.remove(uuid)) {
@@ -551,18 +580,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					break;
 				}
 			}
-		}*/
+			}*/
 	}
+
 	public boolean removeComponent(Component comp, boolean recycleAllowed) {
 		final String uuid = comp.getUuid();
-		if (_comps.remove(uuid) == null || !recycleAllowed || recycleUuidDisabled()
-				|| (comp instanceof StubComponent)) //Bug ZK-1452: don't need to recycle StubComponent's uuid since it's never reset
+		if (_comps.remove(uuid) == null || !recycleAllowed || recycleUuidDisabled() || (comp instanceof StubComponent)) //Bug ZK-1452: don't need to recycle StubComponent's uuid since it's never reset
 			return false; //not recycled
 
 		//Bug 3002611: don't recycle UUID if RawId, since addUuidChanged will
 		//cause AuRemove to be sent
-		if (comp instanceof RawId &&
-		(!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl)_wapp).getIdGenerator() != null))
+		if (comp instanceof RawId
+				&& (!ComponentsCtrl.isAutoUuid(uuid) || ((WebAppCtrl) _wapp).getIdGenerator() != null))
 			return false; //not recycled
 
 		final int execId = getExecId();
@@ -570,7 +599,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (_uuidRecycle == null) {
 			_uuidRecycle = new LinkedList<RecycleInfo>();
 		} else {
-			for (RecycleInfo r: _uuidRecycle)
+			for (RecycleInfo r : _uuidRecycle)
 				if (r.execId == execId) {
 					ri = r; //found
 					break;
@@ -581,57 +610,67 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		ri.uuids.add(uuid);
 		return true; //recycled
 	}
+
 	public Component mapComponent(String uuid, Component comp) {
 		if (uuid == null)
 			throw new IllegalArgumentException("null");
-		return comp != null ?
-			_comps.put(uuid, comp): _comps.remove(uuid);
-			//no recycle, no check
+		return comp != null ? _comps.put(uuid, comp) : _comps.remove(uuid);
+		//no recycle, no check
 	}
+
 	private static int getExecId() {
 		final Execution exec = Executions.getCurrent();
-		return exec != null ? System.identityHashCode(exec): 0;
+		return exec != null ? System.identityHashCode(exec) : 0;
 	}
+
 	private static boolean recycleUuidDisabled() {
 		if (_recycleUuidDisabled == null)
-			_recycleUuidDisabled = Boolean.valueOf(
-				"true".equals(Library.getProperty(Attributes.UUID_RECYCLE_DISABLED)));
+			_recycleUuidDisabled = Boolean
+					.valueOf("true".equals(Library.getProperty(Attributes.UUID_RECYCLE_DISABLED)));
 		return _recycleUuidDisabled.booleanValue();
 	}
+
 	private static Boolean _recycleUuidDisabled;
 
 	public Map<String, Object> getAttributes() {
 		return _attrs.getAttributes();
 	}
+
 	public Object getAttribute(String name) {
 		return _attrs.getAttribute(name);
 	}
-	public boolean hasAttribute(String name) {
-		return _attrs.hasAttribute(name);
-	}
-	public Object setAttribute(String name, Object value) {
-		return _attrs.setAttribute(name, value);
-	}
-	public Object removeAttribute(String name) {
-		return _attrs.removeAttribute(name);
-	}
+
 	public Object getAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
 		if (val != null || !recurse || hasAttribute(name))
 			return val;
-		if (_sess != null) return _sess.getAttribute(name, true);
-		if (_wapp != null) return _wapp.getAttribute(name, true);
+		if (_sess != null)
+			return _sess.getAttribute(name, true);
+		if (_wapp != null)
+			return _wapp.getAttribute(name, true);
 		return null;
 	}
+
+	public boolean hasAttribute(String name) {
+		return _attrs.hasAttribute(name);
+	}
+
 	public boolean hasAttribute(String name, boolean recurse) {
 		if (hasAttribute(name))
 			return true;
 		if (recurse) {
-			if (_sess != null) return _sess.hasAttribute(name, true);
-			if (_wapp != null) return _wapp.hasAttribute(name, true);
+			if (_sess != null)
+				return _sess.hasAttribute(name, true);
+			if (_wapp != null)
+				return _wapp.hasAttribute(name, true);
 		}
 		return false;
 	}
+
+	public Object setAttribute(String name, Object value) {
+		return _attrs.setAttribute(name, value);
+	}
+
 	public Object setAttribute(String name, Object value, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			if (_sess != null) {
@@ -644,6 +683,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return setAttribute(name, value);
 	}
+
+	public Object removeAttribute(String name) {
+		return _attrs.removeAttribute(name);
+	}
+
 	public Object removeAttribute(String name, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			if (_sess != null) {
@@ -661,6 +705,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public boolean addScopeListener(ScopeListener listener) {
 		return _attrs.addScopeListener(listener);
 	}
+
 	public boolean removeScopeListener(ScopeListener listener) {
 		return _attrs.removeScopeListener(listener);
 	}
@@ -672,12 +717,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public String getRequestPath() {
 		return _path;
 	}
-	public String getQueryString() {
-		return _qs;
-	}
+
 	public String getCurrentDirectory() {
 		return _dir;
 	}
+
 	public void setCurrentDirectory(String dir) {
 		if (dir == null) {
 			dir = "";
@@ -694,6 +738,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		housekeep();
 		return _rque;
 	}
+
 	public void setExecution(Execution exec) {
 		_exec = exec;
 	}
@@ -710,7 +755,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (comp != null) {
 			final AuService svc = comp.getAuService();
 			if ((svc == null || !svc.service(request, everError)) && comp.getDesktop() != null)
-				((ComponentCtrl)comp).service(request, everError);
+				((ComponentCtrl) comp).service(request, everError);
 			return; //done (it's comp's job to handle it)
 		}
 
@@ -724,17 +769,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		} else if (Events.ON_VISIBILITY_CHANGE.equals(cmd)) {
 			Events.postEvent(VisibilityChangeEvent.getVisibilityChangeEvent(request));
 		} else if ("rmDesktop".equals(cmd)) {
-			((WebAppCtrl)request.getDesktop().getWebApp())
-				.getUiEngine().setAbortingReason(
-					new org.zkoss.zk.ui.impl.AbortByRemoveDesktop());
-				//to avoid surprise, we don't remove it now
-				//rather, it is done by AbortByRemoveDesktop.getResponse
+			((WebAppCtrl) request.getDesktop().getWebApp()).getUiEngine()
+					.setAbortingReason(new org.zkoss.zk.ui.impl.AbortByRemoveDesktop());
+			//to avoid surprise, we don't remove it now
+			//rather, it is done by AbortByRemoveDesktop.getResponse
 		} else if ("redraw".equals(cmd)) {
 			invalidate();
 		} else if ("error".equals(cmd)) {
 			final Map<String, Object> data = request.getData();
 			if (data != null)
-				log.error(this+" client error: " + data.get("message"));
+				log.error(this + " client error: " + data.get("message"));
 		} else
 			Events.postEvent(Event.getEvent(request));
 	}
@@ -742,9 +786,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public Visualizer getVisualizer() {
 		return _uv;
 	}
+
 	public void setVisualizer(Visualizer uv) {
 		_uv = uv;
 	}
+
 	public Object getActivationLock() {
 		return _uvLock;
 	}
@@ -752,15 +798,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public int getNextKey() {
 		return _nextKey++;
 	}
+
 	public String getNextUuid(Page page) {
-		final IdGenerator idgen = ((WebAppCtrl)_wapp).getIdGenerator();
-		String uuid = idgen != null ? idgen.nextPageUuid(page): null;
+		final IdGenerator idgen = ((WebAppCtrl) _wapp).getIdGenerator();
+		String uuid = idgen != null ? idgen.nextPageUuid(page) : null;
 		if (uuid == null)
 			return nextUuid();
 
 		ComponentsCtrl.checkUuid(uuid);
 		return uuid;
 	}
+
 	public String getNextUuid(Component comp) {
 		//The reason to recycle UUID is to keep it short (since _nextUuid won't grow too fast)
 		//Thus, it takes fewer memory at the client
@@ -777,15 +825,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 
-		final IdGenerator idgen = ((WebAppCtrl)_wapp).getIdGenerator();
+		final IdGenerator idgen = ((WebAppCtrl) _wapp).getIdGenerator();
 		String uuid = null;
-		if(idgen != null){
-			try{
-				uuid = idgen.nextComponentUuid(
-					this, comp, Utils.getComponentInfo(comp));
-			}catch(AbstractMethodError ex){
+		if (idgen != null) {
+			try {
+				uuid = idgen.nextComponentUuid(this, comp, Utils.getComponentInfo(comp));
+			} catch (AbstractMethodError ex) {
 				try {
-					Method method = idgen.getClass().getMethod("nextComponentUuid", Desktop.class,Component.class);
+					Method method = idgen.getClass().getMethod("nextComponentUuid", Desktop.class, Component.class);
 					Fields.setAccessible(method, true);
 					uuid = (String) method.invoke(idgen, this, comp);
 				} catch (Exception e) {
@@ -799,7 +846,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		ComponentsCtrl.checkUuid(uuid);
 		return uuid;
 	}
-	
+
 	private String nextUuid() {
 		return ComponentsCtrl.toAutoId(_uuidPrefix, _nextUuid++);
 	}
@@ -808,42 +855,47 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//We have to synchronize it due to getPage allows concurrent access
 		synchronized (_pages) {
 			_pages.add(page);
-			if (log.isDebugEnabled()) log.debug("After added, pages: {}", _pages);
+			if (log.isDebugEnabled())
+				log.debug("After added, pages: {}", _pages);
 		}
 		afterPageAttached(page, this);
 		_wapp.getConfiguration().afterPageAttached(page, this);
 	}
+
 	public void removePage(Page page) {
 		synchronized (_pages) {
 			if (!_pages.remove(page))
 				return;
-				//Both UiVisualizer.getResponses and Include.setChildPage
-				//might call removePage
+			//Both UiVisualizer.getResponses and Include.setChildPage
+			//might call removePage
 
-			if (log.isDebugEnabled()) log.debug("After removed, pages: {}", _pages);
+			if (log.isDebugEnabled())
+				log.debug("After removed, pages: {}", _pages);
 		}
 		removeComponents(page.getRoots());
 
 		afterPageDetached(page, this);
 		_wapp.getConfiguration().afterPageDetached(page, this);
 
-		((PageCtrl)page).destroy();
+		((PageCtrl) page).destroy();
 	}
+
 	private void removeComponents(Collection<Component> comps) {
-		for (Component comp: comps) {
+		for (Component comp : comps) {
 			removeComponents(comp.getChildren()); //recursive
 			removeComponent(comp, true);
 		}
 	}
 
 	public void setId(String id) {
-		if (!((ExecutionCtrl)_exec).isRecovering())
+		if (!((ExecutionCtrl) _exec).isRecovering())
 			throw new IllegalStateException("Callable only in recovring");
 		if (id == null || id.length() <= 1 || id.charAt(0) != 'g')
-			throw new IllegalArgumentException("Invalid desktop ID. You have to recover to the original value, not creating a new value: "+id);
+			throw new IllegalArgumentException(
+					"Invalid desktop ID. You have to recover to the original value, not creating a new value: " + id);
 
 		//_sess and dc are null if in a working thread
-		final DesktopCache dc = _sess != null ? ((WebAppCtrl)_wapp).getDesktopCache(_sess): null;
+		final DesktopCache dc = _sess != null ? ((WebAppCtrl) _wapp).getDesktopCache(_sess) : null;
 		if (dc != null)
 			dc.removeDesktop(this);
 
@@ -853,13 +905,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (dc != null)
 			dc.addDesktop(this);
 	}
+
 	public void recoverDidFail(Throwable ex) {
-		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
+		((WebAppCtrl) _wapp).getDesktopCache(_sess).removeDesktop(this);
 	}
 
 	public void recycle() {
 		_clientPerDesktops = null; //re-generation is required
 	}
+
 	/** Marks the per-desktop information of the given key will be generated,
 	 * and returns true if the information is not generated yet
 	 * (i.e., this method is NOT called with the given key).
@@ -868,16 +922,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 */
 	/*package*/ boolean markClientInfoPerDesktop(String key) {
 		if (_clientPerDesktops == null)
-			_clientPerDesktops= new HashSet<String>(32);
+			_clientPerDesktops = new HashSet<String>(32);
 		return _clientPerDesktops.add(key);
 	}
 
 	public boolean isAlive() {
 		return _rque != null;
 	}
+
 	public void destroy() {
 		final ExecutionMonitor execmon = _wapp != null ? //just in case
-			_wapp.getConfiguration().getExecutionMonitor(): null;
+				_wapp.getConfiguration().getExecutionMonitor() : null;
 
 		_rque = null; //denote it is destroyed
 
@@ -887,22 +942,22 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			try {
 				sp.stop();
 			} catch (Throwable ex) {
-				log.warn("Failed to stop server-push, "+sp, ex);
+				log.warn("Failed to stop server-push, " + sp, ex);
 			}
 		}
 
 		try {
 			final List<Page> pages = new ArrayList<Page>(_pages);
 			_pages.clear();
-			for (Page page: pages) {
+			for (Page page : pages) {
 				try {
-					((PageCtrl)page).destroy();
+					((PageCtrl) page).destroy();
 				} catch (Throwable ex) {
-					log.warn("Failed to destroy "+page, ex);
+					log.warn("Failed to destroy " + page, ex);
 				}
 			}
 		} catch (Throwable ex) {
-			log.warn("Failed to clean up pages of "+this, ex);
+			log.warn("Failed to clean up pages of " + this, ex);
 		}
 
 		if (execmon != null)
@@ -925,16 +980,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public Collection<EventProcessingThread> getSuspendedThreads() {
-		return ((WebAppCtrl)_wapp).getUiEngine().getSuspendedThreads(this);
+		return ((WebAppCtrl) _wapp).getUiEngine().getSuspendedThreads(this);
 	}
+
 	public boolean ceaseSuspendedThread(EventProcessingThread evtthd, String cause) {
-		return ((WebAppCtrl)_wapp).getUiEngine()
-			.ceaseSuspendedThread(this, evtthd, cause);
+		return ((WebAppCtrl) _wapp).getUiEngine().ceaseSuspendedThread(this, evtthd, cause);
 	}
 
 	//-- Object --//
 	public String toString() {
-		return "[Desktop "+_id+':'+_path+']';
+		return "[Desktop " + _id + ':' + _path + ']';
 	}
 
 	public void sessionWillPassivate(Session sess) {
@@ -951,6 +1006,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 	}
+
 	public void sessionDidActivate(Session sess) {
 		_sess = sess;
 		_wapp = sess.getWebApp();
@@ -971,10 +1027,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 	}
+
 	/** Safe to be called even if the Web application has been destroyed
 	 */
 	private void safeActivate(Execution exec) {
-		final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
+		final UiEngine uieng = ((WebAppCtrl) _wapp).getUiEngine();
 		if (uieng != null) {
 			uieng.activate(exec);
 		} else {
@@ -982,10 +1039,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			ExecutionsCtrl.setCurrent(exec);
 		}
 	}
+
 	/** Safe to be called even if the Web application has been destroyed
 	 */
 	private void safeDeactivate(Execution exec) {
-		final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
+		final UiEngine uieng = ((WebAppCtrl) _wapp).getUiEngine();
 		if (uieng != null) {
 			uieng.deactivate(exec);
 		} else {
@@ -993,11 +1051,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			ExecutionsCtrl.setCurrent(null);
 		}
 	}
-	private void sessWillPassivate() {
-		for (Page page: _pages)
-			((PageCtrl)page).sessionWillPassivate(this);
 
-		if (_dev != null) _dev.sessionWillPassivate(this);
+	private void sessWillPassivate() {
+		for (Page page : _pages)
+			((PageCtrl) page).sessionWillPassivate(this);
+
+		if (_dev != null)
+			_dev.sessionWillPassivate(this);
 
 		willPassivate(_attrs.getAttributes().values());
 		willPassivate(_attrs.getListeners());
@@ -1007,11 +1067,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		willPassivate(_execCleans);
 		willPassivate(_uiCycles);
 	}
-	private void sessDidActivate() {
-		if (_dev != null) _dev.sessionDidActivate(this);
 
-		for (Page page: _pages)
-			((PageCtrl)page).sessionDidActivate(this);
+	private void sessDidActivate() {
+		if (_dev != null)
+			_dev.sessionDidActivate(this);
+
+		for (Page page : _pages)
+			((PageCtrl) page).sessionDidActivate(this);
 
 		didActivate(_attrs.getAttributes().values());
 		didActivate(_attrs.getListeners());
@@ -1021,29 +1083,32 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		didActivate(_execCleans);
 		didActivate(_uiCycles);
 	}
+
 	private void willPassivate(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willPassivate(it.next());
 	}
+
 	private void willPassivate(Object o) {
 		if (o instanceof DesktopActivationListener)
-			((DesktopActivationListener)o).willPassivate(this);
+			((DesktopActivationListener) o).willPassivate(this);
 	}
+
 	private void didActivate(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				didActivate(it.next());
 	}
+
 	private void didActivate(Object o) {
 		if (o instanceof DesktopActivationListener)
-			((DesktopActivationListener)o).didActivate(this);
+			((DesktopActivationListener) o).didActivate(this);
 	}
 
 	//-- Serializable --//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		final Map<String, Object> attrs = _attrs.getAttributes();
@@ -1064,31 +1129,31 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		willSerialize(_ausvcs);
 		Serializables.smartWrite(s, _ausvcs);
 
-		if (_spush == null || _spush instanceof java.io.Serializable
-		|| _spush instanceof java.io.Externalizable)
+		if (_spush == null || _spush instanceof java.io.Serializable || _spush instanceof java.io.Externalizable)
 			s.writeObject(_spush);
 		else
 			s.writeObject(_spush.getClass());
 	}
+
 	private void willSerialize(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willSerialize(it.next());
 	}
+
 	private void willSerialize(Object o) {
 		if (o instanceof DesktopSerializationListener)
-			((DesktopSerializationListener)o).willSerialize(this);
+			((DesktopSerializationListener) o).willSerialize(this);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
 
 		//get back _comps from _pages
-		for (Page page: _pages)
-			for (Component root = page.getFirstRoot(); root != null;
-			root = root.getNextSibling())
+		for (Page page : _pages)
+			for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
 				addAllComponents(root);
 
 		final Map<String, Object> attrs = _attrs.getAttributes();
@@ -1115,96 +1180,96 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			ServerPush sp = null;
 			if (o instanceof Class) {
 				try {
-					sp = (ServerPush)((Class)o).newInstance();
+					sp = (ServerPush) ((Class) o).newInstance();
 				} catch (Throwable ex) {
 				}
 			} else
-				sp = (ServerPush)o;
+				sp = (ServerPush) o;
 			_spushTemp = sp;
 		}
 	}
+
 	private void didDeserialize(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				didDeserialize(it.next());
 	}
+
 	private void didDeserialize(Object o) {
 		if (o instanceof DesktopSerializationListener)
-			((DesktopSerializationListener)o).didDeserialize(this);
+			((DesktopSerializationListener) o).didDeserialize(this);
 	}
+
 	private void addAllComponents(Component comp) {
 		addComponent(comp);
-		for (Component child: comp.getChildren())
+		for (Component child : comp.getChildren())
 			addAllComponents(child);
 	}
 
 	public void addListener(Object listener) {
 		boolean added = false;
 		if (listener instanceof EventInterceptor) {
-			_eis.addEventInterceptor((EventInterceptor)listener);
+			_eis.addEventInterceptor((EventInterceptor) listener);
 			added = true;
 		}
 
 		if (listener instanceof DesktopCleanup) {
-			_dtCleans = addListener0(_dtCleans, (DesktopCleanup)listener);
+			_dtCleans = addListener0(_dtCleans, (DesktopCleanup) listener);
 			added = true;
 		}
 
 		if (listener instanceof ExecutionInit) {
-			_execInits = addListener0(_execInits, (ExecutionInit)listener);
+			_execInits = addListener0(_execInits, (ExecutionInit) listener);
 			added = true;
 		}
 		if (listener instanceof ExecutionCleanup) {
-			_execCleans = addListener0(_execCleans, (ExecutionCleanup)listener);
+			_execCleans = addListener0(_execCleans, (ExecutionCleanup) listener);
 			added = true;
 		}
 
 		if (listener instanceof UiLifeCycle) {
-			_uiCycles = addListener0(_uiCycles, (UiLifeCycle)listener);
+			_uiCycles = addListener0(_uiCycles, (UiLifeCycle) listener);
 			added = true;
 		}
 
 		if (listener instanceof AuService) {
-			_ausvcs = addListener0(_ausvcs, (AuService)listener);
+			_ausvcs = addListener0(_ausvcs, (AuService) listener);
 			added = true;
 		}
 
 		if (!added)
-			throw new IllegalArgumentException("Unknown listener: "+listener);
+			throw new IllegalArgumentException("Unknown listener: " + listener);
 	}
+
 	private <T> List<T> addListener0(List<T> list, T listener) {
 		if (list == null)
 			list = new LinkedList<T>();
 		list.add(listener);
 		return list;
 	}
+
 	public boolean removeListener(Object listener) {
 		boolean found = false;
-		if (listener instanceof EventInterceptor
-		&& _eis.removeEventInterceptor((EventInterceptor)listener))
+		if (listener instanceof EventInterceptor && _eis.removeEventInterceptor((EventInterceptor) listener))
 			found = true;
 
-		if (listener instanceof DesktopCleanup
-		&& removeListener0(_dtCleans, listener))
+		if (listener instanceof DesktopCleanup && removeListener0(_dtCleans, listener))
 			found = true;
 
-		if (listener instanceof ExecutionInit
-		&& removeListener0(_execInits, listener))
+		if (listener instanceof ExecutionInit && removeListener0(_execInits, listener))
 			found = true;
 
-		if (listener instanceof ExecutionCleanup
-		&& removeListener0(_execCleans, listener))
+		if (listener instanceof ExecutionCleanup && removeListener0(_execCleans, listener))
 			found = true;
 
-		if (listener instanceof UiLifeCycle
-		&& removeListener0(_uiCycles, listener))
+		if (listener instanceof UiLifeCycle && removeListener0(_uiCycles, listener))
 			found = true;
 
-		if (listener instanceof AuService
-		&& removeListener0(_ausvcs, listener))
+		if (listener instanceof AuService && removeListener0(_ausvcs, listener))
 			found = true;
 		return found;
 	}
+
 	private boolean removeListener0(List list, Object listener) {
 		//Since 3.0.6: To be consistent with Configuration,
 		//use equals instead of ==
@@ -1217,24 +1282,28 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		return false;
 	}
+
 	public Event beforeSendEvent(Event event) {
 		event = _eis.beforeSendEvent(event);
 		if (event != null)
 			event = _wapp.getConfiguration().beforeSendEvent(event);
 		return event;
 	}
+
 	public Event beforePostEvent(Event event) {
 		event = _eis.beforePostEvent(event);
 		if (event != null)
 			event = _wapp.getConfiguration().beforePostEvent(event);
 		return event;
 	}
+
 	public Event beforeProcessEvent(Event event) throws Exception {
 		event = _eis.beforeProcessEvent(event);
 		if (event != null)
 			event = _wapp.getConfiguration().beforeProcessEvent(event);
 		return event;
 	}
+
 	public void afterProcessEvent(Event event) throws Exception {
 		_eis.afterProcessEvent(event);
 		_wapp.getConfiguration().afterProcessEvent(event);
@@ -1243,23 +1312,19 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			if (_bookmark.length() > 0)
 				addResponse(new AuBookmark(_bookmark));
 
-			l_out:
-			for (Page page: _pages)
-				for (Component root = page.getFirstRoot();
-				root != null; root = root.getNextSibling())
+			l_out: for (Page page : _pages)
+				for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
 					if (Events.isListened(root, Events.ON_CLIENT_INFO, false)) {
 						setAttribute("org.zkoss.desktop.clientinfo.enabled", true);
 						addResponse(new AuClientInfo(this));
 						break l_out;
 					}
-			l_out:
-				for (Page page: _pages)
-					for (Component root = page.getFirstRoot();
-					root != null; root = root.getNextSibling())
-						if (Events.isListened(root, Events.ON_VISIBILITY_CHANGE, false)) {
-							setAttribute("org.zkoss.desktop.visibilitychange.enabled", true);
-							break l_out;
-						}
+			l_out: for (Page page : _pages)
+				for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
+					if (Events.isListened(root, Events.ON_VISIBILITY_CHANGE, false)) {
+						setAttribute("org.zkoss.desktop.visibilitychange.enabled", true);
+						break l_out;
+					}
 		}
 	}
 
@@ -1270,14 +1335,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					listener.cleanup(this);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+listener, ex);
+					log.error("Failed to invoke " + listener, ex);
 				}
 			}
 		}
 	}
 
-	public void invokeExecutionInits(Execution exec, Execution parent)
-	throws UiException {
+	public void invokeExecutionInits(Execution exec, Execution parent) throws UiException {
 		if (_execInits != null) {
 			for (Iterator<ExecutionInit> it = new LinkedList<ExecutionInit>(_execInits).iterator(); it.hasNext();) {
 				try {
@@ -1289,15 +1353,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 	}
+
 	public void invokeExecutionCleanups(Execution exec, Execution parent, List<Throwable> errs) {
 		if (_execCleans != null) {
-			for (Iterator<ExecutionCleanup> it = new LinkedList<ExecutionCleanup>(_execCleans).iterator(); it.hasNext();) {
+			for (Iterator<ExecutionCleanup> it = new LinkedList<ExecutionCleanup>(_execCleans).iterator(); it
+					.hasNext();) {
 				final ExecutionCleanup listener = it.next();
 				try {
 					listener.cleanup(exec, parent, errs);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+listener, ex);
-					if (errs != null) errs.add(ex);
+					log.error("Failed to invoke " + listener, ex);
+					if (errs != null)
+						errs.add(ex);
 				}
 			}
 		}
@@ -1310,11 +1377,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					listener.afterComponentAttached(comp, page);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+listener, ex);
+					log.error("Failed to invoke " + listener, ex);
 				}
 			}
 		}
 	}
+
 	public void afterComponentDetached(Component comp, Page prevpage) {
 		if (_uiCycles != null) {
 			for (Iterator<UiLifeCycle> it = new LinkedList<UiLifeCycle>(_uiCycles).iterator(); it.hasNext();) {
@@ -1322,11 +1390,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					listener.afterComponentDetached(comp, prevpage);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+listener, ex);
+					log.error("Failed to invoke " + listener, ex);
 				}
 			}
 		}
 	}
+
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
 		if (_uiCycles != null) {
 			for (Iterator<UiLifeCycle> it = new LinkedList<UiLifeCycle>(_uiCycles).iterator(); it.hasNext();) {
@@ -1334,11 +1403,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					listener.afterComponentMoved(parent, child, prevparent);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+listener, ex);
+					log.error("Failed to invoke " + listener, ex);
 				}
 			}
 		}
 	}
+
 	private void afterPageAttached(Page page, Desktop desktop) {
 		if (_uiCycles != null) {
 			for (Iterator<UiLifeCycle> it = new LinkedList<UiLifeCycle>(_uiCycles).iterator(); it.hasNext();) {
@@ -1346,11 +1416,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					listener.afterPageAttached(page, desktop);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+listener, ex);
+					log.error("Failed to invoke " + listener, ex);
 				}
 			}
 		}
 	}
+
 	private void afterPageDetached(Page page, Desktop prevdesktop) {
 		if (_uiCycles != null) {
 			for (Iterator<UiLifeCycle> it = new LinkedList<UiLifeCycle>(_uiCycles).iterator(); it.hasNext();) {
@@ -1358,7 +1429,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					listener.afterPageDetached(page, prevdesktop);
 				} catch (Throwable ex) {
-					log.error("Failed to invoke "+listener, ex);
+					log.error("Failed to invoke " + listener, ex);
 				}
 			}
 		}
@@ -1368,33 +1439,33 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public boolean enableServerPush(boolean enable) {
 		return enableServerPush(enable, null);
 	}
-	
+
 	public boolean enableServerPush(boolean enable, Serializable enabler) {
 		return enableServerPush(null, enable, enabler);
 	}
-	
+
 	//ZK-1840 make sure the serverpush does not get enabled/disabled multiple times, to keep reference counting consistent
 	//and provide possibility to disable/enable in the same execution
 	private boolean enableServerPush(ServerPush serverPush, boolean enable, Serializable enabler) {
-		synchronized(enablers) {
+		synchronized (enablers) {
 			boolean enablersEmptyBefore = enablers.isEmpty();
-			if(enable) {
+			if (enable) {
 				// B65-ZK-2105: Do not add if enabler is null.
-				if(enabler != null && !enablers.add(enabler)) {
+				if (enabler != null && !enablers.add(enabler)) {
 					log.debug("trying to enable already enabled serverpush by: " + enabler);
 					return false;
 				}
-				if(enablersEmptyBefore) {
+				if (enablersEmptyBefore) {
 					return enableServerPush0(serverPush, enable);
 				}
-			} else { 
+			} else {
 				// B65-ZK-2105: Do remove if enabler is null.
-				if(enabler != null && !enablers.remove(enabler)) {
+				if (enabler != null && !enablers.remove(enabler)) {
 					log.debug("trying to disable already disabled serverpush by: " + enabler);
 					return false;
 				}
 				// B65-ZK-2105: No need to check if enablers is empty before, it would cause B30-2202620 side effect.
-				if(enablers.isEmpty()) {
+				if (enablers.isEmpty()) {
 					return enableServerPush0(serverPush, enable);
 				}
 			}
@@ -1402,40 +1473,51 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//nothing to do already enabled/disabled by this "enabler"
 		return false;
 	}
-	
+
+	public boolean enableServerPush(ServerPush serverpush) {
+		final boolean serverPushAlreadyExists = _spush != null, enable = serverpush != null;
+		if (serverPushAlreadyExists != enable || serverpush != _spush) {
+			if (serverPushAlreadyExists)
+				enableServerPush(false, null);
+			if (enable)
+				enableServerPush(serverpush, true, null);
+		}
+		return serverPushAlreadyExists;
+	}
+
 	private boolean enableServerPush0(ServerPush sp, boolean enable) {
 		if (_sess == null)
 			throw new IllegalStateException("Server push cannot be enabled in a working thread");
 
 		final boolean serverPushAlreadyExists = _spush != null;
-		
-		
+
 		if (serverPushAlreadyExists != enable) {
-			final Integer icnt = (Integer)_sess.getAttribute(ATTR_PUSH_COUNT);
-			int cnt = icnt != null ? icnt.intValue(): 0;
+			final Integer icnt = (Integer) _sess.getAttribute(ATTR_PUSH_COUNT);
+			int cnt = icnt != null ? icnt.intValue() : 0;
 			if (enable) {
 				if (Executions.getCurrent() == null)
 					throw new IllegalStateException("Server Push cannot be started without execution");
 
 				final int maxcnt = _wapp.getConfiguration().getSessionMaxPushes();
 				if (maxcnt >= 0 && cnt >= maxcnt)
-					throw new UiException(cnt > 0 ? "Too many concurrent push connections per session: "+cnt:
-						"Server push is disabled");
+					throw new UiException(cnt > 0 ? "Too many concurrent push connections per session: " + cnt
+							: "Server push is disabled");
 
 				if (sp != null) {
 					_spush = sp;
 				} else {
 					final Class cls = getDevice().getServerPushClass();
 					if (cls == null)
-						throw new UiException("No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
+						throw new UiException(
+								"No server push defined. Make sure you are using ZK PE or EE, or you have configured your own implementation");
 
-					_spush = ((WebAppCtrl)_wapp).getUiFactory().newServerPush(this, cls);
+					_spush = ((WebAppCtrl) _wapp).getUiFactory().newServerPush(this, cls);
 				}
 				_spush.start(this);
 				_spushShallStop = false;
 				++cnt;
 			} else if (_spush.isActive()) {
-				if(enablers.isEmpty()) {
+				if (enablers.isEmpty()) {
 					_spushShallStop = true;
 					--cnt;
 				}
@@ -1445,30 +1527,21 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				--cnt;
 			}
 			_sess.setAttribute(ATTR_PUSH_COUNT, new Integer(cnt));
-		} else if(enable) {
+		} else if (enable) {
 			//B65-ZK-1840 make sure the serverpush resumes in case stopped during that executions
 			_spushShallStop = false;
 		}
 		return serverPushAlreadyExists;
 	}
-	public boolean enableServerPush(ServerPush serverpush) {
-		final boolean serverPushAlreadyExists = _spush != null,
-			enable = serverpush != null;
-		if (serverPushAlreadyExists != enable || serverpush != _spush) {
-			if (serverPushAlreadyExists)
-				enableServerPush(false, null);
-			if (enable)
-				enableServerPush(serverpush, true, null);
-		}
-		return serverPushAlreadyExists;
-	}
-	
+
 	public boolean isServerPushEnabled() {
 		return _spush != null;
 	}
+
 	public ServerPush getServerPush() {
 		return _spush;
 	}
+
 	public <T extends Event> void scheduleServerPush(EventListener<T> listener, T event) {
 		if (listener == null)
 			throw new IllegalArgumentException("null listener");
@@ -1479,7 +1552,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				if (log.isDebugEnabled()) {
 					log.debug("scheduleServerPush: [{}]", event);
 				}
-				
+
 				synchronized (_schedInfos) { //must be thread safe
 					if (_dummyTarget == null) {
 						_dummyTarget = new AbstractComponent();
@@ -1490,21 +1563,23 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		});
 	}
+
 	public boolean scheduledServerPush() {
 		return !_schedInfos.isEmpty(); //no need to sync
 	}
+
 	private void checkSeverPush(String what) {
 		if (_spush == null)
 			if (isAlive())
-				throw new IllegalStateException("Before calling Executions."+what+"(), the server push must be enabled for "+this);
+				throw new IllegalStateException(
+						"Before calling Executions." + what + "(), the server push must be enabled for " + this);
 			else
 				throw new DesktopUnavailableException("Stopped");
 	}
-	public boolean activateServerPush(long timeout)
-	throws InterruptedException {
+
+	public boolean activateServerPush(long timeout) throws InterruptedException {
 		checkSeverPush("activate");
-		if (Events.inEventListener()
-		&& Executions.getCurrent().getDesktop() == this)
+		if (Events.inEventListener() && Executions.getCurrent().getDesktop() == this)
 			throw new IllegalStateException("No need to invoke Executions.activate() in an event listener");
 
 		if (log.isDebugEnabled()) {
@@ -1512,6 +1587,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return _spush.activate(timeout);
 	}
+
 	public void deactivateServerPush() {
 		if (log.isDebugEnabled()) {
 			log.debug("activateServerPush, _spush's activation is [{}]", _spush.isActive());
@@ -1528,17 +1604,17 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		//a problem)
 		//On the other hand, most pages don't listen onPiggyback at all,
 		//so _piggybackListened is good enough to improve the performance
-		if (listen) _piggybackListened = true;
+		if (listen)
+			_piggybackListened = true;
 	}
+
 	public void onPiggyback() {
 		//Note: we don't post ON_PIGGYBACK twice in an execution
 		//(performance concern and back-compatibility).
-		if (_piggybackListened
-		&& Executions.getCurrent().getAttribute(ATTR_PIGGYBACK_POSTED) == null) {
-			for (Page page: _pages) {
+		if (_piggybackListened && Executions.getCurrent().getAttribute(ATTR_PIGGYBACK_POSTED) == null) {
+			for (Page page : _pages) {
 				if (Executions.getCurrent().isAsyncUpdate(page)) { //ignore new created pages
-					for (Component root = page.getFirstRoot();
-					root != null; root = root.getNextSibling()) {
+					for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling()) {
 						if (Events.isListened(root, Events.ON_PIGGYBACK, false)) { //asap+deferrable
 							Events.postEvent(new Event(Events.ON_PIGGYBACK, root));
 							Executions.getCurrent().setAttribute(ATTR_PIGGYBACK_POSTED, Boolean.TRUE);
@@ -1550,35 +1626,38 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		if (!_schedInfos.isEmpty())
 			Events.postEvent(ON_SCHEDULE, _dummyTarget, null);
-			//we could not process them here (otherwise, event handling, thread
-			//might not work)
-			//Thus, we post an event and handle it in _dummyTarget
+		//we could not process them here (otherwise, event handling, thread
+		//might not work)
+		//Thus, we post an event and handle it in _dummyTarget
 
 		if (_spush != null)
 			_spush.onPiggyback();
 	}
-	private static final String ATTR_PIGGYBACK_POSTED =
-		"org.zkoss.zk.ui.impl.piggyback.posted";
+
+	private static final String ATTR_PIGGYBACK_POSTED = "org.zkoss.zk.ui.impl.piggyback.posted";
 
 	//AU Response//
 	public void responseSent(String reqId, Object response) {
 		if (reqId != null)
 			_lastRes = new ReqResult(reqId, response);
 	}
+
 	public Object getLastResponse(String reqId) {
-		return _lastRes != null && _lastRes.id.equals(reqId) ?
-			_lastRes.response: null;
+		return _lastRes != null && _lastRes.id.equals(reqId) ? _lastRes.response : null;
 	}
+
 	public int getResponseId(boolean advance) {
 		if (advance && ++_resId > MAX_RESPONSE_ID)
 			_resId = 1;
 		return _resId;
 	}
+
 	public void setResponseId(int resId) {
 		if (resId > MAX_RESPONSE_ID)
-			throw new IllegalArgumentException("Invalid response ID: "+resId);
-		_resId = resId < 0 ? 0: resId;
+			throw new IllegalArgumentException("Invalid response ID: " + resId);
+		_resId = resId < 0 ? 0 : resId;
 	}
+
 	public List<AuResponse> piggyResponse(Collection<AuResponse> response, boolean reset) {
 		if (response != null) {
 			if (_piggyRes == null)
@@ -1587,37 +1666,37 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 
 		List<AuResponse> l = _piggyRes;
-		if (reset) _piggyRes = null;
+		if (reset)
+			_piggyRes = null;
 		return l;
 	}
 
 	public void invalidate() {
-		for (Page page: _pages)
-			if (((PageCtrl)page).getOwner() == null)
+		for (Page page : _pages)
+			if (((PageCtrl) page).getOwner() == null)
 				page.invalidate();
 	}
 
 	public Storage getStorage() {
 		_storageLock.lock();
 		try {
-			Storage storage = (Storage) getAttribute(
-					this.getClass().getName());
+			Storage storage = (Storage) getAttribute(this.getClass().getName());
 			if (storage == null) {
 				setAttribute(this.getClass().getName(), storage = new Storage() {
-							private ConcurrentHashMap<String, Object> _cache = new ConcurrentHashMap<String, Object>();
+					private ConcurrentHashMap<String, Object> _cache = new ConcurrentHashMap<String, Object>();
 
-							public <T> T getItem(String key) {
-								return (T) _cache.get(key);
-							}
+					public <T> T getItem(String key) {
+						return (T) _cache.get(key);
+					}
 
-							public <T> void setItem(String key, T value) {
-								_cache.put(key, (Object) value);
-							}
+					public <T> void setItem(String key, T value) {
+						_cache.put(key, (Object) value);
+					}
 
-							public <T> T removeItem(String key) {
-								return (T) _cache.remove(key);
-							}
-						});
+					public <T> T removeItem(String key) {
+						return (T) _cache.remove(key);
+					}
+				});
 			}
 			return storage;
 		} finally {
@@ -1628,28 +1707,35 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static class ReqResult {
 		private final String id;
 		private final Object response;
+
 		private ReqResult(String id, Object response) {
 			this.id = id;
 			this.response = response;
 		}
 	}
+
 	private static class RecycleInfo implements java.io.Serializable {
 		private final int execId;
 		private final List<String> uuids = new LinkedList<String>();
+
 		private RecycleInfo(int execId) {
 			this.execId = execId;
 		}
+
 		public String toString() {
 			return '[' + execId + ": " + uuids + ']';
 		}
 	}
+
 	private static class ScheduleInfo<T extends Event> implements java.io.Serializable {
 		private final EventListener<T> _listener;
 		private final T _event;
+
 		private ScheduleInfo(EventListener<T> listener, T event) {
 			_listener = listener;
 			_event = event;
 		}
+
 		private void invoke() throws Exception {
 			if (log.isDebugEnabled()) {
 				log.debug("Handling schedule info, the event is [{}]", _event);
@@ -1657,6 +1743,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_listener.onEvent(_event);
 		}
 	}
+
 	private class ScheduleListener implements EventListener<Event>, java.io.Serializable {
 		public void onEvent(Event event) throws Exception {
 			final long max = System.currentTimeMillis() + getMaxSchedTime();
@@ -1680,8 +1767,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 								_schedInfos.add(j++, it.next());
 						}
 						if (t instanceof Exception)
-							throw (Exception)t;
-						throw (Error)t;
+							throw (Exception) t;
+						throw (Error) t;
 					}
 				}
 				if (System.currentTimeMillis() > max)
@@ -1689,6 +1776,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			}
 		}
 	}
+
 	/** The maximal allowed time to run scheduled listeners.
 	 */
 	private static long getMaxSchedTime() {
@@ -1700,9 +1788,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				try {
 					int v = Integer.parseInt(val); //unit: seconds
 					if (v > 0)
-						_maxSchedTime = ((long)v) * 1000;
+						_maxSchedTime = ((long) v) * 1000;
 				} catch (Throwable t) {
-					log.warn("Ignored library property, "+PROP+": not a number, "+val);
+					log.warn("Ignored library property, " + PROP + ": not a number, " + val);
 				}
 			}
 			if (_maxSchedTime == null)
@@ -1710,5 +1798,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return _maxSchedTime.longValue();
 	}
+
 	private static Long _maxSchedTime;
 }

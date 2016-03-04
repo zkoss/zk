@@ -29,11 +29,11 @@ public interface ComboitemRendererExt {
 	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default comboitem is created as follow.
-<pre><code>
-final Comboitem item = new Comboitem();
-item.applyProperties();
-return item;
-</code></pre>
+	<pre><code>
+	final Comboitem item = new Comboitem();
+	item.applyProperties();
+	return item;
+	</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Comboitem#setParent}.
 	 * 

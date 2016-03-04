@@ -14,15 +14,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zul.event;
 
-import java.util.Set;
-import java.util.Map;
-import java.util.List;
-
 import static org.zkoss.lang.Generics.cast;
 
-import org.zkoss.zk.ui.Component;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
 /**
@@ -39,10 +39,9 @@ public class RenderEvent<T extends Component> extends Event {
 	 */
 	public static final <C extends Component> RenderEvent<C> getRenderEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		final List<String> sitems = cast((List)data.get("items"));
+		final List<String> sitems = cast((List) data.get("items"));
 		final Set<C> items = AuRequests.convertToItems(request.getDesktop(), sitems);
-		return new RenderEvent<C>(request.getCommand(),
-			request.getComponent(), items);
+		return new RenderEvent<C>(request.getCommand(), request.getComponent(), items);
 	}
 
 	/**
@@ -50,9 +49,11 @@ public class RenderEvent<T extends Component> extends Event {
 	 */
 	public RenderEvent(String name, Component comp, Set<T> items) {
 		super(name, comp);
-		if (items == null) throw new IllegalArgumentException();
+		if (items == null)
+			throw new IllegalArgumentException();
 		_items = items;
 	}
+
 	public RenderEvent(String name, Set<T> items) {
 		this(name, null, items);
 	}

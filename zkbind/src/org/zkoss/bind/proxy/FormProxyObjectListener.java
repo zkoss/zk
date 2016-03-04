@@ -23,7 +23,7 @@ public interface FormProxyObjectListener extends Serializable {
 	 * Call when the data in FormProxyObject change
 	 */
 	public void onDataChange(Object o);
-	
+
 	/**
 	 * Call when setting form.dirty true
 	 */

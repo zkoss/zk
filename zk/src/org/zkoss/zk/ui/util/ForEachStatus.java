@@ -32,15 +32,18 @@ public interface ForEachStatus {
 	/** Returns the status of the enclosing forEach statement.
 	 */
 	public ForEachStatus getPrevious();
+
 	/** Returns the object of this iteration.
 	 * @deprecated As of release 8.0.0, use {@link #getCurrent()} instead.
 	 */
 	public Object getEach();
+
 	/**
 	 * Returns the object of this iteration.
 	 * @since 8.0.0
 	 */
 	public Object getCurrent();
+
 	/** Returns the index of the current round of the iteration.
 	 * If iteration is being performed over a subset of an underlying array,
 	 * collection, or other type, the index returned is absolute with respect
@@ -50,10 +53,12 @@ public interface ForEachStatus {
 	 * (forEachBegin is 4), then the first value returned by this method will be 4.
 	 */
 	public int getIndex();
+
 	/** Returns the index (starting from 0) that the iteration begins at,
 	 * or null if not specified (and 0 is assumed).
 	 */
 	public Integer getBegin();
+
 	/** Returns the index (starting from 0) that the iteration ends at,
 	 * or null if not specified (and the last element is assumed).
 	 */
@@ -63,15 +68,18 @@ public interface ForEachStatus {
 	 * @since 8.0.0
 	 */
 	public boolean isFirst();
+
 	/**Returns whether the current round is the last pass through the iteration
 	 * @since 8.0.0
 	 */
 	public boolean isLast();
+
 	/** Returns the value of the 'step' attribute for the associated tag,
 	 * or null if no 'step' attribute was specified.
 	 * @since 8.0.0
 	 */
 	public Integer getStep();
+
 	/**
 	 * Retrieves the "count" of the current round of the iteration. The count is
 	 * a relative, 1-based sequence number identifying the current "round" of

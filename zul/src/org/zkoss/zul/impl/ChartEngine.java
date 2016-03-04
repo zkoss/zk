@@ -34,4 +34,3 @@ public interface ChartEngine {
 	 */
 	public byte[] drawChart(Object data);
 }
-		

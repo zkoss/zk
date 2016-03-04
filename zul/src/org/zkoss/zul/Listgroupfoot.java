@@ -34,23 +34,26 @@ import org.zkoss.zk.ui.Component;
 public class Listgroupfoot extends Listitem {
 	public Listgroupfoot() {
 	}
+
 	public Listgroupfoot(String label) {
 		this();
 		setLabel(label);
 	}
+
 	public <T> Listgroupfoot(String label, T value) {
 		this();
 		setLabel(label);
 		setValue(value);
 	}
-	
+
 	/** Returns the value of the {@link Label} it contains, or null
 	 * if no such cell.
 	 */
 	public String getLabel() {
 		final Component cell = getFirstChild();
-		return cell != null && cell instanceof Label ? ((Label)cell).getValue(): null;
+		return cell != null && cell instanceof Label ? ((Label) cell).getValue() : null;
 	}
+
 	/** Sets the value of the {@link Label} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
@@ -64,7 +67,7 @@ public class Listgroupfoot extends Listitem {
 	}
 
 	private Listcell autoFirstCell() {
-		Listcell cell = (Listcell)getFirstChild();
+		Listcell cell = (Listcell) getFirstChild();
 		if (cell == null) {
 			cell = new Listcell();
 			cell.applyProperties();

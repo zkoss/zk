@@ -14,11 +14,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import org.zkoss.zk.xel.ExValue;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.EvaluatorRef;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Represents a client-side event listener for the peer widget.
@@ -47,7 +46,7 @@ public class WidgetListener extends ConditionValue {
 		if (name == null || script == null)
 			throw new IllegalArgumentException();
 		_name = name;
-		_script = script != null ? new ExValue(script, String.class): null;
+		_script = script != null ? new ExValue(script, String.class) : null;
 	}
 
 	/** Returns the event name, such as, onClick.
@@ -55,18 +54,20 @@ public class WidgetListener extends ConditionValue {
 	public String getName() {
 		return _name;
 	}
+
 	/** Returns the script associated with this event handler.
 	 * @since 5.0.2
 	 */
 	public String getScript(Component comp) {
-		return _script != null ? (String)_script.getValue(_evalr, comp): null;
+		return _script != null ? (String) _script.getValue(_evalr, comp) : null;
 	}
+
 	/** Returns the script passed to the constructor.
 	 * In other words, it might contains EL. 
 	 * @since 5.0.2
 	 */
 	public String getRawScript() {
-		return _script != null ? _script.getRawValue(): null;
+		return _script != null ? _script.getRawValue() : null;
 	}
 
 	public void assign(Component comp) {

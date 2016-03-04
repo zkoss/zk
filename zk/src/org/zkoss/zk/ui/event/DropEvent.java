@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event cause by user's dragging and dropping a component.
@@ -40,26 +40,26 @@ public class DropEvent extends MouseEvent {
 		final Map<String, Object> data = request.getData();
 		final int keys = AuRequests.parseKeys(data);
 		return new DropEvent(request.getCommand(), request.getComponent(),
-			request.getDesktop().getComponentByUuid((String)data.get("dragged")),
-			AuRequests.getInt(data, "x", 0), AuRequests.getInt(data, "y", 0),
-			AuRequests.getInt(data, "pageX", 0), AuRequests.getInt(data, "pageY", 0),
-			keys);
+				request.getDesktop().getComponentByUuid((String) data.get("dragged")), AuRequests.getInt(data, "x", 0),
+				AuRequests.getInt(data, "y", 0), AuRequests.getInt(data, "pageX", 0),
+				AuRequests.getInt(data, "pageY", 0), keys);
 	}
 
 	/** Constructs a drop event.
 	 * @param dragged The component being dragged and drop to {@link #getTarget}.
 	 * @since 5.0.0
 	 */
-	public DropEvent(String name, Component target, Component dragged,
-	int x, int y, int pageX, int pageY, int keys) {
+	public DropEvent(String name, Component target, Component dragged, int x, int y, int pageX, int pageY, int keys) {
 		super(name, target, x, y, pageX, pageY, keys);
 		_dragged = dragged;
 	}
+
 	/** Returns the component being dragged and drop to {@link #getTarget}.
 	 */
 	public final Component getDragged() {
 		return _dragged;
 	}
+
 	/** Inherited from {@link MouseEvent}, but not applicable to {@link DropEvent}.
 	 * It always returns null.
 	 */

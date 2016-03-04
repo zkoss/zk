@@ -27,9 +27,9 @@ import org.zkoss.zul.TreeModel;
 public class TreeDataEvent {
 	/** Identifies changing contents of nodes. */
 	public static final int CONTENTS_CHANGED = 0;
-	/** Identifies the addition of children to a node. */    
+	/** Identifies the addition of children to a node. */
 	public static final int INTERVAL_ADDED = 1;
-	/** Identifies the removal of children to a node. */   
+	/** Identifies the removal of children to a node. */
 	public static final int INTERVAL_REMOVED = 2;
 	/** Identifies the structure of the tree has changed. @since 5.0.6  */
 	public static final int STRUCTURE_CHANGED = 3;
@@ -72,8 +72,7 @@ public class TreeDataEvent {
 	 * @param indexFrom the lower index of the change range
 	 * @param indexTo the upper index of the change range
 	 */
-	public TreeDataEvent(TreeModel model, int type,
-	int[] nodePath, int indexFrom, int indexTo) {
+	public TreeDataEvent(TreeModel model, int type, int[] nodePath, int indexFrom, int indexTo) {
 		_model = model;
 		_type = type;
 		_nodePath = nodePath;
@@ -81,7 +80,7 @@ public class TreeDataEvent {
 		_indexTo = indexTo;
 		_affectedPath = null;
 	}
-	
+
 	/** Constructor.
 	 *
 	 * @param type one of {@link #CONTENTS_CHANGED},
@@ -96,8 +95,7 @@ public class TreeDataEvent {
 	 * @param indexTo the upper index of the change range
 	 * @param affectedPath the path to be removed or added
 	 */
-	public TreeDataEvent(TreeModel model, int type,
-	int[] nodePath, int indexFrom, int indexTo, int[] affectedPath) {
+	public TreeDataEvent(TreeModel model, int type, int[] nodePath, int indexFrom, int indexTo, int[] affectedPath) {
 		_model = model;
 		_type = type;
 		_nodePath = nodePath;
@@ -105,13 +103,13 @@ public class TreeDataEvent {
 		_indexTo = indexTo;
 		_affectedPath = affectedPath;
 	}
-	
+
 	/** Returns the tree model that fires this event.
 	 */
 	public TreeModel getModel() {
 		return _model;
 	}
-	
+
 	/** Returns the event type. One of {@link #CONTENTS_CHANGED},
 	 * {@link #INTERVAL_ADDED}, or {@link #INTERVAL_REMOVED}.
 	 */
@@ -127,26 +125,26 @@ public class TreeDataEvent {
 	 * If {@link #STRUCTURE_CHANGED} or {@link #MULTIPLE_CHANGED}, it is null.
 	 * @return the parent node that one of its children being modified 
 	 */
-	public int[] getPath(){
+	public int[] getPath() {
 		return _nodePath;
 	}
-	
+
 	/**
 	 * Return the lower index of the change range
 	 * @return the lower index of the change range
-	 */ 
-	public int getIndexFrom(){
+	 */
+	public int getIndexFrom() {
 		return _indexFrom;
 	}
-	
+
 	/**
 	 * Return the upper index of the change range
 	 * @return the upper index of the change range
 	 */
-	public int getIndexTo(){
+	public int getIndexTo() {
 		return _indexTo;
 	}
-	
+
 	/**
 	 * Return the path of removed node
 	 * @return the node that is removed 

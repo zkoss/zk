@@ -19,8 +19,8 @@ package org.zkoss.zk.ui.event;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event cause by user's entering a wrong data
@@ -34,14 +34,14 @@ public class ErrorEvent extends InputEvent {
 	/** Converts an AU request to an error event.
 	 * @since 5.0.4
 	 */
-	public static final
-	ErrorEvent getErrorEvent(AuRequest request, Object oldValue) {
+	public static final ErrorEvent getErrorEvent(AuRequest request, Object oldValue) {
 		final Map<String, Object> data = request.getData();
-		return new ErrorEvent(request.getCommand(), request.getComponent(),
-			Objects.toString(data.get("value")), oldValue,
-			//Bug ZK-908: replace String.valueOf by Objects.toString
-			Objects.toString(data.get("message")));
+		return new ErrorEvent(request.getCommand(), request.getComponent(), Objects.toString(data.get("value")),
+				oldValue,
+				//Bug ZK-908: replace String.valueOf by Objects.toString
+				Objects.toString(data.get("message")));
 	}
+
 	/** Constructs an error-relevant event.
 	 * @param val the new value that caused the error
 	 * @param oldValue the previous value.
@@ -49,8 +49,7 @@ public class ErrorEvent extends InputEvent {
 	 * error (notified by previous {@link ErrorEvent}) is cleared.
 	 * @since 5.0.4
 	 */
-	public ErrorEvent(String name, Component target, String val,
-	Object oldValue, String msg) {
+	public ErrorEvent(String name, Component target, String val, Object oldValue, String msg) {
 		super(name, target, val, oldValue);
 		_msg = msg;
 	}

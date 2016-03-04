@@ -18,23 +18,23 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class NotifyChangeInfo extends ExecutionInfoBase{
+public class NotifyChangeInfo extends ExecutionInfoBase {
 
 	public static final String TYPE = "notify-change";
-	
+
 	Object _base;
 	Object _prop;
-	
+
 	public NotifyChangeInfo(Component comp, Object base, Object prop, String note) {
-		super(TYPE, null,comp, note);
+		super(TYPE, null, comp, note);
 		_base = base;
 		_prop = prop;
 	}
-	
-	public JSONObject toJSON(){
+
+	public JSONObject toJSON() {
 		JSONObject json = super.toJSON();
-		putEssential(json,"base", toString(_base,100));
-		putEssential(json,"prop", toString(_prop,200));
+		putEssential(json, "base", toString(_base, 100));
+		putEssential(json, "prop", toString(_prop, 200));
 		return json;
 	}
 

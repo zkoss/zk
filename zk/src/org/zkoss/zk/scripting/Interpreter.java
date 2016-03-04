@@ -35,6 +35,7 @@ public interface Interpreter {
 	 * @param zslang the language this interpreter is associated with
 	 */
 	public void init(Page owner, String zslang);
+
 	/** Called when the interpreter is about to be destroyed.
 	 * After called, this interpreter cannot be used again.
 	 */
@@ -43,6 +44,7 @@ public interface Interpreter {
 	/** Returns the owner of this interpreter.
 	 */
 	public Page getOwner();
+
 	/** Returns the scripting language this interpreter is associated with.
 	 */
 	public String getLanguage();
@@ -78,6 +80,7 @@ public interface Interpreter {
 	/** Returns the class defined in this interpreter, or null if not found.
 	 */
 	public Class<?> getClass(String clsnm);
+
 	/** Returns the method of the specified name defined in this interpreter,
 	 * or null if not defined.
 	 *
@@ -93,10 +96,12 @@ public interface Interpreter {
 	 * @since 2.4.0
 	 */
 	public boolean containsVariable(String name);
+
 	/** Returns the value of a variable defined in this interpreter.
 	 * Note: it doesn't search the scope ({@link Scope}).
 	 */
 	public Object getVariable(String name);
+
 	/** Sets the value of a variable to this interpreter, as if
 	 * they are defined in the interpreter.
 	 *
@@ -104,6 +109,7 @@ public interface Interpreter {
 	 * if its name conflicts with any variable defined in the namespaces.
 	 */
 	public void setVariable(String name, Object value);
+
 	/** Removes the value of a variable defined in this interpreter.
 	 */
 	public void unsetVariable(String name);

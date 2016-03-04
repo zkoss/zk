@@ -33,6 +33,7 @@ public class SessionResolverImpl implements SessionResolver {
 		_ctx = ctx;
 		_req = request;
 	}
+
 	public Session getSession(boolean create) {
 		return WebManager.getSession(_ctx, _req, create);
 	}

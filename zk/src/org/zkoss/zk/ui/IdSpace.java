@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.Collection;
+
 import org.zkoss.zk.ui.ext.Scope;
 
 /**
@@ -67,22 +68,7 @@ public interface IdSpace extends Scope {
 	 * @exception ComponentNotFoundException is thrown if
 	 * this component doesn't belong to any ID space
 	 */
-	public Component getFellow(String id)
-	throws ComponentNotFoundException;
-	/** Returns a component of the specified ID in this ID space, or null
-	 * if not found.
-	 * <p>Unlike {@link #getFellow(String)}, it returns null if not found.
-	 */
-	public Component getFellowIfAny(String id);
-	/** Returns all fellows in this ID space.
-	 * The returned collection is readonly.
-	 * @since 3.0.6
-	 */
-	public Collection<Component> getFellows();
-	/** Returns whether there is a fellow named with the specified component ID.
-	 * @since 3.5.2
-	 */
-	public boolean hasFellow(String id);
+	public Component getFellow(String id) throws ComponentNotFoundException;
 
 	/** Returns a component of the specified ID in this ID space.
 	 *
@@ -95,8 +81,14 @@ public interface IdSpace extends Scope {
 	 * existence of the fellow
 	 * @since 5.0.0
 	 */
-	public Component getFellow(String id, boolean recurse)
-	throws ComponentNotFoundException;
+	public Component getFellow(String id, boolean recurse) throws ComponentNotFoundException;
+
+	/** Returns a component of the specified ID in this ID space, or null
+	 * if not found.
+	 * <p>Unlike {@link #getFellow(String)}, it returns null if not found.
+	 */
+	public Component getFellowIfAny(String id);
+
 	/** Returns a component of the specified ID in this ID space, or null
 	 * if not found.
 	 *
@@ -108,6 +100,18 @@ public interface IdSpace extends Scope {
 	 * @since 5.0.0
 	 */
 	public Component getFellowIfAny(String id, boolean recurse);
+
+	/** Returns all fellows in this ID space.
+	 * The returned collection is readonly.
+	 * @since 3.0.6
+	 */
+	public Collection<Component> getFellows();
+
+	/** Returns whether there is a fellow named with the specified component ID.
+	 * @since 3.5.2
+	 */
+	public boolean hasFellow(String id);
+
 	/** Returns whether there is a fellow named with the specified component ID.
 	 *
 	 * @param recurse whether to look up the parent ID space for the

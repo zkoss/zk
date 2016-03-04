@@ -31,11 +31,11 @@ public interface ListitemRendererExt {
 	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default list item is created as follow.
-<pre><code>
-final Listitem item = new Listitem();
-item.applyProperties();
-return item;
-</code></pre>
+	<pre><code>
+	final Listitem item = new Listitem();
+	item.applyProperties();
+	return item;
+	</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Listitem#setParent}.
 	 *
@@ -43,6 +43,7 @@ return item;
 	 * if you want {@link Listbox} to create it for you
 	 */
 	public Listitem newListitem(Listbox listbox);
+
 	/** Create an instance of {@link Listcell} that will be attached to the
 	 * <b>unloaded</b> listitem.
 	 * By unloaded we mean the listitem that is not loaded with the data
@@ -55,11 +56,11 @@ return item;
 	 * in {@link ListitemRenderer#render}.
 	 *
 	 * <p>If null is returned, the default list cell is created as follow.
-<pre><code>
-final Listcell cell = new Listcell();
-cell.applyProperties();
-return cell;
-</code></pre>
+	<pre><code>
+	final Listcell cell = new Listcell();
+	cell.applyProperties();
+	return cell;
+	</code></pre>
 	 *
 	 * <p>Note: remember to invoke {@link Listcell#applyProperties} to initialize
 	 * the properties, defined in the component definition, properly.
@@ -90,6 +91,7 @@ return cell;
 	 * the first cell (of the passed list item).
 	 */
 	public static final int DETACH_ON_RENDER = 0x0001;
+
 	/** Returns how a listbox shall render the live data.
 	 *
 	 * <p>Note: if this interface is not implemented, {@link #DETACH_ON_RENDER}

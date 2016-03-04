@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
-import java.io.Writer;
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
 
 import javax.servlet.ServletOutputStream;
 
@@ -35,9 +35,10 @@ public class ServletOutputStreamWrapper extends ServletOutputStream {
 	/** Returns a facade of the specified stream. */
 	public static ServletOutputStream getInstance(OutputStream stream) {
 		if (stream instanceof ServletOutputStream)
-			return (ServletOutputStream)stream;
+			return (ServletOutputStream) stream;
 		return new ServletOutputStreamWrapper(stream);
 	}
+
 	/** Returns a facade of the specified writer.
 	 *
 	 * @param charset the charset. If null, "UTF-8" is assumed.
@@ -51,6 +52,7 @@ public class ServletOutputStreamWrapper extends ServletOutputStream {
 			throw new IllegalArgumentException("null");
 		_stream = stream;
 	}
+
 	/**
 	 * @param charset the charset. If null, "UTF-8" is assumed.
 	 */
@@ -64,10 +66,12 @@ public class ServletOutputStreamWrapper extends ServletOutputStream {
 	public void write(int b) throws IOException {
 		_stream.write(b);
 	}
+
 	public void flush() throws IOException {
 		_stream.flush();
 		super.flush();
 	}
+
 	public void close() throws IOException {
 		_stream.close();
 		super.close();

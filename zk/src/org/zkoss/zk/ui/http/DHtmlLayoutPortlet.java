@@ -37,11 +37,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
-
 import org.zkoss.web.Attributes;
 import org.zkoss.web.portlet.Portlets;
 import org.zkoss.web.portlet.RenderHttpServletRequest;
@@ -117,13 +117,12 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		}
 	}
 
-	protected void doView(RenderRequest request, RenderResponse response)
-	throws PortletException, IOException {
+	protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
 		//try parameter first and then attribute
 		boolean bRichlet = false;
 		String path = request.getParameter(ATTR_PAGE);
 		if (path == null) {
-			path = (String)request.getAttribute(ATTR_PAGE);
+			path = (String) request.getAttribute(ATTR_PAGE);
 			if (path == null) {
 				PortletPreferences prefs = request.getPreferences();
 				path = prefs.getValue(ATTR_PAGE, null);
@@ -131,7 +130,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					path = request.getParameter(ATTR_RICHLET);
 					bRichlet = path != null;
 					if (!bRichlet) {
-						path = (String)request.getAttribute(ATTR_RICHLET);
+						path = (String) request.getAttribute(ATTR_RICHLET);
 						bRichlet = path != null;
 						if (!bRichlet) {
 							path = prefs.getValue(ATTR_RICHLET, null);
@@ -146,8 +145,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 		final Session sess = getSession(request, true);
 		if (!SessionsCtrl.requestEnter(sess)) {
-			handleError(sess, request, response, path, null,
-				Messages.get(MZk.TOO_MANY_REQUESTS));
+			handleError(sess, request, response, path, null, Messages.get(MZk.TOO_MANY_REQUESTS));
 			return;
 		}
 		SessionsCtrl.setCurrent(sess);
@@ -156,7 +154,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
 			HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
 			final Object old = I18Ns.setup(httpreq.getSession(), httpreq, httpres,
-					sess.getWebApp().getConfiguration().getResponseCharset()); 
+					sess.getWebApp().getConfiguration().getResponseCharset());
 			try {
 				if (!process(sess, request, response, path, bRichlet))
 					handleError(sess, request, response, path, null, null);
@@ -167,7 +165,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			}
 		} finally {
 			SessionsCtrl.requestExit(sess);
-			SessionsCtrl.setCurrent((Session)null);
+			SessionsCtrl.setCurrent((Session) null);
 		}
 	}
 
@@ -175,15 +173,14 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	 * Process AJAX request here instead of DHtmlUpdateServlet if the Portal Container support JSR 286. 
 	 * @since 6.5.2
 	 */
-	public void serveResource(ResourceRequest request, ResourceResponse response)
-			throws PortletException, IOException {
+	public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
 		final WebManager webman = getWebManager();
 		final WebApp wapp = webman.getWebApp();
-		
+
 		final HttpServletRequest httpreq = ResourceHttpServletRequest.getInstance(request);
 		final HttpServletResponse httpres = ResourceHttpServletResponse.getInstance(response);
 		final Session sess = getSession(request, false);
-		
+
 		final DHtmlUpdateServlet updateServlet = DHtmlUpdateServlet.getUpdateServlet(wapp);
 		boolean compress = false; //Some portal container (a.k.a GateIn) doesn't work with gzipped output stream.
 		final String sid = httpreq.getHeader("ZK-SID");
@@ -204,32 +201,31 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			response.setProperty("Cache-Control", "no-cache");
 			response.setProperty("Cache-Control", "no-store");
 			response.setProperty("Expires", "-1");
-			
+
 			updateServlet.process(sess, httpreq, httpres, compress);
 		} catch (ServletException e) {
 			e.printStackTrace();
 		} finally {
 			I18Ns.cleanup(httpreq, old);
 			SessionsCtrl.requestExit(sess);
-			SessionsCtrl.setCurrent((Session)null);
+			SessionsCtrl.setCurrent((Session) null);
 		}
 	}
-	
+
 	/** Returns the session. */
-	private Session getSession(Object request, boolean create)
-	throws PortletException {
+	private Session getSession(Object request, boolean create) throws PortletException {
 		final WebApp wapp = getWebManager().getWebApp();
-		
+
 		PortletSession psess = null;
 		if (request instanceof RenderRequest)
 			psess = ((RenderRequest) request).getPortletSession();
 		else if (request instanceof ResourceRequest)
 			psess = ((ResourceRequest) request).getPortletSession();
-		
+
 		Session sess = SessionsCtrl.getSession(wapp, psess);
 		if (sess == null && create)
 			sess = SessionsCtrl.newSession(wapp, psess, request);
-		
+
 		return sess;
 	}
 
@@ -237,31 +233,28 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 	 * @return false if the page is not found.
 	 * @since 3.0.0
 	 */
-	protected boolean process(Session sess, RenderRequest request,
-	RenderResponse response, String path, boolean bRichlet)
-	throws PortletException, IOException {
-//		if (log.isDebugEnabled()) log.debug("Creates from "+path);
+	protected boolean process(Session sess, RenderRequest request, RenderResponse response, String path,
+			boolean bRichlet) throws PortletException, IOException {
+		//		if (log.isDebugEnabled()) log.debug("Creates from "+path);
 		final WebManager webman = getWebManager();
 		final WebApp wapp = webman.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final WebAppCtrl wappc = (WebAppCtrl) wapp;
 
 		final HttpServletRequest httpreq = RenderHttpServletRequest.getInstance(request);
 		final HttpServletResponse httpres = RenderHttpServletResponse.getInstance(response);
 		final ServletContext svlctx = wapp.getServletContext();
 
 		final DesktopRecycle dtrc = wapp.getConfiguration().getDesktopRecycle();
-		Desktop desktop = dtrc != null ?
-			DesktopRecycles.beforeService(dtrc, svlctx, sess, httpreq, httpres, path): null;
+		Desktop desktop = dtrc != null ? DesktopRecycles.beforeService(dtrc, svlctx, sess, httpreq, httpres, path)
+				: null;
 
 		try {
 			if (desktop != null) { //recycle
 				final Page page = Utils.getMainPage(desktop);
 				if (page != null) {
-					final Execution exec =
-						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					final Execution exec = new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
 					fixContentType(response);
-					wappc.getUiEngine()
-						.recycleDesktop(exec, page, response.getWriter());
+					wappc.getUiEngine().recycleDesktop(exec, page, response.getWriter());
 				} else
 					desktop = null; //something wrong (not possible; just in case)
 			}
@@ -271,10 +264,9 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				if (desktop == null) //forward or redirect
 					return true;
 
-				final RequestInfo ri = new RequestInfoImpl(
-					wapp, sess, desktop, httpreq,
-					PageDefinitions.getLocator(wapp, path));
-				((SessionCtrl)sess).notifyClientRequest(true);
+				final RequestInfo ri = new RequestInfoImpl(wapp, sess, desktop, httpreq,
+						PageDefinitions.getLocator(wapp, path));
+				((SessionCtrl) sess).notifyClientRequest(true);
 
 				final Page page;
 				final PageRenderPatch patch = getRenderPatch();
@@ -286,32 +278,30 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 						return false; //not found
 
 					page = WebManager.newPage(uf, ri, richlet, httpres, path);
-					final Execution exec =
-						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					final Execution exec = new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
 					fixContentType(response);
 					if (isJSR286) {
 						ResourceURL url = response.createResourceURL();
-						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
+						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()),
+								Page.PAGE_SCOPE);
 						page.setAttribute("org.zkoss.portlet2.namespace", getNamespace(response), Page.PAGE_SCOPE);
 					}
-					wappc.getUiEngine().execNewPage(exec, richlet, page,
-						out != null ? out: response.getWriter());
+					wappc.getUiEngine().execNewPage(exec, richlet, page, out != null ? out : response.getWriter());
 				} else if (path != null) {
 					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
 					if (pagedef == null)
 						return false; //not found
 
 					page = WebManager.newPage(uf, ri, pagedef, httpres, path);
-					final Execution exec =
-						new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
+					final Execution exec = new ExecutionImpl(svlctx, httpreq, httpres, desktop, page);
 					fixContentType(response);
 					if (isJSR286) {
 						ResourceURL url = response.createResourceURL();
-						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()), Page.PAGE_SCOPE);
+						page.setAttribute("org.zkoss.portlet2.resourceURL", response.encodeURL(url.toString()),
+								Page.PAGE_SCOPE);
 						page.setAttribute("org.zkoss.portlet2.namespace", getNamespace(response), Page.PAGE_SCOPE);
 					}
-					wappc.getUiEngine().execNewPage(exec, pagedef, page,
-						out != null ? out: response.getWriter());
+					wappc.getUiEngine().execNewPage(exec, pagedef, page, out != null ? out : response.getWriter());
 				} else
 					return true; //nothing to do
 
@@ -324,7 +314,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 		}
 		return true; //success
 	}
-	
+
 	/** Returns the namespace for resource request parameters
 	 * <p>
 	 * Default: "".
@@ -336,7 +326,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			return "";
 		return response.getNamespace();
 	}
-	
+
 	private static PageRenderPatch getRenderPatch() {
 		if (_prpatch != null)
 			return _prpatch;
@@ -346,22 +336,22 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 				return _prpatch;
 
 			final PageRenderPatch patch;
-			final String clsnm = Library.getProperty(
-				org.zkoss.zk.ui.sys.Attributes.PORTLET_RENDER_PATCH_CLASS);
+			final String clsnm = Library.getProperty(org.zkoss.zk.ui.sys.Attributes.PORTLET_RENDER_PATCH_CLASS);
 			if (clsnm == null) {
 				patch = new PageRenderPatch() {
 					public Writer beforeRender(RequestInfo reqInfo) {
 						return null;
 					}
+
 					public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
-					throws IOException {
+							throws IOException {
 					}
 				};
 			} else {
 				try {
-					patch = (PageRenderPatch)Classes.newInstanceByThread(clsnm);
+					patch = (PageRenderPatch) Classes.newInstanceByThread(clsnm);
 				} catch (ClassCastException ex) {
-					throw new UiException(clsnm+" must implement "+PageRenderPatch.class.getName());
+					throw new UiException(clsnm + " must implement " + PageRenderPatch.class.getName());
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex, "Unable to instantiate");
 				}
@@ -369,6 +359,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			return _prpatch = patch;
 		}
 	}
+
 	private static volatile PageRenderPatch _prpatch;
 
 	private static void fixContentType(RenderResponse response) {
@@ -379,26 +370,24 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 	/** Returns the layout servlet.
 	 */
-	private final WebManager getWebManager()
-	throws PortletException {
-		final WebManager webman =
-			(WebManager)getPortletContext().getAttribute(WebManager.ATTR_WEB_MANAGER);
+	private final WebManager getWebManager() throws PortletException {
+		final WebManager webman = (WebManager) getPortletContext().getAttribute(WebManager.ATTR_WEB_MANAGER);
 		if (webman == null)
-			throw new PortletException("The Layout Servlet not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
+			throw new PortletException("The Layout Servlet not found. Make sure <load-on-startup> is specified for "
+					+ DHtmlLayoutServlet.class.getName());
 		return webman;
 	}
+
 	/** Handles exception being thrown when rendering a page.
 	 * @param ex the exception being throw. If null, it means the page
 	 * is not found.
 	 */
-	private void handleError(Session sess, RenderRequest request,
-	RenderResponse response, String path, Throwable err, String msg)
-	throws PortletException, IOException {
+	private void handleError(Session sess, RenderRequest request, RenderResponse response, String path, Throwable err,
+			String msg) throws PortletException, IOException {
 		if (err != null) {
-		//Bug 1714094: we have to handle err, because Web container
-		//didn't allow developer to intercept errors caused by inclusion
-			final String errpg = sess.getWebApp().getConfiguration()
-				.getErrorPage(sess.getDeviceType(), err);
+			//Bug 1714094: we have to handle err, because Web container
+			//didn't allow developer to intercept errors caused by inclusion
+			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
 			if (errpg != null) {
 				try {
 					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
@@ -407,30 +396,27 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
 					if (process(sess, request, response, errpg, false))
 						return; //done
-					log.warn("The error page not found: "+errpg);
+					log.warn("The error page not found: " + errpg);
 				} catch (IOException ex) { //eat it (connection off)
 				} catch (Throwable ex) {
-					log.warn("Failed to load the error page: "+errpg, ex);
+					log.warn("Failed to load the error page: " + errpg, ex);
 				}
 			}
 
 			if (msg == null)
-				msg = Messages.get(MZk.PAGE_FAILED,
-					new Object[] {path, Exceptions.getMessage(err),
-						Exceptions.formatStackTrace(null, err, null, 6)});
+				msg = Messages.get(MZk.PAGE_FAILED, new Object[] { path, Exceptions.getMessage(err),
+						Exceptions.formatStackTrace(null, err, null, 6) });
 		} else {
 			if (msg == null)
-				msg = path != null ?
-					Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path}):
-					Messages.get(MZk.PORTLET_PAGE_REQUIRED);
+				msg = path != null ? Messages.get(MZk.PAGE_NOT_FOUND, new Object[] { path })
+						: Messages.get(MZk.PORTLET_PAGE_REQUIRED);
 		}
 
 		final Map<String, String> attrs = new HashMap<String, String>();
 		attrs.put(Attributes.ALERT_TYPE, "error");
 		attrs.put(Attributes.ALERT, msg);
-		Portlets.include(getPortletContext(), request, response,
-			"~./html/alert.dsp", attrs, Portlets.OVERWRITE_URI);
-			//Portlets doesn't support PASS_THRU_ATTR yet (because
-			//protlet request will mangle attribute name)
+		Portlets.include(getPortletContext(), request, response, "~./html/alert.dsp", attrs, Portlets.OVERWRITE_URI);
+		//Portlets doesn't support PASS_THRU_ATTR yet (because
+		//protlet request will mangle attribute name)
 	}
 }

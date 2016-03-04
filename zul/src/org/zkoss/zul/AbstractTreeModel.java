@@ -59,9 +59,8 @@ import org.zkoss.zul.ext.TreeSelectableModel;
  * @author tomyeh
  * @since 3.0.0
  */
-abstract public class AbstractTreeModel<E> implements TreeModel<E>,
-TreeSelectableModel, TreeOpenableModel, Selectable<E>, Openable<E>,
-java.io.Serializable, Pageable, PagingEventPublisher {
+public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectableModel, TreeOpenableModel,
+		Selectable<E>, Openable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
@@ -75,6 +74,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	private boolean _multiple;
 
 	private SelectionControl<E> _ctrl;
+
 	public void setSelectionControl(SelectionControl ctrl) {
 		_ctrl = ctrl;
 	}
@@ -82,6 +82,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	public SelectionControl getSelectionControl() {
 		return _ctrl;
 	}
+
 	/**
 	 * Creates a {@link AbstractTreeModel}.
 	 * 
@@ -99,11 +100,12 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		});
 		_ctrl = new DefaultSelectionControl(this);
 	}
-	
+
 	private void updatePath(TreeDataEvent event) {
 		final int type = event.getType();
 		final int[] affectedPath = event.getAffectedPath();
-		if (affectedPath == null || affectedPath.length < 1) return;
+		if (affectedPath == null || affectedPath.length < 1)
+			return;
 		switch (type) {
 		case TreeDataEvent.INTERVAL_REMOVED:
 			internalDataChange(_opens, affectedPath, true);
@@ -115,7 +117,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 			break;
 		}
 	}
-	
+
 	private void internalDataChange(Set<Path> openOrSelect, int[] affectedPath, boolean isRemoved) {
 		List<Path> list = new LinkedList<Path>(openOrSelect);
 		int update = isRemoved ? -1 : 1;
@@ -136,6 +138,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	public E getRoot() {
 		return _root;
 	}
+
 	/** Sets the root of the tree model.
 	 */
 	/*package*/ void setRootDirectly(E root) {
@@ -147,6 +150,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	public void fireEvent(E node, int indexFrom, int indexTo, int evtType) {
 		fireEvent(evtType, getPath(node), indexFrom, indexTo);
 	}
+
 	/**
 	 * Fires a {@link TreeDataEvent} for all registered listener
 	 * 
@@ -155,11 +159,11 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	 * @since 6.0.0
 	 */
 	public void fireEvent(int evtType, int[] path, int indexFrom, int indexTo) {
-		final TreeDataEvent evt =
-			new TreeDataEvent(this, evtType, path, indexFrom, indexTo);
+		final TreeDataEvent evt = new TreeDataEvent(this, evtType, path, indexFrom, indexTo);
 		for (TreeDataListener l : _listeners)
 			l.onChange(evt);
 	}
+
 	/**
 	 * Has the same functionality with {@link #fireEvent(int, int[], int, int)},
 	 * while this is used for node removal only
@@ -167,11 +171,11 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	 * @since 7.0.5
 	 */
 	public void fireEvent(int evtType, int[] path, int indexFrom, int indexTo, int[] affectedPath) {
-		final TreeDataEvent evt =
-			new TreeDataEvent(this, evtType, path, indexFrom, indexTo, affectedPath);
+		final TreeDataEvent evt = new TreeDataEvent(this, evtType, path, indexFrom, indexTo, affectedPath);
 		for (TreeDataListener l : _listeners)
 			l.onChange(evt);
 	}
+
 	/**
 	 * Fires a {@link TreeDataEvent} for all registered listener when selection
 	 * status has changed.
@@ -179,11 +183,11 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	 * @since 6.0.0
 	 */
 	protected void fireSelectionChanged(int[] path) {
-		final TreeDataEvent evt = new TreeDataEvent(this,
-				TreeDataEvent.SELECTION_CHANGED, path, 0, 1);
+		final TreeDataEvent evt = new TreeDataEvent(this, TreeDataEvent.SELECTION_CHANGED, path, 0, 1);
 		for (TreeDataListener l : _listeners)
 			l.onChange(evt);
 	}
+
 	/**
 	 * Fires a {@link TreeDataEvent} for all registered listener when open
 	 * status has changed.
@@ -191,8 +195,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	 * @since 6.0.0
 	 */
 	protected void fireOpenChanged(int[] path) {
-		final TreeDataEvent evt = new TreeDataEvent(this,
-				TreeDataEvent.OPEN_CHANGED, path, 0, 1);
+		final TreeDataEvent evt = new TreeDataEvent(this, TreeDataEvent.OPEN_CHANGED, path, 0, 1);
 		for (TreeDataListener l : _listeners)
 			l.onChange(evt);
 	}
@@ -223,9 +226,8 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return -1;
 	}
 
-	
 	public E getChild(int[] path) {
-		E node = getRoot();		
+		E node = getRoot();
 		for (int childCount = 0, i = 0; i < path.length && node != null; i++) {
 			if (path[i] < 0 || path[i] > (childCount = _childCount(node)))
 				return null;
@@ -233,11 +235,11 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		}
 		return node;
 	}
+
 	//Retrieves the child count. Note: it won't call getChildCount if isLeaf
 	private int _childCount(E parent) {
-		return isLeaf(parent) ? 0: getChildCount(parent);
+		return isLeaf(parent) ? 0 : getChildCount(parent);
 	}
-
 
 	/**
 	 * Returns the path from the specified child.
@@ -256,12 +258,13 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 			ipath[j] = path.get(j);
 		return ipath;
 	}
-	private boolean dfSearch(List<Integer> path, E node, E target){
+
+	private boolean dfSearch(List<Integer> path, E node, E target) {
 		if (node.equals(target))
 			return true;
 
-		for (int i = 0, size = _childCount(node); i< size; i++)
-			if (dfSearch(path, getChild(node, i), target)){
+		for (int i = 0, size = _childCount(node); i < size; i++)
+			if (dfSearch(path, getChild(node, i), target)) {
 				path.add(0, new Integer(i));
 				return true;
 			}
@@ -269,17 +272,17 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	}
 
 	// -- TreeModel --//
-	
+
 	public void addTreeDataListener(TreeDataListener l) {
 		_listeners.add(l);
 	}
-	
+
 	public void removeTreeDataListener(TreeDataListener l) {
 		_listeners.remove(l);
 	}
 
 	//TreeSelectableModel//
-	
+
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
 			_multiple = multiple;
@@ -292,18 +295,18 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 				_selection.clear();
 				_selection.add(sel);
 
-				for (final Path path: sels)
+				for (final Path path : sels)
 					fireSelectionChanged(path.path);
 			}
 		}
 	}
-	
+
 	public boolean isMultiple() {
 		return _multiple;
 	}
 
 	// TreeSelectableModel
-	
+
 	public boolean addSelectionPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -313,7 +316,6 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return false;
 	}
 
-	
 	public boolean addSelectionPaths(int[][] paths) {
 		boolean added = false;
 		final int len = paths != null ? paths.length : 0;
@@ -339,7 +341,6 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return added;
 	}
 
-	
 	public boolean removeSelectionPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -349,7 +350,6 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return false;
 	}
 
-	
 	public boolean removeSelectionPaths(int[][] paths) {
 		boolean found = false;
 		final int len = paths != null ? paths.length : 0;
@@ -365,17 +365,14 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return found;
 	}
 
-	
 	public boolean isPathSelected(int[] path) {
 		return path != null && _selection.contains(new Path(path));
 	}
 
-	
 	public int[] getSelectionPath() {
-		return _selection.isEmpty() ? null: _selection.iterator().next().path;
+		return _selection.isEmpty() ? null : _selection.iterator().next().path;
 	}
 
-	
 	public int[][] getSelectionPaths() {
 		if (_selection.isEmpty())
 			return null;
@@ -387,30 +384,27 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return paths;
 	}
 
-	
 	public int getSelectionCount() {
 		return _selection.size();
 	}
 
-	
 	public boolean isSelectionEmpty() {
 		return _selection.isEmpty();
 	}
 
-	
 	public void clearSelection() {
 		if (!_selection.isEmpty()) {
 			final int[][] paths = getSelectionPaths();
 			if (paths != null) {
 				_selection.clear();
-				for (int j = 0; j < paths.length;  ++j)
+				for (int j = 0; j < paths.length; ++j)
 					fireSelectionChanged(paths[j]);
 			}
 		}
 	}
 
 	// TreeOpenableModel //
-	
+
 	public boolean addOpenPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -419,8 +413,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		}
 		return false;
 	}
-	
-	
+
 	public boolean addOpenPaths(int[][] paths) {
 		boolean added = false;
 		final int len = paths != null ? paths.length : 0;
@@ -436,7 +429,6 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return added;
 	}
 
-	
 	public boolean removeOpenPath(int[] path) {
 		if (path != null && path.length > 0) {
 			final int[][] paths = new int[1][path.length];
@@ -446,7 +438,6 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return false;
 	}
 
-	
 	public boolean removeOpenPaths(int[][] paths) {
 		boolean found = false;
 		final int len = paths != null ? paths.length : 0;
@@ -460,17 +451,14 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return found;
 	}
 
-	
 	public boolean isPathOpened(int[] path) {
 		return path != null && _opens.contains(new Path(path));
 	}
 
-	
 	public int[] getOpenPath() {
-		return _opens.isEmpty() ? null: _opens.iterator().next().path;
+		return _opens.isEmpty() ? null : _opens.iterator().next().path;
 	}
 
-	
 	public int[][] getOpenPaths() {
 		if (_opens.isEmpty())
 			return null;
@@ -482,23 +470,20 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		return paths;
 	}
 
-	
 	public int getOpenCount() {
 		return _opens.size();
 	}
 
-	
 	public boolean isOpenEmpty() {
 		return _opens.isEmpty();
 	}
 
-	
 	public void clearOpen() {
 		if (!_opens.isEmpty()) {
 			final int[][] paths = getOpenPaths();
 			if (paths != null) {
 				_opens.clear();
-				for (int j = 0; j < paths.length;  ++j)
+				for (int j = 0; j < paths.length; ++j)
 					fireOpenChanged(paths[j]);
 			}
 		}
@@ -519,6 +504,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 			states.opens.add(getChild(path.path));
 		return states;
 	}
+
 	/** A utility that the deriving class can call to restore the states
 	 * saved by {@link #beforeSort}
 	 * @since 6.0.0
@@ -526,18 +512,18 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	protected void afterSort(Object ctx) {
 		if (ctx instanceof States) {
 			@SuppressWarnings("unchecked")
-			final States<E> states = (States)ctx;
+			final States<E> states = (States) ctx;
 			_selection.clear();
-			for (final E node: states.selection)
+			for (final E node : states.selection)
 				_selection.add(new Path(getPath(node)));
 			_opens.clear();
-			for (final E node: states.opens)
+			for (final E node : states.opens)
 				_opens.add(new Path(getPath(node)));
 		}
 	}
 
 	//Selectable//
-	
+
 	public Set<E> getSelection() {
 		final Set<E> selected = new LinkedHashSet<E>();
 		int[][] paths = getSelectionPaths();
@@ -546,50 +532,52 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 				selected.add(getChild(paths[i]));
 		return selected;
 	}
-	
+
 	public void setSelection(Collection<? extends E> selection) {
 		if (isSelectionChanged(selection)) {
 			clearSelection();
-			for (final E node: selection)
+			for (final E node : selection)
 				addToSelection(node);
 		}
 	}
+
 	private boolean isSelectionChanged(Collection<? extends E> selection) {
 		if (_selection.size() != selection.size())
 			return true;
 
-		for (final E e: selection)
+		for (final E e : selection)
 			if (!_selection.contains(e))
 				return true;
 		return false;
 	}
 
 	@SuppressWarnings("unchecked")
-	
+
 	public boolean isSelected(Object child) {
-		final int[] path = getPath((E)child);
+		final int[] path = getPath((E) child);
 		if (path != null && path.length > 0)
 			return isPathSelected(path);
 		return false;
 	}
-	
+
 	public boolean addToSelection(E child) {
 		final int[] path = getPath(child);
 		if (path != null && path.length > 0)
 			return addSelectionPath(path);
 		return false;
 	}
+
 	@SuppressWarnings("unchecked")
-	
+
 	public boolean removeFromSelection(Object child) {
-		final int[] path = getPath((E)child);
+		final int[] path = getPath((E) child);
 		if (path != null && path.length > 0)
 			return removeSelectionPath(path);
 		return false;
 	}
 
 	//Openable//
-	
+
 	public Set<E> getOpenObjects() {
 		final Set<E> opened = new LinkedHashSet<E>();
 		int[][] paths = getOpenPaths();
@@ -598,46 +586,46 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 				opened.add(getChild(paths[i]));
 		return opened;
 	}
-	
+
 	public void setOpenObjects(Collection<? extends E> opened) {
 		clearOpen();
-		for (final E node: opened)
+		for (final E node : opened)
 			addOpenObject(node);
 	}
+
 	@SuppressWarnings("unchecked")
-	
+
 	public boolean isObjectOpened(Object child) {
-		final int[] path = getPath((E)child);
+		final int[] path = getPath((E) child);
 		if (path != null && path.length > 0)
 			return isPathOpened(path);
 		return false;
 	}
-	
+
 	public boolean addOpenObject(E child) {
 		final int[] path = getPath(child);
 		if (path != null && path.length > 0)
 			return addOpenPath(path);
 		return false;
 	}
+
 	@SuppressWarnings("unchecked")
-	
+
 	public boolean removeOpenObject(Object child) {
-		final int[] path = getPath((E)child);
+		final int[] path = getPath((E) child);
 		if (path != null && path.length > 0)
 			return removeOpenPath(path);
 		return false;
 	}
 
 	// Serializable//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		Serializables.smartWrite(s, _listeners);
 	}
 
-	private void readObject(java.io.ObjectInputStream s)
-			throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		_listeners = new LinkedList<TreeDataListener>();
@@ -645,7 +633,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	}
 
 	@SuppressWarnings("unchecked")
-	
+
 	public Object clone() {
 		final AbstractTreeModel clone;
 		try {
@@ -665,10 +653,11 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	 */
 	protected static class Path implements java.io.Serializable, Comparable {
 		public final int[] path;
+
 		protected Path(int[] path) {
 			this.path = path;
 		}
-		
+
 		protected Path(Path p) {
 			int length = p.path.length;
 			this.path = new int[length];
@@ -676,35 +665,35 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 				this.path[i] = p.path[i];
 			}
 		}
-		
+
 		public int hashCode() {
 			return Objects.hashCode(path);
 		}
-		
+
 		public boolean equals(Object o) {
-			return o instanceof Path && Objects.equals(path, ((Path)o).path);
+			return o instanceof Path && Objects.equals(path, ((Path) o).path);
 		}
 
 		public int compareTo(Object o) {
 			if (!(o instanceof Path))
 				throw new WrongValueException(o + " is not Path object");
 			int length = path.length;
-			Path toCompared = (Path)o;
+			Path toCompared = (Path) o;
 			int[] toPath = toCompared.path;
 			int toLength = toCompared.path.length;
 
-			int smaller = (length < toLength? length : toLength);
+			int smaller = (length < toLength ? length : toLength);
 			for (int i = 0; i < smaller; i++) {
 				if (path[i] != toPath[i])
 					return path[i] - toPath[i];
 			}
 			return length - toLength;
 		}
-		
+
 		private boolean verifyPrefix(int[] path) {
 			return verifyPrefix(path, 0);
 		}
-		
+
 		/**
 		 * Test if this object's path match the given path when removal or addition,
 		 * and there are three situations:
@@ -732,10 +721,10 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 				if (path[i] != this.path[i])
 					break;
 			}
-			
+
 			if (i == path.length) { //fully match prefix, should be removed
 				if (update == 1) //only for add case
-					this.path[i-1] += update;
+					this.path[i - 1] += update;
 				return true;
 			} else if (i == path.length - 1) { //different on last digit, sibling
 				if (this.path[i] > path[i]) //this.path is later
@@ -743,9 +732,9 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 				return false;
 			} else {
 				return false;
-			}		
+			}
 		}
-		
+
 		public String toString() {
 			String result = "[";
 			for (int i = 0; i < path.length; i++) {
@@ -755,6 +744,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 			return result;
 		}
 	}
+
 	private static class States<E> {
 		private final Set<E> selection = new LinkedHashSet<E>();
 		private final Set<E> opens = new LinkedHashSet<E>();
@@ -830,7 +820,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 		}
 		return count;
 	}
-	
+
 	//ZK-1696: set to a invalid value to trigger re-calculation when getPageCount() is called
 	private void invalidatePageCount() {
 		_pageCount = -1;
@@ -876,6 +866,7 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 			}
 		}
 	}
+
 	/**
 	 * A default selection control implementation for {@link AbstractTreeModel},
 	 * by default it assumes all elements are selectable.
@@ -885,12 +876,15 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 	 */
 	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
 		private AbstractTreeModel model;
+
 		public DefaultSelectionControl(AbstractTreeModel model) {
 			this.model = model;
 		}
+
 		public boolean isSelectable(E e) {
 			return true;
 		}
+
 		public void setSelectAll(boolean selectAll) {
 			if (selectAll) {
 				List all = new LinkedList();
@@ -905,24 +899,25 @@ java.io.Serializable, Pageable, PagingEventPublisher {
 
 				if (model instanceof AbstractTreeModel)
 					try {
-						((Selectable)model).setSelection(all);
+						((Selectable) model).setSelection(all);
 					} finally {
 						model.fireEvent(TreeDataEvent.ENABLE_CLIENT_UPDATE, null, -1, -1);
 					}
 			} else {
-				((Selectable)model).clearSelection();
+				((Selectable) model).clearSelection();
 			}
 		}
+
 		public boolean isSelectAll() {
 			List<E> allNodes = model.getAllNodes();
 			for (E o : allNodes) {
-				if (isSelectable(o) && !((Selectable)model).isSelected(o))
+				if (isSelectable(o) && !((Selectable) model).isSelected(o))
 					return false;
 			}
 			return true;
 		}
 	}
-	
+
 	public void addPagingEventListener(PagingListener listener) {
 		if (listener == null)
 			throw new NullPointerException();

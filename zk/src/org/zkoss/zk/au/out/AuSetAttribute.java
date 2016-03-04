@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to set the attribute of the specified component at the client.
@@ -35,10 +35,10 @@ public class AuSetAttribute extends AuResponse {
 	 * {@link org.zkoss.zk.au.DeferredValue},
 	 * and any kind of objects that
 	 * the client accepts (marshaled by JSON).
-
+	
 	 * @since 5.0.0
 	 */
 	public AuSetAttribute(Component comp, String attr, Object val) {
-		super("setAttr", comp, new Object[] {comp, attr, val});
+		super("setAttr", comp, new Object[] { comp, attr, val });
 	}
 }

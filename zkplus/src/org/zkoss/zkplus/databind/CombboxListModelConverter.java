@@ -21,12 +21,11 @@ import org.zkoss.zul.ListModel;
  * @since 6.0.1
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
-public class CombboxListModelConverter extends ListModelConverter{
+public class CombboxListModelConverter extends ListModelConverter {
 
 	private static final long serialVersionUID = 1L;
 
-	
-	protected ListModel<?> getComponentModel(Component comp){
-		return ((Combobox)comp).getModel();
+	protected ListModel<?> getComponentModel(Component comp) {
+		return ((Combobox) comp).getModel();
 	}
 }

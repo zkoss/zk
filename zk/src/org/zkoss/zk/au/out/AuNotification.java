@@ -26,21 +26,20 @@ import org.zkoss.zk.ui.Page;
  * @since 6.0.1
  */
 public class AuNotification extends AuResponse {
-	
+
 	/** Shows notification at predefined position.
 	 */
-	public AuNotification(String msg, String type, Page page, Component ref, 
-			String position, int duration, boolean closable) {
-		super("showNotification", new Object[] { 
-				msg, type, page.getUuid(), ref, position, null, duration, closable });
+	public AuNotification(String msg, String type, Page page, Component ref, String position, int duration,
+			boolean closable) {
+		super("showNotification", new Object[] { msg, type, page.getUuid(), ref, position, null, duration, closable });
 	}
-	
+
 	/** Shows notification at given coordinate
 	 */
-	public AuNotification(String msg, String type, Page page, Component ref, 
-			int x, int y, int duration, boolean closable) {
-		super("showNotification", new Object[] { 
-				msg, type, page.getUuid(), ref, null, new int[]{x, y}, duration, closable });
+	public AuNotification(String msg, String type, Page page, Component ref, int x, int y, int duration,
+			boolean closable) {
+		super("showNotification",
+				new Object[] { msg, type, page.getUuid(), ref, null, new int[] { x, y }, duration, closable });
 	}
-	
+
 }

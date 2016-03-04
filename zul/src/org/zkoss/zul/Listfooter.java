@@ -16,8 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -37,9 +37,11 @@ public class Listfooter extends FooterElement {
 
 	public Listfooter() {
 	}
+
 	public Listfooter(String label) {
 		super(label);
 	}
+
 	public Listfooter(String label, String src) {
 		super(label, src);
 	}
@@ -48,18 +50,19 @@ public class Listfooter extends FooterElement {
 	 */
 	public Listbox getListbox() {
 		final Component comp = getParent();
-		return comp != null ? (Listbox)comp.getParent(): null;
+		return comp != null ? (Listbox) comp.getParent() : null;
 	}
+
 	/** Returns the column index, starting from 0.
 	 */
 	public int getColumnIndex() {
 		int j = 0;
-		for (Iterator it = getParent().getChildren().iterator();
-		it.hasNext(); ++j)
+		for (Iterator it = getParent().getChildren().iterator(); it.hasNext(); ++j)
 			if (it.next() == this)
 				break;
 		return j;
 	}
+
 	/** Returns the list header that is in the same column as
 	 * this footer, or null if not available.
 	 */
@@ -78,17 +81,18 @@ public class Listfooter extends FooterElement {
 	}
 
 	//-- Component --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-listfooter" : _zclass;
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listfoot))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
 }

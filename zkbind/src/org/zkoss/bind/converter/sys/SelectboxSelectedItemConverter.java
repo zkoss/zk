@@ -30,45 +30,46 @@ import org.zkoss.zul.ext.Selectable;
  */
 public class SelectboxSelectedItemConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
-	
+
 	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Selectbox sbox = (Selectbox) comp;
 		final ListModel<?> model = sbox.getModel();
-		if(model==null){
+		if (model == null) {
 			throw new UiException("no model in selectbox");
 		}
-		if(!(model instanceof Selectable)){
-  			throw new UiException("model doesn't implement Selectable");
-  		}
-		
-	  	if (val != null) {
-	  		((Selectable<Object>)model).addToSelection(val);
-	  		return IGNORED_VALUE;
-	  	}
-	  	
-	  	Set<Object> sels = ((Selectable<Object>)model).getSelection();
-	  	if(sels!=null && sels.size()>0)
-	  		((Selectable<Object>)model).clearSelection();
-	  	return IGNORED_VALUE;
+		if (!(model instanceof Selectable)) {
+			throw new UiException("model doesn't implement Selectable");
+		}
+
+		if (val != null) {
+			((Selectable<Object>) model).addToSelection(val);
+			return IGNORED_VALUE;
+		}
+
+		Set<Object> sels = ((Selectable<Object>) model).getSelection();
+		if (sels != null && sels.size() > 0)
+			((Selectable<Object>) model).clearSelection();
+		return IGNORED_VALUE;
 	}
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 		//since there is always a model, we get the selected by item by model directly
-	  	if (val != null) {
-	  		Selectbox sbox = (Selectbox) comp;
+		if (val != null) {
+			Selectbox sbox = (Selectbox) comp;
 			final ListModel<?> model = sbox.getModel();
-			if(model==null){
+			if (model == null) {
 				throw new UiException("no model in selectbox");
 			}
-			if(!(model instanceof Selectable)){
-	  			throw new UiException("model doesn't implement Selectable");
-	  		}
-			Set<?> selection = ((Selectable<?>)model).getSelection();
-  			if(selection==null || selection.size()==0) return null;
-  			return selection.iterator().next();
-	  	}
-	 	return null;
+			if (!(model instanceof Selectable)) {
+				throw new UiException("model doesn't implement Selectable");
+			}
+			Set<?> selection = ((Selectable<?>) model).getSelection();
+			if (selection == null || selection.size() == 0)
+				return null;
+			return selection.iterator().next();
+		}
+		return null;
 	}
 
 }

@@ -16,40 +16,39 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.io.StringWriter;
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringWriter;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.FilterChain;
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Strings;
 
+import org.zkoss.lang.Strings;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
 import org.zkoss.web.servlet.http.Https;
-
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.impl.RequestInfoImpl;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.UiFactory;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.RequestInfo;
-import org.zkoss.zk.ui.impl.RequestInfoImpl;
 
 /**
  * Used to post-process the response into a ZK page.
@@ -76,34 +75,30 @@ public class DHtmlLayoutFilter implements Filter {
 	/** Processes the content
 	 * @since 3.0.0
 	 */
-	protected void process(HttpServletRequest request,
-	HttpServletResponse response, String content)
-	throws ServletException, IOException {
-		if (log.isDebugEnabled()) log.debug("Content to filter:\n"+content);
+	protected void process(HttpServletRequest request, HttpServletResponse response, String content)
+			throws ServletException, IOException {
+		if (log.isDebugEnabled())
+			log.debug("Content to filter:\n" + content);
 
 		final WebManager webman = WebManager.getWebManager(_ctx);
 		final WebApp wapp = webman.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final WebAppCtrl wappc = (WebAppCtrl) wapp;
 		final Session sess = webman.getSession(_ctx, request);
 		final Object old = I18Ns.setup(sess, request, response, _charset);
 		try {
 			final String path = Https.getThisServletPath(request);
-			final Desktop desktop =
-				webman.getDesktop(sess, request, response, path, true);
+			final Desktop desktop = webman.getDesktop(sess, request, response, path, true);
 			if (desktop == null) //forward or redirect
 				return;
 
-			final RequestInfo ri = new RequestInfoImpl(
-				wapp, sess, desktop, request, null);
-			((SessionCtrl)sess).notifyClientRequest(true);
+			final RequestInfo ri = new RequestInfoImpl(wapp, sess, desktop, request, null);
+			((SessionCtrl) sess).notifyClientRequest(true);
 			final UiFactory uf = wappc.getUiFactory();
-			final PageDefinition pagedef =
-				uf.getPageDefinitionDirectly(ri, content, _ext);
+			final PageDefinition pagedef = uf.getPageDefinitionDirectly(ri, content, _ext);
 
 			final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
-			final Execution exec =
-				new ExecutionImpl(_ctx, request, response, desktop, page);
-			final StringWriter out = new StringWriter(4096*2);
+			final Execution exec = new ExecutionImpl(_ctx, request, response, desktop, page);
+			final StringWriter out = new StringWriter(4096 * 2);
 			wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 
 			//bug 1738368: Jetty refuses wrong content length
@@ -113,18 +108,18 @@ public class DHtmlLayoutFilter implements Filter {
 			//of course, wrong
 			String cs = response.getCharacterEncoding();
 			if (cs == null || cs.length() == 0)
-				cs = _charset != null ? _charset: "UTF-8";
+				cs = _charset != null ? _charset : "UTF-8";
 
 			final String result = out.toString();
 			try {
 				final OutputStream os = response.getOutputStream();
-					//Call it first to ensure getWrite() is not called yet
+				//Call it first to ensure getWrite() is not called yet
 
 				byte[] data = result.getBytes(cs);
-				if (_compress && !Servlets.isIncluded(request)
-				&& data.length > 200) {
+				if (_compress && !Servlets.isIncluded(request) && data.length > 200) {
 					byte[] bs = Https.gzip(request, response, null, data);
-					if (bs != null) data = bs; //yes, browser support compress
+					if (bs != null)
+						data = bs; //yes, browser support compress
 				}
 
 				response.setContentLength(data.length);
@@ -133,12 +128,13 @@ public class DHtmlLayoutFilter implements Filter {
 				response.getWriter().write(result);
 			}
 		} catch (UiException ex) {
-			log.error("Failed to process:\n"+content);
+			log.error("Failed to process:\n" + content);
 			throw ex;
 		} finally {
 			I18Ns.cleanup(request, old);
 		}
 	}
+
 	/** Filters the content to make it legal XML if possible.
 	 * Currently, it only removes &lt;!DOCTYPE ...//DTD HTML...&gt;,
 	 * since it makes it invalid XML. Refer to Bug 1702216.
@@ -151,8 +147,7 @@ public class DHtmlLayoutFilter implements Filter {
 			if (cc == '<') {
 				if (++j < len && sb.charAt(j) == '!') {
 					j = Strings.skipWhitespaces(sb, j + 1);
-					if (j + 7 < len
-					&& "DOCTYPE".equalsIgnoreCase(sb.substring(j, j + 7))) {
+					if (j + 7 < len && "DOCTYPE".equalsIgnoreCase(sb.substring(j, j + 7))) {
 						for (int k = j += 7; k < len; ++k) {
 							if (sb.charAt(k) == '>') {
 								if (shallFilter(sb.substring(j, k)))
@@ -167,32 +162,33 @@ public class DHtmlLayoutFilter implements Filter {
 		}
 		return sb.toString();
 	}
+
 	private static boolean shallFilter(String pubId) {
 		pubId = pubId.toUpperCase();
 		int j = pubId.indexOf("//DTD");
 		if (j >= 0) {
 			j = Strings.skipWhitespaces(pubId, j + 5);
-			return j + 4 < pubId.length()
-				&& "HTML".equals(pubId.substring(j, j + 4));
+			return j + 4 < pubId.length() && "HTML".equals(pubId.substring(j, j + 4));
 		}
 		return false; //unknown => don't filter out (safer)
 	}
 
 	//-- Filter --//
-	public void doFilter(ServletRequest request, ServletResponse response,
-	FilterChain chain) throws IOException, ServletException {
-		final StringWriter sw = new StringWriter(4096*2);
-		final HttpServletResponse hres = (HttpServletResponse)response;
-		final HttpBufferedResponse hbufres =
-			(HttpBufferedResponse)HttpBufferedResponse.getInstance(hres, sw);
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		final StringWriter sw = new StringWriter(4096 * 2);
+		final HttpServletResponse hres = (HttpServletResponse) response;
+		final HttpBufferedResponse hbufres = (HttpBufferedResponse) HttpBufferedResponse.getInstance(hres, sw);
 		chain.doFilter(request, hbufres);
 
 		//Bug 1673839: servlet might redirect
 		if (!hbufres.isSendRedirect())
-			process((HttpServletRequest)request, hres, xmlfilter(sw.getBuffer()));
+			process((HttpServletRequest) request, hres, xmlfilter(sw.getBuffer()));
 	}
+
 	public void destroy() {
 	}
+
 	public final void init(FilterConfig config) throws ServletException {
 		_ctx = config.getServletContext();
 
@@ -202,7 +198,7 @@ public class DHtmlLayoutFilter implements Filter {
 
 		param = config.getInitParameter("charset");
 		if (param != null)
-			_charset = param.length() > 0 ? param: null;
+			_charset = param.length() > 0 ? param : null;
 
 		param = config.getInitParameter("compress");
 		if (param != null)

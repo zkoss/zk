@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.util.resource.ClassLocator;
@@ -47,10 +48,9 @@ public class Utils {
 	 * You could use this method to minimize the bytes to be sent to
 	 * the client if the information is required only once per desktop.
 	 */
-	public static
-	boolean markClientInfoPerDesktop(Desktop desktop, String key) {
+	public static boolean markClientInfoPerDesktop(Desktop desktop, String key) {
 		return !(desktop instanceof DesktopImpl) //always gen if unknown
-		|| ((DesktopImpl)desktop).markClientInfoPerDesktop(key);
+				|| ((DesktopImpl) desktop).markClientInfoPerDesktop(key);
 	}
 
 	/** Returns the XML resources locator to locate
@@ -61,15 +61,16 @@ public class Utils {
 			final String clsnm = Library.getProperty("org.zkoss.zk.ui.sys.XMLResourcesLocator.class");
 			if (clsnm != null) {
 				try {
-					return _xmlloc = (XMLResourcesLocator)Classes.newInstanceByThread(clsnm);
+					return _xmlloc = (XMLResourcesLocator) Classes.newInstanceByThread(clsnm);
 				} catch (Throwable ex) {
-					log.warn("Unable to load "+clsnm, ex);
+					log.warn("Unable to load " + clsnm, ex);
 				}
 			}
 			_xmlloc = new ClassLocator();
 		}
 		return _xmlloc;
 	}
+
 	private static XMLResourcesLocator _xmlloc;
 
 	/** Instantiates a composer of the given object.
@@ -82,24 +83,21 @@ public class Utils {
 	 * If <code>o</code> is an instance of {@link Composer}, it is returned
 	 * directly.
 	 */
-	public static Composer newComposer(Page page, Object o)
-	throws Exception {
+	public static Composer newComposer(Page page, Object o) throws Exception {
 		Class cls;
 		if (o instanceof String) {
-			final String clsnm = ((String)o).trim();
+			final String clsnm = ((String) o).trim();
 			if (page != null)
-				return ((WebAppCtrl)page.getDesktop().getWebApp())
-					.getUiFactory().newComposer(page, clsnm);
+				return ((WebAppCtrl) page.getDesktop().getWebApp()).getUiFactory().newComposer(page, clsnm);
 			cls = Classes.forNameByThread(clsnm);
 		} else if (o instanceof Class) {
-			cls = (Class)o;
-			if (page != null) 
-				return ((WebAppCtrl)page.getDesktop().getWebApp())
-					.getUiFactory().newComposer(page, cls);
+			cls = (Class) o;
+			if (page != null)
+				return ((WebAppCtrl) page.getDesktop().getWebApp()).getUiFactory().newComposer(page, cls);
 		} else
-			return (Composer)o;
+			return (Composer) o;
 
-		return (Composer)cls.newInstance();
+		return (Composer) cls.newInstance();
 	}
 
 	/** Returns the component info associated with the given component, or null
@@ -107,44 +105,48 @@ public class Utils {
 	 * <p>It is used only internally.
 	 */
 	public static ComponentInfo getComponentInfo(Component comp) {
-		final Map<Component,ComponentInfo> map = getComponentInfos(false);
-		return map != null ? map.get(comp): null;
+		final Map<Component, ComponentInfo> map = getComponentInfos(false);
+		return map != null ? map.get(comp) : null;
 	}
-	private static Map<Component,ComponentInfo> getComponentInfos(boolean autoCreate){
+
+	private static Map<Component, ComponentInfo> getComponentInfos(boolean autoCreate) {
 		Execution exec = Executions.getCurrent();
-		if (exec == null )
+		if (exec == null)
 			return null;
 
-		Map<Component,ComponentInfo> result = cast((Map) exec.getAttribute(COMPONENT_INFO));
-		if (result == null && autoCreate){
-			result = new HashMap<Component,ComponentInfo>();
+		Map<Component, ComponentInfo> result = cast((Map) exec.getAttribute(COMPONENT_INFO));
+		if (result == null && autoCreate) {
+			result = new HashMap<Component, ComponentInfo>();
 			exec.setAttribute(COMPONENT_INFO, result);
 		}
 		return result;
 	}
+
 	/** Sets the component info for the given component.
 	 * <p>It is used only internally.
 	 */
 	public static void setComponentInfo(Component comp, ComponentInfo info) {
-		final Map<Component,ComponentInfo> map = getComponentInfos(info != null);
+		final Map<Component, ComponentInfo> map = getComponentInfos(info != null);
 		if (map != null)
 			if (info != null)
 				map.put(comp, info);
 			else
 				map.remove(comp);
 	}
-	private static Map<Component,ShadowInfo> getShadowInfos(boolean autoCreate){
+
+	private static Map<Component, ShadowInfo> getShadowInfos(boolean autoCreate) {
 		Execution exec = Executions.getCurrent();
-		if (exec == null )
+		if (exec == null)
 			return null;
 
 		Map<Component, ShadowInfo> result = cast((Map) exec.getAttribute(COMPONENT_INFO));
-		if (result == null && autoCreate){
+		if (result == null && autoCreate) {
 			result = new HashMap<Component, ShadowInfo>();
 			exec.setAttribute(COMPONENT_INFO, result);
 		}
 		return result;
 	}
+
 	/** Sets the component info for the given component.
 	 * <p>It is used only internally.
 	 * @since 8.0.0
@@ -157,5 +159,6 @@ public class Utils {
 			else
 				map.remove(comp);
 	}
+
 	private static final String COMPONENT_INFO = "org.zkoss.zk.ui.metainfo.compinfo";
 }

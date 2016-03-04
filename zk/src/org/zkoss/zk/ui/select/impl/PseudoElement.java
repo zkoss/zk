@@ -6,21 +6,21 @@ package org.zkoss.zk.ui.select.impl;
  * @author christopher
  */
 public class PseudoElement {
-	
+
 	private String _name;
-	
+
 	public PseudoElement(String name) {
 		_name = name;
 	}
-	
+
 	public String getName() {
 		return _name;
 	}
-	
+
 	public void setName(String name) {
 		_name = name;
 	}
-	
+
 	public String toString() {
 		return "::" + _name;
 	}

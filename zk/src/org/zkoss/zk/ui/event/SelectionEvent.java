@@ -20,9 +20,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event cause by user's the active selection which is a
@@ -39,17 +39,14 @@ public class SelectionEvent extends Event {
 	 */
 	public static final SelectionEvent getSelectionEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new SelectionEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getInt(data, "start", 0),
-			AuRequests.getInt(data, "end", 0),
-			(String)data.get("selected"));
+		return new SelectionEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "start", 0),
+				AuRequests.getInt(data, "end", 0), (String) data.get("selected"));
 	}
 
 	/**
 	 * Constructs a selection event.
 	 */
-	public SelectionEvent(String name, Component target, int start, int end,
-			String txt) {
+	public SelectionEvent(String name, Component target, int start, int end, String txt) {
 		super(name, target);
 		_start = start;
 		_end = end;

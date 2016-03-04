@@ -75,12 +75,13 @@ public class HeaderInfo { //directive
 			_attrs = Collections.emptyList();
 		} else {
 			_attrs = new LinkedList<AttrInfo>();
-			for (Map.Entry<String, String> me: attrs.entrySet()) {
+			for (Map.Entry<String, String> me : attrs.entrySet()) {
 				final String nm = me.getKey(), val = me.getValue();
 				_attrs.add(new AttrInfo(nm, new ExValue(val, String.class)));
 			}
 		}
 	}
+
 	/** Returns the tag name of this header element.
 	 */
 	public String getName() {
@@ -98,38 +99,35 @@ public class HeaderInfo { //directive
 		if (_cond != null && !_cond.isEffective(eval, page))
 			return "";
 
-		final boolean bScript = "script".equals(_name),
-			bStyle = !bScript && "style".equals(_name);
+		final boolean bScript = "script".equals(_name), bStyle = !bScript && "style".equals(_name);
 
 		//1. scan content
 		final StringBuffer sb = new StringBuffer(128);
 		if (bScript || bStyle) {
 			String content = null;
 			boolean srcFound = false;
-			for (AttrInfo attr: _attrs) {
+			for (AttrInfo attr : _attrs) {
 				final String nm = attr.name;
 				if ("content".equals(nm)) {
-					content = (String)attr.value.getValue(eval, page);
+					content = (String) attr.value.getValue(eval, page);
 				} else {
 					srcFound = srcFound || "src".equals(nm) || "href".equals(nm);
 				}
 			}
 
 			if (content != null) {
-				sb.append('<').append(_name).append(" type=\"text/")
-					.append(bScript ? "javascript": "css").append("\">\n")
-					.append(content)
-					.append("\n</").append(_name).append('>');
-				if (srcFound) sb.append('\n');
+				sb.append('<').append(_name).append(" type=\"text/").append(bScript ? "javascript" : "css")
+						.append("\">\n").append(content).append("\n</").append(_name).append('>');
+				if (srcFound)
+					sb.append('\n');
 			}
 			if (!srcFound)
 				return sb.toString(); //no more to generate
 		}
 
-		
-		sb.append('<').append(bStyle ? "link": _name);
+		sb.append('<').append(bStyle ? "link" : _name);
 		boolean relFound = false, typeFound = false;
-		for (AttrInfo attr: _attrs) {
+		for (AttrInfo attr : _attrs) {
 			final String nm = attr.name;
 			if ((bScript || bStyle) && "content".equals(nm))
 				continue; //skip
@@ -137,28 +135,27 @@ public class HeaderInfo { //directive
 			relFound = bStyle && (relFound || "rel".equals(nm));
 			typeFound = (bScript || bStyle) && (typeFound || "type".equals(nm));
 
-			String val = (String)attr.value.getValue(eval, page);
+			String val = (String) attr.value.getValue(eval, page);
 			if (val == null || val.length() == 0)
 				val = "";
 			else if ("href".equals(nm) || ((bScript || bStyle) && "src".equals(nm)))
 				val = Executions.encodeURL(val);
 
-			HTMLs.appendAttribute(sb,
-				bStyle && "src".equals(nm) ? "href":
-				bScript && "href".equals(nm) ? "src": nm, val);
+			HTMLs.appendAttribute(sb, bStyle && "src".equals(nm) ? "href" : bScript && "href".equals(nm) ? "src" : nm,
+					val);
 		}
 
 		if (bStyle && !relFound)
-				sb.append(" rel=\"stylesheet\"");
+			sb.append(" rel=\"stylesheet\"");
 		if ((bScript || bStyle) && !typeFound)
-			sb.append(" type=\"text/")
-				.append(bScript ? "javascript": "css").append('"');
-		return sb.append(bScript ? ">\n</script>": "/>").toString();
+			sb.append(" type=\"text/").append(bScript ? "javascript" : "css").append('"');
+		return sb.append(bScript ? ">\n</script>" : "/>").toString();
 	}
 
 	private static class AttrInfo {
 		private final String name;
 		private final ExValue value;
+
 		private AttrInfo(String name, ExValue value) {
 			this.name = name;
 			this.value = value;

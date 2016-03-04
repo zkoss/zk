@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.portlet;
 
 import javax.portlet.PortletRequestDispatcher;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -32,12 +31,12 @@ public class PortletServletDispatcher implements RequestDispatcher {
 	private final PortletRequestDispatcher _rd;
 
 	/** Returns a facade instance for the specified dispatcher. */
-	public static final
-	RequestDispatcher getInstance(PortletRequestDispatcher rd) {
+	public static final RequestDispatcher getInstance(PortletRequestDispatcher rd) {
 		if (rd instanceof RequestDispatcher)
-			return (RequestDispatcher)rd;
+			return (RequestDispatcher) rd;
 		return new PortletServletDispatcher(rd);
 	}
+
 	private PortletServletDispatcher(PortletRequestDispatcher rd) {
 		if (rd == null)
 			throw new IllegalArgumentException("null");
@@ -45,12 +44,11 @@ public class PortletServletDispatcher implements RequestDispatcher {
 	}
 
 	//RequestDispatcher//
-	public void forward(ServletRequest request, ServletResponse response)
-	throws ServletException, java.io.IOException {
+	public void forward(ServletRequest request, ServletResponse response) throws ServletException, java.io.IOException {
 		throw new UnsupportedOperationException();
 	}
-	public void include(ServletRequest request, ServletResponse response)
-	throws ServletException, java.io.IOException {
+
+	public void include(ServletRequest request, ServletResponse response) throws ServletException, java.io.IOException {
 		throw new UnsupportedOperationException(); //TODO
 	}
 }

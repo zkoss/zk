@@ -17,20 +17,20 @@ import org.zkoss.json.JSONObject;
  * @author dennis
  *
  */
-public class StackInfo extends ExecutionInfoBase{
+public class StackInfo extends ExecutionInfoBase {
 
 	public static final String TYPE = "stack";
-	
+
 	String _name;
-	
-	public StackInfo(String name,String note) {
-		super(TYPE, null,null,note);
+
+	public StackInfo(String name, String note) {
+		super(TYPE, null, null, note);
 		_name = name;
 	}
-	
-	public JSONObject toJSON(){
+
+	public JSONObject toJSON() {
 		JSONObject json = super.toJSON();
-		putEssential(json,"name", _name);
+		putEssential(json, "name", _name);
 		return json;
 	}
 }

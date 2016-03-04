@@ -26,7 +26,7 @@ public interface ValidationContext {
 	 * @return true of result is valid, false if any {@link Validator} called {@link #setInvalid()}. Note, default is true. 
 	 */
 	boolean isValid();
-	
+
 	/** 
 	 * Checks status of local validation context valid or not, it only relates to one validator. 
 	 * @return true of result is valid, false if this {@link Validator} called {@link #setInvalid()}, default is true.
@@ -51,8 +51,8 @@ public interface ValidationContext {
 	 * a form validation
 	 * @return the properties map.
 	 */
-	Map<String,Property[]> getProperties();
-	
+	Map<String, Property[]> getProperties();
+
 	/**
 	 * get dependent properties by the property name.
 	 * you usually use this method to get a value of other properties to do complex validation or
@@ -61,8 +61,7 @@ public interface ValidationContext {
 	 * @return the properties array
 	 */
 	Property[] getProperties(String name);
-	
-	
+
 	/**
 	 * get dependent properties by a base object.
 	 * this method returns a Map (key is the property name) of properties that have same base object. 
@@ -75,9 +74,8 @@ public interface ValidationContext {
 	 * @return a Map of properties that has same base object.
 	 * @since 6.0.1
 	 */
-	Map<String,Property> getProperties(Object base);
-	
-	
+	Map<String, Property> getProperties(Object base);
+
 	/**
 	 * Returns validator arg value of the given key
 	 * This is a shortcut of <code>getBindContext().getValidatorArg()</code> 
@@ -92,7 +90,6 @@ public interface ValidationContext {
 	 * @return the main property.
 	 */
 	Property getProperty();
-	
 
 	/**
 	 * @return current bind context

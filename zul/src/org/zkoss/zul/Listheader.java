@@ -56,7 +56,7 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  */
 public class Listheader extends HeaderElement {
-    private static final long serialVersionUID = 20080218L;
+	private static final long serialVersionUID = 20080218L;
 
 	private String _sortDir = "natural";
 	private transient Comparator _sortAsc, _sortDsc;
@@ -73,12 +73,14 @@ public class Listheader extends HeaderElement {
 		addClientEvent(Listheader.class, Events.ON_GROUP, CE_DUPLICATE_IGNORE);
 		addClientEvent(Listheader.class, Events.ON_UNGROUP, CE_DUPLICATE_IGNORE);
 	}
-	
+
 	public Listheader() {
 	}
+
 	public Listheader(String label) {
 		super(label);
 	}
+
 	/* Constructs a list header with label and image.
 	 *
 	 * @param src the URI of the image. Ignored if null or empty.
@@ -86,6 +88,7 @@ public class Listheader extends HeaderElement {
 	public Listheader(String label, String src) {
 		super(label, src);
 	}
+
 	/* Constructs a list header with label, image and width.
 	 *
 	 * @param src the URI of the image. Ignored if null or empty.
@@ -101,7 +104,7 @@ public class Listheader extends HeaderElement {
 	 */
 	public Listbox getListbox() {
 		final Component comp = getParent();
-		return comp != null ? (Listbox)comp.getParent(): null;
+		return comp != null ? (Listbox) comp.getParent() : null;
 	}
 
 	/** Returns the value.
@@ -112,8 +115,9 @@ public class Listheader extends HeaderElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -130,6 +134,7 @@ public class Listheader extends HeaderElement {
 	public String getSortDirection() {
 		return _sortDir;
 	}
+
 	/** Sets the sort direction. This does not sort the data, it only serves
 	 * as an indicator as to how the list is sorted. (unless the listbox has "autosort" attribute)
 	 *
@@ -141,9 +146,9 @@ public class Listheader extends HeaderElement {
 	 * @param sortDir one of "ascending", "descending" and "natural"
 	 */
 	public void setSortDirection(String sortDir) throws WrongValueException {
-		if (sortDir == null || (!"ascending".equals(sortDir)
-		&& !"descending".equals(sortDir) && !"natural".equals(sortDir)))
-			throw new WrongValueException("Unknown sort direction: "+sortDir);
+		if (sortDir == null
+				|| (!"ascending".equals(sortDir) && !"descending".equals(sortDir) && !"natural".equals(sortDir)))
+			throw new WrongValueException("Unknown sort direction: " + sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
 			if (!"natural".equals(sortDir) && !_ignoreSort) {
@@ -200,7 +205,8 @@ public class Listheader extends HeaderElement {
 	 * Therefore, no more sorting is available to users for this column.
 	 */
 	public void setSort(String type) {
-		if (type == null) return;
+		if (type == null)
+			return;
 		if (type.startsWith("client")) {
 			try {
 				setSortAscending(type);
@@ -217,12 +223,12 @@ public class Listheader extends HeaderElement {
 			final int j = type.indexOf('(');
 			final int k = type.lastIndexOf(')');
 			if (j >= 0 && k >= 0) {
-				final String name = type.substring(j+1, k);
+				final String name = type.substring(j + 1, k);
 				char cc;
 				int index = -1;
 				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
 					if ((index = Integer.parseInt(name)) < 0)
-						throw new IllegalArgumentException("Nonnegative number is required: "+name);
+						throw new IllegalArgumentException("Nonnegative number is required: " + name);
 				if (getSortAscending() == null || !_isCustomAscComparator) {
 					if (index < 0)
 						setSortAscending(new FieldComparator(name, true));
@@ -238,11 +244,11 @@ public class Listheader extends HeaderElement {
 					_isCustomDscComparator = false;
 				}
 			} else {
-				throw new UiException("Unknown sort type: "+type);
+				throw new UiException("Unknown sort type: " + type);
 			}
 		} else if ("none".equals(type)) {
-			setSortAscending((Comparator)null);
-			setSortDescending((Comparator)null);
+			setSortAscending((Comparator) null);
+			setSortDescending((Comparator) null);
 		}
 	}
 
@@ -251,6 +257,7 @@ public class Listheader extends HeaderElement {
 	public Comparator getSortAscending() {
 		return _sortAsc;
 	}
+
 	/** Sets the ascending sorter, or null for no sorter for
 	 * the ascending order.
 	 *
@@ -268,19 +275,19 @@ public class Listheader extends HeaderElement {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
 			_isCustomAscComparator = _sortAsc != null;
-			String nm = _isCustomAscComparator ? "fromServer": "none";
+			String nm = _isCustomAscComparator ? "fromServer" : "none";
 			if (!_sortAscNm.equals(nm)) {
 				_sortAscNm = nm;
 				smartUpdate("sortAscending", _sortAscNm);
 			}
 		}
 	}
+
 	/** Sets the ascending sorter with the class name, or null for
 	 * no sorter for the ascending order.
 	 */
 	public void setSortAscending(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortAscNm.equals(clsnm)) {
 			_sortAscNm = clsnm;
 			smartUpdate("sortAscending", clsnm);
@@ -293,6 +300,7 @@ public class Listheader extends HeaderElement {
 	public Comparator getSortDescending() {
 		return _sortDsc;
 	}
+
 	/** Sets the descending sorter, or null for no sorter for the
 	 * descending order.
 	 *
@@ -310,19 +318,19 @@ public class Listheader extends HeaderElement {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
 			_isCustomDscComparator = _sortDsc != null;
-			String nm = _isCustomDscComparator ? "fromServer": "none";
+			String nm = _isCustomDscComparator ? "fromServer" : "none";
 			if (!_sortDscNm.equals(nm)) {
 				_sortDscNm = nm;
 				smartUpdate("sortDescending", _sortDscNm);
 			}
 		}
 	}
+
 	/** Sets the descending sorter with the class name, or null for
 	 * no sorter for the descending order.
 	 */
 	public void setSortDescending(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortDscNm.equals(clsnm)) {
 			_sortDscNm = clsnm;
 			smartUpdate("sortDescending", clsnm);
@@ -331,18 +339,17 @@ public class Listheader extends HeaderElement {
 	}
 
 	private Comparator toComparator(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
-		if (clsnm == null || clsnm.length() == 0) return null;
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (clsnm == null || clsnm.length() == 0)
+			return null;
 
 		final Page page = getPage();
-		final Class cls = page != null ?
-			page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+		final Class cls = page != null ? page.resolveClass(clsnm) : Classes.forNameByThread(clsnm);
 		if (cls == null)
 			throw new ClassNotFoundException(clsnm);
 		if (!Comparator.class.isAssignableFrom(cls))
-			throw new UiException("Comparator must be implemented: "+clsnm);
-		return (Comparator)cls.newInstance();
+			throw new UiException("Comparator must be implemented: " + clsnm);
+		return (Comparator) cls.newInstance();
 	}
 
 	/** Returns the maximal length of each item's label.
@@ -351,13 +358,15 @@ public class Listheader extends HeaderElement {
 	public int getMaxlength() {
 		return _maxlength;
 	}
+
 	/** Sets the maximal length of each item's label.
 	 * <p>Default: 0 (no limit).
 	 * <p>Notice that maxlength will be applied to this header and all
 	 * listcell of the same column.
 	 */
 	public void setMaxlength(int maxlength) {
-		if (maxlength < 0) maxlength = 0;
+		if (maxlength < 0)
+			maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
 			smartUpdate("maxlength", maxlength);
@@ -368,8 +377,7 @@ public class Listheader extends HeaderElement {
 	 */
 	public int getColumnIndex() {
 		int j = 0;
-		for (Iterator it = getParent().getChildren().iterator();
-		it.hasNext(); ++j)
+		for (Iterator it = getParent().getChildren().iterator(); it.hasNext(); ++j)
 			if (it.next() == this)
 				break;
 		return j;
@@ -405,18 +413,40 @@ public class Listheader extends HeaderElement {
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
 		if (ascending) {
-			if ("ascending".equals(dir)) return false;
+			if ("ascending".equals(dir))
+				return false;
 		} else {
-			if ("descending".equals(dir)) return false;
+			if ("descending".equals(dir))
+				return false;
 		}
 		return doSort(ascending);
 	}
+
+	/** Sorts the list items based on {@link #getSortAscending}
+	 * and {@link #getSortDescending}.
+	 *
+	 * @param ascending whether to use {@link #getSortAscending}.
+	 * If the corresponding comparator is not set, it returns false
+	 * and does nothing.
+	 * @param force whether to enforce the sorting no matter what the sort
+	 * direction ({@link #getSortDirection}) is.
+	 * If false, this method is the same as {@link #sort(boolean)}.
+	 * @return whether the rows are sorted.
+	 */
+	public boolean sort(boolean ascending, boolean force) {
+		if (force)
+			setSortDirection("natural");
+		return sort(ascending);
+	}
+
 	/**/ boolean doSort(boolean ascending) {
-		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
-		if (cmpr == null) return false;
+		final Comparator cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr == null)
+			return false;
 
 		final Listbox box = getListbox();
-		if (box == null) return false;
+		if (box == null)
+			return false;
 
 		//comparator might be zscript
 		Scopes.beforeInterpret(this);
@@ -426,51 +456,49 @@ public class Listheader extends HeaderElement {
 			int activePg = isPagingMold ? box.getPaginal().getActivePage() : 0;
 			if (model != null) { //live data
 				if (model instanceof GroupsSortableModel) {
-					sortGroupsModel(box, (GroupsSortableModel)model, cmpr, ascending);
+					sortGroupsModel(box, (GroupsSortableModel) model, cmpr, ascending);
 				} else {
 					if (!(model instanceof Sortable))
-						throw new UiException(GroupsSortableModel.class
-						+ " or " + Sortable.class + " must be implemented in "+model.getClass().getName());
-					sortListModel((Sortable)model, cmpr, ascending);
+						throw new UiException(GroupsSortableModel.class + " or " + Sortable.class
+								+ " must be implemented in " + model.getClass().getName());
+					sortListModel((Sortable) model, cmpr, ascending);
 				}
 			} else { //not live data
 				sort0(box, cmpr);
 			}
-			if (isPagingMold) box.getPaginal().setActivePage(activePg);
-				// Because of maintaining the number of the visible item, we cause
-				// the wrong active page when dynamically add/remove the item (i.e. sorting).
-				// Therefore, we have to reset the correct active page.
+			if (isPagingMold)
+				box.getPaginal().setActivePage(activePg);
+			// Because of maintaining the number of the visible item, we cause
+			// the wrong active page when dynamically add/remove the item (i.e. sorting).
+			// Therefore, we have to reset the correct active page.
 		} finally {
 			Scopes.afterInterpret();
 		}
 
 		_ignoreSort = true;
 		//maintain
-		for (Iterator it = box.getListhead().getChildren().iterator();
-		it.hasNext();) {
-			final Listheader hd = (Listheader)it.next();
-			hd.setSortDirection(
-				hd != this ? "natural": ascending ? "ascending": "descending");
+		for (Iterator it = box.getListhead().getChildren().iterator(); it.hasNext();) {
+			final Listheader hd = (Listheader) it.next();
+			hd.setSortDirection(hd != this ? "natural" : ascending ? "ascending" : "descending");
 		}
 		_ignoreSort = false;
 
 		// sometimes the items at client side are out of date
 		box.invalidate();
-		
+
 		return true;
 	}
-	
+
 	private void fixDirection(Listbox listbox, boolean ascending) {
 		_ignoreSort = true;
 		//maintain
-		for (Iterator it = listbox.getListhead().getChildren().iterator();
-		it.hasNext();) {
-			final Listheader hd = (Listheader)it.next();
-			hd.setSortDirection(
-				hd != this ? "natural": ascending ? "ascending": "descending");
+		for (Iterator it = listbox.getListhead().getChildren().iterator(); it.hasNext();) {
+			final Listheader hd = (Listheader) it.next();
+			hd.setSortDirection(hd != this ? "natural" : ascending ? "ascending" : "descending");
 		}
 		_ignoreSort = false;
 	}
+
 	/**
 	 * Groups and sorts the items ({@link Listitem}) based on
 	 * {@link #getSortAscending}.
@@ -484,18 +512,22 @@ public class Listheader extends HeaderElement {
 	 * @since 6.5.0
 	 */
 	public boolean group(boolean ascending) {
-		final String dir = getSortDirection();		
+		final String dir = getSortDirection();
 		if (ascending) {
-			if ("ascending".equals(dir)) return false;
+			if ("ascending".equals(dir))
+				return false;
 		} else {
-			if ("descending".equals(dir)) return false;
+			if ("descending".equals(dir))
+				return false;
 		}
-		final Comparator<?> cmpr = ascending ? _sortAsc: _sortDsc;
-		if (cmpr == null) return false;
-		
+		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr == null)
+			return false;
+
 		final Listbox listbox = getListbox();
-		if (listbox == null) return false;
-		
+		if (listbox == null)
+			return false;
+
 		//comparator might be zscript
 		Scopes.beforeInterpret(this);
 		try {
@@ -503,20 +535,22 @@ public class Listheader extends HeaderElement {
 			int index = listbox.getListhead().getChildren().indexOf(this);
 			if (model != null) { //live data
 				if (!(model instanceof GroupsSortableModel))
-					throw new UiException(GroupsSortableModel.class + " must be implemented in "+model.getClass().getName());
-				groupGroupsModel((GroupsSortableModel)model, cmpr, ascending, index);
+					throw new UiException(
+							GroupsSortableModel.class + " must be implemented in " + model.getClass().getName());
+				groupGroupsModel((GroupsSortableModel) model, cmpr, ascending, index);
 			} else { // not live data
 				final List<Listitem> items = listbox.getItems();
-				if (items.isEmpty()) return false;//Avoid listbox with null group		
+				if (items.isEmpty())
+					return false; //Avoid listbox with null group
 				if (listbox.hasGroup()) {
-					for (Listgroup group: new ArrayList<Listgroup>(listbox.getGroups()))
+					for (Listgroup group : new ArrayList<Listgroup>(listbox.getGroups()))
 						group.detach(); // Groupfoot is removed automatically, if any.
 				}
-				
+
 				Comparator<?> cmprx;
-				if(cmpr instanceof GroupComparator){
-					cmprx = new GroupToComparator((GroupComparator)cmpr);
-				}else{
+				if (cmpr instanceof GroupComparator) {
+					cmprx = new GroupToComparator((GroupComparator) cmpr);
+				} else {
 					cmprx = cmpr;
 				}
 
@@ -530,8 +564,7 @@ public class Listheader extends HeaderElement {
 						//new group
 						final List<Listcell> cells = item.getChildren();
 						if (cells.size() < index)
-							throw new IndexOutOfBoundsException(
-									"Index: "+index+" but size: "+ cells.size());
+							throw new IndexOutOfBoundsException("Index: " + index + " but size: " + cells.size());
 						Listgroup group;
 						Listcell cell = cells.get(index);
 						if (cell.getLabel() != null) {
@@ -539,7 +572,7 @@ public class Listheader extends HeaderElement {
 						} else {
 							Component cc = cell.getFirstChild();
 							if (cc instanceof Label) {
-								String val = ((Label)cc).getValue();
+								String val = ((Label) cc).getValue();
 								group = new Listgroup(val);
 							} else {
 								group = new Listgroup(Messages.get(MZul.GRID_OTHER));
@@ -559,60 +592,49 @@ public class Listheader extends HeaderElement {
 		}
 
 		fixDirection(listbox, ascending);
-		
+
 		// sometimes the items at client side are out of date
 		listbox.invalidate();
-		
+
 		return true;
 	}
+
 	@SuppressWarnings("unchecked")
-	private void groupGroupsModel(GroupsSortableModel model, Comparator cmpr,
-	boolean ascending, int index) {
+	private void groupGroupsModel(GroupsSortableModel model, Comparator cmpr, boolean ascending, int index) {
 		model.group(cmpr, ascending, index);
 	}
+
 	@SuppressWarnings("unchecked")
 	private static void sortCollection(List<Listitem> comps, Comparator cmpr) {
 		Collections.sort(comps, cmpr);
 	}
+
 	@SuppressWarnings("unchecked")
 	private static int compare(Comparator cmpr, Object a, Object b) {
 		return cmpr.compare(a, b);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private void sortGroupsModel(Listbox box, GroupsSortableModel model,
-	Comparator cmpr, boolean ascending) {
+	private void sortGroupsModel(Listbox box, GroupsSortableModel model, Comparator cmpr, boolean ascending) {
 		model.sort(cmpr, ascending, box.getListhead().getChildren().indexOf(this));
 	}
+
 	@SuppressWarnings("unchecked")
 	private void sortListModel(Sortable model, Comparator cmpr, boolean ascending) {
 		model.sort(cmpr, ascending);
 	}
+
 	/** Sorts the items. If with group, each group is sorted independently.
 	 */
 	@SuppressWarnings("unchecked")
 	private static void sort0(Listbox box, Comparator cmpr) {
 		if (box.hasGroup())
-			for (Listgroup g: box.getGroups()) {
+			for (Listgroup g : box.getGroups()) {
 				int index = g.getIndex() + 1;
 				Components.sort(box.getItems(), index, index + g.getItemCount(), cmpr);
 			}
-		else Components.sort(box.getItems(), cmpr);
-	}
-	/** Sorts the list items based on {@link #getSortAscending}
-	 * and {@link #getSortDescending}.
-	 *
-	 * @param ascending whether to use {@link #getSortAscending}.
-	 * If the corresponding comparator is not set, it returns false
-	 * and does nothing.
-	 * @param force whether to enforce the sorting no matter what the sort
-	 * direction ({@link #getSortDirection}) is.
-	 * If false, this method is the same as {@link #sort(boolean)}.
-	 * @return whether the rows are sorted.
-	 */
-	public boolean sort(boolean ascending, boolean force) {
-		if (force) setSortDirection("natural");
-		return sort(ascending);
+		else
+			Components.sort(box.getItems(), cmpr);
 	}
 
 	//-- event listener --//
@@ -624,7 +646,7 @@ public class Listheader extends HeaderElement {
 	public void onSort(SortEvent event) {
 		sort(event.isAscending());
 	}
-	
+
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
 	 * @deprecated As of release 6.5.0, use or override {@link #onSort(SortEvent)}
@@ -632,9 +654,12 @@ public class Listheader extends HeaderElement {
 	 */
 	public void onSort() {
 		final String dir = getSortDirection();
-		if ("ascending".equals(dir)) sort(false);
-		else if ("descending".equals(dir)) sort(true);
-		else if (!sort(true)) sort(false);
+		if ("ascending".equals(dir))
+			sort(false);
+		else if ("descending".equals(dir))
+			sort(true);
+		else if (!sort(true))
+			sort(false);
 	}
 
 	/**
@@ -644,7 +669,7 @@ public class Listheader extends HeaderElement {
 	public void onGroupLater(SortEvent event) {
 		group(event.isAscending());
 	}
-	
+
 	/**
 	 * Ungroups and sorts the items ({@link Listitem}) based on the ascending.
 	 * If the corresponding comparator is not set, it returns false
@@ -667,8 +692,7 @@ public class Listheader extends HeaderElement {
 				try {
 					final List<Listitem> items = listbox.getItems();
 					if (listbox.hasGroup()) {
-						for (Listgroup group : new ArrayList<Listgroup>(
-								listbox.getGroups()))
+						for (Listgroup group : new ArrayList<Listgroup>(listbox.getGroups()))
 							group.detach(); // Listgroupfoot is removed
 											// automatically, if any.
 					}
@@ -680,8 +704,7 @@ public class Listheader extends HeaderElement {
 						cmprx = cmpr;
 					}
 
-					final List<Listitem> children = new LinkedList<Listitem>(
-							items);
+					final List<Listitem> children = new LinkedList<Listitem>(items);
 					items.clear();
 					sortCollection(children, cmprx);
 					for (Component c : children)
@@ -696,7 +719,7 @@ public class Listheader extends HeaderElement {
 			listbox.invalidate();
 		}
 	}
-	
+
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-listheader" : _zclass;
@@ -705,11 +728,10 @@ public class Listheader extends HeaderElement {
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listhead))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
 
-	
 	/** Processes an AU request.
 	 * <p>Default: in addition to what are handled by its superclass, it also 
 	 * handles onSort.
@@ -735,18 +757,17 @@ public class Listheader extends HeaderElement {
 		} else
 			super.service(request, everError);
 	}
-	
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		if (!"none".equals(_sortDscNm))
 			render(renderer, "sortDescending", _sortDscNm);
 
 		if (!"none".equals(_sortAscNm))
 			render(renderer, "sortAscending", _sortAscNm);
-		
+
 		if (!"natural".equals(_sortDir))
 			render(renderer, "sortDirection", _sortDir);
 
@@ -755,37 +776,35 @@ public class Listheader extends HeaderElement {
 
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Listheader clone = (Listheader)super.clone();
+		final Listheader clone = (Listheader) super.clone();
 		clone.fixClone();
 		return clone;
 	}
+
 	private void fixClone() {
 		if (_sortAsc instanceof ListitemComparator) {
-			final ListitemComparator c = (ListitemComparator)_sortAsc;
+			final ListitemComparator c = (ListitemComparator) _sortAsc;
 			if (c.getListheader() == this && c.isAscending())
-				_sortAsc =
-					new ListitemComparator(this, true, c.shallIgnoreCase());
+				_sortAsc = new ListitemComparator(this, true, c.shallIgnoreCase());
 		}
 		if (_sortDsc instanceof ListitemComparator) {
-			final ListitemComparator c = (ListitemComparator)_sortDsc;
+			final ListitemComparator c = (ListitemComparator) _sortDsc;
 			if (c.getListheader() == this && !c.isAscending())
-				_sortDsc =
-					new ListitemComparator(this, false, c.shallIgnoreCase());
+				_sortDsc = new ListitemComparator(this, false, c.shallIgnoreCase());
 		}
 	}
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		boolean written = false;
 		if (_sortAsc instanceof ListitemComparator) {
-			final ListitemComparator c = (ListitemComparator)_sortAsc;
+			final ListitemComparator c = (ListitemComparator) _sortAsc;
 			if (c.getListheader() == this && c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
@@ -800,7 +819,7 @@ public class Listheader extends HeaderElement {
 
 		written = false;
 		if (_sortDsc instanceof ListitemComparator) {
-			final ListitemComparator c = (ListitemComparator)_sortDsc;
+			final ListitemComparator c = (ListitemComparator) _sortDsc;
 			if (c.getListheader() == this && !c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
@@ -813,8 +832,8 @@ public class Listheader extends HeaderElement {
 			s.writeObject(_sortDsc);
 		}
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		boolean b = s.readBoolean();
@@ -824,7 +843,7 @@ public class Listheader extends HeaderElement {
 			_sortAsc = new ListitemComparator(this, true, igcs, byval);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortAsc = (Comparator)s.readObject();
+			_sortAsc = (Comparator) s.readObject();
 		}
 
 		b = s.readBoolean();
@@ -834,24 +853,27 @@ public class Listheader extends HeaderElement {
 			_sortDsc = new ListitemComparator(this, false, igcs, byval);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortDsc = (Comparator)s.readObject();
+			_sortDsc = (Comparator) s.readObject();
 		}
 	}
+
 	private static class GroupToComparator implements Comparator {
 		private final GroupComparator _gcmpr;
+
 		private GroupToComparator(GroupComparator gcmpr) {
 			_gcmpr = gcmpr;
 		}
+
 		@SuppressWarnings("unchecked")
 		public int compare(Object o1, Object o2) {
 			return _gcmpr.compareGroup(o1, o2);
 		}
 	}
-	
+
 	//B70-ZK-1816, also add in zk 8, ZK-2660
 	protected void updateByClient(String name, Object value) {
 		if ("visible".equals(name))
-			this.setVisibleDirectly(((Boolean)value).booleanValue());
+			this.setVisibleDirectly(((Boolean) value).booleanValue());
 		else
 			super.updateByClient(name, value);
 	}

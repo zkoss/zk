@@ -25,44 +25,44 @@ public final class StandardTheme extends Theme {
 	/**
 	 * Used to specify the origin of theme resources (e.g. CSS, Images)
 	 * @since 6.5.2
-	 */	
+	 */
 	public static enum ThemeOrigin {
 		JAR, FOLDER
 	}
-	
+
 	/**
 	 * Name used to identify the default theme
 	 */
-	public final static String DEFAULT_NAME    = "breeze";
+	public static final String DEFAULT_NAME = "breeze";
 	/**
 	 * Name used to display the default theme
 	 */
-	public final static String DEFAULT_DISPLAY = "Breeze";
+	public static final String DEFAULT_DISPLAY = "Breeze";
 	/**
 	 * Priority of the default theme
 	 */
-	public final static int DEFAULT_PRIORITY   = 500;
+	public static final int DEFAULT_PRIORITY = 500;
 	/**
 	 * Origin of the default theme.
 	 * For default desktop theme, it is inside zul.jar/zkex.jar/zkmax.jar.
 	 * For default tablet theme, it is inside zkmax.jar.
 	 */
-	public final static ThemeOrigin DEFAULT_ORIGIN  = ThemeOrigin.JAR;
-	
+	public static final ThemeOrigin DEFAULT_ORIGIN = ThemeOrigin.JAR;
+
 	// Name used to display the theme
 	private String _displayName;
 	// Used in theme selection process
 	private int _priority;
 	// Location to retrieve theme resources such as CSS files and images
 	private ThemeOrigin _origin;
-		
+
 	/**
 	 * Instantiate a default theme
 	 */
 	public StandardTheme() {
 		super(DEFAULT_NAME);
 	}
-	
+
 	/**
 	 * Instantiate a standard theme
 	 * 
@@ -81,7 +81,7 @@ public final class StandardTheme extends Theme {
 	public StandardTheme(String themeName, ThemeOrigin origin) {
 		this(themeName, themeName, DEFAULT_PRIORITY, origin);
 	}
-	
+
 	/**
 	 * Instantiate a standard theme
 	 * 
@@ -95,7 +95,7 @@ public final class StandardTheme extends Theme {
 	public StandardTheme(String themeName, String displayName, int priority) {
 		this(themeName, displayName, priority, DEFAULT_ORIGIN);
 	}
-	
+
 	/**
 	 * Instantiate a standard theme
 	 * 
@@ -116,14 +116,14 @@ public final class StandardTheme extends Theme {
 		} else
 			throw new IllegalArgumentException("Standard themes should not have blank names");
 	}
-	
+
 	/**
 	 * @return the name used to display the theme 
 	 */
 	public String getDisplayName() {
 		return _displayName;
 	}
-	
+
 	/**
 	 * Rename the display name
 	 * @param displayName the new name used to display the theme
@@ -136,9 +136,9 @@ public final class StandardTheme extends Theme {
 	 * @return the priority of the theme
 	 */
 	public int getPriority() {
-		return _priority; 
+		return _priority;
 	}
-	
+
 	/**
 	 * Adjust the priority of the theme
 	 * 
@@ -154,9 +154,9 @@ public final class StandardTheme extends Theme {
 	public ThemeOrigin getOrigin() {
 		return _origin;
 	}
-	
+
 	private static final Comparator<StandardTheme> _COMPARATOR = new Comparator<StandardTheme>() {
-		
+
 		public int compare(StandardTheme t1, StandardTheme t2) {
 			if (t1 == null) {
 				if (t2 == null)
@@ -166,11 +166,11 @@ public final class StandardTheme extends Theme {
 			} else if (t2 == null) {
 				return -1;
 			} else
-				return t1._priority - t2._priority;		
+				return t1._priority - t2._priority;
 		}
 
 	};
-	
+
 	/**
 	 * Defines the ordering of standard themes. Higher priority themes are
 	 * ordered before the lower priority themes.
@@ -180,5 +180,5 @@ public final class StandardTheme extends Theme {
 	public static Comparator<StandardTheme> getComparator() {
 		return _COMPARATOR;
 	}
-	
+
 }

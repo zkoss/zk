@@ -14,8 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to select a portion of the specified component at the client.
@@ -30,9 +30,9 @@ public class AuSelect extends AuResponse {
 	public AuSelect(Component comp) {
 		super("select", comp, comp);
 	}
+
 	public AuSelect(Component comp, int beg, int end) {
-		super("select", comp,
-			new Object[] {comp, new Integer(beg), new Integer(end)});
+		super("select", comp, new Object[] { comp, new Integer(beg), new Integer(end) });
 	}
 
 	/** Default: zk.select (i.e., only one response of this class

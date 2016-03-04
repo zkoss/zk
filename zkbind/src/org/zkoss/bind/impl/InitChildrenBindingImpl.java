@@ -35,52 +35,50 @@ import org.zkoss.zul.event.ListDataListener;
  * @author Dennis
  * @since 6.0.0
  */
-public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
-	InitChildrenBinding {
+public class InitChildrenBindingImpl extends ChildrenBindingImpl implements InitChildrenBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-	
-	public InitChildrenBindingImpl(Binder binder, Component comp, String initExpr,Map<String, Object> bindingArgs,
-			String converterExpr,Map<String, Object> converterArgs) {
-		super(binder, comp, initExpr, ConditionType.PROMPT, null, bindingArgs,converterExpr,converterArgs);
+
+	public InitChildrenBindingImpl(Binder binder, Component comp, String initExpr, Map<String, Object> bindingArgs,
+			String converterExpr, Map<String, Object> converterArgs) {
+		super(binder, comp, initExpr, ConditionType.PROMPT, null, bindingArgs, converterExpr, converterArgs);
 	}
-	
-	
-	protected boolean ignoreTracker(){
+
+	protected boolean ignoreTracker() {
 		//init only loaded once, so it don't need to add to tracker.
 		return true;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void load(BindContext ctx) {
-		final Component comp = getComponent();//ctx.getComponent();
+		final Component comp = getComponent(); //ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
-		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
-		
+		final BindingExecutionInfoCollector collector = ((BinderCtrl) getBinder()).getBindingExecutionInfoCollector();
+
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
-		
+
 		//use _converter to convert type if any
 		final Converter conv = getConverter();
 		Object old = value;
 		if (conv != null) {
 			value = conv.coerceToUi(value, comp, ctx);
-			if(value == Converter.IGNORED_VALUE) {
-				if(collector!=null){
-					collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_INIT,comp,null,
-							getPropertyString(),null,old,getArgs(),"*Converter.IGNORED_VALUE"));
+			if (value == Converter.IGNORED_VALUE) {
+				if (collector != null) {
+					collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_INIT, comp, null, getPropertyString(), null, old,
+							getArgs(), "*Converter.IGNORED_VALUE"));
 				}
 				return;
 			}
 		}
-		
+
 		comp.getChildren().clear();
 		BindELContext.removeModel(comp);
-		if(value!=null){
+		if (value != null) {
 			List<Object> data = null;
-			if(value instanceof List){
-				data = (List<Object>)value;
-			}else{
-				throw new UiException(value+" is not a List, is "+value.getClass());
+			if (value instanceof List) {
+				data = (List<Object>) value;
+			} else {
+				throw new UiException(value + " is not a List, is " + value.getClass());
 			}
 			BindChildRenderer renderer = new BindChildRenderer();
 			BindELContext.addModel(comp, data); //ZK-758. @see AbstractRenderer#addItemReference
@@ -90,22 +88,19 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements
 				ListDataListener dataListener = new ChildrenBindingListDataListener(comp, ctx, conv);
 				((ListModel<?>) old).addListDataListener(dataListener);
 				comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL, old);
-				final Object attribute = comp.setAttribute(
-						BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER,
-						dataListener);
-				if (attribute instanceof  ListDataListener) // B80-ZK-2927
-					((ListModel<?>) old).removeListDataListener(
-							(ListDataListener) attribute);
+				final Object attribute = comp.setAttribute(BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER, dataListener);
+				if (attribute instanceof ListDataListener) // B80-ZK-2927
+					((ListModel<?>) old).removeListDataListener((ListDataListener) attribute);
 			}
 			int size = data.size();
-			for(int i = 0; i < size; i++) {
+			for (int i = 0; i < size; i++) {
 				renderer.render(comp, data.get(i), i, size, isUsingListModel);
 			}
 		}
-		
-		if(collector!=null){
-			collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_INIT,comp,null,
-					getPropertyString(),null,value,getArgs(),null));
+
+		if (collector != null) {
+			collector.addInfo(new LoadInfo(LoadInfo.CHILDREN_INIT, comp, null, getPropertyString(), null, value,
+					getArgs(), null));
 		}
 	}
 }

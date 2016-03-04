@@ -25,9 +25,9 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  * @since 3.0.0
  */
-/*package*/ class LangEvalRef extends AbstractEvalRef
-implements java.io.Serializable {
+/*package*/ class LangEvalRef extends AbstractEvalRef implements java.io.Serializable {
 	private transient LanguageDefinition _langdef;
+
 	/*package*/ LangEvalRef(LanguageDefinition langdef) {
 		_langdef = langdef;
 	}
@@ -39,17 +39,16 @@ implements java.io.Serializable {
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
-		s.writeObject(_langdef != null ? _langdef.getName(): null);
+		s.writeObject(_langdef != null ? _langdef.getName() : null);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final String langnm = (String)s.readObject();
+		final String langnm = (String) s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
 	}

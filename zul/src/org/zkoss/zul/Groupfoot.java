@@ -35,23 +35,26 @@ import org.zkoss.zk.ui.UiException;
 public class Groupfoot extends Row {
 	public Groupfoot() {
 	}
+
 	public Groupfoot(String label) {
 		this();
 		setLabel(label);
 	}
+
 	public <T> Groupfoot(String label, T value) {
 		this();
 		setLabel(label);
 		setValue(value);
 	}
-	
+
 	/** Returns the value of the {@link Label} it contains, or null
 	 * if no such cell.
 	 */
 	public String getLabel() {
 		final Component cell = getFirstChild();
-		return cell != null && cell instanceof Label ? ((Label)cell).getValue(): null;
+		return cell != null && cell instanceof Label ? ((Label) cell).getValue() : null;
 	}
+
 	/** Sets the value of the {@link Label} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
@@ -63,14 +66,16 @@ public class Groupfoot extends Row {
 	public String getZclass() {
 		return _zclass == null ? "z-groupfoot" : _zclass;
 	}
+
 	private Label autoFirstCell() {
 		Component cell = getFirstChild();
 		if (cell == null || cell instanceof Label) {
-			if (cell == null) cell = new Label();
+			if (cell == null)
+				cell = new Label();
 			cell.applyProperties();
 			cell.setParent(this);
-			return (Label)cell;
+			return (Label) cell;
 		}
-		throw new UiException("Unsupported child for setLabel: "+cell);
+		throw new UiException("Unsupported child for setLabel: " + cell);
 	}
 }

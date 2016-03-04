@@ -24,5 +24,5 @@ import org.zkoss.zk.ui.event.Event;
  */
 public interface ImplicitObjectContributor {
 
-	public Map<String,Object> contirbuteCommandObject(Binder binder,CommandBinding binding, Event event);
+	public Map<String, Object> contirbuteCommandObject(Binder binder, CommandBinding binding, Event event);
 }

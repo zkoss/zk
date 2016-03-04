@@ -18,10 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event cause by user's input something at the client.
@@ -40,16 +39,13 @@ public class InputEvent extends Event {
 	 * @param oldValue the previous value
 	 * @since 5.0.4
 	 */
-	public static final
-	InputEvent getInputEvent(AuRequest request, Object oldValue) {
+	public static final InputEvent getInputEvent(AuRequest request, Object oldValue) {
 		final Map<String, Object> data = request.getData();
 		final Object val = data.get("value");
-		return new InputEvent(request.getCommand(), request.getComponent(),
-			val == null ? "" : val.toString(),
-			oldValue,
-			AuRequests.getBoolean(data, "bySelectBack"),
-			AuRequests.getInt(data, "start", 0));
+		return new InputEvent(request.getCommand(), request.getComponent(), val == null ? "" : val.toString(), oldValue,
+				AuRequests.getBoolean(data, "bySelectBack"), AuRequests.getInt(data, "start", 0));
 	}
+
 	/** Constructs a input-relevant event.
 	 * @param val the new value
 	 * @param oldValue the previous value
@@ -58,6 +54,7 @@ public class InputEvent extends Event {
 	public InputEvent(String name, Component target, String val, Object oldValue) {
 		this(name, target, val, oldValue, false, 0);
 	}
+
 	/** Constructs an input event
 	 * @param val the new value
 	 * @param oldValue the previous value
@@ -66,8 +63,7 @@ public class InputEvent extends Event {
 	 * event. See {@link #isChangingBySelectBack} for details.
 	 * @since 5.0.4
 	 */
-	public InputEvent(String name, Component target, String val, Object oldValue,
-	boolean selbk, int start) {
+	public InputEvent(String name, Component target, String val, Object oldValue, boolean selbk, int start) {
 		super(name, target);
 		_val = val;
 		_oldVal = oldValue;
@@ -86,6 +82,7 @@ public class InputEvent extends Event {
 	public final String getValue() {
 		return _val;
 	}
+
 	/** Returns the previous value before user's input.
 	 * Notice that the class of the return value depends on the component.
 	 * For example, an instance of Double is returned if {@link org.zkoss.zul.Doublebox}
@@ -95,6 +92,7 @@ public class InputEvent extends Event {
 	public Object getPreviousValue() {
 		return _oldVal;
 	}
+
 	/** Returns whether this event is <code>onChanging</code>, and caused by
 	 * user's selecting a list of predefined values (a.k.a., items).
 	 *

@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.servlet.Servlets;
@@ -85,8 +86,10 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		String param = config.getInitParameter("log-level");
 		if (param != null && param.length() > 0) {
 			final Level level = org.zkoss.util.logging.Log.getLevel(param);
-			if (level != null)  Logger.getLogger("org.zkoss").setLevel(level);
-			else log.error("Unknown log-level: "+param);
+			if (level != null)
+				Logger.getLogger("org.zkoss").setLevel(level);
+			else
+				log.error("Unknown log-level: " + param);
 		}
 
 		param = config.getInitParameter("compress");
@@ -94,8 +97,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 		final ServletContext ctx = getServletContext();
 		_webman = WebManager.getWebManagerIfAny(ctx);
-		String updateURI = Utils.checkUpdateURI(
-				config.getInitParameter("update-uri"), "The update-uri parameter");
+		String updateURI = Utils.checkUpdateURI(config.getInitParameter("update-uri"), "The update-uri parameter");
 		ctx.setAttribute("org.zkoss.zk.ui.http.update-uri", updateURI); //B65-ZK-1619
 		if (_webman == null) {
 			log.warn("WebManager not initialized. Please check if HttpSessionListener is configured properly.");
@@ -105,6 +107,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			_webman.setUpdateUri(updateURI);
 		}
 	}
+
 	public void destroy() {
 		if (_webman != null) {
 			if (_webmanCreated)
@@ -114,24 +117,22 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	}
 
 	//-- super --//
-	protected
-	void doGet(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String path = Https.getThisPathInfo(request);
 		final boolean bRichlet = path != null && path.length() > 0;
 		if (!bRichlet)
 			path = Https.getThisServletPath(request);
-//		if (log.finerable()) log.finer("Creates from "+path);
+		//		if (log.finerable()) log.finer("Creates from "+path);
 
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		if (!SessionsCtrl.requestEnter(sess)) {
-			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,
-				Messages.get(MZk.TOO_MANY_REQUESTS));
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, Messages.get(MZk.TOO_MANY_REQUESTS));
 			return;
 		}
 		try {
 			final Object old = I18Ns.setup(sess, request, response,
-				sess.getWebApp().getConfiguration().getResponseCharset());
+					sess.getWebApp().getConfiguration().getResponseCharset());
 			try {
 				if (!process(sess, request, response, path, bRichlet))
 					handleError(sess, request, response, path, null);
@@ -144,9 +145,9 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			SessionsCtrl.requestExit(sess);
 		}
 	}
-	protected
-	void doPost(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
@@ -156,28 +157,24 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	 * @return false if the page is not found.
 	 * @since 3.0.0
 	 */
-	protected boolean process(Session sess,
-	HttpServletRequest request, HttpServletResponse response, String path,
-	boolean bRichlet)
-	throws ServletException, IOException {
+	protected boolean process(Session sess, HttpServletRequest request, HttpServletResponse response, String path,
+			boolean bRichlet) throws ServletException, IOException {
 		final WebApp wapp = sess.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final WebAppCtrl wappc = (WebAppCtrl) wapp;
 		final Configuration config = wapp.getConfiguration();
 
 		final boolean bInclude = Servlets.isIncluded(request);
 		final boolean compress = _compress && !bInclude;
-		final Writer out = compress ? (Writer)new StringWriter(): response.getWriter();
-		final DesktopRecycle dtrc = bInclude ? null: config.getDesktopRecycle();
+		final Writer out = compress ? (Writer) new StringWriter() : response.getWriter();
+		final DesktopRecycle dtrc = bInclude ? null : config.getDesktopRecycle();
 		final ServletContext ctx = getServletContext();
-		Desktop desktop = dtrc != null ?
-			DesktopRecycles.beforeService(dtrc, ctx, sess, request, response, path): null;
+		Desktop desktop = dtrc != null ? DesktopRecycles.beforeService(dtrc, ctx, sess, request, response, path) : null;
 
 		try {
 			if (desktop != null) { //recycle
 				final Page page = Utils.getMainPage(desktop);
 				if (page != null) {
-					final Execution exec = new ExecutionImpl(
-						ctx, request, response, desktop, page);
+					final Execution exec = new ExecutionImpl(ctx, request, response, desktop, page);
 					WebManager.setDesktop(request, desktop);
 					wappc.getUiEngine().recycleDesktop(exec, page, out);
 				} else
@@ -190,10 +187,9 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				if (desktop == null) //forward or redirect
 					return true;
 
-				final RequestInfo ri = new RequestInfoImpl(
-					wapp, sess, desktop, request,
-					PageDefinitions.getLocator(wapp, path));
-				((SessionCtrl)sess).notifyClientRequest(true);
+				final RequestInfo ri = new RequestInfoImpl(wapp, sess, desktop, request,
+						PageDefinitions.getLocator(wapp, path));
+				((SessionCtrl) sess).notifyClientRequest(true);
 
 				final UiFactory uf = wappc.getUiFactory();
 				if (uf.isRichlet(ri, bRichlet)) {
@@ -202,18 +198,16 @@ public class DHtmlLayoutServlet extends HttpServlet {
 						return false; //not found
 
 					final Page page = WebManager.newPage(uf, ri, richlet, response, path);
-					final Execution exec = new ExecutionImpl(
-						ctx, request, response, desktop, page);
+					final Execution exec = new ExecutionImpl(ctx, request, response, desktop, page);
 					wappc.getUiEngine().execNewPage(exec, richlet, page, out);
-						//no need to set device type here, since UiEngine will do it later
+					//no need to set device type here, since UiEngine will do it later
 				} else {
 					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
 					if (pagedef == null)
 						return false; //not found
 
 					final Page page = WebManager.newPage(uf, ri, pagedef, response, path);
-					final Execution exec = new ExecutionImpl(
-						ctx, request, response, desktop, page);
+					final Execution exec = new ExecutionImpl(ctx, request, response, desktop, page);
 					wappc.getUiEngine().execNewPage(exec, pagedef, page, out);
 					voided = exec.isVoided();
 				}
@@ -221,16 +215,17 @@ public class DHtmlLayoutServlet extends HttpServlet {
 
 			// check voided to ignore the IOExecuption that caused by Executions.forward()
 			if (compress && !voided) {
-				final String result = ((StringWriter)out).toString();
+				final String result = ((StringWriter) out).toString();
 
 				try {
 					final OutputStream os = response.getOutputStream();
-						//Call it first to ensure getWrite() is not called yet
+					//Call it first to ensure getWrite() is not called yet
 
 					byte[] data = result.getBytes(config.getResponseCharset());
 					if (data.length > 200) {
 						byte[] bs = Https.gzip(request, response, null, data);
-						if (bs != null) data = bs; //yes, browser support compress
+						if (bs != null)
+							data = bs; //yes, browser support compress
 					}
 
 					response.setContentLength(data.length);
@@ -251,17 +246,15 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	 * @param err the exception being throw. If null, it means the page
 	 * is not found.
 	 */
-	private void handleError(Session sess, HttpServletRequest request,
-	HttpServletResponse response, String path, Throwable err)
-	throws ServletException, IOException {
+	private void handleError(Session sess, HttpServletRequest request, HttpServletResponse response, String path,
+			Throwable err) throws ServletException, IOException {
 		Utils.resetOwner();
 
 		//Note: if not included, it is handled by Web container
 		if (err != null && Servlets.isIncluded(request)) {
 			//Bug 1714094: we have to handle err, because Web container
 			//didn't allow developer to intercept errors caused by inclusion
-			final String errpg = sess.getWebApp().getConfiguration()
-				.getErrorPage(sess.getDeviceType(), err);
+			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
 			if (errpg != null) {
 				try {
 					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
@@ -271,10 +264,10 @@ public class DHtmlLayoutServlet extends HttpServlet {
 					if (process(sess, request, response, errpg, false))
 						return; //done
 
-					log.warn("The error page not found: "+errpg);
+					log.warn("The error page not found: " + errpg);
 				} catch (IOException ex) { //eat it (connection off)
 				} catch (Throwable ex) {
-					log.warn("Failed to load the error page: "+errpg, ex);
+					log.warn("Failed to load the error page: " + errpg, ex);
 				}
 			}
 		}

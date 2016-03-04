@@ -12,7 +12,6 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 
-
 package org.zkoss.zkplus.databind;
 
 import org.zkoss.lang.Objects;
@@ -37,7 +36,7 @@ public class BindingGroupsListModel extends GroupsListModel implements BindingLi
 
 	//--BindingListModel--//
 	public int indexOf(Object obj) {
-		for(int j = getSize(); j-- > 0;) {
+		for (int j = getSize(); j-- > 0;) {
 			if (Objects.equals(getElementAt(j), obj)) {
 				return j;
 			}

@@ -19,10 +19,12 @@ package org.zkoss.zhtml;
 /**
  * A fileupload dialog used to let user upload a file.
  *
- * <p>You don't create {@link Fileupload} directly. Rather, use {@link #get()}
- * or {@link #get(String, String)}.
+ * <p>
+ * You don't create {@link Fileupload} directly. Rather, use {@link #get()} or
+ * {@link #get(String, String)}.
  *
- * <p>A non-XHTML extension.
+ * <p>
+ * A non-XHTML extension.
  * 
  * @author tomyeh
  */

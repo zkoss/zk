@@ -24,8 +24,9 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  * @since 6.0.0
  */
-public class ObjectBooleanConverter implements Converter,Serializable {
+public class ObjectBooleanConverter implements Converter, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
+
 	/**
 	 * Given an object value and return whether it is a "true" object.
 	 * @param val the object to be checked if a true object
@@ -37,7 +38,7 @@ public class ObjectBooleanConverter implements Converter,Serializable {
 		final Object trueObj = ctx.getConverterArg("true");
 		return Boolean.valueOf(Objects.equals(val, trueObj));
 	}
-	
+
 	/**
 	 * Given a Boolean value and return associated "true" object if true; or "false" object if null or false
 	 * @param val the boolean value to be checked.
@@ -49,6 +50,6 @@ public class ObjectBooleanConverter implements Converter,Serializable {
 		final Object trueObj = ctx.getConverterArg("true");
 		final Object falseObj = ctx.getConverterArg("false");
 		final Boolean b = (Boolean) val;
-		return b!=null && b.booleanValue() ? trueObj : falseObj;
+		return b != null && b.booleanValue() ? trueObj : falseObj;
 	}
 }

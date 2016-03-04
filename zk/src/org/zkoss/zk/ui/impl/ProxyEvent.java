@@ -41,11 +41,13 @@ public class ProxyEvent extends Event {
 		_realTarget = realTarget;
 		_event = event;
 	}
+
 	/** Returns the real target.
 	 */
 	public Component getRealTarget() {
 		return _realTarget;
 	}
+
 	/** Returns the proxied event.
 	 */
 	public Event getProxiedEvent() {

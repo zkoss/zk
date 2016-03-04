@@ -32,6 +32,7 @@ import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.SystemException;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ExtendletContext;
@@ -61,14 +62,11 @@ public class Portlets {
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
 	 * and params contains the same parameter.
 	 */
-	public static final
-	void include(PortletContext ctx, RenderRequest request,
-	RenderResponse response, String uri, Map params, int mode)
-	throws IOException, PortletException {
-		final PortletRequestDispatcher disp =
-			getRequestDispatcher(ctx, uri, params, mode);
+	public static final void include(PortletContext ctx, RenderRequest request, RenderResponse response, String uri,
+			Map params, int mode) throws IOException, PortletException {
+		final PortletRequestDispatcher disp = getRequestDispatcher(ctx, uri, params, mode);
 		if (disp == null)
-			throw new PortletException("No dispatcher available to include "+uri);
+			throw new PortletException("No dispatcher available to include " + uri);
 		disp.include(request, response);
 	}
 
@@ -85,27 +83,27 @@ public class Portlets {
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
 	 * and params contains the same parameter.
 	 */
-	public static final PortletRequestDispatcher
-	getRequestDispatcher(PortletContext ctx, String uri, Map params, int mode)
-	throws PortletException {
+	public static final PortletRequestDispatcher getRequestDispatcher(PortletContext ctx, String uri, Map params,
+			int mode) throws PortletException {
 		return new ParsedURI(ctx, uri).getRequestDispatcher(params, mode);
 	}
+
 	/** Returns the resource of the specified uri.
 	 * Unlike PortletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
 	 */
-	public static final URL getResource(PortletContext ctx, String uri)
-	throws MalformedURLException {
+	public static final URL getResource(PortletContext ctx, String uri) throws MalformedURLException {
 		return new ParsedURI(ctx, uri).getResource();
 	}
+
 	/** Returns the resource stream of the specified uri.
 	 * Unlike PortletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
 	 */
-	public static final InputStream getResourceAsStream(
-	PortletContext ctx, String uri) {
+	public static final InputStream getResourceAsStream(PortletContext ctx, String uri) {
 		return new ParsedURI(ctx, uri).getResourceAsStream();
 	}
+
 	/** Used to resolve "~" in URI. */
 	private static class ParsedURI {
 		/** The portlet context, null if _svlctx or _extctx is need. */
@@ -134,13 +132,14 @@ public class Portlets {
 					_svlctx = svlctx;
 					_svlctx = _svlctx.getContext(ctxroot);
 					if (_svlctx == null)
-						throw new SystemException("Context not found or not visible to "+ctx+": "+ctxroot);
+						throw new SystemException("Context not found or not visible to " + ctx + ": " + ctxroot);
 				}
 			} else {
 				_prtctx = ctx;
 				_uri = uri;
 			}
 		}
+
 		private PortletRequestDispatcher getRequestDispatcher(Map params, int mode) {
 			if (_extctx == null && _svlctx == null && _prtctx == null) //not found
 				return null;
@@ -149,20 +148,20 @@ public class Portlets {
 			if (_prtctx != null)
 				return _prtctx.getRequestDispatcher(uri);
 
-			final RequestDispatcher rd =
-				_svlctx != null ? _svlctx.getRequestDispatcher(uri):
-					_extctx.getRequestDispatcher(uri);
+			final RequestDispatcher rd = _svlctx != null ? _svlctx.getRequestDispatcher(uri)
+					: _extctx.getRequestDispatcher(uri);
 			return ServletPortletDispatcher.getInstance(rd);
 		}
+
 		private URL getResource() throws MalformedURLException {
-			return _prtctx != null ? _prtctx.getResource(_uri):
-				_svlctx != null ? _svlctx.getResource(_uri):
-				_extctx != null ? _extctx.getResource(_uri): null;
+			return _prtctx != null ? _prtctx.getResource(_uri)
+					: _svlctx != null ? _svlctx.getResource(_uri) : _extctx != null ? _extctx.getResource(_uri) : null;
 		}
+
 		private InputStream getResourceAsStream() {
-			return _prtctx != null ? _prtctx.getResourceAsStream(_uri):
-				_svlctx != null ? _svlctx.getResourceAsStream(_uri):
-				_extctx != null ? _extctx.getResourceAsStream(_uri): null;
+			return _prtctx != null ? _prtctx.getResourceAsStream(_uri)
+					: _svlctx != null ? _svlctx.getResourceAsStream(_uri)
+							: _extctx != null ? _extctx.getResourceAsStream(_uri) : null;
 		}
 	}
 
@@ -185,6 +184,7 @@ public class Portlets {
 	 * Used by {@link #generateURI}
 	 */
 	public static final int APPEND_PARAM = Servlets.APPEND_PARAM;
+
 	/** Generates URI by appending the parameters.
 	 * @param params the parameters to append to the query string
 	 * @param mode one of {@link #OVERWRITE_URI}, {@link #IGNORE_PARAM},

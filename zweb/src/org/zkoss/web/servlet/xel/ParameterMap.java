@@ -14,15 +14,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.web.servlet.xel;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.util.AbstractSet;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Iterator;
-import java.util.Enumeration;
 
 import javax.servlet.ServletRequest;
-
-import static org.zkoss.lang.Generics.cast;
 
 /**
  * Represents a parameter map.
@@ -44,9 +44,11 @@ public class ParameterMap extends StringKeysMap<String> {
 				public int size() {
 					return ParameterMap.this.size();
 				}
+
 				public boolean contains(Object o) {
 					return ParameterMap.this.containsKey(o);
 				}
+
 				public Iterator<Map.Entry<String, String>> iterator() {
 					return cast(new EntryIter());
 				}
@@ -58,6 +60,7 @@ public class ParameterMap extends StringKeysMap<String> {
 	public int size() {
 		return _request.getParameterMap().size();
 	}
+
 	public boolean containsKey(Object key) {
 		return _request.getParameterMap().containsKey(key);
 	}
@@ -65,13 +68,16 @@ public class ParameterMap extends StringKeysMap<String> {
 	protected String getValue(String key) {
 		return _request.getParameter(key);
 	}
+
 	@SuppressWarnings("unchecked")
 	protected Enumeration<String> getKeys() {
 		return _request.getParameterNames();
 	}
+
 	protected void setValue(String key, String value) {
 		throw new UnsupportedOperationException("readonly");
 	}
+
 	protected void removeValue(String key) {
 		throw new UnsupportedOperationException("readonly");
 	}

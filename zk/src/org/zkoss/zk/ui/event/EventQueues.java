@@ -14,13 +14,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
-
-import org.zkoss.zk.ui.WebApp;
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
-
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.impl.EventQueueProvider;
 import org.zkoss.zk.ui.event.impl.EventQueueProviderImpl;
 
@@ -128,10 +126,10 @@ public class EventQueues {
 	 * @exception IllegalStateException if not in an activated execution
 	 * @exception UnsupportedOperationException if the scope is not supported
 	 */
-	public static <T extends Event>
-	EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
+	public static <T extends Event> EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
 		return getProvider().lookup(name, scope, autoCreate);
 	}
+
 	/** Returns the event queue with the specified name in the
 	 * give session (i.e., the session scope).
 	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
@@ -142,10 +140,10 @@ public class EventQueues {
 	 * @see #lookup(String, WebApp, boolean)
 	 * @since 5.0.2
 	 */
-	public static <T extends Event>
-	EventQueue<T> lookup(String name, Session sess, boolean autoCreate) {
+	public static <T extends Event> EventQueue<T> lookup(String name, Session sess, boolean autoCreate) {
 		return getProvider().lookup(name, sess, autoCreate);
 	}
+
 	/** Returns the event queue with the specified name in the
 	 * give application (i.e., the application scope).
 	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
@@ -156,18 +154,18 @@ public class EventQueues {
 	 * @see #lookup(String, Session, boolean)
 	 * @since 5.0.2
 	 */
-	public static <T extends Event>
-	EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate) {
+	public static <T extends Event> EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate) {
 		return getProvider().lookup(name, wapp, autoCreate);
 	}
+
 	/** Returns the desktop-level event queue with the specified name in the current
 	 * desktop.
 	 * It is a shortcut of <code>lookup(name, DESKTOP, autoCreate)</code>.
 	 */
-	public static <T extends Event>
-	EventQueue<T> lookup(String name, boolean autoCreate) {
+	public static <T extends Event> EventQueue<T> lookup(String name, boolean autoCreate) {
 		return lookup(name, DESKTOP, autoCreate);
 	}
+
 	/** Returns the desktop-level event queue with the specified name in the current
 	 * desktop, or if no such event queue, create one.
 	 * It is a shortcut of <code>lookup(name, DESKTOP, true)</code>.
@@ -181,6 +179,7 @@ public class EventQueues {
 	public static boolean exists(String name, String scope) {
 		return lookup(name, scope, false) != null;
 	}
+
 	/** Tests if the specified event queue has been created
 	 * in the current desktop.
 	 * It is a shortcut of <code>exists(name, DESKTOP)</code>
@@ -197,6 +196,7 @@ public class EventQueues {
 	public static boolean remove(String name) {
 		return remove(name, DESKTOP);
 	}
+
 	/** Removes the event queue of the specified scope.
 	 * @param name the queue name.
 	 * @param scope the scope of the event queue. Currently,
@@ -208,6 +208,7 @@ public class EventQueues {
 	public static boolean remove(String name, String scope) {
 		return getProvider().remove(name, scope);
 	}
+
 	/** Removes the event queue of the specified session.
 	 * <p>Unlike {@link #remove(String, String)}, this method
 	 * can be called without an activated execution.
@@ -220,6 +221,7 @@ public class EventQueues {
 	public static boolean remove(String name, Session sess) {
 		return getProvider().remove(name, sess);
 	}
+
 	/** Removes the event queue of the specified application.
 	 * <p>Unlike {@link #remove(String, String)}, this method
 	 * can be called without an activated execution.
@@ -232,6 +234,7 @@ public class EventQueues {
 	public static boolean remove(String name, WebApp wapp) {
 		return getProvider().remove(name, wapp);
 	}
+
 	private static final EventQueueProvider getProvider() {
 		if (_provider == null)
 			synchronized (EventQueues.class) {
@@ -240,18 +243,19 @@ public class EventQueues {
 					String clsnm = Library.getProperty("org.zkoss.zk.ui.event.EventQueueProvider.class");
 					if (clsnm == null)
 						clsnm = Library.getProperty("org.zkoss.zkmax.ui.EventQueueProvider.class");
-							//backward compatible
+					//backward compatible
 					if (clsnm != null)
 						try {
 							final Object o = Classes.newInstanceByThread(clsnm);
-									//try zkex first
+							//try zkex first
 							if (!(o instanceof EventQueueProvider))
-								throw new UiException(o.getClass().getName()+" must implement "+EventQueueProvider.class.getName());
-							provider = (EventQueueProvider)o;
+								throw new UiException(o.getClass().getName() + " must implement "
+										+ EventQueueProvider.class.getName());
+							provider = (EventQueueProvider) o;
 						} catch (UiException ex) {
 							throw ex;
 						} catch (Throwable ex) {
-							throw UiException.Aide.wrap(ex, "Unable to load "+clsnm);
+							throw UiException.Aide.wrap(ex, "Unable to load " + clsnm);
 						}
 					if (provider == null)
 						provider = new EventQueueProviderImpl();
@@ -260,5 +264,6 @@ public class EventQueues {
 			}
 		return _provider;
 	}
+
 	private static volatile EventQueueProvider _provider;
 }

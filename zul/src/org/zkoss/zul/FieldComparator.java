@@ -18,11 +18,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.lang.Strings;
@@ -51,7 +51,7 @@ public class FieldComparator implements Comparator, Serializable {
 	/** Whether to treat null as the maximum value. */
 	private boolean _maxnull;
 	private boolean _ascending;
-	
+
 	/** Compares with the fields per the given "ORDER BY" clause.
 	 * <p>Note: It assumes null as minimum value.
 	 *  If not, use {@link #FieldComparator(String, boolean, boolean)}
@@ -63,7 +63,7 @@ public class FieldComparator implements Comparator, Serializable {
 	public FieldComparator(String orderBy, boolean ascending) {
 		this(orderBy, ascending, false);
 	}
-	
+
 	/** Compares with the fields per the given "ORDER BY" clause.
 	 *
 	 * @param orderBy the "ORDER BY" clause to be compared upon for the given object in {@link #compare}.
@@ -73,27 +73,28 @@ public class FieldComparator implements Comparator, Serializable {
 	 */
 	public FieldComparator(String orderBy, boolean ascending, boolean nullAsMax) {
 		if (Strings.isBlank(orderBy)) {
-			throw new UiException("Empty fieldnames: "+ orderBy);
+			throw new UiException("Empty fieldnames: " + orderBy);
 		}
 		_fieldnames = parseFieldNames(orderBy, ascending);
 		_maxnull = nullAsMax;
 		_rawOrderBy = orderBy;
 		_ascending = ascending;
 	}
-	
+
 	public int compare(Object o1, Object o2) {
 		try {
-			for(FieldInfo fi: _fieldnames) {
+			for (FieldInfo fi : _fieldnames) {
 				final int res = compare0(o1, o2, fi.fieldname, fi.asc, fi.func);
 				if (res != 0) {
 					return res;
 				}
 			}
-			return 0; 
+			return 0;
 		} catch (NoSuchMethodException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+
 	/** Returns the order-by clause.
 	 * Notice that is the parsed result, such as <code>name=category ASC</code>.
 	 * For the original format, please use {@link #getRawOrderBy}.
@@ -105,7 +106,7 @@ public class FieldComparator implements Comparator, Serializable {
 			if (it.hasNext()) {
 				appendField(sb, it.next());
 			}
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				sb.append(',');
 				appendField(sb, it.next());
 			}
@@ -113,6 +114,7 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		return _orderBy;
 	}
+
 	/** Returns the original order-by clause passed to the constructor.
 	 * It is usually the field's name, such as <code>category</code>,
 	 * or a concatenation of field names, such as <code>category.name</code>.
@@ -123,6 +125,7 @@ public class FieldComparator implements Comparator, Serializable {
 	public String getRawOrderBy() {
 		return _rawOrderBy;
 	}
+
 	/** Returns whether the sorting is ascending.
 	 * @since 5.0.6
 	 */
@@ -138,19 +141,23 @@ public class FieldComparator implements Comparator, Serializable {
 		}
 		sb.append(fi.asc ? " ASC" : " DESC");
 	}
+
 	@SuppressWarnings("unchecked")
-	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func) throws NoSuchMethodException {
+	private int compare0(Object o1, Object o2, String fieldname, boolean asc, String func)
+			throws NoSuchMethodException {
 		// Bug B50-3183438: Access to bean shall be consistent
-		final Object f1 = o1 instanceof Map ? ((Map)o1).get(fieldname) : 
-			Fields.getByCompound(getCompareObject(o1), fieldname);
-		final Object f2 = o2 instanceof Map ? ((Map)o2).get(fieldname) : 
-			Fields.getByCompound(getCompareObject(o2), fieldname);
+		final Object f1 = o1 instanceof Map ? ((Map) o1).get(fieldname)
+				: Fields.getByCompound(getCompareObject(o1), fieldname);
+		final Object f2 = o2 instanceof Map ? ((Map) o2).get(fieldname)
+				: Fields.getByCompound(getCompareObject(o2), fieldname);
 		final Object v1 = handleFunction(f1, func);
 		final Object v2 = handleFunction(f2, func);
-		
-		if (v1 == null) return v2 == null ? 0: (asc == _maxnull) ? 1 : -1;
-		if (v2 == null) return (asc == _maxnull) ? -1 : 1;
-		final int v = ((Comparable)v1).compareTo(v2);
+
+		if (v1 == null)
+			return v2 == null ? 0 : (asc == _maxnull) ? 1 : -1;
+		if (v2 == null)
+			return (asc == _maxnull) ? -1 : 1;
+		final int v = ((Comparable) v1).compareTo(v2);
 		return asc ? v : -v;
 	}
 
@@ -163,16 +170,14 @@ public class FieldComparator implements Comparator, Serializable {
 	private Object handleFunction(Object c, String func) {
 		if ("UPPER".equals(func)) {
 			if (c instanceof String)
-				return ((String)c).toUpperCase();
+				return ((String) c).toUpperCase();
 			if (c instanceof Character)
-				return new Character(Character.toUpperCase(
-					((Character)c).charValue()));
+				return new Character(Character.toUpperCase(((Character) c).charValue()));
 		} else if ("LOWER".equals(func)) {
 			if (c instanceof String)
-				return ((String)c).toLowerCase(java.util.Locale.ENGLISH);
+				return ((String) c).toLowerCase(java.util.Locale.ENGLISH);
 			if (c instanceof Character)
-				return new Character(Character.toLowerCase(
-					((Character)c).charValue()));
+				return new Character(Character.toLowerCase(((Character) c).charValue()));
 		}
 		return c;
 	}
@@ -186,22 +191,22 @@ public class FieldComparator implements Comparator, Serializable {
 			String ascstr = "asc";
 			//whether a String
 			String func = null;
-			final String ufn = field.toUpperCase(); 
+			final String ufn = field.toUpperCase();
 			if (ufn.startsWith("UPPER(") || ufn.startsWith("LOWER(")) { //with function
 				final int k = field.lastIndexOf(')');
 				if (k == 0) {
-					throw new UiException("No closing function ')' mark: "+field);
+					throw new UiException("No closing function ')' mark: " + field);
 				} else if (k == 6) {
-					throw new UiException("No data inside function: "+field);
+					throw new UiException("No data inside function: " + field);
 				} else {
 					fieldname = field.substring(6, k);
-					if ((k+1) < field.length()) { //with asc
-						ascstr = field.substring(k+1);
+					if ((k + 1) < field.length()) { //with asc
+						ascstr = field.substring(k + 1);
 						if (Strings.isBlank(ascstr)) {
 							ascstr = "asc";
 						}
 					}
-					func = ufn.substring(0,5);
+					func = ufn.substring(0, 5);
 				}
 			} else {
 				final int j = field.indexOf(' ');
@@ -209,10 +214,10 @@ public class FieldComparator implements Comparator, Serializable {
 					fieldname = field;
 				} else {
 					fieldname = field.substring(0, j);
-					ascstr = field.substring(j+1);
+					ascstr = field.substring(j + 1);
 				}
 			}
-			
+
 			boolean asc;
 			if ("asc".equalsIgnoreCase(ascstr)) {
 				asc = ascending;
@@ -221,17 +226,17 @@ public class FieldComparator implements Comparator, Serializable {
 			} else {
 				throw new UiException("field must be in the form of \"field ASC\" or \"field DESC\":" + ascstr);
 			}
-				
+
 			results.add(new FieldInfo(fieldname, asc, func));
 		}
 		return results;
 	}
-		
+
 	private static class FieldInfo implements Serializable {
 		private String fieldname;
 		private boolean asc;
 		private String func;
-		
+
 		public FieldInfo(String fieldname, boolean asc, String func) {
 			this.fieldname = fieldname;
 			this.asc = asc;

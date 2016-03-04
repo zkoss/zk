@@ -22,8 +22,8 @@ import org.zkoss.zul.Listbox;
  */
 public class ListboxSelectedIndexConverter extends AbstractSelectedIndexConverter<Listbox> {
 	private static final long serialVersionUID = 201108171811L;
-	
+
 	protected ListModel<?> getComponentModel(Listbox comp) {
-		return ((Listbox)comp).getModel();
+		return ((Listbox) comp).getModel();
 	}
 }

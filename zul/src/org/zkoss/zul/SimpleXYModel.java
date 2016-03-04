@@ -42,19 +42,19 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	public Comparable<?> getSeries(int index) {
 		return _seriesList.get(index);
 	}
-	
+
 	public Collection<Comparable<?>> getSeries() {
 		return _seriesList;
 	}
-	
+
 	public int getDataCount(Comparable<?> series) {
-		final List<XYPair> xyPairs =  _seriesMap.get(series);
+		final List<XYPair> xyPairs = _seriesMap.get(series);
 		return xyPairs != null ? xyPairs.size() : 0;
 	}
 
 	public Number getX(Comparable<?> series, int index) {
 		final List<XYPair> xyPairs = _seriesMap.get(series);
-		
+
 		if (xyPairs != null) {
 			return xyPairs.get(index).getX();
 		}
@@ -63,28 +63,28 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 
 	public Number getY(Comparable<?> series, int index) {
 		final List<XYPair> xyPairs = _seriesMap.get(series);
-		
+
 		if (xyPairs != null) {
 			return xyPairs.get(index).getY();
 		}
 		return null;
 	}
-	
+
 	public void setValue(Comparable<?> series, Number x, Number y, int index) {
 		removeValue0(series, index);
 		int cIndex = addValue0(series, x, y, index);
 		fireEvent(ChartDataEvent.CHANGED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex, y);
 	}
-	
+
 	public void addValue(Comparable<?> series, Number x, Number y) {
 		addValue(series, x, y, -1);
 	}
-	
+
 	public void addValue(Comparable<?> series, Number x, Number y, int index) {
 		int cIndex = addValue0(series, x, y, index);
 		fireEvent(ChartDataEvent.ADDED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex, y);
 	}
-	
+
 	private int addValue0(Comparable<?> series, Number x, Number y, int index) {
 		List<XYPair> xyPairs = _seriesMap.get(series);
 		if (xyPairs == null) {
@@ -92,7 +92,7 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 			_seriesMap.put(series, xyPairs);
 			_seriesList.add(series);
 		}
-		int i = index; 
+		int i = index;
 		if (index >= 0)
 			xyPairs.add(index, new XYPair(x, y));
 		else {
@@ -109,22 +109,22 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	public boolean isAutoSort() {
 		return _autoSort;
 	}
-	
+
 	public void removeSeries(Comparable<?> series) {
 		_seriesMap.remove(series);
-		
+
 		final int sIndex = _seriesList.indexOf(series);
 		_seriesList.remove(series);
 		//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
 		fireEvent(ChartDataEvent.REMOVED, series, null, sIndex, -1, null);
 	}
-	
+
 	public void removeValue(Comparable<?> series, int index) {
 		XYPair pair = removeValue0(series, index);
-		fireEvent(ChartDataEvent.REMOVED, series, (Comparable<?>)(pair != null ? pair.getX() : null),
+		fireEvent(ChartDataEvent.REMOVED, series, (Comparable<?>) (pair != null ? pair.getX() : null),
 				_seriesList.indexOf(series), index, pair != null ? pair.getY() : null);
 	}
-	
+
 	private XYPair removeValue0(Comparable<?> series, int index) {
 		List<XYPair> xyPairs = _seriesMap.get(series);
 		if (xyPairs == null) {
@@ -132,38 +132,37 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		}
 		return xyPairs.remove(index);
 	}
-	
+
 	public void clear() {
 		_seriesMap.clear();
 		_seriesList.clear();
 		fireEvent(ChartDataEvent.REMOVED, null, null, -1, -1, null);
 	}
-	
+
 	//-- internal class --//
 	protected static class XYPair implements java.io.Serializable {
 		private static final long serialVersionUID = 20091008182941L;
 		private Number _x;
 		private Number _y;
-		
+
 		protected XYPair(Number x, Number y) {
 			_x = x;
 			_y = y;
 		}
-		
+
 		public Number getX() {
 			return _x;
 		}
-		
+
 		public Number getY() {
 			return _y;
 		}
-		
+
 		public Number[] toNumbers() {
-			return new Number[] {_x, _y};
+			return new Number[] { _x, _y };
 		}
 	}
 
-	
 	public Object clone() {
 		SimpleXYModel clone = (SimpleXYModel) super.clone();
 		if (_seriesMap != null)

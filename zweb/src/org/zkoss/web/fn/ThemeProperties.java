@@ -49,31 +49,31 @@ import org.zkoss.xel.zel.ELFactory;
  * @since 6.5.0
  */
 public class ThemeProperties {
-	private ThemeProperties() {}
+	private ThemeProperties() {
+	}
+
 	private static final ELFactory _ELF = new ELFactory();
 	private static final String THEME_FN_URL = "http://www.zkoss.org/dsp/web/theme";
 	private static final String CORE_FN_URL = "http://www.zkoss.org/dsp/web/core";
-	
+
 	/**
 	 * Loads a properties file and apply them into the request scope
 	 */
 	public static boolean loadProperties(ServletRequest req, String bundleName) {
-		final Locators.StreamLocation loc =
-			Locators.locateAsStream(bundleName, 
-					null, Locators.getDefault());
+		final Locators.StreamLocation loc = Locators.locateAsStream(bundleName, null, Locators.getDefault());
 		if (loc != null)
 			return loadProperties(req, loc.stream);
 		else {
 			// add ability to load theme properties from a folder
 			// @since 6.5.2
-			String root = ((HttpServletRequest)req).getContextPath();
+			String root = ((HttpServletRequest) req).getContextPath();
 			ServletContext context = ServletFns.getCurrentServletContext();
 			bundleName = bundleName.replace(root, "");
-			
+
 			return loadProperties(req, new ServletContextLocator(context).getResourceAsStream(bundleName));
 		}
 	}
-	
+
 	/**
 	 * Loads a properties file and apply them into the request scope
 	 */
@@ -85,23 +85,6 @@ public class ThemeProperties {
 		} catch (IOException e) {
 			return false;
 		}
-	}
-	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getPropertyMap(ServletRequest req, String key) {
-		Object obj = req.getAttribute(key);
-		if (obj == null) {
-			Map<String, Object> m = new HashMap<String, Object>(200);
-			req.setAttribute(key, m);
-			Enumeration names = req.getAttributeNames();
-	        while(names.hasMoreElements()) {
-	        	String name = (String) names.nextElement();
-				m.put(name, req.getAttribute(name));
-	        }
-			return m;
-		}
-		if (obj instanceof Map<?, ?>)
-			return (Map<String, Object>) obj;
-		throw new IllegalStateException("Root node is not a Map: " + key);
 	}
 	
 	private static boolean loadProperties(ServletRequest req, Map<String, Object> pmap) {
@@ -115,14 +98,32 @@ public class ThemeProperties {
 			if (Strings.isBlank(v))
 				continue;
 			Object w = v.contains("${") ? _ELF.evaluate(ctx, v, Object.class) : v;
-
+			
 			map.put(e.getKey(), w);
 			req.setAttribute(e.getKey(), w);
 			
 		}
 		return true;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getPropertyMap(ServletRequest req, String key) {
+		Object obj = req.getAttribute(key);
+		if (obj == null) {
+			Map<String, Object> m = new HashMap<String, Object>(200);
+			req.setAttribute(key, m);
+			Enumeration names = req.getAttributeNames();
+			while (names.hasMoreElements()) {
+				String name = (String) names.nextElement();
+				m.put(name, req.getAttribute(name));
+			}
+			return m;
+		}
+		if (obj instanceof Map<?, ?>)
+			return (Map<String, Object>) obj;
+		throw new IllegalStateException("Root node is not a Map: " + key);
+	}
+
 	private static XelContext buildXelContext(Map<String, Object> map) {
 		List<Taglib> libs = Arrays.asList(new Taglib("t", THEME_FN_URL), new Taglib("c", CORE_FN_URL));
 		FunctionMapper mapper = Taglibs.getFunctionMapper(libs, Locators.getDefault());

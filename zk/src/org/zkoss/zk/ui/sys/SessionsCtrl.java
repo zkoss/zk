@@ -18,6 +18,7 @@ package org.zkoss.zk.ui.sys;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApp;
@@ -31,8 +32,9 @@ import org.zkoss.zk.ui.util.Monitor;
  */
 public class SessionsCtrl extends Sessions {
 	private static final Logger log = LoggerFactory.getLogger(SessionsCtrl.class);
-	
-	protected SessionsCtrl() {} //prevent from instantiation
+
+	protected SessionsCtrl() {
+	} //prevent from instantiation
 
 	/** Sets the session for the current thread.
 	 * Called only internally.
@@ -40,6 +42,7 @@ public class SessionsCtrl extends Sessions {
 	public static final void setCurrent(Session sess) {
 		_sess.set(sess);
 	}
+
 	/** Sets the session for the current thread.
 	 * Unlike {@link #setCurrent(Session)}, the session is resolved
 	 * later (when {@link #getCurrent} is called).
@@ -48,10 +51,11 @@ public class SessionsCtrl extends Sessions {
 	public static final void setCurrent(SessionResolver sr) {
 		_sess.set(sr);
 	}
+
 	/** Returns the current {@link SessionCtrl}.
 	 */
 	public static final SessionCtrl getCurrentCtrl() {
-		return (SessionCtrl)getCurrent();
+		return (SessionCtrl) getCurrent();
 	}
 
 	/** Returns the current session or the current session resolver.
@@ -64,6 +68,7 @@ public class SessionsCtrl extends Sessions {
 	public static final Object getRawCurrent() {
 		return _sess.get();
 	}
+
 	/** Sets the current session or the current session resolver.
 	 * @param rawsess the raw session. It can be null, an instance of
 	 * {@link Session} and {@link SessionResolver}.
@@ -83,8 +88,10 @@ public class SessionsCtrl extends Sessions {
 	 */
 	public static final void updateCount(boolean inc) {
 		synchronized (SessionsCtrl.class) {
-			if (inc) ++_cnt;
-			else --_cnt;
+			if (inc)
+				++_cnt;
+			else
+				--_cnt;
 		}
 	}
 
@@ -102,8 +109,8 @@ public class SessionsCtrl extends Sessions {
 	 * @since 3.0.1
 	 */
 	public static boolean requestEnter(Session sess) {
-		final Integer v = (Integer)sess.getAttribute(ATTR_REQUEST_COUNT);
-		final int i = v != null ? v.intValue() + 1: 1;
+		final Integer v = (Integer) sess.getAttribute(ATTR_REQUEST_COUNT);
+		final int i = v != null ? v.intValue() + 1 : 1;
 		final int max = sess.getWebApp().getConfiguration().getSessionMaxRequests();
 		if (max < 0 || i <= max) {
 			sess.setAttribute(ATTR_REQUEST_COUNT, new Integer(i));
@@ -111,6 +118,7 @@ public class SessionsCtrl extends Sessions {
 		}
 		return false;
 	}
+
 	/**
 	 * Called when a servlet/portlet completes the service of a request.
 	 * This method must be called if {@link #requestEnter} is called
@@ -119,12 +127,12 @@ public class SessionsCtrl extends Sessions {
 	 * @since 3.0.1
 	 */
 	public static void requestExit(Session sess) {
-		final Integer v = (Integer)sess.getAttribute(ATTR_REQUEST_COUNT);
-		final int i = v != null ? v.intValue() - 1: 0;
-		sess.setAttribute(ATTR_REQUEST_COUNT, new Integer(i >= 0 ? i: 0));
+		final Integer v = (Integer) sess.getAttribute(ATTR_REQUEST_COUNT);
+		final int i = v != null ? v.intValue() - 1 : 0;
+		sess.setAttribute(ATTR_REQUEST_COUNT, new Integer(i >= 0 ? i : 0));
 	}
-	private static final String ATTR_REQUEST_COUNT
-		= "org.zkoss.zk.ui.sys.RequestCount";
+
+	private static final String ATTR_REQUEST_COUNT = "org.zkoss.zk.ui.sys.RequestCount";
 
 	/** Returns the ZK session associated with the specified native session,
 	 * or null if not found.
@@ -134,15 +142,17 @@ public class SessionsCtrl extends Sessions {
 	 * @since 3.0.5
 	 */
 	public static final Session getSession(WebApp wapp, Object navsess) {
-		final SessionCache sc = ((WebAppCtrl)wapp).getSessionCache();
-		if (sc == null) return null;
-			//bug 2668190: happens when destroying app in WebSphere 7
+		final SessionCache sc = ((WebAppCtrl) wapp).getSessionCache();
+		if (sc == null)
+			return null;
+		//bug 2668190: happens when destroying app in WebSphere 7
 
 		final Session sess = sc.get(navsess);
 		if (sess != null && sess.getNativeSession() != navsess)
-			((SessionCtrl)sess).recover(navsess);
+			((SessionCtrl) sess).recover(navsess);
 		return sess;
 	}
+
 	/** Instantiates a ZK session that is associated with the specified
 	 * native session and request.
 	 *
@@ -150,11 +160,9 @@ public class SessionsCtrl extends Sessions {
 	 * If HTTP, it is HttpSession. If portlet, it is PortletSession.
 	 * @since 3.0.5
 	 */
-	public static final
-	Session newSession(WebApp wapp, Object navsess, Object request) {
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final Session sess =
-			wappc.getUiFactory().newSession(wapp, navsess, request);
+	public static final Session newSession(WebApp wapp, Object navsess, Object request) {
+		final WebAppCtrl wappc = (WebAppCtrl) wapp;
+		final Session sess = wappc.getUiFactory().newSession(wapp, navsess, request);
 		wappc.getSessionCache().put(sess);
 
 		final Configuration config = wapp.getConfiguration();
@@ -168,11 +176,12 @@ public class SessionsCtrl extends Sessions {
 				log.error("", ex);
 			}
 		}
-		
+
 		//Note: we set timeout here, because HttpSession might have been created
 		//by other servlet or filter
 		final int v = wapp.getConfiguration().getSessionMaxInactiveInterval();
-		if (v != 0) sess.setMaxInactiveInterval(v);
+		if (v != 0)
+			sess.setMaxInactiveInterval(v);
 		return sess;
 	}
 }

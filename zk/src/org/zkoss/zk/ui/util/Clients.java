@@ -20,13 +20,34 @@ import java.util.List;
 import java.util.Locale;
 
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.out.AuAlert;
+import org.zkoss.zk.au.out.AuClearBusy;
+import org.zkoss.zk.au.out.AuClearWrongValue;
+import org.zkoss.zk.au.out.AuConfirmClose;
+import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.au.out.AuLoadCSS;
+import org.zkoss.zk.au.out.AuLoadScript;
+import org.zkoss.zk.au.out.AuLog;
+import org.zkoss.zk.au.out.AuMoveBy;
+import org.zkoss.zk.au.out.AuMoveTo;
+import org.zkoss.zk.au.out.AuNotification;
+import org.zkoss.zk.au.out.AuPrint;
+import org.zkoss.zk.au.out.AuResizeBy;
+import org.zkoss.zk.au.out.AuResizeTo;
+import org.zkoss.zk.au.out.AuResizeWidget;
+import org.zkoss.zk.au.out.AuScript;
+import org.zkoss.zk.au.out.AuScrollBy;
+import org.zkoss.zk.au.out.AuScrollIntoView;
+import org.zkoss.zk.au.out.AuScrollTo;
+import org.zkoss.zk.au.out.AuShowBusy;
+import org.zkoss.zk.au.out.AuSubmitForm;
+import org.zkoss.zk.au.out.AuWrongValue;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.au.out.*;
 
 /**
  * Utilities to send {@link AuResponse} to the client.
@@ -46,6 +67,7 @@ public class Clients {
 	public static final void response(AuResponse response) {
 		Executions.getCurrent().addAuResponse(response);
 	}
+
 	/** Sends an AU response ({@link AuResponse}) to the client
 	 * with the given key (instead of {@link AuResponse#getOverrideKey}).
 	 *
@@ -85,6 +107,7 @@ public class Clients {
 	public static final void alert(String msg) {
 		response(new AuAlert(msg));
 	}
+
 	/** Shows an error message at the browser.
 	 * It is similar to {@link org.zkoss.zul.Messagebox}.
 	 * @param msg the message to display.
@@ -97,6 +120,7 @@ public class Clients {
 	public static final void alert(String msg, String title, String icon) {
 		response(new AuAlert(msg, title, icon));
 	}
+
 	/** Shows an error message for the specified component, if any,
 	 * at the browser.
 	 * <p>You have to clear the error message manually with {@link #clearWrongValue}.
@@ -105,6 +129,7 @@ public class Clients {
 	public static final void wrongValue(Component comp, String msg) {
 		response(new AuWrongValue(comp, msg));
 	}
+
 	/** Closes the error message of the specified component, if any,
 	 * at the browser.
 	 * @since 5.0.0
@@ -112,7 +137,7 @@ public class Clients {
 	public static final void clearWrongValue(Component comp) {
 		response(new AuClearWrongValue(comp));
 	}
-	
+
 	/** Closes the error message of the specified components, if any,
 	 * at the browser.
 	 * @since 5.0.0
@@ -120,6 +145,7 @@ public class Clients {
 	public static final void clearWrongValue(List<Component> comps) {
 		response(new AuClearWrongValue(comps)); //append, not overwrite
 	}
+
 	/** Closes the error message of the specified components, if any,
 	 * at the browser.
 	 * @since 5.0.0
@@ -127,18 +153,20 @@ public class Clients {
 	public static final void clearWrongValue(Component[] comps) {
 		response(new AuClearWrongValue(comps)); //append, not overwrite
 	}
-	
+
 	/** Submits the form with the specified ID.
 	 */
 	public static final void submitForm(String formId) {
 		response(new AuSubmitForm(formId));
 	}
+
 	/** Submits the form with the specified form.
 	 * It assumes the form component is a HTML form.
 	 */
 	public static final void submitForm(Component form) {
 		submitForm(form.getUuid());
 	}
+
 	/** Asks the client to print the current desktop (a.k.a., browser window).
 	 */
 	public static void print() {
@@ -151,6 +179,7 @@ public class Clients {
 	public static final void scrollIntoView(Component cmp) {
 		response(new AuScrollIntoView(cmp));
 	}
+
 	/** Scrolls the current desktop (a.k.a., browser window) by the specified number of pixels.
 	 * If the number passed is positive, the desktop is scrolled down.
 	 * If negative, it is scrolled up.
@@ -159,6 +188,7 @@ public class Clients {
 	public static final void scrollBy(int x, int y) {
 		response(new AuScrollBy(x, y));
 	}
+
 	/** Scrolls the current desktop (a.k.a., browser window) to the specified location (in pixels).
 	 *
 	 * @see #scrollBy
@@ -166,6 +196,7 @@ public class Clients {
 	public static final void scrollTo(int x, int y) {
 		response(new AuScrollTo(x, y));
 	}
+
 	/** Resizes the current desktop (a.k.a., browser window) by the specified number of pixels.
 	 * If the numbers passed are positive, the desktop size is increased.
 	 * Negative numbers reduce the size of the desktop.
@@ -175,6 +206,7 @@ public class Clients {
 	public static final void resizeBy(int x, int y) {
 		response(new AuResizeBy(x, y));
 	}
+
 	/** Resizes the current desktop (a.k.a., browser window) to the specified size (in pixels).
 	 *
 	 * @see #resizeBy
@@ -182,6 +214,7 @@ public class Clients {
 	public static final void resizeTo(int x, int y) {
 		response(new AuResizeTo(x, y));
 	}
+
 	/** Moves the current desktop (a.k.a., browser window) by the specified number of pixels.
 	 * If the number passed is positive, the desktop is moved down.
 	 * If negative, it is moved up.
@@ -190,6 +223,7 @@ public class Clients {
 	public static final void moveBy(int x, int y) {
 		response(new AuMoveBy(x, y));
 	}
+
 	/** Moves the current desktop (a.k.a., browser window) to the specified location (in pixels).
 	 *
 	 * @see #moveBy
@@ -206,22 +240,22 @@ public class Clients {
 	public static final void evalJavaScript(String javaScript) {
 		response(new AuScript(null, javaScript));
 	}
-	
+
 	/**
 	 * Notification type: information
 	 */
 	public static final String NOTIFICATION_TYPE_INFO = "info";
-	
+
 	/**
 	 * Notification type: warning
 	 */
 	public static final String NOTIFICATION_TYPE_WARNING = "warning";
-	
+
 	/**
 	 * Notification type: error
 	 */
 	public static final String NOTIFICATION_TYPE_ERROR = "error";
-	
+
 	/**
 	 * Shows a message at the center of the browser window.
 	 * @param msg the message to show
@@ -230,7 +264,7 @@ public class Clients {
 	public static final void showNotification(String msg) {
 		showNotification(msg, null, null, null, -1, false);
 	}
-	
+
 	/**
 	 * Shows a message at the center of the browser window.
 	 * @param msg the message to show
@@ -242,7 +276,7 @@ public class Clients {
 	public static final void showNotification(String msg, boolean closable) {
 		showNotification(msg, null, null, null, -1, closable);
 	}
-	
+
 	/**
 	 * Shows a message at the right side of the given component.
 	 * @param msg the message to show
@@ -252,7 +286,7 @@ public class Clients {
 	public static final void showNotification(String msg, Component ref) {
 		showNotification(msg, null, ref, null, -1, false);
 	}
-	
+
 	/**
 	 * Shows a message at the right side of the given component.
 	 * @param msg the message to show
@@ -265,7 +299,7 @@ public class Clients {
 	public static final void showNotification(String msg, Component ref, boolean closable) {
 		showNotification(msg, null, ref, null, -1, closable);
 	}
-	
+
 	/**
 	 * Displays a message.
 	 * @param msg the message to show
@@ -304,11 +338,10 @@ public class Clients {
 	 * of the notification box.
 	 * @since 6.0.1
 	 */
-	public static final void showNotification(String msg, String type, 
-			Component ref, String position, int duration) {
+	public static final void showNotification(String msg, String type, Component ref, String position, int duration) {
 		showNotification(msg, type, ref, position, duration, false);
 	}
-	
+
 	/**
 	 * Displays a message.
 	 * 
@@ -351,8 +384,8 @@ public class Clients {
 	 * or duration time up, default false.
 	 * @since 6.5.0
 	 */
-	public static final void showNotification(String msg, String type,
-			Component ref, String position, int duration, boolean closable) {
+	public static final void showNotification(String msg, String type, Component ref, String position, int duration,
+			boolean closable) {
 		Execution exec = Executions.getCurrent();
 		Page page = ref != null ? ref.getPage() : null;
 		if (page == null && exec instanceof ExecutionCtrl)
@@ -361,7 +394,7 @@ public class Clients {
 			type = NOTIFICATION_TYPE_INFO;
 		response(new AuNotification(msg, type, page, ref, position, duration, closable));
 	}
-	
+
 	/**
 	 * Displays a message.
 	 * @param msg the message to show
@@ -374,11 +407,10 @@ public class Clients {
 	 * of the notification box.
 	 * @since 6.0.1
 	 */
-	public static final void showNotification(String msg, String type, 
-			Component ref, int x, int y, int duration) {
+	public static final void showNotification(String msg, String type, Component ref, int x, int y, int duration) {
 		showNotification(msg, type, ref, x, y, duration, false);
 	}
-	
+
 	/**
 	 * Displays a message.
 	 * @param msg the message to show
@@ -394,8 +426,8 @@ public class Clients {
 	 * or duration time up, default false.
 	 * @since 6.5.0
 	 */
-	public static final void showNotification(String msg, String type, 
-			Component ref, int x, int y, int duration, boolean closable) {
+	public static final void showNotification(String msg, String type, Component ref, int x, int y, int duration,
+			boolean closable) {
 		Execution exec = Executions.getCurrent();
 		Page page = ref != null ? ref.getPage() : null;
 		if (page == null && exec instanceof ExecutionCtrl)
@@ -404,7 +436,7 @@ public class Clients {
 			type = NOTIFICATION_TYPE_INFO;
 		response(new AuNotification(msg, type, page, ref, x, y, duration, closable));
 	}
-	
+
 	/** Shows the busy message at the browser such that
 	 * the user knows the system is busy.
 	 *
@@ -422,13 +454,7 @@ public class Clients {
 	public static final void showBusy(String msg) {
 		response(new AuShowBusy(msg));
 	}
-	/** Cleans the busy message at the browser.
-	 * @see #showBusy(String)
-	 * @since 5.0.0
-	 */
-	public static final void clearBusy() {
-		response(new AuClearBusy());
-	}
+
 	/** Shows the busy message at the browser that covers only the specified
 	 * component.
 	 * It is used to denote a portion of the desktop is busy, and
@@ -452,6 +478,15 @@ public class Clients {
 	public static final void showBusy(Component comp, String msg) {
 		response(new AuShowBusy(comp, msg));
 	}
+
+	/** Cleans the busy message at the browser.
+	 * @see #showBusy(String)
+	 * @since 5.0.0
+	 */
+	public static final void clearBusy() {
+		response(new AuClearBusy());
+	}
+
 	/** Clears the busy message at the browser that covers only the specified
 	 * component.
 	 * @param comp the component that the busy message to cover.
@@ -491,8 +526,7 @@ public class Clients {
 	 * @exception UnsupportedOperationException if the device is not ajax.
 	 * @since 3.6.3
 	 */
-	public static final void reloadMessages(Locale locale)
-	throws java.io.IOException {
+	public static final void reloadMessages(Locale locale) throws java.io.IOException {
 		Executions.getCurrent().getDesktop().getDevice().reloadMessages(locale);
 	}
 
@@ -502,6 +536,14 @@ public class Clients {
 	 */
 	public static final void log(String msg) {
 		response(new AuLog(msg));
+	}
+
+	/** Logs the message to the client.
+	 * @param msg message, cast to String
+	 * @since 8.0.0
+	 */
+	public static final void log(Object msg) {
+		response(new AuLog((String) msg));
 	}
 
 	/**
@@ -545,22 +587,14 @@ public class Clients {
 		response(new AuLoadCSS(url));
 	}
 
-    /**
-     * Send a command to client (afterCommand)
-     * @param component target component
-     * @param commandName the command name which would be triggered in client
-     * @param data data which would be sent to client
-     * @since 8.0.0
-     */
-    public static final void sendClientCommand(Component component, String commandName, Object data) {
-        response(new AuInvoke(component, "$afterCommand", new Object[] {commandName, data }));
-    }
-
-    /** Logs the message to the client.
-     * @param msg message, cast to String
-     * @since 8.0.0
-     */
-    public static final void log(Object msg) {
-        response(new AuLog((String)msg));
-    }
+	/**
+	 * Send a command to client (afterCommand)
+	 * @param component target component
+	 * @param commandName the command name which would be triggered in client
+	 * @param data data which would be sent to client
+	 * @since 8.0.0
+	 */
+	public static final void sendClientCommand(Component component, String commandName, Object data) {
+		response(new AuInvoke(component, "$afterCommand", new Object[] { commandName, data }));
+	}
 }

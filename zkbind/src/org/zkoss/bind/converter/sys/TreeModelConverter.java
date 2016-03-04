@@ -23,18 +23,16 @@ import org.zkoss.zul.TreeModel;
  * @author dennis
  *
  */
-public class TreeModelConverter implements Converter,Serializable{
+public class TreeModelConverter implements Converter, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
-		if(val instanceof TreeModel){
+		if (val instanceof TreeModel) {
 			BindELContext.addModel(component, val); //ZK-758. @see AbstractRenderer#addItemReference
 		}
 		return val;
 	}
 
-	
 	public Object coerceToBean(Object val, Component component, BindContext ctx) {
 		return val;
 	}

@@ -35,10 +35,10 @@ public @interface ScopeParam {
 	 * @return name of the parameter
 	 */
 	String value();
-	
+
 	/**
 	 * the scopes to evaluate.
 	 * @return the scopes, default {@linkplain Scope#AUTO}
 	 */
-	Scope[] scopes() default {Scope.AUTO};
+	Scope[] scopes() default { Scope.AUTO };
 }

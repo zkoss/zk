@@ -17,11 +17,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.io.Serializables;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.EventInterceptor;
 
@@ -55,6 +54,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 
 		_eis = eilst.toArray(new EventInterceptor[eilst.size()]);
 	}
+
 	/** Removes an event interceptor.
 	 *
 	 * <p>Note: we use the equals method to test whether
@@ -76,13 +76,13 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 
 			if (found) {
 				final int sz = eilst.size();
-				_eis = sz == 0 ? null:
-					eilst.toArray(new EventInterceptor[sz]);
+				_eis = sz == 0 ? null : eilst.toArray(new EventInterceptor[sz]);
 				return true;
 			}
 		}
 		return false;
 	}
+
 	/** Removes an event interceptor with the specified class.
 	 *
 	 * <p>Note: we tests whether an interceptor is an instance of
@@ -104,13 +104,13 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 
 			if (found) {
 				final int sz = eilst.size();
-				_eis = sz == 0 ? null:
-					eilst.toArray(new EventInterceptor[sz]);
+				_eis = sz == 0 ? null : eilst.toArray(new EventInterceptor[sz]);
 				return true;
 			}
 		}
 		return false;
 	}
+
 	/** Invokes {@link EventInterceptor#beforeSendEvent}
 	 */
 	public Event beforeSendEvent(Event event) {
@@ -124,6 +124,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 		}
 		return event;
 	}
+
 	/** Invokes {@link EventInterceptor#beforePostEvent}
 	 */
 	public Event beforePostEvent(Event event) {
@@ -137,6 +138,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 		}
 		return event;
 	}
+
 	/** Invokes {@link EventInterceptor#beforeProcessEvent}
 	 */
 	public Event beforeProcessEvent(Event event) {
@@ -150,6 +152,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 		}
 		return event;
 	}
+
 	/** Invokes {@link EventInterceptor#afterProcessEvent}
 	 */
 	public void afterProcessEvent(Event event) {
@@ -164,7 +167,7 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 	public Object clone() {
 		final EventInterceptors clone;
 		try {
-			clone = (EventInterceptors)super.clone();
+			clone = (EventInterceptors) super.clone();
 			if (clone._eis != null)
 				clone._eis = clone._eis.clone();
 		} catch (CloneNotSupportedException ex) {
@@ -175,17 +178,16 @@ public class EventInterceptors implements Cloneable, java.io.Serializable {
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		Serializables.smartWrite(s, _eis);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final Collection<EventInterceptor> eilst = Serializables.smartRead(s, (Collection<EventInterceptor>)null);
+		final Collection<EventInterceptor> eilst = Serializables.smartRead(s, (Collection<EventInterceptor>) null);
 		if (eilst != null)
 			_eis = eilst.toArray(new EventInterceptor[eilst.size()]);
 	}

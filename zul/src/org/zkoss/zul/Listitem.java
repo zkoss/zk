@@ -17,11 +17,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.Serializable;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.LoadStatus;
 import org.zkoss.zul.impl.XulElement;
 
@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Listitem extends XulElement {
-	
+
 	private transient Object _value;
 	/** The index in the parent (only for implementation purpose). */
 	private int _index = -1; //no parent at beginning
@@ -42,12 +42,14 @@ public class Listitem extends XulElement {
 	 * the listbox owning this item is using a list model.
 	 */
 	private boolean _loaded;
-	
+
 	public Listitem() {
 	}
+
 	public Listitem(String label) {
 		setLabel(label);
 	}
+
 	public <T> Listitem(String label, T value) {
 		setLabel(label);
 		setValue(value);
@@ -57,9 +59,9 @@ public class Listitem extends XulElement {
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Listbox getListbox() {
-		return (Listbox)getParent();
+		return (Listbox) getParent();
 	}
-	
+
 	/**
 	 * Returns the listgroup that this item belongs to, or null.
 	 * @since 3.5.0
@@ -74,6 +76,7 @@ public class Listitem extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-listitem" : _zclass;
 	}
+
 	/**
 	 * @deprecated As of release 8.0.0, please use {@link #isSelectable()}
 	 */
@@ -115,14 +118,13 @@ public class Listitem extends XulElement {
 		}
 	}
 
-	
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of getParent().getMaxlength();
 	 * Thus, it works only if the listbox's mold is "select".
 	 */
 	public int getMaxlength() {
 		final Listbox listbox = getListbox();
-		return listbox != null ? listbox.getMaxlength(): 0;
+		return listbox != null ? listbox.getMaxlength() : 0;
 	}
 
 	/** Returns the value.
@@ -135,8 +137,9 @@ public class Listitem extends XulElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -157,7 +160,7 @@ public class Listitem extends XulElement {
 					smartUpdate("value", _value);
 		}
 	}
-	
+
 	/**
 	 * Please use {@link Listcell} or {@link Listbox} instead.
 	 * @deprecated as of release 7.0.3.
@@ -173,13 +176,14 @@ public class Listitem extends XulElement {
 	public void setStubonly(boolean stubonly) {
 		super.setStubonly(stubonly);
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
 	public boolean isDisabled() {
 		return _disabled;
 	}
+
 	/** Sets whether it is disabled.
 	 */
 	public void setDisabled(boolean disabled) {
@@ -188,17 +192,19 @@ public class Listitem extends XulElement {
 			smartUpdate("disabled", _disabled);
 		}
 	}
+
 	/** Returns whether it is selected.
 	 * <p>Default: false.
 	 */
 	public boolean isSelected() {
 		return _selected;
 	}
+
 	/** Sets whether it is selected.
 	 */
 	public void setSelected(boolean selected) {
 		if (_selected != selected) {
-			final Listbox listbox = (Listbox)getParent();
+			final Listbox listbox = (Listbox) getParent();
 			if (listbox != null) {
 				//Note: we don't update it here but let its parent does the job
 				listbox.toggleItemSelection(this);
@@ -212,9 +218,10 @@ public class Listitem extends XulElement {
 	 * if no such cell.
 	 */
 	public String getLabel() {
-		final Listcell cell = (Listcell)getFirstChild();
-		return cell != null ? cell.getLabel(): null;
+		final Listcell cell = (Listcell) getFirstChild();
+		return cell != null ? cell.getLabel() : null;
 	}
+
 	/** Sets the label of the {@link Listcell} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
@@ -222,8 +229,9 @@ public class Listitem extends XulElement {
 	public void setLabel(String label) {
 		autoFirstCell().setLabel(label);
 	}
+
 	private Listcell autoFirstCell() {
-		Listcell cell = (Listcell)getFirstChild();
+		Listcell cell = (Listcell) getFirstChild();
 		if (cell == null) {
 			cell = new Listcell();
 			cell.applyProperties();
@@ -238,18 +246,21 @@ public class Listitem extends XulElement {
 	public String getSrc() {
 		return getImage();
 	}
+
 	/** @deprecated As of release 3.5.0, it is redundant since it
 	 * is the same {@link #getSrc}.
 	 */
 	public void setSrc(String src) {
 		setImage(src);
 	}
+
 	/** Returns the image of the {@link Listcell} it contains.
 	 */
 	public String getImage() {
-		final Listcell cell = (Listcell)getFirstChild();
-		return cell != null ? cell.getImage(): null;
+		final Listcell cell = (Listcell) getFirstChild();
+		return cell != null ? cell.getImage() : null;
 	}
+
 	/** Sets the image of the {@link Listcell} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
@@ -276,6 +287,7 @@ public class Listitem extends XulElement {
 				smartUpdate("_loaded", _loaded);
 		}
 	}
+
 	/** Returns whether the content of this item is loaded.
 	 * It is meaningful only if {@link #getListbox} is live data,
 	 * i.e., {@link Listbox#getModel} is not null.
@@ -290,17 +302,19 @@ public class Listitem extends XulElement {
 	/*package*/ void setIndexDirectly(int index) {
 		setIndex(index);
 	}
-	
+
 	protected void setIndex(int index) {
-		_index = index;	
+		_index = index;
 	}
+
 	/*package*/ void setSelectedDirectly(boolean selected) {
 		_selected = selected;
 	}
+
 	public boolean setVisible(boolean visible) {
 		if (isVisible() == visible)
 			return visible;
-		
+
 		final boolean result = super.setVisible(visible);
 		final Listbox listbox = (Listbox) getParent();
 		if (listbox != null) {
@@ -321,27 +335,31 @@ public class Listitem extends XulElement {
 		if (isVisible() || box == null || !box.inSelectMold())
 			super.smartUpdate(name, value);
 	}
+
 	protected void smartUpdate(String name, boolean value) { //make it accessible in this package
 		Listbox box = getListbox();
 		if (isVisible() || box == null || !box.inSelectMold())
 			super.smartUpdate(name, value);
 	}
+
 	protected void smartUpdate(String name, int value) {
 		Listbox box = getListbox();
 		if (isVisible() || box == null || !box.inSelectMold())
 			super.smartUpdate(name, value);
 	}
-	
+
 	public String getMold() {
-		return getParent() != null ? "select".equals(getParent().getMold()) ?
-				"select" : super.getMold(): super.getMold();
+		return getParent() != null ? "select".equals(getParent().getMold()) ? "select" : super.getMold()
+				: super.getMold();
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
@@ -349,43 +367,42 @@ public class Listitem extends XulElement {
 	public void setHflex(String flex) {
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "selected", isSelected());
 		render(renderer, "disabled", isDisabled());
 		render(renderer, "_loaded", _loaded ? _loaded : getListbox().getModel() == null);
 		renderer.render("_index", _index);
-		
+
 		if (_value instanceof String && getListbox().getName() != null)
 			render(renderer, "value", _value);
-		
+
 		if (!isCheckable())
 			renderer.render("checkable", false);
 	}
-	
+
 	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
-		if (oldparent == null || !((Listbox)oldparent).isLoadingModel()) {
+		if (oldparent == null || !((Listbox) oldparent).isLoadingModel()) {
 			super.addMoved(oldparent, oldpg, newpg);
 		}
 	}
-	
+
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
-			throw new UiException("Listitem's parent must be Listbox, not "+parent);
+			throw new UiException("Listitem's parent must be Listbox, not " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Listcell))
-			throw new UiException("Unsupported child for listitem: "+child);
+			throw new UiException("Unsupported child for listitem: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
-	
+
 	// -- Serializable --//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		if (_value instanceof Serializable) {
@@ -396,8 +413,7 @@ public class Listitem extends XulElement {
 		}
 	}
 
-	private void readObject(java.io.ObjectInputStream s)
-			throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		if (s.readBoolean())
 			_value = s.readObject();
@@ -405,22 +421,22 @@ public class Listitem extends XulElement {
 
 	//Clone//
 	public Object clone() {
-		final Listitem clone = (Listitem)super.clone();
+		final Listitem clone = (Listitem) super.clone();
 		clone._index = -1;
-			//note: we have to reset, since listbox.insertBefore assumes
-			//that a parent-less listitem's index is -1
+		//note: we have to reset, since listbox.insertBefore assumes
+		//that a parent-less listitem's index is -1
 		return clone;
 	}
-	
+
 	//-- ComponentCtrl --//
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements LoadStatus {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements LoadStatus {
 		//-- LoadStatus --//
 		public boolean isLoaded() {
 			return Listitem.this.isLoaded();
@@ -429,7 +445,7 @@ public class Listitem extends XulElement {
 		public void setLoaded(boolean loaded) {
 			Listitem.this.setLoaded(loaded);
 		}
-		
+
 		public void setIndex(int index) {
 			Listitem.this.setIndex(index);
 		}

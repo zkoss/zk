@@ -24,10 +24,11 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
-import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Frozen;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
@@ -44,7 +45,6 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
-import org.zkoss.zul.Attributes;
 
 /**
  * Generic {@link Listbox} data loader.
@@ -58,17 +58,19 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	public void init(Component owner, int offset, int limit) {
 		_listbox = (Listbox) owner;
 	}
+
 	public void reset() {
 		//do nothing
 	}
-	final public Component getOwner() {
+
+	public final Component getOwner() {
 		return _listbox;
 	}
 
 	public int getOffset() {
 		return 0;
 	}
-	
+
 	public int getLimit() {
 		return _listbox.getRows() > 0 ? _listbox.getRows() + 5 : 50;
 	}
@@ -79,9 +81,11 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	}
 
 	private int INVALIDATE_THRESHOLD = -1;
+
 	public void doListDataChange(ListDataEvent event) {
 		if (INVALIDATE_THRESHOLD == -1) {
-			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10, true);
+			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
+					true);
 		}
 		//when this is called _model is never null
 		final ListModel _model = _listbox.getModel();
@@ -97,16 +101,18 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				return;
 			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
 				_listbox.invalidate();
-					//Bug 3147518: avoid memory leak
-					//Also better performance (outer better than remove a lot)
+			//Bug 3147518: avoid memory leak
+			//Also better performance (outer better than remove a lot)
 			if (min < 0)
-				if (max < 0) min = 0;
-				else min = max - cnt + 1;
-			if (min > oldsz) min = oldsz;
+				if (max < 0)
+					min = 0;
+				else
+					min = max - cnt + 1;
+			if (min > oldsz)
+				min = oldsz;
 
 			ListitemRenderer renderer = null;
-			final Component next =
-				min < oldsz ? _listbox.getItemAtIndex(min): null;
+			final Component next = min < oldsz ? _listbox.getItemAtIndex(min) : null;
 			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = (ListitemRenderer) getRealRenderer();
@@ -120,14 +126,17 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				throw new UiException("Removal causes a larger list?");
 			if (cnt == 0) //no change, nothing to do here
 				return;
-			if (min >= 0) max = min + cnt - 1;
-			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
-			if (max > oldsz - 1) max = oldsz - 1;
+			if (min >= 0)
+				max = min + cnt - 1;
+			else if (max < 0)
+				max = cnt - 1; //0 ~ cnt - 1			
+			if (max > oldsz - 1)
+				max = oldsz - 1;
 
 			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
 				_listbox.invalidate();
-					//Bug 3147518: avoid memory leak
-					//Also better performance (outer better than remove a lot)
+			//Bug 3147518: avoid memory leak
+			//Also better performance (outer better than remove a lot)
 
 			//detach from end (due to groupfoot issue)
 			Component comp = _listbox.getItemAtIndex(max);
@@ -139,12 +148,12 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			break;
 
 		default: //CONTENTS_CHANGED
-			syncModel(min, max < 0 ? -1 : (max - min + 1)); 
+			syncModel(min, max < 0 ? -1 : (max - min + 1));
 			//TonyQ: B50-ZK-897 , listfoot disappear after clicking run button , 
 			// 		   		sync logic with GridDataLoader 
 		}
 	}
-	
+
 	/** Creates an new and unloaded listitem. */
 	protected final Listitem newUnloadedItem(ListitemRenderer renderer, int index) {
 		final ListModel model = _listbox.getModel();
@@ -152,60 +161,64 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		if (model instanceof GroupsListModel) {
 			final GroupsListModel gmodel = (GroupsListModel) model;
 			final GroupingInfo info = gmodel.getDataInfo(index);
-			switch(info.getType()){
+			switch (info.getType()) {
 			case GroupDataInfo.GROUP:
 				item = newListgroup(renderer);
-				((Listgroup)item).setOpen(info.isOpen());
+				((Listgroup) item).setOpen(info.isOpen());
 				break;
 			case GroupDataInfo.GROUPFOOT:
 				item = newListgroupfoot(renderer);
 				break;
 			default:
 				item = newListitem(renderer);
-			}		
-		}else{
+			}
+		} else {
 			item = newListitem(renderer);
 		}
-		((LoadStatus)item.getExtraCtrl()).setLoaded(false);
-		((LoadStatus)item.getExtraCtrl()).setIndex(index);
+		((LoadStatus) item.getExtraCtrl()).setLoaded(false);
+		((LoadStatus) item.getExtraCtrl()).setIndex(index);
 
 		newUnloadedCell(renderer, item);
 		return item;
 	}
+
 	private Listitem newListitem(ListitemRenderer renderer) {
 		Listitem item = null;
 		if (renderer instanceof ListitemRendererExt)
-			item = ((ListitemRendererExt)renderer).newListitem(_listbox);
+			item = ((ListitemRendererExt) renderer).newListitem(_listbox);
 		if (item == null) {
 			item = new Listitem();
 			item.applyProperties();
 		}
 		return item;
 	}
+
 	private Listgroup newListgroup(ListitemRenderer renderer) {
 		Listgroup group = null;
 		if (renderer instanceof ListgroupRendererExt)
-			group = ((ListgroupRendererExt)renderer).newListgroup(_listbox);
+			group = ((ListgroupRendererExt) renderer).newListgroup(_listbox);
 		if (group == null) {
 			group = new Listgroup();
 			group.applyProperties();
 		}
 		return group;
 	}
+
 	private Listgroupfoot newListgroupfoot(ListitemRenderer renderer) {
 		Listgroupfoot groupfoot = null;
 		if (renderer instanceof ListgroupRendererExt)
-			groupfoot = ((ListgroupRendererExt)renderer).newListgroupfoot(_listbox);
+			groupfoot = ((ListgroupRendererExt) renderer).newListgroupfoot(_listbox);
 		if (groupfoot == null) {
 			groupfoot = new Listgroupfoot();
 			groupfoot.applyProperties();
 		}
 		return groupfoot;
 	}
+
 	private Listcell newUnloadedCell(ListitemRenderer renderer, Listitem item) {
 		Listcell cell = null;
 		if (renderer instanceof ListitemRendererExt)
-			cell = ((ListitemRendererExt)renderer).newListcell(item);
+			cell = ((ListitemRendererExt) renderer).newListcell(item);
 
 		if (cell == null) {
 			cell = new Listcell();
@@ -217,12 +230,12 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 	public Object getRealRenderer() {
 		final ListitemRenderer renderer = _listbox.getItemRenderer();
-		return renderer != null ? renderer: _defRend;
+		return renderer != null ? renderer : _defRend;
 	}
-	
+
 	private static final ListitemRenderer _defRend = new ListitemRenderer() {
 		public void render(final Listitem item, final Object data, final int index) {
-			final Listbox listbox = (Listbox)item.getParent();
+			final Listbox listbox = (Listbox) item.getParent();
 			Template tm = listbox.getTemplate("model");
 			GroupingInfo info = null;
 			if (item instanceof Listgroup) {
@@ -243,75 +256,75 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				item.setValue(data);
 			} else {
 				final GroupingInfo groupingInfo = info;
-				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(listbox, item,
-					new VariableResolver() {
-						public Object resolveVariable(String name) {
-							if ("each".equals(name)) {
-								return data;
-							} else if ("forEachStatus".equals(name)) {
-								return new ForEachStatus() {
-									
-									public ForEachStatus getPrevious() {
-										return null;
-									}
-									
-									public Object getEach() {
-										return getCurrent();
-									}
-									
-									public int getIndex() {
-										return index;
-									}
-									
-									public Integer getBegin() {
-										return 0;
-									}
-									
-									public Integer getEnd() {
-										return listbox.getModel().getSize();
-									}
+				final Component[] items = ShadowElementsCtrl
+						.filterOutShadows(tm.create(listbox, item, new VariableResolver() {
+					public Object resolveVariable(String name) {
+						if ("each".equals(name)) {
+							return data;
+						} else if ("forEachStatus".equals(name)) {
+							return new ForEachStatus() {
 
-									public Object getCurrent() {
-										return data;
-									}
+								public ForEachStatus getPrevious() {
+									return null;
+								}
 
-									public boolean isFirst() {
-										return getCount() == 1;
-									}
+								public Object getEach() {
+									return getCurrent();
+								}
 
-									public boolean isLast() {
-										return getIndex() + 1 == getEnd();
-									}
+								public int getIndex() {
+									return index;
+								}
 
-									public Integer getStep() {
-										return null;
-									}
+								public Integer getBegin() {
+									return 0;
+								}
 
-									public int getCount() {
-										return getIndex() + 1;
-									}
-								};
-							} else if ("groupingInfo".equals(name)) {
-								return groupingInfo;
-							} else {
-								return null;
-							}
+								public Integer getEnd() {
+									return listbox.getModel().getSize();
+								}
+
+								public Object getCurrent() {
+									return data;
+								}
+
+								public boolean isFirst() {
+									return getCount() == 1;
+								}
+
+								public boolean isLast() {
+									return getIndex() + 1 == getEnd();
+								}
+
+								public Integer getStep() {
+									return null;
+								}
+
+								public int getCount() {
+									return getIndex() + 1;
+								}
+							};
+						} else if ("groupingInfo".equals(name)) {
+							return groupingInfo;
+						} else {
+							return null;
 						}
-					}, null));
+					}
+				}, null));
 				if (items.length != 1)
-					throw new UiException("The model template must have exactly one item, not "+items.length);
+					throw new UiException("The model template must have exactly one item, not " + items.length);
 
-				final Listitem nli = (Listitem)items[0];
-				
+				final Listitem nli = (Listitem) items[0];
+
 				//sync open state
 				if (nli instanceof Listgroup && item instanceof Listgroup) {
-					((Listgroup)nli).setOpen(((Listgroup)item).isOpen());
+					((Listgroup) nli).setOpen(((Listgroup) item).isOpen());
 				}
-				
+
 				if (nli.getValue() == null) //template might set it
 					nli.setValue(data);
 				item.setAttribute(Attributes.MODEL_RENDERAS, nli);
-					//indicate a new item is created to replace the existent one
+				//indicate a new item is created to replace the existent one
 				item.detach();
 			}
 		}
@@ -326,40 +339,47 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			_listbox.removeAttribute(Listbox.SYNCING_MODEL);
 		}
 	}
+
 	private void syncModel0(int offset, int limit) {
 		int min = offset;
 		int max = offset + limit - 1;
-		
+
 		final ListModel _model = _listbox.getModel();
 		final int newsz = _model.getSize();
 		final int oldsz = _listbox.getItemCount();
 		final Paginal _pgi = _listbox.getPaginal();
 		final boolean inPaging = inPagingMold();
 		final boolean shallInvalidated = //Bug 3147518: avoid memory leak
-			(min < 0 || min == 0) && (max < 0 || max >= newsz || max >= oldsz);
+		(min < 0 || min == 0) && (max < 0 || max >= newsz || max >= oldsz);
 
 		int newcnt = newsz - oldsz;
-		int atg = _pgi != null ? _listbox.getActivePage(): 0;
+		int atg = _pgi != null ? _listbox.getActivePage() : 0;
 		ListitemRenderer renderer = null;
-		Component next = null;		
+		Component next = null;
 		if (oldsz > 0) {
-			if (min < 0) min = 0;
-			else if (min > oldsz - 1) min = oldsz - 1;
-			if (max < 0) max = oldsz - 1;
-			else if (max > oldsz - 1) max = oldsz - 1;
+			if (min < 0)
+				min = 0;
+			else if (min > oldsz - 1)
+				min = oldsz - 1;
+			if (max < 0)
+				max = oldsz - 1;
+			else if (max > oldsz - 1)
+				max = oldsz - 1;
 			if (min > max) {
-				int t = min; min = max; max = t;
+				int t = min;
+				min = max;
+				max = t;
 			}
 
 			int cnt = max - min + 1; //# of affected
 			if (_model instanceof GroupsListModel) {
-			//detach all from end to front since groupfoot
-			//must be detached before group
+				//detach all from end to front since groupfoot
+				//must be detached before group
 				newcnt += cnt; //add affected later
 				if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD) && !inPaging)
 					_listbox.invalidate();
-						//Bug 3147518: avoid memory leak
-						//Also better performance (outer better than remove a lot)
+				//Bug 3147518: avoid memory leak
+				//Also better performance (outer better than remove a lot)
 
 				Component comp = _listbox.getItemAtIndex(max);
 				next = comp.getNextSibling();
@@ -376,12 +396,12 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 					if (cnt < -newcnt) { //if shrink, -newcnt > 0
 						item.detach(); //remove extra
-					} else if (((Listitem)item).isLoaded()) {
+					} else if (((Listitem) item).isLoaded()) {
 						if (renderer == null)
 							renderer = (ListitemRenderer) getRealRenderer();
 
 						// ZK-2450: cache selected Index and item, added them back after detach item
-						if(_pgi != null && ((Listitem) item).isSelected()) {
+						if (_pgi != null && ((Listitem) item).isSelected()) {
 							int index = ((Listitem) item).getIndex();
 							item.detach(); // always detach
 							Listitem newItem = newUnloadedItem(renderer, min);
@@ -394,14 +414,14 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 						++addcnt;
 					}
 					++min;
-					item = next;//B2100338.,next item could be Paging, don't use Listitem directly
+					item = next; //B2100338.,next item could be Paging, don't use Listitem directly
 				}
 
 				if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
-				&& !inPagingMold())
+						&& !inPagingMold())
 					_listbox.invalidate();
-						//Bug 3147518: avoid memory leak
-						//Also better performance (outer better than remove a lot)
+				//Bug 3147518: avoid memory leak
+				//Also better performance (outer better than remove a lot)
 			}
 		} else {
 			min = 0;
@@ -409,7 +429,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 		for (; --newcnt >= 0; ++min) {
 			if (renderer == null)
-				renderer = (ListitemRenderer)getRealRenderer();
+				renderer = (ListitemRenderer) getRealRenderer();
 			_listbox.insertBefore(newUnloadedItem(renderer, min), next);
 		}
 		if (_pgi != null) {
@@ -420,31 +440,29 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				_pgi.setTotalSize(newsz); //Bug ZK-1601: reset total size since model size may changed.
 		}
 	}
-	
+
 	protected boolean inPagingMold() {
 		return "paging".equals(_listbox.getMold());
 	}
-	
+
 	protected boolean inSelectMold() {
 		return "select".equals(_listbox.getMold());
 	}
-	
+
 	public void updateModelInfo() {
 		// do nothing
 	}
-	
+
 	public void setLoadAll(boolean b) {
 		// do nothing
 	}
-	
+
 	//--Cropper--//
 	public boolean isCropper() {
-		return _listbox != null &&
-				inPagingMold()
-				&& _listbox.getPageSize() <= getTotalSize();
-				//Single page is considered as not a cropper.
-				//isCropper is called after a component is removed, so
-				//we have to test >= rather than >
+		return _listbox != null && inPagingMold() && _listbox.getPageSize() <= getTotalSize();
+		//Single page is considered as not a cropper.
+		//isCropper is called after a component is removed, so
+		//we have to test >= rather than >
 	}
 
 	/** Retrieves the children available at client.
@@ -453,6 +471,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	public final Set<? extends Component> getAvailableAtClient() {
 		return getAvailableAtClient(false);
 	}
+
 	/** Retrieves the children available at client with more control.
 	 * <p>Derived class shall override this method rather than {@link #getAvailableAtClient()}.
 	 * @param itemOnly whether to return only {@link Listitem} and derives.
@@ -461,12 +480,13 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	protected Set<? extends Component> getAvailableAtClient(boolean itemOnly) {
 		if (!isCropper())
 			return null;
-		
+
 		final Paginal pgi = _listbox.getPaginal();
 		int pgsz = pgi.getPageSize();
 		int ofs = pgi.getActivePage() * pgsz;
 		return getAvailableAtClient(ofs, pgsz, itemOnly);
 	}
+
 	/** Retrieves the children available at the client within the given range.
 	 * @param itemOnly whether to return only {@link Listitem} and derives.
 	 * @since 5.0.10
@@ -479,19 +499,23 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		if (!itemOnly) {
 			avail.addAll(_listbox.getHeads());
 			final Listfoot listfoot = _listbox.getListfoot();
-			if (listfoot != null) avail.add(listfoot);
+			if (listfoot != null)
+				avail.add(listfoot);
 			final Paging paging = _listbox.getPagingChild();
-			if (paging != null) avail.add(paging);
+			if (paging != null)
+				avail.add(paging);
 			final Frozen frozen = _listbox.getFrozen();
-			if (frozen != null) avail.add(frozen);
+			if (frozen != null)
+				avail.add(frozen);
 		}
 
 		int pgsz = limit;
 		int ofs = offset;
 		if (_listbox.getItemCount() > 0) {
 			Component item = _listbox.getItems().get(0);
-			while(item != null) {
-				if (pgsz == 0) break;
+			while (item != null) {
+				if (pgsz == 0)
+					break;
 				if (item.isVisible() && item instanceof Listitem) {
 					if (--ofs < 0) {
 						--pgsz;

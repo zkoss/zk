@@ -19,6 +19,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.MCommon;
 import org.zkoss.mesg.Messages;
@@ -61,11 +62,13 @@ import org.zkoss.mesg.Messages;
 			props.load(is);
 			org.zkoss.util.logging.Log.configure(props);
 		} catch (Throwable ex) {
-			log.error("Failed to load "+path, ex);
+			log.error("Failed to load " + path, ex);
 		} finally {
 			if (is != null)
-				try {is.close();} catch (Throwable ex) {}
+				try {
+					is.close();
+				} catch (Throwable ex) {
+				}
 		}
 	}
 }
-

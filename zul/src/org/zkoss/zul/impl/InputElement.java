@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
@@ -56,17 +57,16 @@ import org.zkoss.zul.mesg.MZul;
  *
  * @author tomyeh
  */
-abstract public class InputElement extends XulElement
-implements Constrainted, Readonly, Disable {
+public abstract class InputElement extends XulElement implements Constrainted, Readonly, Disable {
 	private static final Logger log = LoggerFactory.getLogger(InputElement.class);
 
 	static {
-		addClientEvent(InputElement.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
+		addClientEvent(InputElement.class, Events.ON_CHANGE, CE_IMPORTANT | CE_REPEAT_IGNORE);
 		addClientEvent(InputElement.class, Events.ON_CHANGING, CE_DUPLICATE_IGNORE);
 		addClientEvent(InputElement.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(InputElement.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(InputElement.class, Events.ON_SELECTION, CE_REPEAT_IGNORE);
-		addClientEvent(InputElement.class, Events.ON_ERROR, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(InputElement.class, Events.ON_ERROR, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	/** The value. */
@@ -78,7 +78,7 @@ implements Constrainted, Readonly, Disable {
 	private boolean _valided;
 	private boolean _inplace;
 	private String _placeholder;
-	
+
 	/**
 	 * Returns the placeholder text
 	 * @since 6.5.0
@@ -86,7 +86,7 @@ implements Constrainted, Readonly, Disable {
 	public String getPlaceholder() {
 		return _placeholder;
 	}
-	
+
 	/**
 	 * Sets the placeholder text that is displayed when input is empty.
 	 * Only works for browsers supporting HTML5.
@@ -110,7 +110,7 @@ implements Constrainted, Readonly, Disable {
 			smartUpdate("inplace", _inplace);
 		}
 	}
-	
+
 	/**
 	 * Returns whether enable the inplace-editing.
 	 * <p>default: false.
@@ -119,13 +119,14 @@ implements Constrainted, Readonly, Disable {
 	public boolean isInplace() {
 		return _inplace;
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
 	public boolean isDisabled() {
 		return _disabled;
 	}
+
 	/** Sets whether it is disabled.
 	 */
 	public void setDisabled(boolean disabled) {
@@ -134,12 +135,14 @@ implements Constrainted, Readonly, Disable {
 			smartUpdate("disabled", _disabled);
 		}
 	}
+
 	/** Returns whether it is readonly.
 	 * <p>Default: false.
 	 */
 	public boolean isReadonly() {
 		return _readonly;
 	}
+
 	/** Sets whether it is readonly.
 	 */
 	public void setReadonly(boolean readonly) {
@@ -159,8 +162,9 @@ implements Constrainted, Readonly, Disable {
 	 * with other kind of clients.
 	 */
 	public String getName() {
-		return _auxinf != null ? _auxinf.name: null;
+		return _auxinf != null ? _auxinf.name : null;
 	}
+
 	/** Sets the name of this component.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
@@ -172,8 +176,9 @@ implements Constrainted, Readonly, Disable {
 	 * @param name the name of this component.
 	 */
 	public void setName(String name) {
-		if (name != null && name.length() == 0) name = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.name: null, name)) {
+		if (name != null && name.length() == 0)
+			name = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.name : null, name)) {
 			initAuxInfo().name = name;
 			smartUpdate("name", getName());
 		}
@@ -193,8 +198,9 @@ implements Constrainted, Readonly, Disable {
 	 * {@link org.zkoss.zul.Intbox#getValue}.
 	 */
 	public String getErrorMessage() {
-		return _auxinf != null ? _auxinf.errmsg: null;
+		return _auxinf != null ? _auxinf.errmsg : null;
 	}
+
 	/** Associates an error message to this input.
 	 * It will cause the given error message to be shown at the client.
 	 * <p>Notice that the application rarely invokes this method. Rather,
@@ -211,6 +217,7 @@ implements Constrainted, Readonly, Disable {
 			clearErrorMessage();
 		}
 	}
+
 	/** Clears the error message.
 	 *
 	 * <p>The error message is cleared automatically, so you rarely need
@@ -246,6 +253,7 @@ implements Constrainted, Readonly, Disable {
 		}
 		_valided = !revalidateRequired;
 	}
+
 	/** Clears the error message.
 	 * It is the same as clearErrorMessage(false). That is, the current
 	 * value is assumed to be correct. {@link #getText} or others (such as {@link org.zkoss.zul.Intbox#getValue})
@@ -307,7 +315,7 @@ implements Constrainted, Readonly, Disable {
 			smartUpdate("_value", marshall(val));
 		} else if (errFound) {
 			smartUpdate("_value", marshall(_value)); //send back original value
-				//Bug 1876292: make sure client see the updated value
+			//Bug 1876292: make sure client see the updated value
 		}
 	}
 
@@ -321,8 +329,8 @@ implements Constrainted, Readonly, Disable {
 	 * <p>Moreover, when {@link org.zkoss.zul.Textbox} is called, it calls this method
 	 * with value = null. Derives shall handle this case properly.
 	 */
-	abstract protected
-	Object coerceFromString(String value) throws WrongValueException;
+	protected abstract Object coerceFromString(String value) throws WrongValueException;
+
 	/** Coerces the value passed to {@link #setText}.
 	 *
 	 * <p>Default: convert null to an empty string.
@@ -332,7 +340,7 @@ implements Constrainted, Readonly, Disable {
 	 * you have to override {@link #coerceToString} and {@link #coerceFromString}
 	 * to convert between a string and your targeting type.
 	 */
-	abstract protected String coerceToString(Object value);
+	protected abstract String coerceToString(Object value);
 
 	/** Validates the value returned by {@link #coerceFromString}.
 	 * <p>Default: use  {@link #getConstraint}'s {@link Constraint#validate},
@@ -348,7 +356,7 @@ implements Constrainted, Readonly, Disable {
 				constr.validate(this, value);
 				if (!_auxinf.checkOnly && (constr instanceof CustomConstraint)) {
 					try {
-						((CustomConstraint)constr).showCustomError(this, null);
+						((CustomConstraint) constr).showCustomError(this, null);
 						//not call thru showCustomError(Wrong...) for better performance
 					} catch (Throwable ex) {
 						log.error("", ex);
@@ -359,6 +367,7 @@ implements Constrainted, Readonly, Disable {
 			}
 		}
 	}
+
 	/** Shows the error message in the custom way by calling
 	 * ({@link CustomConstraint#showCustomError}, if the constraint
 	 * implements {@link CustomConstraint}.
@@ -374,7 +383,7 @@ implements Constrainted, Readonly, Disable {
 		if (_auxinf != null && _auxinf.constr instanceof CustomConstraint) {
 			Scopes.beforeInterpret(this);
 			try {
-				((CustomConstraint)_auxinf.constr).showCustomError(this, ex);
+				((CustomConstraint) _auxinf.constr).showCustomError(this, ex);
 			} catch (Throwable t) {
 				log.error("", t); //and ignore it
 			} finally {
@@ -388,48 +397,54 @@ implements Constrainted, Readonly, Disable {
 	 * <p>Default: 0 (non-positive means unlimited).
 	 */
 	public int getMaxlength() {
-		return _auxinf != null ? _auxinf.maxlength: 0;
+		return _auxinf != null ? _auxinf.maxlength : 0;
 	}
+
 	/** Sets the maxlength.
 	 * <p> The length includes the format, if specified.
 	 */
 	public void setMaxlength(int maxlength) {
-		if ((_auxinf != null ? _auxinf.maxlength: 0) != maxlength) {
+		if ((_auxinf != null ? _auxinf.maxlength : 0) != maxlength) {
 			initAuxInfo().maxlength = maxlength;
 			smartUpdate("maxlength", getMaxlength());
 		}
 	}
+
 	/** Returns the cols.
 	 * <p>Default: 0 (non-positive means the same as browser's default).
 	 */
 	public int getCols() {
 		return _cols;
 	}
+
 	/** Sets the cols.
 	 */
 	public void setCols(int cols) throws WrongValueException {
 		if (cols <= 0)
-			throw new WrongValueException("Illegal cols: "+cols);
+			throw new WrongValueException("Illegal cols: " + cols);
 
 		if (_cols != cols) {
 			_cols = cols;
 			smartUpdate("cols", _cols);
 		}
 	}
+
 	/** Returns the tab order of this component.
 	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
-		return _auxinf != null ? _auxinf.tabindex: 0;
+		return _auxinf != null ? _auxinf.tabindex : 0;
 	}
+
 	/** Sets the tab order of this component.
 	 */
 	public void setTabindex(int tabindex) throws WrongValueException {
-		if ((_auxinf != null ? _auxinf.tabindex: 0) != tabindex) {
+		if ((_auxinf != null ? _auxinf.tabindex : 0) != tabindex) {
 			initAuxInfo().tabindex = tabindex;
 			smartUpdate("tabindex", getTabindex());
 		}
 	}
+
 	/** Returns true if onChange event is sent as soon as user types in the input 
 	 * component.
 	 * <p>Default: false
@@ -447,6 +462,7 @@ implements Constrainted, Readonly, Disable {
 	public boolean isInstant() {
 		return _auxinf != null && _auxinf.instant;
 	}
+
 	/** Sets the instant attribute. When the attribute is true, onChange event 
 	 * will be fired as soon as user type in the input component.
 	 * @since 6.0.0
@@ -457,12 +473,14 @@ implements Constrainted, Readonly, Disable {
 			smartUpdate("instant", getInstant());
 		}
 	}
+
 	/** Returns whether it is multiline.
 	 * <p>Default: false.
 	 */
 	public boolean isMultiline() {
 		return false;
 	}
+
 	/** Returns the type.
 	 * <p>Default: text.
 	 */
@@ -478,10 +496,11 @@ implements Constrainted, Readonly, Disable {
 
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? SimpleConstraint.getInstance(constr): null); //Bug 2564298
+		setConstraint(constr != null ? SimpleConstraint.getInstance(constr) : null); //Bug 2564298
 	}
+
 	public void setConstraint(Constraint constr) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.constr: null, constr)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.constr : null, constr)) {
 			initAuxInfo().constr = constr;
 			_valided = false;
 
@@ -489,7 +508,7 @@ implements Constrainted, Readonly, Disable {
 				smartUpdate("constraint", "[c"); //implies validated at server
 				return;
 			} else if (_auxinf.constr instanceof ClientConstraint) {
-				final ClientConstraint cc = (ClientConstraint)_auxinf.constr;
+				final ClientConstraint cc = (ClientConstraint) _auxinf.constr;
 				final JavaScriptValue cpkgs = getClientPackages(cc);
 				if (cpkgs != null)
 					smartUpdate("_0", cpkgs); //name doesn't matter
@@ -499,30 +518,33 @@ implements Constrainted, Readonly, Disable {
 					if (code instanceof JavaScriptValue)
 						smartUpdate("z$al", code);
 					else //must be string
-						smartUpdate("constraint", new JavaScriptValue((String)code));
+						smartUpdate("constraint", new JavaScriptValue((String) code));
 					return;
 				}
 			}
-			smartUpdate("constraint", _auxinf.constr != null ? "[s": null);
+			smartUpdate("constraint", _auxinf.constr != null ? "[s" : null);
 		}
 	}
+
 	private static JavaScriptValue getClientPackages(ClientConstraint cc) {
 		final String cpkg = cc.getClientPackages();
-		return cpkg != null ? new JavaScriptValue("zk.load('" + cpkg + "')"): null;
+		return cpkg != null ? new JavaScriptValue("zk.load('" + cpkg + "')") : null;
 	}
+
 	private static Object getClientConstraintCode(ClientConstraint cc) {
 		final String js = cc.getClientConstraint();
 		if (js != null && js.length() > 0) {
-			final char c =  js.charAt(0);
+			final char c = js.charAt(0);
 			if (c != '\'' && c != '"')
-				return new JavaScriptValue("{constraint:function(){\nreturn "+js+";}}");
-					//some JavaScript code => z$al
+				return new JavaScriptValue("{constraint:function(){\nreturn " + js + ";}}");
+			//some JavaScript code => z$al
 			return js;
 		}
 		return null;
 	}
+
 	public Constraint getConstraint() {
-		return _auxinf != null ? _auxinf.constr: null;
+		return _auxinf != null ? _auxinf.constr : null;
 	}
 
 	/** Returns the value in the targeting type.
@@ -554,6 +576,7 @@ implements Constrainted, Readonly, Disable {
 	public Object getRawValue() {
 		return _value;
 	}
+
 	/** Returns the text directly without checking whether any error
 	 * message not yet fixed. In other words, it does NOT invoke
 	 * {@link #checkUserError}.
@@ -568,6 +591,7 @@ implements Constrainted, Readonly, Disable {
 	public String getRawText() {
 		return coerceToString(_value);
 	}
+
 	/** Sets the raw value directly. The caller must make sure the value
 	 * is correct (or intend to be incorrect), because this method
 	 * doesn't do any validation.
@@ -590,13 +614,13 @@ implements Constrainted, Readonly, Disable {
 	 * @see #getRawValue
 	 */
 	public void setRawValue(Object value) {
-		if ((_auxinf != null && _auxinf.errmsg != null)
-		|| !Objects.equals(_value, value)) {
+		if ((_auxinf != null && _auxinf.errmsg != null) || !Objects.equals(_value, value)) {
 			clearErrorMessage(true);
 			_value = value;
 			smartUpdate("_value", marshall(_value));
 		}
 	}
+
 	/** Sets the value directly.
 	 * Note: Unlike {@link #setRawValue} (nor setValue), this method
 	 * assigns the value directly without clearing error message or
@@ -644,22 +668,24 @@ implements Constrainted, Readonly, Disable {
 	 *            style.If the start point same with the end point always
 	 *            represent cursor style.
 	 */
-	public void setSelectedText(int start, int end, String newtxt,
-			boolean isHighLight) {
+	public void setSelectedText(int start, int end, String newtxt, boolean isHighLight) {
 		if (start <= end) {
 			final String txt = getText();
 			final int len = txt.length();
-			if (start < 0) start = 0;
-			if (start > len) start = len;
-			if (end < 0) end = 0;
-			if (end > len) end = len;
+			if (start < 0)
+				start = 0;
+			if (start > len)
+				start = len;
+			if (end < 0)
+				end = 0;
+			if (end > len)
+				end = len;
 
 			if (newtxt == null)
 				newtxt = "";
 
-			setText( txt.substring(0, start) + newtxt + txt.substring(end));
-			setSelectionRange(start,
-				isHighLight ? start + newtxt.length(): start);
+			setText(txt.substring(0, start) + newtxt + txt.substring(end));
+			setSelectionRange(start, isHighLight ? start + newtxt.length() : start);
 		}
 	}
 
@@ -679,7 +705,7 @@ implements Constrainted, Readonly, Disable {
 	public void setSelectionRange(int start, int end) {
 		response(new AuSelect(this, start, end));
 	}
-	
+
 	/** Checks whether user entered a wrong value (and not correct it yet).
 	 * Since user might enter a wrong value and moves on to other components,
 	 * this method is called when {@link #getText} or {@link #getTargetValue} is
@@ -691,14 +717,14 @@ implements Constrainted, Readonly, Disable {
 	protected void checkUserError() throws WrongValueException {
 		if (_auxinf != null && _auxinf.errmsg != null)
 			throw new WrongValueException(this, _auxinf.errmsg);
-				//Note: we still throw exception to abort the exec flow
-				//It's client's job NOT to show the error box!
-				//(client checks z.srvald to decide whether to open error box)
+		//Note: we still throw exception to abort the exec flow
+		//It's client's job NOT to show the error box!
+		//(client checks z.srvald to decide whether to open error box)
 
 		if (!_valided && _auxinf != null && _auxinf.constr != null)
 			setText(coerceToString(_value));
 	}
-	
+
 	/**
 	 * Returns the class name of the custom style applied to the errorbox of this component.
 	 * @return Sclass
@@ -707,20 +733,21 @@ implements Constrainted, Readonly, Disable {
 	public String getErrorboxSclass() {
 		return _auxinf != null ? _auxinf.errorboxSclass : null;
 	}
-	
+
 	/**
 	 * Sets the class name of the custom style to be applied to the errorbox of this component.
 	 * @param sclass
 	 * @since 8.0.1
 	 */
 	public void setErrorboxSclass(String sclass) {
-		if (sclass != null && sclass.length() == 0) sclass = null;
+		if (sclass != null && sclass.length() == 0)
+			sclass = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, sclass)) {
 			initAuxInfo().errorboxSclass = sclass;
 			smartUpdate("errorboxSclass", getErrorboxSclass());
 		}
 	}
-	
+
 	/**
 	 * Returns the class name of the custom style applied to the errorbox icon of this component.
 	 * @return Sclass
@@ -729,14 +756,15 @@ implements Constrainted, Readonly, Disable {
 	public String getErrorboxIconSclass() {
 		return _auxinf != null ? _auxinf.errorboxIconSclass : null;
 	}
-	
+
 	/**
 	 * Sets the class name of the custom style to be applied to the errorbox icon of this component.
 	 * @param iconSclass
 	 * @since 8.0.1
 	 */
 	public void setErrorboxIconSclass(String iconSclass) {
-		if (iconSclass != null && iconSclass.length() == 0) iconSclass = null;
+		if (iconSclass != null && iconSclass.length() == 0)
+			iconSclass = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, iconSclass)) {
 			initAuxInfo().errorboxIconSclass = iconSclass;
 			smartUpdate("errorboxIconSclass", getErrorboxIconSclass());
@@ -754,6 +782,7 @@ implements Constrainted, Readonly, Disable {
 		initAuxInfo().errmsg = Exceptions.getMessage(ex);
 		return showCustomError(ex);
 	}
+
 	/** Marshall value to be sent to the client if needed.
 	 *
 	 * <p>Overrides it if the value to be sent to the client is not JSON Compatible.
@@ -764,6 +793,7 @@ implements Constrainted, Readonly, Disable {
 	protected Object marshall(Object value) {
 		return value;
 	}
+
 	/** Unmarshall value returned from client if needed.
 	 *
 	 * <p>Overrides it if the value returned is not JSON Compatible.
@@ -774,6 +804,7 @@ implements Constrainted, Readonly, Disable {
 	protected Object unmarshall(Object value) {
 		return value;
 	}
+
 	private void setValueByClient(Object value, String valstr) {
 		if (_auxinf != null && _auxinf.maxlength > 0 && valstr != null && valstr.length() > _auxinf.maxlength)
 			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
@@ -791,9 +822,10 @@ implements Constrainted, Readonly, Disable {
 			_value = value;
 		} else if (errFound) {
 			smartUpdate("_value", marshall(_value)); //send back original value
-				//Bug 1876292: make sure client see the updated value
+			//Bug 1876292: make sure client see the updated value
 		}
 	}
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -807,7 +839,7 @@ implements Constrainted, Readonly, Disable {
 				final Object oldval = _value;
 				Object value = null;
 				final Map<String, Object> data = request.getData();
-				final String rawValue = (String)data.get("rawValue");
+				final String rawValue = (String) data.get("rawValue");
 				if (rawValue != null) {
 					value = coerceFromString(rawValue);
 				} else {
@@ -827,10 +859,8 @@ implements Constrainted, Readonly, Disable {
 				if (Objects.equals(oldval, _value))
 					return; //Bug 1881557: don't post event if not modified
 
-				final InputEvent evt = new InputEvent(cmd, this,
-					valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
-					AuRequests.getBoolean(data, "bySelectBack"),
-					AuRequests.getInt(data, "start", 0));
+				final InputEvent evt = new InputEvent(cmd, this, valstr, oldval, //20101022, henrichen: for backward compatible, must coerceToString
+						AuRequests.getBoolean(data, "bySelectBack"), AuRequests.getInt(data, "start", 0));
 				Events.postEvent(evt);
 			} catch (WrongValueException ex) {
 				initAuxInfo().errmsg = ex.getMessage();
@@ -840,15 +870,13 @@ implements Constrainted, Readonly, Disable {
 			final Map<String, Object> data = request.getData();
 			final Object clientv = data.get("value");
 			final Object oldval = _value;
-			final InputEvent evt = new InputEvent(cmd, this,
-				clientv == null ? "" : clientv.toString(), oldval, //clientv is what user input (not marshal)
-				AuRequests.getBoolean(data, "bySelectBack"),
-				AuRequests.getInt(data, "start", 0));
+			final InputEvent evt = new InputEvent(cmd, this, clientv == null ? "" : clientv.toString(), oldval, //clientv is what user input (not marshal)
+					AuRequests.getBoolean(data, "bySelectBack"), AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_ERROR)) {
 			ErrorEvent evt = ErrorEvent.getErrorEvent(request, _value);
 			final String msg = evt.getMessage();
-			initAuxInfo().errmsg = msg != null && msg.length() > 0 ? msg: null;
+			initAuxInfo().errmsg = msg != null && msg.length() > 0 ? msg : null;
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECTION)) {
 			Events.postEvent(SelectionEvent.getSelectionEvent(request));
@@ -857,32 +885,36 @@ implements Constrainted, Readonly, Disable {
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "_value", marshall(_value));
-			//ZK-658: we have to render the value before constraint
+		//ZK-658: we have to render the value before constraint
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", getName());
 		render(renderer, "inplace", _inplace);
-		
-		if (_placeholder != null) render(renderer, "placeholder", _placeholder);
-		
+
+		if (_placeholder != null)
+			render(renderer, "placeholder", _placeholder);
+
 		int v;
-		if ((v = getMaxlength()) > 0) renderer.render("maxlength", v);
-		if (_cols > 0) renderer.render("cols", _cols);
-		if ((v = getTabindex()) != 0) renderer.render("tabindex", v);
-		if (getInstant()) renderer.render("instant", true);
+		if ((v = getMaxlength()) > 0)
+			renderer.render("maxlength", v);
+		if (_cols > 0)
+			renderer.render("cols", _cols);
+		if ((v = getTabindex()) != 0)
+			renderer.render("tabindex", v);
+		if (getInstant())
+			renderer.render("instant", true);
 
 		boolean constrDone = false;
-		final Constraint constr = _auxinf != null ? _auxinf.constr: null;
+		final Constraint constr = _auxinf != null ? _auxinf.constr : null;
 		if (constr instanceof CustomConstraint) { //client ignored if custom
 			renderer.render("constraint", "[c"); //implies validated at server
 			constrDone = true;
 		} else if (constr instanceof ClientConstraint) {
-			final ClientConstraint cc = (ClientConstraint)constr;
+			final ClientConstraint cc = (ClientConstraint) constr;
 			render(renderer, "_0", getClientPackages(cc)); //name doesn't matter
 
 			final Object code = getClientConstraintCode(cc);
@@ -898,16 +930,15 @@ implements Constrainted, Readonly, Disable {
 			renderer.render("constraint", "[s");
 
 		Utils.renderCrawlableText(coerceToString(_value));
-		
+
 		//ZK-2677
 		render(renderer, "errorboxSclass", getErrorboxSclass());
 		render(renderer, "errorboxIconSclass", getErrorboxIconSclass());
 	}
 
-
-
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(12);
+
 	static {
 		_properties.put("name", new StringPropertyAccess() {
 			public void setValue(Component cmp, String name) {
@@ -1006,7 +1037,7 @@ implements Constrainted, Readonly, Disable {
 				return ((InputElement) cmp).getTabindex();
 			}
 		});
-		
+
 		_properties.put("errorboxSclass", new StringPropertyAccess() {
 			public void setValue(Component cmp, String errorboxSclass) {
 				((InputElement) cmp).setErrorboxSclass(errorboxSclass);
@@ -1016,7 +1047,7 @@ implements Constrainted, Readonly, Disable {
 				return ((InputElement) cmp).getErrorboxSclass();
 			}
 		});
-		
+
 		_properties.put("errorboxIconSclass", new StringPropertyAccess() {
 			public void setValue(Component cmp, String errorboxIconSclass) {
 				((InputElement) cmp).setErrorboxIconSclass(errorboxIconSclass);
@@ -1037,9 +1068,9 @@ implements Constrainted, Readonly, Disable {
 
 	//Cloneable//
 	public Object clone() {
-		final InputElement clone = (InputElement)super.clone();
+		final InputElement clone = (InputElement) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
 
@@ -1048,6 +1079,7 @@ implements Constrainted, Readonly, Disable {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
+
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		/** The error message. Not null if users entered a wrong data (and
 		 * not correct it yet).

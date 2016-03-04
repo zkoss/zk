@@ -18,12 +18,12 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 
 /**
  * Represents an event cause by mouse activity.
@@ -70,13 +70,12 @@ public class MouseEvent extends Event {
 		final Map<String, Object> data = request.getData();
 		final String name = request.getCommand();
 		final int keys = AuRequests.parseKeys(data);
-		final String area = (String)data.get("area");
-		return area != null ? new MouseEvent(name, request.getComponent(), area, keys): //area
-			new MouseEvent(name, request.getComponent(), //coord
-				AuRequests.getInt(data, "x", 0, true),
-				AuRequests.getInt(data, "y", 0, true),
-				AuRequests.getInt(data, "pageX", 0, true),
-				AuRequests.getInt(data, "pageY", 0, true), keys);
+		final String area = (String) data.get("area");
+		return area != null ? new MouseEvent(name, request.getComponent(), area, keys)
+				: //area
+				new MouseEvent(name, request.getComponent(), //coord
+						AuRequests.getInt(data, "x", 0, true), AuRequests.getInt(data, "y", 0, true),
+						AuRequests.getInt(data, "pageX", 0, true), AuRequests.getInt(data, "pageY", 0, true), keys);
 	}
 
 	/** Construct a mouse relevant event with coordinate or area.
@@ -86,21 +85,21 @@ public class MouseEvent extends Event {
 		_area = null;
 		_x = _y = _pgx = _pgy = _keys = 0;
 	}
+
 	/** Constructs a mouse relevant event.
 	 * @since 5.0.0
 	 */
-	public MouseEvent(String name, Component target, int x, int y,
-	int pageX, int pageY) {
+	public MouseEvent(String name, Component target, int x, int y, int pageX, int pageY) {
 		this(name, target, x, y, pageX, pageY, 0);
 	}
+
 	/** Constructs a mouse relevant event.
 	 *
 	 * @param keys a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}
 	 * {@link #ALT_KEY}, {@link #LEFT_CLICK} and {@link #RIGHT_CLICK}.
 	 * @since 5.0.0
 	 */
-	public MouseEvent(String name, Component target, int x, int y,
-	int pageX, int pageY, int keys) {
+	public MouseEvent(String name, Component target, int x, int y, int pageX, int pageY, int keys) {
 		super(name, target);
 		_x = x;
 		_y = y;
@@ -109,6 +108,7 @@ public class MouseEvent extends Event {
 		_area = null;
 		_keys = keys;
 	}
+
 	/** Constructs a mouse relevant event with a logic name called area.
 	 * @since 5.0.0
 	 */
@@ -137,6 +137,7 @@ public class MouseEvent extends Event {
 	public String getArea() {
 		return _area;
 	}
+
 	/** Returns the component representing the area that the click occurs,
 	 * or null if not associated with any component.
 	 * <p>This method assumes {@link #getArea} is either a component's ID
@@ -172,12 +173,14 @@ public class MouseEvent extends Event {
 	public final int getX() {
 		return _x;
 	}
+
 	/** Returns the vertical coordinate of the mouse pointer relevant to
 	 * the component.
 	 */
 	public final int getY() {
 		return _y;
 	}
+
 	/** Returns the horizontal coordinate of the mouse pointer relative
 	 * to the whole document.
 	 * @since 5.0.0
@@ -185,6 +188,7 @@ public class MouseEvent extends Event {
 	public final int getPageX() {
 		return _pgx;
 	}
+
 	/** Returns the vertical coordinate of the mouse pointer relative
 	 * to the whole document.
 	 * @since 5.0.0

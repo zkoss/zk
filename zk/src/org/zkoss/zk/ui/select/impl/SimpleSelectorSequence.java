@@ -19,7 +19,7 @@ import org.zkoss.zk.ui.select.impl.Selector.Combinator;
  * @author simonpai
  */
 public class SimpleSelectorSequence {
-	
+
 	private Combinator _combinator;
 	private String _type;
 	private String _id;
@@ -27,17 +27,17 @@ public class SimpleSelectorSequence {
 	private List<Attribute> _attributes;
 	private List<PseudoClass> _pseudoClasses;
 	private List<PseudoElement> _pseudoElements;
-	
+
 	private Attribute _currAttribute;
 	private PseudoClass _currPseudoClass;
-	
+
 	private List<Selectors> _toStringOrder;
-	
+
 	private enum Selectors {
 		TYPE, ID, CLASS, ATTRIBUTE, PSEUDO_CLASS, PSEUDO_ELEMENT
 	}
-	
-	public SimpleSelectorSequence(){
+
+	public SimpleSelectorSequence() {
 		_combinator = Combinator.DESCENDANT;
 		_classes = new LinkedHashSet<String>();
 		_attributes = new LinkedList<Attribute>();
@@ -45,132 +45,129 @@ public class SimpleSelectorSequence {
 		_pseudoElements = new LinkedList<PseudoElement>();
 		_toStringOrder = new LinkedList<Selectors>();
 	}
-	
-	public SimpleSelectorSequence(String type){
+
+	public SimpleSelectorSequence(String type) {
 		this();
 		_type = type;
 	}
-	
-	
-	
+
 	// getter //
-	public Combinator getCombinator(){
+	public Combinator getCombinator() {
 		return _combinator;
 	}
-	
-	public String getType(){
+
+	public String getType() {
 		return _type;
 	}
-	
-	public String getId(){
+
+	public String getId() {
 		return _id;
 	}
-	
-	public Set<String> getClasses(){
+
+	public Set<String> getClasses() {
 		return Collections.unmodifiableSet(_classes);
 	}
-	
-	public List<Attribute> getAttributes(){
+
+	public List<Attribute> getAttributes() {
 		return Collections.unmodifiableList(_attributes);
 	}
-	
-	public List<PseudoClass> getPseudoClasses(){
+
+	public List<PseudoClass> getPseudoClasses() {
 		return Collections.unmodifiableList(_pseudoClasses);
 	}
-	
-	public List<PseudoElement> getPseudoElements(){
+
+	public List<PseudoElement> getPseudoElements() {
 		return Collections.unmodifiableList(_pseudoElements);
 	}
-	
-	
+
 	// setter //
-	public void setCombinator(Combinator combinator){
+	public void setCombinator(Combinator combinator) {
 		_combinator = combinator;
 	}
-	
-	public void setType(String type){
+
+	public void setType(String type) {
 		_type = type;
 		_toStringOrder.add(Selectors.TYPE);
 	}
-	
-	public void setId(String id){
+
+	public void setId(String id) {
 		_id = id;
 		_toStringOrder.add(Selectors.ID);
 	}
-	
-	public void addClass(String clazz){
+
+	public void addClass(String clazz) {
 		if (!_classes.contains(clazz)) {
 			_classes.add(clazz);
 			_toStringOrder.add(Selectors.CLASS);
 		}
 	}
-	
-	public void addAttribute(String name){
+
+	public void addAttribute(String name) {
 		_attributes.add(_currAttribute = new Attribute(name));
 		_toStringOrder.add(Selectors.ATTRIBUTE);
 	}
-	
-	public void attachAttributeOperator(Operator operator){
-		if(_currAttribute == null) throw new IllegalStateException();
+
+	public void attachAttributeOperator(Operator operator) {
+		if (_currAttribute == null)
+			throw new IllegalStateException();
 		_currAttribute.setOperator(operator);
 	}
-	
-	public void attachAttributeValue(String value){
+
+	public void attachAttributeValue(String value) {
 		attachAttributeValue(value, false);
 	}
-	
-	public void attachAttributeValue(String value, boolean quoted){
-		if(_currAttribute == null) throw new IllegalStateException();
+
+	public void attachAttributeValue(String value, boolean quoted) {
+		if (_currAttribute == null)
+			throw new IllegalStateException();
 		_currAttribute.setValue(value, quoted);
 	}
-	
-	public void attachAttributeQuote(boolean inQuote){
-		if(_currAttribute == null) throw new IllegalStateException();
+
+	public void attachAttributeQuote(boolean inQuote) {
+		if (_currAttribute == null)
+			throw new IllegalStateException();
 		_currAttribute.setQuoted(inQuote);
 	}
-	
-	public void addPseudoClass(String function){
+
+	public void addPseudoClass(String function) {
 		_pseudoClasses.add(_currPseudoClass = new PseudoClass(function));
 		_toStringOrder.add(Selectors.PSEUDO_CLASS);
 	}
-	
-	public void attachPseudoClassParameter(String parameter){
-		if(_currPseudoClass == null) throw new IllegalStateException();
+
+	public void attachPseudoClassParameter(String parameter) {
+		if (_currPseudoClass == null)
+			throw new IllegalStateException();
 		_currPseudoClass.addParameter(parameter);
 	}
-	
+
 	public void addPseudoElement(String source) {
 		_pseudoElements.add(new PseudoElement(source));
 		_toStringOrder.add(Selectors.PSEUDO_ELEMENT);
 	}
-	
+
 	public String toString() {
-		if (_type == null &&
-			_id == null &&
-			_classes.isEmpty() &&
-			_pseudoClasses.isEmpty() &&
-			_attributes.isEmpty() &&
-			_pseudoElements.isEmpty())
+		if (_type == null && _id == null && _classes.isEmpty() && _pseudoClasses.isEmpty() && _attributes.isEmpty()
+				&& _pseudoElements.isEmpty())
 			return "*";
-		
+
 		StringBuffer sb = new StringBuffer();
-		
+
 		Iterator<String> classIter = null;
-		if(!_classes.isEmpty())
+		if (!_classes.isEmpty())
 			classIter = _classes.iterator();
-		
+
 		Iterator<Attribute> attrIter = null;
-		if(!_attributes.isEmpty())
+		if (!_attributes.isEmpty())
 			attrIter = _attributes.iterator();
-		
+
 		Iterator<PseudoClass> pseudoClassIter = null;
-		if(!_pseudoClasses.isEmpty())
+		if (!_pseudoClasses.isEmpty())
 			pseudoClassIter = _pseudoClasses.iterator();
-			
+
 		Iterator<PseudoElement> pasueoElemIter = null;
 		if (!_pseudoElements.isEmpty())
 			pasueoElemIter = _pseudoElements.iterator();
-			
+
 		// ZK-2944: maintain the order of input
 		for (Selectors s : _toStringOrder) {
 			switch (s) {
@@ -178,7 +175,8 @@ public class SimpleSelectorSequence {
 				sb.append(_type == null ? "" : _type.toString());
 				break;
 			case ID:
-				if(_id != null) sb.append('#').append(_id);
+				if (_id != null)
+					sb.append('#').append(_id);
 				break;
 			case CLASS:
 				if (classIter != null && classIter.hasNext())
@@ -198,7 +196,7 @@ public class SimpleSelectorSequence {
 				break;
 			}
 		}
-		
+
 		return sb.toString();
 	}
 }

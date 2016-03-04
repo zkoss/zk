@@ -34,24 +34,26 @@ public class If extends AbstractAction {
 	public boolean getTest() {
 		return _cond;
 	}
+
 	/** Sets the test result. */
 	public void setTest(boolean cond) {
 		_cond = cond;
 	}
+
 	/** Returns whether to trim the result.
 	 * <p>Default: true.
 	 */
 	public boolean isTrim() {
 		return _trim;
 	}
+
 	/** Sets whether to trim the result. */
 	public void setTrim(boolean trim) {
 		_trim = trim;
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (nested && _cond && isEffective()) {
 			final StringWriter out = getFragmentOut(ac, _trim);
 			renderFragment(ac, out, _trim);

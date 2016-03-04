@@ -19,7 +19,8 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.CheckEvent;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.Utils;
 
 /**
@@ -39,7 +40,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  */
 public class Radio extends Checkbox {
-	
+
 	/** At most one of _group and _groupId will be non-null. */
 	private Radiogroup _group;
 	/** At most one of _group and _groupId will be non-null. */
@@ -48,9 +49,11 @@ public class Radio extends Checkbox {
 
 	public Radio() {
 	}
+
 	public Radio(String label) {
 		super(label);
 	}
+
 	public Radio(String label, String image) {
 		super(label, image);
 	}
@@ -70,7 +73,7 @@ public class Radio extends Checkbox {
 		for (Component p = this;;) {
 			Component q = p.getParent();
 			if ((q instanceof Radiogroup) || q == null)
-				return (Radiogroup)q;
+				return (Radiogroup) q;
 			p = q;
 		}
 	}
@@ -84,12 +87,12 @@ public class Radio extends Checkbox {
 		boolean inGroup = _groupId != null;
 		_groupId = null;
 		if (inGroup || radiogroup != _group) {
-			if (_group != null){
+			if (_group != null) {
 				_group.removeExternal(this);
 				_attachExternal = false;
 			}
 			_group = radiogroup;
-			
+
 			//ZK-1073 it's better not to add the external when component is not attached.
 			if (_group != null && getDesktop() != null) {
 				_group.addExternal(this);
@@ -99,6 +102,7 @@ public class Radio extends Checkbox {
 			smartUpdate("radiogroup", _group);
 		}
 	}
+
 	/** Associates the radiogroup to this radio component by giving ID.
 	 * The radio automatically belongs to the nearest ancestral radiogroup.
 	 * Use this method only if the radio group is not one of its ancestors.
@@ -108,7 +112,7 @@ public class Radio extends Checkbox {
 	 */
 	public void setRadiogroup(String radiogroupId) {
 		if (radiogroupId == null) {
-			setRadiogroup((Radiogroup)null);
+			setRadiogroup((Radiogroup) null);
 			return;
 		}
 
@@ -119,13 +123,14 @@ public class Radio extends Checkbox {
 		else
 			invalidate(); //delay the retrieval of _group to redraw
 	}
+
 	/** @param silent whether NOT to throw an exception if not found. */
 	private boolean resolveGroup(boolean silent) {
 		if (_groupId != null) {
-			_group = (Radiogroup)Utils.getComponentById(this, _groupId);
+			_group = (Radiogroup) Utils.getComponentById(this, _groupId);
 			if (_group == null) {
 				if (!silent)
-					throw new WrongValueException("Radiogroup not found: "+_groupId);
+					throw new WrongValueException("Radiogroup not found: " + _groupId);
 				return false;
 			}
 			_groupId = null;
@@ -142,6 +147,7 @@ public class Radio extends Checkbox {
 	public boolean isSelected() {
 		return isChecked();
 	}
+
 	/** Sets whether it is selected.
 	 * <p>Don't override this. Override {@link #setChecked} instead.
 	 * <p>The same as {@link #setChecked}.
@@ -149,6 +155,7 @@ public class Radio extends Checkbox {
 	public void setSelected(boolean selected) {
 		setChecked(selected);
 	}
+
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}.
 	 */
@@ -158,6 +165,7 @@ public class Radio extends Checkbox {
 			fixSiblings(checked, false);
 		}
 	}
+
 	/** Make sure only one of them is checked. */
 	private void fixSiblings(boolean checked, boolean byclient) {
 		final Radiogroup group = getRadiogroup();
@@ -186,7 +194,7 @@ public class Radio extends Checkbox {
 	 */
 	public String getName() {
 		final Radiogroup group = getRadiogroup();
-		return group != null ? group.getName(): getUuid();
+		return group != null ? group.getName() : getUuid();
 	}
 
 	/** Returns the Style of radio label
@@ -198,23 +206,23 @@ public class Radio extends Checkbox {
 	public String getZclass() {
 		return _zclass == null ? "z-radio" : _zclass;
 	}
-	
+
 	//-- Component --//
 	public void setParent(Component parent) {
 		Radiogroup oldgp = null;
-		
+
 		if (getParent() != null)
 			oldgp = getRadiogroup();
-		
+
 		super.setParent(parent);
 
 		Radiogroup newgp = null;
-		
+
 		if (parent != null)
 			newgp = getRadiogroup();
 
 		if (oldgp != newgp) {
-			if (oldgp != null) {//removed from the component tree  
+			if (oldgp != null) { //removed from the component tree  
 				if (oldgp == _group) {
 					_group.removeExternal(this);
 					_attachExternal = false;
@@ -230,14 +238,13 @@ public class Radio extends Checkbox {
 			}
 		}
 	}
-	
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		resolveGroup(false);
 		render(renderer, "radiogroup", _group);
 	}
-	
+
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
@@ -263,7 +270,7 @@ public class Radio extends Checkbox {
 		super.onPageDetached(page);
 		//B65-ZK-1768 remove the radio from the radiogroup in case it is an external radio
 		final Radiogroup rg = getRadiogroup();
-		if(rg != null) {
+		if (rg != null) {
 			rg.removeExternal(this);
 		}
 	}

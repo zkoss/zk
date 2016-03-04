@@ -25,10 +25,10 @@ import org.zkoss.zk.au.AuRequest;
  * since 5.0.8
  */
 public interface Blockable {
-	
+
 	/**
 	 * Return true if the request shall be blocked.
 	 */
 	public boolean shallBlock(AuRequest request);
-	
+
 }

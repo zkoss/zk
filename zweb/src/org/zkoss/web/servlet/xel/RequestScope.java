@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.web.servlet.xel;
 
 import java.util.Enumeration;
+
 import javax.servlet.ServletRequest;
 
 /**
@@ -34,12 +35,15 @@ public class RequestScope extends AttributesMap {
 	protected Enumeration<String> getKeys() {
 		return _request.getAttributeNames();
 	}
+
 	protected Object getValue(String key) {
 		return _request.getAttribute(key);
 	}
+
 	protected void setValue(String key, Object val) {
 		_request.setAttribute(key, val);
 	}
+
 	protected void removeValue(String key) {
 		_request.removeAttribute(key);
 	}

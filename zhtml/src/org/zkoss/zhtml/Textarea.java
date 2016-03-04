@@ -19,18 +19,19 @@ package org.zkoss.zhtml;
 import java.lang.Object;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zhtml.impl.PageRenderer;
+import org.zkoss.zhtml.impl.TagRenderContext;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
-import org.zkoss.zhtml.impl.TagRenderContext;
-import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The TEXTAREA tag.
  *
- * <p>If you instantiate {@link Textarea} directly, you shall use {@link #setValue}
- * to set up the value. You shall not add children to it.
+ * <p>
+ * If you instantiate {@link Textarea} directly, you shall use {@link #setValue} to set up the
+ * value. You shall not add children to it.
  * 
  * @author tomyeh
  */
@@ -39,26 +40,26 @@ public class Textarea extends Input implements AfterCompose {
 
 	static {
 		addClientEvent(Textarea.class, Events.ON_CHANGE, 0);
-			//don't declare as CE_IMPORTANT since it is not applicable
-			//(all zhtml components share the same widget class)
+		// don't declare as CE_IMPORTANT since it is not applicable
+		// (all zhtml components share the same widget class)
 	}
 
 	public Textarea() {
 		super("textarea");
 	}
+
 	public Textarea(String value) {
 		super("textarea");
-		_value = value != null ? value: "";
+		_value = value != null ? value : "";
 	}
-	
+
 	public void afterCompose() {
 		String content = PageRenderer.childrenToContent(this);
 		if (content != null)
 			setValue(content);
 	}
-	
-	public void setDynamicProperty(String name, Object value)
-	throws WrongValueException {
+
+	public void setDynamicProperty(String name, Object value) throws WrongValueException {
 		if ("value".equals(name)) {
 			_value = Objects.toString(value);
 			if (_value == null)
@@ -67,13 +68,15 @@ public class Textarea extends Input implements AfterCompose {
 			super.setDynamicProperty(name, value);
 		}
 	}
-	
+
 	public Object getDynamicProperty(String name) {
-		return "value".equals(name) ? _value: super.getDynamicProperty(name);
+		return "value".equals(name) ? _value : super.getDynamicProperty(name);
 	}
 
-	//-- Component --//
-	/** Returns the widget class, "zhtml.Input".
+	// -- Component --//
+	/**
+	 * Returns the widget class, "zhtml.Input".
+	 * 
 	 * @since 8.0.0
 	 */
 	public String getWidgetClass() {
@@ -81,13 +84,13 @@ public class Textarea extends Input implements AfterCompose {
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+			throws java.io.IOException {
 		super.renderProperties(renderer);
 		render(renderer, "value", _value);
 	}
-	
-	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec,
-	java.io.Writer out) throws java.io.IOException {
+
+	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec, java.io.Writer out)
+			throws java.io.IOException {
 		out.write(_value);
 		super.redrawChildrenDirectly(rc, exec, out);
 	}

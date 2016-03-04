@@ -27,26 +27,10 @@ public interface Scope {
 	/** Returns all custom attributes associated with this object (scope).
 	 */
 	public Map<String, Object> getAttributes();
+
 	/** Returns the custom attribute associated with this object (scope).
 	 */
 	public Object getAttribute(String name);
-	/** Returns if a custom attribute is associated with this object (scope).
-	 * <p>Notice that <code>null</code> is a valid value, so you can
-	 * tell if an attribute is associated by examining the return value
-	 * of {@link #getAttribute}.
-	 * @since 5.0.0
-	 */
-	public boolean hasAttribute(String name);
-	/** Sets (a.k.a., associates) the value for a custom attribute with this object (scope).
-	 * @return the previous value associated with the attribute, if any
-	 * @since 5.0.0
-	 */
-	public Object setAttribute(String name, Object value);
-	/** Removes the attribute from the current scope if any.
-	 * @return the previous value associated with the attribute, if any,
-	 * @since 5.0.0
-	 */
-	public Object removeAttribute(String name);
 
 	/** Returns the custom attribute associated with this object.
 	 *
@@ -57,6 +41,15 @@ public interface Scope {
 	 * @since 5.0.0
 	 */
 	public Object getAttribute(String name, boolean recurse);
+
+	/** Returns if a custom attribute is associated with this object (scope).
+	 * <p>Notice that <code>null</code> is a valid value, so you can
+	 * tell if an attribute is associated by examining the return value
+	 * of {@link #getAttribute}.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name);
+
 	/** Returns if a custom attribute is associated with this object.
 	 * <p>Notice that <code>null</code> is a valid value, so you can
 	 * tell if an attribute is associated by examining the return value
@@ -69,6 +62,13 @@ public interface Scope {
 	 * @since 5.0.0
 	 */
 	public boolean hasAttribute(String name, boolean recurse);
+
+	/** Sets (a.k.a., associates) the value for a custom attribute with this object (scope).
+	 * @return the previous value associated with the attribute, if any
+	 * @since 5.0.0
+	 */
+	public Object setAttribute(String name, Object value);
+
 	/** Sets the custom attribute associated with this scope, or the parent
 	 * scope.
 	 * @param recurse whether to look up the parent scope for the
@@ -79,6 +79,13 @@ public interface Scope {
 	 * @since 5.0.0
 	 */
 	public Object setAttribute(String name, Object value, boolean recurse);
+
+	/** Removes the attribute from the current scope if any.
+	 * @return the previous value associated with the attribute, if any,
+	 * @since 5.0.0
+	 */
+	public Object removeAttribute(String name);
+
 	/** Removes the custom attribute associated with this scope.
 	 * @param recurse whether to look up the parent scope for the
 	 * existence of the attribute.<br/>
@@ -99,6 +106,7 @@ public interface Scope {
 	 * @since 5.0.0
 	 */
 	public boolean addScopeListener(ScopeListener listener);
+
 	/** Removes a change listener from this scope.
 	 *
 	 * @return false if listener is not added before.

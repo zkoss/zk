@@ -17,7 +17,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.device;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
@@ -55,6 +54,7 @@ public interface Device {
 	 * @since 2.4.0
 	 */
 	public String getUnavailableMessage();
+
 	/** Sets the unavailable message that is shown to the client
 	 * if the client doesn't support this device.
 	 *
@@ -81,6 +81,7 @@ public interface Device {
 	 * @since 3.0.0
 	 */
 	public Class getServerPushClass();
+
 	/** Sets the class that implements the server-push feature
 	 * ({@link ServerPush}) for this device, or null to use the default.
 	 *
@@ -99,6 +100,7 @@ public interface Device {
 	 * @since 3.0.0
 	 */
 	public String getContentType();
+
 	/** Returns the default doc type, or null if no doc type at all.
 	 *
 	 * @since 3.0.0
@@ -116,6 +118,7 @@ public interface Device {
 	 * @since 3.0.6
 	 */
 	public void addEmbedded(String content);
+
 	/** Returns the content that shall be embedded to the output being
 	 * generated to the client, or null if no embedded content.
 	 *
@@ -132,11 +135,13 @@ public interface Device {
 	 * @since 3.0.0
 	 */
 	public void init(String deviceType, DeviceConfig config);
+
 	/** Notification that the desktop, which owns this device,
 	 * is about to be passivated (a.k.a., serialized) by the Web container.
 	 * @since 2.4.0
 	 */
 	public void sessionWillPassivate(Desktop desktop);
+
 	/** Notification that the desktop, which owns this device,
 	 * has just been activated (a.k.a., deserialized) by the Web container.
 	 * @since 2.4.0
@@ -168,13 +173,14 @@ public interface Device {
 	 * is assumed.
 	 * @since 5.0.4
 	 */
-	public void reloadMessages(java.util.Locale locale)
-	throws java.io.IOException;
+	public void reloadMessages(java.util.Locale locale) throws java.io.IOException;
+
 	/** Converts a package to an absolute path that can be accessible by
 	 * the class loader (classpath).
 	 * @since 5.0.4
 	 */
 	public String packageToPath(String pkg);
+
 	/** Converts a relative path to an absolute path that can be accessible by
 	 * the class loader (classpath).
 	 * @param path the path (never null).

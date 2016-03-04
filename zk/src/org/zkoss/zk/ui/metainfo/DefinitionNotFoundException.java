@@ -27,30 +27,38 @@ public class DefinitionNotFoundException extends UiException {
 	public DefinitionNotFoundException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public DefinitionNotFoundException(String s) {
 		super(s);
 	}
+
 	public DefinitionNotFoundException(Throwable cause) {
 		super(cause);
 	}
+
 	public DefinitionNotFoundException() {
 	}
 
 	public DefinitionNotFoundException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public DefinitionNotFoundException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public DefinitionNotFoundException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public DefinitionNotFoundException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public DefinitionNotFoundException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public DefinitionNotFoundException(int code) {
 		super(code);
 	}

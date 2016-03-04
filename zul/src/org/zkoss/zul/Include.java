@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Files;
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
@@ -32,12 +33,23 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.*;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Includer;
-import org.zkoss.zk.ui.metainfo.*;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.NodeInfo;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -177,11 +189,9 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  * @see Iframe
  */
-public class Include extends XulElement
-implements Includer, DynamicPropertied, AfterCompose, IdSpace {
+public class Include extends XulElement implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	private static final Logger log = LoggerFactory.getLogger(Include.class);
-	private static final String ATTR_RENDERED =
-		"org.zkoss.zul.Include.rendered";
+	private static final String ATTR_RENDERED = "org.zkoss.zul.Include.rendered";
 	private String _src;
 	private Map<String, Object> _dynams;
 	/** The child page. Note: it is recovered by PageImpl. */
@@ -201,6 +211,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public Include() {
 		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
 	}
+
 	public Include(String src) {
 		this();
 		setSrc(src);
@@ -226,7 +237,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			_progressing = progressing;
 			fixMode(); //becomes defer mode if auto
 			checkProgressing();
-			
+
 			if (!_instantMode) {
 				getChildren().clear();
 				invalidate();
@@ -234,6 +245,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				super.invalidate();
 		}
 	}
+
 	/**
 	 * Returns whether to show the {@link MZul#PLEASE_WAIT} message before a long operation.
 	 * <p>Default: false.
@@ -242,20 +254,23 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public boolean getProgressing() {
 		return _progressing;
 	}
+
 	/**
 	 * Internal use only.
 	 *@since 3.0.4
 	 */
 	public void onEchoInclude() {
- 		Clients.clearBusy();
+		Clients.clearBusy();
 		super.invalidate();
 	}
+
 	/** Returns the src.
 	 * <p>Default: null.
 	 */
 	public String getSrc() {
 		return _src;
 	}
+
 	/** Sets the src.
 	 *
 	 * <p>If src is changed, the whole component is invalidate.
@@ -270,17 +285,20 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	 * @see #setDynamicProperty
 	 */
 	public void setSrc(String src) {
-		if (src != null && src.length() == 0) src = null;
+		if (src != null && src.length() == 0)
+			src = null;
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
 			fixMode();
-			if (!_instantMode) invalidate();
-			else super.invalidate();
-				//invalidate is redundant in instant mode, but less memory leak in IE
+			if (!_instantMode)
+				invalidate();
+			else
+				super.invalidate();
+			//invalidate is redundant in instant mode, but less memory leak in IE
 		}
 	}
-	
+
 	// B60-ZK-1160: Exception when closing tab with included content
 	// Must clean up included content before detaching tab panel
 	public void detach() {
@@ -300,24 +318,27 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public String getMode() {
 		return _mode;
 	}
+
 	/** Sets the inclusion mode.
 	 * @param mode the inclusion mode: auto, instant or defer.
 	 * @since 3.6.2
 	 */
 	public void setMode(String mode) throws WrongValueException {
 		if (!_mode.equals(mode)) {
-			if (!"auto".equals(mode) && !"instant".equals(mode)
-			&& !"defer".equals(mode))
-				throw new WrongValueException("Unknown mode: "+mode);
+			if (!"auto".equals(mode) && !"instant".equals(mode) && !"defer".equals(mode))
+				throw new WrongValueException("Unknown mode: " + mode);
 			if ((_localized || _progressing) && "instant".equals(mode))
 				throw new UnsupportedOperationException("localized/progressing not allowed in the instant mode");
 
 			_mode = mode;
 			fixMode();
-			if (!_instantMode) invalidate();
-			else super.invalidate();
+			if (!_instantMode)
+				invalidate();
+			else
+				super.invalidate();
 		}
 	}
+
 	/** Returns the name of the enclosing tag.
 	 * <p>Default: div 
 	 * @since 7.0.4
@@ -325,6 +346,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public String getEnclosingTag() {
 		return _tag;
 	}
+
 	/**Sets the the name of the enclosing tag
 	 * <p>Default: div
 	 * @since 7.0.4
@@ -337,11 +359,13 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			smartUpdate("enclosingTag", _tag);
 		}
 	}
+
 	private void fixMode() {
 		fixModeOnly();
 		// see the comment inside applyChangesToContent();
 		applyChangesToContent();
 	}
+
 	private void fixModeOnly() { //called by afterCompose
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
@@ -354,8 +378,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 
 					// ZK-2567: use defer mode for unrecognized files
 					try {
-						LanguageDefinition lang = LanguageDefinition
-								.getByExtension(ext);
+						LanguageDefinition lang = LanguageDefinition.getByExtension(ext);
 						_instantMode = ("xhtml".equals(lang.getName()) || "xul/html".equals(lang.getName()));
 					} catch (DefinitionNotFoundException e) {
 						_instantMode = false;
@@ -366,7 +389,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 		} else
 			_instantMode = "instant".equals(_mode);
 	}
-	private void applyChangesToContent(){
+
+	private void applyChangesToContent() {
 		// FIX: 2011.01.18 Iantsai
 		// in fixModeOnly(), we set _instantMode to false, and which means afterCompose() 
 		// won't be called, but we got no logic to clear the content!
@@ -374,14 +398,14 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 		// but if setSrc(null); happened in a button click, this wont work.
 		if (_instantMode && _afterComposed)
 			afterCompose();
-		else if(_src == null && !getChildren().isEmpty())
+		else if (_src == null && !getChildren().isEmpty())
 			// !getChildren().isEmpty() is for performance.
 			getChildren().clear();
 		else if (!_instantMode && "auto".equals(getMode()) && !getChildren().isEmpty())
 			//Bug ZK-1437: auto mode has no chance to clear the content if src is changed (_instantMode become false)
 			getChildren().clear();
 	}
-	
+
 	/** Returns whether the source depends on the current Locale.
 	 * If true, it will search xxx_en_US.yyy, xxx_en.yyy and xxx.yyy
 	 * for the proper content, where src is assumed to be xxx.yyy.
@@ -391,6 +415,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public boolean isLocalized() {
 		return _localized;
 	}
+
 	/** Sets whether the source depends on the current Locale.
 	 */
 	public void setLocalized(boolean localized) {
@@ -401,9 +426,11 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			_localized = localized;
 			if (_localized)
 				fixMode(); //becomes defer mode if auto
-			if (!_instantMode) invalidate();
-			else super.invalidate();
-				//invalidate is redundant in instant mode, but less memory leak in IE
+			if (!_instantMode)
+				invalidate();
+			else
+				super.invalidate();
+			//invalidate is redundant in instant mode, but less memory leak in IE
 		}
 	}
 
@@ -427,6 +454,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public boolean isComment() {
 		return _comment;
 	}
+
 	/** Sets  whether to generate the included content inside
 	 * the HTML comment.
 	 * @see #isComment
@@ -440,26 +468,26 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public Page getChildPage() {
 		return _childpg;
 	}
-	
+
 	public void setChildPage(Page page) {
 		if (_childpg != null && page == null) {
 			final Desktop desktop = getDesktop();
 			if (desktop != null)
-				((DesktopCtrl)desktop).removePage(_childpg);
+				((DesktopCtrl) desktop).removePage(_childpg);
 		}
 		_childpg = page;
 	}
-	
+
 	public void setRenderingResult(String result) {
 		_renderResult = result;
 	}
 
-	
 	public void onPageAttached(Page newpage, Page oldpage) {
 		if (newpage != null)
 			Events.postEvent("onAfterCompose", this, null);
 		super.onPageAttached(newpage, oldpage);
 	}
+
 	public void onAfterCompose() {
 		if (!_afterComposed)
 			afterCompose();
@@ -472,8 +500,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 		if (_instantMode) {
 			final Execution exec = getExecution();
 			final Map<String, Object> old = setupDynams(exec);
-			final String attrRenderedKey = ATTR_RENDERED+'$'+getUuid(); 
-			final String oldSrc  = (String) exec.getAttribute(attrRenderedKey);
+			final String attrRenderedKey = ATTR_RENDERED + '$' + getUuid();
+			final String oldSrc = (String) exec.getAttribute(attrRenderedKey);
 			if (!Objects.equals(oldSrc, _src)) {
 				try {
 					getChildren().clear();
@@ -483,8 +511,9 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 					List<NodeInfo> nodes = pdef.getChildren();
 					if (nodes != null && nodes.size() > 0) {
 						NodeInfo firstNode = nodes.get(0);
-						if (firstNode instanceof ComponentInfo && "html".equals(((ComponentInfo)firstNode).getTag()))
-							throw new UiException("Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
+						if (firstNode instanceof ComponentInfo && "html".equals(((ComponentInfo) firstNode).getTag()))
+							throw new UiException(
+									"Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
 					}
 					exec.createComponents(pdef, this, _dynams);
 					if (j >= 0)
@@ -499,9 +528,10 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			getChildren().clear();
 		}
 	}
+
 	private Execution getExecution() {
 		final Desktop desktop = getDesktop();
-		return desktop != null ? desktop.getExecution(): Executions.getCurrent();
+		return desktop != null ? desktop.getExecution() : Executions.getCurrent();
 	}
 
 	//DynamicPropertied//
@@ -510,6 +540,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	public boolean hasDynamicProperty(String name) {
 		return _dynams != null && _dynams.containsKey(name);
 	}
+
 	/** Returns the parameter associated with the specified name,
 	 * or null if not found.
 	 *
@@ -517,8 +548,9 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	 * @see #setDynamicProperty
 	 */
 	public Object getDynamicProperty(String name) {
-		return _dynams != null ? _dynams.get(name): null;
+		return _dynams != null ? _dynams.get(name) : null;
 	}
+
 	/** Adds a dynamic property that will be passed to the included page
 	 * via the request's attribute.
 	 *
@@ -533,6 +565,7 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			_dynams = new HashMap<String, Object>();
 		_dynams.put(name, value);
 	}
+
 	/** Removes all dynamic properties.
 	 * @since 5.0.1
 	 */
@@ -548,18 +581,20 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	 */
 	public void invalidate() {
 		super.invalidate();
-			//invalidate is redundant in instant mode, but less memory leak in IE
-		
+		//invalidate is redundant in instant mode, but less memory leak in IE
+
 		// see the comment inside applyChangesToContent();
 		applyChangesToContent();
-		
-		if (_progressStatus >= 2) _progressStatus = 0;
+
+		if (_progressStatus >= 2)
+			_progressStatus = 0;
 		checkProgressing();
 	}
+
 	/** Checks if _progressingg is defined.
 	 */
 	private void checkProgressing() {
-		if(_progressing && _progressStatus == 0) {
+		if (_progressing && _progressStatus == 0) {
 			_progressStatus = 1;
 			Clients.showBusy(Messages.get(MZul.PLEASE_WAIT));
 			Events.echoEvent("onEchoInclude", this, null);
@@ -571,19 +606,18 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 	protected boolean isChildable() {
 		return _instantMode;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		setChildPage(null);
 		render(renderer, "comment", _comment);
 		render(renderer, "enclosingTag", _tag);
 
-		if (_instantMode &&_afterComposed)
+		if (_instantMode && _afterComposed)
 			return; //instant mode (done by redrawChildren())
 
-		final UiEngine ueng =
-			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
+		final UiEngine ueng = ((WebAppCtrl) getDesktop().getWebApp()).getUiEngine();
 		Component old = ueng.setOwner(this);
 		try {
 			if (_progressStatus == 1) {
@@ -597,7 +631,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 					// ZK-2642: Check if included html file will produce duplicated html, head and body tag
 					String str = incsb != null ? incsb.toString() : "";
 					if (!str.isEmpty() && (str.contains("<html") || str.contains("<!DOCTYPE")))
-						throw new UiException("Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
+						throw new UiException(
+								"Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
 				}
 
 				//Don't output sw directly if getChildPage() is not null
@@ -605,9 +640,8 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 				//first (since it is part of rc.temp)
 
 				if (getChildPage() == null //only able to handle non-ZUL page
-				&& !Utils.testAttribute(this, "org.zkoss.zul.include.html.defer", false, true)) {
-					final HtmlPageRenders.RenderContext rc =
-						HtmlPageRenders.getRenderContext(null);
+						&& !Utils.testAttribute(this, "org.zkoss.zul.include.html.defer", false, true)) {
+					final HtmlPageRenders.RenderContext rc = HtmlPageRenders.getRenderContext(null);
 					if (rc != null && !rc.included) { //Use zk().detachChildren() only if not included
 						final Writer cwout = rc.temp;
 						cwout.write("<div id=\"");
@@ -620,23 +654,24 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 							cwout.write("\n-->\n");
 						cwout.write("</div>");
 
-						renderer.render("_xcnt",
-							new JavaScriptValue("zk('"+getUuid()+"').detachChildren()"));
+						renderer.render("_xcnt", new JavaScriptValue("zk('" + getUuid() + "').detachChildren()"));
 						return; //done
 					}
 				}
 
 				renderer.render("_xcnt", incsb.toString());
 				if (_renderResult != null && _renderResult.length() > 0)
-					renderer.renderDirectly("_childjs", "function(){" +
-							// B65-ZK-1836
-							_renderResult.replaceAll("</(?i)(?=script>)", "<\\\\/") + '}');
+					renderer.renderDirectly("_childjs",
+							"function(){"
+									// B65-ZK-1836
+									+ _renderResult.replaceAll("</(?i)(?=script>)", "<\\\\/") + '}');
 			}
 		} finally {
 			_renderResult = null;
 			ueng.setOwner(old);
 		}
 	}
+
 	private void include(Writer out) throws IOException {
 		final Desktop desktop = getDesktop();
 		final Execution exec = getExecution();
@@ -647,11 +682,9 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 			exec.include(out, src, null, 0);
 		} catch (Throwable err) {
 			setChildPage(null);
-		//though DHtmlLayoutServlet handles exception, we still have to
-		//handle it because src might not be ZUML
-			final String errpg =
-				desktop.getWebApp().getConfiguration().getErrorPage(
-					desktop.getDeviceType(), err);
+			//though DHtmlLayoutServlet handles exception, we still have to
+			//handle it because src might not be ZUML
+			final String errpg = desktop.getWebApp().getConfiguration().getErrorPage(desktop.getDeviceType(), err);
 			if (errpg != null) {
 				try {
 					exec.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
@@ -662,53 +695,59 @@ implements Includer, DynamicPropertied, AfterCompose, IdSpace {
 					return; //done
 				} catch (IOException ex) { //eat it (connection off)
 				} catch (Throwable ex) {
-					log.warn("Failed to load the error page: "+errpg, ex);
+					log.warn("Failed to load the error page: " + errpg, ex);
 				}
 			}
 
 			final String msg = Messages.get(MZk.PAGE_FAILED,
-				new Object[] {src, Exceptions.getMessage(err),
-					Exceptions.formatStackTrace(null, err, null, 6)});
+					new Object[] { src, Exceptions.getMessage(err), Exceptions.formatStackTrace(null, err, null, 6) });
 			final Map<String, String> attrs = new HashMap<String, String>();
 			attrs.put(Attributes.ALERT_TYPE, "error");
 			attrs.put(Attributes.ALERT, msg);
-			exec.include(out,
-				"~./html/alert.dsp", attrs, Execution.PASS_THRU_ATTR);
+			exec.include(out, "~./html/alert.dsp", attrs, Execution.PASS_THRU_ATTR);
 		} finally {
 			ComponentRedraws.afterRedraw();
 			restoreDynams(exec, old);
 		}
 	}
+
 	private Map<String, Object> setupDynams(Execution exec) {
 		if (_dynams == null || _dynams.isEmpty())
 			return null;
 
 		final Map<String, Object> old = new HashMap<String, Object>();
-		for (Map.Entry<String, Object> me: _dynams.entrySet()) {
+		for (Map.Entry<String, Object> me : _dynams.entrySet()) {
 			final String nm = me.getKey();
 			final Object val = me.getValue();
 
 			old.put(nm, exec.getAttribute(nm));
 
-			if (val != null) exec.setAttribute(nm, val);
-			else exec.removeAttribute(nm);
+			if (val != null)
+				exec.setAttribute(nm, val);
+			else
+				exec.removeAttribute(nm);
 		}
 		return old;
 	}
+
 	private static void restoreDynams(Execution exec, Map<String, Object> old) {
 		if (old != null)
-			for (Map.Entry<String, Object> me: old.entrySet()) {
+			for (Map.Entry<String, Object> me : old.entrySet()) {
 				final String nm = me.getKey();
 				final Object val = me.getValue();
 
-				if (val != null) exec.setAttribute(nm, val);
-				else exec.removeAttribute(nm);
+				if (val != null)
+					exec.setAttribute(nm, val);
+				else
+					exec.removeAttribute(nm);
 			}
 	}
+
 	private static String getDefaultMode() {
 		if (_defMode == null)
 			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "auto");
 		return _defMode;
 	}
+
 	private static String _defMode;
 }

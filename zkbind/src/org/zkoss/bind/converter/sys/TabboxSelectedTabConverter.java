@@ -37,63 +37,64 @@ import org.zkoss.zul.ext.Selectable;
  */
 public class TabboxSelectedTabConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 200808190445L;
-	
+
 	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Tabbox tbx = (Tabbox) comp;
 		final ListModel<?> model = tbx.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
-		if(model !=null && !(model instanceof Selectable)){
+		if (model != null && !(model instanceof Selectable)) {
 			//model has to implement Selectable if binding to selectedItem
-  			throw new UiException("model doesn't implement Selectable");
-  		}
-		
-	  	if (val != null) {
-	  		if(model!=null){
-	  			((Selectable<Object>)model).addToSelection(val);
-	  			return IGNORED_VALUE;
-	  		}else{
-	  			//no model case, //iterate to find the selected tab via the value
-	  			Tabs tabs = ((Tabbox)comp).getTabs();
-	  			if(tabs!=null){
+			throw new UiException("model doesn't implement Selectable");
+		}
+
+		if (val != null) {
+			if (model != null) {
+				((Selectable<Object>) model).addToSelection(val);
+				return IGNORED_VALUE;
+			} else {
+				//no model case, //iterate to find the selected tab via the value
+				Tabs tabs = ((Tabbox) comp).getTabs();
+				if (tabs != null) {
 					for (Iterator<Component> it = tabs.getChildren().iterator(); it.hasNext();) {
 						final Component child = it.next();
 						if (child instanceof Tab) {
-							if (val.equals(((Tab)child).getLabel())) {
+							if (val.equals(((Tab) child).getLabel())) {
 								return child;
 							}
 						}
 					}
-	  			}
-	  		}
-		  	//not in the item list
-	  	}
-	  	
-	  //nothing matched, clean the old selection
-	  	if(model!=null){
-	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
-	  		if(sels!=null && sels.size()>0)
-	  			((Selectable<Object>)model).clearSelection();
-	  		return IGNORED_VALUE;
-	  	}
-	  	return null;
+				}
+			}
+			//not in the item list
+		}
+
+		//nothing matched, clean the old selection
+		if (model != null) {
+			Set<Object> sels = ((Selectable<Object>) model).getSelection();
+			if (sels != null && sels.size() > 0)
+				((Selectable<Object>) model).clearSelection();
+			return IGNORED_VALUE;
+		}
+		return null;
 	}
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
-	  	if (val != null) {
-		  	final Tabbox tbx = (Tabbox) comp;
-	  		final ListModel<?> model = tbx.getModel();
-	  		if(model !=null && !(model instanceof Selectable)){
-	  			throw new UiException("model doesn't implement Selectable");
-	  		}
-	  		if(model!=null){
-	  			Set<?> selection = ((Selectable<?>)model).getSelection();
-	  			if(selection==null || selection.size()==0) return null;
-	  			return selection.iterator().next();
-	  		} else{//no model
-	  			return ((Tab)val).getLabel();
-	  		}
-	  	}
-	 	return null;
+		if (val != null) {
+			final Tabbox tbx = (Tabbox) comp;
+			final ListModel<?> model = tbx.getModel();
+			if (model != null && !(model instanceof Selectable)) {
+				throw new UiException("model doesn't implement Selectable");
+			}
+			if (model != null) {
+				Set<?> selection = ((Selectable<?>) model).getSelection();
+				if (selection == null || selection.size() == 0)
+					return null;
+				return selection.iterator().next();
+			} else { //no model
+				return ((Tab) val).getLabel();
+			}
+		}
+		return null;
 	}
 }

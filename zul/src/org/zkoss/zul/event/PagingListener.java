@@ -30,7 +30,8 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
  * @see CloneableEventListener
  * @since 8.0.0
  */
-public interface PagingListener extends SerializableEventListener<Event>, CloneableEventListener<Event>{
+public interface PagingListener extends SerializableEventListener<Event>, CloneableEventListener<Event> {
 	public abstract void onEvent(Event event) throws Exception;
+
 	public abstract Object willClone(Component comp);
 }

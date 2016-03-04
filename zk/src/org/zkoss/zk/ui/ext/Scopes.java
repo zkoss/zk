@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -49,24 +50,24 @@ public class Scopes {
 	 *
 	 * <p>Typical use:
 	 * <pre><code>
-final Scope scope = Scopes.beforeInterpret(comp);
-try {
-  Scopes.setImplicit("some", value);
-  page.interpret(zslang, zscript, scope); //it will push scope as the current scope
-} finally {
-  Scopes.afterInterpret();
-}
-</code></pre>
+	final Scope scope = Scopes.beforeInterpret(comp);
+	try {
+	Scopes.setImplicit("some", value);
+	page.interpret(zslang, zscript, scope); //it will push scope as the current scope
+	} finally {
+	Scopes.afterInterpret();
+	}
+	</code></pre>
 	 *
 	 * <p>Another example:
 	 * <pre><code>
-Scopes.beforeInterpret(comp);
-try {
-  constr.validate(comp); //if constr might be an instance of a class implemented in zscript
-} finally {
-  Scopess.afterInterpret();
-}
-</code></pre>
+	Scopes.beforeInterpret(comp);
+	try {
+	constr.validate(comp); //if constr might be an instance of a class implemented in zscript
+	} finally {
+	Scopess.afterInterpret();
+	}
+	</code></pre>
 	 *
 	 * <p>If you need to set some implicit variables, you can invoke
 	 * {@link #setImplicit} between {@link #beforeInterpret}
@@ -85,12 +86,13 @@ try {
 
 		if (scope instanceof Component)
 			impl.setImplicit("componentScope", new DeferredAttributes(scope));
-				//Use DeferredAttributes so scope.getAttributes is called only if
-				//required.
-				//Reason: save footprint of AbstractComponent which stores
-				//attrs in _auxinf (and created only if necessary)
+		//Use DeferredAttributes so scope.getAttributes is called only if
+		//required.
+		//Reason: save footprint of AbstractComponent which stores
+		//attrs in _auxinf (and created only if necessary)
 		return scope;
 	}
+
 	private static Implicit beforeInterpret0(Scope scope) {
 		List<Implicit> impls = _implicits.get();
 		if (impls == null)
@@ -99,12 +101,13 @@ try {
 		impls.add(0, impl);
 
 		final Execution exec = Executions.getCurrent();
-		impl.setImplicit("arg", exec != null ? exec.getArg(): null);
+		impl.setImplicit("arg", exec != null ? exec.getArg() : null);
 
 		push(scope);
 
 		return impl;
 	}
+
 	/** Used with {@link #beforeInterpret} to clean up implicit
 	 * variables.
 	 */
@@ -120,6 +123,7 @@ try {
 	public static void setImplicit(String name, Object value) {
 		_implicits.get().get(0).setImplicit(name, value);
 	}
+
 	/** Returns the implicit object.
 	 *
 	 * <p>It searches the implicit object stored with {@link #setImplicit},
@@ -136,12 +140,13 @@ try {
 			return implicits.get(0).getImplicit(name, defValue);
 
 		Object val = getSysImplicit(name);
-		return val != null ? val: defValue;
+		return val != null ? val : defValue;
 	}
+
 	private static Object getSysImplicit(String name) {
 		final Object val = getCurrent(null);
-		return  val instanceof Component ? Components.getImplicit((Component)val, name):
-			val instanceof Page ? Components.getImplicit((Page)val, name): null;
+		return val instanceof Component ? Components.getImplicit((Component) val, name)
+				: val instanceof Page ? Components.getImplicit((Page) val, name) : null;
 	}
 
 	/** Returns the current scope.
@@ -158,17 +163,18 @@ try {
 	 */
 	public static final Scope getCurrent(Page page) {
 		final List<Scope> nss = _scopes.get();
-		final Scope scope = nss != null && !nss.isEmpty() ? nss.get(0): null;
+		final Scope scope = nss != null && !nss.isEmpty() ? nss.get(0) : null;
 		if (scope != null)
 			return scope;
 
 		if (page == null) {
 			final Execution exec = Executions.getCurrent();
 			if (exec != null)
-				page = ((ExecutionCtrl)exec).getCurrentPage();
+				page = ((ExecutionCtrl) exec).getCurrentPage();
 		}
 		return page;
 	}
+
 	/** Pushes the specified scope as the current scope.
 	 *
 	 * @param scope the scope. If null, it means page's scope.
@@ -179,6 +185,7 @@ try {
 			_scopes.set(nss = new LinkedList<Scope>());
 		nss.add(0, scope);
 	}
+
 	/** Pops the current namespace (pushed by {@link #push}).
 	 */
 	private static final void pop() {
@@ -191,74 +198,95 @@ try {
 
 		private Implicit() {
 		}
+
 		private void setImplicit(String name, Object value) {
 			_vars.put(name, value);
 		}
+
 		private Object getImplicit(String name, Object defValue) {
 			Object val = _vars.get(name);
 			if (val != null || _vars.containsKey(name)) {
 				if (val instanceof Deferred)
-				 	_vars.put(name, val = ((Deferred)val).getValue());
+					_vars.put(name, val = ((Deferred) val).getValue());
 				return val;
 			}
 			val = getSysImplicit(name);
-			return val != null ? val: defValue;
+			return val != null ? val : defValue;
 		}
 	}
+
 	/** Store a deferred value. */
 	private static interface Deferred {
 		/** Returns the real value. */
 		public Object getValue();
 	}
+
 	private static class DeferredAttributes implements Map<String, Object> {
 		private final Scope _scope;
+
 		private DeferredAttributes(Scope scope) {
 			_scope = scope;
 		}
+
 		public void clear() {
 			_scope.getAttributes().clear();
 		}
+
 		public boolean containsKey(Object arg0) {
 			return _scope.getAttributes().containsKey(arg0);
 		}
+
 		public boolean containsValue(Object arg0) {
 			return _scope.getAttributes().containsValue(arg0);
 		}
+
 		public Set<Map.Entry<String, Object>> entrySet() {
 			return _scope.getAttributes().entrySet();
 		}
+
 		public Object get(Object arg0) {
 			return _scope.getAttributes().get(arg0);
 		}
+
 		public boolean isEmpty() {
 			return _scope.getAttributes().isEmpty();
 		}
+
 		public Set<String> keySet() {
 			return _scope.getAttributes().keySet();
 		}
+
 		public Object put(String arg0, Object arg1) {
 			return _scope.getAttributes().put(arg0, arg1);
 		}
+
 		public void putAll(Map<? extends String, ? extends Object> arg0) {
 			_scope.getAttributes().putAll(arg0);
 		}
+
 		public Object remove(Object arg0) {
 			return _scope.getAttributes().remove(arg0);
 		}
+
 		public int size() {
 			return _scope.getAttributes().size();
 		}
+
 		public Collection<Object> values() {
 			return _scope.getAttributes().values();
 		}
+
 		public int hashCode() {
 			return _scope.getAttributes().hashCode();
 		}
+
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			return _scope.getAttributes().equals(o instanceof DeferredAttributes ? 
-					((DeferredAttributes) o)._scope.getAttributes() : o);
+			if (this == o)
+				return true;
+			return _scope.getAttributes()
+					.equals(o instanceof DeferredAttributes ? ((DeferredAttributes) o)._scope.getAttributes() : o);
 		}
+
 		public String toString() {
 			return _scope.getAttributes().toString();
 		}

@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
  *
  * @author tomyeh
  */
-abstract public class LabelElement extends XulElement {
+public abstract class LabelElement extends XulElement {
 	/** The label. */
 	private String _label = "";
 
@@ -38,12 +38,14 @@ abstract public class LabelElement extends XulElement {
 	public String getLabel() {
 		return _label;
 	}
+
 	/** Sets the label.
 	 * <p>If label is changed, the whole component is invalidate.
 	 * Thus, you want to smart-update, you have to override this method.
 	 */
 	public void setLabel(String label) {
-		if (label == null) label = "";
+		if (label == null)
+			label = "";
 		if (!Objects.equals(_label, label)) {
 			_label = label;
 			smartUpdate("label", _label);
@@ -51,13 +53,13 @@ abstract public class LabelElement extends XulElement {
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "label", _label);
 		renderCrawlable(_label);
 	}
+
 	/** Renders the crawlable information.
 	 * It is called by {@link #renderProperties},
 	 * and designed to be overridden if the deriving class wants to generate
@@ -71,6 +73,7 @@ abstract public class LabelElement extends XulElement {
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+
 	static {
 		_properties.put("label", new StringPropertyAccess() {
 			public void setValue(Component cmp, String label) {

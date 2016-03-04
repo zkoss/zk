@@ -17,14 +17,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.json.JavaScriptValue;
-
+import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.au.AuResponse;
 
 /**
  * A response to insert an unparsed HTML as the last child of
@@ -45,6 +44,7 @@ public class AuAppendChild extends AuResponse {
 	public AuAppendChild(Component comp, Collection<String> contents) {
 		super("addChd", comp, toArray(comp.getUuid(), contents));
 	}
+
 	/**
 	 * @param contents a collection of contents (in String objects).
 	 * Each content is the output of a component or a page.
@@ -53,6 +53,7 @@ public class AuAppendChild extends AuResponse {
 	public AuAppendChild(Page page, Collection<String> contents) {
 		super("addChd", page, toArray(page.getUuid(), contents));
 	}
+
 	/** Converts the contents (a collection of strings) to an array of JavaScriptValue. */
 	/*package*/ static Object[] toArray(String uuid, Collection<String> contents) {
 		final List<Object> list = new LinkedList<Object>();
@@ -60,9 +61,10 @@ public class AuAppendChild extends AuResponse {
 		stringToJS(contents, list);
 		return list.toArray(new Object[list.size()]);
 	}
+
 	/** Converts the contents (a collection of strings) to an array of JavaScriptValue. */
 	private static void stringToJS(Collection<String> contents, Collection<Object> result) {
-		for (String content: contents)
+		for (String content : contents)
 			result.add(new JavaScriptValue(content));
 	}
 }

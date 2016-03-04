@@ -35,12 +35,14 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * @param uri the URI of this macro. If null, the default is used.
 	 */
 	public void setMacroURI(String uri);
+
 	/** Returns the macro URI.
 	 * <p>If {@link #setMacroURI} wasn't called, it returns the URI
 	 * defined in the macro definition.
 	 * @since 3.6.0
 	 */
 	public String getMacroURI();
+
 	/** Detaches all child components and then recreate them.
 	 *
 	 * <p>It is used if you have assigned new values to dynamic properties
@@ -50,6 +52,7 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * Refer to <a href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/UI_Composing/Macro_Component">ZK Developer's Reference</a> for details.
 	 */
 	public void recreate();
+
 	/** Returns whether this is an inline macro.
 	 * The only way to create an inline macro is by use of
 	 * {@link org.zkoss.zk.ui.metainfo.ComponentDefinition#newInstance}.
@@ -57,6 +60,7 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * @since 2.4.0
 	 */
 	public boolean isInline();
+
 	/** Sets the parent to the given one and insert the children of
 	 * the inline macro right before the given sibling (beforeSibling).
 	 *

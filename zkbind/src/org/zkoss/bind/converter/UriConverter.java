@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  * @since 6.0.0
  */
-public class UriConverter implements Converter,Serializable{
+public class UriConverter implements Converter, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
@@ -30,11 +30,11 @@ public class UriConverter implements Converter,Serializable{
 		final String prefix = (String) ctx.getConverterArg("prefix");
 		final String postfix = (String) ctx.getConverterArg("postfix");
 		final StringBuilder sb = new StringBuilder();
-//		return prefix + uri + postfix;
-		if(prefix!=null) 
+		//		return prefix + uri + postfix;
+		if (prefix != null)
 			sb.append(prefix);
 		sb.append(uri);
-		if(postfix!=null) 
+		if (postfix != null)
 			sb.append(postfix);
 		return sb.toString();
 	}

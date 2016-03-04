@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 
 /**
  * An extra interface that can be implemented with {@link Initiator} to
@@ -64,6 +64,7 @@ public interface InitiatorExt {
 	 * Prior to ZK 3.0.0, void is returned and it means always re-thrown
 	 */
 	public boolean doCatch(Throwable ex) throws Exception;
+
 	/** Do the cleanup after the page has been evaluated.
 	 * It won't be called if {@link Initiator#doInit} throws an exception.
 	 * However,it is always called no matter whether {@link #doCatch} is called.

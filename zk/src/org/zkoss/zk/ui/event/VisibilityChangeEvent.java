@@ -45,8 +45,7 @@ public class VisibilityChangeEvent extends Event {
 	 * <p>Note: {@link #getTarget} will return null. It means it is a broadcast
 	 * event.
 	 */
-	public VisibilityChangeEvent(String name, boolean hidden,
-			String visibleState) {
+	public VisibilityChangeEvent(String name, boolean hidden, String visibleState) {
 		super(name, null);
 		_hidden = hidden;
 		_visibleState = visibleState;
@@ -55,11 +54,9 @@ public class VisibilityChangeEvent extends Event {
 	/**
 	 * Converts an AU request to a visibility change event.
 	 */
-	public static final VisibilityChangeEvent getVisibilityChangeEvent(
-			AuRequest request) {
+	public static final VisibilityChangeEvent getVisibilityChangeEvent(AuRequest request) {
 		Map<String, Object> data = request.getData();
-		return new VisibilityChangeEvent(request.getCommand(),
-				(Boolean) data.get("hidden"),
+		return new VisibilityChangeEvent(request.getCommand(), (Boolean) data.get("hidden"),
 				(String) data.get("visibilityState"));
 	}
 

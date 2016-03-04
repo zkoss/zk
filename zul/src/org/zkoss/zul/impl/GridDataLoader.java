@@ -24,10 +24,11 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
-import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zul.Attributes;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Group;
 import org.zkoss.zul.GroupRendererExt;
@@ -42,7 +43,6 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.GroupsListModel.GroupDataInfo;
-import org.zkoss.zul.Attributes;
 
 /**
  * Generic {@link Grid} data loader.
@@ -56,19 +56,19 @@ public class GridDataLoader implements DataLoader, Cropper {
 	public void init(Component owner, int offset, int limit) {
 		_grid = (Grid) owner;
 	}
-	
+
 	public void reset() {
 		//do nothing
 	}
-	
-	final public Component getOwner() {
+
+	public final Component getOwner() {
 		return _grid;
 	}
 
 	public int getOffset() {
 		return 0;
 	}
-	
+
 	public int getLimit() {
 		return 50;
 	}
@@ -80,9 +80,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 	}
 
 	private int INVALIDATE_THRESHOLD = -1;
+
 	public void doListDataChange(ListDataEvent event) {
 		if (INVALIDATE_THRESHOLD == -1) {
-			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10, true);
+			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
+					true);
 		}
 		//when this is called _model is never null
 		final Rows rows = _grid.getRows();
@@ -97,23 +99,24 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Adding causes a smaller list?");
 			}
-			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD)
-			&& !inPagingMold())
+			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
 				rows.invalidate();
-					//Invalidate rows to improve the performance since it is faster
-					//to remove a lot of individual rows. It is safer than invalidating
-					//the whole grid since header might have an input affecting the model
-					//(e.g., ZK-985: demo's data filter)
-					//The memory leak of IE is better with outer (Bug 3147518),
-					//and even better with _grid.invalidate() but better to solve ZK-985
+			//Invalidate rows to improve the performance since it is faster
+			//to remove a lot of individual rows. It is safer than invalidating
+			//the whole grid since header might have an input affecting the model
+			//(e.g., ZK-985: demo's data filter)
+			//The memory leak of IE is better with outer (Bug 3147518),
+			//and even better with _grid.invalidate() but better to solve ZK-985
 			if (min < 0)
-				if (max < 0) min = 0;
-				else min = max - cnt + 1;
-			if (min > oldsz) min = oldsz;
+				if (max < 0)
+					min = 0;
+				else
+					min = max - cnt + 1;
+			if (min > oldsz)
+				min = oldsz;
 
 			RowRenderer renderer = null;
-			final Component next =
-				min < oldsz ? rows.getChildren().get(min): null;
+			final Component next = min < oldsz ? rows.getChildren().get(min) : null;
 			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = (RowRenderer) getRealRenderer();
@@ -128,14 +131,16 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Removal causes a larger list?");
 			}
-			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD)
-			&& !inPagingMold())
+			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
 				rows.invalidate();
-					//Invalidate rows to improve the performance see above
+			//Invalidate rows to improve the performance see above
 
-			if (min >= 0) max = min + cnt - 1;
-			else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
-			if (max > oldsz - 1) max = oldsz - 1;
+			if (min >= 0)
+				max = min + cnt - 1;
+			else if (max < 0)
+				max = cnt - 1; //0 ~ cnt - 1			
+			if (max > oldsz - 1)
+				max = oldsz - 1;
 
 			//detach from end (due to groupfoot issue)
 			Component comp = rows.getChildren().get(max);
@@ -150,70 +155,73 @@ public class GridDataLoader implements DataLoader, Cropper {
 			syncModel(min, max < 0 ? -1 : (max - min + 1));
 		}
 	}
-	
+
 	/** Creates a new and unloaded row. */
 	protected Component newUnloadedItem(Object renderer, int index) {
 		final RowRenderer renderer0 = (RowRenderer) renderer;
-		final ListModel model = ((Grid)getOwner()).getModel();
+		final ListModel model = ((Grid) getOwner()).getModel();
 		Row row = null;
 		if (model instanceof GroupsListModel) {
 			final GroupsListModel gmodel = (GroupsListModel) model;
 			final GroupingInfo info = gmodel.getDataInfo(index);
-			switch(info.getType()){
+			switch (info.getType()) {
 			case GroupDataInfo.GROUP:
 				row = newGroup(renderer0);
-				((Group)row).setOpen(info.isOpen());
+				((Group) row).setOpen(info.isOpen());
 				break;
 			case GroupDataInfo.GROUPFOOT:
 				row = newGroupfoot(renderer0);
 				break;
 			default:
 				row = newRow(renderer0);
-			}		
-		}else{
+			}
+		} else {
 			row = newRow(renderer0);
 		}
-		((LoadStatus)row.getExtraCtrl()).setLoaded(false);
-		((LoadStatus)row.getExtraCtrl()).setIndex(index);
+		((LoadStatus) row.getExtraCtrl()).setLoaded(false);
+		((LoadStatus) row.getExtraCtrl()).setIndex(index);
 
 		newUnloadedCell(renderer0, row);
 		return row;
 	}
-	
+
 	private Row newRow(RowRenderer renderer) {
 		Row row = null;
 		if (renderer instanceof RowRendererExt)
-			row = ((RowRendererExt)renderer).newRow((Grid)getOwner());
+			row = ((RowRendererExt) renderer).newRow((Grid) getOwner());
 		if (row == null) {
 			row = new Row();
 			row.applyProperties();
 		}
 		return row;
 	}
+
 	private Group newGroup(RowRenderer renderer) {
 		Group group = null;
 		if (renderer instanceof GroupRendererExt)
-			group = ((GroupRendererExt)renderer).newGroup((Grid)getOwner());
+			group = ((GroupRendererExt) renderer).newGroup((Grid) getOwner());
 		if (group == null) {
 			group = new Group();
 			group.applyProperties();
 		}
 		return group;
 	}
+
 	private Groupfoot newGroupfoot(RowRenderer renderer) {
 		Groupfoot groupfoot = null;
 		if (renderer instanceof GroupRendererExt)
-			groupfoot = ((GroupRendererExt)renderer).newGroupfoot((Grid)getOwner());
+			groupfoot = ((GroupRendererExt) renderer).newGroupfoot((Grid) getOwner());
 		if (groupfoot == null) {
 			groupfoot = new Groupfoot();
 			groupfoot.applyProperties();
 		}
 		return groupfoot;
 	}
+
 	private Component newUnloadedCell(RowRenderer renderer, Row row) {
 		Component cell = null;
 		if (renderer instanceof RowRendererExt)
-			cell = ((RowRendererExt)renderer).newCell(row);
+			cell = ((RowRendererExt) renderer).newCell(row);
 
 		if (cell == null) {
 			cell = newRenderLabel(null);
@@ -222,23 +230,24 @@ public class GridDataLoader implements DataLoader, Cropper {
 		cell.setParent(row);
 		return cell;
 	}
+
 	/** Returns the label for the cell generated by the default renderer.
 	 */
 	private static Label newRenderLabel(String value) {
-		final Label label =
-			new Label(value != null && value.length() > 0 ? value: " ");
+		final Label label = new Label(value != null && value.length() > 0 ? value : " ");
 		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
 		return label;
 	}
-	
+
 	public Object getRealRenderer() {
 		final RowRenderer renderer = _grid.getRowRenderer();
-		return renderer != null ? renderer : _defRend; 
+		return renderer != null ? renderer : _defRend;
 	}
+
 	private static final RowRenderer _defRend = new RowRenderer() {
 		public void render(final Row row, final Object data, final int index) {
-			final Rows rows = (Rows)row.getParent();
-			final Grid grid = (Grid)rows.getParent();
+			final Rows rows = (Rows) row.getParent();
+			final Grid grid = (Grid) rows.getParent();
 			Template tm = getTemplate(grid, rows, "model");
 			GroupingInfo info = null;
 			if (row instanceof Group) {
@@ -261,122 +270,128 @@ public class GridDataLoader implements DataLoader, Cropper {
 				row.setValue(data);
 			} else {
 				final GroupingInfo groupingInfo = info;
-				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(rows, row,
-					new VariableResolver() {
-						public Object resolveVariable(String name) {
-							if ("each".equals(name)) {
-								return data;
-							} else if ("forEachStatus".equals(name)) {
-								return new ForEachStatus() {
-									
-									public ForEachStatus getPrevious() {
-										return null;
-									}
-									
-									public Object getEach() {
-										return getCurrent();
-									}
-									
-									public int getIndex() {
-										return index;
-									}
-									
-									public Integer getBegin() {
-										return 0;
-									}
-									
-									public Integer getEnd() {
-										return grid.getModel().getSize();
-									}
+				final Component[] items = ShadowElementsCtrl
+						.filterOutShadows(tm.create(rows, row, new VariableResolver() {
+					public Object resolveVariable(String name) {
+						if ("each".equals(name)) {
+							return data;
+						} else if ("forEachStatus".equals(name)) {
+							return new ForEachStatus() {
 
-									public Object getCurrent() {
-										return data;
-									}
+								public ForEachStatus getPrevious() {
+									return null;
+								}
 
-									public boolean isFirst() {
-										return getCount() == 1;
-									}
+								public Object getEach() {
+									return getCurrent();
+								}
 
-									public boolean isLast() {
-										return getIndex() + 1 == getEnd();
-									}
+								public int getIndex() {
+									return index;
+								}
 
-									public Integer getStep() {
-										return null;
-									}
+								public Integer getBegin() {
+									return 0;
+								}
 
-									public int getCount() {
-										return getIndex() + 1;
-									}
-								};
-							} else if ("groupingInfo".equals(name)) {
-								return groupingInfo;
-							} else {
-								return null;
-							}
+								public Integer getEnd() {
+									return grid.getModel().getSize();
+								}
+
+								public Object getCurrent() {
+									return data;
+								}
+
+								public boolean isFirst() {
+									return getCount() == 1;
+								}
+
+								public boolean isLast() {
+									return getIndex() + 1 == getEnd();
+								}
+
+								public Integer getStep() {
+									return null;
+								}
+
+								public int getCount() {
+									return getIndex() + 1;
+								}
+							};
+						} else if ("groupingInfo".equals(name)) {
+							return groupingInfo;
+						} else {
+							return null;
 						}
-					}, null));
+					}
+				}, null));
 				if (items.length != 1)
-					throw new UiException("The model template must have exactly one row, not "+items.length);
+					throw new UiException("The model template must have exactly one row, not " + items.length);
 
-				final Row nr = (Row)items[0];
+				final Row nr = (Row) items[0];
 
 				//sync open state
 				if (nr instanceof Group && row instanceof Group) {
-					((Group)nr).setOpen(((Group)row).isOpen());
+					((Group) nr).setOpen(((Group) row).isOpen());
 				}
-				
+
 				if (nr.getValue() == null) //template might set it
 					nr.setValue(data);
 				row.setAttribute(Attributes.MODEL_RENDERAS, nr);
-					//indicate a new row is created to replace the existent one
+				//indicate a new row is created to replace the existent one
 				row.detach();
 			}
 		}
 	};
+
 	private static Template getTemplate(Grid grid, Rows rows, String name) {
 		final Template tm = grid.getTemplate(name);
-		return tm != null ? tm: rows != null ? rows.getTemplate(name): null;
-			// Also allow model's template to be declared in Rows
+		return tm != null ? tm : rows != null ? rows.getTemplate(name) : null;
+		// Also allow model's template to be declared in Rows
 	}
-	
+
 	public void syncModel(int offset, int limit) {
 		int min = offset;
 		int max = offset + limit - 1;
 
 		final ListModel model = _grid.getModel();
-		Rows rows = _grid.getRows(); 
+		Rows rows = _grid.getRows();
 		final int newsz = model.getSize();
-		final int oldsz = rows != null ? rows.getChildren().size(): 0;
+		final int oldsz = rows != null ? rows.getChildren().size() : 0;
 		final Paginal pgi = _grid.getPaginal();
 		final boolean inPaging = inPagingMold();
 		final boolean shallInvalidated = //Bug 3147518: avoid memory leak
-			(min < 0 || min == 0) && (max < 0 || max >= newsz || max >= oldsz);
+		(min < 0 || min == 0) && (max < 0 || max >= newsz || max >= oldsz);
 
 		int newcnt = newsz - oldsz;
-		int atg = pgi != null ? _grid.getActivePage(): 0;
+		int atg = pgi != null ? _grid.getActivePage() : 0;
 		RowRenderer renderer = null;
-		Component next = null;		
+		Component next = null;
 		if (oldsz > 0) {
-			if (min < 0) min = 0;
-			else if (min > oldsz - 1) min = oldsz - 1;
-			if (max < 0) max = oldsz - 1;
-			else if (max > oldsz - 1) max = oldsz - 1;
+			if (min < 0)
+				min = 0;
+			else if (min > oldsz - 1)
+				min = oldsz - 1;
+			if (max < 0)
+				max = oldsz - 1;
+			else if (max > oldsz - 1)
+				max = oldsz - 1;
 			if (min > max) {
-				int t = min; min = max; max = t;
+				int t = min;
+				min = max;
+				max = t;
 			}
 
 			int cnt = max - min + 1; //# of affected
 			if (rows != null) {
 				if (model instanceof GroupsListModel) {
-				//detach all from end to front since groupfoot
-				//must be detached before group
+					//detach all from end to front since groupfoot
+					//must be detached before group
 					newcnt += cnt; //add affected later
-					if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD)
-					&& !inPaging)
+					if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD) && !inPaging)
 						rows.invalidate();
 					//Invalidate rows to improve the performance see above
-	
+
 					Component comp = rows.getChildren().get(max);
 					next = comp.getNextSibling();
 					while (--cnt >= 0) {
@@ -389,12 +404,12 @@ public class GridDataLoader implements DataLoader, Cropper {
 					Component row = rows.getChildren().get(min);
 					while (--cnt >= 0) {
 						next = row.getNextSibling();
-	
+
 						if (cnt < -newcnt) { //if shrink, -newcnt > 0
 							row.detach(); //remove extra
-						} else if (((LoadStatus)((Row)row).getExtraCtrl()).isLoaded()) {
+						} else if (((LoadStatus) ((Row) row).getExtraCtrl()).isLoaded()) {
 							if (renderer == null)
-								renderer = (RowRenderer)getRealRenderer();
+								renderer = (RowRenderer) getRealRenderer();
 							row.detach(); //always detach
 							rows.insertBefore(newUnloadedItem(renderer, min), next);
 							++addcnt;
@@ -402,11 +417,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 						++min;
 						row = next;
 					}
-	
+
 					if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
-					&& !inPaging)
+							&& !inPaging)
 						rows.invalidate();
-						//Invalidate rows to improve the performance see above
+					//Invalidate rows to improve the performance see above
 				}
 			}
 		} else {
@@ -414,7 +429,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 			//auto create but it means <grid model="xx"><rows/>... will fail
 			if (rows == null) {
-				rows = new Rows(); 
+				rows = new Rows();
 				rows.setParent(_grid);
 			}
 		}
@@ -424,7 +439,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				renderer = (RowRenderer) getRealRenderer();
 			rows.insertBefore(newUnloadedItem(renderer, min), next);
 		}
-		
+
 		if (pgi != null) {
 			if (atg >= pgi.getPageCount())
 				atg = pgi.getPageCount() - 1;
@@ -437,41 +452,40 @@ public class GridDataLoader implements DataLoader, Cropper {
 	protected boolean inPagingMold() {
 		return "paging".equals(_grid.getMold());
 	}
-	
+
 	public void updateModelInfo() {
 		// do nothing
 	}
-	
+
 	public void setLoadAll(boolean b) {
 		//do nothing
 	}
-	
+
 	//--Cropper--//
 	public boolean isCropper() {
-		return _grid != null &&
-				inPagingMold()
-				&& _grid.getPageSize() <= getTotalSize();
-				//Single page is considered as not a cropper.
-				//isCropper is called after a component is removed, so
-				//we have to test >= rather than >
+		return _grid != null && inPagingMold() && _grid.getPageSize() <= getTotalSize();
+		//Single page is considered as not a cropper.
+		//isCropper is called after a component is removed, so
+		//we have to test >= rather than >
 	}
-	
+
 	public Set<? extends Component> getAvailableAtClient() {
 		if (!isCropper())
 			return null;
-		
+
 		final Paginal pgi = _grid.getPaginal();
 		int pgsz = pgi.getPageSize();
 		int ofs = pgi.getActivePage() * pgsz;
 		return getAvailableAtClient(ofs, pgsz);
 	}
-	
+
 	protected Set<? extends Component> getAvailableAtClient(int offset, int limit) {
 		final Set<Component> avail = new LinkedHashSet<Component>(32);
 		final Rows rows = _grid.getRows();
 		Row row = (Row) rows.getFirstChild();
-		while(row != null) {
-			if (limit == 0) break;
+		while (row != null) {
+			if (limit == 0)
+				break;
 			if (row.isVisible()) {
 				if (--offset < 0) {
 					--limit;

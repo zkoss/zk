@@ -35,38 +35,42 @@ public class Set extends AbstractAction {
 	public int getScope() {
 		return _scope;
 	}
+
 	/** Sets the scope. */
 	public void setScope(String scope) {
 		_scope = toScope(scope);
 	}
+
 	/** Returns the attribute name. */
 	public String getVar() {
 		return _var;
 	}
+
 	/** Sets the attribute name. */
 	public void setVar(String var) {
 		_var = var;
 	}
+
 	/** Returns the attribute value. */
 	public Object getValue() {
 		return _val;
 	}
+
 	/** Sets the attribute value. */
 	public void setValue(Object val) {
 		_val = val;
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!isEffective())
 			return;
 		if (nested)
 			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
-				new Object[] {this, new Integer(ac.getLineNumber())});
+					new Object[] { this, new Integer(ac.getLineNumber()) });
 		if (_var == null)
 			throw new DspException(MWeb.DSP_ATTRIBUTE_REQUIRED,
-				new Object[] {this, "var", new Integer(ac.getLineNumber())});
+					new Object[] { this, "var", new Integer(ac.getLineNumber()) });
 		ac.setAttribute(_var, _val, _scope);
 	}
 

@@ -35,12 +35,14 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class Treecell extends LabelImageElement {
 	private AuxInfo _auxinf;
-	
+
 	public Treecell() {
 	}
+
 	public Treecell(String label) {
 		super(label);
 	}
+
 	public Treecell(String label, String src) {
 		super(label, src);
 	}
@@ -50,9 +52,10 @@ public class Treecell extends LabelImageElement {
 	public Tree getTree() {
 		for (Component n = this; (n = n.getParent()) != null;)
 			if (n instanceof Tree)
-				return (Tree)n;
+				return (Tree) n;
 		return null;
 	}
+
 	/** Returns the tree column associated with this cell, or null if not available.
 	 */
 	public Treecol getTreecol() {
@@ -63,17 +66,17 @@ public class Treecell extends LabelImageElement {
 				final int j = getColumnIndex();
 				final List lcschs = lcs.getChildren();
 				if (j < lcschs.size())
-					return (Treecol)lcschs.get(j);
+					return (Treecol) lcschs.get(j);
 			}
 		}
 		return null;
 	}
+
 	/** Returns the column index of this cell, starting from 0.
 	 */
 	public int getColumnIndex() {
 		int j = 0;
-		for (Iterator it = getParent().getChildren().iterator();
-		it.hasNext(); ++j)
+		for (Iterator it = getParent().getChildren().iterator(); it.hasNext(); ++j)
 			if (it.next() == this)
 				break;
 		return j;
@@ -87,14 +90,14 @@ public class Treecell extends LabelImageElement {
 		if (tree == null)
 			return 0;
 		final Treecol lc = getTreecol();
-		return lc != null ? lc.getMaxlength(): 0;
+		return lc != null ? lc.getMaxlength() : 0;
 	}
 
 	/** Returns the level this cell is. The root is level 0.
 	 */
 	public int getLevel() {
 		final Component parent = getParent();
-		return parent != null ? ((Treerow)parent).getLevel(): 0;
+		return parent != null ? ((Treerow) parent).getLevel() : 0;
 	}
 
 	/** Returns number of columns to span this cell.
@@ -103,6 +106,7 @@ public class Treecell extends LabelImageElement {
 	public int getSpan() {
 		return _auxinf != null ? _auxinf.span : 1;
 	}
+
 	/** Sets the number of columns to span this cell.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
@@ -119,9 +123,9 @@ public class Treecell extends LabelImageElement {
 
 	//Cloneable//
 	public Object clone() {
-		final Treecell clone = (Treecell)super.clone();
+		final Treecell clone = (Treecell) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
 
@@ -130,14 +134,16 @@ public class Treecell extends LabelImageElement {
 	 */
 	public String getWidth() {
 		final Treecol col = getTreecol();
-		return col != null ? col.getWidth(): null;
+		return col != null ? col.getWidth() : null;
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the width of Treecell, please 
 	 * use {@link Treecol#setWidth(String)} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the hflex of Treecell, please 
 	 * use {@link Treecol#setHflex(String)} instead.
@@ -146,19 +152,19 @@ public class Treecell extends LabelImageElement {
 	}
 
 	//-- Component --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		if (getSpan() > 1)
 			renderer.render("colspan", getSpan());
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treerow))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	private AuxInfo initAuxInfo() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();

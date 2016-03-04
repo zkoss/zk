@@ -16,8 +16,8 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.PortletMode;
 
@@ -29,7 +29,7 @@ import javax.portlet.PortletMode;
 public class PortletModes {
 	/** Returns the portlet mode of the specified name.
 	 */
-	
+
 	public static final PortletMode toPortletMode(String modeName) {
 		PortletMode mode = _modes.get(modeName);
 		if (mode == null) {
@@ -44,7 +44,9 @@ public class PortletModes {
 		}
 		return mode;
 	}
+
 	private static Map<String, PortletMode> _modes = new HashMap<String, PortletMode>(4);
+
 	static {
 		_modes.put("EDIT", PortletMode.EDIT);
 		_modes.put("HELP", PortletMode.HELP);

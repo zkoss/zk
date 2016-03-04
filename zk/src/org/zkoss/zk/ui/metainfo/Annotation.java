@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Map;
+
 import org.zkoss.util.resource.Location;
 
 /**
@@ -42,16 +43,19 @@ public interface Annotation extends java.io.Serializable {
 	 * name.
 	 */
 	public String getName();
+
 	/** Returns the map of attributes(never null).
 	 * The key is a String instance, while the value is an array of
 	 * String instances (length might be zero, but it is never null).
 	 * <p>The returned map is read-only.
 	 */
 	public Map<String, String[]> getAttributes();
+
 	/** Returns the first value of the given attribute, or null if not found.
 	 * By the first value we mean the first element in the value array.
 	 */
 	public String getAttribute(String name);
+
 	/** Returns all values of the given attribute, or null if not found.
 	 * Notice if the attribute is assigned with no value, a zero-length array
 	 * is returned.

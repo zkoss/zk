@@ -16,14 +16,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.zkoss.zk.ui.Component;
-
 /**
  * Marker annotation to identify a Command method for {@link org.zkoss.zk.ui.util.Composer}
  * to use.
  * @author jumperchen
  * @since 8.0.0
- * @see org.zkoss.zk.ui.util.ConventionWires#wireServiceCommand(Component, Object) 
+ * @see org.zkoss.zk.ui.util.ConventionWires#wireServiceCommand(org.zkoss.zk.ui.Component, Object) 
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

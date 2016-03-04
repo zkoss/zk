@@ -18,14 +18,14 @@ package org.zkoss.zk.scripting.rhino;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Function;
-import org.mozilla.javascript.Undefined;
-import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.ImporterTopLevel;
+import org.mozilla.javascript.ScriptRuntime;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.Undefined;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
+import org.zkoss.zk.ui.Page;
 
 /**
  * Rhino-based JavaScript interpreter.
@@ -56,41 +56,46 @@ public class RhinoInterpreter extends GenericInterpreter {
 
 	//GenericInterpreter//
 	protected void exec(String script) {
-		Context.getCurrentContext()
-			.evaluateString(_global, script, "zk", 1, null);
+		Context.getCurrentContext().evaluateString(_global, script, "zk", 1, null);
 	}
+
 	protected boolean contains(String name) {
 		return _global.has(name, _global);
 	}
+
 	protected Object get(String name) {
 		final Object val = _global.get(name, _global);
-		if (val == Scriptable.NOT_FOUND
-		|| val == Undefined.instance || val == null)
+		if (val == Scriptable.NOT_FOUND || val == Undefined.instance || val == null)
 			return null;
 
-		return Context.getCurrentContext()
-			.jsToJava(val, ScriptRuntime.ObjectClass);
+		return Context.getCurrentContext().jsToJava(val, ScriptRuntime.ObjectClass);
 	}
+
 	protected void set(String name, Object value) {
 		_global.put(name, _global, toJS(value));
 	}
+
 	private Object toJS(Object value) {
-		return value == null || (value instanceof Number) ||
-			(value instanceof String) || (value instanceof Boolean) ?
-				value: Context.toObject(value, _global);
+		return value == null || (value instanceof Number) || (value instanceof String) || (value instanceof Boolean)
+				? value : Context.toObject(value, _global);
 	}
+
 	protected void unset(String name) {
 		_global.delete(name);
 	}
+
 	protected void beforeExec() {
 		enterContext();
 	}
+
 	protected void afterExec() {
 		exitContext();
 	}
+
 	private Context enterContext() {
 		return ContextFactory.getGlobal().enterContext();
 	}
+
 	private void exitContext() {
 		Context.exit();
 	}
@@ -106,6 +111,7 @@ public class RhinoInterpreter extends GenericInterpreter {
 			exitContext();
 		}
 	}
+
 	public void destroy() {
 		_global = null;
 		super.destroy();
@@ -124,7 +130,7 @@ public class RhinoInterpreter extends GenericInterpreter {
 			final Object val = _global.get(name, _global);
 			if (!(val instanceof Function))
 				return null;
-			return new RhinoFunction((Function)val);
+			return new RhinoFunction((Function) val);
 		} finally {
 			exitContext();
 		}
@@ -137,16 +143,17 @@ public class RhinoInterpreter extends GenericInterpreter {
 		private GlobalScope(Context ctx) {
 			super(ctx);
 		}
+
 		/* Not sure the side effect yet, so disable it
 		public boolean has(String name, Scriptable start) {
 			return super.has(name, start) || getFromNamespace(name) != UNDEFINED;
 		}*/
 		public Object get(String name, Scriptable start) {
 			final Object val = super.get(name, start);
-			if (val == Scriptable.NOT_FOUND
-			|| val == Undefined.instance) {
+			if (val == Scriptable.NOT_FOUND || val == Undefined.instance) {
 				final Object v = getFromNamespace(name);
-				if (v != UNDEFINED) return toJS(v);
+				if (v != UNDEFINED)
+					return toJS(v);
 			}
 			return val;
 		}
@@ -154,6 +161,7 @@ public class RhinoInterpreter extends GenericInterpreter {
 
 	private class RhinoFunction implements org.zkoss.xel.Function {
 		private final Function _func;
+
 		private RhinoFunction(Function func) {
 			if (func == null)
 				throw new IllegalArgumentException("null");
@@ -164,9 +172,11 @@ public class RhinoInterpreter extends GenericInterpreter {
 		public Class[] getParameterTypes() {
 			return new Class[0];
 		}
+
 		public Class getReturnType() {
 			return Object.class;
 		}
+
 		public Object invoke(Object obj, Object[] args) throws Exception {
 			final Context ctx = enterContext();
 			try {
@@ -176,6 +186,7 @@ public class RhinoInterpreter extends GenericInterpreter {
 				exitContext();
 			}
 		}
+
 		public java.lang.reflect.Method toMethod() {
 			return null;
 		}

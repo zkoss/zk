@@ -37,11 +37,10 @@ import org.zkoss.zul.ListModelList;
  * @see org.zkoss.zul.ListModelList
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
-public class BindingListModelList<E> extends ListModelList<E>
-implements BindingListModelExt<E>, java.io.Serializable {
+public class BindingListModelList<E> extends ListModelList<E> implements BindingListModelExt<E>, java.io.Serializable {
 	private static final long serialVersionUID = 200808191518L;
 	private boolean _distinct = true; //since 3.5; default to true
-	
+
 	/**
 	 * @since 3.1
 	 */
@@ -56,19 +55,19 @@ implements BindingListModelExt<E>, java.io.Serializable {
 	public BindingListModelList(List<E> list, boolean live) {
 		super(list, live);
 	}
-	
+
 	public boolean isDistinct() {
 		return _distinct;
 	}
-	
+
 	public int[] indexesOf(Object elm) {
 		if (isDistinct()) {
 			final int idx = indexOf(elm);
-			return idx < 0 ? new int[0] : new int[] {idx}; 
+			return idx < 0 ? new int[0] : new int[] { idx };
 		} else {
 			final List<Integer> indexes = new LinkedList<Integer>();
 			int j = 0;
-			for(final Iterator<E> it = _list.iterator(); it.hasNext(); ++j) {
+			for (final Iterator<E> it = _list.iterator(); it.hasNext(); ++j) {
 				if (Objects.equals(elm, it.next())) {
 					indexes.add(new Integer(j));
 				}
@@ -82,7 +81,5 @@ implements BindingListModelExt<E>, java.io.Serializable {
 			return result;
 		}
 	}
-	
-	
-}
 
+}

@@ -21,8 +21,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.util.WebAppInit;
 import org.zkoss.zk.ui.util.WebAppCleanup;
+import org.zkoss.zk.ui.util.WebAppInit;
 
 /**
  * <p>Listener to init and cleanup the hibernate session factory automatically. 
@@ -63,32 +63,31 @@ import org.zkoss.zk.ui.util.WebAppCleanup;
  * @author henrichen
  * @deprecated As of release 6.0.2, please use the official Hibernate's method instead.
  */
-public class HibernateSessionFactoryListener 
-implements WebAppInit, WebAppCleanup,  ServletContextListener {
+public class HibernateSessionFactoryListener implements WebAppInit, WebAppCleanup, ServletContextListener {
 	//WebAppInit//
-    public void init(WebApp app)  {
-        HibernateUtil.initSessionFactory(app);
-    }
+	public void init(WebApp app) {
+		HibernateUtil.initSessionFactory(app);
+	}
 
 	//WebAppCleanup//
-    public void cleanup(WebApp wapp) {
-        HibernateUtil.cleanupSessionFactory();
-    }
-	
+	public void cleanup(WebApp wapp) {
+		HibernateUtil.cleanupSessionFactory();
+	}
+
 	//ServletContextListener//
 	/**
 	 *@since 3.0.1
 	 */
 	public void contextDestroyed(ServletContextEvent sce) {
-        HibernateUtil.cleanupSessionFactory();
-    }
-	
+		HibernateUtil.cleanupSessionFactory();
+	}
+
 	/**
 	 *@since 3.0.1
 	 */
 	public void contextInitialized(ServletContextEvent sce) {
 		final ServletContext ctx = sce.getServletContext();
 		String resource = ctx.getInitParameter(HibernateUtil.CONFIG);
-        HibernateUtil.initSessionFactory(resource);
-    }
+		HibernateUtil.initSessionFactory(resource);
+	}
 }

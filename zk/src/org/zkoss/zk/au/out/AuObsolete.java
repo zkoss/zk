@@ -28,7 +28,7 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuObsolete extends AuResponse {
 	public AuObsolete(String dtid, String message) {
-		super("obsolete", new String[] {dtid, message});
+		super("obsolete", new String[] { dtid, message });
 	}
 
 	/** Default: zk.obsolete (i.e., only one response of this class will

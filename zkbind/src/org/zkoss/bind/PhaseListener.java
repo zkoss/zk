@@ -28,14 +28,14 @@ package org.zkoss.bind;
  * @since 6.0.0
  */
 public interface PhaseListener {
-	
+
 	/**
 	 * Callbacks before each phase.
 	 * @param phase the phase id
 	 * @param ctx the associated {@link BindContext}
 	 */
 	public void prePhase(Phase phase, BindContext ctx);
-	
+
 	/**
 	 * Callbacks after each phase. 
 	 * @param phase the phase id

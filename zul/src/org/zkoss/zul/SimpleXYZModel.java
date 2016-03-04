@@ -16,9 +16,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zul.event.ChartDataEvent;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.zkoss.zul.event.ChartDataEvent;
 
 /**
  * A XYZ data model implementation of {@link XYZModel}.
@@ -38,42 +39,46 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	public void addValue(Comparable<?> series, Number x, Number y) {
 		throw new UnsupportedOperationException("Use addValue(series, x, y, z) instead!");
 	}
+
 	/** Not supported since we need not only x, y, but also z information.
 	 */
 	public void addValue(Comparable<?> series, Number x, Number y, int index) {
 		throw new UnsupportedOperationException("Use addValue(series, x, y, z, index) instead!");
 	}
+	
+	public void addValue(Comparable<?> series, Number x, Number y, Number z) {
+		addValue(series, x, y, z, -1);
+	}
+	
+	public void addValue(Comparable<?> series, Number x, Number y, Number z, int index) {
+		int cIndex = addValue0(series, x, y, z, index);
+		fireEvent(ChartDataEvent.ADDED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex,
+				_seriesMap.get(series).get(cIndex).toNumbers());
+	}
+
 	/** Not supported since we need not only x, y, but also z information.
 	 */
 	public void setValue(Comparable<?> series, Number x, Number y, int index) {
 		throw new UnsupportedOperationException("Use setValue(series, x, y, z, index) instead!");
 	}
 	
+	public void setValue(Comparable<?> series, Number x, Number y, Number z, int index) {
+		removeValue0(series, index);
+		int cIndex = addValue0(series, x, y, z, index);
+		fireEvent(ChartDataEvent.CHANGED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex,
+				_seriesMap.get(series).get(cIndex).toNumbers());
+	}
+
 	//-- XYZModel --//
 	public Number getZ(Comparable<?> series, int index) {
 		final List<XYPair> xyzTuples = _seriesMap.get(series);
-		
+
 		if (xyzTuples != null) {
-			return ((XYZTuple)xyzTuples.get(index)).getZ();
+			return ((XYZTuple) xyzTuples.get(index)).getZ();
 		}
 		return null;
 	}
 
-	public void addValue(Comparable<?> series, Number x, Number y, Number z) {
-		addValue(series, x, y, z, -1);
-	}
-	
-	public void setValue(Comparable<?> series, Number x, Number y, Number z, int index) {
-		removeValue0(series, index);
-		int cIndex = addValue0(series, x, y, z, index);
-		fireEvent(ChartDataEvent.CHANGED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex, _seriesMap.get(series).get(cIndex).toNumbers());
-	}
-	
-	public void addValue(Comparable<?> series, Number x, Number y, Number z, int index) {
-		int cIndex = addValue0(series, x, y, z, index);
-		fireEvent(ChartDataEvent.ADDED, series, (Comparable<?>) x, _seriesList.indexOf(series), cIndex, _seriesMap.get(series).get(cIndex).toNumbers());
-	}
-	
 	private int addValue0(Comparable<?> series, Number x, Number y, Number z, int index) {
 		List<XYPair> xyzTuples = _seriesMap.get(series);
 		if (xyzTuples == null) {
@@ -94,11 +99,12 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 	public void removeValue(Comparable<?> series, int index) {
 		XYZTuple xyz = removeValue0(series, index);
 		if (xyz != null)
-			fireEvent(ChartDataEvent.REMOVED, series, (Comparable<?>)xyz.getX(), _seriesList.indexOf(series), index, xyz.toNumbers());
+			fireEvent(ChartDataEvent.REMOVED, series, (Comparable<?>) xyz.getX(), _seriesList.indexOf(series), index,
+					xyz.toNumbers());
 		else
 			fireEvent(ChartDataEvent.REMOVED, series, null, _seriesList.indexOf(series), -1, null);
 	}
-	
+
 	private XYZTuple removeValue0(Comparable<?> series, int index) {
 		List<XYPair> xyzTuples = _seriesMap.get(series);
 		if (xyzTuples == null) {
@@ -106,23 +112,23 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 		}
 		return (XYZTuple) xyzTuples.remove(index);
 	}
-	
+
 	//-- internal class --//
 	private static class XYZTuple extends XYPair {
 		private static final long serialVersionUID = 20091008183759L;
 		private Number _z;
-		
+
 		private XYZTuple(Number x, Number y, Number z) {
 			super(x, y);
 			_z = z;
 		}
-		
+
 		public Number getZ() {
 			return _z;
 		}
-		
+
 		public Number[] toNumbers() {
-			return new Number[] {getX(), getY(), _z};
+			return new Number[] { getX(), getY(), _z };
 		}
 	}
 }

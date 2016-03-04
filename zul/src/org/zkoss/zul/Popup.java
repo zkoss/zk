@@ -18,8 +18,8 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.*;
-
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -37,10 +37,11 @@ public class Popup extends XulElement {
 	static {
 		addClientEvent(Popup.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
-	
+
 	public Popup() {
 		super.setVisible(false);
 	}
+
 	protected Popup(boolean visible) {
 		// some sub class should construct without setVisible(false)
 		if (!visible)
@@ -62,7 +63,7 @@ public class Popup extends XulElement {
 	 * @since 3.0.0
 	 */
 	public void open(String x, String y) {
-		response("popup", new AuInvoke(this, "open", new Object[] {null, new Object[] {x, y}, null}));
+		response("popup", new AuInvoke(this, "open", new Object[] { null, new Object[] { x, y }, null }));
 		disableClientUpdate(true);
 		try {
 			super.setVisible(true); // Bug B65-ZK-2267
@@ -70,6 +71,7 @@ public class Popup extends XulElement {
 			disableClientUpdate(false);
 		}
 	}
+
 	/**
 	 * Opens this popup to the specified location at the client.
 	 *
@@ -87,6 +89,7 @@ public class Popup extends XulElement {
 	public void open(int x, int y) {
 		open(Integer.toString(x), Integer.toString(y));
 	}
+
 	/**
 	 * Opens this popup right below the specified component at the client.
 	 * <p>By default the position "at_pointer" is assumed.(since 5.0.0)
@@ -99,6 +102,7 @@ public class Popup extends XulElement {
 	public void open(Component ref) {
 		open(ref, "at_pointer");
 	}
+
 	/**
 	 * Opens this popup right below the specified component at the client.
 	 * <p>In most cases, the popup is shown automatically when specified
@@ -145,7 +149,7 @@ public class Popup extends XulElement {
 	 * @since 3.6.1
 	 */
 	public void open(Component ref, String position) {
-		response("popup", new AuInvoke(this, "open", new Object[] {ref.getUuid(), null, position}));
+		response("popup", new AuInvoke(this, "open", new Object[] { ref.getUuid(), null, position }));
 		disableClientUpdate(true);
 		try {
 			super.setVisible(true); // Bug B65-ZK-2267
@@ -153,6 +157,7 @@ public class Popup extends XulElement {
 			disableClientUpdate(false);
 		}
 	}
+
 	/**
 	 * Closes this popup at the client.
 	 *
@@ -177,6 +182,7 @@ public class Popup extends XulElement {
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("Use open/close instead");
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-popup" : _zclass;
 	}

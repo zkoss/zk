@@ -35,6 +35,5 @@ import org.zkoss.zk.ui.util.ComponentCloneListener;
  * @author jumperchen
  * @since 6.0.0
  */
-public interface CloneableEventListener<T extends Event> extends EventListener<T>,
-		ComponentCloneListener {
+public interface CloneableEventListener<T extends Event> extends EventListener<T>, ComponentCloneListener {
 }

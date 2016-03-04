@@ -18,11 +18,10 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.ZulEvents;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * Paging of long content.
@@ -50,6 +49,7 @@ public class Paging extends XulElement implements Paginal {
 	static {
 		addClientEvent(Paging.class, ZulEvents.ON_PAGING, CE_IMPORTANT);
 	}
+
 	public Paging() {
 	}
 
@@ -63,12 +63,12 @@ public class Paging extends XulElement implements Paginal {
 		setTotalSize(totalsz);
 		setPageSize(pagesz);
 	}
-	
+
 	//Paginal//
 	public int getPageSize() {
 		return _pgsz;
 	}
-	
+
 	/**Sets the items to show in each page
 	 * 
 	 */
@@ -82,13 +82,14 @@ public class Paging extends XulElement implements Paginal {
 			updatePageNum();
 			// B50-ZK-345: speed up onPagingImpl to surpass onInitRender
 			Events.postEvent(10001, new PagingEvent("onPagingImpl", this, _actpg));
-				//onPagingImpl is used for implementation purpose only
+			//onPagingImpl is used for implementation purpose only
 		}
 	}
+
 	public int getTotalSize() {
 		return _ttsz;
 	}
-	
+
 	/**Sets total size of items
 	 * 
 	 */
@@ -102,9 +103,11 @@ public class Paging extends XulElement implements Paginal {
 			updatePageNum();
 		}
 	}
+
 	private void updatePageNum() {
 		int v = (_ttsz - 1) / _pgsz + 1;
-		if (v == 0) v = 1;
+		if (v == 0)
+			v = 1;
 		if (v != _npg) {
 			_npg = v;
 			smartUpdate("pageCount", _npg);
@@ -118,34 +121,36 @@ public class Paging extends XulElement implements Paginal {
 	public int getPageCount() {
 		return _npg;
 	}
+
 	public int getActivePage() {
 		return _actpg;
 	}
+
 	/**
 	 * Set the active page
 	 * <p>Note: In server side, active page starts from 0. But in browser UI, it starts from 1
 	 */
 	public void setActivePage(int pg) throws WrongValueException {
 		if (pg >= _npg || pg < 0)
-			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
+			throw new WrongValueException("Unable to set active page to " + pg + " since only " + _npg + " pages");
 		if (_actpg != pg) {
 			_actpg = pg;
 			smartUpdate("activePage", pg);
 			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
-				//onPagingImpl is used for implementation purpose only
+			//onPagingImpl is used for implementation purpose only
 		}
 	}
 
 	public int getPageIncrement() {
 		return _pginc;
 	}
-	
+
 	/**
 	 * Sets the number of page list icon when mold is "os"
 	 */
 	public void setPageIncrement(int pginc) throws WrongValueException {
 		if (pginc <= 0)
-			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
+			throw new WrongValueException("Nonpositive is not allowed: " + pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
 			smartUpdate("pageIncrement", pginc);
@@ -155,7 +160,7 @@ public class Paging extends XulElement implements Paginal {
 	public boolean isDetailed() {
 		return _detailed;
 	}
-	
+
 	/** Sets whether to show total size and index of items in current page
 	 * 
 	 */
@@ -174,6 +179,7 @@ public class Paging extends XulElement implements Paginal {
 	public boolean isAutohide() {
 		return _autohide;
 	}
+
 	/** Sets whether to automatically hide this component if
 	 * there is only one page available.
 	 */
@@ -183,20 +189,25 @@ public class Paging extends XulElement implements Paginal {
 			smartUpdate("autohide", autohide);
 		}
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (_ttsz != 0) renderer.render("totalSize", _ttsz);
-		if (_pgsz != 20) renderer.render("pageSize", _pgsz);
-		if (_actpg != 0) renderer.render("activePage", _actpg);
-		if (_npg != 1) renderer.render("pageCount", _npg);
-		if (_pginc != 10) renderer.render("pageIncrement", _pginc);
+
+		if (_ttsz != 0)
+			renderer.render("totalSize", _ttsz);
+		if (_pgsz != 20)
+			renderer.render("pageSize", _pgsz);
+		if (_actpg != 0)
+			renderer.render("activePage", _actpg);
+		if (_npg != 1)
+			renderer.render("pageCount", _npg);
+		if (_pginc != 10)
+			renderer.render("pageIncrement", _pginc);
 		render(renderer, "detailed", _detailed);
 		render(renderer, "autohide", isAutohide());
 	}
-	
+
 	public String getZclass() {
 		String added = "os".equals(getMold()) ? "-os" : "";
 		return _zclass == null ? "z-paging" + added : _zclass;
@@ -206,9 +217,11 @@ public class Paging extends XulElement implements Paginal {
 	public boolean isVisible() {
 		return super.isVisible() && (_npg > 1 || !_autohide);
 	}
+
 	protected boolean isChildable() {
 		return false;
 	}
+
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *

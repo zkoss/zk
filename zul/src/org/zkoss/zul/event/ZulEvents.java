@@ -22,7 +22,8 @@ package org.zkoss.zul.event;
  * @author tomyeh
  */
 public class ZulEvents {
-	private ZulEvents() {} //prevent from creation
+	private ZulEvents() {
+	} //prevent from creation
 
 	/** The onPaging event used with {@link PagingEvent}.
 	 */

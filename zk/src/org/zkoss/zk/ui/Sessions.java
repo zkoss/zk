@@ -28,7 +28,8 @@ public class Sessions {
 	protected static final ThreadLocal<Object> _sess = new ThreadLocal<Object>();
 	protected static int _cnt;
 
-	protected Sessions() {} //prevent from instantiated
+	protected Sessions() {
+	} //prevent from instantiated
 
 	/** Returns the number of total alive session.
 	 * @since 5.0.0
@@ -44,6 +45,7 @@ public class Sessions {
 	public static final Session getCurrent() {
 		return getCurrent(true);
 	}
+
 	/** Returns the session for the current thread, or null if not available.
 	 *
 	 * @param create whether to create a new session if not available.
@@ -54,10 +56,11 @@ public class Sessions {
 	public static final Session getCurrent(boolean create) {
 		final Object o = _sess.get();
 		if (o instanceof SessionResolver) {
-			Session sess = ((SessionResolver)o).getSession(create);
-			if (sess != null) _sess.set(sess);
+			Session sess = ((SessionResolver) o).getSession(create);
+			if (sess != null)
+				_sess.set(sess);
 			return sess;
 		}
-		return (Session)o;
+		return (Session) o;
 	}
 }

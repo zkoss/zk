@@ -12,8 +12,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.embed;
 
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -21,27 +21,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.web.servlet.http.Https;
-
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.GenericRichlet;
-import org.zkoss.zk.ui.metainfo.PageDefinitions;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.UiFactory;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.RequestInfo;
-import org.zkoss.zk.ui.impl.Attributes;
-import org.zkoss.zk.ui.impl.RequestInfoImpl;
-import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.I18Ns;
+import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.RequestInfo;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.UiFactory;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
  * Utilities to embed ZK component(s) as a native JSF component, a JSP tag, Zimlet or others.
@@ -66,14 +65,13 @@ public class Renders {
 	 * @param out the output (never null).
 	 * @since 5.0.5
 	 */
-	public static final void render(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response,
-	Component comp, String path, Writer out)
-	throws ServletException, IOException {
+	public static final void render(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			Component comp, String path, Writer out) throws ServletException, IOException {
 		if (comp == null)
 			throw new IllegalArgumentException();
 		render(ctx, request, response, new EmbedRichlet(comp), path, false, out);
 	}
+
 	/** Outputs the HTML tags of the given component to the given writer.
 	 * It is the same as <code>render(ctx, request, response, richlet, path, false, out)</code>.
 	 *
@@ -85,12 +83,11 @@ public class Renders {
 	 * instead.
 	 * @since 5.0.5
 	 */
-	public static final void render(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response,
-	Richlet richlet, String path, Writer out)
-	throws ServletException, IOException {
+	public static final void render(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			Richlet richlet, String path, Writer out) throws ServletException, IOException {
 		render(ctx, request, response, richlet, path, false, out);
 	}
+
 	/** Outputs the HTML tags of the given component to the given writer with
 	 * additional control.
 	 * @param path the request path. If null, the servlet path is assumed.
@@ -104,29 +101,25 @@ public class Renders {
 	 * an additional DIV element representing the tag.
 	 * @since 5.0.8
 	 */
-	public static final void render(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response,
-	Richlet richlet, String path, boolean pageDOM, Writer out)
-	throws ServletException, IOException {
+	public static final void render(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			Richlet richlet, String path, boolean pageDOM, Writer out) throws ServletException, IOException {
 		if (path == null)
 			path = Https.getThisServletPath(request);
 
 		final WebManager webman = WebManager.getWebManager(ctx);
 		final Session sess = WebManager.getSession(ctx, request);
 		final WebApp wapp = sess.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
-		final Object old = I18Ns.setup(sess, request, response,
-			wapp.getConfiguration().getResponseCharset());
+		final WebAppCtrl wappc = (WebAppCtrl) wapp;
+		final Object old = I18Ns.setup(sess, request, response, wapp.getConfiguration().getResponseCharset());
 		Execution exec = null;
 		try {
 			final Desktop desktop = webman.getDesktop(sess, request, response, path, true);
 			if (desktop == null) //forward or redirect
 				return;
 
-			final RequestInfo ri = new RequestInfoImpl(
-				wapp, sess, desktop, request,
-				PageDefinitions.getLocator(wapp, path));
-			((SessionCtrl)sess).notifyClientRequest(true);
+			final RequestInfo ri = new RequestInfoImpl(wapp, sess, desktop, request,
+					PageDefinitions.getLocator(wapp, path));
+			((SessionCtrl) sess).notifyClientRequest(true);
 
 			final UiFactory uf = wappc.getUiFactory();
 			final Page page = WebManager.newPage(uf, ri, richlet, response, path);
@@ -135,7 +128,7 @@ public class Renders {
 			exec.setAttribute(Attributes.PAGE_RENDERER, new PageRenderer(exec, pageDOM));
 
 			wappc.getUiEngine().execNewPage(exec, richlet, page, out);
-					//no need to set device type here, since UiEngine will do it later
+			//no need to set device type here, since UiEngine will do it later
 		} finally {
 			I18Ns.cleanup(request, old);
 			if (exec != null) {
@@ -144,13 +137,15 @@ public class Renders {
 			}
 		}
 	}
+
 	//Supporting classes//
 	private static class EmbedRichlet extends GenericRichlet {
 		private final Component _comp;
+
 		private EmbedRichlet(Component comp) {
 			_comp = comp;
 		}
-		
+
 		public void service(Page page) {
 			_comp.setPage(page);
 		}
@@ -166,15 +161,18 @@ public class Renders {
 	public static class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		private final Execution _exec;
 		private final boolean _pageDOM;
+
 		/** Default constructor.
 		 * It is the same as <code>PageRenderer(Executions.getCurrent())</code>.
 		 */
 		public PageRenderer() {
 			this(Executions.getCurrent(), false);
 		}
+
 		public PageRenderer(Execution exec) {
 			this(exec, false);
 		}
+
 		/**
 		 * @param pageDOM whether to generate the DOM element to represent the page.
 		 * In other words, if true is specified, the content will be enclosed with
@@ -186,7 +184,6 @@ public class Renders {
 			_pageDOM = pageDOM;
 		}
 
-		
 		public void render(Page page, Writer out) throws IOException {
 			out.write(HtmlPageRenders.outLangStyleSheets(_exec, null, null));
 			out.write(HtmlPageRenders.outLangJavaScripts(_exec, null, null));
@@ -218,16 +215,16 @@ public class Renders {
 
 			out.write(");zkpe();</script>\n");
 
-			for (Component root = page.getFirstRoot(); root != null;
-			root = root.getNextSibling()) {
+			for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling()) {
 				HtmlPageRenders.outStandalone(_exec, root, out);
 			}
 		}
+
 		private String getContextURI() {
 			if (_exec != null) {
 				String s = _exec.encodeURL("/");
 				int j = s.lastIndexOf('/'); //might have jsessionid=...
-				return j >= 0 ? s.substring(0, j) + s.substring(j + 1): s;
+				return j >= 0 ? s.substring(0, j) + s.substring(j + 1) : s;
 			}
 			return "";
 		}

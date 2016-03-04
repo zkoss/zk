@@ -31,6 +31,6 @@ public class AuLoadScript extends AuResponse {
 	 * @param once true means the url will be cached and executed only once.
 	 */
 	public AuLoadScript(String url, String callback, boolean once) {
-		super("loadScript", new Object[]{Executions.encodeURL(url), callback, once});
+		super("loadScript", new Object[] { Executions.encodeURL(url), callback, once });
 	}
 }

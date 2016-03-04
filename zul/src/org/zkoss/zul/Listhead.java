@@ -19,7 +19,6 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.HeadersElement;
 
 /**
@@ -44,7 +43,7 @@ public class Listhead extends HeadersElement {
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Listbox getListbox() {
-		return (Listbox)getParent();
+		return (Listbox) getParent();
 	}
 
 	/**
@@ -58,6 +57,7 @@ public class Listhead extends HeadersElement {
 			smartUpdate("columnshide", _columnshide);
 		}
 	}
+
 	/**
 	 * Returns whether to enable hiding of listheader with the header context menu.
 	 * <p>Default: true.
@@ -66,6 +66,7 @@ public class Listhead extends HeadersElement {
 	public boolean isColumnshide() {
 		return _columnshide;
 	}
+
 	/**
 	 * Sets whether to enable grouping of listheader with the header context menu.
 	 * <p>Note that it is only applied when {@link #getMenupopup()} is auto. 
@@ -77,6 +78,7 @@ public class Listhead extends HeadersElement {
 			smartUpdate("columnsgroup", _columnsgroup);
 		}
 	}
+
 	/**
 	 * Returns whether to enable grouping of listheader with the header context menu.
 	 * <p>Default: true.
@@ -95,6 +97,7 @@ public class Listhead extends HeadersElement {
 	public String getMenupopup() {
 		return _mpop;
 	}
+
 	/** Sets the ID of the menupopup ({@link Menupopup}) that should appear
 	 * when the user clicks on the element of each column.
 	 *
@@ -125,15 +128,14 @@ public class Listhead extends HeadersElement {
 			smartUpdate("menupopup", mpop);
 		}
 	}
-	
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (!_columnsgroup) 
+
+		if (!_columnsgroup)
 			renderer.render("columnsgroup", false);
-		if (!_columnshide) 
+		if (!_columnshide)
 			renderer.render("columnshide", false);
 		if (!"none".equals(_mpop))
 			renderer.render("menupopup", _mpop);
@@ -147,8 +149,9 @@ public class Listhead extends HeadersElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -158,12 +161,14 @@ public class Listhead extends HeadersElement {
 	public <T> void setValue(T value) {
 		_value = value;
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Listbox related 
 	 * components, please refer to {@link Listbox} and {@link Listheader} instead.
@@ -178,12 +183,13 @@ public class Listhead extends HeadersElement {
 
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Listheader))
-			throw new UiException("Unsupported child for listhead: "+child);
+			throw new UiException("Unsupported child for listhead: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
 }

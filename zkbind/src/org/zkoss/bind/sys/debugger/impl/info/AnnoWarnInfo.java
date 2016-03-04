@@ -18,23 +18,23 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class AnnoWarnInfo extends ExecutionInfoBase{
+public class AnnoWarnInfo extends ExecutionInfoBase {
 
 	public static final String TYPE = "anno-warn";
-	
+
 	String _attr;
 	String _anno;
-	
-	public AnnoWarnInfo(Component comp,String attr,String anno,String note) {
-		super(TYPE, null,comp, note);
+
+	public AnnoWarnInfo(Component comp, String attr, String anno, String note) {
+		super(TYPE, null, comp, note);
 		_attr = attr;
 		_anno = anno;
 	}
-	
-	public JSONObject toJSON(){
+
+	public JSONObject toJSON() {
 		JSONObject json = super.toJSON();
-		putEssential(json,"attr", _attr);
-		putEssential(json,"anno", _anno);
+		putEssential(json, "attr", _attr);
+		putEssential(json, "anno", _anno);
 		return json;
 	}
 

@@ -21,15 +21,17 @@ import org.zkoss.lang.Objects;
  * @author jimmy
  * @since 5.0.4
  */
-abstract public class FooterElement extends LabelImageElement {
+public abstract class FooterElement extends LabelImageElement {
 	private int _span = 1;
 	private String _align, _valign;
 
 	protected FooterElement() {
 	}
+
 	protected FooterElement(String label) {
 		super(label);
 	}
+
 	protected FooterElement(String label, String image) {
 		super(label, image);
 	}
@@ -40,6 +42,7 @@ abstract public class FooterElement extends LabelImageElement {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the horizontal alignment of this footer.
 	 */
 	public void setAlign(String align) {
@@ -48,12 +51,14 @@ abstract public class FooterElement extends LabelImageElement {
 			smartUpdate("align", _align);
 		}
 	}
+
 	/** Returns the vertical alignment of this footer.
 	 * <p>Default: null (system default: top).
 	 */
 	public String getValign() {
 		return _valign;
 	}
+
 	/** Sets the vertical alignment of this footer.
 	 */
 	public void setValign(String valign) {
@@ -62,12 +67,14 @@ abstract public class FooterElement extends LabelImageElement {
 			smartUpdate("valign", _valign);
 		}
 	}
+
 	/** Returns number of columns to span this footer.
 	 * Default: 1.
 	 */
 	public int getSpan() {
 		return _span;
 	}
+
 	/** Sets the number of columns to span this footer.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
@@ -77,12 +84,13 @@ abstract public class FooterElement extends LabelImageElement {
 			smartUpdate("span", _span);
 		}
 	}
+
 	void setWidthByClient(String width) {
 		setWidthDirectly(width);
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		render(renderer, "valign", _valign);
 		render(renderer, "align", _align);
@@ -90,4 +98,3 @@ abstract public class FooterElement extends LabelImageElement {
 			renderer.render("span", _span);
 	}
 }
-

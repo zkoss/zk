@@ -49,17 +49,22 @@ public class Text extends AbstractComponent implements RawId {
 
 	public Text() {
 	}
+
 	public Text(String value) {
 		setValue(value);
 	}
 
-	/** Returns the value.
-	 * <p>Default: "".
+	/**
+	 * Returns the value.
+	 * <p>
+	 * Default: "".
 	 */
 	public String getValue() {
 		return _value;
 	}
-	/** Sets the value.
+
+	/**
+	 * Sets the value.
 	 */
 	public void setValue(String value) {
 		if (value == null)
@@ -76,43 +81,50 @@ public class Text extends AbstractComponent implements RawId {
 	/** Whether to generate the value directly without ID. */
 	private boolean isIdRequired() {
 		final Page p = getPage();
-		return p == null || !isVisible()
-			|| getId().length() > 0 || !isRawLabel(p);
+		return p == null || !isVisible() || getId().length() > 0 || !isRawLabel(p);
 	}
+
 	private static boolean isRawLabel(Page page) {
-		final LanguageDefinition langdef =
-				page.getLanguageDefinition();
+		final LanguageDefinition langdef = page.getLanguageDefinition();
 		return langdef != null && langdef.isRawLabel();
 	}
 
-	/** Returns whether to encode the text, such as converting &lt;
-	 * to &amp;lt;.
-	 * <p>Default: true.
+	/**
+	 * Returns whether to encode the text, such as converting &lt; to &amp;lt;.
+	 * <p>
+	 * Default: true.
+	 * 
 	 * @since 5.0.8
 	 */
 	public boolean isEncode() {
 		return _encode;
 	}
-	/** Sets whether to encode the text, such as converting &lt;
-	 * to &amp;lt;.
-	 * <p>Default: true.
+
+	/**
+	 * Sets whether to encode the text, such as converting &lt; to &amp;lt;.
+	 * <p>
+	 * Default: true.
+	 * 
 	 * @since 5.0.8
 	 */
 	public void setEncode(boolean encode) {
 		_encode = encode;
 	}
 
-	//-- Component --//
-	/** Returns the widget class, "zhtml.Text".
+	// -- Component --//
+	/**
+	 * Returns the widget class, "zhtml.Text".
+	 * 
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {
 		return "zhtml.Text";
 	}
-	
+
 	private boolean invalidateParent() {
 		return !(getParent() instanceof Includer) && !isIdRequired();
 	}
+
 	public void setParent(Component parent) {
 		final Component old = getParent();
 		if (old != null && old != parent && invalidateParent())
@@ -124,10 +136,14 @@ public class Text extends AbstractComponent implements RawId {
 		if (parent != null && old != parent && invalidateParent())
 			parent.invalidate();
 	}
+
 	public void invalidate() {
-		if (!invalidateParent()) super.invalidate();
-		else if (getParent() != null) getParent().invalidate();
+		if (!invalidateParent())
+			super.invalidate();
+		else if (getParent() != null)
+			getParent().invalidate();
 	}
+
 	public void redraw(Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		if (!HtmlPageRenders.isDirectContent(exec)) {
@@ -142,7 +158,7 @@ public class Text extends AbstractComponent implements RawId {
 			out.write("\">");
 		}
 
-		out.write(_encode ? XMLs.encodeText(_value): _value);
+		out.write(_encode ? XMLs.encodeText(_value) : _value);
 
 		if (idRequired)
 			out.write("</span>");
@@ -153,8 +169,9 @@ public class Text extends AbstractComponent implements RawId {
 			rc.renderEnd(this);
 		}
 	}
+
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws IOException {
+			throws IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "value", _value);
@@ -162,6 +179,7 @@ public class Text extends AbstractComponent implements RawId {
 		if (!_encode)
 			renderer.render("encode", false);
 	}
+
 	protected boolean isChildable() {
 		return false;
 	}
@@ -169,11 +187,14 @@ public class Text extends AbstractComponent implements RawId {
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	protected class ExtraCtrl implements org.zkoss.zk.ui.ext.render.DirectContent {
 	}
 
-	//--ComponentCtrl--//
-	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+	// --ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(
+			2);
+
 	static {
 		_properties.put("encode", new BooleanPropertyAccess() {
 			public void setValue(Component cmp, Boolean value) {

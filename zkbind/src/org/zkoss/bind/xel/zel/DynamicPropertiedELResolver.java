@@ -29,83 +29,76 @@ import org.zkoss.zk.ui.ext.DynamicPropertied;
  */
 public class DynamicPropertiedELResolver extends BeanELResolver {
 
-	
-	public DynamicPropertiedELResolver(){
+	public DynamicPropertiedELResolver() {
 		super(false);
 	}
-	
-	
-	public Object getValue(ELContext context, Object base, Object property) throws NullPointerException,
-			PropertyNotFoundException, ELException {
+
+	public Object getValue(ELContext context, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
 		if (context == null) {
 			throw new NullPointerException();
 		}
 		Object val = null;
-		if(base instanceof DynamicPropertied){
+		if (base instanceof DynamicPropertied) {
 			//don't get value before check it types(DynamicPropertied), to prevent call super 
 			//BeanELResolver too early before other resolvers
-			try{
+			try {
 				val = super.getValue(context, base, property);
-			}catch(PropertyNotFoundException x){
-				if(((DynamicPropertied)base).hasDynamicProperty(property.toString())){
+			} catch (PropertyNotFoundException x) {
+				if (((DynamicPropertied) base).hasDynamicProperty(property.toString())) {
 					context.setPropertyResolved(true);
-					val = ((DynamicPropertied)base).getDynamicProperty(property.toString());
-				}else{
-					context.setPropertyResolved(false);//super always set resolved to true, reset it
+					val = ((DynamicPropertied) base).getDynamicProperty(property.toString());
+				} else {
+					context.setPropertyResolved(false); //super always set resolved to true, reset it
 				}
 			}
 		}
 		return val;
 	}
 
-	
-	public Class<?> getType(ELContext context, Object base, Object property) throws NullPointerException,
-			PropertyNotFoundException, ELException {
+	public Class<?> getType(ELContext context, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
 		Class<?> type = null;
-		if(base instanceof DynamicPropertied){
+		if (base instanceof DynamicPropertied) {
 			//don't get value before check it types, , to prevent call super 
 			//BeanELResolver too early before other resolvers
-			try{
+			try {
 				type = super.getType(context, base, property);
-			}catch(PropertyNotFoundException x){
+			} catch (PropertyNotFoundException x) {
 				context.setPropertyResolved(true);
 				type = Object.class;
 			}
 		}
-		
+
 		return type;
 	}
 
-	
-	public void setValue(ELContext context, Object base, Object property, Object value) throws NullPointerException,
-			PropertyNotFoundException, PropertyNotWritableException, ELException {
-		if(base instanceof DynamicPropertied){
+	public void setValue(ELContext context, Object base, Object property, Object value)
+			throws NullPointerException, PropertyNotFoundException, PropertyNotWritableException, ELException {
+		if (base instanceof DynamicPropertied) {
 			//don't get value before check it types, , to prevent call super 
 			//BeanELResolver too early before other resolvers
-			try{
-				super.setValue(context, base, property,value);
-			}catch(PropertyNotFoundException x){
+			try {
+				super.setValue(context, base, property, value);
+			} catch (PropertyNotFoundException x) {
 				context.setPropertyResolved(true);
-				((DynamicPropertied)base).setDynamicProperty(property.toString(), value);
+				((DynamicPropertied) base).setDynamicProperty(property.toString(), value);
 			}
 		}
 	}
 
-	
-	public boolean isReadOnly(ELContext context, Object base, Object property) throws NullPointerException,
-			PropertyNotFoundException, ELException {
-		if(base instanceof DynamicPropertied){
+	public boolean isReadOnly(ELContext context, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
+		if (base instanceof DynamicPropertied) {
 			return super.isReadOnly(context, base, property);
 		}
 		return true;
 	}
 
-	
 	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 		return null;
 	}
 
-	
 	public Class<?> getCommonPropertyType(ELContext context, Object base) {
 		return null;
 	}

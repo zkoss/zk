@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.util.Converter;
@@ -78,6 +79,7 @@ public class ConventionWires {
 	public static final void wireFellows(IdSpace idspace, Object controller) {
 		new ConventionWire(controller).wireFellows(idspace);
 	}
+
 	/** Wire fellow components and space owner with a custom separator.
 	 * The separator is used to separate the component ID and additional
 	 * information, such as event name.
@@ -86,10 +88,10 @@ public class ConventionWires {
 	 * the separator.
 	 * @see #wireFellows(IdSpace, Object)
 	 */
-	public static final
-	void wireFellows(IdSpace idspace, Object controller, char separator) {
+	public static final void wireFellows(IdSpace idspace, Object controller, char separator) {
 		new ConventionWire(controller, separator).wireFellows(idspace);
 	}
+
 	/** Wire fellow components and space owner with full control.
 	 * @param separator the separator used to separate the component ID and event name.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
@@ -97,9 +99,8 @@ public class ConventionWires {
 	 * @param ignoreXel whether to ignore variables defined in varible resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 */
-	public static final
-	void wireFellows(IdSpace idspace, Object controller, char separator,
-	boolean ignoreZScript, boolean ignoreXel) {
+	public static final void wireFellows(IdSpace idspace, Object controller, char separator, boolean ignoreZScript,
+			boolean ignoreXel) {
 		new ConventionWire(controller, separator, ignoreZScript, ignoreXel).wireFellows(idspace);
 	}
 
@@ -138,6 +139,7 @@ public class ConventionWires {
 	public static final void wireVariables(Component comp, Object controller) {
 		new ConventionWire(controller).wireVariables(comp);
 	}
+
 	/** Wire accessible variable objects of the specified component with a custom separator.
 	 * The separator is used to separate the component ID and additional
 	 * information, such as event name.
@@ -146,10 +148,10 @@ public class ConventionWires {
 	 * the separator.
 	 * @see #wireVariables(Component, Object)
 	 */
-	public static final
-	void wireVariables(Component comp, Object controller, char separator) {
+	public static final void wireVariables(Component comp, Object controller, char separator) {
 		new ConventionWire(controller, separator).wireVariables(comp);
 	}
+
 	/** Wire controller as a variable objects of the specified component with full control.
 	 * @param separator the separator used to separate the component ID and event name.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
@@ -157,9 +159,8 @@ public class ConventionWires {
 	 * @param ignoreXel whether to ignore variables defined in varible resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 */
-	public static final
-	void wireVariables(Component comp, Object controller, char separator,
-	boolean ignoreZScript, boolean ignoreXel) {
+	public static final void wireVariables(Component comp, Object controller, char separator, boolean ignoreZScript,
+			boolean ignoreXel) {
 		new ConventionWire(controller, separator, ignoreZScript, ignoreXel).wireVariables(comp);
 	}
 
@@ -197,6 +198,7 @@ public class ConventionWires {
 	public static final void wireVariables(Page page, Object controller) {
 		new ConventionWire(controller).wireVariables(page);
 	}
+
 	/** Wire accessible variable objects of the specified page with a custom separator.
 	 * The separator is used to separate the component ID and additional
 	 * information, such as event name.
@@ -205,10 +207,10 @@ public class ConventionWires {
 	 * the separator.
 	 * @see #wireVariables(Page, Object)
 	 */
-	public static final
-	void wireVariables(Page page, Object controller, char separator) {
+	public static final void wireVariables(Page page, Object controller, char separator) {
 		new ConventionWire(controller, separator).wireVariables(page);
 	}
+
 	/** Wire accessible variable objects of the specified page with complete control.
 	 * @param separator the separator used to separate the component ID and event name.
 	 * @param ignoreZScript whether to ignore variables defined in zscript when wiring
@@ -216,9 +218,8 @@ public class ConventionWires {
 	 * @param ignoreXel whether to ignore variables defined in variable resolver
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 */
-	public static final
-	void wireVariables(Page page, Object controller, char separator,
-	boolean ignoreZScript, boolean ignoreXel) {
+	public static final void wireVariables(Page page, Object controller, char separator, boolean ignoreZScript,
+			boolean ignoreXel) {
 		new ConventionWire(controller, separator, ignoreZScript, ignoreXel).wireVariables(page);
 	}
 
@@ -230,13 +231,42 @@ public class ConventionWires {
 	 * '$' is not applicable, you can invoke {@link #wireController(Component, Object, char)}
 	 * to use '_' as the separator.
 	 */
-	public static final
-	void wireController(Component comp, Object controller) {
+	public static final void wireController(Component comp, Object controller) {
 		wireController(comp, controller, '$');
+	}
+
+	/** Wire controller as an attribute of the specified component with a custom separator.
+	 * <p>The separator is used to separate the component ID and the controller.
+	 * By default, it is '$'. However, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke this method to use '_' as
+	 * the separator.
+	 */
+	public static final void wireController(Component comp, Object controller, char separator) {
+		//feature #3326788: support custom name
+		Object onm = comp.getAttribute("composerName");
+		if (onm instanceof String && ((String) onm).length() > 0) {
+			comp.setAttribute((String) onm, controller);
+		} else {
+			//bug zk-1298, the timing doesn't correct to get composerName in doBeforeComposeChildren
+			//fix by post processing in AttributesInfo#apply
+			comp.setAttribute("_$composer$_", controller); //stored in a special attribute
+		}
+
+		//after the fix of zk-1298, the id-$composer is always available no matter the composerName exsited or not.
+		comp.setAttribute(separator + "composer", controller);
+		//no need to check since it is more nature (new overwrites old)
+
+		//feature #2778513, support {id}$composer name
+		final String id = comp.getId();
+		comp.setAttribute(id + separator + "composer", controller);
+
+		//support {id}$ClassName
+		comp.setAttribute(composerNameByClass(id, controller.getClass(), separator), controller);
 	}
 
 	private interface WireAuService extends AuService {
 	}
+
 	/**
 	 * Wire controller's command method to be an AuService command that the command
 	 * can be triggered from client side JavaScript.
@@ -252,129 +282,82 @@ public class ConventionWires {
 	 * @since 8.0.0
 	 */
 	public static final void wireServiceCommand(final Component comp, final Object controller) {
-		Reflections.forMethods(controller.getClass(), Command.class,
-				new Reflections.MethodRunner<Command>() {
-					public void onMethod(Class<?> clazz, final Method method,
-							Command annotation) {
-						if ((method.getModifiers() & Modifier.STATIC) != 0)
-							throw new UiException(
-									"Cannot add forward to static method: "
-											+ method.getName());
-						AuService auService = comp.getAuService();
-						// no need to chain the same WireAuService it happens in a serializable case
-						final AuService prevAuService = auService instanceof WireAuService ? null : auService;
-						comp.setAuService(new WireAuService() {
-							private Converter<Pair<Class<?>, Object>, Object> converter;
+		Reflections.forMethods(controller.getClass(), Command.class, new Reflections.MethodRunner<Command>() {
+			public void onMethod(Class<?> clazz, final Method method, Command annotation) {
+				if ((method.getModifiers() & Modifier.STATIC) != 0)
+					throw new UiException("Cannot add forward to static method: " + method.getName());
+				AuService auService = comp.getAuService();
+				// no need to chain the same WireAuService it happens in a serializable case
+				final AuService prevAuService = auService instanceof WireAuService ? null : auService;
+				comp.setAuService(new WireAuService() {
+					private Converter<Pair<Class<?>, Object>, Object> converter;
 
-							{
-								String property = Library.getProperty(
-										"org.zkoss.zk.ui.jsonServiceParamConverter.class");
-								if (property == null) {
-									converter = new Converter<Pair<Class<?>, Object>, Object>() {
-										public Object convert(
-												Pair<Class<?>, Object> pair) {
-											return pair.getY();
+					{
+						String property = Library.getProperty("org.zkoss.zk.ui.jsonServiceParamConverter.class");
+						if (property == null) {
+							converter = new Converter<Pair<Class<?>, Object>, Object>() {
+								public Object convert(Pair<Class<?>, Object> pair) {
+									return pair.getY();
+								}
+							};
+						} else {
+
+							try {
+								converter = (Converter) Classes.newInstanceByThread(property);
+							} catch (Exception x) {
+								log.error(x.getMessage(), x);
+							}
+						}
+					}
+
+					public boolean service(AuRequest request, boolean everError) {
+						String command = request.getCommand();
+						if (command.startsWith("onAuServiceCommand$")) {
+							Map<String, Object> data = request.getData();
+							final String cmd = (String) data.get("cmd");
+							final List<Object> args = (List<Object>) data.get("args");
+							final List<String> stringList = new LinkedList<String>(
+									Arrays.asList(method.getAnnotation(Command.class).value()));
+							stringList.add(method.getName());
+							if (stringList.contains(cmd)) {
+								try {
+									Class<?>[] types = method.getParameterTypes();
+									if (types.length == 0)
+										method.invoke(controller);
+									else {
+										if (args == null || args.size() != types.length) {
+											throw new IllegalArgumentException(
+													"The number of the parameters from the json value are not the same as the method parameters");
 										}
-									};
-								} else {
 
-									try {
-										converter = (Converter) Classes
-												.newInstanceByThread(property);
-									} catch (Exception x) {
-										log.error(x.getMessage(), x);
+										Object[] params = new Object[types.length];
+										int index = 0;
+										for (Class<?> type : types) {
+											params[index] = converter
+													.convert(new Pair<Class<?>, Object>(type, args.get(index)));
+											index++;
+										}
+										method.invoke(controller, params);
 									}
+								} catch (Exception e) {
+									throw UiException.Aide.wrap(e);
 								}
 							}
-
-							public boolean service(AuRequest request,
-									boolean everError) {
-								String command = request.getCommand();
-								if (command.startsWith("onAuServiceCommand$")) {
-									Map<String, Object> data = request
-											.getData();
-									final String cmd = (String) data.get("cmd");
-									final List<Object> args = (List<Object>) data
-											.get("args");
-									final List<String> stringList = new LinkedList<String>(
-											Arrays.asList(method.getAnnotation(
-													Command.class).value()));
-									stringList.add(method.getName());
-									if (stringList.contains(cmd)) {
-										try {
-											Class<?>[] types = method
-													.getParameterTypes();
-											if (types.length == 0)
-												method.invoke(controller);
-											else {
-												if (args == null || args.size()
-														!= types.length) {
-													throw new IllegalArgumentException(
-															"The number of the parameters from the json value are not the same as the method parameters");
-												}
-
-												Object[] params = new Object[types.length];
-												int index = 0;
-												for (Class<?> type : types) {
-													params[index] = converter
-															.convert(
-																	new Pair<Class<?>, Object>(
-																			type,
-																			args.get(
-																					index)));
-													index++;
-												}
-												method.invoke(controller,
-														params);
-											}
-										} catch (Exception e) {
-											throw UiException.Aide.wrap(e);
-										}
-									}
-									return true;
-								}
-								if (prevAuService != null)
-									return prevAuService.service(request, everError);
-								return false;
-							}
-						});
+							return true;
+						}
+						if (prevAuService != null)
+							return prevAuService.service(request, everError);
+						return false;
 					}
 				});
+			}
+		});
 	}
-	/** Wire controller as an attribute of the specified component with a custom separator.
-	 * <p>The separator is used to separate the component ID and the controller.
-	 * By default, it is '$'. However, for Groovy or other environment that
-	 * '$' is not applicable, you can invoke this method to use '_' as
-	 * the separator.
-	 */
-	public static final
-	void wireController(Component comp, Object controller, char separator) {
-		//feature #3326788: support custom name
-		Object onm = comp.getAttribute("composerName");
-		if (onm instanceof String && ((String)onm).length() > 0) {
-			comp.setAttribute((String)onm, controller);
-		} else {
-			//bug zk-1298, the timing doesn't correct to get composerName in doBeforeComposeChildren
-			//fix by post processing in AttributesInfo#apply
-			comp.setAttribute("_$composer$_", controller);//stored in a special attribute
-		}
-		
-		//after the fix of zk-1298, the id-$composer is always available no matter the composerName exsited or not.
-		comp.setAttribute(separator + "composer", controller);
-		//no need to check since it is more nature (new overwrites old)
 
-		//feature #2778513, support {id}$composer name
-		final String id = comp.getId();
-		comp.setAttribute(id + separator + "composer", controller);
-	
-		//support {id}$ClassName
-		comp.setAttribute(
-			composerNameByClass(id, controller.getClass(), separator), controller);
-	}
 	private static String composerNameByClass(String id, Class cls, char separator) {
 		final String clsname = cls.getName();
 		int j = clsname.lastIndexOf('.');
-		return id + separator + (j >= 0 ? clsname.substring(j+1) : clsname);
+		return id + separator + (j >= 0 ? clsname.substring(j + 1) : clsname);
 	}
 
 	/**Wire implicit variables of the specified component into a controller Java object. 
@@ -382,11 +365,10 @@ public class ConventionWires {
 	 * @param comp the component
 	 * @param controller the controller object
 	 */
-	public static final
-	void wireImplicit(Component comp, Object controller) {
+	public static final void wireImplicit(Component comp, Object controller) {
 		new ConventionWire(controller, '$', true, true).wireImplicit(comp);
 	}
-	
+
 	/** <p>Adds forward conditions to myid source component so onXxx source 
 	 * event received by 
 	 * myid component can be forwarded to the specified target 
@@ -414,6 +396,7 @@ public class ConventionWires {
 	public static void addForwards(Component comp, Object controller) {
 		addForwards(comp, controller, '$');
 	}
+
 	/** Adds forward conditions to the specified component with a custom separator.
 	 * The separator is used to separate the component ID and additional
 	 * information, such as event name.
@@ -422,8 +405,7 @@ public class ConventionWires {
 	 * the separator.
 	 * @see #addForwards(Component, Object)
 	 */
-	public static
-	void addForwards(Component comp, Object controller, char separator) {
+	public static void addForwards(Component comp, Object controller, char separator) {
 		final Class cls = controller.getClass();
 		final Method[] mtds = cls.getMethods();
 		for (int j = 0; j < mtds.length; ++j) {
@@ -436,8 +418,8 @@ public class ConventionWires {
 					k = mdname.lastIndexOf(separator);
 					if (k >= 3) { //found '$'
 						final String srcevt = mdname.substring(0, k);
-						if ((k+1) < mdname.length()) {
-							final String srccompid = mdname.substring(k+1);
+						if ((k + 1) < mdname.length()) {
+							final String srccompid = mdname.substring(k + 1);
 							Object srccomp = xcomp.getAttributeOrFellow(srccompid, true);
 							if (srccomp == null) {
 								Page page = xcomp.getPage();
@@ -446,15 +428,17 @@ public class ConventionWires {
 							}
 							if (srccomp == null || !(srccomp instanceof Component)) {
 								if (log.isDebugEnabled())
-									log.debug("Cannot find the associated component to forward event: "+mdname);
+									log.debug("Cannot find the associated component to forward event: " + mdname);
 								break;
 							} else {
-								((Component)srccomp).addForward(srcevt, xcomp, mdname);
+								((Component) srccomp).addForward(srcevt, xcomp, mdname);
 								xcomp = (Component) srccomp;
 								mdname = srcevt;
 							}
 						} else {
-							throw new UiException("Illegal event method name(component id not specified or consecutive '"+separator+"'): "+md.getName());
+							throw new UiException(
+									"Illegal event method name(component id not specified or consecutive '" + separator
+											+ "'): " + md.getName());
 						}
 					}
 				} while (k >= 3);

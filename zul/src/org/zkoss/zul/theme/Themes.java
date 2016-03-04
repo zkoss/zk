@@ -39,25 +39,25 @@ import org.zkoss.zk.ui.Execution;
  * @author neillee
  */
 public class Themes {
-	
+
 	/**
 	 * Should use StandardTheme.DEFAULT_NAME
 	 * @deprecated since 6.5.2
 	 */
-	public final static String BREEZE_NAME = "breeze";
+	public static final String BREEZE_NAME = "breeze";
 
 	/**
 	 * Should use StandardTheme.DEFAULT_DISPLAY
 	 * @deprecated since 6.5.2
 	 */
-	public final static String BREEZE_DISPLAY = "Breeze";
+	public static final String BREEZE_DISPLAY = "Breeze";
 
 	/**
 	 * Should use StandardTheme.DEFAULT_PRIORITY
 	 * @deprecated since 6.5.2
 	 */
-	public final static int BREEZE_PRIORITY = 500;
-	
+	public static final int BREEZE_PRIORITY = 500;
+
 	/**
 	 * Sets the theme name using the current theme resolution strategy
 	 * Default strategy is to use cookies
@@ -65,15 +65,13 @@ public class Themes {
 	 * @param exe Execution
 	 * @param themeName the new intended theme name
 	 */
-	public static void setTheme (Execution exe, String themeName) {
+	public static void setTheme(Execution exe, String themeName) {
 		ThemeResolver themeResolver = ThemeFns.getThemeResolver();
-		
-		themeResolver.setTheme(
-			(HttpServletRequest)exe.getNativeRequest(), 
-			(HttpServletResponse)exe.getNativeResponse(), 
-			themeName);
+
+		themeResolver.setTheme((HttpServletRequest) exe.getNativeRequest(),
+				(HttpServletResponse) exe.getNativeResponse(), themeName);
 	}
-	
+
 	/**
 	 * Returns the theme specified using the current theme resolution strategy
 	 * Default strategy is to use cookies
@@ -82,12 +80,12 @@ public class Themes {
 	 * @return the name of the theme or a fall back theme name determined by the
 	 * theme resolution strategy used.
 	 */
-	public static String getTheme (Execution exe) {
+	public static String getTheme(Execution exe) {
 		ThemeResolver themeResolver = ThemeFns.getThemeResolver();
-		
+
 		return themeResolver.getTheme((HttpServletRequest) exe.getNativeRequest());
 	}
-	
+
 	/**
 	 * Returns the current theme name
 	 * @return the current theme name
@@ -95,7 +93,7 @@ public class Themes {
 	public static String getCurrentTheme() {
 		return ThemeFns.getCurrentTheme();
 	}
-	
+
 	/**
 	 * Returns true if the theme is registered
 	 * @param themeName the name of the theme
@@ -105,7 +103,7 @@ public class Themes {
 		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
 		return themeRegistry.hasTheme(themeName);
 	}
-	
+
 	/**
 	 * Returns an array of registered theme names
 	 * @return an array of registered theme names
@@ -115,11 +113,11 @@ public class Themes {
 		Theme[] themes = themeRegistry.getThemes();
 		String[] themeNames = new String[themes.length];
 		for (int i = 0; i < themes.length; i++) {
-			themeNames[i] = themes[i].getName();			
+			themeNames[i] = themes[i].getName();
 		}
 		return themeNames;
 	}
-	
+
 	/**
 	 * Register the theme, so it becomes available in the theme list
 	 * 
@@ -133,7 +131,7 @@ public class Themes {
 		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
 		themeRegistry.register(new StandardTheme(themeName));
 	}
-	
+
 	/**
 	 * Register the theme, and specifies its origin (e.g. from JAR or from FOLDER)
 	 * Please use <code>Themes.register("custom", Themes.ThemeOrigin.FOLDER)</code> 
@@ -151,7 +149,7 @@ public class Themes {
 		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
 		themeRegistry.register(new StandardTheme(themeName, origin));
 	}
-	
+
 	/**
 	 * Register the theme with details
 	 * 
@@ -188,7 +186,7 @@ public class Themes {
 		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
 		themeRegistry.register(new StandardTheme(themeName, displayName, priority, origin));
 	}
-	
+
 	/**
 	 * Set the display name (human name) of the theme
 	 * 
@@ -206,7 +204,7 @@ public class Themes {
 			((StandardTheme) theme).setDisplayName(displayName);
 		}
 	}
-	
+
 	/**
 	 * Return the display name (human name) of the theme
 	 *
@@ -226,7 +224,7 @@ public class Themes {
 		}
 		return Strings.isEmpty(displayName) ? capitalize(themeName) : displayName;
 	}
-	
+
 	/**
 	 * Set the priority of the theme.
 	 * @param themeName theme name
@@ -241,10 +239,10 @@ public class Themes {
 		Theme theme = themeRegistry.getTheme(themeName);
 
 		if (theme instanceof StandardTheme) {
-			((StandardTheme)theme).setPriority(priority);
+			((StandardTheme) theme).setPriority(priority);
 		}
 	}
-	
+
 	/**
 	 * Return the priority of the given theme
 	 * 
@@ -258,22 +256,20 @@ public class Themes {
 	public static int getPriority(String themeName) {
 		ThemeRegistry themeRegistry = ThemeFns.getThemeRegistry();
 		Theme theme = themeRegistry.getTheme(themeName);
-		
+
 		if (theme instanceof StandardTheme) {
-			return ((StandardTheme)theme).getPriority();
+			return ((StandardTheme) theme).getPriority();
 		} else {
 			return Integer.MAX_VALUE;
 		}
 	}
-	
-	
-	
+
 	// helper //
-	
+
 	private static String capitalize(String str) {
-		if(Strings.isEmpty(str))
+		if (Strings.isEmpty(str))
 			return str;
 		return Character.toUpperCase(str.charAt(0)) + str.substring(1);
 	}
-	
+
 }

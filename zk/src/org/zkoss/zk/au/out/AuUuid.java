@@ -12,8 +12,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Rename the UUID.
@@ -26,6 +26,6 @@ public class AuUuid extends AuResponse {
 	 * @param oldid the old UUID.
 	 */
 	public AuUuid(Component comp, String oldid) {
-		super("uuid", comp, new String[] {oldid, comp.getUuid()});
+		super("uuid", comp, new String[] { oldid, comp.getUuid() });
 	}
 }

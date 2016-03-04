@@ -28,6 +28,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Treerow extends XulElement {
 	public Treerow() {
 	}
+
 	/** Instantiates a treerow with a treecel holding the given label.
 	 * @since 5.0.8
 	 */
@@ -40,7 +41,7 @@ public class Treerow extends XulElement {
 	public Tree getTree() {
 		for (Component p = this; (p = p.getParent()) != null;)
 			if (p instanceof Tree)
-				return (Tree)p;
+				return (Tree) p;
 		return null;
 	}
 
@@ -48,7 +49,7 @@ public class Treerow extends XulElement {
 	 */
 	public int getLevel() {
 		final Component parent = getParent();
-		return parent != null ? ((Treeitem)parent).getLevel(): 0;
+		return parent != null ? ((Treeitem) parent).getLevel() : 0;
 	}
 
 	/** Returns the {@link Treechildren} associated with this
@@ -60,7 +61,7 @@ public class Treerow extends XulElement {
 	 */
 	public Treechildren getLinkedTreechildren() {
 		final Component parent = getParent();
-		return parent != null ? ((Treeitem)parent).getTreechildren(): null;
+		return parent != null ? ((Treeitem) parent).getTreechildren() : null;
 	}
 
 	/** Returns the label of the {@link Treecell} it contains, or null
@@ -68,9 +69,10 @@ public class Treerow extends XulElement {
 	 * @since 5.0.8
 	 */
 	public String getLabel() {
-		final Treecell cell = (Treecell)getFirstChild();
-		return cell != null ? cell.getLabel(): null;
+		final Treecell cell = (Treecell) getFirstChild();
+		return cell != null ? cell.getLabel() : null;
 	}
+
 	/** Sets the label of the {@link Treecell} it contains.
 	 *
 	 * <p>If treecell are not created, we automatically create it.
@@ -82,14 +84,16 @@ public class Treerow extends XulElement {
 	public void setLabel(String label) {
 		autoFirstCell().setLabel(label);
 	}
+
 	/** Returns the image of the {@link Treecell} it contains, or null
 	 * if no such cell.
 	 * @since  5.0.8
 	 */
 	public String getImage() {
-		final Treecell cell = (Treecell)getFirstChild();
-		return cell != null ? cell.getImage(): null;
+		final Treecell cell = (Treecell) getFirstChild();
+		return cell != null ? cell.getImage() : null;
 	}
+
 	/** Sets the image of the {@link Treecell} it contains.
 	 *
 	 * <p>If treecell are not created, we automatically create it.
@@ -101,8 +105,9 @@ public class Treerow extends XulElement {
 	public void setImage(String image) {
 		autoFirstCell().setImage(image);
 	}
+
 	private Treecell autoFirstCell() {
-		Treecell cell = (Treecell)getFirstChild();
+		Treecell cell = (Treecell) getFirstChild();
 		if (cell == null) {
 			cell = new Treecell();
 			cell.applyProperties();
@@ -110,33 +115,39 @@ public class Treerow extends XulElement {
 		}
 		return cell;
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setHflex(String flex) {
 	}
-	
+
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-treerow" : _zclass;
 	}
+
 	public void smartUpdate(String attr, Object value) {
 		super.smartUpdate(attr, value);
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treeitem))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Treecell))
-			throw new UiException("Unsupported child for tree row: "+child);
+			throw new UiException("Unsupported child for tree row: " + child);
 		super.beforeChildAdded(child, refChild);
-	}}
+	}
+}

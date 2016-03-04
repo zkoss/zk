@@ -28,11 +28,10 @@ import org.zkoss.web.theme.ThemeRegistry;
  * @since 6.5.2
  */
 public class DesktopThemeRegistry implements ThemeRegistry {
-	
+
 	// a mapping from theme name to Theme
-	private Map<String, Theme> 
-		_registry = new HashMap<String, Theme>();
-	
+	private Map<String, Theme> _registry = new HashMap<String, Theme>();
+
 	/**
 	 * Initialize the registry with the default theme (a.k.a Breeze).
 	 * 
@@ -52,7 +51,7 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 		_registry.put(theme.getName(), theme);
 		return true;
 	}
-	
+
 	/**
 	 * Remove a theme from the list of available desktop themes
 	 * @param theme the theme to be removed
@@ -67,18 +66,18 @@ public class DesktopThemeRegistry implements ThemeRegistry {
 	 * @return the list of currently registered desktop themes
 	 */
 	public Theme[] getThemes() {
-		Collection<Theme> themes = _registry.values();		
-		return themes.toArray(new Theme[themes.size()]);		
+		Collection<Theme> themes = _registry.values();
+		return themes.toArray(new Theme[themes.size()]);
 	}
 
 	/**
 	 * Check if a dekstop theme with the given name is available to use
 	 * @return true if theme is found; false otherwise
 	 */
-	public boolean hasTheme(String themeName) {		
+	public boolean hasTheme(String themeName) {
 		return _registry.containsKey(themeName);
 	}
-	
+
 	/**
 	 * Returns the desktop theme with the given name
 	 * @param themeName theme name

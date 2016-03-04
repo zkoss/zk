@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.action;
 
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 
 import org.zkoss.web.servlet.dsp.DspException;
 
@@ -33,6 +33,7 @@ public class Choose extends AbstractAction {
 	/*package*/ boolean isMatched() {
 		return _matched;
 	}
+
 	/** Sets whether any child {@link When} is evaluated to true. */
 	/*package*/ void setMatched(boolean matched) {
 		_matched = matched;
@@ -42,6 +43,7 @@ public class Choose extends AbstractAction {
 	public boolean isTrim() {
 		return _trim;
 	}
+
 	/** Sets whether to trim the result.
 	 * <p>Default: true.
 	 */
@@ -50,8 +52,7 @@ public class Choose extends AbstractAction {
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (nested && isEffective()) {
 			final StringWriter out = getFragmentOut(ac, _trim);
 			renderFragment(ac, out, _trim);

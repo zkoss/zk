@@ -18,12 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.json.JSONArray;
 import org.zkoss.web.servlet.Charsets;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
  * Utilities to allow developers to start an execution in foreign Ajax channel.
@@ -55,8 +55,8 @@ public class Bridge {
 	 * @param desktop the desktop you want to access.
 	 * You could retrieve by use of {@link #getDesktop}.
 	 */
-	public static Bridge start(ServletContext svlctx, HttpServletRequest request,
-	HttpServletResponse response, Desktop desktop) {
+	public static Bridge start(ServletContext svlctx, HttpServletRequest request, HttpServletResponse response,
+			Desktop desktop) {
 		try {
 			return new Bridge(svlctx, request, response, desktop, Charsets.setup(request, response, "utf-8"));
 		} catch (Exception ex) { //not possible
@@ -67,27 +67,27 @@ public class Bridge {
 	/** Returns the desktop of the given desktop ID, or null if not found.
 	 * @param dtid the desktop's ID.
 	 */
-	public static Desktop
-	getDesktop(ServletContext svlctx, HttpServletRequest request, String dtid) {
-		return ((WebAppCtrl)WebManager.getWebApp(svlctx))
-			.getDesktopCache(WebManager.getSession(svlctx, request))
-			.getDesktop(dtid);
+	public static Desktop getDesktop(ServletContext svlctx, HttpServletRequest request, String dtid) {
+		return ((WebAppCtrl) WebManager.getWebApp(svlctx)).getDesktopCache(WebManager.getSession(svlctx, request))
+				.getDesktop(dtid);
 	}
 
 	/** Constructor.
 	 * Don't invoke this directly. Rather, use {@link #start} instead.
 	 */
-	protected Bridge(ServletContext svlctx, HttpServletRequest request,
-	HttpServletResponse response, Desktop desktop, Object locale) throws Exception {
+	protected Bridge(ServletContext svlctx, HttpServletRequest request, HttpServletResponse response, Desktop desktop,
+			Object locale) throws Exception {
 		_exec = new ExecutionImpl(svlctx, request, response, desktop, null);
-		_updctx = ((WebAppCtrl)desktop.getWebApp()).getUiEngine().startUpdate(_exec);
+		_updctx = ((WebAppCtrl) desktop.getWebApp()).getUiEngine().startUpdate(_exec);
 		_locale = locale;
 	}
+
 	/** Returns the execution.
 	 */
 	public Execution getExecution() {
 		return _exec;
 	}
+
 	/** Returns the result in the JavaScript.
 	 * The caller shall send it back and evaluate it at the client (<code>eval(jscode);</code>).
 	 * <p>After calling this method, the caller shall not modify the component's state any more.
@@ -95,15 +95,14 @@ public class Bridge {
 	public String getResult() {
 		final Desktop desktop = _exec.getDesktop();
 		try {
-			JSONArray result = ((WebAppCtrl)desktop.getWebApp())
-				.getUiEngine().finishUpdate(_updctx);
-			return new StringBuffer(512)
-				.append("zAu.doCmds('").append(desktop.getId()).append("',")
-				.append(result.toString()).append(");").toString();
+			JSONArray result = ((WebAppCtrl) desktop.getWebApp()).getUiEngine().finishUpdate(_updctx);
+			return new StringBuffer(512).append("zAu.doCmds('").append(desktop.getId()).append("',")
+					.append(result.toString()).append(");").toString();
 		} catch (Exception ex) { //not possible
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+
 	/** Closes the execution such that other requests targeting
 	 * the same desktop can be processed.
 	 * It must be called. Otherwise, the whole desktop might not be able
@@ -112,7 +111,7 @@ public class Bridge {
 	public void close() {
 		final HttpServletRequest request = (HttpServletRequest) _exec.getNativeRequest();
 		try {
-			((WebAppCtrl)_exec.getDesktop().getWebApp()).getUiEngine().closeUpdate(_updctx);
+			((WebAppCtrl) _exec.getDesktop().getWebApp()).getUiEngine().closeUpdate(_updctx);
 			_updctx = null;
 			_exec = null;
 		} catch (Exception ex) { //not possible

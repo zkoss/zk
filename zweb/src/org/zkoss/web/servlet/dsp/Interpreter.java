@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp;
 
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -25,10 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.web.servlet.dsp.impl.Parser;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
-
-import org.zkoss.web.servlet.dsp.impl.Parser;
 
 /**
  * The interpreter of the DSP file.
@@ -39,7 +38,7 @@ import org.zkoss.web.servlet.dsp.impl.Parser;
  * @author tomyeh
  */
 public class Interpreter {
-//	private static final Logger log = LoggerFactory.getLogger(Interpreter.class);
+	//	private static final Logger log = LoggerFactory.getLogger(Interpreter.class);
 
 	/** Returns the content type by specifying a path, or null
 	 * if no content type is available or path is null.
@@ -48,24 +47,28 @@ public class Interpreter {
 	 * Note: it considers the extension of "a.css.dsp" as "css".
 	 */
 	public static final String getContentType(String path) {
-		if (path == null) return null;
+		if (path == null)
+			return null;
 
 		int j = path.lastIndexOf('.');
-		if (j < 0 || path.indexOf('/', j + 1) >= 0) return null;
+		if (j < 0 || path.indexOf('/', j + 1) >= 0)
+			return null;
 
 		int k = path.indexOf(';', j + 1); //it might contain session-id
-		String ext =
-			(k >= 0 ? path.substring(j + 1, k): path.substring(j + 1))
-			.toLowerCase(java.util.Locale.ENGLISH);
+		String ext = (k >= 0 ? path.substring(j + 1, k) : path.substring(j + 1)).toLowerCase(java.util.Locale.ENGLISH);
 		if ("dsp".equals(ext)) {
-			if (j == 0) return null; //unknown
+			if (j == 0)
+				return null; //unknown
 			k = path.lastIndexOf('.', j - 1);
-			if (k < 0) return null; //unknown
+			if (k < 0)
+				return null; //unknown
 			ext = path.substring(k + 1, j);
-			if (ext.indexOf('/') >= 0) return null; //unknown
+			if (ext.indexOf('/') >= 0)
+				return null; //unknown
 		}
 		return ContentTypes.getContentType(ext);
 	}
+
 	/** Constructor.
 	 */
 	public Interpreter() {
@@ -81,11 +84,11 @@ public class Interpreter {
 	 * action, "text/html" is assumed.
 	 * @since 3.0.0
 	 */
-	public final Interpretation parse(String content, String ctype,
-	XelContext xelc, Locator loc)
-	throws DspException, IOException,  XelException {
+	public final Interpretation parse(String content, String ctype, XelContext xelc, Locator loc)
+			throws DspException, IOException, XelException {
 		return new Parser().parse(content, ctype, xelc, loc);
 	}
+
 	/** Interprets the specified content and generates the result to
 	 * the output specified in {@link DspContext}.
 	 *
@@ -96,11 +99,11 @@ public class Interpreter {
 	 * action, "text/html" is assumed.
 	 * @since 3.0.0
 	 */
-	public final void interpret(DspContext dc, String content,
-	String ctype, XelContext xelc)
-	throws DspException, IOException, XelException {
+	public final void interpret(DspContext dc, String content, String ctype, XelContext xelc)
+			throws DspException, IOException, XelException {
 		parse(content, ctype, xelc, dc.getLocator()).interpret(dc);
 	}
+
 	/** Interprets the specified content based on the HTTP request.
 	 * It actually wraps the HTTP request into {@link DspContext}
 	 * and then invoke {@link #interpret(DspContext, String, String, XelContext)}.
@@ -113,14 +116,11 @@ public class Interpreter {
 	 * no page action at all. If it is not specified and not page
 	 * action, "text/html" is assumed.
 	 */
-	public final void interpret(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response,
-	String content, String ctype, Locator locator)
-	throws DspException, IOException, XelException {
-		interpret(
-			new ServletDspContext(ctx, request, response, locator),
-			content, ctype, null);
+	public final void interpret(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			String content, String ctype, Locator locator) throws DspException, IOException, XelException {
+		interpret(new ServletDspContext(ctx, request, response, locator), content, ctype, null);
 	}
+
 	/** Interprets the specified content based on the HTTP request.
 	 * It actually wraps the HTTP request into {@link DspContext}
 	 * and then invoke {@link #interpret(DspContext, String, String, XelContext)}.
@@ -137,12 +137,8 @@ public class Interpreter {
 	 * In other words, response.getWriter() is used.
 	 * @since 2.4.1
 	 */
-	public final void interpret(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response, Writer out,
-	String content, String ctype, Locator locator)
-	throws DspException, IOException, XelException {
-		interpret(
-			new ServletDspContext(ctx, request, response, out, locator),
-			content, ctype, null);
+	public final void interpret(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			Writer out, String content, String ctype, Locator locator) throws DspException, IOException, XelException {
+		interpret(new ServletDspContext(ctx, request, response, out, locator), content, ctype, null);
 	}
 }

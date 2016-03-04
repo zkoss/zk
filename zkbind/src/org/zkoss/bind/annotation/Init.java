@@ -60,7 +60,7 @@ import java.lang.annotation.Target;
  * @author dennis
  * @since 6.0.0
  */
-@Target({ElementType.METHOD,ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Init {
 	boolean superclass() default false;

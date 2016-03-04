@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import org.zkoss.lang.SystemException;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Expectable;
+import org.zkoss.lang.SystemException;
 import org.zkoss.zel.ELException;
 
 /**
@@ -47,11 +47,10 @@ public class UiException extends SystemException {
 				t = t.getCause();
 			}
 			if (skipWrapping)
-				return (OperationException)
-						Exceptions.wrap(t, OperationException.class);
-			return (UiException)
-				Exceptions.wrap(t, UiException.class);
+				return (OperationException) Exceptions.wrap(t, OperationException.class);
+			return (UiException) Exceptions.wrap(t, UiException.class);
 		}
+
 		/** Converts an exception to UiException or OperationException
 		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
@@ -66,12 +65,11 @@ public class UiException extends SystemException {
 				t = t.getCause();
 			}
 			if (skipWrapping)
-				return (OperationException)
-					Exceptions.wrap(t, OperationException.class, msg);
+				return (OperationException) Exceptions.wrap(t, OperationException.class, msg);
 
-			return (UiException)
-				Exceptions.wrap(t, UiException.class, msg);
+			return (UiException) Exceptions.wrap(t, UiException.class, msg);
 		}
+
 		/** Converts an exception to UiException or OperationException
 		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
@@ -86,11 +84,10 @@ public class UiException extends SystemException {
 				t = t.getCause();
 			}
 			if (skipWrapping)
-				return (OperationException)
-					Exceptions.wrap(t, OperationException.class, code, fmtArgs);
-			return (UiException)
-				Exceptions.wrap(t, UiException.class, code, fmtArgs);
+				return (OperationException) Exceptions.wrap(t, OperationException.class, code, fmtArgs);
+			return (UiException) Exceptions.wrap(t, UiException.class, code, fmtArgs);
 		}
+
 		/** Converts an exception to UiException or OperationException
 		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
@@ -105,11 +102,10 @@ public class UiException extends SystemException {
 				t = t.getCause();
 			}
 			if (skipWrapping)
-				return (OperationException)
-					Exceptions.wrap(t, OperationException.class, code, fmtArg);
-			return (UiException)
-				Exceptions.wrap(t, UiException.class, code, fmtArg);
+				return (OperationException) Exceptions.wrap(t, OperationException.class, code, fmtArg);
+			return (UiException) Exceptions.wrap(t, UiException.class, code, fmtArg);
 		}
+
 		/** Converts an exception to UiException or OperationException
 		 * depending on whether t implements Expectable.
 		 * @see Exceptions#wrap
@@ -124,40 +120,46 @@ public class UiException extends SystemException {
 				t = t.getCause();
 			}
 			if (skipWrapping)
-				return (OperationException)
-					Exceptions.wrap(t, OperationException.class, code);
-			return (UiException)
-				Exceptions.wrap(t, UiException.class, code);
+				return (OperationException) Exceptions.wrap(t, OperationException.class, code);
+			return (UiException) Exceptions.wrap(t, UiException.class, code);
 		}
 	}
 
 	public UiException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public UiException(String s) {
 		super(s);
 	}
+
 	public UiException(Throwable cause) {
 		super(cause);
 	}
+
 	public UiException() {
 	}
 
 	public UiException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public UiException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public UiException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public UiException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public UiException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public UiException(int code) {
 		super(code);
 	}

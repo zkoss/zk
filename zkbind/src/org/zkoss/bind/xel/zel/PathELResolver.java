@@ -34,24 +34,23 @@ import org.zkoss.zel.impl.parser.Node;
 public class PathELResolver extends ELResolver {
 	private LinkedList<Integer> _numOfKids = new LinkedList<Integer>();
 	private LinkedList<Path> _paths = new LinkedList<Path>();
-	
+
 	private String toNodeString(ELContext ctx) {
 		final Node node0 = (Node) ctx.getContext(Node.class);
 		return BindELContext.toNodeString(node0, new StringBuilder());
 	}
-	
-	
+
 	public Object getValue(ELContext ctx, Object base, Object property)
 			throws NullPointerException, PropertyNotFoundException, ELException {
-        if (ctx == null) {
-            throw new NullPointerException();
-        }
+		if (ctx == null) {
+			throw new NullPointerException();
+		}
 		Integer numOfKids;
 		Path path;
-        if (base == null) { //init
-        	numOfKids = (Integer) ctx.getContext(AstIdentifier.class); //Number of siblings of AstIdentifier
+		if (base == null) { //init
+			numOfKids = (Integer) ctx.getContext(AstIdentifier.class); //Number of siblings of AstIdentifier
 			path = new Path();
-        } else {
+		} else {
 			numOfKids = _numOfKids.removeFirst();
 			path = _paths.removeFirst();
 		}
@@ -72,59 +71,51 @@ public class PathELResolver extends ELResolver {
 				_paths.addFirst(path);
 			}
 		}
-        return null;
+		return null;
 	}
 
-	
 	public Class<?> getType(ELContext ctx, Object base, Object property)
 			throws NullPointerException, PropertyNotFoundException, ELException {
-        if (ctx == null) {
-            throw new NullPointerException();
-        }
+		if (ctx == null) {
+			throw new NullPointerException();
+		}
 
-        // for null object with form binding
-        if (!_numOfKids.isEmpty()) {
-	        Integer numOfKids = _numOfKids.removeFirst();
-	        Path path = _paths.removeFirst();
-	        
-	    	//maintain the number of kids
-	    	int nums = numOfKids.intValue() - 1;
-	    	numOfKids = new Integer(nums);
-	    	ctx.putContext(Integer.class, numOfKids);
-	
-	    	//maintain the form path field
-	    	path.add(toNodeString(ctx), Objects.toString(property));
-	    	ctx.putContext(Path.class, path);
-        }
-    	return null;
+		// for null object with form binding
+		if (!_numOfKids.isEmpty()) {
+			Integer numOfKids = _numOfKids.removeFirst();
+			Path path = _paths.removeFirst();
+
+			//maintain the number of kids
+			int nums = numOfKids.intValue() - 1;
+			numOfKids = new Integer(nums);
+			ctx.putContext(Integer.class, numOfKids);
+
+			//maintain the form path field
+			path.add(toNodeString(ctx), Objects.toString(property));
+			ctx.putContext(Path.class, path);
+		}
+		return null;
 
 	}
 
-	
-	public void setValue(ELContext ctx, Object base, Object property,
-			Object value) throws NullPointerException,
-			PropertyNotFoundException, PropertyNotWritableException,
-			ELException {
-        if (ctx == null) {
-            throw new NullPointerException();
-        }
-		
-        //#getType() will maintain number of kids and path field, just let go
+	public void setValue(ELContext ctx, Object base, Object property, Object value)
+			throws NullPointerException, PropertyNotFoundException, PropertyNotWritableException, ELException {
+		if (ctx == null) {
+			throw new NullPointerException();
+		}
+
+		//#getType() will maintain number of kids and path field, just let go
 	}
 
-	
 	public boolean isReadOnly(ELContext context, Object base, Object property)
 			throws NullPointerException, PropertyNotFoundException, ELException {
 		return true;
 	}
 
-	
-	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
-			Object base) {
+	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 		return null;
 	}
 
-	
 	public Class<?> getCommonPropertyType(ELContext context, Object base) {
 		return null;
 	}

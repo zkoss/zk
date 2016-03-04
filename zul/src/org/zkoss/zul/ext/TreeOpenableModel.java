@@ -89,7 +89,7 @@ public interface TreeOpenableModel {
 	 * Returns the number of paths that are opened.
 	 */
 	public int getOpenCount();
-	
+
 	/**
 	 * Returns the first path in the open. How first is defined is up to
 	 * implementors.

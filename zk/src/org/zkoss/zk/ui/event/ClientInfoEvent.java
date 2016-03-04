@@ -16,12 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import java.util.TimeZone;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.zkoss.util.TimeZones;
-
 import org.zkoss.zk.au.AuRequest;
 
 /**
@@ -50,17 +49,17 @@ public class ClientInfoEvent extends Event {
 	public static final ClientInfoEvent getClientInfoEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
 		//Note: ClientInfoEvent is a broadcast event
-		final List inf = (List)data.get("");
-		return new ClientInfoEvent(request.getCommand(),
-			getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
-			getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7),
-			getDouble(inf, 8), (String)inf.get(9));
+		final List inf = (List) data.get("");
+		return new ClientInfoEvent(request.getCommand(), getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
+				getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7), getDouble(inf, 8), (String) inf.get(9));
 	}
+
 	private static final int getInt(List inf, int j) {
-		return ((Integer)inf.get(j)).intValue();
+		return ((Integer) inf.get(j)).intValue();
 	}
+
 	private static final double getDouble(List inf, int j) {
-		return Double.parseDouble((String)inf.get(j));
+		return Double.parseDouble((String) inf.get(j));
 	}
 
 	/** Constructs an event to hold the client-info.
@@ -77,9 +76,8 @@ public class ClientInfoEvent extends Event {
 	 * @param dpr the device's devicePixelRatio
 	 * @param orient the device's orientation
 	 */
-	public ClientInfoEvent(String name, int timeZoneOfs,
-	int scrnwd, int scrnhgh, int colorDepth,
-	int dtwd, int dthgh, int dtx, int dty, double dpr, String orient) {
+	public ClientInfoEvent(String name, int timeZoneOfs, int scrnwd, int scrnhgh, int colorDepth, int dtwd, int dthgh,
+			int dtx, int dty, double dpr, String orient) {
 		super(name, null);
 
 		final StringBuffer sb = new StringBuffer(8).append("GMT");
@@ -95,41 +93,48 @@ public class ClientInfoEvent extends Event {
 		_dthgh = dthgh;
 		_dtx = dtx;
 		_dty = dty;
-		
+
 		//devicePixelRatio and orientation on tablet device
 		_dpr = dpr;
 		_orient = orient;
 	}
+
 	/** Returns the time zone of the client.
 	 */
 	public TimeZone getTimeZone() {
 		return _timeZone;
 	}
+
 	/** Returns the pixel width of the client's screen.
 	 */
 	public int getScreenWidth() {
 		return _scrnwd;
 	}
+
 	/** Returns the pixel height of the client's screen.
 	 */
 	public int getScreenHeight() {
 		return _scrnhgh;
 	}
+
 	/** Returns the maximum number of colors the client's screen supports.
 	 */
 	public int getColorDepth() {
 		return _colorDepth;
 	}
+
 	/** Returns the pixel width of the client's desktop.
 	 */
 	public int getDesktopWidth() {
 		return _dtwd;
 	}
+
 	/** Returns the pixel height of the client's desktop.
 	 */
 	public int getDesktopHeight() {
 		return _dthgh;
 	}
+
 	/** The the current horizontal pixel location of the top-left corner of
 	 * the document in the window.
 	 * It is changed by user when he scrolls the browser.
@@ -138,6 +143,7 @@ public class ClientInfoEvent extends Event {
 	public int getDesktopXOffset() {
 		return _dtx;
 	}
+
 	/** The the current vertical pixel location of the top-left corner of
 	 * the document in the window.
 	 * It is changed by user when he scrolls the browser.
@@ -146,6 +152,7 @@ public class ClientInfoEvent extends Event {
 	public int getDesktopYOffset() {
 		return _dty;
 	}
+
 	/**
 	 * Return the current device pixel ratio on tablet/mobile device,
 	 * otherwise return 1.0 instead.
@@ -154,6 +161,7 @@ public class ClientInfoEvent extends Event {
 	public double getDevicePixelRatio() {
 		return _dpr;
 	}
+
 	/**
 	 * Return the current orientation. The orientation is portrait when the
 	 * media feature height is greater than or equal to media feature width,
@@ -163,6 +171,7 @@ public class ClientInfoEvent extends Event {
 	public String getOrientation() {
 		return _orient;
 	}
+
 	/**
 	 * Utility to check if the current orientation is portrait on tablet/mobile device.
 	 * @since 6.5.0
@@ -170,6 +179,7 @@ public class ClientInfoEvent extends Event {
 	public boolean isPortrait() {
 		return "portrait".equals(_orient);
 	}
+
 	/**
 	 * Utility to check if the current orientation is portrait on tablet/mobile device.
 	 * @see #isPortrait()
@@ -178,18 +188,20 @@ public class ClientInfoEvent extends Event {
 	public boolean isVertical() {
 		return isPortrait();
 	}
+
 	/**
 	 * Utility to check if the current orientation is landscape on tablet/mobile device.
 	 * @since 6.5.0
-	 */	
-	public boolean isLandscape(){
+	 */
+	public boolean isLandscape() {
 		return "landscape".equals(_orient);
 	}
+
 	/**
 	 * Utility to check if the current orientation is landscape on tablet/mobile device.
 	 * @see #isLandscape()
 	 * @since 6.5.0
-	 */	
+	 */
 	public boolean isHorizontal() {
 		return isLandscape();
 	}

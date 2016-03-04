@@ -14,15 +14,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Simplify the parsing of arguments.
@@ -40,35 +40,33 @@ import org.zkoss.zk.xel.Evaluator;
 	/*package*/ ArgumentInfo(Map<String, String> args) {
 		if (args != null && !args.isEmpty()) {
 			_args = new LinkedHashMap<String, ExValue>();
-			for (Map.Entry<String, String> me: args.entrySet())
+			for (Map.Entry<String, String> me : args.entrySet())
 				_args.put(me.getKey(), new ExValue(me.getValue(), Object.class));
 		} else
 			_args = null;
 	}
 
-	/*package*/ Object newInstance(Class<?> cls, Evaluator eval, Page page)
-	throws Exception {
+	/*package*/ Object newInstance(Class<?> cls, Evaluator eval, Page page) throws Exception {
 		if (_args != null) {
 			Map<String, Object> args = resolveArguments(eval, page);
 			try {
-				return cls.getConstructor(new Class[] {Map.class})
-					.newInstance(new Object[] {args});
+				return cls.getConstructor(new Class[] { Map.class }).newInstance(new Object[] { args });
 			} catch (NoSuchMethodException ex) {
 			}
 			try {
-				return cls.getConstructor(new Class[] {Object[].class})
-					.newInstance(new Object[] {toArray(args)});
+				return cls.getConstructor(new Class[] { Object[].class }).newInstance(new Object[] { toArray(args) });
 			} catch (NoSuchMethodException e2) {
 			}
 		}
 		return cls.newInstance();
 	}
+
 	/*package*/ Map<String, Object> resolveArguments(Evaluator eval, Page page) {
 		if (_args == null)
 			return Collections.emptyMap();
 
 		final Map<String, Object> args = new LinkedHashMap<String, Object>(); //eval order is important
-		for (Map.Entry<String, ExValue> me: _args.entrySet())
+		for (Map.Entry<String, ExValue> me : _args.entrySet())
 			args.put(me.getKey(), me.getValue().getValue(eval, page));
 		return args;
 	}
@@ -80,7 +78,7 @@ import org.zkoss.zk.xel.Evaluator;
 			return new Object[0];
 
 		final List<Object> lst = new LinkedList<Object>();
-		for (int j = 0;;j++) {
+		for (int j = 0;; j++) {
 			final String nm = "arg" + j;
 			if (args.containsKey(nm))
 				lst.add(args.remove(nm));

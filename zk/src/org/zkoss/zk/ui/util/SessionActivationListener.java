@@ -33,6 +33,7 @@ public interface SessionActivationListener {
 	/** Called when a session has just been activated.
 	 */
 	public void didActivate(Session session);
+
 	/** Called when a session is about to be passivated.
 	 */
 	public void willPassivate(Session session);

@@ -17,6 +17,7 @@ import org.zkoss.bind.xel.BindXelFactory;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.impl.ExpressionFactoryImpl;
 import org.zkoss.zel.impl.lang.ExpressionBuilder;
+
 /**
  * Handle dot series script.
  * @author henrichen
@@ -25,8 +26,8 @@ import org.zkoss.zel.impl.lang.ExpressionBuilder;
  * @since 6.0.0
  */
 public class BindExpressionFactoryImpl extends ExpressionFactoryImpl {
-    //20110815, Henri Chen: allow override node visiting (see BindExpressionBuilder#visit)
-    protected ExpressionBuilder newExpressionBuilder(String expression, ELContext context) {
-    	return new BindExpressionBuilder((String)AllocUtil.inst.processScript(expression), context); //ZSS-2289
-    }
+	//20110815, Henri Chen: allow override node visiting (see BindExpressionBuilder#visit)
+	protected ExpressionBuilder newExpressionBuilder(String expression, ELContext context) {
+		return new BindExpressionBuilder((String) AllocUtil.inst.processScript(expression), context); //ZSS-2289
+	}
 }

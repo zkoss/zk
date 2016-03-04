@@ -31,22 +31,23 @@ import org.zkoss.zul.Tabbox;
  */
 public class TabboxSelectedTabConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808190445L;
+
 	public Object coerceToUi(Object val, Component comp) { //load
-	  	if (val != null) {
+		if (val != null) {
 			//iterate to find the selected radio via the value
-			for (Iterator it = ((Tabbox)comp).getTabs().getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component)it.next();
+			for (Iterator it = ((Tabbox) comp).getTabs().getChildren().iterator(); it.hasNext();) {
+				final Component child = (Component) it.next();
 				if (child instanceof Tab) {
-					if (val.equals(((Tab)child).getLabel())) {
+					if (val.equals(((Tab) child).getLabel())) {
 						return child;
 					}
 				}
 			}
 		}
-	  	return null;
+		return null;
 	}
-  
+
 	public Object coerceToBean(Object val, Component comp) { //save
- 		return val != null ? ((Tab)val).getLabel() : null;
+		return val != null ? ((Tab) val).getLabel() : null;
 	}
 }

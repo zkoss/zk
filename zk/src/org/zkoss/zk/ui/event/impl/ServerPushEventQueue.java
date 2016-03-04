@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Desktop;
@@ -60,15 +61,19 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 			}
 		}
 	}
+
 	public void subscribe(EventListener<T> listener) {
 		subscribe(listener, null, false);
 	}
+
 	public void subscribe(EventListener<T> listener, EventListener<T> callback) {
 		subscribe(listener, callback, true);
 	}
+
 	public void subscribe(EventListener<T> listener, boolean async) {
 		subscribe(listener, null, async);
 	}
+
 	private void subscribe(EventListener<T> listener, EventListener<T> callback, boolean async) {
 		if (listener == null)
 			throw new IllegalArgumentException();
@@ -81,11 +86,11 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 		synchronized (_dtInfos) {
 			di = _dtInfos.get(desktop);
 			if (di == null)
-				_dtInfos.put(desktop,
-					di = new DesktopInfo(desktop, new EQService(), new EQCleanup()));
+				_dtInfos.put(desktop, di = new DesktopInfo(desktop, new EQService(), new EQCleanup()));
 		}
 		di.subscribe(listener, callback, async);
 	}
+
 	public boolean isSubscribed(EventListener<T> listener) {
 		if (listener == null)
 			return false;
@@ -101,6 +106,7 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 		}
 		return di != null && di.isSubscribed(listener);
 	}
+
 	public boolean unsubscribe(EventListener<T> listener) {
 		if (listener == null)
 			throw new IllegalArgumentException();
@@ -122,13 +128,15 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 		}
 		return false;
 	}
+
 	public void close() {
 		_closed = true;
 		final Execution exec = Executions.getCurrent();
 		if (exec != null)
 			close(exec.getDesktop());
-			//queues of other desktops will be closed in EQService
+		//queues of other desktops will be closed in EQService
 	}
+
 	private void close(Desktop desktop) {
 		final DesktopInfo di;
 		synchronized (_dtInfos) {
@@ -137,6 +145,7 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 		if (di != null)
 			di.close();
 	}
+
 	public boolean isClose() {
 		return _closed;
 	}
@@ -153,30 +162,35 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 			_desktop = desktop;
 			_que = new DesktopEventQueue<T>();
 			_spEnabled = true; // for bug ZK-2702, we always enable it here
-			((DesktopCtrl)desktop).enableServerPush(true, this);
+			((DesktopCtrl) desktop).enableServerPush(true, this);
 			desktop.addListener(_service = service);
 			desktop.addListener(_cleanup = cleanup);
-				//OK to call addListener since it is the current desktop
+			//OK to call addListener since it is the current desktop
 		}
 
 		private void publish(T event) {
 			Executions.schedule(_desktop, new ScheduleListener<T>(_que), event);
 		}
+
 		private void subscribe(EventListener<T> listener, EventListener<T> callback, boolean async) {
 			if (callback != null)
 				_que.subscribe(listener, callback);
 			else
 				_que.subscribe(listener, async);
 		}
+
 		private boolean isSubscribed(EventListener<T> listener) {
 			return _que.isSubscribed(listener);
 		}
+
 		private boolean unsubscribe(EventListener<T> listener) {
 			return _que.unsubscribe(listener);
 		}
+
 		private boolean isIdle() {
 			return _que.isIdle();
 		}
+
 		private void close() {
 			_que.close();
 			_desktop.removeListener(_cleanup);
@@ -188,7 +202,7 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 
 					if (_desktop.isAlive())
 						try {
-							((DesktopCtrl)_desktop).enableServerPush(false, this);
+							((DesktopCtrl) _desktop).enableServerPush(false, this);
 						} catch (Throwable ex) {
 							log.warn("Ingored: unable to stop server push", ex);
 						}
@@ -197,16 +211,20 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 			}
 		}
 	}
+
 	private static class ScheduleListener<T extends Event> implements EventListener<T>, java.io.Serializable {
 		private final DesktopEventQueue<T> _que;
+
 		private ScheduleListener(DesktopEventQueue<T> queue) {
 			_que = queue;
 		}
+
 		public void onEvent(T event) {
 			if (!_que.isClose()) //just in case
 				_que.publish(event);
 		}
 	}
+
 	private class EQService implements AuService, java.io.Serializable {
 		public boolean service(AuRequest request, boolean everError) {
 			if (_closed)
@@ -214,6 +232,7 @@ public class ServerPushEventQueue<T extends Event> implements EventQueue<T>, jav
 			return false;
 		}
 	}
+
 	private class EQCleanup implements DesktopCleanup, java.io.Serializable {
 		public void cleanup(Desktop desktop) throws Exception {
 			final DesktopInfo di;

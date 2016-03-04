@@ -19,9 +19,11 @@ package org.zkoss.zhtml;
 /**
  * Represents the message box.
  *
- * <p>You don't create {@link Messagebox} directly. Rather, use {@link #show}.
+ * <p>
+ * You don't create {@link Messagebox} directly. Rather, use {@link #show}.
  * 
- * <p>A non-XHTML extension.
+ * <p>
+ * A non-XHTML extension.
  *
  * @author tomyeh
  */

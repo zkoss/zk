@@ -22,7 +22,6 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.RepeatableMedia;
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zul.impl.Utils;
@@ -38,7 +37,7 @@ import org.zkoss.zul.impl.Utils;
 public class Flash extends HtmlBasedComponent {
 	private String _src;
 	private Media _media;
-	private String _wmode = "transparent";	
+	private String _wmode = "transparent";
 	private String _quality = "high";
 	private String _version = "6,0,0,0";
 	private String _bgcolor;
@@ -48,6 +47,7 @@ public class Flash extends HtmlBasedComponent {
 
 	public Flash() {
 	}
+
 	public Flash(String src) {
 		setSrc(src);
 	}
@@ -59,18 +59,19 @@ public class Flash extends HtmlBasedComponent {
 	 */
 	public String getBgcolor() {
 		return _bgcolor;
-	}	
+	}
+
 	/**
 	 * Sets the background color of Flash movie.
 	 * @param bgcolor [ hexadecimal RGB value] 
 	 */
 	public void setBgcolor(String bgcolor) {
-		if(!Objects.equals(_bgcolor, bgcolor)){
+		if (!Objects.equals(_bgcolor, bgcolor)) {
 			_bgcolor = bgcolor;
-			smartUpdate("bgcolor",bgcolor);
+			smartUpdate("bgcolor", bgcolor);
 		}
 	}
-	
+
 	/**
 	 * Returns true if the Flash movie plays repeatedly.
 	 * <p>Default: false
@@ -79,26 +80,30 @@ public class Flash extends HtmlBasedComponent {
 	public boolean isLoop() {
 		return _loop;
 	}
+
 	/**
 	 * Sets whether the Flash movie plays repeatedly
 	 * @param loop
 	 */
 	public void setLoop(boolean loop) {
-		if(_loop != loop){
+		if (_loop != loop) {
 			_loop = loop;
-			smartUpdate("loop",loop);
+			smartUpdate("loop", loop);
 		}
 	}
+
 	/** @deprecated As of release 3.6.1, use {@link #isAutoplay} instead.
 	 */
 	public boolean isAutoPlay() {
 		return isAutoplay();
 	}
+
 	/** @deprecated As of release 3.6.1, use {@link #setAutoplay} instead.
 	 */
 	public void setAutoPlay(boolean autoplay) {
 		setAutoplay(autoplay);
 	}
+
 	/**
 	 * Return true if the Flash movie starts playing automatically
 	 * <p>Default: true
@@ -108,18 +113,19 @@ public class Flash extends HtmlBasedComponent {
 	public boolean isAutoplay() {
 		return _autoplay;
 	}
+
 	/**
 	 * Sets wether to play the Flash movie automatically.
 	 * @param autoplay whether to play the Flash movie automatically
 	 * @since 3.6.1
 	 */
-	public void setAutoplay(boolean autoplay){
-		if(_autoplay != autoplay){
+	public void setAutoplay(boolean autoplay) {
+		if (_autoplay != autoplay) {
 			_autoplay = autoplay;
 			smartUpdate("autoplay", autoplay);
 		}
 	}
-	
+
 	/**
 	 * Returns the Window mode property of the Flash movie 
 	 * <p>Default: "transparent".
@@ -128,13 +134,14 @@ public class Flash extends HtmlBasedComponent {
 	public String getWmode() {
 		return _wmode;
 	}
+
 	/**
 	 * Sets the Window Mode property of the Flash movie 
 	 * for transparency, layering, and positioning in the browser.
 	 * @param wmode Possible values: window, opaque, transparent.
 	 */
 	public void setWmode(String wmode) {
-		if(!Objects.equals(_wmode, wmode)){
+		if (!Objects.equals(_wmode, wmode)) {
 			_wmode = wmode;
 			smartUpdate("wmode", wmode);
 		}
@@ -148,12 +155,13 @@ public class Flash extends HtmlBasedComponent {
 	public String getVersion() {
 		return _version;
 	}
+
 	/**
 	 * Sets the expected version of the Flash player.
 	 * @since 5.0.0
 	 */
 	public void setVersion(String version) {
-		if(!Objects.equals(_version, version)){
+		if (!Objects.equals(_version, version)) {
 			_version = version;
 			smartUpdate("version", version);
 		}
@@ -168,13 +176,14 @@ public class Flash extends HtmlBasedComponent {
 	public String getQuality() {
 		return _quality;
 	}
+
 	/**
 	 * Sets the quality of the Flash movie.
 	 * @param quality the quality of the Flash movie. Accept "high","medium","low"
 	 * @since 5.0.0
 	 */
 	public void setQuality(String quality) {
-		if(!Objects.equals(_quality, quality)){
+		if (!Objects.equals(_quality, quality)) {
 			_quality = quality;
 			smartUpdate("quality", quality);
 		}
@@ -187,6 +196,7 @@ public class Flash extends HtmlBasedComponent {
 	public String getSrc() {
 		return _src;
 	}
+
 	/**
 	 * Sets the source path of Flash movie 
 	 * and redraw the component
@@ -216,13 +226,15 @@ public class Flash extends HtmlBasedComponent {
 	public void setContent(Media media) {
 		if (_src != null || media != _media) {
 			_media = RepeatableMedia.getInstance(media);
-				//Use RepeatableMedia since it might be reloaded
-				//if the component is in an overlapped wnd (Bug 1896797)
+			//Use RepeatableMedia since it might be reloaded
+			//if the component is in an overlapped wnd (Bug 1896797)
 			_src = null;
-			if (_media != null) ++_medver; //enforce browser to reload
+			if (_media != null)
+				++_medver; //enforce browser to reload
 			smartUpdate("src", new EncodedSrc());
 		}
 	}
+
 	/** Returns the content set by {@link #setContent}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
 	 * It simply returns what is passed to {@link #setContent}.
@@ -234,14 +246,15 @@ public class Flash extends HtmlBasedComponent {
 
 	private String getEncodedSrc() {
 		final Desktop dt = getDesktop();
-		return _media != null ? getMediaSrc(): //already encoded
-			dt != null && _src != null ?
-				dt.getExecution().encodeURL(_src):  "";
+		return _media != null ? getMediaSrc()
+				: //already encoded
+				dt != null && _src != null ? dt.getExecution().encodeURL(_src) : "";
 	}
+
 	private String getMediaSrc() {
-		return Utils.getDynamicMediaURI(
-			this, _medver, _media.getName(), _media.getFormat());
+		return Utils.getDynamicMediaURI(this, _medver, _media.getName(), _media.getFormat());
 	}
+
 	private class EncodedSrc implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedSrc();
@@ -249,8 +262,7 @@ public class Flash extends HtmlBasedComponent {
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "src", getEncodedSrc());
@@ -261,7 +273,8 @@ public class Flash extends HtmlBasedComponent {
 		if (!"6,0,0,0".equals(_version))
 			render(renderer, "version", _version);
 		render(renderer, "loop", _loop);
-		if (!_autoplay) renderer.render("autoplay", false);
+		if (!_autoplay)
+			renderer.render("autoplay", false);
 		render(renderer, "bgcolor", _bgcolor);
 	}
 }

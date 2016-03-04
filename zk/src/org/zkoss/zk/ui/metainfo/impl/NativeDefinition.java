@@ -17,7 +17,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo.impl;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.metainfo.*;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
 /**
  * The component definition for the native components.
@@ -28,8 +28,7 @@ import org.zkoss.zk.ui.metainfo.*;
  * @see ComponentDefinitionImpl#newNativeDefinition
  */
 /*package*/ class NativeDefinition extends ComponentDefinitionImpl {
-	/*package*/ NativeDefinition(LanguageDefinition langdef, String name,
-	Class<? extends Component> cls) {
+	/*package*/ NativeDefinition(LanguageDefinition langdef, String name, Class<? extends Component> cls) {
 		super(langdef, null, name, cls);
 
 		if (cls == null)

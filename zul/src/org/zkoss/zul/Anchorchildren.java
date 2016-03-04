@@ -32,25 +32,26 @@ import org.zkoss.zul.impl.XulElement;
  * @author peterkuo
  * @since 6.0.0
  */
-public class Anchorchildren extends XulElement{
+public class Anchorchildren extends XulElement {
 
 	/** accept number, percent, space separated*/
-	private String _anchor = ""; 
-	
-	public Anchorchildren(){}
-	
-	public Anchorchildren(String anchor){
+	private String _anchor = "";
+
+	public Anchorchildren() {
+	}
+
+	public Anchorchildren(String anchor) {
 		super();
 		_anchor = anchor;
 	}
-	
+
 	/**
 	 * Returns the anchor setting.
 	 */
-	public String getAnchor(){
+	public String getAnchor() {
 		return _anchor;
 	}
-	
+
 	/**
 	 * Sets the width, height relative to parent, anchorlayout.
 	 * It can use % or number.
@@ -65,9 +66,9 @@ public class Anchorchildren extends XulElement{
 	public void setAnchor(String anchor) {
 		if (anchor == null)
 			anchor = "";
-		if(!Objects.equals(_anchor,anchor)){
+		if (!Objects.equals(_anchor, anchor)) {
 			_anchor = anchor;
-			smartUpdate("anchor",_anchor);
+			smartUpdate("anchor", _anchor);
 		}
 	}
 
@@ -80,10 +81,10 @@ public class Anchorchildren extends XulElement{
 			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
-	protected void renderProperties(ContentRenderer renderer) throws IOException{
+
+	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
-				
-		render(renderer,"anchor", _anchor);
+
+		render(renderer, "anchor", _anchor);
 	}
 }

@@ -27,15 +27,14 @@ import org.zkoss.web.servlet.dsp.DspException;
  */
 public class Otherwise extends AbstractAction {
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!nested && !isEffective())
 			return;
 
 		final Action parent = ac.getParent();
 		if (!(parent instanceof Choose))
 			throw new DspException("The parent of otherwise must be choose");
-		final Choose choose = (Choose)parent;
+		final Choose choose = (Choose) parent;
 		if (!choose.isMatched())
 			ac.renderFragment(null);
 	}

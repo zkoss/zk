@@ -31,6 +31,7 @@ public interface RichletConfig {
 	 * parameter, or null if the parameter does not exist.
 	 */
 	public String getInitParameter(String name);
+
 	/** Returns the names of the richlet's initialization parameters as
 	 * an iterable String objects (never null).
 	 * @since 6.0.0

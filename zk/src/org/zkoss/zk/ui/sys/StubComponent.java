@@ -12,14 +12,14 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.event.StubEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.StubEvent;
+import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.au.AuRequest;
 
 /**
  * A stub component is a 'degenerated' component that does not maintain
@@ -55,11 +55,11 @@ public class StubComponent extends AbstractComponent {
 			return id0(getId()); //null if not found or no ID assigned
 		return getIdFromChild(this, uuid);
 	}
+
 	private static String getIdFromChild(Component comp, String uuid) {
-		for (Component child = comp.getFirstChild(); child != null;
-		child = child.getNextSibling()) {
+		for (Component child = comp.getFirstChild(); child != null; child = child.getNextSibling()) {
 			if (child instanceof StubComponent) {
-				String id = ((StubComponent)child).getId(uuid); //recursive
+				String id = ((StubComponent) child).getId(uuid); //recursive
 				if (id != null)
 					return id;
 			} else {
@@ -72,8 +72,9 @@ public class StubComponent extends AbstractComponent {
 		}
 		return null;
 	}
+
 	private static String id0(String id) {
-		return id != null && id.length() > 0 ? id: null;
+		return id != null && id.length() > 0 ? id : null;
 	}
 
 	//super//
@@ -105,36 +106,37 @@ public class StubComponent extends AbstractComponent {
 	 * @exception IllegalStateException if this component has a parent,
 	 * sibling or child.
 	 */
-	public void replace(Component comp, boolean bFellow, boolean bListener,
-	boolean bChildren) {
+	public void replace(Component comp, boolean bFellow, boolean bListener, boolean bChildren) {
 		super.replace(comp, bFellow, bListener, bChildren);
 	}
+
 	/** Returns the widget class, "#stub".
 	 */
 	public String getWidgetClass() {
 		return "#stub";
 	}
-	
+
 	public void service(AuRequest request, boolean everError) {
 		Events.postEvent(StubEvent.getStubEvent(request));
 	}
-	
+
 	public void service(Event event, Scope scope) throws Exception {
 		if (event instanceof StubEvent) {
 			EventListenerMap map = ((ComponentCtrl) this).getEventListenerMap();
 			if (map != null) {
-				map.service(event, scope, this, ((StubEvent)event).getCommand());
+				map.service(event, scope, this, ((StubEvent) event).getCommand());
 			} else
-				postToNonStubAncestor((StubEvent)event);
+				postToNonStubAncestor((StubEvent) event);
 		} else {
 			super.service(event, scope);
 		}
 	}
+
 	/** Post event to the non-stub ancestor. */
 	/*package*/ void postToNonStubAncestor(StubEvent event) {
 		Component target = event.getTarget();
-		for (; target != null && (target instanceof Native
-		|| target instanceof StubComponent); target = target.getParent())
+		for (; target != null
+				&& (target instanceof Native || target instanceof StubComponent); target = target.getParent())
 			;
 		if (target != null)
 			Events.postEvent(new StubEvent(event, target));

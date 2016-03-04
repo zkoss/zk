@@ -19,14 +19,13 @@ package org.zkoss.zk.ui.sys;
 import java.util.Collection;
 
 import org.zkoss.xel.XelContext;
-
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.Callback;
-import org.zkoss.zk.au.AuResponse;
 
 /**
  * Additional interface to {@link org.zkoss.zk.ui.Execution}
@@ -51,6 +50,7 @@ public interface ExecutionCtrl {
 	 * @see Desktop#getPage
 	 */
 	public Page getCurrentPage();
+
 	/** Sets the current page.
 	 * Though an execution might process many pages, it processes update requests
 	 * one-by-one and each update request is associated with a page.
@@ -61,6 +61,7 @@ public interface ExecutionCtrl {
 	 * evaluating a page (from a page definition).
 	 */
 	public PageDefinition getCurrentPageDefinition();
+
 	/** Sets the current page definition.
 	 * @param pgdef the page definition. If null, it means it is the same
 	 * as getCurrentPage().getPageDefinition().
@@ -81,6 +82,7 @@ public interface ExecutionCtrl {
 	/** Returns whether this execution is activated.
 	 */
 	public boolean isActivated();
+
 	/** Called when this execution is about to become the current execution
 	 * {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 *
@@ -95,6 +97,7 @@ public interface ExecutionCtrl {
 	 * <p>Note: don't throw any exception in this method.
 	 */
 	public void onActivate();
+
 	/** Called when this execution is about to become a non-current execution.
 	 *
 	 * <p>It is used as callback notification.
@@ -115,6 +118,7 @@ public interface ExecutionCtrl {
 	 * @since 7.0.5
 	 */
 	public void onBeforeDeactivate();
+
 	/**
 	 * Adds a callback method to be executed only once after the execution
 	 * activated.
@@ -130,7 +134,7 @@ public interface ExecutionCtrl {
 	 * @since 7.0.5
 	 */
 	public void addOnDeactivate(Callback callback);
-	
+
 	/** Returns whether this execution is in recovering.
 	 * In other words, it is in the invocation of {@link FailoverManager#recover}.
 	 * If in recovering, no response is sent to the client.
@@ -167,6 +171,7 @@ public interface ExecutionCtrl {
 	 * @since 3.0.5
 	 */
 	public void setRequestId(String reqId);
+
 	/** Returns the sequence ID of the current request, or null if not
 	 * available. Not all clients support the request ID.
 	 * @since 3.0.5
@@ -178,6 +183,7 @@ public interface ExecutionCtrl {
 	 * @since 5.0.0
 	 */
 	public Collection<AuResponse> getResponses();
+
 	/** Sets the collection of the AU responses ({@link AuResponse})
 	 * that shall be generated to the output.
 	 * @since 5.0.0
@@ -191,6 +197,7 @@ public interface ExecutionCtrl {
 	 * @since 5.0.6
 	 */
 	public ExecutionInfo getExecutionInfo();
+
 	/** Sets the information of the event being served, or null if not under
 	 * serving an event.
 	 * @since 5.0.6
@@ -205,6 +212,7 @@ public interface ExecutionCtrl {
 	 * @since 6.0.0
 	 */
 	public Object getExtraXelVariable(String name);
+
 	/** Returns the object, if any, defined in any variable resolver
 	 * added by {@link org.zkoss.zk.ui.Execution#addVariableResolver}.
 	 * <p>Notice that it looks only for the variables defined

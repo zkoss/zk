@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event caused by a component being moved.
@@ -49,30 +49,31 @@ public class MoveEvent extends Event {
 	 */
 	public static final MoveEvent getMoveEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new MoveEvent(request.getCommand(), request.getComponent(),
-			(String)data.get("left"), (String)data.get("top"),
-			AuRequests.parseKeys(data));
+		return new MoveEvent(request.getCommand(), request.getComponent(), (String) data.get("left"),
+				(String) data.get("top"), AuRequests.parseKeys(data));
 	}
 
 	/** Constructs a mouse relevant event.
 	 */
-	public MoveEvent(String name, Component target, String left, String top,
-	int keys) {
+	public MoveEvent(String name, Component target, String left, String top, int keys) {
 		super(name, target);
 		_left = left;
 		_top = top;
 		_keys = keys;
 	}
+
 	/** Returns the left of the component after moved.
 	 */
 	public final String getLeft() {
 		return _left;
 	}
+
 	/** Returns the top of the component after moved.
 	 */
 	public final String getTop() {
 		return _top;
 	}
+
 	/** Returns what keys were pressed when the component is moved, or 0 if
 	 * none of them was pressed.
 	 * It is a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}

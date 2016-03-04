@@ -16,42 +16,42 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.util.resource;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.Calendar;
-import java.net.URL;
-import java.io.OutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Library;
-import org.zkoss.lang.Objects;
-import org.zkoss.lang.Exceptions;
+
 import org.zkoss.io.Files;
 import org.zkoss.io.WriterOutputStream;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
-
 import org.zkoss.web.Attributes;
-import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
-import org.zkoss.web.servlet.http.Https;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.http.Https;
 import org.zkoss.xml.XMLs;
 
 /**
@@ -123,6 +123,7 @@ public class ClassWebResource {
 	public static URL getClassResource(String uri) {
 		return Locators.getDefault().getResource(PATH_PREFIX + fixURI(uri));
 	}
+
 	/** Returns the resource in a stream of the specified URI by searching
 	 * only the class path (with {@link #PATH_PREFIX}).
 	 * <p>On the other hand, {@link #getResourceAsStream} will search
@@ -133,6 +134,7 @@ public class ClassWebResource {
 	public static InputStream getClassResourceAsStream(String uri) {
 		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + fixURI(uri));
 	}
+
 	/** Returns the URL of the resource of the specified URI by searching
 	 * the extra locator, if any, and then the class path
 	 * (with {@link #PATH_PREFIX}).
@@ -143,10 +145,12 @@ public class ClassWebResource {
 		uri = fixURI(uri);
 		if (_extraloc != null) {
 			final URL url = _extraloc.getResource(uri);
-			if (url != null) return url;
+			if (url != null)
+				return url;
 		}
 		return Locators.getDefault().getResource(PATH_PREFIX + uri);
 	}
+
 	/** Returns the resource in a stream of the specified URI by searching
 	 * the extra locator, if any, and then, the class path (with {@link #PATH_PREFIX}).
 	 * <p>This method becomes non-static since 5.0.0, and it
@@ -156,15 +160,19 @@ public class ClassWebResource {
 		uri = fixURI(uri);
 		if (_extraloc != null) {
 			final InputStream is = _extraloc.getResourceAsStream(uri);
-			if (is != null) return is;
+			if (is != null)
+				return is;
 		}
 		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
 	}
+
 	private static String fixURI(String uri) {
 		int j = uri.lastIndexOf('?');
-		if (j >= 0) uri = uri.substring(0, j);
+		if (j >= 0)
+			uri = uri.substring(0, j);
 		j = uri.lastIndexOf(";jsession");
-		if (j >= 0) uri = uri.substring(0, j);
+		if (j >= 0)
+			uri = uri.substring(0, j);
 		return uri;
 	}
 
@@ -177,7 +185,9 @@ public class ClassWebResource {
 			response.setDateHeader("Expires", _expires);
 		}
 	}
+
 	private static final long _expires;
+
 	static {
 		final Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, 365);
@@ -187,10 +197,9 @@ public class ClassWebResource {
 	/** Returns the instance (singleton in the whole app) for
 	 * handling resources located in class path.
 	 */
-	public static final
-	ClassWebResource getInstance(ServletContext ctx, String mappingURI) {
+	public static final ClassWebResource getInstance(ServletContext ctx, String mappingURI) {
 		synchronized (ctx) {
-			final CWC cwc = (CWC)Servlets.getExtendletContext(ctx, ".");
+			final CWC cwc = (CWC) Servlets.getExtendletContext(ctx, ".");
 			if (cwc != null)
 				return cwc.getClassWebResource();
 
@@ -199,6 +208,7 @@ public class ClassWebResource {
 			return cwr;
 		}
 	}
+
 	/** Constructor. */
 	private ClassWebResource(ServletContext ctx, String mappingURI) {
 		if (!mappingURI.startsWith("/") || mappingURI.endsWith("/"))
@@ -212,6 +222,7 @@ public class ClassWebResource {
 
 		addExtendlet("dsp", new DspExtendlet());
 	}
+
 	/** Returns the extra locator, or null if not available.
 	 * The extra locator, if specified, has the higher priority than
 	 * the class path.
@@ -221,6 +232,7 @@ public class ClassWebResource {
 	public Locator getExtraLocator() {
 		return _extraloc;
 	}
+
 	/** Sets the extra locator.
 	 * The extra locator, if specified, has the higher priority than
 	 * the class path.
@@ -230,6 +242,7 @@ public class ClassWebResource {
 	public void setExtraLocator(Locator loc) {
 		_extraloc = loc;
 	}
+
 	/** Process the request by retrieving the path from the path info.
 	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info,
 	 * and then invoke {@link #service(HttpServletRequest,HttpServletResponse,String)}.
@@ -238,23 +251,20 @@ public class ClassWebResource {
 	 *
 	 * @since 2.4.1
 	 */
-	public void service(HttpServletRequest request,
-	HttpServletResponse response)
-	throws ServletException, IOException {
+	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-//		if (log.isDebugEnabled()) log.debug("Path info: "+pi);
+		//		if (log.isDebugEnabled()) log.debug("Path info: "+pi);
 		if (pi != null)
 			service(request, response, pi.substring(PATH_PREFIX.length()));
 	}
-			
+
 	/** Process the request with the specified path.
 	 *
 	 * @param path the path related to the class path
 	 * @since 3.0.0
 	 */
-	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path)
-	throws ServletException, IOException {
+	public void service(HttpServletRequest request, HttpServletResponse response, String path)
+			throws ServletException, IOException {
 		Servlets.getBrowser(request); //update request info
 
 		final Object old = Charsets.setup(request, response, "UTF-8");
@@ -292,10 +302,12 @@ public class ClassWebResource {
 			}
 
 			int j = ext.indexOf('.');
-			if (j < 0) 	return null;
+			if (j < 0)
+				return null;
 			ext = ext.substring(j + 1);
 		}
 	}
+
 	/** Returns the Extendlet (a.k.a., resource processor) of the
 	 * specified extension, or null if not associated.
 	 *
@@ -309,6 +321,7 @@ public class ClassWebResource {
 	public Extendlet getExtendlet(String ext) {
 		return getExtendlet(ext, true);
 	}
+
 	/** Adds an {@link Extendlet} (a.k.a., resource processor) to process
 	 * the resource of the specified extension.
 	 *
@@ -325,6 +338,7 @@ public class ClassWebResource {
 			public ExtendletContext getExtendletContext() {
 				return _cwc;
 			}
+
 			public void addCompressExtension(String ext) {
 				synchronized (ClassWebResource.this) {
 					if (_compressExts == null)
@@ -339,6 +353,7 @@ public class ClassWebResource {
 			return _extlets.put(ext, extlet);
 		}
 	}
+
 	/** Removes the {@link Extendlet} (a.k.a., resource processor)
 	 * for the specified extension.
 	 *
@@ -376,8 +391,8 @@ public class ClassWebResource {
 			return null;
 
 		ext = ext.toLowerCase(java.util.Locale.ENGLISH);
-		final Map<String, FastReadArray<Filter>> filters =
-			flag == 0 || (flag & FILTER_REQUEST) != 0 ? _reqfilters: _incfilters;
+		final Map<String, FastReadArray<Filter>> filters = flag == 0 || (flag & FILTER_REQUEST) != 0 ? _reqfilters
+				: _incfilters;
 		if (filters.isEmpty()) //no need to sync
 			return null; //optimize
 
@@ -387,14 +402,16 @@ public class ClassWebResource {
 				ary = filters.get(ext);
 			}
 			if (ary != null)
-				return (Filter[])ary.toArray();
+				return (Filter[]) ary.toArray();
 
 			int j = ext.indexOf('.');
-			if (j < 0) 	return null;
+			if (j < 0)
+				return null;
 			ext = ext.substring(j + 1);
 		}
 
 	}
+
 	/** Adds a filter ({@link Filter}) to perform filtering task for
 	 * the resource of the specified extension.
 	 *
@@ -424,6 +441,7 @@ public class ClassWebResource {
 		if ((flags & FILTER_INCLUDE) != 0)
 			addFilter(_incfilters, ext, filter);
 	}
+
 	private static void addFilter(Map<String, FastReadArray<Filter>> filters, String ext, Filter filter) {
 		FastReadArray<Filter> ary;
 		synchronized (filters) {
@@ -433,6 +451,7 @@ public class ClassWebResource {
 		}
 		ary.add(filter);
 	}
+
 	/** Removes the filter ({@link Filter}) for the specified extension.
 	 * @param flags a combination of {@link #FILTER_REQUEST}
 	 * and {@link #FILTER_INCLUDE}. If 0, {@link #FILTER_REQUEST}
@@ -452,6 +471,7 @@ public class ClassWebResource {
 			removed = rmFilter(_incfilters, ext, filter) || removed;
 		return removed;
 	}
+
 	private static boolean rmFilter(Map<String, FastReadArray<Filter>> filters, String ext, Filter filter) {
 		FastReadArray<Filter> ary;
 		synchronized (filters) {
@@ -488,6 +508,7 @@ public class ClassWebResource {
 			_compressExts = null;
 		}
 	}
+
 	/**Returns the extension that shall be compressed if the browser
 	 * supports the compression encoding (accept-encoding).
 	 *
@@ -495,9 +516,7 @@ public class ClassWebResource {
 	 *@since 2.4.1
 	 */
 	public String[] getCompress() {
-		return _compressExts != null ?
-			_compressExts.toArray(new String[_compressExts.size()]):
-			null;
+		return _compressExts != null ? _compressExts.toArray(new String[_compressExts.size()]) : null;
 	}
 
 	/** Returns whether to debug JavaScript files.
@@ -510,6 +529,7 @@ public class ClassWebResource {
 	public boolean isDebugJS() {
 		return _debugJS;
 	}
+
 	/**Sets whether to debug JavaScript files.
 	 *
 	 * <p>Default: false.
@@ -537,27 +557,29 @@ public class ClassWebResource {
 	 * 
 	 * @param mappingURI mapping URI excluding PATH_PREFIX.
 	 */
-	public void setMappingURI (String mappingURI) {
+	public void setMappingURI(String mappingURI) {
 		if (!mappingURI.startsWith("/") || mappingURI.endsWith("/"))
 			throw new IllegalArgumentException("mappingURI must start with /, but not ends with /");
 
 		_mappingURI = mappingURI + PATH_PREFIX;
 	}
+
 	//-- Work with CWC --//
 	/** Works with {@link CWC} to
 	 * load resources from class path (thru this servlet).
 	 */
-	private void web(HttpServletRequest request,
-	HttpServletResponse response, String pi)
-	throws ServletException, IOException {
+	private void web(HttpServletRequest request, HttpServletResponse response, String pi)
+			throws ServletException, IOException {
 		//A trick used to enforce browser to load new version JavaScript
 		//How it work: client engine prefix URI with /_zv123, where
 		//123 is the build version that changes once reload is required
 		//Then, the server eliminate such prefix before locating resource
 		if (pi.startsWith(ZVER)) {
 			final int j = pi.indexOf('/', ZVER.length());
-			if (j >= 0) pi = pi.substring(j);
-			else log.warn("Unknown path info: "+pi);
+			if (j >= 0)
+				pi = pi.substring(j);
+			else
+				log.warn("Unknown path info: " + pi);
 		} else if (_encURLPrefix != null && pi.startsWith(_encURLPrefix)) {
 			final int len1 = pi.length(), len2 = _encURLPrefix.length();
 			if (len1 > len2 && pi.charAt(len2) == '/')
@@ -565,19 +587,17 @@ public class ClassWebResource {
 		}
 
 		final String ext = Servlets.getExtension(pi, false); //complete extension
-		final Filter[] filters = getFilters(ext,
-			Servlets.isIncluded(request) ? FILTER_INCLUDE: FILTER_REQUEST);
+		final Filter[] filters = getFilters(ext, Servlets.isIncluded(request) ? FILTER_INCLUDE : FILTER_REQUEST);
 		if (filters == null) {
 			web0(request, response, pi, ext);
 		} else {
-			new FilterChainImpl(filters, pi, ext)
-				.doFilter(request, response);
+			new FilterChainImpl(filters, pi, ext).doFilter(request, response);
 		}
 	}
+
 	/** Processes the request without calling filter. */
-	private void web0(HttpServletRequest request,
-	HttpServletResponse response, String pi, String ext)
-	throws ServletException, IOException {
+	private void web0(HttpServletRequest request, HttpServletResponse response, String pi, String ext)
+			throws ServletException, IOException {
 		if (ext != null) {
 			//Invoke the resource processor (Extendlet)
 			final Extendlet extlet = getExtendlet(ext);
@@ -613,11 +633,11 @@ public class ClassWebResource {
 		InputStream is = null;
 
 		if (_debugJS && "js".equals(ext)) {
-			final String orgpi = Servlets.locate(_ctx, request,
-				pi.substring(0, pi.length() - 3) + ".src.js",
-				_cwc.getLocator());
+			final String orgpi = Servlets.locate(_ctx, request, pi.substring(0, pi.length() - 3) + ".src.js",
+					_cwc.getLocator());
 			is = getResourceAsStream(orgpi);
-			if (is != null) pi = orgpi;
+			if (is != null)
+				pi = orgpi;
 		}
 
 		if (is == null) {
@@ -632,20 +652,21 @@ public class ClassWebResource {
 				//Don't sendError. Reason: 1) IE waits and no onerror fired
 				//2) better to debug (user will tell us what went wrong)
 				// B65-ZK-1897 Sanitizing pi to prevent possible cross-site scripting vulnerability 
-				data = ("(window.zk&&zk.error?zk.error:alert)('"+ XMLs.encodeText(pi) +" not found');").getBytes("UTF-8");
-					//FUTURE: zweb shall not depend on zk
+				data = ("(window.zk&&zk.error?zk.error:alert)('" + XMLs.encodeText(pi) + " not found');")
+						.getBytes("UTF-8");
+				//FUTURE: zweb shall not depend on zk
 			} else {
-				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
+				if (Servlets.isIncluded(request))
+					log.error("Resource not found: " + pi);
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(pi));
 				return;
 			}
 		} else {
 			//Note: don't compress images
-			data = shallCompress(request, ext) ?
-				Https.gzip(request, response, is, null): null;
+			data = shallCompress(request, ext) ? Https.gzip(request, response, is, null) : null;
 			if (!(compressed = (data != null)))
 				data = Files.readAll(is);
-				//since what is embedded in the jar is not big, so load completely
+			//since what is embedded in the jar is not big, so load completely
 
 			Files.close(is);
 		}
@@ -670,7 +691,8 @@ public class ClassWebResource {
 			try {
 				out = response.getOutputStream();
 			} catch (IllegalStateException ex) {
-				if (compressed) throw ex;
+				if (compressed)
+					throw ex;
 				try {
 					out = new WriterOutputStream(response.getWriter(), "UTF-8");
 				} catch (Throwable t) {
@@ -682,9 +704,9 @@ public class ClassWebResource {
 		out.write(data);
 		out.flush();
 	}
+
 	private boolean shallCompress(ServletRequest request, String ext) {
-		return _compressExts != null && _compressExts.contains(ext)
-			&& !Servlets.isIncluded(request);
+		return _compressExts != null && _compressExts.contains(ext) && !Servlets.isIncluded(request);
 	}
 
 	/** Sets the prefix used to encoding the URL.
@@ -706,6 +728,7 @@ public class ClassWebResource {
 			prefix = '/' + prefix;
 		_encURLPrefix = prefix;
 	}
+
 	/** Returns the prefix used to encoding the URL, or null if no prefix.
 	 * If an non-null prefix is returned, it must start with '/'.
 	 * @see ExtendletContext#encodeURL
@@ -724,12 +747,14 @@ public class ClassWebResource {
 			public String getDirectory() {
 				return null;
 			}
+
 			public URL getResource(String name) {
 				return ClassWebResource.this.getResource(name);
 			}
+
 			public InputStream getResourceAsStream(String name) {
 				return ClassWebResource.this.getResourceAsStream(name);
-					//Note: it doesn't handle _debugJS
+				//Note: it doesn't handle _debugJS
 			}
 		};
 
@@ -742,32 +767,35 @@ public class ClassWebResource {
 		public ServletContext getServletContext() {
 			return _ctx;
 		}
+
 		public Locator getLocator() {
 			return _locator;
 		}
+
 		public boolean shallCompress(ServletRequest request, String ext) {
 			return ClassWebResource.this.shallCompress(request, ext);
 		}
-	
-		public String encodeURL(ServletRequest request,
-		ServletResponse response, String uri)
-		throws ServletException, UnsupportedEncodingException {
+
+		public String encodeURL(ServletRequest request, ServletResponse response, String uri)
+				throws ServletException, UnsupportedEncodingException {
 			uri = Servlets.locate(_ctx, request, uri, getLocator()); //resolves "*"
-			uri = (_encURLPrefix != null ? _mappingURI + _encURLPrefix: _mappingURI)
-				+ uri; //prefix with mapping
+			uri = (_encURLPrefix != null ? _mappingURI + _encURLPrefix : _mappingURI) + uri; //prefix with mapping
 
 			//prefix context path
 			if (request instanceof HttpServletRequest) {
-				String ctxpath = ((HttpServletRequest)request).getContextPath();
+				String ctxpath = ((HttpServletRequest) request).getContextPath();
 				if (ctxpath == null)
-					throw new NullPointerException("HttpServletRequest#getContentPath() returns a null value from [ " + request + " ]");
+					throw new NullPointerException(
+							"HttpServletRequest#getContentPath() returns a null value from [ " + request + " ]");
 				final int ctxlen = ctxpath.length();
 				if (ctxlen > 0) {
 					final char cc = ctxpath.charAt(0);
-					if (cc != '/') ctxpath = '/' + ctxpath;
-						//Work around a bug for Pluto's RenderRequest (1.0.1)
-					else if (ctxlen == 1) ctxpath = ""; // "/" =>  ""
-						//Work around liferay's issue: Upload 1627928 (not verified)
+					if (cc != '/')
+						ctxpath = '/' + ctxpath;
+					//Work around a bug for Pluto's RenderRequest (1.0.1)
+					else if (ctxlen == 1)
+						ctxpath = ""; // "/" =>  ""
+					//Work around liferay's issue: Upload 1627928 (not verified)
 				}
 				uri = ctxpath + uri;
 			}
@@ -776,54 +804,52 @@ public class ClassWebResource {
 			if (j < 0) {
 				uri = Encodes.encodeURI(uri);
 			} else {
-				uri = Encodes.encodeURI(uri.substring(0, j))
-					+ uri.substring(j);
+				uri = Encodes.encodeURI(uri.substring(0, j)) + uri.substring(j);
 			}
 			//encode
 			if (response instanceof HttpServletResponse)
-				uri = ((HttpServletResponse)response).encodeURL(uri);
+				uri = ((HttpServletResponse) response).encodeURL(uri);
 			return uri;
 		}
-		public String encodeRedirectURL(HttpServletRequest request,
-		HttpServletResponse response, String uri, Map params, int mode) {
-			return Https.encodeRedirectURL(_ctx, request, response,
-				_mappingURI + uri, params, mode);
+
+		public String encodeRedirectURL(HttpServletRequest request, HttpServletResponse response, String uri,
+				Map params, int mode) {
+			return Https.encodeRedirectURL(_ctx, request, response, _mappingURI + uri, params, mode);
 		}
+
 		public RequestDispatcher getRequestDispatcher(String uri) {
-//			if (log.isDebugEnabled()) log.debug("getRequestDispatcher: "+uri);
+			//			if (log.isDebugEnabled()) log.debug("getRequestDispatcher: "+uri);
 			return _ctx.getRequestDispatcher(_mappingURI + uri);
 		}
-		public void include(HttpServletRequest request,
-		HttpServletResponse response, String uri, Map params)
-		throws ServletException, IOException {
+
+		public void include(HttpServletRequest request, HttpServletResponse response, String uri, Map params)
+				throws ServletException, IOException {
 			//Note: it is caller's job to convert related path to ~./
-			if (uri.startsWith("~./") && uri.indexOf('?') < 0
-			&& isDirectInclude(uri)) {
+			if (uri.startsWith("~./") && uri.indexOf('?') < 0 && isDirectInclude(uri)) {
 				Object old = request.getAttribute(Attributes.ARG);
 				if (params != null)
 					request.setAttribute(Attributes.ARG, params);
-					//If params=null, use the 'inherited' one (same as Servlets.include)
+				//If params=null, use the 'inherited' one (same as Servlets.include)
 
 				final String attrnm = "org.zkoss.web.servlet.include";
 				request.setAttribute(attrnm, Boolean.TRUE);
-					//so Servlets.isIncluded returns correctly
+				//so Servlets.isIncluded returns correctly
 				try {
-					service(request, response,
-						Servlets.locate(_ctx, request, uri.substring(2), _cwc.getLocator()));
+					service(request, response, Servlets.locate(_ctx, request, uri.substring(2), _cwc.getLocator()));
 				} finally {
 					request.removeAttribute(attrnm);
 					request.setAttribute(Attributes.ARG, old);
 				}
 			} else {
-				Servlets.include(_ctx, request, response,
-					uri, params, Servlets.PASS_THRU_ATTR);
+				Servlets.include(_ctx, request, response, uri, params, Servlets.PASS_THRU_ATTR);
 			}
 		}
+
 		/** Returns whether the page can be directly included.
 		 */
 		private boolean isDirectInclude(String path) {
 			final String ext = Servlets.getExtension(path, false);
-			final Extendlet extlet = ext != null ? getExtendlet(ext): null;
+			final Extendlet extlet = ext != null ? getExtendlet(ext) : null;
 			if (extlet != null) {
 				try {
 					return extlet.getFeature(Extendlet.ALLOW_DIRECT_INCLUDE);
@@ -832,41 +858,45 @@ public class ClassWebResource {
 			}
 			return true;
 		}
+
 		public URL getResource(String uri) {
 			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
 				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
 				URL url = ClassWebResource.this.getResource(orgpi);
-				if (url != null) return url;
+				if (url != null)
+					return url;
 			}
 			return ClassWebResource.this.getResource(uri);
 		}
+
 		public InputStream getResourceAsStream(String uri) {
 			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
 				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
 				InputStream is = ClassWebResource.this.getResourceAsStream(orgpi);
-				if (is != null) return is;
+				if (is != null)
+					return is;
 			}
 			return ClassWebResource.this.getResourceAsStream(uri);
 		}
 	}
+
 	private class FilterChainImpl implements FilterChain {
 		private final Filter[] _filters;
 		private final String _pi, _ext;
 
 		/** Which filter to process. */
 		private int _j;
-		private FilterChainImpl(
-		Filter[] filters, String pi, String ext)
-		throws ServletException, IOException {
+
+		private FilterChainImpl(Filter[] filters, String pi, String ext) throws ServletException, IOException {
 			_pi = pi;
 			_filters = filters;
 			_ext = ext;
 		}
-		public void doFilter(HttpServletRequest request,
-		HttpServletResponse response)
-		throws ServletException, IOException {
+
+		public void doFilter(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
 			if (_j > _filters.length)
-				throw new IllegalStateException("Out of bound: "+_j+", filter="+Objects.toString(_filters));
+				throw new IllegalStateException("Out of bound: " + _j + ", filter=" + Objects.toString(_filters));
 			final int j = _j++;
 			if (j == _filters.length) {
 				web0(request, response, _pi, _ext);

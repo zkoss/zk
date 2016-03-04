@@ -24,16 +24,16 @@ package org.zkoss.web.theme;
  * @since 6.5.2
  */
 public abstract class Theme {
-	
+
 	// name of the theme 
 	private String _name = "";
-	
+
 	/**
 	 * Instantiate a theme
 	 */
 	public Theme() {
 	}
-	
+
 	/**
 	 * Instantiate a theme with the given name
 	 * @param themeName name used to identify the theme
@@ -41,20 +41,21 @@ public abstract class Theme {
 	public Theme(String themeName) {
 		setName(themeName);
 	}
-	
+
 	/**
 	 * @return name used to identify the theme
 	 */
 	public String getName() {
 		return _name;
 	}
-	
+
 	/**
 	 * Rename the theme
 	 * @param themeName new name used by the theme
 	 */
 	public void setName(String themeName) {
-		if (themeName == null) themeName = "";
+		if (themeName == null)
+			themeName = "";
 		_name = themeName;
 	}
 
@@ -64,5 +65,5 @@ public abstract class Theme {
 	public String toString() {
 		return _name;
 	}
-	
+
 }

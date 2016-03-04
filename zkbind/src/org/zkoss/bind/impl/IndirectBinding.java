@@ -28,9 +28,9 @@ import org.zkoss.zul.ListModelList;
  * @author jumperchen
  * @since 8.0.0
  */
-public abstract class IndirectBinding implements ReferenceBinding,
-		Serializable {
+public abstract class IndirectBinding implements ReferenceBinding, Serializable {
 	private Object _data;
+
 	public IndirectBinding(Object data) {
 		_data = data;
 	}
@@ -42,7 +42,7 @@ public abstract class IndirectBinding implements ReferenceBinding,
 		return _data;
 	}
 
-	abstract protected ListModel getModel();
+	protected abstract ListModel getModel();
 
 	/**
 	 * Sets the data
@@ -50,6 +50,7 @@ public abstract class IndirectBinding implements ReferenceBinding,
 	public void setData(Object data) {
 		_data = data;
 	}
+
 	/**
 	 * do nothing for this method
 	 */
@@ -60,14 +61,10 @@ public abstract class IndirectBinding implements ReferenceBinding,
 	public void setValue(BindELContext ctx, Object value) {
 		ListModel model = getModel();
 		if (model instanceof ListModelArray) {
-			((ListModelArray<Object>) model)
-					.set(((ListModelArray<Object>) model).indexOf(getData()),
-							value);
+			((ListModelArray<Object>) model).set(((ListModelArray<Object>) model).indexOf(getData()), value);
 			_data = value; // update it
 		} else if (model instanceof ListModelList<?>) {
-			((ListModelList<Object>) model)
-					.set(((ListModelList<Object>) model).indexOf(getData()),
-							value);
+			((ListModelList<Object>) model).set(((ListModelList<Object>) model).indexOf(getData()), value);
 			_data = value; // update it
 		}
 	}
@@ -82,12 +79,14 @@ public abstract class IndirectBinding implements ReferenceBinding,
 	public Map<String, Object> getArgs() {
 		return null;
 	}
+
 	/**
 	 * Null is returned by default. (never be used)
 	 */
 	public String getPropertyString() {
 		return null;
 	}
+
 	/**
 	 * do nothing for this method
 	 */

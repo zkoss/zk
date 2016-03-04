@@ -58,6 +58,7 @@ public interface Desktop extends Scope {
 	 * assumed.
 	 */
 	public String getDeviceType();
+
 	/** Sets the device type that this desktop belongs to.
 	 *
 	 * <p>Note: you can change the device type only before any component
@@ -72,6 +73,7 @@ public interface Desktop extends Scope {
 	 * @exception UiException if any component is attached to a page of the desktop.
 	 */
 	public void setDeviceType(String deviceType);
+
 	/** Returns the device that is associated with this desktop.
 	 * <p>Note: the device is shared by all desktops of the same device type.
 	 */
@@ -87,13 +89,16 @@ public interface Desktop extends Scope {
 	 * It is unique in the whole session.
 	 */
 	public String getId();
+
 	/** Returns the execution, or null if this desktop is not 
 	 * serving any execution (a.k.a., not locked).
 	 */
 	public Execution getExecution();
+
 	/** Returns the session of this desktop.
 	 */
 	public Session getSession();
+
 	/** Returns the Web application this desktop belongs to.
 	 */
 	public WebApp getWebApp();
@@ -106,22 +111,25 @@ public interface Desktop extends Scope {
 	 * @param pageId the page's ID or UUID. ID has the higher priority.
 	 * @exception ComponentNotFoundException if page not found
 	 */
-	public Page getPage(String pageId)
-	throws ComponentNotFoundException;
+	public Page getPage(String pageId) throws ComponentNotFoundException;
+
 	/** Returns the page of the specified ID or UUID, or null if no such page.
 	 *
 	 * @param pageId the page's ID or UUID. ID has the higher priority.
 	 * @since 2.4.1
 	 */
 	public Page getPageIfAny(String pageId);
+
 	/** Returns a readonly collection of all {@link Page} in this desktop.
 	 */
 	public Collection<Page> getPages();
+
 	/** Returns the first page, or null if no page at all (happens when the desktop
 	 * has been destroyed)
 	 * @since 5.0.3
 	 */
 	public Page getFirstPage();
+
 	/** Returns whether a page exists.
 	 */
 	public boolean hasPage(String pageId);
@@ -129,12 +137,15 @@ public interface Desktop extends Scope {
 	/** Returns all custom attributes associated with this desktop.
 	 */
 	public Map<String, Object> getAttributes();
+
 	/** Returns the value of the specified custom attribute associated with the desktop.
 	 */
 	public Object getAttribute(String name);
+
 	/** Sets the value of the specified custom attribute associated with the desktop.
 	 */
 	public Object setAttribute(String name, Object value);
+
 	/** Removes the specified custom attribute associated with the desktop.
 	 */
 	public Object removeAttribute(String name);
@@ -142,10 +153,12 @@ public interface Desktop extends Scope {
 	/** Returns all components contained in this desktop.
 	 */
 	public Collection<Component> getComponents();
+
 	/** Returns the component of the specified UUID ({@link Component#getUuid}).
 	 * @exception ComponentNotFoundException if component not found
 	 */
 	public Component getComponentByUuid(String uuid);
+
 	/** Returns the component of the specified UUID
 	 * ({@link Component#getUuid}), or null if not found.
 	 */
@@ -173,6 +186,7 @@ public interface Desktop extends Scope {
 	 * @since 3.0.0
 	 */
 	public String getRequestPath();
+
 	/** Returns the query string that is contained in the request URL after the
 	 * path ({@link #getRequestPath}), or null if the URL does not have a query
 	 * string.
@@ -186,6 +200,7 @@ public interface Desktop extends Scope {
 	 * In other words, you could use getCurrentDirectory() + relative_path.
 	 */
 	public String getCurrentDirectory();
+
 	/** Sets the current directory.
 	 * @param dir the current directory. If null, an empty string is assumed
 	 * (means no current directory at all).
@@ -197,12 +212,14 @@ public interface Desktop extends Scope {
 	 * because user might use BACK, FORWARD or others to change the bookmark.
 	 */
 	public String getBookmark();
+
 	/** Sets a bookmark to this desktop. Then, when user press BACK, FORWARD
 	 * or specify an URL with this bookmark, the onBookmarkChange event
 	 * is sent to all pages of the desktop.
 	 * <p>It is the same as <code>setBookmark(name, false)</code>
 	 */
 	public void setBookmark(String name);
+
 	/**
 	 * Sets the bookmark to this desktop. with more control.
 	 * @param name the name of the bookmark
@@ -223,6 +240,7 @@ public interface Desktop extends Scope {
 	 * <p>Used mainly for component implementation.
 	 */
 	public String getDynamicMediaURI(Component comp, String pathInfo);
+
 	/** Returns URI for a media that is used to download to the client.
 	 * The client will open a Save As dialog to save the specified file.
 	 *
@@ -251,6 +269,7 @@ public interface Desktop extends Scope {
 	 * @since 3.0.0
 	 */
 	public boolean enableServerPush(boolean enable);
+
 	/** Returns whether the server-push feature is enabled for this
 	 * desktop.
 	 *
@@ -282,6 +301,7 @@ public interface Desktop extends Scope {
 	 * @since 3.0.6
 	 */
 	public void addListener(Object listener);
+
 	/** Removes a listener.
 	 *
 	 * @return whether the listener is removed successfully.

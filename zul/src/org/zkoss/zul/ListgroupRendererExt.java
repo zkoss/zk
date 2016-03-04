@@ -31,11 +31,11 @@ public interface ListgroupRendererExt {
 	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default row is created as follow.
-<pre><code>
-final Listgroup group = new Listgroup();
-group.applyProperties();
-return group;
-</code></pre>
+	<pre><code>
+	final Listgroup group = new Listgroup();
+	group.applyProperties();
+	return group;
+	</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Listgroup#setParent}.
 	 *
@@ -51,11 +51,11 @@ return group;
 	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default row is created as follow.
-<pre><code>
-final Listgroupfoot groupfoot = new Listgroupfoot();
-groupfoot.applyProperties();
-return groupfoot;
-</code></pre>
+	<pre><code>
+	final Listgroupfoot groupfoot = new Listgroupfoot();
+	groupfoot.applyProperties();
+	return groupfoot;
+	</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Listgroupfoot#setParent}.
 	 *

@@ -24,18 +24,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Locale;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.text.DateFormats;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-import org.zkoss.text.DateFormats;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
@@ -71,89 +70,88 @@ public class Timebox extends FormatInputElement {
 	private Locale _locale;
 	private boolean _btnVisible = true;
 	private static Date _dummyDate = new Date();
-	
+
 	public Timebox() {
 		setCols(5);
 		setFormat("");
 	}
+
 	public Timebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
 	}
 
-
-
 	/** Sets the date format.
-<p>If null or empty is specified, {@link #getDefaultFormat} is assumed.
-Since 5.0.7, you could specify one of the following reserved words,
-and {@link DateFormats#getTimeFormat}
-will be used to retrieve the real format.
-<table border=0 cellspacing=3 cellpadding=0>
-<tr>
-<td>short</td>
-<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#SHORT}</td>
-</tr>
-<tr>
-<td>medium</td>
-<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#MEDIUM}</td>
-</tr>
-<tr>
-<td>long</td>
-<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#LONG}</td>
-</tr>
-<tr>
-<td>full</td>
-<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#FULL}</td>
-</tr>
-</table>
-
-<p>In additions, the format could be a combination of the following pattern letters:
-<table border=0 cellspacing=3 cellpadding=0>
-
-     <tr bgcolor="#ccccff">
-         <th align=left>Letter
-         <th align=left>Date or Time Component
-         <th align=left>Presentation
-         <th align=left>Examples
-     <tr>
- *     <tr bgcolor="#eeeeff">
- *         <td><code>a</code>
- *         <td>Am/pm marker
- *         <td><a href="#text">Text</a>
- *         <td><code>PM</code>
- *     <tr>
- *         <td><code>H</code>
- *         <td>Hour in day (0-23)
- *         <td><a href="#number">Number</a>
- *         <td><code>0</code>
- *     <tr bgcolor="#eeeeff">
- *         <td><code>k</code>
- *         <td>Hour in day (1-24)
- *         <td><a href="#number">Number</a>
- *         <td><code>24</code>
- *     <tr>
- *         <td><code>K</code>
- *         <td>Hour in am/pm (0-11)
- *         <td><a href="#number">Number</a>
- *         <td><code>0</code>
- *     <tr bgcolor="#eeeeff">
- *         <td><code>h</code>
- *         <td>Hour in am/pm (1-12)
- *         <td><a href="#number">Number</a>
- *         <td><code>12</code>
- *     <tr>
- *         <td><code>m</code>
- *         <td>Minute in hour
- *         <td><a href="#number">Number</a>
- *         <td><code>30</code>
- *     <tr bgcolor="#eeeeff">
- *         <td><code>s</code>
- *         <td>Second in minute
- *         <td><a href="#number">Number</a>
- *         <td><code>55</code>
- </table>
- 	@since 5.0.0
- 	 */
+	<p>If null or empty is specified, {@link #getDefaultFormat} is assumed.
+	Since 5.0.7, you could specify one of the following reserved words,
+	and {@link DateFormats#getTimeFormat}
+	will be used to retrieve the real format.
+	<table border=0 cellspacing=3 cellpadding=0>
+	<tr>
+	<td>short</td>
+	<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#SHORT}</td>
+	</tr>
+	<tr>
+	<td>medium</td>
+	<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#MEDIUM}</td>
+	</tr>
+	<tr>
+	<td>long</td>
+	<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#LONG}</td>
+	</tr>
+	<tr>
+	<td>full</td>
+	<td>{@link DateFormats#getTimeFormat} with {@link DateFormat#FULL}</td>
+	</tr>
+	</table>
+	
+	<p>In additions, the format could be a combination of the following pattern letters:
+	<table border=0 cellspacing=3 cellpadding=0>
+	
+	 <tr bgcolor="#ccccff">
+	     <th align=left>Letter
+	     <th align=left>Date or Time Component
+	     <th align=left>Presentation
+	     <th align=left>Examples
+	 <tr>
+	*     <tr bgcolor="#eeeeff">
+	*         <td><code>a</code>
+	*         <td>Am/pm marker
+	*         <td><a href="#text">Text</a>
+	*         <td><code>PM</code>
+	*     <tr>
+	*         <td><code>H</code>
+	*         <td>Hour in day (0-23)
+	*         <td><a href="#number">Number</a>
+	*         <td><code>0</code>
+	*     <tr bgcolor="#eeeeff">
+	*         <td><code>k</code>
+	*         <td>Hour in day (1-24)
+	*         <td><a href="#number">Number</a>
+	*         <td><code>24</code>
+	*     <tr>
+	*         <td><code>K</code>
+	*         <td>Hour in am/pm (0-11)
+	*         <td><a href="#number">Number</a>
+	*         <td><code>0</code>
+	*     <tr bgcolor="#eeeeff">
+	*         <td><code>h</code>
+	*         <td>Hour in am/pm (1-12)
+	*         <td><a href="#number">Number</a>
+	*         <td><code>12</code>
+	*     <tr>
+	*         <td><code>m</code>
+	*         <td>Minute in hour
+	*         <td><a href="#number">Number</a>
+	*         <td><code>30</code>
+	*     <tr bgcolor="#eeeeff">
+	*         <td><code>s</code>
+	*         <td>Second in minute
+	*         <td><a href="#number">Number</a>
+	*         <td><code>55</code>
+	</table>
+	@since 5.0.0
+	 */
 	public void setFormat(String format) throws WrongValueException {
 		if (!Objects.equals(getFormat(), format)) {
 			String realformat = getRealFormat();
@@ -161,11 +159,11 @@ will be used to retrieve the real format.
 				String timezone = getFormattedTimezone();
 				smartUpdate("timezone", timezone);
 			}
-			
-			super.setFormat(format != null ? format: "");			
+
+			super.setFormat(format != null ? format : "");
 		}
 	}
-	
+
 	/** Returns the real format, i.e., the combination of the format patterns,
 	 * such as hh:mm.
 	 * <p>As described in {@link #setFormat}, a developer could specify
@@ -179,8 +177,7 @@ will be used to retrieve the real format.
 			return getDefaultFormat();
 
 		int ts = Datebox.toStyle(format);
-		return ts != -111 ?
-			DateFormats.getTimeFormat(ts, _locale, DEFAULT_FORMAT): format;
+		return ts != -111 ? DateFormats.getTimeFormat(ts, _locale, DEFAULT_FORMAT) : format;
 	}
 
 	/** Returns the value (in Date), might be null unless
@@ -188,8 +185,9 @@ will be used to retrieve the real format.
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Date getValue() throws WrongValueException {
-		return (Date)getTargetValue();
+		return (Date) getTargetValue();
 	}
+
 	/** Sets the value (in Date).
 	 * If value is null, then an empty will be sent(render) to client.
 	 * If else, only the Hour and Minute field will be sent(render) to client. 
@@ -200,13 +198,14 @@ will be used to retrieve the real format.
 		validate(value);
 		setRawValue(value);
 	}
-	
+
 	/** Returns whether the button (on the right of the textbox) is visible.
 	 * <p>Default: true.
 	 */
 	public boolean isButtonVisible() {
 		return _btnVisible;
 	}
+
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 */
 	public void setButtonVisible(boolean visible) {
@@ -215,7 +214,7 @@ will be used to retrieve the real format.
 			smartUpdate("buttonVisible", visible);
 		}
 	}
-		
+
 	/** Returns the time zone that this time box belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
@@ -223,6 +222,7 @@ will be used to retrieve the real format.
 	public TimeZone getTimeZone() {
 		return _tzone;
 	}
+
 	/** Sets the time zone that this time box belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
@@ -241,6 +241,7 @@ will be used to retrieve the real format.
 	public Locale getLocale() {
 		return _locale;
 	}
+
 	/** Sets the locale used to identify the format of this timebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
@@ -252,14 +253,14 @@ will be used to retrieve the real format.
 			invalidate();
 		}
 	}
+
 	/** Sets the locale used to identify the format of this timebox.
 	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
 	 * is assumed)
 	 * @since 5.0.7
 	 */
 	public void setLocale(String locale) {
-		setLocale(locale != null && locale.length() > 0 ?
-			Locales.getLocale(locale): null);
+		setLocale(locale != null && locale.length() > 0 ? Locales.getLocale(locale) : null);
 	}
 
 	/**
@@ -274,22 +275,28 @@ will be used to retrieve the real format.
 	 */
 	protected String getDefaultFormat() {
 		return DateFormats.getTimeFormat(DateFormat.DEFAULT, _locale, "HH:mm");
-			//We use HH:mm for backward compatibility
+		//We use HH:mm for backward compatibility
 	}
 
 	protected Object marshall(Object value) {
-		if (value == null || _tzone == null) return value;
+		if (value == null || _tzone == null)
+			return value;
 		Date date = (Date) value;
-		return new Date((date).getTime() - Dates.getTimezoneOffset(TimeZones.getCurrent(), date) + Dates.getTimezoneOffset(_tzone, date));
+		return new Date((date).getTime() - Dates.getTimezoneOffset(TimeZones.getCurrent(), date)
+				+ Dates.getTimezoneOffset(_tzone, date));
 	}
+
 	protected Object unmarshall(Object value) {
-		if (value == null || _tzone == null) return value;
+		if (value == null || _tzone == null)
+			return value;
 		Date date = (Date) value;
-		return new Date((date).getTime() + Dates.getTimezoneOffset(TimeZones.getCurrent(), date) - Dates.getTimezoneOffset(_tzone, date));
+		return new Date((date).getTime() + Dates.getTimezoneOffset(TimeZones.getCurrent(), date)
+				- Dates.getTimezoneOffset(_tzone, date));
 	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		//null or empty string,
-		if (value == null || value.length() == 0){
+		if (value == null || value.length() == 0) {
 			return null;
 		}
 		final String fmt = getRealFormat();
@@ -298,31 +305,30 @@ will be used to retrieve the real format.
 		try {
 			date = df.parse(value);
 		} catch (ParseException ex) {
-			throw showCustomError(
-				new WrongValueException(this, MZul.DATE_REQUIRED,
-					new Object[] {value, fmt}));
+			throw showCustomError(new WrongValueException(this, MZul.DATE_REQUIRED, new Object[] { value, fmt }));
 		}
 		return date;
 	}
+
 	protected String coerceToString(Object value) {
 		final DateFormat df = getDateFormat(getRealFormat());
 		return value != null ? df.format((Date) value) : "";
 	}
-	
+
 	/** Returns the date format of the time only,
 	 *
 	 * <p>Default: it uses SimpleDateFormat to format the date.
 	 */
 	protected DateFormat getDateFormat(String fmt) {
-		final DateFormat df = new SimpleDateFormat(fmt,
-			_locale != null ? _locale: Locales.getCurrent());
+		final DateFormat df = new SimpleDateFormat(fmt, _locale != null ? _locale : Locales.getCurrent());
 		final TimeZone tz = _tzone != null ? _tzone : TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
 	}
+
 	private String getUnformater() {
-		if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
-				getDesktop(), "org.zkoss.zul.Timebox.unformater.isSent")) {
+		if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(getDesktop(),
+				"org.zkoss.zul.Timebox.unformater.isSent")) {
 			return Library.getProperty("org.zkoss.zul.Timebox.unformater");
 		}
 		return null;
@@ -331,12 +337,10 @@ will be used to retrieve the real format.
 	private Object[] getRealSymbols() {
 		if (_locale != null) {
 			final String localeName = _locale.toString();
-			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(
-					getDesktop(),
-					getClass().getName() + localeName)) {
+			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(getDesktop(), getClass().getName() + localeName)) {
 				final Map<String, String[]> map = new HashMap<String, String[]>(2);
 				final Calendar cal = Calendar.getInstance(_locale);
-				
+
 				SimpleDateFormat df = new SimpleDateFormat("a", _locale);
 				cal.set(Calendar.HOUR_OF_DAY, 3);
 				final String[] ampm = new String[2];
@@ -344,19 +348,19 @@ will be used to retrieve the real format.
 				cal.set(Calendar.HOUR_OF_DAY, 15);
 				ampm[1] = df.format(cal.getTime());
 				map.put("APM", ampm);
-				return new Object[] {localeName, map };
+				return new Object[] { localeName, map };
 			}
-			return new Object[] {localeName, null };
+			return new Object[] { localeName, null };
 		}
 		return null;
 	}
-	
+
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-timebox" : _zclass;
+		return _zclass == null ? "z-timebox" : _zclass;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		String realformat = getRealFormat();
@@ -365,9 +369,9 @@ will be used to retrieve the real format.
 			renderer.render("timezone", timezone);
 		}
 
-		if(!_btnVisible)
+		if (!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);
-		
+
 		String unformater = getUnformater();
 		if (!Strings.isBlank(unformater))
 			renderer.render("unformater", unformater); // TODO: compress
@@ -375,13 +379,14 @@ will be used to retrieve the real format.
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols());
 	}
-	
-	private String getFormattedTimezone(){
+
+	private String getFormattedTimezone() {
 		return getDateFormat("z").format(_dummyDate);
 	}
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+
 	static {
 		_properties.put("value", new PropertyAccess<Date>() {
 			public void setValue(Component cmp, Date value) {

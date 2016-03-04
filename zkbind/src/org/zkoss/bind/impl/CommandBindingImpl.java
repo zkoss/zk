@@ -33,40 +33,43 @@ public class CommandBindingImpl extends BindingImpl implements CommandBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final String _evtnm;
 	private final ExpressionX _command;
+
 	public CommandBindingImpl(Binder binder, Component comp, String evtnm, String cmdScript, Map<String, Object> args) {
 		super(binder, comp, args);
 		_evtnm = evtnm;
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		_command = eval.parseExpressionX(null, cmdScript, String.class);
 	}
+
 	public String getEventName() {
 		return _evtnm;
 	}
+
 	public ExpressionX getCommand() {
 		return _command;
 	}
+
 	public String getCommandString() {
 		return BindEvaluatorXUtil.getExpressionString(_command);
 	}
-	
+
 	//TODO, DENNIS, Nobody call this
 	public void execute(BindContext ctx) {
 		final Object base = getBinder().getViewModel();
-		final Component comp = getComponent();//ctx.getComponent();
+		final Component comp = getComponent(); //ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		final String methodName = (String) eval.getValue(ctx, comp, getCommand());
 		try {
-			final Method method = Classes.getMethodInPublic(base.getClass(), methodName, new Class[] {Map.class});
+			final Method method = Classes.getMethodInPublic(base.getClass(), methodName, new Class[] { Map.class });
 			method.invoke(getBinder().getViewModel(), ctx.getAttributes());
 		} catch (Exception e) {
 			throw UiException.Aide.wrap(e);
 		}
 	}
-	
-	public String toString(){
-		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
-		.append(",component:").append(getComponent())
-		.append(",evtnm:").append(_evtnm)
-		.append(",command:").append(getCommandString()).toString();
+
+	public String toString() {
+		return new StringBuilder().append(getClass().getSimpleName()).append("@")
+				.append(Integer.toHexString(hashCode())).append(",component:").append(getComponent()).append(",evtnm:")
+				.append(_evtnm).append(",command:").append(getCommandString()).toString();
 	}
 }

@@ -22,6 +22,8 @@ import org.zkoss.zk.ui.Component;
  */
 public interface PropertyAccess<T> extends Serializable {
 	public void setValue(Component cmp, T value);
+
 	public Class<T> getType();
+
 	public T getValue(Component cmp);
 }

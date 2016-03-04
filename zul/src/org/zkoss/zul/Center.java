@@ -79,7 +79,7 @@ public class Center extends LayoutRegion {
 	public void setMinsize(int minsize) {
 		throw new UnsupportedOperationException("readonly");
 	}
-	
+
 	/**
 	 * Returns {@link Borderlayout#CENTER}.
 	 */

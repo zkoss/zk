@@ -16,14 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.Collection;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.Collection;
 
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ZScript;
 
 /**
@@ -48,6 +48,7 @@ public interface PageCtrl {
 	 * @since 3.5.2
 	 */
 	public void preInit();
+
 	/** Initializes this page by assigning the info provided by
 	 * the specified {@link PageConfig}, and then adds it
 	 * to a desktop (by use of {@link Execution#getDesktop}).
@@ -62,6 +63,7 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public void init(PageConfig config);
+
 	/** Called when this page is about to be destroyed.
 	 * It is called by desktop, after removing it from the desktop.
 	 */
@@ -78,6 +80,7 @@ public interface PageCtrl {
 	 * @since 5.0.5
 	 */
 	public String getBeforeHeadTags();
+
 	/** Returns the tags that shall be generated inside the head element
 	 * and after ZK's default tags (never null).
 	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
@@ -89,6 +92,7 @@ public interface PageCtrl {
 	 * @since 5.0.5
 	 */
 	public String getAfterHeadTags();
+
 	/** Adds the tags that will be generated inside the head element
 	 * and before ZK's default tags. For example,
 	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
@@ -98,6 +102,7 @@ public interface PageCtrl {
 	 * @since 5.0.5
 	 */
 	public void addBeforeHeadTags(String tags);
+
 	/** Adds the tags that will be generated inside the head element
 	 * and after ZK's default tags. For example,
 	 * <pre><code>((PageCtrl)page).addBeforeHeadTags("<meta name=\"robots\" content=\"index,follow\"/>");</code></pre>
@@ -118,6 +123,7 @@ public interface PageCtrl {
 	 * @since 5.0.2
 	 */
 	public Collection<Object[]> getResponseHeaders();
+
 	/** Returns the attributes of the root element declared in this page
 	 * (never null).
 	 * An empty string is returned if no special attribute is declared.
@@ -126,23 +132,27 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public String getRootAttributes();
+
 	/** Set the attributes of the root element declared in this page
 	 *
 	 * <p>Default: "".
 	 */
 	public void setRootAttributes(String rootAttributes);
+
 	/** Returns the doc type (&lt;!DOCTYPE&gt;),
 	 * or null to use the device default.
 	 *
 	 * @since 3.0.0
 	 */
 	public String getDocType();
+
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
 	 * <p>Default: null (i.e., the device default)
 	 * @since 3.0.0
 	 */
 	public void setDocType(String docType);
+
 	/** Returns the first line to be generated to the output,
 	 * or null if nothing to generate.
 	 *
@@ -152,6 +162,7 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public String getFirstLine();
+
 	/** Sets the first line to be generated to the output.
 	 *
 	 * <p>Default: null (i.e., nothing generated)
@@ -164,6 +175,7 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public String getContentType();
+
 	/** Sets the content type.
 	 *
 	 * @since 3.0.0
@@ -175,6 +187,7 @@ public interface PageCtrl {
 	 * @since 5.0.5
 	 */
 	public String getWidgetClass();
+
 	/** Sets the widget class of this page.
 	 *
 	 * @param wgtcls the widget class. The device default is assumed if wgtcls
@@ -189,6 +202,7 @@ public interface PageCtrl {
 	 * @since 3.0.0
 	 */
 	public Boolean getCacheable();
+
 	/** Sets if the client can cache the rendered result.
 	 *
 	 * <p>Default: null (use the device default).
@@ -202,6 +216,7 @@ public interface PageCtrl {
 	 * @since 3.6.3
 	 */
 	public Boolean getAutomaticTimeout();
+
 	/** Sets whether to automatically redirect to the timeout URI.
 	 *
 	 * <p>Default: null (use the device default).
@@ -223,6 +238,7 @@ public interface PageCtrl {
 	 * <p>Note: the owner, if not null, must implement {@link org.zkoss.zk.ui.ext.Includer}.
 	 */
 	public Component getOwner();
+
 	/** Sets the owner of this page.
 	 * <p>Called only internally
 	 * <p>Since 5.0.6, the owner must implement {@link org.zkoss.zk.ui.ext.Includer}.
@@ -252,6 +268,7 @@ public interface PageCtrl {
 	 * is about to be passivated (a.k.a., serialized).
 	 */
 	public void sessionWillPassivate(Desktop desktop);
+
 	/** Notification that the session, which owns this page,
 	 * has just been activated (a.k.a., deserialized).
 	 */

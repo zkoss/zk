@@ -16,22 +16,22 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.io.Reader;
 import java.io.IOException;
+import java.io.Reader;
 
 import org.zkoss.idom.Document;
-import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Richlet;
-import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.sys.ServerPush;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ShadowInfo;
+import org.zkoss.zk.ui.util.Composer;
 
 /**
  * Used to create {@link Session}, {@link Desktop}, {@link Page},
@@ -56,6 +56,7 @@ public interface UiFactory {
 	/** Starts this factory.
 	 */
 	public void start(WebApp wapp);
+
 	/** Stops this factory.
 	 */
 	public void stop(WebApp wapp);
@@ -82,6 +83,7 @@ public interface UiFactory {
 	 * @return true if it is a richlet, or false if it is a ZUML page.
 	 */
 	public boolean isRichlet(RequestInfo ri, boolean bRichlet);
+
 	/** Returns a richlet for specified request, or null if the richlet is not found..
 	 */
 	public Richlet getRichlet(RequestInfo ri, String path);
@@ -110,6 +112,7 @@ public interface UiFactory {
 	 * by a filter.
 	 */
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path);
+
 	/** Creates an instance of {@link Page} for the specified richlet.
 	 *
 	 * <p>Note: the returned instance must also implement {@link PageCtrl}.
@@ -130,8 +133,7 @@ public interface UiFactory {
 	 * @param compInfo the component information
 	 * @since 6.0.0
 	 */
-	public Component newComponent(Page page, Component parent,
-	ComponentInfo compInfo, Component insertBefore);
+	public Component newComponent(Page page, Component parent, ComponentInfo compInfo, Component insertBefore);
 
 	/** Creates and initializes a shadow based on the specified
 	 * {@link ShadowInfo}.
@@ -144,8 +146,7 @@ public interface UiFactory {
 	 * @param compInfo the shadow information
 	 * @since 8.0.0
 	 */
-	public Component newComponent(Page page, Component parent,
-	ShadowInfo compInfo, Component insertBefore);
+	public Component newComponent(Page page, Component parent, ShadowInfo compInfo, Component insertBefore);
 
 	/** Creates and initializes a component based on the specified
 	 * {@link ComponentDefinition}.
@@ -161,8 +162,7 @@ public interface UiFactory {
 	 * If null, {@link ComponentDefinition#getImplementationClass} will
 	 * be used.
 	 */
-	public Component newComponent(Page page, Component parent,
-	ComponentDefinition compdef, String clsnm);
+	public Component newComponent(Page page, Component parent, ComponentDefinition compdef, String clsnm);
 
 	/** Creates and initializes a composer of the given class and page.
 	 * @param page the page that the composer will be created for.
@@ -170,6 +170,7 @@ public interface UiFactory {
 	 * @since 6.0.0
 	 */
 	public Composer newComposer(Page page, Class klass);
+
 	/** Creates and initializes a composer of the given class name and page.
 	 * In most cases, the implementation could use {@link Page#resolveClass}
 	 * to resolve the class, if page is not null.
@@ -177,8 +178,8 @@ public interface UiFactory {
 	 * @exception UiException if failed to instantiate
 	 * @since 6.0.0
 	 */
-	public Composer newComposer(Page page, String className)
-	throws ClassNotFoundException;
+	public Composer newComposer(Page page, String className) throws ClassNotFoundException;
+
 	/** Creates and initializes the server push of the given class and desktop.
 	 * @param desktop the desktop that the server push will be created for.
 	 * @exception UiException if failed to instantiate
@@ -212,6 +213,7 @@ public interface UiFactory {
 	 * @see #getPageDefinitionDirectly
 	 */
 	public PageDefinition getPageDefinition(RequestInfo ri, String path);
+
 	/** Returns the page definition of the specified content; never null.
 	 *
 	 * <p>It is called when a filter or {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(String, String)}
@@ -228,8 +230,7 @@ public interface UiFactory {
 	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinition
 	 */
-	public PageDefinition getPageDefinitionDirectly(
-	RequestInfo ri, String content, String extension);
+	public PageDefinition getPageDefinitionDirectly(RequestInfo ri, String content, String extension);
 
 	/** Returns the page definition of the specified content; never null.
 	 *
@@ -247,8 +248,8 @@ public interface UiFactory {
 	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinition
 	 */
-	public PageDefinition getPageDefinitionDirectly(
-	RequestInfo ri, Document content, String extension);
+	public PageDefinition getPageDefinitionDirectly(RequestInfo ri, Document content, String extension);
+
 	/** Returns the page definition of the specified reader; never null.
 	 *
 	 * <p>It is called when {@link org.zkoss.zk.ui.Execution#getPageDefinitionDirectly(Reader, String)}
@@ -265,6 +266,5 @@ public interface UiFactory {
 	 * the language called "xul/html" is assumed.
 	 * @see #getPageDefinition
 	 */
-	public PageDefinition getPageDefinitionDirectly(
-	RequestInfo ri, Reader reader, String extension) throws IOException;
+	public PageDefinition getPageDefinitionDirectly(RequestInfo ri, Reader reader, String extension) throws IOException;
 }

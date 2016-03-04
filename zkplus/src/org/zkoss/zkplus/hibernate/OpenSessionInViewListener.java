@@ -21,6 +21,7 @@ import java.util.List;
 import org.hibernate.StaleObjectStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.util.ExecutionInit;
@@ -48,25 +49,25 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	//-- ExecutionInit --//
 	public void init(Execution exec, Execution parent) {
 		if (parent == null) { //the root execution of a servlet request
-			log.debug("Starting a database transaction: "+exec);
+			log.debug("Starting a database transaction: " + exec);
 			HibernateUtil.currentSession().beginTransaction();
 		}
 	}
-	
+
 	//-- ExecutionCleanup --//
 	public void cleanup(Execution exec, Execution parent, List errs) {
 		if (parent == null) { //the root execution of a servlet request
 			try {
 				if (errs == null || errs.isEmpty()) {
 					// Commit and cleanup
-					log.debug("Committing the database transaction: "+exec);
+					log.debug("Committing the database transaction: " + exec);
 					HibernateUtil.currentSession().getTransaction().commit();
 				} else {
 					final Throwable ex = (Throwable) errs.get(0);
 					if (ex instanceof StaleObjectStateException) {
 						// default implementation does not do any optimistic concurrency 
 						// control; it simply rollback the transaction.
-						handleStaleObjectStateException(exec, (StaleObjectStateException)ex);
+						handleStaleObjectStateException(exec, (StaleObjectStateException) ex);
 					} else {
 						// default implementation log the stacktrace and then rollback
 						// the transaction.
@@ -78,7 +79,7 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 			}
 		}
 	}
-	
+
 	/**
 	 * <p>Default StaleObjectStateException handler. This implementation
 	 * does not implement optimistic concurrency control! It simply rollback 
@@ -93,12 +94,12 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	 *
 	 * @param exec the execution to clean up.
 	 * @param ex the StaleObjectStateException being thrown (and not handled) during the execution
-	 */			
+	 */
 	protected void handleStaleObjectStateException(Execution exec, StaleObjectStateException ex) {
 		log.error("This listener does not implement optimistic concurrency control!");
 		rollback(exec, ex);
 	}
-	
+
 	/**
 	 * <p>Default other exception (other than StaleObjectStateException) handler. 
 	 * This implementation simply rollback the transaction.</p>
@@ -110,7 +111,7 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	 *
 	 * @param exec the execution to clean up.
 	 * @param ex the Throwable other than StaleObjectStateException being thrown (and not handled) during the execution
-	 */			
+	 */
 	protected void handleOtherException(Execution exec, Throwable ex) {
 		// Rollback only
 		ex.printStackTrace();
@@ -122,15 +123,15 @@ public class OpenSessionInViewListener implements ExecutionInit, ExecutionCleanu
 	 *
 	 * @param exec the execution to clean up.
 	 * @param ex the StaleObjectStateException being thrown (and not handled) during the execution
-	 */	
+	 */
 	private void rollback(Execution exec, Throwable ex) {
 		try {
 			if (HibernateUtil.currentSession().getTransaction().isActive()) {
-				log.debug("Trying to rollback database transaction after exception:"+ex);
+				log.debug("Trying to rollback database transaction after exception:" + ex);
 				HibernateUtil.currentSession().getTransaction().rollback();
 			}
 		} catch (Throwable rbEx) {
-			log.error("Could not rollback transaction after exception! Original Exception:\n"+ex, rbEx);
+			log.error("Could not rollback transaction after exception! Original Exception:\n" + ex, rbEx);
 		}
 	}
 }

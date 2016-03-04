@@ -16,13 +16,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import java.util.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
@@ -39,12 +38,13 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * @since 3.0.9
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
-public class DateFormatConverter implements TypeConverter, java.io.Serializable  {
+public class DateFormatConverter implements TypeConverter, java.io.Serializable {
 
 	public Object coerceToBean(Object val, org.zkoss.zk.ui.Component comp) {
 		//do nothing
 		return val;
 	}
+
 	/**
 	 * Depending whether the data is coming from the database or coming from the datebox 
 	 * we might be passed either a java.util.Date or a java.sql.Timestamp
@@ -53,24 +53,25 @@ public class DateFormatConverter implements TypeConverter, java.io.Serializable 
 	 */
 	public Object coerceToUi(Object val, org.zkoss.zk.ui.Component comp) {
 		Date date = null;
-		if( val instanceof Timestamp ){
-			final Timestamp timestamp = (Timestamp)val;
+		if (val instanceof Timestamp) {
+			final Timestamp timestamp = (Timestamp) val;
 			date = new Date(timestamp.getTime());
-		} else if( val instanceof Date ){
-			date = (Date)val;
+		} else if (val instanceof Date) {
+			date = (Date) val;
 		}
 
-		final Annotation annot = ((ComponentCtrl)comp).getAnnotation(null, "format");
+		final Annotation annot = ((ComponentCtrl) comp).getAnnotation(null, "format");
 		String pattern = null;
 		if (annot != null) {
 			pattern = annot.getAttribute("value");
 		}
-		
+
 		if (date == null)
 			return "";
 
 		//prepare dateFormat and convert Date to String
-		final SimpleDateFormat df = new SimpleDateFormat(pattern == null ? "MM/dd/yyyy" : pattern, Locales.getCurrent());
+		final SimpleDateFormat df = new SimpleDateFormat(pattern == null ? "MM/dd/yyyy" : pattern,
+				Locales.getCurrent());
 		df.setTimeZone(TimeZones.getCurrent());
 		return df.format(date);
 	}

@@ -20,7 +20,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -28,8 +27,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-button.(since 3.5.0)
  * @author tomyeh
  */
-public class Button extends LabelImageElement
-implements org.zkoss.zk.ui.ext.Disable {
+public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private AuxInfo _auxinf;
 
 	static {
@@ -39,19 +37,22 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	public Button() {
 	}
+
 	public Button(String label) {
 		super(label);
 	}
+
 	public Button(String label, String image) {
 		super(label, image);
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
 	public boolean isDisabled() {
 		return _auxinf != null && _auxinf.disabled;
 	}
+
 	/** Sets whether it is disabled.
 	 * @see #setAutodisable
 	 */
@@ -67,8 +68,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 5.0.0
 	 */
 	public String getAutodisable() {
-		return _auxinf != null ? _auxinf.autodisable: null;
+		return _auxinf != null ? _auxinf.autodisable : null;
 	}
+
 	/** Sets a list of component IDs that shall be disabled when the user
 	 * clicks this button.
 	 *
@@ -97,7 +99,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 5.0.0
 	 */
 	public void setAutodisable(String autodisable) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable: null, autodisable)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable : null, autodisable)) {
 			initAuxInfo().autodisable = autodisable;
 			smartUpdate("autodisable", getAutodisable());
 		}
@@ -107,8 +109,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>Default: "normal".
 	 */
 	public String getDir() {
-		return _auxinf != null ? _auxinf.dir: NORMAL;
+		return _auxinf != null ? _auxinf.dir : NORMAL;
 	}
+
 	/** Sets the direction to layout image.
 	 * @param dir either "normal" or "reverse".
 	 */
@@ -116,17 +119,19 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (!NORMAL.equals(dir) && !"reverse".equals(dir))
 			throw new WrongValueException(dir);
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.dir: NORMAL, dir)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.dir : NORMAL, dir)) {
 			initAuxInfo().dir = dir;
 			smartUpdate("dir", getDir());
 		}
 	}
+
 	/** Returns the orient.
 	 * <p>Default: "horizontal".
 	 */
 	public String getOrient() {
-		return _auxinf != null ? _auxinf.orient: HORIZONTAL;
+		return _auxinf != null ? _auxinf.orient : HORIZONTAL;
 	}
+
 	/** Sets the orient to layout image.
 	 * @param orient either "horizontal" or "vertical".
 	 */
@@ -134,18 +139,20 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (!HORIZONTAL.equals(orient) && !"vertical".equals(orient))
 			throw new WrongValueException(orient);
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.orient: HORIZONTAL, orient)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.orient : HORIZONTAL, orient)) {
 			initAuxInfo().orient = orient;
 			smartUpdate("orient", getOrient());
 		}
 	}
+
 	/** Returns the button type.
 	 * <p>Default: "button".
 	 * @since 5.0.4
 	 */
 	public String getType() {
-		return _auxinf != null ? _auxinf.type: BUTTON;
+		return _auxinf != null ? _auxinf.type : BUTTON;
 	}
+
 	/** Sets the button type.
 	 * <p>Default: "button".
 	 * It is meaningful only if it is used with a HTML form.
@@ -158,7 +165,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (!BUTTON.equals(type) && !"submit".equals(type) && !"reset".equals(type))
 			throw new WrongValueException(type);
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.type: BUTTON, type)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.type : BUTTON, type)) {
 			initAuxInfo().type = type;
 			smartUpdate("type", getType());
 		}
@@ -171,14 +178,15 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>If it is not null, the onClick event won't be sent.
 	 */
 	public String getHref() {
-		return _auxinf != null ? _auxinf.href: null;
+		return _auxinf != null ? _auxinf.href : null;
 	}
+
 	/** Sets the href.
 	 */
 	public void setHref(String href) {
 		if (href != null && href.length() == 0)
 			href = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.href: null, href)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.href : null, href)) {
 			initAuxInfo().href = href;
 			smartUpdate("href", new EncodedHref()); //Bug 1850895
 		}
@@ -192,8 +200,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>Default: null.
 	 */
 	public String getTarget() {
-		return _auxinf != null ? _auxinf.target: null;
+		return _auxinf != null ? _auxinf.target : null;
 	}
+
 	/** Sets the target frame or window.
 	 * @param target the name of the frame or window to hyperlink.
 	 */
@@ -201,7 +210,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (target != null && target.length() == 0)
 			target = null;
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.target: null, target)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.target : null, target)) {
 			initAuxInfo().target = target;
 			smartUpdate("target", getTarget());
 		}
@@ -211,12 +220,13 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
-		return _auxinf != null ? _auxinf.tabindex: 0;
+		return _auxinf != null ? _auxinf.tabindex : 0;
 	}
+
 	/** Sets the tab order of this component.
 	 */
 	public void setTabindex(int tabindex) throws WrongValueException {
-		if ((_auxinf != null ? _auxinf.tabindex: 0) != tabindex) {
+		if ((_auxinf != null ? _auxinf.tabindex : 0) != tabindex) {
 			initAuxInfo().tabindex = tabindex;
 			smartUpdate("tabindex", getTabindex());
 		}
@@ -227,8 +237,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 5.0.0
 	 */
 	public String getUpload() {
-		return _auxinf != null ? _auxinf.upload: null;
+		return _auxinf != null ? _auxinf.upload : null;
 	}
+
 	/** Sets the JavaScript class at the client to handle the upload if this
 	 * button is used for file upload.
 	 * <p>Default: null.
@@ -269,41 +280,41 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 5.0.0
 	 */
 	public void setUpload(String upload) {
-		if (upload != null
-		&& (upload.length() == 0 || "false".equals(upload)))
+		if (upload != null && (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
-		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload: null)) {
+		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
 			onUploadChanged(upload);
 			initAuxInfo().upload = upload;
 			smartUpdate("upload", getUpload());
 		}
 	}
+
 	/** Called when the upload attribute is modified. */
 	private void onUploadChanged(String upload) {
-		if (upload != null && !"trendy".equals(getMold())
-		&& getDefinition().getMoldNames().contains("trendy")) //Toolbarbutton doesn't support trendy
+		if (upload != null && !"trendy".equals(getMold()) && getDefinition().getMoldNames().contains("trendy")) //Toolbarbutton doesn't support trendy
 			setMold("trendy");
 	}
 
 	private String getEncodedHref() {
 		final Desktop dt = getDesktop();
-		return _auxinf != null && _auxinf.href != null && dt != null ?
-			dt.getExecution().encodeURL(_auxinf.href): null;
-			//if desktop is null, it doesn't belong to any execution
+		return _auxinf != null && _auxinf.href != null && dt != null ? dt.getExecution().encodeURL(_auxinf.href) : null;
+		//if desktop is null, it doesn't belong to any execution
 	}
 
 	//-- super --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		int v;
 		if ((v = getTabindex()) != 0)
 			renderer.render("tabindex", v);
 		String s;
-		if (!NORMAL.equals(s = getDir())) render(renderer, "dir", s);
-		if (!HORIZONTAL.equals(s = getOrient())) render(renderer, "orient", s);
-		if (!BUTTON.equals(s = getType())) render(renderer, "type", s);
+		if (!NORMAL.equals(s = getDir()))
+			render(renderer, "dir", s);
+		if (!HORIZONTAL.equals(s = getOrient()))
+			render(renderer, "orient", s);
+		if (!BUTTON.equals(s = getType()))
+			render(renderer, "type", s);
 
 		render(renderer, "disabled", isDisabled());
 		render(renderer, "autodisable", getAutodisable());
@@ -314,19 +325,20 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
-	
+
 	protected void renderCrawlable(String label) throws java.io.IOException {
 		//does nothing since generated in renderProperties
 	}
+
 	public String getZclass() {
 		return _zclass != null ? _zclass : "z-button";
 	}
 
 	//Cloneable//
 	public Object clone() {
-		final Button clone = (Button)super.clone();
+		final Button clone = (Button) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
 
@@ -343,11 +355,10 @@ implements org.zkoss.zk.ui.ext.Disable {
 		}
 	}
 
-	
 	protected void updateByClient(String name, Object value) {
 		if ("disabled".equals(name))
-			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():
-				"true".equals(Objects.toString(value)));
+			setDisabled(value instanceof Boolean ? ((Boolean) value).booleanValue()
+					: "true".equals(Objects.toString(value)));
 		else
 			super.updateByClient(name, value);
 	}
@@ -357,8 +368,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
-	private static final String HORIZONTAL = "horizontal", NORMAL = "normal",
-		BUTTON = "button";
+
+	private static final String HORIZONTAL = "horizontal", NORMAL = "normal", BUTTON = "button";
+
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String orient = HORIZONTAL;
 		private String dir = NORMAL;

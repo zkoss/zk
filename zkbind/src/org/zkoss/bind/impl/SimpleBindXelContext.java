@@ -30,15 +30,17 @@ public class SimpleBindXelContext extends SimpleXelContext {
 	private Component _cmp;
 	private Binder _binder;
 	private boolean inited;
-	public SimpleBindXelContext(Component cmp, Binder binder,
-			VariableResolver resolver, FunctionMapper mapper) {
+
+	public SimpleBindXelContext(Component cmp, Binder binder, VariableResolver resolver, FunctionMapper mapper) {
 		super(resolver, mapper);
 		_cmp = cmp;
 		_binder = binder;
 	}
+
 	public Component getSelf() {
 		return _cmp;
 	}
+
 	public Binder getBinder() {
 		if (_binder == null && !inited) {
 			inited = true;
@@ -46,6 +48,7 @@ public class SimpleBindXelContext extends SimpleXelContext {
 		}
 		return _binder;
 	}
+
 	public String getViewModelName() {
 		if (getBinder() == null)
 			return null;
@@ -54,6 +57,7 @@ public class SimpleBindXelContext extends SimpleXelContext {
 			return VM;
 		return vmName;
 	}
+
 	public Object getViewModel() {
 		if (getBinder() != null)
 			return _binder.getViewModel();

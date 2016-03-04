@@ -16,16 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.util.resource;
 
-import java.util.Map;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -61,14 +61,15 @@ public interface ExtendletContext {
 	 * It includes the context path and the servlet to interpret
 	 * this extended resource.
 	 */
-	public String encodeURL(ServletRequest request,
-	ServletResponse response, String uri)
-	throws ServletException, IOException;
+	public String encodeURL(ServletRequest request, ServletResponse response, String uri)
+			throws ServletException, IOException;
+
 	/** Returns  the encoded URL for send redirect.
 	 * The URL is also encoded with HttpServletResposne.encodeRedirectURL.
 	 */
-	public String encodeRedirectURL(HttpServletRequest request,
-	HttpServletResponse response, String uri, Map params, int mode);
+	public String encodeRedirectURL(HttpServletRequest request, HttpServletResponse response, String uri, Map params,
+			int mode);
+
 	/* Returns the request dispatcher that acts as a wrapper for
 	 * the resource located at the given path, or null if not found.
 	 */
@@ -82,9 +83,8 @@ public interface ExtendletContext {
 	 *
 	 * @since 3.5.2 
 	 */
-	public void include(HttpServletRequest request,
-	HttpServletResponse response, String uri, Map params)
-	throws ServletException, IOException;
+	public void include(HttpServletRequest request, HttpServletResponse response, String uri, Map params)
+			throws ServletException, IOException;
 
 	/** Returns the URL of the specified URI, or null if not found.
 	 *
@@ -94,6 +94,7 @@ public interface ExtendletContext {
 	 * the non-compressed version.
 	 */
 	public URL getResource(String uri);
+
 	/** Returns the resource of the specified URI as input stream,
 	 * or null if not found.
 	 *
@@ -107,12 +108,14 @@ public interface ExtendletContext {
 	/** Returns the servlet context.
 	 */
 	public ServletContext getServletContext();
+
 	/** Returns the locator of this context used to locate resources.
 	 *
 	 * <p>Unlike {@link #getResource} and {@link #getResourceAsStream},
 	 * {@link #getLocator} doesn't handle the JavaScript debugging.
 	 */
 	public Locator getLocator();
+
 	/** Tests whether to compress the specified extension, e.g, "js" and
 	 * "css".
 	 *

@@ -33,8 +33,7 @@ public class Absolutelayout extends XulElement {
 
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Absolutechildren))
-			throw new UiException("Unsupported child for Absolutelayout: "
-					+ child);
+			throw new UiException("Unsupported child for Absolutelayout: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
 

@@ -16,11 +16,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.DesktopCacheProvider;
+import org.zkoss.zk.ui.sys.SessionCtrl;
 
 /**
  * A implementation of {@link DesktopCacheProvider} that stores all desktops
@@ -38,7 +38,7 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 
 	//-- DesktopCacheProvider --//
 	public DesktopCache getDesktopCache(Session sess) {
-		final SessionCtrl sessCtrl = (SessionCtrl)sess;
+		final SessionCtrl sessCtrl = (SessionCtrl) sess;
 		DesktopCache dc = sessCtrl.getDesktopCache();
 		if (dc == null) {
 			synchronized (this) {
@@ -51,8 +51,9 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 		}
 		return dc;
 	}
+
 	public void sessionDestroyed(Session sess) {
-		final SessionCtrl sessCtrl = (SessionCtrl)sess;
+		final SessionCtrl sessCtrl = (SessionCtrl) sess;
 		final DesktopCache dc = sessCtrl.getDesktopCache();
 		if (dc != null) {
 			sessCtrl.setDesktopCache(null);
@@ -63,19 +64,23 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionWillPassivate}.
 	 */
 	public void sessionWillPassivate(Session sess) {
-		final DesktopCache dc = ((SessionCtrl)sess).getDesktopCache();
-		if (dc != null) dc.sessionWillPassivate(sess);
+		final DesktopCache dc = ((SessionCtrl) sess).getDesktopCache();
+		if (dc != null)
+			dc.sessionWillPassivate(sess);
 	}
+
 	/** Invokes {@link #getDesktopCache}'s {@link DesktopCache#sessionDidActivate}.
 	 */
 	public void sessionDidActivate(Session sess) {
-		final DesktopCache dc = ((SessionCtrl)sess).getDesktopCache();
-		if (dc != null) dc.sessionDidActivate(sess);
+		final DesktopCache dc = ((SessionCtrl) sess).getDesktopCache();
+		if (dc != null)
+			dc.sessionDidActivate(sess);
 	}
 
 	public void start(WebApp wapp) {
 		_wapp = wapp;
 	}
+
 	public void stop(WebApp wapp) {
 		_wapp = null;
 	}

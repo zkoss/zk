@@ -25,18 +25,16 @@ import org.zkoss.zel.ELContext;
  * @since 6.0.0
  */
 public class BindXelFactory extends ELFactory {
-	public Expression parseExpression(XelContext xelc, String expression, @SuppressWarnings("rawtypes") Class expectedType)
-	throws XelException {
-		return new BindXelExpression(
-			_expf.createValueExpression(
-				newELContext(xelc), expression, expectedType));
+	public Expression parseExpression(XelContext xelc, String expression,
+			@SuppressWarnings("rawtypes") Class expectedType) throws XelException {
+		return new BindXelExpression(_expf.createValueExpression(newELContext(xelc), expression, expectedType));
 	}
-	
+
 	protected ELContext newELContext(XelContext xelc) {
 		return new BindELContext(xelc);
 	}
-	
-    //20110815, Henri Chen: allow overriding node visiting (see BindExpressionFactory#newExpressionBuilder)
+
+	//20110815, Henri Chen: allow overriding node visiting (see BindExpressionFactory#newExpressionBuilder)
 	protected org.zkoss.zel.ExpressionFactory newExpressionFactory() {
 		return new org.zkoss.bind.xel.zel.BindExpressionFactoryImpl();
 	}

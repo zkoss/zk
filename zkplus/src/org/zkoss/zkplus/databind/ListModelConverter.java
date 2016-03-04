@@ -35,6 +35,7 @@ import org.zkoss.zul.ext.Selectable;
  */
 public class ListModelConverter implements TypeConverter, java.io.Serializable {
 	private static final long serialVersionUID = 200808191433L;
+
 	/** Convert a Set, Map, List, Object[], Enum, or other kind of BindingListModel to associated {@link BindingListModel}.
 	 * @param val must be instanceof Set, Map, List, Object[], Enum Class, or other kind of BindingListModel implementation.
 	 */
@@ -50,60 +51,62 @@ public class ListModelConverter implements TypeConverter, java.io.Serializable {
 		if (val instanceof BindingListModel) {
 			return val;
 		} else if (val instanceof ListModel) { //Bug 3354086: Model attribute will not accept a ListModel
-			wrappedModel = new BindingListModelListModel((ListModel) val,distinct);			
+			wrappedModel = new BindingListModelListModel((ListModel) val, distinct);
 		} else if (val instanceof Set) {
-			wrappedModel = new BindingListModelSet((Set)val, true);
+			wrappedModel = new BindingListModelSet((Set) val, true);
 		} else if (val instanceof List) {
-			wrappedModel = new BindingListModelList((List)val, true, distinct);
+			wrappedModel = new BindingListModelList((List) val, true, distinct);
 		} else if (val instanceof Map) {
-			wrappedModel = new BindingListModelMap((Map)val, true);
+			wrappedModel = new BindingListModelMap((Map) val, true);
 		} else if (val instanceof Object[]) {
 			wrappedModel = new BindingListModelArray((Object[]) val, true, distinct);
-		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
-			wrappedModel = new BindingListModelArray(((Class)val).getEnumConstants(), true);
+		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class) val)) {
+			wrappedModel = new BindingListModelArray(((Class) val).getEnumConstants(), true);
 		} else if (val instanceof GroupsModel) { //feature#2866506: Data Binding shall support GroupsModel with Listbox/Grid
 			wrappedModel = new BindingGroupsListModel((GroupsModel) val);
 		} else {
-			throw new UiException("Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, GroupsModel, ListModel,or BindingListModel only. "+val.getClass());
+			throw new UiException(
+					"Expects java.util.Set, java.util.List, java.util.Map, Object[], Enum Class, GroupsModel, ListModel,or BindingListModel only. "
+							+ val.getClass());
 		}
-		
+
 		//ZK-927 zkplus databinding1 should auto-wrapping BindingListModelXxx with setMultiple() and Selectable handled
 		final ListModel compModel = getComponentModel(comp);
-		if(compModel instanceof Selectable && wrappedModel instanceof Selectable){
-			Selectable selectable = ((Selectable)compModel);
+		if (compModel instanceof Selectable && wrappedModel instanceof Selectable) {
+			Selectable selectable = ((Selectable) compModel);
 			((Selectable) wrappedModel).setMultiple(selectable.isMultiple());
-			
-			for(Object selected:selectable.getSelection()){
+
+			for (Object selected : selectable.getSelection()) {
 				((Selectable) wrappedModel).addToSelection(selected);
 			}
-			
+
 		}
-		if(!(val instanceof ListModel)){
+		if (!(val instanceof ListModel)) {
 			//for the data that is not listmodel, provide a chance to post process it. see ListboxListModelConverter 
-			wrappedModel = handleWrappedNonListModel(comp,wrappedModel);
+			wrappedModel = handleWrappedNonListModel(comp, wrappedModel);
 		}
-		
+
 		return wrappedModel;
-		
+
 	}
-	
+
 	/**
 	 * Gets the model of the component, the sub-class should override this method
 	 * @since 6.0.1
 	 */
-	protected ListModel<?> getComponentModel(Component comp){
+	protected ListModel<?> getComponentModel(Component comp) {
 		return null;
 	}
-	
+
 	/**
 	 * Handles the wrapped non-list-model, by default it return the original one. <p/> 
 	 * The sub-class could override this method if it needs to do some post process on the wrapped model.
 	 * @since 6.0.1
 	 */
-	protected BindingListModel<?> handleWrappedNonListModel(Component comp, BindingListModel<?> wrappedModel){
+	protected BindingListModel<?> handleWrappedNonListModel(Component comp, BindingListModel<?> wrappedModel) {
 		return wrappedModel;
 	}
-	
+
 	/*package*/ static boolean isDistinct(Component comp) {
 		Map args = (Map) comp.getAttribute(DataBinder.ARGS);
 		boolean distinct = true;
@@ -124,19 +127,21 @@ public class ListModelConverter implements TypeConverter, java.io.Serializable {
 			throw new NullPointerException("val");
 		}
 		if (val instanceof BindingListModelSet) {
-			return ((BindingListModelSet)val).getInnerSet();
+			return ((BindingListModelSet) val).getInnerSet();
 		} else if (val instanceof BindingListModelList) {
-			return ((BindingListModelList)val).getInnerList();
+			return ((BindingListModelList) val).getInnerList();
 		} else if (val instanceof BindingListModelMap) {
-			return ((BindingListModelMap)val).getInnerMap();
+			return ((BindingListModelMap) val).getInnerMap();
 		} else if (val instanceof BindingListModelArray) {
-			return ((BindingListModelArray)val).getInnerArray();
+			return ((BindingListModelArray) val).getInnerArray();
 		} else if (val instanceof BindingListModel) {
 			return val;
 		} else if (val instanceof BindingListModelListModel) {
 			return ((BindingListModelListModel) val).getInnerModel();
 		} else {
-			throw new UiException("Expects BindingListModelSet, BindingListModelList, BindingListModelMap, BindingListModelListModel or BindingListModel only."+val.getClass());
+			throw new UiException(
+					"Expects BindingListModelSet, BindingListModelList, BindingListModelMap, BindingListModelListModel or BindingListModel only."
+							+ val.getClass());
 		}
 	}
 }

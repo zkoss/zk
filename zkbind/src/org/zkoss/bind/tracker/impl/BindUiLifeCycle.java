@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.bind.AnnotateBinder;
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.Binder;
@@ -52,23 +53,23 @@ import org.zkoss.zul.event.ListDataListener;
  * @since 6.0.0
  */
 public class BindUiLifeCycle implements UiLifeCycle {
-	
+
 	static final Logger log = LoggerFactory.getLogger(BindUiLifeCycle.class);
 	private static final String ON_ZKBIND_LATER = "onZKBindLater";
 	private static final String REMOVE_MARK = "$$RemoveMark$$";
 	//F80: Speed up render, check component's subBinderAnnotation
 	private static final String SKIP_BIND_INIT = "$$SkipBindInitMark$$";
 	private static Extension _ext;
-	
+
 	public void afterComponentAttached(Component comp, Page page) {
 		handleComponentAttached(comp);
 	}
-	
-	protected void handleComponentAttached(Component comp){
+
+	protected void handleComponentAttached(Component comp) {
 		//ZK-2022, check if this component is in queue for removal 
 		//if yes, then post and do processing later
 		boolean removeMark = Boolean.TRUE.equals(comp.getAttribute(REMOVE_MARK));
-		if(removeMark){
+		if (removeMark) {
 			//handle later
 			comp.addEventListener(10000, ON_ZKBIND_LATER, new EventListener<Event>() {
 				public void onEvent(Event event) throws Exception {
@@ -81,9 +82,10 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			});
 			Events.postEvent(new Event(ON_ZKBIND_LATER, comp));
 			return;
-		} else if (!Boolean.FALSE.equals(comp.removeAttribute(SKIP_BIND_INIT))){
+		} else if (!Boolean.FALSE.equals(comp.removeAttribute(SKIP_BIND_INIT))) {
 			//F80: Speed up render, check component's subBinderAnnotation
-			if (comp instanceof ComponentCtrl && !((ComponentCtrl)comp).hasSubBindingAnnotation() && !(comp instanceof ShadowElement))
+			if (comp instanceof ComponentCtrl && !((ComponentCtrl) comp).hasSubBindingAnnotation()
+					&& !(comp instanceof ShadowElement))
 				return;
 		}
 		if (comp.getDesktop() != null || comp instanceof ShadowElement) {
@@ -91,7 +93,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			Binder selfBinder = BinderUtil.getBinder(comp);
 			if (selfBinder == null) {
 				//check if parent exists any binder
-				Binder parentBinder = BinderUtil.getBinder(comp,true);
+				Binder parentBinder = BinderUtil.getBinder(comp, true);
 				if (parentBinder == null && comp instanceof ShadowElement) {
 					Component shadowHost = ((ShadowElement) comp).getShadowHost();
 					if (shadowHost != null)
@@ -106,7 +108,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 					//ZK-603, ZK-604, ZK-605
 					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
 					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
-						
+
 						public void onEvent(Event event) throws Exception {
 							final Component comp = event.getTarget();
 							comp.removeEventListener(BinderImpl.ON_BIND_INIT, this);
@@ -115,12 +117,12 @@ public class BindUiLifeCycle implements UiLifeCycle {
 							if (comp.getPage() == null && !(comp instanceof ShadowElement)) {
 								return;
 							}
-							
+
 							final Binder innerBinder = BinderUtil.getBinder(comp);
-							if (innerBinder != null) {//it was already handled by innerBinder, ignore it								
+							if (innerBinder != null) { //it was already handled by innerBinder, ignore it								
 								return;
 							}
-							
+
 							//ZK-1640 command send 2 wrong ViewModel
 							//check if there any parent binder again, don't use out-side parentBinder, it is not correct
 							Binder binder = null;
@@ -141,25 +143,24 @@ public class BindUiLifeCycle implements UiLifeCycle {
 								if (binder == null)
 									return;
 							}
-							
+
 							//ZK-1699 Performance issue ZK-Bind getters are called multiple times
 							//check if it is handling, if yes then skip to evaluate it.
 							if (getExtension().isLifeCycleHandling(comp)) {
 								return;
 							}
-							
+
 							if (binder instanceof AnnotateBinder) {
-								new AnnotateBinderHelper(binder)
-										.initComponentBindings(comp);
+								new AnnotateBinderHelper(binder).initComponentBindings(comp);
 							}
-							
+
 							//ZK-1699, mark the comp and it's children are handling.
 							//note:mark handing before load, because of some load will change(create or reset) the children structure
 							//(consider F00769.zul if you bind to tree open , it will load children in loadComponent)
 							getExtension().markLifeCycleHandling(comp);
-							
-							binder.loadComponent(comp,true);
-							
+
+							binder.loadComponent(comp, true);
+
 							//[Dennis,20120925], this code was added when fixing issue zk-739, 
 							//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.
 							if (comp.hasAttribute(BinderImpl.VAR) || bid != null)
@@ -176,6 +177,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	public void afterComponentDetached(Component comp, Page prevpage) {
 		handleComponentDetached(comp);
 	}
+
 	protected void handleComponentDetached(Component comp) {
 		//ZK-1887 should post the remove as well in detach
 		comp.addEventListener(10000, BinderImpl.ON_BIND_CLEAN, new EventListener<Event>() {
@@ -187,11 +189,9 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				// Bug ZK-3045, we need to handle the detached component
 				// to remove all its references in a tracker.
 				if (comp.hasAttribute(BinderImpl.VAR)) {
-					Object ref = comp.getAttribute(
-							(String) comp.getAttribute(
-									BinderImpl.VAR));
+					Object ref = comp.getAttribute((String) comp.getAttribute(BinderImpl.VAR));
 					if (ref instanceof ReferenceBinding) {
-						BinderUtil.markHandling(comp, ((ReferenceBinding)ref).getBinder());
+						BinderUtil.markHandling(comp, ((ReferenceBinding) ref).getBinder());
 					}
 				}
 				removeBindings(comp);
@@ -202,19 +202,19 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		//ZK-2545 - Children binding support list model
 		if (comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS) != null) {
 			ListModel<?> model = (ListModel<?>) comp.getAttribute(BinderCtrl.CHILDREN_BINDING_MODEL);
-			ListDataListener listener = (ListDataListener) comp.removeAttribute(BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER);
+			ListDataListener listener = (ListDataListener) comp
+					.removeAttribute(BinderCtrl.CHILDREN_BINDING_MODEL_LISTENER);
 			if (model != null && listener != null) {
 				model.removeListDataListener(listener);
 			}
 		}
-		
+
 		//F80: Speed up render, check component's subBinderAnnotation
 		comp.setAttribute(SKIP_BIND_INIT, false);
-		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));		
+		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));
 	}
 
-	public void afterComponentMoved(Component parent, Component child,
-			Component prevparent) {
+	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
 		//do nothing
 	}
 
@@ -224,68 +224,69 @@ public class BindUiLifeCycle implements UiLifeCycle {
 
 	public void afterPageDetached(Page page, Desktop prevdesktop) {
 		final Collection<Component> comps = page.getRoots();
-		for(final Iterator<Component> it = comps.iterator(); it.hasNext();) {
+		for (final Iterator<Component> it = comps.iterator(); it.hasNext();) {
 			final Component comp = it.next();
-			removeBindings(comp); 
+			removeBindings(comp);
 		}
 	}
+
 	public void afterShadowAttached(ShadowElement shadow, Component host) {
 		if (shadow instanceof Component) // just in case
-			handleComponentAttached((Component)shadow);
+			handleComponentAttached((Component) shadow);
 	}
 
 	public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
 		if (shadow instanceof Component) // just in case
 			handleComponentDetached((Component) shadow);
 	}
-	
+
 	private void removeBindings(Component comp) {
 		//ZK-2224 batch remove component and it kids to enhance performance.
-		Map<Binder,Set<Component>> batchRemove = new LinkedHashMap<Binder, Set<Component>>();
-		removeBindingsRecursively(comp,batchRemove);
-		for(Entry<Binder,Set<Component>> entry:batchRemove.entrySet()){
+		Map<Binder, Set<Component>> batchRemove = new LinkedHashMap<Binder, Set<Component>>();
+		removeBindingsRecursively(comp, batchRemove);
+		for (Entry<Binder, Set<Component>> entry : batchRemove.entrySet()) {
 			entry.getKey().removeBindings(entry.getValue());
 		}
 	}
-	
-	private void removeBindingsRecursively(Component comp,Map<Binder,Set<Component>> batchRemove) {
+
+	private void removeBindingsRecursively(Component comp, Map<Binder, Set<Component>> batchRemove) {
 		removeBindings0(comp, batchRemove);
-		for(final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
+		for (final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext();) {
 			final Component kid = it.next();
 			if (kid != null) {
-				removeBindingsRecursively(kid,batchRemove); //recursive
+				removeBindingsRecursively(kid, batchRemove); //recursive
 			}
 		}
 		if (comp instanceof ComponentCtrl) {
 			for (ShadowElement se : ((ComponentCtrl) comp).getShadowRoots()) {
-				removeBindingsRecursively((Component)se, batchRemove); //recursive
+				removeBindingsRecursively((Component) se, batchRemove); //recursive
 			}
 		}
 	}
-	
-	private void removeBindings0(Component comp,Map<Binder,Set<Component>> batchRemove) {
+
+	private void removeBindings0(Component comp, Map<Binder, Set<Component>> batchRemove) {
 		//A component with renderer; might need to remove $MODEL$
-		final Object installed = comp.removeAttribute(BinderImpl.RENDERER_INSTALLED); 
-		if (installed != null) { 
+		final Object installed = comp.removeAttribute(BinderImpl.RENDERER_INSTALLED);
+		if (installed != null) {
 			BindELContext.removeModel(comp);
 		}
 		final Binder binder = BinderUtil.getBinder(comp);
 		if (binder != null) {
-			if(batchRemove!=null){
+			if (batchRemove != null) {
 				//ZK-2224 batch remove component and it kids to enhance performance.
 				Set<Component> components = batchRemove.get(binder);
-				if(components==null){
+				if (components == null) {
 					batchRemove.put(binder, components = new LinkedHashSet<Component>());
 				}
 				components.add(comp);
-			}else{
+			} else {
 				binder.removeBindings(comp);
 			}
 		}
-		
+
 		getExtension().removeLifeCycleHandling(comp);
 	}
-	
+
 	private static Extension getExtension() {
 		if (_ext == null) {
 			synchronized (BindUiLifeCycle.class) {
@@ -293,9 +294,9 @@ public class BindUiLifeCycle implements UiLifeCycle {
 					String clsnm = Library.getProperty("org.zkoss.bind.tracker.impl.extension");
 					if (clsnm != null) {
 						try {
-							_ext = (Extension)Classes.newInstanceByThread(clsnm);
+							_ext = (Extension) Classes.newInstanceByThread(clsnm);
 						} catch (Throwable ex) {
-							log.error("Unable to instantiate "+clsnm, ex);
+							log.error("Unable to instantiate " + clsnm, ex);
 						}
 					}
 					if (_ext == null)
@@ -305,6 +306,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		}
 		return _ext;
 	}
+
 	/**
 	 * Internal use only.
 	 * Mark a component and it's children are handling already in current execution.
@@ -314,7 +316,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	public static void markLifeCycleHandling(Component comp) {
 		getExtension().markLifeCycleHandling(comp);
 	}
-	
+
 	/** An interface used to extend the {@code BindUiLifeCycle}.
 	 * The class name of the extension shall be specified in
 	 * the library properties called org.zkoss.bind.tracker.impl.extension.
@@ -323,15 +325,21 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	 */
 	public static interface Extension {
 		public void markLifeCycleHandling(Component comp);
-		public boolean isLifeCycleHandling(Component comp);		
+
+		public boolean isLifeCycleHandling(Component comp);
+
 		public void removeLifeCycleHandling(Component comp);
 	}
+
 	private static class DefaultExtension implements Extension {
-		public void markLifeCycleHandling(Component comp) {}
+		public void markLifeCycleHandling(Component comp) {
+		}
 
 		public boolean isLifeCycleHandling(Component comp) {
 			return false;
 		}
-		public void removeLifeCycleHandling(Component comp) {}
+
+		public void removeLifeCycleHandling(Component comp) {
+		}
 	}
 }

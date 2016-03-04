@@ -109,7 +109,7 @@ public class Borderlayout extends HtmlBasedComponent {
 	private transient East _east;
 
 	private transient Center _center;
-	
+
 	private boolean _animationDisabled = isDefaultAnimationDisabled();
 
 	public Borderlayout() {
@@ -117,11 +117,13 @@ public class Borderlayout extends HtmlBasedComponent {
 
 	private static boolean isDefaultAnimationDisabled() {
 		if (_defAnimation == null)
-			_defAnimation = Boolean.valueOf(Library.getProperty("org.zkoss.zul.borderlayout.animation.disabed", "false"));
+			_defAnimation = Boolean
+					.valueOf(Library.getProperty("org.zkoss.zul.borderlayout.animation.disabed", "false"));
 		return _defAnimation.booleanValue();
 	}
+
 	private static Boolean _defAnimation;
-	
+
 	/**
 	 * Returns whether disable animation effects
 	 * <p>Default: false.
@@ -130,7 +132,7 @@ public class Borderlayout extends HtmlBasedComponent {
 	public boolean isAnimationDisabled() {
 		return _animationDisabled;
 	}
-	
+
 	/**
 	 * Sets to disable animation effects.
 	 * @since 5.0.8
@@ -141,6 +143,7 @@ public class Borderlayout extends HtmlBasedComponent {
 			smartUpdate("_animationDisabled", animationDisabled);
 		}
 	}
+
 	public North getNorth() {
 		return _north;
 	}
@@ -170,16 +173,13 @@ public class Borderlayout extends HtmlBasedComponent {
 
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof LayoutRegion))
-			throw new UiException("Unsupported child for Borderlayout: "
-					+ child);
+			throw new UiException("Unsupported child for Borderlayout: " + child);
 		if (child instanceof North) {
 			if (_north != null && child != _north)
-				throw new UiException("Only one north child is allowed: "
-						+ this);
+				throw new UiException("Only one north child is allowed: " + this);
 		} else if (child instanceof South) {
 			if (_south != null && child != _south)
-				throw new UiException("Only one south child is allowed: "
-						+ this);
+				throw new UiException("Only one south child is allowed: " + this);
 		} else if (child instanceof West) {
 			if (_west != null && child != _west)
 				throw new UiException("Only one west child is allowed: " + this);
@@ -188,11 +188,11 @@ public class Borderlayout extends HtmlBasedComponent {
 				throw new UiException("Only one east child is allowed: " + this);
 		} else if (child instanceof Center) {
 			if (_center != null && child != _center)
-				throw new UiException("Only one center child is allowed: "
-						+ this);
+				throw new UiException("Only one center child is allowed: " + this);
 		}
 		super.beforeChildAdded(child, refChild);
 	}
+
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof North) {
 			if (!super.insertBefore(child, refChild))
@@ -220,31 +220,38 @@ public class Borderlayout extends HtmlBasedComponent {
 		}
 		return true;
 	}
-	
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		render(renderer, "_animationDisabled", _animationDisabled);
 	}
+
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		if (_north == child) _north = null;
-		else if (_south == child) _south = null;
-		else if (_west == child) _west = null;
-		else if (_east == child) _east = null;
-		else if (_center == child) _center = null;
+		if (_north == child)
+			_north = null;
+		else if (_south == child)
+			_south = null;
+		else if (_west == child)
+			_west = null;
+		else if (_east == child)
+			_east = null;
+		else if (_center == child)
+			_center = null;
 	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-borderlayout" : _zclass;
 	}
+
 	//Cloneable//
 	public Object clone() {
 		final Borderlayout clone = (Borderlayout) super.clone();
 		clone.afterUnmarshal();
 		return clone;
 	}
+
 	private void afterUnmarshal() {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
@@ -261,9 +268,9 @@ public class Borderlayout extends HtmlBasedComponent {
 			}
 		}
 	}
+
 	//-- Serializable --//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		afterUnmarshal();
 	}

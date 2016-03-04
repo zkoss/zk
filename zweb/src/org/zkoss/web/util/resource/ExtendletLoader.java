@@ -16,14 +16,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.util.resource;
 
-import java.net.URL;
 import java.io.InputStream;
+import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Library;
-import org.zkoss.io.Files;
 
+import org.zkoss.io.Files;
+import org.zkoss.lang.Library;
 import org.zkoss.util.resource.Loader;
 
 /**
@@ -38,7 +38,7 @@ import org.zkoss.util.resource.Loader;
  * @see Extendlet
  * @since 3.0.6
  */
-abstract public class ExtendletLoader<V> implements Loader<String, V> {
+public abstract class ExtendletLoader<V> implements Loader<String, V> {
 	private static final Logger log = LoggerFactory.getLogger(ExtendletLoader.class);
 
 	private int _checkPeriod;
@@ -68,6 +68,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 	public boolean shallCheck(String src, long expiredMillis) {
 		return expiredMillis > 0;
 	}
+
 	/** Returns the last modified time.
 	 */
 	public long getLastModified(String src) {
@@ -78,14 +79,16 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 			final URL url = getExtendletContext().getResource(src);
 			if (url != null) {
 				final long v = url.openConnection().getLastModified();
-				return v != -1 ? v: 0; //not to reload (5.0.6 for better performance)
+				return v != -1 ? v : 0; //not to reload (5.0.6 for better performance)
 			}
 		} catch (Throwable ex) {
 		}
 		return -1; //reload (might be removed)
 	}
+
 	public V load(String src) throws Exception {
-		if (log.isDebugEnabled()) log.debug("Parse "+src);
+		if (log.isDebugEnabled())
+			log.debug("Parse " + src);
 		final String path = getRealPath(src);
 		InputStream is = null;
 		if (getCheckPeriod() >= 0) {
@@ -95,7 +98,7 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 				if (real != null)
 					is = real.openStream();
 			} catch (Throwable ex) {
-				log.warn("Unable to read from URL: "+path, ex);
+				log.warn("Unable to read from URL: " + path, ex);
 			}
 		}
 
@@ -108,12 +111,13 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 		try {
 			return parse(is, path, src);
 		} catch (Throwable ex) {
-			log.error("Failed to parse "+src, ex);
+			log.error("Failed to parse " + src, ex);
 			return null; //as non-existent
 		} finally {
 			Files.close(is);
 		}
 	}
+
 	//Derive to override//
 	/** It is called to parse the resource into an intermediate format
 	 * depending on {@link Extendlet}.
@@ -132,11 +136,11 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 	 * the additional information encoded into the URI.
 	 * @since 5.0.0
 	 */
-	abstract protected V parse(InputStream is, String path, String orgpath)
-	throws Exception;
+	protected abstract V parse(InputStream is, String path, String orgpath) throws Exception;
+
 	/** Returns the extendlet context.
 	 */
-	abstract protected ExtendletContext getExtendletContext();
+	protected abstract ExtendletContext getExtendletContext();
 
 	/** Returns the check period, or -1 if the content is never changed.
 	 * Unit: milliseconds.
@@ -150,8 +154,9 @@ abstract public class ExtendletLoader<V> implements Loader<String, V> {
 	public int getCheckPeriod() {
 		return _checkPeriod;
 	}
+
 	private static int getInitCheckPeriod() {
 		final int v = Library.getIntProperty("org.zkoss.util.resource.extendlet.checkPeriod", -1);
-		return v > 0 ? v * 1000: v;
+		return v > 0 ? v * 1000 : v;
 	}
 }

@@ -16,9 +16,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
-import org.zkoss.zul.ListModelMap;
-
 import java.util.Map;
+
+import org.zkoss.zul.ListModelMap;
 
 /**
  * <p>This is the {@link BindingListModel} as a {@link java.util.Map} to be used with 
@@ -36,7 +36,7 @@ import java.util.Map;
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class BindingListModelMap<K, V> extends ListModelMap<K, V>
-implements BindingListModelExt<Map.Entry<K, V>>, java.io.Serializable {
+		implements BindingListModelExt<Map.Entry<K, V>>, java.io.Serializable {
 	private static final long serialVersionUID = 200808191420L;
 
 	/**
@@ -45,14 +45,14 @@ implements BindingListModelExt<Map.Entry<K, V>>, java.io.Serializable {
 	public BindingListModelMap(Map<K, V> map, boolean live) {
 		super(map, live);
 	}
-	
+
 	//Map is naturally distinct
 	public boolean isDistinct() {
 		return true;
 	}
-	
+
 	public int[] indexesOf(Object elm) {
 		final int idx = indexOf(elm);
-		return idx < 0 ? new int[0] : new int[] {idx};
+		return idx < 0 ? new int[0] : new int[] { idx };
 	}
 }

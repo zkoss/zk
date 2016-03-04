@@ -28,9 +28,9 @@ public class WebAppFactoryImpl implements WebAppFactory {
 		Class<?> cls = config.getWebAppClass();
 		if (cls != null) {
 			try {
-				return (WebApp)cls.newInstance();
+				return (WebApp) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		} else {
 			return new SimpleWebApp();

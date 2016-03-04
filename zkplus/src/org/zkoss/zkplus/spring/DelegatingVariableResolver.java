@@ -25,14 +25,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 
 /**
  * <p>
@@ -66,9 +65,8 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 		final Execution exec = Executions.getCurrent();
 		String classes = null;
 		if (exec != null) {
-			classes = exec.getDesktop()
-				.getWebApp().getConfiguration()
-				.getPreference("org.zkoss.spring.VariableResolver", null);
+			classes = exec.getDesktop().getWebApp().getConfiguration()
+					.getPreference("org.zkoss.spring.VariableResolver", null);
 		}
 
 		if (classes == null)
@@ -78,12 +76,12 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 			String[] vrClss = classes.split(",");
 			for (int i = 0; i < vrClss.length; i++) {
 				try {
-					VariableResolver o = (VariableResolver)Classes.newInstanceByThread(vrClss[i]);
-					if(!_variableResolvers.contains(o)) {
+					VariableResolver o = (VariableResolver) Classes.newInstanceByThread(vrClss[i]);
+					if (!_variableResolvers.contains(o)) {
 						_variableResolvers.add(o);
 					}
 				} catch (Throwable e) {
-					log.warn("Ignored: failed to instantiate "+vrClss[i], e);
+					log.warn("Ignored: failed to instantiate " + vrClss[i], e);
 				}
 			}
 		} else {
@@ -98,7 +96,7 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 	 */
 	public Object resolveVariable(String name) {
 		Object o = null;
-		for (VariableResolver resolver: _variableResolvers) {
+		for (VariableResolver resolver : _variableResolvers) {
 			o = resolver.resolveVariable(name);
 			if (o != null) {
 				return o;
@@ -115,7 +113,7 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 		return this == obj || (obj instanceof DelegatingVariableResolver
 				&& Objects.equals(_variableResolvers, ((DelegatingVariableResolver) obj)._variableResolvers));
 	}
-	
+
 	// -- Serializable --//
 	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
 		s.defaultWriteObject();
@@ -128,21 +126,20 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 				s.writeObject(o);
 		}
 	}
-	
-	private void readObject(java.io.ObjectInputStream s) throws IOException,
-			ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		_variableResolvers = new ArrayList<VariableResolver>();
 		int size = s.readInt();
-		for (int i=0; i<size; i++) {
+		for (int i = 0; i < size; i++) {
 			Object o = s.readObject();
 			if (o instanceof String) {
 				_variableResolvers.add(new DefaultDelegatingVariableResolver());
 			} else
-				_variableResolvers.add((VariableResolver)o); 
+				_variableResolvers.add((VariableResolver) o);
 		}
 	}
-	
+
 	/**
 	 * Provides a default variable resolver implementation that resolves 
 	 * spring beans by name. It also declares an implicit variable springContext
@@ -157,19 +154,20 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 		private ApplicationContext getApplicationContext() {
 			if (_ctx != null)
 				return _ctx;
-				
+
 			_ctx = SpringUtil.getApplicationContext();
 			return _ctx;
 		}
 
 		public Object resolveVariable(String name) throws XelException {
-			
+
 			if ("springContext".equals(name)) {
 				return getApplicationContext();
 			}
 
 			return SpringUtil.getBean(name);
 		}
+
 		public int hashCode() {
 			return Objects.hashCode(getClass());
 		}

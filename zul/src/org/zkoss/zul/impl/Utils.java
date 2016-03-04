@@ -48,29 +48,28 @@ public class Utils {
 	 * means "1,2" if defafultValue is 1
 	 * @return an array of int, or null if no integer at all
 	 */
-	public static final
-	int[] stringToInts(String numbers, int defaultValue)
-	throws WrongValueException {
+	public static final int[] stringToInts(String numbers, int defaultValue) throws WrongValueException {
 		if (numbers == null)
 			return null;
 
 		List<Integer> list = new LinkedList<Integer>();
 		for (int j = 0;;) {
 			int k = numbers.indexOf(',', j);
-			final String s =
-				(k >= 0 ? numbers.substring(j, k): numbers.substring(j)).trim();
+			final String s = (k >= 0 ? numbers.substring(j, k) : numbers.substring(j)).trim();
 			if (s.length() == 0) {
-				if (k < 0) break;
+				if (k < 0)
+					break;
 				list.add(null);
 			} else {
 				try {
 					list.add(Integer.valueOf(s));
 				} catch (Throwable ex) {
-					throw new WrongValueException("Not a valid number list: "+numbers);
+					throw new WrongValueException("Not a valid number list: " + numbers);
 				}
-			}	
+			}
 
-			if (k < 0) break;
+			if (k < 0)
+				break;
 			j = k + 1;
 		}
 
@@ -81,13 +80,14 @@ public class Utils {
 			int j = 0;
 			for (Iterator<Integer> it = list.iterator(); it.hasNext(); ++j) {
 				final Integer i = it.next();
-				ary[j] = i != null ? i.intValue(): defaultValue;
+				ary[j] = i != null ? i.intValue() : defaultValue;
 			}
 		} else {
 			ary = null;
 		}
 		return ary;
 	}
+
 	/** Converts an array of numbers to a string.
 	 */
 	public static final String intsToString(int[] ary) {
@@ -109,29 +109,30 @@ public class Utils {
 	 * For example, ",2" means "1,2" if defafultValue is "1"
 	 * @return an array of string, or null if no data at all
 	 */
-	public static final
-	String[] stringToArray(String src, String defaultValue) {
+	public static final String[] stringToArray(String src, String defaultValue) {
 		if (src == null)
 			return null;
 
 		List<String> list = new LinkedList<String>();
 		for (int j = 0;;) {
 			int k = src.indexOf(',', j);
-			final String s =
-				(k >= 0 ? src.substring(j, k): src.substring(j)).trim();
+			final String s = (k >= 0 ? src.substring(j, k) : src.substring(j)).trim();
 			if (s.length() == 0) {
-				if (k < 0) break;
+				if (k < 0)
+					break;
 				list.add(defaultValue);
 			} else {
 				list.add(s);
-			}	
+			}
 
-			if (k < 0) break;
+			if (k < 0)
+				break;
 			j = k + 1;
 		}
 
 		return list.toArray(new String[list.size()]);
 	}
+
 	/** Converts an array of objects to a string, by concatenating them
 	 * together and separated with comma.
 	 */
@@ -154,10 +155,10 @@ public class Utils {
 	 *
 	 * @since 3.0.2
 	 */
-	public static String getDynamicMediaURI(AbstractComponent comp,
-	int version, String name, String format) {
+	public static String getDynamicMediaURI(AbstractComponent comp, int version, String name, String format) {
 		final Desktop desktop = comp.getDesktop();
-		if (desktop == null) return ""; //no avail at client
+		if (desktop == null)
+			return ""; //no avail at client
 
 		final StringBuffer sb = new StringBuffer(64).append('/');
 		Strings.encode(sb, version & 0xffff);
@@ -168,7 +169,8 @@ public class Utils {
 				name = name.replace('\\', '/');
 				if (name.charAt(0) == '/') {
 					name = name.substring(1);
-					if (name.length() == 0) name = "ua";
+					if (name.length() == 0)
+						name = "ua";
 				}
 				sb.append(name);
 				bExtRequired = name.lastIndexOf('.') < 0;
@@ -195,14 +197,13 @@ public class Utils {
 		sb.append("};");
 		return sb.toString();
 	}
-	
+
 	/** Generates the locale-dependent JavaScript codes, such as messages
 	 * (msgzul).
 	 * <p>It is called by zul/lang/zk.wpd.
 	 */
 	public static final String outLocaleJavaScript() {
-		final StringBuffer sb = new StringBuffer(1024)
-			.append("zk.$default(msgzul, {");
+		final StringBuffer sb = new StringBuffer(1024).append("zk.$default(msgzul, {");
 
 		addLocaleJS(sb, "VALUE_NOT_MATCHED", MZul.VALUE_NOT_MATCHED);
 		addLocaleJS(sb, "EMPTY_NOT_ALLOWED", MZul.EMPTY_NOT_ALLOWED);
@@ -225,13 +226,13 @@ public class Utils {
 		addLocaleJS(sb, "NO_FUTURE", MZul.NO_FUTURE);
 		addLocaleJS(sb, "NO_PAST_TODAY", MZul.NO_PAST_TODAY);
 		addLocaleJS(sb, "NO_PAST", MZul.NO_PAST);
-		addLocaleJS(sb, "NO_TODAY", MZul.NO_TODAY);	
+		addLocaleJS(sb, "NO_TODAY", MZul.NO_TODAY);
 
 		addLocaleJS(sb, "FIRST", MZul.FIRST);
 		addLocaleJS(sb, "LAST", MZul.LAST);
 		addLocaleJS(sb, "PREV", MZul.PREV);
 		addLocaleJS(sb, "NEXT", MZul.NEXT);
-		
+
 		addLocaleJS(sb, "GRID_GROUP", MZul.GRID_GROUP);
 		addLocaleJS(sb, "GRID_OTHER", MZul.GRID_OTHER);
 		addLocaleJS(sb, "GRID_ASC", MZul.GRID_ASC);
@@ -255,21 +256,21 @@ public class Utils {
 
 		addLocaleJS(sb, "UPLOAD_CANCEL", MZul.UPLOAD_CANCEL);
 		addLocaleJS(sb, "ILLEGAL_VALUE", MZul.ILLEGAL_VALUE);
-		
+
 		addLocaleJS(sb, "PANEL_CLOSE", MZul.PANEL_CLOSE);
 		addLocaleJS(sb, "PANEL_MAXIMIZE", MZul.PANEL_MAXIMIZE);
 		addLocaleJS(sb, "PANEL_MINIMIZE", MZul.PANEL_MINIMIZE);
 		addLocaleJS(sb, "PANEL_EXPAND", MZul.PANEL_EXPAND);
 		addLocaleJS(sb, "PANEL_COLLAPSE", MZul.PANEL_COLLAPSE);
-		
 
 		int j = sb.length() - 1;
-		if (sb.charAt(j) == ',') sb.setLength(j);
+		if (sb.charAt(j) == ',')
+			sb.setLength(j);
 
 		return sb.append("});").toString();
 	}
-	private static
-	void addLocaleJS(StringBuffer sb, String name, int mesgCode) {
+
+	private static void addLocaleJS(StringBuffer sb, String name, int mesgCode) {
 		sb.append('\n').append(name).append(":'");
 		Strings.escape(sb, Messages.get(mesgCode), Strings.ESCAPE_JAVASCRIPT);
 		sb.append("',");
@@ -282,37 +283,34 @@ public class Utils {
 	 * @param label the label to show. Empty is assumed if null.
 	 * @since 5.0.0
 	 */
-	public static void renderCrawlableA(String href, String label)
-	throws IOException {
+	public static void renderCrawlableA(String href, String label) throws IOException {
 		if (href != null && href.length() > 0) {
-			final HtmlPageRenders.RenderContext rc =
-				HtmlPageRenders.getRenderContext(null);
+			final HtmlPageRenders.RenderContext rc = HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.crawlable) {
 				final Writer cwout = rc.temp;
 				cwout.write("<a href=\"");
 				cwout.write(href);
 				cwout.write("\">");
-				cwout.write(label != null ? label: "");
+				cwout.write(label != null ? label : "");
 				cwout.write("</a>\n");
 			}
 		}
 	}
+
 	/** Render the crawlable text.
 	 * If crawlable is not enabled or the text is empty, nothing is generated.
 	 * @param text the text that is crawlable.
 	 * If null or empty, nothing is generated.
 	 * @since 5.0.0
 	 */
-	public static void renderCrawlableText(String text)
-	throws IOException {
+	public static void renderCrawlableText(String text) throws IOException {
 		if (text != null && text.length() > 0) {
-			final HtmlPageRenders.RenderContext rc =
-				HtmlPageRenders.getRenderContext(null);
+			final HtmlPageRenders.RenderContext rc = HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.crawlable) {
 				final Writer cwout = rc.temp;
 				cwout.write("<div>");
 				cwout.write(XMLs.encodeText(text));
-					//encode required since it might not be valid HTML
+				//encode required since it might not be valid HTML
 				cwout.write("</div>\n");
 			}
 		}
@@ -334,7 +332,7 @@ public class Utils {
 					return null;
 				dt = exec.getDesktop();
 			}
-			return dt != null ? dt.getComponentByUuidIfAny(id.substring(5, len - 1)): null;
+			return dt != null ? dt.getComponentByUuidIfAny(id.substring(5, len - 1)) : null;
 		}
 		return comp.getFellowIfAny(id);
 	}
@@ -346,15 +344,13 @@ public class Utils {
 	 * @param recurse whether to look up the ancestor's attribute
 	 * @since 5.0.7
 	 */
-	public static final 
-	boolean testAttribute(Component comp, String name, boolean defValue, boolean recurse) {
+	public static final boolean testAttribute(Component comp, String name, boolean defValue, boolean recurse) {
 		Object val = comp.getAttribute(name, recurse);
 		if (val == null)
 			val = Library.getProperty(name);
-		return val instanceof Boolean ? ((Boolean)val).booleanValue():
-			val != null ? "true".equals(val): defValue;
+		return val instanceof Boolean ? ((Boolean) val).booleanValue() : val != null ? "true".equals(val) : defValue;
 	}
-	
+
 	/** Returns the number if the given attribute is defined in a component or in library property.
 	 * @param name the name of the attribute
 	 * @param defValue the default value if neither component's attribute or library property is defined
@@ -362,14 +358,13 @@ public class Utils {
 	 * @param recurse whether to look up the ancestor's attribute
 	 * @since 5.0.8
 	 */
-	public static final 
-	int getIntAttribute(Component comp, String name, int defValue, boolean recurse) {
+	public static final int getIntAttribute(Component comp, String name, int defValue, boolean recurse) {
 		Object val = comp.getAttribute(name, recurse);
 		if (val == null)
 			val = Library.getProperty(name);
 		if (val instanceof Integer)
-			return ((Integer)val).intValue();
-		
+			return ((Integer) val).intValue();
+
 		try {
 			return Integer.parseInt((String) val);
 		} catch (NumberFormatException e) {

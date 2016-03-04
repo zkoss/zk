@@ -59,13 +59,12 @@ public class Selectbox extends HtmlBasedComponent {
 	private transient ListDataListener _dataListener;
 	private transient ItemRenderer<?> _renderer;
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
-	
+
 	private transient boolean _childable;
-	private transient String[] _tmpdatas; 
+	private transient String[] _tmpdatas;
 
 	static {
-		addClientEvent(Selectbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE
-				| CE_IMPORTANT);
+		addClientEvent(Selectbox.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		addClientEvent(Selectbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Selectbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
@@ -148,9 +147,8 @@ public class Selectbox extends HtmlBasedComponent {
 	 * automatically.
 	 */
 	@SuppressWarnings("rawtypes")
-	public void setItemRenderer(String clsnm) throws ClassNotFoundException,
-			NoSuchMethodException, IllegalAccessException,
-			InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setItemRenderer(String clsnm) throws ClassNotFoundException, NoSuchMethodException,
+			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setItemRenderer((ItemRenderer) Classes.newInstanceByThread(clsnm));
 	}
@@ -232,6 +230,7 @@ public class Selectbox extends HtmlBasedComponent {
 			};
 		_model.addListDataListener(_dataListener);
 	}
+
 	private void doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
 		if (smodel.isSelectionEmpty()) {
@@ -251,9 +250,10 @@ public class Selectbox extends HtmlBasedComponent {
 		}
 		setSelectedIndex(-1); //just in case
 	}
+
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {
-		return (Selectable<Object>)_model;
+		return (Selectable<Object>) _model;
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class Selectbox extends HtmlBasedComponent {
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
 			if (!(model instanceof Selectable))
-				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+				throw new UiException(model.getClass() + " must implement " + Selectable.class);
 
 			if (_model != model) {
 				if (_model != null) {
@@ -293,6 +293,7 @@ public class Selectbox extends HtmlBasedComponent {
 		onInitRenderNow();
 		invalidate();
 	}
+
 	public void onInitRenderNow() {
 		if (_model != null) {
 			_tmpdatas = new String[_model.getSize()];
@@ -347,67 +348,63 @@ public class Selectbox extends HtmlBasedComponent {
 			if (tm == null)
 				return Objects.toString(data);
 			else {
-				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(owner, null,
-						new VariableResolver() {
-							public Object resolveVariable(String name) {
-								if ("each".equals(name)) {
-									return data;
-								} else if ("forEachStatus".equals(name)) {
-									return new ForEachStatus() {
-										
-										public ForEachStatus getPrevious() {
-											return null;
-										}
-										
-										public Object getEach() {
-											return getCurrent();
-										}
-										
-										public int getIndex() {
-											return index;
-										}
-										
-										public Integer getBegin() {
-											return 0;
-										}
-										
-										public Integer getEnd() {
-											return ((Selectbox)owner).getModel().getSize();
-										}
+				final Component[] items = ShadowElementsCtrl
+						.filterOutShadows(tm.create(owner, null, new VariableResolver() {
+					public Object resolveVariable(String name) {
+						if ("each".equals(name)) {
+							return data;
+						} else if ("forEachStatus".equals(name)) {
+							return new ForEachStatus() {
 
-										public Object getCurrent() {
-											return data;
-										}
-
-										public boolean isFirst() {
-											return getCount() == 1;
-										}
-
-										public boolean isLast() {
-											return getIndex() + 1 == getEnd();
-										}
-
-										public Integer getStep() {
-											return null;
-										}
-
-										public int getCount() {
-											return getIndex() + 1;
-										}
-									};
-								} else {
+								public ForEachStatus getPrevious() {
 									return null;
 								}
-							}
-						}, null));
+
+								public Object getEach() {
+									return getCurrent();
+								}
+
+								public int getIndex() {
+									return index;
+								}
+
+								public Integer getBegin() {
+									return 0;
+								}
+
+								public Integer getEnd() {
+									return ((Selectbox) owner).getModel().getSize();
+								}
+
+								public Object getCurrent() {
+									return data;
+								}
+
+								public boolean isFirst() {
+									return getCount() == 1;
+								}
+
+								public boolean isLast() {
+									return getIndex() + 1 == getEnd();
+								}
+
+								public Integer getStep() {
+									return null;
+								}
+
+								public int getCount() {
+									return getIndex() + 1;
+								}
+							};
+						} else {
+							return null;
+						}
+					}
+				}, null));
 				if (items.length != 1)
-					throw new UiException(
-							"The model template must have exactly one item, not "
-									+ items.length);
+					throw new UiException("The model template must have exactly one item, not " + items.length);
 				if (!(items[0] instanceof Label))
-					throw new UiException(
-							"The model template can only support Label component, not "
-									+ items[0]);
+					throw new UiException("The model template can only support Label component, not " + items[0]);
 				items[0].detach(); //remove the label from owner
 				return ((Label) items[0]).getValue();
 			}
@@ -423,26 +420,27 @@ public class Selectbox extends HtmlBasedComponent {
 	}
 
 	// ZK-948 need render data when change parent or attach to page
-	public void setParent (Component parent) {
+	public void setParent(Component parent) {
 		super.setParent(parent);
 		if (parent != null) {
 			prepareDatas();
 		}
 	}
+
 	// ZK-948 
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		prepareDatas();
 	}
-	
+
 	private void prepareDatas() {
 		if (_tmpdatas == null && _model != null && _model.getSize() > 0) {
 			// post onInitRender to rerender content
 			postOnInitRender();
 		}
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-			throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "name", _name);
@@ -451,7 +449,7 @@ public class Selectbox extends HtmlBasedComponent {
 
 		if (_tabindex != 0)
 			renderer.render("tabindex", _tabindex);
-		
+
 		if (_tmpdatas != null) {
 			render(renderer, "items", _tmpdatas);
 			// B65-ZK-2379 _tmpdatas = null; //purge the data
@@ -465,25 +463,25 @@ public class Selectbox extends HtmlBasedComponent {
 			// ZK-2148: should check if model exists
 			final Object prevSelected = _jsel >= 0 && _model != null ? _model.getElementAt(_jsel) : null;
 			_jsel = ((Integer) request.getData().get("")).intValue();
-			final Integer index = ((Integer)request.getData().get(""));
+			final Integer index = ((Integer) request.getData().get(""));
 			final Set<Object> selObjs = new LinkedHashSet<Object>();
-			
+
 			// ZK-2148: should check if model exists
 			if (_model != null) {
 				if (index >= 0)
 					selObjs.add(_model.getElementAt(index));
 				getSelectableModel().setSelection(selObjs);
 			}
-			
+
 			if (prevSelected != null) {
 				final Set<Object> prevSeldObjs = new LinkedHashSet<Object>(1);
 				prevSeldObjs.add(prevSelected);
 
-				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-						null, null, selObjs, prevSeldObjs, prevSeldObjs, null, index, 0));
+				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, null, null, selObjs, prevSeldObjs,
+						prevSeldObjs, null, index, 0));
 			} else {
-				Events.postEvent(new SelectEvent(Events.ON_SELECT, this, null, 
-						null, null, selObjs, null, null, null, index, 0));
+				Events.postEvent(
+						new SelectEvent(Events.ON_SELECT, this, null, null, null, selObjs, null, null, null, index, 0));
 			}
 		} else // ZK-1053
 			super.service(request, everError);
@@ -509,22 +507,19 @@ public class Selectbox extends HtmlBasedComponent {
 
 	// -- Serializable --//
 	// NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		willSerialize(_model);
-		s.writeObject(_model instanceof java.io.Serializable
-				|| _model instanceof java.io.Externalizable ? _model : null);
+		s.writeObject(
+				_model instanceof java.io.Serializable || _model instanceof java.io.Externalizable ? _model : null);
 		willSerialize(_renderer);
-		s.writeObject(_renderer instanceof java.io.Serializable
-				|| _renderer instanceof java.io.Externalizable ? _renderer
-				: null);
+		s.writeObject(_renderer instanceof java.io.Serializable || _renderer instanceof java.io.Externalizable
+				? _renderer : null);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void readObject(java.io.ObjectInputStream s)
-			throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		_model = (ListModel) s.readObject();
@@ -536,13 +531,12 @@ public class Selectbox extends HtmlBasedComponent {
 		}
 	}
 
-	
 	public void sessionWillPassivate(Page page) {
 		super.sessionWillPassivate(page);
 		willPassivate(_model);
 		willPassivate(_renderer);
 	}
-	
+
 	public void sessionDidActivate(Page page) {
 		super.sessionDidActivate(page);
 		didActivate(_model);

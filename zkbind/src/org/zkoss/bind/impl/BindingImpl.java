@@ -26,24 +26,24 @@ import org.zkoss.zk.ui.Component;
  * @author henrichen
  * @since 6.0.0
  */
-public class BindingImpl implements Binding,Serializable{
+public class BindingImpl implements Binding, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	//http://tracker.zkoss.org/browse/ZK-869, It is OK to not use WeakReference here, 
 	//A binding is always associated with a component, and was removed after a component is detached from the view
 	private final Component _comp;
 	private final Binder _binder;
 	private final Map<String, Object> _args;
-	
+
 	protected BindingImpl(Binder binder, Component comp, Map<String, Object> args) {
 		_comp = comp;
 		_binder = binder;
 		_args = args;
 	}
-	
+
 	public Component getComponent() {
 		return _comp;
 	}
-	
+
 	public Binder getBinder() {
 		return _binder;
 	}
@@ -51,7 +51,7 @@ public class BindingImpl implements Binding,Serializable{
 	public Map<String, Object> getArgs() {
 		return _args;
 	}
-	
+
 	protected Object setAttribute(BindContext ctx, Object key, Object value) {
 		Map<Object, Object> bindingBag = getBindingAttribute(ctx);
 		if (bindingBag == null) {
@@ -60,20 +60,19 @@ public class BindingImpl implements Binding,Serializable{
 		}
 		return bindingBag.put(key, value);
 	}
-	
+
 	protected Object getAttribute(BindContext ctx, Object key) {
 		Map<Object, Object> bindingBag = getBindingAttribute(ctx);
 		return bindingBag != null ? bindingBag.get(key) : null;
 	}
-	
+
 	protected boolean containsAttribute(BindContext ctx, Object key) {
 		Map<Object, Object> bindingBag = getBindingAttribute(ctx);
 		return bindingBag != null ? bindingBag.containsKey(key) : false;
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
-	private Map<Object,Object> getBindingAttribute(BindContext ctx){
-		return (Map<Object,Object>)ctx.getAttribute(this);
+	private Map<Object, Object> getBindingAttribute(BindContext ctx) {
+		return (Map<Object, Object>) ctx.getAttribute(this);
 	}
 }

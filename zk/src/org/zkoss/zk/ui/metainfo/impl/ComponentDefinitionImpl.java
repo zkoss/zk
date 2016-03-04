@@ -16,25 +16,30 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo.impl;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
 import java.util.LinkedList;
-import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.Location;
 import org.zkoss.web.servlet.Servlets;
-
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.metainfo.*;
+import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.Property;
+import org.zkoss.zk.ui.metainfo.ShadowInfo;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.EvaluatorRef;
+import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.Utils;
 
 /**
@@ -46,8 +51,7 @@ import org.zkoss.zk.xel.impl.Utils;
  *
  * @author tomyeh
  */
-public class ComponentDefinitionImpl
-implements ComponentDefinition, java.io.Serializable {
+public class ComponentDefinitionImpl implements ComponentDefinition, java.io.Serializable {
 	private String _name;
 	private transient LanguageDefinition _langdef;
 	private transient PageDefinition _pgdef;
@@ -89,12 +93,13 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param cls the implementation class.
 	 * @since 3.0.0
 	 */
-	public ComponentDefinitionImpl(LanguageDefinition langdef,
-	PageDefinition pgdef, String name, Class<? extends Component> cls) {
+	public ComponentDefinitionImpl(LanguageDefinition langdef, PageDefinition pgdef, String name,
+			Class<? extends Component> cls) {
 		if (cls != null && !Component.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException(cls+" must implement "+Component.class);
+			throw new IllegalArgumentException(cls + " must implement " + Component.class);
 		init(langdef, pgdef, name, cls);
 	}
+
 	/** Constructs a native component, i.e., a component implemented by
 	 * a Java class.
 	 *
@@ -109,12 +114,11 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param clsnm the implementation class.
 	 * @since 3.0.8
 	 */
-	public ComponentDefinitionImpl(LanguageDefinition langdef,
-	PageDefinition pgdef, String name, String clsnm) {
+	public ComponentDefinitionImpl(LanguageDefinition langdef, PageDefinition pgdef, String name, String clsnm) {
 		init(langdef, pgdef, name, clsnm);
 	}
-	private void init(LanguageDefinition langdef,
-	PageDefinition pgdef, String name, Object cls) {
+
+	private void init(LanguageDefinition langdef, PageDefinition pgdef, String name, Object cls) {
 		if (name == null)
 			throw new IllegalArgumentException();
 		if (langdef != null && pgdef != null)
@@ -125,9 +129,9 @@ implements ComponentDefinition, java.io.Serializable {
 		_name = name;
 		_implcls = cls;
 
-		_evalr = _langdef != null ? _langdef.getEvaluatorRef():
-			_pgdef != null ? _pgdef.getEvaluatorRef(): null;
+		_evalr = _langdef != null ? _langdef.getEvaluatorRef() : _pgdef != null ? _pgdef.getEvaluatorRef() : null;
 	}
+
 	/** Constructs a shadow component definition.
 	 * It is the component definition used to implement the shadow element.
 	 *
@@ -138,11 +142,11 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param templateURI the URI of the ZUML page to representing this shadow, like macroURI.
 	 * @since 8.0.0
 	 */
-	public static final ComponentDefinition newShadowDefinition(
-	LanguageDefinition langdef, PageDefinition pgdef, String name,
-	Class<? extends Component> cls, String templateURI) {
+	public static final ComponentDefinition newShadowDefinition(LanguageDefinition langdef, PageDefinition pgdef,
+			String name, Class<? extends Component> cls, String templateURI) {
 		return new ShadowDefinitionImpl(langdef, pgdef, name, cls, templateURI);
 	}
+
 	/** Constructs a macro component definition.
 	 * It is the component definition used to implement the macros.
 	 *
@@ -153,19 +157,19 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @param macroURI the URI of the ZUML page to representing this macro.
 	 * @since 3.0.0
 	 */
-	public static final ComponentDefinition newMacroDefinition(
-	LanguageDefinition langdef, PageDefinition pgdef, String name,
-	Class<? extends Component> cls, String macroURI, boolean inline) {
+	public static final ComponentDefinition newMacroDefinition(LanguageDefinition langdef, PageDefinition pgdef,
+			String name, Class<? extends Component> cls, String macroURI, boolean inline) {
 		return new MacroDefinition(langdef, pgdef, name, cls, macroURI, inline);
 	}
+
 	/** Constructs a native component definition.
 	 * It is the component definition used to implement the native namespace.
 	 *
 	 * @param langdef the language definition. It cannot be null.
 	 * @since 3.0.0
 	 */
-	public static final ComponentDefinition newNativeDefinition(
-	LanguageDefinition langdef, String name, Class<? extends Component> cls) {
+	public static final ComponentDefinition newNativeDefinition(LanguageDefinition langdef, String name,
+			Class<? extends Component> cls) {
 		return new NativeDefinition(langdef, name, cls);
 	}
 
@@ -173,8 +177,7 @@ implements ComponentDefinition, java.io.Serializable {
 	/** Adds a custom attribute.
 	 */
 	public void addCustomAttribute(String name, String value) {
-		if (name == null || value == null
-		|| name.length() == 0 || value.length() == 0)
+		if (name == null || value == null || name.length() == 0 || value.length() == 0)
 			throw new IllegalArgumentException();
 
 		final ExValue ev = new ExValue(value, Object.class);
@@ -196,8 +199,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * the document, or null if not available.
 	 * @since 6.0.0
 	 */
-	public void addAnnotation(String propName, String annotName,
-	Map<String, String[]> annotAttrs, Location loc) {
+	public void addAnnotation(String propName, String annotName, Map<String, String[]> annotAttrs, Location loc) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs, loc);
@@ -209,6 +211,7 @@ implements ComponentDefinition, java.io.Serializable {
 	public String getCurrentDirectory() {
 		return _curdir;
 	}
+
 	/** Sets the current directory which is used to convert
 	 * a relative URI to absolute.
 	 *
@@ -216,7 +219,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 */
 	public void setCurrentDirectory(String curdir) {
 		if (curdir != null && curdir.length() > 0) {
-			_curdir = curdir.charAt(curdir.length() - 1) != '/' ? curdir + '/': curdir;
+			_curdir = curdir.charAt(curdir.length() - 1) != '/' ? curdir + '/' : curdir;
 		} else {
 			_curdir = null;
 		}
@@ -232,8 +235,9 @@ implements ComponentDefinition, java.io.Serializable {
 	 * @since 3.0.0
 	 */
 	public void setTextAs(String propnm) {
-		_textAs = propnm != null && propnm.length() > 0 ? propnm: null;
+		_textAs = propnm != null && propnm.length() > 0 ? propnm : null;
 	}
+
 	/** Sets whether to preserve the blank text.
 	 * If false, the blank text (a non-empty string consisting of whitespaces)
 	 * are ignored.
@@ -245,6 +249,7 @@ implements ComponentDefinition, java.io.Serializable {
 	public void setBlankPreserved(boolean preserve) {
 		_blankpresv = preserve;
 	}
+
 	/** Sets whether the child component is allowed within the element.
 	 * For more information, please refer to {@link ComponentDefinition#getTextAs}.
 	 * @since 6.0.0
@@ -266,6 +271,7 @@ implements ComponentDefinition, java.io.Serializable {
 	public LanguageDefinition getLanguageDefinition() {
 		return _langdef;
 	}
+
 	public String getName() {
 		return _name;
 	}
@@ -273,10 +279,11 @@ implements ComponentDefinition, java.io.Serializable {
 	public String getTextAs() {
 		return _textAs;
 	}
-	
+
 	public boolean isChildAllowedInTextAs() {
 		return _childAllowedInTextAs;
 	}
+
 	public boolean isBlankPreserved() {
 		return _blankpresv;
 	}
@@ -284,9 +291,11 @@ implements ComponentDefinition, java.io.Serializable {
 	public boolean isMacro() {
 		return false;
 	}
+
 	public String getMacroURI() {
 		return null;
 	}
+
 	public boolean isInlineMacro() {
 		return false;
 	}
@@ -298,44 +307,50 @@ implements ComponentDefinition, java.io.Serializable {
 	public Object getImplementationClass() {
 		return _implcls;
 	}
+
 	public void setImplementationClass(Class<? extends Component> cls) {
 		if (!Component.class.isAssignableFrom(cls))
-			throw new UiException(Component.class.getName()+" must be implemented by "+cls);
+			throw new UiException(Component.class.getName() + " must be implemented by " + cls);
 		_implcls = cls;
 	}
+
 	public void setImplementationClass(String clsnm) {
 		if (clsnm == null || clsnm.length() == 0)
 			throw new UiException("Non-empty class name is required");
 		_implcls = clsnm;
 	}
+
 	@SuppressWarnings("unchecked")
 	public Component newInstance(Page page, String clsnm) {
 		try {
-			return newInstance((Class<? extends Component>)
-				resolveImplementationClass(page, clsnm));
+			return newInstance((Class<? extends Component>) resolveImplementationClass(page, clsnm));
 		} catch (ClassNotFoundException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+
 	public Component newInstance(Class<? extends Component> cls) {
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
 		boolean bSet = true;
 		if (curInfo instanceof ComponentInfo) {
-			bSet = ((ComponentInfo)curInfo).getComponentDefinition() != this;
+			bSet = ((ComponentInfo) curInfo).getComponentDefinition() != this;
 		} else if (curInfo instanceof ShadowInfo) {
-			bSet = ((ShadowInfo)curInfo).getComponentDefinition() != this;
+			bSet = ((ShadowInfo) curInfo).getComponentDefinition() != this;
 		}
-		if (bSet) ComponentsCtrl.setCurrentInfo(this);
+		if (bSet)
+			ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
 			comp = cls.newInstance();
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			if (bSet) ComponentsCtrl.setCurrentInfo((ComponentDefinition)null);
+			if (bSet)
+				ComponentsCtrl.setCurrentInfo((ComponentDefinition) null);
 		}
 		return comp;
 	}
+
 	public boolean isInstance(Component comp) {
 		Class<?> cls;
 		if (_implcls instanceof String) {
@@ -345,22 +360,22 @@ implements ComponentDefinition, java.io.Serializable {
 				return true; //consider as true if not resolvable
 			}
 		} else {
-			cls = (Class<?>)_implcls;
+			cls = (Class<?>) _implcls;
 		}
 		return cls.isInstance(comp);
 	}
-	public Class<?> resolveImplementationClass(Page page, String clsnm)
-	throws ClassNotFoundException {
-		final Object cls = clsnm != null ? clsnm: _implcls;
+
+	public Class<?> resolveImplementationClass(Page page, String clsnm) throws ClassNotFoundException {
+		final Object cls = clsnm != null ? clsnm : _implcls;
 		if (cls instanceof String) {
-			clsnm = (String)cls;
-			final Class<?> found = page != null ?
-				page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
-			if (clsnm.equals(_implcls)) _implcls = found;
-				//cache to _implcls (to improve the performance)
+			clsnm = (String) cls;
+			final Class<?> found = page != null ? page.resolveClass(clsnm) : Classes.forNameByThread(clsnm);
+			if (clsnm.equals(_implcls))
+				_implcls = found;
+			//cache to _implcls (to improve the performance)
 			return found;
 		}
-		return (Class)cls;
+		return (Class) cls;
 	}
 
 	public AnnotationMap getAnnotationMap() {
@@ -373,14 +388,17 @@ implements ComponentDefinition, java.io.Serializable {
 
 		final StringBuffer sb = new StringBuffer();
 		for (int j = 0; j < _apply.length; ++j) {
-			if (j > 0) sb.append(',');
+			if (j > 0)
+				sb.append(',');
 			sb.append(_apply[j].getRawValue());
 		}
 		return sb.toString();
 	}
+
 	public void setApply(String apply) {
 		_apply = Utils.parseList(apply, Object.class, true);
 	}
+
 	public ExValue[] getParsedApply() {
 		return _apply;
 	}
@@ -390,9 +408,9 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 
 	public void addProperty(String name, String value) {
-	//Implementation Note: the reason not to have condition because
-	//isEffective always assumes Executions.getCurrent, which is
-	//not true if _langdef != null
+		//Implementation Note: the reason not to have condition because
+		//isEffective always assumes Executions.getCurrent, which is
+		//not true if _langdef != null
 
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException("name");
@@ -402,22 +420,23 @@ implements ComponentDefinition, java.io.Serializable {
 			_props = new LinkedList<Property>();
 		_props.add(prop);
 	}
+
 	public void applyProperties(Component comp) {
 		//Note: it doesn't apply annotations since it is done
 		//by AbstractComponent's constructor
 		//AbstractComponent's constructor also invokes applyAttributes automatically
 
 		if (_props != null) {
-			for (Property prop: _props) {
+			for (Property prop : _props) {
 				prop.assign(comp);
 			}
 		}
 	}
+
 	public void applyAttributes(Component comp) {
 		if (_custAttrs != null) {
-			for (Map.Entry<String, ExValue> me: _custAttrs.entrySet()) {
-				comp.setAttribute(me.getKey(),
-					me.getValue().getValue(_evalr, comp));
+			for (Map.Entry<String, ExValue> me : _custAttrs.entrySet()) {
+				comp.setAttribute(me.getKey(), me.getValue().getValue(_evalr, comp));
 			}
 		}
 	}
@@ -427,7 +446,7 @@ implements ComponentDefinition, java.io.Serializable {
 			propmap = new HashMap<String, Object>();
 
 		if (_props != null) {
-			for (Property prop: _props) {
+			for (Property prop : _props) {
 				if (parent != null) {
 					if (prop.isEffective(parent))
 						propmap.put(prop.getName(), prop.getValue(parent));
@@ -452,33 +471,36 @@ implements ComponentDefinition, java.io.Serializable {
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
 	}
+
 	public Collection<String> getMoldNames() {
 		if (_molds != null)
 			return _molds.keySet();
 		return Collections.emptyList();
 	}
+
 	public String getWidgetClass(Component comp, String moldName) {
 		if (_molds != null) {
 			final ExValue wc = _molds.get(moldName);
 			if (wc != null) {
-				final String s = (String)wc.getValue(_evalr, comp);
+				final String s = (String) wc.getValue(_evalr, comp);
 				if (s != null)
 					return s;
 			}
 		}
 		return getDefaultWidgetClass(comp);
 	}
+
 	public String getDefaultWidgetClass(Component comp) {
-		return _defWgtClass != null ?
-			(String)_defWgtClass.getValue(_evalr, comp): null;
+		return _defWgtClass != null ? (String) _defWgtClass.getValue(_evalr, comp) : null;
 	}
+
 	public void setDefaultWidgetClass(String widgetClass) {
 		final ExValue oldwc = _defWgtClass;
 		_defWgtClass = new ExValue(widgetClass, String.class);
 
 		//replace mold's widget class if it is the old default one
 		if (oldwc != null && _molds != null)
-			for (Map.Entry<String, ExValue> me: _molds.entrySet()) {
+			for (Map.Entry<String, ExValue> me : _molds.entrySet()) {
 				if (oldwc.equals(me.getValue()))
 					me.setValue(_defWgtClass);
 			}
@@ -487,59 +509,48 @@ implements ComponentDefinition, java.io.Serializable {
 	private String toAbsoluteURI(String uri) {
 		if (_curdir != null && uri != null && uri.length() > 0) {
 			final char cc = uri.charAt(0);
-			if (cc != '/' && cc != '~' && !Servlets.isUniversalURL(uri)) 
+			if (cc != '/' && cc != '~' && !Servlets.isUniversalURL(uri))
 				return _curdir + uri;
 		}
 		return uri;
 	}
 
-	public ComponentDefinition clone(LanguageDefinition langdef, String name) {
-		if (name == null || name.length() == 0)
-			throw new IllegalArgumentException("empty");
-
-		ComponentDefinitionImpl cd = (ComponentDefinitionImpl)clone();
-		cd._name = name;
-		cd._langdef = langdef;
-		return cd;
-	}
-	
 	public boolean isShadowElement() {
 		return false;
 	}
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
-		s.writeObject(_langdef != null ? _langdef.getName(): null);
+		s.writeObject(_langdef != null ? _langdef.getName() : null);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		final String langnm = (String)s.readObject();
+		final String langnm = (String) s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
 	}
 
 	//Object//
 	public String toString() {
-		return "[ComponentDefinition: "+_name+']';
+		return "[ComponentDefinition: " + _name + ']';
 	}
 
 	//Cloneable/
 	public Object clone() {
 		final ComponentDefinitionImpl compdef;
 		try {
-			compdef = (ComponentDefinitionImpl)super.clone();
+			compdef = (ComponentDefinitionImpl) super.clone();
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}
 
 		if (_annots != null)
-			compdef._annots = (AnnotationMap)_annots.clone();
+			compdef._annots = (AnnotationMap) _annots.clone();
 		if (_props != null)
 			compdef._props = new LinkedList<Property>(_props);
 		if (_molds != null)
@@ -547,5 +558,15 @@ implements ComponentDefinition, java.io.Serializable {
 		if (_custAttrs != null)
 			compdef._custAttrs = new HashMap<String, ExValue>(_custAttrs);
 		return compdef;
+	}
+
+	public ComponentDefinition clone(LanguageDefinition langdef, String name) {
+		if (name == null || name.length() == 0)
+			throw new IllegalArgumentException("empty");
+
+		ComponentDefinitionImpl cd = (ComponentDefinitionImpl) clone();
+		cd._name = name;
+		cd._langdef = langdef;
+		return cd;
 	}
 }

@@ -27,6 +27,7 @@ import org.zkoss.web.servlet.dsp.DspException;
  */
 class TextNode extends Node {
 	private final String _text;
+
 	TextNode(String text) {
 		_text = text;
 	}
@@ -39,16 +40,15 @@ class TextNode extends Node {
 	}
 
 	//-- super --//
-	void interpret(InterpretContext ic)
-	throws DspException, IOException {
+	void interpret(InterpretContext ic) throws DspException, IOException {
 		ic.dc.getOut().write(_text);
 	}
+
 	void addChild(Node node) {
 		throw new IllegalStateException("No child allowed");
 	}
 
 	public String toString() {
-		return "TextNode["+
-			(_text.length() > 20 ? _text.substring(0, 20): _text)+']';
+		return "TextNode[" + (_text.length() > 20 ? _text.substring(0, 20) : _text) + ']';
 	}
 }

@@ -29,7 +29,7 @@ import org.zkoss.zul.ListModelArray;
  * @author dennis
  * @since 6.5.2
  */
-public class ChildrenBindingConverter implements Converter, Serializable{
+public class ChildrenBindingConverter implements Converter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
@@ -39,15 +39,15 @@ public class ChildrenBindingConverter implements Converter, Serializable{
 		}
 		Collection<Object> data;
 		if (val instanceof Collection) {
-			data = new ArrayList<Object>((Collection)val);
+			data = new ArrayList<Object>((Collection) val);
 		} else if (val instanceof Map) { // ZK-2483: support Map in template children binding.
 			data = new ArrayList<Object>(Maps.transferToSerializableEntrySet(((Map<?, ?>) val).entrySet()));
 		} else if (val instanceof ListModelArray<?>) { // ZK-2545: support ListModelArray in template children binding.
-			data =  Arrays.asList(((ListModelArray<?>) val).getInnerArray());
+			data = Arrays.asList(((ListModelArray<?>) val).getInnerArray());
 		} else if (val instanceof Object[]) {
-			data = Arrays.asList((Object[])val);
-		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class)val)) {
-			data = Arrays.asList(((Class)val).getEnumConstants());
+			data = Arrays.asList((Object[]) val);
+		} else if ((val instanceof Class) && Enum.class.isAssignableFrom((Class) val)) {
+			data = Arrays.asList(((Class) val).getEnumConstants());
 		} else {
 			data = new ArrayList<Object>();
 			data.add(val);
@@ -55,7 +55,6 @@ public class ChildrenBindingConverter implements Converter, Serializable{
 		return data;
 	}
 
-	
 	public Object coerceToBean(Object val, Component component, BindContext ctx) {
 		//no save binding in children binding
 		return val;

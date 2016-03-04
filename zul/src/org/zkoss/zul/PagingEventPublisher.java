@@ -31,12 +31,14 @@ public interface PagingEventPublisher {
 	 * PagingEvent from Paging component and PagingEvent from PagingEventPublisher
 	 */
 	public static final String INTERNAL_EVENT = "internalModelEvent";
+
 	/**
 	 * Adds a listener to the list of listeners to be notified when a PagingEvent
 	 * happens outside of standard Paging component
 	 * @param listener
 	 */
 	public void addPagingEventListener(PagingListener listener);
+
 	/**
 	 * Removes a listener from the list of listeners to be notified when a PagingEvent
 	 * happens outside of standard Paging component

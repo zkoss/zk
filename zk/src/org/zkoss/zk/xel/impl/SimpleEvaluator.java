@@ -16,23 +16,21 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.xel.impl;
 
-import org.zkoss.xel.XelContext;
-import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.Expression;
-import org.zkoss.xel.Expressions;
-import org.zkoss.xel.ExpressionFactory;
-import org.zkoss.xel.XelException;
-import org.zkoss.xel.util.SimpleXelContext;
-import org.zkoss.xel.util.DualFunctionMapper;
-
 import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestContexts;
-
+import org.zkoss.xel.Expression;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.Expressions;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.XelException;
+import org.zkoss.xel.util.DualFunctionMapper;
+import org.zkoss.xel.util.SimpleXelContext;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.xel.Evaluator;
@@ -58,17 +56,15 @@ public class SimpleEvaluator implements Evaluator {
 	}
 
 	//Evaluator//
-	public Expression parseExpression(String expression, Class expectedType)
-	throws XelException {
-		return getExpressionFactory()
-			.parseExpression(newXelContext(null), expression, expectedType);
+	public Expression parseExpression(String expression, Class expectedType) throws XelException {
+		return getExpressionFactory().parseExpression(newXelContext(null), expression, expectedType);
 	}
-	public Object evaluate(Page page, Expression expression)
-	throws XelException {
+
+	public Object evaluate(Page page, Expression expression) throws XelException {
 		return expression.evaluate(newXelContext(page));
 	}
-	public Object evaluate(Component comp, Expression expression)
-	throws XelException {
+
+	public Object evaluate(Component comp, Expression expression) throws XelException {
 		return expression.evaluate(newXelContext(comp));
 	}
 
@@ -85,6 +81,7 @@ public class SimpleEvaluator implements Evaluator {
 			_expf = Expressions.newExpressionFactory(_expfcls);
 		return _expf;
 	}
+
 	/** Instantiate a XEL context.
 	 * Don't reuse it since it has attributes (that shall not be kept
 	 * after evaluation).
@@ -93,7 +90,7 @@ public class SimpleEvaluator implements Evaluator {
 		final FunctionMapper mapper = getFunctionMapper(ref);
 		final VariableResolver resolver = getVariableResolver(ref);
 		return new SimpleXelContext(resolver, mapper);
-			//Bug 1814838: don't cache the instance
+		//Bug 1814838: don't cache the instance
 	}
 
 	/** Returns the function mapper, or null if not available.
@@ -106,16 +103,15 @@ public class SimpleEvaluator implements Evaluator {
 	 */
 	public FunctionMapper getFunctionMapper(Object ref) {
 		if (ref instanceof Component)
-			ref = ((Component)ref).getPage();
+			ref = ((Component) ref).getPage();
 		if (ref == null) {
 			ExecutionCtrl execCtrl = ExecutionsCtrl.getCurrentCtrl();
 			if (execCtrl != null)
 				ref = execCtrl.getCurrentPage();
 		}
-		return DualFunctionMapper.combine(
-			ref instanceof Page ? ((Page)ref).getFunctionMapper(): null,
-			_mapper);
+		return DualFunctionMapper.combine(ref instanceof Page ? ((Page) ref).getFunctionMapper() : null, _mapper);
 	}
+
 	/** Returns the variable resolver, or null if not available.
 	 *
 	 * <p>Default: it returns the variable resolver of the
@@ -137,7 +133,7 @@ public class SimpleEvaluator implements Evaluator {
 				return null;
 		}
 		if (resolver instanceof ExecutionResolver)
-			((ExecutionResolver)resolver).setSelf(ref);
+			((ExecutionResolver) resolver).setSelf(ref);
 		return resolver;
 	}
 }

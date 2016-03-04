@@ -21,13 +21,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -70,36 +70,28 @@ import org.zkoss.zk.ui.util.ThemeProvider;
  * @since 5.0.0
  */
 public class HtmlPageRenders {
-//	private static final Logger log = LoggerFactory.getLogger(HtmlPageRenders.class);
+	//	private static final Logger log = LoggerFactory.getLogger(HtmlPageRenders.class);
 
 	/** Denotes whether style sheets are generated for this request. */
-	private static final String ATTR_LANG_CSS_GENED
-		= "javax.zkoss.zk.lang.css.generated";
-		//Naming with javax to be able to shared among portlets
+	private static final String ATTR_LANG_CSS_GENED = "javax.zkoss.zk.lang.css.generated";
+	//Naming with javax to be able to shared among portlets
 	/** Denotes whether JavaScripts are generated for this request. */
-	private static final String ATTR_LANG_JS_GENED
-		= "javax.zkoss.zk.lang.js.generated";
-		//Naming with javax to be able to shared among portlets
+	private static final String ATTR_LANG_JS_GENED = "javax.zkoss.zk.lang.js.generated";
+	//Naming with javax to be able to shared among portlets
 	/** Denotes whether the unavailable message is generated for this request. */
-	private static final String ATTR_UNAVAILABLE_GENED
-		= "javax.zkoss.zk.unavail.generated";
+	private static final String ATTR_UNAVAILABLE_GENED = "javax.zkoss.zk.unavail.generated";
 	/** Denotes whether zkdt has been generated. */
-	private static final String ATTR_DESKTOP_JS_GENED
-		= "javax.zkoss.zk.dtjs.generated";
+	private static final String ATTR_DESKTOP_JS_GENED = "javax.zkoss.zk.dtjs.generated";
 
 	/** Denotes DOCTYPE has been generated. */
-	private static final String DOCTYPE_GENED
-		= "javax.zkoss.zk.doctype.generated";
+	private static final String DOCTYPE_GENED = "javax.zkoss.zk.doctype.generated";
 	/** Denotes the first line has been generated. */
-	private static final String FIRST_LINE_GENED
-		= "javax.zkoss.zk.firstline.generated";
+	private static final String FIRST_LINE_GENED = "javax.zkoss.zk.firstline.generated";
 
 	/** The render context. */
-	private static final String ATTR_RENDER_CONTEXT
-		= "org.zkoss.zk.ui.renderContext";
+	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.ui.renderContext";
 	/** Whether is allowed to generate content directly. */
-	private static final String ATTR_DIRECT_CONTENT
-		= "org.zkoss.zk.ui.directContent";
+	private static final String ATTR_DIRECT_CONTENT = "org.zkoss.zk.ui.directContent";
 	/** Enabled client info */
 	private static final String ATTR_DESKTOP_CLIENTINFO = "org.zkoss.desktop.clientinfo.enabled";
 	/** Enabled visibility change */
@@ -107,84 +99,81 @@ public class HtmlPageRenders {
 	/** Support Portlet 2.0 */
 	private static final String ATTR_PORTLET2_RESOURCEURL = "org.zkoss.portlet2.resourceURL";
 	private static final String ATTR_PORTLET2_NAMESPACE = "org.zkoss.portlet2.namespace";
-	
+
 	/**
 	* Set this library property to false to hide the zk version info.
 	* @since 6.5.5
 	*/
-	private final static String ZK_VERSION_INFO_ENABLED_KEY = "org.zkoss.zk.ui.versionInfo.enabled";
-	
-	private static volatile int msgCode = -1;
-	
+	private static final String ZK_VERSION_INFO_ENABLED_KEY = "org.zkoss.zk.ui.versionInfo.enabled";
 
+	private static volatile int msgCode = -1;
 
 	/** Sets the content type to the specified execution for the given page.
 	 * @param exec the execution (never null)
 	 */
 	public static final void setContentType(Execution exec, Page page) {
-		String contentType = ((PageCtrl)page).getContentType();
+		String contentType = ((PageCtrl) page).getContentType();
 		if (contentType == null) {
 			contentType = page.getDesktop().getDevice().getContentType();
-			if (contentType == null) contentType = "";
+			if (contentType == null)
+				contentType = "";
 		}
 
 		final int j = contentType.indexOf(';');
 		if (j < 0) {
-			final String cs = page.getDesktop().getWebApp()
-				.getConfiguration().getResponseCharset();
+			final String cs = page.getDesktop().getWebApp().getConfiguration().getResponseCharset();
 			if (cs != null && cs.length() > 0)
 				contentType += ";charset=" + cs;
 		}
 
-		((ExecutionCtrl)exec).setContentType(contentType);
+		((ExecutionCtrl) exec).setContentType(contentType);
 	}
+
 	/** Returns the doc type, or null if not available.
 	 * It is null or &lt;!DOCTYPE ...&gt;.
 	 */
 	public static final String outDocType(Execution exec, Page page) {
-		if (exec.getAttribute(DOCTYPE_GENED) == null
-		&& !exec.isAsyncUpdate(null)) {
+		if (exec.getAttribute(DOCTYPE_GENED) == null && !exec.isAsyncUpdate(null)) {
 			exec.setAttribute(DOCTYPE_GENED, Boolean.TRUE);
-			final String docType = ((PageCtrl)page).getDocType();
-			return trimAndLF(docType != null ?
-				docType: page.getDesktop().getDevice().getDocType());
+			final String docType = ((PageCtrl) page).getDocType();
+			return trimAndLF(docType != null ? docType : page.getDesktop().getDevice().getDocType());
 		}
 		return "";
 	}
+
 	/** Trims and appends a linefeed if necessary.
 	 */
 	private static final String trimAndLF(String s) {
 		if (s != null) {
 			s = s.trim();
 			final int len = s.length();
-			if (len > 0 && s.charAt(len-1) != '\n')
+			if (len > 0 && s.charAt(len - 1) != '\n')
 				s += '\n';
 		}
 		return s;
 	}
+
 	/** Generates the unavailable message in HTML tags, if any.
 	 * @param exec the execution (never null)
 	 */
 	public static String outUnavailable(Execution exec) {
-		if (exec.getAttribute(ATTR_UNAVAILABLE_GENED) == null
-		&& !exec.isAsyncUpdate(null)) {
+		if (exec.getAttribute(ATTR_UNAVAILABLE_GENED) == null && !exec.isAsyncUpdate(null)) {
 			exec.setAttribute(ATTR_UNAVAILABLE_GENED, Boolean.TRUE);
 
 			final Device device = exec.getDesktop().getDevice();
 			String s = device.getUnavailableMessage();
-			return s != null ?
-				"<noscript>\n" + s + "\n</noscript>": "";
+			return s != null ? "<noscript>\n" + s + "\n</noscript>" : "";
 		}
 		return ""; //nothing to generate
 	}
+
 	/** Returns the first line to be generated to the output,
 	 * or null if no special first line.
 	 */
 	public static final String outFirstLine(Execution exec, Page page) {
-		if (exec.getAttribute(FIRST_LINE_GENED) == null
-		&& !exec.isAsyncUpdate(null)) {
+		if (exec.getAttribute(FIRST_LINE_GENED) == null && !exec.isAsyncUpdate(null)) {
 			exec.setAttribute(FIRST_LINE_GENED, Boolean.TRUE);
-			return trimAndLF(((PageCtrl)page).getFirstLine());
+			return trimAndLF(((PageCtrl) page).getFirstLine());
 		}
 		return "";
 	}
@@ -196,6 +185,7 @@ public class HtmlPageRenders {
 	public static final String outResponseJavaScripts(Execution exec) {
 		return outResponseJavaScripts(exec, false);
 	}
+
 	/** Generates the AU responses that are part of a page rendering.
 	 * Notice that {@link #outPageContent} will invoke this method automatically.
 	 * @param directJS whether to generate JS directly.
@@ -204,9 +194,10 @@ public class HtmlPageRenders {
 	 * @since 5.0.2
 	 */
 	public static final String outResponseJavaScripts(Execution exec, boolean directJS) {
-		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		final ExecutionCtrl execCtrl = (ExecutionCtrl) exec;
 		final Collection<AuResponse> responses = execCtrl.getResponses();
-		if (responses == null || responses.isEmpty()) return "";
+		if (responses == null || responses.isEmpty())
+			return "";
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256);
@@ -215,17 +206,14 @@ public class HtmlPageRenders {
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
-			sb.append('\'').append(response.getCommand())
-				.append("',");
+			sb.append('\'').append(response.getCommand()).append("',");
 			final List<?> encdata = response.getEncodedData();
 			if (encdata != null)
-				sb.append('\'')
-					.append(Strings.escape(
-						org.zkoss.json.JSONArray.toJSONString(encdata),
-						Strings.ESCAPE_JAVASCRIPT))
-					.append('\'');
+				sb.append('\'').append(
+						Strings.escape(org.zkoss.json.JSONArray.toJSONString(encdata), Strings.ESCAPE_JAVASCRIPT))
+						.append('\'');
 			else
-				sb.append((String)null);
+				sb.append((String) null);
 			if (it.hasNext())
 				sb.append(",\n");
 		}
@@ -250,23 +238,23 @@ public class HtmlPageRenders {
 	 * So you have to specify it if the execution is not associated
 	 * with desktop (a fake execution).
 	 */
-	public static final
-	String outLangJavaScripts(Execution exec, WebApp wapp, String deviceType) {
+	public static final String outLangJavaScripts(Execution exec, WebApp wapp, String deviceType) {
 		if (exec.isAsyncUpdate(null) || exec.getAttribute(ATTR_LANG_JS_GENED) != null)
 			return ""; //nothing to generate
 		exec.setAttribute(ATTR_LANG_JS_GENED, Boolean.TRUE);
 
 		final Desktop desktop = exec.getDesktop();
-		if (wapp == null) wapp = desktop.getWebApp();
+		if (wapp == null)
+			wapp = desktop.getWebApp();
 		if (deviceType == null)
-			deviceType = desktop != null ? desktop.getDeviceType(): "ajax";
+			deviceType = desktop != null ? desktop.getDeviceType() : "ajax";
 
 		final StringBuffer sb = new StringBuffer(1536);
 
 		final Set<JavaScript> jses = new LinkedHashSet<JavaScript>(32);
-		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType))
+		for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType(deviceType))
 			jses.addAll(langdef.getJavaScripts());
-		for (JavaScript js: jses)
+		for (JavaScript js : jses)
 			append(sb, js);
 
 		// F65-ZK-2061: Check if user want to show or hide zk version info.
@@ -278,29 +266,29 @@ public class HtmlPageRenders {
 				sb.append(" PE");
 			sb.append(' ').append(wapp.getBuild());
 			Object o = wapp.getAttribute("org.zkoss.zk.ui.notice");
-			if (o != null) sb.append(o);
+			if (o != null)
+				sb.append(o);
 			sb.append(" -->\n");
 		}
 
 		int tmout = 0;
 		final Boolean autoTimeout = getAutomaticTimeout(desktop);
-		if (autoTimeout != null ? autoTimeout.booleanValue():
-		wapp.getConfiguration().isAutomaticTimeout(deviceType)) {
+		if (autoTimeout != null ? autoTimeout.booleanValue() : wapp.getConfiguration().isAutomaticTimeout(deviceType)) {
 			if (desktop != null) {
 				tmout = desktop.getSession().getMaxInactiveInterval();
 			} else {
 				Object req = exec.getNativeRequest();
-				if (req instanceof HttpServletRequest)  {
-					final HttpSession hsess = ((HttpServletRequest)req).getSession(false);
+				if (req instanceof HttpServletRequest) {
+					final HttpSession hsess = ((HttpServletRequest) req).getSession(false);
 					if (hsess != null) {
 						final Session sess = SessionsCtrl.getSession(wapp, hsess);
 						if (sess != null) {
 							tmout = sess.getMaxInactiveInterval();
 						} else {
-						//try configuration first since HttpSession's timeout is set
-						//when ZK Session is created (so it is not set yet)
-						//Note: no need to setMaxInactiveInternval here since it will
-						//be set later or not useful at the end
+							//try configuration first since HttpSession's timeout is set
+							//when ZK Session is created (so it is not set yet)
+							//Note: no need to setMaxInactiveInternval here since it will
+							//be set later or not useful at the end
 							tmout = wapp.getConfiguration().getSessionMaxInactiveInterval();
 							if (tmout <= 0) //system default
 								tmout = hsess.getMaxInactiveInterval();
@@ -311,14 +299,14 @@ public class HtmlPageRenders {
 			}
 			if (tmout > 0) { //unit: seconds
 				int extra = tmout / 8;
-				tmout += extra > 60 ? 60: extra < 5 ? 5: extra;
-					//Add extra seconds to ensure it is really timeout
+				tmout += extra > 60 ? 60 : extra < 5 ? 5 : extra;
+				//Add extra seconds to ensure it is really timeout
 			}
 		}
 
 		final boolean keepDesktop = exec.getAttribute(Attributes.NO_CACHE) == null
-			&& !"page".equals(ExecutionsCtrl.getPageRedrawControl(exec)),
-			groupingAllowed = isGroupingAllowed(desktop);
+				&& !"page".equals(ExecutionsCtrl.getPageRedrawControl(exec)),
+				groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
 			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({");
@@ -341,36 +329,37 @@ public class HtmlPageRenders {
 		String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
-		
+
 		Map<String, DataHandlerInfo> dataHandlers = wapp.getConfiguration().getDataHandlers();
 		Set<Pair<String, String>> scripts = new LinkedHashSet<Pair<String, String>>();
 		for (DataHandlerInfo info : dataHandlers.values()) {
 			List<Pair<String, String>> scripts2 = info.getScripts();
-            int size;
+			int size;
 			if (scripts2 != null && (size = scripts2.size()) > 1)
-                scripts.addAll(scripts2.subList(0, size - 1));
+				scripts.addAll(scripts2.subList(0, size - 1));
 		}
 		for (Pair<String, String> scriptInfo : scripts) {
-            String src = scriptInfo.getX();
-            sb.append("<script type=\"text/javascript\"");
-            if (src != null && src.length() != 0)
-                sb.append(" src=\"")
-                    .append(Executions.encodeURL(src))
-                    .append("\" charset=\"UTF-8\">");
-            else
-                sb.append(">").append(scriptInfo.getY());
-            sb.append("</script>\n");
+			String src = scriptInfo.getX();
+			sb.append("<script type=\"text/javascript\"");
+			if (src != null && src.length() != 0)
+				sb.append(" src=\"").append(Executions.encodeURL(src)).append("\" charset=\"UTF-8\">");
+			else
+				sb.append(">").append(scriptInfo.getY());
+			sb.append("</script>\n");
 		}
 		return sb.toString();
 	}
+
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
 		if (desktop != null)
-			for (Page page: desktop.getPages()) {
-				Boolean b = ((PageCtrl)page).getAutomaticTimeout();
-				if (b != null) return b;
+			for (Page page : desktop.getPages()) {
+				Boolean b = ((PageCtrl) page).getAutomaticTimeout();
+				if (b != null)
+					return b;
 			}
 		return null;
 	}
+
 	/** Returns HTML tags to include all style sheets that are
 	 * defined in all languages of the specified device (never null).
 	 *
@@ -392,19 +381,20 @@ public class HtmlPageRenders {
 	 * So you have to specify it if the execution is not associated
 	 * with desktop (a fake execution).
 	 */
-	public static final String outLangStyleSheets(Execution exec,
-	WebApp wapp, String deviceType) {
+	public static final String outLangStyleSheets(Execution exec, WebApp wapp, String deviceType) {
 		if (exec.isAsyncUpdate(null) || exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
 			return ""; //nothing to generate
 		exec.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(512);
-		for (StyleSheet ss: getStyleSheets(exec, wapp, deviceType))
+		for (StyleSheet ss : getStyleSheets(exec, wapp, deviceType))
 			append(sb, ss, exec, null);
 
-		if (sb.length() > 0) sb.append('\n');
+		if (sb.length() > 0)
+			sb.append('\n');
 
-		if (wapp == null) wapp = exec.getDesktop().getWebApp();
+		if (wapp == null)
+			wapp = exec.getDesktop().getWebApp();
 		Map<String, DataHandlerInfo> dataHandlers = wapp.getConfiguration().getDataHandlers();
 		Set<Map<String, String>> links = new LinkedHashSet<Map<String, String>>();
 		for (DataHandlerInfo info : dataHandlers.values()) {
@@ -437,16 +427,17 @@ public class HtmlPageRenders {
 	 * So you have to specify it if the execution is not associated
 	 * with desktop (a fake execution).
 	 */
-	public static final
-	List<StyleSheet> getStyleSheets(Execution exec, WebApp wapp, String deviceType) {
-		if (wapp == null) wapp = exec.getDesktop().getWebApp();
-		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
+	public static final List<StyleSheet> getStyleSheets(Execution exec, WebApp wapp, String deviceType) {
+		if (wapp == null)
+			wapp = exec.getDesktop().getWebApp();
+		if (deviceType == null)
+			deviceType = exec.getDesktop().getDeviceType();
 
 		final Configuration config = wapp.getConfiguration();
 		final Set<String> disabled = config.getDisabledThemeURIs();
 		final List<StyleSheet> sses = new LinkedList<StyleSheet>(); //a list of StyleSheet
-		for (LanguageDefinition langdef: LanguageDefinition.getByDeviceType(deviceType)) {
-			for (StyleSheet ss: langdef.getStyleSheets()) {
+		for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType(deviceType)) {
+			for (StyleSheet ss : langdef.getStyleSheets()) {
 				if (!disabled.contains(ss.getHref()))
 					sses.add(ss);
 			}
@@ -456,10 +447,10 @@ public class HtmlPageRenders {
 		final ThemeProvider themeProvider = config.getThemeProvider();
 		if (themeProvider != null) {
 			final List<Object> orgss = new LinkedList<Object>();
-			for (StyleSheet ss:  sses) {
+			for (StyleSheet ss : sses) {
 				final String href = ss.getHref();
 				if (href != null && href.length() > 0)
-					orgss.add(ss.getMedia() != null ? ss: href); //we don't support getContent
+					orgss.add(ss.getMedia() != null ? ss : href); //we don't support getContent
 			}
 
 			final String[] hrefs = config.getThemeURIs();
@@ -469,9 +460,8 @@ public class HtmlPageRenders {
 			sses.clear();
 			final Collection<?> res = themeProvider.getThemeURIs(exec, orgss);
 			if (res != null) {
-				for (Object re: res) {
-					sses.add(re instanceof StyleSheet ? (StyleSheet)re:
-						new StyleSheet((String)re, "text/css"));
+				for (Object re : res) {
+					sses.add(re instanceof StyleSheet ? (StyleSheet) re : new StyleSheet((String) re, "text/css"));
 				}
 			}
 		} else {
@@ -482,19 +472,17 @@ public class HtmlPageRenders {
 		return sses;
 	}
 
-	private static void append(StringBuffer sb, StyleSheet ss,
-	Execution exec, Page page) {
+	private static void append(StringBuffer sb, StyleSheet ss, Execution exec, Page page) {
 		String href = ss.getHref();
 		String media = ss.getMedia();
 		if (href != null) {
 			try {
 				if (exec != null)
-					href = (String)exec.evaluate(page, href, String.class);
+					href = (String) exec.evaluate(page, href, String.class);
 
 				if (href != null && href.length() > 0) {
-					sb.append("\n<link rel=\"stylesheet\" type=\"")
-						.append(ss.getType()).append("\" href=\"")
-						.append(ServletFns.encodeURL(href));
+					sb.append("\n<link rel=\"stylesheet\" type=\"").append(ss.getType()).append("\" href=\"")
+							.append(ServletFns.encodeURL(href));
 					if (media != null)
 						sb.append("\" media=\"").append(media);
 					sb.append("\"/>");
@@ -509,6 +497,7 @@ public class HtmlPageRenders {
 			sb.append(">\n").append(ss.getContent()).append("\n</style>");
 		}
 	}
+
 	private static void append(StringBuffer sb, JavaScript js) {
 		sb.append("\n<script type=\"text/javascript\"");
 		if (js.getSrc() != null) {
@@ -526,9 +515,8 @@ public class HtmlPageRenders {
 			sb.append('>');
 		} else {
 			sb.append(" class=\"z-runonce\">\n")
-				// B65-ZK-1836
-				.append(js.getContent().replaceAll("</(?i)(?=script>)", "<\\\\/"))
-				.append("\n");
+					// B65-ZK-1836
+					.append(js.getContent().replaceAll("</(?i)(?=script>)", "<\\\\/")).append("\n");
 		}
 		sb.append("</script>");
 	}
@@ -540,14 +528,13 @@ public class HtmlPageRenders {
 	 * @param exec the execution. If null, {@link Executions#getCurrent}
 	 * is assumed.
 	 */
-	public static final
-	RenderContext getRenderContext(Execution exec) {
-		if (exec == null) exec = Executions.getCurrent();
-		return exec != null ?
-			(RenderContext)exec.getAttribute(ATTR_RENDER_CONTEXT): null;
+	public static final RenderContext getRenderContext(Execution exec) {
+		if (exec == null)
+			exec = Executions.getCurrent();
+		return exec != null ? (RenderContext) exec.getAttribute(ATTR_RENDER_CONTEXT) : null;
 	}
-	private static final
-	void setRenderContext(Execution exec, RenderContext rc) {
+
+	private static final void setRenderContext(Execution exec, RenderContext rc) {
 		exec.setAttribute(ATTR_RENDER_CONTEXT, rc);
 	}
 
@@ -555,19 +542,17 @@ public class HtmlPageRenders {
 	 * @param au whether it is caused by asynchronous update
 	 * @param exec the execution (never null)
 	 */
-	public static final
-	void outPageContent(Execution exec, Page page, Writer out, boolean au)
-	throws IOException {
+	public static final void outPageContent(Execution exec, Page page, Writer out, boolean au) throws IOException {
 		final Desktop desktop = page.getDesktop();
-		final PageCtrl pageCtrl = (PageCtrl)page;
+		final PageCtrl pageCtrl = (PageCtrl) page;
 		final Component owner = pageCtrl.getOwner();
 		boolean contained = owner == null && exec.isIncluded();
-			//a standalone page (i.e., no owner), and being included by
-			//non-ZK page (e.g., JSP).
-			//
-			//Revisit Bug 2001707: OK to use exec.isIncluded() since
-			//we use PageRenderer now (rather than Servlet's include)
-			//TODO: test again
+		//a standalone page (i.e., no owner), and being included by
+		//non-ZK page (e.g., JSP).
+		//
+		//Revisit Bug 2001707: OK to use exec.isIncluded() since
+		//we use PageRenderer now (rather than Servlet's include)
+		//TODO: test again
 
 		//prepare style
 		String style = page.getStyle();
@@ -575,16 +560,15 @@ public class HtmlPageRenders {
 			style = null;
 			String wd = null, hgh = null;
 			if (owner instanceof HtmlBasedComponent) {
-				final HtmlBasedComponent hbc = (HtmlBasedComponent)owner;
+				final HtmlBasedComponent hbc = (HtmlBasedComponent) owner;
 				wd = hbc.getWidth(); //null if not set
 				hgh = hbc.getHeight(); //null if not set
 			}
 
 			if (wd != null || hgh != null || contained) {
 				final StringBuffer sb = new StringBuffer(32);
-				HTMLs.appendStyle(sb, "width", wd != null ? wd: "100%");
-				HTMLs.appendStyle(sb, "height",
-					hgh != null ? hgh: contained ? null: "100%");
+				HTMLs.appendStyle(sb, "width", wd != null ? wd : "100%");
+				HTMLs.appendStyle(sb, "height", hgh != null ? hgh : contained ? null : "100%");
 				style = sb.toString();
 			}
 		}
@@ -592,20 +576,18 @@ public class HtmlPageRenders {
 		RenderContext rc = null, old = null;
 		final boolean aupg = exec.isAsyncUpdate(page); //AU this page
 		final boolean includedAndPart = owner != null && !aupg;
-			//this page is included and rendered with its owner
+		//this page is included and rendered with its owner
 		final boolean divRequired = !au || includedAndPart;
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
-			rc = new RenderContext(
-				out, new StringWriter(),
-				desktop.getWebApp().getConfiguration().isCrawlable(), false);
+			rc = new RenderContext(out, new StringWriter(), desktop.getWebApp().getConfiguration().isCrawlable(),
+					false);
 			setRenderContext(exec, rc);
 		} else if (owner != null) {
 			old = getRenderContext(exec); //store
 			final boolean crawlable = old != null && old.temp != null
-				&& desktop.getWebApp().getConfiguration().isCrawlable();
-			setRenderContext(exec,
-				crawlable ? new RenderContext(old.temp, null, true, true): null);
+					&& desktop.getWebApp().getConfiguration().isCrawlable();
+			setRenderContext(exec, crawlable ? new RenderContext(old.temp, null, true, true) : null);
 		}
 
 		//generate div first
@@ -631,7 +613,8 @@ public class HtmlPageRenders {
 		final String extra;
 		try {
 			if (order < 0) {
-				if (aupg) out.write('[');
+				if (aupg)
+					out.write('[');
 				else {
 					out.write(outSpecialJS(desktop));
 
@@ -642,15 +625,15 @@ public class HtmlPageRenders {
 					for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
 						DataHandlerInfo handler = me.getValue();
 						List<Pair<String, String>> scripts = handler.getScripts();
-                        Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
+						Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
 						String scriptSrc = scriptInfo.getX();
-                        String script = scriptInfo.getY();
-                        if (scriptSrc != null && scriptSrc.length() != 0) {
+						String script = scriptInfo.getY();
+						if (scriptSrc != null && scriptSrc.length() != 0) {
 							script = Devices.loadJavaScript(exec, scriptSrc);
 						}
 						out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
 					}
-					out.write(divRequired ? "zkmx(": "zkx(");
+					out.write(divRequired ? "zkmx(" : "zkx(");
 				}
 			} else if (order > 0) //not first child
 				out.write(',');
@@ -683,9 +666,8 @@ public class HtmlPageRenders {
 			out.write("},{"); // preserved for shadow element
 			out.write("},[");
 
-			for (Component root = page.getFirstRoot(); root != null;
-			root = root.getNextSibling())
-				((ComponentCtrl)root).redraw(out);
+			for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
+				((ComponentCtrl) root).redraw(out);
 
 			out.write("]]");
 		} finally {
@@ -699,13 +681,13 @@ public class HtmlPageRenders {
 		if (standalone) {
 			setRenderContext(exec, null);
 
-			StringBuffer sw = ((StringWriter)out).getBuffer();
+			StringBuffer sw = ((StringWriter) out).getBuffer();
 			out = rc.temp;
 			if (divRequired)
 				outDivTemplateEnd(page, out);
-				//close tag after temp, but before perm (so perm won't be destroyed)
-			Files.write(out, ((StringWriter)rc.perm).getBuffer()); //perm
-			
+			//close tag after temp, but before perm (so perm won't be destroyed)
+			Files.write(out, ((StringWriter) rc.perm).getBuffer()); //perm
+
 			// B65-ZK-1836
 			Files.write(out, new StringBuffer(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/"))); //js
 		} else if (owner != null) { //restore
@@ -713,19 +695,20 @@ public class HtmlPageRenders {
 		}
 
 		if (includedAndPart) {
-			((Includer)owner).setRenderingResult(((StringWriter)out).toString());
+			((Includer) owner).setRenderingResult(((StringWriter) out).toString());
 		} else if (divRequired) {
 			out.write("\n</script>\n");
 		}
 	}
-	private static void outDivTemplateBegin(Writer out, String uuid)
-	throws IOException {
+
+	private static void outDivTemplateBegin(Writer out, String uuid) throws IOException {
 		out.write("<div");
 		writeAttr(out, "id", uuid);
-		out.write(" class=\"z-temp\"><div id=\"zk_proc\" class=\"z-loading\"><div class=\"z-loading-indicator\">" + 
+		out.write(" class=\"z-temp\"><div id=\"zk_proc\" class=\"z-loading\"><div class=\"z-loading-indicator\">"
 				// B65-ZK-1852: Displays localized loading label.
-				"<span class=\"z-loading-icon\"></span>" + getLoadingLabel() + "</div></div>");
+				+ "<span class=\"z-loading-icon\"></span>" + getLoadingLabel() + "</div></div>");
 	}
+
 	private static String getLoadingLabel() {
 		if (msgCode == -1) {
 			try {
@@ -739,34 +722,36 @@ public class HtmlPageRenders {
 		// B70-ZK-1852: Returns the localized label.
 		return msgCode != -1 ? Messages.get(msgCode) : "Processing...";
 	}
-	private static void outDivTemplateEnd(Page page, Writer out)
-	throws IOException {
+
+	private static void outDivTemplateEnd(Page page, Writer out) throws IOException {
 		final Desktop dt;
 		if (page != null && (dt = page.getDesktop()) != null) {
 			if (dt.getAttribute(ATTR_DESKTOP_CLIENTINFO) != null) {
 				dt.removeAttribute(ATTR_DESKTOP_CLIENTINFO);
 				if (!"CE".equals(WebApps.getEdition()))
-					out.write("<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>");
+					out.write(
+							"<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>");
 			}
 			if (dt.getAttribute(ATTR_DESKTOP_VISIBILITYCHANGE) != null) {
 				dt.removeAttribute(ATTR_DESKTOP_VISIBILITYCHANGE);
-				out.write("<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>");
+				out.write(
+						"<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>");
 			}
 			String resourceURL = (String) page.getAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE),
 					namespace = (String) page.getAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
-			if(resourceURL != null) {
+			if (resourceURL != null) {
 				page.removeAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE);
 				page.removeAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
 				// B65-ZK-2210: store url and namespace per desktop.
-				out.write("<script type=\"text/javascript\">if(!zk.portlet2Data) zk.portlet2Data = {};\n" +
-						"zk.portlet2Data['" + dt.getId() + "'] = {" +
-						"resourceURL: '" + resourceURL + "', " +
-						"namespace: '" + namespace + "'};</script>");
+				out.write("<script type=\"text/javascript\">if(!zk.portlet2Data) zk.portlet2Data = {};\n"
+						+ "zk.portlet2Data['" + dt.getId() + "'] = {" + "resourceURL: '" + resourceURL + "', "
+						+ "namespace: '" + namespace + "'};</script>");
 			}
 		}
 		outSEOContent(page, out);
 		out.write("</div>");
 	}
+
 	/** Generates the SEO content for the given page.
 	 * Nothing is generated if the SEO content has been generated or it shall not be generated.
 	 * <p>The SEO content shall be placed inside <code>&lt;div class="z-temp"&gt;</code>.
@@ -775,9 +760,8 @@ public class HtmlPageRenders {
 	 * @since 5.0.9
 	 */
 	public static void outSEOContent(Page page, Writer out) throws IOException {
-		if (page != null && ((PageCtrl)page).getOwner() == null) { //only the topmost page shall generate SEO
-			final SEORenderer[] sds = page.getDesktop().getWebApp()
-				.getConfiguration().getSEORenderers();
+		if (page != null && ((PageCtrl) page).getOwner() == null) { //only the topmost page shall generate SEO
+			final SEORenderer[] sds = page.getDesktop().getWebApp().getConfiguration().getSEORenderers();
 			for (int j = 0; j < sds.length; ++j)
 				sds[j].render(page, out);
 		}
@@ -787,9 +771,8 @@ public class HtmlPageRenders {
 	 * It assumes the function name and the first parenthesis has been generated.
 	 * @param aupg whether the current page is caused by AU request
 	 */
-	private static void outEndJavaScriptFunc(Execution exec, Writer out,
-	String extra, boolean aupg)
-	throws IOException {
+	private static void outEndJavaScriptFunc(Execution exec, Writer out, String extra, boolean aupg)
+			throws IOException {
 		final String ac = outResponseJavaScripts(exec, true);
 		if (aupg) {
 			if (extra.length() > 0 || ac.length() > 0) {
@@ -813,8 +796,8 @@ public class HtmlPageRenders {
 		} else {
 			if (extra.length() > 0 || ac.length() > 0) {
 				out.write(',');
-				out.write(extra.length() > 0 ? '9': '0');
-					//Bug 2983792: delay until non-defer script (i.e., extra) evaluated
+				out.write(extra.length() > 0 ? '9' : '0');
+				//Bug 2983792: delay until non-defer script (i.e., extra) evaluated
 
 				if (ac.length() > 0) {
 					out.write(",\n[");
@@ -827,14 +810,17 @@ public class HtmlPageRenders {
 			out.write(extra);
 		}
 	}
+
 	private static void appendProp(StringBuffer sb, String name, Object value) {
-		if (sb.length() > 0) sb.append(',');
+		if (sb.length() > 0)
+			sb.append(',');
 		sb.append(name).append(':');
 		boolean quote = value instanceof String;
 		if (quote) {
 			sb.append('\'');
-			sb.append(HTMLs.encodeJavaScript((String)value));
-			if (quote) sb.append('\'');
+			sb.append(HTMLs.encodeJavaScript((String) value));
+			if (quote)
+				sb.append('\'');
 		} else {
 			sb.append(value); //no escape, so use with care
 		}
@@ -848,13 +834,13 @@ public class HtmlPageRenders {
 		final StringBuffer sb = new StringBuffer();
 
 		//output application name
-		String oldnm = (String)desktop.getAttribute(ATTR_APPNM);
-		if (oldnm == null) oldnm = "ZK";
+		String oldnm = (String) desktop.getAttribute(ATTR_APPNM);
+		if (oldnm == null)
+			oldnm = "ZK";
 		final String appnm = desktop.getWebApp().getAppName();
 		if (!oldnm.equals(appnm)) {
 			sb.append("zk.appName='");
-			Strings.escape(sb, appnm, Strings.ESCAPE_JAVASCRIPT)
-				.append("';");
+			Strings.escape(sb, appnm, Strings.ESCAPE_JAVASCRIPT).append("';");
 			desktop.setAttribute(ATTR_APPNM, appnm);
 		}
 
@@ -869,8 +855,7 @@ public class HtmlPageRenders {
 		}
 		if (!oldthemenm.equals(themenm)) {
 			sb.append("zk.themeName='");
-			Strings.escape(sb, themenm, Strings.ESCAPE_JAVASCRIPT)
-				.append("';");
+			Strings.escape(sb, themenm, Strings.ESCAPE_JAVASCRIPT).append("';");
 			desktop.setAttribute(ATTR_THEMENM, themenm);
 		}
 
@@ -880,24 +865,30 @@ public class HtmlPageRenders {
 			WebApp wapp = desktop.getWebApp();
 			if (wapp == null || "CE".equals(WebApps.getEdition())
 					|| wapp.getAttribute("org.zkoss.zk.ui.notice") != null) {
-				final PI pi = (PI)sess.getAttribute(ATTR_PI);
+				final PI pi = (PI) sess.getAttribute(ATTR_PI);
 				boolean show = pi == null;
-				if (show) sess.setAttribute(ATTR_PI, new PI());
-				else show = pi.show();
+				if (show)
+					sess.setAttribute(ATTR_PI, new PI());
+				else
+					show = pi.show();
 				if (show)
 					sb.append("zk.pi=1;");
 			}
 		}
 		return sb.toString();
 	}
+
 	private static final String ATTR_APPNM = "org.zkoss.zk.appnm";
 	private static final String ATTR_THEMENM = "org.zkoss.zk.zkthemenm";
 	private static final String ATTR_PI = "org.zkoss.zk.pi";
+
 	private static class PI implements java.io.Serializable {
 		long _t;
+
 		private PI() {
 			_t = System.currentTimeMillis();
 		}
+
 		private boolean show() {
 			long now = System.currentTimeMillis();
 			if (now - _t > 600000) { //every 10 minutes
@@ -911,8 +902,7 @@ public class HtmlPageRenders {
 	private static final boolean isClientROD(Page page) {
 		Object o = page.getAttribute(Attributes.CLIENT_ROD);
 		if (o != null)
-			return (o instanceof Boolean && ((Boolean)o).booleanValue())
-				|| !"false".equals(o);
+			return (o instanceof Boolean && ((Boolean) o).booleanValue()) || !"false".equals(o);
 
 		if (_crod == null) {
 			final String s = Library.getProperty(Attributes.CLIENT_ROD);
@@ -920,6 +910,7 @@ public class HtmlPageRenders {
 		}
 		return _crod.booleanValue();
 	}
+
 	private static Boolean _crod;
 
 	private static final boolean isGroupingAllowed(Desktop desktop) {
@@ -930,8 +921,7 @@ public class HtmlPageRenders {
 				final Page page = pages.iterator().next();
 				Object o = page.getAttribute(name);
 				if (o != null)
-					return (o instanceof Boolean && ((Boolean)o).booleanValue())
-						|| !"false".equals(o);
+					return (o instanceof Boolean && ((Boolean) o).booleanValue()) || !"false".equals(o);
 			}
 		}
 
@@ -941,19 +931,20 @@ public class HtmlPageRenders {
 		}
 		return _groupingAllowed.booleanValue();
 	}
+
 	private static Boolean _groupingAllowed;
-		
-    /** Used to indicate ZK Data Handler Scripts are generated. */
-    private static final String ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED = "zkDataHandlerScriptsGenerated";
+
+	/** Used to indicate ZK Data Handler Scripts are generated. */
+	private static final String ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED = "zkDataHandlerScriptsGenerated";
+
 	/** Generates the content of a standalone component that
 	 * the peer widget is not a child of the page widget at the client.
 	 * @param comp the component to render. It is null if no child component
 	 * at all.
 	 */
-	public static final void outStandalone(Execution exec,
-	Component comp, Writer out) throws IOException {
+	public static final void outStandalone(Execution exec, Component comp, Writer out) throws IOException {
 		if (ComponentRedraws.beforeRedraw(false) >= 0)
-			throw new InternalError("Not possible: "+comp);
+			throw new InternalError("Not possible: " + comp);
 
 		final String extra;
 		try {
@@ -968,24 +959,24 @@ public class HtmlPageRenders {
 			WebApp webApp = WebApps.getCurrent();
 			Configuration configuration = webApp.getConfiguration();
 
-            if (exec.getAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED) == null) {
-                Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
-                for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
-                    DataHandlerInfo handler = me.getValue();
-                    List<Pair<String, String>> scripts = handler.getScripts();
-                    Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
-                    String scriptSrc = scriptInfo.getX();
-                    String script = scriptInfo.getY();
-                    if (scriptSrc != null && scriptSrc.length() != 0)
-                        script = Devices.loadJavaScript(exec, scriptSrc);
-                    out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
-                }
-                exec.setAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED, true);
-            }
+			if (exec.getAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED) == null) {
+				Map<String, DataHandlerInfo> dataHandlers = configuration.getDataHandlers();
+				for (Map.Entry<String, DataHandlerInfo> me : dataHandlers.entrySet()) {
+					DataHandlerInfo handler = me.getValue();
+					List<Pair<String, String>> scripts = handler.getScripts();
+					Pair<String, String> scriptInfo = scripts.get(scripts.size() - 1);
+					String scriptSrc = scriptInfo.getX();
+					String script = scriptInfo.getY();
+					if (scriptSrc != null && scriptSrc.length() != 0)
+						script = Devices.loadJavaScript(exec, scriptSrc);
+					out.write("zkdh('" + me.getKey() + "', " + script + ");\n");
+				}
+				exec.setAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED, true);
+			}
 
 			out.write("\nzkmx(");
 			if (comp != null)
-				((ComponentCtrl)comp).redraw(out);
+				((ComponentCtrl) comp).redraw(out);
 			else
 				out.write("null"); //no component at all
 		} finally {
@@ -993,11 +984,11 @@ public class HtmlPageRenders {
 		}
 
 		outEndJavaScriptFunc(exec, out, extra, false);
-			//generate extra, responses and ");"
+		//generate extra, responses and ");"
 		out.write("\n</script>\n");
 	}
-	private static final void writeAttr(Writer out, String name, String value)
-	throws IOException {
+
+	private static final void writeAttr(Writer out, String name, String value) throws IOException {
 		out.write(' ');
 		out.write(name);
 		out.write("=\"");
@@ -1021,20 +1012,20 @@ public class HtmlPageRenders {
 	 * If true, only the headers that shall be shown after (such as link)
 	 * are returned.
 	 */
-	public static final
-	String outHeaders(Execution exec, Page page, boolean before) {
+	public static final String outHeaders(Execution exec, Page page, boolean before) {
 		if (page == null)
 			return "";
 
 		String attr = "zkHeaderGened" + page.getUuid();
-		if (before) attr += "Bf";
+		if (before)
+			attr += "Bf";
 		if (exec.getAttribute(attr) != null)
 			return null;
 
 		exec.setAttribute(attr, Boolean.TRUE); //generated only once
-		return before ? ((PageCtrl)page).getBeforeHeadTags():
-			((PageCtrl)page).getAfterHeadTags();
+		return before ? ((PageCtrl) page).getBeforeHeadTags() : ((PageCtrl) page).getAfterHeadTags();
 	}
+
 	/** Generates and returns the ZK specific HTML tags including
 	 * the headers defined in the specified page, or null if it was
 	 * generated before.
@@ -1048,17 +1039,12 @@ public class HtmlPageRenders {
 	 * @see #outZkTags
 	 */
 	public static String outHeaderZkTags(Execution exec, Page page) {
-		String s1 = outHeaders(exec, page, true),
-			s2 = outZkTags(exec, null, null),
-			s3 = outHeaders(exec, page, false);
-		return s1 != null ?
-			s2 != null ?
-				s3 != null ? s1 + s2 + s3: s1 + s2:
-				s3 != null ? s1 + s3: s1: //s2 null
-			s2 != null ?
-				s3 != null ? s2 + s3: s2:
-				s3 != null ? s3: null; //s2 null
+		String s1 = outHeaders(exec, page, true), s2 = outZkTags(exec, null, null), s3 = outHeaders(exec, page, false);
+		return s1 != null ? s2 != null ? s3 != null ? s1 + s2 + s3 : s1 + s2 : s3 != null ? s1 + s3 : s1
+				: //s2 null
+				s2 != null ? s3 != null ? s2 + s3 : s2 : s3 != null ? s3 : null; //s2 null
 	}
+
 	/** Generates and returns the ZK specific HTML tags such as stylesheet
 	 * and JavaScript.
 	 *
@@ -1081,67 +1067,61 @@ public class HtmlPageRenders {
 	 * with desktop (a fake execution).
 	 * @see #outHeaderZkTags
 	 */
-	public static
-	String outZkTags(Execution exec, WebApp wapp, String deviceType) {
+	public static String outZkTags(Execution exec, WebApp wapp, String deviceType) {
 		if (exec.getAttribute(ATTR_ZK_TAGS_GENERATED) != null)
 			return null;
 		exec.setAttribute(ATTR_ZK_TAGS_GENERATED, Boolean.TRUE);
 
-		final StringBuffer sb = new StringBuffer(512).append('\n')
-            .append(outLangJavaScripts(exec, wapp, deviceType))
-            .append(outLangStyleSheets(exec, wapp, deviceType));
+		final StringBuffer sb = new StringBuffer(512).append('\n').append(outLangJavaScripts(exec, wapp, deviceType))
+				.append(outLangStyleSheets(exec, wapp, deviceType));
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkdt('")
-				.append(desktop.getId()).append("','")
-				.append(getContextURI(exec))
-				.append("','").append(desktop.getUpdateURI(null))
-				.append("','").append(desktop.getRequestPath())
-				.append("');").append(outSpecialJS(desktop))
-				.append("\n</script>\n");
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkdt('").append(desktop.getId())
+					.append("','").append(getContextURI(exec)).append("','").append(desktop.getUpdateURI(null))
+					.append("','").append(desktop.getRequestPath()).append("');").append(outSpecialJS(desktop))
+					.append("\n</script>\n");
 		}
-		
+
 		// Bug ZK-2649
 		if ("complete".equals(exec.getAttribute(Attributes.PAGE_REDRAW_CONTROL))) {
-			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+			final ExecutionCtrl execCtrl = (ExecutionCtrl) exec;
 			final Collection responses = execCtrl.getResponses();
 			if (responses != null && !responses.isEmpty()) {
 				execCtrl.setResponses(null);
 				sb.append("\n<script>zk.afterMount(function(){\n");
 				for (Iterator it = responses.iterator(); it.hasNext();) {
-					final AuResponse response = (AuResponse)it.next();
-					sb.append("zAu.process('").append(response.getCommand())
-						.append("'");
-	
+					final AuResponse response = (AuResponse) it.next();
+					sb.append("zAu.process('").append(response.getCommand()).append("'");
+
 					final List encdata = response.getEncodedData();
 					if (encdata != null)
-						sb.append(",'")
-							.append(Strings.escape(
-								org.zkoss.json.JSONArray.toJSONString(encdata),
-								Strings.ESCAPE_JAVASCRIPT))
-							.append('\'');
+						sb.append(",'").append(Strings.escape(org.zkoss.json.JSONArray.toJSONString(encdata),
+								Strings.ESCAPE_JAVASCRIPT)).append('\'');
 					sb.append(");\n");
 				}
 				sb.append("});\n</script>\n");
 			}
 		}
-		
+
 		return sb.toString();
 	}
+
 	/** Returns if the ZK specific HTML tags are generated.
 	 * @since 5.0.3
 	 */
 	public static boolean isZkTagsGenerated(Execution exec) {
 		return exec.getAttribute(ATTR_ZK_TAGS_GENERATED) != null;
 	}
+
 	/** Used to indicate ZK tags are generated. */
 	private static final String ATTR_ZK_TAGS_GENERATED = "zkHtmlTagsGened";
+
 	private static String getContextURI(Execution exec) {
 		if (exec != null) {
 			String s = exec.encodeURL("/");
 			int j = s.lastIndexOf('/'); //might have jsessionid=...
-			return j >= 0 ? s.substring(0, j) + s.substring(j + 1): s;
+			return j >= 0 ? s.substring(0, j) + s.substring(j + 1) : s;
 		}
 		return "";
 	}
@@ -1151,10 +1131,10 @@ public class HtmlPageRenders {
 	 * @see #isDirectContent
 	 */
 	public static boolean setDirectContent(Execution exec, boolean direct) {
-		return (direct ?
-			exec.setAttribute(ATTR_DIRECT_CONTENT, Boolean.TRUE):
-			exec.removeAttribute(ATTR_DIRECT_CONTENT)) != null;
+		return (direct ? exec.setAttribute(ATTR_DIRECT_CONTENT, Boolean.TRUE)
+				: exec.removeAttribute(ATTR_DIRECT_CONTENT)) != null;
 	}
+
 	/** Returns whether a component can directly generate HTML tags
 	 * to the output.
 	 * This flag is used by components that can generate the content
@@ -1194,8 +1174,7 @@ public class HtmlPageRenders {
 		 */
 		public final boolean included;
 
-		private RenderContext(Writer temp, Writer perm, boolean crawlable,
-		boolean included) {
+		private RenderContext(Writer temp, Writer perm, boolean crawlable, boolean included) {
 			this.temp = temp;
 			this.perm = perm;
 			if (crawlable && WebApps.getFeature("ee")) {
@@ -1205,6 +1184,7 @@ public class HtmlPageRenders {
 			this.included = included;
 		}
 	}
+
 	/** Returns Script tag to include init-crash-script and init-crash-timeout defined in zk.xml
 	 * 
 	 * <p>It will be placed before all JavaScript files and codes generated by {@link #outLangJavaScripts}
@@ -1219,7 +1199,8 @@ public class HtmlPageRenders {
 		if (exec.isAsyncUpdate(null))
 			return ""; //nothing to generate
 
-		if (wapp == null) wapp = exec.getDesktop().getWebApp();
+		if (wapp == null)
+			wapp = exec.getDesktop().getWebApp();
 		Configuration config = wapp.getConfiguration();
 		String script = config.getInitCrashScript();
 		int timeout = config.getInitCrashTimeout();

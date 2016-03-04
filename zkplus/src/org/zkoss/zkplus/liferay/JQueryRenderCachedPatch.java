@@ -34,20 +34,21 @@ import org.slf4j.LoggerFactory;
  */
 public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 	private static final Logger log = LoggerFactory.getLogger(JQueryRenderCachedPatch.class);
-	
-	
+
 	protected String getBrowserDelay() {
-		return "zk.ie6_ || zk.ie7_ ? 1300 : 100"; 
+		return "zk.ie6_ || zk.ie7_ ? 1300 : 100";
 	}
-	
+
 	/**
 	 *	Append CSS link to head, and remove zk.wpd script
 	 */
 	protected String[] processHtml(String html) {
 		boolean isAppendCSS = false;
-		StringBuffer script = new StringBuffer("<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
+		StringBuffer script = new StringBuffer(
+				"<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
 		Pattern cssPattern = Pattern.compile("<link[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*(/>|>\\s*</link>)");
-		Pattern scriptPattern = Pattern.compile("<script[^>]+src=[\"']?([^'\"> ]+/zk.wpd)[\"']?[^>]*(/>|>\\s*</script>)");
+		Pattern scriptPattern = Pattern
+				.compile("<script[^>]+src=[\"']?([^'\"> ]+/zk.wpd)[\"']?[^>]*(/>|>\\s*</script>)");
 
 		StringBuffer buffer = new StringBuffer();
 		int parseStart = 0, scriptStart = 0, scriptEnd = 0;
@@ -67,7 +68,7 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 				break;
 			}
 		}
-		String[] ret = {"", html};
+		String[] ret = { "", html };
 		if (isAppendCSS) {
 			script.append("</script>");
 			ret[0] = script.toString();
@@ -75,8 +76,9 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 		}
 		return ret;
 	}
-	
-	private static boolean extractCSS(String html, int start, int end, Pattern cssPattern, StringBuffer scriptBuffer, StringBuffer htmlBuffer) {
+
+	private static boolean extractCSS(String html, int start, int end, Pattern cssPattern, StringBuffer scriptBuffer,
+			StringBuffer htmlBuffer) {
 		if (!(start < end))
 			return false;
 
@@ -90,8 +92,9 @@ public class JQueryRenderCachedPatch extends JQueryRenderPatch {
 		m.appendTail(htmlBuffer);
 		return isAppendCSS;
 	}
-	
-	private static void removeScript(String html, int start, int end, Pattern scriptPattern, StringBuffer scriptBuffer, StringBuffer htmlBuffer) {
+
+	private static void removeScript(String html, int start, int end, Pattern scriptPattern, StringBuffer scriptBuffer,
+			StringBuffer htmlBuffer) {
 		String scriptBlock = html.substring(start, end);
 		Matcher m = scriptPattern.matcher(scriptBlock);
 		if (m.find())

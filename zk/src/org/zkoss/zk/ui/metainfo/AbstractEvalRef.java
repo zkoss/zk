@@ -18,9 +18,8 @@ package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelException;
-
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
@@ -35,16 +34,15 @@ abstract /*package*/ class AbstractEvalRef implements EvaluatorRef {
 	}
 
 	//Evaluator//
-	public Expression parseExpression(String expression, Class<?> expectedType)
-	throws XelException {
+	public Expression parseExpression(String expression, Class<?> expectedType) throws XelException {
 		return getEvaluator().parseExpression(expression, expectedType);
 	}
-	public Object evaluate(Page page, Expression expression)
-	throws XelException {
+
+	public Object evaluate(Page page, Expression expression) throws XelException {
 		return getEvaluator().evaluate(page, expression);
 	}
-	public Object evaluate(Component comp, Expression expression)
-	throws XelException {
+
+	public Object evaluate(Component comp, Expression expression) throws XelException {
 		return getEvaluator().evaluate(comp, expression);
 	}
 }

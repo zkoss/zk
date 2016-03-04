@@ -24,10 +24,45 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 	</exec>
 </target>
 
+<!-- ================ -->
+<!-- CODE STYLE CHECK -->
+<!-- ================ -->
+
+<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+		 classpath="${bin.dir}/checkstyle-6.14.1-all.jar"/>
+
+<target name="checkstyle.java"
+		 description="Generates a report of code convention violations."
+		 depends="codegen.mesg"
+		 if="${checkstyle.java}">
+	<checkstyle config="${bin.dir}/zk_checks.xml">
+		<fileset dir="." includes="**/*.java"/>
+		<formatter type="plain"/>
+	</checkstyle>
+</target>
+
+<target name="checkstyle.js"
+		 description="Check javascript code style"
+		 depends="codegen.mesg"
+		 if="${checkstyle.js}">
+	<exec executable="bash" dir="." resultproperty="checkstyle.js.err">
+		<arg value="${bin.dir}/jscheck"/>
+		<arg value="${src.dir}"/>
+		<arg value="--reporter=checkstyle"/>
+		<arg value="--config=${bin.dir}/zk_jscheck.json"/>
+		<arg value="--max-errors=-1"/>
+	</exec>
+	<fail message="checkstyle.js failed">
+		<condition>
+			<equals arg1="${checkstyle.js.err}" arg2="1"/>
+		</condition>
+	</fail>
+</target>
+
 <!-- ======= -->
 <!-- COMPILE -->
 <!-- ======= -->
-<target name="compile0" depends="codegen.mesg" if="srcpv.dir.exist">
+<target name="compile0" depends="checkstyle.java,checkstyle.js" if="srcpv.dir.exist">
 	<mkdir dir="${out.dir}"/>
 	<javac srcdir="${srcpv.dir}" destdir="${out.dir}"
 	 debug="false" optimize="true" encoding="UTF-8"
@@ -36,7 +71,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		<compilerarg value="${javac.unchecked}"/>
 	</javac>
 </target>
-<target name="compile1" depends="codegen.mesg,compile0" if="src.dir.exist">
+<target name="compile1" depends="checkstyle.java,checkstyle.js,compile0" if="src.dir.exist">
 	<mkdir dir="${out.dir}"/>
 	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
 	<property name="srcdpc.dir" value=""/>

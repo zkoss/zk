@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.xel;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * RequestContexts maintains a stack of {@link RequestContext} to simplify
@@ -38,7 +38,8 @@ import java.util.LinkedList;
  * @since 3.0.0
  */
 public class RequestContexts {
-	protected RequestContexts() {} //prevent from instantiated
+	protected RequestContexts() {
+	} //prevent from instantiated
 
 	/** A list of RequestContext. */
 	private static final ThreadLocal<List<RequestContext>> _elCtxs = new ThreadLocal<List<RequestContext>>();
@@ -48,7 +49,7 @@ public class RequestContexts {
 	 */
 	public static final RequestContext getCurrent() {
 		final List<RequestContext> jcs = _elCtxs.get();
-		return jcs != null && !jcs.isEmpty() ? jcs.get(0): null;
+		return jcs != null && !jcs.isEmpty() ? jcs.get(0) : null;
 	}
 
 	/** Pushes the context as the current context, such that it will
@@ -79,6 +80,7 @@ public class RequestContexts {
 			_elCtxs.set(jcs = new LinkedList<RequestContext>());
 		jcs.add(0, jc);
 	}
+
 	/** Pops the context out and use the previous one as the current context.
 	 *
 	 * <p>However, you don't need to invoke this method if you are using
@@ -88,7 +90,9 @@ public class RequestContexts {
 	 */
 	public static final void pop() {
 		final List<RequestContext> l = _elCtxs.get();
-		if (l.size() == 1) _elCtxs.set(null);
-		else l.remove(0);
+		if (l.size() == 1)
+			_elCtxs.set(null);
+		else
+			l.remove(0);
 	}
 }

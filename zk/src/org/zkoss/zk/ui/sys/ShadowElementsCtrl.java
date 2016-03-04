@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.util.Template;
 public class ShadowElementsCtrl {
 	private static final ThreadLocal<Object> _shadowInfo = new ThreadLocal<Object>();
 	private static final ThreadLocal<Object> _distributedIndexInfo = new ThreadLocal<Object>();
+
 	/** Sets the current shadow element, which is used only by
 	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
 	 * {@link org.zkoss.zk.ui.HtmlShadowElement}.
@@ -37,7 +38,7 @@ public class ShadowElementsCtrl {
 	public static final void setCurrentInfo(Object shadowInfo) {
 		_shadowInfo.set(shadowInfo);
 	}
-	
+
 	/** Returns the current shadow element, which is used only by
 	 * {@link org.zkoss.zk.ui.sys.UiEngine} to communicate with
 	 * {@link org.zkoss.zk.ui.HtmlShadowElement}.
@@ -46,6 +47,7 @@ public class ShadowElementsCtrl {
 	public static final Object getCurrentInfo() {
 		return _shadowInfo.get();
 	}
+
 	/** Sets the current distributed index info, which is used only by
 	 * {@link org.zkoss.zk.ui.HtmlShadowElement}.
 	 * <p>Used only internally.
@@ -101,7 +103,7 @@ public class ShadowElementsCtrl {
 				start = shadows[0];
 				parent = start.getParent();
 			}
-			
+
 			if (parent instanceof ComponentCtrl) {
 				ComponentCtrl pCtrl = (ComponentCtrl) parent;
 				if (pCtrl.getShadowRoots().isEmpty())

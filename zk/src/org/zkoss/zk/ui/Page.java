@@ -16,24 +16,24 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Map;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
+
 import org.zkoss.lang.ClassResolver;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.Function;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelContext;
-import org.zkoss.xel.Function;
-import org.zkoss.xel.ExpressionFactory;
-
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
-import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Template;
 
 /**
@@ -98,6 +98,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * {@link org.zkoss.zk.ui.util.Initiator#doInit} is called.
 	 */
 	public String getId();
+
 	/** Sets the identifier of this page.
 	 *
 	 * <p>Note: you can change the page's ID only in
@@ -125,6 +126,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * <p>Default: "".
 	 */
 	public String getTitle();
+
 	/** Sets the title of the desktop this page belongs to
 	 * (it might contain an expression).
 	 */
@@ -133,19 +135,21 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	/** Returns the CSS style of this page, or empty if not specified.
 	 */
 	public String getStyle();
+
 	/** Sets the CSS style of this page.
 	 *
 	 * <p>Note: Unlike {@link #setTitle}, you can change the style only in
 	 * the lifecycle of the loading page.
 	 */
 	public void setStyle(String style);
-	
+
 	/**
 	 * Return the meta viewport of this page, or "auto" if not specified.
 	 * <p>Default: "auto".
 	 * @since 6.5.0
 	 */
 	public String getViewport();
+
 	/**
 	 * Sets the viewport of this page.
 	 * @since 6.5.0
@@ -183,10 +187,12 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	/** Returns a readonly list of the root components.
 	 */
 	public Collection<Component> getRoots();
+
 	/** Returns the first root component.
 	 * @since 3.5.2
 	 */
 	public Component getFirstRoot();
+
 	/** Returns the last root component.
 	 * @since 3.5.2
 	 */
@@ -236,6 +242,11 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Map<String, Object> getAttributes(int scope);
+
+	/** Returns all custom attributes associated with this page.
+	 */
+	public Map<String, Object> getAttributes();
+
 	/** Returns the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -246,12 +257,25 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object getAttribute(String name, int scope);
+
+	/** Returns the value of the specified attribute associated with this page.
+	 */
+	public Object getAttribute(String name);
+
 	/** Returns if an attribute exists.
 	 * <p>Notice that <code>null</code> is a valid value, so you need this
 	 * method to really know if an attribute is defined.
 	 * @since 5.0.0
 	 */
 	public boolean hasAttribute(String name, int scope);
+
+	/** Returns if an attribute exists.
+	 * <p>Notice that <code>null</code> is a valid value, so you need this
+	 * method to really know if an attribute is defined.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name);
+
 	/** Sets the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -262,6 +286,12 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object setAttribute(String name, Object value, int scope);
+
+	/** Sets the value of the specified custom attribute associated with this page.
+	 * @param value the value.
+	 */
+	public Object setAttribute(String name, Object value);
+
 	/** Removes the specified custom attribute in the specified scope.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -273,22 +303,6 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 */
 	public Object removeAttribute(String name, int scope);
 
-	/** Returns all custom attributes associated with this page.
-	 */
-	public Map<String, Object> getAttributes();
-	/** Returns the value of the specified attribute associated with this page.
-	 */
-	public Object getAttribute(String name);
-	/** Returns if an attribute exists.
-	 * <p>Notice that <code>null</code> is a valid value, so you need this
-	 * method to really know if an attribute is defined.
-	 * @since 5.0.0
-	 */
-	public boolean hasAttribute(String name);
-	/** Sets the value of the specified custom attribute associated with this page.
-	 * @param value the value.
-	 */
-	public Object setAttribute(String name, Object value);
 	/** Removes the specified attribute custom associated with the page.
 	 */
 	public Object removeAttribute(String name);
@@ -306,6 +320,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 5.0.0
 	 */
 	public Object getAttributeOrFellow(String name, boolean recurse);
+
 	/** Returns if a custom attribute is associated with this page,
 	 * or a fellow of this page.
 	 *
@@ -332,6 +347,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 3.0.1
 	 */
 	public Class<?> resolveClass(String clsnm) throws ClassNotFoundException;
+
 	/** Adds a class resolver to this page.
 	 * @param resolver the class resolver to be added.
 	 * Currently it supports only {@link org.zkoss.lang.ImportedClassResolver}.
@@ -357,6 +373,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @see #getLoadedInterpreters
 	 */
 	public Class<?> getZScriptClass(String clsnm);
+
 	/** Returns the function of the specified name by searching
 	 * the loaded interpreters.
 	 *
@@ -365,6 +382,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 3.0.0
 	 */
 	public Function getZScriptFunction(String name, Class[] argTypes);
+
 	/** Returns the function of the specified name by searching
 	 * the logical scope of the specified component
 	 * in all the loaded interpreters.
@@ -384,6 +402,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @see #getLoadedInterpreters
 	 */
 	public Object getZScriptVariable(String name);
+
 	/** Returns the value of the variable of the specified name by searching
 	 * the logical scope of the specified component
 	 * in all the loaded interpreters, if any.
@@ -404,6 +423,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 3.0.0
 	 */
 	public Object getXelVariable(String name);
+
 	/** Returns a variable that is visible to XEL expressions.
 	 * <p>Unlike {@link #getXelVariable(String)}, this method
 	 * can utilize {@link org.zkoss.xel.VariableResolverX} if you'd like
@@ -421,9 +441,8 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @see #getXelVariable(String)
 	 * @since 5.0.0
 	 */
-	public Object getXelVariable(
-	XelContext ctx, Object base, Object name, boolean ignoreExec);
- 
+	public Object getXelVariable(XelContext ctx, Object base, Object name, boolean ignoreExec);
+
 	/** Adds a variable resolver that will be used to resolve a variable
 	 * by {@link #getXelVariable}.
 	 *
@@ -436,11 +455,13 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * and this method returns false.
 	 */
 	public boolean addVariableResolver(VariableResolver resolver);
+
 	/** Removes a variable resolver that was added by {@link #addVariableResolver}.
 	 *
 	 * @return false if the resolver is not added before.
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
+
 	/** Returns if the specified variable resolver has been registered
 	 * @see #addVariableResolver
 	 * @since 5.0.3
@@ -469,17 +490,21 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @see Component#addEventListener
 	 */
 	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener);
+
 	/** Removes an event listener.
 	 * @return whether the listener is removed; false if it was never added.
 	 */
 	public boolean removeEventListener(String evtnm, EventListener<? extends Event> listener);
+
 	/** Returns whether the event listener is available.
 	 */
 	public boolean isListenerAvailable(String evtnm);
+
 	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
 	 * Returns an iterator for iterating the event listeners for the given event.
 	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm);
+
 	/** Returns an iterable collection of the event listeners for the given event.
 	 * <p>Note: it is OK to invoke {@link #addEventListener} or {@link #removeEventListener}
 	 * when iterating through the event listeners with the returned collection.
@@ -513,6 +538,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 5.0.0
 	 */
 	public void interpret(String zslang, String script, Scope scope);
+
 	/** Returns the interpreter of the specified scripting language.
 	 *
 	 * <p>The interpreter will be loaded and initialized,
@@ -523,6 +549,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @exception InterpreterNotFoundException if not found.
 	 */
 	public Interpreter getInterpreter(String zslang);
+
 	/** Returns all loaded interpreters.
 	 */
 	public Collection<Interpreter> getLoadedInterpreters();
@@ -533,13 +560,13 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @return the default scripting language, say, Java. Never null.
 	 */
 	public String getZScriptLanguage();
+
 	/** Sets the default scripting language which will be assumed
 	 * if a zscript element doesn't specify any language.
 	 *
 	 * @exception InterpreterNotFoundException if no such language
 	 */
-	public void setZScriptLanguage(String zslang)
-	throws InterpreterNotFoundException;
+	public void setZScriptLanguage(String zslang) throws InterpreterNotFoundException;
 
 	/** Returns the implementation of the expression factory that
 	 * is used by this page, or null if
@@ -552,6 +579,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 3.0.4
 	 */
 	public Class<? extends ExpressionFactory> getExpressionFactoryClass();
+
 	/** Sets the implementation of the expression factory that
 	 * is used by this page.
 	 *
@@ -582,6 +610,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 3.0.4
 	 */
 	public boolean isComplete();
+
 	/** Sets if the page is a complete page.
 	 *
 	 * <p>Default: false. It means a page is complete if and only if it
@@ -604,6 +633,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 3.0.0
 	 */
 	public FunctionMapper getFunctionMapper();
+
 	/** Adds the function mapper in addition to the current one.
 	 *
 	 * <p>The new added function mapper has the higher priority.
@@ -612,12 +642,14 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @param mapper the new function mapper (null to ignore).
 	 */
 	public boolean addFunctionMapper(FunctionMapper mapper);
+
 	/** Removes a function mapper that was added by {@link #addFunctionMapper}.
 	 *
 	 * @return false if the mapper is not added before.
 	 * @since 5.0.8
 	 */
 	public boolean removeFunctionMapper(FunctionMapper mapper);
+
 	/** Returns if the specified function mapper has been registered
 	 * @see #addFunctionMapper
 	 * @since 5.0.8
@@ -627,6 +659,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	/** Returns the language definition that this page belongs to (never null).
 	 */
 	public LanguageDefinition getLanguageDefinition();
+
 	/** Returns the map of component definitions (never null).
 	 *
 	 * <p>Note: the map is shared among all instance of the same page definition.
@@ -635,6 +668,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * Thus, it is NOT a good idea to change its content.
 	 */
 	public ComponentDefinitionMap getComponentDefinitionMap();
+
 	/** Returns the component definition of the specified name, or null
 	 * if not found.
 	 *
@@ -645,6 +679,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
 	public ComponentDefinition getComponentDefinition(String name, boolean recurse);
+
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 *
@@ -655,7 +690,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
 	public ComponentDefinition getComponentDefinition(Class<? extends Component> cls, boolean recurse);
-	
+
 	/**
 	 * Adds page scope template
 	 * @param name
@@ -663,14 +698,14 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	 * @since 8.0.0
 	 */
 	public void addTemplate(String name, Template template);
-	
+
 	/**
 	 * Removes page scope template
 	 * @param name
 	 * @since 8.0.0
 	 */
 	public void removeTemplate(String name);
-	
+
 	/**
 	 * Gets page scope template by name
 	 * @param name

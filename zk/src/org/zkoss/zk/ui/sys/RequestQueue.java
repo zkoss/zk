@@ -36,6 +36,7 @@ public interface RequestQueue {
 	 * @since 3.0.5
 	 */
 	public boolean isEmpty();
+
 	/** Returns the next request, or null if no more request.
 	 * Once returned, the request is removed from the queue.
 	 */
@@ -56,6 +57,7 @@ public interface RequestQueue {
 	 * @since 3.0.5
 	 */
 	public void addPerfRequestId(String requestId);
+
 	/** Clears all request IDs that were added by {@link #addPerfRequestId}
 	 * for performance measurement.
 	 * It is usually called after all requests are processed

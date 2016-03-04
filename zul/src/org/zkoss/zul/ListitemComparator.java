@@ -16,8 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * A comparator used to compare {@link Listitem}, if not live data,
@@ -51,6 +51,7 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	public ListitemComparator() {
 		this(-1, true, true, false, false);
 	}
+
 	/** Compares with the column of the specified index.
 	 *
 	 * <p>0 for the first column, 1 for the second and so on
@@ -71,6 +72,7 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	public ListitemComparator(int index) {
 		this(index, true, true, false, false);
 	}
+
 	/** Compares with the column of the specified index.
 	 *
 	 * <p>0 for the first column, 1 for the second and so on
@@ -90,10 +92,10 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
 	 */
-	public ListitemComparator(int index, boolean ascending,
-	boolean ignoreCase) {
+	public ListitemComparator(int index, boolean ascending, boolean ignoreCase) {
 		this(index, ascending, ignoreCase, false, false);
 	}
+
 	/** Compares with the column of the specified index.
 	 *
 	 * <p>0 for the first column, 1 for the second and so on
@@ -113,10 +115,10 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	 * implements Comparable.
 	 * It is ignored if the index is -1.
 	 */
-	public ListitemComparator(int index, boolean ascending,
-	boolean ignoreCase, boolean byValue) {
+	public ListitemComparator(int index, boolean ascending, boolean ignoreCase, boolean byValue) {
 		this(index, ascending, ignoreCase, byValue, false);
 	}
+
 	/** Compares with the column of the specified index.
 	 *
 	 * <p>0 for the first column, 1 for the second and so on
@@ -136,8 +138,7 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	 * @param nullAsMax whether to consider null as the maximum value.
 	 * If false, null is considered as the minimum value.
 	 */
-	public ListitemComparator(int index, boolean ascending,
-	boolean ignoreCase, boolean byValue, boolean nullAsMax) {
+	public ListitemComparator(int index, boolean ascending, boolean ignoreCase, boolean byValue, boolean nullAsMax) {
 		_header = null;
 		_index = index;
 		_asc = ascending;
@@ -145,6 +146,7 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 		_byval = byValue;
 		_maxnull = nullAsMax;
 	}
+
 	/** Compares with the column which the list header is at.
 	 *
 	 * <p>Note: it compares the returned value of {@link Listcell#getLabel}.
@@ -157,10 +159,10 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	 * @param ascending whether to sort as ascending (or descending).
 	 * @param ignoreCase whether to sort case-insensitive
 	 */
-	public ListitemComparator(Listheader header, boolean ascending,
-	boolean ignoreCase) {
+	public ListitemComparator(Listheader header, boolean ascending, boolean ignoreCase) {
 		this(header, ascending, ignoreCase, false, false);
 	}
+
 	/** Compares with the column which the list header is at.
 	 *
 	 * <p>A null value is considered as the minimum value.
@@ -170,10 +172,10 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	 * @param byValue whether to compare {@link Listcell#getValue}.
 	 * If false, it compares {@link Listcell#getLabel}.
 	 */
-	public ListitemComparator(Listheader header, boolean ascending,
-	boolean ignoreCase, boolean byValue) {
+	public ListitemComparator(Listheader header, boolean ascending, boolean ignoreCase, boolean byValue) {
 		this(header, ascending, ignoreCase, byValue, false);
 	}
+
 	/** Compares with the column which the list header is at.
 	 *
 	 * @param ascending whether to sort as ascending (or descending).
@@ -183,8 +185,8 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	 * @param nullAsMax whether to consider null as the maximum value.
 	 * If false, null is considered as the minimum value.
 	 */
-	public ListitemComparator(Listheader header, boolean ascending,
-	boolean ignoreCase, boolean byValue, boolean nullAsMax) {
+	public ListitemComparator(Listheader header, boolean ascending, boolean ignoreCase, boolean byValue,
+			boolean nullAsMax) {
 		_header = header;
 		_index = -1; //not decided yet
 		_asc = ascending;
@@ -199,16 +201,19 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 	public Listheader getListheader() {
 		return _header;
 	}
+
 	/** Returns whether the order is ascending.
 	 */
 	public boolean isAscending() {
 		return _asc;
 	}
+
 	/** Returns whether to ignore case.
 	 */
 	public boolean shallIgnoreCase() {
 		return _igcase;
 	}
+
 	/** Returns whether to compare the returned value of {@link Listcell#getValue}
 	 */
 	public boolean byValue() {
@@ -217,27 +222,28 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 
 	//Comparator//
 	public int compare(Object o1, Object o2) {
-		final int index =
-			_index < 0 && _header != null ? _header.getColumnIndex(): _index;
+		final int index = _index < 0 && _header != null ? _header.getColumnIndex() : _index;
 
 		Object v1, v2;
 		if (o1 instanceof Listitem) { //not live data
-			final Listitem li1 = (Listitem)o1, li2 = (Listitem)o2;
+			final Listitem li1 = (Listitem) o1, li2 = (Listitem) o2;
 			if (index < 0) {
-				v1 = handleCase((Comparable)li1.getValue());
-				v2 = handleCase((Comparable)li2.getValue());
+				v1 = handleCase((Comparable) li1.getValue());
+				v2 = handleCase((Comparable) li2.getValue());
 			} else {
 				List lcs1 = li1.getChildren();
-				if (index >= lcs1.size()) v1 = null;
+				if (index >= lcs1.size())
+					v1 = null;
 				else {
-					final Listcell lc = (Listcell)lcs1.get(index);
-					v1 = handleCase(_byval ? lc.getValue(): lc.getLabel());
+					final Listcell lc = (Listcell) lcs1.get(index);
+					v1 = handleCase(_byval ? lc.getValue() : lc.getLabel());
 				}
 				List lcs2 = li2.getChildren();
-				if (index >= lcs2.size()) v2 = null;
+				if (index >= lcs2.size())
+					v2 = null;
 				else {
-					final Listcell lc = (Listcell)lcs2.get(index);
-					v2 = handleCase(_byval ? lc.getValue(): lc.getLabel());
+					final Listcell lc = (Listcell) lcs2.get(index);
+					v2 = handleCase(_byval ? lc.getValue() : lc.getLabel());
 				}
 			}
 		} else { //live data
@@ -245,22 +251,25 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 			v2 = handleCase(o2);
 		}
 
-		if (v1 == null) return v2 == null ? 0: _maxnull ? 1: -1;
-		if (v2 == null) return _maxnull ? -1: 1;
-		final int v = compareTo((Comparable)v1, v2);
-		return _asc ? v: -v;
+		if (v1 == null)
+			return v2 == null ? 0 : _maxnull ? 1 : -1;
+		if (v2 == null)
+			return _maxnull ? -1 : 1;
+		final int v = compareTo((Comparable) v1, v2);
+		return _asc ? v : -v;
 	}
+
 	@SuppressWarnings("unchecked")
 	private static int compareTo(Comparable v1, Object v2) {
 		return v1.compareTo(v2);
 	}
+
 	private Object handleCase(Object c) {
 		if (_igcase) {
 			if (c instanceof String)
-				return ((String)c).toUpperCase();
+				return ((String) c).toUpperCase();
 			if (c instanceof Character)
-				return new Character(Character.toUpperCase(
-					((Character)c).charValue()));
+				return new Character(Character.toUpperCase(((Character) c).charValue()));
 		}
 		return c;
 	}
@@ -270,13 +279,15 @@ public class ListitemComparator implements Comparator, java.io.Serializable {
 			return true;
 		if (!(o instanceof ListitemComparator))
 			return false;
-		final ListitemComparator c = (ListitemComparator)o;
+		final ListitemComparator c = (ListitemComparator) o;
 		return c._index == _index && c._asc == _asc && c._igcase == _igcase;
 	}
+
 	public int hashCode() {
-		return _index ^ (_asc ? 1: 5) ^ (_igcase ? 9: 3);
+		return _index ^ (_asc ? 1 : 5) ^ (_igcase ? 9 : 3);
 	}
+
 	public String toString() {
-		return "[Comparator "+_index+"-th col, asc:"+_asc+']';
+		return "[Comparator " + _index + "-th col, asc:" + _asc + ']';
 	}
 }

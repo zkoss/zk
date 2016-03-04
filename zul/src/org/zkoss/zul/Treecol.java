@@ -29,9 +29,8 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Scopes;
-
-import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.ext.Sortable;
+import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A treecol.
@@ -40,7 +39,7 @@ import org.zkoss.zul.ext.Sortable;
  */
 public class Treecol extends HeaderElement {
 	private static final long serialVersionUID = 20110131122933L;
-	
+
 	private String _sortDir = "natural";
 	private transient Comparator<?> _sortAsc, _sortDsc;
 	private String _sortAscNm = "none";
@@ -53,12 +52,14 @@ public class Treecol extends HeaderElement {
 	static {
 		addClientEvent(Treecol.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
 	}
-	
+
 	public Treecol() {
 	}
+
 	public Treecol(String label) {
 		super(label);
 	}
+
 	/* Constructs a tree header with label and image.
 	 *
 	 * @param lable the label. No label if null or empty.
@@ -67,6 +68,7 @@ public class Treecol extends HeaderElement {
 	public Treecol(String label, String src) {
 		super(label, src);
 	}
+
 	/* Constructs a tree header with label, image and width.
 	 *
 	 * @param src the URI of the image. Ignored if null or empty.
@@ -82,9 +84,8 @@ public class Treecol extends HeaderElement {
 	 */
 	public Tree getTree() {
 		final Component comp = getParent();
-		return comp != null ? (Tree)comp.getParent(): null;
+		return comp != null ? (Tree) comp.getParent() : null;
 	}
-
 
 	/** Returns the sort direction.
 	 * @since 5.0.6
@@ -93,6 +94,7 @@ public class Treecol extends HeaderElement {
 	public String getSortDirection() {
 		return _sortDir;
 	}
+
 	/** Sets the sort direction. This does not sort the data, it only serves
 	 * as an indicator as to how the tree is sorted. (unless the tree has "autosort" attribute)
 	 *
@@ -104,9 +106,9 @@ public class Treecol extends HeaderElement {
 	 * @param sortDir one of "ascending", "descending" and "natural"
 	 */
 	public void setSortDirection(String sortDir) throws WrongValueException {
-		if (sortDir == null || (!"ascending".equals(sortDir)
-		&& !"descending".equals(sortDir) && !"natural".equals(sortDir)))
-			throw new WrongValueException("Unknown sort direction: "+sortDir);
+		if (sortDir == null
+				|| (!"ascending".equals(sortDir) && !"descending".equals(sortDir) && !"natural".equals(sortDir)))
+			throw new WrongValueException("Unknown sort direction: " + sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
 			if (!"natural".equals(sortDir) && !_ignoreSort) {
@@ -167,7 +169,8 @@ public class Treecol extends HeaderElement {
 	 * @since 5.0.6
 	 */
 	public void setSort(String type) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		if (type == null) return;
+		if (type == null)
+			return;
 		if (type.startsWith("client")) {
 			try {
 				setSortAscending(type);
@@ -184,12 +187,12 @@ public class Treecol extends HeaderElement {
 			final int j = type.indexOf('(');
 			final int k = type.lastIndexOf(')');
 			if (j >= 0 && k >= 0) {
-				final String name = type.substring(j+1, k);
+				final String name = type.substring(j + 1, k);
 				char cc;
 				int index = -1;
 				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
 					if ((index = Integer.parseInt(name)) < 0)
-						throw new IllegalArgumentException("Nonnegative number is required: "+name);
+						throw new IllegalArgumentException("Nonnegative number is required: " + name);
 				if (getSortAscending() == null || !_isCustomAscComparator) {
 					if (index < 0)
 						setSortAscending(new FieldComparator(name, true));
@@ -205,11 +208,11 @@ public class Treecol extends HeaderElement {
 					_isCustomDscComparator = false;
 				}
 			} else {
-				throw new UiException("Unknown sort type: "+type);
+				throw new UiException("Unknown sort type: " + type);
 			}
 		} else if ("none".equals(type)) {
-			setSortAscending((Comparator)null);
-			setSortDescending((Comparator)null);
+			setSortAscending((Comparator) null);
+			setSortDescending((Comparator) null);
 		}
 	}
 
@@ -219,6 +222,7 @@ public class Treecol extends HeaderElement {
 	public Comparator<?> getSortAscending() {
 		return _sortAsc;
 	}
+
 	/** Sets the ascending sorter, or null for no sorter for
 	 * the ascending order.
 	 *
@@ -229,20 +233,20 @@ public class Treecol extends HeaderElement {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
 			_isCustomAscComparator = _sortAsc != null;
-			String nm = _isCustomAscComparator ? "fromServer": "none";
+			String nm = _isCustomAscComparator ? "fromServer" : "none";
 			if (!_sortAscNm.equals(nm)) {
 				_sortAscNm = nm;
 				smartUpdate("sortAscending", _sortAscNm);
 			}
 		}
 	}
+
 	/** Sets the ascending sorter with the class name, or null for
 	 * no sorter for the ascending order.
 	 * @since 5.0.6
 	 */
 	public void setSortAscending(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortAscNm.equals(clsnm)) {
 			_sortAscNm = clsnm;
 			smartUpdate("sortAscending", clsnm);
@@ -256,6 +260,7 @@ public class Treecol extends HeaderElement {
 	public Comparator<?> getSortDescending() {
 		return _sortDsc;
 	}
+
 	/** Sets the descending sorter, or null for no sorter for the
 	 * descending order.
 	 *
@@ -266,20 +271,20 @@ public class Treecol extends HeaderElement {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
 			_isCustomDscComparator = _sortDsc != null;
-			String nm = _isCustomDscComparator ? "fromServer": "none";
+			String nm = _isCustomDscComparator ? "fromServer" : "none";
 			if (!_sortDscNm.equals(nm)) {
 				_sortDscNm = nm;
 				smartUpdate("sortDescending", _sortDscNm);
 			}
 		}
 	}
+
 	/** Sets the descending sorter with the class name, or null for
 	 * no sorter for the descending order.
 	 * @since 5.0.6
 	 */
 	public void setSortDescending(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortDscNm.equals(clsnm)) {
 			_sortDscNm = clsnm;
 			smartUpdate("sortDescending", clsnm);
@@ -288,18 +293,17 @@ public class Treecol extends HeaderElement {
 	}
 
 	private Comparator<?> toComparator(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
-		if (clsnm == null || clsnm.length() == 0) return null;
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (clsnm == null || clsnm.length() == 0)
+			return null;
 
 		final Page page = getPage();
-		final Class cls = page != null ?
-			page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+		final Class cls = page != null ? page.resolveClass(clsnm) : Classes.forNameByThread(clsnm);
 		if (cls == null)
 			throw new ClassNotFoundException(clsnm);
 		if (!Comparator.class.isAssignableFrom(cls))
-			throw new UiException("Comparator must be implemented: "+clsnm);
-		return (Comparator<?>)cls.newInstance();
+			throw new UiException("Comparator must be implemented: " + clsnm);
+		return (Comparator<?>) cls.newInstance();
 	}
 
 	/** Returns the maximal length of each item's label.
@@ -308,13 +312,15 @@ public class Treecol extends HeaderElement {
 	public int getMaxlength() {
 		return _maxlength;
 	}
+
 	/** Sets the maximal length of each item's label.
 	 * <p>Default: 0 (no limit).
 	 * <p>Notice that maxlength will be applied to this header and all
 	 * listcell of the same column.
 	 */
 	public void setMaxlength(int maxlength) {
-		if (maxlength < 0) maxlength = 0;
+		if (maxlength < 0)
+			maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
 			smartUpdate("maxlength", maxlength);
@@ -325,13 +331,12 @@ public class Treecol extends HeaderElement {
 	 */
 	public int getColumnIndex() {
 		int j = 0;
-		for (Iterator it = getParent().getChildren().iterator();
-		it.hasNext(); ++j)
+		for (Iterator it = getParent().getChildren().iterator(); it.hasNext(); ++j)
 			if (it.next() == this)
 				break;
 		return j;
 	}
-	
+
 	/** Sorts the treechildren ({@link Treeitem}) based on {@link #getSortAscending}
 	 * and {@link #getSortDescending}, if {@link #getSortDirection} doesn't
 	 * matches the ascending argument.
@@ -363,68 +368,13 @@ public class Treecol extends HeaderElement {
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
 		if (ascending) {
-			if ("ascending".equals(dir)) return false;
+			if ("ascending".equals(dir))
+				return false;
 		} else {
-			if ("descending".equals(dir)) return false;
+			if ("descending".equals(dir))
+				return false;
 		}
 		return doSort(ascending);
-	}
-
-	@SuppressWarnings("unchecked")	
-	/*package*/ boolean doSort(boolean ascending) {
-		final Comparator cmpr = ascending ? _sortAsc: _sortDsc;
-		if (cmpr == null) return false;
-
-		final Tree tree = getTree();
-		if (tree == null) return false;
-
-		//comparator might be zscript
-		Scopes.beforeInterpret(this);
-		try {
-			final TreeModel model = tree.getModel();
-			boolean isPagingMold = tree.inPagingMold();
-			int activePg = isPagingMold ? tree.getPaginal().getActivePage() : 0;
-			if (model != null) { //live data
-				if (!(model instanceof Sortable))
-					throw new UiException(Sortable.class + " must be implemented in "+model.getClass().getName());
-				((Sortable)model).sort(cmpr, ascending);
-			} else { //not live data
-				sort0(tree.getTreechildren(), cmpr);
-			}
-			if (isPagingMold) tree.getPaginal().setActivePage(activePg);
-				// Because of maintaining the number of the visible item, we cause
-				// the wrong active page when dynamically add/remove the item (i.e. sorting).
-				// Therefore, we have to reset the correct active page.
-		} finally {
-			Scopes.afterInterpret();
-		}
-		
-		_ignoreSort = true;
-		//maintain
-		for (Iterator it = tree.getTreecols().getChildren().iterator();
-		it.hasNext();) {
-			final Treecol col = (Treecol)it.next();
-			col.setSortDirection(
-				col != this ? "natural": ascending ? "ascending": "descending");
-		}
-		_ignoreSort = false;
-
-		// sometimes the items at client side are out of date
-		tree.invalidate();
-		
-		return true;
-	}
-	/** Sorts the treechildren.
-	 * @since 5.0.6
-	 */
-	@SuppressWarnings("unchecked")
-	private static void sort0(Treechildren treechildren, Comparator cmpr) {
-		if (treechildren == null) return;
-		Components.sort(treechildren.getChildren(), cmpr);
-		for (Iterator it = treechildren.getChildren().iterator(); it.hasNext();) {
-			Treeitem item = (Treeitem) it.next();
-			sort0(item.getTreechildren(), cmpr);
-		}
 	}
 	
 	/** Sorts the treechildren ({@link Treeitem}) based on {@link #getSortAscending}
@@ -440,10 +390,71 @@ public class Treecol extends HeaderElement {
 	 * @since 5.0.6
 	 */
 	public boolean sort(boolean ascending, boolean force) {
-		if (force) setSortDirection("natural");
+		if (force)
+			setSortDirection("natural");
 		return sort(ascending);
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	/*package*/ boolean doSort(boolean ascending) {
+		final Comparator cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr == null)
+			return false;
+
+		final Tree tree = getTree();
+		if (tree == null)
+			return false;
+
+		//comparator might be zscript
+		Scopes.beforeInterpret(this);
+		try {
+			final TreeModel model = tree.getModel();
+			boolean isPagingMold = tree.inPagingMold();
+			int activePg = isPagingMold ? tree.getPaginal().getActivePage() : 0;
+			if (model != null) { //live data
+				if (!(model instanceof Sortable))
+					throw new UiException(Sortable.class + " must be implemented in " + model.getClass().getName());
+				((Sortable) model).sort(cmpr, ascending);
+			} else { //not live data
+				sort0(tree.getTreechildren(), cmpr);
+			}
+			if (isPagingMold)
+				tree.getPaginal().setActivePage(activePg);
+			// Because of maintaining the number of the visible item, we cause
+			// the wrong active page when dynamically add/remove the item (i.e. sorting).
+			// Therefore, we have to reset the correct active page.
+		} finally {
+			Scopes.afterInterpret();
+		}
+
+		_ignoreSort = true;
+		//maintain
+		for (Iterator it = tree.getTreecols().getChildren().iterator(); it.hasNext();) {
+			final Treecol col = (Treecol) it.next();
+			col.setSortDirection(col != this ? "natural" : ascending ? "ascending" : "descending");
+		}
+		_ignoreSort = false;
+
+		// sometimes the items at client side are out of date
+		tree.invalidate();
+
+		return true;
+	}
+
+	/** Sorts the treechildren.
+	 * @since 5.0.6
+	 */
+	@SuppressWarnings("unchecked")
+	private static void sort0(Treechildren treechildren, Comparator cmpr) {
+		if (treechildren == null)
+			return;
+		Components.sort(treechildren.getChildren(), cmpr);
+		for (Iterator it = treechildren.getChildren().iterator(); it.hasNext();) {
+			Treeitem item = (Treeitem) it.next();
+			sort0(item.getTreechildren(), cmpr);
+		}
+	}
+
 	//-- event listener --//
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
@@ -451,18 +462,20 @@ public class Treecol extends HeaderElement {
 	 */
 	public void onSort() {
 		final String dir = getSortDirection();
-		if ("ascending".equals(dir)) sort(false);
-		else if ("descending".equals(dir)) sort(true);
-		else if (!sort(true)) sort(false);
+		if ("ascending".equals(dir))
+			sort(false);
+		else if ("descending".equals(dir))
+			sort(true);
+		else if (!sort(true))
+			sort(false);
 	}
-	
+
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-treecol" : _zclass;
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		if (!"none".equals(_sortDscNm))
@@ -470,10 +483,10 @@ public class Treecol extends HeaderElement {
 
 		if (!"none".equals(_sortAscNm))
 			render(renderer, "sortAscending", _sortAscNm);
-		
+
 		if (!"natural".equals(_sortDir))
 			render(renderer, "sortDirection", _sortDir);
-		
+
 		if (_maxlength > 0)
 			renderer.render("maxlength", _maxlength);
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
@@ -482,40 +495,38 @@ public class Treecol extends HeaderElement {
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treecols))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Treecol clone = (Treecol)super.clone();
+		final Treecol clone = (Treecol) super.clone();
 		clone.fixClone();
 		return clone;
 	}
+
 	private void fixClone() {
 		if (_sortAsc instanceof TreeitemComparator) {
-			final TreeitemComparator c = (TreeitemComparator)_sortAsc;
+			final TreeitemComparator c = (TreeitemComparator) _sortAsc;
 			if (c.getTreecol() == this && c.isAscending())
-				_sortAsc =
-					new TreeitemComparator(this, true, c.shallIgnoreCase());
+				_sortAsc = new TreeitemComparator(this, true, c.shallIgnoreCase());
 		}
 		if (_sortDsc instanceof TreeitemComparator) {
-			final TreeitemComparator c = (TreeitemComparator)_sortDsc;
+			final TreeitemComparator c = (TreeitemComparator) _sortDsc;
 			if (c.getTreecol() == this && !c.isAscending())
-				_sortDsc =
-					new TreeitemComparator(this, false, c.shallIgnoreCase());
+				_sortDsc = new TreeitemComparator(this, false, c.shallIgnoreCase());
 		}
 	}
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		boolean written = false;
 		if (_sortAsc instanceof TreeitemComparator) {
-			final TreeitemComparator c = (TreeitemComparator)_sortAsc;
+			final TreeitemComparator c = (TreeitemComparator) _sortAsc;
 			if (c.getTreecol() == this && c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
@@ -530,7 +541,7 @@ public class Treecol extends HeaderElement {
 
 		written = false;
 		if (_sortDsc instanceof TreeitemComparator) {
-			final TreeitemComparator c = (TreeitemComparator)_sortDsc;
+			final TreeitemComparator c = (TreeitemComparator) _sortDsc;
 			if (c.getTreecol() == this && !c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
@@ -543,8 +554,8 @@ public class Treecol extends HeaderElement {
 			s.writeObject(_sortDsc);
 		}
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		boolean b = s.readBoolean();
@@ -554,7 +565,7 @@ public class Treecol extends HeaderElement {
 			_sortAsc = new TreeitemComparator(this, true, igcs, byval);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortAsc = (Comparator)s.readObject();
+			_sortAsc = (Comparator) s.readObject();
 		}
 
 		b = s.readBoolean();
@@ -564,7 +575,7 @@ public class Treecol extends HeaderElement {
 			_sortDsc = new TreeitemComparator(this, false, igcs, byval);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortDsc = (Comparator)s.readObject();
+			_sortDsc = (Comparator) s.readObject();
 		}
 	}
 }

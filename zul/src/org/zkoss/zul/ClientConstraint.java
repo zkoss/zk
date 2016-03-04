@@ -63,13 +63,14 @@ public interface ClientConstraint {
 	 *
 	 * <p>Notice that {@link CustomConstraint} has the higher priority than
 	 * {@link ClientConstraint}. In other words, {@link ClientConstraint}
- 	 * is ignored if both defined.
+	 * is ignored if both defined.
 	 *
 	 * @return the code snippet that will be evaluated at client to
 	 * return a validator.
 	 * @since 5.0.0
 	 */
 	public String getClientConstraint();
+
 	/** Returns a list of packages separated by comma that ZK client
 	 * engine has to load before evaluating {@link #getClientConstraint}.
 	 * <p>For example,

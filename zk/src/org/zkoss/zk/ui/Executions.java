@@ -16,25 +16,25 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Map;
-import java.io.Reader;
-import java.io.Writer;
 import java.io.IOException;
-import java.net.URL;
+import java.io.Reader;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
+import javax.servlet.ServletRequest;
 
 import org.zkoss.idom.Document;
 import org.zkoss.xel.ExpressionFactory;
-
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.xel.Evaluator;
 
 /**
  * Utilities to access {@link Execution}.
@@ -65,6 +65,7 @@ public class Executions {
 	public static final Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
 		return getCurrent().getEvaluator(page, expfcls);
 	}
+
 	/** Returns the evaluator of the current execution.
 	 * It is a shortcut of getEvaluator(comp != null ? comp.getPage(): null)
 	 *
@@ -92,10 +93,10 @@ public class Executions {
 	 *
 	 * @param comp as the self variable (ignored if null)
 	 */
-	public static final Object evaluate(Component comp,
-	String expr, Class expectedType) {
+	public static final Object evaluate(Component comp, String expr, Class expectedType) {
 		return getCurrent().evaluate(comp, expr, expectedType);
 	}
+
 	/** Evaluates the specified expression with the resolver of the current
 	 * execution ({@link #getCurrent}).
 	 *
@@ -112,8 +113,7 @@ public class Executions {
 	 * @param page used as the self variable and to retrieve the function
 	 * mapper if funmap is not defined. Ignored if null.
 	 */
-	public static final Object evaluate(Page page,
-	String expr, Class expectedType) {
+	public static final Object evaluate(Page page, String expr, Class expectedType) {
 		return getCurrent().evaluate(page, expr, expectedType);
 	}
 
@@ -142,22 +142,22 @@ public class Executions {
 	 * a legal {@link URL}
 	 * @since 3.5.0
 	 */
-	public static final URL encodeToURL(String uri)
-	throws MalformedURLException {
+	public static final URL encodeToURL(String uri) throws MalformedURLException {
 		final Execution exec = getCurrent();
 		uri = exec.encodeURL(uri);
 		if (uri.indexOf("://") < 0) {
-			final StringBuffer sb = new StringBuffer(256)
-				.append(exec.getScheme()).append("://")
-				.append(exec.getServerName());
+			final StringBuffer sb = new StringBuffer(256).append(exec.getScheme()).append("://")
+					.append(exec.getServerName());
 			int port = exec.getServerPort();
-			if (port != 80) sb.append(':').append(port);
+			if (port != 80)
+				sb.append(':').append(port);
 			if (uri.length() > 0 && uri.charAt(0) != '/')
 				sb.append('/');
 			uri = sb.append(uri).toString();
 		}
 		return new URL(uri);
 	}
+
 	/** Creates components from a page file specified by an URI.
 	 * Shortcut to {@link Execution#createComponents(String, Component, Map)}.
 	 *
@@ -172,10 +172,10 @@ public class Executions {
 	 * @return the first component being created.
 	 * @see #createComponents(PageDefinition, Component, Map)
 	 */
-	public static final Component createComponents(
-	String uri, Component parent, Map<?, ?> arg) {
+	public static final Component createComponents(String uri, Component parent, Map<?, ?> arg) {
 		return getCurrent().createComponents(uri, parent, arg);
 	}
+
 	/** Creates components based on the specified page definition.
 	 * Shortcut to {@link Execution#createComponents(PageDefinition, Component, Map)}.
 	 *
@@ -191,101 +191,8 @@ public class Executions {
 	 * @return the first component being created.
 	 * @see #createComponents(String, Component, Map)
 	 */
-	public static final Component createComponents(PageDefinition pagedef,
-	Component parent, Map<?, ?> arg) {
+	public static final Component createComponents(PageDefinition pagedef, Component parent, Map<?, ?> arg) {
 		return getCurrent().createComponents(pagedef, parent, arg);
-	}
-
-	/** Creates components from the raw content specified by a string.
-	 * Shortcut to {@link Execution#createComponentsDirectly(String, String, Component, Map)}.
-	 *
-	 * @param content the raw content of the page. It must be a XML and
-	 * compliant to the page format (such as ZUL).
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param arg a map of parameters that is accessible by the arg variable
-	 * in EL, or by {@link Execution#getArg}.
-	 * Ignored if null.
-	 * @return the first component being created.
-	 * @see #createComponents(PageDefinition, Component, Map)
-	 * @see #createComponents(String, Component, Map)
-	 * @see #createComponentsDirectly(Document, String, Component, Map)
-	 * @see #createComponentsDirectly(Reader, String, Component, Map)
-	 */
-	public static final Component createComponentsDirectly(String content,
-	String extension, Component parent, Map<?, ?> arg) {
-		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
-	}
-	/** Creates components from the raw content specified by a DOM tree.
-	 * Shortcut to {@link Execution#createComponentsDirectly(Document, String, Component, Map)}.
-	 *
-	 * @param content the raw content in DOM.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param arg a map of parameters that is accessible by the arg variable
-	 * in EL, or by {@link Execution#getArg}.
-	 * Ignored if null.
-	 * @return the first component being created.
-	 * @see #createComponents(PageDefinition, Component, Map)
-	 * @see #createComponents(String, Component, Map)
-	 * @see #createComponentsDirectly(String, String, Component, Map)
-	 * @see #createComponentsDirectly(Reader, String, Component, Map)
-	 */
-	public static final Component createComponentsDirectly(Document content,
-	String extension, Component parent, Map<?, ?> arg) {
-		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
-	}
-	/** Creates components from the raw content read from the specified reader.
-	 * Shortcut to {@link Execution#createComponentsDirectly(Reader, String, Component, Map)}.
-	 *
-	 * <p>The raw content is loader and parsed to a page defintion by use of
-	 * {@link Execution#getPageDefinitionDirectly(Reader, String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
-	 * to create components.
-	 *
-	 * @param reader the reader to retrieve the raw content.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param arg a map of parameters that is accessible by the arg variable
-	 * in EL, or by {@link Execution#getArg}.
-	 * Ignored if null.
-	 * @return the first component being created.
-	 * @see #createComponents(PageDefinition, Component, Map)
-	 * @see #createComponents(String, Component, Map)
-	 * @see #createComponentsDirectly(Document, String, Component, Map)
-	 * @see #createComponentsDirectly(String, String, Component, Map)
-	 */
-	public static Component createComponentsDirectly(Reader reader,
-	String extension, Component parent, Map<?, ?> arg)
-	throws IOException {
-		return getCurrent().createComponentsDirectly(reader, extension, parent, arg);
 	}
 
 	/** Creates components that don't belong to any page
@@ -316,6 +223,7 @@ public class Executions {
 			afterCC(cci);
 		}
 	}
+
 	/** Creates components that don't belong to any page
 	 * from a page file specified by an URI.
 	 *
@@ -372,6 +280,99 @@ public class Executions {
 		return getCurrent().createComponents(uri, page, resolver, arg);
 	}
 
+	/** Creates components from the raw content specified by a string.
+	 * Shortcut to {@link Execution#createComponentsDirectly(String, String, Component, Map)}.
+	 *
+	 * @param content the raw content of the page. It must be a XML and
+	 * compliant to the page format (such as ZUL).
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @return the first component being created.
+	 * @see #createComponents(PageDefinition, Component, Map)
+	 * @see #createComponents(String, Component, Map)
+	 * @see #createComponentsDirectly(Document, String, Component, Map)
+	 * @see #createComponentsDirectly(Reader, String, Component, Map)
+	 */
+	public static final Component createComponentsDirectly(String content, String extension, Component parent,
+			Map<?, ?> arg) {
+		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
+	}
+
+	/** Creates components from the raw content specified by a DOM tree.
+	 * Shortcut to {@link Execution#createComponentsDirectly(Document, String, Component, Map)}.
+	 *
+	 * @param content the raw content in DOM.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @return the first component being created.
+	 * @see #createComponents(PageDefinition, Component, Map)
+	 * @see #createComponents(String, Component, Map)
+	 * @see #createComponentsDirectly(String, String, Component, Map)
+	 * @see #createComponentsDirectly(Reader, String, Component, Map)
+	 */
+	public static final Component createComponentsDirectly(Document content, String extension, Component parent,
+			Map<?, ?> arg) {
+		return getCurrent().createComponentsDirectly(content, extension, parent, arg);
+	}
+
+	/** Creates components from the raw content read from the specified reader.
+	 * Shortcut to {@link Execution#createComponentsDirectly(Reader, String, Component, Map)}.
+	 *
+	 * <p>The raw content is loader and parsed to a page defintion by use of
+	 * {@link Execution#getPageDefinitionDirectly(Reader, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param reader the reader to retrieve the raw content.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @return the first component being created.
+	 * @see #createComponents(PageDefinition, Component, Map)
+	 * @see #createComponents(String, Component, Map)
+	 * @see #createComponentsDirectly(Document, String, Component, Map)
+	 * @see #createComponentsDirectly(String, String, Component, Map)
+	 */
+	public static Component createComponentsDirectly(Reader reader, String extension, Component parent, Map<?, ?> arg)
+			throws IOException {
+		return getCurrent().createComponentsDirectly(reader, extension, parent, arg);
+	}
+
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a string.
 	 *
@@ -406,9 +407,7 @@ public class Executions {
 	 * @see #createComponentsDirectly(WebApp, Reader, String, Map)
 	 * @since 3.6.2
 	 */
-	public static Component[]
-	createComponentsDirectly(WebApp wapp, String content, String extension,
-	Map<?, ?> arg) {
+	public static Component[] createComponentsDirectly(WebApp wapp, String content, String extension, Map<?, ?> arg) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponentsDirectly(content, extension, arg);
@@ -416,6 +415,7 @@ public class Executions {
 			afterCC(cci);
 		}
 	}
+
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a DOM tree.
 	 *
@@ -450,9 +450,7 @@ public class Executions {
 	 * @see #createComponentsDirectly(WebApp, Reader, String, Map)
 	 * @since 3.6.2
 	 */
-	public static Component[]
-	createComponentsDirectly(WebApp wapp, Document content, String extension,
-	Map<?, ?> arg) {
+	public static Component[] createComponentsDirectly(WebApp wapp, Document content, String extension, Map<?, ?> arg) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponentsDirectly(content, extension, arg);
@@ -460,6 +458,7 @@ public class Executions {
 			afterCC(cci);
 		}
 	}
+
 	/** Creates components that don't belong to any page
 	 * from the raw content read from the specified reader.
 	 *
@@ -496,8 +495,8 @@ public class Executions {
 	 * @see #createComponentsDirectly(WebApp, String, String, Map)
 	 * @since 3.6.2
 	 */
-	public static Component[] createComponentsDirectly(WebApp wapp, Reader reader, String extension,
-	Map<?, ?> arg) throws IOException {
+	public static Component[] createComponentsDirectly(WebApp wapp, Reader reader, String extension, Map<?, ?> arg)
+			throws IOException {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.createComponentsDirectly(reader, extension, arg);
@@ -532,6 +531,7 @@ public class Executions {
 			afterCC(cci);
 		}
 	}
+
 	/** Converts the specified page content to a page definition.
 	 *
 	 * <p>Like {@link #createComponents(WebApp,PageDefinition,Map)},
@@ -555,8 +555,7 @@ public class Executions {
 	 * @see #getPageDefinition
 	 * @since 3.6.2
 	 */
-	public PageDefinition
-	getPageDefinitionDirectly(WebApp wapp, String content, String extension) {
+	public PageDefinition getPageDefinitionDirectly(WebApp wapp, String content, String extension) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.getPageDefinitionDirectly(content, extension);
@@ -564,6 +563,7 @@ public class Executions {
 			afterCC(cci);
 		}
 	}
+
 	/** Converts the specified page content, in DOM, to a page definition.
 	 *
 	 * <p>Like {@link #createComponentsDirectly(WebApp,Document,String,Map)},
@@ -587,8 +587,7 @@ public class Executions {
 	 * @see #getPageDefinition
 	 * @since 3.6.2
 	 */
-	public PageDefinition
-	getPageDefinitionDirectly(WebApp wapp, Document content, String extension) {
+	public PageDefinition getPageDefinitionDirectly(WebApp wapp, Document content, String extension) {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.getPageDefinitionDirectly(content, extension);
@@ -596,6 +595,7 @@ public class Executions {
 			afterCC(cci);
 		}
 	}
+
 	/** Reads the raw content from a reader and converts it into
 	 * a page definition.
 	 *
@@ -620,9 +620,7 @@ public class Executions {
 	 * @see #getPageDefinition
 	 * @since 3.6.2
 	 */
-	public PageDefinition
-	getPageDefinitionDirectly(WebApp wapp, Reader reader, String extension)
-	throws IOException {
+	public PageDefinition getPageDefinitionDirectly(WebApp wapp, Reader reader, String extension) throws IOException {
 		final CCInfo cci = beforeCC(wapp);
 		try {
 			return cci.exec.getPageDefinitionDirectly(reader, extension);
@@ -636,23 +634,24 @@ public class Executions {
 		if (exec != null)
 			return new CCInfo(exec, false);
 
-		((WebAppCtrl)wapp).getUiEngine()
-			.activate(exec = CCExecution.newInstance(wapp));
+		((WebAppCtrl) wapp).getUiEngine().activate(exec = CCExecution.newInstance(wapp));
 		return new CCInfo(exec, true);
-		
+
 	}
+
 	private static final void afterCC(CCInfo cci) {
 		if (cci.created) {
 			try {
-				((WebAppCtrl)cci.exec.getDesktop().getWebApp())
-					.getUiEngine().deactivate(cci.exec);
+				((WebAppCtrl) cci.exec.getDesktop().getWebApp()).getUiEngine().deactivate(cci.exec);
 			} catch (Throwable ex) {
 			}
 		}
 	}
+
 	private static class CCInfo {
 		private final Execution exec;
 		private final boolean created;
+
 		private CCInfo(Execution exec, boolean created) {
 			this.exec = exec;
 			this.created = created;
@@ -676,20 +675,19 @@ public class Executions {
 
 	/** A shortcut of Executions.getCurrent().include(page).
 	 *
-	 * @see Execution#include(Writer,String,Map,int)
+	 * @see Execution#include(java.io.Writer,String,Map,int)
 	 * @see Execution#include(String)
 	 */
-	public static void include(String page)
-	throws IOException {
+	public static void include(String page) throws IOException {
 		getCurrent().include(page);
 	}
+
 	/** A shortcut of Executions.getCurrent().forward(page).
 	 *
-	 * @see Execution#forward(Writer,String,Map,int)
+	 * @see Execution#forward(java.io.Writer,String,Map,int)
 	 * @see Execution#forward(String)
 	 */
-	public static void forward(String page)
-	throws IOException {
+	public static void forward(String page) throws IOException {
 		getCurrent().forward(page);
 	}
 
@@ -717,10 +715,10 @@ public class Executions {
 	 * by specifying <code>max-suspended-thread</code> in <code>zk.xml</code>,
 	 * or invoking {@link org.zkoss.zk.ui.util.Configuration#setMaxSuspendedThreads}.
 	 */
-	public static final void wait(Object mutex)
-	throws InterruptedException, SuspendNotAllowedException {
+	public static final void wait(Object mutex) throws InterruptedException, SuspendNotAllowedException {
 		getUiEngine().wait(mutex);
 	}
+
 	/** Wakes up a single event processing thread that is waiting on the
 	 * specified object.
 	 *
@@ -742,6 +740,52 @@ public class Executions {
 	public static final void notify(Object mutex) {
 		getUiEngine().notify(mutex);
 	}
+
+	/** Wakes up a single event processing thread for the specified desktop
+	 * that is waiting on the specified object.
+	 *
+	 * <p>Unlike {@link #notify(Object)}, this method can be called any time.
+	 * It is designed to let working threads resume an event processing
+	 * thread.
+	 *
+	 * <p>Notice: if this method is NOT called in an event processing thread,
+	 * the resumed thread won't execute until the next request is received.
+	 * To enforce it happen, you might use the timer component (found in ZUL).
+	 *
+	 * <p>Notice: to resolve racing issue, you usually need to follow
+	 * this pattern.
+	 * <pre><code>
+	//Event Handling Thread
+	synchronized (mutex) {
+	final WorkingThread worker = new WorkingThread(desktop);
+	synchronized (mutex) {
+		worker.start();
+		Executions.wait(mutex);
+	}
+	....
+	}
+	//Working Thread
+	public void run() {
+	....
+	synchronized (mutex) {
+		Executions.notify(desktop, mutex);
+	}
+	}
+	 </code></pre>
+	 *
+	 * @param desktop the desktop which the suspended thread is processing.
+	 * It must be the same desktop of the suspended thread.
+	 * @param mutex any non-null object to identify what to notify.
+	 * It must be same object passed to {@link #wait}.
+	 * If there is racing issue, you have to enclose it with
+	 * <code>synchronized</code> (though it is optional).
+	 * @see #notify(Object)
+	 * @see #notifyAll(Desktop, Object)
+	 */
+	public static final void notify(Desktop desktop, Object mutex) {
+		getUiEngine(desktop).notify(desktop, mutex);
+	}
+
 	/** Wakes up all event processing thread that are waiting on the
 	 * specified object.
 	 *
@@ -763,50 +807,7 @@ public class Executions {
 	public static final void notifyAll(Object mutex) {
 		getUiEngine().notifyAll(mutex);
 	}
-	/** Wakes up a single event processing thread for the specified desktop
-	 * that is waiting on the specified object.
-	 *
-	 * <p>Unlike {@link #notify(Object)}, this method can be called any time.
-	 * It is designed to let working threads resume an event processing
-	 * thread.
-	 *
-	 * <p>Notice: if this method is NOT called in an event processing thread,
-	 * the resumed thread won't execute until the next request is received.
-	 * To enforce it happen, you might use the timer component (found in ZUL).
-	 *
-	 * <p>Notice: to resolve racing issue, you usually need to follow
-	 * this pattern.
-	 * <pre><code>
-//Event Handling Thread
-synchronized (mutex) {
-	final WorkingThread worker = new WorkingThread(desktop);
-	synchronized (mutex) {
-		worker.start();
-		Executions.wait(mutex);
-	}
-	....
-}
-//Working Thread
-public void run() {
-	....
-	synchronized (mutex) {
-		Executions.notify(desktop, mutex);
-	}
-}
-	 </code></pre>
-	 *
-	 * @param desktop the desktop which the suspended thread is processing.
-	 * It must be the same desktop of the suspended thread.
-	 * @param mutex any non-null object to identify what to notify.
-	 * It must be same object passed to {@link #wait}.
-	 * If there is racing issue, you have to enclose it with
-	 * <code>synchronized</code> (though it is optional).
-	 * @see #notify(Object)
-	 * @see #notifyAll(Desktop, Object)
-	 */
-	public static final void notify(Desktop desktop, Object mutex) {
-		getUiEngine(desktop).notify(desktop, mutex);
-	}
+
 	/** Wakes up all event processing threads for the specified desktop
 	 * that are waiting on the specified object.
 	 *
@@ -821,22 +822,22 @@ public void run() {
 	 * <p>Notice: to resolve racing issue, you usually need to follow
 	 * this pattern.
 	 * <pre><code>
-//Event Handling Thread
-synchronized (mutex) {
+	//Event Handling Thread
+	synchronized (mutex) {
 	final WorkingThread worker = new WorkingThread(desktop);
 	synchronized (mutex) {
 		worker.start();
 		Executions.wait(mutex);
 	}
 	....
-}
-//Working Thread
-public void run() {
+	}
+	//Working Thread
+	public void run() {
 	....
 	synchronized (mutex) {
 		Executions.notifyAll(desktop, mutex);
 	}
-}
+	}
 	 </code></pre>
 	 *
 	 * @param desktop the desktop which the suspended thread is processing.
@@ -889,8 +890,9 @@ public void run() {
 	 * @since 5.0.6
 	 */
 	public static <T extends Event> void schedule(Desktop desktop, EventListener<T> task, T event) {
-		((DesktopCtrl)desktop).scheduleServerPush(task, event);
+		((DesktopCtrl) desktop).scheduleServerPush(task, event);
 	}
+
 	/** Activates a thread to allow it access the given desktop synchronously.
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,
@@ -960,17 +962,17 @@ public void run() {
 	 * thread. In the rare case that the framework, at the same time, is waiting
 	 * on the release of another lock from your application, then a deadlock
 	 * would result.
-     *
+	 *
 	 * @exception InterruptedException if it is interrupted by other thread
 	 * @exception IllegalStateException if the server push is not enabled.
 	 * @exception DesktopUnavailableException if the desktop is removed
 	 * (when activating).
 	 * @since 3.0.0
 	 */
-	public static final void activate(Desktop desktop)
-	throws InterruptedException, DesktopUnavailableException {
+	public static final void activate(Desktop desktop) throws InterruptedException, DesktopUnavailableException {
 		activate(desktop, 0);
 	}
+
 	/** Activates a thread to allow it access the given desktop synchronously,
 	 * or until a certain amount of time has elapsed.
 	 * It causes the current thread to wait until the desktop is available
@@ -981,7 +983,7 @@ public void run() {
 	 * thread. In the rare case that the framework, at the same time, is waiting
 	 * on the release of another lock from your application, then a deadlock
 	 * would result.
-     *
+	 *
 	 * @param timeout the maximum time to wait in milliseconds.
 	 * Ignored (i.e., never timeout) if non-positive.
 	 * @return whether it is activated or it is timeout.
@@ -996,27 +998,29 @@ public void run() {
 	 * @see #deactivate
 	 */
 	public static final boolean activate(Desktop desktop, long timeout)
-	throws InterruptedException, DesktopUnavailableException {
-		return ((DesktopCtrl)desktop).activateServerPush(timeout);
+			throws InterruptedException, DesktopUnavailableException {
+		return ((DesktopCtrl) desktop).activateServerPush(timeout);
 	}
+
 	/** Deactivates a thread that has invoked {@link #activate} successfully.
 	 * @since 3.0.0
 	 * @see #activate(Desktop)
 	 * @see #activate(Desktop, long)
 	 */
 	public static final void deactivate(Desktop desktop) {
-		((DesktopCtrl)desktop).deactivateServerPush();
+		((DesktopCtrl) desktop).deactivateServerPush();
 	}
 
 	private static final UiEngine getUiEngine(Desktop desktop) {
 		if (desktop == null)
 			throw new IllegalArgumentException("desktop cannot be null");
-		return ((WebAppCtrl)desktop.getWebApp()).getUiEngine();
+		return ((WebAppCtrl) desktop.getWebApp()).getUiEngine();
 	}
+
 	private static final UiEngine getUiEngine() {
 		final Execution exec = getCurrent();
 		if (exec == null)
 			throw new IllegalStateException("This method can be called only under an event listener");
-		return ((WebAppCtrl)exec.getDesktop().getWebApp()).getUiEngine();
+		return ((WebAppCtrl) exec.getDesktop().getWebApp()).getUiEngine();
 	}
 }

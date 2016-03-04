@@ -35,7 +35,7 @@ public interface HiLoModel extends ChartModel {
 	/**
 	 * Set the only series.
 	 * @param series the only series in legend.
-	 */	
+	 */
 	public void setSeries(Comparable<?> series);
 
 	/**
@@ -47,7 +47,7 @@ public interface HiLoModel extends ChartModel {
 	 * Get date of a specified data index.
 	 */
 	public Date getDate(int index);
-	
+
 	/**
 	 * Get Open value of a specified data index.
 	 * @param index the data index.
@@ -87,7 +87,7 @@ public interface HiLoModel extends ChartModel {
 	 * @param close the close value in the date.
 	 * @param volumn the trading volume in the date.
 	 * 
-	 */	
+	 */
 	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volumn);
 
 	/**
@@ -100,9 +100,9 @@ public interface HiLoModel extends ChartModel {
 	 * @param volumn the trading volumn in the date.
 	 * @param index the data index
 	 * @since 5.0.0
-	 */	
+	 */
 	public void addValue(Date date, Number open, Number high, Number low, Number close, Number volumn, int index);
-	
+
 	/**
 	 * Replace an (date, open, high, low, close, volumn) tuple at specified index.
 	 * @param date the date
@@ -113,17 +113,17 @@ public interface HiLoModel extends ChartModel {
 	 * @param volumn the trading volumn in the date.
 	 * @param index the data index
 	 * @since 5.0.0 
-	 */	
+	 */
 	public void setValue(Date date, Number open, Number high, Number low, Number close, Number volumn, int index);
-	
+
 	/**
 	 * Remove (date, open, high, low, close, volumn) tuple of a data index.
 	 * @param index the data index.
-	 */	
+	 */
 	public void removeValue(int index);
 
 	/**
 	 * clear this model.
-	 */	
+	 */
 	public void clear();
 }

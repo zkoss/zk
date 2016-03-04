@@ -9,26 +9,21 @@ package org.zkoss.zk.ui;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Cache;
 import org.zkoss.util.FastReadCache;
 import org.zkoss.util.resource.Location;
-
-import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.annotation.ComponentAnnotation;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.impl.AnnotationHelper;
-import org.zkoss.zk.ui.annotation.ComponentAnnotation;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
@@ -42,37 +37,34 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 */
-	/*package*/ static ComponentDefinition
-	getDefinition(Execution exec, Class<? extends Component> cls) {
+	/*package*/ static ComponentDefinition getDefinition(Execution exec, Class<? extends Component> cls) {
 		if (exec != null) {
-			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+			final ExecutionCtrl execCtrl = (ExecutionCtrl) exec;
 			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
 			final Page page = execCtrl.getCurrentPage();
 
-			final ComponentDefinition compdef =
-				pgdef != null ? pgdef.getComponentDefinition(cls, true):
-				page != null ? 	page.getComponentDefinition(cls, true): null;
+			final ComponentDefinition compdef = pgdef != null ? pgdef.getComponentDefinition(cls, true)
+					: page != null ? page.getComponentDefinition(cls, true) : null;
 			if (compdef != null && compdef.getLanguageDefinition() != null)
 				return compdef; //already from langdef (not from pgdef)
 
-			final ComponentDefinition compdef2 =
-				Components.getDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
-			return compdef != null && (compdef2 == null ||
-			!Objects.equals(compdef.getImplementationClass(), compdef2.getImplementationClass())) ?
-				compdef: compdef2; //Feature 2816083: use compdef2 if same class
+			final ComponentDefinition compdef2 = Components.getDefinitionByDeviceType(exec.getDesktop().getDeviceType(),
+					cls);
+			return compdef != null && (compdef2 == null
+					|| !Objects.equals(compdef.getImplementationClass(), compdef2.getImplementationClass())) ? compdef
+							: compdef2; //Feature 2816083: use compdef2 if same class
 		}
 
-		for (String deviceType: LanguageDefinition.getDeviceTypes()) {
-			final ComponentDefinition compdef =
-				Components.getDefinitionByDeviceType(deviceType, cls);
+		for (String deviceType : LanguageDefinition.getDeviceTypes()) {
+			final ComponentDefinition compdef = Components.getDefinitionByDeviceType(deviceType, cls);
 			if (compdef != null)
 				return compdef;
 		}
 		return null;
 	}
-	/*package*/ static ComponentDefinition
-	getDefinitionByDeviceType(Component comp, String deviceType, String name) {
-		for (LanguageDefinition ld: LanguageDefinition.getByDeviceType(deviceType)) {
+
+	/*package*/ static ComponentDefinition getDefinitionByDeviceType(Component comp, String deviceType, String name) {
+		for (LanguageDefinition ld : LanguageDefinition.getByDeviceType(deviceType)) {
 			try {
 				final ComponentDefinition def = ld.getComponentDefinition(name);
 				if (def.isInstance(comp))
@@ -85,15 +77,16 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 	/*package*/ static boolean duplicateListenerIgnored() {
 		if (_dupListenerIgnored == null)
-			_dupListenerIgnored = Boolean.valueOf(
-				"true".equals(Library.getProperty("org.zkoss.zk.ui.EventListener.duplicateIgnored")));
+			_dupListenerIgnored = Boolean
+					.valueOf("true".equals(Library.getProperty("org.zkoss.zk.ui.EventListener.duplicateIgnored")));
 		return _dupListenerIgnored.booleanValue();
 	}
+
 	private static Boolean _dupListenerIgnored;
 
 	/*package*/ static String defaultMold(Class<? extends Component> klass) {
-	//To speed up the performance, we store info in FastReadCache (no sync for read)
-	//Also, better to use class name as a key since class might be defined in zscript
+		//To speed up the performance, we store info in FastReadCache (no sync for read)
+		//Also, better to use class name as a key since class might be defined in zscript
 		final String clsnm = klass.getName();
 		String mold = _defMolds.get(clsnm);
 		if (mold == null) {
@@ -102,9 +95,10 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 		}
 		return mold;
 	}
-	private static transient Cache<String, String> _defMolds =
-		new FastReadCache<String, String>(100, 4 * 60 * 60 * 1000);
-		//cache is required since component's class might be defined in zscript
+
+	private static transient Cache<String, String> _defMolds = new FastReadCache<String, String>(100,
+			4 * 60 * 60 * 1000);
+			//cache is required since component's class might be defined in zscript
 
 	//--- Class's Annotations ---//
 	/** Returns the annotation map defined in Java class, or null if not found.
@@ -116,13 +110,14 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 		final String clsnm = klass.getName();
 		Object val = _defAnnots.get(clsnm);
 		if (val == null) { //not loaded yet (OK to race)
-			final AnnotationMap  annots = new AnnotationMap();
+			final AnnotationMap annots = new AnnotationMap();
 			annots.addAll(getClassAnnotationMap(klass.getSuperclass()));
 			loadClassAnnots(annots, klass);
-			_defAnnots.put(clsnm, val = annots.isEmpty() ? Objects.UNKNOWN: annots);
+			_defAnnots.put(clsnm, val = annots.isEmpty() ? Objects.UNKNOWN : annots);
 		}
-		return val instanceof AnnotationMap ? (AnnotationMap)val: null;
+		return val instanceof AnnotationMap ? (AnnotationMap) val : null;
 	}
+
 	/** Loads the annotation defined
 	 */
 	private static void loadClassAnnots(AnnotationMap annots, Class<?> klass) {
@@ -147,8 +142,9 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 			}
 		}
 	}
-	private static void loadClassAnnots(AnnotationMap annots,
-	ComponentAnnotation jannot, final String prop, Location loc) {
+
+	private static void loadClassAnnots(AnnotationMap annots, ComponentAnnotation jannot, final String prop,
+			Location loc) {
 		final AnnotationHelper annHelper = new AnnotationHelper();
 		final String[] values = jannot.value();
 		for (int j = 0; j < values.length; ++j) {
@@ -159,15 +155,15 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 				name = m.group(1);
 				value = m.group(2);
 			}
-			
+
 			if (!AnnotationHelper.isAnnotation(value))
-				throw new UiException(loc.format("Invalid annotation: "+value));
+				throw new UiException(loc.format("Invalid annotation: " + value));
 			annHelper.addByCompoundValue(value, loc);
 			annHelper.applyAnnotations(annots, name, true);
 		}
 	}
-	private static final Pattern _rprop =
-		Pattern.compile(" *([a-zA-Z0-9_$]*) *: *(.*) *");
+
+	private static final Pattern _rprop = Pattern.compile(" *([a-zA-Z0-9_$]*) *: *(.*) *");
 
 	/** Returns the property name represents by this method, or null
 	 * if not a setter/getter.
@@ -191,9 +187,10 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 		}
 		return null;
 	}
-	private static transient Cache<String, Object> _defAnnots =
-		new FastReadCache<String, Object>(100, 4 * 60 * 60 * 1000);
-		//cache is required since component's class might be defined in zscript
+
+	private static transient Cache<String, Object> _defAnnots = new FastReadCache<String, Object>(100,
+			4 * 60 * 60 * 1000);
+	//cache is required since component's class might be defined in zscript
 
 	/** Location's implementation. */
 	private static class Loc implements Location, java.io.Serializable {
@@ -202,15 +199,19 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 		private Loc(String path) {
 			_path = path;
 		}
+
 		public String getPath() {
 			return _path;
 		}
+
 		public int getLineNumber() {
 			return -1;
 		}
+
 		public int getColumnNumber() {
 			return -1;
 		}
+
 		public String format(String message) {
 			return org.zkoss.xml.Locators.format(message, _path, null, -1, -1);
 		}

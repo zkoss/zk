@@ -25,18 +25,16 @@ import org.zkoss.zk.ui.util.Clients;
 public class ErrorMessageConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
 	public Object coerceToUi(Object val, Component component, BindContext ctx) {
-		final String msg = val==null?null:val.toString();
-		if(Strings.isEmpty(msg)){
+		final String msg = val == null ? null : val.toString();
+		if (Strings.isEmpty(msg)) {
 			Clients.clearWrongValue(component);
-		}else{
+		} else {
 			Clients.wrongValue(component, msg);
 		}
 		return IGNORED_VALUE;
 	}
 
-	
 	public Object coerceToBean(Object val, Component component, BindContext ctx) {
 		return val;
 	}

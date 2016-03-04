@@ -36,6 +36,7 @@ public class EventHandler extends ConditionValue {
 			throw new IllegalArgumentException();
 		_zscript = zscript;
 	}
+
 	public EventHandler(ZScript zscript) {
 		this(null, zscript, null);
 	}

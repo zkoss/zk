@@ -20,7 +20,7 @@ import org.zkoss.bind.BindContext;
  * @since 6.0.0
  */
 public interface LoadBinding extends Binding {
-	
+
 	/**
 	 * Load data into the source attribute from the target property.
 	 * @param ctx the binding runtime context 

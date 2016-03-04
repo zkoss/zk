@@ -17,7 +17,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import org.zkoss.io.Files;
-
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
@@ -36,19 +35,22 @@ public class Path {
 	private final String _path;
 
 	public Path() {
-		this((String)null);
+		this((String) null);
 	}
+
 	public Path(String path) {
 		_path = Files.normalize(path);
 	}
+
 	public Path(String parent, String child) {
-		this(parent == null || parent.length() == 0 ? child:
-			child == null || child.length() == 0 ? parent:
-				parent + '/' + child);
+		this(parent == null || parent.length() == 0 ? child
+				: child == null || child.length() == 0 ? parent : parent + '/' + child);
 	}
+
 	public Path(Path parent, String child) {
-		this(parent != null ? parent.getPath(): null, child);
+		this(parent != null ? parent.getPath() : null, child);
 	}
+
 	/** Returns the path of the specified component. */
 	public Path(Component comp) {
 		this(getPath(comp));
@@ -60,41 +62,47 @@ public class Path {
 		return _path;
 	}
 
+	/** Returns the path of the specified component.
+	 */
+	public static final String getPath(Component comp) {
+		final StringBuffer sb = new StringBuffer(64);
+		for (;;) {
+			if (sb.length() > 0)
+				sb.insert(0, '/');
+			final String compId = comp.getId();
+			if (compId.length() == 0)
+				throw new UiException("ID required: " + comp);
+			sb.insert(0, compId);
+			IdSpace is = comp.getSpaceOwner();
+			if (is instanceof Page)
+				break; //done
+
+			if (is == comp) {
+				final Component p = ((Component) is).getParent();
+				if (p == null)
+					break; //topmost
+				is = p.getSpaceOwner();
+				if (is instanceof Page)
+					break; //done
+			}
+			comp = (Component) is;
+		}
+		sb.insert(0, '/');
+		return sb.toString();
+	}
+
 	/** Returns the component with this path, or null if no such component.
 	 */
 	public Component getComponent() {
 		return getComponent0(null, _path);
 	}
 
-	/** Returns the path of the specified component.
-	 */
-	public static final String getPath(Component comp) {
-		final StringBuffer sb = new StringBuffer(64);
-		for (;;) {
-			if (sb.length() > 0) sb.insert(0, '/');
-			final String compId = comp.getId();
-			if (compId.length() == 0)
-				throw new UiException("ID required: " + comp);
-			sb.insert(0, compId);
-			IdSpace is = comp.getSpaceOwner();
-			if (is instanceof Page) break; //done
-
-			if (is == comp) {
-				final Component p = ((Component)is).getParent();
-				if (p == null) break; //topmost
-				is = p.getSpaceOwner();
-				if (is instanceof Page) break; //done
-			}
-			comp = (Component)is;
-		}
-		sb.insert(0, '/');
-		return sb.toString();
-	}
 	/** Returns the component of the specified path, or null if no such component.
 	 */
 	public static final Component getComponent(String path) {
 		return getComponent0(null, Files.normalize(path));
 	}
+
 	/** Returns the component of the specified path which is related
 	 * to the specified ID space, or null if no such component.
 	 *
@@ -104,6 +112,7 @@ public class Path {
 	public static final Component getComponent(IdSpace is, String path) {
 		return getComponent0(is, Files.normalize(path));
 	}
+
 	private static final Component getComponent0(IdSpace is, String path) {
 		Component found = null;
 		for (int j = 0, k;; j = k + 1) {
@@ -112,7 +121,7 @@ public class Path {
 			if (k == 0) { //starts with /
 				final Execution exec = Executions.getCurrent();
 				final Desktop desktop = exec.getDesktop();
-				Page page = ((ExecutionCtrl)exec).getCurrentPage();
+				Page page = ((ExecutionCtrl) exec).getCurrentPage();
 				if (page == null) {
 					page = desktop.getFirstPage();
 					if (page == null)
@@ -137,16 +146,16 @@ public class Path {
 				continue;
 			}
 
-			final String nm = k >= 0 ? path.substring(j, k): path.substring(j);
+			final String nm = k >= 0 ? path.substring(j, k) : path.substring(j);
 			if ("..".equals(nm)) {
 				if (!(is instanceof Component))
 					return null;
 
-				final Component c = (Component)is;
+				final Component c = (Component) is;
 				final Component p = c.getParent();
-				is = p != null ? p.getSpaceOwner(): c.getPage();
+				is = p != null ? p.getSpaceOwner() : c.getPage();
 				if (k < 0) {
-					return (is instanceof Component) ? (Component)is: null;
+					return (is instanceof Component) ? (Component) is : null;
 				}
 				continue;
 			}
@@ -154,22 +163,26 @@ public class Path {
 				return null;
 
 			final Component c = is.getFellowIfAny(nm);
-			if (k < 0 || c == null) return c;
+			if (k < 0 || c == null)
+				return c;
 
 			if (!(c instanceof IdSpace))
 				return null;
-			is = (IdSpace)c;
+			is = (IdSpace) c;
 		}
 	}
 
 	//--Object--//
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		return o instanceof Path && ((Path)o)._path.equals(_path);
+		if (this == o)
+			return true;
+		return o instanceof Path && ((Path) o)._path.equals(_path);
 	}
+
 	public int hashCode() {
 		return _path.hashCode();
 	}
+
 	public String toString() {
 		return _path;
 	}

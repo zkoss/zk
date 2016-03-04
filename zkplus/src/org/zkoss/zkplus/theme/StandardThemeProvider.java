@@ -18,13 +18,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.theme;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
-
-import org.zkoss.lang.Strings;
-import org.zkoss.zk.ui.Execution;
-
 /**
  * A standard implementation of ThemeProvider, which works with the Breeze series
  * themes.

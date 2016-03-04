@@ -35,33 +35,37 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.5.0
  */
 public class Panelchildren extends XulElement {
-	
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Panel))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	/**
 	 * This method is unsupported. Please use {@link Panel#setWidth(String)} instead.
 	 */
 	public void setWidth(String width) {
 		throw new UnsupportedOperationException("readonly");
 	}
+
 	/**
 	 * This method is unsupported. Please use {@link Panel#setHeight(String)} instead.
 	 */
 	public void setHeight(String height) {
 		throw new UnsupportedOperationException("readonly");
 	}
+
 	public String getHflex() {
 		Component parent = getParent();
 		return parent == null ? null : ((Panel) parent).getHflex();
 	}
+
 	public String getVflex() {
 		Component parent = getParent();
 		return parent == null ? null : ((Panel) parent).getVflex();
 	}
+
 	/**
 	 * This method is unsupported. Please use {@link Panel#setHflex(String)} instead.
 	 * @since 6.0.0
@@ -69,6 +73,7 @@ public class Panelchildren extends XulElement {
 	public void setHflex(String flex) {
 		throw new UnsupportedOperationException("readonly");
 	}
+
 	/**
 	 * This method is unsupported. Please use {@link Panel#setVflex(String)} instead.
 	 * @since 6.0.0
@@ -76,10 +81,11 @@ public class Panelchildren extends XulElement {
 	public void setVflex(String flex) {
 		throw new UnsupportedOperationException("readonly");
 	}
-	
+
 	protected void smartUpdate(String attr, Object value) {
 		super.smartUpdate(attr, value); // provides a bridge so it can be called by Panel
 	}
+
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 		render(renderer, "hflex", getHflex());
@@ -88,6 +94,6 @@ public class Panelchildren extends XulElement {
 
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-panelchildren" : _zclass;
+		return _zclass == null ? "z-panelchildren" : _zclass;
 	}
 }

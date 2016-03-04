@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.out.AuSendRedirect;
@@ -50,8 +51,7 @@ public class AuRedirect implements AuExtension, WebAppInit {
 				DHtmlUpdateServlet.addAuExtension(wapp, URI_PREFIX, this);
 			} catch (Throwable ex) {
 				log.error("could not initialize AuRedirect extension", ex);
-				throw new IllegalStateException(
-						"could not initialize AuRedirect extension", ex);
+				throw new IllegalStateException("could not initialize AuRedirect extension", ex);
 			}
 		}
 	}
@@ -62,9 +62,8 @@ public class AuRedirect implements AuExtension, WebAppInit {
 	public void destroy() {
 	}
 
-	public void service(HttpServletRequest request,
-			HttpServletResponse response, String pi) throws ServletException,
-			IOException {
+	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+			throws ServletException, IOException {
 		String redirectUrl = request.getParameter(REDIRECT_URL_PARAMETER);
 		AuSendRedirect auSendRedirect = new AuSendRedirect(redirectUrl, null);
 		AuWriter auWriter = AuWriters.newInstance();

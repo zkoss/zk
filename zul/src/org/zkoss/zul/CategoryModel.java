@@ -33,14 +33,14 @@ public interface CategoryModel extends ChartModel {
 	public Comparable<?> getSeries(int index);
 	
 	/**
-	 * Get a category of the specified index;
-	 */
-	public Comparable<?> getCategory(int index);
-
-	/**
 	 * Get all series as a collection.
 	 */
 	public Collection<Comparable<?>> getSeries();
+
+	/**
+	 * Get a category of the specified index;
+	 */
+	public Comparable<?> getCategory(int index);
 
 	/**
 	 * Get categories of a specified series as a collection.
@@ -54,7 +54,7 @@ public interface CategoryModel extends ChartModel {
 	 * called.
 	 */
 	public Collection<List<Comparable<?>>> getKeys();
-	
+
 	/**
 	 * Get value of the specified series and category.
 	 * @param series the series
@@ -74,9 +74,9 @@ public interface CategoryModel extends ChartModel {
 	 * remove the value of the specified series and category.
 	 * @param series the series
 	 * @param category the category.
-	 */	
+	 */
 	public void removeValue(Comparable<?> series, Comparable<?> category);
-	
+
 	/**
 	 * clear the model.
 	 */

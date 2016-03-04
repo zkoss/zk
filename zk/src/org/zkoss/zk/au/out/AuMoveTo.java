@@ -30,6 +30,6 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuMoveTo extends AuResponse {
 	public AuMoveTo(int x, int y) {
-		super("moveTo", new Integer[] {new Integer(x), new Integer(y)});
+		super("moveTo", new Integer[] { new Integer(x), new Integer(y) });
 	}
 }

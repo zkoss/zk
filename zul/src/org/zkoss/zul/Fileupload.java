@@ -16,16 +16,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.media.Media;
-
-
-import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -33,6 +31,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.impl.FileuploadDlg;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * A fileupload dialog used to let user upload a file.
@@ -67,24 +66,27 @@ import org.zkoss.zul.impl.FileuploadDlg;
 public class Fileupload extends Button { //not XulElement since not applicable
 	private static final Logger log = LoggerFactory.getLogger(Fileupload.class);
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
-	
+
 	public Fileupload() {
 		setUpload("true");
 	}
+
 	public Fileupload(String label) {
 		this();
 		setLabel(label);
 	}
+
 	public Fileupload(String label, String image) {
 		this(label);
 		setImage(image);
 	}
-	
+
 	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public int getMaxsize() {
 		return -1;
 	}
+
 	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setMaxsize(int maxsize) {
@@ -95,15 +97,18 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public int getNumber() {
 		return 1;
 	}
+
 	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setNumber(int maxnum) throws WrongValueException {
 	}
+
 	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public boolean isNative() {
 		return false;
 	}
+
 	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setNative(boolean alwaysNative) {
@@ -123,6 +128,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media get() {
 		return get(null, null, false);
 	}
+
 	/** Opens a modal dialog with the default message and title,
 	 * and let user upload a file.
 	 *
@@ -144,6 +150,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media get(boolean alwaysNative) {
 		return get(null, null, alwaysNative);
 	}
+
 	/** Opens a modal dialog with the specified message and title,
 	 * and let user upload a file.
 	 *
@@ -159,6 +166,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media get(String message, String title) {
 		return get(message, title, false);
 	}
+
 	/** Opens a modal dialog with the specified message and title,
 	 * and let user upload a file.
 	 *
@@ -181,7 +189,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 */
 	public static Media get(String message, String title, boolean alwaysNative) {
 		final Media[] result = get(message, title, 1, alwaysNative);
-		return result != null ? result[0]: null;
+		return result != null ? result[0] : null;
 	}
 
 	/**
@@ -200,7 +208,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media[] get(EventListener<UploadEvent> listener) {
 		return get(1, listener);
 	}
-	
+
 	/**
 	 * Opens a modal dialog to upload multiple files with
 	 * the default message and title.
@@ -218,6 +226,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media[] get(int max, EventListener<UploadEvent> listener) {
 		return get(new HashMap<String, Object>(8), null, null, max, -1, false, listener);
 	}
+
 	/** Opens a modal dialog to upload multiple files with
 	 * the default message and title.
 	 *
@@ -233,6 +242,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media[] get(int max) {
 		return get(null, null, max, false);
 	}
+
 	/** Opens a modal dialog to upload multiple files with
 	 * the default message and title.
 	 *
@@ -256,6 +266,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media[] get(int max, boolean alwaysNative) {
 		return get(null, null, max, alwaysNative);
 	}
+
 	/** Opens a modal dialog to upload multiple files with
 	 * the specified message and title.
 	 *
@@ -274,6 +285,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	public static Media[] get(String message, String title, int max) {
 		return get(message, title, max, false);
 	}
+
 	/** Opens a modal dialog to upload multiple files with
 	 * the specified message, title and options.
 	 *
@@ -293,10 +305,10 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.0.0
 	 */
-	public static
-	Media[] get(String message, String title, int max, boolean alwaysNative) {
+	public static Media[] get(String message, String title, int max, boolean alwaysNative) {
 		return get(message, title, max, -1, alwaysNative);
 	}
+
 	/** Opens a modal dialog to upload multiple files with
 	 * the specified message, title and options.
 	 *
@@ -317,11 +329,10 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 3.6.0
 	 */
-	public static
-	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative) {
-		return get(new HashMap<String, Object>(8),
-			message, title, max, maxsize, alwaysNative);
+	public static Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative) {
+		return get(new HashMap<String, Object>(8), message, title, max, maxsize, alwaysNative);
 	}
+
 	/**
 	 * Opens a modal dialog to upload multiple files with
 	 * the specified message, title and options.
@@ -346,8 +357,8 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 6.5.3
 	 */
-	public static Media[] get(Map<String, Object> params,
-			String message, String title, int max, int maxsize, boolean alwaysNative, EventListener<UploadEvent> listener) {
+	public static Media[] get(Map<String, Object> params, String message, String title, int max, int maxsize,
+			boolean alwaysNative, EventListener<UploadEvent> listener) {
 		return get(params, message, title, null, max, maxsize, alwaysNative, listener);
 	}
 
@@ -377,21 +388,18 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * <a href="http://books.zkoss.org/wiki/ZK_Component_Reference/Essential_Components/Fileupload#Event_Thread_Disabled">ZK Component Reference: Fileupload</a>.
 	 * @since 7.0.2
 	 */
-	public static Media[] get(Map<String, Object> params,
-			String message, String title, String accept, int max, int maxsize, boolean alwaysNative, EventListener<UploadEvent> listener) {
+	public static Media[] get(Map<String, Object> params, String message, String title, String accept, int max,
+			int maxsize, boolean alwaysNative, EventListener<UploadEvent> listener) {
 		final Execution exec = Executions.getCurrent();
-		params.put("message", message == null ?
-			Messages.get(MZul.UPLOAD_MESSAGE): message);
-		params.put("title", title == null ?
-			Messages.get(MZul.UPLOAD_TITLE): title);
-		params.put("max", new Integer(max == 0 ? 1 : max > 1000 ? 1000: max < -1000 ? -1000 : max));
+		params.put("message", message == null ? Messages.get(MZul.UPLOAD_MESSAGE) : message);
+		params.put("title", title == null ? Messages.get(MZul.UPLOAD_TITLE) : title);
+		params.put("max", new Integer(max == 0 ? 1 : max > 1000 ? 1000 : max < -1000 ? -1000 : max));
 		params.put("accept", accept);
 		params.put("native", Boolean.valueOf(alwaysNative));
 		params.put("maxsize", String.valueOf(maxsize));
 		params.put("listener", listener);
-		
-		final FileuploadDlg dlg = (FileuploadDlg)
-			exec.createComponents(_templ, null, params);
+
+		final FileuploadDlg dlg = (FileuploadDlg) exec.createComponents(_templ, null, params);
 		try {
 			dlg.doModal();
 		} catch (Throwable ex) {
@@ -404,6 +412,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 		}
 		return dlg.getResult();
 	}
+
 	/** The implementation of all public get methods.
 	 * In other words, all public <code>get</code> methods will prepare
 	 * an empty map and invoke this method to retrieve the media.
@@ -411,8 +420,8 @@ public class Fileupload extends Button { //not XulElement since not applicable
 	 * the dialog, such as adding more parameters.
 	 * @since 5.0.11
 	 */
-	protected static Media[] get(Map<String, Object> params,
-	String message, String title, int max, int maxsize, boolean alwaysNative) {
+	protected static Media[] get(Map<String, Object> params, String message, String title, int max, int maxsize,
+			boolean alwaysNative) {
 		return get(params, message, title, max, maxsize, alwaysNative, null);
 	}
 
@@ -432,6 +441,7 @@ public class Fileupload extends Button { //not XulElement since not applicable
 			throw new IllegalArgumentException("empty");
 		_templ = uri;
 	}
+
 	/** Returns the template used to create the upload modal dialog.
 	 */
 	public static String getTemplate() {

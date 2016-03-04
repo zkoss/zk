@@ -23,17 +23,18 @@ import org.zkoss.zk.ui.WrongValuesException;
  * @author dennis
  * @since 6.0.1
  */
-public class WrongValuePropertyImpl implements Property,Serializable {
+public class WrongValuePropertyImpl implements Property, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _base;
 	private final String _property;
 	private final Object _wrongValueException;
+
 	public WrongValuePropertyImpl(Object base, String property, Object wrongValueException) {
 		_base = base;
 		_property = property;
-		if (!(wrongValueException instanceof WrongValueException 
+		if (!(wrongValueException instanceof WrongValueException
 				|| wrongValueException instanceof WrongValuesException)) {
-			throw new IllegalArgumentException("not a wrong value exception, is "+wrongValueException);
+			throw new IllegalArgumentException("not a wrong value exception, is " + wrongValueException);
 		}
 		_wrongValueException = wrongValueException;
 	}
@@ -41,7 +42,7 @@ public class WrongValuePropertyImpl implements Property,Serializable {
 	public Object getBase() {
 		return _base;
 	}
-	
+
 	public Object getValue() {
 		return null;
 	}
@@ -49,35 +50,31 @@ public class WrongValuePropertyImpl implements Property,Serializable {
 	public String getProperty() {
 		return _property;
 	}
-	
-	public WrongValueException[] getWrongValueExceptions(){
-		if(_wrongValueException instanceof WrongValueException){
-			return new WrongValueException[]{(WrongValueException)_wrongValueException};
-		}else if(_wrongValueException instanceof WrongValuesException){
-			return ((WrongValuesException)_wrongValueException).getWrongValueExceptions();
+
+	public WrongValueException[] getWrongValueExceptions() {
+		if (_wrongValueException instanceof WrongValueException) {
+			return new WrongValueException[] { (WrongValueException) _wrongValueException };
+		} else if (_wrongValueException instanceof WrongValuesException) {
+			return ((WrongValuesException) _wrongValueException).getWrongValueExceptions();
 		}
 		return null;
 	}
-	
-	public String toString(){
-		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
-		.append(",base:").append(getBase())
-		.append(",property:").append(getProperty())
-		.append(",value:").append(getValue()).toString();
+
+	public String toString() {
+		return new StringBuilder().append(getClass().getSimpleName()).append("@")
+				.append(Integer.toHexString(hashCode())).append(",base:").append(getBase()).append(",property:")
+				.append(getProperty()).append(",value:").append(getValue()).toString();
 	}
 
-	
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((_base == null) ? 0 : _base.hashCode());
-		result = prime * result
-				+ ((_property == null) ? 0 : _property.hashCode());
+		result = prime * result + ((_property == null) ? 0 : _property.hashCode());
 		result = prime * result + ((_wrongValueException == null) ? 0 : _wrongValueException.hashCode());
 		return result;
 	}
 
-	
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

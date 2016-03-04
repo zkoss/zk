@@ -37,13 +37,13 @@ import org.zkoss.zk.ui.UiException;
  * @author jumperchen
  * @since 6.0.0
  */
-public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBinding {
+public class LoadFormBindingImpl extends FormBindingImpl implements LoadFormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private int _len;
 	private Set<String> _doneDependsOn;
-	
-	public LoadFormBindingImpl(Binder binder, Component comp, String formId, String loadExpr, 
-			ConditionType conditionType,String command, Map<String, Object> bindingArgs) {
+
+	public LoadFormBindingImpl(Binder binder, Component comp, String formId, String loadExpr,
+			ConditionType conditionType, String command, Map<String, Object> bindingArgs) {
 		super(binder, comp, formId, loadExpr, conditionType, command, bindingArgs);
 	}
 
@@ -51,60 +51,61 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent();
-		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
-		
+		final BindingExecutionInfoCollector collector = ((BinderCtrl) getBinder()).getBindingExecutionInfoCollector();
+
 		final Object bean = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		//ZK-1016 Nested form binding doesn't work.
-		final ValueReference valref = eval.getValueReference(ctx, comp,  _accessInfo.getProperty());
+		final ValueReference valref = eval.getValueReference(ctx, comp, _accessInfo.getProperty());
 		//value-reference is null if it is a simple node, ex ${vm}
-		if ((valref != null && valref.getBase() instanceof Form)
-				|| bean instanceof Form) {
-			throw new UiException(MiscUtil.formatLocationMessage("doesn't support to load a nested form , formId "+getFormId(),comp));
+		if ((valref != null && valref.getBase() instanceof Form) || bean instanceof Form) {
+			throw new UiException(MiscUtil
+					.formatLocationMessage("doesn't support to load a nested form , formId " + getFormId(), comp));
 		}
-		
-		final Form form = initFormBean(bean, (Class<Object>) (bean != null ? bean.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())), ctx);
-		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 
-			//ZK-1005 ZK 6.0.1 validation fails on nested bean
-			//sets the last loaded bean express of the form
-			comp.setAttribute(BinderCtrl.LOAD_FORM_EXPRESSION, getPropertyString());
-			
-			if (activating)
-				return;// don't notify change if activating
+		final Form form = initFormBean(bean,
+				(Class<Object>) (bean != null ? bean.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())),
+				ctx);
+		final boolean activating = ((BinderCtrl) getBinder()).isActivating();
 
-			// don't do resetDirty when in activating. Test case is in bind/form/FormWith*
-			FormStatus formStatus = form.getFormStatus();
-			formStatus.reset(); //initial loading, mark form as clean
-						
-			binder.notifyChange(form, "."); // notify change of fx and fx.*
+		//ZK-1005 ZK 6.0.1 validation fails on nested bean
+		//sets the last loaded bean express of the form
+		comp.setAttribute(BinderCtrl.LOAD_FORM_EXPRESSION, getPropertyString());
 
-				// notify change of fxStatus and fxStatus.*
-			binder.notifyChange(formStatus, ".");
+		if (activating)
+			return; // don't notify change if activating
 
-			if (collector != null) {
-				collector.addInfo(new LoadInfo(LoadInfo.FORM_LOAD, comp,
-						getConditionString(ctx), getPropertyString(),
-						getFormId(), bean, getArgs(), null));
-			}
+		// don't do resetDirty when in activating. Test case is in bind/form/FormWith*
+		FormStatus formStatus = form.getFormStatus();
+		formStatus.reset(); //initial loading, mark form as clean
+
+		binder.notifyChange(form, "."); // notify change of fx and fx.*
+
+		// notify change of fxStatus and fxStatus.*
+		binder.notifyChange(formStatus, ".");
+
+		if (collector != null) {
+			collector.addInfo(new LoadInfo(LoadInfo.FORM_LOAD, comp, getConditionString(ctx), getPropertyString(),
+					getFormId(), bean, getArgs(), null));
+		}
 
 	}
-	
-	private String getConditionString(BindContext ctx){
+
+	private String getConditionString(BindContext ctx) {
 		StringBuilder condition = new StringBuilder();
-		if(getConditionType()==ConditionType.BEFORE_COMMAND){
+		if (getConditionType() == ConditionType.BEFORE_COMMAND) {
 			condition.append("before = '").append(getCommandName()).append("'");
-		}else if(getConditionType()==ConditionType.AFTER_COMMAND){
+		} else if (getConditionType() == ConditionType.AFTER_COMMAND) {
 			condition.append("after = '").append(getCommandName()).append("'");
-		}else{
-			condition.append(ctx.getTriggerEvent()==null?"":"event = "+ctx.getTriggerEvent().getName()); 
+		} else {
+			condition.append(ctx.getTriggerEvent() == null ? "" : "event = " + ctx.getTriggerEvent().getName());
 		}
-		return condition.length()==0?null:condition.toString();
+		return condition.length() == 0 ? null : condition.toString();
 	}
-	
+
 	public void setSeriesLength(int len) {
 		_len = len;
 	}
-	
+
 	public int getSeriesLength() {
 		return _len;
 	}
@@ -120,7 +121,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 			}
 			_doneDependsOn = AllocUtil.inst.addSet(_doneDependsOn, src); //mark method as done @DependsOn; ZK-2289
 		}
-		for(String prop : props) {
+		for (String prop : props) {
 			BindELContext.addDependsOnTracking(this, srcpath, basepath, prop);
 		}
 	}

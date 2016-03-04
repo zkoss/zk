@@ -35,33 +35,33 @@ public class DialModel extends AbstractChartModel {
 	private static final long serialVersionUID = 20091008183229L;
 
 	private List<DialModelScale> _series = new ArrayList<DialModelScale>(4);
-	
+
 	//DialFrame background
 	private String _bgColor = "#FFFFFF";
-	private int[] _bgRGB = new int[] {0xFF,0xFF,0xFF}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private int[] _bgRGB = new int[] { 0xFF, 0xFF, 0xFF }; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private int _bgAlpha = 255; //background alpha transparency (0 ~ 255, default to 255)
 	private String _bgColor1 = "#FFFFFF";
-	private int[] _bgRGB1 = new int[] {0xFF,0xFF,0xFF}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255) for gradient background starting color
+	private int[] _bgRGB1 = new int[] { 0xFF, 0xFF, 0xFF }; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255) for gradient background starting color
 	private String _bgColor2 = "#AAAADC";
-	private int[] _bgRGB2 = new int[] {0xAA,0xAA,0xDC}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255) for gradient background ending color
-	
+	private int[] _bgRGB2 = new int[] { 0xAA, 0xAA, 0xDC }; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255) for gradient background ending color
+
 	//DialFrame foreground
 	private String _fgColor;
-	private int[] _fgRGB = new int[] {0x80,0x80,0x80}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
-	
+	private int[] _fgRGB = new int[] { 0x80, 0x80, 0x80 }; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+
 	//DialBackground gradient direction
 	private String _gdirection = "vertical";
-	
+
 	//DialCap radius
 	private double _capRadius = 0.07;
-	
+
 	/**
 	 * Returns the number of {@link DialModelScale}s.
 	 */
 	public int size() {
 		return _series.size();
 	}
-	
+
 	/**
 	 * new an instance of scale in this DialModel.
 	 * @return an instance of scale in this DialModel.
@@ -72,7 +72,7 @@ public class DialModel extends AbstractChartModel {
 		fireEvent(ChartDataEvent.ADDED, DialChartDataEvent.SCALE, entry);
 		return entry;
 	}
-	
+
 	/**
 	 * new an instance of scale in this DialModel.
 	 * @param lowerBound lower bound of this scale.
@@ -82,15 +82,15 @@ public class DialModel extends AbstractChartModel {
 	 * @param majorTickInterval the interval between major tick (in lower bound and upper bound).
 	 * @param minorTickCount the number of minor ticks between major tick.
 	 */
-	public DialModelScale newScale(double lowerBound, double upperBound, 
-		double startAngle, double extent, double majorTickInterval, int minorTickCount) {
+	public DialModelScale newScale(double lowerBound, double upperBound, double startAngle, double extent,
+			double majorTickInterval, int minorTickCount) {
 		final DialModelScale entry = new DialModelScale(this);
 		_series.add(entry);
 		entry.setScale(lowerBound, upperBound, startAngle, extent, majorTickInterval, minorTickCount);
 		fireEvent(ChartDataEvent.ADDED, DialChartDataEvent.SCALE, entry);
 		return entry;
 	}
-	
+
 	/**
 	 * Return the index of the specified model entry.
 	 * @param entry the DialModelScale
@@ -99,7 +99,7 @@ public class DialModel extends AbstractChartModel {
 	public int indexOf(DialModelScale entry) {
 		return _series.indexOf(entry);
 	}
-	
+
 	/**
 	 * Returns the {@link DialModelScale} of the specified index.
 	 * @param index the index of the entry.
@@ -108,7 +108,7 @@ public class DialModel extends AbstractChartModel {
 	public DialModelScale getScale(int index) {
 		return _series.get(index);
 	}
-	
+
 	/**
 	 * Remove the specified DialModelScale from this DialModel.
 	 * @param scale
@@ -118,7 +118,7 @@ public class DialModel extends AbstractChartModel {
 		_series.remove(scale);
 		fireEvent(ChartDataEvent.REMOVED, DialChartDataEvent.SCALE, index);
 	}
-	
+
 	/**
 	 * Get value of the scale per the specified index.
 	 * @param index the scale index.
@@ -132,7 +132,7 @@ public class DialModel extends AbstractChartModel {
 	 * @param index the index of the Scale
 	 * @param value the value
 	 */
-	public void setValue(int index,  double value) {
+	public void setValue(int index, double value) {
 		getScale(index).setValue(value);
 	}
 
@@ -160,7 +160,7 @@ public class DialModel extends AbstractChartModel {
 		_bgAlpha = alpha;
 		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_ALPHA, alpha);
 	}
-	
+
 	/**
 	 * Get the background alpha of the dial frame (transparency, 0 ~ 255, opacue).
 	 */
@@ -185,7 +185,7 @@ public class DialModel extends AbstractChartModel {
 		}
 		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_COLOR, color);
 	}
-	
+
 	/**
 	 * Get the background color of the dial frame (in string as #RRGGBB).
 	 * null means default.
@@ -193,7 +193,7 @@ public class DialModel extends AbstractChartModel {
 	public String getFrameBgColor() {
 		return _bgColor;
 	}
-	
+
 	/**
 	 * Get the background color of the dial frame in int array (0: red, 1: green, 2:blue).
 	 * null means default.
@@ -201,7 +201,7 @@ public class DialModel extends AbstractChartModel {
 	public int[] getFrameBgRGB() {
 		return _bgRGB;
 	}
-	
+
 	/**
 	 * Set the foreground color of the dial frame.
 	 * @param color in #RRGGBB format (hexadecimal).
@@ -219,7 +219,7 @@ public class DialModel extends AbstractChartModel {
 		}
 		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_FG_COLOR, color);
 	}
-	
+
 	/**
 	 * Get the foreground color of the dial frame (in string as #RRGGBB).
 	 * null means default.
@@ -227,7 +227,7 @@ public class DialModel extends AbstractChartModel {
 	public String getFrameFgColor() {
 		return _fgColor;
 	}
-	
+
 	/**
 	 * Get the foreground color of the dial frame in int array (0: red, 1: green, 2:blue).
 	 * null means default.
@@ -235,7 +235,7 @@ public class DialModel extends AbstractChartModel {
 	public int[] getFrameFgRGB() {
 		return _fgRGB;
 	}
-	
+
 	/**
 	 * Set the 1st background color of the dial frame (for gradient starting color).
 	 * @param color in #RRGGBB format (hexadecimal).
@@ -253,7 +253,7 @@ public class DialModel extends AbstractChartModel {
 		}
 		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_COLOR_1, color);
 	}
-	
+
 	/**
 	 * Get the 1st background color of the dial frame (in string as #RRGGBB) for gradient starting color.
 	 * null means use default.
@@ -261,7 +261,7 @@ public class DialModel extends AbstractChartModel {
 	public String getFrameBgColor1() {
 		return _bgColor1;
 	}
-	
+
 	/**
 	 * Get the 1st background color of the dial frame in int array (0: red, 1: green, 2:blue) for gradient starting color.
 	 * null means use default.
@@ -287,7 +287,7 @@ public class DialModel extends AbstractChartModel {
 		}
 		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.FRAME_BG_COLOR_2, color);
 	}
-	
+
 	/**
 	 * Get the 2nd background color of the dial frame (in string as #RRGGBB) for gradient ending color.
 	 * null means default.
@@ -295,7 +295,7 @@ public class DialModel extends AbstractChartModel {
 	public String getFrameBgColor2() {
 		return _bgColor2;
 	}
-	
+
 	/**
 	 * Get the 2nd background color of the dial frame in int array (0: red, 1: green, 2:blue) for gradient ending color.
 	 * null means default.
@@ -312,7 +312,7 @@ public class DialModel extends AbstractChartModel {
 		_gdirection = direction;
 		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.GRADIENT_DIRECTION, direction); //ZK-1693
 	}
-	
+
 	/**
 	 * Returns the Frame background gradient color direction (from bgColor1 to bgColor2); 
 	 * center_horizontal, center_vertical, horizontal, vertical. 
@@ -320,7 +320,7 @@ public class DialModel extends AbstractChartModel {
 	public String getGradientDirection() {
 		return _gdirection;
 	}
-	
+
 	/**
 	 * Sets the radius percentage(0 ~ 1) of the meter's cap; default to 0.07.
 	 * @param radius the radius percentage(0 ~ 1) of the meter's cap.
@@ -329,7 +329,7 @@ public class DialModel extends AbstractChartModel {
 		_capRadius = radius;
 		fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.CAP_RADIUS, radius);
 	}
-	
+
 	/**
 	 * Return the radius percentage(0 ~ 1) of the meter's cap; default to 0.07.
 	 * @return the radius percentage(0 ~ 1) of the meter's cap.
@@ -347,7 +347,7 @@ public class DialModel extends AbstractChartModel {
 	 */
 	protected void fireEvent(int type, String propertyKey, Object data) {
 		final ChartDataEvent evt = new DialChartDataEvent(this, type, propertyKey, data);
-		for (ChartDataListener l: _listeners)
+		for (ChartDataListener l : _listeners)
 			l.onChange(evt);
 	}
 

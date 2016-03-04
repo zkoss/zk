@@ -33,6 +33,7 @@ import javax.servlet.ServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.ClassResolver;
 import org.zkoss.lang.ImportedClassResolver;
@@ -114,7 +115,7 @@ import org.zkoss.zk.ui.util.Template;
  */
 public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private static final Logger log = LoggerFactory.getLogger(PageImpl.class);
-    private static final long serialVersionUID = 20110726L;
+	private static final long serialVersionUID = 20110726L;
 
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
@@ -162,6 +163,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private List<String> _impclss;
 
 	private Map<String, Template> _templates;
+
 	/** Constructs a page by giving the page definition.
 	 *
 	 * <p>Note: when a page is constructed, it doesn't belong to a desktop
@@ -176,8 +178,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	 * @param pgdef the page definition (never null).
 	 */
 	public PageImpl(PageDefinition pgdef) {
-		constr(pgdef.getLanguageDefinition(),
-			pgdef.getRequestPath(), pgdef.getZScriptLanguage());
+		constr(pgdef.getLanguageDefinition(), pgdef.getRequestPath(), pgdef.getZScriptLanguage());
 
 		_compdefs = pgdef.getComponentDefinitionMap();
 		_clsresolver = pgdef.getImportedClassResolver();
@@ -186,6 +187,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		//NOTE: don't store pgdef since it is not serializable
 	}
+
 	/** Constructs a page without page definition and richlet.
 	 *
 	 * @param langdef the language definition (never null)
@@ -194,20 +196,19 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	 * @param path the request path. If null, empty is assumed.
 	 * @param zslang the zscript language. If null, "Java" is assumed.
 	 */
-	public PageImpl(LanguageDefinition langdef,
-	ComponentDefinitionMap compdefs, String path, String zslang) {
+	public PageImpl(LanguageDefinition langdef, ComponentDefinitionMap compdefs, String path, String zslang) {
 		constr(langdef, path, zslang);
-		_compdefs = compdefs != null ? compdefs:
-			new ComponentDefinitionMap(
-				_langdef.getComponentDefinitionMap().isCaseInsensitive());
+		_compdefs = compdefs != null ? compdefs
+				: new ComponentDefinitionMap(_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_clsresolver = new SimpleClassResolver();
 	}
+
 	/** Constructs a page with another page as instance
 	 * @since 6.0.0
 	 */
 	public PageImpl(Page ref) {
-		this(ref.getLanguageDefinition(), ref.getComponentDefinitionMap(),
-			ref.getRequestPath(), ref.getZScriptLanguage());
+		this(ref.getLanguageDefinition(), ref.getComponentDefinitionMap(), ref.getRequestPath(),
+				ref.getZScriptLanguage());
 	}
 
 	/** Constructs a page by specifying a richlet.
@@ -225,16 +226,17 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public PageImpl(Richlet richlet, String path) {
 		constr(richlet.getLanguageDefinition(), path, null);
 
-		_compdefs = new ComponentDefinitionMap(
-			_langdef.getComponentDefinitionMap().isCaseInsensitive());
+		_compdefs = new ComponentDefinitionMap(_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_clsresolver = new SimpleClassResolver();
 	}
+
 	private void constr(LanguageDefinition langdef, String path, String zslang) {
 		init();
 		_langdef = langdef;
-		_path = path != null ? path: "";
-		_zslang = zslang != null ? zslang: "Java";
+		_path = path != null ? path : "";
+		_zslang = zslang != null ? zslang : "Java";
 	}
+
 	/** Initialized the page when constructed or deserialized.
 	 */
 	protected void init() {
@@ -242,20 +244,77 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_attrs = new SimpleScope(this);
 	}
 
+	public void init(PageConfig config) {
+		final Execution exec = Executions.getCurrent();
+		if (((ExecutionCtrl) exec).isRecovering()) {
+			final String uuid = config.getUuid(), id = config.getId();
+			if (uuid == null || id == null)
+				throw new IllegalArgumentException("both id and uuid are required in recovering");
+			_uuid = uuid;
+			_id = id;
+		} else {
+			_uuid = ((DesktopCtrl) _desktop).getNextUuid(this);
+
+			if (_id == null || _id.length() == 0)
+				_id = config.getId();
+			if (_id != null)
+				_id = (String) exec.evaluate(this, _id, String.class);
+			if (_id == null) {
+				_id = "";
+			} else if (_id.length() != 0) {
+				final String INVALID = ".&\\%";
+				if (Strings.anyOf(_id, INVALID, 0) < _id.length())
+					throw new IllegalArgumentException("Invalid page ID: " + _id + ". Invalid characters: " + INVALID);
+			}
+		}
+
+		//Note: the evaluation order was changed since 5.0.2
+		((DesktopCtrl) _desktop).addPage(this);
+		//add page before evaluate title and others
+
+		String s;
+		if (_title.length() == 0) {
+			s = config.getTitle();
+			if (s != null)
+				setTitle(s);
+		}
+		if (_style.length() == 0) {
+			s = config.getStyle();
+			if (s != null)
+				setStyle(s);
+		}
+		if ("auto".equals(_viewport)) {
+			s = config.getViewport();
+			if (s != null)
+				setViewport(s);
+		}
+
+		s = config.getBeforeHeadTags();
+		if (s != null)
+			_hdbfr = s;
+		s = config.getAfterHeadTags();
+		if (s != null)
+			_hdaft = s;
+		_hdres = config.getResponseHeaders();
+		if (_hdres.isEmpty())
+			_hdres = null;
+	}
+
 	/** Returns the UI engine.
 	 */
 	private final UiEngine getUiEngine() {
-		return ((WebAppCtrl)_desktop.getWebApp()).getUiEngine();
+		return ((WebAppCtrl) _desktop.getWebApp()).getUiEngine();
 	}
 
 	//-- Page --//
 	private final Execution getExecution() {
-		return _desktop != null ? _desktop.getExecution():
-			Executions.getCurrent();
+		return _desktop != null ? _desktop.getExecution() : Executions.getCurrent();
 	}
+
 	public final FunctionMapper getFunctionMapper() {
 		return _mapper;
 	}
+
 	public boolean addFunctionMapper(FunctionMapper mapper) {
 		if (mapper == null)
 			return false;
@@ -268,9 +327,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_mappers.add(0, mapper); //FILO order
 		return true;
 	}
+
 	public boolean removeFunctionMapper(FunctionMapper mapper) {
 		return _mappers != null && _mappers.remove(mapper);
 	}
+
 	public boolean hasFunctionMapper(FunctionMapper mapper) {
 		return _mappers != null && _mappers.contains(mapper);
 	}
@@ -278,30 +339,37 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public String getRequestPath() {
 		return _path;
 	}
+
 	public final String getId() {
 		return _id;
 	}
+
 	public final String getUuid() {
 		return _uuid;
 	}
+
 	public void setId(String id) {
 		if (_desktop != null && _desktop.getPages().contains(this))
 			throw new UiException("ID cannot be changed after initialized");
-		_id = id != null ? id: "";
+		_id = id != null ? id : "";
 		//No need to update client since it is allowed only before init(...)
 	}
+
 	public String getTitle() {
 		return _title;
 	}
+
 	public void setTitle(String title) {
-		if (title == null) title = "";
+		if (title == null)
+			title = "";
 		if (!_title.equals(title)) {
 			_title = title;
 			if (_desktop != null) {
 				final Execution exec = getExecution();
 				if (_title.length() > 0) {
-					_title = (String)exec.evaluate(this, _title, String.class);
-					if (_title == null) _title = "";
+					_title = (String) exec.evaluate(this, _title, String.class);
+					if (_title == null)
+						_title = "";
 				}
 
 				if (exec.isAsyncUpdate(this))
@@ -309,35 +377,43 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			}
 		}
 	}
+
 	public String getStyle() {
 		return _style;
 	}
+
 	public void setStyle(String style) {
-		if (style == null) style = "";
+		if (style == null)
+			style = "";
 		if (!_style.equals(style)) {
 			_style = style;
 			if (_desktop != null) {
 				final Execution exec = getExecution();
 				if (_style.length() > 0) {
-					_style = (String)exec.evaluate(this, _style, String.class);
-					if (_style == null) _style = "";
+					_style = (String) exec.evaluate(this, _style, String.class);
+					if (_style == null)
+						_style = "";
 				}
 				//FUTURE: might support the change of style dynamically
 			}
 		}
 	}
+
 	public String getViewport() {
 		return _viewport;
 	}
+
 	public void setViewport(String viewport) {
-		if (viewport == null) viewport = "auto";
+		if (viewport == null)
+			viewport = "auto";
 		if (!_viewport.equals(viewport)) {
 			_viewport = viewport;
 			if (_desktop != null) {
 				final Execution exec = getExecution();
 				if (_viewport.length() > 0) {
-					_viewport = (String)exec.evaluate(this, _viewport, String.class);
-					if (_viewport == null) _viewport = "auto";
+					_viewport = (String) exec.evaluate(this, _viewport, String.class);
+					if (_viewport == null)
+						_viewport = "auto";
 				}
 			}
 		}
@@ -365,49 +441,48 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return Collections.emptyMap();
 	}
-	public Object getAttribute(String name, int scope) {
-		return getAttributes(scope).get(name);
-	}
-	public boolean hasAttribute(String name, int scope) {
-		return getAttributes(scope).containsKey(name);
-	}
-	public Object setAttribute(String name, Object value, int scope) {
-		final Map<String, Object> attrs = getAttributes(scope);
-		if (attrs == Collections.EMPTY_MAP)
-			throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
-		return attrs.put(name, value);
-	}
-	public Object removeAttribute(String name, int scope) {
-			final Map<String, Object> attrs = getAttributes(scope);
-			if (attrs == Collections.EMPTY_MAP)
-				throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
-		return attrs.remove(name);
-	}
 
 	public Map<String, Object> getAttributes() {
 		return _attrs.getAttributes();
 	}
+
+	public Object getAttribute(String name, int scope) {
+		return getAttributes(scope).get(name);
+	}
+
 	public Object getAttribute(String name) {
 		return _attrs.getAttribute(name);
 	}
+
+	public Object getAttribute(String name, boolean recurse) {
+		Object val = getAttribute(name);
+		return val != null || !recurse || hasAttribute(name) ? val
+				: _desktop != null ? _desktop.getAttribute(name, true) : null;
+	}
+
+	public boolean hasAttribute(String name, int scope) {
+		return getAttributes(scope).containsKey(name);
+	}
+
 	public boolean hasAttribute(String name) {
 		return _attrs.hasAttribute(name);
 	}
+
+	public boolean hasAttribute(String name, boolean recurse) {
+		return hasAttribute(name) || (recurse && _desktop != null && _desktop.hasAttribute(name, true));
+	}
+
+	public Object setAttribute(String name, Object value, int scope) {
+		final Map<String, Object> attrs = getAttributes(scope);
+		if (attrs == Collections.EMPTY_MAP)
+			throw new IllegalStateException("This component doesn't belong to any ID space: " + this);
+		return attrs.put(name, value);
+	}
+
 	public Object setAttribute(String name, Object value) {
 		return _attrs.setAttribute(name, value);
 	}
-	public Object removeAttribute(String name) {
-		return _attrs.removeAttribute(name);
-	}
-	public Object getAttribute(String name, boolean recurse) {
-		Object val = getAttribute(name);
-		return val != null || !recurse || hasAttribute(name) ? val:
-			_desktop != null ? _desktop.getAttribute(name, true): null;
-	}
-	public boolean hasAttribute(String name, boolean recurse) {
-		return hasAttribute(name)
-			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
-	}
+
 	public Object setAttribute(String name, Object value, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			if (_desktop != null) {
@@ -417,6 +492,18 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return setAttribute(name, value);
 	}
+
+	public Object removeAttribute(String name, int scope) {
+		final Map<String, Object> attrs = getAttributes(scope);
+		if (attrs == Collections.EMPTY_MAP)
+			throw new IllegalStateException("This component doesn't belong to any ID space: " + this);
+		return attrs.remove(name);
+	}
+
+	public Object removeAttribute(String name) {
+		return _attrs.removeAttribute(name);
+	}
+
 	public Object removeAttribute(String name, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			if (_desktop != null) {
@@ -437,17 +524,18 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (val != null)
 			return val;
 
-		return recurse && _desktop != null ?
-			_desktop.getAttribute(name, true): null;
+		return recurse && _desktop != null ? _desktop.getAttribute(name, true) : null;
 	}
+
 	public boolean hasAttributeOrFellow(String name, boolean recurse) {
 		return hasAttribute(name) || hasFellow(name)
-			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
+				|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {
 		return _attrs.addScopeListener(listener);
 	}
+
 	public boolean removeScopeListener(ScopeListener listener) {
 		return _attrs.removeScopeListener(listener);
 	}
@@ -470,18 +558,19 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				_clsresolver = resolver;
 				_clsresolverShared = true;
 			} else {
-				ImportedClassResolver cur = (ImportedClassResolver)_clsresolver;
+				ImportedClassResolver cur = (ImportedClassResolver) _clsresolver;
 				if (_clsresolverShared) {
 					ImportedClassResolver newcr = new ImportedClassResolver();
 					newcr.addAll(cur);
 					_clsresolver = newcr;
 					_clsresolverShared = false;
 				}
-				cur.addAll((ImportedClassResolver)resolver);
+				cur.addAll((ImportedClassResolver) resolver);
 			}
 		}
 		return true;
 	}
+
 	public Class<?> resolveClass(String clsnm) throws ClassNotFoundException {
 		try {
 			return _clsresolver.resolveClass(clsnm);
@@ -492,29 +581,29 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			throw ex;
 		}
 	}
+
 	public Class<?> getZScriptClass(String clsnm) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+		for (Interpreter ip : getLoadedInterpreters()) {
 			Class<?> cls = ip.getClass(clsnm);
 			if (cls != null)
 				return cls;
 		}
 		return null; //Since ZK 6, we don't look for the current thread's class loader
 	}
+
 	public Function getZScriptFunction(String name, Class[] argTypes) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+		for (Interpreter ip : getLoadedInterpreters()) {
 			Function mtd = ip.getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
 		return null;
 	}
-	public Function getZScriptFunction(
-	Component comp, String name, Class[] argTypes) {
-		for (Interpreter ip: getLoadedInterpreters()) {
-			Function mtd =
-				ip instanceof HierachicalAware ?
-				((HierachicalAware)ip).getFunction(comp, name, argTypes):
-				(ip).getFunction(name, argTypes);
+
+	public Function getZScriptFunction(Component comp, String name, Class[] argTypes) {
+		for (Interpreter ip : getLoadedInterpreters()) {
+			Function mtd = ip instanceof HierachicalAware ? ((HierachicalAware) ip).getFunction(comp, name, argTypes)
+					: ip.getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
@@ -522,18 +611,18 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Object getZScriptVariable(String name) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+		for (Interpreter ip : getLoadedInterpreters()) {
 			final Object val = ip.getVariable(name);
 			if (val != null)
 				return val;
 		}
 		return null;
 	}
+
 	public Object getZScriptVariable(Component comp, String name) {
-		for (Interpreter ip: getLoadedInterpreters()) {
-			final Object val = ip instanceof HierachicalAware ?
-				((HierachicalAware)ip).getVariable(comp, name):
-				(ip).getVariable(name);
+		for (Interpreter ip : getLoadedInterpreters()) {
+			final Object val = ip instanceof HierachicalAware ? ((HierachicalAware) ip).getVariable(comp, name)
+					: ip.getVariable(name);
 			if (val != null)
 				return val;
 		}
@@ -543,19 +632,17 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public Object getXelVariable(String name) {
 		return getXelVariable(null, null, name, false);
 	}
-	public Object getXelVariable(
-	XelContext ctx, Object base, Object name, boolean ignoreExec) {
+
+	public Object getXelVariable(XelContext ctx, Object base, Object name, boolean ignoreExec) {
 		if (!ignoreExec) {
 			final Execution exec = getExecution();
 			if (exec != null)
-				return Evaluators.resolveVariable(
-					ctx, exec.getVariableResolver(), base, name);
-					//note: ExecutionResolver will call back this method
+				return Evaluators.resolveVariable(ctx, exec.getVariableResolver(), base, name);
+			//note: ExecutionResolver will call back this method
 		}
-		
+
 		if (_resolvers != null) {
-			for (Iterator<VariableResolver> it = CollectionsX.comodifiableIterator(_resolvers);
-			it.hasNext();) {
+			for (Iterator<VariableResolver> it = CollectionsX.comodifiableIterator(_resolvers); it.hasNext();) {
 				Object o = Evaluators.resolveVariable(ctx, it.next(), base, name);
 				if (o != null)
 					return o;
@@ -576,9 +663,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_resolvers.add(0, resolver); //FILO order
 		return true;
 	}
+
 	public boolean removeVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.remove(resolver);
 	}
+
 	public boolean hasVariableResolver(VariableResolver resolver) {
 		return _resolvers != null && _resolvers.contains(resolver);
 	}
@@ -587,7 +676,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 		if (!Events.isValid(evtnm))
-			throw new IllegalArgumentException("Invalid event name: "+evtnm);
+			throw new IllegalArgumentException("Invalid event name: " + evtnm);
 
 		if (_listeners == null)
 			_listeners = new HashMap<String, List<EventListener<? extends Event>>>(2);
@@ -595,7 +684,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		List<EventListener<? extends Event>> l = _listeners.get(evtnm);
 		if (l != null) {
 			if (duplicateListenerIgnored()) {
-				for (EventListener<? extends Event> li: l) {
+				for (EventListener<? extends Event> li : l) {
 					if (listener.equals(li))
 						return false;
 				}
@@ -606,6 +695,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		l.add(listener);
 		return true;
 	}
+
 	public boolean removeEventListener(String evtnm, EventListener<? extends Event> listener) {
 		if (evtnm == null || listener == null)
 			throw new NullPointerException();
@@ -627,17 +717,20 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return false;
 	}
+
 	private static boolean duplicateListenerIgnored() {
 		if (dupListenerIgnored == null)
-			dupListenerIgnored = Boolean.valueOf(
-				"true".equals(Library.getProperty("org.zkoss.zk.ui.EventListener.duplicateIgnored")));
+			dupListenerIgnored = Boolean
+					.valueOf("true".equals(Library.getProperty("org.zkoss.zk.ui.EventListener.duplicateIgnored")));
 		return dupListenerIgnored.booleanValue();
 	}
+
 	private static Boolean dupListenerIgnored;
 
 	public boolean isComplete() {
 		return _complete;
 	}
+
 	public void setComplete(boolean complete) {
 		_complete = complete;
 	}
@@ -654,55 +747,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		_desktop.getWebApp().getConfiguration().init(this);
 	}
-	public void init(PageConfig config) {
-		final Execution exec = Executions.getCurrent();
-		if (((ExecutionCtrl)exec).isRecovering()) {
-			final String uuid = config.getUuid(), id = config.getId();
-			if (uuid == null || id == null)
-				throw new IllegalArgumentException("both id and uuid are required in recovering");
-			_uuid = uuid;
-			_id = id;
-		} else {
-			_uuid = ((DesktopCtrl)_desktop).getNextUuid(this);
 
-			if (_id == null || _id.length() == 0)
-				_id = config.getId();
-			if (_id != null)
-				_id = (String)exec.evaluate(this, _id, String.class);
-			if (_id == null) {
-				_id = "";
-			} else if (_id.length() != 0) {
-				final String INVALID = ".&\\%";
-				if (Strings.anyOf(_id, INVALID, 0) < _id.length())
-					throw new IllegalArgumentException("Invalid page ID: "+_id+". Invalid characters: "+INVALID);
-			}
-		}
-
-		//Note: the evaluation order was changed since 5.0.2
-		((DesktopCtrl)_desktop).addPage(this);
-			//add page before evaluate title and others
-
-		String s;
-		if (_title.length() == 0) {
-			s = config.getTitle();
-			if (s != null) setTitle(s);
-		}
-		if (_style.length() == 0) {
-			s = config.getStyle();
-			if (s != null) setStyle(s);
-		}
-		if ("auto".equals(_viewport)) {
-			s = config.getViewport();
-			if (s != null) setViewport(s);
-		}
-
-		s = config.getBeforeHeadTags();
-		if (s != null) _hdbfr = s;
-		s = config.getAfterHeadTags();
-		if (s != null) _hdaft = s;
-		_hdres = config.getResponseHeaders();
-		if (_hdres.isEmpty()) _hdres = null;
-	}
 	public void destroy() {
 		super.destroy();
 
@@ -711,16 +756,16 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				final List<Interpreter> ips = new ArrayList<Interpreter>(_ips.values());
 				_ips.clear();
 				_ips = null; //not just clear since it is better to NPE than memory leak
-				for (Interpreter ip: ips) {
+				for (Interpreter ip : ips) {
 					try {
 						ip.destroy();
 					} catch (Throwable ex) {
-						log.warn("Failed to destroy "+ip, ex);
+						log.warn("Failed to destroy " + ip, ex);
 					}
 				}
 			}
 		} catch (Throwable ex) { //avoid racing
-			log.warn("Failed to clean up interpreters of "+this, ex);
+			log.warn("Failed to clean up interpreters of " + this, ex);
 		}
 
 		//theoretically, the following is not necessary, but, to be safe...
@@ -731,6 +776,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_mappers = null;
 		_attrs.getAttributes().clear();
 	}
+
 	public boolean isAlive() {
 		return _ips != null;
 	}
@@ -738,13 +784,16 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public String getBeforeHeadTags() {
 		return _hdbfr;
 	}
+
 	public String getAfterHeadTags() {
 		return _hdaft;
 	}
+
 	public void addBeforeHeadTags(String tags) {
 		if (tags != null && tags.length() > 0)
 			_hdbfr += '\n' + tags;
 	}
+
 	public void addAfterHeadTags(String tags) {
 		if (tags != null && tags.length() > 0)
 			_hdaft += '\n' + tags;
@@ -755,45 +804,59 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return _hdres;
 		return Collections.emptyList();
 	}
+
 	public String getRootAttributes() {
 		return _rootAttrs;
 	}
+
 	public void setRootAttributes(String rootAttrs) {
-		_rootAttrs = rootAttrs != null ? rootAttrs: "";
+		_rootAttrs = rootAttrs != null ? rootAttrs : "";
 	}
+
 	public String getContentType() {
 		return _contentType;
 	}
+
 	public void setContentType(String contentType) {
 		_contentType = contentType;
 	}
+
 	public String getWidgetClass() {
 		return _wgtcls;
 	}
+
 	public void setWidgetClass(String wgtcls) {
-		_wgtcls = wgtcls != null && wgtcls.length() > 0 ? wgtcls: null;
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ? wgtcls : null;
 	}
+
 	public String getDocType() {
 		return _docType;
 	}
+
 	public void setDocType(String docType) {
 		_docType = docType;
 	}
+
 	public String getFirstLine() {
 		return _firstLine;
 	}
+
 	public void setFirstLine(String firstLine) {
 		_firstLine = firstLine;
 	}
+
 	public Boolean getCacheable() {
 		return _cacheable;
 	}
+
 	public void setCacheable(Boolean cacheable) {
 		_cacheable = cacheable;
 	}
+
 	public Boolean getAutomaticTimeout() {
 		return _autoTimeout;
 	}
+
 	public void setAutomaticTimeout(Boolean autoTimeout) {
 		_autoTimeout = autoTimeout;
 	}
@@ -802,26 +865,24 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _desktop;
 	}
 
-	public void redraw(Writer out)
-	throws IOException {
+	public void redraw(Writer out) throws IOException {
 		String ctl;
 		final Execution exec = getExecution();
 		final boolean au = exec.isAsyncUpdate(null);
 		if (!au && !exec.isIncluded()
-		&& ((ctl=ExecutionsCtrl.getPageRedrawControl(exec)) == null
-			|| "desktop".equals(ctl))) {
+				&& ((ctl = ExecutionsCtrl.getPageRedrawControl(exec)) == null || "desktop".equals(ctl))) {
 			boolean ie7compat;
 			if (!au && ((ie7compat = shallIE7Compatible()) || !shallDisableAutoCompatible()))
 				try {
-					if (exec.getBrowser("ie") >= 8
-					&& !exec.containsResponseHeader("X-UA-Compatible")) {
+					if (exec.getBrowser("ie") >= 8 && !exec.containsResponseHeader("X-UA-Compatible")) {
 						if (ie7compat) {
 							exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
 						} else {
-							double[] ieCompatibilityInfo = Servlets.getIECompatibilityInfo((ServletRequest) exec.getNativeRequest());
-							if(ieCompatibilityInfo != null) {
-								if(ieCompatibilityInfo[0] != ieCompatibilityInfo[2]) {
-									exec.addResponseHeader("X-UA-Compatible", "IE=" + (int)ieCompatibilityInfo[2]);
+							double[] ieCompatibilityInfo = Servlets
+									.getIECompatibilityInfo((ServletRequest) exec.getNativeRequest());
+							if (ieCompatibilityInfo != null) {
+								if (ieCompatibilityInfo[0] != ieCompatibilityInfo[2]) {
+									exec.addResponseHeader("X-UA-Compatible", "IE=" + (int) ieCompatibilityInfo[2]);
 								}
 							}
 						}
@@ -829,13 +890,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				} catch (Throwable ex) { //ignore (it might not be allowed)
 				}
 
-//FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
-//Why yes: the client doesn't need to ask the server for updated content
-//Why no: browsers seems fail to handle DHTML correctly (when BACK to
-//a DHTML page), so it is better to let the server handle cache, if any
-			final boolean cacheable =
-				_cacheable != null ?  _cacheable.booleanValue():
-					_desktop.getDevice().isCacheable();
+			//FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
+			//Why yes: the client doesn't need to ask the server for updated content
+			//Why no: browsers seems fail to handle DHTML correctly (when BACK to
+			//a DHTML page), so it is better to let the server handle cache, if any
+			final boolean cacheable = _cacheable != null ? _cacheable.booleanValue()
+					: _desktop.getDevice().isCacheable();
 			if (!cacheable) {
 				//Bug 1520444
 				exec.setResponseHeader("Pragma", "no-cache");
@@ -854,27 +914,28 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				//so HtmlPageRenderers.outLangJavaScripts generates JS's keepDesktop correctly
 			}
 			if (_hdres != null)
-				for (Object[] vals: _hdres) {
-					final String nm = (String)vals[0];
+				for (Object[] vals : _hdres) {
+					final String nm = (String) vals[0];
 					final Object val = vals[1];
-					final boolean add = ((Boolean)vals[2]).booleanValue();
+					final boolean add = ((Boolean) vals[2]).booleanValue();
 					if (val instanceof Date) {
-						if (add) exec.addResponseHeader(nm, (Date)val);
-						else exec.setResponseHeader(nm, (Date)val);
+						if (add)
+							exec.addResponseHeader(nm, (Date) val);
+						else
+							exec.setResponseHeader(nm, (Date) val);
 					} else {
-						if (add) exec.addResponseHeader(nm, (String)val);
-						else exec.setResponseHeader(nm, (String)val);
+						if (add)
+							exec.addResponseHeader(nm, (String) val);
+						else
+							exec.setResponseHeader(nm, (String) val);
 					}
 				}
 		}
 
-		final PageRenderer renderer = (PageRenderer)
-			exec.getAttribute(Attributes.PAGE_RENDERER);
-		final Object oldrendering =
-			exec.setAttribute(Attributes.PAGE_RENDERING, Boolean.TRUE);
+		final PageRenderer renderer = (PageRenderer) exec.getAttribute(Attributes.PAGE_RENDERER);
+		final Object oldrendering = exec.setAttribute(Attributes.PAGE_RENDERING, Boolean.TRUE);
 		try {
-			(renderer != null ? renderer: _langdef.getPageRenderer())
-				.render(this, out);
+			(renderer != null ? renderer : _langdef.getPageRenderer()).render(this, out);
 		} finally {
 			if (oldrendering != null)
 				exec.setAttribute(Attributes.PAGE_RENDERING, oldrendering);
@@ -882,18 +943,20 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				exec.removeAttribute(Attributes.PAGE_RENDERING);
 		}
 	}
+
 	private static Boolean _ie7compat;
 	private static Boolean _ieAutoCompat;
+
 	private static boolean shallIE7Compatible() {
 		if (_ie7compat == null)
-			_ie7compat = Boolean.valueOf("true".equals(
-				Library.getProperty("org.zkoss.zk.ui.EmulateIE7")));
+			_ie7compat = Boolean.valueOf("true".equals(Library.getProperty("org.zkoss.zk.ui.EmulateIE7")));
 		return _ie7compat.booleanValue();
 	}
+
 	private static boolean shallDisableAutoCompatible() {
 		if (_ieAutoCompat == null)
-			_ieAutoCompat = Boolean.valueOf("true".equals(
-				Library.getProperty("org.zkoss.zk.ui.IEAutoCompatible.disabled")));
+			_ieAutoCompat = Boolean
+					.valueOf("true".equals(Library.getProperty("org.zkoss.zk.ui.IEAutoCompatible.disabled")));
 		return _ieAutoCompat.booleanValue();
 	}
 
@@ -903,16 +966,16 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Interpreter getInterpreter(String zslang) {
-		zslang = (zslang != null ? zslang: _zslang).toLowerCase(java.util.Locale.ENGLISH);
+		zslang = (zslang != null ? zslang : _zslang).toLowerCase(java.util.Locale.ENGLISH);
 		Interpreter ip = _ips.get(zslang);
 		if (ip == null) {
 			if (_desktop != null //might be null, if deserialized
-			&& !_desktop.getWebApp().getConfiguration().isZScriptEnabled())
+					&& !_desktop.getWebApp().getConfiguration().isZScriptEnabled())
 				throw new UiException("zscript is not allowed since <disable-zscript> is configured");
 
 			ip = Interpreters.newInterpreter(zslang, this);
 			_ips.put(zslang, ip);
-				//set first to avoid dead loop if script calls interpret again
+			//set first to avoid dead loop if script calls interpret again
 
 			String script = _langdef.getInitScript(zslang);
 			if (script != null) {
@@ -939,24 +1002,27 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return _ips.values();
 		return Collections.emptyList(); //just in case
 	}
+
 	public String getZScriptLanguage() {
 		return _zslang;
 	}
-	public void setZScriptLanguage(String zslang)
-	throws InterpreterNotFoundException {
+
+	public void setZScriptLanguage(String zslang) throws InterpreterNotFoundException {
 		if (!Objects.equals(zslang, _zslang)) {
 			if (!Interpreters.exists(zslang))
 				throw new InterpreterNotFoundException(zslang, MZk.NOT_FOUND, zslang);
 			_zslang = zslang;
 		}
 	}
+
 	public void addDeferredZScript(Component parent, ZScript zscript) {
 		if (zscript != null) {
 			if (_zsDeferred == null)
 				_zsDeferred = new LinkedList<Object[]>();
-			_zsDeferred.add(new Object[] {parent, zscript});
+			_zsDeferred.add(new Object[] { parent, zscript });
 		}
 	}
+
 	/** Evaluates the deferred zscript.
 	 * It is called when the interpreter is loaded
 	 */
@@ -964,7 +1030,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (_zsDeferred != null) {
 			for (Iterator<Object[]> it = _zsDeferred.iterator(); it.hasNext();) {
 				final Object[] zsInfo = it.next();
-				final ZScript zscript = (ZScript)zsInfo[1];
+				final ZScript zscript = (ZScript) zsInfo[1];
 				String targetlang = zscript.getLanguage();
 				if (targetlang == null)
 					targetlang = _zslang; //use default
@@ -972,10 +1038,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				if (targetlang.equalsIgnoreCase(zslang)) { //case insensitive
 					it.remove(); //done
 
-					final Component parent = (Component)zsInfo[0];
+					final Component parent = (Component) zsInfo[0];
 					if (parent == null || parent.getPage() == this) {
-						final Scope scope =
-							Scopes.beforeInterpret(parent != null ? (Scope)parent: this);
+						final Scope scope = Scopes.beforeInterpret(parent != null ? (Scope) parent : this);
 						try {
 							ip.interpret(zscript.getContent(this, parent), scope);
 						} finally {
@@ -989,8 +1054,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				_zsDeferred = null;
 		}
 	}
+
 	private boolean isEffective(Condition cond, Component comp) {
-		return comp != null ? cond.isEffective(comp): cond.isEffective(this);
+		return comp != null ? cond.isEffective(comp) : cond.isEffective(this);
 	}
 
 	public boolean isListenerAvailable(String evtnm) {
@@ -1000,6 +1066,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return false;
 	}
+
 	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
 	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm) {
@@ -1010,6 +1077,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return CollectionsX.emptyIterator();
 	}
+
 	public Iterable<EventListener<? extends Event>> getEventListeners(String evtnm) {
 		if (_listeners != null) {
 			final List<EventListener<? extends Event>> l = _listeners.get(evtnm);
@@ -1026,28 +1094,30 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public final Component getOwner() {
 		return _owner;
 	}
+
 	public final void setOwner(Component comp) {
 		if (_owner != null)
 			throw new IllegalStateException("owner can be set only once");
 		_owner = comp;
 		if (_owner instanceof Includer)
-			((Includer)_owner).setChildPage(this);
+			((Includer) _owner).setChildPage(this);
 	}
 
 	public void sessionWillPassivate(Desktop desktop) {
 		for (Component root = getFirstRoot(); root != null; root = root.getNextSibling())
-			((ComponentCtrl)root).sessionWillPassivate(this);
+			((ComponentCtrl) root).sessionWillPassivate(this);
 
 		willPassivate(_attrs.getAttributes().values());
 		willPassivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator<List<EventListener<? extends Event>>> it = CollectionsX.comodifiableIterator(_listeners.values());
-			it.hasNext();)
+			for (Iterator<List<EventListener<? extends Event>>> it = CollectionsX
+					.comodifiableIterator(_listeners.values()); it.hasNext();)
 				willPassivate(it.next());
 		willPassivate(_resolvers);
 		willPassivate(_mappers);
 	}
+
 	public void sessionDidActivate(Desktop desktop) {
 		_desktop = desktop;
 
@@ -1057,44 +1127,50 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 
 		for (Component root = getFirstRoot(); root != null; root = root.getNextSibling())
-			((ComponentCtrl)root).sessionDidActivate(this);
+			((ComponentCtrl) root).sessionDidActivate(this);
 
 		didActivate(_attrs.getAttributes().values());
 		didActivate(_attrs.getListeners());
 
 		if (_listeners != null)
-			for (Iterator<List<EventListener<? extends Event>>> it = CollectionsX.comodifiableIterator(_listeners.values());
-			it.hasNext();)
+			for (Iterator<List<EventListener<? extends Event>>> it = CollectionsX
+					.comodifiableIterator(_listeners.values()); it.hasNext();)
 				didActivate(it.next());
 
 		didActivate(_resolvers);
 		didActivate(_mappers);
 	}
+
 	private void willPassivate(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willPassivate(it.next());
 	}
+
 	private void willPassivate(Object o) {
 		if (o instanceof PageSerializationListener)
-			((PageActivationListener)o).willPassivate(this);
+			((PageActivationListener) o).willPassivate(this);
 	}
+
 	private void didActivate(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				didActivate(it.next());
 	}
+
 	private void didActivate(Object o) {
 		if (o instanceof PageSerializationListener)
-			((PageActivationListener)o).didActivate(this);
+			((PageActivationListener) o).didActivate(this);
 	}
 
 	public LanguageDefinition getLanguageDefinition() {
 		return _langdef;
 	}
+
 	public ComponentDefinitionMap getComponentDefinitionMap() {
 		return _compdefs;
 	}
+
 	public ComponentDefinition getComponentDefinition(String name, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(name);
 		if (!recurse || compdef != null)
@@ -1110,6 +1186,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
+
 	public ComponentDefinition getComponentDefinition(Class<? extends Component> cls, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(cls);
 		if (!recurse || compdef != null)
@@ -1125,15 +1202,17 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
+
 	public Class<? extends ExpressionFactory> getExpressionFactoryClass() {
 		return _expfcls;
 	}
+
 	public void setExpressionFactoryClass(Class<? extends ExpressionFactory> expfcls) {
 		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
-			throw new IllegalArgumentException(expfcls+" must implement "+ExpressionFactory.class);
+			throw new IllegalArgumentException(expfcls + " must implement " + ExpressionFactory.class);
 		_expfcls = expfcls;
 	}
-	
+
 	//ZK-2623: page scope template
 	public void addTemplate(String name, Template template) {
 		if (name == null)
@@ -1147,19 +1226,18 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public void removeTemplate(String name) {
 		_templates.remove(name);
 	}
-	
+
 	public Template getTemplate(String name) {
 		return _templates != null ? _templates.get(name) : null;
 	}
-	
+
 	//-- Serializable --//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
-		s.writeObject(_langdef != null ? _langdef.getName(): null);
-		s.writeObject(_owner != null ? _owner.getUuid(): null);
+		s.writeObject(_langdef != null ? _langdef.getName() : null);
+		s.writeObject(_owner != null ? _owner.getUuid() : null);
 
 		final Map<String, Object> attrs = _attrs.getAttributes();
 		willSerialize(attrs.values());
@@ -1169,7 +1247,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		Serializables.smartWrite(s, lns);
 
 		if (_listeners != null)
-			for (Map.Entry<String, List<EventListener<? extends Event>>> me: _listeners.entrySet()) {
+			for (Map.Entry<String, List<EventListener<? extends Event>>> me : _listeners.entrySet()) {
 				s.writeObject(me.getKey());
 
 				final List<EventListener<? extends Event>> ls = me.getValue();
@@ -1185,37 +1263,39 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		Serializables.smartWrite(s, _mappers);
 
 		//Handles interpreters
-		for (Map.Entry<String, Interpreter> me: _ips.entrySet()) {
+		for (Map.Entry<String, Interpreter> me : _ips.entrySet()) {
 			final Interpreter ip = me.getValue();
 			if (ip instanceof SerializableAware) {
 				s.writeObject(me.getKey()); //zslang
 
-				((SerializableAware)ip).write(s, null);
+				((SerializableAware) ip).write(s, null);
 			}
 		}
 		s.writeObject(null); //denote end-of-interpreters
 	}
+
 	private void willSerialize(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willSerialize(it.next());
 	}
+
 	private void willSerialize(Object o) {
 		if (o instanceof PageSerializationListener)
-			((PageSerializationListener)o).willSerialize(this);
+			((PageSerializationListener) o).willSerialize(this);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
 
-		final String langnm = (String)s.readObject();
+		final String langnm = (String) s.readObject();
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
 
-		_ownerUuid = (String)s.readObject();
-			//_owner is restored later when sessionDidActivate is called
+		_ownerUuid = (String) s.readObject();
+		//_owner is restored later when sessionDidActivate is called
 
 		final Map<String, Object> attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
@@ -1223,11 +1303,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		Serializables.smartRead(s, lns);
 
 		for (;;) {
-			final String evtnm = (String)s.readObject();
-			if (evtnm == null) break; //no more
+			final String evtnm = (String) s.readObject();
+			if (evtnm == null)
+				break; //no more
 
-			if (_listeners == null) _listeners = new HashMap<String, List<EventListener<? extends Event>>>();
-			final List<EventListener<? extends Event>> ls = Serializables.smartRead(s, (List<EventListener<? extends Event>>)null);
+			if (_listeners == null)
+				_listeners = new HashMap<String, List<EventListener<? extends Event>>>();
+			final List<EventListener<? extends Event>> ls = Serializables.smartRead(s,
+					(List<EventListener<? extends Event>>) null);
 			_listeners.put(evtnm, ls);
 		}
 
@@ -1236,10 +1319,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		//Handles interpreters
 		for (;;) {
-			final String zslang = (String)s.readObject();
-			if (zslang == null) break; //no more
+			final String zslang = (String) s.readObject();
+			if (zslang == null)
+				break; //no more
 
-			((SerializableAware)getInterpreter(zslang)).read(s);
+			((SerializableAware) getInterpreter(zslang)).read(s);
 		}
 
 		//didDeserialize
@@ -1248,30 +1332,30 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		didDeserialize(_resolvers);
 		didDeserialize(_mappers);
 		if (_listeners != null)
-			for (List<EventListener<? extends Event>> ls: _listeners.values())
+			for (List<EventListener<? extends Event>> ls : _listeners.values())
 				didDeserialize(ls);
 	}
+
 	private void didDeserialize(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				didDeserialize(it.next());
 	}
+
 	private void didDeserialize(Object o) {
 		if (o instanceof PageSerializationListener)
-			((PageSerializationListener)o).didDeserialize(this);
+			((PageSerializationListener) o).didDeserialize(this);
 	}
 
 	//-- Object --//
 	public String toString() {
-		return "[Page "+(_id.length() > 0 ? _id: _uuid)+']';
+		return "[Page " + (_id.length() > 0 ? _id : _uuid) + ']';
 	}
-	private class PageFuncMapper
-	implements FunctionMapper, FunctionMapperExt, java.io.Serializable {
-		public Function resolveFunction(String prefix, String name)
-		throws XelException {
+
+	private class PageFuncMapper implements FunctionMapper, FunctionMapperExt, java.io.Serializable {
+		public Function resolveFunction(String prefix, String name) throws XelException {
 			if (_mappers != null) {
-				for (Iterator<FunctionMapper> it = CollectionsX.comodifiableIterator(_mappers);
-				it.hasNext();) {
+				for (Iterator<FunctionMapper> it = CollectionsX.comodifiableIterator(_mappers); it.hasNext();) {
 					final Function f = it.next().resolveFunction(prefix, name);
 					if (f != null)
 						return f;
@@ -1279,29 +1363,27 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			}
 			return null;
 		}
+
 		public Collection<String> getClassNames() {
 			Collection<String> coll = null;
 			if (_mappers != null) {
-				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
-				it.hasNext();) {
-					final FunctionMapper mapper = (FunctionMapper)it.next();
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers); it.hasNext();) {
+					final FunctionMapper mapper = (FunctionMapper) it.next();
 					if (mapper instanceof FunctionMapperExt)
-						coll = combine(coll,
-							((FunctionMapperExt)mapper).getClassNames());
+						coll = combine(coll, ((FunctionMapperExt) mapper).getClassNames());
 				}
 			}
 			if (coll != null)
 				return coll;
 			return Collections.emptyList();
 		}
+
 		public Class resolveClass(String name) throws XelException {
 			if (_mappers != null) {
-				for (Iterator it = CollectionsX.comodifiableIterator(_mappers);
-				it.hasNext();) {
-					final FunctionMapper mapper = (FunctionMapper)it.next();
+				for (Iterator it = CollectionsX.comodifiableIterator(_mappers); it.hasNext();) {
+					final FunctionMapper mapper = (FunctionMapper) it.next();
 					if (mapper instanceof FunctionMapperExt) {
-						final Class c =
-							((FunctionMapperExt)mapper).resolveClass(name);
+						final Class c = ((FunctionMapperExt) mapper).resolveClass(name);
 						if (c != null)
 							return c;
 					}
@@ -1310,9 +1392,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return null;
 		}
 	}
+
 	private static <E> Collection<E> combine(Collection<E> first, Collection<E> second) {
-		return DualCollection.combine(
-			first != null && !first.isEmpty() ? first: null,
-			second != null && !second.isEmpty() ? second: null);
+		return DualCollection.combine(first != null && !first.isEmpty() ? first : null,
+				second != null && !second.isEmpty() ? second : null);
 	}
 }

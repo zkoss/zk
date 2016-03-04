@@ -20,11 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.zkoss.zk.ui.ext.Scope;
-
 import bsh.BshMethod;
 import bsh.NameSpace;
+import org.slf4j.Logger;
+
+import org.zkoss.zk.ui.ext.Scope;
 
 /** Serializable Namespace wrapper.
  * Used to prevent to serialize NameSpace directly.
@@ -41,48 +41,50 @@ import bsh.NameSpace;
 	/*package*/ NSWrapSR(NameSpace ns) {
 		super(ns);
 	}
+
 	public NSWrapSR() {
 	}
+
 	/** Returns the associated NameSpace. */
 	public NameSpace unwrap(Scope scope) {
 		if (_bshns == null) {
 			_bshns = BSHInterpreter.getInterpreter(scope).newNS(scope);
 			if (_vars != null) {
-				for (Map.Entry<String, Object> me: _vars.entrySet()) {
+				for (Map.Entry<String, Object> me : _vars.entrySet()) {
 					try {
 						_bshns.setVariable(me.getKey(), me.getValue(), false);
 					} catch (Throwable ex) {
-						log.warn("Ignored failure of set "+me.getKey(), ex);
+						log.warn("Ignored failure of set " + me.getKey(), ex);
 					}
 				}
 				_vars = null;
 			}
 			if (_mtds != null) {
-				for (BshMethod mtd: _mtds) {
+				for (BshMethod mtd : _mtds) {
 					try {
 						_bshns.setMethod(mtd.getName(), mtd);
 					} catch (Throwable ex) {
-						log.warn("Ignored failure of set "+mtd, ex);
+						log.warn("Ignored failure of set " + mtd, ex);
 					}
 				}
 				_mtds = null;
 			}
 			if (_clses != null) {
-				for (String name: _clses) {
+				for (String name : _clses) {
 					try {
 						_bshns.importClass(name);
 					} catch (Throwable ex) {
-						log.warn("Ignored failure of import class "+name, ex);
+						log.warn("Ignored failure of import class " + name, ex);
 					}
 				}
 				_clses = null;
 			}
 			if (_pkgs != null) {
-				for (String name: _pkgs) {
+				for (String name : _pkgs) {
 					try {
 						_bshns.importPackage(name);
 					} catch (Throwable ex) {
-						log.warn("Ignored failure of import package "+name, ex);
+						log.warn("Ignored failure of import package " + name, ex);
 					}
 				}
 				_pkgs = null;
@@ -90,8 +92,8 @@ import bsh.NameSpace;
 		}
 		return _bshns;
 	}
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws IOException {
+
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
 		s.defaultWriteObject();
 
 		s.writeBoolean(_bshns != null);
@@ -103,30 +105,38 @@ import bsh.NameSpace;
 			});
 		}
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		if (s.readBoolean()) {
 			BSHInterpreter.read(new NameSpace(null, null, "nst") {
 				public void setVariable(String name, Object value, boolean strictJava) {
-					if (_vars == null) _vars = new HashMap<String, Object>();
+					if (_vars == null)
+						_vars = new HashMap<String, Object>();
 					_vars.put(name, value);
 				}
+
 				public void setMethod(String name, BshMethod mtd) {
-					if (_mtds == null) _mtds = new LinkedList<BshMethod>();
+					if (_mtds == null)
+						_mtds = new LinkedList<BshMethod>();
 					_mtds.add(mtd);
 				}
+
 				public void importClass(String name) {
-					if (_clses == null) _clses = new LinkedList<String>();
+					if (_clses == null)
+						_clses = new LinkedList<String>();
 					_clses.add(name);
 				}
+
 				public void importPackage(String name) {
-					if (_pkgs == null) _pkgs = new LinkedList<String>();
+					if (_pkgs == null)
+						_pkgs = new LinkedList<String>();
 					_pkgs.add(name);
 				}
+
 				public void loadDefaultImports() {
-					 //to speed up the performance
+					//to speed up the performance
 				}
 			}, s);
 		}

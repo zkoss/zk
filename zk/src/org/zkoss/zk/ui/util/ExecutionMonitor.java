@@ -12,8 +12,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.event.Event;
 
 /**
@@ -39,15 +39,18 @@ public interface ExecutionMonitor {
 	 * the same time.
 	 */
 	public void executionActivate(Execution exec, Desktop desktop);
+
 	/** Called when an execution fails to activate and then being waiting
 	 * for activation.
 	 * <p>Since 5.0, the AU requests are blocked at the client if ZK is busy
 	 * for processing an AU request. Thus, this method is rarely called.
 	 */
 	public void executionWait(Execution exec, Desktop desktop);
+
 	/** Called when an activated execution completes and is deactivated.
 	 */
 	public void executionDeactivate(Execution exec, Desktop desktop);
+
 	/** Called when the activation of the given execution is aborted.
 	 *
 	 * @param t the exception causing the abort, or null if it is aborted
@@ -65,14 +68,17 @@ public interface ExecutionMonitor {
 	 * The execution can be found by {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 */
 	public void eventStart(Event event);
+
 	/** Called when the processing of the given event completes.
 	 * The execution can be found by {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 */
 	public void eventComplete(Event event);
+
 	/** Called when the processing of the given event suspends.
 	* The execution can be found by {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 */
 	public void eventSuspend(Event event);
+
 	/** Called when the processing of the given event resumes.
 	* The execution can be found by {@link org.zkoss.zk.ui.Executions#getCurrent}.
 	 */

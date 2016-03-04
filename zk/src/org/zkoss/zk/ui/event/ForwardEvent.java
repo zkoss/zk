@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class ForwardEvent extends Event {
 	private final Event _origin;
+
 	/** Constructs a forward event.
 	 *
 	 * @param origin the original event that causes this forward event.
@@ -35,17 +36,18 @@ public class ForwardEvent extends Event {
 		super(name, target);
 		_origin = origin;
 	}
+
 	/** Constructs a forward event.
 	 *
 	 * @param origin the original event that causes this forward event.
 	 * @param data the event data returned by {@link #getData}
 	 * @since 3.0.6
 	 */
-	public ForwardEvent(String name, Component target, Event origin,
-	Object data) {
+	public ForwardEvent(String name, Component target, Event origin, Object data) {
 		super(name, target, data);
 		_origin = origin;
 	}
+
 	/** Returns the original event.
 	 */
 	public Event getOrigin() {

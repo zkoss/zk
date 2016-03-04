@@ -39,6 +39,7 @@ public interface Selectable<E> {
 	 * @return the current selection.
 	 */
 	public Set<E> getSelection();
+
 	/**
 	 * Replace the current selection with the given set.
 	 * <p>If this represents a change to the
@@ -46,16 +47,18 @@ public interface Selectable<E> {
 	 * @since 6.0.0
 	 */
 	public void setSelection(Collection<? extends E> selection);
+
 	/** Returns whether an object is selected.
 	 * @since 6.0.0
 	 */
 	public boolean isSelected(Object obj);
-	
+
 	/**
 	 * Returns true if the selection is currently empty.
 	 * @since 6.0.0
 	 */
 	public boolean isSelectionEmpty();
+
 	/**
 	 * Add the specified object into selection.
 	 * <p>If this represents a change to the
@@ -66,6 +69,7 @@ public interface Selectable<E> {
 	 * @since 6.0.0
 	 */
 	public boolean addToSelection(E obj);
+
 	/**
 	 * Remove the specified object from selection.
 	 * <p>If this represents a change to the
@@ -75,6 +79,7 @@ public interface Selectable<E> {
 	 * @since 6.0.0
 	 */
 	public boolean removeFromSelection(Object obj);
+
 	/**
 	 * Change the selection to the empty set.
 	 * <p>If this represents a change to the
@@ -87,6 +92,7 @@ public interface Selectable<E> {
 	 * @since 6.0.0
 	 */
 	public void setMultiple(boolean multiple);
+
 	/**
 	 * Returns whether the current selection mode is multiple.
 	 * @see #setMultiple

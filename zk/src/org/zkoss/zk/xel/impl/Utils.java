@@ -16,15 +16,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.xel.impl;
 
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Collection;
-import java.util.List;
-import java.util.LinkedList;
 import static org.zkoss.lang.Generics.cast;
-import org.zkoss.util.Maps;
-import org.zkoss.util.CollectionsX;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.zkoss.util.CollectionsX;
+import org.zkoss.util.Maps;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.xel.Evaluator;
@@ -53,6 +54,7 @@ public class Utils {
 	 * Example: "one=first, two=${second}".
 	 */
 	public static final int MAP = 2;
+
 	/** Parses a list of expressions that is separated by comma.
 	 * For example, parseList("${a}, b, ${c}", Object.class)
 	 * will return a three-element array.
@@ -62,15 +64,14 @@ public class Utils {
 	 * or null if expr is null.
 	 * @see #parseComposite
 	 */
-	public static ExValue[] parseList(String expr, Class expcls,
-	boolean ignoreEmpty) {
+	public static ExValue[] parseList(String expr, Class expcls, boolean ignoreEmpty) {
 		if (expr == null)
 			return null;
 
 		if (expr.length() != 0) {
 			List<ExValue> dst = new LinkedList<ExValue>();
 			Collection<String> src = CollectionsX.parse(null, expr, ',', true, true);
-			for (String s: src)
+			for (String s : src)
 				if (!ignoreEmpty || s.length() > 0)
 					dst.add(new ExValue(s, expcls));
 
@@ -78,8 +79,9 @@ public class Utils {
 				return dst.toArray(new ExValue[dst.size()]);
 		}
 
-		return ignoreEmpty ? null: new ExValue[] {new ExValue(expr, expcls)};
+		return ignoreEmpty ? null : new ExValue[] { new ExValue(expr, expcls) };
 	}
+
 	/** Parses an expression which could a scalar, vector or map,
 	 * depending on the specified type.
 	 *
@@ -102,18 +104,17 @@ public class Utils {
 	 * To evaluate it, invoke {@link #evaluateComposite} by passing
 	 * the returned value as its expr argument.
 	 */
-	public static Object parseComposite(String expr, Class expcls,
-	int type) {
+	public static Object parseComposite(String expr, Class expcls, int type) {
 		if (expr == null)
 			return null;
 
 		if (type == LIST) {
 			return parseList(expr, expcls, false);
-		} else if (type == MAP) {		
+		} else if (type == MAP) {
 			Map<String, Object> dst = new LinkedHashMap<String, Object>();
 			Maps.parse(dst, expr, ',', '\'', false, true);
-			for (Map.Entry<String, Object> me: dst.entrySet()) {
-				me.setValue(new ExValue((String)me.getValue(), expcls));
+			for (Map.Entry<String, Object> me : dst.entrySet()) {
+				me.setValue(new ExValue((String) me.getValue(), expcls));
 			}
 			return dst;
 		} else {
@@ -124,46 +125,45 @@ public class Utils {
 	/** Evaluates the composite expression parsed by
 	 * {@link #parseComposite} against a component.
 	 */
-	public static
-	Object evaluateComposite(Evaluator eval, Component comp, Object expr) {
+	public static Object evaluateComposite(Evaluator eval, Component comp, Object expr) {
 		if (expr == null) {
 			return null;
 		} else if (expr instanceof ExValue) {
-			return ((ExValue)expr).getValue(eval, comp);
+			return ((ExValue) expr).getValue(eval, comp);
 		} else if (expr instanceof ExValue[]) {
-			ExValue[] src = (ExValue[])expr;
+			ExValue[] src = (ExValue[]) expr;
 			Object[] dst = new Object[src.length];
 			for (int j = 0; j < src.length; ++j)
 				dst[j] = src[j].getValue(eval, comp);
 			return dst;
 		} else {
-			Map<?, ExValue> src = cast((Map)expr);
+			Map<?, ExValue> src = cast((Map) expr);
 			Map<Object, Object> dst = new LinkedHashMap<Object, Object>(src.size());
-			for (Map.Entry<?, ExValue> me: src.entrySet()) {
+			for (Map.Entry<?, ExValue> me : src.entrySet()) {
 				dst.put(me.getKey(), me.getValue().getValue(eval, comp));
 			}
 			return dst;
 		}
 	}
+
 	/** Evaluates the composite expression parsed by
 	 * {@link #parseComposite} against a page.
 	 */
-	public static
-	Object evaluateComposite(Evaluator eval, Page page, Object expr) {
+	public static Object evaluateComposite(Evaluator eval, Page page, Object expr) {
 		if (expr == null) {
 			return null;
 		} else if (expr instanceof ExValue) {
-			return ((ExValue)expr).getValue(eval, page);
+			return ((ExValue) expr).getValue(eval, page);
 		} else if (expr instanceof ExValue[]) {
-			ExValue[] src = (ExValue[])expr;
+			ExValue[] src = (ExValue[]) expr;
 			Object[] dst = new Object[src.length];
 			for (int j = 0; j < src.length; ++j)
 				dst[j] = src[j].getValue(eval, page);
 			return dst;
 		} else {
-			Map<?, ExValue> src = cast((Map)expr);
+			Map<?, ExValue> src = cast((Map) expr);
 			Map<Object, Object> dst = new LinkedHashMap<Object, Object>(src.size());
-			for (Map.Entry<?, ExValue> me: src.entrySet()) {
+			for (Map.Entry<?, ExValue> me : src.entrySet()) {
 				dst.put(me.getKey(), me.getValue().getValue(eval, page));
 			}
 			return dst;

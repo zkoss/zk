@@ -12,8 +12,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Comparator;
 import java.lang.reflect.Array;
+import java.util.Comparator;
 
 /**
  * Compares the specified element of the array.
@@ -28,6 +28,7 @@ import java.lang.reflect.Array;
 public class ArrayComparator<E> implements Comparator<E>, java.io.Serializable {
 	private final int _index;
 	private final boolean _ascending;
+
 	/** The constructor.
 	 * @param index which index of an array to compare
 	 * @param ascending whether to sort as ascending (or descending).
@@ -36,22 +37,26 @@ public class ArrayComparator<E> implements Comparator<E>, java.io.Serializable {
 		_index = index;
 		_ascending = ascending;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public int compare(E o1, E o2) {
-		int v = ((Comparable)Array.get(getCompareObject(o1), _index)).compareTo(Array.get(getCompareObject(o2), _index));
-		return _ascending ? v: -v;
+		int v = ((Comparable) Array.get(getCompareObject(o1), _index))
+				.compareTo(Array.get(getCompareObject(o2), _index));
+		return _ascending ? v : -v;
 	}
+
 	private Object getCompareObject(Object o) {
 		if (o instanceof TreeNode)
 			return ((TreeNode) o).getData();
 		return o;
 	}
+
 	/** Returns the index of the element.
 	 */
 	public int getIndex() {
 		return _index;
 	}
+
 	/** Returns whether the sorting is ascending.
 	 */
 	public boolean isAscending() {

@@ -16,11 +16,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import javax.servlet.*;
+import javax.servlet.ServletRequestAttributeEvent;
+import javax.servlet.ServletRequestAttributeListener;
 
-import org.zkoss.web.servlet.Servlets;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 
 /**
  * Used to clean up desktops that a session owns.
@@ -30,37 +30,32 @@ import org.zkoss.zk.ui.Execution;
  * {@link HttpSessionListener23} instead.
  * @author tomyeh
  */
-public class HttpSessionListener extends HttpSessionListener23
-implements ServletRequestAttributeListener {
+public class HttpSessionListener extends HttpSessionListener23 implements ServletRequestAttributeListener {
 	// ServletRequestAttributeListener//
 	public void attributeAdded(ServletRequestAttributeEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
 			final Execution exec = Executions.getCurrent();
-			if (exec instanceof ExecutionImpl
-			&& evt.getServletRequest().equals(exec.getNativeRequest()))
-				((ExecutionImpl)exec).getScopeListeners()
-					.notifyAdded(name, evt.getValue());
+			if (exec instanceof ExecutionImpl && evt.getServletRequest().equals(exec.getNativeRequest()))
+				((ExecutionImpl) exec).getScopeListeners().notifyAdded(name, evt.getValue());
 		}
 	}
+
 	public void attributeRemoved(ServletRequestAttributeEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
 			final Execution exec = Executions.getCurrent();
-			if (exec instanceof ExecutionImpl
-			&& evt.getServletRequest().equals(exec.getNativeRequest()))
-				((ExecutionImpl)exec).getScopeListeners()
-					.notifyRemoved(name);
+			if (exec instanceof ExecutionImpl && evt.getServletRequest().equals(exec.getNativeRequest()))
+				((ExecutionImpl) exec).getScopeListeners().notifyRemoved(name);
 		}
 	}
+
 	public void attributeReplaced(ServletRequestAttributeEvent evt) {
 		final String name = evt.getName();
 		if (!shallIgnore(name)) {
 			final Execution exec = Executions.getCurrent();
-			if (exec instanceof ExecutionImpl
-			&& evt.getServletRequest().equals(exec.getNativeRequest()))
-				((ExecutionImpl)exec).getScopeListeners()
-					.notifyReplaced(name, evt.getValue());
+			if (exec instanceof ExecutionImpl && evt.getServletRequest().equals(exec.getNativeRequest()))
+				((ExecutionImpl) exec).getScopeListeners().notifyReplaced(name, evt.getValue());
 		}
 	}
 }

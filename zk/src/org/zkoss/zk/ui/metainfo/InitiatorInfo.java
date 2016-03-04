@@ -17,12 +17,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Map;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * The init directive in the ZUML page.
@@ -37,7 +38,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class InitiatorInfo extends ArgumentInfo { //directive
-//	private static final Logger log = LoggerFactory.getLogger(InitiatorInfo.class);
+	//	private static final Logger log = LoggerFactory.getLogger(InitiatorInfo.class);
 
 	/** A class, an ExValue or an Initiator. */
 	private Object _init;
@@ -54,14 +55,14 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 		checkClass(cls);
 		_init = cls;
 	}
+
 	/** Constructs with a class name and {@link #newInitiator} will
 	 * instantiate a new instance.
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 * @since 3.6.2
 	 */
-	public InitiatorInfo(String clsnm, Map<String, String> args)
-	throws ClassNotFoundException {
+	public InitiatorInfo(String clsnm, Map<String, String> args) throws ClassNotFoundException {
 		super(args);
 
 		if (clsnm == null || clsnm.length() == 0)
@@ -74,7 +75,7 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 					checkClass(cls);
 					_init = cls;
 				} catch (ClassNotFoundException ex) {
-					throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+					throw new ClassNotFoundException("Class not found: " + clsnm, ex);
 				}
 			} else { //it might depend on <?import?>
 				_init = clsnm;
@@ -83,6 +84,7 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 			_init = new ExValue(clsnm, String.class);
 		}
 	}
+
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
 	 * @since 3.6.2
@@ -96,54 +98,52 @@ public class InitiatorInfo extends ArgumentInfo { //directive
 
 	private static void checkClass(Class<?> cls) {
 		if (!Initiator.class.isAssignableFrom(cls))
-			throw new UiException(Initiator.class+" must be implemented: "+cls);
+			throw new UiException(Initiator.class + " must be implemented: " + cls);
 	}
 
 	/** Creates and returns the initiator, or null if no initiator is resolved.
 	 * Notice that {@link Initiator#doInit} was called before returned.
 	 */
-	public Initiator newInitiator(PageDefinition pgdef, Page page)
-	throws Exception {
+	public Initiator newInitiator(PageDefinition pgdef, Page page) throws Exception {
 		return newInitiator(pgdef.getEvaluator(), page);
 	}
+
 	/** Creates and returns the initiator, or null if no initiator is resolved.
 	 * Notice that {@link Initiator#doInit} was called before returned.
 	 * @since 3.6.2
 	 */
-	public Initiator newInitiator(Evaluator eval, Page page)
-	throws Exception {
+	public Initiator newInitiator(Evaluator eval, Page page) throws Exception {
 		if (_init instanceof Initiator)
-			return doInit((Initiator)_init, eval, page);
+			return doInit((Initiator) _init, eval, page);
 
 		String clsnm = null;
 		if (_init instanceof ExValue) {
-			clsnm = (String)((ExValue)_init).getValue(eval, page);
+			clsnm = (String) ((ExValue) _init).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
-//				if (log.isDebugEnabled()) log.debug("Ignore "+_init+" due to empty");
+				//				if (log.isDebugEnabled()) log.debug("Ignore "+_init+" due to empty");
 				return null; //ignore it!!
 			}
 		} else if (_init instanceof String) {
-			clsnm = (String)_init;
+			clsnm = (String) _init;
 		}
 
 		final Class<?> cls;
 		if (clsnm != null) {
 			try {
-				cls = page != null ?
-					page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+				cls = page != null ? page.resolveClass(clsnm) : Classes.forNameByThread(clsnm);
 				checkClass(cls);
 			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_init+")", ex);
+				throw new ClassNotFoundException("Class not found: " + clsnm + " (" + _init + ")", ex);
 			}
 			if (clsnm.equals(_init))
 				_init = cls; //cache it for better performance
 		} else {
-			cls = (Class<?>)_init;
+			cls = (Class<?>) _init;
 		}
-		return doInit((Initiator)cls.newInstance(), eval, page);
+		return doInit((Initiator) cls.newInstance(), eval, page);
 	}
-	private Initiator doInit(Initiator init, Evaluator eval, Page page)
-	throws Exception {
+
+	private Initiator doInit(Initiator init, Evaluator eval, Page page) throws Exception {
 		final Map<String, Object> args = resolveArguments(eval, page);
 		init.doInit(page, args);
 		return init;

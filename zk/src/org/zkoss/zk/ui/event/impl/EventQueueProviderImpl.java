@@ -12,8 +12,14 @@
 */
 package org.zkoss.zk.ui.event.impl;
 
+import static org.zkoss.lang.Generics.cast;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -28,11 +34,6 @@ import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.util.Callback;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.zkoss.lang.Generics.cast;
-
 /**
  * A simple implementation of {@link EventQueueProvider}.
  *
@@ -41,13 +42,12 @@ import static org.zkoss.lang.Generics.cast;
  */
 public class EventQueueProviderImpl implements EventQueueProvider {
 	private static final Logger log = LoggerFactory.getLogger(EventQueueProviderImpl.class);
-	
+
 	/** The attribute used to store the map of event queues.
 	 */
 	protected static final String ATTR_EVENT_QUEUES = "org.zkoss.zk.ui.event.eventQueues";
 
-	public <T extends Event>
-	EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
+	public <T extends Event> EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
 
 		final boolean bAppScope = EventQueues.APPLICATION.equals(scope);
 
@@ -57,17 +57,15 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			if (Sessions.getCurrent() == null)
 				throw new IllegalStateException("Not in an execution");
 
-			return lookup0(name,
-					bAppScope ? (Scope) WebApps.getCurrent() :
-							Sessions.getCurrent(), autoCreate);
-		} else  if (EventQueues.DESKTOP.equals(scope)) {
+			return lookup0(name, bAppScope ? (Scope) WebApps.getCurrent() : Sessions.getCurrent(), autoCreate);
+		} else if (EventQueues.DESKTOP.equals(scope)) {
 			final Execution exec = Executions.getCurrent();
 
 			if (exec == null)
 				throw new IllegalStateException("Not in an execution");
 
 			final Desktop desktop = exec.getDesktop();
-			Map<String, EventQueue<T>> eqs = cast((Map)desktop.getAttribute(ATTR_EVENT_QUEUES));
+			Map<String, EventQueue<T>> eqs = cast((Map) desktop.getAttribute(ATTR_EVENT_QUEUES));
 			if (eqs == null)
 				desktop.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue<T>>(4));
 
@@ -80,22 +78,22 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			}
 			return eq;
 		} else
-			throw new UnsupportedOperationException("Unknown scope: "+scope);
+			throw new UnsupportedOperationException("Unknown scope: " + scope);
 	}
-	public <T extends Event>
-	EventQueue<T> lookup(String name, Session sess, boolean autoCreate) {
+
+	public <T extends Event> EventQueue<T> lookup(String name, Session sess, boolean autoCreate) {
 		return lookup0(name, sess, autoCreate);
 	}
-	public <T extends Event>
-	EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate) {
+
+	public <T extends Event> EventQueue<T> lookup(String name, WebApp wapp, boolean autoCreate) {
 		return lookup0(name, wapp, autoCreate);
 	}
+
 	/** Looks up a session or application scoped event queue. */
-	private <T extends Event>
-	EventQueue<T> lookup0(String name, Scope ctxscope, boolean autoCreate) {
+	private <T extends Event> EventQueue<T> lookup0(String name, Scope ctxscope, boolean autoCreate) {
 		Map<String, EventQueue<T>> eqs;
 		synchronized (ctxscope) {
-			eqs = cast((Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES));
+			eqs = cast((Map) ctxscope.getAttribute(ATTR_EVENT_QUEUES));
 			if (eqs == null)
 				ctxscope.setAttribute(ATTR_EVENT_QUEUES, eqs = new HashMap<String, EventQueue<T>>(4));
 		}
@@ -112,6 +110,7 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 		}
 		return eq;
 	}
+
 	public boolean remove(String name, String scope) {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
@@ -125,16 +124,19 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			return remove0(name, exec.getSession());
 		return false;
 	}
+
 	public boolean remove(String name, Session sess) {
 		return remove0(name, sess);
 	}
+
 	public boolean remove(String name, WebApp wapp) {
 		return remove0(name, wapp);
 	}
+
 	private boolean remove0(String name, Scope ctxscope) {
 		Map<String, EventQueue> eqs;
 		synchronized (ctxscope) {
-			eqs = cast((Map)ctxscope.getAttribute(ATTR_EVENT_QUEUES));
+			eqs = cast((Map) ctxscope.getAttribute(ATTR_EVENT_QUEUES));
 		}
 		if (eqs != null) {
 			EventQueue eq;
@@ -143,14 +145,14 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			}
 			if (eq != null) {
 				Execution execution = Executions.getCurrent();
-				
+
 				// if the runtime is not in servlet 3.0, we use the original way to close.
 				if (execution == null || WebApps.getCurrent().getServletContext().getMajorVersion() < 3) {
 					eq.close();
 				} else {
 					// Bug ZK-2574
 					final EventQueue callbackEq = eq;
-					((ExecutionCtrl)execution).addOnDeactivate(new Callback<Object>() {
+					((ExecutionCtrl) execution).addOnDeactivate(new Callback<Object>() {
 						public void call(Object data) {
 							callbackEq.close();
 						}

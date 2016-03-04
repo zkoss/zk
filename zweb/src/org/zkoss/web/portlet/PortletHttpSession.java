@@ -16,8 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.portlet;
 
-import javax.servlet.http.HttpSession;
 import javax.portlet.PortletSession;
+import javax.servlet.http.HttpSession;
 
 /**
  * A facade of PortletSession for implementing HttpSession.
@@ -29,11 +29,13 @@ import javax.portlet.PortletSession;
  */
 public class PortletHttpSession implements HttpSession {
 	private final PortletSession _sess;
+
 	public static HttpSession getInstance(PortletSession sess) {
 		if (sess instanceof HttpSession)
-			return (HttpSession)sess;
+			return (HttpSession) sess;
 		return new PortletHttpSession(sess);
 	}
+
 	private PortletHttpSession(PortletSession sess) {
 		if (sess == null)
 			throw new IllegalArgumentException("null");
@@ -51,64 +53,80 @@ public class PortletHttpSession implements HttpSession {
 	public Object getAttribute(String name) {
 		return _sess.getAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
+
 	public java.util.Enumeration getAttributeNames() {
 		return _sess.getAttributeNames(PortletSession.APPLICATION_SCOPE);
 	}
+
 	public long getCreationTime() {
 		return _sess.getCreationTime();
 	}
+
 	public String getId() {
 		return _sess.getId();
 	}
+
 	public long getLastAccessedTime() {
 		return _sess.getLastAccessedTime();
 	}
+
 	public int getMaxInactiveInterval() {
 		return _sess.getMaxInactiveInterval();
 	}
+
 	public javax.servlet.ServletContext getServletContext() {
 		return PortletServletContext.getInstance(_sess.getPortletContext());
 	}
+
 	/**
 	 * @deprecated
 	 */
 	public javax.servlet.http.HttpSessionContext getSessionContext() {
 		return null;
 	}
+
 	/**
 	 * @deprecated
 	 */
 	public Object getValue(String name) {
 		return null;
 	}
+
 	/**
 	 * @deprecated
 	 */
 	public String[] getValueNames() {
 		return null;
 	}
+
 	public void invalidate() {
 		_sess.invalidate();
 	}
+
 	public boolean isNew() {
 		return _sess.isNew();
 	}
+
 	/**
 	 * @deprecated
 	 */
 	public void putValue(String name, Object value) {
 	}
+
 	public void removeAttribute(String name) {
 		_sess.removeAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
+
 	/**
 	 * @deprecated
 	 */
 	public void removeValue(String name) {
 	}
+
 	public void setAttribute(String name, Object value) {
 		_sess.setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
 	}
+
 	public void setMaxInactiveInterval(int interval) {
 		_sess.setMaxInactiveInterval(interval);
 	}
@@ -117,12 +135,12 @@ public class PortletHttpSession implements HttpSession {
 	public int hashCode() {
 		return _sess.hashCode();
 	}
+
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		PortletSession val =
-			o instanceof PortletSession ? (PortletSession)o:
-			o instanceof PortletHttpSession ? ((PortletHttpSession)o)._sess: null;
+		PortletSession val = o instanceof PortletSession ? (PortletSession) o
+				: o instanceof PortletHttpSession ? ((PortletHttpSession) o)._sess : null;
 		return val != null && val.equals(_sess);
 	}
 }

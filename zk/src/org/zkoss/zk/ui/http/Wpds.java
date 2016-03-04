@@ -62,19 +62,19 @@ public class Wpds {
 	 * @param lang the language to look at
 	 */
 	public static String outWidgetListJavaScript(String lang) {
-		final StringBuffer sb = new StringBuffer(4096)
-			.append("zk.wgt.WidgetInfo.register([");
+		final StringBuffer sb = new StringBuffer(4096).append("zk.wgt.WidgetInfo.register([");
 
 		boolean first = true;
-		for (Iterator it = LanguageDefinition.lookup(lang)
-		.getComponentDefinitions().iterator(); it.hasNext();) {
-			final ComponentDefinition compdef = (ComponentDefinition)it.next();
+		for (Iterator it = LanguageDefinition.lookup(lang).getComponentDefinitions().iterator(); it.hasNext();) {
+			final ComponentDefinition compdef = (ComponentDefinition) it.next();
 			for (Iterator e = compdef.getMoldNames().iterator(); e.hasNext();) {
-				final String mold = (String)e.next();
+				final String mold = (String) e.next();
 				final String wgtcls = compdef.getWidgetClass(null, mold);
 				if (wgtcls != null) {
-					if (first) first = false;
-					else sb.append(',');
+					if (first)
+						first = false;
+					else
+						sb.append(',');
 					sb.append('\'').append(wgtcls).append('\'');
 				}
 			}
@@ -85,64 +85,82 @@ public class Wpds {
 
 	/** Generates Locale-dependent strings in JavaScript syntax.
 	 */
-	public final static String outLocaleJavaScript() {
+	public static final String outLocaleJavaScript() {
 		final Locale locale = Locales.getCurrent();
 		return outNumberJavaScript(locale) + outDateJavaScript(locale);
 	}
+
+	/**
+	 * Generates Locale-dependent strings in JavaScript syntax.
+	 * @since 6.5.1
+	 */
+	public static final String outLocaleJavaScript(ServletRequest request, ServletResponse response)
+			throws IOException {
+		final StringBuffer result = new StringBuffer(4096);
+		final WebApp webApp = WebApps.getCurrent();
+		final Execution exec = new FakeExecution(webApp.getServletContext(), request, response, null, null);
+
+		//the same as AjaxDevice.reloadMessages()
+		result.append(Devices.loadJavaScript(exec, "~./js/zk/lang/msgzk*.js"));
+		result.append(Wpds.outLocaleJavaScript());
+		for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType("ajax"))
+			//WpdExtendlet.getDeviceType() also return "ajax" directly...
+			for (MessageLoader loader : langdef.getMessageLoaders())
+				loader.load(result, exec);
+
+		return result.toString();
+	}
+
 	/** Output number relevant texts.
 	 */
-	private final static String outNumberJavaScript(Locale locale) {
+	private static final String outNumberJavaScript(Locale locale) {
 		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
 		final StringBuffer sb = new StringBuffer(128);
-		appendAssignJavaScript(
-			sb, "zk.GROUPING", symbols.getGroupingSeparator());
-		appendAssignJavaScript(
-			sb, "zk.DECIMAL", symbols.getDecimalSeparator());
-		appendAssignJavaScript(
-			sb, "zk.PERCENT", symbols.getPercent());
-		appendAssignJavaScript(
-			sb, "zk.MINUS", symbols.getMinusSign());
-		appendAssignJavaScript(
-			sb, "zk.PER_MILL", symbols.getPerMill());
+		appendAssignJavaScript(sb, "zk.GROUPING", symbols.getGroupingSeparator());
+		appendAssignJavaScript(sb, "zk.DECIMAL", symbols.getDecimalSeparator());
+		appendAssignJavaScript(sb, "zk.PERCENT", symbols.getPercent());
+		appendAssignJavaScript(sb, "zk.MINUS", symbols.getMinusSign());
+		appendAssignJavaScript(sb, "zk.PER_MILL", symbols.getPerMill());
 		return sb.toString();
 	}
-	private final static
-	void appendAssignJavaScript(StringBuffer sb, String nm, char val) {
-		final char quot = val == '"' ? '\'': '"';
+
+	private static final void appendAssignJavaScript(StringBuffer sb, String nm, char val) {
+		final char quot = val == '"' ? '\'' : '"';
 		sb.append(nm).append('=').append(quot).append(val).append(quot).append(";\n");
 	}
+
 	/** Output date/calendar relevant labels.
 	 */
-	private final static String outDateJavaScript(Locale locale) {
+	private static final String outDateJavaScript(Locale locale) {
 		final int firstDayOfWeek = Utils.getFirstDayOfWeek();
 		final String djkey = locale + ":" + firstDayOfWeek;
 		synchronized (_datejs) {
 			final String djs = _datejs.get(djkey);
-			if (djs != null) return djs;
+			if (djs != null)
+				return djs;
 		}
 
 		String djs = getDateJavaScript(locale, firstDayOfWeek);
 		synchronized (_datejs) { //OK to race
 			//To minimize memory use, reuse the string if they are the same
 			//which is common
-			for (String val: _datejs.values()) {
+			for (String val : _datejs.values()) {
 				if (val.equals(djs))
-					djs = val; 
+					djs = val;
 			}
 			_datejs.put(djkey, djs);
 		}
 		return djs;
 	}
-	private final static String getDateJavaScript(Locale locale, int firstDayOfWeek) {
+
+	private static final String getDateJavaScript(Locale locale, int firstDayOfWeek) {
 		final StringBuffer sb = new StringBuffer(512);
 		final Calendar cal = Calendar.getInstance(locale);
 		cal.clear();
 
 		if (firstDayOfWeek < 0)
 			firstDayOfWeek = cal.getFirstDayOfWeek();
-		sb.append("zk.DOW_1ST=")
-			.append(firstDayOfWeek - Calendar.SUNDAY)
-			.append(";\n");
+		sb.append("zk.DOW_1ST=").append(firstDayOfWeek - Calendar.SUNDAY).append(";\n");
 
 		//Note: no need to df.setTimeZone(TimeZones.getCurrent()) since
 		//it is used to generate locale-dependent labels
@@ -153,16 +171,15 @@ public class Wpds {
 		for (int j = firstDayOfWeek, k = 0; k < 7; ++k) {
 			cal.set(Calendar.DAY_OF_WEEK, j);
 			sdow[k] = df.format(cal.getTime());
-			if (++j > Calendar.SATURDAY) j = Calendar.SUNDAY;
+			if (++j > Calendar.SATURDAY)
+				j = Calendar.SUNDAY;
 
 			if (zhlang) {
-				s2dow[k] = sdow[k].length() >= 3 ?
-					sdow[k].substring(2): sdow[k];
+				s2dow[k] = sdow[k].length() >= 3 ? sdow[k].substring(2) : sdow[k];
 			} else {
 				final int len = sdow[k].length();
-				final char cc  = sdow[k].charAt(len - 1);
-				s2dow[k] = cc == '.' || cc == ',' ?
-					sdow[k].substring(0, len - 1): sdow[k];
+				final char cc = sdow[k].charAt(len - 1);
+				s2dow[k] = cc == '.' || cc == ',' ? sdow[k].substring(0, len - 1) : sdow[k];
 			}
 		}
 		df = new SimpleDateFormat("G", locale);
@@ -171,18 +188,18 @@ public class Wpds {
 			sb.append("zk.ERA='").append(df.format(new java.util.Date())).append("';\n");
 		else
 			sb.append("zk.ERA=\"").append(df.format(new java.util.Date())).append("\";\n");
-		
 
 		Calendar ec = Calendar.getInstance(Locale.ENGLISH);
 		Calendar lc = Calendar.getInstance(locale);
 		sb.append("zk.YDELTA=").append(lc.get(Calendar.YEAR) - ec.get(Calendar.YEAR)).append(";\n");
-		
+
 		df = new SimpleDateFormat("EEEE", locale);
 		final String[] fdow = new String[7];
 		for (int j = firstDayOfWeek, k = 0; k < 7; ++k) {
 			cal.set(Calendar.DAY_OF_WEEK, j);
 			fdow[k] = df.format(cal.getTime());
-			if (++j > Calendar.SATURDAY) j = Calendar.SUNDAY;
+			if (++j > Calendar.SATURDAY)
+				j = Calendar.SUNDAY;
 		}
 
 		df = new SimpleDateFormat("MMM", locale);
@@ -193,12 +210,11 @@ public class Wpds {
 
 			if (zhlang) {
 				s2mon[j] = smon[0].length() >= 2 ? //remove the last char
-					smon[j].substring(0, smon[j].length() -1): smon[j];
+						smon[j].substring(0, smon[j].length() - 1) : smon[j];
 			} else {
 				final int len = smon[j].length();
-				final char cc  = smon[j].charAt(len - 1);
-				s2mon[j] = cc == '.' || cc == ',' ?
-					smon[j].substring(0, len - 1): smon[j];
+				final char cc = smon[j].charAt(len - 1);
+				s2mon[j] = cc == '.' || cc == ',' ? smon[j].substring(0, len - 1) : smon[j];
 			}
 		}
 
@@ -241,122 +257,101 @@ public class Wpds {
 		//since ZK 6.5.5
 		if ("true".equals(Library.getProperty("org.zkoss.zk.ui.processMask.enabled")))
 			sb.append("zk.processMask=true;\n");
-		
+
 		//since ZK 7.0.5
 		//since ZK 8.0.0 default is false
 		if ("true".equals(Library.getProperty("org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled", "false")))
 			sb.append("if (zk.invokeFirstRootForAfterKeyDown == undefined)zk.invokeFirstRootForAfterKeyDown=true;\n");
-			
+
 		return sb.toString();
 	}
-	private static final void appendJavaScriptArray(StringBuffer sb,
-	String varnm, String[] vals) {
+
+	private static final void appendJavaScriptArray(StringBuffer sb, String varnm, String[] vals) {
 		sb.append("zk.").append(varnm).append("=[");
 		for (int j = 0;;) {
-			sb.append('\'')
-				.append(Strings.escape(vals[j], Strings.ESCAPE_JAVASCRIPT))
-				.append('\'');
-			if (++j >= vals.length) break;
-			else sb.append(',');
+			sb.append('\'').append(Strings.escape(vals[j], Strings.ESCAPE_JAVASCRIPT)).append('\'');
+			if (++j >= vals.length)
+				break;
+			else
+				sb.append(',');
 		}
 		sb.append("];\n");
 	}
+
 	private static final CacheMap<String, String> _datejs;
+
 	static {
 		_datejs = new CacheMap<String, String>(8);
-		_datejs.setLifetime(24*60*60*1000);
+		_datejs.setLifetime(24 * 60 * 60 * 1000);
 	}
-	
-	/**
-	 * Generates Locale-dependent strings in JavaScript syntax.
-	 * @since 6.5.1
-	 */
-	public static final String outLocaleJavaScript(ServletRequest request, ServletResponse response) 
-	throws IOException {	
-		final StringBuffer result = new StringBuffer(4096);
-		final WebApp webApp = WebApps.getCurrent();
-		final Execution exec = new FakeExecution(
-			webApp.getServletContext(), request, response, null, null
-		);
 
-		//the same as AjaxDevice.reloadMessages()
-		result.append(Devices.loadJavaScript(exec, "~./js/zk/lang/msgzk*.js"));
-		result.append(Wpds.outLocaleJavaScript());
-		for (LanguageDefinition langdef : LanguageDefinition.getByDeviceType("ajax"))
-			//WpdExtendlet.getDeviceType() also return "ajax" directly...
-			for (MessageLoader loader : langdef.getMessageLoaders())
-				loader.load(result, exec);
-
-		return result.toString();
-	}
-	
-	private final static class FakeExecution extends ExecutionImpl {		
-		FakeExecution(ServletContext ctx, ServletRequest request, ServletResponse response,
-		Desktop desktop, Page creating) {
-			super(ctx, (HttpServletRequest)request, (HttpServletResponse)response, desktop, creating);
+	private static final class FakeExecution extends ExecutionImpl {
+		FakeExecution(ServletContext ctx, ServletRequest request, ServletResponse response, Desktop desktop,
+				Page creating) {
+			super(ctx, (HttpServletRequest) request, (HttpServletResponse) response, desktop, creating);
 		}
-				
+
 		//use AbstractExecution
-		 public void onActivate() {}
-		 public void onDeactivate() {}
-		
+		public void onActivate() {
+		}
+
+		public void onDeactivate() {
+		}
+
 		//use PhantomExecution		
-		 public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
+		public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls) {
 			return null;
 		}
-		
-		 public Evaluator getEvaluator(Component page, Class expfcls) {
+
+		public Evaluator getEvaluator(Component page, Class expfcls) {
 			return null;
 		}
-		
-		 public Object evaluate(Component comp, String expr, Class expectedType) {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public Object evaluate(Page page, String expr, Class expectedType) {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public void include(Writer out, String page, Map<String, ?> params, int mode)
-		throws IOException {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public void include(String page) throws IOException {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public void forward(Writer out, String page, Map<String, ?> params, int mode)
-		throws IOException {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public void forward(String page) throws IOException {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public PageDefinition getPageDefinition(String uri) {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public PageDefinition getPageDefinitionDirectly(String content, String ext) {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public PageDefinition getPageDefinitionDirectly(Document content, String ext) {
-			throw new UnsupportedOperationException();
-		}
-		
-		 public PageDefinition getPageDefinitionDirectly(Reader reader, String ext)
-		throws IOException {
+
+		public Object evaluate(Component comp, String expr, Class expectedType) {
 			throw new UnsupportedOperationException();
 		}
 
-		 public boolean addScopeListener(ScopeListener listener) {
+		public Object evaluate(Page page, String expr, Class expectedType) {
 			throw new UnsupportedOperationException();
 		}
-		
-		 public boolean removeScopeListener(ScopeListener listener) {
+
+		public void include(Writer out, String page, Map<String, ?> params, int mode) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public void include(String page) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public void forward(Writer out, String page, Map<String, ?> params, int mode) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public void forward(String page) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public PageDefinition getPageDefinition(String uri) {
+			throw new UnsupportedOperationException();
+		}
+
+		public PageDefinition getPageDefinitionDirectly(String content, String ext) {
+			throw new UnsupportedOperationException();
+		}
+
+		public PageDefinition getPageDefinitionDirectly(Document content, String ext) {
+			throw new UnsupportedOperationException();
+		}
+
+		public PageDefinition getPageDefinitionDirectly(Reader reader, String ext) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean addScopeListener(ScopeListener listener) {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean removeScopeListener(ScopeListener listener) {
 			throw new UnsupportedOperationException();
 		}
 	}

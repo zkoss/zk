@@ -5,6 +5,7 @@ import org.python.core.PyObject;
 import org.python.core.PyStringMap;
 import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
+
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.ui.Page;
 
@@ -30,7 +31,7 @@ public class JythonInterpreter extends GenericInterpreter {
 		super.init(owner, zslang);
 		if (System.getProperty("python.home") == null)
 			System.setProperty("python.home", System.getProperty("java.io.tmpdir"));
-		
+
 		PySystemState.initialize();
 		PySystemState.add_extdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/lib"), true);
 		PySystemState.add_classdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/classes"));
@@ -51,12 +52,14 @@ public class JythonInterpreter extends GenericInterpreter {
 		//Bug 2208873: Don't use _ip.get(String, Object) since it
 		//doesn't handle null well
 		PyObject val = _ip.get(name);
-		return val != null ? Py.tojava(val, Object.class): null;
+		return val != null ? Py.tojava(val, Object.class) : null;
 	}
 
 	protected void set(String name, Object value) {
-		if (value == null) _ip.set(name, (PyObject)null);
-		else _ip.set(name, value);
+		if (value == null)
+			_ip.set(name, (PyObject) null);
+		else
+			_ip.set(name, value);
 	}
 
 	protected void unset(String name) {

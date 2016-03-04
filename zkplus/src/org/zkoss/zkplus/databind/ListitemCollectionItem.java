@@ -37,8 +37,7 @@ import org.zkoss.zul.Listitem;
 			final Listitem item = (Listitem) comp;
 			return item.getListbox();
 		} else {
-			throw new UiException(
-					"Unsupported type for ListitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ListitemCollectionItem: " + comp);
 		}
 	}
 
@@ -47,8 +46,7 @@ import org.zkoss.zul.Listitem;
 			final Listbox listbox = (Listbox) comp;
 			return listbox.getModel();
 		} else {
-			throw new UiException(
-					"Unsupported type for ListitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ListitemCollectionItem: " + comp);
 		}
 	}
 
@@ -57,8 +55,7 @@ import org.zkoss.zul.Listitem;
 			final Listbox listbox = (Listbox) comp;
 			return listbox.getItemAtIndex(index);
 		} else {
-			throw new UiException(
-					"Unsupported type for ListitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ListitemCollectionItem: " + comp);
 		}
 	}
 
@@ -77,8 +74,7 @@ import org.zkoss.zul.Listitem;
 			final Listbox listbox = (Listbox) comp;
 			return listbox.getItems();
 		} else {
-			throw new UiException(
-					"Unsupported type for ListitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ListitemCollectionItem: " + comp);
 		}
 	}
 

@@ -28,18 +28,17 @@ import org.zkoss.zk.ui.Component;
  * @since 5.0.8
  */
 public class SortEvent extends Event {
-	
+
 	private final boolean _ascending;
-	
+
 	/**
 	 * Converts an AU request to a sort event.
 	 */
 	public static SortEvent getSortEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new SortEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getBoolean(data, ""));
+		return new SortEvent(request.getCommand(), request.getComponent(), AuRequests.getBoolean(data, ""));
 	}
-	
+
 	/**
 	 * Constructs a sort event.
 	 * @param ascending whether it is ascending.
@@ -48,12 +47,12 @@ public class SortEvent extends Event {
 		super(name, target);
 		_ascending = ascending;
 	}
-	
+
 	/**
 	 * Returns true if the sorting request is ascending.
 	 */
 	public final boolean isAscending() {
 		return _ascending;
 	}
-	
+
 }

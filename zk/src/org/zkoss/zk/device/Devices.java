@@ -19,21 +19,21 @@ package org.zkoss.zk.device;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.io.Files;
-
+import org.zkoss.lang.Classes;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
  * A manager of devices ({@link Device}).
@@ -42,7 +42,8 @@ import org.zkoss.zk.ui.WebApps;
  * @since 2.4.0
  */
 public class Devices {
-	private Devices() {}
+	private Devices() {
+	}
 
 	/** Map(String type, DeviceInfo info or Device device). */
 	private static final Map<String, Object> _devmap = new LinkedHashMap<String, Object>(4);
@@ -57,33 +58,33 @@ public class Devices {
 	 * @exception DeviceNotFoundException if not found.
 	 * @since 3.0.0
 	 */
-	public static final Device getDevice(String deviceType)
-	throws DeviceNotFoundException {
+	public static final Device getDevice(String deviceType) throws DeviceNotFoundException {
 		final Object o; //null, Device or DeviceInfo
 		synchronized (_devmap) {
 			o = _devmap.get(deviceType);
 		}
 
 		if (o instanceof Device)
-			return (Device)o;
+			return (Device) o;
 		if (o == null)
 			throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
 
-		final Device device = ((DeviceInfo)o).newDevice(deviceType);
+		final Device device = ((DeviceInfo) o).newDevice(deviceType);
 		final List<Device> devs = new LinkedList<Device>();
 		synchronized (_devmap) {
 			final Object old = _devmap.put(deviceType, device);
 			if (old != o)
 				_devmap.put(deviceType, old); //changed by someone else; so restore
 
-			for (Object d: _devmap.values()) {
+			for (Object d : _devmap.values()) {
 				if (d instanceof Device)
-					devs.add((Device)d);
+					devs.add((Device) d);
 			}
 		}
 		_devs = devs.toArray(new Device[devs.size()]);
 		return device;
 	}
+
 	/** Returns the device for the specified client.
 	 * It invokes {@link Device#isCompatible} to return the correct device.
 	 *If all devices returns null (means unknown), one of the devices returning
@@ -96,8 +97,7 @@ public class Devices {
 	 * @exception DeviceNotFoundException if not found.
 	 * @since 3.0.0
 	 */
-	public static final Device getDeviceByClient(String userAgent)
-	throws DeviceNotFoundException {
+	public static final Device getDeviceByClient(String userAgent) throws DeviceNotFoundException {
 		String[] devTypes;
 		synchronized (_devmap) {
 			Collection<String> c = _devmap.keySet();
@@ -123,9 +123,8 @@ public class Devices {
 			if (b != null) {
 				if (b.booleanValue())
 					return dev;
-			} else if (device == null
-			|| "ajax".equals(devTypes[j]) //ajax highest priority
-			|| "xml".equals(device.getType())) { //xml lowest priority
+			} else if (device == null || "ajax".equals(devTypes[j]) //ajax highest priority
+					|| "xml".equals(device.getType())) { //xml lowest priority
 				device = dev;
 			}
 		}
@@ -140,14 +139,48 @@ public class Devices {
 	 * @since 2.4.0
 	 */
 	public static final boolean exists(String deviceType) {
-		if (deviceType == null) return false;
+		if (deviceType == null)
+			return false;
 
 		final Object o;
 		synchronized (_devmap) {
 			o = _devmap.get(deviceType);
 		}
-		return o instanceof Device
-			|| (o != null && ((DeviceInfo)o).isValid());
+		return o instanceof Device || (o != null && ((DeviceInfo) o).isValid());
+	}
+
+	/** Adds a device based on the XML declaration.
+	 *
+	 * <pre><code>
+	&lt;device-config&gt;
+	&lt;device-type&gt;superajax&lt;/device-type&gt;
+	&lt;device-class&gt;my.MyDevice&lt;/device-class&gt;
+	&lt;unavailable-message&gt;error message&lt;/unavailable-message&gt;
+	&lt;server-push-class&gt;my.MyServerPush&lt;/server-push-class&gt;
+	&lt;/device-config&gt;
+	 * </code></pre>
+	 *
+	 * @param config the XML element called zscript-config
+	 */
+	public static final void add(Element config) {
+		//Spec: it is OK to declare an nonexistent device
+		final String deviceType = IDOMs.getRequiredElementValue(config, "device-type");
+
+		String s = config.getElementValue("device-class", true);
+		if (s != null)
+			add(deviceType, s);
+
+		s = config.getElementValue("unavailable-message", true);
+		if (s != null)
+			setUnavailableMessage(deviceType, s);
+
+		s = config.getElementValue("server-push-class", true);
+		if (s != null)
+			setServerPushClass(deviceType, s);
+
+		for (Iterator it = config.getElements("embed").iterator(); it.hasNext();) {
+			addEmbedded(deviceType, ((Element) it.next()).getText(true));
+		}
 	}
 
 	/** Adds a device type.
@@ -160,6 +193,7 @@ public class Devices {
 	public static final String add(String deviceType, String clsnm) {
 		return add0(deviceType, clsnm);
 	}
+
 	/** Adds a device type.
 	 *
 	 * @param deviceType the device type (a.k.a., the device name).
@@ -171,21 +205,19 @@ public class Devices {
 	public static final String add(String deviceType, Class cls) {
 		return add0(deviceType, cls);
 	}
+
 	private static final String add0(String deviceType, Object cls) {
-		if (deviceType == null || deviceType.length() == 0
-		|| cls == null)
+		if (deviceType == null || deviceType.length() == 0 || cls == null)
 			throw new IllegalArgumentException();
 
 		synchronized (_devmap) {
 			final Object o = _devmap.get(deviceType);
 			if (o instanceof DeviceInfo) {
-				return ((DeviceInfo)o).setDeviceClass(cls);
+				return ((DeviceInfo) o).setDeviceClass(cls);
 			} else if (o instanceof Device) {
-				final Device device = (Device)o;
+				final Device device = (Device) o;
 				_devmap.put(deviceType,
-					new DeviceInfo(cls,
-						device.getUnavailableMessage(),
-						device.getServerPushClass()));
+						new DeviceInfo(cls, device.getUnavailableMessage(), device.getServerPushClass()));
 				return device.getClass().getName();
 			} else {
 				_devmap.put(deviceType, new DeviceInfo(cls));
@@ -208,9 +240,10 @@ public class Devices {
 		synchronized (_devmap) {
 			o = _devmap.get(deviceType);
 		}
-		return o instanceof Device ? ((Device)o).getUnavailableMessage():
-			o instanceof DeviceInfo ? ((DeviceInfo)o).getUnavailableMessage(): null;
+		return o instanceof Device ? ((Device) o).getUnavailableMessage()
+				: o instanceof DeviceInfo ? ((DeviceInfo) o).getUnavailableMessage() : null;
 	}
+
 	/** Sets the unavailable message for the specified device type.
 	 *
 	 * @return the previous unavailable message if any.
@@ -227,9 +260,9 @@ public class Devices {
 		synchronized (_devmap) {
 			final Object o = _devmap.get(deviceType);
 			if (o instanceof Device) {
-				return ((Device)o).setUnavailableMessage(msg);
+				return ((Device) o).setUnavailableMessage(msg);
 			} else if (o instanceof DeviceInfo) {
-				return ((DeviceInfo)o).setUnavailableMessage(msg);
+				return ((DeviceInfo) o).setUnavailableMessage(msg);
 			} else {
 				final DeviceInfo info = new DeviceInfo();
 				_devmap.put(deviceType, info);
@@ -249,9 +282,10 @@ public class Devices {
 		synchronized (_devmap) {
 			o = _devmap.get(deviceType);
 		}
-		return o instanceof Device ? ((Device)o).getEmbedded():
-			o instanceof DeviceInfo ? ((DeviceInfo)o).getEmbedded(): null;
+		return o instanceof Device ? ((Device) o).getEmbedded()
+				: o instanceof DeviceInfo ? ((DeviceInfo) o).getEmbedded() : null;
 	}
+
 	/** Adds the content that shall be added to the output generated and
 	 * sent to the client, when rending a desktop.
 	 * What content can be embedded depends on the device.
@@ -271,9 +305,9 @@ public class Devices {
 		synchronized (_devmap) {
 			final Object o = _devmap.get(deviceType);
 			if (o instanceof Device) {
-				((Device)o).addEmbedded(content);
+				((Device) o).addEmbedded(content);
 			} else if (o instanceof DeviceInfo) {
-				((DeviceInfo)o).addEmbedded(content);
+				((DeviceInfo) o).addEmbedded(content);
 			} else {
 				final DeviceInfo info = new DeviceInfo();
 				_devmap.put(deviceType, info);
@@ -297,11 +331,12 @@ public class Devices {
 			o = _devmap.get(deviceType);
 		}
 		if (o instanceof Device) {
-			final Class cls = ((Device)o).getServerPushClass();
-			return cls != null ? cls.getName(): null;
+			final Class cls = ((Device) o).getServerPushClass();
+			return cls != null ? cls.getName() : null;
 		}
-		return o instanceof DeviceInfo ? ((DeviceInfo)o).getServerPushClassName(): null;
+		return o instanceof DeviceInfo ? ((DeviceInfo) o).getServerPushClassName() : null;
 	}
+
 	/** Sets the name of the class that implements the server-push feature.
 	 *
 	 * @param clsnm the class name that implements the server push.
@@ -312,6 +347,7 @@ public class Devices {
 	public static final String setServerPushClass(String deviceType, String clsnm) {
 		return setServerPushClass0(deviceType, clsnm);
 	}
+
 	/** Sets the class that implements the server-push feature.
 	 *
 	 * @param cls the class that implements the server push.
@@ -322,6 +358,7 @@ public class Devices {
 	public static final String setServerPushClass(String deviceType, Class cls) {
 		return setServerPushClass0(deviceType, cls);
 	}
+
 	private static final String setServerPushClass0(String deviceType, Object cls) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new IllegalArgumentException();
@@ -330,12 +367,11 @@ public class Devices {
 			synchronized (_devmap) {
 				final Object o = _devmap.get(deviceType);
 				if (o instanceof Device) {
-					final Class old = ((Device)o).setServerPushClass(
-						cls instanceof Class ? (Class)cls:
-						cls != null ? Classes.forNameByThread((String)cls): null);
-					return old != null ? old.getName(): null;
+					final Class old = ((Device) o).setServerPushClass(cls instanceof Class ? (Class) cls
+							: cls != null ? Classes.forNameByThread((String) cls) : null);
+					return old != null ? old.getName() : null;
 				} else if (o instanceof DeviceInfo) {
-					return ((DeviceInfo)o).setServerPushClass(cls);
+					return ((DeviceInfo) o).setServerPushClass(cls);
 				} else {
 					final DeviceInfo info = new DeviceInfo();
 					_devmap.put(deviceType, info);
@@ -344,7 +380,7 @@ public class Devices {
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			throw new UiException("Class not found: "+cls);
+			throw new UiException("Class not found: " + cls);
 		}
 	}
 
@@ -368,57 +404,20 @@ public class Devices {
 		return null;
 	}
 
-	/** Adds a device based on the XML declaration.
-	 *
-	 * <pre><code>
-&lt;device-config&gt;
-  &lt;device-type&gt;superajax&lt;/device-type&gt;
-  &lt;device-class&gt;my.MyDevice&lt;/device-class&gt;
-  &lt;unavailable-message&gt;error message&lt;/unavailable-message&gt;
-  &lt;server-push-class&gt;my.MyServerPush&lt;/server-push-class&gt;
-&lt;/device-config&gt;
-	 * </code></pre>
-	 *
-	 * @param config the XML element called zscript-config
-	 */
-	public static final void add(Element config) {
-		//Spec: it is OK to declare an nonexistent device
-		final String deviceType =
-			IDOMs.getRequiredElementValue(config, "device-type");
-
-		String s = config.getElementValue("device-class", true);
-		if (s != null)
-			add(deviceType, s);
-
-		s = config.getElementValue("unavailable-message", true);
-		if (s != null)
-			setUnavailableMessage(deviceType, s);
-
-		s = config.getElementValue("server-push-class", true);
-		if (s != null)
-			setServerPushClass(deviceType, s);
-
-		for (Iterator it = config.getElements("embed").iterator();
-		it.hasNext();) {
-			addEmbedded(deviceType, ((Element)it.next()).getText(true));
-		}
-	}
-	
 	/** Loads the content of a javascript file as a String.
 	 * @since 5.0.11
 	 */
-	public static String loadJavaScript(Execution exec, String path)
-	throws IOException {
+	public static String loadJavaScript(Execution exec, String path) throws IOException {
 		path = exec.locate(path);
 		//ZK-1345: use WebApps.getCurrent() instead of exec.getDesktop().getWebApp()
 		InputStream is = WebApps.getCurrent().getResourceAsStream(path);
 		if (is == null)
-			throw new UiException("Unable to load "+path);
+			throw new UiException("Unable to load " + path);
 		final byte[] bs = Files.readAll(is);
 		Files.close(is);
 		return new String(bs, "UTF-8"); //UTF-8 is assumed
 	}
-	
+
 	/** Device info.
 	 */
 	private static class DeviceInfo implements DeviceConfig {
@@ -434,59 +433,68 @@ public class Devices {
 
 		private DeviceInfo() {
 		}
+
 		private DeviceInfo(Object deviceClass) {
 			_dvcls = deviceClass;
 		}
-		private DeviceInfo(Object deviceClass, String unavailable,
-		Class spushcls) {
+
+		private DeviceInfo(Object deviceClass, String unavailable, Class spushcls) {
 			_dvcls = deviceClass;
 			_uamsg = unavailable;
 			_spushcls = spushcls;
 		}
+
 		/** Returns whether this device is valid, i.e., defined with a device class.
 		 */
 		private boolean isValid() {
 			return _dvcls != null;
 		}
+
 		/** Sets the device class.
 		 */
 		private String setDeviceClass(Object cls) {
 			final Object old = _dvcls;
 			_dvcls = cls;
-			return old instanceof Class ? ((Class)old).getName(): (String)old;
+			return old instanceof Class ? ((Class) old).getName() : (String) old;
 		}
+
 		public String getUnavailableMessage() {
 			return _uamsg;
 		}
+
 		public String setUnavailableMessage(String msg) {
 			final String old = _uamsg;
-			_uamsg = msg != null && msg.length() > 0 ? msg: null;
+			_uamsg = msg != null && msg.length() > 0 ? msg : null;
 			return old;
 		}
+
 		/**
 		 * @param cls the class name or class of the server push.
 		 */
 		public String setServerPushClass(Object cls) {
 			final Object old = _spushcls;
 			_spushcls = cls;
-			return old instanceof Class ? ((Class)old).getName(): (String)old;
+			return old instanceof Class ? ((Class) old).getName() : (String) old;
 		}
+
 		public String getServerPushClassName() {
-			return _spushcls instanceof Class ? ((Class)_spushcls).getName(): (String)_spushcls;
+			return _spushcls instanceof Class ? ((Class) _spushcls).getName() : (String) _spushcls;
 		}
+
 		public Class getServerPushClass() {
 			try {
-				return _spushcls instanceof Class ? (Class)_spushcls:
-					_spushcls != null ?
-						Classes.forNameByThread((String)_spushcls): null;
+				return _spushcls instanceof Class ? (Class) _spushcls
+						: _spushcls != null ? Classes.forNameByThread((String) _spushcls) : null;
 			} catch (ClassNotFoundException ex) {
-				throw new UiException("Class not found: "+_spushcls);
+				throw new UiException("Class not found: " + _spushcls);
 			}
 		}
+
 		public void addEmbedded(String content) {
 			if (content != null && content.length() > 0)
-				_embed = _embed != null ? _embed + '\n' + content: content;
+				_embed = _embed != null ? _embed + '\n' + content : content;
 		}
+
 		public String getEmbedded() {
 			return _embed;
 		}
@@ -500,18 +508,18 @@ public class Devices {
 			try {
 				final Class cls;
 				if (_dvcls instanceof Class) {
-					cls = (Class)_dvcls;
+					cls = (Class) _dvcls;
 				} else {
-					cls = Classes.forNameByThread((String)_dvcls);
+					cls = Classes.forNameByThread((String) _dvcls);
 					if (!Device.class.isAssignableFrom(cls))
-						throw new IllegalArgumentException(cls+" must implements "+Device.class);
+						throw new IllegalArgumentException(cls + " must implements " + Device.class);
 				}
 
-				final Device device = (Device)cls.newInstance();
+				final Device device = (Device) cls.newInstance();
 				device.init(deviceType, this);
 				return device;
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to create "+_dvcls);
+				throw UiException.Aide.wrap(ex, "Unable to create " + _dvcls);
 			}
 		}
 	}

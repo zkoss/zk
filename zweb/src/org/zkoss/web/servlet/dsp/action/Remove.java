@@ -34,30 +34,32 @@ public class Remove extends AbstractAction {
 	public int getScope() {
 		return _scope;
 	}
+
 	/** Sets the scope. */
 	public void setScope(String scope) {
 		_scope = toScope(scope);
 	}
+
 	/** Returns the attribute name. */
 	public String getVar() {
 		return _var;
 	}
+
 	/** Sets the attribute name. */
 	public void setVar(String var) {
 		_var = var;
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!isEffective())
 			return;
 		if (nested)
 			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
-				new Object[] {this, new Integer(ac.getLineNumber())});
+					new Object[] { this, new Integer(ac.getLineNumber()) });
 		if (_var == null)
 			throw new DspException(MWeb.DSP_ATTRIBUTE_REQUIRED,
-				new Object[] {this, "var", new Integer(ac.getLineNumber())});
+					new Object[] { this, "var", new Integer(ac.getLineNumber()) });
 		ac.removeAttribute(_var, _scope);
 	}
 

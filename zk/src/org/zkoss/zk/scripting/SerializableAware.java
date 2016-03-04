@@ -31,15 +31,14 @@ public interface SerializableAware {
 	 *
 	 * <p>To read back, use {@link #read}.
 	 */
-	public void write(java.io.ObjectOutputStream s, Filter filter)
-	throws java.io.IOException;
+	public void write(java.io.ObjectOutputStream s, Filter filter) throws java.io.IOException;
+
 	/** Reads the name and value of the variable from the specified input
 	 * stream.
 	 *
 	 * @see #write
 	 */
-	public void read(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException;
+	public void read(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException;
 
 	/** The filter used with {@link SerializableAware#write}.
 	 */
@@ -47,5 +46,5 @@ public interface SerializableAware {
 		/** Whether to accept the specified variable name and its value.
 		 */
 		public boolean accept(String name, Object value);
-	};
+	}
 }

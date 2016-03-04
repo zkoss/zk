@@ -22,6 +22,7 @@ import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.util.resource.Loader;
 
 /**
@@ -30,7 +31,7 @@ import org.zkoss.util.resource.Loader;
  *
  * @author tomyeh
  */
-abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
+public abstract class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	private static final Logger log = LoggerFactory.getLogger(ResourceLoader.class);
 
 	protected ResourceLoader() {
@@ -43,8 +44,8 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	 *
 	 * @param extra the extra parameter passed from {@link ResourceCaches#get}.
 	 */
-	abstract protected V parse(String path, File file, Object extra)
-	throws Exception;
+	protected abstract V parse(String path, File file, Object extra) throws Exception;
+
 	/** Parses the specified URL and returns the result which
 	 * will be stored into the cache ({@link ResourceCaches#get}).
 	 *
@@ -52,38 +53,43 @@ abstract public class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 	 *
 	 * @param extra the extra parameter passed from {@link ResourceCaches#get}.
 	 */
-	abstract protected V parse(String path, URL url, Object extra)
-	throws Exception;
+	protected abstract V parse(String path, URL url, Object extra) throws Exception;
 
 	public boolean shallCheck(ResourceInfo src, long expiredMillis) {
 		return expiredMillis > 0;
 		//FUTURE: prolong if src.url's protocol is http, https or ftp
 	}
+
 	public long getLastModified(ResourceInfo src) {
 		if (src.url != null) {
 			try {
 				final long v = src.url.openConnection().getLastModified();
-				return v != -1 ? v: 0; //not to reload (5.0.6 for better performance)
+				return v != -1 ? v : 0; //not to reload (5.0.6 for better performance)
 			} catch (Throwable ex) {
 				return -1; //reload (might be removed)
 			}
 		}
 
 		final long v = src.file.lastModified();
-		return v == -1 ? 0: //not to reload if unknown (5.0.6 for better performance)
-			v == 0 ? -1: v; //0 means nonexistent so reload
+		return v == -1 ? 0
+				: //not to reload if unknown (5.0.6 for better performance)
+				v == 0 ? -1 : v; //0 means nonexistent so reload
 	}
+
 	public V load(ResourceInfo src) throws Exception {
 		if (src.url != null)
 			return parse(src.path, src.url, src.extra);
-		
+
 		// Bug ZK-1132
-		if (!src.file.exists() && src.extra != null && ((ServletContextLocator) src.extra).getResourceAsStream(src.path) == null) {
-			if (log.isDebugEnabled()) log.debug("Not found: "+src.file);
+		if (!src.file.exists() && src.extra != null
+				&& ((ServletContextLocator) src.extra).getResourceAsStream(src.path) == null) {
+			if (log.isDebugEnabled())
+				log.debug("Not found: " + src.file);
 			return null; //File not found
 		}
 
-		if (log.isDebugEnabled()) log.debug("Loading "+src.file);
+		if (log.isDebugEnabled())
+			log.debug("Loading " + src.file);
 		try {
 			return parse(src.path, src.file, src.extra);
 		} catch (FileNotFoundException ex) {

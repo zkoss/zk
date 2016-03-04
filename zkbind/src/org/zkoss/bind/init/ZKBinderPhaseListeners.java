@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.zk.ui.util.AggregationListener;
 
@@ -41,7 +42,7 @@ public class ZKBinderPhaseListeners implements AggregationListener {
 					}
 				}
 			} catch (Exception e) {
-				_log.error("Error when initial phase listener:"+klass , e);
+				_log.error("Error when initial phase listener:" + klass, e);
 			}
 			return true;
 		}

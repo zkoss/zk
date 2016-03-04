@@ -28,9 +28,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Files;
 import org.zkoss.lang.Library;
-
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.web.servlet.Servlets;
@@ -63,35 +63,34 @@ public class DspExtendlet implements Extendlet {
 		final DspLoader loader = new DspLoader();
 		_cache = new ResourceCache<String, Interpretation>(loader, 131);
 		_cache.setMaxSize(1024);
-		_cache.setLifetime(60*60*1000); //1hr
+		_cache.setLifetime(60 * 60 * 1000); //1hr
 		final int checkPeriod = loader.getCheckPeriod();
-		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
+		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod : 60 * 60 * 1000); //1hr
 	}
+
 	public boolean getFeature(int feature) {
 		return feature == ALLOW_DIRECT_INCLUDE;
 	}
-	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path)
-	throws ServletException, IOException {
+
+	public void service(HttpServletRequest request, HttpServletResponse response, String path)
+			throws ServletException, IOException {
 		String resourceCache = Library.getProperty("org.zkoss.zk.WCS.cache");
 		if (resourceCache != null && "false".equalsIgnoreCase(resourceCache))
-			_cache.clear();		
+			_cache.clear();
 
 		final Interpretation cnt = _cache.get(path);
 		if (cnt == null) {
 			if (Servlets.isIncluded(request)) {
-				log.error("Failed to load the resource: "+path);
-					//It might be eaten, so log the error
-				throw new java.io.FileNotFoundException("Failed to load the resource: "+path);
-					//have the includer to handle it
+				log.error("Failed to load the resource: " + path);
+				//It might be eaten, so log the error
+				throw new java.io.FileNotFoundException("Failed to load the resource: " + path);
+				//have the includer to handle it
 			}
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(path));
 			return;
 		}
 
-		StringWriter sw =
-			_webctx.shallCompress(request, get2ndExtension(path)) ?
-				new StringWriter(4096): null;
+		StringWriter sw = _webctx.shallCompress(request, get2ndExtension(path)) ? new StringWriter(4096) : null;
 		cnt.interpret(new ExtendletDspContext(_webctx, request, response, path, sw));
 
 		if (sw != null) {
@@ -100,7 +99,7 @@ public class DspExtendlet implements Extendlet {
 
 			try {
 				final OutputStream os = response.getOutputStream();
-					//Call it first to ensure getWrite() is not called yet
+				//Call it first to ensure getWrite() is not called yet
 
 				String charset = response.getCharacterEncoding();
 				if (charset == null || charset.length() == 0)
@@ -108,7 +107,8 @@ public class DspExtendlet implements Extendlet {
 				byte[] data = result.getBytes(charset);
 				if (data.length > 200) {
 					byte[] bs = Https.gzip(request, response, null, data);
-					if (bs != null) data = bs; //yes, browser support compress
+					if (bs != null)
+						data = bs; //yes, browser support compress
 				}
 
 				response.setContentLength(data.length);
@@ -120,6 +120,7 @@ public class DspExtendlet implements Extendlet {
 			response.flushBuffer();
 		}
 	}
+
 	/** Returns the second extension. For example, js in xx.js.dsp.
 	 */
 	private static final String get2ndExtension(String path) {
@@ -127,7 +128,7 @@ public class DspExtendlet implements Extendlet {
 		if (j < 0 || path.indexOf('/', j + 1) >= 0)
 			return null;
 
-		int k = j > 0 ? path.lastIndexOf('.', j - 1): -1;
+		int k = j > 0 ? path.lastIndexOf('.', j - 1) : -1;
 		if (k < 0 || path.indexOf('/', k + 1) >= 0)
 			return null;
 		return path.substring(k + 1, j).toLowerCase(java.util.Locale.ENGLISH);
@@ -139,19 +140,17 @@ public class DspExtendlet implements Extendlet {
 		}
 
 		//-- super --//
-		protected Interpretation parse(InputStream is, String path, String orgpath)
-		throws Exception {
-			final String content =
-				Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
+		protected Interpretation parse(InputStream is, String path, String orgpath) throws Exception {
+			final String content = Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
 
 			String ctype = Interpreter.getContentType(path);
 			if (ctype == null)
 				ctype = ";charset=UTF-8";
 			else if (ctype.indexOf(';') < 0 && !ContentTypes.isBinary(ctype))
 				ctype += ";charset=UTF-8";
-			return new Interpreter()
-				.parse(content, ctype, null, _webctx.getLocator());
+			return new Interpreter().parse(content, ctype, null, _webctx.getLocator());
 		}
+
 		protected ExtendletContext getExtendletContext() {
 			return _webctx;
 		}

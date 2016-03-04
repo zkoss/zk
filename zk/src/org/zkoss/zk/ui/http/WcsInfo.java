@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.List;
+
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
 /**
@@ -24,6 +25,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 	/*package*/ final LanguageDefinition langdef;
 	/** A list of URI or static method. */
 	/*package*/ final Object[] items;
+
 	/*package*/ WcsInfo(String lang, List<Object> items) {
 		this.langdef = LanguageDefinition.lookup(lang);
 		this.items = items.toArray(new Object[items.size()]);

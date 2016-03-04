@@ -45,5 +45,5 @@ public interface DesktopInit {
 	 * If portlet, it is javax.portlet.RenderRequest.
 	 * @since 3.0.1
 	 */
-	public void init(Desktop desktop,  Object request) throws Exception;
+	public void init(Desktop desktop, Object request) throws Exception;
 }

@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
  *
  * @author tomyeh
  */
-abstract public class GenericRichlet implements Richlet {
+public abstract class GenericRichlet implements Richlet {
 	/** Called by the richlet container to indicate to a richlet that
 	 * the richlet is being placed into service.
 	 *
@@ -32,6 +32,7 @@ abstract public class GenericRichlet implements Richlet {
 	 */
 	public void init(RichletConfig config) {
 	}
+
 	/** Called by the richlet container to indicate to a richlet that
 	 * the richlet is being taken out of service.
 	 *
@@ -39,6 +40,7 @@ abstract public class GenericRichlet implements Richlet {
 	 */
 	public void destroy() {
 	}
+
 	/** Returns the language definition that this richlet belongs to.
 	 * Don't return null.
 	 *

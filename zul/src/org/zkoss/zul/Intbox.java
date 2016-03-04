@@ -35,6 +35,7 @@ public class Intbox extends NumberInputElement {
 	public Intbox() {
 		setCols(11);
 	}
+
 	public Intbox(int value) throws WrongValueException {
 		this();
 		setValue(new Integer(value));
@@ -45,14 +46,16 @@ public class Intbox extends NumberInputElement {
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Integer getValue() throws WrongValueException {
-		return (Integer)getTargetValue();
+		return (Integer) getTargetValue();
 	}
+
 	/** Returns the value in int. If null, zero is returned.
 	 */
 	public int intValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Integer)val).intValue(): 0;
+		return val != null ? ((Integer) val).intValue() : 0;
 	}
+
 	/** Sets the value (in Integer).
 	 * @exception WrongValueException if value is wrong
 	 */
@@ -65,30 +68,31 @@ public class Intbox extends NumberInputElement {
 	public String getZclass() {
 		return _zclass == null ? "z-intbox" : _zclass;
 	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
-		final String val = (String)vals[0];
+		final String val = (String) vals[0];
 		if (val == null || val.length() == 0)
 			return null;
 
 		try {
 			int v = Integer.parseInt(val);
-			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
+			int divscale = vals[1] != null ? ((Integer) vals[1]).intValue() : 0;
 			while (v != 0 && --divscale >= 0)
 				v /= 10;
 			return new Integer(v);
 		} catch (NumberFormatException ex) {
-			throw showCustomError(
-				new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
+			throw showCustomError(new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
+
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ?
-			value.toString(): formatNumber(value, null);
+		return value != null && getFormat() == null ? value.toString() : formatNumber(value, null);
 	}
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+
 	static {
 		_properties.put("value", new IntegerPropertyAccess() {
 			public void setValue(Component cmp, Integer value) {

@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
-import java.util.Collection;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Represents a writer that is used to send the output back to the client,
@@ -36,6 +36,7 @@ public interface AuWriter {
 	 * @since 3.6.3
 	 */
 	public void setCompress(boolean compress);
+
 	/** Initializes the writer.
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)
@@ -43,8 +44,8 @@ public interface AuWriter {
 	 * @return this object
 	 * @since 6.0.0 (the signature is simplified)
 	 */
-	public AuWriter open(Object request, Object response)
-	throws IOException;
+	public AuWriter open(Object request, Object response) throws IOException;
+
 	/** Closes the writer and flush the result to client.
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)
@@ -65,6 +66,7 @@ public interface AuWriter {
 	 * @since 5.0.4
 	 */
 	public Object complete() throws IOException;
+
 	/** Resend the content of the previous request returned by {@link #complete}.
 	 * <p>The content is usually stored to a desktop
 	 * by {@link org.zkoss.zk.ui.sys.DesktopCtrl#responseSent},
@@ -88,9 +90,11 @@ public interface AuWriter {
 	 * @since 3.5.0
 	 */
 	public void writeResponseId(int resId) throws IOException;
+
 	/** Generates the specified the response to the output.
 	 */
 	public void write(AuResponse response) throws IOException;
+
 	/** Generates a list of responses to the output.
 	 */
 	public void write(Collection<AuResponse> responses) throws IOException;

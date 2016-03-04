@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
@@ -72,7 +73,7 @@ public class Utils {
 			cwr.setDebugJS(debug);
 			final Extendlet ext = cwr.getExtendlet("wpd");
 			if (ext instanceof WpdExtendlet)
-				((WpdExtendlet)ext).setDebugJS(debug);
+				((WpdExtendlet) ext).setDebugJS(debug);
 		}
 	}
 
@@ -80,9 +81,10 @@ public class Utils {
 	 * It is the same as <code>getFirstDayOfWeek(Sessions.getCurrent())</code>.
 	 * @since 5.0.3
 	 */
-	public final static int getFirstDayOfWeek() {
+	public static final int getFirstDayOfWeek() {
 		return getFirstDayOfWeek(Sessions.getCurrent());
 	}
+
 	/** Returns the first day of the week of the given session, or -1 if no defined by the application.
 	 * It searches the following attributes and properties until found.
 	 * Notice that it doesn't look for {@link java.util.Calendar#getFirstDayOfWeek}.
@@ -94,7 +96,7 @@ public class Utils {
 	 * @param sess the session to look at. Ignored if null.
 	 * @since 5.0.3
 	 */
-	public final static int getFirstDayOfWeek(Session sess) {
+	public static final int getFirstDayOfWeek(Session sess) {
 		int firstDayOfWeek = -1;
 		try {
 			Object o = null;
@@ -103,16 +105,17 @@ public class Utils {
 				if (o == null) {
 					final Object hsess = sess.getNativeSession();
 					if (hsess instanceof HttpSession)
-						o = ((HttpSession)hsess).getServletContext().getAttribute(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
+						o = ((HttpSession) hsess).getServletContext()
+								.getAttribute(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
 				}
 			}
 			if (o == null)
 				o = Library.getProperty(Attributes.PREFERRED_FIRST_DAY_OF_WEEK);
 
 			if (o instanceof Integer)
-				firstDayOfWeek = ((Integer)o).intValue();
+				firstDayOfWeek = ((Integer) o).intValue();
 			else if (o instanceof String)
-				firstDayOfWeek = Integer.parseInt((String)o);
+				firstDayOfWeek = Integer.parseInt((String) o);
 		} catch (Throwable ex) { //ignore
 		}
 		if (firstDayOfWeek < Calendar.SUNDAY || firstDayOfWeek > Calendar.SATURDAY)
@@ -124,44 +127,41 @@ public class Utils {
 	 * @param ex the exception being throw. If null, it means the page
 	 * is not found.
 	 */
-	/*package*/ static
-	void handleError(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response,
-	String path, Throwable err) throws ServletException, IOException {
+	/*package*/ static void handleError(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			String path, Throwable err) throws ServletException, IOException {
 		if (Servlets.isIncluded(request)) {
-			final String msg =
-				err != null ?
-					Messages.get(MZk.PAGE_FAILED,
-						new Object[] {path, Exceptions.getMessage(err),
-						Exceptions.formatStackTrace(null, err, null, 6)}):
-					Messages.get(MZk.PAGE_NOT_FOUND, new Object[] {path});
+			final String msg = err != null
+					? Messages.get(MZk.PAGE_FAILED,
+							new Object[] { path, Exceptions.getMessage(err),
+									Exceptions.formatStackTrace(null, err, null, 6) })
+					: Messages.get(MZk.PAGE_NOT_FOUND, new Object[] { path });
 
 			final Map<String, String> attrs = new HashMap<String, String>();
 			attrs.put(Attributes.ALERT_TYPE, "error");
 			attrs.put(Attributes.ALERT, msg);
-			Servlets.include(ctx, request, response,
-				"~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
+			Servlets.include(ctx, request, response, "~./html/alert.dsp", attrs, Servlets.PASS_THRU_ATTR);
 		} else {
 			//If not included, let the Web container handle it
 			if (err != null) {
 				if (err instanceof ServletException)
-					throw (ServletException)err;
+					throw (ServletException) err;
 				else if (err instanceof IOException)
-					throw (IOException)err;
+					throw (IOException) err;
 				else
 					throw UiException.Aide.wrap(err);
 			}
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
 		}
 	}
+
 	/** Resets the child page of the owner, if any.
 	 */
 	/*package*/ static void resetOwner() {
 		final Execution exec = Executions.getCurrent();
 		if (exec != null) {
-			final Component comp = ((ExecutionCtrl)exec).getVisualizer().getOwner();
+			final Component comp = ((ExecutionCtrl) exec).getVisualizer().getOwner();
 			if (comp instanceof Includer)
-				((Includer)comp).setChildPage(null);
+				((Includer) comp).setChildPage(null);
 		}
 	}
 
@@ -170,8 +170,8 @@ public class Utils {
 	 */
 	/*package*/ static Page getMainPage(Desktop desktop) {
 		for (Iterator it = desktop.getPages().iterator(); it.hasNext();) {
-			final Page page = (Page)it.next();
-			if (((PageCtrl)page).getOwner() == null)
+			final Page page = (Page) it.next();
+			if (((PageCtrl) page).getOwner() == null)
 				return page;
 		}
 		return null;
@@ -184,21 +184,18 @@ public class Utils {
 	 * @exception ServletException if updateURI is incorrect.
 	 * @since 5.0.5
 	 */
-	public static final String checkUpdateURI(String updateURI, String info)
-	throws ServletException {
-		if (updateURI == null
-		|| (updateURI = updateURI.trim()).length() == 0
-		|| updateURI.charAt(0) != '/')
-			throw new ServletException(info+" must be specified and starts with /");
+	public static final String checkUpdateURI(String updateURI, String info) throws ServletException {
+		if (updateURI == null || (updateURI = updateURI.trim()).length() == 0 || updateURI.charAt(0) != '/')
+			throw new ServletException(info + " must be specified and starts with /");
 		if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
-			throw new ServletException(info+" cannot contain ';' or '?'");
-			//Jetty will encode URL by appending ';jsess..' and we have to
-			//remove it under certain situations, so not allow it
+			throw new ServletException(info + " cannot contain ';' or '?'");
+		//Jetty will encode URL by appending ';jsess..' and we have to
+		//remove it under certain situations, so not allow it
 		if (updateURI.charAt(updateURI.length() - 1) == '\\') {
 			if (updateURI.length() == 1)
-				throw new ServletException(info+" cannot contain only '/'");
+				throw new ServletException(info + " cannot contain only '/'");
 			updateURI = updateURI.substring(0, updateURI.length() - 1);
-				//remove the trailing '\\' if any
+			//remove the trailing '\\' if any
 		}
 		return updateURI;
 	}

@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -41,6 +40,7 @@ public class Div extends XulElement {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the alignment: one of left, center, right, justify,
 	 * @deprecated as of release 6.0.0, use CSS instead.
 	 */
@@ -53,10 +53,9 @@ public class Div extends XulElement {
 			smartUpdate("align", _align);
 		}
 	}
-	
+
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "align", _align);

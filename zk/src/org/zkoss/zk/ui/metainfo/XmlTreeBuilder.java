@@ -29,11 +29,11 @@ public class XmlTreeBuilder implements TreeBuilder {
 		return new SAXBuilder(true, false, true).build(file);
 	}
 
-	public Document parse(URL url) throws Exception  {
+	public Document parse(URL url) throws Exception {
 		return new SAXBuilder(true, false, true).build(url);
 	}
-	
-	public Document parse(Reader reader) throws Exception  {
+
+	public Document parse(Reader reader) throws Exception {
 		return new SAXBuilder(true, false, true).build(reader);
 	}
 

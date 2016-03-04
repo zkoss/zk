@@ -14,9 +14,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-
 /**
  * An event queue.
  * An event queue is a many-to-many 'channel' to publish events and to subscribe
@@ -93,14 +90,14 @@ public interface EventQueue<T extends Event> {
 	 * @see #subscribe(EventListener,boolean)
 	 */
 	public void subscribe(EventListener<T> listener);
-	
+
 	/** Subscribes a synchronous or asynchronous listener to this event queue.
 	 * A synchronous listener works the same as a normal event listener,
 	 * while an asynchronous listener is executed asynchronously in an working thread.
 	 * Refer <a href="#async_sync">here</a> for details.
 	 * <p>Here is an example,
-<pre><code>
-&lt;window title="long operation" border="normal">
+	<pre><code>
+	&lt;window title="long operation" border="normal">
 	&lt;zscript>
 	void print(String msg) {
 		new Label(msg).setParent(inf);
@@ -108,34 +105,34 @@ public interface EventQueue<T extends Event> {
 	&lt;/zscript>
 	&lt;button label="async long op">
 		&lt;attribute name="onClick">&lt;![CDATA[
-   if (EventQueues.exists("longop")) {
-     print("It is busy. Please wait");
-     return; //busy
-   }
-
-   EventQueue eq = EventQueues.lookup("longop"); //create a queue
-   String result;
-
-   //subscribe async listener to handle long operation
-   eq.subscribe(new EventListener() {
-     public void onEvent(Event evt) { //asynchronous
-       org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
-       result = "success"; //store the result
-     }
-   }, new EventListener() { //callback
-     public void onEvent(Event evt) {
-       print(result); //show the result to the browser
-   	   EventQueues.remove("longop");
-   	 }
-   });
-
-   print("Wait for 3 seconds");
-   eq.publish(new Event("whatever")); //kick off the long operation
-  		]]>&lt;/attribute>
- 	&lt;/button>
- 	&lt;vbox id="inf"/>
-&lt;/window>
-</code></pre>
+	if (EventQueues.exists("longop")) {
+	 print("It is busy. Please wait");
+	 return; //busy
+	}
+	
+	EventQueue eq = EventQueues.lookup("longop"); //create a queue
+	String result;
+	
+	//subscribe async listener to handle long operation
+	eq.subscribe(new EventListener() {
+	 public void onEvent(Event evt) { //asynchronous
+	   org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
+	   result = "success"; //store the result
+	 }
+	}, new EventListener() { //callback
+	 public void onEvent(Event evt) {
+	   print(result); //show the result to the browser
+	   EventQueues.remove("longop");
+	 }
+	});
+	
+	print("Wait for 3 seconds");
+	eq.publish(new Event("whatever")); //kick off the long operation
+		]]>&lt;/attribute>
+	&lt;/button>
+	&lt;vbox id="inf"/>
+	&lt;/window>
+	</code></pre>
 	 *
 	 * <p>Notice that, though an asynchronous listener cannot access
 	 * the desktop and has no current execution, it can invoke
@@ -169,51 +166,51 @@ public interface EventQueue<T extends Event> {
 	 * with each other with events.
 	 * <p>There is another way to do the same job, callback, refer
 	 * to {@link #subscribe(EventListener,EventListener)} for example.
- 	 * <pre><code>
-&lt;window title="long operation" border="normal"&gt;
-  &lt;zscript&gt;
-  void print(String msg) {
-    new Label(msg).setParent(inf);
-  }
-  &lt;/zscript&gt;
-  &lt;button label="async long op"&gt;
-    &lt;attribute name="onClick"&gt;&lt;![CDATA[
-   if (EventQueues.exists("longop")) {
-     print("It is busy. Please wait");
-     return; //busy
-   }
-
-   EventQueue eq = EventQueues.lookup("longop"); //create a queue
-   String result;
-
-   //subscribe async listener to handle long operation
-   eq.subscribe(new EventListener() {
-     public void onEvent(Event evt) {
-       if ("doLongOp".equals(evt.getName())) {
-         org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
-         result = "success"; //store the result
-         eq.publish(new Event("endLongOp")); //notify it is done
-       }
-     }
-   }, true); //asynchronous
-
-   //subscribe a normal listener to show the result to the browser
-   eq.subscribe(new EventListener() {
-     public void onEvent(Event evt) {
-       if ("endLongOp".equals(evt.getName())) {
-   	     print(result); //show the result to the browser
-   	     EventQueues.remove("longop");
-   	   }
-   	 }
-   }); //synchronous
-
-   print("Wait for 3 seconds");
-   eq.publish(new Event("doLongOp")); //kick off the long operation
-    ]]&gt;&lt;/attribute&gt;
-  &lt;/button&gt;
-  &lt;vbox id="inf"/&gt;
-&lt;/window&gt;
-</code></pre>
+	 * <pre><code>
+	&lt;window title="long operation" border="normal"&gt;
+	&lt;zscript&gt;
+	void print(String msg) {
+	new Label(msg).setParent(inf);
+	}
+	&lt;/zscript&gt;
+	&lt;button label="async long op"&gt;
+	&lt;attribute name="onClick"&gt;&lt;![CDATA[
+	if (EventQueues.exists("longop")) {
+	 print("It is busy. Please wait");
+	 return; //busy
+	}
+	
+	EventQueue eq = EventQueues.lookup("longop"); //create a queue
+	String result;
+	
+	//subscribe async listener to handle long operation
+	eq.subscribe(new EventListener() {
+	 public void onEvent(Event evt) {
+	   if ("doLongOp".equals(evt.getName())) {
+	     org.zkoss.lang.Threads.sleep(3000); //simulate a long operation
+	     result = "success"; //store the result
+	     eq.publish(new Event("endLongOp")); //notify it is done
+	   }
+	 }
+	}, true); //asynchronous
+	
+	//subscribe a normal listener to show the result to the browser
+	eq.subscribe(new EventListener() {
+	 public void onEvent(Event evt) {
+	   if ("endLongOp".equals(evt.getName())) {
+	     print(result); //show the result to the browser
+	     EventQueues.remove("longop");
+	   }
+	 }
+	}); //synchronous
+	
+	print("Wait for 3 seconds");
+	eq.publish(new Event("doLongOp")); //kick off the long operation
+	]]&gt;&lt;/attribute&gt;
+	&lt;/button&gt;
+	&lt;vbox id="inf"/&gt;
+	&lt;/window&gt;
+	</code></pre>
 	 * <p>The asynchronous event listener requires Server Push
 	 * ({@link org.zkoss.zk.ui.sys.ServerPush}).
 	 * <p>If you want to show a busy message to cover a portion of the desktop,
@@ -234,6 +231,7 @@ public interface EventQueue<T extends Event> {
 	 * @see #subscribe(EventListener, EventListener)
 	 */
 	public void subscribe(EventListener<T> listener, boolean async);
+
 	/** Unsubscribes a listener from the queue.
 	 *
 	 * <p>Note: this method must be called within an activated execution,
@@ -255,12 +253,14 @@ public interface EventQueue<T extends Event> {
 	 * session-level event queue.
 	 */
 	public boolean isSubscribed(EventListener<T> listener);
+
 	/** Closes the event queue.
 	 * After closed, application cannot access any of its method.
 	 * <p>Don't call this method directly. It is called only internally.
 	 * Rather, use {@link EventQueues#remove} instead.
 	 */
 	public void close();
+
 	/** Returns whether it is closed.
 	 * @since 5.0.6
 	 */

@@ -29,10 +29,10 @@ import org.zkoss.zk.ui.UiException;
  * @author henrichen
  * @since 6.0.0
  */
-public class FormatedDateConverter implements Converter,Serializable {
-	
+public class FormatedDateConverter implements Converter, Serializable {
+
 	private static final long serialVersionUID = 1463169907348730644L;
-	
+
 	/**
 	 * Convert Date to String.
 	 * @param val date to be converted
@@ -43,11 +43,12 @@ public class FormatedDateConverter implements Converter,Serializable {
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		//user sets format in annotation of binding or args when calling binder.addPropertyBinding()  
 		final String format = (String) ctx.getConverterArg("format");
-		if(format==null) throw new NullPointerException("format attribute not found");
+		if (format == null)
+			throw new NullPointerException("format attribute not found");
 		final Date date = (Date) val;
 		return date == null ? null : getLocalizedSimpleDateFormat(format).format(date);
 	}
-	
+
 	/**
 	 * Convert String to Date.
 	 * @param val date in string form
@@ -57,7 +58,8 @@ public class FormatedDateConverter implements Converter,Serializable {
 	 */
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 		final String format = (String) ctx.getConverterArg("format");
-		if(format==null) throw new NullPointerException("format attribute not found");
+		if (format == null)
+			throw new NullPointerException("format attribute not found");
 		final String date = (String) val;
 		try {
 			return date == null ? null : getLocalizedSimpleDateFormat(format).parse(date);
@@ -65,8 +67,8 @@ public class FormatedDateConverter implements Converter,Serializable {
 			throw UiException.Aide.wrap(e);
 		}
 	}
-	
-	private static SimpleDateFormat getLocalizedSimpleDateFormat(String formatPtn){
+
+	private static SimpleDateFormat getLocalizedSimpleDateFormat(String formatPtn) {
 		SimpleDateFormat sdf = new SimpleDateFormat(formatPtn, Locales.getCurrent());
 		sdf.setTimeZone(TimeZones.getCurrent());
 		return sdf;

@@ -28,5 +28,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotifyCommand {
 	String[] value() default {};
-	String onChange() default "null";// cannot put empty string here.
+
+	String onChange() default "null"; // cannot put empty string here.
 }

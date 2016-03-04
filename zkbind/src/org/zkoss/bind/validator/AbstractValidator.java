@@ -13,6 +13,7 @@ package org.zkoss.bind.validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -20,7 +21,6 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.bind.sys.ValidationMessages;
-
 
 /**
  * A abstract validator the handling validation message
@@ -31,15 +31,15 @@ import org.zkoss.bind.sys.ValidationMessages;
  */
 public abstract class AbstractValidator implements Validator {
 
-	private final static Logger log = LoggerFactory.getLogger(AbstractValidator.class); 
-	
+	private static final Logger log = LoggerFactory.getLogger(AbstractValidator.class);
+
 	/**
 	 * add a message to validation context, when you call this method, it also set context invalid.
 	 * @param ctx the validation context
 	 * @param message the message of validation
 	 */
-	protected void addInvalidMessage(ValidationContext ctx,String message) {
-		addInvalidMessages(ctx, null, new String[]{message});
+	protected void addInvalidMessage(ValidationContext ctx, String message) {
+		addInvalidMessages(ctx, null, new String[] { message });
 	}
 
 	/**
@@ -49,7 +49,7 @@ public abstract class AbstractValidator implements Validator {
 	 * @param message the message of validation
 	 */
 	protected void addInvalidMessage(ValidationContext ctx, String key, String message) {
-		addInvalidMessages(ctx, key, new String[]{message});
+		addInvalidMessages(ctx, key, new String[] { message });
 	}
 
 	/**
@@ -61,7 +61,7 @@ public abstract class AbstractValidator implements Validator {
 	 * @since 8.0.1
 	 */
 	protected void addInvalidMessage(ValidationContext ctx, String key, String message, Object value) {
-		addInvalidMessages(ctx, key, new String[]{message}, value);
+		addInvalidMessages(ctx, key, new String[] { message }, value);
 	}
 
 	/**
@@ -70,8 +70,9 @@ public abstract class AbstractValidator implements Validator {
 	 * @param messages messages of validation
 	 */
 	protected void addInvalidMessages(ValidationContext ctx, String[] messages) {
-		addInvalidMessages(ctx,null,messages);
+		addInvalidMessages(ctx, null, messages);
 	}
+
 	/**
 	 * add multiple messages to validation context, when you call this method, it also sets the context invalid.
 	 * @param ctx the validation context
@@ -92,24 +93,23 @@ public abstract class AbstractValidator implements Validator {
 	 */
 	protected void addInvalidMessages(ValidationContext ctx, String key, String[] messages, Object value) {
 		ctx.setInvalid();
-		ValidationMessages vmsgs = ((BinderCtrl)ctx.getBindContext().getBinder()).getValidationMessages();
-		if(vmsgs!=null){
+		ValidationMessages vmsgs = ((BinderCtrl) ctx.getBindContext().getBinder()).getValidationMessages();
+		if (vmsgs != null) {
 			Binding binding = ctx.getBindContext().getBinding();
 			String attr = null;
-			if(binding instanceof PropertyBinding){
-				attr = ((PropertyBinding)binding).getFieldName();
-			}else if(binding instanceof FormBinding){
-				attr = ((FormBinding)binding).getFormId();
-			}else{
+			if (binding instanceof PropertyBinding) {
+				attr = ((PropertyBinding) binding).getFieldName();
+			} else if (binding instanceof FormBinding) {
+				attr = ((FormBinding) binding).getFormId();
+			} else {
 				//ignore children binding;
 			}
-			if(attr!=null){
-				vmsgs.addMessages(ctx.getBindContext().getComponent(),attr, key, messages, value);
+			if (attr != null) {
+				vmsgs.addMessages(ctx.getBindContext().getComponent(), attr, key, messages, value);
 			}
-		}else{
-			log.warn("ValidationMessages not found on binder "+ctx.getBindContext().getBinder() + ", please init it");
+		} else {
+			log.warn("ValidationMessages not found on binder " + ctx.getBindContext().getBinder() + ", please init it");
 		}
 	}
-	
-	
+
 }

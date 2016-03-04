@@ -33,12 +33,12 @@ public class Columns extends HeadersElement {
 	private Object _value;
 	private boolean _columnshide = true;
 	private boolean _columnsgroup = true;
-	
+
 	/** Returns the grid that it belongs to.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Grid getGrid() {
-		return (Grid)getParent();
+		return (Grid) getParent();
 	}
 
 	/**
@@ -52,6 +52,7 @@ public class Columns extends HeadersElement {
 			smartUpdate("columnshide", _columnshide);
 		}
 	}
+
 	/**
 	 * Returns whether to enable hiding of columns with the header context menu.
 	 * <p>Default: true.
@@ -60,6 +61,7 @@ public class Columns extends HeadersElement {
 	public boolean isColumnshide() {
 		return _columnshide;
 	}
+
 	/**
 	 * Sets whether to enable grouping of columns with the header context menu.
 	 * <p>Note that it is only applied when {@link #getMenupopup()} is auto. 
@@ -71,6 +73,7 @@ public class Columns extends HeadersElement {
 			smartUpdate("columnsgroup", _columnsgroup);
 		}
 	}
+
 	/**
 	 * Returns whether to enable grouping of columns with the header context menu.
 	 * <p>Default: true.
@@ -89,6 +92,7 @@ public class Columns extends HeadersElement {
 	public String getMenupopup() {
 		return _mpop;
 	}
+
 	/** Sets the ID of the menupopup ({@link Menupopup}) that should appear
 	 * when the user clicks on the element of each column.
 	 *
@@ -119,15 +123,14 @@ public class Columns extends HeadersElement {
 			smartUpdate("menupopup", mpop);
 		}
 	}
-	
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (!_columnsgroup) 
+
+		if (!_columnsgroup)
 			renderer.render("columnsgroup", false);
-		if (!_columnshide) 
+		if (!_columnshide)
 			renderer.render("columnshide", false);
 		if (!"none".equals(_mpop))
 			renderer.render("menupopup", _mpop);
@@ -141,8 +144,9 @@ public class Columns extends HeadersElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -152,32 +156,35 @@ public class Columns extends HeadersElement {
 	public <T> void setValue(T value) {
 		_value = value;
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setHflex(String flex) {
 	}
-	
+
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-columns" : _zclass;
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
-			throw new UiException("Unsupported parent for columns: "+parent);
+			throw new UiException("Unsupported parent for columns: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Column))
-			throw new UiException("Unsupported child for columns: "+child);
+			throw new UiException("Unsupported child for columns: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
 }

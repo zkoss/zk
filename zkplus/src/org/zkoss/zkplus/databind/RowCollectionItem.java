@@ -41,8 +41,7 @@ import org.zkoss.zul.Row;
 			final Row row = (Row) comp;
 			return row.getGrid();
 		} else {
-			throw new UiException("Unsupported type for RowCollectionItem: "
-					+ comp);
+			throw new UiException("Unsupported type for RowCollectionItem: " + comp);
 		}
 	}
 
@@ -51,8 +50,7 @@ import org.zkoss.zul.Row;
 			final Grid grid = (Grid) comp;
 			return grid.getModel();
 		} else {
-			throw new UiException("Unsupported type for RowCollectionItem: "
-					+ comp);
+			throw new UiException("Unsupported type for RowCollectionItem: " + comp);
 		}
 	}
 
@@ -65,14 +63,13 @@ import org.zkoss.zul.Row;
 			}
 		}
 	}
-	
+
 	public List getItems(Component comp) {
 		if (comp instanceof Grid) {
 			final Grid grid = (Grid) comp;
 			return grid.getRows().getChildren();
 		} else {
-			throw new UiException("Unsupported type for RowCollectionItem: "
-					+ comp);
+			throw new UiException("Unsupported type for RowCollectionItem: " + comp);
 		}
 	}
 }

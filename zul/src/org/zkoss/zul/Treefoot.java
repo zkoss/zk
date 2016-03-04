@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -33,14 +32,16 @@ public class Treefoot extends XulElement {
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tree getTree() {
-		return (Tree)getParent();
+		return (Tree) getParent();
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
@@ -52,14 +53,16 @@ public class Treefoot extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-treefoot" : _zclass;
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tree))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Treefooter))
-			throw new UiException("Unsupported child for treefoot: "+child);
+			throw new UiException("Unsupported child for treefoot: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
 }

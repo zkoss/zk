@@ -16,37 +16,36 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Collections;
 import java.util.Collection;
-import java.util.Map;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
+import org.zkoss.html.HTMLs;
 import org.zkoss.lang.ClassResolver;
 import org.zkoss.lang.ImportedClassResolver;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.Function;
-import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.taglib.Taglibs;
-import org.zkoss.xel.taglib.Taglib;
+import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.taglib.FunctionDefinition;
-import org.zkoss.html.HTMLs;
-
+import org.zkoss.xel.taglib.Taglib;
+import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Initiator;
-import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.PageConfig;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.EvaluatorRef;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
-import org.zkoss.zk.xel.EvaluatorRef;
 
 /**
  * A page definition.
@@ -105,7 +104,7 @@ public class PageDefinition implements NodeInfo {
 	private Boolean _cacheable;
 	private Boolean _autoTimeout;
 	private boolean _complete;
-	
+
 	//ZK-2623: page scope template
 	private Map<String, TemplateInfo> _templatesInfo;
 
@@ -122,9 +121,9 @@ public class PageDefinition implements NodeInfo {
 
 		_langdef = langdef;
 		_locator = locator;
-		_compdefs = new ComponentDefinitionMap(
-			_langdef.getComponentDefinitionMap().isCaseInsensitive());
+		_compdefs = new ComponentDefinitionMap(_langdef.getComponentDefinitionMap().isCaseInsensitive());
 	}
+
 	/** Constructor.
 	 * @param langdef the default language which is used if no namespace
 	 * is specified. Note: a page might have components from different
@@ -133,8 +132,7 @@ public class PageDefinition implements NodeInfo {
 	 * @param title the title. See {@link #setTitle}.
 	 * @param style the CSS style. See {@link #setStyle}.
 	 */
-	public PageDefinition(LanguageDefinition langdef, String id, String title,
-	String style, Locator locator) {
+	public PageDefinition(LanguageDefinition langdef, String id, String title, String style, Locator locator) {
 		this(langdef, locator);
 		setId(id);
 		setTitle(title);
@@ -161,6 +159,7 @@ public class PageDefinition implements NodeInfo {
 	public String getZScriptLanguage() {
 		return _zslang;
 	}
+
 	/** Sets the default scripting language which is assumed when
 	 * a zscript element doesn't specify any language.
 	 *
@@ -179,6 +178,7 @@ public class PageDefinition implements NodeInfo {
 	public String getId() {
 		return _id;
 	}
+
 	/** Sets the identifier that will be assigned to pages created from this
 	 * definition.
 	 * @param id the identifier. It might contain EL expressions.
@@ -186,9 +186,9 @@ public class PageDefinition implements NodeInfo {
 	 * If not empty, ID (after evaluated) must be unique in the same request.
 	 */
 	public void setId(String id) {
-		_id = id != null && id.length() > 0 ? id: null;
+		_id = id != null && id.length() > 0 ? id : null;
 	}
-		
+
 	/** Returns the title that will be assigned to pages created from
 	 * this definition, or null if no title is assigned at the beginning.
 	 * <p>Note: the returned value might contain EL expressions.
@@ -196,12 +196,13 @@ public class PageDefinition implements NodeInfo {
 	public String getTitle() {
 		return _title;
 	}
+
 	/** Sets the title that will be assigned to pages created from
 	 * this definition, or null if no title is assigned at the beginning.
 	 * @param title the title. If empty, null is assumed.
 	 */
 	public void setTitle(String title) {
-		_title = title != null && title.length() > 0 ? title: null;
+		_title = title != null && title.length() > 0 ? title : null;
 	}
 
 	/** Returns the CSS style that will be assigned to pages created from
@@ -211,14 +212,15 @@ public class PageDefinition implements NodeInfo {
 	public String getStyle() {
 		return _style;
 	}
+
 	/** Sets the CSS style that will be assigned to pages created from
 	 * this definition, or null if no style is assigned at the beginning.
 	 * @param style the CSS style. If empty, null is assumed.
 	 */
 	public void setStyle(String style) {
-		_style = style != null && style.length() > 0 ? style: null;
+		_style = style != null && style.length() > 0 ? style : null;
 	}
-	
+
 	/** Returns the viewport that will be assigned to pages created from
 	 * this definition, or "auto" if no viewport is assigned at the beginning.
 	 * <p>Note: the returned value might contain EL expressions.
@@ -227,30 +229,30 @@ public class PageDefinition implements NodeInfo {
 	public String getViewport() {
 		return _viewport;
 	}
+
 	/** Sets the viewport that will be assigned to pages created from
 	 * this definition, or "auto" if no viewport is assigned at the beginning.
 	 * @param viewport the viewport setting. If empty, "auto" is assumed.
 	 * @since 6.5.0
 	 */
 	public void setViewport(String viewport) {
-		_viewport = viewport != null && viewport.length() > 0 ? viewport: "auto";
+		_viewport = viewport != null && viewport.length() > 0 ? viewport : "auto";
 	}
 
 	/** Returns the widget class of the given page, or null if the default is used.
 	 * @since 5.0.5
 	 */
 	public String getWidgetClass(Page page) {
-		return _wgtcls != null ?
-			(String)_wgtcls.getValue(_evalr, page): null;
+		return _wgtcls != null ? (String) _wgtcls.getValue(_evalr, page) : null;
 	}
+
 	/** Sets the widget class of the page.
 	 * @param wgtcls the widget class. It may contain EL expressions.
 	 * If null or empty, the default widget class is assumed.
 	 * @since 5.0.5
 	 */
 	public void setWidgetClass(String wgtcls) {
-		_wgtcls = wgtcls != null && wgtcls.length() > 0 ?
-			new ExValue(wgtcls, String.class): null;
+		_wgtcls = wgtcls != null && wgtcls.length() > 0 ? new ExValue(wgtcls, String.class) : null;
 	}
 
 	/** Returns the request path of this page definition, or ""
@@ -262,10 +264,11 @@ public class PageDefinition implements NodeInfo {
 	public String getRequestPath() {
 		return _path;
 	}
+
 	/** Sets the request path of this page definition.
 	 */
 	public void setRequestPath(String path) {
-		_path = path != null ? path: "";
+		_path = path != null ? path : "";
 	}
 
 	/** Imports the specified directives from the specified page definition.
@@ -284,62 +287,48 @@ public class PageDefinition implements NodeInfo {
 		if (directives == null || contains(directives, "import"))
 			_clsresolver.addAll(pgdef._clsresolver);
 
-		if (pgdef._initdefs != null
-		&& (directives == null || contains(directives, "init")))
-			for (InitiatorInfo ii: pgdef._initdefs)
+		if (pgdef._initdefs != null && (directives == null || contains(directives, "init")))
+			for (InitiatorInfo ii : pgdef._initdefs)
 				addInitiatorInfo(ii);
 
 		if (directives == null || contains(directives, "component")) {
-			for (Iterator it = pgdef._compdefs.getNames().iterator();
-			it.hasNext();)
-				addComponentDefinition(pgdef._compdefs.get((String)it.next()));
+			for (Iterator it = pgdef._compdefs.getNames().iterator(); it.hasNext();)
+				addComponentDefinition(pgdef._compdefs.get((String) it.next()));
 		}
 
-		if (pgdef._taglibs != null
-		&& directives != null && contains(directives, "taglib"))
-			for (Taglib tl: pgdef._taglibs)
+		if (pgdef._taglibs != null && directives != null && contains(directives, "taglib"))
+			for (Taglib tl : pgdef._taglibs)
 				addTaglib(tl);
 
-		if (pgdef._resolvdefs != null
-		&& directives != null && contains(directives, "variable-resolver")) {
-			for (VariableResolverInfo vri: pgdef._resolvdefs)
+		if (pgdef._resolvdefs != null && directives != null && contains(directives, "variable-resolver")) {
+			for (VariableResolverInfo vri : pgdef._resolvdefs)
 				addVariableResolverInfo(vri);
 		}
 
-		if (pgdef._mapperdefs != null
-		&& directives != null && contains(directives, "function-mapper")) {
-			for (FunctionMapperInfo fmi: pgdef._mapperdefs)
+		if (pgdef._mapperdefs != null && directives != null && contains(directives, "function-mapper")) {
+			for (FunctionMapperInfo fmi : pgdef._mapperdefs)
 				addFunctionMapperInfo(fmi);
 		}
 
-		if (pgdef._xelfuncs != null
-		&& directives != null && contains(directives, "xel-method"))
-			for (FunctionDefinition xfi: pgdef._xelfuncs)
+		if (pgdef._xelfuncs != null && directives != null && contains(directives, "xel-method"))
+			for (FunctionDefinition xfi : pgdef._xelfuncs)
 				addXelMethod(xfi.prefix, xfi.name, xfi.function);
 
-		if (pgdef._hdBfrDefs != null
-		&& directives != null && contains(directives, "meta")) {
-			for (HeaderInfo hi: pgdef._hdBfrDefs)
+		if (pgdef._hdBfrDefs != null && directives != null && contains(directives, "meta")) {
+			for (HeaderInfo hi : pgdef._hdBfrDefs)
 				addHeaderInfo(hi, true);
 		}
-		if (pgdef._hdAftDefs != null
-		&& directives != null && contains(directives, "meta")) {
-			for (HeaderInfo hi: pgdef._hdAftDefs)
+		if (pgdef._hdAftDefs != null && directives != null && contains(directives, "meta")) {
+			for (HeaderInfo hi : pgdef._hdAftDefs)
 				addHeaderInfo(hi, false);
 		}
 
-		if (pgdef._hdResDefs != null
-		&& directives != null && contains(directives, "header")) {
-			for (ResponseHeaderInfo rhi: pgdef._hdResDefs)
+		if (pgdef._hdResDefs != null && directives != null && contains(directives, "header")) {
+			for (ResponseHeaderInfo rhi : pgdef._hdResDefs)
 				addResponseHeaderInfo(rhi);
 		}
 	}
-	private static boolean contains(String[] dirs, String dir) {
-		for (int j = dirs.length; --j >= 0;)
-			if ("*".equals(dirs[j]) || dir.equalsIgnoreCase(dirs[j]))
-				return true;
-		return false;
-	}
+
 	/** Imports the init directives and component definitions from
 	 * the specified page definition.
 	 *
@@ -349,6 +338,13 @@ public class PageDefinition implements NodeInfo {
 	 */
 	public void imports(PageDefinition pgdef) {
 		imports(pgdef, null);
+	}
+
+	private static boolean contains(String[] dirs, String dir) {
+		for (int j = dirs.length; --j >= 0;)
+			if ("*".equals(dirs[j]) || dir.equalsIgnoreCase(dirs[j]))
+				return true;
+		return false;
 	}
 
 	/** Adds an imported class
@@ -363,12 +359,14 @@ public class PageDefinition implements NodeInfo {
 	public void addImportedClass(String clsptn) throws ClassNotFoundException {
 		_clsresolver.addImportedClass(clsptn);
 	}
+
 	/** Returns a readonly list of the imported class names.
 	 * @since 6.0.0
 	 */
 	public List<String> getImportedClasses() {
 		return _clsresolver.getImportedClasses();
 	}
+
 	/** Returns the class resolver represented by {@link #getImportedClasses}.
 	 * @since 6.0.0
 	 */
@@ -385,6 +383,7 @@ public class PageDefinition implements NodeInfo {
 			_initdefs = new LinkedList<InitiatorInfo>();
 		_initdefs.add(init);
 	}
+
 	/** Returns a list of all {@link Initiator} and invokes
 	 * its {@link Initiator#doInit} before returning.
 	 * It never returns null.
@@ -395,9 +394,10 @@ public class PageDefinition implements NodeInfo {
 
 		final List<Initiator> inits = new LinkedList<Initiator>();
 		try {
-			for (InitiatorInfo ii: _initdefs) {
+			for (InitiatorInfo ii : _initdefs) {
 				final Initiator init = ii.newInitiator(getEvaluator(), page);
-				if (init != null) inits.add(init);
+				if (init != null)
+					inits.add(init);
 			}
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
@@ -415,6 +415,7 @@ public class PageDefinition implements NodeInfo {
 			_resolvdefs = new LinkedList<VariableResolverInfo>();
 		_resolvdefs.add(resolver);
 	}
+
 	/** Adds a definition of {@link FunctionMapper}.
 	 * @since 3.5.0
 	 */
@@ -426,6 +427,7 @@ public class PageDefinition implements NodeInfo {
 			_mapperdefs = new LinkedList<FunctionMapperInfo>();
 		_mapperdefs.add(mapper);
 	}
+
 	/** Adds a XEL method.
 	 *
 	 * @param prefix the prefix of the method name
@@ -452,6 +454,7 @@ public class PageDefinition implements NodeInfo {
 			_hdResDefs = new LinkedList<ResponseHeaderInfo>();
 		_hdResDefs.add(header);
 	}
+
 	/** Returns a map of response headers (never null).
 	 * The value of each entry is a two-element object array. The
 	 * first element of the array is the value which is an instance of {@link java.util.Date}
@@ -462,10 +465,9 @@ public class PageDefinition implements NodeInfo {
 	public Collection<Object[]> getResponseHeaders(Page page) {
 		final List<Object[]> headers = new LinkedList<Object[]>();
 		if (_hdResDefs != null)
-			for (ResponseHeaderInfo rhi: _hdResDefs) {
-				headers.add(new Object[] {
-					rhi.getName(), rhi.getValue(this, page),
-					Boolean.valueOf(rhi.shallAppend(this, page))});
+			for (ResponseHeaderInfo rhi : _hdResDefs) {
+				headers.add(new Object[] { rhi.getName(), rhi.getValue(this, page),
+						Boolean.valueOf(rhi.shallAppend(this, page)) });
 			}
 		return headers;
 	}
@@ -489,6 +491,7 @@ public class PageDefinition implements NodeInfo {
 			_hdAftDefs.add(header);
 		}
 	}
+
 	/** Adds a header definition ({@link HeaderInfo}).
 	 * It places the meta headers before ZK's CSS/JS headers,
 	 * and others after ZK's CSS/JS headers.
@@ -496,6 +499,7 @@ public class PageDefinition implements NodeInfo {
 	public void addHeaderInfo(HeaderInfo header) {
 		addHeaderInfo(header, "meta".equals(header.getName()));
 	}
+
 	/** Returns the content that shall be generated inside the head element
 	 * and before ZK's default tags (never null).
 	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
@@ -509,6 +513,7 @@ public class PageDefinition implements NodeInfo {
 	public String getBeforeHeadTags(Page page) {
 		return getHeadTags(page, _hdBfrDefs);
 	}
+
 	/** Returns the content that shall be generated inside the head element
 	 * and after ZK's default tags (never null).
 	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.
@@ -522,12 +527,13 @@ public class PageDefinition implements NodeInfo {
 	public String getAfterHeadTags(Page page) {
 		return getHeadTags(page, _hdAftDefs);
 	}
+
 	private String getHeadTags(Page page, List<HeaderInfo> defs) {
 		if (defs == null)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
-		for (HeaderInfo hi: defs) {
+		for (HeaderInfo hi : defs) {
 			final String s = hi.toHTML(this, page);
 			if (s != null && s.length() > 0)
 				sb.append(s).append('\n');
@@ -545,6 +551,7 @@ public class PageDefinition implements NodeInfo {
 			_forwdefs = new LinkedList<ForwardInfo>();
 		_forwdefs.add(forward);
 	}
+
 	/** Returns the URI to forward to, or null if not to forward.
 	 * It evaluates the forward definition (added by {@link #addForwardInfo})
 	 * one-by-one, if any, to see whether to forward.
@@ -555,7 +562,7 @@ public class PageDefinition implements NodeInfo {
 		if (_forwdefs == null)
 			return null;
 
-		for (ForwardInfo fi: _forwdefs) {
+		for (ForwardInfo fi : _forwdefs) {
 			final String uri = fi.resolveURI(this, page);
 			if (uri != null)
 				return uri;
@@ -570,9 +577,9 @@ public class PageDefinition implements NodeInfo {
 	 * @since 3.0.0
 	 */
 	public String getContentType(Page page) {
-		return _contentType != null ?
-			(String)_contentType.getValue(_evalr, page): null;
+		return _contentType != null ? (String) _contentType.getValue(_evalr, page) : null;
 	}
+
 	/** Sets the content type.
 	 *
 	 * <p>Default: null (use the device default).
@@ -581,9 +588,9 @@ public class PageDefinition implements NodeInfo {
 	 * @since 3.0.0
 	 */
 	public void setContentType(String contentType) {
-		_contentType = contentType != null && contentType.length() > 0 ?
-			new ExValue(contentType, String.class): null;
+		_contentType = contentType != null && contentType.length() > 0 ? new ExValue(contentType, String.class) : null;
 	}
+
 	/** Returns the doc type (&lt;!DOCTYPE&gt;) (after evaluation),
 	 * or null to use the device default.
 	 *
@@ -591,8 +598,9 @@ public class PageDefinition implements NodeInfo {
 	 * @since 3.0.0
 	 */
 	public String getDocType(Page page) {
-		return _docType != null ? (String)_docType.getValue(_evalr, page): null;
+		return _docType != null ? (String) _docType.getValue(_evalr, page) : null;
 	}
+
 	/** Sets the doc type (&lt;!DOCTYPE&gt;).
 	 *
 	 * <p>Default: null (use the device default).
@@ -603,8 +611,9 @@ public class PageDefinition implements NodeInfo {
 	 * @since 3.0.0
 	 */
 	public void setDocType(String docType) {
-		_docType = docType != null ? new ExValue(docType, String.class): null;
+		_docType = docType != null ? new ExValue(docType, String.class) : null;
 	}
+
 	/** Returns the first line to be generated to the output
 	 * (after evaluation), or null if nothing to generate.
 	 *
@@ -615,17 +624,16 @@ public class PageDefinition implements NodeInfo {
 	 * @since 3.0.0
 	 */
 	public String getFirstLine(Page page) {
-		return _firstLine != null ?
-			(String)_firstLine.getValue(_evalr, page): null;
+		return _firstLine != null ? (String) _firstLine.getValue(_evalr, page) : null;
 	}
+
 	/** Sets the first line to be generated to the output.
 	 *
 	 * <p>Default: null (i.e., nothing generated)
 	 * @since 3.0.0
 	 */
 	public void setFirstLine(String firstLine) {
-		_firstLine = firstLine != null && firstLine.length() > 0 ?
-			new ExValue(firstLine, String.class): null;
+		_firstLine = firstLine != null && firstLine.length() > 0 ? new ExValue(firstLine, String.class) : null;
 	}
 
 	/** Returns if the client can cache the rendered result, or null
@@ -636,6 +644,7 @@ public class PageDefinition implements NodeInfo {
 	public Boolean getCacheable() {
 		return _cacheable;
 	}
+
 	/** Sets if the client can cache the rendered result.
 	 *
 	 * <p>Default: null (use the device default).
@@ -653,6 +662,7 @@ public class PageDefinition implements NodeInfo {
 	public Boolean getAutomaticTimeout() {
 		return _autoTimeout;
 	}
+
 	/** Sets whether to automatically redirect to the timeout URI.
 	 *
 	 * <p>Default: null (use the device default).
@@ -680,6 +690,7 @@ public class PageDefinition implements NodeInfo {
 	public boolean isComplete() {
 		return _complete;
 	}
+
 	/** Sets if the page is a complete page.
 	 * <p>Default: false. It means a page is complete if and only if it
 	 * is <em>not</em> included by other page.
@@ -694,6 +705,7 @@ public class PageDefinition implements NodeInfo {
 	public void setComplete(boolean complete) {
 		_complete = complete;
 	}
+
 	/** Adds a root attribute.
 	 * The previous attribute of the same name will be replaced.
 	 *
@@ -711,9 +723,12 @@ public class PageDefinition implements NodeInfo {
 			_rootAttrs = new LinkedHashMap<String, ExValue>();
 		}
 
-		if (value == null) _rootAttrs.remove(name);
-		else _rootAttrs.put(name, new ExValue(value, String.class));
+		if (value == null)
+			_rootAttrs.remove(name);
+		else
+			_rootAttrs.put(name, new ExValue(value, String.class));
 	}
+
 	/** Converts the header definitions (added by {@link #setRootAttribute})
 	 * to the attributes of the root element.
 	 * For HTML, the root element is the HTML element.
@@ -725,8 +740,8 @@ public class PageDefinition implements NodeInfo {
 
 		final Evaluator eval = getEvaluator();
 		final StringBuffer sb = new StringBuffer(256);
-		for (Map.Entry<String, ExValue> me: _rootAttrs.entrySet()) {
-			final String val = (String)me.getValue().getValue(eval, page);
+		for (Map.Entry<String, ExValue> me : _rootAttrs.entrySet()) {
+			final String val = (String) me.getValue().getValue(eval, page);
 			if (val != null)
 				HTMLs.appendAttribute(sb, me.getKey(), val);
 		}
@@ -738,6 +753,7 @@ public class PageDefinition implements NodeInfo {
 	public ComponentDefinitionMap getComponentDefinitionMap() {
 		return _compdefs;
 	}
+
 	/** Adds a component definition belonging to this page definition only.
 	 *
 	 * <p>It is the same as calling {@link ComponentDefinitionMap#add} 
@@ -747,14 +763,13 @@ public class PageDefinition implements NodeInfo {
 		final LanguageDefinition langdef = compdef.getLanguageDefinition();
 		if (langdef != null) {
 			final LanguageDefinition ld2 = getLanguageDefinition();
-			if (langdef != ld2
-			&& !langdef.getDeviceType().equals(ld2.getDeviceType()))
-				throw new UiException("Component definition, "+compdef
-					+", does not belong to the same device type of the page definition, "
-					+ld2.getDeviceType());
+			if (langdef != ld2 && !langdef.getDeviceType().equals(ld2.getDeviceType()))
+				throw new UiException("Component definition, " + compdef
+						+ ", does not belong to the same device type of the page definition, " + ld2.getDeviceType());
 		}
 		_compdefs.add(compdef);
 	}
+
 	/** Returns the component definition of the specified name, or null
 	 * if not found.
 	 *
@@ -775,6 +790,7 @@ public class PageDefinition implements NodeInfo {
 		}
 		return null;
 	}
+
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 *
@@ -810,6 +826,7 @@ public class PageDefinition implements NodeInfo {
 			_taglibs = new LinkedList<Taglib>();
 		_taglibs.add(taglib);
 	}
+
 	/** Adds an imported class to the expression factory.
 	 * @since 3.0.0
 	 */
@@ -822,10 +839,12 @@ public class PageDefinition implements NodeInfo {
 			_expimps = new HashMap<String, Class<?>>(4);
 		_expimps.put(nm, cls);
 	}
+
 	private void checkXelModifiable() {
 		if (_eval != null || _mapper != null)
 			throw new IllegalStateException("getEvaluator() has been called, and no further change is allowed");
 	}
+
 	/** Sets the implementation of the expression factory that shall
 	 * be used by this page.
 	 *
@@ -842,9 +861,10 @@ public class PageDefinition implements NodeInfo {
 	public void setExpressionFactoryClass(Class<?> expfcls) {
 		checkXelModifiable();
 		if (expfcls != null && !ExpressionFactory.class.isAssignableFrom(expfcls))
-			throw new IllegalArgumentException(ExpressionFactory.class+" must be implemented: "+expfcls);
-		_expfcls = (Class)expfcls;
+			throw new IllegalArgumentException(ExpressionFactory.class + " must be implemented: " + expfcls);
+		_expfcls = (Class) expfcls;
 	}
+
 	/** Returns the implementation of the expression factory that
 	 * is used by this page, or null if
 	 * {@link org.zkoss.zk.ui.util.Configuration#getExpressionFactoryClass}
@@ -863,15 +883,18 @@ public class PageDefinition implements NodeInfo {
 			_eval = newEvaluator();
 		return _eval;
 	}
+
 	private Evaluator newEvaluator() {
 		return new SimpleEvaluator(getTaglibMapper(), _expfcls);
 	}
+
 	// (NodeInfo)
 	public EvaluatorRef getEvaluatorRef() {
 		if (_evalr == null)
 			_evalr = newEvaluatorRef();
 		return _evalr;
 	}
+
 	private EvaluatorRef newEvaluatorRef() {
 		return new PageEvalRef(this);
 	}
@@ -889,7 +912,7 @@ public class PageDefinition implements NodeInfo {
 			if (_mapper == null)
 				_mapper = Expressions.EMPTY_MAPPER;
 		}
-		return _mapper != Expressions.EMPTY_MAPPER ? _mapper: null;
+		return _mapper != Expressions.EMPTY_MAPPER ? _mapper : null;
 	}
 
 	/** Adds a template info
@@ -904,17 +927,17 @@ public class PageDefinition implements NodeInfo {
 
 		if (_templatesInfo == null)
 			_templatesInfo = new LinkedHashMap<String, TemplateInfo>();
-		
+
 		_templatesInfo.put(info.getName(), info);
 	}
-	
+
 	/** Gets templates info map
 	 * @since 8.0.0
 	 */
 	public Map<String, TemplateInfo> getTemplatesInfo() {
 		return _templatesInfo;
 	}
-	
+
 	/** Initializes the context for the given page before rendering
 	 * this page definition.
 	 * <p>It is called before {@link Initiator#doInit} and {@link #init}.
@@ -928,11 +951,10 @@ public class PageDefinition implements NodeInfo {
 
 		if (_mapperdefs != null)
 			for (Iterator it = _mapperdefs.iterator(); it.hasNext();) {
-				final FunctionMapperInfo def = (FunctionMapperInfo)it.next();
+				final FunctionMapperInfo def = (FunctionMapperInfo) it.next();
 				try {
-					FunctionMapper mapper =
-						def.newFunctionMapper(this, page);
-					if (mapper != null) 
+					FunctionMapper mapper = def.newFunctionMapper(this, page);
+					if (mapper != null)
 						page.addFunctionMapper(mapper);
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
@@ -941,63 +963,85 @@ public class PageDefinition implements NodeInfo {
 
 		if (_resolvdefs != null)
 			for (Iterator it = _resolvdefs.iterator(); it.hasNext();) {
-				final VariableResolverInfo def = (VariableResolverInfo)it.next();
+				final VariableResolverInfo def = (VariableResolverInfo) it.next();
 				try {
-					VariableResolver resolver =
-						def.newVariableResolver(this, page);
-					if (resolver != null) 
+					VariableResolver resolver = def.newVariableResolver(this, page);
+					if (resolver != null)
 						page.addVariableResolver(resolver);
 				} catch (Throwable ex) {
 					throw UiException.Aide.wrap(ex);
 				}
 			}
 	}
+
 	/** Initializes a page after execution is activated.
 	 * It setup the identifier and title, and adds it to desktop.
 	 * <p>It is called after {@link #preInit} and {@link Initiator#doInit}.
 	 */
 	public void init(final Page page, final boolean evalHeaders) {
-		final PageCtrl pageCtrl = (PageCtrl)page;
-		pageCtrl.init(
-			new PageConfig() {
-				public String getId() {return _id;}
-				public String getUuid() {return null;}
-				public String getTitle() {return _title;}
-				public String getStyle() {return _style;}
-				public String getViewport() {return _viewport;}
-				public String getBeforeHeadTags() {
-					return evalHeaders ?
-						PageDefinition.this.getBeforeHeadTags(page): "";
-				}
-				public String getAfterHeadTags() {
-					return evalHeaders ?
-						PageDefinition.this.getAfterHeadTags(page): "";
-				}
-				public Collection<Object[]> getResponseHeaders() {
-					if (evalHeaders)
-						return PageDefinition.this.getResponseHeaders(page);
-					return Collections.emptyList();
-				}
-			});
+		final PageCtrl pageCtrl = (PageCtrl) page;
+		pageCtrl.init(new PageConfig() {
+			public String getId() {
+				return _id;
+			}
+
+			public String getUuid() {
+				return null;
+			}
+
+			public String getTitle() {
+				return _title;
+			}
+
+			public String getStyle() {
+				return _style;
+			}
+
+			public String getViewport() {
+				return _viewport;
+			}
+
+			public String getBeforeHeadTags() {
+				return evalHeaders ? PageDefinition.this.getBeforeHeadTags(page) : "";
+			}
+
+			public String getAfterHeadTags() {
+				return evalHeaders ? PageDefinition.this.getAfterHeadTags(page) : "";
+			}
+
+			public Collection<Object[]> getResponseHeaders() {
+				if (evalHeaders)
+					return PageDefinition.this.getResponseHeaders(page);
+				return Collections.emptyList();
+			}
+		});
 
 		String s = getRootAttributes(page);
-		if (s != null) pageCtrl.setRootAttributes(s);
+		if (s != null)
+			pageCtrl.setRootAttributes(s);
 
 		s = getContentType(page);
-		if (s != null) pageCtrl.setContentType(s);
+		if (s != null)
+			pageCtrl.setContentType(s);
 
 		s = getDocType(page);
-		if (s != null) pageCtrl.setDocType(s);
+		if (s != null)
+			pageCtrl.setDocType(s);
 
 		s = getFirstLine(page);
-		if (s != null) pageCtrl.setFirstLine(s);
+		if (s != null)
+			pageCtrl.setFirstLine(s);
 
 		s = getWidgetClass(page);
-		if (s != null) pageCtrl.setWidgetClass(s);
+		if (s != null)
+			pageCtrl.setWidgetClass(s);
 
-		if (_cacheable != null) pageCtrl.setCacheable(_cacheable);
-		if (_autoTimeout != null) pageCtrl.setAutomaticTimeout(_autoTimeout);
-		if (_expfcls != null) page.setExpressionFactoryClass(_expfcls);
+		if (_cacheable != null)
+			pageCtrl.setCacheable(_cacheable);
+		if (_autoTimeout != null)
+			pageCtrl.setAutomaticTimeout(_autoTimeout);
+		if (_expfcls != null)
+			page.setExpressionFactoryClass(_expfcls);
 		page.setComplete(_complete);
 	}
 
@@ -1007,40 +1051,40 @@ public class PageDefinition implements NodeInfo {
 	public NodeInfo getParent() {
 		return null;
 	}
+
 	/** Returns the page definition (always this).
 	 */
 	public PageDefinition getPageDefinition() {
 		return this;
 	}
-	
+
 	public void appendChild(NodeInfo child) {
 		NodeInfo oldp = child.getParent();
 		if (oldp != null)
 			oldp.removeChild(child);
 
 		_children.add(child);
-		((LeafInfo)child).setParentDirectly(this); //except root, all are LeafInfo
+		((LeafInfo) child).setParentDirectly(this); //except root, all are LeafInfo
 		BranchInfo.fixEvaluatorRefDown(child, getEvaluatorRef());
-			//Use getEvaluatorRef() to force _evalr being assigned
+		//Use getEvaluatorRef() to force _evalr being assigned
 	}
-	
+
 	public boolean removeChild(NodeInfo child) {
 		if (child != null && _children.remove(child)) {
-			((LeafInfo)child).setParentDirectly(null); //except root, all are LeafInfo
+			((LeafInfo) child).setParentDirectly(null); //except root, all are LeafInfo
 			BranchInfo.fixEvaluatorRefDown(child, null);
 			return true;
 		}
 		return false;
 	}
-	
+
 	public List<NodeInfo> getChildren() {
 		return _children;
 	}
 
 	//Object//
 	public String toString() {
-		return "[PageDefinition: "
-			+(_id != null ? _id: _title != null ? _title: ""+System.identityHashCode(this))
-			+", path="+_path+']';
+		return "[PageDefinition: " + (_id != null ? _id : _title != null ? _title : "" + System.identityHashCode(this))
+				+ ", path=" + _path + ']';
 	}
 }

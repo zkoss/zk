@@ -35,6 +35,7 @@ public class Progressmeter extends XulElement {
 	public Progressmeter() {
 		super.setWidth("100px");
 	}
+
 	public Progressmeter(int value) {
 		this();
 		setValue(value);
@@ -48,6 +49,7 @@ public class Progressmeter extends XulElement {
 		_resetWidth = false;
 		super.setWidth(width);
 	}
+
 	/** Overrides the method in HtmlBasedComponent, to avoid misuse hflex and width at the same time.
 	 * @since 8.0.1
 	 */
@@ -57,17 +59,19 @@ public class Progressmeter extends XulElement {
 			super.setWidth("");
 		super.setHflex(flex);
 	}
+
 	/** Sets the current value of the progress meter.
 	 * <p>Range: 0~100.
 	 */
 	public void setValue(int value) {
 		if (value < 0 || value > 100)
-			throw new UiException("Illegal value: "+value+". Range: 0 ~ 100");
+			throw new UiException("Illegal value: " + value + ". Range: 0 ~ 100");
 		if (_val != value) {
 			_val = value;
 			smartUpdate("value", _val);
 		}
 	}
+
 	/** Returns the current value of the progress meter.
 	 */
 	public int getValue() {
@@ -83,12 +87,11 @@ public class Progressmeter extends XulElement {
 	protected boolean isChildable() {
 		return false;
 	}
-	
+
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
-		render(renderer, "value", ""+_val);
-		
+		render(renderer, "value", "" + _val);
+
 	}
 }

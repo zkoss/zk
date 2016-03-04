@@ -16,8 +16,8 @@ package org.zkoss.zk.ui;
 
 import javax.servlet.ServletContext;
 
-import org.zkoss.zk.ui.impl.DesktopImpl;
 import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.impl.DesktopImpl;
 
 /**
  * Used for create components and other temporary tasks.
@@ -27,8 +27,7 @@ import org.zkoss.zk.ui.http.WebManager;
 	/*package*/ static CCExecution newInstance(WebApp wapp) {
 		final ServletContext ctx = wapp.getServletContext();
 		final String updateURI = WebManager.getWebManager(ctx).getUpdateURI();
-		return new CCExecution(ctx,
-			new DesktopImpl(wapp, updateURI, "/", null, null));
+		return new CCExecution(ctx, new DesktopImpl(wapp, updateURI, "/", null, null));
 	}
 
 	private CCExecution(ServletContext ctx, Desktop desktop) {

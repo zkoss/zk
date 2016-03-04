@@ -31,9 +31,11 @@ public class VolatilePage extends PageImpl {
 	public VolatilePage(PageDefinition pgdef) {
 		super(pgdef);
 	}
+
 	public VolatilePage(Page ref) {
 		super(ref);
 	}
+
 	public String toString() {
 		return "vlatile" + super.toString();
 	}

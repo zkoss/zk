@@ -24,6 +24,7 @@ package org.zkoss.zk.ui;
  */
 public class WrongValuesException extends OperationException {
 	private final WrongValueException[] _wves;
+
 	/** Constructs a multiple wrong value exception.
 	 * @param wrongValueExs an array of {@link WrongValueException}
 	 * @exception IllegalArgumentException if wrongValueExs is null or empty
@@ -33,7 +34,7 @@ public class WrongValuesException extends OperationException {
 			throw new IllegalArgumentException();
 		_wves = wrongValueExs;
 	}
-	
+
 	/** Returns all the exceptions (never null).
 	 */
 	public WrongValueException[] getWrongValueExceptions() {

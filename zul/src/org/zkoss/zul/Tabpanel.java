@@ -35,9 +35,10 @@ public class Tabpanel extends XulElement {
 	/** Returns the tabbox owns this component.
 	 */
 	public Tabbox getTabbox() {
-		final Tabpanels panels = (Tabpanels)getParent();
-		return panels != null ? panels.getTabbox(): null;
+		final Tabpanels panels = (Tabpanels) getParent();
+		return panels != null ? panels.getTabbox() : null;
 	}
+
 	/** Returns the tab associated with this tab panel.
 	 */
 	public Tab getLinkedTab() {
@@ -47,11 +48,12 @@ public class Tabpanel extends XulElement {
 			if (tabbox != null) {
 				final Tabs tabs = tabbox.getTabs();
 				if (tabs != null && tabs.getChildren().size() > j)
-					return (Tab)tabs.getChildren().get(j);
+					return (Tab) tabs.getChildren().get(j);
 			}
 		}
 		return null;
 	}
+
 	/** Returns whether this tab panel is selected.
 	 */
 	public boolean isSelected() {
@@ -63,7 +65,7 @@ public class Tabpanel extends XulElement {
 	 * tabpanels.
 	 */
 	public int getIndex() {
-		final Tabpanels tabpanels = (Tabpanels)getParent();
+		final Tabpanels tabpanels = (Tabpanels) getParent();
 		if (tabpanels == null)
 			return -1;
 		int j = 0;
@@ -85,9 +87,10 @@ public class Tabpanel extends XulElement {
 	public boolean isVisible() {
 		return super.isVisible() && isSelected();
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabpanels))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
 }

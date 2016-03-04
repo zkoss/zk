@@ -32,6 +32,7 @@ public class Hbox extends Box {
 	public Hbox() {
 		super("horizontal");
 	}
+
 	/** Constructor a horizontal box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added

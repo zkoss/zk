@@ -17,7 +17,7 @@ package org.zkoss.zk.ui.sys;
  * @since 8.0.1.1
  */
 public abstract class IntPropertyAccess implements PropertyAccess<Integer> {
-    public Class<Integer> getType() {
-        return Integer.TYPE;
-    }
+	public Class<Integer> getType() {
+		return Integer.TYPE;
+	}
 }

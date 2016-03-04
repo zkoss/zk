@@ -18,8 +18,8 @@ package org.zkoss.zk.ui.util;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * An utility to simplify the implementation of {@link Condition}.
@@ -28,7 +28,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  */
 public class ConditionImpl implements java.io.Serializable {
-    private static final long serialVersionUID = 20060622L;
+	private static final long serialVersionUID = 20060622L;
 
 	private ExValue _if;
 	private ExValue _unless;
@@ -38,11 +38,11 @@ public class ConditionImpl implements java.io.Serializable {
 	 * In other words, it is useful if you use null or empty to denote true.
 	 */
 	public static ConditionImpl getInstance(String ifc, String unless) {
-		if ((ifc == null || ifc.length() == 0)
-		&& (unless == null || unless.length() == 0))
+		if ((ifc == null || ifc.length() == 0) && (unless == null || unless.length() == 0))
 			return null;
 		return new ConditionImpl(ifc, unless);
 	}
+
 	/** Construct.
 	 * In most cases, use {@link #getInstance} instead of this constructor.
 	 */
@@ -57,17 +57,16 @@ public class ConditionImpl implements java.io.Serializable {
 	 * Note: If null (not specified), it is considered effective.
 	 */
 	public void setIf(String cond) {
-		_if = cond != null && cond.length() > 0 ?
-			new ExValue(cond, Boolean.TYPE): null;
+		_if = cond != null && cond.length() > 0 ? new ExValue(cond, Boolean.TYPE) : null;
 	}
+
 	/** Sets the unless condition.
 	 * @see #isEffective
 	 * @param cond the condition.
 	 * Note: If null (not specified), it is considered ineffective.
 	 */
 	public void setUnless(String cond) {
-		_unless = cond != null && cond.length() > 0 ?
-			new ExValue(cond, Boolean.TYPE): null;
+		_unless = cond != null && cond.length() > 0 ? new ExValue(cond, Boolean.TYPE) : null;
 	}
 
 	/** Used to evaluate whether it is effective.
@@ -77,11 +76,10 @@ public class ConditionImpl implements java.io.Serializable {
 	 * @since 3.0.0
 	 */
 	public boolean isEffective(Evaluator eval, Component comp) {
-		return (_if == null
-			|| ((Boolean)_if.getValue(eval, comp)).booleanValue())
-		&& (_unless == null
-			|| !((Boolean)_unless.getValue(eval, comp)).booleanValue());
+		return (_if == null || ((Boolean) _if.getValue(eval, comp)).booleanValue())
+				&& (_unless == null || !((Boolean) _unless.getValue(eval, comp)).booleanValue());
 	}
+
 	/** Used to evaluate whether it is effective.
 	 *
 	 * @param eval the evaluator to evaluate this condition
@@ -89,9 +87,7 @@ public class ConditionImpl implements java.io.Serializable {
 	 * @since 3.0.0
 	 */
 	public boolean isEffective(Evaluator eval, Page page) {
-		return (_if == null
-			|| ((Boolean)_if.getValue(eval, page)).booleanValue())
-		&& (_unless == null
-			|| !((Boolean)_unless.getValue(eval, page)).booleanValue());
+		return (_if == null || ((Boolean) _if.getValue(eval, page)).booleanValue())
+				&& (_unless == null || !((Boolean) _unless.getValue(eval, page)).booleanValue());
 	}
 }

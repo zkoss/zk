@@ -27,8 +27,8 @@ import org.zkoss.web.theme.ThemeResolver;
  * @since 6.5.2
  */
 public class CookieThemeResolver implements ThemeResolver {
-	
-	private final static String THEME_COOKIE_KEY = "zktheme";
+
+	private static final String THEME_COOKIE_KEY = "zktheme";
 
 	/**
 	 * Retrieves theme name from Cookie
@@ -38,12 +38,12 @@ public class CookieThemeResolver implements ThemeResolver {
 	 */
 	public String getTheme(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
-		if (cookies == null) 
+		if (cookies == null)
 			return "";
 		for (Cookie c : cookies) {
 			if (THEME_COOKIE_KEY.equals(c.getName())) {
 				String themeName = c.getValue();
-				if (themeName != null) 
+				if (themeName != null)
 					return themeName;
 			}
 		}
@@ -57,13 +57,12 @@ public class CookieThemeResolver implements ThemeResolver {
 	 * @param themeName theme name to be stored in Cookie
 	 * @since 6.5.2
 	 */
-	public void setTheme(HttpServletRequest request,
-			HttpServletResponse response, String themeName) {
+	public void setTheme(HttpServletRequest request, HttpServletResponse response, String themeName) {
 		Cookie cookie = new Cookie(THEME_COOKIE_KEY, themeName);
 		if (request.isSecure()) {
 			cookie.setSecure(true);
 		}
-		cookie.setMaxAge(60*60*24*30); //store 30 days
+		cookie.setMaxAge(60 * 60 * 24 * 30); //store 30 days
 		String cp = request.getContextPath();
 		if (cp == null || "/".equals(cp))
 			cp = "";

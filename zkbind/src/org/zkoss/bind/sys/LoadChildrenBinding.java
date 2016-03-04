@@ -12,7 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.sys;
 
-
 /**
  * ChildrenBinding for loading children of component from backing bean property.
  * @author dennis

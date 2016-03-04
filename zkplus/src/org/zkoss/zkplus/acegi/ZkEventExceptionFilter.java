@@ -18,15 +18,14 @@ package org.zkoss.zkplus.acegi;
 
 import java.io.IOException;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.FilterChain;
 import javax.servlet.Filter;
+import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.acegisecurity.AcegiSecurityException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -99,20 +98,25 @@ public class ZkEventExceptionFilter implements Filter, InitializingBean {
 	/*package*/ static final String COMPONENT = "org.zkoss.zkplus.acegi.COMPONENT";
 	/*package*/ static final String EVENT = "org.zkoss.zkplus.acegi.EVENT";
 
-    public void afterPropertiesSet() throws Exception {}
+	public void afterPropertiesSet() throws Exception {
+	}
 
 	//-- Filter --//
-	public void doFilter(ServletRequest request, ServletResponse response,
-	FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		chain.doFilter(request, response);
 
-		final AcegiSecurityException exception  = (AcegiSecurityException) request.getAttribute(EXCEPTION);
+		final AcegiSecurityException exception = (AcegiSecurityException) request.getAttribute(EXCEPTION);
 
-		if ( exception != null) {
+		if (exception != null) {
 			request.removeAttribute(EXCEPTION);
 			throw exception;
 		}
 	}
-	public void destroy() {}
-	public final void init(FilterConfig config) throws ServletException {}
+
+	public void destroy() {
+	}
+
+	public final void init(FilterConfig config) throws ServletException {
+	}
 }

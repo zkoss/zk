@@ -26,11 +26,11 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Library;
+
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Locales;
-
 import org.zkoss.web.Attributes;
 
 /**
@@ -43,6 +43,7 @@ public class Charsets {
 	private static final String ATTR_SETUP = "org.zkoss.web.charset.setup";
 
 	private static final String _uriCharset;
+
 	static {
 		String cs = Library.getProperty("org.zkoss.web.uri.charset");
 		if (cs == null || cs.length() == 0)
@@ -82,8 +83,8 @@ public class Charsets {
 	 * default is used.
 	 * @return an object that must be passed to {@link #cleanup}
 	 */
-	public static final
-	Object setup(HttpSession sess, ServletRequest request, ServletResponse response, String charset) {
+	public static final Object setup(HttpSession sess, ServletRequest request, ServletResponse response,
+			String charset) {
 		if (hasSetup(request)) //processed before?
 			return Objects.UNKNOWN;
 
@@ -94,14 +95,14 @@ public class Charsets {
 				if (Servlets.isServlet24()) {
 					response.setCharacterEncoding(charset);
 				} else {
-				//don't access 2.4 API: setCharacterEncoding, getContentType
+					//don't access 2.4 API: setCharacterEncoding, getContentType
 					response.setContentType(";charset=" + charset);
 				}
 			} catch (Throwable ex) {
 				try {
 					final String v = response.getCharacterEncoding();
 					if (!Objects.equals(v, charset))
-						log.warn("Unable to set response's charset: "+charset+" (current="+v+')', ex);
+						log.warn("Unable to set response's charset: " + charset + " (current=" + v + ')', ex);
 				} catch (Throwable t) { //just in case
 				}
 			}
@@ -114,25 +115,27 @@ public class Charsets {
 			} catch (Throwable ex) {
 				final String v = request.getCharacterEncoding();
 				if (!Objects.equals(v, charset))
-					log.warn("Unable to set request's charset: "+charset+" (current="+v+"): "+Exceptions.getMessage(ex));
+					log.warn("Unable to set request's charset: " + charset + " (current=" + v + "): "
+							+ Exceptions.getMessage(ex));
 			}
 		}
 
 		markSetup(request, true);
 		return Locales.setThreadLocal(locale);
 	}
+
 	/** Sets up the charset for the request and response based on
 	 * {@link #getPreferredLocale(HttpSession,ServletRequest)}.
 	 * It is the same as setup(request.getSession(false), request, response, charset);
 	 */
-	public static final Object
-	setup(ServletRequest request, ServletResponse response, String charset) {
+	public static final Object setup(ServletRequest request, ServletResponse response, String charset) {
 		return setup(getSession(request), request, response, charset);
 	}
+
 	private static final HttpSession getSession(ServletRequest request) {
-		return request instanceof HttpServletRequest ?
-			((HttpServletRequest)request).getSession(false): null;
+		return request instanceof HttpServletRequest ? ((HttpServletRequest) request).getSession(false) : null;
 	}
+
 	/** Cleans up what has been set in {@link #setup}.
 	 * Some invocation are not undo-able, so this method only does the basic
 	 * cleanups.
@@ -142,10 +145,11 @@ public class Charsets {
 	 */
 	public static final void cleanup(ServletRequest request, Object old) {
 		if (old != Objects.UNKNOWN) {
-			Locales.setThreadLocal((Locale)old);
+			Locales.setThreadLocal((Locale) old);
 			markSetup(request, false);
 		}
 	}
+
 	/** Returns whether the specified request has been set up, i.e.,
 	 * {@link #setup} is called
 	 *
@@ -155,6 +159,7 @@ public class Charsets {
 	public static final boolean hasSetup(ServletRequest request) {
 		return request.getAttribute(ATTR_SETUP) != null; //processed before?
 	}
+
 	/** Marks the specified request whether it has been set up, i.e.,
 	 * {@link #setup} is called.
 	 *
@@ -162,8 +167,10 @@ public class Charsets {
 	 * automatically by {@link #setup}.
 	 */
 	public static final void markSetup(ServletRequest request, boolean setup) {
-		if (setup) request.setAttribute(ATTR_SETUP, Boolean.TRUE);
-		else request.removeAttribute(ATTR_SETUP);
+		if (setup)
+			request.setAttribute(ATTR_SETUP, Boolean.TRUE);
+		else
+			request.removeAttribute(ATTR_SETUP);
 	}
 
 	/** Returns the preferred locale of the specified request.
@@ -182,15 +189,14 @@ public class Charsets {
 	 *
 	 * @param sess the session to look for the preferred locale. Ignored if null.
 	 */
-	public static final
-	Locale getPreferredLocale(HttpSession sess, ServletRequest request) {
+	public static final Locale getPreferredLocale(HttpSession sess, ServletRequest request) {
 		if (sess != null) {
 			Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
 			if (v == null)
 				v = sess.getAttribute(PX_PREFERRED_LOCALE); //backward compatible (prior to 5.0.3)
 			if (v != null) {
 				if (v instanceof Locale)
-					return (Locale)v;
+					return (Locale) v;
 				logLocaleError(v);
 			}
 
@@ -199,7 +205,7 @@ public class Charsets {
 				v = sess.getServletContext().getAttribute(PX_PREFERRED_LOCALE); //backward compatible (prior to 5.0.3)
 			if (v != null) {
 				if (v instanceof Locale)
-					return (Locale)v;
+					return (Locale) v;
 				logLocaleError(v);
 			}
 
@@ -207,12 +213,19 @@ public class Charsets {
 			if (s != null)
 				return Locales.getLocale(s);
 		}
-		
+
 		Locale l = request.getLocale();
 		// B65-ZK-1916: convert zh_HANS-XX and zh_HANT-XX to zh_XX
-		return l != null ? fixZhLocale(l): Locale.getDefault();
+		return l != null ? fixZhLocale(l) : Locale.getDefault();
 	}
 	
+	/** Returns the preferred locale of the specified request.
+	 * It is the same as getPreferredLocale(request.getSession(false), request).
+	 */
+	public static final Locale getPreferredLocale(ServletRequest request) {
+		return getPreferredLocale(getSession(request), request);
+	}
+
 	/* Maps zh_HANS-XX to zh_HANT-XX to zh_XX 
 	 * 
 	 * Mapping rules:
@@ -235,7 +248,7 @@ public class Charsets {
 			if (country.startsWith("HANS")) {
 				if (country.endsWith("SG"))
 					return new Locale("zh", "SG");
-				else 
+				else
 					return Locale.SIMPLIFIED_CHINESE;
 			} else if (country.startsWith("HANT")) {
 				if (country.endsWith("TW"))
@@ -244,23 +257,18 @@ public class Charsets {
 					return new Locale("zh", "HK");
 				else if (country.endsWith("MO"))
 					return new Locale("zh", "MO");
-				else 
+				else
 					return Locale.TRADITIONAL_CHINESE;
 			}
-		 }
-		 return locale;
+		}
+		return locale;
 	}
-	
+
 	/** The previous attribute name (backward compatible prior to 5.0.3. */
 	private static final String PX_PREFERRED_LOCALE = "px_preferred_locale";
+
 	private static void logLocaleError(Object v) {
-		log.warn(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
-	}
-	/** Returns the preferred locale of the specified request.
-	 * It is the same as getPreferredLocale(request.getSession(false), request).
-	 */
-	public static final Locale getPreferredLocale(ServletRequest request) {
-		return getPreferredLocale(getSession(request), request);
+		log.warn(Attributes.PREFERRED_LOCALE + " ignored. Locale is required, not " + v.getClass());
 	}
 
 	/** Sets the preferred locale for the specified session.
@@ -270,8 +278,7 @@ public class Charsets {
 	 * @see #getPreferredLocale(HttpSession,ServletRequest)
 	 * @since 3.6.3
 	 */
-	public static final
-	void setPreferredLocale(HttpSession hsess, Locale locale) {
+	public static final void setPreferredLocale(HttpSession hsess, Locale locale) {
 		if (locale != null) {
 			hsess.setAttribute(Attributes.PREFERRED_LOCALE, locale);
 		} else {
@@ -279,6 +286,7 @@ public class Charsets {
 			hsess.removeAttribute(PX_PREFERRED_LOCALE);
 		}
 	}
+
 	/** Sets the preferred locale for the specified servlet context.
 	 * It is the default locale for the whole Web application.
 	 * <p>Default: null (no preferred locale -- depending on browser's setting).
@@ -286,8 +294,7 @@ public class Charsets {
 	 * @see #getPreferredLocale(HttpSession,ServletRequest)
 	 * @since 3.6.3
 	 */
-	public static final
-	void setPreferredLocale(ServletContext ctx, Locale locale) {
+	public static final void setPreferredLocale(ServletContext ctx, Locale locale) {
 		if (locale != null) {
 			ctx.setAttribute(Attributes.PREFERRED_LOCALE, locale);
 		} else {

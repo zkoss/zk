@@ -51,16 +51,20 @@ public interface Pageable {
 	 * <p>Default: 20.
 	 */
 	public int getPageSize();
+
 	/** Sets the number of items per page.
 	 */
 	public void setPageSize(int size) throws WrongValueException;
+
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
 	 */
 	public int getPageCount();
+
 	/** Returns the active page (starting from 0).
 	 */
 	public int getActivePage();
+
 	/** Sets the active page (starting from 0).
 	 */
 	public void setActivePage(int pg) throws WrongValueException;

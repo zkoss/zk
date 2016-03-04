@@ -7,8 +7,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import javax.servlet.http.HttpSession;
 import javax.portlet.PortletSession;
+import javax.servlet.http.HttpSession;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Session;
@@ -27,21 +27,24 @@ import org.zkoss.zk.ui.sys.Attributes;
 	 * @param sess the ZK session.
 	 */
 	public void put(Session sess) {
-		((HttpSession)sess.getNativeSession()).setAttribute(Attributes.ZK_SESSION, sess);
+		((HttpSession) sess.getNativeSession()).setAttribute(Attributes.ZK_SESSION, sess);
 	}
+
 	/** Retrieves a ZK session from the cache, or null if the ZK session
 	 * is not stored.
 	 */
 	public Session get(Object navsess) {
-		return (Session)((HttpSession)navsess).getAttribute(Attributes.ZK_SESSION);
+		return (Session) ((HttpSession) navsess).getAttribute(Attributes.ZK_SESSION);
 	}
+
 	/** Removes the ZK session from the cache.
 	 */
 	public void remove(Session sess) {
-			((HttpSession)sess.getNativeSession()).removeAttribute(Attributes.ZK_SESSION);
+		((HttpSession) sess.getNativeSession()).removeAttribute(Attributes.ZK_SESSION);
 	}
 
 	/*package*/ static final SessionAgent agent;
+
 	static {
 		SessionAgent sa;
 		try {
@@ -52,21 +55,26 @@ import org.zkoss.zk.ui.sys.Attributes;
 					//so we have to check PortletSession first
 					final Object navsess = sess.getNativeSession();
 					if (navsess instanceof PortletSession)
-						((PortletSession)navsess).setAttribute(Attributes.ZK_SESSION, sess, PortletSession.APPLICATION_SCOPE);
+						((PortletSession) navsess).setAttribute(Attributes.ZK_SESSION, sess,
+								PortletSession.APPLICATION_SCOPE);
 					else
-						((HttpSession)navsess).setAttribute(Attributes.ZK_SESSION, sess);
+						((HttpSession) navsess).setAttribute(Attributes.ZK_SESSION, sess);
 				}
+
 				public Session get(Object navsess) {
-					return (Session)(navsess instanceof PortletSession ?
-							((PortletSession)navsess).getAttribute(Attributes.ZK_SESSION, PortletSession.APPLICATION_SCOPE):
-						((HttpSession)navsess).getAttribute(Attributes.ZK_SESSION));
+					return (Session) (navsess instanceof PortletSession
+							? ((PortletSession) navsess).getAttribute(Attributes.ZK_SESSION,
+									PortletSession.APPLICATION_SCOPE)
+							: ((HttpSession) navsess).getAttribute(Attributes.ZK_SESSION));
 				}
+
 				public void remove(Session sess) {
 					final Object navsess = sess.getNativeSession();
 					if (navsess instanceof PortletSession)
-						((PortletSession)navsess).removeAttribute(Attributes.ZK_SESSION, PortletSession.APPLICATION_SCOPE);
+						((PortletSession) navsess).removeAttribute(Attributes.ZK_SESSION,
+								PortletSession.APPLICATION_SCOPE);
 					else
-						((HttpSession)navsess).removeAttribute(Attributes.ZK_SESSION);
+						((HttpSession) navsess).removeAttribute(Attributes.ZK_SESSION);
 				}
 			};
 		} catch (Throwable t) {

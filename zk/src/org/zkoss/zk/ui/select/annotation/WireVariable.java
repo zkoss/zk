@@ -31,19 +31,19 @@ import org.zkoss.zk.ui.select.SelectorComposer;
  * @author simonpai
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ ElementType.FIELD, ElementType.METHOD })
 public @interface WireVariable {
-	
+
 	/**
 	 * The name of variable to wire. If empty, it will use field name or method
 	 * name (without "set" prefix).
 	 */
 	String value() default "";
-	
+
 	/**
 	 * If true, the variable will be rewired when the composer is deserialized 
 	 * in cluster environment. Session and Webapp variables are always rewired.
 	 */
 	boolean rewireOnActivate() default false;
-	
+
 }

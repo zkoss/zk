@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
+
 import org.zkoss.io.Serializables;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -30,8 +31,7 @@ import org.zkoss.zk.ui.util.ComponentSerializationListener;
  * @since 6.0.0
  */
 /*package*/ class EventListenerInfo
-implements ComponentSerializationListener, ComponentActivationListener,
-java.io.Serializable {
+		implements ComponentSerializationListener, ComponentActivationListener, java.io.Serializable {
 	/*package*/ final int priority;
 	/*package*/ final EventListener<? extends Event> listener;
 
@@ -45,21 +45,20 @@ java.io.Serializable {
 	 * @param comp the component used to invoke ComponentSerializationListener.
 	 * Ignored if null.
 	 */
-	/*package*/ static final void write(java.io.ObjectOutputStream s,
-	AbstractComponent comp, Map<String, List<EventListenerInfo>> listeners)
-	throws IOException {
+	/*package*/ static final void write(java.io.ObjectOutputStream s, AbstractComponent comp,
+			Map<String, List<EventListenerInfo>> listeners) throws IOException {
 		if (listeners != null) {
 			final Logger logio = Serializables.logio;
 			final boolean debug = logio.isDebugEnabled();
-			for (Map.Entry<String, List<EventListenerInfo>> me: listeners.entrySet()) {
+			for (Map.Entry<String, List<EventListenerInfo>> me : listeners.entrySet()) {
 				boolean keyWritten = false;
 				final List<EventListenerInfo> ls = me.getValue();
-				for (EventListenerInfo li: ls) {
+				for (EventListenerInfo li : ls) {
 					if (comp != null)
 						comp.willSerialize(li.listener);
 
 					if ((li.listener instanceof java.io.Serializable)
-					|| (li.listener instanceof java.io.Externalizable)) {
+							|| (li.listener instanceof java.io.Externalizable)) {
 						if (!keyWritten) {
 							keyWritten = true;
 							s.writeObject(me.getKey());
@@ -67,11 +66,11 @@ java.io.Serializable {
 						try {
 							s.writeObject(li);
 						} catch (java.io.NotSerializableException ex) {
-							logio.error("Unable to serialize item: "+li.listener);
+							logio.error("Unable to serialize item: " + li.listener);
 							throw ex;
 						}
 					} else if (debug) {
-						logio.debug("Skip not-serializable item: "+li.listener);
+						logio.debug("Skip not-serializable item: " + li.listener);
 					}
 				}
 
@@ -81,27 +80,27 @@ java.io.Serializable {
 		}
 		s.writeObject(null); //end of event listeners
 	}
+
 	/**
 	 * @param comp the component used to invoke ComponentSerializationListener.
 	 * Ignored if null.
 	 */
-	/*package*/ static final Map<String, List<EventListenerInfo>> read(
-	java.io.ObjectInputStream s, AbstractComponent comp)
-	throws IOException, ClassNotFoundException {
+	/*package*/ static final Map<String, List<EventListenerInfo>> read(java.io.ObjectInputStream s,
+			AbstractComponent comp) throws IOException, ClassNotFoundException {
 		Map<String, List<EventListenerInfo>> listeners = null;
 		for (;;) {
-			final String evtnm = (String)s.readObject();
-			if (evtnm == null) break; //no more
+			final String evtnm = (String) s.readObject();
+			if (evtnm == null)
+				break; //no more
 
 			if (listeners == null)
-				listeners = new HashMap<String,List<EventListenerInfo>>(4);
-			final List<EventListenerInfo> ls =
-				Serializables.smartRead(s, (List<EventListenerInfo>)null);
-				//OK to use Serializables.smartRead to read back
+				listeners = new HashMap<String, List<EventListenerInfo>>(4);
+			final List<EventListenerInfo> ls = Serializables.smartRead(s, (List<EventListenerInfo>) null);
+			//OK to use Serializables.smartRead to read back
 
 			if (ls != null) {
 				if (comp != null)
-					for (EventListenerInfo li: ls)
+					for (EventListenerInfo li : ls)
 						comp.didDeserialize(li.listener);
 
 				listeners.put(evtnm, ls);
@@ -112,18 +111,22 @@ java.io.Serializable {
 
 	//ComponentSerializationListener//
 	public void willSerialize(Component comp) {
-		((AbstractComponent)comp).willSerialize(this.listener);
+		((AbstractComponent) comp).willSerialize(this.listener);
 	}
+
 	public void didDeserialize(Component comp) {
-		((AbstractComponent)comp).didDeserialize(this.listener);
+		((AbstractComponent) comp).didDeserialize(this.listener);
 	}
+
 	//ComponentActivationListener//
 	public void didActivate(Component comp) {
-		((AbstractComponent)comp).didActivate(this.listener);
+		((AbstractComponent) comp).didActivate(this.listener);
 	}
+
 	public void willPassivate(Component comp) {
-		((AbstractComponent)comp).willPassivate(this.listener);
+		((AbstractComponent) comp).willPassivate(this.listener);
 	}
+
 	public String toString() {
 		return "[" + this.priority + ": " + this.listener.toString() + "]";
 	}

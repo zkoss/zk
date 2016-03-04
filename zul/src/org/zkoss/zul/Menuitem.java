@@ -17,13 +17,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
-
+import org.zkoss.zk.ui.event.CheckEvent;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -33,22 +33,24 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-menuitem. (since 3.5.0)
  * @author tomyeh
  */
-public class Menuitem extends LabelImageElement
-implements org.zkoss.zk.ui.ext.Disable {
+public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private AuxInfo _auxinf;
 
 	static {
 		addClientEvent(Menuitem.class, Events.ON_CHECK, CE_IMPORTANT);
 	}
+
 	public Menuitem() {
 	}
+
 	public Menuitem(String label) {
 		super(label);
 	}
+
 	public Menuitem(String label, String src) {
 		super(label, src);
 	}
-	
+
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Default: false.
@@ -57,6 +59,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public boolean isCheckmark() {
 		return _auxinf != null && _auxinf.checkmark;
 	}
+
 	/** Sets whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Note the checkbox can be checked only if {@link #isAutocheck()} is true
@@ -72,7 +75,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public String getZclass() {
 		return _zclass == null ? "z-menuitem" : _zclass;
 	}
-	
+
 	/**
 	 * Sets whether it is disabled.
 	 * @since 3.0.1
@@ -83,7 +86,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("disabled", isDisabled());
 		}
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 * @since 3.0.1
@@ -91,13 +94,15 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public boolean isDisabled() {
 		return _auxinf != null && _auxinf.disabled;
 	}
+
 	/** Returns a list of component IDs that shall be disabled when the user
 	 * clicks this menuitem.
 	 * @since 5.0.7
 	 */
 	public String getAutodisable() {
-		return _auxinf != null ? _auxinf.autodisable: null;
+		return _auxinf != null ? _auxinf.autodisable : null;
 	}
+
 	/** Sets a list of component IDs that shall be disabled when the user
 	 * clicks this menuitem.
 	 *
@@ -126,33 +131,37 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 5.0.7
 	 */
 	public void setAutodisable(String autodisable) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable: null, autodisable)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable : null, autodisable)) {
 			initAuxInfo().autodisable = autodisable;
 			smartUpdate("autodisable", getAutodisable());
 		}
 	}
+
 	/** Returns the value.
 	 * <p>Default: "".
 	 */
 	public String getValue() {
-		return _auxinf != null ? _auxinf.value: "";
+		return _auxinf != null ? _auxinf.value : "";
 	}
+
 	/** Sets the value.
 	 */
 	public void setValue(String value) {
 		if (value == null)
 			value = "";
-		if (!Objects.equals(_auxinf != null ? _auxinf.value: "", value)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.value : "", value)) {
 			initAuxInfo().value = value;
 			smartUpdate("value", getValue());
 		}
 	}
+
 	/** Returns whether it is checked.
 	 * <p>Default: false.
 	 */
 	public boolean isChecked() {
 		return _auxinf != null && _auxinf.checked;
 	}
+
 	/** Sets whether it is checked.
 	 * <p> This only applies when {@link #isCheckmark()} = true. (since 3.5.0)
 	 */
@@ -164,6 +173,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("checked", isChecked());
 		}
 	}
+
 	/** Returns whether the menuitem check mark will update each time
 	 * the menu item is selected.
 	 * <p>Default: false.
@@ -171,6 +181,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public boolean isAutocheck() {
 		return _auxinf != null && _auxinf.autocheck;
 	}
+
 	/** Sets whether the menuitem check mark will update each time
 	 * the menu item is selected.
 	 * <p> This only applies when {@link #isCheckmark()} = true. (since 3.5.0)
@@ -187,14 +198,15 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * specify the onClick handler.
 	 */
 	public String getHref() {
-		return _auxinf != null ? _auxinf.href: null;
+		return _auxinf != null ? _auxinf.href : null;
 	}
+
 	/** Sets the href.
 	 */
 	public void setHref(String href) throws WrongValueException {
 		if (href != null && href.length() == 0)
 			href = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.href: null, href)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.href : null, href)) {
 			initAuxInfo().href = href;
 			smartUpdate("href", new EncodedHref()); //Bug 1850895
 		}
@@ -208,8 +220,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>Default: null.
 	 */
 	public String getTarget() {
-		return _auxinf != null ? _auxinf.target: null;
+		return _auxinf != null ? _auxinf.target : null;
 	}
+
 	/** Sets the target frame or window.
 	 * @param target the name of the frame or window to hyperlink.
 	 */
@@ -217,7 +230,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (target != null && target.length() == 0)
 			target = null;
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.target: null, target)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.target : null, target)) {
 			initAuxInfo().target = target;
 			smartUpdate("target", getTarget());
 		}
@@ -235,8 +248,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 5.0.0
 	 */
 	public String getUpload() {
-		return _auxinf != null ? _auxinf.upload: null;
+		return _auxinf != null ? _auxinf.upload : null;
 	}
+
 	/** Sets the JavaScript class at the client to handle the upload if this
 	 * button is used for file upload.
 	 * <p>Default: null.
@@ -269,11 +283,10 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 5.0.0
 	 */
 	public void setUpload(String upload) {
-		if (upload != null
-		&& (upload.length() == 0 || "false".equals(upload)))
+		if (upload != null && (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
 
-		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload: null)) {
+		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
 			initAuxInfo().upload = upload;
 			smartUpdate("upload", getUpload());
 		}
@@ -282,34 +295,34 @@ implements org.zkoss.zk.ui.ext.Disable {
 	//Bug #2871082
 	private String getEncodedHref() {
 		final Desktop dt = getDesktop();
-		return _auxinf != null && _auxinf.href != null && dt != null ?
-			dt.getExecution().encodeURL(_auxinf.href): null;
-			//if desktop is null, it doesn't belong to any execution
+		return _auxinf != null && _auxinf.href != null && dt != null ? dt.getExecution().encodeURL(_auxinf.href) : null;
+		//if desktop is null, it doesn't belong to any execution
 	}
-	
+
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
-		if (parent != null && !(parent instanceof Menupopup)
-		&& !(parent instanceof Menubar))
-			throw new UiException("Unsupported parent for menuitem: "+parent);
+		if (parent != null && !(parent instanceof Menupopup) && !(parent instanceof Menubar))
+			throw new UiException("Unsupported parent for menuitem: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	//Cloneable//
 	public Object clone() {
-		final Menuitem clone = (Menuitem)super.clone();
+		final Menuitem clone = (Menuitem) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
+
 	/** Not childable. */
 	protected boolean isChildable() {
 		return false;
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "disabled", isDisabled());
 		render(renderer, "checked", isChecked());
@@ -323,7 +336,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
-	
+
 	protected void renderCrawlable(String label) throws java.io.IOException {
 		//does nothing since generated in renderProperties
 	}
@@ -353,19 +366,21 @@ implements org.zkoss.zk.ui.ext.Disable {
 			return getEncodedHref();
 		}
 	}
-	
+
 	protected void updateByClient(String name, Object value) {
 		if ("disabled".equals(name))
-			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():
-				"true".equals(Objects.toString(value)));
+			setDisabled(value instanceof Boolean ? ((Boolean) value).booleanValue()
+					: "true".equals(Objects.toString(value)));
 		else
 			super.updateByClient(name, value);
 	}
+
 	private AuxInfo initAuxInfo() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
+
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String value = "";
 		private String href, target;

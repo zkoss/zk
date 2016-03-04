@@ -23,16 +23,18 @@ import org.zkoss.lang.Objects;
  *
  * @author tomyeh
  */
-abstract public class HeaderElement extends LabelImageElement {
+public abstract class HeaderElement extends LabelImageElement {
 	private String _align, _valign;
 
 	protected HeaderElement() {
 	}
+
 	/** @since 5.0.0
 	 */
 	protected HeaderElement(String label) {
 		super(label);
 	}
+
 	/** @since 5.0.0
 	 */
 	protected HeaderElement(String label, String image) {
@@ -45,6 +47,7 @@ abstract public class HeaderElement extends LabelImageElement {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the horizontal alignment of this column.
 	 */
 	public void setAlign(String align) {
@@ -53,12 +56,14 @@ abstract public class HeaderElement extends LabelImageElement {
 			smartUpdate("align", _align);
 		}
 	}
+
 	/** Returns the vertical alignment of this grid.
 	 * <p>Default: null (system default: top).
 	 */
 	public String getValign() {
 		return _valign;
 	}
+
 	/** Sets the vertical alignment of this grid.
 	 */
 	public void setValign(String valign) {
@@ -67,18 +72,20 @@ abstract public class HeaderElement extends LabelImageElement {
 			smartUpdate("valign", _valign);
 		}
 	}
+
 	void setWidthByClient(String width) {
 		// reset hflex min first; for Bug ZK-2772 Misaligned Grid columns
 		setHflexByClient("false");
 		setWidthDirectly(width);
 	}
+
 	//feature#3177275: Listheader should override hflex when sized by end user
 	void setHflexByClient(String hflex) {
 		setHflexDirectly(hflex);
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		render(renderer, "valign", _valign);
 		render(renderer, "align", _align);

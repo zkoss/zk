@@ -18,9 +18,8 @@ package org.zkoss.zk.xel;
 
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelException;
-
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 
 /**
  * A ZK specific expression builder that is based on XEL.
@@ -36,20 +35,19 @@ public interface Evaluator extends java.io.Serializable {
 	 * later.
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
-	public Expression parseExpression(String expression, Class<?> expectedType)
-	throws XelException;
+	public Expression parseExpression(String expression, Class<?> expectedType) throws XelException;
+
 	/**
 	 * Evaluates the expression.
 	 *
 	 * @param page the page, or null to ignore
 	 */
-	public Object evaluate(Page page, Expression expression)
-	throws XelException;
+	public Object evaluate(Page page, Expression expression) throws XelException;
+
 	/**
 	 * Evaluates the expression.
 	 *
 	 * @param comp the component, or null to ignore
 	 */
-	public Object evaluate(Component comp, Expression expression)
-	throws XelException;
+	public Object evaluate(Component comp, Expression expression) throws XelException;
 }

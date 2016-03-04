@@ -12,8 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.ConditionImpl;
 
@@ -22,12 +22,12 @@ import org.zkoss.zk.ui.util.ConditionImpl;
  * @author tomyeh
  * @since 6.0.0
  */
-/*package*/ abstract class ConditionLeafInfo extends LeafInfo
-implements Condition {
+/*package*/ abstract class ConditionLeafInfo extends LeafInfo implements Condition {
 	/*package*/ ConditionImpl _cond;
 
 	/*package*/ ConditionLeafInfo() {
 	}
+
 	/*package*/ ConditionLeafInfo(NodeInfo parent, ConditionImpl cond) {
 		parent.appendChild(this);
 		_cond = cond;
@@ -38,6 +38,7 @@ implements Condition {
 	public void setCondition(ConditionImpl cond) {
 		_cond = cond;
 	}
+
 	/** Tests if the condition is set
 	 */
 	public boolean withCondition() {
@@ -48,7 +49,7 @@ implements Condition {
 	public boolean isEffective(Component comp) {
 		return _cond == null || _cond.isEffective(_evalr, comp);
 	}
-	
+
 	public boolean isEffective(Page page) {
 		return _cond == null || _cond.isEffective(_evalr, page);
 	}

@@ -71,7 +71,7 @@ import java.lang.annotation.Target;
  * @author Ian Y.T Tsai(zanyking)
  * @since 6.0.2
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AfterCompose {
 	boolean superclass() default false;

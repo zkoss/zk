@@ -58,6 +58,7 @@ public class Groupbox extends XulElement {
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Opens or closes this groupbox.
 	 */
 	public void setOpen(boolean open) {
@@ -76,6 +77,7 @@ public class Groupbox extends XulElement {
 	public boolean isClosable() {
 		return _closable;
 	}
+
 	/** Sets whether user can open or close the group box.
 	 */
 	public void setClosable(boolean closable) {
@@ -84,27 +86,31 @@ public class Groupbox extends XulElement {
 			smartUpdate("closable", closable);
 		}
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "contentStyle", _cntStyle);
 		render(renderer, "contentSclass", _cntSclass);
 		render(renderer, "title", _title);
-		if (!_open) renderer.render("open", false);
-		if (!_closable) renderer.render("closable", false);
+		if (!_open)
+			renderer.render("open", false);
+		if (!_closable)
+			renderer.render("closable", false);
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "default".equals(getMold()) ? "z-groupbox" : "z-groupbox-3d" : _zclass;
 	}
-	
+
 	/** Returns the CSS style for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 */
 	public String getContentStyle() {
 		return _cntStyle;
 	}
+
 	/** Sets the CSS style for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 *
@@ -116,12 +122,14 @@ public class Groupbox extends XulElement {
 			smartUpdate("contentStyle", _cntStyle);
 		}
 	}
+
 	/** Returns the style class used for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 */
 	public String getContentSclass() {
 		return _cntSclass;
 	}
+
 	/** Sets the style class used for the content block.
 	 *
 	 * @see #getContentSclass
@@ -133,6 +141,7 @@ public class Groupbox extends XulElement {
 			smartUpdate("contentSclass", _cntSclass);
 		}
 	}
+
 	/** Returns the title.
 	 * Besides this attribute, you could use {@link Caption} to define
 	 * a more sophisticated caption (a.k.a., title).
@@ -143,6 +152,7 @@ public class Groupbox extends XulElement {
 	public String getTitle() {
 		return _title;
 	}
+
 	/** Sets the title.
 	 * @since 6.0.0
 	 */
@@ -160,6 +170,7 @@ public class Groupbox extends XulElement {
 	public boolean isLegend() {
 		return "default".equals(getMold());
 	}
+
 	/** @deprecated As of release 6.0, legend no longer used in groupbox.
 	 */
 	public void setLegend(boolean legend) {
@@ -173,18 +184,19 @@ public class Groupbox extends XulElement {
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Caption) {
 			if (_caption != null && _caption != child)
-				throw new UiException("Only one caption is allowed: "+this);
+				throw new UiException("Only one caption is allowed: " + this);
 		} else if (refChild instanceof Caption) {
 			throw new UiException("caption must be the first child");
 		}
 		super.beforeChildAdded(child, refChild);
 	}
+
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Caption) {
 			refChild = getFirstChild();
-				//always makes caption as the first child
+			//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
-				_caption = (Caption)child;
+				_caption = (Caption) child;
 				return true;
 			}
 		} else {
@@ -192,6 +204,7 @@ public class Groupbox extends XulElement {
 		}
 		return false;
 	}
+
 	public void onChildRemoved(Component child) {
 		if (child instanceof Caption)
 			_caption = null;
@@ -217,11 +230,13 @@ public class Groupbox extends XulElement {
 
 	//Cloneable//
 	public Object clone() {
-		final Groupbox clone = (Groupbox)super.clone();
+		final Groupbox clone = (Groupbox) super.clone();
 
-		if (_caption != null) clone.afterUnmarshal();
+		if (_caption != null)
+			clone.afterUnmarshal();
 		return clone;
 	}
+
 	/** @param cnt # of children that need special handling (used for optimization).
 	 * -1 means process all of them
 	 */
@@ -234,8 +249,7 @@ public class Groupbox extends XulElement {
 	}
 
 	//Serializable//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		afterUnmarshal();
 	}

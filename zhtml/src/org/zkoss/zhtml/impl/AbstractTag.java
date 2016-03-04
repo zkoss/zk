@@ -46,14 +46,13 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
 /**
  * The raw component used to generate raw HTML elements.
  *
- * <p>Note: ZHTML components ignore the page listener since it handles
- * non-deferrable event listeners
+ * <p>
+ * Note: ZHTML components ignore the page listener since it handles non-deferrable event listeners
  * (see {@link org.zkoss.zk.ui.event.Deferrable}).
  *
  * @author tomyeh
  */
-public class AbstractTag extends AbstractComponent
-implements DynamicPropertied, RawId {
+public class AbstractTag extends AbstractComponent implements DynamicPropertied, RawId {
 	static {
 		addClientEvent(AbstractTag.class, Events.ON_CLICK, 0);
 	}
@@ -67,70 +66,83 @@ implements DynamicPropertied, RawId {
 			throw new IllegalArgumentException("A tag name is required");
 		_tagnm = tagname;
 	}
+
 	protected AbstractTag() {
 	}
 
-	/** Returns the CSS class.
-	 * Due to Java's limitation, we cannot use the name called getClas.
-	 * <p>Default: null (the default value depends on element).
+	/**
+	 * Returns the CSS class. Due to Java's limitation, we cannot use the name called getClas.
+	 * <p>
+	 * Default: null (the default value depends on element).
 	 */
 	public String getSclass() {
-		return (String)getDynamicProperty("class");
+		return (String) getDynamicProperty("class");
 	}
-	/** Sets the CSS class.
+
+	/**
+	 * Sets the CSS class.
 	 */
 	public void setSclass(String sclass) {
 		setDynamicProperty("class", sclass);
 	}
-	/** Returns the CSS style.
-	 * <p>Default: null.
+
+	/**
+	 * Returns the CSS style.
+	 * <p>
+	 * Default: null.
 	 */
 	public String getStyle() {
-		return (String)getDynamicProperty("style");
+		return (String) getDynamicProperty("style");
 	}
-	/** Sets the CSS style.
+
+	/**
+	 * Sets the CSS style.
 	 *
-	 * <p>Note: if display is not specified as part of style,
-	 * the returned value of {@link #isVisible} is assumed.
-	 * In other words, if not visible and display is not specified as part of style,
+	 * <p>
+	 * Note: if display is not specified as part of style, the returned value of {@link #isVisible}
+	 * is assumed. In other words, if not visible and display is not specified as part of style,
 	 * "display:none" is appended.
 	 *
-	 * <p>On the other hand, if display is specified, then {@link #setVisible}
-	 * is called to reflect the visibility, if necessary.
+	 * <p>
+	 * On the other hand, if display is specified, then {@link #setVisible} is called to reflect the
+	 * visibility, if necessary.
 	 */
 	public void setStyle(String style) {
 		setDynamicProperty("style", style);
 	}
 
-	/** Returns the tag name.
+	/**
+	 * Returns the tag name.
 	 */
 	public String getTag() {
 		return _tagnm;
 	}
 
-	//-- DynamicPropertys --//
+	// -- DynamicPropertys --//
 	public boolean hasDynamicProperty(String name) {
 		return ComponentsCtrl.isReservedAttribute(name);
 	}
-	/** Returns the dynamic property, or null if not found.
-	 * Note: it must be a String object or null.
+
+	/**
+	 * Returns the dynamic property, or null if not found. Note: it must be a String object or null.
 	 */
 	public Object getDynamicProperty(String name) {
-		return _props != null ? _props.get(name): null;
+		return _props != null ? _props.get(name) : null;
 	}
-	/** Sets the dynamic property.
-	 * Note: it converts the value to a string object (by use of
+
+	/**
+	 * Sets the dynamic property. Note: it converts the value to a string object (by use of
 	 * {@link Objects#toString}).
 	 *
-	 * <p>Note: it handles the style property specially. Refer to {@link #setStyle}
-	 * for details.
+	 * <p>
+	 * Note: it handles the style property specially. Refer to {@link #setStyle} for details.
 	 */
-	public void setDynamicProperty(String name, Object value)
-	throws WrongValueException {
+	public void setDynamicProperty(String name, Object value) throws WrongValueException {
 		if (name == null)
 			throw new WrongValueException("name is required");
 		if (!hasDynamicProperty(name))
-			throw new WrongValueException("Attribute not allowed: "+name+"\nSpecify the ZK namespace if you want to use special ZK attributes");
+			throw new WrongValueException("Attribute not allowed: " + name
+					+ "\nSpecify the ZK namespace if you want to use special ZK attributes");
 
 		String sval = Objects.toString(value);
 		if ("style".equals(name)) {
@@ -140,7 +152,7 @@ implements DynamicPropertied, RawId {
 			// ZK-3011: should defer until render
 			EncodedURL url = new EncodedURL(sval);
 			setDynaProp(name, url);
-			smartUpdate("dynamicProperty", new Object[]{name, url}, true);
+			smartUpdate("dynamicProperty", new Object[] { name, url }, true);
 			return;
 		} else if ("textContent".equals(name)) {
 			setDynaProp(name, sval);
@@ -148,37 +160,42 @@ implements DynamicPropertied, RawId {
 				invalidate();
 		} else
 			setDynaProp(name, value);
-		//B80-ZK-2716: style and textContent are both dynamiccProperty
-		smartUpdate("dynamicProperty", new String[] {name, sval}, true);
+		// B80-ZK-2716: style and textContent are both dynamiccProperty
+		smartUpdate("dynamicProperty", new String[] { name, sval }, true);
 	}
+
 	private String getEncodedURL(String src) {
-		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null ? dt.getExecution()
-			.encodeURL(src != null ? src: "~./img/spacer.gif"): "";
+		final Desktop dt = getDesktop(); // it might not belong to any desktop
+		return dt != null ? dt.getExecution().encodeURL(src != null ? src : "~./img/spacer.gif")
+				: "";
 	}
+
 	/** Processes the style. */
 	private String filterStyle(String style) {
 		if (style != null) {
 			final int j = HTMLs.getSubstyleIndex(style, "display");
-			if (j >= 0) { //display is specified
-				super.setVisible(
-					!"none".equals(HTMLs.getSubstyleValue(style, j)));
-				return style; //done
+			if (j >= 0) { // display is specified
+				super.setVisible(!"none".equals(HTMLs.getSubstyleValue(style, j)));
+				return style; // done
 			}
 		}
 
 		if (!isVisible()) {
-			int len = style != null ? style.length(): 0;
-			if (len == 0) return "display:none;";
-			if (style.charAt(len - 1) != ';') style += ';';
+			int len = style != null ? style.length() : 0;
+			if (len == 0)
+				return "display:none;";
+			if (style.charAt(len - 1) != ';')
+				style += ';';
 			style += "display:none;";
 		}
 		return style;
 	}
+
 	/** Set the dynamic property 'blindly'. */
 	private void setDynaProp(String name, Object value) {
 		if (value == null) {
-			if (_props != null) _props.remove(name);
+			if (_props != null)
+				_props.remove(name);
 		} else {
 			if (_props == null)
 				_props = new LinkedHashMap<String, Object>();
@@ -186,18 +203,23 @@ implements DynamicPropertied, RawId {
 		}
 	}
 
-	/** Whether to hide the id attribute.
-	 * <p>Default: false.
-	 * <p>Some tags, such as {@link org.zkoss.zhtml.Html}, won't generate the id attribute.
-	 * They shall override this method to return true.
+	/**
+	 * Whether to hide the id attribute.
+	 * <p>
+	 * Default: false.
+	 * <p>
+	 * Some tags, such as {@link org.zkoss.zhtml.Html}, won't generate the id attribute. They shall
+	 * override this method to return true.
 	 */
 	protected boolean shallHideId() {
 		return false;
 	}
 
-	//-- Component --//
-	/** Changes the visibility of this component.
-	 * <p>Note: it will adjust the style ({@link #getStyle}) based on the visibility.
+	// -- Component --//
+	/**
+	 * Changes the visibility of this component.
+	 * <p>
+	 * Note: it will adjust the style ({@link #getStyle}) based on the visibility.
 	 *
 	 * @return the previous visibility
 	 */
@@ -213,7 +235,8 @@ implements DynamicPropertied, RawId {
 						if ("none".equals(val)) {
 							String newstyle = style.substring(0, j);
 							final int k = style.indexOf(';', j + 7);
-							if (k >= 0) newstyle += style.substring(k + 1);
+							if (k >= 0)
+								newstyle += style.substring(k + 1);
 							setDynaProp("style", newstyle);
 						}
 					}
@@ -228,14 +251,14 @@ implements DynamicPropertied, RawId {
 						if (!"none".equals(val)) {
 							String newstyle = style.substring(0, j) + "display:none;";
 							final int k = style.indexOf(';', j + 7);
-							if (k >= 0) newstyle += style.substring(k + 1);
+							if (k >= 0)
+								newstyle += style.substring(k + 1);
 							setDynaProp("style", newstyle);
 						}
 					} else {
 						final int len = style.length();
-						String newstyle =
-							len > 0 && style.charAt(len - 1) != ';' ?
-								style + ';': style;
+						String newstyle = len > 0 && style.charAt(len - 1) != ';' ? style + ';'
+								: style;
 						setDynaProp("style", style + "display:none;");
 					}
 				}
@@ -244,7 +267,9 @@ implements DynamicPropertied, RawId {
 		return old;
 	}
 
-	/** Returns the widget class, "zhtml.Widget".
+	/**
+	 * Returns the widget class, "zhtml.Widget".
+	 * 
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {
@@ -256,9 +281,8 @@ implements DynamicPropertied, RawId {
 			throw new UiException("The tag name is not initialized yet");
 
 		final Execution exec = Executions.getCurrent();
-		if (exec == null || exec.isAsyncUpdate(null)
-		|| !HtmlPageRenders.isDirectContent(exec)) {
-			super.redraw(out); //generate JavaScript
+		if (exec == null || exec.isAsyncUpdate(null) || !HtmlPageRenders.isDirectContent(exec)) {
+			super.redraw(out); // generate JavaScript
 			return;
 		}
 
@@ -283,21 +307,22 @@ implements DynamicPropertied, RawId {
 			PageRenderer.afterRenderTag(exec, ret);
 		}
 	}
-	/** Renders the children directly to the given output.
-	 * Notice it is called only if {@link #redraw} is going to render
-	 * the content (HTML tags) directly.
-	 * If it is about to generate the JavaScript code
-	 * {@link #redrawChildren} will be called instead.
-	 * <p>You have to override this method if the deriving class
-	 * has additional information to render.
+
+	/**
+	 * Renders the children directly to the given output. Notice it is called only if
+	 * {@link #redraw} is going to render the content (HTML tags) directly. If it is about to
+	 * generate the JavaScript code {@link #redrawChildren} will be called instead.
+	 * <p>
+	 * You have to override this method if the deriving class has additional information to render.
+	 * 
 	 * @since 5.0.7
 	 */
-	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec,
-	java.io.Writer out) throws java.io.IOException {
+	protected void redrawChildrenDirectly(TagRenderContext rc, Execution exec, java.io.Writer out)
+			throws java.io.IOException {
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
-			if (((ComponentCtrl)child).getExtraCtrl() instanceof DirectContent) {
-				((ComponentCtrl)child).redraw(out);
+			if (((ComponentCtrl) child).getExtraCtrl() instanceof DirectContent) {
+				((ComponentCtrl) child).redraw(out);
 			} else {
 				HtmlPageRenders.setDirectContent(exec, false);
 				rc.renderBegin(child, null, getSpecialRendererOutput(child), true);
@@ -308,25 +333,27 @@ implements DynamicPropertied, RawId {
 			child = next;
 		}
 	}
+
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+			throws java.io.IOException {
 		super.renderProperties(renderer);
 		render(renderer, "prolog", getPrologHalf(false));
 		render(renderer, "epilog", getEpilogHalf());
 	}
+
 	/**
-	 * @param hideUuidIfNoId whether not to generate UUID if possible
+	 * @param hideUuidIfNoId
+	 *            whether not to generate UUID if possible
 	 */
-	/*package*/ String getPrologHalf(boolean hideUuidIfNoId) {
-		final StringBuilder sb = new StringBuilder(128)
-			.append('<').append(_tagnm);
+	/* package */ String getPrologHalf(boolean hideUuidIfNoId) {
+		final StringBuilder sb = new StringBuilder(128).append('<').append(_tagnm);
 
 		if ((!hideUuidIfNoId && !shallHideId()) || getId().length() > 0)
 			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
+				final Map.Entry me = (Map.Entry) it.next();
 				if (!"textContent".equals(me.getKey())) { // ignore textContent
 					// ZK-3011: should getValue if it's a deferredValue
 					Object v = me.getValue();
@@ -334,8 +361,7 @@ implements DynamicPropertied, RawId {
 						v = ((DeferredValue) v).getValue();
 					}
 					sb.append(' ').append(me.getKey()).append("=\"")
-						.append(XMLs.encodeAttribute(Objects.toString(v)))
-						.append('"');
+							.append(XMLs.encodeAttribute(Objects.toString(v))).append('"');
 				}
 			}
 		}
@@ -344,30 +370,34 @@ implements DynamicPropertied, RawId {
 			sb.append('/');
 
 		sb.append('>');
-		
 
 		Object textContent = getDynamicProperty("textContent");
 		if (textContent != null)
-			sb.append(XMLs.escapeXML((String)textContent));
+			sb.append(XMLs.escapeXML((String) textContent));
 		return sb.toString();
 	}
-	/*package*/ String getEpilogHalf() {
-		return isOrphanTag() ? "</" + _tagnm + '>': "";
+
+	/* package */ String getEpilogHalf() {
+		return isOrphanTag() ? "</" + _tagnm + '>' : "";
 	}
+
 	protected boolean isChildable() {
 		return isOrphanTag();
 	}
-	/** Returns whether this tag is an orphan tag, i.e., it shall be in the
-	 * form of &lt;tag/&gt;.
+
+	/**
+	 * Returns whether this tag is an orphan tag, i.e., it shall be in the form of &lt;tag/&gt;.
+	 * 
 	 * @since 5.0.8
 	 */
 	protected boolean isOrphanTag() {
 		return !HTMLs.isOrphanTag(_tagnm);
 	}
 
+	// --ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(
+			5);
 
-	//--ComponentCtrl--//
-	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
 	static {
 		_properties.put("id", new StringPropertyAccess() {
 			public void setValue(Component cmp, String value) {
@@ -413,29 +443,34 @@ implements DynamicPropertied, RawId {
 			return pa;
 		return super.getPropertyAccess(prop);
 	}
-	//Cloneable//
+
+	// Cloneable//
 	public Object clone() {
-		final AbstractTag clone = (AbstractTag)super.clone();
+		final AbstractTag clone = (AbstractTag) super.clone();
 		if (clone._props != null)
 			clone._props = new LinkedHashMap<String, Object>(clone._props);
 		return clone;
 	}
 
-	//Object//
+	// Object//
 	public String toString() {
-		return "["+_tagnm+' '+super.toString()+']';
+		return "[" + _tagnm + ' ' + super.toString() + ']';
 	}
 
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	protected class ExtraCtrl implements DirectContent {
 	}
+
 	private class EncodedURL implements org.zkoss.zk.au.DeferredValue {
 		private String _src;
+
 		public EncodedURL(String src) {
 			_src = src;
 		}
+
 		public Object getValue() {
 			return getEncodedURL(_src);
 		}

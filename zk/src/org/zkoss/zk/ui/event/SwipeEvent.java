@@ -36,16 +36,12 @@ public class SwipeEvent extends Event {
 		final Map<String, Object> data = request.getData();
 		Object dir = data.get("dir");
 		String swipeDir = dir == null ? "" : (String) dir;
-		
-		return new SwipeEvent(request.getCommand(), request.getComponent(),
-				AuRequests.getInt(data, "dispX", 0),
-				AuRequests.getInt(data,	"dispY", 0),
-				AuRequests.getInt(data, "dispT", 0),
-				swipeDir);
+
+		return new SwipeEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "dispX", 0),
+				AuRequests.getInt(data, "dispY", 0), AuRequests.getInt(data, "dispT", 0), swipeDir);
 	}
 
-	public SwipeEvent(String name, Component target, int swipeX, int swipeY,
-			int swipeTime, String swipeDir) {
+	public SwipeEvent(String name, Component target, int swipeX, int swipeY, int swipeTime, String swipeDir) {
 		super(name, target);
 		_swipeX = swipeX;
 		_swipeY = swipeY;

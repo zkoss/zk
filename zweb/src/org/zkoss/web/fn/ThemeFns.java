@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.resource.Locators;
@@ -46,13 +47,12 @@ import org.zkoss.web.util.resource.ClassWebResource;
  * @since 6.5.0
  */
 public class ThemeFns {
-	
+
 	private ThemeFns() {
 	}
 
 	private static Browser getBrowser() {
-		Double number = Servlets.getBrowser(
-				ServletFns.getCurrentRequest(), "ff");
+		Double number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ff");
 		if (number != null && number >= 3.6)
 			return Browser.Firefox;
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ie");
@@ -61,17 +61,16 @@ public class ThemeFns {
 				if (number == 9)
 					return Browser.IE9;
 				return Browser.Old_IE;
-			} else return Browser.IE;
+			} else
+				return Browser.IE;
 		}
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "webkit");
 		if (number != null) {
-			Double android = Servlets.getBrowser(
-					ServletFns.getCurrentRequest(), "android");
+			Double android = Servlets.getBrowser(ServletFns.getCurrentRequest(), "android");
 			if (android != null && android < 3) {
 				return Browser.Old_WebKit;
 			}
-			Double version = Servlets.getBrowser(
-					ServletFns.getCurrentRequest(), "chrome");
+			Double version = Servlets.getBrowser(ServletFns.getCurrentRequest(), "chrome");
 			if (version != null) {
 				if (version >= 10)
 					return Browser.WebKit;
@@ -80,13 +79,11 @@ public class ThemeFns {
 			}
 
 			// B65-ZK-1614: Full Screen iPad Web Apps Missing Component Buttons
-			version = Servlets.getBrowser(
-					ServletFns.getCurrentRequest(), "ios");
+			version = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ios");
 			if (version != null && version >= 500)
 				return Browser.WebKit;
-			
-			version = Servlets.getBrowser(
-					ServletFns.getCurrentRequest(), "safari");
+
+			version = Servlets.getBrowser(ServletFns.getCurrentRequest(), "safari");
 			if (version != null) {
 				if (version >= 5.1)
 					return Browser.WebKit;
@@ -114,8 +111,7 @@ public class ThemeFns {
 	public static String gradient(String direction, String colors) {
 		Browser temp = getBrowser();
 		if (temp == Browser.Old || temp == Browser.W3C)
-			return "\tbackground:"
-					+ grad(direction, getBrowser(), colors.split(";"));
+			return "\tbackground:" + grad(direction, getBrowser(), colors.split(";"));
 		else {
 			String[] cols = colors.split(";");
 			StringBuilder sb = new StringBuilder();
@@ -140,17 +136,14 @@ public class ThemeFns {
 	 *         "background:".
 	 */
 	public static String gradValue(String direction, String colors) {
-		return grad(direction, getBrowser(), colors.split(";"))
-				.replace(";", "");
+		return grad(direction, getBrowser(), colors.split(";")).replace(";", "");
 	}
 
 	private static String grad(String dir, Browser template, String[] colors) {
 		if ("|ver|hor|diag-|diag+|rad|".indexOf("|" + dir + "|") == -1)
-			throw new IllegalArgumentException(
-					"Type must be ver, hor, diag-, diag+, or rad.");
+			throw new IllegalArgumentException("Type must be ver, hor, diag-, diag+, or rad.");
 		if (colors.length < 2)
-			throw new IllegalArgumentException(
-					"Please specify more than two colors.");
+			throw new IllegalArgumentException("Please specify more than two colors.");
 		String color1 = toHex(colors[0]);
 		String color2 = toHex(colors[1]);
 		StringBuilder colorAll = new StringBuilder();
@@ -163,15 +156,14 @@ public class ThemeFns {
 				if (end == 0 && !color.toLowerCase(java.util.Locale.ENGLISH).contains("transparent"))
 					if (hex)
 						throw new IllegalArgumentException(
-								"The format of hexadecimal is wrong! [" + color
-										+ "] or without stops (%)");
-					else throw new IllegalArgumentException(
-							"The format of RGBA is wrong! [" + color + "] or without stops (%)");
+								"The format of hexadecimal is wrong! [" + color + "] or without stops (%)");
+					else
+						throw new IllegalArgumentException(
+								"The format of RGBA is wrong! [" + color + "] or without stops (%)");
 
 				String pos = color.substring(end, color.length());
 				color = color.substring(0, end);
-				colorAll.append("color-stop(").append(pos).append(',')
-						.append(color).append("),");
+				colorAll.append("color-stop(").append(pos).append(',').append(color).append("),");
 			}
 			int len = colorAll.length();
 			if (len > 0)
@@ -185,17 +177,16 @@ public class ThemeFns {
 				if (end == 0 && !color.toLowerCase(java.util.Locale.ENGLISH).contains("transparent"))
 					if (hex)
 						throw new IllegalArgumentException(
-								"The format of hexadecimal is wrong! [" + color
-										+ "] or without stops (%)");
-					else throw new IllegalArgumentException(
-							"The format of RGBA is wrong! [" + color + "] or without stops (%)");
+								"The format of hexadecimal is wrong! [" + color + "] or without stops (%)");
+					else
+						throw new IllegalArgumentException(
+								"The format of RGBA is wrong! [" + color + "] or without stops (%)");
 
 				String pos = color.substring(end, color.length());
 				color = color.substring(0, end);
-				colorAll.append("<stop stop-color=\"").append(color).append("\" offset=\"")
-						.append(pos).append("\"/>");
+				colorAll.append("<stop stop-color=\"").append(color).append("\" offset=\"").append(pos).append("\"/>");
 			}
-		
+
 		} else if (template == Browser.Old_IE) {
 			color1 = toIEHex(colors[0]);
 			color2 = toIEHex(colors[1]);
@@ -211,8 +202,8 @@ public class ThemeFns {
 		String gradType = "rad".equals(dir) ? "radial" : "linear";
 		int ieGradType = "hor".equals(dir) ? 1 : 0; // IE only supports
 													// ver/hor
-		String result = String.format(template.getGradient(dir), color1, color2, "",
-				gradType, ieGradType, colorAll.toString());
+		String result = String.format(template.getGradient(dir), color1, color2, "", gradType, ieGradType,
+				colorAll.toString());
 		if (template == Browser.IE9) {
 			try {
 				result = Base64.encodeBase64String(result.getBytes("UTF-8"));
@@ -221,7 +212,7 @@ public class ThemeFns {
 			}
 			result = "url(data:image/svg+xml;base64," + result + ");";
 		}
-		
+
 		return result;
 	}
 
@@ -252,8 +243,7 @@ public class ThemeFns {
 	private static String applyCSS(String styleName, String styleValue) {
 		Browser browser = getBrowser();
 		if (!Strings.isEmpty(browser.getPrefix())) {
-			return String.format(CSS_TEMPLATE, browser.getPrefix(), styleName,
-					styleValue);
+			return String.format(CSS_TEMPLATE, browser.getPrefix(), styleName, styleValue);
 		}
 		return String.format(CSS_TEMPLATE_W3C, styleName, styleValue);
 	}
@@ -297,8 +287,7 @@ public class ThemeFns {
 		Browser browser = getBrowser();
 		StringBuilder sb = new StringBuilder(32);
 		if (browser == Browser.Firefox || browser == Browser.WebKit) {
-			sb.append("\t display:\t").append(browser.getPrefix())
-					.append("box;\n");
+			sb.append("\t display:\t").append(browser.getPrefix()).append("box;\n");
 		}
 		sb.append("\t display:\t box;\n");
 		return sb.append(applyCSS(styleName, styleValue)).toString();
@@ -310,17 +299,14 @@ public class ThemeFns {
 	 * 
 	 * @see #box(String, String)
 	 */
-	public static String box2(String styleName, String styleValue,
-			String styleName2, String styleValue2) {
+	public static String box2(String styleName, String styleValue, String styleName2, String styleValue2) {
 		Browser browser = getBrowser();
 		StringBuilder sb = new StringBuilder(32);
 		if (browser == Browser.Firefox || browser == Browser.WebKit) {
-			sb.append("\t display:\t").append(browser.getPrefix())
-					.append("box;\n");
+			sb.append("\t display:\t").append(browser.getPrefix()).append("box;\n");
 		}
 		sb.append("\t display:\t box;\n");
-		return sb.append(applyCSS(styleName, styleValue))
-				.append(applyCSS(styleName2, styleValue2)).toString();
+		return sb.append(applyCSS(styleName, styleValue)).append(applyCSS(styleName2, styleValue2)).toString();
 	}
 
 	/**
@@ -330,18 +316,15 @@ public class ThemeFns {
 	 * @see #box(String, String)
 	 * @see #box2(String, String, String, String)
 	 */
-	public static String box3(String styleName, String styleValue,
-			String styleName2, String styleValue2, String styleName3,
-			String styleValue3) {
+	public static String box3(String styleName, String styleValue, String styleName2, String styleValue2,
+			String styleName3, String styleValue3) {
 		Browser browser = getBrowser();
 		StringBuilder sb = new StringBuilder(32);
 		if (browser == Browser.Firefox || browser == Browser.WebKit) {
-			sb.append("\t display:\t").append(browser.getPrefix())
-					.append("box;\n");
+			sb.append("\t display:\t").append(browser.getPrefix()).append("box;\n");
 		}
 		sb.append("\t display:\t box;\n");
-		return sb.append(applyCSS(styleName, styleValue))
-				.append(applyCSS(styleName2, styleValue2))
+		return sb.append(applyCSS(styleName, styleValue)).append(applyCSS(styleName2, styleValue2))
 				.append(applyCSS(styleName3, styleValue3)).toString();
 	}
 
@@ -391,16 +374,18 @@ public class ThemeFns {
 		if (end > 0)
 			color = color.substring(0, end);
 
-		Map<String, String> colors = (Map<String, String>) ServletFns
-				.getCurrentRequest().getAttribute("themeFns.colors");
+		Map<String, String> colors = (Map<String, String>) ServletFns.getCurrentRequest()
+				.getAttribute("themeFns.colors");
 		if (colors == null)
-			ServletFns.getCurrentRequest().setAttribute("themeFns.colors",
-					colors = new HashMap<String, String>());
+			ServletFns.getCurrentRequest().setAttribute("themeFns.colors", colors = new HashMap<String, String>());
 		if (!colors.containsKey(color))
 			colors.put(color, toHex(toColor(color)));
 		return colors.get(color);
 	}
-
+	
+	private static String toHex(Color color) {
+		return Colors.getHexString(color);
+	}
 
 	@SuppressWarnings("unchecked")
 	private static String toIEHex(String color) {
@@ -415,21 +400,24 @@ public class ThemeFns {
 		if (end > 0)
 			color = color.substring(0, end);
 
-		Map<String, String> colors = (Map<String, String>) ServletFns
-				.getCurrentRequest().getAttribute("themeFns.IEcolors");
+		Map<String, String> colors = (Map<String, String>) ServletFns.getCurrentRequest()
+				.getAttribute("themeFns.IEcolors");
 		if (colors == null)
-			ServletFns.getCurrentRequest().setAttribute("themeFns.IEcolors",
-					colors = new HashMap<String, String>());
+			ServletFns.getCurrentRequest().setAttribute("themeFns.IEcolors", colors = new HashMap<String, String>());
 		if (!colors.containsKey(color))
 			colors.put(color, toIEHex(toColor(color)));
 		return colors.get(color);
 	}
+	
+	private static String toIEHex(Color color) {
+		return Colors.getIEHexString(color);
+	}
+
 	private static String locate(String path) {
 		try {
 			if (path.startsWith("~./")) {
 				path = Servlets.locate(ServletFns.getCurrentServletContext(), ServletFns.getCurrentRequest(),
-					ClassWebResource.PATH_PREFIX + path.substring(2),
-					Locators.getDefault());
+						ClassWebResource.PATH_PREFIX + path.substring(2), Locators.getDefault());
 				return path;
 			}
 			return Servlets.locate(ServletFns.getCurrentServletContext(), ServletFns.getCurrentRequest(), path, null);
@@ -438,12 +426,15 @@ public class ThemeFns {
 		}
 		return path;
 	}
-	
+
 	private static void log(String msg) {
 		Logger log = LoggerFactory.getLogger("global");
-		if (log.isErrorEnabled()) log.error(msg);
-		else System.err.println(msg);
+		if (log.isErrorEnabled())
+			log.error(msg);
+		else
+			System.err.println(msg);
 	}
+
 	/**
 	 * Loads a theme properties and apply them into the request scope.
 	 * @param path a file path
@@ -451,17 +442,9 @@ public class ThemeFns {
 	public static void loadProperties(String path) {
 		// add ability to load theme properties from a folder
 		// @since 6.5.2
-		if (!ThemeProperties.loadProperties(ServletFns.getCurrentRequest(), 
-				locate(ServletFns.resolveThemeURL(path)))) {
+		if (!ThemeProperties.loadProperties(ServletFns.getCurrentRequest(), locate(ServletFns.resolveThemeURL(path)))) {
 			log("The properties file is not loaded correctly! [" + path + "]");
 		}
-	}
-
-	private static String toHex(Color color) {
-		return Colors.getHexString(color);
-	}
-	private static String toIEHex(Color color) {
-		return Colors.getIEHexString(color);
 	}
 
 	private static Color toColor(String color) {
@@ -469,15 +452,9 @@ public class ThemeFns {
 	}
 
 	private enum Browser {
-		WebKit("-webkit-", "Chrome10+,Safari5.1+"),
-		W3C("", "W3C"),
-		Firefox("-moz-", "FF3.6+"),
-		Opera("-o-", "Opera 11.10+"),
-		IE("-ms-", "IE10+"),
-		IE9("-ms-", "IE9"),
-		Old(null, null),
-		Old_IE(null, "IE6-8"),
-		Old_WebKit("-webkit-", "Chrome,Safari4+");
+		WebKit("-webkit-", "Chrome10+,Safari5.1+"), W3C("", "W3C"), Firefox("-moz-", "FF3.6+"), Opera("-o-",
+				"Opera 11.10+"), IE("-ms-", "IE10+"), IE9("-ms-", "IE9"), Old(null, null), Old_IE(null,
+						"IE6-8"), Old_WebKit("-webkit-", "Chrome,Safari4+");
 
 		private final String _template;
 
@@ -490,36 +467,35 @@ public class ThemeFns {
 			if ("IE6-8".equals(browser)) {
 				_template = new StringBuilder(
 						"\tbackground: #FFFFFF;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
-						.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-8 */\n")
-						.toString();
+								.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-8 */\n").toString();
 			} else if ("IE9".equals(browser)) {
 				_template = new StringBuilder(
 						"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%%\" height=\"100%%\" viewBox=\"0 0 1 1\" preserveAspectRatio=\"none\">\n")
-						.append("%3$s\n")
-						.append("%6$s\n")
-						.append("</linearGradient>\n")
-						.append("<rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"url(#zkie9)\" /></svg>").toString();
+								.append("%3$s\n").append("%6$s\n").append("</linearGradient>\n")
+								.append("<rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"url(#zkie9)\" /></svg>")
+								.toString();
 				_GRAD_TYPE = new HashMap<String, String>();
-				_GRAD_TYPE.put("ver", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"0%%\" y2=\"100%%\">");
-				_GRAD_TYPE.put("hor", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"0%%\">");
-				_GRAD_TYPE.put("diag-", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"100%%\">");
-				_GRAD_TYPE.put("diag+", "<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"100%%\" x2=\"100%%\" y2=\"0%%\">");
-				_GRAD_TYPE
-						.put("rad", "<radialGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" cx=\"50%%\" cy=\"50%%\" r=\"50%%\">");
+				_GRAD_TYPE.put("ver",
+						"<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"0%%\" y2=\"100%%\">");
+				_GRAD_TYPE.put("hor",
+						"<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"0%%\">");
+				_GRAD_TYPE.put("diag-",
+						"<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"0%%\" x2=\"100%%\" y2=\"100%%\">");
+				_GRAD_TYPE.put("diag+",
+						"<linearGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" x1=\"0%%\" y1=\"100%%\" x2=\"100%%\" y2=\"0%%\">");
+				_GRAD_TYPE.put("rad",
+						"<radialGradient id=\"zkie9\" gradientUnits=\"userSpaceOnUse\" cx=\"50%%\" cy=\"50%%\" r=\"50%%\">");
 			} else if ("Chrome,Safari4+".equals(browser)) {
-				_template = new StringBuilder().append("\t").append(prefix)
-						.append("gradient(%4$s, %3$s, %6$s); /* ")
+				_template = new StringBuilder().append("\t").append(prefix).append("gradient(%4$s, %3$s, %6$s); /* ")
 						.append(browser).append(" */\n").toString();
 				_GRAD_TYPE = new HashMap<String, String>();
 				_GRAD_TYPE.put("ver", "left top, left bottom");
 				_GRAD_TYPE.put("hor", "left top, right top");
 				_GRAD_TYPE.put("diag-", "left top, right bottom");
 				_GRAD_TYPE.put("diag+", "left bottom, right top");
-				_GRAD_TYPE
-						.put("rad", "center center, 0px, center center, 100%");
+				_GRAD_TYPE.put("rad", "center center, 0px, center center, 100%");
 			} else if (browser != null) {
-				_template = new StringBuilder().append("\t").append(prefix)
-						.append("%4$s-gradient(%3$s, %6$s); /* ")
+				_template = new StringBuilder().append("\t").append(prefix).append("%4$s-gradient(%3$s, %6$s); /* ")
 						.append(browser).append(" */\n").toString();
 				if ("W3C".equals(browser)) {
 					_GRAD_TYPE = new HashMap<String, String>();
@@ -536,7 +512,8 @@ public class ThemeFns {
 					_GRAD_TYPE.put("diag+", "45deg");
 					_GRAD_TYPE.put("rad", "center, ellipse cover");
 				}
-			} else _template = "\t%1$s; /* Old browsers */\n";
+			} else
+				_template = "\t%1$s; /* Old browsers */\n";
 		}
 
 		public String getPrefix() {
@@ -556,7 +533,7 @@ public class ThemeFns {
 	private static ThemeRegistry _themeRegistry = null;
 	// the current theme resolver
 	private static ThemeResolver _themeResolver = null;
-	
+
 	/**
 	 * Returns the current theme registry
 	 * 
@@ -566,7 +543,7 @@ public class ThemeFns {
 	public static ThemeRegistry getThemeRegistry() {
 		return _themeRegistry;
 	}
-	
+
 	/**
 	 * Change the theme registry
 	 * 
@@ -576,7 +553,7 @@ public class ThemeFns {
 	public static void setThemeRegistry(ThemeRegistry themeRegistry) {
 		_themeRegistry = themeRegistry;
 	}
-	
+
 	/**
 	 * Returns the current theme resolver
 	 * 
@@ -586,7 +563,7 @@ public class ThemeFns {
 	public static ThemeResolver getThemeResolver() {
 		return _themeResolver;
 	}
-	
+
 	/**
 	 * Change the current theme resolver
 	 * 
@@ -595,9 +572,9 @@ public class ThemeFns {
 	public static void setThemeResolver(ThemeResolver themeResolver) {
 		_themeResolver = themeResolver;
 	}
-	
-	private final static String THEME_PREFERRED_KEY = "org.zkoss.theme.preferred";
-	
+
+	private static final String THEME_PREFERRED_KEY = "org.zkoss.theme.preferred";
+
 	/**
 	 * Returns the current theme name
 	 * 
@@ -609,37 +586,37 @@ public class ThemeFns {
 		String t = getTheme();
 		if (_themeRegistry.hasTheme(t))
 			return t;
-		
+
 		// 2. library property
 		t = Library.getProperty(THEME_PREFERRED_KEY);
 		if (_themeRegistry.hasTheme(t))
 			return t;
-		
+
 		// 3. theme of highest priority
 		Theme[] themes = _themeRegistry.getThemes();
 		StandardTheme highest = null;
 		Comparator<StandardTheme> comparator = StandardTheme.getComparator();
 		for (Theme theme : themes) {
 			if (theme instanceof StandardTheme) {
-				if (comparator.compare((StandardTheme)theme, highest) < 0) {
-					highest = (StandardTheme)theme;
+				if (comparator.compare((StandardTheme) theme, highest) < 0) {
+					highest = (StandardTheme) theme;
 				}
 			}
-		}		
+		}
 		return (highest != null) ? highest.getName() : StandardTheme.DEFAULT_NAME;
 	}
-	
+
 	/**
 	 * Returns the theme specified in cookies
 	 * @return the name of the theme or default theme.
 	 */
 	private static String getTheme() {
 		ServletRequest request = ServletFns.getCurrentRequest();
-		
+
 		if (!(request instanceof HttpServletRequest))
 			return StandardTheme.DEFAULT_NAME;
-		
-		return _themeResolver.getTheme((HttpServletRequest)request);
+
+		return _themeResolver.getTheme((HttpServletRequest) request);
 	}
-	
+
 }

@@ -39,6 +39,7 @@ public interface DynamicTag extends DynamicPropertied {
 	/** Sets the tag name.
 	 */
 	public void setTag(String tagname) throws WrongValueException;
+
 	/** Returns whether the specified tag is allowed.
 	 */
 	public boolean hasTag(String tagname);

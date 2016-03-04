@@ -47,8 +47,7 @@ public interface EventThreadSuspend {
 	 * is called with.
 	 * @exception Exception preventing the thread from suspending.
 	 */
-	public void beforeSuspend(Component comp, Event evt, Object obj)
-	throws Exception;
+	public void beforeSuspend(Component comp, Event evt, Object obj) throws Exception;
 
 	/** Called in the servlet thread after the event processing thread has been
 	 * suspended.

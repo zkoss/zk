@@ -36,6 +36,7 @@ public interface DesktopSerializationListener {
 	/** Called when a desktop is going to serialize this object.
 	 */
 	public void willSerialize(Desktop desktop);
+
 	/** Called when a desktop has de-serialized this object back.
 	 */
 	public void didDeserialize(Desktop desktop);

@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
@@ -38,8 +39,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelArray<E> extends AbstractListModel<E>
-implements Sortable<E>, java.io.Serializable {
+public class ListModelArray<E> extends AbstractListModel<E> implements Sortable<E>, java.io.Serializable {
 	private static final long serialVersionUID = 20070226L;
 
 	protected Object[] _array;
@@ -66,7 +66,7 @@ implements Sortable<E>, java.io.Serializable {
 	 * @since 2.4.0
 	 */
 	public ListModelArray(E[] array, boolean live) {
-		_array = live ? array: ArraysX.duplicate(array);
+		_array = live ? array : ArraysX.duplicate(array);
 	}
 
 	/**
@@ -80,7 +80,7 @@ implements Sortable<E>, java.io.Serializable {
 	public ListModelArray(E[] array) {
 		_array = ArraysX.duplicate(array);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param size the array size.
@@ -88,6 +88,7 @@ implements Sortable<E>, java.io.Serializable {
 	public ListModelArray(int size) {
 		_array = new Object[size];
 	}
+
 	/**
 	 * Constructor.
 	 * It mades a copy of the specified list (i.e., not live).
@@ -103,7 +104,7 @@ implements Sortable<E>, java.io.Serializable {
 	public E get(int index) {
 		return getElementAt(index);
 	}
-	
+
 	/** Change content of the Array at specified index.
 	 * @param index the array index to be set the new value.
 	 */
@@ -111,11 +112,11 @@ implements Sortable<E>, java.io.Serializable {
 		_array[index] = value;
 		fireEvent(ListDataEvent.CONTENTS_CHANGED, index, index);
 	}
-		
+
 	/**
 	 * Get the inner real Object[].
 	 * @since 2.4.0
-	 */	
+	 */
 	public Object[] getInnerArray() {
 		return _array;
 	}
@@ -123,7 +124,7 @@ implements Sortable<E>, java.io.Serializable {
 	/** Returns the index of the specified element.
 	 */
 	public int indexOf(Object elm) {
-		for(int j = 0; j < _array.length; ++j) {
+		for (int j = 0; j < _array.length; ++j) {
 			if (Objects.equals(elm, _array[j])) {
 				return j;
 			}
@@ -150,11 +151,12 @@ implements Sortable<E>, java.io.Serializable {
 	public int getSize() {
 		return _array.length;
 	}
+
 	@SuppressWarnings("unchecked")
 	public E getElementAt(int j) {
-		return (E)_array[j];
+		return (E) _array[j];
 	}
-	
+
 	//-- Sortable --//
 	/** Sorts the data.
 	 *
@@ -166,33 +168,34 @@ implements Sortable<E>, java.io.Serializable {
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		_sorting = cmpr;
 		_sortDir = ascending;
-		Arrays.sort(_array, (Comparator)cmpr);
+		Arrays.sort(_array, (Comparator) cmpr);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
 	public String getSortDirection(Comparator<E> cmpr) {
 		if (Objects.equals(_sorting, cmpr))
-			return _sortDir ?
-					"ascending" : "descending";
-		return "natural";	
+			return _sortDir ? "ascending" : "descending";
+		return "natural";
 	}
-	
+
 	//Object//
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o instanceof ListModelArray) {
-			return Arrays.equals(_array, ((ListModelArray<?>)o)._array);
+			return Arrays.equals(_array, ((ListModelArray<?>) o)._array);
 		}
 		return false;
 	}
+
 	public int hashCode() {
 		return Arrays.hashCode(_array);
 	}
+
 	public String toString() {
 		return Objects.toString(_array);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		ListModelArray<E> clone = (ListModelArray<E>) super.clone();
@@ -201,17 +204,17 @@ implements Sortable<E>, java.io.Serializable {
 		return clone;
 	}
 
-	
 	protected void fireSelectionEvent(E e) {
 		fireEvent(ListDataEvent.SELECTION_CHANGED, indexOf(e), -1);
 	}
-	
+
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
 	public void addSelection(E obj) {
 		addToSelection(obj);
 	}
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
 	public void removeSelection(Object obj) {

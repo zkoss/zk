@@ -21,7 +21,10 @@ import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.MaximizeEvent;
+import org.zkoss.zk.ui.event.MinimizeEvent;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.XulElement;
 
@@ -57,20 +60,20 @@ public class Panel extends XulElement implements Framable {
 
 	private String _border = "none";
 	private String _title = "";
-	private int _minheight = 100, _minwidth = 200; 
-	private boolean _closable, _collapsible, _floatable, _movable, 
-		_maximizable, _minimizable, _maximized, _minimized, _sizable,
-		_open = true, _framableBC/*backward compatible*/;
+	private int _minheight = 100, _minwidth = 200;
+	private boolean _closable, _collapsible, _floatable, _movable, _maximizable, _minimizable, _maximized, _minimized,
+			_sizable, _open = true, _framableBC/*backward compatible*/;
 
 	static {
 		addClientEvent(Panel.class, Events.ON_CLOSE, 0);
-		addClientEvent(Panel.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Panel.class, Events.ON_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		addClientEvent(Panel.class, Events.ON_OPEN, CE_IMPORTANT);
-		addClientEvent(Panel.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Panel.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Panel.class, Events.ON_MINIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_MINIMIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
+
 	/**
 	 * Returns whether this Panel is open.
 	 * <p>Default: true.
@@ -78,6 +81,7 @@ public class Panel extends XulElement implements Framable {
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** 
 	 * Opens or closes this Panel.
 	 */
@@ -87,6 +91,7 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("open", _open);
 		}
 	}
+
 	/**
 	 * @deprecated As of release 5.0.6, replaced with {@link #getBorder}.
 	 * Returns whether to render the panel with custom rounded borders.
@@ -95,6 +100,7 @@ public class Panel extends XulElement implements Framable {
 	public boolean isFramable() {
 		return _border.startsWith("rounded"); //rounded or rounded+
 	}
+
 	/**
 	 * @deprecated As of release 5.0.6, replaced with {@link #setBorder}.
 	 * Sets whether to render the panel with custom rounded borders.
@@ -104,10 +110,9 @@ public class Panel extends XulElement implements Framable {
 	public void setFramable(boolean framable) {
 		_framableBC = true;
 		boolean bordered = "normal".equals(_border) || "rounded+".equals(_border);
-		setBorder0(
-			framable ?
-				bordered ? "rounded+": "rounded": bordered ? "normal": "none");
+		setBorder0(framable ? bordered ? "rounded+" : "rounded" : bordered ? "normal" : "none");
 	}
+
 	/**
 	 * Sets whether to move the panel to display it inline where it is rendered.
 	 * 
@@ -120,6 +125,7 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("movable", _movable);
 		}
 	}
+
 	/**
 	 * Returns whether to move the panel to display it inline where it is rendered.
 	 * <p>Default: false.
@@ -127,6 +133,7 @@ public class Panel extends XulElement implements Framable {
 	public boolean isMovable() {
 		return _movable;
 	}
+
 	/**
 	 * Returns whether to float the panel to display it inline where it is rendered.
 	 * <p>Default: false.
@@ -134,25 +141,28 @@ public class Panel extends XulElement implements Framable {
 	public boolean isFloatable() {
 		return _floatable;
 	}
+
 	public boolean setVisible(boolean visible) {
 		if (visible == isVisible())
 			return visible;
 		_maximized = _minimized = false;
 		return setVisible0(visible);
 	}
+
 	private boolean setVisible0(boolean visible) {
 		return super.setVisible(visible);
 	}
+
 	/**
 	 * Sets whether to float the panel to display it inline where it is rendered.
 	 * 
 	 * <p>Note that by default, setting floatable to true will cause the
-     * panel to display at default offsets, which depend on the offsets of 
-     * the embedded panel from its element to <i>document.body</i> -- because the panel
-     * is absolute positioned, the position must be set explicitly by {@link #setTop(String)}
-     * and {@link #setLeft(String)}. Also, when floatable a panel you should always
-     * assign a fixed width, otherwise it will be auto width and will expand to fill
-     * to the right edge of the viewport.
+	 * panel to display at default offsets, which depend on the offsets of 
+	 * the embedded panel from its element to <i>document.body</i> -- because the panel
+	 * is absolute positioned, the position must be set explicitly by {@link #setTop(String)}
+	 * and {@link #setLeft(String)}. Also, when floatable a panel you should always
+	 * assign a fixed width, otherwise it will be auto width and will expand to fill
+	 * to the right edge of the viewport.
 	 */
 	public void setFloatable(boolean floatable) {
 		if (_floatable != floatable) {
@@ -160,12 +170,14 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("floatable", _floatable);
 		}
 	}
+
 	/**
 	 * Returns whether the panel is maximized.
 	 */
 	public boolean isMaximized() {
 		return _maximized;
 	}
+
 	/**
 	 * Sets whether the panel is maximized, and then the size of the panel will depend 
 	 * on it to show a appropriate size. In other words, if true, the size of the
@@ -180,7 +192,7 @@ public class Panel extends XulElement implements Framable {
 	public void setMaximized(boolean maximized) {
 		if (_maximized != maximized) {
 			if (!_maximizable)
-				throw new UiException("Not maximizable, "+this);
+				throw new UiException("Not maximizable, " + this);
 
 			_maximized = maximized;
 			if (_maximized) {
@@ -190,21 +202,23 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("maximized", _maximized);
 		}
 	}
+
 	/**
 	 * Returns whether to display the maximizing button and allow the user to maximize
-     * the panel. 
-     * <p>Default: false.
+	 * the panel. 
+	 * <p>Default: false.
 	 */
 	public boolean isMaximizable() {
 		return _maximizable;
 	}
+
 	/**
-     * Sets whether to display the maximizing button and allow the user to maximize
-     * the panel, when a panel is maximized, the button will automatically
-     * change to a restore button with the appropriate behavior already built-in
-     * that will restore the panel to its previous size.
-     * <p>Default: false.
-     * 
+	 * Sets whether to display the maximizing button and allow the user to maximize
+	 * the panel, when a panel is maximized, the button will automatically
+	 * change to a restore button with the appropriate behavior already built-in
+	 * that will restore the panel to its previous size.
+	 * <p>Default: false.
+	 * 
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 */
 	public void setMaximizable(boolean maximizable) {
@@ -221,6 +235,7 @@ public class Panel extends XulElement implements Framable {
 	public boolean isMinimized() {
 		return _minimized;
 	}
+
 	/**
 	 * Sets whether the panel is minimized.
 	 * <p>Default: false.
@@ -229,32 +244,35 @@ public class Panel extends XulElement implements Framable {
 	public void setMinimized(boolean minimized) {
 		if (_minimized != minimized) {
 			if (!_minimizable)
-				throw new UiException("not minimizable, "+ this);
+				throw new UiException("not minimizable, " + this);
 
 			_minimized = minimized;
 			if (_minimized) {
 				_maximized = false;
 				setVisible0(false); //avoid dead loop
-			} else setVisible0(true);
+			} else
+				setVisible0(true);
 			smartUpdate("minimized", _minimized);
 		}
 	}
+
 	/**
 	 * Returns whether to display the minimizing button and allow the user to minimize
-     * the panel. 
-     * <p>Default: false.
+	 * the panel. 
+	 * <p>Default: false.
 	 */
 	public boolean isMinimizable() {
 		return _minimizable;
 	}
+
 	/**
-     * Sets whether to display the minimizing button and allow the user to minimize
-     * the panel. Note that this button provides no implementation -- the behavior
-     * of minimizing a panel is implementation-specific, so the MinimizeEvent
-     * event must be handled and a custom minimize behavior implemented for this
-     * option to be useful.
-     * 
-     * <p>Default: false. 
+	 * Sets whether to display the minimizing button and allow the user to minimize
+	 * the panel. Note that this button provides no implementation -- the behavior
+	 * of minimizing a panel is implementation-specific, so the MinimizeEvent
+	 * event must be handled and a custom minimize behavior implemented for this
+	 * option to be useful.
+	 * 
+	 * <p>Default: false. 
 	 * <p>Note: the maximize button won't be displayed if no title or caption at all.
 	 * @see MinimizeEvent
 	 */
@@ -264,6 +282,7 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("minimizable", _minimizable);
 		}
 	}
+
 	/**
 	 * Returns whether to show a toggle button on the title bar.
 	 * <p>Default: false.
@@ -271,6 +290,7 @@ public class Panel extends XulElement implements Framable {
 	public boolean isCollapsible() {
 		return _collapsible;
 	}
+
 	/**
 	 * Sets whether to show a toggle button on the title bar.
 	 * <p>Default: false.
@@ -283,11 +303,13 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("collapsible", _collapsible);
 		}
 	}
+
 	/** Returns whether to show a close button on the title bar.
 	 */
 	public boolean isClosable() {
 		return _closable;
 	}
+
 	/** Sets whether to show a close button on the title bar.
 	 * If closable, a button is displayed and the onClose event is sent
 	 * if an user clicks the button.
@@ -313,12 +335,14 @@ public class Panel extends XulElement implements Framable {
 	 * @since 5.0.0
 	 */
 	public void setMinheight(int minheight) {
-		if (minheight < 0) minheight = 100;
+		if (minheight < 0)
+			minheight = 100;
 		if (_minheight != minheight) {
 			_minheight = minheight;
 			smartUpdate("minheight", _minheight);
 		}
 	}
+
 	/**
 	 * Returns the minimum height.
 	 * <p>Default: 100.
@@ -327,6 +351,7 @@ public class Panel extends XulElement implements Framable {
 	public int getMinheight() {
 		return _minheight;
 	}
+
 	/**
 	 * Sets the minimum width in pixels allowed for this panel. If negative, 200 is assumed.
 	 * <p>Default: 200. 
@@ -334,12 +359,14 @@ public class Panel extends XulElement implements Framable {
 	 * @since 5.0.0
 	 */
 	public void setMinwidth(int minwidth) {
-		if (minwidth < 0) minwidth = 200;
+		if (minwidth < 0)
+			minwidth = 200;
 		if (_minwidth != minwidth) {
 			_minwidth = minwidth;
 			smartUpdate("minwidth", _minwidth);
 		}
 	}
+
 	/**
 	 * Returns the minimum width.
 	 * <p>Default: 200.
@@ -348,24 +375,28 @@ public class Panel extends XulElement implements Framable {
 	public int getMinwidth() {
 		return _minwidth;
 	}
+
 	public void setHflex(String flex) {
 		super.setHflex(flex);
 		Panelchildren pc = getPanelchildren();
 		if (pc != null)
 			pc.smartUpdate("hflex", flex);
 	}
+
 	public void setVflex(String flex) {
 		super.setVflex(flex);
 		Panelchildren pc = getPanelchildren();
 		if (pc != null)
 			pc.smartUpdate("vflex", flex);
 	}
+
 	/** Returns whether the panel is sizable.
 	 * @since 5.0.0
 	 */
 	public boolean isSizable() {
 		return _sizable;
 	}
+
 	/** Sets whether the panel is sizable.
 	 * If true, an user can drag the border to change the panel width.
 	 * <p>Default: false.
@@ -377,21 +408,23 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("sizable", sizable);
 		}
 	}
-	
+
 	/** Returns the caption of this panel.
 	 */
 	public Caption getCaption() {
 		return _caption;
 	}
+
 	/** Returns the border.
 	 *
 	 * <p>Default: "none".
 	 */
 	public String getBorder() {
 		if (_framableBC && _border.startsWith("rounded")) //backward compatible
-			return "rounded".equals(_border) ? "none": "normal";
+			return "rounded".equals(_border) ? "none" : "normal";
 		return _border;
 	}
+
 	/** Sets the border.
 	 * Allowed values include <code>none</code> (default), <code>normal</code>,
 	 * <code>rounded</code> and <code>rounded+</code>.
@@ -416,17 +449,19 @@ public class Panel extends XulElement implements Framable {
 					border = "rounded";
 			}
 		}
-	
+
 		setBorder0(border);
 	}
+
 	/** Enables or disables the border.
 	 * @param border whether to have a border. If true is specified,
 	 * it is the same as <code>setBorder("normal")</code>.
 	 * @since 5.0.8
 	 */
 	public void setBorder(boolean border) {
-		setBorder(border ? "normal": "none");
+		setBorder(border ? "normal" : "none");
 	}
+
 	private void setBorder0(String border) {
 		if (!Objects.equals(_border, border)) {
 			_border = border;
@@ -445,6 +480,7 @@ public class Panel extends XulElement implements Framable {
 	public String getTitle() {
 		return _title;
 	}
+
 	/** Sets the title.
 	 */
 	public void setTitle(String title) {
@@ -455,7 +491,7 @@ public class Panel extends XulElement implements Framable {
 			smartUpdate("title", _title);
 		}
 	}
-	
+
 	/**
 	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
 	 * "tbar" is the name of top toolbar, and "bbar" the name of bottom toolbar,
@@ -467,17 +503,17 @@ public class Panel extends XulElement implements Framable {
 		Component refChild = null;
 		if ("tbar".equals(name)) {
 			if (_tbar != null)
-				throw new UiException("Only one top toolbar child is allowed: "+this);
+				throw new UiException("Only one top toolbar child is allowed: " + this);
 			refChild = this.getFirstChild();
 		} else if ("bbar".equals(name)) {
 			if (_bbar != null)
-				throw new UiException("Only one bottom toolbar child is allowed: "+this);
+				throw new UiException("Only one bottom toolbar child is allowed: " + this);
 			refChild = _fbar;
 		} else if ("fbar".equals(name)) {
 			if (_fbar != null)
-				throw new UiException("Only one foot toolbar child is allowed: "+this);
+				throw new UiException("Only one foot toolbar child is allowed: " + this);
 		} else {
-			throw new UiException("Unknown toolbar: "+name);
+			throw new UiException("Unknown toolbar: " + name);
 		}
 
 		if (super.insertBefore(toolbar, refChild)) {
@@ -495,25 +531,28 @@ public class Panel extends XulElement implements Framable {
 		}
 		return false;
 	}
+
 	/** Process the onClose event sent when the close button is pressed.
 	 * <p>Default: detach itself.
 	 */
 	public void onClose() {
 		detach();
 	}
-	
+
 	/**
 	 * Returns the top toolbar of this panel.
 	 */
 	public Toolbar getTopToolbar() {
 		return _tbar;
 	}
+
 	/**
 	 * Returns the bottom toolbar of this panel.
 	 */
 	public Toolbar getBottomToolbar() {
 		return _bbar;
 	}
+
 	/**
 	 * Returns the foot toolbar of this panel.
 	 */
@@ -529,30 +568,29 @@ public class Panel extends XulElement implements Framable {
 	}
 
 	public String getZclass() {
-		return _zclass == null ?  "z-panel" : _zclass;
-	}	
-	
+		return _zclass == null ? "z-panel" : _zclass;
+	}
+
 	//-- Component --//
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Caption) {
 			if (_caption != null && _caption != newChild)
-				throw new UiException("Only one caption is allowed: "+this);
+				throw new UiException("Only one caption is allowed: " + this);
 		} else if (refChild instanceof Caption) {
 			throw new UiException("caption must be the first child");
 		} else if (newChild instanceof Panelchildren) {
 			if (_panelchildren != null && _panelchildren != newChild)
-				throw new UiException("Only one panelchildren child is allowed: "+this);
+				throw new UiException("Only one panelchildren child is allowed: " + this);
 		} else if (newChild instanceof Toolbar) {
-			if (refChild instanceof Panelchildren
-			|| (refChild == null && (getChildren().isEmpty()))) {
-				if(_tbar != null && _tbar != newChild)
-					throw new UiException("Only one top toolbar child is allowed: "+this);
+			if (refChild instanceof Panelchildren || (refChild == null && (getChildren().isEmpty()))) {
+				if (_tbar != null && _tbar != newChild)
+					throw new UiException("Only one top toolbar child is allowed: " + this);
 			} else if (refChild == null || refChild == _fbar) {
 				if (_bbar != null && _bbar != newChild) {
-					if (refChild != null && refChild == _fbar) 
-						throw new UiException("Only one bottom toolbar child is allowed: "+this);
+					if (refChild != null && refChild == _fbar)
+						throw new UiException("Only one bottom toolbar child is allowed: " + this);
 					if (_fbar != null && _fbar != newChild)
-						throw new UiException("Only one foot toolbar child is allowed: "+this);
+						throw new UiException("Only one foot toolbar child is allowed: " + this);
 				}
 			} else {
 				throw new UiException("Only three toolbars child is allowed: " + this);
@@ -562,12 +600,13 @@ public class Panel extends XulElement implements Framable {
 		}
 		super.beforeChildAdded(newChild, refChild);
 	}
+
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Caption) {
 			refChild = getFirstChild();
-				//always makes caption as the first child
+			//always makes caption as the first child
 			if (super.insertBefore(newChild, refChild)) {
-				_caption = (Caption)newChild;
+				_caption = (Caption) newChild;
 				return true;
 			}
 		} else if (newChild instanceof Panelchildren) {
@@ -578,70 +617,72 @@ public class Panel extends XulElement implements Framable {
 		} else if (newChild instanceof Toolbar) {
 			if (super.insertBefore(newChild, refChild)) {
 				if (refChild instanceof Panelchildren
-				|| (refChild == null && (getChildren().size() == (_caption != null ? 2 : 1)))) {
+						|| (refChild == null && (getChildren().size() == (_caption != null ? 2 : 1)))) {
 					_tbar = (Toolbar) newChild;
 				} else if (refChild == null || refChild == _fbar) {
 					if (_bbar != null && _bbar != newChild) {
 						_fbar = (Toolbar) newChild;
 					} else {
-						_bbar = (Toolbar) newChild; 
+						_bbar = (Toolbar) newChild;
 					}
 				}
 				return true;
 			}
 		} else {
 			return super.insertBefore(newChild, refChild);
-				//impossible but to make it more extensible
+			//impossible but to make it more extensible
 		}
 		return false;
 	}
+
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		if (_caption == child) _caption = null;
-		else if (_tbar == child) _tbar = null;
-		else if (_bbar == child) _bbar = null;
-		else if (_panelchildren == child) _panelchildren = null;
-		else if (_fbar == child) _fbar = null;
+		if (_caption == child)
+			_caption = null;
+		else if (_tbar == child)
+			_tbar = null;
+		else if (_bbar == child)
+			_bbar = null;
+		else if (_panelchildren == child)
+			_panelchildren = null;
+		else if (_fbar == child)
+			_fbar = null;
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
 		final Panel clone = (Panel) super.clone();
 		clone.afterUnmarshal();
 		return clone;
 	}
+
 	private void afterUnmarshal() {
 		if (_caption != null)
-			_caption = (Caption) getChildren().get(_caption.getParent()
-					.getChildren().indexOf(_caption));
+			_caption = (Caption) getChildren().get(_caption.getParent().getChildren().indexOf(_caption));
 		if (_tbar != null)
-			_tbar = (Toolbar) getChildren().get(_tbar.getParent()
-					.getChildren().indexOf(_tbar));
+			_tbar = (Toolbar) getChildren().get(_tbar.getParent().getChildren().indexOf(_tbar));
 		if (_panelchildren != null)
-			_panelchildren = (Panelchildren) getChildren().get(_panelchildren.getParent()
-					.getChildren().indexOf(_panelchildren));
+			_panelchildren = (Panelchildren) getChildren()
+					.get(_panelchildren.getParent().getChildren().indexOf(_panelchildren));
 		if (_bbar != null)
-			_bbar = (Toolbar) getChildren().get(_bbar.getParent()
-					.getChildren().indexOf(_bbar));
+			_bbar = (Toolbar) getChildren().get(_bbar.getParent().getChildren().indexOf(_bbar));
 		if (_fbar != null)
-			_fbar = (Toolbar) getChildren().get(_fbar.getParent()
-					.getChildren().indexOf(_fbar));
+			_fbar = (Toolbar) getChildren().get(_fbar.getParent().getChildren().indexOf(_fbar));
 	}
 
 	//-- Serializable --//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		//afterUnmarshal(); // B50-ZK-261: no afterUnmarshal() as now the fields are non-transient
 	}
-	
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (_title.length() > 0) render(renderer, "title", _title);
-		
+
+		if (_title.length() > 0)
+			render(renderer, "title", _title);
+
 		render(renderer, "closable", _closable);
 		render(renderer, "floatable", _floatable);
 		render(renderer, "collapsible", _collapsible);
@@ -652,14 +693,18 @@ public class Panel extends XulElement implements Framable {
 		render(renderer, "minimized", _minimized);
 		render(renderer, "sizable", _sizable);
 
-		if (_minheight != 100) renderer.render("minheight", _minheight);
-		if (_minwidth != 200) renderer.render("minwidth", _minwidth);
-		
-		if (!_open) renderer.render("open", false);
+		if (_minheight != 100)
+			renderer.render("minheight", _minheight);
+		if (_minwidth != 200)
+			renderer.render("minwidth", _minwidth);
 
-		if (!"none".equals(_border)) renderer.render("border", _border);
+		if (!_open)
+			renderer.render("open", false);
+
+		if (!"none".equals(_border))
+			renderer.render("border", _border);
 	}
-	
+
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
@@ -680,7 +725,8 @@ public class Panel extends XulElement implements Framable {
 			setWidthDirectly(evt.getWidth());
 			setHeightDirectly(evt.getHeight());
 			_maximized = evt.isMaximized();
-			if (_maximized) setVisibleDirectly(true);
+			if (_maximized)
+				setVisibleDirectly(true);
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_MINIMIZE)) {
 			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
@@ -689,7 +735,8 @@ public class Panel extends XulElement implements Framable {
 			setWidthDirectly(evt.getWidth());
 			setHeightDirectly(evt.getHeight());
 			_minimized = evt.isMinimized();
-			if (_minimized) setVisibleDirectly(false);
+			if (_minimized)
+				setVisibleDirectly(false);
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

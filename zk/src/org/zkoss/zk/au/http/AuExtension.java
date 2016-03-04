@@ -17,6 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.http;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +36,8 @@ public interface AuExtension {
 	/** Initializes the AU extension.
 	 * It is called when an extension is added to {@link DHtmlUpdateServlet}.
 	 */
-	public void init(DHtmlUpdateServlet servlet)
-	throws ServletException;
+	public void init(DHtmlUpdateServlet servlet) throws ServletException;
+
 	/** Destroys the AU extension.
 	 * It is called when an extension is removed from {@link DHtmlUpdateServlet},
 	 * or when {@link DHtmlUpdateServlet} is being destroyed.
@@ -57,7 +58,6 @@ public interface AuExtension {
 	 * pi must start with "/upload". Note: it might end with other string
 	 * depending on the URI you generated to the client.
 	 */
-	public void service(
-	HttpServletRequest request, HttpServletResponse response, String pi)
-	throws ServletException, IOException;
+	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+			throws ServletException, IOException;
 }

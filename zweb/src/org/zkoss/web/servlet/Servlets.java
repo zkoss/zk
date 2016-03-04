@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -45,6 +46,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.lang.SystemException;
@@ -69,18 +71,16 @@ public class Servlets {
 	private static final Logger log = LoggerFactory.getLogger(Servlets.class);
 
 	private static ClientIdentifier _clientId;
-	private static final Pattern
-		_rwebkit = Pattern.compile(".*(webkit)[ /]([\\w.]+).*"),
-		_ropera = Pattern.compile(".*(opera)(?:.*version)?[ /]([\\w.]+).*"),
-		_rmsie = Pattern.compile(".*(msie) ([\\w.]+).*"),
-		_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
-		_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
-		_randroid = Pattern.compile(".*(android)[ /]([\\w.]+).*"),
-		_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*"),
-		_rtrident = Pattern.compile("trident/([0-9\\.]+)");
-				
+	private static final Pattern _rwebkit = Pattern.compile(".*(webkit)[ /]([\\w.]+).*"),
+			_ropera = Pattern.compile(".*(opera)(?:.*version)?[ /]([\\w.]+).*"),
+			_rmsie = Pattern.compile(".*(msie) ([\\w.]+).*"),
+			_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
+			_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
+			_randroid = Pattern.compile(".*(android)[ /]([\\w.]+).*"),
+			_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*"), _rtrident = Pattern.compile("trident/([0-9\\.]+)");
 
 	private static final boolean _svl24, _svl23, _svl3;
+
 	static {
 		boolean b = false;
 		try {
@@ -110,18 +110,19 @@ public class Servlets {
 	}
 
 	/** Utilities; no instantiation required. */
-	protected Servlets() {}
+	protected Servlets() {
+	}
 
 	/** Returns whether a URL starts with xxx://, mailto:, about:,
 	 * javascript:, data:
 	 */
 	public static final boolean isUniversalURL(String uri) {
-		if (uri == null || uri.length() == 0) return false;
+		if (uri == null || uri.length() == 0)
+			return false;
 
 		final char cc = uri.charAt(0);
-		return cc >= 'a' && cc <= 'z'
-			&& (uri.indexOf("://") > 0 || uri.startsWith("mailto:")
-			|| uri.startsWith("javascript:") || uri.startsWith("about:") || uri.startsWith("data:"));
+		return cc >= 'a' && cc <= 'z' && (uri.indexOf("://") > 0 || uri.startsWith("mailto:")
+				|| uri.startsWith("javascript:") || uri.startsWith("about:") || uri.startsWith("data:"));
 	}
 
 	/** Returns whether the current Web server supports Servlet 3.0 or above.
@@ -131,6 +132,7 @@ public class Servlets {
 	public static final boolean isServlet3() {
 		return _svl3;
 	}
+
 	/** Returns whether the current Web server supports Servlet 2.4 or above.
 	 *
 	 * @since 3.0.0
@@ -138,6 +140,7 @@ public class Servlets {
 	public static final boolean isServlet24() {
 		return _svl24;
 	}
+
 	/** Returns whether the current Web server supports Servlet 2.3 or above.
 	 * Thus, if {@link #isServlet24} returns true, {@link #isServlet23}
 	 * must return true, too.
@@ -186,9 +189,8 @@ public class Servlets {
 	 * @see Locales#getCurrent
 	 */
 	@SuppressWarnings("unchecked")
-	public static final String locate(ServletContext ctx,
-	ServletRequest request, String pgpath, Locator locator)
-	throws ServletException {
+	public static final String locate(ServletContext ctx, ServletRequest request, String pgpath, Locator locator)
+			throws ServletException {
 		if (pgpath == null)
 			return pgpath;
 		final int f = pgpath.indexOf('*');
@@ -197,7 +199,7 @@ public class Servlets {
 		final int jquest = pgpath.indexOf('?');
 		if (jquest >= 0 && f > jquest)
 			return pgpath;
-			//optimize the case that no "*" at all
+		//optimize the case that no "*" at all
 
 		final String qstr;
 		if (jquest >= 0) {
@@ -210,9 +212,8 @@ public class Servlets {
 		//by browser?
 		int l = pgpath.lastIndexOf('*');
 		if (l > f) { //two '*'
-			final String bc = Servlets.isExplorer(request) ? "ie":
-				Servlets.isSafari(request) ? "saf":
-				Servlets.isOpera(request) ? "opr": "moz";
+			final String bc = Servlets.isExplorer(request) ? "ie"
+					: Servlets.isSafari(request) ? "saf" : Servlets.isOpera(request) ? "opr" : "moz";
 			l += bc.length() - 1;
 			pgpath = pgpath.substring(0, f) + bc + pgpath.substring(f + 1);
 		}
@@ -221,8 +222,7 @@ public class Servlets {
 		pgpath = pgpath.substring(0, l) + pgpath.substring(l + 1); //remove
 
 		//by locale? 1) before the first dot, 2) the last char if no dot
-		boolean byLocale = l == pgpath.length()
-		|| (pgpath.charAt(l) == '.' && pgpath.indexOf('/', l + 1) < 0);
+		boolean byLocale = l == pgpath.length() || (pgpath.charAt(l) == '.' && pgpath.indexOf('/', l + 1) < 0);
 		if (byLocale) {
 			//make sure no dot before it
 			for (int j = l; --j >= 0;) {
@@ -236,14 +236,13 @@ public class Servlets {
 			}
 		}
 		if (!byLocale)
-			return qstr != null ? pgpath + qstr: pgpath; //not by locale
-
+			return qstr != null ? pgpath + qstr : pgpath; //not by locale
 
 		final String PGPATH_CACHE = "org.zkoss.web.pgpath.cache";
-		Map<URIIndex, String> map = (Map<URIIndex, String>)ctx.getAttribute(PGPATH_CACHE);
+		Map<URIIndex, String> map = (Map<URIIndex, String>) ctx.getAttribute(PGPATH_CACHE);
 		if (map == null) {
 			map = Collections.synchronizedMap( //10 min
-				new CacheMap<URIIndex, String>(500, 10*60*1000));
+					new CacheMap<URIIndex, String>(500, 10 * 60 * 1000));
 			ctx.setAttribute(PGPATH_CACHE, map);
 		}
 
@@ -252,32 +251,35 @@ public class Servlets {
 
 		String uri = map.get(index);
 		if (uri == null) {
-			final Locators.URLLocation loc =
-				Locators.locate(pgpath, locale,
-					locator != null ? locator: new ServletContextLocator(ctx));
-			uri = loc != null ? loc.file: pgpath;
+			final Locators.URLLocation loc = Locators.locate(pgpath, locale,
+					locator != null ? locator : new ServletContextLocator(ctx));
+			uri = loc != null ? loc.file : pgpath;
 			map.put(index, uri);
 		}
 
-		return qstr != null ? uri + qstr: uri;
+		return qstr != null ? uri + qstr : uri;
 	}
+
 	private static class URIIndex {
 		private final String _uri;
 		private final Locale _locale;
+
 		private URIIndex(String uri, Locale locale) {
 			if (uri == null || locale == null)
 				throw new IllegalArgumentException("null");
 			_uri = uri;
 			_locale = locale;
 		}
+
 		public int hashCode() {
 			return _uri.hashCode();
 		}
+
 		public boolean equals(Object o) {
 			if (this == o)
 				return true;
 			//To speed up, don't check whether o is the right class
-			final URIIndex idx = (URIIndex)o;
+			final URIIndex idx = (URIIndex) o;
 			return _uri.equals(idx._uri) && _locale.equals(idx._locale);
 		}
 	}
@@ -295,6 +297,7 @@ public class Servlets {
 	public static void setClientIdentifier(ClientIdentifier clientId) {
 		_clientId = clientId;
 	}
+
 	/** Returns the client identifier, or null if no such plugin.
 	 * @see ClientIdentifier
 	 * @since 6.0.0
@@ -319,14 +322,16 @@ public class Servlets {
 	 * @since 6.0.0
 	 */
 	public static Double getBrowser(ServletRequest request, String name) {
-		return (Double)browserInfo(request).get(name);
+		return (Double) browserInfo(request).get(name);
 	}
+
 	/** Returns the name of the browser, or null if not identifiable.
 	 * @since 6.0.0
 	 */
 	public static String getBrowser(ServletRequest request) {
-		return (String)((Map)browserInfo(request).get("browser")).get("name");
+		return (String) ((Map) browserInfo(request).get("browser")).get("name");
 	}
+
 	/** Returns the version of the given browser name, or null if the client
 	 * is not the given browsers.
 	 *
@@ -345,8 +350,9 @@ public class Servlets {
 	public static Double getBrowser(String userAgent, String name) {
 		final Map<String, Object> zk = new HashMap<String, Object>();
 		browserInfo(zk, userAgent);
-		return (Double)zk.get(name);
+		return (Double) zk.get(name);
 	}
+
 	/** Returns the name of the browser, or null if not identifiable.
 	 * @param userAgent the user agent (i.e., the user-agent header in HTTP).
 	 * @since 6.0.0
@@ -354,11 +360,12 @@ public class Servlets {
 	public static String getBrowser(String userAgent) {
 		final Map<String, Object> zk = new HashMap<String, Object>();
 		browserInfo(zk, userAgent);
-		return (String)((Map)zk.get("browser")).get("name");
+		return (String) ((Map) zk.get("browser")).get("name");
 	}
+
 	private static Map browserInfo(ServletRequest request) {
 		//No need synchronized since the servlet request is executed synchronously
-		Map<String, Object> zk = cast((Map)request.getAttribute("zk"));
+		Map<String, Object> zk = cast((Map) request.getAttribute("zk"));
 		if (zk == null)
 			request.setAttribute("zk", zk = new HashMap<String, Object>(4));
 
@@ -366,10 +373,11 @@ public class Servlets {
 			browserInfo(zk, getUserAgent(request));
 		return zk;
 	}
+
 	private static void browserInfo(Map<String, Object> zk, String ua) {
 		if (ua != null) {
 			// ZK-1822: In locale Turkish, it can prevent 'I'.toLowerCase becomes 'i' without dot.
-			 ua = ua.toLowerCase(Locale.ENGLISH);
+			ua = ua.toLowerCase(Locale.ENGLISH);
 			if (_clientId != null) {
 				final ClientIdentifier ci = _clientId.matches(ua);
 				if (ci != null) {
@@ -378,7 +386,7 @@ public class Servlets {
 				}
 			}
 			Matcher m = _rwebkit.matcher(ua);
-			if(m.matches()) {
+			if (m.matches()) {
 				double version;
 				browserInfo(zk, "webkit", version = getVersion(m));
 
@@ -393,14 +401,14 @@ public class Servlets {
 				m = _rsafari.matcher(ua);
 				if (!matchChrome && m.matches())
 					zk.put("safari", getVersion(m));
-				
+
 				m = _randroid.matcher(ua);
 				if (m.matches()) {
 					double v = getVersion(m);
 					zk.put("android", v);
 					zk.put("mobile", v);
 				}
-				
+
 				for (int j = _ios.length; --j >= 0;)
 					if (ua.indexOf(_ios[j]) >= 0) {
 						zk.put(_ios[j], version);
@@ -442,13 +450,13 @@ public class Servlets {
 							}
 						}
 					}
-					
+
 					// ie11~
 					if (ua.contains("trident")) {
 						browserInfo(zk, "ie", version);
 						return;
 					}
-					
+
 					//the version after gecko/* is confusing, so we
 					//use firefox's version instead
 					browserInfo(zk, "gecko", version);
@@ -459,18 +467,21 @@ public class Servlets {
 		}
 		zk.put("browser", Collections.emptyMap()); //none matched
 	}
-	private static final String[] _ios = {"ipod", "iphone", "ipad"};
-	private static
-	void browserInfo(Map<String, Object> zk, String name, double version) {
+
+	private static final String[] _ios = { "ipod", "iphone", "ipad" };
+
+	private static void browserInfo(Map<String, Object> zk, String name, double version) {
 		final Map<String, Object> bi = new HashMap<String, Object>(4);
 		bi.put("name", name);
 		bi.put("version", version);
 		zk.put("browser", bi);
 		zk.put(name, version);
 	}
+
 	private static double getVersion(Matcher m) {
-		return m.groupCount() < 2 ? 1/*ignore it*/: getVersion(m.group(2));
+		return m.groupCount() < 2 ? 1/*ignore it*/ : getVersion(m.group(2));
 	}
+
 	private static double getVersion(String version) {
 		try {
 			int j = version.indexOf('.');
@@ -496,9 +507,9 @@ public class Servlets {
 	 * @since 3.5.1
 	 */
 	public static boolean isBrowser(ServletRequest req, String type) {
-		return (req instanceof HttpServletRequest)
-			&& isBrowser(getUserAgent(req), type);
+		return (req instanceof HttpServletRequest) && isBrowser(getUserAgent(req), type);
 	}
+
 	/** Returns whether the user agent is a browser of the specified type.
 	 *
 	 * @param userAgent represents a client.
@@ -519,10 +530,11 @@ public class Servlets {
 				return true; //OR
 		return false;
 	}
+
 	private static boolean browser(String userAgent, String type) {
 		if (userAgent == null) //Bug ZK-1582: userAgent could be null if it is robot.
 			return false;
-		
+
 		int last = (type = type.trim()).length();
 		if (last == 0)
 			return false;
@@ -552,13 +564,14 @@ public class Servlets {
 			return false; //not matched
 		if (vtype == null)
 			return true; //not care about version
-		
+
 		if (vclient == null)
 			return false; //not matched for Bug ZK-1930
-		
+
 		double v1 = vclient.doubleValue(), v2 = vtype.doubleValue();
-		return equals ? v1 == v2: v1 >= v2;
-	}	
+		return equals ? v1 == v2 : v1 >= v2;
+	}
+
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
@@ -566,9 +579,9 @@ public class Servlets {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isRobot(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isRobot(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isRobot(getUserAgent(req));
 	}
+
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
@@ -584,20 +597,21 @@ public class Servlets {
 			return false;
 
 		boolean ie = userAgent.indexOf("MSIE ") >= 0;
-			//Bug 3107026: in Turkish, "MSIE".toLowerCase(java.util.Locale.ENGLISH) is NOT "msie"
+		//Bug 3107026: in Turkish, "MSIE".toLowerCase(java.util.Locale.ENGLISH) is NOT "msie"
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return !ie && userAgent.indexOf("msie ") < 0 && userAgent.indexOf("opera") < 0
-			&& userAgent.indexOf("gecko/") < 0 && userAgent.indexOf("safari") < 0
-			&& userAgent.indexOf("zk") < 0 && userAgent.indexOf("rmil") < 0;
+				&& userAgent.indexOf("gecko/") < 0 && userAgent.indexOf("safari") < 0 && userAgent.indexOf("zk") < 0
+				&& userAgent.indexOf("rmil") < 0;
 	}
+
 	/** Returns whether the browser is Internet Explorer.
 	 * If true, it also implies {@link #isExplorer7} is true.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isExplorer(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isExplorer(getUserAgent(req));
 	}
+
 	/** Returns whether the browser is Internet Explorer.
 	 * If true, it also implies {@link #isExplorer7} is true.
 	 *
@@ -611,17 +625,18 @@ public class Servlets {
 			return false;
 
 		boolean ie = userAgent.indexOf("MSIE ") >= 0;
-			//Bug 3107026: in Turkish, "MSIE".toLowerCase(java.util.Locale.ENGLISH) is NOT "msie"
+		//Bug 3107026: in Turkish, "MSIE".toLowerCase(java.util.Locale.ENGLISH) is NOT "msie"
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return (ie || userAgent.indexOf("msie ") >= 0) && userAgent.indexOf("opera") < 0;
 	}
+
 	/** Returns whether the browser is Explorer 7 or later.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer7(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isExplorer7(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isExplorer7(getUserAgent(req));
 	}
+
 	/** Returns whether the browser is Explorer 7 or later.
 	 *
 	 * @param userAgent represents a client.
@@ -638,9 +653,9 @@ public class Servlets {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isGecko(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isGecko(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isGecko(getUserAgent(req));
 	}
+
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino
 	 * If true, it also implies {@link #isGecko3} is true.
 	 *
@@ -656,14 +671,15 @@ public class Servlets {
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("gecko/") >= 0 && userAgent.indexOf("safari") < 0;
 	}
+
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 * @since 3.5.0
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isGecko3(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isGecko3(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isGecko3(getUserAgent(req));
 	}
+
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 *
 	 * @param userAgent represents a client.
@@ -679,9 +695,9 @@ public class Servlets {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isSafari(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isSafari(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isSafari(getUserAgent(req));
 	}
+
 	/** Returns whether the browser is Safari.
 	 *
 	 * @param userAgent represents a client.
@@ -696,14 +712,14 @@ public class Servlets {
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("safari") >= 0;
 	}
-	
+
 	/** Returns whether the browser is Opera.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isOpera(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isOpera(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isOpera(getUserAgent(req));
 	}
+
 	/** Returns whether the browser is Opera.
 	 *
 	 * @param userAgent represents a client.
@@ -727,9 +743,9 @@ public class Servlets {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isHilDevice(ServletRequest req) {
-		return (req instanceof HttpServletRequest)
-			&& isHilDevice(getUserAgent(req));
+		return (req instanceof HttpServletRequest) && isHilDevice(getUserAgent(req));
 	}
+
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
 	 * For example, ZK Mobile for Android.
@@ -747,7 +763,7 @@ public class Servlets {
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return userAgent.indexOf("zk") >= 0 && userAgent.indexOf("rhil") >= 0;
 	}
-	
+
 	/**
 	 * Returns the IE compatibility information.
 	 * @param request
@@ -755,11 +771,11 @@ public class Servlets {
 	 * @since 6.5.5
 	 */
 	public static double[] getIECompatibilityInfo(ServletRequest request) {
-		final String s = ((HttpServletRequest)request).getHeader("user-agent");
+		final String s = ((HttpServletRequest) request).getHeader("user-agent");
 		if (isBrowser(s, "ie")) {
 			final String ua = s.toLowerCase(Locale.ENGLISH);
 			Matcher tridentMatcher = _rtrident.matcher(ua);
-			if(tridentMatcher.find()) {
+			if (tridentMatcher.find()) {
 				double tridentVersion = Double.parseDouble(tridentMatcher.group(1));
 				Matcher msie = _rmsie.matcher(ua);
 				Matcher ie = _rmozilla.matcher(ua); // ie11~
@@ -767,13 +783,13 @@ public class Servlets {
 				if (ieMatcher != null) {
 					double ieVersion = getVersion(ieMatcher);
 					double ieVersionReal = tridentVersion + 4.0;
-					return new double[]{ieVersion, tridentVersion, ieVersionReal};
+					return new double[] { ieVersion, tridentVersion, ieVersionReal };
 				}
 			}
 		}
 		return null;
 	}
-	
+
 	/** Returns the user-agent header, which indicates what the client is,
 	 * or an empty string if not available.
 	 *
@@ -781,16 +797,16 @@ public class Servlets {
 	 * the client is with {@link String#indexOf}.
 	 *
 	 * @since 3.0.2
-	 */	
+	 */
 	public static final String getUserAgent(ServletRequest req) {
 		if (req instanceof HttpServletRequest) {
-			String s = ((HttpServletRequest)req).getHeader("user-agent");
+			String s = ((HttpServletRequest) req).getHeader("user-agent");
 			if (s != null) {
 				String cache = (String) req.getAttribute("$$zkagent$$");
 				if (cache != null)
 					return cache;
 				double[] ieCompatibilityInfo = getIECompatibilityInfo(req);
-				if(ieCompatibilityInfo != null) {
+				if (ieCompatibilityInfo != null) {
 					s += "; MSIE " + ieCompatibilityInfo[2];
 				}
 				req.setAttribute("$$zkagent$$", s);
@@ -805,17 +821,19 @@ public class Servlets {
 	 */
 	public static final boolean isIncluded(ServletRequest request) {
 		return request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH) != null
-			|| request.getAttribute("org.zkoss.web.servlet.include") != null;
-				//org.zkoss.web.servlet.include is used by ZK (or others)
-				//to 'simulate' inclusion
+				|| request.getAttribute("org.zkoss.web.servlet.include") != null;
+		//org.zkoss.web.servlet.include is used by ZK (or others)
+		//to 'simulate' inclusion
 	}
+
 	/**
 	 * Tests whether this page is forwarded by another page.
 	 */
 	public static final boolean isForwarded(ServletRequest request) {
 		return request.getAttribute(Attributes.FORWARD_CONTEXT_PATH) != null
-		|| request.getAttribute("org.zkoss.web.servlet.forward") != null;
+				|| request.getAttribute("org.zkoss.web.servlet.forward") != null;
 	}
+
 	/**
 	 * Forward to the specified URI.
 	 * It enhances RequestDispatcher in the following ways.
@@ -850,11 +868,9 @@ public class Servlets {
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
 	 * and params contains the same parameter.
 	 */
-	public static final
-	void forward(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
-	throws IOException, ServletException {
-//		if (log.isDebugEnabled()) log.debug("Forwarding "+uri);
+	public static final void forward(ServletContext ctx, ServletRequest request, ServletResponse response, String uri,
+			Map params, int mode) throws IOException, ServletException {
+		//		if (log.isDebugEnabled()) log.debug("Forwarding "+uri);
 
 		//include or foward depending whether this page is included or not
 		if (isIncluded(request)) {
@@ -864,10 +880,9 @@ public class Servlets {
 
 		uri = locate(ctx, request, uri, null);
 
-		final RequestDispatcher disp =
-			getRequestDispatcher(ctx, request, uri, params, mode);
+		final RequestDispatcher disp = getRequestDispatcher(ctx, request, uri, params, mode);
 		if (disp == null)
-			throw new ServletException("No dispatcher available to forward to "+uri);
+			throw new ServletException("No dispatcher available to forward to " + uri);
 
 		if (mode == PASS_THRU_ATTR && params != null && !params.isEmpty()) {
 			final Map old = setPassThruAttr(request, params);
@@ -894,13 +909,14 @@ public class Servlets {
 			disp.forward(request, response);
 		}
 	}
+
 	/** A shortcut of forward(request, response, uri, null, 0).
 	 */
-	public static final 
-	void forward(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri) throws IOException, ServletException {
+	public static final void forward(ServletContext ctx, ServletRequest request, ServletResponse response, String uri)
+			throws IOException, ServletException {
 		forward(ctx, request, response, uri, null, 0);
 	}
+
 	/**
 	 * Includes the resource at the specified URI.
 	 * It enhances RequestDispatcher to allow the inclusion with
@@ -922,11 +938,9 @@ public class Servlets {
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
 	 * and params contains the same parameter.
 	 */
-	public static final
-	void include(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri, Map params, int mode)
-	throws IOException, ServletException {
-//		if (log.isDebugEnabled()) log.debug("Including "+uri+" at "+ctx);
+	public static final void include(ServletContext ctx, ServletRequest request, ServletResponse response, String uri,
+			Map params, int mode) throws IOException, ServletException {
+		//		if (log.isDebugEnabled()) log.debug("Including "+uri+" at "+ctx);
 
 		//Note: we don't optimize the include to call ClassWebResource here
 		//since 1) it is too low level (might have some risk)
@@ -940,10 +954,9 @@ public class Servlets {
 
 		uri = locate(ctx, request, uri, null);
 
-		final RequestDispatcher disp =
-			getRequestDispatcher(ctx, request, uri, params, mode);
+		final RequestDispatcher disp = getRequestDispatcher(ctx, request, uri, params, mode);
 		if (disp == null)
-			throw new ServletException("No dispatcher available to include "+uri);
+			throw new ServletException("No dispatcher available to include " + uri);
 
 		if (mode == PASS_THRU_ATTR && params != null && !params.isEmpty()) {
 			final Map old = setPassThruAttr(request, params);
@@ -956,30 +969,31 @@ public class Servlets {
 			disp.include(request, response);
 		}
 	}
+
 	/** A shortcut of include(request, response, uri, null, 0).
 	 */
-	public static final 
-	void include(ServletContext ctx, ServletRequest request,
-	ServletResponse response, String uri) throws IOException, ServletException {
+	public static final void include(ServletContext ctx, ServletRequest request, ServletResponse response, String uri)
+			throws IOException, ServletException {
 		include(ctx, request, response, uri, null, 0);
 	}
+
 	/** Sets the arg attribute to pass parameters thru request's attribute.
 	 */
-	private static final
-	Map setPassThruAttr(ServletRequest request, Map params) {
-		final Map old = (Map)request.getAttribute(Attributes.ARG);
+	private static final Map setPassThruAttr(ServletRequest request, Map params) {
+		final Map old = (Map) request.getAttribute(Attributes.ARG);
 		request.setAttribute(Attributes.ARG, params);
 		return old;
 	}
+
 	/** Restores what has been done by {@link #setPassThruAttr}.
 	 */
-	private static final
-	void restorePassThruAttr(ServletRequest request, Map old) {
+	private static final void restorePassThruAttr(ServletRequest request, Map old) {
 		if (old != null)
 			request.setAttribute(Attributes.ARG, old);
 		else
 			request.removeAttribute(Attributes.ARG);
 	}
+
 	/** Returns the request dispatch of the specified URI.
 	 *
 	 * @param ctx the servlet context. If null, uri cannot be foreign URI.
@@ -995,19 +1009,15 @@ public class Servlets {
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
 	 * and params contains the same parameter.
 	 */
-	public static final RequestDispatcher
-	getRequestDispatcher(ServletContext ctx, ServletRequest request,
-	String uri, Map params, int mode)
-	throws ServletException {
-		final char cc = uri.length() > 0 ? uri.charAt(0): (char)0;
-		if (ctx == null || (cc != '/' && cc != '~')) {//... or relevant
+	public static final RequestDispatcher getRequestDispatcher(ServletContext ctx, ServletRequest request, String uri,
+			Map params, int mode) throws ServletException {
+		final char cc = uri.length() > 0 ? uri.charAt(0) : (char) 0;
+		if (ctx == null || (cc != '/' && cc != '~')) { //... or relevant
 			if (request == null)
-				throw new IllegalArgumentException(
-					ctx == null ?
-						"Servlet context and request cannot be both null":
-						"Request is required to use revalant URI: "+uri);
+				throw new IllegalArgumentException(ctx == null ? "Servlet context and request cannot be both null"
+						: "Request is required to use revalant URI: " + uri);
 			if (cc == '~')
-				throw new IllegalArgumentException("Servlet context is required to use foreign URI: "+uri);
+				throw new IllegalArgumentException("Servlet context is required to use foreign URI: " + uri);
 			uri = generateURI(uri, params, mode);
 			return request.getRequestDispatcher(uri);
 		}
@@ -1015,6 +1025,7 @@ public class Servlets {
 		//NO NEED to encodeURL since it is forward/include
 		return new ParsedURI(ctx, uri).getRequestDispatcher(params, mode);
 	}
+
 	/** Returns the resource of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
@@ -1024,8 +1035,8 @@ public class Servlets {
 		try {
 			if (uri != null && uri.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://")) {
 				final File file = new File(new URI(uri));
-				return file.exists() ? file.toURI().toURL(): null;
-					//spec: return null if not found
+				return file.exists() ? file.toURI().toURL() : null;
+				//spec: return null if not found
 			}
 
 			URL url = toURL(uri);
@@ -1033,24 +1044,22 @@ public class Servlets {
 				return url; //unfortunately, we cannot detect if it exists
 			return new ParsedURI(ctx, uri).getResource();
 		} catch (Throwable ex) {
-			log.warn("Ignored: failed to load "+uri, ex);
+			log.warn("Ignored: failed to load " + uri, ex);
 			return null; //spec: return null if not found
 		}
 	}
+
 	/** Returns the resource stream of the specified uri.
 	 * Unlike ServletContext.getResource, it handles "~" like
 	 * {@link #getRequestDispatcher} did.
 	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
-	public static final InputStream getResourceAsStream(
-	ServletContext ctx, String uri)
-	throws IOException {
+	public static final InputStream getResourceAsStream(ServletContext ctx, String uri) throws IOException {
 		try {
 			if (uri != null && uri.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://")) {
 				final File file = new File(new URI(uri));
-				return file.exists() ?
-					new BufferedInputStream (new FileInputStream(file)): null;
-					//spec: return null if not found
+				return file.exists() ? new BufferedInputStream(new FileInputStream(file)) : null;
+				//spec: return null if not found
 			}
 
 			URL url = toURL(uri);
@@ -1058,19 +1067,20 @@ public class Servlets {
 				return url.openStream();
 			return new ParsedURI(ctx, uri).getResourceAsStream();
 		} catch (Throwable ex) {
-			log.warn("Ignored: failed to load "+uri, ex);
+			log.warn("Ignored: failed to load " + uri, ex);
 			return null; //spec: return null if not found
 		}
 	}
+
 	/** Converts URI to URL if starts with http:/, https:/ or ftp:/ */
-	private static URL toURL(String uri)
-	throws MalformedURLException {
+	private static URL toURL(String uri) throws MalformedURLException {
 		String s;
 		if (uri != null && ((s = uri.toLowerCase(java.util.Locale.ENGLISH)).startsWith("http://")
-		|| s.startsWith("https://") || s.startsWith("ftp://")))
+				|| s.startsWith("https://") || s.startsWith("ftp://")))
 			return new URL(uri);
 		return null;
 	}
+
 	/** Used to resolve "~" in URI. */
 	private static class ParsedURI {
 		private ServletContext _svlctx;
@@ -1092,29 +1102,30 @@ public class Servlets {
 				_extctx = getExtendletContext(ctx, ctxroot.substring(1));
 				if (_extctx == null) {
 					_svlctx = ctx.getContext(ctxroot);
-					if (_svlctx == null) 
-						throw new SystemException("Context not found or not visible to "+ctx+": "+ctxroot);
+					if (_svlctx == null)
+						throw new SystemException("Context not found or not visible to " + ctx + ": " + ctxroot);
 				}
 			} else {
 				_svlctx = ctx;
 				_uri = uri;
 			}
 		}
+
 		private RequestDispatcher getRequestDispatcher(Map params, int mode) {
 			if (_extctx == null && _svlctx == null) //not found
 				return null;
 
 			final String uri = generateURI(_uri, params, mode);
-			return _svlctx != null ? _svlctx.getRequestDispatcher(uri):
-				_extctx.getRequestDispatcher(uri);
+			return _svlctx != null ? _svlctx.getRequestDispatcher(uri) : _extctx.getRequestDispatcher(uri);
 		}
+
 		private URL getResource() throws MalformedURLException {
-			return _svlctx != null ? _svlctx.getResource(_uri):
-				_extctx != null ? _extctx.getResource(_uri): null;
+			return _svlctx != null ? _svlctx.getResource(_uri) : _extctx != null ? _extctx.getResource(_uri) : null;
 		}
+
 		private InputStream getResourceAsStream() {
-			return _svlctx != null ? _svlctx.getResourceAsStream(_uri):
-				_extctx != null ? _extctx.getResourceAsStream(_uri): null;
+			return _svlctx != null ? _svlctx.getResourceAsStream(_uri)
+					: _extctx != null ? _extctx.getResourceAsStream(_uri) : null;
 		}
 	}
 
@@ -1137,6 +1148,7 @@ public class Servlets {
 	 * attribute called arg.
 	 */
 	public static final int PASS_THRU_ATTR = 3;
+
 	/** Generates URI by appending the parameters.
 	 * Note: it doesn't support the ~xxx/ format.
 	 *
@@ -1151,7 +1163,7 @@ public class Servlets {
 	 */
 	public static final String generateURI(String uri, Map params, int mode) {
 		if (uri.startsWith("~"))
-			throw new IllegalArgumentException("~ctx not supported here: "+uri);
+			throw new IllegalArgumentException("~ctx not supported here: " + uri);
 
 		final int j = uri.indexOf('?');
 		String qstr = null;
@@ -1163,8 +1175,7 @@ public class Servlets {
 		try {
 			uri = Encodes.encodeURI(uri);
 			final boolean noQstr = qstr == null;
-			final boolean noParams =
-				mode == PASS_THRU_ATTR || params == null || params.isEmpty();
+			final boolean noParams = mode == PASS_THRU_ATTR || params == null || params.isEmpty();
 			if (noQstr && noParams)
 				return uri;
 
@@ -1172,15 +1183,15 @@ public class Servlets {
 				mode = APPEND_PARAM;
 
 			final StringBuffer sb = new StringBuffer(80).append(uri);
-			if (qstr != null) sb.append(qstr);
+			if (qstr != null)
+				sb.append(qstr);
 
 			switch (mode) {
 			case IGNORE_PARAM:
 				//removing params that is conflict
-				for (final Iterator it = params.entrySet().iterator();
-				it.hasNext();) {
-					final Map.Entry me = (Map.Entry)it.next();
-					final String nm = (String)me.getKey();
+				for (final Iterator it = params.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry) it.next();
+					final String nm = (String) me.getKey();
 					if (Encodes.containsQuery(qstr, nm))
 						it.remove();
 				}
@@ -1190,7 +1201,7 @@ public class Servlets {
 			case APPEND_PARAM:
 				return Encodes.addToQueryString(sb, params).toString();
 			default:
-				throw new IllegalArgumentException("Unknown mode: "+mode);
+				throw new IllegalArgumentException("Unknown mode: " + mode);
 			}
 		} catch (UnsupportedEncodingException ex) {
 			throw new SystemException(ex);
@@ -1199,6 +1210,7 @@ public class Servlets {
 
 	/** A list of context root paths (e.g., "/abc"). */
 	private static volatile List<String> _ctxroots;
+
 	/** Returns a list of context paths (e.g., "/abc") that this application
 	 * has. This implementation parse application.xml. For war that doesn't
 	 * contain application.xml might have to override this method and
@@ -1218,28 +1230,28 @@ public class Servlets {
 			throw SystemException.Aide.wrap(ex);
 		}
 	}
+
 	private static final List<String> myGetContextPaths() throws Exception {
 		final String APP_XML = "/META-INF/application.xml";
 		final List<String> ctxroots = new LinkedList<String>();
 		final URL xmlURL = Locators.getDefault().getResource(APP_XML);
 		if (xmlURL == null)
-			throw new SystemException("File not found: "+APP_XML);
+			throw new SystemException("File not found: " + APP_XML);
 
-//		if (log.isDebugEnabled()) log.debug("Parsing "+APP_XML);
-		final Element root =
-			new SAXBuilder(false,false,true).build(xmlURL).getRootElement();
+		//		if (log.isDebugEnabled()) log.debug("Parsing "+APP_XML);
+		final Element root = new SAXBuilder(false, false, true).build(xmlURL).getRootElement();
 
-		for (Element e: root.getElements("module")) {
-			final String ctxroot = (String)e.getContent("web/context-root");
+		for (Element e : root.getElements("module")) {
+			final String ctxroot = (String) e.getContent("web/context-root");
 			if (ctxroot == null) {
-//				if (log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
+				//				if (log.finerable()) log.finer("Skip non-web: "+e.getContent("java"));
 				continue;
 			}
 
-			ctxroots.add(ctxroot.startsWith("/") ? ctxroot: "/" + ctxroot);
+			ctxroots.add(ctxroot.startsWith("/") ? ctxroot : "/" + ctxroot);
 		}
 
-//		log.info("Context found: "+ctxroots);
+		//		log.info("Context found: "+ctxroots);
 		return new ArrayList<String>(ctxroots);
 	}
 
@@ -1251,11 +1263,12 @@ public class Servlets {
 		final String lto = Long.toHexString(System.currentTimeMillis());
 		return lto + Checksums.getChecksum(lto, "");
 	}
+
 	/** Returns whether a token returned by getLimitTimeOffer expired.
 	 * @param timeout how long the office shall expire, unit: seconds.
 	 */
 	public static final boolean isOfferExpired(String lto, int timeout) {
-		final int len = lto != null ? lto.length(): 0;
+		final int len = lto != null ? lto.length() : 0;
 		if (len <= 1)
 			return true;
 
@@ -1265,8 +1278,7 @@ public class Servlets {
 			return true;
 
 		try {
-			return Long.parseLong(lto, 16) + timeout*1000L
-				< System.currentTimeMillis();
+			return Long.parseLong(lto, 16) + timeout * 1000L < System.currentTimeMillis();
 		} catch (NumberFormatException ex) {
 			return true;
 		}
@@ -1276,34 +1288,32 @@ public class Servlets {
 	 * @return the previous extended context, if any, associated with
 	 * the specified name.
 	 */
-	public static final
-	ExtendletContext addExtendletContext(ServletContext ctx,
-	String name, ExtendletContext extctx) {
+	public static final ExtendletContext addExtendletContext(ServletContext ctx, String name, ExtendletContext extctx) {
 		if (name == null || extctx == null)
 			throw new IllegalArgumentException("null");
 		return getExtWebCtxs(ctx).put(name, extctx);
 	}
+
 	/** Removes an extended context of the specified name.
 	 */
-	public static final
-	ExtendletContext removeExtendletContext(ServletContext ctx, String name) {
+	public static final ExtendletContext removeExtendletContext(ServletContext ctx, String name) {
 		return getExtWebCtxs(ctx).remove(name);
 	}
+
 	/** Returns the extended context of the specified name.
 	 */
-	public static final
-	ExtendletContext getExtendletContext(ServletContext ctx, String name) {
+	public static final ExtendletContext getExtendletContext(ServletContext ctx, String name) {
 		return getExtWebCtxs(ctx).get(name);
 	}
+
 	@SuppressWarnings("unchecked")
 	private static final Map<String, ExtendletContext> getExtWebCtxs(ServletContext ctx) {
 		final String attr = "javax.zkoss.web.servlets.ExtendletContexts";
-			//such that it could be shared among portlets
+		//such that it could be shared among portlets
 		synchronized (Servlets.class) { //don't use ctx because it might be a proxy (in portlet)
-			Map<String, ExtendletContext> ctxs = (Map<String, ExtendletContext>)ctx.getAttribute(attr);
+			Map<String, ExtendletContext> ctxs = (Map<String, ExtendletContext>) ctx.getAttribute(attr);
 			if (ctxs == null)
-				ctx.setAttribute(attr,
-					ctxs = Collections.synchronizedMap(new HashMap<String, ExtendletContext>(4)));
+				ctx.setAttribute(attr, ctxs = Collections.synchronizedMap(new HashMap<String, ExtendletContext>(4)));
 			return ctxs;
 		}
 	}
@@ -1322,10 +1332,11 @@ public class Servlets {
 			int j = path.lastIndexOf('.');
 			if (j >= 0 && path.indexOf('/', j + 1) < 0)
 				return path.substring(j + 1).toLowerCase(java.util.Locale.ENGLISH);
-				//don't worry jsessionid since it is handled by container
+			//don't worry jsessionid since it is handled by container
 		}
 		return null;
 	}
+
 	/** Returns the file/path extension of the specified path (excluding dot),
 	 * or null if no extension at all.
 	 *
@@ -1360,7 +1371,7 @@ public class Servlets {
 			else if (cc == '/')
 				break;
 		}
-		return dot >= 0 ? path.substring(dot + 1).toLowerCase(java.util.Locale.ENGLISH): "";
+		return dot >= 0 ? path.substring(dot + 1).toLowerCase(java.util.Locale.ENGLISH) : "";
 	}
 
 	/** Returns the request detail infomation.
@@ -1368,24 +1379,21 @@ public class Servlets {
 	 * @since 3.0.5
 	 */
 	public static String getDetail(ServletRequest request) {
-		final HttpServletRequest hreq =
-			request instanceof HttpServletRequest ? (HttpServletRequest)request: null;
+		final HttpServletRequest hreq = request instanceof HttpServletRequest ? (HttpServletRequest) request : null;
 		final StringBuffer sb = new StringBuffer(128);
 		if (hreq != null) {
 			sb.append(" sid: ").append(hreq.getHeader("ZK-SID")).append('\n');
 			addHeaderInfo(sb, hreq, "user-agent");
 			addHeaderInfo(sb, hreq, "content-length");
 			addHeaderInfo(sb, hreq, "content-type");
-//			sb.append(" method: ").append(hreq.getMethod());
+			//			sb.append(" method: ").append(hreq.getMethod());
 		}
 		sb.append(" ip: ").append(request.getRemoteAddr());
 		return sb.toString();
 	}
-	private static void addHeaderInfo(StringBuffer sb,
-	HttpServletRequest request, String header) {
-		sb.append(' ')
-			.append(header).append(": ").append(request.getHeader(header))
-			.append('\n');
+
+	private static void addHeaderInfo(StringBuffer sb, HttpServletRequest request, String header) {
+		sb.append(' ').append(header).append(": ").append(request.getHeader(header)).append('\n');
 	}
 
 	/** A plugin used to provide additional browser information for
@@ -1399,16 +1407,18 @@ public class Servlets {
 		 * @param userAgent represents a client.
 		 */
 		public ClientIdentifier matches(String userAgent);
+
 		/** Returns the name of the browser.
 		 * It is called only against the instance returned by {@link #matches}.
 		 */
 		public String getName();
+
 		/** Returns the version of the browser.
 		 * It is called only against the instance returned by {@link #matches}.
 		 */
 		public double getVersion();
 	}
-	
+
 	/** Returns the normal path; that is, will elminate the double dots 
 	 * ".."(parent) and single dot "."(current) in the path as possible. e.g. 
 	 * /abc/../def would be normalized to /def; /abc/./def would be
@@ -1425,13 +1435,13 @@ public class Servlets {
 		int j = 0, colon = -100, dot1 = -100, dot2 = -100;
 		for (; j < sb.length(); ++j) {
 			final char c = sb.charAt(j);
-			switch(c) {
+			switch (c) {
 			case '/':
 				if (dot1 >= 0) { //single dot or double dots
 					if (dot2 >= 0) { //double dots
 						int preslash = slashes.pop();
 						if (preslash == 0) { //special case "/../"
-							throw new IllegalArgumentException("Illegal path: "+path);
+							throw new IllegalArgumentException("Illegal path: " + path);
 						}
 						if (slashes.isEmpty()) {
 							slashes.push(-1);
@@ -1439,20 +1449,20 @@ public class Servlets {
 						dot2 = -100;
 					}
 					int b = slashes.peek();
-					sb.delete(b + 1, j+1);
+					sb.delete(b + 1, j + 1);
 					j = b;
 					dot1 = -100;
 				} else { //no dot
 					int s = slashes.peek();
 					if (s >= 0) {
-						if (j == (s+1)) { //consequtive slashs
-							if (colon == (s-1)) { //e.g. "http://abc"
+						if (j == (s + 1)) { //consequtive slashs
+							if (colon == (s - 1)) { //e.g. "http://abc"
 								slashes.clear();
 								slashes.push(-1);
 								slashes.push(j);
 							} else {
 								--j;
-								sb.delete(j, j+1);
+								sb.delete(j, j + 1);
 							}
 							continue;
 						}
@@ -1462,17 +1472,17 @@ public class Servlets {
 				break;
 			case '.':
 				if (dot1 < 0) {
-					if (slashes.peek() == (j-1))
+					if (slashes.peek() == (j - 1))
 						dot1 = j;
-				} else if (dot2 < 0){
+				} else if (dot2 < 0) {
 					dot2 = j;
 				} else { //more than 2 consecutive dots
-					throw new IllegalArgumentException("Illegal path: "+path);
+					throw new IllegalArgumentException("Illegal path: " + path);
 				}
 				break;
-			case ':': 
+			case ':':
 				if (colon >= 0) {
-					throw new IllegalArgumentException("Illegal path: "+path);
+					throw new IllegalArgumentException("Illegal path: " + path);
 				}
 				colon = j;
 			default:
@@ -1481,26 +1491,31 @@ public class Servlets {
 		}
 		return sb.toString();
 	}
-	
+
 	private static class IntStack {
 		private int _top = -1;
 		private int[] _value;
-		
+
 		public IntStack(int sz) {
 			_value = new int[sz];
 		}
+
 		public boolean isEmpty() {
 			return _top < 0;
 		}
+
 		public int peek() {
-			return _top >= 0 && _top < _value.length ? _value[_top] : -100;  
+			return _top >= 0 && _top < _value.length ? _value[_top] : -100;
 		}
+
 		public int pop() {
 			return _value[_top--];
 		}
+
 		public void push(int val) {
 			_value[++_top] = val;
 		}
+
 		public void clear() {
 			_top = -1;
 		}

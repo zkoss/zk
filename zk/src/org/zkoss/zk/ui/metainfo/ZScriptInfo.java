@@ -15,9 +15,8 @@ package org.zkoss.zk.ui.metainfo;
 import java.net.URL;
 
 import org.zkoss.util.resource.Locator;
-
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.ConditionImpl;
 
 /**
@@ -39,6 +38,7 @@ public class ZScriptInfo extends ConditionLeafInfo {
 		super(parent, cond);
 		_zs = new ZScript(zslang, content);
 	}
+
 	/** Create a {@link ZScriptInfo} with an URL that is used to load the content.
 	 *
 	 * @param url the URL to load the content of zscript.
@@ -47,6 +47,7 @@ public class ZScriptInfo extends ConditionLeafInfo {
 		super(parent, cond);
 		_zs = new ZScript(zslang, url);
 	}
+
 	/** Constructs a {@link ZScriptInfo} with an URL, which might contain an EL
 	 * expression.
 	 *
@@ -64,12 +65,14 @@ public class ZScriptInfo extends ConditionLeafInfo {
 		_zs.setEvaluatorRef(_evalr); //in case that this info has been moved
 		return _zs;
 	}
+
 	/** Returns the scripting language, or null if the default scripting language
 	 * is preferred.
 	 */
 	public String getLanguage() {
 		return _zs.getLanguage();
 	}
+
 	/** Sets the scripting language.
 	 *
 	 * @param zslang the scripting language. If null, the default scripting
@@ -93,6 +96,7 @@ public class ZScriptInfo extends ConditionLeafInfo {
 	public String getRawContent() {
 		return _zs.getRawContent();
 	}
+
 	/** Returns the content of zscript.
 	 * If URL is specified, this method loads the content from it.
 	 * If URL is an EL expression, it will be evaluated first.
@@ -116,6 +120,7 @@ public class ZScriptInfo extends ConditionLeafInfo {
 	public boolean isDeferred() {
 		return _deferred;
 	}
+
 	/** Sets whether the evaluation of the zscript shall be deferred.
 	 * <p>Default: false.
 	 */

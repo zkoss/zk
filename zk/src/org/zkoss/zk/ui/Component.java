@@ -17,17 +17,17 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Iterator;
 
-import org.zkoss.zk.ui.util.Template;
-import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.au.AuService;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.util.Template;
 
 /**
  * An UI component.
@@ -80,15 +80,16 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <p>To override in Java, you could invoke {@link #setWidgetClass}.
 	 * To override in ZUML, you could use the client namespace as follows.
 	 * <pre><code>
-&lt;window xmlns:w="http://www.zkoss.org/2005/zk/client"
-w:use="foo.MyWindow"&gt;
-&lt;/window&gt;
+	&lt;window xmlns:w="http://www.zkoss.org/2005/zk/client"
+	w:use="foo.MyWindow"&gt;
+	&lt;/window&gt;
 	 *</code></pre>
 	 * <p>Note: for Ajax devices, the widget class must be non-null.
 	 * @since 5.0.0
 	 * @see #setWidgetClass
 	 */
 	public String getWidgetClass();
+
 	/** Sets the widget class (a.k.a., the widget type).
 	 * The widget class is a JavaScript class, including the package name.
 	 * For example, "zul.wnd.Window".
@@ -144,6 +145,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see Path
 	 */
 	public String getId();
+
 	/** Sets the ID. The scope of uniqueness depends on whether this component
 	 * is a root component. Refer to {@link #getId} for more details.
 	 *
@@ -179,6 +181,7 @@ w:use="foo.MyWindow"&gt;
 	 * </ol>
 	 */
 	public Desktop getDesktop();
+
 	/** Returns the page that this component belongs to, or null if
 	 * it doesn't belong to any page.
 	 *
@@ -198,6 +201,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see #setPage
 	 */
 	public Page getPage();
+
 	/** Sets what page this component belongs to.
 	 * If this component already belongs to the same page, nothing
 	 * is changed.
@@ -221,6 +225,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see org.zkoss.zk.ui.sys.ComponentCtrl#onPageDetached
 	 */
 	public void setPage(Page page);
+
 	/** Sets what page this component belongs to, and insert
 	 * this component right before the reference component.
 	 *
@@ -264,22 +269,7 @@ w:use="foo.MyWindow"&gt;
 	 * @exception ComponentNotFoundException is thrown if fellow not found
 	 */
 	public Component getFellow(String id);
-	/** Returns a component of the specified ID in the same ID space, or null
-	 * if not found.
-	 * <p>Unlike {@link #getFellow}, it returns null if not found.
-	 */
-	public Component getFellowIfAny(String id);
-	/** Returns all fellows in the same ID space of this component.
-	 * Notice that only components that are assigned with ID are considered
-	 * as fellows.
-	 * The returned collection is read-only.
-	 * @since 3.0.6
-	 */
-	public Collection<Component> getFellows();
-	/** Returns whether a fellow exists in the same ID space of this component.
-	 * @since 5.0.0
-	 */
-	public boolean hasFellow(String compId);
+
 	/** Returns a component of the specified ID in the same ID space.
 	 * It is the same as getSpaceOwner().getFellow(id, recurse);
 	 *
@@ -292,8 +282,14 @@ w:use="foo.MyWindow"&gt;
 	 * existence of the fellow
 	 * @since 5.0.0
 	 */
-	public Component getFellow(String id, boolean recurse)
-	throws ComponentNotFoundException;
+	public Component getFellow(String id, boolean recurse) throws ComponentNotFoundException;
+
+	/** Returns a component of the specified ID in the same ID space, or null
+	 * if not found.
+	 * <p>Unlike {@link #getFellow}, it returns null if not found.
+	 */
+	public Component getFellowIfAny(String id);
+
 	/** Returns a component of the specified ID in the same ID space, or null
 	 * if not found.
 	 * It is the same as getSpaceOwner().getFellowIfAny(id, recurse);
@@ -306,6 +302,15 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public Component getFellowIfAny(String id, boolean recurse);
+
+	/** Returns all fellows in the same ID space of this component.
+	 * Notice that only components that are assigned with ID are considered
+	 * as fellows.
+	 * The returned collection is read-only.
+	 * @since 3.0.6
+	 */
+	public Collection<Component> getFellows();
+
 	/** Returns whether there is a fellow named with the specified component ID
 	 * in the same ID space as this component.
 	 * It is the same as getSpaceOwner().hasFellow(id, recurse);
@@ -316,18 +321,26 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public boolean hasFellow(String id, boolean recurse);
 
+	/** Returns whether a fellow exists in the same ID space of this component.
+	 * @since 5.0.0
+	 */
+	public boolean hasFellow(String compId);
+
 	/** Returns the next sibling, or null if it is the last child.
 	 * @since 3.0.0
 	 */
 	public Component getNextSibling();
+
 	/** Returns the previous sibling, or null if it is the first child.
 	 * @since 3.0.0
 	 */
 	public Component getPreviousSibling();
+
 	/** Returns the first child component, or null if no child at all.
 	 * @since 3.0.0
 	 */
 	public Component getFirstChild();
+
 	/** Returns the last child  component, or null if no child at all.
 	 * @since 3.0.0
 	 */
@@ -393,6 +406,12 @@ w:use="foo.MyWindow"&gt;
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Map<String, Object> getAttributes(int scope);
+
+	/** Returns all custom attributes associated with this component, i.e.,
+	 * {@link #COMPONENT_SCOPE}.
+	 */
+	public Map<String, Object> getAttributes();
+
 	/** Returns the value of the specified custom attribute in the specified scope,
 	 * or null if not defined.
 	 *
@@ -410,6 +429,12 @@ w:use="foo.MyWindow"&gt;
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Object getAttribute(String name, int scope);
+
+	/** Returns the custom attribute associated with this component, i.e.,
+	 * {@link #COMPONENT_SCOPE}.
+	 */
+	public Object getAttribute(String name);
+
 	/** Returns if the custom attribute is associate with this component.
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means attributes private
 	 * to this component.
@@ -429,6 +454,15 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public boolean hasAttribute(String name, int scope);
+
+	/** Returns if the custom attribute is associate with this component.
+	 * <p>Notice that <code>null</code> is a valid value, so you can
+	 * tell if an attribute is associated by examining the return value
+	 * of {@link #getAttribute}.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name);
+
 	/** Sets the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
@@ -449,6 +483,12 @@ w:use="foo.MyWindow"&gt;
 	 * @param value the value. If null, the attribute is removed.
 	 */
 	public Object setAttribute(String name, Object value, int scope);
+
+	/** Sets the custom attribute associated with this component, i.e.,
+	 * {@link #COMPONENT_SCOPE}.
+	 */
+	public Object setAttribute(String name, Object value);
+
 	/** Removes the specified custom attribute in the specified scope.
 	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means attributes private
 	 * to this component.
@@ -465,25 +505,6 @@ w:use="foo.MyWindow"&gt;
 	 */
 	public Object removeAttribute(String name, int scope);
 
-	/** Returns all custom attributes associated with this component, i.e.,
-	 * {@link #COMPONENT_SCOPE}.
-	 */
-	public Map<String, Object> getAttributes();
-	/** Returns the custom attribute associated with this component, i.e.,
-	 * {@link #COMPONENT_SCOPE}.
-	 */
-	public Object getAttribute(String name);
-	/** Returns if the custom attribute is associate with this component.
-	 * <p>Notice that <code>null</code> is a valid value, so you can
-	 * tell if an attribute is associated by examining the return value
-	 * of {@link #getAttribute}.
-	 * @since 5.0.0
-	 */
-	public boolean hasAttribute(String name);
-	/** Sets the custom attribute associated with this component, i.e.,
-	 * {@link #COMPONENT_SCOPE}.
-	 */
-	public Object setAttribute(String name, Object value);
 	/** Removes the custom attribute associated with this component, i.e.,
 	 * {@link #COMPONENT_SCOPE}.
 	 */
@@ -506,7 +527,6 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public Object getAttributeOrFellow(String name, boolean recurse);
-
 
 	/** Returns the shadow variable associated with this component or its parent
 	 * component; or null if not found.
@@ -570,6 +590,7 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.4
 	 */
 	public String getStubonly();
+
 	/** Sets whether this component is stub-only.
 	 * By stub-only, we mean we don't need to maintain the states of
 	 * the component at the server side.
@@ -592,6 +613,7 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.4
 	 */
 	public void setStubonly(String stubonly);
+
 	/** Sets whether this component is stub-only.
 	 * It is the same as <code>setStubonly(stubonly ? "true": "false")</code>.
 	 * @since 6.0.0
@@ -601,6 +623,7 @@ w:use="foo.MyWindow"&gt;
 	/** Returns the parent component, or null if this is the root component.
 	 */
 	public Component getParent();
+
 	/** Sets the parent component.
 	 *
 	 * <p>Note: {@link #setParent} always calls back {@link #insertBefore}
@@ -612,10 +635,12 @@ w:use="foo.MyWindow"&gt;
 	 * to customize the behavior.
 	 */
 	public void setParent(Component parent);
+
 	/** Returns a live list of children.
 	 * By live we mean the developer could add or remove a child by manipulating the returned list directly.
 	 */
 	public <T extends Component> List<T> getChildren();
+
 	/** Returns the root of this component.
 	 */
 	public Component getRoot();
@@ -624,6 +649,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see Components#isRealVisible
 	 */
 	public boolean isVisible();
+
 	/** Sets whether this component is visible.
 	 *
 	 * @return the previous visibility
@@ -656,6 +682,7 @@ w:use="foo.MyWindow"&gt;
 	 * change.
 	 */
 	public boolean insertBefore(Component newChild, Component refChild);
+
 	/** Appends a child.
 	 * A shortcut to insertBefore(child, null).
 	 *
@@ -700,10 +727,10 @@ w:use="foo.MyWindow"&gt;
 	 * then you can override the default mold by specifying the property
 	 * called "org.zkoss.zul.Button.mold" with the mold you want
 	 * in zk.xml. For example,
-<pre><code>&lt;library-property>
-  &lt;name>org.zkoss.zul.Button.mold&lt;/name>
-  &lt;value>trendy&lt;/value>
-&lt;/library-property></code></pre>
+	<pre><code>&lt;library-property>
+	&lt;name>org.zkoss.zul.Button.mold&lt;/name>
+	&lt;value>trendy&lt;/value>
+	&lt;/library-property></code></pre>
 	 * <p>Notice that it doesn't affect the deriving classes. If you want
 	 * to change the deriving class's default mold, you have to specify
 	 * them explicitly, too.
@@ -711,6 +738,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
 	 */
 	public String getMold();
+
 	/** Sets the mold to render this component.
 	 *
 	 * @param mold the mold. If null or empty, "default" is assumed.
@@ -753,6 +781,7 @@ w:use="foo.MyWindow"&gt;
 	 * @since 6.0.0
 	 */
 	public boolean addEventListener(int priority, String evtnm, EventListener<? extends Event> listener);
+
 	/** Adds an event listener to specified event name for this component.
 	 * The second registration is ignored and false is returned.
 	 * The priority is assumed to 0.
@@ -774,6 +803,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see Page#addEventListener
 	 */
 	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener);
+
 	/** Removes an event listener.
 	 * @return whether the listener is removed; false if it was never added.
 	 */
@@ -793,10 +823,12 @@ w:use="foo.MyWindow"&gt;
 	 * @see Component#addEventListener
 	 */
 	public boolean isListenerAvailable(String evtnm, boolean asap);
+
 	/** @deprecated As of release 6.0, replaced with {@link #getEventListeners}.
 	 * Returns an iterator for iterating the event listeners for the given event.
 	 */
 	public Iterator<EventListener<? extends Event>> getListenerIterator(String evtnm);
+
 	/** Returns an iterable collection of the event listeners for the given event.
 	 * <p>Note: it is OK to invoke {@link #addEventListener} or {@link #removeEventListener}
 	 * when iterating through the event listeners with the returned collection.
@@ -830,8 +862,8 @@ w:use="foo.MyWindow"&gt;
 	 * @see #removeForward(String, Component, String)
 	 * @see #addForward(String, Component, String, Object)
 	 */
-	public boolean addForward(
-	String originalEvent, Component target, String targetEvent);
+	public boolean addForward(String originalEvent, Component target, String targetEvent);
+
 	/** Adds a forward condition to forward the event received
 	 * by this component to another component, specified with a path.
 	 *
@@ -854,8 +886,8 @@ w:use="foo.MyWindow"&gt;
 	 * @see #removeForward(String, String, String)
 	 * @since 3.0.0
 	 */
-	public boolean addForward(
-	String originalEvent, String targetPath, String targetEvent);
+	public boolean addForward(String originalEvent, String targetPath, String targetEvent);
+
 	/** Adds a forward condition to forward the event received
 	 * by this component to another component with extra event data.
 	 *
@@ -864,8 +896,8 @@ w:use="foo.MyWindow"&gt;
 	 * @see #addForward(String, Component, String)
 	 * @since 3.0.6
 	 */
-	public boolean addForward(String originalEvent, Component target,
-	String targetEvent, Object eventData);
+	public boolean addForward(String originalEvent, Component target, String targetEvent, Object eventData);
+
 	/** Adds a forward condition to forward the event received
 	 * by this component to another component of the specified path
 	 * with extra event data.
@@ -875,8 +907,8 @@ w:use="foo.MyWindow"&gt;
 	 * @see #addForward(String, String, String)
 	 * @since 3.0.6
 	 */
-	public boolean addForward(String originalEvent, String targetPath,
-	String targetEvent, Object eventData);
+	public boolean addForward(String originalEvent, String targetPath, String targetEvent, Object eventData);
+
 	/** Removes a forward condition that was added by
 	 * {@link #addForward(String, Component, String)}.
 	 * If no such forward condition exists, nothing happens but return false.
@@ -893,8 +925,8 @@ w:use="foo.MyWindow"&gt;
 	 * @see #addForward(String, Component, String)
 	 * @since 3.0.0
 	 */
-	public boolean removeForward(
-	String originalEvent, Component target, String targetEvent);
+	public boolean removeForward(String originalEvent, Component target, String targetEvent);
+
 	/** Removes a forward condition that was added by
 	 * {@link #addForward(String, String, String)}.
 	 * If no such forward condition exists, nothing happens but return false.
@@ -913,8 +945,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see #addForward(String, String, String)
 	 * @since 3.0.0
 	 */
-	public boolean removeForward(
-	String originalEvent, String targetPath, String targetEvent);
+	public boolean removeForward(String originalEvent, String targetPath, String targetEvent);
 
 	//-- drawing --//
 	/** Returns if this component needs to be redrawn at the client.
@@ -932,6 +963,7 @@ w:use="foo.MyWindow"&gt;
 	 * @since 3.0.5
 	 */
 	public boolean isInvalidated();
+
 	/** Invalidates this component by setting the dirty flag
 	 * such that it will be redraw the whole content of this
 	 * component and its dependences later.
@@ -946,6 +978,7 @@ w:use="foo.MyWindow"&gt;
 	 * phases. However, it is NOT allowed in the rendering phase.
 	 */
 	public void invalidate();
+
 	/** Initializes the properties (a.k.a. members) 
 	 * based on what are defined in the component definition.
 	 *
@@ -977,10 +1010,12 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public String setWidgetListener(String evtnm, String script);
+
 	/** Returns the script of the client event, or null if not found.
 	 * @since 5.0.0
 	 */
 	public String getWidgetListener(String evtnm);
+
 	/** Returns a read-only collection of event names (String) that
 	 * the listener of the peer widget are assigned, or
 	 * an empty collection if none is registered.
@@ -1032,11 +1067,13 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public String setWidgetOverride(String name, String script);
+
 	/** Returns the script of the method definition to override
 	 * widget's method, or null if not found.
 	 * @since 5.0.0
 	 */
 	public String getWidgetOverride(String name);
+
 	/** Returns a read-only collection of the property names (String) that
 	 * shall be overridden, or an empty collection if none is registered.
 	 * @since 5.0.0
@@ -1048,6 +1085,7 @@ w:use="foo.MyWindow"&gt;
 	 * instead.
 	 */
 	public String setWidgetAttribute(String name, String value);
+
 	/** 
 	 * @deprecated As released of ZK 8.0.0, please use {@link #getClientAttribute(String)}
 	 * instead.
@@ -1077,35 +1115,38 @@ w:use="foo.MyWindow"&gt;
 	 * @since 8.0.0
 	 */
 	public String setClientAttribute(String name, String value);
+
 	/** Returns the value of a DOM attribute
 	 * @since 8.0.0
 	 */
 	public String getClientAttribute(String name);
 
-    /*** Sets a DOM data attribute of the peer widget (at the client).
-     * If it has previous value, the component will invalidate.
-     * ZK pass the attributes directly to the DOM attribute generated
-     * at the client.
-     * <p>Notice that the parameter - name would be expanded by adding the prefix
-     * "data-" automatically.
-     * @param name the attribute name to generate to the DOM element,
-     * such as <code>mask</code>.
-     * @param value the value of the attribute. It could be anything
-     * depending on the attribute.
-     * If null, the attribute will be removed. Make sure to specify an empty
-     * string if you want an attribute with an empty value.
-     * @return the previous value if any
-     * @since 8.0.0
-     * @see #setClientDataAttribute(String, String)
-     */
-    public String setClientDataAttribute(String name, String value);
-    /** Returns the value of a DOM data attribute
-     * <p>Notice that the parameter - name would be expanded by adding the prefix
-     * "data-" automatically.
-     * @since 8.0.0
-     * @see #getClientDataAttribute(String)
-     */
-    public String getClientDataAttribute(String name);
+	/*** Sets a DOM data attribute of the peer widget (at the client).
+	 * If it has previous value, the component will invalidate.
+	 * ZK pass the attributes directly to the DOM attribute generated
+	 * at the client.
+	 * <p>Notice that the parameter - name would be expanded by adding the prefix
+	 * "data-" automatically.
+	 * @param name the attribute name to generate to the DOM element,
+	 * such as <code>mask</code>.
+	 * @param value the value of the attribute. It could be anything
+	 * depending on the attribute.
+	 * If null, the attribute will be removed. Make sure to specify an empty
+	 * string if you want an attribute with an empty value.
+	 * @return the previous value if any
+	 * @since 8.0.0
+	 * @see #setClientDataAttribute(String, String)
+	 */
+	public String setClientDataAttribute(String name, String value);
+
+	/** Returns the value of a DOM data attribute
+	 * <p>Notice that the parameter - name would be expanded by adding the prefix
+	 * "data-" automatically.
+	 * @since 8.0.0
+	 * @see #getClientDataAttribute(String)
+	 */
+	public String getClientDataAttribute(String name);
+
 	/** Returns a read-only collection of additions DOM attributes that shall be
 	 * generated. That is, they are the attributes added by {@link #setWidgetAttribute}.
 	 * @since 5.0.3
@@ -1117,6 +1158,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see #setTemplate
 	 */
 	public Template getTemplate(String name);
+
 	/** Sets a UI template which could be retrieved later
 	 * with {@link #getTemplate}.
 	 * @param name the template's name. It cannot be empty or null.
@@ -1125,6 +1167,7 @@ w:use="foo.MyWindow"&gt;
 	 * @return the previous template, if any
 	 */
 	public Template setTemplate(String name, Template template);
+
 	/** Returns a readonly set of the names of all templates.
 	 * @since 6.0.0
 	 */
@@ -1141,6 +1184,7 @@ w:use="foo.MyWindow"&gt;
 	 * @since 5.0.0
 	 */
 	public void setAuService(AuService service);
+
 	/** Returns an AU service to process the AU request before the component's
 	 * default handling.
 	 * <p>Default: null
@@ -1158,6 +1202,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see #setAutag
 	 */
 	public String getAutag();
+
 	/** Sets the AU tag for this widget.
 	 * The AU tag tag is used to tag the AU requests sent by the peer widget.
 	 * @param tag the AU tag. Both an empty string and null are considered as null,
@@ -1182,6 +1227,7 @@ w:use="foo.MyWindow"&gt;
 	 * @see #queryAll
 	 */
 	public Component query(String selector);
+
 	/** Returns an iterable object for components that match the given CSS3 selector.
 	 * <p>Notice: this method traverses the whole component tree, only if
 	 * you iterate through the whole iterable object.

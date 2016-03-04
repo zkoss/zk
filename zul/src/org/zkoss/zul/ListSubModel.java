@@ -18,7 +18,6 @@
  */
 package org.zkoss.zul;
 
-
 /**
  * An extra interface that can be implemented with {@link ListModel} to control
  * the extract of the combobox.

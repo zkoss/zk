@@ -21,11 +21,11 @@ import org.zkoss.zk.ui.Component;
  * @since 6.5.2
  */
 public interface BindingAnnotationInfoChecker {
-	
+
 	/**
 	 * check binding annotation
 	 */
-	void checkBinding(Binder binder,Component comp);
+	void checkBinding(Binder binder, Component comp);
 
 	/**
 	 * check view model annotation 

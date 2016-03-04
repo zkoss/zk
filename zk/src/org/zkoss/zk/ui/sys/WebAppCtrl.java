@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.au.AuDecoder;
 
 /**
  * Additional interface of {@link org.zkoss.zk.ui.WebApp} for implementation.
@@ -35,6 +35,7 @@ public interface WebAppCtrl {
 	 * @param config the configuration (never null)
 	 */
 	public void init(Object context, Configuration config);
+
 	/** Destroys this Web application.
 	 * <p>Note; once destroyed, this instance cannot be used anymore.
 	 */
@@ -43,6 +44,7 @@ public interface WebAppCtrl {
 	/** Returns the UI engine for this Web application (never null).
 	 */
 	public UiEngine getUiEngine();
+
 	/** Sets the UI engine for this Web application.
 	 * The UI engine is stateful so it is not safe to change it
 	 * if there are active sessions.
@@ -57,9 +59,11 @@ public interface WebAppCtrl {
 	 * {@link DesktopCacheProvider#getDesktopCache}.
 	 */
 	public DesktopCache getDesktopCache(Session sess);
+
 	/** Returns the desktop cache provider.
 	 */
 	public DesktopCacheProvider getDesktopCacheProvider();
+
 	/** Sets the desktop provider for this Web application.
 	 * @param provider the desktop cache provider
 	 * @exception IllegalArgumentException if provider is null.
@@ -70,6 +74,7 @@ public interface WebAppCtrl {
 	/** Returns the UI factory for this Web application (never null).
 	 */
 	public UiFactory getUiFactory();
+
 	/** Sets the UI factory for this Web application.
 	 * @param factory the UI factory
 	 * @exception IllegalArgumentException if factory is null.
@@ -80,6 +85,7 @@ public interface WebAppCtrl {
 	/** Returns the failover manager, or null if not available.
 	 */
 	public FailoverManager getFailoverManager();
+
 	/** Sets the failover manager for this Web application.
 	 * @param manager the failover manager.
 	 * If null, it means no failover manager at all.
@@ -92,6 +98,7 @@ public interface WebAppCtrl {
 	 * @since 2.4.1
 	 */
 	public IdGenerator getIdGenerator();
+
 	/** Sets the ID generator for this Web application.
 	 * @param generator the ID generator.
 	 * If null, it means no (custom) ID generator at all.
@@ -104,6 +111,7 @@ public interface WebAppCtrl {
 	 * @since 3.0.5
 	 */
 	public SessionCache getSessionCache();
+
 	/** Sets the session cache for this Web application.
 	 * @param cache the session cache
 	 * @exception IllegalArgumentException if cache is null.
@@ -116,6 +124,7 @@ public interface WebAppCtrl {
 	 * @since 5.0.4
 	 */
 	public AuDecoder getAuDecoder();
+
 	/** Sets the AU decoder for this Web application.
 	 * <p>Default: null (using the system default).
 	 * @since 5.0.4
@@ -126,6 +135,7 @@ public interface WebAppCtrl {
 	 * (a.k.a., serialized).
 	 */
 	public void sessionWillPassivate(Session sess);
+
 	/** Notification that the session has just been activated
 	 * (a.k.a., deserialized).
 	 */

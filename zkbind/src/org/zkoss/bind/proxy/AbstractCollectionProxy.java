@@ -13,11 +13,8 @@ package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
@@ -33,8 +30,8 @@ import org.zkoss.lang.Objects;
  * @author jumperchen
  * @since 8.0.0
  */
-public abstract class AbstractCollectionProxy<E> implements Collection<E>,
-		Proxy, FormProxyObject, Serializable, FormProxyObjectListener{
+public abstract class AbstractCollectionProxy<E>
+		implements Collection<E>, Proxy, FormProxyObject, Serializable, FormProxyObjectListener {
 	private Collection<E> _cache;
 	private static final long serialVersionUID = 20141225142801L;
 	private Object _origin;
@@ -42,7 +39,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	//F80: formProxyObject support notifyChange with Form.isDirty
 	private FormProxyObjectListener _listener;
 	protected boolean isImmutableElements;
-	
+
 	public AbstractCollectionProxy(Collection<E> origin, Annotation[] callerAnnots) {
 		_origin = origin;
 		_cache = initCache();
@@ -55,12 +52,12 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 			}
 		}
 	}
-	
+
 	protected abstract Collection<E> initCache();
-	
+
 	@SuppressWarnings("unchecked")
 	protected <T extends Collection<E>> T getCache() {
-		return (T)_cache;
+		return (T) _cache;
 	}
 
 	public Object getOriginObject() {
@@ -75,29 +72,33 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 
 	//F80: formProxyObject support notifyChange with Form.isDirty
 	public void addFormProxyObjectListener(FormProxyObjectListener l) {
-		if (_listener == null) _listener = l;
+		if (_listener == null)
+			_listener = l;
 	}
-	
+
 	public void onDirtyChange() {
-		if (_listener != null) _listener.onDirtyChange();
+		if (_listener != null)
+			_listener.onDirtyChange();
 	}
-	
+
 	public void onDataChange(Object o) {
-		if (_listener != null) _listener.onDataChange(o);
-	}	
-	
+		if (_listener != null)
+			_listener.onDataChange(o);
+	}
+
 	protected void setDirty(boolean d) {
 		if (_dirty != d) {
 			_dirty = d;
 			onDirtyChange();
 		}
-		if (d) onDataChange(this);
+		if (d)
+			onDataChange(this);
 	}
-	
+
 	public void setHandler(MethodHandler mi) {
 		throw new UnsupportedOperationException("Not support!");
 	}
-	
+
 	public int size() {
 		return _cache.size();
 	}
@@ -124,7 +125,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 		setDirty(true);
 		_cache.clear();
 	}
-	
+
 	public Iterator<E> iterator() {
 		return _cache.iterator();
 	}
@@ -136,7 +137,7 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 	public <T> T[] toArray(T[] a) {
 		return _cache.toArray(a);
 	}
-	
+
 	public boolean add(E e) {
 		if (_cache.add(createProxyObject(e))) {
 			setDirty(true);
@@ -157,14 +158,13 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 		boolean modified = false;
 		Iterator<? extends E> e = c.iterator();
 		while (e.hasNext()) {
-		    if (add(e.next()))
-			modified = true;
+			if (add(e.next()))
+				modified = true;
 		}
 		if (modified)
 			setDirty(true);
 		return modified;
 	}
-
 
 	public boolean containsAll(Collection<?> c) {
 		Iterator<?> e = c.iterator();
@@ -217,31 +217,31 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 			setDirty(true);
 		return modified;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void resetFromOrigin() {
 		getCache().clear();
 		setDirty(false);
-		for (E e : (Collection<E>)getOriginObject()) {
+		for (E e : (Collection<E>) getOriginObject()) {
 			getCache().add(createProxyObject(e));
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void submitToOrigin(BindContext ctx) {
-		Collection<E> origin = ((Collection<E>)getOriginObject());
+		Collection<E> origin = ((Collection<E>) getOriginObject());
 		origin.clear();
 		for (E e : getCache()) {
 			if (e instanceof FormProxyObject) {
 				FormProxyObject proxy = (FormProxyObject) e;
 				proxy.submitToOrigin(ctx);
-				origin.add((E)proxy.getOriginObject());
+				origin.add((E) proxy.getOriginObject());
 			} else {
 				origin.add(e);
-			}	
+			}
 		}
 	}
-	
+
 	protected static boolean testEquals(Object e, Object o) {
 		if (e == o) {
 			return true;
@@ -263,11 +263,11 @@ public abstract class AbstractCollectionProxy<E> implements Collection<E>,
 		}
 		return false;
 	}
-	
+
 	public void setFormOwner(Object owner, FormBinding binding) {
 		throw new IllegalAccessError("Not supported");
 	}
-	
+
 	//F80: formProxyObject support notifyChange with Form.isDirty
 	private <T extends Object> T createProxyObject(T t) {
 		T p = isImmutableElements ? t : ProxyHelper.createProxyIfAny(t);

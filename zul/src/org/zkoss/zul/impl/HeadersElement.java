@@ -28,12 +28,12 @@ import org.zkoss.zul.event.ZulEvents;
  *
  * @author tomyeh
  */
-abstract public class HeadersElement extends XulElement {
+public abstract class HeadersElement extends XulElement {
 
 	static {
 		addClientEvent(HeadersElement.class, ZulEvents.ON_COL_SIZE, CE_IMPORTANT); //no CE_DUPLICATE_IGNORE (might apply to diff index)
 	}
-	
+
 	private boolean _sizable;
 
 	/** Returns whether the width of the child column is sizable.
@@ -41,6 +41,7 @@ abstract public class HeadersElement extends XulElement {
 	public boolean isSizable() {
 		return _sizable;
 	}
+
 	/** Sets whether the width of the child column is sizable.
 	 * If true, an user can drag the border between two columns (e.g., {@link org.zkoss.zul.Column})
 	 * to change the widths of adjacent columns.
@@ -54,12 +55,12 @@ abstract public class HeadersElement extends XulElement {
 	}
 
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		render(renderer, "sizable", _sizable);
 	}
+
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
@@ -70,12 +71,12 @@ abstract public class HeadersElement extends XulElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(ZulEvents.ON_COL_SIZE)) {
-			((MeshElement)this.getParent()).setSpan(false); //clear span
-			((MeshElement)this.getParent()).setSizedByContent(false); //clear sizedByContent
+			((MeshElement) this.getParent()).setSpan(false); //clear span
+			((MeshElement) this.getParent()).setSizedByContent(false); //clear sizedByContent
 			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
 			int j = 0;
-			for(Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
-				final HeaderElement header = (HeaderElement) it.next(); 
+			for (Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
+				final HeaderElement header = (HeaderElement) it.next();
 				header.setWidthByClient(evt.getWidth(j));
 				if (header.getHflex() != null) {
 					header.setHflexByClient(null);

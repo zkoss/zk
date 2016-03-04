@@ -46,8 +46,7 @@ public class StaticIdGenerator implements IdGenerator, Serializable {
 	private static final String ID_PREFIX = "z_";
 	private static final String ID_NUM = "num";
 
-	public String nextComponentUuid(Desktop desktop, Component comp,
-			ComponentInfo compInfo) {
+	public String nextComponentUuid(Desktop desktop, Component comp, ComponentInfo compInfo) {
 		String number;
 		if ((number = (String) desktop.getAttribute(ID_NUM)) == null) {
 			number = "0";

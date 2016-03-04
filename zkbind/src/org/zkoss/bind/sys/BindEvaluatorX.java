@@ -35,8 +35,7 @@ public interface BindEvaluatorX extends Evaluator {
 	 * later.
 	 * @param expectedType the expected type of the result of the evaluation
 	 */
-	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)
-	throws XelException;
+	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType) throws XelException;
 
 	/**
 	 * Sets the specified value to the property resolved from the specified expression.
@@ -46,8 +45,7 @@ public interface BindEvaluatorX extends Evaluator {
 	 * @param expression the expression that will resolve a property
 	 * @param value the value to be set into the resolved property
 	 */
-	public void setValue(BindContext ctx, Component comp, ExpressionX expression, Object value)
-	throws XelException;
+	public void setValue(BindContext ctx, Component comp, ExpressionX expression, Object value) throws XelException;
 
 	/**
 	 * Sets the specified value to the property resolved from the specified expression.
@@ -56,8 +54,7 @@ public interface BindEvaluatorX extends Evaluator {
 	 * @param comp the scoped component context of this operation
 	 * @param expression the expression that will resolve a property
 	 */
-	public Object getValue(BindContext ctx, Component comp, ExpressionX expression)
-	throws XelException;
+	public Object getValue(BindContext ctx, Component comp, ExpressionX expression) throws XelException;
 
 	/**
 	 * Returns the result type of the specified expression.
@@ -66,8 +63,7 @@ public interface BindEvaluatorX extends Evaluator {
 	 * @param comp evaluation context 
 	 * @param expression the expression that will resolve a property
 	 */
-	public Class<?> getType(BindContext ctx, Component comp, ExpressionX expression)
-	throws XelException;
+	public Class<?> getType(BindContext ctx, Component comp, ExpressionX expression) throws XelException;
 
 	/**
 	 * Returns the result reference of the specified expression.
@@ -77,8 +73,8 @@ public interface BindEvaluatorX extends Evaluator {
 	 * @param expression the expression that will resolve a property
 	 */
 	public ValueReference getValueReference(BindContext ctx, Component comp, ExpressionX expression)
-	throws XelException;
-	
+			throws XelException;
+
 	/**
 	 * Returns whether the specified expression a read only expression. 
 	 * @param ctx BindContext
@@ -87,6 +83,5 @@ public interface BindEvaluatorX extends Evaluator {
 	 * @return whether the specified expression a read only expression.
 	 * @throws XelException
 	 */
-	public boolean isReadOnly(BindContext ctx, Component comp, ExpressionX expression)
-	throws XelException;
+	public boolean isReadOnly(BindContext ctx, Component comp, ExpressionX expression) throws XelException;
 }

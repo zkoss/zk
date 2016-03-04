@@ -26,6 +26,7 @@ import javax.persistence.Persistence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -86,7 +87,7 @@ public class JpaUtil {
 	 *&lt;preference&gt;
 	 *	&lt;name&gt;JPA.PersistenceUnitName&lt;/name&gt;
 	 *	&lt;value&gt;PERSISTENCE_UNIT_NAME&lt;/value&gt;
-     *&lt;/preference&gt;
+	 *&lt;/preference&gt;
 	 * </code></pre>
 	 * 
 	 * </p>
@@ -118,8 +119,7 @@ public class JpaUtil {
 	 * @param properties Defined priorities
 	 * @return EntityManagerFactory
 	 */
-	public static EntityManagerFactory getEntityManagerFactory(String puName,
-	Map properties) {
+	public static EntityManagerFactory getEntityManagerFactory(String puName, Map properties) {
 		return initEntityManagerFactory(puName, properties);
 	}
 
@@ -132,7 +132,7 @@ public class JpaUtil {
 	 *&lt;preference&gt;
 	 *	&lt;name&gt;JPA.PersistenceUnitName&lt;/name&gt;
 	 *	&lt;value&gt;PERSISTENCE_UNIT_NAME&lt;/value&gt;
-     *&lt;/preference&gt;
+	 *&lt;/preference&gt;
 	 * </code></pre>
 	 * 
 	 * </p>
@@ -168,7 +168,7 @@ public class JpaUtil {
 	 *&lt;preference&gt;
 	 *	&lt;name&gt;JPA.PersistenceUnitName&lt;/name&gt;
 	 *	&lt;value&gt;PERSISTENCE_UNIT_NAME&lt;/value&gt;
-     *&lt;/preference&gt;
+	 *&lt;/preference&gt;
 	 * </code></pre>
 	 * @since 3.0.7
 	 */
@@ -182,9 +182,10 @@ public class JpaUtil {
 	 */
 	public static void closeEntityManager(String puName) {
 		EntityManager em = getEmMap().remove(getPersistenceUnitName(puName));
-		if (em != null && em.isOpen()) em.close();
+		if (em != null && em.isOpen())
+			em.close();
 	}
-	
+
 	/**
 	 * Returns an EntityManager for the specified persistence unit name and
 	 * defined properties. </br>*Notice: It always creates a new EntityManagerFactory
@@ -224,7 +225,7 @@ public class JpaUtil {
 	 * If EntityManager with persistence name puName is not found in Map,
 	 * created a new one; or return the existing EntityManager of this execution directly.
 	 */
-	private static EntityManager initEntityManger(String puName,Map properties) {
+	private static EntityManager initEntityManger(String puName, Map properties) {
 		EntityManager em;
 		if (properties == null) {
 			String puName2 = getPersistenceUnitName(puName);
@@ -244,8 +245,7 @@ public class JpaUtil {
 	 * Create the EntityManagerFactory by persistence unit name. If persistence
 	 * unit name not given, using the one which is defined in zk.xml
 	 */
-	private static EntityManagerFactory createEntityManagerFactory(
-	String puName, Map properties) {
+	private static EntityManagerFactory createEntityManagerFactory(String puName, Map properties) {
 		puName = getPersistenceUnitName(puName);
 		EntityManagerFactory emf;
 		try {
@@ -254,7 +254,7 @@ public class JpaUtil {
 				log.info("EntityManagerFactory for: " + puName + " is created ");
 			} else {
 				emf = Persistence.createEntityManagerFactory(puName, properties);
-				log.info("EntityManagerFactory for: " + puName + " with properties "+properties + " is created ");
+				log.info("EntityManagerFactory for: " + puName + " with properties " + properties + " is created ");
 			}
 		} catch (Exception ex) {
 			log.error("Initial EntityManagerFactory creation failed." + ex);
@@ -295,7 +295,7 @@ public class JpaUtil {
 			pu = config.getPreference(CONFIG, null);
 		}
 		if (pu == null) {
-			throw new UiException("Forget to specify the preference of "+CONFIG+" in WEB-INF/zk.xml?");
+			throw new UiException("Forget to specify the preference of " + CONFIG + " in WEB-INF/zk.xml?");
 		}
 		return pu;
 	}
