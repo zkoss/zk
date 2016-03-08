@@ -15,10 +15,10 @@
     Authors: Max Vetrenko, Ruslan Diachenko, Roman Ivanov.
  -->
 
-<module name = "Checker">
+<module name="Checker">
     <property name="charset" value="UTF-8"/>
 
-    <property name="severity" value="warning"/>
+    <property name="severity" value="${checkstyle.java.severity}" default="ignore"/>
 
     <property name="fileExtensions" value="java"/>
 
