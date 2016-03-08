@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -35,25 +34,27 @@ public class Tabpanels extends XulElement {
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tabbox getTabbox() {
-		return (Tabbox)getParent();
+		return (Tabbox) getParent();
 	}
 
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabbox))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Tabpanel))
-			throw new UiException("Unsupported child for tabpanels: "+child);
+			throw new UiException("Unsupported child for tabpanels: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
+
 	/** Returns the style class.
 	 * @since 3.5.0
 	 * <p>Note: the default style class is always "z-tabpanels".
 	 */
 	public String getZclass() {
 		return _zclass == null ? "z-tabpanels" : _zclass;
-	}	
+	}
 }

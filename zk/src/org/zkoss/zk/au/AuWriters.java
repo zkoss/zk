@@ -16,9 +16,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
-import org.zkoss.json.*;
-import org.zkoss.zk.ui.UiException;
+import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONObject;
 import org.zkoss.zk.au.http.HttpAuWriter;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Utilities to instantiate an implementation of {@link AuWriter}.
@@ -36,8 +37,9 @@ public class AuWriters {
 	 * <p>Default: {@link HttpAuWriter}.
 	 */
 	public static Class getImplementationClass() {
-		return _awCls != null ? _awCls: HttpAuWriter.class;
+		return _awCls != null ? _awCls : HttpAuWriter.class;
 	}
+
 	/** Sets the implementation class of {@link AuWriter} that
 	 * will be used to generate the output to the client.
 	 */
@@ -46,15 +48,16 @@ public class AuWriters {
 			if (cls.equals(HttpAuWriter.class))
 				cls = null;
 			else if (!AuWriter.class.isAssignableFrom(cls))
-				throw new IllegalArgumentException(cls+" must implement "+AuWriter.class.getName());
+				throw new IllegalArgumentException(cls + " must implement " + AuWriter.class.getName());
 		_awCls = cls;
 	}
+
 	/** Creates an instance of {@link AuWriter}.
 	 */
 	public static AuWriter newInstance() throws UiException {
 		if (_awCls != null) {
 			try {
-				return (AuWriter)_awCls.newInstance();
+				return (AuWriter) _awCls.newInstance();
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex);
 			}
@@ -77,6 +80,7 @@ public class AuWriters {
 		out.put("rs", rs);
 		return out;
 	}
+
 	/** Converts a response to a JSON object.
 	 *@since 5.0.5
 	 */

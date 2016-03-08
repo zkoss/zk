@@ -34,27 +34,27 @@ import org.zkoss.zul.event.DialChartDataEvent;
  */
 public class DialModelScale implements Serializable {
 	private DialModel _model;
-	
+
 	//data
 	private double _value;
-	
+
 	//text annotation
 	private String _text;
 	private Font _textFont; //14, 10
 	private double _textRadius = 0.7; //0.7, 0.5
-	
+
 	//value indicator
 	private Font _valueFont; //10, 10
 	private double _valueRadius = 0.6; //0.6, 0.6
 	private double _valueAngle = -90; //-103.0, -77.0 
-	
+
 	//tick
 	private Font _tickFont; //14, 10
 	private double _tickRadius = 0.88; //0.88, 0.50
 	private String _tickColor; //tick, 0xFF0000
 	private int[] _tickRGB; //tick, red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private double _tickLabelOffset = 0.20; //offset between tick and tick label
-	
+
 	//scale
 	double _lowerBound;
 	double _upperBound;
@@ -62,10 +62,10 @@ public class DialModelScale implements Serializable {
 	double _extent;
 	double _majorTickInterval;
 	int _minorTickCount;
-	
+
 	//ranges
-	private List<DialModelRange> _ranges =  new ArrayList<DialModelRange>(4);
-	
+	private List<DialModelRange> _ranges = new ArrayList<DialModelRange>(4);
+
 	//needle
 	private String _needleType = "pointer"; //"pointer", "pin"
 	private String _needleColor; //needle, 0xFF0000
@@ -79,26 +79,26 @@ public class DialModelScale implements Serializable {
 	public int getIndex() {
 		return _model.indexOf(this);
 	}
-	
+
 	/** Get the value */
 	public double getValue() {
 		return _value;
 	}
-	
+
 	public void setValue(double val) {
 		if (Double.compare(_value, val) != 0) {
 			_value = val;
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE_VALUE, val);
 		}
 	}
-	
+
 	/**
 	 * Returns the text annotation of this scale.
 	 */
 	public String getText() {
 		return _text;
 	}
-	
+
 	/**
 	 * Sets the text annotation of this scale; e.g. "Temperature" for a temperature dial meter.
 	 * @param text text annotation(subtitle) of this scale.
@@ -109,6 +109,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE_TEXT, text);
 		}
 	}
+
 	/**
 	 * Returns the text annotation font.
 	 * @return the text annotation font.
@@ -116,7 +117,7 @@ public class DialModelScale implements Serializable {
 	public Font getTextFont() {
 		return _textFont;
 	}
-	
+
 	/**
 	 * Sets the text annotation font.
 	 * @param font the text annotation font.
@@ -127,7 +128,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE_FONT, font);
 		}
 	}
-	
+
 	/**
 	 * Return the radius percentage(0 ~ 1) to place the text annotation.
 	 * @return the radius percentage(0 ~ 1) to place the text annotation.
@@ -135,7 +136,7 @@ public class DialModelScale implements Serializable {
 	public double getTextRadius() {
 		return _textRadius;
 	}
-	
+
 	/**
 	 * Sets the radius percentage(0 ~ 1) to place the text annotation.
 	 * @param radius radius percentage(0 ~ 1) to place the text annotation.
@@ -146,7 +147,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TEXT_RADIUS, radius);
 		}
 	}
-	
+
 	/**
 	 * Returns the value font.
 	 * @return the value font.
@@ -154,7 +155,7 @@ public class DialModelScale implements Serializable {
 	public Font getValueFont() {
 		return _valueFont;
 	}
-	
+
 	/**
 	 * Sets the value font.
 	 * @param font the value font.
@@ -165,7 +166,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.VALUE_FONT, font);
 		}
 	}
-	
+
 	/**
 	 * Return the radius percentage(0 ~ 1) to place the value.
 	 * @return the radius percentage(0 ~ 1) to place the value.
@@ -173,7 +174,7 @@ public class DialModelScale implements Serializable {
 	public double getValueRadius() {
 		return _valueRadius;
 	}
-	
+
 	/**
 	 * Sets the radius percentage(0 ~ 1) to place the value.
 	 * @param radius radius percentage(0 ~ 1) to place the value.
@@ -183,7 +184,7 @@ public class DialModelScale implements Serializable {
 			_valueRadius = radius;
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.VALUE_RADIUS, radius);
 		}
-	}	
+	}
 
 	/**
 	 * Return the angle to place the value (counter clockwise is positive).
@@ -192,7 +193,7 @@ public class DialModelScale implements Serializable {
 	public double getValueAngle() {
 		return _valueAngle;
 	}
-	
+
 	/**
 	 * Sets the angle in degree to place the value (counter clockwise is positive).
 	 * @param angle angle in degree to place the value (counter clockwise is positive).
@@ -203,7 +204,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.VALUE_ANGLE, angle);
 		}
 	}
-	
+
 	/**
 	 * Sets the scale information of this DialModelScale.
 	 * @param lowerBound lower bound of this scale.
@@ -213,14 +214,12 @@ public class DialModelScale implements Serializable {
 	 * @param majorTickInterval the interval between major tick (in lower bound and upper bound).
 	 * @param minorTickCount the number of minor ticks between major tick.
 	 */
-	public void setScale(double lowerBound, double upperBound, 
-		double startAngle, double extent, double majorTickInterval, int minorTickCount) {
-		if (Double.compare(lowerBound, _lowerBound) != 0
-			|| Double.compare(upperBound, _upperBound) != 0
-			|| Double.compare(startAngle, _startAngle) != 0
-			|| Double.compare(extent, _extent) != 0
-			|| Double.compare(majorTickInterval, _majorTickInterval) != 0
-			|| Double.compare(minorTickCount, _minorTickCount) != 0) {
+	public void setScale(double lowerBound, double upperBound, double startAngle, double extent,
+			double majorTickInterval, int minorTickCount) {
+		if (Double.compare(lowerBound, _lowerBound) != 0 || Double.compare(upperBound, _upperBound) != 0
+				|| Double.compare(startAngle, _startAngle) != 0 || Double.compare(extent, _extent) != 0
+				|| Double.compare(majorTickInterval, _majorTickInterval) != 0
+				|| Double.compare(minorTickCount, _minorTickCount) != 0) {
 			_lowerBound = lowerBound;
 			_upperBound = upperBound;
 			_startAngle = startAngle;
@@ -230,7 +229,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.SCALE, this);
 		}
 	}
-	
+
 	/**
 	 * Returns the scale's lower bound.
 	 * @return the scale's lower bound.
@@ -238,7 +237,7 @@ public class DialModelScale implements Serializable {
 	public double getScaleLowerBound() {
 		return _lowerBound;
 	}
-	
+
 	/**
 	 * Returns the scale's upper bound.
 	 * @return the scale's upper bound.
@@ -246,6 +245,7 @@ public class DialModelScale implements Serializable {
 	public double getScaleUpperBound() {
 		return _upperBound;
 	}
+
 	/**
 	 * Returns starting angle in degree associated to the sclae's lower bound
 	 * (0 degree point to east, counter-clockwise is positive).
@@ -255,6 +255,7 @@ public class DialModelScale implements Serializable {
 	public double getScaleStartAngle() {
 		return _startAngle;
 	}
+
 	/**
 	 * Returns angles in degree extended from the starting angle (counter clockwise is positive).
 	 * @return angles in degree extended from the starting angle (counter clockwise is positive).
@@ -262,7 +263,7 @@ public class DialModelScale implements Serializable {
 	public double getScaleExtent() {
 		return _extent;
 	}
-	
+
 	/**
 	 * Returns the interval between major tick (in lower bound and upper bound).
 	 * @return the interval between major tick (in lower bound and upper bound).
@@ -270,7 +271,7 @@ public class DialModelScale implements Serializable {
 	public double getMajorTickInterval() {
 		return _majorTickInterval;
 	}
-	
+
 	/**
 	 * returns the number of minor ticks between major tick.
 	 * @return the number of minor ticks between major tick.
@@ -286,7 +287,7 @@ public class DialModelScale implements Serializable {
 	public Font getTickFont() {
 		return _tickFont;
 	}
-	
+
 	/**
 	 * Sets the tick label font.
 	 * @param font the tick label font.
@@ -297,7 +298,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TICK_FONT, font);
 		}
 	}
-	
+
 	/**
 	 * Return the radius percentage(0 ~ 1) to place the tick label.
 	 * @return the radius percentage(0 ~ 1) to place the tick label.
@@ -305,7 +306,7 @@ public class DialModelScale implements Serializable {
 	public double getTickRadius() {
 		return _tickRadius;
 	}
-	
+
 	/**
 	 * Sets the radius percentage(0 ~ 1) to place the tick label.
 	 * @param radius radius percentage(0 ~ 1) to place the tick label.
@@ -316,7 +317,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TICK_RADIUS, radius);
 		}
 	}
-	
+
 	/**
 	 * Returns the radius offset in percentage(0 ~ 1) between the tick and tick label.
 	 * @return the radius offset in percentage(0 ~ 1) between the tick and tick label.
@@ -335,7 +336,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.TICK_LABEL_OFFSET, tickLabelOffset);
 		}
 	}
-	
+
 	/**
 	 * Set the tick color.
 	 * @param color in #RRGGBB format (hexadecimal).
@@ -361,7 +362,7 @@ public class DialModelScale implements Serializable {
 	public String getTickColor() {
 		return _tickColor;
 	}
-	
+
 	/**
 	 * Get the tick color of this scale in int array (0: red, 1: green, 2:blue).
 	 * null means default.
@@ -369,7 +370,7 @@ public class DialModelScale implements Serializable {
 	public int[] getTickRGB() {
 		return _tickRGB;
 	}
-	
+
 	/**
 	 * Setup the DailModel range.
 	 * @param lower the lower bound in the scale.
@@ -393,7 +394,7 @@ public class DialModelScale implements Serializable {
 	public int rangeSize() {
 		return _ranges.size();
 	}
-	
+
 	/** Returns the color range of the specified index.
 	 * 
 	 * @param index the specified index.
@@ -402,13 +403,13 @@ public class DialModelScale implements Serializable {
 	public DialModelRange getRange(int index) {
 		return _ranges.get(index);
 	}
-	
+
 	/**
 	 * Removes the specified range from this scale.
 	 * @param range the range to be removed.
 	 */
 	public void removeRange(DialModelRange range) {
-		int index = _ranges.indexOf(range); 
+		int index = _ranges.indexOf(range);
 		_ranges.remove(range);
 		fireEvent(ChartDataEvent.REMOVED, DialChartDataEvent.RANGE, index);
 	}
@@ -420,7 +421,7 @@ public class DialModelScale implements Serializable {
 	public String getNeedleType() {
 		return _needleType;
 	}
-	
+
 	/**
 	 * Sets the needle type of this scale ("pointer" or "pin")
 	 * @param type the needle type of this scale ("pointer" or "pin")
@@ -431,7 +432,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.NEEDLE_TYPE, type);
 		}
 	}
-	
+
 	/**
 	 * Set the needle color.
 	 * @param color in #RRGGBB format (hexadecimal).
@@ -457,7 +458,7 @@ public class DialModelScale implements Serializable {
 	public String getNeedleColor() {
 		return _needleColor;
 	}
-	
+
 	/**
 	 * Get the needle color of this scale in int array (0: red, 1: green, 2:blue).
 	 * null means default.
@@ -465,7 +466,7 @@ public class DialModelScale implements Serializable {
 	public int[] getNeedleRGB() {
 		return _needleRGB;
 	}
-	
+
 	/**
 	 * Sets the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
 	 * @param radius the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
@@ -476,7 +477,7 @@ public class DialModelScale implements Serializable {
 			fireEvent(ChartDataEvent.CHANGED, DialChartDataEvent.NEEDLE_RADIUS, radius);
 		}
 	}
-	
+
 	/**
 	 * Return the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
 	 * @return the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
@@ -484,6 +485,7 @@ public class DialModelScale implements Serializable {
 	public double getNeedleRadius() {
 		return _needleRadius;
 	}
+
 	/**
 	 * Utility method to delegate event to {@link DialModel}
 	 * @param evt the {@link ChartDataEvent}.

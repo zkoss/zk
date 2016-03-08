@@ -16,17 +16,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.device;
 
-import java.util.Locale;
 import java.io.IOException;
+import java.util.Locale;
 
 import org.zkoss.util.Locales;
-import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.au.out.AuScript;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.http.Wpds;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.MessageLoader;
-import org.zkoss.zk.au.out.AuScript;
+import org.zkoss.zk.ui.util.Clients;
 
 /**
  * Represents a Web browser with the Ajax support.
@@ -40,19 +40,19 @@ public class AjaxDevice extends GenericDevice {
 	public boolean isCacheable() {
 		return false;
 	}
+
 	public Boolean isCompatible(String userAgent) {
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
-		return userAgent.indexOf("mozilla") >= 0 
-			|| userAgent.indexOf("msie ") >= 0
-			|| userAgent.indexOf("gecko/") >= 0
-			|| userAgent.indexOf("safari") >= 0
-			|| userAgent.indexOf("opera") >= 0 ? Boolean.TRUE: null;
+		return userAgent.indexOf("mozilla") >= 0 || userAgent.indexOf("msie ") >= 0 || userAgent.indexOf("gecko/") >= 0
+				|| userAgent.indexOf("safari") >= 0 || userAgent.indexOf("opera") >= 0 ? Boolean.TRUE : null;
 	}
+
 	/** Returns <code>text/html</code>
 	 */
 	public String getContentType() {
 		return "text/html";
 	}
+
 	/** Returns <code>&lt;!DOCTYPE html&gt;</code>. (since 7.0.0)
 	 */
 	public String getDocType() {
@@ -67,6 +67,7 @@ public class AjaxDevice extends GenericDevice {
 	public String packageToPath(String pkg) {
 		return "/js/" + pkg + ".wpd";
 	}
+
 	/** Converts a relative path to an absolute path that can be accessible by
 	 * the class loader (classpath).
 	 * <p>Default: "/js/" + path (if path doesn't start with '/' or '~').
@@ -75,12 +76,11 @@ public class AjaxDevice extends GenericDevice {
 	 * @since 5.0.4
 	 */
 	public String toAbsolutePath(String path) {
-		final char cc = path.length() > 0 ? path.charAt(0): (char)0;
-		return cc != '/' && cc != '~' ? "/js/" + path: path;
+		final char cc = path.length() > 0 ? path.charAt(0) : (char) 0;
+		return cc != '/' && cc != '~' ? "/js/" + path : path;
 	}
 
-	public void reloadMessages(Locale locale)
-	throws IOException {
+	public void reloadMessages(Locale locale) throws IOException {
 		if (locale == null)
 			locale = Locales.getCurrent();
 

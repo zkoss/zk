@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.util.CollectionsX;
 import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.zk.ui.Execution;
@@ -86,7 +87,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * Note: No need to serialize attributes since it is done by Web server.
 	 */
 	private Map<String, Object> _attrs;
-	
+
 	private DesktopCache _cache;
 	/** Next available component uuid. */
 	private int _nextUuid;
@@ -107,8 +108,9 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * @since 3.0.1
 	 */
 	public SimpleSession(WebApp wapp, HttpSession hsess, Object request) {
-		this(wapp, (Object)hsess, request);
+		this(wapp, (Object) hsess, request);
 	}
+
 	/** Constructs a ZK session with either a HTTP session or a Portlet session.
 	 *
 	 * <p>Note: it assumes the scope of attributes is
@@ -132,9 +134,10 @@ public class SimpleSession implements Session, SessionCtrl {
 		_navsess = navsess;
 
 		cleanSessAttrs(); //after _navsess is initialized
-		
+
 		init();
 	}
+
 	/** Called to initialize some members after this object is deserialized.
 	 * <p>In other words, it is called by the deriving class if it implements
 	 * java.io.Serializable.
@@ -144,39 +147,43 @@ public class SimpleSession implements Session, SessionCtrl {
 			protected Enumeration<String> getKeys() {
 				return getAttrNames();
 			}
+
 			protected Object getValue(String key) {
 				return getAttribute(key);
 			}
+
 			protected void setValue(String key, Object val) {
 				setAttribute(key, val);
 			}
+
 			protected void removeValue(String key) {
 				removeAttribute(key);
 			}
 		};
 	}
+
 	/** Cleans up the attribute being set.
 	 */
 	private final void cleanSessAttrs() {
 		final Object names = getAttribute(ATTR_PRIVATE);
 		if (names instanceof Set) { //Bug 1954655: backward-compatible
-			for (Iterator it = ((Set)names).iterator(); it.hasNext();)
-				rmAttr((String)it.next());
+			for (Iterator it = ((Set) names).iterator(); it.hasNext();)
+				rmAttr((String) it.next());
 		}
 		rmAttr(ATTR_PRIVATE);
 	}
+
 	@SuppressWarnings("unchecked")
 	private final Enumeration<String> getAttrNames() {
-		return _navsess instanceof HttpSession ?
-			((HttpSession)_navsess).getAttributeNames():
-			_navsess != null ?
-				((PortletSession)_navsess)
-					.getAttributeNames(PortletSession.APPLICATION_SCOPE):
-				CollectionsX.EMPTY_ENUMERATION;
+		return _navsess instanceof HttpSession ? ((HttpSession) _navsess).getAttributeNames()
+				: _navsess != null ? ((PortletSession) _navsess).getAttributeNames(PortletSession.APPLICATION_SCOPE)
+						: CollectionsX.EMPTY_ENUMERATION;
 	}
+
 	public String getDeviceType() {
 		return _devType;
 	}
+
 	public void setDeviceType(String deviceType) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new IllegalArgumentException();
@@ -189,16 +196,24 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public Object getAttribute(String name) {
-		return _navsess instanceof HttpSession ?
-				((HttpSession)_navsess).getAttribute(name):
-			_navsess != null ?
-				((PortletSession)_navsess)
-					.getAttribute(name, PortletSession.APPLICATION_SCOPE):
-				null;
+		return _navsess instanceof HttpSession ? ((HttpSession) _navsess).getAttribute(name)
+				: _navsess != null ? ((PortletSession) _navsess).getAttribute(name, PortletSession.APPLICATION_SCOPE)
+						: null;
 	}
+
+	public Object getAttribute(String name, boolean recurse) {
+		Object val = getAttribute(name);
+		return val != null || !recurse || _wapp == null ? val : _wapp.getAttribute(name, true);
+	}
+
 	public boolean hasAttribute(String name) {
 		return getAttribute(name) != null; //Servlet limitation
 	}
+
+	public boolean hasAttribute(String name, boolean recurse) {
+		return hasAttribute(name) || (recurse && _wapp != null && _wapp.hasAttribute(name, true));
+	}
+
 	@SuppressWarnings("unchecked")
 	public Object setAttribute(String name, Object value) {
 		final Object old = getAttribute(name);
@@ -211,10 +226,10 @@ public class SimpleSession implements Session, SessionCtrl {
 				if (bStore) {
 					if (!(prv instanceof Set))
 						setAttr(ATTR_PRIVATE, prv = new HashSet());
-					((Set)prv).add(name);
+					((Set) prv).add(name);
 				} else {
 					if (prv instanceof Set)
-						((Set)prv).remove(name);
+						((Set) prv).remove(name);
 				}
 			}
 		} else {
@@ -222,15 +237,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 		return old;
 	}
-	public Object getAttribute(String name, boolean recurse) {
-		Object val = getAttribute(name);
-		return val != null || !recurse || _wapp == null ?
-			val: _wapp.getAttribute(name, true);
-	}
-	public boolean hasAttribute(String name, boolean recurse) {
-		return hasAttribute(name)
-		|| (recurse && _wapp != null && _wapp.hasAttribute(name, true));
-	}
+
 	public Object setAttribute(String name, Object value, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			if (_wapp != null) {
@@ -240,6 +247,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 		return setAttribute(name, value);
 	}
+
 	public Object removeAttribute(String name, boolean recurse) {
 		if (recurse && !hasAttribute(name)) {
 			if (_wapp != null) {
@@ -251,24 +259,6 @@ public class SimpleSession implements Session, SessionCtrl {
 		return removeAttribute(name);
 	}
 
-	public boolean addScopeListener(ScopeListener listener) {
-		return _scopeListeners.addScopeListener(listener);
-	}
-	public boolean removeScopeListener(ScopeListener listener) {
-		return _scopeListeners.removeScopeListener(listener);
-	}
-	/** Returns all scope listeners.
-	 */
-	/*package*/ ScopeListeners getScopeListeners() {
-		return _scopeListeners;
-	}
-
-	private void setAttr(String name, Object value) {
-		if (_navsess instanceof HttpSession)
-			((HttpSession)_navsess).setAttribute(name, value);
-		else if (_navsess != null)
-			((PortletSession)_navsess).setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
-	}
 	public Object removeAttribute(String name) {
 		Object old = getAttribute(name);
 		if (!(this instanceof Serializable || this instanceof Externalizable)) {
@@ -277,52 +267,79 @@ public class SimpleSession implements Session, SessionCtrl {
 
 				Object prv = getAttribute(ATTR_PRIVATE);
 				if (prv instanceof Set)
-					((Set)prv).remove(name);
+					((Set) prv).remove(name);
 			}
 		} else {
 			rmAttr(name);
 		}
 		return old;
 	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		return _scopeListeners.addScopeListener(listener);
+	}
+
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _scopeListeners.removeScopeListener(listener);
+	}
+
+	/** Returns all scope listeners.
+	 */
+	/*package*/ ScopeListeners getScopeListeners() {
+		return _scopeListeners;
+	}
+
+	private void setAttr(String name, Object value) {
+		if (_navsess instanceof HttpSession)
+			((HttpSession) _navsess).setAttribute(name, value);
+		else if (_navsess != null)
+			((PortletSession) _navsess).setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
+	}
+
 	private void rmAttr(String name) {
 		if (_navsess instanceof HttpSession)
-			((HttpSession)_navsess).removeAttribute(name);
+			((HttpSession) _navsess).removeAttribute(name);
 		else if (_navsess != null)
-			((PortletSession)_navsess).removeAttribute(name, PortletSession.APPLICATION_SCOPE);
+			((PortletSession) _navsess).removeAttribute(name, PortletSession.APPLICATION_SCOPE);
 	}
+
 	public Map<String, Object> getAttributes() {
 		return _attrs;
 	}
 
 	public String getRemoteAddr() {
-		 Execution execution = Executions.getCurrent();
-		 if (execution != null)
-			 return execution.getRemoteAddr();
-		 return null;
+		Execution execution = Executions.getCurrent();
+		if (execution != null)
+			return execution.getRemoteAddr();
+		return null;
 	}
+
 	public String getRemoteHost() {
-		 Execution execution = Executions.getCurrent();
-		 if (execution != null)
-			 return execution.getRemoteHost();
-		 return null;
+		Execution execution = Executions.getCurrent();
+		if (execution != null)
+			return execution.getRemoteHost();
+		return null;
 	}
+
 	public String getServerName() {
-		 Execution execution = Executions.getCurrent();
-		 if (execution != null)
-			 return execution.getServerName();
-		 return null;
+		Execution execution = Executions.getCurrent();
+		if (execution != null)
+			return execution.getServerName();
+		return null;
 	}
+
 	public String getLocalName() {
-		 Execution execution = Executions.getCurrent();
-		 if (execution != null)
-			 return execution.getLocalName();
-		 return null;
+		Execution execution = Executions.getCurrent();
+		if (execution != null)
+			return execution.getLocalName();
+		return null;
 	}
+
 	public String getLocalAddr() {
-		 Execution execution = Executions.getCurrent();
-		 if (execution != null)
-			 return execution.getLocalAddr();
-		 return null;
+		Execution execution = Executions.getCurrent();
+		if (execution != null)
+			return execution.getLocalAddr();
+		return null;
 	}
 
 	public void invalidateNow() {
@@ -333,24 +350,24 @@ public class SimpleSession implements Session, SessionCtrl {
 
 			rmAttr(Attributes.RENEW_NATIVE_SESSION); //See HttpSessionListener
 			if (_navsess instanceof HttpSession)
-				((HttpSession)_navsess).invalidate();
+				((HttpSession) _navsess).invalidate();
 			else
-				((PortletSession)_navsess).invalidate();
+				((PortletSession) _navsess).invalidate();
 		}
 	}
+
 	public void setMaxInactiveInterval(int interval) {
 		if (_navsess instanceof HttpSession)
-			((HttpSession)_navsess).setMaxInactiveInterval(interval);
+			((HttpSession) _navsess).setMaxInactiveInterval(interval);
 		else if (_navsess != null)
-			((PortletSession)_navsess).setMaxInactiveInterval(interval);
+			((PortletSession) _navsess).setMaxInactiveInterval(interval);
 	}
+
 	public int getMaxInactiveInterval() {
-		return _navsess instanceof HttpSession ?
-				((HttpSession)_navsess).getMaxInactiveInterval():
-			_navsess != null ? 
-				((PortletSession)_navsess).getMaxInactiveInterval():
-				-1;
+		return _navsess instanceof HttpSession ? ((HttpSession) _navsess).getMaxInactiveInterval()
+				: _navsess != null ? ((PortletSession) _navsess).getMaxInactiveInterval() : -1;
 	}
+
 	public Object getNativeSession() {
 		return _navsess;
 	}
@@ -376,6 +393,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	public final void invalidate() {
 		_invalid = true;
 	}
+
 	public final boolean isInvalidated() {
 		return _invalid;
 	}
@@ -383,18 +401,20 @@ public class SimpleSession implements Session, SessionCtrl {
 	public DesktopCache getDesktopCache() {
 		return _cache;
 	}
+
 	public void setDesktopCache(DesktopCache cache) {
 		_cache = cache;
 	}
+
 	public void recover(Object nativeSession) {
 		_invalidated = _invalid = false;
 		if (_navsess == null)
-			sessionDidActivate((HttpSession)nativeSession);
+			sessionDidActivate((HttpSession) nativeSession);
 		else
 			_navsess = nativeSession;
-			//Session Fixation Protection might change native session
-			//Not sure it is clever to call sessionDidActivate
-			//To be safe, we recover _navsess only
+		//Session Fixation Protection might change native session
+		//Not sure it is clever to call sessionDidActivate
+		//To be safe, we recover _navsess only
 	}
 
 	public void onDestroyed() {
@@ -423,13 +443,14 @@ public class SimpleSession implements Session, SessionCtrl {
 	/** Used by the deriving class,
 	 * only if the deriving class implements java.io.Serializable.
 	 */
-	protected SimpleSession() {}
+	protected SimpleSession() {
+	}
+
 	/** Used by the deriving class to write this object,
 	 * only if the deriving class implements java.io.Serializable.
 	 */
-	protected void writeThis(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
-		
+	protected void writeThis(java.io.ObjectOutputStream s) throws java.io.IOException {
+
 		s.writeObject(_cache);
 		s.writeInt(_nextUuid);
 
@@ -437,25 +458,26 @@ public class SimpleSession implements Session, SessionCtrl {
 		//we ony invoke the notification
 		for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
 			final String nm = en.nextElement();
-			
+
 			// Skip to write ZK Session for Weblogic to avoid an infinite loop
 			if (!Attributes.ZK_SESSION.equals(nm)) {
 				willSerialize(getAttribute(nm));
 			}
 		}
 	}
+
 	private void willSerialize(Object o) {
 		if (o instanceof SessionSerializationListener)
-			((SessionSerializationListener)o).willSerialize(this);
+			((SessionSerializationListener) o).willSerialize(this);
 	}
+
 	/** Used by the deriving class to read back this object,
 	 * only if the deriving class implements java.io.Serializable.
 	 */
-	protected void readThis(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	protected void readThis(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		init();
 
-		_cache = (DesktopCache)s.readObject();
+		_cache = (DesktopCache) s.readObject();
 		_nextUuid = s.readInt();
 	}
 
@@ -466,7 +488,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		final Object old = SessionsCtrl.getRawCurrent(); //shall be null; just in case
 		SessionsCtrl.setCurrent(this);
 		try {
-			((WebAppCtrl)_wapp).sessionWillPassivate(this);
+			((WebAppCtrl) _wapp).sessionWillPassivate(this);
 
 			for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
 				final String nm = en.nextElement();
@@ -476,6 +498,7 @@ public class SimpleSession implements Session, SessionCtrl {
 			SessionsCtrl.setRawCurrent(old);
 		}
 	}
+
 	/** Used by the deriving class to post-process a session after
 	 * it is read back.
 	 *
@@ -489,16 +512,14 @@ public class SimpleSession implements Session, SessionCtrl {
 		SessionsCtrl.setCurrent(this);
 		try {
 			_navsess = hsess;
-			WebManager.addActivationListener(
-				hsess.getServletContext(),
+			WebManager.addActivationListener(hsess.getServletContext(),
 					//FUTURE: getServletContext only in Servlet 2.3 or later
-				new WebManagerActivationListener() {
-					public void didActivate(WebManager webman) {
-						_wapp = webman.getWebApp();
-						((WebAppCtrl)_wapp)
-							.sessionDidActivate(SimpleSession.this);
-					}
-				});
+					new WebManagerActivationListener() {
+						public void didActivate(WebManager webman) {
+							_wapp = webman.getWebApp();
+							((WebAppCtrl) _wapp).sessionDidActivate(SimpleSession.this);
+						}
+					});
 
 			for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
 				final String nm = en.nextElement();
@@ -508,12 +529,14 @@ public class SimpleSession implements Session, SessionCtrl {
 			SessionsCtrl.setRawCurrent(old);
 		}
 	}
+
 	private void willPassivate(Object o) {
 		if (o instanceof SessionActivationListener)
-			((SessionActivationListener)o).willPassivate(this);
+			((SessionActivationListener) o).willPassivate(this);
 	}
+
 	private void didActivate(Object o) {
 		if (o instanceof SessionActivationListener)
-			((SessionActivationListener)o).didActivate(this);
+			((SessionActivationListener) o).didActivate(this);
 	}
 }

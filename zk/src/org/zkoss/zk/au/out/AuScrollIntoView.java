@@ -30,6 +30,6 @@ public class AuScrollIntoView extends org.zkoss.zk.au.AuResponse {
 	 */
 	public AuScrollIntoView(Component comp) {
 		super("scrollIntoView", comp);
-			//component-independent (so we can scroll multiple elements at once)
+		//component-independent (so we can scroll multiple elements at once)
 	}
 }

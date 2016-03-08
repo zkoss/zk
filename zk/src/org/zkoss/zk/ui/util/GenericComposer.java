@@ -16,13 +16,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * <p>A skeletal composer that you can extend and write intuitive onXxx event handler methods;
@@ -79,18 +79,19 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * @author robbiecheng
  * @since 3.0.1
  */
-abstract public class GenericComposer<T extends Component> extends GenericEventListener
-implements Composer<T>, ComposerExt<T>, java.io.Serializable {
+public abstract class GenericComposer<T extends Component> extends GenericEventListener
+		implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
 	protected String _applied; //uuid of the applied component (for serialization back)
-	
+
 	/** Returns the current page.
 	 * @since 5.0.10
 	 */
 	protected Page getPage() {
 		final Execution exec = Executions.getCurrent();
-		return exec != null ? ((ExecutionCtrl)exec).getCurrentPage(): null;
+		return exec != null ? ((ExecutionCtrl) exec).getCurrentPage() : null;
 	}
+
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
 	 * this method should remember to call super.doAfterCompose(comp) or it will not 
@@ -101,12 +102,11 @@ implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 		_applied = comp.getUuid();
 		bindComponent(comp);
 	}
-	
-	public ComponentInfo doBeforeCompose(Page page, Component parent,
-			ComponentInfo compInfo) { //do nothing
+
+	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) { //do nothing
 		return compInfo;
 	}
-	
+
 	public void doBeforeComposeChildren(T comp) throws Exception {
 		//assign this composer as a variable
 		//feature #2778508
@@ -115,11 +115,11 @@ implements Composer<T>, ComposerExt<T>, java.io.Serializable {
 		//feature #ZK-2822
 		ConventionWires.wireServiceCommand(comp, this);
 	}
-	
+
 	public boolean doCatch(Throwable ex) throws Exception { //do nothing
 		return false;
 	}
-	
+
 	public void doFinally() throws Exception { //do nothing
 	}
 }

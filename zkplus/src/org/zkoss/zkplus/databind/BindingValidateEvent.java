@@ -39,20 +39,20 @@ public class BindingValidateEvent extends Event {
 	 * @param bindings the list of the associated bindings of this event.
 	 * @param values the list of the values associated with the binding.
 	 */
-	public BindingValidateEvent(String name, Component target,
-	List<Component> references, List<Binding> bindings, List<Object> values) {
+	public BindingValidateEvent(String name, Component target, List<Component> references, List<Binding> bindings,
+			List<Object> values) {
 		super(name, target);
 		_refs = references;
 		_bindings = bindings;
 		_values = values;
 	}
-	
+
 	/** Gets the list of the reference components that "trigger" sending of this event.
 	 */
 	public List<Component> getReferences() {
 		return _refs;
 	}
-	
+
 	/** Gets the list of the associate bindings of this event ({@link Binding}).
 	 * The property that causes the binding can be found by use of
 	 * {@link Binding#getExpression}.
@@ -62,7 +62,7 @@ public class BindingValidateEvent extends Event {
 	public List<Binding> getBindings() {
 		return _bindings;
 	}
-	
+
 	/** Gets the list of the value to be saved after "onBindingValidate" event.
 	 */
 	public List<Object> getValues() {

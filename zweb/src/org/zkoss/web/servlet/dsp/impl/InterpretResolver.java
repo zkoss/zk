@@ -16,15 +16,15 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.zkoss.web.servlet.dsp.Interpretation;
+import org.zkoss.web.servlet.dsp.action.ActionContext;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
-import org.zkoss.web.servlet.dsp.*;
-import org.zkoss.web.servlet.dsp.action.ActionContext;
 
 /**
  * The resolver used to interpret an {@link Interpretation}.
@@ -51,17 +51,17 @@ class InterpretResolver implements VariableResolver {
 		if (_parent != null) {
 			switch (scope) {
 			case ActionContext.REQUEST_SCOPE:
-				attrs = (Map)Evaluators.resolveVariable(_parent, "requestScope");
+				attrs = (Map) Evaluators.resolveVariable(_parent, "requestScope");
 				break;
 			case ActionContext.SESSION_SCOPE:
-				attrs = (Map)Evaluators.resolveVariable(_parent, "sessionScope");
+				attrs = (Map) Evaluators.resolveVariable(_parent, "sessionScope");
 				break;
 			case ActionContext.APPLICATION_SCOPE:
-				attrs = (Map)Evaluators.resolveVariable(_parent, "applicationScope");
+				attrs = (Map) Evaluators.resolveVariable(_parent, "applicationScope");
 				break;
 			}
 		}
-		return attrs != null ? attrs: Collections.EMPTY_MAP;
+		return attrs != null ? attrs : Collections.EMPTY_MAP;
 	}
 
 	//-- VariableResolver --//
@@ -69,6 +69,6 @@ class InterpretResolver implements VariableResolver {
 		if ("pageScope".equals(name))
 			return _attrs;
 		final Object o = _attrs.get(name);
-		return o != null ? o: Evaluators.resolveVariable(_parent, name);
+		return o != null ? o : Evaluators.resolveVariable(_parent, name);
 	}
 }

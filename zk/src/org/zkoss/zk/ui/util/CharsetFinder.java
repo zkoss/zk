@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Represents a class that decides the character set based on the
@@ -36,6 +36,5 @@ public interface CharsetFinder {
 	 * @param contentType the content type (never null)
 	 * @param content the content
 	 */
-	public String getCharset(String contentType, InputStream content)
-	throws IOException;
+	public String getCharset(String contentType, InputStream content) throws IOException;
 }

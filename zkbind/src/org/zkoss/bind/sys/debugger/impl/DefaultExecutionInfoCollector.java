@@ -31,103 +31,95 @@ import org.zkoss.json.JSONObject;
 public class DefaultExecutionInfoCollector extends AbstractExecutionInfoCollector {
 
 	private boolean _startLine = false;
-	
+
 	public void addInfo(JSONObject info) {
-		
+
 		Object type = info.get("type");
-		if(!_startLine){
+		if (!_startLine) {
 			out("=======================================");
 			_startLine = true;
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("["+info.get("sid")+"]");
-		int stack = (Integer)info.get("stack");
+		sb.append("[" + info.get("sid") + "]");
+		int stack = (Integer) info.get("stack");
 		for (int i = 0; i < stack; i++) {
 			sb.append(" ");
-			if(i==stack-1){
-				if(StackInfo.TYPE.equals(type)){
+			if (i == stack - 1) {
+				if (StackInfo.TYPE.equals(type)) {
 					sb.append(" + ");
-				}else{
+				} else {
 					sb.append(" *");
 				}
-			}else{
+			} else {
 				sb.append(" ");
 			}
 		}
-		
-		if(AddBindingInfo.TYPE.equals(type) || AddCommandBindingInfo.TYPE.equals(type)){
+
+		if (AddBindingInfo.TYPE.equals(type) || AddCommandBindingInfo.TYPE.equals(type)) {
 			sb.append("ADD-BINDING");
 		}
-		
-		
-		if(StackInfo.TYPE.equals(type)){
-			sb.append(info.get("name")+"\t ");
-		}else{
-			sb.append("["+info.get("type")+(info.containsKey("subtype")?":"+info.get("subtype"):"")+"]\t");
-		}
-		
-		if(EventInfo.TYPE.equals(type)){
-			sb.append("["+info.get("event") +"]");
-		}
-		else if(LoadInfo.TYPE.equals(type)){
-			if(info.containsKey("condition")){
-				sb.append("["+info.get("condition")+"]\t");
-			}
-			sb.append(info.get("fromExpr")+" > "+info.get("toExpr")+"\t");
-			if(Boolean.TRUE.equals(info.get("nullval"))){
-				sb.append("NULL");
-			}else{
-				sb.append(info.get("value"));
-			}
-			
-		}
-		else if(CommandInfo.TYPE.equals(type)){
-			if(info.containsKey("event")){
-				sb.append("["+info.get("event")+"]\t");
-			}
-			if(info.containsKey("commandExpr")){
-				sb.append("["+info.get("commandExpr")+"]\t");
-			}
-			sb.append(info.get("command"));
-		}
-		else if(ValidationInfo.TYPE.equals(type)){
-			sb.append(info.get("validatorExpr")+"\t"+info.get("validator")+"\t result = "+info.get("result"));
-		}
-		else if(SaveInfo.TYPE.equals(type)){
-			if(info.containsKey("condition")){
-				sb.append("["+info.get("condition")+"]\t");
-			}
-			sb.append(info.get("fromExpr")+" > "+info.get("toExpr")+"\t");
-			if(Boolean.TRUE.equals(info.get("nullval"))){
-				sb.append("NULL");
-			}else{
-				sb.append(info.get("value"));
-			}
-		}
-		else if(NotifyChangeInfo.TYPE.equals(type)){
-			sb.append("["+info.get("base")+"]["+info.get("prop")+"]");
-		}
-		else if(AddBindingInfo.TYPE.equals(type)){
-			if(info.containsKey("condition")){
-				sb.append("["+info.get("condition")+"]\t");
-			}
-			sb.append(info.get("fromExpr")+" > "+info.get("toExpr"));
-		}
-		else if(AddCommandBindingInfo.TYPE.equals(type)){
-			sb.append("["+info.get("event")+"]\t"+info.get("commandExpr"));
-		}
-		else if(AnnoWarnInfo.TYPE.equals(type)){
-			sb.append(info.get("attr")+" = @"+info.get("anno")+"()");
+
+		if (StackInfo.TYPE.equals(type)) {
+			sb.append(info.get("name") + "\t ");
+		} else {
+			sb.append("[" + info.get("type") + (info.containsKey("subtype") ? ":" + info.get("subtype") : "") + "]\t");
 		}
 
-		if(info.containsKey("widget")){
-			sb.append("\t<"+info.get("widget")+" uuid=\""+info.get("uuid")+"\" id=\""+info.get("id")+"\" />");
+		if (EventInfo.TYPE.equals(type)) {
+			sb.append("[" + info.get("event") + "]");
+		} else if (LoadInfo.TYPE.equals(type)) {
+			if (info.containsKey("condition")) {
+				sb.append("[" + info.get("condition") + "]\t");
+			}
+			sb.append(info.get("fromExpr") + " > " + info.get("toExpr") + "\t");
+			if (Boolean.TRUE.equals(info.get("nullval"))) {
+				sb.append("NULL");
+			} else {
+				sb.append(info.get("value"));
+			}
+
+		} else if (CommandInfo.TYPE.equals(type)) {
+			if (info.containsKey("event")) {
+				sb.append("[" + info.get("event") + "]\t");
+			}
+			if (info.containsKey("commandExpr")) {
+				sb.append("[" + info.get("commandExpr") + "]\t");
+			}
+			sb.append(info.get("command"));
+		} else if (ValidationInfo.TYPE.equals(type)) {
+			sb.append(info.get("validatorExpr") + "\t" + info.get("validator") + "\t result = " + info.get("result"));
+		} else if (SaveInfo.TYPE.equals(type)) {
+			if (info.containsKey("condition")) {
+				sb.append("[" + info.get("condition") + "]\t");
+			}
+			sb.append(info.get("fromExpr") + " > " + info.get("toExpr") + "\t");
+			if (Boolean.TRUE.equals(info.get("nullval"))) {
+				sb.append("NULL");
+			} else {
+				sb.append(info.get("value"));
+			}
+		} else if (NotifyChangeInfo.TYPE.equals(type)) {
+			sb.append("[" + info.get("base") + "][" + info.get("prop") + "]");
+		} else if (AddBindingInfo.TYPE.equals(type)) {
+			if (info.containsKey("condition")) {
+				sb.append("[" + info.get("condition") + "]\t");
+			}
+			sb.append(info.get("fromExpr") + " > " + info.get("toExpr"));
+		} else if (AddCommandBindingInfo.TYPE.equals(type)) {
+			sb.append("[" + info.get("event") + "]\t" + info.get("commandExpr"));
+		} else if (AnnoWarnInfo.TYPE.equals(type)) {
+			sb.append(info.get("attr") + " = @" + info.get("anno") + "()");
 		}
-		if(info.containsKey("note")){
-			sb.append("\t"+info.get("note"));
+
+		if (info.containsKey("widget")) {
+			sb.append(
+					"\t<" + info.get("widget") + " uuid=\"" + info.get("uuid") + "\" id=\"" + info.get("id") + "\" />");
 		}
-		if(info.containsKey("location")){
-			sb.append("\t"+info.get("location"));
+		if (info.containsKey("note")) {
+			sb.append("\t" + info.get("note"));
+		}
+		if (info.containsKey("location")) {
+			sb.append("\t" + info.get("location"));
 		}
 		out(sb.toString());
 	}

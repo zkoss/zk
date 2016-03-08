@@ -31,11 +31,13 @@ public class Menuseparator extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-menuseparator" : _zclass;
 	}
+
 	/** Not childable. */
 	protected boolean isChildable() {
 		return false;
 	}
-	public boolean isPopup(){
+
+	public boolean isPopup() {
 		return getParent() instanceof Menupopup;
 	}
 }

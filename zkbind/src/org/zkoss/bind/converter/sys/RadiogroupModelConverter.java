@@ -20,9 +20,9 @@ import org.zkoss.zul.Radiogroup;
  * @author dennis
  * @since 6.0.0
  */
-public class RadiogroupModelConverter extends AbstractListModelConverter<Radiogroup>{
+public class RadiogroupModelConverter extends AbstractListModelConverter<Radiogroup> {
 	private static final long serialVersionUID = 1463169907348730644L;
-	
+
 	protected ListModel<?> getComponentModel(Radiogroup comp) {
 		return comp.getModel();
 	}

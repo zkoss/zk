@@ -45,6 +45,7 @@ public interface EventInterceptor {
 	 * the following interceptor.
 	 */
 	public Event beforeSendEvent(Event event);
+
 	/** Called before posting an event
 	 * (with {@link org.zkoss.zk.ui.event.Events#postEvent}).
 	 *
@@ -60,6 +61,7 @@ public interface EventInterceptor {
 	 * the following interceptor.
 	 */
 	public Event beforePostEvent(Event event);
+
 	/** Called before processing an event.
 	 * By processing, we mean handing over the event to the event listeners
 	 * and handlers.
@@ -81,6 +83,7 @@ public interface EventInterceptor {
 	 * the following interceptor.
 	 */
 	public Event beforeProcessEvent(Event event);
+
 	/** Called after processing an event.
 	 * By processing, we mean handing over the event to the event listeners
 	 * and handlers.

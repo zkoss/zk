@@ -29,6 +29,5 @@ public interface EventListenerMap {
 	 * @param cmd the real name of the event,
 	 * used to retrieve event listener/handler
 	 */
-	public void service(Event event, Scope scope, Component comp, String cmd)
-	throws Exception;
+	public void service(Event event, Scope scope, Component comp, String cmd) throws Exception;
 }

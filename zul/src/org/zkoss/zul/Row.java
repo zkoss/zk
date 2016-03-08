@@ -47,7 +47,7 @@ public class Row extends XulElement {
 	 * the grid owning this row is using a list model.
 	 */
 	private boolean _loaded;
-	
+
 	private transient Detail _detail;
 	private transient int _index = -1;
 
@@ -58,10 +58,11 @@ public class Row extends XulElement {
 	public Detail getDetailChild() {
 		return _detail;
 	}
+
 	/** Returns the grid that contains this row. */
 	public Grid getGrid() {
 		final Component parent = getParent();
-		return parent != null ? (Grid)parent.getParent(): null;
+		return parent != null ? (Grid) parent.getParent() : null;
 	}
 
 	/** Returns the horizontal alignment of the whole row.
@@ -70,6 +71,7 @@ public class Row extends XulElement {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the horizontal alignment of the whole row.
 	 * Allowed values: right, left, center, justify, char
 	 */
@@ -79,12 +81,14 @@ public class Row extends XulElement {
 			smartUpdate("align", _align);
 		}
 	}
+
 	/** Returns the nowrap.
 	 * <p>Default: null (system default: wrap).
 	 */
 	public boolean isNowrap() {
 		return _nowrap;
 	}
+
 	/** Sets the nowrap.
 	 */
 	public void setNowrap(boolean nowrap) {
@@ -93,12 +97,14 @@ public class Row extends XulElement {
 			smartUpdate("nowrap", _nowrap);
 		}
 	}
+
 	/** Returns the vertical alignment of the whole row.
 	 * <p>Default: null (system default: top).
 	 */
 	public String getValign() {
 		return _valign;
 	}
+
 	/** Sets the vertical alignment of the whole row.
 	 * Allowed values: top, middle, bottom, baseline
 	 */
@@ -108,6 +114,7 @@ public class Row extends XulElement {
 			smartUpdate("valign", _valign);
 		}
 	}
+
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible) {
 			final Rows rows = (Rows) getParent();
@@ -127,8 +134,9 @@ public class Row extends XulElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -146,6 +154,7 @@ public class Row extends XulElement {
 	public String getSpans() {
 		return _spans;
 	}
+
 	/** Sets the spans, which is a list of numbers separated by comma.
 	 *
 	 * <p>For example, "1,2,3" means the second column will span two columns
@@ -160,7 +169,6 @@ public class Row extends XulElement {
 		}
 	}
 
-
 	/** Internal Use only. Sets whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
@@ -173,12 +181,14 @@ public class Row extends XulElement {
 				smartUpdate("_loaded", _loaded);
 		}
 	}
+
 	/** Internal Use Only. Returns whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
 	 */
 	/*package*/ boolean isLoaded() {
 		return _loaded;
 	}
+
 	/** Returns the index of the specified row.
 	 * <p>Notice that the performance is not good if there are a lot of rows.
 	 * Therefore, this method shall not be used with a huge grid.
@@ -187,15 +197,15 @@ public class Row extends XulElement {
 	public int getIndex() {
 		return _index;
 	}
-	
+
 	/*package*/ void setIndexDirectly(int index) {
-		_index = index;	
+		_index = index;
 	}
-	
+
 	public String getZclass() {
 		return _zclass == null ? "z-row" : _zclass;
 	}
-	
+
 	/**
 	 * Returns the group that this row belongs to, or null.
 	 * @since 3.5.0
@@ -204,12 +214,14 @@ public class Row extends XulElement {
 		final Rows rows = (Rows) getParent();
 		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Grid related 
 	 * components, please refer to {@link Grid} and {@link Column} instead.
@@ -224,12 +236,13 @@ public class Row extends XulElement {
 	 */
 	public String getSclass() {
 		final String sclass = super.getSclass();
-		if (sclass != null) return sclass;
+		if (sclass != null)
+			return sclass;
 
 		final Grid grid = getGrid();
-		return grid != null ? grid.getSclass(): sclass;
+		return grid != null ? grid.getSclass() : sclass;
 	}
-	
+
 	/**
 	 * Please use {@link Cell} or {@link Grid} instead.
 	 * @deprecated as of release 7.0.3.
@@ -245,11 +258,11 @@ public class Row extends XulElement {
 	public void setStubonly(boolean stubonly) {
 		super.setStubonly(stubonly);
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		render(renderer, "align", _align);
 		render(renderer, "valign", _valign);
 		render(renderer, "nowrap", _nowrap);
@@ -258,21 +271,22 @@ public class Row extends XulElement {
 		if (_index >= 0)
 			renderer.render("_index", _index);
 	}
-	
+
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Rows))
-			throw new UiException("Unsupported parent for row: "+parent);
+			throw new UiException("Unsupported parent for row: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Detail) {
 			if (_detail != null && _detail != newChild)
-				throw new UiException("Only one detail is allowed: "+this);
+				throw new UiException("Only one detail is allowed: " + this);
 		}
 		super.beforeChildAdded(newChild, refChild);
 	}
+
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Detail) {
 			//move to the first child
@@ -281,38 +295,42 @@ public class Row extends XulElement {
 				_detail = (Detail) newChild;
 				return true;
 			}
-			return false;			
+			return false;
 		} else if (refChild != null && refChild == _detail) {
-			if (getChildren().size() <= 1) refChild = null;
-			else refChild = getChildren().get(1);
+			if (getChildren().size() <= 1)
+				refChild = null;
+			else
+				refChild = getChildren().get(1);
 		}
 		return super.insertBefore(newChild, refChild);
 	}
 
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		if (_detail == child) _detail = null;
+		if (_detail == child)
+			_detail = null;
 	}
 
 	//Cloneable//
 	public Object clone() {
-		final Row clone = (Row)super.clone();
-		if (_detail != null) clone.afterUnmarshal();
+		final Row clone = (Row) super.clone();
+		if (_detail != null)
+			clone.afterUnmarshal();
 		return clone;
 	}
-	
+
 	private void afterUnmarshal() {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Detail) {
-				_detail = (Detail)child;
+				_detail = (Detail) child;
 				break; //done
 			}
 		}
 	}
+
 	// -- Serializable --//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		if (_value instanceof Serializable) {
@@ -323,25 +341,24 @@ public class Row extends XulElement {
 		}
 	}
 
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
-		
+
 		if (s.readBoolean())
 			_value = s.readObject();
-		
+
 		afterUnmarshal();
 	}
-	
+
 	//-- ComponentCtrl --//
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements LoadStatus {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements LoadStatus {
 		//-- LoadStatus --//
 		public boolean isLoaded() {
 			return Row.this.isLoaded();
@@ -350,7 +367,7 @@ public class Row extends XulElement {
 		public void setLoaded(boolean loaded) {
 			Row.this.setLoaded(loaded);
 		}
-		
+
 		public void setIndex(int index) {
 			Row.this.setIndexDirectly(index);
 		}

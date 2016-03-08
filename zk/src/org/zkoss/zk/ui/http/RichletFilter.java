@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.zk.ui.Desktop;
@@ -101,27 +102,25 @@ public class RichletFilter implements Filter {
 	public void init(FilterConfig config) throws ServletException {
 		_config = config;
 		String param = config.getInitParameter("compress");
-		_compress = param == null || param.length() == 0
-				|| "true".equals(param);
+		_compress = param == null || param.length() == 0 || "true".equals(param);
 		final ServletContext ctx = _config.getServletContext();
 		_webman = WebManager.getWebManagerIfAny(ctx);
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest reg = (HttpServletRequest) request;
 			HttpServletResponse resp = (HttpServletResponse) response;
-			final Session sess = WebManager.getSession(
-					_config.getServletContext(), (HttpServletRequest) request);
+			final Session sess = WebManager.getSession(_config.getServletContext(), (HttpServletRequest) request);
 			String path = Https.getThisPathInfo(request);
 			if (path == null) {
 				path = Https.getThisServletPath(request);
 			}
-			
+
 			try {
-				final Object old = I18Ns.setup(sess, request, response, sess
-						.getWebApp().getConfiguration().getResponseCharset());
+				final Object old = I18Ns.setup(sess, request, response,
+						sess.getWebApp().getConfiguration().getResponseCharset());
 				try {
 					if (process(sess, reg, resp, path, true))
 						return; // done
@@ -134,33 +133,28 @@ public class RichletFilter implements Filter {
 				SessionsCtrl.requestExit(sess);
 			}
 		}
-		
+
 		chain.doFilter(request, response);
 	}
-	
-	protected boolean process(Session sess, HttpServletRequest request,
-			HttpServletResponse response, String path, boolean bRichlet)
-			throws ServletException, IOException {
+
+	protected boolean process(Session sess, HttpServletRequest request, HttpServletResponse response, String path,
+			boolean bRichlet) throws ServletException, IOException {
 		final WebApp wapp = sess.getWebApp();
 		final WebAppCtrl wappc = (WebAppCtrl) wapp;
 		final Configuration config = wapp.getConfiguration();
 
 		final boolean bInclude = Servlets.isIncluded(request);
 		final boolean compress = _compress && !bInclude;
-		final Writer out = compress ? (Writer) new StringWriter() : response
-				.getWriter();
-		final DesktopRecycle dtrc = bInclude ? null : config
-				.getDesktopRecycle();
+		final Writer out = compress ? (Writer) new StringWriter() : response.getWriter();
+		final DesktopRecycle dtrc = bInclude ? null : config.getDesktopRecycle();
 		final ServletContext ctx = _config.getServletContext();
-		Desktop desktop = dtrc != null ? DesktopRecycles.beforeService(dtrc,
-				ctx, sess, request, response, path) : null;
+		Desktop desktop = dtrc != null ? DesktopRecycles.beforeService(dtrc, ctx, sess, request, response, path) : null;
 
 		try {
 			if (desktop != null) { // recycle
 				final Page page = Utils.getMainPage(desktop);
 				if (page != null) {
-					final Execution exec = new ExecutionImpl(ctx, request,
-							response, desktop, page);
+					final Execution exec = new ExecutionImpl(ctx, request, response, desktop, page);
 					WebManager.setDesktop(request, desktop);
 					wappc.getUiEngine().recycleDesktop(exec, page, out);
 				} else
@@ -168,13 +162,12 @@ public class RichletFilter implements Filter {
 									// case)
 			}
 			if (desktop == null) {
-				desktop = _webman.getDesktop(sess, request, response, path,
-						true);
+				desktop = _webman.getDesktop(sess, request, response, path, true);
 				if (desktop == null) // forward or redirect
 					return true;
 
-				final RequestInfo ri = new RequestInfoImpl(wapp, sess, desktop,
-						request, PageDefinitions.getLocator(wapp, path));
+				final RequestInfo ri = new RequestInfoImpl(wapp, sess, desktop, request,
+						PageDefinitions.getLocator(wapp, path));
 				((SessionCtrl) sess).notifyClientRequest(true);
 
 				final UiFactory uf = wappc.getUiFactory();
@@ -183,10 +176,8 @@ public class RichletFilter implements Filter {
 					if (richlet == null)
 						return false; // not found
 
-					final Page page = WebManager.newPage(uf, ri, richlet,
-							response, path);
-					final Execution exec = new ExecutionImpl(ctx, request,
-							response, desktop, page);
+					final Page page = WebManager.newPage(uf, ri, richlet, response, path);
+					final Execution exec = new ExecutionImpl(ctx, request, response, desktop, page);
 					wappc.getUiEngine().execNewPage(exec, richlet, page, out);
 					// no need to set device type here, since UiEngine will do
 					// it later

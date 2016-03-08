@@ -14,21 +14,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.au.http;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.zkoss.lang.Generics.cast;
 import org.zkoss.util.media.Media;
-
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.impl.Attributes;
-import org.zkoss.zk.au.AuRequests;
-import org.zkoss.zk.au.AuService;
-import org.zkoss.zk.au.AuRequest;
 
 /**
  * Extends desktop to handle the request of the upload information
@@ -40,7 +40,7 @@ import org.zkoss.zk.au.AuRequest;
 public class UploadInfoService implements AuService, Serializable {
 	private UploadInfoService() {
 	}
-	
+
 	private static Media[] parseResult(List<Media> result) {
 		if (result != null) {
 			//we have to filter items that user doesn't specify any file
@@ -61,19 +61,18 @@ public class UploadInfoService implements AuService, Serializable {
 		}
 		return null;
 	}
-	
+
 	public boolean service(AuRequest request, boolean everError) {
 		if ("updateResult".equals(request.getCommand())) {
 			final Map<String, Object> data = request.getData();
 			Desktop desktop = request.getDesktop();
 			final String uuid = (String) request.getData().get("wid");
 			final String sid = (String) request.getData().get("sid");
-			final List<Media> result = cast((List)AuRequests.getUpdateResult(request));
-			Events.postEvent(new UploadEvent(Events.ON_UPLOAD,
-					desktop.getComponentByUuid(uuid), parseResult(result)));
+			final List<Media> result = cast((List) AuRequests.getUpdateResult(request));
+			Events.postEvent(new UploadEvent(Events.ON_UPLOAD, desktop.getComponentByUuid(uuid), parseResult(result)));
 
 			Map percent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
-			Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
+			Map size = (Map) desktop.getAttribute(Attributes.UPLOAD_SIZE);
 			final String key = uuid + '_' + sid;
 			percent.remove(key);
 			size.remove(key);
@@ -81,12 +80,13 @@ public class UploadInfoService implements AuService, Serializable {
 		}
 		return false;
 	}
+
 	/** Registers the upload info service when
 	 */
 	public static class DesktopInit implements org.zkoss.zk.ui.util.DesktopInit {
-		public void init(Desktop desktop,  Object request) {
+		public void init(Desktop desktop, Object request) {
 			desktop.addListener(new UploadInfoService());
 		}
 	}
-	
+
 }

@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.util.CacheMap;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
@@ -44,19 +45,19 @@ import org.zkoss.zk.ui.util.Monitor;
  */
 public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	private static final Logger log = LoggerFactory.getLogger(SimpleDesktopCache.class);
-    private static final long serialVersionUID = 20060622L;
+	private static final long serialVersionUID = 20060622L;
 
 	/** Used to purge obsolete desktops. */
 	private final Cache _desktops;
 	/** The next available key. */
 	private int _nextKey;
-		//to reduce the chance that two browsers with the same desktop ID
-		//it is possible if we re-boot the server
+	//to reduce the chance that two browsers with the same desktop ID
+	//it is possible if we re-boot the server
 
 	public SimpleDesktopCache(Configuration config) {
 		_desktops = new Cache(config);
 		if (!config.isRepeatUuid())
-			_nextKey = ((int)System.currentTimeMillis()) & 0xffff;
+			_nextKey = ((int) System.currentTimeMillis()) & 0xffff;
 	}
 
 	//-- DesktopCache --//
@@ -65,6 +66,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			return _nextKey++;
 		}
 	}
+
 	public Desktop getDesktopIfAny(String desktopId) {
 		final boolean old = _desktops.disableExpunge(true);
 		try {
@@ -75,15 +77,17 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			_desktops.disableExpunge(old);
 		}
 	}
+
 	public Desktop getDesktop(String desktopId) {
 		final Desktop desktop;
 		synchronized (_desktops) {
 			desktop = _desktops.get(desktopId);
 		}
 		if (desktop == null)
-			throw new ComponentNotFoundException("Desktop not found: "+desktopId);
+			throw new ComponentNotFoundException("Desktop not found: " + desktopId);
 		return desktop;
 	}
+
 	public void addDesktop(Desktop desktop) {
 		//final boolean added;
 		final Desktop old;
@@ -91,15 +95,15 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			old = _desktops.put(desktop.getId(), desktop);
 		}
 		if (old != null) {
-			_desktops.put((old).getId(), old); //recover
+			_desktops.put(old.getId(), old); //recover
 			if (log.isWarnEnabled()) {
-				log.warn(
-					desktop == old ? "Register a desktop twice: "+desktop:
-						"Replicated ID: "+desktop+"; already used by "+old);
+				log.warn(desktop == old ? "Register a desktop twice: " + desktop
+						: "Replicated ID: " + desktop + "; already used by " + old);
 			}
 		}
 		//if (log.isDebugEnabled()) log.debug("After added, desktops: "+_desktops);
 	}
+
 	public void removeDesktop(Desktop desktop) {
 		final boolean oldexp = _desktops.disableExpunge(true);
 		try {
@@ -108,35 +112,34 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 				old = _desktops.remove(desktop.getId());
 			}
 			if (old == null)
-				log.warn("Removing non-existent desktop: "+desktop);
+				log.warn("Removing non-existent desktop: " + desktop);
 			else
 				desktopDestroyed(desktop);
 		} finally {
 			_desktops.disableExpunge(oldexp);
 		}
 	}
+
 	private static void desktopDestroyed(Desktop desktop) {
 		final Session sess = desktop.getSession();
-		final Execution exec = new ExecutionImpl(
-				desktop.getWebApp().getServletContext(), null, null, desktop, null);
+		final Execution exec = new ExecutionImpl(desktop.getWebApp().getServletContext(), null, null, desktop, null);
 
 		try {
 			// For ZK-1890: Can't subscribe eventqueue in desktop cleanup
 			ExecutionsCtrl.setCurrent(exec);
 			final UiVisualizer uv = new UiVisualizer(exec, true, false);
-			final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+			final DesktopCtrl desktopCtrl = (DesktopCtrl) desktop;
 			desktopCtrl.setVisualizer(uv);
 			desktopCtrl.setExecution(exec);
 
-
 			final WebApp wapp = desktop.getWebApp();
-			((DesktopCtrl)desktop).invokeDesktopCleanups();
+			((DesktopCtrl) desktop).invokeDesktopCleanups();
 			final Configuration config = wapp.getConfiguration();
 			config.invokeDesktopCleanups(desktop);
-				//Feature 1767347: call DesktopCleanup before desktopDestroyed
-				//such that app dev has a chance to manipulate the desktop
-			((WebAppCtrl)wapp).getUiEngine().desktopDestroyed(desktop);
-	
+			//Feature 1767347: call DesktopCleanup before desktopDestroyed
+			//such that app dev has a chance to manipulate the desktop
+			((WebAppCtrl) wapp).getUiEngine().desktopDestroyed(desktop);
+
 			final Monitor monitor = desktop.getWebApp().getConfiguration().getMonitor();
 			if (monitor != null) {
 				try {
@@ -145,7 +148,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 					log.error("", ex);
 				}
 			}
-	
+
 			final DesktopRecycle dtrc = config.getDesktopRecycle();
 			if (dtrc != null) {
 				try {
@@ -169,7 +172,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			synchronized (_desktops) {
 				desktops = new ArrayList<Desktop>(_desktops.values());
 			}
-			
+
 			for (Desktop desktop : desktops)
 				((DesktopCtrl) desktop).sessionWillPassivate(sess);
 
@@ -177,6 +180,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			_desktops.disableExpunge(old);
 		}
 	}
+
 	/** Invokes {@link DesktopCtrl#sessionDidActivate} for each
 	 * desktops it cached.
 	 */
@@ -188,10 +192,10 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			synchronized (_desktops) {
 				desktops = new ArrayList<Desktop>(_desktops.values());
 			}
-			
-			for (Desktop desktop: desktops)
-				((DesktopCtrl)desktop).sessionDidActivate(sess);
-			
+
+			for (Desktop desktop : desktops)
+				((DesktopCtrl) desktop).sessionDidActivate(sess);
+
 		} finally {
 			_desktops.disableExpunge(old);
 		}
@@ -207,7 +211,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 				desktops = new ArrayList<Desktop>(_desktops.values());
 				_desktops.clear();
 			}
-			for (Desktop desktop: desktops) {
+			for (Desktop desktop : desktops) {
 				desktopDestroyed(desktop);
 			}
 		} finally {
@@ -218,45 +222,48 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	/** Holds desktops. */
 	private static class Cache extends CacheMap<String, Desktop> { //serializable
 		private AtomicBoolean _expungeDisabled = new AtomicBoolean(false);
+
 		private Cache(Configuration config) {
 			super(16);
 
 			int v = config.getSessionMaxDesktops();
-			setMaxSize(v >= 0 ? v: Integer.MAX_VALUE / 4);
+			setMaxSize(v >= 0 ? v : Integer.MAX_VALUE / 4);
 
 			v = config.getDesktopMaxInactiveInterval();
-			setLifetime(v >= 0 ? v * 1000: Integer.MAX_VALUE / 4);
+			setLifetime(v >= 0 ? v * 1000 : Integer.MAX_VALUE / 4);
 		}
+
 		private boolean disableExpunge(boolean disable) {
 			return _expungeDisabled.getAndSet(disable);
 		}
+
 		protected boolean shallExpunge() {
-			return !_expungeDisabled.get()
-				&& (super.shallExpunge()
-					|| sizeWithoutExpunge() > (getMaxSize() / 2));
+			return !_expungeDisabled.get() && (super.shallExpunge() || sizeWithoutExpunge() > (getMaxSize() / 2));
 			//2012-12-07 Ian: expunge should been triggered often  
-				//1) disable expunge if serialization/activation
-				//2) to minimize memory use, expunge even if no GC
+			//1) disable expunge if serialization/activation
+			//2) to minimize memory use, expunge even if no GC
 		}
+
 		protected int canExpunge(int size, Value<Desktop> v) {
 			if (v.getValue().getExecution() != null)
-				return EXPUNGE_NO|EXPUNGE_CONTINUE;
+				return EXPUNGE_NO | EXPUNGE_CONTINUE;
 			return super.canExpunge(size, v);
 		}
+
 		protected void onExpunge(Value<Desktop> v) {
 			super.onExpunge(v);
 
 			desktopDestroyed(v.getValue());
-			if (log.isDebugEnabled()) log.debug("Expunge desktop: "+v.getValue());
+			if (log.isDebugEnabled())
+				log.debug("Expunge desktop: " + v.getValue());
 		}
 
-		private void readObject(java.io.ObjectInputStream s)
-		throws java.io.IOException, ClassNotFoundException {
+		private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 			s.defaultReadObject();
 			disableExpunge(false);
 		}
-		private synchronized void writeObject(java.io.ObjectOutputStream s)
-		throws java.io.IOException {
+
+		private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 			final boolean old = disableExpunge(true);
 			try {
 				s.defaultWriteObject();

@@ -17,8 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ShadowElement;
 
 /**
@@ -40,6 +40,7 @@ public interface UiLifeCycle {
 	 * @since 8.0.0
 	 */
 	public void afterShadowAttached(ShadowElement shadow, Component host);
+
 	/** Called after a shadow is detached from a host.
 	 *
 	 * <p>If a tree of shadows are detached to a host, this method
@@ -53,6 +54,7 @@ public interface UiLifeCycle {
 	 * @since 8.0.0
 	 */
 	public void afterShadowDetached(ShadowElement shadow, Component prevhost);
+
 	/** Called after a component is attached to a page.
 	 *
 	 * <p>If a tree of components are attached to a page, this method
@@ -63,6 +65,7 @@ public interface UiLifeCycle {
 	 * <p>Note: exception thrown by this method is ignored (but logged).
 	 */
 	public void afterComponentAttached(Component comp, Page page);
+
 	/** Called after a component is detached from a page.
 	 *
 	 * <p>If a tree of components are detached to a page, this method
@@ -75,6 +78,7 @@ public interface UiLifeCycle {
 	 * @param prevpage the previous page that comp belongs to.
 	 */
 	public void afterComponentDetached(Component comp, Page prevpage);
+
 	/** Called after the parent/children relation is changed.
 	 *
 	 * <p>If a tree of components has become children of the other component,
@@ -94,6 +98,7 @@ public interface UiLifeCycle {
 	 * <p>Note: exception thrown by this method is ignored (but logged).
 	 */
 	public void afterPageAttached(Page page, Desktop desktop);
+
 	/** Called after a page is detached to a desktop.
 	 */
 	public void afterPageDetached(Page page, Desktop prevdesktop);

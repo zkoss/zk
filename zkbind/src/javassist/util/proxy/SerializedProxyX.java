@@ -21,6 +21,7 @@ public class SerializedProxyX extends SerializedProxy {
 	public SerializedProxyX(Class proxy, byte[] sig, MethodHandler h) {
 		super(proxy, sig, h);
 	}
+
 	public Object readResolve() throws ObjectStreamException {
 		return super.readResolve();
 	}

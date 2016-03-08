@@ -23,8 +23,8 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  * @since 6.0.0
  */
-public interface Converter<U,B,C extends Component> {
-	
+public interface Converter<U, B, C extends Component> {
+
 	/**
 	 * Indicates the returned value should be ignored to load to a component or save to a bean, 
 	 * It is useful for writing a converter to manipulate component directly when loading or saving
@@ -33,7 +33,7 @@ public interface Converter<U,B,C extends Component> {
 	 * @since 6.0.1
 	 */
 	public Object IGNORED_VALUE = new Object();
-	
+
 	/**
 	 * Coerces a value to another value to load to a component
 	 * @param beanProp the bean value
@@ -42,7 +42,7 @@ public interface Converter<U,B,C extends Component> {
 	 * @return the value to load to a component
 	 */
 	public U coerceToUi(B beanProp, C component, BindContext ctx);
-	
+
 	/**
 	 * Coerces a value to bean value to save to a bean
 	 * @param compAttr the value of component attribute.

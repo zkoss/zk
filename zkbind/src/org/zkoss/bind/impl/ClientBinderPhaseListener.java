@@ -45,25 +45,23 @@ public class ClientBinderPhaseListener implements PhaseListener {
 			final Object vm = binder.getViewModel();
 			if (binder instanceof BinderImpl && vm != null) {
 				ToClientCommand ccmd = vm.getClass().getAnnotation(ToClientCommand.class);
-				if (ccmd != null) { 
+				if (ccmd != null) {
 					List<String> asList = Arrays.asList(ccmd.value());
-				
+
 					if (asList.contains("*") || asList.contains(commandName)) {
-						final Map<String, Object> args = (Map<String, Object>) ctx.getAttribute(BindContextImpl.COMMAND_ARGS);
+						final Map<String, Object> args = (Map<String, Object>) ctx
+								.getAttribute(BindContextImpl.COMMAND_ARGS);
 						if (args != null) {
 							if (args.size() == 1) {
-								Object data = new JavaScriptValue(
-										String.valueOf(binder.getConverter(
-												"jsonBindingParam").coerceToUi(
-												args.values().iterator().next(),
-												ctx.getComponent(), ctx)));
-								Clients.response(new AuInvoke(ctx.getBinder()
-										.getView(), "$afterCommand", new Object[] {
-										commandName, data }));
+								Object data = new JavaScriptValue(String.valueOf(binder.getConverter("jsonBindingParam")
+										.coerceToUi(args.values().iterator().next(), ctx.getComponent(), ctx)));
+								Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand",
+										new Object[] { commandName, data }));
 							} else {
-								Object data = new JavaScriptValue(String.valueOf(binder.getConverter("jsonBindingParam").coerceToUi(args, ctx.getComponent(), ctx)));
-								Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", new Object[]{commandName, 
-										data}));
+								Object data = new JavaScriptValue(String.valueOf(binder.getConverter("jsonBindingParam")
+										.coerceToUi(args, ctx.getComponent(), ctx)));
+								Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand",
+										new Object[] { commandName, data }));
 							}
 						} else {
 							Clients.response(new AuInvoke(ctx.getBinder().getView(), "$afterCommand", commandName));

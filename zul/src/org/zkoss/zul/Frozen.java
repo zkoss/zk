@@ -30,7 +30,7 @@ public class Frozen extends XulElement {
 
 	private int _columns;
 	private int _start;
-	
+
 	/**
 	 * Sets the start position of the scrollbar.
 	 * <p> Default: 0
@@ -44,7 +44,7 @@ public class Frozen extends XulElement {
 			smartUpdate("start", _start);
 		}
 	}
-	
+
 	/**
 	 * Returns the start position of the scrollbar.
 	 * <p>Default: 0
@@ -52,6 +52,7 @@ public class Frozen extends XulElement {
 	public int getStart() {
 		return _start;
 	}
+
 	/**
 	 * Sets the number of columns to freeze.(from left to right)
 	 * @param columns positive only
@@ -91,27 +92,22 @@ public class Frozen extends XulElement {
 		return 0;
 	}
 
-	
 	public String getZclass() {
 		return _zclass == null ? "z-frozen" : _zclass;
 	}
-		
-	
+
 	protected void updateByClient(String name, Object value) {
 		if ("start".equals(name))
-			setStart(value instanceof Number ? ((Number)value).intValue():
-				Integer.parseInt(Objects.toString(value)));
+			setStart(value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(Objects.toString(value)));
 		else
 			super.updateByClient(name, value);
 	}
 
-	
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (_columns > 0)
-			renderer.render("columns", _columns);		
+			renderer.render("columns", _columns);
 		if (_columns > 0 && _start > 0)
-			renderer.render("start", _start);		
+			renderer.render("start", _start);
 	}
 }

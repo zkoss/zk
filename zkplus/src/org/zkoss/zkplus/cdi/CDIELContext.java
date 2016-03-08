@@ -36,39 +36,44 @@ import org.zkoss.xel.XelContext;
 	private final XelContext _xelc;
 	private final ELResolver _cdiResolver;
 
-	private static final VariableMapper EMPTY_VAR_MAPPER =
-		new VariableMapper() {
-			public ValueExpression resolveVariable(String variable) {
-				return null;
-			}
-			public ValueExpression setVariable(String variable,
-			ValueExpression expression) {
-				throw new UnsupportedOperationException();
-			}
-		};
+	private static final VariableMapper EMPTY_VAR_MAPPER = new VariableMapper() {
+		public ValueExpression resolveVariable(String variable) {
+			return null;
+		}
+
+		public ValueExpression setVariable(String variable, ValueExpression expression) {
+			throw new UnsupportedOperationException();
+		}
+	};
+
 	/*package*/ CDIELContext(final XelContext xelc, ELResolver cdiResolver) {
 		_xelc = xelc;
 		_cdiResolver = cdiResolver;
 	}
+
 	public ELResolver getELResolver() {
 		return _cdiResolver;
 	}
+
 	public javax.el.FunctionMapper getFunctionMapper() {
-		return _xelc != null ?
-			new XelELMapper(_xelc.getFunctionMapper()): null;
+		return _xelc != null ? new XelELMapper(_xelc.getFunctionMapper()) : null;
 	}
+
 	public VariableMapper getVariableMapper() {
 		return EMPTY_VAR_MAPPER; //not support
 	}
+
 	public XelContext getXelContext() {
 		return _xelc;
 	}
+
 	private class XelELMapper extends javax.el.FunctionMapper {
 		private FunctionMapper _mapper;
 
 		public XelELMapper(FunctionMapper mapper) {
 			_mapper = mapper;
 		}
+
 		public Method resolveFunction(String prefix, String name) {
 			if (_mapper != null) {
 				final Function f = _mapper.resolveFunction(prefix, name);

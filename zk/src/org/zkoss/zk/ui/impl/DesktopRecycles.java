@@ -15,9 +15,8 @@ package org.zkoss.zk.ui.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -44,14 +43,14 @@ public class DesktopRecycles {
 		if (dtrc != null) {
 			try {
 				if (dtrc.beforeRemove(exec, dt, 0)) {
-					((DesktopCtrl)dt).recycle();
+					((DesktopCtrl) dt).recycle();
 					return false; //recycled
 				}
 			} catch (Throwable ex) {
 				log.error("", ex);
 			}
 		}
-		((WebAppCtrl)wapp).getDesktopCache(dt.getSession()).removeDesktop(dt);
+		((WebAppCtrl) wapp).getDesktopCache(dt.getSession()).removeDesktop(dt);
 		return true;
 	}
 }

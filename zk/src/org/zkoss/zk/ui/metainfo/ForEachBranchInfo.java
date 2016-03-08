@@ -14,11 +14,11 @@ package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.impl.Utils;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.ui.util.ForEach;
 import org.zkoss.zk.ui.util.ForEachImpl;
+import org.zkoss.zk.xel.ExValue;
+import org.zkoss.zk.xel.impl.Utils;
 
 /**
  * Used to implement a branch node that supports forEach.
@@ -33,9 +33,11 @@ import org.zkoss.zk.ui.util.ForEachImpl;
 
 	/*package*/ ForEachBranchInfo() {
 	}
+
 	/*package*/ ForEachBranchInfo(NodeInfo parent, ConditionImpl cond) {
 		super(parent, cond);
 	}
+
 	/** Used only by {@link ComponentInfo#duplicate} to make a virtual copy.
 	 */
 	/*package*/ ForEachBranchInfo(ForEachBranchInfo from) {
@@ -56,31 +58,30 @@ import org.zkoss.zk.ui.util.ForEachImpl;
 	 */
 	public ForEach resolveForEach(Page page, Component comp) {
 		return _forEach == null ? null
-				: _forEachInfo.length == 2 ?
-					(comp != null ? ForEachImpl.getInstance(_evalr, comp,
-										_forEach, _forEachInfo[0], _forEachInfo[1]) : 
-									ForEachImpl.getInstance(_evalr, page, _forEach,
-										_forEachInfo[0], _forEachInfo[1])) :
-					(comp != null ? ForEachImpl.getInstance(_evalr, comp, _forEach,
-										_forEachInfo[0], _forEachInfo[1], _forEachInfo[2]) :
-									ForEachImpl.getInstance(_evalr, page, _forEach,
-											_forEachInfo[0], _forEachInfo[1], _forEachInfo[2]));
+				: _forEachInfo.length == 2
+						? (comp != null
+								? ForEachImpl.getInstance(_evalr, comp, _forEach, _forEachInfo[0], _forEachInfo[1])
+								: ForEachImpl.getInstance(_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1]))
+						: (comp != null
+								? ForEachImpl.getInstance(_evalr, comp, _forEach, _forEachInfo[0], _forEachInfo[1],
+										_forEachInfo[2])
+								: ForEachImpl.getInstance(_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1],
+										_forEachInfo[2]));
 	}
+
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
 	 * null/empty to denote no iteration.
 	 */
 	public void setForEach(String expr, String begin, String end) {
 		_forEach = Utils.parseList(expr, Object.class, false);
-			//forEach="" means to iterate a single-element array and the value
-			//is empty
-		_forEachInfo = _forEach == null ? null:
-			new ExValue[] {
-				begin != null && begin.length() > 0 ?
-					new ExValue(begin, Integer.class): null,
-				end != null && end.length() > 0 ?
-					new ExValue(end, Integer.class): null};
+		//forEach="" means to iterate a single-element array and the value
+		//is empty
+		_forEachInfo = _forEach == null ? null
+				: new ExValue[] { begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class) : null,
+						end != null && end.length() > 0 ? new ExValue(end, Integer.class) : null };
 	}
+
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
 	 * null/empty to denote no iteration.
@@ -88,17 +89,14 @@ import org.zkoss.zk.ui.util.ForEachImpl;
 	 */
 	public void setForEach(String expr, String begin, String end, String step) {
 		_forEach = Utils.parseList(expr, Object.class, false);
-			//forEach="" means to iterate a single-element array and the value
-			//is empty
-		_forEachInfo = _forEach == null ? null:
-			new ExValue[] {
-				begin != null && begin.length() > 0 ?
-					new ExValue(begin, Integer.class): null,
-				end != null && end.length() > 0 ?
-					new ExValue(end, Integer.class): null,
-				step != null && step.length() > 0 ?
-					new ExValue(step, Integer.class): null};
+		//forEach="" means to iterate a single-element array and the value
+		//is empty
+		_forEachInfo = _forEach == null ? null
+				: new ExValue[] { begin != null && begin.length() > 0 ? new ExValue(begin, Integer.class) : null,
+						end != null && end.length() > 0 ? new ExValue(end, Integer.class) : null,
+						step != null && step.length() > 0 ? new ExValue(step, Integer.class) : null };
 	}
+
 	/** Returns whether the forEach condition is defined.
 	 */
 	public boolean withForEach() {

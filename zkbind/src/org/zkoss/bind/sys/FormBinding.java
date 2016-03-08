@@ -25,30 +25,30 @@ public interface FormBinding extends Binding {
 	 * @return the implicit form associated with this form binding.
 	 */
 	public Form getFormBean();
-	
+
 	/**
 	 * Returns the associated form id of this Binding.
 	 * @return the associated attribute name of this component.
 	 */
 	public String getFormId();
-	
+
 	/**
 	 * Returns the associated command name of this binding; null if not specified.
 	 * @return the associated command name of this binding; null if not specified.
 	 */
 	public String getCommandName();
-	
+
 	/**
 	 * Returns the property expression script of this binding.
 	 * @return the property expression script of this binding. 
 	 */
 	public String getPropertyString();
-	
+
 	/**
 	 * Returns the condition type of this binding
 	 */
 	public ConditionType getConditionType();
-	
+
 	/**
 	 * Returns the field expression from the given field.
 	 * @since 8.0.0

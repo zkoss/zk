@@ -14,11 +14,11 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.util.Date;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Represents a setting of a response header.
@@ -53,14 +53,16 @@ public class ResponseHeaderInfo { //directive
 
 		_name = name;
 		_value = new ExValue(value, Object.class);
-		_append = append != null ? new ExValue(append, Boolean.class): null;
+		_append = append != null ? new ExValue(append, Boolean.class) : null;
 		_cond = cond;
 	}
+
 	/** Returns the response header's name.
 	 */
 	public String getName() {
 		return _name;
 	}
+
 	/** Returns the value of the response header.
 	 * @return the value which is an instance of {@link Date} or {@link String}
 	 * (and never null).
@@ -69,15 +71,16 @@ public class ResponseHeaderInfo { //directive
 		final Evaluator eval = pgdef.getEvaluator();
 		if (_cond == null || _cond.isEffective(eval, page)) {
 			final Object val = _value.getValue(eval, page);
-			return val != null ? val instanceof Date ? val: val.toString(): "";
+			return val != null ? val instanceof Date ? val : val.toString() : "";
 		}
 		return "";
 	}
+
 	/** Returns whether to append the response header, rather than replace.
 	 */
 	public boolean shallAppend(PageDefinition pgdef, Page page) {
 		final Evaluator eval = pgdef.getEvaluator();
-		final Boolean bAppend = _append != null ? (Boolean)_append.getValue(eval, page): null;
+		final Boolean bAppend = _append != null ? (Boolean) _append.getValue(eval, page) : null;
 		return bAppend != null && bAppend.booleanValue();
 	}
 }

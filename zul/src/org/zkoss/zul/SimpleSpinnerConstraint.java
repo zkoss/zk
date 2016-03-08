@@ -92,19 +92,14 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 		try {
 			if (minIndex >= 0 && maxIndex >= 0) { // have "min" & "max"
 				if (maxIndex > minIndex) { // min first
-					_min = new Integer(constraint.substring(minIndex + 3,
-							maxIndex).trim());
-					_max = new Integer(constraint.substring(maxIndex + 3)
-							.trim());
+					_min = new Integer(constraint.substring(minIndex + 3, maxIndex).trim());
+					_max = new Integer(constraint.substring(maxIndex + 3).trim());
 				} else { // max first
-					_min = new Integer(constraint.substring(minIndex + 3)
-							.trim());
-					_max = new Integer(constraint.substring(maxIndex + 3,
-							minIndex).trim());
+					_min = new Integer(constraint.substring(minIndex + 3).trim());
+					_max = new Integer(constraint.substring(maxIndex + 3, minIndex).trim());
 				}
 				if (_min.compareTo(_max) > 0)
-					throw new UiException("Constraint error: " + _min + " > "
-							+ _max);
+					throw new UiException("Constraint error: " + _min + " > " + _max);
 				return 0;
 			} else if (minIndex >= 0) { // only have "min"
 				_min = new Integer(constraint.substring(minIndex + 3).trim());
@@ -118,9 +113,8 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 		}
 		return super.parseConstraint(constraint);
 	}
-	
-	public void validate(Component comp, Object value)
-			throws WrongValueException {
+
+	public void validate(Component comp, Object value) throws WrongValueException {
 		if (value instanceof Integer) {
 			final Integer intValue = (Integer) value;
 
@@ -137,9 +131,7 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 		if (errmsg != null)
 			return new WrongValueException(comp, errmsg);
 
-		final String s =
-			_min != null ? _max != null ?
-				_min + " ~ " + _max: ">= " + _min: "<= " + _max;
+		final String s = _min != null ? _max != null ? _min + " ~ " + _max : ">= " + _min : "<= " + _max;
 		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
 }

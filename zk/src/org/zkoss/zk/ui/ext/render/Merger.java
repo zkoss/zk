@@ -28,6 +28,7 @@ public interface Merger {
 	 * to merge the next sibling.
 	 */
 	public Component mergeNextSibling();
+
 	/** Merges the children into one component, if possible.
 	 * <p>Notice that {@link #mergeNextSibling} is called first to merge
 	 * all adjacent siblings if possible, and then {@link #mergeChildren}

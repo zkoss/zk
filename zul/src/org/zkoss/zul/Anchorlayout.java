@@ -29,15 +29,14 @@ import org.zkoss.zul.impl.XulElement;
  * @author peterkuo
  * @since 6.0.0
  */
-public class Anchorlayout extends XulElement{
+public class Anchorlayout extends XulElement {
 
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Anchorchildren))
-			throw new UiException("Unsupported child for Anchorlayout: "
-					+ child);
+			throw new UiException("Unsupported child for Anchorlayout: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
-	
+
 	public String getZclass() {
 		return _zclass == null ? "z-anchorlayout" : _zclass;
 	}

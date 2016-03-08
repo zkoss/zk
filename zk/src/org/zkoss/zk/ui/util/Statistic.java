@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.util;
 
 import java.util.List;
 
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
 
 /**
  * An implementation of {@link Monitor} to accumulate statistic data
@@ -50,11 +50,13 @@ public class Statistic implements Monitor {
 	public int getTotalSessionCount() {
 		return _nsess;
 	}
+
 	/** Returns the number of active sessions.
 	 */
 	public int getActiveSessionCount() {
 		return _actsess;
 	}
+
 	/** Returns the average number of sessions being created in an hour.
 	 */
 	public double getAverageSessionCount() {
@@ -67,11 +69,13 @@ public class Statistic implements Monitor {
 	public int getTotalDesktopCount() {
 		return _ndt;
 	}
+
 	/** Returns the number of active desktops.
 	 */
 	public int getActiveDesktopCount() {
 		return _actdt;
 	}
+
 	/** Returns the average number of desktops being created in an hour.
 	 */
 	public double getAverageDesktopCount() {
@@ -84,11 +88,13 @@ public class Statistic implements Monitor {
 	public int getTotalUpdateCount() {
 		return _nupd;
 	}
+
 	/** Returns the number of active asynchronous updates.
 	 */
 	public int getActiveUpdateCount() {
 		return _actupd;
 	}
+
 	/** Returns the average number of asynchronous updates being created
 	 * in an hour.
 	 */
@@ -100,26 +106,34 @@ public class Statistic implements Monitor {
 	 */
 	private double getEscapedHours() {
 		long v = System.currentTimeMillis() - _startTime;
-		return ((double)v) / 3600000;
+		return ((double) v) / 3600000;
 	}
 
 	//-- Monitor --//
-	synchronized public void sessionCreated(Session sess) {
-		++_nsess; ++_actsess;
+	public synchronized void sessionCreated(Session sess) {
+		++_nsess;
+		++_actsess;
 	}
-	synchronized public void sessionDestroyed(Session sess) {
+
+	public synchronized void sessionDestroyed(Session sess) {
 		--_actsess;
 	}
-	synchronized public void desktopCreated(Desktop desktop) {
-		++_ndt; ++_actdt;
+
+	public synchronized void desktopCreated(Desktop desktop) {
+		++_ndt;
+		++_actdt;
 	}
-	synchronized public void desktopDestroyed(Desktop desktop) {
+
+	public synchronized void desktopDestroyed(Desktop desktop) {
 		--_actdt;
 	}
-	synchronized public void beforeUpdate(Desktop desktop, List<AuRequest> requests) {
-		++_nupd; ++_actupd;
+
+	public synchronized void beforeUpdate(Desktop desktop, List<AuRequest> requests) {
+		++_nupd;
+		++_actupd;
 	}
-	synchronized public void afterUpdate(Desktop desktop) {
+
+	public synchronized void afterUpdate(Desktop desktop) {
 		--_actupd;
 	}
 }

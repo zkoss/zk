@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
@@ -108,7 +109,7 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 				val = Library.getProperty(PREF);
 			if (val != null) {
 				final Collection klassSets = CollectionsX.parse(null, val, ';');
-				for(Iterator its = klassSets.iterator(); its.hasNext(); ) {
+				for (Iterator its = klassSets.iterator(); its.hasNext();) {
 					final String klassSetStr = (String) its.next();
 					final Collection klassSet = CollectionsX.parse(null, klassSetStr, '=');
 					final Iterator itz = klassSet.iterator();
@@ -121,7 +122,7 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 		}
 		_threadLocalsMap = new HashMap<String, Object[]>(_fieldsMap.size());
 	}
-	
+
 	//-- EventThreadInit --//
 	public void prepare(Component comp, Event evt) {
 		if (_enabled) {
@@ -163,20 +164,20 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 		}
 	}
 
-	public void abortResume(Component comp, Event evt){
+	public void abortResume(Component comp, Event evt) {
 		//do nothing
 	}
 
 	//-- utilities --//
 	private void getThreadLocals() {
-		for(Entry<String, String[]> me: _fieldsMap.entrySet()) {
+		for (Entry<String, String[]> me : _fieldsMap.entrySet()) {
 			try {
 				final String clsName = me.getKey();
 				final Class cls = Classes.forNameByThread(clsName);
 				final String[] fields = me.getValue();
 				final Object[] threadLocals = new Object[fields.length];
 				_threadLocalsMap.put(clsName, threadLocals);
-				for(int j = 0; j < threadLocals.length; ++j) {
+				for (int j = 0; j < threadLocals.length; ++j) {
 					try {
 						threadLocals[j] = getThreadLocal(cls, fields[j]).get();
 					} catch (SystemException ex) {
@@ -194,14 +195,14 @@ public class ThreadLocalListener implements EventThreadInit, EventThreadCleanup,
 	}
 
 	private void setThreadLocals() {
-		for(Entry<String, Object[]> me: _threadLocalsMap.entrySet()) {
+		for (Entry<String, Object[]> me : _threadLocalsMap.entrySet()) {
 			try {
 				final String clsName = me.getKey();
 				final Class cls = Classes.forNameByThread(clsName);
 				final Object[] threadLocals = me.getValue();
 				final String[] fields = _fieldsMap.get(clsName);
-			
-				for(int j = 0; j < threadLocals.length; ++j) {
+
+				for (int j = 0; j < threadLocals.length; ++j) {
 					getThreadLocal(cls, fields[j]).set(threadLocals[j]);
 				}
 			} catch (ClassNotFoundException ex) {

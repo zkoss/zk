@@ -20,11 +20,10 @@ import java.util.Map;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.xel.FunctionMapper;
-
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * A definition of the function mapper ({@link FunctionMapper}).
@@ -53,22 +52,23 @@ public class FunctionMapperInfo extends ArgumentInfo { //directive
 		checkClass(cls);
 		_mapper = cls;
 	}
+
 	/** Constructs with a class.
 	 */
 	public FunctionMapperInfo(Class<? extends FunctionMapper> cls) {
 		this(cls, null);
 	}
+
 	private static void checkClass(Class<?> cls) {
 		if (!FunctionMapper.class.isAssignableFrom(cls))
-			throw new UiException(FunctionMapper.class+" must be implemented: "+cls);
+			throw new UiException(FunctionMapper.class + " must be implemented: " + cls);
 	}
 
 	/** Constructs with a class name.
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
-	public FunctionMapperInfo(String clsnm, Map<String, String> args)
-	throws ClassNotFoundException {
+	public FunctionMapperInfo(String clsnm, Map<String, String> args) throws ClassNotFoundException {
 		super(args);
 
 		if (clsnm == null || clsnm.length() == 0)
@@ -81,7 +81,7 @@ public class FunctionMapperInfo extends ArgumentInfo { //directive
 					checkClass(cls);
 					_mapper = cls;
 				} catch (ClassNotFoundException ex) {
-					throw new ClassNotFoundException("Class not found: "+clsnm, ex);
+					throw new ClassNotFoundException("Class not found: " + clsnm, ex);
 				}
 			} else { //it might depend on <?import?>
 				_mapper = clsnm;
@@ -90,6 +90,7 @@ public class FunctionMapperInfo extends ArgumentInfo { //directive
 			_mapper = new ExValue(clsnm, String.class);
 		}
 	}
+
 	/** Constructs with a class name.
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
@@ -97,6 +98,7 @@ public class FunctionMapperInfo extends ArgumentInfo { //directive
 	public FunctionMapperInfo(String clsnm) throws ClassNotFoundException {
 		this(clsnm, null);
 	}
+
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newFunctionMapper} is called.
 	 */
@@ -110,45 +112,42 @@ public class FunctionMapperInfo extends ArgumentInfo { //directive
 
 	/** Creates and returns the function mapper for the specified pagedefinition and page.
 	 */
-	public FunctionMapper newFunctionMapper(PageDefinition pgdef, Page page)
-	throws Exception {
+	public FunctionMapper newFunctionMapper(PageDefinition pgdef, Page page) throws Exception {
 		return newFunctionMapper(pgdef.getEvaluator(), page);
 	}
-	
+
 	/** Creates and returns the function mapper for the specified evaluator and page.
 	 * @since 3.6.2
 	 */
-	public FunctionMapper newFunctionMapper(Evaluator eval, Page page)
-	throws Exception {
+	public FunctionMapper newFunctionMapper(Evaluator eval, Page page) throws Exception {
 		if (_mapper instanceof FunctionMapper)
-			return (FunctionMapper)_mapper;
+			return (FunctionMapper) _mapper;
 
 		String clsnm = null;
 		if (_mapper instanceof ExValue) {
-			clsnm = (String)((ExValue)_mapper).getValue(eval, page);
+			clsnm = (String) ((ExValue) _mapper).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 				return null; //ignore it!!
 			}
 		} else if (_mapper instanceof String) {
-			clsnm = (String)_mapper;
+			clsnm = (String) _mapper;
 		}
 
 		final Class<?> cls;
 		if (clsnm != null) {
 			try {
-				cls = page != null ?
-					page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+				cls = page != null ? page.resolveClass(clsnm) : Classes.forNameByThread(clsnm);
 				checkClass(cls);
 			} catch (ClassNotFoundException ex) {
-				throw new ClassNotFoundException("Class not found: "+clsnm+" ("+_mapper+")", ex);
+				throw new ClassNotFoundException("Class not found: " + clsnm + " (" + _mapper + ")", ex);
 			}
 			if (clsnm.equals(_mapper))
 				_mapper = cls; //cache it for better performance
 		} else {
-			cls = (Class<?>)_mapper;
+			cls = (Class<?>) _mapper;
 		}
 
-		return (FunctionMapper)newInstance(cls, eval, page);
+		return (FunctionMapper) newInstance(cls, eval, page);
 	}
 
 	//Object//

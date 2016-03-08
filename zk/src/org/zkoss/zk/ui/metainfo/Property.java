@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.zk.ui.Component;
@@ -73,21 +74,20 @@ public class Property extends ConditionValue {
 	/** Constructs a property with a class that is known in advance.
 	 * @exception IllegalArgumentException if name is null
 	 */
-	public Property(EvaluatorRef evalr, String name, String value,
-	ConditionImpl cond) {
+	public Property(EvaluatorRef evalr, String name, String value, ConditionImpl cond) {
 		this(evalr, name, value, null, cond);
 	}
+
 	/** Constructs a property with the native content.
 	 * The native content is represented by {@link NativeInfo},
 	 * i.e., a XML fragment (a.k.a., a tree of {@link ComponentInfo}.
 	 * @since 3.5.0
 	 */
-	public Property(EvaluatorRef evalr, String name, NativeInfo value,
-	ConditionImpl cond) {
+	public Property(EvaluatorRef evalr, String name, NativeInfo value, ConditionImpl cond) {
 		this(evalr, name, null, value, cond);
 	}
-	private Property(EvaluatorRef evalr, String name, String value,
-	NativeInfo navval, ConditionImpl cond) {
+
+	private Property(EvaluatorRef evalr, String name, String value, NativeInfo navval, ConditionImpl cond) {
 		super(evalr, cond);
 
 		if (name == null)
@@ -95,8 +95,8 @@ public class Property extends ConditionValue {
 
 		_name = name;
 		_navval = navval;
-		_value = navval != null ? null: new ExValue(value, Object.class);
-			//type will be fixed when mapped to a method
+		_value = navval != null ? null : new ExValue(value, Object.class);
+		//type will be fixed when mapped to a method
 	}
 
 	/** Returns the name of the property.
@@ -104,6 +104,7 @@ public class Property extends ConditionValue {
 	public String getName() {
 		return _name;
 	}
+
 	/** Returns the raw value of the property.
 	 * Note: it is the original value without evaluation.
 	 * In other words, it may contain EL expressions.
@@ -116,6 +117,7 @@ public class Property extends ConditionValue {
 			throw new UnsupportedOperationException("native content");
 		return _value.getRawValue();
 	}
+
 	/** Sets the raw value of the property.
 	 * @exception UnsupportedOperationException if value is the native content,
 	 * i.e., it is constructed by use of {@link #Property(EvaluatorRef, String, NativeInfo, ConditionImpl)}.
@@ -142,14 +144,14 @@ public class Property extends ConditionValue {
 			if (exec == null)
 				throw new IllegalStateException("Not attached, nor execution");
 			desktop = exec.getDesktop();
-			page = ((ExecutionCtrl)exec).getCurrentPage();
+			page = ((ExecutionCtrl) exec).getCurrentPage();
 		} else {
 			page = comp.getPage();
 		}
-		return ((WebAppCtrl)desktop.getWebApp()).getUiEngine()
-			.getNativeContent(comp, _navval.getChildren(),
-			((Native)_navval.newInstance(page, comp)).getHelper());
+		return ((WebAppCtrl) desktop.getWebApp()).getUiEngine().getNativeContent(comp, _navval.getChildren(),
+				((Native) _navval.newInstance(page, comp)).getHelper());
 	}
+
 	/** Evaluates the value to an Object.
 	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
 	 * the result (i.e., Object.class is assumed).
@@ -161,6 +163,7 @@ public class Property extends ConditionValue {
 			throw new UnsupportedOperationException("native content");
 		return _value.getValue(_evalr, page);
 	}
+
 	/** Assigns the value of this member to the specified component.
 	 *
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
@@ -170,11 +173,38 @@ public class Property extends ConditionValue {
 			try {
 				assign0(comp);
 			} catch (Exception ex) {
-				log.error("Failed to assign "+this+" to "+comp+"\n"+Exceptions.getMessage(ex));
+				log.error("Failed to assign " + this + " to " + comp + "\n" + Exceptions.getMessage(ex));
 				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
+
+	/** Assigns a property.
+	 *
+	 * <p>Don't use the reflection directly since this method searches
+	 * more signatures.
+	 *
+	 * @exception PropertyNotFoundException if the property is not found,
+	 * i.e., no corresponding method and {@link DynamicPropertied} not
+	 * implemented.
+	 * @exception UiException if fail to assign
+	 * @since 3.5.0
+	 */
+	public static final void assign(Component comp, String name, String value) {
+		final Method mtd = resolveMethod(comp.getClass(), name);
+		if (mtd != null) {
+			try {
+				Object val = Classes.coerce(mtd.getParameterTypes()[0], value);
+				mtd.invoke(comp, val);
+			} catch (Exception ex) {
+				log.error("Failed to assign " + value + " to " + comp + "\n" + Exceptions.getMessage(ex));
+				throw UiException.Aide.wrap(ex);
+			}
+		} else {
+			((DynamicPropertied) comp).setDynamicProperty(name, value);
+		}
+	}
+
 	private Object[] resolve(Class cls) {
 		Method mtd = null;
 		Method[] mtds = null;
@@ -182,26 +212,26 @@ public class Property extends ConditionValue {
 		if (_value == null) {
 			mtd = resolveMethod0(cls, mtdnm);
 		} else {
-			mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
+			mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] { null });
 			if (mtds.length == 0) {
 				if (!DynamicPropertied.class.isAssignableFrom(cls))
-					throw new PropertyNotFoundException("Method "+mtdnm+" not found for "+cls); 
+					throw new PropertyNotFoundException("Method " + mtdnm + " not found for " + cls);
 				mtds = null;
 			} else if (mtds.length == 1) {
 				mtd = mtds[0];
 				mtds = null;
 			}
 		}
-		return new Object[] {mtd, mtds};
+		return new Object[] { mtd, mtds };
 	}
+
 	private void assign0(Component comp) throws Exception {
 		if (comp instanceof ComponentCtrl) {
 			ComponentCtrl ctrl = ((ComponentCtrl) comp);
 			PropertyAccess propertyAccess = ctrl.getPropertyAccess(_name);
 			if (propertyAccess != null) {
 				try {
-					propertyAccess.setValue(comp,
-							Classes.coerce(propertyAccess.getType(), getValue(comp)));
+					propertyAccess.setValue(comp, Classes.coerce(propertyAccess.getType(), getValue(comp)));
 					return;
 				} catch (ClassCastException cce) {
 					// yes, ignore it here and use the old EL way.
@@ -215,8 +245,8 @@ public class Property extends ConditionValue {
 			synchronized (this) {
 				if (_lastcls == null) { //not being initialized
 					final Object[] mi = resolve(cls);
-					_mtd = (Method)mi[0];
-					_mtds = (Method[])mi[1];
+					_mtd = (Method) mi[0];
+					_mtds = (Method[]) mi[1];
 					_lastcls = cls;
 				}
 			}
@@ -230,15 +260,15 @@ public class Property extends ConditionValue {
 		} else { //two or more different compopent classes (use="${x?a:b}")
 			//We don't cache methods for 2nd class (only cache 1st)
 			final Object[] mi = resolve(cls);
-			mtd = (Method)mi[0];
-			mtds = (Method[])mi[1];
+			mtd = (Method) mi[0];
+			mtds = (Method[]) mi[1];
 		}
 
 		//Note: if mtd and mtds are both null, it must be dyna-attr
 		//However, if dyna-attr, mtd or mtds might not be null
-		Class type =
-			mtd != null ? mtd.getParameterTypes()[0]: Object.class;
-		if (_value != null) _value.setExpectedType(type);
+		Class type = mtd != null ? mtd.getParameterTypes()[0] : Object.class;
+		if (_value != null)
+			_value.setExpectedType(type);
 		Object val = getValue(comp);
 
 		Method m = null;
@@ -246,12 +276,11 @@ public class Property extends ConditionValue {
 			m = mtd;
 		} else if (mtds == null) {
 			//it must be dynamic attribute
-			((DynamicPropertied)comp).setDynamicProperty(_name, val);
+			((DynamicPropertied) comp).setDynamicProperty(_name, val);
 			return; //done
 		} else { //mtds != null && val != null
-			if ((m = findExact(mtds, val)) == null
-			&& (m = findAssignable(mtds, val)) == null
-			&& (m = findNullable(mtds, val)) == null) {
+			if ((m = findExact(mtds, val)) == null && (m = findAssignable(mtds, val)) == null
+					&& (m = findNullable(mtds, val)) == null) {
 				//primitive
 				if (val != null)
 					for (int j = 0; j < mtds.length; ++j) {
@@ -291,7 +320,8 @@ public class Property extends ConditionValue {
 							}
 						}
 						if (m == null)
-							throw new ClassCastException("Unable to find a setter named "+_name+" that supports "+val);
+							throw new ClassCastException(
+									"Unable to find a setter named " + _name + " that supports " + val);
 					}
 				}
 			}
@@ -308,6 +338,7 @@ public class Property extends ConditionValue {
 		}
 		return null;
 	}
+
 	private static Method findAssignable(final Method[] mtds, final Object val) {
 		if (val != null) {
 			//Look for the most 'extended' and isInstance class
@@ -315,8 +346,7 @@ public class Property extends ConditionValue {
 			Class<?> t = null;
 			for (int j = 0; j < mtds.length; ++j) {
 				final Class<?> type = mtds[j].getParameterTypes()[0];
-				if (type.isInstance(val)
-				&& (t == null || t.isAssignableFrom(type))) {
+				if (type.isInstance(val) && (t == null || t.isAssignableFrom(type))) {
 					t = type;
 					m = mtds[j];
 				}
@@ -325,6 +355,7 @@ public class Property extends ConditionValue {
 		}
 		return null;
 	}
+
 	private static Method findNullable(final Method[] mtds, final Object val) {
 		if (val == null) {
 			//Look for the most 'extended' class
@@ -332,8 +363,7 @@ public class Property extends ConditionValue {
 			Class<?> t = null;
 			for (int j = 0; j < mtds.length; ++j) {
 				final Class<?> type = mtds[j].getParameterTypes()[0];
-				if (!type.isPrimitive()
-				&& (t == null || t.isAssignableFrom(type))) {
+				if (!type.isPrimitive() && (t == null || t.isAssignableFrom(type))) {
 					t = type;
 					m = mtds[j];
 				}
@@ -344,7 +374,7 @@ public class Property extends ConditionValue {
 	}
 
 	public String toString() {
-		return "["+_name+(_navval != null ? ""+_navval: "="+_value)+']';
+		return "[" + _name + (_navval != null ? "" + _navval : "=" + _value) + ']';
 	}
 
 	//static utilities//
@@ -362,49 +392,21 @@ public class Property extends ConditionValue {
 	 * implemented.
 	 * @since 3.5.0
 	 */
-	public static final Method resolveMethod(Class cls, String name)
-	throws PropertyNotFoundException {
+	public static final Method resolveMethod(Class cls, String name) throws PropertyNotFoundException {
 		return resolveMethod0(cls, Classes.toMethodName(name, "set"));
 	}
-	private static final Method resolveMethod0(Class cls, String mtdnm)
-	throws PropertyNotFoundException {
+
+	private static final Method resolveMethod0(Class cls, String mtdnm) throws PropertyNotFoundException {
 		try {
-			return Classes.getCloseMethod(
-				cls, mtdnm, new Class[] {String.class});
+			return Classes.getCloseMethod(cls, mtdnm, new Class[] { String.class });
 		} catch (NoSuchMethodException ex) {
 			try {
-				return Classes.getCloseMethod(
-					cls, mtdnm, new Class[] {null});
+				return Classes.getCloseMethod(cls, mtdnm, new Class[] { null });
 			} catch (NoSuchMethodException e2) {
 				if (!DynamicPropertied.class.isAssignableFrom(cls))
-					throw new PropertyNotFoundException("Method, "+mtdnm+", not found for "+cls);
+					throw new PropertyNotFoundException("Method, " + mtdnm + ", not found for " + cls);
 				return null;
 			}
-		}
-	}
-	/** Assigns a property.
-	 *
-	 * <p>Don't use the reflection directly since this method searches
-	 * more signatures.
-	 *
-	 * @exception PropertyNotFoundException if the property is not found,
-	 * i.e., no corresponding method and {@link DynamicPropertied} not
-	 * implemented.
-	 * @exception UiException if fail to assign
-	 * @since 3.5.0
-	 */
-	public static final void assign(Component comp, String name, String value) {
-		final Method mtd = resolveMethod(comp.getClass(), name);
-		if (mtd != null) {
-			try {
-				Object val = Classes.coerce(mtd.getParameterTypes()[0], value);
-				mtd.invoke(comp, val);
-			} catch (Exception ex) {
-				log.error("Failed to assign "+value+" to "+comp+"\n"+Exceptions.getMessage(ex));
-				throw UiException.Aide.wrap(ex);
-			}
-		} else {
-			((DynamicPropertied)comp).setDynamicProperty(name, value);
 		}
 	}
 }

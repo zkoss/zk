@@ -30,12 +30,13 @@ public interface LoadStatus {
 	 * @param loaded true to set the item as loaded.
 	 */
 	public void setLoaded(boolean loaded);
+
 	/**
 	 * Returns whether the on-demand-loading item is loaded.
 	 * @return loaded true to set the item as loaded.
 	 */
 	public boolean isLoaded();
-	
+
 	/**
 	 * Sets the index of the loaded item (so client known row's index).
 	 * @param index the loaded item

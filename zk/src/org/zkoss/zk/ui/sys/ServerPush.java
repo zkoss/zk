@@ -67,6 +67,7 @@ public interface ServerPush {
 	 * desktop.
 	 */
 	public void start(Desktop desktop);
+
 	/** Stops and cleans up the server-push controller.
 	 *
 	 * <p>{@link #stop} is called when {@link Desktop#enableServerPush}
@@ -75,7 +76,6 @@ public interface ServerPush {
 	 */
 	public void stop();
 
-	
 	/** 
 	 * Resumes server-push - this is required after desktop recycling.
 	 * (added ServerPush interface to fix ZK-1777) 
@@ -86,7 +86,7 @@ public interface ServerPush {
 	 * @since 6.5.4
 	 */
 	public void resume();
-	
+
 	/** Called by the associated desktop to schedule a task to execute
 	 * asynchronously.
 	 * <p>The implementation usually delegates the scheduling to
@@ -101,8 +101,8 @@ public interface ServerPush {
 	 * If you prefer to handle it by yourself, you could ignore it.
 	 * @since 5.0.6
 	 */
-	public <T extends Event>
-	void schedule(EventListener<T> task, T event, Scheduler<T> scheduler);
+	public <T extends Event> void schedule(EventListener<T> task, T event, Scheduler<T> scheduler);
+
 	/** Activate the current thread (which must be a server-push thread).
 	 * It causes the current thread to wait until the desktop is available
 	 * to access, the desktop no longer exists,
@@ -127,8 +127,8 @@ public interface ServerPush {
 	 * @return whether it is activated or it is timeout.
 	 * The only reason it returns false is timeout.
 	 */
-	public boolean activate(long timeout)
-	throws InterruptedException, DesktopUnavailableException;
+	public boolean activate(long timeout) throws InterruptedException, DesktopUnavailableException;
+
 	/** Deactivates the current thread (which must be a server-push thread).
 	 *
 	 * @param stop whether to stop after deactivate

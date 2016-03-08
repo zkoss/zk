@@ -23,11 +23,9 @@ import java.util.regex.Pattern;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Dates;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -39,9 +37,8 @@ import org.zkoss.zul.mesg.MZul;
  *
  * @author tomyeh
  */
-public class SimpleConstraint
-implements Constraint, ClientConstraint, java.io.Serializable {
-    private static final long serialVersionUID = 20070411L;
+public class SimpleConstraint implements Constraint, ClientConstraint, java.io.Serializable {
+	private static final long serialVersionUID = 20070411L;
 
 	/** Positive numbers are not allowed. */
 	public static final int NO_POSITIVE = 0x0001;
@@ -116,7 +113,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	/** The Error-box position. 
 	 */
 	public static final int AFTER_POINTER = 0xe000;
-	
+
 	/** The constraints. A combination of {@link #NO_POSITIVE} and others.
 	 */
 	protected int _flags;
@@ -132,6 +129,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	public SimpleConstraint(int flags) {
 		this(flags, (Pattern) null, null);
 	}
+
 	/** Constructs a constraint with flags and an error message.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
@@ -141,6 +139,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	public SimpleConstraint(int flags, String errmsg) {
 		this(flags, (Pattern) null, errmsg);
 	}
+
 	/** Constructs a regular-expression constraint.
 	 *
 	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
@@ -148,9 +147,9 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleConstraint(Pattern, String)}
 	 */
 	public SimpleConstraint(String regex, String errmsg) {
-		this(regex == null || regex.length() == 0 ?
-				null: Pattern.compile(regex), errmsg);
+		this(regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
 	}
+
 	/** Constructs a regular-expression constraint.
 	 *
 	 * @param regex ignored if null or empty
@@ -160,6 +159,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	public SimpleConstraint(Pattern regex, String errmsg) {
 		this(0, regex, errmsg);
 	}
+
 	/** Constructs a constraint combining regular expression.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
@@ -169,9 +169,9 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleConstraint(int, Pattern, String)}
 	 */
 	public SimpleConstraint(int flags, String regex, String errmsg) {
-		this(flags,  regex == null || regex.length() == 0 ?
-				null: Pattern.compile(regex), errmsg);
+		this(flags, regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
 	}
+
 	/** Constructs a constraint combining regular expression.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
@@ -183,9 +183,10 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	public SimpleConstraint(int flags, Pattern regex, String errmsg) {
 		_flags = flags;
 		_regex = regex;
-		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
+		_errmsg = errmsg == null || errmsg.length() == 0 ? null : errmsg;
 		_raw = null;
 	}
+
 	/** Constructs a constraint with a list of constraints separated by comma.
 	 *
 	 * @param constraint a list of constraints separated by comma.
@@ -195,10 +196,10 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 */
 	public SimpleConstraint(String constraint) {
 		String regex = null, errmsg = null;
-		l_out:
-		for (int j = 0, k = 0, len = constraint.length(); k >= 0; j = k + 1) {
+		l_out: for (int j = 0, k = 0, len = constraint.length(); k >= 0; j = k + 1) {
 			for (;; ++j) {
-				if (j >= len) break l_out; //done
+				if (j >= len)
+					break l_out; //done
 
 				char cc = constraint.charAt(j);
 				switch (cc) {
@@ -210,10 +211,12 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 						}
 
 						cc = constraint.charAt(k);
-						if (cc == '/') break; //ending / found
-						if (cc == '\\') ++k; //skip one
+						if (cc == '/')
+							break; //ending / found
+						if (cc == '\\')
+							++k; //skip one
 					}
-					regex = k >= 0 ? constraint.substring(j, k): constraint.substring(j);
+					regex = k >= 0 ? constraint.substring(j, k) : constraint.substring(j);
 					continue l_out;
 				case ':':
 					errmsg = constraint.substring(j + 1).trim();
@@ -233,18 +236,18 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 				final char cc = constraint.charAt(k);
 				if (cc == ',' || cc == ':' || cc == ';' || cc == '/') {
 					s = constraint.substring(j, k);
-					if (cc == ':' || cc == '/') --k;
+					if (cc == ':' || cc == '/')
+						--k;
 					break;
 				}
 			}
-			
+
 			_flags |= parseConstraint(s.trim().toLowerCase(java.util.Locale.ENGLISH));
 		}
 
 		_raw = constraint;
-		_regex = regex == null || regex.length() == 0 ?
-			null: Pattern.compile(regex);
-		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
+		_regex = regex == null || regex.length() == 0 ? null : Pattern.compile(regex);
+		_errmsg = errmsg == null || errmsg.length() == 0 ? null : errmsg;
 	}
 
 	/** Parses a list of constraints from a string to an integer
@@ -256,6 +259,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	public static SimpleConstraint getInstance(String constraint) {
 		return new SimpleConstraint(constraint);
 	}
+
 	/** Parses a constraint into an integer value.
 	 * For example, "no positive" is parsed to {@link #NO_POSITIVE}.
 	 *
@@ -311,9 +315,10 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		else if (constraint.equals("after_pointer"))
 			return AFTER_POINTER;
 		else if (constraint.length() > 0)
-			throw new UiException("Unknown constraint: "+constraint);
+			throw new UiException("Unknown constraint: " + constraint);
 		return 0;
 	}
+
 	/**
 	 * Returns the constraint flags, i.e., a combination of
 	 * {@link #NO_POSITIVE}, {@link #NO_NEGATIVE}, {@link #STRICT} and others.
@@ -323,6 +328,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	public int getFlags() {
 		return _flags;
 	}
+
 	/** Returns the custom error message that shall be shown if an error occurs,
 	 * or null if no custom error message specified.
 	 */
@@ -331,17 +337,15 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	}
 
 	//-- Constraint --//
-	public void validate(Component comp, Object value)
-	throws WrongValueException {
+	public void validate(Component comp, Object value) throws WrongValueException {
 		if (value == null) {
 			if ((_flags & NO_EMPTY) != 0)
 				throw wrongValue(comp, MZul.EMPTY_NOT_ALLOWED);
 		} else if (value instanceof Number) {
-			if ((_flags & (NO_POSITIVE|NO_NEGATIVE|NO_ZERO)) == 0)
+			if ((_flags & (NO_POSITIVE | NO_NEGATIVE | NO_ZERO)) == 0)
 				return; //nothing to check
 
-			final int cmp = compareTo((Comparable)value,
-				Classes.coerce(value.getClass(), null, false)); //compare to zero
+			final int cmp = compareTo((Comparable) value, Classes.coerce(value.getClass(), null, false)); //compare to zero
 			if (cmp > 0) {
 				if ((_flags & NO_POSITIVE) != 0)
 					throw wrongValue(comp, getMessageForNumberDenied());
@@ -353,25 +357,25 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 					throw wrongValue(comp, getMessageForNumberDenied());
 			}
 		} else if (value instanceof String) {
-			final String s = (String)value;
+			final String s = (String) value;
 			if ((_flags & NO_EMPTY) != 0 && s.length() == 0)
 				throw wrongValue(comp, MZul.EMPTY_NOT_ALLOWED);
-			if (_regex != null && !_regex.matcher(s != null ? s: "").matches())
+			if (_regex != null && !_regex.matcher(s != null ? s : "").matches())
 				throw wrongValue(comp, MZul.ILLEGAL_VALUE);
 			if ((_flags & STRICT) != 0) {
 				if (s.length() > 0 && comp instanceof Combobox) {
-					for (Iterator it = ((Combobox)comp).getItems().iterator(); it.hasNext();) {
-						final Comboitem ci = (Comboitem)it.next();
-						if(!ci.isDisabled() && ci.isVisible() && s.equalsIgnoreCase(ci.getLabel()))
+					for (Iterator it = ((Combobox) comp).getItems().iterator(); it.hasNext();) {
+						final Comboitem ci = (Comboitem) it.next();
+						if (!ci.isDisabled() && ci.isVisible() && s.equalsIgnoreCase(ci.getLabel()))
 							return;
 					}
 					throw wrongValue(comp, MZul.VALUE_NOT_MATCHED);
 				}
 			}
 		} else if (value instanceof Date) {
-			if ((_flags & (NO_FUTURE|NO_PAST|NO_TODAY)) == 0)
+			if ((_flags & (NO_FUTURE | NO_PAST | NO_TODAY)) == 0)
 				return;
-			final Date date = Dates.beginOfDate((Date)value, null);
+			final Date date = Dates.beginOfDate((Date) value, null);
 			final int cmp = date.compareTo(Dates.today());
 			if (cmp > 0) {
 				if ((_flags & NO_FUTURE) != 0)
@@ -385,53 +389,56 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			}
 		}
 	}
+
 	@SuppressWarnings("unchecked")
 	private static int compareTo(Comparable v1, Object v2) {
 		return v1.compareTo(v2);
 	}
+
 	private WrongValueException wrongValue(Component comp, int errcode) {
-		return _errmsg != null ? new WrongValueException(comp, _errmsg):
-			new WrongValueException(comp, errcode);
+		return _errmsg != null ? new WrongValueException(comp, _errmsg) : new WrongValueException(comp, errcode);
 	}
 
 	private int getMessageForNumberDenied() {
-		switch (_flags & (NO_POSITIVE|NO_NEGATIVE|NO_ZERO)) {
-		case (NO_POSITIVE|NO_ZERO):
+		switch (_flags & (NO_POSITIVE | NO_NEGATIVE | NO_ZERO)) {
+		case (NO_POSITIVE | NO_ZERO):
 			return MZul.NO_POSITIVE_ZERO;
 		case (NO_POSITIVE):
 			return MZul.NO_POSITIVE;
-		case (NO_NEGATIVE|NO_ZERO):
+		case (NO_NEGATIVE | NO_ZERO):
 			return MZul.NO_NEGATIVE_ZERO;
 		case (NO_NEGATIVE):
 			return MZul.NO_NEGATIVE;
 		case (NO_ZERO):
 			return MZul.NO_ZERO;
-		case (NO_POSITIVE|NO_NEGATIVE|NO_ZERO):
+		case (NO_POSITIVE | NO_NEGATIVE | NO_ZERO):
 			return MZul.NO_POSITIVE_NEGATIVE_ZERO;
-		case (NO_POSITIVE|NO_NEGATIVE):
+		case (NO_POSITIVE | NO_NEGATIVE):
 			return MZul.NO_POSITIVE_NEGATIVE;
 		}
 		throw new InternalError();
 	}
+
 	private int getMessageForDateDenied() {
-		switch (_flags & (NO_FUTURE|NO_PAST|NO_TODAY)) {
-		case (NO_FUTURE|NO_TODAY):
+		switch (_flags & (NO_FUTURE | NO_PAST | NO_TODAY)) {
+		case (NO_FUTURE | NO_TODAY):
 			return MZul.NO_FUTURE_TODAY;
 		case (NO_FUTURE):
 			return MZul.NO_FUTURE;
-		case (NO_PAST|NO_TODAY):
+		case (NO_PAST | NO_TODAY):
 			return MZul.NO_PAST_TODAY;
 		case (NO_PAST):
 			return MZul.NO_PAST;
 		case (NO_TODAY):
 			return MZul.NO_TODAY;
-		case (NO_FUTURE|NO_PAST|NO_TODAY):
+		case (NO_FUTURE | NO_PAST | NO_TODAY):
 			return MZul.NO_FUTURE_PAST_TODAY;
-		case (NO_FUTURE|NO_PAST):
+		case (NO_FUTURE | NO_PAST):
 			return MZul.NO_FUTURE_PAST;
 		}
 		throw new InternalError();
 	}
+
 	//ClientConstraint//
 	public String getClientConstraint() {
 		if (_raw != null)
@@ -457,6 +464,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		}
 		return sb.append(')').toString();
 	}
+
 	/** Default: null (since it depends on zul.inp which is loaded for
 	* all input widgets).
 	 */

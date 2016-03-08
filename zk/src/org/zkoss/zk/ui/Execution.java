@@ -62,6 +62,7 @@ public interface Execution extends Scope {
 	 * Each execution is against exactly one desktop.
 	 */
 	public Desktop getDesktop();
+
 	/** Returns the session this execution belongs to.
 	 * @since 5.0.0
 	 */
@@ -82,10 +83,12 @@ public interface Execution extends Scope {
 	 * the given request parameter has, or null if the parameter does not exist.
 	 */
 	public String[] getParameterValues(String name);
+
 	/** Returns the value of a request parameter as a String,
 	 * or null if the parameter does not exist
 	 */
 	public String getParameter(String name);
+
 	/** Returns a Map of the parameters of this request.
 	 * Request parameters are extra information sent with the request.
 	 */
@@ -103,6 +106,7 @@ public interface Execution extends Scope {
 	 * @since 3.0.0
 	 */
 	public Evaluator getEvaluator(Page page, Class<? extends ExpressionFactory> expfcls);
+
 	/** Returns the evaluator of the current execution.
 	 * It is a shortcut of getEvaluator(comp != null ? comp.getPage(): null)
 	 *
@@ -133,6 +137,7 @@ public interface Execution extends Scope {
 	 * @see #getEvaluator
 	 */
 	public Object evaluate(Component comp, String expr, Class<?> expectedType);
+
 	/** Evaluates the specified expression with ${link #getVariableResolver}
 	 * and {@link Page#getFunctionMapper} of the specified
 	 * page.
@@ -185,17 +190,20 @@ public interface Execution extends Scope {
 	 * @since 6.0.0
 	 */
 	public boolean addVariableResolver(VariableResolver resolver);
+
 	/** Removes a name resolve that was added by {@link #addVariableResolver}.
 	 *
 	 * @return false if resolved is not added before.
 	 * @since 6.0.0
 	 */
 	public boolean removeVariableResolver(VariableResolver resolver);
+
 	/** Returns if the specified variable resolved has been registered
 	 * @see #addVariableResolver
 	 * @since 6.0.0
 	 */
 	public boolean hasVariableResolver(VariableResolver resolver);
+
 	/** Returns if any instance of the give class has been registered.
 	 * @since 6.0.1
 	 */
@@ -210,6 +218,7 @@ public interface Execution extends Scope {
 	 * @see #postEvent(int, Component, Event)
 	 */
 	public void postEvent(Event evt);
+
 	/** Queues an event with the specified priority to this execution.
 	 * In other words, the event is placed to the event queue
 	 * with the specified priority.
@@ -237,6 +246,7 @@ public interface Execution extends Scope {
 	 * @since 3.0.7
 	 */
 	public void postEvent(int priority, Event evt);
+
 	/** Queues the give event for the specified target to this execution.
 	 * The target could be different from {@link Event#getTarget}.
 	 * @param priority the priority of the event. The default priority is 0
@@ -266,6 +276,7 @@ public interface Execution extends Scope {
 	 * attribute called arg.
 	 */
 	public static final int PASS_THRU_ATTR = Servlets.PASS_THRU_ATTR;
+
 	/** Includes a page.
 	 *
 	 * @param writer the output to write. If null, the response's default
@@ -278,12 +289,12 @@ public interface Execution extends Scope {
 	 * mode is used only if both uri contains query string and params is
 	 * not empty.
 	 */
-	public void include(Writer writer, String page, Map<String, ?> params, int mode)
-	throws IOException;
+	public void include(Writer writer, String page, Map<String, ?> params, int mode) throws IOException;
+
 	/** A shortcut of include(null, page, null, 0).
 	 */
-	public void include(String page)
-	throws IOException;
+	public void include(String page) throws IOException;
+
 	/** Forwards to another page.
 	 *
 	 * <p>Note: this method can be called only when loading a page.
@@ -300,12 +311,11 @@ public interface Execution extends Scope {
 	 * mode is used only if both uri contains query string and params is
 	 * not empty.
 	 */
-	public void forward(Writer writer, String page, Map<String, ?> params, int mode)
-	throws IOException;
+	public void forward(Writer writer, String page, Map<String, ?> params, int mode) throws IOException;
+
 	/** A shortcut of forward(null, page, null, 0).
 	 */
-	public void forward(String page)
-	throws IOException;
+	public void forward(String page) throws IOException;
 
 	/** Locates a page based on the current Locale. It never returns null.
 	 *
@@ -354,6 +364,7 @@ public interface Execution extends Scope {
 	 * @since 2.4.0
 	 */
 	public boolean isVoided();
+
 	/** Sets whether the execution is voided.
 	 * By void we mean ZK Loader shall stop evaluation of a ZUML document,
 	 * since the request will be taken charged by other servlet
@@ -367,9 +378,9 @@ public interface Execution extends Scope {
 	 * <p>The other case to invoke this method is if you'd like to redirect
 	 * to another (by specifying the refresh header).
 	 * 
-     * <p>If the ZK page has already been created, this method throws
-     * an IllegalStateException, i.e. you cannot invoke this method in
-     * {@link  org.zkoss.zk.ui.util.Composer#doAfterCompose(Component)}. (@since 6.5.5)
+	 * <p>If the ZK page has already been created, this method throws
+	 * an IllegalStateException, i.e. you cannot invoke this method in
+	 * {@link  org.zkoss.zk.ui.util.Composer#doAfterCompose(Component)}. (@since 6.5.5)
 	 *
 	 * @since 2.4.1
 	 */
@@ -378,6 +389,7 @@ public interface Execution extends Scope {
 	/** Returns whether this execution is included by some other pages.
 	 */
 	public boolean isIncluded();
+
 	/** Returns whether the execution is forwarded from other pages.
 	 * @since 2.4.0
 	 */
@@ -414,6 +426,7 @@ public interface Execution extends Scope {
 	 * If the user has not been authenticated, the method returns null.
 	 */
 	public Principal getUserPrincipal();
+
 	/** Returns a boolean indicating whether the authenticated user is
 	 * included in the specified logical "role". Roles and role membership
 	 * can be defined using deployment descriptors.
@@ -422,12 +435,14 @@ public interface Execution extends Scope {
 	 * @param role a String specifying the name of the role
 	 */
 	public boolean isUserInRole(String role);
+
 	/** Returns the login of the user making this request, if the user has
 	 * been authenticated, or null if the user has not been authenticated.
 	 * Whether the user name is sent with each subsequent request depends on
 	 * the browser and type of authentication.
 	 */
 	public String getRemoteUser();
+
 	/** Returns the fully qualified name of the client or the last proxy
 	 * that sent the request.
 	 * If the engine cannot or chooses not to resolve the hostname
@@ -435,10 +450,12 @@ public interface Execution extends Scope {
 	 * the IP address.
 	 */
 	public String getRemoteHost();
+
 	/**  Returns the Internet Protocol (IP) address of the client or last
 	 * proxy that sent the request.
 	 */
 	public String getRemoteAddr();
+
 	/** Returns the host name of the server to which the request was sent.
 	 * It is the value of the part before ":" in the Host header value, if any,
 	 * or the resolved server name, or the server IP address.
@@ -446,6 +463,7 @@ public interface Execution extends Scope {
 	 * @see #getLocalName
 	 */
 	public String getServerName();
+
 	/** Returns the port number to which the request was sent.
 	 * It is the value of the part after ":" in the Host header value, if any,
 	 * or the server port where the client connection was accepted on.
@@ -453,6 +471,7 @@ public interface Execution extends Scope {
 	 * @see #getLocalPort
 	 */
 	public int getServerPort();
+
 	/** Returns the host name of the Internet Protocol (IP) interface
 	 * on which the request was received.
 	 *
@@ -462,10 +481,12 @@ public interface Execution extends Scope {
 	 * @see #getServerName
 	 */
 	public String getLocalName();
+
 	/** Returns the Internet Protocol (IP) address of the interface on which
 	 * the request was received.
 	 */
 	public String getLocalAddr();
+
 	/** Returns the Internet Protocol (IP) port number of the interface on which
 	 * the request was received.
 	 *
@@ -505,6 +526,7 @@ public interface Execution extends Scope {
 	 * @see #getPageDefinitionDirectly(Reader, String)
 	 */
 	public PageDefinition getPageDefinition(String uri);
+
 	/** Converts the specified page content to a page definition.
 	 *
 	 * <p>Implementation Notes: this method must invoke
@@ -522,6 +544,7 @@ public interface Execution extends Scope {
 	 * @see #getPageDefinition
 	 */
 	public PageDefinition getPageDefinitionDirectly(String content, String extension);
+
 	/** Converts the specified page content, in DOM, to a page definition.
 	 *
 	 * @param content the raw content of the page in DOM.
@@ -536,6 +559,7 @@ public interface Execution extends Scope {
 	 * @see #getPageDefinition
 	 */
 	public PageDefinition getPageDefinitionDirectly(Document content, String extension);
+
 	/** Reads the raw content from a reader and converts it into
 	 * a page definition.
 	 *
@@ -550,8 +574,7 @@ public interface Execution extends Scope {
 	 * @see #getPageDefinitionDirectly(Document, String)
 	 * @see #getPageDefinition
 	 */
-	public PageDefinition getPageDefinitionDirectly(Reader reader, String extension)
-	throws IOException;
+	public PageDefinition getPageDefinitionDirectly(Reader reader, String extension) throws IOException;
 
 	/** Creates components from the specified page definition.
 	 * The created components become the child of the specified parent,
@@ -570,8 +593,8 @@ public interface Execution extends Scope {
 	 * @return the first component being created.
 	 * @see #createComponents(String, Component, Map)
 	 */
-	public Component createComponents(PageDefinition pagedef,
-	Component parent, Map<?, ?> arg);
+	public Component createComponents(PageDefinition pagedef, Component parent, Map<?, ?> arg);
+
 	/** Creates components from a page file specified by an URI.
 	 * The created components become the child of the specified parent,
 	 * or become the root components of the current page if parent is specified
@@ -595,104 +618,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Document, String, Component, Map)
 	 * @see #createComponentsDirectly(Reader, String, Component, Map)
 	 */
-	public Component createComponents(String uri, Component parent,
-	Map<?, ?> arg);
-	/** Creates components from the raw content specified by a string.
-	 * The created components become the child of the specified parent,
-	 * or become the root components of the current page if parent is specified
-	 * as null.
-	 *
-	 * <p>The raw content is parsed to a page definition by use of
-	 * {@link #getPageDefinitionDirectly(String, String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
-	 * to create components.
-	 *
-	 * @param content the raw content of the page. It must be in ZUML.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param arg a map of parameters that is accessible by the arg variable
-	 * in EL, or by {@link Execution#getArg}.
-	 * Ignored if null.
-	 * @see #createComponents(PageDefinition, Component, Map)
-	 * @see #createComponents(String, Component, Map)
-	 * @see #createComponentsDirectly(Document, String, Component, Map)
-	 * @see #createComponentsDirectly(Reader, String, Component, Map)
-	 */
-	public Component createComponentsDirectly(String content, String extension,
-	Component parent, Map<?, ?> arg);
-	/** Creates components from the raw content specified by a DOM tree.
-	 * The created components become the child of the specified parent,
-	 * or become the root components of the current page if parent is specified
-	 * as null.
-	 *
-	 * <p>The raw content is parsed to a page definition by use of
-	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
-	 * to create components.
-	 *
-	 * @param content the raw content in DOM.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param arg a map of parameters that is accessible by the arg variable
-	 * in EL, or by {@link Execution#getArg}.
-	 * Ignored if null.
-	 * @see #createComponents(PageDefinition, Component, Map)
-	 * @see #createComponents(String, Component, Map)
-	 * @see #createComponentsDirectly(Document, String, Component, Map)
-	 * @see #createComponentsDirectly(Reader, String, Component, Map)
-	 */
-	public Component createComponentsDirectly(Document content, String extension,
-	Component parent, Map<?, ?> arg);
-	/** Creates components from the raw content read from the specified reader.
-	 * The created components become the child of the specified parent,
-	 * or become the root components of the current page if parent is specified
-	 * as null.
-	 *
-	 * <p>The raw content is loaded and parsed to a page definition by use of
-	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
-	 * to create components.
-	 *
-	 * @param reader the reader to retrieve the raw content in ZUML.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param arg a map of parameters that is accessible by the arg variable
-	 * in EL, or by {@link Execution#getArg}.
-	 * Ignored if null.
-	 * @see #createComponents(PageDefinition, Component, Map)
-	 * @see #createComponents(String, Component, Map)
-	 * @see #createComponentsDirectly(Document, String, Component, Map)
-	 * @see #createComponentsDirectly(String, String, Component, Map)
-	 */
-	public Component createComponentsDirectly(Reader reader, String extension,
-	Component parent, Map<?, ?> arg) throws IOException;
+	public Component createComponents(String uri, Component parent, Map<?, ?> arg);
 
 	/** Creates components from the specified page definition
 	 * with a custom variable resolver and inserts before a particular component.
@@ -714,8 +640,9 @@ public interface Execution extends Scope {
 	 * @see #createComponents(String, Component, Component, VariableResolver)
 	 * @since 6.0.0
 	 */
-	public Component createComponents(PageDefinition pagedef,
-	Component parent, Component insertBefore, VariableResolver resolver);
+	public Component createComponents(PageDefinition pagedef, Component parent, Component insertBefore,
+			VariableResolver resolver);
+
 	/** Creates components from a page file specified by an URI
 	 * with a custom variable resolver and inserts before a particular component.
 	 * The created components become the child of the specified parent,
@@ -742,8 +669,8 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
 	 * @since 6.0.0
 	 */
-	public Component createComponents(String uri, Component parent,
-	Component insertBefore, VariableResolver resolver);
+	public Component createComponents(String uri, Component parent, Component insertBefore, VariableResolver resolver);
+
 	/** Creates components from a page file specified by an URI
 	 * with a custom variable resolver and inserts before a particular component.
 	 * The created components become the child of the specified parent,
@@ -773,114 +700,8 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
 	 * @since 8.0.0
 	 */
-	public Component[] createComponents(String uri, Component parent,
-	Component insertBefore, VariableResolver resolver, Map<?, ?> arg);
-
-	/** Creates components from the raw content specified by a string
-	 * with a custom variable resolver and inserts before a particular component.
-	 * The created components become the child of the specified parent,
-	 * or become the root components of the current page if parent is specified
-	 * as null.
-	 *
-	 * <p>The raw content is parsed to a page definition by use of
-	 * {@link #getPageDefinitionDirectly(String, String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
-	 * to create components.
-	 *
-	 * @param content the raw content of the page. It must be in ZUML.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param insertBefore the sibling component that new components will be
-	 * inserted before. Ignored if null (i.e., append as last children).
-	 * @param resolver the variable resolver used to resolve variables.
-	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
-	 * @see #createComponents(String, Component, Component, VariableResolver)
-	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
-	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 6.0.0
-	 */
-	public Component createComponentsDirectly(String content, String extension,
-	Component parent, Component insertBefore, VariableResolver resolver);
-	/** Creates components from the raw content specified by a DOM tree
-	 * with a custom variable resolver and inserts before a particular component.
-	 * The created components become the child of the specified parent,
-	 * or become the root components of the current page if parent is specified
-	 * as null.
-	 *
-	 * <p>The raw content is parsed to a page definition by use of
-	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
-	 * to create components.
-	 *
-	 * @param content the raw content in DOM.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param insertBefore the sibling component that new components will be
-	 * inserted before. Ignored if null (i.e., append as last children).
-	 * @param resolver the variable resolver used to resolve variables.
-	 * Ignored if null.
-	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
-	 * @see #createComponents(String, Component, Component, VariableResolver)
-	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
-	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
-	 * @since 6.0.0
-	 */
-	public Component createComponentsDirectly(Document content, String extension,
-	Component parent, Component insertBefore, VariableResolver resolver);
-	/** Creates components from the raw content read from the specified reader
-	 * with a custom variable resolver and inserts before a particular component.
-	 * The created components become the child of the specified parent,
-	 * or become the root components of the current page if parent is specified
-	 * as null.
-	 *
-	 * <p>The raw content is loaded and parsed to a page definition by use of
-	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
-	 * to create components.
-	 *
-	 * @param reader the reader to retrieve the raw content in ZUML.
-	 * @param extension the default extension if the content doesn't specify
-	 * an language. In other words, if
-	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
-	 * is called.
-	 * If extension is null and the content doesn't specify a language,
-	 * the language called "xul/html" is assumed.
-	 * @param parent the parent component, or null if you want it to be
-	 * a root component. If parent is null, the page is assumed to be
-	 * the current page, which is determined by the execution context.
-	 * In other words, the new component will be the root component
-	 * of the current page if parent is null.
-	 * @param insertBefore the sibling component that new components will be
-	 * inserted before. Ignored if null (i.e., append as last children).
-	 * @param resolver the variable resolver used to resolve variables.
-	 * Ignored if null.
-	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
-	 * @see #createComponents(String, Component, Component, VariableResolver)
-	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
-	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
-	 * @since 6.0.0
-	 */
-	public Component createComponentsDirectly(Reader reader, String extension,
-	Component parent, Component insertBefore, VariableResolver resolver)
-	throws IOException;
+	public Component[] createComponents(String uri, Component parent, Component insertBefore, VariableResolver resolver,
+			Map<?, ?> arg);
 
 	/** Creates components that don't belong to any page
 	 * from the specified page definition.
@@ -894,6 +715,7 @@ public interface Execution extends Scope {
 	 * @since 2.4.0
 	 */
 	public Component[] createComponents(PageDefinition pagedef, Map<?, ?> arg);
+
 	/** Creates components that don't belong to any page
 	 * from a page file specified by an URI.
 	 *
@@ -934,6 +756,211 @@ public interface Execution extends Scope {
 	 * @since 8.0.1
 	 */
 	public Component[] createComponents(String uri, Page page, VariableResolver resolver, Map<?, ?> arg);
+
+	/** Creates components from the raw content specified by a string.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is parsed to a page definition by use of
+	 * {@link #getPageDefinitionDirectly(String, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content of the page. It must be in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Map)
+	 * @see #createComponents(String, Component, Map)
+	 * @see #createComponentsDirectly(Document, String, Component, Map)
+	 * @see #createComponentsDirectly(Reader, String, Component, Map)
+	 */
+	public Component createComponentsDirectly(String content, String extension, Component parent, Map<?, ?> arg);
+
+	/** Creates components from the raw content specified by a DOM tree.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is parsed to a page definition by use of
+	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content in DOM.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Map)
+	 * @see #createComponents(String, Component, Map)
+	 * @see #createComponentsDirectly(Document, String, Component, Map)
+	 * @see #createComponentsDirectly(Reader, String, Component, Map)
+	 */
+	public Component createComponentsDirectly(Document content, String extension, Component parent, Map<?, ?> arg);
+
+	/** Creates components from the raw content read from the specified reader.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is loaded and parsed to a page definition by use of
+	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param reader the reader to retrieve the raw content in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Map)
+	 * @see #createComponents(String, Component, Map)
+	 * @see #createComponentsDirectly(Document, String, Component, Map)
+	 * @see #createComponentsDirectly(String, String, Component, Map)
+	 */
+	public Component createComponentsDirectly(Reader reader, String extension, Component parent, Map<?, ?> arg)
+			throws IOException;
+
+	/** Creates components from the raw content specified by a string
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is parsed to a page definition by use of
+	 * {@link #getPageDefinitionDirectly(String, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content of the page. It must be in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponents(String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
+	 * @since 6.0.0
+	 */
+	public Component createComponentsDirectly(String content, String extension, Component parent,
+			Component insertBefore, VariableResolver resolver);
+
+	/** Creates components from the raw content specified by a DOM tree
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is parsed to a page definition by use of
+	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param content the raw content in DOM.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponents(String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Reader, String, Component, Component, VariableResolver)
+	 * @since 6.0.0
+	 */
+	public Component createComponentsDirectly(Document content, String extension, Component parent,
+			Component insertBefore, VariableResolver resolver);
+
+	/** Creates components from the raw content read from the specified reader
+	 * with a custom variable resolver and inserts before a particular component.
+	 * The created components become the child of the specified parent,
+	 * or become the root components of the current page if parent is specified
+	 * as null.
+	 *
+	 * <p>The raw content is loaded and parsed to a page definition by use of
+	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
+	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * to create components.
+	 *
+	 * @param reader the reader to retrieve the raw content in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param parent the parent component, or null if you want it to be
+	 * a root component. If parent is null, the page is assumed to be
+	 * the current page, which is determined by the execution context.
+	 * In other words, the new component will be the root component
+	 * of the current page if parent is null.
+	 * @param insertBefore the sibling component that new components will be
+	 * inserted before. Ignored if null (i.e., append as last children).
+	 * @param resolver the variable resolver used to resolve variables.
+	 * Ignored if null.
+	 * @see #createComponents(PageDefinition, Component, Component, VariableResolver)
+	 * @see #createComponents(String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(Document, String, Component, Component, VariableResolver)
+	 * @see #createComponentsDirectly(String, String, Component, Component, VariableResolver)
+	 * @since 6.0.0
+	 */
+	public Component createComponentsDirectly(Reader reader, String extension, Component parent, Component insertBefore,
+			VariableResolver resolver) throws IOException;
+
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a string.
 	 *
@@ -958,8 +985,8 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Map)
 	 * @since 2.4.0
 	 */
-	public Component[] createComponentsDirectly(String content, String extension,
-	Map<?, ?> arg);
+	public Component[] createComponentsDirectly(String content, String extension, Map<?, ?> arg);
+
 	/** Creates components that don't belong to any page
 	 * from the raw content specified by a DOM tree.
 	 *
@@ -984,8 +1011,8 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(Reader, String, Map)
 	 * @since 2.4.0
 	 */
-	public Component[] createComponentsDirectly(Document content, String extension,
-	Map<?, ?> arg);
+	public Component[] createComponentsDirectly(Document content, String extension, Map<?, ?> arg);
+
 	/** Creates components that don't belong to any page
 	 * from the raw content read from the specified reader.
 	 *
@@ -1010,8 +1037,7 @@ public interface Execution extends Scope {
 	 * @see #createComponentsDirectly(String, String, Map)
 	 * @since 2.4.0
 	 */
-	public Component[] createComponentsDirectly(Reader reader, String extension,
-	Map<?, ?> arg) throws IOException;
+	public Component[] createComponentsDirectly(Reader reader, String extension, Map<?, ?> arg) throws IOException;
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.
@@ -1025,6 +1051,7 @@ public interface Execution extends Scope {
 	 * @param uri the URI to redirect to, or null to reload the same page
 	 */
 	public void sendRedirect(String uri);
+
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL and redirect to the specified browser window.
 	 *
@@ -1041,6 +1068,7 @@ public interface Execution extends Scope {
 	 * is used.
 	 */
 	public void sendRedirect(String uri, String target);
+
 	/**
 	 * Send a redirect to the given url in the application the redirect is done
 	 * via status 302 by {@link AuRedirect} if respRedirect is set to true. If
@@ -1072,11 +1100,13 @@ public interface Execution extends Scope {
 	 * the map for its event listeners.
 	 */
 	public Map<?, ?> getArg();
+
 	/** Pushes the parameters (aka., arg) that EL could refer it by the arg variable.
 	 * Remember to call {@link #popArg} in the finally clause.
 	 * @see #getArg
 	 */
 	public void pushArg(Map<?, ?> arg);
+
 	/** Pops the parameters (aka., arg) that is pushed by {@link #pushArg}.
 	 * <p>It never throws an exception.
 	 * @see #getArg
@@ -1095,6 +1125,7 @@ public interface Execution extends Scope {
 	 * @since 5.0.2
 	 */
 	public void addAuResponse(AuResponse resposne);
+
 	/** Adds an asynchronous response ({@link AuResponse}) with the given
 	 * key instead of {@link AuResponse#getOverrideKey}.
 	 *
@@ -1113,7 +1144,6 @@ public interface Execution extends Scope {
 	 */
 	public void addAuResponse(String key, AuResponse resposne);
 
-
 	/** Returns the version of the given browser name, or null if the client
 	 * is not the given browsers.
 	 *
@@ -1128,6 +1158,7 @@ public interface Execution extends Scope {
 	 * @since 6.0.0
 	 */
 	public Double getBrowser(String name);
+
 	/** Returns the name of the browser, or null if not identifiable.
 	 * @since 6.0.0
 	 */
@@ -1139,6 +1170,7 @@ public interface Execution extends Scope {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isBrowser();
+
 	/** Returns whether it is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
@@ -1150,6 +1182,7 @@ public interface Execution extends Scope {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isBrowser(String type);
+
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
 	 * <p>Because there are too many robots, it returns true if the user-agent
@@ -1157,33 +1190,40 @@ public interface Execution extends Scope {
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isRobot();
+
 	/** Returns whether the client is Internet Explorer.
 	 * If true, it also implies {@link #isExplorer7} is true.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isExplorer();
+
 	/** Returns whether the client is Internet Explorer 7 or later.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isExplorer7();
+
 	/** Returns whether the client is Gecko based, such as Mozilla, Firefox and Camino.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isGecko();
+
 	/** Returns whether the browser is Gecko 3 based, such as Firefox 3.
 	 * @since 3.5.0
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isGecko3();
+
 	/** Returns whether the client is Safari.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isSafari();
+
 	/** Returns whether the client is Opera.
 	 * @since 3.5.1
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isOpera();
+
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
 	 *
@@ -1209,6 +1249,7 @@ public interface Execution extends Scope {
 	 * javax.servlet.ServletRequest is returned.
 	 */
 	public Object getNativeRequest();
+
 	/** Returns the native response, or null if not available.
 	 *
 	 * <p>The returned object depends on the Web container.
@@ -1220,16 +1261,19 @@ public interface Execution extends Scope {
 	/** Returns the value of the specified request attribute.
 	 */
 	public Object getAttribute(String name);
+
 	/** Sets the value of the specified request attribute.
 	 *
 	 * @param value the value. If null, the attribute is removed.
 	 * @return the previous value if any (since ZK5)
 	 */
 	public Object setAttribute(String name, Object value);
+
 	/** Removes the specified request attribute.
 	 * @return the previous value if any (since ZK5)
 	 */
 	public Object removeAttribute(String name);
+
 	/** Returns a map of request attributes associated with this session.
 	 */
 	public Map<String, Object> getAttributes();
@@ -1239,6 +1283,7 @@ public interface Execution extends Scope {
 	 * @since 3.5.0
 	 */
 	public String getHeader(String name);
+
 	/** Returns all the values of the specified header as an iterable
 	 * {@link String} objects.
 	 *
@@ -1250,6 +1295,7 @@ public interface Execution extends Scope {
 	 * @since 6.0.0
 	 */
 	public Iterable<String> getHeaders(String name);
+
 	/** Returns all header names this request contains.
 	 * If the request has no headers, this method returns an empty iterable.
 	 * If the container does not allow access to header information,
@@ -1268,10 +1314,12 @@ public interface Execution extends Scope {
 	 * @see #containsResponseHeader
 	 */
 	public void setResponseHeader(String name, String value);
+
 	/** Sets a response header with the given name and date-value.
 	 * @since 5.0.2
 	 */
 	public void setResponseHeader(String name, Date value);
+
 	/** Adds a response header with the give name and value.
 	 *  This method allows response headers to have multiple values.
 	 * @param value the additional header value If it contains octet string,
@@ -1280,10 +1328,12 @@ public interface Execution extends Scope {
 	 * @since 3.5.0
 	 */
 	public void addResponseHeader(String name, String value);
+
 	/** Adds a response header with the given name and date-value.
 	 * @since 5.0.2
 	 */
 	public void addResponseHeader(String name, Date value);
+
 	/** Returns whether the named response header has already been set.
 	 * @since 3.5.0
 	 */
@@ -1294,6 +1344,7 @@ public interface Execution extends Scope {
 	 * @since 6.0.0
 	 */
 	public void log(String msg);
+
 	/** Writes an explanatory message and a stack trace for a given Throwable
 	 * exception to the servlet log file. The name and type of the servlet
 	 * log file is specific to the servlet container, usually an event log. 

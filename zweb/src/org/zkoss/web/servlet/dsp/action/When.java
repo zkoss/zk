@@ -32,14 +32,14 @@ public class When extends AbstractAction {
 	public boolean getTest() {
 		return _cond;
 	}
+
 	/** Sets the test result. */
 	public void setTest(boolean cond) {
 		_cond = cond;
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!isEffective())
 			return;
 
@@ -47,7 +47,7 @@ public class When extends AbstractAction {
 		if (!(parent instanceof Choose))
 			throw new DspException("The parent of when must be choose");
 
-		final Choose choose = (Choose)parent;
+		final Choose choose = (Choose) parent;
 		if (_cond && !choose.isMatched()) {
 			choose.setMatched(true);
 			if (nested)

@@ -20,4 +20,3 @@ public class ProxyFactoryX extends ProxyFactory {
 		return ProxyFactory.getFilterSignature(clazz);
 	}
 }
-

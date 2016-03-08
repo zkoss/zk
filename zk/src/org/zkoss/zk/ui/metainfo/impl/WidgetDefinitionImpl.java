@@ -18,10 +18,10 @@ package org.zkoss.zk.ui.metainfo.impl;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
-import org.zkoss.zk.ui.metainfo.*;
+import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 
 /**
  * An implementation of WidgetDefinition.
@@ -46,9 +46,11 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 	public String getWidgetClass() {
 		return _class;
 	}
+
 	public boolean isBlankPreserved() {
 		return _blankpresv;
 	}
+
 	public void addMold(String name, String moldURI) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException();
@@ -57,15 +59,18 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 			_molds = new HashMap<String, String>(2);
 		_molds.put(name, moldURI);
 	}
+
 	public String getMoldURI(String name) {
 		if (_molds == null)
 			return null;
 
 		return _molds.get(name);
 	}
+
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
 	}
+
 	public Collection<String> getMoldNames() {
 		if (_molds != null)
 			return _molds.keySet();

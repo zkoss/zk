@@ -17,13 +17,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.idom.Namespace;
-
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.xel.EvaluatorRef;
 
@@ -52,6 +51,7 @@ public class NativeInfo extends ComponentInfo {
 		if (!compdef.isNative())
 			throw new IllegalArgumentException("compdef must be native");
 	}
+
 	/** Constructs a native info without a parent.
 	 * @param evlar the evaluator (never null).
 	 * @param compdef the component definition (never null).
@@ -69,6 +69,7 @@ public class NativeInfo extends ComponentInfo {
 			return _dns;
 		return Collections.emptyList();
 	}
+
 	/** Adds a declared namespace.
 	 */
 	public void addDeclaredNamespace(Namespace ns) {
@@ -90,6 +91,7 @@ public class NativeInfo extends ComponentInfo {
 			return _prokids;
 		return Collections.emptyList();
 	}
+
 	/** Returns a readonly list of the epilog children ({@link NativeInfo}).
 	 * The epilog children must be rendered after {@link #getChildren}.
 	 */
@@ -98,6 +100,7 @@ public class NativeInfo extends ComponentInfo {
 			return _epikids;
 		return Collections.emptyList();
 	}
+
 	/** Adds a prolog child.
 	 *
 	 * <p>Note: if child belong to other {@link ComponentInfo},
@@ -112,6 +115,7 @@ public class NativeInfo extends ComponentInfo {
 			_prokids = new LinkedList<NodeInfo>();
 		_prokids.add(child);
 	}
+
 	/** Adds an epilog child.
 	 *
 	 * @param child the epilog child. If child belongs to {@link #getChildren},
@@ -135,6 +139,7 @@ public class NativeInfo extends ComponentInfo {
 	public NativeInfo getSplitChild() {
 		return _splitkid;
 	}
+
 	/** Sets the split kid.
 	 * @see #getSplitChild
 	 * @since 3.0.0
@@ -148,8 +153,8 @@ public class NativeInfo extends ComponentInfo {
 		final Component comp = super.newInstance(page, parent);
 
 		if (_dns != null) {
-			final Native nc = (Native)comp;
-			for (Namespace ns: _dns)
+			final Native nc = (Native) comp;
+			for (Namespace ns : _dns)
 				nc.addDeclaredNamespace(ns);
 		}
 

@@ -7,8 +7,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.Map;
 import java.util.Collections;
+import java.util.Map;
 
 import org.zkoss.zk.ui.ext.Scope;
 
@@ -26,7 +26,6 @@ public class SynchronizedScope extends SimpleScope {
 		super(owner);
 	}
 
-	
 	Map<String, Object> newInitMap() {
 		return Collections.synchronizedMap(super.newInitMap());
 	}

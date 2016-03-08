@@ -17,9 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.util.List;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Component;
+
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
 
 /**
  * A part of {@link Execution} for visualizing the components whose
@@ -34,12 +35,14 @@ public interface Visualizer {
 	/** Returns the execution that this visualizer is associated with.
 	 */
 	public Execution getExecution();
+
 	/** Returns the owner component for this execution, or null if
 	 * this execution is not owned by any component.
 	 * <p>The include component is a typical owner.
 	 * @since 5.0.0
 	 */
 	public Component getOwner();
+
 	/** Whether the execution associated with this visualizer
 	 * is caused by an async-update.
 	 *
@@ -51,6 +54,7 @@ public interface Visualizer {
 	 * async-update.
 	 */
 	public boolean isEverAsyncUpdate();
+
 	/** Adds the responses to the first {@link Visualizer} if it is
 	 * caused by async-update.
 	 * @return true if responses are added; false if the first {@link Visualizer}

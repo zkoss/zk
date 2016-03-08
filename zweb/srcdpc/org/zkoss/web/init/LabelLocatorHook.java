@@ -16,12 +16,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.init;
 
-
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-//
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.util.resource.ServletLabelLocator;
 import org.zkoss.web.util.resource.ServletRequestResolver;
@@ -51,6 +49,7 @@ public class LabelLocatorHook implements ServletContextListener {
 
 	public void contextDestroyed(ServletContextEvent sce) {
 	}
+
 	public void contextInitialized(ServletContextEvent sce) {
 		final ServletContext ctx = sce.getServletContext();
 		//if (log.isDebugEnabled()) log.debug("Hook label locator for "+ctx);

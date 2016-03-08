@@ -18,7 +18,7 @@ import org.zkoss.zk.ui.select.SelectorComposer;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Listen {
-	
+
 	/**
 	 * The instruction string for adding EventListeners. The string should 
 	 * contain a list of [event name] = [selector] pairs, separated by semicolon.
@@ -29,5 +29,5 @@ public @interface Listen {
 	 * </code></pre>
 	 */
 	String value();
-	
+
 }

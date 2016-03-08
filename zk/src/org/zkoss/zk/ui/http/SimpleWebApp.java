@@ -23,6 +23,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.ServletContext;
 
 import org.zkoss.util.CollectionsX;
@@ -53,11 +54,10 @@ public class SimpleWebApp extends AbstractWebApp {
 	public void init(Object context, Configuration config) {
 		if (context == null)
 			throw new IllegalArgumentException("context");
-		_ctx = (ServletContext)context;
+		_ctx = (ServletContext) context;
 		super.init(context, config);
 
-		Registry.sign(this, Registry.class, WebManager.class,
-				WebAppFactoryImpl.class);
+		Registry.sign(this, Registry.class, WebManager.class, WebAppFactoryImpl.class);
 	}
 
 	private final Map<String, Object> _attrs = new AttributesMap() {
@@ -65,12 +65,15 @@ public class SimpleWebApp extends AbstractWebApp {
 		protected Enumeration<String> getKeys() {
 			return _ctx.getAttributeNames();
 		}
+
 		protected Object getValue(String key) {
 			return _ctx.getAttribute(key);
 		}
+
 		protected void setValue(String key, Object val) {
 			_ctx.setAttribute(key, val);
 		}
+
 		protected void removeValue(String key) {
 			_ctx.removeAttribute(key);
 		}
@@ -79,19 +82,23 @@ public class SimpleWebApp extends AbstractWebApp {
 	public Object getAttribute(String name) {
 		return _ctx.getAttribute(name);
 	}
+
 	public boolean hasAttribute(String name) {
 		return getAttribute(name) != null; //Servlet limitation
 	}
+
 	public Object setAttribute(String name, Object value) {
 		Object old = _ctx.getAttribute(name);
 		_ctx.setAttribute(name, value);
 		return old;
 	}
+
 	public Object removeAttribute(String name) {
 		Object old = _ctx.getAttribute(name);
 		_ctx.removeAttribute(name);
 		return old;
 	}
+
 	public Map<String, Object> getAttributes() {
 		return _attrs;
 	}
@@ -99,9 +106,11 @@ public class SimpleWebApp extends AbstractWebApp {
 	public boolean addScopeListener(ScopeListener listener) {
 		return _scopeListeners.addScopeListener(listener);
 	}
+
 	public boolean removeScopeListener(ScopeListener listener) {
 		return _scopeListeners.removeScopeListener(listener);
 	}
+
 	/** Returns all scope listeners.
 	 */
 	/*package*/ ScopeListeners getScopeListeners() {
@@ -111,10 +120,12 @@ public class SimpleWebApp extends AbstractWebApp {
 	public String getUpdateURI() {
 		return getUpdateURI(true);
 	}
+
 	public String getUpdateURI(boolean encode) {
 		final String uri = getWebManager().getUpdateURI();
-		return encode ? Executions.getCurrent().encodeURL(uri): uri;
+		return encode ? Executions.getCurrent().encodeURL(uri) : uri;
 	}
+
 	private WebManager getWebManager() {
 		return WebManager.getWebManager(this);
 	}
@@ -128,29 +139,31 @@ public class SimpleWebApp extends AbstractWebApp {
 		}
 		return null;
 	}
+
 	public String getDirectory() {
 		return null;
 	}
+
 	public URL getResource(String path) {
 		if (path.startsWith("~./"))
-			return getWebManager()
-				.getClassWebResource().getResource(path.substring(2));
+			return getWebManager().getClassWebResource().getResource(path.substring(2));
 		try {
 			return _ctx.getResource(path);
 		} catch (MalformedURLException ex) {
-			throw new UiException("Failed to retrieve "+path, ex);
+			throw new UiException("Failed to retrieve " + path, ex);
 		}
 	}
+
 	public InputStream getResourceAsStream(String path) {
 		if (path.startsWith("~./"))
-			return getWebManager()
-				.getClassWebResource().getResourceAsStream(path.substring(2));
+			return getWebManager().getClassWebResource().getResourceAsStream(path.substring(2));
 		return _ctx.getResourceAsStream(path);
 	}
 
 	public String getInitParameter(String name) {
 		return _ctx.getInitParameter(name);
 	}
+
 	public Iterable<String> getInitParameterNames() {
 		return new Iterable<String>() {
 			@SuppressWarnings("unchecked")
@@ -159,31 +172,34 @@ public class SimpleWebApp extends AbstractWebApp {
 			}
 		};
 	}
+
 	public String getRealPath(String path) {
 		return _ctx.getRealPath(path);
 	}
+
 	public String getMimeType(String file) {
 		return _ctx.getMimeType(file);
 	}
+
 	@SuppressWarnings("unchecked")
 	public Set<String> getResourcePaths(String path) {
 		return _ctx.getResourcePaths(path);
 	}
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #getServletContext}.
 	 */
 	public Object getNativeContext() {
 		return _ctx;
 	}
-	
+
 	public ServletContext getServletContext() {
 		return _ctx;
 	}
 
-	
 	public void log(String msg) {
 		_ctx.log(msg);
 	}
-	
+
 	public void log(String msg, Throwable ex) {
 		_ctx.log(msg, ex);
 	}

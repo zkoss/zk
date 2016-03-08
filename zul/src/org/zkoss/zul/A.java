@@ -28,8 +28,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author jumperchen
  * @since 5.0.0
  */
-public class A extends LabelImageElement
-implements org.zkoss.zk.ui.ext.Disable {
+public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private AuxInfo _auxinf;
 
 	static {
@@ -39,19 +38,22 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	public A() {
 	}
+
 	public A(String label) {
 		super(label);
 	}
+
 	public A(String label, String image) {
 		super(label, image);
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
 	public boolean isDisabled() {
 		return _auxinf != null && _auxinf.disabled;
 	}
+
 	/** Sets whether it is disabled.
 	 */
 	public void setDisabled(boolean disabled) {
@@ -66,8 +68,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 7.0.2
 	 */
 	public String getAutodisable() {
-		return _auxinf != null ? _auxinf.autodisable: null;
+		return _auxinf != null ? _auxinf.autodisable : null;
 	}
+
 	/** Sets a list of component IDs that shall be disabled when the user
 	 * clicks this anchor.
 	 *
@@ -96,18 +99,19 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 7.0.2
 	 */
 	public void setAutodisable(String autodisable) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable: null, autodisable)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.autodisable : null, autodisable)) {
 			initAuxInfo().autodisable = autodisable;
 			smartUpdate("autodisable", getAutodisable());
 		}
 	}
-	
+
 	/** Returns the direction.
 	 * <p>Default: "normal".
 	 */
 	public String getDir() {
-		return _auxinf != null ? _auxinf.dir: "normal";
+		return _auxinf != null ? _auxinf.dir : "normal";
 	}
+
 	/** Sets the direction to layout with image.
 	 * @param dir either "normal" or "reverse".
 	 */
@@ -115,7 +119,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (!"normal".equals(dir) && !"reverse".equals(dir))
 			throw new WrongValueException(dir);
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.dir: "normal", dir)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.dir : "normal", dir)) {
 			initAuxInfo().dir = dir;
 			smartUpdate("dir", getDir());
 		}
@@ -128,14 +132,15 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>If it is not null, the onClick event won't be sent.
 	 */
 	public String getHref() {
-		return _auxinf != null ? _auxinf.href: null;
+		return _auxinf != null ? _auxinf.href : null;
 	}
+
 	/** Sets the href.
 	 */
 	public void setHref(String href) {
 		if (href != null && href.length() == 0)
 			href = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.href: null, href)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.href : null, href)) {
 			initAuxInfo().href = href;
 			smartUpdate("href", new EncodedHref()); //Bug 1850895
 		}
@@ -149,8 +154,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>Default: null.
 	 */
 	public String getTarget() {
-		return _auxinf != null ? _auxinf.target: null;
+		return _auxinf != null ? _auxinf.target : null;
 	}
+
 	/** Sets the target frame or window.
 	 * @param target the name of the frame or window to hyperlink.
 	 */
@@ -158,7 +164,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (target != null && target.length() == 0)
 			target = null;
 
-		if (!Objects.equals(_auxinf != null ? _auxinf.target: null, target)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.target : null, target)) {
 			initAuxInfo().target = target;
 			smartUpdate("target", getTarget());
 		}
@@ -168,12 +174,13 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * <p>Default: 0 (means the same as browser's default).
 	 */
 	public int getTabindex() {
-		return _auxinf != null ? _auxinf.tabindex: 0;
+		return _auxinf != null ? _auxinf.tabindex : 0;
 	}
+
 	/** Sets the tab order of this component.
 	 */
 	public void setTabindex(int tabindex) throws WrongValueException {
-		if ((_auxinf != null ? _auxinf.tabindex: 0) != tabindex) {
+		if ((_auxinf != null ? _auxinf.tabindex : 0) != tabindex) {
 			initAuxInfo().tabindex = tabindex;
 			smartUpdate("tabindex", getTabindex());
 		}
@@ -181,21 +188,20 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	private String getEncodedHref() {
 		final Desktop dt = getDesktop();
-		return _auxinf != null && _auxinf.href != null && dt != null ?
-				dt.getExecution().encodeURL(_auxinf.href): null;
-			//if desktop is null, it doesn't belong to any execution
+		return _auxinf != null && _auxinf.href != null && dt != null ? dt.getExecution().encodeURL(_auxinf.href) : null;
+		//if desktop is null, it doesn't belong to any execution
 	}
 
 	//-- super --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		int v;
 		if ((v = getTabindex()) != 0)
 			renderer.render("tabindex", v);
 		String s;
-		if (!"normal".equals(s = getDir())) render(renderer, "dir", s);
+		if (!"normal".equals(s = getDir()))
+			render(renderer, "dir", s);
 
 		render(renderer, "disabled", isDisabled());
 		render(renderer, "autodisable", getAutodisable());
@@ -205,7 +211,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
-	
+
 	protected void renderCrawlable(String label) throws java.io.IOException {
 		//does nothing since generated in renderProperties
 	}
@@ -218,7 +224,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	//Component//
 	public String getZclass() {
-		return _zclass != null ? _zclass: "z-a";
+		return _zclass != null ? _zclass : "z-a";
 	}
 
 	private class EncodedHref implements org.zkoss.zk.au.DeferredValue {
@@ -226,6 +232,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			return getEncodedHref();
 		}
 	}
+
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String dir = "normal";
 		private String href, target;

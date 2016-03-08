@@ -28,21 +28,20 @@ import org.zkoss.zk.ui.UiException;
  * @author Ian Y.T Tsai(zanyking)
  *
  */
-public class ImageContentConverter implements Serializable, Converter<Object, Object, org.zkoss.zul.Image>{
+public class ImageContentConverter implements Serializable, Converter<Object, Object, org.zkoss.zul.Image> {
 
-	
 	public Object coerceToUi(Object beanProp, org.zkoss.zul.Image imgComp, BindContext ctx) {
-		if(beanProp==null){
+		if (beanProp == null) {
 			return null;
-			
-		} else if(beanProp instanceof org.zkoss.image.Image){
+
+		} else if (beanProp instanceof org.zkoss.image.Image) {
 			return beanProp;
-			
-		}else if(beanProp instanceof RenderedImage){
-			RenderedImage awtImg = (RenderedImage)beanProp;
+
+		} else if (beanProp instanceof RenderedImage) {
+			RenderedImage awtImg = (RenderedImage) beanProp;
 			try {
-				 return Images.encode("a.png", awtImg);
-				
+				return Images.encode("a.png", awtImg);
+
 			} catch (java.io.IOException ex) {
 				throw UiException.Aide.wrap(ex);
 			}
@@ -50,7 +49,6 @@ public class ImageContentConverter implements Serializable, Converter<Object, Ob
 		return beanProp;
 	}
 
-	
 	public Object coerceToBean(Object compAttr, org.zkoss.zul.Image imgComp, BindContext ctx) {
 		return compAttr;
 	}

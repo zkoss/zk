@@ -16,19 +16,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.hibernate;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Library;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
 
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.cfg.AnnotationConfiguration;
 /**
  * <p>Utility to access Hibernate Session. This implementation works with the Hibernate's 
  * thread session context (version 3.1+). That is, you have to specified 
@@ -63,36 +63,36 @@ public class HibernateUtil {
 	 */
 	public static final String CONFIG = "HibernateUtil.config";
 	private static final Logger log = LoggerFactory.getLogger(HibernateUtil.class);
-	
+
 	private static SessionFactory _factory;
 
 	/**
 	 * Get the singleton hibernate Session Factory.
 	 */
 	public static SessionFactory getSessionFactory() {
-		return initSessionFactory((WebApp)null);
+		return initSessionFactory((WebApp) null);
 	}
-	
+
 	/**
 	 * Wrapping HibernateUtil.getSessionFactory().getCurrentSession() into a simple API.
 	 */
 	public static Session currentSession() throws HibernateException {
 		return getSessionFactory().getCurrentSession();
 	}
-	
+
 	/**
 	 * Wrapping HibernateUtil.getSessionFactory().getCurrentSession().close() into a simple API.
 	 */
 	public static void closeSession() throws HibernateException {
 		currentSession().close();
 	}
-	
-	 /**
-	 * Used in {@link HibernateSessionFactoryListener} to init
-	 * Hibernate SessionFactory.
-	 * @param app web application, given null will try to get it from current Execution.
-	 * @since 3.0.1
-	 */
+
+	/**
+	* Used in {@link HibernateSessionFactoryListener} to init
+	* Hibernate SessionFactory.
+	* @param app web application, given null will try to get it from current Execution.
+	* @since 3.0.1
+	*/
 	/* package */ static SessionFactory initSessionFactory(WebApp app) {
 		if (_factory == null) {
 			//read hibernate.config preference
@@ -115,13 +115,14 @@ public class HibernateUtil {
 		}
 		return _factory;
 	}
+
 	/*package*/ static SessionFactory initSessionFactory(String resource) {
 		if (_factory == null) {
 			try {
-				_factory = resource == null ? 
-					new AnnotationConfiguration().configure().buildSessionFactory() :
-					new AnnotationConfiguration().configure(resource).buildSessionFactory();
-				log.debug("Hibernate configuration file loaded: "+ (resource == null ? "hibernate.cfg.xml" : resource));
+				_factory = resource == null ? new AnnotationConfiguration().configure().buildSessionFactory()
+						: new AnnotationConfiguration().configure(resource).buildSessionFactory();
+				log.debug(
+						"Hibernate configuration file loaded: " + (resource == null ? "hibernate.cfg.xml" : resource));
 			} catch (Throwable ex) {
 				// Make sure you log the exception, as it might be swallowed
 				log.error("Initial SessionFactory creation failed." + ex);

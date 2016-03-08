@@ -35,8 +35,9 @@ public class AuDownload extends AuResponse {
 	 * @param url the URI of the file to download, never null.
 	 */
 	public AuDownload(String url) {
-		super("download", new String[] {url});
+		super("download", new String[] { url });
 	}
+
 	/** Constructs with a deferred URI.
 	 * To work with WebSphere 5.1 and some other old server, it is
 	 * suggested to use {@link #AuDownload(DeferredValue)} and

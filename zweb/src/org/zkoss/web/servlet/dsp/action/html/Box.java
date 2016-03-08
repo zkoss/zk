@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.action.html;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.zkoss.web.servlet.dsp.DspException;
 import org.zkoss.web.servlet.dsp.action.AbstractAction;
@@ -43,6 +43,7 @@ public class Box extends AbstractAction {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the horizontal alignment.
 	 */
 	public void setAlign(String align) {
@@ -55,6 +56,7 @@ public class Box extends AbstractAction {
 	public String getColor() {
 		return _color;
 	}
+
 	/** Sets the color.
 	 * <p>You might use any string that HTML supports.
 	 */
@@ -68,6 +70,7 @@ public class Box extends AbstractAction {
 	public boolean isShadow() {
 		return _shadow;
 	}
+
 	/** Sets whether this box has the shadow effect.
 	 */
 	public void setShadow(boolean shadow) {
@@ -80,6 +83,7 @@ public class Box extends AbstractAction {
 	public String getSpacing() {
 		return _spacing;
 	}
+
 	/** Sets the spacing.
 	 */
 	public void setSpacing(String spacing) {
@@ -92,6 +96,7 @@ public class Box extends AbstractAction {
 	public String getWidth() {
 		return _width;
 	}
+
 	/** Sets the width.
 	 */
 	public void setWidth(String width) {
@@ -104,14 +109,14 @@ public class Box extends AbstractAction {
 	public String getCaption() {
 		return _caption;
 	}
+
 	/** Sets the caption.
 	 */
 	public void setCaption(String caption) {
 		_caption = caption;
 	}
 
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!isEffective())
 			return;
 

@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event cause by user's check a state at the client.
@@ -35,8 +35,7 @@ public class CheckEvent extends Event {
 	 */
 	public static final CheckEvent getCheckEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new CheckEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getBoolean(data, ""));
+		return new CheckEvent(request.getCommand(), request.getComponent(), AuRequests.getBoolean(data, ""));
 	}
 
 	/** Constructs a check-relevant event.
@@ -46,6 +45,7 @@ public class CheckEvent extends Event {
 		super(name, target);
 		_checked = checked;
 	}
+
 	/** Returns whether the state is checked.
 	 */
 	public final boolean isChecked() {

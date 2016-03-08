@@ -14,11 +14,7 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 
 import org.zkoss.bind.annotation.Immutable;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ForEachStatus;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Row;
-import org.zkoss.zul.Treeitem;
 
 /**
  * The Class AbstractForEachStatus.
@@ -28,31 +24,36 @@ import org.zkoss.zul.Treeitem;
  */
 //it is immutable
 @Immutable
-public abstract class AbstractForEachStatus implements ForEachStatus, Serializable{
+public abstract class AbstractForEachStatus implements ForEachStatus, Serializable {
 	private static final long serialVersionUID = 1L;
+
 	//not supported
-	public ForEachStatus getPrevious(){
+	public ForEachStatus getPrevious() {
 		return null;
 	}
-	
+
 	//default 0
-	public Integer getBegin(){
+	public Integer getBegin() {
 		return 0;
 	}
-	
+
 	// default 1
 	public Integer getStep() {
 		return null;
 	}
+
 	public boolean isFirst() {
 		return getCount() == 1;
 	}
+
 	public boolean isLast() {
 		return (getIndex() + 1) == getEnd();
 	}
+
 	public Object getEach() {
 		return getCurrent();
 	}
+
 	public int getCount() {
 		return getIndex() + 1;
 	}

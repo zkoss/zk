@@ -35,7 +35,7 @@ public interface FormStatus {
 	 * @since 8.0.0
 	 */
 	public void submit(BindContext ctx);
-	
+
 	/**
 	 * Returns the origin object of the form object
 	 * @since 8.0.0

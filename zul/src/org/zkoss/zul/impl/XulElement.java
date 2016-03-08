@@ -34,7 +34,7 @@ import org.zkoss.zul.Popup;
  * 
  * @author tomyeh
  */
-abstract public class XulElement extends HtmlBasedComponent {
+public abstract class XulElement extends HtmlBasedComponent {
 	/** AuxInfo: use a class (rather than multiple member) to save footprint */
 	private AuxInfo _auxinf;
 
@@ -43,8 +43,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @since 3.0.6
 	 */
 	public String getCtrlKeys() {
-		return _auxinf != null ? _auxinf.ctrlKeys: null;
+		return _auxinf != null ? _auxinf.ctrlKeys : null;
 	}
+
 	/** Sets what keystrokes to intercept.
 	 *
 	 * <p>The string could be a combination of the following:
@@ -101,7 +102,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public void setCtrlKeys(String ctrlKeys) throws UiException {
 		if (ctrlKeys != null && ctrlKeys.length() == 0)
 			ctrlKeys = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.ctrlKeys: null, ctrlKeys)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.ctrlKeys : null, ctrlKeys)) {
 			initAuxInfo().ctrlKeys = ctrlKeys;
 			smartUpdate("ctrlKeys", getCtrlKeys());
 		}
@@ -115,6 +116,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getContext() {
 		return _auxinf != null && _auxinf.context != null ? (String) _auxinf.context.getValue() : null;
 	}
+
 	/** Sets the ID of the popup ({@link Popup}) that should appear
 	 * when the user right-clicks on the element (a.k.a., context menu).
 	 *
@@ -165,11 +167,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setContext(Popup)
 	 */
 	public void setContext(String context) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.context: null, context)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.context : null, context)) {
 			initAuxInfo().context = new DeferedUuid(context);
 			smartUpdate("context", _auxinf.context);
 		}
 	}
+
 	/** Sets the UUID of the popup that should appear 
 	 * when the user right-clicks on the element (a.k.a., context menu).
 	 *
@@ -180,11 +183,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setContext(Popup popup) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.context: null, popup)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.context : null, popup)) {
 			initAuxInfo().context = new DeferedUuid(popup);
 			smartUpdate("context", _auxinf.context);
 		}
 	}
+
 	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
@@ -193,6 +197,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 	public String getPopup() {
 		return _auxinf != null && _auxinf.popup != null ? (String) _auxinf.popup.getValue() : null;
 	}
+
 	/** Sets the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
@@ -232,11 +237,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setPopup(String popup) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.popup: null, popup)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.popup : null, popup)) {
 			initAuxInfo().popup = new DeferedUuid(popup);
 			smartUpdate("popup", _auxinf.popup);
 		}
 	}
+
 	/** Sets the UUID of the popup that should appear
 	 * when the user clicks on the element.
 	 *
@@ -246,11 +252,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * @see #setPopup(String)
 	 */
 	public void setPopup(Popup popup) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.popup: null, popup)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.popup : null, popup)) {
 			initAuxInfo().popup = new DeferedUuid(popup);
 			smartUpdate("popup", _auxinf.popup);
 		}
 	}
+
 	/** Returns the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 * The tooltip will automatically disappear when the mouse is moved away.
@@ -258,8 +265,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 * <p>Default: null (no tooltip).
 	 */
 	public String getTooltip() {
-		return _auxinf != null && _auxinf.tooltip != null ? (String)  _auxinf.tooltip.getValue() : null;
+		return _auxinf != null && _auxinf.tooltip != null ? (String) _auxinf.tooltip.getValue() : null;
 	}
+
 	/** Sets the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 *
@@ -304,11 +312,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 */
 	public void setTooltip(String tooltip) {
 		// ZK-816
-		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip: null, tooltip)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip : null, tooltip)) {
 			initAuxInfo().tooltip = new DeferedUuid(tooltip);
 			smartUpdate("tooltip", _auxinf.tooltip);
 		}
 	}
+
 	/** Sets the UUID of the popup that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 *
@@ -319,15 +328,14 @@ abstract public class XulElement extends HtmlBasedComponent {
 	 */
 	public void setTooltip(Popup popup) {
 		// ZK-816, component keep wrong tooltip reference if set tooltip before tooltip attached
-		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip: null, popup)) {
+		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip : null, popup)) {
 			initAuxInfo().tooltip = new DeferedUuid(popup);
 			smartUpdate("tooltip", _auxinf.tooltip);
 		}
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "popup", getPopup());
@@ -337,14 +345,16 @@ abstract public class XulElement extends HtmlBasedComponent {
 		render(renderer, "ctrlKeys", getCtrlKeys());
 	}
 
-
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+
 	static {
 		_properties.put("context", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object context) {
-                if(context instanceof String)((XulElement) cmp).setContext((String)context);
-                else if(context instanceof Popup)((XulElement) cmp).setContext((Popup)context);
+				if (context instanceof String)
+					((XulElement) cmp).setContext((String) context);
+				else if (context instanceof Popup)
+					((XulElement) cmp).setContext((Popup) context);
 			}
 
 			public String getValue(Component cmp) {
@@ -353,8 +363,10 @@ abstract public class XulElement extends HtmlBasedComponent {
 		});
 		_properties.put("popup", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object popup) {
-                if(popup instanceof String)((XulElement) cmp).setPopup((String)popup);
-                else if(popup instanceof Popup)((XulElement) cmp).setPopup((Popup)popup);
+				if (popup instanceof String)
+					((XulElement) cmp).setPopup((String) popup);
+				else if (popup instanceof Popup)
+					((XulElement) cmp).setPopup((Popup) popup);
 			}
 
 			public String getValue(Component cmp) {
@@ -363,10 +375,12 @@ abstract public class XulElement extends HtmlBasedComponent {
 		});
 
 		_properties.put("tooltip", new ObjectPropertyAccess() {
-            public void setValue(Component cmp, Object tooltip) {
-                if(tooltip instanceof String)((XulElement) cmp).setTooltip((String)tooltip);
-                else if(tooltip instanceof Popup)((XulElement) cmp).setTooltip((Popup)tooltip);
-            }
+			public void setValue(Component cmp, Object tooltip) {
+				if (tooltip instanceof String)
+					((XulElement) cmp).setTooltip((String) tooltip);
+				else if (tooltip instanceof Popup)
+					((XulElement) cmp).setTooltip((Popup) tooltip);
+			}
 
 			public String getValue(Component cmp) {
 				return ((XulElement) cmp).getTooltip();
@@ -393,9 +407,9 @@ abstract public class XulElement extends HtmlBasedComponent {
 
 	//Cloneable//
 	public Object clone() {
-		final XulElement clone = (XulElement)super.clone();
+		final XulElement clone = (XulElement) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
 
@@ -404,6 +418,7 @@ abstract public class XulElement extends HtmlBasedComponent {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
+
 	/** Merge multiple members into an single object (and create on demand)
 	 * to minimize the footprint
 	 * @since 5.0.4
@@ -426,51 +441,52 @@ abstract public class XulElement extends HtmlBasedComponent {
 			}
 		}
 	}
-	
-	private static class DeferedUuid implements DeferredValue,Serializable{
+
+	private static class DeferedUuid implements DeferredValue, Serializable {
 		private static final long serialVersionUID = -122378869909137783L;
-		
+
 		private Popup popup;
 		private String popupString;
+
 		public DeferedUuid(String popupString) {
 			super();
 			this.popupString = popupString;
 		}
-		
+
 		public DeferedUuid(Popup tooltip) {
 			super();
 			this.popup = tooltip;
 		}
-		
+
 		public Object getValue() {
-			if( popupString != null){
+			if (popupString != null) {
 				return popupString;
-			}else if(popup != null){
+			} else if (popup != null) {
 				return "uuid(" + popup.getUuid() + ")";
-			}else{
+			} else {
 				return null;
 			}
 		}
-		
+
 		public int hashCode() {
-			if(popupString != null) {
+			if (popupString != null) {
 				return popupString.hashCode();
-			}else if(popup != null){
+			} else if (popup != null) {
 				return popup.hashCode();
-			}else{
+			} else {
 				return super.hashCode();
 			}
 		}
-		
+
 		public boolean equals(Object obj) {
-			
-			if(obj instanceof String){
+
+			if (obj instanceof String) {
 				return Objects.equals(popupString, obj);
-			}else if(obj instanceof Popup){
+			} else if (obj instanceof Popup) {
 				return Objects.equals(popup, obj);
-			}else if(obj == null){
+			} else if (obj == null) {
 				return popup == null && popupString == null;
-			}else{
+			} else {
 				return false;
 			}
 		}

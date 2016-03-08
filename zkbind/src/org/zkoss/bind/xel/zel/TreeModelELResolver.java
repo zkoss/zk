@@ -30,108 +30,101 @@ import org.zkoss.zul.TreeModel;
  * @since 6.0.0
  */
 public class TreeModelELResolver extends ELResolver {
-	
+
 	private static final Class<?> INTEGER_ARRAY = new int[0].getClass();
-	
-    
-    public Object getValue(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
 
-        if (base instanceof TreeModel<?>) {
-        	TreeModel<?> treemodel = (TreeModel<?>) base;
-            int[] path = coerce(property);
-            if (path==null) {
-                return null;
-            }
-            context.setPropertyResolved(true);
-            return treemodel.getChild(path);
-        }
+	public Object getValue(ELContext context, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
+		if (context == null) {
+			throw new NullPointerException();
+		}
 
-        return null;
-    }
+		if (base instanceof TreeModel<?>) {
+			TreeModel<?> treemodel = (TreeModel<?>) base;
+			int[] path = coerce(property);
+			if (path == null) {
+				return null;
+			}
+			context.setPropertyResolved(true);
+			return treemodel.getChild(path);
+		}
 
-    
-    public Class<?> getType(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
+		return null;
+	}
 
-        if (base instanceof TreeModel<?>) {
-        	int[] path = coerce(property);
-            if (path == null) return null;
-            context.setPropertyResolved(true);
-            return Object.class;
-        }
+	public Class<?> getType(ELContext context, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
+		if (context == null) {
+			throw new NullPointerException();
+		}
 
-        return null;
-    }
+		if (base instanceof TreeModel<?>) {
+			int[] path = coerce(property);
+			if (path == null)
+				return null;
+			context.setPropertyResolved(true);
+			return Object.class;
+		}
 
-    
-    public void setValue(ELContext context, Object base, Object property,
-            Object value) throws NullPointerException,
-            PropertyNotFoundException, PropertyNotWritableException,
-            ELException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-    }
+		return null;
+	}
 
-    
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-            throws NullPointerException, PropertyNotFoundException, ELException {
-    	return true;
-    }
+	public void setValue(ELContext context, Object base, Object property, Object value)
+			throws NullPointerException, PropertyNotFoundException, PropertyNotWritableException, ELException {
+		if (context == null) {
+			throw new NullPointerException();
+		}
+	}
 
-    
-    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-//        if (base instanceof TreeModel<?>) {
-//            FeatureDescriptor[] descs = new FeatureDescriptor[1];
-//            descs[0] = new FeatureDescriptor();
-//            descs[0].setDisplayName("["+0+"]");
-//            descs[0].setExpert(false);
-//            descs[0].setHidden(false);
-//            descs[0].setName("0");
-//            descs[0].setPreferred(true);
-//            descs[0].setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.FALSE);
-//            descs[0].setValue(TYPE, _pathClass.getClass());
-//            return Arrays.asList(descs).iterator();
-//        }
-        return null;
-    }
+	public boolean isReadOnly(ELContext context, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
+		return true;
+	}
 
-    
-    public Class<?> getCommonPropertyType(ELContext context, Object base) {
-        if (base instanceof TreeModel<?>) { // implies base != null
-            return INTEGER_ARRAY.getClass();
-        }
-        return null;
-    }
+	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
+		//        if (base instanceof TreeModel<?>) {
+		//            FeatureDescriptor[] descs = new FeatureDescriptor[1];
+		//            descs[0] = new FeatureDescriptor();
+		//            descs[0].setDisplayName("["+0+"]");
+		//            descs[0].setExpert(false);
+		//            descs[0].setHidden(false);
+		//            descs[0].setName("0");
+		//            descs[0].setPreferred(true);
+		//            descs[0].setValue(RESOLVABLE_AT_DESIGN_TIME, Boolean.FALSE);
+		//            descs[0].setValue(TYPE, _pathClass.getClass());
+		//            return Arrays.asList(descs).iterator();
+		//        }
+		return null;
+	}
 
-    private static final int[] coerce(Object property) {
-    	
-    	if (INTEGER_ARRAY.isInstance(property)) {//quick casting for int[]
-            return (int[])property;
-        }
-    	
-    	final Class<?> clz = property.getClass(); 
-    	if(clz.isArray()){
-    		int s  = Array.getLength(property);
-    		int[] path = new int[s];
-    		for(int i=0;i<s;i++){
-    			try{
-    				path[i] = ((Integer)Classes.coerce(Integer.class, Array.get(property, i))).intValue();
-    			}catch(Exception x){
-    				throw new PropertyNotFoundException(x.getMessage(),x);
-    			}
-    		}
-    		return path;
-    	}
-        
-        //just ignore other types (especially a string)
-        return null;
-    }
+	public Class<?> getCommonPropertyType(ELContext context, Object base) {
+		if (base instanceof TreeModel<?>) { // implies base != null
+			return INTEGER_ARRAY.getClass();
+		}
+		return null;
+	}
+
+	private static final int[] coerce(Object property) {
+
+		if (INTEGER_ARRAY.isInstance(property)) { //quick casting for int[]
+			return (int[]) property;
+		}
+
+		final Class<?> clz = property.getClass();
+		if (clz.isArray()) {
+			int s = Array.getLength(property);
+			int[] path = new int[s];
+			for (int i = 0; i < s; i++) {
+				try {
+					path[i] = ((Integer) Classes.coerce(Integer.class, Array.get(property, i))).intValue();
+				} catch (Exception x) {
+					throw new PropertyNotFoundException(x.getMessage(), x);
+				}
+			}
+			return path;
+		}
+
+		//just ignore other types (especially a string)
+		return null;
+	}
 }

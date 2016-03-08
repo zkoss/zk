@@ -43,13 +43,13 @@ public class BindingSaveEvent extends Event {
 		_binding = binding;
 		_value = value;
 	}
-	
+
 	/** Gets the reference component that "trigger" sending of this event.
 	 */
 	public Component getReference() {
 		return _ref;
 	}
-	
+
 	/** Gets the associate binding of this event.
 	 * The property that causes the binding can be found by use of
 	 * {@link Binding#getExpression}.
@@ -59,7 +59,7 @@ public class BindingSaveEvent extends Event {
 	public Binding getBinding() {
 		return _binding;
 	}
-	
+
 	/** Gets the value to be saved after "onBindingSave" event.
 	 */
 	public Object getValue() {

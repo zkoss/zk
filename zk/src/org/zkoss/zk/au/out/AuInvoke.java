@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to ask the client to invoke a function.
@@ -48,8 +48,9 @@ public class AuInvoke extends AuResponse {
 	 * @param function the function name
 	 */
 	public AuInvoke(Component comp, String function) {
-		super("invoke", comp, new Object[] {comp, function});
+		super("invoke", comp, new Object[] { comp, function });
 	}
+
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one argument.
 	 *
@@ -70,9 +71,9 @@ public class AuInvoke extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, Object arg) {
-		super("invoke", comp,
-			new Object[] {comp, function, arg});
+		super("invoke", comp, new Object[] { comp, function, arg });
 	}
+
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one boolean argument.
 	 *
@@ -84,9 +85,9 @@ public class AuInvoke extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, boolean arg) {
-		super("invoke", comp,
-			new Object[] {comp, function, Boolean.valueOf(arg)});
+		super("invoke", comp, new Object[] { comp, function, Boolean.valueOf(arg) });
 	}
+
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one int argument.
 	 *
@@ -97,9 +98,9 @@ public class AuInvoke extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, int arg) {
-		super("invoke", comp,
-			new Object[] {comp, function, new Integer(arg)});
+		super("invoke", comp, new Object[] { comp, function, new Integer(arg) });
 	}
+
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one double argument.
 	 *
@@ -110,9 +111,9 @@ public class AuInvoke extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, double arg) {
-		super("invoke", comp,
-			new Object[] {comp, function, new Double(arg)});
+		super("invoke", comp, new Object[] { comp, function, new Double(arg) });
 	}
+
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * two arguments.
 	 *
@@ -127,9 +128,9 @@ public class AuInvoke extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, Object arg1, Object arg2) {
-		super("invoke", comp, new Object[] {comp, function,
-			arg1, arg2});
+		super("invoke", comp, new Object[] { comp, function, arg1, arg2 });
 	}
+
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * three arguments.
 	 *
@@ -144,11 +145,10 @@ public class AuInvoke extends AuResponse {
 	 * @param arg3 the 3rd additional argument.
 	 * @since 5.0.0
 	 */
-	public AuInvoke(Component comp, String function, Object arg1, Object arg2,
-	Object arg3) {
-		super("invoke", comp, new Object[] {comp, function,
-			arg1, arg2, arg3});
+	public AuInvoke(Component comp, String function, Object arg1, Object arg2, Object arg3) {
+		super("invoke", comp, new Object[] { comp, function, arg1, arg2, arg3 });
 	}
+
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * an array of the given arguments.
 	 *
@@ -165,6 +165,7 @@ public class AuInvoke extends AuResponse {
 	public AuInvoke(Component comp, String function, Object... args) {
 		super("invoke", comp, toData(comp, function, args));
 	}
+
 	/** Construct AuInvoke to call a client function with variable number of
 	 * arguments.
 	 * Notice that the component itself will be inserted in front of
@@ -181,6 +182,7 @@ public class AuInvoke extends AuResponse {
 	public AuInvoke(Component comp, String function, String... args) {
 		super("invoke", comp, toData(comp, function, args));
 	}
+
 	/** Construct AuInvoke to call a global function at the client with
 	 * the given arguments.
 	 * @param function the function name
@@ -192,11 +194,11 @@ public class AuInvoke extends AuResponse {
 	 * @since 6.0.0
 	 */
 	public AuInvoke(String function, Object... args) {
-		super("invoke", (Component)null, toData(null, function, args));
+		super("invoke", (Component) null, toData(null, function, args));
 	}
-	private static final
-	Object[] toData(Component comp, String function, Object[] args) {
-		final Object[] data = new Object[2 + (args != null ? args.length: 0)];
+
+	private static final Object[] toData(Component comp, String function, Object[] args) {
+		final Object[] data = new Object[2 + (args != null ? args.length : 0)];
 		data[0] = comp;
 		data[1] = function;
 		if (args != null)

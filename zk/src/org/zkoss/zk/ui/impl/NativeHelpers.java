@@ -19,9 +19,9 @@ package org.zkoss.zk.ui.impl;
 import java.util.Collection;
 import java.util.Map;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.html.HTMLs;
 import org.zkoss.idom.Namespace;
+import org.zkoss.lang.Objects;
 
 /**
  * Utilities for implementing {@link org.zkoss.zk.ui.ext.Native.Helper}.
@@ -40,10 +40,10 @@ public class NativeHelpers {
 	 * to be generated, or null if not.
 	 * Note: EL expressions is not allowed
 	 */
-	public static final
-	void getAttributes(StringBuffer sb, Map<String, Object> props, Collection<Namespace> namespaces) {
+	public static final void getAttributes(StringBuffer sb, Map<String, Object> props,
+			Collection<Namespace> namespaces) {
 		if (namespaces != null && !namespaces.isEmpty()) {
-			for (Namespace ns: namespaces) {
+			for (Namespace ns : namespaces) {
 				sb.append(" xmlns");
 				if (ns.getPrefix().length() > 0)
 					sb.append(':').append(ns.getPrefix());
@@ -52,9 +52,8 @@ public class NativeHelpers {
 		}
 
 		if (props != null && !props.isEmpty()) {
-			for (Map.Entry<String, Object> me: props.entrySet()) {
-				HTMLs.appendAttribute(sb,
-					me.getKey(), Objects.toString(me.getValue()), false);
+			for (Map.Entry<String, Object> me : props.entrySet()) {
+				HTMLs.appendAttribute(sb, me.getKey(), Objects.toString(me.getValue()), false);
 			}
 		}
 	}

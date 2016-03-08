@@ -15,7 +15,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 
@@ -32,6 +31,7 @@ public class Separator extends XulElement {
 
 	public Separator() {
 	}
+
 	/**
 	 * @param orient either "horizontal" or "vertical".
 	 */
@@ -45,6 +45,7 @@ public class Separator extends XulElement {
 	public String getOrient() {
 		return _orient;
 	}
+
 	/** Sets the orient.
 	 * @param orient either "horizontal" or "vertical".
 	 */
@@ -57,12 +58,14 @@ public class Separator extends XulElement {
 			smartUpdate("orient", _orient);
 		}
 	}
+
 	/** Returns whether it is a horizontal separator.
 	 * @since 3.0.4
 	 */
 	public boolean isHorizontal() {
 		return "horizontal".equals(getOrient());
 	}
+
 	/** Returns whether it is a vertical separator.
 	 * @since 3.0.4
 	 */
@@ -76,6 +79,7 @@ public class Separator extends XulElement {
 	public boolean isBar() {
 		return _bar;
 	}
+
 	/** Sets  whether to display a visual bar as the separator.
 	 */
 	public void setBar(boolean bar) {
@@ -91,13 +95,16 @@ public class Separator extends XulElement {
 	public String getSpacing() {
 		return _spacing;
 	}
+
 	/** Sets the spacing.
 	 * @param spacing the spacing (such as "0", "5px", "3pt")
 	 */
 	public void setSpacing(String spacing) {
 		if (spacing != null)
-			if (spacing.length() == 0) spacing = null;
-			else spacing = spacing.trim();
+			if (spacing.length() == 0)
+				spacing = null;
+			else
+				spacing = spacing.trim();
 
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
@@ -109,8 +116,8 @@ public class Separator extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-separator" : _zclass;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "spacing", _spacing);

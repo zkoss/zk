@@ -32,12 +32,12 @@ public interface SingleValueCategoryModel extends ChartModel {
 	 * @param index the index of the category.
 	 */
 	public Comparable<?> getCategory(int index);
-		
+
 	/**
 	 * Get categories as a collection.
 	 */
 	public Collection<Comparable<?>> getCategories();
-	
+
 	/**
 	 * Get value of the specified category.
 	 * @param category the pie category.
@@ -54,9 +54,9 @@ public interface SingleValueCategoryModel extends ChartModel {
 	/**
 	 * remove the value of the specified category.
 	 * @param category the pie category.
-	 */	
+	 */
 	public void removeValue(Comparable<?> category);
-	
+
 	/**
 	 * clear the model.
 	 */

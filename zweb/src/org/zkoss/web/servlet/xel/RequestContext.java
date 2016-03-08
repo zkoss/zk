@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.xel;
 
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -41,15 +41,19 @@ public interface RequestContext {
 	/** Returns the writer, never null.
 	 */
 	public Writer getOut() throws IOException;
+
 	/** Returns the request, or null if not available.
 	 */
 	public ServletRequest getRequest();
+
 	/** Returns the response, or null if not available.
 	 */
 	public ServletResponse getResponse();
+
 	/** Returns the request, or null if not available.
 	 */
 	public ServletContext getServletContext();
+
 	/** Returns the variable resolver.
 	 */
 	public VariableResolver getVariableResolver();

@@ -14,16 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.http;
 
-import java.util.Map;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 
@@ -36,35 +36,36 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 /*package*/ class TemporaryExecution extends ExecutionImpl {
 	/** Constructor.
 	 */
-	/*package*/ TemporaryExecution(ServletContext ctx, HttpServletRequest request,
-	HttpServletResponse response, Desktop desktop) {
+	/*package*/ TemporaryExecution(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			Desktop desktop) {
 		super(ctx, request, response, desktop, null);
 	}
+
 	public void sendRedirect(String uri) { //getUiEngine not ready yet
 		try {
-			((HttpServletResponse)getNativeResponse()).sendRedirect(
-				uri != null ? uri: "");
+			((HttpServletResponse) getNativeResponse()).sendRedirect(uri != null ? uri : "");
 			setVoided(true);
 		} catch (IOException ex) {
 			throw new UiException(ex);
 		}
 	}
+
 	public void sendRedirect(String uri, String target) {
 		sendRedirect(uri); //target is ignored (not supported)
 	}
-	public void forward(Writer out, String page, Map<String, ?> params, int mode)
-	throws IOException {
+
+	public void forward(Writer out, String page, Map<String, ?> params, int mode) throws IOException {
 		final Execution exec = ExecutionsCtrl.getCurrent();
 		ExecutionsCtrl.setCurrent(null);
-			//It is fake one and shall not be re-used by forward
+		//It is fake one and shall not be re-used by forward
 		try {
 			super.forward(out, page, params, mode);
 		} finally {
 			ExecutionsCtrl.setCurrent(exec);
 		}
 	}
-	public void include(Writer out, String page, Map<String, ?> params, int mode)
-	throws IOException {
+
+	public void include(Writer out, String page, Map<String, ?> params, int mode) throws IOException {
 		throw new IllegalStateException("include not allowd in DesktopInit");
 	}
 }

@@ -12,12 +12,12 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Desktop;
 
 /**
  * A response to ask client to send the specified event for all qualified desktops.
@@ -35,8 +35,9 @@ public class AuEchoGlobal extends AuResponse {
 	 * @param dt the desktop to receive the event.
 	 */
 	public AuEchoGlobal(String evtnm, String data, Desktop dt) {
-		super("echoGx", new String[] {evtnm, data, dt.getId()});
+		super("echoGx", new String[] { evtnm, data, dt.getId() });
 	}
+
 	/**
 	 * @param evtnm the event name to echo back
 	 * @param data the data to sent with the event when echoed back
@@ -45,11 +46,12 @@ public class AuEchoGlobal extends AuResponse {
 	public AuEchoGlobal(String evtnm, String data, Collection<Desktop> dts) {
 		super("echoGx", toArray(evtnm, data, dts));
 	}
+
 	private static String[] toArray(String evtnm, String data, Collection<Desktop> dts) {
 		final List<String> l = new LinkedList<String>();
 		l.add(evtnm);
 		l.add(data);
-		for (Desktop desktop: dts)
+		for (Desktop desktop : dts)
 			l.add(desktop.getId());
 		return l.toArray(new String[l.size()]);
 	}

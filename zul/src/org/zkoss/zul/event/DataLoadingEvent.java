@@ -38,9 +38,8 @@ public class DataLoadingEvent extends Event {
 	 */
 	public static final DataLoadingEvent getDataLoadingEvent(AuRequest request, int preload) {
 		final Map<String, Object> data = request.getData();
-		return new DataLoadingEvent(request.getCommand(),
-			request.getComponent(),
-			AuRequests.getInt(data, "offset", 0), AuRequests.getInt(data, "limit", 20)+preload);
+		return new DataLoadingEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "offset", 0),
+				AuRequests.getInt(data, "limit", 20) + preload);
 	}
 
 	public DataLoadingEvent(String name, Component comp, int offset, int limit) {
@@ -55,7 +54,7 @@ public class DataLoadingEvent extends Event {
 	public int getOffset() {
 		return _offset;
 	}
-	
+
 	/**
 	 * Returns the limit of the data chunk to be loaded.
 	 * @return the limit of the data chunk to be loaded.

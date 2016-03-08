@@ -16,21 +16,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.acegi;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
-
-import org.acegisecurity.ui.AccessDeniedHandler;
-import org.acegisecurity.ui.AccessDeniedHandlerImpl;
-import org.acegisecurity.AccessDeniedException;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import org.acegisecurity.AccessDeniedException;
+import org.acegisecurity.ui.AccessDeniedHandler;
+import org.acegisecurity.ui.AccessDeniedHandlerImpl;
+
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * Used by ExceptionTranslationFilter to handle an
@@ -43,29 +43,29 @@ import javax.servlet.http.HttpServletRequest;
 public class ZkAccessDeniedHandler implements AccessDeniedHandler {
 	private static final String ON_ACCESSDENIED = "onAccessDenied";
 	private String _errorPage;
-	
+
 	public void setErrorPage(String url) {
 		_errorPage = url;
 	}
-	
+
 	public String getErrorPage() {
 		return _errorPage;
 	}
-	
-    public void handle(ServletRequest request, ServletResponse response, AccessDeniedException accessDeniedException)
-        throws IOException, ServletException {
 
-        // Put exception into request scope (perhaps of use to a view)
-        ((HttpServletRequest) request).setAttribute(AccessDeniedHandlerImpl.ACEGI_SECURITY_ACCESS_DENIED_EXCEPTION_KEY,
-            accessDeniedException);
+	public void handle(ServletRequest request, ServletResponse response, AccessDeniedException accessDeniedException)
+			throws IOException, ServletException {
 
-    	final Component comp = (Component) request.getAttribute(ZkEventExceptionFilter.COMPONENT);
+		// Put exception into request scope (perhaps of use to a view)
+		((HttpServletRequest) request).setAttribute(AccessDeniedHandlerImpl.ACEGI_SECURITY_ACCESS_DENIED_EXCEPTION_KEY,
+				accessDeniedException);
+
+		final Component comp = (Component) request.getAttribute(ZkEventExceptionFilter.COMPONENT);
 		if (!comp.isListenerAvailable(ON_ACCESSDENIED, true)) {
 			final EventListener<Event> listener = new ShowWindowEventListener<Event>();
 			comp.setAttribute(ON_ACCESSDENIED, listener);
 			comp.addEventListener(ON_ACCESSDENIED, listener);
 		}
 		final String url = getErrorPage();
-    	Events.postEvent(new Event(ON_ACCESSDENIED, comp, url != null ? url : "~./accessDenied.zul"));
-    }
+		Events.postEvent(new Event(ON_ACCESSDENIED, comp, url != null ? url : "~./accessDenied.zul"));
+	}
 }

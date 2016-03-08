@@ -26,50 +26,51 @@ import org.zkoss.zul.ext.Selectable;
  * @author dennis
  * @since 6.0.0
  */
-public abstract class AbstractSelectedIndexConverter<C extends Component> implements Converter<Object,Object,C>, java.io.Serializable {
+public abstract class AbstractSelectedIndexConverter<C extends Component>
+		implements Converter<Object, Object, C>, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
-	
+
 	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, C comp, BindContext ctx) {
 
 		final ListModel<?> model = getComponentModel(comp);
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
-		if(model !=null && !(model instanceof Selectable)){
+		if (model != null && !(model instanceof Selectable)) {
 			//model has to implement Selectable if binding to selectedItem
-  			throw new UiException("model doesn't implement Selectable");
-  		}
-		
-	  	if (val != null) {
-	  		if(model!=null){
-	  			int index = ((Integer)val).intValue();
-	  			if(index<0){
-	  				Set<Object> sels = ((Selectable<Object>)model).getSelection();
-	  				if(sels!=null && sels.size()>0)
-	  		  			((Selectable<Object>)model).clearSelection();
-	  			}else{
-	  				((Selectable<Object>)model).addToSelection(model.getElementAt(index));
-	  			}
-	  			return IGNORED_VALUE;
-	  		}else{
-	  			return val;
-	  		}
-		  	//not in the item list
-	  	}
-	  	
-	  	//nothing matched, clean the old selection
-	  	if(model!=null){
-	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
-	  		if(sels!=null && sels.size()>0)
-	  			((Selectable<Object>)model).clearSelection();
-	  		return IGNORED_VALUE;
-	  	}
-	  	return val;
+			throw new UiException("model doesn't implement Selectable");
+		}
+
+		if (val != null) {
+			if (model != null) {
+				int index = ((Integer) val).intValue();
+				if (index < 0) {
+					Set<Object> sels = ((Selectable<Object>) model).getSelection();
+					if (sels != null && sels.size() > 0)
+						((Selectable<Object>) model).clearSelection();
+				} else {
+					((Selectable<Object>) model).addToSelection(model.getElementAt(index));
+				}
+				return IGNORED_VALUE;
+			} else {
+				return val;
+			}
+			//not in the item list
+		}
+
+		//nothing matched, clean the old selection
+		if (model != null) {
+			Set<Object> sels = ((Selectable<Object>) model).getSelection();
+			if (sels != null && sels.size() > 0)
+				((Selectable<Object>) model).clearSelection();
+			return IGNORED_VALUE;
+		}
+		return val;
 	}
 
-	abstract protected ListModel<?> getComponentModel(C comp);
+	protected abstract ListModel<?> getComponentModel(C comp);
 
 	public Object coerceToBean(Object val, C comp, BindContext ctx) {
-	 	return val;
+		return val;
 	}
 
 }

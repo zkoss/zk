@@ -28,8 +28,7 @@ public class BinderPropertiesRenderer implements PropertiesRenderer {
 	/* (non-Javadoc)
 	 * @see org.zkoss.zk.ui.sys.PropertiesRenderer#renderProperties(org.zkoss.zk.ui.Component, org.zkoss.zk.ui.sys.ContentRenderer)
 	 */
-	public void renderProperties(Component comp, ContentRenderer render)
-			throws IOException {
+	public void renderProperties(Component comp, ContentRenderer render) throws IOException {
 		Binder binder = BinderUtil.getBinder(comp);
 		if (binder != null && binder.getView() == comp) {
 			render.render("$ZKBINDER$", true);

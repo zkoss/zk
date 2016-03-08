@@ -20,7 +20,7 @@ import org.zkoss.zul.Tabbox;
  */
 public class TabboxSelectedIndexConverter extends AbstractSelectedIndexConverter<Tabbox> {
 	private static final long serialVersionUID = 201108171811L;
-	
+
 	protected ListModel<?> getComponentModel(Tabbox comp) {
 		return comp.getModel();
 	}

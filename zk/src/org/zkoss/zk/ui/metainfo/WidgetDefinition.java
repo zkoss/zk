@@ -30,12 +30,15 @@ public interface WidgetDefinition {
 	/** Returns the widget class (a JavaScript class).
 	 */
 	public String getWidgetClass();
+
 	/** Returns a collection of the mold names that have the molde URL.
 	 */
 	public Collection<String> getMoldNames();
+
 	/** Returns whether the mold URI exists for the given mold.
 	 */
 	public boolean hasMold(String name);
+
 	/** Adds the mold URI for the specified mold.
 	 *
 	 * @param name the mold name.
@@ -43,6 +46,7 @@ public interface WidgetDefinition {
 	 * @since 5.0.4
 	 */
 	public void addMold(String name, String moldURI);
+
 	/** Returns the URI (String) of the template to generate the mold,
 	 * or null if not available.
 	 * For Ajax clients, the template is a JavaScript method.

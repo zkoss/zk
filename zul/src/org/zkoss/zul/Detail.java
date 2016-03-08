@@ -19,7 +19,8 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -46,17 +47,18 @@ public class Detail extends XulElement {
 	private String _cntStyle;
 	/** The style class used for the content block. */
 	private String _cntscls;
-	
+
 	static {
 		addClientEvent(Detail.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
-	
+
 	/** 
 	 * Returns the CSS style for the content block of the window.
 	 */
 	public String getContentStyle() {
 		return _cntStyle;
 	}
+
 	/** 
 	 * Sets the CSS style for the content block of the window.
 	 *
@@ -75,6 +77,7 @@ public class Detail extends XulElement {
 	public String getContentSclass() {
 		return _cntscls;
 	}
+
 	/**
 	 * Sets the style class used for the content block.
 	 */
@@ -94,31 +97,31 @@ public class Detail extends XulElement {
 			smartUpdate("open", _open);
 		}
 	}
-	
+
 	/**
 	 * Returns whether the detail is open.
 	 */
 	public boolean isOpen() {
 		return _open;
 	}
+
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-detail" : _zclass;
 	}
 
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "open", this.isOpen());
 		render(renderer, "contentSclass", this.getContentSclass());
 		render(renderer, "contentStyle", this.getContentStyle());
 	}
-	
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Row))
-			throw new UiException("Unsupported parent for detail: "+parent);
+			throw new UiException("Unsupported parent for detail: " + parent);
 		super.beforeParentChanged(parent);
 	}
 

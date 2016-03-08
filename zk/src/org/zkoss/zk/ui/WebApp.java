@@ -16,15 +16,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 import java.util.Set;
-import java.net.URL;
-import java.io.InputStream;
+
 import javax.servlet.ServletContext;
 
 import org.zkoss.util.resource.Locator;
-import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * Represents a Web application.
@@ -45,10 +46,11 @@ public interface WebApp extends Scope, Locator {
 	 * <p>Default: ZK
 	 */
 	public String getAppName();
+
 	/** Sets the application name.
 	 * Developer can set it to any name that describes his application.
 	 */
-	public void setAppName(String name); 
+	public void setAppName(String name);
 
 	/** Returns the ZK version, such as "1.1.0" and "2.0.0".
 	 * @see #getSubversion
@@ -56,6 +58,7 @@ public interface WebApp extends Scope, Locator {
 	 * @see org.zkoss.util.Utils#compareVersion
 	 */
 	public String getVersion();
+
 	/** Returns the build identifier, such as 2007121316.
 	 *
 	 * <p>Each time ZK is built, a different build identifier is assigned.
@@ -79,10 +82,12 @@ public interface WebApp extends Scope, Locator {
 	/** Returns the value of the specified custom attribute.
 	 */
 	public Object getAttribute(String name);
+
 	/** Sets the value of the specified custom attribute.
 	 * @return the previous value if any (since ZK 5)
 	 */
 	public Object setAttribute(String name, Object value);
+
 	/** Removes the specified custom attribute.
 	 * @return the previous value if any (since ZK 5)
 	 */
@@ -106,6 +111,7 @@ public interface WebApp extends Scope, Locator {
 	 * string first.
 	 */
 	public URL getResource(String path);
+
 	/** Returns the resource located at the named path as
 	 * an InputStream object.
 	 *
@@ -115,6 +121,7 @@ public interface WebApp extends Scope, Locator {
 	 * string first.
 	 */
 	public InputStream getResourceAsStream(String path);
+
 	/** Returns a String containing the real path for a given virtual path.
 	 * For example, the path "/index.html" returns the absolute file path
 	 * on the server's filesystem would be served by a request for
@@ -141,20 +148,20 @@ public interface WebApp extends Scope, Locator {
 	 * end with a '/'. The returned paths are all relative to
 	 * the root of the web application and have a leading '/'.
 	 * For example, for a web application containing
-<pre><code>
-/welcome.html
-/catalog/index.html
-/catalog/products.html
-/catalog/offers/books.html
-/catalog/offers/music.html
-/customer/login.jsp
-/WEB-INF/web.xml
-/WEB-INF/classes/com.acme.OrderServlet.class,
-
-getResourcePaths("/") returns {"/welcome.html", "/catalog/", "/customer/", "/WEB-INF/"}
-getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products.html", "/catalog/offers/"}.
-</code>
-</pre>
+	<pre><code>
+	/welcome.html
+	/catalog/index.html
+	/catalog/products.html
+	/catalog/offers/books.html
+	/catalog/offers/music.html
+	/customer/login.jsp
+	/WEB-INF/web.xml
+	/WEB-INF/classes/com.acme.OrderServlet.class,
+	
+	getResourcePaths("/") returns {"/welcome.html", "/catalog/", "/customer/", "/WEB-INF/"}
+	getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products.html", "/catalog/offers/"}.
+	</code>
+	</pre>
 	 */
 	public Set<String> getResourcePaths(String path);
 
@@ -162,6 +169,7 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 * or null if the parameter does not exist.
 	 */
 	public String getInitParameter(String name);
+
 	/** Returns the names of the context's initialization parameters as
 	 * an iterable String objects (never null).
 	 * @since 6.0.0
@@ -176,6 +184,7 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 * @since 3.6.2
 	 */
 	public String getUpdateURI();
+
 	/** Returns the URI for asynchronous update that can be encoded or
 	 * not.
 	 *
@@ -194,6 +203,7 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	/** @deprecated As of release 6.0.0, replaced with {@link #getServletContext}.
 	 */
 	public Object getNativeContext();
+
 	/** Returns the servlet context of this application.
 	 * @since 6.0.0
 	 */
@@ -204,6 +214,7 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 * @since 6.0.0
 	 */
 	public void log(String msg);
+
 	/** Writes an explanatory message and a stack trace for a given Throwable
 	 * exception to the servlet log file. The name and type of the servlet
 	 * log file is specific to the servlet container, usually an event log. 

@@ -33,6 +33,7 @@ public interface Includer {
 	/** Returns the child page.
 	 */
 	public Page getChildPage();
+
 	/** Sets the child page.
 	 * <p>Used only for implementing an includer component (such as
 	 * {@link org.zkoss.zul.Include}).

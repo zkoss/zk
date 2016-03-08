@@ -12,7 +12,6 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 
-
 package org.zkoss.zul.impl;
 
 import javax.servlet.ServletRequest;
@@ -32,7 +31,7 @@ import org.zkoss.zul.ext.Paginated;
  * @author henrichen
  * @since 5.0.6
  */
-abstract public class MeshElement extends XulElement implements Paginated {
+public abstract class MeshElement extends XulElement implements Paginated {
 	private String _span;
 	private boolean _sizedByContent;
 	private boolean _autopaging;
@@ -48,6 +47,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public String getSpan() {
 		return _span;
 	}
+
 	/**
 	 * Sets column span hint of this component. 
 	 * <p>String number span indicates how this component distributes remaining empty space to the 
@@ -70,6 +70,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 			smartUpdate("span", span);
 		}
 	}
+
 	/**
 	 * Sets whether distributes remaining empty space of this component to ALL columns proportionally. 
 	 * <p>Default: false. That is, NOT span any column.</p>
@@ -83,6 +84,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 			smartUpdate("span", span);
 		}
 	}
+
 	/**
 	 * Returns whether distributes remaining empty space of this component to ANY column. 
 	 * <p>Default: false.</p>
@@ -95,7 +97,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public boolean isSpan() {
 		return _span != null && !"false".equals(_span);
 	}
-	
+
 	/**
 	 * Sets whether sizing grid/listbox/tree column width by its content; it equals set hflex="min" on each column.
 	 * <p>Default: false. 
@@ -103,7 +105,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	 * @since 5.0.0
 	 */
 	public void setSizedByContent(boolean byContent) {
-		if(_sizedByContent != byContent) {
+		if (_sizedByContent != byContent) {
 			_sizedByContent = byContent;
 			smartUpdate("sizedByContent", byContent);
 		}
@@ -150,7 +152,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public boolean isAutopaging() {
 		return _autopaging;
 	}
-	
+
 	/**
 	 * Sets how to position the paging of mesh element at the client screen.
 	 * It is meaningless if the mold is not in "paging".
@@ -159,39 +161,39 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	 * @since 3.0.4
 	 */
 	public void setPagingPosition(String pagingPosition) {
-		if (pagingPosition == null || (!pagingPosition.equals("top") &&
-			!pagingPosition.equals("bottom") && !pagingPosition.equals("both")))
-			throw new WrongValueException("Unsupported position : "+pagingPosition);
-		if(!Objects.equals(_pagingPosition, pagingPosition)){
+		if (pagingPosition == null || (!pagingPosition.equals("top") && !pagingPosition.equals("bottom")
+				&& !pagingPosition.equals("both")))
+			throw new WrongValueException("Unsupported position : " + pagingPosition);
+		if (!Objects.equals(_pagingPosition, pagingPosition)) {
 			_pagingPosition = pagingPosition;
 			smartUpdate("pagingPosition", pagingPosition);
 		}
 	}
-	
+
 	protected class InternalPaging extends Paging {
 		private boolean autohideModify = false;
-		
+
 		public InternalPaging() {
 		}
-		
+
 		public boolean isAutohide() {
 			if (!autohideModify)
 				return isAutohidePaging();
 			else
 				return super.isAutohide();
 		}
-		
+
 		public void setAutohide(boolean autohide) {
 			autohideModify = true;
 			super.setAutohide(autohide);
 		}
-				
+
 		public boolean isAutohideModify() {
 			return autohideModify;
 		}
-		
+
 	}
-	
+
 	protected abstract boolean isAutohidePaging();
 
 	/**
@@ -202,7 +204,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public String getPagingPosition() {
 		return _pagingPosition;
 	}
-	
+
 	/** Returns the instance of the @{link Paginal}
 	 */
 	protected abstract Paginal pgi();
@@ -214,6 +216,7 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public int getPageSize() {
 		return pgi().getPageSize();
 	}
+
 	/** Sets the page size, a.k.a., the number rows per page.
 	 * @exception IllegalStateException if {@link #pgi} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
@@ -229,12 +232,14 @@ abstract public class MeshElement extends XulElement implements Paginated {
 	public int getPageCount() {
 		return pgi().getPageCount();
 	}
+
 	/** Returns the active page (starting from 0).
 	 * @since 3.0.4
 	 */
 	public int getActivePage() {
 		return pgi().getActivePage();
 	}
+
 	/** Sets the active page (starting from 0).
 	 * @since 3.0.4
 	 */
@@ -249,14 +254,12 @@ abstract public class MeshElement extends XulElement implements Paginated {
 			return true;
 		} else {
 			// iscroll bar is only available for EE version B70-ZK-2992
-			boolean isMobile = Servlets.getBrowser(request, "mobile") != null && WebApps
-					.getFeature("ee");
+			boolean isMobile = Servlets.getBrowser(request, "mobile") != null && WebApps.getFeature("ee");
 			return Utils.testAttribute(this, "org.zkoss.zul.nativebar", !isMobile, true);
 		}
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (isSizedByContent())
 			renderer.render("sizedByContent", true);

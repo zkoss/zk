@@ -16,28 +16,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Comparator;
-
-import static org.zkoss.lang.Generics.cast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.zkoss.io.Serializables;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.io.Serializables;
-
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -218,10 +218,8 @@ public class Grid extends MeshElement {
 	private static final Logger log = LoggerFactory.getLogger(Grid.class);
 	private static final long serialVersionUID = 20091111L;
 
-	private static final String ATTR_ON_INIT_RENDER_POSTED =
-		"org.zkoss.zul.Grid.onInitLaterPosted";
-	private static final String ATTR_ON_PAGING_INIT_RENDERER_POSTED = 
-		"org.zkoss.zul.Grid.onPagingInitLaterPosted";
+	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.Grid.onInitLaterPosted";
+	private static final String ATTR_ON_PAGING_INIT_RENDERER_POSTED = "org.zkoss.zul.Grid.onPagingInitLaterPosted";
 
 	private static final int INIT_LIMIT = 50;
 
@@ -251,43 +249,49 @@ public class Grid extends MeshElement {
 	private int _currentLeft = 0;
 	private int _topPad; //since 5.0.0 top padding
 	private boolean _renderAll; //since 5.0.0
-	
+
 	private transient boolean _rod;
 	/** the message to display when there are no items */
 	private String _emptyMessage;
-	
+
 	static {
-		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
-		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
+		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		addClientEvent(Grid.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.0
 		addClientEvent(Grid.class, "onTopPad", CE_DUPLICATE_IGNORE); //since 5.0.0
-		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.0
-		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Grid.class, "onDataLoading", CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.0
+		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
 	}
-	
+
 	public Grid() {
 		init();
 	}
+
 	private void init() {
 		_heads = new AbstractCollection<Component>() {
 			public int size() {
 				int sz = getChildren().size();
-				if (_rows != null) --sz;
-				if (_foot != null) --sz;
-				if (_paging != null) --sz;
-				if (_frozen != null) --sz;
+				if (_rows != null)
+					--sz;
+				if (_foot != null)
+					--sz;
+				if (_paging != null)
+					--sz;
+				if (_frozen != null)
+					--sz;
 				return sz;
 			}
+
 			public Iterator<Component> iterator() {
 				return new Iter();
 			}
 		};
 	}
-	
+
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		if (oldpage == null) {
-			Executions.getCurrent().setAttribute("zkoss.Grid.deferInitModel_"+getUuid(), Boolean.TRUE);
+			Executions.getCurrent().setAttribute("zkoss.Grid.deferInitModel_" + getUuid(), Boolean.TRUE);
 			//prepare a right moment to init Grid(must be as early as possible)
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
@@ -297,17 +301,18 @@ public class Grid extends MeshElement {
 			_model.addListDataListener(_dataListener);
 		}
 	}
-	
+
 	public void onPageDetached(Page page) {
 		super.onPageDetached(page);
 		if (_model != null && _dataListener != null) {
 			_model.removeListDataListener(_dataListener);
 		}
 	}
-	
+
 	private void resetDataLoader() {
 		resetDataLoader(true);
 	}
+
 	private void resetDataLoader(boolean shallReset) {
 		if (_dataLoader != null) {
 			if (shallReset) {
@@ -316,7 +321,7 @@ public class Grid extends MeshElement {
 			}
 			_dataLoader = null;
 		}
-		
+
 		if (shallReset) {
 			// Bug ZK-373
 			smartUpdate("resetDataLoader", true);
@@ -325,17 +330,16 @@ public class Grid extends MeshElement {
 			_topPad = 0;
 		}
 	}
-	
-	private class ModelInitListener implements SerializableEventListener<Event>,
-			CloneableEventListener<Event> {
+
+	private class ModelInitListener implements SerializableEventListener<Event>, CloneableEventListener<Event> {
 		public void onEvent(Event event) throws Exception {
 			if (_modelInitListener != null) {
 				Grid.this.removeEventListener("onInitModel", _modelInitListener);
-				_modelInitListener = null; 
+				_modelInitListener = null;
 			}
 			//initialize data loader
 			//Tricky! might has been initialized when apply properties
-			if (_dataLoader != null) { 
+			if (_dataLoader != null) {
 				final boolean rod = evalRod();
 				if (_rod != rod || getRows() == null || getRows().getChildren().isEmpty()) {
 					if (_model != null) { //so has to recreate rows and items
@@ -344,33 +348,34 @@ public class Grid extends MeshElement {
 						resetDataLoader(); //enforce recreate dataloader, must after getRows().getChildren().clear()
 						initModel();
 					} else {
-						resetDataLoader();  //enforce recreate dataloader
-						
+						resetDataLoader(); //enforce recreate dataloader
+
 						// Bug ZK-1895
 						//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
-						Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
+						Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_" + getUuid());
 					}
 				}
-			} else if (_model != null){ //rows not created yet
+			} else if (_model != null) { //rows not created yet
 				initModel();
 			} else {
 				//bug# 3039282: NullPointerException when assign a model to Grid at onCreate
 				//The attribute shall be removed, otherwise DataLoader will not syncModel when setModel
-				Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
+				Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_" + getUuid());
 			}
 			final DataLoader loader = getDataLoader();
-			
+
 			//initialize paginal if any
 			Paginal pgi = getPaginal();
-			if (pgi != null) pgi.setTotalSize(loader.getTotalSize());
+			if (pgi != null)
+				pgi.setTotalSize(loader.getTotalSize());
 		}
+
 		//reinit the model
 		private void initModel() {
-			Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_"+getUuid());
+			Executions.getCurrent().removeAttribute("zkoss.Grid.deferInitModel_" + getUuid());
 			setModel(_model);
 		}
 
-		
 		public Object willClone(Component comp) {
 			return null; // skip to clone
 		}
@@ -392,6 +397,7 @@ public class Grid extends MeshElement {
 		}
 		return Integer.parseInt(vflex) > 0;
 	}
+
 	/** Sets whether to grow and shrink vertical to fit their given space,
 	 * so called vertical flexibility.
 	 *
@@ -402,36 +408,40 @@ public class Grid extends MeshElement {
 			setVflex(String.valueOf(vflex));
 		}
 	}
+
 	/**
 	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 * @param fixedLayout true to outline this grid by browser
 	 */
 	public void setFixedLayout(boolean fixedLayout) {
-		 setSizedByContent(!fixedLayout);
+		setSizedByContent(!fixedLayout);
 	}
+
 	/**
 	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
 	 */
 	public boolean isFixedLayout() {
 		return !isSizedByContent();
 	}
-	
+
 	/** Returns the rows.
 	 */
 	public Rows getRows() {
 		return _rows;
 	}
+
 	/** Returns the columns.
 	 */
 	public Columns getColumns() {
 		return _cols;
 	}
+
 	/** Returns the foot.
 	 */
 	public Foot getFoot() {
 		return _foot;
 	}
-	
+
 	/**
 	 * Returns the frozen child.
 	 * @since 5.0.0
@@ -439,6 +449,7 @@ public class Grid extends MeshElement {
 	public Frozen getFrozen() {
 		return _frozen;
 	}
+
 	/** Returns a collection of heads, including {@link #getColumns}
 	 * and auxiliary heads ({@link Auxhead}) (never null).
 	 *
@@ -454,13 +465,15 @@ public class Grid extends MeshElement {
 	 */
 	public Component getCell(int row, int col) {
 		final Rows rows = getRows();
-		if (rows == null) return null;
+		if (rows == null)
+			return null;
 
 		List children = rows.getChildren();
-		if (children.size() <= row) return null;
+		if (children.size() <= row)
+			return null;
 
-		children = ((Row)children.get(row)).getChildren();
-		return children.size() <= col ? null: (Component)children.get(col);
+		children = ((Row) children.get(row)).getChildren();
+		return children.size() <= col ? null : (Component) children.get(col);
 	}
 
 	/** @deprecated As of release 5.0, use CSS instead.
@@ -468,6 +481,7 @@ public class Grid extends MeshElement {
 	public String getAlign() {
 		return null;
 	}
+
 	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public void setAlign(String align) {
@@ -489,6 +503,7 @@ public class Grid extends MeshElement {
 	public Paginal getPaginal() {
 		return _pgi;
 	}
+
 	/** Specifies the paging controller.
 	 * Note: the paging controller is used only if {@link #getMold} is "paging".
 	 *
@@ -505,15 +520,18 @@ public class Grid extends MeshElement {
 			_pgi = pgi; //assign before detach paging, since removeChild assumes it
 
 			if (inPagingMold()) {
-				if (old != null) removePagingListener(old);
+				if (old != null)
+					removePagingListener(old);
 				if (_pgi == null) {
 					if (_paging != null) {
 						_pgi = _paging;
-					} else newInternalPaging();
+					} else
+						newInternalPaging();
 				} else { //_pgi != null
 					if (_pgi != _paging) {
-						if (_paging != null) _paging.detach();
-						_pgi.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
+						if (_paging != null)
+							_paging.detach();
+						_pgi.setTotalSize(_rows != null ? getDataLoader().getTotalSize() : 0);
 						addPagingListener(_pgi);
 						if (_pgi instanceof Component)
 							smartUpdate("paginal", _pgi);
@@ -528,27 +546,29 @@ public class Grid extends MeshElement {
 			}
 		}
 	}
+
 	/** Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-//		assert inPagingMold(): "paging mold only";
-//		assert (_paging == null && _pgi == null);
+		//		assert inPagingMold(): "paging mold only";
+		//		assert (_paging == null && _pgi == null);
 
 		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
-		if(_model instanceof Pageable && ((Pageable) _model).getPageSize() != -1) {
+		if (_model instanceof Pageable && ((Pageable) _model).getPageSize() != -1) {
 			paging.setPageSize(((Pageable) _model).getPageSize());
 		}
-		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize(): 0);
-		if(_model instanceof Pageable && ((Pageable) _model).getActivePage() != -1) {
+		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize() : 0);
+		if (_model instanceof Pageable && ((Pageable) _model).getActivePage() != -1) {
 			paging.setActivePage(((Pageable) _model).getActivePage());
 		}
 		paging.setParent(this);
-		
+
 		if (_pgi != null)
 			addPagingListener(_pgi);
 	}
+
 	private class PGListener implements PagingListener {
 		public void onEvent(Event event) {
 			if (event instanceof PagingEvent) {
@@ -556,26 +576,28 @@ public class Grid extends MeshElement {
 				int pgsz = pe.getPageable().getPageSize();
 				int actpg = pe.getActivePage();
 				if (PagingEventPublisher.INTERNAL_EVENT.equals(pe.getName())) {
-					if (pgsz != -1) _pgi.setPageSize(pgsz);
-					if (actpg != -1) _pgi.setActivePage(actpg);
+					if (pgsz != -1)
+						_pgi.setPageSize(pgsz);
+					if (actpg != -1)
+						_pgi.setActivePage(actpg);
 				} else if (_model instanceof Pageable) {
 					//Bug ZK-1696: model also preserves paging information
 					((Pageable) _model).setActivePage(actpg);
 				}
-				Events.postEvent(new PagingEvent(event.getName(), Grid.this,
-						pe.getPageable(), actpg));
+				Events.postEvent(new PagingEvent(event.getName(), Grid.this, pe.getPageable(), actpg));
 			}
 		}
-		
+
 		public Object willClone(Component comp) {
 			return null; // skip to clone
 		}
 	}
+
 	private class PGImpListener implements PagingListener {
 		public void onEvent(Event event) {
 			if (_rows != null && _model != null && inPagingMold()) {
-			//theoretically, _rows shall not be null if _model is not null when
-			//this method is called. But, just in case -- if sent manually
+				//theoretically, _rows shall not be null if _model is not null when
+				//this method is called. But, just in case -- if sent manually
 				final Paginal pgi = getPaginal();
 				int pgsz = pgi.getPageSize();
 				int ofs = pgi.getActivePage() * pgsz;
@@ -589,22 +611,23 @@ public class Grid extends MeshElement {
 				}
 				postOnPagingInitRender();
 			}
-			
-			if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
+
+			if (getModel() != null || getPagingPosition().equals("both"))
+				invalidate(); // just in case.
 			else if (_rows != null) {
 				_rows.invalidate();
-				
+
 				// Bug 3218078
 				if (_frozen != null)
 					_frozen.invalidate();
 			}
 		}
 
-		
 		public Object willClone(Component comp) {
 			return null; // skip to clone
 		}
 	}
+
 	/** Adds the event listener for the onPaging event. */
 	private void addPagingListener(Paginal pgi) {
 		if (_pgListener == null)
@@ -618,6 +641,7 @@ public class Grid extends MeshElement {
 			_pgImpListener = new PGImpListener();
 		pgi.addEventListener("onPagingImpl", _pgImpListener);
 	}
+
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
 		if (_model instanceof PagingEventPublisher) {
@@ -635,6 +659,7 @@ public class Grid extends MeshElement {
 	public Paging getPagingChild() {
 		return _paging;
 	}
+
 	protected Paginal pgi() {
 		if (_pgi == null)
 			throw new IllegalStateException("Available only the paging mold");
@@ -646,7 +671,7 @@ public class Grid extends MeshElement {
 	/*package*/ boolean inPagingMold() {
 		return "paging".equals(getMold());
 	}
-	
+
 	//-- ListModel dependent codes --//
 	/** Returns the model associated with this grid, or null
 	 * if this grid is not associated with any list data model.
@@ -660,8 +685,9 @@ public class Grid extends MeshElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
-		return (ListModel)_model;
+		return (ListModel) _model;
 	}
+
 	/** Returns the list model associated with this grid, or null
 	 * if this grid is associated with a {@link GroupsModel}
 	 * or not associated with any list data model.
@@ -670,8 +696,9 @@ public class Grid extends MeshElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getListModel() {
-		return _model instanceof GroupsListModel ? null: (ListModel)_model;
+		return _model instanceof GroupsListModel ? null : (ListModel) _model;
 	}
+
 	/** Returns the groups model associated with this grid, or null
 	 * if this grid is associated with a {@link ListModel}
 	 * or not associated with any list data model.
@@ -680,9 +707,9 @@ public class Grid extends MeshElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <D, G, F> GroupsModel<D, G, F> getGroupsModel() {
-		return _model instanceof GroupsListModel ?
-			((GroupsListModel)_model).getGroupsModel(): null;
+		return _model instanceof GroupsListModel ? ((GroupsListModel) _model).getGroupsModel() : null;
 	}
+
 	/** Sets the list model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as
 	 * the previous, it will always cause re-render.
@@ -701,19 +728,20 @@ public class Grid extends MeshElement {
 					/* Bug ZK-1512: should clear row anyway
 					if (_model instanceof GroupsListModel)
 						_rows.getChildren().clear();*/
-					
+
 					resetDataLoader(); // Bug 3357641
 				}
-				if (_rows != null) _rows.getChildren().clear(); //Bug 1807414, ZK-1512
-				
+				if (_rows != null)
+					_rows.getChildren().clear(); //Bug 1807414, ZK-1512
+
 				smartUpdate("model", model instanceof GroupsListModel || model instanceof GroupsModel ? "group" : true);
 
 				_model = model;
 				initDataListener();
 				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
 			}
-			
-			if (inPagingMold()) { 
+
+			if (inPagingMold()) {
 				//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
 				//must update paginal totalSize or exception in setActivePage
 				final Paginal pgi = getPaginal();
@@ -738,7 +766,8 @@ public class Grid extends MeshElement {
 			}
 
 			final Execution exec = Executions.getCurrent();
-			final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Grid.deferInitModel_"+getUuid()) != null;
+			final boolean defer = exec == null ? false
+					: exec.getAttribute("zkoss.Grid.deferInitModel_" + getUuid()) != null;
 			final boolean rod = evalRod();
 			//Always syncModel because it is easier for user to enforce reload
 			if (!defer || !rod) { //if attached and rod, defer the model sync
@@ -756,13 +785,14 @@ public class Grid extends MeshElement {
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
 			_model = null;
-			if (_rows != null) _rows.getChildren().clear();
+			if (_rows != null)
+				_rows.getChildren().clear();
 			smartUpdate("model", false);
 		}
-		
+
 		getDataLoader().updateModelInfo();
 	}
-	
+
 	/** Sets the groups model associated with this grid.
 	 * If a non-null model is assigned, no matter whether it is the same as
 	 * the previous, it will always cause re-render.
@@ -778,8 +808,9 @@ public class Grid extends MeshElement {
 	 * @see #getGroupsModel()
 	 */
 	public void setModel(GroupsModel<?, ?, ?> model) {
-		setModel((model != null ? GroupsListModel.toListModel(model): null));
+		setModel((model != null ? GroupsListModel.toListModel(model) : null));
 	}
+
 	private void initDataListener() {
 		if (_dataListener == null)
 			_dataListener = new ListDataListener() {
@@ -791,17 +822,17 @@ public class Grid extends MeshElement {
 			};
 		_model.addListDataListener(_dataListener);
 	}
-	
+
 	/**
 	 * Sort the rows based on {@link Column#getSortDirection}.
 	 * @return whether the method susseed or not
 	 */
 	private static boolean doSort(Grid grid) {
 		Columns cols = grid.getColumns();
-		if (!grid.isAutosort() || cols == null) return false;
-		for (Iterator it = cols.getChildren().iterator();
-		it.hasNext();) {
-			final Column hd = (Column)it.next();
+		if (!grid.isAutosort() || cols == null)
+			return false;
+		for (Iterator it = cols.getChildren().iterator(); it.hasNext();) {
+			final Column hd = (Column) it.next();
 			String dir = hd.getSortDirection();
 			if (!"natural".equals(dir)) {
 				hd.doSort("ascending".equals(dir));
@@ -816,8 +847,9 @@ public class Grid extends MeshElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> RowRenderer<T> getRowRenderer() {
-		return (RowRenderer)_renderer;
+		return (RowRenderer) _renderer;
 	}
+
 	/** Sets the renderer which is used to render each row
 	 * if {@link #getModel} is not null.
 	 *
@@ -833,8 +865,7 @@ public class Grid extends MeshElement {
 			_renderer = renderer;
 
 			if (_model != null) {
-				if ((renderer instanceof RowRendererExt)
-				|| (_renderer instanceof RowRendererExt)) {
+				if ((renderer instanceof RowRendererExt) || (_renderer instanceof RowRendererExt)) {
 					//bug# 2388345, a new renderer that might new own Row, shall clean all Row first
 					getRows().getChildren().clear();
 					getDataLoader().syncModel(-1, -1); //we have to recreate all
@@ -843,7 +874,8 @@ public class Grid extends MeshElement {
 				} else {
 					//bug# 3039282, we need to resyncModel if not in a defer mode
 					final Execution exec = Executions.getCurrent();
-					final boolean defer = exec == null ? false : exec.getAttribute("zkoss.Grid.deferInitModel_"+getUuid()) != null;
+					final boolean defer = exec == null ? false
+							: exec.getAttribute("zkoss.Grid.deferInitModel_" + getUuid()) != null;
 					final boolean rod = evalRod();
 					if (!defer || !rod)
 						getDataLoader().syncModel(-1, -1);
@@ -851,14 +883,14 @@ public class Grid extends MeshElement {
 			}
 		}
 	}
+
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
 	 */
-	public void setRowRenderer(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-	InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setRowRenderer(String clsnm) throws ClassNotFoundException, NoSuchMethodException,
+			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
-			setRowRenderer((RowRenderer)Classes.newInstanceByThread(clsnm));
+			setRowRenderer((RowRenderer) Classes.newInstanceByThread(clsnm));
 	}
 
 	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
@@ -877,6 +909,7 @@ public class Grid extends MeshElement {
 		final String size = (String) getAttribute("pre-load-size");
 		return size != null ? Integer.parseInt(size) : _preloadsz;
 	}
+
 	/** @deprecated As of release 5.0.8, use custom attributes (org.zkoss.zul.listbox.preloadSize) instead.
 	 * Sets the number of rows to preload when receiving
 	 * the rendering request from the client.
@@ -890,9 +923,9 @@ public class Grid extends MeshElement {
 	 */
 	public void setPreloadSize(int sz) {
 		if (sz < 0)
-			throw new UiException("nonnegative is required: "+sz);
+			throw new UiException("nonnegative is required: " + sz);
 		_preloadsz = sz;
-			//no need to update client since paging done at server
+		//no need to update client since paging done at server
 	}
 
 	/**
@@ -913,12 +946,14 @@ public class Grid extends MeshElement {
 	 * @since 3.0.0
 	 */
 	public void setInnerWidth(String innerWidth) {
-		if (innerWidth == null) innerWidth = "100%";
+		if (innerWidth == null)
+			innerWidth = "100%";
 		if (!_innerWidth.equals(innerWidth)) {
 			_innerWidth = innerWidth;
 			smartUpdate("innerWidth", innerWidth);
 		}
 	}
+
 	/**
 	 * Returns the inner width of this component.
 	 * The inner width is the width of the inner table.
@@ -929,7 +964,7 @@ public class Grid extends MeshElement {
 	public String getInnerWidth() {
 		return _innerWidth;
 	}
-	
+
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
 	 */
@@ -963,21 +998,22 @@ public class Grid extends MeshElement {
 			final int cnt = _rows.getChildren().size() + getDataLoader().getOffset();
 			if (ofs >= cnt) { //not possible; just in case
 				ofs = cnt - pgsz;
-				if (ofs < 0) ofs = 0;
+				if (ofs < 0)
+					ofs = 0;
 			}
 
 			int j = 0;
 			int index = 0; // ZK-1867: Set visible of row doesn't work correctly
 			int realOfs = ofs - getDataLoader().getOffset();
-			if (realOfs < 0) realOfs = 0;
+			if (realOfs < 0)
+				realOfs = 0;
 			boolean open = true;
-			for (Row row = _rows.getChildren().size() <= realOfs ? null: (Row)_rows.getChildren().get(realOfs), nxt;
-			j < pgsz && row != null; row = nxt) {
-				nxt = (Row)row.getNextSibling();
+			for (Row row = _rows.getChildren().size() <= realOfs ? null
+					: (Row) _rows.getChildren().get(realOfs), nxt; j < pgsz && row != null; row = nxt) {
+				nxt = (Row) row.getNextSibling();
 
-				if (row.isVisible()
-				&& (open || row instanceof Groupfoot || row instanceof Group)) {
-					renderer.render(row, index + ofs); 
+				if (row.isVisible() && (open || row instanceof Groupfoot || row instanceof Group)) {
+					renderer.render(row, index + ofs);
 					++j;
 				}
 				if (row instanceof Group)
@@ -992,10 +1028,10 @@ public class Grid extends MeshElement {
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the grid when all of the row have been rendered. 		
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the grid when all of the row have been rendered. 		
 		removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 	}
-	
+
 	private void postOnInitRender() {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
@@ -1005,8 +1041,8 @@ public class Grid extends MeshElement {
 	}
 
 	private void postOnPagingInitRender() {
-		if (getAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED) == null && 
-				getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) { // B50-ZK-345
+		if (getAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED) == null
+				&& getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) { // B50-ZK-345
 			setAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED, Boolean.TRUE);
 			Events.postEvent("onPagingInitRender", this, null);
 		}
@@ -1017,21 +1053,20 @@ public class Grid extends MeshElement {
 	private void onListDataChange(ListDataEvent event) {
 		//sort when add
 		int type = event.getType();
-		if ((type == ListDataEvent.INTERVAL_ADDED || 
-				type == ListDataEvent.CONTENTS_CHANGED) && 
-				!isIgnoreSortWhenChanged()) {
+		if ((type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.CONTENTS_CHANGED)
+				&& !isIgnoreSortWhenChanged()) {
 			doSort(this);
 		} else {
 			if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
-					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED)) return;
+					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))
+				return;
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
-			
+
 			// TODO: We have to skip the synchronization of the target component
 			// when the event is fired from it, i.e. No need to sync the sorting
 			// status here.
-			if (type == ListDataEvent.STRUCTURE_CHANGED
-					&& _model instanceof Sortable && _cols != null) { //ZK-1704 added null check for _cols
+			if (type == ListDataEvent.STRUCTURE_CHANGED && _model instanceof Sortable && _cols != null) { //ZK-1704 added null check for _cols
 				Sortable<Object> smodel = cast(_model);
 				List<Column> cols = cast(_cols.getChildren());
 				boolean found = false;
@@ -1057,8 +1092,7 @@ public class Grid extends MeshElement {
 	/** Returns the label for the cell generated by the default renderer.
 	 */
 	private static Label newRenderLabel(String value) {
-		final Label label =
-			new Label(value != null && value.length() > 0 ? value: " ");
+		final Label label = new Label(value != null && value.length() > 0 ? value : " ");
 		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
 		return label;
 	}
@@ -1071,20 +1105,20 @@ public class Grid extends MeshElement {
 		/*package*/ Renderer() {
 			_renderer = (RowRenderer) getDataLoader().getRealRenderer();
 		}
+
 		/*package*/ @SuppressWarnings("unchecked")
 		void render(Row row, int index) throws Throwable {
 			if (row.isLoaded())
 				return; //nothing to do
 
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
-				((RendererCtrl)_renderer).doTry();
+				((RendererCtrl) _renderer).doTry();
 				_ctrled = true;
 			}
 
 			final Component cell = row.getFirstChild();
 			if (!(_renderer instanceof RowRendererExt)
-			|| (((RowRendererExt)_renderer).getControls() & 
-				RowRendererExt.DETACH_ON_RENDER) != 0) { //detach (default)
+					|| (((RowRendererExt) _renderer).getControls() & RowRendererExt.DETACH_ON_RENDER) != 0) { //detach (default)
 				cell.detach();
 			}
 
@@ -1094,14 +1128,14 @@ public class Grid extends MeshElement {
 				try {
 					_renderer.render(row, value, index);
 				} catch (AbstractMethodError ex) {
-					final Method m = _renderer.getClass()
-						.getMethod("render", new Class<?>[] {Row.class, Object.class});
+					final Method m = _renderer.getClass().getMethod("render",
+							new Class<?>[] { Row.class, Object.class });
 					m.setAccessible(true);
-					m.invoke(_renderer, new Object[] {row, value});
+					m.invoke(_renderer, new Object[] { row, value });
 				}
 				Object v = row.getAttribute(Attributes.MODEL_RENDERAS);
 				if (v != null) //a new row is created to replace the existent one
-					row = (Row)v;
+					row = (Row) v;
 			} catch (Throwable ex) {
 				try {
 					final Label label = newRenderLabel(Exceptions.getMessage(ex));
@@ -1121,10 +1155,11 @@ public class Grid extends MeshElement {
 			row.setLoaded(true);
 			_rendered = true;
 		}
+
 		/*package*/ void doCatch(Throwable ex) {
 			if (_ctrled) {
 				try {
-					((RendererCtrl)_renderer).doCatch(ex);
+					((RendererCtrl) _renderer).doCatch(ex);
 				} catch (Throwable t) {
 					throw UiException.Aide.wrap(t);
 				}
@@ -1132,9 +1167,10 @@ public class Grid extends MeshElement {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
+
 		/*package*/ void doFinally() {
 			if (_ctrled)
-				((RendererCtrl)_renderer).doFinally();
+				((RendererCtrl) _renderer).doFinally();
 		}
 	}
 
@@ -1145,7 +1181,8 @@ public class Grid extends MeshElement {
 	 * In other words, it is meaningful only if live data model is used.
 	 */
 	public void renderRow(Row row) {
-		if (_model == null) return;
+		if (_model == null)
+			return;
 
 		final Renderer renderer = new Renderer();
 		try {
@@ -1156,11 +1193,13 @@ public class Grid extends MeshElement {
 			renderer.doFinally();
 		}
 	}
+
 	/** Renders all {@link Row} if not loaded yet,
 	 * with {@link #getRowRenderer}.
 	 */
 	public void renderAll() {
-		if (_model == null) return;
+		if (_model == null)
+			return;
 
 		_renderAll = true;
 		getDataLoader().setLoadAll(_renderAll);
@@ -1168,10 +1207,10 @@ public class Grid extends MeshElement {
 		final Renderer renderer = new Renderer();
 		if (!_rows.getChildren().isEmpty())
 			try {
-				Row row = (Row)_rows.getChildren().get(0);
+				Row row = (Row) _rows.getChildren().get(0);
 				int index = row.getIndex();
 				for (Row nxt; row != null; row = nxt) {
-					nxt = (Row)row.getNextSibling(); //retrieve first since it might be changed
+					nxt = (Row) row.getNextSibling(); //retrieve first since it might be changed
 					renderer.render(row, index++);
 				}
 			} catch (Throwable ex) {
@@ -1180,6 +1219,7 @@ public class Grid extends MeshElement {
 				renderer.doFinally();
 			}
 	}
+
 	/** Renders a set of specified rows.
 	 * It is the same as {@link #renderItems}.
 	 */
@@ -1189,16 +1229,17 @@ public class Grid extends MeshElement {
 
 	public void renderItems(Set<? extends Row> rows) {
 		if (_model == null) { //just in case that application developers might change it
-			if (log.isDebugEnabled()) log.debug("No model no render");
+			if (log.isDebugEnabled())
+				log.debug("No model no render");
 			return;
 		}
 
 		if (rows.isEmpty())
 			return; //nothing to do
-		
+
 		final Renderer renderer = new Renderer();
 		try {
-			for (final Row row: rows)
+			for (final Row row : rows)
 				renderer.render(row, row.getIndex());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
@@ -1216,6 +1257,7 @@ public class Grid extends MeshElement {
 	public String getOddRowSclass() {
 		return _scOddRow == null ? getZclass() + "-odd" : _scOddRow;
 	}
+
 	/** Sets the style class for the odd rows.
 	 * If the style class doesn't exist, the striping effect disappears.
 	 * You can provide different effects by providing the proper style
@@ -1223,7 +1265,8 @@ public class Grid extends MeshElement {
 	 * @since 3.0.0
 	 */
 	public void setOddRowSclass(String scls) {
-		if (scls != null && scls.length() == 0) scls = null;
+		if (scls != null && scls.length() == 0)
+			scls = null;
 		if (!Objects.equals(_scOddRow, scls)) {
 			_scOddRow = scls;
 			smartUpdate("oddRowSclass", scls);
@@ -1241,8 +1284,8 @@ public class Grid extends MeshElement {
 		final String old = getMold();
 		if (!Objects.equals(old, mold)) {
 			super.setMold(mold);
-				//we have to change model before detaching paging,
-				//since removeChild assumes it
+			//we have to change model before detaching paging,
+			//since removeChild assumes it
 
 			if ("paging".equals(old)) { //change from paging
 				if (_paging != null) {
@@ -1257,19 +1300,21 @@ public class Grid extends MeshElement {
 				}
 				invalidate(); //paging mold -> non-paging mold
 			} else if (inPagingMold()) { //change to paging
-				if (_pgi != null) addPagingListener(_pgi);
-				else newInternalPaging();
+				if (_pgi != null)
+					addPagingListener(_pgi);
+				else
+					newInternalPaging();
 				_topPad = 0;
 				_currentTop = 0;
 				_currentLeft = 0;
 				//enforce a page loading
 				// B50-ZK-345: speed up onPagingImpl to surpass onInitRender
-				Events.postEvent(10001, new PagingEvent("onPagingImpl", 
-						(Component)_pgi, _pgi.getActivePage()));
+				Events.postEvent(10001, new PagingEvent("onPagingImpl", (Component) _pgi, _pgi.getActivePage()));
 				invalidate(); //non-paging mold -> paging mold
 			}
 		}
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-grid" : _zclass;
 	}
@@ -1278,53 +1323,55 @@ public class Grid extends MeshElement {
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Rows) {
 			if (_rows != null && _rows != newChild)
-				throw new UiException("Only one rows child is allowed: "+this+"\nNote: rows is created automatically if live data");
+				throw new UiException("Only one rows child is allowed: " + this
+						+ "\nNote: rows is created automatically if live data");
 		} else if (newChild instanceof Columns) {
 			if (_cols != null && _cols != newChild)
-				throw new UiException("Only one columns child is allowed: "+this);
+				throw new UiException("Only one columns child is allowed: " + this);
 		} else if (newChild instanceof Frozen) {
 			if (_frozen != null && _frozen != newChild)
-				throw new UiException("Only one frozen child is allowed: "+this);
+				throw new UiException("Only one frozen child is allowed: " + this);
 		} else if (newChild instanceof Paging) {
 			if (_pgi != null)
 				throw new UiException("External paging cannot coexist with child paging");
 			if (_paging != null && _paging != newChild)
-				throw new UiException("Only one paging is allowed: "+this);
+				throw new UiException("Only one paging is allowed: " + this);
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
 		} else if (newChild instanceof Foot) {
 			if (_foot != null && _foot != newChild)
-				throw new UiException("Only one foot child is allowed: "+this);
+				throw new UiException("Only one foot child is allowed: " + this);
 		} else if (!(newChild instanceof Auxhead)) {
-			throw new UiException("Unsupported child for grid: "+newChild);
+			throw new UiException("Unsupported child for grid: " + newChild);
 		}
- 
+
 		super.beforeChildAdded(newChild, refChild);
 	}
+
 	public boolean insertBefore(Component newChild, Component refChild) {
 		if (newChild instanceof Rows) {
 			if (super.insertBefore(newChild, refChild)) {
-				_rows = (Rows)newChild;
+				_rows = (Rows) newChild;
 				return true;
 			}
 		} else if (newChild instanceof Columns) {
 			if (super.insertBefore(newChild, refChild)) {
-				_cols = (Columns)newChild;
+				_cols = (Columns) newChild;
 				return true;
 			}
 		} else if (newChild instanceof Frozen) {
 			if (super.insertBefore(newChild, refChild)) {
-				_frozen = (Frozen)newChild;
+				_frozen = (Frozen) newChild;
 				return true;
 			}
 		} else if (newChild instanceof Paging) {
 			if (super.insertBefore(newChild, refChild)) {
-				_pgi = _paging = (Paging)newChild;
+				_pgi = _paging = (Paging) newChild;
 				return true;
 			}
 		} else if (newChild instanceof Foot) {
 			if (super.insertBefore(newChild, refChild)) {
-				_foot = (Foot)newChild;
+				_foot = (Foot) newChild;
 				return true;
 			}
 		} else {
@@ -1332,35 +1379,41 @@ public class Grid extends MeshElement {
 		}
 		return false;
 	}
+
 	public boolean removeChild(Component child) {
 		if (_paging == child && _pgi == child && inPagingMold())
-			throw new IllegalStateException("The paging component cannot be removed manually. It is removed automatically when changing the mold");
-				//Feature 1906110: prevent developers from removing it accidently
+			throw new IllegalStateException(
+					"The paging component cannot be removed manually. It is removed automatically when changing the mold");
+		//Feature 1906110: prevent developers from removing it accidently
 
 		if (!super.removeChild(child))
 			return false;
 
-		if (_rows == child) _rows = null;
-		else if (_cols == child) _cols = null;
-		else if (_frozen == child) _frozen = null;
-		else if (_foot == child) _foot = null;
+		if (_rows == child)
+			_rows = null;
+		else if (_cols == child)
+			_cols = null;
+		else if (_frozen == child)
+			_frozen = null;
+		else if (_foot == child)
+			_foot = null;
 		else if (_paging == child) {
 			_paging = null;
-			if (_pgi == child) _pgi = null;
+			if (_pgi == child)
+				_pgi = null;
 		}
 		return true;
 	}
-	
+
 	protected boolean isAutohidePaging() {
 		return Utils.testAttribute(this, "org.zkoss.zul.grid.autohidePaging", true, true);
 	}
-	
+
 	/*package*/ boolean evalRod() {
-		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true)
-		&& !(_model instanceof GroupsListModel);
+		return Utils.testAttribute(this, "org.zkoss.zul.grid.rod", false, true) && !(_model instanceof GroupsListModel);
 		//TODO: performance enhancement: support GroupsModel in ROD
 	}
-	
+
 	/** Returns whether to sort all of item when model or sort direction be changed.
 	 * @since 5.0.7
 	 */
@@ -1369,10 +1422,10 @@ public class Grid extends MeshElement {
 		Object val = getAttribute(attr, true);
 		if (val == null)
 			val = Library.getProperty(attr);
-		return val instanceof Boolean ? ((Boolean)val).booleanValue():
-			val != null ? "true".equals(val) || "ignore.change".equals(val): false;
+		return val instanceof Boolean ? ((Boolean) val).booleanValue()
+				: val != null ? "true".equals(val) || "ignore.change".equals(val) : false;
 	}
-	
+
 	/** 
 	 * Returns the number of rows to preload when receiving the rendering
 	 * request from the client.
@@ -1385,13 +1438,12 @@ public class Grid extends MeshElement {
 	private int preloadSize() {
 		final String size = (String) getAttribute("pre-load-size");
 		int sz = size != null ? Integer.parseInt(size) : _preloadsz;
-		
-		if ((sz = Utils.getIntAttribute(this, 
-				"org.zkoss.zul.grid.preloadSize", sz, true)) < 0)
+
+		if ((sz = Utils.getIntAttribute(this, "org.zkoss.zul.grid.preloadSize", sz, true)) < 0)
 			throw new UiException("nonnegative is required: " + sz);
 		return sz;
 	}
-	
+
 	/** 
 	 * Returns the number of rows rendered when the Grid first render.
 	 *  <p>
@@ -1401,13 +1453,12 @@ public class Grid extends MeshElement {
 	 * ({@link #getPagingChild}.
 	 */
 	private int initRodSize() {
-		int sz = Utils.getIntAttribute(this, "org.zkoss.zul.grid.initRodSize",
-				INIT_LIMIT, true);
+		int sz = Utils.getIntAttribute(this, "org.zkoss.zul.grid.initRodSize", INIT_LIMIT, true);
 		if ((sz) < 0)
 			throw new UiException("nonnegative is required: " + sz);
 		return sz;
 	}
-	
+
 	/** Returns whether to sort all of item when model or sort direction be changed.
 	 * @since 5.0.7
 	 */
@@ -1416,17 +1467,16 @@ public class Grid extends MeshElement {
 		Object val = getAttribute(attr, true);
 		if (val == null)
 			val = Library.getProperty(attr);
-		return val == null ? true: "ignore.change".equals(val);
+		return val == null ? true : "ignore.change".equals(val);
 	}
-	
+
 	/*package*/ DataLoader getDataLoader() {
 		if (_dataLoader == null) {
 			_rod = evalRod();
 			final String loadercls = Library.getProperty("org.zkoss.zul.grid.DataLoader.class");
 			try {
-				_dataLoader = _rod && loadercls != null ? 
-						(DataLoader) Classes.forNameByThread(loadercls).newInstance() :
-						new GridDataLoader();
+				_dataLoader = _rod && loadercls != null ? (DataLoader) Classes.forNameByThread(loadercls).newInstance()
+						: new GridDataLoader();
 			} catch (Exception e) {
 				throw UiException.Aide.wrap(e);
 			}
@@ -1437,29 +1487,35 @@ public class Grid extends MeshElement {
 
 	//Cloneable//
 	public Object clone() {
-		final Grid clone = (Grid)super.clone();
+		final Grid clone = (Grid) super.clone();
 		clone.init();
-		
+
 		// remove cached listeners
 		clone._pgListener = null;
 		clone._pgImpListener = null;
-		
+
 		//recreate the DataLoader 
-		final int offset = clone.getDataLoader().getOffset(); 
-		
+		final int offset = clone.getDataLoader().getOffset();
+
 		int cnt = 0;
-		if (clone._rows != null) ++cnt;
-		if (clone._cols != null) ++cnt;
-		if (clone._foot != null) ++cnt;
-		if (clone._frozen != null) ++cnt;
-		if (clone._paging != null) ++cnt;
-		if (cnt > 0) clone.afterUnmarshal(cnt);
+		if (clone._rows != null)
+			++cnt;
+		if (clone._cols != null)
+			++cnt;
+		if (clone._foot != null)
+			++cnt;
+		if (clone._frozen != null)
+			++cnt;
+		if (clone._paging != null)
+			++cnt;
+		if (cnt > 0)
+			clone.afterUnmarshal(cnt);
 
 		// after _pgi ready, and then getLimit() will work
 		final int limit = clone.getDataLoader().getLimit();
 		clone.resetDataLoader(false);
 		clone.getDataLoader().init(clone, offset, limit);
-		
+
 		if (clone._model != null) {
 			if (clone._model instanceof ComponentCloneListener) {
 				final ListModel model = (ListModel) ((ComponentCloneListener) clone._model).willClone(clone);
@@ -1473,12 +1529,13 @@ public class Grid extends MeshElement {
 			// clone the posted event, so we need to remove the attributes here.
 			clone.removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
 			clone.removeAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED);
-			
+
 			clone.getDataLoader().setLoadAll(_renderAll);
 		}
-		
+
 		return clone;
 	}
+
 	/** @param cnt # of children that need special handling (used for optimization).
 	 * -1 means process all of them
 	 */
@@ -1486,27 +1543,30 @@ public class Grid extends MeshElement {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Rows) {
-				_rows = (Rows)child;
-				if (--cnt == 0) break;
+				_rows = (Rows) child;
+				if (--cnt == 0)
+					break;
 			} else if (child instanceof Columns) {
-				_cols = (Columns)child;
-				if (--cnt == 0) break;
+				_cols = (Columns) child;
+				if (--cnt == 0)
+					break;
 			} else if (child instanceof Paging) {
-				_pgi = _paging = (Paging)child;
+				_pgi = _paging = (Paging) child;
 				addPagingListener(_pgi);
-				if (--cnt == 0) break;
+				if (--cnt == 0)
+					break;
 			} else if (child instanceof Frozen) {
-				_frozen = (Frozen)child;
-				if (--cnt == 0) break;
+				_frozen = (Frozen) child;
+				if (--cnt == 0)
+					break;
 			} else if (child instanceof Foot) {
-				_foot = (Foot)child;
-				if (--cnt == 0) break;
+				_foot = (Foot) child;
+				if (--cnt == 0)
+					break;
 			}
 		}
 	}
 
-	
-	
 	/**
 	 * Returns the message to display when there are no items
 	 * @return String
@@ -1515,30 +1575,29 @@ public class Grid extends MeshElement {
 	public String getEmptyMessage() {
 		return _emptyMessage;
 	}
-	
+
 	/**
 	 * Sets the message to display when there are no items
 	 * @param emptyMessage
 	 * @since 5.0.7
 	 */
 	public void setEmptyMessage(String emptyMessage) {
-		if(!Objects.equals(emptyMessage, _emptyMessage)){
+		if (!Objects.equals(emptyMessage, _emptyMessage)) {
 			_emptyMessage = emptyMessage;
-			smartUpdate("emptyMessage",_emptyMessage);
+			smartUpdate("emptyMessage", _emptyMessage);
 		}
 	}
-	
+
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		willSerialize(_model);
 		Serializables.smartWrite(s, _model);
 		willSerialize(_renderer);
 		Serializables.smartWrite(s, _renderer);
-		
+
 		// keep the scrolling status after serialized
 		if (_dataLoader != null) {
 			s.writeInt(_dataLoader.getOffset());
@@ -1546,32 +1605,32 @@ public class Grid extends MeshElement {
 		} else {
 			s.writeInt(0);
 			s.writeInt(100);
-		}		
+		}
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		_model = (ListModel)s.readObject();
+		_model = (ListModel) s.readObject();
 		didDeserialize(_model);
-		_renderer = (RowRenderer)s.readObject();
+		_renderer = (RowRenderer) s.readObject();
 		didDeserialize(_renderer);
 
 		init();
 		afterUnmarshal(-1);
-		
+
 		int offset = s.readInt();
 		int limit = s.readInt();
 		resetDataLoader(false); // no need to reset, it will reset the old reference.
 		getDataLoader().init(this, offset, limit);
-		
+
 		//TODO: how to marshal _pgi if _pgi != _paging
 		//TODO: re-register event listener for onPaging
 
 		if (_model != null) {
 			initDataListener();
 			getDataLoader().setLoadAll(_renderAll);
-			
+
 			// Map#Entry cannot be serialized, we have to restore them
 			if (_model instanceof ListModelMap && _rows != null) {
 				for (Component o : _rows.getChildren()) {
@@ -1581,15 +1640,16 @@ public class Grid extends MeshElement {
 			}
 		}
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "oddRowSclass", _scOddRow);
-		
+
 		if (_model != null)
-			render(renderer, "model", _model instanceof GroupsListModel || _model instanceof GroupsModel ? "group" : true);
+			render(renderer, "model",
+					_model instanceof GroupsListModel || _model instanceof GroupsModel ? "group" : true);
 
 		if (!"100%".equals(_innerWidth))
 			render(renderer, "innerWidth", _innerWidth);
@@ -1599,32 +1659,35 @@ public class Grid extends MeshElement {
 			renderer.render("_currentLeft", _currentLeft);
 
 		renderer.render("_topPad", _topPad);
-		
+
 		renderer.render("emptyMessage", _emptyMessage);
-		
+
 		renderer.render("_totalSize", getDataLoader().getTotalSize());
 		renderer.render("_offset", getDataLoader().getOffset());
-		
+
 		if (_rod) {
-			if (((Cropper)getDataLoader()).isCropper())//bug #2936064 
-					renderer.render("_grid$rod", true);
+			if (((Cropper) getDataLoader()).isCropper())//bug #2936064 
+				renderer.render("_grid$rod", true);
 			int sz = initRodSize();
 			if (sz != INIT_LIMIT)
 				renderer.render("initRodSize", initRodSize());
 		}
-		
+
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
 
 	}
+
 	/*package*/ boolean isRod() {
 		return _rod;
 	}
+
 	public void sessionWillPassivate(Page page) {
 		super.sessionWillPassivate(page);
 		willPassivate(_model);
 		willPassivate(_renderer);
 	}
+
 	public void sessionDidActivate(Page page) {
 		super.sessionDidActivate(page);
 		didActivate(_model);
@@ -1635,11 +1698,11 @@ public class Grid extends MeshElement {
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Padding {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Padding {
 		//-- Padding --//
 		public int getHeight() {
 			return _topPad;
@@ -1667,8 +1730,8 @@ public class Grid extends MeshElement {
 			if (size != oldsize) {
 				int begin = getActivePage() * oldsize;
 				int end = begin + oldsize;
-				end = Math.min(getPaginal().getTotalSize(), end); 
-				int sel = size > oldsize ? (end-1) : begin;
+				end = Math.min(getPaginal().getTotalSize(), end);
+				int sel = size > oldsize ? (end - 1) : begin;
 				int newpg = sel / size;
 				setPageSize(size);
 				setActivePage(newpg);
@@ -1683,23 +1746,25 @@ public class Grid extends MeshElement {
 			_topPad = AuRequests.getInt(request.getData(), "topPad", 0);
 		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
-			_innerWidth = width == null ? "100%": width;
+			_innerWidth = width == null ? "100%" : width;
 		} else if (cmd.equals(Events.ON_RENDER)) {
 			final RenderEvent<Row> event = RenderEvent.getRenderEvent(request);
 			final Set<Row> items = event.getItems();
 
 			int cnt = items.size();
-			if (cnt == 0) return; //nothing to do
+			if (cnt == 0)
+				return; //nothing to do
 
 			cnt = 20 - cnt;
 			if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
-				if (cnt > _preloadsz) cnt = _preloadsz;
+				if (cnt > _preloadsz)
+					cnt = _preloadsz;
 
 				//1. locate the first item found in items
 				final List<Row> toload = new LinkedList<Row>();
 				Iterator<Component> it = getRows().getChildren().iterator();
 				while (it.hasNext()) {
-					final Row row = (Row)it.next();
+					final Row row = (Row) it.next();
 					if (items.contains(row)) //found
 						break;
 					if (!row.isLoaded())
@@ -1708,16 +1773,15 @@ public class Grid extends MeshElement {
 
 				//2. add unload items before the found one
 				if (!toload.isEmpty()) {
-					int bfcnt = cnt/3;
-					for (Iterator<Row> e = toload.iterator();
-					bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
+					int bfcnt = cnt / 3;
+					for (Iterator<Row> e = toload.iterator(); bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
 						items.add(e.next());
 					}
 				}
 
 				//3. add unloaded after the found one
 				while (cnt > 0 && it.hasNext()) {
-					final Row row = (Row)it.next();
+					final Row row = (Row) it.next();
 					if (!row.isLoaded() && items.add(row))
 						--cnt;
 				}
@@ -1726,6 +1790,7 @@ public class Grid extends MeshElement {
 		} else
 			super.service(request, everError);
 	}
+
 	/** An iterator used by _heads.
 	 */
 	private class Iter implements Iterator<Component> {
@@ -1741,6 +1806,7 @@ public class Grid extends MeshElement {
 			}
 			return false;
 		}
+
 		public Component next() {
 			for (;;) {
 				Component o = _it.next();
@@ -1748,11 +1814,12 @@ public class Grid extends MeshElement {
 					return o;
 			}
 		}
+
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
 	}
-	
+
 	@Override
 	public void setActivePage(int pg) throws WrongValueException {
 		// Bug ZK-1696: model also preserves paging information

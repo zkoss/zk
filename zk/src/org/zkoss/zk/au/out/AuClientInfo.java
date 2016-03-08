@@ -16,8 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Desktop;
 
 /**
  * A response to ask the browser to send back its information.
@@ -35,8 +35,9 @@ public class AuClientInfo extends AuResponse {
 	 * @since 3.0.0
 	 */
 	public AuClientInfo(Desktop desktop) {
-		super("clientInfo", desktop != null ? desktop.getId(): null);
+		super("clientInfo", desktop != null ? desktop.getId() : null);
 	}
+
 	/** Constructs a client-info response for all desktops of the same
 	 * browser window.
 	 */

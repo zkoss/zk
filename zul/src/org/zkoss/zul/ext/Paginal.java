@@ -54,7 +54,7 @@ import org.zkoss.zk.ui.event.EventListener;
  * @see Paginated
  */
 public interface Paginal extends Pageable {
-	
+
 	/**
 	 * Returns whether to automatically hide the paging if
 	 * there is only one page available.
@@ -62,6 +62,7 @@ public interface Paginal extends Pageable {
 	 * @since 7.0.1
 	 */
 	public boolean isAutohide();
+
 	/**
 	 * Sets whether to automatically hide the paging if
 	 * there is only one page available.
@@ -69,10 +70,11 @@ public interface Paginal extends Pageable {
 	 * @since 7.0.1
 	 */
 	public void setAutohide(boolean autohide);
-	
+
 	/** Returns the total number of items.
 	 */
 	public int getTotalSize();
+
 	/** Sets the total number of items.
 	 */
 	public void setTotalSize(int size) throws WrongValueException;
@@ -82,6 +84,7 @@ public interface Paginal extends Pageable {
 	 * <p>Default: 10.
 	 */
 	public int getPageIncrement();
+
 	/** Sets the number of page anchors shall appear at the client.
 	 */
 	public void setPageIncrement(int pginc) throws WrongValueException;
@@ -89,6 +92,7 @@ public interface Paginal extends Pageable {
 	/** Returns whether to show the detailed info, such as {@link #getTotalSize}.
 	 */
 	public boolean isDetailed();
+
 	/** Sets whether to show the detailed info, such as {@link #getTotalSize}.
 	 */
 	public void setDetailed(boolean detailed);
@@ -105,6 +109,7 @@ public interface Paginal extends Pageable {
 	 * @see org.zkoss.zul.event.PagingEvent
 	 */
 	public boolean addEventListener(String evtnm, EventListener<? extends Event> listener);
+
 	/** Removes an event listener.
 	 * @return whether the listener is removed; false if it was never added.
 	 */

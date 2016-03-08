@@ -45,6 +45,5 @@ public interface Constraint {
 	/** Verifies whether the value is acceptable.
 	 * @param comp the component being validated
 	 */
-	public void validate(Component comp, Object value)
-	throws WrongValueException;
+	public void validate(Component comp, Object value) throws WrongValueException;
 }

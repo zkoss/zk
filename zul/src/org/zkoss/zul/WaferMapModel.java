@@ -16,8 +16,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Collections;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +43,7 @@ public class WaferMapModel extends AbstractChartModel {
 	 */
 	public WaferMapModel() {
 	}
-	
+
 	/**
 	 * data model to be used with wafermap chart.
 	 * @param xsize the x size of the wafer matrix.
@@ -64,21 +64,21 @@ public class WaferMapModel extends AbstractChartModel {
 		_ysize = ysize;
 		_space = space;
 	}
-	
+
 	/**
 	 * Returns the x size of the wafer matrix.
 	 */
 	public int getXsize() {
 		return _xsize;
 	}
-	
+
 	/**
 	 * Returns the y size of the wafer matrix.
 	 */
 	public int getYsize() {
 		return _ysize;
 	}
-	
+
 	/**
 	 * Returns the x size of the wafer matrix.
 	 */
@@ -88,7 +88,7 @@ public class WaferMapModel extends AbstractChartModel {
 			fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 		}
 	}
-	
+
 	/**
 	 * Returns the y size of the wafer matrix.
 	 */
@@ -98,14 +98,14 @@ public class WaferMapModel extends AbstractChartModel {
 			fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 		}
 	}
-	
+
 	/**
 	 * Returns the space between chips, default to 1.
 	 */
 	public double getSpace() {
 		return _space;
 	}
-	
+
 	/** Returns the value of the given chip at (x,y) of the wafer matrix.
 	 * @param x the x index of the wafer matrix.
 	 * @param y the y index of the wafer matrix.
@@ -126,17 +126,17 @@ public class WaferMapModel extends AbstractChartModel {
 	 * @param y the y index to specify the chip on the wafer.
 	 */
 	public void addValue(int value, int x, int y) {
-		if (x >= _xsize) 
-			throw new IndexOutOfBoundsException("x size: "+_xsize+", x: "+x);
-		if (y >= _ysize) 
-			throw new IndexOutOfBoundsException("y size: "+_ysize+", y: "+y);
+		if (x >= _xsize)
+			throw new IndexOutOfBoundsException("x size: " + _xsize + ", x: " + x);
+		if (y >= _ysize)
+			throw new IndexOutOfBoundsException("y size: " + _ysize + ", y: " + y);
 		if (_values == null) {
 			_values = new HashMap<IntPair, Number>();
 		}
 		_values.put(new IntPair(x, y), new Integer(value));
 		fireEvent(ChartDataEvent.CHANGED, null, null, -1, -1, null);
 	}
-	
+
 	/** Internal Use Only. The entrySet of the added values.
 	 */
 	public Collection<Map.Entry<IntPair, Number>> getEntrySet() {
@@ -144,12 +144,12 @@ public class WaferMapModel extends AbstractChartModel {
 			return _values.entrySet();
 		return Collections.emptySet();
 	}
-	
+
 	/**
 	 * remove the value of the specified x and y.
 	 * @param x the x index of the wafer matrix.
 	 * @param y the y index of the wafer matrix.
-	 */	
+	 */
 	public void removeValue(int x, int y) {
 		if (_values != null) {
 			final Number old = _values.remove(new IntPair(x, y));
@@ -158,7 +158,7 @@ public class WaferMapModel extends AbstractChartModel {
 			}
 		}
 	}
-	
+
 	/**
 	 * clear the model.
 	 */
@@ -174,24 +174,24 @@ public class WaferMapModel extends AbstractChartModel {
 		private static final long serialVersionUID = 20091008182635L;
 		private int _x;
 		private int _y;
-		
+
 		private IntPair(int x, int y) {
 			_x = x;
 			_y = y;
 		}
-		
+
 		public int getX() {
 			return _x;
 		}
-		
+
 		public int getY() {
 			return _y;
 		}
-		
+
 		public int hashCode() {
 			return _x ^ _y;
 		}
-		
+
 		public boolean equals(Object other) {
 			if (this == other) {
 				return true;
@@ -203,7 +203,7 @@ public class WaferMapModel extends AbstractChartModel {
 			return o._x == _x && o._y == _y;
 		}
 	}
-	
+
 	public Object clone() {
 		WaferMapModel clone = (WaferMapModel) super.clone();
 		if (_values != null)

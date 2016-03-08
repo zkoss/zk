@@ -48,22 +48,20 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		boolean pageOnly = au;
 		if (!pageOnly)
-			pageOnly = (exec.isIncluded() || "page".equals(ctl))
-				&& !"desktop".equals(ctl);
+			pageOnly = (exec.isIncluded() || "page".equals(ctl)) && !"desktop".equals(ctl);
 
 		if (pageOnly)
 			renderPage(exec, page, out, au);
 		else
 			renderDesktop(exec, page, out);
 	}
+
 	/** Renders the desktop and the page.
 	 */
-	protected
-	void renderDesktop(Execution exec, Page page, Writer out)
-	throws IOException {
+	protected void renderDesktop(Execution exec, Page page, Writer out) throws IOException {
 		HtmlPageRenders.setContentType(exec, page);
 
-		final PageCtrl pageCtrl = (PageCtrl)page;
+		final PageCtrl pageCtrl = (PageCtrl) page;
 		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		Double number = exec.getBrowser("mobile");
@@ -74,26 +72,27 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			// let ie <= 8 support VML on javascript
 			if (ie != null && ie < 9)
 				out.write(" xmlns:v=\"urn:schemas-microsft.com:vml\"");
-			
+
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
-				// B70-ZK-2065: Remove meta for validation.
-				//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
-				//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
+					// B70-ZK-2065: Remove meta for validation.
+					//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
+					//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
 					+ "<title>");
 		} else {
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n");
-				// B70-ZK-2065: Remove meta for validation.
-				//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
-				//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n");
-			
+			// B70-ZK-2065: Remove meta for validation.
+			//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
+			//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n");
+
 			String viewport = page.getViewport();
 			if (!"auto".equals(viewport))
 				out.write("<meta name=\"viewport\" content=\"" + viewport + "\" > \n");
 			else if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
-				out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n");
-			
+				out.write(
+						"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n");
+
 			out.write("<title>");
 		}
 		write(out, page.getTitle());
@@ -112,50 +111,53 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		}
 		out.write("\n</body>\n</html>\n");
 	}
-	private static void outHeaders(Execution exec, Page page, Writer out)
-	throws IOException {
+
+	private static void outHeaders(Execution exec, Page page, Writer out) throws IOException {
 		out.write(HtmlPageRenders.outHeaders(exec, page, true));
 		//F70-ZK-2495: place init-crash-script before zk.wpd
 		out.write(HtmlPageRenders.outInitCrashScript(exec, null));
-        out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
+		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
 		out.write(HtmlPageRenders.outHeaders(exec, page, false));
 	}
+
 	private static void write(Writer out, String s) throws IOException {
-		if (s != null) out.write(s);
+		if (s != null)
+			out.write(s);
 	}
+
 	private static void writeln(Writer out, String s) throws IOException {
 		if (s != null) {
 			out.write(s);
 			out.write('\n');
 		}
 	}
+
 	/** Renders the page if {@link Page#isComplete} is false.
 	 *
 	 * @param au whether it is caused by an asynchronous update
 	 */
-	protected void renderPage(Execution exec, Page page, Writer out, boolean au)
-	throws IOException {
+	protected void renderPage(Execution exec, Page page, Writer out, boolean au) throws IOException {
 		if (!au) {
 			out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
 			out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		}
 
 		HtmlPageRenders.outPageContent(exec, page, out, au);
-		if (!au && ((PageCtrl)page).getOwner() == null)
+		if (!au && ((PageCtrl) page).getOwner() == null)
 			writeln(out, HtmlPageRenders.outUnavailable(exec));
 	}
+
 	/** Renders the page if {@link Page#isComplete} is true.
 	 * In other words, the page content contains HTML/BODY tags.
 	 */
-	protected void renderComplete(Execution exec, Page page, Writer out)
-	throws IOException {
+	protected void renderComplete(Execution exec, Page page, Writer out) throws IOException {
 		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		HtmlPageRenders.setContentType(exec, page);
 
 		for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling())
-			((ComponentCtrl)root).redraw(out);
+			((ComponentCtrl) root).redraw(out);
 
 		write(out, HtmlPageRenders.outHeaderZkTags(exec, page));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));

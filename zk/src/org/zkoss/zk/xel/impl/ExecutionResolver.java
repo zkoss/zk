@@ -48,7 +48,8 @@ public class ExecutionResolver implements VariableResolverX {
 	 * @param exec the current execution
 	 */
 	public ExecutionResolver(Execution exec, VariableResolver parent) {
-		if (exec == null) throw new NullPointerException();
+		if (exec == null)
+			throw new NullPointerException();
 		_exec = exec;
 		_parent = parent;
 	}
@@ -59,6 +60,7 @@ public class ExecutionResolver implements VariableResolverX {
 	public void setSelf(Object self) {
 		_self = self;
 	}
+
 	/** Returns the self variable.
 	 */
 	public Object getSelf() {
@@ -69,14 +71,15 @@ public class ExecutionResolver implements VariableResolverX {
 	public Object resolveVariable(String name) throws XelException {
 		return resolveVariable(null, null, name);
 	}
+
 	//-- VariableResolverX --//
 	public Object resolveVariable(XelContext ctx, Object base, Object onm) {
 		if (base != null) {
-			Object o = ((ExecutionCtrl)_exec).getExtraXelVariable(ctx, base, onm);
+			Object o = ((ExecutionCtrl) _exec).getExtraXelVariable(ctx, base, onm);
 			if (o != null)
 				return o;
-			final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
-			return page != null ? page.getXelVariable(ctx, base, onm, true): null;
+			final Page page = ((ExecutionCtrl) _exec).getCurrentPage();
+			return page != null ? page.getXelVariable(ctx, base, onm, true) : null;
 		}
 
 		if (onm == null)
@@ -94,7 +97,7 @@ public class ExecutionResolver implements VariableResolverX {
 			return _exec.getArg();
 		if ("componentScope".equals(name)) {
 			if (_self instanceof Component)
-				return ((Component)_self).getAttributes(Component.COMPONENT_SCOPE);
+				return ((Component) _self).getAttributes(Component.COMPONENT_SCOPE);
 			return Collections.EMPTY_MAP;
 		}
 		if ("desktopScope".equals(name))
@@ -105,18 +108,18 @@ public class ExecutionResolver implements VariableResolverX {
 			return _exec;
 		if ("pageScope".equals(name)) {
 			if (_self instanceof Component)
-				return ((Component)_self).getAttributes(Component.PAGE_SCOPE);
+				return ((Component) _self).getAttributes(Component.PAGE_SCOPE);
 			if (_self instanceof Page)
-				return ((Page)_self).getAttributes();
-			final Page page = ((ExecutionCtrl)_exec).getCurrentPage();
-			return page != null ? page.getAttributes(): Collections.EMPTY_MAP;
+				return ((Page) _self).getAttributes();
+			final Page page = ((ExecutionCtrl) _exec).getCurrentPage();
+			return page != null ? page.getAttributes() : Collections.EMPTY_MAP;
 		}
 		if ("page".equals(name)) {
 			if (_self instanceof Component)
-				return Components.getCurrentPage((Component)_self);
+				return Components.getCurrentPage((Component) _self);
 			if (_self instanceof Page)
 				return _self;
-			return ((ExecutionCtrl)_exec).getCurrentPage();
+			return ((ExecutionCtrl) _exec).getCurrentPage();
 		}
 		if ("requestScope".equals(name))
 			return _exec.getAttributes();
@@ -128,31 +131,31 @@ public class ExecutionResolver implements VariableResolverX {
 			return _exec.getDesktop().getSession();
 		if ("spaceOwner".equals(name)) {
 			if (_self instanceof Component)
-				return ((Component)_self).getSpaceOwner();
+				return ((Component) _self).getSpaceOwner();
 			if (_self instanceof Page)
 				return _self;
 			return null;
 		}
 		if ("spaceScope".equals(name)) {
 			if (_self instanceof Component)
-				return ((Component)_self).getAttributes(Component.SPACE_SCOPE);
+				return ((Component) _self).getAttributes(Component.SPACE_SCOPE);
 			if (_self instanceof Page)
-				return ((Page)_self).getAttributes();
+				return ((Page) _self).getAttributes();
 			return Collections.EMPTY_MAP;
 		}
 		if ("param".equals(name) || "paramValues".equals(name))
 			return Evaluators.resolveVariable(_parent, name);
-			//Bug 3131983: cannot go through getZScriptVariable
+		//Bug 3131983: cannot go through getZScriptVariable
 
 		if (_self instanceof Component) {
-			final Component comp = (Component)_self;
+			final Component comp = (Component) _self;
 
 			//We have to look getZScriptVariable first and then namespace
 			//so it is in the same order of interpreter
 			Page page = null;
 			if (comp instanceof ShadowElement) {
 				final Component host = ((ShadowElement) comp).getShadowHost();
-				 page = Components.getCurrentPage(host);
+				page = Components.getCurrentPage(host);
 				if (page != null) {
 					final Object o = page.getZScriptVariable(host, name);
 					if (o != null)
@@ -173,15 +176,14 @@ public class ExecutionResolver implements VariableResolverX {
 			o = comp.getShadowVariable(name, true);
 			if (o != null)
 				return o;
-			
+
 			o = comp.getAttributeOrFellow(name, true);
 			if (o != null)
 				return o;
 
-			o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
+			o = ((ExecutionCtrl) _exec).getExtraXelVariable(name);
 			if (o != null)
 				return o;
-			
 
 			if (page != null) {
 				o = page.getXelVariable(ctx, null, name, true);
@@ -191,9 +193,9 @@ public class ExecutionResolver implements VariableResolverX {
 		} else {
 			Page page;
 			if (_self instanceof Page) {
-				page = (Page)_self;
+				page = (Page) _self;
 			} else {
-				page = ((ExecutionCtrl)_exec).getCurrentPage();
+				page = ((ExecutionCtrl) _exec).getCurrentPage();
 			}
 
 			if (page != null) {
@@ -209,7 +211,7 @@ public class ExecutionResolver implements VariableResolverX {
 				if (o != null)
 					return o;
 
-				o = ((ExecutionCtrl)_exec).getExtraXelVariable(name);
+				o = ((ExecutionCtrl) _exec).getExtraXelVariable(name);
 				if (o != null)
 					return o;
 

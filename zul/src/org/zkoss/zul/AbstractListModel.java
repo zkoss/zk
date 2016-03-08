@@ -40,8 +40,8 @@ import org.zkoss.zul.ext.SelectionControl;
  * 
  * @author tomyeh
  */
-abstract public class AbstractListModel<E> implements ListModel<E>,
-Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
+public abstract class AbstractListModel<E>
+		implements ListModel<E>, Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	private transient List<ListDataListener> _listeners = new ArrayList<ListDataListener>();
 	private transient List<PagingListener> _pagingListeners = new ArrayList<PagingListener>();
 
@@ -53,7 +53,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	protected AbstractListModel() {
 		_selection = newEmptySelection();
 		_ctrl = new DefaultSelectionControl<E>(this);
-	}	
+	}
 
 	/**
 	 * Fires a {@link ListDataEvent} for all registered listener (thru
@@ -75,6 +75,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 			throw new NullPointerException();
 		_listeners.add(l);
 	}
+
 	/** {@inheritDoc} */
 	public void removeListDataListener(ListDataListener l) {
 		_listeners.remove(l);
@@ -85,11 +86,12 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	public Set<E> getSelection() {
 		return Collections.unmodifiableSet(_selection);
 	}
+
 	/** {@inheritDoc} */
 	public void setSelection(Collection<? extends E> selection) {
 		if (isSelectionChanged(selection)) {
 			if (!_multiple && selection.size() > 1)
-				throw new IllegalArgumentException("Only one selection is allowed, not "+selection);
+				throw new IllegalArgumentException("Only one selection is allowed, not " + selection);
 			_selection.clear();
 			_selection.addAll(selection);
 			if (selection.isEmpty()) {
@@ -98,11 +100,12 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 				fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
 		}
 	}
+
 	private boolean isSelectionChanged(Collection<? extends E> selection) {
 		if (_selection.size() != selection.size())
 			return true;
 
-		for (final E e: selection)
+		for (final E e : selection)
 			if (!_selection.contains(e))
 				return true;
 		return false;
@@ -110,11 +113,10 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 
 	/** {@inheritDoc} */
 	public boolean isSelected(Object obj) {
-		return !isSelectionEmpty()
-				&& (_selection.size() == 1 ? Objects
-						.equals(_selection.iterator().next(), obj)
-						 : _selection.contains(obj));
+		return !isSelectionEmpty() && (_selection.size() == 1 ? Objects.equals(_selection.iterator().next(), obj)
+				: _selection.contains(obj));
 	}
+
 	/** {@inheritDoc} */
 	public boolean isSelectionEmpty() {
 		return _selection.isEmpty();
@@ -132,6 +134,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 		}
 		return false;
 	}
+
 	/** {@inheritDoc} */
 	public boolean removeFromSelection(Object obj) {
 		if (_selection.remove(obj)) {
@@ -140,6 +143,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 		}
 		return false;
 	}
+
 	/** {@inheritDoc} */
 	public void clearSelection() {
 		if (!_selection.isEmpty()) {
@@ -161,7 +165,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	protected void fireSelectionEvent(E e) {
 		fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
 	}
-	
+
 	/**Removes the selection of the given collection.
 	 */
 	protected void removeAllSelection(Collection<?> c) {
@@ -171,6 +175,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 			fireEvent(ListDataEvent.SELECTION_CHANGED, -1, -1);
 		}
 	}
+
 	/**Removes the selection that doesn't belong to the given collection.
 	 */
 	protected void retainAllSelection(Collection<?> c) {
@@ -185,6 +190,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	public boolean isMultiple() {
 		return _multiple;
 	}
+
 	/** {@inheritDoc} */
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
@@ -217,12 +223,15 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	 */
 	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
 		private AbstractListModel model;
+
 		public DefaultSelectionControl(AbstractListModel model) {
 			this.model = model;
 		}
+
 		public boolean isSelectable(E e) {
 			return true;
 		}
+
 		public void setSelectAll(boolean selectAll) {
 			if (selectAll) {
 				List all = new LinkedList();
@@ -237,18 +246,19 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 
 				if (model instanceof AbstractListModel)
 					try {
-						((Selectable)model).setSelection(all);
+						((Selectable) model).setSelection(all);
 					} finally {
 						model.fireEvent(ListDataEvent.ENABLE_CLIENT_UPDATE, -1, -1);
 					}
 			} else {
-				((Selectable)model).clearSelection();
+				((Selectable) model).clearSelection();
 			}
 		}
+
 		public boolean isSelectAll() {
 			for (int i = 0, j = model.getSize(); i < j; i++) {
 				E o = (E) model.getElementAt(i);
-				if (isSelectable(o) && !((Selectable)model).isSelected(o))
+				if (isSelectable(o) && !((Selectable) model).isSelected(o))
 					return false;
 			}
 			return true;
@@ -263,33 +273,32 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 	protected Set<E> newEmptySelection() {
 		return new LinkedHashSet<E>();
 	}
+
 	/** Writes {@link #_selection}.
 	 * <p>Default: write it directly. Override it if E is not serializable.
 	 */
-	protected void writeSelection(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	protected void writeSelection(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.writeObject(_selection);
 	}
+
 	/** Reads back {@link #_selection}.
 	 * <p>Default: write it directly. Override it if E is not serializable.
 	 */
 	@SuppressWarnings("unchecked")
-	protected void readSelection(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		_selection = (Set<E>)s.readObject();
+	protected void readSelection(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
+		_selection = (Set<E>) s.readObject();
 	}
 
 	// Serializable//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		writeSelection(s);
 		Serializables.smartWrite(s, _listeners);
 		Serializables.smartWrite(s, _pagingListeners);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		readSelection(s);
@@ -313,7 +322,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 		clone._selection.addAll(_selection);
 		return clone;
 	}
-	
+
 	// Pageable //
 	private int _pageSize = -1;
 	private int _activePage = -1;
@@ -339,11 +348,11 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 
 	public int getPageCount() {
 		int size = getSize();
-		if(size > 0){
+		if (size > 0) {
 			int pageCount = size / _pageSize;
-			if(size % _pageSize == 0){
+			if (size % _pageSize == 0) {
 				return pageCount;
-			} else{
+			} else {
 				return pageCount + 1;
 			}
 		} else {
@@ -377,6 +386,7 @@ Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
 			throw new NullPointerException();
 		_pagingListeners.add(l);
 	}
+
 	public void removePagingEventListener(PagingListener l) {
 		_pagingListeners.remove(l);
 	}

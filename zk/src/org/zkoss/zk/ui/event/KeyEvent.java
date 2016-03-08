@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents a key pressed by the user.
@@ -58,23 +58,24 @@ public class KeyEvent extends Event {
 	 */
 	public static final KeyEvent getKeyEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new KeyEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getInt(data, "keyCode", 0), AuRequests.getBoolean(data, "ctrlKey"),
-			AuRequests.getBoolean(data, "shiftKey"), AuRequests.getBoolean(data, "altKey"),
-			request.getDesktop().getComponentByUuidIfAny((String)data.get("reference")));
+		return new KeyEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "keyCode", 0),
+				AuRequests.getBoolean(data, "ctrlKey"), AuRequests.getBoolean(data, "shiftKey"),
+				AuRequests.getBoolean(data, "altKey"),
+				request.getDesktop().getComponentByUuidIfAny((String) data.get("reference")));
 	}
 
 	private final int _keyCode;
 	private final boolean _ctrlKey, _shiftKey, _altKey;
 	private final Component _ref;
-	public KeyEvent(String name, Component target, int keyCode,
-			boolean ctrlKey, boolean shiftKey, boolean altKey) {
+
+	public KeyEvent(String name, Component target, int keyCode, boolean ctrlKey, boolean shiftKey, boolean altKey) {
 		this(name, target, keyCode, ctrlKey, shiftKey, altKey, null);
 	}
+
 	/** Constructs a mouse relevant event.
 	 */
-	public KeyEvent(String name, Component target, int keyCode,
-	boolean ctrlKey, boolean shiftKey, boolean altKey, Component ref) {
+	public KeyEvent(String name, Component target, int keyCode, boolean ctrlKey, boolean shiftKey, boolean altKey,
+			Component ref) {
 		super(name, target);
 		_keyCode = keyCode;
 		_ctrlKey = ctrlKey;
@@ -82,21 +83,25 @@ public class KeyEvent extends Event {
 		_altKey = altKey;
 		_ref = ref;
 	}
+
 	/** Returns the key code.
 	 */
 	public final int getKeyCode() {
 		return _keyCode;
 	}
+
 	/** Returns whether CTRL is pressed.
 	 */
 	public final boolean isCtrlKey() {
 		return _ctrlKey;
 	}
+
 	/** Returns whether SHIFT is pressed.
 	 */
 	public final boolean isShiftKey() {
 		return _shiftKey;
 	}
+
 	/** Returns whether ALT is pressed.
 	 */
 	public final boolean isAltKey() {
@@ -111,5 +116,5 @@ public class KeyEvent extends Event {
 	 */
 	public Component getReference() {
 		return _ref;
-	} 
+	}
 }

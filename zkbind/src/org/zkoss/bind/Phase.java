@@ -40,7 +40,7 @@ public enum Phase {
 	/**
 	 * command phase.
 	 */
-	COMMAND, 
+	COMMAND,
 	/**
 	 * global command phase.
 	 */
@@ -48,23 +48,23 @@ public enum Phase {
 	/**
 	 * validate phase.
 	 */
-	VALIDATE, 
+	VALIDATE,
 	/**
 	 * save before command phase.
 	 */
-	SAVE_BEFORE, 
+	SAVE_BEFORE,
 	/**
 	 * load before command phase.
-	 */		
-	LOAD_BEFORE, 
+	 */
+	LOAD_BEFORE,
 	/**
 	 * command execution phase.
 	 */
-	EXECUTE, 
+	EXECUTE,
 	/**
 	 * save after command phase.
 	 */
-	SAVE_AFTER, 
+	SAVE_AFTER,
 	/**
 	 * load after command phase.
 	 */

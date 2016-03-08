@@ -31,6 +31,7 @@ public interface Condition {
 	 * @param comp used as the self variable. Ignored if null.
 	 */
 	public boolean isEffective(Component comp);
+
 	/** Used to evaluate whether it is effective.
 	 *
 	 * @param page used as the self variable. Ignored if null.

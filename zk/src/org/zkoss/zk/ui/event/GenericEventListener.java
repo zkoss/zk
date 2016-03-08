@@ -19,7 +19,6 @@ package org.zkoss.zk.ui.event;
 import java.lang.reflect.Method;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 
 /**
@@ -55,8 +54,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
  * @since 3.0.1
  *
  */
-abstract public class GenericEventListener<T extends Event>
-implements SerializableEventListener<T> {
+public abstract class GenericEventListener<T extends Event> implements SerializableEventListener<T> {
 
 	/* Process the event by forwarding the invocation to
 	 * the corresponding method called onXxx.
@@ -73,30 +71,29 @@ implements SerializableEventListener<T> {
 	 * and pass the original forwarded event to the onXxx method.</p>
 	 *
 	 * @see org.zkoss.zk.ui.event.EventListener#onEvent(org.zkoss.zk.ui.event.Event)
-	 */	
-	public void onEvent(Event evt) throws Exception {		
+	 */
+	public void onEvent(Event evt) throws Exception {
 		final Object controller = getController();
-		final Method mtd =	ComponentsCtrl.getEventMethod(controller.getClass(), evt.getName());
+		final Method mtd = ComponentsCtrl.getEventMethod(controller.getClass(), evt.getName());
 		if (mtd != null) {
 			if (mtd.getParameterTypes().length == 0)
 				mtd.invoke(controller);
 			else if (evt instanceof ForwardEvent) { //ForwardEvent
 				final Class paramcls = mtd.getParameterTypes()[0];
 				//paramcls is ForwardEvent || Event
-				if (ForwardEvent.class.isAssignableFrom(paramcls)
-				|| Event.class.equals(paramcls)) { 
+				if (ForwardEvent.class.isAssignableFrom(paramcls) || Event.class.equals(paramcls)) {
 					mtd.invoke(controller, evt);
 				} else {
 					do {
-						evt = ((ForwardEvent)evt).getOrigin();
-					} while(evt instanceof ForwardEvent);
+						evt = ((ForwardEvent) evt).getOrigin();
+					} while (evt instanceof ForwardEvent);
 					mtd.invoke(controller, evt);
 				}
 			} else
 				mtd.invoke(controller, evt);
 		}
 	}
-	
+
 	/**
 	 * A convenient method that help you register this event listener
 	 * to the specified target component.
@@ -110,12 +107,12 @@ implements SerializableEventListener<T> {
 	 * @param comp the target component to register this event listener.
 	 */
 	public void bindComponent(Component comp) {
-		final Method [] metds = getController().getClass().getMethods();
-		for(int i=0; i < metds.length; i ++){
+		final Method[] metds = getController().getClass().getMethods();
+		for (int i = 0; i < metds.length; i++) {
 			final String evtnm = metds[i].getName();
 			if (Events.isValid(evtnm))
 				comp.addEventListener(evtnm, this);
-		}		
+		}
 	}
 
 	/**
@@ -127,12 +124,12 @@ implements SerializableEventListener<T> {
 	 * @since 3.6.3
 	 */
 	public void unbindComponent(Component comp) {
-		final Method [] metds = getController().getClass().getMethods();
-		for(int i=0; i < metds.length; i ++){
+		final Method[] metds = getController().getClass().getMethods();
+		for (int i = 0; i < metds.length; i++) {
 			final String evtnm = metds[i].getName();
 			if (Events.isValid(evtnm))
 				comp.removeEventListener(evtnm, this);
-		}		
+		}
 	}
 
 	/**

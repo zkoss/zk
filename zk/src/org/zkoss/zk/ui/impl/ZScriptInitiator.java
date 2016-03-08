@@ -19,10 +19,10 @@ package org.zkoss.zk.ui.impl;
 import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
+import org.zkoss.zk.ui.metainfo.ZScript;
+import org.zkoss.zk.ui.util.Initiator;
 
 /**
  * An initiator used to evaluate a zscript file.
@@ -36,14 +36,15 @@ public class ZScriptInitiator implements Initiator {
 	private final ZScript _zscript;
 
 	public ZScriptInitiator(ZScript script) {
-		if (script == null) throw new IllegalArgumentException("null");
+		if (script == null)
+			throw new IllegalArgumentException("null");
 		_zscript = script;
 	}
+
 	public void doInit(Page page, Map<String, Object> args) throws Exception {
 		final Scope scope = Scopes.beforeInterpret(page);
 		try {
-			page.interpret(
-				_zscript.getLanguage(), _zscript.getContent(page, null), scope);
+			page.interpret(_zscript.getLanguage(), _zscript.getContent(page, null), scope);
 		} finally {
 			Scopes.afterInterpret();
 		}

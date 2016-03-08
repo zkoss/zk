@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +45,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.image.AImage;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
@@ -82,17 +84,18 @@ public class AuUploader implements AuExtension {
 
 	public AuUploader() {
 	}
+
 	public void init(DHtmlUpdateServlet servlet) {
 		_ctx = servlet.getServletContext();
 	}
+
 	public void destroy() {
 	}
 
 	/** Processes a file uploaded from the client.
 	 */
-	public void service(
-	HttpServletRequest request, HttpServletResponse response, String pathInfo)
-	throws ServletException, IOException {
+	public void service(HttpServletRequest request, HttpServletResponse response, String pathInfo)
+			throws ServletException, IOException {
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
 			response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
@@ -108,8 +111,9 @@ public class AuUploader implements AuExtension {
 					// refix ZK-2056: should escape both XML and Javascript
 					uuid = escapeParam(request.getParameter("wid"));
 					sid = escapeParam(request.getParameter("sid"));
-					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(XMLs.encodeText(request.getParameter("dtid")));
-					
+					desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess)
+							.getDesktop(XMLs.encodeText(request.getParameter("dtid")));
+
 					Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
 					Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
 
@@ -128,17 +132,17 @@ public class AuUploader implements AuExtension {
 						return;
 					}
 					final Integer p = percent.get(key);
-					final Long cb = (Long)sinfo;
-					response.getWriter().write((p != null ? p.intValue(): -1)+ ","
-								+(cb != null ? cb.longValue(): -1));
+					final Long cb = (Long) sinfo;
+					response.getWriter()
+							.write((p != null ? p.intValue() : -1) + "," + (cb != null ? cb.longValue() : -1));
 					return;
-				} else 
+				} else
 					alert = "enctype must be multipart/form-data";
 			} else {
 				// refix ZK-2056: should escape both XML and Javascript
 				uuid = escapeParam(request.getParameter("uuid"));
 				sid = escapeParam(request.getParameter("sid"));
-				
+
 				if (uuid == null || uuid.length() == 0) {
 					alert = "uuid is required!";
 				} else {
@@ -150,11 +154,10 @@ public class AuUploader implements AuExtension {
 					if (dtid == null || dtid.length() == 0) {
 						alert = "dtid is required!";
 					} else {
-						desktop = ((WebAppCtrl)sess.getWebApp())
-							.getDesktopCache(sess).getDesktop(dtid);
+						desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
 						final Map<String, Object> params = parseRequest(request, desktop, uuid + '_' + sid);
-						nextURI = (String)params.get("nextURI");
-						
+						nextURI = (String) params.get("nextURI");
+
 						// Bug 3054784
 						params.put("native", request.getParameter("native"));
 						processItems(desktop, params, attrs);
@@ -191,27 +194,28 @@ public class AuUploader implements AuExtension {
 		if (attrs.get("contentId") == null && alert == null)
 			//B65-ZK-1724: display more meaningful errormessage
 			alert = "Upload Aborted : (contentId is required)";
-			
+
 		if (alert != null) {
 			if (desktop == null) {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
 			Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
-			Map<String, Object> size = cast((Map)desktop.getAttribute(Attributes.UPLOAD_SIZE));
+			Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
 			final String key = uuid + '_' + sid;
 			if (percent != null) {
 				percent.remove(key);
 				size.put(key, alert);
 			}
 		}
-		if (log.isTraceEnabled()) log.trace(Objects.toString(attrs));
+		if (log.isTraceEnabled())
+			log.trace(Objects.toString(attrs));
 
 		if (nextURI == null || nextURI.length() == 0)
 			nextURI = "~./zul/html/fileupload-done.html.dsp";
-		Servlets.forward(_ctx, request, response,
-			nextURI, attrs, Servlets.PASS_THRU_ATTR);
+		Servlets.forward(_ctx, request, response, nextURI, attrs, Servlets.PASS_THRU_ATTR);
 	}
+
 	/** Handles the exception that was thrown when uploading files,
 	 * and returns the error message.
 	 * When uploading file(s) causes an exception, this method will be
@@ -225,13 +229,13 @@ public class AuUploader implements AuExtension {
 	 * Then, specify it in web.xml as follows. 
 	 * (we change from processor0 to extension0 after ZK5.)
 	 * @see DHtmlUpdateServlet
-<code><pre>&lt;servlet&gt;
-  &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;
-  &lt;init-param&gt;
-    &lt;param-name&gt;extension0&lt;/param-name&gt;
-    &lt;param-value&gt;/upload=com.my.MyUploader&lt;/param-value&gt;
-  &lt;/init-param&gt;
-...</pre></code>
+	<code><pre>&lt;servlet&gt;
+	&lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;
+	&lt;init-param&gt;
+	&lt;param-name&gt;extension0&lt;/param-name&gt;
+	&lt;param-value&gt;/upload=com.my.MyUploader&lt;/param-value&gt;
+	&lt;/init-param&gt;
+	...</pre></code>
 	 * 
 	 * @param ex the exception.
 	 * Typical exceptions include org.apache.commons.fileupload .FileUploadBase.SizeLimitExceededException
@@ -239,67 +243,66 @@ public class AuUploader implements AuExtension {
 	 */
 	protected String handleError(Throwable ex) {
 		log.error("Failed to upload", ex);
-        if (ex instanceof FileUploadBase.SizeLimitExceededException) {
-            try {
-                FileUploadBase.SizeLimitExceededException fex = (FileUploadBase.SizeLimitExceededException) ex;
-                long size = fex.getActualSize();
-                long limit = fex.getPermittedSize();
-                final Class<?> msgClass = Classes.forNameByThread("org.zkoss.zul.mesg.MZul");
-                Field msgField = msgClass.getField("UPLOAD_ERROR_EXCEED_MAXSIZE");
-                int divisor1 = 1024;
-                int divisor2 = 1024 * 1024;
-                String[] units = new String[] {" Bytes", " KB", " MB"};
-                int i1 = (int)(Math.log(size) / Math.log(1024));
-                int i2 = (int)(Math.log(limit) / Math.log(1024));
-                String size_auto = Math.round(size / Math.pow(1024, i1)) + units[i1];
-                String limit_auto = Math.round(limit / Math.pow(1024, i2)) + units[i2];
+		if (ex instanceof FileUploadBase.SizeLimitExceededException) {
+			try {
+				FileUploadBase.SizeLimitExceededException fex = (FileUploadBase.SizeLimitExceededException) ex;
+				long size = fex.getActualSize();
+				long limit = fex.getPermittedSize();
+				final Class<?> msgClass = Classes.forNameByThread("org.zkoss.zul.mesg.MZul");
+				Field msgField = msgClass.getField("UPLOAD_ERROR_EXCEED_MAXSIZE");
+				int divisor1 = 1024;
+				int divisor2 = 1024 * 1024;
+				String[] units = new String[] { " Bytes", " KB", " MB" };
+				int i1 = (int) (Math.log(size) / Math.log(1024));
+				int i2 = (int) (Math.log(limit) / Math.log(1024));
+				String size_auto = Math.round(size / Math.pow(1024, i1)) + units[i1];
+				String limit_auto = Math.round(limit / Math.pow(1024, i2)) + units[i2];
 
-                Object[] args = new Object[] {size_auto, limit_auto, size, limit,
-                        String.valueOf((Long)(size / divisor1)) + units[1], String.valueOf((Long) (limit / divisor1)) + units[1],
-                        String.valueOf((Long)(size / divisor2)) + units[2], String.valueOf((Long) (limit / divisor2)) + units[2]};
+				Object[] args = new Object[] { size_auto, limit_auto, size, limit,
+						String.valueOf((Long) (size / divisor1)) + units[1],
+						String.valueOf((Long) (limit / divisor1)) + units[1],
+						String.valueOf((Long) (size / divisor2)) + units[2],
+						String.valueOf((Long) (limit / divisor2)) + units[2] };
 
-                return Messages.get(msgField.getInt(null), args);
-            } catch (Throwable e) {
-                log.error("Failed to parse upload error message..", e);
-            }
-        }
+				return Messages.get(msgField.getInt(null), args);
+			} catch (Throwable e) {
+				log.error("Failed to parse upload error message..", e);
+			}
+		}
 		return Exceptions.getMessage(ex);
 	}
 
 	/** Process fileitems named file0, file1 and so on.
 	 */
-	private static final
-	void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
-	throws IOException {
+	private static final void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
+			throws IOException {
 		final List<Media> meds = new LinkedList<Media>();
 		final boolean alwaysNative = "true".equals(params.get("native"));
 		final Object fis = params.get("file");
 		if (fis instanceof FileItem) {
-			meds.add(processItem(desktop, (FileItem)fis, alwaysNative,
+			meds.add(processItem(desktop, (FileItem) fis, alwaysNative,
 					(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 		} else if (fis != null) {
-			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
-				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative,
+			for (Iterator it = ((List) fis).iterator(); it.hasNext();) {
+				meds.add(processItem(desktop, (FileItem) it.next(), alwaysNative,
 						(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 			}
 		}
 
-		final String contentId = Strings.encode(
-			new StringBuffer(12).append("z__ul_"),
-			((DesktopCtrl)desktop).getNextKey()).toString();
+		final String contentId = Strings
+				.encode(new StringBuffer(12).append("z__ul_"), ((DesktopCtrl) desktop).getNextKey()).toString();
 		attrs.put("contentId", contentId);
 		desktop.setAttribute(contentId, meds);
 	}
+
 	/** Process the specified fileitem.
 	 */
-	private static final
-	Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative,
-			org.zkoss.zk.ui.sys.DiskFileItemFactory factory)
-	throws IOException {
+	private static final Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative,
+			org.zkoss.zk.ui.sys.DiskFileItemFactory factory) throws IOException {
 		String name = getBaseName(fi);
 		if (name != null) {
-		//Not sure whether a name might contain ;jsessionid or similar
-		//But we handle this case: x.y;z
+			//Not sure whether a name might contain ;jsessionid or similar
+			//But we handle this case: x.y;z
 			final int j = name.lastIndexOf(';');
 			if (j > 0) {
 				final int k = name.lastIndexOf('.');
@@ -309,7 +312,7 @@ public class AuUploader implements AuExtension {
 		}
 
 		String ctype = fi.getContentType(),
-			ctypelc = ctype != null ? ctype.toLowerCase(java.util.Locale.ENGLISH): null;
+				ctypelc = ctype != null ? ctype.toLowerCase(java.util.Locale.ENGLISH) : null;
 		if (name != null && "application/octet-stream".equals(ctypelc)) { //Bug 1896291: IE limit
 			final int j = name.lastIndexOf('.');
 			if (j >= 0) {
@@ -327,18 +330,18 @@ public class AuUploader implements AuExtension {
 		if (!alwaysNative && ctypelc != null) {
 			if (ctypelc.startsWith("image/")) {
 				try {
-					return fi.isInMemory() ? new AImage(name, fi.get()):
-						new AImage(name, fi.getInputStream());
-							//note: AImage converts stream to binary array
+					return fi.isInMemory() ? new AImage(name, fi.get()) : new AImage(name, fi.getInputStream());
+					//note: AImage converts stream to binary array
 				} catch (Throwable ex) {
-					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled())
+						log.debug("Unknown file format: " + ctype);
 				}
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
-					return fi.isInMemory() ? new AAudio(name, fi.get()):
-						new StreamAudio(name, fi, ctypelc);
+					return fi.isInMemory() ? new AAudio(name, fi.get()) : new StreamAudio(name, fi, ctypelc);
 				} catch (Throwable ex) {
-					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled())
+						log.debug("Unknown file format: " + ctype);
 				}
 			} else if (ctypelc.startsWith("text/")) {
 				String charset = getCharset(ctype);
@@ -347,22 +350,18 @@ public class AuUploader implements AuExtension {
 					final CharsetFinder chfd = conf.getUploadCharsetFinder();
 					if (chfd != null)
 						charset = chfd.getCharset(ctype,
-							fi.isInMemory() ?
-								new ByteArrayInputStream(fi.get()):
-								fi.getInputStream());
+								fi.isInMemory() ? new ByteArrayInputStream(fi.get()) : fi.getInputStream());
 					if (charset == null)
 						charset = conf.getUploadCharset();
 				}
-				return fi.isInMemory() ?
-					new AMedia(name, null, ctype, fi.getString(charset)):
-					new ReaderMedia(name, null, ctype, fi, charset);
+				return fi.isInMemory() ? new AMedia(name, null, ctype, fi.getString(charset))
+						: new ReaderMedia(name, null, ctype, fi, charset);
 			}
 		}
 
-		return fi.isInMemory() ?
-			new AMedia(name, null, ctype, fi.get()):
-			new StreamMedia(name, null, ctype, fi);
+		return fi.isInMemory() ? new AMedia(name, null, ctype, fi.get()) : new StreamMedia(name, null, ctype, fi);
 	}
+
 	private static String getCharset(String ctype) {
 		final String ctypelc = ctype.toLowerCase(java.util.Locale.ENGLISH);
 		for (int j = 0; (j = ctypelc.indexOf("charset", j)) >= 0; j += 7) {
@@ -371,8 +370,7 @@ public class AuUploader implements AuExtension {
 				k = Strings.skipWhitespaces(ctype, j + 7);
 				if (k <= ctype.length() && ctype.charAt(k) == '=') {
 					j = ctype.indexOf(';', ++k);
-					String charset =
-						(j >= 0 ? ctype.substring(k, j): ctype.substring(k)).trim();
+					String charset = (j >= 0 ? ctype.substring(k, j) : ctype.substring(k)).trim();
 					if (charset.length() > 0)
 						return charset;
 					break; //use default
@@ -385,9 +383,8 @@ public class AuUploader implements AuExtension {
 	/** Parses the multipart request into a map of
 	 * (String nm, FileItem/String/List(FileItem/String)).
 	 */
-	private static Map<String, Object> parseRequest(HttpServletRequest request,
-	Desktop desktop, String key)
-	throws FileUploadException {
+	private static Map<String, Object> parseRequest(HttpServletRequest request, Desktop desktop, String key)
+			throws FileUploadException {
 		final Map<String, Object> params = new HashMap<String, Object>();
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		int thrs = conf.getFileSizeThreshold();
@@ -420,16 +417,17 @@ public class AuUploader implements AuExtension {
 		final ServletFileUpload sfu = new ServletFileUpload(fty);
 
 		sfu.setProgressListener(fty.new ProgressCallback());
-		
+
 		int maxsz = conf.getMaxUploadSize();
 		try {
 			maxsz = Integer.parseInt(request.getParameter("maxsize"));
-		} catch (NumberFormatException e) {}
-		
-		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);
+		} catch (NumberFormatException e) {
+		}
+
+		sfu.setSizeMax(maxsz >= 0 ? 1024L * maxsz : -1);
 
 		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {
-			final FileItem fi = (FileItem)it.next();
+			final FileItem fi = (FileItem) it.next();
 			final String nm = fi.getFieldName();
 			final Object val;
 			if (fi.isFormField()) {
@@ -442,7 +440,7 @@ public class AuUploader implements AuExtension {
 			if (old != null) {
 				final List<Object> vals;
 				if (old instanceof List) {
-					params.put(nm, vals = cast((List)old));
+					params.put(nm, vals = cast((List) old));
 				} else {
 					params.put(nm, vals = new LinkedList<Object>());
 					vals.add(old);
@@ -452,6 +450,7 @@ public class AuUploader implements AuExtension {
 		}
 		return params;
 	}
+
 	/** Returns the base name for FileItem (i.e., removing path).
 	 */
 	private static String getBaseName(FileItem fi) {
@@ -459,7 +458,7 @@ public class AuUploader implements AuExtension {
 		if (name == null)
 			return null;
 
-		final String[] seps = {"/", "\\", "%5c", "%5C", "%2f", "%2F"};
+		final String[] seps = { "/", "\\", "%5c", "%5C", "%2f", "%2F" };
 		for (int j = seps.length; --j >= 0;) {
 			final int k = name.lastIndexOf(seps[j]);
 			if (k >= 0)
@@ -467,7 +466,7 @@ public class AuUploader implements AuExtension {
 		}
 		return name;
 	}
-	
+
 	/** 
 	 * Internal Use Only.
 	 */
@@ -479,75 +478,87 @@ public class AuUploader implements AuExtension {
 	 */
 	public static final boolean isMultipartContent(HttpServletRequest request) {
 		return "post".equals(request.getMethod().toLowerCase(java.util.Locale.ENGLISH))
-			&& FileUploadBase.isMultipartContent(new ServletRequestContext(request));
+				&& FileUploadBase.isMultipartContent(new ServletRequestContext(request));
 	}
 
 	private static class StreamMedia extends AMedia {
 		private final FileItem _fi;
+
 		public StreamMedia(String name, String format, String ctype, FileItem fi) {
 			super(name, format, ctype, DYNAMIC_STREAM);
 			_fi = fi;
 		}
+
 		public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
 			} catch (IOException ex) {
-				throw new UiException("Unable to read "+_fi, ex);
+				throw new UiException("Unable to read " + _fi, ex);
 			}
 		}
+
 		public boolean isBinary() {
 			return true;
 		}
+
 		public boolean inMemory() {
 			return false;
 		}
 	}
+
 	private static class ReaderMedia extends AMedia {
 		private final FileItem _fi;
 		private final String _charset;
-		public ReaderMedia(String name, String format, String ctype,
-		FileItem fi, String charset) {
+
+		public ReaderMedia(String name, String format, String ctype, FileItem fi, String charset) {
 			super(name, format, ctype, DYNAMIC_READER);
 			_fi = fi;
 			_charset = charset;
 		}
+
 		public java.io.Reader getReaderData() {
 			try {
-				return new java.io.InputStreamReader(
-					_fi.getInputStream(), _charset);
+				return new java.io.InputStreamReader(_fi.getInputStream(), _charset);
 			} catch (IOException ex) {
-				throw new UiException("Unable to read "+_fi, ex);
+				throw new UiException("Unable to read " + _fi, ex);
 			}
 		}
+
 		public boolean isBinary() {
 			return false;
 		}
+
 		public boolean inMemory() {
 			return false;
 		}
 	}
+
 	private static class StreamAudio extends AAudio {
 		private final FileItem _fi;
 		private String _format;
 		private String _ctype;
+
 		public StreamAudio(String name, FileItem fi, String ctype) throws IOException {
 			super(name, DYNAMIC_STREAM);
 			_fi = fi;
 			_ctype = ctype;
 		}
+
 		public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
 			} catch (IOException ex) {
-				throw new UiException("Unable to read "+_fi, ex);
+				throw new UiException("Unable to read " + _fi, ex);
 			}
 		}
-		public String getFormat(){
+
+		public String getFormat() {
 			if (_format == null) {
 				_format = ContentTypes.getFormat(getContentType());
 			}
 			return _format;
 		}
+
 		public String getContentType() {
 			return _ctype != null ? _ctype : _fi.getContentType();
 		}
@@ -566,8 +577,8 @@ public class AuUploader implements AuExtension {
 		private org.zkoss.zk.ui.sys.DiskFileItemFactory _factory;
 
 		@SuppressWarnings("unchecked")
-		/*package*/ ItemFactory(Desktop desktop, HttpServletRequest request, String key,
-				int sizeThreshold, File repository, org.zkoss.zk.ui.sys.DiskFileItemFactory factory) {
+		/*package*/ ItemFactory(Desktop desktop, HttpServletRequest request, String key, int sizeThreshold,
+				File repository, org.zkoss.zk.ui.sys.DiskFileItemFactory factory) {
 			super(sizeThreshold, repository);
 
 			_factory = factory;
@@ -588,8 +599,8 @@ public class AuUploader implements AuExtension {
 				_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new HashMap());
 				_desktop.setAttribute(Attributes.UPLOAD_SIZE, new HashMap());
 			}
-			((Map)_desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(key, new Integer(0));
-			((Map)_desktop.getAttribute(Attributes.UPLOAD_SIZE)).put(key, new Long(_cbtotal));
+			((Map) _desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(key, new Integer(0));
+			((Map) _desktop.getAttribute(Attributes.UPLOAD_SIZE)).put(key, new Long(_cbtotal));
 		}
 
 		@SuppressWarnings("unchecked")
@@ -597,47 +608,43 @@ public class AuUploader implements AuExtension {
 			int percent = 0;
 			if (_cbtotal > 0) {
 				_cbrcv = cbRead;
-				percent = (int)(_cbrcv * 100 / _cbtotal);
+				percent = (int) (_cbrcv * 100 / _cbtotal);
 			}
-			((Map)_desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(_key, new Integer(percent));
+			((Map) _desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(_key, new Integer(percent));
 		}
 
 		//-- FileItemFactory --//
-		public FileItem createItem(String fieldName, String contentType,
-				boolean isFormField, String fileName) {
+		public FileItem createItem(String fieldName, String contentType, boolean isFormField, String fileName) {
 			if (_factory != null)
-				return _factory.createItem(fieldName, contentType, isFormField,
-						fileName, getSizeThreshold(), getRepository());
-			return new ZkFileItem(fieldName, contentType, isFormField, fileName,
-					getSizeThreshold(), getRepository());
+				return _factory.createItem(fieldName, contentType, isFormField, fileName, getSizeThreshold(),
+						getRepository());
+			return new ZkFileItem(fieldName, contentType, isFormField, fileName, getSizeThreshold(), getRepository());
 		}
 
 		//-- helper classes --//
 		/** FileItem created by {@link ItemFactory}.
 		 */
 		/*package*/ class ZkFileItem extends DiskFileItem {
-			/*package*/ ZkFileItem(String fieldName, String contentType,
-			boolean isFormField, String fileName, int sizeThreshold,
-			File repository) {
-				super(fieldName, contentType, isFormField,
-					fileName, sizeThreshold, repository);
+			/*package*/ ZkFileItem(String fieldName, String contentType, boolean isFormField, String fileName,
+					int sizeThreshold, File repository) {
+				super(fieldName, contentType, isFormField, fileName, sizeThreshold, repository);
 			}
 
 			/** Returns the charset by parsing the content type.
 			 * If none is defined, UTF-8 is assumed.
 			 */
-		    public String getCharSet() {
+			public String getCharSet() {
 				final String charset = super.getCharSet();
-				return charset != null ? charset: "UTF-8";
+				return charset != null ? charset : "UTF-8";
 			}
 		}
 
 		/*package*/ class ProgressCallback implements ProgressListener {
-		    public void update(long pBytesRead, long pContentLength, int pItems) {
-		    	onProgress(pBytesRead);
-		    	if (pContentLength >= 0)
-		    		_cbtotal = pContentLength;
-		    }
+			public void update(long pBytesRead, long pContentLength, int pItems) {
+				onProgress(pBytesRead);
+				if (pContentLength >= 0)
+					_cbtotal = pContentLength;
+			}
 		}
 	}
 }

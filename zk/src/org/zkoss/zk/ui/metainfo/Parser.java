@@ -36,6 +36,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
+
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.CData;
 import org.zkoss.idom.Comment;
@@ -104,7 +105,7 @@ public class Parser {
 				return (op1 < op2) ? 1 : (op1 > op2) ? -1 : 0;
 			}
 		});
-		_locator = locator != null ? locator: wapp;
+		_locator = locator != null ? locator : wapp;
 	}
 
 	/** Parses the specified file.
@@ -120,6 +121,7 @@ public class Parser {
 		pgdef.setRequestPath(path);
 		return pgdef;
 	}
+
 	/** Parses the specified URL.
 	 *
 	 * @param path the request path.
@@ -141,11 +143,11 @@ public class Parser {
 	 * If extension is null and the content doesn't specify a language,
 	 * the language called "xul/html" is assumed.
 	 */
-	public PageDefinition parse(Reader reader, String extension)
-	throws Exception {
+	public PageDefinition parse(Reader reader, String extension) throws Exception {
 		//if (log.isDebugEnabled()) log.debug("Parsing "+reader);
 		return parse(TreeBuilderFactory.makeBuilder(extension).parse(reader), extension);
 	}
+
 	/** Parse the raw content directly from a DOM tree.
 	 *
 	 * @param extension the default extension if doc doesn't specify
@@ -153,17 +155,17 @@ public class Parser {
 	 * If extension is null and the content doesn't specify a language,
 	 * the language called "xul/html" is assumed.
 	 */
-	public PageDefinition parse(Document doc, String extension)
-	throws Exception {
+	public PageDefinition parse(Document doc, String extension) throws Exception {
 		//1. parse the page and import directive if any
 		final List<ProcessingInstruction> pis = new LinkedList<ProcessingInstruction>();
 		final List<String[]> imports = new LinkedList<String[]>();
 		final List<String> impclses = new LinkedList<String>();
 		String lang = null;
-		for (Object o: doc.getChildren()) {
-			if (!(o instanceof ProcessingInstruction)) continue;
+		for (Object o : doc.getChildren()) {
+			if (!(o instanceof ProcessingInstruction))
+				continue;
 
-			final ProcessingInstruction pi = (ProcessingInstruction)o;
+			final ProcessingInstruction pi = (ProcessingInstruction) o;
 			final String target = pi.getTarget();
 			if ("page".equals(target)) {
 				//we handle only the language attribute here
@@ -184,20 +186,20 @@ public class Parser {
 				if (src != null) {
 					noELnorEmpty("src", src, pi);
 					noEL("directives", dirs, pi);
-					imports.add(new String[] {src, dirs});
+					imports.add(new String[] { src, dirs });
 				}
 				if (cls != null) {
 					noELnorEmpty("class", cls, pi);
 					impclses.add(cls);
 				}
-				for (Map.Entry<String, String> me: params.entrySet()) {
+				for (Map.Entry<String, String> me : params.entrySet()) {
 					final String nm = me.getKey();
 					final String val = me.getValue();
 					if (val == null) {
 						noELnorEmpty(nm, nm, pi);
 						impclses.add(nm);
 					} else {
-						log.warn(message("Ignored unknown attribute for import: "+nm, pi));
+						log.warn(message("Ignored unknown attribute for import: " + nm, pi));
 					}
 				}
 			} else {
@@ -206,37 +208,34 @@ public class Parser {
 		}
 
 		//2. Create PageDefinition
-		final LanguageDefinition langdef =
-			extension != null && lang == null?
-				LanguageDefinition.getByExtension(extension):
-				LanguageDefinition.lookup(lang);
+		final LanguageDefinition langdef = extension != null && lang == null
+				? LanguageDefinition.getByExtension(extension) : LanguageDefinition.lookup(lang);
 		final PageDefinition pgdef = new PageDefinition(langdef, getLocator());
 
 		//3a. resolve imports
 		if (!imports.isEmpty()) {
-			final RequestInfo ri =
-				new RequestInfoImpl(_wapp, null, null, null, getLocator());
-			final UiFactory uf = ((WebAppCtrl)_wapp).getUiFactory();
+			final RequestInfo ri = new RequestInfoImpl(_wapp, null, null, null, getLocator());
+			final UiFactory uf = ((WebAppCtrl) _wapp).getUiFactory();
 			for (Iterator it = imports.iterator(); it.hasNext();) {
-				final String[] imprt = (String[])it.next();
+				final String[] imprt = (String[]) it.next();
 				final String path = imprt[0], dirs = imprt[1];
 				try {
 					final PageDefinition pd = uf.getPageDefinition(ri, path);
 					if (pd == null)
-						throw new UiException("The imported page not found: "+path);
+						throw new UiException("The imported page not found: " + path);
 					pgdef.imports(pd, parseToArray(dirs));
 				} catch (PotentialDeadLockException ex) {
-					throw new UiException("Recursive import not allowed: "+path, ex);
+					throw new UiException("Recursive import not allowed: " + path, ex);
 				}
 			}
 		}
 		//3b. resolve imported classes
-		for (String impcls: impclses)
+		for (String impcls : impclses)
 			pgdef.addImportedClass(impcls);
 
 		//4. Processing the rest of processing instructions at the top level
 		for (Iterator it = pis.iterator(); it.hasNext();)
-			parse(pgdef, (ProcessingInstruction)it.next());
+			parse(pgdef, (ProcessingInstruction) it.next());
 
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
@@ -245,33 +244,17 @@ public class Parser {
 
 		return pgdef;
 	}
-	/** Parses a list of string separated by comma, into a String array.
-	 */
-	private static String[] parseToArray(String s) {
-		if (s == null)
-			return null;
-		Collection<String> ims = CollectionsX.parse(null, s, ',', false); //NO EL
-		return ims.toArray(new String[ims.size()]);
-	}
-
-	//-- derive to override --//
-	/** returns locator for locating resources. */
-	public Locator getLocator() {
-		return _locator;
-	}
 
 	/** Parse processing instruction.
 	 */
-	private void parse(PageDefinition pgdef, ProcessingInstruction pi)
-	throws Exception {
+	private void parse(PageDefinition pgdef, ProcessingInstruction pi) throws Exception {
 		final String target = pi.getTarget();
 		final Map<String, String> params = pi.parseData();
 		if ("page".equals(target)) {
 			parsePageDirective(pgdef, pi, params);
 		} else if ("init".equals(target)) {
 			parseInitDirective(pgdef, pi, params);
-		} else if ("variable-resolver".equals(target)
-		|| "function-mapper".equals(target)) {
+		} else if ("variable-resolver".equals(target) || "function-mapper".equals(target)) {
 			final String clsnm = params.remove("class");
 			if (isEmpty(clsnm))
 				throw new UiException(message("The class attribute is required", pi));
@@ -287,7 +270,7 @@ public class Parser {
 			final String uri = params.remove("uri");
 			final String prefix = params.remove("prefix");
 			if (!params.isEmpty())
-				log.warn(message("Ignored unknown attributes: "+params.keySet(), pi));
+				log.warn(message("Ignored unknown attributes: " + params.keySet(), pi));
 			if (uri == null || prefix == null)
 				throw new UiException(message("Both uri and prefix attribute are required", pi));
 			//if (log.isDebugEnabled()) log.debug("taglib: prefix="+prefix+" uri="+uri);
@@ -298,31 +281,26 @@ public class Parser {
 			parseEvaluatorDirective(pgdef, pi, params);
 		} else if ("xel-method".equals(target)) {
 			parseXelMethod(pgdef, pi, params);
-		} else if ("link".equals(target) || "meta".equals(target)
-		|| "script".equals(target) || "style".equals(target)) { //declare a header element
+		} else if ("link".equals(target) || "meta".equals(target) || "script".equals(target)
+				|| "style".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(target, params,
-				ConditionImpl.getInstance(params.remove("if"),
-						params.remove("unless"))));
+					ConditionImpl.getInstance(params.remove("if"), params.remove("unless"))));
 		} else if ("header".equals(target)) { //declare a response header
-			pgdef.addResponseHeaderInfo(new ResponseHeaderInfo(
-				params.remove("name"), params.remove("value"),
-				params.remove("append"),
-				ConditionImpl.getInstance(
-					params.remove("if"), params.remove("unless"))));
+			pgdef.addResponseHeaderInfo(new ResponseHeaderInfo(params.remove("name"), params.remove("value"),
+					params.remove("append"), ConditionImpl.getInstance(params.remove("if"), params.remove("unless"))));
 		} else if ("root-attributes".equals(target)) {
 			for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				pgdef.setRootAttribute((String)me.getKey(), (String)me.getValue());
+				final Map.Entry me = (Map.Entry) it.next();
+				pgdef.setRootAttribute((String) me.getKey(), (String) me.getValue());
 			}
 		} else if ("forward".equals(target)) { //forward
 			final String uri = params.remove("uri");
 			final String ifc = params.remove("if");
 			final String unless = params.remove("unless");
 			if (!params.isEmpty())
-				log.warn(message("Ignored unknown attributes: "+params.keySet(), pi));
+				log.warn(message("Ignored unknown attributes: " + params.keySet(), pi));
 			noEmpty("uri", uri, pi);
-			pgdef.addForwardInfo(
-				new ForwardInfo(uri, ConditionImpl.getInstance(ifc, unless)));
+			pgdef.addForwardInfo(new ForwardInfo(uri, ConditionImpl.getInstance(ifc, unless)));
 		} else if ("import".equals(target)) { //import
 			throw new UiException(message("The import directive can be used only at the top level", pi));
 		} else if ("template".equals(target)) { //ZK-2623: page scope template
@@ -331,12 +309,28 @@ public class Parser {
 			if (name != null && name.length() != 0 && src != null && src.length() != 0)
 				pgdef.addTemplateInfo(new TemplateInfo(null, name, src, params, null));
 		} else {
-			log.warn(message("Unknown processing instruction: "+target, pi));
+			log.warn(message("Unknown processing instruction: " + target, pi));
 		}
 	}
+
+	/** Parses a list of string separated by comma, into a String array.
+	 */
+	private static String[] parseToArray(String s) {
+		if (s == null)
+			return null;
+		Collection<String> ims = CollectionsX.parse(null, s, ',', false); //NO EL
+		return ims.toArray(new String[ims.size()]);
+	}
+
+	//-- derive to override --//
+	/** returns locator for locating resources. */
+	public Locator getLocator() {
+		return _locator;
+	}
+
 	/** Process the init directive. */
-	private void parseInitDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+	private void parseInitDirective(PageDefinition pgdef, ProcessingInstruction pi, Map<String, String> params)
+			throws Exception {
 		final String clsnm = params.remove("class");
 		final String zsrc = params.remove("zscript");
 
@@ -346,20 +340,18 @@ public class Parser {
 				throw new UiException(message("Either the class or zscript attribute must be specified", pi));
 
 			checkZScriptEnabled(pi.getLocator());
-			ZScript zs =  null;
+			ZScript zs = null;
 			final String zslang = pgdef.getZScriptLanguage();
 			if (zsrc.indexOf("${") < 0) {
 				final URL url = getLocator().getResource(zsrc);
 				if (url != null)
 					zs = new ZScript(zslang, url);
-					//Bug 2929887: defer the error message since it might not be required
+				//Bug 2929887: defer the error message since it might not be required
 			}
 			if (zs == null)
-				zs = new ZScript(pgdef.getEvaluatorRef(),
-					zslang, zsrc, getLocator());
+				zs = new ZScript(pgdef.getEvaluatorRef(), zslang, zsrc, getLocator());
 
-			pgdef.addInitiatorInfo(
-				new InitiatorInfo(new ZScriptInitiator(zs), args));
+			pgdef.addInitiatorInfo(new InitiatorInfo(new ZScriptInitiator(zs), args));
 		} else {
 			if (zsrc != null)
 				throw new UiException(message("You cannot specify both class and zscript", pi));
@@ -367,34 +359,38 @@ public class Parser {
 			pgdef.addInitiatorInfo(new InitiatorInfo(clsnm, args));
 		}
 	}
+
 	private static String message(String message, Item el) {
-		return org.zkoss.xml.Locators.format(message,
-				el != null ? el.getLocator() : null);
+		return org.zkoss.xml.Locators.format(message, el != null ? el.getLocator() : null);
 	}
+
 	private static String message(String message, org.zkoss.xml.Locator loc) {
 		return org.zkoss.xml.Locators.format(message, loc);
 	}
+
 	private static org.zkoss.util.resource.Location location(Item el) {
-		return org.zkoss.xml.Locators.toLocation(
-				el != null ? el.getLocator() : null);
+		return org.zkoss.xml.Locators.toLocation(el != null ? el.getLocator() : null);
 	}
 
 	private void checkZScriptEnabled(Element el) {
 		checkZScriptEnabled(el.getLocator());
 	}
+
 	private void checkZScriptEnabled(org.zkoss.xml.Locator loc) {
 		if (!_wapp.getConfiguration().isZScriptEnabled())
 			throw new UiException(message("zscript is not allowed since <disable-zscript> is configured", loc));
 	}
+
 	/** Process the page directive. */
-	private static void parsePageDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map<String, String> params) throws Exception {
-		for (Map.Entry<String, String> me: pi.parseData().entrySet()) {
+	private static void parsePageDirective(PageDefinition pgdef, ProcessingInstruction pi, Map<String, String> params)
+			throws Exception {
+		for (Map.Entry<String, String> me : pi.parseData().entrySet()) {
 			final String nm = me.getKey();
 			final String val = me.getValue();
 			if ("language".equals(nm)) {
 				if (!(pi.getParent() instanceof Document))
-					log.warn(message("Ignored language attribute since the page directive is not at the top level", pi));
+					log.warn(
+							message("Ignored language attribute since the page directive is not at the top level", pi));
 			} else if ("title".equals(nm)) {
 				pgdef.setTitle(val);
 			} else if ("style".equals(nm)) {
@@ -405,8 +401,7 @@ public class Parser {
 				pgdef.setId(val);
 			} else if ("widgetClass".equals(nm)) {
 				pgdef.setWidgetClass(val);
-			} else if ("zscriptLanguage".equals(nm)
-			|| "zscript-language".equals(nm)) { //backward compatible with 2.4.x
+			} else if ("zscriptLanguage".equals(nm) || "zscript-language".equals(nm)) { //backward compatible with 2.4.x
 				noELnorEmpty("zscriptLanguage", val, pi);
 				pgdef.setZScriptLanguage(val);
 			} else if ("cacheable".equals(nm)) {
@@ -419,43 +414,44 @@ public class Parser {
 				noEmpty("contentType", val, pi);
 				pgdef.setContentType(val);
 			} else if ("docType".equals(nm)) {
-				pgdef.setDocType(isEmpty(val) ? "": "<!DOCTYPE " + val + '>');
+				pgdef.setDocType(isEmpty(val) ? "" : "<!DOCTYPE " + val + '>');
 			} else if ("xml".equals(nm)) {
 				noEmpty("xml", val, pi);
 				pgdef.setFirstLine("<?xml " + val + "?>");
 			} else if ("complete".equals(nm)) {
 				pgdef.setComplete("true".equals(val));
 			} else {
-				log.warn(message("Ignored unknown attribute: "+nm, pi));
+				log.warn(message("Ignored unknown attribute: " + nm, pi));
 			}
 		}
 	}
+
 	/** Process the component directive. */
-	private void parseComponentDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+	private void parseComponentDirective(PageDefinition pgdef, ProcessingInstruction pi, Map<String, String> params)
+			throws Exception {
 		final String name = params.remove("name");
 		noELnorEmpty("name", name, pi);
 
 		String macroURI = params.remove("macroURI");
-		if (macroURI == null) macroURI = params.remove("macro-uri"); //backward compatible (2.4.x)
+		if (macroURI == null)
+			macroURI = params.remove("macro-uri"); //backward compatible (2.4.x)
 		final String extds = params.remove("extends");
 		final String clsnm = params.remove("class");
 		final String lang = params.remove("language");
-		final LanguageDefinition langdef = lang != null ?
-			LanguageDefinition.lookup(lang): pgdef.getLanguageDefinition();
+		final LanguageDefinition langdef = lang != null ? LanguageDefinition.lookup(lang)
+				: pgdef.getLanguageDefinition();
 		ComponentDefinition compdef;
 		String templateURI = params.remove("templateURI");
 		if (templateURI != null) { // assume it is shadow like (<apply>)
 			noEL("templateURI", templateURI, pi);
-				//no EL because pagedef must be loaded to resolve
-				//the implementing class before creating an instance of shadow
+			//no EL because pagedef must be loaded to resolve
+			//the implementing class before creating an instance of shadow
 
-			compdef = langdef.getShadowDefinition(
-				name, pgdef, toAbsoluteURI(templateURI, false));
+			compdef = langdef.getShadowDefinition(name, pgdef, toAbsoluteURI(templateURI, false));
 			if (!isEmpty(clsnm)) {
 				noEL("class", clsnm, pi);
 				compdef.setImplementationClass(clsnm);
-					//Resolve later since might defined in zscript
+				//Resolve later since might defined in zscript
 			}
 		} else if (macroURI != null) {
 			//if (log.finerable()) log.finer("macro component definition: "+name);
@@ -463,18 +459,17 @@ public class Parser {
 			final String inline = params.remove("inline");
 			noEL("inline", inline, pi);
 			noEL("macroURI", macroURI, pi);
-				//no EL because pagedef must be loaded to resolve
-				//the implementing class before creating an instance of macro
+			//no EL because pagedef must be loaded to resolve
+			//the implementing class before creating an instance of macro
 
 			final boolean bInline = "true".equals(inline);
-			compdef = langdef.getMacroDefinition(name,
-					toAbsoluteURI(macroURI, false), bInline, pgdef);
+			compdef = langdef.getMacroDefinition(name, toAbsoluteURI(macroURI, false), bInline, pgdef);
 			if (!isEmpty(clsnm)) {
 				if (bInline)
 					throw new UiException(message("class not allowed with inline macros", pi));
 				noEL("class", clsnm, pi);
 				compdef.setImplementationClass(clsnm);
-					//Resolve later since might defined in zscript
+				//Resolve later since might defined in zscript
 			}
 		} else {
 			ComponentDefinition ref = null;
@@ -485,18 +480,16 @@ public class Parser {
 				ref = langdef.getComponentDefinition(extds);
 			} else {
 				try {
-					final Class cls = pgdef.getImportedClassResolver().resolveClass(
-							clsnm);
+					final Class cls = pgdef.getImportedClassResolver().resolveClass(clsnm);
 					if (lang != null) {
 						ref = langdef.getComponentDefinition(cls);
-							//throw exception if not found
+						//throw exception if not found
 					} else {
 						ref = pgdef.getComponentDefinition(cls, true);
 						if (ref == null) //return null if not found
-							ref = Components.getDefinitionByDeviceType(
-								langdef.getDeviceType(), cls);
+							ref = Components.getDefinitionByDeviceType(langdef.getDeviceType(), cls);
 					}
-				} catch (Throwable ex) {//ignore
+				} catch (Throwable ex) { //ignore
 				}
 			}
 
@@ -508,20 +501,20 @@ public class Parser {
 				if (!isEmpty(clsnm)) {
 					noEL("class", clsnm, pi);
 					compdef.setImplementationClass(clsnm);
-						//Resolve later since might defined in zscript
+					//Resolve later since might defined in zscript
 				}
 			} else {
 				//if (log.finerable()) log.finer("Add component definition: name="+name);
 
 				noELnorEmpty("class", clsnm, pi);
 
-				final ComponentDefinitionImpl cdi =
-					new ComponentDefinitionImpl(null, pgdef, name, (Class<? extends Component>)null);
+				final ComponentDefinitionImpl cdi = new ComponentDefinitionImpl(null, pgdef, name,
+						(Class<? extends Component>) null);
 				cdi.setCurrentDirectory(getLocator().getDirectory());
-					//mold URI requires it
+				//mold URI requires it
 				compdef = cdi;
 				compdef.setImplementationClass(clsnm);
-					//Resolve later since might be defined in zscript
+				//Resolve later since might be defined in zscript
 			}
 		}
 
@@ -534,28 +527,31 @@ public class Parser {
 		pgdef.addComponentDefinition(compdef);
 
 		Object o = params.remove("moldURI");
-		if (o == null) o = params.remove("mold-uri");
+		if (o == null)
+			o = params.remove("mold-uri");
 		if (o != null)
-			throw new UnsupportedOperationException(message("moldURI not supported in 5.0. Use <?script?> or lang-addon.xml instead", pi));
+			throw new UnsupportedOperationException(
+					message("moldURI not supported in 5.0. Use <?script?> or lang-addon.xml instead", pi));
 
 		o = params.remove("cssURI");
 		if (o != null)
-			throw new UnsupportedOperationException(message("cssURI not supported in 5.0. Use <?link?> or lang-addon.xml instead", pi));
+			throw new UnsupportedOperationException(
+					message("cssURI not supported in 5.0. Use <?link?> or lang-addon.xml instead", pi));
 
 		compdef.setApply(params.remove("apply"));
 
-		for (Map.Entry<String, String> me: params.entrySet()) {
+		for (Map.Entry<String, String> me : params.entrySet()) {
 			compdef.addProperty(me.getKey(), me.getValue());
 		}
 	}
+
 	/** Parse the evaluator directive. */
-	private static void parseEvaluatorDirective(PageDefinition pgdef,
-	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+	private static void parseEvaluatorDirective(PageDefinition pgdef, ProcessingInstruction pi,
+			Map<String, String> params) throws Exception {
 		final String clsnm = params.remove("class");
 		if (clsnm != null && clsnm.length() > 0) {
 			noELnorEmpty("class", clsnm, pi);
-			pgdef.setExpressionFactoryClass(
-				pgdef.getImportedClassResolver().resolveClass(clsnm));
+			pgdef.setExpressionFactoryClass(pgdef.getImportedClassResolver().resolveClass(clsnm));
 		} else { //name has the lower priority
 			final String nm = params.remove("name");
 			if (nm != null)
@@ -564,31 +560,31 @@ public class Parser {
 
 		final String imports = params.remove("import");
 		if (imports != null && imports.length() > 0) {
-			Collection<String> ims = CollectionsX.parse(null, imports, ',',
-					false); //No EL
-			for (String im: ims) {
+			Collection<String> ims = CollectionsX.parse(null, imports, ',', false); //No EL
+			for (String im : ims) {
 				final int k = im.indexOf('=');
-				String nm = k > 0 ? im.substring(0, k).trim(): null;
-				String cn = (k >= 0 ? im.substring(k + 1): im).trim();
+				String nm = k > 0 ? im.substring(0, k).trim() : null;
+				String cn = (k >= 0 ? im.substring(k + 1) : im).trim();
 
 				if (cn.length() != 0) {
 					if (nm == null || nm.length() == 0) {
 						final int j = cn.lastIndexOf('.');
-						nm = j >= 0 ? cn.substring(j + 1): cn;
+						nm = j >= 0 ? cn.substring(j + 1) : cn;
 					}
 					pgdef.addExpressionImport(nm, Classes.forNameByThread(cn));
-						//evaluator's import does not support <?import class?>,
-						//since it looks strange.
-						//FUTURE: it is better to deprecate this attribute, and
-						//have FunctionMapperExt to depend on <?import class?>
-						//(however, it is worth since only MVEL/OGNL uses it)
+					//evaluator's import does not support <?import class?>,
+					//since it looks strange.
+					//FUTURE: it is better to deprecate this attribute, and
+					//have FunctionMapperExt to depend on <?import class?>
+					//(however, it is worth since only MVEL/OGNL uses it)
 				}
 			}
 		}
 	}
+
 	/** Parse the XEL method. */
-	private static void parseXelMethod(PageDefinition pgdef,
-	ProcessingInstruction pi, Map<String, String> params) throws Exception {
+	private static void parseXelMethod(PageDefinition pgdef, ProcessingInstruction pi, Map<String, String> params)
+			throws Exception {
 		final String prefix = params.remove("prefix");
 		noELnorEmpty("prefix", prefix, pi);
 		final String nm = params.remove("name");
@@ -604,43 +600,42 @@ public class Parser {
 			final Class cls = clsresolver.resolveClass(clsnm);
 			mtd = Classes.getMethodBySignature(cls, sig, null, clsresolver);
 		} catch (ClassNotFoundException ex) {
-			throw new UiException(message("Class not found: "+clsnm, pi));
+			throw new UiException(message("Class not found: " + clsnm, pi));
 		} catch (Exception ex) {
-			throw new UiException(message("Method not found: "+sig+" in "+clsnm, pi));
+			throw new UiException(message("Method not found: " + sig + " in " + clsnm, pi));
 		}
 		if ((mtd.getModifiers() & Modifier.STATIC) == 0)
-			throw new UiException(message("Not a static method: "+mtd, pi));
+			throw new UiException(message("Not a static method: " + mtd, pi));
 
 		pgdef.addXelMethod(prefix, nm, new MethodFunction(mtd));
 	}
-	private static void noELnorEmpty(String nm, String val, Item item)
-	throws UiException {
+
+	private static void noELnorEmpty(String nm, String val, Item item) throws UiException {
 		if (isEmpty(val))
 			throw new UiException(message(nm + " cannot be empty", item));
 		noEL(nm, val, item);
 	}
-	private static void noEL(String nm, String val, Item item)
-	throws UiException {
+
+	private static void noEL(String nm, String val, Item item) throws UiException {
 		if (val != null && val.indexOf("${") >= 0)
-			throw new UiException(message(nm+" does not support EL expressions", item));
+			throw new UiException(message(nm + " does not support EL expressions", item));
 	}
+
 	/** Checks whether the value is an empty string.
 	 * Note: Like {@link #noEL}, it is OK to be null!!
 	 */
-	private static void noEmpty(String nm, String val, Item item)
-	throws UiException {
+	private static void noEmpty(String nm, String val, Item item) throws UiException {
 		if (val != null && val.length() == 0)
-			throw new UiException(message(nm+" cannot be empty", item));
+			throw new UiException(message(nm + " cannot be empty", item));
 	}
+
 	private String toAbsoluteURI(String uri, boolean allowEL) {
 		if (uri != null && uri.length() > 0) {
 			final char cc = uri.charAt(0);
-			if (cc != '/' && cc != '~' && (!allowEL || uri.indexOf("${") < 0)
-			&& !Servlets.isUniversalURL(uri)) {
+			if (cc != '/' && cc != '~' && (!allowEL || uri.indexOf("${") < 0) && !Servlets.isUniversalURL(uri)) {
 				final String dir = getLocator().getDirectory();
 				if (dir != null && dir.length() > 0)
-					return dir.charAt(dir.length() - 1) == '/' ?
-							dir + uri: dir + '/' + uri;
+					return dir.charAt(dir.length() - 1) == '/' ? dir + uri : dir + '/' + uri;
 			}
 		}
 		return uri;
@@ -650,9 +645,8 @@ public class Parser {
 	 * @param bNativeContent whether to consider the child element all native
 	 * It is true if a component definition with text-as is found
 	 */
-	private void parseItems(final PageDefinition pgdef, final NodeInfo parent,
-	Collection items, AnnotationHelper annHelper, boolean bNativeContent)
-	throws Exception {
+	private void parseItems(final PageDefinition pgdef, final NodeInfo parent, Collection items,
+			AnnotationHelper annHelper, boolean bNativeContent) throws Exception {
 		LanguageDefinition parentlang = getLanguageDefinition(parent);
 		if (parentlang == null)
 			parentlang = pgdef.getLanguageDefinition();
@@ -663,15 +657,14 @@ public class Parser {
 		StringBuffer textAsBuffer = null;
 		for (NodeInfo p = parent; p != null; p = p.getParent())
 			if (p instanceof ComponentInfo) {
-				pi = (ComponentInfo)p;
+				pi = (ComponentInfo) p;
 				textAs = pi.getTextAs();
 				if (textAs != null && pi == parent) //only direct child
 					textAsBuffer = new StringBuffer();
 				break; //found
 			}
 		final boolean isXHTML = "xhtml".equals(parentlang.getName());
-		final boolean isAllBlankPreserved = !"false".equals(
-				Library.getProperty("preserve-all-blank"));
+		final boolean isAllBlankPreserved = !"false".equals(Library.getProperty("preserve-all-blank"));
 		boolean breakLine = false;
 		NativeInfo preNativeInfo = null; //check if brother is native
 
@@ -679,36 +672,33 @@ public class Parser {
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element)
-				parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent, ParsingState.FIRST);
+				parseItem(pgdef, parent, (Element) o, annHelper, bNativeContent, ParsingState.FIRST);
 		}
 
 		for (Iterator it = items.iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
 				breakLine = false;
-				preNativeInfo = (NativeInfo) parseItem(pgdef, parent, (Element)o, annHelper, bNativeContent, ParsingState.SECOND);
+				preNativeInfo = (NativeInfo) parseItem(pgdef, parent, (Element) o, annHelper, bNativeContent,
+						ParsingState.SECOND);
 			} else if (o instanceof ProcessingInstruction) {
 				breakLine = false;
-				parse(pgdef, (ProcessingInstruction)o);
+				parse(pgdef, (ProcessingInstruction) o);
 			} else if (o instanceof Comment) {
 				breakLine = false;
 				// keep the comment, like <!--[if lte IE 9]>
 				if (parentlang.isNative() || isXHTML) {
-					String label = "<!--" + ((Item)o).getText() + "-->";
-					final ComponentInfo labelInfo =
-							parentlang.newLabelInfo(parent, label);
+					String label = "<!--" + ((Item) o).getText() + "-->";
+					final ComponentInfo labelInfo = parentlang.newLabelInfo(parent, label);
 					labelInfo.addProperty("encode", "false", null);
 				}
 			} else if ((o instanceof Text) || (o instanceof CData)) {
-				String label = ((Item)o).getText(),
-					trimLabel = !isXHTML ?
-							label.trim() : label; // do not trim with xhtml
+				String label = ((Item) o).getText(), trimLabel = !isXHTML ? label.trim() : label; // do not trim with xhtml
 				if (breakLine && (o instanceof Text) && label.trim().isEmpty()) {
 					// we need to merge the breakLine into the previous one to save memory
 					List<NodeInfo> children = parent.getChildren();
 					final String labelAttr = parentlang.getLabelAttribute();
-					for (Property prop : ((ComponentInfo)children.get(
-							children.size() - 1)).getProperties()) {
+					for (Property prop : ((ComponentInfo) children.get(children.size() - 1)).getProperties()) {
 						if (prop.getName().equals(labelAttr)) {
 							prop.setRawValue(prop.getRawValue() + trimLabel);
 						}
@@ -721,7 +711,7 @@ public class Parser {
 				if (bZkSwitch) {
 					if (trimLabel.length() == 0)
 						continue;
-					throw new UiException(message("Only <zk> can be used in <zk switch>", (Item)o));
+					throw new UiException(message("Only <zk> can be used in <zk switch>", (Item) o));
 				}
 
 				//ZK-2760: if parent is xhtml and no other sibling and length of label is 0, don't create TextInfo to it
@@ -740,8 +730,7 @@ public class Parser {
 
 					// trim the cdata when in the XHTML parser which will retain the syntax
 					String newLabel = label.trim();
-					if (newLabel.startsWith("<![CDATA[") && newLabel.endsWith(
-							"]]>")) {
+					if (newLabel.startsWith("<![CDATA[") && newLabel.endsWith("]]>")) {
 						label = newLabel.substring(9, newLabel.length() - 3);
 					}
 					// Bug ZK-2845: ShadowInfo does not allow TextInfo as child
@@ -756,7 +745,7 @@ public class Parser {
 								textAsBuffer.append(label); //concatenate all together
 							else if (!(parent instanceof TemplateInfo))
 								throw new UnsupportedOperationException(
-									message("Not allowed in text-as", ((Item)o).getParent()));
+										message("Not allowed in text-as", ((Item) o).getParent()));
 					} else { // shadow element shouldn't support empty LabelInfo
 						if (parent instanceof ShadowInfo) {
 							if (trimLabel.isEmpty())
@@ -768,11 +757,9 @@ public class Parser {
 							label = trimLabel;
 						}
 						if (isXHTML && preNativeInfo != null && label.trim().length() == 0) { //Merge break line between two NativeInfo when using zhtml
-							preNativeInfo.addEpilogChild(
-									new TextInfo(null, label));
+							preNativeInfo.addEpilogChild(new TextInfo(null, label));
 						} else {
-							final ComponentInfo labelInfo = parentlang.newLabelInfo(
-									parent, label);
+							final ComponentInfo labelInfo = parentlang.newLabelInfo(parent, label);
 							if (trimLabel.length() == 0)
 								labelInfo.setReplaceableText(label); //yes, it can be replaced by a text
 						}
@@ -794,6 +781,7 @@ public class Parser {
 				pi.addProperty(textAs, trimLabel, null);
 		}
 	}
+
 	/*package*/ static boolean isNativeText(ComponentInfo pi) { //also called by ComponentInfo
 		if (pi instanceof NativeInfo)
 			return true;
@@ -807,6 +795,7 @@ public class Parser {
 		}
 		return false;
 	}
+
 	/** Returns whether to trim the leading and trailing whitespaces
 	 * of labels.
 	 * <p>Default: false since 3.0.4.
@@ -817,26 +806,24 @@ public class Parser {
 	 */
 	private static boolean isTrimLabel() {
 		if (_trimLabel == null) {
-			final String s = Library.getProperty(
-					"org.zkoss.zk.ui.parser.trimLabel");
+			final String s = Library.getProperty("org.zkoss.zk.ui.parser.trimLabel");
 			_trimLabel = Boolean.valueOf(s != null && s.length() > 0);
 		}
 		return _trimLabel.booleanValue();
 	}
+
 	private static Boolean _trimLabel;
 
-	private static final
-	LanguageDefinition getLanguageDefinition(NodeInfo node) {
+	private static final LanguageDefinition getLanguageDefinition(NodeInfo node) {
 		for (; node != null; node = node.getParent()) {
 			if (node instanceof ComponentInfo) {
-				LanguageDefinition langdef =
-					((ComponentInfo)node).getLanguageDefinition();
+				LanguageDefinition langdef = ((ComponentInfo) node).getLanguageDefinition();
 				if (langdef != null)
 					return langdef;
 			} else if (node instanceof PageDefinition) {
-				return ((PageDefinition)node).getLanguageDefinition();
+				return ((PageDefinition) node).getLanguageDefinition();
 			} else if (node instanceof ShadowInfo) {
-				return ((ShadowInfo)node).getLanguageDefinition();
+				return ((ShadowInfo) node).getLanguageDefinition();
 			}
 		}
 		return null;
@@ -847,30 +834,26 @@ public class Parser {
 	 * It is true if a component definition with text-as is found
 	 * @return native item for optimization
 	 */
-	private Object parseItem(PageDefinition pgdef, NodeInfo parent,
-	Element el, AnnotationHelper annHelper, boolean bNativeContent, ParsingState parsingState)
-	throws Exception {
+	private Object parseItem(PageDefinition pgdef, NodeInfo parent, Element el, AnnotationHelper annHelper,
+			boolean bNativeContent, ParsingState parsingState) throws Exception {
 		final String nm = el.getLocalName();
 		final Namespace ns = el.getNamespace();
-		final String pref = ns != null ? ns.getPrefix(): "";
-		final String uri = ns != null ? ns.getURI(): "";
+		final String pref = ns != null ? ns.getPrefix() : "";
+		final String uri = ns != null ? ns.getURI() : "";
 		LanguageDefinition langdef = pgdef.getLanguageDefinition();
 		final String langName = langdef.getName();
 
-		if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri)
-		|| "annotation".equals(uri))
-			throw new UiException(message("Namespace, "+uri+", no longer supported element's annotation", el));
+		if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri) || "annotation".equals(uri))
+			throw new UiException(message("Namespace, " + uri + ", no longer supported element's annotation", el));
 
 		//ZK-2632: Parser support disorder template tag
 		if (parsingState != ParsingState.SECOND) {
 			if ("attribute".equals(nm) && isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 				if (!(parent instanceof ComponentInfo))
 					throw new UiException(message("<attribute> cannot be the root element", el));
-				parseAttribute(pgdef, (ComponentInfo)parent, el, annHelper);
-			} else if ("template".equals(nm)
-				&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
-				parseItems(pgdef, parseTemplate(parent, el, annHelper),
-						el.getChildren(), annHelper, bNativeContent);
+				parseAttribute(pgdef, (ComponentInfo) parent, el, annHelper);
+			} else if ("template".equals(nm) && isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+				parseItems(pgdef, parseTemplate(parent, el, annHelper), el.getChildren(), annHelper, bNativeContent);
 			}
 		}
 
@@ -882,32 +865,26 @@ public class Parser {
 				parseZScript(parent, el, annHelper);
 			} else if ("custom-attributes".equals(nm) && isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 				parseCustomAttributes(langdef, parent, el, annHelper);
-			} else if ("variables".equals(nm)
-			&& isZkElement(langdef, nm, pref, uri, bNativeContent)) {
+			} else if ("variables".equals(nm) && isZkElement(langdef, nm, pref, uri, bNativeContent)) {
 				parseVariables(langdef, parent, el, annHelper);
 			} else if ("zk".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
-				parseItems(pgdef, parseZk(parent, el, annHelper), el.getChildren(),
-						annHelper, bNativeContent);
+				parseItems(pgdef, parseZk(parent, el, annHelper), el.getChildren(), annHelper, bNativeContent);
 			} else if (isShadowElement(langdef, pgdef, nm, pref, uri, bNativeContent)) {
-				parseItems(pgdef, parseShadowElement(pgdef, parent, el, annHelper),
-					el.getChildren(), annHelper, bNativeContent);
+				parseItems(pgdef, parseShadowElement(pgdef, parent, el, annHelper), el.getChildren(), annHelper,
+						bNativeContent);
 			} else {
 				//if (log.isDebugEnabled()) log.debug("component: "+nm+", ns:"+ns);
 				if (isZkSwitch(parent))
 					throw new UiException(message("Only <zk> can be used in <zk switch>", el));
 
-				boolean prefRequired =
-					uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+				boolean prefRequired = uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
 				boolean bNative = bNativeContent || prefRequired || LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
-					|| "native".equals(uri);
+						|| "native".equals(uri);
 
-				if (!bNative && langdef.isNative()
-				&& !langdef.getNamespace().equals(uri))
-					bNative = prefRequired =
-						("".equals(pref) && "".equals(uri))
-						|| !LanguageDefinition.exists(uri);
-					//Spec: if pref/URI not specified => native
-					//		if uri unknown => native
+				if (!bNative && langdef.isNative() && !langdef.getNamespace().equals(uri))
+					bNative = prefRequired = ("".equals(pref) && "".equals(uri)) || !LanguageDefinition.exists(uri);
+				//Spec: if pref/URI not specified => native
+				//		if uri unknown => native
 
 				final ComponentInfo compInfo;
 				if (bNative) {
@@ -915,9 +892,8 @@ public class Parser {
 						log.warn(message("Annotations are ignored since native doesn't support them", el));
 
 					final NativeInfo ni;
-					compInfo = ni = new NativeInfo(
-						parent, langdef.getNativeDefinition(),
-						prefRequired && pref.length() > 0 ? pref + ":" + nm: nm);
+					compInfo = ni = new NativeInfo(parent, langdef.getNativeDefinition(),
+							prefRequired && pref.length() > 0 ? pref + ":" + nm : nm);
 
 					//add declared namespace if starting with native:
 					final Collection<Namespace> dns = el.getDeclaredNamespaces();
@@ -925,10 +901,8 @@ public class Parser {
 						addDeclaredNamespace(ni, dns, langdef);
 				} else {
 					final boolean defaultNS = isDefaultNS(langdef, pref, uri);
-					final LanguageDefinition complangdef =
-						defaultNS ? langdef: LanguageDefinition.lookup(uri);
-					ComponentDefinition compdef =
-						defaultNS ? pgdef.getComponentDefinitionMap().get(nm): null;
+					final LanguageDefinition complangdef = defaultNS ? langdef : LanguageDefinition.lookup(uri);
+					ComponentDefinition compdef = defaultNS ? pgdef.getComponentDefinitionMap().get(nm) : null;
 					if (compdef != null) {
 						compInfo = new ComponentInfo(parent, compdef, nm);
 					} else if (complangdef.hasComponentDefinition(nm)) {
@@ -938,7 +912,8 @@ public class Parser {
 					} else {
 						compdef = complangdef.getDynamicTagDefinition();
 						if (compdef == null)
-							throw new DefinitionNotFoundException(message("Component definition not found: "+nm+" in "+complangdef, el));
+							throw new DefinitionNotFoundException(
+									message("Component definition not found: " + nm + " in " + complangdef, el));
 						compInfo = new ComponentInfo(parent, compdef, nm);
 						langdef = complangdef;
 					}
@@ -949,44 +924,44 @@ public class Parser {
 						use = use.trim();
 						if (use.length() != 0)
 							compInfo.setImplementation(use);
-							//Resolve later since might defined in zscript
+						//Resolve later since might defined in zscript
 					}
 				}
 
-				String ifc = null, unless = null,
-					forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
+				String ifc = null, unless = null, forEach = null, forEachBegin = null, forEachEnd = null,
+						forEachStep = null;
 				AnnotationHelper attrAnnHelper = null;
 				//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
 				boolean isMVVM = false;
-				for (Iterator it = el.getAttributeItems().iterator();
-				it.hasNext();) {
-					final Attribute attr = (Attribute)it.next();
+				for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
+					final Attribute attr = (Attribute) it.next();
 					final Namespace attrns = attr.getNamespace();
-					final String attURI = attrns != null ? attrns.getURI(): "";
+					final String attURI = attrns != null ? attrns.getURI() : "";
 					final String attnm = attr.getLocalName();
 					final String attval = attr.getValue();
-					final String attPref = attrns != null ? attrns.getPrefix(): "";
-
+					final String attPref = attrns != null ? attrns.getPrefix() : "";
 
 					// ZK-2494: use getName instead of getLocalName when namespace is native or xml and attribute uri 
 					// is not one of known namespaces in zk. Exclude xmlns to avoid redefine.
-					if (isNativeNamespace(uri) || isXmlNamespace(uri) || "native".equals(langName) || "xml".equals(langName)) {
-						if (!isZkAttr(langdef, attrns) && !isZKNamespace(attURI) && !"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
+					if (isNativeNamespace(uri) || isXmlNamespace(uri) || "native".equals(langName)
+							|| "xml".equals(langName)) {
+						if (!isZkAttr(langdef, attrns) && !isZKNamespace(attURI) && !"xmlns".equals(attPref)
+								&& !("xmlns".equals(attnm) && "".equals(attPref))
 								&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 
-						// Bug ZK-2995
-						boolean handled = false;
-						for (NamespaceParser nsParser: _nsParsers) {
-							if (nsParser.isMatched(attURI)) {
-								if (nsParser.parse(attr, compInfo, pgdef)) {
-									handled = true;
-									break;
+							// Bug ZK-2995
+							boolean handled = false;
+							for (NamespaceParser nsParser : _nsParsers) {
+								if (nsParser.isMatched(attURI)) {
+									if (nsParser.parse(attr, compInfo, pgdef)) {
+										handled = true;
+										break;
+									}
 								}
 							}
-						}
-						if (!handled) {
-							compInfo.addProperty(attr.getName(), attval, null);
-						}
+							if (!handled) {
+								compInfo.addProperty(attr.getName(), attval, null);
+							}
 							continue;
 						} else if (isClientNamespace(attURI) || isClientAttrNamespace(attURI)) {
 							compInfo.addProperty(attnm, attval, null);
@@ -1010,23 +985,19 @@ public class Parser {
 						forEachBegin = attval;
 					} else if ("forEachEnd".equals(attnm) && isZkAttr(langdef, attrns)) {
 						forEachEnd = attval;
-					} else if ("fulfill".equals(attnm)
-					&& isZkAttr(langdef, attrns, bNativeContent)) {
+					} else if ("fulfill".equals(attnm) && isZkAttr(langdef, attrns, bNativeContent)) {
 						compInfo.setFulfill(attval);
-					} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI)
-					|| "annotation".equals(attURI)) {
+					} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI) || "annotation".equals(attURI)) {
 						//ZK 6: annotation namespace mandates annotation
 						if (attrAnnHelper == null)
 							attrAnnHelper = new AnnotationHelper();
 						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), true, location(attr));
-					} else if (!"use".equals(attnm)
-					|| !isZkAttr(langdef, attrns, bNativeContent)) {
+					} else if (!"use".equals(attnm) || !isZkAttr(langdef, attrns, bNativeContent)) {
 						final String attvaltrim;
-						if (!"xmlns".equals(attPref)
-						&& !("xmlns".equals(attnm) && "".equals(attPref))
-						&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
+						if (!"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
+								&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 							if (!bNativeContent && !bNative
-									//ZK 6: non-annotation namespace mandates non-annotation
+							//ZK 6: non-annotation namespace mandates non-annotation
 									&& (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
 									&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 								if (attrAnnHelper == null)
@@ -1034,7 +1005,8 @@ public class Parser {
 								applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
 								//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
 								Configuration config = WebApps.getCurrent().getConfiguration();
-								if (config.getBinderInitAttribute().equals(attnm)) isMVVM = true;
+								if (config.getBinderInitAttribute().equals(attnm))
+									isMVVM = true;
 								//F80 - store subtree's binder annotation count
 								Set<String> binderAnnotations = config.getBinderAnnotations();
 								for (String annot : binderAnnotations) {
@@ -1045,7 +1017,7 @@ public class Parser {
 								}
 							} else {
 								boolean handled = false;
-								for (NamespaceParser nsParser: _nsParsers) {
+								for (NamespaceParser nsParser : _nsParsers) {
 									if (nsParser.isMatched(attURI)) {
 										if (nsParser.parse(attr, compInfo, pgdef)) {
 											handled = true;
@@ -1054,8 +1026,7 @@ public class Parser {
 									}
 								}
 								if (!handled) {
-									addAttribute(compInfo, attrns, attnm, attval, null,
-										attr.getLocator());
+									addAttribute(compInfo, attrns, attnm, attval, null, attr.getLocator());
 									if (attrAnnHelper != null)
 										attrAnnHelper.applyAnnotations(compInfo, attnm, true);
 								}
@@ -1069,9 +1040,11 @@ public class Parser {
 					String apply = compInfo.getApply();
 					String bindComposerStr = "org.zkoss.bind.BindComposer";
 					if (apply != null && apply.contains(bindComposerStr) && !apply.contains(",")) {
-						log.warn(message("If the attribute of viewModel is being used, then \"" + bindComposerStr + "\" will be applied automatically. " +
-								"Notice that if you want to use another Composer, you will need to apply the \"" + bindComposerStr + "\" yourself.", el));
-					} else if (apply == null || apply.length() == 0){ //ZK-2763: only auto apply "BindComposer" when the attribute "apply" isn't used.
+						log.warn(message("If the attribute of viewModel is being used, then \"" + bindComposerStr
+								+ "\" will be applied automatically. "
+								+ "Notice that if you want to use another Composer, you will need to apply the \""
+								+ bindComposerStr + "\" yourself.", el));
+					} else if (apply == null || apply.length() == 0) { //ZK-2763: only auto apply "BindComposer" when the attribute "apply" isn't used.
 						compInfo.setApply(bindComposerStr);
 					}
 				}
@@ -1079,9 +1052,8 @@ public class Parser {
 				compInfo.setForEach(forEach, forEachBegin, forEachEnd, forEachStep);
 				annHelper.applyAnnotations(compInfo, null, true);
 
-
 				//only provide if there already has other annotation
-				if(compInfo.getAnnotationMap()!=null && el.getLocator()!=null){
+				if (compInfo.getAnnotationMap() != null && el.getLocator() != null) {
 					//provide component location info as a annotation with it's location.
 					compInfo.addAnnotation(null, "ZKLOC", null, Locators.toLocation(el.getLocator()));
 				}
@@ -1089,13 +1061,13 @@ public class Parser {
 				final Collection<Item> items = el.getChildren();
 				String textAs = null;
 				if (!bNativeContent && !items.isEmpty() //if empty, no need to check
-				&& (textAs = compInfo.getTextAs()) != null) {
+						&& (textAs = compInfo.getTextAs()) != null) {
 					//if textAs is specified, we detect if any child element
 					//if so, we parse them as property
 					//if not, we handle it normally and text, if any, will be
 					//trimmed and assigned as a property (in parseItems)
 					if (compInfo.isChildAllowedInTextAs() //don't consider it as text if childable and element found
-					|| !textAsAllowed(langdef, items, bNativeContent))
+							|| !textAsAllowed(langdef, items, bNativeContent))
 						textAs = null;
 				}
 
@@ -1106,100 +1078,95 @@ public class Parser {
 
 				//optimize native components
 				if (compInfo instanceof NativeInfo && !compInfo.getChildren().isEmpty()) {
-					optimizeNativeInfos((NativeInfo)compInfo);
+					optimizeNativeInfos((NativeInfo) compInfo);
 					return compInfo;
 				}
 			} //end-of-else//
 		}
 		return null;
 	}
-	private boolean textAsAllowed(LanguageDefinition langdef,
-	Collection<Item> items, boolean bNativeContent) {
+
+	private boolean textAsAllowed(LanguageDefinition langdef, Collection<Item> items, boolean bNativeContent) {
 		boolean textAsAllowed = true;
 		String xmlFound = null; //whether a XML fragment
 		String zkElem = null; //a ZK element
 		boolean empty = true; //whether there is anything other than whitespace
 		for (Iterator<Item> it = items.iterator();;) {
 			if (zkElem != null && xmlFound != null)
-				throw new UnsupportedOperationException(
-					message("Unable to handle XML fragment, <"+xmlFound+">, with <"+zkElem+">. Please use CDATA instead",
-						(it.hasNext() ? it.next(): items.iterator().next().getParent())));
-						//might be possible to handle but not worth
+				throw new UnsupportedOperationException(message(
+						"Unable to handle XML fragment, <" + xmlFound + ">, with <" + zkElem
+								+ ">. Please use CDATA instead",
+						(it.hasNext() ? it.next() : items.iterator().next().getParent())));
+			//might be possible to handle but not worth
 			if (!it.hasNext())
 				break;
 
 			final Item o = it.next();
 			if (empty)
-				empty = (o instanceof Text || o instanceof CData)
-					&& o.getText().trim().length() == 0;
+				empty = (o instanceof Text || o instanceof CData) && o.getText().trim().length() == 0;
 
 			if (o instanceof Element) {
-				final Element e = (Element)o;
+				final Element e = (Element) o;
 				final String n = e.getLocalName();
-				if (isZkElement(langdef, e, bNativeContent)
-				&& ("attribute".equals(n) || "custom-attributes".equals(n)
-				|| "variables".equals(n) || "template".equals(n)
-				|| "zscript".equals(n))) { //we have to skip zscript because of B50-3259479
+				if (isZkElement(langdef, e, bNativeContent) && ("attribute".equals(n) || "custom-attributes".equals(n)
+						|| "variables".equals(n) || "template".equals(n) || "zscript".equals(n))) { //we have to skip zscript because of B50-3259479
 					zkElem = n;
 					textAsAllowed = false;
 					//unable to handle them because EL/zscript might affect
 					//the result
 				} else {
 					xmlFound = n;
-						//including "zk" (risk if allowed to mix zk with attribute...)
+					//including "zk" (risk if allowed to mix zk with attribute...)
 				}
 			}
 		}
 		return textAsAllowed && !empty;
-			//if empty (i.e., only whitespace), so don't handle textAs (i.e., ignore it)
+		//if empty (i.e., only whitespace), so don't handle textAs (i.e., ignore it)
 	}
 
 	/** Parses the items as if they are native and they will become a property
 	 * rather than child components.
 	 */
-	private void parseAsProperty(PageDefinition pgdef, ComponentInfo compInfo,
-	String name, Collection items, AnnotationHelper annHelper, ConditionImpl cond)
-	throws Exception {
-		final NativeInfo nativeInfo = new NativeInfo(
-			compInfo.getEvaluatorRef(), pgdef.getLanguageDefinition().getNativeDefinition(), "");
-			//Note: nativeInfo can not be a child. Rather, it will be a property
+	private void parseAsProperty(PageDefinition pgdef, ComponentInfo compInfo, String name, Collection items,
+			AnnotationHelper annHelper, ConditionImpl cond) throws Exception {
+		final NativeInfo nativeInfo = new NativeInfo(compInfo.getEvaluatorRef(),
+				pgdef.getLanguageDefinition().getNativeDefinition(), "");
+		//Note: nativeInfo can not be a child. Rather, it will be a property
 		parseItems(pgdef, nativeInfo, items, annHelper, true);
 		compInfo.addProperty(name, nativeInfo, cond);
 	}
+
 	/** @param val the value (it was trimmed before called). */
-	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
-	ComponentInfo compInfo, String nm, String val, boolean selfAllowed,
-	org.zkoss.util.resource.Location loc) {
+	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper, ComponentInfo compInfo, String nm, String val,
+			boolean selfAllowed, org.zkoss.util.resource.Location loc) {
 		attrAnnHelper.addByCompoundValue(val.trim(), loc);
-		attrAnnHelper.applyAnnotations(compInfo,
-			selfAllowed && "self".equals(nm) ? null: nm, true);
+		attrAnnHelper.applyAnnotations(compInfo, selfAllowed && "self".equals(nm) ? null : nm, true);
 	}
+
 	/** @param val the value (it was trimmed before called). */
-	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
-	ShadowInfo compInfo, String nm, String val, boolean selfAllowed,
-	org.zkoss.util.resource.Location loc) {
+	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper, ShadowInfo compInfo, String nm, String val,
+			boolean selfAllowed, org.zkoss.util.resource.Location loc) {
 		attrAnnHelper.addByCompoundValue(val.trim(), loc);
-		attrAnnHelper.applyAnnotations(compInfo,
-			selfAllowed && "self".equals(nm) ? null: nm, true);
+		attrAnnHelper.applyAnnotations(compInfo, selfAllowed && "self".equals(nm) ? null : nm, true);
 	}
+
 	private static void warnWrongZkAttr(Attribute attr) {
-		log.warn(message("Attribute "+attr.getName()+" ignored in <zk>", attr));
+		log.warn(message("Attribute " + attr.getName() + " ignored in <zk>", attr));
 	}
+
 	private static boolean isZkSwitch(NodeInfo nodeInfo) {
-		return nodeInfo instanceof ZkInfo && ((ZkInfo)nodeInfo).withSwitch();
+		return nodeInfo instanceof ZkInfo && ((ZkInfo) nodeInfo).withSwitch();
 	}
-	private void parseZScript(NodeInfo parent, Element el,
-	AnnotationHelper annHelper) {
+
+	private void parseZScript(NodeInfo parent, Element el, AnnotationHelper annHelper) {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException(message("forEach not applicable to <zscript>", el));
 		if (annHelper.clear())
 			log.warn(message("Annotations are ignored since <zscript> doesn't support them", el));
 
-		final String ifc = el.getAttributeValue("if"),
-			unless = el.getAttributeValue("unless"),
-			zsrc = el.getAttributeValue("src");
-		final boolean
-			deferred = "true".equals(el.getAttributeValue("deferred"));
+		final String ifc = el.getAttributeValue("if"), unless = el.getAttributeValue("unless"),
+				zsrc = el.getAttributeValue("src");
+		final boolean deferred = "true".equals(el.getAttributeValue("deferred"));
 
 		String zslang = el.getAttributeValue("language");
 		if (zslang == null) {
@@ -1218,18 +1185,19 @@ public class Parser {
 				final URL url = getLocator().getResource(zsrc);
 				if (url != null)
 					zs = new ZScriptInfo(parent, zslang, url, cond);
-					//Bug 2929887: defer the error message since it might not be required
+				//Bug 2929887: defer the error message since it might not be required
 			}
 			if (zs == null)
 				zs = new ZScriptInfo(parent, zslang, zsrc, getLocator(), cond);
 
-			if (deferred) zs.setDeferred(true);
+			if (deferred)
+				zs.setDeferred(true);
 		}
 
 		String script = el.getText(false);
 		if (!isEmpty(script.trim())) {
 			final org.zkoss.xml.Locator l = el.getLocator();
-			int lno = l != null ? l.getLineNumber(): 0;
+			int lno = l != null ? l.getLineNumber() : 0;
 			if (lno > 1) {
 				final StringBuffer sb = new StringBuffer(lno);
 				while (--lno > 0)
@@ -1237,12 +1205,13 @@ public class Parser {
 				script = sb.toString() + script;
 			}
 			final ZScriptInfo zs = new ZScriptInfo(parent, zslang, script, cond);
-			if (deferred) zs.setDeferred(true);
+			if (deferred)
+				zs.setDeferred(true);
 		}
 	}
-	private void parseAttribute(PageDefinition pgdef,
-	ComponentInfo parent, Element el, AnnotationHelper annHelper)
-	throws Exception {
+
+	private void parseAttribute(PageDefinition pgdef, ComponentInfo parent, Element el, AnnotationHelper annHelper)
+			throws Exception {
 		if (el.getAttributeItem("forEach") != null)
 			throw new UiException(message("forEach not applicable to attribute", el));
 
@@ -1251,7 +1220,7 @@ public class Parser {
 		for (Iterator it = el.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof Element) {
-				elFound = ((Element)o).getName();
+				elFound = ((Element) o).getName();
 				break;
 			}
 		}
@@ -1262,26 +1231,25 @@ public class Parser {
 
 		final String attnm = attr.getValue();
 		noEmpty("name", attnm, el);
-		final ConditionImpl cond = ConditionImpl.getInstance(
-				el.getAttributeValue("if"), el.getAttributeValue("unless"));
+		final ConditionImpl cond = ConditionImpl.getInstance(el.getAttributeValue("if"),
+				el.getAttributeValue("unless"));
 		if (elFound != null) {
 			if (Events.isValid(attnm))
 				throw new UiException(message("<" + elFound + "> not allowed in an event listener", el));
 
-			parseAsProperty(pgdef, parent, attnm, el.getChildren(), annHelper,
-					cond);
+			parseAsProperty(pgdef, parent, attnm, el.getChildren(), annHelper, cond);
 		} else {
 			final String trim = el.getAttributeValue("trim");
 			noEL("trim", trim, el);
 			final String attval = el.getText(trim != null && "true".equals(trim));
-			addAttribute(parent, attr.getNamespace(), attnm, attval, cond,
-				el.getLocator());
+			addAttribute(parent, attr.getNamespace(), attnm, attval, cond, el.getLocator());
 		}
 
 		annHelper.applyAnnotations(parent, attnm, true);
 	}
-	private static void parseCustomAttributes(LanguageDefinition langdef,
-	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
+
+	private static void parseCustomAttributes(LanguageDefinition langdef, NodeInfo parent, Element el,
+			AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException(message("Child elements are not allowed for <custom-attributes>", el));
 
@@ -1293,9 +1261,8 @@ public class Parser {
 		String ifc = null, unless = null, scope = null, composite = null;
 		final Map<String, String> attrs = new LinkedHashMap<String, String>();
 		AnnotationHelper attrAnnHelper = null;
-		for (Iterator it = el.getAttributeItems().iterator();
-		it.hasNext();) {
-			final Attribute attr = (Attribute)it.next();
+		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
+			final Attribute attr = (Attribute) it.next();
 			final Namespace attrns = attr.getNamespace();
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
@@ -1309,25 +1276,22 @@ public class Parser {
 			} else if ("composite".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				composite = attval;
 			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
-				throw new UiException(
-						message("forEach not applicable to <custom-attributes>", el));
-			} else if (parent instanceof ComponentInfo
-			&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) {
+				throw new UiException(message("forEach not applicable to <custom-attributes>", el));
+			} else if (parent instanceof ComponentInfo && AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) {
 				if (attrAnnHelper == null)
 					attrAnnHelper = new AnnotationHelper();
-				applyAttrAnnot(attrAnnHelper, (ComponentInfo)parent,
-					attnm, attvaltrim, false, location(attr));
+				applyAttrAnnot(attrAnnHelper, (ComponentInfo) parent, attnm, attvaltrim, false, location(attr));
 			} else {
 				attrs.put(attnm, attval);
 			}
 		}
 
 		if (!attrs.isEmpty())
-			new AttributesInfo(parent, attrs, scope, composite,
-				ConditionImpl.getInstance(ifc, unless));
+			new AttributesInfo(parent, attrs, scope, composite, ConditionImpl.getInstance(ifc, unless));
 	}
-	private static void parseVariables(LanguageDefinition langdef,
-	NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
+
+	private static void parseVariables(LanguageDefinition langdef, NodeInfo parent, Element el,
+			AnnotationHelper annHelper) throws Exception {
 		//if (!el.getElements().isEmpty())
 		//	throw new UiException(message("Child elements are not allowed for <variables> element", el));
 
@@ -1337,9 +1301,8 @@ public class Parser {
 		String ifc = null, unless = null, composite = null;
 		boolean local = false;
 		final Map<String, String> vars = new LinkedHashMap<String, String>();
-		for (Iterator it = el.getAttributeItems().iterator();
-		it.hasNext();) {
-			final Attribute attr = (Attribute)it.next();
+		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
+			final Attribute attr = (Attribute) it.next();
 			final Namespace attrns = attr.getNamespace();
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
@@ -1358,66 +1321,56 @@ public class Parser {
 			}
 		}
 		if (!vars.isEmpty())
-			new VariablesInfo(parent, vars, local, composite,
-				ConditionImpl.getInstance(ifc, unless));
+			new VariablesInfo(parent, vars, local, composite, ConditionImpl.getInstance(ifc, unless));
 	}
-	private static void parseAnnotation(Element el, AnnotationHelper annHelper)
-	throws Exception {
+
+	private static void parseAnnotation(Element el, AnnotationHelper annHelper) throws Exception {
 		if (!el.getElements().isEmpty())
 			throw new UiException(message("Child elements are not allowed for the annotations", el));
 
 		final Map<String, String[]> attrs = new LinkedHashMap<String, String[]>();
-		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext(); ) {
-			final Attribute attr = (Attribute)it.next();
+		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
+			final Attribute attr = (Attribute) it.next();
 			attrs.put(attr.getLocalName(),
-				AnnotationHelper.parseAttributeValue(
-					attr.getValue().trim(), location(attr)));
+					AnnotationHelper.parseAttributeValue(attr.getValue().trim(), location(attr)));
 		}
 		annHelper.add(el.getLocalName(), attrs, location(el));
 	}
+
 	private static NodeInfo parseShadowElement(PageDefinition pgdef, NodeInfo parent, Element el,
-	AnnotationHelper annHelper) throws Exception {
-		String ifc = null, unless = null,
-			name = el.getLocalName();
+			AnnotationHelper annHelper) throws Exception {
+		String ifc = null, unless = null, name = el.getLocalName();
 		AnnotationHelper attrAnnHelper = null;
 		final LanguageDefinition lookup = LanguageDefinition.lookup("xul/html");
 		ComponentDefinition shadowDefinition = lookup.hasShadowDefinition(name) ? lookup.getShadowDefinition(name)
-						: pgdef.getComponentDefinitionMap().get(name);
-		final ShadowInfo compInfo = new ShadowInfo(parent, shadowDefinition,
-			name, ConditionImpl.getInstance(ifc, unless));
-		for (Iterator it = el.getAttributeItems().iterator();
-		it.hasNext();) {
-			final Attribute attr = (Attribute)it.next();
+				: pgdef.getComponentDefinitionMap().get(name);
+		final ShadowInfo compInfo = new ShadowInfo(parent, shadowDefinition, name,
+				ConditionImpl.getInstance(ifc, unless));
+		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
+			final Attribute attr = (Attribute) it.next();
 			final Namespace attrns = attr.getNamespace();
-			final String attURI = attrns != null ? attrns.getURI(): "";
+			final String attURI = attrns != null ? attrns.getURI() : "";
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
 			if ("if".equals(attnm)) {
 				ifc = attval;
 			} else if ("unless".equals(attnm)) {
 				unless = attval;
-			} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI)
-					|| "annotation".equals(attURI)) {
+			} else if (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI) || "annotation".equals(attURI)) {
 				//ZK 6: annotation namespace mandates annotation
 				if (attrAnnHelper == null)
 					attrAnnHelper = new AnnotationHelper();
 				applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), false, location(attr));
 			} else {
-				final String attPref = attrns != null ? attrns.getPrefix()
-						: null;
+				final String attPref = attrns != null ? attrns.getPrefix() : null;
 				String attvaltrim;
-				if (!"xmlns".equals(attPref)
-						&& !("xmlns".equals(attnm) && "".equals(attPref))
-						&& !"http://www.w3.org/2001/XMLSchema-instance"
-						.equals(attURI)) {
-					if ((attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE
-							.endsWith(attURI))
-							&& AnnotationHelper
-									.isAnnotation(attvaltrim = attval.trim())) { // annotation
+				if (!"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
+						&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
+					if ((attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
+							&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { // annotation
 						if (attrAnnHelper == null)
 							attrAnnHelper = new AnnotationHelper();
-						applyAttrAnnot(attrAnnHelper, compInfo, attnm,
-								attvaltrim, true, location(attr));
+						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
 						//F80 - store subtree's binder annotation count
 						Set<String> binderAnnotations = WebApps.getCurrent().getConfiguration().getBinderAnnotations();
 						for (String annot : binderAnnotations) {
@@ -1429,8 +1382,7 @@ public class Parser {
 					} else {
 						compInfo.addProperty(attnm, attval, null);
 						if (attrAnnHelper != null)
-							attrAnnHelper.applyAnnotations(compInfo, attnm,
-									true);
+							attrAnnHelper.applyAnnotations(compInfo, attnm, true);
 					}
 				}
 			}
@@ -1442,7 +1394,7 @@ public class Parser {
 		Node root = el.getFirstChild();
 		while (root != null && !(root instanceof Element)) {
 			if (root instanceof Text) {
-				if (!((Text)root).getText().trim().isEmpty())
+				if (!((Text) root).getText().trim().isEmpty())
 					break;
 			}
 			root = root.getNextSibling();
@@ -1453,7 +1405,7 @@ public class Parser {
 				Node item = root;
 				while (item != null) {
 					if ("template".equals(item.getLocalName()))
-						throw new UiException(message(rn+" does not support between templates", (Item)root));
+						throw new UiException(message(rn + " does not support between templates", (Item) root));
 					item = item.getNextSibling();
 				}
 				return new TemplateInfo(compInfo, "", null, null, null);
@@ -1461,21 +1413,20 @@ public class Parser {
 		}
 		return compInfo;
 	}
-	private static TemplateInfo parseTemplate(NodeInfo parent, Element el,
-	AnnotationHelper annHelper) throws Exception {
+
+	private static TemplateInfo parseTemplate(NodeInfo parent, Element el, AnnotationHelper annHelper)
+			throws Exception {
 		if (annHelper.clear())
 			log.warn(message("Annotations are ignored since <template> doesn't support them", el));
 		if (el.getAttributeItem("forEach") != null)
 			log.warn(message("forEach is ignored since <template> doesn't support it", el));
 
-		String ifc = null, unless = null,
-			name = null, src = null;
+		String ifc = null, unless = null, name = null, src = null;
 		final Map<String, String> params = new LinkedHashMap<String, String>(); //reserve the order
-		for (Iterator it = el.getAttributeItems().iterator();
-		it.hasNext();) {
-			final Attribute attr = (Attribute)it.next();
+		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
+			final Attribute attr = (Attribute) it.next();
 			final Namespace attrns = attr.getNamespace();
-			final String attURI = attrns != null ? attrns.getURI(): "";
+			final String attURI = attrns != null ? attrns.getURI() : "";
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
 			if ("name".equals(attnm)) {
@@ -1487,11 +1438,9 @@ public class Parser {
 			} else if ("unless".equals(attnm)) {
 				unless = attval;
 			} else {
-				final String attPref = attrns != null ? attrns.getPrefix(): null;
-				if (!"xmlns".equals(attnm) && !"xml".equals(attnm)
-				&& attURI.indexOf("w3.org") < 0
-				&& (attPref == null
-				 || (!"xmlns".equals(attPref) && !"xml".equals(attPref))))
+				final String attPref = attrns != null ? attrns.getPrefix() : null;
+				if (!"xmlns".equals(attnm) && !"xml".equals(attnm) && attURI.indexOf("w3.org") < 0
+						&& (attPref == null || (!"xmlns".equals(attPref) && !"xml".equals(attPref))))
 					params.put(attnm, attval);
 			}
 		}
@@ -1501,22 +1450,19 @@ public class Parser {
 			// support "" an empty string for ZK 8.0.0 shadow element
 
 		}
-		return new TemplateInfo(parent,
-			name, src, params, ConditionImpl.getInstance(ifc, unless));
+		return new TemplateInfo(parent, name, src, params, ConditionImpl.getInstance(ifc, unless));
 	}
-	private static ZkInfo parseZk(NodeInfo parent, Element el,
-	AnnotationHelper annHelper) throws Exception {
+
+	private static ZkInfo parseZk(NodeInfo parent, Element el, AnnotationHelper annHelper) throws Exception {
 		if (annHelper.clear())
 			log.warn(message("Annotations are ignored since <zk> doesn't support them", el));
 
 		final ZkInfo zi = new ZkInfo(parent, null);
-		String ifc = null, unless = null,
-			forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
-		for (Iterator it = el.getAttributeItems().iterator();
-		it.hasNext();) {
-			final Attribute attr = (Attribute)it.next();
+		String ifc = null, unless = null, forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
+		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
+			final Attribute attr = (Attribute) it.next();
 			final Namespace attrns = attr.getNamespace();
-			final String attURI = attrns != null ? attrns.getURI(): "";
+			final String attURI = attrns != null ? attrns.getURI() : "";
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
 			if ("if".equals(attnm) || "when".equals(attnm)) {
@@ -1533,18 +1479,16 @@ public class Parser {
 				forEachEnd = attval;
 			} else if ("switch".equals(attnm) || "choose".equals(attnm)) {
 				if (isZkSwitch(parent))
-					throw new UiException(message("<zk "+attnm+"> cannot be used in <zk switch/choose>", el));
+					throw new UiException(message("<zk " + attnm + "> cannot be used in <zk switch/choose>", el));
 				zi.setSwitch(attval);
 			} else if ("case".equals(attnm)) {
 				if (!isZkSwitch(parent))
 					throw new UiException(message("<zk case> can be used only in <zk switch>", attr));
 				zi.setCase(attval);
 			} else {
-				final String attPref = attrns != null ? attrns.getPrefix(): null;
-				if (!"xmlns".equals(attnm) && !"xml".equals(attnm)
-				&& attURI.indexOf("w3.org") < 0
-				&& (attPref == null
-				 || (!"xmlns".equals(attPref) && !"xml".equals(attPref))))
+				final String attPref = attrns != null ? attrns.getPrefix() : null;
+				if (!"xmlns".equals(attnm) && !"xml".equals(attnm) && attURI.indexOf("w3.org") < 0
+						&& (attPref == null || (!"xmlns".equals(attPref) && !"xml".equals(attPref))))
 					warnWrongZkAttr(attr);
 			}
 		}
@@ -1557,38 +1501,40 @@ public class Parser {
 	private static boolean isEmpty(String s) {
 		return s == null || s.length() == 0;
 	}
+
 	/** Whether the name space belongs to the default language. */
-	private static final
-	boolean isDefaultNS(LanguageDefinition langdef, String pref, String uri) {
-		return (!langdef.isNative() && "".equals(pref) && "".equals(uri))
-			|| langdef.getNamespace().equals(uri);
+	private static final boolean isDefaultNS(LanguageDefinition langdef, String pref, String uri) {
+		return (!langdef.isNative() && "".equals(pref) && "".equals(uri)) || langdef.getNamespace().equals(uri);
 	}
+
 	/** Returns whether it is a Shadow element.
 	 * @param pref namespace's prefix
 	 * @param uri namespace's URI
 	 * @param bNativeContent whether to ignore if URI not specified explicitly
 	 */
-	private static final boolean isShadowElement(LanguageDefinition langdef,
-			PageDefinition pgdef, String nm, String pref, String uri, boolean bNativeContent) {
+	private static final boolean isShadowElement(LanguageDefinition langdef, PageDefinition pgdef, String nm,
+			String pref, String uri, boolean bNativeContent) {
 		// feature in 8.0.0, no need to check namespace, if any.
 		if ("true".equalsIgnoreCase(Library.getProperty("org.zkoss.zk.namespace.tolerant", "false")))
-			return langdef.hasShadowDefinition(nm) || (!"xul/html".equals(langdef.getName()) &&
-					LanguageDefinition.lookup("xul/html").hasShadowDefinition(nm));
+			return langdef.hasShadowDefinition(nm) || (!"xul/html".equals(langdef.getName())
+					&& LanguageDefinition.lookup("xul/html").hasShadowDefinition(nm));
 		ComponentDefinition componentDefinition = pgdef.getComponentDefinitionMap().get(nm);
 		// F80 - support another namespace
-		if (componentDefinition instanceof ShadowDefinitionImpl || LanguageDefinition.SHADOW_NAMESPACE.equals(uri) || LanguageDefinition.SHADOW_NAME.equals(uri))
+		if (componentDefinition instanceof ShadowDefinitionImpl || LanguageDefinition.SHADOW_NAMESPACE.equals(uri)
+				|| LanguageDefinition.SHADOW_NAME.equals(uri))
 			return true;
 		if (isDefaultNS(langdef, pref, uri))
 			return !bNativeContent && langdef.hasShadowDefinition(nm);
 		return false;
 	}
+
 	/** Returns whether it is a ZK element.
 	 * @param pref namespace's prefix
 	 * @param uri namespace's URI
 	 * @param bNativeContent whether to ignore if URI not specified explicitly
 	 */
-	private static final boolean isZkElement(LanguageDefinition langdef,
-	String nm, String pref, String uri, boolean bNativeContent) {
+	private static final boolean isZkElement(LanguageDefinition langdef, String nm, String pref, String uri,
+			boolean bNativeContent) {
 		// feature in 8.0.0, no need to check namespace, if any.
 		if ("true".equalsIgnoreCase(Library.getProperty("org.zkoss.zk.namespace.tolerant", "false")))
 			return true;
@@ -1596,64 +1542,58 @@ public class Parser {
 			return !bNativeContent && !langdef.hasComponentDefinition(nm);
 		return LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri);
 	}
-	private static final boolean isZkElement(LanguageDefinition langdef,
-	Element el, boolean bNativeContent) {
+
+	private static final boolean isZkElement(LanguageDefinition langdef, Element el, boolean bNativeContent) {
 		final Namespace ns = el.getNamespace();
-		return isZkElement(langdef, el.getLocalName(),
-			ns != null ? ns.getPrefix(): "",
-			ns != null ? ns.getURI(): "", bNativeContent);
+		return isZkElement(langdef, el.getLocalName(), ns != null ? ns.getPrefix() : "", ns != null ? ns.getURI() : "",
+				bNativeContent);
 	}
-	private static final boolean
-	isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
+
+	private static final boolean isZkElement(LanguageDefinition langdef, String nm, String pref, String uri) {
 		return isZkElement(langdef, nm, pref, uri, false);
 	}
+
 	/** Returns whether it is a ZK attribute (in a non-ZK element).
 	 * @param bNativeContent whether to ignore if URI not specified explicitly
 	 */
-	private static final boolean
-	isZkAttr(LanguageDefinition langdef, Namespace attrns, boolean bNativeContent) {
+	private static final boolean isZkAttr(LanguageDefinition langdef, Namespace attrns, boolean bNativeContent) {
 		//if native we will make sure URI is ZK or lang's namespace
-		if ((bNativeContent || langdef.isNative())
-		&& attrns != null && "".equals(attrns.getPrefix()))
+		if ((bNativeContent || langdef.isNative()) && attrns != null && "".equals(attrns.getPrefix()))
 			return false; //if navtive, "" means not ZK
 
 		return isZkElementAttr(langdef, attrns);
 	}
-	private static final boolean
-	isZkAttr(LanguageDefinition langdef, Namespace attrns) {
+
+	private static final boolean isZkAttr(LanguageDefinition langdef, Namespace attrns) {
 		return isZkAttr(langdef, attrns, false);
 	}
+
 	/** Similar to {@link #isZkAttr}, except it doesn't care isNative
 	 * (i.e., we consider it as a ZK attribute unless a namespace
 	 * other than ZK is specified.
 	 */
-	private static final
-	boolean isZkElementAttr(LanguageDefinition langdef, Namespace attrns) {
-		if (attrns == null  //not possible; just in case
-		|| "".equals(attrns.getPrefix())) //w3c attr: uri is "" if prefix ""
+	private static final boolean isZkElementAttr(LanguageDefinition langdef, Namespace attrns) {
+		if (attrns == null //not possible; just in case
+				|| "".equals(attrns.getPrefix())) //w3c attr: uri is "" if prefix ""
 			return true;
 
 		final String uri = attrns.getURI();
-		return  LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri)
-			|| langdef.getNamespace().equals(uri);
+		return LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri) || langdef.getNamespace().equals(uri);
 	}
 
 	/** Parse an attribute and adds it to the definition.
 	 */
-	private void addAttribute(ComponentInfo compInfo, Namespace attrns,
-	String name, String value, ConditionImpl cond, org.zkoss.xml.Locator xl)
-	throws Exception {
+	private void addAttribute(ComponentInfo compInfo, Namespace attrns, String name, String value, ConditionImpl cond,
+			org.zkoss.xml.Locator xl) throws Exception {
 		if (Events.isValid(name)) {
 			boolean bZkAttr = attrns == null;
 			if (!bZkAttr) {
 				final String uri = attrns.getURI();
-				if (LanguageDefinition.CLIENT_NAMESPACE.equals(uri)
-				|| "client".equals(uri)) {
+				if (LanguageDefinition.CLIENT_NAMESPACE.equals(uri) || "client".equals(uri)) {
 					compInfo.addWidgetListener(name, value, cond);
 					return;
 				}
-				if (LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri)
-				|| "client/attribute".equals(uri)) {
+				if (LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri) || "client/attribute".equals(uri)) {
 					compInfo.addWidgetAttribute(name, value, cond);
 					return;
 				}
@@ -1668,24 +1608,21 @@ public class Parser {
 				else if (isDefaultNS(langdef, pref, uri) && !compdef.isNative())
 					bZkAttr = !langdef.isDynamicReservedAttributes("[event]");
 				else
-					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri)
-						|| "zk".equals(uri);
+					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri);
 			}
 			if (bZkAttr) {
 				checkZScriptEnabled(xl);
-				final int lno = xl != null ? xl.getLineNumber(): 0;
+				final int lno = xl != null ? xl.getLineNumber() : 0;
 				final ZScript zscript = ZScript.parseContent(value, lno);
 				if (zscript.getLanguage() == null)
-					zscript.setLanguage(
-						compInfo.getPageDefinition().getZScriptLanguage());
-						//resolve it here instead of runtime since createComponents
+					zscript.setLanguage(compInfo.getPageDefinition().getZScriptLanguage());
+				//resolve it here instead of runtime since createComponents
 				compInfo.addEventHandler(name, zscript, cond);
 				return; //done
 			}
 		} else {
 			final String uri = attrns.getURI();
-			if (LanguageDefinition.CLIENT_NAMESPACE.equals(uri)
-			|| "client".equals(uri)) {
+			if (LanguageDefinition.CLIENT_NAMESPACE.equals(uri) || "client".equals(uri)) {
 				if (name.length() == 0)
 					throw new UiException(message("Client attribute name required", xl));
 				if ("use".equals(name)) {
@@ -1697,8 +1634,7 @@ public class Parser {
 				}
 				return;
 			}
-			if (LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri)
-			|| "client/attribute".equals(uri)) {
+			if (LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri) || "client/attribute".equals(uri)) {
 				compInfo.addWidgetAttribute(name, value, cond);
 				return;
 			}
@@ -1708,22 +1644,18 @@ public class Parser {
 
 	/** Adds the declared namespaces to the native info, if necessary.
 	 */
-	private static void addDeclaredNamespace(
-	NativeInfo nativeInfo, Collection<Namespace> namespaces,
+	private static void addDeclaredNamespace(NativeInfo nativeInfo, Collection<Namespace> namespaces,
 			LanguageDefinition langdef) {
-		for (Namespace ns: namespaces) {
+		for (Namespace ns : namespaces) {
 			final String uri = ns.getURI();
-			boolean bNatPrefix =
-				uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
+			boolean bNatPrefix = uri.startsWith(LanguageDefinition.NATIVE_NAMESPACE_PREFIX);
 			// ZK-2494: Should also consider adding declaredNamespace inside a native component
-			if (bNatPrefix
-			|| (!isZKNamespace(uri) && !langdef.getNamespace().equals(uri)))
-				nativeInfo.addDeclaredNamespace(
-					new Namespace(ns.getPrefix(),
-						bNatPrefix ? uri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()):
-							uri));
+			if (bNatPrefix || (!isZKNamespace(uri) && !langdef.getNamespace().equals(uri)))
+				nativeInfo.addDeclaredNamespace(new Namespace(ns.getPrefix(),
+						bNatPrefix ? uri.substring(LanguageDefinition.NATIVE_NAMESPACE_PREFIX.length()) : uri));
 		}
 	}
+
 	/** Minimizes the native infos such that UiEngine creates
 	 * the minimal number of components.
 	 */
@@ -1731,9 +1663,9 @@ public class Parser {
 		//Optimize 1: merge to prolog, if the first children are
 		//native and have no child
 		for (Iterator it = compInfo.getChildren().iterator(); it.hasNext();) {
-			final NodeInfo o = (NodeInfo)it.next();
+			final NodeInfo o = (NodeInfo) it.next();
 			if (o instanceof NativeInfo) {
-				final NativeInfo childInfo = (NativeInfo)o;
+				final NativeInfo childInfo = (NativeInfo) o;
 				if (!childInfo.getChildren().isEmpty())
 					break;
 				childInfo.setParentDirectly(null);
@@ -1763,7 +1695,7 @@ public class Parser {
 			while (it.hasPrevious()) {
 				final Object o = it.previous();
 				if (o instanceof NativeInfo) {
-					final NativeInfo childInfo = (NativeInfo)o;
+					final NativeInfo childInfo = (NativeInfo) o;
 					if (!childInfo.getChildren().isEmpty()) {
 						it.next();
 						break;
@@ -1775,7 +1707,7 @@ public class Parser {
 				}
 			}
 			while (it.hasNext()) {
-				final NodeInfo o = (NodeInfo)it.next();
+				final NodeInfo o = (NodeInfo) it.next();
 				compInfo.addEpilogChild(o);
 				it.remove();
 			}
@@ -1784,21 +1716,19 @@ public class Parser {
 		//Optimize 3: merge to split child
 		//If there is only one native child, we make it a split child and
 		//make all its children (grand-children) up one level
-		if (compInfo.getChildren().size() == 1
-		&& compInfo.getSplitChild() == null /*just in case*/) {
+		if (compInfo.getChildren().size() == 1 && compInfo.getSplitChild() == null /*just in case*/) {
 			Iterator it = compInfo.getChildren().iterator();
 			final Object o = it.next();
 			if (o instanceof NativeInfo) {
-				final NativeInfo childInfo = (NativeInfo)o;
+				final NativeInfo childInfo = (NativeInfo) o;
 				//FUTURE: enhance UiEngineImpl to handle split's forEach
-				if (!childInfo.withForEach() && !childInfo.withCondition()) {// B65-ZK-1626
+				if (!childInfo.withForEach() && !childInfo.withCondition()) { // B65-ZK-1626
 					childInfo.setParentDirectly(null);
 					compInfo.setSplitChild(childInfo);
 					it.remove();
 
-					for (it = new ArrayList<NodeInfo>(childInfo.getChildren()).iterator();
-					it.hasNext();)
-						compInfo.appendChild((NodeInfo)it.next());
+					for (it = new ArrayList<NodeInfo>(childInfo.getChildren()).iterator(); it.hasNext();)
+						compInfo.appendChild((NodeInfo) it.next());
 				}
 			}
 		}
@@ -1822,23 +1752,14 @@ public class Parser {
 	/** Returns whether the given uri is a known namespace in ZK or not
 	 */
 	private static boolean isZKNamespace(String uri) {
-		if (LanguageDefinition.ZK_NAMESPACE.equals(uri)
-				|| "zk".equals(uri)
-				|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri)
-				|| "native".equals(uri)
-				|| "annotation".equals(uri)
-				|| LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri)
-				|| "client".equals(uri)
-				|| LanguageDefinition.CLIENT_NAMESPACE.equals(uri)
-				|| "client/attribute".equals(uri)
-				|| LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri)
-				|| "xhtml".equals(uri)
-				|| "http://www.w3.org/1999/xhtml/".equals(uri)
-				|| "zul".equals(uri)
-				|| "http://www.zkoss.org/2005/zul/".equals(uri)
-				|| "xml".equals(uri)
-				|| "http://www.zkoss.org/2007/xml".equals(uri)
-				|| langdefLookup(uri) != null) {
+		if (LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri)
+				|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri) || "native".equals(uri) || "annotation".equals(uri)
+				|| LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri) || "client".equals(uri)
+				|| LanguageDefinition.CLIENT_NAMESPACE.equals(uri) || "client/attribute".equals(uri)
+				|| LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri) || "xhtml".equals(uri)
+				|| "http://www.w3.org/1999/xhtml/".equals(uri) || "zul".equals(uri)
+				|| "http://www.zkoss.org/2005/zul/".equals(uri) || "xml".equals(uri)
+				|| "http://www.zkoss.org/2007/xml".equals(uri) || langdefLookup(uri) != null) {
 			return true;
 		} else {
 			return false;

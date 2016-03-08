@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 import java.util.List;
+
 import org.zkoss.zk.ui.Execution;
 
 /**
@@ -50,6 +51,5 @@ public interface ExecutionCleanup {
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
 	 */
-	public void cleanup(Execution exec, Execution parent, List<Throwable> errs)
-	throws Exception;
+	public void cleanup(Execution exec, Execution parent, List<Throwable> errs) throws Exception;
 }

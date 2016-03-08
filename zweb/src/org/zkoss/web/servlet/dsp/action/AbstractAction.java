@@ -16,20 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.action;
 
-import java.io.StringWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 
 import org.zkoss.lang.Strings;
-import org.zkoss.xml.XMLs;
-
 import org.zkoss.web.servlet.dsp.DspException;
+import org.zkoss.xml.XMLs;
 
 /**
  * A skeletal implementation to simplify the implementation of actions.
  *
  * @author tomyeh
  */
-abstract public class AbstractAction implements Action {
+public abstract class AbstractAction implements Action {
 	private boolean _if = true;
 	private boolean _unless = false;
 
@@ -45,11 +44,13 @@ abstract public class AbstractAction implements Action {
 	public boolean getIf() {
 		return _if;
 	}
+
 	/** Sets the if condition.
 	 */
 	public void setIf(boolean ifcond) {
 		_if = ifcond;
 	}
+
 	/** Returns the unless condition.
 	 * If the unless condition is true, this tag is ignored.
 	 * If the if condition ({@link #getIf}) is true, this tag is ignored, too.
@@ -61,6 +62,7 @@ abstract public class AbstractAction implements Action {
 	public boolean getUnless() {
 		return _unless;
 	}
+
 	/** Sets the unless condition.
 	 */
 	public void setUnless(boolean unless) {
@@ -82,22 +84,20 @@ abstract public class AbstractAction implements Action {
 	 * @param scope one of "page", "request", "session" and "application".
 	 */
 	protected static final int toScope(String scope) {
-		return "request".equals(scope) ? ActionContext.REQUEST_SCOPE:
-			"session".equals(scope) ? ActionContext.SESSION_SCOPE:
-			"application".equals(scope) ? ActionContext.APPLICATION_SCOPE:
-				ActionContext.PAGE_SCOPE;
+		return "request".equals(scope) ? ActionContext.REQUEST_SCOPE
+				: "session".equals(scope) ? ActionContext.SESSION_SCOPE
+						: "application".equals(scope) ? ActionContext.APPLICATION_SCOPE : ActionContext.PAGE_SCOPE;
 	}
 
 	/** Appends an attribute to the string buffer,
 	 * if <code>attrValue</code> is not null.
 	 */
-	protected static final
-	void append(StringBuffer sb, String attrName, String attrValue) {
+	protected static final void append(StringBuffer sb, String attrName, String attrValue) {
 		if (attrValue != null)
-			sb.append(' ').append(attrName).append("=\"")
-			.append(XMLs.encodeAttribute(attrValue)).append('"');
-			//it might contain " or other special characters
+			sb.append(' ').append(attrName).append("=\"").append(XMLs.encodeAttribute(attrValue)).append('"');
+		//it might contain " or other special characters
 	}
+
 	/** Appends an attribute to the string buffer,
 	 * if <code>avail</code> is true.
 	 */
@@ -106,12 +106,11 @@ abstract public class AbstractAction implements Action {
 		if (avail)
 			sb.append(' ').append(attrName);
 	}
+
 	/** Appends an attribute to the string buffer.
 	 */
-	protected static final
-	void append(StringBuffer sb, String attrName, int val) {
-		sb.append(' ').append(attrName).append("=\"")
-			.append(Integer.toString(val)).append('"');
+	protected static final void append(StringBuffer sb, String attrName, int val) {
+		sb.append(' ').append(attrName).append("=\"").append(Integer.toString(val)).append('"');
 	}
 
 	//package-level utilities//
@@ -121,23 +120,19 @@ abstract public class AbstractAction implements Action {
 	 * <p>The return value is passed to {@link #renderFragment}
 	 * directly.
 	 */
-	/*package*/ static
-	StringWriter getFragmentOut(ActionContext ac, boolean trim)
-	throws IOException {
-		return trim && !(ac.getOut() instanceof StringWriter) ?
-			new StringWriter(): null;
+	/*package*/ static StringWriter getFragmentOut(ActionContext ac, boolean trim) throws IOException {
+		return trim && !(ac.getOut() instanceof StringWriter) ? new StringWriter() : null;
 	}
+
 	/** Invokes ac.renderFragment() and trim the output if trim is true.
 	 *
 	 * @param out the return value of {@link #getFragmentOut}.
 	 */
-	/*package*/ static
-	void renderFragment(ActionContext ac, StringWriter out, boolean trim)
-	throws DspException, IOException {
+	/*package*/ static void renderFragment(ActionContext ac, StringWriter out, boolean trim)
+			throws DspException, IOException {
 		if (trim) {
-			final StringBuffer buf =
-				(out != null ? out: (StringWriter)ac.getOut()).getBuffer();
-				//ac.getOut must be StringWriter if out is null and trim
+			final StringBuffer buf = (out != null ? out : (StringWriter) ac.getOut()).getBuffer();
+			//ac.getOut must be StringWriter if out is null and trim
 			final int index = buf.length();
 			ac.renderFragment(out);
 			Strings.trim(buf, index);

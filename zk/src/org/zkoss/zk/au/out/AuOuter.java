@@ -17,10 +17,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import org.zkoss.json.JavaScriptValue;
-
+import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.au.AuResponse;
 
 /**
  * A response to ask client to 'outer' the widgets and all its
@@ -34,9 +33,10 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuOuter extends AuResponse {
 	public AuOuter(Component comp, String content) {
-		super("outer", comp, new Object[] {comp, new JavaScriptValue(content)});
+		super("outer", comp, new Object[] { comp, new JavaScriptValue(content) });
 	}
+
 	public AuOuter(Page page, String content) {
-		super("outer", page, new Object[] {page.getUuid(), new JavaScriptValue(content)});
+		super("outer", page, new Object[] { page.getUuid(), new JavaScriptValue(content) });
 	}
 }

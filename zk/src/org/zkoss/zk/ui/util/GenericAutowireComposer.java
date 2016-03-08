@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -115,16 +116,16 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
  * @since 3.0.6
  * @see ConventionWires
  */
-abstract public class GenericAutowireComposer<T extends Component> extends GenericComposer<T>
-implements ComponentCloneListener, ComponentActivationListener {
+public abstract class GenericAutowireComposer<T extends Component> extends GenericComposer<T>
+		implements ComponentCloneListener, ComponentActivationListener {
 	private static final long serialVersionUID = 20091006115726L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
 	private static Logger log = LoggerFactory.getLogger(GenericAutowireComposer.class);
-	
+
 	/** Implicit Object; the applied component itself. 
 	 * @since 3.0.7
-	 */ 
+	 */
 	protected transient T self;
 	/** Implicit Object; the space owner of the applied component.
 	 * @since 3.0.7
@@ -186,7 +187,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 * @since 3.6.1
 	 */
 	protected transient Map<String, String[]> param;
-	
+
 	/** The separator used to separate the component ID and event name.
 	 * By default, it is '$'. For Groovy and other environment that '$'
 	 * is not applicable, you can specify '_'.
@@ -222,6 +223,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 	protected GenericAutowireComposer() {
 		this('$');
 	}
+
 	/** Constructor with a custom separator.
 	 * The separator is used to separate the component ID and event name.
 	 * By default, it is '$'. For Groovy and other environment that '$'
@@ -252,6 +254,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 		_ignoreZScript = _sIgnoreZScript;
 		_ignoreXel = _sIgnoreXel;
 	}
+
 	/** Constructors with full control, including separator, whether to
 	 * search zscript and xel variables
 	 * @param separator the separator used to separate the component ID and event name.
@@ -262,21 +265,20 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 * ({@link Page#addVariableResolver}) when wiring a member.
 	 * @since 5.0.3
 	 */
-	protected GenericAutowireComposer(char separator, boolean ignoreZScript,
-	boolean ignoreXel) {
+	protected GenericAutowireComposer(char separator, boolean ignoreZScript, boolean ignoreXel) {
 		_separator = separator;
 		_ignoreZScript = ignoreZScript;
 		_ignoreXel = ignoreXel;
 	}
+
 	private void initIgnores() {
 		if (!_sIgnoreChecked) {
-			_sIgnoreZScript = !"true".equals(Library.getProperty(
-				"org.zkoss.zk.ui.composer.autowire.zscript"));
-			_sIgnoreXel = !"true".equals(Library.getProperty(
-				"org.zkoss.zk.ui.composer.autowire.xel"));
+			_sIgnoreZScript = !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.zscript"));
+			_sIgnoreXel = !"true".equals(Library.getProperty("org.zkoss.zk.ui.composer.autowire.xel"));
 			_sIgnoreChecked = true;
 		}
 	}
+
 	private static boolean _sIgnoreChecked, _sIgnoreZScript, _sIgnoreXel;
 
 	/** Returns the current page.
@@ -290,6 +292,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 		}
 		return super.getPage();
 	}
+
 	/**
 	 * Auto wire accessible variables of the specified component into a 
 	 * controller Java object; a subclass that 
@@ -298,27 +301,29 @@ implements ComponentCloneListener, ComponentActivationListener {
 	 */
 	public void doAfterCompose(T comp) throws Exception {
 		super.doAfterCompose(comp);
-		
+
 		//wire variables to reference fields (include implicit objects) ASAP
 		ConventionWires.wireVariables(comp, this, _separator, _ignoreZScript, _ignoreXel);
-	
+
 		//register event to wire variables just before component onCreate
 		comp.addEventListener(1000, "onCreate", new BeforeCreateWireListener());
 	}
-	
+
 	private class BeforeCreateWireListener implements SerializableEventListener<CreateEvent> {
 		public void onEvent(CreateEvent event) throws Exception {
 			//wire variables again so some late created object can be wired in(e.g. DataBinder)
-			ConventionWires.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator, _ignoreZScript, _ignoreXel);
+			ConventionWires.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator, _ignoreZScript,
+					_ignoreXel);
 			//called only once
 			event.getTarget().removeEventListener("onCreate", this);
 		}
 	}
-	
+
 	/** Shortcut to call Messagebox.show(String).
 	 * @since 3.0.7 
 	 */
 	private static Method _alert;
+
 	protected void alert(String m) {
 		if ("ajax".equals(Executions.getCurrent().getDesktop().getDeviceType())) {
 			//zk.jar cannot depends on zul.jar; thus we call Messagebox.show() via
@@ -326,9 +331,9 @@ implements ComponentCloneListener, ComponentActivationListener {
 			try {
 				if (_alert == null) {
 					final Class<?> mboxcls = Classes.forNameByThread("org.zkoss.zul.Messagebox");
-					_alert = mboxcls.getMethod("show", new Class<?>[] {String.class});
+					_alert = mboxcls.getMethod("show", new Class<?>[] { String.class });
 				}
-				_alert.invoke(null, new Object[] {m});
+				_alert.invoke(null, new Object[] { m });
 				return; //done
 			} catch (Throwable ex) {
 				log.debug("Failed to invoke org.zkoss.zul.Messagebox", ex);
@@ -351,11 +356,11 @@ implements ComponentCloneListener, ComponentActivationListener {
 		try {
 			final Execution exec = Executions.getCurrent();
 			final int idcode = System.identityHashCode(comp);
-			Composer composerClone = (Composer) exec.getAttribute(COMPOSER_CLONE+idcode);
+			Composer composerClone = (Composer) exec.getAttribute(COMPOSER_CLONE + idcode);
 			if (composerClone == null) {
 				composerClone = (Composer) Classes.newInstance(getClass(), null);
-				exec.setAttribute(COMPOSER_CLONE+idcode, composerClone);
-				
+				exec.setAttribute(COMPOSER_CLONE + idcode, composerClone);
+
 				//cannot call doAfterCompose directly because the clone 
 				//component might not be attach to Page yet
 				comp.addEventListener(ON_CLONE_DO_AFTER_COMPOSE, new CloneDoAfterCompose());
@@ -366,13 +371,13 @@ implements ComponentCloneListener, ComponentActivationListener {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	
+
 	//doAfterCompose, called once after clone
 	private static class CloneDoAfterCompose implements SerializableEventListener<Event> {
 		@SuppressWarnings("unchecked")
 		public void onEvent(Event event) throws Exception {
 			final Component clone = event.getTarget();
-			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 
+			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData();
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
 		}
@@ -393,6 +398,7 @@ implements ComponentCloneListener, ComponentActivationListener {
 		//feature #ZK-2822
 		ConventionWires.wireServiceCommand(comp, this);
 	}
+
 	public void willPassivate(Component comp) {
 	}
 }

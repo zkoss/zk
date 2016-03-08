@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp;
 
-import org.zkoss.lang.SystemException;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.SystemException;
 
 /**
  * Represents a DSP exception.
@@ -37,65 +37,77 @@ public class DspException extends SystemException {
 		 * @see Exceptions#wrap
 		 */
 		public static DspException wrap(Throwable t) {
-			return (DspException)Exceptions.wrap(t, DspException.class);
+			return (DspException) Exceptions.wrap(t, DspException.class);
 		}
+
 		/** Converts an exception to DspException if it is
 		 * not RuntimeException nor Error.
 		 * @see Exceptions#wrap
 		 */
 		public static DspException wrap(Throwable t, String msg) {
-			return (DspException)Exceptions.wrap(t, DspException.class, msg);
+			return (DspException) Exceptions.wrap(t, DspException.class, msg);
 		}
+
 		/** Converts an exception to DspException if it is
 		 * not RuntimeException nor Error.
 		 * @see Exceptions#wrap
 		 */
 		public static DspException wrap(Throwable t, int code, Object[] fmtArgs) {
-			return (DspException)Exceptions.wrap(t, DspException.class, code, fmtArgs);
+			return (DspException) Exceptions.wrap(t, DspException.class, code, fmtArgs);
 		}
+
 		/** Converts an exception to DspException if it is
 		 * not RuntimeException nor Error.
 		 * @see Exceptions#wrap
 		 */
 		public static DspException wrap(Throwable t, int code, Object fmtArg) {
-			return (DspException)Exceptions.wrap(t, DspException.class, code, fmtArg);
+			return (DspException) Exceptions.wrap(t, DspException.class, code, fmtArg);
 		}
+
 		/** Converts an exception to DspException if it is
 		 * not RuntimeException nor Error.
 		 * @see Exceptions#wrap
 		 */
 		public static DspException wrap(Throwable t, int code) {
-			return (DspException)Exceptions.wrap(t, DspException.class, code);
+			return (DspException) Exceptions.wrap(t, DspException.class, code);
 		}
 	}
 
 	public DspException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public DspException(String s) {
 		super(s);
 	}
+
 	public DspException(Throwable cause) {
 		super(cause);
 	}
+
 	public DspException() {
 	}
 
 	public DspException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public DspException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public DspException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public DspException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public DspException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public DspException(int code) {
 		super(code);
 	}

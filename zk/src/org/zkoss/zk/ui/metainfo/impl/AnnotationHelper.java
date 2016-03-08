@@ -69,12 +69,15 @@ public class AnnotationHelper {
 					int j = Strings.skipWhitespaces(val, 1);
 					char cc = val.charAt(j);
 					//annotation must start with the above characters
-					if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')
-					|| cc == '_' || cc == '$') {
+					if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z') || cc == '_' || cc == '$') {
 						for (; j < len; ++j) {
 							switch (cc = val.charAt(j)) {
-							case '(': return true; //valid
-							case '_': case '$': case '.': case '-':
+							case '(':
+								return true; //valid
+							case '_':
+							case '$':
+							case '.':
+							case '-':
 								continue; //valid
 							default:
 								if (Character.isWhitespace(cc)) {
@@ -83,8 +86,7 @@ public class AnnotationHelper {
 										return true;
 									return false;
 								}
-								if ((cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z') 
-								&& (cc < '0' || cc > '9'))
+								if ((cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z') && (cc < '0' || cc > '9'))
 									return false;
 							}
 						}
@@ -110,11 +112,13 @@ public class AnnotationHelper {
 			throw new IllegalArgumentException("empty");
 		_annots.add(new AnnotInfo(annotName, annotAttrs, loc));
 	}
+
 	/** @deprecated As of release 6.0.1, replaced with {@link #add(String, Map, Location)}.
 	 */
 	public void add(String annotName, Map<String, String[]> annotAttrs) {
 		add(annotName, annotAttrs, null);
 	}
+
 	/** Adds annotation by specifying the content in the compound format.
 	 * <p>There are two formats:
 	 * <p>Format 1 (recommended, since 6.0):<br/>
@@ -137,8 +141,7 @@ public class AnnotationHelper {
 	 */
 	public void addByCompoundValue(String cval, Location loc) {
 		final int len = cval.length();
-		if (cval.charAt(1) == '{'
-		&& cval.charAt(len - 1) == '}') { //Format 1
+		if (cval.charAt(1) == '{' && cval.charAt(len - 1) == '}') { //Format 1
 			addInV5(cval.substring(2, len - 1));
 			return;
 		}
@@ -156,12 +159,12 @@ public class AnnotationHelper {
 			j = ++k;
 			final StringBuffer sb = new StringBuffer(len);
 			int nparen = 1;
-			for (char quot = (char)0;; ++j) {
+			for (char quot = (char) 0;; ++j) {
 				if (j >= len)
 					throw wrongAnnotationException(cval, "')' expected", loc);
 
 				char cc = cval.charAt(j);
-				if (quot == (char)0) {
+				if (quot == (char) 0) {
 					if (cc == '(') {
 						++nparen;
 					} else if (cc == ')' && --nparen == 0) { //found
@@ -171,48 +174,49 @@ public class AnnotationHelper {
 						quot = cc; //begin-of-quote
 					}
 				} else if (cc == quot) {
-					quot = (char)0; //end-of-quote
+					quot = (char) 0; //end-of-quote
 				}
 
 				sb.append(cc);
 
 				if (cc == '\\' && j < len - 1)
 					sb.append(cval.charAt(++j));
-					//Note: we don't decode \x. Rather, we preserve it such
-					//that the data binder can use them
+				//Note: we don't decode \x. Rather, we preserve it such
+				//that the data binder can use them
 			}
 		}
 	}
+
 	/** @param rval <code>att1-name=att1-value, att2-name = att2-value</code> */
 	private void addByRawValueInV6(String annotName, String rval, Location loc) {
 		final Map<String, String[]> attrs = new LinkedHashMap<String, String[]>(4);
 		final int len = rval.length();
 		final StringBuffer sb = new StringBuffer(len);
 		String nm = null;
-		char quot = (char)0;
+		char quot = (char) 0;
 		int nparen = 0;
 		main: //for each name=value, parse name and value
 		for (int j = 0;; ++j) {
 			if (j >= len) {
-				if (quot != (char)0)
-					throw wrongAnnotationException(rval, quot+" expected (not paired)", loc);
+				if (quot != (char) 0)
+					throw wrongAnnotationException(rval, quot + " expected (not paired)", loc);
 				if (nparen != 0)
 					throw wrongAnnotationException(rval, "')' expected", loc);
 
 				final String val = sb.toString().trim();
 				if (nm != null || val.length() > 0) //skip empty one (including after last , )
-					attrs.put(nm, new String[] {val}); //found
+					attrs.put(nm, new String[] { val }); //found
 				break; //done
 			}
 
 			char cc = rval.charAt(j);
-			if (quot == (char)0) {
+			if (quot == (char) 0) {
 				if (cc == ',' && nparen == 0) {
 					final String val = sb.toString().trim();
 					if (nm == null && val.length() == 0)
 						throw wrongAnnotationException(rval, "nothing before ','", loc);
 
-					attrs.put(nm, new String[] {val}); //found
+					attrs.put(nm, new String[] { val }); //found
 					nm = null; //cleanup
 					sb.setLength(0); //cleanup
 					continue; //next name=value
@@ -229,20 +233,20 @@ public class AnnotationHelper {
 						throw wrongAnnotationException(rval, "too many ')'", loc);
 				} else if (cc == '\'' || cc == '"') {
 					quot = cc;
-				} else if (cc == '{' && nparen == 0
-				&& (sb.length() == 0 || sb.toString().trim().length() == 0)) {
+				} else if (cc == '{' && nparen == 0 && (sb.length() == 0 || sb.toString().trim().length() == 0)) {
 					//look for }
 					for (int k = ++j, ncur = 1;; ++j) {
 						if (j >= len)
 							throw wrongAnnotationException(rval, "'}' expected", loc);
 
 						cc = rval.charAt(j);
-						if (quot == (char)0) {
+						if (quot == (char) 0) {
 							if (cc == '}' && --ncur == 0) { //found
 								attrs.put(nm, parseValueArray(rval.substring(k, j).trim(), loc));
 								j = Strings.skipWhitespaces(rval, j + 1);
 								if (j < len && rval.charAt(j) != ',')
-									throw wrongAnnotationException(rval, "',' expected, not '" + rval.charAt(j)+'\'', loc);
+									throw wrongAnnotationException(rval, "',' expected, not '" + rval.charAt(j) + '\'',
+											loc);
 								nm = null; //cleanup
 								sb.setLength(0); //cleanup
 								continue main;
@@ -252,27 +256,28 @@ public class AnnotationHelper {
 								quot = cc;
 							}
 						} else if (cc == quot) {
-							quot = (char)0;
+							quot = (char) 0;
 						}
 						if (cc == '\\' && j < len - 1)
 							++j; //skip next \
 					}
 				}
 			} else if (cc == quot) {
-				quot = (char)0;
+				quot = (char) 0;
 			}
 
 			sb.append(cc);
 
 			if (cc == '\\' && j < len - 1)
 				sb.append(rval.charAt(++j));
-				//Note: we don't decode \x. Rather, we preserve it such
-				//that the data binder can use them
+			//Note: we don't decode \x. Rather, we preserve it such
+			//that the data binder can use them
 		}
 
 		//TODO pass loc only in some condition, e.g. debug or non-production
 		add(annotName, attrs, loc);
 	}
+
 	/** Parses the attribute value.
 	 * If the value starts with { and ends with }, an array of String is returned.
 	 * Otherwise, the value is returned directly (without any processing).
@@ -285,20 +290,21 @@ public class AnnotationHelper {
 	 */
 	public static String[] parseAttributeValue(String val, Location loc) {
 		final int len = val.length();
-		if (len >= 2 && val.charAt(0) == '{' && val.charAt(len - 1) =='}')
+		if (len >= 2 && val.charAt(0) == '{' && val.charAt(len - 1) == '}')
 			return parseValueArray(val.substring(1, len - 1), loc);
-		return new String[] {val};
+		return new String[] { val };
 	}
+
 	private static String[] parseValueArray(String rval, Location loc) {
 		final List<String> attrs = new ArrayList<String>();
 		final int len = rval.length();
-		char quot = (char)0;
+		char quot = (char) 0;
 		final StringBuffer sb = new StringBuffer(len);
 		int nparen = 0;
-		for (int j =0;; ++j) {
+		for (int j = 0;; ++j) {
 			if (j >= len) {
-				if (quot != (char)0)
-					throw wrongAnnotationException(rval, '\'' + quot+"' expected (not paired)", loc);
+				if (quot != (char) 0)
+					throw wrongAnnotationException(rval, '\'' + quot + "' expected (not paired)", loc);
 				if (nparen != 0)
 					throw wrongAnnotationException(rval, "')' expected", loc);
 
@@ -309,7 +315,7 @@ public class AnnotationHelper {
 			}
 
 			char cc = rval.charAt(j);
-			if (quot == (char)0) {
+			if (quot == (char) 0) {
 				if (cc == ',' && nparen == 0) { //found
 					attrs.add(sb.toString().trim()); //including empty (between ,)
 					sb.setLength(0); //cleanup
@@ -323,60 +329,61 @@ public class AnnotationHelper {
 					quot = cc;
 				}
 			} else if (cc == quot) {
-				quot = (char)0;
+				quot = (char) 0;
 			}
 
 			sb.append(cc);
 
 			if (cc == '\\' && j < len - 1)
 				sb.append(rval.charAt(++j));
-				//Note: we don't decode \x. Rather, we preserve it such
-				//that the data binder can use them
+			//Note: we don't decode \x. Rather, we preserve it such
+			//that the data binder can use them
 		}
 
 		return attrs.toArray(new String[attrs.size()]);
 	}
-	private static UiException wrongAnnotationException(
-	String cval, String reason, Location loc) {
-		final String msg = "Illegal annotation, "+reason+": "+cval;
-		return new UiException(loc != null ? loc.format(msg): msg);
+
+	private static UiException wrongAnnotationException(String cval, String reason, Location loc) {
+		final String msg = "Illegal annotation, " + reason + ": " + cval;
+		return new UiException(loc != null ? loc.format(msg) : msg);
 	}
+
 	private void addInV5(String cval) {
-		final char[] seps1 = {'(', ' '}, seps2 = {')'};
+		final char[] seps1 = { '(', ' ' }, seps2 = { ')' };
 		for (int j = 0, len = cval.length(); j < len;) {
 			j = Strings.skipWhitespaces(cval, j);
 			int k = Strings.nextSeparator(cval, j, seps1, true, true, false);
 			if (k < len && cval.charAt(k) == '(') {
 				String nm = cval.substring(j, k).trim();
-				if (nm.length() == 0) nm = "default";
+				if (nm.length() == 0)
+					nm = "default";
 
 				j = k + 1;
 				k = Strings.nextSeparator(cval, j, seps2, true, true, false);
 
-				final String rv = 
-					(k < len ? cval.substring(j, k): cval.substring(j)).trim();
+				final String rv = (k < len ? cval.substring(j, k) : cval.substring(j)).trim();
 				if (rv.length() > 0)
 					addByRawValueInV5(nm, rv);
 				else
 					add(nm, null);
 			} else {
-				final String rv = 
-					(k < len ? cval.substring(j, k): cval.substring(j)).trim();
+				final String rv = (k < len ? cval.substring(j, k) : cval.substring(j)).trim();
 				if (rv.length() > 0)
 					addByRawValueInV5("default", rv);
 			}
 			j = k + 1;
 		}
 	}
+
 	/** @param rval <code>att1-name=att1-value, att2-name = att2-value</code> */
 	@SuppressWarnings("unchecked")
 	private void addByRawValueInV5(String annotName, String rval) {
 		//The parsing of the value in format 1 is different from format 2
-		final Map<String, Object> attrs = (Map)Maps.parse(null, rval, ',', '\'', true);
-		for (Map.Entry<String, Object> me: attrs.entrySet())
-			me.setValue(new String[] {(String)me.getValue()});
-			//convert String to String[]
-		add(annotName, (Map)attrs);
+		final Map<String, Object> attrs = (Map) Maps.parse(null, rval, ',', '\'', true);
+		for (Map.Entry<String, Object> me : attrs.entrySet())
+			me.setValue(new String[] { (String) me.getValue() });
+		//convert String to String[]
+		add(annotName, (Map) attrs);
 	}
 
 	/** Applies the annotations defined in this helper to the specified
@@ -388,14 +395,14 @@ public class AnnotationHelper {
 	 * @see #clear
 	 * @since 6.0.1
 	 */
-	public void applyAnnotations(ComponentInfo compInfo, String propName,
-	boolean clear) {
-		for (AnnotInfo info: _annots) {
+	public void applyAnnotations(ComponentInfo compInfo, String propName, boolean clear) {
+		for (AnnotInfo info : _annots) {
 			compInfo.addAnnotation(propName, info.name, info.attrs, info.loc);
 		}
 		if (clear)
 			_annots.clear();
 	}
+
 	/** Applies the annotations defined in this helper to the specified
 	 * instance definition.
 	 *
@@ -405,21 +412,21 @@ public class AnnotationHelper {
 	 * @see #clear
 	 * @since 8.0.0
 	 */
-	public void applyAnnotations(ShadowInfo compInfo, String propName,
-	boolean clear) {
-		for (AnnotInfo info: _annots) {
+	public void applyAnnotations(ShadowInfo compInfo, String propName, boolean clear) {
+		for (AnnotInfo info : _annots) {
 			compInfo.addAnnotation(propName, info.name, info.attrs, info.loc);
 		}
 		if (clear)
 			_annots.clear();
 	}
+
 	/** @deprecated As of release 6.0.1, replaced
 	 * with {@link #applyAnnotations(ComponentInfo,String,boolean)}.
 	 */
-	public void applyAnnotations(ComponentInfo compInfo, String propName,
-	boolean clear, Location loc) {
+	public void applyAnnotations(ComponentInfo compInfo, String propName, boolean clear, Location loc) {
 		applyAnnotations(compInfo, propName, clear);
 	}
+
 	/** Applies the annotations defined in this helper to the specified
 	 * component.
 	 *
@@ -428,15 +435,15 @@ public class AnnotationHelper {
 	 * @param clear whether to clear all definitions before returning
 	 * @see #clear
 	 */
-	public void applyAnnotations(Component comp, String propName,
-	boolean clear) {
-		for (AnnotInfo info: _annots) {
+	public void applyAnnotations(Component comp, String propName, boolean clear) {
+		for (AnnotInfo info : _annots) {
 			ComponentCtrl ctrl = (ComponentCtrl) comp;
 			ctrl.addAnnotation(propName, info.name, info.attrs);
 		}
 		if (clear)
 			_annots.clear();
 	}
+
 	/** Applies the annotations defined in this helper to the specified
 	 * annotation map.
 	 *
@@ -446,13 +453,13 @@ public class AnnotationHelper {
 	 * @see #clear
 	 * @since 6.0.1
 	 */
-	public void applyAnnotations(AnnotationMap annots, String propName,
-	boolean clear) {
-		for (AnnotInfo info: _annots)
+	public void applyAnnotations(AnnotationMap annots, String propName, boolean clear) {
+		for (AnnotInfo info : _annots)
 			annots.addAnnotation(propName, info.name, info.attrs, info.loc);
 		if (clear)
 			_annots.clear();
 	}
+
 	/** Clears the annotations defined in this helper.
 	 *
 	 * <p>The annotations are defined by {@link #add}

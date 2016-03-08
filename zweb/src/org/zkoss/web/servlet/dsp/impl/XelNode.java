@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelException;
 
@@ -34,15 +35,13 @@ class XelNode extends Node {
 	private final Expression _expr;
 
 	XelNode(String expr, ParseContext ctx) throws XelException {
-		_expr = ctx.getExpressionFactory()
-			.parseExpression(ctx, expr, String.class);
+		_expr = ctx.getExpressionFactory().parseExpression(ctx, expr, String.class);
 	}
 
 	//-- super --//
-	void interpret(InterpretContext ic)
-	throws IOException {
+	void interpret(InterpretContext ic) throws IOException {
 		try {
-			final String result = (String)_expr.evaluate(ic.xelc);
+			final String result = (String) _expr.evaluate(ic.xelc);
 			if (result != null)
 				ic.dc.getOut().write(result);
 		} catch (XelException ex) {
@@ -50,6 +49,7 @@ class XelNode extends Node {
 			throw ex;
 		}
 	}
+
 	void addChild(Node node) {
 		throw new IllegalStateException("No child allowed");
 	}

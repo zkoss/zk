@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Utilities about variable's names.
@@ -26,15 +26,15 @@ import java.util.Collections;
  * @author tomyeh
  */
 public class Names {
-	private Names() {}
+	private Names() {
+	}
+
 	private static final Set<String> _reves;
+
 	static {
 		Set<String> reves = new HashSet<String>();
-		final String[] rs = new String[] {
-			"arg", "desktop", "event", "page", "self", "session",
-			"spaceOwner"
-		};
-		for (int j = rs.length; --j >=0;)
+		final String[] rs = new String[] { "arg", "desktop", "event", "page", "self", "session", "spaceOwner" };
+		for (int j = rs.length; --j >= 0;)
 			reves.add(rs[j]);
 		_reves = Collections.unmodifiableSet(reves);
 	}
@@ -44,6 +44,7 @@ public class Names {
 	public static final Set<String> getReservedNames() {
 		return _reves;
 	}
+
 	/** Returns whether the specified is valid.
 	 * It also invokes {@link #isReserved}.
 	 */
@@ -53,12 +54,12 @@ public class Names {
 
 		for (int j = name.length(); --j >= 0;) {
 			final char cc = name.charAt(j);
-			if ((cc < '0' || cc > '9') && (cc < 'a' || cc > 'z')
-			&& (cc < 'A' || cc > 'Z') && cc != '_')
+			if ((cc < '0' || cc > '9') && (cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z') && cc != '_')
 				return false;
 		}
 		return true;
 	}
+
 	/** Returns whether the specified name is reserved.
 	 * If true, you cannot use it in zscript (and EL).
 	 */

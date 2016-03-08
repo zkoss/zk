@@ -43,6 +43,7 @@ public interface ListModel<E> {
 	/** Returns the value at the specified index.
 	 */
 	public E getElementAt(int index);
+
 	/** Returns the length of the list.
 	 */
 	public int getSize();
@@ -51,8 +52,9 @@ public interface ListModel<E> {
 	 * to the data model occurs. 
 	 */
 	public void addListDataListener(ListDataListener l);
+
 	/** Removes a listener from the list that's notified each time
 	 * a change to the data model occurs. 
 	 */
-	public void removeListDataListener(ListDataListener l) ;
+	public void removeListDataListener(ListDataListener l);
 }

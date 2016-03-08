@@ -26,6 +26,7 @@ public interface Disable {
 	 * <p>Default: false.
 	 */
 	public boolean isDisabled();
+
 	/** Sets whether it is disabled.
 	 */
 	public void setDisabled(boolean disabled);

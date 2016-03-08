@@ -27,4 +27,3 @@ package org.zkoss.zul;
 public class SimplePieModel extends SimpleSingleValueCategoryModel implements PieModel {
 	private static final long serialVersionUID = 20091008183556L;
 }
-

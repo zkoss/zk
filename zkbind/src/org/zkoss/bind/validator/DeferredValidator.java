@@ -18,43 +18,41 @@ import org.zkoss.bind.Validator;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.UiException;
 
-
 /**
  * A deferred validator that defers the initialization of the real validator,
  * a validator needs 3-party jar files could still be installed if user doesn't provide it (ex, BeanValidator of JSR 303).   
  * @author dennis
  * @since 6.0.0
  */
-public class DeferredValidator implements Validator,Serializable{
+public class DeferredValidator implements Validator, Serializable {
 	private static final long serialVersionUID = 6545009126528775045L;
 	private String _clzName;
 	private Class<Validator> _clz;
 	private volatile Validator _target;
-	
-	public DeferredValidator(String clzName){
+
+	public DeferredValidator(String clzName) {
 		_clzName = clzName;
 	}
-	
-	public DeferredValidator(Class<Validator> clz){
+
+	public DeferredValidator(Class<Validator> clz) {
 		_clz = clz;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private Validator getValidator() throws Exception{
-		if(_target==null){
-			synchronized(this){
-				if(_target==null){
-					if(_clz==null){
-						_clz = (Class<Validator>)Classes.forNameByThread(_clzName);
+	private Validator getValidator() throws Exception {
+		if (_target == null) {
+			synchronized (this) {
+				if (_target == null) {
+					if (_clz == null) {
+						_clz = (Class<Validator>) Classes.forNameByThread(_clzName);
 					}
-					_target = (Validator)_clz.newInstance();
+					_target = (Validator) _clz.newInstance();
 				}
 			}
 		}
 		return _target;
 	}
-	
-	
+
 	public void validate(ValidationContext ctx) {
 		try {
 			getValidator().validate(ctx);
@@ -63,7 +61,7 @@ public class DeferredValidator implements Validator,Serializable{
 		}
 	}
 
-	public String toString(){
+	public String toString() {
 		return new StringBuilder().append(super.toString()).append("[")
 				.append(_clzName != null ? _clzName : (_target != null ? _target : _clz)).append("]").toString();
 	}

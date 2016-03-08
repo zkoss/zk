@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to ask the client to show the busy message such that
@@ -34,8 +34,9 @@ public class AuShowBusy extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuShowBusy(String mesg) {
-		super("showBusy", mesg != null ? mesg: "");
+		super("showBusy", mesg != null ? mesg : "");
 	}
+
 	/** Constructs a busy message covering only the specified component.
 	 * To close, use {@link AuClearBusy#AuClearBusy(Component)}.
 	 * @param comp the component that the busy message to cover.
@@ -43,7 +44,7 @@ public class AuShowBusy extends AuResponse {
 	 * @since 5.0.0
 	 */
 	public AuShowBusy(Component comp, String mesg) {
-		super("showBusy", comp, new Object[] {comp, mesg != null ? mesg: ""});
+		super("showBusy", comp, new Object[] { comp, mesg != null ? mesg : "" });
 	}
 
 	/** Default: zk.busy (i.e., only one response of this class and {@link AuClearBusy} will

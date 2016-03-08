@@ -20,17 +20,16 @@ import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.util.resource.ResourceCache;
+
 import org.zkoss.util.resource.ContentLoader;
 import org.zkoss.util.resource.Locator;
-
-
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.xel.ExValue;
-import org.zkoss.zk.xel.EvaluatorRef;
+import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.zk.scripting.Interpreters;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.xel.EvaluatorRef;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Represents a zscript content.
@@ -67,6 +66,7 @@ public class ZScript implements java.io.Serializable {
 	public static final ZScript parseContent(String content) {
 		return parseContent(content, 0);
 	}
+
 	/** Parses the content into a {@link ZScript} instance.
 	 *
 	 * <p>It is similar to {@link #parseContent(String)} except it
@@ -80,7 +80,7 @@ public class ZScript implements java.io.Serializable {
 	 */
 	public static final ZScript parseContent(String content, int lineno) {
 		String prefix = null, zslang = null;
-		final int len = content != null ? content.length(): 0;
+		final int len = content != null ? content.length() : 0;
 		if (len > 0) {
 			//Don't generate prefix if content is empty (i.e., keep empty)
 			//so PageImpl.interpret() could optimize it (not to execute at all)
@@ -100,16 +100,17 @@ public class ZScript implements java.io.Serializable {
 							content = content.substring(j + 1);
 							break;
 						} else {
-							log.warn("Ignored: unknown scripting language, "+zslang);
+							log.warn("Ignored: unknown scripting language, " + zslang);
 						}
 					}
 					break;
-				} if (!Interpreters.isLegalName(cc)) {
+				}
+				if (!Interpreters.isLegalName(cc)) {
 					break; //done
 				}
 			}
 		}
-		return new ZScript(zslang, prefix != null && content.length() > 0 ? prefix+content: content);
+		return new ZScript(zslang, prefix != null && content.length() > 0 ? prefix + content : content);
 	}
 
 	/** Creates a zscript with the content directly.
@@ -121,10 +122,11 @@ public class ZScript implements java.io.Serializable {
 	 */
 	public ZScript(String zslang, String content) {
 		_zslang = zslang;
-		_cnt = content != null ? content: "";
+		_cnt = content != null ? content : "";
 		_url = null;
 		_locator = null;
 	}
+
 	/** Creates a zscript with an URL that is used to load the content.
 	 */
 	public ZScript(String zslang, URL url) {
@@ -136,6 +138,7 @@ public class ZScript implements java.io.Serializable {
 		_cnt = null;
 		_locator = null;
 	}
+
 	/** Creates a zscript with an URL that is used to load the content.
 	 * @param evalr the evaluator used to evaluate
 	 * @exception IllegalArgumentException if url or locator is null, or
@@ -152,8 +155,8 @@ public class ZScript implements java.io.Serializable {
 		_cnt = null;
 		_locator = locator;
 
-		if (evalr == null && ((ExValue)_url).isExpression())
-			throw new IllegalArgumentException("evalr required since EL is used: "+url);
+		if (evalr == null && ((ExValue) _url).isExpression())
+			throw new IllegalArgumentException("evalr required since EL is used: " + url);
 	}
 
 	/** Returns the scripting language, or null if the default scripting language
@@ -162,6 +165,7 @@ public class ZScript implements java.io.Serializable {
 	public String getLanguage() {
 		return _zslang;
 	}
+
 	/** Sets the scripting language.
 	 *
 	 * @param zslang the scripting language. If null, the default scripting
@@ -170,6 +174,7 @@ public class ZScript implements java.io.Serializable {
 	public void setLanguage(String zslang) {
 		_zslang = zslang;
 	}
+
 	/** Returns the raw content.
 	 * It is the content specified in the constructor
 	 * ({@link #ZScript(String, String)}.
@@ -184,6 +189,7 @@ public class ZScript implements java.io.Serializable {
 	public String getRawContent() {
 		return _cnt;
 	}
+
 	/** Returns the content of zscript.
 	 * If URL is specified, this method loads the content from it.
 	 * If URL is an EL expression, it will be evaluated first.
@@ -200,26 +206,25 @@ public class ZScript implements java.io.Serializable {
 
 		final URL url;
 		if (_url instanceof ExValue) {
-			final String s = (String)(comp != null ? 
-				((ExValue)_url).getValue(_evalr, comp):
-				((ExValue)_url).getValue(_evalr, page));
+			final String s = (String) (comp != null ? ((ExValue) _url).getValue(_evalr, comp)
+					: ((ExValue) _url).getValue(_evalr, page));
 			if (s == null || s.length() == 0)
-				throw new UiException("The zscript URL, "+_url+", is evaluated to \""+s+'"');
+				throw new UiException("The zscript URL, " + _url + ", is evaluated to \"" + s + '"');
 			url = _locator.getResource(s);
 			if (url == null)
-				throw new UiException("File not found: "+s+" (evaluated from "+_url+')');
-				//note: we don't throw FileNotFoundException since Tomcat 'eats' it
+				throw new UiException("File not found: " + s + " (evaluated from " + _url + ')');
+			//note: we don't throw FileNotFoundException since Tomcat 'eats' it
 		} else {
-			url = (URL)_url;
+			url = (URL) _url;
 		}
 
 		final String o = getCache().get(url);
-			//It is OK to use cache here even if script might be located, say,
-			//at a database. Reason: it is Locator's job to implement
-			//the relevant function for URL (including lastModified).
+		//It is OK to use cache here even if script might be located, say,
+		//at a database. Reason: it is Locator's job to implement
+		//the relevant function for URL (including lastModified).
 		if (o == null)
-			throw new UiException("File not found: "+_url);
-			//note: we don't throw FileNotFoundException since Tomcat 'eats' it
+			throw new UiException("File not found: " + _url);
+		//note: we don't throw FileNotFoundException since Tomcat 'eats' it
 		return o;
 	}
 
@@ -246,14 +251,14 @@ public class ZScript implements java.io.Serializable {
 	}
 
 	private static volatile ResourceCache<Object, String> _cache;
+
 	private static final ResourceCache<Object, String> getCache() {
 		if (_cache == null) {
 			synchronized (ZScript.class) {
 				if (_cache == null) {
-					final ResourceCache<Object, String> cache
-						= new ResourceCache<Object, String>(new ContentLoader());
+					final ResourceCache<Object, String> cache = new ResourceCache<Object, String>(new ContentLoader());
 					cache.setMaxSize(512);
-					cache.setLifetime(60*60*1000); //1hr
+					cache.setLifetime(60 * 60 * 1000); //1hr
 					_cache = cache;
 				}
 			}

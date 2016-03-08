@@ -27,6 +27,7 @@ import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
@@ -67,16 +68,15 @@ public class PageDefinitions {
 	 * the language called "xul/html" is assumed.
 	 * @exception UiException if failed to parse
 	 */
-	public static final
-	PageDefinition getPageDefinitionDirectly(WebApp wapp, Locator locator,
-	String content, String extension) {
+	public static final PageDefinition getPageDefinitionDirectly(WebApp wapp, Locator locator, String content,
+			String extension) {
 		try {
-			return getPageDefinitionDirectly(
-				wapp, locator, new StringReader(content), extension);
+			return getPageDefinitionDirectly(wapp, locator, new StringReader(content), extension);
 		} catch (IOException ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+
 	/** Returns the page definition of the raw content from the specified
 	 * reader; never null.
 	 *
@@ -90,9 +90,8 @@ public class PageDefinitions {
 	 * the language called "xul/html" is assumed.
 	 * @exception UiException if failed to parse
 	 */
-	public static final
-	PageDefinition getPageDefinitionDirectly(WebApp wapp, Locator locator,
-	Reader reader, String extension) throws IOException {
+	public static final PageDefinition getPageDefinitionDirectly(WebApp wapp, Locator locator, Reader reader,
+			String extension) throws IOException {
 		try {
 			return new Parser(wapp, locator).parse(reader, extension);
 		} catch (IOException ex) {
@@ -101,6 +100,7 @@ public class PageDefinitions {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+
 	/** Returns the page definition of the specified raw content in DOM;
 	 * never null.
 	 *
@@ -114,9 +114,8 @@ public class PageDefinitions {
 	 * the language called "xul/html" is assumed.
 	 * @exception UiException if failed to parse
 	 */
-	public static final
-	PageDefinition getPageDefinitionDirectly(WebApp wapp, Locator locator,
-	Document doc, String extension) {
+	public static final PageDefinition getPageDefinitionDirectly(WebApp wapp, Locator locator, Document doc,
+			String extension) {
 		try {
 			return new Parser(wapp, locator).parse(doc, extension);
 		} catch (Exception ex) {
@@ -135,14 +134,13 @@ public class PageDefinitions {
 	 * @param locator the locator used to locate taglib and other resources.
 	 * If null, wapp is assumed ({@link WebApp} is also assumed).
 	 */
-	public static final
-	PageDefinition getPageDefinition(WebApp wapp, Locator locator, String path) {
+	public static final PageDefinition getPageDefinition(WebApp wapp, Locator locator, String path) {
 		wapp.getConfiguration().invokeURIInterceptors(path);
-			//give the security a chance to reject
+		//give the security a chance to reject
 
-		return ResourceCaches.get(
-			getCache(wapp), wapp.getServletContext(), path, locator);
+		return ResourceCaches.get(getCache(wapp), wapp.getServletContext(), path, locator);
 	}
+
 	/** Returns the locator for the specified context.
 	 *
 	 * @param path the original path, or null if not available.
@@ -151,38 +149,39 @@ public class PageDefinitions {
 	 * is used.
 	 */
 	public static final Locator getLocator(WebApp wapp, String path) {
-		if (wapp == null) throw new IllegalArgumentException("null");
-	
+		if (wapp == null)
+			throw new IllegalArgumentException("null");
+
 		if (path != null && path.length() > 0 && path.charAt(0) == '/') {
 			final int j = path.lastIndexOf('/');
-			path = j > 0 ? path.substring(0, j + 1): "/";
+			path = j > 0 ? path.substring(0, j + 1) : "/";
 		} else {
 			final Execution exec = Executions.getCurrent();
-			if (exec != null) path = exec.getDesktop().getCurrentDirectory();
+			if (exec != null)
+				path = exec.getDesktop().getCurrentDirectory();
 		}
 		return new ServletContextLocator(wapp.getServletContext(), path);
 	}
 
 	@SuppressWarnings("unchecked")
 	private static final ResourceCache<PageDefinition> getCache(WebApp wapp) {
-		ResourceCache<PageDefinition> cache = (ResourceCache<PageDefinition>)wapp.getAttribute(ATTR_PAGE_CACHE);
+		ResourceCache<PageDefinition> cache = (ResourceCache<PageDefinition>) wapp.getAttribute(ATTR_PAGE_CACHE);
 		if (cache == null) {
 			synchronized (PageDefinitions.class) {
-				cache = (ResourceCache)wapp.getAttribute(ATTR_PAGE_CACHE);
+				cache = (ResourceCache) wapp.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
 					ResourceLoader<PageDefinition> loader = null;
 					final String clsnm = Library.getProperty("org.zkoss.zk.ui.metainfo.page.Loader.class");
 					if (clsnm != null) {
 						try {
-							final Object o = Classes.newInstanceByThread(clsnm,
-								new Class[] {WebApp.class},
-								new Object[] {wapp});
+							final Object o = Classes.newInstanceByThread(clsnm, new Class[] { WebApp.class },
+									new Object[] { wapp });
 							if (o instanceof ResourceLoader)
-								loader = (ResourceLoader)o;
+								loader = (ResourceLoader) o;
 							else
 								log.warn(clsnm + " must implement " + ResourceLoader.class.getName());
 						} catch (Throwable ex) {
-							log.warn("Unable to instantiate "+clsnm, ex);
+							log.warn("Unable to instantiate " + clsnm, ex);
 						}
 					}
 
@@ -190,7 +189,7 @@ public class PageDefinitions {
 						loader = new MyLoader(wapp);
 					cache = new ResourceCache<PageDefinition>(loader, 167);
 					cache.setMaxSize(1024);
-					cache.setLifetime(60*60000); //1hr
+					cache.setLifetime(60 * 60000); //1hr
 					wapp.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}
@@ -200,28 +199,24 @@ public class PageDefinitions {
 
 	private static class MyLoader extends ResourceLoader<PageDefinition> {
 		private final WebApp _wapp;
+
 		private MyLoader(WebApp wapp) {
 			_wapp = wapp;
 		}
 
 		//-- super --//
-		protected PageDefinition parse(String path, File file, Object extra)
-		throws Exception {
-			final Locator locator =
-				extra != null ? (Locator)extra: getLocator(_wapp, path);
+		protected PageDefinition parse(String path, File file, Object extra) throws Exception {
+			final Locator locator = extra != null ? (Locator) extra : getLocator(_wapp, path);
 			Parser parser = new Parser(_wapp, locator);
 			// Bug ZK-1132
 			if (file.exists()) {
 				return parser.parse(file, path);
 			} else {
-				InputStream stream = parser.getLocator().getResourceAsStream(
-						path);
+				InputStream stream = parser.getLocator().getResourceAsStream(path);
 				BufferedReader reader = null;
 				try {
-						reader = new BufferedReader(
-							new InputStreamReader(stream));
-					PageDefinition pgdef = parser.parse(reader,
-							Servlets.getExtension(path));
+					reader = new BufferedReader(new InputStreamReader(stream));
+					PageDefinition pgdef = parser.parse(reader, Servlets.getExtension(path));
 					pgdef.setRequestPath(path);
 					return pgdef;
 				} finally {
@@ -230,10 +225,9 @@ public class PageDefinitions {
 				}
 			}
 		}
-		protected PageDefinition parse(String path, URL url, Object extra)
-		throws Exception {
-			final Locator locator =
-				extra != null ? (Locator)extra: getLocator(_wapp, path);
+
+		protected PageDefinition parse(String path, URL url, Object extra) throws Exception {
+			final Locator locator = extra != null ? (Locator) extra : getLocator(_wapp, path);
 			return new Parser(_wapp, locator).parse(url, path);
 		}
 	}

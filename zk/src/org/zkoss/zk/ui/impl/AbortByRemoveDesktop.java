@@ -19,12 +19,11 @@ package org.zkoss.zk.ui.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.AbortingReason;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.sys.AbortingReason;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * The aborting reason when the remove-desktop command is received.
@@ -41,16 +40,19 @@ public class AbortByRemoveDesktop implements AbortingReason {
 	public boolean isAborting() {
 		return true;
 	}
+
 	public void execute() {
 	}
+
 	public AuResponse getResponse() {
 		return null;
 	}
+
 	public void finish() {
 		final Execution exec = Executions.getCurrent();
 
 		//Bug 1753712: disable visualizer since responses were generated.
-		((ExecutionCtrl)exec).getVisualizer().disable();
+		((ExecutionCtrl) exec).getVisualizer().disable();
 
 		//Bug 1868371: we shall postpone the cleanup to the last step
 		DesktopRecycles.removeDesktop(exec);

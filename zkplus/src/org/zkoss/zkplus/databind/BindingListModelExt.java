@@ -44,7 +44,7 @@ public interface BindingListModelExt<E> extends BindingListModel<E> {
 	 * @return indexes that contains the given object; return empty array if none found.
 	 */
 	public int[] indexesOf(Object obj);
-	
+
 	/**
 	 * Returns true if all objects inside this ListModel is distinct. 
 	 * This is for {@link DataBinder} performance so there is no need 

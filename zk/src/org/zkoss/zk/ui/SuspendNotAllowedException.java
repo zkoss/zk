@@ -32,30 +32,38 @@ public class SuspendNotAllowedException extends UiException {
 	public SuspendNotAllowedException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public SuspendNotAllowedException(String s) {
 		super(s);
 	}
+
 	public SuspendNotAllowedException(Throwable cause) {
 		super(cause);
 	}
+
 	public SuspendNotAllowedException() {
 	}
 
 	public SuspendNotAllowedException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public SuspendNotAllowedException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public SuspendNotAllowedException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public SuspendNotAllowedException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public SuspendNotAllowedException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public SuspendNotAllowedException(int code) {
 		super(code);
 	}

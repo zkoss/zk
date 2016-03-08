@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.text.DateFormatInfo;
@@ -61,10 +62,10 @@ public class I18Ns {
 	 * response.setCharacterEncoding won't be called, i.e., the container's
 	 * default is used.
 	 */
-	public static final Object setup(Session sess,
-	ServletRequest request, ServletResponse response, String charset) {
-		return setup((Object)sess, request, response, charset);
+	public static final Object setup(Session sess, ServletRequest request, ServletResponse response, String charset) {
+		return setup((Object) sess, request, response, charset);
 	}
+
 	/** Sets up the internationalization attributes, including locale
 	 * and time zone.
 	 *
@@ -94,30 +95,29 @@ public class I18Ns {
 	 * default is used.
 	 * @since 3.6.2
 	 */
-	public static final Object setup(HttpSession sess,
-	ServletRequest request, ServletResponse response, String charset) {
-		return setup((Object)sess, request, response, charset);
+	public static final Object setup(HttpSession sess, ServletRequest request, ServletResponse response,
+			String charset) {
+		return setup((Object) sess, request, response, charset);
 	}
-	private static final Object setup(Object sess,
-	ServletRequest request, ServletResponse response, String charset) {
+
+	private static final Object setup(Object sess, ServletRequest request, ServletResponse response, String charset) {
 		final Object[] old;
 		if (request.getAttribute(ATTR_SETUP) != null) { //has been setup
 			old = null;
 		} else {
 			final HttpSession hsess;
 			if (sess instanceof Session) {
-				final Session se = (Session)sess;
+				final Session se = (Session) sess;
 				//Invoke the request interceptors
-				se.getWebApp().getConfiguration()
-					.invokeRequestInterceptors(se, request, response);
+				se.getWebApp().getConfiguration().invokeRequestInterceptors(se, request, response);
 
-				hsess = (HttpSession)se.getNativeSession();
+				hsess = (HttpSession) se.getNativeSession();
 			} else {
-				hsess = (HttpSession)sess;
+				hsess = (HttpSession) sess;
 			}
 
 			final Object ol = Charsets.setup(hsess, request, response, charset);
-				//Charsets will handle PREFERRED_LOCALE
+			//Charsets will handle PREFERRED_LOCALE
 
 			//time zone
 			final TimeZone tz = getTimeZone(hsess);
@@ -127,13 +127,14 @@ public class I18Ns {
 			final DateFormatInfo dfinfo = getDateFormatInfo(hsess);
 			final Object odi = DateFormats.setLocalFormatInfo(dfinfo);
 			request.setAttribute(ATTR_SETUP, Boolean.TRUE); //mark as setup
-			old = new Object[] {ol, otz, odi};
+			old = new Object[] { ol, otz, odi };
 		}
 
 		if (sess instanceof Session)
-			SessionsCtrl.setCurrent((Session)sess);
+			SessionsCtrl.setCurrent((Session) sess);
 		return old;
 	}
+
 	/** Returns the time zone of the given session, or null if not set.
 	 */
 	private static TimeZone getTimeZone(HttpSession hsess) {
@@ -154,18 +155,17 @@ public class I18Ns {
 			return tz;
 
 		String s = Library.getProperty(Attributes.PREFERRED_TIME_ZONE);
-		return s != null ? TimeZone.getTimeZone(s): null;
+		return s != null ? TimeZone.getTimeZone(s) : null;
 	}
+
 	/** Returns the format info of the given session, or null if not set.
 	 */
 	private static DateFormatInfo getDateFormatInfo(HttpSession hsess) {
-		DateFormatInfo fi = checkDateFormatInfo(
-			hsess.getAttribute(Attributes.PREFERRED_DATE_FORMAT_INFO));
+		DateFormatInfo fi = checkDateFormatInfo(hsess.getAttribute(Attributes.PREFERRED_DATE_FORMAT_INFO));
 		if (fi != null)
 			return fi;
 
-		fi = checkDateFormatInfo(
-			hsess.getServletContext().getAttribute(Attributes.PREFERRED_DATE_FORMAT_INFO));
+		fi = checkDateFormatInfo(hsess.getServletContext().getAttribute(Attributes.PREFERRED_DATE_FORMAT_INFO));
 		if (fi != null)
 			return fi;
 
@@ -181,28 +181,30 @@ public class I18Ns {
 
 	/** The previous attribute name (backward compatible prior to 5.0.3. */
 	private static final String PX_PREFERRED_TIME_ZONE = "px_preferred_time_zone";
+
 	private static TimeZone checkTimeZone(Object tz) {
 		if (tz != null && !(tz instanceof TimeZone)) {
-			log.warn(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone required, not "+tz.getClass());
+			log.warn(Attributes.PREFERRED_TIME_ZONE + " ignored. TimeZone required, not " + tz.getClass());
 			return null;
 		}
-		return (TimeZone)tz;
+		return (TimeZone) tz;
 	}
+
 	private static DateFormatInfo checkDateFormatInfo(Object o) {
 		if (o == null || (o instanceof DateFormatInfo))
-			return (DateFormatInfo)o;
+			return (DateFormatInfo) o;
 
 		try {
 			if (o instanceof String)
-				o = Classes.forNameByThread((String)o);
+				o = Classes.forNameByThread((String) o);
 			if (o instanceof Class)
-				return (DateFormatInfo)((Class)o).newInstance();
+				return (DateFormatInfo) ((Class) o).newInstance();
 		} catch (Throwable ex) {
-			log.warn(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. Failed to instantiate "+o, ex);
+			log.warn(Attributes.PREFERRED_DATE_FORMAT_INFO + " ignored. Failed to instantiate " + o, ex);
 			return null;
 		}
 
-		log.warn(Attributes.PREFERRED_DATE_FORMAT_INFO+" ignored. DateFormatInfo required, not "+o.getClass());
+		log.warn(Attributes.PREFERRED_DATE_FORMAT_INFO + " ignored. DateFormatInfo required, not " + o.getClass());
 		return null;
 	}
 
@@ -214,11 +216,11 @@ public class I18Ns {
 		if (old != null) {
 			request.removeAttribute(ATTR_SETUP);
 
-			SessionsCtrl.setCurrent((Session)null);
+			SessionsCtrl.setCurrent((Session) null);
 
-			final Object[] op = (Object[])old;
-			TimeZones.setThreadLocal((TimeZone)op[1]);
-			DateFormats.setLocalFormatInfo((DateFormatInfo)op[2]);
+			final Object[] op = (Object[]) old;
+			TimeZones.setThreadLocal((TimeZone) op[1]);
+			DateFormats.setLocalFormatInfo((DateFormatInfo) op[2]);
 			Charsets.cleanup(request, op[0]);
 		}
 	}
@@ -230,8 +232,7 @@ public class I18Ns {
 	 * @see #setup
 	 * @since 3.6.3
 	 */
-	public static final
-	void setPreferredTimeZone(HttpSession hsess, TimeZone timezone) {
+	public static final void setPreferredTimeZone(HttpSession hsess, TimeZone timezone) {
 		if (timezone != null) {
 			hsess.setAttribute(Attributes.PREFERRED_TIME_ZONE, timezone);
 		} else {
@@ -239,6 +240,7 @@ public class I18Ns {
 			hsess.removeAttribute(PX_PREFERRED_TIME_ZONE);
 		}
 	}
+
 	/** Sets the preferred timezone for the specified servlet context.
 	 * It is the default timezone for the whole Web application.
 	 * <p>Default: null (no preferred timezone -- depending on browser's location).
@@ -246,8 +248,7 @@ public class I18Ns {
 	 * @see #setup
 	 * @since 3.6.3
 	 */
-	public static final
-	void setPreferredTimeZone(ServletContext ctx, TimeZone timezone) {
+	public static final void setPreferredTimeZone(ServletContext ctx, TimeZone timezone) {
 		if (timezone != null) {
 			ctx.setAttribute(Attributes.PREFERRED_TIME_ZONE, timezone);
 		} else {

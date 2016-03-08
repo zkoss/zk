@@ -33,6 +33,5 @@ public interface Action {
 	 *
 	 * @param nested whether there is any nested content.
 	 */
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException;
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException;
 }

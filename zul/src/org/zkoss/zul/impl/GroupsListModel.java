@@ -47,8 +47,7 @@ import org.zkoss.zul.ext.SelectionControl;
  * @author tomyeh
  * @since 3.5.0
  */
-public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implements
-	GroupsSelectableModel<Object> {
+public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implements GroupsSelectableModel<Object> {
 	protected GroupsModel<D, G, F> _model;
 	private transient int _size;
 	/** An array of the group offset.
@@ -70,17 +69,17 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 	 * groups model.
 	 * @since 6.0.0
 	 */
-	public static <D, G, F> GroupsListModel<D, G, F>
-	toListModel(GroupsModel<D, G, F> model) {
+	public static <D, G, F> GroupsListModel<D, G, F> toListModel(GroupsModel<D, G, F> model) {
 		if (model instanceof GroupsSortableModel)
 			return new GroupsListModelExt<D, G, F>(model);
 		return new GroupsListModel<D, G, F>(model);
 	}
-	
+
 	protected GroupsListModel(GroupsModel<D, G, F> model) {
 		_model = model;
 		init();
 	}
+
 	/*package*/ void init() {
 		final int groupCount = _model.getGroupCount();
 		_gpofs = new int[groupCount];
@@ -92,25 +91,26 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 			_gpopens[j] = _model.isGroupOpened(j);
 			_size += 1 + (_gpopens[j] ? _model.getChildCount(j) : 0); //closed group deemed as zero child in ListModel
 			_gpfts[j] = _model.hasGroupfoot(j);
-			if (_gpfts[j]) ++_size;
+			if (_gpfts[j])
+				++_size;
 		}
-		if(_listener==null){
+		if (_listener == null) {
 			_listener = new DataListener();
 			_model.addGroupsDataListener(_listener);
 		}
-		
+
 	}
-	
+
 	public List<int[]> getGroupsInfos() {
 		_gpinfo = new LinkedList<int[]>();
-		for(int j=0; j < _gpofs.length; ++j) {
+		for (int j = 0; j < _gpofs.length; ++j) {
 			final int offset1 = _gpofs[j];
 			final int offset2 = getNextOffset(j);
-			_gpinfo.add(new int[] {offset1, offset2 - offset1, hasGroupfoot(j) ? offset2 - 1 : -1});
+			_gpinfo.add(new int[] { offset1, offset2 - offset1, hasGroupfoot(j) ? offset2 - 1 : -1 });
 		}
 		return _gpinfo;
 	}
-	
+
 	/**
 	 * Returns the offset from 0 that a group in this ListModel.
 	 * <p>For example, _gpofs[2] is the offset of group 2 (the third group)
@@ -121,21 +121,24 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 	public int getGroupOffset(int groupIndex) {
 		return _gpofs[groupIndex];
 	}
-	
+
 	public GroupsModel<D, G, F> getGroupsModel() {
 		return _model;
 	}
+
 	/** Returns the number of groups in the data model.
 	 */
 	/*package*/ int getGroupCount() {
 		return _gpofs.length;
 	}
+
 	/** Returns the number of items belong the specified group.
 	 */
 	/*package*/ int getChildCount(int groupIndex) {
 		int v = getNextOffset(groupIndex) - _gpofs[groupIndex] - 1;
-		return _gpfts[groupIndex] ? v - 1: v;
+		return _gpfts[groupIndex] ? v - 1 : v;
 	}
+
 	/**
 	 * Returns whether the Group has a Groupfoot or not.
 	 */
@@ -146,7 +149,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 	/** Returns the offset of the next group.
 	 */
 	private int getNextOffset(int groupIndex) {
-		return groupIndex >= (_gpofs.length - 1) ? _size: _gpofs[groupIndex + 1];
+		return groupIndex >= (_gpofs.length - 1) ? _size : _gpofs[groupIndex + 1];
 	}
 
 	/**
@@ -154,46 +157,48 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 	 */
 	public GroupingInfo getDataInfo(int index) {
 		if (index < 0 || index >= _size)
-			throw new IndexOutOfBoundsException("Not in 0.."+_size+": "+index);
+			throw new IndexOutOfBoundsException("Not in 0.." + _size + ": " + index);
 
 		int gi = Arrays.binarySearch(_gpofs, index);
 		if (gi >= 0)
 			return new GroupDataInfo(GroupDataInfo.GROUP, gi, 0, _gpopens[gi]);
 
-		gi = - gi - 2; //0 ~ _gpofs.length - 2
+		gi = -gi - 2; //0 ~ _gpofs.length - 2
 		int ofs = index - _gpofs[gi] - 1;
-		if (_gpfts[gi]
-		&& ofs >=  getNextOffset(gi) - _gpofs[gi] -2) //child count
+		if (_gpfts[gi] && ofs >= getNextOffset(gi) - _gpofs[gi] - 2) //child count
 			return new GroupDataInfo(GroupDataInfo.GROUPFOOT, gi, 0, _gpopens[gi]);
 
 		return new GroupDataInfo(GroupDataInfo.ELEMENT, gi, ofs, _gpopens[gi]);
 	}
+
 	//Object//
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		return _model.equals(
-				o instanceof GroupsListModel ? ((GroupsListModel) o)._model : o);
+		return _model.equals(o instanceof GroupsListModel ? ((GroupsListModel) o)._model : o);
 	}
+
 	public int hashCode() {
 		return _model.hashCode();
 	}
+
 	public String toString() {
 		return Objects.toString(_model);
 	}
-	
+
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
 	public void addSelection(Object obj) {
 		addToSelection(obj);
 	}
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
 	public void removeSelection(Object obj) {
 		removeFromSelection(obj);
 	}
-	
+
 	//ListModel
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
 	//Group is deemed not in the ListModel
@@ -205,6 +210,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 			return _model.getGroupfoot(info.getGroupIndex());
 		return _model.getChild(info.getGroupIndex(), info.getOffset());
 	}
+
 	//ListModel assume each item in the ListModel is visible; thus items inside closed
 	//Group is not count into size
 	public int getSize() {
@@ -214,27 +220,30 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 	//Selectable
 	@SuppressWarnings("unchecked")
 	public Set<Object> getSelection() {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			return ((Selectable) _model).getSelection();
 		return super.getSelection();
 	}
+
 	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	public void setSelection(Collection<?> selection) {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			((Selectable) _model).setSelection(selection);
 		else
 			super.setSelection(selection);
 	}
+
 	/** {@inheritDoc} */
 	public boolean isSelected(Object obj) {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			return ((Selectable) _model).isSelected(obj);
 		return super.isSelected(obj);
 	}
+
 	/** {@inheritDoc} */
 	public boolean isSelectionEmpty() {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			return ((Selectable) _model).isSelectionEmpty();
 		return super.isSelectionEmpty();
 	}
@@ -242,35 +251,37 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	public boolean addToSelection(Object obj) {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			return ((Selectable) _model).addToSelection(obj);
 		else
 			return super.addToSelection(obj);
 	}
+
 	/** {@inheritDoc} */
 	public boolean removeFromSelection(Object obj) {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			return ((Selectable) _model).removeFromSelection(obj);
 		return super.removeFromSelection(obj);
 	}
-	
+
 	/** {@inheritDoc} */
 	public void clearSelection() {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			((Selectable) _model).clearSelection();
 		else
 			super.clearSelection();
 	}
+
 	/** {@inheritDoc} */
 	public boolean isMultiple() {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			return ((Selectable) _model).isMultiple();
 		return super.isMultiple();
 	}
-	
+
 	/** {@inheritDoc} */
 	public void setMultiple(boolean multiple) {
-		if (_model instanceof Selectable) 
+		if (_model instanceof Selectable)
 			((Selectable) _model).setMultiple(multiple);
 		else
 			super.setMultiple(multiple);
@@ -293,8 +304,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 	}
 
 	//Serializable//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		_model.removeGroupsDataListener(_listener); //avoid being serialized
 
 		try {
@@ -303,8 +313,8 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 			_model.addGroupsDataListener(_listener);
 		}
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		init();
@@ -332,9 +342,7 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 
 	private class DataListener implements GroupsDataListener {
 		public void onChange(GroupsDataEvent event) {
-			int type = event.getType(),
-				j0 = event.getIndex0(),
-				j1 = event.getIndex1();
+			int type = event.getType(), j0 = event.getIndex0(), j1 = event.getIndex1();
 
 			switch (type) {
 			case GroupsDataEvent.CONTENTS_CHANGED:
@@ -342,18 +350,19 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 			case GroupsDataEvent.INTERVAL_REMOVED:
 				final int gi = event.getGroupIndex();
 				if (gi < 0 || gi >= _gpofs.length)
-					throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+gi);
+					throw new IndexOutOfBoundsException("Group index not in 0.." + getGroupCount() + ", " + gi);
 
 				int ofs = _gpofs[gi] + 1;
-				j0 = j0 >= 0 ? j0 + ofs: ofs;
+				j0 = j0 >= 0 ? j0 + ofs : ofs;
 
 				if (j1 >= 0) {
 					j1 = j1 + ofs;
 				} else {
 					j1 = getNextOffset(gi) - 1;
-					if (_gpfts[gi]) --j1; //exclude groupfoot
+					if (_gpfts[gi])
+						--j1; //exclude groupfoot
 				}
-				init();//re-initialize the model information
+				init(); //re-initialize the model information
 				break;
 			case GroupsDataEvent.GROUPS_CHANGED:
 			case GroupsDataEvent.GROUPS_ADDED:
@@ -361,15 +370,15 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 				type -= GroupsDataEvent.GROUPS_CHANGED;
 				if (j0 >= 0) {
 					if (j0 >= _gpofs.length)
-						throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+j0);
+						throw new IndexOutOfBoundsException("Group index not in 0.." + getGroupCount() + ", " + j0);
 					j0 = _gpofs[j0];
 				}
 				if (j1 >= 0) {
 					if (j1 >= _gpofs.length)
-						throw new IndexOutOfBoundsException("Group index not in 0.."+getGroupCount()+", "+j1);
+						throw new IndexOutOfBoundsException("Group index not in 0.." + getGroupCount() + ", " + j1);
 					j1 = getNextOffset(j1) - 1; //include groupfoot
 				}
-				init();//re-initialize the model information
+				init(); //re-initialize the model information
 				break;
 			case GroupsDataEvent.SELECTION_CHANGED:
 				type = ListDataEvent.SELECTION_CHANGED;
@@ -379,8 +388,9 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 				break;
 			case GroupsDataEvent.GROUPS_OPENED: //ZK-2812: onOpen event listener didn't trigger when using GroupsModel
 				int index = event.getGroupIndex();
-				if (event.getModel().getChildCount(index) <= 0) return;
-				init();//re-initialize the model information
+				if (event.getModel().getChildCount(index) <= 0)
+					return;
+				init(); //re-initialize the model information
 				boolean open = _gpopens[index];
 				if (open)
 					type = ListDataEvent.INTERVAL_ADDED;
@@ -396,12 +406,13 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 				type = ListDataEvent.ENABLE_CLIENT_UPDATE;
 				break;
 			default:
-				init();//re-initialize the model information
+				init(); //re-initialize the model information
 				break;
 			}
 			fireEvent(type, j0, j1);
 		}
 	}
+
 	/** The group information returned by {@link GroupsListModel#getDataInfo}.
 	 */
 	public static class GroupDataInfo implements GroupingInfo {
@@ -434,32 +445,30 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 			_open = open;
 		}
 
-		
 		public int getType() {
 			return _type;
 		}
 
-		
 		public int getGroupIndex() {
 			return _groupIndex;
 		}
 
-		
 		public int getOffset() {
 			return _offset;
 		}
 
-		
 		public boolean isOpen() {
 			return _open;
 		}
 	}
 }
+
 /*package*/ class GroupsListModelExt<D, G, F> extends GroupsListModel<D, G, F>
-implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
+		implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	/*package*/ GroupsListModelExt(GroupsModel<D, G, F> model) {
 		super(model);
 	}
+
 	/**
 	 * Groups and sorts the data by the specified column and comparator.
 	 * It only called when {@link org.zkoss.zul.Listbox} or {@link org.zkoss.zul.Grid} has the sort function.
@@ -468,23 +477,24 @@ implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
 	@SuppressWarnings("unchecked")
 	public void group(Comparator<D> cmpr, boolean ascending, int colIndex) {
 		if (!(_model instanceof GroupsSortableModel))
-			throw new UiException(GroupsSortableModel.class + " must be implemented in "+_model.getClass());
-		((GroupsSortableModel)_model).group(cmpr, ascending, colIndex);
+			throw new UiException(GroupsSortableModel.class + " must be implemented in " + _model.getClass());
+		((GroupsSortableModel) _model).group(cmpr, ascending, colIndex);
 	}
+
 	/** Sorts the data by the specified column and comparator.
 	 */
 	@SuppressWarnings("unchecked")
 	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex) {
 		if (!(_model instanceof GroupsSortableModel))
-			throw new UiException(GroupsSortableModel.class + " must be implemented in "+_model.getClass());
-		((GroupsSortableModel)_model).sort(cmpr, ascending, colIndex);
+			throw new UiException(GroupsSortableModel.class + " must be implemented in " + _model.getClass());
+		((GroupsSortableModel) _model).sort(cmpr, ascending, colIndex);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Object willClone(Component comp) {
 		if (_model instanceof ComponentCloneListener) {
 			GroupsListModelExt clone = (GroupsListModelExt) clone();
-			GroupsModel m = (GroupsModel)((ComponentCloneListener) _model).willClone(comp);
+			GroupsModel m = (GroupsModel) ((ComponentCloneListener) _model).willClone(comp);
 			if (m != null)
 				clone._model = m;
 			clone.init(); // reset grouping info

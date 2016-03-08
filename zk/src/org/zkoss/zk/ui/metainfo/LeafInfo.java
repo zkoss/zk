@@ -12,8 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.xel.Evaluator;
@@ -38,10 +38,12 @@ import org.zkoss.zk.xel.EvaluatorRef;
 	/*package*/ LeafInfo() {
 		//_evalr will be added later when this node is added as child (see BranchInfo)
 	}
+
 	/*package*/ LeafInfo(NodeInfo parent) {
 		if (parent != null)
 			parent.appendChild(this);
 	}
+
 	/** Used only by {@link ComponentInfo#duplicate} to make a virtual copy.
 	 */
 	/*package*/ LeafInfo(LeafInfo from) {
@@ -49,24 +51,22 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		_evalr = from._evalr;
 	}
 
-	
 	public EvaluatorRef getEvaluatorRef() {
 		return _evalr;
 	}
-	
+
 	public PageDefinition getPageDefinition() {
-		return _evalr != null ? _evalr.getPageDefinition(): null;
-	}
-	
-	public Evaluator getEvaluator() {
-		return _evalr != null ? _evalr.getEvaluator(): null;
+		return _evalr != null ? _evalr.getPageDefinition() : null;
 	}
 
-	
+	public Evaluator getEvaluator() {
+		return _evalr != null ? _evalr.getEvaluator() : null;
+	}
+
 	public NodeInfo getParent() {
 		return _parent;
 	}
-	
+
 	public List<NodeInfo> getChildren() {
 		return Collections.emptyList();
 	}
@@ -77,11 +77,10 @@ import org.zkoss.zk.xel.EvaluatorRef;
 		_parent = parent;
 	}
 
-	
 	public void appendChild(NodeInfo child) {
-		throw new UiException(this+" does not allow any children");
+		throw new UiException(this + " does not allow any children");
 	}
-	
+
 	public boolean removeChild(NodeInfo child) {
 		return false;
 	}

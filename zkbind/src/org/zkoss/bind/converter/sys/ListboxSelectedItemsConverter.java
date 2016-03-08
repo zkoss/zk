@@ -34,38 +34,38 @@ import org.zkoss.zul.ext.Selectable;
  */
 public class ListboxSelectedItemsConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201108171811L;
-	
+
 	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Listbox lbx = (Listbox) comp;
 		final ListModel<?> model = lbx.getModel();
-		if(model !=null && !(model instanceof Selectable)){
+		if (model != null && !(model instanceof Selectable)) {
 			//model has to implement Selectable if binding to selectedItems
-  			throw new UiException("model doesn't implement Selectable");
-  		}
-		
-  		final Set<Listitem> items = new LinkedHashSet<Listitem>();
+			throw new UiException("model doesn't implement Selectable");
+		}
+
+		final Set<Listitem> items = new LinkedHashSet<Listitem>();
 		Set<Object> vals = val == null ? null : (Set<Object>) Classes.coerce(LinkedHashSet.class, val);
-		
-	  	if (vals != null && vals.size()>0) {
-	  		if(model!=null){
-	  			((Selectable<Object>)model).setSelection(vals);
-	  		}else{
-	  			//no model case
-			  	for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
-			  		final Listitem li = (Listitem) it.next();
-			  		Object bean = li.getValue();
-			  		
-			  		if (vals.contains(bean)) {
-			  			items.add(li);
-			  		}
-			  	}
-	  		}
-	  	}else if(model!=null && !((Selectable<Object>)model).isSelectionEmpty()){//model !=null and no selection
-	  		((Selectable<Object>)model).clearSelection();
-	  	}
-	  	
-	  	return model == null ? items : IGNORED_VALUE;
+
+		if (vals != null && vals.size() > 0) {
+			if (model != null) {
+				((Selectable<Object>) model).setSelection(vals);
+			} else {
+				//no model case
+				for (final Iterator<?> it = lbx.getItems().iterator(); it.hasNext();) {
+					final Listitem li = (Listitem) it.next();
+					Object bean = li.getValue();
+
+					if (vals.contains(bean)) {
+						items.add(li);
+					}
+				}
+			}
+		} else if (model != null && !((Selectable<Object>) model).isSelectionEmpty()) { //model !=null and no selection
+			((Selectable<Object>) model).clearSelection();
+		}
+
+		return model == null ? items : IGNORED_VALUE;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -73,26 +73,26 @@ public class ListboxSelectedItemsConverter implements Converter, java.io.Seriali
 		Set<Object> vals = new LinkedHashSet<Object>();
 		if (val != null) {
 			final Listbox lbx = (Listbox) comp;
-	  		final ListModel<?> model = lbx.getModel();
-	  		if(model !=null && !(model instanceof Selectable)){
-	  			throw new UiException("model doesn't implement Selectable");
-	  		}
-	  		
-	  		if(model!=null){
-	  			Set<?> selection = ((Selectable<?>)model).getSelection();
-	  			if(selection!=null && selection.size()>0){
-	  				for(Object o:selection){
-	  					vals.add(o);
-	  				}
-	  			}
-	  		} else{//no model
-	  			final Set<Listitem> items = (Set<Listitem>)Classes.coerce(HashSet.class, val);
-		  		for(Listitem item : items){
-			  		vals.add(item.getValue());
-		  		}
-	  		}
-	  	}
-	 	return vals;
+			final ListModel<?> model = lbx.getModel();
+			if (model != null && !(model instanceof Selectable)) {
+				throw new UiException("model doesn't implement Selectable");
+			}
+
+			if (model != null) {
+				Set<?> selection = ((Selectable<?>) model).getSelection();
+				if (selection != null && selection.size() > 0) {
+					for (Object o : selection) {
+						vals.add(o);
+					}
+				}
+			} else { //no model
+				final Set<Listitem> items = (Set<Listitem>) Classes.coerce(HashSet.class, val);
+				for (Listitem item : items) {
+					vals.add(item.getValue());
+				}
+			}
+		}
+		return vals;
 	}
 
 }

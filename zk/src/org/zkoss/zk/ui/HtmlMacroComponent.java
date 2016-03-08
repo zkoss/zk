@@ -16,15 +16,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import java.util.Map;
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.zkoss.io.Serializables;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
-import org.zkoss.io.Serializables;
 import org.zkoss.xel.VariableResolver;
-
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.ConventionWires;
@@ -91,6 +90,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		if (getAutowireFlag() == 0)
 			Selectors.wireVariables(this, this, _resolvers);
 	}
+
 	private void init() {
 		_props = new LinkedHashMap<String, Object>();
 		_props.put("includer", this);
@@ -110,6 +110,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public String getEnclosingTag() {
 		return _tag;
 	}
+
 	/**Sets the the name of the enclosing tag for this macro component.
 	 * <p>Default: div (since 7.0.1)
 	 * @since 5.0.3
@@ -122,6 +123,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			smartUpdate("enclosingTag", _tag);
 		}
 	}
+
 	//-- Macro --//
 	/** Creates the child components after apply dynamic properties
 	 * {@link #setDynamicProperty}.
@@ -138,6 +140,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void afterCompose() {
 		compose();
 	}
+
 	/** Composes the macro component.
 	 * It is called by {@link #afterCompose} and others
 	 * to do the rendering based on {@link #getMacroURI}.
@@ -158,21 +161,19 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			if (_inlines != null)
 				return; //don't do twice
 
-			_inlines = exec.createComponents(
-				_uri != null ? _uri: getDefinition().getMacroURI(), _props);
-				//Note: it doesn't belong to any page/component
+			_inlines = exec.createComponents(_uri != null ? _uri : getDefinition().getMacroURI(), _props);
+			//Note: it doesn't belong to any page/component
 		} else {
 			if (!getChildren().isEmpty())
 				return; //don't do twice (silently)
 
-			exec.createComponents(
-				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
+			exec.createComponents(_uri != null ? _uri : getDefinition().getMacroURI(), this, _props);
 		}
 
 		switch (getAutowireFlag()) {
 		case 0: //by selector
 			Selectors.wireComponents(this, this, false);
-			Selectors.wireEventListeners(this, this); 
+			Selectors.wireEventListeners(this, this);
 			break;
 		case 1: //by convention
 			ConventionWires.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
@@ -180,22 +181,21 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			break;
 		}
 	}
+
 	private static Integer _autowireflag;
+
 	private static int getAutowireFlag() {
 		if (_autowireflag == null)
-			_autowireflag = 
-				"true".equals(Library.getProperty(
-				"org.zkoss.zk.ui.macro.autowire.disabled")) ?
-					-1/*no wire*/:
-				"true".equals(Library.getProperty(
-				"org.zkoss.zk.ui.macro.autowire.convention")) ?
-					1/*convention*/: 0/*selector*/;
+			_autowireflag = "true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.disabled")) ? -1
+					/*no wire*/ : "true".equals(Library.getProperty("org.zkoss.zk.ui.macro.autowire.convention")) ? 1
+							/*convention*/ : 0/*selector*/;
 		return _autowireflag;
 	}
 
 	public String getMacroURI() {
-		return _uri != null ? _uri: getDefinition().getMacroURI();
+		return _uri != null ? _uri : getDefinition().getMacroURI();
 	}
+
 	public void setMacroURI(String uri) {
 		if (!Objects.equals(_uri, uri)) {
 			if (uri != null && uri.length() == 0)
@@ -205,6 +205,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 				recreate();
 		}
 	}
+
 	/** Detaches all child components and then recreate them by use of
 	 * {@link #compose}.
 	 */
@@ -216,10 +217,11 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		} else {
 			getChildren().clear();
 			invalidate();
-				//invalidate is redudant, but less memory leak in IE
+			//invalidate is redudant, but less memory leak in IE
 		}
 		compose();
 	}
+
 	public boolean isInline() {
 		return getDefinition().isInlineMacro();
 	}
@@ -246,6 +248,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			super.setParent(parent);
 		}
 	}
+
 	public boolean setInlineParent(Component parent, Component beforeSibling) {
 		if (!isInline())
 			throw new InternalError("inline only");
@@ -282,22 +285,22 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 			super.setPage(page);
 		}
 	}
+
 	protected boolean isChildable() {
 		return !isInline();
 	}
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		_props.remove("includer");
 		Serializables.smartWrite(s, _props);
 		_props.put("includer", this);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();
 		Serializables.smartRead(s, _props);
@@ -305,7 +308,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 
 	//Cloneable//
 	public Object clone() {
-		final HtmlMacroComponent clone = (HtmlMacroComponent)super.clone();
+		final HtmlMacroComponent clone = (HtmlMacroComponent) super.clone();
 		clone.init();
 		clone._props.putAll(_props);
 		clone._props.put("includer", clone);
@@ -313,7 +316,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		if (_inlines != null) { //deep clone
 			clone._inlines = new Component[_inlines.length];
 			for (int j = 0; j < _inlines.length; ++j)
-				clone._inlines[j] = (Component)_inlines[j].clone();
+				clone._inlines[j] = (Component) _inlines[j].clone();
 		}
 		return clone;
 	}
@@ -322,17 +325,17 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public boolean hasDynamicProperty(String name) {
 		return _props.containsKey(name);
 	}
+
 	public Object getDynamicProperty(String name) {
 		return _props.get(name);
 	}
-	public void setDynamicProperty(String name, Object value)
-	throws WrongValueException {
+
+	public void setDynamicProperty(String name, Object value) throws WrongValueException {
 		_props.put(name, value);
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		// B70-ZK-2065: Replace span with div, because block-level element inside an inline element is not valid.
 		if (!"div".equals(_tag))

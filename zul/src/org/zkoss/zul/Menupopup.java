@@ -44,9 +44,8 @@ public class Menupopup extends Popup {
 
 	//-- Component --//
 	public void beforeChildAdded(Component child, Component refChild) {
-		if (!(child instanceof Menuitem)
-		&& !(child instanceof Menuseparator) && !(child instanceof Menu))
-			throw new UiException("Unsupported child for menupopup: "+child);
+		if (!(child instanceof Menuitem) && !(child instanceof Menuseparator) && !(child instanceof Menu))
+			throw new UiException("Unsupported child for menupopup: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
 }

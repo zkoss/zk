@@ -30,8 +30,7 @@ public interface NamespaceParser {
 	 * 
 	 * @return true to terminal the next namespace parser processing
 	 */
-	public boolean parse(Attribute attr, ComponentInfo compInfo,
-			PageDefinition pgdef) throws Exception;
+	public boolean parse(Attribute attr, ComponentInfo compInfo, PageDefinition pgdef) throws Exception;
 
 	/**
 	 * Returns the namespace parser's priority, higher is the first.

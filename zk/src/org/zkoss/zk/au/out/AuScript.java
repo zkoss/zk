@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to ask the client to execute the specified client scripts.
@@ -42,6 +42,7 @@ public class AuScript extends AuResponse {
 	public AuScript(Component depends, String script) {
 		super("script", depends, script);
 	}
+
 	/** Constructs a AuScript response that doesn't depend on any component.
 	 * @since 6.0.0
 	 */

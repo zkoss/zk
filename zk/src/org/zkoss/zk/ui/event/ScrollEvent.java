@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event caused by that user is scrolling or
@@ -41,7 +41,7 @@ public class ScrollEvent extends Event {
 		Object decimal = data.get("decimal");
 		int pos;
 		double dPos = 0;
-		
+
 		if (decimal != null) {
 			dPos = AuRequests.getDouble(data, "decimal", 0);
 			pos = (int) dPos;
@@ -51,11 +51,9 @@ public class ScrollEvent extends Event {
 		}
 		Object outBound = data.get("outBound");
 		if (outBound != null)
-			return new ScrollEvent(request.getCommand(), request.getComponent(),
-				dPos, (Boolean)outBound);
+			return new ScrollEvent(request.getCommand(), request.getComponent(), dPos, (Boolean) outBound);
 		else
-			return new ScrollEvent(request.getCommand(), request.getComponent(),
-				dPos);
+			return new ScrollEvent(request.getCommand(), request.getComponent(), dPos);
 	}
 
 	/** Constructs an scroll-relevant event.
@@ -66,6 +64,7 @@ public class ScrollEvent extends Event {
 		_pos = pos;
 		_dPos = pos;
 	}
+
 	/** Constructs an scroll-relevant event.
 	 * @param pos the new position
 	 * @since 7.0.1
@@ -75,6 +74,7 @@ public class ScrollEvent extends Event {
 		_pos = (int) pos;
 		_dPos = pos;
 	}
+
 	/** Constructs an scroll-relevant event.
 	 * @param pos the new position
 	 * @param outBound the position is outside the boundary or not (only used on tablet/mobile device)
@@ -85,6 +85,7 @@ public class ScrollEvent extends Event {
 		_dPos = pos;
 		_outBound = outBound;
 	}
+
 	/** Constructs an scroll-relevant event.
 	 * @param dPos the new position
 	 * @param outBound the position is outside the boundary or not (only used on tablet/mobile device)
@@ -96,17 +97,20 @@ public class ScrollEvent extends Event {
 		_dPos = dPos;
 		_outBound = outBound;
 	}
+
 	/** Returns the position.
 	 */
 	public final int getPos() {
 		return _pos;
 	}
+
 	/** Returns the position.
 	 * @since 7.0.1
 	 */
 	public final double getPosInDouble() {
 		return _dPos;
 	}
+
 	/** Return true if the scroll position is outside of boundary on tablet/mobile device.
 	 * @since 6.5.0
 	 */

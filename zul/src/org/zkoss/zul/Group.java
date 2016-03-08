@@ -22,7 +22,8 @@ import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.XulElement;
 
@@ -44,20 +45,22 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.5.0
  */
 public class Group extends Row {
-	private boolean _open = true;	
+	private boolean _open = true;
 	private transient List<Row> _items;
-	
+
 	static {
-		addClientEvent(Group.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Group.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
-	
+
 	public Group() {
 		init();
 	}
+
 	public Group(String label) {
 		this();
 		setLabel(label);
 	}
+
 	public <T> Group(String label, T value) {
 		this();
 		setLabel(label);
@@ -65,38 +68,42 @@ public class Group extends Row {
 	}
 
 	private void init() {
-		_items =  new AbstractList<Row>() {
+		_items = new AbstractList<Row>() {
 			public int size() {
 				return getItemCount();
 			}
+
 			public Iterator<Row> iterator() {
 				return new IterItems();
 			}
+
 			public Row get(int index) {
-				final Rows rows = (Rows)getParent();
+				final Rows rows = (Rows) getParent();
 				if (rows != null) {
 					int i = 0;
-					for (Iterator<Component> it = rows.getChildren().listIterator(getIndex() + 1); 
-						it.hasNext() && i <= index; i++) {
-						if (i == index) 
-							return (Row)it.next();
+					for (Iterator<Component> it = rows.getChildren().listIterator(getIndex() + 1); it.hasNext()
+							&& i <= index; i++) {
+						if (i == index)
+							return (Row) it.next();
 						it.next();
 					}
 				}
-				throw new IndexOutOfBoundsException("Index: "+index);
+				throw new IndexOutOfBoundsException("Index: " + index);
 			}
 		};
 	}
+
 	/** 
 	 * Returns a list of all {@link Row} are grouped by this group.
 	 */
 	public List<Row> getItems() {
 		return _items;
 	}
+
 	/** Returns the number of items.
 	 */
 	public int getItemCount() {
-		final Rows rows = (Rows)getParent();
+		final Rows rows = (Rows) getParent();
 		if (rows != null) {
 			int[] g = rows.getGroupsInfoAt(getIndex(), true);
 			if (g != null) {
@@ -105,16 +112,15 @@ public class Group extends Row {
 				else
 					return g[1] - 2;
 			}
-			
+
 		}
 		return 0;
 	}
-	
-	
+
 	public Group getGroup() {
 		return this;
 	}
-	
+
 	/**
 	 * Returns the number of visible descendant {@link Row}.
 	 * @since 3.5.1
@@ -124,21 +130,23 @@ public class Group extends Row {
 		int visibleCount = 0;
 		Row row = (Row) getNextSibling();
 		while (count-- > 0 && row != null) {
-			if(row.isVisible())
+			if (row.isVisible())
 				visibleCount++;
 			row = (Row) row.getNextSibling();
 		}
 		return visibleCount;
 	}
+
 	/**
 	 * Returns the index of Groupfoot
 	 * <p> -1: no Groupfoot
 	 */
-	public int getGroupfootIndex(){
-		final Rows rows = (Rows)getParent();
+	public int getGroupfootIndex() {
+		final Rows rows = (Rows) getParent();
 		if (rows != null) {
 			int[] g = rows.getGroupsInfoAt(getIndex(), true);
-			if (g != null) return g[2];
+			if (g != null)
+				return g[2];
 		}
 		return -1;
 	}
@@ -148,16 +156,19 @@ public class Group extends Row {
 	 */
 	public Groupfoot getGroupfoot() {
 		int index = getGroupfootIndex();
-		if (index < 0) return null;
-		final Rows rows = (Rows)getParent();
+		if (index < 0)
+			return null;
+		final Rows rows = (Rows) getParent();
 		return (Groupfoot) rows.getChildren().get(index);
 	}
+
 	/** Returns whether this container is open.
 	 * <p>Default: true.
 	 */
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Sets whether this container is open.
 	 * 
 	 * <p>Note: if you use a model as the data to render, don't use setOpen(). It'll tangle the lifecycle with model  
@@ -173,6 +184,7 @@ public class Group extends Row {
 				rows.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
 		}
 	}
+
 	/** Returns the HTML IMG tag for the image part, or null
 	 * if no image is assigned.
 	 *
@@ -180,25 +192,26 @@ public class Group extends Row {
 	 *
 	 */
 	public String getImgTag() {
-		final StringBuffer sb = new StringBuffer(64)
-			.append("<img src=\"")
-			.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-			.append("\" class=\"").append(getZclass()).append("-img ")
-			.append(getZclass()).append(isOpen() ? "-img-open" : "-img-close")
-			.append("\" align=\"absmiddle\"/>");
+		final StringBuffer sb = new StringBuffer(64).append("<img src=\"")
+				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif")).append("\" class=\"")
+				.append(getZclass()).append("-img ").append(getZclass()).append(isOpen() ? "-img-open" : "-img-close")
+				.append("\" align=\"absmiddle\"/>");
 
 		final String label = getLabel();
-		if (label != null && label.length() > 0) sb.append(' ');
+		if (label != null && label.length() > 0)
+			sb.append(' ');
 
 		return sb.toString(); //keep a space
 	}
+
 	/** Returns the value of the {@link Label} it contains, or null
 	 * if no such cell.
 	 */
 	public String getLabel() {
 		final Component cell = getFirstChild();
-		return cell != null && cell instanceof Label ? ((Label)cell).getValue(): null;
+		return cell != null && cell instanceof Label ? ((Label) cell).getValue() : null;
 	}
+
 	/** Sets the value of the {@link Label} it contains.
 	 *
 	 * <p>If it is not created, we automatically create it.
@@ -206,28 +219,31 @@ public class Group extends Row {
 	public void setLabel(String label) {
 		autoFirstCell().setValue(label);
 	}
+
 	private Label autoFirstCell() {
 		Component cell = getFirstChild();
 		if (cell == null || cell instanceof Label) {
-			if (cell == null) cell = new Label();
+			if (cell == null)
+				cell = new Label();
 			cell.applyProperties();
 			cell.setParent(this);
-			return (Label)cell;
+			return (Label) cell;
 		}
-		throw new UiException("Unsupported child for setLabel: "+cell);
+		throw new UiException("Unsupported child for setLabel: " + cell);
 	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-group" : _zclass;
 	}
+
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (!isOpen()) renderer.render("open", false);
+
+		if (!isOpen())
+			renderer.render("open", false);
 	}
-	
+
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
@@ -245,10 +261,10 @@ public class Group extends Row {
 				rows.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
 				final Grid grid = getGrid();
 				if (grid != null) {
-					final ListModel model = grid.getModel(); 
+					final ListModel model = grid.getModel();
 					if (model instanceof GroupsListModel) {
 						int gindex = rows.getGroupIndex(getIndex());
-						GroupsModel gmodel = ((GroupsListModel)model).getGroupsModel();
+						GroupsModel gmodel = ((GroupsListModel) model).getGroupsModel();
 						if (_open)
 							gmodel.addOpenGroup(gindex);
 						else
@@ -260,20 +276,23 @@ public class Group extends Row {
 		} else
 			super.service(request, everError);
 	}
+
 	/**
 	 * An iterator used by _items.
 	 */
 	private class IterItems implements Iterator<Row> {
-		private final Iterator<Component> _it = getParent().getChildren().listIterator(getIndex()+1);
+		private final Iterator<Component> _it = getParent().getChildren().listIterator(getIndex() + 1);
 		private int _j;
 
 		public boolean hasNext() {
 			return _j < getItemCount();
 		}
+
 		public Row next() {
 			++_j;
-			return (Row)_it.next();
+			return (Row) _it.next();
 		}
+
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
@@ -281,13 +300,13 @@ public class Group extends Row {
 
 	//Cloneable//
 	public Object clone() {
-		final Group clone = (Group)super.clone();
+		final Group clone = (Group) super.clone();
 		clone.init();
 		return clone;
 	}
+
 	//-- Serializable --//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();
 	}

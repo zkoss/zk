@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.util.ExecutionCleanup;
 import org.zkoss.zk.ui.util.ExecutionInit;
@@ -40,42 +41,43 @@ import org.zkoss.zk.ui.util.ExecutionInit;
  * @author Jeff
  * @since 3.0.2
  */
-public class OpenEntityManagerInViewListener implements ExecutionCleanup,
-		ExecutionInit {
+public class OpenEntityManagerInViewListener implements ExecutionCleanup, ExecutionInit {
 	private static final Logger log = LoggerFactory.getLogger(OpenEntityManagerInViewListener.class);
-	
+
 	//-- ExecutionCleanup --//
-	public void cleanup(Execution exec, Execution parent, List errs)throws Exception{ 
-		if(parent == null){
-			try
-			{
+	public void cleanup(Execution exec, Execution parent, List errs) throws Exception {
+		if (parent == null) {
+			try {
 				if (errs == null || errs.isEmpty()) {
-					log.debug("JPA: Committing the database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
+					log.debug("JPA: Committing the database transaction: " + exec + " for entityManager:"
+							+ JpaUtil.getEntityManager());
 					JpaUtil.getEntityManager().getTransaction().commit();
-				}else
-				{
+				} else {
 					final Throwable ex = (Throwable) errs.get(0);
-					handleException(exec,ex);
+					handleException(exec, ex);
 				}
-			}finally{
-				if(JpaUtil.getEntityManager().isOpen()){
-					log.debug("JPA: close a database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
+			} finally {
+				if (JpaUtil.getEntityManager().isOpen()) {
+					log.debug("JPA: close a database transaction: " + exec + " for entityManager:"
+							+ JpaUtil.getEntityManager());
 					JpaUtil.getEntityManager().close();
-				}else
-					log.debug("JPA: the database transaction is not open: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
+				} else
+					log.debug("JPA: the database transaction is not open: " + exec + " for entityManager:"
+							+ JpaUtil.getEntityManager());
 			}
 		}
 	}
 
 	//-- ExecutionInit --//
 	public void init(Execution exec, Execution parent) throws Exception {
-		
-		if(parent==null){
-			log.debug("JPA: Starting a database transaction: "+exec+" for entityManager:"+JpaUtil.getEntityManager());
+
+		if (parent == null) {
+			log.debug("JPA: Starting a database transaction: " + exec + " for entityManager:"
+					+ JpaUtil.getEntityManager());
 			JpaUtil.getEntityManager().getTransaction().begin();
 		}
 	}
-	
+
 	/**
 	 * <p>Default exception handler. 
 	 * This implementation simply rollback the transaction.</p>
@@ -93,23 +95,22 @@ public class OpenEntityManagerInViewListener implements ExecutionCleanup,
 		ex.printStackTrace();
 		rollback(exec, ex);
 	}
-	
+
 	/**
 	 * rollback the current entityManager.
 	 *
 	 * @param exec the execution to clean up.
 	 * @param ex the Exception being thrown (and not handled) during the execution
-	 */	
+	 */
 	private void rollback(Execution exec, Throwable ex) {
 		try {
 			if (JpaUtil.getEntityManager().getTransaction().isActive()) {
-				log.debug("Trying to rollback database transaction after exception:"+ex);
+				log.debug("Trying to rollback database transaction after exception:" + ex);
 				JpaUtil.getEntityManager().getTransaction().rollback();
 			}
 		} catch (Throwable rbEx) {
-			log.error("Could not rollback transaction after exception! Original Exception:\n"+ex, rbEx);
+			log.error("Could not rollback transaction after exception! Original Exception:\n" + ex, rbEx);
 		}
 	}
-	
 
 }

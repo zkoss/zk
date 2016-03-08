@@ -39,7 +39,7 @@ public interface ThemeRegistry {
 	 * @return true if the theme is registered; false if it cannot be registered
 	 */
 	public boolean register(Theme theme);
-	
+
 	/**
 	 * Remove a theme from web application's use
 	 * 
@@ -54,7 +54,7 @@ public interface ThemeRegistry {
 	 * @return a list of currently registered themes
 	 */
 	public Theme[] getThemes();
-	
+
 	/**
 	 * Returns the theme identified by themeName
 	 * 
@@ -62,7 +62,7 @@ public interface ThemeRegistry {
 	 * @return the theme identified by themeName; null if the theme is not registered
 	 */
 	public Theme getTheme(String themeName);
-	
+
 	/**
 	 * Determine if a theme is registered
 	 * 

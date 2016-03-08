@@ -16,28 +16,27 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.http;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Iterator;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Objects;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.SystemException;
-
-
-import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ExtendletContext;
 
 /**
@@ -49,7 +48,8 @@ import org.zkoss.web.util.resource.ExtendletContext;
 public class Encodes {
 	private static final Logger log = LoggerFactory.getLogger(Encodes.class);
 
-	protected Encodes() {} //prevent from instantiation
+	protected Encodes() {
+	} //prevent from instantiation
 
 	/** Encodes a string to HTTP URI compliance by use of
 	 * {@link Charsets#getURICharset}.
@@ -60,40 +60,40 @@ public class Encodes {
 	 * @param unsafes the set of characters that must be encoded; never null.
 	 * It must be sorted.
 	 */
-	private static final String encodeURI0(String s, char[] unsafes)
-	throws UnsupportedEncodingException {
+	private static final String encodeURI0(String s, char[] unsafes) throws UnsupportedEncodingException {
 		if (s == null)
 			return null;
 
 		final String charset = Charsets.getURICharset();
 		final byte[] in = s.getBytes(charset);
-		final byte[] out = new byte[in.length * 3];//at most: %xx
+		final byte[] out = new byte[in.length * 3]; //at most: %xx
 		int j = 0, k = 0;
 		for (; j < in.length; ++j) {
 			//Though it is ok to use '+' for ' ', Jetty has problem to
 			//handle space between Chinese characters.
-			final char cc = (char)(((int)in[j]) & 0xff);
-			if (cc >= 0x80 || cc <= ' '
-			|| Arrays.binarySearch(unsafes, cc) >= 0) {
-				out[k++] = (byte)'%';
+			final char cc = (char) (((int) in[j]) & 0xff);
+			if (cc >= 0x80 || cc <= ' ' || Arrays.binarySearch(unsafes, cc) >= 0) {
+				out[k++] = (byte) '%';
 				String cvt = Integer.toHexString(cc);
 				if (cvt.length() == 1) {
-					out[k++] = (byte)'0';
-					out[k++] = (byte)cvt.charAt(0);
+					out[k++] = (byte) '0';
+					out[k++] = (byte) cvt.charAt(0);
 				} else {
-					out[k++] = (byte)cvt.charAt(0);
-					out[k++] = (byte)cvt.charAt(1);
+					out[k++] = (byte) cvt.charAt(0);
+					out[k++] = (byte) cvt.charAt(1);
 				}
 			} else {
 				out[k++] = in[j];
 			}
 		}
-		return j == k ? s: new String(out, 0, k, charset);
+		return j == k ? s : new String(out, 0, k, charset);
 	}
+
 	/** unsafe character when that are used in url's location. */
 	private static final char[] URI_UNSAFE;
 	/** unsafe character when that are used in url's query. */
 	private static final char[] URI_COMP_UNSAFE;
+
 	static {
 		URI_UNSAFE = "`%^{}[]\\\"<>|".toCharArray();
 		Arrays.sort(URI_UNSAFE);
@@ -112,10 +112,10 @@ public class Encodes {
 	 * @return the encoded string or null if s is null
 	 * @see #encodeURIComponent
 	 */
-	public static final String encodeURI(String s)
-	throws UnsupportedEncodingException {
+	public static final String encodeURI(String s) throws UnsupportedEncodingException {
 		return encodeURI0(s, URI_UNSAFE);
 	}
+
 	/** Does the HTTP encoding for an URI query parameter.
 	 * For example, '/' is translated to '%2F'.
 	 * Both name and value must be encoded separately. Example,
@@ -131,10 +131,10 @@ public class Encodes {
 	 * @see #addToQueryString(StringBuffer,String,Object)
 	 * @see #encodeURI
 	 */
-	public static final String encodeURIComponent(String s)
-	throws UnsupportedEncodingException {
+	public static final String encodeURIComponent(String s) throws UnsupportedEncodingException {
 		return encodeURI0(s, URI_COMP_UNSAFE);
 	}
+
 	/**
 	/** Appends a map of parameters (name=value) to a query string.
 	 * It returns the query string preceding with '?' if any parameter exists,
@@ -150,17 +150,16 @@ public class Encodes {
 	 * @param params a map of parameters; format: (String, Object) or
 	 * (String, Object[]); null is OK
 	 */
-	public static final StringBuffer
-	addToQueryString(StringBuffer sb, Map params)
-	throws UnsupportedEncodingException {
+	public static final StringBuffer addToQueryString(StringBuffer sb, Map params) throws UnsupportedEncodingException {
 		if (params != null) {
 			for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				addToQueryString(sb, (String)me.getKey(), me.getValue());
+				final Map.Entry me = (Map.Entry) it.next();
+				addToQueryString(sb, (String) me.getKey(), me.getValue());
 			}
 		}
 		return sb;
 	}
+
 	/** Appends a parameter (name=value) to a query string.
 	 * This method automatically detects whether other query is already
 	 * appended. If so, &amp; is used instead of ?.
@@ -174,11 +173,10 @@ public class Encodes {
 	 * If it is an array of objects, multiple pairs of name=value[j] will
 	 * be appended.
 	 */
-	public static final StringBuffer
-	addToQueryString(StringBuffer sb, String name, Object value)
-	throws UnsupportedEncodingException {
+	public static final StringBuffer addToQueryString(StringBuffer sb, String name, Object value)
+			throws UnsupportedEncodingException {
 		if (value instanceof Object[]) {
-			final Object[] vals = (Object[])value;
+			final Object[] vals = (Object[]) value;
 			if (vals.length == 0) {
 				value = null; //only append name
 			} else {
@@ -188,10 +186,10 @@ public class Encodes {
 			}
 		}
 
-		sb.append(next(sb, '?', 0) >= sb.length() ? '?': '&');
+		sb.append(next(sb, '?', 0) >= sb.length() ? '?' : '&');
 		sb.append(encodeURIComponent(name)).append('=');
-			//NOTE: jetty with jboss3.0.6 ignore parameters without '=',
-			//so we always append '=' even value is null
+		//NOTE: jetty with jboss3.0.6 ignore parameters without '=',
+		//so we always append '=' even value is null
 		if (value != null)
 			sb.append(encodeURIComponent(Objects.toString(value)));
 
@@ -225,51 +223,50 @@ public class Encodes {
 	 * @return The new or result query string with your name/value.
 	 * @see #addToQueryString
 	 */
-	public static final
-	String setToQueryString(String str, String name, Object value)
-	throws UnsupportedEncodingException {
+	public static final String setToQueryString(String str, String name, Object value)
+			throws UnsupportedEncodingException {
 		final StringBuffer sb = new StringBuffer();
 		if (str != null)
 			sb.append(str);
 		return setToQueryString(sb, name, value).toString();
 	}
+
 	/**
 	 * Sets the parameter (name=value) to a query string.
 	 * If the name already exists in the query string, it will be
 	 * removed first.
 	 * @see #addToQueryString
 	 */
-	public static final StringBuffer
-	setToQueryString(StringBuffer sb, String name, Object value)
-	throws UnsupportedEncodingException {
+	public static final StringBuffer setToQueryString(StringBuffer sb, String name, Object value)
+			throws UnsupportedEncodingException {
 		removeFromQueryString(sb, name);
 		return addToQueryString(sb, name, value);
 	}
+
 	/**
 	 * Sets a map of parameters (name=value) to a query string.
 	 * If the name already exists in the query string, it will be removed first.
 	 * @see #addToQueryString
 	 */
-	public static final String setToQueryString(String str, Map params)
-	throws UnsupportedEncodingException {
+	public static final String setToQueryString(String str, Map params) throws UnsupportedEncodingException {
 		return setToQueryString(new StringBuffer(str), params).toString();
 	}
+
 	/**
 	 * Sets a map of parameters (name=value) to a query string.
 	 * If the name already exists in the query string, it will be removed first.
 	 * @see #addToQueryString
 	 */
-	public static final StringBuffer 
-	setToQueryString(StringBuffer sb, Map params)
-	throws UnsupportedEncodingException {
+	public static final StringBuffer setToQueryString(StringBuffer sb, Map params) throws UnsupportedEncodingException {
 		if (params != null) {
 			for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				setToQueryString(sb, (String)me.getKey(), me.getValue());
+				final Map.Entry me = (Map.Entry) it.next();
+				setToQueryString(sb, (String) me.getKey(), me.getValue());
 			}
 		}
 		return sb;
 	}
+
 	/** Tests whether a parameter exists in the query string.
 	 */
 	public static final boolean containsQuery(String str, String name) {
@@ -287,6 +284,7 @@ public class Encodes {
 		cc = str.charAt(j);
 		return cc == '=' || cc == '&';
 	}
+
 	/** Remove all name/value pairs of the specified name from a string.
 	 *
 	 * <p>The query string might contain servlet path and other parts.
@@ -295,9 +293,7 @@ public class Encodes {
 	 * without query's name/value pairs.
 	 * @see #addToQueryString
 	 */
-	public static final
-	String removeFromQueryString(String str, String name)
-	throws UnsupportedEncodingException {
+	public static final String removeFromQueryString(String str, String name) throws UnsupportedEncodingException {
 		if (str == null)
 			return null;
 
@@ -307,14 +303,14 @@ public class Encodes {
 
 		final StringBuffer sb = new StringBuffer(str);
 		removeFromQueryString(sb, name);
-		return sb.length() == str.length() ? str: sb.toString();
+		return sb.length() == str.length() ? str : sb.toString();
 	}
+
 	/** Remove all name/value pairs of the specified name from a string.
 	 * @see #addToQueryString
 	 */
-	public static final StringBuffer
-	removeFromQueryString(StringBuffer sb, String name)
-	throws UnsupportedEncodingException {
+	public static final StringBuffer removeFromQueryString(StringBuffer sb, String name)
+			throws UnsupportedEncodingException {
 		name = encodeURIComponent(name);
 		int j = sb.indexOf("?");
 		if (j < 0)
@@ -397,24 +393,24 @@ public class Encodes {
 	 * @see org.zkoss.web.servlet.Servlets#locate
 	 * @see org.zkoss.web.servlet.Servlets#generateURI
 	 */
-	public static final String encodeURL(ServletContext ctx,
-	ServletRequest request, ServletResponse response, String uri)
-	throws ServletException {
+	public static final String encodeURL(ServletContext ctx, ServletRequest request, ServletResponse response,
+			String uri) throws ServletException {
 		try {
 			return urlEncoder().encodeURL(ctx, request, response, uri, _urlenc0);
 		} catch (Exception ex) {
 			log.error("", ex);
-			throw new ServletException("Unable to encode "+uri, ex);
+			throw new ServletException("Unable to encode " + uri, ex);
 		}
 	}
+
 	private static URLEncoder urlEncoder() {
 		if (_urlenc == null) {
 			final String cls = Library.getProperty("org.zkoss.web.servlet.http.URLEncoder");
 			if (cls != null && cls.length() > 0) {
 				try {
-					_urlenc = (URLEncoder)Classes.newInstanceByThread(cls);
+					_urlenc = (URLEncoder) Classes.newInstanceByThread(cls);
 				} catch (Throwable ex) {
-					throw SystemException.Aide.wrap(ex, "Unable to instantiate "+cls);
+					throw SystemException.Aide.wrap(ex, "Unable to instantiate " + cls);
 				}
 			} else {
 				_urlenc = _urlenc0;
@@ -422,25 +418,24 @@ public class Encodes {
 		}
 		return _urlenc;
 	}
+
 	private static URLEncoder _urlenc;
 	private static final URLEncoder _urlenc0 = new URLEncoder() {
-		public String encodeURL(ServletContext ctx,
-		ServletRequest request, ServletResponse response, String uri,
-		URLEncoder defaultEncoder)
-		throws Exception {
+		public String encodeURL(ServletContext ctx, ServletRequest request, ServletResponse response, String uri,
+				URLEncoder defaultEncoder) throws Exception {
 			return encodeURL0(ctx, request, response, uri);
 		}
 	};
 
-	private static final String encodeURL0(ServletContext ctx,
-	ServletRequest request, ServletResponse response, String uri)
-	throws Exception {
+	private static final String encodeURL0(ServletContext ctx, ServletRequest request, ServletResponse response,
+			String uri) throws Exception {
 		if (uri == null || uri.length() == 0)
 			return uri; //keep as it is
 
 		boolean ctxpathSpecified = false;
 		if (uri.charAt(0) != '/') { //NOT relative to context path
-			if (Servlets.isUniversalURL(uri)) return uri; //nothing to do
+			if (Servlets.isUniversalURL(uri))
+				return uri; //nothing to do
 
 			if (uri.charAt(0) == '~') { //foreign context
 				final String ctxroot;
@@ -452,22 +447,20 @@ public class Encodes {
 				} else {
 					uri = '/' + uri.substring(1);
 					final int j = uri.indexOf('/', 1);
-					ctxroot = j >= 0 ? uri.substring(0, j): uri;
+					ctxroot = j >= 0 ? uri.substring(0, j) : uri;
 				}
 
-				final ExtendletContext extctx =
-					Servlets.getExtendletContext(ctx, ctxroot.substring(1));
+				final ExtendletContext extctx = Servlets.getExtendletContext(ctx, ctxroot.substring(1));
 				if (extctx != null) {
 					final int j = uri.indexOf('/', 1);
-					return extctx.encodeURL(request, response,
-						j >= 0 ? uri.substring(j): "/");
+					return extctx.encodeURL(request, response, j >= 0 ? uri.substring(j) : "/");
 				}
 
 				final ServletContext newctx = ctx.getContext(ctxroot);
 				if (newctx != null) {
 					ctx = newctx;
 				} else if (log.isDebugEnabled()) {
-					log.debug("Context not found: "+ctxroot);
+					log.debug("Context not found: " + ctxroot);
 				}
 				ctxpathSpecified = true;
 			} else if (Https.isIncluded(request) || Https.isForwarded(request)) {
@@ -490,11 +483,10 @@ public class Encodes {
 
 		//prefix context path
 		if (!ctxpathSpecified && uri.charAt(0) == '/'
-				//ZK-3131: do not prefix context path to relative protocol urls that starts with //
-				&& !(uri.length() > 1 && uri.charAt(1) == '/')
-				&& (request instanceof HttpServletRequest)) {
+		//ZK-3131: do not prefix context path to relative protocol urls that starts with //
+				&& !(uri.length() > 1 && uri.charAt(1) == '/') && (request instanceof HttpServletRequest)) {
 			//Work around with a bug when we wrap Pluto's RenderRequest (1.0.1)
-			String ctxpath = ((HttpServletRequest)request).getContextPath();
+			String ctxpath = ((HttpServletRequest) request).getContextPath();
 			if (ctxpath.length() > 0 && ctxpath.charAt(0) != '/')
 				ctxpath = '/' + ctxpath;
 
@@ -514,7 +506,7 @@ public class Encodes {
 		}
 		//encode
 		if (response instanceof HttpServletResponse)
-			uri = ((HttpServletResponse)response).encodeURL(uri);
+			uri = ((HttpServletResponse) response).encodeURL(uri);
 		return uri;
 	}
 
@@ -550,9 +542,7 @@ public class Encodes {
 		 * @param defaultEncoder the default encoder (never null).
 		 * @since 5.0.0
 		 */
-		public String encodeURL(ServletContext ctx,
-		ServletRequest request, ServletResponse response, String url,
-		URLEncoder defaultEncoder)
-		throws Exception;
+		public String encodeURL(ServletContext ctx, ServletRequest request, ServletResponse response, String url,
+				URLEncoder defaultEncoder) throws Exception;
 	}
 }

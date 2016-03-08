@@ -12,15 +12,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.StubEvent;
-import org.zkoss.zk.ui.sys.EventListenerMap;
+import org.zkoss.zk.ui.ext.Scope;
 
 /**
  * Represents a tree of {@link StubComponent} that are merged into
@@ -48,39 +47,37 @@ public class StubsComponent extends StubComponent {
 
 		final List<String> uuids = new LinkedList<String>();
 		final List<String[]> idmap = new LinkedList<String[]>();
-		final List<Object[]> evtmap = bListener ? new LinkedList<Object[]>(): null;
+		final List<Object[]> evtmap = bListener ? new LinkedList<Object[]>() : null;
 		final Page page = getPage();
 
-		mapChildren(page != null ? (DesktopCtrl)page.getDesktop(): null,
-			uuids, idmap, evtmap, replaced);
+		mapChildren(page != null ? (DesktopCtrl) page.getDesktop() : null, uuids, idmap, evtmap, replaced);
 
 		_uuids = uuids.toArray(new String[uuids.size()]);
-		_idmap = !idmap.isEmpty() ?
-			idmap.toArray(new String[idmap.size()][]): null;
-		_evtmap = evtmap != null && !evtmap.isEmpty() ?
-			evtmap.toArray(new Object[evtmap.size()][]): null;
+		_idmap = !idmap.isEmpty() ? idmap.toArray(new String[idmap.size()][]) : null;
+		_evtmap = evtmap != null && !evtmap.isEmpty() ? evtmap.toArray(new Object[evtmap.size()][]) : null;
 	}
-	private void mapChildren(DesktopCtrl desktopCtrl, List<String> uuids,
-	List<String[]> idmap, List<Object[]> evtmap, Component comp) {
+
+	private void mapChildren(DesktopCtrl desktopCtrl, List<String> uuids, List<String[]> idmap, List<Object[]> evtmap,
+			Component comp) {
 		for (Component p = comp.getFirstChild(); p != null; p = p.getNextSibling()) {
 			if (p instanceof StubsComponent) {
-				final String[] kiduuids = ((StubsComponent)p)._uuids;
+				final String[] kiduuids = ((StubsComponent) p)._uuids;
 				if (kiduuids != null)
-					for (String uuid: kiduuids) {
+					for (String uuid : kiduuids) {
 						uuids.add(uuid);
 						if (desktopCtrl != null)
 							desktopCtrl.mapComponent(uuid, this);
 					}
 
-				final String[][] kidids = ((StubsComponent)p)._idmap;
+				final String[][] kidids = ((StubsComponent) p)._idmap;
 				if (kidids != null)
-					for (String[] idinf: kidids)
+					for (String[] idinf : kidids)
 						idmap.add(idinf);
 
 				if (evtmap != null) {
-					final Object[][] kidevts = ((StubsComponent)p)._evtmap;
+					final Object[][] kidevts = ((StubsComponent) p)._evtmap;
 					if (kidevts != null)
-						for (Object[] evtinf: kidevts)
+						for (Object[] evtinf : kidevts)
 							evtmap.add(evtinf);
 				}
 			}
@@ -92,11 +89,11 @@ public class StubsComponent extends StubComponent {
 
 			final String id = p.getId();
 			if (id != null && id.length() > 0)
-				idmap.add(new String[] {uuid, id});
+				idmap.add(new String[] { uuid, id });
 			if (evtmap != null) {
-				EventListenerMap em = ((ComponentCtrl)p).getEventListenerMap();
+				EventListenerMap em = ((ComponentCtrl) p).getEventListenerMap();
 				if (em != null)
-					evtmap.add(new Object[] {uuid, em});
+					evtmap.add(new Object[] { uuid, em });
 			}
 
 			mapChildren(desktopCtrl, uuids, idmap, evtmap, p); //recursive
@@ -106,41 +103,39 @@ public class StubsComponent extends StubComponent {
 	//--super--//
 	public String getId(String uuid) {
 		if (_idmap != null)
-			for (String[] idinf: _idmap)
+			for (String[] idinf : _idmap)
 				if (uuid.equals(idinf[0]))
 					return idinf[1];
 		return super.getId(uuid);
 	}
-	
+
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 
 		if (newpage != null) {
-			final DesktopCtrl desktopCtrl = (DesktopCtrl)newpage.getDesktop();
-			for (String uuid: _uuids)
+			final DesktopCtrl desktopCtrl = (DesktopCtrl) newpage.getDesktop();
+			for (String uuid : _uuids)
 				desktopCtrl.mapComponent(uuid, this);
 		}
 	}
-	
+
 	public void onPageDetached(Page page) {
 		super.onPageDetached(page);
 
-		final DesktopCtrl desktopCtrl = (DesktopCtrl)page.getDesktop();
-		for (String uuid: _uuids)
+		final DesktopCtrl desktopCtrl = (DesktopCtrl) page.getDesktop();
+		for (String uuid : _uuids)
 			desktopCtrl.mapComponent(uuid, null);
 	}
-	
+
 	public void service(Event event, Scope scope) throws Exception {
-		final StubEvent stubevt =
-			event instanceof StubEvent ? (StubEvent)event: null;
-		final String uuid = stubevt != null ? stubevt.getUuid(): null;
+		final StubEvent stubevt = event instanceof StubEvent ? (StubEvent) event : null;
+		final String uuid = stubevt != null ? stubevt.getUuid() : null;
 		if (uuid == null || uuid.equals(getUuid())) {
 			super.service(event, scope);
 		} else if (_evtmap != null) {
-			for (Object[] evtinf: _evtmap) {
-				if (uuid.equals(evtinf[0])) {//matched
-					((EventListenerMap)evtinf[1]).service(
-						event, scope, this, stubevt.getCommand());
+			for (Object[] evtinf : _evtmap) {
+				if (uuid.equals(evtinf[0])) { //matched
+					((EventListenerMap) evtinf[1]).service(event, scope, this, stubevt.getCommand());
 					break; //done
 				}
 			}
@@ -153,18 +148,21 @@ public class StubsComponent extends StubComponent {
 	public String getWidgetClass() {
 		return "#stubs";
 	}
+
 	/** {@link StubsComponent} represents a collection of {@link StubComponent},
 	 * so it does not allow any child.
 	 */
 	protected boolean isChildable() {
 		return false;
 	}
+
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(super.toString());
 		if (_uuids != null) {
 			sb.append('(');
 			for (int j = 0; j < _uuids.length; ++j) {
-				if (j != 0) sb.append(", ");
+				if (j != 0)
+					sb.append(", ");
 				sb.append(_uuids[j]);
 			}
 			sb.append(')');
@@ -172,7 +170,8 @@ public class StubsComponent extends StubComponent {
 		if (_idmap != null) {
 			sb.append('(');
 			for (int j = 0; j < _idmap.length; ++j) {
-				if (j != 0) sb.append(", ");
+				if (j != 0)
+					sb.append(", ");
 				sb.append(_idmap[j][0]).append('=').append(_idmap[j][1]);
 			}
 			sb.append(')');

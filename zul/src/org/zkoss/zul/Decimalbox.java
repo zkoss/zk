@@ -40,6 +40,7 @@ public class Decimalbox extends NumberInputElement {
 	public Decimalbox() {
 		setCols(11);
 	}
+
 	public Decimalbox(BigDecimal value) throws WrongValueException {
 		this();
 		setValue(value);
@@ -50,32 +51,37 @@ public class Decimalbox extends NumberInputElement {
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public BigDecimal getValue() throws WrongValueException {
-		return (BigDecimal)getTargetValue();
+		return (BigDecimal) getTargetValue();
 	}
+
 	/** Returns the value in double. If null, zero is returned.
 	 */
 	public double doubleValue() throws WrongValueException {
 		final BigDecimal val = getValue();
-		return val != null ? val.doubleValue(): 0.0;
+		return val != null ? val.doubleValue() : 0.0;
 	}
+
 	/** Returns the value in integer. If null, zero is returned.
 	 */
 	public int intValue() throws WrongValueException {
 		final BigDecimal val = getValue();
-		return val != null ? val.intValue(): 0;
+		return val != null ? val.intValue() : 0;
 	}
+
 	/** Returns the value in long. If null, zero is returned.
 	 */
 	public long longValue() throws WrongValueException {
 		final BigDecimal val = getValue();
-		return val != null ? val.longValue(): 0;
+		return val != null ? val.longValue() : 0;
 	}
+
 	/** Returns the value in short. If null, zero is returned.
 	 */
 	public short shortValue() throws WrongValueException {
 		final BigDecimal val = getValue();
-		return val != null ? val.shortValue(): 0;
+		return val != null ? val.shortValue() : 0;
 	}
+
 	/** Sets the value (in BigDecimal).
 	 * @exception WrongValueException if value is wrong
 	 */
@@ -83,7 +89,8 @@ public class Decimalbox extends NumberInputElement {
 		validate(value);
 		setRawValue(value);
 	}
-	public void setValue(String str){
+
+	public void setValue(String str) {
 		this.setValue(new BigDecimal(str));
 	}
 
@@ -96,6 +103,7 @@ public class Decimalbox extends NumberInputElement {
 	public int getScale() {
 		return _scale;
 	}
+
 	/** Sets the scale for the decimal number storing in this component,
 	 * or {@link #AUTO} if the scale is decided automatically (based on
 	 * what user has entered).
@@ -108,8 +116,8 @@ public class Decimalbox extends NumberInputElement {
 		if (_scale != scale) {
 			_scale = scale;
 			smartUpdate("scale", scale);
-			if(scale != AUTO) {
-				BigDecimal v = (BigDecimal)_value;
+			if (scale != AUTO) {
+				BigDecimal v = (BigDecimal) _value;
 				if (v != null) {
 					setValue(v);
 				}
@@ -121,22 +129,26 @@ public class Decimalbox extends NumberInputElement {
 	public String getZclass() {
 		return _zclass == null ? "z-decimalbox" : _zclass;
 	}
+
 	protected Object marshall(Object value) {
-		return value != null ? ((BigDecimal)value).toPlainString() : value;
+		return value != null ? ((BigDecimal) value).toPlainString() : value;
 	}
+
 	protected Object unmarshall(Object value) {
-		return value != null ? new BigDecimal((String)value) : value;
+		return value != null ? new BigDecimal((String) value) : value;
 	}
+
 	public void setRawValue(Object value) {
 		//bug #3089502: setScale in decimalbox not working
 		if (_scale != AUTO && value != null) {
-			value = ((BigDecimal)value).setScale(_scale, getRoundingMode());
+			value = ((BigDecimal) value).setScale(_scale, getRoundingMode());
 		}
 		super.setRawValue(value);
 	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
-		final String val = (String)vals[0];
+		final String val = (String) vals[0];
 		if (val == null || val.length() == 0)
 			return null;
 
@@ -145,34 +157,32 @@ public class Decimalbox extends NumberInputElement {
 			if (_scale != AUTO)
 				v = v.setScale(_scale, getRoundingMode());
 
-			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
+			int divscale = vals[1] != null ? ((Integer) vals[1]).intValue() : 0;
 			if (divscale > 0) {
 				final BigDecimal ten = new BigDecimal(10);
 				do {
-					v = v.divide(ten, _scale == AUTO ? v.scale()+1: _scale,
-						getRoundingMode());
+					v = v.divide(ten, _scale == AUTO ? v.scale() + 1 : _scale, getRoundingMode());
 				} while (--divscale > 0);
 			}
 			return v;
 		} catch (NumberFormatException ex) {
-			throw showCustomError(
-				new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
+			throw showCustomError(new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
+
 	protected String coerceToString(Object value) {
 		try {
-			return value != null && getFormat() == null ?
-				value instanceof BigDecimal ?
-					BigDecimals.toLocaleString((BigDecimal)value, getDefaultLocale()):
-					value.toString()/*just in case*/: formatNumber(value, null);
+			return value != null && getFormat() == null ? value instanceof BigDecimal
+					? BigDecimals.toLocaleString((BigDecimal) value, getDefaultLocale()) : value.toString()
+					/*just in case*/ : formatNumber(value, null);
 		} catch (ArithmeticException ex) {
 			throw new ArithmeticWrongValueException(this, ex.getMessage(), ex, value);
 		}
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		if (_scale != AUTO)
 			renderer.render("scale", _scale);
 	}

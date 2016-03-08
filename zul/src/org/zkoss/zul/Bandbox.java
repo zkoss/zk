@@ -16,11 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 
 /**
  * A band box. A bank box consists of an input box ({@link Textbox} and
@@ -51,15 +52,16 @@ public class Bandbox extends Textbox {
 
 	public Bandbox() {
 	}
+
 	public Bandbox(String value) throws WrongValueException {
 		this();
 		setValue(value);
 	}
-	
+
 	/** Returns the dropdown window belonging to this band box.
 	 */
 	public Bandpopup getDropdown() {
-		return (Bandpopup)getFirstChild();
+		return (Bandpopup) getFirstChild();
 	}
 
 	/** Returns whether to automatically drop the list if users is changing
@@ -69,6 +71,7 @@ public class Bandbox extends Textbox {
 	public boolean isAutodrop() {
 		return _autodrop;
 	}
+
 	/** Sets whether to automatically drop the list if users is changing
 	 * this text box.
 	 */
@@ -85,6 +88,7 @@ public class Bandbox extends Textbox {
 	public boolean isButtonVisible() {
 		return _btnVisible;
 	}
+
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 */
 	public void setButtonVisible(boolean visible) {
@@ -102,6 +106,7 @@ public class Bandbox extends Textbox {
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Drops down or closes the child.
 	 * only works while visible
 	 * @since 3.0.1
@@ -112,11 +117,14 @@ public class Bandbox extends Textbox {
 		if (_open != open) {
 			_open = open;
 			if (isVisible()) {
-				if (open) open();
-				else close();
+				if (open)
+					open();
+				else
+					close();
 			}
 		}
 	}
+
 	/** Drops down the child.
 	 * The same as setOpen(true).
 	 *
@@ -125,6 +133,7 @@ public class Bandbox extends Textbox {
 	public void open() {
 		response("open", new AuInvoke(this, "setOpen", true), -1000); //don't use smartUpdate
 	}
+
 	/** Closes the child if it was dropped down.
 	 * The same as setOpen(false).
 	 *
@@ -147,21 +156,22 @@ public class Bandbox extends Textbox {
 	 */
 	public void setRows(int rows) {
 		if (rows != 1)
-			throw new UnsupportedOperationException("Bandbox doesn't support multiple rows, "+rows);
+			throw new UnsupportedOperationException("Bandbox doesn't support multiple rows, " + rows);
 	}
 
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-bandbox" : _zclass;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "autodrop", _autodrop);
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
 	}
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link Textbox#service},
@@ -181,11 +191,12 @@ public class Bandbox extends Textbox {
 	//-- Component --//
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Bandpopup))
-			throw new UiException("Unsupported child for Bandbox: "+newChild);
+			throw new UiException("Unsupported child for Bandbox: " + newChild);
 		if (getFirstChild() != null)
-			throw new UiException("At most one bandpopup is allowed, "+this);
+			throw new UiException("At most one bandpopup is allowed, " + this);
 		super.beforeChildAdded(newChild, refChild);
 	}
+
 	/** Childable. */
 	protected boolean isChildable() {
 		return true;

@@ -42,6 +42,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.image.AImage;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
@@ -69,18 +70,19 @@ import org.zkoss.zk.ui.util.Configuration;
 public class AuDropUploader implements AuExtension {
 	private static final Logger log = LoggerFactory.getLogger(AuDropUploader.class);
 
-	public AuDropUploader() {}
-		
+	public AuDropUploader() {
+	}
+
 	public void init(DHtmlUpdateServlet servlet) {
 	}
-		
-	public void destroy() {}
+
+	public void destroy() {
+	}
 
 	/** Processes a file uploaded from the client.
 	 */
-	public void service(
-	HttpServletRequest request, HttpServletResponse response, String pathInfo)
-	throws ServletException, IOException {		
+	public void service(HttpServletRequest request, HttpServletResponse response, String pathInfo)
+			throws ServletException, IOException {
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
 			response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
@@ -92,7 +94,7 @@ public class AuDropUploader implements AuExtension {
 		Desktop desktop = null;
 		try {
 			uuid = request.getParameter("uuid");
-			
+
 			if (uuid == null || uuid.length() == 0) {
 				alert = "uuid is required!";
 			} else {
@@ -102,10 +104,9 @@ public class AuDropUploader implements AuExtension {
 				if (dtid == null || dtid.length() == 0) {
 					alert = "dtid is required!";
 				} else {
-					desktop = ((WebAppCtrl)sess.getWebApp())
-						.getDesktopCache(sess).getDesktop(dtid);
+					desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
 					final Map<String, Object> params = parseRequest(request, desktop, "");
-					nextURI = (String)params.get("nextURI");
+					nextURI = (String) params.get("nextURI");
 					// Bug 3054784
 					params.put("native", request.getParameter("native"));
 					processItems(desktop, params, attrs);
@@ -129,16 +130,16 @@ public class AuDropUploader implements AuExtension {
 				alert = handleError(ex);
 			}
 		}
-		
+
 		if (alert != null) {
 			if (desktop == null) {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
 		}
-		if (log.isTraceEnabled()) log.trace(Objects.toString(attrs));		
+		if (log.isTraceEnabled())
+			log.trace(Objects.toString(attrs));
 	}
-	
 
 	/** Handles the exception that was thrown when uploading files,
 	 * and returns the error message.
@@ -153,13 +154,13 @@ public class AuDropUploader implements AuExtension {
 	 * Then, specify it in web.xml as follows. 
 	 * (we change from processor0 to extension0 after ZK5.)
 	 * @see DHtmlUpdateServlet
-<code><pre>&lt;servlet&gt;
-  &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;
-  &lt;init-param&gt;
-    &lt;param-name&gt;extension0&lt;/param-name&gt;
-    &lt;param-value&gt;/upload=com.my.MyUploader&lt;/param-value&gt;
-  &lt;/init-param&gt;
-...</pre></code>
+	<code><pre>&lt;servlet&gt;
+	&lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;
+	&lt;init-param&gt;
+	&lt;param-name&gt;extension0&lt;/param-name&gt;
+	&lt;param-value&gt;/upload=com.my.MyUploader&lt;/param-value&gt;
+	&lt;/init-param&gt;
+	...</pre></code>
 	 * 
 	 * @param ex the exception.
 	 * Typical exceptions include org.apache.commons.fileupload .FileUploadBase.SizeLimitExceededException
@@ -173,40 +174,37 @@ public class AuDropUploader implements AuExtension {
 	/** Process fileitems named file0, file1 and so on.
 	 */
 	@SuppressWarnings("unchecked")
-	private static final
-	void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
-	throws IOException {
+	private static final void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
+			throws IOException {
 		String uuid = attrs.get("uuid");
 		List<Media> meds = (List<Media>) desktop.getAttribute(uuid);
-		if (meds == null ){
+		if (meds == null) {
 			meds = new LinkedList<Media>();
 			desktop.setAttribute(uuid, meds);
 		}
-		
+
 		final boolean alwaysNative = "true".equals(params.get("native"));
 		final Object fis = params.get("file");
-		
+
 		if (fis instanceof FileItem) {
-			meds.add(processItem(desktop, (FileItem)fis, alwaysNative,
+			meds.add(processItem(desktop, (FileItem) fis, alwaysNative,
 					(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 		} else if (fis != null) {
-			for (Iterator it = ((List)fis).iterator(); it.hasNext();) {
-				meds.add(processItem(desktop, (FileItem)it.next(), alwaysNative,
+			for (Iterator it = ((List) fis).iterator(); it.hasNext();) {
+				meds.add(processItem(desktop, (FileItem) it.next(), alwaysNative,
 						(org.zkoss.zk.ui.sys.DiskFileItemFactory) params.get("diskFileItemFactory")));
 			}
 		}
 	}
-	
+
 	/** Process the specified fileitem.
 	 */
-	private static final
-	Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative,
-			org.zkoss.zk.ui.sys.DiskFileItemFactory factory)
-	throws IOException {
+	private static final Media processItem(Desktop desktop, FileItem fi, boolean alwaysNative,
+			org.zkoss.zk.ui.sys.DiskFileItemFactory factory) throws IOException {
 		String name = getBaseName(fi);
 		if (name != null) {
-		//Not sure whether a name might contain ;jsessionid or similar
-		//But we handle this case: x.y;z
+			//Not sure whether a name might contain ;jsessionid or similar
+			//But we handle this case: x.y;z
 			final int j = name.lastIndexOf(';');
 			if (j > 0) {
 				final int k = name.lastIndexOf('.');
@@ -216,7 +214,7 @@ public class AuDropUploader implements AuExtension {
 		}
 
 		String ctype = fi.getContentType(),
-			ctypelc = ctype != null ? ctype.toLowerCase(java.util.Locale.ENGLISH): null;
+				ctypelc = ctype != null ? ctype.toLowerCase(java.util.Locale.ENGLISH) : null;
 		if (name != null && "application/octet-stream".equals(ctypelc)) { //Bug 1896291: IE limit
 			final int j = name.lastIndexOf('.');
 			if (j >= 0) {
@@ -234,18 +232,18 @@ public class AuDropUploader implements AuExtension {
 		if (!alwaysNative && ctypelc != null) {
 			if (ctypelc.startsWith("image/")) {
 				try {
-					return fi.isInMemory() ? new AImage(name, fi.get()):
-						new AImage(name, fi.getInputStream());
-							//note: AImage converts stream to binary array
+					return fi.isInMemory() ? new AImage(name, fi.get()) : new AImage(name, fi.getInputStream());
+					//note: AImage converts stream to binary array
 				} catch (Throwable ex) {
-					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled())
+						log.debug("Unknown file format: " + ctype);
 				}
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
-					return fi.isInMemory() ? new AAudio(name, fi.get()):
-						new StreamAudio(name, fi, ctypelc);
+					return fi.isInMemory() ? new AAudio(name, fi.get()) : new StreamAudio(name, fi, ctypelc);
 				} catch (Throwable ex) {
-					if (log.isDebugEnabled()) log.debug("Unknown file format: "+ctype);
+					if (log.isDebugEnabled())
+						log.debug("Unknown file format: " + ctype);
 				}
 			} else if (ctypelc.startsWith("text/")) {
 				String charset = getCharset(ctype);
@@ -254,22 +252,18 @@ public class AuDropUploader implements AuExtension {
 					final CharsetFinder chfd = conf.getUploadCharsetFinder();
 					if (chfd != null)
 						charset = chfd.getCharset(ctype,
-							fi.isInMemory() ?
-								new ByteArrayInputStream(fi.get()):
-								fi.getInputStream());
+								fi.isInMemory() ? new ByteArrayInputStream(fi.get()) : fi.getInputStream());
 					if (charset == null)
 						charset = conf.getUploadCharset();
 				}
-				return fi.isInMemory() ?
-					new AMedia(name, null, ctype, fi.getString(charset)):
-					new ReaderMedia(name, null, ctype, fi, charset);
+				return fi.isInMemory() ? new AMedia(name, null, ctype, fi.getString(charset))
+						: new ReaderMedia(name, null, ctype, fi, charset);
 			}
 		}
 
-		return fi.isInMemory() ?
-			new AMedia(name, null, ctype, fi.get()):
-			new StreamMedia(name, null, ctype, fi);
+		return fi.isInMemory() ? new AMedia(name, null, ctype, fi.get()) : new StreamMedia(name, null, ctype, fi);
 	}
+
 	private static String getCharset(String ctype) {
 		final String ctypelc = ctype.toLowerCase(java.util.Locale.ENGLISH);
 		for (int j = 0; (j = ctypelc.indexOf("charset", j)) >= 0; j += 7) {
@@ -278,8 +272,7 @@ public class AuDropUploader implements AuExtension {
 				k = Strings.skipWhitespaces(ctype, j + 7);
 				if (k <= ctype.length() && ctype.charAt(k) == '=') {
 					j = ctype.indexOf(';', ++k);
-					String charset =
-						(j >= 0 ? ctype.substring(k, j): ctype.substring(k)).trim();
+					String charset = (j >= 0 ? ctype.substring(k, j) : ctype.substring(k)).trim();
 					if (charset.length() > 0)
 						return charset;
 					break; //use default
@@ -292,9 +285,8 @@ public class AuDropUploader implements AuExtension {
 	/** Parses the multipart request into a map of
 	 * (String nm, FileItem/String/List(FileItem/String)).
 	 */
-	private static Map<String, Object> parseRequest(HttpServletRequest request,
-	Desktop desktop, String key)
-	throws FileUploadException {
+	private static Map<String, Object> parseRequest(HttpServletRequest request, Desktop desktop, String key)
+			throws FileUploadException {
 		final Map<String, Object> params = new HashMap<String, Object>();
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		int thrs = conf.getFileSizeThreshold();
@@ -326,17 +318,17 @@ public class AuDropUploader implements AuExtension {
 		final ItemFactory fty = new ItemFactory(sizeThreadHold, repository, dfiFactory);
 		final ServletFileUpload sfu = new ServletFileUpload(fty);
 
-				
 		int maxsz = conf.getMaxUploadSize();
 		try {
 			maxsz = Integer.parseInt(request.getParameter("maxsize"));
-		} catch (NumberFormatException e) {}
-		
-		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);
+		} catch (NumberFormatException e) {
+		}
+
+		sfu.setSizeMax(maxsz >= 0 ? 1024L * maxsz : -1);
 
 		//XXX need handle maxsize limit at server side?
 		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {
-			final FileItem fi = (FileItem)it.next();
+			final FileItem fi = (FileItem) it.next();
 			final String nm = fi.getFieldName();
 			final Object val;
 			if (fi.isFormField()) {
@@ -349,7 +341,7 @@ public class AuDropUploader implements AuExtension {
 			if (old != null) {
 				final List<Object> vals;
 				if (old instanceof List) {
-					params.put(nm, vals = cast((List)old));
+					params.put(nm, vals = cast((List) old));
 				} else {
 					params.put(nm, vals = new LinkedList<Object>());
 					vals.add(old);
@@ -359,6 +351,7 @@ public class AuDropUploader implements AuExtension {
 		}
 		return params;
 	}
+
 	/** Returns the base name for FileItem (i.e., removing path).
 	 */
 	private static String getBaseName(FileItem fi) {
@@ -366,7 +359,7 @@ public class AuDropUploader implements AuExtension {
 		if (name == null)
 			return null;
 
-		final String[] seps = {"/", "\\", "%5c", "%5C", "%2f", "%2F"};
+		final String[] seps = { "/", "\\", "%5c", "%5C", "%2f", "%2F" };
 		for (int j = seps.length; --j >= 0;) {
 			final int k = name.lastIndexOf(seps[j]);
 			if (k >= 0)
@@ -379,75 +372,87 @@ public class AuDropUploader implements AuExtension {
 	 */
 	public static final boolean isMultipartContent(HttpServletRequest request) {
 		return "post".equals(request.getMethod().toLowerCase(java.util.Locale.ENGLISH))
-			&& FileUploadBase.isMultipartContent(new ServletRequestContext(request));
+				&& FileUploadBase.isMultipartContent(new ServletRequestContext(request));
 	}
 
 	private static class StreamMedia extends AMedia {
 		private final FileItem _fi;
+
 		public StreamMedia(String name, String format, String ctype, FileItem fi) {
 			super(name, format, ctype, DYNAMIC_STREAM);
 			_fi = fi;
 		}
+
 		public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
 			} catch (IOException ex) {
-				throw new UiException("Unable to read "+_fi, ex);
+				throw new UiException("Unable to read " + _fi, ex);
 			}
 		}
+
 		public boolean isBinary() {
 			return true;
 		}
+
 		public boolean inMemory() {
 			return false;
 		}
 	}
+
 	private static class ReaderMedia extends AMedia {
 		private final FileItem _fi;
 		private final String _charset;
-		public ReaderMedia(String name, String format, String ctype,
-		FileItem fi, String charset) {
+
+		public ReaderMedia(String name, String format, String ctype, FileItem fi, String charset) {
 			super(name, format, ctype, DYNAMIC_READER);
 			_fi = fi;
 			_charset = charset;
 		}
+
 		public java.io.Reader getReaderData() {
 			try {
-				return new java.io.InputStreamReader(
-					_fi.getInputStream(), _charset);
+				return new java.io.InputStreamReader(_fi.getInputStream(), _charset);
 			} catch (IOException ex) {
-				throw new UiException("Unable to read "+_fi, ex);
+				throw new UiException("Unable to read " + _fi, ex);
 			}
 		}
+
 		public boolean isBinary() {
 			return false;
 		}
+
 		public boolean inMemory() {
 			return false;
 		}
 	}
+
 	private static class StreamAudio extends AAudio {
 		private final FileItem _fi;
 		private String _format;
 		private String _ctype;
+
 		public StreamAudio(String name, FileItem fi, String ctype) throws IOException {
 			super(name, DYNAMIC_STREAM);
 			_fi = fi;
 			_ctype = ctype;
 		}
+
 		public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
 			} catch (IOException ex) {
-				throw new UiException("Unable to read "+_fi, ex);
+				throw new UiException("Unable to read " + _fi, ex);
 			}
 		}
-		public String getFormat(){
+
+		public String getFormat() {
 			if (_format == null) {
 				_format = ContentTypes.getFormat(getContentType());
 			}
 			return _format;
 		}
+
 		public String getContentType() {
 			return _ctype != null ? _ctype : _fi.getContentType();
 		}
@@ -460,40 +465,35 @@ public class AuDropUploader implements AuExtension {
 		private org.zkoss.zk.ui.sys.DiskFileItemFactory _factory;
 
 		@SuppressWarnings("unchecked")
-		/*package*/ ItemFactory(int sizeThreshold, File repository,
-				org.zkoss.zk.ui.sys.DiskFileItemFactory factory) {
+		/*package*/ ItemFactory(int sizeThreshold, File repository, org.zkoss.zk.ui.sys.DiskFileItemFactory factory) {
 			super(sizeThreshold, repository);
 
 			_factory = factory;
 		}
 
 		//-- FileItemFactory --//
-		public FileItem createItem(String fieldName, String contentType,
-				boolean isFormField, String fileName) {
+		public FileItem createItem(String fieldName, String contentType, boolean isFormField, String fileName) {
 			if (_factory != null)
-				return _factory.createItem(fieldName, contentType, isFormField,
-						fileName, getSizeThreshold(), getRepository());
-			return new ZkFileItem(fieldName, contentType, isFormField, fileName,
-					getSizeThreshold(), getRepository());
+				return _factory.createItem(fieldName, contentType, isFormField, fileName, getSizeThreshold(),
+						getRepository());
+			return new ZkFileItem(fieldName, contentType, isFormField, fileName, getSizeThreshold(), getRepository());
 		}
 
 		//-- helper classes --//
 		/** FileItem created by {@link ItemFactory}.
 		 */
 		/*package*/ class ZkFileItem extends DiskFileItem {
-			/*package*/ ZkFileItem(String fieldName, String contentType,
-			boolean isFormField, String fileName, int sizeThreshold,
-			File repository) {
-				super(fieldName, contentType, isFormField,
-					fileName, sizeThreshold, repository);
+			/*package*/ ZkFileItem(String fieldName, String contentType, boolean isFormField, String fileName,
+					int sizeThreshold, File repository) {
+				super(fieldName, contentType, isFormField, fileName, sizeThreshold, repository);
 			}
 
 			/** Returns the charset by parsing the content type.
 			 * If none is defined, UTF-8 is assumed.
 			 */
-		    public String getCharSet() {
+			public String getCharSet() {
 				final String charset = super.getCharSet();
-				return charset != null ? charset: "UTF-8";
+				return charset != null ? charset : "UTF-8";
 			}
 		}
 	}

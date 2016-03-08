@@ -32,11 +32,11 @@ public interface RowRendererExt {
 	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default row is created as follow.
-<pre><code>
-final Row row = new Row();
-row.applyProperties();
-return row;
-</code></pre>
+	<pre><code>
+	final Row row = new Row();
+	row.applyProperties();
+	return row;
+	</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Row#setParent}.
 	 *
@@ -44,6 +44,7 @@ return row;
 	 * if you want {@link Grid} to create it for you
 	 */
 	public Row newRow(Grid grid);
+
 	/** Create a component that will be attached to the <b>unloaded</b> row.
 	 * By unloaded row we mean the row that is not loaded with the data
 	 * retreived from the model. That is, {@link RowRenderer#render}
@@ -55,11 +56,11 @@ return row;
 	 * in {@link RowRenderer#render}.
 	 *
 	 * <p>If null is returned, the default cell is created as follows.
-<pre><code>
-final Label cell = new Label();
-cell.applyProperties();
-return cell;
-</code></pre>
+	<pre><code>
+	final Label cell = new Label();
+	cell.applyProperties();
+	return cell;
+	</code></pre>
 	 *
 	 * <p>Note: remember to invoke {@link Component#applyProperties} to
 	 * initialize the properties, defined in the component definition, properly,
@@ -90,6 +91,7 @@ return cell;
 	 * the first cell (of the passed row).
 	 */
 	public static final int DETACH_ON_RENDER = 0x0001;
+
 	/** Returns how a grid shall render the live data.
 	 *
 	 * <p>Note: if this interface is not implemented, {@link #DETACH_ON_RENDER}

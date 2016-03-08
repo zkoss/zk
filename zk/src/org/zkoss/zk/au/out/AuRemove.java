@@ -16,9 +16,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
+import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.au.AuResponse;
 
 /**
  * A response to remove the specified component at the client.
@@ -33,9 +33,11 @@ public class AuRemove extends AuResponse {
 	public AuRemove(Component comp) {
 		this(comp.getUuid());
 	}
+
 	public AuRemove(Page page) {
 		this(page.getUuid());
 	}
+
 	/** Removes a component by its UUID.
 	 * This constructor is used only if a component's UUID is changed.
 	 */

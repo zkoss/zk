@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -42,8 +43,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 	 * @param sysinits the system-level initiators
 	 */
 	@SuppressWarnings("unchecked")
-	public static final Initiators doInit(PageDefinition pagedef, Page page,
-	Initiator[] sysinits) {
+	public static final Initiators doInit(PageDefinition pagedef, Page page, Initiator[] sysinits) {
 		if (sysinits != null)
 			try {
 				for (int j = 0; j < sysinits.length; ++j)
@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 				throw UiException.Aide.wrap(ex);
 			}
 
-		final List<Initiator> inits = pagedef != null ? pagedef.doInit(page): null;
+		final List<Initiator> inits = pagedef != null ? pagedef.doInit(page) : null;
 		boolean sysinitEx = false;
 		if (sysinits != null)
 			for (int j = 0; j < sysinits.length; ++j)
@@ -63,7 +63,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 
 		boolean initEx = false;
 		if (inits != null)
-			for (Initiator init: inits)
+			for (Initiator init : inits)
 				if (init instanceof InitiatorExt) {
 					initEx = true;
 					break;
@@ -73,14 +73,17 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 			return new Initiators();
 		return new RealInits(sysinits, inits, sysinitEx, initEx);
 	}
+
 	protected Initiators() {
 	}
 
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 	}
+
 	public boolean doCatch(Throwable t) {
 		return false;
 	}
+
 	public void doFinally() {
 	}
 
@@ -88,19 +91,19 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		private final Initiator[] _sysinits;
 		private final List<Initiator> _inits;
 		private boolean _sysinitEx, _initEx;
-	
+
 		/**
 		 * @param inits a collection of {@link Initiator}.
 		 * @param sysinitEx whether any of sysinits implements InitiatorExt
 		 * @param initEx whether any of inits implements InitiatorExt
 		 */
-		private RealInits(Initiator[] sysinits, List<Initiator> inits,
-		boolean sysinitEx, boolean initEx) {
+		private RealInits(Initiator[] sysinits, List<Initiator> inits, boolean sysinitEx, boolean initEx) {
 			_sysinits = sysinits;
 			_inits = inits;
 			_sysinitEx = sysinitEx;
 			_initEx = initEx;
 		}
+
 		/**
 		 * Invokes {@link Initiator#doAfterCompose}.
 		 * @param page
@@ -111,18 +114,21 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 				for (int j = 0; j < _sysinits.length; ++j) {
 					final Initiator init = _sysinits[j];
 					if (init instanceof InitiatorExt) {
-						if (comps == null) comps = new Component[0];
-						((InitiatorExt)init).doAfterCompose(page, comps);
+						if (comps == null)
+							comps = new Component[0];
+						((InitiatorExt) init).doAfterCompose(page, comps);
 					}
 				}
 			if (_initEx)
-				for (Initiator init: _inits) {
+				for (Initiator init : _inits) {
 					if (init instanceof InitiatorExt) {
-						if (comps == null) comps = new Component[0];
-						((InitiatorExt)init).doAfterCompose(page, comps);
+						if (comps == null)
+							comps = new Component[0];
+						((InitiatorExt) init).doAfterCompose(page, comps);
 					}
 				}
 		}
+
 		/** Invokes {@link Initiator#doCatch}.
 		 * It eats all exception without throwing one (but logging).
 		 * Caller has to re-throw the exception.
@@ -133,7 +139,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 					final Initiator init = _sysinits[j];
 					if (init instanceof InitiatorExt) {
 						try {
-							if (((InitiatorExt)init).doCatch(t))
+							if (((InitiatorExt) init).doCatch(t))
 								return true;
 						} catch (Throwable ex) {
 							Initiators.log.error("", ex);
@@ -141,10 +147,10 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 					}
 				}
 			if (_initEx)
-				for (Initiator init: _inits) {
+				for (Initiator init : _inits) {
 					if (init instanceof InitiatorExt) {
 						try {
-							if (((InitiatorExt)init).doCatch(t))
+							if (((InitiatorExt) init).doCatch(t))
 								return true; //ignore and skip all other initiators
 						} catch (Throwable ex) {
 							Initiators.log.error("", ex);
@@ -153,6 +159,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 				}
 			return false;
 		}
+
 		/** Invokes {@link Initiator#doFinally}.
 		 */
 		public void doFinally() {
@@ -162,25 +169,28 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 					final Initiator init = _sysinits[j];
 					if (init instanceof InitiatorExt) {
 						try {
-							((InitiatorExt)init).doFinally();
+							((InitiatorExt) init).doFinally();
 						} catch (Throwable ex) {
 							Initiators.log.error("", ex);
-							if (t == null) t = ex;
+							if (t == null)
+								t = ex;
 						}
 					}
 				}
 			if (_initEx)
-				for (Initiator init: _inits) {
+				for (Initiator init : _inits) {
 					if (init instanceof InitiatorExt) {
 						try {
-							((InitiatorExt)init).doFinally();
+							((InitiatorExt) init).doFinally();
 						} catch (Throwable ex) {
 							Initiators.log.error("", ex);
-							if (t == null) t = ex;
+							if (t == null)
+								t = ex;
 						}
 					}
 				}
-			if (t != null) throw UiException.Aide.wrap(t);
+			if (t != null)
+				throw UiException.Aide.wrap(t);
 		}
 	}
 }

@@ -11,7 +11,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind;
 
-
 /**
  * Generic binding validation interface.
  * @author dennis

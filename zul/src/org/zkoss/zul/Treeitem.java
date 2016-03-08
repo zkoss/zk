@@ -44,8 +44,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Treeitem extends XulElement
-implements org.zkoss.zk.ui.ext.Disable {
+public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable {
 	private transient Treerow _treerow;
 	private transient Treechildren _treechildren;
 	private Object _value;
@@ -53,7 +52,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	private boolean _selected;
 	private boolean _disabled;
 	private boolean _selectable = true;
-	
+
 	/** whether the content of this item is loaded; used if
 	 * the tree owning this item is using a tree model.
 	 */
@@ -63,11 +62,14 @@ implements org.zkoss.zk.ui.ext.Disable {
 	static {
 		addClientEvent(Treeitem.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
+
 	public Treeitem() {
 	}
+
 	public Treeitem(String label) {
 		setLabel(label);
 	}
+
 	public Treeitem(String label, Object value) {
 		setLabel(label);
 		setValue(value);
@@ -113,7 +115,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("selectable", selectable);
 		}
 	}
-	
+
 	/**
 	 * Unload the tree item
 	 * <p>To load the tree item, with 
@@ -121,10 +123,10 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * 
 	 * @since 3.0.4
 	 */
-	public void unload(){
-		if(isLoaded()){
+	public void unload() {
+		if (isLoaded()) {
 			//Clean its children
-			if(getTreechildren() != null)
+			if (getTreechildren() != null)
 				getTreechildren().getChildren().clear();
 			//Set the load status to unloaded
 			setLoaded(false);
@@ -132,7 +134,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			setOpen(false);
 		}
 	}
-	
+
 	/**
 	 * Sets whether it is disabled.
 	 * @since 3.0.1
@@ -143,7 +145,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("disabled", disabled);
 		}
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 * @since 3.0.1
@@ -151,7 +153,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public boolean isDisabled() {
 		return _disabled;
 	}
-	
+
 	/**
 	 * Returns true whether this tree item is rendered. Unlike {@link #isLoaded()}
 	 * which is used to check whether all children of this tree item are loaded.
@@ -169,27 +171,28 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("_loaded", _loaded);
 		}
 	}
+
 	/**
 	 * Return true whether all children of this tree item, if any, is loaded
 	 * @return true whether all children of this tree item is loaded
 	 * @since 3.0.0
 	 */
-	public boolean isLoaded(){
+	public boolean isLoaded() {
 		return _loaded;
 	}
-	
+
 	/**
 	 * Sets whether all children of this tree item, if any, is loaded.
 	 * @since 3.0.0
 	 */
-	/*package*/ void setLoaded(boolean loaded){
+	/*package*/ void setLoaded(boolean loaded) {
 		if (_loaded != loaded) {
 			_loaded = loaded;
-			
+
 			smartUpdate("_loadedChildren", _loaded);
 		}
 	}
-	
+
 	/**
 	 * Please use {@link Treecell} or {@link Tree} instead.
 	 * @deprecated as of release 7.0.3.
@@ -205,7 +208,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public void setStubonly(boolean stubonly) {
 		super.setStubonly(stubonly);
 	}
-	
+
 	/**
 	 * return the index of this item
 	 * @return the index of this item
@@ -215,19 +218,21 @@ implements org.zkoss.zk.ui.ext.Disable {
 		List list = this.getParent().getChildren();
 		return list.indexOf(this);
 	}
+
 	/**
 	 * @deprecated As of release 5.0.9, replaced with {@link #getIndex}.
 	 */
 	public int indexOf() {
 		return getIndex();
 	}
-	
+
 	/** Returns the treerow that this tree item owns (might null).
 	 * Each tree items has exactly one tree row.
 	 */
 	public Treerow getTreerow() {
 		return _treerow;
 	}
+
 	/** Returns the treechildren that this tree item owns, or null if
 	 * doesn't have any child.
 	 */
@@ -241,6 +246,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public boolean isContainer() {
 		return _treechildren != null;
 	}
+
 	/** Returns whether this element contains no child elements.
 	 */
 	public boolean isEmpty() {
@@ -256,6 +262,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public <T> T getValue() {
 		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * Note: the value is not sent to the browser, so it is OK to be
@@ -264,12 +271,14 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public <T> void setValue(T value) {
 		_value = value;
 	}
+
 	/** Returns whether this container is open.
 	 * <p>Default: true.
 	 */
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Sets whether this container is open.
 	 */
 	public void setOpen(boolean open) {
@@ -279,21 +288,23 @@ implements org.zkoss.zk.ui.ext.Disable {
 			//initialized before creating child components (for ZK pages)
 			smartUpdate("open", _open);
 			//If the item is open, its tree has model and not rendered, render the item
-			if (_treechildren != null) 
-				addVisibleItemCount((_open ? 1: -1) * _treechildren.getVisibleItemCount());
-			
+			if (_treechildren != null)
+				addVisibleItemCount((_open ? 1 : -1) * _treechildren.getVisibleItemCount());
+
 			Tree tree = getTree();
-			if(tree != null && tree.getModel() !=null){
-				if(_open && !isLoaded())
+			if (tree != null && tree.getModel() != null) {
+				if (_open && !isLoaded())
 					tree.renderItem(this);
 			}
 		}
 	}
+
 	/** Returns whether this item is selected.
 	 */
 	public boolean isSelected() {
 		return _selected;
 	}
+
 	/** Returns whether this item is selected.
 	 */
 	public void setSelected(boolean selected) {
@@ -307,6 +318,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			}
 		}
 	}
+
 	/** Updates _selected directly and invalidate getTreerow if necessary.
 	 */
 	/*package*/ void setSelectedDirectly(boolean selected) {
@@ -333,8 +345,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * if no such cell.
 	 */
 	public String getLabel() {
-		return _treerow != null ? _treerow.getLabel(): null;
+		return _treerow != null ? _treerow.getLabel() : null;
 	}
+
 	/** Sets the label of the {@link Treecell} it contains.
 	 *
 	 * <p>If treerow and treecell are not created, we automatically create it.
@@ -346,6 +359,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public void setLabel(String label) {
 		autoTreerow().setLabel(label);
 	}
+
 	private Treerow autoTreerow() {
 		if (_treerow == null) {
 			final Treerow row = new Treerow();
@@ -361,17 +375,20 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public String getSrc() {
 		return getImage();
 	}
+
 	/** @deprecated As of release 3.5.0, it is redundant since it
 	 * the same as {@link #setImage}.
 	 */
 	public void setSrc(String src) {
 		setImage(src);
 	}
+
 	/** Returns the image of the {@link Treecell} it contains.
 	 */
 	public String getImage() {
-		return _treerow != null ? _treerow.getImage(): null;
+		return _treerow != null ? _treerow.getImage() : null;
 	}
+
 	/** Sets the image of the {@link Treecell} it contains.
 	 *
 	 * <p>If treerow and treecell are not created, we automatically create it.
@@ -392,31 +409,32 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 */
 	public Treeitem getParentItem() {
 		final Component p = getParent();
-		final Component gp = p != null ? p.getParent(): null;
-		return gp instanceof Treeitem ? (Treeitem)gp: null;
+		final Component gp = p != null ? p.getParent() : null;
+		return gp instanceof Treeitem ? (Treeitem) gp : null;
 	}
+
 	/** Returns the tree owning this item.
 	 */
 	public Tree getTree() {
 		for (Component p = this; (p = p.getParent()) != null;)
 			if (p instanceof Tree)
-				return (Tree)p;
+				return (Tree) p;
 		return null;
 	}
+
 	/*package*/ boolean isRealVisible() {
-		if(!isVisible())
+		if (!isVisible())
 			return false;
 		Component comp = getParent();
-		return comp == null || ((comp instanceof Treechildren) ? 
-				((Treechildren)comp).isRealVisible() : comp.isVisible());
+		return comp == null
+				|| ((comp instanceof Treechildren) ? ((Treechildren) comp).isRealVisible() : comp.isVisible());
 	}
-	
+
 	//-- super --//
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible) {
 			smartUpdate("visible", visible);
-			int count = isOpen() && _treechildren != null ? _treechildren
-					.getVisibleItemCount() + 1 : 1;
+			int count = isOpen() && _treechildren != null ? _treechildren.getVisibleItemCount() + 1 : 1;
 			if (visible) {
 				boolean result = super.setVisible(visible);
 				addVisibleItemCount(count);
@@ -428,7 +446,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		}
 		return visible;
 	}
-	
+
 	/**
 	 * Returns the number of visible descendant {@link Treechildren}.
 	 * Descendants include direct children, grand children and so on.
@@ -436,8 +454,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 3.6.1
 	 */
 	public int getVisibleItemCount() {
-		return isVisible() ? 1 + (_open && _treechildren != null ? _treechildren.getVisibleItemCount() : 0 ): 0;
+		return isVisible() ? 1 + (_open && _treechildren != null ? _treechildren.getVisibleItemCount() : 0) : 0;
 	}
+
 	/**
 	 * adds the number of the visible item to the count of its parent.
 	 * @param count
@@ -449,31 +468,34 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (tc != null && super.isVisible())
 			tc.addVisibleItemCount(count);
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setWidth(String width) {
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the size of Tree related 
 	 * components, please refer to {@link Tree} and {@link Treecol} instead.
 	 */
 	public void setHflex(String flex) {
 	}
-	
+
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treechildren))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void setParent(Component parent) {
 		final Component oldp = getParent();
 		if (oldp == parent)
 			return; //nothing changed
 
-		final Tree oldtree = oldp != null ? getTree(): null;
+		final Tree oldtree = oldp != null ? getTree() : null;
 		super.setParent(parent);
 
 		//maintain the selected status
@@ -481,43 +503,48 @@ implements org.zkoss.zk.ui.ext.Disable {
 			oldtree.onTreeitemRemoved(this);
 		if (parent != null) {
 			final Tree tree = getTree();
-			if (tree != null) tree.onTreeitemAdded(this);
+			if (tree != null)
+				tree.onTreeitemAdded(this);
 		}
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Treerow) {
 			if (_treerow != null && _treerow != child)
-				throw new UiException("Only one treerow is allowed: "+this);
+				throw new UiException("Only one treerow is allowed: " + this);
 		} else if (child instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != child)
-				throw new UiException("Only one treechildren is allowed: "+this);
+				throw new UiException("Only one treechildren is allowed: " + this);
 		} else {
-			throw new UiException("Unsupported child for tree item: "+child);
+			throw new UiException("Unsupported child for tree item: " + child);
 		}
 		super.beforeChildAdded(child, refChild);
 	}
+
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Treerow) {
 			if (super.insertBefore(child, refChild)) {
-				_treerow = (Treerow)child;
+				_treerow = (Treerow) child;
 				return true;
 			}
 		} else if (child instanceof Treechildren) {
 			if (super.insertBefore(child, refChild)) {
-				_treechildren = (Treechildren)child;
+				_treechildren = (Treechildren) child;
 				return true;
 			}
 		} else {
 			return super.insertBefore(child, refChild);
-				//impossible but more extensible
+			//impossible but more extensible
 		}
 		return false;
 	}
+
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 		if (_treechildren == child)
 			addVisibleItemCount(_treechildren.getVisibleItemCount());
 	}
+
 	public void onChildRemoved(Component child) {
 		if (child instanceof Treerow) {
 			_treerow = null;
@@ -528,23 +555,26 @@ implements org.zkoss.zk.ui.ext.Disable {
 		}
 		super.onChildRemoved(child);
 	}
-	
+
 	// Returns whether the treeitem should be visited.
 	private static boolean shallVisitTree(Tree tree, Component child) {
 		final Treeitem item = (Treeitem) child;
-		int count = item.isOpen() && item.getTreechildren() != null ? 
-				item.getTreechildren().getVisibleItemCount(): 0;
-		Integer visited = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
+		int count = item.isOpen() && item.getTreechildren() != null ? item.getTreechildren().getVisibleItemCount() : 0;
+		Integer visited = (Integer) tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
 		final Paginal pgi = tree.getPaginal();
 		final int ofs = pgi.getActivePage() * pgi.getPageSize();
 		int visit = visited != null ? visited.intValue() + 1 : 1;
 		boolean shoulbBeVisited = ofs < visit + count;
-		if (visited == null) visited = new Integer(shoulbBeVisited ? 1 : count + 1);
-		else visited = new Integer(visited.intValue()+ (shoulbBeVisited ? 1 : count + 1));
+		if (visited == null)
+			visited = new Integer(shoulbBeVisited ? 1 : count + 1);
+		else
+			visited = new Integer(visited.intValue() + (shoulbBeVisited ? 1 : count + 1));
 
-		Integer total = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_TOTAL);
-		if (total == null) total = new Integer(count + 1);
-		else total = new Integer(total.intValue() + count + 1);
+		Integer total = (Integer) tree.getAttribute(Attributes.VISITED_ITEM_TOTAL);
+		if (total == null)
+			total = new Integer(count + 1);
+		else
+			total = new Integer(total.intValue() + count + 1);
 		tree.setAttribute(Attributes.VISITED_ITEM_COUNT, visited);
 		tree.setAttribute(Attributes.VISITED_ITEM_TOTAL, total);
 		return shoulbBeVisited;
@@ -552,20 +582,22 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	// Returns whether the specified should be rendered.
 	private static boolean shallRenderTree(Tree tree) {
-		Integer visited = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
+		Integer visited = (Integer) tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
 		final Paginal pgi = tree.getPaginal();
 		final int ofs = pgi.getActivePage() * pgi.getPageSize();
-		if(ofs < visited.intValue()) {
+		if (ofs < visited.intValue()) {
 			// count the rendered item
 			Integer renderedCount = (Integer) tree.getAttribute(Attributes.RENDERED_ITEM_COUNT);
-			if (renderedCount == null) renderedCount = new Integer(1);
-			else renderedCount = new Integer(renderedCount.intValue() + 1);
+			if (renderedCount == null)
+				renderedCount = new Integer(1);
+			else
+				renderedCount = new Integer(renderedCount.intValue() + 1);
 			tree.setAttribute(Attributes.RENDERED_ITEM_COUNT, renderedCount);
 			return true;
 		}
 		return false;
 	}
-	
+
 	protected void redrawChildren(Writer out) throws IOException {
 		Tree tree = getTree();
 		if (!tree.inPagingMold()) {
@@ -579,60 +611,69 @@ implements org.zkoss.zk.ui.ext.Disable {
 			boolean close = !isOpen();
 			ComponentCtrl child = getTreechildren();
 			if (child != null) {
-				if (close) ((Component)child).setAttribute(Attributes.SHALL_RENDER_ITEM, Boolean.TRUE);
+				if (close)
+					((Component) child).setAttribute(Attributes.SHALL_RENDER_ITEM, Boolean.TRUE);
 				child.redraw(out);
-				if (close) ((Component)child).removeAttribute(Attributes.SHALL_RENDER_ITEM);
-			}			
+				if (close)
+					((Component) child).removeAttribute(Attributes.SHALL_RENDER_ITEM);
+			}
 		}
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Treeitem clone = (Treeitem)super.clone();
+		final Treeitem clone = (Treeitem) super.clone();
 
 		int cnt = 0;
-		if (clone._treerow != null) ++cnt;
-		if (clone._treechildren != null) ++cnt;
-		if (cnt > 0) clone.afterUnmarshal(cnt);
+		if (clone._treerow != null)
+			++cnt;
+		if (clone._treechildren != null)
+			++cnt;
+		if (cnt > 0)
+			clone.afterUnmarshal(cnt);
 
 		return clone;
 	}
+
 	private void afterUnmarshal(int cnt) {
 		for (Iterator it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Treerow) {
-				_treerow = (Treerow)child;
-				if (--cnt == 0) break;
+				_treerow = (Treerow) child;
+				if (--cnt == 0)
+					break;
 			} else if (child instanceof Treechildren) {
-				_treechildren = (Treechildren)child;
-				if (--cnt == 0) break;
+				_treechildren = (Treechildren) child;
+				if (--cnt == 0)
+					break;
 			}
 		}
 	}
 
 	//-- Serializable --//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		afterUnmarshal(-1);
 	}
 
 	//-- ComponentCtrl --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		render(renderer, "selected", isSelected());
 		render(renderer, "disabled", isDisabled());
-		if (!isOpen()) renderer.render("open", false);
-		if (!isSelectable()) renderer.render("checkable", false);
+		if (!isOpen())
+			renderer.render("open", false);
+		if (!isSelectable())
+			renderer.render("checkable", false);
 		render(renderer, "_loadedChildren", isLoaded());
 		render(renderer, "_loaded", isRendered() ? true : (getTree() != null ? getTree().getModel() == null : false));
-		
+
 		if (_value instanceof String)
 			render(renderer, "value", _value);
 	}
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -651,7 +692,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			if (tree != null && tree.getModel() != null) {
 				if (open && !isLoaded()) {
 					tree.renderItem(Treeitem.this);
-					
+
 					// better client side performance with invalidate
 					if (_treechildren != null && _treechildren.getChildren().size() >= 5)
 						invalidate();
@@ -660,12 +701,12 @@ implements org.zkoss.zk.ui.ext.Disable {
 				TreeModel model = tree.getModel();
 				if (model instanceof TreeOpenableModel) {
 					if (open)
-						hasOpenableModel = ((TreeOpenableModel)model).addOpenPath(tree.getTreeitemPath(tree, this));
+						hasOpenableModel = ((TreeOpenableModel) model).addOpenPath(tree.getTreeitemPath(tree, this));
 					else
-						hasOpenableModel = ((TreeOpenableModel)model).removeOpenPath(tree.getTreeitemPath(tree, this));
+						hasOpenableModel = ((TreeOpenableModel) model).removeOpenPath(tree.getTreeitemPath(tree, this));
 				}
 			}
-			
+
 			if (!hasOpenableModel && _treechildren != null && super.isVisible()) {
 				if (open)
 					addVisibleItemCount(_treechildren.getVisibleItemCount());
@@ -673,11 +714,10 @@ implements org.zkoss.zk.ui.ext.Disable {
 					addVisibleItemCount(-_treechildren.getVisibleItemCount());
 				}
 			}
-			
+
 			// Bug #3170417 the status should update after update the visibleItemCount
 			_open = open;
 
-			
 			if (tree != null && tree.inPagingMold()) {
 				//bug ZK-2375 clear the closed children and fire a paging event to make sure
 				//everything on the current active page will be rendered correctly
@@ -688,7 +728,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 					getChildren().clear();
 					setRendered(false);
 					setLoaded(false);
-					Events.postEvent(new PagingEvent("onPagingImpl",(Paging) tree.getPaginal(), activePage));
+					Events.postEvent(new PagingEvent("onPagingImpl", (Paging) tree.getPaginal(), activePage));
 				}
 				// Bug #2838782
 				tree.focus();

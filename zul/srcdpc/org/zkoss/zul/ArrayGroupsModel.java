@@ -16,13 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-
-import org.zkoss.util.ArraysX;
-import org.zkoss.zul.event.GroupsDataEvent;
 
 /**
  * An array implementation of {@link GroupsModel}.
@@ -45,9 +39,10 @@ public class ArrayGroupsModel extends GroupsModelArray {
 	 * In this phase it also invoke {@link #createGroupHead(Object[], int, int)} and {@link #createGroupFoot(Object[], int, int)} to create head of foot Object of each group.<br/>
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 */
-	public ArrayGroupsModel(Object[] data,Comparator cmpr){
+	public ArrayGroupsModel(Object[] data, Comparator cmpr) {
 		super(data, cmpr);
 	}
+
 	/**
 	 * 
 	 * @param data an array data to be grouping.
@@ -58,7 +53,7 @@ public class ArrayGroupsModel extends GroupsModelArray {
 	 * At 3rd phase, it calls {@link Comparator#compare(Object, Object)} to sort data in each group.<br/>
 	 * @param col column index associate with cmpr.
 	 */
-	public ArrayGroupsModel(Object[] data,Comparator cmpr, int col){
+	public ArrayGroupsModel(Object[] data, Comparator cmpr, int col) {
 		super(data, cmpr, col);
 	}
 }

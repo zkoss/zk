@@ -26,6 +26,7 @@ public class ResourceCache<V> extends org.zkoss.util.resource.ResourceCache<Reso
 	public ResourceCache(ResourceLoader<V> loader) {
 		super(loader);
 	}
+
 	/** Constructor.
 	 * @param loader the loader to load resource
 	 * @param initsz the initial size of the map

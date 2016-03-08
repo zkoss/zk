@@ -12,8 +12,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Used to force ZK Client re-calculate the size of the widget at the client.

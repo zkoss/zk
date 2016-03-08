@@ -15,9 +15,7 @@ package org.zkoss.zul;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zul.DefaultTreeNode.TreeNodeChildrenList;
@@ -45,7 +43,7 @@ import org.zkoss.zul.ext.Sortable;
  * @since 5.0.6
  */
 public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
-implements Sortable<TreeNode<E>>, java.io.Serializable {
+		implements Sortable<TreeNode<E>>, java.io.Serializable {
 
 	private static final long serialVersionUID = 20110131094811L;
 
@@ -53,7 +51,7 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	private boolean _sortDir;
 	/** Whether to treat the zero size of children node as a leaf node. */
 	private boolean _emptyleaf;
-	
+
 	/** Creates a tree with the specified note as the root.
 	 * @param root the root (cannot be null).
 	 */
@@ -75,22 +73,21 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 		_emptyleaf = emptyChildAsLeaf;
 	}
 
-	
 	public boolean isLeaf(TreeNode<E> node) {
 		boolean isLeaf = node.isLeaf();
 		if (!isLeaf && _emptyleaf)
 			return node.getChildCount() == 0;
 		return isLeaf;
 	}
-	
+
 	public TreeNode<E> getChild(TreeNode<E> parent, int index) {
 		return parent.getChildAt(index);
 	}
-	
+
 	public int getChildCount(TreeNode<E> parent) {
 		return parent.getChildCount();
 	}
-	
+
 	public int getIndexOfChild(TreeNode<E> parent, TreeNode<E> child) {
 		return parent.getIndex(child);
 	}
@@ -114,7 +111,8 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 					}
 				}
 				child = parent;
-			} else break; // ZK-838
+			} else
+				break; // ZK-838
 		}
 		final Integer[] objs = p.toArray(new Integer[p.size()]);
 		final int[] path = new int[objs.length];
@@ -127,7 +125,7 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	public boolean isSelected(Object child) {
 		return child instanceof TreeNode && super.isSelected(child);
 	}
-	
+
 	public boolean removeFromSelection(Object child) {
 		return child instanceof TreeNode && super.removeFromSelection(child);
 	}
@@ -136,7 +134,7 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	public boolean isObjectOpened(Object child) {
 		return child instanceof TreeNode && super.isObjectOpened(child);
 	}
-	
+
 	public boolean removeOpenObject(Object child) {
 		return child instanceof TreeNode && super.removeOpenObject(child);
 	}
@@ -166,15 +164,16 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 			fireEvent(TreeDataEvent.STRUCTURE_CHANGED, null, 0, 0);
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private void sort0(TreeNode<E> node, Comparator<TreeNode<E>> cmpr) {
-		if (node.getChildren() == null) return;
+		if (node.getChildren() == null)
+			return;
 		if (node instanceof DefaultTreeNode)
-			((TreeNodeChildrenList)node.getChildren()).treeSort(cmpr);
+			((TreeNodeChildrenList) node.getChildren()).treeSort(cmpr);
 		else
 			Collections.sort(node.getChildren(), cmpr);
-		for (TreeNode<E> child: node.getChildren())
+		for (TreeNode<E> child : node.getChildren())
 			sort0(child, cmpr);
 	}
 
@@ -184,8 +183,9 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 	@SuppressWarnings("unchecked")
 	public void addSelection(Object obj) {
 		if (obj instanceof TreeNode)
-			addToSelection((TreeNode)obj);
+			addToSelection((TreeNode) obj);
 	}
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
 	public void removeSelection(Object obj) {
@@ -204,23 +204,23 @@ implements Sortable<TreeNode<E>>, java.io.Serializable {
 				removeOpenPath(path);
 		}
 	}
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #isObjectOpened}.
 	 */
 	public boolean isOpen(Object child) {
 		return isObjectOpened(child);
 	}
 
-	
 	public String getSortDirection(Comparator<TreeNode<E>> cmpr) {
 		if (Objects.equals(_sorting, cmpr))
 			return _sortDir ? "ascending" : "descending";
-		return "natural";	
+		return "natural";
 	}
 
 	@SuppressWarnings("unchecked")
 	public Object clone() {
-		final DefaultTreeModel clone = (DefaultTreeModel)super.clone();
-		final TreeNode cloneRoot = (TreeNode)getRoot().clone();
+		final DefaultTreeModel clone = (DefaultTreeModel) super.clone();
+		final TreeNode cloneRoot = (TreeNode) getRoot().clone();
 		cloneRoot.setModel(this);
 		clone.setRootDirectly(cloneRoot);
 		return clone;

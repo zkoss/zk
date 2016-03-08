@@ -37,28 +37,28 @@ import org.zkoss.zk.ui.Component;
  */
 public class FormBindingImpl extends BindingImpl implements FormBinding {
 	private static final long serialVersionUID = 1463169907348730644L;
-	final protected String _formId;
-	final protected AccessInfo _accessInfo;
+	protected final String _formId;
+	protected final AccessInfo _accessInfo;
 	private Map<String, ExpressionX> _fieldExprs;
 
-	protected FormBindingImpl(Binder binder, Component comp, String formId,
-			String accessExpr, ConditionType conditionType, String command,Map<String, Object> bindingArgs) {
+	protected FormBindingImpl(Binder binder, Component comp, String formId, String accessExpr,
+			ConditionType conditionType, String command, Map<String, Object> bindingArgs) {
 		super(binder, comp, bindingArgs);
 		this._formId = formId;
 		this._accessInfo = AccessInfo.create(this, accessExpr, Object.class, conditionType, command, ignoreTracker());
 	}
 
 	//should this binding set the ignore tracker attribute when evaluate the expression.
-	protected boolean ignoreTracker(){
+	protected boolean ignoreTracker() {
 		return false;
 	}
-	
+
 	public Form getFormBean() {
-		return ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
+		return ((BinderCtrl) getBinder()).getForm(getComponent(), _formId);
 	}
-	
+
 	public <T> Form initFormBean(Object bean, Class<Object> class1, BindContext bindContext) {
-		Form form = ((BinderCtrl)getBinder()).getForm(getComponent(), _formId);
+		Form form = ((BinderCtrl) getBinder()).getForm(getComponent(), _formId);
 		if (form == null) {
 			Class[] interfaces = null;
 
@@ -75,14 +75,14 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 						}
 					}
 					if (found)
-						interfaces = new Class[] {ImmutableFields.class};
+						interfaces = new Class[] { ImmutableFields.class };
 				}
 			}
 			form = (Form) ProxyHelper.createFormProxy(bean, class1, interfaces);
-			((BinderCtrl)getBinder()).storeForm(getComponent(), _formId, form);
+			((BinderCtrl) getBinder()).storeForm(getComponent(), _formId, form);
 		}
 		if (!(bean instanceof Form) && form instanceof FormProxyObject)
-			((FormProxyObject)form).setFormOwner(bean, this);
+			((FormProxyObject) form).setFormOwner(bean, this);
 		return form;
 	}
 
@@ -93,18 +93,18 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 	public String getPropertyString() {
 		return BindEvaluatorXUtil.getExpressionString(this._accessInfo.getProperty());
 	}
-	
+
 	public ConditionType getConditionType() {
 		return this._accessInfo.getConditionType();
 	}
-	
+
 	public String getCommandName() {
 		return this._accessInfo.getCommandName();
 	}
-	
+
 	public ExpressionX getFieldExpression(BindEvaluatorX eval, String field) {
-		ExpressionX expr  = _fieldExprs == null ? null : _fieldExprs.get(field);
-		if (expr  == null) {
+		ExpressionX expr = _fieldExprs == null ? null : _fieldExprs.get(field);
+		if (expr == null) {
 			final String property = getPropertyString();
 			final String script = BindELContext.appendFields(property, field);
 			expr = eval.parseExpressionX(null, script, Object.class);
@@ -112,17 +112,17 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		}
 		return expr;
 	}
-	
+
 	public ExpressionX getFormExpression(BindEvaluatorX eval, String field) {
 		final String script = BindELContext.appendFields(getFormId(), field);
-		ExpressionX expr  = _fieldExprs == null ? null : _fieldExprs.get(script);
-		if (expr  == null) {
+		ExpressionX expr = _fieldExprs == null ? null : _fieldExprs.get(script);
+		if (expr == null) {
 			expr = eval.parseExpressionX(null, script, Object.class);
 			_fieldExprs = AllocUtil.inst.putMap(_fieldExprs, script, expr); //ZK-2289
 		}
 		return expr;
 	}
-	
+
 	public ExpressionX getBaseExpression(BindEvaluatorX eval) {
 		//TODO, Dennis potential bug if a field name same as form id
 		final String property = getPropertyString();
@@ -134,13 +134,11 @@ public class FormBindingImpl extends BindingImpl implements FormBinding {
 		}
 		return expr;
 	}
-	
-	public String toString(){
-		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
-		.append(",component:").append(getComponent())
-		.append(",id:").append(getFormId())
-		.append(",access:").append(getPropertyString())
-		.append(",condition:").append(getConditionType())		
-		.append(",command:").append(getCommandName()).toString();
+
+	public String toString() {
+		return new StringBuilder().append(getClass().getSimpleName()).append("@")
+				.append(Integer.toHexString(hashCode())).append(",component:").append(getComponent()).append(",id:")
+				.append(getFormId()).append(",access:").append(getPropertyString()).append(",condition:")
+				.append(getConditionType()).append(",command:").append(getCommandName()).toString();
 	}
 }

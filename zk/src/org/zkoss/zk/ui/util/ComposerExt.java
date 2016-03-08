@@ -16,8 +16,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
 /**
@@ -48,13 +48,14 @@ public interface ComposerExt<T extends Component> {
 	 * If null is returned, the component won't be instantiated.
 	 * In other words, it is ignored.
 	 */
-	public ComponentInfo doBeforeCompose(Page page, Component parent,
-	ComponentInfo compInfo) throws Exception;
+	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) throws Exception;
+
 	/** Invokes after the component is instantiated and initialized, but
 	 * before composing any child.
 	 * @param comp the component being composed
 	 */
 	public void doBeforeComposeChildren(T comp) throws Exception;
+
 	/** Called when an exception occurs when composing the component.
 	 *
 	 * <p>If you don't want to handle the exception, simply returns false.
@@ -71,6 +72,7 @@ public interface ComposerExt<T extends Component> {
 	 * ignored and it means doCatch of the following composers won't be called.
 	 */
 	public boolean doCatch(Throwable ex) throws Exception;
+
 	/** Called after the component has been composed completely.
 	 * It is the last step of the composing.
 	 *

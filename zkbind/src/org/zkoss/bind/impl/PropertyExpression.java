@@ -41,8 +41,7 @@ public class PropertyExpression implements ExpressionX, java.io.Serializable {
 	public Object evaluate(XelContext ctx) throws XelException {
 		try {
 			if (cmp instanceof ComponentCtrl) {
-				PropertyAccess propertyAccess = ((ComponentCtrl) cmp)
-						.getPropertyAccess(field);
+				PropertyAccess propertyAccess = ((ComponentCtrl) cmp).getPropertyAccess(field);
 				if (propertyAccess != null)
 					return propertyAccess.getValue(cmp);
 			}
@@ -62,12 +61,11 @@ public class PropertyExpression implements ExpressionX, java.io.Serializable {
 	public void setValue(XelContext ctx, Object value) throws XelException {
 		try {
 			if (cmp instanceof ComponentCtrl) {
-				PropertyAccess propertyAccess = ((ComponentCtrl) cmp)
-						.getPropertyAccess(field);
+				PropertyAccess propertyAccess = ((ComponentCtrl) cmp).getPropertyAccess(field);
 				if (propertyAccess != null) {
 					try {
 						propertyAccess.setValue(cmp, Classes.coerce(propertyAccess.getType(), value));
-						return;// done
+						return; // done
 					} catch (ClassCastException cce) {
 						// yes, ignore it here and use the old EL way.
 					}

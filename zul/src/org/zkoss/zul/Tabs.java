@@ -19,12 +19,10 @@ package org.zkoss.zul;
 import java.util.Iterator;
 
 import org.zkoss.lang.Objects;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -35,12 +33,14 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Tabs extends XulElement {
 	private String _align = "start";
+
 	/** Returns the tabbox owns this component.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Tabbox getTabbox() {
-		return (Tabbox)getParent();
+		return (Tabbox) getParent();
 	}
+
 	public String getWidth() {
 		String width = super.getWidth();
 		Tabbox tabbox = getTabbox();
@@ -48,7 +48,7 @@ public class Tabs extends XulElement {
 			width = "50px";
 		return width;
 	}
-	
+
 	/** Returns the alignment of tab.
 	 * Reserved for future extension; not supported yet.
 	 * @since 3.0.0
@@ -56,6 +56,7 @@ public class Tabs extends XulElement {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the alignment of tab.
 	 * Reserved for future extension; not supported yet.
 	 * <p>Default: "start".
@@ -71,7 +72,7 @@ public class Tabs extends XulElement {
 			smartUpdate("align", _align);
 		}
 	}
-	
+
 	public void invalidate() {
 		Tabbox tbox = getTabbox();
 		if (tbox != null && tbox.isVertical())
@@ -79,29 +80,33 @@ public class Tabs extends XulElement {
 		else
 			super.invalidate();
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-tabs" : _zclass;
 	}
+
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabbox))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Tab))
-			throw new UiException("Unsupported child for tabs: "+child);
+			throw new UiException("Unsupported child for tabs: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
+
 	public boolean insertBefore(Component child, Component refChild) {
 		boolean sel = getChildren().isEmpty(), desel = false;
-		final Tab newtab = (Tab)child;
+		final Tab newtab = (Tab) child;
 		if (!sel && newtab.isSelected()) {
 			if (newtab.getTabbox() != null) // B65-ZK-1597
 				newtab.setSelected(false); //reset it
 			else
-				newtab.setSelectedDirectly(false);	//turn off first
-			sel = desel = true;					//turn on later
+				newtab.setSelectedDirectly(false); //turn off first
+			sel = desel = true; //turn on later
 		}
 
 		if (super.insertBefore(child, refChild)) {
@@ -115,7 +120,7 @@ public class Tabs extends XulElement {
 					newtab.setSelectedDirectly(true);
 					if (desel)
 						for (Iterator<Component> it = getChildren().iterator(); it.hasNext();) {
-							final Tab tab = (Tab)it.next();
+							final Tab tab = (Tab) it.next();
 							if (tab != newtab && tab.isSelected()) {
 								tab.setSelectedDirectly(false);
 								break;
@@ -126,28 +131,29 @@ public class Tabs extends XulElement {
 		}
 		return false;
 	}
+
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 
 		final Tabbox tabbox = getTabbox();
-		if (tabbox != null){
+		if (tabbox != null) {
 			Tab tab = (Tab) child;
 			tab.removeEventListener(Events.ON_SELECT, tabbox._listener);
-			if(tabbox.getSelectedTab() == tab){
+			if (tabbox.getSelectedTab() == tab) {
 				tabbox.clearSelectedTab();
 			}
 		}
 	}
+
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null)
-			((Tab)child).addEventListener(Events.ON_SELECT, tabbox._listener);
+			((Tab) child).addEventListener(Events.ON_SELECT, tabbox._listener);
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		if (!"start".equals(_align))

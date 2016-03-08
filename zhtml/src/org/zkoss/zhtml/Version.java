@@ -17,14 +17,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 /**
- * The version of the ZK ZHTML component set.
- * {@link #UID} must be the same as the version specified in lang.xml
- * and config.xml.
+ * The version of the ZK ZHTML component set. {@link #UID} must be the same as the version specified
+ * in lang.xml and config.xml.
  * 
  * @author tomyeh
  */
 public class Version {
-	/** Returns the version UID.
+	/**
+	 * Returns the version UID.
 	 */
 	public static final String UID = "8.0.2";
 }

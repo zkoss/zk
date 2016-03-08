@@ -34,6 +34,7 @@ public class DeviceNotFoundException extends UiException {
 		super(msg, cause);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */
@@ -41,6 +42,7 @@ public class DeviceNotFoundException extends UiException {
 		super(s);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */
@@ -48,6 +50,7 @@ public class DeviceNotFoundException extends UiException {
 		super(cause);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */
@@ -62,6 +65,7 @@ public class DeviceNotFoundException extends UiException {
 		super(code, fmtArgs, cause);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */
@@ -69,6 +73,7 @@ public class DeviceNotFoundException extends UiException {
 		super(code, fmtArg, cause);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */
@@ -76,6 +81,7 @@ public class DeviceNotFoundException extends UiException {
 		super(code, fmtArgs);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */
@@ -83,6 +89,7 @@ public class DeviceNotFoundException extends UiException {
 		super(code, fmtArg);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */
@@ -90,6 +97,7 @@ public class DeviceNotFoundException extends UiException {
 		super(code, cause);
 		_type = type;
 	}
+
 	/**
 	 * @param type the device type.
 	 */

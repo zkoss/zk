@@ -30,7 +30,7 @@ public interface GroupingInfo {
 	public static final byte GROUPFOOT = 1;
 	/** Indicates the data is an element of a group. */
 	public static final byte ELEMENT = 2;
-	
+
 	/** The type of the data.
 	 * It is one of {@link #GROUP}, {@link #GROUPFOOT} and {@link #ELEMENT}.
 	 */
@@ -40,12 +40,12 @@ public interface GroupingInfo {
 	 * Returns the index of this group
 	 */
 	public int getGroupIndex();
-	
+
 	/** The offset of an element in a group.
 	 * It is meaningful only if {@link #getType} is {@link #ELEMENT}.
 	 */
 	public int getOffset();
-	
+
 	/** Whether the group is opened.
 	 * It is meaningful only if {@link #getType} is {@link #GROUP}.
 	 */

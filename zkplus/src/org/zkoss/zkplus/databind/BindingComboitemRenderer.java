@@ -16,13 +16,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.zkoss.lang.Generics.cast;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Combobox;
@@ -33,13 +33,14 @@ import org.zkoss.zul.Comboitem;
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  * @since 3.0.2
  */
-/*package*/ class BindingComboitemRenderer implements org.zkoss.zul.ComboitemRenderer, org.zkoss.zul.ComboitemRendererExt, Serializable {
+/*package*/ class BindingComboitemRenderer
+		implements org.zkoss.zul.ComboitemRenderer, org.zkoss.zul.ComboitemRendererExt, Serializable {
 	private static final long serialVersionUID = 200808191415L;
 	private static final String KIDS = "zkplus.databind.KIDS";
 	private Comboitem _template;
 	private DataBinder _binder;
 	private int x = 0;
-	
+
 	public BindingComboitemRenderer(Comboitem template, DataBinder binder) {
 		_template = template;
 		_binder = binder;
@@ -49,10 +50,10 @@ import org.zkoss.zul.Comboitem;
 		final List<Component> kids = cast((List) item.getAttribute(KIDS));
 		item.getChildren().addAll(kids);
 		//item.removeAttribute(KIDS);
-			
+
 		//remove template mark of cloned component and its descendants
-		_binder.setupTemplateComponent(item, null); 
-			
+		_binder.setupTemplateComponent(item, null);
+
 		//setup clone id
 		BindingRendererUtil.setupCloneIds(item);
 
@@ -67,22 +68,22 @@ import org.zkoss.zul.Comboitem;
 		//feature# 3026221: Databinder shall fire onCreate when cloning each items
 		DataBinder.postOnCreateEvents(item); //since 5.0.4
 	}
-	
+
 	public Comboitem newComboitem(Combobox combobox) {
 		//clone from template
-		final Comboitem clone = (Comboitem)_template.clone();
+		final Comboitem clone = (Comboitem) _template.clone();
 		//TODO: see if databinder has this kind of Comboitem, if not, add new CollectionListItem 
 		//avoid duplicate id error, will set to new id when render()
 		//Bug #1962153: Data binding generates duplicate id in some case add "_".
 		if (clone.getId().length() > 0) {
 			clone.setId(null);
 		}
-		
+
 		//link cloned component with template
 		//each Comboitem and and it descendants share the same templatemap
 		Map<Object, Object> templatemap = new HashMap<Object, Object>(8);
 		BindingRendererUtil.linkTemplates(clone, _template, templatemap, _binder);
-		
+
 		//link this template map to parent templatemap (Combobox in Combobox)
 		Map parenttemplatemap = (Map) combobox.getAttribute(DataBinder.TEMPLATEMAP);
 		if (parenttemplatemap != null) {

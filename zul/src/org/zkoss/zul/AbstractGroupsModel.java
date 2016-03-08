@@ -46,29 +46,29 @@ import org.zkoss.zul.ext.SelectionControl;
  * @since 3.5.0
  * @see Selectable
  */
-abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, H, F>,
-		GroupsSelectableModel<E>, java.io.Serializable {
+public abstract class AbstractGroupsModel<D, H, F, E>
+		implements GroupsModel<D, H, F>, GroupsSelectableModel<E>, java.io.Serializable {
 	private transient List<GroupsDataListener> _listeners = new LinkedList<GroupsDataListener>();
-	
+
 	/** The current selection. */
 	protected transient Set<E> _selection;
 	private boolean _multiple;
 	private SelectionControl<E> _ctrl;
 	private boolean _groupSelectable;
-	
+
 	protected AbstractGroupsModel() {
 		_selection = newEmptySelection();
 		_ctrl = new DefaultSelectionControl(this);
 	}
+
 	/** Fires a {@link GroupsDataEvent} for all registered listener
 	 * (thru {@link #addGroupsDataListener}.
 	 *
 	 * <p>Note: you can invoke this method only in an event listener.
 	 */
 	protected void fireEvent(int type, int groupIndex, int index0, int index1) {
-		final GroupsDataEvent evt =
-			new GroupsDataEvent(this, type, groupIndex, index0, index1);
-		for (GroupsDataListener l: _listeners)
+		final GroupsDataEvent evt = new GroupsDataEvent(this, type, groupIndex, index0, index1);
+		for (GroupsDataListener l : _listeners)
 			l.onChange(evt);
 	}
 
@@ -86,19 +86,22 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 			throw new NullPointerException();
 		_listeners.add(l);
 	}
+
 	public void removeGroupsDataListener(GroupsDataListener l) {
 		_listeners.remove(l);
 	}
+
 	//Selectable//
 	/** {@inheritDoc} */
 	public Set<E> getSelection() {
 		return Collections.unmodifiableSet(_selection);
 	}
+
 	/** {@inheritDoc} */
 	public void setSelection(Collection<? extends E> selection) {
 		if (!_selection.equals(selection)) {
 			if (!_multiple && _selection.size() > 1)
-				throw new IllegalArgumentException("Only one selection is allowed, not "+selection);
+				throw new IllegalArgumentException("Only one selection is allowed, not " + selection);
 			_selection.clear();
 			_selection.addAll(selection);
 			if (selection.isEmpty()) {
@@ -107,10 +110,12 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 				fireSelectionEvent(selection.iterator().next());
 		}
 	}
+
 	/** {@inheritDoc} */
 	public boolean isSelected(Object obj) {
 		return _selection.contains(obj);
 	}
+
 	/** {@inheritDoc} */
 	public boolean isSelectionEmpty() {
 		return _selection.isEmpty();
@@ -128,6 +133,7 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 		}
 		return false;
 	}
+
 	/** {@inheritDoc} */
 	public boolean removeFromSelection(Object obj) {
 		if (_selection.remove(obj)) {
@@ -136,6 +142,7 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 		}
 		return false;
 	}
+
 	/** {@inheritDoc} */
 	public void clearSelection() {
 		if (!_selection.isEmpty()) {
@@ -157,12 +164,13 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 	protected void fireSelectionEvent(E e) {
 		fireEvent(GroupsDataEvent.SELECTION_CHANGED, -1, -1, -1);
 	}
-	
+
 	/**Removes the selection of the given collection.
 	 */
 	protected void removeAllSelection(Collection<?> c) {
 		_selection.removeAll(c);
 	}
+
 	/**Removes the selection that doesn't belong to the given collection.
 	 */
 	protected void retainAllSelection(Collection<?> c) {
@@ -173,6 +181,7 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 	public boolean isMultiple() {
 		return _multiple;
 	}
+
 	/** {@inheritDoc} */
 	public void setMultiple(boolean multiple) {
 		if (_multiple != multiple) {
@@ -204,21 +213,22 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 	protected Set<E> newEmptySelection() {
 		return new LinkedHashSet<E>();
 	}
+
 	/** Writes {@link #_selection}.
 	 * <p>Default: write it directly. Override it if E is not serializable.
 	 */
-	protected void writeSelection(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	protected void writeSelection(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.writeObject(_selection);
 	}
+
 	/** Reads back {@link #_selection}.
 	 * <p>Default: write it directly. Override it if E is not serializable.
 	 */
 	@SuppressWarnings("unchecked")
-	protected void readSelection(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		_selection = (Set<E>)s.readObject();
+	protected void readSelection(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
+		_selection = (Set<E>) s.readObject();
 	}
+
 	/**
 	 * A default selection control implementation for {@link AbstractGroupsModel},
 	 * by default it assumes all elements are selectable.
@@ -228,12 +238,15 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 	 */
 	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
 		private AbstractGroupsModel model;
+
 		public DefaultSelectionControl(AbstractGroupsModel model) {
 			this.model = model;
 		}
+
 		public boolean isSelectable(E e) {
 			return true;
 		}
+
 		public void setSelectAll(boolean selectAll) {
 			if (selectAll) {
 				boolean isGroupSelectable = model.isGroupSelectable();
@@ -241,10 +254,11 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 				for (int i = 0, j = model.getGroupCount(); i < j; i++) {
 					if (isGroupSelectable) {
 						Object group = model.getGroup(i);
-						if (isSelectable((E)group)) {
+						if (isSelectable((E) group)) {
 							all.add(group);
 						}
-						for (int childIndex = 0, childSize = model.getChildCount(i); childIndex < childSize; childIndex++) {
+						for (int childIndex = 0, childSize = model
+								.getChildCount(i); childIndex < childSize; childIndex++) {
 							Object child = model.getChild(i, childIndex);
 							if (isSelectable((E) child)) {
 								all.add(child);
@@ -252,12 +266,13 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 						}
 						if (model.hasGroupfoot(i)) {
 							group = model.getGroupfoot(i);
-							if (isSelectable((E)group)) {
+							if (isSelectable((E) group)) {
 								all.add(group);
 							}
 						}
 					} else {
-						for (int childIndex = 0, childSize = model.getChildCount(i); childIndex < childSize; childIndex++) {
+						for (int childIndex = 0, childSize = model
+								.getChildCount(i); childIndex < childSize; childIndex++) {
 							Object child = model.getChild(i, childIndex);
 							if (isSelectable((E) child)) {
 								all.add(child);
@@ -271,21 +286,22 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 
 				if (model instanceof AbstractGroupsModel)
 					try {
-						((Selectable)model).setSelection(all);
+						((Selectable) model).setSelection(all);
 					} finally {
 						model.fireEvent(GroupsDataEvent.ENABLE_CLIENT_UPDATE, -1, -1, -1);
 					}
 			} else {
-				((Selectable)model).clearSelection();
+				((Selectable) model).clearSelection();
 			}
 		}
+
 		public boolean isSelectAll() {
 			Selectable smodel = (Selectable) model;
 			boolean isGroupSelectable = model.isGroupSelectable();
 			for (int i = 0, j = model.getGroupCount(); i < j; i++) {
 				if (isGroupSelectable) {
 					Object group = model.getGroup(i);
-					if (isSelectable((E)group) && !smodel.isSelected(group)) {
+					if (isSelectable((E) group) && !smodel.isSelected(group)) {
 						return false;
 					}
 					for (int childIndex = 0, childSize = model.getChildCount(i); childIndex < childSize; childIndex++) {
@@ -296,7 +312,7 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 					}
 					if (model.hasGroupfoot(i)) {
 						group = model.getGroupfoot(i);
-						if (isSelectable((E)group) && !smodel.isSelected(group)) {
+						if (isSelectable((E) group) && !smodel.isSelected(group)) {
 							return false;
 						}
 					}
@@ -312,23 +328,23 @@ abstract public class AbstractGroupsModel<D, H, F, E> implements GroupsModel<D, 
 			return true;
 		}
 	}
+
 	//Serializable//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		writeSelection(s);
 		Serializables.smartWrite(s, _listeners);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		readSelection(s);
 		_listeners = new LinkedList<GroupsDataListener>();
 		Serializables.smartRead(s, _listeners);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		final AbstractGroupsModel clone;

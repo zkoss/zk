@@ -16,20 +16,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting.util;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.Function;
-
+import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
-import org.zkoss.zk.scripting.Interpreter;
 
 /**
  * A skeletal class for implementing a interpreter ({@link Interpreter}).
@@ -57,12 +56,14 @@ import org.zkoss.zk.scripting.Interpreter;
  *
  * @author tomyeh
  */
-abstract public class GenericInterpreter implements Interpreter {
+public abstract class GenericInterpreter implements Interpreter {
 	/** Used by {@link #getFromNamespace} to denote a variable is not defined.
 	 * @since 2.4.0
 	 */
 	public static final Object UNDEFINED = new Object() {
-		public String toString() {return "undefined";}
+		public String toString() {
+			return "undefined";
+		}
 	};
 
 	/** A list of {@link Scope}.
@@ -80,7 +81,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * Deriving class shall provide an implementation of this method, rather
 	 * than overriding {@link #interpret}.
 	 */
-	abstract protected void exec(String script);
+	protected abstract void exec(String script);
 
 	/** Tests whether a variable is defined in this interpreter.
 	 * Optional. Implement it if the interpreter can tell the difference
@@ -91,34 +92,6 @@ abstract public class GenericInterpreter implements Interpreter {
 	 */
 	protected boolean contains(String name) {
 		return get(name) != null;
-	}
-	/** Gets the variable from the interpreter.
-	 * Optional. Implement it if you want to expose variables defined
-	 * in the interpreter to Java codes.
-	 *
-	 * <p>{@link #beforeExec} is called first, before this method is invoked.
-	 *
-	 * <p>An empty (and fake) scope is pushed so {@link #getFromNamespace}
-	 * always returns null.
-	 */
-	protected Object get(String name) {
-		return null;
-	}
-	/** Sets the variable to the interpreter.
-	 * Optional. Implement it if you want to allow Java codes to define
-	 * a variable in the interpreter.
-	 *
-	 * <p>{@link #beforeExec} is called first, before this method is invoked.
-	 */
-	protected void set(String name, Object value) {
-	}
-	/** Removes the variable from the interpreter.
-	 * Optional. Implement it if you want to allow Java codes to undefine
-	 * a variable from the interpreter.
-	 *
-	 * <p>{@link #beforeExec} is called first, before this method is invoked.
-	 */
-	protected void unset(String name) {
 	}
 
 	/** Tests whether a variable is defined in the interpreter's scope
@@ -133,6 +106,20 @@ abstract public class GenericInterpreter implements Interpreter {
 	protected boolean contains(Scope scope, String name) {
 		return get(scope, name) != null;
 	}
+
+	/** Gets the variable from the interpreter.
+	 * Optional. Implement it if you want to expose variables defined
+	 * in the interpreter to Java codes.
+	 *
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 *
+	 * <p>An empty (and fake) scope is pushed so {@link #getFromNamespace}
+	 * always returns null.
+	 */
+	protected Object get(String name) {
+		return null;
+	}
+
 	/** Gets the variable from the interpreter's scope associated with
 	 * the giving scope.
 	 * Optional. Implement it if you want to expose variables defined
@@ -152,6 +139,16 @@ abstract public class GenericInterpreter implements Interpreter {
 	protected Object get(Scope scope, String name) {
 		return get(name);
 	}
+
+	/** Sets the variable to the interpreter.
+	 * Optional. Implement it if you want to allow Java codes to define
+	 * a variable in the interpreter.
+	 *
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 */
+	protected void set(String name, Object value) {
+	}
+
 	/** Sets the variable to the interpreter's scope associated with the
 	 * giving scope.
 	 * Optional. Implement it if you want to allow Java codes to define
@@ -168,6 +165,16 @@ abstract public class GenericInterpreter implements Interpreter {
 	protected void set(Scope scope, String name, Object value) {
 		set(name, value);
 	}
+
+	/** Removes the variable from the interpreter.
+	 * Optional. Implement it if you want to allow Java codes to undefine
+	 * a variable from the interpreter.
+	 *
+	 * <p>{@link #beforeExec} is called first, before this method is invoked.
+	 */
+	protected void unset(String name) {
+	}
+
 	/** Removes the variable from the interpreter.
 	 * Optional. Implement it if you want to allow Java codes to undefine
 	 * a variable from the interpreter.
@@ -193,6 +200,7 @@ abstract public class GenericInterpreter implements Interpreter {
 		beforeExec();
 		push(scope); //getFromNamespace will handle null
 	}
+
 	/** Called after {@link #exec}.
 	 * <p>Default: call {@link #afterExec}.
 	 * @since 5.0.0
@@ -201,11 +209,13 @@ abstract public class GenericInterpreter implements Interpreter {
 		pop();
 		afterExec();
 	}
+
 	/** Called before {@link #exec}, {@link #get} and many others.
 	 * <p>Default: does nothing.
 	 */
 	protected void beforeExec() {
 	}
+
 	/** Called after {@link #exec}, {@link #get} and many others.
 	 * <p>Default: does nothing.
 	 */
@@ -233,7 +243,7 @@ abstract public class GenericInterpreter implements Interpreter {
 			}
 
 			if (scope instanceof Component) {
-				Component comp = (Component)scope;
+				Component comp = (Component) scope;
 				Object val = comp.getAttributeOrFellow(name, true);
 				if (val != null || comp.hasAttributeOrFellow(name, true))
 					return val;
@@ -245,7 +255,7 @@ abstract public class GenericInterpreter implements Interpreter {
 						return val;
 				}
 			} else if (scope instanceof Page) {
-				Page page = (Page)scope;
+				Page page = (Page) scope;
 				Object val = page.getAttributeOrFellow(name, true);
 				if (val != null || page.hasAttributeOrFellow(name, true))
 					return val;
@@ -261,16 +271,7 @@ abstract public class GenericInterpreter implements Interpreter {
 		}
 		return getImplicit(name);
 	}
-	/** Returns the value of the implicit variables.
-	 * It is called by {@link #getFromNamespace}, so you don't need to
-	 * invoke this method if you invoke {@link #getFromNamespace}.
-	 * However, you have to invoke this method as the last step, if you
-	 * implement your own getFromNamespace from scratch.
-	 * @since 3.6.0
-	 */
-	protected static Object getImplicit(String name) {
-		return Scopes.getImplicit(name, UNDEFINED);
-	}
+
 	/** Returns the variable through the specified scopes and
 	 * variable resolvers, or {@link #UNDEFINED} if the variable is not
 	 * defined.
@@ -296,19 +297,33 @@ abstract public class GenericInterpreter implements Interpreter {
 		return getImplicit(name);
 	}
 
+	/** Returns the value of the implicit variables.
+	 * It is called by {@link #getFromNamespace}, so you don't need to
+	 * invoke this method if you invoke {@link #getFromNamespace}.
+	 * However, you have to invoke this method as the last step, if you
+	 * implement your own getFromNamespace from scratch.
+	 * @since 3.6.0
+	 */
+	protected static Object getImplicit(String name) {
+		return Scopes.getImplicit(name, UNDEFINED);
+	}
+
 	//Interpreter//
 	public void init(Page owner, String zslang) {
 		_owner = owner;
 		_zslang = zslang;
 	}
+
 	/** Reset the owner ({@link #getOwner}) to null.
 	 */
 	public void destroy() {
 		_owner = null;
 	}
+
 	public Page getOwner() {
 		return _owner;
 	}
+
 	public String getLanguage() {
 		return _zslang;
 	}
@@ -318,8 +333,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * @since 5.0.0
 	 */
 	public void interpret(String script, Scope scope) {
-		final String each =
-			_owner.getLanguageDefinition().getEachTimeScript(_zslang);
+		final String each = _owner.getLanguageDefinition().getEachTimeScript(_zslang);
 		if (each != null)
 			script = each + '\n' + script;
 
@@ -330,17 +344,20 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterInterpret(scope);
 		}
 	}
+
 	/** Returns null since retrieving class is not supported.
 	 */
 	public Class getClass(String clsnm) {
 		return null;
 	}
+
 	/** Returns null since retrieving methods is not supported.
 	 * @since 3.0.0
 	 */
 	public Function getFunction(String name, Class[] argTypes) {
 		return null;
 	}
+
 	/** Returns null since retrieving methods is not supported.
 	 * @since 5.0.0
 	 */
@@ -356,50 +373,11 @@ abstract public class GenericInterpreter implements Interpreter {
 	public boolean containsVariable(String name) {
 		beforeExec();
 		push(Objects.UNKNOWN);
-			//don't use null since it means Scopes#getCurrent, see below
+		//don't use null since it means Scopes#getCurrent, see below
 		try {
 			return contains(name);
 		} finally {
 			pop();
-			afterExec();
-		}
-	}
-	/** Retrieve the variable.
-	 *
-	 * <p>Deriving class shall override {@link #get(String)}, instead of this method.
-	 */
-	public Object getVariable(String name) {
-		beforeExec();
-		push(Objects.UNKNOWN);
-			//don't use null since it means Scopes#getCurrent, see below
-		try {
-			return get(name);
-		} finally {
-			pop();
-			afterExec();
-		}
-	}
-	/** Sets the variable to this interpreter.
-	 *
-	 * <p>Deriving class shall override {@link #set(String,Object)}, instead of this method.
-	 */
-	public final void setVariable(String name, Object value) {
-		beforeExec();
-		try {
-			set(name, value);
-		} finally {
-			afterExec();
-		}
-	}
-	/** Removes the variable from this interpreter.
-	 *
-	 * <p>Deriving class shall override {@link #unset(String)}, instead of this method.
-	 */
-	public final void unsetVariable(String name) {
-		beforeExec();
-		try {
-			unset(name);
-		} finally {
 			afterExec();
 		}
 	}
@@ -413,7 +391,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	public boolean containsVariable(Scope scope, String name) {
 		beforeExec();
 		push(Objects.UNKNOWN);
-			//don't use null since it means Scopes#getCurrent, see below
+		//don't use null since it means Scopes#getCurrent, see below
 		try {
 			return contains(scope, name);
 		} finally {
@@ -421,6 +399,23 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
+
+	/** Retrieve the variable.
+	 *
+	 * <p>Deriving class shall override {@link #get(String)}, instead of this method.
+	 */
+	public Object getVariable(String name) {
+		beforeExec();
+		push(Objects.UNKNOWN);
+		//don't use null since it means Scopes#getCurrent, see below
+		try {
+			return get(name);
+		} finally {
+			pop();
+			afterExec();
+		}
+	}
+
 	/** Returns the value of a variable defined in this interpreter's
 	 * scope identified by the specified scope.
 	 * Note: it doesn't search the specified scope ({@link Scope}).
@@ -436,7 +431,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Object getVariable(Scope scope, String name) {
 		beforeExec();
 		push(Objects.UNKNOWN);
-			//don't use null since it means Scopes#getCurrent, see below
+		//don't use null since it means Scopes#getCurrent, see below
 		try {
 			return get(scope, name);
 		} finally {
@@ -444,6 +439,20 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
+
+	/** Sets the variable to this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #set(String,Object)}, instead of this method.
+	 */
+	public final void setVariable(String name, Object value) {
+		beforeExec();
+		try {
+			set(name, value);
+		} finally {
+			afterExec();
+		}
+	}
+
 	/** Sets the value of a variable to this interpreter's scope
 	 * identified by the specified scope.
 	 *
@@ -459,6 +468,20 @@ abstract public class GenericInterpreter implements Interpreter {
 			afterExec();
 		}
 	}
+
+	/** Removes the variable from this interpreter.
+	 *
+	 * <p>Deriving class shall override {@link #unset(String)}, instead of this method.
+	 */
+	public final void unsetVariable(String name) {
+		beforeExec();
+		try {
+			unset(name);
+		} finally {
+			afterExec();
+		}
+	}
+
 	/** Removes the value of a variable defined in the interpreter's
 	 * scope identified by the specified scope.
 	 *
@@ -479,11 +502,13 @@ abstract public class GenericInterpreter implements Interpreter {
 	private void push(Object scope) {
 		_scopes.add(0, scope);
 	}
+
 	/** Remove the active scope.
 	 */
 	private void pop() {
 		_scopes.remove(0);
 	}
+
 	/** Returns the current scope, or null if no scope is allowed.
 	 * Note: if this method returns null, it means the interpreter shall
 	 * not search variables defined in ZK scope.
@@ -497,7 +522,7 @@ abstract public class GenericInterpreter implements Interpreter {
 			if (o == Objects.UNKNOWN)
 				return null; //no scope allowed
 			if (o != null)
-				return (Scope)o;
+				return (Scope) o;
 			//we assume owner's scope if null, because zscript might
 			//define a class that will be invoke thru, say, event listener
 			//In other words, interpret is not called, so scope is not specified

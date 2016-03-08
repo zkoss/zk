@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event cause by user's opening or closing
@@ -49,10 +49,8 @@ public class OpenEvent extends Event {
 	 */
 	public static final OpenEvent getOpenEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new OpenEvent(request.getCommand(), request.getComponent(),
-			AuRequests.getBoolean(data, "open"),
-			request.getDesktop().getComponentByUuidIfAny((String)data.get("reference")),
-			data.get("value"));
+		return new OpenEvent(request.getCommand(), request.getComponent(), AuRequests.getBoolean(data, "open"),
+				request.getDesktop().getComponentByUuidIfAny((String) data.get("reference")), data.get("value"));
 	}
 
 	/** Constructs an onOpen event.
@@ -61,28 +59,29 @@ public class OpenEvent extends Event {
 	public OpenEvent(String name, Component target, boolean open) {
 		this(name, target, open, null, null);
 	}
+
 	/** Constructs an onOpen event for a context menu, a tooltip or a popup.
 	 *
 	 * @param target the component being opened
 	 * @param ref the component that causes target to be opened.
 	 */
-	public OpenEvent(String name, Component target, boolean open,
-	Component ref) {
+	public OpenEvent(String name, Component target, boolean open, Component ref) {
 		this(name, target, open, ref, null);
 	}
+
 	/** Constructs an onOpen event.
 	 * @param open whether the new status is open
 	 * @param value the current value of the target component if applicable.
 	 * @see #getValue
 	 * @since 3.5.0
 	 */
-	public OpenEvent(String name, Component target, boolean open,
-	Component ref, Object value) {
+	public OpenEvent(String name, Component target, boolean open, Component ref, Object value) {
 		super(name, target);
 		_open = open;
 		_ref = ref;
 		_val = value;
 	}
+
 	/** Returns the reference that causes {@link #getTarget}
 	 * to be opened.
 	 *
@@ -98,11 +97,13 @@ public class OpenEvent extends Event {
 	public Component getReference() {
 		return _ref;
 	}
+
 	/** Returns whether it causes open.
 	 */
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Returns the value of the target component,
 	 * when the onOpen event is sent, or null if not applicable.
 	 *

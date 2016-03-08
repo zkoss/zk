@@ -33,8 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * @author tomyeh
  * @see Combobox
  */
-public class Comboitem extends LabelImageElement
-implements org.zkoss.zk.ui.ext.Disable {
+public class Comboitem extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private String _desc = "";
 	private transient Object _value;
 	private String _content = "";
@@ -43,13 +42,15 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	public Comboitem() {
 	}
+
 	public Comboitem(String label) {
 		super(label);
 	}
+
 	public Comboitem(String label, String image) {
 		super(label, image);
 	}
-	
+
 	/**
 	 * Sets whether it is disabled.
 	 * @since 3.0.1
@@ -60,7 +61,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("disabled", disabled);
 		}
 	}
-	
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 * @since 3.0.1
@@ -68,7 +69,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public boolean isDisabled() {
 		return _disabled;
 	}
-	
+
 	/** Returns the description (never null).
 	 * The description is used to provide extra information such that
 	 * users is easy to make a selection.
@@ -79,10 +80,12 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public String getDescription() {
 		return _desc;
 	}
+
 	/** Sets the description.
 	 */
 	public void setDescription(String desc) {
-		if (desc == null) desc = "";
+		if (desc == null)
+			desc = "";
 		if (!_desc.equals(desc)) {
 			_desc = desc;
 			smartUpdate("description", getDescription()); //allow overriding
@@ -100,6 +103,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public String getContent() {
 		return _content;
 	}
+
 	/** Sets the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.
 	 *
@@ -120,7 +124,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @since 3.0.0
 	 */
 	public void setContent(String content) {
-		if (content == null) content = "";
+		if (content == null)
+			content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
 			smartUpdate("content", getContent()); //allow overriding getContent()
@@ -142,6 +147,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public <T> T getValue() {
 		return (T) _value;
 	}
+
 	/** Associate the value with this combo item.
 	 * The value is application dependent. It can be anything.
 	 *
@@ -162,28 +168,28 @@ implements org.zkoss.zk.ui.ext.Disable {
 			cb.syncItemIndices();
 		return _index;
 	}
-	
+
 	/*package*/ void setIndexDirectly(int index) { //called by Combobox
 		_index = index;
 	}
-	
+
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-comboitem" : _zclass;
-	}	
+	}
+
 	public void setLabel(String label) {
 		final String old = getLabel();
 		if (!Objects.equals(old, label)) {
-			final Combobox cb = (Combobox)getParent();
-			final boolean syncValueToSelection =
-				cb != null && cb.getSelectedItemDirectly() == this;
+			final Combobox cb = (Combobox) getParent();
+			final boolean syncValueToSelection = cb != null && cb.getSelectedItemDirectly() == this;
 
 			super.setLabel(label);
-			
+
 			if (syncValueToSelection) {
 				final Constraint constr = cb.getConstraint();
-				if (constr != null && constr instanceof SimpleConstraint 
-						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
+				if (constr != null && constr instanceof SimpleConstraint
+						&& (((SimpleConstraint) constr).getFlags() & SimpleConstraint.STRICT) != 0) {
 					cb.setValue(label);
 				} else {
 					cb.schedSyncValueToSelection();
@@ -191,8 +197,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 			}
 		}
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "disabled", _disabled);
@@ -202,7 +208,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Combobox))
-			throw new UiException("Comboitem's parent must be Combobox");		
+			throw new UiException("Comboitem's parent must be Combobox");
 		super.beforeParentChanged(parent);
 	}
 
@@ -210,10 +216,9 @@ implements org.zkoss.zk.ui.ext.Disable {
 	protected boolean isChildable() {
 		return false;
 	}
-	
+
 	// -- Serializable --//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		if (_value instanceof Serializable) {
@@ -224,16 +229,15 @@ implements org.zkoss.zk.ui.ext.Disable {
 		}
 	}
 
-	private void readObject(java.io.ObjectInputStream s)
-			throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		if (s.readBoolean())
 			_value = s.readObject();
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Comboitem clone = (Comboitem)super.clone();
+		final Comboitem clone = (Comboitem) super.clone();
 		clone._index = 0;
 		return clone;
 	}

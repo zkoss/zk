@@ -16,12 +16,14 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
-import java.util.Iterator;
 import java.io.IOException;
+import java.util.Iterator;
 
-import org.zkoss.xel.FunctionMapper;
+import org.zkoss.web.servlet.dsp.DspContext;
+import org.zkoss.web.servlet.dsp.DspException;
+import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.xel.RequestContexts;
-import org.zkoss.web.servlet.dsp.*;
+import org.zkoss.xel.FunctionMapper;
 
 /**
  * The root node for the parsed result.
@@ -29,7 +31,7 @@ import org.zkoss.web.servlet.dsp.*;
  * @author tomyeh
  */
 class RootNode extends Node implements Interpretation {
-//	private static final Logger log = LoggerFactory.getLogger(RootNode.class);
+	//	private static final Logger log = LoggerFactory.getLogger(RootNode.class);
 
 	private FunctionMapper _mapper;
 
@@ -41,20 +43,18 @@ class RootNode extends Node implements Interpretation {
 	}
 
 	//-- Node --//
-	void interpret(InterpretContext ic)
-	throws DspException, IOException {
+	void interpret(InterpretContext ic) throws DspException, IOException {
 		if (_children == null)
 			return;
 
 		ic.init(_mapper);
 		for (Iterator it = _children.iterator(); it.hasNext();) {
-			((Node)it.next()).interpret(ic);
+			((Node) it.next()).interpret(ic);
 		}
 	}
 
 	//-- Interpretation --//
-	public void interpret(DspContext dc)
-	throws DspException, IOException {
+	public void interpret(DspContext dc) throws DspException, IOException {
 		RequestContexts.push(dc);
 		try {
 			interpret(new InterpretContext(dc));

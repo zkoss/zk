@@ -16,29 +16,28 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.zkoss.json.JSONArray;
 import org.zkoss.xel.VariableResolver;
-
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Richlet;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.SuspendNotAllowedException;
-import org.zkoss.zk.ui.ext.Native;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.metainfo.NodeInfo;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Richlet;
+import org.zkoss.zk.ui.SuspendNotAllowedException;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.metainfo.NodeInfo;
+import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
  * UI engine is responsible to process requests from the client,
@@ -57,6 +56,7 @@ public interface UiEngine {
 	/** Starts the engine.
 	 */
 	public void start(WebApp wapp);
+
 	/** Stops the engine.
 	 * Called only if the server is about to stop.
 	 */
@@ -100,13 +100,16 @@ public interface UiEngine {
 	 * @since 3.0.5
 	 */
 	public boolean isInvalidated(Component comp);
+
 	/** Invalidates the page to cause all of its components to redraw.
 	 */
 	public void addInvalidate(Page page);
+
 	/** Invalidates a component to cause redrawing.
 	 * Called when {@link Component#invalidate} is called.
 	 */
 	public void addInvalidate(Component comp);
+
 	/** Smart-updates a property of the peer widget.
 	 *
 	 * @param append whether to append the updates of properties with the same
@@ -115,6 +118,7 @@ public interface UiEngine {
 	 * @since 5.0.2
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value, boolean append);
+
 	/**
 	 * Adds a smart update that will be executed at the given priority.
 	 * The higher priority, the earlier the update is executed.
@@ -130,6 +134,7 @@ public interface UiEngine {
 	 * @since 6.0.0
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value, int priority);
+
 	/** Adds a response directly by using {@link AuResponse#getOverrideKey}
 	 * as the override key.
 	 * In other words, it is the same as <code>addResponse(resposne.getOverrideKey(), response)</code>
@@ -141,6 +146,7 @@ public interface UiEngine {
 	 * @see #addResponse(String, AuResponse)
 	 */
 	public void addResponse(AuResponse response);
+
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
 	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#response}.
@@ -160,6 +166,7 @@ public interface UiEngine {
 	 * @see #addResponse(AuResponse)
 	 */
 	public void addResponse(String key, AuResponse response);
+
 	/** Adds a response with the given priority.
 	 * The higher priority, the earlier the update is executed.
 	 * The priority of {@link #addResponse(String, AuResponse)}
@@ -169,6 +176,7 @@ public interface UiEngine {
 	 * @since 6.0.1
 	 */
 	public void addResponse(String key, AuResponse response, int priority);
+
 	/** Called to update (redraw) a component, when a component is moved.
 	 * If a component's page or parent is changed, this method need to be
 	 * called only once for the top one.
@@ -178,6 +186,7 @@ public interface UiEngine {
 	 * @param newpg the page after moved
 	 */
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg);
+
 	/** Called before changing the component's UUID.
 	 * @since 5.0.3
 	 */
@@ -187,19 +196,17 @@ public interface UiEngine {
 	/** Creates components specified in the given page definition.
 	 * Called when a new page is creates.
 	 */
-	public void execNewPage(Execution exec, PageDefinition pagedef, Page page,
-	Writer out) throws IOException;
+	public void execNewPage(Execution exec, PageDefinition pagedef, Page page, Writer out) throws IOException;
+
 	/** Invoke {@link Richlet#service}, when a new page is creates upon
 	 * visiting a richlet.
 	 */
-	public void execNewPage(Execution exec, Richlet richlet, Page page,
-	Writer out) throws IOException;
+	public void execNewPage(Execution exec, Richlet richlet, Page page, Writer out) throws IOException;
 
 	/** Reuse the desktop and generate the output.
 	 * @since 5.0.0
 	 */
-	public void recycleDesktop(Execution exec, Page page, Writer out)
-	throws IOException;
+	public void recycleDesktop(Execution exec, Page page, Writer out) throws IOException;
 
 	/** Executes an asynchronous update to a component (or page).
 	 * It is the same as execUpdate(exec, requests, null, out).
@@ -208,8 +215,7 @@ public interface UiEngine {
 	 *
 	 * @param requests a list of {@link AuRequest}.
 	 */
-	public void execUpdate(Execution exec, List<AuRequest> requests, AuWriter out)
-	throws IOException;
+	public void execUpdate(Execution exec, List<AuRequest> requests, AuWriter out) throws IOException;
 
 	/** Activates an execution that will allow developers to update
 	 * the state of components.
@@ -221,6 +227,7 @@ public interface UiEngine {
 	 * @see #closeUpdate
 	 */
 	public Object startUpdate(Execution exec) throws IOException;
+
 	/** Finishes the update and returns the result in an array of JSON object.
 	 * Notice it does not deactivate the execution. Rather, the caller
 	 * has to invoke {@link #closeUpdate}.
@@ -232,6 +239,7 @@ public interface UiEngine {
 	 * @see #closeUpdate
 	 */
 	public JSONArray finishUpdate(Object ctx) throws IOException;
+
 	/** Deactivates the execution and cleans up.
 	 * <p>It is designed to implement {@link org.zkoss.zkplus.embed.Bridge}.
 	 * @since 5.0.5
@@ -270,9 +278,8 @@ public interface UiEngine {
 	 * @return the components being created.
 	 * @since 6.0.0
 	 */
-	public Component[] createComponents(Execution exec,
-	PageDefinition pagedef, Page page, Component parent,
-	Component insertBefore, VariableResolver resolver, Map<?, ?> arg);
+	public Component[] createComponents(Execution exec, PageDefinition pagedef, Page page, Component parent,
+			Component insertBefore, VariableResolver resolver, Map<?, ?> arg);
 
 	/** Sends a temporary redirect response to the client using the specified
 	 * redirect location URL.
@@ -285,6 +292,7 @@ public interface UiEngine {
 	 * @param target the new target, or null to denote the same browser window
 	 */
 	public void sendRedirect(String uri, String target);
+
 	/** Aborts the current execution.
 	 * if not null, it means the current execution is aborting
 	 *
@@ -322,8 +330,8 @@ public interface UiEngine {
 	 * by specifying <code>max-suspended-thread</code> in <code>zk.xml</code>,
 	 * or invoking {@link org.zkoss.zk.ui.util.Configuration#setMaxSuspendedThreads}.
 	 */
-	public void wait(Object obj)
-	throws InterruptedException, SuspendNotAllowedException;
+	public void wait(Object obj) throws InterruptedException, SuspendNotAllowedException;
+
 	/** Wakes up a single event processing thread that is waiting on the
 	 * specified object.
 	 *
@@ -337,19 +345,7 @@ public interface UiEngine {
 	 * @exception UiException if it is called not during event processing.
 	 */
 	public void notify(Object obj);
-	/** Wakes up all event processing thread that are waiting on the
-	 * specified object.
-	 *
-	 * <p>Unlike {@link #notify(Desktop, Object)}, this method can be invoked only
-	 * if the same desktop is locked for processing requests.
-	 *
-	 * @param obj any non-null object to identify what to notify. It must be
-	 * same object passed to {@link #wait}.
-	 * @see #notify(Desktop, Object)
-	 * @see #notifyAll(Object)
-	 * @exception UiException if it is called not during event processing.
-	 */
-	public void notifyAll(Object obj);
+
 	/** Wakes up a single event processing thread for the specified desktop
 	 * that is waiting on the specified object.
 	 *
@@ -369,6 +365,21 @@ public interface UiEngine {
 	 * @see #notifyAll(Desktop, Object)
 	 */
 	public void notify(Desktop desktop, Object obj);
+
+	/** Wakes up all event processing thread that are waiting on the
+	 * specified object.
+	 *
+	 * <p>Unlike {@link #notify(Desktop, Object)}, this method can be invoked only
+	 * if the same desktop is locked for processing requests.
+	 *
+	 * @param obj any non-null object to identify what to notify. It must be
+	 * same object passed to {@link #wait}.
+	 * @see #notify(Desktop, Object)
+	 * @see #notifyAll(Object)
+	 * @exception UiException if it is called not during event processing.
+	 */
+	public void notifyAll(Object obj);
+
 	/** Wakes up all event processing threads for the specified desktop
 	 * that are waiting on the specified object.
 	 *
@@ -403,6 +414,7 @@ public interface UiEngine {
 	 * invalidate and do any smart updates. In other words, READ ONLY.
 	 */
 	public void activate(Execution exec);
+
 	/** Activates an execution such that you can access a component.
 	 * Unlike {@link #activate(Execution)}, you could specify an amount of
 	 * time (timeout), and it returns false if it takes longer than the given
@@ -413,6 +425,7 @@ public interface UiEngine {
 	 * @since 5.0.6
 	 */
 	public boolean activate(Execution exec, int timeout);
+
 	/** Deactivates an execution, such that other threads could activate
 	 * and access components.
 	 */
@@ -422,12 +435,12 @@ public interface UiEngine {
 	 * @since 3.5.0
 	 */
 	public void beginUpdate(Execution exec);
+
 	/** Executes posted events, deactivate and ends the asynchronous update.
 	 *
 	 * @since 5.0.0
 	 */
-	public void endUpdate(Execution exec)
-	throws IOException;
+	public void endUpdate(Execution exec) throws IOException;
 
 	/** Retrieve the native content for a property of the specified component.
 	 * The native content is a value of a property that is represented
@@ -451,13 +464,13 @@ public interface UiEngine {
 	 * @see org.zkoss.zk.ui.metainfo.Property
 	 * @since 3.5.0
 	 */
-	public String getNativeContent(Component comp, List<NodeInfo> children,
-	Native.Helper helper);
+	public String getNativeContent(Component comp, List<NodeInfo> children, Native.Helper helper);
 
 	/** Returns if any suspended event processing thread in the
 	 * whole system.
 	 */
 	public boolean hasSuspendedThread();
+
 	/** Returns a collection of suspended event processing threads
 	 * belonging to the specified desktop,
 	 * or empty if no suspended thread at all.
@@ -469,6 +482,7 @@ public interface UiEngine {
 	 * threads belong to (never null).
 	 */
 	public Collection<EventProcessingThread> getSuspendedThreads(Desktop desktop);
+
 	/** Ceases the specified event thread.
 	 *
 	 * @param desktop which desktop the event thread belongs to
@@ -477,8 +491,7 @@ public interface UiEngine {
 	 * @return true if the event processing thread is ceased successfully;
 	 * false if no such thread or it is not suspended.
 	 */
-	public boolean ceaseSuspendedThread(
-		Desktop desktop, EventProcessingThread evtthd, String cause);
+	public boolean ceaseSuspendedThread(Desktop desktop, EventProcessingThread evtthd, String cause);
 
 	/** Sets whether to disable the update of the client widget.
 	 * By default, if a component is attached to a page, modifications that

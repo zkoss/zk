@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -47,7 +48,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Tab extends LabelImageElement {
 
 	private static final Logger log = LoggerFactory.getLogger(Tab.class);
-			
+
 	private boolean _selected;
 	/** Whether to show a close button. */
 	private boolean _closable;
@@ -55,12 +56,14 @@ public class Tab extends LabelImageElement {
 	private boolean _disabled;
 	private transient Caption _caption;
 	private transient Object _value;
-	
+
 	static {
 		addClientEvent(Tab.class, Events.ON_CLOSE, 0);
 		addClientEvent(Tab.class, Events.ON_SELECT, CE_IMPORTANT);
 	}
-	public Tab() {}
+
+	public Tab() {
+	}
 
 	public Tab(String label) {
 		super(label);
@@ -78,8 +81,9 @@ public class Tab extends LabelImageElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -91,14 +95,14 @@ public class Tab extends LabelImageElement {
 			_value = value;
 		}
 	}
-	
+
 	/** Returns the caption of this tab.
 	 * @since 6.5.0
 	 */
 	public Caption getCaption() {
 		return _caption;
 	}
-	
+
 	//-- super --//
 	public void setWidth(String width) {
 		Tabbox tb = getTabbox();
@@ -106,7 +110,7 @@ public class Tab extends LabelImageElement {
 			throw new UnsupportedOperationException("Set Tabs' width instead");
 		super.setWidth(width);
 	}
-	
+
 	/**
 	 * Returns whether this tab is closable. If closable, a button is displayed
 	 * and the onClose event is sent if an user clicks the button.
@@ -161,14 +165,14 @@ public class Tab extends LabelImageElement {
 			}
 		}
 		Tabbox tabbox = getTabbox();
-		
+
 		// Nothing to do according to ZK-2027 issue, let application developer to do so.
 		if (tabbox != null && tabbox.getModel() != null)
 			return;
-		
+
 		//Cache panel before detach , or we couldn't get it after tab is detached.
 		final Tabpanel panel = getLinkedPanel();
-		
+
 		detach();
 
 		if (panel != null) {
@@ -181,7 +185,7 @@ public class Tab extends LabelImageElement {
 			panel.detach();
 		}
 	}
-	
+
 	private Tab selectNextTab() {
 		for (Tab tab = (Tab) getNextSibling(); tab != null; tab = (Tab) tab.getNextSibling())
 			if (!tab.isDisabled()) {
@@ -195,7 +199,7 @@ public class Tab extends LabelImageElement {
 			}
 		return null;
 	}
-	
+
 	/**
 	 * Returns the tabbox owns this component.
 	 */
@@ -234,17 +238,17 @@ public class Tab extends LabelImageElement {
 		final Tabbox tabbox = (Tabbox) getTabbox();
 		if (tabbox != null) {
 			// Note: we don't update it here but let its parent does the job
-			if(selected){  //Note that if already selected , tabbox will ignore it.
+			if (selected) { //Note that if already selected , tabbox will ignore it.
 				tabbox.setSelectedTab(this);
-			}else if(tabbox.getSelectedTab() == this){ //selected false and selected
-				
+			} else if (tabbox.getSelectedTab() == this) { //selected false and selected
+
 				//clean selected tab , not set any others selected , if user call setSelected(false) manually , 
 				//they should set another tab to be selected or no any tab will be selected.
-				tabbox.clearSelectedTab();   
+				tabbox.clearSelectedTab();
 				_selected = false;
 			}
-		} else if(_selected != selected){
-			_selected = selected;				
+		} else if (_selected != selected) {
+			_selected = selected;
 			smartUpdate("selected", _selected);
 		}
 	}
@@ -307,20 +311,21 @@ public class Tab extends LabelImageElement {
 	protected boolean isChildable() {
 		return true;
 	}
-	
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Caption) {
 			if (_caption != null && _caption != child)
-				throw new UiException("Only one caption is allowed: "+this);
+				throw new UiException("Only one caption is allowed: " + this);
 			super.beforeChildAdded(child, refChild);
-		} else if (child instanceof Label) {// backward compatible
+		} else if (child instanceof Label) { // backward compatible
 			super.beforeChildAdded(child, refChild);
 		} else
-			throw new UiException("Only caption is allowed: "+this);
+			throw new UiException("Only caption is allowed: " + this);
 	}
-	
+
 	// backward compatible
 	private transient Label _tmpLabel;
+
 	/**
 	 * Internal use only
 	 * @since 6.5.0
@@ -332,25 +337,25 @@ public class Tab extends LabelImageElement {
 		}
 		_tmpLabel = null;
 	}
-	
+
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Caption) {
 			refChild = getFirstChild();
-				//always makes caption as the first child
+			//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
-				_caption = (Caption)child;
+				_caption = (Caption) child;
 				invalidate();
 				return true;
 			}
 			return false;
-		} else if (child instanceof Label) {// backward compatible
-			_tmpLabel = (Label)child;
-			log.warn("Please use Tab#setLabel(msg) instead! ["+this+"]");
+		} else if (child instanceof Label) { // backward compatible
+			_tmpLabel = (Label) child;
+			log.warn("Please use Tab#setLabel(msg) instead! [" + this + "]");
 		}
 		return super.insertBefore(child, refChild);
-		
+
 	}
-	
+
 	public void onChildRemoved(Component child) {
 		if (child instanceof Caption) {
 			_caption = null;
@@ -359,32 +364,32 @@ public class Tab extends LabelImageElement {
 		super.onChildRemoved(child);
 	}
 
-
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabs))
 			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Tab clone = (Tab)super.clone();
-		if (clone._caption != null) clone.afterUnmarshal();
+		final Tab clone = (Tab) super.clone();
+		if (clone._caption != null)
+			clone.afterUnmarshal();
 		return clone;
 	}
+
 	private void afterUnmarshal() {
 		for (Iterator<Component> it = getChildren().iterator(); it.hasNext();) {
 			final Object child = it.next();
 			if (child instanceof Caption) {
-				_caption = (Caption)child;
+				_caption = (Caption) child;
 				break;
 			}
 		}
 	}
 
 	//Serializable//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		afterUnmarshal();
 	}
@@ -405,47 +410,47 @@ public class Tab extends LabelImageElement {
 				prevSeldItems.add(tabbox.getSelectedTab());
 			final SelectEvent<Tab, Object> evt = SelectEvent.getSelectEvent(request,
 					new SelectEvent.SelectedObjectHandler<Tab>() {
-				public Set<Object> getObjects(Set<Tab> items) {
-					if (items == null || items.isEmpty() || tabbox.getModel() == null)
-						return null;
-					Set<Object> objs = new LinkedHashSet<Object>();
-					ListModel<Object> model = tabbox.getModel();
-					for (Tab i : items)
-						objs.add(model.getElementAt(i.getIndex()));
-					return objs;
-				}
+						public Set<Object> getObjects(Set<Tab> items) {
+							if (items == null || items.isEmpty() || tabbox.getModel() == null)
+								return null;
+							Set<Object> objs = new LinkedHashSet<Object>();
+							ListModel<Object> model = tabbox.getModel();
+							for (Tab i : items)
+								objs.add(model.getElementAt(i.getIndex()));
+							return objs;
+						}
 
-				public Set<Tab> getPreviousSelectedItems() {
-					return prevSeldItems;
-				}
+						public Set<Tab> getPreviousSelectedItems() {
+							return prevSeldItems;
+						}
 
-				// in single selection, getUnselectedItems() is same as getPreviousSelectedItems()
-				public Set<Tab> getUnselectedItems() {
-					return getPreviousSelectedItems();
-				}
+						// in single selection, getUnselectedItems() is same as getPreviousSelectedItems()
+						public Set<Tab> getUnselectedItems() {
+							return getPreviousSelectedItems();
+						}
 
-				public Set<Object> getPreviousSelectedObjects() {
-					ListModel<Object> model = tabbox.getModel();
-					Set<Tab> items = getPreviousSelectedItems();
-					if (model == null || items.size() < 1)
-						return null;
-					else {
-						Set<Object> s = new LinkedHashSet<Object>();
-						s.add(model.getElementAt(((Tab)items.iterator().next()).getIndex()));
-						return s;
-					}
-				}
+						public Set<Object> getPreviousSelectedObjects() {
+							ListModel<Object> model = tabbox.getModel();
+							Set<Tab> items = getPreviousSelectedItems();
+							if (model == null || items.size() < 1)
+								return null;
+							else {
+								Set<Object> s = new LinkedHashSet<Object>();
+								s.add(model.getElementAt(((Tab) items.iterator().next()).getIndex()));
+								return s;
+							}
+						}
 
-				// in single selection, getUnselectedObjects() is same as getPreviousSelectedObjects()
-				public Set<Object> getUnselectedObjects() {
-					return getPreviousSelectedObjects();
-				}
-			});
-			
+						// in single selection, getUnselectedObjects() is same as getPreviousSelectedObjects()
+						public Set<Object> getUnselectedObjects() {
+							return getPreviousSelectedObjects();
+						}
+					});
+
 			final Set<Tab> selItems = evt.getSelectedItems();
 			if (selItems == null || selItems.size() != 1)
 				throw new UiException("Exactly one selected tab is required: " + selItems); // debug purpose
-			
+
 			if (tabbox != null)
 				tabbox.selectTabDirectly((Tab) selItems.iterator().next(), true);
 
@@ -453,8 +458,8 @@ public class Tab extends LabelImageElement {
 		} else
 			super.service(request, everError);
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-			throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (_disabled)
 			render(renderer, "disabled", _disabled);

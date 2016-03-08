@@ -17,8 +17,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.out;
 
 import java.util.List;
-import org.zkoss.zk.ui.Component;
+
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to ask the client to close the error messages belonging
@@ -38,12 +39,14 @@ public class AuClearWrongValue extends AuResponse {
 	public AuClearWrongValue(List<? extends Component> comps) {
 		super("clearWrongValue", comps.toArray()); //component-independent
 	}
+
 	/**
 	 * @param comps a list of components
 	 */
 	public AuClearWrongValue(Component[] comps) {
 		super("clearWrongValue", comps); //component-independent
 	}
+
 	/** Unlike other constructors, the object instantiated by this method
 	 * depends on the specified comp.
 	 * @param comp the component whose error box, if any, shall be closed.
@@ -57,6 +60,6 @@ public class AuClearWrongValue extends AuResponse {
 	 * @since 5.0.2
 	 */
 	public final String getOverrideKey() {
-		return getDepends() != null ? "zk.wrongValue": null /*append*/;
+		return getDepends() != null ? "zk.wrongValue" : null /*append*/;
 	}
 }

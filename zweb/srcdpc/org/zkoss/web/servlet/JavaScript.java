@@ -30,6 +30,7 @@ public class JavaScript extends org.zkoss.html.JavaScript {
 	public JavaScript(String src, String charset) {
 		super(src, charset);
 	}
+
 	/** Creates by assigning the content (JavaScript codes).
 	 *
 	 * @param content the JavaScript codes.

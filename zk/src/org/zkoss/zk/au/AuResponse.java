@@ -17,14 +17,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.json.JSONArray;
 import org.zkoss.json.JSONAware;
 import org.zkoss.json.JSONs;
-
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 
@@ -62,8 +61,9 @@ public class AuResponse {
 	 * @since 5.0.0 (becomes public)
 	 */
 	public AuResponse(String cmd) {
-		this(cmd, (Component)null, (Object[])null);
+		this(cmd, (Component) null, (Object[]) null);
 	}
+
 	/** Constructs a component-independent response.
 	 *
 	 * @param data the data. It can be null, String, Date,
@@ -72,14 +72,16 @@ public class AuResponse {
 	 * @since 5.0.0 (becomes public)
 	 */
 	public AuResponse(String cmd, Object data) {
-		this(cmd, (Component)null, data);
+		this(cmd, (Component) null, data);
 	}
+
 	/** Constructs a component-independent response.
 	 * @since 5.0.0 (becomes public)
 	 */
 	public AuResponse(String cmd, Object[] data) {
-		this(cmd, (Component)null, data);
+		this(cmd, (Component) null, data);
 	}
+
 	/** Constructs a response with one or zero data.
 	 *
 	 * @param depends specifies whether this response depends on whether
@@ -96,8 +98,9 @@ public class AuResponse {
 	 * @since 5.0.0 (becomes public)
 	 */
 	public AuResponse(String cmd, Component depends, Object data) {
-		this(cmd, depends, data != null ? new Object[] {data}: null);
+		this(cmd, depends, data != null ? new Object[] { data } : null);
 	}
+
 	/** Constructs a response with multiple data.
 	 * @since 5.0.0 (becomes public)
 	 */
@@ -108,12 +111,14 @@ public class AuResponse {
 		_depends = depends;
 		_data = data;
 	}
+
 	/** Constructs a response with single data.
 	 * @since 5.0.0 (becomes public)
 	 */
 	public AuResponse(String cmd, Page depends, Object data) {
-		this(cmd, depends, data != null ? new Object[] {data}: null);
+		this(cmd, depends, data != null ? new Object[] { data } : null);
 	}
+
 	/** Constructs a response with multiple data.
 	 * @param data an array of data (null to ignore).
 	 * Each element must be an instance of String, {@link DeferredValue}
@@ -135,6 +140,7 @@ public class AuResponse {
 	public String getCommand() {
 		return _cmd;
 	}
+
 	/** Returns the evaluated result of the associated data of
 	 * this response (might be null).
 	 * 
@@ -157,15 +163,16 @@ public class AuResponse {
 		for (int j = 0; j < _data.length; ++j) {
 			Object d = _data[j];
 			if (d instanceof DeferredValue)
-				d = ((DeferredValue)d).getValue();
+				d = ((DeferredValue) d).getValue();
 			if (d instanceof Component)
-				d = new JSONComponent((Component)d);
+				d = new JSONComponent((Component) d);
 			if (d instanceof Date)
-				d = new JSONDate((Date)d);
+				d = new JSONDate((Date) d);
 			encdata.add(d);
 		}
 		return encdata;
 	}
+
 	/** Returns the associated data of this response in the original
 	 * format (might be null).
 	 * <p>Note: it is a readonly array. Don't change its value.
@@ -186,6 +193,7 @@ public class AuResponse {
 	public final Object getDepends() {
 		return _depends;
 	}
+
 	/** Returns the override key. If null, this response will be appended.
 	 * If not null, it overrides the previous response, if any, with
 	 * the same override key and the same depends ({@link #getDepends}).
@@ -214,14 +222,15 @@ public class AuResponse {
 		}
 		return hash;
 	}
+
 	public final boolean equals(Object o) { //prevent override
 		return this == o;
 	}
+
 	public String toString() {
 		//Don't call getCommand and getData since it causes
 		//AuSetDeferredAttribute to evaluate the deferred value
-		final StringBuffer sb =
-			new StringBuffer(60).append("[cmd=").append(_cmd);
+		final StringBuffer sb = new StringBuffer(60).append("[cmd=").append(_cmd);
 		if (_data != null && _data.length > 0) {
 			sb.append(", data0=").append(_data[0]);
 			if (_data.length > 1) {
@@ -232,29 +241,36 @@ public class AuResponse {
 		}
 		return sb.append(']').toString();
 	}
+
 	private static String trimOutput(Object data) {
 		String s = Objects.toString(data);
-		if (s == null) return null;
+		if (s == null)
+			return null;
 		s = s.trim();
-		return s.length() <= 36 ?  s: s.substring(0, 36) + "...";
+		return s.length() <= 36 ? s : s.substring(0, 36) + "...";
 	}
 
 	private static class JSONDate implements JSONAware {
 		private final Date _d;
+
 		private JSONDate(Date d) {
 			_d = d;
 		}
+
 		public String toJSONString() {
 			return "jq.j2d('" + JSONs.d2j(_d) + "')";
 		}
 	}
+
 	private static class JSONComponent implements JSONAware {
 		private final Component _comp;
+
 		private JSONComponent(Component comp) {
 			_comp = comp;
 		}
+
 		public String toJSONString() {
-			return _comp.getPage() == null ? "null": "{$u:'" + _comp.getUuid() + "'}";
+			return _comp.getPage() == null ? "null" : "{$u:'" + _comp.getUuid() + "'}";
 		}
 	}
 }

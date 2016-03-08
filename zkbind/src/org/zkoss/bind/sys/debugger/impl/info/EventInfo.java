@@ -18,20 +18,20 @@ import org.zkoss.zk.ui.Component;
  * @author dennis
  *
  */
-public class EventInfo extends ExecutionInfoBase{
+public class EventInfo extends ExecutionInfoBase {
 
 	public static final String TYPE = "event";
 	String _event;
-	
-	public EventInfo(Component comp, String event,String note) {
+
+	public EventInfo(Component comp, String event, String note) {
 		super(TYPE, null, comp, note);
 		_event = event;
 	}
-	
-	public JSONObject toJSON(){
+
+	public JSONObject toJSON() {
 		JSONObject json = super.toJSON();
-		putEssential(json,"event", _event);
-		
+		putEssential(json, "event", _event);
+
 		return json;
 	}
 }

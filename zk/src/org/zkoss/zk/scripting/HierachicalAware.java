@@ -50,6 +50,7 @@ public interface HierachicalAware {
 	 * @since 5.0.0
 	 */
 	public boolean containsVariable(Scope scope, String name);
+
 	/** Returns the value of a variable defined in this interpreter's
 	 * scope identified by the specified scope.
 	 * Note: it doesn't search the specified scope ({@link Scope}).
@@ -64,6 +65,7 @@ public interface HierachicalAware {
 	 * @since 5.0.0
 	 */
 	public Object getVariable(Scope scope, String name);
+
 	/** Sets the value of a variable to this interpreter's scope
 	 * identified by the specified scope.
 	 *
@@ -77,6 +79,7 @@ public interface HierachicalAware {
 	 * @since 5.0.0
 	 */
 	public void setVariable(Scope scope, String name, Object value);
+
 	/** Removes the value of a variable defined in the interpreter's
 	 * scope identified by the specified scope.
 	 *

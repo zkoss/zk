@@ -29,14 +29,15 @@ import org.zkoss.zul.Radiogroup;
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
 public class RadiogroupSelectedItemConverter implements TypeConverter, java.io.Serializable {
-  	private static final long serialVersionUID = 200808191534L;
+	private static final long serialVersionUID = 200808191534L;
+
 	public Object coerceToUi(Object val, Component comp) { //load
 		if (val != null) {
 			//iterate to find the selected radio via the value
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-				final Component child = (Component)it.next();
+				final Component child = (Component) it.next();
 				if (child instanceof Radio) {
-					if (val.equals(((Radio)child).getValue())) {
+					if (val.equals(((Radio) child).getValue())) {
 						return child;
 					}
 				} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
@@ -50,8 +51,8 @@ public class RadiogroupSelectedItemConverter implements TypeConverter, java.io.S
 		}
 		return null;
 	}
-  
+
 	public Object coerceToBean(Object val, Component comp) { //save
- 		return val != null ? ((Radio)val).getValue() : null;
+		return val != null ? ((Radio) val).getValue() : null;
 	}
 }

@@ -17,8 +17,8 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A box.
@@ -37,12 +37,14 @@ public class Box extends XulElement {
 	public Box() {
 		this("vertical");
 	}
+
 	/**
 	 * @param orient either "horizontal" or "vertical".
 	 */
 	public Box(String orient) {
 		setOrient(orient);
 	}
+
 	/** Constructor a box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added
@@ -51,6 +53,7 @@ public class Box extends XulElement {
 	public Box(Component[] children) {
 		this("vertical", children);
 	}
+
 	/** Constructor a box by assigning an array of children.
 	 *
 	 * @param children an array of children to be added
@@ -70,6 +73,7 @@ public class Box extends XulElement {
 	public boolean isHorizontal() {
 		return "horizontal".equals(getOrient());
 	}
+
 	/** Returns whether it is a vertical box.
 	 * @since 3.0.0
 	 */
@@ -83,15 +87,17 @@ public class Box extends XulElement {
 	public String getOrient() {
 		return getMold();
 	}
+
 	/** Sets the orient.
 	 * @param orient either "horizontal" or "vertical".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
-			throw new WrongValueException("orient cannot be "+orient);
+			throw new WrongValueException("orient cannot be " + orient);
 
 		setMold(orient);
 	}
+
 	/** Returns the spacing between adjacent children, or null if the default
 	 * spacing is used.
 	 *
@@ -109,6 +115,7 @@ public class Box extends XulElement {
 	public String getSpacing() {
 		return _spacing;
 	}
+
 	/** Sets the spacing between adjacent children.
 	 * @param spacing the spacing (such as "0", "5px", "3pt" or "1em").
 	 * If null, empty ("") or "auto", the default spacing is used (i.e.,
@@ -116,7 +123,8 @@ public class Box extends XulElement {
 	 * @see #getSpacing
 	 */
 	public void setSpacing(String spacing) {
-		if (spacing != null && spacing.length() == 0) spacing = null;
+		if (spacing != null && spacing.length() == 0)
+			spacing = null;
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
 			smartUpdate("spacing", _spacing);
@@ -158,6 +166,7 @@ public class Box extends XulElement {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the alignment of cells of this box in the 'opposite' direction
 	 * (<i>start</i>, center, end, stretch).
 	 *
@@ -170,12 +179,14 @@ public class Box extends XulElement {
 	 * @since 3.0.0
 	 */
 	public void setAlign(String align) {
-		if (align != null && align.length() == 0) align = null;
+		if (align != null && align.length() == 0)
+			align = null;
 		if (!Objects.equals(_align, align)) {
 			_align = align;
 			smartUpdate("align", _align);
 		}
 	}
+
 	/** Returns the pack alignment of cells of this box
 	 * (start, center, end) plus an indication <i>stretch</i> option.
 	 *
@@ -223,6 +234,7 @@ public class Box extends XulElement {
 	public String getPack() {
 		return _pack;
 	}
+
 	/** Sets the alignment of cells of this box
 	 * (start, center, end) plus an <i>stretch</i> option.
 	 *
@@ -232,7 +244,8 @@ public class Box extends XulElement {
 	 * @see #getPack()
 	 */
 	public void setPack(String pack) {
-		if (pack != null && pack.length() == 0) pack = null;
+		if (pack != null && pack.length() == 0)
+			pack = null;
 		if (!Objects.equals(_pack, pack)) {
 			_pack = pack;
 			smartUpdate("pack", _pack);
@@ -255,6 +268,7 @@ public class Box extends XulElement {
 	public String getWidths() {
 		return Utils.arrayToString(_sizes);
 	}
+
 	/** Returns the heights/widths, which is a list of numbers separated by comma
 	 * to denote the height/width of each cell in a box.
 	 * If {@link Hbox} (i.e., {@link #getOrient} is horizontal),
@@ -270,6 +284,7 @@ public class Box extends XulElement {
 	public String getHeights() {
 		return getWidths();
 	}
+
 	/** Sets the widths/heights, which is a list of numbers separated
 	 * by comma to denote the width/height of each cell in a box.
 	 *
@@ -294,6 +309,7 @@ public class Box extends XulElement {
 			smartUpdate("widths", _sizes);
 		}
 	}
+
 	/** Sets the widths/heights, which is a list of numbers separated
 	 * by comma to denote the width/height of each cell in a box.
 	 *
@@ -315,11 +331,12 @@ public class Box extends XulElement {
 	 * @since 5.0.4
 	 */
 	public void setSizedByContent(boolean byContent) {
-		if(_sizedByContent != byContent) {
+		if (_sizedByContent != byContent) {
 			_sizedByContent = byContent;
 			smartUpdate("sizedByContent", byContent);
 		}
 	}
+
 	/**
 	 * Returns whether sizing the cell's size by its content.
 	 * <p>Default: true.
@@ -329,18 +346,22 @@ public class Box extends XulElement {
 	public boolean isSizedByContent() {
 		return _sizedByContent;
 	}
+
 	//-- super --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "spacing", _spacing);
 		render(renderer, "_sizes", _sizes);
 
-		if (!"start".equals(_align)) render(renderer, "align", _align);
-		if (!"start".equals(_pack)) render(renderer, "pack", _pack);
-		if (!isSizedByContent()) renderer.render("sizedByContent", false);
+		if (!"start".equals(_align))
+			render(renderer, "align", _align);
+		if (!"start".equals(_pack))
+			render(renderer, "pack", _pack);
+		if (!isSizedByContent())
+			renderer.render("sizedByContent", false);
 	}
+
 	public String getZclass() {
 		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : _zclass;
 	}

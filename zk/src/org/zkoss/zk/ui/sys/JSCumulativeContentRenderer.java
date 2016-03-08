@@ -35,9 +35,9 @@ import org.zkoss.zk.ui.UiException;
  * @since 8.0
  */
 public class JSCumulativeContentRenderer implements ContentRenderer {
-	
-	private Map<String, List<Object>> _stack = new LinkedHashMap<String,List<Object>>();
-	
+
+	private Map<String, List<Object>> _stack = new LinkedHashMap<String, List<Object>>();
+
 	private List<Object> fetch(String name) {
 		List<Object> list = _stack.get(name);
 		if (list == null) {
@@ -46,152 +46,13 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		}
 		return list;
 	}
+
 	public void render(String name, String value) throws IOException {
 		fetch(name).add(renderValue(value));
 	}
 
 	public void render(String name, Date value) throws IOException {
 		fetch(name).add(renderValue(value));
-	}
-
-	private String renderValue(String value) {
-		if (value == null) return null;
-		else {
-			return Strings.escapeJavaScript(value);
-		}
-	}
-	private String renderValue(Date value) {
-		if (value == null) return null;
-		else return new StringBuilder().append("jq.j2d('")
-			.append(JSONs.d2j(value))
-			.append("')").toString();
-	}
-	private String renderValue(Component value) {
-		if (value == null || value.getPage() == null) return null;
-		else return new StringBuilder().append("{$u:'").append(value.getUuid()).append("'}").toString();
-	}
-	private String renderValue(Object value) {
-		if (value == null || value instanceof String) {
-			return renderValue((String)value);
-		}
-		if (value instanceof Date) {
-			return renderValue((Date)value);
-		}
-		if (value instanceof Component) {
-			return renderValue((Component)value);
-		}
-		if (value instanceof Character) {
-			return renderValue(((Character)value).charValue());
-		}
-		StringBuilder buf = new StringBuilder(); 
-		if (value instanceof Map) {
-			buf.append('{');
-			boolean first = true;
-			for (Iterator it = ((Map)value).entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				if (first) first = false;
-				else buf.append(',');
-				buf.append('\'').append(me.getKey()).append("':");
-				renderValue(me.getValue());
-			}
-			buf.append('}');
-			return buf.toString();
-		}
-		if (value instanceof List) {
-			buf.append('[');
-			int j = 0;
-			for (Iterator it = ((List)value).iterator(); it.hasNext();j++) {
-				if (j > 0) buf.append(',');
-				renderValue(it.next());
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		//handle array
-		if (value instanceof Object[]) {
-			buf.append('[');
-			final Object[] ary = (Object[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof int[]) {
-			buf.append('[');
-			final int[] ary = (int[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof long[]) {
-			buf.append('[');
-			final long[] ary = (long[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof short[]) {
-			buf.append('[');
-			final short[] ary = (short[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof float[]) {
-			buf.append('[');
-			final float[] ary = (float[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof double[]) {
-			buf.append('[');
-			final double[] ary = (double[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof byte[]) {
-			buf.append('[');
-			final byte[] ary = (byte[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof char[]) {
-			buf.append('[');
-			final char[] ary = (char[])value;
-			for (int j = 0; j < ary.length; ++j) {
-				if (j > 0) buf.append(',');
-				renderValue(ary[j]);
-			}
-			buf.append(']');
-			return buf.toString();
-		}
-		if (value instanceof JSONAware)
-			return ((JSONAware)value).toJSONString();
-		else
-			return renderValue(value.toString());
 	}
 
 	public void render(String name, Object value) throws IOException {
@@ -230,6 +91,192 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		fetch(name).add(renderValue(value));
 	}
 
+	private String renderValue(String value) {
+		if (value == null)
+			return null;
+		else {
+			return Strings.escapeJavaScript(value);
+		}
+	}
+
+	private String renderValue(Date value) {
+		if (value == null)
+			return null;
+		else
+			return new StringBuilder().append("jq.j2d('").append(JSONs.d2j(value)).append("')").toString();
+	}
+
+	private String renderValue(Component value) {
+		if (value == null || value.getPage() == null)
+			return null;
+		else
+			return new StringBuilder().append("{$u:'").append(value.getUuid()).append("'}").toString();
+	}
+
+	private String renderValue(Object value) {
+		if (value == null || value instanceof String) {
+			return renderValue((String) value);
+		}
+		if (value instanceof Date) {
+			return renderValue((Date) value);
+		}
+		if (value instanceof Component) {
+			return renderValue((Component) value);
+		}
+		if (value instanceof Character) {
+			return renderValue(((Character) value).charValue());
+		}
+		StringBuilder buf = new StringBuilder();
+		if (value instanceof Map) {
+			buf.append('{');
+			boolean first = true;
+			for (Iterator it = ((Map) value).entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry) it.next();
+				if (first)
+					first = false;
+				else
+					buf.append(',');
+				buf.append('\'').append(me.getKey()).append("':");
+				renderValue(me.getValue());
+			}
+			buf.append('}');
+			return buf.toString();
+		}
+		if (value instanceof List) {
+			buf.append('[');
+			int j = 0;
+			for (Iterator it = ((List) value).iterator(); it.hasNext(); j++) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(it.next());
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		//handle array
+		if (value instanceof Object[]) {
+			buf.append('[');
+			final Object[] ary = (Object[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof int[]) {
+			buf.append('[');
+			final int[] ary = (int[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof long[]) {
+			buf.append('[');
+			final long[] ary = (long[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof short[]) {
+			buf.append('[');
+			final short[] ary = (short[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof float[]) {
+			buf.append('[');
+			final float[] ary = (float[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof double[]) {
+			buf.append('[');
+			final double[] ary = (double[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof byte[]) {
+			buf.append('[');
+			final byte[] ary = (byte[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof char[]) {
+			buf.append('[');
+			final char[] ary = (char[]) value;
+			for (int j = 0; j < ary.length; ++j) {
+				if (j > 0)
+					buf.append(',');
+				renderValue(ary[j]);
+			}
+			buf.append(']');
+			return buf.toString();
+		}
+		if (value instanceof JSONAware)
+			return ((JSONAware) value).toJSONString();
+		else
+			return renderValue(value.toString());
+	}
+
+	private String renderValue(char value) {
+		StringBuilder buf = new StringBuilder();
+		buf.append('\'');
+		switch (value) {
+		case '\'':
+		case '\\':
+			buf.append('\\');
+			break;
+		case '\n':
+			buf.append('\\');
+			value = 'n';
+			break;
+		case '\t':
+			buf.append('\\');
+			value = 't';
+			break;
+		case '\r':
+			buf.append('\\');
+			value = 'r';
+			break;
+		case '\f':
+			buf.append('\\');
+			value = 'f';
+			break;
+		}
+		buf.append(value).append('\'');
+		return buf.toString();
+	}
+
 	public void renderDirectly(String name, Object value) {
 		fetch(name).add(renderValue(value));
 	}
@@ -245,37 +292,26 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	public void renderWidgetAttributes(Map<String, String> attrs) {
 		renderClientAttributes(attrs);
 	}
+
 	public void renderClientAttributes(Map<String, String> attrs) {
 		fetch("domExtraAttrs").add(attrs);
 	}
-	private String renderValue(char value) {
-		StringBuilder buf = new StringBuilder();
-		buf.append('\'');
-		switch (value) {
-		case '\'':
-		case '\\': buf.append('\\'); break;
-		case '\n': buf.append('\\'); value = 'n'; break;
-		case '\t': buf.append('\\'); value = 't'; break;
-		case '\r': buf.append('\\'); value = 'r'; break;
-		case '\f': buf.append('\\'); value = 'f'; break;
-		}
-		buf.append(value).append('\'');
-		return buf.toString();
-	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder(64);
 		Map<String, List<Object>> result = new LinkedHashMap<String, List<Object>>(_stack);
 		List<Map<String, String>> listeners = Generics.cast(result.remove("listeners0"));
 		List<Map<String, String>> overrides = Generics.cast(result.remove("overrides"));
 		List<Map<String, String>> attrs = Generics.cast(result.remove("domExtraAttrs"));
-		
+
 		for (Map.Entry<String, List<Object>> me : result.entrySet()) {
-			renderName(sb,  me.getKey());
+			renderName(sb, me.getKey());
 			sb.append('[');
 			final List<Object> value = me.getValue();
 			int j = 0;
-			for (Iterator<Object> it = value.iterator(); it.hasNext();j++) {
-				if (j > 0) sb.append(',');
+			for (Iterator<Object> it = value.iterator(); it.hasNext(); j++) {
+				if (j > 0)
+					sb.append(',');
 				sb.append(it.next());
 			}
 			sb.append(']');
@@ -283,16 +319,16 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		if (listeners != null) {
 			renderName(sb, "listeners0");
 			sb.append('[');
-			
+
 			int j = 0;
-			for (Iterator<Map<String, String>> it = listeners.iterator(); it.hasNext();j++) {
-				if (j > 0) sb.append(',');
-				
+			for (Iterator<Map<String, String>> it = listeners.iterator(); it.hasNext(); j++) {
+				if (j > 0)
+					sb.append(',');
+
 				sb.append('{');
 				for (Iterator itt = it.next().entrySet().iterator(); itt.hasNext();) {
-					final Map.Entry me = (Map.Entry)itt.next();
-					sb.append(me.getKey()).append(":function(event){\n")
-						.append(me.getValue()).append("\n},");
+					final Map.Entry me = (Map.Entry) itt.next();
+					sb.append(me.getKey()).append(":function(event){\n").append(me.getValue()).append("\n},");
 				}
 				sb.setCharAt(sb.length() - 1, '}');
 			}
@@ -302,27 +338,28 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		if (overrides != null) {
 			renderName(sb, "overrides");
 			sb.append('[');
-			
+
 			int j = 0;
-			for (Iterator<Map<String, String>> it = overrides.iterator(); it.hasNext();j++) {
-				if (j > 0) sb.append(',');
-				
+			for (Iterator<Map<String, String>> it = overrides.iterator(); it.hasNext(); j++) {
+				if (j > 0)
+					sb.append(',');
+
 				sb.append('{');
 				for (Iterator itt = it.next().entrySet().iterator(); itt.hasNext();) {
-					final Map.Entry me = (Map.Entry)itt.next();
-					final String name = (String)me.getKey();
-					final String value = (String)me.getValue();
+					final Map.Entry me = (Map.Entry) itt.next();
+					final String name = (String) me.getKey();
+					final String value = (String) me.getValue();
 					if (value != null) {
 						//It is too costly to detect if it is a legal expression
 						//so we only check the most common illegal case
 						final String v = value.trim();
 						char cc;
-						if (v.length() != 0
-						&& ((cc=v.charAt(v.length() - 1)) == ';' || cc == ','
-						|| (v.indexOf("function") < 0 && v.indexOf(';') >= 0)))
-							throw new UiException("Illegal client override: "+v+
-								(name.startsWith("on") ? "\nTo listen an event, remember to captalize the third letter, such as onClick":
-									"\nIt must be a legal JavaScript expression (not statement)"));
+						if (v.length() != 0 && ((cc = v.charAt(v.length() - 1)) == ';' || cc == ','
+								|| (v.indexOf("function") < 0 && v.indexOf(';') >= 0)))
+							throw new UiException("Illegal client override: " + v
+									+ (name.startsWith("on")
+											? "\nTo listen an event, remember to captalize the third letter, such as onClick"
+											: "\nIt must be a legal JavaScript expression (not statement)"));
 					}
 					sb.append(name).append(":\n").append(value.length() == 0 ? "''" : value).append("\n,");
 				}
@@ -334,14 +371,15 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 		if (attrs != null) {
 			renderName(sb, "domExtraAttrs");
 			sb.append('[');
-			
+
 			int j = 0;
-			for (Iterator<Map<String, String>> it = listeners.iterator(); it.hasNext();j++) {
-				if (j > 0) sb.append(',');
-				
+			for (Iterator<Map<String, String>> it = listeners.iterator(); it.hasNext(); j++) {
+				if (j > 0)
+					sb.append(',');
+
 				sb.append('{');
 				for (Iterator itt = it.next().entrySet().iterator(); itt.hasNext();) {
-					final Map.Entry me = (Map.Entry)itt.next();
+					final Map.Entry me = (Map.Entry) itt.next();
 					renderValue(me.getKey()); //allow ':' or others
 					sb.append(':');
 					renderValue(me.getValue());
@@ -355,7 +393,8 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	}
 
 	private void renderName(StringBuilder sb, String name) {
-		if (sb.length() > 0) sb.append(',');
+		if (sb.length() > 0)
+			sb.append(',');
 		sb.append(name).append(':');
 	}
 }

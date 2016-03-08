@@ -33,10 +33,11 @@ import org.zkoss.zul.Treerow;
  */
 public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;
+
 	public void render(final Treeitem item, final Object data, final int index) throws Exception {
 		final Tree tree = item.getTree();
 		final Component parent = item.getParent();
-		final Template tm = resolveTemplate(tree,parent,data,index,-1,"model");
+		final Template tm = resolveTemplate(tree, parent, data, index, -1, "model");
 		// ZK-2859: to replace the id of the the original treeitem that is not from the template
 		final String oldId = item.getId();
 		if (!Strings.isEmpty(oldId)) {
@@ -46,44 +47,44 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			Treecell tc = new Treecell(Objects.toString(data));
 			Treerow tr = null;
 			item.setValue(data);
-			if(item.getTreerow()==null){
+			if (item.getTreerow() == null) {
 				tr = new Treerow();
 				tr.setParent(item);
-			}else{
+			} else {
 				tr = item.getTreerow();
 				tr.getChildren().clear();
 			}
 			tc.setParent(tr);
 		} else {
 
-			final ForEachStatus iterStatus = new AbstractForEachStatus(){//provide iteration status in this context
+			final ForEachStatus iterStatus = new AbstractForEachStatus() { //provide iteration status in this context
 				private static final long serialVersionUID = 1L;
-				
+
 				public int getIndex() {
 					return index;
 				}
-				
-				public Object getCurrent(){
+
+				public Object getCurrent() {
 					return data;
 				}
-				
-				public Integer getEnd(){
+
+				public Integer getEnd() {
 					throw new UiException("end attribute is not supported");
 				}
 			};
-			
+
 			final String var = (String) tm.getParameters().get(EACH_ATTR);
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
-			final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
-			
-			
+			final String itervarnm = itervar == null ? (var == null ? EACH_STATUS_VAR : varnm + STATUS_POST_VAR)
+					: itervar; //provide default value if not specified
+
 			//bug 1188, EL when nested var and itervar
 			Object oldVar = parent.getAttribute(varnm);
 			Object oldIter = parent.getAttribute(itervarnm);
 			parent.setAttribute(varnm, data);
 			parent.setAttribute(itervarnm, iterStatus);
-			
+
 			final Component[] items = filterOutShadows(parent, tm.create(parent, item, null, null));
 
 			// Bug ZK-2882
@@ -99,23 +100,23 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 			}
 
 			if (items.length != 1)
-				throw new UiException("The model template must have exactly one item, not "+items.length);
+				throw new UiException("The model template must have exactly one item, not " + items.length);
 
-			final Treeitem ti = (Treeitem)items[0];
+			final Treeitem ti = (Treeitem) items[0];
 			ti.setAttribute(BinderImpl.VAR, varnm); // for the converter to get the value
 			//zk-1698, mvvm tree performance issue, 
 			//no need to use reference binding for tree because we don't allow it to notify a path change also.
-			ti.setAttribute(varnm,data); 
-			
+			ti.setAttribute(varnm, data);
+
 			ti.setAttribute(itervarnm, iterStatus);
-			
+
 			//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
 			//move TEMPLATE_OBJECT (was set in resoloveTemplate) to current for check in addTemplateTracking
 			ti.setAttribute(TemplateResolver.TEMPLATE_OBJECT, parent.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
-			
+
 			//add template dependency
 			addTemplateTracking(tree, ti, data, index, -1);
-			
+
 			if (ti.getValue() == null) //template might set it
 				ti.setValue(data);
 			// ZK-2859: change the id back if ti is actually the original treeitem which is not from the template
@@ -123,7 +124,7 @@ public class BindTreeitemRenderer extends AbstractRenderer implements TreeitemRe
 				ti.setId(oldId);
 			}
 			item.setAttribute(Attributes.MODEL_RENDERAS, ti);
-				//indicate a new item is created to replace the existent one
+			//indicate a new item is created to replace the existent one
 			item.detach();
 		}
 	}

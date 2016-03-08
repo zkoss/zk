@@ -16,9 +16,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
-import java.io.IOException;
 
 /**
  * Used with {@link org.zkoss.zk.ui.AbstractComponent#renderProperties}
@@ -30,8 +30,10 @@ import java.io.IOException;
 public interface ContentRenderer {
 	/** Renders a string property. */
 	public void render(String name, String value) throws IOException;
+
 	/** Renders a Date property. */
 	public void render(String name, Date value) throws IOException;
+
 	/** Renders an arbitrary object property.
 	 * What type of supported objects depends on the implementation.
 	 * However, the following types are always supported:
@@ -49,28 +51,38 @@ public interface ContentRenderer {
 	 * It the client's job to convert the string back to the correct object.
 	 */
 	public void render(String name, Object value) throws IOException;
+
 	/** Renders an integer property. */
 	public void render(String name, int value) throws IOException;
+
 	/** Renders a short property. */
 	public void render(String name, short value) throws IOException;
+
 	/** Renders a long property. */
 	public void render(String name, long value) throws IOException;
+
 	/** Renders a byte property. */
 	public void render(String name, byte value) throws IOException;
+
 	/** Renders a boolean property. */
 	public void render(String name, boolean value) throws IOException;
+
 	/** Renders a double property. */
 	public void render(String name, double value) throws IOException;
+
 	/** Renders a float property. */
 	public void render(String name, float value) throws IOException;
+
 	/** Renders a char property. */
 	public void render(String name, char value) throws IOException;
+
 	/** Renders the value directly without encapsulation or conversion.
 	 * It depends on the implementation.
 	 * For {@link JsContentRenderer}, value must be a valid JavaScript
 	 * snippet.
 	 */
 	public void renderDirectly(String name, Object value);
+
 	/** Renders the client code snippet for event listeners
 	 * registered for the peer widget.
 	 * @param listeners the map of listeners to register at the peer widget.
@@ -79,6 +91,7 @@ public interface ContentRenderer {
 	 * They are both String instances.
 	 */
 	public void renderWidgetListeners(Map<String, String> listeners);
+
 	/** Renders the client code snippet to override the methods
 	 * and properties of the peer widget.
 	 *
@@ -90,10 +103,12 @@ public interface ContentRenderer {
 	 * <code>{name1: value1, name2: value2}</code>.
 	 */
 	public void renderWidgetOverrides(Map<String, String> overrides);
+
 	/** @deprecated As released of ZK 8.0.0, please use {@link #renderClientAttributes(Map)}
 	 * instead.
 	 */
 	public void renderWidgetAttributes(Map<String, String> attrs);
+
 	/** Renders the client's DOM attributes for the peer widgets.
 	 * @param attrs the map of attributes. The key is the attribute's name,
 	 * while the value is the attribute's value. They are both instances of String.

@@ -18,15 +18,14 @@ package org.zkoss.zul;
 
 import java.awt.image.RenderedImage;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.image.Images;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
-
-import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * An image.
@@ -77,6 +76,7 @@ public class Image extends XulElement {
 
 	public Image() {
 	}
+
 	public Image(String src) {
 		setSrc(src);
 	}
@@ -88,6 +88,7 @@ public class Image extends XulElement {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the alignment: one of top, texttop, middle, absmiddle,
 	 * bottom, absbottom, baseline, left, right and center.
 	 * @deprecated as of release 6.0.0, use CSS instead.
@@ -101,16 +102,19 @@ public class Image extends XulElement {
 			smartUpdate("align", _align);
 		}
 	}
+
 	/** 
 	 * @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public String getBorder() {
 		return null;
 	}
+
 	/** @deprecated As of release 5.0.5, use CSS instead.
 	 */
 	public void setBorder(String border) {
 	}
+
 	/** Returns number of pixels of extra space to the left and right
 	 * side of the image.
 	 * <p>Default: null (use browser default).
@@ -119,6 +123,7 @@ public class Image extends XulElement {
 	public String getHspace() {
 		return _hspace;
 	}
+
 	/** Sets number of pixels of extra space to the left and right
 	 * side of the image.
 	 * @deprecated as of release 6.0.0, use CSS instead.
@@ -132,6 +137,7 @@ public class Image extends XulElement {
 			smartUpdate("hspace", _hspace);
 		}
 	}
+
 	/** Returns number of pixels of extra space to the top and bottom
 	 * side of the image.
 	 * <p>Default: null (use browser default).
@@ -140,6 +146,7 @@ public class Image extends XulElement {
 	public String getVspace() {
 		return _vspace;
 	}
+
 	/** Sets number of pixels of extra space to the top and bottom
 	 * side of the image.
 	 * @deprecated as of release 6.0.0, use CSS instead.
@@ -160,6 +167,7 @@ public class Image extends XulElement {
 	public String getSrc() {
 		return _src;
 	}
+
 	/** Sets the source URI of the image.
 	 *
 	 * <p>Calling this method implies setContent(null).
@@ -180,6 +188,7 @@ public class Image extends XulElement {
 			smartUpdate("src", new EncodedURL()); //Bug 1850895
 		}
 	}
+
 	/** Sets the content directly.
 	 * <p>Default: null.
 	 *
@@ -194,10 +203,12 @@ public class Image extends XulElement {
 		if (_src != null || image != _image) {
 			_image = image;
 			_src = null;
-			if (_image != null) ++_imgver; //enforce browser to reload image
+			if (_image != null)
+				++_imgver; //enforce browser to reload image
 			smartUpdate("src", new EncodedURL()); //Bug 1850895
 		}
 	}
+
 	/** Sets the content directly with the rendered image.
 	 * It actually encodes the rendered image to an PNG image
 	 * ({@link org.zkoss.image.Image}) with {@link Images#encode},
@@ -215,6 +226,7 @@ public class Image extends XulElement {
 			throw new UiException(ex);
 		}
 	}
+
 	/** Returns the content set by {@link #setContent(org.zkoss.image.Image)}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
 	 * It simply returns what is passed to {@link #setContent(org.zkoss.image.Image)}.
@@ -228,23 +240,20 @@ public class Image extends XulElement {
 	private String getEncodedURL() {
 		if (_image != null)
 			return Utils.getDynamicMediaURI( //already encoded
-				this, _imgver, "c/" + _image.getName(), _image.getFormat());
+					this, _imgver, "c/" + _image.getName(), _image.getFormat());
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null ? dt.getExecution()
-			.encodeURL(_src != null ? _src: "~./img/spacer.gif"): "";
+		return dt != null ? dt.getExecution().encodeURL(_src != null ? _src : "~./img/spacer.gif") : "";
 	}
+
 	/** Returns the encoded URL of the hover image, or null if no hover image.
 	 */
 	private String getEncodedHoverURL() {
 		if (_hoverimg != null)
-			return Utils.getDynamicMediaURI(
-				this, _hoverimgver,
-				"h/" + _hoverimg.getName(), _hoverimg.getFormat());
+			return Utils.getDynamicMediaURI(this, _hoverimgver, "h/" + _hoverimg.getName(), _hoverimg.getFormat());
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null && _hoversrc != null ?
-			dt.getExecution().encodeURL(_hoversrc): null;
+		return dt != null && _hoversrc != null ? dt.getExecution().encodeURL(_hoversrc) : null;
 	}
 
 	/** Returns the URI of the hover image.
@@ -255,6 +264,7 @@ public class Image extends XulElement {
 	public String getHover() {
 		return _hoversrc;
 	}
+
 	/** Sets the image URI.
 	 * The hover image is used when the mouse is moving over this component.
 	 * <p>Calling this method implies setHoverContent(null).
@@ -265,13 +275,15 @@ public class Image extends XulElement {
 	 * @see #setHoverContent(RenderedImage)
 	 */
 	public void setHover(String src) {
-		if (src != null && src.length() == 0) src = null;
+		if (src != null && src.length() == 0)
+			src = null;
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
 			smartUpdate("hover", new EncodedHoverURL());
 		}
 	}
+
 	/** Sets the content of the hover image directly.
 	 * The hover image is used when the mouse is moving over this component.
 	 * <p>Default: null.
@@ -287,10 +299,12 @@ public class Image extends XulElement {
 		if (_hoversrc != null || image != _hoverimg) {
 			_hoverimg = image;
 			_hoversrc = null;
-			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
+			if (_hoverimg != null)
+				_hoverimgver++; //enforce browser to reload image
 			smartUpdate("hover", new EncodedHoverURL());
 		}
 	}
+
 	/** Sets the content of the hover image directly with the rendered image.
 	 * The hover image is used when the mouse is moving over this component.
 	 *
@@ -311,8 +325,7 @@ public class Image extends XulElement {
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		//ZK-1638: preload image can also defined in zk.xml by library property
 		render(renderer, "_preloadImage", Utils.testAttribute(this, "org.zkoss.zul.image.preload", false, true));
@@ -323,7 +336,6 @@ public class Image extends XulElement {
 		render(renderer, "hspace", _hspace);
 		render(renderer, "vspace", _vspace);
 	}
-
 
 	//-- Component --//
 	/** Default: not childable.
@@ -336,11 +348,11 @@ public class Image extends XulElement {
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements DynamicMedia {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements DynamicMedia {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			if (pathInfo != null) {
@@ -360,6 +372,7 @@ public class Image extends XulElement {
 			return getEncodedURL();
 		}
 	}
+
 	private class EncodedHoverURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedHoverURL();

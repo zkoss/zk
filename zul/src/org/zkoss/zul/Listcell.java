@@ -33,12 +33,14 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Listcell extends LabelImageElement {
 	private Object _value;
 	private AuxInfo _auxinf;
-	
+
 	public Listcell() {
 	}
+
 	public Listcell(String label) {
 		super(label);
 	}
+
 	public Listcell(String label, String src) {
 		super(label, src);
 	}
@@ -47,21 +49,21 @@ public class Listcell extends LabelImageElement {
 	 */
 	public Listbox getListbox() {
 		final Component comp = getParent();
-		return comp != null ? (Listbox)comp.getParent(): null;
+		return comp != null ? (Listbox) comp.getParent() : null;
 	}
 
 	public String getZclass() {
 		return _zclass == null ? "z-listcell" : _zclass;
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Listcell clone = (Listcell)super.clone();
+		final Listcell clone = (Listcell) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
-	
+
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.
 	 */
@@ -73,7 +75,7 @@ public class Listcell extends LabelImageElement {
 				final int j = getColumnIndex();
 				final List lcschs = lcs.getChildren();
 				if (j < lcschs.size())
-					return (Listheader)lcschs.get(j);
+					return (Listheader) lcschs.get(j);
 			}
 		}
 		return null;
@@ -83,8 +85,7 @@ public class Listcell extends LabelImageElement {
 	 */
 	public int getColumnIndex() {
 		int j = 0;
-		for (Iterator it = getParent().getChildren().iterator();
-		it.hasNext(); ++j)
+		for (Iterator it = getParent().getChildren().iterator(); it.hasNext(); ++j)
 			if (it.next() == this)
 				break;
 		return j;
@@ -105,7 +106,7 @@ public class Listcell extends LabelImageElement {
 		if (listbox.inSelectMold())
 			return listbox.getMaxlength();
 		final Listheader lc = getListheader();
-		return lc != null ? lc.getMaxlength(): 0;
+		return lc != null ? lc.getMaxlength() : 0;
 	}
 
 	/** Returns the value.
@@ -115,8 +116,9 @@ public class Listcell extends LabelImageElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -132,6 +134,7 @@ public class Listcell extends LabelImageElement {
 	public int getSpan() {
 		return _auxinf != null ? _auxinf.span : 1;
 	}
+
 	/** Sets the number of columns to span this cell.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
@@ -141,29 +144,30 @@ public class Listcell extends LabelImageElement {
 			smartUpdate("colspan", getSpan());
 		}
 	}
+
 	/**
 	 * @deprecated as of release 6.0.0. To control the hflex of Listcell, please 
 	 * use {@link Listheader#setHflex(String)} instead.
 	 */
 	public void setHflex(String flex) {
 	}
-	
+
 	//-- super --//
 	public void setWidth(String width) {
 		throw new UnsupportedOperationException("Set listheader's width instead");
 	}
 
 	//-- Component --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		if (getSpan() > 1)
 			renderer.render("colspan", getSpan());
 	}
+
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listitem))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
 
@@ -184,5 +188,5 @@ public class Listcell extends LabelImageElement {
 			}
 		}
 	}
-	
+
 }

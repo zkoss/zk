@@ -18,12 +18,11 @@ package org.zkoss.zhtml;
 
 import java.io.StringWriter;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * The BODY tag.
@@ -35,13 +34,14 @@ public class Body extends AbstractTag {
 		super("body");
 	}
 
-	//--Component-//
+	// --Component-//
 	public void invalidate() {
 		final Execution exec = Executions.getCurrent();
 		if (exec != null && exec.isAsyncUpdate(getPage()))
 			throw new UnsupportedOperationException("body.invalidate() not allowed");
 		super.invalidate();
 	}
+
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);
@@ -57,7 +57,7 @@ public class Body extends AbstractTag {
 
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Html))
-			throw new UiException("Body's parent must be Html, not "+parent);
+			throw new UiException("Body's parent must be Html, not " + parent);
 		super.beforeParentChanged(parent);
 	}
 }

@@ -16,10 +16,10 @@ import org.zkoss.zk.ui.util.Composer;
 public class AnnotateDataBindingComposer implements Composer, java.io.Serializable {
 	private static final long serialVersionUID = -1572346127326530607L;
 	protected AnnotateDataBinder _binder;
-	
+
 	public void doAfterCompose(Component comp) throws Exception {
 		_binder = new AnnotateDataBinder(comp);
-		comp.setAttribute("binder",_binder);
+		comp.setAttribute("binder", _binder);
 		_binder.loadAll();
 	}
 }

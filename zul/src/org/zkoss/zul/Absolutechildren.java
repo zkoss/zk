@@ -74,8 +74,7 @@ public class Absolutechildren extends XulElement {
 		return _y;
 	}
 
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-			throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		if (_x != 0)

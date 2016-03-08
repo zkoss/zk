@@ -43,8 +43,9 @@ public interface ChartModel {
 	 * to the data model occurs. 
 	 */
 	public void addChartDataListener(ChartDataListener l);
-    /** Removes a listener from the chart that's notified each time
-     * a change to the data model occurs. 
-     */
-	public void removeChartDataListener(ChartDataListener l) ;
+
+	/** Removes a listener from the chart that's notified each time
+	 * a change to the data model occurs. 
+	 */
+	public void removeChartDataListener(ChartDataListener l);
 }

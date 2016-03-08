@@ -30,6 +30,6 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuScrollTo extends AuResponse {
 	public AuScrollTo(int x, int y) {
-		super("scrollTo", new Integer[] {new Integer(x), new Integer(y)});
+		super("scrollTo", new Integer[] { new Integer(x), new Integer(y) });
 	}
 }

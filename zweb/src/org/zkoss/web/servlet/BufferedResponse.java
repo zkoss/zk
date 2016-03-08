@@ -16,13 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
-import java.io.Writer;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
@@ -50,48 +50,42 @@ public class BufferedResponse extends ServletResponseWrapper {
 	 * is returned.
 	 * It is smart enough not to wrap the same writer twice.
 	 */
-	public static final ServletResponse
-	getInstance(ServletResponse response, Writer writer) {
+	public static final ServletResponse getInstance(ServletResponse response, Writer writer) {
 		if (response instanceof HttpServletResponse)
-			return HttpBufferedResponse.getInstance(
-				(HttpServletResponse)response, writer);
+			return HttpBufferedResponse.getInstance((HttpServletResponse) response, writer);
 
 		if (writer != null
-		&& (!(response instanceof BufferedResponse)
-			|| ((BufferedResponse)response)._writer != writer))
+				&& (!(response instanceof BufferedResponse) || ((BufferedResponse) response)._writer != writer))
 			return new BufferedResponse(response, writer);
 		return response;
 	}
+
 	/** Returns a buffered response with a output stream, if stream is not null;
 	 * or the original response if stream is null.
 	 * If response is HttpServletResponse, {@link HttpBufferedResponse#getInstance}
 	 * is returned.
 	 * It is smart enough not to wrap the same stream twice.
 	 */
-	public static final ServletResponse
-	getInstance(ServletResponse response, OutputStream stream) {
+	public static final ServletResponse getInstance(ServletResponse response, OutputStream stream) {
 		if (response instanceof HttpServletResponse)
-			return HttpBufferedResponse.getInstance(
-				(HttpServletResponse)response, stream);
+			return HttpBufferedResponse.getInstance((HttpServletResponse) response, stream);
 
 		if (stream != null
-		&& (!(response instanceof BufferedResponse)
-			|| ((BufferedResponse)response)._stream != stream))
+				&& (!(response instanceof BufferedResponse) || ((BufferedResponse) response)._stream != stream))
 			return new BufferedResponse(response, stream);
 		return response;
 	}
 
 	/** Constructs a buffered response with a writer. */
-	private BufferedResponse(ServletResponse response,
-	Writer writer) {
+	private BufferedResponse(ServletResponse response, Writer writer) {
 		super(response);
 		if (writer == null)
 			throw new NullPointerException("writer");
 		_writer = writer;
 	}
+
 	/** Constructs a buffered response with an output stream. */
-	private BufferedResponse(ServletResponse response,
-	OutputStream stream) {
+	private BufferedResponse(ServletResponse response, OutputStream stream) {
 		super(response);
 		if (stream == null)
 			throw new NullPointerException("stream");
@@ -106,17 +100,17 @@ public class BufferedResponse extends ServletResponseWrapper {
 		if (_pwt == null) {
 			if (_writer != null) {
 				if (_writer instanceof PrintWriter) {
-					_pwt = (PrintWriter)_writer;
+					_pwt = (PrintWriter) _writer;
 				} else {
 					_pwt = new PrintWriter(_writer);
 				}
 			} else {
-				_pwt = new PrintWriter(new OutputStreamWriter(
-					_stream, getCharacterEncoding()));
+				_pwt = new PrintWriter(new OutputStreamWriter(_stream, getCharacterEncoding()));
 			}
 		}
 		return _pwt;
 	}
+
 	public ServletOutputStream getOutputStream() throws IOException {
 		if (_pwt != null)
 			throw new IllegalStateException("getWriter was called");
@@ -132,17 +126,20 @@ public class BufferedResponse extends ServletResponseWrapper {
 	}
 
 	public void flushBuffer() throws IOException {
-		if (_writer != null) _writer.flush();
-		else _stream.flush();
+		if (_writer != null)
+			_writer.flush();
+		else
+			_stream.flush();
 	}
+
 	/** Useful only if StringWriter or ByteArrayOutputStream is used
 	 * to construct this object.
 	 */
 	public void resetBuffer() {
 		if (_writer instanceof StringWriter) {
-			((StringWriter)_writer).getBuffer().setLength(0);
+			((StringWriter) _writer).getBuffer().setLength(0);
 		} else if (_stream instanceof ByteArrayOutputStream) {
-			((ByteArrayOutputStream)_stream).reset();
+			((ByteArrayOutputStream) _stream).reset();
 		}
 	}
 }

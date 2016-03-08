@@ -14,6 +14,7 @@ package org.zkoss.zk.ui.sys;
 import java.io.File;
 
 import org.apache.commons.fileupload.FileItem;
+
 import org.zkoss.util.media.Media;
 
 /**
@@ -47,14 +48,8 @@ public interface DiskFileItemFactory {
 	 *
 	 * @return The newly created file item.
 	 */
-	public FileItem createItem(
-			String fieldName,
-			String contentType,
-			boolean isFormField,
-			String fileName,
-			int sizeThreshold,
-			File repository
-	);
+	public FileItem createItem(String fieldName, String contentType, boolean isFormField, String fileName,
+			int sizeThreshold, File repository);
 
 	/**
 	 * Create a new {@link Media} instance from from the supplied parameters and
@@ -66,6 +61,5 @@ public interface DiskFileItemFactory {
 	 * @param isNative whether the file item is a binary type.
 	 * @return The newly created media.
 	 */
-	public Media createMedia(FileItem fileItem, String contentType, String fileName,
-			boolean isNative);
+	public Media createMedia(FileItem fileItem, String contentType, String fileName, boolean isNative);
 }

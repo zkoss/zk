@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.Component;
 
 /**
  * Represents an event caused by a component being maximized.
@@ -37,14 +37,13 @@ public class MaximizeEvent extends Event {
 	 */
 	public static final MaximizeEvent getMaximizeEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		return new MaximizeEvent(request.getCommand(), request.getComponent(),
-			(String)data.get("left"), (String)data.get("top"),
-			(String)data.get("width"), (String)data.get("height"),
-			AuRequests.getBoolean(data, "maximized"));
+		return new MaximizeEvent(request.getCommand(), request.getComponent(), (String) data.get("left"),
+				(String) data.get("top"), (String) data.get("width"), (String) data.get("height"),
+				AuRequests.getBoolean(data, "maximized"));
 	}
 
-	public MaximizeEvent(String name, Component target, String left, String top,
-			String width, String height, boolean maximized) {
+	public MaximizeEvent(String name, Component target, String left, String top, String width, String height,
+			boolean maximized) {
 		super(name, target);
 		_left = left;
 		_top = top;
@@ -52,26 +51,31 @@ public class MaximizeEvent extends Event {
 		_height = height;
 		_maximized = maximized;
 	}
+
 	/** Returns the width of the component, which is its original width.
 	 */
 	public final String getWidth() {
 		return _width;
 	}
+
 	/** Returns the height of the component, which is its original height.
 	 */
 	public final String getHeight() {
 		return _height;
 	}
+
 	/** Returns the left of the component, which is its original left.
 	 */
 	public final String getLeft() {
 		return _left;
 	}
+
 	/** Returns the top of the component, which is its original top.
 	 */
 	public final String getTop() {
 		return _top;
 	}
+
 	/** Returns whether to be maximized.
 	 */
 	public final boolean isMaximized() {

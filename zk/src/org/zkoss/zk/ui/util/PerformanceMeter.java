@@ -53,8 +53,8 @@ public interface PerformanceMeter {
 	 * between midnight January 1, 1970 (UTC) to when the client starts
 	 * the request. It is client's time, not server's.
 	 */
-	public void requestStartAtClient(
-		String requestId, Execution exec, long time);
+	public void requestStartAtClient(String requestId, Execution exec, long time);
+
 	/** Called to notify when the client has received the response
 	 * (but not processed yet).
 	 *
@@ -81,8 +81,8 @@ public interface PerformanceMeter {
 	 * completed the process. It is client's time, not server's.
 	 * @since 3.0.8
 	 */
-	public void requestReceiveAtClient(
-		String requestId, Execution exec, long time);
+	public void requestReceiveAtClient(String requestId, Execution exec, long time);
+
 	/** Called to notify when the client has completed the processing of
 	 * the response.
 	 *
@@ -102,8 +102,7 @@ public interface PerformanceMeter {
 	 * between midnight January 1, 1970 (UTC) to when the client has
 	 * completed the process. It is client's time, not server's.
 	 */
-	public void requestCompleteAtClient(
-		String requestId, Execution exec, long time);
+	public void requestCompleteAtClient(String requestId, Execution exec, long time);
 
 	/** Called to notify when the server receives the request.
 	 *
@@ -118,8 +117,8 @@ public interface PerformanceMeter {
 	 * between midnight January 1, 1970 (UTC) to when the server receives
 	 * the request. It is server's time.
 	 */
-	public void requestStartAtServer(
-		String requestId, Execution exec, long time);
+	public void requestStartAtServer(String requestId, Execution exec, long time);
+
 	/** Called to notify when the server has completed the processing of
 	 * the request.
 	 *
@@ -134,6 +133,5 @@ public interface PerformanceMeter {
 	 * between midnight January 1, 1970 (UTC) to when the server has
 	 * completed the process. It is server's time.
 	 */
-	public void requestCompleteAtServer(
-		String requestId, Execution exec, long time);
+	public void requestCompleteAtServer(String requestId, Execution exec, long time);
 }

@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javassist.Modifier;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
+
 import org.zkoss.bind.Form;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.ImmutableElements;
@@ -36,7 +37,7 @@ import org.zkoss.zk.ui.UiException;
  */
 public class ProxyHelper {
 	private static Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<Class<?>, Boolean>();
-	
+
 	/**
 	 * Creates a proxy object from the given origin object, if any.
 	 * @param origin
@@ -45,6 +46,7 @@ public class ProxyHelper {
 	public static <T extends Object> T createProxyIfAny(T origin) {
 		return createProxyIfAny(origin, null);
 	}
+
 	/**
 	 * Creates a proxy object from the given origin object, if any.
 	 * @param origin
@@ -71,39 +73,40 @@ public class ProxyHelper {
 		}
 		if (isImmutable(origin))
 			return origin;
-		
+
 		ProxyFactory factory = new ProxyFactory();
 		if (origin instanceof List) {
-			return (T) new ListProxy((List)origin, annotations);
+			return (T) new ListProxy((List) origin, annotations);
 		} else if (origin instanceof Set) {
-			return (T) new SetProxy((Set)origin, annotations);
+			return (T) new SetProxy((Set) origin, annotations);
 		} else if (origin instanceof Map) {
-			return (T) new MapProxy((Map)origin, annotations);
+			return (T) new MapProxy((Map) origin, annotations);
 		} else if (origin instanceof Collection) {
-			return (T) new ListProxy((Collection)origin, annotations);
+			return (T) new ListProxy((Collection) origin, annotations);
 		} else if (origin.getClass().isArray()) {
 			throw new UnsupportedOperationException("Array cannot be a proxy object!");
 		} else {
 			factory.setFilter(BeanProxyHandler.BEAN_METHOD_FILTER);
 			factory.setSuperclass(origin.getClass());
 			if (hasImmutableFields) {
-				factory.setInterfaces(new Class[] {FormProxyObject.class, ImmutableFields.class});
+				factory.setInterfaces(new Class[] { FormProxyObject.class, ImmutableFields.class });
 			} else {
-				factory.setInterfaces(new Class[] {FormProxyObject.class});
+				factory.setInterfaces(new Class[] { FormProxyObject.class });
 			}
 			Class<?> proxyClass = factory.createClass();
 			Object p1 = null;
 			try {
 				p1 = proxyClass.newInstance();
 			} catch (Exception e) {
-				throw UiException.Aide.wrap(e, "Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
+				throw UiException.Aide.wrap(e,
+						"Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
 			}
 
 			((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));
 			return (T) p1;
 		}
 	}
-	
+
 	/**
 	 * Adds an ignored proxy class type. Once the data binder try to create a proxy
 	 * object for the form binding, it will check whether the origin class type
@@ -112,15 +115,17 @@ public class ProxyHelper {
 	public static void addIgnoredProxyClass(Class<?> type) {
 		_ignoredClasses.put(type, Boolean.TRUE);
 	}
+
 	/**
 	 * Returns whether the given origin object is immutable.
 	 */
 	public static boolean isImmutable(Object origin) {
 		if (BindELContext.isImmutable(origin))
 			return true;
-		
+
 		return checkImmutable(origin.getClass());
 	}
+
 	private static boolean checkImmutable(Class<?> type) {
 		if (_ignoredClasses.containsKey(type))
 			return true;
@@ -128,9 +133,10 @@ public class ProxyHelper {
 			_ignoredClasses.put(type, Boolean.TRUE);
 			return true;
 		}
-		
+
 		return false;
 	}
+
 	/**
 	 * Creates a proxy form object from the given origin object, if any.
 	 * @param origin the origin data object
@@ -140,6 +146,7 @@ public class ProxyHelper {
 	public static <T extends Object> T createFormProxy(T origin, Class<?> type) {
 		return createFormProxy(origin, type, null);
 	}
+
 	/**
 	 * Creates a proxy form object from the given origin object, if any.
 	 * @param origin the origin data object
@@ -159,15 +166,14 @@ public class ProxyHelper {
 
 		factory.setSuperclass(type);
 		if (interfaces == null) {
-			factory.setInterfaces(new Class[] {FormProxyObject.class, Form.class,
-					FormFieldCleaner.class});
+			factory.setInterfaces(new Class[] { FormProxyObject.class, Form.class, FormFieldCleaner.class });
 		} else {
 			int len0 = interfaces.length;
-			Class[] newArray = new Class[len0+3];
+			Class[] newArray = new Class[len0 + 3];
 			System.arraycopy(interfaces, 0, newArray, 0, len0);
 			newArray[len0] = FormProxyObject.class;
-			newArray[len0+1] = Form.class;
-			newArray[len0+2] = FormFieldCleaner.class;
+			newArray[len0 + 1] = Form.class;
+			newArray[len0 + 2] = FormFieldCleaner.class;
 			factory.setInterfaces(newArray);
 		}
 
@@ -176,7 +182,8 @@ public class ProxyHelper {
 		try {
 			p1 = proxyClass.newInstance();
 		} catch (Exception e) {
-			throw UiException.Aide.wrap(e, "Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
+			throw UiException.Aide.wrap(e,
+					"Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
 		}
 
 		((Proxy) p1).setHandler(new FormProxyHandler<T>(origin));

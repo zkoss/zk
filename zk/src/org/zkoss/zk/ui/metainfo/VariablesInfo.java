@@ -16,11 +16,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.xel.impl.Utils;
@@ -47,25 +47,23 @@ public class VariablesInfo extends ConditionLeafInfo {
 	 * @exception IllegalArgumentException if the composite type is illegal.
 	 * @since 3.0.6
 	 */
-	public VariablesInfo(NodeInfo parent, Map<String, String> vars, boolean local,
-	String composite, ConditionImpl cond) {
+	public VariablesInfo(NodeInfo parent, Map<String, String> vars, boolean local, String composite,
+			ConditionImpl cond) {
 		super(parent, cond);
 
-		if (composite == null || composite.length() == 0
-		|| composite.equals("none"))
+		if (composite == null || composite.length() == 0 || composite.equals("none"))
 			_composite = Utils.SCALAR;
 		else if (composite.equals("list"))
 			_composite = Utils.LIST;
 		else if (composite.equals("map"))
 			_composite = Utils.MAP;
 		else
-			throw new IllegalArgumentException("Unkonwn composite: "+composite);
+			throw new IllegalArgumentException("Unkonwn composite: " + composite);
 
 		if (vars != null) {
 			_vars = new LinkedHashMap<String, Object>();
-			for (Map.Entry<String, String> me: vars.entrySet()) {
-				_vars.put(me.getKey(),
-					Utils.parseComposite(me.getValue(), Object.class, _composite));
+			for (Map.Entry<String, String> me : vars.entrySet()) {
+				_vars.put(me.getKey(), Utils.parseComposite(me.getValue(), Object.class, _composite));
 			}
 		} else {
 			_vars = null;
@@ -73,14 +71,14 @@ public class VariablesInfo extends ConditionLeafInfo {
 
 		_local = local;
 	}
+
 	/** The same as VariablesInfo(parent, vars, locale, "none", cond).
 	 * @param vars a map of (String name, String value).
 	 * Note: once called, the caller cannot access it any more.
 	 * In other words, it becomes part of this object.
 	 * @param local whether they are local variables.
 	 */
-	public VariablesInfo(NodeInfo parent, Map<String, String> vars, boolean local,
-	ConditionImpl cond) {
+	public VariablesInfo(NodeInfo parent, Map<String, String> vars, boolean local, ConditionImpl cond) {
 		this(parent, vars, local, null, cond);
 	}
 
@@ -90,12 +88,12 @@ public class VariablesInfo extends ConditionLeafInfo {
 	public boolean isLocal() {
 		return _local;
 	}
+
 	/** Returns the composite type: "none", "list" or "map".
 	 * @since 3.0.6
 	 */
 	public String getComposite() {
-		return _composite == Utils.LIST ? "list":
-			_composite == Utils.MAP ? "map": "none";
+		return _composite == Utils.LIST ? "list" : _composite == Utils.MAP ? "map" : "none";
 	}
 
 	/** Applies the variable element against the parent component.
@@ -105,25 +103,24 @@ public class VariablesInfo extends ConditionLeafInfo {
 	public void apply(Component comp) {
 		if (_vars != null && isEffective(comp)) {
 			final Evaluator eval = getEvaluator();
-			for (Map.Entry<String, Object> me: _vars.entrySet()) {
+			for (Map.Entry<String, Object> me : _vars.entrySet()) {
 				final String name = me.getKey();
 				final Object value = me.getValue();
-				comp.getSpaceOwner().setAttribute(
-					name, Utils.evaluateComposite(eval, comp, value), !_local);
+				comp.getSpaceOwner().setAttribute(name, Utils.evaluateComposite(eval, comp, value), !_local);
 			}
 		}
 	}
+
 	/** Applies the variable element against the page.
 	 * It is called if the element doesn't belong to any component.
 	 */
 	public void apply(Page page) {
 		if (_vars != null && isEffective(page)) {
 			final Evaluator eval = getEvaluator();
-			for (Map.Entry<String, Object> me: _vars.entrySet()) {
+			for (Map.Entry<String, Object> me : _vars.entrySet()) {
 				final String name = me.getKey();
 				final Object value = me.getValue();
-				page.setAttribute(
-					name, Utils.evaluateComposite(eval, page, value), !_local);
+				page.setAttribute(name, Utils.evaluateComposite(eval, page, value), !_local);
 			}
 		}
 	}
@@ -132,7 +129,7 @@ public class VariablesInfo extends ConditionLeafInfo {
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(40).append("[variables:");
 		if (_vars != null)
-			for (String name: _vars.keySet())
+			for (String name : _vars.keySet())
 				sb.append(' ').append(name);
 		return sb.append(']').toString();
 	}

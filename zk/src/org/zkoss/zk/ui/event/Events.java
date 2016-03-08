@@ -16,19 +16,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.impl.EventProcessor;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
-import org.zkoss.zk.ui.impl.EventProcessor;
-import org.zkoss.zk.au.out.AuEcho;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
@@ -37,7 +37,8 @@ import org.zkoss.zk.ui.util.Clients;
  * @author tomyeh
  */
 public class Events {
-	private Events() {} //prevent from creation
+	private Events() {
+	} //prevent from creation
 
 	/** The onClick event (used with {@link MouseEvent}).
 	 */
@@ -259,9 +260,8 @@ public class Events {
 	 * must be upper case.
 	 */
 	public static final boolean isValid(String name) {
-		return name != null && name.length() > 2
-			&& name.charAt(0) == 'o' && name.charAt(1) == 'n'
-			&& Character.isUpperCase(name.charAt(2));
+		return name != null && name.length() > 2 && name.charAt(0) == 'o' && name.charAt(1) == 'n'
+				&& Character.isUpperCase(name.charAt(2));
 	}
 
 	/** Returns whether the current thread is an event listener.
@@ -290,13 +290,11 @@ public class Events {
 	 * @see org.zkoss.zk.ui.event.Deferrable
 	 * @see Component#isListenerAvailable
 	 */
-	public static
-	boolean isListened(Component comp, String evtnm, boolean asap) {
-		if (((ComponentCtrl)comp).getEventHandler(evtnm) != null)
+	public static boolean isListened(Component comp, String evtnm, boolean asap) {
+		if (((ComponentCtrl) comp).getEventHandler(evtnm) != null)
 			return true;
 
-		if (ComponentsCtrl.getEventMethod(comp.getClass(), evtnm) != null
-		|| comp.isListenerAvailable(evtnm, asap))
+		if (ComponentsCtrl.getEventMethod(comp.getClass(), evtnm) != null || comp.isListenerAvailable(evtnm, asap))
 			return true;
 
 		if (!asap) {
@@ -314,20 +312,19 @@ public class Events {
 	public static void sendEvent(Component comp, Event event) {
 		final Execution exec = Executions.getCurrent();
 		final Desktop desktop = exec.getDesktop();
-			//note: we don't use comp.getDesktop because 1) it may be null
-			//2) it may be different from the current desktop
+		//note: we don't use comp.getDesktop because 1) it may be null
+		//2) it may be different from the current desktop
 
-		event = ((DesktopCtrl)desktop).beforeSendEvent(event);
+		event = ((DesktopCtrl) desktop).beforeSendEvent(event);
 		if (event == null)
 			return; //done
 
 		final Thread thd = Thread.currentThread();
 		if (!(thd instanceof EventProcessingThread)) {
 			if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
-				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+				final ExecutionCtrl execCtrl = (ExecutionCtrl) exec;
 				final Page page = execCtrl.getCurrentPage();
-				final EventProcessor proc =
-					new EventProcessor(desktop, comp, event);
+				final EventProcessor proc = new EventProcessor(desktop, comp, event);
 				proc.setup();
 				try {
 					proc.process();
@@ -343,11 +340,12 @@ public class Events {
 		}
 
 		try {
-			((EventProcessingThread)thd).sendEvent(comp, event);
+			((EventProcessingThread) thd).sendEvent(comp, event);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
+
 	/** Sends the event to the target specified in the event, and processes it immediately.
 	 *
 	 * <p>Note: {@link Event#getTarget} cannot be null.
@@ -355,6 +353,7 @@ public class Events {
 	public static void sendEvent(Event event) {
 		sendEvent(event.getTarget(), event);
 	}
+
 	/** Sends the event to the target, and processes it immediately.
 	 * @param target the target of the event (never null)
 	 * @since 5.0.4
@@ -380,16 +379,17 @@ public class Events {
 	public static final void postEvent(Event event) {
 		Executions.getCurrent().postEvent(event);
 	}
+
 	/** Posts an instance of {@link Event} to the current execution.
 	 * <p>The priority of the event is assumed to be 0. Refer to
 	 * {@link #postEvent(int, String, Component, Object)}.
 	 * @see #postEvent(Event)
 	 * @see #postEvent(int, String, Component, Object)
 	 */
-	public static final
-	void postEvent(String name, Component target, Object data) {
+	public static final void postEvent(String name, Component target, Object data) {
 		postEvent(0, name, target, data);
 	}
+
 	/** Posts an event to the current execution with the specified priority.
 	 *
 	 * <p>The posted events are processed from the higher priority to the 
@@ -407,6 +407,7 @@ public class Events {
 	public static final void postEvent(int priority, Event event) {
 		Executions.getCurrent().postEvent(priority, event);
 	}
+
 	/** Queues the give event for the specified target to this execution.
 	 * The target could be different from {@link Event#getTarget}.
 	 * @param priority the priority of the event. The default priority is 0
@@ -421,6 +422,7 @@ public class Events {
 	public static final void postEvent(int priority, Component realTarget, Event event) {
 		Executions.getCurrent().postEvent(priority, realTarget, event);
 	}
+
 	/** Queues the give event for the specified target to this execution.
 	 * The target could be different from {@link Event#getTarget}.
 	 * @param realTarget the target component that will receive the event.
@@ -433,6 +435,7 @@ public class Events {
 	public static final void postEvent(Component realTarget, Event event) {
 		Executions.getCurrent().postEvent(0, realTarget, event);
 	}
+
 	/** Posts an instance of {@link Event} to the current execution
 	 * with the specified priority.
 	 *
@@ -450,8 +453,7 @@ public class Events {
 	 * @param priority the priority of the event.
 	 * @since 3.0.7
 	 */
-	public static final void postEvent(int priority,
-	String name, Component target, Object data) {
+	public static final void postEvent(int priority, String name, Component target, Object data) {
 		if (name == null || name.length() == 0 || target == null)
 			throw new IllegalArgumentException("Name is empty or target is null.");
 		postEvent(priority, new Event(name, target, data));
@@ -479,9 +481,9 @@ public class Events {
 	 * It will become {@link Event#getData}.
 	 */
 	public static final void echoEvent(String name, Component target, String data) {
-		echoEvent(name, target, (Object)data);
+		echoEvent(name, target, (Object) data);
 	}
-	
+
 	/** Echos an event.
 	 * By echo we mean the event is fired after the client receives the AU
 	 * responses and then echoes back.
@@ -499,6 +501,7 @@ public class Events {
 	public static final void echoEvent(Event event) {
 		echoEvent(event.getName(), event.getTarget(), event.getData());
 	}
+
 	/** Echos an event.
 	 * By echo we mean the event is fired after the client receives the AU
 	 * responses and then echoes back.
@@ -575,7 +578,7 @@ public class Events {
 			Event evt = event.getOrigin();
 			if (!(evt instanceof ForwardEvent))
 				return evt;
-			event = (ForwardEvent)evt;
+			event = (ForwardEvent) evt;
 		}
 	}
 }

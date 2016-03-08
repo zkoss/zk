@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.html.JavaScript;
 import org.zkoss.html.StyleSheet;
 import org.zkoss.lang.Objects;
@@ -124,13 +125,12 @@ public class LanguageDefinition {
 	 * @since 8.0.0
 	 */
 	public static final String SHADOW_NAMESPACE = "http://www.zkoss.org/2015/zk/shadow";
-	
+
 	/** The names of ZK shadow components.
 	 * @since 8.0.0
 	 */
 	public static final String SHADOW_NAME = "shadow";
-	
-	
+
 	/** the device type that this definition belongs to. */
 	private final String _deviceType;
 	/** name */
@@ -178,8 +178,7 @@ public class LanguageDefinition {
 	/** The page renderer. */
 	private PageRenderer _pgrend;
 	/** The message loaders. */
-	private final FastReadArray<MessageLoader> _msgloads = 
-		new FastReadArray<MessageLoader>(MessageLoader.class);
+	private final FastReadArray<MessageLoader> _msgloads = new FastReadArray<MessageLoader>(MessageLoader.class);
 	/** A set of CSS URI. */
 	private final Set<String> _cssURIs = new LinkedHashSet<String>();
 	/** Whether it is a native language. */
@@ -196,7 +195,7 @@ public class LanguageDefinition {
 			return _ldefByName.containsKey(name);
 		}
 	}
-	
+
 	/**
 	 * Returns the tree builder class for this language
 	 * @since 8.0.0
@@ -223,7 +222,7 @@ public class LanguageDefinition {
 			langdef = _ldefByName.get(name);
 			if (langdef == null) {
 				final String slashnm = "/" + name;
-				for (Map.Entry<String, LanguageDefinition> me: _ldefByName.entrySet()) {
+				for (Map.Entry<String, LanguageDefinition> me : _ldefByName.entrySet()) {
 					final String langnm = me.getKey();
 
 					//two kind of names: zul/html and http://.../zul
@@ -243,11 +242,13 @@ public class LanguageDefinition {
 		}
 		if (langdef == null)
 			if (ZK_NAMESPACE.equals(name))
-				throw new DefinitionNotFoundException(ZK_NAMESPACE+" is reserved. Use it only with reserved elements and attributes, such as zscript and attribute");
+				throw new DefinitionNotFoundException(ZK_NAMESPACE
+						+ " is reserved. Use it only with reserved elements and attributes, such as zscript and attribute");
 			else
-				throw new DefinitionNotFoundException("Language not found: "+name);
+				throw new DefinitionNotFoundException("Language not found: " + name);
 		return langdef;
 	}
+
 	/** Returns the language definition by specifying an extension.
 	 *
 	 * @param ext the extension, e.g., "zul".
@@ -266,9 +267,10 @@ public class LanguageDefinition {
 			langdef = _ldefsByExt.get(ext);
 		}
 		if (langdef == null)
-			throw new DefinitionNotFoundException("Language not found for extension "+ext);
+			throw new DefinitionNotFoundException("Language not found for extension " + ext);
 		return langdef;
 	}
+
 	/** Associates an extension to a language.
 	 *
 	 * @param lang the language name. It cannot be null.
@@ -286,6 +288,7 @@ public class LanguageDefinition {
 			_ldefsByExt.put(ext, langdef);
 		}
 	}
+
 	/** Returns a readonly list of language definitions belong to
 	 * the specified device type.
 	 *
@@ -311,6 +314,7 @@ public class LanguageDefinition {
 		return Collections.emptyList();
 
 	}
+
 	/** Returns a readonly list of all language definitions
 	 * regardless of the device type.
 	 *
@@ -322,7 +326,7 @@ public class LanguageDefinition {
 
 		final List<LanguageDefinition> list = new LinkedList<LanguageDefinition>();
 		synchronized (_ldefsByClient) {
-			for (List<LanguageDefinition> langs: _ldefsByClient.values()) {
+			for (List<LanguageDefinition> langs : _ldefsByClient.values()) {
 				list.addAll(langs);
 			}
 		}
@@ -337,6 +341,7 @@ public class LanguageDefinition {
 
 		return _ldefsByClient.keySet();
 	}
+
 	private static final void init() {
 		try {
 			DefinitionLoaders.load();
@@ -363,18 +368,16 @@ public class LanguageDefinition {
 	 * @param treeBuilderClass a tree builder class for this language (since 8.0.0)
 	 * @since 5.0.0
 	 */
-	public LanguageDefinition(String deviceType, String name, String namespace,
-	List<String> extensions, PageRenderer pageRenderer,
-	boolean ignoreCase, boolean bNative, Locator locator, String treeBuilderClass) {
+	public LanguageDefinition(String deviceType, String name, String namespace, List<String> extensions,
+			PageRenderer pageRenderer, boolean ignoreCase, boolean bNative, Locator locator, String treeBuilderClass) {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new UiException("deviceType cannot be empty");
 		if (!Devices.exists(deviceType))
 			throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
 		if (ZK_NAMESPACE.equals(namespace))
-			throw new UiException(ZK_NAMESPACE+" is reserved.");
-		if (name == null || name.length() == 0
-		|| namespace == null || namespace.length() == 0
-		|| pageRenderer == null || locator == null)
+			throw new UiException(ZK_NAMESPACE + " is reserved.");
+		if (name == null || name.length() == 0 || namespace == null || namespace.length() == 0 || pageRenderer == null
+				|| locator == null)
 			throw new IllegalArgumentException();
 
 		_deviceType = deviceType;
@@ -389,30 +392,30 @@ public class LanguageDefinition {
 
 		boolean replWarned = false;
 		synchronized (_ldefByName) {
-			if (!_ldefByName.containsKey(name)
-			&& _ldefByName.containsKey(namespace))
-				throw new UiException("Different language, "+name+", with the same namespace, "+namespace);
+			if (!_ldefByName.containsKey(name) && _ldefByName.containsKey(namespace))
+				throw new UiException("Different language, " + name + ", with the same namespace, " + namespace);
 
 			_ldefByName.put(namespace, this);
 			final LanguageDefinition old = _ldefByName.put(name, this);
 			if (old != null) {
 				final List<LanguageDefinition> ldefs = _ldefsByClient.get(deviceType);
-				if (ldefs != null) ldefs.remove(old);
+				if (ldefs != null)
+					ldefs.remove(old);
 
 				replWarned = true;
-				log.warn("Replicated language: "+name+", overriden by "+this);
-			//it is possible if zcommon.jar is placed in both
-			//WEB-INF/lib and shared/lib, i.e., appear twice in the class path
-			//We overwrite because shared/lib appears first due to
-			//getResources is used (parent first)
+				log.warn("Replicated language: " + name + ", overriden by " + this);
+				//it is possible if zcommon.jar is placed in both
+				//WEB-INF/lib and shared/lib, i.e., appear twice in the class path
+				//We overwrite because shared/lib appears first due to
+				//getResources is used (parent first)
 			}
 		}
 		if (extensions != null) {
 			synchronized (_ldefsByExt) {
-				for (String ext: extensions) {
+				for (String ext : extensions) {
 					final LanguageDefinition old = _ldefsByExt.put(ext, this);
 					if (!replWarned && old != null)
-						log.warn("Extension "+ext+", overriden by "+this);
+						log.warn("Extension " + ext + ", overriden by " + this);
 				}
 			}
 			_exts = Collections.unmodifiableList(extensions);
@@ -427,6 +430,7 @@ public class LanguageDefinition {
 			ldefs.add(this);
 		}
 	}
+
 	/** Returns the device type that this definition belongs to.
 	 *
 	 * <p>A device type identifies the type of a client. For example, "ajax"
@@ -438,6 +442,7 @@ public class LanguageDefinition {
 	public String getDeviceType() {
 		return _deviceType;
 	}
+
 	/** Returns whether this is a native language.
 	 * If true, it means all tags in a ZUML page is considered as
 	 * native and all namespaces (except ZK namespace) are output
@@ -448,18 +453,21 @@ public class LanguageDefinition {
 	public boolean isNative() {
 		return _native;
 	}
+
 	/** Returns name of this language.
 	 * Each language definition has a unique name and namespace.
 	 */
 	public String getName() {
 		return _name;
 	}
+
 	/** Returns the name space.
 	 * Each language definition has a unique name and namespace.
 	 */
 	public String getNamespace() {
 		return _ns;
 	}
+
 	/** Returns the readonly list of extensions that this language definition
 	 * is associated with (never null).
 	 * @since 2.4.1
@@ -467,28 +475,33 @@ public class LanguageDefinition {
 	public List<String> getExtensions() {
 		return _exts;
 	}
+
 	/** Returns a readonly collection of all shadow element definitions in this language.
 	 * @since 8.0.0
 	 */
 	public Collection<ComponentDefinition> getShadowDefinitions() {
 		return _shadowdefs.getDefinitions();
 	}
+
 	/** Returns the map of shadow elements defined in this language (never null).
 	 */
 	public ComponentDefinitionMap getShadowDefinitionMap() {
 		return _shadowdefs;
 	}
+
 	/** Returns a readonly collection of all component definitions in this language.
 	 * @since 3.6.3
 	 */
 	public Collection<ComponentDefinition> getComponentDefinitions() {
 		return _compdefs.getDefinitions();
 	}
+
 	/** Returns the map of components defined in this language (never null).
 	 */
 	public ComponentDefinitionMap getComponentDefinitionMap() {
 		return _compdefs;
 	}
+
 	/** Returns {@link ComponentDefinition} of the specified name.
 	 *
 	 * <p>Note: anonymous shadow element definition won't be returned by
@@ -499,23 +512,12 @@ public class LanguageDefinition {
 	 * is not found
 	 */
 	public ComponentDefinition getShadowDefinition(String name) {
-		final ComponentDefinition compdef =
-			_shadowdefs.get(name);
+		final ComponentDefinition compdef = _shadowdefs.get(name);
 		if (compdef == null)
-			throw new DefinitionNotFoundException("Shadow element definition not found: "+name);
+			throw new DefinitionNotFoundException("Shadow element definition not found: " + name);
 		return compdef;
 	}
-	/** Returns {@link ComponentDefinition} of the specified name, or null
-	 * if not found.
-	 * It is the same as {@link #getShadowDefinition}, except this method
-	 * won't throw any exception.
-	 *
-	 * @param name the name of the shadow element definition.
-	 * @since 8.0.0
-	 */
-	public ComponentDefinition getShadowDefinitionIfAny(String name) {
-		return _shadowdefs.get(name);
-	}
+
 	/** Returns {@link ComponentDefinition} of the specified class.
 	 *
 	 * <p>Note: anonymous shadow element definition won't be returned by
@@ -527,18 +529,48 @@ public class LanguageDefinition {
 	 * @since 8.0.0
 	 */
 	public ComponentDefinition getShadowDefinition(Class klass) {
-		final ComponentDefinition compdef =
-			_shadowdefs.get(klass);
+		final ComponentDefinition compdef = _shadowdefs.get(klass);
 		if (compdef == null)
-			throw new DefinitionNotFoundException("Shadow element definition not found: "+klass);
+			throw new DefinitionNotFoundException("Shadow element definition not found: " + klass);
 		return compdef;
 	}
+
+	/** Instantiates and returns the component definition for the specified condition.
+	 *
+	 * @param pgdef the page definition the shadow definition belongs to.
+	 * If null, it belongs to this language definition.
+	 * @exception UnsupportedOperationException if this language doesn't
+	 * support the shadows
+	 * @since 8.0.0
+	 */
+	public ComponentDefinition getShadowDefinition(String name, PageDefinition pgdef, String templateURI) {
+		if (_shadowcls == null)
+			throw new UiException("Shadow not supported by " + this);
+
+		final ComponentDefinition compdef = ComponentDefinitionImpl.newShadowDefinition(pgdef != null ? null : this,
+				pgdef, name, _shadowcls, templateURI);
+		return compdef;
+	}
+
+	/** Returns {@link ComponentDefinition} of the specified name, or null
+	 * if not found.
+	 * It is the same as {@link #getShadowDefinition}, except this method
+	 * won't throw any exception.
+	 *
+	 * @param name the name of the shadow element definition.
+	 * @since 8.0.0
+	 */
+	public ComponentDefinition getShadowDefinitionIfAny(String name) {
+		return _shadowdefs.get(name);
+	}
+
 	/** Returns whether the specified shadow element is defined.
 	 * @since 8.0.0
 	 */
 	public boolean hasShadowDefinition(String name) {
 		return _shadowdefs.contains(name);
 	}
+
 	/** Adds a shadow element definition.
 	 */
 	public void addShadowDefinition(ComponentDefinition compdef) {
@@ -546,6 +578,7 @@ public class LanguageDefinition {
 			throw new IllegalArgumentException();
 		_shadowdefs.add(compdef);
 	}
+
 	/** Returns {@link ComponentDefinition} of the specified name.
 	 *
 	 * <p>Note: anonymous component definition won't be returned by
@@ -556,12 +589,28 @@ public class LanguageDefinition {
 	 * is not found
 	 */
 	public ComponentDefinition getComponentDefinition(String name) {
-		final ComponentDefinition compdef =
-			_compdefs.get(name);
+		final ComponentDefinition compdef = _compdefs.get(name);
 		if (compdef == null)
-			throw new DefinitionNotFoundException("Component definition not found: "+name);
+			throw new DefinitionNotFoundException("Component definition not found: " + name);
 		return compdef;
 	}
+
+	/** Returns {@link ComponentDefinition} of the specified class.
+	 *
+	 * <p>Note: anonymous component definition won't be returned by
+	 * this method.
+	 *
+	 * @param klass the class that implements the component.
+	 * @exception DefinitionNotFoundException is thrown if the definition
+	 * is not found
+	 */
+	public ComponentDefinition getComponentDefinition(Class klass) {
+		final ComponentDefinition compdef = _compdefs.get(klass);
+		if (compdef == null)
+			throw new DefinitionNotFoundException("Component definition not found: " + klass);
+		return compdef;
+	}
+
 	/** Returns {@link ComponentDefinition} of the specified name, or null
 	 * if not found.
 	 * It is the same as {@link #getComponentDefinition}, except this method
@@ -573,27 +622,13 @@ public class LanguageDefinition {
 	public ComponentDefinition getComponentDefinitionIfAny(String name) {
 		return _compdefs.get(name);
 	}
-	/** Returns {@link ComponentDefinition} of the specified class.
-	 *
-	 * <p>Note: anonymous component definition won't be returned by
-	 * this method.
-	 *
-	 * @param klass the class that implements the component.
-	 * @exception DefinitionNotFoundException is thrown if the definition
-	 * is not found
-	 */
-	public ComponentDefinition getComponentDefinition(Class klass) {
-		final ComponentDefinition compdef =
-			_compdefs.get(klass);
-		if (compdef == null)
-			throw new DefinitionNotFoundException("Component definition not found: "+klass);
-		return compdef;
-	}
+
 	/** Returns whether the specified component is defined.
 	 */
 	public boolean hasComponentDefinition(String name) {
 		return _compdefs.contains(name);
 	}
+
 	/** Adds a component definition.
 	 */
 	public void addComponentDefinition(ComponentDefinition compdef) {
@@ -610,6 +645,7 @@ public class LanguageDefinition {
 	public boolean hasWidgetDefinition(String widgetClass) {
 		return _wgtdefs.containsKey(widgetClass);
 	}
+
 	/** Returns the widget of the specified class name.
 	 *
 	 * @param widgetClass the name of the widget class (JavaScript class),
@@ -621,9 +657,10 @@ public class LanguageDefinition {
 	public WidgetDefinition getWidgetDefinition(String widgetClass) {
 		final WidgetDefinition wgtdef = getWidgetDefinitionIfAny(widgetClass);
 		if (wgtdef == null)
-			throw new DefinitionNotFoundException("Widget definition not found: "+widgetClass);
+			throw new DefinitionNotFoundException("Widget definition not found: " + widgetClass);
 		return wgtdef;
 	}
+
 	/** Returns the widget of the specified class name, or null if not found.
 	 * It is the same as {@link #getWidgetDefinition}, except this method
 	 * won't throw any exception.
@@ -635,6 +672,7 @@ public class LanguageDefinition {
 	public WidgetDefinition getWidgetDefinitionIfAny(String widgetClass) {
 		return _wgtdefs.get(widgetClass);
 	}
+
 	/** Adds a widget definition.
 	 * @since 5.0.0
 	 */
@@ -658,10 +696,11 @@ public class LanguageDefinition {
 			zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 			synchronized (_initscripts) {
 				final String s = _initscripts.get(zslang);
-				_initscripts.put(zslang, s != null ? s + '\n' + script: script);
+				_initscripts.put(zslang, s != null ? s + '\n' + script : script);
 			}
 		}
 	}
+
 	/** Returns the initial scripts of
 	 * the specified language, or null if no script.
 	 */
@@ -687,10 +726,11 @@ public class LanguageDefinition {
 			zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 			synchronized (_eachscripts) {
 				final String s = _eachscripts.get(zslang);
-				_eachscripts.put(zslang, s != null ? s + '\n' + script: script);
+				_eachscripts.put(zslang, s != null ? s + '\n' + script : script);
 			}
 		}
 	}
+
 	/** Returns the each-time scripts of 
 	 * the specified language, or null if no scripts.
 	 *
@@ -711,6 +751,7 @@ public class LanguageDefinition {
 			throw new IllegalArgumentException();
 		_js.add(js);
 	}
+
 	/** Removes a {@link JavaScript} of the give source required by this language.
 	 * @see #addJavaScript
 	 * @since 5.0.4
@@ -725,12 +766,14 @@ public class LanguageDefinition {
 			}
 		}
 	}
+
 	/** Returns a readonly list of all {@link JavaScript} required
 	 * by this language.
 	 */
 	public Collection<JavaScript> getJavaScripts() {
 		return new CollectionsX.ArrayCollection<JavaScript>(_js.toArray());
 	}
+
 	/** Merge a JavaScript package, say pkgFrom, to another package, say pkgTo,
 	 * such that, when loading pkgTo, pkgFrom will be placed in the same WPD file.
 	 * Thus, the number of WPD fields to load will be reduced, and
@@ -747,8 +790,7 @@ public class LanguageDefinition {
 	 * @since 6.0.0
 	 */
 	public void mergeJavaScriptPackage(String pkgFrom, String pkgTo) {
-		if (pkgFrom == null || pkgFrom.length() == 0
-		|| pkgTo == null || pkgTo.length() == 0)
+		if (pkgFrom == null || pkgFrom.length() == 0 || pkgTo == null || pkgTo.length() == 0)
 			throw new IllegalArgumentException();
 
 		FastReadArray<String> pkgs = _mergepkgs.get(pkgTo);
@@ -756,16 +798,15 @@ public class LanguageDefinition {
 			synchronized (this) {
 				pkgs = _mergepkgs.get(pkgTo);
 				if (pkgs == null) {
-					Map<String, FastReadArray<String>> mpkgs =
-						new HashMap<String, FastReadArray<String>>(_mergepkgs);
-					mpkgs.put(pkgTo,
-						pkgs = new FastReadArray<String>(String.class));
+					Map<String, FastReadArray<String>> mpkgs = new HashMap<String, FastReadArray<String>>(_mergepkgs);
+					mpkgs.put(pkgTo, pkgs = new FastReadArray<String>(String.class));
 					_mergepkgs = mpkgs;
 				}
 			}
 		}
 		pkgs.add(pkgFrom);
 	}
+
 	/** Undo the merge of a JavaScript package to another.
 	 * @see #mergeJavaScriptPackage
 	 * @since 6.0.0
@@ -774,6 +815,7 @@ public class LanguageDefinition {
 		FastReadArray<String> pkgs = _mergepkgs.get(pkgTo);
 		return pkgs != null && pkgs.remove(pkgFrom);
 	}
+
 	/** Returns a list of JavaScript packages that are merged the given
 	 * package, such as "zk" and "zul.lang".
 	 * @since 6.0.0
@@ -784,6 +826,7 @@ public class LanguageDefinition {
 			return new CollectionsX.ArrayCollection<String>(pkgs.toArray());
 		return Collections.emptyList();
 	}
+
 	/** Returns a readonly collection of the packages that will be merged
 	 * by other packages.
 	 * @since 6.0.0
@@ -798,8 +841,7 @@ public class LanguageDefinition {
 	 * its URL such that browsers know when to reload it.
 	 */
 	public void addJavaScriptModule(String name, String version) {
-		if (name == null || name.length() == 0
-		|| version == null || version.length() == 0)
+		if (name == null || name.length() == 0 || version == null || version.length() == 0)
 			throw new IllegalArgumentException();
 
 		synchronized (this) {
@@ -808,6 +850,7 @@ public class LanguageDefinition {
 			_jsmods = jsmods;
 		}
 	}
+
 	/** Returns a readonly map of definitions of JavaScript modules,
 	 * (String name, String version).
 	 */
@@ -822,6 +865,7 @@ public class LanguageDefinition {
 			throw new IllegalArgumentException();
 		_ss.add(ss);
 	}
+
 	/** Returns a readonly list of all {@link StyleSheet} required
 	 * by this language.
 	 */
@@ -841,30 +885,31 @@ public class LanguageDefinition {
 	public PageRenderer getPageRenderer() {
 		return _pgrend;
 	}
-	
+
 	/** Adds a MessageLoader
 	 * @since 5.0.11
 	 */
 	public void addMessageLoader(MessageLoader loader) {
 		_msgloads.add(loader);
 	}
+
 	/** Returns the message loader for this language.
 	 * @since 5.0.11
 	 */
 	public Collection<MessageLoader> getMessageLoaders() {
 		return new CollectionsX.ArrayCollection<MessageLoader>(_msgloads.toArray());
 	}
-	
+
 	/** Sets the macro template.
 	 *
 	 * @since 5.0.0
 	 */
 	public void setMacroTemplate(Class<? extends Component> klass) {
-		if (klass == null || !Component.class.isAssignableFrom(klass)
-		|| !Macro.class.isAssignableFrom(klass))
-			throw new IllegalArgumentException("Illegal macro class: "+klass);
+		if (klass == null || !Component.class.isAssignableFrom(klass) || !Macro.class.isAssignableFrom(klass))
+			throw new IllegalArgumentException("Illegal macro class: " + klass);
 		_macrocls = klass;
 	}
+
 	/** Instantiates and returns the component definition for the specified condition.
 	 *
 	 * @param pgdef the page definition the macro definition belongs to.
@@ -875,15 +920,12 @@ public class LanguageDefinition {
 	 * support the macros
 	 * @since 3.0.0
 	 */
-	public ComponentDefinition getMacroDefinition(
-	String name, String macroURI, boolean inline, PageDefinition pgdef) {
+	public ComponentDefinition getMacroDefinition(String name, String macroURI, boolean inline, PageDefinition pgdef) {
 		if (_macrocls == null)
-			throw new UiException("Macro not supported by "+this);
+			throw new UiException("Macro not supported by " + this);
 
-		final ComponentDefinition compdef =
-			ComponentDefinitionImpl.newMacroDefinition(
-				pgdef != null ? null: this, pgdef,
-				name, _macrocls, macroURI, inline);
+		final ComponentDefinition compdef = ComponentDefinitionImpl.newMacroDefinition(pgdef != null ? null : this,
+				pgdef, name, _macrocls, macroURI, inline);
 		return compdef;
 	}
 
@@ -891,40 +933,20 @@ public class LanguageDefinition {
 	 * @since 8.0.0
 	 */
 	public void setShadowTemplate(Class<? extends Component> klass) {
-		if (klass == null || !Component.class.isAssignableFrom(klass)
-		|| !ShadowElement.class.isAssignableFrom(klass))
-			throw new IllegalArgumentException("Illegal shadow class: "+klass);
+		if (klass == null || !Component.class.isAssignableFrom(klass) || !ShadowElement.class.isAssignableFrom(klass))
+			throw new IllegalArgumentException("Illegal shadow class: " + klass);
 		_shadowcls = klass;
-	}
-	/** Instantiates and returns the component definition for the specified condition.
-	 *
-	 * @param pgdef the page definition the shadow definition belongs to.
-	 * If null, it belongs to this language definition.
-	 * @exception UnsupportedOperationException if this language doesn't
-	 * support the shadows
-	 * @since 8.0.0
-	 */
-	public ComponentDefinition getShadowDefinition(
-	String name, PageDefinition pgdef, String templateURI) {
-		if (_shadowcls == null)
-			throw new UiException("Shadow not supported by "+this);
-
-		final ComponentDefinition compdef =
-			ComponentDefinitionImpl.newShadowDefinition(
-				pgdef != null ? null: this, pgdef, name, _shadowcls, templateURI);
-		return compdef;
 	}
 
 	/** Sets the native template.
 	 * @since 3.0.0
 	 */
 	public void setNativeTemplate(Class<? extends Component> klass) {
-		if (klass == null || !Component.class.isAssignableFrom(klass)
-		|| !Native.class.isAssignableFrom(klass))
-			throw new IllegalArgumentException("Illegal native class: "+klass);
-		_nativedef =
-			ComponentDefinitionImpl.newNativeDefinition(this, "native", klass);
+		if (klass == null || !Component.class.isAssignableFrom(klass) || !Native.class.isAssignableFrom(klass))
+			throw new IllegalArgumentException("Illegal native class: " + klass);
+		_nativedef = ComponentDefinitionImpl.newNativeDefinition(this, "native", klass);
 	}
+
 	/** Returns the component definition for the native components.
 	 *
 	 * @exception UnsupportedOperationException if this language doesn't
@@ -933,7 +955,7 @@ public class LanguageDefinition {
 	 */
 	public ComponentDefinition getNativeDefinition() {
 		if (_nativedef == null)
-			throw new UnsupportedOperationException("Native not supported by "+this);
+			throw new UnsupportedOperationException("Native not supported by " + this);
 		return _nativedef;
 	}
 
@@ -946,18 +968,19 @@ public class LanguageDefinition {
 	 * an {@link ComponentInfo} for a label.
 	 */
 	public void setLabelTemplate(String compName, String propName, boolean raw) {
-		_labeltmpl = compName != null ?
-			new LabelTemplate(compName, propName, raw): null;
+		_labeltmpl = compName != null ? new LabelTemplate(compName, propName, raw) : null;
 	}
+
 	/** Constructs and returns an {@link ComponentInfo} for
 	 * the specified parent and text.
 	 * @since 6.0.0
 	 */
 	public ComponentInfo newLabelInfo(NodeInfo parent, String text) {
 		if (_labeltmpl == null)
-			throw new UiException("No default label component is supported by "+this);
+			throw new UiException("No default label component is supported by " + this);
 		return _labeltmpl.newComponentInfo(parent, text);
 	}
+
 	/** Returns whether this language prefers the raw label.
 	 * By raw labels we mean the text shall not be trimmed and
 	 * shall be generated directly to the output (rather than wrapping
@@ -966,6 +989,7 @@ public class LanguageDefinition {
 	public boolean isRawLabel() {
 		return _labeltmpl != null && _labeltmpl.raw;
 	}
+
 	/** Returns the label attribute of the label template in the language setting.
 	 * @since 8.0.0
 	 */
@@ -984,12 +1008,14 @@ public class LanguageDefinition {
 	 */
 	public void setDynamicTagInfo(String compnm, Set<String> reservedAttrs) {
 		if (compnm != null && _dyntagnm != null)
-			log.warn("Overwriting the definition of dynamic tag. Previous="+_dyntagnm+" New="+compnm+" for "+this);
+			log.warn("Overwriting the definition of dynamic tag. Previous=" + _dyntagnm + " New=" + compnm + " for "
+					+ this);
 		_dyntagnm = compnm;
 		_dyntagDefn = null;
-		_dyntagRvAttrs = compnm == null || reservedAttrs.isEmpty() ? null:
-			Collections.unmodifiableSet(new HashSet<String>(reservedAttrs));
+		_dyntagRvAttrs = compnm == null || reservedAttrs.isEmpty() ? null
+				: Collections.unmodifiableSet(new HashSet<String>(reservedAttrs));
 	}
+
 	/** Returns the component definition of the dynamic tag, or null if
 	 * this language doesn't support the dynamic tag.
 	 * @exception DefinitionNotFoundException is thrown if the definition
@@ -1003,6 +1029,7 @@ public class LanguageDefinition {
 		}
 		return _dyntagDefn;
 	}
+
 	/** Returns whether a reserved attribute is used by the dynamic tag
 	 * ({@link #getDynamicTagDefinition}).
 	 */
@@ -1024,12 +1051,13 @@ public class LanguageDefinition {
 			_eval = newEvaluator();
 		return _eval;
 	}
+
 	private Evaluator newEvaluator() {
 		return new SimpleEvaluator(
-			Taglibs.getFunctionMapper(
-				new CollectionsX.ArrayCollection<Taglib>(_taglibs.toArray()), _locator),
+				Taglibs.getFunctionMapper(new CollectionsX.ArrayCollection<Taglib>(_taglibs.toArray()), _locator),
 				null);
 	}
+
 	/** Returns the evaluator reference (never null).
 	 * <p>This method is used only for implementation only.
 	 * @since 3.0.0
@@ -1039,6 +1067,7 @@ public class LanguageDefinition {
 			_evalr = newEvaluatorRef();
 		return _evalr;
 	}
+
 	private EvaluatorRef newEvaluatorRef() {
 		return new LangEvalRef(this);
 	}
@@ -1052,6 +1081,7 @@ public class LanguageDefinition {
 			throw new IllegalArgumentException();
 		_cssURIs.add(cssURI);
 	}
+
 	/** Returns a readonly collection of the URIs of CSS files of this language.
 	 * @since 5.0.0
 	 */
@@ -1061,7 +1091,7 @@ public class LanguageDefinition {
 
 	//Object//
 	public String toString() {
-		return "[LanguageDefinition: "+_name+']';
+		return "[LanguageDefinition: " + _name + ']';
 	}
 
 	private class LabelTemplate {
@@ -1075,13 +1105,13 @@ public class LanguageDefinition {
 		private final boolean raw;
 
 		private LabelTemplate(String name, String prop, boolean raw) {
-			if (name == null || name.length() == 0
-			|| prop == null || prop.length() == 0)
+			if (name == null || name.length() == 0 || prop == null || prop.length() == 0)
 				throw new IllegalArgumentException();
 			_name = name;
 			_prop = prop;
 			this.raw = raw;
 		}
+
 		private ComponentInfo newComponentInfo(NodeInfo parent, String text) {
 			if (_compdef == null) //no sync since racing is OK
 				_compdef = getComponentDefinition(_name);

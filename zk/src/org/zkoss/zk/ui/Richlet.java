@@ -16,7 +16,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
 /**
@@ -35,6 +34,7 @@ public interface Richlet {
 	 * the richlet is being placed into service.
 	 */
 	public void init(RichletConfig config);
+
 	/** Called by the richlet container to indicate to a richlet that
 	 * the richlet is being taken out of service.
 	 */

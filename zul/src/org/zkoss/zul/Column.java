@@ -16,33 +16,31 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Collections;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
-
 import org.zkoss.zk.au.AuRequests;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SortEvent;
 import org.zkoss.zk.ui.ext.Scopes;
-
+import org.zkoss.zul.ext.GroupsSortableModel;
+import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.mesg.MZul;
-import org.zkoss.zul.ext.Sortable;
-import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * A single column in a {@link Columns} element.
@@ -73,12 +71,14 @@ public class Column extends HeaderElement {
 		addClientEvent(Column.class, Events.ON_GROUP, CE_DUPLICATE_IGNORE);
 		addClientEvent(Column.class, Events.ON_UNGROUP, CE_DUPLICATE_IGNORE);
 	}
-	
+
 	public Column() {
 	}
+
 	public Column(String label) {
 		super(label);
 	}
+
 	/* Constructs a grid header with label and image.
 	 *
 	 * @param lable the label. No label if null or empty.
@@ -87,6 +87,7 @@ public class Column extends HeaderElement {
 	public Column(String label, String src) {
 		super(label, src);
 	}
+
 	/* Constructs a grid header with label, image and width.
 	 *
 	 * @param lable the label. No label if null or empty.
@@ -102,15 +103,16 @@ public class Column extends HeaderElement {
 	/** Returns the grid that contains this column. */
 	public Grid getGrid() {
 		final Component parent = getParent();
-		return parent != null ? (Grid)parent.getParent(): null;
+		return parent != null ? (Grid) parent.getParent() : null;
 	}
-	
+
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
 	 */
 	public String getSortDirection() {
 		return _sortDir;
 	}
+
 	/** Sets the sort direction. This does not sort the data, it only serves
 	 * as an indicator as to how the grid is sorted. (unless the grid has "autosort" attribute)
 	 *
@@ -122,9 +124,9 @@ public class Column extends HeaderElement {
 	 * @param sortDir one of "ascending", "descending" and "natural"
 	 */
 	public void setSortDirection(String sortDir) throws WrongValueException {
-		if (sortDir == null || (!"ascending".equals(sortDir)
-		&& !"descending".equals(sortDir) && !"natural".equals(sortDir)))
-			throw new WrongValueException("Unknown sort direction: "+sortDir);
+		if (sortDir == null
+				|| (!"ascending".equals(sortDir) && !"descending".equals(sortDir) && !"natural".equals(sortDir)))
+			throw new WrongValueException("Unknown sort direction: " + sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
 			if (!"natural".equals(sortDir) && !_ignoreSort) {
@@ -185,7 +187,8 @@ public class Column extends HeaderElement {
 	 * @since 3.5.3
 	 */
 	public void setSort(String type) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		if (type == null) return;
+		if (type == null)
+			return;
 		if (type.startsWith("client")) {
 			setSortAscending(type);
 			setSortDescending(type);
@@ -198,12 +201,12 @@ public class Column extends HeaderElement {
 			final int j = type.indexOf('(');
 			final int k = type.lastIndexOf(')');
 			if (j >= 0 && k >= 0) {
-				final String name = type.substring(j+1, k);
+				final String name = type.substring(j + 1, k);
 				char cc;
 				int index = -1;
 				if (name.length() > 0 && (cc = name.charAt(0)) >= '0' && cc <= '9')
 					if ((index = Integer.parseInt(name)) < 0)
-						throw new IllegalArgumentException("Nonnegative number is required: "+name);
+						throw new IllegalArgumentException("Nonnegative number is required: " + name);
 				if (getSortAscending() == null || !_isCustomAscComparator) {
 					if (index < 0)
 						setSortAscending(new FieldComparator(name, true));
@@ -219,11 +222,11 @@ public class Column extends HeaderElement {
 					_isCustomDscComparator = false;
 				}
 			} else {
-				throw new UiException("Unknown sort type: "+type);
+				throw new UiException("Unknown sort type: " + type);
 			}
 		} else if ("none".equals(type)) {
-			setSortAscending((Comparator)null);
-			setSortDescending((Comparator)null);
+			setSortAscending((Comparator) null);
+			setSortDescending((Comparator) null);
 		}
 	}
 
@@ -232,6 +235,7 @@ public class Column extends HeaderElement {
 	public Comparator<?> getSortAscending() {
 		return _sortAsc;
 	}
+
 	/** Sets the ascending sorter, or null for no sorter for
 	 * the ascending order.
 	 *
@@ -249,19 +253,19 @@ public class Column extends HeaderElement {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
 			_isCustomAscComparator = _sortAsc != null;
-			String nm = _isCustomAscComparator ? "fromServer": "none";
+			String nm = _isCustomAscComparator ? "fromServer" : "none";
 			if (!_sortAscNm.equals(nm)) {
 				_sortAscNm = nm;
 				smartUpdate("sortAscending", _sortAscNm);
 			}
 		}
 	}
+
 	/** Sets the ascending sorter with the class name, or null for
 	 * no sorter for the ascending order.
 	 */
 	public void setSortAscending(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortAscNm.equals(clsnm)) {
 			_sortAscNm = clsnm;
 			smartUpdate("sortAscending", clsnm);
@@ -274,6 +278,7 @@ public class Column extends HeaderElement {
 	public Comparator<?> getSortDescending() {
 		return _sortDsc;
 	}
+
 	/** Sets the descending sorter, or null for no sorter for the
 	 * descending order.
 	 *
@@ -291,19 +296,19 @@ public class Column extends HeaderElement {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
 			_isCustomDscComparator = _sortDsc != null;
-			String nm = _isCustomDscComparator ? "fromServer": "none";
+			String nm = _isCustomDscComparator ? "fromServer" : "none";
 			if (!_sortDscNm.equals(nm)) {
 				_sortDscNm = nm;
 				smartUpdate("sortDescending", _sortDscNm);
 			}
 		}
 	}
+
 	/** Sets the descending sorter with the class name, or null for
 	 * no sorter for the descending order.
 	 */
 	public void setSortDescending(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortDscNm.equals(clsnm)) {
 			_sortDscNm = clsnm;
 			smartUpdate("sortDescending", clsnm);
@@ -312,18 +317,17 @@ public class Column extends HeaderElement {
 	}
 
 	private Comparator<?> toComparator(String clsnm)
-	throws ClassNotFoundException, InstantiationException,
-	IllegalAccessException {
-		if (clsnm == null || clsnm.length() == 0) return null;
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (clsnm == null || clsnm.length() == 0)
+			return null;
 
 		final Page page = getPage();
-		final Class cls = page != null ?
-			page.resolveClass(clsnm): Classes.forNameByThread(clsnm);
+		final Class cls = page != null ? page.resolveClass(clsnm) : Classes.forNameByThread(clsnm);
 		if (cls == null)
 			throw new ClassNotFoundException(clsnm);
 		if (!Comparator.class.isAssignableFrom(cls))
-			throw new UiException("Comparator must be implemented: "+clsnm);
-		return (Comparator<?>)cls.newInstance();
+			throw new UiException("Comparator must be implemented: " + clsnm);
+		return (Comparator<?>) cls.newInstance();
 	}
 
 	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
@@ -356,85 +360,16 @@ public class Column extends HeaderElement {
 	public boolean sort(boolean ascending) {
 		final String dir = getSortDirection();
 		if (ascending) {
-			if ("ascending".equals(dir)) return false;
+			if ("ascending".equals(dir))
+				return false;
 		} else {
-			if ("descending".equals(dir)) return false;
+			if ("descending".equals(dir))
+				return false;
 		}
 
 		return doSort(ascending);
 	}
-	/*package*/ boolean doSort(boolean ascending) {
-		final Comparator<?> cmpr = ascending ? _sortAsc: _sortDsc;
-		if (cmpr == null) return false;
-
-		final Grid grid = getGrid();
-		if (grid == null) return false;
-		final Rows rows = grid.getRows();
-		if (rows == null) return false;
-
-		//comparator might be zscript
-		Scopes.beforeInterpret(this);
-		try {
-			final ListModel<?> model = grid.getModel();
-			boolean isPagingMold = grid.inPagingMold();
-			int activePg = isPagingMold ? grid.getPaginal().getActivePage() : 0;
-			if (model != null) { //live data
-				if (model instanceof GroupsSortableModel) {
-					sortGroupsModel(grid, (GroupsSortableModel)model, cmpr, ascending);
-				} else {
-					if (!(model instanceof Sortable))
-						throw new UiException("Sortable must be implemented in "+model.getClass());
-					sortListModel((Sortable)model, cmpr, ascending);
-				}
-			} else { //not live data
-				sort0(grid, cmpr);
-			}
-			if (isPagingMold) grid.getPaginal().setActivePage(activePg);
-				// Because of maintaining the number of the visible item, we cause
-				// the wrong active page when dynamically add/remove the item (i.e. sorting).
-				// Therefore, we have to reset the correct active page.
-		} finally {
-			Scopes.afterInterpret();
-		}
-		fixDirection(grid, ascending);
-
-		// sometimes the items at client side are out of date
-		grid.getRows().invalidate();
-		return true;
-	}
-	@SuppressWarnings("unchecked")
-	private void sortGroupsModel(Grid grid, GroupsSortableModel model,
-	Comparator cmpr, boolean ascending) {
-		model.sort(cmpr, ascending, grid.getColumns().getChildren().indexOf(this));
-	}
-	@SuppressWarnings("unchecked")
-	private void sortListModel(Sortable model, Comparator cmpr, boolean ascending) {
-		model.sort(cmpr, ascending);
-	}
-	/** Sorts the rows. If with group, each group is sorted independently.
-	 */
-	@SuppressWarnings("unchecked")
-	private static void sort0(Grid grid, Comparator cmpr) {
-		final Rows rows = grid.getRows();
-		if (rows.hasGroup())
-			for (Group g: rows.getGroups()) {
-				int index = g.getIndex() + 1;
-				Components.sort(rows.getChildren(), index, index + g.getItemCount(), cmpr);
-			}
-		else Components.sort(rows.getChildren(), cmpr);
-	}
 	
-	private void fixDirection(Grid grid, boolean ascending) {
-		_ignoreSort = true;
-		//maintain
-		for (Iterator it = grid.getColumns().getChildren().iterator();
-		it.hasNext();) {
-			final Column hd = (Column)it.next();
-			hd.setSortDirection(
-				hd != this ? "natural": ascending ? "ascending": "descending");
-		}
-		_ignoreSort = false;
-	}
 	/** Sorts the rows ({@link Row}) based on {@link #getSortAscending}
 	 * and {@link #getSortDescending}.
 	 *
@@ -447,9 +382,89 @@ public class Column extends HeaderElement {
 	 * @return whether the rows are sorted.
 	 */
 	public boolean sort(boolean ascending, boolean force) {
-		if (force) setSortDirection("natural");
+		if (force)
+			setSortDirection("natural");
 		return sort(ascending);
 	}
+
+	/*package*/ boolean doSort(boolean ascending) {
+		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr == null)
+			return false;
+
+		final Grid grid = getGrid();
+		if (grid == null)
+			return false;
+		final Rows rows = grid.getRows();
+		if (rows == null)
+			return false;
+
+		//comparator might be zscript
+		Scopes.beforeInterpret(this);
+		try {
+			final ListModel<?> model = grid.getModel();
+			boolean isPagingMold = grid.inPagingMold();
+			int activePg = isPagingMold ? grid.getPaginal().getActivePage() : 0;
+			if (model != null) { //live data
+				if (model instanceof GroupsSortableModel) {
+					sortGroupsModel(grid, (GroupsSortableModel) model, cmpr, ascending);
+				} else {
+					if (!(model instanceof Sortable))
+						throw new UiException("Sortable must be implemented in " + model.getClass());
+					sortListModel((Sortable) model, cmpr, ascending);
+				}
+			} else { //not live data
+				sort0(grid, cmpr);
+			}
+			if (isPagingMold)
+				grid.getPaginal().setActivePage(activePg);
+			// Because of maintaining the number of the visible item, we cause
+			// the wrong active page when dynamically add/remove the item (i.e. sorting).
+			// Therefore, we have to reset the correct active page.
+		} finally {
+			Scopes.afterInterpret();
+		}
+		fixDirection(grid, ascending);
+
+		// sometimes the items at client side are out of date
+		grid.getRows().invalidate();
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void sortGroupsModel(Grid grid, GroupsSortableModel model, Comparator cmpr, boolean ascending) {
+		model.sort(cmpr, ascending, grid.getColumns().getChildren().indexOf(this));
+	}
+
+	@SuppressWarnings("unchecked")
+	private void sortListModel(Sortable model, Comparator cmpr, boolean ascending) {
+		model.sort(cmpr, ascending);
+	}
+
+	/** Sorts the rows. If with group, each group is sorted independently.
+	 */
+	@SuppressWarnings("unchecked")
+	private static void sort0(Grid grid, Comparator cmpr) {
+		final Rows rows = grid.getRows();
+		if (rows.hasGroup())
+			for (Group g : rows.getGroups()) {
+				int index = g.getIndex() + 1;
+				Components.sort(rows.getChildren(), index, index + g.getItemCount(), cmpr);
+			}
+		else
+			Components.sort(rows.getChildren(), cmpr);
+	}
+
+	private void fixDirection(Grid grid, boolean ascending) {
+		_ignoreSort = true;
+		//maintain
+		for (Iterator it = grid.getColumns().getChildren().iterator(); it.hasNext();) {
+			final Column hd = (Column) it.next();
+			hd.setSortDirection(hd != this ? "natural" : ascending ? "ascending" : "descending");
+		}
+		_ignoreSort = false;
+	}
+
 	/**
 	 * Groups and sorts the rows ({@link Row}) based on
 	 * {@link #getSortAscending}.
@@ -463,18 +478,22 @@ public class Column extends HeaderElement {
 	 * @since 3.5.0
 	 */
 	public boolean group(boolean ascending) {
-		final String dir = getSortDirection();		
+		final String dir = getSortDirection();
 		if (ascending) {
-			if ("ascending".equals(dir)) return false;
+			if ("ascending".equals(dir))
+				return false;
 		} else {
-			if ("descending".equals(dir)) return false;
+			if ("descending".equals(dir))
+				return false;
 		}
-		final Comparator<?> cmpr = ascending ? _sortAsc: _sortDsc;
-		if (cmpr == null) return false;
-		
+		final Comparator<?> cmpr = ascending ? _sortAsc : _sortDsc;
+		if (cmpr == null)
+			return false;
+
 		final Grid grid = getGrid();
-		if (grid == null) return false;
-		
+		if (grid == null)
+			return false;
+
 		//comparator might be zscript
 		Scopes.beforeInterpret(this);
 		try {
@@ -482,20 +501,22 @@ public class Column extends HeaderElement {
 			int index = grid.getColumns().getChildren().indexOf(this);
 			if (model != null) { //live data
 				if (!(model instanceof GroupsSortableModel))
-					throw new UiException(GroupsSortableModel.class + " must be implemented in "+model.getClass().getName());
-				groupGroupsModel((GroupsSortableModel)model, cmpr, ascending, index);
+					throw new UiException(
+							GroupsSortableModel.class + " must be implemented in " + model.getClass().getName());
+				groupGroupsModel((GroupsSortableModel) model, cmpr, ascending, index);
 			} else { // not live data
 				final Rows rows = grid.getRows();
-				if (rows == null) return false;//Avoid grid with null group		
+				if (rows == null)
+					return false; //Avoid grid with null group		
 				if (rows.hasGroup()) {
-					for (Group group: new ArrayList<Group>(rows.getGroups()))
+					for (Group group : new ArrayList<Group>(rows.getGroups()))
 						group.detach(); // Groupfoot is removed automatically, if any.
 				}
-				
+
 				Comparator<?> cmprx;
-				if(cmpr instanceof GroupComparator){
-					cmprx = new GroupToComparator((GroupComparator)cmpr);
-				}else{
+				if (cmpr instanceof GroupComparator) {
+					cmprx = new GroupToComparator((GroupComparator) cmpr);
+				} else {
 					cmprx = cmpr;
 				}
 
@@ -511,17 +532,16 @@ public class Column extends HeaderElement {
 						//new group
 						final List<Component> cells = row.getChildren();
 						if (cells.size() < index)
-							throw new IndexOutOfBoundsException(
-									"Index: "+index+" but size: "+ cells.size());
+							throw new IndexOutOfBoundsException("Index: " + index + " but size: " + cells.size());
 						Group group;
 						Component cell = cells.get(index);
 						if (cell instanceof Label) {
-							String val = ((Label)cell).getValue();
+							String val = ((Label) cell).getValue();
 							group = new Group(val);
 						} else {
 							Component cc = cell.getFirstChild();
 							if (cc instanceof Label) {
-								String val = ((Label)cc).getValue();
+								String val = ((Label) cc).getValue();
 								group = new Group(val);
 							} else {
 								group = new Group(Messages.get(MZul.GRID_OTHER));
@@ -541,42 +561,43 @@ public class Column extends HeaderElement {
 		}
 
 		fixDirection(grid, ascending);
-	
+
 		// sometimes the items at client side are out of date
 		grid.getRows().invalidate();
 		return true;
 	}
+
 	@SuppressWarnings("unchecked")
-	private void groupGroupsModel(GroupsSortableModel model, Comparator cmpr,
-	boolean ascending, int index) {
+	private void groupGroupsModel(GroupsSortableModel model, Comparator cmpr, boolean ascending, int index) {
 		model.group(cmpr, ascending, index);
 	}
+
 	@SuppressWarnings("unchecked")
 	private static void sortCollection(List<Component> comps, Comparator cmpr) {
 		Collections.sort(comps, cmpr);
 	}
+
 	@SuppressWarnings("unchecked")
 	private static int compare(Comparator cmpr, Object a, Object b) {
 		return cmpr.compare(a, b);
 	}
 
 	// super
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
+
 		if (!"none".equals(_sortDscNm))
 			render(renderer, "sortDescending", _sortDscNm);
 
 		if (!"none".equals(_sortAscNm))
 			render(renderer, "sortAscending", _sortAscNm);
-		
+
 		if (!"natural".equals(_sortDir))
 			render(renderer, "sortDirection", _sortDir);
 
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
 	}
-	
+
 	/** Returns the value.
 	 * <p>Default: null.
 	 * <p>Note: the value is application dependent, you can place
@@ -585,8 +606,9 @@ public class Column extends HeaderElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)_value;
+		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value.
 	 * <p>Note: the value is application dependent, you can place
@@ -606,7 +628,7 @@ public class Column extends HeaderElement {
 	public void onSort(SortEvent event) {
 		sort(event.isAscending());
 	}
-	
+
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.
 	 * @deprecated As of release 5.0.8, use or override {@link #onSort(SortEvent)}
@@ -614,11 +636,14 @@ public class Column extends HeaderElement {
 	 */
 	public void onSort() {
 		final String dir = getSortDirection();
-		if ("ascending".equals(dir)) sort(false);
-		else if ("descending".equals(dir)) sort(true);
-		else if (!sort(true)) sort(false);
+		if ("ascending".equals(dir))
+			sort(false);
+		else if ("descending".equals(dir))
+			sort(true);
+		else if (!sort(true))
+			sort(false);
 	}
-	
+
 	/**
 	 * Internal use only.
 	 * @since 6.5.0
@@ -626,7 +651,7 @@ public class Column extends HeaderElement {
 	public void onGroupLater(SortEvent event) {
 		group(event.isAscending());
 	}
-	
+
 	/**
 	 * Ungroups and sorts the rows ({@link Row}) based on the ascending.
 	 * If the corresponding comparator is not set, it returns false
@@ -650,22 +675,19 @@ public class Column extends HeaderElement {
 					final Rows rows = grid.getRows();
 					if (rows != null) {
 						if (rows.hasGroup()) {
-							for (Group group : new ArrayList<Group>(
-									rows.getGroups()))
+							for (Group group : new ArrayList<Group>(rows.getGroups()))
 								group.detach(); // Groupfoot is removed
 												// automatically, if any.
 						}
 
 						Comparator<?> cmprx;
 						if (cmpr instanceof GroupComparator) {
-							cmprx = new GroupToComparator(
-									(GroupComparator) cmpr);
+							cmprx = new GroupToComparator((GroupComparator) cmpr);
 						} else {
 							cmprx = cmpr;
 						}
 
-						final List<Component> children = new LinkedList<Component>(
-								rows.getChildren());
+						final List<Component> children = new LinkedList<Component>(rows.getChildren());
 						rows.getChildren().clear();
 						sortCollection(children, cmprx);
 						for (Component c : children)
@@ -681,7 +703,7 @@ public class Column extends HeaderElement {
 			grid.getRows().invalidate();
 		}
 	}
-	
+
 	public String getZclass() {
 		return _zclass == null ? "z-column" : _zclass;
 	}
@@ -689,10 +711,10 @@ public class Column extends HeaderElement {
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Columns))
-			throw new UiException("Unsupported parent for column: "+parent);
+			throw new UiException("Unsupported parent for column: " + parent);
 		super.beforeParentChanged(parent);
 	}
-	
+
 	/** Processes an AU request.
 	 * <p>Default: in addition to what are handled by its superclass, it also 
 	 * handles onSort.
@@ -718,39 +740,35 @@ public class Column extends HeaderElement {
 		} else
 			super.service(request, everError);
 	}
-	
-	
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Column clone = (Column)super.clone();
+		final Column clone = (Column) super.clone();
 		clone.fixClone();
 		return clone;
 	}
+
 	private void fixClone() {
 		if (_sortAsc instanceof RowComparator) {
-			final RowComparator c = (RowComparator)_sortAsc;
+			final RowComparator c = (RowComparator) _sortAsc;
 			if (c.getColumn() == this && c.isAscending())
-				_sortAsc =
-					new RowComparator(this, true, c.shallIgnoreCase(), false);
+				_sortAsc = new RowComparator(this, true, c.shallIgnoreCase(), false);
 		}
 		if (_sortDsc instanceof RowComparator) {
-			final RowComparator c = (RowComparator)_sortDsc;
+			final RowComparator c = (RowComparator) _sortDsc;
 			if (c.getColumn() == this && !c.isAscending())
-				_sortDsc =
-					new RowComparator(this, false, c.shallIgnoreCase(), false);
+				_sortDsc = new RowComparator(this, false, c.shallIgnoreCase(), false);
 		}
 	}
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		boolean written = false;
 		if (_sortAsc instanceof RowComparator) {
-			final RowComparator c = (RowComparator)_sortAsc;
+			final RowComparator c = (RowComparator) _sortAsc;
 			if (c.getColumn() == this && c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
@@ -764,7 +782,7 @@ public class Column extends HeaderElement {
 
 		written = false;
 		if (_sortDsc instanceof RowComparator) {
-			final RowComparator c = (RowComparator)_sortDsc;
+			final RowComparator c = (RowComparator) _sortDsc;
 			if (c.getColumn() == this && !c.isAscending()) {
 				s.writeBoolean(true);
 				s.writeBoolean(c.shallIgnoreCase());
@@ -776,8 +794,8 @@ public class Column extends HeaderElement {
 			s.writeObject(_sortDsc);
 		}
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		boolean b = s.readBoolean();
@@ -786,7 +804,7 @@ public class Column extends HeaderElement {
 			_sortAsc = new RowComparator(this, true, igcs, false);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortAsc = (Comparator<?>)s.readObject();
+			_sortAsc = (Comparator<?>) s.readObject();
 		}
 
 		b = s.readBoolean();
@@ -795,14 +813,17 @@ public class Column extends HeaderElement {
 			_sortDsc = new RowComparator(this, false, igcs, false);
 		} else {
 			//bug #2830325 FieldComparator not castable to ListItemComparator
-			_sortDsc = (Comparator<?>)s.readObject();
+			_sortDsc = (Comparator<?>) s.readObject();
 		}
 	}
+
 	private static class GroupToComparator implements Comparator {
 		private final GroupComparator _gcmpr;
+
 		private GroupToComparator(GroupComparator gcmpr) {
 			_gcmpr = gcmpr;
 		}
+
 		@SuppressWarnings("unchecked")
 		public int compare(Object o1, Object o2) {
 			return _gcmpr.compareGroup(o1, o2);

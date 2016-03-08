@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import java.util.Map;
 import java.util.Collections;
+import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
 
@@ -30,10 +30,12 @@ import org.zkoss.zk.ui.Component;
  */
 public class CreateEvent extends Event {
 	private final Map<?, ?> _args;
+
 	public CreateEvent(String name, Component target, Map<?, ?> args) {
 		super(name, target);
-		_args = args != null ? args: Collections.EMPTY_MAP;
+		_args = args != null ? args : Collections.EMPTY_MAP;
 	}
+
 	/** Returns arg ({@link org.zkoss.zk.ui.Execution#getArg}) when the component is
 	 * created.
 	 * <p>Note: when onCreate listeners are called, {@link org.zkoss.zk.ui.Execution#getArg}

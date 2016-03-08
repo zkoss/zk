@@ -27,28 +27,29 @@ public class ArithmeticWrongValueException extends WrongValueException {
 	private static final long serialVersionUID = 2388564567451692996L;
 	private Object _value;
 
-	public ArithmeticWrongValueException(Component comp, String msg,
-	Throwable cause, Object value) {
+	public ArithmeticWrongValueException(Component comp, String msg, Throwable cause, Object value) {
 		super(comp, msg, cause);
 		_value = value;
 	}
+
 	public ArithmeticWrongValueException(Component comp, String msg, Object value) {
 		super(comp, msg);
 		_value = value;
 	}
+
 	public ArithmeticWrongValueException(Object value) {
 		_value = value;
 	}
+
 	public ArithmeticWrongValueException() {
 	}
 
-	public ArithmeticWrongValueException(Component comp, int code,
-	Object[] fmtArgs, Object value) {
+	public ArithmeticWrongValueException(Component comp, int code, Object[] fmtArgs, Object value) {
 		this(comp, code, fmtArgs);
 		_value = value;
 	}
-	public ArithmeticWrongValueException(Component comp, int code,
-	Object[] fmtArgs) {
+
+	public ArithmeticWrongValueException(Component comp, int code, Object[] fmtArgs) {
 		super(comp, code, fmtArgs);
 	}
 
@@ -60,8 +61,7 @@ public class ArithmeticWrongValueException extends WrongValueException {
 		super(comp, code);
 	}
 
-	public ArithmeticWrongValueException(int code, Object fmtArg,
-			Throwable cause) {
+	public ArithmeticWrongValueException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
 
@@ -69,8 +69,7 @@ public class ArithmeticWrongValueException extends WrongValueException {
 		super(code, fmtArg);
 	}
 
-	public ArithmeticWrongValueException(int code, Object[] fmtArgs,
-			Throwable cause) {
+	public ArithmeticWrongValueException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
 

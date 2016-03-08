@@ -16,10 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A map of component definitions.
@@ -30,8 +30,7 @@ import java.util.Collections;
  *
  * @author tomyeh
  */
-public class ComponentDefinitionMap
-implements Cloneable, java.io.Serializable {
+public class ComponentDefinitionMap implements Cloneable, java.io.Serializable {
 	/** A map of component definition defined in this page. */
 	private transient Map<String, ComponentDefinition> _compdefs;
 	/** Map(String clsnm, ComponentDefinition compdef). */
@@ -51,7 +50,6 @@ implements Cloneable, java.io.Serializable {
 		return _ignoreCase;
 	}
 
-
 	/** Returns a readonly collection of the names (String)
 	 * of component definitions defined in this map.
 	 */
@@ -60,6 +58,7 @@ implements Cloneable, java.io.Serializable {
 			return _compdefs.keySet();
 		return Collections.emptyList();
 	}
+
 	/** Returns a readonly collection of component definitions
 	 * ({@link ComponentDefinition}) defined in this map.
 	 * @since 3.6.3
@@ -84,26 +83,24 @@ implements Cloneable, java.io.Serializable {
 
 		Object implcls = compdef.getImplementationClass();
 		if (implcls instanceof Class)
-			implcls = ((Class)implcls).getName();
+			implcls = ((Class) implcls).getName();
 
 		synchronized (this) {
 			if (_compdefs == null) {
-				_compdefsByClass =
-					Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(4));
-				_compdefs =
-					Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(4));
+				_compdefsByClass = Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(4));
+				_compdefs = Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(4));
 			}
 
 			_compdefs.put(name, compdef);
-			_compdefsByClass.put((String)implcls, compdef);
+			_compdefsByClass.put((String) implcls, compdef);
 		}
 	}
+
 	/** Returns whether the specified component exists.
 	 */
 	public boolean contains(String name) {
 		return _compdefs != null
-			&& _compdefs.containsKey(
-				isCaseInsensitive() ? name.toLowerCase(java.util.Locale.ENGLISH): name);
+				&& _compdefs.containsKey(isCaseInsensitive() ? name.toLowerCase(java.util.Locale.ENGLISH) : name);
 	}
 
 	/** Returns the component definition of the specified name, or null if not
@@ -114,11 +111,10 @@ implements Cloneable, java.io.Serializable {
 	 * It just returns null.
 	 */
 	public ComponentDefinition get(String name) {
-		return _compdefs != null ?
-			_compdefs.get(
-				isCaseInsensitive() ? name.toLowerCase(java.util.Locale.ENGLISH): name):
-			null;
+		return _compdefs != null
+				? _compdefs.get(isCaseInsensitive() ? name.toLowerCase(java.util.Locale.ENGLISH) : name) : null;
 	}
+
 	/** Returns the component definition of the specified class, or null if not
 	 * found.
 	 *
@@ -129,8 +125,7 @@ implements Cloneable, java.io.Serializable {
 	public ComponentDefinition get(Class cls) {
 		if (_compdefsByClass != null) {
 			for (; cls != null; cls = cls.getSuperclass()) {
-				final ComponentDefinition compdef =
-					_compdefsByClass.get(cls.getName());
+				final ComponentDefinition compdef = _compdefsByClass.get(cls.getName());
 				if (compdef != null)
 					return compdef;
 			}
@@ -140,38 +135,36 @@ implements Cloneable, java.io.Serializable {
 
 	//Serializable//
 	//NOTE: they must be declared as private
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		if (_compdefs != null) {
 			synchronized (_compdefs) {
 				s.writeInt(_compdefs.size());
-				for (ComponentDefinition compdef: _compdefs.values())
+				for (ComponentDefinition compdef : _compdefs.values())
 					s.writeObject(compdef);
 			}
 		} else {
 			s.writeInt(0);
 		}
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		int cnt = s.readInt();
 		while (--cnt >= 0)
-			add((ComponentDefinition)s.readObject());
+			add((ComponentDefinition) s.readObject());
 	}
 
 	//Cloneable//
 	public Object clone() {
 		final ComponentDefinitionMap clone;
 		try {
-			clone = (ComponentDefinitionMap)super.clone();
-			clone._compdefs =
-				Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefs));
-			clone._compdefsByClass =
-				Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefsByClass));
+			clone = (ComponentDefinitionMap) super.clone();
+			clone._compdefs = Collections.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefs));
+			clone._compdefsByClass = Collections
+					.synchronizedMap(new HashMap<String, ComponentDefinition>(_compdefsByClass));
 		} catch (CloneNotSupportedException ex) {
 			throw new InternalError();
 		}

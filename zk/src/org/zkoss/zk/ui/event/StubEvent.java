@@ -14,9 +14,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Map;
 
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.StubComponent;
-import org.zkoss.zk.au.AuRequest;
 
 /**
  * The event sent from a stub component ({@link org.zkoss.zk.ui.sys.StubComponent}.
@@ -37,12 +37,12 @@ public class StubEvent extends Event {
 		final Component target = request.getComponent();
 		final Map<String, Object> data = request.getData();
 		final String uuid = request.getUuid();
-		return new StubEvent("onStub", target, request.getCommand(),
-			uuid, getId(target, uuid), data);
+		return new StubEvent("onStub", target, request.getCommand(), uuid, getId(target, uuid), data);
 	}
+
 	private static final String getId(Component comp, String uuid) {
 		if (comp instanceof StubComponent)
-			return ((StubComponent)comp).getId(uuid);
+			return ((StubComponent) comp).getId(uuid);
 		if (comp != null) {
 			String id = comp.getId();
 			if (id != null && id.length() > 0)
@@ -51,17 +51,24 @@ public class StubEvent extends Event {
 		return null;
 	}
 
+	/** Returns the ID of the stub component sending the request,
+	 * or null if not available.
+	 */
+	public String getId() {
+		return _id;
+	}
+
 	/** Constructs a check-relevant event.
 	 * @param id the ID of the stub component causes this event.
 	 */
-	public StubEvent(String name, Component target,
-	String cmd, String uuid, String id, Map<String, Object> data) {
+	public StubEvent(String name, Component target, String cmd, String uuid, String id, Map<String, Object> data) {
 		super(name, target);
 		_cmd = cmd;
 		_uuid = uuid;
 		_id = id;
 		_data = data;
 	}
+
 	public StubEvent(StubEvent evt, Component target) {
 		this(evt.getName(), target, evt._cmd, evt._uuid, evt._id, evt._data);
 	}
@@ -71,17 +78,13 @@ public class StubEvent extends Event {
 	public String getCommand() {
 		return _cmd;
 	}
-	/** Returns the ID of the stub component sending the request,
-	 * or null if not available.
-	 */
-	public String getId() {
-		return _id;
-	}
+
 	/** Returns the UUID of the stub component sending the request.
 	 */
 	public String getUuid() {
 		return _uuid;
 	}
+
 	/** Returns the data carried in the request.
 	 * The content depends on the request ({@link AuRequest}).
 	 */

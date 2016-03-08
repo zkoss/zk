@@ -17,8 +17,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.ext;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.idom.Namespace;
 import org.zkoss.zk.ui.Component;
@@ -37,26 +37,31 @@ public interface Native extends NonFellow {
 	 * ({@link Namespace}), or empty if no declared namespace.
 	 */
 	public List<Namespace> getDeclaredNamespaces();
+
 	/** Adds a declared namespace.
 	 * The added declared namespace will be generated to the output.
 	 *
 	 * @param ns the namespace (never null).
 	 */
 	public void addDeclaredNamespace(Namespace ns);
+
 	/** Returns the prolog content. It is the content generated
 	 * before the child components, if any.
 	 * <p>Default: empty ("").
 	 */
 	public String getPrologContent();
+
 	/** Sets the prolog content. It is the content generated
 	 * before the child components, if any.
 	 */
 	public void setPrologContent(String prolog);
+
 	/** Returns the epilog content. It is the content generated
 	 * before the child components, if any.
 	 * <p>Default: empty ("").
 	 */
 	public String getEpilogContent();
+
 	/** Sets the epilog content. It is the content generated
 	 * before the child components, if any.
 	 */
@@ -92,8 +97,9 @@ public interface Native extends NonFellow {
 		 * to be generated, or null if not.
 		 * Note: EL expressions is not allowed
 		 */
-		public void getFirstHalf(StringBuffer sb, String tag,
-		Map<String, Object> props, Collection<Namespace> namespaces);
+		public void getFirstHalf(StringBuffer sb, String tag, Map<String, Object> props,
+				Collection<Namespace> namespaces);
+
 		/** Appends the first half of the device-dependent content
 		 * for the specified tag and properties, and appends it to
 		 * the specified string buffer.
@@ -105,6 +111,7 @@ public interface Native extends NonFellow {
 		 * @param tag the tag name (never null)
 		 */
 		public void getSecondHalf(StringBuffer sb, String tag);
+
 		/** Appends the text.
 		 *
 		 * @param text the text content to append

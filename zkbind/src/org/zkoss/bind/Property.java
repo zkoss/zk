@@ -22,13 +22,13 @@ public interface Property {
 	 * @return the base object of this property.
 	 */
 	public Object getBase();
-	
+
 	/**
 	 * Returns the value object of this property.
 	 * @return the value object of this property.
 	 */
 	public Object getValue();
-	
+
 	/**
 	 * Returns the name of this property. 
 	 * @return the name of this property. 

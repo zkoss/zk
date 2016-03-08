@@ -14,10 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.au;
 
-import java.util.Set;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
@@ -41,10 +42,10 @@ public class AuRequests {
 	public static <T extends Component> Set<T> convertToItems(Desktop desktop, List<String> uuids) {
 		final Set<T> items = new LinkedHashSet<T>();
 		if (uuids != null)
-			for (String uuid: uuids) {
+			for (String uuid : uuids) {
 				final Component item = desktop.getComponentByUuidIfAny(uuid.trim());
 				if (item != null)
-					items.add((T)item);
+					items.add((T) item);
 				//notice that it might be null (since the items might be
 				//removed by the last request)
 			}
@@ -58,13 +59,22 @@ public class AuRequests {
 	public static int parseKeys(Map<String, Object> data) {
 		int keys = 0;
 		if (data != null) {
-			if (getBoolean(data, "altKey")) keys |= MouseEvent.ALT_KEY;
-			if (getBoolean(data, "ctrlKey")) keys |= MouseEvent.CTRL_KEY;
-			if (getBoolean(data, "shiftKey")) keys |= MouseEvent.SHIFT_KEY;
+			if (getBoolean(data, "altKey"))
+				keys |= MouseEvent.ALT_KEY;
+			if (getBoolean(data, "ctrlKey"))
+				keys |= MouseEvent.CTRL_KEY;
+			if (getBoolean(data, "shiftKey"))
+				keys |= MouseEvent.SHIFT_KEY;
 			switch (getInt(data, "which", -1)) {
-			case 1: keys |= MouseEvent.LEFT_CLICK; break;
-			case 2: keys |= MouseEvent.MIDDLE_CLICK; break;
-			case 3: keys |= MouseEvent.RIGHT_CLICK; break;
+			case 1:
+				keys |= MouseEvent.LEFT_CLICK;
+				break;
+			case 2:
+				keys |= MouseEvent.MIDDLE_CLICK;
+				break;
+			case 3:
+				keys |= MouseEvent.RIGHT_CLICK;
+				break;
 			}
 		}
 		return keys;
@@ -73,19 +83,17 @@ public class AuRequests {
 	/** Returns the inner width of an AU request representing the update
 	 * of inner width.
 	 */
-	public static String getInnerWidth(AuRequest request)
-	throws UiException {
-		return (String)request.getData().get("");
+	public static String getInnerWidth(AuRequest request) throws UiException {
+		return (String) request.getData().get("");
 	}
 
 	/** Returns the result of an AU request representing the update result.
 	 */
-	public static Object getUpdateResult(AuRequest request)
-	throws UiException {
-		final String key = (String)request.getData().get("contentId");
+	public static Object getUpdateResult(AuRequest request) throws UiException {
+		final String key = (String) request.getData().get("contentId");
 		final Object result = request.getDesktop().removeAttribute(key);
 		if (result == null)
-			throw new UiException("Content not found: "+key);
+			throw new UiException("Content not found: " + key);
 		return result;
 	}
 
@@ -95,25 +103,9 @@ public class AuRequests {
 	 */
 	public static int getInt(Map<String, Object> data, String key, int defVal) {
 		final Object o = data.get(key);
-		return o != null ? ((Number)o).intValue(): defVal;
+		return o != null ? ((Number) o).intValue() : defVal;
 	}
-	/** Returns the integer value of the specified key in the data.
-	 * It is the same as <code>getLong(data, key, defVal, false)</code>.
-	 * @param defVal the default value; used if not found.
-	 */
-	public static long getLong(Map<String, Object> data, String key, long defVal) {
-		final Object o = data.get(key);
-		return o != null ? ((Number)o).longValue(): defVal;
-	}
-	/** Returns the double value of the specified key in the data.
-	 * It is the same as <code>getDouble(data, key, defVal, false)</code>.
-	 * @param defVal the default value; used if not found.
-	 * @since 7.0.1
-	 */
-	public static double getDouble(Map<String, Object> data, String key, long defVal) {
-		final Object o = data.get(key);
-		return o != null ? ((Number)o).doubleValue(): defVal;
-	}
+
 	/** Returns the integer value of the specified key in the data.
 	 * @param defVal the default value; used if not found.
 	 * @param silent whether not to throw an exception if failed to convert
@@ -128,6 +120,16 @@ public class AuRequests {
 			}
 		return getInt(data, key, defVal);
 	}
+
+	/** Returns the integer value of the specified key in the data.
+	 * It is the same as <code>getLong(data, key, defVal, false)</code>.
+	 * @param defVal the default value; used if not found.
+	 */
+	public static long getLong(Map<String, Object> data, String key, long defVal) {
+		final Object o = data.get(key);
+		return o != null ? ((Number) o).longValue() : defVal;
+	}
+
 	/** Returns the integer value of the specified key in the data.
 	 * @param defVal the default value; used if not found.
 	 * @param silent whether not to throw an exception if failed to convert
@@ -142,6 +144,17 @@ public class AuRequests {
 			}
 		return getLong(data, key, defVal);
 	}
+
+	/** Returns the double value of the specified key in the data.
+	 * It is the same as <code>getDouble(data, key, defVal, false)</code>.
+	 * @param defVal the default value; used if not found.
+	 * @since 7.0.1
+	 */
+	public static double getDouble(Map<String, Object> data, String key, long defVal) {
+		final Object o = data.get(key);
+		return o != null ? ((Number) o).doubleValue() : defVal;
+	}
+
 	/** Returns the double value of the specified key in the data.
 	 * @param defVal the default value; used if not found.
 	 * @param silent whether not to throw an exception if failed to convert
@@ -156,11 +169,11 @@ public class AuRequests {
 			}
 		return getDouble(data, key, defVal);
 	}
+
 	/** Returns whether the specified key is defined.
 	 */
 	public static boolean getBoolean(Map<String, Object> data, String key) {
 		final Object o = data.get(key);
-		return o != null
-			&& (!(o instanceof Boolean) || ((Boolean)o).booleanValue());
+		return o != null && (!(o instanceof Boolean) || ((Boolean) o).booleanValue());
 	}
 }

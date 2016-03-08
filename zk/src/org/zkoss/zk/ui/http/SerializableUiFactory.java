@@ -21,8 +21,8 @@ package org.zkoss.zk.ui.http;
 import javax.portlet.PortletSession;
 import javax.servlet.http.HttpSession;
 
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.impl.AbstractUiFactory;
 
 /**
@@ -35,8 +35,8 @@ import org.zkoss.zk.ui.impl.AbstractUiFactory;
 public class SerializableUiFactory extends AbstractUiFactory {
 	public Session newSession(WebApp wapp, Object nativeSess, Object request) {
 		if (nativeSess instanceof HttpSession)
-			return new SerializableSession(wapp, (HttpSession)nativeSess, request);
+			return new SerializableSession(wapp, (HttpSession) nativeSess, request);
 		else
-			return new SerializableSession(wapp, (PortletSession)nativeSess, request);
+			return new SerializableSession(wapp, (PortletSession) nativeSess, request);
 	}
 }

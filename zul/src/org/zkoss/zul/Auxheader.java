@@ -19,7 +19,6 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-
 import org.zkoss.zul.impl.HeaderElement;
 
 /**
@@ -34,9 +33,11 @@ public class Auxheader extends HeaderElement {
 
 	public Auxheader() {
 	}
+
 	public Auxheader(String label) {
 		super(label);
 	}
+
 	public Auxheader(String label, String src) {
 		super(label, src);
 	}
@@ -47,6 +48,7 @@ public class Auxheader extends HeaderElement {
 	public int getColspan() {
 		return _colspan;
 	}
+
 	/** Sets the number of columns to span this header.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
@@ -65,6 +67,7 @@ public class Auxheader extends HeaderElement {
 	public int getRowspan() {
 		return _rowspan;
 	}
+
 	/** Sets the number of rows to span this header.
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
 	 */
@@ -76,7 +79,7 @@ public class Auxheader extends HeaderElement {
 			smartUpdate("rowspan", _rowspan);
 		}
 	}
-	
+
 	/**
 	 * @since 8.0.0
 	 */
@@ -109,13 +112,12 @@ public class Auxheader extends HeaderElement {
 		throw new UiException("Not allowed to set hflex in auxhead.");
 	}
 
-
 	//super//
 	public String getZclass() {
 		return _zclass == null ? "z-auxheader" : _zclass;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		if (_colspan != 1)
@@ -127,7 +129,7 @@ public class Auxheader extends HeaderElement {
 	//Component//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Auxhead))
-			throw new UiException("Wrong parent: "+parent);
+			throw new UiException("Wrong parent: " + parent);
 		super.beforeParentChanged(parent);
 	}
 }

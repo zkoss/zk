@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Files;
 import org.zkoss.util.Utils;
 import org.zkoss.zk.Version;
@@ -45,7 +46,7 @@ import org.zkoss.zk.ui.util.Configuration;
  *
  * @author tomyeh
  */
-abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
+public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 	private static final Logger log = LoggerFactory.getLogger(AbstractWebApp.class);
 
 	private String _appnm;
@@ -73,21 +74,25 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	}
 
 	public String getAppName() {
-		return _appnm != null ? _appnm: "ZK";
+		return _appnm != null ? _appnm : "ZK";
 	}
+
 	public void setAppName(String name) {
-		_appnm = name != null ? name: "";
+		_appnm = name != null ? name : "";
 	}
 
 	public final String getVersion() {
 		return Version.RELEASE;
 	}
+
 	public final String getBuild() {
 		return getBuildStamp();
 	}
-	public final static String getBuildStamp() {
-		return _build == null ? loadBuild(): _build;
+
+	public static final String getBuildStamp() {
+		return _build == null ? loadBuild() : _build;
 	}
+
 	public int getSubversion(int portion) {
 		return Utils.getSubversion(getVersion(), portion);
 	}
@@ -99,12 +104,15 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public Object getAttribute(String name, boolean recurse) {
 		return getAttribute(name);
 	}
+
 	public boolean hasAttribute(String name, boolean recurse) {
 		return hasAttribute(name);
 	}
+
 	public Object setAttribute(String name, Object value, boolean recurse) {
 		return setAttribute(name, value);
 	}
+
 	public Object removeAttribute(String name, boolean recurse) {
 		return removeAttribute(name);
 	}
@@ -117,7 +125,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			throw new IllegalArgumentException("null");
 		final WebApp oldwapp = config.getWebApp();
 		if (oldwapp != null && oldwapp != this)
-			throw new IllegalArgumentException("config already belongs to other Web app, "+oldwapp);
+			throw new IllegalArgumentException("config already belongs to other Web app, " + oldwapp);
 
 		_config = config;
 		if (_appnm == null)
@@ -129,9 +137,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			_engine = new UiEngineImpl();
 		} else {
 			try {
-				_engine = (UiEngine)cls.newInstance();
+				_engine = (UiEngine) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		}
 
@@ -140,9 +148,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			_provider = new SessionDesktopCacheProvider();
 		} else {
 			try {
-				_provider = (DesktopCacheProvider)cls.newInstance();
+				_provider = (DesktopCacheProvider) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		}
 
@@ -151,26 +159,26 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			_factory = new SimpleUiFactory();
 		} else {
 			try {
-				_factory = (UiFactory)cls.newInstance();
+				_factory = (UiFactory) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		}
 
 		cls = _config.getFailoverManagerClass();
 		if (cls != null) {
 			try {
-				_failover = (FailoverManager)cls.newInstance();
+				_failover = (FailoverManager) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		}
 		cls = _config.getIdGeneratorClass();
 		if (cls != null) {
 			try {
-				_idgen = (IdGenerator)cls.newInstance();
+				_idgen = (IdGenerator) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		}
 
@@ -179,18 +187,18 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			_sesscache = new SimpleSessionCache();
 		} else {
 			try {
-				_sesscache = (SessionCache)cls.newInstance();
+				_sesscache = (SessionCache) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		}
 
 		cls = _config.getAuDecoderClass();
 		if (cls != null) {
 			try {
-				_audec = (AuDecoder)cls.newInstance();
+				_audec = (AuDecoder) cls.newInstance();
 			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
+				throw UiException.Aide.wrap(ex, "Unable to construct " + cls);
 			}
 		}
 		_engine.start(this);
@@ -202,6 +210,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 		_config.invokeWebAppInits();
 	}
+
 	public void destroy() {
 		try {
 			_config.invokeWebAppCleanups();
@@ -246,8 +255,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			_failover = null;
 		}
 		_factory = null;
-//		_provider = null;
-//Provider might be stopped before sessionDidActivate is called (Tomcat 5.5.2)
+		//		_provider = null;
+		//Provider might be stopped before sessionDidActivate is called (Tomcat 5.5.2)
 		_engine = null;
 		_sesscache = null;
 
@@ -264,36 +273,47 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public final UiEngine getUiEngine() {
 		return _engine;
 	}
+
 	public void setUiEngine(UiEngine engine) {
-		if (engine == null) throw new IllegalArgumentException();
+		if (engine == null)
+			throw new IllegalArgumentException();
 		_engine.stop(this);
 		_engine = engine;
 		_engine.start(this);
 	}
+
 	public DesktopCache getDesktopCache(Session sess) {
 		return _provider.getDesktopCache(sess);
 	}
+
 	public DesktopCacheProvider getDesktopCacheProvider() {
 		return _provider;
 	}
+
 	public void setDesktopCacheProvider(DesktopCacheProvider provider) {
-		if (provider == null) throw new IllegalArgumentException();
+		if (provider == null)
+			throw new IllegalArgumentException();
 		_provider.stop(this);
 		_provider = provider;
 		_provider.start(this);
 	}
+
 	public UiFactory getUiFactory() {
 		return _factory;
 	}
+
 	public void setUiFactory(UiFactory factory) {
-		if (factory == null) throw new IllegalArgumentException();
+		if (factory == null)
+			throw new IllegalArgumentException();
 		_factory.stop(this);
 		_factory = factory;
 		_factory.start(this);
 	}
+
 	public FailoverManager getFailoverManager() {
 		return _failover;
 	}
+
 	public void setFailoverManager(FailoverManager failover) {
 		if (_failover != null)
 			_failover.stop(this);
@@ -301,24 +321,31 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		if (_failover != null)
 			_failover.start(this);
 	}
+
 	public IdGenerator getIdGenerator() {
 		return _idgen;
 	}
+
 	public void setIdGenerator(IdGenerator idgen) {
 		_idgen = idgen;
 	}
+
 	public SessionCache getSessionCache() {
 		return _sesscache;
 	}
+
 	public void setSessionCache(SessionCache cache) {
-		if (cache == null) throw new IllegalArgumentException();
+		if (cache == null)
+			throw new IllegalArgumentException();
 		_sesscache.destroy(this);
 		_sesscache = cache;
 		_sesscache.init(this);
-	}		
+	}
+
 	public AuDecoder getAuDecoder() {
 		return _audec;
 	}
+
 	public void setAuDecoder(AuDecoder audec) {
 		_audec = audec;
 	}
@@ -329,8 +356,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public void sessionWillPassivate(Session sess) {
 		if (_provider != null)
 			_provider.sessionWillPassivate(sess);
-//Provider might be stopped before sessionDidActivate is called (Tomcat 5.5.2)
+		//Provider might be stopped before sessionDidActivate is called (Tomcat 5.5.2)
 	}
+
 	/** Invokes {@link #getDesktopCacheProvider}'s
 	 * {@link DesktopCacheProvider#sessionDidActivate}.
 	 */
@@ -352,8 +380,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		}
 
 		try {
-			((SessionCtrl)sess).onDestroyed();
-				//after called, sess.getNativeSession() is null!
+			((SessionCtrl) sess).onDestroyed();
+			//after called, sess.getNativeSession() is null!
 		} catch (Throwable ex) {
 			log.warn("Failed to cleanup session", ex);
 		}
@@ -362,11 +390,10 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	/** Loads the build identifier.
 	 * This method is used only Internally
 	 */
-	synchronized public static String loadBuild() {
+	public static synchronized String loadBuild() {
 		if (_build == null) {
 			final String FILE = "/metainfo/zk/build";
-			InputStream is = Thread.currentThread()
-				.getContextClassLoader().getResourceAsStream(FILE);
+			InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(FILE);
 			if (is == null) {
 				is = AbstractWebApp.class.getResourceAsStream(FILE);
 				if (is == null)
@@ -377,7 +404,10 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			} catch (Exception ex) {
 				_build = "error";
 			} finally {
-				try {is.close();} catch (Throwable ex) {}
+				try {
+					is.close();
+				} catch (Throwable ex) {
+				}
 			}
 		}
 		return _build;

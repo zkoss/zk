@@ -42,6 +42,7 @@ public interface SessionCtrl {
 	 * access this method.
 	 */
 	public DesktopCache getDesktopCache();
+
 	/** Sets the desktop cache.
 	 *
 	 * <p>Note: this is an utility to implement {@link DesktopCacheProvider},
@@ -51,7 +52,7 @@ public interface SessionCtrl {
 	 * @param cache the desktop cache; null to denote no cache available.
 	 */
 	public void setDesktopCache(DesktopCache cache);
-	
+
 	/** Called when the session is destroyed.
 	 * <p>Application shall never access this method.
 	 */
@@ -79,6 +80,7 @@ public interface SessionCtrl {
 	 * has been processed), so the session might be still alive.
 	 */
 	public boolean isInvalidated();
+
 	/** Really invalidates the session.
 	 * <p>Application shall never access this method.
 	 */

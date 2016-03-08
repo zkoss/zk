@@ -22,22 +22,24 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
  */
 public class ShadowDefinitionImpl extends ComponentDefinitionImpl {
 	private final String _templateURI;
-	public ShadowDefinitionImpl(LanguageDefinition langdef,
-			PageDefinition pgdef, String name, Class<? extends Component> cls) {
+
+	public ShadowDefinitionImpl(LanguageDefinition langdef, PageDefinition pgdef, String name,
+			Class<? extends Component> cls) {
 		super(langdef, pgdef, name, cls);
 		_templateURI = null;
 	}
-	public ShadowDefinitionImpl(LanguageDefinition langdef,
-			PageDefinition pgdef, String name, String clsnm) {
+
+	public ShadowDefinitionImpl(LanguageDefinition langdef, PageDefinition pgdef, String name, String clsnm) {
 		super(langdef, pgdef, name, clsnm);
 		_templateURI = null;
 	}
-	ShadowDefinitionImpl(LanguageDefinition langdef, PageDefinition pgdef,
-			String name, 
-			Class<? extends Component> cls, String templateURI) {
+
+	ShadowDefinitionImpl(LanguageDefinition langdef, PageDefinition pgdef, String name, Class<? extends Component> cls,
+			String templateURI) {
 		super(langdef, pgdef, name, cls);
 		_templateURI = templateURI;
 	}
+
 	public String getTemplateURI() {
 		return _templateURI;
 	}

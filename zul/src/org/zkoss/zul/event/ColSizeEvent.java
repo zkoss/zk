@@ -66,25 +66,24 @@ public class ColSizeEvent extends Event {
 	public static final ColSizeEvent getColSizeEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
 		final List<String> wdlist = (List<String>) data.get("widths");
-		return wdlist == null ? 
-			new ColSizeEvent(request.getCommand(), request.getComponent(),
-					AuRequests.getInt(data, "index", 0),
-					request.getDesktop().getComponentByUuid((String)data.get("column")),
-					(String)data.get("width"), AuRequests.parseKeys(data)) :
-			new ColSizeEvent(request.getCommand(), request.getComponent(), //since 5.0.6, to support fix width of multiple columns
-			AuRequests.getInt(data, "index", 0),
-			request.getDesktop().getComponentByUuid((String)data.get("column")),
-			wdlist.toArray(new String[wdlist.size()]), AuRequests.parseKeys(data));
+		return wdlist == null
+				? new ColSizeEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "index", 0),
+						request.getDesktop().getComponentByUuid((String) data.get("column")),
+						(String) data.get("width"), AuRequests.parseKeys(data))
+				: new ColSizeEvent(request.getCommand(), request.getComponent(), //since 5.0.6, to support fix width of multiple columns
+						AuRequests.getInt(data, "index", 0),
+						request.getDesktop().getComponentByUuid((String) data.get("column")),
+						wdlist.toArray(new String[wdlist.size()]), AuRequests.parseKeys(data));
 	}
+
 	/** Constructs an instance of {@link ColSizeEvent}.
 	 *
 	 * @see #ColSizeEvent(String, Component, int, Component, String, int)
 	 */
-	public ColSizeEvent(String evtnm, Component target, int icol,
-	Component col, int keys) {
-		this(evtnm, target, icol, col, (String)null, keys);
+	public ColSizeEvent(String evtnm, Component target, int icol, Component col, int keys) {
+		this(evtnm, target, icol, col, (String) null, keys);
 	}
-	
+
 	/**
 	 * Constructs an instance of {@link ColSizeEvent}.
 	 * @param icol the index of the first column whose width is changed.
@@ -92,18 +91,17 @@ public class ColSizeEvent extends Event {
 	 * @param width the width of the column that trigger this event.
 	 * @since 5.0.0
 	 */
-	public ColSizeEvent(String evtnm, Component target, int icol,
-	Component col, String width, int keys) {
+	public ColSizeEvent(String evtnm, Component target, int icol, Component col, String width, int keys) {
 		super(evtnm, target);
 		_icol = icol;
 		_col = col;
 		_keys = keys;
 		_width = width;
-		_oldWd = col instanceof HtmlBasedComponent ?
-				((HtmlBasedComponent)col).getWidth(): null;
+		_oldWd = col instanceof HtmlBasedComponent ? ((HtmlBasedComponent) col).getWidth() : null;
 		_widths = null;
 		_oldWds = null;
 	}
+
 	/**
 	 * Constructs an instance of {@link ColSizeEvent} that provide width of all columns.
 	 * @param icol the index of the column whose width is changed and trigger this event.
@@ -111,23 +109,22 @@ public class ColSizeEvent extends Event {
 	 * @param widths the width of all columns
 	 * @since 5.0.6
 	 */
-	public ColSizeEvent(String evtnm, Component target, int icol,
-	Component col, String[] widths, int keys) {
+	public ColSizeEvent(String evtnm, Component target, int icol, Component col, String[] widths, int keys) {
 		super(evtnm, target);
 		_icol = icol;
 		_col = col;
 		_widths = widths;
 		_oldWds = new String[_widths.length];
 		int j = 0;
-		for(Iterator it = target.getChildren().iterator(); it.hasNext(); ++j) {
+		for (Iterator it = target.getChildren().iterator(); it.hasNext(); ++j) {
 			final Object header = it.next();
-			_oldWds[j] = header instanceof HtmlBasedComponent ?
-					((HtmlBasedComponent)header).getWidth(): null;
+			_oldWds[j] = header instanceof HtmlBasedComponent ? ((HtmlBasedComponent) header).getWidth() : null;
 		}
 		_width = _widths[icol];
 		_oldWd = _oldWds[icol];
 		_keys = keys;
 	}
+
 	/**
 	 * Returns the column width
 	 * @since 5.0.0
@@ -135,6 +132,16 @@ public class ColSizeEvent extends Event {
 	public String getWidth() {
 		return _width;
 	}
+	
+	/**
+	 * Returns the column width of the specified column index.
+	 * @param col the column index 
+	 * @since 5.0.6
+	 */
+	public String getWidth(int col) {
+		return _widths[col];
+	}
+
 	/**
 	 * Returns the previous column width
 	 * @since 5.0.4
@@ -142,6 +149,16 @@ public class ColSizeEvent extends Event {
 	public String getPreviousWidth() {
 		return _oldWd;
 	}
+	
+	/**
+	 * Returns the previous column width of the specified column index.
+	 * @param col the column index
+	 * @since 5.0.6
+	 */
+	public String getPreviousWidth(int col) {
+		return _oldWds[col];
+	}
+
 	/** Return the column index of the first column whose width is changed.
 	 * The other column is the returned index plus one.
 	 * <p>In other words, it is the index (starting from 0) of {@link #getColumn}.
@@ -149,6 +166,7 @@ public class ColSizeEvent extends Event {
 	public int getColIndex() {
 		return _icol;
 	}
+
 	/** Returns the column whose width is changed.
 	 * @since 3.0.0
 	 */
@@ -163,21 +181,5 @@ public class ColSizeEvent extends Event {
 	 */
 	public final int getKeys() {
 		return _keys;
-	}
-	/**
-	 * Returns the column width of the specified column index.
-	 * @param col the column index 
-	 * @since 5.0.6
-	 */
-	public String getWidth(int col) {
-		return _widths[col];
-	}
-	/**
-	 * Returns the previous column width of the specified column index.
-	 * @param col the column index
-	 * @since 5.0.6
-	 */
-	public String getPreviousWidth(int col) {
-		return _oldWds[col];
 	}
 }

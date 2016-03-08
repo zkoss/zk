@@ -28,21 +28,25 @@ public interface ExecutionInfo {
 	/** Returns the thread serving the event.
 	 */
 	public Thread getThread();
+
 	/** Returns the event being served (never null).
 	 * <p>Notice: don't change the state of any UI objects (such as components
 	 * and desktops) since they might belong to other
 	 */
 	public Event getEvent();
+
 	/** Returns the method that serves the event, or null if it
 	 * is served by a listener ({@link #getEventListener}), or
 	 * a zscript ({@link #getEventZScript}).
 	 */
 	public Method getEventMethod();
+
 	/** Returns the listener that serves the event, or null if it
 	 * is served by a method ({@link #getEventMethod}), or
 	 * a zscript ({@link #getEventZScript}).
 	 */
 	public EventListener<? extends Event> getEventListener();
+
 	/** Returns the zscript that serves the event, or null if it
 	 * is served by a listener ({@link #getEventListener}), or
 	 * a method ({@link #getEventMethod}).

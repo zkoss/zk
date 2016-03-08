@@ -12,9 +12,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event.impl;
 
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventQueue;
+import org.zkoss.zk.ui.event.EventQueues;
 
 /**
  * Used to instantiate an event queue.
@@ -44,6 +46,7 @@ public interface EventQueueProvider {
 	 * @exception UnsupportedOperationException if the scope is not supported
 	 */
 	public <T extends Event> EventQueue<T> lookup(String name, String scope, boolean autoCreate);
+
 	/** Returns the event queue with the specified name in the
 	 * give session (i.e., the scope).
 	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
@@ -53,6 +56,7 @@ public interface EventQueueProvider {
 	 * @since 5.0.2
 	 */
 	public <T extends Event> EventQueue<T> lookup(String name, Session sess, boolean autoCreate);
+
 	/** Returns the event queue with the specified name in the
 	 * give application (i.e., the scope).
 	 * <p>Unlike {@link #lookup(String, String, boolean)}, this method
@@ -71,6 +75,7 @@ public interface EventQueueProvider {
 	 * @return true if it is removed successfully
 	 */
 	public boolean remove(String name, String scope);
+
 	/** Removes the event queue of the specified session.
 	 * <p>Unlike {@link #remove(String, String)}, this method
 	 * can be called without an activated execution.
@@ -81,6 +86,7 @@ public interface EventQueueProvider {
 	 * @since 5.0.4
 	 */
 	public boolean remove(String name, Session sess);
+
 	/** Removes the event queue of the specified application.
 	 * <p>Unlike {@link #remove(String, String)}, this method
 	 * can be called without an activated execution.

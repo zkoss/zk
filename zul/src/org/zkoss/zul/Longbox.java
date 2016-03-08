@@ -34,10 +34,12 @@ public class Longbox extends NumberInputElement {
 	public Longbox() {
 		setCols(11);
 	}
+
 	public Longbox(long value) throws WrongValueException {
 		this();
 		setValue(new Long(value));
 	}
+
 	public Longbox(int value) throws WrongValueException {
 		this();
 		setValue(new Long(value));
@@ -48,20 +50,23 @@ public class Longbox extends NumberInputElement {
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Long getValue() throws WrongValueException {
-		return (Long)getTargetValue();
+		return (Long) getTargetValue();
 	}
+
 	/** Returns the value in long. If null, zero is returned.
 	 */
 	public long longValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Long)val).longValue(): 0;
+		return val != null ? ((Long) val).longValue() : 0;
 	}
+
 	/** Returns the value in int. If null, zero is returned.
 	 */
 	public long intValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Long)val).intValue(): 0;
+		return val != null ? ((Long) val).intValue() : 0;
 	}
+
 	/** Sets the value (in Long).
 	 * @exception WrongValueException if value is wrong
 	 */
@@ -74,44 +79,49 @@ public class Longbox extends NumberInputElement {
 	public String getZclass() {
 		return _zclass == null ? "z-longbox" : _zclass;
 	}
+
 	protected Object marshall(Object value) {
-		return value != null ? ((Long)value).toString() : value;
+		return value != null ? ((Long) value).toString() : value;
 	}
+
 	protected Object unmarshall(Object value) {
-		return value != null ? new Long((String)value) : value;
+		return value != null ? new Long((String) value) : value;
 	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
-		final String val = (String)vals[0];
+		final String val = (String) vals[0];
 		if (val == null || val.length() == 0)
 			return null;
 
 		try {
 			long v = Long.parseLong(val);
-			int divscale = vals[1] != null ? ((Integer)vals[1]).intValue(): 0;
+			int divscale = vals[1] != null ? ((Integer) vals[1]).intValue() : 0;
 			while (v != 0 && --divscale >= 0)
 				v /= 10;
 			return new Long(v);
 		} catch (NumberFormatException ex) {
-			throw showCustomError(
-				new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
+			throw showCustomError(new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
+
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ?
-			value.toString(): formatNumber(value, null);
+		return value != null && getFormat() == null ? value.toString() : formatNumber(value, null);
 	}
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+
 	static {
 		_properties.put("value", new PropertyAccess<Long>() {
 			public void setValue(Component cmp, Long value) {
 				((Longbox) cmp).setValue(value);
 			}
+
 			public Class<Long> getType() {
 				return Long.class;
 			}
+
 			public Long getValue(Component cmp) {
 				return ((Longbox) cmp).getValue();
 			}

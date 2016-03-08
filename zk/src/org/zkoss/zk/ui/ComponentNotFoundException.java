@@ -25,30 +25,38 @@ public class ComponentNotFoundException extends UiException {
 	public ComponentNotFoundException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public ComponentNotFoundException(String s) {
 		super(s);
 	}
+
 	public ComponentNotFoundException(Throwable cause) {
 		super(cause);
 	}
+
 	public ComponentNotFoundException() {
 	}
 
 	public ComponentNotFoundException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public ComponentNotFoundException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public ComponentNotFoundException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public ComponentNotFoundException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public ComponentNotFoundException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public ComponentNotFoundException(int code) {
 		super(code);
 	}

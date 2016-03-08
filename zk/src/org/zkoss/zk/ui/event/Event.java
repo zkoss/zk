@@ -18,9 +18,10 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Collection;
 import java.util.Map;
+
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.au.AuRequest;
 
 /**
  * An event sent to the event handler of a component.
@@ -43,13 +44,13 @@ public class Event implements java.io.Serializable {
 		//ZK-1847 should check whether data is empty or not
 		if (data.isEmpty()) {
 			return new Event(name, comp);
-		} else if(data.containsKey("") && data.size() == 1) {
+		} else if (data.containsKey("") && data.size() == 1) {
 			//ZK-1812 extract value of ""-key, only if there is nothing else in the map 
 			final Object extractedData = data.get("");
 			if (extractedData == null)
 				return new Event(name, comp);
 			if (extractedData instanceof Collection)
-				return new Event(name, comp, ((Collection<?>)extractedData).toArray());
+				return new Event(name, comp, ((Collection<?>) extractedData).toArray());
 			return new Event(name, comp, extractedData);
 		}
 		return new Event(name, comp, data);
@@ -61,6 +62,7 @@ public class Event implements java.io.Serializable {
 	public Event(String name) {
 		this(name, null);
 	}
+
 	/** Constructs a simple event.
 	 * @param target the component to receive this event,
 	 * or null to indicate broadcasting the event to all root components.
@@ -72,6 +74,7 @@ public class Event implements java.io.Serializable {
 		_target = target;
 		_data = null;
 	}
+
 	/** Constructs a simple event.
 	 * @param target the component to receive this event,
 	 * or null to indicate broadcasting the event to all root components.
@@ -90,17 +93,20 @@ public class Event implements java.io.Serializable {
 	public final String getName() {
 		return _name;
 	}
+
 	/** Returns the target component that receives this event,
 	 * or null if broadcast.
 	 */
 	public final Component getTarget() {
 		return _target;
 	}
+
 	/** Returns the page owning this event, or null if broadcast.
 	 */
 	public final Page getPage() {
-		return _target != null ? _target.getPage(): null;
+		return _target != null ? _target.getPage() : null;
 	}
+
 	/** Returns the data accompanies with this event, or null if not available.
 	 */
 	public Object getData() {
@@ -117,6 +123,7 @@ public class Event implements java.io.Serializable {
 	public boolean isPropagatable() {
 		return _propagatable;
 	}
+
 	/** Stops the propagation for this event.
 	 */
 	public void stopPropagation() {
@@ -127,6 +134,6 @@ public class Event implements java.io.Serializable {
 	public String toString() {
 		final String clsnm = getClass().getName();
 		final int j = clsnm.lastIndexOf('.');
-		return "["+clsnm.substring(j+1)+' '+_name+' '+_target+']';
+		return "[" + clsnm.substring(j + 1) + ' ' + _name + ' ' + _target + ']';
 	}
 }

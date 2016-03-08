@@ -36,7 +36,7 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	private final Map<String, Object> _converterArgs;
 	private String _filedName;
 
-	private final static Pattern FIELD_COMPILER = Pattern.compile("(?:\\(|\\)|\\[|\\]|\\.)");
+	private static final Pattern FIELD_COMPILER = Pattern.compile("(?:\\(|\\)|\\[|\\]|\\.)");
 
 	/**
 	 * @param binder
@@ -50,10 +50,10 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	 * @param converterExpr
 	 * @param converterArgs
 	 */
-	protected PropertyBindingImpl(Binder binder, Component comp, String fieldName,String fieldExpr, String accessExpr, 
-			ConditionType conditionType, String command, Map<String, Object> bindingArgs,
-			String converterExpr, Map<String, Object> converterArgs) {
-		super(binder,comp, bindingArgs);
+	protected PropertyBindingImpl(Binder binder, Component comp, String fieldName, String fieldExpr, String accessExpr,
+			ConditionType conditionType, String command, Map<String, Object> bindingArgs, String converterExpr,
+			Map<String, Object> converterArgs) {
+		super(binder, comp, bindingArgs);
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Class<Object> returnType = Object.class;
 		if (!FIELD_COMPILER.matcher(fieldName).find()) {
@@ -66,19 +66,19 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 		}
 		this._accessInfo = AccessInfo.create(this, accessExpr, returnType, conditionType, command, ignoreTracker());
 		_converterArgs = converterArgs;
-		_converter = converterExpr==null?null:parseConverter(eval,converterExpr);
-		_filedName =  fieldName;
+		_converter = converterExpr == null ? null : parseConverter(eval, converterExpr);
+		_filedName = fieldName;
 	}
 
 	public Map<String, Object> getConverterArgs() {
 		return _converterArgs;
 	}
-	
+
 	//should this binding set the ignore tracker attribute when evaluate the expression.
-	protected boolean ignoreTracker(){
+	protected boolean ignoreTracker() {
 		return false;
 	}
-	
+
 	private ExpressionX parseConverter(BindEvaluatorX eval, String converterExpr) {
 		final BindContext ctx = BindContextUtil.newBindContext(getBinder(), this, false, null, getComponent(), null);
 		//provide a bindcontext when pare expression of converter with this binding,
@@ -87,48 +87,49 @@ public abstract class PropertyBindingImpl extends BindingImpl implements Propert
 	}
 
 	public Converter getConverter() {
-		if(_converter==null) return null;
+		if (_converter == null)
+			return null;
 
 		final BindContext ctx = BindContextUtil.newBindContext(getBinder(), this, false, null, getComponent(), null);
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		Object obj = eval.getValue(ctx, getComponent(), _converter);
-		
-		if(obj instanceof Converter){
-			return (Converter)obj;
-		}else if(obj instanceof String){
-			return getBinder().getConverter((String)obj);//binder will throw exception if not found
-		}else{
-			throw new ClassCastException("result of expression '"+_converter.getExpressionString()+"' is not a Converter, is "+obj);
+
+		if (obj instanceof Converter) {
+			return (Converter) obj;
+		} else if (obj instanceof String) {
+			return getBinder().getConverter((String) obj); //binder will throw exception if not found
+		} else {
+			throw new ClassCastException(
+					"result of expression '" + _converter.getExpressionString() + "' is not a Converter, is " + obj);
 		}
 	}
-	
+
 	public String getFieldName() {
 		return _filedName;
 	}
-	
+
 	public String getCommandName() {
 		return this._accessInfo.getCommandName();
 	}
-	
+
 	public String getPropertyString() {
 		return BindEvaluatorXUtil.getExpressionString(_accessInfo.getProperty());
 	}
-	
+
 	public ConditionType getConditionType() {
 		return this._accessInfo.getConditionType();
 	}
-	
+
 	//F80-ZK-2668: New Build-in Converter - FormattedTimeConverter
 	public ExpressionX getProperty() {
 		return this._accessInfo.getProperty();
 	}
-	
-	public String toString(){
-		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
-		.append(",component:").append(getComponent())
-		.append(",field:").append(getFieldName())
-		.append(",access:").append(getProperty().getExpressionString())
-		.append(",condition:").append(getConditionType())
-		.append(",command:").append(getCommandName()).toString();
+
+	public String toString() {
+		return new StringBuilder().append(getClass().getSimpleName()).append("@")
+				.append(Integer.toHexString(hashCode())).append(",component:").append(getComponent()).append(",field:")
+				.append(getFieldName()).append(",access:").append(getProperty().getExpressionString())
+				.append(",condition:").append(getConditionType()).append(",command:").append(getCommandName())
+				.toString();
 	}
 }

@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Files;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Locator;
@@ -83,6 +84,7 @@ public class InterpreterServlet extends HttpServlet {
 			public String getDirectory() {
 				return null; //FUTURE: support relative path
 			}
+
 			public URL getResource(String name) {
 				URL url = null;
 				if (name.indexOf("://") < 0) {
@@ -93,58 +95,59 @@ public class InterpreterServlet extends HttpServlet {
 					} catch (java.net.MalformedURLException ex) { //eat it
 					}
 				}
-				return url != null ? url: Taglibs.getDefaultURL(name);
+				return url != null ? url : Taglibs.getDefaultURL(name);
 			}
+
 			public InputStream getResourceAsStream(String name) {
 				InputStream is = ctx.getResourceAsStream(name);
-				return !bClsRes || is != null ? is:
-					ClassWebResource.getClassResourceAsStream(name);
+				return !bClsRes || is != null ? is : ClassWebResource.getClassResourceAsStream(name);
 			}
 		};
 
 		param = config.getInitParameter("charset");
-		if (param != null) _charset = param.length() > 0 ? param: null;
+		if (param != null)
+			_charset = param.length() > 0 ? param : null;
 	}
 
 	//-- super --//
-	protected
-	void doGet(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		Servlets.getBrowser(request); //update request info
 
 		final String path = Https.getThisServletPath(request);
-		if (log.isDebugEnabled()) log.debug("Get "+path);
+		if (log.isDebugEnabled())
+			log.debug("Get " + path);
 
 		final Object old = Charsets.setup(request, response, _charset);
 		final ServletContext ctx = getServletContext();
 		try {
-			final Interpretation cnt = (Interpretation)
-				ResourceCaches.get(getCache(), ctx, path, null);
+			final Interpretation cnt = (Interpretation) ResourceCaches.get(getCache(), ctx, path, null);
 			if (cnt == null) {
-				if (Https.isIncluded(request)) log.error("Not found: "+path);
-					//It might be eaten, so log the error
+				if (Https.isIncluded(request))
+					log.error("Not found: " + path);
+				//It might be eaten, so log the error
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(path));
 				return;
 			}
 
 			final boolean compress = _compress && !Servlets.isIncluded(request);
-			final StringWriter out = compress ? new StringWriter(): null;
-			cnt.interpret(
-				new ServletDspContext(ctx, request, response, out, null));
+			final StringWriter out = compress ? new StringWriter() : null;
+			cnt.interpret(new ServletDspContext(ctx, request, response, out, null));
 
 			if (compress) {
 				final String result = out.toString();
 
 				try {
 					final OutputStream os = response.getOutputStream();
-						//Call it first to ensure getWrite() is not called yet
-	
+					//Call it first to ensure getWrite() is not called yet
+
 					byte[] data = result.getBytes("UTF-8");
 					if (data.length > 200) {
 						byte[] bs = Https.gzip(request, response, null, data);
-						if (bs != null) data = bs; //yes, browser support compress
+						if (bs != null)
+							data = bs; //yes, browser support compress
 					}
-	
+
 					response.setContentLength(data.length);
 					os.write(data);
 					response.flushBuffer();
@@ -156,73 +159,75 @@ public class InterpreterServlet extends HttpServlet {
 			Charsets.cleanup(request, old);
 		}
 	}
-	protected
-	void doPost(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
 	private static final String ATTR_PAGE_CACHE = "org.zkoss.web.servlet.dsp.PageCache";
+
 	@SuppressWarnings("unchecked")
 	private final ResourceCache<Interpretation> getCache() {
 		final ServletContext ctx = getServletContext();
-		ResourceCache cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
+		ResourceCache cache = (ResourceCache) ctx.getAttribute(ATTR_PAGE_CACHE);
 		if (cache == null) {
 			synchronized (InterpreterServlet.class) {
-				cache = (ResourceCache)ctx.getAttribute(ATTR_PAGE_CACHE);
+				cache = (ResourceCache) ctx.getAttribute(ATTR_PAGE_CACHE);
 				if (cache == null) {
 					cache = new ResourceCache(new MyLoader(), 29);
 					cache.setMaxSize(1024);
-					cache.setLifetime(60*60*1000); //1hr
+					cache.setLifetime(60 * 60 * 1000); //1hr
 					ctx.setAttribute(ATTR_PAGE_CACHE, cache);
 				}
 			}
 		}
 		return cache;
 	}
+
 	private class MyLoader extends ResourceLoader<Interpretation> {
 		private MyLoader() {
 		}
+
 		//-- super --//
-		protected Interpretation parse(String path, File file, Object extra)
-		throws Exception {
+		protected Interpretation parse(String path, File file, Object extra) throws Exception {
 			final InputStream is = new BufferedInputStream(new FileInputStream(file));
 			try {
 				return parse0(is, Interpreter.getContentType(file.getName()));
 			} catch (Exception ex) {
 				if (log.isDebugEnabled())
-					log.error("Failed to parse "+file, ex);
+					log.error("Failed to parse " + file, ex);
 				else
-					log.error("Failed to parse "+file+"\nCause: "+Exceptions.getMessage(ex)
-						+"\n"+Exceptions.getBriefStackTrace(ex));
+					log.error("Failed to parse " + file + "\nCause: " + Exceptions.getMessage(ex) + "\n"
+							+ Exceptions.getBriefStackTrace(ex));
 				return null; //as non-existent
 			} finally {
 				Files.close(is);
 			}
 		}
-		protected Interpretation parse(String path, URL url, Object extra)
-		throws Exception {
+
+		protected Interpretation parse(String path, URL url, Object extra) throws Exception {
 			InputStream is = url.openStream();
-			if (is != null) is = new BufferedInputStream(is);
+			if (is != null)
+				is = new BufferedInputStream(is);
 			try {
-				return parse0(is,
-					Interpreter.getContentType(url.getPath()));
+				return parse0(is, Interpreter.getContentType(url.getPath()));
 			} catch (Exception ex) {
 				if (log.isDebugEnabled())
-					log.error("Failed to parse "+url, ex);
+					log.error("Failed to parse " + url, ex);
 				else
-					log.error("Failed to parse "+url+"\nCause: "+Exceptions.getMessage(ex));
+					log.error("Failed to parse " + url + "\nCause: " + Exceptions.getMessage(ex));
 				return null; //as non-existent
 			} finally {
 				Files.close(is);
 			}
 		}
-		private Interpretation parse0(InputStream is, String ctype) throws Exception {
-			if (is == null) return null;
 
-			final String content =
-				Files.readAll(new InputStreamReader(is, "UTF-8"))
-				.toString();
+		private Interpretation parse0(InputStream is, String ctype) throws Exception {
+			if (is == null)
+				return null;
+
+			final String content = Files.readAll(new InputStreamReader(is, "UTF-8")).toString();
 			return new Interpreter().parse(content, ctype, null, _locator);
 		}
 	}

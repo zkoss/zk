@@ -40,6 +40,7 @@ public class Textbox extends InputElement {
 	public Textbox() {
 		setValueDirectly("");
 	}
+
 	public Textbox(String value) throws WrongValueException {
 		setValue(value);
 	}
@@ -52,6 +53,7 @@ public class Textbox extends InputElement {
 	public String getValue() throws WrongValueException {
 		return getText();
 	}
+
 	/** Sets the value.
 	 *
 	 * @param value the value; If null, it is considered as empty.
@@ -67,33 +69,35 @@ public class Textbox extends InputElement {
 	 * <p>Default: convert null to an empty string.
 	 */
 	protected Object coerceFromString(String value) throws WrongValueException {
-		return value != null ? value: "";
+		return value != null ? value : "";
 	}
+
 	/** Coerces the value passed to {@link #setValue}.
 	 *
 	 * <p>Default: convert null to an empty string.
 	 */
 	protected String coerceToString(Object value) {
-		return value != null ? (String)value: "";
+		return value != null ? (String) value : "";
 	}
 
 	/** Returns the type.
 	 * <p>Default: text.
 	 */
 	public String getType() {
-		return _auxinf != null ? _auxinf.type: TEXT;
+		return _auxinf != null ? _auxinf.type : TEXT;
 	}
+
 	/** Sets the type.
 	 * @param type the type. Acceptable values are "text" and "password".
 	 * Unlike XUL, "timed" is redundant because it is enabled as long as
 	 * onChanging is added. Since 6.5.0 type also support tel, email and url.
 	 */
 	public void setType(String type) throws WrongValueException {
-		if (!TEXT.equals(type) && !"password".equals(type) &&
-				!"tel".equals(type) && !"email".equals(type) && !"url".equals(type))
-			throw new WrongValueException("Illegal type: "+type);
+		if (!TEXT.equals(type) && !"password".equals(type) && !"tel".equals(type) && !"email".equals(type)
+				&& !"url".equals(type))
+			throw new WrongValueException("Illegal type: " + type);
 
-		if (!type.equals(_auxinf != null ? _auxinf.type: TEXT)) {
+		if (!type.equals(_auxinf != null ? _auxinf.type : TEXT)) {
 			initAuxInfo().type = type;
 			smartUpdate("type", getType());
 		}
@@ -103,27 +107,30 @@ public class Textbox extends InputElement {
 	 * <p>Default: 1.
 	 */
 	public int getRows() {
-		return _auxinf != null ? _auxinf.rows: 1;
+		return _auxinf != null ? _auxinf.rows : 1;
 	}
+
 	/** Sets the rows.
 	 */
 	public void setRows(int rows) throws WrongValueException {
 		if (rows <= 0)
-			throw new WrongValueException("Illegal rows: "+rows);
+			throw new WrongValueException("Illegal rows: " + rows);
 
-		if ((_auxinf != null ? _auxinf.rows: 1) != rows) {
+		if ((_auxinf != null ? _auxinf.rows : 1) != rows) {
 			initAuxInfo().rows = rows;
 			if (rows > 1)
 				setMultiline(true); //auto-enable
 			smartUpdate("rows", getRows());
 		}
 	}
+
 	/** Returns whether it is multiline.
 	 * <p>Default: false.
 	 */
 	public boolean isMultiline() {
 		return _auxinf != null && _auxinf.multiline;
 	}
+
 	/** Sets whether it is multiline.
 	 */
 	public void setMultiline(boolean multiline) {
@@ -142,6 +149,7 @@ public class Textbox extends InputElement {
 	public boolean isTabbable() {
 		return _auxinf != null && _auxinf.tabbable;
 	}
+
 	/** Sets whether TAB is allowed.
 	 * If true, the user can enter TAB in the textbox, rather than change
 	 * focus.
@@ -157,14 +165,15 @@ public class Textbox extends InputElement {
 
 	//Cloneable//
 	public Object clone() {
-		final Textbox clone = (Textbox)super.clone();
+		final Textbox clone = (Textbox) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+
 	static {
 		_properties.put("value", new StringPropertyAccess() {
 			public void setValue(Component cmp, String value) {
@@ -219,29 +228,34 @@ public class Textbox extends InputElement {
 			return pa;
 		return super.getPropertyAccess(prop);
 	}
+
 	//-- super --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "multiline", isMultiline());
 		final int rows = getRows();
-		if (rows > 1) renderer.render("rows", rows);
+		if (rows > 1)
+			renderer.render("rows", rows);
 		render(renderer, "tabbable", isTabbable());
 		final String type = getType();
-		if (!TEXT.equals(type)) renderer.render("type", type);
+		if (!TEXT.equals(type))
+			renderer.render("type", type);
 	}
+
 	public String getZclass() {
-		return _zclass != null ? _zclass: "z-textbox";
+		return _zclass != null ? _zclass : "z-textbox";
 	}
 
 	private static final String TEXT = "text";
+
 	private AuxInfo initAuxInfo() {
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
-	private static class AuxInfo implements java.io.Serializable, Cloneable  {
+
+	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String type = TEXT;
 		private int rows = 1;
 		private boolean multiline;

@@ -27,30 +27,38 @@ public class PropertyNotFoundException extends UiException {
 	public PropertyNotFoundException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public PropertyNotFoundException(String s) {
 		super(s);
 	}
+
 	public PropertyNotFoundException(Throwable cause) {
 		super(cause);
 	}
+
 	public PropertyNotFoundException() {
 	}
 
 	public PropertyNotFoundException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public PropertyNotFoundException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public PropertyNotFoundException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public PropertyNotFoundException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public PropertyNotFoundException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public PropertyNotFoundException(int code) {
 		super(code);
 	}

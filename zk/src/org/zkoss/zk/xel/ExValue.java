@@ -17,13 +17,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.xel;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.Expressions;
 import org.zkoss.xel.XelException;
-
-import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 
 /**
  * Used to represent a string value that might contain an expression.
@@ -54,8 +53,7 @@ public class ExValue implements java.io.Serializable {
 	 * only if 100% not an expression.
 	 */
 	public boolean isExpression() {
-		return _expr == null ? _value != null && _value.indexOf("${") >= 0:
-			_expr != Expressions.DUMMY_EXPRESSION;
+		return _expr == null ? _value != null && _value.indexOf("${") >= 0 : _expr != Expressions.DUMMY_EXPRESSION;
 	}
 
 	/** Returns the raw value.
@@ -65,6 +63,7 @@ public class ExValue implements java.io.Serializable {
 	public final String getRawValue() {
 		return _value;
 	}
+
 	/** Sets the raw value.
 	 * @param value the value. It can be null.
 	 */
@@ -75,11 +74,13 @@ public class ExValue implements java.io.Serializable {
 			_coercedVal = Objects.UNKNOWN;
 		}
 	}
+
 	/** Returns the expected type.
 	 */
 	public final Class getExpectedType() {
 		return _expected;
 	}
+
 	/** Sets the expected type.
 	 */
 	public final void setExpectedType(Class expectedType) {
@@ -88,34 +89,35 @@ public class ExValue implements java.io.Serializable {
 
 		if (_expected != expectedType) {
 			_expected = expectedType;
-			if (_expr != Expressions.DUMMY_EXPRESSION) _expr = null; //re-parse
+			if (_expr != Expressions.DUMMY_EXPRESSION)
+				_expr = null; //re-parse
 			_coercedVal = Objects.UNKNOWN;
 		}
 	}
 
 	/** Returns the value after evaluation.
 	 */
-	public Object getValue(Evaluator eval, Page page)
-	throws XelException {
-		if (_expr == null) init(eval);
-		return _expr == Expressions.DUMMY_EXPRESSION ?
-			coerce(): eval.evaluate(page, _expr);
+	public Object getValue(Evaluator eval, Page page) throws XelException {
+		if (_expr == null)
+			init(eval);
+		return _expr == Expressions.DUMMY_EXPRESSION ? coerce() : eval.evaluate(page, _expr);
 	}
+
 	/** Returns the value after evaluation.
 	 */
-	public Object getValue(Evaluator eval, Component comp)
-	throws XelException {
-		if (_expr == null) init(eval);
-		return _expr == Expressions.DUMMY_EXPRESSION ?
-			coerce(): eval.evaluate(comp, _expr);
+	public Object getValue(Evaluator eval, Component comp) throws XelException {
+		if (_expr == null)
+			init(eval);
+		return _expr == Expressions.DUMMY_EXPRESSION ? coerce() : eval.evaluate(comp, _expr);
 	}
+
 	private Object coerce() {
 		if (_coercedVal == Objects.UNKNOWN)
 			_coercedVal = Classes.coerce(_expected, _value);
 		return _coercedVal;
 	}
-	private void init(Evaluator eval)
-	throws XelException {
+
+	private void init(Evaluator eval) throws XelException {
 		if (_value != null && _value.indexOf("${") >= 0) {
 			_expr = eval.parseExpression(_value, _expected);
 		} else {
@@ -123,8 +125,7 @@ public class ExValue implements java.io.Serializable {
 		}
 	}
 
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		_coercedVal = Objects.UNKNOWN;
 	}
@@ -132,15 +133,17 @@ public class ExValue implements java.io.Serializable {
 	public String toString() {
 		return _value;
 	}
+
 	public int hashCode() {
 		return Objects.hashCode(_value);
 	}
+
 	public boolean equals(Object o) {
-		if (this == o) return true;
+		if (this == o)
+			return true;
 		if (o instanceof ExValue) {
-			final ExValue val = (ExValue)o;
-			return Objects.equals(val._value, _value)
-				&& Objects.equals(val._expected, _expected);
+			final ExValue val = (ExValue) o;
+			return Objects.equals(val._value, _value) && Objects.equals(val._expected, _expected);
 		}
 		return false;
 	}

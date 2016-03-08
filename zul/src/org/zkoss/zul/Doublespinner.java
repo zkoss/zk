@@ -41,7 +41,7 @@ import org.zkoss.zul.mesg.MZul;
 public class Doublespinner extends NumberInputElement {
 	private double _step = 1.0;
 	private boolean _btnVisible = true;
-	
+
 	public Doublespinner() {
 		setCols(11);
 	}
@@ -50,27 +50,26 @@ public class Doublespinner extends NumberInputElement {
 		this();
 		setValue(new Double(value));
 	}
-	
+
 	/** Returns the value (in Double), might be null unless
 	 * a constraint stops it.
 	 * @exception WrongValueException if user entered a wrong value
 	 */
 	public Double getValue() throws WrongValueException {
-		return (Double)getTargetValue();
+		return (Double) getTargetValue();
 	}
-	
+
 	protected Object getTargetValue() throws WrongValueException {
 		Object val = super.getTargetValue();
-		
+
 		// ZK-1949, we need to accept the null value when invoking getValue()
 		if (val == null)
 			return null;
-		
+
 		if (val instanceof Double) {
 			return val;
 		}
-		throw showCustomError(new WrongValueException(this,
-				MZul.NUMBER_REQUIRED, val));
+		throw showCustomError(new WrongValueException(this, MZul.NUMBER_REQUIRED, val));
 	}
 
 	/** Returns the value in double. If null, zero is returned.
@@ -78,7 +77,7 @@ public class Doublespinner extends NumberInputElement {
 	 */
 	public double doubleValue() throws WrongValueException {
 		final Object val = getTargetValue();
-		return val != null ? ((Double)val).doubleValue(): 0;
+		return val != null ? ((Double) val).doubleValue() : 0;
 	}
 
 	/** Sets the value (in Double).
@@ -106,13 +105,13 @@ public class Doublespinner extends NumberInputElement {
 		}
 	}
 
-	
 	/** Returns whether the button (on the right of the textbox) is visible.
 	 * <p>Default: true.
 	 */
 	public boolean isButtonVisible() {
 		return _btnVisible;
 	}
+
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 */
 	public void setButtonVisible(boolean visible) {
@@ -121,21 +120,21 @@ public class Doublespinner extends NumberInputElement {
 			smartUpdate("buttonVisible", visible);
 		}
 	}
-	
+
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-doublespinner" : _zclass;
+		return _zclass == null ? "z-doublespinner" : _zclass;
 	}
-	
+
 	/**
 	 * @param constr a list of constraints separated by comma.
 	 * Example: no positive, no zero
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleDoubleSpinnerConstraint(constr): null);
+		setConstraint(constr != null ? new SimpleDoubleSpinnerConstraint(constr) : null);
 	}
-	
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);
 		final String val = (String) vals[0];
@@ -149,31 +148,28 @@ public class Doublespinner extends NumberInputElement {
 				v /= 10;
 			return new Double(v);
 		} catch (NumberFormatException ex) {
-			throw showCustomError(new WrongValueException(this,
-					MZul.NUMBER_REQUIRED, value));
+			throw showCustomError(new WrongValueException(this, MZul.NUMBER_REQUIRED, value));
 		}
 	}
 
 	protected String coerceToString(Object value) {
-		return value != null && getFormat() == null ?
-			value instanceof Double ?
-				Doublebox.toLocaleString((Double)value, getDefaultLocale()):
-			value.toString()/*just in case*/: formatNumber(value, null);
+		return value != null && getFormat() == null ? value instanceof Double
+				? Doublebox.toLocaleString((Double) value, getDefaultLocale()) : value.toString()
+				/*just in case*/ : formatNumber(value, null);
 	}
-	
+
 	protected Object unmarshall(Object value) {
-		if(value instanceof Integer){
-			return new Double(((Integer)value).doubleValue());	
+		if (value instanceof Integer) {
+			return new Double(((Integer) value).doubleValue());
 		}
 		return value;
 	}
-	
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
-		if(Double.compare(_step, 1.0) != 0)
+		if (Double.compare(_step, 1.0) != 0)
 			renderer.render("step", _step);
-		if(!_btnVisible)
+		if (!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);
 	}
 

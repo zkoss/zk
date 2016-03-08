@@ -36,6 +36,7 @@ public interface EventProcessingThread {
 	 * That is, it returns true if it is going to die, or dead already.
 	 */
 	public boolean isCeased();
+
 	/** Returns whether it is suspended.
 	 *
 	 * @see DesktopCtrl#getSuspendedThreads
@@ -50,6 +51,7 @@ public interface EventProcessingThread {
 	/** Returns the event being processed by this thread, or null if idle.
 	 */
 	public Event getEvent();
+
 	/** Returns the component being processed by this thread, or null if idle.
 	 */
 	public Component getComponent();
@@ -59,6 +61,5 @@ public interface EventProcessingThread {
 	 * Used to implements {@link org.zkoss.zk.ui.event.Events#sendEvent}.
 	 * @since 3.0.2
 	 */
-	public void sendEvent(Component comp, Event event)
-	throws Exception;
+	public void sendEvent(Component comp, Event event) throws Exception;
 }

@@ -42,17 +42,19 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 	private String _content = "";
-	
+
 	static {
-		addClientEvent(Menu.class, Events.ON_CLICK, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
-		addClientEvent(Menu.class, Events.ON_CHANGE, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
+		addClientEvent(Menu.class, Events.ON_CLICK, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
+		addClientEvent(Menu.class, Events.ON_CHANGE, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
-	
+
 	public Menu() {
 	}
+
 	public Menu(String label) {
 		super(label);
 	}
+
 	public Menu(String label, String src) {
 		super(label, src);
 	}
@@ -69,7 +71,7 @@ public class Menu extends LabelImageElement {
 	public Menupopup getMenupopup() {
 		return _popup;
 	}
-	
+
 	/** Returns the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.
 	 *
@@ -82,7 +84,7 @@ public class Menu extends LabelImageElement {
 	public String getContent() {
 		return _content;
 	}
-	
+
 	/** Sets the embedded content (i.e., HTML tags) that is
 	 * shown as part of the description.
 	 *
@@ -94,13 +96,14 @@ public class Menu extends LabelImageElement {
 	 * @since 5.0.0
 	 */
 	public void setContent(String content) {
-		if (content == null) content = "";
+		if (content == null)
+			content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
 			smartUpdate("content", content);
 		}
 	}
-	
+
 	/**
 	 * Opens the menupopup that belongs to the menu.
 	 * <p>
@@ -109,7 +112,7 @@ public class Menu extends LabelImageElement {
 	 */
 	public void open() {
 		if (this.getParent() instanceof Menubar)
-			response("menu", new AuInvoke(this, "open", (Object)null));
+			response("menu", new AuInvoke(this, "open", (Object) null));
 	}
 
 	//-- Component --//
@@ -117,62 +120,63 @@ public class Menu extends LabelImageElement {
 		return _zclass == null ? "z-menu" : _zclass;
 	}
 
-	protected void renderProperties(ContentRenderer renderer)
-			throws IOException {
+	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 		render(renderer, "content", _content);
 	}
-	
+
 	public void beforeParentChanged(Component parent) {
-		if (parent != null && !(parent instanceof Menubar)
-		&& !(parent instanceof Menupopup))
-			throw new UiException("Unsupported parent for menu: "+parent);
+		if (parent != null && !(parent instanceof Menubar) && !(parent instanceof Menupopup))
+			throw new UiException("Unsupported parent for menu: " + parent);
 		super.beforeParentChanged(parent);
 	}
+
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Menupopup) {
 			if (_popup != null && _popup != child)
-				throw new UiException("Only one menupopup is allowed: "+this);
+				throw new UiException("Only one menupopup is allowed: " + this);
 		} else {
-			throw new UiException("Unsupported child for menu: "+child);
+			throw new UiException("Unsupported child for menu: " + child);
 		}
 		super.beforeChildAdded(child, refChild);
 	}
-	
+
 	public void onChildRemoved(Component child) {
 		_popup = null;
 		super.onChildRemoved(child);
 	}
-	
+
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Menupopup) {
 			if (super.insertBefore(child, refChild)) {
-				_popup = (Menupopup)child;
+				_popup = (Menupopup) child;
 				return true;
 			}
 		} else {
 			return super.insertBefore(child, refChild);
-				//impossible but make it more extensible
+			//impossible but make it more extensible
 		}
 		return false;
 	}
 
 	//Cloneable//
 	public Object clone() {
-		final Menu clone = (Menu)super.clone();
-		if (clone._popup != null) clone.afterUnmarshal();
+		final Menu clone = (Menu) super.clone();
+		if (clone._popup != null)
+			clone.afterUnmarshal();
 		return clone;
 	}
+
 	private void afterUnmarshal() {
-		_popup = (Menupopup)getFirstChild();
+		_popup = (Menupopup) getFirstChild();
 	}
 
 	//Serializable//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
-		if (!getChildren().isEmpty()) afterUnmarshal();
+		if (!getChildren().isEmpty())
+			afterUnmarshal();
 	}
 
 	//--ComponentCtrl--//
@@ -191,7 +195,7 @@ public class Menu extends LabelImageElement {
 			if (getContent().indexOf("#color") == 0) {
 				disableClientUpdate(true);
 				try {
-					setContent("#color=" + (String)data.get("color"));
+					setContent("#color=" + (String) data.get("color"));
 				} finally {
 					disableClientUpdate(false);
 				}

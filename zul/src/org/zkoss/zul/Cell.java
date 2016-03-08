@@ -30,13 +30,14 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Cell extends XulElement {
 	private AuxInfo _auxinf;
-	
+
 	/** Returns the horizontal alignment.
 	 * <p>Default: null (system default: left unless CSS specified).
 	 */
 	public String getAlign() {
 		return _auxinf != null ? _auxinf.align : null;
 	}
+
 	/** Sets the horizontal alignment.
 	 * Allowed values: left,right,center,justify,char. 
 	 */
@@ -46,12 +47,14 @@ public class Cell extends XulElement {
 			smartUpdate("align", getAlign());
 		}
 	}
+
 	/** Returns the vertical alignment.
 	 * <p>Default: null (system default: top).
 	 */
 	public String getValign() {
 		return _auxinf != null ? _auxinf.valign : null;
 	}
+
 	/** Sets the vertical alignment of this grid.
 	 * Allowed values: 	top, middle, bottom, baseline
 	 */
@@ -68,6 +71,7 @@ public class Cell extends XulElement {
 	public int getColspan() {
 		return _auxinf != null ? _auxinf.colspan : 1;
 	}
+
 	/** Sets the number of columns to span.
 	 * <p>It is the same as the colspan attribute of HTML TD tag.
 	 */
@@ -84,8 +88,9 @@ public class Cell extends XulElement {
 	 * Default: 1.
 	 */
 	public int getRowspan() {
-		return _auxinf != null ? _auxinf.rowspan: 1;
+		return _auxinf != null ? _auxinf.rowspan : 1;
 	}
+
 	/** Sets the number of rows to span.
 	 * <p>It is the same as the rowspan attribute of HTML TD tag.
 	 */
@@ -97,29 +102,28 @@ public class Cell extends XulElement {
 			smartUpdate("rowspan", getRowspan());
 		}
 	}
-	
+
 	//super//
 	public String getZclass() {
 		return _zclass == null ? "z-cell" : _zclass;
 	}
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Cell clone = (Cell)super.clone();
+		final Cell clone = (Cell) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
-	
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		if (getColspan() != 1)
 			renderer.render("colspan", getColspan());
 		if (getRowspan() != 1)
 			renderer.render("rowspan", getRowspan());
-		
+
 		renderer.render("align", getAlign());
 		renderer.render("valign", getValign());
 	}
@@ -135,8 +139,7 @@ public class Cell extends XulElement {
 		private String valign = null;
 		private int colspan = 1;
 		private int rowspan = 1;
-		
-		
+
 		public Object clone() {
 			try {
 				return super.clone();

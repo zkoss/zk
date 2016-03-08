@@ -38,6 +38,7 @@ public class Label extends XulElement {
 
 	public Label() {
 	}
+
 	public Label(String value) {
 		setValue(value);
 	}
@@ -50,14 +51,16 @@ public class Label extends XulElement {
 	public String getValue() {
 		return _value;
 	}
+
 	/** Sets the value.
 	 */
 	public void setValue(String value) {
-		if (value == null) value = "";
+		if (value == null)
+			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
 			smartUpdate("value", getValue());
-				//allow deriving to override getValue()
+			//allow deriving to override getValue()
 		}
 	}
 
@@ -65,23 +68,27 @@ public class Label extends XulElement {
 	 * <p>Default: 0 (means no limitation)
 	 */
 	public int getMaxlength() {
-		return _auxinf != null ? _auxinf.maxlength: 0;
+		return _auxinf != null ? _auxinf.maxlength : 0;
 	}
+
 	/** Sets the maximal length of the label.
 	 */
 	public void setMaxlength(int maxlength) {
-		if (maxlength < 0) maxlength = 0;
-		if ((_auxinf != null ? _auxinf.maxlength: 0) != maxlength) {
+		if (maxlength < 0)
+			maxlength = 0;
+		if ((_auxinf != null ? _auxinf.maxlength : 0) != maxlength) {
 			initAuxInfo().maxlength = maxlength;
 			smartUpdate("maxlength", getMaxlength());
 		}
 	}
+
 	/** Returns whether to preserve the new line and the white spaces at the
 	 * beginning of each line.
 	 */
 	public boolean isMultiline() {
 		return _auxinf != null && _auxinf.multiline;
 	}
+
 	/** Sets whether to preserve the new line and the white spaces at the
 	 * beginning of each line.
 	 */
@@ -91,6 +98,7 @@ public class Label extends XulElement {
 			smartUpdate("multiline", isMultiline());
 		}
 	}
+
 	/** Returns whether to preserve the white spaces, such as space,
 	 * tab and new line.
 	 *
@@ -105,6 +113,7 @@ public class Label extends XulElement {
 	public boolean isPre() {
 		return _auxinf != null && _auxinf.pre;
 	}
+
 	/** Sets whether to preserve the white spaces, such as space,
 	 * tab and new line.
 	 */
@@ -114,11 +123,13 @@ public class Label extends XulElement {
 			smartUpdate("pre", isPre());
 		}
 	}
+
 	/** @deprecated As of release 5.0.0, use CSS instead.
 	 */
 	public boolean isHyphen() {
 		return false;
 	}
+
 	/** @deprecated As of release 5.0.0, use CSS instead.
 	 *
 	 * <p>Use the CSS style called "word-wrap: word-break"
@@ -131,6 +142,7 @@ public class Label extends XulElement {
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+
 	static {
 		_properties.put("value", new StringPropertyAccess() {
 			public void setValue(Component cmp, String value) {
@@ -167,30 +179,32 @@ public class Label extends XulElement {
 			return pa;
 		return super.getPropertyAccess(prop);
 	}
+
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 
 		int v = getMaxlength();
-		if (v > 0) renderer.render("maxlength", v);
+		if (v > 0)
+			renderer.render("maxlength", v);
 		render(renderer, "multiline", isMultiline());
 		render(renderer, "pre", isPre());
 
 		final String val = getValue();
-			//allow deriving to override getValue()
+		//allow deriving to override getValue()
 		render(renderer, "value", val);
 		org.zkoss.zul.impl.Utils.renderCrawlableText(val);
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-label" : _zclass;
 	}
 
 	//Cloneable//
 	public Object clone() {
-		final Label clone = (Label)super.clone();
+		final Label clone = (Label) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
 
@@ -205,6 +219,7 @@ public class Label extends XulElement {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
+
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private int maxlength;
 		private boolean multiline;

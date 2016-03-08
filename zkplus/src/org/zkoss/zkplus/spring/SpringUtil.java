@@ -20,6 +20,7 @@ import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -38,18 +39,18 @@ public class SpringUtil {
 		if (exec == null) {
 			throw new UiException("SpringUtil can be called only under ZK environment!");
 		}
-		
-		return WebApplicationContextUtils.getRequiredWebApplicationContext(
-				exec.getDesktop().getWebApp().getServletContext());
+
+		return WebApplicationContextUtils
+				.getRequiredWebApplicationContext(exec.getDesktop().getWebApp().getServletContext());
 	}
-	
+
 	/**
 	 * Get the spring bean by the specified name.
-	 */		
+	 */
 	public static Object getBean(String name) {
 		Object o = null;
 		try {
-			if(getApplicationContext().containsBean(name)) {
+			if (getApplicationContext().containsBean(name)) {
 				o = getApplicationContext().getBean(name);
 			}
 		} catch (NoSuchBeanDefinitionException ex) {
@@ -60,11 +61,11 @@ public class SpringUtil {
 
 	/**
 	 * Get the spring bean by the specified name and class.
-	 */		
+	 */
 	public static Object getBean(String name, Class cls) {
 		Object o = null;
 		try {
-			if(getApplicationContext().containsBean(name)) {
+			if (getApplicationContext().containsBean(name)) {
 				o = getApplicationContext().getBean(name, cls);
 			}
 		} catch (NoSuchBeanDefinitionException ex) {

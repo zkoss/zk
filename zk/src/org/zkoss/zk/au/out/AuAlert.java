@@ -30,6 +30,7 @@ public class AuAlert extends AuResponse {
 	public AuAlert(String message) {
 		super("alert", message); //component-independent
 	}
+
 	/**
 	 * For the response error use, the next AuRequest will be stopped until the
 	 * alert dialog is closed.
@@ -38,16 +39,18 @@ public class AuAlert extends AuResponse {
 	 * @since 7.0.0
 	 */
 	public AuAlert(String message, boolean disabledAuRequest) {
-		super("alert", new Object[] {message, null, null, disabledAuRequest}); //component-independent
+		super("alert", new Object[] { message, null, null, disabledAuRequest }); //component-independent
 	}
+
 	/**
 	 * @param message the message to display.
 	 * @param title the title of the message box
 	 * @since 5.0.3
 	 */
 	public AuAlert(String message, String title) {
-		super("alert", new String[] {message, title}); //component-independent
+		super("alert", new String[] { message, title }); //component-independent
 	}
+
 	/**
 	 * @param message the message to display.
 	 * @param title the title of the message box
@@ -57,6 +60,6 @@ public class AuAlert extends AuResponse {
 	 * @since 5.0.3
 	 */
 	public AuAlert(String message, String title, String icon) {
-		super("alert", new String[] {message, title, icon}); //component-independent
+		super("alert", new String[] { message, title, icon }); //component-independent
 	}
 }

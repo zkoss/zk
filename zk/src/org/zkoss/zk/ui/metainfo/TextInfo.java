@@ -33,11 +33,12 @@ public class TextInfo extends LeafInfo {
 	 * @since 6.0.0
 	 */
 	public TextInfo(String text) {
-		_text = text != null ? new ExValue(text, String.class): null;
+		_text = text != null ? new ExValue(text, String.class) : null;
 	}
+
 	public TextInfo(NodeInfo parent, String text) {
 		super(parent);
-		_text = text != null ? new ExValue(text, String.class): null;
+		_text = text != null ? new ExValue(text, String.class) : null;
 	}
 
 	/** Returns the raw value (text).
@@ -49,12 +50,13 @@ public class TextInfo extends LeafInfo {
 	/** Returns the value after evaluation (might be null).
 	 */
 	public String getValue(Page page) {
-		return _text != null ? (String)_text.getValue(_evalr, page): null;
+		return _text != null ? (String) _text.getValue(_evalr, page) : null;
 	}
+
 	/** Returns the value after evaluation.
 	 */
 	public String getValue(Component comp) {
-		return _text != null ? (String)_text.getValue(_evalr, comp): null;
+		return _text != null ? (String) _text.getValue(_evalr, comp) : null;
 	}
 
 	public String toString() {

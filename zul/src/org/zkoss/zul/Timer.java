@@ -40,6 +40,7 @@ public class Timer extends HtmlBasedComponent {
 
 	public Timer() {
 	}
+
 	public Timer(int delay) {
 		this();
 		_delay = Math.max(0, delay);
@@ -52,6 +53,7 @@ public class Timer extends HtmlBasedComponent {
 	public int getDelay() {
 		return _delay;
 	}
+
 	/** Sets the delay, the number of milliseconds between
 	 * successive action events.
 	 * @param delay If negative, 0 is assumed.
@@ -63,12 +65,14 @@ public class Timer extends HtmlBasedComponent {
 			smartUpdate("delay", _delay);
 		}
 	}
+
 	/** Returns whether the timer shall send Event repeatedly.
 	 * <p>Default: false.
 	 */
 	public boolean isRepeats() {
 		return _repeats;
 	}
+
 	/** Sets whether the timer shall send Event repeatedly.
 	 */
 	public void setRepeats(boolean repeats) {
@@ -77,6 +81,7 @@ public class Timer extends HtmlBasedComponent {
 			smartUpdate("repeats", _repeats);
 		}
 	}
+
 	/** Returns whether this timer is running.
 	 * <p>Default: true.
 	 * @see #stop
@@ -85,11 +90,14 @@ public class Timer extends HtmlBasedComponent {
 	public boolean isRunning() {
 		return _running;
 	}
+
 	/** Start or stops the timer.
 	 */
 	public void setRunning(boolean running) {
-		if (running) start();
-		else stop();
+		if (running)
+			start();
+		else
+			stop();
 	}
 
 	/** Stops the timer.
@@ -100,6 +108,7 @@ public class Timer extends HtmlBasedComponent {
 			smartUpdate("running", Boolean.FALSE, true); //Bug 3155985: shall allow restore
 		}
 	}
+
 	/** Starts the timer.
 	 */
 	public void start() {
@@ -125,18 +134,20 @@ public class Timer extends HtmlBasedComponent {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_TIMER)) {
-			if (!_repeats) _running = false; //Bug 1829397
+			if (!_repeats)
+				_running = false; //Bug 1829397
 		}
 		super.service(request, everError);
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "repeats", _repeats);
-		if (_delay != 0) renderer.render("delay", _delay);
-		if (!_running) renderer.render("running", false);
+		if (_delay != 0)
+			renderer.render("delay", _delay);
+		if (!_running)
+			renderer.render("running", false);
 	}
 }

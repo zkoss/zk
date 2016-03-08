@@ -44,6 +44,7 @@ public interface Cropper {
 	 * with {@link Cropper}.
 	 */
 	public boolean isCropper();
+
 	/** Returns a set of child components that are available at the client,
 	 * or null if ALL available. The child components in the returned set
 	 * must be in the same order of {@link Component#getChildren}.
@@ -58,6 +59,7 @@ public interface Cropper {
 	 * such as tree. Refer to {@link #getCropOwner}.
 	 */
 	public Set<? extends Component> getAvailableAtClient();
+
 	/** Returns the owner of the cropping scope.
 	 * In most cases, {@link #getAvailableAtClient} returns only the
 	 * available direct children of this component,

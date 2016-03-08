@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.au.out.AuScript;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.DesktopUnavailableException;
@@ -78,6 +79,7 @@ public class PollingServerPush implements ServerPush {
 	public PollingServerPush() {
 		this(-1, -1, -1);
 	}
+
 	/**
 	 * @param min the minimal delay before sending the second polling request
 	 * (unit: milliseconds).
@@ -107,6 +109,7 @@ public class PollingServerPush implements ServerPush {
 	protected void startClientPush() {
 		Clients.response("zk.clientpush", new AuScript(null, getStartScript()));
 	}
+
 	/** Sends an AU response the client to stop the server push.
 	 * <p>The derived class usually overrides this method to support
 	 * different devices, such as ZK Mobile.
@@ -118,57 +121,55 @@ public class PollingServerPush implements ServerPush {
 	protected void stopClientPush() {
 		Clients.response("zk.clientpush", new AuScript(null, getStopScript()));
 	}
+
 	/** Returns the JavaScript codes to enable (a.k.a., start) the server push.
 	 * It is called by {@link #startClientPush} to prepare the script
 	 * of {@link AuScript} that will be sent to the client.
 	 */
 	protected String getStartScript() {
-		final String start = _desktop.getWebApp().getConfiguration()
-			.getPreference("PollingServerPush.start", null);
+		final String start = _desktop.getWebApp().getConfiguration().getPreference("PollingServerPush.start", null);
 		if (start != null)
 			return start;
 
 		final StringBuffer sb = new StringBuffer(128)
-			.append("zk.load('zk.cpsp');zk.afterLoad(function(){zk.cpsp.start('")
-			.append(_desktop.getId()).append('\'');
+				.append("zk.load('zk.cpsp');zk.afterLoad(function(){zk.cpsp.start('").append(_desktop.getId())
+				.append('\'');
 
-		final int min = _min > 0 ? _min: getIntPref("PollingServerPush.delay.min"),
-			max = _max > 0 ? _max: getIntPref("PollingServerPush.delay.max"),
-			factor = _factor > 0 ? _factor: getIntPref("PollingServerPush.delay.factor");
-		if (min > 0  || max > 0 || factor > 0)
-			sb.append(',').append(min).append(',').append(max)
-				.append(',').append(factor);
+		final int min = _min > 0 ? _min : getIntPref("PollingServerPush.delay.min"),
+				max = _max > 0 ? _max : getIntPref("PollingServerPush.delay.max"),
+				factor = _factor > 0 ? _factor : getIntPref("PollingServerPush.delay.factor");
+		if (min > 0 || max > 0 || factor > 0)
+			sb.append(',').append(min).append(',').append(max).append(',').append(factor);
 
 		return sb.append(");});").toString();
 	}
+
 	private int getIntPref(String key) {
-		final String s = _desktop.getWebApp().getConfiguration()
-			.getPreference(key, null);
+		final String s = _desktop.getWebApp().getConfiguration().getPreference(key, null);
 		if (s != null) {
 			try {
 				return Integer.parseInt(s);
 			} catch (NumberFormatException ex) {
-				log.warn("Not a number specified at "+key);
+				log.warn("Not a number specified at " + key);
 			}
 		}
 		return -1;
 	}
-			
+
 	/** Returns the JavaScript codes to disable (a.k.a., stop) the server push.
 	 * It is called by {@link #stopClientPush} to prepare the script
 	 * of {@link AuScript} that will be sent to the client.
 	 */
 	protected String getStopScript() {
-		final String stop = _desktop.getWebApp().getConfiguration()
-			.getPreference("PollingServerPush.stop", null);
-		return stop != null ? stop:
-			"zk.cpsp.stop('" + _desktop.getId() + "');";
+		final String stop = _desktop.getWebApp().getConfiguration().getPreference("PollingServerPush.stop", null);
+		return stop != null ? stop : "zk.cpsp.stop('" + _desktop.getId() + "');";
 	}
 
 	//ServerPush//
 	public boolean isActive() {
 		return _active != null && _active.nActive > 0;
 	}
+
 	public void start(Desktop desktop) {
 		if (_desktop != null) {
 			log.warn("Ignored: Sever-push already started");
@@ -178,18 +179,18 @@ public class PollingServerPush implements ServerPush {
 		_desktop = desktop;
 		startClientPush();
 	}
-	
+
 	/**
 	 * ZK-1777 resume serverpush after DesktopRecycling
 	 */
 	public void resume() {
-		if(_desktop == null) {
+		if (_desktop == null) {
 			throw new IllegalStateException(
 					"ServerPush cannot be resumed without desktop, or has been stopped!call #start(desktop)} instead");
 		}
 		startClientPush();
 	}
-	
+
 	public void stop() {
 		if (_desktop == null) {
 			log.warn("Ignored: Sever-push not started");
@@ -198,7 +199,7 @@ public class PollingServerPush implements ServerPush {
 
 		final Execution exec = Executions.getCurrent();
 		final boolean inexec = exec != null && exec.getDesktop() == _desktop;
-			//it might be caused by DesktopCache expunge (when creating another desktop)
+		//it might be caused by DesktopCache expunge (when creating another desktop)
 		try {
 			if (inexec && _desktop.isAlive()) //Bug 1815480: don't send if timeout
 				stopClientPush();
@@ -216,9 +217,10 @@ public class PollingServerPush implements ServerPush {
 			}
 		}
 	}
+
 	private void wakePending() {
 		synchronized (_pending) {
-			for (ThreadInfo info: _pending) {
+			for (ThreadInfo info : _pending) {
 				synchronized (info) {
 					info.notify();
 				}
@@ -238,8 +240,7 @@ public class PollingServerPush implements ServerPush {
 			//In addition, an ill-written code might activate again
 			//before onPiggyback returns. It causes dead-loop in this case.
 			if (tmexpired == 0) { //first time
-				tmexpired = System.currentTimeMillis()
-					+ (config.getMaxProcessTime() >> 1);
+				tmexpired = System.currentTimeMillis() + (config.getMaxProcessTime() >> 1);
 				cnt = _pending.size() + 3;
 			} else if (--cnt < 0 || System.currentTimeMillis() > tmexpired) {
 				break;
@@ -276,13 +277,11 @@ public class PollingServerPush implements ServerPush {
 		}
 	}
 
-	public <T extends Event>
-	void schedule(EventListener<T> listener, T event, Scheduler<T> scheduler) {
+	public <T extends Event> void schedule(EventListener<T> listener, T event, Scheduler<T> scheduler) {
 		scheduler.schedule(listener, event); //delegate back
 	}
 
-	public boolean activate(long timeout)
-	throws InterruptedException, DesktopUnavailableException {
+	public boolean activate(long timeout) throws InterruptedException, DesktopUnavailableException {
 		final Thread curr = Thread.currentThread();
 		if (_active != null && _active.thread.equals(curr)) { //re-activate
 			++_active.nActive;
@@ -301,7 +300,7 @@ public class PollingServerPush implements ServerPush {
 			synchronized (info) {
 				if (_desktop != null) {
 					if (info.nActive == 0) //not granted yet
-						info.wait(timeout <= 0 ? 10*60*1000: timeout);
+						info.wait(timeout <= 0 ? 10 * 60 * 1000 : timeout);
 
 					if (info.nActive <= 0) { //not granted
 						boolean bTimeout = timeout > 0;
@@ -334,10 +333,10 @@ public class PollingServerPush implements ServerPush {
 		//Note: we don't mimic inEventListener since 1) ZK doesn't assume it
 		//2) Window depends on it
 	}
+
 	public boolean deactivate(boolean stop) {
 		boolean stopped = false;
-		if (_active != null &&
-		Thread.currentThread().equals(_active.thread)) {
+		if (_active != null && Thread.currentThread().equals(_active.thread)) {
 			if (--_active.nActive <= 0) {
 				if (stop)
 					stopClientPush();
@@ -358,9 +357,12 @@ public class PollingServerPush implements ServerPush {
 					_mutex.notify();
 				}
 
-				try {Thread.sleep(100);} catch (Throwable ex) {}
-					//to minimize the chance that the server-push thread
-					//activate again, before onPiggback polls next _pending
+				try {
+					Thread.sleep(100);
+				} catch (Throwable ex) {
+				}
+				//to minimize the chance that the server-push thread
+				//activate again, before onPiggback polls next _pending
 			}
 		}
 		return stopped;
@@ -373,9 +375,11 @@ public class PollingServerPush implements ServerPush {
 		private final Thread thread;
 		/** # of activate() was called. */
 		private int nActive;
+
 		private ThreadInfo(Thread thread) {
 			this.thread = thread;
 		}
+
 		public String toString() {
 			return "[" + thread + ',' + nActive + ']';
 		}

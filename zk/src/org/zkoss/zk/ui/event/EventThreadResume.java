@@ -53,6 +53,7 @@ public interface EventThreadResume {
 	 * the main thread.
 	 */
 	public void beforeResume(Component comp, Event evt) throws Exception;
+
 	/** Called after the suspended event thread is resumed.
 	 * Unlike {@link #beforeResume}, it executes in the 
 	 * event processing thread that is resumed.
@@ -63,18 +64,18 @@ public interface EventThreadResume {
 	 */
 	public void afterResume(Component comp, Event evt) throws Exception;
 
- 	/** Called when the suspended event thread is aborted.
- 	 * It is called in the main thread (i.e., the servlet thread).
- 	 *
- 	 * <p>If a suspended event thread is resumed normally, {@link #beforeResume}
- 	 * and {@link #afterResume} are called.
- 	 * On the other hand, if it is aborted (usually caused by destroying
- 	 * the desktop that owns this thread), {@link #abortResume} is called instead.
- 	 *
- 	 * <p>Note: if the suspended thread is aborted, none of {@link #beforeResume},
- 	 * {@link #afterResume}, {@link EventThreadCleanup#cleanup}, and
- 	 * {@link EventThreadCleanup#complete} will be called.
- 	 * Thus, you have to do necessary cleanups in this method.
- 	 */
- 	public void abortResume(Component comp, Event evt) throws Exception;
+	/** Called when the suspended event thread is aborted.
+	 * It is called in the main thread (i.e., the servlet thread).
+	 *
+	 * <p>If a suspended event thread is resumed normally, {@link #beforeResume}
+	 * and {@link #afterResume} are called.
+	 * On the other hand, if it is aborted (usually caused by destroying
+	 * the desktop that owns this thread), {@link #abortResume} is called instead.
+	 *
+	 * <p>Note: if the suspended thread is aborted, none of {@link #beforeResume},
+	 * {@link #afterResume}, {@link EventThreadCleanup#cleanup}, and
+	 * {@link EventThreadCleanup#complete} will be called.
+	 * Thus, you have to do necessary cleanups in this method.
+	 */
+	public void abortResume(Component comp, Event evt) throws Exception;
 }

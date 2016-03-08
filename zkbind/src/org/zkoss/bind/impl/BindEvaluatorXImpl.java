@@ -38,97 +38,93 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		super(mapper, expfcls);
 	}
 
-	public Object getValue(BindContext ctx, Component comp, ExpressionX expression)
-	throws XelException {
-		try{
+	public Object getValue(BindContext ctx, Component comp, ExpressionX expression) throws XelException {
+		try {
 			if (expression instanceof PropertyExpression) {
 				return expression.evaluate(null);
 			}
 			return expression.evaluate(newXelContext(ctx, comp));
-		}catch(Exception x){
+		} catch (Exception x) {
 			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
 
-	public void setValue(BindContext ctx, Component comp, ExpressionX expression, Object value)
-	throws XelException {
+	public void setValue(BindContext ctx, Component comp, ExpressionX expression, Object value) throws XelException {
 		//ZK-1063 No exception if binding to a non-existed property
 		//Dennis, Removed the try-catch PropertyNotFoundException, we don't have history to check why we did try-catch before
 		//However, it should throw the property-not-found to let user be aware it. 
-		try{
+		try {
 
 			if (expression instanceof PropertyExpression) {
 				expression.setValue(null, value);
 			} else {
 				expression.setValue(newXelContext(ctx, comp), value);
 			}
-			
-		}catch(Exception x){
+
+		} catch (Exception x) {
 			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
 
-	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType)
-	throws XelException {
+	public ExpressionX parseExpressionX(BindContext ctx, String expression, Class<?> expectedType) throws XelException {
 		Component comp = null;
 		if (ctx != null) {
 			comp = ctx.getComponent();
 			if (comp == null) {
-				final Binding binding = ctx.getBinding(); 
+				final Binding binding = ctx.getBinding();
 				if (binding != null) {
 					comp = binding.getComponent();
 				}
 			}
 		}
-		try{
-			return (ExpressionX) getExpressionFactory()
-				.parseExpression(newXelContext(ctx, comp), "${"+expression+"}", expectedType);
-		}catch(Exception x){
+		try {
+			return (ExpressionX) getExpressionFactory().parseExpression(newXelContext(ctx, comp),
+					"${" + expression + "}", expectedType);
+		} catch (Exception x) {
 			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
-	
-	public Class<?> getType(BindContext ctx, Component comp, ExpressionX expression)
-	throws XelException {
+
+	public Class<?> getType(BindContext ctx, Component comp, ExpressionX expression) throws XelException {
 		return expression.getType(newXelContext(ctx, comp));
 	}
-	
+
 	public ValueReference getValueReference(BindContext ctx, Component comp, ExpressionX expression)
-	throws XelException {
-		try{
+			throws XelException {
+		try {
 			ValueReference ref = expression.getValueReference(newXelContext(ctx, comp));
 			//bug 1129-ref NPE, no value reference if it is a SimpleNode
-			if(ref==null){
+			if (ref == null) {
 				XelContext xctx = newXelContext(ctx, comp);
 				//Dennis, a special control flag to ignore ref-binding getValue in BindELResolver
 				xctx.setAttribute(BinderImpl.IGNORE_REF_VALUE, Boolean.TRUE);
 				Object val = expression.evaluate(xctx);
-				if(val instanceof ReferenceBindingImpl){//get value-reference from ref-binding
-					ref = ((ReferenceBindingImpl)val).getValueReference();
+				if (val instanceof ReferenceBindingImpl) { //get value-reference from ref-binding
+					ref = ((ReferenceBindingImpl) val).getValueReference();
 				}
 			}
 			return ref;
-		}catch(Exception x){
+		} catch (Exception x) {
 			throw MiscUtil.mergeExceptionInfo(x, comp);
 		}
 	}
 
 	//utility to create an XelContext associated to the reference
-	protected XelContext newXelContext(BindContext ctx, final Component comp) {	
+	protected XelContext newXelContext(BindContext ctx, final Component comp) {
 		final FunctionMapper mapper = getFunctionMapper(comp);
 		//ZK-1795MVVM nested template may cause exception
 		//Dennis: Shouldn't get the real variable-resolver and keep it, it will set ref as evaluator's self, 
 		//When nested MVVM templates, if there are a ref-binding, it will newXelContext multiple time to do new evaluation in this evaluation,
 		//this cause the real variable-resolver's self be changed when newXelContext called.
-		final VariableResolver resolver = new VariableResolver(){
+		final VariableResolver resolver = new VariableResolver() {
 			public Object resolveVariable(String name) throws XelException {
 				VariableResolver vr = getVariableResolver(comp);
-				return vr==null?null:vr.resolveVariable(name);
-			}};
-		
-//		final XelContext xelc = super.newXelContext(comp);
-		final XelContext xelc = new SimpleBindXelContext(comp, ctx != null ? ctx.getBinder() : null, resolver, mapper);//super.newXelContext(comp);
-		
+				return vr == null ? null : vr.resolveVariable(name);
+			}
+		};
+
+		final XelContext xelc = new SimpleBindXelContext(comp, ctx != null ? ctx.getBinder() : null, resolver, mapper); //super.newXelContext(comp);
+
 		xelc.setAttribute(BinderImpl.BINDCTX, ctx);
 		if (ctx != null) {
 			xelc.setAttribute(BinderImpl.BINDING, ctx.getBinding());
@@ -139,9 +135,7 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 		return xelc;
 	}
 
-	
-	public boolean isReadOnly(BindContext ctx, Component comp,
-			ExpressionX expression) throws XelException {
+	public boolean isReadOnly(BindContext ctx, Component comp, ExpressionX expression) throws XelException {
 		return expression.isReadOnly(newXelContext(ctx, comp));
 	}
 }

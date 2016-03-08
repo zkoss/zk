@@ -35,18 +35,21 @@ public interface PageConfig {
 	 * a non-empty value before, this method is ignored.
 	 */
 	public String getId();
+
 	/** Returns the page's UUID. 
 	 * This method is used only in the recovering mode
 	 * ({@link ExecutionCtrl#isRecovering}).
 	 * In other words, it is null if not in the recovering mode.
 	 */
 	public String getUuid();
+
 	/** Returns the page title, or null if not available (no title at all).
 	 *
 	 * <p>Note: if {@link org.zkoss.zk.ui.Page#setTitle} was called with
 	 * a non-empty value before, this method is ignored.
 	 */
 	public String getTitle();
+
 	/** Returns the page's CSS style, or null if no special CSS style to
 	 * assign.
 	 *
@@ -54,6 +57,7 @@ public interface PageConfig {
 	 * a non-empty value before, this method is ignored.
 	 */
 	public String getStyle();
+
 	/**
 	 * Return the page's viewport, or "auto" if not specified.
 	 * <p>Note: if {@link org.zkoss.zk.ui.Page#setViewport} was called with
@@ -73,6 +77,7 @@ public interface PageConfig {
 	 * @since 5.0.5
 	 */
 	public String getBeforeHeadTags();
+
 	/** Returns the content that shall be generated inside the head element
 	 * and after ZK's default tags (never null).
 	 * For example, it might consist of &lt;meta&gt; and &lt;link&gt;.

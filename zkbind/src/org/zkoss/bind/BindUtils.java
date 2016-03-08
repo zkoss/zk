@@ -26,8 +26,7 @@ import org.zkoss.zk.ui.event.EventQueues;
  *
  */
 public class BindUtils {
-	
-	
+
 	/**
 	 * Post a global command to corresponding event queue
 	 * @param queueName the queue name, null for default queue name
@@ -35,14 +34,17 @@ public class BindUtils {
 	 * @param cmdName the global command name
 	 * @param args arguments, could get the data in command method by {@link BindingParam}
 	 */
-	public static void postGlobalCommand(String queueName, String queueScope, String cmdName, Map<String,Object> args){
-		final EventQueue<Event> que = EventQueues.lookup(queueName==null?BinderCtrl.DEFAULT_QUEUE_NAME:queueName, queueScope==null?BinderCtrl.DEFAULT_QUEUE_SCOPE:queueScope, false);
-		if(Strings.isEmpty(cmdName)) throw new IllegalArgumentException("cmdName is empty");
+	public static void postGlobalCommand(String queueName, String queueScope, String cmdName,
+			Map<String, Object> args) {
+		final EventQueue<Event> que = EventQueues.lookup(queueName == null ? BinderCtrl.DEFAULT_QUEUE_NAME : queueName,
+				queueScope == null ? BinderCtrl.DEFAULT_QUEUE_SCOPE : queueScope, false);
+		if (Strings.isEmpty(cmdName))
+			throw new IllegalArgumentException("cmdName is empty");
 		if (que != null) {
 			que.publish(new GlobalCommandEvent(null, cmdName, args));
 		}
 	}
-	
+
 	/**
 	 * Post a notify change to corresponding event queue to notify a bean's property changing
 	 * @param queueName the queue name, null for default queue name
@@ -50,9 +52,11 @@ public class BindUtils {
 	 * @param bean the bean instance
 	 * @param property the property name of bean
 	 */
-	public static void postNotifyChange(String queueName, String queueScope, Object bean, String property){
-		final EventQueue<Event> que = EventQueues.lookup(queueName==null?BinderCtrl.DEFAULT_QUEUE_NAME:queueName, queueScope==null?BinderCtrl.DEFAULT_QUEUE_SCOPE:queueScope, false);
-		if(Strings.isEmpty(property)) throw new IllegalArgumentException("property is empty");
+	public static void postNotifyChange(String queueName, String queueScope, Object bean, String property) {
+		final EventQueue<Event> que = EventQueues.lookup(queueName == null ? BinderCtrl.DEFAULT_QUEUE_NAME : queueName,
+				queueScope == null ? BinderCtrl.DEFAULT_QUEUE_SCOPE : queueScope, false);
+		if (Strings.isEmpty(property))
+			throw new IllegalArgumentException("property is empty");
 		if (que != null) {
 			que.publish(new PropertyChangeEvent(null, bean, property));
 		}

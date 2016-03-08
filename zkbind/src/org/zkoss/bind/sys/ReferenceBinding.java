@@ -28,20 +28,19 @@ public interface ReferenceBinding extends LoadBinding {
 	 * @return the referenced value.
 	 */
 	public Object getValue(BindELContext ctx); //@see BindELResolver
-	
-	
+
 	/**
 	 * Sets the value to referenced object
 	 * @param ctx the context to evaluate the reference expression.
 	 */
-	public void setValue(BindELContext ctx,Object value); //@see BindELResolver
-	
+	public void setValue(BindELContext ctx, Object value); //@see BindELResolver
+
 	/**
 	 * Returns the reference expression script of this binding.
 	 * @return the reference expression script of this binding. 
 	 */
 	public String getPropertyString();
-	
+
 	/**
 	 * Invalidate cached value of this reference.
 	 */

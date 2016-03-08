@@ -39,18 +39,23 @@ public interface PageContext {
 	/** The current request.
 	 */
 	public ServletRequest getRequest();
+
 	/** The current response.
 	 */
 	public ServletResponse getResponse();
+
 	/** The Servlet configuration.
 	 */
 	public ServletConfig getServletConfig();
+
 	/** The Servlet context.
 	 */
 	public ServletContext getServletContext();
+
 	/** The current session.
 	 */
 	public HttpSession getSession();
+
 	/** The current variable resolver.
 	 */
 	public VariableResolver getVariableResolver();

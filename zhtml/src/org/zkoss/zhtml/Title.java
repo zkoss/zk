@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 /**
  * The TITLE tag.
@@ -29,12 +29,14 @@ public class Title extends AbstractTag {
 		super("title");
 	}
 
-	//-- super --//
-	/** Don't generate the id attribute.
+	// -- super --//
+	/**
+	 * Don't generate the id attribute.
 	 */
 	protected boolean shallHideId() {
 		return true;
 	}
+
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (!HtmlPageRenders.isDirectContent(null))
 			throw new UnsupportedOperationException("Parent of title must be head");

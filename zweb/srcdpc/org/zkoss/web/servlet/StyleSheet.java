@@ -30,6 +30,7 @@ public class StyleSheet extends org.zkoss.html.StyleSheet {
 	public StyleSheet(String href, String type) {
 		super(href, type);
 	}
+
 	/** Creates by assigning the content (style sheets).
 	 *
 	 * @param content the style content or an URI to an external file.
@@ -40,6 +41,7 @@ public class StyleSheet extends org.zkoss.html.StyleSheet {
 	public StyleSheet(String content, String type, boolean byContent) {
 		super(content, type, byContent);
 	}
+
 	/** Creates by assigning the content (style sheets).
 	 *
 	 * @param content the style content or an URI to an external file.

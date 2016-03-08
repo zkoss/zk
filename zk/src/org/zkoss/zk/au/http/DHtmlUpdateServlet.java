@@ -16,71 +16,70 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.http;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Date;
+import static org.zkoss.lang.Generics.cast;
+
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.mesg.Messages;
-import org.zkoss.lang.Classes;
-import static org.zkoss.lang.Generics.cast;
-import org.zkoss.lang.Exceptions;
-import org.zkoss.util.resource.Labels;
 
 import org.zkoss.json.JSONValue;
-import org.zkoss.xml.XMLs;
-
-import org.zkoss.web.servlet.Servlets;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messages;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.web.servlet.Charsets;
-import org.zkoss.web.servlet.http.Https;
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ClassWebResource;
-
-import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ActivationTimeoutException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.ui.util.URIInfo;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.FailoverManager;
-import org.zkoss.zk.ui.http.ExecutionImpl;
-import org.zkoss.zk.ui.http.WebManager;
-import org.zkoss.zk.ui.http.SessionResolverImpl;
-import org.zkoss.zk.ui.http.I18Ns;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuDecoder;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.RequestOutOfSequenceException;
+import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuConfirmClose;
 import org.zkoss.zk.au.out.AuObsolete;
-import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
 import org.zkoss.zk.device.Devices;
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.ActivationTimeoutException;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.http.ExecutionImpl;
+import org.zkoss.zk.ui.http.I18Ns;
+import org.zkoss.zk.ui.http.SessionResolverImpl;
+import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.FailoverManager;
+import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.URIInfo;
 
 /**
  * Used to receive command from the server and send result back to client.
@@ -112,10 +111,8 @@ import org.zkoss.zk.device.Devices;
  */
 public class DHtmlUpdateServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DHtmlUpdateServlet.class);
-	private static final String ATTR_UPDATE_SERVLET
-		= "org.zkoss.zk.au.http.updateServlet";
-	private static final String ATTR_AU_PROCESSORS
-		= "org.zkoss.zk.au.http.auProcessors";
+	private static final String ATTR_UPDATE_SERVLET = "org.zkoss.zk.au.http.updateServlet";
+	private static final String ATTR_AU_PROCESSORS = "org.zkoss.zk.au.http.auProcessors";
 
 	private long _lastModified;
 	/** (String name, AuExtension). */
@@ -128,8 +125,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @since 3.0.2
 	 */
 	public static DHtmlUpdateServlet getUpdateServlet(WebApp wapp) {
-		return (DHtmlUpdateServlet)
-			(wapp.getServletContext()).getAttribute(ATTR_UPDATE_SERVLET);
+		return (DHtmlUpdateServlet) (wapp.getServletContext()).getAttribute(ATTR_UPDATE_SERVLET);
 	}
 
 	//Servlet//
@@ -146,40 +142,39 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//Copies au extensions defined before DHtmlUpdateServlet is started
 		final WebApp wapp = webman.getWebApp();
-		final Map aues = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
+		final Map aues = (Map) wapp.getAttribute(ATTR_AU_PROCESSORS);
 		if (aues != null) {
 			for (Iterator it = aues.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				addAuExtension((String)me.getKey(), (AuExtension)me.getValue());
+				final Map.Entry me = (Map.Entry) it.next();
+				addAuExtension((String) me.getKey(), (AuExtension) me.getValue());
 			}
 			wapp.removeAttribute(ATTR_AU_PROCESSORS);
 		}
 
 		//ZK 5: extension defined in init-param has the higher priority
-		for (int j = 0;;++j) {
+		for (int j = 0;; ++j) {
 			param = config.getInitParameter("extension" + j);
 			if (param == null) {
 				param = config.getInitParameter("processor" + j); //backward compatible
-				if (param == null) break;
+				if (param == null)
+					break;
 			}
 			final int k = param.indexOf('=');
 			if (k < 0) {
-				log.warn("Ignore init-param: illegal format, "+param);
+				log.warn("Ignore init-param: illegal format, " + param);
 				continue;
 			}
 
 			final String prefix = param.substring(0, k).trim();
 			final String clsnm = param.substring(k + 1).trim();
 			try {
-				addAuExtension(prefix,
-					(AuExtension)Classes.newInstanceByThread(clsnm));
+				addAuExtension(prefix, (AuExtension) Classes.newInstanceByThread(clsnm));
 			} catch (ClassNotFoundException ex) {
-				log.warn("Ignore init-param: class not found, "+clsnm);
+				log.warn("Ignore init-param: class not found, " + clsnm);
 			} catch (ClassCastException ex) {
-				log.warn("Ignore: "+clsnm+" not implement "+AuExtension.class);
+				log.warn("Ignore: " + clsnm + " not implement " + AuExtension.class);
 			} catch (Throwable ex) {
-				log.warn("Ignore init-param: failed to add an AU extension, "+param,
-					ex);
+				log.warn("Ignore init-param: failed to add an AU extension, " + param, ex);
 			}
 		}
 
@@ -187,60 +182,62 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				addAuExtension("/upload", new AuUploader());
 			} catch (Throwable ex) {
-				final String msg =
-					"Make sure commons-fileupload.jar is installed.";
-				log.warn("Failed to configure fileupload. "+msg, ex);
+				final String msg = "Make sure commons-fileupload.jar is installed.";
+				log.warn("Failed to configure fileupload. " + msg, ex);
 
 				//still add /upload to generate exception when fileupload is used
-				addAuExtension("/upload",
-					new AuExtension() {
-						public void init(DHtmlUpdateServlet servlet) {
-						}
-						public void destroy() {
-						}
-						public void service(HttpServletRequest request, HttpServletResponse response, String pi)
-						throws ServletException, IOException {
-							if (Sessions.getCurrent(false) != null)
-								throw new ServletException("Failed to upload. "+msg);
-						}
-					});
+				addAuExtension("/upload", new AuExtension() {
+					public void init(DHtmlUpdateServlet servlet) {
+					}
+
+					public void destroy() {
+					}
+
+					public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+							throws ServletException, IOException {
+						if (Sessions.getCurrent(false) != null)
+							throw new ServletException("Failed to upload. " + msg);
+					}
+				});
 			}
 		}
-		
+
 		//==== for ZK-447 DropUpload ====//
 		if (getAuExtension("/dropupload") == null) {
 			try {
 				addAuExtension("/dropupload", new AuDropUploader());
 			} catch (Throwable ex) {
-				final String msg =
-						"Make sure commons-fileupload.jar is installed.";
-					log.warn("Failed to configure fileupload. "+msg, ex);
+				final String msg = "Make sure commons-fileupload.jar is installed.";
+				log.warn("Failed to configure fileupload. " + msg, ex);
 
-					//still add /upload to generate exception when fileupload is used
-					addAuExtension("/dropupload",
-						new AuExtension() {
-							 public void init(DHtmlUpdateServlet servlet) {}
-							 public void destroy() {}
-							
-							public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+				//still add /upload to generate exception when fileupload is used
+				addAuExtension("/dropupload", new AuExtension() {
+					public void init(DHtmlUpdateServlet servlet) {
+					}
+
+					public void destroy() {
+					}
+
+					public void service(HttpServletRequest request, HttpServletResponse response, String pi)
 							throws ServletException, IOException {
-								if (Sessions.getCurrent(false) != null)
-									throw new ServletException("Failed to upload. "+msg);
-							}
-						});
-				}
+						if (Sessions.getCurrent(false) != null)
+							throw new ServletException("Failed to upload. " + msg);
+					}
+				});
+			}
 		}
 		//================//		
 
 		if (getAuExtension("/view") == null)
 			addAuExtension("/view", new AuDynaMediar());
 	}
+
 	public void destroy() {
-		for (AuExtension aue: _aues.values()) {
+		for (AuExtension aue : _aues.values()) {
 			try {
 				aue.destroy();
 			} catch (Throwable ex) {
-				log.warn("Unable to stop "+aue, ex);
+				log.warn("Unable to stop " + aue, ex);
 			}
 		}
 	}
@@ -251,6 +248,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	public boolean isCompress() {
 		return _compress;
 	}
+
 	/* Set whether to compress the output or not.
 	 * @since 6.5.2
 	 */
@@ -267,13 +265,22 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			synchronized (DHtmlUpdateServlet.class) {
 				upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
 				if (upsv == null) {
-					Map aues = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
-					return aues != null ? (AuExtension)aues.get(prefix): null;
+					Map aues = (Map) wapp.getAttribute(ATTR_AU_PROCESSORS);
+					return aues != null ? (AuExtension) aues.get(prefix) : null;
 				}
 			}
 		}
 		return upsv.getAuExtension(prefix);
 	}
+
+	/** Returns the AU extension associated with the specified prefix,
+	 * or null if no AU extension associated.
+	 * @since 5.0.0
+	 */
+	public AuExtension getAuExtension(String prefix) {
+		return _aues.get(prefix);
+	}
+
 	/** Adds an AU extension and associates it with the specified prefix,
 	 * even before {@link DHtmlUpdateServlet} is started.
 	 * <p>Unlike {@link #addAuExtension(String, AuExtension)}, it can be called
@@ -284,17 +291,15 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * the old AU extension will be replaced.
 	 * @since 5.0.0
 	 */
-	public static final AuExtension
-	addAuExtension(WebApp wapp, String prefix, AuExtension extension)
-	throws ServletException {
+	public static final AuExtension addAuExtension(WebApp wapp, String prefix, AuExtension extension)
+			throws ServletException {
 		DHtmlUpdateServlet upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
 		if (upsv == null) {
 			synchronized (DHtmlUpdateServlet.class) {
 				upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
 				if (upsv == null) {
 					checkAuExtension(prefix, extension);
-					Map<String, AuExtension> aues =
-						cast((Map)wapp.getAttribute(ATTR_AU_PROCESSORS));
+					Map<String, AuExtension> aues = cast((Map) wapp.getAttribute(ATTR_AU_PROCESSORS));
 					if (aues == null)
 						wapp.setAttribute(ATTR_AU_PROCESSORS, aues = new HashMap<String, AuExtension>(4));
 					return aues.put(prefix, extension);
@@ -304,6 +309,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		return upsv.addAuExtension(prefix, extension);
 	}
+
 	/** Adds an AU extension and associates it with the specified prefix.
 	 *
 	 * <p>If there was an AU extension associated with the same name, the
@@ -321,11 +327,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @see #addAuExtension(WebApp,String,AuExtension)
 	 * @since 5.0.0
 	 */
-	public AuExtension addAuExtension(String prefix, AuExtension extension)
-	throws ServletException {
+	public AuExtension addAuExtension(String prefix, AuExtension extension) throws ServletException {
 		checkAuExtension(prefix, extension);
 
-		if (_aues.get(prefix) ==  extension) //speed up to avoid sync
+		if (_aues.get(prefix) == extension) //speed up to avoid sync
 			return extension; //nothing changed
 
 		extension.init(this);
@@ -341,33 +346,27 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				old.destroy();
 			} catch (Throwable ex) {
-				log.warn("Unable to stop "+old, ex);
+				log.warn("Unable to stop " + old, ex);
 			}
 		return old;
 	}
+
 	private static void checkAuExtension(String prefix, AuExtension extension) {
-		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2
-		|| "/_".equals(prefix) || extension == null)
-			throw new UiException("Ilegal prefix: "+prefix);
+		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2 || "/_".equals(prefix)
+				|| extension == null)
+			throw new UiException("Ilegal prefix: " + prefix);
 		if (ClassWebResource.PATH_PREFIX.equalsIgnoreCase(prefix))
-			throw new IllegalArgumentException(
-				ClassWebResource.PATH_PREFIX + " is reserved");
+			throw new IllegalArgumentException(ClassWebResource.PATH_PREFIX + " is reserved");
 	}
-	/** Returns the AU extension associated with the specified prefix,
-	 * or null if no AU extension associated.
-	 * @since 5.0.0
-	 */
-	public AuExtension getAuExtension(String prefix) {
-		return _aues.get(prefix);
-	}
+
 	/** Returns the first AU extension matches the specified path,
 	 * or null if not found.
 	 */
 	private AuExtension getAuExtensionByPath(String path) {
 		for (Iterator it = _aues.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			if (path.startsWith((String)me.getKey()))
-				return (AuExtension)me.getValue();
+			final Map.Entry me = (Map.Entry) it.next();
+			if (path.startsWith((String) me.getKey()))
+				return (AuExtension) me.getValue();
 		}
 		return null;
 	}
@@ -375,39 +374,37 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	//-- super --//
 	protected long getLastModified(HttpServletRequest request) {
 		final String pi = Https.getThisPathInfo(request);
-		if (pi != null && pi.startsWith(ClassWebResource.PATH_PREFIX)
-		&& pi.indexOf('*') < 0 //language independent
-		&& !Servlets.isIncluded(request)) {
+		if (pi != null && pi.startsWith(ClassWebResource.PATH_PREFIX) && pi.indexOf('*') < 0 //language independent
+				&& !Servlets.isIncluded(request)) {
 			//If a resource extension is registered for the extension,
 			//we assume the content is dynamic
 			final String ext = Servlets.getExtension(pi, false);
-			if (ext == null
-			|| getClassWebResource().getExtendlet(ext) == null) {
-				if (_lastModified == 0) _lastModified = new Date().getTime();
-					//Hard to know when it is modified, so cheat it..
+			if (ext == null || getClassWebResource().getExtendlet(ext) == null) {
+				if (_lastModified == 0)
+					_lastModified = new Date().getTime();
+				//Hard to know when it is modified, so cheat it..
 				return _lastModified;
 			}
 		}
 		return -1;
 	}
+
 	private ClassWebResource getClassWebResource() {
 		return WebManager.getWebManager(getServletContext()).getClassWebResource();
 	}
-	protected
-	void doGet(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-//		if (log.finerable()) log.finer("Path info: "+pi);
+		//		if (log.finerable()) log.finer("Path info: "+pi);
 
 		final ServletContext ctx = getServletContext();
-		final boolean withpi = pi != null && pi.length() != 0
-			&& !(pi.startsWith("/_/") || "/_".equals(pi));
+		final boolean withpi = pi != null && pi.length() != 0 && !(pi.startsWith("/_/") || "/_".equals(pi));
 		if (withpi && pi.startsWith(ClassWebResource.PATH_PREFIX)) {
 			//use HttpSession to avoid loading SerializableSession in GAE
 			//and don't retrieve session if possible
 			final ClassWebResource cwr = getClassWebResource();
-			final HttpSession hsess =
-				shallSession(cwr, pi) ? request.getSession(false): null;
+			final HttpSession hsess = shallSession(cwr, pi) ? request.getSession(false) : null;
 			Object oldsess = null;
 			if (hsess == null) {
 				oldsess = SessionsCtrl.getRawCurrent();
@@ -417,17 +414,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 			WebApp wapp;
 			Session sess;
-			final Object old = hsess != null?
-				(wapp = WebManager.getWebAppIfAny(ctx)) != null &&
-				(sess = SessionsCtrl.getSession(wapp, hsess)) != null ?
-					I18Ns.setup(sess, request, response, "UTF-8"):
-					I18Ns.setup(hsess, request, response, "UTF-8"):
-				Charsets.setup(null, request, response, "UTF-8");
+			final Object old = hsess != null
+					? (wapp = WebManager.getWebAppIfAny(ctx)) != null
+							&& (sess = SessionsCtrl.getSession(wapp, hsess)) != null
+									? I18Ns.setup(sess, request, response, "UTF-8")
+									: I18Ns.setup(hsess, request, response, "UTF-8")
+					: Charsets.setup(null, request, response, "UTF-8");
 			try {
-				cwr.service(request, response,
-						pi.substring(ClassWebResource.PATH_PREFIX.length()));
+				cwr.service(request, response, pi.substring(ClassWebResource.PATH_PREFIX.length()));
 			} finally {
-				if (hsess != null) I18Ns.cleanup(request, old);
+				if (hsess != null)
+					I18Ns.cleanup(request, old);
 				else {
 					Charsets.cleanup(request, old);
 					SessionsCtrl.setRawCurrent(oldsess);
@@ -441,7 +438,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
-				log.debug("Unknown path info: "+pi);
+				log.debug("Unknown path info: " + pi);
 				return;
 			}
 
@@ -452,13 +449,13 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				//it might be created later
 			}
 
-			final Object old = sess != null?
-				I18Ns.setup(sess, request, response, "UTF-8"):
-				Charsets.setup(null, request, response, "UTF-8");
+			final Object old = sess != null ? I18Ns.setup(sess, request, response, "UTF-8")
+					: Charsets.setup(null, request, response, "UTF-8");
 			try {
 				aue.service(request, response, pi);
 			} finally {
-				if (sess != null) I18Ns.cleanup(request, old);
+				if (sess != null)
+					I18Ns.cleanup(request, old);
 				else {
 					Charsets.cleanup(request, old);
 					SessionsCtrl.setRawCurrent(oldsess);
@@ -479,7 +476,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Cache-Control", "no-store");
 		response.setHeader("Expires", "-1");
-		
+
 		final Object old = I18Ns.setup(sess, request, response, "UTF-8");
 		try {
 			process(sess, request, response, _compress);
@@ -487,25 +484,25 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			I18Ns.cleanup(request, old);
 		}
 	}
-	
-	protected
-	void doPost(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
+
 	private static boolean shallSession(ClassWebResource cwr, String pi) {
-		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null || (pi != null && pi.indexOf('*') >= 0) ;
+		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null || (pi != null && pi.indexOf('*') >= 0);
 		//Optimize the access of static resources (for GAE)
 	}
-	
+
 	/**
 	 * Denote HTTP 410 Session timeout response
 	 * @since 6.5.2
 	 */
-	public void denoteSessionTimeout(WebApp wapp, HttpServletRequest request,
-			HttpServletResponse response, boolean compress) throws ServletException, IOException {
+	public void denoteSessionTimeout(WebApp wapp, HttpServletRequest request, HttpServletResponse response,
+			boolean compress) throws ServletException, IOException {
 		response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); // denote timeout
-		
+
 		// Bug 1849088: rmDesktop might be sent after invalidate
 		// Bug 1859776: need send response to client for redirect or others
 		final String dtid = getAuDecoder(wapp).getDesktopId(request);
@@ -517,23 +514,23 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	/** Process asynchronous update requests from the client.
 	 * @since 3.0.0
 	 */
-	public void process(Session sess,
-	HttpServletRequest request, HttpServletResponse response, boolean compress)
-	throws ServletException, IOException {
+	public void process(Session sess, HttpServletRequest request, HttpServletResponse response, boolean compress)
+			throws ServletException, IOException {
 		final String errClient = request.getHeader("ZK-Error-Report");
 		if (errClient != null)
-			if (log.isDebugEnabled()) log.debug("Error found at client: "+errClient+"\n"+Servlets.getDetail(request));
+			if (log.isDebugEnabled())
+				log.debug("Error found at client: " + errClient + "\n" + Servlets.getDetail(request));
 
 		//parse desktop ID
 		final WebApp wapp = sess.getWebApp();
-		final WebAppCtrl wappc = (WebAppCtrl)wapp;
+		final WebAppCtrl wappc = (WebAppCtrl) wapp;
 		final AuDecoder audec = getAuDecoder(wapp);
 		final String dtid = audec.getDesktopId(request);
-		
+
 		if (dtid == null) {
 			//Bug 1929139: incomplete request (IE only)
 			if (log.isDebugEnabled()) {
-				final String msg = "Incomplete request\n"+Servlets.getDetail(request);
+				final String msg = "Incomplete request\n" + Servlets.getDetail(request);
 				log.debug(msg);
 			}
 
@@ -554,7 +551,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 		}
 		WebManager.setDesktop(request, desktop);
-			//reason: a new page might be created (such as include)
+		//reason: a new page might be created (such as include)
 
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null) { //Some client might not have ZK-SID
@@ -567,7 +564,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 			response.setHeader("ZK-SID", sid);
 		}
-		
+
 		//parse commands
 		final Configuration config = wapp.getConfiguration();
 		final List<AuRequest> aureqs;
@@ -575,11 +572,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		try {
 			final boolean timerKeepAlive = config.isTimerKeepAlive();
 			aureqs = audec.decode(request, desktop);
-			for (AuRequest aureq: aureqs) {
+			for (AuRequest aureq : aureqs) {
 				final String cmdId = aureq.getCommand();
-				keepAlive = !(!timerKeepAlive && Events.ON_TIMER.equals(cmdId))
-					&& !"dummy".equals(cmdId);
-					//dummy is used for PollingServerPush for piggyback
+				keepAlive = !(!timerKeepAlive && Events.ON_TIMER.equals(cmdId)) && !"dummy".equals(cmdId);
+				//dummy is used for PollingServerPush for piggyback
 				if (keepAlive)
 					break; //done
 			}
@@ -596,13 +592,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		((SessionCtrl)sess).notifyClientRequest(keepAlive);
+		((SessionCtrl) sess).notifyClientRequest(keepAlive);
 
-//		if (log.isDebugEnabled()) log.debug("AU request: "+aureqs);
-		final Execution exec = 
-			new ExecutionImpl(getServletContext(), request, response, desktop, null);
+		//		if (log.isDebugEnabled()) log.debug("AU request: "+aureqs);
+		final Execution exec = new ExecutionImpl(getServletContext(), request, response, desktop, null);
 		if (sid != null)
-			((ExecutionCtrl)exec).setRequestId(sid);
+			((ExecutionCtrl) exec).setRequestId(sid);
 
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(compress);
@@ -628,15 +623,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @since 5.0.3
 	 */
 	protected Desktop getDesktop(Session sess, String dtid) {
-		return ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktopIfAny(dtid);
+		return ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktopIfAny(dtid);
 	}
 
 	/**
 	 * @param wapp the Web application (or null if not available yet)
 	 */
-	private void sessionTimeout(HttpServletRequest request,
-	HttpServletResponse response, WebApp wapp, String dtid, boolean compress)
-	throws ServletException, IOException {
+	private void sessionTimeout(HttpServletRequest request, HttpServletResponse response, WebApp wapp, String dtid,
+			boolean compress) throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null) {
 			//B65-ZK-2464 : Possible XSS Vulnerability in HTTP Header
@@ -653,9 +647,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.open(request, response);
 		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			final String deviceType = getDeviceType(request);
-			URIInfo ui = wapp != null ? wapp.getConfiguration()
-				.getTimeoutURI(deviceType): null;
-			String uri = ui != null ? ui.uri: null;
+			URIInfo ui = wapp != null ? wapp.getConfiguration().getTimeoutURI(deviceType) : null;
+			String uri = ui != null ? ui.uri : null;
 			out.write(new AuConfirmClose(null)); // Bug: B50-3147382
 			final AuResponse resp;
 			if (uri != null) {
@@ -667,9 +660,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				dtid = XMLs.encodeText(dtid); // Fix ZK-1862 security issue
 				if (msg != null && msg.startsWith("label:")) {
 					final String key;
-					msg = Labels.getLabel(key = msg.substring(6), new Object[] {dtid});
+					msg = Labels.getLabel(key = msg.substring(6), new Object[] { dtid });
 					if (msg == null)
-						log.warn("Label not found, "+key);
+						log.warn("Label not found, " + key);
 				}
 				if (msg == null)
 					msg = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid);
@@ -687,7 +680,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				return Devices.getDeviceByClient(agt).getType();
 			} catch (Throwable ex) {
-				log.warn("Unknown device for "+agt);
+				log.warn("Unknown device for " + agt);
 			}
 		}
 		return "ajax";
@@ -700,29 +693,25 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @return the recovered desktop, or null if failed to recover
 	 * @since 5.0.3
 	 */
-	protected Desktop recoverDesktop(Session sess,
-	HttpServletRequest request, HttpServletResponse response,
-	WebAppCtrl wappc, String dtid) {
+	protected Desktop recoverDesktop(Session sess, HttpServletRequest request, HttpServletResponse response,
+			WebAppCtrl wappc, String dtid) {
 		final FailoverManager failover = wappc.getFailoverManager();
 		if (failover != null) {
 			Desktop desktop = null;
 			final ServletContext ctx = getServletContext();
 			try {
 				if (failover.isRecoverable(sess, dtid)) {
-					desktop = WebManager.getWebManager(ctx)
-						.getDesktop(sess, request, response, null, true);
+					desktop = WebManager.getWebManager(ctx).getDesktop(sess, request, response, null, true);
 					if (desktop == null) //forward or redirect
 						throw new IllegalStateException("sendRediect or forward not allowed in recovering");
 
-					wappc.getUiEngine().execRecover(
-						new ExecutionImpl(ctx, request, response, desktop, null),
-						failover);
+					wappc.getUiEngine().execRecover(new ExecutionImpl(ctx, request, response, desktop, null), failover);
 					return desktop; //success
 				}
 			} catch (Throwable ex) {
-				log.error("Unable to recover "+dtid, ex);
+				log.error("Unable to recover " + dtid, ex);
 				if (desktop != null)
-					((DesktopCtrl)desktop).recoverDidFail(ex);
+					((DesktopCtrl) desktop).recoverDidFail(ex);
 			}
 		}
 		return null;
@@ -730,9 +719,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 	/** Generates a response for an error message.
 	 */
-	private static void responseError(HttpServletRequest request,
-	HttpServletResponse response, String errmsg)
-	throws IOException {
+	private static void responseError(HttpServletRequest request, HttpServletResponse response, String errmsg)
+			throws IOException {
 		//Don't use sendError because Browser cannot handle UTF-8
 		AuWriter out = AuWriters.newInstance().open(request, response);
 		out.write(new AuAlert(errmsg, true));
@@ -740,41 +728,44 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 
 	private static final AuDecoder getAuDecoder(WebApp wapp) {
-		AuDecoder audec = wapp != null ? ((WebAppCtrl)wapp).getAuDecoder(): null;
-		return audec != null ? audec: _audec;
+		AuDecoder audec = wapp != null ? ((WebAppCtrl) wapp).getAuDecoder() : null;
+		return audec != null ? audec : _audec;
 	}
+
 	private static final AuDecoder _audec = new AuDecoder() {
 		public String getDesktopId(Object request) {
-			return ((HttpServletRequest)request).getParameter("dtid");
+			return ((HttpServletRequest) request).getParameter("dtid");
 		}
+
 		public String getFirstCommand(Object request) {
-			return ((HttpServletRequest)request).getParameter("cmd.0");
+			return ((HttpServletRequest) request).getParameter("cmd.0");
 		}
+
 		@SuppressWarnings("unchecked")
 		public List<AuRequest> decode(Object request, Desktop desktop) {
 			final List<AuRequest> aureqs = new LinkedList<AuRequest>();
-			final HttpServletRequest hreq = (HttpServletRequest)request;
+			final HttpServletRequest hreq = (HttpServletRequest) request;
 			for (int j = 0;; ++j) {
-				final String cmdId = hreq.getParameter("cmd_"+j);
+				final String cmdId = hreq.getParameter("cmd_" + j);
 				if (cmdId == null)
 					break;
 
-				final String uuid = hreq.getParameter("uuid_"+j);
-				final String data = hreq.getParameter("data_"+j);
-				final Map<String, Object> decdata = (Map)JSONValue.parse(data);
-				aureqs.add(uuid == null || uuid.length() == 0 ? 
-					new AuRequest(desktop, cmdId, decdata):
-					new AuRequest(desktop, uuid, cmdId, decdata));
+				final String uuid = hreq.getParameter("uuid_" + j);
+				final String data = hreq.getParameter("data_" + j);
+				final Map<String, Object> decdata = (Map) JSONValue.parse(data);
+				aureqs.add(uuid == null || uuid.length() == 0 ? new AuRequest(desktop, cmdId, decdata)
+						: new AuRequest(desktop, uuid, cmdId, decdata));
 			}
 			return aureqs;
 		}
+
 		public boolean isIgnorable(Object request, WebApp wapp) {
-			final HttpServletRequest hreq = (HttpServletRequest)request;
+			final HttpServletRequest hreq = (HttpServletRequest) request;
 			for (int j = 0;; ++j) {
-				if (hreq.getParameter("cmd_"+j) == null)
+				if (hreq.getParameter("cmd_" + j) == null)
 					break;
 
-				final String opt = hreq.getParameter("opt_"+j);
+				final String opt = hreq.getParameter("opt_" + j);
 				if (opt == null || opt.indexOf("i") < 0)
 					return false; //not ignorable
 			}

@@ -38,7 +38,7 @@ public class ShadowInfo extends BranchInfo {
 	private AnnotationMap _annots;
 	//F80 - store subtree's binder annotation count
 	private boolean _hasBindingAnnotation = false;
-	
+
 	/** Creates a shadow.
 	 *
 	 * @param parent the parent node (never null)
@@ -88,13 +88,12 @@ public class ShadowInfo extends BranchInfo {
 	 * @param loc the location information of the annotation in
 	 * the document, or null if not available.
 	 */
-	public void addAnnotation(String propName, String annotName,
-	Map<String, String[]> annotAttrs, Location loc) {
+	public void addAnnotation(String propName, String annotName, Map<String, String[]> annotAttrs, Location loc) {
 		if (_annots == null)
 			_annots = new AnnotationMap();
 		_annots.addAnnotation(propName, annotName, annotAttrs, loc);
 	}
-	
+
 	/** Applies the custom attributes.
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
@@ -138,7 +137,7 @@ public class ShadowInfo extends BranchInfo {
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			ComponentsCtrl.setCurrentInfo((ComponentInfo)null);
+			ComponentsCtrl.setCurrentInfo((ComponentInfo) null);
 		}
 		return comp;
 	}
@@ -149,12 +148,12 @@ public class ShadowInfo extends BranchInfo {
 	public LanguageDefinition getLanguageDefinition() {
 		return _compdef.getLanguageDefinition();
 	}
+
 	/** Returns the component definition, or null if it is PageDefinition.
 	 */
 	public ComponentDefinition getComponentDefinition() {
 		return _compdef;
 	}
-
 
 	/** Returns a readonly list of properties ({@link Property}) (never null).
 	 */
@@ -162,9 +161,10 @@ public class ShadowInfo extends BranchInfo {
 		if (_props != null)
 			return _props;
 		return Collections.emptyList();
-			//it is better to protect with Collections.unmodifiableList
-			//but for better performance...
+		//it is better to protect with Collections.unmodifiableList
+		//but for better performance...
 	}
+
 	/** Adds a property initializer.
 	 * It will initialize a component when created with this info.
 	 * @param name the member name. The component must have a valid setter
@@ -187,7 +187,7 @@ public class ShadowInfo extends BranchInfo {
 	 */
 	public void appendChild(NodeInfo child) {
 		if (!((child instanceof ShadowInfo) || (child instanceof TemplateInfo)))
-			throw new IllegalStateException("Only accept template and shadow element to be a child of "+this);
+			throw new IllegalStateException("Only accept template and shadow element to be a child of " + this);
 		super.appendChild(child);
 	}
 
@@ -195,7 +195,7 @@ public class ShadowInfo extends BranchInfo {
 	public String toString() {
 		final StringBuffer sb = new StringBuffer(40).append("[shadow element(").append(_tag).append(")");
 		if (_props != null)
-			for (Property name: _props)
+			for (Property name : _props)
 				sb.append(' ').append(name.getName());
 		return sb.append(']').toString();
 	}
@@ -204,9 +204,11 @@ public class ShadowInfo extends BranchInfo {
 	public boolean hasBindingAnnotation() {
 		return _hasBindingAnnotation;
 	}
+
 	public void enableBindingAnnotation() {
 		this._hasBindingAnnotation = true;
 	}
+
 	public void disableBindingAnnotation() {
 		this._hasBindingAnnotation = false;
 	}

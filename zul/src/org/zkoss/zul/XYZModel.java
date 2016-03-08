@@ -23,7 +23,7 @@ package org.zkoss.zul;
  * @see Chart
  * @see SimpleXYModel
  * @since 3.5.0
- */	
+ */
 public interface XYZModel extends XYModel {
 
 	/**
@@ -39,7 +39,7 @@ public interface XYZModel extends XYModel {
 	 * @param x the x value.
 	 * @param y the y value.
 	 * @param z the z value.
-	 */	
+	 */
 	public void addValue(Comparable<?> series, Number x, Number y, Number z);
 
 	/**
@@ -50,7 +50,7 @@ public interface XYZModel extends XYModel {
 	 * @param z the z value.
 	 * @param index the data index.
 	 * @since 5.0.0
-	 */	
+	 */
 	public void addValue(Comparable<?> series, Number x, Number y, Number z, int index);
 
 	/**
@@ -61,6 +61,6 @@ public interface XYZModel extends XYModel {
 	 * @param z the z value.
 	 * @param index the data index.
 	 * @since 5.0.0
-	 */	
+	 */
 	public void setValue(Comparable<?> series, Number x, Number y, Number z, int index);
-}	
+}

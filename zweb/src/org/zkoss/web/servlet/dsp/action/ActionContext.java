@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.action;
 
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 
 import org.zkoss.web.servlet.dsp.DspException;
@@ -43,16 +43,19 @@ public interface ActionContext {
 	 * {@link #SESSION_SCOPE} and {@link #APPLICATION_SCOPE}.
 	 */
 	public Object getAttribute(String name, int scope);
+
 	/** Sets the attribute of the specified scope.
 	 * @param scope one of {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE},
 	 * {@link #SESSION_SCOPE} and {@link #APPLICATION_SCOPE}.
 	 */
 	public void setAttribute(String name, Object value, int scope);
+
 	/** Removes the attribute of the specified scope.
 	 * @param scope one of {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE},
 	 * {@link #SESSION_SCOPE} and {@link #APPLICATION_SCOPE}.
 	 */
 	public void removeAttribute(String name, int scope);
+
 	/** Finds the attribute from page, request, session to application scope
 	 */
 	public Object findAttribute(String name);
@@ -64,6 +67,7 @@ public interface ActionContext {
 	/** Returns the current output.
 	 */
 	public Writer getOut() throws IOException;
+
 	/** Returns the parent action, or null if no parent at all.
 	 */
 	public Action getParent();
@@ -72,8 +76,8 @@ public interface ActionContext {
 	 *
 	 * @param out the output. If null, {@link #getOut} is assumed.
 	 */
-	public void renderFragment(Writer out)
-	throws DspException, IOException;
+	public void renderFragment(Writer out) throws DspException, IOException;
+
 	/** Includes the specified URI and render the result to the specified
 	 * output.
 	 *
@@ -84,8 +88,7 @@ public interface ActionContext {
 	 * @param params a map of parameters, or null to ignore.
 	 * The map is passed thru the request attribute called arg.
 	 */
-	public void include(String uri, Map<?,?> params)
-	throws DspException, IOException;
+	public void include(String uri, Map<?, ?> params) throws DspException, IOException;
 
 	/** Returns whether this page is included.
 	 * @since 3.0.6

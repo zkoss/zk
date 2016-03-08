@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
@@ -110,40 +111,41 @@ public class Combobox extends Textbox {
 	private ListModel<?> _model;
 	/** The submodel used if _model is ListSubModel. */
 	private Object[] _subModel;
-	private ComboitemRenderer<?>_renderer;
+	private ComboitemRenderer<?> _renderer;
 	private transient ListDataListener _dataListener;
 	private transient EventListener<InputEvent> _eventListener;
 	/**Used to detect whether to sync Comboitem's index later. */
 	private boolean _syncItemIndicesLater;
 
 	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
-	
+
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
-		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
+		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
 	public Combobox() {
 	}
+
 	public Combobox(String value) throws WrongValueException {
 		this();
 		setValue(value);
 	}
-	
+
 	protected String coerceToString(Object value) {
 		final Constraint constr = getConstraint();
 		final String val = super.coerceToString(value);
-		if (val.length() > 0 && constr != null && 
-				constr instanceof SimpleConstraint && (((SimpleConstraint)constr)
-						.getFlags() & SimpleConstraint.STRICT) != 0) {
+		if (val.length() > 0 && constr != null && constr instanceof SimpleConstraint
+				&& (((SimpleConstraint) constr).getFlags() & SimpleConstraint.STRICT) != 0) {
 			for (Iterator<Comboitem> it = getItems().iterator(); it.hasNext();) {
-				final String label = ((Comboitem)it.next()).getLabel();
-				if(val.equalsIgnoreCase(label))
+				final String label = ((Comboitem) it.next()).getLabel();
+				if (val.equalsIgnoreCase(label))
 					return label;
 			}
 		}
 		return val;
 	}
+
 	//-- ListModel dependent codes --//
 	/** Returns the list model associated with this combobox, or null
 	 * if this combobox is not associated with any list data model.
@@ -154,8 +156,9 @@ public class Combobox extends Textbox {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> ListModel<T> getModel() {
-		return (ListModel)_model;
+		return (ListModel) _model;
 	}
+
 	/** Sets the list model associated with this combobox.
 	 * If a non-null model is assigned, no matter whether it is the same as
 	 * the previous, it will always cause re-render.
@@ -168,21 +171,22 @@ public class Combobox extends Textbox {
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
 			if (!(model instanceof Selectable))
-				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+				throw new UiException(model.getClass() + " must implement " + Selectable.class);
 
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 				}
 				// ZK-1702: do not clear Comboitems if using Data Binding 1
-				if (_model != null && !_model.getClass().getName().equals("org.zkoss.zkplus.databind.BindingListModelList")) {
+				if (_model != null
+						&& !_model.getClass().getName().equals("org.zkoss.zkplus.databind.BindingListModelList")) {
 					// Bug B60-ZK-1202.zul
 					// Remove current items anyway, when changing models
 					if (!getItems().isEmpty()) {
 						getItems().clear();
 					}
 				}
-				
+
 				_model = model;
 				_subModel = null; //clean up (generated later)
 				initDataListener();
@@ -202,11 +206,13 @@ public class Combobox extends Textbox {
 				removeEventListener(Events.ON_CHANGING, _eventListener);
 			_model = null;
 			_subModel = null;
-			if (!getItems().isEmpty()) getItems().clear();
+			if (!getItems().isEmpty())
+				getItems().clear();
 		}
 	}
 
 	private int INVALIDATE_THRESHOLD = -1;
+
 	private void initDataListener() {
 		if (INVALIDATE_THRESHOLD == -1) {
 			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this, "org.zkoss.zul.invalidateThreshold", 10, true);
@@ -216,11 +222,12 @@ public class Combobox extends Textbox {
 				public void onChange(ListDataEvent event) {
 					int type = event.getType();
 					if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
-							&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED)) return;
+							&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))
+						return;
 					final ListModel _model = getModel();
 					final int newsz = _model.getSize(), oldsz = getItemCount();
 					int min = event.getIndex0(), max = event.getIndex1(), cnt;
-					
+
 					// Bug B30-1906748.zul
 					switch (type) {
 					case ListDataEvent.SELECTION_CHANGED:
@@ -236,15 +243,17 @@ public class Combobox extends Textbox {
 							return;
 						if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !isOpen())//ZK-2704: don't invalidate when the combobox is open
 							invalidate();
-								//Also better performance (outer better than remove a lot)
+						//Also better performance (outer better than remove a lot)
 						if (min < 0)
-							if (max < 0) min = 0;
-							else min = max - cnt + 1;
-						if (min > oldsz) min = oldsz;
+							if (max < 0)
+								min = 0;
+							else
+								min = max - cnt + 1;
+						if (min > oldsz)
+							min = oldsz;
 
 						final Renderer renderer = new Renderer();
-						final Component next =
-							min < oldsz ? getItemAtIndex(min): null;
+						final Component next = min < oldsz ? getItemAtIndex(min) : null;
 						int index = min;
 						try {
 							ComboitemRenderer cirenderer = null;
@@ -267,13 +276,16 @@ public class Combobox extends Textbox {
 							throw new UiException("Removal causes a larger list?");
 						if (cnt == 0) //no change, nothing to do here
 							return;
-						if (min >= 0) max = min + cnt - 1;
-						else if (max < 0) max = cnt - 1; //0 ~ cnt - 1			
-						if (max > oldsz - 1) max = oldsz - 1;
+						if (min >= 0)
+							max = min + cnt - 1;
+						else if (max < 0)
+							max = cnt - 1; //0 ~ cnt - 1			
+						if (max > oldsz - 1)
+							max = oldsz - 1;
 
 						if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !isOpen())//ZK-2704: don't invalidate when the combobox is open
 							invalidate();
-								//Also better performance (outer better than remove a lot)
+						//Also better performance (outer better than remove a lot)
 
 						//detach from end (due to groupfoot issue)
 						Component comp = getItemAtIndex(max);
@@ -296,12 +308,13 @@ public class Combobox extends Textbox {
 							postOnInitRender(event.getValue());
 					}
 				}
-		};
+			};
 
 		_model.addListDataListener(_dataListener);
 		if (_model instanceof ListSubModel)
 			addEventListener(Events.ON_CHANGING, _eventListener);
 	}
+
 	private void doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
 		if (smodel.isSelectionEmpty()) {
@@ -310,12 +323,11 @@ public class Combobox extends Textbox {
 			return;
 		}
 
-		if (_selItem != null
-		&& smodel.isSelected(getElementAt(_selItem.getIndex())))
+		if (_selItem != null && smodel.isSelected(getElementAt(_selItem.getIndex())))
 			return; //nothing changed
 
 		int j = 0;
-		for (final Comboitem item: getItems()) {
+		for (final Comboitem item : getItems()) {
 			if (smodel.isSelected(getElementAt(j++))) {
 				setSelectedItem(item);
 				return;
@@ -331,7 +343,7 @@ public class Combobox extends Textbox {
 			//(though it could be wrong too -- at least less obvious to users)
 			final Object selObj = smodel.getSelection().iterator().next();
 			if (selObj instanceof String || selObj == null) {
-				setValue((String)selObj);
+				setValue((String) selObj);
 				postOnInitRender(null); //cause Comboitem to be generated
 			}
 			return;
@@ -339,12 +351,14 @@ public class Combobox extends Textbox {
 
 		//don't call setSelectedItem(null) either. or, it will clear _value
 	}
+
 	private Object getElementAt(int index) {
-		return _subModel != null ? _subModel[index]: _model.getElementAt(index);
+		return _subModel != null ? _subModel[index] : _model.getElementAt(index);
 	}
+
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {
-		return (Selectable<Object>)_model;
+		return (Selectable<Object>) _model;
 	}
 
 	/** Returns the renderer to render each row, or null if the default
@@ -353,9 +367,9 @@ public class Combobox extends Textbox {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> ComboitemRenderer<T> getItemRenderer() {
-		return (ComboitemRenderer)_renderer;
+		return (ComboitemRenderer) _renderer;
 	}
-	
+
 	/** Sets the renderer which is used to render each row
 	 * if {@link #getModel} is not null.
 	 *
@@ -370,29 +384,29 @@ public class Combobox extends Textbox {
 	public void setItemRenderer(ComboitemRenderer<?> renderer) {
 		_renderer = renderer;
 	}
-	
+
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
 	 *@since 3.0.2
 	 */
 	@SuppressWarnings("rawtypes")
-	public void setItemRenderer(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-	InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setItemRenderer(String clsnm) throws ClassNotFoundException, NoSuchMethodException,
+			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
-			setItemRenderer((ComboitemRenderer)Classes.newInstanceByThread(clsnm));
+			setItemRenderer((ComboitemRenderer) Classes.newInstanceByThread(clsnm));
 	}
-	
+
 	/** Synchronizes the combobox to be consistent with the specified model.
 	 */
 	private ListModel<?> syncModel(Object index) {
 		ComboitemRenderer<?> renderer = null;
-		final ListModel<?> subset = _model instanceof ListSubModel ? 
-			((ListSubModel<?>)_model).getSubModel(index, -1) : _model;
+		final ListModel<?> subset = _model instanceof ListSubModel ? ((ListSubModel<?>) _model).getSubModel(index, -1)
+				: _model;
 		final int newsz = subset.getSize();
 
-		if (!getItems().isEmpty()) getItems().clear();
-		
+		if (!getItems().isEmpty())
+			getItems().clear();
+
 		for (int j = 0; j < newsz; ++j) {
 			if (renderer == null)
 				renderer = getRealRenderer();
@@ -400,12 +414,12 @@ public class Combobox extends Textbox {
 		}
 		return subset;
 	}
-	
+
 	/** Creates an new and unloaded Comboitem. */
 	private Comboitem newUnloadedItem(ComboitemRenderer<?> renderer) {
 		Comboitem item = null;
 		if (renderer instanceof ComboitemRendererExt)
-			item = ((ComboitemRendererExt)renderer).newComboitem(this);
+			item = ((ComboitemRendererExt) renderer).newComboitem(this);
 
 		if (item == null) {
 			item = new Comboitem();
@@ -413,25 +427,23 @@ public class Combobox extends Textbox {
 		}
 		return item;
 	}
-	
+
 	/** Handles a private event, onInitRender. It is used only for
 	 * implementation, and you rarely need to invoke it explicitly.
 	 * @since 3.0.2
 	 */
 	@SuppressWarnings("rawtypes")
 	public void onInitRender(Event data) {
-  		//Bug #2010389
+		//Bug #2010389
 		removeAttribute(ATTR_ON_INIT_RENDER); //clear syncModel flag
 		final Renderer renderer = new Renderer();
-		final List<Object> subModel =
-			_model instanceof ListSubModel ? new ArrayList<Object>(): null;
-		final ListModel subset = syncModel(data.getData() != null ? 
-			data.getData() : getRawText());
+		final List<Object> subModel = _model instanceof ListSubModel ? new ArrayList<Object>() : null;
+		final ListModel subset = syncModel(data.getData() != null ? data.getData() : getRawText());
 		try {
 			int pgsz = subset.getSize(), ofs = 0, j = 0;
-			for (Comboitem item = getItems().size() <= ofs ? null: getItems().get(ofs), nxt;
-			j < pgsz && item != null; ++j, item = nxt) {
-				nxt = (Comboitem)item.getNextSibling(); //store it first
+			for (Comboitem item = getItems().size() <= ofs ? null : getItems().get(ofs), nxt; j < pgsz
+					&& item != null; ++j, item = nxt) {
+				nxt = (Comboitem) item.getNextSibling(); //store it first
 				final int index = j + ofs;
 				final Object value = subset.getElementAt(index);
 				if (subModel != null)
@@ -445,15 +457,15 @@ public class Combobox extends Textbox {
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
+		Events.postEvent("onInitRenderLater", this, null); // notify databinding load-when. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the combobox when items have been rendered. 
 		removeAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED);
 	}
-	
+
 	private void postOnInitRender(String idx) {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER) == null) {
-	  		//Bug #2010389
+			//Bug #2010389
 			setAttribute(ATTR_ON_INIT_RENDER, Boolean.TRUE); //flag syncModel
 			Events.postEvent("onInitRender", this, idx);
 		}
@@ -462,82 +474,83 @@ public class Combobox extends Textbox {
 	@SuppressWarnings("rawtypes")
 	private static final ComboitemRenderer _defRend = new ComboitemRenderer() {
 		public void render(final Comboitem item, final Object data, final int index) {
-			final Combobox cb = (Combobox)item.getParent();
+			final Combobox cb = (Combobox) item.getParent();
 			final Template tm = cb.getTemplate("model");
 			if (tm == null) {
 				item.setLabel(Objects.toString(data));
 				item.setValue(data);
 			} else {
-				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(item.getParent(), item,
-					new VariableResolver() {
-						public Object resolveVariable(String name) {
-							if ("each".equals(name)) {
-								return data;
-							} else if ("forEachStatus".equals(name)) {
-								return new ForEachStatus() {
-									
-									public ForEachStatus getPrevious() {
-										return null;
-									}
-									
-									public Object getEach() {
-										return getCurrent();
-									}
-									
-									public int getIndex() {
-										return index;
-									}
-									
-									public Integer getBegin() {
-										return 0;
-									}
-									
-									public Integer getEnd() {
-										return cb.getModel().getSize();
-									}
+				final Component[] items = ShadowElementsCtrl
+						.filterOutShadows(tm.create(item.getParent(), item, new VariableResolver() {
+					public Object resolveVariable(String name) {
+						if ("each".equals(name)) {
+							return data;
+						} else if ("forEachStatus".equals(name)) {
+							return new ForEachStatus() {
 
-									public Object getCurrent() {
-										return data;
-									}
+								public ForEachStatus getPrevious() {
+									return null;
+								}
 
-									public boolean isFirst() {
-										return getCount() == 1;
-									}
+								public Object getEach() {
+									return getCurrent();
+								}
 
-									public boolean isLast() {
-										return getIndex() + 1 == getEnd();
-									}
+								public int getIndex() {
+									return index;
+								}
 
-									public Integer getStep() {
-										return null;
-									}
+								public Integer getBegin() {
+									return 0;
+								}
 
-									public int getCount() {
-										return getIndex() + 1;
-									}
-								};
-							} else {
-								return null;
-							}
+								public Integer getEnd() {
+									return cb.getModel().getSize();
+								}
+
+								public Object getCurrent() {
+									return data;
+								}
+
+								public boolean isFirst() {
+									return getCount() == 1;
+								}
+
+								public boolean isLast() {
+									return getIndex() + 1 == getEnd();
+								}
+
+								public Integer getStep() {
+									return null;
+								}
+
+								public int getCount() {
+									return getIndex() + 1;
+								}
+							};
+						} else {
+							return null;
 						}
-					}, null));
+					}
+				}, null));
 				if (items.length != 1)
-					throw new UiException("The model template must have exactly one item, not "+items.length);
+					throw new UiException("The model template must have exactly one item, not " + items.length);
 
-				final Comboitem nci = (Comboitem)items[0];
+				final Comboitem nci = (Comboitem) items[0];
 				if (nci.getValue() == null) //template might set it
 					nci.setValue(data);
 				item.setAttribute(Attributes.MODEL_RENDERAS, nci);
-					//indicate a new item is created to replace the existent one
+				//indicate a new item is created to replace the existent one
 				item.detach();
 			}
 		}
 	};
+
 	/** Returns the renderer used to render items.
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> ComboitemRenderer<T> getRealRenderer() {
-		return _renderer != null ? _renderer: _defRend;
+		return _renderer != null ? _renderer : _defRend;
 	}
 
 	/** Used to render comboitem if _model is specified. */
@@ -549,11 +562,11 @@ public class Combobox extends Textbox {
 		private Renderer() {
 			_renderer = getRealRenderer();
 		}
+
 		@SuppressWarnings("unchecked")
-		private void render(Comboitem item, Object value, int index)
-		throws Throwable {
+		private void render(Comboitem item, Object value, int index) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
-				((RendererCtrl)_renderer).doTry();
+				((RendererCtrl) _renderer).doTry();
 				_ctrled = true;
 			}
 
@@ -561,30 +574,31 @@ public class Combobox extends Textbox {
 				try {
 					_renderer.render(item, value, index);
 				} catch (AbstractMethodError ex) {
-					final Method m = _renderer.getClass()
-						.getMethod("render", new Class<?>[] {Comboitem.class, Object.class});
+					final Method m = _renderer.getClass().getMethod("render",
+							new Class<?>[] { Comboitem.class, Object.class });
 					m.setAccessible(true);
-					m.invoke(_renderer, new Object[] {item, value});
+					m.invoke(_renderer, new Object[] { item, value });
 				}
 				Object v = item.getAttribute(Attributes.MODEL_RENDERAS);
 				if (v != null) //a new item is created to replace the existent one
-					item = (Comboitem)v;
+					item = (Comboitem) v;
 			} catch (Throwable ex) {
 				try {
 					item.setLabel(Exceptions.getMessage(ex));
 				} catch (Throwable t) {
 					log.error("", t);
-				}			
+				}
 				throw ex;
 			}
 			if (getSelectableModel().isSelected(value))
 				setSelectedItem(item);
 			_rendered = true;
 		}
+
 		private void doCatch(Throwable ex) {
 			if (_ctrled) {
 				try {
-					((RendererCtrl)_renderer).doCatch(ex);
+					((RendererCtrl) _renderer).doCatch(ex);
 				} catch (Throwable t) {
 					throw UiException.Aide.wrap(t);
 				}
@@ -592,12 +606,13 @@ public class Combobox extends Textbox {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
+
 		private void doFinally() {
 			if (_ctrled)
-				((RendererCtrl)_renderer).doFinally();
+				((RendererCtrl) _renderer).doFinally();
 		}
 	}
-	
+
 	/** Returns whether to automatically drop the list if users is changing
 	 * this text box.
 	 * <p>Default: false.
@@ -605,6 +620,7 @@ public class Combobox extends Textbox {
 	public boolean isAutodrop() {
 		return _autodrop;
 	}
+
 	/** Sets whether to automatically drop the list if users is changing
 	 * this text box.
 	 */
@@ -614,6 +630,7 @@ public class Combobox extends Textbox {
 			smartUpdate("autodrop", autodrop);
 		}
 	}
+
 	/** Returns whether to automatically complete this text box
 	 * by matching the nearest item ({@link Comboitem}.
 	 * It is also known as auto-type-ahead.
@@ -632,6 +649,7 @@ public class Combobox extends Textbox {
 	public boolean isAutocomplete() {
 		return _autocomplete;
 	}
+
 	/** Sets whether to automatically complete this text box
 	 * by matching the nearest item ({@link Comboitem}.
 	 */
@@ -650,6 +668,7 @@ public class Combobox extends Textbox {
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Drops down or closes the list of combo items ({@link Comboitem}.
 	 * only works while visible
 	 * @since 3.0.1
@@ -660,11 +679,14 @@ public class Combobox extends Textbox {
 		if (_open != open) {
 			_open = open;
 			if (isVisible()) {
-				if (open) open();
-				else close();
+				if (open)
+					open();
+				else
+					close();
 			}
 		}
 	}
+
 	/** Drops down the list of combo items ({@link Comboitem}.
 	 * It is the same as setOpen(true).
 	 *
@@ -673,6 +695,7 @@ public class Combobox extends Textbox {
 	public void open() {
 		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
+
 	/** Closes the list of combo items ({@link Comboitem} if it was
 	 * dropped down.
 	 * It is the same as setOpen(false).
@@ -680,7 +703,7 @@ public class Combobox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public void close() {
-		response("open", new AuInvoke(this, "setOpen", false));//don't use smartUpdate
+		response("open", new AuInvoke(this, "setOpen", false)); //don't use smartUpdate
 	}
 
 	/** Returns whether the button (on the right of the textbox) is visible.
@@ -689,6 +712,7 @@ public class Combobox extends Textbox {
 	public boolean isButtonVisible() {
 		return _btnVisible;
 	}
+
 	/** Sets whether the button (on the right of the textbox) is visible.
 	 */
 	public void setButtonVisible(boolean visible) {
@@ -708,17 +732,19 @@ public class Combobox extends Textbox {
 	public List<Comboitem> getItems() {
 		return cast(getChildren());
 	}
+
 	/** Returns the number of items.
 	 */
 	public int getItemCount() {
 		return getItems().size();
 	}
+
 	/** Returns the item at the specified index.
 	 */
 	public Comboitem getItemAtIndex(int index) {
 		return getItems().get(index);
 	}
-	
+
 	/** Appends an item.
 	 */
 	public Comboitem appendItem(String label) {
@@ -726,6 +752,7 @@ public class Combobox extends Textbox {
 		item.setParent(this);
 		return item;
 	}
+
 	/**  Removes the child item in the list box at the given index.
 	 * @return the removed item.
 	 */
@@ -734,6 +761,7 @@ public class Combobox extends Textbox {
 		removeChild(item);
 		return item;
 	}
+
 	/** Returns the selected item.
 	 * @since 2.4.0
 	 */
@@ -742,7 +770,6 @@ public class Combobox extends Textbox {
 		return _selItem;
 	}
 
-	
 	/**  Deselects the currently selected items and selects the given item.
 	 * <p>Note: if the label of comboitem has the same more than one, the first 
 	 * comboitem will be selected at client side, it is a limitation of {@link Combobox}
@@ -751,13 +778,13 @@ public class Combobox extends Textbox {
 	 */
 	public void setSelectedItem(Comboitem item) {
 		if (item != null && item.getParent() != this)
-			throw new UiException("Not a child: "+item);
+			throw new UiException("Not a child: " + item);
 
 		if (item != _selItem) {
 			_selItem = item;
 			if (item != null) {
-                setValue(item.getLabel());
-                smartUpdate("selectedItemUuid_", item.getUuid());
+				setValue(item.getLabel());
+				smartUpdate("selectedItemUuid_", item.getUuid());
 			} else {
 				//Bug#2919037: don't call setRawValue(), or the error message will be cleared
 				if (_value != null && !"".equals(_value)) {
@@ -768,7 +795,7 @@ public class Combobox extends Textbox {
 			_lastCkVal = getValue();
 		}
 	}
-	
+
 	/** Deselects the currently selected items and selects
 	 * the item with the given index.
 	 * <p>Note: if the label of comboitem has the same more than one, the first 
@@ -778,13 +805,13 @@ public class Combobox extends Textbox {
 	 */
 	public void setSelectedIndex(int jsel) {
 		if (jsel >= getItemCount())
-			throw new UiException("Out of bound: "+jsel+" while size="+getItemCount());
-		if (jsel < -1) 
+			throw new UiException("Out of bound: " + jsel + " while size=" + getItemCount());
+		if (jsel < -1)
 			jsel = -1;
-		setSelectedItem(jsel >= 0 ? getItemAtIndex(jsel): null);
-			//Bug#2919037: setSelectedIndex(-1) shall unselect even with constraint
+		setSelectedItem(jsel >= 0 ? getItemAtIndex(jsel) : null);
+		//Bug#2919037: setSelectedIndex(-1) shall unselect even with constraint
 	}
-	
+
 	/** Returns the index of the selected item, or -1 if not selected.
 	 * @since 3.0.1
 	 */
@@ -798,15 +825,16 @@ public class Combobox extends Textbox {
 		if (multiline)
 			throw new UnsupportedOperationException("Combobox doesn't support multiline");
 	}
+
 	public void setRows(int rows) {
 		if (rows != 1)
-			throw new UnsupportedOperationException("Combobox doesn't support multiple rows, "+rows);
+			throw new UnsupportedOperationException("Combobox doesn't support multiple rows, " + rows);
 	}
-	
+
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
-	
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 *
@@ -818,13 +846,13 @@ public class Combobox extends Textbox {
 		public boolean shallBlock(AuRequest request) {
 			// B50-3316103: special case of readonly component: do not block onChange and onSelect
 			final String cmd = request.getCommand();
-			if(Events.ON_OPEN.equals(cmd))
+			if (Events.ON_OPEN.equals(cmd))
 				return false;
-			return !Components.isRealVisible(Combobox.this) || isDisabled() || 
-				(isReadonly() && Events.ON_CHANGING.equals(cmd));
+			return !Components.isRealVisible(Combobox.this) || isDisabled()
+					|| (isReadonly() && Events.ON_CHANGING.equals(cmd));
 		}
 	}
-	
+
 	private void syncSelectionToModel() {
 		if (_model != null) {
 			List<Object> selObjs = new ArrayList<Object>();
@@ -838,8 +866,8 @@ public class Combobox extends Textbox {
 	public String getZclass() {
 		return _zclass == null ? "z-combobox" : _zclass;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "autodrop", _autodrop);
@@ -847,9 +875,10 @@ public class Combobox extends Textbox {
 			renderer.render("autocomplete", false);
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
-        if (_selItem != null)
-            renderer.render("selectedItemUuid_", _selItem.getUuid());
+		if (_selItem != null)
+			renderer.render("selectedItemUuid_", _selItem.getUuid());
 	}
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link Textbox#service},
@@ -864,49 +893,50 @@ public class Combobox extends Textbox {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECT)) {
 			final Set<Comboitem> prevSelectedItems = new LinkedHashSet<Comboitem>();
-			Comboitem prevSeld = (Comboitem) request.getDesktop().getComponentByUuidIfAny((String)request.getData().get("prevSeld"));
+			Comboitem prevSeld = (Comboitem) request.getDesktop()
+					.getComponentByUuidIfAny((String) request.getData().get("prevSeld"));
 			// ZK-2089: should skip when selected item is null 
 			if (prevSeld != null)
 				prevSelectedItems.add(prevSeld);
-			SelectEvent<Comboitem, Object> evt = SelectEvent.getSelectEvent(request, 
+			SelectEvent<Comboitem, Object> evt = SelectEvent.getSelectEvent(request,
 					new SelectEvent.SelectedObjectHandler<Comboitem>() {
-				public Set<Object> getObjects(Set<Comboitem> items) {
-					if (items == null || items.isEmpty() || _model == null)
-						return null;
-					Set<Object> objs = new LinkedHashSet<Object>();
-					for (Comboitem i : items)
-						objs.add(_model.getElementAt(i.getIndex()));
-					return objs;
-				}
+						public Set<Object> getObjects(Set<Comboitem> items) {
+							if (items == null || items.isEmpty() || _model == null)
+								return null;
+							Set<Object> objs = new LinkedHashSet<Object>();
+							for (Comboitem i : items)
+								objs.add(_model.getElementAt(i.getIndex()));
+							return objs;
+						}
 
-				public Set<Comboitem> getPreviousSelectedItems() {
-					return prevSelectedItems;
-				}
-				
-				// in single selection, getPreviousSelectedItems() is same as getPreviousSelectedItems()
-				public Set<Comboitem> getUnselectedItems() {
-					return getPreviousSelectedItems();
-				}
+						public Set<Comboitem> getPreviousSelectedItems() {
+							return prevSelectedItems;
+						}
 
-				public Set<Object> getPreviousSelectedObjects() {
-					Set<Comboitem> items = getPreviousSelectedItems();
-					if (_model == null || items.size() < 1)
-						return null;
-					else {
-						Set<Object> s = new LinkedHashSet<Object>();
-						s.add(_model.getElementAt(((Comboitem)items.iterator().next()).getIndex()));
-						return s;
-					}
-				}
+						// in single selection, getPreviousSelectedItems() is same as getPreviousSelectedItems()
+						public Set<Comboitem> getUnselectedItems() {
+							return getPreviousSelectedItems();
+						}
 
-				// in single selection, getUnselectedObjects() is same as getPreviousSelectedObjects()
-				public Set<Object> getUnselectedObjects() {
-					return getPreviousSelectedObjects();
-				}
-			});
+						public Set<Object> getPreviousSelectedObjects() {
+							Set<Comboitem> items = getPreviousSelectedItems();
+							if (_model == null || items.size() < 1)
+								return null;
+							else {
+								Set<Object> s = new LinkedHashSet<Object>();
+								s.add(_model.getElementAt(((Comboitem) items.iterator().next()).getIndex()));
+								return s;
+							}
+						}
+
+						// in single selection, getUnselectedObjects() is same as getPreviousSelectedObjects()
+						public Set<Object> getUnselectedObjects() {
+							return getPreviousSelectedObjects();
+						}
+					});
 			Comboitem oldSel = _selItem;
 			Set<Comboitem> selItems = evt.getSelectedItems();
-			_selItem = selItems != null && !selItems.isEmpty() ? (Comboitem)selItems.iterator().next(): null;
+			_selItem = selItems != null && !selItems.isEmpty() ? (Comboitem) selItems.iterator().next() : null;
 			_lastCkVal = getValue(); //onChange is sent before onSelect
 
 			syncSelectionToModel();
@@ -918,7 +948,7 @@ public class Combobox extends Textbox {
 		} else if (cmd.equals(Events.ON_CHANGE)) {
 			super.service(request, everError);
 			// Bug ZK-1492: synchronize the input value to selection
-			 syncValueToSelection();
+			syncValueToSelection();
 		} else
 			super.service(request, everError);
 	}
@@ -926,19 +956,21 @@ public class Combobox extends Textbox {
 	//-- Component --//
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Comboitem))
-			throw new UiException("Unsupported child for Combobox: "+newChild);
+			throw new UiException("Unsupported child for Combobox: " + newChild);
 		super.beforeChildAdded(newChild, refChild);
 	}
-	
+
 	/** Childable. */
 	protected boolean isChildable() {
 		return true;
 	}
+
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 		_syncItemIndicesLater = true;
 		smartUpdate("repos", true);
 	}
+
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
 		_syncItemIndicesLater = true;
@@ -949,12 +981,12 @@ public class Combobox extends Textbox {
 		}
 		smartUpdate("repos", true);
 	}
-	
+
 	/*package*/ void syncItemIndices() { //called by Comboitem
 		if (_syncItemIndicesLater) {
 			_syncItemIndicesLater = false;
 			int j = 0;
-			for (final Comboitem item: getItems())
+			for (final Comboitem item : getItems())
 				item.setIndexDirectly(j++);
 		}
 	}
@@ -964,18 +996,20 @@ public class Combobox extends Textbox {
 		if (!Objects.equals(_lastCkVal, value)) {
 			_lastCkVal = value;
 			_selItem = null;
-			for (final Comboitem item: getItems()) {
+			for (final Comboitem item : getItems()) {
 				if (Objects.equals(value, item.getLabel())) {
 					_selItem = item;
 					break;
-				}					
+				}
 			}
 			syncSelectionToModel();
 		}
 	}
+
 	/*package*/ void schedSyncValueToSelection() {
 		_lastCkVal = null;
 	}
+
 	/*package*/ Comboitem getSelectedItemDirectly() {
 		return _selItem;
 	}
@@ -983,7 +1017,7 @@ public class Combobox extends Textbox {
 	//Cloneable//
 	@SuppressWarnings("rawtypes")
 	public Object clone() {
-		final Combobox clone = (Combobox)super.clone();
+		final Combobox clone = (Combobox) super.clone();
 		clone._selItem = null;
 		clone.schedSyncValueToSelection();
 		if (clone._model != null) {
@@ -998,16 +1032,15 @@ public class Combobox extends Textbox {
 		}
 		return clone;
 	}
-	
+
 	//	Serializable//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		schedSyncValueToSelection();
 		if (_model != null) {
 			initDataListener();
-			
+
 			// Map#Entry cannot be serialized, we have to restore them
 			if (_model instanceof ListModelMap) {
 				for (final Comboitem item : getItems()) {
@@ -1017,13 +1050,12 @@ public class Combobox extends Textbox {
 		}
 	}
 
-	
 	public void sessionWillPassivate(Page page) {
 		super.sessionWillPassivate(page);
 		willPassivate(_model);
 		willPassivate(_renderer);
 	}
-	
+
 	public void sessionDidActivate(Page page) {
 		super.sessionDidActivate(page);
 		didActivate(_model);
@@ -1032,6 +1064,7 @@ public class Combobox extends Textbox {
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+
 	static {
 		_properties.put("buttonVisible", new BooleanPropertyAccess() {
 			public void setValue(Component cmp, Boolean value) {

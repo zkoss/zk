@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.MutableInteger;
@@ -55,7 +56,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Radiogroup extends XulElement {
 	private static final Logger log = LoggerFactory.getLogger(Radiogroup.class);
-	
+
 	private static final String ZUL_RADIOGROUP_ON_INITRENDER = "zul.Radiogroup.ON_INITRENDER";
 	private String _orient = "horizontal";
 	/** The name of all child radio buttons. */
@@ -66,11 +67,11 @@ public class Radiogroup extends XulElement {
 	private ListModel<?> _model;
 	private RadioRenderer<?> _renderer;
 	private transient ListDataListener _dataListener;
-	
+
 	static {
-		addClientEvent(Radiogroup.class, Events.ON_CHECK, CE_IMPORTANT|CE_REPEAT_IGNORE);
+		addClientEvent(Radiogroup.class, Events.ON_CHECK, CE_IMPORTANT | CE_REPEAT_IGNORE);
 	}
-	
+
 	public Radiogroup() {
 		_name = genGroupName();
 	}
@@ -81,12 +82,13 @@ public class Radiogroup extends XulElement {
 	public String getOrient() {
 		return _orient;
 	}
+
 	/** Sets the orient.
 	 * @param orient either "horizontal" or "vertical".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
-			throw new WrongValueException("orient cannot be "+orient);
+			throw new WrongValueException("orient cannot be " + orient);
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
@@ -104,51 +106,55 @@ public class Radiogroup extends XulElement {
 		final List<Radio> items = new ArrayList<Radio>();
 		getItems0(this, items);
 		if (_externs != null)
-			for (Radio radio: _externs) {
+			for (Radio radio : _externs) {
 				if (!isRedudant(radio))
 					items.add(radio);
 			}
 		return items;
 	}
-	
+
 	private static void getItems0(Component comp, List<Radio> items) {
-		for (Component child: comp.getChildren()) {
+		for (Component child : comp.getChildren()) {
 			if (child instanceof Radio)
-				items.add((Radio)child);
+				items.add((Radio) child);
 			else if (!(child instanceof Radiogroup)) //skip nested radiogroup
 				getItems0(child, items);
 		}
 	}
+
 	/** Returns the radio button at the specified index.
 	 */
 	public Radio getItemAtIndex(int index) {
 		if (index < 0)
-			throw new IndexOutOfBoundsException("Wrong index: "+index);
+			throw new IndexOutOfBoundsException("Wrong index: " + index);
 
 		final MutableInteger cur = new MutableInteger(0);
 		Radio radio = getAt(this, cur, index);
 		if (radio != null)
 			return radio;
 		if (_externs != null)
-			for (Radio r: _externs) {
+			for (Radio r : _externs) {
 				if (!isRedudant(r) && cur.value++ == index)
 					return r;
 			}
-		throw new IndexOutOfBoundsException(index+" out of 0.."+(cur.value-1));
+		throw new IndexOutOfBoundsException(index + " out of 0.." + (cur.value - 1));
 	}
+
 	private static Radio getAt(Component comp, MutableInteger cur, int index) {
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
+			final Component child = (Component) it.next();
 			if (child instanceof Radio) {
 				if (cur.value++ == index)
-					return (Radio)child;
+					return (Radio) child;
 			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
 				Radio r = getAt(child, cur, index);
-				if (r != null) return r;
+				if (r != null)
+					return r;
 			}
 		}
 		return null;
 	}
+
 	private boolean isRedudant(Radio radio) {
 		for (Component p = radio; (p = p.getParent()) != null;)
 			if (p instanceof Radiogroup)
@@ -161,16 +167,17 @@ public class Radiogroup extends XulElement {
 	public int getItemCount() {
 		int sum = countItems(this);
 		if (_externs != null)
-			for (Radio radio: _externs) {
+			for (Radio radio : _externs) {
 				if (!isRedudant(radio))
 					++sum;
 			}
 		return sum;
 	}
+
 	private static int countItems(Component comp) {
 		int sum = 0;
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
+			final Component child = (Component) it.next();
 			if (child instanceof Radio)
 				++sum;
 			else if (!(child instanceof Radiogroup)) //skip nested radiogroup
@@ -184,11 +191,13 @@ public class Radiogroup extends XulElement {
 	public int getSelectedIndex() {
 		return _jsel;
 	}
+
 	/** Deselects all of the currently selected radio button and selects
 	 * the radio button with the given index.
 	 */
 	public void setSelectedIndex(int jsel) {
-		if (jsel < 0) jsel = -1;
+		if (jsel < 0)
+			jsel = -1;
 		if (_jsel != jsel) {
 			if (jsel < 0) {
 				Radio r = getSelectedItem();
@@ -199,11 +208,13 @@ public class Radiogroup extends XulElement {
 			}
 		}
 	}
+
 	/** Returns the selected radio button.
 	 */
 	public Radio getSelectedItem() {
-		return _jsel >= 0 ? getItemAtIndex(_jsel): null;
+		return _jsel >= 0 ? getItemAtIndex(_jsel) : null;
 	}
+
 	/**  Deselects all of the currently selected radio buttons and selects
 	 * the given radio button.
 	 */
@@ -212,7 +223,7 @@ public class Radiogroup extends XulElement {
 			setSelectedIndex(-1);
 		} else {
 			if (item.getRadiogroup() != this)
-				throw new UiException("Not a child: "+item);
+				throw new UiException("Not a child: " + item);
 			item.setSelected(true);
 		}
 	}
@@ -226,6 +237,7 @@ public class Radiogroup extends XulElement {
 		item.setParent(this);
 		return item;
 	}
+
 	/**  Removes the child radio button in the radio group at the given index.
 	 * @return the removed radio button.
 	 */
@@ -248,13 +260,15 @@ public class Radiogroup extends XulElement {
 	public String getName() {
 		return _name;
 	}
+
 	/** Sets the name of this group of radio buttons.
 	 * All child radio buttons shared the same name ({@link Radio#getName}).
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
 	 */
 	public void setName(String name) {
-		if (name != null && name.length() == 0) name = null;
+		if (name != null && name.length() == 0)
+			name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
 			smartUpdate("name", _name);
@@ -271,6 +285,7 @@ public class Radiogroup extends XulElement {
 			fixSelectedIndex();
 		}
 	}
+
 	/** Called when a radio is removed from this group.
 	 */
 	/*package*/ void fixOnRemove(Radio child) {
@@ -280,6 +295,7 @@ public class Radiogroup extends XulElement {
 			fixSelectedIndex();
 		}
 	}
+
 	/** Fix the selected index, _jsel, assuming there are no selected one
 	 * before (and excludes) j-the radio button.
 	 */
@@ -288,7 +304,7 @@ public class Radiogroup extends XulElement {
 		_jsel = fixSelIndex(this, cur);
 
 		if (_jsel < 0 && _externs != null)
-			for (Radio radio: _externs) {
+			for (Radio radio : _externs) {
 				if (!isRedudant(radio)) {
 					if (radio.isSelected()) {
 						_jsel = cur.value;
@@ -298,11 +314,12 @@ public class Radiogroup extends XulElement {
 				}
 			}
 	}
+
 	private static int fixSelIndex(Component comp, MutableInteger cur) {
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
+			final Component child = (Component) it.next();
 			if (child instanceof Radio) {
-				if (((Radio)child).isSelected())
+				if (((Radio) child).isSelected())
 					return cur.value;
 				++cur.value;
 			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
@@ -324,6 +341,7 @@ public class Radiogroup extends XulElement {
 		if (!isRedudant(radio))
 			fixOnAdd(radio);
 	}
+
 	/** Removes an external radio.
 	 */
 	/*package*/ boolean removeExternal(Radio radio) {
@@ -334,23 +352,21 @@ public class Radiogroup extends XulElement {
 		}
 		return false;
 	}
+
 	/** Generates the group name for child radio buttons.
 	 */
 	private String genGroupName() {
-		return Strings.encode(new StringBuffer(16).append("_pg"),
-			System.identityHashCode(this)).toString();
+		return Strings.encode(new StringBuffer(16).append("_pg"), System.identityHashCode(this)).toString();
 	}
-	
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (_name != null)
 			render(renderer, "name", _name);
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);
 	}
-	
-	
+
 	//-- ListModel dependent codes --//
 	/** Returns the list model associated with this radiogroup, or null
 	 * if this radiogroup is not associated with any list data model.
@@ -358,8 +374,9 @@ public class Radiogroup extends XulElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> ListModel<T> getModel() {
-		return (ListModel)_model;
+		return (ListModel) _model;
 	}
+
 	/** Sets the list model associated with this radiogroup.
 	 * If a non-null model is assigned, no matter whether it is the same as
 	 * the previous, it will always cause re-render.
@@ -372,13 +389,14 @@ public class Radiogroup extends XulElement {
 	public void setModel(ListModel<?> model) {
 		if (model != null) {
 			if (!(model instanceof Selectable))
-				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+				throw new UiException(model.getClass() + " must implement " + Selectable.class);
 
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 					//2012/1/11 TonyQ:Here we only clear children but not external radioss.
-				} else if (!getChildren().isEmpty()) getChildren().clear();
+				} else if (!getChildren().isEmpty())
+					getChildren().clear();
 				_model = model;
 				initDataListener();
 			}
@@ -393,12 +411,13 @@ public class Radiogroup extends XulElement {
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
 			_model = null;
-			if (!getChildren().isEmpty()) getChildren().clear();
+			if (!getChildren().isEmpty())
+				getChildren().clear();
 		}
 	}
-	
+
 	private void initDataListener() {
-		if (_dataListener == null){
+		if (_dataListener == null) {
 			_dataListener = new ListDataListener() {
 				public void onChange(ListDataEvent event) {
 					// Bug B30-1906748.zul
@@ -416,6 +435,7 @@ public class Radiogroup extends XulElement {
 
 		_model.addListDataListener(_dataListener);
 	}
+
 	private void doSelectionChanged() {
 		final Selectable<Object> smodel = getSelectableModel();
 		if (smodel.isSelectionEmpty()) {
@@ -428,7 +448,7 @@ public class Radiogroup extends XulElement {
 			return; //nothing changed
 
 		int j = 0;
-		for (final Radio item: getItems()) {
+		for (final Radio item : getItems()) {
 			if (smodel.isSelected(_model.getElementAt(j++))) {
 				setSelectedItem(item);
 				return;
@@ -436,34 +456,36 @@ public class Radiogroup extends XulElement {
 		}
 		setSelectedItem(null); //something wrong but be self-protected
 	}
+
 	@SuppressWarnings("unchecked")
 	private Selectable<Object> getSelectableModel() {
-		return (Selectable<Object>)_model;
+		return (Selectable<Object>) _model;
 	}
 
 	private void postOnInitRender(String idx) {
 		//20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ZUL_RADIOGROUP_ON_INITRENDER) == null) {
-	  		//Bug #2010389
+			//Bug #2010389
 			setAttribute(ZUL_RADIOGROUP_ON_INITRENDER, Boolean.TRUE); //flag syncModel
 			Events.postEvent("onInitRender", this, idx);
 		}
 	}
-	
+
 	/**
 	 * For model rendering
 	 * @param data
 	 */
 	@SuppressWarnings("rawtypes")
 	public void onInitRender(Event data) {
-  		//Bug #2010389
+		//Bug #2010389
 		removeAttribute(ZUL_RADIOGROUP_ON_INITRENDER); //clear syncModel flag
 		final Renderer renderer = new Renderer();
 		final ListModel subset = _model;
 		try {
-			if (!getChildren().isEmpty()) getChildren().clear();
+			if (!getChildren().isEmpty())
+				getChildren().clear();
 			int pgsz = subset.getSize(), ofs = 0;
-			for (int j = 0 ;j < pgsz ; ++j) {
+			for (int j = 0; j < pgsz; ++j) {
 				Radio item = new Radio();
 				item.applyProperties();
 				item.setParent(this);
@@ -472,7 +494,7 @@ public class Radiogroup extends XulElement {
 				renderer.render(item, value, index);
 				Object v = item.getAttribute(Attributes.MODEL_RENDERAS);
 				if (v != null) //a new item is created to replace the existent one
-					item = (Radio)v;
+					item = (Radio) v;
 				if (getSelectableModel().isSelected(value))
 					setSelectedItem(item);
 			}
@@ -481,8 +503,8 @@ public class Radiogroup extends XulElement {
 		} finally {
 			renderer.doFinally();
 		}
-		Events.postEvent("onInitRenderLater", this, null);// notify databinding load-when. 
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the combobox when items have been rendered. 
+		Events.postEvent("onInitRenderLater", this, null); // notify databinding load-when. 
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the combobox when items have been rendered. 
 	}
 
 	/**
@@ -497,23 +519,23 @@ public class Radiogroup extends XulElement {
 			getSelectableModel().setSelection(selObjs);
 		}
 	}
-	
+
 	/** Returns the renderer used to render items.
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> RadioRenderer<T> getRealRenderer() {
-		return _renderer != null ? _renderer: _defRend;
+		return _renderer != null ? _renderer : _defRend;
 	}
-	
+
 	/** Returns the renderer to render each radio, or null if the default
 	 * renderer is used.
 	 * @since 6.0.0
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> RadioRenderer<T> getRadioRenderer() {
-		return (RadioRenderer<T>)_renderer;
+		return (RadioRenderer<T>) _renderer;
 	}
-	
+
 	/** Sets the renderer which is used to render each row
 	 * if {@link #getModel} is not null.
 	 *
@@ -528,91 +550,95 @@ public class Radiogroup extends XulElement {
 	public void setRadioRenderer(RadioRenderer<?> renderer) {
 		_renderer = renderer;
 	}
-	
+
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
 	 *@since 6.0.0
 	 */
-	public void setRadioRenderer(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-	InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setRadioRenderer(String clsnm) throws ClassNotFoundException, NoSuchMethodException,
+			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
-			setRadioRenderer((RadioRenderer)Classes.newInstanceByThread(clsnm));
+			setRadioRenderer((RadioRenderer) Classes.newInstanceByThread(clsnm));
 	}
-	
+
 	/**
 	 * The default Renderer for model rendering. 
 	 */
 	@SuppressWarnings("rawtypes")
 	private static final RadioRenderer _defRend = new RadioRenderer() {
-		public void render(final Radio item,final Object data,final int index) throws Exception {
-			final Radiogroup cb = (Radiogroup)item.getParent();
+		public void render(final Radio item, final Object data, final int index) throws Exception {
+			final Radiogroup cb = (Radiogroup) item.getParent();
 			final Template tm = cb.getTemplate("model");
 			if (tm == null) {
 				item.setLabel(Objects.toString(data));
 				item.setValue(data);
 			} else {
-				final Component[] items = ShadowElementsCtrl.filterOutShadows(tm.create(item.getParent(), item,
-					new VariableResolver() {
-						public Object resolveVariable(String name) {
-							if ("each".equals(name)) {
-								return data;
-							} else if ("forEachStatus".equals(name)) {
-								return new ForEachStatus() {
-									public ForEachStatus getPrevious() {
-										return null;
-									}
-									public Object getEach() {
-										return getCurrent();
-									}
-									public int getIndex() {
-										return index;
-									}
-									public Integer getBegin() {
-										return 0;
-									}
-									public Integer getEnd() {
-										return cb.getModel().getSize();
-									}
+				final Component[] items = ShadowElementsCtrl
+						.filterOutShadows(tm.create(item.getParent(), item, new VariableResolver() {
+					public Object resolveVariable(String name) {
+						if ("each".equals(name)) {
+							return data;
+						} else if ("forEachStatus".equals(name)) {
+							return new ForEachStatus() {
+								public ForEachStatus getPrevious() {
+									return null;
+								}
 
-									public Object getCurrent() {
-										return data;
-									}
+								public Object getEach() {
+									return getCurrent();
+								}
 
-									public boolean isFirst() {
-										return getCount() == 1;
-									}
+								public int getIndex() {
+									return index;
+								}
 
-									public boolean isLast() {
-										return getIndex() + 1 == getEnd();
-									}
+								public Integer getBegin() {
+									return 0;
+								}
 
-									public Integer getStep() {
-										return null;
-									}
+								public Integer getEnd() {
+									return cb.getModel().getSize();
+								}
 
-									public int getCount() {
-										return getIndex() + 1;
-									}
-								};
-							} else {
-								return null;
-							}
+								public Object getCurrent() {
+									return data;
+								}
+
+								public boolean isFirst() {
+									return getCount() == 1;
+								}
+
+								public boolean isLast() {
+									return getIndex() + 1 == getEnd();
+								}
+
+								public Integer getStep() {
+									return null;
+								}
+
+								public int getCount() {
+									return getIndex() + 1;
+								}
+							};
+						} else {
+							return null;
 						}
-					}, null));
+					}
+				}, null));
 				if (items.length != 1)
-					throw new UiException("The model template must have exactly one item, not "+items.length);
+					throw new UiException("The model template must have exactly one item, not " + items.length);
 
-				final Radio nci = (Radio)items[0];
+				final Radio nci = (Radio) items[0];
 				if (nci.getValue() == null) //template might set it
 					nci.setValue(data);
 				item.setAttribute(Attributes.MODEL_RENDERAS, nci);
-					//indicate a new item is created to replace the existent one
+				//indicate a new item is created to replace the existent one
 				item.detach();
 			}
-			
+
 		}
-	};	
+	};
+
 	/** Used to render Radio if _model is specified. */
 	private class Renderer implements java.io.Serializable {
 		@SuppressWarnings("rawtypes")
@@ -622,10 +648,11 @@ public class Radiogroup extends XulElement {
 		private Renderer() {
 			_renderer = getRealRenderer();
 		}
+
 		@SuppressWarnings("unchecked")
 		private void render(Radio item, Object value, int index) throws Throwable {
 			if (!_rendered && (_renderer instanceof RendererCtrl)) {
-				((RendererCtrl)_renderer).doTry();
+				((RendererCtrl) _renderer).doTry();
 				_ctrled = true;
 			}
 
@@ -636,15 +663,16 @@ public class Radiogroup extends XulElement {
 					item.setLabel(Exceptions.getMessage(ex));
 				} catch (Throwable t) {
 					log.error("", t);
-				}			
+				}
 				throw ex;
 			}
 			_rendered = true;
 		}
+
 		private void doCatch(Throwable ex) {
 			if (_ctrled) {
 				try {
-					((RendererCtrl)_renderer).doCatch(ex);
+					((RendererCtrl) _renderer).doCatch(ex);
 				} catch (Throwable t) {
 					throw UiException.Aide.wrap(t);
 				}
@@ -652,16 +680,16 @@ public class Radiogroup extends XulElement {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
+
 		private void doFinally() {
 			if (_ctrled)
-				((RendererCtrl)_renderer).doFinally();
+				((RendererCtrl) _renderer).doFinally();
 		}
 	}
-	
-	
+
 	//Cloneable//
 	public Object clone() {
-		final Radiogroup clone = (Radiogroup)super.clone();
+		final Radiogroup clone = (Radiogroup) super.clone();
 		fixClone(clone);
 		if (clone._model != null) {
 			if (clone._model instanceof ComponentCloneListener) {
@@ -671,21 +699,22 @@ public class Radiogroup extends XulElement {
 			}
 			clone._dataListener = null;
 			clone.initDataListener();
-		}		
+		}
 		return clone;
 	}
+
 	private static void fixClone(Radiogroup clone) {
-		if (clone._name.startsWith("_pg")) clone._name = clone.genGroupName();
+		if (clone._name.startsWith("_pg"))
+			clone._name = clone.genGroupName();
 	}
-	
+
 	//	Serializable//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		if (_model != null) {
 			initDataListener();
 		}
 	}
-	
+
 }

@@ -24,19 +24,19 @@ import java.util.Collection;
  * @author henrichen
  * @see Chart
  * @see SimpleXYModel
- */	
+ */
 public interface XYModel extends ChartModel {
 
 	/**
 	 * Get a series of the specified index;
 	 */
 	public Comparable<?> getSeries(int index);
-	
+
 	/**
 	 * Get all series as a collection.
 	 */
 	public Collection<Comparable<?>> getSeries();
-	
+
 	/**
 	 * Get data count of a specified series.
 	 * @param series the specified series.
@@ -66,13 +66,13 @@ public interface XYModel extends ChartModel {
 	 * @since 5.0.0
 	 */
 	public void setValue(Comparable<?> series, Number x, Number y, int index);
-	
+
 	/**
 	 * Append an (x,y) into a series.
 	 * @param series the series.
 	 * @param x the x value.
 	 * @param y the y value.
-	 */	
+	 */
 	public void addValue(Comparable<?> series, Number x, Number y);
 
 	/**
@@ -82,9 +82,9 @@ public interface XYModel extends ChartModel {
 	 * @param y the y value.
 	 * @param index the data index.
 	 * @since 5.0.0
-	 */	
+	 */
 	public void addValue(Comparable<?> series, Number x, Number y, int index);
-	
+
 	/**
 	 * Set model to autosort on x value for each series.
 	 */
@@ -94,7 +94,7 @@ public interface XYModel extends ChartModel {
 	 * check whether to autosort on x value for each series; default is true.
 	 */
 	public boolean isAutoSort();
-	
+
 	/**
 	 * Remove data of a specified series.
 	 * @param series the series
@@ -105,11 +105,11 @@ public interface XYModel extends ChartModel {
 	 * Remove (x,y) value of a specified series and data index.
 	 * @param series the series.
 	 * @param index the data index.
-	 */	
+	 */
 	public void removeValue(Comparable<?> series, int index);
 
 	/**
 	 * clear this model.
-	 */	
+	 */
 	public void clear();
-}	
+}

@@ -31,33 +31,33 @@ import org.zkoss.zk.ui.Component;
  */
 public abstract class AbstractBindingHandler implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	protected Binder _binder;
-	
-	public void setBinder(Binder binder){
+
+	public void setBinder(Binder binder) {
 		_binder = binder;
 	}
-	
+
 	protected void doPrePhase(Phase phase, BindContext ctx) {
-		((BinderImpl)_binder).doPrePhase(phase, ctx);
+		((BinderImpl) _binder).doPrePhase(phase, ctx);
 	}
-	
+
 	protected void doPostPhase(Phase phase, BindContext ctx) {
-		((BinderImpl)_binder).doPostPhase(phase, ctx);
+		((BinderImpl) _binder).doPostPhase(phase, ctx);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	static protected Set<Property> getNotifys(BindContext ctx){
-		return (Set<Property>)ctx.getAttribute(BinderImpl.NOTIFYS);
+	protected static Set<Property> getNotifys(BindContext ctx) {
+		return (Set<Property>) ctx.getAttribute(BinderImpl.NOTIFYS);
 	}
-	
-	protected void clearValidationMessages(Binder binder, Component component,String attr){
-		ValidationMessages vmsgs = ((BinderCtrl)binder).getValidationMessages();
-		if(vmsgs!=null){
-			vmsgs.clearMessages(component,attr);
+
+	protected void clearValidationMessages(Binder binder, Component component, String attr) {
+		ValidationMessages vmsgs = ((BinderCtrl) binder).getValidationMessages();
+		if (vmsgs != null) {
+			vmsgs.clearMessages(component, attr);
 		}
 	}
-	
+
 	//ZK-2289: Futher optimize zkbind memory consumption.
 	protected <K, V> void addBinding(Map<K, List<V>> bindingsMap, K bkey, V binding) {
 		final List<V> bindings = bindingsMap.get(bkey);

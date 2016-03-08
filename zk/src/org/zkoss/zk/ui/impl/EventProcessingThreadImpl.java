@@ -16,33 +16,32 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Threads;
+
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Threads;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-
-
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ExecutionMonitor;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.EventProcessingThread;
 
 /** Thread to handle events.
  * We need to handle events in a separate thread, because it might
@@ -51,8 +50,7 @@ import org.zkoss.zk.ui.sys.EventProcessingThread;
  * 
  * @author tomyeh
  */
-public class EventProcessingThreadImpl extends Thread
-implements EventProcessingThread {
+public class EventProcessingThreadImpl extends Thread implements EventProcessingThread {
 	private static final Logger log = LoggerFactory.getLogger(EventProcessingThreadImpl.class);
 
 	/** The processor. */
@@ -92,7 +90,7 @@ implements EventProcessingThread {
 	private boolean _suspended;
 
 	public EventProcessingThreadImpl() {
-//		if (log.isDebugEnabled()) log.debug("Starting an event processing thread");
+		//		if (log.isDebugEnabled()) log.debug("Starting an event processing thread");
 		Threads.setDaemon(this, true);
 		start();
 	}
@@ -101,21 +99,25 @@ implements EventProcessingThread {
 	public boolean isCeased() {
 		return _ceased != null || !isAlive();
 	}
+
 	public boolean isSuspended() {
 		return _suspended;
 	}
-	synchronized public boolean isIdle() {
+
+	public synchronized boolean isIdle() {
 		return _proc == null;
 	}
+
 	public final Event getEvent() {
 		return _proc.getEvent();
 	}
+
 	public final Component getComponent() {
 		return _proc.getComponent();
 	}
-	public void sendEvent(final Component comp, Event event)
-	throws Exception {
-//		if (log.finerable()) log.finer("Process sent event: "+event);
+
+	public void sendEvent(final Component comp, Event event) throws Exception {
+		//		if (log.finerable()) log.finer("Process sent event: "+event);
 		if (event == null || comp == null)
 			throw new IllegalArgumentException("Both comp and event must be specified");
 		if (!(Thread.currentThread() instanceof EventProcessingThreadImpl))
@@ -130,7 +132,7 @@ implements EventProcessingThread {
 			_proc = oldproc;
 			if (_ceased != null)
 				throw new InterruptedException(_ceased);
-				//Bug 2819521: cease() resumes suspend threads, which shall stop
+			//Bug 2819521: cease() resumes suspend threads, which shall stop
 			setup();
 		}
 	}
@@ -146,7 +148,7 @@ implements EventProcessingThread {
 	 */
 	public void cease(String cause) {
 		synchronized (_evtmutex) {
-			_ceased = cause != null ? cause: "";
+			_ceased = cause != null ? cause : "";
 			_evtmutex.notifyAll();
 		}
 		if (_suspmutex != null) {
@@ -155,6 +157,7 @@ implements EventProcessingThread {
 			}
 		}
 	}
+
 	/** Stops the thread silently. Called by {@link org.zkoss.zk.ui.sys.UiEngine}
 	 * to stop abnormally.
 	 */
@@ -168,6 +171,7 @@ implements EventProcessingThread {
 	public static final int getThreadNumber() {
 		return _nThd;
 	}
+
 	/** Returns the number of event threads in processing.
 	 */
 	public static final int getThreadNumberInProcessing() {
@@ -189,10 +193,11 @@ implements EventProcessingThread {
 	 * </ul>
 	 */
 	public static void doSuspend(Object mutex) throws InterruptedException {
-		((EventProcessingThreadImpl)Thread.currentThread()).doSuspend0(mutex);
+		((EventProcessingThreadImpl) Thread.currentThread()).doSuspend0(mutex);
 	}
+
 	private void doSuspend0(Object mutex) throws InterruptedException {
-//		if (log.finerable()) log.finer("Suspend event processing; "+_proc);
+		//		if (log.finerable()) log.finer("Suspend event processing; "+_proc);
 		if (mutex == null)
 			throw new IllegalArgumentException("null mutex");
 		if (isIdle())
@@ -213,7 +218,7 @@ implements EventProcessingThread {
 				if (exec != null) {
 					_acted = false;
 					try {
-						((ExecutionCtrl)exec).onDeactivate();
+						((ExecutionCtrl) exec).onDeactivate();
 					} catch (Throwable ex) {
 						log.warn("Ignored deactivate failure", ex);
 					}
@@ -225,9 +230,8 @@ implements EventProcessingThread {
 				}
 
 				if (_ceased == null) {
-					execmon = _proc.getDesktop().getWebApp()
-						.getConfiguration().getExecutionMonitor();
-						//init only required, so eventResume called if-only-if eventSuspend called
+					execmon = _proc.getDesktop().getWebApp().getConfiguration().getExecutionMonitor();
+					//init only required, so eventResume called if-only-if eventSuspend called
 					if (execmon != null)
 						execmon.eventSuspend(getEvent());
 
@@ -249,24 +253,25 @@ implements EventProcessingThread {
 		setup();
 		Execution exec = getExecution();
 		if (exec != null) {
-			((ExecutionCtrl)exec).onActivate();
+			((ExecutionCtrl) exec).onActivate();
 			_acted = true;
 		}
 
 		final List<EventThreadResume> resumes = _evtThdResumes;
 		_evtThdResumes = null;
 		if (resumes != null && !resumes.isEmpty()) {
-			_proc.getDesktop().getWebApp().getConfiguration()
-				.invokeEventThreadResumes(
-					resumes, getComponent(), getEvent());
-				//FUTURE: how to propagate errors to the client
+			_proc.getDesktop().getWebApp().getConfiguration().invokeEventThreadResumes(resumes, getComponent(),
+					getEvent());
+			//FUTURE: how to propagate errors to the client
 		}
 	}
+
 	private Execution getExecution() {
 		Execution exec = _proc.getDesktop().getExecution();
-		return exec != null ? exec: Executions.getCurrent();
-			//just in case that the execution is dead first
+		return exec != null ? exec : Executions.getCurrent();
+		//just in case that the execution is dead first
 	}
+
 	/** Resumes this thread and returns only if the execution (being suspended
 	 * by {@link #doSuspend}) completes.
 	 *
@@ -277,15 +282,14 @@ implements EventProcessingThread {
 	public boolean doResume() throws InterruptedException {
 		if (this.equals(Thread.currentThread()))
 			throw new IllegalStateException("A thread cannot resume itself");
-//		if (log.finerable()) log.finer("Resume event processing; "+_proc);
+		//		if (log.finerable()) log.finer("Resume event processing; "+_proc);
 		if (isIdle())
 			throw new InternalError("Called without processing event?");
 		if (_suspmutex == null)
 			throw new InternalError("Resume non-suspended thread?");
 
 		//Copy first since event thread clean up them, when completed
-		final Configuration config =
-			_proc.getDesktop().getWebApp().getConfiguration();
+		final Configuration config = _proc.getDesktop().getWebApp().getConfiguration();
 		final Component comp = getComponent();
 		final Event event = getEvent();
 		try {
@@ -328,7 +332,7 @@ implements EventProcessingThread {
 		if (Thread.currentThread() instanceof EventProcessingThreadImpl)
 			throw new IllegalStateException("processEvent cannot be called in an event thread");
 		if (_ceased != null)
-			throw new InternalError("The event thread has beeing stopped. Cause: "+_ceased);
+			throw new InternalError("The event thread has beeing stopped. Cause: " + _ceased);
 		if (_proc != null)
 			throw new InternalError("reentering processEvent not allowed");
 
@@ -337,7 +341,7 @@ implements EventProcessingThread {
 		_ex = null;
 
 		final EventProcessor proc = new EventProcessor(desktop, comp, event);
-			//it also check the correctness of desktop/comp/event
+		//it also check the correctness of desktop/comp/event
 		final Configuration config = desktop.getWebApp().getConfiguration();
 		_evtThdInits = config.newEventThreadInits(comp, event);
 		try {
@@ -357,7 +361,7 @@ implements EventProcessingThread {
 							_evtmutex.wait(evtTimeWarn);
 						else
 							_evtmutex.wait();
-							//wait until the event thread to complete or suspended
+						//wait until the event thread to complete or suspended
 
 						if (_suspended) {
 							config.invokeEventThreadSuspends(_evtThdSuspends, comp, event);
@@ -369,8 +373,8 @@ implements EventProcessingThread {
 						if (!isAlive())
 							throw new UiException("The event processing thread was aborted");
 
-						log.warn("The event processing takes more than "+
-							((System.currentTimeMillis()-begt)/1000)+" seconds: "+proc);
+						log.warn("The event processing takes more than " + ((System.currentTimeMillis() - begt) / 1000)
+								+ " seconds: " + proc);
 					}
 				}
 			}
@@ -388,6 +392,7 @@ implements EventProcessingThread {
 		checkError(); //check any error occurs
 		return isIdle();
 	}
+
 	/** Invokes {@link Configuration#newEventThreadSuspends}.
 	 * The caller must execute in the event processing thread.
 	 * It is called only for implementing {@link org.zkoss.zk.ui.sys.UiEngine}.
@@ -397,35 +402,38 @@ implements EventProcessingThread {
 		if (_proc == null)
 			throw new IllegalStateException();
 
-		_evtThdSuspends = _proc.getDesktop().getWebApp().getConfiguration()
-			.newEventThreadSuspends(getComponent(), getEvent(), mutex);
-			//it might throw an exception, so process it before updating
-			//_suspended
+		_evtThdSuspends = _proc.getDesktop().getWebApp().getConfiguration().newEventThreadSuspends(getComponent(),
+				getEvent(), mutex);
+		//it might throw an exception, so process it before updating
+		//_suspended
 	}
 
-	private void invokeEventThreadCompletes(Configuration config,
-	Component comp, Event event) throws UiException {
+	private void invokeEventThreadCompletes(Configuration config, Component comp, Event event) throws UiException {
 		final List<Throwable> errs = new LinkedList<Throwable>();
-		if (_ex != null) errs.add(_ex);
+		if (_ex != null)
+			errs.add(_ex);
 
 		if (_evtThdCleanups != null && !_evtThdCleanups.isEmpty())
 			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs, _ceased != null);
 
 		_evtThdCleanups = null;
-		_ex = errs.isEmpty() ? null: errs.get(0);
+		_ex = errs.isEmpty() ? null : errs.get(0);
 	}
+
 	/** Setup for execution. */
-	synchronized private void setup() {
+	private synchronized void setup() {
 		_proc.setup();
 	}
+
 	/** Cleanup for execution. */
-	synchronized private void cleanup() {
+	private synchronized void cleanup() {
 		_proc.cleanup();
 		_proc = null;
 	}
+
 	private void checkError() {
 		if (_ex != null) { //failed to process
-//			if (log.isDebugEnabled()) log.realCause(_ex);
+			//			if (log.isDebugEnabled()) log.realCause(_ex);
 			final Throwable ex = _ex;
 			_ex = null;
 			throw UiException.Aide.wrap(ex);
@@ -438,13 +446,12 @@ implements EventProcessingThread {
 		try {
 			while (_ceased == null) {
 				if (!isIdle()) {
-					final Configuration config =
-						_proc.getDesktop().getWebApp().getConfiguration();
+					final Configuration config = _proc.getDesktop().getWebApp().getConfiguration();
 					boolean cleaned = false;
 					++_nBusyThd;
 					Execution exec = null;
 					try {
-//						if (log.finerable()) log.finer("Processing event: "+_proc);
+						//						if (log.finerable()) log.finer("Processing event: "+_proc);
 
 						Locales.setThreadLocal(_locale);
 						TimeZones.setThreadLocal(_timeZone);
@@ -452,30 +459,30 @@ implements EventProcessingThread {
 						setup();
 						exec = getExecution();
 						if (exec != null) {
-							((ExecutionCtrl)exec).onActivate();
+							((ExecutionCtrl) exec).onActivate();
 							_acted = true;
 						}
 
-						final boolean b = config.invokeEventThreadInits(
-							_evtThdInits, getComponent(), getEvent());
+						final boolean b = config.invokeEventThreadInits(_evtThdInits, getComponent(), getEvent());
 						_evtThdInits = null;
 
-						if (b) process0();
+						if (b)
+							process0();
 					} catch (Throwable ex) {
 						cleaned = true;
 						newEventThreadCleanups(config, ex);
-							//ex will be assigned to _ex if newEventThreadCleanups not 'eat' it
+						//ex will be assigned to _ex if newEventThreadCleanups not 'eat' it
 					} finally {
 						--_nBusyThd;
 
 						if (!cleaned)
 							newEventThreadCleanups(config, _ex);
 
-//						if (log.finerable()) log.finer("Real processing is done: "+_proc);
+						//						if (log.finerable()) log.finer("Real processing is done: "+_proc);
 						if (exec != null && _acted) { //_acted is false if suspended is killed
 							_acted = false;
 							try {
-								((ExecutionCtrl)exec).onDeactivate();
+								((ExecutionCtrl) exec).onDeactivate();
 							} catch (Throwable ex) {
 								log.warn("Ignored deactivate failure", ex);
 							}
@@ -492,40 +499,42 @@ implements EventProcessingThread {
 
 				synchronized (_evtmutex) {
 					_evtmutex.notify();
-						//wake the main thread OR the resuming thread
+					//wake the main thread OR the resuming thread
 
 					if (_ceased == null)
 						_evtmutex.wait();
-						//wait the main thread to issue another request
+					//wait the main thread to issue another request
 				}
 			}
-//			System.out.println(Thread.currentThread()+" stopped: "+_ceased);
+			//			System.out.println(Thread.currentThread()+" stopped: "+_ceased);
 		} catch (Throwable ex) {
 			if (_ceased == null)
 				_ceased = Exceptions.getMessage(ex);
 
 			if (Exceptions.findCause(ex, InterruptedException.class) == null)
 				throw UiException.Aide.wrap(ex);
-//			System.out.println(Thread.currentThread()+" interrupted silently: "+_ceased);
+			//			System.out.println(Thread.currentThread()+" interrupted silently: "+_ceased);
 		} finally {
 			--_nThd;
 			synchronized (_evtmutex) { //just in case
 				final boolean abnormal = _ceased == null;
-				if (abnormal) _ceased = "Unknow reason";
+				if (abnormal)
+					_ceased = "Unknow reason";
 				_evtmutex.notify();
-//				if (abnormal) System.out.println(Thread.currentThread()+" stopped with unknown cause");
+				//				if (abnormal) System.out.println(Thread.currentThread()+" stopped with unknown cause");
 			}
 		}
 	}
+
 	/** Invokes {@link Configuration#newEventThreadCleanups}.
 	 */
 	private void newEventThreadCleanups(Configuration config, Throwable ex) {
 		final List<Throwable> errs = new LinkedList<Throwable>();
-		if (ex != null) errs.add(ex);
-		_evtThdCleanups =
-			config.newEventThreadCleanups(getComponent(), getEvent(), errs, _ceased != null);
-		_ex = errs.isEmpty() ? null: errs.get(0);
-			//propagate back the first exception
+		if (ex != null)
+			errs.add(ex);
+		_evtThdCleanups = config.newEventThreadCleanups(getComponent(), getEvent(), errs, _ceased != null);
+		_ex = errs.isEmpty() ? null : errs.get(0);
+		//propagate back the first exception
 	}
 
 	/** Processes the component and event.
@@ -538,6 +547,6 @@ implements EventProcessingThread {
 
 	//-- Object --//
 	public String toString() {
-		return "[" +getName()+": "+_proc+", ceased="+_ceased+']';
+		return "[" + getName() + ": " + _proc + ", ceased=" + _ceased + ']';
 	}
 }

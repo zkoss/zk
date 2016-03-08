@@ -30,13 +30,14 @@ import org.zkoss.zk.ui.event.EventQueues;
  */
 public class DefaultBinder extends BinderImpl {
 	private static final long serialVersionUID = 1463169907348730644L;
+
 	/**
 	 * new a binder with default event queue name and scope
 	 */
 	public DefaultBinder() {
-		this(null,null);
+		this(null, null);
 	}
-	
+
 	/**
 	 * new a binder with event queue name and scope
 	 * @param qname event queue name
@@ -45,9 +46,8 @@ public class DefaultBinder extends BinderImpl {
 	public DefaultBinder(String qname, String qscope) {
 		super(qname, qscope);
 	}
-	
-	
-	public void init(Component comp, Object vm,Map<String, Object> initArgs){
+
+	public void init(Component comp, Object vm, Map<String, Object> initArgs) {
 		super.init(comp, vm, initArgs);
 		//mark this component was handled by binder after init
 		BinderUtil.markHandling(comp, this);

@@ -20,9 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.web.fn.ServletFns;
-
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 /**
@@ -44,17 +43,15 @@ public class DspFns {
 	 * @return the string holding the HTML tags, or null if already generated.
 	 * @param deviceType the device type. If null, ajax is assumed.
 	 */
- 	public static String outZkHtmlTags(String deviceType) {
- 		Execution exec = Executions.getCurrent();
- 		if (exec != null)
-	 		return HtmlPageRenders.outZkTags(exec, null, null);
+	public static String outZkHtmlTags(String deviceType) {
+		Execution exec = Executions.getCurrent();
+		if (exec != null)
+			return HtmlPageRenders.outZkTags(exec, null, null);
 
-	 	return JspFns.outZkHtmlTags(
-			ServletFns.getCurrentServletContext(),
-			(HttpServletRequest)ServletFns.getCurrentRequest(),
-			(HttpServletResponse)ServletFns.getCurrentResponse(),
-			deviceType);
- 	}
+		return JspFns.outZkHtmlTags(ServletFns.getCurrentServletContext(),
+				(HttpServletRequest) ServletFns.getCurrentRequest(),
+				(HttpServletResponse) ServletFns.getCurrentResponse(), deviceType);
+	}
 
 	/** Generates the complete CSS content of all components in the
 	 * specified device.
@@ -64,12 +61,11 @@ public class DspFns {
 	 * @since 5.0.0
 	 */
 	public static String outDeviceCSSContent(String deviceType) {
-	 	return JspFns.outDeviceCSSContent(
-			ServletFns.getCurrentServletContext(),
-			(HttpServletRequest)ServletFns.getCurrentRequest(),
-			(HttpServletResponse)ServletFns.getCurrentResponse(),
-			deviceType);
+		return JspFns.outDeviceCSSContent(ServletFns.getCurrentServletContext(),
+				(HttpServletRequest) ServletFns.getCurrentRequest(),
+				(HttpServletResponse) ServletFns.getCurrentResponse(), deviceType);
 	}
+
 	/** Returns HTML tags to include style sheets of the specified device
 	 * for the current application (never null).
 	 *
@@ -78,14 +74,12 @@ public class DspFns {
 	 */
 	public static final String outDeviceStyleSheets(String deviceType) {
 		final Execution exec = Executions.getCurrent();
- 		if (exec != null)
+		if (exec != null)
 			return HtmlPageRenders.outLangStyleSheets(exec, null, null);
 
-	 	return JspFns.outDeviceStyleSheets(
-			ServletFns.getCurrentServletContext(),
-			(HttpServletRequest)ServletFns.getCurrentRequest(),
-			(HttpServletResponse)ServletFns.getCurrentResponse(),
-			deviceType);
+		return JspFns.outDeviceStyleSheets(ServletFns.getCurrentServletContext(),
+				(HttpServletRequest) ServletFns.getCurrentRequest(),
+				(HttpServletResponse) ServletFns.getCurrentResponse(), deviceType);
 	}
 
 	/** Returns HTML tags to include JavaScript files of the specified
@@ -94,14 +88,12 @@ public class DspFns {
 	 */
 	public static final String outDeviceJavaScripts(String deviceType) {
 		final Execution exec = Executions.getCurrent();
- 		if (exec != null)
+		if (exec != null)
 			return HtmlPageRenders.outLangJavaScripts(exec, null, null);
 
-	 	return JspFns.outDeviceJavaScripts(
-			ServletFns.getCurrentServletContext(),
-			(HttpServletRequest)ServletFns.getCurrentRequest(),
-			(HttpServletResponse)ServletFns.getCurrentResponse(),
-			deviceType);
+		return JspFns.outDeviceJavaScripts(ServletFns.getCurrentServletContext(),
+				(HttpServletRequest) ServletFns.getCurrentRequest(),
+				(HttpServletResponse) ServletFns.getCurrentResponse(), deviceType);
 	}
 
 	/** Sets the Cache-Control and Expires headers for the response.
@@ -117,10 +109,10 @@ public class DspFns {
 	 */
 	public static void setCacheControl(String prop, int hours) {
 		JspFns.setCacheControl(ServletFns.getCurrentServletContext(),
-				(HttpServletRequest)ServletFns.getCurrentRequest(),
-				(HttpServletResponse)ServletFns.getCurrentResponse(),
-			prop, hours);
+				(HttpServletRequest) ServletFns.getCurrentRequest(),
+				(HttpServletResponse) ServletFns.getCurrentResponse(), prop, hours);
 	}
+
 	/** Sets the Cache-Control and Expires headers for the CSS files
 	 * of class Web resources.
 	 *
@@ -135,9 +127,10 @@ public class DspFns {
 	 */
 	public static void setCSSCacheControl() {
 		JspFns.setCSSCacheControl(ServletFns.getCurrentServletContext(),
-				(HttpServletRequest)ServletFns.getCurrentRequest(),
-				(HttpServletResponse)ServletFns.getCurrentResponse());
+				(HttpServletRequest) ServletFns.getCurrentRequest(),
+				(HttpServletResponse) ServletFns.getCurrentResponse());
 	}
+
 	/** Sets the Cache-Control and Expires headers for class Web resources.
 	 * It checks if <tt>org.zkoss.web.classWebResource.cache</tt>
 	 * is turned off. If not, it generates the headers.
@@ -147,7 +140,7 @@ public class DspFns {
 	 */
 	public static void setCWRCacheControl() {
 		JspFns.setCWRCacheControl(ServletFns.getCurrentServletContext(),
-				(HttpServletRequest)ServletFns.getCurrentRequest(),
-				(HttpServletResponse)ServletFns.getCurrentResponse());
+				(HttpServletRequest) ServletFns.getCurrentRequest(),
+				(HttpServletResponse) ServletFns.getCurrentResponse());
 	}
 }

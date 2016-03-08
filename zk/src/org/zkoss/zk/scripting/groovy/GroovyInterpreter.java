@@ -19,11 +19,12 @@ package org.zkoss.zk.scripting.groovy;
 import java.util.HashMap;
 
 import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
 import groovy.lang.Closure;
+import groovy.lang.GroovyShell;
+
 import org.zkoss.xel.Function;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
+import org.zkoss.zk.ui.Page;
 
 /**
  * Groovy interpreter.
@@ -63,6 +64,7 @@ public class GroovyInterpreter extends GenericInterpreter {
 	protected boolean contains(String name) {
 		return _global.getVariables().containsKey(name);
 	}
+
 	protected Object get(String name) {
 		try {
 			return _global.getVariable(name);
@@ -70,9 +72,11 @@ public class GroovyInterpreter extends GenericInterpreter {
 			return null;
 		}
 	}
+
 	protected void set(String name, Object value) {
 		_global.setVariable(name, value);
 	}
+
 	protected void unset(String name) {
 		_global.getVariables().remove(name);
 	}
@@ -84,6 +88,7 @@ public class GroovyInterpreter extends GenericInterpreter {
 		_global = new Binding(new Variables());
 		_ip = new GroovyShell(_global);
 	}
+
 	public void destroy() {
 		_ip = null;
 		_global = null;
@@ -101,7 +106,7 @@ public class GroovyInterpreter extends GenericInterpreter {
 		final Object val = get(name);
 		if (!(val instanceof Closure))
 			return null;
-		return new ClosureFunction((Closure)val);
+		return new ClosureFunction((Closure) val);
 	}
 
 	//supporting class//
@@ -112,12 +117,14 @@ public class GroovyInterpreter extends GenericInterpreter {
 			Object val = super.get(key);
 			if (val != null || containsKey(key) || !(key instanceof String))
 				return val;
-			val = getFromNamespace((String)key);
-			return val != UNDEFINED ? val: null;
+			val = getFromNamespace((String) key);
+			return val != UNDEFINED ? val : null;
 		}
 	}
+
 	private static class ClosureFunction implements Function {
 		private final Closure _closure;
+
 		private ClosureFunction(Closure closure) {
 			_closure = closure;
 		}
@@ -126,13 +133,18 @@ public class GroovyInterpreter extends GenericInterpreter {
 		public Class[] getParameterTypes() {
 			return new Class[0];
 		}
+
 		public Class getReturnType() {
 			return Object.class;
 		}
+
 		public Object invoke(Object obj, Object[] args) throws Exception {
-			if (args == null) return _closure.call();
-			else return _closure.call(args);
+			if (args == null)
+				return _closure.call();
+			else
+				return _closure.call(args);
 		}
+
 		public java.lang.reflect.Method toMethod() {
 			return null;
 		}

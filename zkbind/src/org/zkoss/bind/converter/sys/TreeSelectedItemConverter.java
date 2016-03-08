@@ -31,31 +31,31 @@ import org.zkoss.zul.ext.TreeSelectableModel;
  */
 public class TreeSelectedItemConverter implements Converter, java.io.Serializable {
 	private static final long serialVersionUID = 201109261823L;
-	
+
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Tree tree = (Tree) comp;
 		final TreeModel<Object> model = tree.getModel();
 
-  		if(model !=null && !(model instanceof TreeSelectableModel)){
+		if (model != null && !(model instanceof TreeSelectableModel)) {
 			//model has to implement TreeSelectableModel if binding to selectedItem
-  			throw new UiException("model doesn't implement TreeSelectableModel");
-  		}
-  		final TreeSelectableModel smodel = (TreeSelectableModel)model;
-		if(smodel!=null && !smodel.isSelectionEmpty()){//clear the selection first
-	  		smodel.clearSelection();
+			throw new UiException("model doesn't implement TreeSelectableModel");
 		}
-		
-	  	if (val != null) {
-	  		if(model!=null){
-	  			int[] path = model.getPath(val);
-	  			if(path!=null && smodel!=null){
-	  				smodel.addSelectionPath(path);
-	  				return IGNORED_VALUE;
-	  			}
-	  			//what if a model is not a tree selection model, there has same issue if a treeitem is not rendered yet as zk-766
-	  		}	  		
-	  		//no model case
-		  	//if user want better performance, he should get the selection from model directly
+		final TreeSelectableModel smodel = (TreeSelectableModel) model;
+		if (smodel != null && !smodel.isSelectionEmpty()) { //clear the selection first
+			smodel.clearSelection();
+		}
+
+		if (val != null) {
+			if (model != null) {
+				int[] path = model.getPath(val);
+				if (path != null && smodel != null) {
+					smodel.addSelectionPath(path);
+					return IGNORED_VALUE;
+				}
+				//what if a model is not a tree selection model, there has same issue if a treeitem is not rendered yet as zk-766
+			}
+			//no model case
+			//if user want better performance, he should get the selection from model directly
 			for (final Iterator<?> it = tree.getItems().iterator(); it.hasNext();) {
 				final Treeitem ti = (Treeitem) it.next();
 				Object bean = ti.getValue();
@@ -63,33 +63,34 @@ public class TreeSelectedItemConverter implements Converter, java.io.Serializabl
 					return ti;
 				}
 			}
-	  		
-		  	//not in the item list
-	  	}
-	  	
-	  	if(smodel!=null){
-	  		if(smodel.getSelectionCount()>0)
-	  			smodel.clearSelection();
-	  		return IGNORED_VALUE;
-	  	}
-	  	return null;
+
+			//not in the item list
+		}
+
+		if (smodel != null) {
+			if (smodel.getSelectionCount() > 0)
+				smodel.clearSelection();
+			return IGNORED_VALUE;
+		}
+		return null;
 	}
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 		if (val != null) {
-		  	final Tree tree = (Tree) comp;
-	  		final TreeModel<?> model = tree.getModel();
-	  		if(model !=null && !(model instanceof TreeSelectableModel)){
-	  			throw new UiException("model doesn't implement TreeSelectableModel");
-	  		}
-	  		if(model!=null){
-	  			int[] path = ((TreeSelectableModel)model).getSelectionPath();
-	  			if(path==null) return null;
-	  			return model.getChild(path);
-	  		} else{
-	  			return ((Treeitem) val).getValue();
-	  		}
-	  	}
-	 	return null;
+			final Tree tree = (Tree) comp;
+			final TreeModel<?> model = tree.getModel();
+			if (model != null && !(model instanceof TreeSelectableModel)) {
+				throw new UiException("model doesn't implement TreeSelectableModel");
+			}
+			if (model != null) {
+				int[] path = ((TreeSelectableModel) model).getSelectionPath();
+				if (path == null)
+					return null;
+				return model.getChild(path);
+			} else {
+				return ((Treeitem) val).getValue();
+			}
+		}
+		return null;
 	}
 }

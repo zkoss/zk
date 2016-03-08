@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.lang.Classes;
@@ -48,8 +49,7 @@ public class Interpreters {
 	/** Map(zslang, Class/String class); */
 	private static final Map<String, Object> _ips = new HashMap<String, Object>();
 	/** A set of language names. */
-	private static final Set<String> _zslangs =
-		Collections.synchronizedSet(new LinkedHashSet<String>());
+	private static final Set<String> _zslangs = Collections.synchronizedSet(new LinkedHashSet<String>());
 
 	private Interpreters() { //disable it
 	}
@@ -73,16 +73,16 @@ public class Interpreters {
 
 		final Class<? extends Interpreter> cls;
 		if (clsnm instanceof Class) {
-			cls = cast((Class)clsnm);
+			cls = cast((Class) clsnm);
 		} else {
 			Class<?> c;
 			try {
-				c = Classes.forNameByThread((String)clsnm);
+				c = Classes.forNameByThread((String) clsnm);
 			} catch (ClassNotFoundException ex) {
-				throw new UiException("Failed to load class "+clsnm);
+				throw new UiException("Failed to load class " + clsnm);
 			}
 			if (!Interpreter.class.isAssignableFrom(c))
-				throw new IllegalArgumentException(c+" must implements "+Interpreter.class);
+				throw new IllegalArgumentException(c + " must implements " + Interpreter.class);
 			cls = cast(c);
 
 			synchronized (_ips) {
@@ -97,22 +97,25 @@ public class Interpreters {
 			ip.init(owner, zslang);
 			return ip;
 		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex, "Unable to create "+cls);
+			throw UiException.Aide.wrap(ex, "Unable to create " + cls);
 		}
 	}
+
 	/** Tests whether the interpreter for the specified language name
 	 * exists.
 	 *
 	 * @param zslang the name of the scripting language, say, Java.
 	 */
 	public static final boolean exists(String zslang) {
-		if (zslang == null) return false;
+		if (zslang == null)
+			return false;
 
 		zslang = zslang.toLowerCase(java.util.Locale.ENGLISH);
 		synchronized (_ips) {
 			return _ips.containsKey(zslang);
 		}
 	}
+
 	/** Returns a set of names of the scripting languages supported by this
 	 * installation.
 	 */
@@ -128,17 +131,17 @@ public class Interpreters {
 	 * @return the previous class name, or null if not defined yet
 	 */
 	public static final String add(String zslang, String ipcls) {
-		if (zslang == null || zslang.length() == 0
-		|| ipcls == null || ipcls.length() == 0)
+		if (zslang == null || zslang.length() == 0 || ipcls == null || ipcls.length() == 0)
 			throw new IllegalArgumentException("emty or null");
 
-		for (int j = zslang.length();  --j >= 0;) {
+		for (int j = zslang.length(); --j >= 0;) {
 			final char cc = zslang.charAt(j);
 			if (!isLegalName(cc))
-				throw new IllegalArgumentException('\''+cc+"' not allowed in a language name, "+zslang);
+				throw new IllegalArgumentException('\'' + cc + "' not allowed in a language name, " + zslang);
 		}
 
-		if (log.isDebugEnabled()) log.debug("Scripting language is added: "+zslang+", "+ipcls);
+		if (log.isDebugEnabled())
+			log.debug("Scripting language is added: " + zslang + ", " + ipcls);
 		_zslangs.add(zslang);
 
 		final String zsl = zslang.toLowerCase(java.util.Locale.ENGLISH);
@@ -147,22 +150,16 @@ public class Interpreters {
 			old = _ips.put(zsl, ipcls);
 		}
 
-		return old instanceof Class ? ((Class)old).getName(): (String)old;
+		return old instanceof Class ? ((Class) old).getName() : (String) old;
 	}
-	/** Tests whether a character is legal to be used as part of the scripting
-	 * language name.
-	 */
-	public static boolean isLegalName(char cc) {
-		return (cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')
-			|| (cc >= '0' && cc <= '9') || cc == '_';
-	}
+
 	/** Adds an interpreter based on the XML declaration.
 	 *
 	 * <pre><code>
-&lt;zscript-config&gt;
-  &lt;language-name&gt;SuperJava&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;
-  &lt;interpreter-class&gt;my.MySuperJavaInterpreter&lt;/interpreter-class&gt;
-&lt;/zscript-config&gt;
+	&lt;zscript-config&gt;
+	&lt;language-name&gt;SuperJava&lt;/language-name&gt;&lt;!-- case insensitive --!&gt;
+	&lt;interpreter-class&gt;my.MySuperJavaInterpreter&lt;/interpreter-class&gt;
+	&lt;/zscript-config&gt;
 	 * </code></pre>
 	 *
 	 * @param config the XML element called zscript-config
@@ -171,10 +168,15 @@ public class Interpreters {
 	public static final String add(Element config) {
 		//Spec: it is OK to declare an nonexistent interpreter, since
 		//deployer might remove unused jar files.
-		final String zslang =
-			IDOMs.getRequiredElementValue(config, "language-name");
-		final String clsnm =
-			IDOMs.getRequiredElementValue(config, "interpreter-class");
+		final String zslang = IDOMs.getRequiredElementValue(config, "language-name");
+		final String clsnm = IDOMs.getRequiredElementValue(config, "interpreter-class");
 		return add(zslang, clsnm);
+	}
+
+	/** Tests whether a character is legal to be used as part of the scripting
+	 * language name.
+	 */
+	public static boolean isLegalName(char cc) {
+		return (cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z') || (cc >= '0' && cc <= '9') || cc == '_';
 	}
 }

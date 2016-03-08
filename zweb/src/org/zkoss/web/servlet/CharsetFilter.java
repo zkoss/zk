@@ -18,12 +18,12 @@ package org.zkoss.web.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.FilterChain;
 import javax.servlet.Filter;
+import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
  * The filter to correct character encoding and to prepare Locale for
@@ -45,8 +45,8 @@ public class CharsetFilter implements Filter {
 	private String _charset = "UTF-8";
 
 	//-- Filter --//
-	public void doFilter(ServletRequest request, ServletResponse response,
-	FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		final Object old = Charsets.setup(request, response, _charset);
 		try {
 			chain.doFilter(request, response);
@@ -54,11 +54,13 @@ public class CharsetFilter implements Filter {
 			Charsets.cleanup(request, old);
 		}
 	}
+
 	public void destroy() {
 	}
+
 	public final void init(FilterConfig config) throws ServletException {
 		final String cs = config.getInitParameter("charset");
 		if (cs != null)
-			_charset = cs.length() > 0 ? cs: null;
+			_charset = cs.length() > 0 ? cs : null;
 	}
 }

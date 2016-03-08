@@ -27,8 +27,7 @@ import org.zkoss.zk.ui.WebApp;
  *
  * @author tomyeh
  */
-public class SerializableSession extends SimpleSession
-implements HttpSessionActivationListener, java.io.Serializable {
+public class SerializableSession extends SimpleSession implements HttpSessionActivationListener, java.io.Serializable {
 	private static final long serialVersionUID = 20080421L;
 
 	/** Constructor.
@@ -56,22 +55,23 @@ implements HttpSessionActivationListener, java.io.Serializable {
 	public SerializableSession(WebApp wapp, Object hsess, Object request) {
 		super(wapp, hsess, request);
 	}
+
 	//-- HttpSessionActivationListener --//
 	public void sessionWillPassivate(HttpSessionEvent se) {
 		sessionWillPassivate();
 	}
+
 	public void sessionDidActivate(HttpSessionEvent se) {
 		sessionDidActivate(se.getSession());
 	}
 
 	//Serializable//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-	throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 		writeThis(s);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		readThis(s);
 	}

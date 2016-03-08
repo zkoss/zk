@@ -30,18 +30,22 @@ import java.net.URL;
 	/*package*/ final File file;
 	/*package*/ final URL url;
 	/*package*/ final Object extra;
+
 	/**
 	 * @param extra the extra parameter passed from {@link ResourceCaches#get}.
 	 */
 	/*package*/ ResourceInfo(String path, File file, Object extra) {
-		if (file == null) throw new IllegalArgumentException("null");
+		if (file == null)
+			throw new IllegalArgumentException("null");
 		this.path = path;
 		this.file = file;
 		this.url = null;
 		this.extra = extra;
 	}
+
 	/*package*/ ResourceInfo(String path, URL url, Object extra) {
-		if (url == null) throw new IllegalArgumentException("url");
+		if (url == null)
+			throw new IllegalArgumentException("url");
 		this.path = path;
 		this.file = null;
 		this.url = url;
@@ -52,11 +56,13 @@ import java.net.URL;
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		return (o instanceof ResourceInfo) && path.equals(((ResourceInfo)o).path);
+		return (o instanceof ResourceInfo) && path.equals(((ResourceInfo) o).path);
 	}
+
 	public int hashCode() {
 		return this.path.hashCode();
 	}
+
 	public String toString() {
 		return this.path;
 	}

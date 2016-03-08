@@ -38,6 +38,7 @@ public interface PageSerializationListener {
 	/** Called when a page is going to serialize this object.
 	 */
 	public void willSerialize(Page page);
+
 	/** Called when a page has de-serialized this object back.
 	 */
 	public void didDeserialize(Page page);

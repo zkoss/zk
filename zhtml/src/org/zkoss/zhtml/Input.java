@@ -18,9 +18,11 @@ package org.zkoss.zhtml;
 
 import java.lang.Object; //since we have org.zkoss.zhtml.Object
 
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.CheckEvent;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.InputEvent;
 
 /**
  * The input tag.
@@ -38,50 +40,59 @@ public class Input extends AbstractTag {
 	public Input() {
 		this("input");
 	}
+
 	protected Input(String tagnm) {
 		super(tagnm);
 		setValue("");
 	}
 
-	/** Returns the value of this input.
+	/**
+	 * Returns the value of this input.
 	 */
 	public String getValue() {
-		return (String)getDynamicProperty("value");
+		return (String) getDynamicProperty("value");
 	}
-	/** Sets the vallue of this input.
+
+	/**
+	 * Sets the vallue of this input.
 	 */
 	public void setValue(String value) throws WrongValueException {
 		setDynamicProperty("value", value);
 	}
 
-	/** Returns if the input is checked (type: checkbox or radio).
+	/**
+	 * Returns if the input is checked (type: checkbox or radio).
 	 */
 	public boolean isChecked() {
-		final Boolean b = (Boolean)getDynamicProperty("checked");
+		final Boolean b = (Boolean) getDynamicProperty("checked");
 		return b != null && b.booleanValue();
 	}
-	/** Sets if the input is checked (type: checkbox or radio).
+
+	/**
+	 * Sets if the input is checked (type: checkbox or radio).
 	 */
 	public void setChecked(boolean checked) {
 		setDynamicProperty("checked", Boolean.valueOf(checked));
 	}
 
-	//-- Component --//
-	/** Returns the widget class, "zhtml.Input".
+	// -- Component --//
+	/**
+	 * Returns the widget class, "zhtml.Input".
+	 * 
 	 * @since 8.0.0
 	 */
 	public String getWidgetClass() {
 		return "zhtml.Input";
 	}
 
-
-	//super//
+	// super//
 	protected void smartUpdate(String attr, Object value) {
 		if (!_byClient)
 			super.smartUpdate(attr, value);
 	}
 
-	/** Processes an AU request.
+	/**
+	 * Processes an AU request.
 	 *
 	 * @since 5.0.0
 	 */

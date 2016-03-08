@@ -29,9 +29,9 @@ import org.acegisecurity.context.SecurityContext;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.NullWriter;
 import org.zkoss.lang.Exceptions;
-
 import org.zkoss.web.servlet.BufferedResponse;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -73,14 +73,14 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 		final WebApp app = Executions.getCurrent().getDesktop().getWebApp();
 		_enabled = app.getConfiguration().isEventThreadEnabled();
 	}
-	
+
 	//-- EventThreadInit --//
 	public void prepare(Component comp, Event evt) {
 		if (_enabled) {
 			_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
 		}
 	}
-	
+
 	public boolean init(Component comp, Event evt) {
 		if (_enabled) {
 			SecurityContextHolder.setContext(_context); //store into event thread
@@ -88,12 +88,12 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 		}
 		return true;
 	}
-	
+
 	//-- EventThreadCleanup --//
 	public void cleanup(Component comp, Event evt, List errs) {
-		if (!_enabled) 
+		if (!_enabled)
 			return;
-			
+
 		_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
 
 		//handle Acegi Exception occurred within Event handling
@@ -119,11 +119,12 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 		}
 
 		//there was other exception, no need to go thru acegi filter chain.
-		if (errs != null && !errs.isEmpty()) return;
-		
+		if (errs != null && !errs.isEmpty())
+			return;
+
 		//carry the current event that would be used by the filter chain.
 		exec.setAttribute(ZkAuthenticationProcessingFilter.CURRENT_EVENT, evt);
-		
+
 		Filter filter = (Filter) SpringUtil.getBean("zkFilterChainProxy");
 		if (filter != null) {
 			ServletRequest request = (ServletRequest) exec.getNativeRequest();
@@ -131,44 +132,44 @@ public class AcegiSecurityContextListener implements EventThreadInit, EventThrea
 			ServletResponse resp = BufferedResponse.getInstance(response, new NullWriter());
 			try {
 				filter.doFilter(request, resp, new NullFilterChain());
-			} catch(Exception ex1) {
+			} catch (Exception ex1) {
 				throw UiException.Aide.wrap(ex1); //should never occur
 			}
-			
+
 			//after filter chain, SecurityContext could have changed
 			_context = SecurityContextHolder.getContext(); //get threadLocal from event thread
 		}
 	}
-	
+
 	public void complete(Component comp, Event evt) {
 		if (_enabled) {
 			SecurityContextHolder.setContext(_context); //store into servlet thread
 			_context = null;
 		}
 	}
-	
+
 	//-- EventThreadResume --//
 	public void beforeResume(Component comp, Event evt) {
 		if (_enabled) {
 			_context = SecurityContextHolder.getContext(); //get threadLocal from servlet thread
 		}
 	}
-	
+
 	public void afterResume(Component comp, Event evt) {
 		if (_enabled) {
 			SecurityContextHolder.setContext(_context); //store into event thread
 			_context = null;
 		}
 	}
-	
- 	public void abortResume(Component comp, Event evt) {
- 		//do nothing
- 	}
 
-    private static class NullFilterChain implements FilterChain {
-    	public void doFilter(ServletRequest request, ServletResponse response)
-        throws java.io.IOException, ServletException {
-        	//do nothing
-        }
-    }
+	public void abortResume(Component comp, Event evt) {
+		//do nothing
+	}
+
+	private static class NullFilterChain implements FilterChain {
+		public void doFilter(ServletRequest request, ServletResponse response)
+				throws java.io.IOException, ServletException {
+			//do nothing
+		}
+	}
 }

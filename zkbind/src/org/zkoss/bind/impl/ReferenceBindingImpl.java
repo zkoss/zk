@@ -34,15 +34,15 @@ import org.zkoss.zk.ui.Component;
  */
 public class ReferenceBindingImpl extends BindingImpl implements ReferenceBinding {
 	private static final long serialVersionUID = 20120204122151L;
-	private final static Object NULL_VALUE = new Object();
+	private static final Object NULL_VALUE = new Object();
 
 	// make lazy init
 	private ExpressionX _exprX;
 	private final String _expression;
 	private transient Object _cacheValue; //null means invalid
 	private final String _attr;
-	
-	public ReferenceBindingImpl(Binder binder, Component comp, String attr,String expression) {
+
+	public ReferenceBindingImpl(Binder binder, Component comp, String attr, String expression) {
 		super(binder, comp, null);
 		_expression = expression;
 		_attr = attr;
@@ -57,65 +57,62 @@ public class ReferenceBindingImpl extends BindingImpl implements ReferenceBindin
 
 		return _exprX;
 	}
-	
+
 	public Object getValue(BindELContext ctx) {
 		load(null);
 		return _cacheValue == NULL_VALUE ? null : _cacheValue;
 	}
-	
-	
+
 	public void setValue(BindELContext ctx, Object val) {
 		invalidateCache();
 		final BindContext bctx = newBindContext();
 		getBinder().getEvaluatorX().setValue(bctx, getComponent(), initExpressionX(), val);
-		
-		
-		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
-		if(collector!=null){
-			collector.addInfo(new SaveInfo(SaveInfo.REFERENCE,getComponent(), null, _attr, getPropertyString(), val, null, null));
+
+		final BindingExecutionInfoCollector collector = ((BinderCtrl) getBinder()).getBindingExecutionInfoCollector();
+		if (collector != null) {
+			collector.addInfo(new SaveInfo(SaveInfo.REFERENCE, getComponent(), null, _attr, getPropertyString(), val,
+					null, null));
 		}
-		
+
 		//copy notifies back
 		final Set<Property> notifies = BindELContext.getNotifys(bctx);
-		if(notifies!=null){
+		if (notifies != null) {
 			BindELContext.addNotifys(notifies, ctx.getBindContext());
 		}
 	}
-	
+
 	private BindContext newBindContext() {
 		return BindContextUtil.newBindContext(getBinder(), this, false, null, getComponent(), null);
 	}
 
-	
 	public void load(BindContext ctx) {
 		if (_cacheValue == null) {
 			final BindContext bctx = newBindContext();
 			final Object val = getBinder().getEvaluatorX().getValue(bctx, getComponent(), initExpressionX());
 			_cacheValue = val == null ? NULL_VALUE : val;
-			
-			final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
-			if(collector!=null){
-				collector.addInfo(new LoadInfo(LoadInfo.REFERENCE,getComponent(), null, getPropertyString(), _attr, _cacheValue, null, null));
+
+			final BindingExecutionInfoCollector collector = ((BinderCtrl) getBinder())
+					.getBindingExecutionInfoCollector();
+			if (collector != null) {
+				collector.addInfo(new LoadInfo(LoadInfo.REFERENCE, getComponent(), null, getPropertyString(), _attr,
+						_cacheValue, null, null));
 			}
 		}
 	}
 
-	
 	public String getPropertyString() {
 		return BindEvaluatorXUtil.getExpressionString(initExpressionX());
 	}
 
-	
 	public void invalidateCache() {
 		_cacheValue = null;
 	}
 
-	public String toString(){
-		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
-				.append(",component:").append(getComponent()).toString();
+	public String toString() {
+		return new StringBuilder().append(getClass().getSimpleName()).append("@")
+				.append(Integer.toHexString(hashCode())).append(",component:").append(getComponent()).toString();
 	}
 
-	
 	/*package*/ ValueReference getValueReference() {
 		final BindContext bctx = newBindContext();
 		return getBinder().getEvaluatorX().getValueReference(bctx, getComponent(), initExpressionX());

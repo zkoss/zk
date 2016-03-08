@@ -18,8 +18,8 @@ package org.zkoss.zk.ui.metainfo;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.ConditionImpl;
-import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * The forward directive in the ZUML page.
@@ -45,6 +45,7 @@ public class ForwardInfo { //directive
 	public String getURI() {
 		return _uri.getRawValue();
 	}
+
 	/** Evaluates and returns the URI, or null if not to forward.
 	 *
 	 * <p>Note: if URI contains EL expressions and is evaluated to an empty
@@ -53,7 +54,7 @@ public class ForwardInfo { //directive
 	public String resolveURI(PageDefinition pgdef, Page page) {
 		final Evaluator eval = pgdef.getEvaluator();
 		if (_cond == null || _cond.isEffective(eval, page)) {
-			final String uri = (String)_uri.getValue(eval, page);
+			final String uri = (String) _uri.getValue(eval, page);
 			if (uri != null && uri.length() != 0)
 				return uri;
 		}

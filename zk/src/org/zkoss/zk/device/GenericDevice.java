@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.sys.ServerPush;
  * @author tomyeh
  * @since 3.0.0
  */
-abstract public class GenericDevice implements Device {
+public abstract class GenericDevice implements Device {
 	private String _type, _uamsg;
 	private Class _spushcls;
 	private String _embed;
@@ -34,36 +34,42 @@ abstract public class GenericDevice implements Device {
 	public boolean isSupported(int func) {
 		return false;
 	}
+
 	public String getType() {
 		return _type;
 	}
+
 	/** Return true to indicate it is cacheable.
 	 */
 	public boolean isCacheable() {
 		return true;
 	}
+
 	/** Returns null to indicate unknown.
 	 * Deriving should override it to provide more precise information.
 	 */
 	public Boolean isCompatible(String userAgent) {
 		return null;
 	}
+
 	public String getUnavailableMessage() {
 		return _uamsg;
 	}
+
 	public String setUnavailableMessage(String msg) {
 		final String old = _uamsg;
-		_uamsg = msg != null && msg.length() > 0 ? msg: null;
+		_uamsg = msg != null && msg.length() > 0 ? msg : null;
 		return old;
 	}
 
 	public Class setServerPushClass(Class cls) {
 		if (cls != null && !ServerPush.class.isAssignableFrom(cls))
-			throw new IllegalArgumentException("ServerPush not implemented: "+cls);
+			throw new IllegalArgumentException("ServerPush not implemented: " + cls);
 		final Class old = _spushcls;
 		_spushcls = cls;
 		return old;
 	}
+
 	public Class getServerPushClass() {
 		return _spushcls;
 	}
@@ -76,8 +82,9 @@ abstract public class GenericDevice implements Device {
 
 	public void addEmbedded(String content) {
 		if (content != null && content.length() > 0)
-			_embed = _embed != null ? _embed + '\n' + content: content;
+			_embed = _embed != null ? _embed + '\n' + content : content;
 	}
+
 	public String getEmbedded() {
 		return _embed;
 	}
@@ -101,10 +108,10 @@ abstract public class GenericDevice implements Device {
 	 * <p>Default: throw UnsupportedOperationException.
 	 * @since 5.0.4
 	 */
-	public void reloadMessages(java.util.Locale locale)
-	throws java.io.IOException {
+	public void reloadMessages(java.util.Locale locale) throws java.io.IOException {
 		throw new UnsupportedOperationException();
 	}
+
 	/** Converts a package to an absolute path that can be accessible by
 	 * the class loader (classpath).
 	 * <p>Default: throw UnsupportedOperationException.
@@ -113,6 +120,7 @@ abstract public class GenericDevice implements Device {
 	public String packageToPath(String pkg) {
 		throw new UnsupportedOperationException();
 	}
+
 	/** Converts a relative path to an absolute path that can be accessible by
 	 * the class loader (classpath).
 	 * <p>Default: throw UnsupportedOperationException.
@@ -128,8 +136,10 @@ abstract public class GenericDevice implements Device {
 		_spushcls = config.getServerPushClass();
 		_embed = config.getEmbedded();
 	}
+
 	public void sessionWillPassivate(Desktop desktop) {
 	}
+
 	public void sessionDidActivate(Desktop desktop) {
 	}
 }

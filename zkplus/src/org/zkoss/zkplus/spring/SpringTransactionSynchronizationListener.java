@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.SystemException;
 import org.zkoss.zk.ui.Component;
@@ -51,9 +52,10 @@ import org.zkoss.zkplus.util.ThreadLocals;
  * <p>Applicable to Spring Framework version 2.x or later</p>
  * @author henrichen
  */
-public class SpringTransactionSynchronizationListener implements EventThreadInit, EventThreadCleanup, EventThreadResume {
+public class SpringTransactionSynchronizationListener
+		implements EventThreadInit, EventThreadCleanup, EventThreadResume {
 	private static final Logger log = LoggerFactory.getLogger(SpringTransactionSynchronizationListener.class);
-	
+
 	private Object[] _threadLocals = null;
 	private final boolean _enabled; //whether event thread enabled
 
@@ -68,7 +70,7 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 			getThreadLocals(); //get from servlet thread's ThreadLocal
 		}
 	}
-	
+
 	public boolean init(Component comp, Event evt) {
 		if (_enabled) {
 			setThreadLocals(); //copy to event thread's ThreadLocal
@@ -96,29 +98,30 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 			getThreadLocals(); //get from servlet thread's ThreadLocal
 		}
 	}
-	
+
 	public void afterResume(Component comp, Event evt) {
 		if (_enabled) {
 			setThreadLocals(); //copy to event thread's ThreadLocal
 		}
 	}
-	
-	public void abortResume(Component comp, Event evt){
+
+	public void abortResume(Component comp, Event evt) {
 		//do nothing
 	}
-	
+
 	//-- utilities --//
 	private void getThreadLocals() {
 		try {
-			Class cls = Classes.forNameByThread("org.springframework.transaction.support.TransactionSynchronizationManager");
-	
+			Class cls = Classes
+					.forNameByThread("org.springframework.transaction.support.TransactionSynchronizationManager");
+
 			_threadLocals = new Object[7];
 			_threadLocals[0] = getThreadLocal(cls, "resources").get();
 			_threadLocals[1] = getThreadLocal(cls, "synchronizations").get();
 			_threadLocals[2] = getThreadLocal(cls, "currentTransactionName").get();
 			_threadLocals[3] = getThreadLocal(cls, "currentTransactionReadOnly").get();
 			_threadLocals[4] = getThreadLocal(cls, "actualTransactionActive").get();
-	
+
 			//20070907, Henri Chen: bug 1785457, hibernate3 might not used
 			try {
 				cls = Classes.forNameByThread("org.springframework.orm.hibernate3.SessionFactoryUtils");
@@ -126,13 +129,13 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 			} catch (ClassNotFoundException ex) {
 				//ignore if hibernate 3 is not used.
 			}
-			
+
 			cls = Classes.forNameByThread("org.springframework.transaction.interceptor.TransactionAspectSupport");
-			
+
 			//Spring 1.2.8 and Spring 2.0.x, the ThreadLocal field name has changed, default use 2.0.x
 			//2.0.x transactionInfoHolder
 			//1.2.8 currentTransactionInfo
-			try { 
+			try {
 				_threadLocals[6] = getThreadLocal(cls, "transactionInfoHolder").get();
 			} catch (SystemException ex) {
 				if (ex.getCause() instanceof NoSuchFieldException) {
@@ -146,31 +149,32 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 		}
 	}
 
-	@SuppressWarnings("unchecked")	
+	@SuppressWarnings("unchecked")
 	private void setThreadLocals() {
 		if (_threadLocals != null) {
 			try {
-				Class cls = Classes.forNameByThread("org.springframework.transaction.support.TransactionSynchronizationManager");
-		
+				Class cls = Classes
+						.forNameByThread("org.springframework.transaction.support.TransactionSynchronizationManager");
+
 				getThreadLocal(cls, "resources").set(_threadLocals[0]);
 				getThreadLocal(cls, "synchronizations").set(_threadLocals[1]);
 				getThreadLocal(cls, "currentTransactionName").set(_threadLocals[2]);
 				getThreadLocal(cls, "currentTransactionReadOnly").set(_threadLocals[3]);
 				getThreadLocal(cls, "actualTransactionActive").set(_threadLocals[4]);
-				
+
 				//20070907, Henri Chen: bug 1785457, hibernate3 might not used
 				try {
 					cls = Classes.forNameByThread("org.springframework.orm.hibernate3.SessionFactoryUtils");
 					getThreadLocal(cls, "deferredCloseHolder").set(_threadLocals[5]);
 				} catch (ClassNotFoundException ex) {
 					//ignore if hibernate 3 is not used.
-				} 
+				}
 
 				cls = Classes.forNameByThread("org.springframework.transaction.interceptor.TransactionAspectSupport");
 				//Spring 1.2.8 and Spring 2.0.x, the ThreadLocal field name has changed, default use 2.0.x
 				//2.0.x transactionInfoHolder
 				//1.2.8 currentTransactionInfo
-				try { 
+				try {
 					getThreadLocal(cls, "transactionInfoHolder").set(_threadLocals[6]);
 				} catch (SystemException ex) {
 					if (ex.getCause() instanceof NoSuchFieldException) {
@@ -179,14 +183,14 @@ public class SpringTransactionSynchronizationListener implements EventThreadInit
 						throw ex;
 					}
 				}
-				
+
 				_threadLocals = null;
 			} catch (ClassNotFoundException ex) {
 				throw UiException.Aide.wrap(ex);
 			}
 		}
 	}
-		
+
 	private ThreadLocal getThreadLocal(Class cls, String fldname) {
 		return ThreadLocals.getThreadLocal(cls, fldname);
 	}

@@ -17,16 +17,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.util.media.RepeatableMedia;
 import org.zkoss.util.media.Media;
+import org.zkoss.util.media.RepeatableMedia;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.URIEvent;
-
-import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zul.impl.Utils;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * Includes an inline frame.
@@ -45,7 +44,7 @@ public class Iframe extends HtmlBasedComponent {
 	private String _align, _name;
 	private String _src, _scrolling = "auto";
 	/** The media. _src and _media cannot be nonnull at the same time. */
-	private Media _media; 
+	private Media _media;
 	/** Count the version of {@link #_media}. */
 	private byte _medver;
 	/** Whether to hide when a popup or dropdown is placed on top of it. */
@@ -57,10 +56,11 @@ public class Iframe extends HtmlBasedComponent {
 
 	public Iframe() {
 	}
+
 	public Iframe(String src) {
 		setSrc(src);
 	}
-	
+
 	/**
 	 * Define scroll bars
 	 * @param scrolling "true", "false", "yes" or "no" or "auto", "auto" by default
@@ -68,13 +68,14 @@ public class Iframe extends HtmlBasedComponent {
 	 * @since 3.0.4
 	 */
 	public void setScrolling(String scrolling) {
-		if (scrolling == null) scrolling = "auto";
+		if (scrolling == null)
+			scrolling = "auto";
 		if (!scrolling.equals(_scrolling)) {
 			_scrolling = scrolling;
 			smartUpdate("scrolling", _scrolling);
 		}
 	}
-	
+
 	/**
 	 * Return the scroll bars.
 	 * <p>Default: "auto"
@@ -83,7 +84,7 @@ public class Iframe extends HtmlBasedComponent {
 	public String getScrolling() {
 		return _scrolling;
 	}
-	
+
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
 	 * @deprecated as of release 6.0.0, use CSS instead.
@@ -91,6 +92,7 @@ public class Iframe extends HtmlBasedComponent {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the alignment: one of top, middle, bottom, left, right and
 	 * center.
 	 * @deprecated as of release 6.0.0, use CSS instead.
@@ -101,12 +103,14 @@ public class Iframe extends HtmlBasedComponent {
 			smartUpdate("align", _align);
 		}
 	}
+
 	/** Returns the frame name.
 	 * <p>Default: null (use browser default).
 	 */
 	public String getName() {
 		return _name;
 	}
+
 	/** Sets the frame name.
 	 */
 	public void setName(String name) {
@@ -132,6 +136,7 @@ public class Iframe extends HtmlBasedComponent {
 	public boolean isAutohide() {
 		return _autohide;
 	}
+
 	/** Sets whether to automatically hide this component if
 	 * a popup or dropdown is overlapped with it.
 	 * Refer to {@link #isAutohide} for more information
@@ -149,6 +154,7 @@ public class Iframe extends HtmlBasedComponent {
 	public String getSrc() {
 		return _src;
 	}
+
 	/** Sets the src.
 	 *
 	 * <p>Calling this method implies setContent(null).
@@ -167,13 +173,14 @@ public class Iframe extends HtmlBasedComponent {
 			smartUpdate("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
+
 	/** Returns the encoded src ({@link #getSrc}).
 	 */
 	protected String getEncodedSrc() {
 		final Desktop dt = getDesktop();
-		return _media != null ? getMediaSrc(): //already encoded
-			dt != null && _src != null ?
-				dt.getExecution().encodeURL(_src):  "";
+		return _media != null ? getMediaSrc()
+				: //already encoded
+				dt != null && _src != null ? dt.getExecution().encodeURL(_src) : "";
 	}
 
 	/** Sets the content directly.
@@ -188,13 +195,15 @@ public class Iframe extends HtmlBasedComponent {
 	public void setContent(Media media) {
 		if (_src != null || media != _media) {
 			_media = RepeatableMedia.getInstance(media);
-				//Use RepeatableMedia since it might be reloaded
-				//if the component is invalidated or overlapped wnd (Bug 1896797)
+			//Use RepeatableMedia since it might be reloaded
+			//if the component is invalidated or overlapped wnd (Bug 1896797)
 			_src = null;
-			if (_media != null) ++_medver; //enforce browser to reload
+			if (_media != null)
+				++_medver; //enforce browser to reload
 			smartUpdate("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
+
 	/** Returns the content set by {@link #setContent}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
 	 * It simply returns what is passed to {@link #setContent}.
@@ -207,13 +216,11 @@ public class Iframe extends HtmlBasedComponent {
 	 * Don't call this method unless _media is not null;
 	 */
 	private String getMediaSrc() {
-		return Utils.getDynamicMediaURI(
-			this, _medver, _media.getName(), _media.getFormat());
+		return Utils.getDynamicMediaURI(this, _medver, _media.getName(), _media.getFormat());
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "src", getEncodedSrc());
@@ -249,11 +256,11 @@ public class Iframe extends HtmlBasedComponent {
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements DynamicMedia {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements DynamicMedia {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			return _media;

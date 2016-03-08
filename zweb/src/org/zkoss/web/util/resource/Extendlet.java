@@ -49,6 +49,7 @@ public interface Extendlet {
 	/** Initializes the resource processor.
 	 */
 	public void init(ExtendletConfig config);
+
 	/** Returns if the specified feature is supported.
 	 * @since 3.5.2
 	 */
@@ -59,7 +60,6 @@ public interface Extendlet {
 	 * @param path the path mapped to this resource processor.
 	 * @since 5.0.0
 	 */
-	public void service(HttpServletRequest request,
-	HttpServletResponse response, String path)
-	throws ServletException, IOException;
+	public void service(HttpServletRequest request, HttpServletResponse response, String path)
+			throws ServletException, IOException;
 }

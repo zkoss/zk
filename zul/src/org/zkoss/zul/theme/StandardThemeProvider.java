@@ -37,22 +37,22 @@ import org.zkoss.zk.ui.util.ThemeProvider;
  * @author neillee
  */
 public class StandardThemeProvider implements ThemeProvider {
-	
+
 	/**
 	 * Default theme css file
 	 */
-	public final static String DEFAULT_WCS = "~./zul/css/zk.wcs";
-	
+	public static final String DEFAULT_WCS = "~./zul/css/zk.wcs";
+
 	protected static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
 		return StandardTheme.DEFAULT_NAME.equals(suffix) ? null : suffix;
 	}
-	
+
 	private void bypassURI(List<Object> uris, String suffix) {
 		for (ListIterator<Object> it = uris.listIterator(); it.hasNext();) {
 			Object o = it.next();
 			if (o instanceof String) {
-				final String uri = (String)o;
+				final String uri = (String) o;
 				if (uri.startsWith(DEFAULT_WCS)) {
 					it.set(Aide.injectURI(uri, suffix));
 					break;
@@ -60,36 +60,31 @@ public class StandardThemeProvider implements ThemeProvider {
 			}
 		}
 	}
-	
-	
+
 	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
 		String suffix = getThemeFileSuffix();
-		
+
 		if (!Strings.isEmpty(suffix))
 			bypassURI(uris, suffix);
-				
+
 		return uris;
 	}
-	
-	
+
 	public int getWCSCacheControl(Execution exec, String uri) {
 		return 8760; // a year. (JVM will utilize it, don't have to count the answer)
 	}
-	
-	
+
 	public String beforeWCS(Execution exec, String uri) {
 		return uri;
 	}
-	
-	
+
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		if (uri.startsWith("~./zul/css/") ||
-			uri.startsWith("~./js/zul/")) {
-			
+		if (uri.startsWith("~./zul/css/") || uri.startsWith("~./js/zul/")) {
+
 			uri = ServletFns.resolveThemeURL(uri);
 		}
-		
+
 		return uri;
 	}
-	
+
 }

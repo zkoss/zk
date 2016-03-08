@@ -23,7 +23,6 @@ import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.PropertyBinding;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-import org.zkoss.xel.ExpressionX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -32,8 +31,8 @@ import org.zkoss.zk.ui.UiException;
  * @author JamesChu
  * @since 8.0.0
  */
-public class FormattedTimeConverter implements Converter,Serializable {
-	
+public class FormattedTimeConverter implements Converter, Serializable {
+
 	private static final long serialVersionUID = 3505731684878632094L;
 
 	/**
@@ -46,11 +45,12 @@ public class FormattedTimeConverter implements Converter,Serializable {
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		//user sets format in annotation of binding or args when calling binder.addPropertyBinding()  
 		final String format = (String) ctx.getConverterArg("format");
-		if(format==null) throw new NullPointerException("format attribute not found");
+		if (format == null)
+			throw new NullPointerException("format attribute not found");
 		final Date date = (Date) val;
 		return date == null ? null : getLocalizedSimpleDateFormat(format).format(date);
 	}
-	
+
 	/**
 	 * Convert String to Date.
 	 * @param val date in string form
@@ -60,22 +60,24 @@ public class FormattedTimeConverter implements Converter,Serializable {
 	 */
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
 		final String format = (String) ctx.getConverterArg("format");
-		if (format == null) throw new NullPointerException("format attribute not found");
+		if (format == null)
+			throw new NullPointerException("format attribute not found");
 		final String dateStr = (String) val;
-		
+
 		try {
 			Date newDate = dateStr == null ? null : getLocalizedSimpleDateFormat(format).parse(dateStr);
 			if (newDate != null) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTimeZone(TimeZones.getCurrent());
 				cal.setTime(newDate);
-				
+
 				Binding b = ctx.getBinding();
 				if (b instanceof PropertyBinding) {
-					int h = cal.get(Calendar.HOUR_OF_DAY), m = cal.get(Calendar.MINUTE), s = cal.get(Calendar.SECOND)
-						, ms = cal.get(Calendar.MILLISECOND);
-					
-					Object value = ctx.getBinder().getEvaluatorX().getValue(ctx, comp, ((PropertyBinding)b).getProperty());
+					int h = cal.get(Calendar.HOUR_OF_DAY), m = cal.get(Calendar.MINUTE), s = cal.get(Calendar.SECOND),
+							ms = cal.get(Calendar.MILLISECOND);
+
+					Object value = ctx.getBinder().getEvaluatorX().getValue(ctx, comp,
+							((PropertyBinding) b).getProperty());
 					Date oldDate = new Date();
 					if (value instanceof Date)
 						oldDate = (Date) value;
@@ -96,8 +98,8 @@ public class FormattedTimeConverter implements Converter,Serializable {
 			throw UiException.Aide.wrap(e);
 		}
 	}
-	
-	private static SimpleDateFormat getLocalizedSimpleDateFormat(String formatPtn){
+
+	private static SimpleDateFormat getLocalizedSimpleDateFormat(String formatPtn) {
 		SimpleDateFormat sdf = new SimpleDateFormat(formatPtn, Locales.getCurrent());
 		sdf.setTimeZone(TimeZones.getCurrent());
 		return sdf;

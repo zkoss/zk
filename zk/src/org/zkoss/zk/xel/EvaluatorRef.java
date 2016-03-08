@@ -39,6 +39,7 @@ public interface EvaluatorRef extends Evaluator, java.io.Serializable {
 	/** Returns the real evaluator.
 	 */
 	public Evaluator getEvaluator();
+
 	/** Returns the page definition of this reference, or null if not
 	 * available.
 	 */

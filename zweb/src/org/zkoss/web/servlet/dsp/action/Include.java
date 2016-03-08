@@ -33,22 +33,22 @@ public class Include extends AbstractAction {
 	public String getPage() {
 		return _page;
 	}
+
 	/** Sets the page (URI). */
 	public void setPage(String page) {
 		_page = page;
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
 		if (!isEffective())
 			return;
 		if (nested)
 			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
-				new Object[] {this, new Integer(ac.getLineNumber())});
+					new Object[] { this, new Integer(ac.getLineNumber()) });
 		if (_page == null)
 			throw new DspException(MWeb.DSP_ATTRIBUTE_REQUIRED,
-				new Object[] {this, "page", new Integer(ac.getLineNumber())});
+					new Object[] { this, "page", new Integer(ac.getLineNumber()) });
 		ac.include(_page, null);
 	}
 

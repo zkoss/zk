@@ -16,11 +16,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.MouseEvent;
+import org.zkoss.zk.ui.event.OpenEvent;
 
 /**
  * A combo button. A combo button consists of a button {@link Combobutton} and
@@ -49,23 +51,24 @@ public class Combobutton extends Button {
 	private boolean _autodrop, _open;
 
 	static {
-		addClientEvent(Combobutton.class, Events.ON_CLICK, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
-		addClientEvent(Combobutton.class, Events.ON_OPEN, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
+		addClientEvent(Combobutton.class, Events.ON_CLICK, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
+		addClientEvent(Combobutton.class, Events.ON_OPEN, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
 	public Combobutton() {
 	}
+
 	public Combobutton(String value) throws WrongValueException {
 		this();
 		setLabel(value);
 	}
-	
+
 	/** Returns the dropdown window belonging to this combo button.
 	 */
 	public Popup getDropdown() {
-		return (Popup)getFirstChild();
+		return (Popup) getFirstChild();
 	}
-	
+
 	/** Returns whether to automatically drop the popup if user hovers on this 
 	 * Combobutton.
 	 * <p>Default: false.
@@ -73,7 +76,7 @@ public class Combobutton extends Button {
 	public boolean isAutodrop() {
 		return _autodrop;
 	}
-	
+
 	/** Sets whether to automatically drop the popup if user hovers on this 
 	 * Combobutton.
 	 */
@@ -93,11 +96,14 @@ public class Combobutton extends Button {
 		if (open != _open) {
 			_open = open;
 			if (isVisible()) {
-				if (open) open();
-				else close();
+				if (open)
+					open();
+				else
+					close();
 			}
 		}
 	}
+
 	/** Returns whether this combobutton is open.
 	 *
 	 * <p>Default: false.
@@ -106,12 +112,14 @@ public class Combobutton extends Button {
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Drops down the child.
 	 * The same as setOpen(true).
 	 */
 	public void open() {
 		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
+
 	/** Closes the child if it was dropped down.
 	 * The same as setOpen(false).
 	 */
@@ -124,11 +132,12 @@ public class Combobutton extends Button {
 		// F60-ZK-719
 		return _zclass == null ? "default".equals(getMold()) ? "z-combobutton" : "z-combobutton-toolbar" : _zclass;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		render(renderer, "autodrop", _autodrop);
 	}
+
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CLICK)) {
@@ -140,15 +149,16 @@ public class Combobutton extends Button {
 		} else
 			super.service(request, everError);
 	}
-	
+
 	//-- Component --//
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Popup))
-			throw new UiException("Unsupported child for Combobutton: "+newChild);
+			throw new UiException("Unsupported child for Combobutton: " + newChild);
 		if (getFirstChild() != null)
-			throw new UiException("At most one popup is allowed, "+this);
+			throw new UiException("At most one popup is allowed, " + this);
 		super.beforeChildAdded(newChild, refChild);
 	}
+
 	protected boolean isChildable() {
 		return true;
 	}
@@ -160,5 +170,5 @@ public class Combobutton extends Button {
 	public void setUpload(String upload) {
 		throw new UnsupportedOperationException("Combobutton do not support file upload.");
 	}
-	
+
 }

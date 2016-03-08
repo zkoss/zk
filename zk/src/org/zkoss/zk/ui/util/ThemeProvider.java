@@ -87,6 +87,7 @@ public interface ThemeProvider {
 	 * If you don't want the client to cache, return a non-positive number.
 	 */
 	public int getWCSCacheControl(Execution exec, String uri);
+
 	/** Called when a WCS (Widget CSS descriptor) file is about to be loaded.
 	 * This method then returns the real URI of the WCS file to load.
 	 * If no need to change, just return the <code>uri</code> parameter.
@@ -166,25 +167,21 @@ public interface ThemeProvider {
 					fragment = fragment.substring(0, k) + '-' + fragment.substring(k + 1);
 					j = k + 1;
 				}
-				return "~./" + Attributes.INJECT_URI_PREFIX
-					+ fragment + uri.substring(2);
+				return "~./" + Attributes.INJECT_URI_PREFIX + fragment + uri.substring(2);
 			}
 			return uri;
 		}
+
 		/** Decodes the injected URI and returns a two-element array.
 		 * The first element is the original URI, while the second
 		 * element is the fragment.
 		 * <p>Notice that it returns null if no injection is found.
 		 */
 		public static String[] decodeURI(String uri) {
-			if (uri.startsWith("~./")
-			&& uri.substring(3).startsWith(Attributes.INJECT_URI_PREFIX)) {
-				final int j = 3 + Attributes.INJECT_URI_PREFIX.length(),
-					k = uri.indexOf('/', j);
+			if (uri.startsWith("~./") && uri.substring(3).startsWith(Attributes.INJECT_URI_PREFIX)) {
+				final int j = 3 + Attributes.INJECT_URI_PREFIX.length(), k = uri.indexOf('/', j);
 				if (k > 0)
-					return new String[] {
-						"~./" + uri.substring(k + 1), uri.substring(j, k)
-					};
+					return new String[] { "~./" + uri.substring(k + 1), uri.substring(j, k) };
 			}
 			return null;
 		}

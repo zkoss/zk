@@ -16,12 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.impl.Attributes;
 
 /**
@@ -51,22 +51,25 @@ public class AuEcho extends AuResponse {
 	 * @since 3.0.0
 	 */
 	public AuEcho(Desktop desktop) {
-		super("echo", desktop != null ? desktop.getId(): null);
+		super("echo", desktop != null ? desktop.getId() : null);
 	}
+
 	/** Constructs an echo response for each desktop in the same browser
 	 * window
 	 */
 	public AuEcho() {
-		this((Desktop)null);
+		this((Desktop) null);
 	}
+
 	/** Constructs an echo response that will cause an event to fire
 	 * when the client echoes back.
 	 * <p>It is the same as <code>AuEcho(comp, evtnm, (Object)data)</code>.
 	 * @since 3.0.2
 	 */
 	public AuEcho(Component comp, String evtnm, String data) {
-		this(comp, evtnm, (Object)data);
+		this(comp, evtnm, (Object) data);
 	}
+
 	/** Constructs an echo response that will cause an event to fire
 	 * when the client echoes back.
 	 *
@@ -77,30 +80,29 @@ public class AuEcho extends AuResponse {
 	 */
 	public AuEcho(Component comp, String evtnm, Object data) {
 		super("echo2", comp,
-			data != null ?
-				new Object[] {comp, evtnm, getKeyOfData(comp, data)}:
-				new Object[] {comp, evtnm});
+				data != null ? new Object[] { comp, evtnm, getKeyOfData(comp, data) } : new Object[] { comp, evtnm });
 	}
+
 	/** Note: data must be non-null. */
 	@SuppressWarnings("unchecked")
 	private static Integer getKeyOfData(Component comp, Object data) {
-		Object[] inf = (Object[])comp.getAttribute(Attributes.ECHO_DATA);
+		Object[] inf = (Object[]) comp.getAttribute(Attributes.ECHO_DATA);
 		if (inf == null)
-			comp.setAttribute(Attributes.ECHO_DATA,
-				inf = new Object[] {new Integer(0), new HashMap(4)});
-		final Integer key = (Integer)inf[0];
-		((Map)inf[1]).put(key, data);
+			comp.setAttribute(Attributes.ECHO_DATA, inf = new Object[] { new Integer(0), new HashMap(4) });
+		final Integer key = (Integer) inf[0];
+		((Map) inf[1]).put(key, data);
 		inf[0] = new Integer(key.intValue() + 1);
 		return key;
 	}
+
 	/** Retrieves the data associated with an echo event.
 	 * Notice that the data will be removed, so the next call always returns null.
 	 * @since 5.0.4
 	 */
 	public static Object getData(Component comp, Object key) {
-		final Object[] inf = (Object[])comp.getAttribute(Attributes.ECHO_DATA);
+		final Object[] inf = (Object[]) comp.getAttribute(Attributes.ECHO_DATA);
 		if (inf != null) {
-			final Map map = (Map)inf[1];
+			final Map map = (Map) inf[1];
 			final Object data = map.remove(key);
 			if (map.isEmpty())
 				comp.removeAttribute(Attributes.ECHO_DATA);
@@ -114,6 +116,6 @@ public class AuEcho extends AuResponse {
 	 * @since 5.0.2
 	 */
 	public final String getOverrideKey() {
-		return getDepends() != null ? null/*event might diff*/: "zk.echo";
+		return getDepends() != null ? null/*event might diff*/ : "zk.echo";
 	}
 }

@@ -23,16 +23,19 @@ import org.zkoss.zk.ui.UiException;
 public class RequestOutOfSequenceException extends UiException {
 	private final String _reqId;
 	private final String _oldReqId;
+
 	public RequestOutOfSequenceException(String reqId, String oldReqId) {
-		super("Request "+reqId+" out-of-sequence when processing "+oldReqId);
+		super("Request " + reqId + " out-of-sequence when processing " + oldReqId);
 		_reqId = reqId;
 		_oldReqId = oldReqId;
 	}
+
 	/** Returns the sequence ID of the new request.
 	 */
 	public String getRequestId() {
 		return _reqId;
 	}
+
 	/** Returns the sequence ID of the request being processed.
 	 */
 	public String getProcessingId() {

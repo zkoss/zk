@@ -14,39 +14,37 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.http;
 
-import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.SystemException;
-import org.zkoss.util.media.Media;
 
 import org.zkoss.io.Files;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
-
+import org.zkoss.lang.Strings;
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.media.Media;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ExtendletContext;
@@ -70,9 +68,8 @@ public class Https extends Servlets {
 	 * null if the browser doesn't support the compression.
 	 * @since 2.4.1
 	 */
-	public static final byte[] gzip(HttpServletRequest request,
-	HttpServletResponse response, InputStream content1,
-	byte[] content2) throws IOException {
+	public static final byte[] gzip(HttpServletRequest request, HttpServletResponse response, InputStream content1,
+			byte[] content2) throws IOException {
 		//We check Content-Encoding first to avoid compressing twice
 		String ae = request.getHeader("accept-encoding");
 		if (ae != null && !response.containsHeader("Content-Encoding")) {
@@ -80,13 +77,15 @@ public class Https extends Servlets {
 				response.addHeader("Content-Encoding", "gzip");
 				final ByteArrayOutputStream boas = new ByteArrayOutputStream(8192);
 				final GZIPOutputStream gzs = new GZIPOutputStream(boas);
-				if (content1 != null) Files.copy(gzs, content1);
-				if (content2 != null) gzs.write(content2);
+				if (content1 != null)
+					Files.copy(gzs, content1);
+				if (content2 != null)
+					gzs.write(content2);
 				gzs.finish();
 				return boas.toByteArray();
-//			} else if (ae.indexOf("deflate") >= 0) {
-//Refer to http://www.gzip.org/zlib/zlib_faq.html#faq38
-//It is not a good idea to zlib (i.e., deflate)
+				//			} else if (ae.indexOf("deflate") >= 0) {
+				//Refer to http://www.gzip.org/zlib/zlib_faq.html#faq38
+				//It is not a good idea to zlib (i.e., deflate)
 			}
 		}
 		return null;
@@ -101,7 +100,7 @@ public class Https extends Servlets {
 		final String ctx = hreq.getContextPath();
 		final int j = sb.indexOf(ctx);
 		if (j < 0)
-			throw new SystemException("Unknown request: url="+sb+", ctx="+ctx);
+			throw new SystemException("Unknown request: url=" + sb + ", ctx=" + ctx);
 		return sb.delete(j, sb.length()).toString();
 	}
 
@@ -115,15 +114,14 @@ public class Https extends Servlets {
 		final String ctx = hreq.getContextPath();
 		final int j = sb.indexOf(ctx);
 		if (j < 0)
-			throw new SystemException("Unknown request: url="+sb+", ctx="+ctx);
+			throw new SystemException("Unknown request: url=" + sb + ", ctx=" + ctx);
 		return sb.delete(j + ctx.length(), sb.length()).toString();
 	}
 
 	/** Gets the value of the specified cookie, or null if not found.
 	 * @param name the cookie's name
 	 */
-	public static final
-	String getCookieValue(HttpServletRequest request, String name) {
+	public static final String getCookieValue(HttpServletRequest request, String name) {
 		final Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (int j = cookies.length; --j >= 0;) {
@@ -158,11 +156,11 @@ public class Https extends Servlets {
 	 * @return "/" if request is not a http request
 	 */
 	public static final String getThisContextPath(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH);
-		return path != null ? path:
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getContextPath(): "";
+		String path = (String) request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH);
+		return path != null ? path
+				: request instanceof HttpServletRequest ? ((HttpServletRequest) request).getContextPath() : "";
 	}
+
 	/**
 	 * Gets the servlet path of this page.
 	 * Unlike getServletPath, it detects whether the current page is included.
@@ -170,11 +168,11 @@ public class Https extends Servlets {
 	 * @return "/" if request is not a http request
 	 */
 	public static final String getThisServletPath(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.INCLUDE_SERVLET_PATH);
-		return path != null ? path:
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getServletPath(): "/";
+		String path = (String) request.getAttribute(Attributes.INCLUDE_SERVLET_PATH);
+		return path != null ? path
+				: request instanceof HttpServletRequest ? ((HttpServletRequest) request).getServletPath() : "/";
 	}
+
 	/**
 	 * Gets the request URI of this page.
 	 * Unlike getRequestURI, it detects whether the current page is included.
@@ -182,11 +180,11 @@ public class Https extends Servlets {
 	 * @return "/" if request is not a http request
 	 */
 	public static final String getThisRequestURI(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.INCLUDE_REQUEST_URI);
-		return path != null ? path:
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getRequestURI(): "/";
+		String path = (String) request.getAttribute(Attributes.INCLUDE_REQUEST_URI);
+		return path != null ? path
+				: request instanceof HttpServletRequest ? ((HttpServletRequest) request).getRequestURI() : "/";
 	}
+
 	/**
 	 * Gets the query string of this page.
 	 * Unlike getQueryString, it detects whether the current page is included.
@@ -194,11 +192,12 @@ public class Https extends Servlets {
 	 * @return null if request is not a http request
 	 */
 	public static final String getThisQueryString(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.INCLUDE_QUERY_STRING);
-		return path != null || isIncluded(request)
-			|| !(request instanceof HttpServletRequest) ? path: //null is valid even included
-				((HttpServletRequest)request).getQueryString();
+		String path = (String) request.getAttribute(Attributes.INCLUDE_QUERY_STRING);
+		return path != null || isIncluded(request) || !(request instanceof HttpServletRequest) ? path
+				: //null is valid even included
+				((HttpServletRequest) request).getQueryString();
 	}
+
 	/**
 	 * Gets the path info of this page.
 	 * Unlike getPathInfo, it detects whether the current page is included.
@@ -206,10 +205,10 @@ public class Https extends Servlets {
 	 * @return null if request is not a http request
 	 */
 	public static final String getThisPathInfo(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.INCLUDE_PATH_INFO);
-		return path != null || isIncluded(request)
-			|| !(request instanceof HttpServletRequest) ? path: //null is valid even included
-				((HttpServletRequest)request).getPathInfo();
+		String path = (String) request.getAttribute(Attributes.INCLUDE_PATH_INFO);
+		return path != null || isIncluded(request) || !(request instanceof HttpServletRequest) ? path
+				: //null is valid even included
+				((HttpServletRequest) request).getPathInfo();
 	}
 
 	/**
@@ -217,53 +216,52 @@ public class Https extends Servlets {
 	 * Unlike getContextPath, it won't be affected by forwarding.
 	 */
 	public static final String getOriginContextPath(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.FORWARD_CONTEXT_PATH);
-		return path != null ? path:
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getContextPath(): "";
+		String path = (String) request.getAttribute(Attributes.FORWARD_CONTEXT_PATH);
+		return path != null ? path
+				: request instanceof HttpServletRequest ? ((HttpServletRequest) request).getContextPath() : "";
 	}
+
 	/**
 	 * Gets the original servlet path regardless of being forwarded or not.
 	 * Unlike getServletPath, it won't be affected by forwarding.
 	 */
 	public static final String getOriginServletPath(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.FORWARD_SERVLET_PATH);
-		return path != null ? path:
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getServletPath(): "/";
+		String path = (String) request.getAttribute(Attributes.FORWARD_SERVLET_PATH);
+		return path != null ? path
+				: request instanceof HttpServletRequest ? ((HttpServletRequest) request).getServletPath() : "/";
 	}
+
 	/**
 	 * Gets the request URI regardless of being forwarded or not.
 	 * Unlike HttpServletRequest.getRequestURI,
 	 * it won't be affected by forwarding.
 	 */
 	public static final String getOriginRequestURI(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.FORWARD_REQUEST_URI);
-		return path != null ? path:
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getRequestURI(): "/";
+		String path = (String) request.getAttribute(Attributes.FORWARD_REQUEST_URI);
+		return path != null ? path
+				: request instanceof HttpServletRequest ? ((HttpServletRequest) request).getRequestURI() : "/";
 	}
+
 	/**
 	 * Gets the path info regardless of being forwarded or not.
 	 * Unlike getPathInfo, it won't be affected by forwarding.
 	 */
 	public static final String getOriginPathInfo(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.FORWARD_PATH_INFO);
-		return path != null ? path:
-			isForwarded(request) ? null: //null is valid even included
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getPathInfo(): null;
+		String path = (String) request.getAttribute(Attributes.FORWARD_PATH_INFO);
+		return path != null ? path : isForwarded(request) ? null
+				: //null is valid even included
+				request instanceof HttpServletRequest ? ((HttpServletRequest) request).getPathInfo() : null;
 	}
+
 	/**
 	 * Gets the query string regardless of being forwarded or not.
 	 * Unlike getQueryString, it won't be affected by forwarding.
 	 */
 	public static final String getOriginQueryString(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.FORWARD_QUERY_STRING);
-		return path != null ? path:
-			isForwarded(request) ? null: //null is valid even included
-			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getQueryString(): null;
+		String path = (String) request.getAttribute(Attributes.FORWARD_QUERY_STRING);
+		return path != null ? path : isForwarded(request) ? null
+				: //null is valid even included
+				request instanceof HttpServletRequest ? ((HttpServletRequest) request).getQueryString() : null;
 	}
 
 	/** Returns the servlet path + path info + query string.
@@ -278,12 +276,14 @@ public class Https extends Servlets {
 		if (qstr == null && pi == null)
 			return getOriginServletPath(request);
 
-		final StringBuffer sb =
-			new StringBuffer(80).append(getOriginServletPath(request));
-		if (pi != null) sb.append(pi);
-		if (qstr != null) sb.append('?').append(qstr);
+		final StringBuffer sb = new StringBuffer(80).append(getOriginServletPath(request));
+		if (pi != null)
+			sb.append(pi);
+		if (qstr != null)
+			sb.append('?').append(qstr);
 		return sb.toString();
 	}
+
 	/** Returns the request uri + query string.
 	 * Unlike {@link #getOriginFullServlet}, this is in the encoded form
 	 * (e.g., %nn still exists, if any).
@@ -291,8 +291,7 @@ public class Https extends Servlets {
 	 */
 	public static final String getOriginFullRequest(ServletRequest request) {
 		final String qstr = getOriginQueryString(request);
-		return qstr != null ? getOriginRequestURI(request) + '?' + qstr:
-			getOriginRequestURI(request);
+		return qstr != null ? getOriginRequestURI(request) + '?' + qstr : getOriginRequestURI(request);
 	}
 
 	/**
@@ -325,21 +324,18 @@ public class Https extends Servlets {
 	 * and {@link #APPEND_PARAM}. It defines how to handle if both uri
 	 * and params contains the same parameter.
 	 */
-	public static final void sendRedirect(ServletContext ctx,
-	HttpServletRequest request, HttpServletResponse response,
-	String uri, Map params, int mode)
-	throws IOException, ServletException {
+	public static final void sendRedirect(ServletContext ctx, HttpServletRequest request, HttpServletResponse response,
+			String uri, Map params, int mode) throws IOException, ServletException {
 		uri = locate(ctx, request, uri, null);
-		final String encodedUrl =
-			encodeRedirectURL(ctx, request, response, uri, params, mode);
+		final String encodedUrl = encodeRedirectURL(ctx, request, response, uri, params, mode);
 		//if (log.isDebugEnabled()) log.debug("redirect to " + encodedUrl);
 		response.sendRedirect(encodedUrl);
 	}
+
 	/** Encodes an URL such that it can be used with HttpServletResponse.sendRedirect.
 	 */
-	public static final String encodeRedirectURL(ServletContext ctx, 
-	HttpServletRequest request, HttpServletResponse response,
-	String uri, Map params, int mode) {
+	public static final String encodeRedirectURL(ServletContext ctx, HttpServletRequest request,
+			HttpServletResponse response, String uri, Map params, int mode) {
 		if (uri == null) {
 			uri = request.getContextPath() + getOriginFullServlet(request);
 		} else {
@@ -348,22 +344,18 @@ public class Https extends Servlets {
 				uri = request.getContextPath() + uri;
 			} else if (uri.charAt(0) == '~') {
 				final int j = uri.indexOf('/', 1);
-				final String ctxroot =
-					j >= 0 ? "/" + uri.substring(1, j): "/" + uri.substring(1);
-				final ExtendletContext extctx =
-					Servlets.getExtendletContext(ctx, ctxroot.substring(1));
+				final String ctxroot = j >= 0 ? "/" + uri.substring(1, j) : "/" + uri.substring(1);
+				final ExtendletContext extctx = Servlets.getExtendletContext(ctx, ctxroot.substring(1));
 				if (extctx != null) {
-					uri = j >= 0 ? uri.substring(j): "/";
-					return extctx.encodeRedirectURL(
-						request, response, uri, params, mode);
+					uri = j >= 0 ? uri.substring(j) : "/";
+					return extctx.encodeRedirectURL(request, response, uri, params, mode);
 				} else {
-					uri = len >= 2 && uri.charAt(1) == '/' ?
-						uri.substring(1): '/' + uri.substring(1);
+					uri = len >= 2 && uri.charAt(1) == '/' ? uri.substring(1) : '/' + uri.substring(1);
 				}
 			}
 		}
 
-		return response.encodeRedirectURL(generateURI(uri, params, mode));		
+		return response.encodeRedirectURL(generateURI(uri, params, mode));
 	}
 
 	/**
@@ -385,17 +377,16 @@ public class Https extends Servlets {
 		}
 		throw ex;
 	}
+
 	/**
 	 * Converts a data to a string complaint to HTTP protocol.
 	 */
 	public static final String toString(Date date) {
 		return new SimpleDateFormat(_dfs[0], Locale.US).format(date);
 	}
-	private static final String[] _dfs = {
-		"EEE, dd MMM yyyy HH:mm:ss zzz",
-		"EEEEEE, dd-MMM-yy HH:mm:ss zzz",
-		"EEE MMMM d HH:mm:ss yyyy"
-	};
+
+	private static final String[] _dfs = { "EEE, dd MMM yyyy HH:mm:ss zzz", "EEEEEE, dd-MMM-yy HH:mm:ss zzz",
+			"EEE MMMM d HH:mm:ss yyyy" };
 
 	/** Write the specified media to HTTP response.
 	 *
@@ -408,13 +399,11 @@ public class Https extends Servlets {
 	 * It is better to specify true if the media might be read repeatedly.
 	 * @since 3.5.0
 	 */
-	public static
-	void write(HttpServletRequest request, HttpServletResponse response,
-	Media media, boolean download, boolean repeatable)
-	throws IOException {
+	public static void write(HttpServletRequest request, HttpServletResponse response, Media media, boolean download,
+			boolean repeatable) throws IOException {
 		//2012/03/09 TonyQ: ZK-885 Iframe with PDF stop works in IE 8 when we have Accept-Ranges = bytes.
-		
-		if(!Servlets.isBrowser(request, "ie")){
+
+		if (!Servlets.isBrowser(request, "ie")) {
 			response.setHeader("Accept-Ranges", "bytes");
 		}
 
@@ -429,15 +418,16 @@ public class Https extends Servlets {
 
 			if (download) {
 				String value = "attachment";
-				
+
 				// Bug ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
 				StringBuffer temp = request.getRequestURL();
-				final String update_uri = (String)request.getSession().getServletContext().getAttribute("org.zkoss.zk.ui.http.update-uri"); //B65-ZK-1619
+				final String update_uri = (String) request.getSession().getServletContext()
+						.getAttribute("org.zkoss.zk.ui.http.update-uri"); //B65-ZK-1619
 				String flnm = "";
 				if (update_uri != null && temp.toString().contains(update_uri + "/view")) {
 					// for Bug ZK-2350, we don't specify the filename when coming with ZK Fileupload, but invoke this directly as Bug ZK-1619
-//					final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
-//					flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
+					//					final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
+					//					flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
 				} else
 					flnm = media.getName();
 				if (flnm != null && flnm.length() > 0)
@@ -460,7 +450,8 @@ public class Https extends Servlets {
 				final ServletOutputStream out = response.getOutputStream();
 				if (media.isBinary()) {
 					InputStream in = media.getStreamData();
-					if (repeatable) in = RepeatableInputStream.getInstance(in);
+					if (repeatable)
+						in = RepeatableInputStream.getInstance(in);
 					try {
 						if (headOnly) {
 							int cnt = 0;
@@ -484,7 +475,7 @@ public class Https extends Servlets {
 						//so, read it completely, since 2nd read counts on it
 						if (in instanceof org.zkoss.io.Repeatable) {
 							try {
-								final byte[] buf = new byte[1024*8];
+								final byte[] buf = new byte[1024 * 8];
 								for (int v; (v = in.read(buf)) >= 0;)
 									;
 							} catch (Throwable t) { //ignore it
@@ -497,7 +488,8 @@ public class Https extends Servlets {
 				} else {
 					final String charset = getCharset(ctype);
 					Reader in = media.getReaderData();
-					if (repeatable) in = RepeatableReader.getInstance(in);
+					if (repeatable)
+						in = RepeatableReader.getInstance(in);
 					try {
 						if (headOnly) {
 							int cnt = 0;
@@ -515,7 +507,7 @@ public class Https extends Servlets {
 							wt.close(); //flush to pbs
 							pbs.responseTo(response);
 						} else {
-							OutputStreamWriter wt = new OutputStreamWriter(out, charset); 
+							OutputStreamWriter wt = new OutputStreamWriter(out, charset);
 							Files.copy(wt, in);
 							wt.close(); //flush to out
 						}
@@ -524,7 +516,7 @@ public class Https extends Servlets {
 						//so, read it completely, since 2nd read counts on it
 						if (in instanceof org.zkoss.io.Repeatable) {
 							try {
-								final char[] buf = new char[1024*4];
+								final char[] buf = new char[1024 * 4];
 								for (int v; (v = in.read(buf)) >= 0;)
 									;
 							} catch (Throwable t) { //ignore it
@@ -539,8 +531,7 @@ public class Https extends Servlets {
 				return; //done;
 			}
 
-			data = media.isBinary() ? media.getByteData():
-				media.getStringData().getBytes(getCharset(ctype));
+			data = media.isBinary() ? media.getByteData() : media.getStringData().getBytes(getCharset(ctype));
 		}
 
 		if (headOnly) {
@@ -550,12 +541,11 @@ public class Https extends Servlets {
 			if (from >= 0) { //partial
 				response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 
-				int f = from <= data.length ? from: data.length;
-				int t = to >= 0 && to < data.length ? to: data.length;
+				int f = from <= data.length ? from : data.length;
+				int t = to >= 0 && to < data.length ? to : data.length;
 				int cnt = t - f + 1;
 				response.setContentLength(cnt);
-				response.setHeader("Content-Range",
-					"bytes "+f+"-"+t+"/"+data.length);
+				response.setHeader("Content-Range", "bytes " + f + "-" + t + "/" + data.length);
 
 				out.write(data, f, cnt);
 			} else {
@@ -565,6 +555,7 @@ public class Https extends Servlets {
 			out.flush();
 		}
 	}
+
 	/** Filename can be quoted-string.
 	 * Refer to http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html
 	 * and http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html
@@ -581,53 +572,56 @@ public class Https extends Servlets {
 				} else if (agent.contains("Mozilla")) {
 					byte[] bytes = filename.getBytes("UTF-8");
 					filename = "";
-	                for (byte b: bytes) {
-	                	filename += (char)(b & 0xff);
-	                }
+					for (byte b : bytes) {
+						filename += (char) (b & 0xff);
+					}
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return '"' + Strings.escape(filename, "\"") + '"';
 	}
-	static private String getCharset(String contentType) {
+
+	private static String getCharset(String contentType) {
 		if (contentType != null) {
 			int j = contentType.indexOf("charset=");
 			if (j >= 0) {
 				String cs = contentType.substring(j + 8).trim();
-				if (cs.length() > 0) return cs;
+				if (cs.length() > 0)
+					return cs;
 			}
 		}
 		return "UTF-8";
 	}
-	static private int[] parseRange(String range) {
+
+	private static int[] parseRange(String range) {
 		range = range.toLowerCase(java.util.Locale.ENGLISH);
-		for (int j = 0, k, len = range.length();
-		(k = range.indexOf("bytes", j)) >= 0;) {
+		for (int j = 0, k, len = range.length(); (k = range.indexOf("bytes", j)) >= 0;) {
 			for (k += 5; k < len;) {
 				char cc = range.charAt(k++);
-				if (cc == ' ' || cc == '\t') continue;
+				if (cc == ' ' || cc == '\t')
+					continue;
 				if (cc == '=') {
 					j = range.indexOf('-', k);
 					try {
-						int from = Integer.parseInt(
-							(j >= 0 ? range.substring(k, j): range.substring(k)).trim());
+						int from = Integer.parseInt((j >= 0 ? range.substring(k, j) : range.substring(k)).trim());
 						if (from >= 0) {
 							if (j >= 0) {
 								String s = range.substring(j + 1).trim();
 								if (s.length() > 0) {
 									int to = Integer.parseInt(s);
 									if (to >= from)
-										return new int[] {from, to};
+										return new int[] { from, to };
 								}
 							}
-							return new int[] {from, -1};
+							return new int[] { from, -1 };
 						}
 					} catch (Throwable ex) { //ignore
 					}
-					if (log.isDebugEnabled()) log.debug("Failed to parse Range: "+range);
+					if (log.isDebugEnabled())
+						log.debug("Failed to parse Range: " + range);
 					return null;
 				}
 			}
@@ -636,27 +630,30 @@ public class Https extends Servlets {
 		return null;
 	}
 }
+
 /*package*/ class PartialByteStream extends ByteArrayOutputStream {
 	private final int _from, _to;
 	private int _ofs, _cnt;
+
 	/*package*/ PartialByteStream(int from, int to) {
 		super(4096);
 		_from = from;
 		_to = to;
 	}
-	/*package*/ void responseTo(HttpServletResponse response)
-	throws IOException {
+
+	/*package*/ void responseTo(HttpServletResponse response) throws IOException {
 		//Note: after all content are written, _ofs is the total number
 		//while _cnt the number of bytes being written.
 		response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 		response.setContentLength(_cnt);
 
-		int from = _from <= _ofs ? _from: _ofs;
-		int to = _to >= 0 && _to <= _ofs ? _to: _ofs;
-		response.setHeader("Content-Range", "bytes "+from+"-"+to+"/"+_ofs);
+		int from = _from <= _ofs ? _from : _ofs;
+		int to = _to >= 0 && _to <= _ofs ? _to : _ofs;
+		response.setHeader("Content-Range", "bytes " + from + "-" + to + "/" + _ofs);
 
 		writeTo(response.getOutputStream());
 	}
+
 	public synchronized void write(int b) {
 		int ofs = _ofs++;
 		if (ofs >= _from && (_to < 0 || ofs <= _to)) {
@@ -664,6 +661,7 @@ public class Https extends Servlets {
 			super.write(b);
 		}
 	}
+
 	public synchronized void write(byte[] b, int ofs, int len) {
 		while (--len >= 0)
 			write(b[ofs++]);

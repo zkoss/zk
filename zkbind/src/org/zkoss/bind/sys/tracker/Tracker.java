@@ -12,6 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.sys.tracker;
 
 import java.util.Set;
+
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
 import org.zkoss.zk.ui.Component;
@@ -30,7 +31,7 @@ public interface Tracker {
 	 * @param binding the associated binding
 	 */
 	public void addTracking(Component comp, String[] series, Binding binding);
-	
+
 	/**
 	 * Add a depends-on tracking between the source property name series and depends-on property name series.
 	 * @param srcComp the source component with the associated binding
@@ -38,14 +39,15 @@ public interface Tracker {
 	 * @param srcBinding the associated binding
 	 * @param dependsOnSeries the dot series as an array of dependsOn property name.
 	 */
-	public void addDependsOn(Component srcComp, String[] srcSeries, Binding srcBinding, Component dependsOnComp, String[] dependsOnSeries);
-	
+	public void addDependsOn(Component srcComp, String[] srcSeries, Binding srcBinding, Component dependsOnComp,
+			String[] dependsOnSeries);
+
 	/**
 	 * Remove all tracking associated with the specified {@link Component}. 
 	 * @param comp the associated component
 	 */
 	public void removeTrackings(Component comp);
-	
+
 	/**
 	 * Remove all tracking associated with the specified {@link Component} set.
 	 * @param comps the associated component set
@@ -63,7 +65,7 @@ public interface Tracker {
 	 * @param basePath the basePath script prior to the <tt>script</tt> field script (Since 8.0)
 	 */
 	public void tieValue(Object comp, Object base, Object script, Object propName, Object value, Object basePath);
-	
+
 	/**
 	 * Returns all bindings that associated with the specified property.
 	 * @param base base object
@@ -71,5 +73,5 @@ public interface Tracker {
 	 * @return all LoadBindings that associated with the specified property.
 	 */
 	public Set<LoadBinding> getLoadBindings(Object base, String propName);
-	
+
 }

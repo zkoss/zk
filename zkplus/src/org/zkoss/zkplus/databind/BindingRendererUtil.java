@@ -34,17 +34,18 @@ import org.zkoss.zul.Row;
  * @since 5.0.7
  */
 public class BindingRendererUtil {
-	
+
 	/**
 	 * Link cloned components with bindings of templates
 	 */
-	/*package*/ static void linkTemplates(Component clone, Component template, Map<Object, Object> templatemap, DataBinder binder) {
+	/*package*/ static void linkTemplates(Component clone, Component template, Map<Object, Object> templatemap,
+			DataBinder binder) {
 		if (binder.existsBindings(template)) {
 			templatemap.put(template, clone);
 			clone.setAttribute(DataBinder.TEMPLATEMAP, templatemap);
 			clone.setAttribute(DataBinder.TEMPLATE, template);
 		}
-		
+
 		final Iterator<Component> itt = template.getChildren().iterator();
 		final Iterator<Component> itc = clone.getChildren().iterator();
 		while (itt.hasNext()) {
@@ -56,32 +57,32 @@ public class BindingRendererUtil {
 			// item will do its own linkTemplates() 
 			if (isSkippable(t)) //bug#1968615.
 				continue;
-			linkTemplates(c, t, templatemap, binder);	//recursive
+			linkTemplates(c, t, templatemap, binder); //recursive
 		}
 	}
-	
+
 	/**
 	 * Check if comp can be waived from linking templates
 	 * @param comp
 	 */
 	private static boolean isSkippable(Component comp) {
 		// Bug: B50-3183438: skip only when it has model
-		if(comp instanceof Comboitem) {
-			Combobox b = (Combobox)((Comboitem) comp).getParent();
-			if(b != null && b.getModel() != null)
+		if (comp instanceof Comboitem) {
+			Combobox b = (Combobox) ((Comboitem) comp).getParent();
+			if (b != null && b.getModel() != null)
 				return true;
-		} else if(comp instanceof Row) {
+		} else if (comp instanceof Row) {
 			Grid g = ((Row) comp).getGrid();
-			if(g != null && g.getModel() != null)
+			if (g != null && g.getModel() != null)
 				return true;
-		} else if(comp instanceof Listitem) {
+		} else if (comp instanceof Listitem) {
 			Listbox b = ((Listitem) comp).getListbox();
-			if(b != null && b.getModel() != null)
+			if (b != null && b.getModel() != null)
 				return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Setup id of cloned components (cannot called until the component is attached to Listbox)
 	 */
@@ -92,7 +93,7 @@ public class BindingRendererUtil {
 
 		//Feature #3061671: Databinding foreach keep cloned cmp's id when in spaceowner
 		if (!(clone instanceof IdSpace)) { //parent is an IdSpace, so keep the id as is, no need to traverse down
-			for(final Iterator it = clone.getChildren().iterator(); it.hasNext(); ) {
+			for (final Iterator it = clone.getChildren().iterator(); it.hasNext();) {
 				final Component kid = (Component) it.next();
 				// skip Listitem, Row, Comboitem
 				// Listbox in Listbox, Listbox in Grid, Grid in Listbox, Grid in Grid, etc. 

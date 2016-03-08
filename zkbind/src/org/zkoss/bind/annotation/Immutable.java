@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * @author dennis
  * @since 6.0.0
  */
-@Target(value={ElementType.TYPE, ElementType.METHOD})
+@Target(value = { ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Immutable {

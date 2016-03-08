@@ -21,11 +21,12 @@ import org.zkoss.bind.Property;
  * @author henrichen
  * @since 6.0.0
  */
-public class PropertyImpl implements Property,Serializable {
+public class PropertyImpl implements Property, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _base;
 	private final String _property;
 	private final Object _value;
+
 	public PropertyImpl(Object base, String property, Object value) {
 		_base = base;
 		_property = property;
@@ -35,7 +36,7 @@ public class PropertyImpl implements Property,Serializable {
 	public Object getBase() {
 		return _base;
 	}
-	
+
 	public Object getValue() {
 		return _value;
 	}
@@ -43,26 +44,22 @@ public class PropertyImpl implements Property,Serializable {
 	public String getProperty() {
 		return _property;
 	}
-	
-	public String toString(){
-		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(Integer.toHexString(hashCode()))
-		.append(",base:").append(getBase())
-		.append(",property:").append(getProperty())
-		.append(",value:").append(getValue()).toString();
+
+	public String toString() {
+		return new StringBuilder().append(getClass().getSimpleName()).append("@")
+				.append(Integer.toHexString(hashCode())).append(",base:").append(getBase()).append(",property:")
+				.append(getProperty()).append(",value:").append(getValue()).toString();
 	}
 
-	
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((_base == null) ? 0 : _base.hashCode());
-		result = prime * result
-				+ ((_property == null) ? 0 : _property.hashCode());
+		result = prime * result + ((_property == null) ? 0 : _property.hashCode());
 		result = prime * result + ((_value == null) ? 0 : _value.hashCode());
 		return result;
 	}
 
-	
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -88,6 +85,5 @@ public class PropertyImpl implements Property,Serializable {
 			return false;
 		return true;
 	}
-	
-	
+
 }

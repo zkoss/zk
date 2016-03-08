@@ -14,33 +14,31 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.http;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.lang.Classes;
 
-import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
-
+import org.zkoss.lang.Classes;
+import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.Extendlet;
-import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
+import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
-
 import org.zkoss.zk.ui.WebApp;
 
 /**
@@ -64,29 +62,33 @@ import org.zkoss.zk.ui.WebApp;
 		if (_cache != null)
 			_cache.clear();
 	}
+
 	/** Returns whether to generate JS files that is easy to debug. */
 	public boolean isDebugJS() {
 		if (_debugJS == null) {
 			final WebApp wapp = getWebApp();
-			if (wapp == null) return true; //zk lighter
+			if (wapp == null)
+				return true; //zk lighter
 			_debugJS = Boolean.valueOf(wapp.getConfiguration().isDebugJS());
 		}
 		return _debugJS.booleanValue();
 	}
 
 	WebApp getWebApp() {
-		return _webctx != null ? WebManager.getWebManager(_webctx.getServletContext()).getWebApp(): null;
+		return _webctx != null ? WebManager.getWebManager(_webctx.getServletContext()).getWebApp() : null;
 	}
+
 	ServletContext getServletContext() {
-		return _webctx != null ? _webctx.getServletContext(): null;
+		return _webctx != null ? _webctx.getServletContext() : null;
 	}
+
 	void init(ExtendletConfig config, ExtendletLoader<V> loader) {
 		_webctx = config.getExtendletContext();
 		_cache = new ResourceCache<String, V>(loader, 16);
 		_cache.setMaxSize(1024);
-		_cache.setLifetime(60*60*1000); //1hr
+		_cache.setLifetime(60 * 60 * 1000); //1hr
 		final int checkPeriod = loader.getCheckPeriod();
-		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
+		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod : 60 * 60 * 1000); //1hr
 	}
 
 	/** Returns the static method defined in an element, or null if failed. */
@@ -97,29 +99,30 @@ import org.zkoss.zk.ui.WebApp;
 		try {
 			cls = Classes.forNameByThread(clsnm);
 		} catch (ClassNotFoundException ex) {
-			log.error("Class not found: "+clsnm+", "+el.getLocator());
+			log.error("Class not found: " + clsnm + ", " + el.getLocator());
 			return null; //to report as many errors as possible
 		}
 
 		try {
 			final Method mtd = Classes.getMethodBySignature(cls, sig, null);
 			if ((mtd.getModifiers() & Modifier.STATIC) == 0) {
-				log.error("Not a static method: "+mtd);
+				log.error("Not a static method: " + mtd);
 				return null;
 			}
 
 			final Object[] args = new Object[mtd.getParameterTypes().length];
 			for (int j = 0; j < args.length; ++j)
 				args[j] = el.getAttributeValue("arg" + j);
-				
+
 			return new MethodInfo(mtd, args);
 		} catch (ClassNotFoundException ex) {
-			log.error("Unable to load class when resolving "+sig+" "+el.getLocator(), ex);
+			log.error("Unable to load class when resolving " + sig + " " + el.getLocator(), ex);
 		} catch (NoSuchMethodException ex) {
-			log.error("Method not found in "+clsnm+": "+sig+" "+el.getLocator());
+			log.error("Method not found in " + clsnm + ": " + sig + " " + el.getLocator());
 		}
 		return null;
 	}
+
 	/** Invokes a static method.*/
 	/*package*/ String invoke(RequestContext reqctx, MethodInfo mi) {
 		final Class[] argTypes = mi.method.getParameterTypes();
@@ -135,9 +138,9 @@ import org.zkoss.zk.ui.WebApp;
 		}
 		try {
 			Object o = mi.method.invoke(null, args);
-			return o instanceof String ? (String)o: "";
+			return o instanceof String ? (String) o : "";
 		} catch (Throwable ex) { //log and eat ex
-			log.error("Unable to invoke "+mi.method, ex);
+			log.error("Unable to invoke " + mi.method, ex);
 			return "";
 		}
 	}
@@ -147,12 +150,10 @@ import org.zkoss.zk.ui.WebApp;
 		return feature == ALLOW_DIRECT_INCLUDE;
 	}
 
-	private InputStream getResourceAsStream(
-	HttpServletRequest request, String path, boolean locate)
-	throws IOException, ServletException {
+	private InputStream getResourceAsStream(HttpServletRequest request, String path, boolean locate)
+			throws IOException, ServletException {
 		if (locate)
-			path = Servlets.locate(_webctx.getServletContext(),
-				request, path, _webctx.getLocator());
+			path = Servlets.locate(_webctx.getServletContext(), request, path, _webctx.getLocator());
 
 		if (_cache.getCheckPeriod() >= 0) {
 			//Due to Web server might cache the result, we use URL if possible
@@ -161,13 +162,14 @@ import org.zkoss.zk.ui.WebApp;
 				if (url != null)
 					return url.openStream();
 			} catch (Throwable ex) {
-				log.warn("Unable to read from URL: "+path, ex);
+				log.warn("Unable to read from URL: " + path, ex);
 			}
 		}
 
 		//Note: _webctx will handle the renaming for debugJS (.src.js)
 		return _webctx.getResourceAsStream(path);
 	}
+
 	private URL getResource(String path) throws IOException {
 		return _webctx.getResource(path);
 	}
@@ -176,6 +178,7 @@ import org.zkoss.zk.ui.WebApp;
 	/*package*/ static class MethodInfo {
 		final Method method;
 		final Object[] arguments;
+
 		MethodInfo(Method method, Object[] arguments) {
 			this.method = method;
 			this.arguments = arguments;
@@ -189,16 +192,16 @@ import org.zkoss.zk.ui.WebApp;
 		/*package*/ final HttpServletRequest request;
 		/*package*/ final HttpServletResponse response;
 
-		/*package*/ RequestContext(AbstractExtendlet extlet,
-		HttpServletRequest request, HttpServletResponse response) {
+		/*package*/ RequestContext(AbstractExtendlet extlet, HttpServletRequest request, HttpServletResponse response) {
 			_extlet = extlet;
 			this.request = request;
 			this.response = response;
 		}
-		InputStream getResourceAsStream(String path, boolean locate)
-		throws IOException, ServletException {
+
+		InputStream getResourceAsStream(String path, boolean locate) throws IOException, ServletException {
 			return _extlet.getResourceAsStream(this.request, path, locate);
 		}
+
 		URL getResource(String path) throws IOException {
 			return _extlet.getResource(path);
 		}

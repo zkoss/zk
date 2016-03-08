@@ -30,43 +30,44 @@ import org.zkoss.zul.Selectbox;
  * @author dennischen
  * @since 6.0.0
  */
-public class BindSelectboxRenderer extends AbstractRenderer implements ItemRenderer<Object>,Serializable {
+public class BindSelectboxRenderer extends AbstractRenderer implements ItemRenderer<Object>, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
-	
+
 	public String render(final Component owner, final Object data, final int index) throws Exception {
-		final int size = ((Selectbox)owner).getModel().getSize();
-		final Template tm = resolveTemplate(owner,owner,data,index,size,"model");
+		final int size = ((Selectbox) owner).getModel().getSize();
+		final Template tm = resolveTemplate(owner, owner, data, index, size, "model");
 		if (tm == null) {
 			return Objects.toString(data);
 		} else {
-			
-			final ForEachStatus iterStatus = new AbstractForEachStatus(){//provide iteration status in this context
+
+			final ForEachStatus iterStatus = new AbstractForEachStatus() { //provide iteration status in this context
 				private static final long serialVersionUID = 1L;
-				
+
 				public int getIndex() {
 					return index;
 				}
-				
-				public Object getCurrent(){
+
+				public Object getCurrent() {
 					return data;
 				}
-				
-				public Integer getEnd(){
+
+				public Integer getEnd() {
 					return size;
 				}
 			};
-			
+
 			final String var = (String) tm.getParameters().get(EACH_ATTR);
 			final String varnm = var == null ? EACH_VAR : var; //var is not specified, default to "each"
 			final String itervar = (String) tm.getParameters().get(STATUS_ATTR);
-			final String itervarnm = itervar == null ? ( var==null?EACH_STATUS_VAR:varnm+STATUS_POST_VAR) : itervar; //provide default value if not specified
-			
+			final String itervarnm = itervar == null ? (var == null ? EACH_STATUS_VAR : varnm + STATUS_POST_VAR)
+					: itervar; //provide default value if not specified
+
 			//bug 1188, EL when nested var and itervar
 			Object oldVar = owner.getAttribute(varnm);
 			Object oldIter = owner.getAttribute(itervarnm);
 			owner.setAttribute(varnm, data);
 			owner.setAttribute(itervarnm, iterStatus);
-			
+
 			final Component[] items = filterOutShadows(owner, tm.create(owner, null, null, null));
 
 			// Bug ZK-2882
@@ -82,13 +83,9 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 			}
 
 			if (items.length != 1)
-				throw new UiException(
-						"The model template must have exactly one item, not "
-								+ items.length);
+				throw new UiException("The model template must have exactly one item, not " + items.length);
 			if (!(items[0] instanceof Label))
-				throw new UiException(
-						"The model template can only support Label component, not "
-								+ items[0]);
+				throw new UiException("The model template can only support Label component, not " + items[0]);
 			final Label lbl = ((Label) items[0]);
 			lbl.setAttribute(BinderImpl.VAR, varnm);
 			addItemReference(owner, lbl, index, varnm); //kept the reference to the data, before ON_BIND_INIT
@@ -96,8 +93,8 @@ public class BindSelectboxRenderer extends AbstractRenderer implements ItemRende
 
 			//ZK-1787 When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
 			//selectbox doesn't support 1787 because it attaching comp is always detached after render
-//			//lbl.setAttribute(TemplateResolver.TEMPLATE_OBJECT, owner.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
-			
+			//			//lbl.setAttribute(TemplateResolver.TEMPLATE_OBJECT, owner.removeAttribute(TemplateResolver.TEMPLATE_OBJECT));
+
 			//add template dependency
 			addTemplateTracking(owner, lbl, data, index, size);
 

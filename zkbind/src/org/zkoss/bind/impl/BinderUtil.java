@@ -24,68 +24,73 @@ import org.zkoss.zk.ui.Component;
  *
  */
 public class BinderUtil {
-	public static void markHandling(Component comp,Binder binder){
+	public static void markHandling(Component comp, Binder binder) {
 		comp.setAttribute(BinderImpl.BINDER, binder);
 	}
-	
-	public static void unmarkHandling(Component comp){
+
+	public static void unmarkHandling(Component comp) {
 		comp.removeAttribute(BinderImpl.BINDER);
 	}
-	public static boolean isHandling(Component comp){
+
+	public static boolean isHandling(Component comp) {
 		return comp.hasAttribute(BinderImpl.BINDER);
 	}
-	public static Binder getBinder(Component comp){
-		return (Binder)comp.getAttribute(BinderImpl.BINDER);
+
+	public static Binder getBinder(Component comp) {
+		return (Binder) comp.getAttribute(BinderImpl.BINDER);
 	}
-	public static Binder getBinder(Component comp, boolean recurse){
-		return (Binder)comp.getAttribute(BinderImpl.BINDER,recurse);
+
+	public static Binder getBinder(Component comp, boolean recurse) {
+		return (Binder) comp.getAttribute(BinderImpl.BINDER, recurse);
 	}
-	
+
 	/**
 	 * The context for wrapping an API call for a binder, 
 	 * to keep API compatibility and prevent tedious parameter passing of the sugar/debug implementation.
 	 * I use List to implement the stack cause I don't need to care the synchronized
 	 */
 	static ThreadLocal<LiteStack<UtilContext>> _ctxStack = new ThreadLocal<LiteStack<UtilContext>>();
-	
-	public static UtilContext pushContext(){
-		
+
+	public static UtilContext pushContext() {
+
 		LiteStack<UtilContext> stack = _ctxStack.get();
-		if(stack==null){
-			_ctxStack.set(stack = new LiteStack<UtilContext>(3));//usually 1-2, not sure the performance compare to linkedlist
+		if (stack == null) {
+			_ctxStack.set(stack = new LiteStack<UtilContext>(3)); //usually 1-2, not sure the performance compare to linkedlist
 		}
 		UtilContext ctx = new UtilContext();
 		stack.push(ctx);
 		return ctx;
 	}
-	public static boolean hasContext(){
+
+	public static boolean hasContext() {
 		LiteStack<UtilContext> stack = _ctxStack.get();
-		if(stack==null){
+		if (stack == null) {
 			return false;
 		}
 		return !stack.empty();
 	}
-	public static UtilContext getContext(){
+
+	public static UtilContext getContext() {
 		LiteStack<UtilContext> stack = _ctxStack.get();
-		if(stack==null){
+		if (stack == null) {
 			return null;
 		}
 		return stack.peek();
 	}
-	
-	public static void popContext(){
+
+	public static void popContext() {
 		LiteStack<UtilContext> stack = _ctxStack.get();
-		if(stack!=null){
+		if (stack != null) {
 			stack.pop();
-			if(stack.empty()){
+			if (stack.empty()) {
 				_ctxStack.set(null);
 			}
-		}else{
+		} else {
 			throw new IllegalStateException("nothing to popup");
 		}
 	}
-	
-	static public class UtilContext {
+
+	public static class UtilContext {
 		boolean _ignoreAccessCreationWarn;
 		Location _location;
 
@@ -100,45 +105,46 @@ public class BinderUtil {
 		public void setCurrentLocation(Location location) {
 			_location = location;
 		}
-		
-		public Location getCurrentLocation(){
+
+		public Location getCurrentLocation() {
 			return _location;
 		}
-		
-		public String getCurrentLocationMessage(){
+
+		public String getCurrentLocationMessage() {
 			return MiscUtil.formatLocationMessage(null, _location);
 		}
 	}
-	
-	static class LiteStack<T> implements Serializable{
+
+	static class LiteStack<T> implements Serializable {
 		private static final long serialVersionUID = 1L;
 		List<T> _stack;
-		
-		public LiteStack(){
+
+		public LiteStack() {
 			this(3);
 		}
-		public LiteStack(int initialCapacity){
+
+		public LiteStack(int initialCapacity) {
 			_stack = new ArrayList<T>(initialCapacity);
 		}
-		
-		public void push(T element){
+
+		public void push(T element) {
 			_stack.add(element);
 		}
-		
-		public int size(){
+
+		public int size() {
 			return _stack.size();
 		}
-		
-		public boolean empty(){
-			return _stack.size()==0;
+
+		public boolean empty() {
+			return _stack.size() == 0;
 		}
-		
-		public T peek(){
-			return _stack.get(_stack.size()-1);
+
+		public T peek() {
+			return _stack.get(_stack.size() - 1);
 		}
-		
-		public T pop(){
-			return _stack.remove(_stack.size()-1);
+
+		public T pop() {
+			return _stack.remove(_stack.size() - 1);
 		}
 	}
 }

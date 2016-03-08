@@ -36,9 +36,10 @@ import org.zkoss.zul.ext.SelectionControl;
  * @since 5.0.4
  */
 public class ListModels {
-	
-	private ListModels() {}
-	
+
+	private ListModels() {
+	}
+
 	/**
 	 * A comparator for {@link ListSubModel#getSubModel} to check if
 	 * a value retrieved from the model matches the user typed.
@@ -46,11 +47,10 @@ public class ListModels {
 	 * return 0 (i.e., matched), when the value starts with
 	 * the user typed, and both of them are not empty.
 	 */
-	public final static Comparator STRING_COMPARATOR = new Comparator() {
+	public static final Comparator STRING_COMPARATOR = new Comparator() {
 		public int compare(Object key, Object value) {
 			String idx = Objects.toString(key);
-			return idx != null && value != null && idx.length() > 0 &&
-					Objects.toString(value).startsWith(idx) ? 0 : 1;
+			return idx != null && value != null && idx.length() > 0 && Objects.toString(value).startsWith(idx) ? 0 : 1;
 		}
 	};
 
@@ -63,14 +63,14 @@ public class ListModels {
 	 * return 0 when the value (Map.Entry's getValue())
 	 * starts with the user typed, and both of them are not empty.
 	 */
-	public final static Comparator MAP_COMPARATOR = new Comparator() {
+	public static final Comparator MAP_COMPARATOR = new Comparator() {
 		public int compare(Object key, Object value) {
 			String idx = Objects.toString(key);
-			return idx != null && value != null && idx.length() > 0 &&
-					Objects.toString(((Map.Entry) value).getValue()).startsWith(idx) ? 0 : 1;
+			return idx != null && value != null && idx.length() > 0
+					&& Objects.toString(((Map.Entry) value).getValue()).startsWith(idx) ? 0 : 1;
 		}
 	};
-	
+
 	/**
 	 * Returns a proxy instance of the given model that implements
 	 * {@link ListSubModel} and {@link ListModel} interface.
@@ -84,7 +84,7 @@ public class ListModels {
 	public static <T> ListModel<T> toListSubModel(ListModel<T> model, Comparator<T> comparator, int nRows) {
 		return new SubModel<T>(model, comparator, nRows);
 	}
-	
+
 	/**
 	 * Returns a proxy instance of the given model that implements
 	 * {@link ListSubModel} and {@link ListModel} interface.
@@ -99,12 +99,10 @@ public class ListModels {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> ListModel<T> toListSubModel(ListModel<T> model) {
-		return new SubModel<T>(model, (model instanceof ListModelMap) ? MAP_COMPARATOR
-					: STRING_COMPARATOR, 15);
+		return new SubModel<T>(model, (model instanceof ListModelMap) ? MAP_COMPARATOR : STRING_COMPARATOR, 15);
 	}
-	
-	private static class SubModel<E> implements ListModel<E>, ListSubModel<E>, 
-	Selectable<E>, java.io.Serializable {
+
+	private static class SubModel<E> implements ListModel<E>, ListSubModel<E>, Selectable<E>, java.io.Serializable {
 		private final ListModel<E> _model;
 
 		private final Comparator<E> _comparator;
@@ -149,18 +147,18 @@ public class ListModels {
 			nRows = nRows < 0 ? _nRows : nRows;
 			for (int i = 0, j = _model.getSize(); i < j; i++) {
 				E o = _model.getElementAt(i);
-				if (((Comparator)_comparator).compare(value, o) == 0) {
+				if (((Comparator) _comparator).compare(value, o) == 0) {
 					data.add(o);
-					if (_model instanceof Selectable && ((Selectable<?>)_model).isSelected(o)) {
+					if (_model instanceof Selectable && ((Selectable<?>) _model).isSelected(o)) {
 						selection.add(o);
 					}
 					if (--nRows <= 0)
 						break; // done
 				}
 			}
-			final Selectable<E> subm =  new ListModelList<E>(data, true);
+			final Selectable<E> subm = new ListModelList<E>(data, true);
 			// may multiple selected item in subModel, sync the multiple state
-			subm.setMultiple(((Selectable)_model).isMultiple());
+			subm.setMultiple(((Selectable) _model).isMultiple());
 			subm.setSelection(selection);
 			return (ListModel<E>) subm;
 		}
@@ -185,49 +183,41 @@ public class ListModels {
 		private Selectable<E> getSelectModel() {
 			return (Selectable<E>) _model;
 		}
-		
+
 		public Set<E> getSelection() {
 			return getSelectModel().getSelection();
 		}
 
-		
 		public void setSelection(Collection<? extends E> selection) {
 			getSelectModel().setSelection(selection);
 		}
 
-		
 		public boolean isSelected(Object obj) {
 			return getSelectModel().isSelected(obj);
 		}
 
-		
 		public boolean isSelectionEmpty() {
 			return getSelectModel().isSelectionEmpty();
 		}
 
-		
 		public boolean addToSelection(E obj) {
 			return getSelectModel().addToSelection(obj);
 		}
 
-		
 		public boolean removeFromSelection(Object obj) {
 			return getSelectModel().removeFromSelection(obj);
 		}
 
-		
 		public void clearSelection() {
 			getSelectModel().clearSelection();
-			
+
 		}
 
-		
 		public void setMultiple(boolean multiple) {
 			getSelectModel().setMultiple(multiple);
-			
+
 		}
 
-		
 		public boolean isMultiple() {
 			return getSelectModel().isMultiple();
 		}

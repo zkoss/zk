@@ -36,7 +36,8 @@ public class AbortBySendRedirect implements AbortingReason {
 	 * @param target the target browser window, or null to use the current one.
 	 */
 	public AbortBySendRedirect(String url, String target) {
-		if (url == null) throw new IllegalArgumentException("null");
+		if (url == null)
+			throw new IllegalArgumentException("null");
 		_url = url;
 		_target = target;
 	}
@@ -44,13 +45,16 @@ public class AbortBySendRedirect implements AbortingReason {
 	//-- AbortingReason --//
 	public boolean isAborting() {
 		return !_url.startsWith("mailto:") && !_url.startsWith("javascript:")
-			&& (_target == null || "_self".equals(_target));
+				&& (_target == null || "_self".equals(_target));
 	}
+
 	public void execute() {
 	}
+
 	public AuResponse getResponse() {
 		return new AuSendRedirect(_url, _target);
 	}
+
 	public void finish() {
 	}
 }

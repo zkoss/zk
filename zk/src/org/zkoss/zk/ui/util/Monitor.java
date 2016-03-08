@@ -18,9 +18,9 @@ package org.zkoss.zk.ui.util;
 
 import java.util.List;
 
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Session;
 
 /**
  * A listener to monitor the status of ZK engine.
@@ -34,20 +34,24 @@ public interface Monitor {
 	 * @param sess the session being created
 	 */
 	public void sessionCreated(Session sess);
+
 	/** Called when a session is being destroyed.
 	 * @param sess the session being destroyed
 	 */
 	public void sessionDestroyed(Session sess);
+
 	/** Called when a desktop is created.
 	 *
 	 * @param desktop the desktop being created
 	 */
 	public void desktopCreated(Desktop desktop);
+
 	/** Called when a desktop is being destroyed.
 	 *
 	 * @param desktop the desktop being destroyed
 	 */
 	public void desktopDestroyed(Desktop desktop);
+
 	/** Called when an asynchronous updated is called (and not yet processed).
 	 *
 	 * @param desktop the desktop that the update is sent to
@@ -55,6 +59,7 @@ public interface Monitor {
 	 * are being processed.
 	 */
 	public void beforeUpdate(Desktop desktop, List<AuRequest> requests);
+
 	/** Called when an asynchronous updated has been processed.
 	 *
 	 * @param desktop the desktop that the update is sent to

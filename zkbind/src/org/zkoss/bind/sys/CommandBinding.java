@@ -13,7 +13,6 @@ package org.zkoss.bind.sys;
 
 import org.zkoss.bind.BindContext;
 
-
 /**
  * A binding tells which command to call(usually used with UI event).
  * @author henrichen
@@ -25,7 +24,7 @@ public interface CommandBinding extends Binding {
 	 * @param ctx the binding runtime context 
 	 */
 	public void execute(BindContext ctx);
-	
+
 	/**
 	 * Returns the command expression in string.
 	 * @return the command expression in string.

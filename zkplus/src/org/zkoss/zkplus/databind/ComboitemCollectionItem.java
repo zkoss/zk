@@ -37,8 +37,7 @@ import org.zkoss.zul.ListModel;
 			final Comboitem item = (Comboitem) comp;
 			return item.getParent();
 		} else {
-			throw new UiException(
-					"Unsupported type for ComboitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ComboitemCollectionItem: " + comp);
 		}
 	}
 
@@ -47,17 +46,15 @@ import org.zkoss.zul.ListModel;
 			final Combobox cbbox = (Combobox) comp;
 			return cbbox.getModel();
 		} else {
-			throw new UiException(
-					"Unsupported type for ComboitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ComboitemCollectionItem: " + comp);
 		}
 	}
 
 	public Component getComponentAtIndexByOwner(Component comp, int index) {
 		if (comp instanceof Combobox) {
-			return ((Combobox)comp).getItemAtIndex(index);
+			return ((Combobox) comp).getItemAtIndex(index);
 		} else {
-			throw new UiException(
-					"Unsupported type for ComboitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ComboitemCollectionItem: " + comp);
 		}
 	}
 
@@ -76,8 +73,7 @@ import org.zkoss.zul.ListModel;
 			final Combobox cbbox = (Combobox) comp;
 			return cbbox.getItems();
 		} else {
-			throw new UiException(
-					"Unsupported type for ComboitemCollectionItem: " + comp);
+			throw new UiException("Unsupported type for ComboitemCollectionItem: " + comp);
 		}
 	}
 }

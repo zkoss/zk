@@ -12,10 +12,10 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.io.Writer;
 import java.io.StringWriter;
+import java.io.Writer;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,9 +73,10 @@ public class ComponentRedraws {
 				ctx.states.set(0, new Integer(order + 1));
 			}
 		}
-		ctx.states.add(0, new Integer(includingPage ? -1: 0));
+		ctx.states.add(0, new Integer(includingPage ? -1 : 0));
 		return order;
 	}
+
 	/** Returns the string buffer for the snippet that shall be generated
 	 * after rendering the components.
 	 * The content being added to the returned string buffer will be
@@ -85,6 +86,7 @@ public class ComponentRedraws {
 	public static final Writer getScriptBuffer() {
 		return _ctx.get().out;
 	}
+
 	/** Called after finishing the redrawing.
 	 * It must be called in the finally clause if {@link #beforeRedraw}
 	 * is called.
@@ -108,6 +110,7 @@ public class ComponentRedraws {
 		}
 		return "";
 	}
+
 	/** A list of states. Each state indicates the redrawing state:
 	 * If null, it means it is the root component.
 	 * If Boolean.TRUE, it means it is the first child.

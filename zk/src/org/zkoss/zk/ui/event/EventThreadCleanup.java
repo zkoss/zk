@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 
 /**
@@ -62,6 +63,7 @@ public interface EventThreadCleanup {
 	 * such that no error message will be displayed at the client.
 	 */
 	public void cleanup(Component comp, Event evt, List<Throwable> errs) throws Exception;
+
 	/** Called in the serlvet thread to clean up.
 	 * It is called after {@link #cleanup} is called.
 	 *

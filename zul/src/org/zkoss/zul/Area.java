@@ -17,8 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 
@@ -34,6 +34,7 @@ public class Area extends AbstractComponent {
 
 	public Area() {
 	}
+
 	public Area(String coords) {
 		setCoords(coords);
 	}
@@ -44,6 +45,7 @@ public class Area extends AbstractComponent {
 	public String getShape() {
 		return _shape;
 	}
+
 	/** Sets the shape of this area.
 	 *
 	 * @exception WrongValueException if shape is not one of
@@ -51,11 +53,11 @@ public class Area extends AbstractComponent {
 	 */
 	public void setShape(String shape) throws WrongValueException {
 		if (shape != null)
-			if (shape.length() == 0) shape = null;
-			else if (!"rect".equals(shape) && !"rectangle".equals(shape)
-			&& !"circle".equals(shape) && !"circ".equals(shape)
-			&& !"polygon".equals(shape) && !"poly".equals(shape))
-				throw new WrongValueException("Unknown shape: "+shape);
+			if (shape.length() == 0)
+				shape = null;
+			else if (!"rect".equals(shape) && !"rectangle".equals(shape) && !"circle".equals(shape)
+					&& !"circ".equals(shape) && !"polygon".equals(shape) && !"poly".equals(shape))
+				throw new WrongValueException("Unknown shape: " + shape);
 		if (!Objects.equals(shape, _shape)) {
 			_shape = shape;
 			smartUpdate("shape", _shape);
@@ -67,6 +69,7 @@ public class Area extends AbstractComponent {
 	public String getCoords() {
 		return _coords;
 	}
+
 	/** Sets the coords of this area.
 	 * Its content depends on {@link #getShape}:
 	 * <dl>
@@ -83,7 +86,8 @@ public class Area extends AbstractComponent {
 	 * <p>Note: (0, 0) is the upper-left corner.
 	 */
 	public void setCoords(String coords) {
-		if (coords != null && coords.length() == 0) coords = null;
+		if (coords != null && coords.length() == 0)
+			coords = null;
 		if (!Objects.equals(coords, _coords)) {
 			_coords = coords;
 			smartUpdate("coords", _coords);
@@ -96,6 +100,7 @@ public class Area extends AbstractComponent {
 	public String getTooltiptext() {
 		return _tooltiptext;
 	}
+
 	/** Sets the text as the tooltip.
 	 */
 	public void setTooltiptext(String tooltiptext) {
@@ -112,15 +117,15 @@ public class Area extends AbstractComponent {
 	protected boolean isChildable() {
 		return false;
 	}
-	
+
 	//-- super --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))
-			throw new UiException("Area's parent must be imagemap, not "+parent);
+			throw new UiException("Area's parent must be imagemap, not " + parent);
 		super.beforeParentChanged(parent);
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "coords", _coords);

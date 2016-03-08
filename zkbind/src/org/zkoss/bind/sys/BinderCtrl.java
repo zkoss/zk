@@ -23,7 +23,6 @@ import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventQueues;
 
-
 /**
  * An addition interface to {@link Binder}
  * that is used for implementation or tools. <br/>
@@ -33,22 +32,22 @@ import org.zkoss.zk.ui.event.EventQueues;
  * @author jumperchen
  * @since 6.0.0
  */
-public interface BinderCtrl {	
+public interface BinderCtrl {
 	/**
 	 * Default queue name of a binder to share the bean notification and global commands
 	 */
 	public static final String DEFAULT_QUEUE_NAME = "$ZKBIND_DEFQUE$"; //the associated event queue name
-	
+
 	/**
 	 * Default queue scope of a binder to share the bean notification and global commands
 	 */
 	public static final String DEFAULT_QUEUE_SCOPE = EventQueues.DESKTOP; //the associated event queue name
-	
+
 	/**
 	 * PhaseListener key
 	 */
 	public static final String PHASE_LISTENER_CLASS_KEY = "org.zkoss.bind.PhaseListener.class";
-	
+
 	//control keys
 	public static final String BINDING = "$BINDING$"; //a binding
 	public static final String BINDER = "$BINDER$"; //the binder
@@ -62,9 +61,9 @@ public interface BinderCtrl {
 	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
 	public static final String REMOVE_BINDINGS = "$REMOVE_BINDINGS$"; // a mark for removed bindings
 
-	public static final String LOAD_FORM_EXPRESSION = "$LOAD_FORM_EXPR$";//The attribute name of a loaded bean class, internal use only
-	public static final String LOAD_FORM_COMPONENT = "$LOAD_FORM_COMP$";//The attribute name of a loaded bean class, internal use only
-	
+	public static final String LOAD_FORM_EXPRESSION = "$LOAD_FORM_EXPR$"; //The attribute name of a loaded bean class, internal use only
+	public static final String LOAD_FORM_COMPONENT = "$LOAD_FORM_COMP$"; //The attribute name of a loaded bean class, internal use only
+
 	public static final String IGNORE_TRACKER = "$IGNORE_TRACKER$"; //ignore adding currently binding to tracker, ex in init
 
 	public static final String IGNORE_REF_VALUE = "$IGNORE_REF_VALUE$"; //ignore getting nested value form ref-binding when doing el evaluation.
@@ -78,7 +77,7 @@ public interface BinderCtrl {
 	//private control key
 	public static final String FORM_ID = "$FORM_ID$";
 	public static final String CHILDREN_ATTR = "$CHILDREN$";
-	public static final String ACTIVATOR = "$ACTIVATOR$";//the activator that is stored in root comp
+	public static final String ACTIVATOR = "$ACTIVATOR$"; //the activator that is stored in root comp
 
 	// since ZK 8.0.0
 	public static final String BINDRENDERING = "$BINDRENDERING$"; //for bind renderer to use
@@ -86,7 +85,7 @@ public interface BinderCtrl {
 	public static final String CHILDREN_BINDING_RENDERED_COMPONENTS = "$CHILDREN_BINDING_RENDERED_COMPONENTS$";
 	public static final String CHILDREN_BINDING_MODEL = "$CHILDREN_BINDING_MODEL$";
 	public static final String CHILDREN_BINDING_MODEL_LISTENER = "$CHILDREN_BINDING_MODEL_LISTENER$";
-	
+
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
 	 * @param associatedComp associated component inside a form binding
@@ -95,49 +94,50 @@ public interface BinderCtrl {
 	 * @param fieldName the associated form fieldName for the associated save binding
 	 * @since 6.0.1
 	 */
-	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding, String fieldName);
-	
+	public void addFormAssociatedSaveBinding(Component associatedComp, String formId, SaveBinding saveBinding,
+			String fieldName);
+
 	/**
 	 * Get associated save bindings of a form in a component
 	 * @param formComp the component that contains the form
 	 * @return all associated save binding in the form 
 	 */
 	public Set<SaveBinding> getFormAssociatedSaveBindings(Component formComp);
-	
+
 	/**
 	 * Store the form in the component with id
 	 * @param comp the component to store the form
 	 * @param id the form id
 	 * @param form the form instance
 	 */
-	public void storeForm(Component comp,String id, Form form);
-	
+	public void storeForm(Component comp, String id, Form form);
+
 	/**
 	 * Get the form of the component
 	 * @param comp the component has the form
 	 * @param id the form id
 	 * @return the form if there is a form inside the component with the id
 	 */
-	public Form getForm(Component comp,String id);
-	
+	public Form getForm(Component comp, String id);
+
 	/**
 	 * Returns associated dependency tracker of this binder.
 	 * @return associated dependency tracker of this binder.
 	 */
 	public Tracker getTracker();
-	
+
 	/**
 	 * Get the {@link ValidationMessages}
 	 * @return null if no one set the instance by {@link #setValidationMessages(ValidationMessages)}
 	 */
 	public ValidationMessages getValidationMessages();
-	
+
 	/**
 	 * Set the {@link ValidationMessages}
 	 * @param messages the {@link ValidationMessages}
 	 */
 	public void setValidationMessages(ValidationMessages messages);
-	
+
 	/**
 	 * is there a validator on the attribute of component
 	 * @param comp the component to check
@@ -145,7 +145,7 @@ public interface BinderCtrl {
 	 * @return true if there is a validator
 	 */
 	public boolean hasValidator(Component comp, String attr);
-	
+
 	/**
 	 * get the template resolver that sets by {@link Binder#setTemplate(Component, String, String, java.util.Map)}
 	 * @param comp the component has resolvers
@@ -154,7 +154,6 @@ public interface BinderCtrl {
 	 */
 	public TemplateResolver getTemplateResolver(Component comp, String attr);
 
-
 	/**
 	 * get all load prompt binding of the component and attribute
 	 * @param comp the component is relative to the bindings
@@ -162,7 +161,6 @@ public interface BinderCtrl {
 	 * @return the prompt-load-bindings
 	 */
 	public List<Binding> getLoadPromptBindings(Component comp, String attr);
-	
 
 	/**
 	 * get the first {@link PhaseListener}
@@ -170,26 +168,27 @@ public interface BinderCtrl {
 	 * @deprecated As of release ZK 8.0.0, please use {@link #getPhaseListeners()} instead.
 	 */
 	public PhaseListener getPhaseListener();
+
 	/**
 	 * get the first {@link PhaseListener}
 	 * @return the {@link PhaseListener}
 	 */
 	public List<PhaseListener> getPhaseListeners();
-	
+
 	/**
 	 * set the {@link PhaseListener}
 	 * @param listener the {@link PhaseListener}
 	 * @deprecated As of release ZK 8.0.0, please use {@link BinderCtrl#addPhaseListener(PhaseListener)} instead. 
 	 */
 	public void setPhaseListener(PhaseListener listener);
-	
+
 	/**
 	 * Add the {@link PhaseListener}
 	 * @param listener
 	 * @since 8.0.0
 	 */
 	public void addPhaseListener(PhaseListener listener);
-	
+
 	/**
 	 * check if binder is in activating state
 	 * @return true if binder is currently in activating state
@@ -203,14 +202,14 @@ public interface BinderCtrl {
 	 * @since 6.5.2 
 	 */
 	public BindingExecutionInfoCollector getBindingExecutionInfoCollector();
-	
+
 	/** 
 	 * get binding annotation info checker
 	 * @return the collector instance or null if no collector is existed
 	 * @since 6.5.2 
 	 */
 	public BindingAnnotationInfoChecker getBindingAnnotationInfoChecker();
-	
+
 	/**
 	 * Returns the queue name of this binder
 	 * @since 8.0.0
@@ -222,14 +221,14 @@ public interface BinderCtrl {
 	 * @since 8.0.0
 	 */
 	public String getQueueScope();
-	
+
 	/**
 	 * Adds a field name for saving with the given Form.
 	 * @param fieldName field name to be saved into.
 	 * @since 8.0.0
 	 */
 	public void addSaveFormFieldName(Form form, String fieldName);
-	
+
 	/**
 	 * Adds all field names for saving with the given Form.
 	 * @param fieldNames field name to be saved into.

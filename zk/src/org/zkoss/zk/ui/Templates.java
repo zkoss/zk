@@ -55,7 +55,8 @@ public class Templates {
 	 * @param excludeBase It is a boolean to indicate whether to skip {@code base} component or not. Usually, it is false.
 	 * @return Template
 	 */
-	public static Template lookup(Component comp, Component base, String name, Component compBase, boolean excludeBase) {
+	public static Template lookup(Component comp, Component base, String name, Component compBase,
+			boolean excludeBase) {
 		if (comp == null)
 			return null;
 		Template template = (excludeBase && comp == base) ? null : comp.getTemplate(name);
@@ -70,7 +71,8 @@ public class Templates {
 					List<ShadowElement> list = cCtrl.getShadowRoots();
 					if (!list.isEmpty()) {
 						for (ShadowElement sh : list) {
-							if (sh != base && sh instanceof HtmlShadowElement && !(excludeBase && base.getClass().isInstance(sh))) {
+							if (sh != base && sh instanceof HtmlShadowElement
+									&& !(excludeBase && base.getClass().isInstance(sh))) {
 								HtmlShadowElement shadow = (HtmlShadowElement) sh;
 								Template tmp = shadow.getTemplate(name);
 								if (tmp != null) {
@@ -80,12 +82,12 @@ public class Templates {
 									}
 									if (compBase != null) {
 										switch (HtmlShadowElement.inRange(shadow, compBase)) {
-											case FIRST:
-											case IN_RANGE:
-											case LAST:
-												// Bug ZK-2855: only overwrite when compBase belongs to a shadow
-												template = tmp;
-												break;
+										case FIRST:
+										case IN_RANGE:
+										case LAST:
+											// Bug ZK-2855: only overwrite when compBase belongs to a shadow
+											template = tmp;
+											break;
 										}
 									}
 								}

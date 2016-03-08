@@ -18,7 +18,6 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -37,10 +36,11 @@ public class Auxhead extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-auxhead" : _zclass;
 	}
+
 	//super//
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Auxheader))
-			throw new UiException("Unsupported child: "+child);
+			throw new UiException("Unsupported child: " + child);
 		super.beforeChildAdded(child, refChild);
 	}
 }

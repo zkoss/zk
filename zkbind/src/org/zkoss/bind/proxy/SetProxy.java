@@ -31,6 +31,6 @@ public class SetProxy<E> extends AbstractCollectionProxy<E> implements Set<E> {
 
 	@SuppressWarnings("unchecked")
 	protected Collection<E> initCache() {
-		return new LinkedHashSet<E>(((Collection<E>)getOriginObject()).size());
+		return new LinkedHashSet<E>(((Collection<E>) getOriginObject()).size());
 	}
 }

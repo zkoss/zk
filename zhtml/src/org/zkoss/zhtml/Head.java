@@ -18,12 +18,11 @@ package org.zkoss.zhtml;
 
 import java.io.StringWriter;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
-
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * The HEAD tag.
@@ -35,14 +34,15 @@ public class Head extends AbstractTag {
 		super("head");
 	}
 
-	//-- super --//
-	/** Don't generate the id attribute.
+	// -- super --//
+	/**
+	 * Don't generate the id attribute.
 	 */
 	protected boolean shallHideId() {
 		return true;
 	}
 
-	//--Component-//
+	// --Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);
@@ -58,7 +58,7 @@ public class Head extends AbstractTag {
 
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Html))
-			throw new UiException("Head's parent must be Html, not "+parent);
+			throw new UiException("Head's parent must be Html, not " + parent);
 		super.beforeParentChanged(parent);
 	}
 }

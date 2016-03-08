@@ -19,12 +19,13 @@ package org.zkoss.zul;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
-import org.zkoss.zk.au.out.AuInvoke;
 
 /**
  * A generic applet component.
@@ -38,8 +39,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * @since 3.6.0
  */
 public class Applet extends HtmlBasedComponent implements DynamicPropertied {
-	private String _code, _codebase, _archive,
-		_align, _hspace, _vspace;
+	private String _code, _codebase, _archive, _align, _hspace, _vspace;
 	private final Map<String, String> _params = new LinkedHashMap<String, String>();
 	private boolean _mayscript;
 
@@ -49,6 +49,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public String getCode() {
 		return _code;
 	}
+
 	/** Sets the applet class to run.
 	 */
 	public void setCode(String code) {
@@ -57,7 +58,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 			invalidate();
 		}
 	}
-	
+
 	/** Returns a relative base URL for applets specified in {@link #setCode} (URL).
 	 * <p>Default: null (no codebase at all).
 	 * @since 3.6.2
@@ -65,6 +66,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public String getCodebase() {
 		return _codebase;
 	}
+
 	/** Sets a relative base URL for applets specified in {@link #setCode} (URL).
 	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
 	 * @since 3.6.2
@@ -75,6 +77,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 			invalidate();
 		}
 	}
+
 	/** Returns whether the applet is allowed to access the scripting object.
 	 * <p>Default: false.
 	 * <p>It is only necessary for the applet to control the page script objects.
@@ -84,6 +87,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public boolean isMayscript() {
 		return _mayscript;
 	}
+
 	/** Sets whether the applet is allowed to access the scripting object.
 	 * @since 5.0.3
 	 */
@@ -101,11 +105,12 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public String getArchive() {
 		return _archive;
 	}
+
 	/** Sets the location of an archive file (URL).
 	 * <p>Notice that, if URI is specified, it will be encoded ({@link org.zkoss.zk.ui.Execution#encodeURL}).
 	 * @since 5.0.3
 	 */
-	public void setArchive(String  archive) {
+	public void setArchive(String archive) {
 		if (!Objects.equals(_archive, archive)) {
 			_archive = archive;
 			invalidate();
@@ -119,6 +124,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the alignment of an applet according to surrounding elements.
 	 * <p>Refer to <a href="http://www.w3schools.com/tags/tag_applet.asp">HTML &lt;applet> Tag</a>for more information.
 	 * @since 5.0.3
@@ -137,6 +143,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public String getHspace() {
 		return _hspace;
 	}
+
 	/** Sets the horizontal spacing in pixels around an applet.
 	 * @since 5.0.3
 	 */
@@ -146,6 +153,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 			invalidate();
 		}
 	}
+
 	/** Returns the vertical spacing around an applet.
 	 * <p>Default: null (browser default)
 	 * @since 5.0.3
@@ -153,6 +161,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public String getVspace() {
 		return _vspace;
 	}
+
 	/** Sets the vertical spacing in pixels around an applet.
 	 * @since 5.0.3
 	 */
@@ -171,16 +180,18 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 			_params.putAll(params);
 		invalidate();
 	}
+
 	/** Returns a map of parameters (never null).
 	 */
 	public Map<String, String> getParams() {
 		return _params;
 	}
+
 	/** Sets a parameter.
 	 * If the value is null, the parameter is removed.
 	 */
 	public String setParam(String name, String value) {
-		return value != null ? _params.put(name, value): _params.remove(name);
+		return value != null ? _params.put(name, value) : _params.remove(name);
 	}
 
 	public Object getDynamicProperty(String name) {
@@ -191,8 +202,7 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 		return _params.containsKey(name);
 	}
 
-	public void setDynamicProperty(String name, Object value)
-	throws WrongValueException {
+	public void setDynamicProperty(String name, Object value) throws WrongValueException {
 		setParam(name, Objects.toString(value));
 	}
 
@@ -201,17 +211,19 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	public void invoke(String function) {
 		response(new AuInvoke(this, "invoke", function));
 	}
+
 	/** Invokes the function of the applet running at the client with
 	 * one argument.
 	 */
 	public void invoke(String function, String argument) {
 		response(new AuInvoke(this, "invoke", function, argument));
 	}
+
 	/** Invokes the function of the applet running at the client with
 	 * variable number argument.
 	 */
 	public void invoke(String function, String[] arguments) {
-		final int len = arguments != null ? arguments.length: 0;
+		final int len = arguments != null ? arguments.length : 0;
 		final String[] args = new String[len + 1];
 		args[0] = function;
 		System.arraycopy(arguments, 0, args, 1, len);
@@ -230,8 +242,8 @@ public class Applet extends HtmlBasedComponent implements DynamicPropertied {
 	protected boolean isChildable() {
 		return false;
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "code", getCode());

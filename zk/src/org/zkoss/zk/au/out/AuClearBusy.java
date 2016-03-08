@@ -12,8 +12,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
 
 /**
  * A response to ask the client to clear the busy message.
@@ -28,6 +28,7 @@ public class AuClearBusy extends AuResponse {
 	public AuClearBusy() {
 		super("clearBusy");
 	}
+
 	/** Constructs a command to remove a busy message covering only the specified component.
 	 * @param comp the component that the busy message is associated.
 	 */

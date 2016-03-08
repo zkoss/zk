@@ -19,10 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.util.DesktopRecycle;
@@ -39,9 +39,8 @@ public class DesktopRecycles extends org.zkoss.zk.ui.impl.DesktopRecycles {
 	 * @return the recycled desktop, or null if no recycled desktop is matched
 	 * for this request.
 	 */
-	public static Desktop beforeService(
-	DesktopRecycle dtrc, ServletContext ctx, Session sess,
-	HttpServletRequest request, HttpServletResponse response, String path) {
+	public static Desktop beforeService(DesktopRecycle dtrc, ServletContext ctx, Session sess,
+			HttpServletRequest request, HttpServletResponse response, String path) {
 		if (dtrc != null) {
 			final Execution olde = Executions.getCurrent();
 			final Object olds = SessionsCtrl.getRawCurrent();
@@ -59,6 +58,7 @@ public class DesktopRecycles extends org.zkoss.zk.ui.impl.DesktopRecycles {
 		}
 		return null;
 	}
+
 	/** Called after serving a HTTP request.
 	 */
 	public static void afterService(DesktopRecycle dtrc, Desktop desktop) {
@@ -76,6 +76,6 @@ public class DesktopRecycles extends org.zkoss.zk.ui.impl.DesktopRecycles {
 	 * and {@link Desktop#getQueryURI}.
 	 */
 	private static String getURI(String path, String qs) {
-		return qs != null ? path + '?' + qs: path;
+		return qs != null ? path + '?' + qs : path;
 	}
 }

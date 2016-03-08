@@ -23,6 +23,8 @@ import org.zkoss.zul.event.ListDataEvent;
 public interface TabboxEngine {
 	public static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.onInitLaterPosted";
 	public static final String ATTR_CHANGING_SELECTION = "org.zkoss.zul.tabbox.changingSelection";
+
 	public void doInitRenderer(Tabbox tabbox);
+
 	public void doDataChange(Tabbox tabbox, ListDataEvent event);
 }

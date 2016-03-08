@@ -12,12 +12,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.util.resource;
 
+import org.zkoss.web.servlet.xel.RequestContext;
+import org.zkoss.web.servlet.xel.RequestContexts;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.VariableResolverX;
 import org.zkoss.xel.XelException;
-
-import org.zkoss.web.servlet.xel.RequestContext;
-import org.zkoss.web.servlet.xel.RequestContexts;
 
 /**
  * Used to resolve the variables defined in the request
@@ -39,9 +38,8 @@ public class ServletRequestResolver implements VariableResolver, java.io.Seriali
 		if (jc != null) {
 			final VariableResolver parent = jc.getVariableResolver();
 			if (parent != null)
-				return parent instanceof VariableResolverX ?
-					((VariableResolverX)parent).resolveVariable(null, null, name):
-					parent.resolveVariable(name);
+				return parent instanceof VariableResolverX
+						? ((VariableResolverX) parent).resolveVariable(null, null, name) : parent.resolveVariable(name);
 		}
 		return null;
 	}

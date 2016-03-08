@@ -16,8 +16,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au.out;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Component;
+
 /**
  * A response to tell the client a component's value is wrong.
  *
@@ -29,8 +30,9 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuWrongValue extends AuResponse {
 	public AuWrongValue(Component comp, String message) {
-		super("wrongValue", comp, new Object[] {comp, message});
+		super("wrongValue", comp, new Object[] { comp, message });
 	}
+
 	/**
 	 * Constructor for multiple wrong values.
 	 * @param data a string array, the data in the array shall be
@@ -46,6 +48,6 @@ public class AuWrongValue extends AuResponse {
 	 * @since 5.0.2
 	 */
 	public String getOverrideKey() {
-		return getDepends() != null ? "zk.wrongValue": null;
+		return getDepends() != null ? "zk.wrongValue" : null;
 	}
 }

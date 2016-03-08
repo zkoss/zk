@@ -29,6 +29,7 @@ public interface Constrainted {
 	 * <p>Default: null (means no constraint all all).
 	 */
 	public void setConstraint(Constraint constr);
+
 	/** Returns the constraint, or null if no constraint at all.
 	 */
 	public Constraint getConstraint();

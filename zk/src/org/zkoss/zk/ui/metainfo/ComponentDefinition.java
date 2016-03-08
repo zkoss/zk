@@ -16,12 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
-import java.net.URL;
 
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.xel.ExValue;
 
@@ -93,11 +93,11 @@ public interface ComponentDefinition extends Cloneable {
 	 *
 	 * <p>Notice that it is valid to have XML fragment, including XML elements,
 	 * within the element. For example,
-<pre><code>&lt;html>
-  &lt;ul>
-    &lt;li forEach="apple, orange">${each}&lt;/li>
-  &lt;/ul>
-&lt;/html></code></pre>
+	<pre><code>&lt;html>
+	&lt;ul>
+	&lt;li forEach="apple, orange">${each}&lt;/li>
+	&lt;/ul>
+	&lt;/html></code></pre>
 	 *
 	 * <p>If the component allows child components, it is better not to try
 	 * XML fragment as the plain text. And then, it shall return true
@@ -107,6 +107,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 3.0.0
 	 */
 	public String getTextAs();
+
 	/** Returns if a child is allowed in the text-as area.
 	 * It is meaningful only if {@link #getTextAs} is not null.
 	 * If true, the text enclosed within the element is considered as
@@ -122,6 +123,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 6.0.0
 	 */
 	public boolean isChildAllowedInTextAs();
+
 	/** Returns whether to preserve the blank text.
 	 * If false, the blank text (a non-empty string consisting of whitespaces)
 	 * are ignored.
@@ -135,9 +137,11 @@ public interface ComponentDefinition extends Cloneable {
 	 * @see #getMacroURI
 	 */
 	public boolean isMacro();
+
 	/** Returns the macro URI, or null if not a macro.
 	 */
 	public String getMacroURI();
+
 	/** Returns whether this is an inline macro.
 	 * If false, you have to examine {@link #isMacro} to see whether it
 	 * is a regular macro.
@@ -157,6 +161,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @see LanguageDefinition#getShadowDefinition
 	 */
 	public boolean isShadowElement();
+
 	/** Returns the class (Class) or the class name (String) that
 	 * implements the component.
 	 *
@@ -166,6 +171,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * it may define classes upon evaluating a page.
 	 */
 	public Object getImplementationClass();
+
 	/** Sets the class to implements the component.
 	 *
 	 * <p>Note: currently, classes specified in lang.xml or lang-addon.xml
@@ -174,6 +180,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * might be resolved later because it might be defined by zscript.
 	 */
 	public void setImplementationClass(Class<? extends Component> cls);
+
 	/** Sets the class name to implements the component.
 	 * Unlike {@link #setImplementationClass(Class)}, the class won't
 	 * be resolved until {@link ComponentInfo#newInstance} or {@link #getImplementationClass}
@@ -181,6 +188,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * (thru, usually, zscript).
 	 */
 	public void setImplementationClass(String clsnm);
+
 	/** Resolves and returns the class that implements the component.
 	 *
 	 * <p>Unlike {@link #getImplementationClass},
@@ -201,8 +209,8 @@ public interface ComponentDefinition extends Cloneable {
 	 * Note: this method won't attach the component to the specified page.
 	 * @exception ClassNotFoundException if the class not found
 	 */
-	public Class<?> resolveImplementationClass(Page page, String clsnm)
-	throws ClassNotFoundException;
+	public Class<?> resolveImplementationClass(Page page, String clsnm) throws ClassNotFoundException;
+
 	/** Returns whether a component belongs to this definition.
 	 *
 	 * <p>If {@link #resolveImplementationClass} failed to resolve,
@@ -247,6 +255,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @return the new component (never null)
 	 */
 	public Component newInstance(Page page, String clsnm);
+
 	/** Creates an component of this definition.
 	 * Refer to {@link #newInstance(Page, String)}. They are the same
 	 * except this method accepts the class directly,
@@ -276,21 +285,25 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 5.0.4
 	 */
 	public String getWidgetClass(Component comp, String moldName);
+
 	/** Returns the default widget class, or null if not available.
 	 * @param comp the component used to evaluate EL expression, if any,
 	 * when retrieving the widget class. Ignored if null.
 	 * @since 5.0.4
 	 */
 	public String getDefaultWidgetClass(Component comp);
+
 	/** Sets the default widget class.
 	 * @param widgetClass the name of the widget class (JavaScript class),
 	 * including the package name.
 	 * @since 5.0.0
 	 */
 	public void setDefaultWidgetClass(String widgetClass);
+
 	/** Returns whether the specified mold exists.
 	 */
 	public boolean hasMold(String name);
+
 	/** Returns a readonly collection of the names of the mold.
 	 */
 	public Collection<String> getMoldNames();
@@ -303,6 +316,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @param value the value. It might contain expressions (${}).
 	 */
 	public void addProperty(String name, String value);
+
 	/** Applies the properties defined in
 	 * this definition to the specified component.
 	 *
@@ -314,6 +328,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * so they are always available no matter this method is called or not.
 	 */
 	public void applyProperties(Component comp);
+
 	/** Applies the custom attributes defined in this definition
 	 * to the specified component.
 	 * <p>It is called automatically in 
@@ -322,6 +337,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 5.0.7
 	 */
 	public void applyAttributes(Component comp);
+
 	/** Evaluates and retrieves properties to the specified map.
 	 *
 	 * @param propmap the map to store the retrieved properties.
@@ -346,11 +362,13 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 3.6.0
 	 */
 	public String getApply();
+
 	/** Return the parsed expressions of the apply attribute.
 	 * @see #getApply
 	 * @since 3.6.0
 	 */
 	public ExValue[] getParsedApply();
+
 	/** Sets the apply attribute that is is a list of {@link Composer} class
 	 * or EL expressions returning classes, class names or composer instances.
 	 *

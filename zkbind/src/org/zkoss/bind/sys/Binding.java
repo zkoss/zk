@@ -28,16 +28,16 @@ public interface Binding {
 	 * @return the owner binder of this binding.
 	 */
 	public Binder getBinder();
-	
+
 	/**
 	 * Returns the associated component of this binding.
 	 * @return the associated component of this binding.
 	 */
 	public Component getComponent();
-	
+
 	/**
 	 * Returns an argument <tags, object> pairs map(read only). 
 	 * @return an argument <tags, object> pairs map(read only).
 	 */
-	public Map<String,Object> getArgs();
+	public Map<String, Object> getArgs();
 }

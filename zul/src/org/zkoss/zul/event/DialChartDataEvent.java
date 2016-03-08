@@ -30,14 +30,14 @@ public class DialChartDataEvent extends ChartDataEvent {
 	public static String FRAME_FG_COLOR = "frameFgColor";
 	public static String GRADIENT_DIRECTION = "gradientDirection";
 	public static String CAP_RADIUS = "capRadius";
-	
+
 	// DialModelRange
 	public static String RANGE_COLOR = "rangeColor";
 	public static String INNER_RADIUS = "innerRadius";
 	public static String OUTER_RADIUS = "outerRadius";
 	public static String LOWER_BOUND = "lowerBound";
 	public static String UPPER_BOUND = "upperBound";
-	
+
 	// DialModelScale
 	public static String SCALE_VALUE = "scaleValue";
 	public static String SCALE_TEXT = "scaleText";
@@ -54,11 +54,12 @@ public class DialChartDataEvent extends ChartDataEvent {
 	public static String NEEDLE_TYPE = "needleType";
 	public static String NEEDLE_COLOR = "needleColor";
 	public static String NEEDLE_RADIUS = "needleRadius";
-	
+
 	public DialChartDataEvent(ChartModel model, int type, String prop, Object data) {
 		super(model, type, null, null, -1, -1, data);
 		_prop = prop;
 	}
+
 	/**
 	 * Return the key of the property.
 	 */

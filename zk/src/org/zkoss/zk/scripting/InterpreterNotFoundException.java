@@ -33,6 +33,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(msg, cause);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */
@@ -40,6 +41,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(s);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */
@@ -47,6 +49,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(cause);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */
@@ -61,6 +64,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(code, fmtArgs, cause);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */
@@ -68,6 +72,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(code, fmtArg, cause);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */
@@ -75,6 +80,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(code, fmtArgs);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */
@@ -82,6 +88,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(code, fmtArg);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */
@@ -89,6 +96,7 @@ public class InterpreterNotFoundException extends UiException {
 		super(code, cause);
 		_lang = lang;
 	}
+
 	/**
 	 * @param lang the language name.
 	 */

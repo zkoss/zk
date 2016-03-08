@@ -55,10 +55,12 @@ public interface Session extends Scope {
 	/** Returns the value of the specified custom attribute.
 	 */
 	public Object getAttribute(String name);
+
 	/** Sets the value of the specified custom attribute.
 	 * @return the previous value if any (since ZK 5)
 	 */
 	public Object setAttribute(String name, Object value);
+
 	/** Removes the specified custom attribute.
 	 * @return the previous value if any (since ZK 5)
 	 */
@@ -81,12 +83,14 @@ public interface Session extends Scope {
 	 * @deprecated as of release 7.0.0, use {@link Execution#getRemoteHost()} instead.
 	 */
 	public String getRemoteHost();
+
 	/**  Returns the Internet Protocol (IP) address of the client or last
 	 * proxy that sent the first request creating this session.
 	 * @since 3.0.1
 	 * @deprecated as of release 7.0.0, use {@link Execution#getRemoteAddr()} instead.
 	 */
 	public String getRemoteAddr();
+
 	/** Returns the host name of the server to which the first request was sent
 	 * (and created this session).
 	 * It is the value of the part before ":" in the Host header value, if any,
@@ -97,6 +101,7 @@ public interface Session extends Scope {
 	 * @deprecated as of release 7.0.0, use {@link Execution#getServerName()} instead.
 	 */
 	public String getServerName();
+
 	/** Returns the host name of the Internet Protocol (IP) interface
 	 * on which the first request was received (and creates this session).
 	 *
@@ -108,6 +113,7 @@ public interface Session extends Scope {
 	 * @deprecated as of release 7.0.0, use {@link Execution#getLocalName()} instead.
 	 */
 	public String getLocalName();
+
 	/** Returns the Internet Protocol (IP) address of the interface on which
 	 * the first request was received (and creates this session).
 	 * @since 3.0.1
@@ -124,6 +130,7 @@ public interface Session extends Scope {
 	 * invalidated after processing the current request.
 	 */
 	public void invalidate();
+
 	/** Specifies the time, in seconds, between client requests before
 	 * the servlet container will invalidate this session.
 	 * A negative time indicates the session should never timeout.
@@ -132,6 +139,7 @@ public interface Session extends Scope {
 	 * @see org.zkoss.zk.ui.util.Configuration#setSessionMaxInactiveInterval
 	 */
 	public void setMaxInactiveInterval(int interval);
+
 	/** Return the time, in seconds, between client requests before
 	 * the servlet container will invalidate this session.
 	 * A negative time indicates the session should never timeout.

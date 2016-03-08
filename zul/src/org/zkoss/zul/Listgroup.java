@@ -20,7 +20,8 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.impl.GroupsListModel;
 import org.zkoss.zul.impl.XulElement;
 
@@ -42,43 +43,50 @@ public class Listgroup extends Listitem {
 	private transient List<Listitem> _items;
 
 	static {
-		addClientEvent(Listgroup.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Listgroup.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
-	
+
 	public Listgroup() {
 		init();
 	}
+
 	public Listgroup(String label) {
 		this();
 		setLabel(label);
 	}
+
 	public <T> Listgroup(String label, T value) {
 		this();
 		setLabel(label);
 		setValue(value);
 	}
+
 	private void init() {
-		_items =  new AbstractList<Listitem>() {
+		_items = new AbstractList<Listitem>() {
 			public int size() {
 				return getItemCount();
 			}
+
 			public Iterator<Listitem> iterator() {
 				return new IterItems();
 			}
+
 			public Listitem get(int index) {
 				final Listbox lb = getListbox();
 				if (lb == null)
-					throw new IndexOutOfBoundsException("Index: "+index);
+					throw new IndexOutOfBoundsException("Index: " + index);
 				return lb.getItemAtIndex(getIndex() + index + 1);
 			}
 		};
 	}
+
 	/** 
 	 * Returns a list of all {@link Listitem} are grouped by this listgroup.
 	 */
 	public List<Listitem> getItems() {
 		return _items;
 	}
+
 	/** Returns the number of items.
 	 */
 	public int getItemCount() {
@@ -94,11 +102,11 @@ public class Listgroup extends Listitem {
 		}
 		return 0;
 	}
-		
+
 	public Listgroup getListgroup() {
 		return this;
 	}
-	
+
 	/**
 	 * Returns the number of visible descendant {@link Listitem}.
 	 * @since 3.5.1
@@ -111,39 +119,46 @@ public class Listgroup extends Listitem {
 			while (count-- > 0 && item != null) {
 				if (item.isVisible())
 					visibleCount++;
-				if (!(item.getNextSibling() instanceof Listitem)) break;
+				if (!(item.getNextSibling() instanceof Listitem))
+					break;
 				item = (Listitem) item.getNextSibling();
 			}
 		}
 		return visibleCount;
 	}
+
 	/**
 	 * Returns the index of Listgroupfoot
 	 * <p> -1: no Listgroupfoot
 	 */
-	public int getListgroupfootIndex(){
-		final Listbox lb = (Listbox)getParent();
-		if (lb != null) {			
+	public int getListgroupfootIndex() {
+		final Listbox lb = (Listbox) getParent();
+		if (lb != null) {
 			int[] g = lb.getGroupsInfoAt(getIndex(), true);
-			if (g != null) return g[2];
+			if (g != null)
+				return g[2];
 		}
 		return -1;
 	}
+
 	/**
 	 * Returns the Listfoot, if any. Otherwise, null is returned.
 	 */
 	public Listfoot getListfoot() {
 		int index = getListgroupfootIndex();
-		if (index < 0) return null;
-		final Listbox lb = (Listbox)getParent();
+		if (index < 0)
+			return null;
+		final Listbox lb = (Listbox) getParent();
 		return (Listfoot) lb.getChildren().get(index);
 	}
+
 	/** Returns whether this container is open.
 	 * <p>Default: true.
 	 */
 	public boolean isOpen() {
 		return _open;
 	}
+
 	/** Sets whether this container is open.
 	 */
 	public void setOpen(boolean open) {
@@ -155,30 +170,32 @@ public class Listgroup extends Listitem {
 				listbox.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
 		}
 	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-listgroup" : _zclass;
 	}
 
 	//Cloneable//
 	public Object clone() {
-		final Listgroup clone = (Listgroup)super.clone();
+		final Listgroup clone = (Listgroup) super.clone();
 		clone.init();
 		return clone;
 	}
+
 	//-- Serializable --//
-	private void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();
 	}
 
 	//-- ComponentCtrl --//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		
-		if (!isOpen()) renderer.render("open", false);
+
+		if (!isOpen())
+			renderer.render("open", false);
 	}
+
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},
@@ -196,29 +213,34 @@ public class Listgroup extends Listitem {
 				final ListModel model = listbox.getModel();
 				if (model instanceof GroupsListModel) {
 					int gindex = listbox.getGroupIndex(getIndex());
-					GroupsModel gmodel = ((GroupsListModel)model).getGroupsModel();
-					if (_open) gmodel.addOpenGroup(gindex);
-					else gmodel.removeOpenGroup(gindex);
+					GroupsModel gmodel = ((GroupsListModel) model).getGroupsModel();
+					if (_open)
+						gmodel.addOpenGroup(gindex);
+					else
+						gmodel.removeOpenGroup(gindex);
 				}
 			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}
+
 	/**
 	 * An iterator used by _items.
 	 */
 	private class IterItems implements Iterator<Listitem> {
-		private final Iterator<Listitem> _it = getListbox().getItems().listIterator(getIndex()+1);
+		private final Iterator<Listitem> _it = getListbox().getItems().listIterator(getIndex() + 1);
 		private int _j;
 
 		public boolean hasNext() {
 			return _j < getItemCount();
 		}
+
 		public Listitem next() {
 			++_j;
 			return _it.next();
 		}
+
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}

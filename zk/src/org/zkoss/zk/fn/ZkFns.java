@@ -29,7 +29,8 @@ import org.zkoss.zk.ui.WebApps;
  * @author tomyeh
  */
 public class ZkFns {
-	protected ZkFns() {}
+	protected ZkFns() {
+	}
 
 	/** Converts the specified URI to absolute if necessary.
 	 * Refer to {@link org.zkoss.zk.ui.Execution#toAbsoluteURI}.
@@ -41,14 +42,15 @@ public class ZkFns {
 	public static String toAbsoluteURI(String uri, boolean skipInclude) {
 		return Executions.getCurrent().toAbsoluteURI(uri, skipInclude);
 	}
+
 	/** Converts the specified URI to absolute if not included by another page.
 	 * It is a shortcut of {@link #toAbsoluteURI(String, boolean)} with skipInclude
 	 * is true.
 	 */
 	public static String toAbsoluteURI(String uri) {
 		return toAbsoluteURI(uri, true);
-	//we preserve this method for backward compatibility (since some developers
-	//might have old version core.dsp.tld
+		//we preserve this method for backward compatibility (since some developers
+		//might have old version core.dsp.tld
 	}
 
 	/** Returns the build identifier, such as 2007121316.
@@ -75,14 +77,15 @@ public class ZkFns {
 	public static String getEdition() {
 		return WebApps.getEdition();
 	}
-	
+
 	/**
 	 * Returns the edition whether valid or invalid.
 	 * @since 6.5.5
 	 */
 	public static boolean isEditionValid() {
 		WebApp current = WebApps.getCurrent();
-		return !("CE".equals(getEdition()) || current == null || current.getAttribute("org.zkoss.zk.ui.notice") == null);
+		return !("CE".equals(getEdition()) || current == null
+				|| current.getAttribute("org.zkoss.zk.ui.notice") == null);
 	}
 
 	/** Returns the string encoded with ZK.

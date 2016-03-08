@@ -16,31 +16,31 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.net.URL;
+import java.util.Map;
 
+import org.zkoss.idom.Element;
+import org.zkoss.idom.input.SAXBuilder;
+import org.zkoss.idom.util.IDOMs;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.xel.Expressions;
-import org.zkoss.xel.ExpressionFactory;
-import org.zkoss.xel.XelContext;
-import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.XelException;
-import org.zkoss.xel.util.SimpleMapper;
-import org.zkoss.xel.taglib.Taglibs;
-import org.zkoss.idom.input.SAXBuilder;
-import org.zkoss.idom.Element;
-import org.zkoss.idom.util.IDOMs;
-
 import org.zkoss.web.mesg.MWeb;
-import org.zkoss.web.servlet.dsp.*;
-import org.zkoss.web.servlet.dsp.action.Page;
+import org.zkoss.web.servlet.dsp.DspException;
+import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.action.Action;
+import org.zkoss.web.servlet.dsp.action.Page;
+import org.zkoss.xel.ExpressionFactory;
+import org.zkoss.xel.Expressions;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.XelException;
+import org.zkoss.xel.taglib.Taglibs;
+import org.zkoss.xel.util.SimpleMapper;
 
 /**
  * Used to parse a DSP page into a meta format called
@@ -60,9 +60,8 @@ public class Parser {
 	 * @param loc used to locate the resource such as taglib.
 	 * It could null only if DSP contains no such resource.
 	 */
-	public Interpretation parse(String content, String ctype,
-	XelContext xelc, Locator loc)
-	throws DspException, IOException, XelException {
+	public Interpretation parse(String content, String ctype, XelContext xelc, Locator loc)
+			throws DspException, IOException, XelException {
 		final Context ctx = new Context(content, xelc, loc);
 		final RootNode root = new RootNode();
 		parse0(ctx, root, 0, content.length());
@@ -74,8 +73,10 @@ public class Parser {
 			root.addChild(0, action);
 			final Map<String, String> attrs = new HashMap<String, String>(2);
 
-			if (ctype == null) ctype = "text/html";
-			else if (ctype.length() > 0 && ctype.charAt(0) == ';') ctype = "text/html" + ctype;
+			if (ctype == null)
+				ctype = "text/html";
+			else if (ctype.length() > 0 && ctype.charAt(0) == ';')
+				ctype = "text/html" + ctype;
 
 			attrs.put("optionalContentType", ctype);
 			applyAttrs("page", action, attrs, ctx);
@@ -87,7 +88,7 @@ public class Parser {
 	/** Recursively parse the content into a tree of {@link Node}.
 	 */
 	private static void parse0(Context ctx, Node parent, int from, int to)
-	throws DspException, IOException, XelException {
+			throws DspException, IOException, XelException {
 		boolean esc = false;
 		final StringBuffer sb = new StringBuffer(512);
 		for (int j = from; j < to; ++j) {
@@ -108,8 +109,7 @@ public class Parser {
 						final int oldLines = ctx.nLines;
 						int k = skipWhitespaces(ctx, j + 1, to);
 						int l = nextSeparator(ctx, k, to);
-						if (l >= to || l == k
-						|| ctx.content.charAt(l) != ':') {
+						if (l >= to || l == k || ctx.content.charAt(l) != ':') {
 							ctx.nLines = oldLines;
 							break; //bypass what we don't recognize
 						}
@@ -145,24 +145,22 @@ public class Parser {
 		}
 		addText(parent, sb);
 	}
+
 	/** Parses a control (e.g., &lt;% page %&gt;) starting at from,
 	 * and returns the position of '&gt' (in %&gt;).
 	 */
-	private static int parseControl(Context ctx, Node parent,
-	int from, int to)
-	throws DspException, IOException, XelException {
+	private static int parseControl(Context ctx, Node parent, int from, int to)
+			throws DspException, IOException, XelException {
 		int j = from + 2;
 		if (j + 1 >= to)
-			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
-				new Object[] {null, new Integer(ctx.nLines)});
+			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED, new Object[] { null, new Integer(ctx.nLines) });
 
 		//0. comment
 		char cc = ctx.content.charAt(j);
-		if (cc == '-' && ctx.content.charAt(j + 1)  == '-') { //comment
+		if (cc == '-' && ctx.content.charAt(j + 1) == '-') { //comment
 			for (int end = to - 4;; ++j) {
 				if (j > end)
-					throw new DspException(MWeb.DSP_COMMENT_NOT_TERMINATED,
-						new Integer(ctx.nLines));
+					throw new DspException(MWeb.DSP_COMMENT_NOT_TERMINATED, new Integer(ctx.nLines));
 				if (ctx.content.charAt(j) == '\n')
 					++ctx.nLines;
 				else if (startsWith(ctx.content, j, to, "--%>"))
@@ -171,14 +169,13 @@ public class Parser {
 		}
 		if (cc != '@')
 			throw new DspException(MWeb.DSP_EXPECT_CHARACTER,
-				new Object[] {new Character('@'), new Integer(ctx.nLines)});
+					new Object[] { new Character('@'), new Integer(ctx.nLines) });
 
 		//1: which control
 		j = skipWhitespaces(ctx, j + 1, to);
 		int k = nextSeparator(ctx, j, to);
 		if (k >= to)
-			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
-				new Object[] {null, new Integer(ctx.nLines)});
+			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED, new Object[] { null, new Integer(ctx.nLines) });
 		final ActionNode action;
 		final String ctlnm = ctx.content.substring(j, k);
 		if ("taglib".equals(ctlnm)) {
@@ -188,8 +185,7 @@ public class Parser {
 			trim(parent); //Bug 1798123: avoid getOut being called before Page
 			parent.addChild(action = new ActionNode(Page.class, ctx.nLines));
 		} else {
-			throw new DspException(MWeb.DSP_UNKNOWN_ACTION,
-				new Object[] {ctlnm, new Integer(ctx.nLines)});
+			throw new DspException(MWeb.DSP_UNKNOWN_ACTION, new Object[] { ctlnm, new Integer(ctx.nLines) });
 		}
 
 		//2: parse attributes
@@ -198,11 +194,10 @@ public class Parser {
 		cc = ctx.content.charAt(k);
 		if (cc != '%')
 			throw new DspException(MWeb.DSP_EXPECT_CHARACTER,
-				new Object[] {new Character('%'), new Integer(ctx.nLines)});
+					new Object[] { new Character('%'), new Integer(ctx.nLines) });
 
 		if (action == null) { //taglib
-			final String uri = attrs.get("uri"),
-				prefix = attrs.get("prefix");
+			final String uri = attrs.get("uri"), prefix = attrs.get("prefix");
 			if (prefix == null || uri == null)
 				throw new DspException(MWeb.DSP_TAGLIB_ATTRIBUTE_REQUIRED, new Integer(ctx.nLines));
 			ctx.loadTaglib(prefix, uri);
@@ -211,17 +206,17 @@ public class Parser {
 		}
 
 		if (++k >= to || ctx.content.charAt(k) != '>')
-			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
-				new Object[] {ctlnm, new Integer(ctx.nLines)});
+			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED, new Object[] { ctlnm, new Integer(ctx.nLines) });
 		return k;
 	}
+
 	/** Trimmed {@link TextNode} that contains nothing but spaces.
 	 */
 	private static void trim(Node node) {
 		for (Iterator it = node.getChildren().iterator(); it.hasNext();) {
 			final Object o = it.next();
 			if (o instanceof TextNode) {
-				final String s = ((TextNode)o).getText();
+				final String s = ((TextNode) o).getText();
 				if (s == null || s.trim().length() == 0)
 					it.remove();
 			}
@@ -232,15 +227,14 @@ public class Parser {
 	 * @param from the position of ':'
 	 * @return the position of the last '&gt'.
 	 */
-	private static int parseAction(Context ctx, Node parent,
-	String prefix, int from, int to)
-	throws DspException, IOException, XelException {
+	private static int parseAction(Context ctx, Node parent, String prefix, int from, int to)
+			throws DspException, IOException, XelException {
 		//1: which action
 		int j = skipWhitespaces(ctx, from + 1, to);
 		int k = nextSeparator(ctx, j, to);
 		if (k >= to)
 			throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
-				new Object[] {prefix+':', new Integer(ctx.nLines)});
+					new Object[] { prefix + ':', new Integer(ctx.nLines) });
 		if (k == j)
 			throw new DspException(MWeb.DSP_ACTION_REQUIRED, new Integer(ctx.nLines));
 
@@ -248,7 +242,7 @@ public class Parser {
 		final Class actcls = ctx.getActionClass(prefix, actnm);
 		if (actcls == null)
 			throw new DspException(MWeb.DSP_UNKNOWN_ACTION,
-				new Object[] {prefix+':'+actnm, new Integer(ctx.nLines)});
+					new Object[] { prefix + ':' + actnm, new Integer(ctx.nLines) });
 		final ActionNode action = new ActionNode(actcls, ctx.nLines);
 		parent.addChild(action);
 
@@ -259,14 +253,14 @@ public class Parser {
 		boolean ended = cc == '/';
 		if (!ended && cc != '>')
 			throw new DspException(MWeb.DSP_UNEXPECT_CHARACTER,
-				new Object[] {new Character(cc), new Integer(ctx.nLines)});
+					new Object[] { new Character(cc), new Integer(ctx.nLines) });
 
 		applyAttrs(actnm, action, attrs, ctx);
 
 		if (ended) {
 			if (j + 1 >= to || ctx.content.charAt(j + 1) != '>')
 				throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
-					new Object[] {prefix+':'+actnm, new Integer(action.getLineNumber())});
+						new Object[] { prefix + ':' + actnm, new Integer(action.getLineNumber()) });
 			return j + 1;
 		}
 
@@ -275,7 +269,7 @@ public class Parser {
 		for (int depth = 0;; ++j) {
 			if (j >= to)
 				throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
-					new Object[] {actnm, new Integer(action.getLineNumber())});
+						new Object[] { actnm, new Integer(action.getLineNumber()) });
 
 			cc = ctx.content.charAt(j);
 			if (j + 1 < to) {
@@ -283,10 +277,9 @@ public class Parser {
 					final int oldLines = ctx.nLines;
 					k = j + 1;
 					ended = ctx.content.charAt(k) == '/';
-					k = skipWhitespaces(ctx, ended ? k + 1: k, to);
+					k = skipWhitespaces(ctx, ended ? k + 1 : k, to);
 					int l = nextSeparator(ctx, k, to);
-					if (l >= to || ctx.content.charAt(l) != ':'
-					|| !prefix.equals(ctx.content.substring(k, l))) {
+					if (l >= to || ctx.content.charAt(l) != ':' || !prefix.equals(ctx.content.substring(k, l))) {
 						ctx.nLines = oldLines;
 						continue; //bypass
 					}
@@ -319,70 +312,76 @@ public class Parser {
 					continue;
 				}
 			}
-			if (cc == '\n') ++ctx.nLines;
+			if (cc == '\n')
+				++ctx.nLines;
 		}
 
 		parse0(ctx, action, nestedFrom, nestedTo); //recursive
 		return j;
 	}
+
 	private static boolean startsWith(String content, int from, int to, String s) {
-		for (int j = 0, len = s.length(); ; ++from, ++j) {
-			if (j >= len) return true;
-			if (from >= to || content.charAt(from) != s.charAt(j)) return false;
+		for (int j = 0, len = s.length();; ++from, ++j) {
+			if (j >= len)
+				return true;
+			if (from >= to || content.charAt(from) != s.charAt(j))
+				return false;
 		}
 	}
+
 	private static int skipWhitespaces(Context ctx, int from, int to) {
 		for (; from < to; ++from) {
 			final char cc = ctx.content.charAt(from);
-			if (cc == '\n') ++ctx.nLines;
+			if (cc == '\n')
+				++ctx.nLines;
 			else if (!Character.isWhitespace(cc))
 				break;
 		}
 		return from;
 	}
+
 	private static int nextSeparator(Context ctx, int from, int to) {
 		for (; from < to; ++from) {
 			final char cc = ctx.content.charAt(from);
-			if ((cc < '0' || cc > '9') && (cc < 'a' || cc > 'z')
-			&& (cc < 'A' || cc > 'Z') && cc != '_')
+			if ((cc < '0' || cc > '9') && (cc < 'a' || cc > 'z') && (cc < 'A' || cc > 'Z') && cc != '_')
 				break;
 		}
 		return from;
 	}
+
 	/** Parses the attributes.
 	 */
-	private static int parseAttrs(Context ctx, Map<String, String> attrs, String actnm,
-	int from, int to)
-	throws DspException {
+	private static int parseAttrs(Context ctx, Map<String, String> attrs, String actnm, int from, int to)
+			throws DspException {
 		for (int j, k = from;;) {
 			j = skipWhitespaces(ctx, k, to);
 			k = nextSeparator(ctx, j, to);
 			if (k >= to)
-				throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED,
-					new Object[] {actnm, new Integer(ctx.nLines)});
-			if (j == k) return j;
+				throw new DspException(MWeb.DSP_ACTION_NOT_TERMINATED, new Object[] { actnm, new Integer(ctx.nLines) });
+			if (j == k)
+				return j;
 
 			final String attrnm = ctx.content.substring(j, k);
 			k = skipWhitespaces(ctx, k, to);
 			j = skipWhitespaces(ctx, k + 1, to);
 			if (j >= to || ctx.content.charAt(k) != '=')
 				throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_REQUIRED,
-					new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
+						new Object[] { actnm, attrnm, new Integer(ctx.nLines) });
 
 			final char quot = ctx.content.charAt(j);
 			if (quot != '"' && quot != '\'')
 				throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
-					new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
+						new Object[] { actnm, attrnm, new Integer(ctx.nLines) });
 
 			final StringBuffer sbval = new StringBuffer();
 			for (k = ++j;; ++k) {
 				if (k >= to)
 					throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
-						new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
+							new Object[] { actnm, attrnm, new Integer(ctx.nLines) });
 				final char cc = ctx.content.charAt(k);
 				if (cc == '\n')
 					throw new DspException(MWeb.DSP_ATTRIBUTE_VALUE_QUOTE_REQUIRED,
-						new Object[] {actnm, attrnm, new Integer(ctx.nLines)});
+							new Object[] { actnm, attrnm, new Integer(ctx.nLines) });
 
 				if (cc == quot) {
 					++k;
@@ -397,23 +396,22 @@ public class Parser {
 			attrs.put(attrnm, sbval.toString());
 		}
 	}
+
 	/** Applies attributes.
 	 */
-	private static final
-	void applyAttrs(String actnm, ActionNode action, Map<String, String> attrs,
-	ParseContext ctx)
-	throws DspException, XelException {
-		for (Map.Entry<String, String> me: attrs.entrySet()) {
+	private static final void applyAttrs(String actnm, ActionNode action, Map<String, String> attrs, ParseContext ctx)
+			throws DspException, XelException {
+		for (Map.Entry<String, String> me : attrs.entrySet()) {
 			final String attrnm = me.getKey();
 			final String attrval = me.getValue();
 			try {
 				action.addAttribute(attrnm, attrval, ctx);
 			} catch (NoSuchMethodException ex) {
 				throw new DspException(MWeb.DSP_ATTRIBUTE_NOT_FOUND,
-					new Object[] {actnm, attrnm, new Integer(action.getLineNumber())});
+						new Object[] { actnm, attrnm, new Integer(action.getLineNumber()) });
 			} catch (ClassCastException ex) {
 				throw new DspException(MWeb.DSP_ATTRIBUTE_INVALID_VALUE,
-					new Object[] {actnm, attrnm, attrval, new Integer(action.getLineNumber())}, ex);
+						new Object[] { actnm, attrnm, attrval, new Integer(action.getLineNumber()) }, ex);
 			}
 		}
 	}
@@ -421,16 +419,14 @@ public class Parser {
 	/** Parses an EL expression starting at from.
 	 * @return the position of }.
 	 */
-	private static int parseEL(Context ctx, Node parent, int from, int to)
-	throws DspException, XelException {
+	private static int parseEL(Context ctx, Node parent, int from, int to) throws DspException, XelException {
 		int j = endOfEL(ctx, from, to); //point to }
-		parent.addChild(
-			new XelNode(ctx.content.substring(from, j + 1), ctx));
+		parent.addChild(new XelNode(ctx.content.substring(from, j + 1), ctx));
 		return j;
 	}
+
 	/** Returns the position of '}'. */
-	private static int endOfEL(Context ctx, int from, int to)
-	throws DspException {
+	private static int endOfEL(Context ctx, int from, int to) throws DspException {
 		for (int j = from + 2;; ++j) {
 			if (j >= to)
 				throw new DspException(MWeb.EL_NOT_TERMINATED, new Integer(ctx.nLines));
@@ -441,9 +437,11 @@ public class Parser {
 			} else if (cc == '\'' || cc == '"') {
 				while (++j < to) {
 					final char c2 = ctx.content.charAt(j);
-					if (c2 == cc) break;
+					if (c2 == cc)
+						break;
 					if (cc == '\n')
-						throw new DspException("Illegal EL expression: non-terminaled "+cc+" at line "+ctx.nLines+" character "+j);
+						throw new DspException("Illegal EL expression: non-terminaled " + cc + " at line " + ctx.nLines
+								+ " character " + j);
 					if (c2 == '\\' && ++j < to && ctx.content.charAt(j) == '\n')
 						++ctx.nLines;
 				}
@@ -479,9 +477,11 @@ public class Parser {
 		public ExpressionFactory getExpressionFactory() {
 			return _xelf;
 		}
+
 		public VariableResolver getVariableResolver() {
 			return _resolver;
 		}
+
 		public FunctionMapper getFunctionMapper() {
 			return _mapper;
 		}
@@ -489,25 +489,27 @@ public class Parser {
 		//Internal//
 		private Context(String content, XelContext xelc, Locator loc) {
 			this.content = content;
-			_resolver = xelc != null ? xelc.getVariableResolver(): null;
-			_mapper = new SimpleMapper(xelc != null ? xelc.getFunctionMapper(): null);
+			_resolver = xelc != null ? xelc.getVariableResolver() : null;
+			_mapper = new SimpleMapper(xelc != null ? xelc.getFunctionMapper() : null);
 			_xelf = Expressions.newExpressionFactory();
 			_locator = loc;
 			this.nLines = 1;
 		}
+
 		private boolean hasPrefix(String prefix) {
 			return _actions.containsKey(prefix);
 		}
+
 		private Class<?> getActionClass(String prefix, String actnm) {
 			final Map<String, Class<?>> acts = _actions.get(prefix);
-			return acts != null ? acts.get(actnm): null;
+			return acts != null ? acts.get(actnm) : null;
 		}
-		private void loadTaglib(String prefix, String uri)
-		throws DspException, IOException {
-			if (_locator == null)
-				throw new DspException("Unable to load "+uri+" because locator is not specified");
 
-			URL url = uri.indexOf("://") > 0 ? null: _locator.getResource(uri);
+		private void loadTaglib(String prefix, String uri) throws DspException, IOException {
+			if (_locator == null)
+				throw new DspException("Unable to load " + uri + " because locator is not specified");
+
+			URL url = uri.indexOf("://") > 0 ? null : _locator.getResource(uri);
 			if (url == null) {
 				url = Taglibs.getDefaultURL(uri);
 				if (url == null)
@@ -520,23 +522,21 @@ public class Parser {
 				throw ex;
 			} catch (Exception ex) {
 				throw DspException.Aide.wrap(ex);
-			}	
+			}
 		}
-		private void loadTaglib0(String prefix, URL url)
-		throws Exception {
-			final Element root = new SAXBuilder(true, false, true)
-				.build(url).getRootElement();
+
+		private void loadTaglib0(String prefix, URL url) throws Exception {
+			final Element root = new SAXBuilder(true, false, true).build(url).getRootElement();
 			_mapper.load(prefix, url);
 
 			final Map<String, Class<?>> acts = new HashMap<String, Class<?>>();
-			for (Iterator it = root.getElements("tag").iterator();
-			it.hasNext();) {
-				final Element e = (Element)it.next();
+			for (Iterator it = root.getElements("tag").iterator(); it.hasNext();) {
+				final Element e = (Element) it.next();
 				final String name = IDOMs.getRequiredElementValue(e, "name");
 				final String clsName = IDOMs.getRequiredElementValue(e, "tag-class");
 				final Class<?> cls = Classes.forNameByThread(clsName);
 				if (!Action.class.isAssignableFrom(cls))
-					throw new DspException(cls+" doesn't implement "+Action.class);
+					throw new DspException(cls + " doesn't implement " + Action.class);
 				acts.put(name, cls);
 			}
 			if (!acts.isEmpty())
@@ -544,20 +544,25 @@ public class Parser {
 		}
 
 		private Map<String, Object> attrs() {
-			return _attrs != null ? _attrs: (_attrs = new HashMap<String, Object>());
+			return _attrs != null ? _attrs : (_attrs = new HashMap<String, Object>());
 		}
+
 		public Object getAttribute(String name) {
-			return _attrs != null ? _attrs.get(name):  null;
+			return _attrs != null ? _attrs.get(name) : null;
 		}
+
 		public Object setAttribute(String name, Object value) {
 			return attrs().put(name, value);
 		}
+
 		public boolean hasAttribute(String name) {
 			return _attrs != null && _attrs.containsKey(name);
 		}
+
 		public Object removeAttribute(String name) {
-			return _attrs != null ? _attrs.remove(name): null;
+			return _attrs != null ? _attrs.remove(name) : null;
 		}
+
 		public Map<String, Object> getAttributes() {
 			return attrs();
 		}

@@ -15,6 +15,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
  */
 package org.zkoss.zul;
+
 import java.util.Iterator;
 
 import org.zkoss.io.Serializables;
@@ -98,12 +99,12 @@ public class Tabbox extends XulElement {
 	private boolean _maximalHeight = false;
 	/** The event listener used to listen onSelect for each tab. */
 	/* package */transient EventListener<Event> _listener;
-	
+
 	private transient ListModel<?> _model;
 	private transient ListDataListener _dataListener;
 	private transient TabboxRenderer<?> _renderer;
 	private transient TabboxEngine _engine;
-	
+
 	public Tabbox() {
 		init();
 	}
@@ -121,7 +122,7 @@ public class Tabbox extends XulElement {
 			_engine = newTabboxEngine();
 		return _engine;
 	}
-	
+
 	/** Sets the tabbox engine for {@link ListModel}
 	 * @since 7.0.0
 	 */
@@ -129,10 +130,11 @@ public class Tabbox extends XulElement {
 		if (_engine != engine) {
 			_engine = engine;
 		}
-		
+
 		//Always redraw, if any
 		postOnInitRender();
 	}
+
 	/** Instantiates the default tabbox engine.
 	 * It is called, if {@link #setEngine} is not called with non-null
 	 * engine.
@@ -154,7 +156,7 @@ public class Tabbox extends XulElement {
 		final String PROP = "org.zkoss.zul.tabbox.engine.class";
 		final String klass = Library.getProperty(PROP);
 		if (klass == null)
-			throw new UiException("Library property,  "+PROP+", required");
+			throw new UiException("Library property,  " + PROP + ", required");
 
 		final Object v;
 		try {
@@ -163,8 +165,8 @@ public class Tabbox extends XulElement {
 			throw UiException.Aide.wrap(ex);
 		}
 		if (!(v instanceof TabboxEngine))
-			throw new UiException(TabboxEngine.class + " must be implemented by "+v);
-		return (TabboxEngine)v;
+			throw new UiException(TabboxEngine.class + " must be implemented by " + v);
+		return (TabboxEngine) v;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -173,12 +175,13 @@ public class Tabbox extends XulElement {
 	 * @since 7.0.0
 	 */
 	public Selectable<Object> getSelectableModel() {
-		return (Selectable<Object>)_model;
+		return (Selectable<Object>) _model;
 	}
 
 	private static boolean disableFeature() {
 		return !WebApps.getFeature("ee");
 	}
+
 	/**
 	 * Sets the list model associated with this t. If a non-null model
 	 * is assigned, no matter whether it is the same as the previous, it will
@@ -196,7 +199,7 @@ public class Tabbox extends XulElement {
 			throw new IllegalAccessError("ZK EE version only!");
 		if (model != null) {
 			if (!(model instanceof Selectable))
-				throw new UiException(model.getClass() + " must implement "+Selectable.class);
+				throw new UiException(model.getClass() + " must implement " + Selectable.class);
 
 			if (_model != model) {
 				if (_model != null) {
@@ -223,7 +226,6 @@ public class Tabbox extends XulElement {
 			};
 		_model.addListDataListener(_dataListener);
 	}
-
 
 	/**
 	 * Returns the renderer to render each tab and tabpanel, or null if the default renderer
@@ -266,13 +268,12 @@ public class Tabbox extends XulElement {
 	 * @since 7.0.0
 	 * @see #setTabboxRenderer(TabboxRenderer)
 	 */
-	public void setTabboxRenderer(String clsnm) throws ClassNotFoundException,
-			NoSuchMethodException, IllegalAccessException,
-			InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setTabboxRenderer(String clsnm) throws ClassNotFoundException, NoSuchMethodException,
+			IllegalAccessException, InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null)
 			setTabboxRenderer((TabboxRenderer<?>) Classes.newInstanceByThread(clsnm));
 	}
-	
+
 	public void onInitRender() {
 		if (disableFeature())
 			throw new IllegalAccessError("ZK EE version only!");
@@ -280,13 +281,13 @@ public class Tabbox extends XulElement {
 		doInitRenderer();
 		invalidate();
 	}
-	
+
 	private void doInitRenderer() {
 		if (disableFeature())
 			throw new IllegalAccessError("ZK EE version only!");
 		getEngine().doInitRenderer(this);
-		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null);// notify the tabbox when items have been rendered.
-		
+		Events.postEvent(ZulEvents.ON_AFTER_RENDER, this, null); // notify the tabbox when items have been rendered.
+
 	}
 
 	/**
@@ -309,7 +310,6 @@ public class Tabbox extends XulElement {
 		return (ListModel<T>) _model;
 	}
 
-	
 	/**
 	 * Returns whether it is in the accordion mold.
 	 */
@@ -332,12 +332,14 @@ public class Tabbox extends XulElement {
 	public Toolbar getToolbar() {
 		return _toolbar;
 	}
+
 	/**
 	 * Returns the tabpanels that this tabbox owns.
 	 */
 	public Tabpanels getTabpanels() {
 		return _tabpanels;
 	}
+
 	/**
 	 * Returns whether the tab scrolling is enabled.
 	 * Default: true.
@@ -358,7 +360,7 @@ public class Tabbox extends XulElement {
 			smartUpdate("tabscroll", _tabscroll);
 		}
 	}
-	
+
 	/**
 	 * Returns whether to use maximum height of all tabpanel in initial phase.
 	 * <p> 
@@ -381,7 +383,7 @@ public class Tabbox extends XulElement {
 			smartUpdate("maximalHeight", _maximalHeight);
 		}
 	}
-	
+
 	/**
 	 * Returns the spacing between {@link Tabpanel}. This is used by certain
 	 * molds, such as accordion.
@@ -423,7 +425,7 @@ public class Tabbox extends XulElement {
 		if (j >= 0)
 			setSelectedTab((Tab) tabs.getChildren().get(j));
 		else
-			setSelectedTab((Tab)tabs.getFirstChild()); // keep the first one selected.
+			setSelectedTab((Tab) tabs.getFirstChild()); // keep the first one selected.
 	}
 
 	/**
@@ -432,6 +434,7 @@ public class Tabbox extends XulElement {
 	public Tabpanel getSelectedPanel() {
 		return _seltab != null ? _seltab.getLinkedPanel() : null;
 	}
+
 	/**
 	 * Sets the selected tab panel.
 	 */
@@ -451,6 +454,7 @@ public class Tabbox extends XulElement {
 	public Tab getSelectedTab() {
 		return _seltab;
 	}
+
 	/**
 	 * Sets the selected tab.
 	 */
@@ -502,23 +506,25 @@ public class Tabbox extends XulElement {
 	public String getOrient() {
 		return this._orient;
 	}
+
 	/**
 	 * Sets the mold.
 	 *
 	 * @param mold default , accordion and accordion-lite
 	 *
 	 */
-	public void setMold(String mold){
-		if (isVertical()){
-			if (mold.startsWith("accordion")){
-				throw new WrongValueException("Unsupported vertical orient in mold : "+mold);
-			}else{
+	public void setMold(String mold) {
+		if (isVertical()) {
+			if (mold.startsWith("accordion")) {
+				throw new WrongValueException("Unsupported vertical orient in mold : " + mold);
+			} else {
 				super.setMold(mold);
 			}
-		}else{
+		} else {
 			super.setMold(mold);
 		}
 	}
+
 	/**
 	 * Sets the orient.
 	 *
@@ -526,11 +532,11 @@ public class Tabbox extends XulElement {
 	 * @since 7.0.0 "horizontal" is renamed to "top" and "vertical" is renamed to "left".
 	 */
 	public void setOrient(String orient) throws WrongValueException {
-		if (!"horizontal".equals(orient) && !"top".equals(orient) && !"bottom".equals(orient) 
+		if (!"horizontal".equals(orient) && !"top".equals(orient) && !"bottom".equals(orient)
 				&& !"vertical".equals(orient) && !"right".equals(orient) && !"left".equals(orient))
 			throw new WrongValueException("Unknow orient : " + orient);
 		if (inAccordionMold())
-			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());
+			throw new WrongValueException("Unsupported vertical orient in mold : " + getMold());
 		if (!Objects.equals(_orient, orient)) {
 			if ("horizontal".equals(orient))
 				this._orient = "top";
@@ -551,7 +557,7 @@ public class Tabbox extends XulElement {
 		String orient = getOrient();
 		return "horizontal".equals(orient) || "top".equals(orient) || "bottom".equals(orient);
 	}
-	
+
 	/**
 	 * Returns whether it is the top orientation.
 	 * @since 7.0.0
@@ -560,7 +566,7 @@ public class Tabbox extends XulElement {
 		String orient = getOrient();
 		return "horizontal".equals(orient) || "top".equals(orient);
 	}
-	
+
 	/**
 	 * Returns whether it is the bottom orientation.
 	 * @since 7.0.0
@@ -568,6 +574,7 @@ public class Tabbox extends XulElement {
 	public boolean isBottom() {
 		return "bottom".equals(getOrient());
 	}
+
 	/**
 	 * Returns whether it is a vertical tabbox.
 	 *
@@ -577,7 +584,7 @@ public class Tabbox extends XulElement {
 		String orient = getOrient();
 		return "vertical".equals(orient) || "right".equals(orient) || "left".equals(orient);
 	}
-	
+
 	/**
 	 * Returns whether it is the left orientation.
 	 *
@@ -587,7 +594,7 @@ public class Tabbox extends XulElement {
 		String orient = getOrient();
 		return "vertical".equals(orient) || "left".equals(orient);
 	}
-	
+
 	/**
 	 * Returns whether it is the right orientation.
 	 *
@@ -617,6 +624,7 @@ public class Tabbox extends XulElement {
 		}
 		super.beforeChildAdded(child, refChild);
 	}
+
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Tabs) {
 			if (super.insertBefore(child, refChild)) {
@@ -644,7 +652,7 @@ public class Tabbox extends XulElement {
 			}
 		} else {
 			return super.insertBefore(child, refChild);
-				//impossible but make it more extensible
+			//impossible but make it more extensible
 		}
 		return false;
 	}
@@ -654,7 +662,7 @@ public class Tabbox extends XulElement {
 			removeTabsListeners();
 			_tabs = null;
 			_seltab = null;
-		} else if (_tabpanels ==  child) {
+		} else if (_tabpanels == child) {
 			_tabpanels = null;
 		} else if (_toolbar == child) {
 			_toolbar = null;
@@ -681,8 +689,8 @@ public class Tabbox extends XulElement {
 			}
 		}
 	}
-	
-	protected void clearSelectedTab(){
+
+	protected void clearSelectedTab() {
 		_seltab = null;
 	}
 
@@ -735,8 +743,7 @@ public class Tabbox extends XulElement {
 	}
 
 	// -- Serializable --//
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws java.io.IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws java.io.IOException {
 		s.defaultWriteObject();
 
 		willSerialize(_model);
@@ -744,8 +751,8 @@ public class Tabbox extends XulElement {
 		willSerialize(_renderer);
 		Serializables.smartWrite(s, _renderer);
 	}
-	private void readObject(java.io.ObjectInputStream s)
-			throws java.io.IOException, ClassNotFoundException {
+
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		_model = (ListModel) s.readObject();
@@ -770,10 +777,10 @@ public class Tabbox extends XulElement {
 			return !Events.isListened(Tabbox.this, Events.ON_SELECT, true);
 		}
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-			throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_panelSpacing != null )
+		if (_panelSpacing != null)
 			render(renderer, "panelSpacing", _panelSpacing);
 		if (!isTop())
 			render(renderer, "orient", _orient);

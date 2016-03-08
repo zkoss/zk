@@ -17,13 +17,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedList;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.UiException;
@@ -40,7 +40,7 @@ import org.zkoss.zul.event.ChartDataEvent;
 public class GanttModel extends AbstractChartModel {
 	private static final long serialVersionUID = 20091008183023L;
 	private Map<Comparable<?>, List<GanttTask>> _taskMap = new LinkedHashMap<Comparable<?>, List<GanttTask>>(8); //(series, task list)
-	
+
 	public void addValue(Comparable<?> series, GanttTask task) {
 		List<GanttTask> tasks = _taskMap.get(series);
 		if (tasks == null) {
@@ -48,14 +48,15 @@ public class GanttModel extends AbstractChartModel {
 			_taskMap.put(series, tasks);
 		}
 		if (task.getSeries() != null) {
-			throw new UiException("A GanttTask in a series cannot be added again: "+ task.getSeries()+":"+task.getDescription());
+			throw new UiException(
+					"A GanttTask in a series cannot be added again: " + task.getSeries() + ":" + task.getDescription());
 		}
 		task.setSeries(series);
 		task.setOwner(this);
 		tasks.add(task);
 		fireEvent(ChartDataEvent.ADDED, series, null, -1, -1, task);
 	}
-	
+
 	public void removeValue(Comparable<?> series, GanttTask task) {
 		final List<GanttTask> tasks = _taskMap.get(series);
 		if (tasks == null) {
@@ -74,7 +75,7 @@ public class GanttModel extends AbstractChartModel {
 		final Set<Comparable<?>> allseries = _taskMap.keySet();
 		return allseries.toArray(new Comparable[allseries.size()]);
 	}
-	
+
 	public GanttTask[] getTasks(Comparable<?> series) {
 		final List<GanttTask> tasks = _taskMap.get(series);
 		return tasks == null ? new GanttTask[0] : tasks.toArray(new GanttTask[tasks.size()]);
@@ -95,7 +96,7 @@ public class GanttModel extends AbstractChartModel {
 		private double _percent;
 		private Collection<GanttTask> _subtasks;
 		private GanttModel _owner;
-		
+
 		public GanttTask(String description, Date start, Date end, double percent) {
 			_description = description;
 			_start = start;
@@ -151,7 +152,8 @@ public class GanttModel extends AbstractChartModel {
 
 		public void addSubtask(GanttTask task) {
 			if (task.getSeries() != null) {
-				throw new UiException("A GanttTask in a series cannot be added again: "+ task.getSeries()+":"+task.getDescription());
+				throw new UiException("A GanttTask in a series cannot be added again: " + task.getSeries() + ":"
+						+ task.getDescription());
 			}
 			task.setSeries(_series);
 			task.setOwner(_owner);
@@ -159,7 +161,7 @@ public class GanttModel extends AbstractChartModel {
 			if (_owner != null)
 				_owner.fireEvent(ChartDataEvent.CHANGED, _series, null, -1, -1, this);
 		}
-		
+
 		public void removeSubtask(GanttTask task) {
 			if (_subtasks.remove(task)) {
 				task.setSeries(null);
@@ -168,30 +170,29 @@ public class GanttModel extends AbstractChartModel {
 					_owner.fireEvent(ChartDataEvent.CHANGED, _series, null, -1, -1, this);
 			}
 		}
-		
+
 		public GanttTask[] getSubtasks() {
 			return _subtasks.toArray(new GanttTask[_subtasks.size()]);
 		}
-		
+
 		private Comparable<?> getSeries() {
 			return _series;
 		}
-		
+
 		private void setSeries(Comparable<?> series) {
 			_series = series;
 		}
-		
+
 		private void setOwner(GanttModel owner) {
 			_owner = owner;
 		}
-		
+
 		protected void fireChartChange() {
 			if (_owner != null)
 				_owner.fireEvent(ChartDataEvent.CHANGED, _series, null, -1, -1, this);
 		}
 	}
 
-	
 	public Object clone() {
 		GanttModel clone = (GanttModel) super.clone();
 		if (_taskMap != null)

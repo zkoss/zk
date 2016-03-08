@@ -35,59 +35,60 @@ import org.zkoss.zul.ext.Selectable;
  * @since 6.0.0
  */
 public class RadiogroupSelectedItemConverter implements Converter, java.io.Serializable {
-  	private static final long serialVersionUID = 200808191534L;
-  	
-  	@SuppressWarnings("unchecked")
+	private static final long serialVersionUID = 200808191534L;
+
+	@SuppressWarnings("unchecked")
 	public Object coerceToUi(Object val, Component comp, BindContext ctx) {
 		Radiogroup radiogroup = (Radiogroup) comp;
 		final ListModel<?> model = radiogroup.getModel();
 		//ZK-762 selection of ListModelList is not correct if binding to selectedItem
-		if(model !=null && !(model instanceof Selectable)){
+		if (model != null && !(model instanceof Selectable)) {
 			//model has to implement Selectable if binding to selectedItem
-  			throw new UiException("model doesn't implement Selectable");
-  		}
-		
-	  	if (val != null) {
-	  		if(model!=null){
-	  			((Selectable<Object>)model).addToSelection(val);
-	  			return IGNORED_VALUE;
-	  		}else{
-	  			//no model case
-			  	for (final Iterator<?> it = radiogroup.getItems().iterator(); it.hasNext();) {
-			  		final Radio radio = (Radio) it.next();
-			  		if (val.equals(radio.getValue())) {
-			  			return radio;
-			  		}
-			  	}
-	  		}
-		  	//not in the item list
-	  	}
-	  	
-	  //nothing matched, clean the old selection
-	  	if(model!=null){
-	  		Set<Object> sels = ((Selectable<Object>)model).getSelection();
-	  		if(sels!=null && sels.size()>0)
-	  			((Selectable<Object>)model).clearSelection();
-	  		return IGNORED_VALUE;
-	  	}
-	  	return null;
+			throw new UiException("model doesn't implement Selectable");
+		}
+
+		if (val != null) {
+			if (model != null) {
+				((Selectable<Object>) model).addToSelection(val);
+				return IGNORED_VALUE;
+			} else {
+				//no model case
+				for (final Iterator<?> it = radiogroup.getItems().iterator(); it.hasNext();) {
+					final Radio radio = (Radio) it.next();
+					if (val.equals(radio.getValue())) {
+						return radio;
+					}
+				}
+			}
+			//not in the item list
+		}
+
+		//nothing matched, clean the old selection
+		if (model != null) {
+			Set<Object> sels = ((Selectable<Object>) model).getSelection();
+			if (sels != null && sels.size() > 0)
+				((Selectable<Object>) model).clearSelection();
+			return IGNORED_VALUE;
+		}
+		return null;
 	}
 
 	public Object coerceToBean(Object val, Component comp, BindContext ctx) {
-	  	if (val != null) {
-	  		final ListModel<?> model = ((Radio)val).getRadiogroup().getModel();
-	  		
-	  		if(model !=null && !(model instanceof Selectable)){
-	  			throw new UiException("model doesn't implement Selectable");
-	  		}
-	  		if(model!=null){
-	  			Set<?> selection = ((Selectable<?>)model).getSelection();
-	  			if(selection==null || selection.size()==0) return null;
-	  			return selection.iterator().next();
-	  		} else{//no model
-	  			return ((Radio) val).getValue();
-	  		}
-	  	}
-	 	return null;
+		if (val != null) {
+			final ListModel<?> model = ((Radio) val).getRadiogroup().getModel();
+
+			if (model != null && !(model instanceof Selectable)) {
+				throw new UiException("model doesn't implement Selectable");
+			}
+			if (model != null) {
+				Set<?> selection = ((Selectable<?>) model).getSelection();
+				if (selection == null || selection.size() == 0)
+					return null;
+				return selection.iterator().next();
+			} else { //no model
+				return ((Radio) val).getValue();
+			}
+		}
+		return null;
 	}
 }

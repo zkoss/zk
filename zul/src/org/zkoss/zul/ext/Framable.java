@@ -29,18 +29,22 @@ public interface Framable {
 	 * Returns whether to show a close button.
 	 */
 	public boolean isClosable();
+
 	/**
 	 * Returns whether to display the maximizing button.
 	 */
 	public boolean isMaximizable();
+
 	/**
 	 * Returns whether to display the minimizing button.
 	 */
 	public boolean isMinimizable();
+
 	/**
 	 * Returns whether to show a toggle button.
 	 */
 	public boolean isCollapsible();
+
 	/**
 	 * Returns whether is maximized.
 	 * @since 3.6.3
@@ -53,4 +57,3 @@ public interface Framable {
 	 */
 	public String getTitle();
 }
-

@@ -25,6 +25,7 @@ import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.Maps;
 import org.zkoss.xel.VariableResolver;
@@ -36,13 +37,13 @@ import org.zkoss.xel.XelException;
  *
  */
 public class JndiVariableResolver implements VariableResolver {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(JndiVariableResolver.class);
-	
-	private String _jndiPrepend=null;
-	
+
+	private String _jndiPrepend = null;
+
 	private Map<String, Object> _jndiMapping = new HashMap<String, Object>();
-	
+
 	/**
 	 * This constructor take arguments to initialize JNDI names. 
 	 * <ul>
@@ -77,12 +78,12 @@ public class JndiVariableResolver implements VariableResolver {
 	 * @param mapping key-value pairs for JNDI name and its corresponding variable name
 	 */
 	public JndiVariableResolver(String prepend, String mapping) {
-		_jndiMapping= new HashMap<String, Object>();
-		Maps.parse(_jndiMapping , mapping, ',', '=');
+		_jndiMapping = new HashMap<String, Object>();
+		Maps.parse(_jndiMapping, mapping, ',', '=');
 		_jndiPrepend = prepend;
 	}
-	
-	public JndiVariableResolver(){
+
+	public JndiVariableResolver() {
 		//Do Nothing
 	}
 
@@ -92,53 +93,52 @@ public class JndiVariableResolver implements VariableResolver {
 	 * @return bean of context
 	 */
 	public Object resolveVariable(String var) throws XelException {
-		Object variable= null;
+		Object variable = null;
 		/*
 		 * First, find the variable, var in JNDI key-value map. If
 		 * not found, look for the variable as a sessionBean
 		 */
-		
-		variable = jndiLookup("java:comp/env/"+var);
-		
-		if(variable == null){
-			variable = jndiLookup("java:comp/"+var);
+
+		variable = jndiLookup("java:comp/env/" + var);
+
+		if (variable == null) {
+			variable = jndiLookup("java:comp/" + var);
 		}
-		if(variable == null){
-			variable = jndiLookup("java:/"+var);
+		if (variable == null) {
+			variable = jndiLookup("java:/" + var);
 		}
-		if(variable == null){
+		if (variable == null) {
 			variable = defaultBean(var);
 		}
-		if(!_jndiMapping.isEmpty()&&variable==null){	
+		if (!_jndiMapping.isEmpty() && variable == null) {
 			Object jndiPattern = _jndiMapping.get(var);
-			if(jndiPattern != null){
+			if (jndiPattern != null) {
 				variable = jndiLookup(jndiPattern.toString());
 			}
 		}
 		return variable;
 	}
-	
-	private Object defaultBean(String name){
-		Object variable= null;
-		
-		variable = jndiLookup(_jndiPrepend+"/"+name+"/local");
+
+	private Object defaultBean(String name) {
+		Object variable = null;
+
+		variable = jndiLookup(_jndiPrepend + "/" + name + "/local");
 		//If not found in local, lookup remote
-		if(variable == null){
-			variable = jndiLookup(_jndiPrepend+"/"+name+"/remote");
+		if (variable == null) {
+			variable = jndiLookup(_jndiPrepend + "/" + name + "/remote");
 		}
 		return variable;
 	}
-	
-	private Object jndiLookup(String jndiPattern){
+
+	private Object jndiLookup(String jndiPattern) {
 		Object obj = null;
-		try{
+		try {
 			Context ctx = new InitialContext();
 			obj = ctx.lookup(jndiPattern);
-		}catch (NamingException ex)
-		{
+		} catch (NamingException ex) {
 			//Not found, logging
-			if(log.isDebugEnabled()){
-				log.debug("JNDI binding not found: "+ex);
+			if (log.isDebugEnabled()) {
+				log.debug("JNDI binding not found: " + ex);
 			}
 		}
 		return obj;
@@ -149,7 +149,7 @@ public class JndiVariableResolver implements VariableResolver {
 	}
 
 	public boolean equals(Object obj) {
-		return this == obj || (obj instanceof JndiVariableResolver 
+		return this == obj || (obj instanceof JndiVariableResolver
 				&& Objects.equals(_jndiMapping, ((JndiVariableResolver) obj)._jndiMapping)
 				&& Objects.equals(_jndiPrepend, ((JndiVariableResolver) obj)._jndiPrepend));
 	}

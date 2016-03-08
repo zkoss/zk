@@ -16,10 +16,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.LinkedList;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.web.servlet.dsp.DspException;
 
@@ -34,8 +34,7 @@ abstract class Node {
 	/** Interprets the node to generate the result to the output
 	 * specified in the interpret context.
 	 */
-	abstract void interpret(InterpretContext ic)
-	throws DspException, IOException;
+	abstract void interpret(InterpretContext ic) throws DspException, IOException;
 
 	/** Adds a child. */
 	void addChild(Node node) {
@@ -45,6 +44,7 @@ abstract class Node {
 			_children = new LinkedList<Node>();
 		_children.add(node);
 	}
+
 	/** Adds a child to the specified position. */
 	void addChild(int pos, Node node) {
 		if (node == null)

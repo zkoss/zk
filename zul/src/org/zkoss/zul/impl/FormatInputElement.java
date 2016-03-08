@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
  *
  * @author tomyeh
  */
-abstract public class FormatInputElement extends InputElement {
+public abstract class FormatInputElement extends InputElement {
 	private String _format;
 
 	/** Returns the format.
@@ -38,6 +38,7 @@ abstract public class FormatInputElement extends InputElement {
 	public String getFormat() {
 		return _format;
 	}
+
 	/** Sets the format.
 	 */
 	public void setFormat(String format) throws WrongValueException {
@@ -45,16 +46,17 @@ abstract public class FormatInputElement extends InputElement {
 			_format = format;
 			smartUpdate("format", getRealFormat());
 			smartUpdate("_value", marshall(_value));
-				//Technically, it shall be independent of format, but it is
-				//safer to send again (since some implementation might not good)
-				//See also bug 2998196.
+			//Technically, it shall be independent of format, but it is
+			//safer to send again (since some implementation might not good)
+			//See also bug 2998196.
 		}
 	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
-		render(renderer, "format", getRealFormat());//value might depend on format (though it shall not)
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
+		render(renderer, "format", getRealFormat()); //value might depend on format (though it shall not)
 		super.renderProperties(renderer);
 	}
+
 	/** Returns the real format.
 	 * <p>Default: return {@link #getFormat}.
 	 * It is designed to allow the deriving class to provide another layer of
@@ -68,6 +70,7 @@ abstract public class FormatInputElement extends InputElement {
 
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+
 	static {
 		_properties.put("format", new StringPropertyAccess() {
 			public void setValue(Component cmp, String name) {

@@ -14,8 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.ext.Scope;
@@ -55,15 +55,18 @@ public class ScopeListeners {
 		_listeners.add(listener);
 		return true;
 	}
+
 	/** Adds a scope listener.
 	 */
 	public boolean removeScopeListener(ScopeListener listener) {
 		return _listeners != null && _listeners.remove(listener);
 	}
+
 	/** Returns a list of all scope listeners (never null).
 	 */
 	public List<ScopeListener> getListeners() {
-		if (_listeners == null) _listeners = new LinkedList<ScopeListener>();
+		if (_listeners == null)
+			_listeners = new LinkedList<ScopeListener>();
 		return _listeners;
 	}
 
@@ -74,9 +77,10 @@ public class ScopeListeners {
 	 */
 	public void notifyAdded(String name, Object value) {
 		if (_listeners != null)
-			for (ScopeListener l: _listeners)
+			for (ScopeListener l : _listeners)
 				l.attributeAdded(_owner, name, value);
 	}
+
 	/** Invokes {@link ScopeListener#attributeReplaced} for registered
 	 * listeners.
 	 *
@@ -84,9 +88,10 @@ public class ScopeListeners {
 	 */
 	public void notifyReplaced(String name, Object value) {
 		if (_listeners != null)
-			for (ScopeListener l: _listeners)
+			for (ScopeListener l : _listeners)
 				l.attributeReplaced(_owner, name, value);
 	}
+
 	/** Invokes {@link ScopeListener#attributeRemoved} for registered
 	 * listeners.
 	 *
@@ -94,9 +99,10 @@ public class ScopeListeners {
 	 */
 	public void notifyRemoved(String name) {
 		if (_listeners != null)
-			for (ScopeListener l: _listeners)
+			for (ScopeListener l : _listeners)
 				l.attributeRemoved(_owner, name);
 	}
+
 	/** Invokes {@link ScopeListener#parentChanged} for registered
 	 * listeners.
 	 *
@@ -104,7 +110,7 @@ public class ScopeListeners {
 	 */
 	public void notifyParentChanged(Scope newparent) {
 		if (_listeners != null)
-			for (ScopeListener l: _listeners)
+			for (ScopeListener l : _listeners)
 				l.parentChanged(_owner, newparent);
 	}
 
@@ -116,7 +122,7 @@ public class ScopeListeners {
 	 */
 	public void notifyIdSpaceChanged(IdSpace newIdSpace) {
 		if (_listeners != null)
-			for (ScopeListener l: _listeners)
+			for (ScopeListener l : _listeners)
 				l.idSpaceChanged(_owner, newIdSpace);
 	}
 }

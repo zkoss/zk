@@ -18,8 +18,8 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.*;
-
+import org.zkoss.zk.ui.event.CheckEvent;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -33,8 +33,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author tomyeh
  */
-public class Checkbox extends LabelImageElement
-implements org.zkoss.zk.ui.ext.Disable {
+public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private Object _value;
 	/** The name. */
 	private String _name;
@@ -43,18 +42,20 @@ implements org.zkoss.zk.ui.ext.Disable {
 	/*package*/ boolean _checked;
 	private boolean _disabled;
 	private String _autodisable;
-	
+
 	static {
-		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT|CE_REPEAT_IGNORE);
+		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT | CE_REPEAT_IGNORE);
 		addClientEvent(Checkbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Checkbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
-	
+
 	public Checkbox() {
 	}
+
 	public Checkbox(String label) {
 		super(label);
 	}
+
 	public Checkbox(String label, String image) {
 		super(label, image);
 	}
@@ -66,6 +67,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public String getAutodisable() {
 		return _autodisable;
 	}
+
 	/** Sets a list of component IDs that shall be disabled when the user
 	 * clicks this checkbox.
 	 *
@@ -101,12 +103,14 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("autodisable", _autodisable);
 		}
 	}
+
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
 	public boolean isDisabled() {
 		return _disabled;
 	}
+
 	/** Sets whether it is disabled.
 	 */
 	public void setDisabled(boolean disabled) {
@@ -122,6 +126,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public boolean isChecked() {
 		return _checked;
 	}
+
 	/** Sets whether it is checked.
 	 */
 	public void setChecked(boolean checked) {
@@ -139,6 +144,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public <T> T getValue() {
 		return (T) _value;
 	}
+
 	/** Sets the value.
 	 * @param value the value;
 	 * @since 5.0.4
@@ -149,7 +155,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 			smartUpdate("value", _value);
 		}
 	}
-	
+
 	/** Returns the name of this component.
 	 * <p>Default: null.
 	 * <p>Don't use this method if your application is purely based
@@ -162,6 +168,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public String getName() {
 		return _name;
 	}
+
 	/** Sets the name of this component.
 	 * <p>Don't use this method if your application is purely based
 	 * on ZK's event-driven model.
@@ -173,7 +180,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 	 * @param name the name of this component.
 	 */
 	public void setName(String name) {
-		if (name != null && name.length() == 0) name = null;
+		if (name != null && name.length() == 0)
+			name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
 			smartUpdate("name", _name);
@@ -186,6 +194,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public int getTabindex() {
 		return _tabindex;
 	}
+
 	/** Sets the tab order of this component.
 	 */
 	public void setTabindex(int tabindex) throws WrongValueException {
@@ -201,7 +210,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 	protected boolean isChildable() {
 		return false;
 	}
-	
+
 	/** Returns the Style of checkbox label
 	 *
 	 * <p>Default: "z-checkbox"
@@ -211,9 +220,8 @@ implements org.zkoss.zk.ui.ext.Disable {
 	public String getZclass() {
 		return _zclass == null ? "z-checkbox" : _zclass;
 	}
-	
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (_value != null)
 			render(renderer, "value", _value);
@@ -227,6 +235,7 @@ implements org.zkoss.zk.ui.ext.Disable {
 		if (_checked)
 			render(renderer, "checked", _checked);
 	}
+
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
@@ -243,11 +252,11 @@ implements org.zkoss.zk.ui.ext.Disable {
 		} else
 			super.service(request, everError);
 	}
-	
+
 	protected void updateByClient(String name, Object value) {
 		if ("disabled".equals(name))
-			setDisabled(value instanceof Boolean ? ((Boolean)value).booleanValue():
-				"true".equals(Objects.toString(value)));
+			setDisabled(value instanceof Boolean ? ((Boolean) value).booleanValue()
+					: "true".equals(Objects.toString(value)));
 		else
 			super.updateByClient(name, value);
 	}

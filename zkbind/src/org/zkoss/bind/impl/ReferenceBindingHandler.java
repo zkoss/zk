@@ -15,6 +15,7 @@ package org.zkoss.bind.impl;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.zk.ui.Component;
+
 /**
  * to handle reference binding
  * @author dennis

@@ -33,7 +33,7 @@ public class AuSendRedirect extends AuResponse {
 	 * @param target the target browser window, or null to use the current one.
 	 */
 	public AuSendRedirect(String url, String target) {
-		super("redirect", new String[] {url, target != null ? target: ""});
+		super("redirect", new String[] { url, target != null ? target : "" });
 	}
 
 	/** Default: zk.redirect (i.e., only one response of this class will

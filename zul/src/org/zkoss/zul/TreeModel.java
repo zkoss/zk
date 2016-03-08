@@ -16,8 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zul.event.TreeDataListener;
 import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.event.TreeDataListener;
 
 /**
  * This interface defines the methods that component like {@link Tree}
@@ -52,6 +52,15 @@ public interface TreeModel<E> {
 	public E getChild(E parent, int index);
 	
 	/**
+	 * Returns the child at the given path where the path indicates the child is
+	 * placed in the whole tree.
+	 * @param path the tree path
+	 * @return the child at path
+	 * @since 6.0.0
+	 */
+	public E getChild(int[] path);
+
+	/**
 	 * Returns the number of children of the given parent.
 	 * @param parent a node in the tree, obtained from this data source
 	 * @return the number of children of the node parent
@@ -62,7 +71,7 @@ public interface TreeModel<E> {
 	 * Returns the index of the given child in the given parent.
 	 * If either parent or child is null, returns -1. If either parent or child don't belong to this tree model, returns -1. 
 	 * @param parent a node in the tree, obtained from this data source
-     * @param child the node we are interested in 
+	 * @param child the node we are interested in 
 	 * @return the index of the child in the parent, or -1 if either child or parent are null or don't belong to this tree model
 	 * @since 5.0.6
 	 */
@@ -73,16 +82,6 @@ public interface TreeModel<E> {
 	 * @return the root of Tree.
 	 */
 	public E getRoot();
-	
-	/**
-	 * Returns the child at the given path where the path indicates the child is
-	 * placed in the whole tree.
-	 * @param path the tree path
-	 * @return the child at path
-	 * @since 6.0.0
-	 */
-	public E getChild(int[] path);
-	
 
 	/**
 	 * Returns the path from the given child, where the path indicates the child is
@@ -91,13 +90,13 @@ public interface TreeModel<E> {
 	 * @since 6.0.0
 	 */
 	public int[] getPath(E child);
-	
+
 	/**
 	 * Add a listener to the tree that's notified each time a change to the data model occurs
 	 * @param l the listener to add
 	 */
 	public void addTreeDataListener(TreeDataListener l);
-	
+
 	/**
 	 * Remove a listener to the tree that's notified each time a change to the data model occurs
 	 * @param l the listener to remove

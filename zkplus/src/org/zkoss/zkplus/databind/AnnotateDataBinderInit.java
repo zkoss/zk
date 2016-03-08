@@ -19,9 +19,9 @@ package org.zkoss.zkplus.databind;
 import java.util.Map;
 
 import org.zkoss.lang.Library;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Initiator;
 import org.zkoss.zk.ui.util.InitiatorExt;
@@ -76,24 +76,26 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * @see AnnotateDataBinder
  * @deprecated As of release 7.0.0, replace with new ZK binding.
  */
- public class AnnotateDataBinderInit implements Initiator, InitiatorExt {
+public class AnnotateDataBinderInit implements Initiator, InitiatorExt {
 	private static final String COMPATIBLE = "org.zkoss.zkplus.databind.AnnotateDataBinderInit.compatible";
 	private Component _comp;
 	private String _compPath;
 	private String _defaultConfig;
 	private String _name;
 	private boolean _loadOnSave;
-	
+
 	/** The AnnotateDataBinder created in doAfterCompose() */
-	protected AnnotateDataBinder _binder; 
-	
+	protected AnnotateDataBinder _binder;
+
 	//-- Initiator --//
- 	public boolean doCatch(java.lang.Throwable ex) {
- 		return false; // do nothing
- 	}
+	public boolean doCatch(java.lang.Throwable ex) {
+		return false; // do nothing
+	}
+
 	public void doFinally() {
 		// do nothing
 	}
+
 	public void doInit(Page page, Map args) {
 		boolean hasArg0 = args.containsKey("root");
 
@@ -112,30 +114,30 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 			} else if (arg0 instanceof Component) {
 				_comp = (Component) arg0;
 			} else if (!(arg0 instanceof Page)) {
-				throw new UiException("arg0/root has to be String, Component, or Page: "+arg0);
+				throw new UiException("arg0/root has to be String, Component, or Page: " + arg0);
 			}
 		}
-		
-		_defaultConfig = (String)args.get("loadDefault");
+
+		_defaultConfig = (String) args.get("loadDefault");
 		if (_defaultConfig == null) {
-			_defaultConfig = (String)args.get("arg1"); //backward compatible
+			_defaultConfig = (String) args.get("arg1"); //backward compatible
 		}
-		
+
 		_name = (String) args.get("name");
 		if (_name == null) {
 			_name = "binder";
 		}
-		
+
 		Object loadOnSave = args.get("loadOnSave");
 		if (loadOnSave == null) {
 			_loadOnSave = true;
 		} else if (loadOnSave instanceof String) {
 			_loadOnSave = !"false".equals(loadOnSave);
 		} else if (loadOnSave instanceof Boolean) {
-			_loadOnSave = ((Boolean)loadOnSave).booleanValue();
+			_loadOnSave = ((Boolean) loadOnSave).booleanValue();
 		}
 	}
-	
+
 	//-- InitiatorExt --//
 	private void saveBinder(Component comp) {
 		final String val = Library.getProperty(COMPATIBLE);
@@ -145,43 +147,45 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 			comp.setAttribute(_name, _binder);
 		}
 	}
-	
+
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 		boolean b = _defaultConfig != null ? Boolean.valueOf(_defaultConfig).booleanValue() : true;
 		if (_comp != null) { //a specified component instance
 			_binder = new AnnotateDataBinder(_comp, b);
-			saveBinder(_comp);//_comp.setAttribute(_name, _binder);
+			saveBinder(_comp); //_comp.setAttribute(_name, _binder);
 		} else if (_compPath == null || "page".equals(_compPath)) { //page
 			_binder = new AnnotateDataBinder(page, b);
 			if (page.getAttribute(_name) != null) { //already a binder on the page
-				throw new UiException("Page is already covered by another Data Binder. Cannot be covered by this Data Binder again. Page:"+page.getId());
+				throw new UiException(
+						"Page is already covered by another Data Binder. Cannot be covered by this Data Binder again. Page:"
+								+ page.getId());
 			} else {
 				page.setAttribute(_name, _binder);
 			}
 		} else if (_compPath.length() > 0 && _compPath.charAt(0) == '/') { //absolute path
 			final Component comp = Path.getComponent(_compPath);
 			if (comp == null) {
-				throw new UiException("Cannot find the specified component. Absolute Path:"+_compPath);
+				throw new UiException("Cannot find the specified component. Absolute Path:" + _compPath);
 			}
 			_binder = new AnnotateDataBinder(comp, b);
-			saveBinder(comp);//comp.setAttribute(_name, _binder);
+			saveBinder(comp); //comp.setAttribute(_name, _binder);
 		} else if (_compPath.startsWith("./") || _compPath.startsWith("../")) { //relative path
 			for (int j = 0; j < comps.length; ++j) {
 				final Component vroot = comps[j];
 				final Component comp = Path.getComponent(vroot.getSpaceOwner(), _compPath);
 				if (comp != null) { //found
 					_binder = new AnnotateDataBinder(comp, b);
-					saveBinder(comp);//comp.setAttribute(_name, _binder);
+					saveBinder(comp); //comp.setAttribute(_name, _binder);
 					break;
 				}
 			}
 			if (_binder == null) {
-				throw new UiException("Cannot find the specified component. Relative Path:"+_compPath);
+				throw new UiException("Cannot find the specified component. Relative Path:" + _compPath);
 			}
 		} else {
 			final Component comp = page.getFellow(_compPath);
 			_binder = new AnnotateDataBinder(comp, b);
-			saveBinder(comp);//comp.setAttribute(_name, _binder);
+			saveBinder(comp); //comp.setAttribute(_name, _binder);
 		}
 		_binder.setLoadOnSave(_loadOnSave);
 		_binder.loadAll(); //load data bean properties into UI components

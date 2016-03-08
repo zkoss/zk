@@ -34,6 +34,5 @@ public interface PropertiesRenderer {
 	 * properties, they will be both sent to the client and the default one
 	 * will be evaluated first, and then the custom properties.
 	 */
-	public void renderProperties(Component comp, ContentRenderer render)
-	throws java.io.IOException;
+	public void renderProperties(Component comp, ContentRenderer render) throws java.io.IOException;
 }

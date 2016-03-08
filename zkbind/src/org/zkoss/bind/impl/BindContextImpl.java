@@ -37,12 +37,12 @@ public class BindContextImpl implements BindContext, Serializable {
 	private final Component _component; //ZK context
 	private final Event _event; //ZK event
 	private final Map<Object, Object> _attrs;
-	
+
 	public static final String COMMAND_ARGS = "$BC_CMDARGS$";
 	public static final String BINDING_ARGS = "$BC_BINDARGS$";
 	public static final String VALIDATOR_ARGS = "$BC_VALIDARGS$";
 	public static final String CONVERTER_ARGS = "$BC_CONVARGS$";
-	
+
 	public BindContextImpl(Binder binder, Binding binding, boolean save, String command, Component comp, Event event) {
 		this._binder = binder;
 		this._binding = binding;
@@ -52,6 +52,7 @@ public class BindContextImpl implements BindContext, Serializable {
 		this._event = event;
 		this._attrs = new HashMap<Object, Object>();
 	}
+
 	public Binder getBinder() {
 		return this._binder;
 	}
@@ -65,46 +66,51 @@ public class BindContextImpl implements BindContext, Serializable {
 	}
 
 	public Object setAttribute(Object key, Object value) {
-		return value == null ? 
-				this._attrs.remove(key) : this._attrs.put(key, value);
+		return value == null ? this._attrs.remove(key) : this._attrs.put(key, value);
 	}
 
 	public Map<Object, Object> getAttributes() {
-		return Collections.unmodifiableMap(_attrs); 
+		return Collections.unmodifiableMap(_attrs);
 	}
-	
-	public Object getCommandArg(String key){
-		Map<?, ?> m = (Map<?, ?>)getAttribute(COMMAND_ARGS);
-		return m==null?null:m.get(key);
+
+	public Object getCommandArg(String key) {
+		Map<?, ?> m = (Map<?, ?>) getAttribute(COMMAND_ARGS);
+		return m == null ? null : m.get(key);
 	}
-	public Object getBindingArg(String key){
-		Map<?, ?> m = (Map<?, ?>)getAttribute(BINDING_ARGS);
-		return m==null?null:m.get(key);
+
+	public Object getBindingArg(String key) {
+		Map<?, ?> m = (Map<?, ?>) getAttribute(BINDING_ARGS);
+		return m == null ? null : m.get(key);
 	}
-	public Object getConverterArg(String key){
-		Map<?, ?> m = (Map<?, ?>)getAttribute(CONVERTER_ARGS);
-		return m==null?null:m.get(key);
+
+	public Object getConverterArg(String key) {
+		Map<?, ?> m = (Map<?, ?>) getAttribute(CONVERTER_ARGS);
+		return m == null ? null : m.get(key);
 	}
-	public Object getValidatorArg(String key){
-		Map<?, ?> m = (Map<?, ?>)getAttribute(VALIDATOR_ARGS);
-		return m==null?null:m.get(key);
+
+	public Object getValidatorArg(String key) {
+		Map<?, ?> m = (Map<?, ?>) getAttribute(VALIDATOR_ARGS);
+		return m == null ? null : m.get(key);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getCommandArgs(){
-		return (Map<String, Object>)getAttribute(COMMAND_ARGS);
+	public Map<String, Object> getCommandArgs() {
+		return (Map<String, Object>) getAttribute(COMMAND_ARGS);
 	}
+
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getBindingArgs(){
-		return (Map<String, Object>)getAttribute(BINDING_ARGS);
+	public Map<String, Object> getBindingArgs() {
+		return (Map<String, Object>) getAttribute(BINDING_ARGS);
 	}
+
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getConverterArgs(){
-		return (Map<String, Object>)getAttribute(CONVERTER_ARGS);
+	public Map<String, Object> getConverterArgs() {
+		return (Map<String, Object>) getAttribute(CONVERTER_ARGS);
 	}
+
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getValidatorArgs(){
-		return (Map<String, Object>)getAttribute(VALIDATOR_ARGS);
+	public Map<String, Object> getValidatorArgs() {
+		return (Map<String, Object>) getAttribute(VALIDATOR_ARGS);
 	}
 
 	public boolean isSave() {
@@ -118,7 +124,7 @@ public class BindContextImpl implements BindContext, Serializable {
 	public Component getComponent() {
 		return this._component;
 	}
-	
+
 	public Event getTriggerEvent() {
 		return this._event;
 	}

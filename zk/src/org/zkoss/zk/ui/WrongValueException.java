@@ -32,6 +32,7 @@ public class WrongValueException extends OperationException {
 		super(msg);
 		_comp = comp;
 	}
+
 	/** Constructs a wrong value exception to show an error box at the client.
 	 * @param comp the component that causes this exception.
 	 */
@@ -39,6 +40,7 @@ public class WrongValueException extends OperationException {
 		super(code, fmtArgs);
 		_comp = comp;
 	}
+
 	/** Constructs a wrong value exception to show an error box at the client.
 	 * @param comp the component that causes this exception.
 	 */
@@ -46,6 +48,7 @@ public class WrongValueException extends OperationException {
 		super(code, fmtArg);
 		_comp = comp;
 	}
+
 	/** Constructs a wrong value exception to show an error box at the client.
 	 * @param comp the component that causes this exception.
 	 */
@@ -65,30 +68,38 @@ public class WrongValueException extends OperationException {
 	public WrongValueException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
 	public WrongValueException(String s) {
 		super(s);
 	}
+
 	public WrongValueException(Throwable cause) {
 		super(cause);
 	}
+
 	public WrongValueException() {
 	}
 
 	public WrongValueException(int code, Object[] fmtArgs, Throwable cause) {
 		super(code, fmtArgs, cause);
 	}
+
 	public WrongValueException(int code, Object fmtArg, Throwable cause) {
 		super(code, fmtArg, cause);
 	}
+
 	public WrongValueException(int code, Object[] fmtArgs) {
 		super(code, fmtArgs);
 	}
+
 	public WrongValueException(int code, Object fmtArg) {
 		super(code, fmtArg);
 	}
+
 	public WrongValueException(int code, Throwable cause) {
 		super(code, cause);
 	}
+
 	public WrongValueException(int code) {
 		super(code);
 	}

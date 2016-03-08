@@ -18,9 +18,9 @@ import org.zkoss.zul.Tabbox;
  * @author dennis
  * @since 7.0.0
  */
-public class TabboxModelConverter extends AbstractListModelConverter<Tabbox>{
+public class TabboxModelConverter extends AbstractListModelConverter<Tabbox> {
 	private static final long serialVersionUID = 1463169907348730644L;
-	
+
 	protected ListModel<?> getComponentModel(Tabbox comp) {
 		return comp.getModel();
 	}

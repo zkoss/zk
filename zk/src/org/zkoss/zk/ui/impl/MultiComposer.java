@@ -18,8 +18,9 @@ package org.zkoss.zk.ui.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.zkoss.zk.ui.Page;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
@@ -44,8 +45,7 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 	 * @return a composer to represent cs, or null if cs is null or empty.
 	 */
 	@SuppressWarnings("unchecked")
-	public static Composer getComposer(Page page, Object[] ary)
-	throws Exception {
+	public static Composer getComposer(Page page, Object[] ary) throws Exception {
 		if (ary == null || ary.length == 0)
 			return null;
 
@@ -55,20 +55,22 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 		final Composer[] cs;
 		boolean ext = false, full = false;
 		if (ary instanceof Composer[]) {
-			cs = (Composer[])ary;
+			cs = (Composer[]) ary;
 			for (int j = cs.length; --j >= 0;) {
 				if (cs[j] instanceof ComposerExt) {
 					ext = true;
-					if (full) break;
+					if (full)
+						break;
 				}
 				if (cs[j] instanceof FullComposer) {
 					full = true;
-					if (ext) break;
+					if (ext)
+						break;
 				}
 			}
 		} else {
 			cs = new Composer[ary.length];
-			for (int j = ary.length; --j >=0;) {
+			for (int j = ary.length; --j >= 0;) {
 				cs[j] = Utils.newComposer(page, ary[j]);
 				ext = ext || (cs[j] instanceof ComposerExt);
 				full = full || (cs[j] instanceof FullComposer);
@@ -76,10 +78,12 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 		}
 
 		if (full) {
-			if (ext) return new MultiFullComposerExt(cs);
+			if (ext)
+				return new MultiFullComposerExt(cs);
 			return new MultiFullComposer(cs);
 		} else {
-			if (ext) return new MultiComposerExt(cs);
+			if (ext)
+				return new MultiComposerExt(cs);
 			return new MultiComposer(cs);
 		}
 	}
@@ -94,12 +98,14 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 		_fullOnly = fullOnly;
 		return b;
 	}
+
 	/** Returns whether to invoke only the composer that implements {@link FullComposer}.
 	 * @since 5.0.1
 	 */
 	public boolean isFullComposerOnly() {
 		return _fullOnly;
 	}
+
 	private boolean shallInvoke(Composer composer) {
 		return !_fullOnly || composer instanceof FullComposer;
 	}
@@ -117,55 +123,58 @@ public class MultiComposer<T extends Component> implements Composer<T> {
 			csMap.put(cs[j].getClass().toString(), cs[j]);
 		_cs = csMap.values().toArray(new Composer[csMap.values().size()]);
 	}
+
 	public void doAfterCompose(T comp) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (shallInvoke(_cs[j]))
 				_cs[j].doAfterCompose(comp);
 	}
-	public ComponentInfo doBeforeCompose(Page page, Component parent,
-	ComponentInfo compInfo) throws Exception {
+
+	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j])) {
-				compInfo = ((ComposerExt)_cs[j])
-					.doBeforeCompose(page, parent, compInfo);
+				compInfo = ((ComposerExt) _cs[j]).doBeforeCompose(page, parent, compInfo);
 				if (compInfo == null)
 					return null;
 			}
 		return compInfo;
 	}
+
 	@SuppressWarnings("unchecked")
 	public void doBeforeComposeChildren(T comp) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
-				((ComposerExt)_cs[j]).doBeforeComposeChildren(comp);
+				((ComposerExt) _cs[j]).doBeforeComposeChildren(comp);
 	}
+
 	public boolean doCatch(Throwable ex) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
-				if (((ComposerExt)_cs[j]).doCatch(ex))
+				if (((ComposerExt) _cs[j]).doCatch(ex))
 					return true; //caught (eat it)
 		return false;
 	}
+
 	public void doFinally() throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (_cs[j] instanceof ComposerExt && shallInvoke(_cs[j]))
-				((ComposerExt)_cs[j]).doFinally();
+				((ComposerExt) _cs[j]).doFinally();
 	}
 
-	private static class MultiComposerExt<T extends Component>
-	extends MultiComposer<T> implements ComposerExt<T> {
+	private static class MultiComposerExt<T extends Component> extends MultiComposer<T> implements ComposerExt<T> {
 		private MultiComposerExt(Composer<T>[] cs) throws Exception {
 			super(cs);
 		}
 	}
-	private static class MultiFullComposer<T extends Component>
-	extends MultiComposer<T> implements FullComposer {
+
+	private static class MultiFullComposer<T extends Component> extends MultiComposer<T> implements FullComposer {
 		private MultiFullComposer(Composer<T>[] cs) throws Exception {
 			super(cs);
 		}
 	}
-	private static class MultiFullComposerExt<T extends Component>
-	extends MultiFullComposer<T> implements ComposerExt<T> {
+
+	private static class MultiFullComposerExt<T extends Component> extends MultiFullComposer<T>
+			implements ComposerExt<T> {
 		private MultiFullComposerExt(Composer<T>[] cs) throws Exception {
 			super(cs);
 		}

@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zul.event.ListDataEvent;
@@ -44,15 +45,15 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListSubModel (since 3.0.2)
  */
 public class SimpleListModel<E> extends AbstractListModel<E>
-implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
-    private static final long serialVersionUID = 20060707L;
+		implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
+	private static final long serialVersionUID = 20060707L;
 
 	private Object[] _data;
 
 	private Comparator<E> _sorting;
 
 	private boolean _sortDir;
-	
+
 	/** Constructor.
 	 *
 	 * @param data the array to represent
@@ -69,8 +70,9 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 * @since 2.4.1
 	 */
 	public SimpleListModel(E[] data, boolean live) {
-		_data = live ? data: ArraysX.duplicate(data);
+		_data = live ? data : ArraysX.duplicate(data);
 	}
+
 	/** Constructor.
 	 * It made a copy of the specified array (<code>data</code>).
 	 *
@@ -96,9 +98,10 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	public int getSize() {
 		return _data.length;
 	}
+
 	@SuppressWarnings("unchecked")
 	public E getElementAt(int j) {
-		return (E)_data[j];
+		return (E) _data[j];
 	}
 
 	//-- Sortable --//
@@ -112,17 +115,16 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	public void sort(Comparator<E> cmpr, final boolean ascending) {
 		_sorting = cmpr;
 		_sortDir = ascending;
-		Arrays.sort(_data, (Comparator)cmpr);
+		Arrays.sort(_data, (Comparator) cmpr);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
 	}
 
 	public String getSortDirection(Comparator<E> cmpr) {
 		if (Objects.equals(_sorting, cmpr))
-			return _sortDir ?
-					"ascending" : "descending";
-		return "natural";	
+			return _sortDir ? "ascending" : "descending";
+		return "natural";
 	}
-	
+
 	/**
 	 * Returns the subset of the list model data that matches
 	 * the specified value.
@@ -152,20 +154,23 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 		nRows = getMaxNumberInSubModel(nRows);
 		for (int i = 0; i < _data.length; i++) {
 			if (inSubModel(value, _data[i])) {
-				data.add((E)_data[i]);
-				if (--nRows <= 0) break; //done
+				data.add((E) _data[i]);
+				if (--nRows <= 0)
+					break; //done
 			}
 		}
 		return new SimpleListModel<E>(data);
 	}
+
 	/** Returns the maximal allowed number of matched items in the sub-model
 	 * returned by {@link #getSubModel}.
 	 * <p>Default: <code>nRows < 0 ? 15: nRows</code>.
 	 * @since 5.0.4
 	 */
 	protected int getMaxNumberInSubModel(int nRows) {
-		return nRows < 0 ? 15: nRows;
+		return nRows < 0 ? 15 : nRows;
 	}
+
 	/** Compares if the given value shall belong to the submodel represented
 	 * by the key.
 	 * <p>Default: converts both key and value to String objects and
@@ -186,8 +191,8 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 	 * @deprecated As of release 5.0.4, replaced with {@link #inSubModel}.
 	 */
 	protected String objectToString(Object value) {
-		final String s = value != null ? value.toString(): "";
-		return s != null ? s: "";
+		final String s = value != null ? value.toString() : "";
+		return s != null ? s : "";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -197,10 +202,10 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 			clone._data = ArraysX.duplicate(_data);
 		return clone;
 	}
-	
+
 	protected void fireSelectionEvent(E e) {
 		int index = -1;
-		for(int j = 0; j < _data.length; ++j) {
+		for (int j = 0; j < _data.length; ++j) {
 			index++;
 			if (Objects.equals(e, _data[j])) {
 				break;
@@ -208,13 +213,14 @@ implements Sortable<E>, ListSubModel<E>, java.io.Serializable {
 		}
 		fireEvent(ListDataEvent.SELECTION_CHANGED, index, -1);
 	}
-	
+
 	//For Backward Compatibility//
 	/** @deprecated As of release 6.0.0, replaced with {@link #addToSelection}.
 	 */
 	public void addSelection(E obj) {
 		addToSelection(obj);
 	}
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
 	public void removeSelection(Object obj) {

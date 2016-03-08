@@ -11,14 +11,14 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.bind.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
 
 /**
  * For ZK-2289, Memory allocation utility.
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class AllocUtil {
 	public static AllocUtil inst = new AllocUtil();
-	
+
 	/**
 	 * Put key, value into the specified map.
 	 * @param map the map to be put key, value in.
@@ -42,7 +42,7 @@ public class AllocUtil {
 		map.put(key, value);
 		return map;
 	}
-	
+
 	/**
 	 * Put key, value into the specified LinkedHashMap.
 	 * @param map the LinkedHashMap to be put key, value in.
@@ -57,14 +57,14 @@ public class AllocUtil {
 		map.put(key, value);
 		return map;
 	}
-	
+
 	/**
 	 * Prepare a suitable LinkedHashMap that optimize the space.
 	 */
 	public <K, V> Map<K, V> newLinkedHashMap(int size) {
 		return new LinkedHashMap<K, V>();
 	}
-	
+
 	/**
 	 * Add value into the specified set.
 	 * @param set the set to be add value in
@@ -78,7 +78,7 @@ public class AllocUtil {
 		set.add(value);
 		return set;
 	}
-	
+
 	public <V> Set<V> addLinkedHashSet(Set<V> set, V value) {
 		if (set == null) {
 			set = new LinkedHashSet<V>();
@@ -86,15 +86,15 @@ public class AllocUtil {
 		set.add(value);
 		return set;
 	}
-	
+
 	public <V> Set<V> addWeakIdentityHashSet(Set<V> set, V value) {
 		if (set == null) {
-			set =  new WeakIdentityMap<V, Boolean>().keySet();
+			set = new WeakIdentityMap<V, Boolean>().keySet();
 		}
 		set.add(value);
 		return set;
 	}
-	
+
 	/**
 	 * Add value into the spcified list.
 	 * @param list the list to be add value in
@@ -108,7 +108,7 @@ public class AllocUtil {
 		list.add(value);
 		return list;
 	}
-	
+
 	/**
 	 * Returns the processed script.
 	 * @param script

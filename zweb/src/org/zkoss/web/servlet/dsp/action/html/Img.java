@@ -39,116 +39,137 @@ public class Img extends AbstractAction {
 	public String getId() {
 		return _id;
 	}
+
 	/** Sets the id attribute.
 	 */
 	public void setId(String id) {
 		_id = id;
 	}
+
 	/** Returns the src (URL).
 	 * Default: null.
 	 */
 	public String getSrc() {
 		return _src;
 	}
+
 	/** Sets the src (URL).
 	 */
 	public void setSrc(String src) {
 		_src = src;
 	}
+
 	/** Returns the alignment.
 	 * Default: null.
 	 */
 	public String getAlign() {
 		return _align;
 	}
+
 	/** Sets the alignment.
 	 */
 	public void setAlign(String align) {
 		_align = align;
 	}
+
 	/** Returns the alt.
 	 * Default: null.
 	 */
 	public String getAlt() {
 		return _alt;
 	}
+
 	/** Sets the alt.
 	 */
 	public void setAlt(String alt) {
 		_alt = alt;
 	}
+
 	/** Returns the border.
 	 * Default: null.
 	 */
 	public String getBorder() {
 		return _border;
 	}
+
 	/** Sets the border.
 	 */
 	public void setBorder(String border) {
 		_border = border;
 	}
+
 	/** Returns the hspace.
 	 * Default: null.
 	 */
 	public String getHspace() {
 		return _hspace;
 	}
+
 	/** Sets the hspace.
 	 */
 	public void setHspace(String hspace) {
 		_hspace = hspace;
 	}
+
 	/** Returns the vspace.
 	 * Default: null.
 	 */
 	public String getVspace() {
 		return _vspace;
 	}
+
 	/** Sets the vspace.
 	 */
 	public void setVspace(String vspace) {
 		_vspace = vspace;
 	}
+
 	/** Returns the style class.
 	 * Default: null.
 	 */
 	public String getSclass() {
 		return _sclass;
 	}
+
 	/** Sets the style class.
 	 */
 	public void setSclass(String sclass) {
 		_sclass = sclass;
 	}
+
 	/** Returns the style.
 	 * Default: null.
 	 */
 	public String getStyle() {
 		return _style;
 	}
+
 	/** Sets the style.
 	 */
 	public void setStyle(String style) {
 		_style = style;
 	}
+
 	/** Returns the height.
 	 * Default: null.
 	 */
 	public String getHeight() {
 		return _height;
 	}
+
 	/** Sets the height.
 	 */
 	public void setHeight(String height) {
 		_height = height;
 	}
+
 	/** Returns the width.
 	 * Default: null.
 	 */
 	public String getWidth() {
 		return _width;
 	}
+
 	/** Sets the width.
 	 */
 	public void setWidth(String width) {
@@ -161,6 +182,7 @@ public class Img extends AbstractAction {
 	public String getTitle() {
 		return _title;
 	}
+
 	/** Sets the title.
 	 */
 	public void setTitle(String title) {
@@ -173,6 +195,7 @@ public class Img extends AbstractAction {
 	public String getOnclick() {
 		return _onclick;
 	}
+
 	/** Sets the onclick.
 	 */
 	public void setOnclick(String onclick) {
@@ -180,16 +203,14 @@ public class Img extends AbstractAction {
 	}
 
 	//-- Action --//
-	public void render(ActionContext ac, boolean nested)
-	throws DspException, IOException {
-		if (!isEffective()|| _src == null || _src.length() == 0)
+	public void render(ActionContext ac, boolean nested) throws DspException, IOException {
+		if (!isEffective() || _src == null || _src.length() == 0)
 			return; //nothing to generate
 		if (nested)
 			throw new DspException(MWeb.DSP_NESTED_ACTION_NOT_ALLOWED,
-				new Object[] {this, new Integer(ac.getLineNumber())});
+					new Object[] { this, new Integer(ac.getLineNumber()) });
 
-		final StringBuffer sb = new StringBuffer(64)
-			.append("<img src=\"").append(ac.encodeURL(_src)).append('"');
+		final StringBuffer sb = new StringBuffer(64).append("<img src=\"").append(ac.encodeURL(_src)).append('"');
 		append(sb, "id", _id);
 		append(sb, "height", _height);
 		append(sb, "width", _width);

@@ -37,6 +37,7 @@ public interface RendererCtrl {
 	 * <p>Example, you could start an transaction here.
 	 */
 	public void doTry();
+
 	/** Called if any exception occurs when rendering items.
 	 * Note: this method won't be called if exception occurs in {@link #doTry}.
 	 *
@@ -48,6 +49,7 @@ public interface RendererCtrl {
 	 * <p>Example, you could roll back the transaction.
 	 */
 	public void doCatch(Throwable ex) throws Throwable;
+
 	/** Invoked after all rendering are done successfully or an exception
 	 * occurs.
 	 *

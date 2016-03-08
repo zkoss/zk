@@ -39,13 +39,13 @@ public class BookmarkEvent extends Event {
 	 */
 	public static final BookmarkEvent getBookmarkEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
-		final String nm = (String)data.get("");
+		final String nm = (String) data.get("");
 		return new BookmarkEvent(request.getCommand(), nm);
 	}
 
 	public BookmarkEvent(String name, String bookmark) {
 		super(name, null);
-		_bookmark = bookmark != null ? bookmark: "";
+		_bookmark = bookmark != null ? bookmark : "";
 	}
 
 	/** Returns the bookmark name (never null).

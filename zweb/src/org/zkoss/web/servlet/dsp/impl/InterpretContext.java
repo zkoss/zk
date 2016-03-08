@@ -16,12 +16,12 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp.impl;
 
-import org.zkoss.xel.XelContext;
-import org.zkoss.xel.FunctionMapper;
-import org.zkoss.xel.util.SimpleXelContext;
-
-import org.zkoss.web.servlet.dsp.*;
+import org.zkoss.web.servlet.dsp.DspContext;
+import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.action.Action;
+import org.zkoss.xel.FunctionMapper;
+import org.zkoss.xel.XelContext;
+import org.zkoss.xel.util.SimpleXelContext;
 
 /**
  * Holds the context for interpreting an {@link Interpretation}.
@@ -41,6 +41,7 @@ class InterpretContext {
 		this.dc = dc;
 		this.resolver = new InterpretResolver(dc.getVariableResolver());
 	}
+
 	void init(FunctionMapper mapper) {
 		if (this.xelc != null)
 			throw new IllegalArgumentException();

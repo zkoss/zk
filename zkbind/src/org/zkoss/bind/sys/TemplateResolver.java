@@ -14,7 +14,6 @@ package org.zkoss.bind.sys;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Template;
 
-
 /**
  * Resolver for Template
  * @author dennis
@@ -25,10 +24,10 @@ public interface TemplateResolver {
 	public static final String EACH_VAR = "each";
 	public static final String STATUS_ATTR = "status";
 	public static final String EACH_STATUS_VAR = "forEachStatus";
-	
+
 	//ZK-1787When the viewModel tell binder to reload a list, the other component that bind a bean in the list will reload again
 	public static final String TEMPLATE_OBJECT = "$TemplateVar$";
-	
+
 	/**
 	 * Resolve the template for the component 
 	 * @param eachComp the template to be resolved of the component
@@ -40,14 +39,14 @@ public interface TemplateResolver {
 	 * @since 7.0.0
 	 */
 	Template resolveTemplate(Component eachComp, Object eachData, int index, int size, String subType);
-	
+
 	/**
 	 * @deprecated since 7.0.0
 	 * use {@link #resolveTemplate(Component, Object, int, int, String)}
 	 */
 	@Deprecated
 	Template resolveTemplate(Component eachComp, Object eachData, int index, int size);
-	
+
 	/**
 	 * Add template tracking to component
 	 * @param eachComp the component to add template tracking
@@ -55,7 +54,7 @@ public interface TemplateResolver {
 	 */
 	@Deprecated
 	void addTemplateTracking(Component eachComp);
-	
+
 	/**
 	 * Add template tracking to component
 	 * @param eachComp the template to be resolved of the component

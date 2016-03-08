@@ -23,6 +23,7 @@ import javax.naming.NamingException;
 
 import org.zkoss.lang.Library;
 import org.zkoss.xel.XelException;
+
 /**
  * Some generic utility for use with CDI.
  * <p>Applicable to CDI version 1.0 or later</p>
@@ -40,21 +41,20 @@ import org.zkoss.xel.XelException;
  */
 public class CDIUtil {
 	private static BeanManager _manager;
+
 	/** Returns the CDI BeanManager. 
 	 * Default implementation use JNDI to lookup "java:comp/env/BeanManager". 
-	 */ 
+	 */
 	public static BeanManager getBeanManager() {
 		if (_manager != null)
 			return _manager;
-			
+
 		try {
 			final InitialContext initialContext = new InitialContext();
-			_manager = (BeanManager) initialContext.lookup(Library.getProperty(
-					"org.zkoss.zkplus.cdi.beanManager.jndiName",
-					"java:comp/env/BeanManager"));
+			_manager = (BeanManager) initialContext.lookup(
+					Library.getProperty("org.zkoss.zkplus.cdi.beanManager.jndiName", "java:comp/env/BeanManager"));
 		} catch (NamingException e) { // Error getting the home interface
-			throw XelException.Aide.wrap(e,
-					"Cannot locate the BeanManager for JavaEE 6.");
+			throw XelException.Aide.wrap(e, "Cannot locate the BeanManager for JavaEE 6.");
 		}
 		return _manager;
 	}

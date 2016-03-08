@@ -18,8 +18,8 @@ package org.zkoss.zk.au.http;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -28,28 +28,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.mesg.Messages;
+
 import org.zkoss.lang.Exceptions;
+import org.zkoss.mesg.Messages;
 import org.zkoss.util.media.Media;
-
 import org.zkoss.web.servlet.http.Https;
-
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
-import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.UiEngine;
-import org.zkoss.zk.ui.http.ExecutionImpl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * The AU processor used to response the content for {@link DynamicMedia#getMedia}
@@ -64,17 +63,19 @@ public class AuDynaMediar implements AuExtension {
 
 	public AuDynaMediar() {
 	}
+
 	public void init(DHtmlUpdateServlet servlet) {
 		_ctx = servlet.getServletContext();
 	}
+
 	public void destroy() {
 	}
 
 	/** Retrieves the media from {@link DynamicMedia#getMedia}.
 	 */
 	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
-	throws ServletException, IOException {
-//		if (log.isDebugEnabled()) log.debug("View "+pi);
+			throws ServletException, IOException {
+		//		if (log.isDebugEnabled()) log.debug("View "+pi);
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
 			response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi));
@@ -84,24 +85,23 @@ public class AuDynaMediar implements AuExtension {
 		int j = pi.indexOf('/', 1) + 1;
 		int k = pi.indexOf('/', j);
 		if (j <= 0 || k <= 0)
-			throw new ServletException("Wrong path info: "+pi);
+			throw new ServletException("Wrong path info: " + pi);
 
 		final String dtid = pi.substring(j, k);
 		final int l = pi.indexOf('/', ++k);
-		final String uuid = l >= 0 ? pi.substring(k, l): pi.substring(k);
+		final String uuid = l >= 0 ? pi.substring(k, l) : pi.substring(k);
 
 		Media media;
 		boolean download = false;
 		try {
 			final WebApp wapp = sess.getWebApp();
-			final WebAppCtrl wappc = (WebAppCtrl)wapp;
+			final WebAppCtrl wappc = (WebAppCtrl) wapp;
 			final UiEngine uieng = wappc.getUiEngine();
 			final Desktop desktop = wappc.getDesktopCache(sess).getDesktop(dtid);
-			final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+			final DesktopCtrl desktopCtrl = (DesktopCtrl) desktop;
 
 			final Execution oldexec = Executions.getCurrent();
-			final Execution exec = new ExecutionImpl(
-				_ctx, request, response, desktop, null);
+			final Execution exec = new ExecutionImpl(_ctx, request, response, desktop, null);
 			uieng.activate(exec);
 
 			final Configuration config = wapp.getConfiguration();
@@ -116,18 +116,22 @@ public class AuDynaMediar implements AuExtension {
 				} else {
 					final Component comp = desktop.getComponentByUuidIfAny(uuid);
 					if (comp == null) { // B65-ZK-1599
-						response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+uuid));
-						log.debug("Failed to load media, "+pi);
+						response.sendError(HttpServletResponse.SC_GONE,
+								Messages.get(MZk.PAGE_NOT_FOUND, pi + " - " + uuid));
+						log.debug("Failed to load media, " + pi);
 						return;
 					}
-					final Object cc = ((ComponentCtrl)comp).getExtraCtrl();
+					final Object cc = ((ComponentCtrl) comp).getExtraCtrl();
 					if (!(cc instanceof DynamicMedia))
-						throw new ServletException(DynamicMedia.class+" must be implemented by getExtraCtrl() of "+comp);
-					int m = l >= 0 ? pi.indexOf('/', l + 1): -1;
-					if (m < 0) m = l;
-					media = ((DynamicMedia)cc).getMedia(m >= 0 ? pi.substring(m): "");
+						throw new ServletException(
+								DynamicMedia.class + " must be implemented by getExtraCtrl() of " + comp);
+					int m = l >= 0 ? pi.indexOf('/', l + 1) : -1;
+					if (m < 0)
+						m = l;
+					media = ((DynamicMedia) cc).getMedia(m >= 0 ? pi.substring(m) : "");
 					if (media == null) {
-						response.sendError(HttpServletResponse.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pi+" - "+comp));
+						response.sendError(HttpServletResponse.SC_GONE,
+								Messages.get(MZk.PAGE_NOT_FOUND, pi + " - " + comp));
 						return;
 					}
 				}
@@ -142,14 +146,14 @@ public class AuDynaMediar implements AuExtension {
 				final StringBuffer errmsg = new StringBuffer(100);
 				if (!errs.isEmpty()) {
 					for (Iterator it = errs.iterator(); it.hasNext();) {
-						final Throwable t = (Throwable)it.next();
-						log.error("Failed to load media, "+pi, t);
+						final Throwable t = (Throwable) it.next();
+						log.error("Failed to load media, " + pi, t);
 						errmsg.append('\n').append(Exceptions.getMessage(t));
 					}
 				}
 
 				response.sendError(HttpServletResponse.SC_GONE,
-					Messages.get(MZk.PAGE_FAILED, new Object[] {pi, errmsg, ""}));
+						Messages.get(MZk.PAGE_FAILED, new Object[] { pi, errmsg, "" }));
 				return;
 			} finally {
 				if (!err) {
@@ -165,7 +169,7 @@ public class AuDynaMediar implements AuExtension {
 		}
 
 		Https.write(request, response, media, download, false);
-			//see bug 2691017 for why not repeatable
+		//see bug 2691017 for why not repeatable
 		//FUTURE: support last-modified
 	}
 }

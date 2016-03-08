@@ -34,6 +34,7 @@ public interface PageActivationListener {
 	 * (and its value has been deserialized).
 	 */
 	public void didActivate(Page page);
+
 	/** Called when a session is about to be passivated
 	 * (and then serialize its value).
 	 */

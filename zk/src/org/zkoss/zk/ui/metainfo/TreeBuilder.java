@@ -27,10 +27,12 @@ public interface TreeBuilder {
 	 * Parse the content of a file to a {@link Document}
 	 */
 	public Document parse(File file) throws Exception;
+
 	/**
 	 * Parse the content from a URL to a {@link Document}
 	 */
 	public Document parse(URL url) throws Exception;
+
 	/**
 	 * Parse the content from a Reader to a {@link Document}
 	 */

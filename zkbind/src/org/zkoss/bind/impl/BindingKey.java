@@ -13,6 +13,7 @@ package org.zkoss.bind.impl;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
+
 /**
  * 
  * @author dennis
@@ -27,31 +28,32 @@ public class BindingKey implements java.io.Serializable {
 	 * The first key. 
 	 **/
 	private final Component x;
-	
+
 	/** The second key. */
 	private final String y;
-	
+
 	public BindingKey(Component x, String y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	//-- Object --//
 	public final boolean equals(Object o) {
-		if(o==this) return true;
-		
+		if (o == this)
+			return true;
+
 		if (!(o instanceof BindingKey))
 			return false;
-		
-		final BindingKey key = (BindingKey)o;
-		return Objects.equals(x, key.x) &&
-				Objects.equals(y, key.y);
+
+		final BindingKey key = (BindingKey) o;
+		return Objects.equals(x, key.x) && Objects.equals(y, key.y);
 	}
+
 	public final int hashCode() {
 		return Objects.hashCode(x) ^ Objects.hashCode(y);
 	}
 
 	public String toString() {
-		return '(' + Objects.toString(x) + ", "  + Objects.toString(y) + ')';
+		return '(' + Objects.toString(x) + ", " + Objects.toString(y) + ')';
 	}
 }

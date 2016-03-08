@@ -29,6 +29,7 @@ public class AuLoadCSS extends AuResponse {
 	public AuLoadCSS(String href) {
 		this(href, null, null);
 	}
+
 	/**
 	 * Loads a CSS file.
 	 * @param href the URL of the CSS file, it will be encoded with
@@ -37,7 +38,7 @@ public class AuLoadCSS extends AuResponse {
 	 * @param media the media attribute. Ignored if not specified.
 	 */
 	public AuLoadCSS(String href, String id, String media) {
-		super("loadCSS", new String[]{Executions.encodeURL(href), id, media});
+		super("loadCSS", new String[] { Executions.encodeURL(href), id, media });
 	}
 
 }

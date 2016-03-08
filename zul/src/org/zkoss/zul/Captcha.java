@@ -16,24 +16,24 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.SerializableEventListener;
-import org.zkoss.zul.impl.CaptchaEngine;
-import org.zkoss.image.AImage;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
-import org.zkoss.lang.Library;
-
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.ArrayList;
+
+import org.zkoss.image.AImage;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zul.impl.CaptchaEngine;
 
 /**
  * The generic captcha component. 
@@ -45,26 +45,24 @@ public class Captcha extends org.zkoss.zul.Image {
 	//control variable
 	private boolean _smartDrawCaptcha; //whether post the smartDraw event already?
 	private EventListener<Event> _smartDrawCaptchaListener; //the smartDrawListner
-	
-	private static Random _random = new Random();//random used for various operation
+
+	private static Random _random = new Random(); //random used for various operation
 	private static final String EXCLUDE = "0123456789IOilo"; //default exclude list
 	private static final int CHAR_START = '0'; //character start
 	private static final int CHAR_END = 'z'; //character end
 	private static final int CHAR_COUNT = CHAR_END - CHAR_START + 1; //charcater count
-	private static final Font[] DEFAULT_FONTS = new Font[] {
-		new Font("Arial", Font.BOLD, 30),
-		new Font("Courier", Font.BOLD, 30)			
-	};
-	
+	private static final Font[] DEFAULT_FONTS = new Font[] { new Font("Arial", Font.BOLD, 30),
+			new Font("Courier", Font.BOLD, 30) };
+
 	private int _intWidth = 200; //integer width in px
 	private int _intHeight = 50; //integer height in px
-	
+
 	private String _fontColor = "#508093"; //font color that used to draw text
 	private int _fontRGB = 0x508093; //font color in 0xRRGGBB
-	
+
 	private String _bgColor = "#FFFFFF"; //background color in #RRGGBB form
 	private int _bgRGB = 0xFFFFFF; //background color in 0xRRGGBB
-	
+
 	private List<Font> _fonts = new ArrayList<Font>(9); //fonts that can be used to draw text
 	private int _len = 5; //text length, default 5
 	private String _exclude = null;
@@ -78,21 +76,21 @@ public class Captcha extends org.zkoss.zul.Image {
 		randomValue();
 		smartDrawCaptcha();
 	}
-	
+
 	/**
 	 * Gets fonts list, default provide two fonts.
 	 */
 	public List<Font> getFonts() {
 		return _fonts;
 	}
-	
+
 	/**
 	 * Gets the default font list.
 	 */
 	public Font[] getDefaultFonts() {
 		return DEFAULT_FONTS;
 	}
-	
+
 	/**
 	 * Get nth Font.
 	 */
@@ -103,7 +101,7 @@ public class Captcha extends org.zkoss.zul.Image {
 
 		return _fonts.get(j);
 	}
-	
+
 	/**
 	 * Add fonts into fonts list. If you did not add fonts, the default implementation
 	 * would use the default fonts; i.e. bold Arial 35, and bold courier 35.
@@ -128,14 +126,14 @@ public class Captcha extends org.zkoss.zul.Image {
 		}
 		smartDrawCaptcha();
 	}
-	
+
 	/**
 	 * Gets font color.
 	 */
 	public String getFontColor() {
 		return _fontColor;
 	}
-	
+
 	/**
 	 * Get the font color in int array (0: red, 1: green, 2:blue).
 	 */
@@ -159,7 +157,7 @@ public class Captcha extends org.zkoss.zul.Image {
 		}
 		smartDrawCaptcha();
 	}
-	
+
 	/**
 	 * Get the background color of the captcha box (in string as #RRGGBB).
 	 * null means default.
@@ -167,7 +165,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	public String getBgColor() {
 		return _bgColor;
 	}
-	
+
 	/**
 	 * Get the background color in int array (0: red, 1: green, 2:blue).
 	 * null means default.
@@ -195,14 +193,14 @@ public class Captcha extends org.zkoss.zul.Image {
 	public void setHflex(String flex) {
 		super.setHflex0(flex);
 	}
-	
+
 	/**
 	 * Get the captcha int width in pixel; to be used by the derived subclass.
 	 */
 	public int getIntWidth() {
 		return _intWidth;
 	}
-	
+
 	/**
 	 * Override super class to prepare the int height.
 	 */
@@ -214,7 +212,7 @@ public class Captcha extends org.zkoss.zul.Image {
 		super.setHeight0(h); // B80-ZK-2908
 		smartDrawCaptcha();
 	}
-	
+
 	/** Overrides the method in HtmlBasedComponent, not to check using vflex and height at the same time
 	 * @since 8.0.1
 	 */
@@ -229,7 +227,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	public int getIntHeight() {
 		return _intHeight;
 	}
-	
+
 	/**
 	 * Returns the text value of this captcha.
 	 * <p>Default: an empty string.
@@ -239,7 +237,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	public String getValue() {
 		return _value;
 	}
-	
+
 	/**
 	 * Sets the text value to be shown as the distortion captcha.
 	 * @param text the captcha text value
@@ -252,7 +250,7 @@ public class Captcha extends org.zkoss.zul.Image {
 			smartDrawCaptcha();
 		}
 	}
-	
+
 	/** Set length of the autogenerated text value; default to 5.
 	 */
 	public void setLength(int len) {
@@ -264,13 +262,13 @@ public class Captcha extends org.zkoss.zul.Image {
 		randomValue();
 		smartDrawCaptcha();
 	}
-	
+
 	/** Get length of the autogenerated text value; default to 5.
 	 */
 	public int getLength() {
 		return _len;
 	}
-	
+
 	/** Set exclude characters that will not be generated. Note that only digit and character is used
 	 * in generating text value. If you leave exclude null, the default exclude list will be applied; 
 	 * i.e.,  0123456789IilOo (only character (no digits) are used except I, i, l, O(big O), o(small o))
@@ -278,31 +276,31 @@ public class Captcha extends org.zkoss.zul.Image {
 	public void setExclude(String exclude) {
 		if (Objects.equals(_exclude, exclude))
 			return;
-			
+
 		_exclude = exclude;
 
 		randomValue();
 		smartDrawCaptcha();
 	}
-	
+
 	/** Get exclude characters.
 	 */
 	public String getExclude() {
 		return _exclude;
 	}
-	
+
 	/** Sets whether generate noise; default to false. (@since 5.0.0)
 	 */
 	public void setNoise(boolean b) {
 		_noise = b;
 	}
-	
+
 	/** Returns whether generate noise; default to false. (@since 5.0.0)
 	 */
 	public boolean isNoise() {
 		return _noise;
 	}
-	
+
 	/** Sets whether generate border.
 	 * <p> Default to false.
 	 * @since 5.0.0
@@ -311,7 +309,7 @@ public class Captcha extends org.zkoss.zul.Image {
 	public void setBorder(boolean b) {
 		setFrame(b);
 	}
-	
+
 	/** Returns whether generate border.
 	 * <p> Default to false.
 	 * @since 5.0.0
@@ -333,37 +331,36 @@ public class Captcha extends org.zkoss.zul.Image {
 	 * <p> Default to false.
 	 * @since 5.0.4
 	 */
-	public boolean isFrame(){
+	public boolean isFrame() {
 		return _frame;
 	}
-	
+
 	/**
 	 * Regenerates new captcha text value and redraw.
 	 */
 	public String randomValue() {
 		String exclude = _exclude == null ? EXCLUDE : _exclude;
 		int len = _len;
-				
+
 		final StringBuffer sb = new StringBuffer(len);
 		while (len > 0) {
 			final char c = (char) ('0' + _random.nextInt(CHAR_COUNT)); // ASCII '0' to 'z'
 			if (Character.isLetterOrDigit(c) && exclude.indexOf(c) < 0) {
-				sb.append(c); 
+				sb.append(c);
 				--len;
 			}
 		}
 		setValue(sb.toString());
 		return getValue();
 	}
-	
+
 	/** Sets the captcha engine by use of a class name.
 	 * It creates an instance automatically.
 	 */
-	public void setEngine(String clsnm)
-	throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-	InstantiationException, java.lang.reflect.InvocationTargetException {
+	public void setEngine(String clsnm) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+			InstantiationException, java.lang.reflect.InvocationTargetException {
 		if (clsnm != null) {
-			setEngine((CaptchaEngine)Classes.newInstanceByThread(clsnm));
+			setEngine((CaptchaEngine) Classes.newInstanceByThread(clsnm));
 		}
 	}
 
@@ -374,21 +371,21 @@ public class Captcha extends org.zkoss.zul.Image {
 		if (_engine != engine) {
 			_engine = engine;
 		}
-		
+
 		smartDrawCaptcha();
 	}
-	
+
 	/**
 	 * Get the captcha engine.
 	 *
 	 * @exception UiException if failed to load the engine.
 	 */
-	public CaptchaEngine getCaptchaEngine()
-	throws UiException {
+	public CaptchaEngine getCaptchaEngine() throws UiException {
 		if (_engine == null)
 			_engine = newCaptchaEngine();
 		return _engine;
 	}
+
 	/** Instantiates the default captcha engine.
 	 * It is called, if {@link #setEngine} is not called with non-null
 	 * engine.
@@ -410,7 +407,7 @@ public class Captcha extends org.zkoss.zul.Image {
 		final String PROP = "org.zkoss.zul.captcha.engine.class";
 		final String klass = Library.getProperty(PROP);
 		if (klass == null)
-			throw new UiException("Library property,  "+PROP+", required");
+			throw new UiException("Library property,  " + PROP + ", required");
 
 		final Object v;
 		try {
@@ -419,8 +416,8 @@ public class Captcha extends org.zkoss.zul.Image {
 			throw UiException.Aide.wrap(ex);
 		}
 		if (!(v instanceof CaptchaEngine))
-			throw new UiException(CaptchaEngine.class + " must be implemented by "+v);
-		return (CaptchaEngine)v;
+			throw new UiException(CaptchaEngine.class + " must be implemented by " + v);
+		return (CaptchaEngine) v;
 	}
 
 	/**
@@ -436,16 +433,16 @@ public class Captcha extends org.zkoss.zul.Image {
 				public void onEvent(Event event) {
 					if (Strings.isBlank(getWidth()))
 						throw new UiException("captcha must specify width");
-									
+
 					if (Strings.isBlank(getHeight()))
 						throw new UiException("captcha must specify height");
-								
+
 					try {
 						//generate the distorted image based on the given text value
 						byte[] bytes = getCaptchaEngine().generateCaptcha(Captcha.this);
-						final AImage image = new AImage("captcha"+new Date().getTime(), bytes);
+						final AImage image = new AImage("captcha" + new Date().getTime(), bytes);
 						setContent(image);
-					} catch(java.io.IOException ex) {
+					} catch (java.io.IOException ex) {
 						throw UiException.Aide.wrap(ex);
 					} finally {
 						_smartDrawCaptcha = false;
@@ -456,14 +453,14 @@ public class Captcha extends org.zkoss.zul.Image {
 		}
 		Events.postEvent("onSmartDrawCaptcha", this, null);
 	}
-	
+
 	/*package*/ static int decode(String color) {
 		if (color == null) {
 			return 0;
 		}
 		if (color.length() != 7 || color.charAt(0) != '#') {
-			throw new UiException("Incorrect color format (#RRGGBB) : "+color);
+			throw new UiException("Incorrect color format (#RRGGBB) : " + color);
 		}
 		return Integer.parseInt(color.substring(1), 16);
 	}
-}		
+}

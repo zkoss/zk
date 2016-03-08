@@ -31,11 +31,11 @@ public interface GroupRendererExt {
 	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default row is created as follow.
-<pre><code>
-final Group group = new Group();
-group.applyProperties();
-return group;
-</code></pre>
+	<pre><code>
+	final Group group = new Group();
+	group.applyProperties();
+	return group;
+	</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Group#setParent}.
 	 *
@@ -51,11 +51,11 @@ return group;
 	 * the properties, defined in the component definition, properly.
 	 *
 	 * <p>If null is returned, the default row is created as follow.
-<pre><code>
-final Groupfoot groupfoot = new Groupfoot();
-groupfoot.applyProperties();
-return groupfoot;
-</code></pre>
+	<pre><code>
+	final Groupfoot groupfoot = new Groupfoot();
+	groupfoot.applyProperties();
+	return groupfoot;
+	</code></pre>
 	 *
 	 * <p>Note: DO NOT call {@link Groupfoot#setParent}.
 	 *

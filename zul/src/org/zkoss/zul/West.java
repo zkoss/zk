@@ -34,6 +34,7 @@ public class West extends LayoutRegion {
 	public String getPosition() {
 		return Borderlayout.WEST;
 	}
+
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).
@@ -49,6 +50,7 @@ public class West extends LayoutRegion {
 	public String getSize() {
 		return getWidth();
 	}
+
 	/**
 	 * Sets the size of this region. This method is shortcut for
 	 * {@link #setWidth(String)}.

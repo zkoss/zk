@@ -19,16 +19,15 @@ import org.zkoss.zul.event.ListDataEvent;
  * @author James Chu
  * @since 8.0.0
  */
-public class ChildrenBindingListModelDataEvent extends ListDataEvent implements java.io.Serializable{
+public class ChildrenBindingListModelDataEvent extends ListDataEvent implements java.io.Serializable {
 	private static final long serialVersionUID = 20150116150500L;
 
-	public ChildrenBindingListModelDataEvent(ListModel<?> model, int type,
-			int index0, int index1) {
+	public ChildrenBindingListModelDataEvent(ListModel<?> model, int type, int index0, int index1) {
 		super(model, type, index0, index1);
 	}
-	
+
 	public ChildrenBindingListModelDataEvent(ListDataEvent e) {
 		super(e.getModel(), e.getType(), e.getIndex0(), e.getIndex1());
 	}
-	
+
 }

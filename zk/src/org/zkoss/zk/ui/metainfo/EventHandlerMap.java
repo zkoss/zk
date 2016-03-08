@@ -16,13 +16,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Set;
 import java.util.Collections;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
@@ -46,6 +46,7 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 	public boolean isEmpty() {
 		return _evthds == null || _evthds.isEmpty();
 	}
+
 	/** Returns the first effective event handler of the specified event name,
 	 * or null if not available.
 	 *
@@ -61,12 +62,13 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 		if (_evthds != null) {
 			final List<EventHandler> ehl = _evthds.get(evtnm);
 			if (ehl != null)
-				for (EventHandler eh: ehl)
+				for (EventHandler eh : ehl)
 					if (eh.isEffective(comp))
 						return eh;
 		}
 		return null;
 	}
+
 	/** Returns a readonly collection of event names (String), or
 	 * an empty collection if no event name is registered.
 	 * @since 3.0.2
@@ -76,6 +78,7 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 			return _evthds.keySet();
 		return Collections.emptySet();
 	}
+
 	/** Returns a readonly list of all event handlers associated
 	 * with the specified event name, or null if no handler is associated
 	 * with.
@@ -120,13 +123,14 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 
 		ehl.add(evthd);
 	}
+
 	/** Adds all event handlers of the specified map to this map.
 	 */
 	public void addAll(EventHandlerMap src) {
 		if (src != null && !src.isEmpty()) {
-			for (Map.Entry<String, List<EventHandler>> me: src._evthds.entrySet()) {
+			for (Map.Entry<String, List<EventHandler>> me : src._evthds.entrySet()) {
 				final String evtnm = me.getKey();
-				for (EventHandler eh: me.getValue())
+				for (EventHandler eh : me.getValue())
 					add(evtnm, eh);
 			}
 		}
@@ -140,6 +144,7 @@ public class EventHandlerMap implements Cloneable, java.io.Serializable {
 		clone.addAll(this);
 		return clone;
 	}
+
 	//Object//
 	public String toString() {
 		return "[evthd:" + _evthds + ']';

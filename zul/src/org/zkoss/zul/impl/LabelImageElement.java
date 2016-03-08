@@ -64,50 +64,55 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
  * 
  * @author tomyeh
  */
-abstract public class LabelImageElement extends LabelElement {
+public abstract class LabelImageElement extends LabelElement {
 	private AuxInfo _auxinf;
 
 	protected LabelImageElement() {
 	}
+
 	/** @since 5.0.0
 	 */
 	protected LabelImageElement(String label, String image) {
 		setLabel(label);
 		setImage(image);
 	}
+
 	/** @since 5.0.0
 	 */
 	protected LabelImageElement(String label) {
 		setLabel(label);
 	}
-	
+
 	/**
 	 * Sets the icon font
 	 * @param iconSclass a CSS class name for the icon font
 	 * @since 7.0.0
 	 */
 	public void setIconSclass(String iconSclass) {
-		if (iconSclass != null && iconSclass.length() == 0) iconSclass = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.iconSclass: null, iconSclass)) {
+		if (iconSclass != null && iconSclass.length() == 0)
+			iconSclass = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.iconSclass : null, iconSclass)) {
 			initAuxInfo().iconSclass = iconSclass;
 			smartUpdate("iconSclass", iconSclass);
 		}
 	}
-	
+
 	/**
 	 * Returns the icon font
 	 * @since 7.0.0
 	 */
 	public String getIconSclass() {
-		return _auxinf != null && _auxinf.iconSclass instanceof String ? (String)_auxinf.iconSclass: null;
-		
+		return _auxinf != null && _auxinf.iconSclass instanceof String ? (String) _auxinf.iconSclass : null;
+
 	}
+
 	/** Returns the image URI.
 	 * <p>Default: null.
 	 */
 	public String getImage() {
-		return _auxinf != null && _auxinf.image instanceof String ? (String)_auxinf.image: null;
+		return _auxinf != null && _auxinf.image instanceof String ? (String) _auxinf.image : null;
 	}
+
 	/** Sets the image URI.
 	 * <p>Calling this method implies setImageContent(null).
 	 * In other words, the last invocation of {@link #setImage} overrides
@@ -116,18 +121,21 @@ abstract public class LabelImageElement extends LabelElement {
 	 * @see #setImageContent(RenderedImage)
 	 */
 	public void setImage(String src) {
-		if (src != null && src.length() == 0) src = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.image: null, src)) {
+		if (src != null && src.length() == 0)
+			src = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.image : null, src)) {
 			initAuxInfo().image = src;
 			smartUpdate("image", new EncodedImageURL());
 		}
 	}
+
 	/** @deprecated As of release 3.5.0, it is redundant since
 	 * it is the same as {@link #getImage}
 	 */
 	public String getSrc() {
 		return getImage();
 	}
+
 	/** @deprecated As of release 3.5.0, it is redundant since
 	 * it is the same as {@link #setImage}
 	 */
@@ -145,12 +153,14 @@ abstract public class LabelImageElement extends LabelElement {
 	 * @see #setImage
 	 */
 	public void setImageContent(Image image) {
-		if ((_auxinf != null ? _auxinf.image: null) != image) {
+		if ((_auxinf != null ? _auxinf.image : null) != image) {
 			initAuxInfo().image = image;
-			if (image != null) _auxinf.imgver++; //enforce browser to reload image
+			if (image != null)
+				_auxinf.imgver++; //enforce browser to reload image
 			smartUpdate("image", new EncodedImageURL());
 		}
 	}
+
 	/** Sets the content directly with the rendered image.
 	 * It actually encodes the rendered image to an PNG image
 	 * ({@link org.zkoss.image.Image}) with {@link Images#encode},
@@ -168,6 +178,7 @@ abstract public class LabelImageElement extends LabelElement {
 			throw new UiException(ex);
 		}
 	}
+
 	/** Returns the image content
 	 * set by {@link #setImageContent(Image)}
 	 * or {@link #setImageContent(RenderedImage)}.
@@ -176,8 +187,7 @@ abstract public class LabelImageElement extends LabelElement {
 	 * Actually, it returns null if {@link #setImage} was called.
 	 */
 	public Image getImageContent() {
-		return _auxinf != null && _auxinf.image instanceof Image ?
-			(Image)_auxinf.image: null;
+		return _auxinf != null && _auxinf.image instanceof Image ? (Image) _auxinf.image : null;
 	}
 
 	/** Returns the URI of the hover image.
@@ -186,9 +196,9 @@ abstract public class LabelImageElement extends LabelElement {
 	 * @since 3.5.0
 	 */
 	public String getHoverImage() {
-		return _auxinf != null && _auxinf.hoverimg instanceof String ?
-			(String)_auxinf.hoverimg: null;
+		return _auxinf != null && _auxinf.hoverimg instanceof String ? (String) _auxinf.hoverimg : null;
 	}
+
 	/** Sets the image URI.
 	 * The hover image is used when the mouse is moving over this component.
 	 * <p>Calling this method implies setHoverImageContent(null).
@@ -197,12 +207,14 @@ abstract public class LabelImageElement extends LabelElement {
 	 * @since 3.5.0
 	 */
 	public void setHoverImage(String src) {
-		if (src != null && src.length() == 0) src = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.hoverimg: null, src)) {
+		if (src != null && src.length() == 0)
+			src = null;
+		if (!Objects.equals(_auxinf != null ? _auxinf.hoverimg : null, src)) {
 			initAuxInfo().hoverimg = src;
 			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
 	}
+
 	/** Returns the content of the hover image
 	 * set by {@link #setHoverImageContent(Image)}
 	 * or {@link #setHoverImageContent(RenderedImage)}.
@@ -212,9 +224,9 @@ abstract public class LabelImageElement extends LabelElement {
 	 * @since 5.0.8
 	 */
 	public Image getHoverImageContent() {
-		return _auxinf != null && _auxinf.hoverimg instanceof Image ?
-			(Image)_auxinf.hoverimg: null;
+		return _auxinf != null && _auxinf.hoverimg instanceof Image ? (Image) _auxinf.hoverimg : null;
 	}
+
 	/** Sets the content of the hover image directly.
 	 * The hover image is used when the mouse is moving over this component.
 	 * <p>Default: null.
@@ -226,12 +238,14 @@ abstract public class LabelImageElement extends LabelElement {
 	 * @since 3.5.0
 	 */
 	public void setHoverImageContent(Image image) {
-		if ((_auxinf != null ? _auxinf.hoverimg: null) != image) {
+		if ((_auxinf != null ? _auxinf.hoverimg : null) != image) {
 			initAuxInfo().hoverimg = image;
-			if (image != null) _auxinf.hoverimgver++; //enforce browser to reload image
+			if (image != null)
+				_auxinf.hoverimgver++; //enforce browser to reload image
 			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
 	}
+
 	/** Sets the content of the hover image directly with the rendered image.
 	 * The hover image is used when the mouse is moving over this component.
 	 *
@@ -258,6 +272,7 @@ abstract public class LabelImageElement extends LabelElement {
 	public boolean isImageAssigned() {
 		return _auxinf != null && _auxinf.image != null;
 	}
+
 	/** Returns the encoded URL for the image ({@link #getImage}
 	 * or {@link #getImageContent}), or null if no image.
 	 * <p>Used only for component development; not by application developers.
@@ -265,33 +280,32 @@ abstract public class LabelImageElement extends LabelElement {
 	 */
 	private String getEncodedImageURL() {
 		if (_auxinf != null && _auxinf.image instanceof Image) {
-			final Image image = (Image)_auxinf.image;
+			final Image image = (Image) _auxinf.image;
 			return Utils.getDynamicMediaURI(this, //already encoded
-				_auxinf.imgver, "c/" + image.getName(), image.getFormat());
+					_auxinf.imgver, "c/" + image.getName(), image.getFormat());
 		}
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null && _auxinf != null && _auxinf.image != null ?
-			dt.getExecution().encodeURL((String)_auxinf.image): null;
+		return dt != null && _auxinf != null && _auxinf.image != null
+				? dt.getExecution().encodeURL((String) _auxinf.image) : null;
 	}
+
 	/** Returns the encoded URL for the hover image or null if not
 	 * available.
 	 */
 	private String getEncodedHoverURL() {
 		if (_auxinf != null && _auxinf.hoverimg instanceof Image) {
-			final Image image = (Image)_auxinf.hoverimg;
-			return Utils.getDynamicMediaURI(this,
-				_auxinf.hoverimgver, "h/" + image.getName(), image.getFormat());
+			final Image image = (Image) _auxinf.hoverimg;
+			return Utils.getDynamicMediaURI(this, _auxinf.hoverimgver, "h/" + image.getName(), image.getFormat());
 		}
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null && _auxinf != null && _auxinf.hoverimg != null ?
-			dt.getExecution().encodeURL((String)_auxinf.hoverimg): null;
+		return dt != null && _auxinf != null && _auxinf.hoverimg != null
+				? dt.getExecution().encodeURL((String) _auxinf.hoverimg) : null;
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		//ZK-1638: preload image can also defined in zk.xml by library property
 		render(renderer, "_preloadImage", Utils.testAttribute(this, "org.zkoss.zul.image.preload", false, true));
@@ -304,11 +318,11 @@ abstract public class LabelImageElement extends LabelElement {
 	public Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
+
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends LabelElement.ExtraCtrl
-	implements DynamicMedia {
+	protected class ExtraCtrl extends LabelElement.ExtraCtrl implements DynamicMedia {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			if (pathInfo != null) {
@@ -322,20 +336,22 @@ abstract public class LabelImageElement extends LabelElement {
 			return getImageContent();
 		}
 	}
+
 	private class EncodedImageURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedImageURL();
 		}
 	}
+
 	private class EncodedHoverURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedHoverURL();
 		}
 	}
 
-
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(5);
+
 	static {
 		_properties.put("iconSclass", new StringPropertyAccess() {
 			public void setValue(Component cmp, String iconSclass) {
@@ -357,9 +373,12 @@ abstract public class LabelImageElement extends LabelElement {
 		});
 		_properties.put("imageContent", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object image) {
-                if(image instanceof Image)((LabelImageElement) cmp).setImageContent((Image)image);
-                else if(image instanceof RenderedImage)((LabelImageElement) cmp).setImageContent((RenderedImage)image);
+				if (image instanceof Image)
+					((LabelImageElement) cmp).setImageContent((Image) image);
+				else if (image instanceof RenderedImage)
+					((LabelImageElement) cmp).setImageContent((RenderedImage) image);
 			}
+
 			public Class getType() {
 				return Image.class;
 			}
@@ -379,9 +398,12 @@ abstract public class LabelImageElement extends LabelElement {
 		});
 		_properties.put("hoverImageContent", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object image) {
-                if(image instanceof Image)((LabelImageElement) cmp).setHoverImageContent((Image)image);
-                else if(image instanceof RenderedImage)((LabelImageElement) cmp).setHoverImageContent((RenderedImage)image);
+				if (image instanceof Image)
+					((LabelImageElement) cmp).setHoverImageContent((Image) image);
+				else if (image instanceof RenderedImage)
+					((LabelImageElement) cmp).setHoverImageContent((RenderedImage) image);
 			}
+
 			public Class getType() {
 				return Image.class;
 			}
@@ -398,11 +420,12 @@ abstract public class LabelImageElement extends LabelElement {
 			return pa;
 		return super.getPropertyAccess(prop);
 	}
+
 	//Cloneable//
 	public Object clone() {
-		final LabelImageElement clone = (LabelImageElement)super.clone();
+		final LabelImageElement clone = (LabelImageElement) super.clone();
 		if (_auxinf != null)
-			clone._auxinf = (AuxInfo)_auxinf.clone();
+			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
 	}
 
@@ -411,6 +434,7 @@ abstract public class LabelImageElement extends LabelElement {
 			_auxinf = new AuxInfo();
 		return _auxinf;
 	}
+
 	/** Merge multiple members to minimize the memory use.
 	 * @since 5.0.8
 	 */
@@ -423,7 +447,7 @@ abstract public class LabelImageElement extends LabelElement {
 		private byte imgver;
 		/** Count the version of {@link #hoverimg}. */
 		private byte hoverimgver;
-		
+
 		private String iconSclass;
 
 		public Object clone() {

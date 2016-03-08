@@ -44,6 +44,7 @@ public interface GroupsModel<D, H, F> {
 	 * @param groupIndex the index of the group.
 	 */
 	public H getGroup(int groupIndex);
+
 	/** Returns the number of groups.
 	 */
 	public int getGroupCount();
@@ -53,6 +54,7 @@ public interface GroupsModel<D, H, F> {
 	 * @param index the index of the element in the group.
 	 */
 	public D getChild(int groupIndex, int index);
+
 	/** Returns the number of children of the specified group.
 	 * <p>Note: it does <i>not</i> include the group foot ({@link #getGroupfoot}).
 	 * @param groupIndex the index of the group.
@@ -67,6 +69,7 @@ public interface GroupsModel<D, H, F> {
 	 * @param groupIndex the index of the group.
 	 */
 	public F getGroupfoot(int groupIndex);
+
 	/** Returns if the specified group has a foot value.
 	 * @param groupIndex the index of the group.
 	 */
@@ -76,10 +79,11 @@ public interface GroupsModel<D, H, F> {
 	 * to the data model occurs. 
 	 */
 	public void addGroupsDataListener(GroupsDataListener l);
-    /** Removes a listener from the groups that's notified each time
-     * a change to the data model occurs. 
-     */
-	public void removeGroupsDataListener(GroupsDataListener l) ;
+
+	/** Removes a listener from the groups that's notified each time
+	 * a change to the data model occurs. 
+	 */
+	public void removeGroupsDataListener(GroupsDataListener l);
 
 	/** Whether the group is open at the specified index.
 	 * It is used to render {@link Group} and {@link Listgroup}.
@@ -88,12 +92,14 @@ public interface GroupsModel<D, H, F> {
 	 * @since 6.0.0
 	 */
 	public boolean isGroupOpened(int groupIndex);
+
 	/** Opens the group at the specified index.
 	 * @param groupIndex the index of the group.
 	 * @return if it has been added successfully; false if it was opened.
 	 * @since 6.0.0
 	 */
 	public boolean addOpenGroup(int groupIndex);
+
 	/** Closes the group at the specified index.
 	 * @param groupIndex the index of the group.
 	 * @return if it has been removed successfully; false if it was closed.

@@ -31,7 +31,7 @@ import org.zkoss.bind.xel.zel.BindELContext;
  * @author henrichen
  * @since 6.0.0
  */
-public class TrackerNodeImpl implements TrackerNode,Serializable {
+public class TrackerNodeImpl implements TrackerNode, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
 	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
@@ -40,7 +40,7 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	private final Set<ReferenceBinding> _refBindings; //associated ReferenceBindings
 	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	private transient WeakReference<Object> _bean; //associated bean value
-	
+
 	public TrackerNodeImpl(Object property) {
 		_script = property;
 		_dependents = new HashMap<Object, TrackerNode>(4);
@@ -49,10 +49,11 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 		_brackets = new HashMap<Object, Object>(4);
 		_associates = new HashSet<TrackerNode>(4);
 	}
-	 public void addAssociate(TrackerNode node) {
+
+	public void addAssociate(TrackerNode node) {
 		_associates.add(node);
 	}
-	
+
 	public TrackerNode getDependent(Object property) {
 		TrackerNode kid = getDependent0(property);
 		if (kid == null) { //try bracket
@@ -85,14 +86,18 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 		return set;
 	}
 	
+	public Set<TrackerNode> getDependents() {
+		return collectDependents0(new HashSet<TrackerNode>());
+	}
+
 	private TrackerNode getDependent0(Object script) {
-		return _dependents.get(script); 
+		return _dependents.get(script);
 	}
 
 	public void addDependent(Object script, TrackerNode dependent) {
 		_dependents.put(script, dependent);
 	}
-	
+
 	public void tieProperty(Object property, Object script) {
 		final Object oldscript = _brackets.get(property);
 		if (script.equals(oldscript)) {
@@ -123,43 +128,39 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 
 	public void addBinding(Binding binding) {
 		if (binding instanceof ReferenceBinding) {
-			_refBindings.add((ReferenceBinding)binding);
+			_refBindings.add((ReferenceBinding) binding);
 		} else {
-			_bindings.add((LoadBinding)binding);
+			_bindings.add((LoadBinding) binding);
 		}
 	}
-	
+
 	public Set<Binding> getBindings() {
 		final Set<Binding> bindings = new HashSet<Binding>();
 		bindings.addAll(getLoadBindings());
 		bindings.addAll(getReferenceBindings());
-		
+
 		return bindings;
 	}
-	
+
 	public Set<ReferenceBinding> getReferenceBindings() {
 		return _refBindings;
 	}
-	
+
 	public Set<LoadBinding> getLoadBindings() {
 		return _bindings;
 	}
 
-	public Set<TrackerNode> getDependents() {
-		return collectDependents0(new HashSet<TrackerNode>());
-	}
-	
 	//bug# 1: depends-on is not working in nested C->B->A when A changed
 	private Set<TrackerNode> collectDependents0(Set<TrackerNode> nodes) {
 		final Set<TrackerNode> kids = getDirectDependents();
 		nodes.addAll(kids);
-		for(TrackerNode kid : kids) {
-			((TrackerNodeImpl)kid).collectDependents0(nodes); //recursive
+		for (TrackerNode kid : kids) {
+			((TrackerNodeImpl) kid).collectDependents0(nodes); //recursive
 		}
-		for(TrackerNode associate : _associates) {
+		for (TrackerNode associate : _associates) {
 			if (!nodes.contains(associate)) { //avoid endless loop
 				nodes.add(associate);
-				((TrackerNodeImpl)associate).collectDependents0(nodes); //recursive
+				((TrackerNodeImpl) associate).collectDependents0(nodes); //recursive
 			}
 		}
 		return nodes;
@@ -168,7 +169,7 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	public Set<TrackerNode> getDirectDependents() {
 		return new HashSet<TrackerNode>(_dependents.values());
 	}
-	
+
 	public Set<TrackerNode> getAssociates() {
 		return _associates;
 	}
@@ -184,18 +185,19 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	public void setBean(Object bean) {
 		_bean = bean == null ? null : new WeakReference<Object>(bean);
 	}
-	
+
 	public Object getFieldScript() {
 		return _script;
 	}
-	
+
 	public Map<Object, Object> getPropNameMapping() {
 		return _brackets;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("[bean:").append(getBean()).append(",script:").append(_script).append("]@").append(System.identityHashCode(this));
+		sb.append("[bean:").append(getBean()).append(",script:").append(_script).append("]@")
+				.append(System.identityHashCode(this));
 		return sb.toString();
 	}
 }

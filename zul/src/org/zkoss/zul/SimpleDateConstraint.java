@@ -16,19 +16,17 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -44,6 +42,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		super(flags);
 		fixConstraint();
 	}
+
 	/** Constraints a constraint.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
@@ -54,6 +53,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		super(flags, errmsg);
 		fixConstraint();
 	}
+
 	/** Constructs a regular-expression constraint.
 	 *
 	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
@@ -61,10 +61,10 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(Pattern, String)}
 	 */
 	public SimpleDateConstraint(String regex, String errmsg) {
-		super(regex == null || regex.length() == 0 ?
-				null: Pattern.compile(regex), errmsg);
+		super(regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
 		fixConstraint();
 	}
+
 	/** Constructs a regular-expression constraint.
 	 *
 	 * @param regex ignored if null or empty
@@ -75,6 +75,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		super(regex, errmsg);
 		fixConstraint();
 	}
+
 	/** Constructs a constraint combining regular expression.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
@@ -84,10 +85,10 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(int, Pattern, String)}
 	 */
 	public SimpleDateConstraint(int flags, String regex, String errmsg) {
-		super(flags, regex == null || regex.length() == 0 ?
-				null: Pattern.compile(regex), errmsg);
+		super(flags, regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
 		fixConstraint();
 	}
+
 	/** Constructs a constraint combining regular expression.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
@@ -100,6 +101,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		super(flags, regex, errmsg);
 		fixConstraint();
 	}
+
 	/** Constructs a constraint with beginning and ending date.
 	 *
 	 * @param flags a combination of {@link #NO_POSITIVE}, {@link #NO_NEGATIVE},
@@ -116,6 +118,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		_end = end;
 		fixConstraint();
 	}
+
 	/** Constructs a constraint with a list of constraints separated by comma.
 	 *
 	 * @param constraint a list of constraints separated by comma.
@@ -125,6 +128,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		super(constraint);
 		fixConstraint();
 	}
+
 	private void fixConstraint() {
 		if ((_flags & NO_FUTURE) != 0 && _end == null)
 			_end = Dates.today();
@@ -138,6 +142,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	public Date getBeginDate() {
 		return _beg;
 	}
+
 	/** Returns the ending date, or null if there is no constraint of
 	 * the ending date.
 	 */
@@ -150,7 +155,7 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		if (constraint.startsWith("between")) {
 			final int j = constraint.indexOf("and", 7);
 			if (j < 0)
-				throw new UiException("Constraint syntax error: "+constraint);
+				throw new UiException("Constraint syntax error: " + constraint);
 			_beg = parseDate(constraint.substring(7, j));
 			_end = parseDate(constraint.substring(j + 3));
 			if (_beg.compareTo(_end) > 0) {
@@ -168,23 +173,24 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		}
 		return super.parseConstraint(constraint);
 	}
+
 	private static Date parseDate(String val) throws UiException {
 		try {
 			return getDateFormat().parse(val.trim());
 		} catch (ParseException ex) {
-			throw new UiException("Not a date: "+val+". Format: yyyyMMdd", ex);
+			throw new UiException("Not a date: " + val + ". Format: yyyyMMdd", ex);
 		}
 	}
+
 	private static SimpleDateFormat getDateFormat() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locales.getCurrent());
 		df.setTimeZone(TimeZones.getCurrent());
 		return df;
 	}
 
-	public void validate(Component comp, Object value)
-	throws WrongValueException {
+	public void validate(Component comp, Object value) throws WrongValueException {
 		if (value instanceof Date) {
-			final Date d =  Dates.beginOfDate((Date)value, TimeZones.getCurrent());
+			final Date d = Dates.beginOfDate((Date) value, TimeZones.getCurrent());
 			if (_beg != null && _beg.compareTo(d) > 0)
 				throw outOfRangeValue(comp);
 			if (_end != null && _end.compareTo(d) < 0)
@@ -192,23 +198,22 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		}
 		super.validate(comp, value);
 	}
+
 	private WrongValueException outOfRangeValue(Component comp) {
 		final String errmsg = getErrorMessage(comp);
 		if (errmsg != null)
 			return new WrongValueException(comp, errmsg);
 
-		final String s =
-			_beg != null ? _end != null ?
-					dateToString(comp, _beg) + " ~ " + dateToString(comp, _end):
-					">= " + dateToString(comp, _beg):
-					"<= " + dateToString(comp, _end);
+		final String s = _beg != null ? _end != null ? dateToString(comp, _beg) + " ~ " + dateToString(comp, _end)
+				: ">= " + dateToString(comp, _beg) : "<= " + dateToString(comp, _end);
 		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
+
 	private static String dateToString(Component comp, Date d) {
 		if (d == null)
 			return "";
 		if (comp instanceof Datebox)
-			return ((Datebox)comp).coerceToString(d);
+			return ((Datebox) comp).coerceToString(d);
 		return getDateFormat().format(d);
 	}
 }

@@ -18,9 +18,8 @@ package org.zkoss.zul;
 
 import java.io.Writer;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.json.JavaScriptValue;
-
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zul.impl.XulElement;
 
@@ -79,11 +78,12 @@ public class Html extends XulElement {
 	 */
 	public Html() {
 	}
+
 	/** Constructs a {@link Html} component to embed HTML tags
 	 * with the specified content.
 	 */
 	public Html(String content) {
-		_content = content != null ? content: "";
+		_content = content != null ? content : "";
 	}
 
 	/** Returns the embedded content (i.e., HTML tags).
@@ -91,6 +91,7 @@ public class Html extends XulElement {
 	public String getContent() {
 		return _content;
 	}
+
 	/** Sets the embedded content (i.e., HTML tags).
 	 * <p>Default: empty ("").
 	 * <p>Deriving class can override it to return whatever it wants
@@ -104,7 +105,8 @@ public class Html extends XulElement {
 	 * attach.
 	 */
 	public void setContent(String content) {
-		if (content == null) content = "";
+		if (content == null)
+			content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
 			smartUpdate("content", getContent());
@@ -113,15 +115,13 @@ public class Html extends XulElement {
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		String cnt = getContent();
-			//allow deriving to override getContent()
+		//allow deriving to override getContent()
 		if (cnt.length() > 0) {
-			final HtmlPageRenders.RenderContext rc =
-				HtmlPageRenders.getRenderContext(null);
+			final HtmlPageRenders.RenderContext rc = HtmlPageRenders.getRenderContext(null);
 			if (rc != null) {
 				final Writer cwout = rc.temp;
 				cwout.write("<div id=\"");
@@ -133,8 +133,7 @@ public class Html extends XulElement {
 					cnt = null; //means already generated
 			}
 			if (cnt == null)
-				renderer.render("content",
-					new JavaScriptValue("zk('"+getUuid()+"').detachChildren()"));
+				renderer.render("content", new JavaScriptValue("zk('" + getUuid() + "').detachChildren()"));
 			else
 				render(renderer, "content", cnt);
 		}

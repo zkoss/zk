@@ -14,8 +14,8 @@ package org.zkoss.zk.au;
 
 import java.util.List;
 
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.WebApp;
 
 /**
  * Used to decode the custom format of the AU requests.
@@ -35,15 +35,18 @@ public interface AuDecoder {
 	 * @param request the request. For HTTP, it is HttpServletRequest.
 	 */
 	public String getDesktopId(Object request);
+
 	/** Returns the first command.
 	 * It is called if a desktop is not found.
 	 * @param request the request. For HTTP, it is HttpServletRequest.
 	 */
 	public String getFirstCommand(Object request);
+
 	/** Returns a list of {@link AuRequest} by decoding the request.
 	 * @param request the request. For HTTP, it is HttpServletRequest.
 	 */
 	public List<AuRequest> decode(Object request, Desktop desktop);
+
 	/** Returns if the request is ignorable when an error occurs.
 	 * If true is returned, the request is simply ignored.
 	 * Otherwise, an error message, depending on the configuration,

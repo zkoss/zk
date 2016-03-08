@@ -39,8 +39,7 @@ import org.zkoss.zul.ext.Sortable;
  * @see ListModelList
  * @see ListModelMap
  */
-public class ListModelSet<E> extends AbstractListModel<E>
-implements Sortable<E>, Set<E>, java.io.Serializable {
+public class ListModelSet<E> extends AbstractListModel<E> implements Sortable<E>, Set<E>, java.io.Serializable {
 	private static final long serialVersionUID = 20120206122849L;
 
 	protected Set<E> _set;
@@ -48,7 +47,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	private Comparator<E> _sorting;
 
 	private boolean _sortDir;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -67,9 +66,9 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	 * @since 2.4.0
 	 */
 	public ListModelSet(Set<E> set, boolean live) {
-		_set = live ? set: new LinkedHashSet<E>(set);
+		_set = live ? set : new LinkedHashSet<E>(set);
 	}
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -88,6 +87,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	public ListModelSet(Collection<? extends E> c) {
 		_set = new LinkedHashSet<E>(c);
 	}
+
 	/**
 	 * Constructor.
 	 * It makes a copy of the specified array (i.e., not live).
@@ -98,7 +98,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		for (int j = 0; j < array.length; ++j)
 			_set.add(array[j]);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param initialCapacity the initial capacity for this ListModelSet.
@@ -118,19 +118,19 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 
 	/**
 	 * Get the inner real set.
-	 */	
+	 */
 	public Set<E> getInnerSet() {
 		return _set;
 	}
-	
+
 	//-- ListModel --//
 	public int getSize() {
 		return _set.size();
 	}
-	
+
 	public E getElementAt(int j) {
 		if (j < 0 || j >= _set.size())
-			throw new IndexOutOfBoundsException(""+j);
+			throw new IndexOutOfBoundsException("" + j);
 
 		for (Iterator<E> it = _set.iterator();;) {
 			final E o = it.next();
@@ -159,8 +159,8 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	 * This implementation optimized on the LinkedHashSet(which guarantees the sequence of the added item). 
 	 * Other implementation needs one more linear search.
 	 */
- 	public boolean add(E o) {
- 		if (!_set.contains(o)) {
+	public boolean add(E o) {
+		if (!_set.contains(o)) {
 			boolean ret = _set.add(o);
 			//After add, the position can change if not LinkedHashSet
 			//bug #1819318 Problem while using SortedSet with Databinding
@@ -173,7 +173,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 			} else if (_set instanceof SortedSet) {
 				final int i1 = indexOf(o);
 				fireEvent(ListDataEvent.INTERVAL_ADDED, i1, i1);
-			} else {//bug #1839634, HashSet, not sure the iteration sequence 
+			} else { //bug #1839634, HashSet, not sure the iteration sequence 
 					//of the HashSet, must resync
 				fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 			}
@@ -191,7 +191,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		if (_set instanceof LinkedHashSet) {
 			int begin = _set.size();
 			int added = 0;
-			for(final Iterator<? extends E> it = c.iterator(); it.hasNext();) {
+			for (final Iterator<? extends E> it = c.iterator(); it.hasNext();) {
 				E o = it.next();
 				if (_set.contains(o)) {
 					continue;
@@ -200,18 +200,18 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 				++added;
 			}
 			if (added > 0) {
-				fireEvent(ListDataEvent.INTERVAL_ADDED, begin, begin+added-1);
+				fireEvent(ListDataEvent.INTERVAL_ADDED, begin, begin + added - 1);
 				return true;
 			}
 			return false;
-		} else {//bug #1819318 Problem while using SortedSet with Databinding
+		} else { //bug #1819318 Problem while using SortedSet with Databinding
 				//bug #1839634 Problem while using HashSet with Databinding
 			final boolean ret = _set.addAll(c);
 			fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
 			return ret;
 		}
 	}
-	
+
 	public void clear() {
 		int i2 = _set.size() - 1;
 		if (i2 < 0) {
@@ -221,32 +221,33 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		_set.clear();
 		fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i2);
 	}
-	
+
 	public boolean contains(Object elem) {
 		return _set.contains(elem);
 	}
-	
+
 	public boolean containsAll(Collection<?> c) {
 		return _set.containsAll(c);
 	}
-	
+
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		return _set.equals(o instanceof ListModelSet ? ((ListModelSet<?>)o)._set: o);
+		return _set.equals(o instanceof ListModelSet ? ((ListModelSet<?>) o)._set : o);
 	}
-	
+
 	public int hashCode() {
 		return _set.hashCode();
 	}
-		
+
 	public boolean isEmpty() {
 		return _set.isEmpty();
 	}
+
 	public String toString() {
 		return _set.toString();
 	}
-    
+
 	public Iterator<E> iterator() {
 		return new Iterator<E>() {
 			private Iterator<E> _it = _set.iterator();
@@ -256,11 +257,13 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 			public boolean hasNext() {
 				return _it.hasNext();
 			}
+
 			public E next() {
 				_current = _it.next();
 				++_nextIndex;
 				return _current;
 			}
+
 			public void remove() {
 				_it.remove();
 				removeFromSelection(_current);
@@ -275,7 +278,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 			}
 		};
 	}
-	
+
 	public boolean remove(Object o) {
 		boolean ret = false;
 		if (_set.contains(o)) {
@@ -292,6 +295,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		}
 		return ret;
 	}
+
 	/** Returns the index of the specified object, or -1 if not found.
 	 */
 	public int indexOf(Object o) {
@@ -302,7 +306,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		}
 		return -1;
 	}
-	
+
 	public boolean removeAll(Collection<?> c) {
 		if (_set == c || this == c) { //special case
 			clear();
@@ -339,7 +343,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 			return ret;
 		}
 	}
-	
+
 	private boolean removePartial(Collection<?> c, boolean isRemove) {
 		int sz = c.size();
 		int removed = 0;
@@ -349,8 +353,8 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		// B60-ZK-1126.zul
 		// Remember the selections to be cleared
 		List<E> selected = new ArrayList<E>();
-		for(final Iterator<E> it = _set.iterator(); 
-			it.hasNext() && (!isRemove || removed < sz) && (isRemove || retained < sz); ++index) {
+		for (final Iterator<E> it = _set.iterator(); it.hasNext() && (!isRemove || removed < sz)
+				&& (isRemove || retained < sz); ++index) {
 			E item = it.next();
 			if (c.contains(item) == isRemove) {
 				if (begin < 0) {
@@ -380,14 +384,14 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 		if (begin >= 0) {
 			fireEvent(ListDataEvent.INTERVAL_REMOVED, begin, index - 1);
 		}
-			
+
 		return removed > 0;
 	}
-		
+
 	public int size() {
 		return _set.size();
 	}
-	
+
 	public Object[] toArray() {
 		return _set.toArray();
 	}
@@ -415,11 +419,10 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 
 	public String getSortDirection(Comparator<E> cmpr) {
 		if (Objects.equals(_sorting, cmpr))
-			return _sortDir ?
-					"ascending" : "descending";
-		return "natural";	
+			return _sortDir ? "ascending" : "descending";
+		return "natural";
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		ListModelSet<E> clone = (ListModelSet<E>) super.clone();
@@ -427,7 +430,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 			clone._set = new LinkedHashSet<E>(_set);
 		return clone;
 	}
-	
+
 	protected void fireSelectionEvent(E e) {
 		fireEvent(ListDataEvent.SELECTION_CHANGED, indexOf(e), -1);
 	}
@@ -438,6 +441,7 @@ implements Sortable<E>, Set<E>, java.io.Serializable {
 	public void addSelection(E obj) {
 		addToSelection(obj);
 	}
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #removeFromSelection}.
 	 */
 	public void removeSelection(Object obj) {

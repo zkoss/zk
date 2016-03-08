@@ -16,27 +16,27 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.util.List;
-import java.util.Collection;
-import java.util.Set;
-import java.util.Map;
-import java.io.Writer;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.Annotation;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
-import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
+import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Callback;
-import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.au.AuRequest;
 
 /**
  * An addition interface to {@link Component}
@@ -58,6 +58,7 @@ public interface ComponentCtrl {
 	 * @exception IllegalArgumentException if compdef is null
 	 */
 	public void setDefinition(ComponentDefinition compdef);
+
 	/** Sets the component definition by specifying the name.
 	 *
 	 * @param defname the name of the component definition
@@ -78,6 +79,7 @@ public interface ComponentCtrl {
 	 * @since 3.6.2
 	 */
 	public void beforeChildAdded(Component child, Component insertBefore);
+
 	/** Called before removing a child.
 	 * If a component denies a certain child to be removed, it shall
 	 * override this method to avoid it.
@@ -86,6 +88,7 @@ public interface ComponentCtrl {
 	 * @since 3.6.2
 	 */
 	public void beforeChildRemoved(Component child);
+
 	/** Called before changing the parent.
 	 * If a component can be a child of certain parents, it shall override
 	 * this method and throws an exception for an illegal parent.
@@ -106,7 +109,8 @@ public interface ComponentCtrl {
 	 * it is in the middle of modifying the component tree.
 	 * @since 3.5.0
 	 */
-	 public void onChildAdded(Component child);
+	public void onChildAdded(Component child);
+
 	/** Called when a child is removed.
 	 * If a component want to optimize the update, it might do something
 	 * different. Otherwise, it simply does nothing.
@@ -115,7 +119,7 @@ public interface ComponentCtrl {
 	 * it is in the middle of modifying the component tree.
 	 * @since 3.5.0
 	 */
-	 public void onChildRemoved(Component child);
+	public void onChildRemoved(Component child);
 
 	/** Called when this component is attached to a page.
 	 *
@@ -135,6 +139,7 @@ public interface ComponentCtrl {
 	 * @since 3.5.0
 	 */
 	public void onPageAttached(Page newpage, Page oldpage);
+
 	/** Called when this component is detached from a page.
 	 *
 	 * <p>If a component is moved from one page to another,
@@ -159,6 +164,7 @@ public interface ComponentCtrl {
 	 * @see Component#getWidgetListener
 	 */
 	public ZScript getEventHandler(String evtnm);
+
 	/** Adds an event handler.
 	 * Note: it is OK to add multiple event handlers to the same event.
 	 * They are evaluated one-by-one.
@@ -167,6 +173,7 @@ public interface ComponentCtrl {
 	 * @see Component#setWidgetListener
 	 */
 	public void addEventHandler(String name, EventHandler evthd);
+
 	/** Adds a map of event handlers which is shared by other components.
 	 * In other words, this component shall have all event handlers
 	 * defined in the specified map, evthds. Meanwhile, this component
@@ -177,6 +184,7 @@ public interface ComponentCtrl {
 	 * @see Component#setWidgetListener
 	 */
 	public void addSharedEventHandlerMap(EventHandlerMap evthds);
+
 	/** Returns a readonly collection of event names (String), or
 	 * an empty collection if no event name is registered.
 	 *
@@ -211,6 +219,7 @@ public interface ComponentCtrl {
 	 * if it receives an event listed in this map consecutively.
 	 */
 	public static final int CE_REPEAT_IGNORE = 0x4000;
+
 	/** Returns a map of event information that the client might send to this component.
 	 * The key of the returned map is a String instance representing the event name,
 	 * and the value an integer representing the flags
@@ -227,6 +236,7 @@ public interface ComponentCtrl {
 	 * {@link #getAnnotation(String, String)}.
 	 */
 	public Annotation getAnnotation(String annotName);
+
 	/** Returns the annotation associated with the definition of the specified
 	 * property, or null if not available.
 	 *
@@ -262,6 +272,7 @@ public interface ComponentCtrl {
 	 * @see #getAnnotations(String, String)
 	 */
 	public Annotation getAnnotation(String propName, String annotName);
+
 	/** Returns the annotations associated with the definition of the specified
 	 * property. It never returns null.
 	 *
@@ -287,9 +298,11 @@ public interface ComponentCtrl {
 	 * @since 6.0.0
 	 */
 	public Collection<Annotation> getAnnotations(String propName, String annotName);
+
 	/** @deprecated As of release 6.0.0, replaced with {@link #getAnnotations(String)}.
 	 */
 	public Collection<Annotation> getAnnotations();
+
 	/** Returns a read-only collection of all annotations ({@link Annotation})
 	 * associated with the specified property. It never returns null.
 	 *
@@ -298,18 +311,22 @@ public interface ComponentCtrl {
 	 * component (rather than a particular property).
 	 */
 	public Collection<Annotation> getAnnotations(String propName);
+
 	/** Returns a read-only list of the names of the properties
 	 * that are associated with the specified annotation (never null).
 	 */
 	public List<String> getAnnotatedPropertiesBy(String annotName);
+
 	/** Returns a read-only list of the name of properties that
 	 * are associated at least one annotation (never null).
 	 */
 	public List<String> getAnnotatedProperties();
+
 	/** @deprecated As of release 6.0.0, replaced with
 	 * {@link #addAnnotation(String, String, Map)}
 	 */
 	public void addAnnotation(String annotName, Map<String, String[]> annotAttrs);
+
 	/** Adds an annotation to the specified property of this component.
 	 *
 	 * <p>If the given property is null, the annotation is associated
@@ -326,8 +343,7 @@ public interface ComponentCtrl {
 	 * This method will make a copy of <code>annotAttrs</code>, so the caller
 	 * can use it after the invocation.
 	 */
-	public void addAnnotation(
-		String propName, String annotName, Map<String, String[]> annotAttrs);
+	public void addAnnotation(String propName, String annotName, Map<String, String[]> annotAttrs);
 
 	/** Notification that the session, which owns this component,
 	 * is about to be passivated (a.k.a., serialized).
@@ -335,6 +351,7 @@ public interface ComponentCtrl {
 	 * <p>Note: only root components are notified by this method.
 	 */
 	public void sessionWillPassivate(Page page);
+
 	/** Notification that the session, which owns this component,
 	 * has just been activated (a.k.a., deserialized).
 	 *
@@ -470,13 +487,13 @@ public interface ComponentCtrl {
 	 * @since 6.0.0
 	 */
 	public EventListenerMap getEventListenerMap();
-	
+
 	/**
 	 * Returns a set of shadow elements, if any.
 	 * @since 8.0.0
 	 */
 	public <T extends ShadowElement> List<T> getShadowRoots();
-	
+
 	/**
 	 * Removes the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
@@ -485,7 +502,7 @@ public interface ComponentCtrl {
 	 * @since 8.0.0
 	 */
 	public boolean removeShadowRoot(ShadowElement shadow);
-	
+
 	/**
 	 * Adds the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
@@ -493,7 +510,7 @@ public interface ComponentCtrl {
 	 * @since 8.0.0
 	 */
 	public boolean addShadowRoot(ShadowElement shadow);
-	
+
 	/**
 	 * Adds the given shadow root from this host. (Shadow developer use only)
 	 * @param shadow a shadow element
@@ -508,20 +525,20 @@ public interface ComponentCtrl {
 	 * @since 8.0.0
 	 */
 	public void enableBindingAnnotation();
-	
+
 	/**
 	 * Set to disable the component with binding annotation. (Internal or component developer use only.)
 	 * @since 8.0.0
 	 */
 	public void disableBindingAnnotation();
-	
+
 	/**
 	 * Returns whether the component itself has binding annotation or not. (Internal or component developer use only.)
 	 * @return true if the component itself has binding annotation
 	 * @since 8.0.0
 	 */
 	public boolean hasBindingAnnotation();
-	
+
 	/**
 	 * Returns whether the component and its children have binding annotation or not. (Internal or component developer use only.)
 	 * @return true if the component and its children have binding annotation
@@ -535,27 +552,27 @@ public interface ComponentCtrl {
 	 * @since 8.0.0
 	 */
 	public int getSubBindingAnnotationCount();
-	
+
 	/**
 	 * Adds a callback at component redraw phase.
 	 * @param callback
 	 * @since 8.0.0
 	 */
 	public boolean addRedrawCallback(Callback<ContentRenderer> callback);
-	
+
 	/**
 	 * Removes a callback for component redraw phase.
 	 * @param callback
 	 * @since 8.0.0
 	 */
 	public boolean removeRedrawCallback(Callback<ContentRenderer> callback);
-	
+
 	/**
 	 * Returns all of callbacks for component redraw phase
 	 * @since 8.0.0
 	 */
 	public Collection<Callback<ContentRenderer>> getRedrawCallback();
-	
+
 	/**
 	 * Returns the shadow element under this shadow host.
 	 * @param id

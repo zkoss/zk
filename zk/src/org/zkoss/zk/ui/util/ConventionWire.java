@@ -25,16 +25,15 @@ import java.util.Set;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
-
-import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.Path;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.HtmlNativeComponent;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.HtmlMacroComponent;
+import org.zkoss.zk.ui.HtmlNativeComponent;
+import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -55,18 +54,19 @@ import org.zkoss.zk.ui.UiException;
 	public ConventionWire(Object controller) {
 		this(controller, '$', false, false);
 	}
+
 	public ConventionWire(Object controller, char separator) {
 		this(controller, separator, false, false);
 	}
-	public ConventionWire(Object controller, char separator,
-	boolean ignoreZScript, boolean ignoreXel) {
+
+	public ConventionWire(Object controller, char separator, boolean ignoreZScript, boolean ignoreXel) {
 		_controller = controller;
 		_separator = separator;
 		_ignoreZScript = ignoreZScript;
 		_ignoreXel = ignoreXel;
 		_injected = new HashSet<String>();
 		_fldMaps = new LinkedHashMap<String, Field>(64);
-		
+
 		Class cls = _controller.getClass();
 		while (cls != null && !ignoreFromWire(cls)) {
 			Field[] flds = cls.getDeclaredFields();
@@ -85,17 +85,17 @@ import org.zkoss.zk.ui.UiException;
 	public void wireFellows(final IdSpace idspace) {
 		//inject fellows
 		final Collection<Component> fellows = idspace.getFellows();
-		for(Component xcomp: fellows)
+		for (Component xcomp : fellows)
 			injectFellow(xcomp);
 
 		//inject space owner ancestors
 		if (idspace instanceof Component) {
 			for (IdSpace is = idspace;;) {
-				final Component parent =
-					is instanceof Component ? ((Component)is).getParent(): null;
-				if (parent == null) {//hit page
-					final Page page = ((Component)idspace).getPage();
-					if (page != null) injectFellow(page);
+				final Component parent = is instanceof Component ? ((Component) is).getParent() : null;
+				if (parent == null) { //hit page
+					final Page page = ((Component) idspace).getPage();
+					if (page != null)
+						injectFellow(page);
 					break;
 				}
 				is = parent.getSpaceOwner();
@@ -105,43 +105,47 @@ import org.zkoss.zk.ui.UiException;
 			injectFellow((Page) idspace);
 		}
 	}
+
 	/** Injects the variables in the context of the given page.
 	 */
 	public void wireVariables(Page page) {
 		myWireVariables(page);
 	}
+
 	/** Injects the variables in the context of the given component.
 	 */
 	public void wireVariables(Component comp) {
 		myWireVariables(comp);
 	}
+
 	private void myWireVariables(Object x) {
 		wireImplicit(x);
 		wireOthers(x);
 	}
+
 	/** Injects the implicit objects in the context of the given object.
 	 */
 	@SuppressWarnings("unchecked")
 	public void wireImplicit(Object x) {
 		//Feature #3315689 
-		if(ignoreFromWire(_controller.getClass()))
+		if (ignoreFromWire(_controller.getClass()))
 			return;
-		
-		for (String fdname: Components.getImplicitNames()) {
+
+		for (String fdname : Components.getImplicitNames()) {
 			//we cannot inject event proxy because it is not an Interface
-			if ("event".equals(fdname)) { 
+			if ("event".equals(fdname)) {
 				continue;
 			}
 			Object arg = myGetImplicit(x, fdname);
 			//bug #2945974
 			//dirty patch
 			if ("param".equals(fdname) && arg != null) {
-				arg = new HashMap((Map) arg); 
+				arg = new HashMap((Map) arg);
 			}
-			injectByName(arg, fdname,
-				x instanceof Component && "page".equals(fdname));
+			injectByName(arg, fdname, x instanceof Component && "page".equals(fdname));
 		}
 	}
+
 	private void wireOthers(Object x) {
 		//check methods
 		final Class cls = _controller.getClass();
@@ -149,10 +153,8 @@ import org.zkoss.zk.ui.UiException;
 		for (int j = 0; j < mtds.length; ++j) {
 			final Method md = mtds[j];
 			final String mdname = md.getName();
-			if ((md.getModifiers() & Modifier.STATIC) == 0
-			&& mdname.length() > 3 && mdname.startsWith("set") 
-			&& Character.isUpperCase(mdname.charAt(3))
-			&& !ignoreFromWire(md.getDeclaringClass())) {
+			if ((md.getModifiers() & Modifier.STATIC) == 0 && mdname.length() > 3 && mdname.startsWith("set")
+					&& Character.isUpperCase(mdname.charAt(3)) && !ignoreFromWire(md.getDeclaringClass())) {
 				final String fdname = Classes.toAttributeName(mdname);
 				if (!_injected.contains(fdname)) { //if not injected yet
 					final Class[] parmcls = md.getParameterTypes();
@@ -164,8 +166,7 @@ import org.zkoss.zk.ui.UiException;
 								if (arg2 != arg && arg2 != null)
 									injectByMethod(md, parmcls[0], arg2.getClass(), arg2, fdname);
 							}
-						} else if ((x instanceof Component || x instanceof Page) &&
-						fdname.indexOf(_separator) >= 0) {
+						} else if ((x instanceof Component || x instanceof Page) && fdname.indexOf(_separator) >= 0) {
 							final Object arg = getFellowByPath(x, fdname);
 							if (arg != null)
 								injectByMethod(md, parmcls[0], arg.getClass(), arg, fdname);
@@ -176,11 +177,10 @@ import org.zkoss.zk.ui.UiException;
 		}
 
 		//check fields
-		for (Entry<String, Field> entry: _fldMaps.entrySet()) {
+		for (Entry<String, Field> entry : _fldMaps.entrySet()) {
 			final String fdname = entry.getKey();
 			final Field fd = entry.getValue();
-			if ((fd.getModifiers() & Modifier.STATIC) == 0
-			&& !_injected.contains(fdname)) { //if not injected by setXxx yet
+			if ((fd.getModifiers() & Modifier.STATIC) == 0 && !_injected.contains(fdname)) { //if not injected by setXxx yet
 				if (containsVariable(x, fdname)) {
 					final Object arg = getVariable(x, fdname);
 					if (!injectField(arg, arg == null ? null : arg.getClass(), fd)) {
@@ -188,8 +188,7 @@ import org.zkoss.zk.ui.UiException;
 						if (arg2 != arg && arg2 != null)
 							injectField(arg2, arg2.getClass(), fd);
 					}
-				} else if ((x instanceof Component || x instanceof Page) &&
-				fdname.indexOf(_separator) >= 0) {
+				} else if ((x instanceof Component || x instanceof Page) && fdname.indexOf(_separator) >= 0) {
 					final Object arg = getFellowByPath(x, fdname);
 					if (arg != null)
 						injectField(arg, arg.getClass(), fd);
@@ -200,8 +199,7 @@ import org.zkoss.zk.ui.UiException;
 
 	/** @param x either a page or component. It cannot be null.*/
 	private Object getFellowByPath(Object x, String name) {
-		return Path.getComponent(
-			x instanceof Page ? (Page)x: ((Component)x).getSpaceOwner(),
+		return Path.getComponent(x instanceof Page ? (Page) x : ((Component) x).getSpaceOwner(),
 				name.replace(_separator, '/'));
 	}
 
@@ -210,22 +208,22 @@ import org.zkoss.zk.ui.UiException;
 		if (x instanceof Page) {
 			final Page page = (Page) x;
 			return (!_ignoreZScript && page.getZScriptVariable(fdname) != null)
-				|| page.hasAttributeOrFellow(fdname, true)
-				|| (!_ignoreXel && page.getXelVariable(null, null, fdname, true) != null);
+					|| page.hasAttributeOrFellow(fdname, true)
+					|| (!_ignoreXel && page.getXelVariable(null, null, fdname, true) != null);
 		} else {
 			final Component cmp = (Component) x;
 			final Page page = Components.getCurrentPage(cmp);
 			return (!_ignoreZScript && page != null && page.getZScriptVariable(cmp, fdname) != null)
-				|| cmp.hasAttributeOrFellow(fdname, true)
-				|| (!_ignoreXel && page != null && page.getXelVariable(null, null, fdname, true) != null);
+					|| cmp.hasAttributeOrFellow(fdname, true)
+					|| (!_ignoreXel && page != null && page.getXelVariable(null, null, fdname, true) != null);
 		}
 	}
-	
+
 	private Object getVariable(Object x, String fdname) {
 		//#feature 2770471 GenericAutowireComposer shall support wiring ZScript varible
 		if (x instanceof Page) {
 			final Page page = (Page) x;
-			Object arg = _ignoreZScript ? null: page.getZScriptVariable(fdname);
+			Object arg = _ignoreZScript ? null : page.getZScriptVariable(fdname);
 			if (arg == null) {
 				arg = page.getAttributeOrFellow(fdname, true);
 				if (!_ignoreXel && arg == null)
@@ -235,7 +233,7 @@ import org.zkoss.zk.ui.UiException;
 		} else {
 			final Component cmp = (Component) x;
 			final Page page = Components.getCurrentPage(cmp);
-			Object arg = !_ignoreZScript && page != null ? page.getZScriptVariable(cmp, fdname): null;
+			Object arg = !_ignoreZScript && page != null ? page.getZScriptVariable(cmp, fdname) : null;
 			if (arg == null) {
 				arg = cmp.getAttributeOrFellow(fdname, true);
 				if (!_ignoreXel && arg == null && page != null)
@@ -244,20 +242,20 @@ import org.zkoss.zk.ui.UiException;
 			return arg;
 		}
 	}
+
 	private Object getFellow(Object x, String fdname) {
-		return x instanceof Page ? ((Page)x).getFellowIfAny(fdname, true):
-			x instanceof Component ? ((Component)x).getFellowIfAny(fdname, true): null;
+		return x instanceof Page ? ((Page) x).getFellowIfAny(fdname, true)
+				: x instanceof Component ? ((Component) x).getFellowIfAny(fdname, true) : null;
 	}
-	
+
 	private void injectFellow(Object arg) {
 		//try setXxx
-		final String fdname = (arg instanceof Page) ? 
-				((Page)arg).getId() : ((Component)arg).getId();
+		final String fdname = (arg instanceof Page) ? ((Page) arg).getId() : ((Component) arg).getId();
 		if (fdname.length() > 0) {
 			injectByName(arg, fdname, false);
 		}
 	}
-	
+
 	private void injectByName(Object arg, String fdname, boolean fieldOnly) {
 		//argument to be injected is null; then no need to inject
 		if (arg != null) {
@@ -265,10 +263,8 @@ import org.zkoss.zk.ui.UiException;
 			final Class parmcls = arg.getClass();
 			final Class tgtcls = _controller.getClass();
 			try {
-				final Method md = fieldOnly ? null:
-					Classes.getCloseMethod(tgtcls, mdname, new Class[] {parmcls});
-				if (fieldOnly
-				|| !injectByMethod(md, parmcls, parmcls, arg, fdname)) {
+				final Method md = fieldOnly ? null : Classes.getCloseMethod(tgtcls, mdname, new Class[] { parmcls });
+				if (fieldOnly || !injectByMethod(md, parmcls, parmcls, arg, fdname)) {
 					injectFieldByName(arg, tgtcls, parmcls, fdname);
 				}
 			} catch (NoSuchMethodException ex) {
@@ -279,6 +275,7 @@ import org.zkoss.zk.ui.UiException;
 			}
 		}
 	}
+
 	private void injectFieldByName(Object arg, Class tgtcls, Class parmcls, String fdname) {
 		try {
 			final Field fd = Classes.getAnyField(tgtcls, fdname);
@@ -289,7 +286,7 @@ import org.zkoss.zk.ui.UiException;
 			throw UiException.Aide.wrap(ex2);
 		}
 	}
-	
+
 	/** Returns false if there is such field but the target class doesn't match.
 	 * In other words, false means the caller can try another object (arg).
 	 */
@@ -350,28 +347,24 @@ import org.zkoss.zk.ui.UiException;
 			fd.setAccessible(old);
 		}
 	}
-	
+
 	private Object myGetImplicit(Object x, String fdname) {
-		return x instanceof Page ?
-				Components.getImplicit((Page)x, fdname) :
-				Components.getImplicit((Component)x, fdname);
+		return x instanceof Page ? Components.getImplicit((Page) x, fdname)
+				: Components.getImplicit((Component) x, fdname);
 	}
 
 	private static boolean ignoreFromWire(Class<?> cls) {
 		Package pkg;
 		return cls != null && (_ignoreWires.contains(cls.getName())
-		|| ((pkg = cls.getPackage()) != null && _ignoreWires.contains(pkg.getName())));
+				|| ((pkg = cls.getPackage()) != null && _ignoreWires.contains(pkg.getName())));
 	}
+
 	private static final Set<String> _ignoreWires = new HashSet<String>(16);
+
 	static {
-		final Class[] clses = new Class[] {
-			HtmlBasedComponent.class,
-			HtmlMacroComponent.class,
-			HtmlNativeComponent.class,
-			AbstractComponent.class,
-			org.zkoss.zk.ui.util.GenericAutowireComposer.class,
-			Object.class
-		};
+		final Class[] clses = new Class[] { HtmlBasedComponent.class, HtmlMacroComponent.class,
+				HtmlNativeComponent.class, AbstractComponent.class, org.zkoss.zk.ui.util.GenericAutowireComposer.class,
+				Object.class };
 		for (int j = 0; j < clses.length; ++j)
 			_ignoreWires.add(clses[j].getName());
 

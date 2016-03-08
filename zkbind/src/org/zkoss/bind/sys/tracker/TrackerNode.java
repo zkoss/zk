@@ -31,32 +31,32 @@ public interface TrackerNode {
 	public Set<TrackerNode> getDependents();
 	
 	/**
-	 * Returns all direct dependent nodes of this node.
-	 * @return all direct dependent nodes of this node.
-	 */
-	public Set<TrackerNode> getDirectDependents();
-	
-	/**
-	 * Returns all associate nodes of this node.
-	 * @return all associate nodes of this node.
-	 */
-	public Set<TrackerNode> getAssociates();
-	
-	/**
-	 * Returns the associated TrackerNode of the associated field script of this tracker node.
-	 * @param script field script to get the dependent 
-	 * @return the linked TrackerNode
-	 */
-	public TrackerNode getDependent(Object script);
-	
-	/**
 	 * Returns all associated TrackerNodes of the associated field script of this tracker node.
 	 * @param script field script to get the dependent 
 	 * @return all linked TrackerNodes
 	 * @since 8.0.0
 	 */
 	public Set<TrackerNode> getDependents(Object script);
-	
+
+	/**
+	 * Returns all direct dependent nodes of this node.
+	 * @return all direct dependent nodes of this node.
+	 */
+	public Set<TrackerNode> getDirectDependents();
+
+	/**
+	 * Returns all associate nodes of this node.
+	 * @return all associate nodes of this node.
+	 */
+	public Set<TrackerNode> getAssociates();
+
+	/**
+	 * Returns the associated TrackerNode of the associated field script of this tracker node.
+	 * @param script field script to get the dependent 
+	 * @return the linked TrackerNode
+	 */
+	public TrackerNode getDependent(Object script);
+
 	/**
 	 * Add a dependent node of the field script.
 	 * @param script the field script to link this track node to its dependent nodes.
@@ -70,7 +70,7 @@ public interface TrackerNode {
 	 * @return the removed TrackerNode
 	 */
 	public TrackerNode removeDependent(Object script);
-	
+
 	/** add associated Binding with this node
 	 * @param binding
 	 */
@@ -81,31 +81,31 @@ public interface TrackerNode {
 	 * @return associated Bindings.
 	 */
 	public Set<Binding> getBindings();
-	
+
 	/** Returns associated LoadBindings except ReferenceBindings.
 	 * @return associated LoadBindings except ReferenceBindings.
 	 * @since 6.0.1 
 	 */
 	public Set<LoadBinding> getLoadBindings();
-	
+
 	/** Returns associated ReferenceBindings.
 	 * @return associated ReferenceBindings.
 	 * @since 6.0.1
 	 */
 	public Set<ReferenceBinding> getReferenceBindings();
-	
+
 	/**
 	 * Returns associated bean of this TrackerNode.
 	 * @return associated bean of this TrackerNode.
 	 */
 	public Object getBean();
-	
+
 	/**
 	 * Sets associated bean of this TrackerNode.
 	 * @param bean the associated bean.
 	 */
 	public void setBean(Object bean);
-	
+
 	/**
 	 * Returns associated field script of this TrackerNode.
 	 * @return associated field script of this TrackerNode.
@@ -125,7 +125,7 @@ public interface TrackerNode {
 	 * @since 6.5.5
 	 */
 	public void tieProperty(Object propName, Object script);
-	
+
 	/**
 	 * get property, script mapping map
 	 * @since 6.5.5

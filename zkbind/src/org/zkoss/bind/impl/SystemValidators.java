@@ -16,10 +16,10 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.validator.DeferredValidator;
 import org.zkoss.lang.Classes;
-
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -31,39 +31,41 @@ public class SystemValidators {
 	private static final Logger _log = LoggerFactory.getLogger(SystemValidators.class);
 	private static final Map<String, Validator> _validators = new HashMap<String, Validator>();
 	private static boolean _init = false;
-	
+
 	static void initBuiltinValidators() {
 		//built in
-		synchronized(_validators){
+		synchronized (_validators) {
 			//built in
-			set0("beanValidator", new DeferredValidator("org.zkoss.bind.validator.BeanValidator"));//defer the init of validator.(user might not use this validator)
+			set0("beanValidator", new DeferredValidator("org.zkoss.bind.validator.BeanValidator")); //defer the init of validator.(user might not use this validator)
 			_init = true;
 		}
 	}
-	
-	static private void init(){
-		if(_init) return;
-		synchronized(_validators){
-			if(_init) return;
+
+	private static void init() {
+		if (_init)
+			return;
+		synchronized (_validators) {
+			if (_init)
+				return;
 			initBuiltinValidators();
 			_init = true;
 		}
 	}
-	
-	static public void set(String name,Validator validator){
+
+	public static void set(String name, Validator validator) {
 		init();
-		set0(name,validator);
+		set0(name, validator);
 	}
-	
-	static private void set0(String name,Validator validator){
-		if(_log.isDebugEnabled()){
-			_log.debug("set validator [{}]=[{}]",name,validator);
+
+	private static void set0(String name, Validator validator) {
+		if (_log.isDebugEnabled()) {
+			_log.debug("set validator [{}]=[{}]", name, validator);
 		}
-		synchronized(_validators){
+		synchronized (_validators) {
 			_validators.put(name, validator);
 		}
 	}
-	
+
 	public static Validator get(String name) {
 		init();
 		Validator v = _validators.get(name);

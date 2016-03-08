@@ -18,10 +18,9 @@ package org.zkoss.zul.event;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
-
+import org.zkoss.zul.Grid;
 import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.Grid;
 
 /**
  * Used to notify the paging size has been changed 
@@ -43,9 +42,10 @@ public class PageSizeEvent extends Event {
 	 */
 	public PageSizeEvent(String name, Component target, int pgsz) {
 		super(name, target);
-		_pgi = (Pageable)target;
+		_pgi = (Pageable) target;
 		_pgsz = pgsz;
 	}
+
 	/** Construct a page size event that the target is different
 	 * from the page controller.
 	 *
@@ -53,8 +53,7 @@ public class PageSizeEvent extends Event {
 	 * @param pageable the paging controller. In other words,
 	 * it is usually {@link Paginal}.
 	 */
-	public PageSizeEvent(String name, Component target, Pageable pageable,
-	int pgsz) {
+	public PageSizeEvent(String name, Component target, Pageable pageable, int pgsz) {
 		super(name, target);
 		_pgi = pageable;
 		_pgsz = pgsz;

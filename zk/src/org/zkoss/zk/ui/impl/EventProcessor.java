@@ -18,21 +18,22 @@ package org.zkoss.zk.ui.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
+
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.Scopes;
-import org.zkoss.zk.ui.util.ExecutionMonitor;
-import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.EventProcessingThread;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
+import org.zkoss.zk.ui.util.ExecutionMonitor;
 
 /**
  * A utility class that simplify the implementation of
@@ -57,9 +58,9 @@ public class EventProcessor {
 	/** Returns whether the current thread is an event listener.
 	 */
 	public static final boolean inEventListener() {
-		return (Thread.currentThread() instanceof EventProcessingThread)
-			|| (_inEvt != null && _inEvt.get() != null); //used if event thread is disabled
+		return (Thread.currentThread() instanceof EventProcessingThread) || (_inEvt != null && _inEvt.get() != null); //used if event thread is disabled
 	}
+
 	/** Sets whether the current thread is an event listener.
 	 * It needs to be called only if the event processing thread is
 	 * disabled.
@@ -87,7 +88,7 @@ public class EventProcessor {
 
 		final Desktop dt = comp.getDesktop();
 		if (dt != null && desktop != dt)
-			throw new IllegalStateException("Process events for another desktop? "+comp);
+			throw new IllegalStateException("Process events for another desktop? " + comp);
 
 		_desktop = desktop;
 		_comp = comp;
@@ -99,11 +100,13 @@ public class EventProcessor {
 	public final Desktop getDesktop() {
 		return _desktop;
 	}
+
 	/** Returns the event.
 	 */
 	public final Event getEvent() {
 		return _event;
 	}
+
 	/** Returns the component.
 	 */
 	public final Component getComponent() {
@@ -118,29 +121,28 @@ public class EventProcessor {
 	 * See also {@link org.zkoss.zk.ui.util.Configuration#isEventThreadEnabled}.
 	 */
 	public void process() throws Exception {
-		final ExecutionMonitor execmon =
-			_desktop.getWebApp().getConfiguration().getExecutionMonitor();
+		final ExecutionMonitor execmon = _desktop.getWebApp().getConfiguration().getExecutionMonitor();
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
 		final Scope scope = Scopes.beforeInterpret(_comp);
-			//we have to push since process0 might invoke methods from zscript class
+		//we have to push since process0 might invoke methods from zscript class
 		try {
 			Scopes.setImplicit("event", _event);
 
-			_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
+			_event = ((DesktopCtrl) _desktop).beforeProcessEvent(_event);
 			if (_event != null) {
 				if (execmon != null)
 					execmon.eventStart(_event);
 
 				Scopes.setImplicit("event", _event); //_event might change
-				((ComponentCtrl)_comp).service(_event, scope);
-				((DesktopCtrl)_desktop).afterProcessEvent(_event);
+				((ComponentCtrl) _comp).service(_event, scope);
+				((DesktopCtrl) _desktop).afterProcessEvent(_event);
 			}
 		} finally {
 			final Execution exec = _desktop.getExecution();
 			if (exec != null) //just in case
-				((ExecutionCtrl)exec).setExecutionInfo(null);
-			if (execmon != null &&_event != null)
+				((ExecutionCtrl) exec).setExecutionInfo(null);
+			if (execmon != null && _event != null)
 				execmon.eventComplete(_event);
 			Scopes.afterInterpret();
 		}
@@ -155,8 +157,9 @@ public class EventProcessor {
 		SessionsCtrl.setCurrent(_desktop.getSession());
 		final Execution exec = _desktop.getExecution();
 		ExecutionsCtrl.setCurrent(exec);
-		((ExecutionCtrl)exec).setCurrentPage(getPage());
+		((ExecutionCtrl) exec).setCurrentPage(getPage());
 	}
+
 	/** Cleanup this process after processing the event by calling
 	 * {@link #process}.
 	 *
@@ -165,7 +168,7 @@ public class EventProcessor {
 	 */
 	public void cleanup() {
 		ExecutionsCtrl.setCurrent(null);
-		SessionsCtrl.setCurrent((Session)null);
+		SessionsCtrl.setCurrent((Session) null);
 	}
 
 	private Page getPage() {
@@ -178,6 +181,6 @@ public class EventProcessor {
 
 	//Object//
 	public String toString() {
-		return "[comp: "+_comp+", event: "+_event+']';
+		return "[comp: " + _comp + ", event: " + _event + ']';
 	}
 }

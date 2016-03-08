@@ -19,10 +19,10 @@ package org.zkoss.zul;
 import java.io.Writer;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.ComponentRedraws;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 /**
  * A component to generate script codes that will be evaluated at the client.
@@ -80,6 +80,7 @@ public class Script extends AbstractComponent {
 
 	public Script() {
 	}
+
 	/** Constructs a script component with the specified content.
 	 * @param content the content (the code snippet).
 	 * @since 6.0.0
@@ -94,11 +95,13 @@ public class Script extends AbstractComponent {
 	public String getType() {
 		return "text/javascript";
 	}
+
 	/** @deprecated As of release 5.0.0, it is meaningless since
 	 * text/javascript is always assumed.
 	 */
 	public void setType(String type) {
 	}
+
 	/** Returns the character enconding of the source.
 	 * It is used with {@link #getSrc}.
 	 *
@@ -107,6 +110,7 @@ public class Script extends AbstractComponent {
 	public String getCharset() {
 		return _charset;
 	}
+
 	/** Sets the character encoding of the source.
 	 * It is used with {@link #setSrc}.
 	 * <p>Refer to <a href="http://www.w3schools.com/TAGS/ref_charactersets.asp">HTML Character Sets</a>for more information.
@@ -127,6 +131,7 @@ public class Script extends AbstractComponent {
 	public String getSrc() {
 		return _src;
 	}
+
 	/** Sets the URI of the source that contains the script codes.
 	 *
 	 * <p>You either add the script codes directly with the {@link Label}
@@ -160,6 +165,7 @@ public class Script extends AbstractComponent {
 	public boolean isDefer() {
 		return _defer;
 	}
+
 	/** Sets whether to defer the execution of the script codes.
 	 * @see #isDefer
 	 */
@@ -182,6 +188,7 @@ public class Script extends AbstractComponent {
 	public String getContent() {
 		return _content;
 	}
+
 	/** Sets the content of the script element.
 	 * By content we mean the JavaScript codes that will be enclosed
 	 * by the HTML SCRIPT element.
@@ -195,7 +202,7 @@ public class Script extends AbstractComponent {
 		if (!Objects.equals(_content, content)) {
 			_content = content;
 			smartUpdate("content", getContent());
-				//allow deriving to override getContent()
+			//allow deriving to override getContent()
 		}
 	}
 
@@ -208,6 +215,7 @@ public class Script extends AbstractComponent {
 	public String getPackages() {
 		return _packages;
 	}
+
 	/** Sets the list of packages to load before evaluating the script
 	 * defined in {@link #getContent}.
 	 * If more than a package to load, separate them with comma.
@@ -224,12 +232,11 @@ public class Script extends AbstractComponent {
 	}
 
 	//super//
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws java.io.IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		final String cnt = getContent();
-			//allow deriving to override getContent()
+		//allow deriving to override getContent()
 		if (cnt != null)
 			if (_defer)
 				renderer.renderDirectly("content", "function(){\n" + cnt + "\n}");
@@ -242,8 +249,7 @@ public class Script extends AbstractComponent {
 			}
 
 		if (_src != null) {
-			final HtmlPageRenders.RenderContext rc =
-				_defer ? null: HtmlPageRenders.getRenderContext(null);
+			final HtmlPageRenders.RenderContext rc = _defer ? null : HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.perm != null) {
 				final Writer cwout = rc.perm;
 				cwout.write("\n<script type=\"text/javascript\" src=\"");
@@ -262,6 +268,7 @@ public class Script extends AbstractComponent {
 		render(renderer, "charset", _charset);
 		render(renderer, "packages", _packages);
 	}
+
 	/** Not childable. */
 	protected boolean isChildable() {
 		return false;
@@ -272,8 +279,9 @@ public class Script extends AbstractComponent {
 			return null;
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null ? dt.getExecution().encodeURL(_src): null;
+		return dt != null ? dt.getExecution().encodeURL(_src) : null;
 	}
+
 	private class EncodedSrcURL implements org.zkoss.zk.au.DeferredValue {
 		public Object getValue() {
 			return getEncodedSrcURL();

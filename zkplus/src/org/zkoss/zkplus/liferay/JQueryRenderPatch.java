@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Page;
@@ -61,9 +62,10 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		try {
 			_delay = Integer.parseInt(val);
 		} catch (Throwable ex) {
-			log.warn("Ignored delay time specified in "+JQUERY_PATCH+": "+val);
+			log.warn("Ignored delay time specified in " + JQUERY_PATCH + ": " + val);
 		}
 	}
+
 	/** Returns the number of milliseconds to wait before replacing with
 	 * the correct content.
 	 * <p>Default: depends on the value defined in the {@link #JQUERY_PATCH}
@@ -72,6 +74,7 @@ public class JQueryRenderPatch implements PageRenderPatch {
 	public int getDelay() {
 		return _delay;
 	}
+
 	/** Sets the number of milliseconds to wait before replacing with
 	 * the correct content.
 	 * @see #JQUERY_PATCH
@@ -80,20 +83,18 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		_delay = delay;
 	}
 
-	
 	/** It returns an instance of StringWriter if {@link #getDelay} is non-negative,
 	 * or null if negative (means no patch).
 	 */
 	public Writer beforeRender(RequestInfo reqInfo) {
-		return _delay >= 0 ? new StringWriter(): null;
-			//we cannot retrieve HTTP request's header so no need to
-			//apply the patch for particular browsers, such as ie
+		return _delay >= 0 ? new StringWriter() : null;
+		//we cannot retrieve HTTP request's header so no need to
+		//apply the patch for particular browsers, such as ie
 	}
-	
-	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out)
-	throws IOException {
+
+	public void patchRender(RequestInfo reqInfo, Page page, Writer result, Writer out) throws IOException {
 		final String extid = page.getUuid() + "-ext";
-		String[] html = processHtml(((StringWriter)result).toString());
+		String[] html = processHtml(((StringWriter) result).toString());
 		//we have to process CSS and append it to HEAD
 		out.write(html[0]);
 		out.write("<div id=\"");
@@ -101,21 +102,22 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		out.write("\"></div><script>setTimeout(function(){\njQuery('#");
 		out.write(extid);
 		out.write("').append('");
-			//we have to use append() since it is evaluated synchronously
-			//while replaceWith() is not
+		//we have to use append() since it is evaluated synchronously
+		//while replaceWith() is not
 		out.write(Strings.escape(html[1], Strings.ESCAPE_JAVASCRIPT));
 		out.write("');},");
 		out.write("" + getBrowserDelay());
 		out.write(");</script>");
 	}
-	
+
 	protected String getBrowserDelay() {
-		return "" + _delay; 
+		return "" + _delay;
 	}
 
 	protected String[] processHtml(String html) {
 		boolean isAppendCSS = false;
-		StringBuffer script = new StringBuffer("<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
+		StringBuffer script = new StringBuffer(
+				"<script>function _zkCSS(uri){var e=document.createElement(\"LINK\");e.rel=\"stylesheet\";e.type=\"text/css\";e.href=uri;document.getElementsByTagName(\"HEAD\")[0].appendChild(e);};");
 		Pattern p = Pattern.compile("<link[^>]+href=[\"']?([^'\"> ]+)[\"']?[^>]*>");
 
 		StringBuffer buffer = new StringBuffer();
@@ -123,7 +125,7 @@ public class JQueryRenderPatch implements PageRenderPatch {
 		for (scriptStart = html.indexOf("<script"); scriptStart != -1;) {
 			if (parseStart < scriptStart) {
 				Matcher m = p.matcher(html.substring(parseStart, scriptStart));
-				while(m.find()) {
+				while (m.find()) {
 					isAppendCSS = true;
 					String uri = m.group(1);
 					script.append("_zkCSS('" + uri + "');");
@@ -144,7 +146,7 @@ public class JQueryRenderPatch implements PageRenderPatch {
 			}
 		}
 
-		String[] ret = {"", html};
+		String[] ret = { "", html };
 		if (isAppendCSS) {
 			script.append("</script>");
 			ret[0] = script.toString();
