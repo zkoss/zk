@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
@@ -90,7 +89,7 @@ public class Registry {
 			if (value == null) {
 				synchronized (values) {
 					if (!values.containsKey(key)) {
-						value = DigestUtils
+						value = DigestUtilsHelper
 								.md5Hex(loadValue(cls) + AbstractWebApp.getBuildStamp());
 						values.put(key, value);
 					}
@@ -104,7 +103,7 @@ public class Registry {
 	public String getKey(Class cls) {
 		final String name = cls.getName();
 		if (!keys.containsKey(name)) {
-			final String key =  DigestUtils.md5Hex(name);
+			final String key =  DigestUtilsHelper.md5Hex(name);
 			keys.put(cls.getName(), key);
 			return key;
 		}
@@ -158,7 +157,7 @@ public class Registry {
 			buf = null;
 
 			StringBuffer sb = sw.getBuffer();
-			return DigestUtils.md5Hex(sb.toString());
+			return DigestUtilsHelper.md5Hex(sb.toString());
 		} catch (Exception e) {
 		} finally {
 			if (is != null) {

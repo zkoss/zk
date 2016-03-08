@@ -3,8 +3,78 @@ if (args == null || args.length != 1) {
 	System.err.println("The source string must be specified");
 	System.exit(-1);
 }
+
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.io.*;
+
+String md5Hex(String data) {
+    return encodeHexString(md5(data));
+}
+
+byte[] md5(String data) {
+    return md5(getBytesUtf8(data));
+}
+
+byte[] getBytesUtf8(String string) {
+    return getBytes(string, Charset.forName("UTF-8"));
+}
+
+Charset forName(String charsetName) {
+    Charset cs = lookup(charsetName);
+    if (cs != null)
+        return cs;
+    throw new IllegalArgumentException(charsetName);
+}
+
+byte[] getBytes(String string, Charset charset) {
+    return string == null?null:string.getBytes(charset);
+}
+
+byte[] md5(byte[] data) {
+    return getMd5Digest().digest(data);
+}
+
+MessageDigest getMd5Digest() {
+    return getDigest("MD5");
+}
+
+MessageDigest getDigest(String algorithm) {
+    try {
+        return MessageDigest.getInstance(algorithm);
+    } catch (java.security.NoSuchAlgorithmException var2) {
+        throw new java.lang.IllegalArgumentException(var2);
+    }
+}
+
+String encodeHexString(byte[] data) {
+    return new String(encodeHex(data));
+}
+
+char[] encodeHex(byte[] data) {
+    return encodeHex(data, true);
+}
+
+char[] encodeHex(byte[] data, boolean toLowerCase) {
+    return encodeHex(data, toLowerCase? DIGITS_LOWER : DIGITS_UPPER);
+}
+
+char[] DIGITS_LOWER = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+char[] DIGITS_UPPER = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+char[] encodeHex(byte[] data, char[] toDigits) {
+    int l = data.length;
+    char[] out = new char[l << 1];
+    int i = 0;
+
+    for(int j = 0; i < l; ++i) {
+        out[j++] = toDigits[(240 & data[i]) >>> 4];
+        out[j++] = toDigits[15 & data[i]];
+    }
+
+    return out;
+}
 
 if (args[0].endsWith(".class")) {
 	InputStream is = new FileInputStream(args[0]);
@@ -20,7 +90,8 @@ if (args[0].endsWith(".class")) {
 	is.close();
 
 	StringBuffer sb = sw.getBuffer();
-	System.out.println(DigestUtils.md5Hex(sb.toString()));
+	System.out.println(md5Hex(sb.toString()));
 } else {
-	 System.out.println(DigestUtils.md5Hex(args[0]));
+	 System.out.println(md5Hex(args[0]));
 }
+
