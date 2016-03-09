@@ -15,6 +15,7 @@ ZK 8.0.2
   ZK-3095: Menubar ignore menuitem margin when calculating scrollable status
   ZK-3117: Selection bug on listbox using checkmarkDeselectOthers functionality
   ZK-3107: error when using @DependsOn
+  ZK-3145: Chosenbox focus() does not give focus to the input field
 
 * Upgrade Notes
 
