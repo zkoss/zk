@@ -235,7 +235,7 @@ if="deploy.tomcat.required">
 
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
-		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
+		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store zkEvalPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
@@ -259,7 +259,7 @@ if="deploy.tomcat.required">
 	</condition>
 	<jar jarfile="${out.dir}/${jar2.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
-		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store **/**.properties"/>
+		<fileset dir="${jar.srcpv.dir}" includes="zkPublicCert.store zkEvalPublicCert.store **/**.properties"/>
 		<fileset dir="${src.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${src.archive.dir}" includes="${zipjs}/**/**.less" />
