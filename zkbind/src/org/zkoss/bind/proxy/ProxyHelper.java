@@ -27,6 +27,9 @@ import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.annotation.ImmutableFields;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.SystemException;
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -38,6 +41,19 @@ import org.zkoss.zk.ui.UiException;
 public class ProxyHelper {
 	private static Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<Class<?>, Boolean>();
 
+	static {
+		String classes = Library.getProperty("org.zkoss.bind.proxy.IgnoredProxyClasses");
+		if (classes != null && classes.length() != 0) {
+			String[] classNameArray = classes.split(",");
+			for (String className : classNameArray) {
+				try {
+					addIgnoredProxyClass(Classes.forNameByThread(className));
+				} catch (ClassNotFoundException ex) {
+					throw new SystemException("Failed to load class " + className);
+				}
+			}
+		}
+	}
 	/**
 	 * Creates a proxy object from the given origin object, if any.
 	 * @param origin
