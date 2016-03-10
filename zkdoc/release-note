@@ -3,6 +3,7 @@ ZK 6.5.9
 * Features
 
 * Bugs
+  ZK-3096: fileupload doesn't work on IE9/10 using ZK 6.5.8.1 & sapphire/silvertail theme
 
   --------
 ZK 6.5.8.1
