@@ -40,6 +40,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
 	</listener>
 	
+    <library-property>
+        <name>org.zkoss.bind.proxy.IgnoredProxyClasses</name>
+        <value>java.util.Date,java.sql.Date,java.sql.Timestamp,java.math.BigDecimal,java.math.BigInteger</value>
+    </library-property>
 	
 	<binder-config>
 		<binder-init-attribute>viewModel</binder-init-attribute>
