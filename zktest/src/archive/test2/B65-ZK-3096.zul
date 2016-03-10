@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-3096.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Mar 10, 2016  3:16:00 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<label multiline="true">
+		1. should test this in silvertail/sapphire theme and with IE9/IE10
+		2. click the "Upload 1" button outside the menubar, should be able to select a file to upload and see the alert message after upload success
+		3. click the "Upload 2" button on the menubar, should be able to select a file to upload and see the alert message after upload success
+	</label>
+	<button id="btn" label="Upload 1" upload="true,native" onUpload="alert(event.toString())"/>
+	<menubar>
+		<menuitem label="Upload 2" upload="true,native" onUpload="alert(event.toString())"/>  
+	</menubar>
+</window>
