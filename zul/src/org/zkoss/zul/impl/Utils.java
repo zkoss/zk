@@ -262,6 +262,7 @@ public class Utils {
 		addLocaleJS(sb, "PANEL_MINIMIZE", MZul.PANEL_MINIMIZE);
 		addLocaleJS(sb, "PANEL_EXPAND", MZul.PANEL_EXPAND);
 		addLocaleJS(sb, "PANEL_COLLAPSE", MZul.PANEL_COLLAPSE);
+		addLocaleJS(sb, "PANEL_RESTORE", MZul.PANEL_RESTORE);
 
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')

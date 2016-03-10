@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3139.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Mar 9 18:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout>
+        <label multiline="true">
+            1. click on the maximize buttons.
+            2. hover mouse on the button, the icon should change to restore.
+        </label>
+        <panel width="250px" height="100px" framable="true" border="normal" maximizable="true" minimizable="true" title="Title">
+            <panelchildren/>
+        </panel>
+        <window width="250px" height="100px" border="normal" closable="true" maximizable="true">
+            <caption label="Window with caption" />
+            <label value="some content here"></label>
+            <label value="some content here"></label>
+            <label value="some content here"></label>
+        </window>
+    </vlayout>
+</zk>
