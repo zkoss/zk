@@ -4,6 +4,7 @@ ZK 8.0.2
   ZK-3100: support a way to customize classloading
   ZK-3105: Users can specify uploading target path
   ZK-3132: Make AuUploader and AuDropUploader can be extended and overridden
+  ZK-3134: provide configurable defaults to be be ignored in form proxies
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path

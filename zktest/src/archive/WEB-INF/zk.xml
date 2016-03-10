@@ -75,7 +75,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zul.listbox.autohidePaging</name>
 		<value>true</value>
 	</library-property>
-	
+    <library-property>
+        <name>org.zkoss.bind.proxy.IgnoredProxyClasses</name>
+        <value>java.math.BigInteger,java.sql.Date</value>
+    </library-property>
 	
 	<!--  Bug ZK-692 -->
 	<listener>
