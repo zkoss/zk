@@ -555,7 +555,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					down = this.getMaximizedIconClass_();
 				if (maximized) {
 					jq(this.$n('max')).addClass(this.$s('maximized'))
-						.attr('title', msgzul.PANEL_MINIMIZE)
+						.attr('title', msgzul.PANEL_RESTORE)
 						.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',

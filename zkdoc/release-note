@@ -17,6 +17,7 @@ ZK 8.0.2
   ZK-3117: Selection bug on listbox using checkmarkDeselectOthers functionality
   ZK-3107: error when using @DependsOn
   ZK-3145: Chosenbox focus() does not give focus to the input field
+  ZK-3139: maximizable and minimizable buttons in panel have the same tooltip
 
 * Upgrade Notes
 

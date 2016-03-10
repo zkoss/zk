@@ -301,7 +301,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				down = this.getMaximizedIconClass_();
 				if (maximized) {
 					jq(this.$n('max')).addClass(this.$s('maximized'))
-					.attr('title', msgzul.PANEL_MINIMIZE)
+					.attr('title', msgzul.PANEL_RESTORE)
 					.children('.' + up).removeClass(up).addClass(down);
 					this._hideShadow();
 
