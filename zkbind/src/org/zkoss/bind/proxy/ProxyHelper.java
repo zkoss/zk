@@ -47,7 +47,7 @@ public class ProxyHelper {
 			String[] classNameArray = classes.split(",");
 			for (String className : classNameArray) {
 				try {
-					addIgnoredProxyClass(Classes.forNameByThread(className));
+					addIgnoredProxyClass(Classes.forNameByThread(className.trim()));
 				} catch (ClassNotFoundException ex) {
 					throw new SystemException("Failed to load class " + className);
 				}
