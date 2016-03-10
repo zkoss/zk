@@ -498,7 +498,7 @@ public class Servlets {
 
 	/**
 	 * Returns whether the client is a browser of the specified type.
-	 *
+	 * To more accurately specify the browser, please use {@link  #getUserAgent(ServletRequest)} instead.
 	 * @param type the type of the browser.
 	 * The syntax: <code>&lt;browser-name&gt;[&lt;version-number&gt];[-]</code>.<br/>
 	 * For example, ie9, ios and ie6-.
@@ -511,7 +511,7 @@ public class Servlets {
 	}
 
 	/** Returns whether the user agent is a browser of the specified type.
-	 *
+	 * To more accurately specify the browser, please use {@link  #getUserAgent(ServletRequest)} instead.
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
 	 * @param type the type of the browser, or a list of types separated by comma.<br/>
