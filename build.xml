@@ -120,14 +120,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 			<equals arg1="${deploy}" arg2="server"/>
 		</condition>
 
-		<!-- code style checker -->
-		<condition property="checkstyle.java.required">
-			<contains string="${checkstyle}" substring="java"/>
-		</condition>
-		<condition property="checkstyle.js.required">
-			<contains string="${checkstyle}" substring="js"/>
-		</condition>
-
 		<!-- deploy tomcat -->
 		<available file="${tomcat.home}" property="tomcat.exist"/>
 		<condition property="deploy.tomcat.required">

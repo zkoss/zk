@@ -422,8 +422,6 @@ function invoke_ant
 	if [ "${lesslist}" = "" ] ; then
 		lesslist=_na_dir_
 	fi
-	checkstyle=$(grep '^checkstyle=' deploy)
-	echo $checkstyle
 	prjver="$(head -1 version)"
 	srcver=$(grep '^source=' version)
 	srcver=${srcver#source=}
@@ -500,7 +498,7 @@ function invoke_ant
 			buildstamp=$gentime
 		fi
 		CLASSPATH="$DCP" ANT_OPTS=-Xmx160M ant $verbose $class_test \
-		$doall -Dformat="$format" -Ddeploy="$deploy" -Dcheckstyle="$checkstyle" \
+		$doall -Dformat="$format" -Ddeploy="$deploy" \
 		-Dcheckstyle.java="$checkstyleJava" -Dcheckstyle.js="$checkstyleJs" \
 		-Dserver.libs="$server_libs" -Dstart.service="$start_service" \
 		-Dtomcat.home="$tomcat_home" \
