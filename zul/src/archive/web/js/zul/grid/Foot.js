@@ -34,6 +34,6 @@ zul.grid.Foot = zk.$extends(zul.Widget, {
 		this.$super(zul.grid.Foot, 'setHflex', v);
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
+		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
 });

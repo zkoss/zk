@@ -5,14 +5,23 @@ if [ -z "$nodeChecker" ] ; then
 	exit 1
 fi
 
-# install jscs anyway
-echo "installing jscs@latest"
-npm install jscs
+maindir="$(pwd)"
+cd $1
 
-OUT="$(jscs $@)"
+echo "check jscs installation"
+jscsChecker="$(npm list jscs)"
+if [[ $jscsChecker == *"empty"* ]] ; then
+	echo 'installing jscs'
+	npm install jscs
+fi
+
+echo "check js code style : $maindir/$2"
+OUT="$(node_modules/jscs/bin/jscs $maindir/$2 $3 $4)"
 
 if [ ! -z "$OUT" ] ; then
 	echo $OUT
 	#Coding Style Error found.
 	exit 1
 fi
+cd $maindir
+echo "passed"

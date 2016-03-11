@@ -13,24 +13,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 msgzk = {};
-msgzk.NOT_FOUND = "Non trovato: ";
-msgzk.UNSUPPORTED = "Non ancora supportato: ";
-msgzk.FAILED_TO_SEND = "Invio della richiesta al server non riuscito.";
-msgzk.FAILED_TO_RESPONSE = "Il server non e riuscito ad elaborare la richiesta.";
-msgzk.TRY_AGAIN = "Riprovare?";
-msgzk.UNSUPPORTED_BROWSER = "Browser non supportato: ";
-msgzk.ILLEGAL_RESPONSE = "Risposta sconosciuta inviata dal server. Ricaricare la pagina e riprovare.\n";
+msgzk.NOT_FOUND = 'Non trovato: ';
+msgzk.UNSUPPORTED = 'Non ancora supportato: ';
+msgzk.FAILED_TO_SEND = 'Invio della richiesta al server non riuscito.';
+msgzk.FAILED_TO_RESPONSE = 'Il server non e riuscito ad elaborare la richiesta.';
+msgzk.TRY_AGAIN = 'Riprovare?';
+msgzk.UNSUPPORTED_BROWSER = 'Browser non supportato: ';
+msgzk.ILLEGAL_RESPONSE = 'Risposta sconosciuta inviata dal server. Ricaricare la pagina e riprovare.\n';
 msgzk.FAILED_TO_PROCESS = "Errore nell'elaborazione di ";
-msgzk.GOTO_ERROR_FIELD = "Arrivato al campo sbagliato";
-msgzk.PLEASE_WAIT = "Elaborazione in corso...";
+msgzk.GOTO_ERROR_FIELD = 'Arrivato al campo sbagliato';
+msgzk.PLEASE_WAIT = 'Elaborazione in corso...';
 
 
-msgzk.FILE_SIZE = "Dimensione file: ";
-msgzk.KBYTES = "KB";
+msgzk.FILE_SIZE = 'Dimensione file: ';
+msgzk.KBYTES = 'KB';
 
-msgzk.FAILED_TO_LOAD="Impossibile caricare";
-msgzk.FAILED_TO_LOAD_DETAIL="Cio puo essere dovuto a traffico errato. Ricaricare la pagina e riprovare.";
+msgzk.FAILED_TO_LOAD = 'Impossibile caricare';
+msgzk.FAILED_TO_LOAD_DETAIL = 'Cio puo essere dovuto a traffico errato. Ricaricare la pagina e riprovare.';
 
-msgzk.CAUSE="Cause: ";
+msgzk.CAUSE = 'Cause: ';
 
-msgzk.LOADING = "Attendere";
+msgzk.LOADING = 'Attendere';

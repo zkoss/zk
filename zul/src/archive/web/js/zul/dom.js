@@ -32,7 +32,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function newButton(nm, f) {
 		return new zul.wgt.Button({
-			label: msgzul[nm.toUpperCase()]||nm,
+			label: msgzul[nm.toUpperCase()] || nm,
 			listeners: {
 				onClick: function (evt) {
 					if (typeof f == 'function')
@@ -55,7 +55,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var btns = [];
 		for (var nm in opts) {
 			var f = opts[nm];
-			btns.push(newButton(nm, typeof f == 'function' ? f: null));
+			btns.push(newButton(nm, typeof f == 'function' ? f : null));
 		}
 		if (!btns.length)
 			btns.push(newButton('OK'));
@@ -67,14 +67,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return $alert(msg);
 
 		opts = opts || {};
-		zk.load("zul.wnd,zul.wgt,zul.box", function () {
+		zk.load('zul.wnd,zul.wgt,zul.box', function () {
 			var wnd = zk.Widget.$(jq('$aualert'));
 			if (!wnd) {
 				var wnd = new zul.wnd.Window({
 					id: 'aualert',
 					closable: true,
 					width: '250pt',
-					title: opts.title||zk.appName,
+					title: opts.title || zk.appName,
 					border: 'normal',
 					listeners: {onClose: function () {
 
@@ -88,7 +88,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						new zul.box.Box({
 							mold: 'horizontal',
 							children: [
-								new zul.wgt.Div({sclass: icons[(opts.icon||'').toUpperCase()]||opts.icon||icons.INFORMATION}),
+								new zul.wgt.Div({sclass: icons[(opts.icon || '').toUpperCase()] || opts.icon || icons.INFORMATION}),
 								new zul.wgt.Div({
 									id: 'content',
 									sclass: 'z-messagebox',
@@ -111,7 +111,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 							children: getButtons(opts.button)
 						})
 					],
-					mode: opts.mode||'modal'
+					mode: opts.mode || 'modal'
 				});
 				var p = opts.desktop || zk.Desktop.$();
 				if (p && (p = p.firstChild) && p.desktop)
@@ -128,8 +128,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 			}
 		});
-  	};
-	zAu.wrongValue_ = function(wgt, msg) {
+	};
+	zAu.wrongValue_ = function (wgt, msg) {
 		var efs = wgt.effects_;
 		if (efs.errMesg) {
 			efs.errMesg.destroy();
@@ -137,7 +137,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (msg !== false) {
 			efs.errMesg = {destroy: zk.$void};
-			zk.load("zul.inp", function () {
+			zk.load('zul.inp', function () {
 				if (efs.errMesg) //not destroyed yet
 					(efs.errMesg = new zul.inp.Errorbox(wgt, msg)).show();
 			});

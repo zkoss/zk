@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	function _getMenu(wgt) {
 		var p = wgt.parent;
-		return p.$instanceof(zul.menu.Menu) ? p: null;
+		return p.$instanceof(zul.menu.Menu) ? p : null;
 	}
 	function _getRootMenu(wgt) {
 		for (var w = wgt; w && (w = _getMenu(w)); w = w.parent) {
@@ -126,8 +126,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 			// ZK-2356 should sync position after calling super.onResponse()
 			if (menu.isTopmost() && ori == 'horizontal' && n) 
-				n.style.top = jq.px0(zk.parseInt(n.style.top) + 
-					zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
+				n.style.top = jq.px0(zk.parseInt(n.style.top)
+							+ zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
 			
 			while(mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
@@ -172,11 +172,12 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (menu = _getMenu(this)) {
 			if (!offset) {
 				ref = menu.getAnchor_();
-				if (!position)
+				if (!position) {
 					if (menu.isTopmost())
 						position = menu.parent.getOrient() == 'vertical'
 							? 'end_before' : 'after_start';
 					else position = 'end_before';
+				}
 			}
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
@@ -191,7 +192,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$supers('setTopmost', arguments);
 		this.zsync();
 	},
-	onFloatUp: function(ctl, opts) {
+	onFloatUp: function (ctl, opts) {
 		if (!this.isVisible())
 			return;
 		
@@ -201,7 +202,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (this._shallToggle && openInfo && opts && (
 				opts.triggerByClick === undefined || (
 				openInfo[3].which == opts.triggerByClick && zUtl.isAncestor(this._openInfo[0], ctl.origin)))) {
-				return;
+			return;
 		}
 
 		this._doFloatUp(ctl);
@@ -212,7 +213,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 		var org = ctl.origin;
 		if (this.parent.menupopup == this && !this.parent.isTopmost() && !this.parent.$class._isActive(this.parent)) {
-			this.close({sendOnOpen:true});
+			this.close({sendOnOpen: true});
 			return;
 		}
 
@@ -241,7 +242,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 			//No need to check _lastTarget since we have to close any other open menupopup
 		}
-		this.close({sendOnOpen:true});
+		this.close({sendOnOpen: true});
 	},
 	onShow: function () {
 		this.zsync();
@@ -349,7 +350,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				//{} for emulate as onClick, escape the checking data == null at serverside
 				w.doClick_(new zk.Event(w, 'onClick',{}));
 				zWatch.fire('onFloatUp', w); //notify all
-				this.close({sendOnOpen:true});
+				this.close({sendOnOpen: true});
 			} else if (w && w.$instanceof(zul.menu.Menu)) {
 				w._togglePopup();
 			} else {

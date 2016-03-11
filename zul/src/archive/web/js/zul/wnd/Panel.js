@@ -269,7 +269,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						this._hideShadow();
 						$body.zk.slideUp(this);
 					}
-					if (!fromServer) this.fire('onOpen', {open:open});
+					if (!fromServer) this.fire('onOpen', {open: open});
 				}
 			}
 		},
@@ -363,7 +363,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					s.width = jq.px0(sw);
 					s.height = jq.px0(sh);
 
-					this._lastSize = {l:l, t:t, w:w, h:h};
+					this._lastSize = {l: l, t: t, w: w, h: h};
 
 					// restore.
 					s.top = '0';
@@ -404,7 +404,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 						var oldinfo = this._oldNodeInfo;
 						node.style.position = oldinfo ? oldinfo._pos : '';
-						this.setZIndex((oldinfo ? oldinfo._zIndex : ''), {fire:true});
+						this.setZIndex((oldinfo ? oldinfo._zIndex : ''), {fire: true});
 						this.setFloating_(false);
 						var p = this.parent.parent.$n();
 						p.style.position = oldinfo ? oldinfo._ppos : '';
@@ -488,7 +488,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		//server use only
-		fbar: function(val) {
+		fbar: function (val) {
 			this.fbar = zk.Widget.$(val);
 			if (this.tbar == this.fbar)
 				this.tbar = null;
@@ -612,17 +612,17 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		this.zsync();
 		var self = this;
-		setTimeout(function() {
+		setTimeout(function () {
 			zUtl.fireSized(self);
 		});
 	},
-	setFlexSizeH_: function(n, zkn, height, isFlexMin) {
+	setFlexSizeH_: function (n, zkn, height, isFlexMin) {
 		if (isFlexMin) {
 			height += this._titleHeight(n);
 		}
 		this.$supers('setFlexSizeH_', arguments);
 	},
-	setFlexSizeW_: function(n, zkn, width, isFlexMin) {
+	setFlexSizeW_: function (n, zkn, width, isFlexMin) {
 		if (isFlexMin && this.caption) {
 			if (width == this.caption.$n().offsetWidth) {
 				width += zk(this.$n('head')).padBorderWidth();
@@ -630,20 +630,20 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		this.$supers('setFlexSizeW_', arguments);
 	},
-	beforeSize: function() {
+	beforeSize: function () {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// have to clear width here if not listen to flex
 		if (!this._flexListened)
-			this.$n('body').style.width='';
+			this.$n('body').style.width = '';
 	},
-	resetSize_: function(orient) {
+	resetSize_: function (orient) {
 		// Bug ZK-334: Tablelayout with hflex won't resize its width after resizing
 		// also reset the size of body
 		this.$supers(zul.wnd.Panel, 'resetSize_', arguments);
-		(this.$n('body')).style[orient == 'w' ? 'width': 'height'] = '';
+		(this.$n('body')).style[orient == 'w' ? 'width' : 'height'] = '';
 	},
 	//watch//
-	onSize: (function() {
+	onSize: (function () {
 		function syncMaximized (wgt) {
 			if (!wgt._lastSize) return;
 			var node = wgt.$n(),
@@ -652,22 +652,22 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
 				
-				var sw = $op[0].clientWidth;
+			var sw = $op[0].clientWidth;
+			if (!floated) {
+				sw -= $op.zk.paddingWidth();
+				sw = $n.revisedWidth(sw);
+			}
+			s.width = jq.px0(sw);
+			if (wgt._open) {
+				var sh = $op[0].clientHeight;
 				if (!floated) {
-					sw -= $op.zk.paddingWidth();
-					sw = $n.revisedWidth(sw);
+					sh -= $op.zk.paddingHeight();
+					sh = $n.revisedHeight(sh);
 				}
-				s.width = jq.px0(sw);
-				if (wgt._open) {
-					var sh = $op[0].clientHeight;
-					if (!floated) {
-						sh -= $op.zk.paddingHeight();
-						sh = $n.revisedHeight(sh);
-					}
-					s.height = jq.px0(sh);
-				}
+				s.height = jq.px0(sh);
+			}
 		}
-		return function(ctl) {
+		return function (ctl) {
 			this._hideShadow();
 			if (this._maximized)
 				syncMaximized(this);
@@ -688,7 +688,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_fixHgh: function (ignoreRealVisible) { // TODO: should be handled by Panelchildren onSize already
 		var pc;
-		if (!(pc=this.panelchildren) || pc.z_rod || (!ignoreRealVisible && !this.isRealVisible())) return;
+		if (!(pc = this.panelchildren) || pc.z_rod || (!ignoreRealVisible && !this.isRealVisible())) return;
 		var n = this.$n(),
 			body = pc.$n(),
 			hgh = n.style.height;
@@ -700,7 +700,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (!pc || pc.z_rod || !this.isRealVisible())
 			return;
 		var body = pc.$n(), pcst, pcwd;
-		if (body && (pcst=body.style) && (pcwd=pcst.width) && pcwd != 'auto') {
+		if (body && (pcst = body.style) && (pcwd = pcst.width) && pcwd != 'auto') {
 			var w = zk(this.$n()).contentWidth();
 			pcst.width = w - zk(this.$n('body')).padBorderWidth() + 'px';
 		}
@@ -717,7 +717,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_offsetHeight: function (n) {
 		var tHeight = this._titleHeight(),
-			body = this.$n('body')
+			body = this.$n('body'),
 			h = zk(tHeight ? n : body).contentHeight() - this._titleHeight();
 		if (tHeight)
 			h -= zk(body).padBorderHeight();
@@ -856,7 +856,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 		if (this._maximizable && this._maximized) {
 			var self = this;
-			after.push(function() {
+			after.push(function () {
 				self._maximized = false;
 				self.setMaximized(true, true);
 			});
@@ -914,10 +914,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (!this._maximized && this._open && c) {
 				if (this._backupCursor == undefined)
 					this._backupCursor = n.style.cursor;
-				n.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
-					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
-					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
-					c == 7 ? 'w-resize': 'nw-resize';
+				n.style.cursor = c == 1 ? 'n-resize' : c == 2 ? 'ne-resize' :
+					c == 3 ? 'e-resize' : c == 4 ? 'se-resize' :
+					c == 5 ? 's-resize' : c == 6 ? 'sw-resize' :
+					c == 7 ? 'w-resize' : 'nw-resize';
 				if (handle) jq(handle).removeClass(this.$s('header-move'));
 			} else {
 				n.style.cursor = this._backupCursor || '';
@@ -959,7 +959,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		evt.stop();
 	},
-	doKeyDown_: function(evt) {
+	doKeyDown_: function (evt) {
 		var n = evt.domTarget,
 			keyCode = evt.keyCode;
 		if (keyCode == '9' || keyCode == '16') { //TAB and SHIFT, skip them so tab/shift-tab will work as expected
@@ -993,9 +993,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var added = this._bordered() ? '' : this.$s('noborder');
-			if (added) scls += (scls ? ' ': '') + added;
+			if (added) scls += (scls ? ' ' : '') + added;
 			added = this._open ? '' : this.$s('collapsed');
-			if (added) scls += (scls ? ' ': '') + added;
+			if (added) scls += (scls ? ' ' : '') + added;
 			
 			if (!(this.getTitle() || this.caption))
 				scls += ' ' + this.$s('noheader');

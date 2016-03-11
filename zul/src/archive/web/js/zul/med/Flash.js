@@ -113,12 +113,12 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 	setHeight: function (height) {
 		this._height = height;
 		var n = this._embedNode();
-		if (n) n.height = height ? height: '';
+		if (n) n.height = height ? height : '';
 	},
 	setWidth: function (width) {
 		this._width = width;
 		var n = this._embedNode();
-		if (n) n.width = width ? width: '';
+		if (n) n.width = width ? width : '';
 	},
 
 	_embedNode: function () {

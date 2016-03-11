@@ -38,7 +38,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
 	}
 	function _prepareTimeFormat(h, m, s) {
-		var o =[];
+		var o = [];
 		if (h) o.push(h);
 		if (m) o.push(m);
 		if (s) o.push(s);
@@ -56,7 +56,7 @@ var globallocalizedSymbols = {},
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_lenient: true,
-	$init: function() {
+	$init: function () {
 		this.$supers('$init', arguments);
 		this.afterInit(_initPopup);
 		this.listen({onChange: this}, -1000);
@@ -332,12 +332,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	/** Drops down or closes the calendar to select a date.
 	 */
-	setOpen: function(open, _focus_) {
+	setOpen: function (open, _focus_) {
 		if (this.isRealVisible()) {
 			var pop;
-			if (pop = this._pop)
+			if (pop = this._pop) {
 				if (open) pop.open(!_focus_);
 				else pop.close(!_focus_);
+			}
 		}
 	},
 	isOpen: function () {
@@ -393,7 +394,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			else this._pop.open();
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
-			var opts = {propagation:true};
+			var opts = {propagation: true};
 			if (zk.ie < 11) opts.dom = true;
 			evt.stop(opts);
 			return;
@@ -437,11 +438,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace)
-			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
+			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
 
 		return this.$supers('afterKeyDown_', arguments);
 	},
-	bind_: function (){
+	bind_: function () {
 		this.$supers(Datebox, 'bind_', arguments);
 		var btn, inp = this.getInputNode();
 
@@ -480,7 +481,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var select = this.$n('dtzones'),
 			timezone = select.value;
 		this.updateChange_();
-		this.fire('onTimeZoneChange', {timezone: timezone}, {toServer:true}, 150);
+		this.fire('onTimeZoneChange', {timezone: timezone}, {toServer: true}, 150);
 		if (this._pop) this._pop.close();
 	},
 	onChange: function (evt) {
@@ -497,12 +498,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	onScroll: function (wgt) {
 		if (this.isOpen()) {
 			// ZK-1552: fix the position of popup when scroll
-			if (wgt && (pp = this._pop))
+			if (wgt && (pp = this._pop)) {
 				// ZK-2211: should close when the input is out of view
 				if (this.getInputNode() && zul.inp.InputWidget._isInView(this))
 					_reposition(this, true);
 				else
 					pp.close();
+			}
 		}
 	},
 	/** Returns the label of the time zone
@@ -561,7 +563,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		if (db._inplace) {
 			db._inplaceIgnore = false;
-			db._inplaceTimerId = setTimeout(function(){
+			db._inplaceTimerId = setTimeout(function () {
 				if (db.desktop) jq(db.$n()).addClass(db.getInplaceCSS());
 			}, db._inplaceTimeout);
 		}
@@ -570,7 +572,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			if (zk.ff && zk.currentFocus) {
 				var n = zk.currentFocus.getInputNode ?
 						zk.currentFocus.getInputNode() : zk.currentFocus.$n();
-				if (jq.nodeName(n, "input") && jq.isAncestor(pp, n)) // Bug ZK-2922, check ancestor first.
+				if (jq.nodeName(n, 'input') && jq.isAncestor(pp, n)) // Bug ZK-2922, check ancestor first.
 					jq(n).blur(); // trigger a missing blur event.
 			}
 		} catch (e) {
@@ -598,13 +600,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	isOpen: function () {
 		return zk(this.parent.$n('pp')).isVisible();
 	},
-	open: function(silent) {
+	open: function (silent) {
 		var db = this.parent,
 			dbn = db.$n(), pp = db.$n('pp');
 		if (!dbn || !pp)
 			return;
 		if (db._inplace) db._inplaceIgnore = true;
-		db.setFloating_(true, {node:pp});
+		db.setFloating_(true, {node: pp});
 		zWatch.fire('onFloatUp', db); //notify all
 		var topZIndex = this.setTopmost();
 		this._setView('day');
@@ -636,7 +638,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		delete db._shortcut;
 		
 		var self = this;
-		setTimeout(function() {
+		setTimeout(function () {
 			_reposition(db, silent);
 			zWatch.fireDown('onVParent', self.parent.$n('pp'), { shadow: self._shadow });
 		}, 150);
@@ -648,7 +650,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		//we should use UTC date instead of Locale date to our value.
 		if (!value)
 			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value, this._localizedSymbols), this._localizedSymbols).toUTCDate()
-				|| (inp.value ? db._value: zUtl.today(fmt));
+				|| (inp.value ? db._value : zUtl.today(fmt));
 		
 		if (value)
 			this.setValue(value);

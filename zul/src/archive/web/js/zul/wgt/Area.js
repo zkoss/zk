@@ -62,7 +62,7 @@ zul.wgt.Area = zk.$extends(zk.Widget, {
 		if (zul.wgt.Imagemap._toofast()) return;
 
 		var area = this.id || this.uuid;
-		this.parent.fire('onClick', {area: area}, {ctl:true});
+		this.parent.fire('onClick', {area: area}, {ctl: true});
 		evt.stop();
 	},
 

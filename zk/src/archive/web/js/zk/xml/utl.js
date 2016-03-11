@@ -36,7 +36,7 @@ zk.xml.Utl = {
 		} else {
 			doc = new ActiveXObject('Microsoft.XMLDOM');
 			if (callback)
-				doc.onreadystatechange = function() {
+				doc.onreadystatechange = function () {
 					if (doc.readyState == 4) callback(doc);
 				};
 		}
@@ -83,8 +83,8 @@ zk.xml.Utl.renType("/zkdemo/img/whatever-off.gif", "on");
 		if (j < 0) j = url.length; //no extension at all
 		var	k = url.lastIndexOf('-'),
 			m = url.lastIndexOf('/'),
-			ext = j <= m ? '': url.substring(j),
-			pref = k <= m ? j <= m ? url: url.substring(0, j): url.substring(0, k);
+			ext = j <= m ? '' : url.substring(j),
+			pref = k <= m ? j <= m ? url : url.substring(0, j) : url.substring(0, k);
 		if (type) type = '-' + type;
 		else type = '';
 		return pref + type + ext + suffix;

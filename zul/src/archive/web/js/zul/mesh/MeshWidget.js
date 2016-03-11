@@ -139,7 +139,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wd = ftwd;
 				wds[i] = wd;
 				// Bug ZK-2772 don't plus one when frozen exists.
-                if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+				if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
 					++wds[i];
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w)
@@ -187,7 +187,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (zk.chrome)
 				wgt.efoottbl.style.display = '';
 			if (ftfaker) {
-				var footcol = ftfaker.firstChild
+				var footcol = ftfaker.firstChild;
 				for (var i = 0; footcol; footcol = footcol.nextSibling)
 					footcol.style.width = ftfakerws[i++];
 			}
@@ -219,7 +219,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wds = wgt._minWd.wds,
 				wlen = wds.length;
 			if (fixMesh && meshmin)
-				wgt.setFlexSize_({width:wd}, true);
+				wgt.setFlexSize_({width: wd}, true);
 			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
 				return; // no first tr
 			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
@@ -250,7 +250,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hgh = 0,
 			row,
 			j = 0;
-		for (var it = wgt.getBodyWidgetIterator({skipHidden:true}),
+		for (var it = wgt.getBodyWidgetIterator({skipHidden: true}),
 				len = rows.length, w; (w = it.next()) && j < len; j++) {
 			row = rows[j];
 			var top = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
@@ -332,7 +332,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 		var ncols = dst.cells.length,
 			src, maxnc = 0;
-		for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
+		for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w; (w = it.next());) {
 			if (wgt._modal && !w._loaded)
 				continue;
 
@@ -346,7 +346,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				break;
 			}
 			if (nc > maxnc) {
-				src = valid ? row: null;
+				src = valid ? row : null;
 				maxnc = nc;
 			} else if (nc == maxnc && !src && valid) {
 				src = row;
@@ -468,7 +468,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * @since 5.0.6
 		 * @see #getSpan
 		 */
-		span: function(v) {
+		span: function (v) {
 			//ZK-2776: if span="false", !isSpan() will return false, because "false" is string not boolean
 			var isTrue = true === v || 'true' == v;
 			var isFalse = false === v || 'false' == v;
@@ -642,8 +642,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] : null,
 			frozen = this.frozen,
 			bar;
-		if (td && frozen && zk.parseInt(td.style.width) == 0 &&
-			(index = index - frozen.getColumns()) >= 0) {
+		if (td && frozen && zk.parseInt(td.style.width) == 0
+			&& (index = index - frozen.getColumns()) >= 0) {
 			if (this._nativebar) {
 				frozen.setStart(index);
 			} else if (bar = this._scrollbar) {
@@ -720,7 +720,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._shallSize) {
 			this.syncSize();
 			this._shallSize = false; // just in case
-        }
+		}
 	},
 	_syncSize: function () {
 		// fixed for F50-3025422.zul on ZTL
@@ -867,7 +867,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.efoot)
 			this.efootrows = this.$n('footrows');
 	},
-	replaceHTML: function() { //tree outer
+	replaceHTML: function () { //tree outer
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
 		try {
@@ -884,7 +884,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._syncingbodyrows = old;
 		}
 	},
-	replaceChildHTML_: function() { //rows outer
+	replaceChildHTML_: function () { //rows outer
 		var old = this._syncingbodyrows;
 		this._syncingbodyrows = true;
 		try {
@@ -993,7 +993,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			min = zul.mesh.Scrollbar.getScrollPosV(this),
 			max = min + this.ebody.offsetHeight;
 		if (min == 0 && max == 0) return; //ZK-2796: Uncessary onRender command triggered when setting tabbox's maximalHeight attribute to true
-		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden:true}),
+		for (var j = 0, it = this.getBodyWidgetIterator({skipHidden: true}),
 				len = rows.length, w; (w = it.next()) && j < len; j++) {
 			if (!w._loaded) {
 				//B70-ZK-2589: w and rows[j] belongs to different widget, 
@@ -1007,7 +1007,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		if (items.length) {
-			this.fire('onRender', {items: items}, {implicit:true});
+			this.fire('onRender', {items: items}, {implicit: true});
 		}
 	},
 	onSize: function () {
@@ -1227,7 +1227,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
-	_isAllWidths: function() {
+	_isAllWidths: function () {
 		// ZK-2157: should skip if the mesh has no children
 		if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.firstChild)
 			return true;
@@ -1291,7 +1291,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.efrozen = null;
 	},
 	// Bug ZK-2243
-	resetSize_: function(orient) {
+	resetSize_: function (orient) {
 		this.$supers('resetSize_', arguments);
 		if (orient == 'w') {
 			if (this.ehead)
@@ -1328,7 +1328,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		} else
 			this._calcSize();
 	},
-	clearCachedSize_: function() {
+	clearCachedSize_: function () {
 		this.$supers('clearCachedSize_', arguments);
 		this._clearCachedSize();
 
@@ -1343,7 +1343,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				delete w._hflexsz;
 		}
 	},
-	_clearCachedSize: function() {
+	_clearCachedSize: function () {
 		var n;
 		if (n = this.$n())
 			n._lastsz = this._minWd = null;
@@ -1401,7 +1401,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this._nspan < 0) {
 
 
-		 	var hasFrozenScrolled = this.frozen && this.frozen.getStart();
+			var hasFrozenScrolled = this.frozen && this.frozen.getStart();
 			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
 				// ZK-2222: should check visibility
 				if (!zk(hdcol).isVisible(true)) {
@@ -1424,7 +1424,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 							}
 						}
 					} else {
-                    	wds[i] = wd = extSum <= 0 ? wds[i] : Math.round(((wds[i] * total / width) + 0.5) || 0);
+						wds[i] = wd = extSum <= 0 ? wds[i] : Math.round(((wds[i] * total / width) + 0.5) || 0);
 					}
 					var stylew = jq.px0(wd);
 					count -= wd;
@@ -1590,8 +1590,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				return cells;
 			else {
 				var out = '';
-				out += '<tr id="' + tbody.id +
-						'-fakeRow" style="visibility:hidden;height:0">';
+				out += '<tr id="' + tbody.id + '-fakeRow" style="visibility:hidden;height:0">';
 				for (var i = 0; i < ncols; i++)
 					out += '<td></td>';
 				out += '</tr>';
@@ -1626,7 +1625,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			this._afterCalcSize(); // for ZK-2370, we need to check the faker-bar again
 		}
-	},
+	}
 });
 /** @class zul.mesh.Scrollbar
  * @import zk.Widget
@@ -1657,7 +1656,7 @@ zul.mesh.Scrollbar = {
 		var scrollbar = new zul.Scrollbar(wgt.ebody, wgt.ebodytbl, {
 			embed: embed,
 			startPositionX: startPositionX,
-			onSyncPosition: function() {
+			onSyncPosition: function () {
 				if (!this.frozen) {
 					var pos = this.getCurrentPosition(),
 						head = wgt.ehead,
@@ -1670,7 +1669,7 @@ zul.mesh.Scrollbar = {
 					}
 				}
 			},
-			onScrollEnd: function() {
+			onScrollEnd: function () {
 				wgt._doScroll();
 			}
 		});

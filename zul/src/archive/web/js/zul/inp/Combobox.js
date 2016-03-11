@@ -74,7 +74,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				//will update it later in onResponse with _fixsz
 				if (pp) {
 					pp.style.width = 'auto';
-					if(zk.webkit) this._shallRedoCss = true ;
+					if(zk.webkit) this._shallRedoCss = true;
 				}
 			}
 			this._repos = false;
@@ -85,7 +85,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (this.isOpen() && jq(this.getPopupNode_()).is(':animated')) {
 			var self = this;
 			var args = arguments;
-			setTimeout(function() {if (self.desktop) self.onResponse.apply(self, args);}, 50);
+			setTimeout(function () {if (self.desktop) self.onResponse.apply(self, args);}, 50);
 			return;
 		}
 		this.$supers('onResponse', arguments);
@@ -150,7 +150,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	 */
 	validateStrict: function (val) {
 		var cst = this._cst;
-		return this._findItem(val, true) ? null: 
+		return this._findItem(val, true) ? null : 
 			(cst ? cst._errmsg['STRICT'] ? cst._errmsg['STRICT'] : '' : '') || msgzul.VALUE_NOT_MATCHED;
 	},
 	_findItem: function (val, strict) {
@@ -193,17 +193,18 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				this.valueEnter_ = inp.value = val;
 				//Bug 3058028
 				// ZK-518
-				if (!opts.noSelectRange)
+				if (!opts.noSelectRange) {
 					if (zk.gecko)
 						inp.select();
 					else
 						zk(inp).setSelectionRange(0, val.length);
+				}
 			}
 			
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 
-			this.fire('onSelect', {items: sel?[sel]:[], reference: sel, prevSeld: oldsel}, {toServer:true}, 90);
+			this.fire('onSelect', {items: sel ? [sel] : [], reference: sel, prevSeld: oldsel}, {toServer: true}, 90);
 			//spec change (diff from zk 3): onSelect fired after onChange
 			//purpose: onSelect can retrieve the value correctly
 			//If we want to change this spec, we have to modify Combobox.java about _lastCkVal
@@ -254,7 +255,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			val = val.toLowerCase();
 			var beg = this._sel,
 				last = this._next(null, bUp);
-			if (!beg || beg.parent != this){
+			if (!beg || beg.parent != this) {
 				beg = this._next(null, !bUp);
 			}
 			if (!beg) {
@@ -275,7 +276,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					}
 				}
 				var nextitem = this._next(item, bUp);
-				if( item == nextitem ) break;  //prevent infinite loop
+				if(item == nextitem) break;  //prevent infinite loop
 				if ((item = nextitem) == beg)
 					break;
 			}
@@ -285,13 +286,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 			if (sel) { //exact match
 				var ofs = zk(inp).getSelectionRange();
-				if (ofs[0] == 0 && ofs[1] == val.length){ //full selected
+				if (ofs[0] == 0 && ofs[1] == val.length) { //full selected
 					sel = this._next(sel, bUp); //next
 				}
-			} else{
+			} else {
 				sel = this._next(null, !bUp);
 			}
-		} else{
+		} else {
 			sel = this._next(null, true);
 		}
 
@@ -302,7 +303,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._select(sel, {sendOnSelect: true, sendOnChange: true});
 		evt.stop();
 	},
-	_next: (function() {
+	_next: (function () {
 		function getVisibleItemOnly(item, bUp, including) {
 			var next = bUp ? 'previousSibling' : 'nextSibling';
 			for (var n = including ? item : item[next]; n; n = n[next])
@@ -310,7 +311,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					return n;
 			return null;
 		}
-		return function(item, bUp) {
+		return function (item, bUp) {
 			if (item)
 				item = getVisibleItemOnly(item, bUp);
 			return item ? item : getVisibleItemOnly(
@@ -319,7 +320,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	})(),
 	_select: function (sel, opts) {
 		var inp = this.getInputNode(),
-			val = inp.value = sel ? sel.getLabel(): '';
+			val = inp.value = sel ? sel.getLabel() : '';
 		this.valueSel_ = val;
 		this._hilite2(sel, opts);
 
@@ -327,17 +328,18 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// ZK-518: Selected value in combobox is right aligned in FF5+ if width is smaller than selected option
 		// setSelectionRange of FF5 or up will set the position to end,
 		// call select() of input element for select all 
-		if (val)
+		if (val) {
 			if (zk.gecko)
 				inp.select();
 			else
 				zk(inp).setSelectionRange(0, val.length);
+		}
 	},
 	otherPressed_: function (evt) {
 		var wgt = this,
 			keyCode = evt.keyCode,
 			bDel;
-		this._bDel = bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/;
+		this._bDel = bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/; //jscs:ignore
 		if (this._readonly)
 			switch (keyCode) {
 			case 35://End
@@ -374,7 +376,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this.valueEnter_ = val;
 		if (!val || !fchild
 		|| ofs[0] != val.length || ofs[0] != ofs[1]) //not at end
-			return this._hilite({strict:true});
+			return this._hilite({strict: true});
 
 		var sel = this._findItem(val, true);
 		if (sel || bDel || !this._autocomplete) {
@@ -408,7 +410,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	updateChange_: function () {
 		var chng = this._value != this.getInputNode().value; // B50-ZK-297
 		if (this.$supers('updateChange_', arguments) && chng) {
-			this._hilite({sendOnSelect:true, noSelectRange:true});
+			this._hilite({sendOnSelect: true, noSelectRange: true});
 			return true;
 		}
 		this.valueEnter_ = null;

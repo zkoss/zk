@@ -115,7 +115,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wgt.setFlexSize_(map, true);
 					var totalsz = 0,
 						vmax = 0;
-					if (cwgt && cwgt.desktop){ //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
+					if (cwgt && cwgt.desktop) { //try child widgets, bug ZK-1575: should check if child widget is bind to desktop
 						var first = cwgt,
 							refDim;
 						
@@ -200,7 +200,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								if (isText) {
 									if (sz > max) 
 										max = sz;
-								} else  {
+								} else {
 									var curDim = zkc.dimension(true);
 									if (_isSameBaseline(refDim || (refDim = zk(first).dimension(true)),
 											curDim, isVflex)) 
@@ -244,7 +244,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wgt.parent.afterChildMinFlexChanged_(wgt, o);
 			}
 			return wgt[flexsz];
-		}
+		};
 	}
 	var _fixMinVflex = _fixMinFlex(true),
 		_fixMinHflex = _fixMinFlex();
@@ -378,7 +378,7 @@ zFlex = { //static methods
 						|| (cwgt && !cwgt.isExcludedHflex_())) {
 					wdh -= offwdh;
 					wdh -= zkc.marginWidth();
-    			}
+				}
 				
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
@@ -406,7 +406,7 @@ zFlex = { //static methods
 			var cwgt = vflexs.shift(), 
 				vsz = cwgt.isExcludedVflex_() ? hgh :
 						(cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
-			cwgt.setFlexSize_({height:vsz});
+			cwgt.setFlexSize_({height: vsz});
 			cwgt._vflexsz = vsz;
 			if (!cwgt.isExcludedVflex_())
 				lastsz -= vsz;
@@ -414,7 +414,7 @@ zFlex = { //static methods
 		//last one with vflex
 		if (vflexs.length) {
 			var cwgt = vflexs.shift();
-			cwgt.setFlexSize_({height:lastsz});
+			cwgt.setFlexSize_({height: lastsz});
 			cwgt._vflexsz = lastsz;
 		}
 		//3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
@@ -429,7 +429,7 @@ zFlex = { //static methods
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
 				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
-			cwgt.setFlexSize_({width:hsz});
+			cwgt.setFlexSize_({width: hsz});
 			cwgt._hflexsz = hsz;
 			if (!cwgt.isExcludedHflex_())
 				lastsz -= hsz;
@@ -437,7 +437,7 @@ zFlex = { //static methods
 		//last one with hflex
 		if (hflexs.length) {
 			var cwgt = hflexs.shift();
-			cwgt.setFlexSize_({width:lastsz});
+			cwgt.setFlexSize_({width: lastsz});
 			cwgt._hflexsz = lastsz;
 		}
 		
@@ -459,7 +459,7 @@ zFlex = { //static methods
 	},
 	fixMinFlex: function (wgt, wgtn, o) {
 		//find the max size of all children
-		return (o == 'h' ? _fixMinVflex: o == 'w' ? _fixMinHflex: _zero)
+		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)
 			(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 	}
 };

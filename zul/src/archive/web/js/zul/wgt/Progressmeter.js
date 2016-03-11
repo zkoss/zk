@@ -35,7 +35,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	_fixImgWidth: _zkf = function() {
+	_fixImgWidth: _zkf = function () {
 		var n = this.$n(), 
 			img = this.$n('img');
 		if (img) {
@@ -58,7 +58,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this});
 		this.$supers(zul.wgt.Progressmeter, 'unbind_', arguments);
 	},
-	setWidth : function (val){
+	setWidth: function (val) {
 		this.$supers('setWidth', arguments);
 		this._fixImgWidth();
 	}

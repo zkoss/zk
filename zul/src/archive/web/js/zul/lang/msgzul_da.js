@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 msgzul = {};
-msgzul.UNKNOWN_TYPE = "Ukendt komponenttype: ";
-msgzul.DATE_REQUIRED = "Du skal angive et datoformat: ";
-msgzul.OUT_OF_RANGE = "Uden for området";
-msgzul.NO_AUDIO_SUPPORT = "Din browser understøtter ikke dynamisk lyd";
+msgzul.UNKNOWN_TYPE = 'Ukendt komponenttype: ';
+msgzul.DATE_REQUIRED = 'Du skal angive et datoformat: ';
+msgzul.OUT_OF_RANGE = 'Uden for området';
+msgzul.NO_AUDIO_SUPPORT = 'Din browser understøtter ikke dynamisk lyd';

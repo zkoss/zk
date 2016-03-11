@@ -21,7 +21,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 	/** Returns the value in int. If null, zero is returned.
 	 * @return int
 	 */
-	intValue: function (){
+	intValue: function () {
 		return this.$supers('getValue', arguments);
 	},
 	coerceFromString_: function (value) {
@@ -36,10 +36,10 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 			sval = new zk.BigDecimal(info.raw).$toString(); // Parse raw input by big decimal to avoid scientific notation
 	
 		// B65-ZK-1907: Should compare raw input string instead of parsed number(may contain scientific notation)
-		if (isNaN(val) || (info.raw != sval && info.raw != '-'+sval))
+		if (isNaN(val) || (info.raw != sval && info.raw != '-' + sval))
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 		if (val > 2147483647 || val < -2147483648)
-			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE+'(−2147483648 - 2147483647)')};
+			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE + '(−2147483648 - 2147483647)')};
 
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;
@@ -47,6 +47,6 @@ zul.inp.Intbox = zk.$extends(zul.inp.NumberInputWidget, {
 	coerceToString_: function (value) {
 		var fmt = this._format;
 		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols)
-					: value != null  ? ''+value: '';
+					: value != null ? '' + value : '';
 	}
 });

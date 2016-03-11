@@ -29,17 +29,17 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	setWidth: zk.$void, // readonly
 	_colspan: 1,
 	$define: {
-    	/** Returns number of columns to span this cell.
-    	 * Default: 1.
-    	 * @return int
-    	 */
-    	/** Sets the number of columns to span this cell.
-    	 * <p>It is the same as the colspan attribute of HTML TD tag.
-    	 * @param int colspan
-    	 */
+		/** Returns number of columns to span this cell.
+		 * Default: 1.
+		 * @return int
+		 */
+		/** Sets the number of columns to span this cell.
+		 * <p>It is the same as the colspan attribute of HTML TD tag.
+		 * @param int colspan
+		 */
 		colspan: [
 			function (colspan) {
-				return colspan > 1 ? colspan: 1;
+				return colspan > 1 ? colspan : 1;
 			},
 			function () {
 				var n = this.$n();
@@ -53,13 +53,12 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		return this.parent ? this.parent.getTree() : null;
 	},
 	domStyle_: function (no) {
-		var style = this.$super('domStyle_', zk.copy(no, {width:true})),
+		var style = this.$super('domStyle_', zk.copy(no, {width: true})),
 				//bug#3185657: not span content if given width
 			tc = this.getTreecol();
 			// B70-ZK-2946: adds the text-align from treecol, same as Listcell
-			if (tc) if (tc._align) style += 'text-align: ' + tc._align + ';';
-			return this.isVisible() && tc && !tc.isVisible() ? style +
-				'display:none;' : style;
+		if (tc) if (tc._align) style += 'text-align: ' + tc._align + ';';
+		return this.isVisible() && tc && !tc.isVisible() ? style + 'display:none;' : style;
 	},
 	/** Returns the tree col associated with this cell, or null if not available.
 	 * @return Treecol
@@ -77,7 +76,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	 * @return int
 	 */
 	getLevel: function () {
-		return this.parent ? this.parent.getLevel(): 0;
+		return this.parent ? this.parent.getLevel() : 0;
 	},
 	/** Returns the maximal length of each item's label.
 	 * @return int
@@ -95,7 +94,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),
 			s2 = this._colHtmlPre();
-		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">&nbsp;' + s1 + '</span>' : s1: s2;
+		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">&nbsp;' + s1 + '</span>' : s1 : s2;
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -107,7 +106,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	doMouseOver_: function(evt) {
+	doMouseOver_: function (evt) {
 		var n = this.$n();
 		
 		// ZK-2136: all children should apply -moz-user-select: none
@@ -117,7 +116,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function(evt) {
+	doMouseOut_: function (evt) {
 		var n = this.$n();
 		
 		// ZK-2136: all children should apply -moz-user-select: none
@@ -225,8 +224,8 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			if (name.indexOf('close') > -1)
 				icon = this.getIconCloseClass_();
 			
-			openCloseIcon += '<i id="' + id + '" class="' + icon + ' ' + iconScls +
-					'-' + name + '"></i>';
+			openCloseIcon += '<i id="' + id + '" class="' + icon + ' ' + iconScls
+					+ '-' + name + '"></i>';
 		}
 		if (button) {
 			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd() 
@@ -242,7 +241,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	getIconCloseClass_: function () {
 		return 'z-icon-caret-right';
 	},
-	getWidth: function() {
+	getWidth: function () {
 		var col = this.getTreecol();
 		return col ? col.getWidth() : null;
 	},
@@ -256,7 +255,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			this.parent.clearCache();
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<td', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></td>');
+		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');
 	}
 });
 })();

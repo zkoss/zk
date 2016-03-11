@@ -58,7 +58,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		 * @param String msg
 		 * @since 5.0.7
 		 */
-		emptyMessage: function(msg) {
+		emptyMessage: function (msg) {
 			if(this.desktop)
 				jq(this.$n('empty')).html(msg);
 		}
@@ -77,7 +77,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			return null;
 		
 		var row = rows.getChildAt(row);
-		return row.nChildren <= col ? null: row.getChildAt(col);
+		return row.nChildren <= col ? null : row.getChildAt(col);
 	},
 	/** Returns the style class for the odd rows.
 	 * <p>Default: {@link #getZclass()}-odd.
@@ -176,7 +176,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Grid, 'bind_', arguments);
 		var w = this;
-		after.push(function() {
+		after.push(function () {
 			_fixForEmpty(w);
 		});
 	},
@@ -218,7 +218,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	_syncEmpty: function () {
 		this._shallFixEmpty = true;
 	},
-	onChildAdded_: function(child) {
+	onChildAdded_: function (child) {
 		this.$supers(Grid, 'onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true); //_syncSize required
@@ -291,7 +291,7 @@ zul.grid.RowIter = zk.$extends(zk.Object, {
 	_init: function () {
 		if (!this._isInit) {
 			this._isInit = true;
-			var p = this.grid.rows ? this.grid.rows.firstChild: null;
+			var p = this.grid.rows ? this.grid.rows.firstChild : null;
 			if (this.opts && this.opts.skipHidden)
 				for (; p && !p.isVisible(); p = p.nextSibling) {}
 			this.p = p;

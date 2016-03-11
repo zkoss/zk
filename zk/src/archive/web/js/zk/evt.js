@@ -168,7 +168,7 @@ onClick: function (evt) {
 		if (data && typeof data == 'object' && !jq.isArray(data))
 			zk.$default(this, data);
 
-		this.opts = opts||{rtags:{}};
+		this.opts = opts || {rtags: {}};
 		if (this.domEvent = domEvent)
 			this.domTarget = domEvent.target;
 	},
@@ -232,7 +232,7 @@ zWatch = (function () {
 				if (ref) {
 					for (var j = 0, l = xinfs.length; j < l; ++j)
 						if (xinfs[j][0] == ref) {
-							infs = xinfs[j][1]
+							infs = xinfs[j][1];
 							xinfs.splice(j--, 1);
 							--l;
 							_invoke(name, infs, ref, args, fns);
@@ -310,10 +310,10 @@ zWatch = (function () {
 		return xinfs;
 	}
 	function _target(inf) {
-		return jq.isArray(inf) ? inf[0]: inf;
+		return jq.isArray(inf) ? inf[0] : inf;
 	}
 	function _fn(inf, o, name) {
-		var fn = jq.isArray(inf) ? inf[1]: o[name];
+		var fn = jq.isArray(inf) ? inf[1] : o[name];
 		if (!fn)
 			throw (o.className || o) + ':' + name + ' not found';
 		return fn;
@@ -329,7 +329,7 @@ zWatch = (function () {
 		}
 	}
 	function _bindLevel(a) {
-		return (a = a.bindLevel) == null || isNaN(a) ? -1: a;
+		return (a = a.bindLevel) == null || isNaN(a) ? -1 : a;
 	}
 	function _cmpLevel(a, b) {
 		return _bindLevel(a[0]) - _bindLevel(b[0]);
@@ -350,7 +350,7 @@ zWatch = (function () {
 			//then we invoke them in the normal order (not reverse), s.t.,
 			//child invokes firsd, but also superclass invoked first (first register, first call if same object)
 			for (var j = fns.length, k = j - 1, i, f, oldp, newp; j >= 0;) {
-				if (--j < 0 || (oldp != (newp=fns[j][1].parent) && oldp)) {
+				if (--j < 0 || (oldp != (newp = fns[j][1].parent) && oldp)) {
 					for (i = j; ++i <= k;) {
 						f = fns[i];
 						f[0].apply(f[1], args);
@@ -367,9 +367,9 @@ zWatch = (function () {
 			if (down) _sync();
 
 			var args = [],
-				fns = opts && opts.reverse ? []: null,
+				fns = opts && opts.reverse ? [] : null,
 				gun = new _Gun(name,
-					down ? _visiChildSubset(name, wts, org): _visiSubset(name, wts),
+					down ? _visiChildSubset(name, wts, org) : _visiSubset(name, wts),
 					args, org, fns);
 			args.push(gun);
 			for (var j = 2, l = vararg.length; j < l;) //skip name and origin
@@ -597,7 +597,7 @@ onX: function (ctl) {
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called. 
 	*/
 	fireDown: function (name, org, opts) {
-		_fire(name, org, zk.copy(opts,{down:true}), arguments);
+		_fire(name, org, zk.copy(opts,{down: true}), arguments);
 	},
 	onBindLevelMove: function () { //internal
 		_dirty = true;

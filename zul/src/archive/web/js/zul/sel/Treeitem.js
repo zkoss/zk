@@ -100,14 +100,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_open: true,
 	$define: {
-    	/** Returns whether this container is open.
-    	 * <p>Default: true.
-    	 * @return boolean
-    	 */
-    	/** Sets whether this container is open.
-    	 * @param boolean open
-    	 */
-		open : function(open, fromServer) {
+		/** Returns whether this container is open.
+		 * <p>Default: true.
+		 * @return boolean
+		 */
+		/** Sets whether this container is open.
+		 * @param boolean open
+		 */
+		open: function (open, fromServer) {
 			var img = this.$n('open'),
 				icon = this.$n('icon');
 			if (!img || _closed(this.parent)) {
@@ -142,8 +142,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				tree._sizeOnOpen();
 				
 				if (!fromServer)
-					this.fire('onOpen', {open : open},
-							{toServer : tree.inPagingMold() || tree.isModel()});
+					this.fire('onOpen', {open: open},
+							{toServer: tree.inPagingMold() || tree.isModel()});
 
 				tree._syncFocus(this);
 				tree.focus();
@@ -152,7 +152,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					tree._fixhdwcnt = tree._fixhdwcnt || 0;
 					if (!tree._fixhdwcnt++)
 						tree._fixhdoldwd = oldwd;
-					setTimeout(function() {
+					setTimeout(function () {
 						if (!--tree._fixhdwcnt
 								&& tree.$n()
 								&& (tree._fixhdoldwd != ebodytbl.clientWidth))
@@ -214,7 +214,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 */
 	getLevel: function () {
 		var level = 0;
-		for (var  item = this;; ++level) {
+		for (var item = this;; ++level) {
 			if (!item.parent)
 				break;
 
@@ -230,7 +230,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 */
 	getLabel: function () {
 		var cell = this.getFirstCell();
-		return cell ? cell.getLabel(): null;
+		return cell ? cell.getLabel() : null;
 	},
 	/** Sets the label of the {@link Treecell} it contains.
 	 *
@@ -263,7 +263,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 */
 	getImage: function () {
 		var cell = this.getFirstCell();
-		return cell ? cell.getImage(): null;
+		return cell ? cell.getImage() : null;
 	},
 	/** Sets the image of the {@link Treecell} it contains.
 	 *
@@ -309,7 +309,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 		return this;
 	},
-	beforeParentChanged_: function(newParent) {
+	beforeParentChanged_: function (newParent) {
 		var oldtree = this.getTree();
 		if (oldtree) 
 			oldtree._onTreeitemRemoved(this);
@@ -319,7 +319,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (tree) 
 				tree._onTreeitemAdded(this);
 		}
-		this.$supers("beforeParentChanged_", arguments);
+		this.$supers('beforeParentChanged_', arguments);
 	},
 	//@Override
 	isRealElement: function () {
@@ -351,7 +351,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				this.rerender();
 		}
 	},
-	onChildRemoved_: function(child) {
+	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.treerow) {
 			this.treerow = null;
@@ -361,7 +361,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				this._syncIcon(true); // remove the icon
 		}
 	},
-	onChildAdded_: function(child) {
+	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true);
@@ -469,7 +469,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		};
 	})(),
 	insertChildHTML_: function (child, before, desktop) {
-		if (before = before ? before.getFirstNode_(): null)
+		if (before = before ? before.getFirstNode_() : null)
 			jq(before).before(child.redrawHTML_());
 		else
 			this._renderChildHTML(child.redrawHTML_());
@@ -503,11 +503,11 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		if ((items = oldwgt.getTree()) && (items = items._selItems))
 			if (oldwgt.$instanceof(zul.sel.Treechildren)) {
 				for (var item = oldwgt.firstChild; item; item = item.nextSibling)
-					_rmSelItemsDown(items, item)
+					_rmSelItemsDown(items, item);
 				for (var item = newwgt.firstChild; item; item = item.nextSibling)
 					_addSelItemsDown(items, item);
 			} else { //Treeitem
-				_rmSelItemsDown(items, oldwgt)
+				_rmSelItemsDown(items, oldwgt);
 				_addSelItemsDown(items, newwgt);
 			}
 	}

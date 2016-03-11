@@ -37,7 +37,7 @@ zul.fud.FileuploadDlg = zk.$extends(zul.wnd.Window, {
 
 zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 	updated: null,
-	$init: function (uplder,  filenm) {
+	$init: function (uplder, filenm) {
 		this._uplder = uplder;
 		filenm = filenm.replace(/\//g, '\\');
 		filenm = filenm.substring(filenm.lastIndexOf('\\') + 1, filenm.length);
@@ -46,8 +46,8 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 			self = this,
 			wgt = uplder.getWidget(),
 			uploaded = wgt.$f('uploaded'),
-			max = wgt.$o().max||0, //max is stored in FileuploadDlg (i.e., $o())
-			uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au:true}),
+			max = wgt.$o().max || 0, //max is stored in FileuploadDlg (i.e., $o())
+			uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au: true}),
 			html = '<div id="' + id + '" style="min-height:16px;background:#F4F8FF;border: 1px solid #99AABD;font-family:'
 			+ 'arial,sans-serif;font-size: 11px;padding: 2px;'
 			+ 'color: #0F3B82;"><img style="float: left;" src="' + uri + '"/>'
@@ -63,8 +63,8 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 		if (max > 0 && max <= uploaded.$n().childNodes.length)
 			uploaded.$f('fileupload').setVisible(false); // B50-ZK-340: need to skip rerender
 		
-		this.viewer = jq('#'+ id)[0];
-		jq('#' + id + '-cancel').click(function() {
+		this.viewer = jq('#' + id)[0];
+		jq('#' + id + '-cancel').click(function () {
 			wgt.$f('submit').revert();
 			if (!self._finish) uplder.cancel();
 			else {
@@ -79,10 +79,10 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 		});
 	},
 	update: function (sent, total) {
-		jq('#'+ this._uplder.id + '-sent').html(Math.round((total/1024)*sent/100) + msgzk.KBYTES);
+		jq('#' + this._uplder.id + '-sent').html(Math.round((total / 1024) * sent / 100) + msgzk.KBYTES);
 		if (!this.updated) {
 			this.updated = true;
-			jq('#'+ this._uplder.id + '-total').html(Math.round(total/1024)+msgzk.KBYTES);
+			jq('#' + this._uplder.id + '-total').html(Math.round(total / 1024) + msgzk.KBYTES);
 		}
 	},
 	destroy: function (finish) {
@@ -91,7 +91,7 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 		if (!finish) jq(this.viewer).remove();
 		else {
 			jq('#' + this._uplder.id + '-sent').parent().remove();
-			jq('#' + this._uplder.id)[0].firstChild.src = zk.ajaxURI('/web/zk/img/attachment.gif', {au:true});
+			jq('#' + this._uplder.id)[0].firstChild.src = zk.ajaxURI('/web/zk/img/attachment.gif', {au: true});
 		}
 	}
 });

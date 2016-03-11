@@ -12,7 +12,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 */
 (function (zk) {
 	function easing(x, t, b, c, d) {
-		return -c * ((t=t/d-1)*t*t*t - 1) + b; // easeOutQuart
+		return -c * ((t = t / d - 1) * t * t * t - 1) + b; // easeOutQuart
 	}	
 	function snap(dg, pointer) {
 		var ctrl = dg.control,
@@ -67,7 +67,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			dg._isVer = true;
 			dg._start = opts.startPosition;
 			if (zk(ctrl.eend).isVisible()) {
-				dg._end = ctrl.eend.offsetTop + Math.ceil(dg.handle.offsetHeight/2);
+				dg._end = ctrl.eend.offsetTop + Math.ceil(dg.handle.offsetHeight / 2);
 				if (dg._end > opts.viewportSize + dg._start)
 					dg._end = opts.viewportSize + dg._start;
 			} else {
@@ -78,7 +78,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			dg._isVer = false;
 			dg._start = opts.startPosition;
 			if (zk(ctrl.eend).isVisible()) {
-				dg._end = ctrl.eend.offsetLeft + Math.ceil(dg.handle.offsetWidth/2);
+				dg._end = ctrl.eend.offsetLeft + Math.ceil(dg.handle.offsetWidth / 2);
 				if (dg._end > opts.viewportSize + dg._start)
 					dg._end = opts.viewportSize + dg._start;
 			} else {
@@ -93,7 +93,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		}
 		var lastP, lastS = [],
 			timeout = 30,
-			duration = timeout*20,
+			duration = timeout * 20,
 			t = 10,
 			running = function (orient) {
 				var norient = zk.parseFloat(dg.node.style[orient]),
@@ -103,7 +103,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 					if (lastS.length > 4 && lastS.shift() == dg._lastSteps) {
 						lastS[0] = dg._lastSteps;
 						clearTimeout(dg._timer);
-						dg._timer = setTimeout(function(){running(orient);}, 100);
+						dg._timer = setTimeout(function () {running(orient);}, 100);
 						return;
 					}
 				} else t = 10; // reset 
@@ -111,8 +111,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				lastP = norient;
 				
 				var down = diff > 0,
-					total = down ? Math.max(0, diff/dg._scale) : Math.min(0, diff/dg._scale),
-					step = Math.round(ctrl.$class.easing(t/duration, t, 0, total, duration));
+					total = down ? Math.max(0, diff / dg._scale) : Math.min(0, diff / dg._scale),
+					step = Math.round(ctrl.$class.easing(t / duration, t, 0, total, duration));
 
 				if (down) {
 					if (total > 1)
@@ -147,9 +147,9 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 					}
 				}
 				clearTimeout(dg._timer);
-				dg._timer = setTimeout(function(){running(orient);}, timeout);
+				dg._timer = setTimeout(function () {running(orient);}, timeout);
 			};
-		dg._timer = setTimeout(function(){running((dg._isVer ? 'top' : 'left'));}, 50);
+		dg._timer = setTimeout(function () {running((dg._isVer ? 'top' : 'left'));}, 50);
 	};
 	function endeffect(dg, evt) {
 		var ctrl = dg.control,
@@ -265,8 +265,8 @@ zul.WScroll = zk.$extends(zk.Object, {
 	$init: function (control, opts) {
 		this.control = control;
 		this.opts = zk.$default(opts, {
-			orient : 'horizontal',
-			startPosition : 0,
+			orient: 'horizontal',
+			startPosition: 0,
 			startStep: 0,
 			offset: 0
 		});
@@ -277,7 +277,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this._isVer = opts.orient == 'vertical';
 		// ZK-2178: viewportSize is 0 if biglistbox has not model
 		if (!opts.viewportSize && opts.viewportSize != 0)
-			throw "Handle required for a viewport size: {viewportSize: size}";
+			throw 'Handle required for a viewport size: {viewportSize: size}';
 		this.redraw(this.anchor);
 		this._initDragdrop();
 		this._listenMouseEvent();
@@ -316,7 +316,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 				es.display = '';
 				es.top = top + edragHeight + rest + 'px';
 			} else {
-				var rate = vsize/rest,
+				var rate = vsize / rest,
 					height = Math.max(edragHeight * rate, 5);
 				this.epos.style.height = height + 'px';
 				this._scale = rate;
@@ -352,7 +352,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 				es.display = '';
 				es.left = left + edragWidth + rest + 'px';
 			} else {
-				var rate = vsize/rest,
+				var rate = vsize / rest,
 					width = Math.max(edragWidth * rate, 5);
 				this.epos.style.width = width + 'px';
 				this._scale = rate;
@@ -402,9 +402,9 @@ zul.WScroll = zk.$extends(zk.Object, {
 	_mouseOver: function (evt) {
 		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
-			key = cls.substring(index+1),
+			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);
-		if ($drag.hasClass(cls + '-clk')){
+		if ($drag.hasClass(cls + '-clk')) {
 			$drag.removeClass(cls + '-clk');
 		}
 		switch (key) {
@@ -426,7 +426,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		var cls = evt.target.className,
 			$drag = jq(this.edrag);
 		$drag.removeClass(cls + '-over');
-		if ($drag.hasClass(cls + '-clk')){
+		if ($drag.hasClass(cls + '-clk')) {
 			$drag.removeClass(cls + '-clk');
 		}
 	},
@@ -436,7 +436,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 	_mouseDown: function (evt) {
 		var cls = evt.target.className,
 			index = cls.lastIndexOf('-'),
-			key = cls.substring(index+1),
+			key = cls.substring(index + 1),
 			$drag = jq(this.edrag);
 		if (!$drag.hasClass(cls + '-over') && !zk.mobile) //no mouse over for mobile
 			return;// disable
@@ -594,18 +594,18 @@ zul.WScroll = zk.$extends(zk.Object, {
 				scale = this._scale,
 				wgt = this.widget;
 			if (deltaY > 0) { // up
-				opts.startStep -= Math.max(Math.round(wgt._cols/5), 1);
+				opts.startStep -= Math.max(Math.round(wgt._cols / 5), 1);
 				if (opts.startStep < 0)
 					opts.startStep = 0;
 			} else { // down
-				opts.startStep += Math.max(Math.round(wgt._cols/5), 1);
+				opts.startStep += Math.max(Math.round(wgt._cols / 5), 1);
 				if (opts.startStep > endStep)
 					opts.startStep = endStep;
 			}
 			if (steps == opts.startStep)
 				return;// nothing changed
 			
-			var moving = opts.startPosition + (opts.startStep  * scale),
+			var moving = opts.startPosition + (opts.startStep * scale),
 				end = zk(this.eend).isVisible() ? this.eend.offsetTop - (this.edrag.offsetHeight - this._gap)
 							: opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
 			this.epos.style.top = moving + 'px';
@@ -628,18 +628,18 @@ zul.WScroll = zk.$extends(zk.Object, {
 				scale = this._scale,
 				wgt = this.widget;
 			if (deltaX < 0) { // up
-				opts.startStep -= Math.max(Math.round(wgt._cols/5), 1);
+				opts.startStep -= Math.max(Math.round(wgt._cols / 5), 1);
 				if (opts.startStep < 0)
 					opts.startStep = 0;
 			} else { // down
-				opts.startStep += Math.max(Math.round(wgt._cols/5), 1);
+				opts.startStep += Math.max(Math.round(wgt._cols / 5), 1);
 				if (opts.startStep > endStep)
 					opts.startStep = endStep;
 			}
 			if (steps == opts.startStep)
 				return;// nothing changed
 			
-			var moving = opts.startPosition + (opts.startStep  * scale),
+			var moving = opts.startPosition + (opts.startStep * scale),
 				end = zk(this.eend).isVisible() ? this.eend.offsetLeft - (this.edrag.offsetWidth - this._gap)
 							: opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
 			this.epos.style.left = moving + 'px';
@@ -669,7 +669,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		s.display = old;
 		
 		this.drag = new zk.Draggable(this, this.edrag, {
-			constraint: this._isVer ? 'vertical': 'horizontal',
+			constraint: this._isVer ? 'vertical' : 'horizontal',
 			snap: snap,
 			starteffect: starteffect,
 			zIndex: 12000,
@@ -689,16 +689,16 @@ zul.WScroll = zk.$extends(zk.Object, {
 			ocls = this._isVer ? 'vertical' : 'horizontal',
 			uuid = this.uid + '-' + orient + 'bar',
 			zcls = this.widget.$s('wscroll');
-		jq(p).append('<div id="' + uuid + '" class="' + zcls + '-' + ocls + '">' +
-				'<div class="' + zcls + '-drag">' +
-					'<div class="' + zcls + '-home" title="' + msgzul.WS_HOME + '"></div>' +
-					'<div class="' + zcls + '-up" title="' + msgzul.WS_PREV + '"></div>' +
-					'<div class="' + zcls + '-down" title="' + msgzul.WS_NEXT + '"></div>' +
-					'<div class="' + zcls + '-end" title="' + msgzul.WS_END + '"></div>' +
-				'</div>' +
-				'<div class="' + zcls + '-pos"></div>' +
-				'<div class="' + zcls + '-endbar"></div>' +
-			'</div>');
+		jq(p).append('<div id="' + uuid + '" class="' + zcls + '-' + ocls + '">'
+				+ '<div class="' + zcls + '-drag">'
+					+ '<div class="' + zcls + '-home" title="' + msgzul.WS_HOME + '"></div>'
+					+ '<div class="' + zcls + '-up" title="' + msgzul.WS_PREV + '"></div>'
+					+ '<div class="' + zcls + '-down" title="' + msgzul.WS_NEXT + '"></div>'
+					+ '<div class="' + zcls + '-end" title="' + msgzul.WS_END + '"></div>'
+				+ '</div>'
+				+ '<div class="' + zcls + '-pos"></div>'
+				+ '<div class="' + zcls + '-endbar"></div>'
+			+ '</div>');
 	}
 }, {
 	/**

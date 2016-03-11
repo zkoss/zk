@@ -35,7 +35,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_tt_close_();
 			_tt_inf = {
 				tip: tip, ref: ref, params: params,
-				timer: setTimeout(function() {_tt_open_(event);}, params.delay !== undefined ? params.delay : zk.tipDelay)
+				timer: setTimeout(function () {_tt_open_(event);}, params.delay !== undefined ? params.delay : zk.tipDelay)
 			};
 		} else
 			_tt_clearClosing_();
@@ -82,7 +82,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				params.y = _parseParamFunc(event, y);
 			
 			var xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
-			_tt_tip.open(_tt_ref, xy, params.position ? params.position : params.x === null ? "after_pointer" : null, {sendOnOpen:true});
+			_tt_tip.open(_tt_ref, xy, params.position ? params.position : params.x === null ? 'after_pointer' : null, {sendOnOpen: true});
 		}
 	}
 	function _tt_close_() {
@@ -99,20 +99,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			// 
 			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
 			// IE10: Bug ZK-1519
-	    	if (zk.ie == 10 || zk.ff) {
+			if (zk.ie == 10 || zk.ff) {
 				var $tip = jq(tip.$n()),
 					$tipOff = $tip.offset(),
 					pointer = zk.currentPointer;
-				if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width())) &&
-					(pointer[1] >= $tipOff.top  && pointer[1] <= ($tipOff.top + $tip.height())))
+				if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width()))
+					&& (pointer[1] >= $tipOff.top && pointer[1] <= ($tipOff.top + $tip.height())))
 					return;
 			}
 			_tt_tip = _tt_ref = null;
-			tip.close({sendOnOpen:true});
+			tip.close({sendOnOpen: true});
 		}
 	}
 	function _setCtrlKeysErr(msg) {
-		zk.error("setCtrlKeys: " + msg);
+		zk.error('setCtrlKeys: ' + msg);
 	}
 	function _parseParamFunc(event, funcBody) {
 		if (funcBody.indexOf('(') != -1 && funcBody.indexOf(')') != -1) {
@@ -433,32 +433,32 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var k = j + 1;
 				for (; k < len; ++k) {
 					var c2 = keys.charAt(k);
-					if ((c2 > 'Z' || c2 < 'A') 	&& (c2 > 'z' || c2 < 'a')
+					if ((c2 > 'Z' || c2 < 'A') && (c2 > 'z' || c2 < 'a')
 					&& (c2 > '9' || c2 < '0'))
 						break;
 				}
 				if (k == j + 1)
-					return _setCtrlKeysErr("Unexpected character "+cc+" in "+keys);
+					return _setCtrlKeysErr('Unexpected character ' + cc + ' in ' + keys);
 
-				var s = keys.substring(j+1, k).toLowerCase();
-				if ("pgup" == s) cc = 33;
-				else if ("pgdn" == s) cc = 34;
-				else if ("end" == s) cc = 35;
-				else if ("home" == s) cc = 36;
-				else if ("left" == s) cc = 37;
-				else if ("up" == s) cc = 38;
-				else if ("right" == s) cc = 39;
-				else if ("down" == s) cc = 40;
-				else if ("ins" == s) cc = 45;
-				else if ("del" == s) cc = 46;
-				else if ("bak" == s) cc = 8;
+				var s = keys.substring(j + 1, k).toLowerCase();
+				if ('pgup' == s) cc = 33;
+				else if ('pgdn' == s) cc = 34;
+				else if ('end' == s) cc = 35;
+				else if ('home' == s) cc = 36;
+				else if ('left' == s) cc = 37;
+				else if ('up' == s) cc = 38;
+				else if ('right' == s) cc = 39;
+				else if ('down' == s) cc = 40;
+				else if ('ins' == s) cc = 45;
+				else if ('del' == s) cc = 46;
+				else if ('bak' == s) cc = 8;
 				else if (s.length > 1 && s.charAt(0) == 'f') {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
-						return _setCtrlKeysErr("Unsupported function key: #f" + v);
+						return _setCtrlKeysErr('Unsupported function key: #f' + v);
 					cc = 112 + v - 1;
 				} else
-					return _setCtrlKeysErr("Unknown #"+s+" in "+keys);
+					return _setCtrlKeysErr('Unknown #' + s + ' in ' + keys);
 
 				parsed[which][cc] = true;
 				which = 0;
@@ -467,9 +467,9 @@ zul.Widget = zk.$extends(zk.Widget, {
 			default:
 				if (!which || ((cc > 'Z' || cc < 'A') 
 				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
-					return _setCtrlKeysErr("Unexpected character "+cc+" in "+keys);
+					return _setCtrlKeysErr('Unexpected character ' + cc + ' in ' + keys);
 				if (which == 4)
-					return _setCtrlKeysErr("$a - $z not supported (found in "+keys+"). Allowed: $#f1, $#home and so on.");
+					return _setCtrlKeysErr('$a - $z not supported (found in ' + keys + '). Allowed: $#f1, $#home and so on.');
 
 				if (cc <= 'z' && cc >= 'a')
 					cc = cc.toUpperCase();
@@ -527,13 +527,13 @@ zul.Widget = zk.$extends(zk.Widget, {
 							: [evt.pageX, evt.pageY];
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && popup.isOpen()) {
-					popup.close({sendOnOpen:true});
+					popup.close({sendOnOpen: true});
 				} else {
-					setTimeout(function() { // F70-ZK-2007: Add the type and button number information
-						popup.open(self, xy, params.position ? params.position : null, {sendOnOpen:true, type:params.type, which:1});
+					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
+						popup.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 1});
 					}, 0);
 				}
-				evt.stop({dom:true});
+				evt.stop({dom: true});
 			}
 		}
 		if (popupOnly !== true)
@@ -552,13 +552,13 @@ zul.Widget = zk.$extends(zk.Widget, {
 							: [evt.pageX, evt.pageY];
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
-					ctx.close({sendOnOpen:true});
+					ctx.close({sendOnOpen: true});
 				} else {
-					setTimeout(function() { // F70-ZK-2007: Add the type and button number information
-						ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true, type:params.type, which:3}); //Bug #2870620
+					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
+						ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
 					}, 0);
 				}
-				evt.stop({dom:true}); //prevent default context menu to appear
+				evt.stop({dom: true}); //prevent default context menu to appear
 			}
 		}
 		this.$supers('doRightClick_', arguments);
@@ -581,11 +581,11 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	_smartFellow: function (id) {
 		return id ? id.startsWith('uuid(') && id.endsWith(')') ?
-			zk.Widget.$(id.substring(5, id.length - 1)):
-			this.$f(id, true): null;
+			zk.Widget.$(id.substring(5, id.length - 1)) :
+			this.$f(id, true) : null;
 	},
 	//B70-ZK-2435: catch key down event right now rather than propagate it
-	doKeyDown_ : function(evt) {
+	doKeyDown_: function (evt) {
 		if (this.getCtrlKeys() || this.isListen('onOK') || this.isListen('onCancel')) {
 			//B70-ZK-2532: if afterKeyDown_ doesn't handle evt, then propagate to super
 			if(!this.afterKeyDown_(evt))
@@ -607,19 +607,19 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @see #setCtrlKeys
 	 */
 	afterKeyDown_: function (evt/*, simulated*/) {
-		var keyCode = evt.keyCode, evtnm = "onCtrlKey", okcancel;
+		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel;
 		switch (keyCode) {
 		case 13: //ENTER
 			var target = evt.domTarget, tn = jq.nodeName(target);
-			if (tn == "textarea" || (tn == "button"
+			if (tn == 'textarea' || (tn == 'button'
 			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup) 
 			&& (!target.id || !target.id.endsWith('-a')))
-			|| (tn == "input" && target.type.toLowerCase() == "button"))
+			|| (tn == 'input' && target.type.toLowerCase() == 'button'))
 				return; //don't change button's behavior (Bug 1556836)
-			okcancel = evtnm = "onOK";
+			okcancel = evtnm = 'onOK';
 			break;
 		case 27: //ESC
-			okcancel = evtnm = "onCancel";
+			okcancel = evtnm = 'onCancel';
 			break;
 		case 16: //Shift
 		case 17: //Ctrl
@@ -640,7 +640,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		var target = evt.target, wgt = target;
 		for (;; wgt = wgt.parent) {
 			if (!wgt) return;
-			if (!wgt.isListen(evtnm, {any:true})) continue;
+			if (!wgt.isListen(evtnm, {any: true})) continue;
 
 			if (okcancel)
 				break;
@@ -670,13 +670,13 @@ zul.Widget = zk.$extends(zk.Widget, {
 		}, 0);
 
 		evt.stop();
-		if (jq.nodeName(evt.domTarget, "select"))
-			evt.stop({dom:true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
+		if (jq.nodeName(evt.domTarget, 'select'))
+			evt.stop({dom: true, revoke: true}); //Bug 1756559: don't stop DOM since it affects IE and Opera's SELECT's closing dropdown
 
 		//Bug 2041347
 		if (zk.ie < 11 && keyCode == 112) {
 			zk._oldOnHelp = window.onhelp;
-			window.onhelp = function () {return false;}
+			window.onhelp = function () {return false;};
 			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);
 		}
 		return true; //handled
@@ -699,8 +699,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @since 5.0.5
 	 */
 	getOpenTooltip: function () {
-		return _tt_tip && _tt_tip.isOpen() ? _tt_tip: null;
+		return _tt_tip && _tt_tip.isOpen() ? _tt_tip : null;
 	}
 });
-
 })();

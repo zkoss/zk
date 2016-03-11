@@ -147,7 +147,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			if ('descending' == dir) return false;
 		}
 
-		var sorter = ascending ? this._sortAscending: this._sortDescending;
+		var sorter = ascending ? this._sortAscending : this._sortDescending;
 		if (sorter == 'fromServer')
 			return false;
 		else if (sorter == 'none') {
@@ -170,7 +170,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		var mesh = this.getMeshWidget(),
 			body = this.getMeshBody(),
 			dir = this.getSortDirection(),
-			sorter = ascending ? this._sortAscending: this._sortDescending,
+			sorter = ascending ? this._sortAscending : this._sortDescending,
 			desktop = body.desktop,
 			node = body.$n();
 		try {
@@ -186,7 +186,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 					}
 			
 			var dsc = dir == 'ascending' ? -1 : 1, fn = this.sorting, isNumber = sorter == 'client(number)';
-			d.sort(function(a, b) {
+			d.sort(function (a, b) {
 				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
 				if (v == 0) {
 					v = (a.index < b.index ? -1 : 1);
@@ -204,12 +204,12 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	},
 	/**
 	 * The default implementation to compare the data.
-     * @param Object o1 the first object to be compared.
-     * @param Object o2 the second object to be compared.
-     * @param boolean isNumber
-     * @return int
+	 * @param Object o1 the first object to be compared.
+	 * @param Object o2 the second object to be compared.
+	 * @param boolean isNumber
+	 * @return int
 	 */
-	sorting: function(a, b, isNumber) {
+	sorting: function (a, b, isNumber) {
 		var v1, v2;
 		if (typeof a.getLabel == 'function')
 			v1 = a.getLabel();

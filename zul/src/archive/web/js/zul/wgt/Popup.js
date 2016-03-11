@@ -126,7 +126,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var node = this.$n(),
 			sendOnOpen = opts && opts.sendOnOpen;
 		this.setVisible(true);
-		if ((!opts || !opts.disableMask) && this.isListen('onOpen', {asapOnly:true})) {
+		if ((!opts || !opts.disableMask) && this.isListen('onOpen', {asapOnly: true})) {
 			//Racing? Previous onResponse has not been fired and user triggers open again
 			if (this.mask) this.mask.destroy(); 
 			
@@ -216,7 +216,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			dim = {
 				left: zk.parseInt(offset[0]), top: zk.parseInt(offset[1]),
 				width: 0, height: 0
-			}
+			};
 		}
 		if (dim) {
 			// we should include margin in this case for customizing theme. (since ZK 7.0.0)
@@ -255,7 +255,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			if (zk.ff && zk.currentFocus) {
 				var n = zk.currentFocus.getInputNode ?
 						zk.currentFocus.getInputNode() : zk.currentFocus.$n();
-				if (jq.nodeName(n, "input") && jq.isAncestor(this.$n(), n)) // Bug ZK-2922, check ancestor first.
+				if (jq.nodeName(n, 'input') && jq.isAncestor(this.$n(), n)) // Bug ZK-2922, check ancestor first.
 					jq(n).blur(); // trigger a missing blur event.
 			}
 		} catch (e) {
@@ -283,18 +283,18 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:false});
+			this.fire('onOpen', {open: false});
 		
 		if (zk.ie < 11) { // re-create dom element to remove :hover state style
 			var that = this;
-			setTimeout(function() {
+			setTimeout(function () {
 				that.replaceHTML(node); // see also ZK-1216, ZK-1124, ZK-318
 			}, 50);
 		}
 		//remove extra CSS class
 		jq(node).removeClass(this.$s('open'));
 	},
-	onFloatUp: function(ctl, opts){
+	onFloatUp: function (ctl, opts) {
 		if (!this.isVisible()) 
 			return;
 		var openInfo = this._openInfo,
@@ -304,7 +304,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._shallToggle && openInfo && opts && (
 				opts.triggerByClick === undefined || (
 				openInfo[3].which == opts.triggerByClick && zUtl.isAncestor(this._openInfo[0], ctl.origin)))) {
-				return;
+			return;
 		}
 		this._doFloatUp(ctl);
 	},
@@ -322,7 +322,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				return;
 			floatFound = floatFound || wgt.isFloating_();
 		}
-		this.close({sendOnOpen:true});
+		this.close({sendOnOpen: true});
 	},
 	// ZK-2990: should also change the zIndex of the stackup of the widget
 	setFloatZIndex_: function (node, zi) {

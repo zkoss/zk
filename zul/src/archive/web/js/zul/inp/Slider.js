@@ -32,24 +32,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		
 		var isVertical = wgt.isVertical(),
 			ofs = zk(wgt.$n()).cmOffset(),
-			totalLen = isVertical ? wgt._getHeight(): wgt._getWidth(), 
+			totalLen = isVertical ? wgt._getHeight() : wgt._getWidth(),
 			x = totalLen > 0 ? ((curpos - wgt._minpos) * totalLen) / (wgt._maxpos - wgt._minpos) : 0;
 		if(!isDecimal)
 			x = Math.round(x);
 	
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
-		ofs = isVertical ? [0, (ofs[1] + x)]: [(ofs[0] + x), 0];
+		ofs = isVertical ? [0, (ofs[1] + x)] : [(ofs[0] + x), 0];
 		ofs = wgt._snap(ofs[0], ofs[1]);
 		
-		return ofs[(isVertical ? 1: 0)];
+		return ofs[(isVertical ? 1 : 0)];
 	}
 	function _getNextPos(wgt, offset) {
 		var $btn = jq(wgt.$n('btn')),
-			fum = wgt.isVertical()? ['top', 'height']: ['left', 'width'],
+			fum = wgt.isVertical() ? ['top', 'height'] : ['left', 'width'],
 			newPosition = {};
 		
 		newPosition[fum[0]] = jq.px0(offset ? 
-			(offset + zk.parseInt($btn.css(fum[0])) - $btn[fum[1]]() / 2):
+			(offset + zk.parseInt($btn.css(fum[0])) - $btn[fum[1]]() / 2) :
 			_getBtnNewPos(wgt));
 		
 		return newPosition;
@@ -84,7 +84,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 * <p>Default : "horizontal" 
 		 * @param String orient either "horizontal" or "vertical".
 		 */
-		orient: function() {
+		orient: function () {
 			this.rerender();
 		},
 		/** Returns the current position of the slider.
@@ -108,7 +108,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		/** Sets the minimum position of the slider.
 		 * @param double minpos (since 7.0.1)
 		 */
-		minpos: function(minpos) {
+		minpos: function (minpos) {
 			if (this._curpos < minpos) {
 				this._curpos = minpos;
 			}
@@ -123,7 +123,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		/** Sets the maximum position of the slider.
 		 * @param double maxpos (since 7.0.1)
 		 */
-		maxpos: function(maxpos) {
+		maxpos: function (maxpos) {
 			if (this._curpos > maxpos) {
 				this._curpos = maxpos;
 			}
@@ -185,7 +185,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 *
 		 * @param String name the name of this component.
 		 */
-		name: function() {
+		name: function () {
 			if (this.efield) 
 				this.efield.name = this._name;
 		},
@@ -208,7 +208,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	domClass_: function() {
+	domClass_: function () {
 		var scls = this.$supers('domClass_', arguments),
 			isVertical = this.isVertical();
 		if (isVertical)
@@ -216,13 +216,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		else
 			scls += ' ' + this.$s('horizontal');
 		if (this.inSphereMold())
-            scls += ' ' + this.$s('sphere');
+			scls += ' ' + this.$s('sphere');
 		else if (this.inScaleMold() && !isVertical) 
 			scls += ' ' + this.$s('scale');
 		
 		return scls;
 	},
-	onup_: function(evt) {
+	onup_: function (evt) {
 		var btn = zul.inp.Slider.down_btn, widget;
 		if (btn) {
 			widget = zk.Widget.$(btn);
@@ -232,12 +232,12 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (widget)
 			jq(document).unbind('zmouseup', widget.onup_);
 	},
-	doMouseDown_: function(evt) {
+	doMouseDown_: function (evt) {
 		jq(document).bind('zmouseup', this.onup_);
 		zul.inp.Slider.down_btn = this.$n('btn');
 		this.$supers('doMouseDown_', arguments);
 	},
-	doClick_: function(evt) {
+	doClick_: function (evt) {
 		var $btn = jq(this.$n('btn')),
 			pos = $btn.zk.revisedOffset(),
 			wgt = this,
@@ -246,13 +246,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			isVertical = this.isVertical(),
 			height = this._getHeight(),
 			width = this._getWidth(),
-			offset = isVertical ? evt.pageY - pos[1]: evt.pageX - pos[0];
+			offset = isVertical ? evt.pageY - pos[1] : evt.pageX - pos[0];
 		
 		if (!$btn[0] || $btn.is(':animated')) return;
 		
 		if (!moveToCursor) {
 			if (pageIncrement > 0) {
-				var curpos = this._curpos + (offset > 0 ? pageIncrement: - pageIncrement);
+				var curpos = this._curpos + (offset > 0 ? pageIncrement : - pageIncrement);
 				this._curpos = _roundDecimal(this._constraintPos(curpos), _digitsAfterDecimal(pageIncrement));
 			} else {
 				var total = isVertical ? height : width,
@@ -268,8 +268,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (!isVertical && zk.parseInt(nextPos.left) > width)
 			nextPos.left = jq.px0(width);
 		//ZK-2332 use the speed set in the client-attribute, use the default value 'slow'
-		$btn.animate(nextPos, $btn.zk.getAnimationSpeed('slow'), function() {
-			pos = moveToCursor ? wgt._realpos(): wgt._curpos;
+		$btn.animate(nextPos, $btn.zk.getAnimationSpeed('slow'), function () {
+			pos = moveToCursor ? wgt._realpos() : wgt._curpos;
 			pos = wgt._constraintPos(pos);
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
 			if (moveToCursor)
@@ -277,19 +277,19 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		});
 		this.$supers('doClick_', arguments);
 	},
-	_makeDraggable: function() {
+	_makeDraggable: function () {
 		var opt = {
-				constraint: this._orient || 'horizontal',
-				starteffect: this._startDrag,
-				snap: opt,
-				change: this._dragging,
-				endeffect: this._endDrag
-				};
+			constraint: this._orient || 'horizontal',
+			starteffect: this._startDrag,
+			snap: opt,
+			change: this._dragging,
+			endeffect: this._endDrag
+		};
 		if (_getStep(this) > 0)
 			opt.snap = this._getStepOffset();
 		this._drag = new zk.Draggable(this, this.$n('btn'), opt);
 	},
-	_snap: function(x, y) {
+	_snap: function (x, y) {
 		var btn = this.$n('btn'), ofs = zk(this.$n()).cmOffset();
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
@@ -308,7 +308,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 		return [x, y];
 	},
-	_startDrag: function(dg) {
+	_startDrag: function (dg) {
 		var widget = dg.control;
 		widget.$n('btn').title = ''; //to avoid annoying effect
 		widget.slidepos = widget._curpos,
@@ -317,8 +317,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		jq(document.body)
 			.append('<div id="zul_slidetip" class="z-slider-popup"'
 			+ 'style="position:absolute;display:none;z-index:60000;'
-			+ 'background-color:white;border: 1px outset">' + widget.slidepos +
-			'</div>');
+			+ 'background-color:white;border: 1px outset">' + widget.slidepos
+			+ '</div>');
 		
 		widget.slidetip = jq('#zul_slidetip')[0];
 		if (widget.slidetip) {
@@ -331,7 +331,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			zk(widget.slidetip).position(widget.$n(), vert ? 'end_before' : 'after_start');
 		}
 	},
-	_dragging: function(dg) {
+	_dragging: function (dg) {
 		var widget = dg.control,
 			isDecimal = widget.isDecimal(),
 			pos = widget._realpos();
@@ -344,7 +344,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 		widget._fixPos();
 	},
-	_endDrag: function(dg) {
+	_endDrag: function (dg) {
 		var widget = dg.control,
 			pos = widget._realpos();
 		
@@ -354,8 +354,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		jq(widget.slidetip).remove();
 		widget.slidetip = null;
 	},
-	_realpos: function(dg) {
-		var btnofs = zk(this.$n("btn")).revisedOffset(),
+	_realpos: function (dg) {
+		var btnofs = zk(this.$n('btn')).revisedOffset(),
 			refofs = zk(this.$n()).revisedOffset(),
 			maxpos = this._maxpos,
 			minpos = this._minpos,
@@ -376,10 +376,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		else 
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	},
-	_constraintPos: function(pos) {
+	_constraintPos: function (pos) {
 		return pos < this._minpos ? this._minpos : (pos > this._maxpos ? this._maxpos : pos);
 	},
-	_getSteppedPos: function(pos) {
+	_getSteppedPos: function (pos) {
 		var minpos = this._minpos,
 			step = _getStep(this),
 			mul = 1,
@@ -388,26 +388,26 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (this.isDecimal()) {
 			mul = Math.pow(10, _digitsAfterDecimal(step));
 			pos *= mul;
-			step *= mul
+			step *= mul;
 		}
 		rmdPos = pos % step;
 		return (pos - rmdPos + Math.round((rmdPos) / step) * step) / mul + minpos;
 	},
-	_getWidth: function() {
+	_getWidth: function () {
 		return this.$n().clientWidth - this.$n('btn').offsetWidth;
 	},
-	_getHeight: function() {
+	_getHeight: function () {
 		return this.$n().clientHeight - this.$n('btn').offsetHeight;
 	},
-	_getStepOffset: function() {
-		var totalLen = this.isVertical() ? this._getHeight(): this._getWidth(),
+	_getStepOffset: function () {
+		var totalLen = this.isVertical() ? this._getHeight() : this._getWidth(),
 			step = _getStep(this),
 			ofs = [0, 0];
 		if (step)
-			ofs[(this.isVertical() ? 1: 0)] = totalLen > 0 ? totalLen * step / (this._maxpos - this._minpos) : 0;
+			ofs[(this.isVertical() ? 1 : 0)] = totalLen > 0 ? totalLen * step / (this._maxpos - this._minpos) : 0;
 		return ofs;
 	},
-	_fixSize: function() {
+	_fixSize: function () {
 		var n = this.$n(),
 			btn = this.$n('btn'),
 			inners = this.$n('inner').style;
@@ -421,10 +421,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			inners.width = jq.px0(wd > 0 ? wd : this._width - btn.offsetWidth);
 		}
 	},
-	_fixPos: function() {
-		this.$n('btn').style[this.isVertical()? 'top': 'left'] = jq.px0(_getBtnNewPos(this));
+	_fixPos: function () {
+		this.$n('btn').style[this.isVertical() ? 'top' : 'left'] = jq.px0(_getBtnNewPos(this));
 	},
-	_fixStep: function() {
+	_fixStep: function () {
 		var step = _getStep(this);
 		if (this._drag) {
 			if (step <= 0) {
@@ -434,36 +434,36 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				this._drag.opts.snap = this._getStepOffset();
 		}
 	},
-	onSize: function() {
+	onSize: function () {
 		this._fixSize();
 		this._fixPos();
 	},
 	/** Return whether this widget in scale mold
 	 * @return boolean
 	 */
-	inScaleMold: function() {
+	inScaleMold: function () {
 		return this.getMold() == 'scale';
 	},
 	/** Return whether this widget in sphere mold
 	 * @return boolean
 	 */
-	inSphereMold: function() {
+	inSphereMold: function () {
 		return this.getMold() == 'sphere';
 	},
 	/** Returns whether it is a vertical slider.
 	 * @return boolean
 	 */
-	isVertical: function() {
+	isVertical: function () {
 		return 'vertical' == this._orient;
 	},
 	/** Returns whether it is a decimal slider.
 	 * @return boolean
 	 * @since 7.0.1
 	 */
-	isDecimal: function() {
+	isDecimal: function () {
 		return 'decimal' == this._mode;
 	},
-	updateFormData: function(val) {
+	updateFormData: function (val) {
 		if (this._name) {
 			val = val || 0;
 			if (!this.efield) 
@@ -479,7 +479,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._makeDraggable();
 		}
 	},
-	bind_: function() {
+	bind_: function () {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
 		this._fixSize();
 		//fix B70-ZK-2438
@@ -494,7 +494,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this.updateFormData(this._curpos);
 		this._fixPos();
 	},
-	unbind_: function() {
+	unbind_: function () {
 		this.efield = null;
 		if (this._drag) {
 			this._drag.destroy();

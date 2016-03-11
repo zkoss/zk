@@ -12,12 +12,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function() {
+(function () {
 	//called when user mouseout some element,
 	//for prevent duplicate state change
 	function _setCloseTimer (wgt) {
 		if (!wgt._tidclose)
-			wgt._tidclose = setTimeout(function() {
+			wgt._tidclose = setTimeout(function () {
 				if (!wgt._bover) {
 					if (wgt._autodrop && wgt.isOpen())
 						wgt.close({sendOnOpen: true});
@@ -28,7 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _fireOnOpen (wgt, opts, o) {
 		if (opts && opts.sendOnOpen)
-			wgt.fire('onOpen', {open:o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
+			wgt.fire('onOpen', {open: o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
 	}
 	// called by open method 
 	function _attachPopup(wgt, bListen) {
@@ -67,7 +67,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						.domUnlisten_(pp, 'onMouseOut');
 				pp.close = wgt._oldppclose;
 				delete wgt._oldppclose;
-			}
+			};
 		}
 	}
 /**
@@ -104,9 +104,9 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		else
 			img = '<img class="' + this.$s('image') + '" src="' + img + '" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
-		var space = "vertical" == this.getOrient() ? '<br/>': ' ';
+		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
 		return this.getDir() == 'reverse' ?
-			label + space + img: img + space + label;
+			label + space + img : img + space + label;
 	},
 	domClass_: function (no) {
 		var cls = this.$supers(zul.wgt.Combobutton, 'domClass_', arguments);
@@ -186,11 +186,12 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			// open it if click on right side,
 			// close it if click on both left and right side
 			var open = !this.isOpen();
-			if (this == evt.target)
+			if (this == evt.target) {
 				if (this.$n('btn') == d || this.$n('icon') == d || !open)
 					this.setOpen(open, {sendOnOpen: true});
 				else
 					this.$supers('doClick_', arguments);
+			}
 		}
 	},
 	doMouseDown_: function (evt) {
@@ -260,7 +261,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	// B60-ZK-1216
 	// Combobutton has problems with label-change if its popup did not close beforehand
 	// Override rerender should also work for the case of image-change
-	rerender: function(skipper) {
+	rerender: function (skipper) {
 		if (this.isOpen()) {
 			this.close();
 		}

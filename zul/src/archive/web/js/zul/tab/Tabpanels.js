@@ -39,7 +39,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	/** Returns the tabbox owns this component.
 	 * @return Tabbox
 	 */
-	getTabbox: function() {
+	getTabbox: function () {
 		return this.parent;
 	},
 	setWidth: function (val) {
@@ -122,7 +122,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this.$n().style.width = this.__width || '';
 	},
 	onChildRemoved_: function (child) {
-		this.$supers("onChildRemoved_", arguments);
+		this.$supers('onChildRemoved_', arguments);
 		this._shallSync = true;
 	},
 	onChildAdded_: function (child) {

@@ -33,7 +33,7 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 			var n = this.$n();
 			if (n) {
 				var val = this._value;
-				n.innerHTML = this._encode ? zUtl.encodeXML(val): val;
+				n.innerHTML = this._encode ? zUtl.encodeXML(val) : val;
 				//See Bug 2871080 and ZK-294
 			}
 		},
@@ -56,12 +56,12 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 		return false;
 	},
 	redraw: function (out) {
-		var attrs = this.domAttrs_({id:1, zclass:1}),
+		var attrs = this.domAttrs_({id: 1, zclass: 1}),
 			val = this._value,
 			span = attrs || (this.idRequired && this._checkContentRequired(val));
 			// Bug 3245960: enclosed text was wrapped with <span>
 		if (span) out.push('<span', ' id="', this.uuid, '"', attrs, '>');
-		out.push(this._encode ? zUtl.encodeXML(val): val);
+		out.push(this._encode ? zUtl.encodeXML(val) : val);
 			//See Bug 2871080 and ZK-294
 		if (span) out.push('</span>');
 	}

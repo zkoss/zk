@@ -38,7 +38,7 @@ function _createJQEvent (target, type, button, changedTouch, ofs) {
 	props.push('button', 'charCode', 'clientX', 'clientY', 'detail',
 			'fromElement', 'keyCode', 'layerX', 'layerY', 'offsetX', 'offsetY',
 			'pageX', 'pageY', 'screenX', 'screenY', 'srcElement', 'toElement');
-	for ( var i = props.length, prop; i; ) {
+	for (var i = props.length, prop; i;) {
 		prop = props[--i];
 		event[prop] = originalEvent[prop];
 	}
@@ -141,7 +141,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			this._startTap = function (wgt) {
 				wgt._lastTap = wgt.$n();  //Holds last tapped element (so we can compare for double tap)
 				wgt._tapValid = true;     //Are we still in the .5 second window where a double tap can occur
-				wgt._tapTimeout = setTimeout(function() {
+				wgt._tapTimeout = setTimeout(function () {
 					wgt._tapValid = false;
 				}, doubleClickTime);
 			};
@@ -156,7 +156,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 				.unbind('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
-	_dblTapStart: function(evt) {
+	_dblTapStart: function (evt) {
 		var tevt = evt.originalEvent;
 		if (tevt.touches.length > 1) return;
 		var	changedTouch = tevt.changedTouches[0];
@@ -177,7 +177,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			&& (!zk.isLoaded('zul.sel') || (!p.$instanceof(zul.sel.Listitem) && !p.$instanceof(zul.sel.Treerow)))) 
 		tevt.stopPropagation();
 	},
-	_dblTapEnd: function(evt) {
+	_dblTapEnd: function (evt) {
 		var tevt = evt.originalEvent;
 		if (tevt.touches.length > 1) return;
 		if (this._dbTap) {
@@ -235,7 +235,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 	},
 	unbindTapHold_: function () {
 		if (this.isListen('onRightClick') || (this.getContext && this.getContext())) { //also register context menu to tapHold event
-			this._startHold = this._cancelHold = null
+			this._startHold = this._cancelHold = null;
 			jq(this.$n()).unbind('touchstart', this.proxy(this._tapHoldStart))
 				.unbind('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
 				.unbind('click', this.proxy(this._tapHoldClick))    //prevent click during hold
@@ -266,8 +266,8 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			return;
 		
 		var	changedTouch = tevt.changedTouches[0];
-		if (Math.abs(changedTouch.clientX - this._pt[0]) > initSensitivity ||
-			Math.abs(changedTouch.clientY - this._pt[1]) > initSensitivity )
+		if (Math.abs(changedTouch.clientX - this._pt[0]) > initSensitivity
+			|| Math.abs(changedTouch.clientY - this._pt[1]) > initSensitivity)
 			this._cancelHold();
 	},
 	_tapHoldClick: function (evt) {
@@ -295,11 +295,11 @@ zk.override(zk.Widget.prototype, _xWidget, {
 var _jq = {},
 	_jqEvent = {};
 zk.override(jq.fn, _jq, {
-	bind: function(type, data, fn) {
+	bind: function (type, data, fn) {
 		var evtType;
 		if (evtType = zjq.eventTypes[type]) {
 			// refer to jquery bind function for reassign args
-			if ( jq.isFunction(data) || data === false ) {
+			if (jq.isFunction(data) || data === false) {
 				fn = data;
 				data = undefined;
 			}
@@ -310,7 +310,7 @@ zk.override(jq.fn, _jq, {
 			
 		return this;
 	},
-	unbind: function(type, fn){
+	unbind: function (type, fn) {
 		var evtType;
 		if (evtType = zjq.eventTypes[type]) {
 			if (_removeEventFunction(this[0], evtType, fn))

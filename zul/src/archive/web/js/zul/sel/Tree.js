@@ -144,7 +144,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		if (!this.childReplacing_) //NOT called by onChildReplaced_
 			this._syncSize();
 	},
-	onChildAdded_: function(child) {
+	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.childReplacing_) //called by onChildReplaced_
 			this._fixOnAdd(child, true);
@@ -294,7 +294,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 * @return Array
 	 */
 	getItems: function (opts) {
-		return this.treechildren ? this.treechildren.getItems(null, opts): [];
+		return this.treechildren ? this.treechildren.getItems(null, opts) : [];
 	},
 	/** Returns the number of child {@link Treeitem}.
 	 * The same as {@link #getItems}.size().
@@ -302,7 +302,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 * @return int
 	 */
 	getItemCount: function () {
-		return this.treechildren != null ? this.treechildren.getItemCount(): 0;
+		return this.treechildren != null ? this.treechildren.getItemCount() : 0;
 	},
 	_doLeft: function (row) {
 		if (row.isOpen()) {
@@ -326,8 +326,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		var n = evt.domTarget;
 		if (n) {
 			var id = n.id;
-			return id.endsWith('open') || id.endsWith('icon') ||
-				(evt.name == 'onRightClick' && !this.rightSelect);
+			return id.endsWith('open') || id.endsWith('icon')
+				|| (evt.name == 'onRightClick' && !this.rightSelect);
 		}
 	},// Bug ZK-2295
 	clearSelection: function () {
@@ -342,7 +342,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers('_removeItemFromSelection', arguments);
 		this._sel = this._selItems[0]; // resync
 	},// @Override F70-ZK-2433
-	checkOnHighlightDisabled_: function() {
+	checkOnHighlightDisabled_: function () {
 		if (this._selectOnHighlightDisabled) {
 			var selection = window.getSelection || document.selection;
 			if (selection) {

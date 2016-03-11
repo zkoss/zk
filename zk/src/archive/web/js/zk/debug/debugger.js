@@ -12,9 +12,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function(){
+(function () {
 
-zk.loadCSS(zk.ajaxURI('web/js/zk/debug/debugger.css.dsp', {au:true}));
+zk.loadCSS(zk.ajaxURI('web/js/zk/debug/debugger.css.dsp', {au: true}));
 
 function _space(deep) {
 	var out = [];
@@ -26,7 +26,7 @@ function _dumpWgt(out, wgt, nLevel, inf) {
 	inf.cnt++;
 	out.push(_space(nLevel++),
 		(wgt.widgetName == 'widget' ? (wgt.$n() ? wgt.$n().tagName : wgt.widgetName) : wgt.widgetName),
-		(wgt.id ? '$' + wgt.id: '#' + wgt.uuid), '<br/>');
+		(wgt.id ? '$' + wgt.id : '#' + wgt.uuid), '<br/>');
 
 	for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 		_dumpWgt(out, wgt, nLevel, inf);
@@ -72,7 +72,7 @@ function _dumpAttrs0(out, nm, wgt) {
 				if (typeof value != 'object' && typeof value != 'function' && value != null && value !== '') {
 					if (_defaultIgnore[key] === undefined) {
 						if (key != 'zclass' || value != 'z-' + widgetName) {
-							if (key == "selectedIndex") 
+							if (key == 'selectedIndex') 
 								out.push(' onCreate="self.selectedIndex = ', value, '"');
 							else 
 								out.push(' ', key, '="', zUtl.encodeXML(zUtl.encodeXML(value)), '"');
@@ -98,7 +98,7 @@ function _dumpAttrs0(out, nm, wgt) {
 				if (typeof value != 'object' && typeof value != 'function' && value != null && value !== '') {
 					if (_defaultIgnore[key] === undefined) {
 						if (key != 'zclass' || value != 'z-' + widgetName) {
-							if (key == "selectedIndex") 
+							if (key == 'selectedIndex') 
 								out.push(' onCreate="self.selectedIndex = ', value, '"');
 							else 
 								out.push(' ', key, '="', zUtl.encodeXML(zUtl.encodeXML(value)), '"');
@@ -148,7 +148,7 @@ function _dumpWgt4Zul(out, wgt, nLevel, inf) {
 		nm = 'listbox';
 	else if (nm == 'option') {
 		nm = 'listitem';
-		var attrs =  _dumpAttrs(wgt).replace('mold="select"', '');
+		var attrs = _dumpAttrs(wgt).replace('mold="select"', '');
 		out.push(_space(nLevel++), '&lt;', nm, attrs);
 		if (wgt.firstChild) {
 			inf.cnt++;
@@ -208,7 +208,7 @@ function _parseHTML(text, handler) {
 		text = text.trim();
 		begin = text.indexOf('<');
 		if (begin == 0 && text.startsWith('<!--')) {
-			begin = text.indexOf("-->");
+			begin = text.indexOf('-->');
 			if (begin != -1) {
 				handler.comment(deep, text.substring(0, begin + 3));
 				text = text.substring(begin + 3);
@@ -263,9 +263,9 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 	getConsole: function () {
 		var console = jq(this.outId, zk)[0];
 		if (!console) {
-			console = document.createElement("div");
+			console = document.createElement('div');
 			document.body.appendChild(console);
-			jq(console).replaceWith('<div id="' + this.outId +'" class="z-debug"></div>');
+			jq(console).replaceWith('<div id="' + this.outId + '" class="z-debug"></div>');
 			console = jq(this.outId, zk)[0];
 		}
 		return console;
@@ -293,14 +293,14 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 	dumpWidgetTree: function (wgt) {
 		var out = [], inf = {cnt: 0};
 		_dumpWgt(out, wgt, 0, inf);
-		this._dump('Total: '+inf.cnt, out.join(''));
+		this._dump('Total: ' + inf.cnt, out.join(''));
 	},
 	// don't change the function name, otherwise, zkjet will break.
 	dumpWidgetTree4Zul: function (wgt) {
 		var out = ['&lt;zk xmlns:h="native"&gt;<br/>'], inf = {cnt: 0};
 		_dumpWgt4Zul(out, wgt, 0, inf);
 		out.push('&lt;/zk&gt;');
-		this._dump("Total: "+inf.cnt, out.join(''));
+		this._dump('Total: ' + inf.cnt, out.join(''));
 	},
 	_dump: function (header, content) {
 		var console = this.getConsole();
@@ -322,7 +322,7 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 	},
 	endTag: function (deep, content, isEmpty) {
 		var startTag = this.stack.pop(),
-			endTag = content.substring(2, content.length-1);
+			endTag = content.substring(2, content.length - 1);
 		if (startTag != endTag) {
 			this._errorNumber++;
 			this.out.push('<span style="color:red">Unmatched start tag : [<span style="color:blue;">&lt;',

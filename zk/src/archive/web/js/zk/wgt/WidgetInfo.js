@@ -21,7 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (zk.$package(nm = pkgs[j]).$wv)
 					zk.load(nm + '.wv');
 			zk.afterLoad(f);
-		}: f);
+		} : f);
 	}
 
 /** Utilities to handle widgets, such as the information about widgets.
@@ -57,8 +57,8 @@ zk.wgt.WidgetInfo = {
 		for (var i = 0, len = infs.length; i < len; ++i) {
 			var clsnm = infs[i],
 				j = clsnm.lastIndexOf('.'),
-				wgtnm = j >= 0 ? clsnm.substring(j + 1): clsnm;
-			_wgtInfs[wgtnm.substring(0,1).toLowerCase()+wgtnm.substring(1)] = clsnm;
+				wgtnm = j >= 0 ? clsnm.substring(j + 1) : clsnm;
+			_wgtInfs[wgtnm.substring(0,1).toLowerCase() + wgtnm.substring(1)] = clsnm;
 		}
 	},
 	/** Loads all packages requires by all widgets.

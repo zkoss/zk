@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 //zk.$package('zul.sel');
 
-(function() {
+(function () {
 	function _beforeChildKey(wgt, evt) {
 		return zAu.processing() || wgt._shallIgnore(evt);
 	}
@@ -56,7 +56,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-checked',
 				$headercm = jq(box._headercm);
-			$headercm[box._isAllSelected() ? 'addClass': 'removeClass'](zcls);
+			$headercm[box._isAllSelected() ? 'addClass' : 'removeClass'](zcls);
 			// B70-ZK-2050: Replace icon with image in IE8.
 			//zk($headercm).redoCSS(-1, {'fixFontIcon': true});
 		}
@@ -76,7 +76,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			|| _isButton(evt) || _isInputWidget(evt);
 	}
 	function _fixReplace(w) {
-		return w && (w = w.uuid) ? zk.Widget.$(w): null;
+		return w && (w = w.uuid) ? zk.Widget.$(w) : null;
 	}
 	function _isListgroup(w) {
 		return zk.isLoaded('zkex.sel') && w.$instanceof(zkex.sel.Listgroup);
@@ -97,8 +97,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 * @type boolean
 	 */
 	rightSelect: true,
-	_anchorTop:0,
-	_anchorLeft:0,
+	_anchorTop: 0,
+	_anchorLeft: 0,
 	_isSelecting: true,
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -181,13 +181,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			function (v) {
 				return v < -1 || (!v && v !== 0) ? -1 : v;
 			},
-			function() {
+			function () {
 				var selected = this._selectedIndex;
 				this.clearSelection();
 				this._selectedIndex = selected;
 				if (selected > -1) {
 					var w;
-					for (var it = this.getBodyWidgetIterator(); selected-- >=0;)
+					for (var it = this.getBodyWidgetIterator(); selected-- >= 0;)
 						w = it.next();
 					if (w) {
 						var isMultiSelected = this._selItems.length > 1;
@@ -247,7 +247,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		 * @param int tabindex
 		 * @since 7.0.4
 		 */
-		tabindex: function(tabindex) {
+		tabindex: function (tabindex) {
 			var n = this.$n();
 			if (n)
 				n.tabindex = tabindex || '';
@@ -258,7 +258,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var sels = {};
 		for (var j = 0;;) {
 			var k = val.indexOf(',', j),
-				s = (k >= 0 ? val.substring(j, k): val.substring(j)).trim();
+				s = (k >= 0 ? val.substring(j, k) : val.substring(j)).trim();
 			if (s) sels[s] = true;
 			if (k < 0) break;
 			j = k + 1;
@@ -356,11 +356,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 	},
-	setVflex: function(v) {
+	setVflex: function (v) {
 		this.$supers('setVflex', arguments);
 		if (this.desktop) this.onSize();
 	},
-	setHflex: function(v) {
+	setHflex: function (v) {
 		this.$supers('setHflex', arguments);
 		if (this.desktop) this.onSize();
 	},
@@ -433,12 +433,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						break;
 					}
 				}
-				sz = Math.ceil(sz && h ? (hgh * sz)/h: hgh/this._headHgh(20));
+				sz = Math.ceil(sz && h ? (hgh * sz) / h : hgh / this._headHgh(20));
 				this._visibleRows(sz);
 				hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
 				//bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
-                hgh -= (this.efrozen && this._nativebar ? this.efrozen.offsetHeight : 0);
-                this.ebody.style.height = (hgh < 0 ? 0 : hgh) + 'px';
+				hgh -= (this.efrozen && this._nativebar ? this.efrozen.offsetHeight : 0);
+				this.ebody.style.height = (hgh < 0 ? 0 : hgh) + 'px';
 				return; //done
 			}
 		}
@@ -462,7 +462,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		hgh = 0;
-		var diff = 2/*experiment*/;
+		var diff = 2;/*experiment*/
 		if (!nRows) {
 			if (this.isVflex()) {
 				hgh = this._vflexSize(n.style.height);
@@ -473,11 +473,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				}
 				if (hgh < 25) hgh = 25;
 
-				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight(): null;
+				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight() : null;
 				if (!rowhgh)
 					rowhgh = this._headHgh(20);
 
-				nRows = Math.round((hgh - diff)/ rowhgh);
+				nRows = Math.round((hgh - diff) / rowhgh);
 			}
 			this._visibleRows(nRows);
 		}
@@ -521,7 +521,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (pgit) hgh += pgit.offsetHeight;
 			if (pgib) hgh += pgib.offsetHeight;
 		}
-		return hgh ? hgh: defVal;
+		return hgh ? hgh : defVal;
 	},
 	/**
 	 * Returns the index of the ItemWidget
@@ -610,7 +610,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					// previous page, make sure the anchor does not goes beyond
 					// table height
 					if (this._currentTop > this.ebodytbl.offsetHeight)
-						btn.style.top = this.ebodytbl.offsetHeight + 'px'
+						btn.style.top = this.ebodytbl.offsetHeight + 'px';
 					else
 						btn.style.top = this._currentTop + 'px';
 				}
@@ -622,7 +622,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		return false;
 	},
-	focusA_: function(btn, timeout) { //called by derived class
+	focusA_: function (btn, timeout) { //called by derived class
 		zk(btn).focus(timeout);
 	},
 	bind_: function () {
@@ -674,10 +674,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	shallIgnoreSelect_: function (evt/*, row*/) { //row has to be the second argument for backward compatible
 		//see also _shallIgnore
-		return evt.name == 'onRightClick' ? this.rightSelect ? -1: true: false;
+		return evt.name == 'onRightClick' ? this.rightSelect ? -1 : true : false;
 	},
 	//@param bSel whether it is called by _doItemSelect
-	_shallIgnore: function(evt, bSel) { // move this function in the widget for override
+	_shallIgnore: function (evt, bSel) { // move this function in the widget for override
 		// F70-ZK-2433
 		if (this.checkOnHighlightDisabled_())
 			return true;
@@ -856,7 +856,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			break;
 		case 38: //UP
 		case 40: //DOWN
-			step = data.keyCode == 40 ? 1: -1;
+			step = data.keyCode == 40 ? 1 : -1;
 			break;
 		case 32: //SPACE
 			if (row) {
@@ -868,7 +868,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			break;
 		case 36: //Home
 		case 35: //End
-			step = data.keyCode == 35 ? 1: -1;
+			step = data.keyCode == 35 ? 1 : -1;
 			endless = true;
 			break;
 		case 37: //LEFT
@@ -975,15 +975,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			offs = zk(n).revisedOffset();
 			offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
 		} else	// ZK-798, use old value if exists
-			offs = [oldLeft? oldLeft : 0, oldTop? oldTop : 0];
+			offs = [oldLeft ? oldLeft : 0, oldTop ? oldTop : 0];
 
 		this.fixAnchor_(offs, focusEl);
-		if( this._anchorTop != offs[1] || this._anchorLeft != offs[0]){
+		if(this._anchorTop != offs[1] || this._anchorLeft != offs[0]) {
 			//ZK-798, to prevent firing onAnchorPos too many times when moust over a rod listbox,
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
 			this._anchorTop = offs[1];
 			this._anchorLeft = offs[0];
-			this.fire('onAnchorPos',{top:this._anchorTop,left:this._anchorLeft});			
+			this.fire('onAnchorPos',{top: this._anchorTop,left: this._anchorLeft});			
 		}
 		
 		focusElStyle.top = this._anchorTop + 'px';
@@ -991,8 +991,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	_toStyleOffset: function (el, x, y) {
 		var ofs1 = zk(el).revisedOffset(),
-			x2 = zk.parseInt(el.style.left), y2 = zk.parseInt(el.style.top);;
-		return [x - ofs1[0] + x2, y  - ofs1[1] + y2];
+		x2 = zk.parseInt(el.style.left), y2 = zk.parseInt(el.style.top);
+		return [x - ofs1[0] + x2, y - ofs1[1] + y2];
 	},
 	/**
 	 * May need fix anchor.
@@ -1167,8 +1167,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (this._headercm && jq.isAncestor(this._headercm, evt.domTarget) && !checkSelectAll) {
 					keep = false;
 				} else {
-					keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey ||
-						(this._checkmark && (!this._cdo || checkSelectAll));
+					keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey
+							|| (this._checkmark && (!this._cdo || checkSelectAll));
 				}
 			}
 		}
@@ -1177,7 +1177,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/* Changes the specified row as focused. */
 	_focus: function (row) {
-		if (this.canActivate({checkOnly:true})) {
+		if (this.canActivate({checkOnly: true})) {
 			this._unsetFocusExcept(row);
 			this._setFocus(row, true);
 		}
@@ -1230,14 +1230,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	_unsetFocusExcept: function (row) {
 		if (this._focusItem && this._focusItem != row)
-			this._setFocus(this._focusItem, false)
+			this._setFocus(this._focusItem, false);
 		else
 			this._focusItem = null;
 	},
 	_updHeaderCM: function () { //update header's checkmark
 		if (this._headercm && this._multiple) {
 			var box = this, v;
-			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1: 1;
+			this._nUpdHeaderCM = (v = this._nUpdHeaderCM) > 0 ? v + 1 : 1;
 			setTimeout(function () {_updHeaderCM(box);}, 100); //do it in batch
 		}
 	},
@@ -1266,20 +1266,20 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_isAllSelected: function () {
 		//B70-ZK-1953: if selectedItems is empty return false.
 		if (!this._selItems.length) {
-				if (this._headercm && this._model && !this.$hasService("onUpdateSelectAll")) {
-        			var zcls = zk.Widget.$(this._headercm).getZclass() + '-checked',
-						$headercm = jq(this._headercm);
-					$headercm.removeClass(zcls);
-        		}
+			if (this._headercm && this._model && !this.$hasService('onUpdateSelectAll')) {
+				var zcls = zk.Widget.$(this._headercm).getZclass() + '-checked',
+					$headercm = jq(this._headercm);
+				$headercm.removeClass(zcls);
+			}
 			return false;
 		}
 		if (this._model) {
-			if (!this.$hasService("onUpdateSelectAll")) {
-				this.$fireService("onUpdateSelectAll", null, function (v) {
+			if (!this.$hasService('onUpdateSelectAll')) {
+				this.$fireService('onUpdateSelectAll', null, function (v) {
 					if (this.desktop && this._headercm && this._multiple) {
 						var zcls = zk.Widget.$(this._headercm).getZclass() + '-checked',
 							$headercm = jq(this._headercm);
-						$headercm[v ? 'addClass': 'removeClass'](zcls);
+						$headercm[v ? 'addClass' : 'removeClass'](zcls);
 						this.$$selectAll = v;
 					}
 				});
@@ -1292,7 +1292,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		var isGroupSelect = this.groupSelect;
-		for (var it = this.getBodyWidgetIterator({skipHidden:true}), w; (w = it.next());) {
+		for (var it = this.getBodyWidgetIterator({skipHidden: true}), w; (w = it.next());) {
 			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
 			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
 				continue;

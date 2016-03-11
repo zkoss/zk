@@ -84,7 +84,7 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		zWatch.listen({onResponse: this});
 		var w = this;
 		if (this._menupopup == 'auto') {
-			after.push(function() {
+			after.push(function () {
 				w._initColMenu();
 			});
 		}
@@ -223,8 +223,8 @@ zul.mesh.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 			var group = new zul.menu.Menuitem({
 					label: msgzul.GRID_GROUP, visible: false
 				});
-				group.setSclass(w.$s('menugrouping'));
-				group.listen({onClick: [w, w._onGroup]});
+			group.setSclass(w.$s('menugrouping'));
+			group.listen({onClick: [w, w._onGroup]});
 			this.appendChild(group);
 			this._group = group;
 			if (zk.feature.ee) {
@@ -238,8 +238,8 @@ zul.mesh.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 			}
 		}
 		var asc = new zul.menu.Menuitem({label: msgzul.GRID_ASC});
-			asc.setSclass(w.$s('menuascending'));
-			asc.listen({onClick: [w, w._onAsc]});
+		asc.setSclass(w.$s('menuascending'));
+		asc.listen({onClick: [w, w._onAsc]});
 		this._asc = asc;
 		this.appendChild(asc);
 		

@@ -73,12 +73,12 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		if (w || h) { // B50-ZK-478
 			attr += ' style="';
 			if (w)
-				attr += 'width:' + w + ';'
+				attr += 'width:' + w + ';';
 			if (h)
-				attr += 'height:' + h + ';'
+				attr += 'height:' + h + ';';
 			attr += '"';
 		}
-		return attr +(this.firstChild ? ' usemap="#' + this.uuid + '-map"':
+		return attr + (this.firstChild ? ' usemap="#' + this.uuid + '-map"' :
 			' ismap="ismap"');
 	},
 
@@ -92,9 +92,9 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 	_doneURI: function () {
 		var Imagemap = zul.wgt.Imagemap,
 			url = Imagemap._doneURI;
-		return url ? url:
-			Imagemap._doneURI = zk.IMAGEMAP_DONE_URI ? zk.IMAGEMAP_DONE_URI:
-				zk.ajaxURI('/web/zul/html/imagemap-done.html', {desktop:this.desktop, au:true});
+		return url ? url :
+			Imagemap._doneURI = zk.IMAGEMAP_DONE_URI ? zk.IMAGEMAP_DONE_URI :
+				zk.ajaxURI('/web/zul/html/imagemap-done.html', {desktop: this.desktop, au: true});
 	}
 },{
 	/** Called by imagemap-done.html. */
@@ -105,7 +105,7 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		if (j < 0) return;
 
 		var k = href.indexOf('?', ++j);
-		if (k < 0 ) return;
+		if (k < 0) return;
 
 		var id = href.substring(j, k),
 			wgt = zk.Widget.$(id);
@@ -117,7 +117,7 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		wgt.fire('onClick', {
 			x: zk.parseInt(href.substring(k, j)),
 			y: zk.parseInt(href.substring(j + 1))
-		}, {ctl:true});
+		}, {ctl: true});
 	},
 	_toofast: function () {
 		if (zk.gecko) { //bug 1510374

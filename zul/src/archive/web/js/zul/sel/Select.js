@@ -68,8 +68,8 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			// select from server API call, fix the index
 			for (w = this.firstChild; w && i < selectedIndex; w = w.nextSibling, i++) {
 				if (w.$instanceof(zul.sel.Option)) {
-    				if (!w.isVisible())
-    					j++;
+					if (!w.isVisible())
+						j++;
 				} else i--;
 			}
 
@@ -94,7 +94,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		 */
 		tabindex: function (tabindex) {
 			var n = this.$n();
-			if (n) n.tabindex = tabindex||'';
+			if (n) n.tabindex = tabindex || '';
 		},
 		/**
 		 * Returns the name of this component.
@@ -159,16 +159,16 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	
 	// ZK-2133: should sync all items
 	setChgSel: function (val) { //called from the server
-	    var sels = {};
-	    for (var j = 0;;) {
-	    	var k = val.indexOf(',', j),
-	        s = (k >= 0 ? val.substring(j, k): val.substring(j)).trim();
-	    	if (s) sels[s] = true;
-	    	if (k < 0) break;
-	    	j = k + 1;
-	    }
-	    for (var w = this.firstChild; w; w = w.nextSibling)
-	    	this._changeSelect(w, sels[w.uuid] == true);
+		var sels = {};
+		for (var j = 0;;) {
+			var k = val.indexOf(',', j),
+			s = (k >= 0 ? val.substring(j, k) : val.substring(j)).trim();
+			if (s) sels[s] = true;
+			if (k < 0) break;
+			j = k + 1;
+		}
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			this._changeSelect(w, sels[w.uuid] == true);
 	},
 	  
 	/* Changes the selected status of an item without affecting other items
@@ -200,7 +200,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	selectItem: function (item) {
 		if (!item)
 			this.setSelectedIndex(-1);
-		else if (this._multiple || !item.isSelected()){
+		else if (this._multiple || !item.isSelected()) {
 			if(item.getOptionIndex_)
 				this.setSelectedIndex(item.getOptionIndex_());
 			else
@@ -245,12 +245,12 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	domAttrs_: function () {
 		var v;
 		return this.$supers('domAttrs_', arguments)
-			+ (this.isDisabled() ? ' disabled="disabled"' :'')
+			+ (this.isDisabled() ? ' disabled="disabled"' : '')
 			+ (this.isMultiple() ? ' multiple="multiple"' : '')
-			+ ((v=this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"': '')
-			+ ((v=this.getTabindex()) ? ' tabindex="' + v + '"': '')
-			+ ((v=this.getRows()) > 0 ? ' size="' + v + '"': '')
-			+ ((v=this.getName()) ? ' name="' + v + '"': '');
+			+ ((v = this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"' : '')
+			+ ((v = this.getTabindex()) ? ' tabindex="' + v + '"' : '')
+			+ ((v = this.getRows()) > 0 ? ' size="' + v + '"' : '')
+			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
 	},
 	bind_: function () {
 		this.$supers(zul.sel.Select, 'bind_', arguments);
@@ -261,7 +261,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			.domListen_(n, 'onBlur', 'doBlur_');
 
 		if (!zk.gecko) {
-			var fn = [this,  this._fixSelIndex];
+			var fn = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
 		}
 
@@ -274,7 +274,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
 			.$supers(zul.sel.Select, 'unbind_', arguments);
 
-		var fn = [this,  this._fixSelIndex];
+		var fn = [this, this._fixSelIndex];
 		zWatch.unlisten({onRestore: fn, onVParent: fn});
 	},
 	_fixSelIndex: function () {

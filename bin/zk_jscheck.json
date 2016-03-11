@@ -1,10 +1,11 @@
 {
-	"disallowEmptyBlocks": true,
+	"excludeFiles":["/**/mold/", "/**/debug/", "/**/codegen/", "/**/.git/", "/**/node_module/", "/**/jquery.js"],
+	/*"disallowEmptyBlocks": true,*/
 	"disallowKeywords": ["with"],
-	"disallowMixedSpacesAndTabs": true,
+	/*disallowMixedSpacesAndTabs": true,*/
 	"disallowMultipleSpaces": {"allowEOLComments": true},
 	"disallowNewlineBeforeBlockStatements": true,
-	"disallowOperatorBeforeLineBreak": true,
+	"disallowOperatorBeforeLineBreak": ["+", "-", "*", "/", "."],
 	"disallowSpaceBeforeSemicolon": true,
 	"disallowSpaceBeforePostfixUnaryOperators": true,
 	"disallowSpaceAfterObjectKeys": true,
@@ -12,8 +13,8 @@
 	"disallowSpacesInNamedFunctionExpression": {"beforeOpeningRoundBrace": true},
 	"disallowSpacesInsideParentheses": true,
 	"disallowTrailingComma": true,
-	"maximumLineLength": { "value": 100, "allExcept": ["comments", "urlComments"]},
-	"requireCapitalizedConstructors": true,
+	/*"maximumLineLength": { "value": 100, "allExcept": ["comments", "urlComments"]},*/
+	/*"requireCapitalizedConstructors": true,*/
 	"requireSemicolons": true,
 	"requireSpaceAfterBinaryOperators": true,
 	"requireSpaceBeforeBinaryOperators": true,
@@ -23,8 +24,9 @@
 	"requireSpacesInAnonymousFunctionExpression": {"beforeOpeningRoundBrace": true,"beforeOpeningCurlyBrace": true},
 	"requireSpacesInConditionalExpression": true,
 	"requireSpacesInNamedFunctionExpression": {"beforeOpeningCurlyBrace": true},
-	"validateIndentation": {"value": "\t", "allExcept": ["comments"]},
+	/*"validateIndentation": {"value": "\t", "allExcept": ["comments"]},*/
     "validateLineBreaks": "CRLF",
 	"validateParameterSeparator": ", ",
 	"validateQuoteMarks": { "mark": "'", "escape": true }
+	
 }

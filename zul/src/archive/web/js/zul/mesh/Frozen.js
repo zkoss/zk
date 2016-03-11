@@ -69,18 +69,18 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 	_start: 0,
 	_scrollScale: 0,
 	$define: {
-    	/**
-    	 * Returns the number of columns to freeze.
-    	 * <p>Default: 0
-    	 * @return int
-    	 */
-    	/**
-    	 * Sets the number of columns to freeze.(from left to right)
-    	 * @param int columns positive only
-    	 */
-		columns: [function(v) {
+		/**
+		 * Returns the number of columns to freeze.
+		 * <p>Default: 0
+		 * @return int
+		 */
+		/**
+		 * Sets the number of columns to freeze.(from left to right)
+		 * @param int columns positive only
+		 */
+		columns: [function (v) {
 			return v < 0 ? 0 : v;
-		}, function(v) {
+		}, function (v) {
 			if (this._columns) {
 				if (this.desktop) {
 					this.onSize();
@@ -121,12 +121,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		var p = this.parent,
 			ebody,
 			l;
-    	if (p && p._nativebar && (ebody = p.ebody) && (l = ebody.scrollLeft) > 0) {
-    		var scroll = this.$n('scrollX');
-        	if (scroll) {
-        		var scrollScale = l / (ebody.scrollWidth - ebody.clientWidth);
-        		scroll.scrollLeft = Math.ceil(scrollScale * (scroll.scrollWidth - scroll.clientWidth));
-        	}
+		if (p && p._nativebar && (ebody = p.ebody) && (l = ebody.scrollLeft) > 0) {
+			var scroll = this.$n('scrollX');
+			if (scroll) {
+				var scrollScale = l / (ebody.scrollWidth - ebody.clientWidth);
+				scroll.scrollLeft = Math.ceil(scrollScale * (scroll.scrollWidth - scroll.clientWidth));
+			}
 		}
 	},
 
@@ -194,8 +194,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		} else if (this._shallSyncScale) {
 			var hdfaker = this.parent.ehdfaker;
 			if (hdfaker) {
-				this._scrollScale = 
-					hdfaker.childNodes.length - this._columns - 1;
+				this._scrollScale = hdfaker.childNodes.length - this._columns - 1;
 			}
 			this._shallSyncScale = false;
 		}
@@ -214,12 +213,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			//B70-ZK-2558: frozen will onSize before other columns, 
 			//so there might be no any column in the beginning
 			var n = phead.$n();
-			firstHdcell = n? (n.cells? n.cells[0]: null) : null;
+			firstHdcell = n ? (n.cells ? n.cells[0] : null) : null;
 			//B70-ZK-2463: if firstHdcell is not undefined
 			if (firstHdcell) {
 				fhcs = firstHdcell.style;
 				if (!fhcs.height)
-					fhcs.height = firstHdcell.offsetHeight+'px';
+					fhcs.height = firstHdcell.offsetHeight + 'px';
 			}
 		}
 		
@@ -360,7 +359,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					faker = jq('#' + n.id + '-hdfaker')[0];
 					//ZK-2776: consider faker's width first for layout consistent
 					if (faker.style.width && zk.parseInt(faker.style.width) > 1)
-						hdWgt._origWd = faker.style.width
+						hdWgt._origWd = faker.style.width;
 					cellWidth = '0px';
 					shallUpdate = true;
 				}

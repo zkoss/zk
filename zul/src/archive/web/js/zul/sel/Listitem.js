@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (dragImg) {
 			// update drag image
 			var allow = jq(drag.node).hasClass('z-drop-allow');
-			for (var len = 0; len < dragImg.length; len ++) {
+			for (var len = 0; len < dragImg.length; len++) {
 				if (allow)
 					jq(dragImg[len]).removeClass('z-icon-times').addClass('z-icon-check');
 				else
@@ -67,7 +67,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	// replace the origional DD_dragging
 	getDragOptions_: function (map) {
 		var old = map.change;
-		map.change =  function (drag, pt, evt) {
+		map.change = function (drag, pt, evt) {
 			old(drag, pt, evt);
 			// update drag image after origional function
 			updateImg(drag);

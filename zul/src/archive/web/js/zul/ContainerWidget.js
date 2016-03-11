@@ -28,7 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.ContainerWidget = zk.$extends(zul.Widget, {
-	bind_ : function() {
+	bind_: function () {
 		this.$supers(zul.ContainerWidget, 'bind_', arguments);
 
 		// B70-ZK-2069: some widget need fire onScroll event, which has
@@ -38,12 +38,12 @@ zul.ContainerWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
-	_doScroll : function() {
+	_doScroll: function () {
 		if (jq(this).data('scrollable'))
 			zWatch.fireDown('onScroll', this);
 	},
 
-	unbind_ : function() {
+	unbind_: function () {
 		if (jq(this).data('scrollable')) {
 			this.domUnlisten_(this.getCaveNode(), 'onScroll');
 		}

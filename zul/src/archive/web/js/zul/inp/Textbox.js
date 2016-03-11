@@ -67,7 +67,7 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		 */
 		type: zk.ie < 11 ? function () {
 			this.rerender(); //though IE9 allows type to change but value is reset
-		}: function (type) {
+		} : function (type) {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.type = type;

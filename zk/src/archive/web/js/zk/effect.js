@@ -15,7 +15,7 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function() {
+(function () {
 
 	var _defSKUOpts, _useSKU;
 
@@ -31,10 +31,10 @@ zk.eff = {
 			_defSKUOpts || (_defSKUOpts = {stackup: zk.eff.shallStackup()}));
 	},
 	// ZK-1904: stackup should be moved from wgt to document.body
-	_onVParent: function(evt, opts) {
+	_onVParent: function (evt, opts) {
 		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) { 
 			var $stk = jq(stackup);
-			if ($stk.parent()[0] != document.body);
+			if ($stk.parent()[0] != document.body)
 				$stk.insertBefore(sdw.node);
 		}
 	}	
@@ -42,7 +42,7 @@ zk.eff = {
 
 /** The shadow effect.
  */
-zk.eff.Shadow = zk.$extends(zk.Object, {
+	zk.eff.Shadow = zk.$extends(zk.Object, {
 	$init: function (element, opts) {
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = zk.eff._skuOpts(opts);
@@ -56,7 +56,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		zWatch.unlisten({ onVParent: [this.node, zk.eff._onVParent] }); // ZK-2586
 		this.wgt = this.node = this.stackup = null;
 	},
-	hide: function(){
+	hide: function () {
 		jq(this.stackup).hide();
 		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
 	},
@@ -80,8 +80,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			
 		if(opts.stackup) {
 			if(!stackup)
-				stackup = this.stackup =
-					jq.newStackup(node, node.id + '-sdwstk', node);
+				stackup = this.stackup = jq.newStackup(node, node.id + '-sdwstk', node);
 
 			var st = stackup.style;
 			st.left = jq.px(l);
@@ -132,7 +131,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	 */
 	$init: function (opts) {
 		opts = zk.eff._skuOpts(opts);
-		var mask = this.mask = jq(opts.mask||[], zk)[0];
+		var mask = this.mask = jq(opts.mask || [], zk)[0];
 		if (this.mask) {
 			if (opts.anchor)
 				opts.anchor.parentNode.insertBefore(mask, opts.anchor);
@@ -146,10 +145,10 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 				html += ' style="';
 				if (opts.zIndex != null) html += 'z-index:' + opts.zIndex;
 				if (opts.visible == false) html += ';display:none';
-				html +='"';
+				html += '"';
 			}
 
-			html += '></div>'
+			html += '></div>';
 			if (opts.anchor)
 				jq(opts.anchor, zk).before(html);
 			else
@@ -171,7 +170,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	destroy: function () {
 		var mask = this.mask, f;
 		jq(mask).unbind('click', jq.Event.stop)
-			.remove()
+			.remove();
 		jq(window).unbind('resize', f = this.proxy(_syncMaskPos))
 			.unbind('scroll', f);
 		jq(this.stackup).remove();
@@ -227,7 +226,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 	 * <li>String msg - the message of the indicator, if any. null, Loading... is assumed.</li>
 	 * </ul>
 	 */
-	$init: function(opts) {
+	$init: function (opts) {
 		opts = opts || {};
 		var $anchor = zk(opts.anchor);
 		
@@ -240,7 +239,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		if (progbox) return this;
 		
-		var msg = opts.message || ((window.msgzk?msgzk.LOADING:'Loading')+'...'),
+		var msg = opts.message || ((window.msgzk ? msgzk.LOADING : 'Loading') + '...'),
 			n = document.createElement('div');
 		
 		document.body.appendChild(n);
@@ -248,17 +247,17 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			w = opts.width || $anchor.offsetWidth(),
 			h = opts.height || $anchor.offsetHeight();
 		jq(n).replaceWith(
-		'<div id="'+maskId+'" style="display:none">' //$anchor size changed if using visibility: hidden
+		'<div id="' + maskId + '" style="display:none">' //$anchor size changed if using visibility: hidden
 		+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 		+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
-		+ '<div id="'+maskId+'-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
+		+ '<div id="' + maskId + '-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
 		+ '<span class="z-apply-loading-icon"></span> '
-		+ msg+ '</div></div></div>');
+		+ msg + '</div></div></div>');
 		
 		this.mask = jq(maskId, zk)[0];
 		this.wgt = zk.Widget.$(opts.anchor);
 		if (this.wgt) {
-			zWatch.listen( {
+			zWatch.listen({
 				onHide: [
 					this.wgt, this.onHide
 				],
@@ -336,14 +335,14 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		this.mask.style.display = 'block';
 		
-		var loading = jq(this.mask.id+'-z_loading', zk)[0];
+		var loading = jq(this.mask.id + '-z_loading', zk)[0];
 		if (loading) {
 			if (loading.offsetHeight > h) 
 				loading.style.height = jq.px0(zk(loading).revisedHeight(h));
 			if (loading.offsetWidth > w)
 				loading.style.width = jq.px0(zk(loading).revisedWidth(w));
-			loading.style.top = jq.px0(xy[1] + ((h - loading.offsetHeight) /2)); //non-negative only
-			loading.style.left = jq.px0(xy[0] + ((w - loading.offsetWidth) /2));
+			loading.style.top = jq.px0(xy[1] + ((h - loading.offsetHeight) / 2)); //non-negative only
+			loading.style.left = jq.px0(xy[0] + ((w - loading.offsetWidth) / 2));
 		}
 		
 		this.mask.style.visibility = '';
@@ -415,7 +414,7 @@ zk.eff.Actions = {
 	}
 };
 
-jq(function() {
+jq(function () {
 	//Handle zk.useStackup
 	var _lastFloat, _autohideCnt = 0, _callback;
 
@@ -427,7 +426,7 @@ jq(function() {
 				if (wgt)
 					wgt = wgt.getTopWidget();
 				if (wgt != _lastFloat) {
-					_lastFloat = wgt
+					_lastFloat = wgt;
 					zk._wgtutl.autohide(); //see widget.js
 				}
 			}
@@ -453,7 +452,7 @@ jq(function() {
 	} else if (_useSKU == null)
 		_useSKU = zk.ie; // ZK-1748 should include all ie
 
-	 // if (_callback) { all browser should support autohide
+	//if (_callback) { all browser should support autohide
 		var w2hide = function (name) {
 			if (name == 'onSize' || name == 'onMove'
 			|| name == 'onShow' || name == 'onHide'

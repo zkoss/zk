@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _isPE = (function () {
 		var _isPE_ = zk.feature.pe;
 		return function () {
-				return _isPE_ && zk.isLoaded('zkex.grid')
+				return _isPE_ && zk.isLoaded('zkex.grid');
 			};
 	})();
 /**
@@ -135,7 +135,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			return sclass;
 		
 		var grid = this.getGrid();
-		return grid ? grid.getSclass(): sclass;
+		return grid ? grid.getSclass() : sclass;
 	},
 	_getChdextr: function (child) {
 		return child.$n('chdextr') || child.$n();
@@ -210,7 +210,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-		var style = this.domStyle_({visible:1, width:1, height:1}),
+		var style = this.domStyle_({visible: 1, width: 1, height: 1}),
 			isDetail = zk.isLoaded('zkex.grid') && child.$instanceof(zkex.grid.Detail);
 		if (isDetail) {
 			var wd = child.getWidth();
@@ -233,7 +233,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (this._nowrap)
 			attrs += ' nowrap="nowrap"';
 		if (style)
-			attrs += ' style="' + style + '"'
+			attrs += ' style="' + style + '"';
 		return attrs + ' class="' + clx + '"';
 	},
 	/**
@@ -286,21 +286,21 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	doMouseOver_: function(evt) {
+	doMouseOver_: function (evt) {
 		if (this._musin)
 			return;
 		this._musin = true;
 		var n = this.$n();
 		
 		// ZK-2250: all children should apply -moz-user-select: none
-		if (n && zk.gecko && this._draggable && 
-				!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+		if (n && zk.gecko && this._draggable
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).addClass('z-draggable-over');
 		}
 		
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function(evt) {
+	doMouseOut_: function (evt) {
 		var n = this.$n();
 		if ((this._musin && jq.isAncestor(n,
 				evt.domEvent.relatedTarget || evt.domEvent.toElement))) {
@@ -311,8 +311,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		this._musin = false;
 		
 		// ZK-2250: all children should unapply -moz-user-select: none 
-		if (n && zk.gecko && this._draggable &&
-				!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+		if (n && zk.gecko && this._draggable
+				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).removeClass('z-draggable-over');
 		}
 		
@@ -326,7 +326,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		return cls;
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<tr', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></tr>');
+		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
 	}
 });
 })();

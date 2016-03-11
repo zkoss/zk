@@ -13,23 +13,23 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
   it will be useful, but WITHOUT ANY WARRANTY.
 */
 msgzk = {
-NOT_FOUND: "Nicht gefunden: ",
-UNSUPPORTED: "Bisher nicht unterstützt: ",
-FAILED_TO_SEND: "Request kann nicht an Server geschickt werden.",
-FAILED_TO_RESPONSE: "Server kann Request nicht bearbeiten.",
-TRY_AGAIN: "Möchten Sie es erneut versuchen?",
-UNSUPPORTED_BROWSER: "Nicht unterstützer Browser: ",
-ILLEGAL_RESPONSE: "Unbekannte Antwort vom Server. Bitte aktualisieren Sie die Seite und probieren Sie es erneut.\n",
-FAILED_TO_PROCESS: "Verarbeitung fehlgeschlagen ",
-GOTO_ERROR_FIELD: "Zur Wiedereingabe, bitte hier klicken.",
-PLEASE_WAIT: "Verarbeitung...",
+	NOT_FOUND: 'Nicht gefunden: ',
+	UNSUPPORTED: 'Bisher nicht unterstützt: ',
+	FAILED_TO_SEND: 'Request kann nicht an Server geschickt werden.',
+	FAILED_TO_RESPONSE: 'Server kann Request nicht bearbeiten.',
+	TRY_AGAIN: 'Möchten Sie es erneut versuchen?',
+	UNSUPPORTED_BROWSER: 'Nicht unterstützer Browser: ',
+	ILLEGAL_RESPONSE: 'Unbekannte Antwort vom Server. Bitte aktualisieren Sie die Seite und probieren Sie es erneut.\n',
+	FAILED_TO_PROCESS: 'Verarbeitung fehlgeschlagen ',
+	GOTO_ERROR_FIELD: 'Zur Wiedereingabe, bitte hier klicken.',
+	PLEASE_WAIT: 'Verarbeitung...',
 
-FILE_SIZE: "Dateigröße: ",
-KBYTES: "KB",
+	FILE_SIZE: 'Dateigröße: ',
+	KBYTES: 'KB',
 
-FAILED_TO_LOAD: "Fehler beim Laden ",
-FAILED_TO_LOAD_DETAIL: "Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.",
-CAUSE: "Ursache: ",
+	FAILED_TO_LOAD: 'Fehler beim Laden ',
+	FAILED_TO_LOAD_DETAIL: 'Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.',
+	CAUSE: 'Ursache: ',
 
-LOADING: "Lade"
+	LOADING: 'Lade'
 };

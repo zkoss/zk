@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.copy(zk, (function() {
+zk.copy(zk, (function () {
 	var _loaded = {'zk': true}, //loaded
 		_xloadings = [], //loading (exclude loaded)
 		_loadedsemis = [], //loaded but not inited
@@ -121,12 +121,14 @@ zk.load('zul.utl', function () {
 	 * @see #load(String, Function)
 	 */
 	load: function (pkg, dt, func) {
-		if (typeof dt == 'function')
-			if (func) throw 'At most one function allowed';
+		if (typeof dt == 'function') {
+			if (func)
+				throw 'At most one function allowed';
 			else {
 				func = dt;
 				dt = null;
 			}
+		}
 
 		if (func) zk.afterLoad(pkg, func, true);
 
@@ -158,7 +160,7 @@ zk.load('zul.utl', function () {
 		else {
 			if (modver) uri = '/web/_zv' + modver + '/js' + uri;
 			else uri = '/web/js' + uri;
-			uri = zk.ajaxURI(uri, {desktop:dt,au:true});
+			uri = zk.ajaxURI(uri, {desktop: dt,au: true});
 		}
 
 		e.src = uri;
@@ -230,12 +232,14 @@ zk.load('zul.utl', function () {
 	 * @see #afterLoad
 	 */
 	depends: function (a, b) {
-		if (a && b) //a depends on b
-			if (_loaded[a]) zk.load(b);
+		if (a && b) {//a depends on b
+			if (_loaded[a])
+				zk.load(b);
 			else {
 				if (_pkgdepend[a]) _pkgdepend[a].push(b);
 				else _pkgdepend[a] = [b];
 			}
+		}
 	},
 
 	/** Declares a function that shall be executed after all requested packages are loaded (i.e., {@link #loading} is 0).
@@ -294,7 +298,7 @@ zk.afterLoad(function() {});
 
 		if (a) {
 			if (zk.loading || _loadedsemis.length) {
-				(front ? _afterLoadFronts: _afterLoads).push(a);
+				(front ? _afterLoadFronts : _afterLoads).push(a);
 				return false;
 			}
 			a(); //note: we cannot use jq(a); otherwise, user cannot use it embedded script (test: zk light's helloword.html)
@@ -313,8 +317,8 @@ zk.afterLoad(function() {});
 	getHost: function (pkg, js) {
 		for (var p in _pkghosts)
 			if (pkg.startsWith(p))
-				return _pkghosts[p][js ? 1: 0];
-		return _defhost[js ? 1: 0];
+				return _pkghosts[p][js ? 1 : 0];
+		return _defhost[js ? 1 : 0];
 	},
 	/** Defines the URL of the host for serving the specified packages.
 	 * @param String host the host, such as http://www.zkoss.org.
@@ -339,5 +343,5 @@ zk.afterLoad(function() {});
 		for (var j = 0; j < pkgs.length; ++j)
 			_pkghosts[pkgs[j]] = [host, hostUpd];
 	}
-  }
+  };
 })());

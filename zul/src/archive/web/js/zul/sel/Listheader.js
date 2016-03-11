@@ -42,8 +42,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	getMeshBody: _zkf,
 	checkClientSort_: function (ascending) {
 		var body;
-		return !(!(body = this.getMeshBody()) || body.hasGroup()) && 
-			this.$supers('checkClientSort_', arguments);
+		return !(!(body = this.getMeshBody()) || body.hasGroup())
+				&& this.$supers('checkClientSort_', arguments);
 	},
 	$define: {
 		/** Returns the maximal length of each item's label.
@@ -92,7 +92,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			if ('descending' == dir) return false;
 		}
 
-		var sorter = ascending ? this._sortAscending: this._sortDescending;
+		var sorter = ascending ? this._sortAscending : this._sortDescending;
 		if (sorter == 'fromServer')
 			return false;
 		else if (sorter == 'none') {
@@ -130,7 +130,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			var dsc = dir == 'ascending' ? -1 : 1,
 				fn = this.sorting,
 				isNumber = sorter == 'client(number)';
-			d.sort(function(a, b) {
+			d.sort(function (a, b) {
 				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
 				if (v == 0) {
 					v = (a.index < b.index ? -1 : 1);
@@ -241,13 +241,11 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		this.$supers(zul.sel.Listheader, 'unbind_', arguments);
 	},
 	_doMouseOver: function (evt) {
-		if (this.isSortable_() ||
-				(this.parent._menupopup && this.parent._menupopup != 'none'))
+		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none'))
 			jq(this.$n()).addClass(this.$s('hover'));
 	},
 	_doMouseOut: function (evt) {
-		if (this.isSortable_() ||
-				(this.parent._menupopup && this.parent._menupopup != 'none')) {
+		if (this.isSortable_() || (this.parent._menupopup && this.parent._menupopup != 'none')) {
 			var $n = jq(this.$n());
 			if (!$n.hasClass(this.$s('visited')))
 				$n.removeClass(this.$s('hover'));
@@ -287,9 +285,9 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			box = this.getListbox();
 		if (box != null && this.parent.firstChild == this 
 				&& box._checkmark && box._multiple && !box._listbox$noSelectAll) // B50-ZK-873
-			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable') + 
-				(box.$$selectAll ? ' ' + this.$s('checked') : '')+'"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
-				+ (s ? '&nbsp;' + s:'');
+			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
+				+ (box.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
+				+ (s ? '&nbsp;' + s : '');
 		return s;
 	},
 	//@Override

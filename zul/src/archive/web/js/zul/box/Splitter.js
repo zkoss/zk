@@ -21,9 +21,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			vert = wgt.isVertical(),
 			Splitter = wgt.$class,
 			before = colps == 'before',
-			sib = before ? Splitter._prev(nd): Splitter._next(nd),
+			sib = before ? Splitter._prev(nd) : Splitter._next(nd),
 			sibwgt = zk.Widget.$(sib),
-			fd = vert ? 'height': 'width', 
+			fd = vert ? 'height' : 'width', 
 			diff = 0;
 		if (sib) {
 			if (!open)
@@ -37,19 +37,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (!before && sibwgt && !sibwgt.nextSibling) {
 				var sp = wgt.$n('chdex2');
 				if (sp) {
-					sp.style.display = open ? '': 'none';
+					sp.style.display = open ? '' : 'none';
 					diff += zk.parseInt(sp.style[fd]);
 				}
 			}
 		}
 
-		var sib2 = before ? Splitter._next(nd): Splitter._prev(nd);
+		var sib2 = before ? Splitter._next(nd) : Splitter._prev(nd);
 		if (sib2) {
 			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
-				sz = c.style[fd];
+			sz = c.style[fd];
 			//ZK-1879: set width only if it has width originally
 			if (sz && sz.indexOf('px') > -1) {
-				diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
+				diff = zk.parseInt(c.style[fd]) + (open ? -diff : diff);
 				if (diff < 0) diff = 0;
 				c.style[fd] = diff + 'px';
 			}
@@ -64,7 +64,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt._fixszAll();
 
 		if (!opts || opts.sendOnOpen)
-			wgt.fire('onOpen', {open:open});
+			wgt.fire('onOpen', {open: open});
 			//if fromServer, opts is true
 	}
 /**
@@ -95,7 +95,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	 	 * <p>Default: true.
 	 	 * @return boolean
 	 	 */
-		open: function(open, opts) {
+		open: function (open, opts) {
 			if (this.desktop)
 				_setOpen(this, open, opts);
 		}
@@ -114,7 +114,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	 */
 	getOrient: function () {
 		var p = this.parent;
-		return p ? p.getOrient(): 'vertical';
+		return p ? p.getOrient() : 'vertical';
 	},
 
 	/** Returns the collapse of this button.
@@ -126,11 +126,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	/** Sets the collapse of this button.
 	 * @param String collapse
 	 */
-	setCollapse: function(collapse) {
+	setCollapse: function (collapse) {
 		if (this._collapse != collapse) {
 			var bOpen = this._open;
 			if (!bOpen)
-				this.setOpen(true, {sendOnOpen:false}); //bug 1939263
+				this.setOpen(true, {sendOnOpen: false}); //bug 1939263
 
 			this._collapse = collapse;
 			if (this.desktop) {
@@ -139,7 +139,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			}
 
 			if (!bOpen)
-				this.setOpen(false, {sendOnOpen:false});
+				this.setOpen(false, {sendOnOpen: false});
 		}
 	},
 
@@ -222,7 +222,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_fixNSDomClass: function () {
 		jq(this.$n())
-			[this._open ? 'removeClass':'addClass'](this.$s('nosplitter'));
+			[this._open ? 'removeClass' : 'addClass'](this.$s('nosplitter'));
 	},
 	_fixbtn: function () {
 		var $btn = jq(this.$n('btn')),
@@ -250,9 +250,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var btn = this.$n('btn'),
 			node = this.$n();
 		if (ver)
-			btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2)+'px';
+			btn.style.marginLeft = ((node.offsetWidth - btn.offsetWidth) / 2) + 'px';
 		else
-			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2)+'px';
+			btn.style.marginTop = ((node.offsetHeight - btn.offsetHeight) / 2) + 'px';
 	},
 	_fixsz: _zkf = function () {
 		if (!this.isRealVisible()) return;
@@ -261,11 +261,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (pn) {
 			var bfcolps = 'before' == this.getCollapse();
 			if (this.isVertical()) {
-				node.style.width = "100%"; // Sandbox-Splitter: the width should be same as parent 
+				node.style.width = '100%'; // Sandbox-Splitter: the width should be same as parent 
 				this.setBtnPos_(true);
 			} else {
-				node.style.height =
-					(zk.webkit ? pn.parentNode.clientHeight: pn.clientHeight)+'px';
+				node.style.height = (zk.webkit ? pn.parentNode.clientHeight : pn.clientHeight) + 'px';
 					//Bug 1916332: TR's clientHeight is correct (not TD's) in Safari
 				this.setBtnPos_();
 			}
@@ -273,12 +272,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (this._shallClose) { //set in bind_
 			delete this._shallClose;
-			_setOpen(this, false, {sendOnOpen:false});
+			_setOpen(this, false, {sendOnOpen: false});
 		}
 	},
 	onSize: _zkf,
 	beforeSize: function () {
-		this.$n().style[this.isVertical() ? 'width': 'height'] = '';
+		this.$n().style[this.isVertical() ? 'width' : 'height'] = '';
 	},
 
 	_fixszAll: function () {
@@ -318,10 +317,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var $node = zk(draggable.node.parentNode);
 		jq(document.body).append(
 			'<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+$node.offsetWidth()+'px;height:'+$node.offsetHeight()
-			+'px;"></div>');
-		return jq("#zk_ddghost")[0];
+			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
+			+ $node.offsetWidth() + 'px;height:' + $node.offsetHeight()
+			+ 'px;"></div>');
+		return jq('#zk_ddghost')[0];
 	},
 	_endDrag: function (draggable) {
 		var wgt = draggable.control,

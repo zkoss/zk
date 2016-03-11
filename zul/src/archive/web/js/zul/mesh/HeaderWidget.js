@@ -49,9 +49,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		//sync frozen
 		var box, frozen, tbody, td, tds, node;
-		if ((box = this.getMeshWidget()) && box.efrozen && 
-			(frozen = zk.Widget.$(box.efrozen.firstChild) && 
-			(node = this.$n()))) {
+		if ((box = this.getMeshWidget()) && box.efrozen
+			&& (frozen = zk.Widget.$(box.efrozen.firstChild)
+			&& (node = this.$n()))) {
 			box._moveToHidingFocusCell(node.cellIndex);
 		}
 	},
@@ -98,7 +98,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	getContentEdgeHeight_: function () {
 		return zk(this).sumStyles('tb', jq.margins);
 	},
-	getContentEdgeWidth_: function() {
+	getContentEdgeWidth_: function () {
 		return zk(this).sumStyles('lr', jq.margins);
 	},
 	domStyle_: function (no) {
@@ -107,7 +107,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			style = 'width: ' + this._hflexWidth + 'px;';
 
 			if (no) no.width = true;
-			else no = {width:true};
+			else no = {width: true};
 		}
 		if (this._align)
 			style += 'text-align:' + this._align + ';';
@@ -259,13 +259,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return false;
 	},
 	//@Override to avoid add child offset
-	ignoreChildNodeOffset_: function(attr) {
+	ignoreChildNodeOffset_: function (attr) {
 		return true;
 	},
 	listenOnFitSize_: zk.$void, // skip flex
 	unlistenOnFitSize_: zk.$void,
 	//@Override to find the minimum width of listheader
-	beforeMinFlex_: function(o) {
+	beforeMinFlex_: function (o) {
 		if (o == 'w') {
 			var wgt = this.getMeshWidget();
 			if (wgt) {
@@ -279,7 +279,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
-	clearCachedSize_: function() {
+	clearCachedSize_: function () {
 		this.$supers('clearCachedSize_', arguments);
 		var mw;
 		if (mw = this.getMeshWidget())
@@ -331,7 +331,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		zUtl.fireSized(mesh, -1);
 	},
 	//@Override to get width/height of MeshWidget
-	getParentSize_: function() {
+	getParentSize_: function () {
 		//to be overridden
 		var mw = this.getMeshWidget(),
 			p = mw.$n(),
@@ -349,7 +349,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			return {
 				height: zkp.contentHeight(),
 				width: zkp.contentWidth()
-			}
+			};
 		}
 		return {};
 	},
@@ -364,7 +364,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return x >= this.$n().offsetWidth - 8;
 	},
 	deferRedrawHTML_: function (out) {
-		out.push('<th', this.domAttrs_({domClass:1}), ' class="z-renderdefer"></th>');
+		out.push('<th', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></th>');
 	}
 }, { //static
 	_faker: ['hdfaker', 'bdfaker', 'ftfaker'],
@@ -380,9 +380,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		ofs[0] += zk(n).offsetWidth();
 		jq(document.body).append(
 			'<div id="zk_hdghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk(el.parentNode.parentNode).offsetHeight()
-			+'px;background:darkgray"></div>');
-		return jq("#zk_hdghost")[0];
+			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:3px;height:' + zk(el.parentNode.parentNode).offsetHeight()
+			+ 'px;background:darkgray"></div>');
+		return jq('#zk_hdghost')[0];
 	},
 	_endghostsizing: function (dg, origin) {
 		dg._zszofs = zk(dg.node).revisedOffset()[0] - zk(origin).revisedOffset()[0];
@@ -500,7 +500,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			uuid, '-cave" class="', this.$s('content'), '"',
 			this.domTextStyleAttr_(), '><div class="', this.$s('sorticon'), 
 			'"><i id="', uuid, '-sort-icon"></i></div>',
-			((!this.firstChild && label == '' ) ? "&nbsp;" : label)); //ZK-805 MenuPopup without columns issue
+			((!this.firstChild && label == '') ? '&nbsp;' : label)); //ZK-805 MenuPopup without columns issue
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
 			out.push('<a id="', uuid, '-btn" href="javascript:;" class="',

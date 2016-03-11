@@ -22,18 +22,18 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 	/** Returns the tabbox owns this component.
 	 * @return Tabbox
 	 */
-	getTabbox: function() {
+	getTabbox: function () {
 		return this.parent ? this.parent.parent : null;
 	},
-	isVisible: function() {
+	isVisible: function () {
 		return this.$supers('isVisible', arguments) && this.isSelected();
 	},
-	setVisible: function() {
+	setVisible: function () {
 		this.$supers('setVisible', arguments);
 		if (this.desktop && !this.isSelected()) //Bug ZK-1618: not show if current tabpanel is not selected
 			this.$n().style.display = 'none';
 	},
-	domClass_: function() {
+	domClass_: function () {
 		var cls = this.$supers('domClass_', arguments),
 			tabbox = this.getTabbox();
 		if (tabbox.inAccordionMold())
@@ -43,8 +43,8 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 	/** Returns the tab associated with this tab panel.
 	 * @return Tab
 	 */
-	getLinkedTab: function() {
-		var tabbox =  this.getTabbox();
+	getLinkedTab: function () {
+		var tabbox = this.getTabbox();
 		if (!tabbox) return null;
 
 		var tabs = tabbox.getTabs();
@@ -54,13 +54,13 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 	 * tabpanels.
 	 * @return int
 	 */
-	getIndex:function() {
+	getIndex: function () {
 		return this.getChildIndex();
 	},
 	/** Returns whether this tab panel is selected.
 	 * @return boolean
 	 */
-	isSelected: function() {
+	isSelected: function () {
 		var tab = this.getLinkedTab();
 		return tab && tab.isSelected();
 	},
@@ -88,7 +88,7 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 				tabbox._animating = true;
 				zkp.slideDown(
 					this,
-					{'afterAnima': function(){delete tabbox._animating;}}
+					{'afterAnima': function () {delete tabbox._animating;}}
 				);
 			} else {
 				zkp.slideUp(this);
@@ -116,12 +116,12 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 	getPanelContentHeight_: function () {
 		var node = this.$n(),
 			tabpanelsNode = this.parent && this.parent.$n(),
-			panelContentHeight = tabpanelsNode &&
-				(tabpanelsNode.scrollHeight + zk(tabpanelsNode).padBorderHeight());
+			panelContentHeight = tabpanelsNode
+				&& (tabpanelsNode.scrollHeight + zk(tabpanelsNode).padBorderHeight());
 
-		return Math.max(node && node.offsetHeight,panelContentHeight) ; // B50-ZK-298: concern panel height
+		return Math.max(node && node.offsetHeight,panelContentHeight); // B50-ZK-298: concern panel height
 	},
-	_fixPanelHgh: function() {
+	_fixPanelHgh: function () {
 		var tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
 			hgh = tbx.style.height;
@@ -150,7 +150,7 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 			}
 		}
 	},
-	onSize: function() {
+	onSize: function () {
 		var tabbox = this.getTabbox();
 		if (tabbox.inAccordionMold() && !zk(this.$n('cave')).isVisible())
 			return;
@@ -167,13 +167,13 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 		if (v != 'min') v = false;
 		this.$supers('setHflex', arguments);
 	},
-	bind_: function(desktop) {
+	bind_: function (desktop) {
 		this.$supers(zul.tab.Tabpanel, 'bind_', arguments);
 		zWatch.listen({onSize: this});
 		// B50-ZK-660: Dynamically generated accordion tabs cannot be closed
 		var tab;
 		if (this.getTabbox().inAccordionMold()
-				&& (tab=this.getLinkedTab())) {
+				&& (tab = this.getLinkedTab())) {
 			
 			if (!tab.$n())
 				tab.unbind().bind(desktop);

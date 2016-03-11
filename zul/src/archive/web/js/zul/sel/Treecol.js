@@ -36,8 +36,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					};
 				}
 		}
-		var dsc = dir == "ascending" ? -1 : 1;
-		d.sort(function(a, b) {
+		var dsc = dir == 'ascending' ? -1 : 1;
+		d.sort(function (a, b) {
 			var v = sorting(a.wgt, b.wgt, isNumber) * dsc;
 			if (v == 0) {
 				v = (a.index < b.index ? -1 : 1);
@@ -80,7 +80,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 		try {
 			body.unbind();
 			_sort0(body, this.getChildIndex(), this.getSortDirection(), this.sorting, 
-				(this[ascending ? '_sortAscending': '_sortDescending'] == 'client(number)'));
+				(this[ascending ? '_sortAscending' : '_sortDescending'] == 'client(number)'));
 			this._fixDirection(ascending);
 		} finally {
 			var old = mesh._syncingbodyrows;
