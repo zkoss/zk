@@ -16,6 +16,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 <window viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2787VM')">
     if you see any exception, that's a bug.
 	<div form="@id('f') @load(vm.foo)">
-		<label value="@load(f.date)"/>
+		<label value="@load(f.val)"/>
 	</div>
 </window>

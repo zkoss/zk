@@ -14,8 +14,9 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
-import java.sql.Timestamp;
+import java.sql.Time;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 import org.zkoss.bind.annotation.ImmutableFields;
@@ -51,7 +52,7 @@ public class B80_ZK_2787Test extends ZATSTestCase {
 		FooZK2787_2 foo = new FooZK2787_2();
 		FooZK2787_2 formProxy = ProxyHelper.createFormProxy(foo, foo.getClass());
 		assertNotSame(foo.getBar(), formProxy.getBar());
-		assertNotSame(foo.getBar().getDate(), formProxy.getBar().getDate());
+		assertNotSame(foo.getBar().getNum(), formProxy.getBar().getNum());
 	}
 
 
@@ -94,12 +95,12 @@ public class B80_ZK_2787Test extends ZATSTestCase {
 
 	@ImmutableFields
 	public static class BarZK2787_1 {
-		private Timestamp _date = new Timestamp(new Date().getTime());
+		private Time _date = new Time(new Date().getTime());
 		public BarZK2787_1() {}
-		public void setDate(Timestamp newDate) {
+		public void setDate(Time newDate) {
 			_date = newDate;
 		}
-		public Timestamp getDate() {
+		public Time getDate() {
 			return _date;
 		}
 	}
@@ -118,13 +119,13 @@ public class B80_ZK_2787Test extends ZATSTestCase {
 	}
 
 	public static class BarZK2787_2 {
-		private Date _date = new Date();
+		private AtomicInteger _num = new AtomicInteger();
 		public BarZK2787_2() {}
-		public void setDate(Date newDate) {
-			_date = newDate;
+		public void setNum(AtomicInteger newNum) {
+			_num = newNum;
 		}
-		public Date getDate() {
-			return _date;
+		public AtomicInteger getNum() {
+			return _num;
 		}
 	}
 }

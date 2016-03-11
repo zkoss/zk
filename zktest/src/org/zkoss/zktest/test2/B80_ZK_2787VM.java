@@ -11,7 +11,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test2;
 
-import java.sql.Timestamp;
+import java.sql.Time;
 import java.util.Date;
 
 import org.zkoss.bind.annotation.ImmutableFields;
@@ -26,7 +26,7 @@ public class B80_ZK_2787VM {
 	@Init
 	public void init() {
 		_f = new Foo();
-		_f.setDate(new Timestamp(new Date().getTime()));
+		_f.setVal(new Time(new Date().getTime()));
 	}
 	public void setFoo(Foo f) {
 		_f = f;
@@ -37,12 +37,12 @@ public class B80_ZK_2787VM {
 	}
 
 	public static class Foo {
-		private Timestamp _date;
-		public void setDate(Timestamp date) {
-			_date = date;
+		private Time _val;
+		public void setVal(Time val) {
+			_val = val;
 		}
-		public Timestamp getDate() {
-			return _date;
+		public Time getVal() {
+			return _val;
 		}
 	}
 }
