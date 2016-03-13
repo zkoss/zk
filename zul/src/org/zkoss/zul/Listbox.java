@@ -3605,9 +3605,9 @@ public class Listbox extends MeshElement {
 							}
 						}
 					}
-					while (start >= 0 && end >= 0 && start <= end) {
-						//ZK-2804: add those items not in _items as selected
-						if (smodel != null) {
+					if (smodel != null) {
+						while (start >= 0 && end >= 0 && start <= end) {
+							//ZK-2804: add those items not in _items as selected
 							Object ele = _model.getElementAt(start++);
 							if (ctrl == null || ctrl.isSelectable(ele))
 								smodel.addToSelection(ele);
