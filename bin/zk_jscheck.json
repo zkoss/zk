@@ -25,7 +25,7 @@
 	"requireSpacesInConditionalExpression": true,
 	"requireSpacesInNamedFunctionExpression": {"beforeOpeningCurlyBrace": true},
 	/*"validateIndentation": {"value": "\t", "allExcept": ["comments"]},*/
-    "validateLineBreaks": "CRLF",
+    /*"validateLineBreaks": "CRLF",*/
 	"validateParameterSeparator": ", ",
 	"validateQuoteMarks": { "mark": "'", "escape": true }
 	
