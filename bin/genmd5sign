@@ -74,7 +74,11 @@ echo $maindir
 
 function md5java {
 	local src="$1"
-	java -cp "$maindir/dist/lib/ext/commons-codec.jar:$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
+	if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
+		java -cp "$maindir/dist/lib/ext/commons-codec.jar;$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
+	else
+		java -cp "$maindir/dist/lib/ext/commons-codec.jar:$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
+	fi
 }
 
 export IFS=","
