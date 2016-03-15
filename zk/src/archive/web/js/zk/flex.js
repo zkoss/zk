@@ -231,7 +231,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					hasChildren = zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Caption) && wgt.nChildren > 0,
 					size = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : max;
 
-				map[sizePos] = size + wgt[contentPos](size) + margin;
+				map[sizePos] = size + wgt[contentPos](size);
 				var s = wgt.setFlexSize_(map, true);
 				sz = {height: n.offsetHeight, width: (s && s.width) || n.offsetWidth};
 				if (sz && sz[sizePos] >= 0)

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3147.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Mar 10 16:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        If you see the message "true" in zk.log console, that bug has fixed.
+    </label>
+    <div id="d1" style="border:solid 1px" hflex="min">
+        <label value="some longer content" />
+    </div>
+    <div id="d2" style="border:solid 1px; margin:15px" hflex="min">
+        <label value="some longer content" />
+    </div>
+    <groupbox id="g1" title="parent groupbox" closable="false" hflex="min">
+        <label value="some longer content" />
+    </groupbox>
+    <groupbox id="g2" title="parent groupbox" closable="false" style="margin:15px" hflex="min">
+        <label value="some longer content" />
+    </groupbox>
+    <script><![CDATA[
+        zk.afterMount(function () {
+            var w = jq(zk.$('$d1')).width();
+            zk.log((jq(zk.$('$d1')).width() == jq(zk.$('$d2')).width()) && (jq(zk.$('$g1')).width() == jq(zk.$('$g2')).width()) );
+        });
+    ]]></script>
+</zk>
