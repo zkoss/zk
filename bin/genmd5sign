@@ -75,7 +75,9 @@ echo $maindir
 function md5java {
 	local src="$1"
 	if [ "$TERM" = "cygwin" ] || [ "$OSTYPE" = "cygwin" ] ; then
-		java -cp "$maindir/dist/lib/ext/commons-codec.jar;$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
+		# need to parse with cygpath for correct path on cygwin/windows
+		# also need semi-colon instead of colon for java classpath
+		java -cp "$maindir/dist/lib/ext/commons-codec.jar;$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $(cygpath -mp $maindir/bin/md5java) $src
 	else
 		java -cp "$maindir/dist/lib/ext/commons-codec.jar:$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
 	fi
@@ -86,8 +88,9 @@ echo "Generate md5 sign"
 for cls in $classes; do
 	echo "class => $cls"
 	clsdir=$(echo $cls | sed 's/\./\//g')
-  	filemd5=`md5java "$debugdir/$clsdir.class"`
-  	filemd5=`md5java "$filemd5$build"`
-  	name=`md5java "$cls"`
-  	echo "$name=$filemd5" >> $dstfl
+	filemd5=`md5java "$debugdir/$clsdir.class"`
+	filemd5=`md5java "$filemd5$build"`
+	name=`md5java "$cls"`
+	# remove line break at the end for windows/cygwin compatility
+	echo "$(echo $name | tr -d '\r')=$filemd5" >> $dstfl
 done
