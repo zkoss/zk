@@ -20,6 +20,7 @@ ZK 8.0.2
   ZK-3139: maximizable and minimizable buttons in panel have the same tooltip
   ZK-3137: an icon in a menupopup is not well aligned horizontally
   ZK-3147: The margin should not increase a component's width with hflex="min"
+  ZK-3140: Textbox text selection in draggable row unavailable in Firefox
 
 * Upgrade Notes
 
