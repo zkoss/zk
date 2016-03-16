@@ -85,7 +85,7 @@ public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 		return Version.RELEASE;
 	}
 
-	public final String getBuild() {
+	public String getBuild() {
 		return getBuildStamp();
 	}
 
