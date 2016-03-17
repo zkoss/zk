@@ -141,6 +141,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	private Map<String, ShadowElement> _shadowIdMap; //to speed up id only shadow selector
 
+	protected static String AFTER_HOST_ATTACHED = "afterHostAttached";
+	protected static String AFTER_HOST_DETACHED = "afterHostDetached";
+
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
 	 */
@@ -1985,6 +1988,19 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	public void onPageAttached(Page newpage, Page oldpage) {
 		if (oldpage == null) //new added
 			onListenerChange(newpage.getDesktop(), true);
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			for (ShadowElement se : shadowRoots) {
+				if (se instanceof ComponentCtrl) {
+					Collection<Callback> callbacks = ((ComponentCtrl) se).getCallback(AFTER_HOST_ATTACHED);
+					if (!callbacks.isEmpty()) {
+						for (Callback callback : callbacks) {
+							callback.call(this);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/** Default: handles special event listeners.
@@ -1993,6 +2009,19 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	 */
 	public void onPageDetached(Page page) {
 		onListenerChange(page.getDesktop(), false);
+		List<ShadowElement> shadowRoots = getShadowRoots();
+		if (!shadowRoots.isEmpty()) {
+			for (ShadowElement se : shadowRoots) {
+				if (se instanceof ComponentCtrl) {
+					Collection<Callback> callbacks = ((ComponentCtrl) se).getCallback(AFTER_HOST_DETACHED);
+					if (!callbacks.isEmpty()) {
+						for (Callback callback : callbacks) {
+							callback.call(this);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/** Returns the widget class (a.k.a., widget type), or null if not defined.
@@ -2060,35 +2089,47 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	public boolean addRedrawCallback(Callback<ContentRenderer> callback) {
+		return addCallback("redraw", callback);
+	}
+
+	public boolean removeRedrawCallback(Callback<ContentRenderer> callback) {
+		return removeCallback("redraw", callback);
+	}
+
+	public Collection<Callback<ContentRenderer>> getRedrawCallback() {
+		return cast(getCallback("redraw"));
+	}
+
+	public boolean addCallback(String name, Callback callback) {
 		if (callback == null)
 			throw new IllegalArgumentException();
 
 		if (initAuxInfo().callbacks == null)
 			_auxinf.callbacks = new LinkedHashMap<String, List<Callback<?>>>(2);
-		List<Callback<?>> list = _auxinf.callbacks.get("redraw");
+		List<Callback<?>> list = _auxinf.callbacks.get(name);
 		if (list == null) {
 			list = new LinkedList<Callback<?>>();
-			_auxinf.callbacks.put("redraw", list);
+			_auxinf.callbacks.put(name, list);
 		}
 		return list.add(callback);
 	}
 
-	public boolean removeRedrawCallback(Callback<ContentRenderer> callback) {
+	public boolean removeCallback(String name, Callback callback) {
 		if (initAuxInfo().callbacks != null) {
-			List<Callback<?>> list = _auxinf.callbacks.get("redraw");
+			List<Callback<?>> list = _auxinf.callbacks.get(name);
 			if (list != null)
 				return list.remove(callback);
 		}
 		return false;
 	}
 
-	public Collection<Callback<ContentRenderer>> getRedrawCallback() {
+	public Collection<Callback> getCallback(String name) {
 		if (initAuxInfo().callbacks != null) {
-			List<Callback<?>> list = _auxinf.callbacks.get("redraw");
+			List<Callback<?>> list = _auxinf.callbacks.get(name);
 			if (list != null)
 				return cast(list);
 		}
-		return Collections.<Callback<ContentRenderer>>emptyList();
+		return Collections.emptyList();
 	}
 
 	//-- in the redrawing phase --//

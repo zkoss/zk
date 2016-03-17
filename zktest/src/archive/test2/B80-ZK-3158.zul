@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3158.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Mar 16 17:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.Click the button, and no exception occur. You should see "attach" and "detach" in zk log.
+    </label>
+    <div apply="org.zkoss.zktest.test2.B80_ZK_3158">
+        <button id="btn" label="press"/>
+    </div>
+</zk>
