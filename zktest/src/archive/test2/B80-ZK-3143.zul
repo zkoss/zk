@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3143.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 15 17:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        0.Test in different browsers (Chrome, Firefox, Safari, ie8 ~ 11, edge, Opera)
+        1.Select one listitem, and press "shift" + right click on another item. You should see the range of items selected without text selection.
+        2.Do it again, press "Ctrl(windows)/Command(Mac)" instead.
+    </label>
+    <window apply="org.zkoss.zktest.test2.B80_ZK_3143">
+        <listbox checkmark="true" id="lb" hflex="min" vflex="true" multiple="true" rows="8">
+            <listhead>
+                <listheader label="First Name" width="80px" />
+                <listheader label="Last Name" width="80px" />
+                <listheader label="Full Name" width="160px"/>
+                <listheader label="Married" width="60px" />
+            </listhead>
+            <template name="model">
+                <listitem>
+                    <listcell label="${each.firstName}"/>
+                    <listcell label="${each.lastName}"/>
+                    <listcell label="${each.fullName}"/>
+                    <listcell label="${each.married ? 'Y' : 'N' }"/>
+                </listitem>
+            </template>
+        </listbox>
+    </window>
+</zk>
