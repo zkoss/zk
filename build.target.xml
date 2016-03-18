@@ -32,7 +32,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		 classpath="${bin.dir}/checkstyle-6.14.1-all.jar"/>
 
 <target name="checkstyle.java"
-		 description="Generates a report of code convention violations."
+		 description="Check java code style"
 		 depends="codegen.mesg"
 		 if="${checkstyle.java}">
 	<checkstyle config="${bin.dir}/zk_checks.xml">
@@ -45,18 +45,13 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		 description="Check javascript code style"
 		 depends="codegen.mesg"
 		 if="${checkstyle.js}">
-	<exec executable="bash" dir="." resultproperty="checkstyle.js.err">
+	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/jscheck"/>
 		<arg value="${bin.dir}"/>
 		<arg value="${src.dir}"/>
 		<arg value="--config=${bin.dir}/zk_jscheck.json"/>
 		<arg value="--max-errors=-1"/>
 	</exec>
-	<fail message="checkstyle.js failed">
-		<condition>
-			<equals arg1="${checkstyle.js.err}" arg2="1"/>
-		</condition>
-	</fail>
 </target>
 
 <!-- ======= -->

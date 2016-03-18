@@ -521,8 +521,8 @@ function invoke_ant
 		$dfnList -buildfile $maindir/build.xml $1
 	fi
 
-	if [ $? != 0 ] ; then
-		exit $?
+	if [ $? -ne 0 ] ; then
+		exit 1
 	fi
 
 	rm -rf velocity.log junit*.properties
