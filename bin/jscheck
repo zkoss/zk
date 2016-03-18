@@ -12,16 +12,16 @@ echo "check jscs installation"
 jscsChecker="$(npm list jscs)"
 if [[ $jscsChecker == *"empty"* ]] ; then
 	echo 'installing jscs'
-	npm install jscs
+	npm cache clean
+	npm install jscs || exit 1
 fi
 
 echo "check js code style : $maindir/$2"
-OUT="$(node_modules/jscs/bin/jscs $maindir/$2 $3 $4)"
-
-if [ ! -z "$OUT" ] ; then
+OUT="$(node_modules/jscs/bin/jscs $maindir/$2 $3 $4)" || {
 	echo $OUT
 	#Coding Style Error found.
 	exit 1
-fi
+}
+
 cd $maindir
 echo "passed"
