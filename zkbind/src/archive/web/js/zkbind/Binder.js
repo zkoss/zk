@@ -82,6 +82,34 @@ zkbind.$ = function (n, opts) {
 			opts[prop] = ignores;
 		}
 	}
+	//ZK-3133
+	function _matchMedia(event, binder, value) {
+		var cookies = binder._cookies;
+		if (event.matches) {
+			var orient = '',
+				dpr = 1;
+			if (zk.mobile) {
+				if ((_initLandscape && _initDefault) || (!_initLandscape && !_initDefault))
+					_portrait = {'-90': true, '90': true};
+				orient = _portrait[window.orientation] ? 'portrait' : 'landscape';
+			} else {
+				orient = jq.innerWidth() > jq.innerHeight() ? 'landscape' : 'portrait';
+			}
+			if (window.devicePixelRatio)
+				dpr = window.devicePixelRatio;
+			//if added any new client information, should also add to zAu.cmd0.clientInfo
+			var ci = [new Date().getTimezoneOffset(), screen.width, screen.height, screen.colorDepth, jq.innerWidth(),
+					jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, event.matches, value];
+			// $ZKCLIENTINFO$ refers to CLIENT_INFO string in BinderCtrl.java
+			binder.command(value, {'$ZKCLIENTINFO$': ci});
+			if (!cookies.$contains(value)) cookies.push(value);
+			document.cookie = 'ZKMatchMedia=' + cookies;
+			document.cookie = 'ZKClientInfo=' + ci;
+		} else {
+			cookies.$remove(value);
+			document.cookie = 'ZKMatchMedia=' + cookies;
+		}
+	}
 /**
  * A data binder utile widget.
  * @since 8.0.0
@@ -92,6 +120,34 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		this.$view = widget;
 		this.$currentTarget = currentTarget;
 		this._aftercmd = {};
+		//ZK-3133
+		if (widget['$ZKMATCHMEDIA$']) {
+			var cookies = [];
+			matched = document.cookie.match(RegExp('ZKMatchMedia=[^;]*'));
+			if (matched && !matched[0].trim().endsWith('=')) {
+				var cookie = matched[0].split('=');
+				var zkmmcs = cookie[1].split(',');
+				for (var i in zkmmcs) {
+					cookies.push(zkmmcs[i]);
+				}
+			}
+			this._cookies = cookies;
+			var binder = this;
+			var mqls = [];
+			for (var i in widget['$ZKMATCHMEDIA$']) {
+				var media = widget['$ZKMATCHMEDIA$'][i].substring(16);
+				var mql = window.matchMedia(media);
+				var func = function (s) {
+					return function (event) {
+						_matchMedia(event, binder, s);
+					};
+				};
+				var handler = func(media);
+				mql.addListener(handler);
+				mqls.push({mql, handler});
+			}
+			this._mediaQueryLists = mqls;
+		}
 	},
 	/**
 	 * Registers a callback after some command executed.
@@ -128,6 +184,14 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 */
 	destroy: function () {
 		this._aftercmd = null;
+		if (this._mediaQueryLists != null) {
+			var mqls = this._mediaQueryLists;
+			for (var i in mqls) {
+				mqls[i].mql.removeListener(mqls[i].handler);
+			}
+			this._mediaQueryLists = null;
+			this._cookies = null;
+		}
 		this.$view = null;
 		this.$currentTarget = null;
 	},

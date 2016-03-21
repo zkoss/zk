@@ -11,6 +11,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
@@ -384,5 +385,12 @@ public interface Binder {
 	 * @return associated root component of this binder.
 	 */
 	public Component getView();
+
+	/**
+	 * Returns an unmodifiable Map containing all the MatchMedia annotation values and the of this binder.
+	 * If there's no MatchMedia annotation, it returns an empty Map.
+	 * @return the associated _matchMediaValue of this binder
+	 */
+	public Map<String, Method> getMatchMediaValue();
 
 }

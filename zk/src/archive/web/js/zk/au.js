@@ -1213,10 +1213,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (window.devicePixelRatio)
 			dpr = window.devicePixelRatio;
 		
+		//if added any new client information, should also add to _matchMedia function in Binder.js
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onClientInfo', 
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient],
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, false, null],
 			{implicit: true, rtags: {onClientInfo: 1}}));
 	},
 	visibilityChange: function (dtid) {

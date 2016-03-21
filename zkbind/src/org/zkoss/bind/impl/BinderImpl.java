@@ -29,6 +29,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +51,7 @@ import org.zkoss.bind.annotation.DefaultCommand;
 import org.zkoss.bind.annotation.DefaultGlobalCommand;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.MatchMedia;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.SmartNotifyChange;
@@ -84,12 +88,16 @@ import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.bind.xel.zel.ImplicitObjectELResolver;
+import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONObject;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -98,6 +106,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.event.Deferrable;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -227,6 +236,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private static final String REF_HANDLER_CLASS_PROP = "org.zkoss.bind.ReferenceBindingHandler.class";
 
+	//ZK-3133 to cache MatchMedia annotation values
+	private Map<String, Method> _matchMediaValues;
+
 	public BinderImpl() {
 		this(null, null);
 	}
@@ -317,6 +329,60 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		//F80 - store subtree's binder annotation count
 		if (comp instanceof ComponentCtrl)
 			((ComponentCtrl) comp).enableBindingAnnotation();
+		//ZK-3133
+		for (Method m : getViewModel().getClass().getDeclaredMethods()) {
+			MatchMedia annomm = m.getAnnotation(MatchMedia.class);
+			if (annomm != null) {
+				if (_matchMediaValues == null)
+					_matchMediaValues = new HashMap<String, Method>();
+				for (String s : annomm.value()) {
+					s = BinderCtrl.MATCHMEDIAVALUE_PREFIX + s.trim();
+					if (_matchMediaValues.get(s) != null)
+						throw new UiException("there are more then one MatchMedia method \"" + s.substring(16)
+								+ "\" in class " + viewModel);
+					_matchMediaValues.put(s, m);
+				}
+			}
+		}
+		if (_matchMediaValues != null) {
+			Clients.response(new AuInvoke(_rootComp, "$binder"));
+			final Execution exec = Executions.getCurrent();
+			if (exec != null) {
+				Cookie[] cookies = ((HttpServletRequest) Executions.getCurrent().getNativeRequest()).getCookies();
+				String[] matchMedias = null;
+				JSONObject args = new JSONObject();
+				JSONArray inf = new JSONArray();
+				for (Cookie c : cookies) {
+					// ZKMatchMeida and ZKClientInfo are both refer to the cookie names in Binder.js
+					if ("ZKMatchMedia".equals(c.getName())) {
+						matchMedias = c.getValue().trim().split(",");
+					} else if ("ZKClientInfo".equals(c.getName())) {
+						String[] sa = c.getValue().trim().split(",");
+						for (int i = 0; i < sa.length; i++) {
+							if (i < 8)
+								inf.add(Integer.valueOf(sa[i]));
+							else if (i == 10)
+								inf.add(Boolean.valueOf(sa[i]));
+							else
+								inf.add(sa[i]);
+						}
+						args.put(BinderCtrl.CLIENT_INFO, inf);
+					}
+					if (matchMedias != null && args.size() != 0) {
+						if (!matchMedias[0].isEmpty()) {
+							for (String s : matchMedias) {
+								s = BinderCtrl.MATCHMEDIAVALUE_PREFIX + s;
+								if (!_matchMediaValues.containsKey(s))
+									continue;
+								final Event evt = new Event(ON_POST_COMMAND, _dummyTarget, new Object[] { s, args });
+								Events.postEvent(-1, evt);
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	private class QueueListener implements EventListener<Event>, Serializable {
@@ -1607,8 +1673,13 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	public int sendCommand(String command, Map<String, Object> args) {
 		checkInit();
 		final Set<Property> notifys = new HashSet<Property>();
-		//args come from user, we don't eval it. 
-		int result = doCommand(_rootComp, null, command, null, args, notifys);
+		Event evt = null;
+		//ZK-3133
+		if (args != null && args.get(BinderCtrl.CLIENT_INFO) != null && (Boolean) ((List) args.get(BinderCtrl.CLIENT_INFO)).get(10)) {
+			evt = ClientInfoEvent.getClientInfoEvent(new AuRequest(_rootComp.getDesktop(), command, args));
+		}
+		//args come from user, we don't eval it.
+		int result = doCommand(_rootComp, null, command, evt, args, notifys);
 		if (result == COMMAND_FAIL_VALIDATE && _validationMessages != null) {
 			notifys.add(new PropertyImpl(_validationMessages, ".", null));
 		}
@@ -2039,6 +2110,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				}
 			}
 
+			//ZK-3133 for matchMedia methods cache
+			if (_matchMediaValues != null) {
+				for (String s : _matchMediaValues.keySet()) {
+					methods.put(s, new CachedItem<Method>(_matchMediaValues.get(s)));
+				}
+			}
 			methods.put(COMMAND_METHOD_MAP_INIT, NULL_METHOD); //mark this map has been initialized.
 		}
 
@@ -2659,6 +2736,14 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	public String getQueueScope() {
 		return _quescope;
+	}
+
+	/**
+	 * Returns the Map of all MatchMedia anntation values and the associated method of this binder
+	 * @return the Map of all MatchMedia anntation values and the associated method of this binder
+	 */
+	public Map<String, Method> getMatchMediaValue() {
+		return _matchMediaValues != null ? Collections.unmodifiableMap(_matchMediaValues) : Collections.EMPTY_MAP;
 	}
 
 	private Map<Object, Set<String>> initSaveFormMap() {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3133.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 18 16:19:01 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. should see "there are more then one MatchMedia method "all and (min-width: 501px)" in class org.zkoss.zktest.test2.F80_ZK_3133_1_VM" error reason below the window
+		2. shrink the width of the browser to 450px
+		3. should see the content text in the window change from "browser width &gt; 500px" to "browser width &lt;= 500px"
+		4. reload this zul without closing the browser
+		5. the content text of the window should remain "browser width &lt;= 500px"
+		6. enlarge the width of the browser to 550px
+		7. should see the content text of the window change from "browser width &lt;= 500px" to "browser width &gt; 500px"
+
+	</label>
+	<div id="div" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_3133_VM')">
+		<window border="normal" width="@bind(vm.windowWidth)" title="window">
+			<apply template="@bind(vm.templateName)"/>
+		</window>
+	</div>
+	<template name="a">
+		<label value="browser width > 500px"/>
+	</template>
+	<template name="b">
+		<label value="browser width &lt;= 500px"/>
+	</template>
+	<iframe width="100%" vflex="1" src="F80-ZK-3133-1.zul"/>
+</zk>

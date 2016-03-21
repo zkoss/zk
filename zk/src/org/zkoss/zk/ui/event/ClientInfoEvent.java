@@ -41,7 +41,11 @@ public class ClientInfoEvent extends Event {
 	private final int _scrnwd, _scrnhgh, _colorDepth;
 	private final int _dtwd, _dthgh, _dtx, _dty;
 	private final double _dpr;
-	private final String _orient;
+	private final String _orient, _media;
+	private final boolean _mediaMatched;
+
+	//refer to BinderCtrl.CLIENT_INFO
+	private static final String CLIENT_INFO = "$ZKCLIENTINFO$";
 
 	/** Converts an AU request to a client-info event.
 	 * @since 5.0.0
@@ -49,9 +53,12 @@ public class ClientInfoEvent extends Event {
 	public static final ClientInfoEvent getClientInfoEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
 		//Note: ClientInfoEvent is a broadcast event
-		final List inf = (List) data.get("");
+		List inf = (List) data.get("");
+		if (inf == null)
+			inf = (List) data.get(CLIENT_INFO);
 		return new ClientInfoEvent(request.getCommand(), getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
-				getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7), getDouble(inf, 8), (String) inf.get(9));
+				getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7), getDouble(inf, 8), (String) inf.get(9),
+				(Boolean) inf.get(10), (String) inf.get(11));
 	}
 
 	private static final int getInt(List inf, int j) {
@@ -77,7 +84,7 @@ public class ClientInfoEvent extends Event {
 	 * @param orient the device's orientation
 	 */
 	public ClientInfoEvent(String name, int timeZoneOfs, int scrnwd, int scrnhgh, int colorDepth, int dtwd, int dthgh,
-			int dtx, int dty, double dpr, String orient) {
+			int dtx, int dty, double dpr, String orient, boolean mediaMatched, String media) {
 		super(name, null);
 
 		final StringBuffer sb = new StringBuffer(8).append("GMT");
@@ -97,6 +104,9 @@ public class ClientInfoEvent extends Event {
 		//devicePixelRatio and orientation on tablet device
 		_dpr = dpr;
 		_orient = orient;
+		//ZK-3133 for matchMedia
+		_mediaMatched = mediaMatched;
+		_media = media;
 	}
 
 	/** Returns the time zone of the client.
@@ -204,5 +214,23 @@ public class ClientInfoEvent extends Event {
 	 */
 	public boolean isHorizontal() {
 		return isLandscape();
+	}
+
+	/**
+	 * Returns the current matched MatchMedia annotation value
+	 * @return the current matched MatchMedia annotation value
+	 * @since 8.0.2
+	 */
+	public String getMedia() {
+		return _media;
+	}
+
+	/**
+	 * Returns true if the MatchMedia annotation value is matched
+	 * @return true if the MatchMedia annotation value is matched
+	 * @since 8.0.2
+	 */
+	public boolean isMediaMatched() {
+		return _mediaMatched;
 	}
 }

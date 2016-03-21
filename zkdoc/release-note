@@ -6,6 +6,7 @@ ZK 8.0.2
   ZK-3132: Make AuUploader and AuDropUploader can be extended and overridden
   ZK-3134: provide configurable defaults to be be ignored in form proxies
   ZK-3142: apply, updated Russian i18n
+  ZK-3133: Support a Match Media annotation for MVVM to use
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path

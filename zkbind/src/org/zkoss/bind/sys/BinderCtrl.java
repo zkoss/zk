@@ -86,6 +86,11 @@ public interface BinderCtrl {
 	public static final String CHILDREN_BINDING_MODEL = "$CHILDREN_BINDING_MODEL$";
 	public static final String CHILDREN_BINDING_MODEL_LISTENER = "$CHILDREN_BINDING_MODEL_LISTENER$";
 
+	// since ZK 8.0.2
+	// CLIENT_INFO is also declared in ClientInfoEvent
+	public static final String CLIENT_INFO = "$ZKCLIENTINFO$";
+	public static final String MATCHMEDIAVALUE_PREFIX = "$$ZKMATCHMEDIA$$";
+
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
 	 * @param associatedComp associated component inside a form binding
