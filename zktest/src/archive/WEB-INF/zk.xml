@@ -80,7 +80,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zktest.test.MyDesktopCleanup</listener-class>
 	</listener>
-   
+
+    <listener>
+        <listener-class>org.zkoss.zktest.test2.B80_ZK_3158_LifeCycle</listener-class>
+    </listener>
 	<!-- Uncomment if you want to control the number of hours that
 		the CSS files of class Web resources won't be changed.
 		By default, it is 8760 (the same as other class Web resouces).

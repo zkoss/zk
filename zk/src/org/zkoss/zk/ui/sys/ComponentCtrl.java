@@ -557,6 +557,7 @@ public interface ComponentCtrl {
 	 * Adds a callback at component redraw phase.
 	 * @param callback
 	 * @since 8.0.0
+	 * @deprecated as of release 8.0.2, use {@link #addCallback} with specific name "redraw"
 	 */
 	public boolean addRedrawCallback(Callback<ContentRenderer> callback);
 
@@ -564,14 +565,39 @@ public interface ComponentCtrl {
 	 * Removes a callback for component redraw phase.
 	 * @param callback
 	 * @since 8.0.0
+	 * @deprecated as of release 8.0.2, use {@link #removeCallback} with specific name "redraw"
 	 */
 	public boolean removeRedrawCallback(Callback<ContentRenderer> callback);
 
 	/**
 	 * Returns all of callbacks for component redraw phase
 	 * @since 8.0.0
+	 * @deprecated as of release 8.0.2, use {@link #getCallback} with specific name "redraw"
 	 */
 	public Collection<Callback<ContentRenderer>> getRedrawCallback();
+
+	/**
+	 * Adds a callback at component in specific name
+	 * @param name
+	 * @param callback
+	 * @since 8.0.2
+	 */
+	public boolean addCallback(String name, Callback callback);
+
+	/**
+	 * Removes a callback for component by specific name.
+	 * @param name
+	 * @param callback
+	 * @since 8.0.2
+	 */
+	public boolean removeCallback(String name, Callback callback);
+
+	/**
+	 * Returns all of callbacks by specific name
+	 * @param name
+	 * @since 8.0.2
+	 */
+	public Collection<Callback> getCallback(String name);
 
 	/**
 	 * Returns the shadow element under this shadow host.

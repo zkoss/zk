@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
+import org.zkoss.zk.ui.util.Callback;
 
 /**
  * A skeleton of shadow element that represents as a <i>shadow</i> tree.
@@ -248,7 +249,19 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		}
 
 		((ComponentCtrl) host).addShadowRoot(this);
-		host.getDesktop().getWebApp().getConfiguration().afterShadowAttached(this, host);
+		final Desktop desktop = host.getDesktop();
+		if (desktop != null) {
+			desktop.getWebApp().getConfiguration().afterShadowAttached(this, host);
+		} else {
+			final ShadowElement se = this;
+			final Callback<Component> callback = new Callback<Component>() {
+				public void call(Component host) {
+					host.getDesktop().getWebApp().getConfiguration().afterShadowAttached(se, host);
+					removeCallback(AFTER_HOST_ATTACHED, this);
+				}
+			};
+			addCallback(AFTER_HOST_ATTACHED, callback);
+		}
 	}
 
 	/**
@@ -265,6 +278,15 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		setParent0(null);
 		if (prevhost != null && prevhost.getDesktop() != null) {
 			prevhost.getDesktop().getWebApp().getConfiguration().afterShadowDetached(this, prevhost);
+		} else {
+			final ShadowElement se = this;
+			Callback<Component> callback = new Callback<Component>() {
+				public void call(Component host) {
+					host.getDesktop().getWebApp().getConfiguration().afterShadowDetached(se, host);
+					removeCallback(AFTER_HOST_DETACHED, this);
+				}
+			};
+			addCallback(AFTER_HOST_DETACHED, callback);
 		}
 	}
 
