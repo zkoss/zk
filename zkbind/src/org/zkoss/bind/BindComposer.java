@@ -13,6 +13,7 @@ package org.zkoss.bind;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import org.zkoss.bind.impl.BindEvaluatorXUtil;
 import org.zkoss.bind.impl.MiscUtil;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
@@ -536,11 +538,20 @@ public class BindComposer<T extends Component>
 		final String cmd = request.getCommand();
 		if (cmd.startsWith("onBindCommand$") || cmd.startsWith("onBindGlobalCommand$")) {
 			final Map<String, Object> data = request.getData();
-			final String vcmd = data.get("cmd").toString();
+			String vcmd = data.get("cmd").toString();
 
 			final ToServerCommand ccmd = getViewModel().getClass().getAnnotation(ToServerCommand.class);
+			List<String> asList = new ArrayList<String>();
 			if (ccmd != null) {
-				List<String> asList = Arrays.asList(ccmd.value());
+				asList.addAll(Arrays.asList(ccmd.value()));
+			}
+			//ZK-3133
+			Map<String, Method> mmv = _binder.getMatchMediaValue();
+			if (!mmv.isEmpty()) {
+				asList.addAll(mmv.keySet());
+				vcmd = BinderCtrl.MATCHMEDIAVALUE_PREFIX + vcmd;
+			}
+			if (asList != null) {
 				if (asList.contains("*") || asList.contains(vcmd)) {
 					if (cmd.startsWith("onBindCommand$")) {
 						_binder.postCommand(vcmd, (Map<String, Object>) data.get("args"));

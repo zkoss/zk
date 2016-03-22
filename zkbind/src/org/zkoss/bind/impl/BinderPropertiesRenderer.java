@@ -12,6 +12,8 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.zk.ui.Component;
@@ -32,6 +34,11 @@ public class BinderPropertiesRenderer implements PropertiesRenderer {
 		Binder binder = BinderUtil.getBinder(comp);
 		if (binder != null && binder.getView() == comp) {
 			render.render("$ZKBINDER$", true);
+			//ZK-3133
+			Map<String, Method> mmv = binder.getMatchMediaValue();
+			if (!mmv.isEmpty()) {
+				render.render("$ZKMATCHMEDIA$", mmv.keySet().toArray());
+			}
 		}
 	}
 
