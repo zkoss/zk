@@ -76,10 +76,18 @@ zjq = function (jq) { //ZK extension
 	}
 
 	function _dissel() {
-		this.style.MozUserSelect = 'none';
+		var $this = jq(this);
+		$this.css('user-select', 'none');
+		if (zk.ie11_ || zk.edge)
+			$this.on('selectstart', false);
+		if (zk.edge)
+			$this.attr('unselectable', 'on');
 	}
 	function _ensel() {
-		this.style.MozUserSelect = '';
+		var $this = jq(this);
+		$this.css('user-select', '');
+		if (zk.ie11_ || zk.edge)
+			$this.on('selectstart', true);
 	}
 
 	function _scrlIntoView(outer, inner, info, excludeHorizontal) {

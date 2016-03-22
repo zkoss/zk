@@ -1346,6 +1346,8 @@ zk.log('value is", value);
 	zk.webkit = browser.webkit;
 	zk.chrome = browser.chrome;
 	zk.safari = browser.webkit && !zk.chrome; // safari only
+	// support W$'s Edge
+	zk.edge = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edge')) >= 0) && _ver(agent.substring(iosver + 5));
 	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent) && 
 		//ZK-2245: add version info to zk.ios
 		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '');

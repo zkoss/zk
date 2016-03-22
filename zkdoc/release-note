@@ -8,6 +8,7 @@ ZK 7.0.8
   ZK-3053: the ZK processing bar is shown unexpectedly
   ZK-3048: Listheaders are mis-aligned with listcells under non-nativebar
   ZK-3049: Combobox drop-down button behavior with inplace="true"
+  ZK-3143: Mesh element with multiple selection text content gets selected when using ctrl click or shift click on IE11
 
 * Upgrade Notes
 
