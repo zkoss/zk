@@ -76,24 +76,16 @@ zjq = function (jq) { //ZK extension
 	}
 
 	function _dissel() {
-		if (!zk.ie8) {
-			var $this = jq(this);
-			$this.css('user-select', 'none');
-			if (zk.ie >= 9)
-				$this.attr('unselectable', 'on');
-			if (zk.ie11_ || zk.edge)
-				$this.on('selectstart', false);
-		}
+		var $this = jq(this);
+		$this.css('user-select', 'none');
+		if (zk.ie11_ || zk.edge)
+			$this.on('selectstart', false);
 	}
 	function _ensel() {
-		if (!zk.ie8) {
-			var $this = jq(this);
-			$this.css('user-select', '');
-			if (zk.ie >= 9)
-				$this.attr('unselectable', '');
-			if (zk.ie11_ || zk.edge)
-				$this.on('selectstart', true);
-		}
+		var $this = jq(this);
+		$this.css('user-select', '');
+		if (zk.ie11_ || zk.edge)
+			$this.on('selectstart', true);
 	}
 
 	function _scrlIntoView(outer, inner, info, excludeHorizontal) {
