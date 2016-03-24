@@ -10,7 +10,11 @@
 Copyright (C)  Potix Corporation. All Rights Reserved.
 */
 (function () {
-	var _WidgetX = {};
+	var _WidgetX = {},
+		_zkMatchMediaRegexPattern = /ZKMatchMedia=[^;]*/,
+		_portrait = {'0': true, '180': true}, //default portrait definition
+		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
+		_initDefault = _portrait[window.orientation]; //default orientation
 
 zk.override(zk.Widget.prototype, _WidgetX, {
 	$binder: function () {
@@ -97,14 +101,14 @@ zkbind.$ = function (n, opts) {
 			}
 			if (window.devicePixelRatio)
 				dpr = window.devicePixelRatio;
-			//if added any new client information, should also add to zAu.cmd0.clientInfo
+			// 16 is the length of string MATCHMEDIAVALUE_PREFIX in BinderCtrl.java
 			var ci = [new Date().getTimezoneOffset(), screen.width, screen.height, screen.colorDepth, jq.innerWidth(),
-					jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, event.matches, value];
+					jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, event.matches, value.substring(16)];
 			// $ZKCLIENTINFO$ refers to CLIENT_INFO string in BinderCtrl.java
 			binder.command(value, {'$ZKCLIENTINFO$': ci});
 			if (!cookies.$contains(value)) cookies.push(value);
 			document.cookie = 'ZKMatchMedia=' + cookies;
-			document.cookie = 'ZKClientInfo=' + ci;
+			document.cookie = 'ZKClientInfo=' + JSON.stringify(ci);
 		} else {
 			cookies.$remove(value);
 			document.cookie = 'ZKMatchMedia=' + cookies;
@@ -123,28 +127,22 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		//ZK-3133
 		if (widget['$ZKMATCHMEDIA$']) {
 			var cookies = [];
-			matched = document.cookie.match(RegExp('ZKMatchMedia=[^;]*'));
-			if (matched && !matched[0].trim().endsWith('=')) {
-				var cookie = matched[0].split('=');
-				var zkmmcs = cookie[1].split(',');
-				for (var i in zkmmcs) {
-					cookies.push(zkmmcs[i]);
-				}
-			}
+			matched = document.cookie.match(_zkMatchMediaRegexPattern);
+			if (matched && !matched[0].trim().endsWith('='))
+				cookies = matched[0].split('=')[1].split(',');
 			this._cookies = cookies;
 			var binder = this;
 			var mqls = [];
-			for (var i in widget['$ZKMATCHMEDIA$']) {
-				var media = widget['$ZKMATCHMEDIA$'][i].substring(16);
-				var mql = window.matchMedia(media);
-				var func = function (s) {
+			for (var i = 0; i < widget['$ZKMATCHMEDIA$'].length; i++) {
+				var media = widget['$ZKMATCHMEDIA$'][i];
+				var mql = window.matchMedia(media.substring(16));
+				var handler = (function (s) {
 					return function (event) {
 						_matchMedia(event, binder, s);
 					};
-				};
-				var handler = func(media);
+				})(media);
 				mql.addListener(handler);
-				mqls.push({mql, handler});
+				mqls.push({mql: mql, handler: handler});
 			}
 			this._mediaQueryLists = mqls;
 		}
@@ -186,7 +184,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		this._aftercmd = null;
 		if (this._mediaQueryLists != null) {
 			var mqls = this._mediaQueryLists;
-			for (var i in mqls) {
+			for (var i = 0; i < mqls.length; i++) {
 				mqls[i].mql.removeListener(mqls[i].handler);
 			}
 			this._mediaQueryLists = null;

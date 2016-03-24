@@ -44,9 +44,6 @@ public class ClientInfoEvent extends Event {
 	private final String _orient, _media;
 	private final boolean _mediaMatched;
 
-	//refer to BinderCtrl.CLIENT_INFO
-	private static final String CLIENT_INFO = "$ZKCLIENTINFO$";
-
 	/** Converts an AU request to a client-info event.
 	 * @since 5.0.0
 	 */
@@ -54,8 +51,11 @@ public class ClientInfoEvent extends Event {
 		final Map<String, Object> data = request.getData();
 		//Note: ClientInfoEvent is a broadcast event
 		List inf = (List) data.get("");
-		if (inf == null)
-			inf = (List) data.get(CLIENT_INFO);
+		// ZK-3133 have to add inf 10, 11 if it's from the original onClientEvent not from match media command
+		if (inf.size() == 10) {
+			inf.add(false);
+			inf.add(null);
+		}
 		return new ClientInfoEvent(request.getCommand(), getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
 				getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7), getDouble(inf, 8), (String) inf.get(9),
 				(Boolean) inf.get(10), (String) inf.get(11));
@@ -217,8 +217,7 @@ public class ClientInfoEvent extends Event {
 	}
 
 	/**
-	 * Returns the current matched MatchMedia annotation value
-	 * @return the current matched MatchMedia annotation value
+	 * Returns the serialized media query list which is the value of <a href="https://www.zkoss.org/javadoc/latest/zk/org/zkoss/bind/annotation/MatchMedia.html">MatchMedia</a> annotation.
 	 * @since 8.0.2
 	 */
 	public String getMedia() {
@@ -226,8 +225,7 @@ public class ClientInfoEvent extends Event {
 	}
 
 	/**
-	 * Returns true if the MatchMedia annotation value is matched
-	 * @return true if the MatchMedia annotation value is matched
+	 * Returns true if the serialized media query list is matched
 	 * @since 8.0.2
 	 */
 	public boolean isMediaMatched() {
