@@ -34,7 +34,6 @@ import org.zkoss.bind.impl.BindEvaluatorXUtil;
 import org.zkoss.bind.impl.MiscUtil;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
-import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
@@ -549,7 +548,6 @@ public class BindComposer<T extends Component>
 			Map<String, Method> mmv = _binder.getMatchMediaValue();
 			if (!mmv.isEmpty()) {
 				asList.addAll(mmv.keySet());
-				vcmd = BinderCtrl.MATCHMEDIAVALUE_PREFIX + vcmd;
 			}
 			if (asList != null) {
 				if (asList.contains("*") || asList.contains(vcmd)) {

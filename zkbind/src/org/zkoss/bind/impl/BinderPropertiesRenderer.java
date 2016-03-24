@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.PropertiesRenderer;
@@ -35,7 +36,7 @@ public class BinderPropertiesRenderer implements PropertiesRenderer {
 		if (binder != null && binder.getView() == comp) {
 			render.render("$ZKBINDER$", true);
 			//ZK-3133
-			Map<String, Method> mmv = binder.getMatchMediaValue();
+			Map<String, Method> mmv = ((BinderCtrl) binder).getMatchMediaValue();
 			if (!mmv.isEmpty()) {
 				render.render("$ZKMATCHMEDIA$", mmv.keySet().toArray());
 			}

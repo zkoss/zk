@@ -18,17 +18,16 @@ import org.zkoss.bind.annotation.MatchMedia;
 
 /**
  * 
- * @author wenning
+ * @author wenninghsu
  */
 public class F80_ZK_3133_1_VM {
 
 	@MatchMedia("all and (min-width: 501px)")
-	public void media1() {
-		System.out.println("3133-1");
+	public void min501() {
 	}
 
 	@MatchMedia("all and (min-width: 501px)")
-	public void media2() {
+	public void max500() {
 	}
 
 }

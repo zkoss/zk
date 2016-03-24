@@ -11,7 +11,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.sys;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.zkoss.bind.Binder;
@@ -252,4 +254,11 @@ public interface BinderCtrl {
 	 * @since 8.0.0
 	 */
 	public Set<String> removeSaveFormFieldNames(Form self);
+
+	/**
+	 * Returns an unmodifiable Map containing all the MatchMedia annotation values of this binder.
+	 * If there's no MatchMedia annotation, it returns an empty Map.
+	 * @since 8.0.2
+	 */
+	public Map<String, Method> getMatchMediaValue();
 }

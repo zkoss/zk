@@ -88,8 +88,8 @@ import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.bind.tracker.impl.TrackerImpl;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.bind.xel.zel.ImplicitObjectELResolver;
-import org.zkoss.json.JSONArray;
 import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONValue;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -334,10 +334,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			MatchMedia annomm = m.getAnnotation(MatchMedia.class);
 			if (annomm != null) {
 				if (_matchMediaValues == null)
-					_matchMediaValues = new HashMap<String, Method>();
+					_matchMediaValues = new HashMap<String, Method>(6);
 				for (String s : annomm.value()) {
 					s = BinderCtrl.MATCHMEDIAVALUE_PREFIX + s.trim();
-					if (_matchMediaValues.get(s) != null)
+					if (_matchMediaValues.containsKey(s))
 						throw new UiException("there are more then one MatchMedia method \"" + s.substring(16)
 								+ "\" in class " + viewModel);
 					_matchMediaValues.put(s, m);
@@ -351,27 +351,18 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				Cookie[] cookies = ((HttpServletRequest) Executions.getCurrent().getNativeRequest()).getCookies();
 				String[] matchMedias = null;
 				JSONObject args = new JSONObject();
-				JSONArray inf = new JSONArray();
 				for (Cookie c : cookies) {
 					// ZKMatchMeida and ZKClientInfo are both refer to the cookie names in Binder.js
-					if ("ZKMatchMedia".equals(c.getName())) {
-						matchMedias = c.getValue().trim().split(",");
-					} else if ("ZKClientInfo".equals(c.getName())) {
-						String[] sa = c.getValue().trim().split(",");
-						for (int i = 0; i < sa.length; i++) {
-							if (i < 8)
-								inf.add(Integer.valueOf(sa[i]));
-							else if (i == 10)
-								inf.add(Boolean.valueOf(sa[i]));
-							else
-								inf.add(sa[i]);
-						}
-						args.put(BinderCtrl.CLIENT_INFO, inf);
+					String name = c.getName();
+					String value = c.getValue();
+					if ("ZKMatchMedia".equals(name)) {
+						matchMedias = value.trim().split(",");
+					} else if ("ZKClientInfo".equals(name)) {
+						args.put(BinderCtrl.CLIENT_INFO, JSONValue.parse(value));
 					}
 					if (matchMedias != null && args.size() != 0) {
 						if (!matchMedias[0].isEmpty()) {
 							for (String s : matchMedias) {
-								s = BinderCtrl.MATCHMEDIAVALUE_PREFIX + s;
 								if (!_matchMediaValues.containsKey(s))
 									continue;
 								final Event evt = new Event(ON_POST_COMMAND, _dummyTarget, new Object[] { s, args });
@@ -1675,8 +1666,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		final Set<Property> notifys = new HashSet<Property>();
 		Event evt = null;
 		//ZK-3133
-		if (args != null && args.get(BinderCtrl.CLIENT_INFO) != null && (Boolean) ((List) args.get(BinderCtrl.CLIENT_INFO)).get(10)) {
-			evt = ClientInfoEvent.getClientInfoEvent(new AuRequest(_rootComp.getDesktop(), command, args));
+		if (args != null && args.containsKey(BinderCtrl.CLIENT_INFO)) {
+			Map<String, Object> inf = new HashMap<String, Object>();
+			inf.put("", args.get(BinderCtrl.CLIENT_INFO));
+			evt = ClientInfoEvent.getClientInfoEvent(new AuRequest(_rootComp.getDesktop(), command, inf));
 		}
 		//args come from user, we don't eval it.
 		int result = doCommand(_rootComp, null, command, evt, args, notifys);
@@ -2738,10 +2731,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		return _quescope;
 	}
 
-	/**
-	 * Returns the Map of all MatchMedia anntation values and the associated method of this binder
-	 * @return the Map of all MatchMedia anntation values and the associated method of this binder
-	 */
 	public Map<String, Method> getMatchMediaValue() {
 		return _matchMediaValues != null ? Collections.unmodifiableMap(_matchMediaValues) : Collections.EMPTY_MAP;
 	}
