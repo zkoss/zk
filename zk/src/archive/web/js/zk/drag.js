@@ -110,7 +110,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				afterFinish: function () {node.style.position = orgpos;}});
 		}
 	}
-	
+	function _disableDragStart(evt) {
+    	return jq.nodeName(evt.target, 'input', 'textarea');
+	}
 /** A draggable object used to make a DOM element draggable. 
  * @disable(zkgwt)
  */
@@ -342,6 +344,9 @@ String scroll; //DOM Element's ID</code></pre>
 
 		jq(this.handle).bind('zmousedown', this.proxy(this._mousedown));
 
+		// issue in test/dragdrop.zul for dragging image file
+		jq(this.handle).bind('dragstart', _disableDragStart);
+
 		//register
 		if(_drags.length == 0)
 			jq(document).bind('zmouseup', _docmouseup)
@@ -359,6 +364,8 @@ String scroll; //DOM Element's ID</code></pre>
 			return;
 		}
 		jq(this.handle).unbind('zmousedown', this.proxy(this._mousedown));
+
+		jq(this.handle).unbind('dragstart', _disableDragStart);
 
 		//unregister
 		_drags.$remove(this);
@@ -613,24 +620,8 @@ String scroll; //DOM Element's ID</code></pre>
 
 		this.offset = ofs;
 		_activate(this, devt, pt);
-		
-		if ((!(zk.ie < 11) || zk.ie8) && !zk.mobile) {
-			if (!zk.Draggable.ignoreStop(target)) { // Bug B65-ZK-1839 we should ignore select tag on IE9
-				devt.stop();
-				//B70-ZK-2003: fire to all the widgets that listen onFloatUp
-				zWatch.fire('onFloatUp', evt.target);
-			}
-			//IE8: if not stop, onclick won't be fired (B50-ZK-909.zul)
-			//IE6: if stop*, onclick won't be fired (unable to select) (test/dragdrop.zul)
-			//FF3: if not stop, IMG cannot be dragged (test/dragdrop.zul) and INPUT not droppable (Bug 3031511)
-			//Opera: if not stop, 'easy' to become selecting text
-			//Chrome (Bug 3074253): unable to select the nested draggable element
-			//Mobile: if stop: onclick won't be fired (Bug ZK-1305)
-			//IE9: if not stop, the IMG cannot be dragged, (Bug ZK-1612)
-			//     and double check with a previous bug which removes the zk.ie9 condition (B50-3306835)
-			//
-			//Bug 3008328: input: if preventDefault(), not editable (both FF and Opera) => solution: stop()
 
+		if (!zk.mobile) {
 			_dnEvt = jq.Event.zk(devt, this.control);
 			//simulate mousedown later (mount.js's invocation of ignoreMouseUp)
 		}
@@ -812,15 +803,10 @@ String scroll; //DOM Element's ID</code></pre>
 	ignoreClick: function () { //called by mount
 		return zk.dragging;
 	},
+	// @deprecated since 8.0.2
+	// not to remove the function for backward compatibility (just in case)
 	ignoreStop: function (target) { //called by mount
-		//Bug 3310017/3309975: if trigger focus() FF and chrome cannot handle input cursor.
-		return zk(target).isInput()
-			// B65-ZK-1839 ignore select tag for IE9, chrome, opera
-			// ZK-2185: ignore select tag for ie
-			// B70-ZK-2862: ignore select tag tor firefox
-			|| ((zk.ie > 8 || zk.chrome || zk.ff || zk.opera) && jq.nodeName(target, 'select'))
-			|| (jq(target).parents('a').length && !jq.nodeName(target, 'img'))// B70-ZK-2587: ignore all tags inside <a> except <img>
-			|| jq.nodeName(target, 'option'); // B65-ZK-1946: ignore option tag 
+		return false;
 	}
 });
 })();

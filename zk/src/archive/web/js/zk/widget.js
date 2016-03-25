@@ -319,6 +319,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	 * It is the low-level utility reserved for overriding for advanced customization.
 	 */
 	zk.DnD = { //for easy overriding
+		/** Returns the drop target from the event, or the element from the event's
+		 * ClientX and ClientY. This function is to fix IE9~11, Edge, and Firefox which
+		 * will receive a wrong target from the mouseup event.
+		 *
+		 * @since 8.0.2
+		 * @param jq.Event evt the DOM event
+		 * @param zk.Draggable drag the draggable controller
+		 * @return zk.Widget
+		 */
+		getDropTarget: function (evt, drag) {
+			var wgt;
+			// Firefox's bug -  https://bugzilla.mozilla.org/show_bug.cgi?id=1259357
+			if ((zk.ff && jq(evt.target).css('overflow') == 'hidden') ||
+				// IE 9~11 and Edge may receive a wrong target when dragging with an Image.
+				((zk.ie > 8 || zk.edge) && jq.nodeName(evt.domTarget, 'img'))) {
+				var n = document.elementFromPoint(evt.domEvent.clientX, evt.domEvent.clientY);
+				if (n)
+					wgt = zk.$(n);
+			} else {
+				wgt = evt.target;
+			}
+			return wgt;
+		},
 		/** Returns the widget to drop to.
 		 * @param zk.Draggable drag the draggable controller
 		 * @param Offset pt the mouse pointer's position.
@@ -326,7 +349,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 * @return zk.Widget
 		 */
 		getDrop: function (drag, pt, evt) {
-			var wgt = evt.target;
+			var wgt = this.getDropTarget(evt, drag);
 			return wgt ? wgt.getDrop_(drag.control) : null;
 		},
 		/** Ghost the DOM element being dragged.
@@ -377,8 +400,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function DD_dragging(drag, pt, evt) {
 		var dropTo;
-		if (!evt || (dropTo = evt.domTarget) == drag._lastDropTo)
+		if (!evt || (dropTo = zk.DnD.getDropTarget(evt)) == drag._lastDropTo) {
 			return;
+		}
 
 		var dropw = zk.DnD.getDrop(drag, pt, evt),
 			found = dropw && dropw == drag._lastDrop;

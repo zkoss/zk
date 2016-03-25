@@ -282,14 +282,21 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	doKeyDown_: function (evt) {
 		var mesh = this.getMeshWidget();
-		if (!zk.gecko || !jq.nodeName(evt.domTarget, 'input', 'textarea'))
+
+		// disable item's content selection excluding input box and textarea
+		if (!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			this._disableSelection_ = true;
 			zk(mesh.$n()).disableSelection();
+		}
 		mesh._doKeyDown(evt);
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
 		var mesh = this.getMeshWidget();
-		zk(mesh.$n()).enableSelection();
+		if (this._disableSelection_) {
+			zk(mesh.$n()).enableSelection();
+			this._disableSelection_ = false;
+		}
 		mesh._doKeyUp(evt);
 		this.$supers('doKeyUp_', arguments);
 	},

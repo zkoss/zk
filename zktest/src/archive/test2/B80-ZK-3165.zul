@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3165.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 24 17:10:11 CST 2016, Created by jumperchen
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <tree onSelect="Clients.log(event.getName())" multiple="false" width="200px" checkmark="true">
+        <treechildren>
+            <treeitem value="draggable" draggable="true">
+                <treerow>
+                    <treecell>
+                        draggable
+                    <textbox onChange="Clients.log(self.value)"/>
+                </treecell>
+                </treerow>
+            </treeitem>
+            <treeitem value="non-draggable" draggable="false">
+                <treerow>
+                    <treecell>
+                        non-draggable
+                        <textbox onChange="Clients.log(self.value)"/>
+                    </treecell>
+                </treerow>
+            </treeitem>
+
+        </treechildren>
+    </tree>
+    <textbox onChange="Clients.log(event.getName())" xmlns:n="client" onBlur="Clients.log(event.getName())" placeholder="edit me"/>
+    <button label="focus me" onBlur="Clients.log(event.getName());"/>
+    <separator/>
+    <label multiline="true">
+    1. Type a text into "edit me", and select the "draggable" treeitem.
+    2. You should see the events displayed in order "onChange", "onBlur", and "onSelect" (for all browsers)
+    3. Type a text into the textbox which is inside the "draggable" treeitem, and then select and drag some text from it to the textbox (i.e. "edit me") which outside the tree component.
+    4. You should see the draggable text is dropped into the textbox (i.e. "edit me").
+    5. Again, test (3~4 steps) with the textbox which is inside the "non-draggable" treeitem.
+    </label>
+</zk>

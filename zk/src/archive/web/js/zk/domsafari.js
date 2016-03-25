@@ -13,12 +13,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _dissel() {
-		this.style.KhtmlUserSelect = 'none';
-	}
-	function _ensel() {
-		this.style.KhtmlUserSelect = '';
-	}
 	
 zk.copy(zjq, {
 	_fixCSS: function (el) { 
@@ -36,12 +30,6 @@ zk.copy(zjq, {
 });
 var _bkZjq = {};
 zk.copy(zjq.prototype, {
-	disableSelection: function () {
-		return this.jq.each(_dissel);
-	},
-	enableSelection: function () {
-		return this.jq.each(_ensel);
-	},
 	beforeHideOnUnbind: function () { //Bug 3076384 (though i cannot reproduce in chrome/safari)
 		return this.jq.each(function () {
 			for (var ns = this.getElementsByTagName('iframe'), j = ns.length; j--;)

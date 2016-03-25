@@ -804,16 +804,21 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			}
 		}
 
-		if (!zk.gecko || !jq.nodeName(evt.domTarget, 'input', 'textarea'))
+		// disable item's content selection excluding input box and textarea
+		if (!jq.nodeName(evt.domTarget, 'input', 'textarea')) {
+			this._disableSelection_ = true;
 			zk(this.$n()).disableSelection();
-
+		}
 		// Feature #1978624
 		if (evt.target == this) //try to give to the focus item
 			evt.target = this._focusItem || this.getSelectedItem() || this;
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
-		zk(this.$n()).enableSelection();
+		if (this._disableSelection_) {
+			this._disableSelection_ = false;
+			zk(this.$n()).enableSelection();
+		}
 		evt.stop({propagation: true});
 		this.$supers('doKeyUp_', arguments);
 	},

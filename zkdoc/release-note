@@ -25,6 +25,7 @@ ZK 8.0.2
   ZK-3140: Textbox text selection in draggable row unavailable in Firefox
   ZK-3143: Mesh element with multiple selection text content gets selected when using ctrl click or shift click on IE11
   ZK-3158: Shadow Element NPE when setting on a parent outside of a page
+  ZK-3165: draggable treeitems fire onSelect too early in IE
 
 * Upgrade Notes
 
