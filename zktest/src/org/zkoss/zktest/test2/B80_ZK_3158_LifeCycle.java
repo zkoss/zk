@@ -23,12 +23,12 @@ public class B80_ZK_3158_LifeCycle implements UiLifeCycle{
 
 	@Override
 	public void afterShadowAttached(ShadowElement shadow, Component host) {
-		Clients.log("attached");
+		System.out.println("B80_ZK_3158_LifeCycle: afterShadowAttached");
 	}
 
 	@Override
 	public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
-		Clients.log("detached");
+		System.out.println("B80_ZK_3158_LifeCycle: afterShadowDetached");
 	}
 
 	@Override

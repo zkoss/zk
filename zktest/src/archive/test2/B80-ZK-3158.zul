@@ -14,7 +14,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label multiline="true">
-        1.Click the button, and no exception occur. You should see "attach" and "detach" in zk log.
+        1.Click the button, and no exception occur. You should see "attach" and "detach" in console.
     </label>
     <div apply="org.zkoss.zktest.test2.B80_ZK_3158">
         <button id="btn" label="press"/>
