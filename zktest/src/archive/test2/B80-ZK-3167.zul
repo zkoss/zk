@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3167.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 25 17:22:47 CST 2016, Created by jumperchen
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  <div>
+      <label multiline="true">
+          1. enter a text e.g. 'a' in the 1st textbox
+          2. drag the 1st row to 2nd
+          3. you should see a text of "onChange: " with your typing in zk.log
+      </label>
+    <grid id="grid" >        
+        <columns>
+            <column label="A" />
+            <column label="B" />
+        </columns>
+        <template name="model">
+        	<row draggable="true" droppable="true">
+        		<attribute name="onDrop"><![CDATA[
+        			if (event.getDragged() instanceof Row) {
+						final int from = ((Row) event.getDragged()).getIndex();
+						final int to = ((Row) event.getTarget()).getIndex();
+						final ListModelList model = (ListModelList) ((Row) event.getDragged()).getGrid().getModel();
+
+						final Object toBeMoved = model.get(from);
+						model.remove(from);
+						model.add(to, toBeMoved);
+					}
+        		]]></attribute>
+        		<label value="${each}"/>
+        		<textbox onChange='Clients.log("onChange: " + self.value)'/>
+        	</row>
+        </template>
+    </grid>
+  </div>
+  <zscript><![CDATA[
+  	ListModelList model = new ListModelList();
+		for (int i = 0 ; i < 3 ; i++){
+			model.add("item "+i);
+		}
+		grid.setModel(model);
+  ]]></zscript>
+</zk>
