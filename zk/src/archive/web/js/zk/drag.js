@@ -342,10 +342,9 @@ String scroll; //DOM Element's ID</code></pre>
 		this.opts = opts;
 		this.dragging = false;   
 
-		jq(this.handle).bind('zmousedown', this.proxy(this._mousedown));
-
-		// issue in test/dragdrop.zul for dragging image file
-		jq(this.handle).bind('dragstart', _disableDragStart);
+		jq(this.handle).bind('zmousedown', this.proxy(this._mousedown))
+				// issue in test/dragdrop.zul for dragging image file
+				.bind('dragstart', _disableDragStart);
 
 		//register
 		if(_drags.length == 0)
@@ -363,9 +362,8 @@ String scroll; //DOM Element's ID</code></pre>
 			this._suicide = true;
 			return;
 		}
-		jq(this.handle).unbind('zmousedown', this.proxy(this._mousedown));
-
-		jq(this.handle).unbind('dragstart', _disableDragStart);
+		jq(this.handle).unbind('zmousedown', this.proxy(this._mousedown))
+				.unbind('dragstart', _disableDragStart);
 
 		//unregister
 		_drags.$remove(this);
