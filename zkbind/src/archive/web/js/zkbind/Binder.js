@@ -142,6 +142,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 					};
 				})(media);
 				mql.addListener(handler);
+				handler(mql);
 				mqls.push({mql: mql, handler: handler});
 			}
 			this._mediaQueryLists = mqls;
