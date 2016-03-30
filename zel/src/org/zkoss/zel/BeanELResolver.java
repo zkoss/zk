@@ -37,6 +37,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.zkoss.zel.impl.util.ClassUtil;
+import org.zkoss.zel.impl.util.ReflectionUtil;
 
 public class BeanELResolver extends ELResolver {
 
@@ -63,8 +64,8 @@ public class BeanELResolver extends ELResolver {
 
     private final boolean readOnly;
 
-    private final ConcurrentCache<String, BeanProperties> cache =
-        new ConcurrentCache<String, BeanProperties>(CACHE_SIZE);
+	//This cache can be static - it allows reusing cache across multiple instances.
+    private static final ConcurrentCache<String, BeanProperties> cache = new ConcurrentCache<String, BeanProperties>(CACHE_SIZE);
 
     public BeanELResolver() {
         this.readOnly = false;
@@ -146,28 +147,11 @@ public class BeanELResolver extends ELResolver {
 			//XXX refactored into write() ?
 			if (!checkType(m, value)) {
 				Class<?> baseClass = base.getClass();
-				//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
-				//XXX the same in AstValue#setValue()
-				String propertySetterName = property.toString();
-				if(propertySetterName != null && propertySetterName.length()>0){
-					propertySetterName =
-							"set"+
-									propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
-									propertySetterName.substring(1);
-				}
-				////
-
-				for (Method method : baseClass.getMethods()) {
-					//method name must the same as t.property (getter)
-					if (method.getName().equals(propertySetterName)) {
-						Class<?>[] clazzes = method.getParameterTypes();
-						if (clazzes.length!=1) { //not standard setter
-							break;
-						}
-						if (ClassUtil.isInstance(value, clazzes[0])) {
-							m = method;
-							break;
-						}
+				for (Method method : ReflectionUtil.getSetter(baseClass, property.toString())) {
+					Class<?>[] clazzes = method.getParameterTypes();
+					if (ClassUtil.isInstance(value, clazzes[0])) {
+						m = method;
+						break;
 					}
 				}
 			}

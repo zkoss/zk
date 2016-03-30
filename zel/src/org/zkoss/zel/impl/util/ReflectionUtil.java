@@ -19,8 +19,12 @@ package org.zkoss.zel.impl.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +37,7 @@ import org.zkoss.zel.impl.lang.ELSupport;
  * Utilities for Managing Serialization and Reflection
  *
  * @author Jacob Hookom [jacob@hookom.net]
+ * @author samuelbr
  */
 public class ReflectionUtil {
 
@@ -42,6 +47,10 @@ public class ReflectionUtil {
     protected static final Class<?>[] PRIMITIVES = new Class[] { boolean.class,
             byte.class, char.class, double.class, float.class, int.class,
             long.class, short.class, Void.TYPE };
+
+	//for reflection cache
+	private static final Method[] EMPTY_METHOD_ARRAY = new Method[0];
+	private static final Map<Class<?>, Map<String, Method[]>> SETTERS_METHODS_CACHE = new ConcurrentHashMap<Class<?>, Map<String, Method[]>>();
 
     private ReflectionUtil() {
         super();
@@ -505,5 +514,59 @@ public class ReflectionUtil {
             return cmp;
         }
     }
+
+	/**
+	 * Get an array of setter methods by a specific propertyName.
+	 * @param cls
+	 * @param propertyName
+	 * @return An array of methods
+	 */
+	public static Method[] getSetter(Class<?> cls, String propertyName) {
+		Map<String, Method[]> classSetters = SETTERS_METHODS_CACHE.get(cls);
+
+		if (classSetters != null) {
+			Method[] methods = classSetters.get(propertyName);
+			if (methods != null) {
+				return methods;
+			}
+		}
+
+		return populateSetters(cls, propertyName);
+	}
+
+	private static Method[] populateSetters(Class<?> cls, String propertyName) {
+		String setterName = "";
+		if (propertyName != null && propertyName.length() > 0){
+			setterName = new StringBuilder("set").append(propertyName.substring(0, 1).toUpperCase(Locale.ENGLISH))
+					.append(propertyName.substring(1)).toString();
+		}
+
+		List<Method> resultList = null;
+		for (Method method : cls.getMethods()) {
+			if (method.getName().equals(setterName)) {
+				Class<?>[] clazzes = method.getParameterTypes();
+
+				if (clazzes.length != 1)
+					continue;
+
+				if (resultList == null)
+					resultList = new ArrayList<Method>();
+
+				resultList.add(method);
+			}
+		}
+
+		Method[] result = EMPTY_METHOD_ARRAY;
+		if (resultList != null && !resultList.isEmpty())
+			result = resultList.toArray(new Method[resultList.size()]);
+
+		Map<String, Method[]> classMap = SETTERS_METHODS_CACHE.get(cls);
+		if (classMap == null) {
+			classMap = new ConcurrentHashMap<String, Method[]>();
+			SETTERS_METHODS_CACHE.put(cls, classMap);
+		}
+		classMap.put(propertyName, result);
+		return result;
+	}
 
 }
