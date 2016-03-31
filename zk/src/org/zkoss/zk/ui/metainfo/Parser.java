@@ -654,13 +654,13 @@ public class Parser {
 
 		ComponentInfo pi = null;
 		String textAs = null;
-		StringBuffer textAsBuffer = null;
+		StringBuilder textAsBuffer = null;
 		for (NodeInfo p = parent; p != null; p = p.getParent())
 			if (p instanceof ComponentInfo) {
 				pi = (ComponentInfo) p;
 				textAs = pi.getTextAs();
 				if (textAs != null && pi == parent) //only direct child
-					textAsBuffer = new StringBuffer();
+					textAsBuffer = new StringBuilder();
 				break; //found
 			}
 		final boolean isXHTML = "xhtml".equals(parentlang.getName());
@@ -735,7 +735,8 @@ public class Parser {
 					}
 					// Bug ZK-2845: ShadowInfo does not allow TextInfo as child
 					if (!(parent instanceof ShadowInfo)) {
-						new TextInfo(parent, label);
+						// It's possible to replace multiple whitespace characters with single space
+						new TextInfo(parent,  trimLabel.length() == 0 ? " " : label);
 					}
 					//Don't trim if native (3.5.0)
 				} else {
@@ -761,7 +762,7 @@ public class Parser {
 						} else {
 							final ComponentInfo labelInfo = parentlang.newLabelInfo(parent, label);
 							if (trimLabel.length() == 0)
-								labelInfo.setReplaceableText(label); //yes, it can be replaced by a text
+								labelInfo.setReplaceableText(" "); //yes, it can be replaced by a text, and it's possible to replace multiple whitespace characters with single space
 						}
 					}
 				}
@@ -1199,10 +1200,10 @@ public class Parser {
 			final org.zkoss.xml.Locator l = el.getLocator();
 			int lno = l != null ? l.getLineNumber() : 0;
 			if (lno > 1) {
-				final StringBuffer sb = new StringBuffer(lno);
+				final StringBuilder sb = new StringBuilder(lno);
 				while (--lno > 0)
 					sb.append('\n');
-				script = sb.toString() + script;
+				script = sb.append(script).toString();
 			}
 			final ZScriptInfo zs = new ZScriptInfo(parent, zslang, script, cond);
 			if (deferred)
