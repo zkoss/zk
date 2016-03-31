@@ -1,9 +1,9 @@
 /* Paging.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 23 15:00:58     2009, Created by jumperchen
 
@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return true;
 		}
 	}
-	
+
 	//Returns whether the string is integer or not
 	function _isUnsignedInteger(s) {
 		  return (s.toString().search(/^[0-9]+$/) == 0);
@@ -38,12 +38,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_pageIncrement: zk.mobile ? 5 : 10,
 
 	$define: { //zk.def
-    	/** Returns the total number of items.
-    	 * @return int
-    	 */
-    	/** Sets the total number of items.
-    	 * @param int totalSize
-    	 */
+		/** Returns the total number of items.
+		 * @return int
+		 */
+		/** Sets the total number of items.
+		 * @param int totalSize
+		 */
 		totalSize: function () {
 			this._updatePageNum();
 			if (this._detailed) {
@@ -57,7 +57,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				}
 			}
 		},
-		/** Returns the number of page anchors shall appear at the client. 
+		/** Returns the number of page anchors shall appear at the client.
 		 *
 		 * <p>Default: 10.
 		 * @return int
@@ -174,7 +174,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 						setTimeout(function () {
 							if (self.desktop) {
 								var n = self.parent.$n();
-		
+
 								// reset and recalculate
 								if (n && n._lastsz) {
 									n._lastsz = null;
@@ -197,10 +197,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			tsz = this._totalSize,
 			lastItem = (acp + 1) * psz,
 			dash = '';
-		
+
 		if ('os' != this.getMold())
 			dash = ' - ' + (lastItem > tsz ? tsz : lastItem);
-		
+
 		return '[ ' + (acp * psz + 1) + dash + ' / ' + tsz + ' ]';
 	},
 	_infoTags: function (out) {
@@ -219,7 +219,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			half = Math.round(pinc / 2),
 			begin,
 			end = this._activePage + half - 1;
-		
+
 		if (end >= pcount) {
 			end = pcount - 1;
 			begin = end - pinc + 1;
@@ -257,12 +257,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	appendAnchor: function (out, label, val, seld) {
 		var isInt = _isUnsignedInteger(label),
 			cls = this.$s('button');
-		
+
 		if (!isInt)
 			cls += ' ' + this.$s('noborder');
 		if (seld)
 			cls += ' ' + this.$s('selected');
-		
+
 		out.push('<li><a class="', cls,
 				'" href="javascript:;" onclick="zul.mesh.Paging.go(this,', val,
 				')">', label, '</a></li>');
@@ -295,7 +295,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			for (var j = btn.length; j--;) {
 				if (!this.$weave)
 					jq(btn[j]).click(Paging['_dom' + postfix[k] + 'Click']);
-	
+
 				if (pcount == 1) {
 					jq(btn[j]).attr('disabled', true);
 				} else if (postfix[k] == 'first' || postfix[k] == 'prev') {
@@ -306,8 +306,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-		
-		if(focusInfo && focusInfo.uuid === this.uuid) {			
+
+		if(focusInfo && focusInfo.uuid === this.uuid) {
 			var pos = focusInfo.lastPos,
 				zinp = zk(input[focusInfo.inpIdx]);
 			zinp.focus();
@@ -409,7 +409,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			wgt.$class.go(wgt, wgt._pageCount - 1, inp);
 			evt.stop();
 			break;
-		case 9: case 8: case 46: //tab, backspace, delete 
+		case 9: case 8: case 46: //tab, backspace, delete
 			break;
 		case 13: //enter
 			wgt.$class._increase(inp, wgt, 0);
@@ -445,7 +445,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		var wgt = zk.Widget.$(evt),
 			uuid = wgt.uuid,
 			postfix = ['first', 'prev'];
-		
+
 		if (wgt.getActivePage() != 0) {
 			wgt.$class.go(wgt, 0);
 			for (var k = postfix.length; k--;)

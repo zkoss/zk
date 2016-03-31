@@ -1,9 +1,9 @@
 /* Longbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Mar 29 20:43:22     2009, Created by tomyeh
 
@@ -20,7 +20,7 @@ zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
 	//bug #2997037, cannot enter large long integer into longbox
 	coerceFromString_: function (value) {
 		if (!value) return null;
-	
+
 		var info = zk.fmt.Number.unformat(this._format, value, false, this._localizedSymbols),
 			val = new zk.Long(info.raw),
 			sval = val.$toString();
@@ -34,7 +34,7 @@ zul.inp.Longbox = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	coerceToString_: function (value) {
 		var fmt = this._format;
-		return value != null ? typeof value == 'string' ? value : 
+		return value != null ? typeof value == 'string' ? value :
 			fmt ? zk.fmt.Number.format(fmt, value.$toString(), this._rounding, this._localizedSymbols)
 				 : value.$toLocaleString() : '';
 	},

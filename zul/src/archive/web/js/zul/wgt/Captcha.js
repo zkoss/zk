@@ -1,9 +1,9 @@
 /* Captcha.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Mar 27 14:53:11     2009, Created by tomyeh
 

@@ -31,7 +31,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				evt.stop();
 			} else
 				wgt.fireX(new zk.Event(wgt, 'onClick', evt.data));
-				
+
 		} else {
 			jq(wgt.$n()).addClass(wgt.isTopmost() ? wgt.$s('selected') : wgt.$s('hover'));
 			wgt.menupopup._shallClose = false;
@@ -68,7 +68,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * When the user clicks the menu element, the child {@link Menupopup}
  * of the menu will be displayed.
  * This element is also used to create submenus (of {@link Menupopup}.
- * 
+ *
  * <p>Default {@link #getZclass}: z-mean.
  */
 zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
@@ -83,7 +83,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		 * shown as part of the description.
 		 *
 		 * <p>It is useful to show the description in more versatile way.
-		 * 
+		 *
 		 * <p>There is a way to create {@link zkex.inp.Colorbox} automatically by using
 		 * #color=#RRGGBB, usage example <code>setContent("#color=FFFFFF")</code>
 		 *
@@ -91,11 +91,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		 */
 		content: function (content) {
 			if (!content || content.length == 0) return;
-			
+
 			if (!this._contentHandler) {
 				if (zk.feature.pe) {
 					var self = this;
-					zk.load('zkex.inp', null, function () { 
+					zk.load('zkex.inp', null, function () {
 						self._contentHandler = new zkex.inp.ContentHandler(self, content);
 					});
 					return;
@@ -130,7 +130,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	getAnchor_: function () {
 		return this.$n('a');
 	},
-	domContent_: function () { 
+	domContent_: function () {
 		var label = '<span class="' + this.$s('text') + '">'
 					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
 		img = this.getImage(),
@@ -138,7 +138,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				+ (this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '"></i>',
 		separator = '<div class="' + this.$s('separator') + '"></div>',
 		iconSclass = this.domIcon_();
-	
+
 		if (img)
 			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
@@ -241,11 +241,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		return next ? _nextVisibleMenu(next) : this;
 	},
 	doKeyDown_: function (evt) {
-		
+
 		// only support for the topmost menu
 		if (this.isTopmost()) {
 			var keyCode = evt.keyCode;
-			
+
 			// switch the navigation key when in vertical view
 			if (this.isVertical_()) {
 				switch (keyCode) {
@@ -332,8 +332,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			.domListen_(anc, 'onBlur', 'doBlur_')
 			.domListen_(anc, 'onMouseEnter')
 			.domListen_(anc, 'onMouseLeave');
-		
-		
+
+
 		if (this.isTopmost() && this.isListen('onClick')) {
 			jq(this.$n()).addClass(this.$s('clickable'));
 		}
@@ -388,7 +388,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				if(this.isTopmost())
 					_toggleClickableCSS(this);
 				this.menupopup.open();
-			} else if (this.isTopmost()) 
+			} else if (this.isTopmost())
 				this.menupopup.close({sendOnOpen: true});
 			else
 				zk(this.menupopup.$n('a')).focus(); // force to get a focus
@@ -399,7 +399,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (menubar) {
 			menubar._noFloatUp = false;
 		}
-		
+
 		var	topmost = this.isTopmost();
 		if(topmost)
 			_toggleClickableCSS(this);
@@ -430,7 +430,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_doMouseLeave: function (evt) { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
 		this._updateHoverImage(); // remove hover image if any
-	
+
 		var topmost = this.isTopmost(),
 			menupopup = this.menupopup;
 		if (topmost) { //implies menubar
@@ -446,7 +446,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	getImageNode: function () {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
-			if (n) 
+			if (n)
 				this._eimg = this.$n('a').firstChild;
 		}
 		return this._eimg;
@@ -503,7 +503,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 	setContent: function (content) {
 		if (this._content != content || !this._pp) {
 			this._content = content;
-			this._wgt.rerender();	
+			this._wgt.rerender();
 		}
 	},
 	redraw: function (out) {
@@ -519,7 +519,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 			wgt.domListen_(wgt.$n(), 'onClick', 'onShow');
 			zWatch.listen({onFloatUp: wgt, onHide: wgt});
 		}
-		
+
 		this._pp = wgt.$n('cnt-pp');
 
 		jq(this._pp, zk)
@@ -558,9 +558,9 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		var wgt = this._wgt,
 			pp = this._pp;
 		if (!pp) return;
-		
+
 		pp.style.display = 'block';
-			
+
 		jq(pp).zk.makeVParent();
 		zWatch.fireDown('onVParent', this);
 
@@ -570,7 +570,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 	onHide: function () {
 		var pp = this._pp;
 		if (!pp || !zk(pp).isVisible()) return;
-		
+
 		pp.style.display = 'none';
 		jq(pp).zk.undoVParent();
 		zWatch.fireDown('onVParent', this);

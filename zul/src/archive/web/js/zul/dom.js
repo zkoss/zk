@@ -1,9 +1,9 @@
 /* dom.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jul 31 16:37:36     2009, Created by tomyeh
 
@@ -37,12 +37,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				onClick: function (evt) {
 					if (typeof f == 'function')
 						f.call(this, evt);
-					
+
 					// backup first
 					var dt = this.desktop;
 					this.$o().detach();
-					
-					// B70-ZK-1683 
+
+					// B70-ZK-1683
 					if (zAu.disabledRequest) {
 						zAu.disabledRequest = false;
 						zAu.sendNow(dt);

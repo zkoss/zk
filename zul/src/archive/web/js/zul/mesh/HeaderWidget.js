@@ -18,13 +18,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_sumWidth: true, //indicate shall add this width for MeshWidget. @See _fixFlex in widget.js
 	$define: {
-    	/** Returns the horizontal alignment of this column.
-    	 * <p>Default: null (system default: left unless CSS specified).
-    	 * @return String
-    	 */
-    	/** Sets the horizontal alignment of this column.
-    	 * @param String align
-    	 */
+		/** Returns the horizontal alignment of this column.
+		 * <p>Default: null (system default: left unless CSS specified).
+		 * @return String
+		 */
+		/** Sets the horizontal alignment of this column.
+		 * @param String align
+		 */
 		align: function (v) {
 			this.adjustDOMAlign_('align', v);
 		},
@@ -46,7 +46,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	// Bug ZK-2401
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
-		
+
 		//sync frozen
 		var box, frozen, tbody, td, tds, node;
 		if ((box = this.getMeshWidget()) && box.efrozen
@@ -198,14 +198,14 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			ofs = this._dragsz ? zk(n).revisedOffset() : false,
 			btn = wgt.$n('btn'),
 			ignoreSort = false;
-		
+
 		//IE will trigger doClick during closing menupopup
 		if (zk.ie < 11 && btn && !zk(btn).isRealVisible())
 			ignoreSort = true;
-		
-		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) 
-				&& this.isSortable_() && !jq.nodeName(tg, 'input') 
-				&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0])) 
+
+		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label))
+				&& this.isSortable_() && !jq.nodeName(tg, 'input')
+				&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))
 				&& !ignoreSort) {
 			this.fire('onSort', 'ascending' != this.getSortDirection()); // B50-ZK-266
 			evt.stop();
@@ -305,7 +305,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 					chdWd = w.getWidth();
 
 				if (chdWd == '-1') //sizable + visible false -> true
-                	updCols.push({index: i, wgt: w});
+					updCols.push({index: i, wgt: w});
 				else {
 					if (chdWd)
 						wd += zk.parseInt(chdWd);
@@ -414,7 +414,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			bdfaker = mesh.ebdfaker,
 			ftfaker = mesh.eftfaker,
 			cidx = zk(wgt.$n()).cellIndex();
-		
+
 		var hdcols = hdfaker.childNodes,
 			bdcols = bdfaker.childNodes,
 			ftcols = ftfaker ? ftfaker.childNodes : null;
@@ -459,28 +459,28 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		hdcols[cidx].style.width = bdcols[cidx].style.width = wd;
 		if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
 			ftcols[cidx].style.width = wd;
-		
+
 		//3. clear width=100% setting, otherwise it will try to expand to whole width
 		mesh.eheadtbl.width = '';
 		mesh.ebodytbl.width = '';
 		if (mesh.efoottbl)
 			mesh.efoottbl.width = '';
-		
+
 		delete mesh._span; //no span!
 		delete mesh._sizedByContent; //no sizedByContent!
 		for (var w = mesh.head.firstChild; w; w = w.nextSibling)
 			w.setHflex_(null); //has side effect of setting w.$n().style.width of w._width
-		
+
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
 			width: wd ,
 			widths: wds
 		}, evt.data), null, 0);
-		
+
 		// bug #2799258 in IE, we have to force to recalculate the size.
 		mesh.$n()._lastsz = null;
-		
+
 		// for the test case of B70-ZK-2290.zul, we need to put the width back.
 		if (!zk.webkit) {
 			mesh.eheadtbl.width = '100%';
@@ -498,7 +498,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			label = this.domContent_();
 		out.push('<th', this.domAttrs_({width: true}), '><div id="',
 			uuid, '-cave" class="', this.$s('content'), '"',
-			this.domTextStyleAttr_(), '><div class="', this.$s('sorticon'), 
+			this.domTextStyleAttr_(), '><div class="', this.$s('sorticon'),
 			'"><i id="', uuid, '-sort-icon"></i></div>',
 			((!this.firstChild && label == '') ? '&nbsp;' : label)); //ZK-805 MenuPopup without columns issue
 

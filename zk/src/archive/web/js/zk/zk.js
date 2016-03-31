@@ -726,7 +726,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 					for (var p in superpt) {//inherit non-static
 						var $p = '|' + p + '|';
 						if ('|_$super|_$subs|$class|_$extds|superclass|className|widgetName|blankPreserved|'.indexOf($p) < 0) {
-							thispt[p] = superpt[p];	
+							thispt[p] = superpt[p];
 						} else if (thispt[p] == undefined && '|className|widgetName|blankPreserved|'.indexOf($p) >= 0) {
 							thispt[p] = superpt[p]; // have to inherit from its parent.
 						}
@@ -1132,7 +1132,7 @@ zk.endProcessing();
 	 */
 	endProcessing: function (pid /* internal use only */) {
 		//F70-ZK-2495: delete init crash timer once endProcessing is called
-		if (window.zkInitCrashTimer) { 
+		if (window.zkInitCrashTimer) {
 			clearTimeout(window.zkInitCrashTimer);
 			window.zkInitCrashTimer = false;
 		}
@@ -1278,8 +1278,8 @@ zk.log('value is", value);
 			l = uri.indexOf('?');
 		return l >= 0 ?
 			k >= 0 ?
-			  prefix + uri.substring(0, l) + suffix + '&' + uri.substring(l + 1) :
-			  prefix + uri.substring(0, l) + suffix + uri.substring(l) :
+			prefix + uri.substring(0, l) + suffix + '&' + uri.substring(l + 1) :
+			prefix + uri.substring(0, l) + suffix + uri.substring(l) :
 			prefix + uri + suffix;
 	},
 	/** Declares the desktop is used for the stateless context.
@@ -1305,7 +1305,7 @@ zk.log('value is", value);
 	 * Adds data attribute handler
 	 * @param String name the attribute name
 	 * @param String script the JS content
-	 * @since 8.0 
+	 * @since 8.0
 	 */
 	addDataHandler: function (name, script) {
 		if (!zk.dataHandlers)
@@ -1412,7 +1412,7 @@ zk.log('value is", value);
 		agent = zk.agent = navigator.userAgent.toLowerCase(),
 		iosver;
 	zk.opera = browser.opera && _ver(browser.version);
-	zk.ff = zk.gecko = browser.mozilla 
+	zk.ff = zk.gecko = browser.mozilla
 		&& (agent.indexOf('trident') < 0) && _ver(browser.version);
 	zk.linux = agent.indexOf('linux') >= 0;
 	zk.mac = !zk.ios && agent.indexOf('mac') >= 0;
@@ -1449,7 +1449,7 @@ zk.log('value is", value);
 		zk.iex = browser.msie && _ver(browser.version); //browser version
 			//zk.iex is the Browser Mode (aka., Compatibility View)
 			//while zk.ie is the Document Mode
-		if (!zk.iex && ie11) 
+		if (!zk.iex && ie11)
 			zk.iex = ie11;
 		
 		if (zk.iex) {
@@ -1788,7 +1788,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 			$id = '#' + id,
 			click = zk.mobild ? ' ontouchstart' : ' onclick',
 			// Use zUtl.encodeXML -- Bug 1463668: security
- 			html = '<div class="z-error" id="' + id + '">'
+			html = '<div class="z-error" id="' + id + '">'
 			+ '<div id="' + id + '-p">'
 			+ '<div class="errornumbers">' + (++_errcnt) + ' Errors</div>'
 			+ '<div class="button"' + click + '="zk._Erbx.remove()">'

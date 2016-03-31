@@ -1,9 +1,9 @@
 /* constraint.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan  9 10:32:19     2009, Created by tomyeh
 
@@ -28,7 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	/** Constructor.
 	 * @param Object a
-	 * It can be String or number, the number or name of flag, 
+	 * It can be String or number, the number or name of flag,
 	 * such as "no positive", 0x0001.
 	 * @param String b the regular expression
 	 * @param String c the error message
@@ -50,11 +50,11 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			for (flag in this._flags) {
 				this._errmsg[flag] = c;
 			}
-			
+
 			if (this._flags.SERVER)
 				this.serverValidate = true;
 		}
-	},	
+	},
 	_init: function (cst) {
 		l_out:
 		for (var j = 0, k = 0, len = cst.length; k >= 0; j = k + 1) {
@@ -74,7 +74,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						if (cc == '\\') ++k; //skip one
 					}
 					this._regex = new RegExp(k >= 0 ? cst.substring(j, k) : cst.substring(j), 'g');
-					this._cstArr[this._cstArr.length] = 'regex'; 
+					this._cstArr[this._cstArr.length] = 'regex';
 					continue l_out;
 				}
 				if (cc == ':') {
@@ -144,10 +144,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	parseConstraint_: function (cst) {
 		var f = this._flags;
 		var arr = this._cstArr;
-		
+
 		if (cst == 'no positive') {
 			f.NO_POSITIVE = true;
-			arr[arr.length] = 'NO_POSITIVE'; 
+			arr[arr.length] = 'NO_POSITIVE';
 		} else if (cst == 'no negative') {
 			f.NO_NEGATIVE = true;
 			arr[arr.length] = 'NO_NEGATIVE';
@@ -191,7 +191,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		if (v & 0x200)
 			f.STRICT = true;
 		if (v = (v & 0xf000))
-			this._pos = _posAllowed[v >> 12];		
+			this._pos = _posAllowed[v >> 12];
 		return f;
 	},
 	_cvtNum: function (v) { //compatible with server side
@@ -210,7 +210,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	},
 	/** validation for flag, validate date if val is date
 	 * @param zk.Widget wgt
-	 * @param Object val a String, a number, or a date, the number or name of flag, 
+	 * @param Object val a String, a number, or a date, the number or name of flag,
 	 * such as "no positive", 0x0001.
 	 */
 	validate: function (wgt, val) {

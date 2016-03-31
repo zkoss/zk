@@ -173,7 +173,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						return;
 					}
 					if (v != 410 && //not timeout (SC_GONE)
-							(!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout 
+							(!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout
 						zAu._resetTimeout();
 
 					if (pushReqCmds(reqInf, req)) { //valid response
@@ -276,14 +276,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 	function ajaxSend(dt, aureq, timeout) {
 		//ZK-1523: dt(desktop) could be null, so search the desktop from target's parent.
-		//call stack: echo2() -> send() 
+		//call stack: echo2() -> send()
 		if (!dt) {
 			//original dt is decided by aureq.target.desktop, so start by it's parent.
 			var wgt = aureq.target.parent;
 			while(!wgt.desktop) {
 				wgt = wgt.parent;
 			}
-			dt = wgt.desktop;			
+			dt = wgt.desktop;
 		}
 		////
 		zAu.addAuRequest(dt, aureq);
@@ -647,11 +647,11 @@ zAu = {
 			//2011/04/22 feature 3291332
 			//Use sync request for chrome, safari and firefox (4 and later).
 			//Note: when pressing F5, the request's URL still arrives before this even async:false
-			async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome. 
+			async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome.
 				// conservative, though it shall be (!zk.safari || zk.ff >= 4)
 		}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
 		
-		// B65-ZK-2210: clean up portlet2 data when desktop removed. 
+		// B65-ZK-2210: clean up portlet2 data when desktop removed.
 		if (!dummy && zk.portlet2Data && zk.portlet2Data[dt.id]) {
 			delete zk.portlet2Data[dt.id];
 		}
@@ -918,7 +918,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		if (content)
 			ajaxSendNow({
 				sid: seqId, uri: requri, dt: dt, content: content,
-				implicit: implicit, 
+				implicit: implicit,
 				ignorable: ignorable, tmout: 0, rtags: rtags
 			});
 		return true;
@@ -1034,15 +1034,15 @@ zAu.beforeSend = function (uri, req, dt) {
      * The function receives four arguments: The XHR (XMLHttpRequest) object,
      * a number describing the status of the request, a string describing the text
      * of the status, and a number describing the retry value to re-send.
-     * 
+     *
      * <p>For example,
 <pre><code>
 zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
     if (ajaxReqTries == null)
         ajaxReqTries = 3; // retry 3 times
         
-    // reset the resendTimeout, for more detail, please refer to 
-    // http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element/The_auto-resend-timeout_Element 
+    // reset the resendTimeout, for more detail, please refer to
+    // http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_client-config_Element/The_auto-resend-timeout_Element
     zk.resendTimeout = 2000;//wait 2 seconds to resend.
     
     if (!zAu.confirmRetry("FAILED_TO_RESPONSE", status+(statusText?": "+statusText:"")))
@@ -1173,11 +1173,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			aureqs = zAu.getAuRequests(dt);
 		// Bug ZK-2741
 		for (var i = 0, j = aureqs.length; i < j; i++) {
-	 		var aureq0 = aureqs[i];
-	 		if ((!aureq0.target || aureq0.target.$instanceof(zk.Desktop)) && aureq0.name == 'dummy') {
-	 			return; //no need to send more
-	 		}
-	 	}
+			var aureq0 = aureqs[i];
+			if ((!aureq0.target || aureq0.target.$instanceof(zk.Desktop)) && aureq0.name == 'dummy') {
+				return; //no need to send more
+			}
+		}
 		zAu.send(new zk.Event(dt, 'dummy', null, {ignorable: true}));
 	},
 	/** Ask the client to echo back globally.

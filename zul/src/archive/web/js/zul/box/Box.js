@@ -1,9 +1,9 @@
 /* Box.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Nov  5 12:10:53     2008, Created by tomyeh
 
@@ -52,8 +52,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						if (child._nhflex && child._nhflex > 0) // B50-ZK-159: skip when min flex
 							child.setFlexSize_({width: 'auto'});
 						else if (c && this._isStretchAlign()) {//release width of children might cause wider box
-									 //bug 2951825, widget not necessary with HTML dom element(<script>)
-									 //add StretchAlign checking, see revision: 13172
+									//bug 2951825, widget not necessary with HTML dom element(<script>)
+									//add StretchAlign checking, see revision: 13172
 							var oldwidth = c.style.width;
 							if (oldwidth) {
 								var oldoffwidth = c.offsetWidth;
@@ -70,8 +70,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						if (child._nvflex && child._nvflex > 0) // B50-ZK-159: skip when min flex
 							child.setFlexSize_({height: 'auto'});
 						else if (c && this._isStretchAlign()) {//release height of children might cause higher box
-									 //bug 2951825, widget not necessary with HTML dom element(<script>)
-									 //add StretchAlign checking, see revision: 13172
+									//bug 2951825, widget not necessary with HTML dom element(<script>)
+									//add StretchAlign checking, see revision: 13172
 							var oldheight = c.style.height;
 							if (oldheight) {
 								var oldoffheight = c.offsetHeight;
@@ -94,7 +94,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (zk.webkit && !vert && (nh = this.$n().style.height)) {
 			var td = this.$n('frame');
 			td.style.height = '';
-			td.style.height = nh.indexOf('%') > 0 ? 
+			td.style.height = nh.indexOf('%') > 0 ?
 				jq.px0(td.offsetHeight) : nh; // B50-ZK-559
 		}
 	}
@@ -156,7 +156,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		/** Sets the alignment of cells of this box
 	 	 * (start, center, end) plus an <i>stretch</i> option.
 	 	 *
-	 	 * @param String pack the alignment. Allowed values: (start, center, end) plus an 
+	 	 * @param String pack the alignment. Allowed values: (start, center, end) plus an
 	 	 * <i>stretch</i> option. If empty or null, it defaults to "stretch,start".
 	 	 * @see #getPack()
 	 	 */
@@ -167,10 +167,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	 	 * when the box is larger that the size of the children. For boxes with
 	 	 * horizontal orientation, it is used to indicate the position of children
 	 	 * horizontally. For boxes with vertical orientation, it is used to indicate
-	 	 * the position of children vertically. The align attribute 
+	 	 * the position of children vertically. The align attribute
 	 	 * ({@link #getAlign})is used to specify
 	 	 * the position in the opposite direction.
-	 	 * 
+	 	 *
 	 	 * <dl>
 	 	 * <dt>start</dt>
 	 	 * <dd>Child elements are aligned starting from the left or top edge of
@@ -186,18 +186,18 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	 	 * <dt>stretch</dt>
 	 	 * <dd>This is an extra option in addition to the (start, center, end) options.
 	 	 * When add this extra option in the pack attribute, the Extra space is placed
-	 	 * proportionally and evenly along each child elements. If you specify 
-	 	 * "stretch,start", then the Extra proportionally and evenly allocated space 
-	 	 * for each child is placed on the right or bottom side of the child. 
-	 	 * If you specify "stretch,center", then the Extra proportionally and evenly 
+	 	 * proportionally and evenly along each child elements. If you specify
+	 	 * "stretch,start", then the Extra proportionally and evenly allocated space
+	 	 * for each child is placed on the right or bottom side of the child.
+	 	 * If you specify "stretch,center", then the Extra proportionally and evenly
 	 	 * allocated space for each child is split equally along each side of the
-	 	 * child. If you specify "stretch,end", then the Extra proportionally and 
-	 	 * evenly allocated space for each child is placed on the left or top side of 
-	 	 * the child. Note that if there are {@link Splitter} child inside this Box, 
+	 	 * child. If you specify "stretch,end", then the Extra proportionally and
+	 	 * evenly allocated space for each child is placed on the left or top side of
+	 	 * the child. Note that if there are {@link Splitter} child inside this Box,
 	 	 * then this Box behaves as if the pack attribute has been set the "stretch"
-	 	 * option; no matter you really specify "stretch" in pack attribute or not. 
-	 	 * If given null or simply "stretch" to this pack attribute then it is the 
-	 	 * same as "stretch,start"</dd> 
+	 	 * option; no matter you really specify "stretch" in pack attribute or not.
+	 	 * If given null or simply "stretch" to this pack attribute then it is the
+	 	 * same as "stretch,start"</dd>
 	 	 * </dl>
 	 	 *
 	 	 * <p>Default: start.
@@ -228,10 +228,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		/**
 		 * Sets whether sizing the cell's size by its content.
 		 * <p>Default: true. It means the cell's size is depended on its content.
-		 * 
+		 *
 		 * <p> With {@link Splitter}, you can specify the sizedByContent to be false
 		 * for resizing smoothly
-		 * @param boolean byContent 
+		 * @param boolean byContent
 		 * @since 5.0.4
 		 */
 		/**
@@ -252,13 +252,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	getHeights: function () {
 		return this.getWidths();
 	},
-	/** Returns whether it is a vertical box. 
+	/** Returns whether it is a vertical box.
 	 * @return boolean
 	 */
 	isVertical: function () {
 		return 'vertical' == this._mold;
 	},
-	/** Returns the orient. 
+	/** Returns the orient.
 	 * @return String
 	 */
 	getOrient: function () {
@@ -324,10 +324,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (this.lastChild == child && (sib = child.previousSibling)) //child is last
 			jq(sib.uuid + '-chdex2', zk).remove();
 	},
-	/** Enclose child with HTML tag such as TR or TD, 
+	/** Enclose child with HTML tag such as TR or TD,
 	 * and return a HTML code or add HTML fragments in out array.
 	 * @param zk.Widget child the child which will be enclosed
-	 * @param boolean prefixSpace if true the previousSibling of the child 
+	 * @param boolean prefixSpace if true the previousSibling of the child
 	 * will put in front of child.
 	 * @param Array out an array of HTML fragments.
 	 * @return String
@@ -338,7 +338,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (this.isVertical()) {
 			oo.push('<tr id="', child.uuid, '-chdex"',
 				this._childOuterAttrs(child), '>');
-				
+
 			if (!isCell) {
 				oo.push('<td', this._childInnerAttrs(child));
 				//follow xul vbox spec.
@@ -346,11 +346,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (v && v != 'stretch') oo.push(' align="', zul.box.Box._toHalign(v), '"');
 				oo.push('>');
 			}
-				
+
 			child.redraw(oo);
-			
+
 			if (!isCell) oo.push('</td>');
-			
+
 			oo.push('</tr>');
 
 		} else {
@@ -371,7 +371,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var pre = child.previousSibling;
 			if (pre) oo.unshift(_spacingHTML(this, pre));
 		}
-		
+
 		if (!out) return oo.join('');
 
 		for (var j = 0, len = oo.length; j < len; ++j)
@@ -381,7 +381,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var	vert = this.isVertical(),
 			k = -1,
 			szes = this._sizes;
-		
+
 		if (!zk.mounting) {// ignore for the loading time
 			if (vert) {
 				for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
@@ -424,9 +424,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	//Bug ZK-1569: add minium 1px width on <td> to pass isWatchable_
 	afterResetChildSize_: function () {
-		for (var kid = this.firstChild, vert = this.isVertical(); kid; kid = kid.nextSibling) {				
+		for (var kid = this.firstChild, vert = this.isVertical(); kid; kid = kid.nextSibling) {
 			// ZK-2231: kid may not bind to desktop yet (client rod enabled)
-			if (kid.desktop) { 
+			if (kid.desktop) {
 				var chdex = vert ? kid.$n('chdex').firstChild : kid.$n('chdex');
 				if (chdex)
 					chdex.style.minWidth = '1px';
@@ -473,7 +473,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//bug 3010663: boxes do not resize when browser window is resized
 		var p = this.$n(),
 			zkp = zk(p),
-			hgh = this._vflexsz !== undefined ? 
+			hgh = this._vflexsz !== undefined ?
 					this._vflexsz - zkp.padBorderHeight() - zkp.marginHeight()
 					// B50-ZK-286: subtract scroll bar width
 					: zkp.contentHeight(true),
@@ -485,13 +485,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	beforeChildrenFlex_: function (child) {
 		child._flexFixed = true;
-		
+
 		var	vert = this.isVertical(),
 			vflexs = [],
 			vflexsz = vert ? 0 : 1,
 			hflexs = [],
 			hflexsz = !vert ? 0 : 1,
-			chdex = child.$n('chdex'), 
+			chdex = child.$n('chdex'),
 			p = chdex ? chdex.parentNode : child.$n().parentNode,
 			zkp = zk(this.$n()),
 			psz = this._getContentSize(),
@@ -509,19 +509,19 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		// Bug 3185686, B50-ZK-452
 		if(zkp.hasVScroll()) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
-			
+
 		// B50-3312936.zul
 		if(zkp.hasHScroll()) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
-		
+
 		for (; xc; xc = xc.nextSibling) {
-			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? 
+			var c = xc.id && xc.id.endsWith('-chdex') ? vert ?
 					xc.firstChild.id ? xc.firstChild : xc.firstChild.firstChild : xc.firstChild : xc;
 
 			// B70-ZK-2390
 			for (; c; c = c.nextSibling)
 				if (c.nodeType != 3) break; //until not a text node
-				
+
 			zkc = zk(c),
 			fixedSize = false;
 			if (zkc.isVisible()) {
@@ -536,13 +536,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						fixedSize = szes[k].endsWith('px');
 					}
 				}
-				var offhgh = fixedSize && vert ? zk.parseInt(szes[k]) : 
-						zk.ie < 11 && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ? 
+				var offhgh = fixedSize && vert ? zk.parseInt(szes[k]) :
+						zk.ie < 11 && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ?
 						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
 					offwdh = fixedSize && !vert ? zk.parseInt(szes[k]) : zkc.offsetWidth(),
 					cwdh = offwdh + zkc.marginWidth(),
 					chgh = offhgh + zkc.marginHeight();
-				
+
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
 					if (cwgt !== child)
@@ -555,7 +555,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						if (vert) vflexsz += cwgt._nvflex;
 					}
 				} else if (vert) hgh -= chgh;
-				
+
 				//horizontal size
 				if (cwgt && cwgt._nhflex) {
 					if (cwgt !== child)
@@ -575,7 +575,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		var lastsz = hgh > 0 ? hgh : 0;
 		for (var j = vflexs.length - 1; j > 0; --j) {
-			var cwgt = vflexs.shift(), 
+			var cwgt = vflexs.shift(),
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0, //cast to integer
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
 				isz = vsz,// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
@@ -583,12 +583,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderHeight(),
 				isInit = !cwgt.$n().style.height;
-			
+
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = vsz - minus;
-			
-			if (!cwgt.$instanceof(zul.wgt.Cell)) {				
+
+			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.height = jq.px0(vsz - $chdex.marginHeight());
 			}
@@ -607,11 +607,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderHeight(),
 				isInit = !cwgt.$n().style.height;
-			
+
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = lastsz - minus;
-			
+
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.height = jq.px0(lastsz - $chdex.marginHeight());
@@ -620,22 +620,22 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (!isInit && vert && cwgt !== child)
 				zUtl.fireSized(cwgt);
 		}
-		
+
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		lastsz = wdh > 0 ? wdh : 0;
 		for (var j = hflexs.length - 1; j > 0; --j) {
-			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
+			var cwgt = hflexs.shift(), //{n: node, f: hflex}
 				hsz = (cwgt._nhflex * wdh / hflexsz) | 0, //cast to integer
 				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderWidth(),
 				isInit = !cwgt.$n().style.width;
-			
+
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width: hsz - minus});
 			cwgt._hflexsz = hsz - minus;
-			
+
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.width = jq.px0(hsz - $chdex.marginWidth());
@@ -656,7 +656,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width: lastsz - minus});
 			cwgt._hflexsz = lastsz - minus;
-			
+
 			if (!cwgt.$instanceof(zul.wgt.Cell)) {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.width = jq.px0(lastsz - $chdex.marginWidth());
@@ -665,11 +665,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (!isInit && !vert && cwgt !== child)
 				zUtl.fireSized(cwgt);
 		}
-		
+
 		//notify all of children with xflex is done.
 		child.parent.afterChildrenFlex_(child);
 		child._flexFixed = false;
-		
+
 		return false; //to skip original _fixFlex
 	},
 	_childOuterAttrs: function (child) {
@@ -678,7 +678,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			html = ' class="' + child.$s('outer') + '"';
 		else if (this.isVertical()) {
 			if (this._isStretchPack()) {
-				var v = this._pack2; 
+				var v = this._pack2;
 				html = ' valign="' + (v ? zul.box.Box._toValign(v) : 'top') + '"';
 			} else html = ' valign="top"';
 		} else
@@ -699,7 +699,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var v = vert ? this.getAlign() : this._pack2;
 			if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"';
 		}
-		
+
 		var style = '', szes = this._sizes;
 		if (szes) {
 			for (var j = 0, len = szes.length, c = this.firstChild;
@@ -718,7 +718,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		return style ? html + ' style="' + style + '"' : html;
 	},
 	_isStretchPack: function () {
-		//when pack has specifies 'stretch' or there are splitter kids which 
+		//when pack has specifies 'stretch' or there are splitter kids which
 		//implies pack='stretch'
 		return this._splitterKid || this._stretchPack;
 	},
@@ -770,13 +770,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				td = this.$n('frame'),
 				zktd = zk(td),
 				tdsz = vert ? zktd.revisedWidth(td.offsetWidth) : zktd.revisedHeight(td.offsetHeight);
-			
+
 			for(var child = this.firstChild, c; child; child = child.nextSibling) {
 				if (child.isVisible() && (c = child.$n())) {
 					//20100120, Henri Chen: Strange! After set c.style.height/width, the margin is gone in safari/chrome
 					if (vert)
 						c.style.width = zk(c).revisedWidth(tdsz, !zk.webkit) + 'px';
-					else 
+					else
 						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie < 11 && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), !zk.webkit) + 'px';
 				}
 			}
@@ -815,7 +815,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (!this._splitterKid) return; //only when there are splitter kids
 		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
 		real.style.height = real.style.width = '100%'; //there are splitter kids
-		
+
 		//Note: we have to assign width/height first
 		//Otherwise, the first time dragging the splitter won't be moved
 		//as expected (since style.width/height might be "")
@@ -844,7 +844,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				} else {
 					var diff = d.offsetWidth;
 					//!sizes  B50-ZK-887: hbox's widths properties specified in Chrome is not precise
-					//if user set the widths , we freeze the with directly 
+					//if user set the widths , we freeze the with directly
 					if(!sizes && d.id && !d.id.endsWith('-chdex2')) //TD
 						d.style.width = zk(d).revisedWidth(i ? diff : total) + 'px';
 					total -= diff;

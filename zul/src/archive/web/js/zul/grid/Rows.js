@@ -1,9 +1,9 @@
 /* Rows.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Dec 23 15:26:20     2008, Created by jumperchen
 
@@ -25,7 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (grid && grid._nativebar && (frozen = grid.frozen))
 			frozen._syncFrozen();
 	}
-	
+
 var Rows =
 /**
  * Defines the rows of a grid.
@@ -97,10 +97,10 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if(child._renderdefer) {
 			var scOdd = this.getGrid().getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
-		
+
 			this.$supers('replaceChildHTML_', arguments);
 			if(isOdd) jq(child).addClass(scOdd);
-		} else 
+		} else
 			this.$supers('replaceChildHTML_', arguments);
 	},
 	_syncStripe: function () {
@@ -132,15 +132,15 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (_isPE() && child.$instanceof(zkex.grid.Group))
 			this._groupsInfo.push(child);
-		
+
 		var g;
 		if ((g = this.getGrid())) {
-			if (g.fixForRowAdd_) 
+			if (g.fixForRowAdd_)
 				g.fixForRowAdd_();
 			g._syncEmpty();
 		}
 		this._syncStripe();
-		
+
 		if (this.desktop)
 			_syncFrozen(this);
 	},
@@ -150,7 +150,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
 			this._syncStripe();
-		
+
 		var g = this.getGrid();
 		if (g) g._syncEmpty();
 	},

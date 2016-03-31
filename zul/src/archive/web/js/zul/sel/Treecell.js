@@ -1,9 +1,9 @@
 /* Treecell.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 10 15:32:39     2009, Created by jumperchen
 
@@ -108,7 +108,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOver_: function (evt) {
 		var n = this.$n();
-		
+
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent._draggable)
 				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
@@ -118,7 +118,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOut_: function (evt) {
 		var n = this.$n();
-		
+
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent._draggable)
 				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
@@ -164,14 +164,14 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 						ckCls = multi ? ' z-icon-check' : ' z-icon-radio';
 					sb.push('<span id="', this.parent.uuid, '-cm" class="',
 							item.$s('checkable'), ' ', cmCls);
-					
+
 					if (!chkable || item.isDisabled())
 						sb.push(' ', item.$s('disabled'));
-					
+
 					sb.push('"');
 					if (!chkable)
 						sb.push(' style="visibility:hidden"');
-					
+
 					sb.push('><i class="', item.$s('icon'), ckCls, '"></i></span>');
 				}
 			}
@@ -179,7 +179,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				pitems = this._getTreeitems(item, tree);
 			for (var j = 0, k = pitems.length; j < k; ++j)
 				this._appendIcon(sb, iconScls, 'spacer', false);
-			
+
 			if (item.isContainer()) {
 				var name = item.isOpen() ? 'open' : 'close';
 				this._appendIcon(sb, iconScls, name, true);
@@ -223,12 +223,12 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			var icon = this.getIconOpenClass_();
 			if (name.indexOf('close') > -1)
 				icon = this.getIconCloseClass_();
-			
+
 			openCloseIcon += '<i id="' + id + '" class="' + icon + ' ' + iconScls
 					+ '-' + name + '"></i>';
 		}
 		if (button) {
-			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd() 
+			var item = this.parent; // B65-ZK-1608, appendChild() will invoke before treeitem._fixOnAdd()
 			if (item)
 				sb.push(' id="', item.uuid, '-open"');
 		}

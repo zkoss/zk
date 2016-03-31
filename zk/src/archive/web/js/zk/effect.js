@@ -32,12 +32,12 @@ zk.eff = {
 	},
 	// ZK-1904: stackup should be moved from wgt to document.body
 	_onVParent: function (evt, opts) {
-		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) { 
+		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) {
 			var $stk = jq(stackup);
 			if ($stk.parent()[0] != document.body)
 				$stk.insertBefore(sdw.node);
 		}
-	}	
+	}
 };
 
 /** The shadow effect.
@@ -64,7 +64,7 @@ zk.eff = {
 		var node = this.node, $node = jq(node);
 		if (!node || !$node.zk.isVisible(true)) {
 			if (this.opts.stackup && node) {
-				if (!this.stackup) 
+				if (!this.stackup)
 					this.stackup = jq.newStackup(node, node.id + '-sdwstk', node);
 			}
 			this.hide();
@@ -126,7 +126,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	 * <li>{@link DOMElement} anchor: whether to insert the mask before.</li>
 	 * <li>String id: the mask ID. Default: z_mask.</li>
 	 * <li>int zIndex: z-index to assign. Default: defined in the CSS called z-modal-mask.</code>
-	 * <li>boolean visible: whether it is visible</li> 
+	 * <li>boolean visible: whether it is visible</li>
 	 * </ul>
 	 */
 	$init: function (opts) {
@@ -184,7 +184,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		if (this.stackup) this.stackup.style.display = 'none';
 	},
 	/** Synchronizes the visual states of the full mask with the specified element and the browser window.
-	 * The visual states include the visibility and Z Index. 
+	 * The visual states include the visibility and Z Index.
 	 */
 	sync: function (el) {
 		if (!zk(el).isVisible(true)) {
@@ -215,7 +215,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 
 /** Applies the mask over the specified element to indicate it is busy.
  * @disable(zkgwt)
- */ 
+ */
 zk.eff.Mask = zk.$extends(zk.Object, {
 	/** The constructor.
 	 * <p>To remove the mask, invoke {@link #destroy}.
@@ -243,7 +243,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			n = document.createElement('div');
 		
 		document.body.appendChild(n);
-		var xy = opts.offset || $anchor.revisedOffset(), 
+		var xy = opts.offset || $anchor.revisedOffset(),
 			w = opts.width || $anchor.offsetWidth(),
 			h = opts.height || $anchor.offsetHeight();
 		jq(n).replaceWith(
@@ -278,9 +278,9 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 	},
 	onHide: function () {
 		this.__mask.hide();
-	}, 
+	},
 	/** Synchronizes the visual states of the mask with the specified element and the browser window.
-	 * The visual states include the visibility and Z Index. 
+	 * The visual states include the visibility and Z Index.
 	 */
 	sync: function () {
 		var $anchor = zk(this._opts.anchor);
@@ -292,7 +292,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		var opts = this._opts,
 			st = this.mask.firstChild.style,
-			xy = opts.offset || $anchor.revisedOffset(), 
+			xy = opts.offset || $anchor.revisedOffset(),
 			w = opts.width || $anchor.offsetWidth(),
 			h = opts.height || $anchor.offsetHeight();
 
@@ -307,7 +307,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		var body = document.body,
 			html = body.parentNode,
 			rleaf = $anchor.jq,
-			zi = 'auto', 
+			zi = 'auto',
 			zic, zicv;
 		// find the highest non-static node with non-auto z-index
 		for (var offp = rleaf.offsetParent(); offp[0] != body && offp[0] != html; offp = offp.offsetParent())
@@ -337,7 +337,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		var loading = jq(this.mask.id + '-z_loading', zk)[0];
 		if (loading) {
-			if (loading.offsetHeight > h) 
+			if (loading.offsetHeight > h)
 				loading.style.height = jq.px0(zk(loading).revisedHeight(h));
 			if (loading.offsetWidth > w)
 				loading.style.width = jq.px0(zk(loading).revisedWidth(w));

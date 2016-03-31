@@ -1,9 +1,9 @@
 /* West.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan  7 12:15:01     2009, Created by jumperchen
 
@@ -16,7 +16,7 @@ var West =
 /**
  * A west region of a border layout.
  * <p>Default {@link #getZclass}: z-west.
- * 
+ *
  * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
  */
 zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
@@ -30,7 +30,7 @@ zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	 */
 	setHeight: zk.$void, // readonly
 	sanchor: 'l',
-	
+
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._cmargins = [0, 3, 3, 0];

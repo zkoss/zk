@@ -1,9 +1,9 @@
 /* Button.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Nov  8 22:58:16     2008, Created by tomyeh
 
@@ -18,16 +18,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, null, v);
 	}
-	
+
 	function _cleanUpld(wgt) {
 		var v;
 		if (v = wgt._uplder) {
 			wgt._uplder = null;
 			v.destroy();
 		}
-	} 
-	
-var Button = 
+	}
+
+var Button =
 /**
  * A button.
  * <p>Default {@link #getZclass}: z-button.
@@ -96,11 +96,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 */
 		disabled: [
 		    // B60-ZK-1176
-		    // Autodisable should not re-enable when setDisabled(true) is called during onClick 
+		    // Autodisable should not re-enable when setDisabled(true) is called during onClick
 		    function (v, opts) {
 				if (opts && opts.adbs)
 					// called from zul.wgt.ADBS.autodisable
-					this._adbs = true;	// Start autodisabling  
+					this._adbs = true;	// Start autodisabling
 				else if (!opts || opts.adbs === undefined)
 					// called somewhere else (including server-side)
 					this._adbs = false;	// Stop autodisabling
@@ -113,19 +113,19 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 						return this._disabled;
 				}
 				return v;
-			}, 
+			},
 			function (v) {
 				var self = this,
-					doDisable = function () { 
+					doDisable = function () {
 						if (self.desktop) {
-							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146 
+							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 							// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
 							if (self._upload)
 								v ? _cleanUpld(self) : _initUpld(self);
 						}
 					};
-				
-				// ZK-2042: delay the setting when the button's type is submit 
+
+				// ZK-2042: delay the setting when the button's type is submit
 				if (this._type == 'submit')
 					setTimeout(doDisable, 50);
 				else
@@ -136,7 +136,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		image: function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			var n = this.getImageNode();
-			if (n) 
+			if (n)
 				n.src = v || '';
 		},*/
 		/** Returns the tab order of this component.
@@ -154,7 +154,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 * clicks this button.
 		 *
 		 * <p>To represent the button itself, the developer can specify <code>self</code>.
-		 * For example, 
+		 * For example,
 		 * <pre><code>
 		 * button.setId('ok');
 		 * wgt.setAutodisable('self,cancel');
@@ -214,12 +214,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 * <p> Another options for the upload can be specified as follows:
 		 *  <pre><code>button.setUpload('true,maxsize=-1,native');</code></pre>
 		 *  <ul>
-		 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
+		 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or
 		 * a negative value if no limit.</li>
 		 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
 		 * image, audio or text files.</li>
 		 *  </ul>
-		 *  
+		 *
 		 * @param String upload a JavaScript class to handle the file upload
 		 * at the client, or "true" if the default class is used,
 		 * or null or "false" to disable the file download (and then
@@ -260,7 +260,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 		return true;
 	},
-	
+
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
@@ -304,19 +304,19 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	doClick_: function (evt) {
 		if (!evt.domEvent) // mobile will trigger doClick twice
 			return;
-		
+
 		if (!this._disabled) {
 			if (!this._upload)
 				zul.wgt.ADBS.autodisable(this);
 			else if (!zk.ie || zk.ie > 10) // ZK-2471
 				this._uplder.openFileDialog();
-			
+
 			this.fireX(evt);
 
 			if (!evt.stopped) {
 				var href = this._href,
 					isMailTo = href ? href.toLowerCase().startsWith('mailto:') : false;
-				
+
 				if (href) {
 					// ZK-2506: use iframe to open a 'mailto' href
 					if (isMailTo) {
@@ -326,7 +326,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 						zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
 					}
 				}
-				
+
 				this.$super('doClick_', evt, true);
 			}
 		}

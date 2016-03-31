@@ -125,13 +125,13 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 		var tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
 			hgh = tbx.style.height;
-		
+
 		if (hgh && hgh != 'auto') {
 			if (!tabbox.inAccordionMold()) {
 				var n = this.$n(),
 					isHor = tabbox.isHorizontal();
 
-				hgh = isHor ? zk(tabbox).contentHeight() - zk(tabbox.tabs).offsetHeight() 
+				hgh = isHor ? zk(tabbox).contentHeight() - zk(tabbox.tabs).offsetHeight()
 						    : zk(tabbox).contentHeight() - zk(n.parentNode).padBorderHeight();
 					// B50-ZK-473: Tabpanel in vertical Tabbox should always have full height
 				n.style.height = jq.px0(hgh);
@@ -174,7 +174,7 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 		var tab;
 		if (this.getTabbox().inAccordionMold()
 				&& (tab = this.getLinkedTab())) {
-			
+
 			if (!tab.$n())
 				tab.unbind().bind(desktop);
 			else if (!jq.isAncestor(this.$n(), tab.$n())) {

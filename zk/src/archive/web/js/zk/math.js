@@ -63,7 +63,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	 * @return String
 	 */
 	$toString: function () { //toString is reserved keyword for IE
-		if (this._value.length == 0) return ''; 
+		if (this._value.length == 0) return '';
 		var j = this._value.length - this._precision,
 			valFixed = '';
 		if (j < 0)
@@ -75,7 +75,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	 * @return String
 	 */
 	$toLocaleString: function () { //toLocaleString is reserved keyword for IE
-		if (this._value.length == 0) return ''; 
+		if (this._value.length == 0) return '';
 		var j = this._value.length - this._precision;
 		if (j <= 0) {
 			var valFixed = '';

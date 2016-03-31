@@ -1,9 +1,9 @@
 /* ColumnMenuWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu, Jun 14, 2012 11:12:58 AM, Created by jumperchen
 
@@ -60,23 +60,23 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		 *
 		 * <p>Note: To simplify the use, it ignores the ID space when locating
 		 * the component at the client. In other words, it searches for the
-		 * first component with the specified ID, no matter it is in 
+		 * first component with the specified ID, no matter it is in
 		 * the same ID space or not.
 		 *
 		 * <p>If there are two components with the same ID (of course, in
 		 * different ID spaces), you can specify the UUID with the following
 		 * format:<br/>
 		 * <code>uuid(comp_uuid)</code>
-		 * 
+		 *
 		 * @param String mpop an ID of the menupopup component, "none", or "auto".
-		 * 	"none" is assumed by default, "auto" means the menupopup component is 
+		 * 	"none" is assumed by default, "auto" means the menupopup component is
 		 *  created automatically.
 		 * @see #setMenupopup(String)
 		 */
 		menupopup: function () {
 			if (this._menupopup != 'auto')
 				this._mpop = null;
-			this.rerender();		
+			this.rerender();
 		}
 	},
 	bind_: function (dt, skipper, after) {
@@ -123,7 +123,7 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 	_onColVisi: function (evt) {
 		var item = evt.currentTarget,
 			pp = item.parent;
-			
+
 		pp.close({sendOnOpen: true});
 		var checked = 0;
 		for (var w = pp.firstChild; w; w = w.nextSibling) {
@@ -132,7 +132,7 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		}
 		if (checked == 0)
 			item.setChecked(true);
-			
+
 		var col = zk.Widget.$(item._col);
 		if (col && col.parent == this) {
 			var mesh = this.getMeshWidget();
@@ -159,8 +159,8 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		var mref = this._mref;
 		if (mref)
 			jq(mref.$n()).removeClass(mref.$s('visited')).removeClass(mref.$s('hover'));
-		
-		this._mref = evt.data.reference; 
+
+		this._mref = evt.data.reference;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -214,9 +214,9 @@ zul.mesh.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 	getUngroupitem: zk.$void,
 	_init: function () {
 		var w = this._columns;
-		
+
 		this.listen({onOpen: [w, w._onMenuPopup]});
-		
+
 		if (zk.feature.pe && w.isColumnsgroup()) {
 			if (!zk.isLoaded(w.getGroupPackage_()))
 				zk.load(w.getGroupPackage_());
@@ -242,7 +242,7 @@ zul.mesh.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 		asc.listen({onClick: [w, w._onAsc]});
 		this._asc = asc;
 		this.appendChild(asc);
-		
+
 		var desc = new zul.menu.Menuitem({label: msgzul.GRID_DESC});
 		desc.setSclass(w.$s('menudescending'));
 		desc.listen({onClick: [w, w._onDesc]});

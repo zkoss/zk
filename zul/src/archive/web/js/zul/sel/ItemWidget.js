@@ -1,9 +1,9 @@
 /* ItemWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri May 22 21:50:50     2009, Created by tomyeh
 
@@ -86,7 +86,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			var box = this.getMeshWidget();
 			if (box)
 				box.toggleItemSelection(this);
-				
+
 			this._setSelectedDirectly(selected);
 		}
 	},
@@ -108,7 +108,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	 * @return String
 	 */
 	getLabel: function () {
-		return this.firstChild ? this.firstChild.getLabel() : null; 
+		return this.firstChild ? this.firstChild.getLabel() : null;
 	},
 	/** Returns whether it is selected.
 	 * <p>Default: false.
@@ -207,7 +207,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			var zcls = zk.Widget.$(box._headercm).$s('checked'),
 				$headercm = jq(box._headercm);
 
- 			// only update for user's selection or sharable model case (ZK-2969 test case)
+			// only update for user's selection or sharable model case (ZK-2969 test case)
 			if (!this.isSelected() && (box.$$selectAll == undefined || this._userSelection))
 				$headercm.removeClass(zcls);
 			else if (!$headercm.hasClass(zcls))

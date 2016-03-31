@@ -1,9 +1,9 @@
 /* Treefooter.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 10 15:32:42     2009, Created by jumperchen
 
@@ -35,7 +35,7 @@ zul.sel.Treefooter = zk.$extends(zul.mesh.FooterWidget, {
 		return this.getHeaderWidget();
 	},
 	/** Returns the maximal length for this cell.
-	 * It is the same as the correponding {@link #getTreecol}'s 
+	 * It is the same as the correponding {@link #getTreecol}'s
 	 * {@link Treecol#getMaxlength}.
 	 *
 	 * @return int

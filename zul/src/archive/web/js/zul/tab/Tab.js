@@ -119,7 +119,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_sel: function (notify, init) {
 		var tabbox = this.getTabbox();
-		
+
 		/* ZK-1441
 		 * If tabbox is animating (end-user click different tabs quickly), ignore this action.
 		 */
@@ -152,9 +152,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 		tab._selected = toSel;
-		
+
 		if (!this.desktop) return;
-		
+
 		if (toSel)
 			jq(tab).addClass(this.$s('selected'));
 		else
@@ -167,21 +167,21 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			var tabs = this.parent;
 			if (tabs) tabs._fixWidth(toSel); //ZK-2810: don't set height to tabbox when deselect
 		}
-		
+
 		if (tab == this) {
 			if (tabbox.isVertical())
 				tabs._scrollcheck('vsel', this);
 			else if (!tabbox.inAccordionMold())
 				tabs._scrollcheck('sel', this);
 		}
-		
+
 		if (notify)
 			this.fire('onSelect', {items: [this], reference: this.uuid});
 	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			this._calcHgh();			
+			this._calcHgh();
 			zUtl.fireSized(this.parent);
 		}
 	},
@@ -193,14 +193,14 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_calcHgh: function () {
 		var n = this.$n(),
 			tabbox = this.getTabbox();
-		
+
 		if (!tabbox.isVertical()) {
 			var r = tabbox.$n('right'),
 				l = tabbox.$n('left'),
 				tb = tabbox.toolbar,
 				tabs = tabbox.tabs.$n(),
 				hgh = jq.px0(tabs ? tabs.offsetHeight : 0);
-				
+
 			if (r && l) {
 				r.style.height = l.style.height = hgh;
 			}
@@ -227,7 +227,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
-		
+
 		if (!label) label = '&nbsp;';
 		if (!img && !iconSclass) return label;
 		if (!img) {
@@ -252,7 +252,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var closebtn = this.isClosable() ? this.$n('cls') : null,
 			tab = this;
 		if (closebtn) {
-			this.domListen_(closebtn, 'onClick', '_doCloseClick');			
+			this.domListen_(closebtn, 'onClick', '_doCloseClick');
 		}
 		if (tab.isSelected()) {
 			zk.afterMount(function () {
@@ -266,10 +266,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				tab._sel(false, true);
 			});
 		}
-		
+
 		if (this.getHeight())
 			this._calcHgh();
-		
+
 		//ZK-3016 make sure parent always do scrollCheck on child bind
 		this.parent._shallCheck = true;
 	},

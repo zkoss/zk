@@ -1,9 +1,9 @@
 /* Include.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Oct 14 15:23:17     2008, Created by tomyeh
 
@@ -39,7 +39,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	/**
 	 * Returns the enclosing tag
 	 * @return String
-	 * @since 7.0.4 
+	 * @since 7.0.4
 	 */
 	getEnclosingTag: function () {
 		return this._enclosingTag;
@@ -47,7 +47,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	/**
 	 * Sets the enclosing tag
 	 * @param String enclosing tag
-	 * @since 7.0.4 
+	 * @since 7.0.4
 	 */
 	setEnclosingTag: function (tag) {
 		this._enclosingTag = tag;

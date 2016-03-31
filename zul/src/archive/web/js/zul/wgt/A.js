@@ -1,9 +1,9 @@
 /* A.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Aug  6 14:31:48     2009, Created by jumperchen
 
@@ -35,11 +35,11 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		disabled: [
 			// Refer from Button.js for the following changes
 			// B60-ZK-1176
-			// Autodisable should not re-enable when setDisabled(true) is called during onClick 
+			// Autodisable should not re-enable when setDisabled(true) is called during onClick
 			function (v, opts) {
 				if (opts && opts.adbs)
 					// called from zul.wgt.ADBS.autodisable
-					this._adbs = true;	// Start autodisabling  
+					this._adbs = true;	// Start autodisabling
 				else if (!opts || opts.adbs === undefined)
 					// called somewhere else (including server-side)
 					this._adbs = false;	// Stop autodisabling
@@ -52,10 +52,10 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 						return this._disabled;
 				}
 			return v;
-			}, 
+			},
 			function (v) {
 				var self = this,
-					doDisable = function () { 
+					doDisable = function () {
 						if (self.desktop) {
 							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 						}
@@ -118,7 +118,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		 * clicks this anchor.
 		 *
 		 * <p>To represent the anchor itself, the developer can specify <code>self</code>.
-		 * For example, 
+		 * For example,
 		 * <pre><code>
 		 * anchor.setId('ok');
 		 * wgt.setAutodisable('self,cancel');
@@ -175,12 +175,12 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.wgt.A, 'unbind_', arguments);
 	},
 	domContent_: function () {
-		var label = zUtl.encodeXML(this.getLabel()), 
+		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
-		if (!img && !iconSclass) 
+		if (!img && !iconSclass)
 			return label;
-		
+
 		if (!img) {
 			img = iconSclass;
 		} else
@@ -193,11 +193,11 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			v;
 		if (v = this.getTarget())
 			attr += ' target="' + v + '"';
-		if (v = this.getTabindex()) 
+		if (v = this.getTabindex())
 			attr += ' tabIndex="' + v + '"';
-		if (v = this.getHref()) 
+		if (v = this.getHref())
 			attr += ' href="' + v + '"';
-		else 
+		else
 			attr += ' href="javascript:;"';
 		if(this._disabled)
 			attr += ' disabled="disabled"';
@@ -219,7 +219,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			evt.stop(); // Prevent browser default
 		else {
 			zul.wgt.ADBS.autodisable(this);
-			
+
 			this.fireX(evt);
 			if (!evt.stopped)
 				this.$super('doClick_', evt, true);

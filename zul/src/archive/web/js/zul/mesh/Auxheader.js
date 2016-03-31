@@ -1,9 +1,9 @@
 /* Auxheader.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon May  4 17:00:30     2009, Created by tomyeh
 

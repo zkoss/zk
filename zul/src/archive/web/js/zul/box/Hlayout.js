@@ -1,9 +1,9 @@
 /* Hlayout.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Aug  6 11:54:19 TST 2010, Created by jumperchen
 
@@ -30,7 +30,7 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		 * @return String
 		 */
 		valign: function () {
-			 this.updateDomClass_();
+			this.updateDomClass_();
 		}
 	},
 	isVertical_: function () {

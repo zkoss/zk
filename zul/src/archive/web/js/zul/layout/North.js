@@ -1,9 +1,9 @@
 /* North.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan  7 12:14:57     2009, Created by jumperchen
 

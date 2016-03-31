@@ -532,7 +532,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (zk.ie <= 8)
 				this._nativebar = true;
 			if (this._nativebar) {
-				var bodyEl = this.isFlex() && this.getFirstChild() ? 
+				var bodyEl = this.isFlex() && this.getFirstChild() ?
 						this.getFirstChild().$n() : this.$n('cave');
 				this.domListen_(bodyEl, 'onScroll');
 			} else {
@@ -546,16 +546,16 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		if (this.isAutoscroll()) {
 			if (this._nativebar) {
-				var bodyEl = this.isFlex() && this.getFirstChild() ? 
+				var bodyEl = this.isFlex() && this.getFirstChild() ?
 						this.getFirstChild().$n() : this.$n('cave');
 				this.domUnlisten_(bodyEl, 'onScroll');
 			} else {
 				zWatch.unlisten({onSize: this});
 			}
 		}
-		
+
 		this.destroyBar_();
-		
+
 		if (this.$n('split')) {
 			if (this._drag) {
 				this._drag.destroy();
@@ -582,14 +582,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onSize: function () {
 		var wgt = this;
-		
+
 		// Bug ZK-2784 we should reset the height of the target before doing children's onSize
 		if (this._fixBarHeight && this.firstChild) {
 			var child = this.firstChild.$n();
 			if (child)
 				child.style.height = '';
 		}
-		
+
 		setTimeout(function () {
 			if (wgt.desktop) {
 				// ZK-2217: should init scrollbar if the cave first child exists
@@ -621,17 +621,17 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				c = p.firstChild,
 				ph = p.offsetHeight,
 				pw = p.offsetWidth;
-			
+
 			while (c && c.nodeType == 3)
 				c = c.nextSibling;
 			if (c) {
 				var cs = c.style;
-				
+
 				if (!fch || !fch.indexOf('px')) { // only recalculate size if no fixed height
 					// force to recalculate size
 					cs.height = '';
 					if (c.offsetHeight);
-					
+
 					cs.height = jq.px(c.scrollHeight >= ph ? c.scrollHeight : ph);
 					this._fixBarHeight = true;
 				} else {
@@ -663,7 +663,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		case this.$n('btn'):
 		case this.$n('btned'):
 		case this.$n('splitbtn'):
-			if (!this.isCollapsible() || this._isSlide || zk.animating()) 
+			if (!this.isCollapsible() || this._isSlide || zk.animating())
 				return;
 			if (this.$n('btned') == target) {
 				var s = this.$n('real').style;
@@ -676,7 +676,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.setOpen(!this._open);
 			break;
 		case this.$n('colled'):
-			if (this._isSlide) 
+			if (this._isSlide)
 				return;
 			this._isSlide = true;
 			var real = this.$n('real'),

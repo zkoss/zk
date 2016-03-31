@@ -1,9 +1,9 @@
 /* FormatWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 16 12:54:29     2009, Created by tomyeh
 

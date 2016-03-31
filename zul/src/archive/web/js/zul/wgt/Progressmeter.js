@@ -1,9 +1,9 @@
 /* Progressmeter.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu May 14 10:17:24     2009, Created by kindalu
 
@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
- * A progress meter is a bar that indicates how much of a task has been completed. 
+ * A progress meter is a bar that indicates how much of a task has been completed.
  *
  * <p>Default {@link #getZclass}: z-progressmeter.
  */
@@ -29,14 +29,14 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		 * @param int value
 		 */
 		value: function () {
-			if(this.$n()) 
+			if(this.$n())
 				this._fixImgWidth();
 		}
 	},
 
 	//super//
 	_fixImgWidth: _zkf = function () {
-		var n = this.$n(), 
+		var n = this.$n(),
 			img = this.$n('img');
 		if (img) {
 			//B70-ZK-2453 remember to add brackets
@@ -50,7 +50,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	bind_: function () {//after compose
-		this.$supers(zul.wgt.Progressmeter, 'bind_', arguments); 
+		this.$supers(zul.wgt.Progressmeter, 'bind_', arguments);
 		this._fixImgWidth(this._value);
 		zWatch.listen({onSize: this});
 	},

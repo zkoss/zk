@@ -1,9 +1,9 @@
 /* msgzul_sr.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History: Created by Ondrej Jombík (ojombik@gmail.com) 11 January 2011
 
 Copyright (C) 2005-2011 Potix Corporation. All Rights Reserved.

@@ -1,9 +1,9 @@
 /* Treechildren.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 10 15:32:40     2009, Created by jumperchen
 
@@ -27,7 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				p._syncIcon();
 		}
 	}
-	
+
 	function _syncFrozen(wgt) {
 		var tree = wgt.getTree(),
 			frozen;
@@ -124,14 +124,14 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	getCaveNode: function () {
 		for (var cn, w = this.lastChild; w; w = w.previousSibling)
 			if ((cn = w.getCaveNode())) {
-				
+
 				// Bug 2909820
 				if (w.treechildren) {
 					var _cn = w.treechildren.getCaveNode();
 					if (_cn)
 						cn = _cn;
 				}
-				return cn;	
+				return cn;
 			}
 	},
 	//@Override
@@ -157,7 +157,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (!skiphd || w.isVisible()) {
 				items.push(w);
-				if (w.treechildren && (!skiphd || w.isOpen())) 
+				if (w.treechildren && (!skiphd || w.isOpen()))
 					w.treechildren.getItems(items, opts);
 			}
 		return items;
@@ -178,7 +178,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		var oldtree = this.getTree();
 		if (oldtree)
 			oldtree._onTreechildrenRemoved(this);
-			
+
 		if (newParent) {
 			var tree = newParent.$instanceof(zul.sel.Tree) ? newParent : newParent.getTree();
 			if (tree) tree._onTreechildrenAdded(this);
@@ -213,7 +213,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	replaceWidget: function (newwgt) {
 		while (this.firstChild != this.lastChild)
 			this.lastChild.detach();
-		
+
 		if (this.firstChild && this.firstChild.treechildren)
 			this.firstChild.treechildren.detach();
 

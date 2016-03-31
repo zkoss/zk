@@ -1,9 +1,9 @@
 /* msgzul.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 　　Tranlated by Boril Yonchev (yonchev@gmail.com) 10 January 2007
 

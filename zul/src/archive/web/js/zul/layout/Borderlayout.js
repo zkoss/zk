@@ -1,9 +1,9 @@
 /* Borderlayout.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan  7 12:14:57     2009, Created by jumperchen
 
@@ -42,7 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			center.w -= ambit.ts;
 		}
 	};
-	
+
 	function _getRegionSize (wgt, hor, ext) {
 		if (!wgt)
 			return 0;
@@ -68,9 +68,9 @@ var Borderlayout =
  * contain no more than one component, and is identified by a corresponding
  * constant: <code>NORTH</code>, <code>SOUTH</code>, <code>EAST</code>,
  * <code>WEST</code>, and <code>CENTER</code>.
- * 
+ *
  * <p>Default {@link #getZclass}: z-borderlayout.
- * 
+ *
  */
 zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	setResize: function () {
@@ -164,13 +164,13 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (!zk(this.$n()).isRealVisible()) return; //ZK-2686: incorrect borderlayout resizing to 0px in tabbox
 
 		//make sure all regions size is resolved
-		var rs = ['north', 'south', 'west', 'east'], k = rs.length; 
+		var rs = ['north', 'south', 'west', 'east'], k = rs.length;
 		for (var region, j = 0; j < k; ++j) {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()
-				&& ((region._nvflex && region._vflexsz === undefined) 
+				&& ((region._nvflex && region._vflexsz === undefined)
 						|| (region._nhflex && region._hflexsz === undefined)))
-				return;	//region size unknown, border cannot _resize() now, 
+				return;	//region size unknown, border cannot _resize() now,
 						//return and keep this._isOnSize true
 						//onSize event will be fired to region later, and region will
 						//call back to _resize() via afterChildrenFlex_() when it resolve
@@ -180,19 +180,19 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		var el = this.$n(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
-			center = { 
+			center = {
 				x: 0,
 				y: 0,
 				w: width,
 				h: height
 			};
-		
+
 		// fixed Opera 10.5+ bug
 		if (zk.opera && !height && (!el.style.height || el.style.height == '100%')) {
 			var parent = el.parentNode;
 			center.h = height = parent.offsetHeight;
 		}
-		
+
 		for (var region, ambit, margin,	j = 0; j < k; ++j) {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()) {
@@ -262,27 +262,27 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				bodyEl = fchild ? wgt.getFirstChild().$n() : wgt.$n('cave'),
 				bs = bodyEl.style,
 				$el = zk(el);
-			
+
 			el.style.width = jq.px0(ambit.w);
-			var contentWidth = $el.contentWidth(); 
+			var contentWidth = $el.contentWidth();
 			//ZK-2750, prevent parent region grows up infinitely
 			if (zk.ie > 8 && (wgt.$instanceof(zul.layout.West)
 				|| wgt.$instanceof(zul.layout.East)) && !wgt._width && !wgt._hflex)
 				contentWidth++; // B50-ZK-641: text wrap in IE
-			bs.width = jq.px0(contentWidth); 
-			
+			bs.width = jq.px0(contentWidth);
+
 			el.style.height = jq.px0(ambit.h);
 			if (wgt.$n('cap'))
 				ambit.h = Math.max(0, ambit.h - wgt.$n('cap').offsetHeight);
-			
-			// Bug: B50-3201762: Borderlayout flex has issue with listbox hflex in IE 6 
+
+			// Bug: B50-3201762: Borderlayout flex has issue with listbox hflex in IE 6
 			if (fchild) { // B50-ZK-198: always need cave height
 				var cv;
 				if (cv = wgt.$n('cave'))
 					cv.style.height = jq.px0(ambit.h - $el.padBorderHeight());
 			}
 			bs.height = jq.px0(ambit.h - $el.padBorderHeight());
-			if (wgt._nativebar && wgt.isAutoscroll()) { 
+			if (wgt._nativebar && wgt.isAutoscroll()) {
 				bs.overflow = 'auto';
 				bs.position = 'relative';
 			}
@@ -290,11 +290,11 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				zUtl.fireSized(wgt);
 		}
 	},
-	_ignoreResize: function (el, w, h) { 
+	_ignoreResize: function (el, w, h) {
 		if (el._lastSize && el._lastSize.width == w && el._lastSize.height == h) {
 			return true;
 		}
-		
+
 		// store fot next time to check
 		el._lastSize = {width: w, height: h};
 		return false;

@@ -60,7 +60,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				var n = this.getInputNode(),
 					ofs;
 				n.value = this.valueEnter_ != null ? this.valueEnter_ : this._value || '';
-				
+
 				// Fixed bug 2944355 and for IE11 Bug ZK-2283
 				if (zk.ie <= 11 && n.value) {
 					ofs = n.value.length;
@@ -68,7 +68,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				}
 				this._typeahead(this._bDel, ofs);
 				this._bDel = null;
-				
+
 				//Fixed bug 3290858: combobox with autodrop and setModel in onChanging
 				var pp = this.getPopupNode_();
 				//will update it later in onResponse with _fixsz
@@ -150,7 +150,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	 */
 	validateStrict: function (val) {
 		var cst = this._cst;
-		return this._findItem(val, true) ? null : 
+		return this._findItem(val, true) ? null :
 			(cst ? cst._errmsg['STRICT'] ? cst._errmsg['STRICT'] : '' : '') || msgzul.VALUE_NOT_MATCHED;
 	},
 	_findItem: function (val, strict) {
@@ -200,7 +200,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 						zk(inp).setSelectionRange(0, val.length);
 				}
 			}
-			
+
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 
@@ -298,8 +298,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		if (sel)
 			zk(sel).scrollIntoView(this.$n('pp'));
-		
-		//B70-ZK-2548: fire onChange event to notify server the current value 
+
+		//B70-ZK-2548: fire onChange event to notify server the current value
 		this._select(sel, {sendOnSelect: true, sendOnChange: true});
 		evt.stop();
 	},
@@ -327,7 +327,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// Fixed IE/Safari/Chrome
 		// ZK-518: Selected value in combobox is right aligned in FF5+ if width is smaller than selected option
 		// setSelectionRange of FF5 or up will set the position to end,
-		// call select() of input element for select all 
+		// call select() of input element for select all
 		if (val) {
 			if (zk.gecko)
 				inp.select();

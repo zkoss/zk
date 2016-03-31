@@ -26,7 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			s = node.style;
-			
+
 		s.width = jq.px0($op[0].clientWidth - $op.zk.paddingWidth());
 		s.height = jq.px0($op[0].clientHeight - $op.zk.paddingHeight());
 	}
@@ -55,7 +55,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			fakeT = $fakeT[0],
 			zcls = wnd.getZclass();
 		_hideShadow(wnd);
-		
+
 		jq(document.body).prepend(
 			'<div id="zk_wndghost" class="' + zcls + '-move-ghost" style="position:absolute;'
 			+ 'top:' + ofs[1] + 'px; left:' + ofs[0] + 'px;'
@@ -66,10 +66,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		el.style.visibility = 'hidden';
 		var h = el.offsetHeight - wnd._titleHeight(el);
 		el = jq('#zk_wndghost')[0];
-		
+
 		var f = el.firstChild;
 		f.style.height = jq.px0(zk(f).revisedHeight(h));
-		
+
 		el.insertBefore(fakeT, el.lastChild);
 		return el;
 	}
@@ -236,11 +236,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.rerender(wgt._skipper);
 			if (last) {
 				wgt._lastSize = last;
-				
+
 				// ZK-1826: should resotre width and height
 				if (n = wgt.$n()) {
 					var s = n.style;
-					
+
 					// ZK-2041: should skip undefined value, or throws exception in ie8
 					if (last.h)
 						s.height = last.h;
@@ -405,7 +405,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	$init: function () {
 		this._fellows = {};
 		this._lastSize = {};
-		
+
 		this.$supers('$init', arguments);
 
 		this.listen({onMaximize: this, onClose: this, onMove: this, onSize: this.onSizeEvent, onZIndex: this}, -1000);
@@ -550,8 +550,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					isRealVisible = this.isRealVisible();
 				if (!isRealVisible && maximized) return;
 
-				var l, t, w, h, 
-					s = node.style, 
+				var l, t, w, h,
+					s = node.style,
 					up = this.getMaximizableIconClass_(),
 					down = this.getMaximizedIconClass_();
 				if (maximized) {
@@ -569,7 +569,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					// prevent the scroll bar.
 					s.top = '-10000px';
 					s.left = '-10000px';
-					
+
 					s.width = jq.px0($op[0].clientWidth - (!floated ? $op.zk.paddingWidth() : 0));
 					s.height = jq.px0($op[0].clientHeight - (!floated ? $op.zk.paddingHeight() : 0));
 					this._lastSize = {l: l, t: t, w: w, h: h};
@@ -860,14 +860,14 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		_hideShadow(this);
 		if (data.width != s.width) {
 			s.width = data.width;
-			
+
 			// ZK-2363
 			this._width = s.width;
 		}
 		if (data.height != s.height) {
 			s.height = data.height;
 			this._fixHgh();
-			
+
 			// ZK-2363
 			this._height = s.height;
 		}
@@ -956,7 +956,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				hgh = n.style.height,
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
-	
+
 			if (hgh && hgh != 'auto') {
 				cave.style.height = jq.px0(this._offsetHeight(n));
 			} else if (cvh && cvh != 'auto') {
@@ -965,7 +965,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		}
 	},
 	_offsetHeight: function (n) {
-		return zk(n).offsetHeight() - this._titleHeight() - zk(n).padBorderHeight();		
+		return zk(n).offsetHeight() - this._titleHeight() - zk(n).padBorderHeight();
 	},
 	_titleHeight: function () {
 		var cap = this.getTitle() || this.caption ? this.$n('cap') : null;
@@ -1076,20 +1076,20 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	domClass_: function (no) {
 		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),
 			bordercls = this._border;
-		
+
 		bordercls = 'normal' == bordercls ? '' :
 			'none' == bordercls ? 'noborder' : bordercls;
-		
+
 		if (bordercls)
 			cls += ' ' + this.$s(bordercls);
-		
+
 		if (!(this.getTitle() || this.caption))
 			cls += ' ' + this.$s('noheader');
-		
-		cls += ' ' + this.$s(this._mode);   
-		return cls;	
+
+		cls += ' ' + this.$s(this._mode);
+		return cls;
 	},
-	
+
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption)) {
@@ -1290,7 +1290,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				c = fc ? fc.$n() : p.firstChild,
 				zkp = zk(p),
 				w = zkp.padBorderWidth();
-			
+
 			if (c) {
 				c = c.parentNode;
 				while (c && c.nodeType == 1 && p != c) {

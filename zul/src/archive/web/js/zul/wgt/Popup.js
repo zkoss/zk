@@ -1,9 +1,9 @@
 /* Popup.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Dec 17 19:15:59     2008, Created by jumperchen
 
@@ -64,7 +64,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 *  <li><b>after_pointer</b><br/> the popup appears with the top aligned with
 	 *  	the bottom of the mouse cursor, with the left side of the popup at the horizontal position of the mouse cursor.</li>
 	 * </ul></p>
-	 * @param Map opts 
+	 * @param Map opts
 	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
 	 *  it will show a disable mask. If opts.overflow exists, it allows the popup to appear
 	 *  out of the screen range. If opts.dodgeRef exists, it will avoid covering the reference
@@ -77,7 +77,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @param String ref the uuid of the ref widget.
 	 * @param Offset offset the offset of x and y
 	 * @param String position Possible values for the position attribute
-	 * @param Map opts 
+	 * @param Map opts
 	 * 	if opts.sendOnOpen exists, it will fire onOpen event. If opts.disableMask exists,
 	 *  it will show a disable mask. If opts.overflow exists, it allows the popup to appear
 	 *  out of the screen range. If opts.dodgeRef exists, it will avoid covering the reference
@@ -89,25 +89,25 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			node = this.$n(),
 			top = node.style.top,
 			$n = jq(node);
-		
-		// the top is depend on children's height, if child will re-size after onSize/onShow, 
+
+		// the top is depend on children's height, if child will re-size after onSize/onShow,
 		// popup need to re-position top after children height has calculated.
 		// B50-ZK-391
 		// should keep openInfo each time,
 		// maybe have to reposition in onResponse if the child changed with onOpen event,
 		this._openInfo = arguments;
-		
+
 		//F70-ZK-2007: Check if it is toggle type.
 		this._shallToggle = opts && opts.type == 'toggle';
 
 		$n.css({position: 'absolute'}).zk.makeVParent();
-		
+
 		// F70-ZK-2007: Fire to all the widgets that listen onVParent.
 		zWatch.fire('onVParent', this);
 
 		if (posInfo)
 			$n.zk.position(posInfo.dim, posInfo.pos, opts);
-		
+
 		this.setFloating_(true); // B50-ZK-280: setFloating_ first
 		this.setTopmost();
 		this.openAnima_(ref, offset, position, opts);
@@ -128,8 +128,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setVisible(true);
 		if ((!opts || !opts.disableMask) && this.isListen('onOpen', {asapOnly: true})) {
 			//Racing? Previous onResponse has not been fired and user triggers open again
-			if (this.mask) this.mask.destroy(); 
-			
+			if (this.mask) this.mask.destroy();
+
 			//ZK-2775, only trigger open() with doClick_ will set sendOnOpen to true
 			if (sendOnOpen) {
 				// use a progress bar to hide the popup
@@ -142,7 +142,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				zWatch.listen({onResponse: this});
 			}
 		}
-		
+
 		// B30-1819264 : should skip null
 		if (this.shallStackup_() && node) {
 			if (!this._stackup)
@@ -159,7 +159,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
 		//add extra CSS class for easy customize
 		jq(node).addClass(this.$s('open'));
-		
+
 		// resync position if the content is not calculated. Bug ZK-2257
 		var openInfo = this._openInfo;
 		if (openInfo) {
@@ -195,19 +195,19 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	_posInfo: function (ref, offset, position, opts) {
 		var pos, dim;
-		
+
 		if (position) {
 			if (ref) {
 				if (typeof ref == 'string')
 					ref = zk.Widget.$(ref);
-					
+
 				if (ref) {
 					var refn = zul.Widget.isInstance(ref) ? ref.$n() : ref;
 					// B65-ZK-1934: Make sure refn is not null
 					if (refn) {
 						pos = position;
 						dim = zk(refn).dimension(true);
-					} else 
+					} else
 						return {pos: position};
 				}
 			} else
@@ -249,7 +249,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			this._stackup.style.display = 'none';
 		// F70-ZK-2007: Clear toggle type.
 		this._shallToggle = false;
-		
+
 		// firefox only
 		try {
 			if (zk.ff && zk.currentFocus) {
@@ -261,7 +261,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		} catch (e) {
 			// do nothing
 		}
-			
+
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
 	},
 	/** The effect for closing the popup. Override this function to provide
@@ -276,7 +276,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 */
 	afterCloseAnima_: function (opts) {
 		this.setVisible(false);
-		
+
 		var node = this.$n();
 		zk(node).undoVParent();
 		zWatch.fireDown('onVParent', this);
@@ -284,7 +284,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(false);
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open: false});
-		
+
 		if (zk.ie < 11) { // re-create dom element to remove :hover state style
 			var that = this;
 			setTimeout(function () {
@@ -295,11 +295,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		jq(node).removeClass(this.$s('open'));
 	},
 	onFloatUp: function (ctl, opts) {
-		if (!this.isVisible()) 
+		if (!this.isVisible())
 			return;
 		var openInfo = this._openInfo,
 			length = ctl.args.length;
-		
+
 		// F70-ZK-2007: If popup belongs to widget's ascendant then return.
 		if (this._shallToggle && openInfo && opts && (
 				opts.triggerByClick === undefined || (
@@ -309,12 +309,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this._doFloatUp(ctl);
 	},
 	_doFloatUp: function (ctl) {
-		if (!this.isVisible()) 
+		if (!this.isVisible())
 			return;
 		var wgt = ctl.origin;
 		for (var floatFound; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
-				if (!floatFound) 
+				if (!floatFound)
 					this.setTopmost();
 				return;
 			}

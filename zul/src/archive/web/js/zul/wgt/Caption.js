@@ -1,9 +1,9 @@
 /* Caption.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Nov 16 13:01:17     2008, Created by tomyeh
 
@@ -64,7 +64,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 				return !(this.nodeType == 3 && !this.nodeValue.trim().length);
 			}).length,
 			index = 0;
-		
+
 		 // B50-ZK-313: only replace dom content
 		if (dn) {
 			// remove dom content
@@ -73,15 +73,15 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			}).remove();
 			this.clearCache(); //B70-ZK-2370: clearCache after remove dom content
 			jq(dn).prepend(cnt ? cnt : '&nbsp;');
-		} 
+		}
 	},
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments),
 			parent = this.parent;
-			
+
 		if (!parent.$instanceof(zul.wgt.Groupbox))
 			return sc;
-			
+
 		return sc + (parent._closable ? '' : ' ' + this.$s('readonly'));
 	},
 	doClick_: function () {

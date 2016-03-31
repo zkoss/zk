@@ -1,9 +1,9 @@
 /* Iframe.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Mar 19 11:47:53     2009, Created by tomyeh
 
@@ -48,8 +48,8 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 			var n = this.$n();
 			if (n) {
 				if (zk.gecko || zk.opera)
-					n.scrolling = 'true' === v ? 'yes' : 'false' === v ? 'no' : v;	
-				else 
+					n.scrolling = 'true' === v ? 'yes' : 'false' === v ? 'no' : v;
+				else
 					this.rerender();
 			}
 		},
@@ -114,12 +114,12 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 				+ ' src="' + zjq.src0 + '" frameborder="0"',
 		v = this._scrolling;
 		if ('auto' != v)
-			attr += ' scrolling="' + ('true' === v ? 'yes' : 'false' === v ? 'no' : v) + '"';	
-		if (v = this._align) 
+			attr += ' scrolling="' + ('true' === v ? 'yes' : 'false' === v ? 'no' : v) + '"';
+		if (v = this._align)
 			attr += ' align="' + v + '"';
-		if (v = this._name) 
+		if (v = this._name)
 			attr += ' name="' + v + '"';
-		if (v = this._autohide) 
+		if (v = this._autohide)
 			attr += ' z_autohide="' + v + '"';
 		return attr;
 	}

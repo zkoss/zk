@@ -39,10 +39,10 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 					jq(node).removeClass(this.$s('collapsed'));
 					zk(this).redoCSS(-1, {'fixFontIcon': true});
 				}
-				zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);			
-				
+				zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);
+
 				if (!fromServer) this.fire('onOpen', {open: open});
-			}			
+			}
 		},
 		/** Returns whether user can open or close the group box.
 		 * In other words, if false, users are no longer allowed to
@@ -184,9 +184,9 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 		var tt;
 		if (this.getTitle() && (tt = this.$n('title')))
 			this.domListen_(tt, 'onClick', '_doTitleClick');
-		if(zk.ie == 8) 
+		if(zk.ie == 8)
 			zk(this).redoCSS();
-		
+
 	},
 	unbind_: function () {
 		zWatch.unlisten({onSize: this});
@@ -226,12 +226,12 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 			if (cls) cls += ' ';
 			cls += this.$s('3d');
 		}
-		
+
 		if (!this.caption && !this.getTitle()) {
 			if (cls) cls += ' ';
 			cls += ' ' + this.$s('notitle');
 		}
-			
+
 		if (!this._open && this._isDefault()) {
 			if (cls) cls += ' ';
 			cls += this.$s('collapsed');
@@ -240,10 +240,10 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 	},
 	afterAnima_: function (visible) {
 		if (!visible && this._isDefault())
-			jq(this.$n()).addClass(this.$s('collapsed'));		
-				
+			jq(this.$n()).addClass(this.$s('collapsed'));
+
 		this.$supers('afterAnima_', arguments);
-		
+
 		// ZK-2138: parent should resize if parent has child with vflex
 		var p = this.parent;
 		for (var c = p.firstChild; c; c = c.nextSibling) {

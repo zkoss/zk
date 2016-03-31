@@ -125,19 +125,19 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				ori = mb ? mb.getOrient() : '';
 
 			// ZK-2356 should sync position after calling super.onResponse()
-			if (menu.isTopmost() && ori == 'horizontal' && n) 
+			if (menu.isTopmost() && ori == 'horizontal' && n)
 				n.style.top = jq.px0(zk.parseInt(n.style.top)
 							+ zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
-			
+
 			while(mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
-			
-			/* ZK-2040: should sync position 
+
+			/* ZK-2040: should sync position
 			 * when the overlap between submenupopup and menupoup is greater than 5px
-			 */ 
-			if ((zk(n).isOverlapped(m, 1) 
+			 */
+			if ((zk(n).isOverlapped(m, 1)
 					&& (((mol + mwd - nol > 5) && (ori != 'vertical'))
-					|| ((nol < mol + mwd / 2) && (ori == 'vertical')))) 
+					|| ((nol < mol + mwd / 2) && (ori == 'vertical'))))
 					|| (mp && mp._shallSync)) {
 				this._shallSync = true;
 				n.style.left = jq.px0(mol - nwd);
@@ -162,7 +162,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (item) item.$class._rmActive(item);
 		this._curIndex = -1;
 		this.$class._rmActive(this);
-		
+
 		this._shallSync = null;
 	},
 	open: function (ref, offset, position, opts) {
@@ -182,7 +182,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 			//open will fire onShow which invoke this.zsync()
-		
+
 		this._syncPos(); //ZK-1248: re-sync position if sub-menu is overlapped on parent menu
 	},
 	shallStackup_: function () {
@@ -195,9 +195,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	onFloatUp: function (ctl, opts) {
 		if (!this.isVisible())
 			return;
-		
+
 		var openInfo = this._openInfo;
-		
+
 		// F70-ZK-2049: If popup belongs to widget's ascendant then return.
 		if (this._shallToggle && openInfo && opts && (
 				opts.triggerByClick === undefined || (
@@ -253,9 +253,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				zk.currentFocus = this; //Bug 2807475: (IE only) s.t. _docMouseDown will focus later (since menupop becomes invisible)
 			}
 		}
-		
+
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
-		
+
 	},
 	onHide: function () {
 		if (this.isOpen())
@@ -281,14 +281,14 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 		var n = this.$n();
 		this.domUnlisten_(n, 'onMouseEnter').domUnlisten_(n, 'onMouseLeave');
-		
+
 		this.$supers(zul.menu.Menupopup, 'unbind_', arguments);
 	},
 	onResponse: function () {
 		if (!this.isOpen())
 			return; // Bug 2950364
 		this.zsync();
-		
+
 		this.$supers('onResponse', arguments); //Bug #2870616
 
 		this._syncPos(); // For Bug ZK-2160, resync position again after invoking supers.
@@ -310,7 +310,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			// 1. close the contenthandler (like colorbox), if any
 			// 2. close the menupopup and jump to the parent menu
 			// 3. if in the topmost menu, then jump to the previous menu
-			// 4. close it when not above scenario matched. 
+			// 4. close it when not above scenario matched.
 			if (w && w.$instanceof(zul.menu.Menu) && w._contentHandler && w._contentHandler.isOpen()) {
 				w._contentHandler.onHide();
 			} else if (((menu = _getMenu(this))) && !menu.isTopmost()) {
@@ -328,7 +328,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 					_activateNextMenu(root);
 				else // the parent is not menu widget
 					this.close();
-				
+
 			}
 			break;
 		case 39: //RIGHT
@@ -429,8 +429,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		var menubar = this.getMenubar();
 		if (menubar) {
 			menubar._bOver = false;
-		 	if (menubar._autodrop)
-		 		menubar._closeOnOut();
+			if (menubar._autodrop)
+				menubar._closeOnOut();
 		}
 	}
 }, {

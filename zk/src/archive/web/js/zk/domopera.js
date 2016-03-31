@@ -37,7 +37,7 @@ zk.copy(zjq, {
 		n.style.visibility = n.getElementsByTagName('input').length ? 'visible' : 'inherit';
 			// visible will cause elements that shall be cropped become visible, but we need do it if it has INPUT
 	},
-	_fixCSS: function (el) { 
+	_fixCSS: function (el) {
 		var old = el.style.display,
 			top = el.scrollTop,
 			lft = el.scrollLeft;

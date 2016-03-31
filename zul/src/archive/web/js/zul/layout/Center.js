@@ -1,9 +1,9 @@
 /* Center.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan  7 12:15:02     2009, Created by jumperchen
 
@@ -20,13 +20,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * {@link #setMinsize(int)}, {@link #setHeight(String)},
  * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
  * and {@link #setVisible(boolean)}.
- * 
+ *
  * <p>Default {@link #getZclass}: z-center.
  */
 zul.layout.Center = zk.$extends(zul.layout.LayoutRegion, {
 	_sumFlexWidth: true, //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
 	_maxFlexHeight: true, //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
-	
+
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).

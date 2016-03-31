@@ -1,9 +1,9 @@
 /* Listfoot.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun  9 18:03:06     2009, Created by jumperchen
 

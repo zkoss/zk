@@ -1,9 +1,9 @@
 /* Scrollbar.js
 
 	Purpose:
-	
-	Description:	
-		A scrollbar used for mesh element	
+
+	Description:
+		A scrollbar used for mesh element
 	History:
 		Thu, May 23, 2013 4:44:22 PM, Created by vincentjian
 
@@ -41,7 +41,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 		return position;
 	};
 /**
- * A Scrollbar used to replace browser native scrollbar on Mesh Element to 
+ * A Scrollbar used to replace browser native scrollbar on Mesh Element to
  * navigate the content, such as Grid/Listbox/Tree.
  */
 zul.Scrollbar = zk.$extends(zk.Object, {
@@ -55,32 +55,32 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	//scroller: null,
 	/**
 	 * The opts of this scrollbar controls.
-	 * 
+	 *
 	 * <h4>embed</h4>
 	 * boolean embed
 	 * <p>Embed the scrollbar inside container or not.
 	 * <p>Default: false
-	 * 
+	 *
 	 * <h4>step</h4>
 	 * int step
 	 * <p>Specifies scrolling pixels each time click on scroll-bar arrow.
 	 * <p>Default: 20
-	 * 
+	 *
 	 * <h4>wheelAmountStep</h4>
 	 * int wheelAmountStep
 	 * <p>Specifies the multiple of step when mouse wheel scrolling.
 	 * <p>Default: 3
-	 * 
+	 *
 	 * <h4>startPositionX</h4>
 	 * int startPositionX
 	 * <p>Specifies the horizontal scroll-bar start position according to the scrolling area.
 	 * <p>Default: 0
-	 * 
+	 *
 	 * <h4>startPositionY</h4>
 	 * int startPositionY
 	 * <p>Specifies the vertical scroll-bar start position according to the scrolling area.
 	 * <p>Default: 0
-	 * 
+	 *
 	 * @type Map
 	 */
 	//opts: null,
@@ -116,7 +116,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		this._pos = [0, 0];
 		this._barPos = [0, 0];
 		this.currentPos = {x: this._pos[0], y: this._pos[1]};
-		
+
 		jq(cave)
 			//bind scroll event for input tab key scroll
 			.bind('scroll', this.proxy(this._fixScroll))
@@ -138,7 +138,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			vbar = this.$n('ver');
 		if (hbar)
 			jq(hbar).remove();
-		
+
 		if (vbar)
 			jq(vbar).remove();
 		if (this.opts.embed) {
@@ -159,7 +159,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	},
 	syncSize: function (showScrollbar) {
 		this._checkBarRequired();
-		
+
 		var wgt = this.widget,
 			frozen = wgt.frozen, froenScrollWidth = 0,
 			tpad = wgt.$n('tpad'), bpad = wgt.$n('bpad'),
@@ -168,12 +168,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			needH = this.needH, needV = this.needV,
 			opts = this.opts,
 			scrollHeight = scroller.scrollHeight;
-		
+
 		if (tpad && bpad) //for Mesh Widget ROD
 			scrollHeight += tpad.offsetHeight + bpad.offsetHeight;
 		if (frozen) //for Frozen component
 			froenScrollWidth = 50 * (frozen._scrollScale || 0);
-		
+
 		if (needH) {
 			var old = hbar.style.display;
 			hbar.style.display = 'block'; // for calculate size
@@ -191,14 +191,14 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 
 			if (swdh < wdh) //only happened with Frozen
 				swdh = wdh + froenScrollWidth;
-			
+
 			if (startX) {
 				left.style.left = jq.px(startX);
 				ws.left = jq.px(startX + lwdh);
 				if (embed)
 					embed.style.left = jq.px(startX);
 			}
-			
+
 			if (needV) {
 				ws.width = jq.px(hwdh - rwdh);
 				right.style.right = jq.px(rwdh);
@@ -209,12 +209,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			} else {
 				ws.width = jq.px(hwdh);
 			}
-			
+
 			var indicator = this.$n('hor-indicator'),
 				wwdh = wrapper.offsetWidth,
 				iwdh = Math.round(wwdh * wdh / swdh),
 				iwdh = iwdh > 15 ? iwdh : 15;
-			
+
 			indicator.style.width = iwdh + 'px';
 			if (embed)
 				embed.style.width = (iwdh + lwdh + rwdh) + 'px';
@@ -230,7 +230,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			}
 			//sync indicator/scroller width ratio
 			this.hRatio = Math.abs(this.hLimit / this.hBarLimit);
-			
+
 			this.needH = indicator.offsetHeight; // use a size for hasHScroll
 			hbar.style.display = old; // for calculate size
 		}
@@ -265,12 +265,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			} else {
 				ws.height = jq.px(vhgh);
 			}
-			
+
 			var indicator = this.$n('ver-indicator'),
 				whgh = wrapper.offsetHeight,
 				ihgh = Math.round(whgh * hgh / shgh),
 				ihgh = ihgh > 15 ? ihgh : 15;
-			
+
 			indicator.style.height = ihgh + 'px';
 			if (embed)
 				embed.style.height = (ihgh + uhgh + dhgh) + 'px';
@@ -290,7 +290,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			this.needV = indicator.offsetWidth; // use a size for hasVScroll
 			vbar.style.display = old; // for calculate size
 		}
-		
+
 		this.scrollTo(this._pos[0], this._pos[1]); //keep scroll position
 		if (showScrollbar) {
 			_showScrollbar(this, 'hor', 1);
@@ -328,7 +328,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			scrollUp = true,
 			// if the offsetWidth are the same, we don't need to move to left.
 			scrollLeft = dom.offsetWidth == cave.offsetWidth;
-		
+
 		// Bug ZK-2418 should consider the case when dom size is greater than view size
 		if (((domRight >= viewLeft && domRight <= viewRight)
 			|| (domLeft >= viewLeft && domLeft <= viewRight)
@@ -338,19 +338,19 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			|| (domTop <= viewTop && domBottom >= viewBottom))) {
 			return; //already in the view port
 		}
-		
+
 		if (domTop < viewTop)
 			scrollUp = false;
 		if (domLeft < viewLeft)
 			scrollLeft = false;
-		
+
 		//calculate scrolling movement
 		var movementY = scrollUp ? domBottom - viewBottom : viewTop - domTop,
 			posY = this._pos[1] + (scrollUp ? movementY : -movementY),
 			movementX = scrollLeft ? domRight - viewRight : viewLeft - domLeft,
 			posX = this._pos[0] + (scrollLeft ? movementX : -movementX),
 			barPos;
-		
+
 		if (this.needV) {
 			//set and check if exceed scrolling limit
 			posY = _setScrollPos(posY, 0, this.vLimit);
@@ -386,7 +386,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			viewBottom = viewTop + cave.offsetHeight,
 			viewLeft = jq(cave).offset().left,
 			viewRight = viewLeft + cave.offsetWidth;
-		
+
 		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop)
 			|| (this.needH && domRight <= viewRight && domLeft >= viewLeft))
 			return true;
@@ -459,12 +459,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			rail = self.$n(orient + '-rail'),
 			arrow1 = self.$n(orient + (isH ? '-left' : '-up')),
 			arrow2 = self.$n(orient + (isH ? '-right' : '-down'));
-		
+
 		if (isH && (!(zk.ie < 11) || !zk.opera)) //IE and Opera does not support mouse wheel
 			jq(cave).mousewheel(self.proxy(self._mousewheelX));
 		else
 			jq(cave).mousewheel(self.proxy(self._mousewheelY));
-		
+
 		jq(bar).click(zk.$void);
 		jq(ind).bind('mousedown', self.proxy(self._dragStart));
 		jq(rail)
@@ -486,12 +486,12 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			rail = self.$n(orient + '-rail'),
 			arrow1 = self.$n(orient + (isH ? '-left' : '-up')),
 			arrow2 = self.$n(orient + (isH ? '-right' : '-down'));
-		
+
 		if (isH && (!(zk.ie < 11) || !zk.opera)) //IE and Opera does not support mouse wheel
 			jq(cave).unmousewheel(self.proxy(self._mousewheelX));
 		else
 			jq(cave).unmousewheel(self.proxy(self._mousewheelY));
-		
+
 		jq(bar).unbind('click', zk.$void);
 		jq(ind).unbind('mousedown', self.proxy(self._dragStart));
 		jq(rail)
@@ -516,7 +516,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	_mouseLeave: function (evt) {
 		if (this.dragging)
 			return;
-		
+
 		_showScrollbar(this, 'hor', 0);
 		_showScrollbar(this, 'ver', 0);
 	},
@@ -536,7 +536,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				point: point,
 				pos: pos
 			};
-		
+
 		jq(document)
 			.bind('mousemove', data, self.proxy(self._dragMove))
 			.bind('mouseup', self.proxy(self._dragEnd));
@@ -548,13 +548,13 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			cave = self.cave,
 			left = jq(cave).offset().left,
 			top = jq(cave).offset().top;
-		
+
 		jq(document)
 			.unbind('mousemove', self.proxy(self._dragMove))
 			.unbind('mouseup', self.proxy(self._dragEnd));
-		
+
 		self.dragging = false;
-		
+
 		if ((x < left || x > left + cave.offsetWidth)
 			|| (y < top || y > top + cave.offsetHeight)) {
 			_showScrollbar(self, 'hor', 0);
@@ -572,7 +572,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			limit = isHor ? this.hBarLimit : this.vBarLimit,
 			ratio = isHor ? this.hRatio : this.vRatio,
 			frozen = this.widget.frozen;
-		
+
 		this.dragging = true;
 		//set and check if exceed scrolling limit
 		barPos = _setScrollPos(barPos, 0, limit);
@@ -594,7 +594,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		var opts = this.opts,
 			step = opts.step * opts.wheelAmountStep,
 			pos = this._pos[0];
-		
+
 		if (deltaX) {
 			evt.stop();
 			//left: -step, right: step
@@ -623,14 +623,14 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			step = opts.step * opts.wheelAmountStep,
 			pos = this._pos[1],
 			barPos;
-		
+
 		if (deltaY) {
 			var scrollUp = deltaY > 0;
 			if (scrollUp && pos == 0)
 				return;
 			if (!scrollUp && pos == this.vLimit)
 				return;
-			
+
 			evt.stop();
 			//up: -step, down: step
 			pos += (scrollUp ? -step : step);
@@ -664,7 +664,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			frozen = this.widget.frozen,
 			hBarLimit = this.hBarLimit,
 			step = frozen ? hBarLimit / frozen._scrollScale : this.opts.step;
-		
+
 		//click on rail
 		if (target == hRail || target == vRail) {
 			var isHor = target == hRail,
@@ -681,7 +681,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				pointlimit = point * ratio,
 				rstep = step * 10;
 			self = this;
-			
+
 			if (frozen) {
 				point = _setScrollPos(point, 0, hBarLimit);
 				self._syncBarPosition('hor', point);
@@ -692,7 +692,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				self._pressTimer = setInterval(function () {
 					var isLeftDown = point > barPos,
 						min, max, bPos;
-					
+
 					min = isLeftDown ? pos : pointlimit;
 					min = min < 0 ? 0 : min;
 					max = isLeftDown ? pointlimit : pos;
@@ -724,7 +724,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				ratio = isHor ? self.hRatio : self.vRatio,
 				pos = isHor ? self._pos[0] : self._pos[1],
 				barPos = self._barPos[0];
-			
+
 			//setInterval for long press on arrow button
 			self._pressTimer = setInterval(function () {
 				if (frozen && isHor) { //Frozen Mesh
@@ -756,16 +756,16 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	_syncPosition: function (orient, pos) {
 		if (!this._pos)
 			return;
-		
+
 		var isH = orient == 'hor',
 			cave = this.cave,
 			bar = this.$n(orient),
 			embed = this.opts.embed;
-		
+
 		if (bar) {
 			pos = Math.round(pos);
 			this._pos[isH ? 0 : 1] = pos;
-			
+
 			bar.style[isH ? 'left' : 'top'] = pos + 'px';
 			if (isH && this.needV) {
 				this.$n('ver').style.right = -pos + 'px';
@@ -778,7 +778,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 					this.$n('hor-embed').style.bottom = -pos + 'px';
 			}
 			cave[isH ? 'scrollLeft' : 'scrollTop'] = pos;
-			
+
 			//onSyncPosition callback
 			var onSyncPosition = this.opts.onSyncPosition;
 			if (onSyncPosition) {
@@ -790,7 +790,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 	_syncBarPosition: function (orient, pos) {
 		var isH = orient == 'hor',
 			indicator = this.$n(orient + '-indicator');
-		
+
 		this._barPos[isH ? 0 : 1] = pos;
 		indicator.style[isH ? 'left' : 'top'] = pos + 'px';
 	},
@@ -817,7 +817,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			lu = isH ? 'left' : 'up',
 			rd = isH ? 'right' : 'down',
 			out = '';
-		
+
 		if (this.opts.embed) {
 			out += '<div id="' + uid + '-embed" class="z-scrollbar-' + hv + '-embed"></div>';
 		}

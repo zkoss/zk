@@ -13,14 +13,14 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	
+
 	function _initUpld(wgt) {
 		zWatch.listen({onSize: wgt});
 		var v;
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, null, v);
 	}
-	
+
 	function _cleanUpld(wgt) {
 		var v;
 		if (v = wgt._uplder) {
@@ -29,7 +29,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			v.destroy();
 		}
 	}
-	
+
 /**
  * A toolbar button.
  *
@@ -78,11 +78,11 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 */
 		disabled: [
 			//B60-ZK-1176
-			// Autodisable should not re-enable when setDisabled(true) is called during onClick 
+			// Autodisable should not re-enable when setDisabled(true) is called during onClick
 			function (v, opts) {
 				if (opts && opts.adbs)
 					// called from zul.wgt.ADBS.autodisable
-					this._adbs = true;	// Start autodisabling  
+					this._adbs = true;	// Start autodisabling
 				else if (!opts || opts.adbs === undefined)
 					// called somewhere else (including server-side)
 					this._adbs = false;	// Stop autodisabling
@@ -168,7 +168,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 * clicks this button.
 		 *
 		 * <p>To represent the button itself, the developer can specify <code>self</code>.
-		 * For example, 
+		 * For example,
 		 * <pre><code>
 		 * button.setId('ok');
 		 * wgt.setAutodisable('self,cancel');
@@ -228,12 +228,12 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 * <p> Another options for the upload can be specified as follows:
 		 *  <pre><code>button.setUpload('true,maxsize=-1,native');</code></pre>
 		 *  <ul>
-		 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
+		 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or
 		 * a negative value if no limit.</li>
 		 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
 		 * image, audio or text files.</li>
 		 *  </ul>
-		 *  
+		 *
 		 * @param String upload a JavaScript class to handle the file upload
 		 * at the client, or "true" if the default class is used,
 		 * or null or "false" to disable the file download (and then
@@ -275,7 +275,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass)
 			return label;
-		
+
 		if (!img) img = iconSclass;
 		else img = '<img src="' + img + '" align="absmiddle" />'
 					+ (iconSclass ? ' ' + iconSclass : '');
@@ -287,11 +287,11 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		var scls = this.$supers('domClass_', arguments),
 			zcls = this.getZclass(),
 			nozcls = (!no || !no.zclass);
-		
+
 		if (this._mode == 'toggle' && this._checked && nozcls && zcls) {
 			scls += ' ' + this.$s('checked');
 		}
-		
+
 		return scls;
 	},
 	domAttrs_: function (no) {
@@ -313,13 +313,13 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 				zul.wgt.ADBS.autodisable(this);
 			else if (!zk.ie || zk.ie > 10) // ZK-2471
 				this._uplder.openFileDialog();
-			
+
 			this.fireX(evt);
-			
+
 			if (!evt.stopped) {
 				var href = this._href,
 					isMailTo = href ? href.toLowerCase().startsWith('mailto:') : false;
-					
+
 				if (href) {
 					// ZK-2506: use iframe to open a 'mailto' href
 					if (isMailTo) {
@@ -329,9 +329,9 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 						zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
 					}
 				}
-				
+
 				this.$super('doClick_', evt, true);
-				
+
 				if (this._mode == 'toggle') {
 					this.setChecked(!this.isChecked());
 					this.fire('onCheck', this.isChecked());

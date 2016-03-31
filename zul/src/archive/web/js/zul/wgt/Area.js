@@ -1,9 +1,9 @@
 /* Area.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Mar 26 15:54:35     2009, Created by tomyeh
 
@@ -30,7 +30,7 @@ zul.wgt.Area = zk.$extends(zk.Widget, {
 			var n = this.$n();
 			if (n) n.shape = v || '';
 		},
-		/** 
+		/**
 		 * Returns the coordination of this area.
 		 * @return String
 		 */
@@ -69,9 +69,9 @@ zul.wgt.Area = zk.$extends(zk.Widget, {
 	domAttrs_: function (no) {
 		var attr = this.$supers('domAttrs_', arguments)
 			+ ' href="javascript:;"', v;
-		if (v = this._coords) 
+		if (v = this._coords)
 			attr += ' coords="' + v + '"';
-		if (v = this._shape) 
+		if (v = this._shape)
 			attr += ' shape="' + v + '"';
 		return attr;
 	}

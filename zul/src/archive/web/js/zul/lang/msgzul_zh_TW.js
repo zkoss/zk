@@ -1,9 +1,9 @@
 /* mesg_zh_TW.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jul  8 14:25:41     2005, Created by tomyeh
 

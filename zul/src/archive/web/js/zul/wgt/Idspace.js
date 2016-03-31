@@ -1,9 +1,9 @@
 /* Idspace.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Nov 03 12:15:49     2011, Created by benbai
 

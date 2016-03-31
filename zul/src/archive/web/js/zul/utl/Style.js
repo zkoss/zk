@@ -1,9 +1,9 @@
 /* Style.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan 14 15:28:14     2009, Created by tomyeh
 
@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.utl.Style = zk.$extends(zk.Widget, {
 	$define: {
-    	/**
+		/**
 		 * Returns the URI of an external style sheet.
 		 * <p>
 		 * Default: null.

@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, wgt._getUploadRef(), v);
 	}
-	
+
 	function _cleanUpld(wgt) {
 		var v;
 		if (v = wgt._uplder) {
@@ -29,11 +29,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			v.destroy();
 		}
 	}
-	
+
 (/**
  * A single choice in a {@link Menupopup} element.
  * It acts much like a button but it is rendered on a menu.
- * 
+ *
  * <p>Default {@link #getZclass}: z-menuitem.
  */
 zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
@@ -61,7 +61,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		 */
 		disabled: [
 			//B60-ZK-1176
-			// Autodisable should not re-enable when setDisabled(true) is called during onClick 
+			// Autodisable should not re-enable when setDisabled(true) is called during onClick
 			function (v, opts) {
 				if (opts && opts.adbs)
 					// called from zul.wgt.ADBS.autodisable
@@ -78,7 +78,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					return this._disabled;
 				}
 				return v;
-			}, 
+			},
 			function (v, opts) {
 				this.rerender(opts && opts.skip ? -1 : 0); //bind and unbind
 			}
@@ -187,7 +187,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		/** Sets the JavaScript class at the client to handle the upload if this
 		 * button is used for file upload.
 		 * <p>Default: null.
-		 *  
+		 *
 		 * @param String upload a JavaScript class to handle the file upload
 		 * at the client, or "true" if the default class is used,
 		 * or null or "false" to disable the file download (and then
@@ -217,7 +217,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (!no || !no.zclass) {
 			var added = this.isDisabled() ? this.$s('disabled') : '';
 			if (added) scls += (scls ? ' ' : '') + added;
-			added = (!this.getImage() && this.isCheckmark()) ? 
+			added = (!this.getImage() && this.isCheckmark()) ?
 						this.$s('checkable') + (this.isChecked() ? ' ' + this.$s('checked') : '') : '';
 			if (added) scls += (scls ? ' ' : '') + added;
 		}
@@ -229,7 +229,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			icon = '<i class="' + this.$s('icon') + ' z-icon-check"></i>',
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
-		
+
 		if (img)
 			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
@@ -293,7 +293,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 
 			var topmost = this.isTopmost(),
 				anc = this.$n('a');
-			
+
 			if (anc.href.startsWith('javascript:')) {
 				if (this.isAutocheck()) {
 					this.setChecked(!this.isChecked());
@@ -312,7 +312,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					zUtl.go(anc.href, {target: anc.target});
 					// Bug #1886352 and #2154611
 					//Note: we cannot eat onclick. or, <a> won't work
-					
+
 				if (zk.gecko && topmost && this.$n().id != anc.id) {
 					zUtl.go(anc.href, {target: anc.target});
 					evt.stop();
@@ -360,7 +360,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	getImageNode: function () {
 		if (!this._eimg && (this._image || this._hoverImage)) {
 			var n = this.$n();
-			if (n) 
+			if (n)
 				this._eimg = this.$n('a').firstChild;
 		}
 		return this._eimg;

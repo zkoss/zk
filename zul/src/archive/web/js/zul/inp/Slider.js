@@ -1,9 +1,9 @@
 /* Slider.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu May 22 11:17:24     2009, Created by kindalu
 
@@ -26,39 +26,39 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var btn = wgt.$n('btn'),
 			curpos = wgt._curpos,
 			isDecimal = wgt.isDecimal();
-		
+
 		btn.title = isDecimal ? curpos.toFixed(_digitsAfterDecimal(_getStep(wgt))) : curpos;
 		wgt.updateFormData(curpos);
-		
+
 		var isVertical = wgt.isVertical(),
 			ofs = zk(wgt.$n()).cmOffset(),
 			totalLen = isVertical ? wgt._getHeight() : wgt._getWidth(),
 			x = totalLen > 0 ? ((curpos - wgt._minpos) * totalLen) / (wgt._maxpos - wgt._minpos) : 0;
 		if(!isDecimal)
 			x = Math.round(x);
-	
+
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		ofs = isVertical ? [0, (ofs[1] + x)] : [(ofs[0] + x), 0];
 		ofs = wgt._snap(ofs[0], ofs[1]);
-		
+
 		return ofs[(isVertical ? 1 : 0)];
 	}
 	function _getNextPos(wgt, offset) {
 		var $btn = jq(wgt.$n('btn')),
 			fum = wgt.isVertical() ? ['top', 'height'] : ['left', 'width'],
 			newPosition = {};
-		
-		newPosition[fum[0]] = jq.px0(offset ? 
+
+		newPosition[fum[0]] = jq.px0(offset ?
 			(offset + zk.parseInt($btn.css(fum[0])) - $btn[fum[1]]() / 2) :
 			_getBtnNewPos(wgt));
-		
+
 		return newPosition;
 	}
 	function _getStep(wgt) {
 		var step = wgt._step;
 		return (!wgt.isDecimal() || step != -1) ? step : 0.1;
 	}
-	
+
 /**
  * A slider.
  *  <p>Default {@link #getZclass}: z-slider.
@@ -74,14 +74,14 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_pageIncrement: -1,
 	_step: -1,
 	_mode: 'integer',
-	
+
 	$define: {
 		/** Returns the orient.
 		 * <p>Default: "horizontal".
 		 * @return String
 		 */
 		/** Sets the orient.
-		 * <p>Default : "horizontal" 
+		 * <p>Default : "horizontal"
 		 * @param String orient either "horizontal" or "vertical".
 		 */
 		orient: function () {
@@ -141,7 +141,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 */
 		slidingtext: null,
 		/** Returns the amount that the value of {@link #getCurpos}
-		 * changes by when the tray of the scroll bar is clicked. 
+		 * changes by when the tray of the scroll bar is clicked.
 		 *
 		 * <p>Default: -1 (means it will scroll to the position the user clicks).
 		 */
@@ -186,7 +186,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 * @param String name the name of this component.
 		 */
 		name: function () {
-			if (this.efield) 
+			if (this.efield)
 				this.efield.name = this._name;
 		},
 		/** Returns the current mode of slider
@@ -217,9 +217,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			scls += ' ' + this.$s('horizontal');
 		if (this.inSphereMold())
 			scls += ' ' + this.$s('sphere');
-		else if (this.inScaleMold() && !isVertical) 
+		else if (this.inScaleMold() && !isVertical)
 			scls += ' ' + this.$s('scale');
-		
+
 		return scls;
 	},
 	onup_: function (evt) {
@@ -227,7 +227,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (btn) {
 			widget = zk.Widget.$(btn);
 		}
-		
+
 		zul.inp.Slider.down_btn = null;
 		if (widget)
 			jq(document).unbind('zmouseup', widget.onup_);
@@ -247,9 +247,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			height = this._getHeight(),
 			width = this._getWidth(),
 			offset = isVertical ? evt.pageY - pos[1] : evt.pageX - pos[0];
-		
+
 		if (!$btn[0] || $btn.is(':animated')) return;
-		
+
 		if (!moveToCursor) {
 			if (pageIncrement > 0) {
 				var curpos = this._curpos + (offset > 0 ? pageIncrement : - pageIncrement);
@@ -296,14 +296,14 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			x = ofs[0];
 		} else {
 			var max = ofs[0] + this._getWidth();
-			if (x > max) 
+			if (x > max)
 				x = max;
 		}
 		if (y <= ofs[1]) {
 			y = ofs[1];
 		} else {
 			var max = ofs[1] + this._getHeight();
-			if (y > max) 
+			if (y > max)
 				y = max;
 		}
 		return [x, y];
@@ -313,13 +313,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.$n('btn').title = ''; //to avoid annoying effect
 		widget.slidepos = widget._curpos,
 		vert = widget.isVertical();
-		
+
 		jq(document.body)
 			.append('<div id="zul_slidetip" class="z-slider-popup"'
 			+ 'style="position:absolute;display:none;z-index:60000;'
 			+ 'background-color:white;border: 1px outset">' + widget.slidepos
 			+ '</div>');
-		
+
 		widget.slidetip = jq('#zul_slidetip')[0];
 		if (widget.slidetip) {
 			var slideStyle = widget.slidetip.style;
@@ -347,9 +347,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_endDrag: function (dg) {
 		var widget = dg.control,
 			pos = widget._realpos();
-		
+
 		widget.fire('onScroll', widget.isDecimal() ? {decimal: pos} : pos);
-		
+
 		widget._fixPos();
 		jq(widget.slidetip).remove();
 		widget.slidetip = null;
@@ -373,7 +373,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (step > 0) {
 			return this._curpos = pos > 0 ? _roundDecimal(pos + minpos, _digitsAfterDecimal(step)) : minpos;
 		}
-		else 
+		else
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	},
 	_constraintPos: function (pos) {
@@ -415,7 +415,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			btn.style.top = '-' + btn.offsetHeight / 2 + 'px';
 			var het = n.clientHeight;
 			inners.height = jq.px0(het > 0 ? het : this._height - btn.offsetHeight);
-		} else { 
+		} else {
 			btn.style.left = '-' + btn.offsetWidth / 2 + 'px';
 			var wd = n.clientWidth;
 			inners.width = jq.px0(wd > 0 ? wd : this._width - btn.offsetWidth);
@@ -466,9 +466,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	updateFormData: function (val) {
 		if (this._name) {
 			val = val || 0;
-			if (!this.efield) 
+			if (!this.efield)
 				this.efield = jq.newHidden(this._name, val, this.$n());
-			else 
+			else
 				this.efield.value = val;
 		}
 	},
@@ -485,7 +485,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		//fix B70-ZK-2438
 		if(this.isRealVisible())
 			this._makeDraggable();
-		
+
 		zWatch.listen({
 			onSize: this,
 			//fix B70-ZK-2438
@@ -500,7 +500,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
-		
+
 		zWatch.unlisten({
 			onSize: this,
 			//fix B70-ZK-2438

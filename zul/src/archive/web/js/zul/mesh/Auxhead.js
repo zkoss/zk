@@ -1,9 +1,9 @@
 /* Auxhead.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon May  4 15:57:46     2009, Created by tomyeh
 

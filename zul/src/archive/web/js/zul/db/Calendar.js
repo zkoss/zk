@@ -37,7 +37,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			new Date(year, month + 1, 0)/*last day of month*/: v;
 	}
 
-var Renderer = 
+var Renderer =
 /** @class zul.db.Renderer
  * The renderer used to render a calendar.
  * It is designed to be overridden
@@ -77,16 +77,16 @@ zul.db.Renderer = {
 	disabled: function (cal, y, m, v, today) {
 		var d = new Date(y, m, v, 0, 0, 0, 0),
 			constraint;
-		
+
 		if ((constraint = cal._constraint) && typeof constraint == 'string') {
-			
+
 			// Bug ID: 3106676
 			if ((constraint.indexOf('no past') > -1 && (d - today) / 86400000 < 0)
 				|| (constraint.indexOf('no future') > -1 && (today - d) / 86400000 < 0)
 				|| (constraint.indexOf('no today') > -1 && today - d == 0))
 					return true;
 		}
-		
+
 		var result = false;
 		if (cal._beg && (result = (d - cal._beg) / 86400000 < 0))
 			return result;
@@ -99,7 +99,7 @@ zul.db.Renderer = {
 	 * <p>Default: the string of the value
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param int the number of the week of the value
-	 * @param Map localizedSymbols the symbols for localization 
+	 * @param Map localizedSymbols the symbols for localization
 	 * @return String the label of the week of year
 	 * @since 6.5.0
 	 */
@@ -109,7 +109,7 @@ zul.db.Renderer = {
 	/**
 	 * Generates the title of the week of year.
 	 * <p>Default: 'Wk'
-	 * @param zul.db.Calendar wgt the calendar widget 
+	 * @param zul.db.Calendar wgt the calendar widget
 	 * @return String the title of the week of year
 	 * @since 6.5.0
 	 */
@@ -120,7 +120,7 @@ zul.db.Renderer = {
 	 * Generates the title of the content HTML.
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization 
+	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.3
 	 */
 	titleHTML: function (wgt, out, localizedSymbols) {
@@ -129,14 +129,14 @@ zul.db.Renderer = {
 			val = wgt.getTime(),
 			m = val.getMonth(),
 			y = val.getFullYear(),
-			ydelta = new zk.fmt.Calendar(val, wgt._localizedSymbols).getYear() - y, 
+			ydelta = new zk.fmt.Calendar(val, wgt._localizedSymbols).getYear() - y,
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
 			text = wgt.$s('text'),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear;
-		
-		
+
+
 		switch(view) {
 		case 'day':
 			out.push('<span id="', uuid, '-tm" class="', text, '">',
@@ -155,7 +155,7 @@ zul.db.Renderer = {
 		case 'decade':
 			var ycen = ydec * 100;
 			out.push('<span id="', uuid, '-tyd" class="', text, '">',
-					(ycen > minyear ? ycen : minyear) + ydelta, '-', 
+					(ycen > minyear ? ycen : minyear) + ydelta, '-',
 					(ycen + 99 < maxyear ? ycen + 99 : maxyear) + ydelta, '</span>');
 			break;
 		}
@@ -164,7 +164,7 @@ zul.db.Renderer = {
 	 * Renderer the dayView for this calendar
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization 
+	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
 	dayView: function (wgt, out, localizedSymbols) {
@@ -173,11 +173,11 @@ zul.db.Renderer = {
 			wkend = wgt.$s('weekend'),
 			wkday = wgt.$s('weekday'),
 			cell = wgt.$s('cell');
-		
+
 		out.push('<table class="', wgt.$s('body'), '" id="', uuid, '-mid"',
 				zUtl.cellps0, '>', '<thead><tr>');
 		for (var j = 0; j < 7; ++j)
-			out.push('<th class="', (j == sun || j == sat) ? wkend : wkday, 
+			out.push('<th class="', (j == sun || j == sat) ? wkend : wkday,
 					'">' + localizedSymbols.S2DOW[j] + '</th>');
 		out.push('</tr></thead><tbody>');
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
@@ -193,7 +193,7 @@ zul.db.Renderer = {
 	 * Renderer the monthView for this calendar
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization 
+	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
 	monthView: function (wgt, out, localizedSymbols) {
@@ -203,7 +203,7 @@ zul.db.Renderer = {
 				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'">', 
+			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'">',
 					localizedSymbols.SMON[j] + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
@@ -213,7 +213,7 @@ zul.db.Renderer = {
 	 * Renderer the yearView for this calendar
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization 
+	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
 	yearView: function (wgt, out, localizedSymbols) {
@@ -222,7 +222,7 @@ zul.db.Renderer = {
 			disd = wgt.$s('disabled'),
 			val = wgt.getTime(),
 			y = val.getFullYear(),
-			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y, 
+			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y,
 			yofs = y - (y % 10 + 1),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear;
@@ -234,11 +234,11 @@ zul.db.Renderer = {
 			if (yofs + ydelta < minyear || yofs + ydelta > maxyear) {
 				out.push('<td class="', disd, '">&nbsp;</td>');
 				if (j + 1 == 12)
-					out.push('</tr>'); 
+					out.push('</tr>');
 				yofs++;
 				continue;
 			}
-			out.push('<td class="', cell, '" data-value="', yofs ,'" id="', uuid, '-y', j, '" >', 
+			out.push('<td class="', cell, '" data-value="', yofs ,'" id="', uuid, '-y', j, '" >',
 					yofs + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
@@ -249,13 +249,13 @@ zul.db.Renderer = {
 	 * Renderer the decadeView for this calendar
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization 
+	 * @param Map localizedSymbols the symbols for localization
 	 * @since 6.5.0
 	 */
 	decadeView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
 			cell = wgt.$s('cell'),
-			disd = wgt.$s('disabled'),	
+			disd = wgt.$s('disabled'),
 			val = wgt.getTime(),
 			y = val.getFullYear(),
 			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y,
@@ -265,7 +265,7 @@ zul.db.Renderer = {
 			mindec = zk.parseInt(minyear / 10) * 10,
 			maxdec = zk.parseInt(maxyear / 10) * 10;
 
-		
+
 		out.push('<table class="', wgt.$s('body'), ' ', wgt.$s('decade'),
 				'" id="', uuid, '-mid"',
 				zUtl.cellps0, '><tbody>');
@@ -276,10 +276,10 @@ zul.db.Renderer = {
 			if (temp < mindec || temp > maxdec) {
 				out.push('<td class="', disd, '">&nbsp;</td>');
 				if (j + 1 == 12)
-					out.push('</tr>'); 
+					out.push('</tr>');
 				continue;
 			}
-			
+
 			out.push('<td data-value="', temp ,'" id="', uuid, '-de', j, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '" >',
 							(temp < minyear ? minyear : temp) + ydelta + '-<br />'
@@ -292,7 +292,7 @@ zul.db.Renderer = {
 	 * Renderer the today link for this calendar
 	 * @param zul.db.Calendar wgt the calendar widget
 	 * @param Array out an array to output HTML fragments.
-	 * @param Map localizedSymbols the symbols for localization 
+	 * @param Map localizedSymbols the symbols for localization
 	 * @since 8.0.0
 	 */
 	todayView: function (wgt, out, localizedSymbols) {
@@ -312,7 +312,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_maxyear: 2099,
 	_minDate: new Date(1899, 11, 31, 23, 59, 59),
 	_maxDate: new Date(2099, 11, 31, 23, 59, 59),
-	
+
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onChange: this}, -1000);
@@ -328,15 +328,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		/** Set the date limit for this component with yyyyMMdd format,
-		 * such as 20100101 is mean Jan 01 2010 
-		 * 
+		 * such as 20100101 is mean Jan 01 2010
+		 *
 		 * <dl>
 		 * <dt>Example:</dt>
 		 * <dd>between 20091201 and 20091231</dd>
 		 * <dd>before 20091201</dd>
 		 * <dd>after 20091231</dd>
 		 * </dl>
-		 * 
+		 *
 		 * @param String constraint
 		 */
 		/** Returns the constraint of this component.
@@ -354,7 +354,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
 				if (constraint.startsWith('between')) {
 					var j = constraint.indexOf('and', 7);
-					if (j < 0 && zk.debugJS) 
+					if (j < 0 && zk.debugJS)
 						zk.error('Unknown constraint: ' + constraint);
 					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), format);
 					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format);
@@ -363,7 +363,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						this._beg = this._end;
 						this._end = d;
 					}
-					
+
 					this._beg.setHours(0, 0, 0, 0);
 					this._end.setHours(0, 0, 0, 0);
 				} else if (constraint.startsWith('before_') || constraint.startsWith('after_')) {
@@ -466,17 +466,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	setMaxYear_: function (v) {
 		if (v) {
-			var y = this.getTime().getFullYear();			
+			var y = this.getTime().getFullYear();
 			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
 		} else {
 			this._maxyear = 2099;;
 		}
 		this._maxDate.setYear(this._maxyear);
-	},		
+	},
 	_shift: function (ofs, opts) {
 		var oldTime = this.getTime(),
 		shiftTime = new Date(oldTime.getTime());
-		
+
 		switch(this._view) {
 		case 'day':
 			shiftTime.setDate(oldTime.getDate() + ofs);
@@ -486,14 +486,14 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				ofs = 4;
 			else if (ofs == -7)
 				ofs = -4;
-			shiftTime.setMonth(oldTime.getMonth() + ofs);	
+			shiftTime.setMonth(oldTime.getMonth() + ofs);
 			break;
 		case 'year':
 			if (ofs == 7)
 				ofs = 4;
 			else if (ofs == -7)
 				ofs = -4;
-			shiftTime.setYear(oldTime.getFullYear() + ofs);				
+			shiftTime.setYear(oldTime.getFullYear() + ofs);
 			break;
 		case 'decade':
 			if (ofs == 7)
@@ -501,15 +501,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			else if (ofs == -7)
 				ofs = -4;
 			ofs *= 10;
-			shiftTime.setYear(oldTime.getFullYear() + ofs);		
+			shiftTime.setYear(oldTime.getFullYear() + ofs);
 			break;
-		}	
+		}
 		//Bug B65-ZK-1804: Constraint the shifted time should not be out of range between _minyear and _maxyear
 		if (shiftTime.getTime() < this._minDate.getTime() || shiftTime.getTime() > this._maxDate.getTime())
 			return; // out of range
-		
+
 		this._shiftDate(this._view, ofs);
-		
+
 		var newTime = this.getTime();
 		switch(this._view) {
 		case 'day':
@@ -518,7 +518,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				opts = opts || {};
 				opts.sameMonth = true; //optimize
 				this._markCal(opts);
-			} else 
+			} else
 				this.rerender();
 			break;
 		case 'month':
@@ -527,7 +527,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			else
 				this.rerender();
 			break;
-		default:		
+		default:
 			this.rerender();
 		}
 	},
@@ -548,7 +548,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 	},
 	focus_: function (timeout) {
-		if (this._view != 'decade') 
+		if (this._view != 'decade')
 			this._markCal({timeout: timeout});
 		else {
 			var anc;
@@ -565,7 +565,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			left = this.$n('left'),
 			right = this.$n('right'),
 			today = this.$n('today');
-		if (this._view != 'decade') 
+		if (this._view != 'decade')
 			this._markCal({silent: true});
 
 		this.domListen_(title, 'onClick', '_changeView')
@@ -586,7 +586,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			today = this.$n('today');
 		this.domUnlisten_(title, 'onClick', '_changeView')
 			.domUnlisten_(mid, 'onClick', '_clickDate')
-			.domUnlisten_(left, 'onClick', '_clickArrow')		
+			.domUnlisten_(left, 'onClick', '_clickArrow')
 			.domUnlisten_(right, 'onClick', '_clickArrow')
 			.domUnlisten_(today, 'onClick', '_clickToday')
 			.domUnlisten_(node, 'onMousewheel')
@@ -639,7 +639,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		else
 			this.rerender();
 	},
-	_doMousewheel: function (evt, intDelta) {		
+	_doMousewheel: function (evt, intDelta) {
 		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')).attr('disabled'))
 			return;
 		this._shiftView(intDelta > 0 ? -1 : 1, true);
@@ -658,12 +658,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate(),
 			val = new zk.fmt.Calendar().escapeDSTConflict(_newDate(year, month, day, d == null)); // B70-ZK-2382
-		
-		this._value = val; 
+
+		this._value = val;
 		if (fireOnChange)
 			this.fire('onChange', {value: val});
 	},
-	// calendar-ctrl.js will override this function 
+	// calendar-ctrl.js will override this function
 	_clickDate: function (evt) {
 		var target = evt.domTarget, val;
 		for (; target; target = target.parentNode)
@@ -740,7 +740,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this._value = newTime;
 			this.fire('onChange', {value: this._value, shallClose: false, shiftView: true});
 		}
-		return newTime; 
+		return newTime;
 	},
 	_changeView: function (evt) {
 		var tm = this.$n('tm'),
@@ -764,7 +764,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	_setView: (function () {
-		
+
 		// check whether to disable the arrow
 		function _updateArrow(wgt) {
 			if (wgt.isOutOfRange(true)) {
@@ -781,7 +781,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		return function (view, force) {
 			if (this._view != view) {
 				this._view = view;
-				
+
 				// ie9 and early won't support css3 transition
 				if (zk.ie < 10) {
 					this.rerender();
@@ -789,28 +789,28 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				}
 				var out = new zk.Buffer(),
 					localizedSymbols = this.getLocalizedSymbols();
-				
+
 				Renderer[view + 'View'](this, out, localizedSymbols);
-				
+
 				jq(this.$n('mid')).after(out.join('')).remove();
-				
+
 				var after = [];
 				// unlisten event
 				this.unbind_(null, after);
 				// listen event
 				this.bind_(this.desktop, null, after);
-				
+
 				out = []; // reset
 				Renderer.titleHTML(this, out, localizedSymbols);
 				jq(this.$n('title')).html(out.join(''));
 				jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1});
-				
+
 				_updateArrow(this);
 
 				var anc;
 				if (anc = this.$n('a'))
 					_doFocus(anc, true);
-				
+
 			} else if (force) {
 				var out = [],
 					localizedSymbols = this.getLocalizedSymbols(),
@@ -820,13 +820,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					x = width * -1,
 					self = this,
 					animaCSS = this.$s('anima');
-				
+
 				Renderer[view + 'View'](this, out, localizedSymbols);
-				
+
 				jq(oldMid).after('<div style="height:' + oldMid.offsetHeight
 						+ 'px;width:' + width + 'px" class="' + animaCSS
 						+ '"><div class="' + animaCSS + '-inner"></div');
-				
+
 				var animaInner = oldMid.nextSibling.firstChild;
 				jq(animaInner).append(oldMid);
 				oldMid = animaInner.firstChild;
@@ -835,12 +835,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				} else {
 					jq(oldMid).after(out.join('')).remove();
 				}
-				
+
 				// clear for _makrCal to get the latest reference
 				this.clearCache();
-				if (view != 'decade') 
+				if (view != 'decade')
 					this._markCal();
-				
+
 				var newMid;
 				if (isLeft) {
 					jq(animaInner.firstChild).after(oldMid);
@@ -851,7 +851,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					jq(animaInner.firstChild).before(oldMid);
 					newMid = oldMid.nextSibling;
 				}
-				
+
 				jq(animaInner).animate({left: x}, {done: function (/*callback*/) {
 						self.domUnlisten_(oldMid, 'onClick', '_clickDate');
 						jq(animaInner.parentNode).after(newMid).remove();
@@ -870,7 +870,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	getLocalizedSymbols: function () {
 		return this._localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
-			    ERA: zk.ERA,    
+			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
 			   SDOW: zk.SDOW,
 			  S2DOW: zk.S2DOW,
@@ -893,16 +893,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var view = this._view,
 			val = date || this.getTime(),
 			y = val.getFullYear(),
-			ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y, 
+			ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y,
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
 			minyear = this._minyear,
-			maxyear = this._maxyear,		
+			maxyear = this._maxyear,
 			mincen = zk.parseInt(minyear / 100) * 100,
-			maxcen = zk.parseInt(maxyear / 100) * 100,	
+			maxcen = zk.parseInt(maxyear / 100) * 100,
 			mindec = zk.parseInt(minyear / 10) * 10,
 			maxdec = zk.parseInt(maxyear / 10) * 10;
-		
+
 		if (view == 'decade') {
 			var value = ydec * 100 + ydelta;
 			return left ? value == mincen : value == maxcen;
@@ -925,10 +925,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if ((anc = this.$n('a')) && (!opts || !opts.silent))
 			_doFocus(anc, opts && opts.timeout);
 	},
-	// calendar-ctrl.js will override this function 
+	// calendar-ctrl.js will override this function
 	_markCal0: function (opts) {
 		var	seldate = this.getTime(),
-		 	m = seldate.getMonth(),
+			m = seldate.getMonth(),
 			mid = this.$n('mid'),
 			$mid = jq(mid),
 			seldClass = this.$s('selected'),
@@ -949,13 +949,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				today = zUtl.today(), //no time part
 				outsideClass = this.$s('outside'),
 				disdClass = this.$s('disabled');
-			
+
 			$mid.find('.' + seldClass).removeClass(seldClass);
 			if (!opts || !opts.sameMonth) {
 				$mid.find('.' + outsideClass).removeClass(outsideClass);
 				$mid.find('.' + disdClass).removeClass(disdClass);
 			}
-			
+
 			if (v < 0) v += 7;
 			for (var j = 0, cur = -v + 1; j < 6; ++j) {
 				var week = this.$n('w' + j);
@@ -968,19 +968,19 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							if (k == 0) week.style.display = '';
 							var	monofs = cur <= 0 ? -1 : cur <= last ? 0 : 1,
 								bSel = cur == d;
-							
+
 							// Bug B65-ZK-1804: check whether the date is out of range
 							if (y >= maxyear && m == 11 && monofs == 1
 									|| y <= minyear && m == 0 && monofs == -1)
 								continue;
 
 							var $cell = jq(week.cells[k]);
-							
+
 							$cell[0]._monofs = monofs;
 							if (bSel)
 								$cell.addClass(seldClass);
-								
-								
+
+
 							//not same month
 							if (!opts || !opts.sameMonth) { // optimize
 								if (monofs) {
@@ -1003,7 +1003,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				node;
 
 			$mid.find('.' + seldClass).removeClass(seldClass);
-				
+
 			for (var j = 0; j < 12; ++j)
 				if (index == j && (node = this.$n(field + j)))
 					jq(node).addClass(seldClass);

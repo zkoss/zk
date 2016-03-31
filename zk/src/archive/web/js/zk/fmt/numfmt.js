@@ -50,7 +50,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (j == ri) { //first digit
 				base = '0';
 			}
-			if (result != 0) 
+			if (result != 0)
 				return result;
 		}
 		return result;
@@ -113,7 +113,7 @@ zk.fmt.Number = {
 				} else {
 					valFixed = 0;
 				}
-			} 
+			}
 		} else if (shift < 0) {
 			// ZK-1737 varStr is not correct variable name
 			var nind = (indVal < 0 ? valStr.length : indVal) + shift;
@@ -243,9 +243,9 @@ zk.fmt.Number = {
 		
 		//pre part
 		indVal = valStr.indexOf('.');
-		if (indVal == -1) 
+		if (indVal == -1)
 			indVal = valStr.length;
-		if (indFmt == -1) 
+		if (indFmt == -1)
 			indFmt = fmt.length;
 		if (ind == -1)
 			ind = pureFmtStr.length;
@@ -272,7 +272,7 @@ zk.fmt.Number = {
 				pre = localizedSymbols.GROUPING + pre;
 				g++;
 			}
-			var fmtcc = fmt.charAt(i); 
+			var fmtcc = fmt.charAt(i);
 			if (fmtcc == '#' || fmtcc == '0') {
 				var cc = valStr.charAt(j);
 				pre = (cc == '0' ? fmtcc : cc) + pre;
@@ -288,7 +288,7 @@ zk.fmt.Number = {
 				i--;
 			}
 		}
-		if (j >= 0) 
+		if (j >= 0)
 			pre = valStr.substr(0, j + 1) + pre;
 		
 		// Bug #2926718
@@ -301,7 +301,7 @@ zk.fmt.Number = {
 		}
 		//sufpart
 		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl; i++) {
-			var fmtcc = fmt.charAt(i); 
+			var fmtcc = fmt.charAt(i);
 			if (fmtcc == '#' || fmtcc == '0') {
 				if (j < vl) {
 					suf += valStr.charAt(j);
@@ -310,7 +310,7 @@ zk.fmt.Number = {
 			} else
 				suf += fmtcc == '%' ? localizedSymbols.PERCENT : fmtcc;
 		}
-		if (j < valStr.length) 
+		if (j < valStr.length)
 			suf = valStr.substr(j, valStr.length);
 		
 		//remove optional '0' digit in sufpart
@@ -340,7 +340,7 @@ zk.fmt.Number = {
 	_escapeQuote: function (fmt, localizedSymbols) {
 		//note we do NOT support mixing of quoted and unquoted percent
 		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej = -1,
-			validPercent = fmt ? !new RegExp('\(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\'\)', 'g').test(fmt) : true; 
+			validPercent = fmt ? !new RegExp('\(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\'\)', 'g').test(fmt) : true;
 			//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = fmt.length; j < len; ++j) {
 			cc = fmt.charAt(j);
@@ -356,16 +356,16 @@ zk.fmt.Number = {
 				} else
 					q = j; //open single quote
 			} else if (q < 0) { //not in quote
-				if (prej < 0 
+				if (prej < 0
 					&& (cc == '#' || cc == '0' || cc == '.' || cc == '-' || cc == ',' || cc == 'E'))
 					prej = ret.length;
 					
 				if (cc == '#' || cc == '0')
 					pure += cc;
 				else if(cc == '.') {
-					if (purejdot < 0) 
+					if (purejdot < 0)
 						purejdot = pure.length;
-					if (jdot < 0) 
+					if (jdot < 0)
 						jdot = ret.length;
 					pure += cc;
 				}
@@ -382,7 +382,7 @@ zk.fmt.Number = {
 				break;
 		}
 		return j;
-	},	
+	},
 	_removePrefixSharps: function (val, localizedSymbols) {
 		var ret = '',
 			sharp = true;
@@ -414,9 +414,9 @@ zk.fmt.Number = {
 			zkDecimal = ignoreLocale ? '.' : localizedSymbols.DECIMAL, //bug #2932443, no format and German Locale
 			zkPercent = ignoreLocale ? '%' : localizedSymbols.PERCENT,
 			permill = String.fromCharCode(0x2030),
-			zkPermill = ignoreLocale ? permill : localizedSymbols.PER_MILL, 
+			zkPermill = ignoreLocale ? permill : localizedSymbols.PER_MILL,
 			zkGrouping = ignoreLocale ? ',' : localizedSymbols.GROUPING,
-			validPercent = !new RegExp('\(\'[%|' + permill + ']+\'\)', 'g').test(fmt); 
+			validPercent = !new RegExp('\(\'[%|' + permill + ']+\'\)', 'g').test(fmt);
 				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);

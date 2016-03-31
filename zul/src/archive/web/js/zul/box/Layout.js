@@ -192,7 +192,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		var vert = this.isVertical_();
 		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
 			if (vert ? (kid._nvflex && kid.getVflex() != 'min')
-					 : (kid._nhflex && kid.getHflex() != 'min')) {
+					: (kid._nhflex && kid.getHflex() != 'min')) {
 
 				var chdex = kid.$n('chdex');
 				if (chdex) {
@@ -221,7 +221,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			return zk(el.parentNode).contentHeight();
 		} else {
 			return zjq.minWidth(el); //See also bug ZK-483
-		} 
+		}
 	},
 	//Bug ZK-1577: should consider spacing size of all chdex node
 	getContentEdgeHeight_: function () {
@@ -243,7 +243,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		// optimized for performance
 		this._shallSize = false;
 		child._flexFixed = true;
-		
+
 		var	vert = this.isVertical_(),
 			vflexs = [],
 			vflexsz = vert ? 0 : 1,
@@ -264,11 +264,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		// Bug 3185686, B50-ZK-452
 		if(zkp.hasVScroll()) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
-			
+
 		// B50-3312936.zul
 		if(zkp.hasHScroll()) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
-		
+
 		for (; xc; xc = xc.nextSibling) {
 			//Bug ZK-2434: not considering the element with vparent (like popup)
 			var zkc;
@@ -283,7 +283,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
 						cwgt.fixMinFlex_(c, 'h');
-						
+
 						//Bug ZK-1577: should consider padding size
 						var h = c.offsetHeight + zkc.marginHeight() + zkxc.padBorderHeight();
 						cp.style.height = jq.px0(h);
@@ -293,7 +293,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						vflexs.push(cwgt);
 						if (vert) {
 							vflexsz += cwgt._nvflex;
-							
+
 							//bug#3157031: remove chdex's padding, border, margin
 							hgh = hgh - zkxc.marginHeight();
 						}
@@ -311,7 +311,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
 						cwgt.fixMinFlex_(c, 'w');
-						
+
 						//Bug ZK-1577: should consider padding size
 						var w = c.offsetWidth + zkc.marginWidth() + zkxc.padBorderWidth();
 						cp.style.width = jq.px0(zkxc.revisedWidth(w));
@@ -321,9 +321,9 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 						hflexs.push(cwgt);
 						if (!vert) {
 							hflexsz += cwgt._nhflex;
-							
+
 							//bug#3157031: remove chdex's padding, border, margin
-							wdh = wdh - zkxc.marginWidth(); 
+							wdh = wdh - zkxc.marginWidth();
 						}
 					}
 				} else if (!vert)
@@ -342,7 +342,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				chdex = cwgt.$n('chdex'),
 				minus = zk(chdex).padBorderHeight(),
 				isInit = !cwgt.$n().style.height;
-			
+
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = vsz - minus;
@@ -362,11 +362,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				chdex = cwgt.$n('chdex'),
 				minus = zk(chdex).padBorderHeight(),
 				isInit = !cwgt.$n().style.height;
-			
+
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height: isz - minus});
 			cwgt._vflexsz = lastsz - minus;
-			
+
 			// no need to subtract padding and border for border-box mode
 			chdex.style.height = jq.px0(lastsz);
 			// ZK-2595: need to update children flex sizes when sibling's flex size updates
@@ -382,7 +382,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				chdex = cwgt.$n('chdex'),
 				minus = zk(chdex).padBorderWidth(),
 				isInit = !cwgt.$n().style.width;
-			
+
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width: hsz - minus});
 			cwgt._hflexsz = hsz - minus;
@@ -401,7 +401,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				chdex = cwgt.$n('chdex'),
 				minus = zk(chdex).padBorderWidth(),
 				isInit = !cwgt.$n().style.width;
-			
+
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width: lastsz - minus});
 			cwgt._hflexsz = lastsz - minus;
@@ -411,7 +411,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			// ZK-2595: need to update children flex sizes when sibling's flex size updates
 			if (!isInit && !vert && cwgt !== child)
 				zUtl.fireSized(cwgt);
-				
+
 		}
 
 		//notify all of children with xflex is done.
@@ -479,7 +479,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 				// IE9+ bug ZK-483
 				if ((zk.ie > 8) && this._hflexsz)
 					max = Math.max(this._hflexsz, max);
-				
+
 				n.style.width = jq.px0(max);
 			}
 		}

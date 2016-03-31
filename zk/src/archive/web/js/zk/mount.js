@@ -52,7 +52,7 @@ function zkmld(wgtcls, molds) {
 	for (var nm in molds) {
 		var fn = molds[nm];
 		ms[nm] = typeof fn == 'function' ? fn : fn[0].molds[fn[1]];
-	}		
+	}
 }
 
 //Run Ajax-as-a-service's main
@@ -218,7 +218,7 @@ function zkamn(pkg, fn) {
 				//inf[4]: aucmds (if BL)
 				//true: don't update DOM
 
-			if (breathe(mtBL)) 
+			if (breathe(mtBL))
 				return; //mtBL has been scheduled for later execution
 		}
 
@@ -491,7 +491,7 @@ function zkamn(pkg, fn) {
 			zk.error('Failed to mount: ' + (e.message || e));
 			setTimeout(function () {
 				throw e;
-			},0);				
+			},0);
 		}
 	},
 	//widget creation called by au.js
@@ -557,7 +557,7 @@ jq(function () {
 <pre><code>zk.beforeUnload(fn, {remove: true});</code></pre>
 		 *
 		 * @param Function fn the function to execute.
-		 * The function shall return null if it is OK to close, or a message (String) if it wants to show it to the end user for confirmation. 
+		 * The function shall return null if it is OK to close, or a message (String) if it wants to show it to the end user for confirmation.
 		 * @param Map opts [optional] a map of options. Allowed vlaues:<br/>
 		 * <ul>
 		 * <li>remove: whether to remove instead of add.</li>
@@ -605,7 +605,7 @@ jq(function () {
 		
 		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
 		//However, ZK-354: if target is upload, we can NOT focus to it. Thus, focusBackFix was introduced
-		if (old && zk.ie) { // Bug ZK-2795, IE11 still fails in this case. 
+		if (old && zk.ie) { // Bug ZK-2795, IE11 still fails in this case.
 			var n = jq(old)[0];
 			if (n)
 				setTimeout(function () {
@@ -699,7 +699,7 @@ jq(function () {
 	})
 	.bind('zcontextmenu', function (evt) {
 		//ios: zcontextmenu shall be listened first,
-		//due to need stop other event (ex: click, mouseup) 
+		//due to need stop other event (ex: click, mouseup)
 		
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
@@ -760,8 +760,8 @@ jq(function () {
 	.click(function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 		
-		if (zk.android 
-				&& (lastTimestamp && lastTimestamp + 400 > evt.timeStamp) 
+		if (zk.android
+				&& (lastTimestamp && lastTimestamp + 400 > evt.timeStamp)
 				&& (lastTarget && lastTarget == evt.target)) { //fix android 4.1.1 fire twice or more
 			return;
 		} else {
@@ -829,7 +829,7 @@ jq(function () {
 
 				if (!zk.rmDesktoping) {
 					rmDesktop();
-				}	
+				}
 			});
 		}
 	} else {

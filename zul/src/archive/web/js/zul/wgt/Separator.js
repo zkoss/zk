@@ -1,9 +1,9 @@
 /* Separator.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Nov  5 16:58:56     2008, Created by tomyeh
 
@@ -55,7 +55,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em")
 		 */
 		spacing: function () {
-			this.updateDomStyle_();		
+			this.updateDomStyle_();
 		}
 	},
 
@@ -100,7 +100,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		var wd = this.$supers('getWidth', arguments);
 		return !this.isVertical() || (wd != null && wd.length > 0)
 			|| _shallFixPercent(this) ? wd : this._spacing;
-		
+
 	},
 	getHeight: function () {
 		var hgh = this.$supers('getHeight', arguments);

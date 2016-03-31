@@ -1,9 +1,9 @@
 /* Widget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Nov  7 17:14:59     2008, Created by tomyeh
 
@@ -80,7 +80,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				params.x = _parseParamFunc(event, x);
 			if (y)
 				params.y = _parseParamFunc(event, y);
-			
+
 			var xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
 			_tt_tip.open(_tt_ref, xy, params.position ? params.position : params.x === null ? 'after_pointer' : null, {sendOnOpen: true});
 		}
@@ -93,10 +93,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (tip && tip.desktop) { //check still attached to desktop
 			// Bug ZK-1222, ZK-1594
 			//
-			// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event 
-			// will be triggered again that closes the tooltip immediately, then another 
+			// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event
+			// will be triggered again that closes the tooltip immediately, then another
 			// TooltipOver event will open the tooltip again...
-			// 
+			//
 			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
 			// IE10: Bug ZK-1519
 			if (zk.ie == 10 || zk.ff) {
@@ -140,7 +140,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 * @param String context the ID of the popup widget.
-	 * @see #setContext(zul.wgt.Popup) 
+	 * @see #setContext(zul.wgt.Popup)
 	 */
 	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
@@ -171,8 +171,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * the first one can reference to any of them.
 	 * And, the second one reference to the component in the same ID space
 	 * (of the label component).
-	 * 
-	 * 
+	 *
+	 *
 	 * <p>The context menu can be shown by a position from
 	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
 	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
@@ -213,7 +213,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user clicks on the element.
 	 * @param String popup the ID of the popup widget.
-	 * @see #setPopup(zul.wgt.Popup) 
+	 * @see #setPopup(zul.wgt.Popup)
 	 */
 	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user clicks on the element.
@@ -244,8 +244,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * the first one can reference to any of them.
 	 * And, the second one reference to the component in the same ID space
 	 * (of the label component).
-	 * 
-	 * 
+	 *
+	 *
 	 * <p>The popup menu can be shown by a position from
 	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
 	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
@@ -287,7 +287,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
 	 * @param String tooltip the ID of the popup widget.
-	 * @see #setPopup(zul.wgt.Popup) 
+	 * @see #setPopup(zul.wgt.Popup)
 	 */
 	/** Sets the ID of the popup ({@link zul.wgt.Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
@@ -318,8 +318,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * the first one can reference to any of them.
 	 * And, the second one reference to the component in the same ID space
 	 * (of the label component).
-	 * 
-	 * 
+	 *
+	 *
 	 * <p>The tooltip can be shown by a position from
 	 * {@link zul.wgt.Popup#open(zk.Widget, Offset, String, Map)}
 	 * or the location of <code>x</code> and <code>y</code>, and can be specified
@@ -376,7 +376,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * <dt>#del</dt>
 	 * <dd>Delete</dd>
 	 * <dt>#bak</dt>
-	 * <dd>Backspace</dd> 
+	 * <dd>Backspace</dd>
 	 * <dt>#left</dt>
 	 * <dd>Left arrow</dd>
 	 * <dt>#right</dt>
@@ -465,7 +465,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				j = k - 1;
 				break;
 			default:
-				if (!which || ((cc > 'Z' || cc < 'A') 
+				if (!which || ((cc > 'Z' || cc < 'A')
 				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
 					return _setCtrlKeysErr('Unexpected character ' + cc + ' in ' + keys);
 				if (which == 4)
@@ -491,18 +491,18 @@ zul.Widget = zk.$extends(zk.Widget, {
 			t = txt;
 		if (start != -1)
 			t = txt.substring(0, txt.substring(0, start).lastIndexOf(','));
-		
+
 		if (index != -1) {
 			params.id = t.substring(0, index).trim();
 			var t2 = t.substring(index + 1, t.length);
 			if (t2)
 				params.position = t2.trim();
-			
+
 			zk.copy(params, zUtl.parseMap(txt.substring(t.length, txt.length)));
 		} else
 			params.id = txt.trim();
-		
-		if (this._popup || this._context) { //should prepare tooltip in _tt_open_ 
+
+		if (this._popup || this._context) { //should prepare tooltip in _tt_open_
 			var x = params.x, y = params.y;
 			if (x)
 				params.x = _parseParamFunc(event, x);
@@ -520,7 +520,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				popup = this._smartFellow(params.id);
 			if (popup) {
 				evt.contextSelected = true;
-				
+
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
@@ -545,7 +545,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				ctx = this._smartFellow(params.id);
 			if (ctx) {
 				evt.contextSelected = true;
-				
+
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
 				var self = this,
 					xy = params.x !== undefined ? [params.x, params.y]
@@ -612,7 +612,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		case 13: //ENTER
 			var target = evt.domTarget, tn = jq.nodeName(target);
 			if (tn == 'textarea' || (tn == 'button'
-			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup) 
+			// if button's ID end with '-a' still fire onOK(Like Listbox and Menupopup)
 			&& (!target.id || !target.id.endsWith('-a')))
 			|| (tn == 'input' && target.type.toLowerCase() == 'button'))
 				return; //don't change button's behavior (Bug 1556836)
@@ -689,7 +689,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * to update its state to the server, such as firing the onChange event.
 	 * @param zk.Event evt the widget event.
 	 * @return boolean if true, the widget want to abort the firing of the control
-	 * 		key. In other words, if true is returned, the control key is ignored. 
+	 * 		key. In other words, if true is returned, the control key is ignored.
 	 */
 	beforeCtrlKeys_: function (evt) {
 	}

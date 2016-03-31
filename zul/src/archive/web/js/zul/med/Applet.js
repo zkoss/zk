@@ -1,9 +1,9 @@
 /* Applet.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Mar 25 17:11:55     2009, Created by tomyeh
 
@@ -18,10 +18,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 /**
  * A generic applet component.
- * 
+ *
  * <p>
  * Non XUL extension.
- * <p>Note: {@link #setVisible} with false cannot work in IE. (Browser's limitation) 
+ * <p>Note: {@link #setVisible} with false cannot work in IE. (Browser's limitation)
  */
 zul.med.Applet = zk.$extends(zul.Widget, {
 	$init: function () {
@@ -142,10 +142,10 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				var args = [],
 					arrayArg = [];
 				if (arguments.length < 3) {
-					if (arguments[1]) 
+					if (arguments[1])
 						args.push(arguments[1]);
 				} else {
-					for (var j = 1, len = arguments.length; j < len;) 
+					for (var j = 1, len = arguments.length; j < len;)
 						arrayArg.push(arguments[j++]);
 					args.push(arrayArg);
 				}
@@ -177,8 +177,8 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 			}
 	},
 	/** Sets the param. Notice that it is meaningful only if it is called
-	 * before redraw. For example, <code>setParam('attr1', 'value1')</code> 
-	 * gives a <code>param</code> tag under <code>applet</code> tag with name 
+	 * before redraw. For example, <code>setParam('attr1', 'value1')</code>
+	 * gives a <code>param</code> tag under <code>applet</code> tag with name
 	 * <code>attr1</code>, value <code>value1</code>.
 	 * There are two format:
 	 * setParam(nm, val)
@@ -196,16 +196,16 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 		else delete this._params[nm];
 	},
 	/** Sets the params map. It should only be called before redraw.
-	 * @param Map m A map of param pairs, as applet parameters. For example, 
-	 * <code>{attr1:'value1', attr2:'value2'}</code> gives two <code>param</code> 
-	 * tags under <code>applet</code> tag with names <code>attr1, attr2</code>, 
+	 * @param Map m A map of param pairs, as applet parameters. For example,
+	 * <code>{attr1:'value1', attr2:'value2'}</code> gives two <code>param</code>
+	 * tags under <code>applet</code> tag with names <code>attr1, attr2</code>,
 	 * values <code>value1, value2</code> respectively.
 	 * @since 5.0.4
 	 */
 	setParams: function (m) {
 		this._params = m;
 	},
-	
+
 	//super
 	domAttrs_: function (no) {
 		return this.$supers('domAttrs_', arguments)

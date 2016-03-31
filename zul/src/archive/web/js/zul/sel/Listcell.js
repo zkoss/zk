@@ -1,9 +1,9 @@
 /* Listcell.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Apr 30 22:17:54     2009, Created by tomyeh
 
@@ -16,26 +16,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _isListgroup(wgt) {
 		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroup);
-	}	
+	}
 	function _isListgroupfoot(wgt) {
 		return zk.isLoaded('zkex.sel') && wgt.$instanceof(zkex.sel.Listgroupfoot);
-	}	
+	}
 /**
  * A list cell.
- * 
+ *
  * <p>Default {@link #getZclass}: z-listcell
  */
 	zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	_colspan: 1,
 	$define: {
-    	/** Returns number of columns to span this cell.
-    	 * Default: 1.
-    	 * @return int
-    	 */
-    	/** Sets the number of columns to span this cell.
-    	 * <p>It is the same as the colspan attribute of HTML TD tag.
-    	 * @param int colspan
-    	 */
+		/** Returns number of columns to span this cell.
+		 * Default: 1.
+		 * @return int
+		 */
+		/** Sets the number of columns to span this cell.
+		 * <p>It is the same as the colspan attribute of HTML TD tag.
+		 * @param int colspan
+		 */
 		colspan: [
 			function (colspan) {
 				return colspan > 1 ? colspan : 1;
@@ -70,7 +70,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	/** Returns the maximal length for this cell.
 	 * If listbox's mold is "select", it is the same as
 	 * {@link Select#getMaxlength}
-	 * If not, it is the same as the correponding {@link #getListheader}'s 
+	 * If not, it is the same as the correponding {@link #getListheader}'s
 	 * {@link Listheader#getMaxlength}.
 	 *
 	 * <p>Note: {@link Option#getMaxlength} is the same as {@link Select#getMaxlength}.
@@ -108,10 +108,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments),
 			p = this.parent;
-		
+
 		if ((!no || !no.zclass) && (_isListgroup(p) || _isListgroupfoot(p)))
 			scls += ' ' + p.$s('inner');
-		
+
 		return scls;
 	},
 	_colHtmlPre: function () {
@@ -122,27 +122,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var isGrp = _isListgroup(p);
 			// insert checkmark
 			//B70-ZK-2053:make sure checkmark won't display on multiple listgroup
-			if (box.isCheckmark() && !_isListgroupfoot(p) 
+			if (box.isCheckmark() && !_isListgroupfoot(p)
 					&& (!isGrp || (box.groupSelect && box.isMultiple()))) {
 				var chkable = p.isSelectable(),
 					multi = box.isMultiple();
-				s += '<span id="' + p.uuid + '-cm" class="' + p.$s('checkable') 
+				s += '<span id="' + p.uuid + '-cm" class="' + p.$s('checkable')
 					+ ' ' + (multi ? p.$s('checkbox') : p.$s('radio'));
-				
+
 				if (!chkable || p.isDisabled())
 					s += ' ' + p.$s('disabled');
-				
+
 				s += '"';
 				if (!chkable)
 					s += ' style="visibility:hidden"';
-				
-				s += '><i class="' + p.$s('icon') + ' ' 
+
+				s += '><i class="' + p.$s('icon') + ' '
 					+ (multi ? 'z-icon-check' : 'z-icon-radio') + '"></i></span>';
 			}
 			// insert toggle icon
 			if (isGrp) {
-				var cls = p._open ? 
-						p.getIconOpenClass_() + ' ' + p.$s('icon-open') : 
+				var cls = p._open ?
+						p.getIconOpenClass_() + ' ' + p.$s('icon-open') :
 						p.getIconCloseClass_() + ' ' + p.$s('icon-close');
 				s += '<span id="' + p.uuid + '-img" class="' + p.$s('icon') + '"><i class="' + cls + '"></i></span>';
 			}
@@ -162,7 +162,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	},
 	doMouseOver_: function (evt) {
 		var n = this.$n();
-		
+
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent._draggable)
 				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
@@ -172,7 +172,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	},
 	doMouseOut_: function (evt) {
 		var n = this.$n();
-		
+
 		// ZK-2136: all children should apply -moz-user-select: none
 		if (n && zk.gecko && (this._draggable || this.parent._draggable)
 				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {

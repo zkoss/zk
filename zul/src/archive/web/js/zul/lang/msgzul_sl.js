@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Created by Ziga (zgantar@users.sourceforge.net) 11 November 2006
 }}IS_NOTE

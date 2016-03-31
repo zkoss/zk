@@ -1,9 +1,9 @@
 /* InputWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Dec 13 23:30:28     2008, Created by tomyeh
 
@@ -91,7 +91,7 @@ zul.inp.RoundUtl = {
 		var node = wgt.$n();
 		if ((!wgt._inplace && !node.style.width) || (!isOnSize && !zk(node).isRealVisible()))
 			return;
-		
+
 		// fixed for ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
 		// calculate only when the width has size
 		if (node.style.width) {
@@ -220,7 +220,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				_fixInput(this);
 
 				var fnm = readonly ? 'addClass' : 'removeClass';
-				
+
 				inp.readOnly = readonly;
 				jq(this.$n())[fnm](this.$s('readonly')); //Merge breeze
 			}
@@ -340,7 +340,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var inpNode = this.getInputNode();
 		if (zk.ff && zk.currentFocus != inpNode)
 			this.focus_();
-		
+
 		zk(inpNode).setSelectionRange(start, end);
 	},
 	/** Returns the type.
@@ -458,10 +458,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		if (this._placeholder) html += ' placeholder="' + zUtl.encodeXML(this._placeholder) + '"';
-		
+
 		var s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
 		if (s) html += ' style="' + s + '"';
-		
+
 		return html;
 	},
 	_onChanging: _onChanging,
@@ -499,7 +499,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					this._inplaceTimerId = null;
 				}
 			}
-			
+
 			// Bug #2280308
 			if (this._errbox) {
 				var self = this, cstp = self._cst && self._cst._pos;
@@ -526,12 +526,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				}, self._inplaceTimeout);
 			}
 		}
-		
+
 		//B65-ZK-1285: scroll window object back when virtual keyboard closed on ipad
 		if (zk.ios && jq(this.$n()).data('fixscrollposition')) { //only scroll back when data-fixScrollPosition attribute is applied
 			var x = window.pageXOffset,
 				y = window.pageYOffset;
-			
+
 			if (x != windowX || y != windowY)
 				window.scrollTo(windowX, windowY);
 		}
@@ -612,7 +612,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!remainError) {
 			this._errmsg = null;
 			jq(this.getInputNode()).removeClass(this.$s('invalid'));
-			
+
 		}
 		if (revalidate)
 			this._reVald = true; //revalidate required
@@ -649,7 +649,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_markError: function (msg, val, noOnError) {
 		this._errmsg = msg;
-		
+
 		if (this.desktop) { //err not visible if not attached
 			jq(this.getInputNode()).addClass(this.$s('invalid'));
 
@@ -775,7 +775,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				 */
 				value = this.coerceToString_(vi.value);
 				if (inp.value !== value) {
-					inp.value = value;					
+					inp.value = value;
 				}
 				this._reVald = false;
 
@@ -827,14 +827,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var sc = this.$supers('domClass_', arguments);
 		if ((!no || !no.zclass) && this._disabled)
 			sc += ' ' + this.$s('disabled');
-		
+
 		if ((!no || !no.input) && this._inplace)
 			sc += ' ' + this.getInplaceCSS();
-			
+
 		// Merge breeze
 		if ((!no || !no.zclass) && this._readonly)
 			sc += ' ' + this.$s('readonly');
-			
+
 		return sc;
 	},
 	bind_: function () {
@@ -842,12 +842,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var n = this.getInputNode();
 
 		this._defRawVal = n.value;
-			
+
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_')
 			.domListen_(n, 'onSelect')
 			.domListen_(n, 'onInput', 'doInput_');
-		
+
 		if (zk.ios)
 			this.domListen_(n, 'onTouchStart', '_doTouch');
 
@@ -862,7 +862,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
 			.domUnlisten_(n, 'onSelect')
 			.domUnlisten_(n, 'onInput', 'doInput_');
-		
+
 		if (zk.ios)
 			this.domUnlisten_(n, 'onTouchStart', '_doTouch');
 
@@ -893,7 +893,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			evt.stop(); // Bug #2916146
 			return;
 		}
-			
+
 		if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
 		&& this._tabbable) {
 			var inp = this.getInputNode(),
@@ -961,7 +961,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @since 5.0.1
 	 */
 	onChangingForced: true,
-	
+
 	// for errorbox, datebox, combowidget
 	_isInView: function (wgt) {
 		var n = wgt.getInputNode();

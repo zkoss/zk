@@ -1,9 +1,9 @@
 /* Imagemap.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Mar 26 15:54:00     2009, Created by tomyeh
 

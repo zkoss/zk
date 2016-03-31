@@ -1,9 +1,9 @@
 /* msgzul_hu.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:   Sep 1, 2007, Andreas Klein - andiklein at idatso dot com
 
 

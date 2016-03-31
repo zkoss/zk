@@ -1,9 +1,9 @@
 /* Row.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Dec 23 15:26:27     2008, Created by jumperchen
 
@@ -68,7 +68,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				n.vAlign = v;
 		}
 	},
-	/** Returns the grid that contains this row. 
+	/** Returns the grid that contains this row.
 	 * @return zul.grid.Grid
 	 */
 	getGrid: function () {
@@ -112,7 +112,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (_isPE() && this.parent && this.parent.hasGroup())
 			for (var w = this; w; w = w.previousSibling)
 				if (w.$instanceof(zkex.grid.Group)) return w;
-				
+
 		return null;
 	},
 	setStyle: function (style) {
@@ -133,7 +133,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		var sclass = this.$supers('getSclass', arguments);
 		if (sclass != null)
 			return sclass;
-		
+
 		var grid = this.getGrid();
 		return grid ? grid.getSclass() : sclass;
 	},
@@ -165,7 +165,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdextr', zk).remove();
 	},
-	/** Enclose child with HTML tag with TD and DIV, 
+	/** Enclose child with HTML tag with TD and DIV,
 	 * and return a HTML code or add HTML fragments in out array.
 	 * @param Map opts
 	 * @return String
@@ -214,7 +214,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			isDetail = zk.isLoaded('zkex.grid') && child.$instanceof(zkex.grid.Detail);
 		if (isDetail) {
 			var wd = child.getWidth();
-			if (wd) 
+			if (wd)
 				style += 'width:' + wd + ';';
 		}
 		if (visible || hgh || align || valign) {
@@ -249,7 +249,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if ((_isPE() && (this.$instanceof(zkex.grid.Group) || this.$instanceof(zkex.grid.Groupfoot)))
 				|| (no && no.visible))
 			return this.$supers('domStyle_', arguments);
-		
+
 		var style = this.$supers('domStyle_', arguments),
 			group = this.getGroup();
 		if (this._align)
@@ -291,38 +291,38 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			return;
 		this._musin = true;
 		var n = this.$n();
-		
+
 		// ZK-2250: all children should apply -moz-user-select: none
 		if (n && zk.gecko && this._draggable
 				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).addClass('z-draggable-over');
 		}
-		
+
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
 		var n = this.$n();
 		if ((this._musin && jq.isAncestor(n,
 				evt.domEvent.relatedTarget || evt.domEvent.toElement))) {
-			// fixed mouse-over issue for datebox 
+			// fixed mouse-over issue for datebox
 			this.parent._musout = this;
 			return;
 		}
 		this._musin = false;
-		
-		// ZK-2250: all children should unapply -moz-user-select: none 
+
+		// ZK-2250: all children should unapply -moz-user-select: none
 		if (n && zk.gecko && this._draggable
 				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
 			jq(n).removeClass('z-draggable-over');
 		}
-		
+
 		this.$supers('doMouseOut_', arguments);
 	},
 	domClass_: function () {
 		var cls = this.$supers('domClass_', arguments),
 			grid = this.getGrid();
 		if (grid && jq(this.$n()).hasClass(grid = grid.getOddRowSclass()))
-			return cls + ' ' + grid; 
+			return cls + ' ' + grid;
 		return cls;
 	},
 	deferRedrawHTML_: function (out) {

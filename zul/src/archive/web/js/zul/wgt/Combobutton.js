@@ -1,9 +1,9 @@
 /* Combobutton.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed May 18 17:32:15     2011, Created by benbai
 
@@ -30,7 +30,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (opts && opts.sendOnOpen)
 			wgt.fire('onOpen', {open: o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
 	}
-	// called by open method 
+	// called by open method
 	function _attachPopup(wgt, bListen) {
 		// just attach if not attached
 		if (!wgt._oldppclose) {
@@ -94,8 +94,8 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		return 'z-combobutton';
 	},
 	domContent_: function () {
-		var label = '<span id="' + this.uuid + '-txt" class="' + this.$s('text') + '">' 
-		 	+ zUtl.encodeXML(this.getLabel()) + '</span>',
+		var label = '<span id="' + this.uuid + '-txt" class="' + this.$s('text') + '">'
+			+ zUtl.encodeXML(this.getLabel()) + '</span>',
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass) return label;
@@ -127,7 +127,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	/** Drops down or closes the child popup ({@link zul.wgt.Popup})
 	 * ({@link zul.menu.Menupopup}, and fire onOpen if it is called with an Event.
 	 * @param boolean open
-	 * @param Map opts 
+	 * @param Map opts
 	 * 	if opts.sendOnOpen exists, it will fire onOpen event.
 	 * @see #open
 	 * @see #close

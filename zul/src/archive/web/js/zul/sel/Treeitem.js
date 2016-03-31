@@ -1,9 +1,9 @@
 /* Treeitem.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 10 15:32:43     2009, Created by jumperchen
 
@@ -85,7 +85,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return target;
 	}
-	
+
 /**
  * A treeitem.
  *
@@ -114,8 +114,8 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				if (icon) {
 					// B65-ZK-1609: Tree close/open icon is not correct after calling clearOpen and reopen a node
 					var cn = icon.className;
-					icon.className = open ? 
-						cn.replace('-right', '-down').replace('-close', '-open') : 
+					icon.className = open ?
+						cn.replace('-right', '-down').replace('-close', '-open') :
 						cn.replace('-down', '-right').replace('-open', '-close');
 				}
 				return;
@@ -124,15 +124,15 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			// (just in case)
 			if (icon) {
 				var cn = icon.className;
-				icon.className = open ? 
-					cn.replace('-right', '-down').replace('-close', '-open') : 
+				icon.className = open ?
+					cn.replace('-right', '-down').replace('-close', '-open') :
 					cn.replace('-down', '-right').replace('-open', '-close');
 			}
 
 			var tree = this.getTree(),
 				ebodytbl = tree ? tree.ebodytbl : null,
 				oldwd = ebodytbl ? ebodytbl.clientWidth : 0; // ebodytbl shall not be null
-			
+
 			if (!open)
 				zWatch.fireDown('onHide', this);
 			this._showKids(open);
@@ -140,7 +140,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				zUtl.fireShown(this);
 			if (tree) {
 				tree._sizeOnOpen();
-				
+
 				if (!fromServer)
 					this.fire('onOpen', {open: open},
 							{toServer: tree.inPagingMold() || tree.isModel()});
@@ -311,12 +311,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	},
 	beforeParentChanged_: function (newParent) {
 		var oldtree = this.getTree();
-		if (oldtree) 
+		if (oldtree)
 			oldtree._onTreeitemRemoved(this);
-		
+
 		if (newParent) {
 			var tree = newParent.getTree();
-			if (tree) 
+			if (tree)
 				tree._onTreeitemAdded(this);
 		}
 		this.$supers('beforeParentChanged_', arguments);
@@ -343,11 +343,11 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_fixOnAdd: function (child, ignoreDom) {
-		if (child.$instanceof(zul.sel.Treerow)) 
+		if (child.$instanceof(zul.sel.Treerow))
 			this.treerow = child;
 		else if (child.$instanceof(zul.sel.Treechildren)) {
 			this.treechildren = child;
-			if (!ignoreDom && this.treerow) 
+			if (!ignoreDom && this.treerow)
 				this.rerender();
 		}
 	},
@@ -402,7 +402,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 			return paths;
 		}
-		
+
 		// return -1 if thisPath is before itemPath,
 		// return 1 if thisPath is after itemPath,
 		function _compareTreePath(thisPath, itemPath) {
@@ -430,7 +430,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		return function (childHTML) {
 			var tree = this.getTree(),
 				erows = tree.ebodyrows;
-			
+
 			// has children
 			if (erows && erows.childNodes.length) {
 				// do binary search for the insertion point
@@ -439,23 +439,23 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 					high = children.length - 1,
 					mid = 0,
 					thisPath = _getTreePath(tree, this);
-				
+
 				while (low <= high) {
 					mid = (low + high) >>> 1;
-					
+
 					var item = zk.Widget.$(children[mid].id).parent,
 						itemPath = _getTreePath(tree, item);
-					
+
 					if (_compareTreePath(thisPath, itemPath) == 1) {
 						low = mid + 1;
 					} else {
 						high = mid - 1;
 						if (low >= high)
 							mid -= 1;
-						
+
 					}
 				}
-				
+
 				if (mid >= 0)
 					jq(children[mid]).after(childHTML);
 				else if (erows.firstChild) // the first one
@@ -465,7 +465,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			} else {
 				jq(erows).append(childHTML);
 			}
-			
+
 		};
 	})(),
 	insertChildHTML_: function (child, before, desktop) {
@@ -473,7 +473,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			jq(before).before(child.redrawHTML_());
 		else
 			this._renderChildHTML(child.redrawHTML_());
-		
+
 		child.bind(desktop);
 	},
 	getOldWidget_: function (n) {

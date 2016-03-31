@@ -4,8 +4,8 @@
 		Locale dependent message
 	Description:
 		
-	History: 
-		Fri Mar 17 14:57:32     2014, Created by Michal Derecki (Michal.Derecki at asseco dot pl) 
+	History:
+		Fri Mar 17 14:57:32     2014, Created by Michal Derecki (Michal.Derecki at asseco dot pl)
 
 Copyright (C) 2005-2014 Potix Corporation. All Rights Reserved.
 

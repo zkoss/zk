@@ -2,7 +2,8 @@
 	"excludeFiles":["/**/mold/", "/**/debug/", "/**/codegen/", "/**/.git/", "/**/node_module/", "/**/jquery.js"],
 	/*"disallowEmptyBlocks": true,*/
 	"disallowKeywords": ["with"],
-	/*disallowMixedSpacesAndTabs": true,*/
+	"disallowMixedSpacesAndTabs": "smart",
+	"disallowTrailingWhitespace": "ignoreEmptyLines",
 	"disallowMultipleSpaces": {"allowEOLComments": true},
 	"disallowNewlineBeforeBlockStatements": true,
 	"disallowOperatorBeforeLineBreak": ["+", "-", "*", "/", "."],

@@ -1,9 +1,9 @@
 /* Checkbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Dec 10 16:17:14     2008, Created by jumperchen
 
@@ -111,7 +111,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 * clicks this checkbox.
 		 *
 		 * <p>To represent the checkbox itself, the developer can specify <code>self</code>.
-		 * For example, 
+		 * For example,
 		 * <pre><code>
 		 * checkbox.setId('ok');
 		 * wgt.setAutodisable('self,cancel');
@@ -157,7 +157,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return true;
 	},
 	contentAttrs_: function () {
-		var html = '', 
+		var html = '',
 			v; // cannot use this._name for radio
 		if (v = this.getName())
 			html += ' name="' + v + '"';
@@ -175,7 +175,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(Checkbox, 'bind_', arguments);
 
 		var n = this.$n('real');
-		
+
 		// Bug 2383106
 		if (n.checked != n.defaultChecked)
 			n.checked = n.defaultChecked;
@@ -185,7 +185,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var n = this.$n('real');
-		
+
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
@@ -206,7 +206,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				this.setChecked(checked); //so Radio has a chance to override it
 				this.fireOnCheck_(checked);
 			}
-			if (zk.webkit && !zk.mobile) 
+			if (zk.webkit && !zk.mobile)
 				zk(real).focus();
 
 			// B65-ZK-2127: should skip radiogroup

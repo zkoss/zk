@@ -1,9 +1,9 @@
 /* Audio.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Mar 26 11:59:09     2009, Created by tomyeh
 
@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	
+
 	function _invoke(wgt, fn) {
 		// Note: setSrc will rerender, so we need to delay the invocation of play
 		if (wgt._isUnbinded)
@@ -23,14 +23,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_invoke2(wgt, fn);
 			}, 200);
 	}
-	function _invoke2(wgt, fn) { 
+	function _invoke2(wgt, fn) {
 		var n = wgt.$n();
 		if (n) {
 			try {
 				if (fn === 'stop') {
 					n.pause();
 					n.currentTime = 0;
-				} else 	
+				} else
 					n[fn]();
 			} catch (e) {
 				// Do not show alert if the browser did not support the source format.
@@ -80,7 +80,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		 * Refer to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">Preload Attribute Description</a> for details.
 		 * @param String preload
 		 * @since 7.0.0
-		 */	
+		 */
 		preload: function (v) {
 			var n = this.$n();
 			if (n && v !== undefined) n.preload = v;
@@ -123,7 +123,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		muted: function (v) {
 			var n = this.$n();
 			if (n) n.muted = v;
-		}		
+		}
 	},
 	/** Plays the audio at the client.
 	 */
@@ -138,7 +138,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	/** Pauses the audio at the client.
 	 */
 	pause: function () {
-		_invoke(this, 'pause');		
+		_invoke(this, 'pause');
 	},
 	unbind_: function () {
 		this._isUnbinded = true;
@@ -147,13 +147,13 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 	domAttrs_: function (no) {
 		var attr = this.$supers('domAttrs_', arguments);
-		if (this._autoplay) 
+		if (this._autoplay)
 			attr += ' autoplay';
 		if (this._preload !== undefined)
 			attr += ' preload="' + this._preload + '"';
-		if (this._controls) 
+		if (this._controls)
 			attr += ' controls';
-		if (this._loop) 
+		if (this._loop)
 			attr += ' loop';
 		if (this._muted)
 			attr += ' muted';

@@ -1,9 +1,9 @@
 /* msgzul.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Created on Nov 30, 2006, by James Liam Supangkat, Jakarta, Indonesia
 

@@ -1,9 +1,9 @@
 /* Cell.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Aug 31 16:50:22     2009, Created by jumperchen
 
@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * The generic cell component to be embedded into {@link Row} or
  * {@link zul.box.Box} for fully control style and layout.
- * 
+ *
  * <p>Default {@link #getZclass}: z-cell.
  * @import zul.grid.*
  * @import zul.box.*
@@ -25,7 +25,7 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 	_rowspan: 1,
 	_rowType: 0,
 	_boxType: 1,
-	
+
 	$define: {
 		/** Returns number of columns to span.
 		 * Default: 1.
@@ -109,13 +109,13 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 	},
 	//super//
 	domAttrs_: function (no) {
-		var s = this.$supers('domAttrs_', arguments), v;	
+		var s = this.$supers('domAttrs_', arguments), v;
 		if ((v = this._colspan) != 1)
 			s += ' colspan="' + v + '"';
 		if ((v = this._rowspan) != 1)
 			s += ' rowspan="' + v + '"';
-			
-		var m1, m2 = zUtl.parseMap(s, ' ', '"');		
+
+		var m1, m2 = zUtl.parseMap(s, ' ', '"');
 		switch (this._getParentType()) {
 		case this._rowType:
 			m1 = zUtl.parseMap(this._getRowAttrs(), ' ', '"');
@@ -146,7 +146,7 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 		// B65-ZK-2015: redoCSS in IE10 to make sure component will show when visible is true
 		if (zk.ie10_ && visible)
 			zk(this.$n()).redoCSS();
-			
+
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');

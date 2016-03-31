@@ -64,7 +64,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		if ('zk' != tn && 'attribute' != tn) {
 			if (!zk.Widget.getClass(tn)) { //not register?
 				var clsnm = zk.wgt.WidgetInfo.getClassName(tn);
-				if (!clsnm) 
+				if (!clsnm)
 					throw 'Unknown tag: ' + tn;
 
 				var j = clsnm.lastIndexOf('.');

@@ -1,9 +1,9 @@
 /* msgzul.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Aug	07 16:43:18     2006, Created by: Daniel Octavio Ruiz Rodriguez aztekinetix@gmail.com
 

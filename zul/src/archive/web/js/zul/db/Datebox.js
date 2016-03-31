@@ -44,7 +44,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (s) o.push(s);
 		return o.join(':');
 	}
-	
+
 var globallocalizedSymbols = {},
 	_quotePattern = /\'/g, // move pattern string here to avoid jsdoc failure
 	_innerDateFormat = 'yyyy/MM/dd ',
@@ -232,7 +232,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				return val;
 			},
 			function () {
-				
+
 				// in this case, we cannot use setLocalizedSymbols() for Timebox
 				if (this._tm)
 					this._tm._localizedSymbols = this._localizedSymbols;
@@ -306,23 +306,23 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			mm = fmt.indexOf('m'),
 			ss = fmt.indexOf('s'),
 			hasAM = aa > -1,
-			//bug 3284144: The databox format parse a wrong result with hh:mm:ss 
+			//bug 3284144: The databox format parse a wrong result with hh:mm:ss
 			hasHour1 = (hasAM || hh) ? hh > -1 || KK > -1 : false,
 			hv,
 			mv = mm > -1 ? 'mm' : '',
 			sv = ss > -1 ? 'ss' : '';
-		
+
 		if (hasHour1) {
 			var time = _prepareTimeFormat(hh < KK ? 'KK' : 'hh', mv, sv);
-			if (aa == -1) 
+			if (aa == -1)
 				return time;
-			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK)) 
+			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK))
 				return 'a ' + time;
 			else
 				return time + ' a';
 		} else
 			return _prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
-		
+
 	},
 	/** Returns the Date format of the specified format
 	 * @return String
@@ -381,7 +381,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doKeyDown: function (evt) {
 		if (jq.nodeName(evt.domTarget, 'option', 'select'))
 			return;
-			
+
 		var keyCode = evt.keyCode,
 			bOpen = this._pop.isOpen();
 		if (keyCode == 9 || (zk.webkit && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
@@ -410,7 +410,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (keyCode == 18 || keyCode == 27 || keyCode == 13
 		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
 			return; //ignore it (doc will handle it)
-		
+
 		// ZK-2202: should not trigger too early when key code is ENTER
 		// select current time
 		if (this._pop.isOpen()) {
@@ -554,7 +554,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers('rerender', arguments);
 		if (this.desktop) this.syncShadow();
 	},
-	
+
 	close: function (silent) {
 		var db = this.parent,
 			pp = db.$n('pp');
@@ -578,7 +578,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		} catch (e) {
 			// do nothing
 		}
-		
+
 		if (this._shadow) {
 			// B65-ZK-1904: Make shadow behavior the same as ComboWidget
 			this._shadow.destroy();
@@ -636,7 +636,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			dbEl = db.$n();
 		zk(pp).position(dbEl, 'after_start', {dodgeRef: dbEl});
 		delete db._shortcut;
-		
+
 		var self = this;
 		setTimeout(function () {
 			_reposition(db, silent);
@@ -651,7 +651,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (!value)
 			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value, this._localizedSymbols), this._localizedSymbols).toUTCDate()
 				|| (inp.value ? db._value : zUtl.today(fmt));
-		
+
 		if (value)
 			this.setValue(value);
 		if (fmt) {
@@ -679,12 +679,12 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			oldDate = db.getValue(),
 			readonly = db.isReadonly(),
 			cal = new zk.fmt.Calendar();
-		
+
 		if (fmt) {
 			var tm = db._tm,
 				time = tm.getValue();
 			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
-			
+
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if(!fmt.match(/[HkKh]/))
 				date = cal.escapeDSTConflict(date);
@@ -694,19 +694,19 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
-			
+
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if(!this.getFormat().match(/[HkKh]/))
 				date = cal.escapeDSTConflict(date);
-		}		
-		
+		}
+
 		//Bug ZK-1712: no need to set datebox input value when shift view
 		if (!evt.data.shiftView)
 			db.getInputNode().value = db.coerceToString_(date);
-		
+
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
-			
+
 			// Bug 3122159 and 3301374
 			evt.data.value = date;
 			if(!_equalDate(date, oldDate))
@@ -757,7 +757,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			this.parent._tm.setVisible(val == 'day');
 		this.$supers('_setView', arguments);
 
-		// ZK-2047: when sync shadow, the calendar popup should be above the pdf 
+		// ZK-2047: when sync shadow, the calendar popup should be above the pdf
 		if (zk.ie > 9) {
 			this.syncShadow();
 		}
@@ -787,19 +787,19 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 			// otherwise the result may be affcted by DST adjustment
 			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value, //onChanging's data is string
 			pattern = _innerDateFormat + db.getTimeFormat();
-		
-		// add 'AM' by default, if pattern specified AMPM 
-		dateTime += pattern.indexOf('a') > -1 ? 
+
+		// add 'AM' by default, if pattern specified AMPM
+		dateTime += pattern.indexOf('a') > -1 ?
 				dateTime.indexOf('AM') < 0 && dateTime.indexOf('PM') < 0 ? 'AM' : '' : '';
 		var	date = db.coerceFromString_(dateTime, pattern);
 
 		// do nothing if date converted from String is not a valid Date object e.g. dateTime = "2014/10/10 1 :  :     "
 		if(date instanceof Date) {
 			db.getInputNode().value = evt.data.value
-				= db.coerceToString_(date);	
+				= db.coerceToString_(date);
 			db.fire(evt.name, evt.data); //onChanging
 		}
-		
+
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 		}

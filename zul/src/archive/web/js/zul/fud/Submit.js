@@ -1,9 +1,9 @@
 /* Submit.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Aug 24 16:18:18 TST 2011, Created by tomyeh
 
@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 /**
  * A Submit Button.
- * 
+ *
  */
 zul.fud.Submit = zk.$extends(zul.wgt.Button, {
 	getZclass: function () { // keep the button's zclass
@@ -36,7 +36,7 @@ zul.fud.Submit = zk.$extends(zul.wgt.Button, {
 		if (zk.ie < 11)
 			this.$f('btns').rerender();
 	},
-	revert: function () {	
+	revert: function () {
 		clearInterval(this._tmp);
 		this._tmp = undefined;
 		this.setDisabled(false);

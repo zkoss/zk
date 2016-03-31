@@ -1,9 +1,9 @@
 /* Panelchildren.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jan 12 18:31:03     2009, Created by jumperchen
 
@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * child who will be shown in the body of Panel.
  * Note that the size of Panelchildren is automatically calculated by Panel so both
  * {@link #setWidth(String)} and {@link #setHeight(String)} are read-only.
- * 
+ *
  * <p>Default {@link #getZclass}: z-panelchildren.
  */
 zul.wnd.Panelchildren = zk.$extends(zul.ContainerWidget, {
@@ -38,7 +38,7 @@ zul.wnd.Panelchildren = zk.$extends(zul.ContainerWidget, {
 		if (!no || !no.zclass) {
 			var zcls = this.getZclass();
 			var added = !this.parent.getTitle() && !this.parent.caption ?
-				zcls + '-noheader' : '';				
+				zcls + '-noheader' : '';
 			if (added) scls += (scls ? ' ' : '') + added;
 			added = this.parent._bordered() ? '' : zcls + '-noborder';
 			if (added) scls += (scls ? ' ' : '') + added;

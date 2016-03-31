@@ -1,9 +1,9 @@
 /* Notification.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Mar 15 17:12:46     2012, Created by simon
 
@@ -29,7 +29,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 6.0.1
  */
 zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
-	
+
 	$init: function (msg, opts) {
 		this.$supers(zul.wgt.Notification, '$init', arguments);
 		this._msg = msg;
@@ -75,7 +75,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		var wgt = ctl.origin;
 		for (var floatFound; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
-				if (!floatFound) 
+				if (!floatFound)
 					this.setTopmost();
 				return;
 			}
@@ -106,7 +106,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		var n = this.$n(),
 			pw = 2 + (zk(p).borderWidth() / 2) || 0,
 			ph = 2 + (zk(p).borderHeight() / 2) || 0;
-		
+
 		n.style.padding = '0';
 		// cache arrow direction for _fixarrow() later
 		switch (position) {
@@ -158,7 +158,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		var p = this.$n('p');
 		if (!p)
 			return;
-		
+
 		var pzcls = this.$s('pointer'),
 			n = this.$n(),
 			refn = ref.$n(),
@@ -187,10 +187,10 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 				p.style[b ? 'left' : 'right'] = ((2 - pw / 2) || 0) + 'px';
 				p.style[b ? 'right' : 'left'] = '';
 			}
-			
+
 			p.className = pzcls + (_dirMap[dir] ? ' ' + this.$s(_dirMap[dir]) : '');
 			jq(p).show();
-			
+
 		} else {
 			p.className = pzcls;
 			jq(p).hide();
@@ -212,7 +212,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		this.detach();
 	}
 }, {
-	
+
 	/**
 	 * Shows a notification.
 	 * TODO
@@ -227,28 +227,28 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			ntf = new zul.wgt.Notification(msg, opts),
 			off = opts.off,
 			n, isInView = true;
-		
+
 		if (ref) {
 			n = ref.$n('real') || ref.$n();
 			isInView = zk(n).isRealScrollIntoView();
 		}
-		
+
 		// TODO: allow user to specify arrow direction?
-		
+
 		//ZK-2687, don't show notification if wgt is not in view
 		if (!isInView)
 			return;
-		
+
 		if (!pos && !off)
 			pos = ref ? 'end_center' : 'middle_center';
-		
+
 		if (!parent) {
 			// bug ZK-1136: If target page is detached, append to current active page
 			parent = zk.Desktop.$().firstChild;
 		}
 		parent.appendChild(ntf);
 		ntf.open(ref, off, pos);
-		
+
 		// auto dismiss
 		if (dur > 0)
 			setTimeout(function () {
@@ -256,7 +256,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 					ntf.close();
 			}, dur);
 	}
-	
+
 });
 
 })();

@@ -1,9 +1,9 @@
 /* Radiogroup.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Dec 17 09:25:17     2008, Created by jumperchen
 
@@ -21,8 +21,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _concatItem0(cmp) {
 		var sum = [];
-		for (var wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {			
-			if (wgt.$instanceof(zul.wgt.Radio)) 
+		for (var wgt = cmp.firstChild; wgt; wgt = wgt.nextSibling) {
+			if (wgt.$instanceof(zul.wgt.Radio))
 				sum.push(wgt);
 			else if (!wgt.$instanceof(zul.wgt.Radiogroup)) //skip nested radiogroup
 				sum = sum.concat(_concatItem0(wgt));
@@ -45,7 +45,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else if (!wgt.$instanceof(zul.wgt.Radiogroup)) {
 				var r = _getAt0(wgt, cur, index);
 				if (r != null) return r;
-			}				
+			}
 		}
 	}
 
@@ -187,7 +187,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 		this.appendChild(item);
 		return item;
 	},
-	/** 
+	/**
 	 * Removes the child radio button in the list box at the given index.
 	 * @param int index
 	 * @return Radio the removed radio button.

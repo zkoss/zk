@@ -1,9 +1,9 @@
 /* Foot.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 23 12:26:51     2009, Created by jumperchen
 
@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-foot.
  */
 zul.grid.Foot = zk.$extends(zul.Widget, {
-	/** Returns the grid that contains this column. 
+	/** Returns the grid that contains this column.
 	 * @return zul.grid.Grid
 	 */
 	getGrid: function () {

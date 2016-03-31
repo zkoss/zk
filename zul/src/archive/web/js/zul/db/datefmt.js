@@ -22,8 +22,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			aa = fmt.indexOf('a'),
 			tlen = txt.replace(/[^.]/g, '').length,
 			flen = fmt.replace(/[^.]/g, '').length;
-			
-			
+
+
 		for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
 			var c = txt.charAt(k),
 				f = fmtlen > i ? fmt.charAt(i) : '';
@@ -171,10 +171,10 @@ zk.fmt.Date = {
 	parseDate: function (txt, fmt, strict, refval, localizedSymbols) {
 		if (!fmt) fmt = 'yyyy/MM/dd';
 		refval = refval || zUtl.today(fmt);
-		
+
 		localizedSymbols = localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
-			    ERA: zk.ERA,    
+			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
 			   SDOW: zk.SDOW,
 			  S2DOW: zk.S2DOW,
@@ -217,10 +217,10 @@ zk.fmt.Date = {
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
-					// ZK-1985: Determine if token's length is less than the expected when strict is true. 
+					// ZK-1985: Determine if token's length is less than the expected when strict is true.
 					if (strict && token && (token.length < len))
 						return;
-					
+
 					if (nosep) {
 						if (len <= 3) len = 2;
 						if (token && token.length > len) {
@@ -228,7 +228,7 @@ zk.fmt.Date = {
 							token = token.substring(0, len);
 						}
 					}
-					
+
 					// ZK-1985:	Determine if token contains non-digital word when strict is true.
 					if (strict && token && regexp.test(token))
 						return;
@@ -241,7 +241,7 @@ zk.fmt.Date = {
 				case 'M':
 					var mon = token ? token.toLowerCase() : '',
 						isNumber0 = !isNaN(token);
-					if (!mon) break; 
+					if (!mon) break;
 					if (!isNumber0 && token) {
 						for (var index = localizedSymbols.SMON.length, brkswch; --index >= 0;) {
 							var smon = localizedSymbols.SMON[index].toLowerCase();
@@ -296,14 +296,14 @@ zk.fmt.Date = {
 					// ZK-1985:	Determine if token's length is less than expected when strict is true.
 					if (strict && token && (token.length < len))
 						return;
-					
+
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
-					
+
 					// ZK-1985:	Determine if token contains non-digital word when strict is true.
 					if (strict && token && regexp.test(token))
 						return;
-					
+
 					if (!isNaN(nv = _parseInt(token))) {
 						d = nv;
 						dFound = true;
@@ -318,18 +318,18 @@ zk.fmt.Date = {
 					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
 					if (strict && token && (token.length < len))
 						return;
-					
+
 					if (hasHour1 ? (cc == 'H' || cc == 'k') : (cc == 'h' || cc == 'K'))
 						break;
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
-					
+
 					// ZK-1985:	Determine if token contains non-digital word when strict is true.
 					if (strict && token && regexp.test(token))
 						return;
-					
+
 					if (!isNaN(nv = _parseInt(token)))
-						hr = (cc == 'h' && nv == 12) || (cc == 'k' && nv == 24) ? 
+						hr = (cc == 'h' && nv == 12) || (cc == 'k' && nv == 24) ?
 							0 : cc == 'K' ? nv % 12 : nv;
 					break;
 				case 'm':
@@ -338,14 +338,14 @@ zk.fmt.Date = {
 					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
 					if (strict && token && (token.length < len))
 						return;
-					
+
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
-					
+
 					// ZK-1985:	Determine if token contains non-digital word when strict is true.
 					if (strict && token && regexp.test(token))
 						return;
-					
+
 					if (!isNaN(nv = _parseInt(token))) {
 						if (cc == 'm') min = nv;
 						else if (cc == 's') sec = nv;
@@ -396,7 +396,7 @@ zk.fmt.Date = {
 
 		localizedSymbols = localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
-			    ERA: zk.ERA,    
+			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
 			   SDOW: zk.SDOW,
 			  S2DOW: zk.S2DOW,
@@ -532,7 +532,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		var d;
 		if (localizedSymbols)
 			this._offset = localizedSymbols.YDELTA;
-			
+
 		if (this._offset) {
 			if (val.getMonth() == 1 && val.getDate() == 29) {
 				d = new LeapDay(val); // a proxy of Date
@@ -552,12 +552,12 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		(d = new Date(d))
 		.setFullYear(d.getFullYear() - this._offset);
 		return d;
-	}, 
+	},
 	parseDate: function (txt, fmt, strict, refval, localizedSymbols) {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols);
 		if (localizedSymbols)
 			this._offset = localizedSymbols.YDELTA;
-			
+
 		if (this._offset && fmt) {
 			if (!LeapDay.isInstance(d)) {
 				var cnt = 0;
@@ -580,7 +580,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		return d;
 	},
 	getYear: function () {
-		return LeapDay.isInstance(this._date) ? this._date.getFullYear() : 
+		return LeapDay.isInstance(this._date) ? this._date.getFullYear() :
 			this._date.getFullYear() + this._offset;
 	},
 	// B70-ZK-2382: in Daylight Saving Time (DST), choose the last time at the end of this mechanism, it will display previous day.

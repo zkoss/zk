@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	
 zk.copy(zjq, {
-	_fixCSS: function (el) { 
+	_fixCSS: function (el) {
 		//we have to preserve scrollTop
 		//Test case: test2/B50-ZK-373.zul and test2/B50-3315594.zul
 		var old = el.style.display,
@@ -42,7 +42,7 @@ zk.copy(zjq.prototype, {
 			return _bkZjq.offsetWidth.apply(this, arguments);
 		
 		var wd = 0;
-		for (var cells = el.cells, j = cells.length; j--;) 
+		for (var cells = el.cells, j = cells.length; j--;)
 			wd += cells[j].offsetWidth;
 		return wd;
 	},
@@ -54,7 +54,7 @@ zk.copy(zjq.prototype, {
 		var hgh = 0;
 		for (var cells = el.cells, j = cells.length; j--;) {
 			var h = cells[j].offsetHeight;
-			if (h > hgh) 
+			if (h > hgh)
 				hgh = h;
 		}
 		return hgh;
@@ -74,7 +74,7 @@ zk.copy(zjq.prototype, {
 }, _bkZjq);
 
 zjq._sfKeys = {
-	25: 9, 	   // SHIFT-TAB
+	25: 9,     // SHIFT-TAB
 	63232: 38, // up
 	63233: 40, // down
 	63234: 37, // left

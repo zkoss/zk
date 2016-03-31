@@ -1,9 +1,9 @@
 /* Span.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Mar 27 15:19:16     2009, Created by tomyeh
 

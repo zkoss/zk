@@ -1,9 +1,9 @@
 /* FooterWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 27 09:24:17 TST 2010, Created by jimmy
 
@@ -17,27 +17,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 	_span: 1,
-	
+
 	$define: {
 		/** Returns number of columns to span this footer.
-    	 * Default: 1.
-    	 * @return int
-    	 */
-    	/** Sets the number of columns to span this footer.
-    	 * <p>It is the same as the colspan attribute of HTML TD tag.
-    	 * @param int span
-    	 */
+		 * Default: 1.
+		 * @return int
+		 */
+		/** Sets the number of columns to span this footer.
+		 * <p>It is the same as the colspan attribute of HTML TD tag.
+		 * @param int span
+		 */
 		span: function (v) {
 			var n = this.$n();
 			if (n) n.colSpan = v;
 		},
 		/** Returns the horizontal alignment of this footer.
-    	 * <p>Default: null (system default: left unless CSS specified).
-    	 * @return String
-    	 */
-    	/** Sets the horizontal alignment of this footer.
-    	 * @param String align
-    	 */
+		 * <p>Default: null (system default: left unless CSS specified).
+		 * @return String
+		 */
+		/** Sets the horizontal alignment of this footer.
+		 * @param String align
+		 */
 		align: function (v) {
 			var n = this.$n();
 			if (n) n.align = v;
@@ -88,7 +88,7 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 			style += 'vertical-align:' + header._valign + ';';
 		if (header && !header.isVisible()) //Bug ZK-1425
 			style += 'display: none;';
-		
+
 		return style + this.$super('domStyle_', no);
 	},
 	domAttrs_: function () {

@@ -1,9 +1,9 @@
 /* Listfooter.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun  9 18:03:07     2009, Created by jumperchen
 
@@ -21,7 +21,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-listfooter.
  */
 zul.sel.Listfooter = zk.$extends(zul.mesh.FooterWidget, {
-	
+
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */
@@ -38,7 +38,7 @@ zul.sel.Listfooter = zk.$extends(zul.mesh.FooterWidget, {
 	/** Returns the maximal length for this cell.
 	 * If listbox's mold is "select", it is the same as
 	 * {@link Select#getMaxlength}
-	 * If not, it is the same as the correponding {@link #getListheader}'s 
+	 * If not, it is the same as the correponding {@link #getListheader}'s
 	 * {@link Listheader#getMaxlength}.
 	 *
 	 * <p>Note: {@link Option#getMaxlength} is the same as {@link Select#getMaxlength}.

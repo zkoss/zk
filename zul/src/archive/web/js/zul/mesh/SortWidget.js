@@ -1,9 +1,9 @@
 /* SortWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue May 26 14:51:17     2009, Created by jumperchen
 
@@ -21,20 +21,20 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	_sortDescending: 'none',
 
 	$define: {
-    	/** Returns the sort direction.
-    	 * <p>Default: "natural".
-    	 * @return String
-    	 */
-    	/** Sets the sort direction. This does not sort the data, it only serves
-    	 * as an indicator as to how the widget is sorted.
-    	 *
-    	 * <p>If you use {@link #sort(String, jq.Event)} to sort rows,
-    	 * the sort direction is maintained automatically.
-    	 * If you want to sort it in customized way, you have to set the
-    	 * sort direction manually.
-    	 *
-    	 * @param String sortDir one of "ascending", "descending" and "natural"
-    	 */
+		/** Returns the sort direction.
+		 * <p>Default: "natural".
+		 * @return String
+		 */
+		/** Sets the sort direction. This does not sort the data, it only serves
+		 * as an indicator as to how the widget is sorted.
+		 *
+		 * <p>If you use {@link #sort(String, jq.Event)} to sort rows,
+		 * the sort direction is maintained automatically.
+		 * If you want to sort it in customized way, you have to set the
+		 * sort direction manually.
+		 *
+		 * @param String sortDir one of "ascending", "descending" and "natural"
+		 */
 		sortDirection: function (v) {
 			if (this.desktop) {
 				var $n = jq(this.$n('sort-icon'));
@@ -58,7 +58,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		sortAscending: function (v) {
 			if (!v)
 				this._sortAscending = v = 'none';
-			
+
 			if (this.desktop) {
 				var $n = jq(this.$n('sort-icon'));
 				if (v == 'none') {
@@ -77,7 +77,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		sortDescending: function (v) {
 			if (!v)
 				this._sortDescending = v = 'none';
-			
+
 			if (this.desktop) {
 				var $n = jq(this.$n('sort-icon'));
 				if (v == 'none') {
@@ -126,11 +126,11 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 	sort: function (ascending, evt) {
 		if (!this.checkClientSort_(ascending))
 			return false;
-		
+
 		evt.stop();
-		
+
 		this.replaceCavedChildrenInOrder_(ascending);
-		
+
 		return true;
 	},
 	/** Check the status whether can be sort in client side.
@@ -154,11 +154,11 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			evt.stop();
 			return false;
 		}
-		
+
 		var mesh = this.getMeshWidget();
 		if (!mesh || mesh.isModel()) return false;
 			// if in model, the sort should be done by server
-			
+
 		return true;
 	},
 	/** Replaced the child widgets with the specified order.
@@ -176,15 +176,15 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		try {
 			body.unbind();
 			var d = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++) 
-				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++) 
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++)
+				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
 							wgt: cell,
 							index: z
 						};
 					}
-			
+
 			var dsc = dir == 'ascending' ? -1 : 1, fn = this.sorting, isNumber = sorter == 'client(number)';
 			d.sort(function (a, b) {
 				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
@@ -197,7 +197,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 				body.appendChild(d[i].wgt.parent);
 			}
 			this._fixDirection(ascending);
-			
+
 		} finally {
 			body.replaceHTML(node, desktop);
 		}
@@ -216,13 +216,13 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		else if (typeof a.getValue == 'function')
 			v1 = a.getValue();
 		else v1 = a;
-		
+
 		if (typeof b.getLabel == 'function')
 			v2 = b.getLabel();
 		else if (typeof b.getValue == 'function')
 			v2 = b.getValue();
 		else v2 = b;
-		
+
 		if (isNumber) return v1 - v2;
 		return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
 	},
@@ -267,10 +267,10 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		if (this.parent._menupopup && this.parent._menupopup != 'none') {
 			var pp = this.parent._menupopup,
 				btn = this.$n('btn');
-			
+
 			//for not removing hover effect when moving mouse on menupopup
 			jq(this.$n()).addClass(this.$s('visited'));
-			
+
 			if (pp == 'auto' && this.parent._mpop)
 				pp = this.parent._mpop;
 			else
@@ -295,9 +295,9 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 						var visible = !model || this.isListen('onUngroup', {asapOnly: 1});
 						pp.getUngroupitem().setVisible(visible && mw.hasGroup());
 					}
-					
+
 					var sep = pp.getDescitem().nextSibling;
-					if (sep) 
+					if (sep)
 						sep.setVisible((asc || desc));
 				} else {
 					pp.listen({onOpen: [this.parent, this.parent._onMenuPopup]});

@@ -1,9 +1,9 @@
 /* Dooublespinner.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Dec 20 10:17:24     2010, Created by jumperchen
 
@@ -38,7 +38,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				vald = _digitsAfterDecimal(val || wgt._value, decimal);
 		wgt._fixedDigits = Math.max(stepd, vald);
 	}
-	
+
 /**
  * An edit box for holding a constrained double.
  *
@@ -104,12 +104,12 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 				++rawind;
 			}
 
-			if (rawind >= 0 && raw.substring(raw.substring(rawind + 1)) && valind < 0) { 
+			if (rawind >= 0 && raw.substring(raw.substring(rawind + 1)) && valind < 0) {
 				valind = valstr.length;
 				valstr += '.';
 			}
 
-			var len = raw.length,	
+			var len = raw.length,
 				vallen = valstr.length;
 
 			//pre zeros
@@ -142,7 +142,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	coerceToString_: function (value) {//copy from intbox
 		var fmt = this._format,
 			DECIMAL = this._localizedSymbols ? this._localizedSymbols.DECIMAL : zk.DECIMAL;
-		
+
 		// ZK-2084: fix display for different step
 		if (typeof value === 'number' && value % 1 == 0) { // is integer
 			var precision = 1;
@@ -151,9 +151,9 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			}
 			value = parseFloat(value).toFixed(precision);
 		}
-			
-		return value == null ? '' : fmt ? 
-			zk.fmt.Number.format(fmt, parseFloat(value), this._rounding, this._localizedSymbols) : 
+
+		return value == null ? '' : fmt ?
+			zk.fmt.Number.format(fmt, parseFloat(value), this._rounding, this._localizedSymbols) :
 				DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL);
 	},
 	onSize: function () {
@@ -190,20 +190,20 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		if (!this._buttonVisible || this._disabled) return;
 
 		var btn = this.$n('btn');
-		
+
 		if (!zk.dragging) {
 			if (this._currentbtn) // just in case
 				this._ondropbtnup(evt);
-			
+
 			this.domListen_(document.body, 'onZMouseup', '_ondropbtnup');
 			this._currentbtn = btn;
 		}
-		
+
 		this.checkValue();
-		
+
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
-		
+
 		if (isOverUpBtn) { //up
 			this._increase(true);
 			this._startAutoIncProc(true);
@@ -211,12 +211,12 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			this._increase(false);
 			this._startAutoIncProc(false);
 		}
-		
+
 		// disable browser's text selection
 		evt.stop();
 	},
 	/**
-	 * Sets bound value if the value out of range 
+	 * Sets bound value if the value out of range
 	 */
 	checkValue: function () {
 		var inp = this.getInputNode(),
@@ -250,13 +250,13 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_increase: function (asc) {
 		var inp = this.getInputNode(),
 			value = this.coerceFromString_(inp.value);
-		
+
 		if (value && value.error)
 			return; //nothing to do if error happens
-		
+
 		var	shiftLen = Math.max(_digitsAfterDecimal(value), this._fixedDigits),
 			result = _shiftedSum(value, this._step, shiftLen, asc); // B50-3301517
-		
+
 		// control overflow
 		if (result > Math.pow(2,63) - 1)	result = Math.pow(2,63) - 1;
 		else if (result < -Math.pow(2,63)) result = -Math.pow(2,63);
@@ -266,9 +266,9 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 		else if (this._min != null && result < this._min) result = value;
 
 		inp.value = this.coerceToString_(result);
-		
+
 		this._onChanging();
-		
+
 	},
 	_clearValue: function () {
 		this.getInputNode().value = this._defRawVal = '';
@@ -304,7 +304,7 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 	afterKeyDown_: function (evt, simulated) {
 		if(!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
-			
+
 		return this.$supers('afterKeyDown_', arguments);
 	},
 	getAllowedKeys_: function () {

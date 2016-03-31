@@ -1,9 +1,9 @@
 /* Listbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Apr 30 22:16:07     2009, Created by tomyeh
 
@@ -44,16 +44,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 var Listbox =
 /**
  * A listbox.
- * 
+ *
  * <p>
  * Event:
  * <ol>
  * <li>onSelect event is sent when user changes the selection.</li>
  * </ol>
- * 
+ *
  * <p>
  * Default {@link #getZclass}: z-listbox.
- * 
+ *
  * <p>
  * To have a list box without stripping, you can specify a non-existent style
  * class to {@link #setOddRowSclass}.
@@ -61,7 +61,7 @@ var Listbox =
  */
 zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_nrows: 0,
-	/** 
+	/**
 	 * Whether to allow Listgroup to be selected
 	 * <p>Default: false
 	 * @since 5.0.7
@@ -84,7 +84,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if(this.desktop)
 				jq(this.$n('empty')).html(msg);
 		}
-	},	
+	},
 	$init: function () {
 		this.$supers(Listbox, '$init', arguments);
 		this._groupsInfo = [];
@@ -230,7 +230,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		// B50-ZK-56
 		// ebody.scrollTop will be reset after between fireOnRender and _doScroll after bind_
 		if (this._tmpScrollTop) {
-			this.ebody.scrollTop = this._tmpScrollTop; 
+			this.ebody.scrollTop = this._tmpScrollTop;
 			this._tmpScrollTop = null;
 		}
 		this.$super(zul.sel.Listbox, '_doScroll');
@@ -239,7 +239,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (this.desktop) {
 			if (this._shallStripe)
 				this.stripe();
-			if (this._shallFixEmpty) 
+			if (this._shallFixEmpty)
 				_fixForEmpty(this);
 		}
 		this.$supers(Listbox, 'onResponse', arguments);
@@ -273,7 +273,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	getCaveNode: function () {
 		return this.$n('rows') || this.$n('cave');
-	},	
+	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before && (!child.$instanceof(zul.sel.Listitem) || before.$instanceof(zul.sel.Listitem)) ? before.getFirstNode_() : null)
 			jq(before).before(child.redrawHTML_());
@@ -306,7 +306,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (!this.lastItem || !this.nextItem(child))
 				this.lastItem = child;
 			++this._nrows;
-			
+
 			if (child.isSelected() && !this._selItems.$contains(child))
 				this._selItems.push(child);
 			noRerender = stripe = true;
@@ -319,9 +319,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		} else if (child.$instanceof(zul.mesh.Frozen)) {
 			this.frozen = child;
 		}
-		
+
 		this._syncEmpty();
-		
+
 		if (!ignoreAll) {
 			if (!ignoreDom && !noRerender)
 				return this.rerender();
@@ -366,7 +366,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (_isListgroup(child))
 				this._groupsInfo.$remove(child);
 			--this._nrows;
-			
+
 			if (child.isSelected())
 				this._selItems.$remove(child);
 			stripe = true;
@@ -381,10 +381,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	 * A redraw method for the empty message , if you want to customize the message ,
 	 * you could overwrite this.
 	 * @param Array out A array that contains html structure ,
-	 * 			it usually come from mold(redraw_). 
+	 * 			it usually come from mold(redraw_).
 	 */
 	redrawEmpty_: function (out) {
-		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="', 
+		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
 				this.uuid, '-empty" style="display:none">',
 				this._emptyMessage ,'</td></tr></tbody>');
 	},
@@ -392,10 +392,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if(child._renderdefer) {
 			var scOdd = this.getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
-			
+
 			this.$supers('replaceChildHTML_', arguments);
 			if(isOdd) jq(child).addClass(scOdd);
-		} else 
+		} else
 			this.$supers('replaceChildHTML_', arguments);
 	},
 	// this function used for Listbox, Listhead
@@ -439,7 +439,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_updHeaderCM: function () {
 		// B50-3322970: need to clear Listheader _check cache
 		var lh;
-		if (this._headercm && this._multiple 
+		if (this._headercm && this._multiple
 			&& (lh = this.listhead) && (lh = lh.firstChild))
 			lh._checked = this._isAllSelected();
 		this.$supers(Listbox, '_updHeaderCM', arguments);
@@ -497,7 +497,7 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 			q = p ? p.parent.nextItem(p) : null;
 		if (this.opts && this.opts.skipHidden)
 			for (; q && !q.isVisible(); q = q.parent.nextItem(q)) {}
-		if (p) 
+		if (p)
 			this.p = q;
 		return p;
 	}

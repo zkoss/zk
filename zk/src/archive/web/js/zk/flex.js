@@ -66,12 +66,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (vertical) {
 			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
 				wdh = ref._wdh || (ref._wdh = ref.left + ref.width);
-			return !(zk.ie == 10) ? cur.top >= hgh || cur.left < wdh : 
+			return !(zk.ie == 10) ? cur.top >= hgh || cur.left < wdh :
 				Math.round(cur.top) >= hgh || Math.round(cur.left) < wdh;
 		} else {
 			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
 				wdh = ref._wdh || (ref._wdh = ref.left + ref.width);
-			return !(zk.ie == 10) ? cur.left >= wdh || cur.top < hgh : 
+			return !(zk.ie == 10) ? cur.left >= wdh || cur.top < hgh :
 				Math.round(cur.left) >= wdh || Math.round(cur.top) < hgh;
 		}
 	}
@@ -198,14 +198,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 									}
 								}
 								if (isText) {
-									if (sz > max) 
+									if (sz > max)
 										max = sz;
 								} else {
 									var curDim = zkc.dimension(true);
 									if (_isSameBaseline(refDim || (refDim = zk(first).dimension(true)),
-											curDim, isVflex)) 
+											curDim, isVflex))
 										max += sz;
-									else if (sz > max) 
+									else if (sz > max)
 										max = sz;
 								}
 							}
@@ -221,13 +221,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				//bug #3005284: (Chrome)Groupbox hflex="min" in borderlayout wrong sized
 				//bug #3006707: The title of the groupbox shouldn't be strikethrough(Chrome)
 				var margin = wgt.getMarginSize_(o);
-				if (zk.webkit && margin < 0) 
+				if (zk.webkit && margin < 0)
 					margin = 0;
 
 				
-				// ZK-970: refixed for caption 
+				// ZK-970: refixed for caption
 				var map = {},
-					n = wgt.$n(), 
+					n = wgt.$n(),
 					hasChildren = zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Caption) && wgt.nChildren > 0,
 					size = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : max;
 
@@ -258,7 +258,7 @@ zFlex = { //static methods
 		if (cleanup)
 			wgt.clearCachedSize_();
 		
-		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space 
+		//bug#3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
 		if (!zk.mounting && wgt.isRealVisible()) {
 			if (wgt._hflex && wgt._hflex != 'min') {
 				wgt.resetSize_('w');
@@ -288,7 +288,7 @@ zFlex = { //static methods
 		
 		//avoid firedown("onSize") calling in again
 		if ((wgt._vflex === undefined || (wgt._vflexsz && wgt._vflex == 'min'))
-			&& (wgt._hflex === undefined || (wgt._hflexsz && wgt._hflex == 'min'))) 
+			&& (wgt._hflex === undefined || (wgt._hflexsz && wgt._hflex == 'min')))
 			return;
 
 		
@@ -357,7 +357,7 @@ zFlex = { //static methods
 					if (!zkpOffset)
 						zkpOffset = zkp.revisedOffset();
 					var size = _getTextSize(zkc, zkp, zkpOffset);
-					if (!cwgt || !cwgt.isExcludedHflex_()) // fixed ZK-1706 sideeffect 
+					if (!cwgt || !cwgt.isExcludedHflex_()) // fixed ZK-1706 sideeffect
 						wdh -= size[0];
 					if (!cwgt || !cwgt.isExcludedVflex_()) // fixed ZK-1706 sideeffect for B60-ZK-917.zul
 						hgh -= size[1];
@@ -374,7 +374,7 @@ zFlex = { //static methods
 					}
 				} else if ((!cwgt &&
 						// panelchild cannot include panel's bottombar.
-						(!zk.isLoaded('zul.wnd') || !wgt.$instanceof(zul.wnd.Panelchildren))) 
+						(!zk.isLoaded('zul.wnd') || !wgt.$instanceof(zul.wnd.Panelchildren)))
 						|| (cwgt && !cwgt.isExcludedHflex_())) {
 					wdh -= offwdh;
 					wdh -= zkc.marginWidth();
@@ -403,7 +403,7 @@ zFlex = { //static methods
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		var lastsz = hgh = Math.max(hgh, 0);
 		for (var j = vflexs.length - 1; j > 0; --j) {
-			var cwgt = vflexs.shift(), 
+			var cwgt = vflexs.shift(),
 				vsz = cwgt.isExcludedVflex_() ? hgh :
 						(cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({height: vsz});
@@ -421,13 +421,13 @@ zFlex = { //static methods
 		//vertical scrollbar might disappear after height was set
 		var newpsz = wgt.getParentSize_(p);
 		if (newpsz.width > psz.width) //yes, the scrollbar gone!
-			wdh += (newpsz.width - psz.width); 
-		
+			wdh += (newpsz.width - psz.width);
+
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		lastsz = wdh = Math.max(wdh, 0);
 		for (var j = hflexs.length - 1; j > 0; --j) {
-			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
+			var cwgt = hflexs.shift(), //{n: node, f: hflex}
 				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({width: hsz});
 			cwgt._hflexsz = hsz;

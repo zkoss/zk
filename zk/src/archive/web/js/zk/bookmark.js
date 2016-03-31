@@ -60,7 +60,7 @@ zk.bmk = (function () { //used internally
 		_startCheck = null;
 		checkBookmark();
 		setInterval(checkBookmark, 250);
-			//Though IE use bookmark.html, timer is still required 
+			//Though IE use bookmark.html, timer is still required
 			//because user might specify URL directly
 	};
 	zk._apac(_startCheck); //see mount.js (after page AU cmds)

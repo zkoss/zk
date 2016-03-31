@@ -1,9 +1,9 @@
 ﻿/* Spinner.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu May 27 10:17:24     2009, Created by kindalu
 
@@ -66,7 +66,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			return {error: zk.fmt.Text.format(msgzul.INTEGER_REQUIRED, value)};
 		if (val > 2147483647 || val < -2147483648)
 			return {error: zk.fmt.Text.format(msgzul.OUT_OF_RANGE + '(−2147483648 - 2147483647)')};
-				
+
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;
 	},
@@ -84,7 +84,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
 			return;
-	
+
 		switch (evt.keyCode) {
 		case 38://up
 			this.checkValue();
@@ -106,22 +106,22 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	_btnDown: function (evt) {
 		if (!this._buttonVisible || this._disabled) return;
-		
+
 		var btn = this.$n('btn');
-			
+
 		if (!zk.dragging) {
 			if (this._currentbtn) // just in case
 				this._ondropbtnup(evt);
-			
+
 			this.domListen_(document.body, 'onZMouseup', '_ondropbtnup');
 			this._currentbtn = btn;
 		}
-		
+
 		this.checkValue();
-		
+
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
-		
+
 		if (isOverUpBtn) { //up
 			this._increase(true);
 			this._startAutoIncProc(true);
@@ -129,12 +129,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			this._increase(false);
 			this._startAutoIncProc(false);
 		}
-				
+
 		// disable browser's text selection
 		evt.stop();
 	},
 	/**
-	 * Sets bound value if the value out of range 
+	 * Sets bound value if the value out of range
 	 */
 	checkValue: function () {
 		var inp = this.getInputNode(),
@@ -171,23 +171,23 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		if (value && value.error)
 			return; //nothing to do if error happens
-		
+
 		var	result = is_add ? (value + this._step) : (value - this._step);
-		
+
 		// control overflow
 		if (result > Math.pow(2,31) - 1)
 			result = Math.pow(2,31) - 1;
 		else if (result < -Math.pow(2,31))
 			result = -Math.pow(2,31);
-		
+
 		//over bound shall restore value
 		if (this._max != null && result > this._max) result = value;
 		else if (this._min != null && result < this._min) result = value;
 
 		inp.value = this.coerceToString_(result); //ZK-1851 convert result using pattern
-		
+
 		this._onChanging();
-		
+
 	},
 	_clearValue: function () {
 		this.getInputNode().value = this._defRawVal = '';
@@ -223,12 +223,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
-			
+
 		return this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {//after compose
-		this.$supers(zul.inp.Spinner, 'bind_', arguments); 
-		
+		this.$supers(zul.inp.Spinner, 'bind_', arguments);
+
 		var btn;
 		if(btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')

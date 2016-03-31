@@ -131,18 +131,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hdler = startHandler,
 			isFirst = true,
 			prevStart, ofs, hStart, hEnd, posOfs;
-		
+
 		//restore separator
 		do {
 			hStart = hdler.index[0];
 			hEnd = hdler.index[1] + 1;
-			
+
 			if (hdler.type && (posOfs = hdler.isSingleLength())) {
 				//sync handler index
 				hdler._doShift(wgt, posOfs);
-				selEnd--;					
+				selEnd--;
 			}
-			
+
 			//latest one
 			if (hEnd >= selEnd && hdler.type) {
 				ofs = selEnd - hStart;
@@ -150,7 +150,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					text += ' ';
 				break;
 			}
-			
+
 			if (hdler.type) {
 				prevStart = isFirst ? pos : hStart;
 				isFirst = false;
@@ -159,9 +159,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ofs = hStart - prevStart;
 			while (ofs-- > 0) //replace by space (before)
 				text += ' ';
-									
+
 			text += hdler.format();
-			
+
 		} while (hdler = fmthdler[++index]);
 		return text;
 	}
@@ -180,14 +180,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	var globallocalizedSymbols = {};
 
-var Timebox = 
+var Timebox =
 /**
  * An input box for holding a time (a Date Object, but only Hour & Minute are used.
  *
  * <p>Default {@link #getZclass}: z-timebox.
  *
  * <p>timebox doens't support customized format. It support HH:mm formate, where HH is hour of day and mm is minute of hour.
- * 
+ *
  * <p>Like {@link zul.inp.Combobox} and {@link Datebox},
  * the value of a read-only time box ({@link #isReadonly}) can be changed
  * by clicking the up or down button (though users cannot type anything
@@ -197,7 +197,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_format: 'HH:mm',
 	_timezone: '',
-	$init: function () {		
+	$init: function () {
 		this.$supers('$init', arguments);
 		_updFormat(this, this._format);
 	},
@@ -230,7 +230,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					if (!globallocalizedSymbols[val[0]])
 						globallocalizedSymbols[val[0]] = val[1];
 					return globallocalizedSymbols[val[0]];
-				} 
+				}
 				return val;
 			}
 		]
@@ -294,7 +294,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					emptyCount++;
 			}
 		}
-		
+
 		if (fmt.length == (hasAM ? --emptyCount : emptyCount)) {
 			this._changed = false;//for return empty string
 			return;
@@ -311,7 +311,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var inp = this.getInputNode();
 		if (inp && this._value && !inp.value)
 			inp.value = this.coerceToString_(this._value);
-		
+
 		zul.inp.RoundUtl.onSize(this, this.$n('btn'));
 	},
 	onHide: zul.inp.Textbox.onHide,
@@ -420,24 +420,24 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		// cache it for IE and others to keep the same position at the first time being clicked.
 		this._lastPos = this._getPos();
-		
+
 		var btn = this.$n('btn'),
 			inp = this.getInputNode();
-			
+
 		if (!zk.dragging) {
 			if (this._currentbtn) // just in case
 				this._ondropbtnup(evt);
-			
+
 			this.domListen_(document.body, 'onZMouseup', '_ondropbtnup');
 			this._currentbtn = btn;
 		}
-		
+
 		// if btn down before blur, needs to convert to real time string first
 		if (inp.value && Timebox._unformater)
 			inp.value = this.coerceToString_(this.coerceFromString_(inp.value));
 		if (!inp.value)
 			inp.value = this.coerceToString_();
-			
+
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
 		if (zk.webkit) {
@@ -445,11 +445,11 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		var newLastPos = this._getPos();
-		
+
 		// Chrome and Firefox get wrong position at initial case
 		if (this._lastPos != newLastPos)
 			zk(inp).setSelectionRange(this._lastPos);
-		
+
 		if (isOverUpBtn) { //up
 			this._doUp();
 			this._startAutoIncProc(true);
@@ -457,11 +457,11 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this._doDown();
 			this._startAutoIncProc(false);
 		}
-		
+
 		this._changed = true;
 		delete this._shortcut;
-		
-		
+
+
 		var selrng = zk(inp).getSelectionRange();
 		if (zk.ie8_) {
 			var self = this;
@@ -475,7 +475,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				}
 			}, 150); // do it later for some timeout function happened.
 		}
-		
+
 		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
 		zk(inp).focus(); //we have to set it here; otherwise, if it is in popup of
 			//datebox, datebox's onblur will find zk.currentFocus is null
@@ -491,7 +491,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		this._onChanging();
 		this._stopAutoIncProc();
-		
+
 		if ((zk.ie < 11 || zk.webkit) && this._lastPos)
 			zk(this.getInputNode()).setSelectionRange(this._lastPos, this._lastPos);
 	},
@@ -527,15 +527,15 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var sr = zk(this.getInputNode()).getSelectionRange(),
 			start = sr[0],
 			end = sr[1];
-			//don't use [0] as the end variable, it may have a bug when the format is aHH:mm:ss 
+			//don't use [0] as the end variable, it may have a bug when the format is aHH:mm:ss
 			//when use UP/Down key to change the time
-		
+
 		// Bug ZK-434
 		var hdler;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			if (!f[i].type) continue;
 			if (f[i].index[0] <= start) {
-				hdler = f[i]; 
+				hdler = f[i];
 				if (f[i].index[1] + 1 >= end)
 					return f[i];
 			}
@@ -546,10 +546,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var f = this._fmthdler,
 			index = f.$indexOf(th),
 			lastHandler;
-			
+
 		while ((lastHandler = f[++index])
 				&& (!lastHandler.type || lastHandler.type == AM_PM_FIELD));
-		
+
 		return lastHandler;
 	},
 	_startAutoIncProc: function (up) {
@@ -574,12 +574,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var n = this.$n(),
 			inp = this.getInputNode(),
 			selrng = zk(inp).getSelectionRange();
-		
+
 		if (!inp.value)
 			inp.value = Timebox._unformater ? '' : this.coerceToString_();
 
 		this._doCheckPos();
-		
+
 		// Bug 2688620
 		if (selrng[0] !== selrng[1]) {
 			zk(inp).setSelectionRange(selrng[0], selrng[1]);
@@ -606,7 +606,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	bind_: function () {
 		this.$supers(zul.db.Timebox, 'bind_', arguments);
 		var btn;
-		
+
 		if (btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')
 				.domListen_(btn, 'onZMouseUp', '_btnUp');
@@ -659,9 +659,9 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			singleLen = this.isSingleLength() !== false,
 			ofs;
 
-		text = zk.parseInt(singleLen ? text : 
+		text = zk.parseInt(singleLen ? text :
 				text.replace(/ /g, '0')) + up;
-		
+
 		var max = this.maxsize + 1;
 		if (text < this.minsize) {
 			text = this.maxsize;
@@ -669,19 +669,19 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		} else if (text >= max) {
 			text = this.minsize;
 			ofs = -1;
-		} else if (singleLen) 
-			ofs = (up > 0) ? 
+		} else if (singleLen)
+			ofs = (up > 0) ?
 					(text == 10) ? 1 : 0 :
 					(text == 9) ? -1 : 0;
 
 		if (text < 10 && !singleLen)
 			 text = '0' + text;
-		
+
 		inp.value = val.substring(0, start) + text + val.substring(end);
-		
+
 		if (singleLen && ofs) {
 			this._doShift(wgt, ofs);
-			end += ofs; 
+			end += ofs;
 		}
 
 		zk(inp).setSelectionRange(start, end);
@@ -692,15 +692,15 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			pos = sel[0],
 			val = inp.value,
 			maxLength = _getMaxLen(wgt);
-		
-		// clean over text	
+
+		// clean over text
 		if (val.length > maxLength) {
 			val = inp.value = val.substr(0, maxLength);
 			sel = [Math.min(sel[0], maxLength), Math.min(sel[1], maxLength)];
 			pos = sel[0];
 		}
-		
-		if (pos != sel[1]) { 
+
+		if (pos != sel[1]) {
 			//select delete
 			inp.value = val.substring(0, pos) + _cleanSelectionText(wgt, this)
 							+ val.substring(sel[1]);
@@ -713,7 +713,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				hdler, posOfs;
 			if (pos == this.index[ofs2] + ofs2) {// on start or end
 				//delete by sibling handler
-				if (hdler = fmthdler[index + ofs * 2]) 
+				if (hdler = fmthdler[index + ofs * 2])
 					pos = hdler.index[ofs3] + ofs3 + ofs;
 			} else {// delete self
 				pos += ofs;
@@ -723,7 +723,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 				posOfs = hdler.isSingleLength();
 				inp.value = val.substring(0, (ofs3 += pos) - 1)
 					+ (posOfs ? '' : ' ') + val.substring(ofs3);
-				if (posOfs)	
+				if (posOfs)
 					hdler._doShift(wgt, posOfs);
 			}
 			if (posOfs && !backspace) pos--;
@@ -735,8 +735,8 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			index, NTH;
 		if (NTH = wgt.getNextTimeHandler(this)) {
 			index = NTH.index[0];
-			zk(inp).setSelectionRange(index, 
-				Math.max(index, 
+			zk(inp).setSelectionRange(index,
+				Math.max(index,
 					zk(inp).getSelectionRange()[1]));
 			NTH.addTime(wgt, num);
 		}
@@ -748,24 +748,24 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			pos = sel[0],
 			maxLength = _getMaxLen(wgt),
 			posOfs = this.isSingleLength();
-			
-		// clean over text	
+
+		// clean over text
 		if (val.length > maxLength) {
 			val = inp.value = val.substr(0, maxLength);
 			sel = [Math.min(sel[0], maxLength), Math.min(sel[1], maxLength)];
 			pos = sel[0];
 		}
-		
+
 		if (pos == maxLength)
 			return;
-		
+
 		// first number (hendle max bound)
 		if (pos == this.index[0]) {
 			var text = this.getText(val)
 						.substring((posOfs === 0) ? 0 : 2).trim(),
 				i;
 			if (!text.length) text = '0';
-			
+
 			if ((i = zk.parseInt(num + text)) > this.maxsize) {
 				if (posOfs !== 0) {
 					val = inp.value = val.substring(0, pos) + (posOfs ? '0' : '00')
@@ -797,13 +797,13 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 					}
 				}
 			}
-			
+
 			if (!i || i > this.maxsize) {
 				this._addNextTime(wgt, num);
 				return;
 			}
 		}
-		
+
 		if (pos != sel[1]) {
 			//select edit
 			var s = _cleanSelectionText(wgt, this),
@@ -811,12 +811,12 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			//in middle position
 			if (posOfs !== false && (ofs = pos - this.index[1]))
 				this._doShift(wgt, ofs);
-				
-			inp.value = val.substring(0, pos++) + num 
+
+			inp.value = val.substring(0, pos++) + num
 				+ s.substring(ofs ? 0 : 1)
 				+ val.substring(sel[1]);
 		} else {
-			inp.value = val.substring(0, pos) 
+			inp.value = val.substring(0, pos)
 				+ num + val.substring(++pos);
 		}
 		wgt.lastPos = pos;
@@ -831,7 +831,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		var f = wgt._fmthdler,
 			index = f.$indexOf(this),
 			NTH;
-		this.index[1] += shift;	
+		this.index[1] += shift;
 		while (NTH = f[++index]) {
 			NTH.index[0] += shift;
 			NTH.index[1] += shift;
@@ -967,7 +967,7 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 	unformat: function (date, val) {
 		var text = this.getText(val).trim(),
 			APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM : zk.APM;
-		return (text.length == APM[0].length) ? 
+		return (text.length == APM[0].length) ?
 			APM[0] == text : true;
 	},
 	addTime: function (wgt, num) {
@@ -993,13 +993,13 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 			start = this.index[0],
 			end = this.index[1] + 1,
 			val = inp.value;
-		if (pos1 - pos > end - start) 
+		if (pos1 - pos > end - start)
 			return this.$supers('deleteTime', arguments);
-			
+
 		var t = [''];
 		for (var i = end - start; i > 0; i--)
 			t.push(' ');
-		
+
 		inp.value = val.substring(0, start) + t.join('') + val.substring(end);
 		zk(inp).setSelectionRange(start, start);
 	},

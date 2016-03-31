@@ -1,9 +1,9 @@
 /* NumberInputWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri May 27 16:12:42 TST 2011, Created by jumperchen
 
@@ -60,7 +60,7 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 					if (!globallocalizedSymbols[ary[0]])
 						globallocalizedSymbols[ary[0]] = ary[1];
 					return globallocalizedSymbols[ary[0]];
-				} 
+				}
 				return val;
 			},
 			function () {

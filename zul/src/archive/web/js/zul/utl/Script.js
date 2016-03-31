@@ -1,9 +1,9 @@
 /* Script.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Dec 11 15:39:59     2008, Created by tomyeh
 
@@ -19,18 +19,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.utl.Script = zk.$extends(zk.Widget, {
 	$define: {
-    	/** Returns the content of the script element.
-    	 * By content we mean the JavaScript codes that will be enclosed
-    	 * by the HTML SCRIPT element.
-    	 *
-    	 * <p>Default: null.
-    	 * @return String
-    	 */
-    	/** Sets the content of the script element.
-    	 * By content we mean the JavaScript codes that will be enclosed
-    	 * by the HTML SCRIPT element.
-    	 * @param String content
-    	 */
+		/** Returns the content of the script element.
+		 * By content we mean the JavaScript codes that will be enclosed
+		 * by the HTML SCRIPT element.
+		 *
+		 * <p>Default: null.
+		 * @return String
+		 */
+		/** Sets the content of the script element.
+		 * By content we mean the JavaScript codes that will be enclosed
+		 * by the HTML SCRIPT element.
+		 * @param String content
+		 */
 		content: function (cnt) {
 			if (cnt) {
 				this._fn = typeof cnt == 'function' ? cnt : new Function(cnt);

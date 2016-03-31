@@ -22,7 +22,7 @@ zk.xml.Utl = {
 	/**
 	 * Loads XML from the resource at the specified URL.
 	 * If the callback method is specified, the URL is loaded asynchronously and
-	 * the callback is called with the XML document after the document is loaded and parsed. 
+	 * the callback is called with the XML document after the document is loaded and parsed.
 	 * @param String url
 	 * @param Function callback
 	 * @return DOMElement
@@ -45,7 +45,7 @@ zk.xml.Utl = {
 		return doc;
 	},
 	/**
-	 * Parses and returns the XML document from the specified text. 
+	 * Parses and returns the XML document from the specified text.
 	 * @param String text
 	 * @return DOMElement
 	 */

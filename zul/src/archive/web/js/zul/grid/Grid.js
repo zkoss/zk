@@ -1,9 +1,9 @@
 /* Grid.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Dec 23 15:23:39     2008, Created by jumperchen
 
@@ -39,9 +39,9 @@ var Grid =
  * It is used to create a grid of elements.
  * Both the rows and columns are displayed at once although only one will
  * typically contain content, while the other may provide size information.
- * 
+ *
  * <p>Default {@link #getZclass}: z-grid.
- * 
+ *
  * <p>To have a grid without stripping, you can specify a non-existent
  * style class to {@link #setOddRowSclass}.
  */
@@ -67,15 +67,15 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * @param int row which row to fetch (starting at 0).
 	 * @param int col which column to fetch (starting at 0).
 	 * @return zk.Widget
-	 */	
+	 */
 	getCell: function (row, col) {
 		var rows;
 		if (!(rows = this.rows))
 			return null;
-		
+
 		if (rows.nChildren <= row)
 			return null;
-		
+
 		var row = rows.getChildAt(row);
 		return row.nChildren <= col ? null : row.getChildAt(col);
 	},
@@ -128,11 +128,11 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		} else if (child.$instanceof(zul.grid.Columns)) {
 			this.columns = child;
 			this._syncEmpty();
-		} else if (child.$instanceof(zul.grid.Foot)) 
+		} else if (child.$instanceof(zul.grid.Foot))
 			this.foot = child;
-		else if (child.$instanceof(zul.mesh.Paging)) 
+		else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
-		else if (child.$instanceof(zul.mesh.Frozen)) 
+		else if (child.$instanceof(zul.mesh.Frozen))
 			this.frozen = child;
 
 		if (!ignoreDom)
@@ -151,9 +151,9 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		} else if (child == this.columns) {
 			this.columns = null;
 			this._syncEmpty();
-		} else if (child == this.foot) 
+		} else if (child == this.foot)
 			this.foot = null;
-		else if (child == this.paging) 
+		else if (child == this.paging)
 			this.paging = null;
 		else if (child == this.frozen) {
 			this.frozen = null;
@@ -166,7 +166,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * a redraw method for the empty message , if you want to customize the message ,
 	 * you could overwrite this.
 	 * @param Array out A array that contains html structure ,
-	 * 			it usually come from mold(redraw_). 
+	 * 			it usually come from mold(redraw_).
 	 */
 	redrawEmpty_: function (out) {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="'
@@ -209,7 +209,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
-			if (this._shallFixEmpty) 
+			if (this._shallFixEmpty)
 				_fixForEmpty(this);
 		}
 		this.$supers(Grid, 'onResponse', arguments);
@@ -316,7 +316,7 @@ zul.grid.RowIter = zk.$extends(zk.Object, {
 			q = p ? p.nextSibling : null;
 		if (this.opts && this.opts.skipHidden)
 			for (; q && !q.isVisible(); q = q.nextSibling) {}
-		if (p) 
+		if (p)
 			this.p = q;
 		return p;
 	}

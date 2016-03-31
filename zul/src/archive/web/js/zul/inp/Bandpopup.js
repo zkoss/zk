@@ -1,9 +1,9 @@
 /* Bandpopup.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Apr  3 15:24:37     2009, Created by tomyeh
 

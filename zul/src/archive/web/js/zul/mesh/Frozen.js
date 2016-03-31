@@ -18,10 +18,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return v ? v : 1;
 	}
 	// Bug 3218078
-	function _onSizeLater(wgt) {		
+	function _onSizeLater(wgt) {
 		var parent = wgt.parent,
 			bdfaker = parent.ebdfaker;
-		
+
 		// ZK-2130: should skip fake scroll bar
 		if (parent.eheadtbl && parent._nativebar) {
 			var cells = parent._getFirstRowCells(parent.eheadrows),
@@ -29,13 +29,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				cellsSize = totalcols,
 				columns = wgt._columns,
 				leftWidth = 0;
-			
+
 			//B70-ZK-2553: one may specify frozen without any real column
 			if (!cells || cellsSize <= 0) {
 				//no need to do the following computation since there is no any column
 				return;
 			}
-			
+
 			//ZK-2776: don't take hidden column, like setVisible(false), into account
 			for (var hdcol = parent.ehdfaker.firstChild; hdcol; hdcol = hdcol.nextSibling) {
 				var style = hdcol.style;
@@ -44,13 +44,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 			for (var i = 0; i < columns; i++)
 					leftWidth += cells[i].offsetWidth;
-			
+
 			parent._deleteFakeRow(parent.eheadrows);
-			
+
 			wgt.$n('cave').style.width = jq.px0(leftWidth);
 			var scroll = wgt.$n('scrollX'),
 				width = parent.$n('body').offsetWidth;
-			
+
 			// B70-ZK-2074: Resize forzen's width as meshwidget's body.
 			parent.$n('frozen').style.width = jq.px0(width);
 			width -= leftWidth;
@@ -60,9 +60,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			wgt.syncScroll();
 		}
 	}
-	
+
 /**
- * A frozen component to represent a frozen column or row in grid, like MS Excel. 
+ * A frozen component to represent a frozen column or row in grid, like MS Excel.
  * <p>Default {@link #getZclass}: z-frozen.
  */
 zul.mesh.Frozen = zk.$extends(zul.Widget, {
@@ -150,7 +150,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			var head = p.$n('head');
 			if (head)
 				this.domListen_(head, 'onScroll', '_doHeadScroll');
-			
+
 		} else {
 			// Bug ZK-2264
 			this._shallSyncScale = true;
@@ -167,7 +167,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			body = p.$n('body'),
 			foot = p.$n('foot'),
 			head = p.$n('head');
-		
+
 		if (p._nativebar) {
 			this.domUnlisten_(this.$n('scrollX'), 'onScroll');
 			p.unlisten({onScroll: this.proxy(this._onScroll)});
@@ -204,13 +204,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			return;
 		var self = this;
 		self._syncFrozen(); // B65-ZK-1470
-		
+
 		//B70-ZK-2129: prevent height changed by scrolling
-		var p = this.parent, 
-			phead = p.head, 
+		var p = this.parent,
+			phead = p.head,
 			firstHdcell, fhcs;
 		if (p._nativebar && phead) {
-			//B70-ZK-2558: frozen will onSize before other columns, 
+			//B70-ZK-2558: frozen will onSize before other columns,
 			//so there might be no any column in the beginning
 			var n = phead.$n();
 			firstHdcell = n ? (n.cells ? n.cells[0] : null) : null;
@@ -221,7 +221,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					fhcs.height = firstHdcell.offsetHeight + 'px';
 			}
 		}
-		
+
 		// Bug 3218078, to do the sizing after the 'setAttr' command
 		setTimeout(function () {
 			_onSizeLater(self);
@@ -235,7 +235,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		var num = this._start;
 		if (this._shallSync && num)
 			this._doScrollNow(num, true);
-		
+
 		this._shallSync = false;
 	},
 	beforeParentChanged_: function (p) {
@@ -243,13 +243,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		//ZK-2651: JS Error showed when clear grid children component that include frozen
 		if (this.desktop && this._lastScale) //if large then 0
 			this._doScroll(0);
-		
+
 		this.$supers('beforeParentChanged_', arguments);
 	},
 	_onScroll: function (evt) {
 		if (!evt.data || !zk.currentFocus)
 			return;
-		
+
 		var p = this.parent,
 			td,
 			frozen = this,
@@ -312,7 +312,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				hdcol = mesh.ehdfaker.firstChild,
 				ftrows = mesh.foot ? mesh.efootrows : null,
 				ftcells = ftrows ? ftrows.rows[0].cells : null;
-			
+
 			for (var faker, i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
 				if (hdcol.style.width.indexOf('px') == -1) {
 					var sw = hdcol.style.width = jq.px0(hdcells[i].offsetWidth),
@@ -332,14 +332,14 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					isVisible = hdWgt && hdWgt.isVisible(),
 					shallUpdate = false,
 					cellWidth;
-				
+
 				//ZK-2776, once a column is hidden, there is an additional style
 				var style = n.style;
 				if (style.visibility == 'hidden' || style.display == 'none' /*just in case*/)
 					continue; //skip column which is hide
-				
+
 				if (cnt-- <= 0) { //show
-					var wd = isVisible ? 
+					var wd = isVisible ?
 							(zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) // Bug ZK-2690
 							: 0,
 						nativebar = mesh._nativebar;
@@ -363,11 +363,11 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					cellWidth = '0px';
 					shallUpdate = true;
 				}
-				
+
 				// ZK-2101: should give 0.1px for chrome and safari
 				if ((zk.chrome || zk.safari) && cellWidth && (parseInt(cellWidth) == 0))
 					cellWidth = '0.1px';
-				
+
 				if (force || shallUpdate) {
 					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
 						faker.style.width = cellWidth;
@@ -383,13 +383,13 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					// if (mesh._nativebar && (!hdWgt._hflex || hdWgt._hflex == 'min')) {
 					//	mesh.ehdfaker.childNodes[i].style.display = hidden ? 'none' : '';
 					//	hdcells[i].style.display = hidden ? 'none' : '';
-					// } 
-					
+					// }
+
 					hdcells[i].style.width = cellWidth;
 					// foot
 					if (ftcells) {
 						// ZK-2071: display causes wrong in colspan case
-						// 
+						//
 						// if (mesh._nativebar) {
 						//	mesh.eftfaker.childNodes[i].style.display = hidden ? 'none' : '';
 						//	ftcells[i].style.display = hidden ? 'none' : '';
@@ -399,14 +399,14 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-			
+
 			hdcol = mesh.ehdfaker.firstChild;
 			for (var i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
 				if (hdcol.style.display != 'none')
 					totalWidth += zk.parseInt(hdcol.style.width);
 			}
 		}
-		// Set style width to table to avoid colgroup width not working 
+		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
 		var headtbl, bodytbl, foottbl;
 		if (headtbl = mesh.eheadtbl)
@@ -417,7 +417,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			foottbl.style.width = jq.px(totalWidth);
 
 		mesh._restoreFocus();
-		
+
 		// Bug ZK-601, Bug ZK-1572
 		if (zk.ie8_) {
 			zk(mesh).redoCSS();

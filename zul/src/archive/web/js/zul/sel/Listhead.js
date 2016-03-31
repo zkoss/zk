@@ -1,9 +1,9 @@
 /* Listhead.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Apr 30 22:25:45     2009, Created by tomyeh
 
@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  *  <p>Default {@link #getZclass}: z-listhead.
  */
-zul.sel.Listhead = zk.$extends(zul.mesh.ColumnMenuWidget, {	
+zul.sel.Listhead = zk.$extends(zul.mesh.ColumnMenuWidget, {
 	/** Returns the listbox that this belongs to.
 	 * @return Listbox
 	 */

@@ -296,7 +296,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				if (!isRealVisible && maximized) return;
 
 				var l, t, w, h,
-				s = node.style, 
+				s = node.style,
 				up = this.getMaximizableIconClass_(),
 				down = this.getMaximizedIconClass_();
 				if (maximized) {
@@ -350,16 +350,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					// prevent the scroll bar.
 					s.top = '-10000px';
 					s.left = '-10000px';
-					
+
 					var sw = $op[0].clientWidth;
-					
+
 					if (!floated) {
 						sw -= $op.zk.paddingWidth();
 						sw = $n.revisedWidth(sw);
 						sh -= $op.zk.paddingHeight();
 						sh = $n.revisedHeight(sh);
 					}
-					
+
 					s.width = jq.px0(sw);
 					s.height = jq.px0(sh);
 
@@ -651,7 +651,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
-				
+
 			var sw = $op[0].clientWidth;
 			if (!floated) {
 				sw -= $op.zk.paddingWidth();
@@ -721,7 +721,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			h = zk(tHeight ? n : body).contentHeight() - this._titleHeight();
 		if (tHeight)
 			h -= zk(body).padBorderHeight();
-		
+
 		var tb = this.tbar ? this.$n('tb') : null,
 			bb = this.bbar ? this.$n('bb') : null,
 			fb = this.fbar ? this.$n('fb') : null;
@@ -818,7 +818,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var shadow = this._shadow;
 		if (shadow) shadow.hide();
 	},
-	
+
 	afterAnima_: function (visible) {
 		this.$supers('afterAnima_', arguments);
 		// ZK-2138: parent should resize if parent has child with vflex
@@ -833,7 +833,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	
+
 	//super//
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.wnd.Panel, 'bind_', arguments);
@@ -874,7 +874,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				if ($jq.length)
 					$jq.hide().remove();
 			}
-			
+
 			zk(node).undoVParent(); //no need to fire onVParent in unbind_
 
 			var p = this.parent;
@@ -996,10 +996,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (added) scls += (scls ? ' ' : '') + added;
 			added = this._open ? '' : this.$s('collapsed');
 			if (added) scls += (scls ? ' ' : '') + added;
-			
+
 			if (!(this.getTitle() || this.caption))
 				scls += ' ' + this.$s('noheader');
-			
+
 			if (!this._rounded())
 				scls += ' ' + this.$s('noframe');
 		}

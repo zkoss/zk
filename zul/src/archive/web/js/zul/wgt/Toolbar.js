@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A toolbar.
- * 
+ *
  * <p>Mold:
  * <ol>
  * <li>default</li>
@@ -57,7 +57,7 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		var sc = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
 			var tabs = this.parent && zk.isLoaded('zul.tab') && this.parent.$instanceof(zul.tab.Tabbox) ? this.$s('tabs') : '';
-				
+
 			if (tabs)
 				sc += ' ' + tabs;
 			if (this.inPanelMold())
@@ -85,12 +85,12 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	// protected
 	onChildAdded_: function () {
 		this.$supers('onChildAdded_', arguments);
-		if (this.inPanelMold()) 
+		if (this.inPanelMold())
 			this.rerender();
 	},
 	onChildRemoved_: function () {
 		this.$supers('onChildRemoved_', arguments);
 		if (!this.childReplacing_ && this.inPanelMold())
 			this.rerender();
-	}	
+	}
 });

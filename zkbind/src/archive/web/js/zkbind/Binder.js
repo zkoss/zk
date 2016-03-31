@@ -25,7 +25,7 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 		}
 		if (w) {
 			if (!w._$binder)
-				w._$binder = new zkbind.Binder(w, this); 
+				w._$binder = new zkbind.Binder(w, this);
 			return w._$binder;
 		}
 		return null;

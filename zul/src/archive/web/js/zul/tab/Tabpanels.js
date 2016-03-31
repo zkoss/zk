@@ -50,7 +50,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 			n.style.width = '';
 
 		this.$supers('setWidth', arguments);
-		
+
 		if (isVer) {
 			if (n.style.width)
 				this.__width = n.style.width;
@@ -129,7 +129,7 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		// sync select status if tabbox not in accordion mold or
 		// the child cave is already visible
-		var tabbox = this.getTabbox(), 
+		var tabbox = this.getTabbox(),
 			cave;
 		if (tabbox && (!tabbox.inAccordionMold()
 				|| (cave = child.$n('cave')) && cave.style.display != 'none'))

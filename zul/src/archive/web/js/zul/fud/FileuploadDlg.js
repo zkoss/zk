@@ -1,9 +1,9 @@
 /* FileuploadDlg.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Aug 24 15:38:57 TST 2011, Created by tomyeh
 
@@ -12,7 +12,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 /**
  * A FileuploadDlg.
- * 
+ *
  */
 zul.fud.FileuploadDlg = zk.$extends(zul.wnd.Window, {
 	getZclass: function () { // keep the window's zclass
@@ -41,7 +41,7 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 		this._uplder = uplder;
 		filenm = filenm.replace(/\//g, '\\');
 		filenm = filenm.substring(filenm.lastIndexOf('\\') + 1, filenm.length);
-		
+
 		var id = uplder.id,
 			self = this,
 			wgt = uplder.getWidget(),
@@ -56,13 +56,13 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 			+ '</div><div style="padding-left: 24px">'
 			+ msgzk.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
 			+ '<span id="' + id + '-total">0</span></div></div>';
-		
+
 		uploaded.setVisible(true);
 		jq(uploaded).append(html);
 
 		if (max > 0 && max <= uploaded.$n().childNodes.length)
 			uploaded.$f('fileupload').setVisible(false); // B50-ZK-340: need to skip rerender
-		
+
 		this.viewer = jq('#' + id)[0];
 		jq('#' + id + '-cancel').click(function () {
 			wgt.$f('submit').revert();
@@ -73,7 +73,7 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 				zAu.send(new zk.Event(wgt.$o(), 'onRemove', index));
 				jq(self.viewer).remove();
 			}
-			
+
 			if (max > 0 && max > uploaded.$n().childNodes.length)
 				uploaded.$f('fileupload').setVisible(true); // B50-ZK-340: need to skip rerender
 		});

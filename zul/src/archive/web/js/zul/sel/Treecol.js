@@ -1,9 +1,9 @@
 /* Treecol.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 10 15:32:40     2009, Created by jumperchen
 
@@ -16,17 +16,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _updCells(tch, jcol) {
 		if (tch)
 			for (var w = tch.firstChild, tr; w; w = w.nextSibling) {
-				if ((tr = w.treerow) && jcol < tr.nChildren) 
+				if ((tr = w.treerow) && jcol < tr.nChildren)
 					tr.getChildAt(jcol).rerender();
 
 				_updCells(w.treechildren, jcol); //recursive
 			}
 	}
-	
+
 	function _sort0(treechildren, col, dir, sorting, isNumber) {
 		var d = [];
 		for (var i = 0, z = 0, w = treechildren.firstChild; w; w = w.nextSibling, z++) {
-			if (w.treechildren) 
+			if (w.treechildren)
 				_sort0(w.treechildren, col, dir, sorting, isNumber);
 			for (var k = 0, cell = w.getFirstCell(); cell; cell = cell.nextSibling, k++)
 				if (k == col) {
@@ -66,7 +66,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 	 */
 	getMeshBody: function () {
 		var tree = this.getTree();
-		return tree ? tree.treechildren : null;  
+		return tree ? tree.treechildren : null;
 	},
 	checkClientSort_: function (ascending) {
 		var tree;
@@ -79,7 +79,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			desktop = body.desktop;
 		try {
 			body.unbind();
-			_sort0(body, this.getChildIndex(), this.getSortDirection(), this.sorting, 
+			_sort0(body, this.getChildIndex(), this.getSortDirection(), this.sorting,
 				(this[ascending ? '_sortAscending' : '_sortDescending'] == 'client(number)'));
 			this._fixDirection(ascending);
 		} finally {
@@ -103,7 +103,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 		 * @param int maxlength
 		 */
 		maxlength: [function (v) {
-			return !v || v < 0 ? 0 : v; 
+			return !v || v < 0 ? 0 : v;
 		}, function () {
 			if (this.desktop) {
 				this.rerender();

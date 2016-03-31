@@ -1,9 +1,9 @@
 /* Upload.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jul 17 16:44:50     2009, Created by tomyeh
 
@@ -27,7 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		zul.Upload.start(uplder);
 		o.uploaders[key] = uplder;
 	}
-	function _start(o, form, val) { //start upload	
+	function _start(o, form, val) { //start upload
 		//B50-ZK-255: FileUploadBase$SizeLimitExceededException
 		//will not warning in browser
 		_initUploader(o, form, val);
@@ -45,7 +45,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					+ (upload.isNative ? '&native=true' : ''), {desktop: dt,au: true}),
 			form = n.form;
 		form.action = action;
-		
+
 		// we don't use jq().remove() in this case, because we have to use its reference.
 		var p = form.parentNode;
 		p.parentNode.removeChild(p);
@@ -55,7 +55,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			for (var len = files.length; len--;)
 				fns.unshift(files[len].name);
 			return fns.join(',');
-		})(n.files); 
+		})(n.files);
 		_start(n._ctrl, form, fileName);
 	}
 
@@ -85,7 +85,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.Upload = zk.$extends(zk.Object, {
 	sid: 0,
 	/** Constructor
-	 * @param zk.Widget wgt the widget belongs to the file upload 
+	 * @param zk.Widget wgt the widget belongs to the file upload
 	 * @param DOMElement parent the element representing where the upload element
 	 * 		is appended
 	 * @param String clsnm the CSS class name of the fileupload
@@ -94,9 +94,9 @@ zul.Upload = zk.$extends(zk.Object, {
 		this.uploaders = {};
 
 		var cls;
-		
+
 		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
-			var attr = attrs[i].trim(); 
+			var attr = attrs[i].trim();
 			if (attr.startsWith('maxsize='))
 				this.maxsize = attr.match(new RegExp(/maxsize=([^,]*)/))[1];
 			else if (attr.startsWith('multiple='))
@@ -108,15 +108,15 @@ zul.Upload = zk.$extends(zk.Object, {
 			else if (attr != 'true')
 				cls = attr;
 		}
-		
+
 		this._clsnm = cls || '';
-		
+
 		this._wgt = wgt;
-		
+
 		this._parent = parent;
 		if (wgt._tooltiptext) // ZK-751
 			this._tooltiptext = wgt._tooltiptext;
-		
+
 		this.initContent();
 	},
 	/**
@@ -153,10 +153,10 @@ zul.Upload = zk.$extends(zk.Object, {
 				 + (this.accept ? ' accept="' + this.accept.replace(new RegExp('\\|', 'g'), ',') + '"' : '')
 				 + ' hidefocus="true" style="height:'
 				 + ref.offsetHeight + 'px"/></form></span>';
-		
-		if (parent) 
+
+		if (parent)
 			jq(parent).append(html);
-		else 
+		else
 			jq(wgt).after(html);
 		delete this._formDetached;
 
@@ -171,7 +171,7 @@ zul.Upload = zk.$extends(zk.Object, {
 
 		var outer = this._outer = parent ? parent.lastChild : ref.nextSibling,
 			inp = outer.firstChild.firstChild;
-		
+
 		this._inp = inp;
 
 		if (zk.opera) { //in opera, relative not correct (test2/B50-ZK-363.zul)
@@ -181,9 +181,9 @@ zul.Upload = zk.$extends(zk.Object, {
 
 		inp.z$proxy = ref;
 		inp._ctrl = this;
-		
+
 		jq(inp).change(_onchange);
-		
+
 		//ZK-2471 refix
 		if (zk.ie <= 10) {
 			jq(inp).hover(function () {
@@ -199,8 +199,8 @@ zul.Upload = zk.$extends(zk.Object, {
 	openFileDialog: function () {
 		jq(this._inp).click();
 	},
-	/** 
-	 * Destroys the fileupload. You cannot use this object any more. 
+	/**
+	 * Destroys the fileupload. You cannot use this object any more.
 	 */
 	destroy: function () {
 		if (zk.opera)
@@ -208,7 +208,7 @@ zul.Upload = zk.$extends(zk.Object, {
 
 		jq(this._outer).remove();
 		this._inp = null;
-		this._wgt = this._parent = null;	
+		this._wgt = this._parent = null;
 		for (var v in this.uploaders) {
 			var uplder = this.uploaders[v];
 			if (uplder) {
@@ -222,7 +222,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * @return String the key of the uploader
 	 */
 	getKey: function (sid) {
-		return (this._wgt ? this._wgt.uuid : '') + '_uplder_' + sid; 
+		return (this._wgt ? this._wgt.uuid : '') + '_uplder_' + sid;
 	},
 	/**
 	 * Cancels the fileupload if the fileupload is progressing.
@@ -252,7 +252,7 @@ zul.Upload = zk.$extends(zk.Object, {
 			zul.Upload.close(uuid, sid);
 		}
 	},
-	
+
 	/**
 	 * Closes the fileupload
 	 * @param String uuid the ID of the widget
@@ -309,7 +309,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * @param Object uplder
 	 */
 	destroy: function (uplder) {
-		for (var files = zul.Upload.files, i = files.length; i--;) 
+		for (var files = zul.Upload.files, i = files.length; i--;)
 			if (files[i].id == uplder.id) {
 				files.splice(i, 1);
 				break;
@@ -326,7 +326,7 @@ zul.Upload = zk.$extends(zk.Object, {
 zul.Uploader = zk.$extends(zk.Object, {
 	/** Constructor
 	 * @param zul.Upload upload the upload object belong to the file uploader
-	 * @param String id the ID of the uploader 
+	 * @param String id the ID of the uploader
 	 * @param DOMElement form the element representing where the uploader element
 	 * 		is appended
 	 * @param String flnm the name of the file to be uploaded
@@ -339,7 +339,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 		this._parent = form.parentNode;
 		this._sid = upload.sid;
 		this._wgt = upload._wgt;
-		
+
 		var viewer, self = this;
 		if (!upload._clsnm) viewer = new zul.UploadViewer(this, flnm);
 		else
@@ -375,19 +375,19 @@ zul.Uploader = zk.$extends(zk.Object, {
 			frameId = this.id + '_ifm';
 
 		document.body.appendChild(this._parent);
-		if (!jq('#' + frameId).length) 
+		if (!jq('#' + frameId).length)
 			jq.newFrame(frameId);
 		this._form.target = frameId;
 		this._form.submit();
 		this._form.style.display = 'none';
-		
+
 		var self = this,
 			data = 'cmd=uploadInfo&dtid=' + wgt.desktop.id
 				+ '&wid=' + wgt.uuid + '&sid=' + this._sid;
-		
+
 		if (zul.Uploader._tmupload)
 			clearInterval(zul.Uploader._tmupload);
-		
+
 		function t() {
 			jq.ajax({
 				type: 'POST',
@@ -423,7 +423,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 			});
 		}
 		t.id = this.id;
-		
+
 		zul.Uploader.clearInterval = function (id) {
 			if (t.id == id) {
 				clearInterval(zul.Uploader._tmupload);
@@ -445,7 +445,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 	/**
 	 * Updates the status of the file being uploaded.
 	 * @param int sent how many percentage being sent
-	 * @param int total the size of the file 
+	 * @param int total the size of the file
 	 * @return boolean
 	 */
 	update: function (sent, total) {
@@ -471,15 +471,15 @@ zul.Uploader = zk.$extends(zk.Object, {
 		this.viewer.destroy(finish);
 		zul.Upload.destroy(this);
 		this._echo = true;
-		
+
 		//B50-3304877: autodisable and Upload
 		var wgt, upload, aded, parent;
 		if ((wgt = this._wgt) && (upload = this._upload)
 			&& (aded = upload._aded)) {
-			wgt._uplder = null; // prevent destory during onResponse(sync disabled status by rerender will destory _uplder) 
+			wgt._uplder = null; // prevent destory during onResponse(sync disabled status by rerender will destory _uplder)
 			aded.onResponse();
 			upload._aded = null;
-			
+
 			//restore uploader
 			wgt._uplder.destroy();
 			if ((parent = upload._parent) && !jq(parent).parents('html').length) {
@@ -511,7 +511,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 		zk.load('zul.wgt,zul.box', function () {
 			/**
 			 * Default file upload manager to manage the uploading files in a panel.
-			 * Users can add/delete the file upon the panel. 
+			 * Users can add/delete the file upon the panel.
 			 */
 			zul.UploadManager = zk.$extends(zul.wgt.Popup, {
 				$init: function () {
@@ -521,7 +521,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 				},
 				onFloatUp: function (ctl) {
 					var wgt = ctl.origin;
-					if (!this.isVisible()) 
+					if (!this.isVisible())
 						return;
 					this.setTopmost();
 				},
@@ -594,15 +594,15 @@ zul.Uploader = zk.$extends(zk.Object, {
 				removeFile: function (uplder) {
 					var id = uplder.id,
 						prog = this.getFileItem(id);
-					if (prog) 
+					if (prog)
 						prog.detach();
 					delete this._files[id];
 					var close = true;
-					for (var p in this._files) 
-						if (!(close = false)) 
+					for (var p in this._files)
+						if (!(close = false))
 							break;
-					
-					if (close) 
+
+					if (close)
 						this.close();
 				},
 				/**
@@ -635,7 +635,7 @@ zul.UploadViewer = zk.$extends(zk.Object, {
 	/**
 	 * Updates the status of the file being uploaded.
 	 * @param int sent how many percentage being sent
-	 * @param int total the size of the file 
+	 * @param int total the size of the file
 	 */
 	update: function (sent, total) {
 		var flman = zul.UploadViewer.flman;

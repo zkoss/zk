@@ -1,9 +1,9 @@
 /* Option.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jun  1 16:43:59     2009, Created by jumperchen
 
@@ -18,16 +18,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.sel.Option = zk.$extends(zul.Widget, {
 	_selected: false,
 	$define: {
-    	/**
-    	 * Returns whether it is disabled.
-    	 * <p>
-    	 * Default: false.
-    	 * @return boolean
-    	 */
-    	/**
-    	 * Sets whether it is disabled.
-    	 * @param boolean disabled
-    	 */
+		/**
+		 * Returns whether it is disabled.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 */
+		/**
+		 * Sets whether it is disabled.
+		 * @param boolean disabled
+		 */
 		disabled: function (disabled) {
 			var n = this.$n();
 			if (n) n.disabled = disabled ? 'disabled' : '';
@@ -105,7 +105,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	 * @return String
 	 */
 	getLabel: function () {
-		return this.firstChild ? this.firstChild.getLabel() : null; 
+		return this.firstChild ? this.firstChild.getLabel() : null;
 	},
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of {@link Select#getMaxlength}.
@@ -131,7 +131,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 				if (w.$instanceof(zul.sel.Option)) {
 					ret++;
 					if(w == this) break;
-				}		
+				}
 			}
 		}
 		return ret;

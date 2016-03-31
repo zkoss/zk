@@ -1,9 +1,9 @@
 /* Image.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Mar 26 15:07:07     2009, Created by tomyeh
 
@@ -121,11 +121,11 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 	 */
 	contentAttrs_: function () {
 		var attr = ' src="' + (this._src || '') + '"', v;
-		if (v = this._align) 
+		if (v = this._align)
 			attr += ' align="' + v + '"';
-		if (v = this._hspace) 
+		if (v = this._hspace)
 			attr += ' hspace="' + v + '"';
-		if (v = this._vspace) 
+		if (v = this._vspace)
 			attr += ' vspace="' + v + '"';
 		return attr;
 	}

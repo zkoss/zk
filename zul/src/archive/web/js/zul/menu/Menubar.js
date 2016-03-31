@@ -25,7 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!menubar._noFloatUp && !menubar._bOver && zul.menu._nOpen)
 			zWatch.fire('onFloatUp', menubar); //notify all
 	}
-	
+
 /**
  * A container that usually contains menu elements.
  *
@@ -45,7 +45,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		orient: function () {
 			this.rerender();
 		},
-		/** Returns whether the menubar scrolling is enabled. 
+		/** Returns whether the menubar scrolling is enabled.
 		 * <p>Default: false.
 		 * @return boolean
 		 */
@@ -54,7 +54,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		 */
 		scrollable: function (scrollable) {
 			if (this.checkScrollable())
-				this.rerender();	
+				this.rerender();
 		},
 		/** Returns whether to automatically drop down menus if user moves mouse
 		 * over it.
@@ -67,7 +67,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		 */
 		autodrop: null
 	},
-	
+
 	setWidth: function () {
 		this.$supers('setWidth', arguments);
 		this._checkScrolling();
@@ -128,23 +128,23 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		if (!this.childReplacing_)
 			this._checkScrolling();
 	},
-	
+
 	_checkScrolling: function () {
 		if (!this.checkScrollable()) return;
-		
+
 		var node = this.$n();
 		if (!node) return;
 		jq(node).addClass(this.$s('scroll'));
-		
+
 		var nodeWidth = zk(node).offsetWidth(),
 			body = this.$n('body'),
 			childs = jq(this.$n('cave')).children(),
 			totalWidth = 0;
-		
+
 		for (var i = childs.length; i--;)
 			totalWidth += jq(childs[i]).outerWidth(true); //ZK-3095
 
-		if (zk.ie) // child width (text node) is not integer in IE 
+		if (zk.ie) // child width (text node) is not integer in IE
 			totalWidth += childs.length;
 
 		var fixedSize = nodeWidth
@@ -182,7 +182,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			left = this.$n('left'),
 			right = this.$n('right'),
 			css = this._scrolling ? 'addClass' : 'removeClass';
-		
+
 		body.style.marginLeft = this._scrolling ? jq.px(left.offsetWidth) : '0';
 		body.style.marginRight = this._scrolling ? jq.px(right.offsetWidth) : '0';
 		left.style.display = right.style.display = this._scrolling ? 'block' : 'none';
@@ -218,7 +218,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		case 'left':
 			for (var i = 0; i < childLen; i++) {
 				// B50-ZK-381: Menu scrolling bug
-				// child width may be larger than body.offsetWidth 
+				// child width may be larger than body.offsetWidth
 				if (childs[i].offsetLeft >= currScrollLeft
 					|| childs[i].offsetLeft + (childs[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
 					var preChild = childs[i].previousSibling;
@@ -258,13 +258,13 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		var currPos = body.scrollLeft;
 		if (currPos == moveDest)
 			return false;
-		
+
 		var step = 5,
 			delta = currPos > moveDest ? -step : step,
 			setTo = currPos + delta;
 		if ((setTo < moveDest && delta < 0) || (setTo > moveDest && delta > 0))
 			setTo = moveDest;
-		
+
 		body.scrollLeft = setTo;
 		return true;
 	},

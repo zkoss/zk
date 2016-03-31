@@ -1,9 +1,9 @@
 /* Absolutechildren.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Oct  3 11:14:17 TST 2011, Created by jumperchen
 
@@ -14,13 +14,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 /**
- * <p>A container component that can contain any other ZK component and can only 
+ * <p>A container component that can contain any other ZK component and can only
  * be contained as direct child of Absolutelayout component. It can be absolutely
  * positioned within Absolutelayout component by either setting "x" and "y"
  * attribute or calling {@link #setX(int)} and {@link #setY(int)} methods.
- * 
+ *
  * <p>Default {@link #getZclass}: z-absolutechildren.
- * 
+ *
  * @author ashish
  * @since 6.0.0
  */

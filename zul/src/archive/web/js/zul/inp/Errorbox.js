@@ -1,9 +1,9 @@
 /* Errorbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Jan 11 21:17:56     2009, Created by tomyeh
 
@@ -45,17 +45,17 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	show: function () {
 		jq(document.body).append(this);
 		var cstp = this.parent._cst && this.parent._cst._pos;
-		
+
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
 		// ZK-2069: show only if is in view
 		setTimeout(function () {
-			if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if 
+			if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if
 				self.open(self.parent, null, cstp || 'end_before', {dodgeRef: !cstp});
 		}, 50); // B36-2935398: add time
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
-	/** 
+	/**
 	 * Destroys the errorbox
 	 */
 	destroy: function () {
@@ -94,11 +94,11 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		if (drag)
 			drag.destroy();
 		zWatch.unlisten({onScroll: this});
-		
+
 		// just in case
 		if (this.parent)
 			zWatch.unlisten({onHide: [this.parent, this.onParentHide]});
-		
+
 		this.$supers(zul.inp.Errorbox, 'unbind_', arguments);
 	},
 	getInputNode: function () {
@@ -210,13 +210,13 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			pointer = this.$n('p'),
 			ptofs = zk(parent).revisedOffset(),
 			nodeofs = zk(node).revisedOffset(),
-			dx = nodeofs[0] - ptofs[0], 
-			dy = nodeofs[1] - ptofs[1], 
+			dx = nodeofs[0] - ptofs[0],
+			dy = nodeofs[1] - ptofs[1],
 			dir,
 			s = node.style,
 			pw = 2 + (zk(pointer).borderWidth() / 2) || 0,
 			ph = 2 + (zk(pointer).borderHeight() / 2) || 0;
-		
+
 		// conditions of direction
 		if (dx >= parent.offsetWidth - pw)
 			dir = dy < ph - node.offsetHeight ? 'ld' : dy >= parent.offsetHeight - ph ? 'lu' : 'l';
@@ -224,14 +224,14 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			dir = dy < ph - node.offsetHeight ? 'rd' : dy >= parent.offsetHeight - ph ? 'ru' : 'r';
 		else
 			dir = dy < 0 ? 'd' : 'u';
-		
+
 		node.style.padding = '0';
 		// for setting the pointer position
 		if(dir == 'd' || dir == 'u') {
 			var md = (Math.max(dx, 0) + Math.min(node.offsetWidth + dx, parent.offsetWidth)) / 2 - dx - 6,
 				mx = node.offsetWidth - 11;
 			pointer.style.left = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
-			if(dir == 'd') { 
+			if(dir == 'd') {
 				pointer.style.top = null;
 				pointer.style.bottom = '-4px';
 				s.paddingBottom = ph + 'px';
@@ -239,12 +239,12 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				pointer.style.top = '-4px';
 				s.paddingTop = ph + 'px';
 			}
-			
+
 		} else if(dir == 'l' || dir == 'r') {
 			var md = (Math.max(dy, 0) + Math.min(node.offsetHeight + dy, parent.offsetHeight)) / 2 - dy - 6,
 				mx = node.offsetHeight - 11;
 			pointer.style.top = (md > mx ? mx : md < 1 ? 1 : md) + 'px';
-			if(dir == 'r') { 
+			if(dir == 'r') {
 				pointer.style.left = null;
 				pointer.style.right = '-4px';
 				s.paddingRight = pw + 'px';
@@ -252,7 +252,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				pointer.style.left = '-4px';
 				s.paddingLeft = pw + 'px';
 			}
-			
+
 		} else {
 			var ps = pointer.style;
 			ps.left = ps.top = ps.right = ps.bottom = null;

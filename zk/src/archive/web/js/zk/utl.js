@@ -172,7 +172,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			"'": '&#x27;',
 			'`': '&#x60;'
 		};
-		 // Functions for escaping and unescaping strings to/from HTML interpolation.
+		// Functions for escaping and unescaping strings to/from HTML interpolation.
 
 		var escaper = function (match) {
 			return escapeMap[match];
@@ -215,7 +215,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			"'": '&#x27;',
 			'`': '&#x60;'
 		};
-		 // Functions for escaping and unescaping strings to/from HTML interpolation.
+		// Functions for escaping and unescaping strings to/from HTML interpolation.
 
 		var escaper = function (match) {
 			return escapeMap[match];
@@ -233,7 +233,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			txt = txt != null ? String(txt) : '';
 
 			if (!opts) // speed up the replacement.
-   				return _encodeXML0(txt);
+				return _encodeXML0(txt);
 
 			var tl = txt.length,
 				pre = opts && opts.pre,
@@ -310,20 +310,20 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/** A shortcut of <code>' cellpadding="0" cellspacing="0" border="0"'</code>.
 	 * @type String
 	 */
- 	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
- 	/** A shortcut of <code>'&lt;img style="height:0;width:0"/&gt;'</code>.
- 	 * @type String
- 	 */
- 	img0: '<img style="height:0;width:0"/>',
- 	/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
- 	 * @type String
- 	 */
- 	i0: '<i style="height:0;width:0"/>',
- 
- 	/** Returns a long value representing the current time (unit: miliseconds).
- 	 * @return long
- 	 * @deprecated As of release 5.0.6, replaced with jq.now().
- 	 */
+	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
+	/** A shortcut of <code>'&lt;img style="height:0;width:0"/&gt;'</code>.
+	 * @type String
+	 */
+	img0: '<img style="height:0;width:0"/>',
+	/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
+	 * @type String
+	 */
+	i0: '<i style="height:0;width:0"/>',
+
+	/** Returns a long value representing the current time (unit: miliseconds).
+	 * @return long
+	 * @deprecated As of release 5.0.6, replaced with jq.now().
+	 */
 	now: jq.now,
 	/** Returns today.
 	 * @param boolean full if true, returns the full time,
@@ -681,7 +681,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/**
 	 * Checks whether all the loading images are finish.
 	 * @see #loadImage
-	 * @since 6.0.0 
+	 * @since 6.0.0
 	 */
 	isImageLoading: function () {
 		for (var n in _imgMap)

@@ -1,9 +1,9 @@
 /* LabelImageWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Nov 16 14:59:07     2008, Created by tomyeh
 
@@ -77,7 +77,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 * Updates the DOM tree for the modified label and image. It is called by
 	 * {@link #setLabel} and {@link #setImage} to update the new content of the
 	 * label and/or image to the DOM tree.
-	 * Default: invoke {@link zk.Widget#rerender} to redraw and re-bind. 
+	 * Default: invoke {@link zk.Widget#rerender} to redraw and re-bind.
 	 */
 	updateDomContent_: function () {
 		this.rerender();
@@ -110,7 +110,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	/**
 	 * Returns the HTML content of the label and image.
 	 * It is a fragment of HTML that you can use in the mold.
-	 * @return String 
+	 * @return String
 	 * @see #domImage_
 	 * @see #domLabel_
 	 */
@@ -118,10 +118,10 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		var label = this.domLabel_(),
 			icon = this.domIcon_(),
 			img = this.domImage_();
-		
+
 		if (img) {
 			if (icon) {
-				return img + ' ' + icon + (label ? ' ' + label : ''); 
+				return img + ' ' + icon + (label ? ' ' + label : '');
 			} else {
 				return label ? img + ' ' + label : img;
 			}

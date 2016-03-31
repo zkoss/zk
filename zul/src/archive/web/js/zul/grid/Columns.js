@@ -1,9 +1,9 @@
 /* Columns.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Dec 24 15:25:32     2008, Created by jumperchen
 
@@ -18,8 +18,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-columns.
  */
 zul.grid.Columns = zk.$extends(zul.mesh.ColumnMenuWidget, {
-	
-	/** Returns the grid that contains this columns. 
+
+	/** Returns the grid that contains this columns.
 	 * @return zul.grid.Grid
 	 */
 	getGrid: function () {
@@ -29,7 +29,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.ColumnMenuWidget, {
 		if (this.desktop) {
 			if (this.parent)
 				this.parent.rerender();
-			else 
+			else
 				this.$supers('rerender', arguments);
 		}
 		return this;

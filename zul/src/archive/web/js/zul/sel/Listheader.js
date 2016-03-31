@@ -1,9 +1,9 @@
 /* Listheader.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Apr 30 22:25:24     2009, Created by tomyeh
 
@@ -54,7 +54,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 		 * @param int maxlength
 		 */
 		maxlength: [function (v) {
-			return !v || v < 0 ? 0 : v; 
+			return !v || v < 0 ? 0 : v;
 		}, function () {
 			if (this.desktop) {
 				this.rerender();
@@ -62,7 +62,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			}
 		}]
 	},
-	
+
 	//B70-ZK-1816, also add in zk 8, ZK-2660
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
@@ -71,12 +71,12 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				this.smartUpdate('visible', visible);
 		}
 	},
-	
+
 	/** Groups and sorts the items ({@link Listitem}) based on
 	 * {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
-	 * 
+	 *
 	 * @param boolean ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
@@ -99,34 +99,34 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			evt.stop();
 			return false;
 		}
-		
+
 		var mesh = this.getMeshWidget();
 		if (!mesh || mesh.isModel() || !zk.feature.pe || !zk.isLoaded('zkex.sel')) return false;
 			// if in model, the sort should be done by server
-		
+
 		var	body = this.getMeshBody();
 		if (!body) return false;
 		evt.stop();
-		
+
 		var desktop = body.desktop,
 			node = body.$n();
 		try {
 			body.unbind();
 			if (body.hasGroup()) {
-				for (var gs = body.getGroups(), len = gs.length; --len >= 0;) 
+				for (var gs = body.getGroups(), len = gs.length; --len >= 0;)
 					body.removeChild(gs[len]);
 			}
-			
+
 			var d = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++) 
-				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++) 
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++)
+				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
 							wgt: cell,
 							index: z
 						};
 					}
-			
+
 			var dsc = dir == 'ascending' ? -1 : 1,
 				fn = this.sorting,
 				isNumber = sorter == 'client(number)';
@@ -137,11 +137,11 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 				}
 				return v;
 			});
-			
+
 			// clear all items
 			for (var item = body.firstItem; item; item = body.nextItem(item))
 				body.removeChild(item);
-			
+
 			for (var previous, row, index = this.getChildIndex(), i = 0, k = d.length; i < k; i++) {
 				row = d[i];
 				if (!previous || fn(previous.wgt, row.wgt, isNumber) != 0) {
@@ -283,7 +283,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	domContent_: function () {
 		var s = this.$supers('domContent_', arguments),
 			box = this.getListbox();
-		if (box != null && this.parent.firstChild == this 
+		if (box != null && this.parent.firstChild == this
 				&& box._checkmark && box._multiple && !box._listbox$noSelectAll) // B50-ZK-873
 			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (box.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'

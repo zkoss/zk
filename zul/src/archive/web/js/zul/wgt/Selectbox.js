@@ -1,9 +1,9 @@
 /* Selectbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Sep 30 10:51:52 TST 2011, Created by jumperchen
 
@@ -83,7 +83,7 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 		 * <p>
 		 * Don't use this method if your application is purely based on ZK's
 		 * event-driven model.
-		 * 
+		 *
 		 * @param String name
 		 *            the name of this component.
 		 */
@@ -102,7 +102,7 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
-		
+
 		if (!zk.gecko) {
 			var fn = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
@@ -132,7 +132,7 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 	//Bug 3304408: IE does not fire onchange
 	doBlur_: function (evt) {
 		this._doChange(evt);
-		return this.$supers('doBlur_', arguments); 		
+		return this.$supers('doBlur_', arguments);
 	},
 	//Bug 1756559: ctrl key shall fore it to be sent first
 	beforeCtrlKeys_: function (evt) {

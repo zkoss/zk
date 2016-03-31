@@ -1,9 +1,9 @@
 /* Timer.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Dec 11 17:37:20     2008, Created by tomyeh
 
@@ -25,13 +25,13 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	_delay: 0,
 
 	$define: {
-    	/** Returns whether the timer shall send Event repeatly.
-    	 * <p>Default: false.
-    	 * @return boolean
-    	 */
-    	/** Sets whether the timer shall send Event repeatly.
-    	 * @param boolean repeats
-    	 */
+		/** Returns whether the timer shall send Event repeatly.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether the timer shall send Event repeatly.
+		 * @param boolean repeats
+		 */
 		repeats: _zkf = function () {
 			if (this.desktop) this._sync();
 		},
@@ -101,7 +101,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	_tmfn: function () {
 		if (!this._repeats) this._running = false;
 		this.fire('onTimer', null, {ignorable: true,
-				rtags: {onTimer: 1} // Bug ZK-2720 only timer-keep-alive should reset the timeout 
+				rtags: {onTimer: 1} // Bug ZK-2720 only timer-keep-alive should reset the timeout
 			});
 	},
 

@@ -1,9 +1,9 @@
 /* Comboitem.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Mar 29 20:53:45     2009, Created by tomyeh
 
@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * An item of a combo box.
  *
  * <p>Non-XUL extension. Refer to {@link Combobox}.
- * 
+ *
  * <p>Default {@link #getZclass}: z-comboitem.
  *
  * @see Combobox
@@ -84,7 +84,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 			cb._select(this, {sendOnSelect: true, sendOnChange: true});
 			this._updateHoverImage();
 			cb.close({sendOnOpen: true, focus: true});
-			
+
 			// Fixed the onFocus event is triggered too late in IE.
 			cb._shallClose = true;
 			if (zul.inp.InputCtrl.isPreservedFocus(this))

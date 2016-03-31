@@ -1,9 +1,9 @@
 /* Bandbox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Mar 31 14:17:28     2009, Created by tomyeh
 
@@ -41,7 +41,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-	
+
 		out.push('</div>');
 	},
 	//@Override
@@ -49,7 +49,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		return 'z-icon-search';
 	},
 	open: function (opts) {
-		if (!this.firstChild) { 
+		if (!this.firstChild) {
 			// ignore when <bandpopup> is absent, but event is still fired
 			if (opts && opts.sendOnOpen)
 				this.fire('onOpen', {open: true, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
@@ -60,7 +60,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 	presize_: function () {
 		var bp = this.firstChild;
 		if (bp && (bp._hflex == 'min' || bp._vflex == 'min')) {
-			zWatch.fireDown('onFitSize', bp, {reverse: true});	
+			zWatch.fireDown('onFitSize', bp, {reverse: true});
 			return true;
 		}
 	},

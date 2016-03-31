@@ -1,9 +1,9 @@
 /* msgzul.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Oct. 13, 2006, created by Airton Carrara
 

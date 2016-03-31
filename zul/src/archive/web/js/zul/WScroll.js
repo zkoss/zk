@@ -1,9 +1,9 @@
 /* WScroll.js
 
 	Purpose:
-	
-	Description:	
-		A wave scrollbar control	
+
+	Description:
+		A wave scrollbar control
 	History:
 		Wed, Feb 22, 2012  4:16:53 PM, Created by jumperchen
 
@@ -13,7 +13,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 (function (zk) {
 	function easing(x, t, b, c, d) {
 		return -c * ((t = t / d - 1) * t * t * t - 1) + b; // easeOutQuart
-	}	
+	}
 	function snap(dg, pointer) {
 		var ctrl = dg.control,
 			x = pointer[0],
@@ -21,7 +21,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		if (dg._isVer) {
 			var move = pointer[1],
 				down = move >= dg._lastPos;
-			
+
 			if (move - dg._start < 0) {
 				move = pointer[1] = dg._start;
 			} else if (move > dg._end) {
@@ -32,12 +32,12 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				if (Math.abs(dg._lastPos - move) < 3)
 					return pointer;
 			}
-			
+
 			dg._lastPos = move;
 		} else {
 			var move = pointer[0],
 				right = move >= dg._lastPos;
-			
+
 			if (move - dg._start < 0) {
 				move = pointer[0] = dg._start;
 			} else if (move > dg._end) {
@@ -48,7 +48,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				if (Math.abs(dg._lastPos - move) < 3)
 					return pointer;
 			}
-			
+
 			dg._lastPos = move;
 		}
 		return pointer;
@@ -59,7 +59,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			opts = ctrl.opts;
 
 		dg._steps = opts.startStep;
-		dg._endStep = opts.endStep - opts.viewport; 
+		dg._endStep = opts.endStep - opts.viewport;
 		dg._scale = ctrl._scale;
 		dg._epos = ctrl.epos;
 		dg._lastP = dg._start;
@@ -87,7 +87,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			dg._end -= dg.node.offsetWidth - ctrl._gap;
 		}
 		jq(dg._epos).show().delay(200).fadeIn(500);
-		
+
 		if (dg._timer) {
 			clearTimeout(dg._timer);
 		}
@@ -106,10 +106,10 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 						dg._timer = setTimeout(function () {running(orient);}, 100);
 						return;
 					}
-				} else t = 10; // reset 
-				
+				} else t = 10; // reset
+
 				lastP = norient;
-				
+
 				var down = diff > 0,
 					total = down ? Math.max(0, diff / dg._scale) : Math.min(0, diff / dg._scale),
 					step = Math.round(ctrl.$class.easing(t / duration, t, 0, total, duration));
@@ -138,7 +138,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 						dg._steps = 0;
 				}
 				dg._epos.style[orient] = dg._start + (dg._scale * dg._steps) + 'px';
-				t += timeout;			
+				t += timeout;
 				if (dg._lastSteps != dg._steps) {
 					dg._lastSteps = dg._steps;
 					var func = orient == 'top' ? ctrl.opts.onScrollY : ctrl.opts.onScrollX;
@@ -164,14 +164,14 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			if (move > end)
 				move = end;
 			jq(dg.node).animate({top: move + 'px'}, 400, 'swing');
-			
+
 		} else {
 			move = zk.parseInt(dg._epos.style.left),
 				end = dg._end;
 			if (move > end)
 				move = end;
 			jq(dg.node).animate({left: move + 'px'}, 400, 'swing');
-			
+
 		}
 		ctrl.opts.startStep = dg._steps;
 		var $jq = jq(dg._epos),
@@ -202,54 +202,54 @@ zul.WScroll = zk.$extends(zk.Object, {
 	 * int startPosition
 	 * <p>Specifies the start position according to the scrolling area, like offset top for
 	 * the vertical scrolling and offset left for the horizental scrolling.
-	 * 
+	 *
 	 * <h4>startStep</h4>
 	 * int startStep
 	 * <p>Specifies the start step for the scrolling.
 	 * <p>Note: it cannot be negative.
-	 *  
+	 *
 	 * <h4>endStep</h4>
 	 * int endStep
 	 * <p>Specifies how many steps for the scrolling.
 	 * <p>Note: it cannot be negative.
-	 * 
+	 *
 	 * <h4>viewport</h4>
 	 * int viewport
 	 * <p>Specifies how many steps will show in the viewport.
 	 * <p>Note: it cannot be negative.
-	 * 
+	 *
 	 * <h4>viewportSize</h4>
 	 * int viewportSize
 	 * <p>Specifies how many pixels for the viewport size, like offsetHeight for
 	 * vertical scrolling and offsetWidth for horizental scrolling.
 	 * <p>Note: it cannot be negative.
-	 * 
+	 *
 	 * <h4>orient</h4>
 	 * String orient
 	 * <p>Specifies either 'vertical' or 'horizontal' to indicate that it can be
 	 * scrolled only in the vertical or horizontal direction.
 	 * <p>Default: 'horizontal'
-	 * 
+	 *
 	 * <h4>anchor</h4>
 	 * DOMElement anchor
 	 * <p>Specifies the anchor that indicates the scrollbar will be its child node.
 	 * <p>Default: the parent node of the control.
-	 * 
+	 *
 	 * <h4>syncSize</h4>
 	 * boolean syncSize
 	 * <p>Specifies whether to sync the scrolling area size at initial phase.
 	 * <p>Default: true.
-	 * 
+	 *
 	 * <h4>onScrollY</h4>
 	 * <pre><code>void onScrollY(int step);</code></pre>
 	 * <p>Specifies the callback function for the vertical scrolling, when user
 	 * changes the vertical scrolling step.
-	 * 
+	 *
 	 * <h4>onScrollX</h4>
 	 * <pre><code>void onScrollX(int step);</code></pre>
 	 * <p>Specifies the callback function for the horizental scrolling, when user
 	 * changes the horizental scrolling step.
-	 * 
+	 *
 	 * <h4>offset</h4>
 	 * int offset
 	 * <p>Specifies the offset for the scrolling step to shift when the callback
@@ -257,7 +257,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 	 * For example, if the offset is 2, then the steps in the onScrollX/Y event
 	 * will start at 2.
 	 * <p>Default: 0
-	 * 
+	 *
 	 * @type Map
 	 */
 	//opts: null,
@@ -390,7 +390,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			jq(self.control).unmousewheel(self.proxy(self._mousewheelY));
 		else if (!(zk.ie < 11) || !zk.opera) // ie and opera unsupported
 			jq(self.control).unmousewheel(self.proxy(self._mousewheelX));
-		
+
 		var $drag = jq(self.edrag);
 		$drag.children('div')
 			.unbind('mouseover', self.proxy(self._mouseOver))
@@ -440,7 +440,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			$drag = jq(this.edrag);
 		if (!$drag.hasClass(cls + '-over') && !zk.mobile) //no mouse over for mobile
 			return;// disable
-		
+
 		$drag.addClass(cls + '-clk');
 
 		var opts = this.opts;
@@ -465,7 +465,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			}
 			break;
 		case 'up':
-			if (opts.startStep > 0) {				
+			if (opts.startStep > 0) {
 				opts.startStep -= 1;
 				var move = opts.startPosition + (opts.startStep * this._scale);
 				if (this._isVer) {
@@ -476,13 +476,13 @@ zul.WScroll = zk.$extends(zk.Object, {
 						end = opts.viewportSize + opts.startPosition;
 					}
 					end -= this.edrag.offsetHeight - this._gap;
-					
+
 					this.epos.style.top = move + 'px';
 					if (end < move) {
 						this.edrag.style.top = end + 'px';
 					} else {
 						this.edrag.style.top = move + 'px';
-					}	
+					}
 					if (typeof this.opts.onScrollY == 'function')
 						this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
 				} else {
@@ -493,18 +493,18 @@ zul.WScroll = zk.$extends(zk.Object, {
 						end = opts.viewportSize + opts.startPosition;
 					}
 					end -= this.edrag.offsetWidth - this._gap;
-					
+
 					this.epos.style.left = move + 'px';
 					if (end < move) {
 						this.edrag.style.left = end + 'px';
 					} else {
 						this.edrag.style.left = move + 'px';
 					}
-					
+
 					if (typeof this.opts.onScrollX == 'function')
 						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 				}
-				
+
 				if (opts.startStep == 0)
 					$drag.removeClass(cls + '-over');
 			}
@@ -521,7 +521,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 						end = opts.viewportSize + opts.startPosition;
 					}
 					end -= this.edrag.offsetHeight - this._gap;
-					
+
 					this.epos.style.top = move + 'px';
 					if (end < move) {
 						this.edrag.style.top = end + 'px';
@@ -538,14 +538,14 @@ zul.WScroll = zk.$extends(zk.Object, {
 						end = opts.viewportSize + opts.startPosition;
 					}
 					end -= this.edrag.offsetWidth - this._gap;
-					
+
 					this.epos.style.left = move + 'px';
 					if (end < move) {
 						this.edrag.style.left = end + 'px';
 					} else {
 						this.edrag.style.left = move + 'px';
 					}
-					
+
 					if (typeof this.opts.onScrollX == 'function')
 						this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 				}
@@ -604,15 +604,15 @@ zul.WScroll = zk.$extends(zk.Object, {
 			}
 			if (steps == opts.startStep)
 				return;// nothing changed
-			
+
 			var moving = opts.startPosition + (opts.startStep * scale),
 				end = zk(this.eend).isVisible() ? this.eend.offsetTop - (this.edrag.offsetHeight - this._gap)
 							: opts.startPosition + opts.viewportSize - (this.edrag.offsetHeight - this._gap);
 			this.epos.style.top = moving + 'px';
-			
+
 			if (moving > end)
 				moving = end;
-				
+
 			this.edrag.style.top = moving + 'px';
 			if (typeof this.opts.onScrollY == 'function')
 			this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
@@ -638,18 +638,18 @@ zul.WScroll = zk.$extends(zk.Object, {
 			}
 			if (steps == opts.startStep)
 				return;// nothing changed
-			
+
 			var moving = opts.startPosition + (opts.startStep * scale),
 				end = zk(this.eend).isVisible() ? this.eend.offsetLeft - (this.edrag.offsetWidth - this._gap)
 							: opts.startPosition + opts.viewportSize - (this.edrag.offsetWidth - this._gap);
 			this.epos.style.left = moving + 'px';
-			
+
 			if (moving > end)
 				moving = end;
-				
+
 			this.edrag.style.left = moving + 'px';
 			if (typeof this.opts.onScrollX == 'function')
-				this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);	
+				this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
 		}
 	},
 	_initDragdrop: function () {
@@ -659,7 +659,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this.edrag = this.node.firstChild;
 		this.epos = this.edrag.nextSibling;
 		this.eend = this.node.lastChild;
-		
+
 		// sync the gap between edrag and epos
 		var s = this.epos.style,
 			old = s.display;
@@ -667,7 +667,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this._gap = this._isVer ? this.edrag.offsetHeight - this.epos.offsetHeight
 					: this.edrag.offsetWidth - this.epos.offsetWidth;
 		s.display = old;
-		
+
 		this.drag = new zk.Draggable(this, this.edrag, {
 			constraint: this._isVer ? 'vertical' : 'horizontal',
 			snap: snap,
@@ -682,7 +682,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this.drag.destroy();
 		this._unlistenMouseEvent();
 		jq(this.node).remove();
-		this.node = this.edrag = this.epos = this.drag = null; 
+		this.node = this.edrag = this.epos = this.drag = null;
 	},
 	redraw: function (p) {
 		var orient = this._isVer ? 'v' : 'h',

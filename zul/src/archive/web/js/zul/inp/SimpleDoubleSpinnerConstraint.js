@@ -43,7 +43,7 @@ zul.inp.SimpleDoubleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 					var msg = msgzul.OUT_OF_RANGE + ': ';
 					msg += '(' + this._min != null ? this._max != null ?
 							this._min + ' ~ ' + this._max : '>= ' + this._min : '<= ' + this._max + ')';
-				}	
+				}
 		}
 		if(msg)
 			return msg;

@@ -1,9 +1,9 @@
 /* HeadWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Dec 29 17:15:38     2008, Created by jumperchen
 
@@ -27,7 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else if ((hdfaker = mesh.ehdfaker)) {
 				//_scrollScale is used in Scrollbar.js
 				frozen._scrollScale = hdfaker.childNodes.length - frozen._columns - 1;
-				
+
 				// Bug ZK-2264
 				frozen._shallSyncScale = false;
 			}
@@ -45,7 +45,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		this.$supers('$init', arguments);
 		this.listen({onColSize: this}, -1000);
 	},
-	
+
 	$define: {
 		/** Returns whether the width of the child column is sizable.
 		 * @return boolean
@@ -60,7 +60,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		sizable: function () {
 			this.rerender();
 		},
-		
+
 		visible: function () {
 			this.rerender();
 			var mesh = this.getMeshWidget();
@@ -71,22 +71,22 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 					// ZK-2217: should contain foot and paging
 					var foot = mesh.$n('foot'),
 						pgib = mesh.$n('pgib'),
-						hgh = zk(mesh).contentHeight() - mesh.$n('head').offsetHeight 
+						hgh = zk(mesh).contentHeight() - mesh.$n('head').offsetHeight
 						- (foot ? foot.offsetHeight : 0) - (pgib ? pgib.offsetHeight : 0)
-						- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n().offsetHeight : 0); 
+						- (mesh._nativebar && mesh.frozen ? mesh.frozen.$n().offsetHeight : 0);
 					mesh.ebody.style.height = jq.px0(hgh);
 				}
 			}, 0);
 		}
 	},
-	
+
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		if (!this.$instanceof(zul.mesh.Auxhead))
 			for (var faker, fs = child.$class._faker, i = fs.length; i--;)
 				jq(child.uuid + '-' + fs[i], zk).remove();
 	},
-	
+
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Listhead/Columns/Treecols
 		v = false;
@@ -130,10 +130,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			rspan = fc.attr('rowspan'),
 			times = parseInt(rspan) - 1;
 		if (rspan && times > 0) {
-			for (var head = this.nextSibling; head && times != 0; head = head.nextSibling, times--) 
+			for (var head = this.nextSibling; head && times != 0; head = head.nextSibling, times--)
 				jq(head.firstChild).addClass(this.$s('border'));
 		}
-		
+
 	},
 	unbind_: function () {
 		jq(this.hdfaker).remove();
@@ -152,13 +152,13 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop) {
 			if (!_fixOnChildChanged(this) && this.parent._fixHeaders()) {
-				// refix-ZK-2466 : grid dynamic add childern should 'syncSize' at the end (instead of 'add one and trigger one's onSize') 
+				// refix-ZK-2466 : grid dynamic add childern should 'syncSize' at the end (instead of 'add one and trigger one's onSize')
 				this.parent._syncSize();
 			}
 			_syncFrozen(this);
 			this.parent._minWd = null;
 			var mesh = this.getMeshWidget();
-			
+
 			// B70-ZK-2128: Auxhead doesn't have to add faker.
 			if (this.$instanceof(zul.mesh.Auxhead)) {
 				var frozen = mesh ? mesh.frozen : null;
@@ -167,7 +167,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				}
 				return;
 			}
-			
+
 			// ZK-2098: recovery the header faker if not exists
 			var head = this,
 				fakers = ['hdfaker', 'bdfaker', 'ftfaker'];
@@ -190,7 +190,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						recoverFakerbar = !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false,
 						index = child.getChildIndex();
 
-					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding 
+					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding
 					// B30-1926480: the bar should be removed
 					if ((faker == 'hdfaker') && bar) {
 						var s;
@@ -200,18 +200,18 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 							barstyle += s.width ? 'width:' + s.width + ';' : '';
 						}
 						$bar.remove();
-		            
+
 						if (recoverFakerbar && hdfakerbar && (s = hdfakerbar.style)) {
 							hdfakerbarstyle = s.display ? 'display:' + s.display + ';' : '';
 							hdfakerbarstyle += s.width ? 'width:' + s.width + ';' : '';
 						}
 						$hdfakerbar.remove();
 					}
-					
-					// B30-1926480: child can be added after any brother node 
+
+					// B30-1926480: child can be added after any brother node
 					if (index > 0)
 						jq($faker.find('col')[index - 1]).after(html);
-					else 
+					else
 						$faker.append(html);
 
 					// resync var
@@ -233,7 +233,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (this.desktop) {
 			if (!_fixOnChildChanged(this) && !this.childReplacing_
-				&& this.parent._fixHeaders()) 
+				&& this.parent._fixHeaders())
 				this.parent.onSize();
 			this.parent._minWd = null;
 			// Fix IE, FF for the issue B30-1926480-1.zul and B30-1926480.zul
@@ -252,7 +252,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				bdfaker = wgt.ebdfaker,
 				hdf = hdfaker ? hdfaker.firstChild : null,
 				bdf = bdfaker ? bdfaker.firstChild : null,
-				everFlex = false; 
+				everFlex = false;
 			for (var h = this.firstChild; h; h = h.nextSibling) {
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
 				if (h.isVisible() && h._nhflex > 0) { //not min or undefined

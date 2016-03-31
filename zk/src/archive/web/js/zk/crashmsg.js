@@ -11,7 +11,7 @@
 	* 5 -> user server no response
 	Customization in zk.xml:
 	* init crash page layout by defining window.zkShowCrashMessage function
-	* init crash timeout by giving a number(sec) 
+	* init crash timeout by giving a number(sec)
 		
 	History:
 		Wed, Nov 12, 2014  5:10:36 PM, Created by Chunfu
@@ -20,22 +20,22 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 */
 window.zkInitCrashTimer = setTimeout(function () {
 	var zkErrorCode,
-		z_runonce = document.querySelectorAll('.z-runonce')[0], 
+		z_runonce = document.querySelectorAll('.z-runonce')[0],
 		zk_proc = document.getElementById('zk_proc'),
 		ztemp = document.querySelectorAll('.z-temp')[0],
 		zna = document.getElementById('zna'),
 		body = document.body;
 	if (zk_proc) {
 		if (z_runonce) { //zk error
-			if (ztemp) { 
+			if (ztemp) {
 				if (!zna)
 					zkErrorCode = 1;
-				else 
+				else
 					zkErrorCode = 2;
 			} else
 				zkErrorCode = 3;
 		} else { // user error
-			if (ztemp) 
+			if (ztemp)
 				zkErrorCode = 4;
 			else
 				zkErrorCode = 5;

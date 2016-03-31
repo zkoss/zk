@@ -1,9 +1,9 @@
 /* Flash.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Mar 28 22:02:52     2009, Created by tomyeh
 
@@ -38,7 +38,7 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 		/** Gets the source path of Flash movie
 		 * @return  String the source path of Flash movie
 		 */
-		/** Sets the source path of Flash movie 
+		/** Sets the source path of Flash movie
 		 * and redraw the component
 		 * @param String src
 		 */
@@ -46,11 +46,11 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 			var n = this._embedNode();
 			if (n) n.movie = n.src = v || '';
 		},
-		/** Returns the Window mode property of the Flash movie 
+		/** Returns the Window mode property of the Flash movie
 		 * <p>Default: "transparent".
-		 * @return String the Window mode property of the Flash movie 
+		 * @return String the Window mode property of the Flash movie
 		 */
-		/** Sets the Window Mode property of the Flash movie 
+		/** Sets the Window Mode property of the Flash movie
 		 * for transparency, layering, and positioning in the browser.
 		 * @param String wmode Possible values: window, opaque, transparent.
 		 */
@@ -60,16 +60,16 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 		},
 		/** Gets the background color of Flash movie.
 		 * <p>Default: null (the system default)
-		 * @return String the background color of Flash movie,[ hexadecimal RGB value] 
+		 * @return String the background color of Flash movie,[ hexadecimal RGB value]
 		 */
 		/** Sets the background color of Flash movie.
-		 * @param String bgcolor [ hexadecimal RGB value] 
+		 * @param String bgcolor [ hexadecimal RGB value]
 		 */
 		bgcolor: function (v) {
 			var n = this._embedNode();
 			if (n) n.bgcolor = v || '';
 		},
-		/** Returns the quality of the Flash movie 
+		/** Returns the quality of the Flash movie
 		 * <p>Default: "high".
 		 * @return String the quality of the Flash movie
 		 */
@@ -93,7 +93,7 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 		},
 		/** Returns true if the Flash movie plays repeatly.
 		 * <p>Default: false
-		 * @return boolean true if the Flash movie plays repeatly 
+		 * @return boolean true if the Flash movie plays repeatly
 		 */
 		/** Sets whether the Flash movie plays repeatly
 		 * @param boolean loop
@@ -107,7 +107,7 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 		// Bug 3306281
 		if (zk.ie < 11)
 			this.fire('onClick', e.data, e.opts);
-		this.$supers('doMouseDown_', arguments);	
+		this.$supers('doMouseDown_', arguments);
 	},
 	//super//
 	setHeight: function (height) {

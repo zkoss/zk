@@ -7,7 +7,7 @@
 		http://code.google.com/apis/ajax/documentation/
 		
 		Used to access Google's service, e.g. Maps API, Search API, Feed API, etc..
-		Since it requires a user to sign up and get a "googleAPIkey" to use it, 
+		Since it requires a user to sign up and get a "googleAPIkey" to use it,
 		you have to	get such key on the Google's web site first:
 		
 		http://code.google.com/apis/maps/signup.html

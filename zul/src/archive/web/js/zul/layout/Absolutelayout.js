@@ -1,9 +1,9 @@
 /* Absolutelayout.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Oct  3 11:14:17 TST 2011, Created by jumperchen
 
@@ -16,9 +16,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * <p>An Absolutelayout component can contain absolute positioned multiple
  * absolutechildren components.
- * 
+ *
  * <p>Default {@link #getZclass}: z-absolutelayout.
- * 
+ *
  * @author ashish
  * @since 6.0.0
  */

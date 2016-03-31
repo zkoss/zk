@@ -1,9 +1,9 @@
 /* SimpleDateConstraint.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Sep 10 10:09:47     2009, Created by jumperchen
 
@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	/** Constructor.
 	 * @param Object a
-	 * It can be String or number, the number or name of flag, 
+	 * It can be String or number, the number or name of flag,
 	 * such as "no positive", 0x0001.
 	 * @param zk.Widget the datebox
 	 * @since 5.0.8
@@ -34,7 +34,7 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		var arr = this._cstArr;
 		if (constraint.startsWith('between')) {
 			var j = constraint.indexOf('and', 7);
-			if (j < 0 && zk.debugJS) 
+			if (j < 0 && zk.debugJS)
 				zk.error('Unknown constraint: ' + constraint);
 			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format);
 			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), this.format);
@@ -43,7 +43,7 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 				this._beg = this._end;
 				this._end = d;
 			}
-				
+
 			this._beg.setHours(0,0,0,0);
 			this._end.setHours(0,0,0,0);
 			arr[arr.length] = 'between';

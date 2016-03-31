@@ -1,9 +1,9 @@
 /* Radio.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Dec 16 11:17:26     2008, Created by jumperchen
 
@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * as the same group.
  * The nearest ancestor {@link Radiogroup} is the group that the radio
  * belongs to. See also {@link #getRadiogroup}.
- * 
+ *
  * <p>Event:
  * <ol>
  * <li>onCheck event is sent when a checkbox
@@ -76,7 +76,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			this._group._rmExtern(this);
 			this._attachExternal = false;
 		}
-	},	
+	},
 	/** Sets the radio is checked and unchecked the others in the same radio
 	 * group ({@link Radiogroup}
 	 * @param boolean checked
@@ -93,7 +93,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				// Bug ZK-622
 				if (!n.checked)
 					jq(n).removeAttr('checked');
-				
+
 				var group = this.getRadiogroup();
 				if (group) {
 					// bug #1893575 : we have to clean all of the radio at the same group.
@@ -163,7 +163,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 					newGroup._addExtern(this);
 					this._attachExternal = true;
 				}
-				newGroup._fixOnAdd(this); 
+				newGroup._fixOnAdd(this);
 			}
 		}
 		this.$supers('beforeParentChanged_', arguments);

@@ -1,9 +1,9 @@
 /* mesg_it.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Aug 10, 2006, Created by Matteo Barbieri
 

@@ -1,9 +1,9 @@
 /* ComboWidget.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Mar 31 14:15:39     2009, Created by tomyeh
 
@@ -49,7 +49,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	onSize: function () {
 		zul.inp.RoundUtl.onSize(this);
 	},
-	
+
 	onFloatUp: function (ctl) {
 		if ((!this._inplace && !this.isOpen()) || jq(this.getPopupNode_()).is(':animated'))
 			return;
@@ -60,9 +60,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			if (this._inplace) {
 				var n = this.$n(),
 					inplace = this.getInplaceCSS();
-				
+
 				if (jq(n).hasClass(inplace)) return;
-				
+
 				n.style.width = jq.px0(zk(n).revisedWidth(n.offsetWidth));
 				jq(this.getInputNode()).addClass(inplace);
 				jq(n).addClass(inplace);
@@ -86,7 +86,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				scrollPos.left = pp.scrollLeft;
 				scrollPos.Top = pp.scrollTop;
 				pp.style.height = 'auto'; // ZK-2086: BandBox popup invalid render if ON_OPEN event listener is attached
-				
+
 				// Bug 2941343, 2936095, and 3189142
 				if (zk.ie8)
 					pp.style.width = pz[0];
@@ -124,7 +124,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	/** Returns whether the list of combo items is open
-	 * @return boolean 
+	 * @return boolean
 	 */
 	isOpen: function () {
 		return this._open;
@@ -176,10 +176,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var $pp = zk(pp);
 		$pp.makeVParent();
 		zWatch.fireDown('onVParent', this);
-		
+
 		// throw in
 		pp.style.left = '';
-		
+
 		//B80-ZK-3051
 		//check the popup space before position()
 		var ppHeight = $pp.dimension().height;
@@ -188,7 +188,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var inpHeight = inpDim.height;
 		var screenY = jq.innerY();
 		var screenHeight = jq.innerHeight();
-		
+
 		if(screenY + screenHeight - inpTop - inpHeight > ppHeight) {
 			$pp.position(inp, 'after_start');
 		} else if(inpTop - screenY > ppHeight) {
@@ -319,7 +319,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.focus) {
 			this.focus();
 		}
-		
+
 		var pp = this.getPopupNode_();
 		if (!pp) return;
 
@@ -331,7 +331,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			zk(pp).undoVParent();
 			zWatch.fireDown('onVParent', self);
 		}, -1);
-		
+
 		if (this._shadow) {
 			this._shadow.destroy();
 			this._shadow = null;
@@ -378,7 +378,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	/** Called when the user presses enter when this widget has the focus ({@link #focus}).
 	 * <p>call the close function
 	 * @param zk.Event evt the widget event.
-	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see #close
 	 */
 	enterPressed_: function (evt) {
@@ -389,7 +389,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	/** Called when the user presses escape key when this widget has the focus ({@link #focus}).
 	 * <p>call the close function
 	 * @param zk.Event evt the widget event.
-	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget} 
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
 	 * @see #close
 	 */
 	escPressed_: function (evt) {
@@ -417,18 +417,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
-			
+
 		return this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {
 		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);
 		var btn, inp = this.getInputNode();
-			
+
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
-		
+
 		zWatch.listen({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.onzsync(this);
 	},
@@ -443,7 +443,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		zWatch.unlisten({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.unzsync(this);
-		
+
 		this.$supers(zul.inp.ComboWidget, 'unbind_', arguments);
 	},
 	inRoundedMold: function () {
@@ -453,9 +453,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._inplaceIgnore = false;
 		if (!this._buttonVisible) return;
 		// ZK-2192: Only need to determine if popup is animating
-		if (!this._disabled && !jq(this.getPopupNode_()).is(':animated')) {		
+		if (!this._disabled && !jq(this.getPopupNode_()).is(':animated')) {
 			if (this._open) this.close({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen: true});
-			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen: true});	
+			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen: true});
 		}
 		if (zk.ios) { //Bug ZK-1313: keep window offset information before virtual keyboard opened on ipad
 			this._windowX = window.pageXOffset;
@@ -536,19 +536,19 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * Returns the icon class for this combo widget. (override by subclass only)
 	 */
 	getIconClass_: zk.$void,
-	/** Utility to implement {@link #redraw}. 
+	/** Utility to implement {@link #redraw}.
 	 *  @param Array out an array of HTML fragments.
 	 */
 	redraw_: _zkf = function (out) {
 		var uuid = this.uuid,
 			isButtonVisible = this._buttonVisible;
-			
+
 		out.push('<span', this.domAttrs_({text: true}), '><input id="',
 			uuid, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)
 			out.push(' ', this.$s('rightedge'));
-		
+
 		out.push('" autocomplete="off"',
 			this.textAttrs_(), '/><a id="', uuid, '-btn" class="',
 			this.$s('button'));

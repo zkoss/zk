@@ -1,9 +1,9 @@
 /* East.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jan  7 12:14:59     2009, Created by jumperchen
 
@@ -16,13 +16,13 @@ var East =
 /**
  * An east region of a border layout.
  * <p>Default {@link #getZclass}: z-east.
- * 
+ *
  * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
  */
 zul.layout.East = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	_sumFlexWidth: true, //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
 	_maxFlexHeight: true, //indicate shall check if the maximum flex height for borderlayout. @See _fixMinFlex in widget.js
-	
+
 	/**
 	 * The height can't be specified in this component because its height is
 	 * determined by other region components ({@link North} or {@link South}).
@@ -64,7 +64,7 @@ zul.layout.East = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 		ambit.w += split.offsetWidth;
 		ambit.h = mars.top + mars.bottom;
 		ambit.ts = ambit.x + ambit.w + mars.right; // total size;
-		ambit.x = ambit.w + mars.right; 
+		ambit.x = ambit.w + mars.right;
 	},
 	_reszSp2: function (ambit, split) {
 		ambit.w -= split.w;

@@ -156,7 +156,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				this.rerender();
 		}
 	},
-	
+
 	// ZK-2133: should sync all items
 	setChgSel: function (val) { //called from the server
 		var sels = {};
@@ -170,7 +170,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			this._changeSelect(w, sels[w.uuid] == true);
 	},
-	  
+
 	/* Changes the selected status of an item without affecting other items
 	 * and return true if the status is really changed.
 	 */

@@ -1,17 +1,17 @@
 /* mesg_kr.js "charset=utf-8"
- 
+
 {{IS_NOTE
 	Purpose:
- 
+
 	Description:
- 
+
 	History:
 		Fri Jun 10 14:25:41     2009, Created by Reyus5
 		Thank Deok-su Lee for his contribution.
 }}IS_NOTE
- 
+
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
- 
+
 {{IS_RIGHT
 	This program is distributed under LGPL Version 2.1 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.

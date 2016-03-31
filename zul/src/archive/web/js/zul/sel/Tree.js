@@ -33,7 +33,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	},
 	onSize: function () {
 		this.$supers(Tree, 'onSize', arguments);
-		var self = this, 
+		var self = this,
 			frozen = this.frozen;
 		if (this._shallSyncFrozen && frozen && this._nativebar) {
 			frozen.onSize();
@@ -61,13 +61,13 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			}
 			bar.syncSize(showBar || this._shallShowScrollbar);
 			delete this._shallShowScrollbar; // use undefined rather false
-			
+
 			// ZK-355: Scroll to current position
 			if (scrollPosition) {
 				bar.scrollTo(scrollPosition.l, scrollPosition.t);
 				scrollPosition = null;
 			}
-			
+
 			//sync frozen
 			var frozen = this.frozen,
 				start;
@@ -116,7 +116,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this.paging = child;
 		else if (child.$instanceof(zul.sel.Treefoot))
 			this.treefoot = child;
-		else if (child.$instanceof(zul.mesh.Frozen)) 
+		else if (child.$instanceof(zul.mesh.Frozen))
 			this.frozen = child;
 		if (!ignoreDom)
 			this.rerender();

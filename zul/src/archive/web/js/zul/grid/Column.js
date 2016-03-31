@@ -1,9 +1,9 @@
 /* Column.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Dec 24 15:25:39     2008, Created by jumperchen
 
@@ -21,11 +21,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  * <p>The use of column is mainly to define attributes for each cell
  * in the grid.
- * 
+ *
  * <p>Default {@link #getZclass}: z-column.
  */
 zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
-	/** Returns the grid that contains this column. 
+	/** Returns the grid that contains this column.
 	 * @return zul.grid.Grid
 	 */
 	getGrid: function () {
@@ -41,7 +41,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	 */
 	getMeshBody: function () {
 		var grid = this.getGrid();
-		return grid ? grid.rows : null;  
+		return grid ? grid.rows : null;
 	},
 	checkClientSort_: function (ascending) {
 		var body;
@@ -52,7 +52,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	 * {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
-	 * 
+	 *
 	 * @param boolean ascending whether to use {@link #getSortAscending}.
 	 * If the corresponding comparator is not set, it returns false
 	 * and does nothing.
@@ -74,35 +74,35 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			evt.stop();
 			return false;
 		}
-		
+
 		var mesh = this.getMeshWidget();
 		if (!mesh || mesh.isModel() || !zk.feature.pe || !zk.isLoaded('zkex.grid'))
 			return false;
 			// if in model, the sort should be done by server
-			
+
 		var	body = this.getMeshBody();
 		if (!body) return false;
 		evt.stop();
-		
+
 		var desktop = body.desktop,
 			node = body.$n();
 		try {
 			body.unbind();
 			if (body.hasGroup()) {
-				for (var gs = body.getGroups(), len = gs.length; --len >= 0;) 
+				for (var gs = body.getGroups(), len = gs.length; --len >= 0;)
 					body.removeChild(gs[len]);
 			}
-			
+
 			var d = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++) 
-				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++) 
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++)
+				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++)
 					if (k == col) {
 						d[i++] = {
 							wgt: cell,
 							index: z
 						};
 					}
-			
+
 			var dsc = dir == 'ascending' ? -1 : 1,
 				fn = this.sorting,
 				isNumber = sorter == 'client(number)';
@@ -113,11 +113,11 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 				}
 				return v;
 			});
-			
+
 			// clear all
 			for (;body.firstChild;)
 				body.removeChild(body.firstChild);
-			
+
 			for (var previous, row, index = this.getChildIndex(), i = 0, k = d.length; i < k; i++) {
 				row = d[i];
 				if (!previous || fn(previous.wgt, row.wgt, isNumber) != 0) {

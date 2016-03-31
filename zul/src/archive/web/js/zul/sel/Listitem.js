@@ -1,9 +1,9 @@
 /* Listitem.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Apr 30 22:17:40     2009, Created by tomyeh
 
@@ -53,7 +53,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 			for (var w = this; w; w = w.previousSibling)
 				if (w.$instanceof(zkex.sel.Listgroup))
 					return w;
-				
+
 		return null;
 	},
 	/** Sets the label of the {@link Listcell} it contains.
@@ -92,7 +92,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		if (_isPE() && (this.$instanceof(zkex.sel.Listgroup) || this.$instanceof(zkex.sel.Listgroupfoot))
 				|| (no && no.visible))
 			return this.$supers('domStyle_', arguments);
-			
+
 		var style = this.$supers('domStyle_', arguments),
 			group = this.getListgroup();
 		return group && !group.isOpen() ? style + 'display:none;' : style;
@@ -101,7 +101,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 		var cls = this.$supers('domClass_', arguments),
 			list = this.getListbox();
 		if (list && jq(this.$n()).hasClass(list = list.getOddRowSclass()))
-			return cls + ' ' + list; 
+			return cls + ' ' + list;
 		return cls;
 	},
 	replaceWidget: function (newwgt) {
@@ -120,7 +120,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	_updHeaderCM: function (bRemove) {
 		// B50-3322970: need to clear Listheader _check cache
 		var box, lh;
-		if (!this.isSelected() && (box = this.getListbox()) 
+		if (!this.isSelected() && (box = this.getListbox())
 			&& box._headercm && box._multiple && box.$$selectAll != undefined
 				&& (lh = box.listhead) && (lh = lh.firstChild))
 			lh._checked = false;

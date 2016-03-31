@@ -1,9 +1,9 @@
 /* Label.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Oct  5 00:22:03     2008, Created by tomyeh
 
@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 /**
  * A label.
- * 
+ *
  * <p>Default {@link #getZclass}: z-label.
  */
 zul.wgt.Label = zk.$extends(zul.Widget, {

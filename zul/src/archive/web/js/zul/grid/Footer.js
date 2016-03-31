@@ -1,9 +1,9 @@
 /* Footer.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 23 12:26:51     2009, Created by jumperchen
 
@@ -20,7 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-footer.
  */
 zul.grid.Footer = zk.$extends(zul.mesh.FooterWidget, {
-	
+
 	/** Returns the grid that this belongs to.
 	 * @return zul.grid.Grid
 	 */

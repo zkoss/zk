@@ -26,7 +26,7 @@ if (!zk.css3) {
 	zk.eff.Shadow = zk.$extends(zk.Object, {
 		/** Constructor of the Shadow object.
 		 * <p>Notice that you have to invoke {@link #destroy},
-		 * if the shadow is no longer used. 
+		 * if the shadow is no longer used.
 		 * @param DOMElement element the element to associate the shadow
 		 * @param Map opts [optional] the options. Alowed options:
 		 * <ul>
@@ -34,7 +34,7 @@ if (!zk.css3) {
 		 * <li>right: The margin at right. Default: 4.</li>
 		 * <li>top: the margin at top. Default: 3.</li>
 		 * <li>bottom: the margin at bottom. Default: 3.</li>
-		 * <li>stackup: whether to create a stackup (see jqzk#makeStackup)</li> 
+		 * <li>stackup: whether to create a stackup (see jqzk#makeStackup)</li>
 		 * </ul>
 		 */
 		$init: function (element, opts) {
@@ -44,7 +44,7 @@ if (!zk.css3) {
 			jq(element).before('<div id="' + sdwid + _shadowEnding);
 			this.shadow = jq(sdwid, zk)[0];
 		},
-		/** Destroys the shadow. You cannot use this object any more. 
+		/** Destroys the shadow. You cannot use this object any more.
 		 */
 		destroy: function () {
 			jq(this.shadow).remove();
@@ -52,13 +52,13 @@ if (!zk.css3) {
 			this.node = this.shadow = this.stackup = null;
 		},
 		/** Hides the shadow, no matter the associated element is visible or not.
-		 * <p>Notice this method is rarely used. Rather, {@link #sync} is more convenient to use. 
+		 * <p>Notice this method is rarely used. Rather, {@link #sync} is more convenient to use.
 		 */
 		hide: function () {
 			jq(this.shadow).hide();
 			jq(this.stackup).hide();
 		},
-		/** Synchronizes the visual states of the element with shadow. The visual states include the visibility, location, dimensions and z-index. When the associated element is changed, you have to invoke this method to synchronize the visual states. 
+		/** Synchronizes the visual states of the element with shadow. The visual states include the visibility, location, dimensions and z-index. When the associated element is changed, you have to invoke this method to synchronize the visual states.
 		 */
 		sync: function () {
 			var node = this.node, $node = jq(node),
@@ -107,7 +107,7 @@ if (!zk.css3) {
 			return true;
 		},
 		/** Returns the lowest level of elements of this shadow. By lowest level, we mean the element is displayed at the botton in the z order.
-		 * The bottom element is the stackup element if #$init is called with the stackup option. Otherwise, it is the shadow element. 
+		 * The bottom element is the stackup element if #$init is called with the stackup option. Otherwise, it is the shadow element.
 		 * @return DOMElement
 		 */
 		getBottomElement: function () {

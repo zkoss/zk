@@ -1,9 +1,9 @@
 /* Splitter.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Nov  9 17:15:35     2008, Created by tomyeh
 
@@ -23,7 +23,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			before = colps == 'before',
 			sib = before ? Splitter._prev(nd) : Splitter._next(nd),
 			sibwgt = zk.Widget.$(sib),
-			fd = vert ? 'height' : 'width', 
+			fd = vert ? 'height' : 'width',
 			diff = 0;
 		if (sib) {
 			if (!open)
@@ -31,7 +31,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 			sibwgt.setDomVisible_(sib, open);
 			sibwgt.parent._fixChildDomVisible(sibwgt, open);
-			
+
 			var c = vert && sib.cells.length ? sib.cells[0] : sib;
 			diff = zk.parseInt(c.style[fd]);
 			if (!before && sibwgt && !sibwgt.nextSibling) {
@@ -78,7 +78,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  *
  *  <p>Default {@link #getZclass}: z-splitter.
- * 
+ *
  */
 zul.box.Splitter = zk.$extends(zul.Widget, {
 	_collapse: 'none',
@@ -108,7 +108,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var p = this.parent;
 		return !p || p.isVertical();
 	},
-	/** Returns the orient. 
+	/** Returns the orient.
 	 * It is the same as the parent's orientation ({@link Box#getOrient}).
 	 * @return String
 	 */
@@ -179,13 +179,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this._fixbtn();
 
 		this._drag = new zk.Draggable(this, node, {
-			constraint: this.getOrient(), 
+			constraint: this.getOrient(),
 			ignoredrag: Splitter._ignoresizing,
-			ghosting: Splitter._ghostsizing, 
-			overlay: true, 
+			ghosting: Splitter._ghostsizing,
+			overlay: true,
 			zIndex: 12000,
 			initSensitivity: 0,
-			snap: Splitter._snap, 
+			snap: Splitter._snap,
 			endeffect: Splitter._endDrag});
 
 		this._shallClose = !this._open;
@@ -261,7 +261,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (pn) {
 			var bfcolps = 'before' == this.getCollapse();
 			if (this.isVertical()) {
-				node.style.width = '100%'; // Sandbox-Splitter: the width should be same as parent 
+				node.style.width = '100%'; // Sandbox-Splitter: the width should be same as parent
 				this.setBtnPos_(true);
 			} else {
 				node.style.height = (zk.webkit ? pn.parentNode.clientHeight : pn.clientHeight) + 'px';
@@ -350,31 +350,31 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			diff = -diff;
 			bfcolps = !bfcolps;
 		}
-		
+
 		if (!diff) return; //nothing to do
-		
+
 		//F70-ZK-112: clear flex once splitter is moved, that is, make splitter resizeable
 		if (w = run.nextwgt) {
 			if (w.getHflex())
 				w.setHflex('false');
-			if (w.getVflex()) 
+			if (w.getVflex())
 				w.setVflex('false');
 			zWatch.fireDown('beforeSize', w);
 		}
 		if (w = run.prevwgt) {
 			if (w.getHflex())
 				w.setHflex('false');
-			if (w.getVflex()) 
+			if (w.getVflex())
 				w.setVflex('false');
 			zWatch.fireDown('beforeSize', w);
 		}
-		
+
 		//B70-ZK-2514: assign fd to each block separately and count on clientFd in the end
 		if (runNext && runPrev) {
 			var s = zk.parseInt(runNext.style[fd]),
 				s2 = zk.parseInt(runPrev.style[fd]),
 				totalFd = s + s2;
-			
+
 			s -= diff;
 			if (s < 0) s = 0;
 			var minusS = totalFd - s;
@@ -386,8 +386,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				runNext.style[fd] = nextClientFd + 'px'; //count on clientFd
 			if (prevClientFd != minusS)
 				runPrev.style[fd] = prevClientFd + 'px'; //count on clientFd
-			
-			if (!bfcolps) 
+
+			if (!bfcolps)
 				runNext.style.overflow = 'hidden';
 			else
 				runPrev.style.overflow = 'hidden';

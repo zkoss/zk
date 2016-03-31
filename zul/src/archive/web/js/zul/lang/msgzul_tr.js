@@ -1,9 +1,9 @@
 /* msgzul.js "charset=utf-8"
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Apr  8 14:00:00     2007, Created by Kursat Kurt
 

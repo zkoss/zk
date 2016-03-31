@@ -18,11 +18,11 @@ function _createMouseEvent (type, button, changedTouch, ofs) {
 		ofs = {sx: 0,sy: 0,cx: 0,cy: 0};
 	
 	var simulatedEvent = document.createEvent('MouseEvent');
-	simulatedEvent.initMouseEvent(type, true, true, window, 1, 
-		changedTouch.screenX + ofs.sx, changedTouch.screenY + ofs.sy, 
+	simulatedEvent.initMouseEvent(type, true, true, window, 1,
+		changedTouch.screenX + ofs.sx, changedTouch.screenY + ofs.sy,
 		changedTouch.clientX + ofs.cx, changedTouch.clientY + ofs.cy,
 		false, false, false, false, button, null);
-	return simulatedEvent;		
+	return simulatedEvent;
 }
 function _createJQEvent (target, type, button, changedTouch, ofs) {
 	//do not allow text
@@ -52,8 +52,8 @@ function _toMouseEvent(event, changedTouch) {
 	case 'touchend':
 		return _createJQEvent(
 			document.elementFromPoint(
-				changedTouch.clientX, 
-				changedTouch.clientY), 
+				changedTouch.clientX,
+				changedTouch.clientY),
 				'mouseup', 0, changedTouch);
 		break;
 	case 'touchmove':
@@ -173,8 +173,8 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		}
 		// ZK-2179: should skip row widget
 		var p = zk.Widget.$(evt.target).parent;
-		if (p && (!zk.isLoaded('zul.grid') || !p.$instanceof(zul.grid.Row)) 
-			&& (!zk.isLoaded('zul.sel') || (!p.$instanceof(zul.sel.Listitem) && !p.$instanceof(zul.sel.Treerow)))) 
+		if (p && (!zk.isLoaded('zul.grid') || !p.$instanceof(zul.grid.Row))
+			&& (!zk.isLoaded('zul.sel') || (!p.$instanceof(zul.sel.Listitem) && !p.$instanceof(zul.sel.Treerow))))
 		tevt.stopPropagation();
 	},
 	_dblTapEnd: function (evt) {
@@ -254,8 +254,8 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		
 		// ZK-2179: should skip row widget
 		var p = zk.Widget.$(evt.target).parent;
-		if (p && (!zk.isLoaded('zul.grid') || !p.$instanceof(zul.grid.Row)) 
-			&& (!zk.isLoaded('zul.sel') || (!p.$instanceof(zul.sel.Listitem) && !p.$instanceof(zul.sel.Treerow)))) 
+		if (p && (!zk.isLoaded('zul.grid') || !p.$instanceof(zul.grid.Row))
+			&& (!zk.isLoaded('zul.sel') || (!p.$instanceof(zul.sel.Listitem) && !p.$instanceof(zul.sel.Treerow))))
 			tevt.stopPropagation();
 	},
 	_tapHoldMove: function (evt) {

@@ -3,7 +3,7 @@
 	Purpose:
 		Locale dependent message
 	Description:
-		
+
 	History:
 		Wed Sep 4 10:34:00     2013, Created by RaymondChao
 

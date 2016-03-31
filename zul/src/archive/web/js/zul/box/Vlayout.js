@@ -1,9 +1,9 @@
 /* Vlayout.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Aug  6 12:37:19 TST 2010, Created by jumperchen
 

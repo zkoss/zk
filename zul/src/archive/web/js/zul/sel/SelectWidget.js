@@ -36,7 +36,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return true;
 	}
-	
+
 	function listenOnFitSize(wgt) {
 		if (wgt._rows && !wgt._rowsOnFitSize) {
 			zWatch.listen({onFitSize: wgt});
@@ -192,7 +192,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (w) {
 						var isMultiSelected = this._selItems.length > 1;
 						this._selectOne(w, true);
-						
+
 						// refix ZK-1483: do not have to scroll selected item into view when multiple items are selected
 						if (!isMultiSelected) {
 							var bar = this._scrollbar;
@@ -234,7 +234,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		name: function () {
 			if (this.destkop) this.updateFormData();
 		},
-		
+
 		/**
 		 * Returns the tab order of this component.
 		 * <p>
@@ -314,7 +314,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		else {
 			var isMultiSelected = this._selItems.length > 1;
 			this._selectOne(item, true);
-			
+
 			// refix ZK-1483: do not have to scroll selected item into view when multiple items are selected
 			if (!isMultiSelected) {
 				var bar = this._scrollbar;
@@ -323,10 +323,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (this._nativebar)
 					zk(item).scrollIntoView(this.ebody);
 			}
-			
+
 			if (zk.ff >= 4 && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
-				this._currentTop = this.ebody.scrollTop; 
+				this._currentTop = this.ebody.scrollTop;
 				this._currentLeft = this.ebody.scrollLeft;
 			}
 		}
@@ -598,7 +598,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var btn;
 		if (btn = this.$n('a')) {
 			if (this._focusItem) {
-				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());) 
+				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 					if (this._isFocus(w)) {
 						w.focus_(timeout);
 						break;
@@ -681,7 +681,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		// F70-ZK-2433
 		if (this.checkOnHighlightDisabled_())
 			return true;
-		
+
 		if (!evt.domTarget || !evt.target.canActivate())
 			return true;
 
@@ -734,7 +734,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		var skipFocus = _focusable(evt); //skip focus if evt is on a focusable element
 		if (this._checkmark
-		&& !evt.data.shiftKey && !(evt.data.ctrlKey || evt.data.metaKey) 
+		&& !evt.data.shiftKey && !(evt.data.ctrlKey || evt.data.metaKey)
 		&& (!this._cdo || cmClicked)) {
 			// Bug 2997034
 			this._syncFocus(row);
@@ -846,9 +846,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				// TODO: concern ctrl
 				if (npg > -1 && npg < this.getPageCount())
 					this.fire('onAcrossPage', {
-						page: npg, 
+						page: npg,
 						offset: this.indexOfItem(row),
-						shift: !shift || !this._multiple ? 0 : 
+						shift: !shift || !this._multiple ? 0 :
 							data.keyCode == 33 ? this.getPageSize() : -this.getPageSize()
 					});
 				return;
@@ -885,7 +885,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this._doRight(row);
 			break;
 		}
-		
+
 		if (step > 0 || (step < 0 && row)) {
 			if (row && shift && !row.isDisabled() && row.isSelectable()) // Bug ZK-1715: not select item if disabled.
 				this._toggleSelect(row, true, evt);
@@ -899,7 +899,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						return; // empty
 				} else
 					nrow = step > 0 ? nrow.nextSibling : nrow.previousSibling;
-				
+
 				if (!nrow) { // F60-ZK-715: across to next/previous page if any
 					if (endless)
 						break; // ignore Home/End key
@@ -909,7 +909,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						// TODO: concern ctrl
 						if (step > 0 ? (pnum + 1 < pg.getPageCount()) : pnum > 0) {
 							this.fire('onAcrossPage', {
-								page: pnum + (step > 0 ? 1 : 0), 
+								page: pnum + (step > 0 ? 1 : 0),
 								offset: step > 0 ? 0 : -1,
 								shift: !this._multiple || !shift ? 0 : step > 0 ? -1 : 1
 							});
@@ -941,7 +941,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				}
 			}
 		}
-		
+
 		if (lastrow) {
 			if (!shift) { // ZK-2971: already handled in the previous code block, ignore shift
 				if (ctrl)
@@ -956,7 +956,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			else {
 				// 1823278: key up until selection is out of view port, then it should scroll.
 				zk(lastrow.$n()).scrollIntoView(this.ebody); // Bug #1823947 and #1823278
-			} 
+			}
 		}
 
 		return _afterChildKey(evt);
@@ -971,7 +971,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var focusEl = this.$n('a');
 		if (!focusEl) //Bug ZK-1480: widget may not rendered when ROD enabled
 			return;
-		
+
 		var focusElStyle = focusEl.style,
 			oldTop = this._anchorTop,
 			oldLeft = this._anchorLeft,
@@ -988,9 +988,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
 			this._anchorTop = offs[1];
 			this._anchorLeft = offs[0];
-			this.fire('onAnchorPos',{top: this._anchorTop,left: this._anchorLeft});			
+			this.fire('onAnchorPos',{top: this._anchorTop,left: this._anchorLeft});
 		}
-		
+
 		focusElStyle.top = this._anchorTop + 'px';
 		focusElStyle.left = this._anchorLeft + 'px';
 	},
@@ -1033,15 +1033,15 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			lastSelected = this._focusItem || this._lastSelectedItem;
 		//Bugfix: if lastSelected is no longer selected, look for closest selected item as starting point
 		if (!lastSelected.isSelected()) {
-			var rowIndex = this.indexOfItem(row), 
-				min = Number.MAX_VALUE, 
+			var rowIndex = this.indexOfItem(row),
+				min = Number.MAX_VALUE,
 				closestSelItem;
 			for (var i = 0; i < this._selItems.length; ++i) {
 				var item = this._selItems[i],
 					index = this.indexOfItem(item),
 					diff = rowIndex - index,
 					oldmin = min;
-				if ((diff <= 0) && closestSelItem) 
+				if ((diff <= 0) && closestSelItem)
 					break;
 				min = Math.min(diff, min);
 				if (min != oldmin)
@@ -1131,7 +1131,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/* Toggle the selection and notifies server. */
 	_toggleSelect: function (row, toSel, evt, skipFocus) {
-		//B70-ZK-2588: don't jump the focus if item is deselected and _multiple is true 
+		//B70-ZK-2588: don't jump the focus if item is deselected and _multiple is true
 		this._isSelecting = toSel;
 		if (!this._multiple) {
 			var old = this.getSelectedItem();
@@ -1168,7 +1168,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			edata = evt.data;
 			if (this._multiple) {// B50-ZK-421
 
-			 	// Bug ZK-2969
+				// Bug ZK-2969
 				if (this._headercm && jq.isAncestor(this._headercm, evt.domTarget) && !checkSelectAll) {
 					keep = false;
 				} else {
@@ -1365,14 +1365,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (this.desktop && (len = selItems.length) && child.$instanceof(zul.sel.ItemWidget))
 			this._shallSyncFocus = selItems[len - 1];
 		//	Bug ZK-1473: when using template to render listbox,
-		//   the item will be remove but current this._focusItem still remain, 
+		//   the item will be remove but current this._focusItem still remain,
 		//   disable it to prevent keyboard navigation jump back to top
 		if (this._focusItem == child) {
 			this._focusItem = null;
 			// Bug in test case ZK-2534, we need to resync the lastSelectedItem if onBlur event is not triggered.
 			this._lastSelectedItem = this._focusItem;
 
-			//ZK-2804: the first selected item may be removed in rod when 
+			//ZK-2804: the first selected item may be removed in rod when
 			//select multiple items with shift key
 			this._itemForSelect = child;
 		}

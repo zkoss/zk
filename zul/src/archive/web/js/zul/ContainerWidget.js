@@ -18,9 +18,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 /**
  * 	A ContainerWidget.
- * 	
- * <p>If container widget has client attribute 'scrollable', it will listen <code>onScroll</code> event. 
- * 
+ *
+ * <p>If container widget has client attribute 'scrollable', it will listen <code>onScroll</code> event.
+ *
  *  @see zul.wnd.Window
  *  @see zul.wnd.Panelchildren
  *  @see zul.wgt.Groupbox
