@@ -27,6 +27,7 @@ ZK 8.0.2
   ZK-3158: Shadow Element NPE when setting on a parent outside of a page
   ZK-3165: draggable treeitems fire onSelect too early in IE
   ZK-3167: A Textbox's onChange doesn't fire when it's inside a draggable Row
+  ZK-3136: Textbox binding * fails
 
 * Upgrade Notes
 
