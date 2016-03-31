@@ -254,13 +254,12 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			desktop.getWebApp().getConfiguration().afterShadowAttached(this, host);
 		} else {
 			final ShadowElement se = this;
-			final Callback<Component> callback = new Callback<Component>() {
+			((ComponentCtrl) host).addCallback(AFTER_PAGE_ATTACHED, new Callback<Component>() {
 				public void call(Component host) {
 					host.getDesktop().getWebApp().getConfiguration().afterShadowAttached(se, host);
-					removeCallback(AFTER_HOST_ATTACHED, this);
+					((ComponentCtrl) host).removeCallback(AFTER_PAGE_ATTACHED, this);
 				}
-			};
-			addCallback(AFTER_HOST_ATTACHED, callback);
+			});
 		}
 	}
 
@@ -276,17 +275,18 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			onHostDetached((Component) host);
 		}
 		setParent0(null);
-		if (prevhost != null && prevhost.getDesktop() != null) {
-			prevhost.getDesktop().getWebApp().getConfiguration().afterShadowDetached(this, prevhost);
-		} else {
-			final ShadowElement se = this;
-			Callback<Component> callback = new Callback<Component>() {
-				public void call(Component host) {
-					host.getDesktop().getWebApp().getConfiguration().afterShadowDetached(se, host);
-					removeCallback(AFTER_HOST_DETACHED, this);
-				}
-			};
-			addCallback(AFTER_HOST_DETACHED, callback);
+		if (prevhost != null) {
+			if (prevhost.getDesktop() != null)
+				prevhost.getDesktop().getWebApp().getConfiguration().afterShadowDetached(this, prevhost);
+			else {
+				final ShadowElement se = this;
+				((ComponentCtrl) prevhost).addCallback(AFTER_PAGE_DETACHED, new Callback<Component>() {
+					public void call(Component host) {
+						host.getDesktop().getWebApp().getConfiguration().afterShadowDetached(se, host);
+						((ComponentCtrl) host).removeCallback(AFTER_PAGE_DETACHED, this);
+					}
+				});
+			}
 		}
 	}
 

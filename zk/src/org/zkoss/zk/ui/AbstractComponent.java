@@ -141,8 +141,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	private Map<String, ShadowElement> _shadowIdMap; //to speed up id only shadow selector
 
-	protected static String AFTER_HOST_ATTACHED = "afterHostAttached";
-	protected static String AFTER_HOST_DETACHED = "afterHostDetached";
+	protected static String AFTER_PAGE_ATTACHED = "afterPageAttached";
+	protected static String AFTER_PAGE_DETACHED = "afterPageDetached";
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -1988,18 +1988,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	public void onPageAttached(Page newpage, Page oldpage) {
 		if (oldpage == null) //new added
 			onListenerChange(newpage.getDesktop(), true);
-		List<ShadowElement> shadowRoots = getShadowRoots();
-		if (!shadowRoots.isEmpty()) {
-			for (ShadowElement se : shadowRoots) {
-				if (se instanceof ComponentCtrl) {
-					Collection<Callback> callbacks = ((ComponentCtrl) se).getCallback(AFTER_HOST_ATTACHED);
-					if (!callbacks.isEmpty()) {
-						for (Callback callback : callbacks) {
-							callback.call(this);
-						}
-					}
-				}
-			}
+		Collection<Callback> callbacks = getCallback(AFTER_PAGE_ATTACHED);
+		for (Callback callback : callbacks) {
+			callback.call(this);
 		}
 	}
 
@@ -2009,18 +2000,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	 */
 	public void onPageDetached(Page page) {
 		onListenerChange(page.getDesktop(), false);
-		List<ShadowElement> shadowRoots = getShadowRoots();
-		if (!shadowRoots.isEmpty()) {
-			for (ShadowElement se : shadowRoots) {
-				if (se instanceof ComponentCtrl) {
-					Collection<Callback> callbacks = ((ComponentCtrl) se).getCallback(AFTER_HOST_DETACHED);
-					if (!callbacks.isEmpty()) {
-						for (Callback callback : callbacks) {
-							callback.call(this);
-						}
-					}
-				}
-			}
+		Collection<Callback> callbacks = getCallback(AFTER_PAGE_DETACHED);
+		for (Callback callback : callbacks) {
+			callback.call(this);
 		}
 	}
 
