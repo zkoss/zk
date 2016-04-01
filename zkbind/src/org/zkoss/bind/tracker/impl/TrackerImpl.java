@@ -263,16 +263,9 @@ public class TrackerImpl implements Tracker, Serializable {
 			Set<TrackerNode> visited) {
 		final LinkedHashSet<Object> kidbases = new LinkedHashSet<Object>(); //collect kid as base bean
 		if (base != null) {
-			if ("*".equals(base)) { //loadAll, when base == "*"
-				final Collection<TrackerNode> nodes = getAllTrackerNodes();
-				if (nodes != null) {
-					getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
-				}
-			} else {
-				final Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
-				if (nodes != null && !nodes.isEmpty()) {
-					getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
-				}
+			final Set<TrackerNode> nodes = getAllTrackerNodesByBean(base);
+			if (nodes != null && !nodes.isEmpty()) {
+				getLoadBindingsPerProperty(nodes, prop, bindings, kidbases, visited);
 			}
 		} else { //base == null)
 			if ("*".equals(prop)) {
