@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3099.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Mar 30 17:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+	<hlayout>
+		<div hflex="1"/>
+		<window contentStyle="overflow: auto" width="300px" height="300px" ca:data-scrollable="true" border="normal">
+            <label>Click each of the button and scroll down/up, the errorbox should appear on the left side of window </label>
+			<button id="btn1" label="Click and scroll down manually" 
+				onClick='throw new WrongValueException(textbox, "position off screen");'/>
+			<button id="btn2" label="Click and auto scroll into view: OK at first" 
+				onClick='Clients.scrollIntoView(textbox); throw new WrongValueException(textbox, "position initially OK");'/>
+			<separator height="100px" />
+			validated component below
+			<separator height="200px" />
+			validated component below
+			<separator height="100px" />
+			<textbox id="textbox" width="250px"/>
+			<separator height="400px" />
+		</window>
+	</hlayout>
+</zk>
