@@ -112,7 +112,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			if (zul.inp.InputWidget._isInView(this)) {// B65-ZK-1632
 				if (!this.isOpen()) // for ZK-2371, we need to show it back when inside viewport.
 					this.open();
-				this.position(this.parent, null, 'end_before', {overflow: true});
+				var p = this.parent, cstp = p ? p._cst && p._cst._pos : false;
+				this.position(p, null, cstp || 'end_before', {dodgeRef: !cstp});
 				this._fixarrow();
 			} else {
 				this.close();

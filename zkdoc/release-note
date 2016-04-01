@@ -28,6 +28,7 @@ ZK 8.0.2
   ZK-3165: draggable treeitems fire onSelect too early in IE
   ZK-3167: A Textbox's onChange doesn't fire when it's inside a draggable Row
   ZK-3136: Textbox binding * fails
+  ZK-3099: error message positioning when using ca:data-scrollable
 
 * Upgrade Notes
 
