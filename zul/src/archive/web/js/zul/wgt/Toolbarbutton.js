@@ -338,6 +338,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 				}
 			}
 		}
+	},
+	focus_: function () {
 	}
 });
 })();
