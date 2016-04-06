@@ -1,0 +1,21 @@
+<zk>
+	<label multiline="true">
+		focus should be on the first button in the modal window, but not the toolbarbutton.
+	</label>
+	<style>
+		.z-toolbarbutton:focus, .z-button:focus, .z-toolbar:focus {
+		background-color: yellow;
+		border: 1px red solid;
+		}
+	</style>
+	<button></button>
+	<button></button>
+	<window mode="modal">
+		<toolbar>
+			<toolbarbutton label="toolbarbutton"></toolbarbutton>
+		</toolbar>
+		<button></button>
+		<button></button>
+		<button></button>
+	</window>
+</zk>

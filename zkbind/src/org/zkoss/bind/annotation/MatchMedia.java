@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>Marker annotation to identify a MatchMedia method in View Model. <br/>
- * A MatchMedia method could also use with {@link ContextParam} to get the <a href="https://www.zkoss.org/javadoc/latest/zk/org/zkoss/zk/ui/event/ClientInfoEvent.html">ClientInfoEvent</a>. <br/>
+ * A MatchMedia method could also use with {@link ContextParam} to get the {@link org.zkoss.zk.ui.event.ClientInfoEvent}. <br/>
  * The annotated methods are not in any particular order if the intervals are overlapping.<br/>
  * </p>
  * <p>This annotation is for RWD in zk mvvm.
@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  * <code>@MatchMedia("all and (max-width: 500px)")</code><br/>
  * <code>public void method(@ContextParam(ContextType.TRIGGER_EVENT) ClientInfoEvent event)</code>
  * </p>
- * <p>When the media query matches the value in the annotation, it'll trigger a <a href="https://www.zkoss.org/javadoc/latest/zk/org/zkoss/zk/ui/event/ClientInfoEvent.html">ClientInfoEvent</a> and the annotated method in the viewmodel will be invoked .<br/>
+ * <p>When the media query matches the value in the annotation, it'll trigger a {@link org.zkoss.zk.ui.event.ClientInfoEvent} and the annotated method in the viewmodel will be invoked .<br/>
  * You could get the client's information by {@link ContextParam}
  * </p>
  * <p>The values of this annotation should be unique in each viewmodel, and has to follow the criteria which is listed in <a href="http://www.w3schools.com/cssref/css3_pr_mediaquery.asp">this media query's spec</a>
