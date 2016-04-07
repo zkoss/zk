@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3118.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr  7 12:26:37 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click "show busy window 1" button, "busy window 1" window should appear without any zk.log
+		2. click "Tab B", "busy window 2" window should appear without any zk.log
+
+	</label>
+	<tabbox id="tb" height="300px">
+		<tabs id="tabs">
+			<tab id="A" label="Tab A" />
+			<tab id="B" label="Tab B" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="win1" border="normal" title="busy window 1" apply="org.zkoss.zktest.test2.B80_ZK_3118_Composer" visible="false">
+					<div>busy window 1</div>
+				</window>
+				<button label="show busy window 1" onClick="win1.setVisible(true)"/>
+			</tabpanel>
+			<tabpanel>
+				<window id="win2" border="normal" title="busy window 2" apply="org.zkoss.zktest.test2.B80_ZK_3118_Composer">
+					<div>busy window 2</div>
+				</window>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<script><![CDATA[
+	zk.afterLoad('zk', function() {
+		var _xcmd0 = {};
+		zk.override(zk.eff.Mask.prototype, _xcmd0, {
+			sync: function() {
+				zk.log('do sync');
+				_xcmd0.sync.apply(this, arguments);
+			}
+		});
+	});
+	]]></script>
+</zk>

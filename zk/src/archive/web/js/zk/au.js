@@ -1334,7 +1334,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		var w = uuid ? Widget.$(uuid) : null;
 		if (!uuid)
 			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy: true});
-		else if (w) {
+		else if (w && w.isRealVisible()) {
 			zk.delayFunction(uuid, function () {
 				w.effects_.showBusy = new zk.eff.Mask({
 					id: w.uuid + '-shby',
