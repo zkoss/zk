@@ -42,7 +42,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	
     <library-property>
         <name>org.zkoss.bind.proxy.IgnoredProxyClasses</name>
-        <value>java.util.Date,java.sql.Date,java.sql.Timestamp,java.math.BigDecimal,java.math.BigInteger</value>
+        <appendable>true</appendable>
+        <list>
+            <value>java.util.Date</value>
+            <value>java.sql.Date</value>
+            <value>java.sql.Timestamp</value>
+            <value>java.math.BigDecimal</value>
+            <value>java.math.BigInteger</value>
+        </list>
     </library-property>
 	
 	<binder-config>

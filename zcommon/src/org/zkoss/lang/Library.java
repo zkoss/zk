@@ -17,6 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.lang;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -39,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Library {
 	private static final Logger log = LoggerFactory.getLogger(Library.class);
-	private static final Map<String, String> _props = new HashMap<String, String>();
+	private static final Map<String, List<String>> _props = new HashMap<String, List<String>>();
 
 	private Library() {}
 
@@ -63,7 +65,11 @@ public class Library {
 	public static String getProperty(String key) {
 		final String v;
 		synchronized (_props) {
-			v = _props.get(key);
+			List<String> valList = _props.get(key);
+			if (valList != null && valList.size() > 0)
+				v = valList.get(0);
+			else
+				v = null;
 		}
 		try {
 			//Unlike System.getProperty, we make the inocation as safe as possible
@@ -83,12 +89,16 @@ public class Library {
 	 * @param key the name of the library property
 	 * @param def a default value.
 	 * @exception NullPointerException if key is null
-	 * @exception IllegalArumentException if key is empty
+	 * @exception IllegalArgumentException if key is empty
 	 */
 	public static String getProperty(String key, String def) {
 		final String v;
 		synchronized (_props) {
-			v = _props.get(key);
+			List<String> valList = _props.get(key);
+			if (valList != null && valList.size() > 0)
+				v = valList.get(0);
+			else
+				v = null;
 		}
 		try {
 			return v != null ? v: System.getProperty(key, def);
@@ -99,7 +109,7 @@ public class Library {
 	/** Sets the library property indicated by the specified key.
 	 * @see #getProperty
 	 * @exception NullPointerException if key is null
-	 * @exception IllegalArumentException if key is empty
+	 * @exception IllegalArgumentException if key is empty
 	 * @return the previous value of the library property, or null if
 	 * it did not have one.
 	 */
@@ -108,7 +118,10 @@ public class Library {
 		if (key.length() == 0) throw new IllegalArgumentException();
 
 		synchronized (_props) {
-			return _props.put(key, value);
+			List<String> vals = new LinkedList<String>();
+			vals.add(value);
+			List<String> prev = _props.put(key, vals);
+			return prev != null && prev.size() > 0 ? prev.get(0) : null;
 		}
 	}
 
@@ -124,9 +137,85 @@ public class Library {
 			try {
 				return Integer.parseInt(val);
 			} catch (Throwable t) {
-				log.warn("Failed to parse "+key+": not an integer, "+val);
+				log.warn("Failed to parse " + key + ": not an integer, " + val);
 			}
 		}
 		return defVal;
+	}
+
+	/** Add a library property indicated by the specified key.
+	 * @see #getProperties
+	 * @exception NullPointerException if key is null
+	 * @exception IllegalArgumentException if key is empty
+	 * @return the previous value of the library properties, or null if
+	 * it did not have any.
+	 */
+	public static List<String> addProperty(String key, String value) {
+		if (key == null) throw new NullPointerException();
+		if (key.length() == 0) throw new IllegalArgumentException();
+
+		synchronized (_props) {
+			List<String> old = _props.get(key);
+			if (old == null)
+				old = new LinkedList<String>();
+			old.add(value);
+			return _props.put(key, old);
+		}
+	}
+
+	/** Add library properties indicated by the specified key.
+	 * @see #getProperties
+	 * @exception NullPointerException if key is null
+	 * @exception IllegalArgumentException if key is empty
+	 * @return the previous value of the library properties, or null if
+	 * it did not have any.
+	 */
+	public static List<String> addProperties(String key, List<String> values) {
+		if (key == null) throw new NullPointerException();
+		if (key.length() == 0) throw new IllegalArgumentException();
+
+		synchronized (_props) {
+			List<String> old = _props.get(key);
+			if (old == null)
+				old = new LinkedList<String>();
+			old.addAll(values);
+			return _props.put(key, old);
+		}
+	}
+
+	/** Sets the library properties indicated by the specified key.
+	 * @see #getProperties
+	 * @exception NullPointerException if key is null
+	 * @exception IllegalArgumentException if key is empty
+	 * @return the previous value of the library properties, or null if
+	 * it did not have any.
+	 */
+	public static List<String> setProperties(String key, List<String> values) {
+		if (key == null) throw new NullPointerException();
+		if (key.length() == 0) throw new IllegalArgumentException();
+
+		synchronized (_props) {
+			return _props.put(key, new LinkedList<String>(values));
+		}
+	}
+
+	/** Returns the library properties indicated by the specified key.
+	 *
+	 * <p>The library properties is shared by Java codes that access
+	 * the same set of ZK libraries, since it is actually
+	 * a static member of this class. Thus, if ZK libraries (including
+	 * this class) are installed in WEB-INF/lib of an application,
+	 * the library properties are accessible only in the application.
+	 *
+	 * @return the List of values of the library properties,
+	 * or null if no such property.
+	 * @see #setProperties
+	 */
+	public static List<String> getProperties(String key) {
+		final List<String> v;
+		synchronized (_props) {
+			v = _props.get(key);
+		}
+		return v;
 	}
 }

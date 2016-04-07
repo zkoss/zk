@@ -7,6 +7,7 @@ ZK 8.0.2
   ZK-3134: provide configurable defaults to be be ignored in form proxies
   ZK-3142: apply, updated Russian i18n
   ZK-3133: Support a Match Media annotation for MVVM to use
+  ZK-3157: Library property support "name" - "values"
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
