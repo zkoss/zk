@@ -42,10 +42,9 @@ public class ProxyHelper {
 	private static Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<Class<?>, Boolean>();
 
 	static {
-		String classes = Library.getProperty("org.zkoss.bind.proxy.IgnoredProxyClasses");
-		if (classes != null && classes.length() != 0) {
-			String[] classNameArray = classes.split(",");
-			for (String className : classNameArray) {
+		List<String> classes = Library.getProperties("org.zkoss.bind.proxy.IgnoredProxyClasses");
+		if (classes != null && classes.size() != 0) {
+			for (String className : classes) {
 				try {
 					addIgnoredProxyClass(Classes.forNameByThread(className.trim()));
 				} catch (ClassNotFoundException ex) {

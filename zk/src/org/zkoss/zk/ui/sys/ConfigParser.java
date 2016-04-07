@@ -508,10 +508,40 @@ public class ConfigParser {
 		}
 	}
 
-	private static void parseLibProperty(Element el) {
+	/**
+	 * Internal use only
+	 */
+	public static void parseLibProperty(Element el) {
 		final String nm = IDOMs.getRequiredElementValue(el, "name");
-		final String val = IDOMs.getRequiredElementValue(el, "value");
-		Library.setProperty(nm, val);
+		Element valueElmn = el.getElement("value");
+		Element appendableElmn = el.getElement("appendable");
+		boolean appendable = appendableElmn != null ? "true".equals(appendableElmn.getText(true)) : false;
+		Element listElmn = el.getElement("list");
+		if (valueElmn != null && listElmn != null)
+			throw new IllegalSyntaxException("You should not use <value> and <list> in <library-property> at the same time");
+		else if (listElmn != null) {
+			List<Element> valElements = listElmn.getElements("value");
+			if (valElements == null || valElements.isEmpty())
+				throw new IllegalSyntaxException(MCommon.XML_ELEMENT_REQUIRED, new Object[] {"value", el.getLocator()});
+			List<String> values = new LinkedList<String>();
+			for (Element valElmn : valElements) {
+				String val = valElmn.getText(true);
+				if (val != null & val.length() != 0)
+					values.add(val);
+			}
+			if (appendable)
+				Library.addProperties(nm, values);
+			else
+				Library.setProperties(nm, values);
+		} else if (valueElmn != null) {
+			String val = valueElmn.getText(true);
+			if (appendable)
+				Library.addProperty(nm, val);
+			else
+				Library.setProperty(nm, val);
+		} else {
+			throw new IllegalSyntaxException(MCommon.XML_ELEMENT_REQUIRED, new Object[] {"<value> or <list>", el.getLocator()});
+		}
 	}
 
 	private static void parseSysProperty(Element el) {

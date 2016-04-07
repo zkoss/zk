@@ -40,7 +40,6 @@ import org.zkoss.idom.ProcessingInstruction;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.XMLResourcesLocator;
@@ -300,9 +299,7 @@ public class DefinitionLoaders {
 		}
 
 		for (Element el : root.getElements("library-property")) {
-			final String nm = IDOMs.getRequiredElementValue(el, "name");
-			final String val = IDOMs.getRequiredElementValue(el, "value");
-			Library.setProperty(nm, val);
+			ConfigParser.parseLibProperty(el);
 		}
 		for (Iterator it = root.getElements("system-property").iterator(); it.hasNext();) {
 			final Element el = (Element) it.next();

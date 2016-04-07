@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3157.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 6 14:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Click each button, and you should see the following result.
+        [set1]
+        [set1, add1]
+        [set2-01, set2-02]
+        [set2-01, set2-02, add2-01, add2-02]
+    </label>
+    <window apply="org.zkoss.zktest.test2.F80_ZK_3157_Composer">
+        <button id="set1" label="Set one"/>
+        <button id="add1" label="Add one"/>
+        <button id="set2" label="Set multiple"/>
+        <button id="add2" label="Add multiple"/>
+    </window>
+</zk>
