@@ -31,6 +31,7 @@ ZK 8.0.2
   ZK-3136: Textbox binding * fails
   ZK-3099: error message positioning when using ca:data-scrollable
   ZK-3068: A toolbar with a toolbarbutton does not count as a focusable control when giving focus to the first element of a modal window
+  ZK-3118: processing mask cause a js missing error exception when target component is not rendered
 
 * Upgrade Notes
 
