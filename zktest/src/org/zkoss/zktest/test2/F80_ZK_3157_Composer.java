@@ -50,7 +50,7 @@ public class F80_ZK_3157_Composer extends SelectorComposer<Component> {
 	}
 	@Listen("onClick = #set2")
 	public void doSet2() {
-		List<String> properties = new LinkedList<>();
+		List<String> properties = new LinkedList<String>();
 		properties.add("set2-01");
 		properties.add("set2-02");
 		Library.setProperties("3157", properties);
@@ -58,7 +58,7 @@ public class F80_ZK_3157_Composer extends SelectorComposer<Component> {
 	}
 	@Listen("onClick = #add2")
 	public void doAdd2() {
-		List<String> properties = new LinkedList<>();
+		List<String> properties = new LinkedList<String>();
 		properties.add("add2-01");
 		properties.add("add2-02");
 		Library.addProperties("3157", properties);
