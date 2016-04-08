@@ -230,10 +230,15 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		opts = opts || {};
 		var $anchor = zk(opts.anchor);
 		
-		if (!$anchor.jq.length || !$anchor.isRealVisible(true)) return; //nothing do to.
-		
 		this._opts = opts;
-		
+
+		if (!$anchor.jq.length || !$anchor.isRealVisible(true)) return; //nothing do to.
+
+		this._draw(opts, $anchor);
+		this.sync();
+	},
+	//ZK-3118
+	_draw: function (opts, $anchor) {
 		var maskId = opts.id || 'z_applymask',
 			progbox = jq(maskId, zk)[0];
 		
@@ -253,7 +258,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		+ '<div id="' + maskId + '-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
 		+ '<span class="z-apply-loading-icon"></span> '
 		+ msg + '</div></div></div>');
-		
+
 		this.mask = jq(maskId, zk)[0];
 		this.wgt = zk.Widget.$(opts.anchor);
 		if (this.wgt) {
@@ -268,7 +273,6 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			this.wgt.__mask = this;
 		}
 		
-		this.sync();
 	},
 	/** Hide the mask. Application developers rarely need to invoke this method.
 	 * Rather, use {@link #sync} to synchronized the visual states.
@@ -283,15 +287,23 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 	 * The visual states include the visibility and Z Index.
 	 */
 	sync: function () {
-		var $anchor = zk(this._opts.anchor);
-		
+		var opts = this._opts,
+			anchor = opts.anchor,
+			$anchor = zk(anchor);
+
+		if (!anchor) {
+			var optsId = opts.id;
+			opts.anchor = anchor = jq('#' + optsId.substring(0, optsId.indexOf('-')))[0];
+			$anchor = zk(anchor);
+			this._draw(opts, $anchor);
+		}
+
 		if (!$anchor.isVisible(true)) {
 			this.hide();
 			return;
 		}
 		
-		var opts = this._opts,
-			st = this.mask.firstChild.style,
+		var st = this.mask.firstChild.style,
 			xy = opts.offset || $anchor.revisedOffset(),
 			w = opts.width || $anchor.offsetWidth(),
 			h = opts.height || $anchor.offsetHeight();
