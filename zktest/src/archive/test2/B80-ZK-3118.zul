@@ -15,8 +15,8 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		1. click "show busy window 1" button, "busy window 1" window should appear without any zk.log
-		2. click "Tab B", "busy window 2" window should appear without any zk.log
+		1. click "show busy window 1" button, "busy window 1" window should appear with a showbusy mask on it
+		2. click "Tab B", "busy window 2" window should appear with a showbusy mask on it
 
 	</label>
 	<tabbox id="tb" height="300px">
@@ -38,15 +38,4 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 			</tabpanel>
 		</tabpanels>
 	</tabbox>
-	<script><![CDATA[
-	zk.afterLoad('zk', function() {
-		var _xcmd0 = {};
-		zk.override(zk.eff.Mask.prototype, _xcmd0, {
-			sync: function() {
-				zk.log('do sync');
-				_xcmd0.sync.apply(this, arguments);
-			}
-		});
-	});
-	]]></script>
 </zk>
