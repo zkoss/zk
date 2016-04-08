@@ -79,13 +79,13 @@ zjq = function (jq) { //ZK extension
 		var $this = jq(this);
 		$this.css('user-select', 'none');
 		if (zk.ie11_ || zk.edge)
-			$this.on('selectstart', false);
+			$this.on('selectstart', zk.$void);
 	}
 	function _ensel() {
 		var $this = jq(this);
 		$this.css('user-select', '');
 		if (zk.ie11_ || zk.edge)
-			$this.on('selectstart', true);
+			$this.off('selectstart', zk.$void);
 	}
 
 	function _scrlIntoView(outer, inner, info, excludeHorizontal) {
