@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
+import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DesktopRecycle;
@@ -123,12 +124,14 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	private static void desktopDestroyed(Desktop desktop) {
 		final Session sess = desktop.getSession();
 		final Execution exec = new ExecutionImpl(desktop.getWebApp().getServletContext(), null, null, desktop, null);
+		final DesktopCtrl desktopCtrl = (DesktopCtrl) desktop;
+		final Execution oldExce = desktop.getExecution();
+		final Visualizer oldVi = desktopCtrl.getVisualizer();
 
 		try {
 			// For ZK-1890: Can't subscribe eventqueue in desktop cleanup
 			ExecutionsCtrl.setCurrent(exec);
 			final UiVisualizer uv = new UiVisualizer(exec, true, false);
-			final DesktopCtrl desktopCtrl = (DesktopCtrl) desktop;
 			desktopCtrl.setVisualizer(uv);
 			desktopCtrl.setExecution(exec);
 
@@ -158,7 +161,10 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 				}
 			}
 		} finally {
+			// reset
 			ExecutionsCtrl.setCurrent(null);
+			desktopCtrl.setVisualizer(oldVi);
+			desktopCtrl.setExecution(oldExce);
 		}
 	}
 
