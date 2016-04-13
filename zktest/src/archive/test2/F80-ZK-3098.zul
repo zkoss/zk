@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    F80-ZK-3098.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 6 16:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Focus the chosenbox and select one option, and then click the item tag.
+        You should see "Click Item: xxx " in log.
+    </label>
+    <window id="win" apply="org.zkoss.zktest.test2.F80_ZK_3098Composer">
+        <chosenbox id="cbx" model="${win$composer.model}" width="200px"/>
+    </window>
+</zk>

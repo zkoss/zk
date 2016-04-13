@@ -8,6 +8,7 @@ ZK 8.0.2
   ZK-3142: apply, updated Russian i18n
   ZK-3133: Support a Match Media annotation for MVVM to use
   ZK-3157: Library property support "name" - "values"
+  ZK-3098: add onItemClick event to Chosenbox
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
@@ -32,8 +33,11 @@ ZK 8.0.2
   ZK-3099: error message positioning when using ca:data-scrollable
   ZK-3068: A toolbar with a toolbarbutton does not count as a focusable control when giving focus to the first element of a modal window
   ZK-3118: processing mask cause a js missing error exception when target component is not rendered
+  ZK-3168: Chosenbox doesn't send onSelectSubModel direcly to the server using ListSubModel
+  ZK-3169: Invalidate on a parent of chosenbox causes selection to disappear using listsubmodel
 
 * Upgrade Notes
+  + Remove the method getOptionId(Object) in Chosenbox.java
 
    --------
 ZK 8.0.1.1

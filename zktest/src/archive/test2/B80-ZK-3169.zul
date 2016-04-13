@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3169.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 6 16:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Type 's' and select one option in the chosenbox, and click 'Invalidate', you should not see any selected item disappear.
+    </label>
+    <zscript>
+        ListModelList myModel = new ListModelList(Locale.getAvailableLocales());
+        ListModel mySubModel = ListModels.toListSubModel(myModel);
+    </zscript>
+    <vlayout id="hl">
+        <chosenbox id="myCb" style="min-width:75px;" hflex="1"
+                   creatable="true" model="${mySubModel}"
+                   onSelect='myLb.setModel(new ListModelList(myModel.getSelection()));' name="chosenboxinput">
+        </chosenbox>
+        <listbox id="myLb"/>
+        <button onClick="hl.invalidate();">Invalidate</button>
+    </vlayout>
+</zk>
