@@ -1,21 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3068.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr  7 12:26:37 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
 <zk>
 	<label multiline="true">
-		focus should be on the first button in the modal window, but not the toolbarbutton.
+		1. focus should be on "btn1" button
+		2. press tab key
+		3. focus should be on "btn2" button
+
 	</label>
-	<style>
-		.z-toolbarbutton:focus, .z-button:focus, .z-toolbar:focus {
-		background-color: yellow;
-		border: 1px red solid;
-		}
-	</style>
-	<button></button>
-	<button></button>
+	<button/>
+	<button/>
 	<window mode="modal">
 		<toolbar>
-			<toolbarbutton label="toolbarbutton"></toolbarbutton>
+			<toolbarbutton label="toolbarbutton"/>
 		</toolbar>
-		<button></button>
-		<button></button>
-		<button></button>
+		<button id="btn1"/>
+		<button id="btn2"/>
+		<button/>
 	</window>
 </zk>
