@@ -35,6 +35,7 @@ ZK 8.0.2
   ZK-3118: processing mask cause a js missing error exception when target component is not rendered
   ZK-3168: Chosenbox doesn't send onSelectSubModel direcly to the server using ListSubModel
   ZK-3169: Invalidate on a parent of chosenbox causes selection to disappear using listsubmodel
+  ZK-3154: autopaging will activate paging mold on first load if the content is just fit for default mold
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java

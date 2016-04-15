@@ -261,9 +261,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hgh = top;
 		}
 		if (row) { //there is row
-			if (top <= max) { //row not exceeds the height, estimate
-				hgh = hgh + row.offsetHeight;
-				j = Math.floor(j * max / hgh);
+			var pgib = wgt.$n('pgib'),
+				pgibHgh = 0;
+			if (pgib)
+				pgibHgh = pgib.offsetHeight;
+			var withPgibMax = max + pgibHgh;
+			if (top <= withPgibMax) { //row not exceeds the height, estimate
+				var totalsz = wgt.paging.getTotalSize(),
+					rowsHgh = hgh + row.offsetHeight,
+					j1 = Math.floor(j * max / rowsHgh),
+					j2 = Math.floor(j * withPgibMax / rowsHgh);
+				if (totalsz > j2)
+					j = j1;
+				else
+					j = j2;
 			}
 			//enforce pageSize change
 			if (j == 0) j = 1; //at least one per page
