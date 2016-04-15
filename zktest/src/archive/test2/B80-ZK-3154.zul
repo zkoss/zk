@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3154.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 13 14:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<window height="730px" title="You should see only one page.">
+    <tree mold="paging" autopaging="true" vflex="1" >
+        <treecols sizable="true" visible="true">
+            <treecol label="Name" hflex="1" />
+            <treecol label="Description" hflex="2" />
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell label="Root" />
+                    <treecell label="Root description" />
+                </treerow>
+                <treechildren>
+                    <treeitem label="Item 1" />
+                    <treeitem label="Item 2" />
+                    <treeitem label="Item 3" />
+                    <treeitem label="Item 4" />
+                    <treeitem label="Item 5" />
+                    <treeitem label="Item 6" />
+                    <treeitem label="Item 7" />
+                    <treeitem label="Item 8" />
+                    <treeitem label="Item 9" />
+                    <treeitem label="Item 10" />
+                    <treeitem label="Item 11" />
+                    <treeitem label="Item 12" />
+                    <treeitem label="Item 13" />
+                    <treeitem label="Item 14" />
+                    <treeitem label="Item 15" />
+                    <treeitem label="Item 16" />
+                    <treeitem label="Item 17" />
+                    <treeitem label="Item 18" />
+                    <treeitem label="Item 19" />
+                    <treeitem label="Item 20" />
+                    <treeitem label="Item 21" />
+                    <treeitem label="Item 22" />
+                    <treeitem label="Item 23" />
+                    <treeitem label="Item 24" />
+                    <treeitem label="Item 25" />
+                    <treeitem label="Item 26" />
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+</window>
