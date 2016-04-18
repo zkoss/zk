@@ -35,7 +35,7 @@ function (out) {
 	if (this._isCloseVisible()) {
 		out.push('<div id="', puuid , '-close" class="', picon, ' ',
 			p.$s('close'), '"');
-		if (tabi > -1) out.push(' tabindex="', tabi, '"');
+		if (tabi != undefined) out.push(' tabindex="', tabi, '"');
 		out.push(' title="', msgzul.PANEL_CLOSE, '"><i class="', p.getClosableIconClass_(), '"></i></div>');
 	}
 	if (this._isMaximizeVisible()) {
@@ -44,20 +44,20 @@ function (out) {
 		if (maxd)
 			out.push(' ', p.$s('maximized'));
 		var maxIcon = maxd ? p.getMaximizedIconClass_() : p.getMaximizableIconClass_();
-		if (tabi > -1) out.push('" tabindex="', tabi);
+		if (tabi != undefined) out.push('" tabindex="', tabi);
 		out.push('" title="', msgzul.PANEL_MAXIMIZE, '"><i class="', maxIcon, '"></i></div>');
 	}
 	if (this._isMinimizeVisible()) {
 		out.push('<div id="', puuid , '-min" class="', picon, ' ',
 				p.$s('minimize'), '"');
-		if (tabi > -1) out.push(' tabindex="', tabi, '"');
+		if (tabi != undefined) out.push(' tabindex="', tabi, '"');
 		out.push(' title="', msgzul.PANEL_MINIMIZE, '"><i class="', p.getMinimizableIconClass_(), '"></i></div>');
 	}
 	if (this._isCollapsibleVisible()) {
 		var openIcon = p._open ? p.getCollapseOpenIconClass_() : p.getCollapseCloseIconClass_();
 		out.push('<div id="', puuid , '-exp" class="', picon, ' ',
 			p.$s('expand'), '"');
-		if (tabi > -1) out.push(' tabindex="', tabi, '"');
+		if (tabi != undefined) out.push(' tabindex="', tabi, '"');
 		if (openIcon)
 			out.push(' title="', msgzul.PANEL_COLLAPSE, '"')
 		else

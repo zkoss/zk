@@ -260,8 +260,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 */
 		tabindex: function (tabindex) {
 			var inp = this.getInputNode();
-			if (inp)
-				inp.tabIndex = tabindex || '';
+			if (inp) {
+				if (tabindex == null)
+					inp.removeAttribute('tabindex');
+				else
+					inp.tabIndex = tabindex;
+			}
 		},
 		/** Returns whether enable the inplace-editing.
 		 * <p>default: false.
@@ -452,7 +456,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (v > 0) html += ' maxlength="' + v + '"';
 		}
 		v = this._tabindex;
-		if (v) html += ' tabindex="' + v + '"';
+		if (v != undefined) html += ' tabindex="' + v + '"';
 		v = this._name;
 		if (v) html += ' name="' + v + '"';
 		if (this._disabled) html += ' disabled="disabled"';

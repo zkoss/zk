@@ -647,6 +647,38 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 
+	/** Returns the tab order of this component.
+	 * <p>Default: 0
+	 */
+	public int getTabindex() {
+		return _auxinf != null ? _auxinf.tabindex : 0;
+	}
+
+	/**
+	 * Returns null if not set.
+	 * @return the tab order of this component
+	 */
+	public Integer getTabindexInteger() {
+		return (_auxinf != null && _auxinf.tabindex != null) ? _auxinf.tabindex : null;
+	}
+
+	/** Sets the tab order of this component.
+	 */
+	public void setTabindex(int tabindex) throws WrongValueException {
+		setTabindex((Integer) tabindex);
+	}
+
+	/**
+	 * Sets the tab order of this component. Removes the tabindex attribute if it's set to null.
+	 * @param tabindex
+	 */
+	public void setTabindex(Integer tabindex) {
+		if ((_auxinf != null ? _auxinf.tabindex : null) != tabindex) {
+			initAuxInfo().tabindex = tabindex;
+			smartUpdate("tabindex", tabindex);
+		}
+	}
+
 	//-- rendering --//
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.
@@ -673,6 +705,8 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 				renderer.render("zIndex", _auxinf.zIndex);
 			if (_auxinf.renderdefer >= 0)
 				renderer.render("renderdefer", _auxinf.renderdefer);
+			if (_auxinf.tabindex != null)
+				renderer.render("tabindex", _auxinf.tabindex);
 
 			final String draggable = _auxinf.draggable;
 			if (draggable != null && (getParent() instanceof DragControl || !draggable.equals("false")))
@@ -825,6 +859,15 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 				return ((HtmlBasedComponent) cmp).getVflex();
 			}
 		});
+		_properties.put("tabindex", new IntPropertyAccess() {
+			public void setValue(Component cmp, Integer tabindex) {
+				((HtmlBasedComponent) cmp).setTabindex(tabindex);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getTabindexInteger();
+			}
+		});
 	}
 
 	public PropertyAccess getPropertyAccess(String prop) {
@@ -941,6 +984,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		private String action;
 		private int zIndex = -1;
 		private int renderdefer = -1;
+		private Integer tabindex;
 
 		public Object clone() {
 			try {

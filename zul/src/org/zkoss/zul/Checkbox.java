@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
@@ -37,7 +36,6 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	private Object _value;
 	/** The name. */
 	private String _name;
-	private int _tabindex;
 	/** Whether it is checked. */
 	/*package*/ boolean _checked;
 	private boolean _disabled;
@@ -188,22 +186,6 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		}
 	}
 
-	/** Returns the tab order of this component.
-	 * <p>Default: 0 (means the same as browser's default).
-	 */
-	public int getTabindex() {
-		return _tabindex;
-	}
-
-	/** Sets the tab order of this component.
-	 */
-	public void setTabindex(int tabindex) throws WrongValueException {
-		if (_tabindex != tabindex) {
-			_tabindex = tabindex;
-			smartUpdate("tabindex", _tabindex);
-		}
-	}
-
 	//-- super --//
 	/** Default: not childable.
 	 */
@@ -227,8 +209,6 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 			render(renderer, "value", _value);
 		if (_autodisable != null)
 			render(renderer, "autodisable", _autodisable);
-		if (_tabindex != 0)
-			renderer.render("tabindex", _tabindex);
 
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", _name);

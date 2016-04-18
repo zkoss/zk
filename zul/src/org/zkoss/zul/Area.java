@@ -31,6 +31,7 @@ public class Area extends AbstractComponent {
 	private String _shape;
 	private String _coords;
 	private String _tooltiptext;
+	private Integer _tabindex;
 
 	public Area() {
 	}
@@ -61,6 +62,25 @@ public class Area extends AbstractComponent {
 		if (!Objects.equals(shape, _shape)) {
 			_shape = shape;
 			smartUpdate("shape", _shape);
+		}
+	}
+
+	/**
+	 * Returns null if not set.
+	 * @return the tab order of this component
+	 */
+	public Integer getTabindexInteger() {
+		return _tabindex;
+	}
+
+	/**
+	 * Sets the tab order of this component. Removes the tabindex attribute if it's set to null.
+	 * @param tabindex
+	 */
+	public void setTabindex(Integer tabindex) {
+		if (_tabindex != tabindex) {
+			_tabindex = tabindex;
+			smartUpdate("tabindex", tabindex);
 		}
 	}
 
@@ -131,5 +151,7 @@ public class Area extends AbstractComponent {
 		render(renderer, "coords", _coords);
 		render(renderer, "shape", _shape);
 		render(renderer, "tooltiptext", _tooltiptext);
+		if (_tabindex != null)
+			renderer.render("tabindex", _tabindex);
 	}
 }

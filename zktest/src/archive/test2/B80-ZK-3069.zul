@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3069.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 15 18:15:05 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="xhtml" xmlns:n="native">
+	<script><![CDATA[
+		function button1tabindex() {
+			zk.log(jq('div')[1].innerHTML.indexOf('tabindex') != -1);
+		}
+		zk.afterMount(function() {
+			zk.log(jq('span')[1].tabIndex + '' + jq('.z-area')[0].tabIndex + jq('.z-area')[1].tabIndex + jq('.z-area')[2].tabIndex + jq('span')[2].tabIndex + (jq('div')[1].innerHTML.indexOf('tabindex') != -1));
+		});
+	]]></script>
+	<label multiline="true">
+		1. should see "02100true" in zklog
+		2. click button "set null", should see "false" in zklog
+
+	</label>
+	<imagemap id="img2" src="/test2/img/sun.jpg" onClick="what(event)" tabindex="0">
+		<area id="First" coords="0,0,50,50" tooltiptext="First" tabindex="2"/>
+		<area id="Second" coords="50,0,100,50" tooltiptext="Second" tabindex="1"/>
+		<area id="Third" coords="100,0,150,50" tooltiptext="Third" tabindex="0"/>
+	</imagemap>
+	<h:text value="text1" tabindex="0"/>
+	<div>
+		<button id="btn1" tabindex="0"/>
+	</div>
+	<button onClick='btn1.setTabindex(null);Clients.evalJavaScript("button1tabindex()");' label="set null"/>
+</zk>
+

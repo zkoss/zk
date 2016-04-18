@@ -103,17 +103,6 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n();
 			if (n) n.target = v || '';
 		},
-		/** Returns the tab order of this component.
-		 * <p>Default: -1 (means the same as browser's default).
-		 * @return int
-		 */
-		/** Sets the tab order of this component.
-		 * @param int tabindex
-		 */
-		tabindex: function (v) {
-			var n = this.$n();
-			if (n) n.tabIndex = v || '';
-		},
 		/** Returns a list of component IDs that shall be disabled when the user
 		 * clicks this anchor.
 		 *
@@ -193,8 +182,6 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			v;
 		if (v = this.getTarget())
 			attr += ' target="' + v + '"';
-		if (v = this.getTabindex())
-			attr += ' tabIndex="' + v + '"';
 		if (v = this.getHref())
 			attr += ' href="' + v + '"';
 		else

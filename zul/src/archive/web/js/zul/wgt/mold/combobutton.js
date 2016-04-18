@@ -16,7 +16,7 @@ function (out) {
 	var tabi = this._tabindex | 0,
 		uuid = this.uuid;
 	
-	out.push('<span ', this.domAttrs_());
+	out.push('<span ', this.domAttrs_({tabindex: 1}));//we have a default 0 for tabindex of this element
 	
 	if (this._disabled)
 		out.push(' disabled="disabled"');

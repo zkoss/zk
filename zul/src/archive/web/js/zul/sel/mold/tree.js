@@ -20,7 +20,7 @@ function (out) {
 		inPaging = this.inPagingMold(), pgpos,
 		tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
 		
-	out.push('<div', this.domAttrs_(), '>');
+	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the button
 	//top paging
 	if (inPaging && this.paging) {
 		pgpos = this.getPagingPosition();
@@ -64,7 +64,7 @@ function (out) {
 	out.push('</table><', tag, ' style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" id="', uuid, 
 			 '-a"  onclick="return false;" href="javascript:;" class="z-focus-a"');
 	var tabindex = this._tabindex; // Feature ZK-2531
-	if (tabindex)
+	if (tabindex != undefined)
 		out.push(' tabindex="' + tabindex + '"');
 	out.push('></', tag, '>', "</div>");
 	

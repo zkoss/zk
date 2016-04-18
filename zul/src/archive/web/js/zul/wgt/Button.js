@@ -139,17 +139,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (n)
 				n.src = v || '';
 		},*/
-		/** Returns the tab order of this component.
-		 * <p>Default: -1 (means the same as browser's default).
-		 * @return int
-		 */
-		/** Sets the tab order of this component.
-		 * @param int tabindex
-		 */
-		tabindex: function (v) {
-			var n = this.$n();
-			if (n) n.tabIndex = v || '';
-		},
 		/** Returns a list of component IDs that shall be disabled when the user
 		 * clicks this button.
 		 *

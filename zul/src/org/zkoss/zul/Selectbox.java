@@ -26,7 +26,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
@@ -54,7 +53,6 @@ public class Selectbox extends HtmlBasedComponent {
 	private String _name;
 	private boolean _disabled;
 	private int _jsel = -1;
-	private int _tabindex;
 	private transient ListModel<?> _model;
 	private transient ListDataListener _dataListener;
 	private transient ItemRenderer<?> _renderer;
@@ -89,25 +87,6 @@ public class Selectbox extends HtmlBasedComponent {
 		if (jsel != _jsel) {
 			_jsel = jsel;
 			smartUpdate("selectedIndex", jsel);
-		}
-	}
-
-	/**
-	 * Returns the tab order of this component.
-	 * <p>
-	 * Default: 0 (means the same as browser's default).
-	 */
-	public int getTabindex() {
-		return _tabindex;
-	}
-
-	/**
-	 * Sets the tab order of this component.
-	 */
-	public void setTabindex(int tabindex) throws WrongValueException {
-		if (_tabindex != tabindex) {
-			_tabindex = tabindex;
-			smartUpdate("tabindex", tabindex);
 		}
 	}
 
@@ -446,9 +425,6 @@ public class Selectbox extends HtmlBasedComponent {
 		render(renderer, "name", _name);
 		render(renderer, "disabled", isDisabled());
 		renderer.render("selectedIndex", _jsel);
-
-		if (_tabindex != 0)
-			renderer.render("tabindex", _tabindex);
 
 		if (_tmpdatas != null) {
 			render(renderer, "items", _tmpdatas);

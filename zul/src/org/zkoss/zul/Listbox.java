@@ -320,7 +320,6 @@ public class Listbox extends MeshElement {
 	private EventListener<Event> _pgListener, _pgImpListener, _modelInitListener;
 	/** The style class of the odd row. */
 	private String _scOddRow = null;
-	private int _tabindex;
 	/** the # of rows to preload. */
 	private int _preloadsz = 50;
 	/** maintain the number of the visible item in Paging mold. */
@@ -658,29 +657,6 @@ public class Listbox extends MeshElement {
 		if (_disabled != disabled) {
 			_disabled = disabled;
 			smartUpdate("disabled", _disabled);
-		}
-	}
-
-	/**
-	 * Returns the tab order of this component.
-	 * <p>
-	 * All three molds support this property since 7.0.4.
-	 * <p>
-	 * Default: 0 (means the same as browser's default).
-	 */
-	public int getTabindex() {
-		return _tabindex;
-	}
-
-	/**
-	 * Sets the tab order of this component.
-	 * <p>
-	 * All three molds support this property since 7.0.4.
-	 */
-	public void setTabindex(int tabindex) throws WrongValueException {
-		if (_tabindex != tabindex) {
-			_tabindex = tabindex;
-			smartUpdate("tabindex", tabindex);
 		}
 	}
 
@@ -3275,10 +3251,6 @@ public class Listbox extends MeshElement {
 		render(renderer, "name", _name);
 
 		render(renderer, "emptyMessage", _emptyMessage);
-
-		// Feature ZK-2531: Support tab ordering in default and paging mold
-		if (_tabindex != 0)
-			renderer.render("tabindex", _tabindex);
 
 		if (inSelectMold()) {
 			render(renderer, "multiple", isMultiple());

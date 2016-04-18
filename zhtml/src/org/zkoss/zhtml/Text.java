@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.sys.IntPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
@@ -46,6 +47,7 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
 public class Text extends AbstractComponent implements RawId {
 	private String _value = "";
 	private boolean _encode = true;
+	private Integer _tabindex;
 
 	public Text() {
 	}
@@ -75,6 +77,25 @@ public class Text extends AbstractComponent implements RawId {
 				smartUpdate("value", _value);
 			else
 				invalidate();
+		}
+	}
+
+	/**
+	 * Returns null if not set.
+	 * @return the tab order of this component
+	 */
+	public Integer getTabindexInteger() {
+		return _tabindex;
+	}
+
+	/**
+	 * Sets the tab order of this component. Removes the tabindex attribute if it's set to null.
+	 * @param tabindex
+	 */
+	public void setTabindex(Integer tabindex) {
+		if (_tabindex != tabindex) {
+			_tabindex = tabindex;
+			smartUpdate("tabindex", tabindex);
 		}
 	}
 
@@ -178,6 +199,8 @@ public class Text extends AbstractComponent implements RawId {
 		render(renderer, "idRequired", isIdRequired());
 		if (!_encode)
 			renderer.render("encode", false);
+		if (_tabindex != null)
+			renderer.render("tabindex", _tabindex);
 	}
 
 	protected boolean isChildable() {
@@ -212,6 +235,15 @@ public class Text extends AbstractComponent implements RawId {
 
 			public String getValue(Component cmp) {
 				return ((Text) cmp).getValue();
+			}
+		});
+		_properties.put("tabindex", new IntPropertyAccess() {
+			public void setValue(Component cmp, Integer value) {
+				((Text) cmp).setTabindex(value);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((Text) cmp).getTabindexInteger();
 			}
 		});
 	}

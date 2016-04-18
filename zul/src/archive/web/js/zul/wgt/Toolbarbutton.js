@@ -44,7 +44,6 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_dir: 'normal',
 	_mode: 'default',
 	_checked: false,
-	//_tabindex: 0,
 
 	$define: {
 		/**
@@ -153,17 +152,6 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		 * @param String orient either "horizontal" or "vertical".
 		 */
 		orient: _zkf,
-		/** Returns the tab order of this component.
-		 * <p>Default: -1 (means the same as browser's default).
-		 * @return int
-		 */
-		/** Sets the tab order of this component.
-		 * @param int tabindex
-		 */
-		tabindex: function (v) {
-			var n = this.$n();
-			if (n) n.tabIndex = v || '';
-		},
 		/** Returns a list of component IDs that shall be disabled when the user
 		 * clicks this button.
 		 *
@@ -295,12 +283,9 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return scls;
 	},
 	domAttrs_: function (no) {
-		var attr = this.$supers('domAttrs_', arguments),
-			v = this.getTabindex();
+		var attr = this.$supers('domAttrs_', arguments);
 		if (this._disabled)
 			attr += ' disabled="disabled"';
-		if (v)
-			attr += ' tabIndex="' + v + '"';
 		return attr;
 	},
 	onSize: function () {
@@ -340,20 +325,20 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	focus_: function (timeout) {
-        if (this._tabindex || this._href || this._upload) {
-            var self = this,
-                n = this.$n();
-            zk.afterAnimate(function () {
-                try {
-                    n.focus();
-                    zk.currentFocus = self;
-                    zjq.fixInput(n);
-                } catch (e) {
-                }
-            }, timeout);
-            return true;
-        }
-	    return false;
+		if (this._tabindex != undefined || this._href || this._upload) {
+			var self = this,
+				n = this.$n();
+			zk.afterAnimate(function () {
+				try {
+					n.focus();
+					zk.currentFocus = self;
+					zjq.fixInput(n);
+			} catch (e) {
+				}
+			}, timeout);
+			return true;
+		}
+		return false;
 	}
 });
 })();
