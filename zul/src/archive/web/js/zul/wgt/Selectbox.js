@@ -21,20 +21,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 	$define: {
 		/**
-		 * Returns the tab order of this component.
-		 * <p>
-		 * Default: 0 (means the same as browser's default).
-		 * @return int
-		 */
-		/**
-		 * Sets the tab order of this component.
-		 * @param int tabindex
-		 */
-		tabindex: function (tabindex) {
-			var n = this.$n();
-			if (n) n.tabindex = tabindex || '';
-		},
-		/**
 		 * Returns the index of the selected item (-1 if no one is selected).
 		 * @return int
 		 */
@@ -143,7 +129,6 @@ zul.wgt.Selectbox = zk.$extends(zul.Widget, {
 		return this.$supers('domAttrs_', arguments)
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
 			+ ((v = this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"' : '')
-			+ ((v = this.getTabindex()) ? ' tabindex="' + v + '"' : '')
 			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
 	}
 });

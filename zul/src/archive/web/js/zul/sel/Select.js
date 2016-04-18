@@ -17,7 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.sel.Select = zk.$extends(zul.Widget, {
 	_selectedIndex: -1,
-	//_tabindex: 0,
 	_rows: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -81,20 +80,6 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				w.setSelected(true);
 				this._selItems.push(w);
 			}
-		},
-		/**
-		 * Returns the tab order of this component.
-		 * <p>
-		 * Default: 0 (means the same as browser's default).
-		 * @return int
-		 */
-		/**
-		 * Sets the tab order of this component.
-		 * @param int tabindex
-		 */
-		tabindex: function (tabindex) {
-			var n = this.$n();
-			if (n) n.tabindex = tabindex || '';
 		},
 		/**
 		 * Returns the name of this component.
@@ -248,7 +233,6 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			+ (this.isDisabled() ? ' disabled="disabled"' : '')
 			+ (this.isMultiple() ? ' multiple="multiple"' : '')
 			+ ((v = this.getSelectedIndex()) > -1 ? ' selectedIndex="' + v + '"' : '')
-			+ ((v = this.getTabindex()) ? ' tabindex="' + v + '"' : '')
 			+ ((v = this.getRows()) > 0 ? ' size="' + v + '"' : '')
 			+ ((v = this.getName()) ? ' name="' + v + '"' : '');
 	},

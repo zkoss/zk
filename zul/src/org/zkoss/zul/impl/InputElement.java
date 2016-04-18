@@ -429,23 +429,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		}
 	}
 
-	/** Returns the tab order of this component.
-	 * <p>Default: 0 (means the same as browser's default).
-	 */
-	public int getTabindex() {
-		return _auxinf != null ? _auxinf.tabindex : 0;
-	}
-
-	/** Sets the tab order of this component.
-	 */
-	public void setTabindex(int tabindex) throws WrongValueException {
-		if ((_auxinf != null ? _auxinf.tabindex : 0) != tabindex) {
-			initAuxInfo().tabindex = tabindex;
-			smartUpdate("tabindex", getTabindex());
-		}
-	}
-
-	/** Returns true if onChange event is sent as soon as user types in the input 
+	/** Returns true if onChange event is sent as soon as user types in the input
 	 * component.
 	 * <p>Default: false
 	 * @since 6.0.0
@@ -903,8 +887,6 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 			renderer.render("maxlength", v);
 		if (_cols > 0)
 			renderer.render("cols", _cols);
-		if ((v = getTabindex()) != 0)
-			renderer.render("tabindex", v);
 		if (getInstant())
 			renderer.render("instant", true);
 
@@ -1028,16 +1010,6 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 			}
 		});
 
-		_properties.put("tabindex", new IntPropertyAccess() {
-			public void setValue(Component cmp, Integer tabindex) {
-				((InputElement) cmp).setTabindex(tabindex);
-			}
-
-			public Integer getValue(Component cmp) {
-				return ((InputElement) cmp).getTabindex();
-			}
-		});
-
 		_properties.put("errorboxSclass", new StringPropertyAccess() {
 			public void setValue(Component cmp, String errorboxSclass) {
 				((InputElement) cmp).setErrorboxSclass(errorboxSclass);
@@ -1088,7 +1060,6 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		/** The name. */
 		private String name;
 		private int maxlength;
-		private int tabindex;
 		/** Whether to send onChange as soon as possible */
 		private boolean instant;
 		private Constraint constr;

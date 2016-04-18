@@ -170,22 +170,6 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 		}
 	}
 
-	/** Returns the tab order of this component.
-	 * <p>Default: 0 (means the same as browser's default).
-	 */
-	public int getTabindex() {
-		return _auxinf != null ? _auxinf.tabindex : 0;
-	}
-
-	/** Sets the tab order of this component.
-	 */
-	public void setTabindex(int tabindex) throws WrongValueException {
-		if ((_auxinf != null ? _auxinf.tabindex : 0) != tabindex) {
-			initAuxInfo().tabindex = tabindex;
-			smartUpdate("tabindex", getTabindex());
-		}
-	}
-
 	private String getEncodedHref() {
 		final Desktop dt = getDesktop();
 		return _auxinf != null && _auxinf.href != null && dt != null ? dt.getExecution().encodeURL(_auxinf.href) : null;
@@ -196,9 +180,6 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		int v;
-		if ((v = getTabindex()) != 0)
-			renderer.render("tabindex", v);
 		String s;
 		if (!"normal".equals(s = getDir()))
 			render(renderer, "dir", s);
@@ -238,7 +219,6 @@ public class A extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable 
 		private String href, target;
 		private String autodisable;
 		protected String upload;
-		private int tabindex;
 		private boolean disabled;
 
 		public Object clone() {

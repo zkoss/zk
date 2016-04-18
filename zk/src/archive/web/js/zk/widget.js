@@ -1104,6 +1104,21 @@ new zul.wnd.Window({
 					}
 					zk.error('Illegal action: ' + v + ', ' + this.className);
 				}
+		},
+		/** Returns the tab order of this component.
+		 * @return int
+		 */
+		/** Sets the tab order of this component.
+		 * @param int tabindex
+		 */
+		tabindex: function (tabindex) {
+			var n = this.$n();
+			if (n) {
+				if (tabindex == null)
+					n.removeAttribute('tabindex');
+				else
+					n.tabIndex = tabindex;
+			}
 		}
 	},
 	setHflex_: function (v) {
@@ -2502,6 +2517,8 @@ function () {
 				out += ' class="' + s + '"';
 			if ((s = this.domTooltiptext_()))
 				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
+			if ((s = this.getTabindex()) != undefined)
+				out += ' tabindex="' + s + '"';
 		} else {
 			if (!no.id && (s = this.uuid))
 				out += ' id="' + s + '"';
@@ -2511,6 +2528,8 @@ function () {
 				out += ' class="' + s + '"';
 			if (!no.tooltiptext && (s = this.domTooltiptext_()))
 				out += ' title="' + zUtl.encodeXML(s) + '"'; // ZK-676
+			if (!no.tabindex && (s = this.getTabindex()) != undefined)
+				out += ' tabindex="' + s + '"';
 		}
 		if (this.domExtraAttrs) {
 			out += this.domExtraAttrs_();

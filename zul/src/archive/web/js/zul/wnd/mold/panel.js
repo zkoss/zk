@@ -18,7 +18,7 @@ function (out, skipper) {
 		caption = this.caption,
 		tabi = this._tabindex;
 
-	out.push('<div', this.domAttrs_(), '>');
+	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the child elements
 	if (caption || title) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('head'), '">', 
 				'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
@@ -27,7 +27,7 @@ function (out, skipper) {
 			var	icon = this.$s('icon');
 			if (this._closable) {
 				out.push('<button id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '"');
-				if (tabi > -1) out.push(' tabindex="', tabi, '"');
+				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
 				out.push(' title="', msgzul.PANEL_CLOSE, '"><i class="', this.getClosableIconClass_(), '"></i></button>');
 			}
 			if (this._maximizable) {
@@ -36,18 +36,18 @@ function (out, skipper) {
 				if (maxd)
 					out.push(' ', this.$s('maximized'));
 				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
-				if (tabi > -1) out.push('" tabindex="', tabi);
+				if (tabi != undefined) out.push('" tabindex="', tabi);
 				out.push('" title="', msgzul.PANEL_MAXIMIZE, '"><i class="', maxIcon, '"></i></div>');
 			}
 			if (this._minimizable) {
 				out.push('<div id="', uuid , '-min" class="', icon, ' ', this.$s('minimize'), '"')
-				if (tabi > -1) out.push(' tabindex="', tabi, '"');
+				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
 				out.push(' title="', msgzul.PANEL_MINIMIZE, '"><i class="', this.getMinimizableIconClass_(), '"></i></div>');
 			}
 			if (this._collapsible) {
 				var openIcon = this._open ? this.getCollapseOpenIconClass_() : this.getCollapseCloseIconClass_();
 				out.push('<div id="', uuid , '-exp" class="', icon, ' ', this.$s('expand'), '"')
-				if (tabi > -1) out.push(' tabindex="', tabi, '"');
+				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
 				if (openIcon)
 					out.push(' title="', msgzul.PANEL_COLLAPSE, '"')
 				else

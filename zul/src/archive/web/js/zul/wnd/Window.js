@@ -757,17 +757,6 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				this._shadowWgt.destroy();
 				this._shadowWgt = null;
 			}
-		},
-		/** Returns the tab order of this component.
-		 * <p>Default: 0 (icons will be tabbable by default).
-		 * @return int
-		 */
-		/** Sets the tab order of this component.
-		 * @param int tabindex
-		 */
-		tabindex: function (v) {
-			var n = this.$n();
-			if (n) n.tabIndex = v || '';
 		}
 	},
 	/** Re-position the window based on the value of {@link #getPosition}.

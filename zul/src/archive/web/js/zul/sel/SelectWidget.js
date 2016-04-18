@@ -234,24 +234,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		name: function () {
 			if (this.destkop) this.updateFormData();
 		},
-
-		/**
-		 * Returns the tab order of this component.
-		 * <p>
-		 * Default: 0 (means the same as browser's default).
-		 * @return int
-		 * @since 7.0.4
-		 */
-		/**
-		 * Sets the tab order of this component.
-		 * @param int tabindex
-		 * @since 7.0.4
-		 */
-		tabindex: function (tabindex) {
-			var n = this.$n();
-			if (n)
-				n.tabindex = tabindex || '';
-		},
 		selectOnHighlightDisabled: _zkf
 	},
 	setChgSel: function (val) { //called from the server

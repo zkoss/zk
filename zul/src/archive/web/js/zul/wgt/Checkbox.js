@@ -92,7 +92,12 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 */
 		tabindex: function (v) {
 			var n = this.$n('real');
-			if (n) n.tabIndex = v || '';
+			if (n) {
+				if (tabindex == null)
+					n.removeAttribute('tabindex');
+				else
+					n.tabIndex = v;
+			}
 		},
 		/** Returns the value.
 		 * <p>Default: "".

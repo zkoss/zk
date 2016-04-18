@@ -216,22 +216,6 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		}
 	}
 
-	/** Returns the tab order of this component.
-	 * <p>Default: 0 (means the same as browser's default).
-	 */
-	public int getTabindex() {
-		return _auxinf != null ? _auxinf.tabindex : 0;
-	}
-
-	/** Sets the tab order of this component.
-	 */
-	public void setTabindex(int tabindex) throws WrongValueException {
-		if ((_auxinf != null ? _auxinf.tabindex : 0) != tabindex) {
-			initAuxInfo().tabindex = tabindex;
-			smartUpdate("tabindex", getTabindex());
-		}
-	}
-
 	/** Returns non-null if this button is used for file upload, or null otherwise.
 	 * Refer to {@link #setUpload} for more details.
 	 * @since 5.0.0
@@ -305,9 +289,6 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		int v;
-		if ((v = getTabindex()) != 0)
-			renderer.render("tabindex", v);
 		String s;
 		if (!NORMAL.equals(s = getDir()))
 			render(renderer, "dir", s);
@@ -378,7 +359,6 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		private String href, target;
 		private String autodisable;
 		protected String upload;
-		private int tabindex;
 		private boolean disabled;
 
 		public Object clone() {

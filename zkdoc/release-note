@@ -36,6 +36,7 @@ ZK 8.0.2
   ZK-3168: Chosenbox doesn't send onSelectSubModel direcly to the server using ListSubModel
   ZK-3169: Invalidate on a parent of chosenbox causes selection to disappear using listsubmodel
   ZK-3154: autopaging will activate paging mold on first load if the content is just fit for default mold
+  ZK-3069: tabindex=0 is not passed to the widgets associated dom element
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
