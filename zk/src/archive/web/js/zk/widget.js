@@ -2710,32 +2710,34 @@ function () {
 
 			var n = this.$n();
 			if (n) {
-				var oldrod = this.z$rod;
-				this.z$rod = false;
-					//to avoid side effect since the caller might look for $n(xx)
+				try {
+					zk.avoidRod = true;
+						//to avoid side effect since the caller might look for $n(xx)
 
-				var skipInfo;
-				if (skipper) {
-					skipInfo = skipper.skip(this);
-					if (skipInfo) {
-						var cfi = _bkFocus(this);
+					var skipInfo;
+					if (skipper) {
+						skipInfo = skipper.skip(this);
+						if (skipInfo) {
+							var cfi = _bkFocus(this);
 
-						this.replaceHTML(n, null, skipper, true);
+							this.replaceHTML(n, null, skipper, true);
 
-						skipper.restore(this, skipInfo);
+							skipper.restore(this, skipInfo);
 
-						zWatch.fireDown('onRestore', this);
-							//to notify it is restored from rerender with skipper
-						zUtl.fireSized(this);
+							zWatch.fireDown('onRestore', this);
+								//to notify it is restored from rerender with skipper
+							zUtl.fireSized(this);
 
-						_rsFocus(cfi);
+							_rsFocus(cfi);
+						}
 					}
+
+					if (!skipInfo)
+						this.replaceHTML(n, null, null, true);
+				} catch (err) {
+				} finally {
+					delete zk.avoidRod;
 				}
-
-				if (!skipInfo)
-					this.replaceHTML(n, null, null, true);
-
-				this.z$rod = oldrod;
 			}
 		}
 		return this;
