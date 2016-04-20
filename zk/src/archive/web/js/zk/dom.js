@@ -644,7 +644,7 @@ zjq.prototype = {
 
 			// only scroll when the target is not into view
 			// for test case B60-ZK-1202.zul
-			if (!this.isScrollIntoView()) {
+			if (!this.isScrollIntoView(true)) {
 				// fix browser's scrollIntoView issue, when offsetParent has absolute position.
 				// for example, B65-ZK-2296-1.zul and B60-ZK-1202.zul
 				var isAbsolute = parent,
