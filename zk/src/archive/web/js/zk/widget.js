@@ -2734,7 +2734,6 @@ function () {
 
 					if (!skipInfo)
 						this.replaceHTML(n, null, null, true);
-				} catch (err) {
 				} finally {
 					delete zk.avoidRod;
 				}
