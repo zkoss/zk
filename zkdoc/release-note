@@ -39,6 +39,7 @@ ZK 8.0.2
   ZK-3154: autopaging will activate paging mold on first load if the content is just fit for default mold
   ZK-3069: tabindex=0 is not passed to the widgets associated dom element
   ZK-3184: ScrollIntoView does not apply recursively
+  ZK-3180: integrate security update in beanshell interpreter
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
