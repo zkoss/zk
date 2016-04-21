@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3170.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Apr 19, 2016 12:45:04 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1 - Close the root item
+        2 - Click the toggle disable button
+        3 - Open the root item
+        Item 2.1.1 should appear and no js error
+    </label>
+    <button label="Toggle disable" onClick="treeitem.disabled= !treeitem.disabled;" />
+    <tree id="tree" multiple="true" checkmark="true">
+        <treechildren>
+            <treeitem id="treeitem1" disabled="false">
+                <treerow>
+                    <treecell label="Item 2" />
+                </treerow>
+                <treechildren>
+                    <treeitem id="treeitem" disabled="false">
+                        <treerow>
+                            <treecell label="Item 2.1" />
+                        </treerow>
+                        <treechildren>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.1.1" />
+                                </treerow>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 2.2" />
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>
