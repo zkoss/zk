@@ -39,6 +39,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.bind.impl.ClientBinderPhaseListener</listener-class>
 	</listener>
+
+    <listener>
+        <listener-class>org.zkoss.bind.proxy.ZKProxyTargetHandlers</listener-class>
+    </listener>
 	
     <library-property>
         <name>org.zkoss.bind.proxy.IgnoredProxyClasses</name>
