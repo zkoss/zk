@@ -254,6 +254,13 @@ public class Events {
 	 */
 	public static final String ON_DEFERRED_EVALUATION = "onDeferredEvaluation";
 
+
+	/**
+	 * The onSlide event (used with {@link Event}).
+	 * @since 8.0.2
+	 */
+	public static final String ON_SLIDE = "onSlide";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

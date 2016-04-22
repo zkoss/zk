@@ -270,6 +270,32 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (nonAnima) this.parent.resize();
 			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
 				this.fire('onOpen', {open: open});
+		},
+        /**
+         * SlideDown or SlideUp the splitter. Meaningful only if
+         * {@link #isCollapsible} is not false.
+         * @param boolean slide
+         */
+        /**
+         * Returns whether it is slide (i.e., not collapsed. Meaningful only if
+         * {@link #isCollapsible} is not false.
+         * <p>
+         * Default: false.
+         * @return boolean
+         */
+		slide: function (slide) {
+			if (!this.$n() || !this.isCollapsible() || !this.parent) {
+				return; //nothing changed
+			}
+			if (slide) {
+				if (this._open) {
+					this.$class.afterSlideDown.apply(this, [this.$n('real')]);
+					this.setOpen(false, false, true);
+				}
+				this._doSlideDown();
+			} else if (!this._isSlideUp) {
+				this._doSlideUp();
+			}
 		}
 	},
 	//bug #3014664
@@ -676,29 +702,39 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.setOpen(!this._open);
 			break;
 		case this.$n('colled'):
-			if (this._isSlide)
-				return;
-			this._isSlide = true;
-			var real = this.$n('real'),
-				s = real.style;
-			s.visibility = 'hidden';
-			s.display = '';
-			this._syncSize();
-			this._original = [s.left, s.top];
-			this._alignTo();
-			s.zIndex = 100;
-
-			if (this.$n('btn'))
-				this.$n('btn').style.display = 'none';
-			s.visibility = '';
-			s.display = 'none';
-			zk(real).slideDown(this, {
-				anchor: this.sanchor,
-				afterAnima: this.$class.afterSlideDown
-			});
+			this._doSlideDown();
 			break;
 		}
 		this.$supers('doClick_', arguments);
+	},
+	_doSlideDown: function () {
+		if (this._isSlide)
+			return;
+		this._isSlide = true;
+		var real = this.$n('real'),
+			s = real.style;
+		s.visibility = 'hidden';
+		s.display = '';
+		this._syncSize();
+		this._original = [s.left, s.top];
+		this._alignTo();
+		s.zIndex = 100;
+
+		if (this.$n('btn'))
+			this.$n('btn').style.display = 'none';
+		s.visibility = '';
+		s.display = 'none';
+		zk(real).slideDown(this, {
+			anchor: this.sanchor,
+			afterAnima: this.$class.afterSlideDown
+		});
+	},
+	_doSlideUp: function () {
+		this._isSlideUp = true;
+		zk(this.$n('real')).slideUp(this, {
+			anchor: this.sanchor,
+			afterAnima: this.$class.afterSlideUp
+		});
 	},
 	_docClick: function (evt) {
 		var target = evt.target;
@@ -710,12 +746,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.$n('real').style.zIndex = ''; //reset
 			} else if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid)
 						|| !zk.animating()) {
-					this._isSlideUp = true;
-					zk(this.$n('real')).slideUp(this, {
-						anchor: this.sanchor,
-						afterAnima: this.$class.afterSlideUp
-					});
-				}
+					this._doSlideUp();
+			}
 		}
 	},
 	_syncSize: function (inclusive) {
@@ -970,6 +1002,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	// a callback function after the collapsed region slides down
 	afterSlideDown: function (n) {
 		jq(document).click(this.proxy(this._docClick));
+		this._slide = true;
+		this.fire('onSlide', {slide: this._isSlide});
 		this._fixFontIcon();
 	},
 	// a callback function after the collapsed region slides up
@@ -982,7 +1016,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.$n('btn'))
 			this.$n('btn').style.display = '';
 		jq(document).unbind('click', this.proxy(this._docClick));
-		this._isSlideUp = this._isSlide = false;
+		this._isSlideUp = this._isSlide = this._slide = false;
+		this.fire('onSlide', {slide: this._isSlide});
 		this._fixFontIcon();
 	},
 	//drag

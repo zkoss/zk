@@ -1107,9 +1107,11 @@ new zul.wnd.Window({
 		},
 		/** Returns the tab order of this component.
 		 * @return int
+		 * @since 8.0.2
 		 */
 		/** Sets the tab order of this component.
 		 * @param int tabindex
+		 * @since 8.0.2
 		 */
 		tabindex: function (tabindex) {
 			var n = this.$n();

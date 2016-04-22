@@ -35,7 +35,7 @@ import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
-import org.zkoss.zk.ui.sys.IntPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
@@ -83,6 +83,7 @@ public class Text extends AbstractComponent implements RawId {
 	/**
 	 * Returns null if not set.
 	 * @return the tab order of this component
+	 * @since 8.0.2
 	 */
 	public Integer getTabindexInteger() {
 		return _tabindex;
@@ -237,7 +238,7 @@ public class Text extends AbstractComponent implements RawId {
 				return ((Text) cmp).getValue();
 			}
 		});
-		_properties.put("tabindex", new IntPropertyAccess() {
+		_properties.put("tabindex", new IntegerPropertyAccess() {
 			public void setValue(Component cmp, Integer value) {
 				((Text) cmp).setTabindex(value);
 			}

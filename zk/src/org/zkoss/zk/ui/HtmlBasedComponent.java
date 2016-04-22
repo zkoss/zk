@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.event.ZIndexEvent;
 import org.zkoss.zk.ui.ext.DragControl;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.sys.IntPropertyAccess;
+import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
@@ -657,6 +658,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	/**
 	 * Returns null if not set.
 	 * @return the tab order of this component
+	 * @since 8.0.2
 	 */
 	public Integer getTabindexInteger() {
 		return (_auxinf != null && _auxinf.tabindex != null) ? _auxinf.tabindex : null;
@@ -859,7 +861,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 				return ((HtmlBasedComponent) cmp).getVflex();
 			}
 		});
-		_properties.put("tabindex", new IntPropertyAccess() {
+		_properties.put("tabindex", new IntegerPropertyAccess() {
 			public void setValue(Component cmp, Integer tabindex) {
 				((HtmlBasedComponent) cmp).setTabindex(tabindex);
 			}
