@@ -68,6 +68,7 @@ public class Area extends AbstractComponent {
 	/**
 	 * Returns null if not set.
 	 * @return the tab order of this component
+	 * @since 8.0.2
 	 */
 	public Integer getTabindexInteger() {
 		return _tabindex;

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3166.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 20 10:06:15 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. should see the west region close, then the region slide in but not open, and then slide out.
+        2. should see two "onSlide" in zklog
+        3. click on the "slide in" button, the west region should slide in but not open
+        4. should see "true onSlide" in zklog
+        5. click on the "slide out" button, the west region should slide out
+        6. should see "false onSlide" in zklog
+
+    </label>
+    <borderlayout height="300px">
+        <west id="west" title="west" collapsible="true" size="50%" onSlide='Clients.log("onSlide")'/>
+    </borderlayout>
+    <button onClick='west.setSlide(true);Clients.log(west.isSlide().toString());' label="slide in"/>
+    <button onClick='west.setSlide(false);Clients.log(west.isSlide().toString());' label="slide out"/>
+    <timer delay="1000" repeats="false">
+        <attribute name="onTimer">
+            west.setOpen(false);
+        </attribute>
+    </timer>
+    <timer delay="2500" repeats="false">
+        <attribute name="onTimer">
+            west.setSlide(true);
+        </attribute>
+    </timer>
+    <timer delay="4000" repeats="false">
+        <attribute name="onTimer">
+            west.setSlide(false);
+        </attribute>
+    </timer>
+</zk>

@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
+import org.zkoss.zk.ui.event.SlideEvent;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
@@ -57,10 +58,12 @@ public abstract class LayoutRegion extends XulElement {
 	private boolean _splittable;
 	private boolean _collapsible;
 	private boolean _open = true;
+	private boolean _slide = false;
 	private transient Caption _caption;
 
 	static {
 		addClientEvent(LayoutRegion.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(LayoutRegion.class, Events.ON_SLIDE, CE_IMPORTANT);
 		addClientEvent(LayoutRegion.class, Events.ON_SIZE, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
@@ -350,6 +353,17 @@ public abstract class LayoutRegion extends XulElement {
 		}
 	}
 
+	public boolean isSlide() {
+		return _slide;
+	}
+
+	public void setSlide(boolean slide) {
+		if (_slide != slide) {
+			_slide = slide;
+			smartUpdate("slide", slide);
+		}
+	}
+
 	/*package*/ boolean isNativeScrollbar() {
 		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
 	}
@@ -443,6 +457,10 @@ public abstract class LayoutRegion extends XulElement {
 		if (cmd.equals(Events.ON_OPEN)) {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			_open = evt.isOpen();
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_SLIDE)) {
+			SlideEvent evt = SlideEvent.getSlideEvent(request);
+			_slide = evt.isSlide();
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

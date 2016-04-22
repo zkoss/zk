@@ -9,7 +9,7 @@ ZK 8.0.2
   ZK-3133: Support a Match Media annotation for MVVM to use
   ZK-3157: Library property support "name" - "values"
   ZK-3098: add onItemClick event to Chosenbox
-  ZK-3170: Opened treeitem set disabled while not visible causes child treeitems to be removed from the DOM tree
+  ZK-3166: BorderLayout slide action server-side support
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
@@ -40,9 +40,11 @@ ZK 8.0.2
   ZK-3069: tabindex=0 is not passed to the widgets associated dom element
   ZK-3184: ScrollIntoView does not apply recursively
   ZK-3180: integrate security update in beanshell interpreter
+  ZK-3170: Opened treeitem set disabled while not visible causes child treeitems to be removed from the DOM tree
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
+  + Moved all getter and setter of tabindex to root component HtmlBasedComponent.java to match the spec of html5
 
    --------
 ZK 8.0.1.1
