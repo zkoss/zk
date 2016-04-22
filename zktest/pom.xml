@@ -6,7 +6,7 @@
 	<properties>
 		<zkel.version>1.1.0</zkel.version>
 		<commons-lang.version>2.4</commons-lang.version>
-		<bsh.version>2.0b4</bsh.version>
+		<bsh.version>2.0b6</bsh.version>
 		<commons-fileupload.version>1.2.2</commons-fileupload.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
@@ -190,7 +190,7 @@
 			<version>${commons-lang.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.beanshell</groupId>
+			<groupId>org.apache-extras.beanshell</groupId>
 			<artifactId>bsh</artifactId>
 			<version>${bsh.version}</version>
 			<scope>runtime</scope>
