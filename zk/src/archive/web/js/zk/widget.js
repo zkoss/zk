@@ -2713,7 +2713,7 @@ function () {
 			var n = this.$n();
 			if (n) {
 				try {
-					zk.avoidRod = true;
+					zk._avoidRod = true;
 						//to avoid side effect since the caller might look for $n(xx)
 
 					var skipInfo;
@@ -2737,7 +2737,7 @@ function () {
 					if (!skipInfo)
 						this.replaceHTML(n, null, null, true);
 				} finally {
-					delete zk.avoidRod;
+					delete zk._avoidRod;
 				}
 			}
 		}
