@@ -1578,7 +1578,7 @@ jq(el).zk.center(); //same as 'center'
 					return this;
 				style.type = 'text/css';
 				
-				style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:"" !important';
+				style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:none !important';
 				var scrollTop = document.documentElement.scrollTop,
 					scrollLeft = document.documentElement.scrollLeft;
 				head.appendChild(style);
