@@ -686,5 +686,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
       <name>org.zkoss.zk.WPD.cache</name>
       <value>false</value>
   </library-property>
-  
+	<!-- for B80-ZK-3149  -->
+    <listener>
+        <listener-class>org.zkoss.zktest.test2.B80_ZK_3149ProxyHandler</listener-class>
+    </listener>
 </zk>

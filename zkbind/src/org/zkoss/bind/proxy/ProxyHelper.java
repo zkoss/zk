@@ -13,6 +13,7 @@ package org.zkoss.bind.proxy;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,7 @@ import org.zkoss.zk.ui.UiException;
  */
 public class ProxyHelper {
 	private static Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<Class<?>, Boolean>();
+	private static List<ProxyTargetHandler> _proxyTargetHandlers;
 
 	static {
 		List<String> classes = Library.getProperties("org.zkoss.bind.proxy.IgnoredProxyClasses");
@@ -52,6 +54,7 @@ public class ProxyHelper {
 				}
 			}
 		}
+		_proxyTargetHandlers = new LinkedList<ProxyTargetHandler>(ZKProxyTargetHandlers.getSystemProxyTargetHandlers());
 	}
 	/**
 	 * Creates a proxy object from the given origin object, if any.
@@ -77,6 +80,7 @@ public class ProxyHelper {
 			return origin;
 		}
 
+		origin = getOriginObject(origin);
 		boolean hasImmutableFields = false;
 		if (annotations != null) {
 			for (Annotation annot : annotations) {
@@ -102,7 +106,7 @@ public class ProxyHelper {
 			throw new UnsupportedOperationException("Array cannot be a proxy object!");
 		} else {
 			factory.setFilter(BeanProxyHandler.BEAN_METHOD_FILTER);
-			factory.setSuperclass(origin.getClass());
+			factory.setSuperclass(getTargetClassIfProxied(origin.getClass()));
 			if (hasImmutableFields) {
 				factory.setInterfaces(new Class[] { FormProxyObject.class, ImmutableFields.class });
 			} else {
@@ -141,6 +145,27 @@ public class ProxyHelper {
 		return checkImmutable(origin.getClass());
 	}
 
+	/**
+	 * Checks if the target class is already proxied
+	 */
+	private static <T> Class<? extends Object> getTargetClassIfProxied(Class<T> clazz) {
+		if (ProxyFactory.isProxyClass(clazz))
+			clazz = (Class<T>) clazz.getSuperclass();
+		return clazz;
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	public static <T extends Object> T getOriginObject(T origin) {
+		for (ProxyTargetHandler handlers : _proxyTargetHandlers) {
+			if (handlers != null) {
+				origin = handlers.getOriginObject(origin);
+			}
+		}
+		return origin;
+	}
+
 	private static boolean checkImmutable(Class<?> type) {
 		if (_ignoredClasses.containsKey(type))
 			return true;
@@ -174,11 +199,13 @@ public class ProxyHelper {
 
 		if (origin instanceof Form)
 			return origin;
+		origin = getOriginObject(origin);
 		ProxyFactory factory = new ProxyFactory();
 		factory.setFilter(FormProxyHandler.FORM_METHOD_FILTER);
 		if (origin instanceof FormProxyObject)
 			type = ((FormProxyObject) origin).getOriginObject().getClass();
-
+		else if (origin != null)
+			type = getTargetClassIfProxied(origin.getClass());
 		factory.setSuperclass(type);
 		if (interfaces == null) {
 			factory.setInterfaces(new Class[] { FormProxyObject.class, Form.class, FormFieldCleaner.class });

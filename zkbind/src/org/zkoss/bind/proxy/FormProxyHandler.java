@@ -156,13 +156,13 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 						BinderCtrl binder = (BinderCtrl) _binding.getBinder();
 						Set<String> saveFormFieldNames = binder.removeSaveFormFieldNames((Form) self);
 
-						_origin = (T) args[0];
+						_origin = ProxyHelper.getOriginObject((T) args[0]);
 						_binding = (FormBinding) args[1];
 
 						if (!saveFormFieldNames.isEmpty())
 							binder.addSaveFormFieldName((Form) self, saveFormFieldNames);
 					} else {
-						_origin = (T) args[0];
+						_origin = ProxyHelper.getOriginObject((T) args[0]);
 						_binding = (FormBinding) args[1];
 					}
 					return null;
