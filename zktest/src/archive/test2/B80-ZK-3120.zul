@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3120.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 21 14:31:26 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. browse in ie8
+        2. click anywhere outside the window
+        3. should not switch to compatibility mode when error box show
+
+    </label>
+    <window border="normal" title="hello" apply="org.zkoss.zktest.test2.B80_ZK_3120Composer">
+        <textbox id="benutzer" />
+    </window>
+</zk>
