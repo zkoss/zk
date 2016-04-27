@@ -11,7 +11,9 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.nio.charset.Charset;
+import org.apache.commons.codec.DecoderException;
+
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -50,11 +52,13 @@ public class DigestUtilsHelper {
 	}
 
 	public static byte[] getBytesUtf8(String string) {
-		return getBytes(string, Charset.forName("UTF-8"));
-	}
-
-	private static byte[] getBytes(String string, Charset charset) {
-		return string == null ? null : string.getBytes(charset);
+		try {
+			return string == null ? null : string.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// Should never happen with UTF-8
+			// If it does - ignore & return null
+		}
+		return null;
 	}
 
 	public static String encodeHexString(byte[] data) {
@@ -88,6 +92,40 @@ public class DigestUtilsHelper {
 		}
 
 		return out;
+	}
+
+	public static byte[] decodeHexString(String data) throws DecoderException {
+		return decodeHex(data.toCharArray());
+	}
+
+	public static byte[] decodeHex(final char[] data) throws DecoderException {
+
+		final int len = data.length;
+
+		if ((len & 0x01) != 0) {
+			throw new DecoderException("Odd number of characters.");
+		}
+
+		final byte[] out = new byte[len >> 1];
+
+		// two characters form the hex value.
+		for (int i = 0, j = 0; j < len; i++) {
+			int f = toDigit(data[j], j) << 4;
+			j++;
+			f = f | toDigit(data[j], j);
+			j++;
+			out[i] = (byte) (f & 0xFF);
+		}
+
+		return out;
+	}
+
+	protected static int toDigit(final char ch, final int index) throws DecoderException {
+		final int digit = Character.digit(ch, 16);
+		if (digit == -1) {
+			throw new DecoderException("Illegal hexadecimal character " + ch + " at index " + index);
+		}
+		return digit;
 	}
 
 }
