@@ -64,6 +64,8 @@ function (out) {
 				'"');
 		if (!this._collapsible)
 			out.push(' style="display:none;"');
+		if (title = this._title)
+			out.push(' title="' + title + '"');
 				
 		out.push('></i></div>');
 	}

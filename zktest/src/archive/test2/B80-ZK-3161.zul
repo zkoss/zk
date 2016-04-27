@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3161.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 26 17:49:56 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. hover on the chevron right icon of the west borderlayout
+        2. should see tooltip "west title"
+        3. hover on the chevron down icon of the north borderlayout
+        4. should not see any tooltip
+
+    </label>
+    <borderlayout height="300px" width="300px">
+        <west title="west title" id="west" collapsible="true" size="100px" open="false"/>
+        <north collapsible="true" size="100px" open="false">
+            <caption label="north caption"/>
+        </north>
+    </borderlayout>
+</zk>
