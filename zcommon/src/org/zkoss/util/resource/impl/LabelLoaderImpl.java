@@ -311,10 +311,26 @@ public class LabelLoaderImpl implements LabelLoader {
 	private void toExValue(Map labels) {
 		if (!labels.isEmpty())
 			for (Iterator it = labels.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				me.setValue(new ExValue((String)me.getValue()));
+				final Map.Entry me = (Map.Entry) it.next();
+				String value = expendValue(labels, (String) me.getValue());
+				me.setValue(new ExValue(value));
 			}
 	}
+
+	//expend ${} EL in labels recursively
+	private String expendValue(Map labels, String value) {
+		if (labels != null && value != null && value.startsWith("${") && value.endsWith("}")) {
+			Object expend = labels.get(value.substring(2, value.length() - 1));
+			if (expend != null) {
+				if (expend instanceof String)
+					return expendValue(labels, (String) expend);
+				else if (expend instanceof ExValue)
+					return expendValue(labels, ((ExValue) expend).getValue());
+			}
+		}
+		return value;
+	}
+
 	//Copy _syncLabels to _labels. It must be called in synchronized(_syncLabels)
 	@SuppressWarnings("unchecked")
 	private void cloneLables() {
