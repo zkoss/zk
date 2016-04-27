@@ -11,8 +11,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import org.apache.commons.codec.DecoderException;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -94,16 +92,16 @@ public class DigestUtilsHelper {
 		return out;
 	}
 
-	public static byte[] decodeHexString(String data) throws DecoderException {
+	public static byte[] decodeHexString(String data) throws IllegalArgumentException {
 		return decodeHex(data.toCharArray());
 	}
 
-	public static byte[] decodeHex(final char[] data) throws DecoderException {
+	public static byte[] decodeHex(final char[] data) throws IllegalArgumentException {
 
 		final int len = data.length;
 
 		if ((len & 0x01) != 0) {
-			throw new DecoderException("Odd number of characters.");
+			throw new IllegalArgumentException("Odd number of characters.");
 		}
 
 		final byte[] out = new byte[len >> 1];
@@ -120,10 +118,10 @@ public class DigestUtilsHelper {
 		return out;
 	}
 
-	protected static int toDigit(final char ch, final int index) throws DecoderException {
+	protected static int toDigit(final char ch, final int index) throws IllegalArgumentException {
 		final int digit = Character.digit(ch, 16);
 		if (digit == -1) {
-			throw new DecoderException("Illegal hexadecimal character " + ch + " at index " + index);
+			throw new IllegalArgumentException("Illegal hexadecimal character " + ch + " at index " + index);
 		}
 		return digit;
 	}
