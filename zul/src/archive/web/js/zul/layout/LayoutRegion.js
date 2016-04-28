@@ -270,33 +270,27 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (nonAnima) this.parent.resize();
 			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
 				this.fire('onOpen', {open: open});
-		},
-        /**
-         * SlideDown or SlideUp the splitter. Meaningful only if
-         * {@link #isCollapsible} is not false.
-         * @param boolean slide
-         */
-        /**
-         * Returns whether it is slide (i.e., not collapsed. Meaningful only if
-         * {@link #isCollapsible} is not false.
-         * <p>
-         * Default: false.
-         * @return boolean
-         */
-		slide: function (slide) {
-			if (!this.$n() || !this.isCollapsible() || !this.parent) {
-				return; //nothing changed
-			}
-			if (slide) {
-				if (this._open) {
-					this.$class.afterSlideDown.apply(this, [this.$n('real')]);
-					this.setOpen(false, false, true);
-				}
-				this._doSlideDown();
-			} else if (!this._isSlideUp) {
-				this._doSlideUp();
-			}
 		}
+	},
+	/**
+	 * Sets whether the colled sildes down or up. Meaningful only if it is not opened, and
+	 * {@link #isCollapsible} is not false.
+	 * @param boolean slide
+	 * @since 8.0.2
+	 */
+	setSlide: function (slide) {
+		if (!this.$n() || !this.isCollapsible() || !this.parent || this._open) {
+			return; //nothing changed
+		}
+		if (slide) this._doSlideDown();
+		else this._doSlideUp();
+	},
+	/**
+	 * Returns whether it's slided down.
+	 * @since 8.0.2
+	 */
+	getSlide: function () {
+		this._slide;
 	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for LayoutRegion
@@ -689,7 +683,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		case this.$n('btn'):
 		case this.$n('btned'):
 		case this.$n('splitbtn'):
-			if (!this.isCollapsible() || this._isSlide || zk.animating())
+			if (!this.isCollapsible() || this._slide || zk.animating())
 				return;
 			if (this.$n('btned') == target) {
 				var s = this.$n('real').style;
@@ -708,9 +702,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('doClick_', arguments);
 	},
 	_doSlideDown: function () {
-		if (this._isSlide)
+		if (this._open || this._slide || this._isSlidingUp)
 			return;
-		this._isSlide = true;
+		this._slide = true;
+		this.fire('onSlide', {slide: true});
 		var real = this.$n('real'),
 			s = real.style;
 		s.visibility = 'hidden';
@@ -730,7 +725,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		});
 	},
 	_doSlideUp: function () {
-		this._isSlideUp = true;
+		if (this._isSlidingUp) return;
+		this._isSlidingUp = true;
+		this._slide = false;
+		this.fire('onSlide', {slide: false});
 		zk(this.$n('real')).slideUp(this, {
 			anchor: this.sanchor,
 			afterAnima: this.$class.afterSlideUp
@@ -738,13 +736,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_docClick: function (evt) {
 		var target = evt.target;
-		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
+		if (this._slide && !jq.isAncestor(this.$n('real'), target)) {
 			var btned = this.$n('btned');
 			if (btned == target || btned == target.parentNode) {
 				this.$class.afterSlideUp.apply(this, [this.$n('real')]);
 				this.setOpen(true, false, true);
 				this.$n('real').style.zIndex = ''; //reset
-			} else if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid)
+			} else if ((this.$class.uuid(target) != this.uuid)
 						|| !zk.animating()) {
 					this._doSlideUp();
 			}
@@ -1002,8 +1000,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	// a callback function after the collapsed region slides down
 	afterSlideDown: function (n) {
 		jq(document).click(this.proxy(this._docClick));
-		this._slide = true;
-		this.fire('onSlide', {slide: this._isSlide});
 		this._fixFontIcon();
 	},
 	// a callback function after the collapsed region slides up
@@ -1015,9 +1011,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.zIndex = '';
 		if (this.$n('btn'))
 			this.$n('btn').style.display = '';
+		this._isSlidingUp = false;
 		jq(document).unbind('click', this.proxy(this._docClick));
-		this._isSlideUp = this._isSlide = this._slide = false;
-		this.fire('onSlide', {slide: this._isSlide});
 		this._fixFontIcon();
 	},
 	//drag

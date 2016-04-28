@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3146.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Apr 24 16:48:45 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. upload a file about 250MB
+        2. close the winodw while the upload is in progress and almost finished
+        3. should not see any error
+
+    </label>
+    <window id="dialog" width="300px" mode="modal" closable="true" border="normal" title="upload">
+        <button label="upload" upload="true,maxsize=-1"/>
+    </window>
+    <script defer="true">
+        //increased to make the error more likely to happen in case the upload finishes within the next 2 seconds
+        //(case was easy to reproduce with a file size of about 250MB in a local env without real network communication)
+        zk.Widget.auDelay = 2000; //default is 38ms so the error only happens very rarely
+    </script>
+</zk>
