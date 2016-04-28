@@ -43,6 +43,7 @@ ZK 8.0.2
   ZK-3170: Opened treeitem set disabled while not visible causes child treeitems to be removed from the DOM tree
   ZK-3149: FormBinding on Hibernate Entity causes: RTE: "duplicate method: setHandler"
   ZK-3120: IE 8 switches to compatibility mode on popup open
+  ZK-3182: The label key is resolved differently in a <template> between the one inside a Grid and outside
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
