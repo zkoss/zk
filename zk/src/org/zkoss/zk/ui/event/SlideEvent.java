@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.Component;
  */
 public class SlideEvent extends Event {
 
-    private final boolean _isSlide;
+    private final boolean _slide;
 
     /** Converts an AU request to an slide event.
      * @since 8.0.2
@@ -49,14 +49,14 @@ public class SlideEvent extends Event {
      */
     public SlideEvent(String name, Component target, boolean slide) {
         super(name, target);
-        _isSlide = slide;
+        _slide = slide;
     }
 
-    /** Returns whether it causes slide.
+    /** Returns whether it is slide out.
      * @since 8.0.2
      */
     public boolean isSlide() {
-        return _isSlide;
+        return _slide;
     }
 
 }

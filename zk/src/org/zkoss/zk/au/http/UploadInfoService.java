@@ -25,6 +25,7 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.AuService;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
@@ -67,10 +68,20 @@ public class UploadInfoService implements AuService, Serializable {
 			final Map<String, Object> data = request.getData();
 			Desktop desktop = request.getDesktop();
 			final String uuid = (String) request.getData().get("wid");
+			final Component comp = desktop.getComponentByUuidIfAny(uuid);
 			final String sid = (String) request.getData().get("sid");
+			if (comp == null) {
+				Map<String, Integer> percent = cast((Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT));
+				Map<String, Object> size = cast((Map) desktop.getAttribute(Attributes.UPLOAD_SIZE));
+				String key = uuid + '_' + sid;
+				if (percent != null) {
+					percent.remove(key);
+					size.put(key, "Upload Aborted");
+				}
+				return false;
+			}
 			final List<Media> result = cast((List) AuRequests.getUpdateResult(request));
-			Events.postEvent(new UploadEvent(Events.ON_UPLOAD, desktop.getComponentByUuid(uuid), parseResult(result)));
-
+			Events.postEvent(new UploadEvent(Events.ON_UPLOAD, comp, parseResult(result)));
 			Map percent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
 			Map size = (Map) desktop.getAttribute(Attributes.UPLOAD_SIZE);
 			final String key = uuid + '_' + sid;
