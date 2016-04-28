@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3106.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 28, 2016 12:40:57 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">It should display a label "Test"</label>
+    <vlayout>
+        <template name="b1">
+            <apply template="b2"/>
+        </template>
+        <apply template="b0"/>
+        <template name="b0">
+            <apply template="b1">
+                <template name="b2">
+                    <label style="border:1px solid #000;padding:2px;" sclass="target" value="Test"/>
+                </template>
+            </apply>
+        </template>
+    </vlayout>
+</zk>
