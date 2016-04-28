@@ -213,6 +213,7 @@ public abstract class LayoutRegion extends XulElement {
 
 	/**
 	 * Sets the title.
+	 * Also sets a tooltip on the chevron icon when close or not slide out.
 	 */
 	public void setTitle(String title) {
 		if (!Objects.equals(_title, title)) {

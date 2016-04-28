@@ -10,6 +10,7 @@ ZK 8.0.2
   ZK-3157: Library property support "name" - "values"
   ZK-3098: add onItemClick event to Chosenbox
   ZK-3166: BorderLayout slide action server-side support
+  ZK-3161: Title / caption / icon for collapsed LayoutRegion in BorderLayout
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
