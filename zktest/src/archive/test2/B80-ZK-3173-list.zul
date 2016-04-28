@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3173-list.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu, Apr 28, 2016  9:21:33 AM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		public void remove1() {
+			if (model.isEmpty()) return;
+			model.remove(model.size() -1);
+		}
+		public void clear() {
+			model.clear();
+		}
+		public void add1() {
+			fill(1);
+		}
+		public void add10() {
+			fill(10);
+		}
+		private void fill(int num) {
+			for (int i = 0; i < num; i++) {
+				model.add("no. " + i);
+			}
+		}
+		public void log() {
+			Clients.log("model active page: " + model.getActivePage());
+			Clients.log("model page count: " + model.getPageCount());
+			Clients.log("list active page: " + list.getActivePage());
+			Clients.log("list page count: " + list.getPageCount());
+			Clients.log("==========================");
+		}
+	]]></zscript>
+	<label multiline="true">
+		This test checks the active page number and page count are in sync between model and listbox
+		A. test clear model
+			1. click "ADD 10" button
+			2. go to the last page
+			3. click "CLEAR" button
+			4. should see model and listbox have the same active page number and page count
+		B. test remove items from model
+			1. click "ADD 10" button
+			2. go to the last page
+			3. click "REMOVE 1" button
+			4. should see model and listbox have the same active page number and page count
+		C. test changing page size
+			1. click "ADD 10" button
+			2. go to the last page
+			3. click "SET PAGE SIZE TO 5" button
+			4. should see model and listbox have the same active page number and page count
+	</label>
+	<listbox id="list" model="${model}" mold="paging" pageSize="3" >
+		<listhead>
+			<listheader>
+				<label>ITEMS</label>
+			</listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell>
+					<label value="${each}" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<button id="clearBtn" label="CLEAR" onClick='clear(); log()' />
+	<button id="add10Btn" label="ADD 10" onClick="add10()" />
+	<button id="add1Btn" label="ADD 1" onClick="add1()" />
+	<button id="remove1Btn" label="REMOVE 1" onClick="remove1(); log()" />
+	<button id="set5Btn" label="SET PAGE SIZE TO 5" onClick="model.setPageSize(5); log()"/>
+</zk>
