@@ -550,17 +550,16 @@ public class Grid extends MeshElement {
 	/** Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-		//		assert inPagingMold(): "paging mold only";
-		//		assert (_paging == null && _pgi == null);
-
 		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
-		if (_model instanceof Pageable && ((Pageable) _model).getPageSize() != -1) {
+		//min page size is 1
+		if (_model instanceof Pageable && ((Pageable) _model).getPageSize() > 0) {
 			paging.setPageSize(((Pageable) _model).getPageSize());
 		}
 		paging.setTotalSize(_rows != null ? getDataLoader().getTotalSize() : 0);
-		if (_model instanceof Pageable && ((Pageable) _model).getActivePage() != -1) {
+		//min page index is 0
+		if (_model instanceof Pageable && ((Pageable) _model).getActivePage() >= 0) {
 			paging.setActivePage(((Pageable) _model).getActivePage());
 		}
 		paging.setParent(this);
@@ -576,9 +575,9 @@ public class Grid extends MeshElement {
 				int pgsz = pe.getPageable().getPageSize();
 				int actpg = pe.getActivePage();
 				if (PagingEventPublisher.INTERNAL_EVENT.equals(pe.getName())) {
-					if (pgsz != -1)
+					if (pgsz > 0) //min page size is 1
 						_pgi.setPageSize(pgsz);
-					if (actpg != -1)
+					if (actpg >= 0) //min page index is 0
 						_pgi.setActivePage(actpg);
 				} else if (_model instanceof Pageable) {
 					//Bug ZK-1696: model also preserves paging information
@@ -749,7 +748,7 @@ public class Grid extends MeshElement {
 				//if pageable model contain non-default values, sync from model to pgi
 				//otherwise, sync from pgi to model
 				if (m != null) {
-					if (m.getPageSize() != -1) {
+					if (m.getPageSize() > 0) { //min page size is 1
 						pgi.setPageSize(m.getPageSize());
 					} else {
 						m.setPageSize(pgi.getPageSize());
@@ -757,7 +756,7 @@ public class Grid extends MeshElement {
 				}
 				pgi.setTotalSize(getDataLoader().getTotalSize());
 				if (m != null) {
-					if (m.getActivePage() != -1) {
+					if (m.getActivePage() >= 0) { //min page index is 0
 						pgi.setActivePage(m.getActivePage());
 					} else {
 						m.setActivePage(pgi.getActivePage());

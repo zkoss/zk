@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3173-tree.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu, Apr 28, 2016  9:21:33 AM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		TreeModel model = new DefaultTreeModel(
+				new DefaultTreeNode(null,
+					new DefaultTreeNode[] {
+						new DefaultTreeNode("item a"),
+						new DefaultTreeNode("item b"),
+						new DefaultTreeNode("item c"),
+						new DefaultTreeNode("item d"),
+						new DefaultTreeNode("item e"),
+						new DefaultTreeNode("item f")
+				}
+			));
+		public void remove1() {
+			int count = model.getChildCount(model.getRoot());
+			if (count < 1) return;
+			TreeNode child = (TreeNode) model.getChild(new int[]{count - 1});
+			if(child.isLeaf()) ((TreeNode) model.getRoot()).remove(child);
+		}
+		public void clear() {
+			TreeNode root = ((TreeNode) model.getRoot());
+			int count = root.getChildCount();
+			for (int i = 0; i < count; i++) {
+				root.remove(0);
+			}
+		}
+		public void add1() {
+			fill(1);
+		}
+		public void add10() {
+			fill(10);
+		}
+		private void fill(int num) {
+			TreeNode root = ((TreeNode) model.getRoot());
+			for (int i = 0; i < num; i++) {
+				root.add(new DefaultTreeNode("item " + i));
+			}
+		}
+		public void log() {
+			Clients.log("model active page: " + model.getActivePage());
+			Clients.log("model page count: " + model.getPageCount());
+			Clients.log("tree active page: " + tree.getActivePage());
+			Clients.log("tree page count: " + tree.getPageCount());
+			Clients.log("==========================");
+		}
+	]]></zscript>
+	<label multiline="true">
+		This test checks the active page number and page count are in sync between model and tree
+		A. test clear model
+			1. click "ADD 10" button
+			2. go to the last page
+			3. click "CLEAR" button
+			4. should see model and tree have the same active page number and page count
+		B. test remove items from model
+			1. click "ADD 10" button
+			2. go to the last page
+			3. click "REMOVE 1" button
+			4. should see model and tree have the same active page number and page count
+		C. test changing page size
+			1. click "ADD 10" button
+			2. go to the last page
+			3. click "SET PAGE SIZE TO 5" button
+			4. should see model and tree have the same active page number and page count
+	</label>
+	<tree id="tree" model="${model}" mold="paging" pageSize="3" >
+	</tree>
+	<button id="clearBtn" label="CLEAR" onClick='clear(); log()' />
+	<button id="add10Btn" label="ADD 10" onClick="add10()" />
+	<button id="add1Btn" label="ADD 1" onClick="add1()" />
+	<button id="remove1Btn" label="REMOVE 1" onClick="remove1(); log()" />
+	<button id="set5Btn" label="SET PAGE SIZE TO 5" onClick="model.setPageSize(5); log()"/>
+</zk>

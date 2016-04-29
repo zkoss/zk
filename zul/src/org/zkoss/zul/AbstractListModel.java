@@ -336,7 +336,18 @@ public abstract class AbstractListModel<E>
 		if (size < 0) {
 			throw new WrongValueException("page size should >= 0");
 		}
+		int oldPageSize = _pageSize;
 		_pageSize = size;
+		
+		//ZK-3173: increased page size might causes active page to exceed page count
+		//need to correct the active page value before sending out paging event
+		if (size > oldPageSize) {
+			int maxPageIndex = getPageCount() - 1;
+			if (_activePage > maxPageIndex) {
+				_activePage = maxPageIndex;
+			}
+		}
+		
 		for (PagingListener p : _pagingListeners) {
 			try {
 				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, _activePage));

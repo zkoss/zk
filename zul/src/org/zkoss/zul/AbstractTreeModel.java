@@ -764,7 +764,19 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		if (size < 0) {
 			throw new WrongValueException("expecting positive non zero value, got: " + size);
 		}
+		int oldPageSize = _pageSize;
 		_pageSize = size;
+		invalidatePageCount(); //need to invalidate cached value first since we're calling getPageCount() below
+		
+		//ZK-3173: increased page size might causes active page to exceed page count
+		//need to correct the active page value before sending out paging event
+		if (size > oldPageSize) {
+			int maxPageIndex = getPageCount() - 1;
+			if (_activePage > maxPageIndex) {
+				_activePage =  maxPageIndex;
+			}
+		}
+		
 		for (PagingListener p : _pagingListeners) {
 			try {
 				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, _activePage));
@@ -772,7 +784,6 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 				e.printStackTrace();
 			}
 		}
-		invalidatePageCount();
 	}
 
 	/**

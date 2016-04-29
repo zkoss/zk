@@ -47,6 +47,7 @@ ZK 8.0.2
   ZK-3182: The label key is resolved differently in a <template> between the one inside a Grid and outside
   ZK-3146: file upload error when detaching parent component
   ZK-3106: template injection doesn't work with the nested template
+  ZK-3173: listmodel.clear() does not reset listmodel.getActivePage()
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java

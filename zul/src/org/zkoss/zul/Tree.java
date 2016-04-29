@@ -314,7 +314,17 @@ public class Tree extends MeshElement {
 	void addVisibleItemCount(int count) {
 		if (inPagingMold()) {
 			Paginal pgi = getPaginal();
-			pgi.setTotalSize(pgi.getTotalSize() + count);
+			int totalSize = pgi.getTotalSize() + count;
+			//ZK-3173: if visible item count reduces, active page might exceed max page count
+			if (count < 0 && _model instanceof Pageable) {
+				Pageable p = (Pageable) _model;
+				int actpg = p.getActivePage();
+				int maxPageIndex = p.getPageCount() - 1;
+				if (actpg > maxPageIndex) {
+					p.setActivePage(maxPageIndex);
+				}
+			}
+			pgi.setTotalSize(totalSize);
 			invalidate(); //the set of visible items might change
 		}
 	}
@@ -405,12 +415,12 @@ public class Tree extends MeshElement {
 				resetPosition(true); //non-paging mold -> paging mold
 				if (_model instanceof Pageable) {
 					Pageable m = (Pageable) _model;
-					if (m.getPageSize() != -1) {
+					if (m.getPageSize() > 0) { //make sure value is valid, min page size is 1
 						_pgi.setPageSize(m.getPageSize());
 					} else {
 						m.setPageSize(_pgi.getPageSize());
 					}
-					if (m.getActivePage() != -1) {
+					if (m.getActivePage() >= 0) { //min page index is 0
 						_pgi.setActivePage(m.getActivePage());
 					} else {
 						m.setActivePage(_pgi.getActivePage());
@@ -486,17 +496,16 @@ public class Tree extends MeshElement {
 	/** Creates the internal paging component.
 	 */
 	private void newInternalPaging() {
-		//		assert inPagingMold(): "paging mold only";
-		//		assert (_paging == null && _pgi == null);
-
 		final Paging paging = new InternalPaging();
 		paging.setDetailed(true);
 		paging.applyProperties();
-		if (_model instanceof Pageable && ((Pageable) _model).getPageSize() != -1) {
+		//min page size is 1
+		if (_model instanceof Pageable && ((Pageable) _model).getPageSize() > 0) {
 			paging.setPageSize(((Pageable) _model).getPageSize());
 		}
 		paging.setTotalSize(getVisibleItemCount());
-		if (_model instanceof Pageable && ((Pageable) _model).getActivePage() != -1) {
+		//min page index is 0
+		if (_model instanceof Pageable && ((Pageable) _model).getActivePage() >= 0) {
 			paging.setActivePage(((Pageable) _model).getActivePage());
 		}
 		paging.setParent(this);
@@ -515,9 +524,9 @@ public class Tree extends MeshElement {
 				int pgsz = pe.getPageable().getPageSize();
 				int actpg = pe.getActivePage();
 				if (PagingEventPublisher.INTERNAL_EVENT.equals(pe.getName())) {
-					if (pgsz != -1)
+					if (pgsz > 0) //min page size is 1
 						_pgi.setPageSize(pgsz);
-					if (actpg != -1)
+					if (actpg >= 0) //min page index is 0
 						_pgi.setActivePage(actpg);
 				} else if (_model instanceof Pageable) {
 					// Bug ZK-1696: model also preserves paging information
@@ -1796,10 +1805,12 @@ public class Tree extends MeshElement {
 				}
 				if (_model instanceof Pageable) {
 					Pageable m = (Pageable) _model;
-					if (m.getPageSize() == -1)
+					if (m.getPageSize() <= 0) { //check for invalid value, min page size is 1
 						m.setPageSize(_pgi.getPageSize());
-					if (m.getActivePage() == -1)
+					}
+					if (m.getActivePage() < 0) { //check for invalid value, min page index is 0
 						m.setActivePage(_pgi.getActivePage());
+					}
 				}
 			}
 			doSort(this);
@@ -2884,7 +2895,7 @@ public class Tree extends MeshElement {
 	@Override
 	public int getActivePage() {
 		if (hasAttribute(ATTR_ON_INIT_RENDER_POSTED) && _model instanceof Pageable) {
-			if (((Pageable) _model).getActivePage() != -1) {
+			if (((Pageable) _model).getActivePage() >= 0) { //min page index is 0
 				return ((Pageable) _model).getActivePage();
 			}
 		}
@@ -2894,13 +2905,13 @@ public class Tree extends MeshElement {
 	public void onAfterRender() {
 		if (inPagingMold() && _model instanceof Pageable) {
 			Pageable m = (Pageable) _model;
-			if (m.getPageSize() != -1) {
+			if (m.getPageSize() > 0) { //min page size is 1
 				_pgi.setPageSize(m.getPageSize());
 			} else {
 				m.setPageSize(_pgi.getPageSize());
 			}
 			_pgi.setTotalSize(getVisibleItemCount());
-			if (m.getActivePage() != -1) {
+			if (m.getActivePage() >= 0) { //min page index is 0
 				_pgi.setActivePage(m.getActivePage());
 			} else {
 				m.setActivePage(_pgi.getActivePage());
