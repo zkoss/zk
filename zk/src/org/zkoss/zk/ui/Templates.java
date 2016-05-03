@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui;
 
+import static org.zkoss.lang.Generics.cast;
+
 import java.util.List;
 
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -90,6 +92,13 @@ public class Templates {
 											break;
 										}
 									}
+								} else if (template == null) {
+									switch (HtmlShadowElement.inRange(shadow, compBase)) {
+									case IN_RANGE:
+									case FIRST:
+									case LAST:
+										template = findShadowChildTemplate(shadow, compBase, name);
+									}
 								}
 							}
 						}
@@ -106,5 +115,29 @@ public class Templates {
 			}
 		}
 		return template;
+	}
+
+	private static Template findShadowChildTemplate(HtmlShadowElement shadow, Component compBase, String name) {
+		List<ShadowElement> children = cast(shadow.getChildren());
+		if (!children.isEmpty()) {
+			Template t;
+			for (ShadowElement child : children) {
+				if (child instanceof HtmlShadowElement) {
+					HtmlShadowElement current = (HtmlShadowElement) child;
+					switch (HtmlShadowElement.inRange(current, compBase)) {
+					case IN_RANGE:
+					case FIRST:
+					case LAST:
+						t = findShadowChildTemplate(current, compBase, name);
+						if (t != null)
+							return t;
+						t = current.getTemplate(name);
+						if (t != null)
+							return t;
+					}
+				}
+			}
+		}
+		return null;
 	}
 }
