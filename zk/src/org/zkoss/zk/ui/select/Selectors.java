@@ -203,14 +203,14 @@ public class Selectors {
 					String name = strs[0];
 					if (name == null)
 						name = "onClick";
- 					// http://tracker.zkoss.org/browse/ZK-2582
- 					int prio = 0;
- 					int idx = name.indexOf('(');
- 					if (idx > 0) {
+					// http://tracker.zkoss.org/browse/ZK-2582
+					int prio = 0;
+					int idx = name.indexOf('(');
+					if (idx > 0) {
  						int li = name.indexOf(')');
- 						prio = Integer.parseInt(name.substring(idx+1, li));
- 						name = name.substring(0, idx);
- 					}
+						prio = Integer.parseInt(name.substring(idx + 1, li));
+						name = name.substring(0, idx);
+					}
 					Iterable<Component> iter = iterable(component, strs[1]);
 					// no forwarding, just add to event listener
 					Set<Component> rewired = rewire ? new HashSet<Component>() : null;
