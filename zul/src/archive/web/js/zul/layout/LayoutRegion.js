@@ -270,6 +270,50 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (nonAnima) this.parent.resize();
 			if (!fromServer && nonAnima) // B50-ZK-301: onOpen is fire after animation
 				this.fire('onOpen', {open: open});
+		},
+		/**
+		 * Slides down or up the region. Meaningful only if
+		 * {@link #isCollapsible} is not false and {@link #isOpen} is false.
+		 * @param boolean slide
+		 * @since 8.0.2
+		 */
+		/**
+		 * Returns whether it is slide down.
+		 * <p>
+		 * Default: false.
+		 * @return boolean
+		 * @since 8.0.2
+		 */
+		slide: function (slide, fromServer, nonAnima) {
+			if (!this._isSlide) {
+				this._isSlide = true;
+				var real = this.$n('real'),
+					s = real.style;
+				s.visibility = 'hidden';
+				s.display = '';
+				this._syncSize();
+				this._original = [s.left, s.top];
+				this._alignTo();
+				s.zIndex = 100;
+
+				if (this.$n('btn'))
+					this.$n('btn').style.display = 'none';
+				s.visibility = '';
+				s.display = 'none';
+				zk(real).slideDown(this, {
+					anchor: this.sanchor,
+					afterAnima: this.$class.afterSlideDown
+				});
+			} else {
+				if (nonAnima) this.$class.afterSlideUp.apply(this, [this.$n('real')]);
+				else {
+					zk(this.$n('real')).slideUp(this, {
+						anchor: this.sanchor,
+						afterAnima: this.$class.afterSlideUp
+					});
+				}
+			}
+			if (!fromServer) this.fire('onSlide', {slide: slide});
 		}
 	},
 	//bug #3014664
@@ -676,26 +720,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.setOpen(!this._open);
 			break;
 		case this.$n('colled'):
-			if (this._isSlide)
-				return;
-			this._isSlide = true;
-			var real = this.$n('real'),
-				s = real.style;
-			s.visibility = 'hidden';
-			s.display = '';
-			this._syncSize();
-			this._original = [s.left, s.top];
-			this._alignTo();
-			s.zIndex = 100;
-
-			if (this.$n('btn'))
-				this.$n('btn').style.display = 'none';
-			s.visibility = '';
-			s.display = 'none';
-			zk(real).slideDown(this, {
-				anchor: this.sanchor,
-				afterAnima: this.$class.afterSlideDown
-			});
+			this.setSlide(!this._isSlide);
 			break;
 		}
 		this.$supers('doClick_', arguments);
@@ -705,17 +730,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
 			var btned = this.$n('btned');
 			if (btned == target || btned == target.parentNode) {
-				this.$class.afterSlideUp.apply(this, [this.$n('real')]);
+				this.setSlide(false, false, true);
 				this.setOpen(true, false, true);
 				this.$n('real').style.zIndex = ''; //reset
-			} else if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid)
-						|| !zk.animating()) {
-					this._isSlideUp = true;
-					zk(this.$n('real')).slideUp(this, {
-						anchor: this.sanchor,
-						afterAnima: this.$class.afterSlideUp
-					});
-				}
+			} else if ((this.$class.uuid(target) != this.uuid) || !zk.animating()) {
+				this.setSlide(false);
+			}
 		}
 	},
 	_syncSize: function (inclusive) {
@@ -982,7 +1002,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.$n('btn'))
 			this.$n('btn').style.display = '';
 		jq(document).unbind('click', this.proxy(this._docClick));
-		this._isSlideUp = this._isSlide = false;
+		this._isSlide = false;
 		this._fixFontIcon();
 	},
 	//drag

@@ -14,33 +14,49 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-    <label multiline="true">
-        1. should see the west region close, then the region slide in but not open, and then slide out.
-        2. should see two "onSlide" in zklog
-        3. click on the "slide in" button, the west region should slide in but not open
-        4. should see "true onSlide" in zklog
-        5. click on the "slide out" button, the west region should slide out
-        6. should see "false onSlide" in zklog
+	<script>
+		zk.afterLoad('zul.layout', function () {
+			var _xLayoutRegion = {};
+			zk.override(zul.layout.LayoutRegion.prototype, _xLayoutRegion, {
+				setSlide: function () {
+					_xLayoutRegion.setSlide.apply(this,arguments);
+					zk.log('after setSlide');
+				}
+			});
+		});
+	</script>
+	<label multiline="true">
+		1. should see the west region closed, then the region slides down but not open, and then slides up.
+        2. should see two "after setSlide" in zklog
+		2. click on the collapsed splitter
+		3. should see the region slides down, and three "after setSlide" in zklog
+		4. click on the collapsed splitter again
+		5. should see the region slides up, and four "after setSlide" in zklog
+		6. click on the button "slide down"
+		7. should see the region slides down, and five "after setSlide" in zklog
+		8. click on the button "slide up"
+		9. should see the region slides up, and seven "after setSlide" in zklog
 
-    </label>
-    <borderlayout height="300px">
-        <west id="west" title="west" collapsible="true" size="50%" onSlide='Clients.log("onSlide")'/>
-    </borderlayout>
-    <button onClick='west.setSlide(true);Clients.log(west.isSlide().toString());' label="slide in"/>
-    <button onClick='west.setSlide(false);Clients.log(west.isSlide().toString());' label="slide out"/>
-    <timer delay="1000" repeats="false">
-        <attribute name="onTimer">
-            west.setOpen(false);
-        </attribute>
-    </timer>
-    <timer delay="2500" repeats="false">
-        <attribute name="onTimer">
-            west.setSlide(true);
-        </attribute>
-    </timer>
-    <timer delay="4000" repeats="false">
-        <attribute name="onTimer">
-            west.setSlide(false);
-        </attribute>
-    </timer>
+	</label>
+	<borderlayout height="300px">
+		<west id="west" title="west" collapsible="true" size="50%">
+		</west>
+	</borderlayout>
+	<button onClick='west.setSlide(true)' label="slide down"/>
+	<button onClick='west.setSlide(false)' label="slide up"/>
+	<timer delay="1000" repeats="false">
+		<attribute name="onTimer">
+			west.setOpen(false);
+		</attribute>
+	</timer>
+	<timer delay="2500" repeats="false">
+		<attribute name="onTimer">
+			west.setSlide(true);
+		</attribute>
+	</timer>
+	<timer delay="4000" repeats="false">
+		<attribute name="onTimer">
+			west.setSlide(false);
+		</attribute>
+	</timer>
 </zk>
