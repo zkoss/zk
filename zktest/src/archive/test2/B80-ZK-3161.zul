@@ -15,9 +15,9 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label multiline="true">
-        1. hover on the chevron right icon of the west borderlayout
+        1. hover on the collapsed splitter of the west borderlayout
         2. should see tooltip "west title"
-        3. hover on the chevron down icon of the north borderlayout
+        3. hover on the collapsed splitter of the north borderlayout
         4. should not see any tooltip
 
     </label>
