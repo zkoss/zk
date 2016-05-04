@@ -59,14 +59,11 @@ function (out) {
 			'<i class="', icon, ' ', splitIcon, '"></i>',
 			'<i class="', icon, doticon, '"></i>',
 			'</span></div>', '<div id="', uuid, '-colled" class="',
-				this.$s('collapsed'), '" style="display:none"><i id="',
-				uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true),
-				'"');
+				this.$s('collapsed'), '" style="display:none"');
+		if (title = this._title) out.push(' title="', title, '"');
+		out.push('><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
 		if (!this._collapsible)
 			out.push(' style="display:none;"');
-		if (title = this._title)
-			out.push(' title="' + title + '"');
-				
 		out.push('></i></div>');
 	}
 	out.push('</div>');
