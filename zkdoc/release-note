@@ -49,6 +49,7 @@ ZK 8.0.2
   ZK-3106: template injection doesn't work with the nested template
   ZK-3173: listmodel.clear() does not reset listmodel.getActivePage()
   ZK-3073: [JBoss Wildfly] Unknown listener: class org.zkoss.zuti.bind.ZutiPhaseListener
+  ZK-3152: Listbox can render changed items only when ROD is enabled
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
