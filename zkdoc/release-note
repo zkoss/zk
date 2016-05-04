@@ -48,6 +48,7 @@ ZK 8.0.2
   ZK-3146: file upload error when detaching parent component
   ZK-3106: template injection doesn't work with the nested template
   ZK-3173: listmodel.clear() does not reset listmodel.getActivePage()
+  ZK-3073: [JBoss Wildfly] Unknown listener: class org.zkoss.zuti.bind.ZutiPhaseListener
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
