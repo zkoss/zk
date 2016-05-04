@@ -51,6 +51,7 @@ ZK 8.0.2
   ZK-3073: [JBoss Wildfly] Unknown listener: class org.zkoss.zuti.bind.ZutiPhaseListener
   ZK-3152: Listbox can render changed items only when ROD is enabled
   ZK-3193: bandbox unexpected onChanging event in FF
+  ZK-3196: form binding: doesn't save property when it's a proxy object
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
