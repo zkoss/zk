@@ -100,12 +100,14 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 			}
 			if (method.getDeclaringClass().isAssignableFrom(FormProxyObject.class)) {
 				if ("submitToOrigin".equals(mname)) {
-					if (_dirtyFieldNames != null && _origin != null) {
+					if (_origin != null) {
 						for (Map.Entry<String, Object> me : _cache.entrySet()) {
 							final Object value = me.getValue();
 							if (value instanceof FormProxyObject) {
 								((FormProxyObject) value).submitToOrigin((BindContext) args[0]);
-							} else if (_dirtyFieldNames.contains(me.getKey())) {
+							}
+
+							if (_dirtyFieldNames != null && _dirtyFieldNames.contains(me.getKey())) {
 								final String setter = toSetter(me.getKey());
 								try {
 									final Method m = Classes.getMethodByObject(_origin.getClass(), setter,
@@ -117,7 +119,8 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 								}
 							}
 						}
-						_dirtyFieldNames.clear();
+						if (_dirtyFieldNames != null)
+							_dirtyFieldNames.clear();
 					}
 				} else if ("getOriginObject".equals(mname)) {
 					return _origin;
@@ -129,19 +132,21 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 				} else if ("isFormDirty".equals(mname)) {
 					boolean dirty = false;
 
-					if (_dirtyFieldNames != null && _cache != null) {
+					if (_cache != null) {
 						// If the dirty field is a form proxy object it may not be dirty.
 						// But once it contains a non-form proxy object, it must be dirty.
 						for (Map.Entry<String, Object> me : _cache.entrySet()) {
 							final Object value = me.getValue();
+							if (_dirtyFieldNames != null && _dirtyFieldNames.contains(me.getKey())) {
+								dirty = true;
+								break;
+							}
+
 							if (value instanceof FormProxyObject) {
 								if (((FormProxyObject) value).isFormDirty()) {
 									dirty = true;
 									break;
 								}
-							} else if (_dirtyFieldNames.contains(me.getKey())) {
-								dirty = true;
-								break;
 							}
 						}
 					}
@@ -173,9 +178,6 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 						}
 
 						addCache(attr, value);
-						if (value instanceof FormProxyObject) {
-							addDirtyField(attr); // it may be changed.
-						}
 					}
 					return value;
 				} else if (mname.startsWith("is")) {

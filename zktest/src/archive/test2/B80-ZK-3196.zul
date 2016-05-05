@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3196.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue May 03 16:10:02 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3196VM')"
+			form="@id('fx') @load(vm.person) @load(vm.person, after='save') @save(vm.person, before='save') @validator(vm.formValidator)">
+        <label multiline="true">
+            1. Select the first option in combobox, and click the 'show' button.
+            2. You should see '(origin) favoriteBuddy: B80_ZK_3196Object [name=Paul]' in zk log.
+            3. Click the 'save' button, and you should see the following log:
+            (proxy) favoriteBuddy: B80_ZK_3196Object [name=Marie]
+            (origin) favoriteBuddy: B80_ZK_3196Object [name=Marie]
+        </label>
+        <separator />
+        <separator />
+		<div>
+			Name <textbox value="@bind(fx.name)"/>
+		</div>
+		<div>
+			Favorite Buddy<combobox id="cb" width="400px" selectedItem="@bind(fx.favoriteBuddy)" model="@init(fx.allFriends)"/>
+		</div>
+		
+		<div style="border: 1px solid green">
+			<div>
+				Person name: <label value="@load(fx.name)"/>
+			</div>
+			<div>
+				Favorite Buddy: <label id="p_val" value="@load(fx.favoriteBuddy)"/>
+			</div>
+		</div>
+		<div>
+			<button id="save" label="save" onClick="@command('save')"/>
+            <button id="show" label="show" onClick="@command('show')"/>
+		</div>
+		<div style="border: 1px solid red">
+			<div>
+				Person name: <label value="@load(vm.person.name)"/>
+			</div>
+			<div>
+				Favorite Buddy: <label id="o_val" value="@load(vm.person.favoriteBuddy)"/>
+			</div>
+		</div>
+	</div>
+</zk>
