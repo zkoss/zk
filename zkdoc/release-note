@@ -11,6 +11,8 @@ ZK 8.0.2
   ZK-3098: add onItemClick event to Chosenbox
   ZK-3166: BorderLayout slide action server-side support
   ZK-3161: Title / caption / icon for collapsed LayoutRegion in BorderLayout
+  ZK-2582: Allow specification of Priority for SelectorComposer's @Listen() Annotation
+  ZK-3206: Support metaKey for MouseEvent
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
@@ -53,6 +55,7 @@ ZK 8.0.2
   ZK-3193: bandbox unexpected onChanging event in FF
   ZK-3196: form binding: doesn't save property when it's a proxy object
   ZK-3110: CollectionTemplate is hiding outer template
+  ZK-3097: Serialization issue: org.zkoss.zhtml.impl.AbstractTag$EncodedURL is not serializeable
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
