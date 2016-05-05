@@ -16,6 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml.impl;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -464,7 +465,8 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	protected class ExtraCtrl implements DirectContent {
 	}
 
-	private class EncodedURL implements org.zkoss.zk.au.DeferredValue {
+	// see: http://tracker.zkoss.org/browse/ZK-3097
+	private class EncodedURL implements org.zkoss.zk.au.DeferredValue, Serializable {
 		private String _src;
 
 		public EncodedURL(String src) {
