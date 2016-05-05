@@ -17,7 +17,13 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
     <label multiline="true">It should display a label "Test"</label>
     <vlayout>
         <template name="b1">
-            <apply template="b2"/>
+            <grid>
+                <rows>
+                    <row>
+                        <apply template="b2"/>
+                    </row>
+                </rows>
+            </grid>
         </template>
         <apply template="b0"/>
         <template name="b0">
