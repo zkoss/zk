@@ -4746,6 +4746,10 @@ _doFooSelect: function (evt) {
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			if (!noFocusChange) {
+				var wgtVParent;
+				if (wgt && (wgtVParent = wgt.$n('a')) && jq.nodeName(wgtVParent, 'button', 'input', 'textarea', 'a', 'select', 'iframe')) {
+					jq(wgtVParent).trigger('focus');
+				}
 				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
 				zk._cfByMD = true;
