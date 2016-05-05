@@ -65,6 +65,8 @@ public class AuRequests {
 				keys |= MouseEvent.CTRL_KEY;
 			if (getBoolean(data, "shiftKey"))
 				keys |= MouseEvent.SHIFT_KEY;
+			if (getBoolean(data, "metaKey"))
+				keys |= MouseEvent.META_KEY;
 			switch (getInt(data, "which", -1)) {
 			case 1:
 				keys |= MouseEvent.LEFT_CLICK;
