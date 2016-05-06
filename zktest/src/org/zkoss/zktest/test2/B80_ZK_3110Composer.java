@@ -30,7 +30,7 @@ public class B80_ZK_3110Composer extends SelectorComposer<Div>{
 	
 	@Wire
 	private Div tagList;
-	private ListModelList<String> tagsModel = new ListModelList<>();
+	private ListModelList<String> tagsModel = new ListModelList();
 	
 	@Override
 	public void doAfterCompose(Div comp) throws Exception {
