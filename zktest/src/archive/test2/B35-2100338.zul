@@ -23,10 +23,10 @@
 	]]></zscript>	
 	<hbox>
 
-	<button onClick="lb1.setModel(model1);" label="listbox model 1"/>
-	<button onClick="lb1.setModel(model2)" label="listbox mode 2"/>
-	<button onClick="gd1.setModel(model1);" label="grid model 1"/>
-	<button onClick="gd1.setModel(model2)" label="grid mode 2"/>
+	<button id="lm1" onClick="lb1.setModel(model1);" label="listbox model 1"/>
+	<button id="lm2" onClick="lb1.setModel(model2)" label="listbox mode 2"/>
+	<button id="gm1" onClick="gd1.setModel(model1);" label="grid model 1"/>
+	<button id="gm2" onClick="gd1.setModel(model2)" label="grid mode 2"/>
 	</hbox> 
 	<hbox>
 	<listbox id="lb1" width="400px" model="${model1}" mold="paging" pageSize="10" >

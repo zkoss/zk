@@ -50,14 +50,14 @@ public class B70_ZK_2754_Composer extends SelectorComposer<Component> {
         queue1.subscribe( 
             new EventListener<Event>() {
                 public void onEvent(Event ev) {
-                    label1.setValue(label1.getValue() + " [" + ev.getName() + "] ");
+                    label1.setValue(label1.getValue() + "[" + ev.getName() + "]");
                 }
             });
         queue2 = EventQueues.lookup(EQ_NAME_2, QUEUE_SCOPE, true);
         queue2.subscribe( 
             new EventListener<Event>() {
                 public void onEvent(Event ev) {
-                    label2.setValue(label2.getValue() + " [" + ev.getName() + "] ");
+                    label2.setValue(label2.getValue() + "[" + ev.getName() + "]");
                 }
             });
     }
