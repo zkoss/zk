@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3097.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May  5 14:50:50 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="xhtml">
+    <window apply="org.zkoss.zktest.test2.B80_ZK_3097">
+        <h:div id="div" src="testURL">test for ZK-3097 serialization</h:div>
+        <label value="should not have any exception"/>
+    </window>
+</zk>
