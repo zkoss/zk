@@ -201,8 +201,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			_fixForEmpty(w);
 		});
 		this._shallScrollIntoView = true;
+		zWatch.listen({onCommandReady: this}); //ZK-3152
 	},
 	unbind_: function () {
+		zWatch.unlisten({onCommandReady: this}); //ZK-3152
 		this.destroyBar_();
 		this.$supers(Listbox, 'unbind_', arguments);
 	},
@@ -235,10 +237,14 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 		this.$super(zul.sel.Listbox, '_doScroll');
 	},
+	onCommandReady: function () {
+		//ZK-3152: stripe here will be after all commands and before onResponse to avoid flickering
+		if (this._shallStripe)
+			this.stripe();
+	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
-			if (this._shallStripe)
-				this.stripe();
+			//ZK-3152: no need to stripe here, already done in onCommandReady
 			if (this._shallFixEmpty)
 				_fixForEmpty(this);
 		}
