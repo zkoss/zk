@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-B80-ZK-2582.zul
+F80-ZK-2582.zul
 
 	Purpose:
 		
@@ -20,7 +20,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         3. should see "100 99 0 -100" in zklog
 
     </label>
-    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2582')">
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2582')">
         <textbox id="lb1" value="@bind(vm.label)"/>
     </div>
 </zk>

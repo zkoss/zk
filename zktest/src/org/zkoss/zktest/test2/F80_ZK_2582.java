@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.util.Clients;
  * 
  * @author wenning
  */
-public class B80_ZK_2582 {
+public class F80_ZK_2582 {
 
     private String label = "111";
 
