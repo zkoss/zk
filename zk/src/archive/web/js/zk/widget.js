@@ -4747,11 +4747,16 @@ _doFooSelect: function (evt) {
 		} else if (!wgt || wgt.canActivate()) {
 			if (!noFocusChange) {
 				var wgtVParent;
-				if (wgt && (wgtVParent = wgt.$n('a')) && jq.nodeName(wgtVParent, 'button', 'input', 'textarea', 'a', 'select', 'iframe')) {
-					jq(wgtVParent).trigger('focus');
-				}
 				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
+				if (wgt && (wgtVParent = wgt.$n('a')) && jq.nodeName(wgtVParent, 'button', 'input', 'textarea', 'a', 'select', 'iframe')) {
+					//ZK-3193 set VParent position to "fixed" temporary, avoid unnecessary scrolling.
+					var oldPosition = jq(wgtVParent).css('position');
+					jq(wgtVParent)
+						.css('position', 'fixed')
+						.trigger('focus')
+						.css('position', oldPosition);
+				}
 				zk._cfByMD = true;
 				setTimeout(function () {zk._cfByMD = false; zk._prevFocus = null;}, 0);
 					//turn it off later since onBlur_ needs it
