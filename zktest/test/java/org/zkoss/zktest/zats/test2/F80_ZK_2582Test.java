@@ -16,7 +16,9 @@ public class F80_ZK_2582Test extends WebDriverTestCase {
         connect();
         JQuery $textbox = jq("@textbox");
         click($textbox);
+        waitResponse();
         type($textbox, "222");
+        waitResponse();
         click(jq(".z-page"));
         waitResponse();
         assertEquals("100 99 0 -100", getZKLog());

@@ -54,6 +54,7 @@ public class MouseEvent extends Event {
 	public static final int SHIFT_KEY = 0x004;
 	/** Indicates whether the Meta key is pressed.
 	 * It might be returned as part of {@link #getKeys}.
+	 * @since 8.0.2
 	 */
 	public static final int META_KEY = 0x008;
 	/** Indicates whether the left button is clicked.
