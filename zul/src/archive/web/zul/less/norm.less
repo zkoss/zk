@@ -417,7 +417,14 @@ input[type="checkbox"] {
 		list-style: none;
 	}
 }
-
+// ZK-3195: only apply to the first layer of children
+.gecko {
+	.z-draggable-over {
+		> * {
+			-moz-user-select: none;
+		}
+	}
+}
 .z-drop {
 	&-allow {
 		background: @dragAllowBackgroundColor;
