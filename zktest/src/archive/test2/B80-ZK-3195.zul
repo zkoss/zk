@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3195.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue May 10 16:12:46 CST 2016, Created by christopherszu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		firefox only
+		1. type something in the textbox, the text inside should be selectable
+		2. drag and drop each row and drop them to other rows, should be droppable
+	</label>
+	<grid>
+		<columns sizable="true">
+			<column label="Type" sort="auto"/>
+			<column label="Content"/>
+		</columns>
+		<rows>
+			<row draggable="true" droppable="true">
+				<label value="File:"/>
+				<textbox width="98%"/>
+			</row>
+			<row draggable="true" droppable="true">
+				<label value="Type:"/>
+				<hlayout>
+					<listbox rows="1" mold="select">
+						<listitem label="Java Files,(*.java)"/>
+						<listitem label="All Files,(*.*)"/>
+					</listbox>
+					<button label="Browse..."/>
+				</hlayout>
+			</row>
+			<row draggable="true" droppable="true">
+				<label value="Options:"/>
+				<textbox rows="3" width="98%"/>
+			</row>
+		</rows>
+	</grid>
+</zk>
