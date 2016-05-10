@@ -98,6 +98,7 @@ public class Templates {
 									case FIRST:
 									case LAST:
 										template = findShadowChildTemplate(shadow, compBase, name);
+										break;
 									}
 								}
 							}
@@ -134,6 +135,7 @@ public class Templates {
 						t = current.getTemplate(name);
 						if (t != null)
 							return t;
+						break;
 					}
 				}
 			}
