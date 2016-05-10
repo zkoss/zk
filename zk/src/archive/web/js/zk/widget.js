@@ -4751,8 +4751,9 @@ _doFooSelect: function (evt) {
 				zk.currentFocus = wgt;
 				if (wgt && (wgtVParent = wgt.$n('a')) && jq.nodeName(wgtVParent, 'button', 'input', 'textarea', 'a', 'select', 'iframe')) {
 					//ZK-3193 set VParent position to "fixed" temporary, avoid unnecessary scrolling.
-					var oldPosition = jq(wgtVParent).css('position');
-					jq(wgtVParent)
+					var $wgtVParent = jq(wgtVParent),
+						oldPosition = $wgtVParent.css('position');
+					$wgtVParent
 						.css('position', 'fixed')
 						.trigger('focus')
 						.css('position', oldPosition);
