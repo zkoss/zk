@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
@@ -22,7 +23,9 @@ import javassist.util.proxy.Proxy;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.lang.Objects;
+import org.zkoss.util.Pair;
 
 /**
  * This class provides a skeletal implementation of the <tt>Collection</tt>
@@ -31,14 +34,14 @@ import org.zkoss.lang.Objects;
  * @since 8.0.0
  */
 public abstract class AbstractCollectionProxy<E>
-		implements Collection<E>, Proxy, FormProxyObject, Serializable, FormProxyObjectListener {
+		implements Collection<E>, Proxy, FormProxyObject, Serializable {
 	private Collection<E> _cache;
 	private static final long serialVersionUID = 20141225142801L;
 	private Object _origin;
 	protected boolean _dirty;
-	//F80: formProxyObject support notifyChange with Form.isDirty
-	private FormProxyObjectListener _listener;
 	protected boolean isImmutableElements;
+	//ZK-3185: Enable form validation with reference and collection binding
+	private ProxyNode _node;
 
 	public AbstractCollectionProxy(Collection<E> origin, Annotation[] callerAnnots) {
 		_origin = origin;
@@ -71,19 +74,12 @@ public abstract class AbstractCollectionProxy<E>
 	}
 
 	//F80: formProxyObject support notifyChange with Form.isDirty
-	public void addFormProxyObjectListener(FormProxyObjectListener l) {
-		if (_listener == null)
-			_listener = l;
-	}
-
 	public void onDirtyChange() {
-		if (_listener != null)
-			_listener.onDirtyChange();
+		ProxyHelper.callOnDirtyChange(_node);
 	}
 
 	public void onDataChange(Object o) {
-		if (_listener != null)
-			_listener.onDataChange(o);
+		ProxyHelper.callOnDataChange(_node, o);
 	}
 
 	protected void setDirty(boolean d) {
@@ -268,13 +264,30 @@ public abstract class AbstractCollectionProxy<E>
 		throw new IllegalAccessError("Not supported");
 	}
 
-	//F80: formProxyObject support notifyChange with Form.isDirty
 	private <T extends Object> T createProxyObject(T t) {
 		T p = isImmutableElements ? t : ProxyHelper.createProxyIfAny(t);
-		if (p instanceof FormProxyObject) {
-			FormProxyObject fpo = (FormProxyObject) p;
-			fpo.addFormProxyObjectListener(this);
-		}
+		if (p instanceof FormProxyObject)
+			((FormProxyObject) p).setPath("[$INDEX$]", _node);
 		return p;
+	}
+
+	public void cacheSavePropertyBinding(String property, SavePropertyBinding s) {
+		ProxyHelper.cacheSavePropertyBinding(_node, _node.getProperty() + property, s);
+	}
+
+	public Set<Pair<String, SavePropertyBinding>> collectCachedSavePropertyBinding() {
+		throw new UnsupportedOperationException("Not support!");
+	}
+
+	public void setPath(String property, ProxyNode parent) {
+		if (property == null && _node != null) { // means update
+			_node.setParent(parent);
+		} else {
+			_node = new ProxyNode(property, parent);
+			for (E e : _cache) {
+				if (e instanceof FormProxyObject)
+					((FormProxyObject) e).setPath("[$INDEX$]", _node);
+			}
+		}
 	}
 }

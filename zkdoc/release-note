@@ -13,6 +13,7 @@ ZK 8.0.2
   ZK-3161: Title / caption / icon for collapsed LayoutRegion in BorderLayout
   ZK-2582: Allow specification of Priority for SelectorComposer's @Listen() Annotation
   ZK-3206: Support metaKey for MouseEvent
+  ZK-3185: Enable form validation with reference and collection binding
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
@@ -62,6 +63,7 @@ ZK 8.0.2
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
   + Moved all getter and setter of tabindex to root component HtmlBasedComponent.java to match the spec of html5
+  + Remove FormProxyObjectChangeListener.java and addFormProxyObjectListener(FormProxyObjectListener) in FormProxyObject.java
 
    --------
 ZK 8.0.1.1

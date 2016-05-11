@@ -23,6 +23,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.ImmutableFields;
 import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.impl.AllocUtil;
+import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.UiException;
@@ -66,6 +67,9 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 	protected Map<String, Object> _cache;
 	protected Set<String> _dirtyFieldNames; // field name that is dirty
 
+	//ZK-3185: Enable form validation with reference and collection binding
+	protected ProxyNode _node;
+
 	public BeanProxyHandler(T origin) {
 		_origin = origin;
 	}
@@ -76,6 +80,14 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 
 	private void addDirtyField(String field) {
 		_dirtyFieldNames = AllocUtil.inst.addSet(_dirtyFieldNames, field);
+	}
+
+	//ZK-3185: Enable form validation with reference and collection binding
+	private void setPath(String property, ProxyNode parent) {
+		if (property == null && _node != null) // means update
+			_node.setParent(parent);
+		else
+			_node = new ProxyNode(property, parent);
 	}
 
 	public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Exception {
@@ -151,8 +163,12 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 						}
 					}
 					return dirty;
-				} else if ("addFormProxyObjectListener".equals(mname)) {
-					//F80: formProxyObject support notifyChange with Form.isDirty
+				} else if ("setPath".equals(mname)) {
+					//ZK-3185: Enable form validation with reference and collection binding
+					setPath((String) args[0], (ProxyNode) args[1]);
+				} else if ("cacheSavePropertyBinding".equals(mname)) {
+					//ZK-3185: Enable form validation with reference and collection binding
+					ProxyHelper.cacheSavePropertyBinding(_node, _node.getProperty() + "." + (String) args[0], (SavePropertyBinding) args[1]);
 					return null;
 				} else {
 					throw new IllegalAccessError("Not implemented yet for FormProxyObject interface: [" + mname + "]");
@@ -178,6 +194,8 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 						}
 
 						addCache(attr, value);
+						if (value instanceof FormProxyObject) //ZK-3185: Enable form validation with reference and collection binding
+							((FormProxyObject) value).setPath(attr, _node);
 					}
 					return value;
 				} else if (mname.startsWith("is")) {
@@ -196,6 +214,8 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 
 					addCache(attrName, args[0]);
 					addDirtyField(attrName);
+					ProxyHelper.callOnDataChange(_node, args[0]);
+					ProxyHelper.callOnDirtyChange(_node);
 				}
 			}
 		} catch (Exception e) {

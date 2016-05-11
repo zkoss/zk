@@ -26,6 +26,8 @@ import javassist.util.proxy.Proxy;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.SavePropertyBinding;
+import org.zkoss.util.Pair;
 
 /**
  * A proxy object to implement <tt>Map</tt>
@@ -33,15 +35,15 @@ import org.zkoss.bind.sys.FormBinding;
  * @author jumperchen
  * @since 8.0.0
  */
-public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serializable, FormProxyObjectListener {
+public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serializable {
 	private Map<K, V> _cache;
 	private boolean _dirty;
 	private Map<K, V> _origin;
-	//F80: formProxyObject support notifyChange with Form.isDirty
-	private FormProxyObjectListener _listener;
 	private List<Annotation> _callerAnnots;
 	private static final long serialVersionUID = 20141226161502L;
 	private boolean isImmutableElements;
+	//ZK-3185: Enable form validation with reference and collection binding
+	private ProxyNode _node;
 
 	public MapProxy(Map<K, V> origin, Annotation[] callerAnnots) {
 		_origin = origin;
@@ -77,7 +79,10 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 		_cache.clear();
 		setDirty(false);
 		for (Map.Entry<K, V> me : ((Map<K, V>) getOriginObject()).entrySet()) {
-			_cache.put(me.getKey(), createProxyObject(me.getValue()));
+			V o = createProxyObject(me.getValue());
+			_cache.put(me.getKey(), o);
+			if (o instanceof FormProxyObject)
+				setCreatedProxyPath((FormProxyObject) o, me.getKey());
 		}
 	}
 
@@ -98,19 +103,12 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 	}
 
 	//F80: formProxyObject support notifyChange with Form.isDirty
-	public void addFormProxyObjectListener(FormProxyObjectListener l) {
-		if (_listener == null)
-			_listener = l;
-	}
-
 	public void onDirtyChange() {
-		if (_listener != null)
-			_listener.onDirtyChange();
+		ProxyHelper.callOnDirtyChange(_node);
 	}
 
 	public void onDataChange(Object o) {
-		if (_listener != null)
-			_listener.onDataChange(o);
+		ProxyHelper.callOnDataChange(_node, o);
 	}
 
 	protected void setDirty(boolean d) {
@@ -168,7 +166,10 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 
 	public V put(K key, V value) {
 		setDirty(true);
-		return _cache.put(createProxyObject(key), createProxyObject(value));
+		V o = createProxyObject(value);
+		if (o instanceof FormProxyObject)
+			setCreatedProxyPath((FormProxyObject) o, key);
+		return _cache.put(createProxyObject(key), o);
 	}
 
 	public V remove(Object key) {
@@ -198,14 +199,31 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 		throw new IllegalAccessError("Not supported");
 	}
 
-	//F80: formProxyObject support notifyChange with Form.isDirty
 	private <T extends Object> T createProxyObject(T t) {
-		T p = isImmutableElements ? t : ProxyHelper.createProxyIfAny(t);
-		if (p instanceof FormProxyObject) {
-			FormProxyObject fpo = (FormProxyObject) p;
-			fpo.addFormProxyObjectListener(this);
-		}
-		return p;
+		return isImmutableElements ? t : ProxyHelper.createProxyIfAny(t);
 	}
 
+	//ZK-3185: Enable form validation with reference and collection binding
+	private void setCreatedProxyPath(FormProxyObject fpo, Object key) {
+		fpo.setPath("['" + key + "']", _node);
+	}
+
+	public void cacheSavePropertyBinding(String property, SavePropertyBinding s) {
+		ProxyHelper.cacheSavePropertyBinding(_node, _node.getProperty() + "['" + property + "']" , s);
+	}
+
+	public Set<Pair<String, SavePropertyBinding>> collectCachedSavePropertyBinding() {
+		throw new UnsupportedOperationException("Not support!");
+	}
+	public void setPath(String property, ProxyNode parent) {
+		if (property == null && _node != null) { // means update
+			_node.setParent(parent);
+		} else {
+			_node = new ProxyNode(property, parent);
+			for (Entry<K, V> e : _cache.entrySet()) {
+				if (e.getValue() instanceof FormProxyObject)
+					((FormProxyObject) _cache.get(e.getKey())).setPath(null, _node);
+			}
+		}
+	}
 }

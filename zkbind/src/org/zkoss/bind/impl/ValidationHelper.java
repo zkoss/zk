@@ -19,13 +19,16 @@ import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Form;
 import org.zkoss.bind.Property;
+import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.SaveBinding;
 import org.zkoss.bind.sys.SaveFormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.ValidationMessages;
+import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 
@@ -187,7 +190,7 @@ import org.zkoss.zk.ui.event.Event;
 
 	//collect properties from a save-binding
 	private void collectSavePropertyBinding(Component comp, SavePropertyBinding binding, String command, Event evt,
-			Set<Property> validates) {
+			Set<Property> validates, boolean checkFormFieldFromCollection) {
 		final BindContext ctx = BindContextUtil.newBindContext(_binder, binding, true, command, binding.getComponent(),
 				evt);
 		BindContextUtil.setConverterArgs(_binder, binding.getComponent(), ctx, binding);
@@ -195,17 +198,44 @@ import org.zkoss.zk.ui.event.Event;
 		Property p = binding.getValidate(ctx);
 		_mainPropertyCache.put(binding, p);
 		cp.add(p); //main property
-		validates.add(p); //collect properties to be validated
+		if (checkFormFieldFromCollection) { //ZK-3185: Enable form validation with reference and collection binding
+			Property pc = ((SavePropertyBindingImpl) binding).getBasePropertyIfFromCollection(); //Check if field from collection
+			if (pc != null) cp.add(pc);
+		}
+		validates.addAll(cp); //collect properties to be validated
+	}
+
+	//collect properties from a save-binding
+	private void collectSavePropertyBinding(Component comp, SavePropertyBinding binding, String command, Event evt,
+											Set<Property> validates) {
+		collectSavePropertyBinding(comp, binding, command, evt, validates, false);
 	}
 
 	//collect properties form a save-form-binding
 	private void collectSaveFormBinding(Component comp, SaveFormBinding binding, String command, Event evt,
 			Set<Property> validates) {
-		Set<SaveBinding> savebindings = ((BinderCtrl) binding.getBinder())
-				.getFormAssociatedSaveBindings(binding.getComponent());
+		//ZK-3185: Enable form validation with reference and collection binding
+		String formId = binding.getFormId();
+		Component formComp = binding.getComponent();
+		Binder binder = binding.getBinder();
+		Form form = ((BinderCtrl) binding.getBinder()).getForm(formComp, formId);
+		if (form instanceof FormProxyObject) {
+			Set<Pair<String, SavePropertyBinding>> cachedSavePropertyBindings = ((FormProxyObject) form).collectCachedSavePropertyBinding();
+			for (Pair<String, SavePropertyBinding> p : cachedSavePropertyBindings) {
+				SavePropertyBinding spbinding = p.getY();
+				String fieldName = p.getX();
+				Component cachedComp = spbinding.getComponent();
+				if (cachedComp.getDesktop() != null) {
+					((BinderCtrl) binder).addFormAssociatedSaveBinding(spbinding.getComponent(), formId, spbinding, fieldName);
+					((BinderCtrl) binder).addSaveFormFieldName(form, fieldName);
+				}
+			}
+		}
+
+		Set<SaveBinding> savebindings = ((BinderCtrl) binder).getFormAssociatedSaveBindings(formComp);
 		for (SaveBinding sbinding : savebindings) {
 			if (sbinding instanceof SavePropertyBinding) {
-				collectSavePropertyBinding(comp, ((SavePropertyBinding) sbinding), command, evt, validates);
+				collectSavePropertyBinding(comp, ((SavePropertyBinding) sbinding), command, evt, validates, true);
 			} else {
 				// any other possible to go here?
 			}

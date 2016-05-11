@@ -17,6 +17,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
@@ -33,6 +36,7 @@ import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
 import org.zkoss.bind.sys.debugger.impl.info.ValidationInfo;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
+import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
@@ -42,6 +46,7 @@ import org.zkoss.zk.ui.UiException;
  * @since 6.0.0
  */
 public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBinding {
+	private static final Logger log = LoggerFactory.getLogger(SaveFormBindingImpl.class);
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
@@ -171,17 +176,24 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 		//remember base and form field
 		if (form instanceof Form) {
 			for (String field : ((BinderCtrl) binder).getSaveFormFieldNames(form)) {
+				if (field.indexOf("[$INDEX$]") != -1) // skip collection field
+					continue;
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
-					final ValueReference valref = eval.getValueReference(ctx, comp, expr);
-					if (valref == null) {
-						throw new UiException("value reference not found by expression [" + expr.getExpressionString()
-								+ "], check if you are trying to save to a variable only expression");
-					}
 					//ZK-911. Load from Form bean via expression(so will use form's AccessFieldName)
 					final ExpressionX formExpr = getFormExpression(eval, field);
 					final Object value = eval.getValue(null, comp, formExpr); //form.getField(field);
-					properties.add(new PropertyImpl(valref.getBase(), (String) valref.getProperty(), value));
+					ValueReference valref = null;
+					try {
+						valref = eval.getValueReference(ctx, comp, expr);
+					} catch (PropertyNotFoundException e) {
+						//ignore PropertyNotFoundException, might be new added expression
+					}
+					if (valref == null)
+						log.debug("value reference not found by expression [" + expr.getExpressionString()
+								+ "], check if you are trying to save to a variable only expression");
+					else
+						properties.add(new PropertyImpl(valref.getBase(), (String) valref.getProperty(), value));
 				}
 			}
 		}

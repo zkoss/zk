@@ -22,6 +22,7 @@ import org.zkoss.bind.Converter;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.Validator;
+import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ConditionType;
@@ -31,6 +32,7 @@ import org.zkoss.bind.sys.debugger.impl.info.SaveInfo;
 import org.zkoss.bind.sys.debugger.impl.info.ValidationInfo;
 import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
+import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -56,6 +58,22 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		_validator = validatorExpr == null ? null : parseValidator(eval, validatorExpr);
 		_validatorArgs = validatorArgs;
+
+		//ZK-3185: Enable form validation with reference and collection binding
+		final BindContext ctx = BindContextUtil.newBindContext(getBinder(), this, true, null, getComponent(), null);
+		ctx.setAttribute(BinderImpl.IGNORE_REF_VALUE, Boolean.FALSE);
+		ctx.setAttribute(BinderImpl.IGNORE_TRACKER, Boolean.TRUE);
+		ValueReference valref = null;
+		try {
+			valref = eval.getValueReference(ctx, getComponent(), _accessInfo.getProperty());
+		} catch (PropertyNotFoundException e) {
+			//ignore null
+		}
+		if (valref != null) {
+			Object base = valref.getBase();
+			if (base instanceof FormProxyObject)
+				((FormProxyObject) base).cacheSavePropertyBinding((String) valref.getProperty(), this);
+		}
 	}
 
 	public Map<String, Object> getValidatorArgs() {
@@ -166,7 +184,8 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 	private ValueReference getValueReference(BindContext ctx) {
 		ValueReference valref = (ValueReference) getAttribute(ctx, $VALUEREF$);
 		if (valref == null) {
-			if (_formFieldInfo != null) { //ZK-1017: Property of a form is not correct when validation
+			//ZK-1017: Property of a form is not correct when validation
+			if (_formFieldInfo != null && _formFieldInfo._fieldName.indexOf("[$INDEX$]") == -1) { // skip collection field name
 				final Object form = getComponent().getAttribute(_formFieldInfo._id, true);
 				final String fieldName = _formFieldInfo._fieldName;
 				valref = new org.zkoss.xel.zel.ELXelExpression.ValueReferenceImpl(form, fieldName);
@@ -278,4 +297,32 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		private String _fieldName;
 		private String _id;
 	}
+
+	/**
+	 * Internal use only, only for collections
+	 */
+	public Property getBasePropertyIfFromCollection() {
+		Property p = null;
+		int index = -1;
+		String fieldName = "";
+		if (_formFieldInfo != null && (fieldName = _formFieldInfo._fieldName) != null && (index = fieldName.indexOf("[$INDEX$]")) != -1) {
+			final BindContext ctx = BindContextUtil.newBindContext(getBinder(), this, false, null, getComponent(), null);
+			final ValueReference valref = getValueReference(ctx);
+			if (valref != null) {
+				Object base = valref.getBase();
+				if (base instanceof FormProxyObject)
+					base = ((FormProxyObject) base).getOriginObject();
+				if (base != null) {
+					final BindEvaluatorX eval = getBinder().getEvaluatorX();
+					Object value = eval.getValue(ctx, getComponent(), _accessInfo.getProperty());
+					String replacedFieldString = fieldName.substring(0, index) + ".$data";
+					if (fieldName.length() > (index + 9))
+						replacedFieldString += fieldName.substring(index + 9);
+					p = new PropertyImpl(base, replacedFieldString, value);
+				}
+			}
+		}
+		return p;
+	}
+
 }

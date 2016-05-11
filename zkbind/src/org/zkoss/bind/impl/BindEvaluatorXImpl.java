@@ -97,7 +97,8 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 			if (ref == null) {
 				XelContext xctx = newXelContext(ctx, comp);
 				//Dennis, a special control flag to ignore ref-binding getValue in BindELResolver
-				xctx.setAttribute(BinderImpl.IGNORE_REF_VALUE, Boolean.TRUE);
+				if (ctx.getAttribute(BinderImpl.IGNORE_REF_VALUE) == null) //ZK-3185
+					xctx.setAttribute(BinderImpl.IGNORE_REF_VALUE, Boolean.TRUE);
 				Object val = expression.evaluate(xctx);
 				if (val instanceof ReferenceBindingImpl) { //get value-reference from ref-binding
 					ref = ((ReferenceBindingImpl) val).getValueReference();

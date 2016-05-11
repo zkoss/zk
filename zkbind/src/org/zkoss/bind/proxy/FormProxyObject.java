@@ -11,8 +11,12 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.proxy;
 
+import java.util.Set;
+
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.SavePropertyBinding;
+import org.zkoss.util.Pair;
 
 /**
  * The interface implemented by proxy classes.
@@ -52,7 +56,24 @@ public interface FormProxyObject {
 	public void setFormOwner(Object owner, FormBinding binding);
 
 	/**
-	 * Add listener
+	 * Set the property of current form proxy object and it's creator
+	 * @param property p the property
+	 * @param parent parent the parent proxy node
+	 * @since 8.0.2
 	 */
-	public void addFormProxyObjectListener(FormProxyObjectListener l);
+	public void setPath(String property, ProxyNode parent);
+
+	/**
+	 * Cache save property binding by property string
+	 * @param property the property of save property binding
+	 * @param savePropertyBinding the save property binding
+	 * @since 8.0.2
+	 */
+	public void cacheSavePropertyBinding(String property, SavePropertyBinding savePropertyBinding);
+
+	/**
+	 * Collect all of collect cached save property bindings
+	 * @since 8.0.2
+	 */
+	public Set<Pair<String, SavePropertyBinding>> collectCachedSavePropertyBinding();
 }
