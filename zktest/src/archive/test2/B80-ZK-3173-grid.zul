@@ -61,6 +61,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 			4. should see model and grid have the same active page number and page count
 	</label>
 	<grid id="grid" model="${model}" mold="paging" pageSize="3" >
+		<custom-attributes org.zkoss.zul.grid.rod="true"/>
 		<columns>
 			<column hflex="1" label="ID" />
 		</columns>

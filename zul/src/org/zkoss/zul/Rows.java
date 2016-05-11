@@ -26,6 +26,7 @@ import java.util.Set;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.DataLoader;
 import org.zkoss.zul.impl.GroupsListModel;
@@ -121,7 +122,18 @@ public class Rows extends XulElement {
 			if (grid != null) {
 				if (grid.inPagingMold()) {
 					final Paginal pgi = grid.getPaginal();
-					pgi.setTotalSize(grid.getDataLoader().getTotalSize());
+					int newTotalSize = grid.getDataLoader().getTotalSize();
+					//ZK-3173: if visible item count reduces, active page might exceed max page count
+					ListModel<?> model = grid.getModel();
+					if (count < 0 && model instanceof Pageable) {
+						Pageable p = (Pageable) model;
+						int actpg = p.getActivePage();
+						int maxPageIndex = p.getPageCount() - 1;
+						if (actpg > maxPageIndex) {
+							p.setActivePage(maxPageIndex);
+						}
+					}
+					pgi.setTotalSize(newTotalSize);
 					if (grid.getModel() != null)
 						grid.invalidate();
 					else {
@@ -546,8 +558,20 @@ public class Rows extends XulElement {
 			}
 		}
 		final Grid grid = getGrid();
-		if (grid != null && grid.inPagingMold())
-			grid.getPaginal().setTotalSize(grid.getDataLoader().getTotalSize());
+		if (grid != null && grid.inPagingMold()) {
+			int newTotalSize = grid.getDataLoader().getTotalSize();
+			//ZK-3173: if visible item count reduces, active page might exceed max page count
+			ListModel<?> model = grid.getModel();
+			if (isRemove && model instanceof Pageable) {
+				Pageable p = (Pageable) model;
+				int actpg = p.getActivePage();
+				int maxPageIndex = p.getPageCount() - 1;
+				if (actpg > maxPageIndex) {
+					p.setActivePage(maxPageIndex);
+				}
+			}
+			grid.getPaginal().setTotalSize(newTotalSize);
+		}
 	}
 
 	/** Checks whether to invalidate, when a child has been added or 

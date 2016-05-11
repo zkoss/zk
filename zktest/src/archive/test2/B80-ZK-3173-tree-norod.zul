@@ -78,7 +78,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 			4. should see model and tree have the same active page number and page count
 	</label>
 	<tree id="tree" model="${model}" mold="paging" pageSize="3" >
-		<custom-attributes org.zkoss.zul.tree.rod="true"/>
+		<custom-attributes org.zkoss.zul.tree.rod="false"/>
 	</tree>
 	<button id="clearBtn" label="CLEAR" onClick='clear(); log()' />
 	<button id="add10Btn" label="ADD 10" onClick="add10()" />
