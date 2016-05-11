@@ -27,10 +27,12 @@ import org.zkoss.bind.Form;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.ImmutableElements;
 import org.zkoss.bind.annotation.ImmutableFields;
+import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
+import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.UiException;
 
 /**
@@ -230,5 +232,51 @@ public class ProxyHelper {
 
 		((Proxy) p1).setHandler(new FormProxyHandler<T>(origin));
 		return (T) p1;
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	/* package */static void cacheSavePropertyBinding(ProxyNode node, String property, SavePropertyBinding savePropertyBinding) {
+		while (node != null) {
+			ProxyNode parent = node.getParent();
+			if (parent == null) {
+				node.getCachedSavePropertyBinding().add(new Pair<String, SavePropertyBinding>(property, savePropertyBinding));
+				break;
+			} else {
+				property = parent.getProperty() + property;
+				node = parent;
+			}
+		}
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	/* package */static void callOnDataChange(ProxyNode node, Object value) {
+		while (node != null) {
+			ProxyNode parent = node.getParent();
+			if (parent == null && node.getOnDataChangeCallback() != null) {
+				node.getOnDataChangeCallback().call(value);
+				break;
+			} else {
+				node = parent;
+			}
+		}
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	/* package */static void callOnDirtyChange(ProxyNode node) {
+		while (node != null) {
+			ProxyNode parent = node.getParent();
+			if (parent == null && node.getOnDirtyChangeCallback() != null) {
+				node.getOnDirtyChangeCallback().call(true);
+				break;
+			} else {
+				node = parent;
+			}
+		}
 	}
 }

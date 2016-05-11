@@ -14,6 +14,7 @@ package org.zkoss.bind.proxy;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,8 +31,11 @@ import org.zkoss.bind.Form;
 import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.lang.Strings;
+import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.util.Callback;
 
 /**
  * A form proxy handler
@@ -80,6 +84,7 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 	public FormProxyHandler(T origin) {
 		super(origin);
 		_status = new FormStatusImpl();
+		_node = new ProxyNode("", null);
 	}
 
 	private class FormStatusImpl implements FormStatus, Serializable {
@@ -152,6 +157,8 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 				return _defaultValues.get(mname);
 			} else {
 				if ("setFormOwner".equals(mname)) {
+					//F80: formProxyObject support notifyChange with Form.isDirty
+					addCallbacks();
 					if (_binding != null) {
 						BinderCtrl binder = (BinderCtrl) _binding.getBinder();
 						Set<String> saveFormFieldNames = binder.removeSaveFormFieldNames((Form) self);
@@ -161,34 +168,49 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 
 						if (!saveFormFieldNames.isEmpty())
 							binder.addSaveFormFieldName((Form) self, saveFormFieldNames);
+
 					} else {
 						_origin = ProxyHelper.getOriginObject((T) args[0]);
 						_binding = (FormBinding) args[1];
 					}
 					return null;
+				} else if ("cacheSavePropertyBinding".equals(mname)) {
+					//ZK-3185: Enable form validation with reference and collection binding
+					ProxyHelper.cacheSavePropertyBinding(_node, (String) args[0], (SavePropertyBinding) args[1]);
+					return null;
 				} else if ("getFormStatus".equals(mname)) {
 					_status.setOwner((FormProxyObject) self);
 					return _status;
+				} else if ("collectCachedSavePropertyBinding".equals(mname)) {
+					//ZK-3185: Enable form validation with reference and collection binding
+					Set<Pair<String, SavePropertyBinding>> sBindings = new HashSet<Pair<String, SavePropertyBinding>>(_node.getCachedSavePropertyBinding());
+					_node.getCachedSavePropertyBinding().clear();
+					return sBindings;
 				}
 
-				//F80: formProxyObject support notifyChange with Form.isDirty
-				Object o = super.invoke(self, method, proceed, args);
-				if (o instanceof FormProxyObject && mname.startsWith("get")) {
-					FormProxyObject fpo = (FormProxyObject) o;
-					fpo.addFormProxyObjectListener(new FormProxyObjectListener() {
-						public void onDataChange(Object o) {
-							_binding.getBinder().notifyChange(o, ".");
-						}
-
-						public void onDirtyChange() {
-							_binding.getBinder().notifyChange(_binding.getFormBean().getFormStatus(), ".");
-						}
-					});
-				}
-				return o;
+				return super.invoke(self, method, proceed, args);
 			}
 		} catch (Exception e) {
 			throw UiException.Aide.wrap(e);
 		}
+	}
+
+	private void addCallbacks() {
+		_node.setOnDataChangeCallback(new Callback() {
+			public void call(Object data) {
+				_binding.getBinder().notifyChange(data, ".");
+			}
+		});
+		_node.setOnDirtyChangeCallback(new Callback() {
+			public void call(Object data) {
+				_binding.getBinder().notifyChange(_binding.getFormBean().getFormStatus(), ".");
+			}
+		});
+	}
+
+	//F80: formProxyObject support notifyChange with Form.isDirty
+	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		addCallbacks();
 	}
 }
