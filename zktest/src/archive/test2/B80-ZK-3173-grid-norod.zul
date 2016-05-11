@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-B80-ZK-3173-list.zul
+B80-ZK-3173-grid.zul
 
 	Purpose:
 
@@ -37,44 +37,40 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 		public void log() {
 			Clients.log("model active page: " + model.getActivePage());
 			Clients.log("model page count: " + model.getPageCount());
-			Clients.log("list active page: " + list.getActivePage());
-			Clients.log("list page count: " + list.getPageCount());
+			Clients.log("grid active page: " + grid.getActivePage());
+			Clients.log("grid page count: " + grid.getPageCount());
 			Clients.log("==========================");
 		}
 	]]></zscript>
 	<label multiline="true">
-		This test checks the active page number and page count are in sync between model and listbox
+		This test checks the active page number and page count are in sync between model and grid
 		A. test clear model
 			1. click "ADD 10" button
 			2. go to the last page
 			3. click "CLEAR" button
-			4. should see model and listbox have the same active page number and page count
+			4. should see model and grid have the same active page number and page count
 		B. test remove items from model
 			1. click "ADD 10" button
 			2. go to the last page
 			3. click "REMOVE 1" button
-			4. should see model and listbox have the same active page number and page count
+			4. should see model and grid have the same active page number and page count
 		C. test changing page size
 			1. click "ADD 10" button
 			2. go to the last page
 			3. click "SET PAGE SIZE TO 5" button
-			4. should see model and listbox have the same active page number and page count
+			4. should see model and grid have the same active page number and page count
 	</label>
-	<listbox id="list" model="${model}" mold="paging" pageSize="3" >
-		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
-		<listhead>
-			<listheader>
-				<label>ITEMS</label>
-			</listheader>
-		</listhead>
+	<grid id="grid" model="${model}" mold="paging" pageSize="3" >
+		<custom-attributes org.zkoss.zul.grid.rod="false"/>
+		<columns>
+			<column hflex="1" label="ID" />
+		</columns>
 		<template name="model">
-			<listitem>
-				<listcell>
-					<label value="${each}" />
-				</listcell>
-			</listitem>
+			<row>
+				<label value="${each}" />
+			</row>
 		</template>
-	</listbox>
+	</grid>
 	<button id="clearBtn" label="CLEAR" onClick='clear(); log()' />
 	<button id="add10Btn" label="ADD 10" onClick="add10()" />
 	<button id="add1Btn" label="ADD 1" onClick="add1()" />

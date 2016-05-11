@@ -1403,7 +1403,16 @@ public class Listbox extends MeshElement {
 			_visibleItemCount += count;
 			if (inPagingMold()) {
 				final Paginal pgi = getPaginal();
-				pgi.setTotalSize(getDataLoader().getTotalSize());
+				int totalSize = getDataLoader().getTotalSize();
+				if (count < 0 && _model instanceof Pageable) {
+					Pageable p = (Pageable) _model;
+					int actpg = p.getActivePage();
+					int maxPageIndex = p.getPageCount() - 1;
+					if (actpg > maxPageIndex) {
+						p.setActivePage(maxPageIndex);
+					}
+				}
+				pgi.setTotalSize(totalSize);
 				invalidate(); // the set of visible items might change
 			} else if (((Cropper) getDataLoader()).isCropper()) {
 				getDataLoader().updateModelInfo();
@@ -1927,8 +1936,18 @@ public class Listbox extends MeshElement {
 				}
 			}
 		}
-		if (inPagingMold())
-			getPaginal().setTotalSize(getDataLoader().getTotalSize());
+		if (inPagingMold()) {
+			int totalSize = getDataLoader().getTotalSize();
+			if (isRemove && _model instanceof Pageable) {
+				Pageable p = (Pageable) _model;
+				int actpg = p.getActivePage();
+				int maxPageIndex = p.getPageCount() - 1;
+				if (actpg > maxPageIndex) {
+					p.setActivePage(maxPageIndex);
+				}
+			}
+			getPaginal().setTotalSize(totalSize);
+		}
 	}
 
 	/**
