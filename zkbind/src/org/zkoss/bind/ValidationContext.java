@@ -49,7 +49,7 @@ public interface ValidationContext {
 	 * get dependent properties that need to be validated.
 	 * you usually use this method to get value of other properties to do complex validation or
 	 * a form validation
-	 * Notice that if the property is under a collection, you would see "$data", which represents "each"
+	 * Notice that if the property is under a collection, you would see "$each", which represents "each"
 	 * @return the properties map.
 	 */
 	Map<String, Property[]> getProperties();
@@ -58,7 +58,7 @@ public interface ValidationContext {
 	 * get dependent properties by the property name.
 	 * you usually use this method to get a value of other properties to do complex validation or
 	 * a form validation
-	 * Notice that if the property is under a collection, you would see "$data", which represents "each"
+	 * Notice that if the property is under a collection, you would see "$each", which represents "each"
 	 * @param name the property name
 	 * @return the properties array
 	 */
@@ -72,7 +72,7 @@ public interface ValidationContext {
 	 * Map<String,Property> beanProps = ctx.getProperties(ctx.getProperty().getBase());
 	 * Map<String,Property> formProps = ctx.getProperties(ctx.getProperty().getValue());
 	 * </code></pre>
-	 * Notice that if the property is under a collection, you would see "$data", which represents "each"
+	 * Notice that if the property is under a collection, you would see "$each", which represents "each"
 	 * @param base the base object of properties
 	 * @return a Map of properties that has same base object.
 	 * @since 6.0.1
@@ -90,7 +90,7 @@ public interface ValidationContext {
 
 	/**
 	 * get the main property that need to be validated. 
-	 * Notice that if the property is under a collection, you would see "$data", which represents "each"
+	 * Notice that if the property is under a collection, you would see "$each", which represents "each"
 	 * @return the main property.
 	 */
 	Property getProperty();

@@ -315,7 +315,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 				if (base != null) {
 					final BindEvaluatorX eval = getBinder().getEvaluatorX();
 					Object value = eval.getValue(ctx, getComponent(), _accessInfo.getProperty());
-					String replacedFieldString = fieldName.substring(0, index) + ".$data";
+					String replacedFieldString = fieldName.substring(0, index) + ".$each";
 					if (fieldName.length() > (index + 9))
 						replacedFieldString += fieldName.substring(index + 9);
 					p = new PropertyImpl(base, replacedFieldString, value);
