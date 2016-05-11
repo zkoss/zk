@@ -4750,13 +4750,18 @@ _doFooSelect: function (evt) {
 				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
 				if (wgt && (wgtVParent = wgt.$n('a')) && jq.nodeName(wgtVParent, 'button', 'input', 'textarea', 'a', 'select', 'iframe')) {
-					//ZK-3193 set VParent position to "fixed" temporary, avoid unnecessary scrolling.
 					var $wgtVParent = jq(wgtVParent),
-						oldPosition = $wgtVParent.css('position');
-					$wgtVParent
-						.css('position', 'fixed')
-						.trigger('focus')
-						.css('position', oldPosition);
+						wgtBody = wgt.ebody,
+						wgtHasScrollBar = !!(wgtBody && (zk(wgtBody).hasVScroll() || zk(wgtBody).hasHScroll()));
+					//ZK-3193 if widget has scrollBar, set VParent position to "fixed" temporary, avoid unnecessary scrolling.
+					if (wgtHasScrollBar) {
+						var oldPosition = $wgtVParent.css('position');
+						$wgtVParent.css('position', 'fixed');
+					}
+					$wgtVParent.trigger('focus');
+					if (wgtHasScrollBar) {
+						$wgtVParent.css('position', oldPosition);
+					}
 				}
 				zk._cfByMD = true;
 				setTimeout(function () {zk._cfByMD = false; zk._prevFocus = null;}, 0);
