@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3202.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 11 11:27:35 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <vlayout>
+        <label multiline="true">
+            1. input integer "4" in the first spinner
+            2. should see "custom error" in the popup errorbox
+            3. input integer "10" in the first spinner
+            4. should see "max is 9" in the popup errorbox
+            5. input integer "4" in the second spinner
+            6. should see "Out of range: >= 5" in the popup errorbox
+
+        </label>
+        <spinner constraint="min 5:custom error, max 9:max is 9"/>
+        <spinner constraint="min 5"/>
+    </vlayout>
+</zk>
