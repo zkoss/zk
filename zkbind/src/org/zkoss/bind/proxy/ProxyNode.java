@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.util.Callback;
  * @author jameschu
  * @since 8.0.2
  */
-public class ProxyNode implements Serializable {
+/* package */class ProxyNode implements Serializable {
 	private String _property;
 	private ProxyNode _parent;
 	private Set<Pair<String, SavePropertyBinding>> _cachedSavePropertyBinding;
