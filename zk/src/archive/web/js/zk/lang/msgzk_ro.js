@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = 'Se procesează...';
 
 msgzk.FILE_SIZE = 'Dimensiune fişier: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Eşuare la încărcare ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Poate fi cauzat de traficul anevoios. Puteţi reîncărca această pagină şi încerca din nou.';

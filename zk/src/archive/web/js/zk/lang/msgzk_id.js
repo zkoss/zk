@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = 'Diproses...';
 
 msgzk.FILE_SIZE = 'Ukuran File: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Failed to load ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'It may be caused by bad traffic. You could reload this page and try again.';

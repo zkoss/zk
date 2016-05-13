@@ -26,6 +26,7 @@ msgzk = {
 
 	FILE_SIZE: '文件大小：',
 	KBYTES: 'KB',
+	MBYTES: 'MB',
 
 	FAILED_TO_LOAD: '无法载入：',
 	FAILED_TO_LOAD_DETAIL: '可能是连线问题，请按重载再试一次。',

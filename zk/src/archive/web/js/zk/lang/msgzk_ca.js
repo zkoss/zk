@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = "S'està processant...";
 
 msgzk.FILE_SIZE = "Mida de l'arxiu: ";
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Ha fallat la càrrega ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Pot haver estat provocat pel mal trànsit de les comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.';

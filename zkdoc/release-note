@@ -14,6 +14,7 @@ ZK 8.0.2
   ZK-2582: Allow specification of Priority for SelectorComposer's @Listen() Annotation
   ZK-3206: Support metaKey for MouseEvent
   ZK-3185: Enable form validation with reference and collection binding
+  ZK-3086: Users can customize file size exceeding message for Dropupload
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path

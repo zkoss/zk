@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = 'Bekleyiniz...';
 
 msgzk.FILE_SIZE = 'Dosya boyu: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Yükleme başarısız: ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Yoğunluktan kaynaklı problem oluşştu.Lütfen yeniden deneyiniz.';

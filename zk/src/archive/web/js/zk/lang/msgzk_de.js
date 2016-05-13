@@ -26,6 +26,7 @@ msgzk = {
 
 	FILE_SIZE: 'Dateigröße: ',
 	KBYTES: 'KB',
+	MBYTES: 'MB',
 
 	FAILED_TO_LOAD: 'Fehler beim Laden ',
 	FAILED_TO_LOAD_DETAIL: 'Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.',

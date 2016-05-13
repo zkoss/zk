@@ -27,6 +27,7 @@ msgzk = {
 
 	FILE_SIZE: 'Rozmiar pliku: ',
 	KBYTES: 'KB',
+	MBYTES: 'MB',
  
 	FAILED_TO_LOAD: 'Nie udało się załadować ',
 	FAILED_TO_LOAD_DETAIL: 'Może być to spowodowane zatorem sieciowym. Możesz przeładować stronę i spróbować ponownie.',

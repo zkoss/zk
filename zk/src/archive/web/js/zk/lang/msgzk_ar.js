@@ -16,6 +16,7 @@ msgzk.PLEASE_WAIT = 'من فضلك الأنتظار ...';
 
 msgzk.FILE_SIZE = 'حجم الملف : ';
 msgzk.KBYTES = 'كيلو بايت ';
+msgzk.MBYTES = 'ميغا بايت ';
 
 msgzk.FAILED_TO_LOAD = 'فشل فى التحميل  ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'فشل فى تحميل تفاصيل البيانات.';

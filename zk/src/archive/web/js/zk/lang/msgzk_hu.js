@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = 'Feldolgozás...';
 
 msgzk.FILE_SIZE = 'Fajl mérete: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Betöltés nem sikerült ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Rosz kapcsolat okozhatta. Próbáljan újra letölteni az oldalt.';
