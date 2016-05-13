@@ -15,6 +15,7 @@ msgzk.GOTO_ERROR_FIELD = 'Перехід до невірного поля';
 msgzk.PLEASE_WAIT = 'Обробка запиту...';
 msgzk.FILE_SIZE = 'Розмір файлу: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 msgzk.FAILED_TO_LOAD = 'Не вдалося завантажити ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Може бути спричинено проблемами з підключенням до мережі. Перевантажте сторінку і спробуйте знову.';
 msgzk.CAUSE = 'Причина: ';

@@ -26,6 +26,7 @@ msgzk = {
 
 	FILE_SIZE: 'File size: ',
 	KBYTES: 'KB',
+	MBYTES: 'MB',
 
 	FAILED_TO_LOAD: 'Failed to load ',
 	FAILED_TO_LOAD_DETAIL: 'It may be caused by bad traffic. You could reload this page and try again.',

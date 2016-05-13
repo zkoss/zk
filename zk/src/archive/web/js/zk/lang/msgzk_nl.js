@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = 'Verwerken...';
 
 msgzk.FILE_SIZE = 'Bestandsgrootte: ';
 msgzk.KBYTES = 'Kb';
+msgzk.MBYTES = 'Mb';
 
 msgzk.FAILED_TO_LOAD = 'Het laden is mislukt ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Het kan veroorzaakt zijn door foutief verkeer. U kunt de pagina opnieuw landen en opnieuw proberen.';

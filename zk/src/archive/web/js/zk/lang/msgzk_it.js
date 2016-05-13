@@ -27,6 +27,7 @@ msgzk.PLEASE_WAIT = 'Elaborazione in corso...';
 
 msgzk.FILE_SIZE = 'Dimensione file: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Impossibile caricare';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Cio puo essere dovuto a traffico errato. Ricaricare la pagina e riprovare.';

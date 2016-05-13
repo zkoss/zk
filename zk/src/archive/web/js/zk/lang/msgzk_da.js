@@ -26,6 +26,7 @@ msgzk = {
  
 	FILE_SIZE: 'Filstørrelse: ',
 	KBYTES: 'KB',
+	MBYTES: 'MB',
  
 	FAILED_TO_LOAD: 'Kunne ikke indlæse ',
 	FAILED_TO_LOAD_DETAIL: 'Det kan være forårsaget af trafik. Genindlæs denne side og prøv igen.',

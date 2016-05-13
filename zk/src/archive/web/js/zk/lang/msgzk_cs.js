@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = 'Pracuji...';
 
 msgzk.FILE_SIZE = 'Velikost souboru: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Chyba při nahrávání ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Chyba může být způsobena špatným připojením, zkuste obnovit stránku';

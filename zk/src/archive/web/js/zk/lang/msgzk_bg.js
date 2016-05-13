@@ -28,6 +28,7 @@ msgzk.PLEASE_WAIT = 'Зарежда се...';
 
 msgzk.FILE_SIZE = 'Размер на файла: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
 
 msgzk.FAILED_TO_LOAD = 'Проблем при зареждане ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Възможно е да се дължи на лоша връзка със сървъра. Опитайте да презаредите страницата отново.';

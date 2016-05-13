@@ -26,6 +26,7 @@ msgzk.PLEASE_WAIT = '처리중...';
 
 msgzk.FILE_SIZE = '파일 크기: ';
 msgzk.KBYTES = 'KB';
+msgzk.MBYTES = 'MB';
  
 msgzk.FAILED_TO_LOAD = '로드에 실패하였습니다 ';
 msgzk.FAILED_TO_LOAD_DETAIL = '트래픽에 의한 문제일 수 있습니다. 페이지를 새로고침하시고 재시도하세요.';

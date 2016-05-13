@@ -264,6 +264,8 @@ public class Utils {
 		addLocaleJS(sb, "PANEL_COLLAPSE", MZul.PANEL_COLLAPSE);
 		addLocaleJS(sb, "PANEL_RESTORE", MZul.PANEL_RESTORE);
 
+		addLocaleJS(sb, "UPLOAD_ERROR_EXCEED_MAXSIZE", MZul.UPLOAD_ERROR_EXCEED_MAXSIZE);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);

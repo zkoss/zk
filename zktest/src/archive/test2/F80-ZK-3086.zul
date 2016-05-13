@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3086.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May  6 10:01:29 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. dropupload any file that's larger then 1KB
+        2. should popup exceed maxsize error message "The request was rejected because its size (xxx KB) exceeds the configured maximum (1 KB)"
+        (xxx should be the file size of your upload file)
+
+    </label>
+    <dropupload maxsize="1" detection="none">
+        <attribute name="content"><![CDATA[
+            <b>Drop Here</b><br/>
+            size < 1k
+        ]]></attribute>
+    </dropupload>
+</zk>
