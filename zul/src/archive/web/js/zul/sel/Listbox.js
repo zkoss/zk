@@ -211,8 +211,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_syncSelInView: function () {
 		if (this._shallScrollIntoView) {
 			// ZK-2971: should scroll when not in paging or in paging but operating with keyboard
-			if (!this.paging || (this.$class.shallSyncSelInView && this.$class.shallSyncSelInView[this.uuid])) {
+			// ZK-3103: if in paging mode, should also scroll when setting selected item/index
+			if (!this.paging || (this.$class.shallSyncSelInView && this.$class.shallSyncSelInView[this.uuid]) || this._listbox$shallSyncSelInView) {
 				if (this.$class.shallSyncSelInView) this.$class.shallSyncSelInView[this.uuid] = false;
+				if (this._listbox$shallSyncSelInView) this._listbox$shallSyncSelInView = false;
 				var selItem = this._selItems.length > 0 ? this._selItems[this._selItems.length - 1] : undefined;
 				if (selItem) {
 					var bar = this._scrollbar;

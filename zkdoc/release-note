@@ -64,6 +64,7 @@ ZK 8.0.2
   ZK-3115: macro components adding inline-styles
   ZK-3207: Clients.resize() keeps increasing a component's height with vflex="min"
   ZK-3210: Spinner custom constraint error message partially wrong
+  ZK-3103: listbox setSelectedIndex does not scroll selected item into view
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
