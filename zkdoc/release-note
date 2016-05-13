@@ -59,6 +59,7 @@ ZK 8.0.2
   ZK-3097: Serialization issue: org.zkoss.zhtml.impl.AbstractTag$EncodedURL is not serializeable
   ZK-3195: Firefox Drag n Drop doesn't give "droppable" status after bugfix 3140
   ZK-3202: Spinner custom constraint error message broken
+  ZK-3209: tbeditor fails when including another jQuery script
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
