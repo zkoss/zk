@@ -62,6 +62,7 @@ ZK 8.0.2
   ZK-3202: Spinner custom constraint error message broken
   ZK-3209: tbeditor fails when including another jQuery script
   ZK-3115: macro components adding inline-styles
+  ZK-3207: Clients.resize() keeps increasing a component's height with vflex="min"
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java
