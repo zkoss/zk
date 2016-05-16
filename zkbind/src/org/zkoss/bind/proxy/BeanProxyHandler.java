@@ -112,7 +112,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 			}
 			if (method.getDeclaringClass().isAssignableFrom(FormProxyObject.class)) {
 				if ("submitToOrigin".equals(mname)) {
-					if (_origin != null) {
+					if (_origin != null && _cache != null) {
 						for (Map.Entry<String, Object> me : _cache.entrySet()) {
 							final Object value = me.getValue();
 							if (value instanceof FormProxyObject) {
