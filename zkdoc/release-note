@@ -61,6 +61,7 @@ ZK 8.0.2
   ZK-3195: Firefox Drag n Drop doesn't give "droppable" status after bugfix 3140
   ZK-3202: Spinner custom constraint error message broken
   ZK-3209: tbeditor fails when including another jQuery script
+  ZK-3115: macro components adding inline-styles
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java

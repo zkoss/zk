@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3115-macro.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun May 15 16:32:09 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<label value="${arg.label}"/>
