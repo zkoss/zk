@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B80-ZK-3103.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed, May 11, 2016  5:07:54 PM, Created by Christopher
+	
+	Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+	
+-->
+<zk>
+	<zscript><![CDATA[
+		List items = new ArrayList();
+		for(int i = 0; i <= 199; i++) {
+			items.add("Item " + i);
+		}
+		ListModelList model = new ListModelList(items);
+	]]></zscript>
+
+	<label multiline="true">
+		1. type 2 into the intbox and click the select button
+		2. should see all four listboxes selected "Item 2"
+		3. type 18 into the intbox and click the select button
+		4. should see all four listboxes selected "Item 18", and "Item 18" should be visible
+		5. type 21 into the intbox and click the select button
+		6. should see all four listboxes switched to 2nd page and selected "Item 21", and "Item 21" should be visible
+		7. type 17 into the int box and click the select button
+		8. should see all four listboxes switched back to 1st page and selected "Item 17", and "Item 17" should be visible
+		9. scroll to the top in all four listboxes
+		10. switch to 2nd page by click the paging control button (the bottom two listboxes used the same model, so click just one of them)
+		11. switch back to 1st page by clicking the paging control button in all four listboxes (the bottom two listboxes used the same model, so click just one of them)
+		12. should see all four listboxes DID NOT SCROLL to reveal the selected "Item 17", if "Item 17" is somehow visible, the bug is not fixed
+	</label>
+	<button id="select" label="select" onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());model.addToSelection(model.getElementAt(index.getValue()));"/><intbox id="index"/>
+	<vlayout>
+		<hlayout>
+			<listbox id="lb1" width="300px" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+				<listhead>
+					<listheader label="no model, no rod"/>
+				</listhead>
+				<listitem forEach="${items}" label="${each}"/>
+			</listbox>
+			<listbox id="lb2" width="300px" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<listhead>
+					<listheader label="mo nodel, rod"/>
+				</listhead>
+				<listitem forEach="${items}" label="${each}"/>
+			</listbox>
+		</hlayout>
+		<hlayout>
+			<listbox id="lb3" width="300px" model="${model}" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<listhead>
+					<listheader label="model, rod"/>
+				</listhead>
+			</listbox>
+			<listbox id="lb4" width="300px" model="${model}" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+				<listhead>
+					<listheader label="model, no rod"/>
+				</listhead>
+			</listbox>
+		</hlayout>
+	</vlayout>
+</zk>

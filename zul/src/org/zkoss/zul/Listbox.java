@@ -341,6 +341,8 @@ public class Listbox extends MeshElement {
 	private transient boolean _ignoreDataSelectionEvent;
 	/** the message to display when there are no items */
 	private String _emptyMessage;
+	//ZK-3103: if setSelectedIndex is called, should force scroll into view
+	private boolean _shallSyncSelInView = false;
 
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
@@ -907,6 +909,8 @@ public class Listbox extends MeshElement {
 					getDataLoader().syncModel(offset, limit); // force reloading
 					if (_jsel != jsel) //Bug ZK-1537: _jsel changed after syncModel if model is never synchronized
 						_jsel = jsel;
+					//ZK-3103: this will be triggered once with model, scrolling selection into view
+					_shallSyncSelInView = true;
 				} else {
 					smartUpdate("selInView_", _jsel);
 				}
@@ -914,6 +918,10 @@ public class Listbox extends MeshElement {
 				if (!item.isDisabled()) { // Bug ZK-1715: not select item if disabled.
 					item.setSelectedDirectly(true);
 					_selItems.add(item);
+					//ZK-3103: should scroll selection into view
+					//if model is present, this will be erroneously triggered twice
+					if (_model == null || !_rod)
+						_shallSyncSelInView = true;
 				}
 			}
 
@@ -3337,6 +3345,12 @@ public class Listbox extends MeshElement {
 			// ZK 8, if no model used in paging mold, we don't support select all in this case
 			if (_model == null) {
 				renderer.render("_listbox$noSelectAll", true); // B50-ZK-873, separate the select all condition and isCropper
+			}
+			
+			//ZK-3103: only true when setSelectedIndex is called
+			if (_shallSyncSelInView) {
+				renderer.render("_listbox$shallSyncSelInView", true);
+				_shallSyncSelInView = false;
 			}
 		}
 		if (_focusIndex > -1)
