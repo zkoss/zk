@@ -764,6 +764,9 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		if (size < 0) {
 			throw new WrongValueException("expecting positive non zero value, got: " + size);
 		}
+		
+		if (_pageSize == size) return; //no change
+		
 		int oldPageSize = _pageSize;
 		_pageSize = size;
 		invalidatePageCount(); //need to invalidate cached value first since we're calling getPageCount() below
@@ -849,6 +852,9 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		if (pg >= pc) {
 			pg = pc - 1; //set to last valid page
 		}
+		
+		if (_activePage == pg) return; //no change
+		
 		_activePage = pg;
 		for (PagingListener p : _pagingListeners) {
 			try {

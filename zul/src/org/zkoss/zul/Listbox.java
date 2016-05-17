@@ -1310,6 +1310,10 @@ public class Listbox extends MeshElement {
 					pgsz = ((PagingEvent) event).getPageable().getPageSize();
 					ofs = ((PagingEvent) event).getActivePage() * pgsz;
 				}
+				if (_model instanceof Pageable) {
+					((Pageable) _model).setPageSize(pgsz);
+					((Pageable) _model).setActivePage(pgi.getActivePage());
+				}
 				if (_rod) {
 					getDataLoader().syncModel(ofs, pgsz);
 				}
@@ -2302,28 +2306,28 @@ public class Listbox extends MeshElement {
 				_model = model;
 				initDataListener();
 				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
-			}
-
-			if (inPagingMold()) {
-				//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
-				//must update paginal totalSize or exception in setActivePage
-				final Paginal pgi = getPaginal();
-				Pageable m = _model instanceof Pageable ? (Pageable) _model : null;
-				//if pageable model contain non-default values, sync from model to pgi
-				//otherwise, sync from pgi to model
-				if (m != null) {
-					if (m.getPageSize() > 0) { //min page size is 1
-						pgi.setPageSize(m.getPageSize());
-					} else {
-						m.setPageSize(pgi.getPageSize());
+				//ZK-3173: move the block here to avoid modifying pgi "again" before PagingEvent is handled
+				if (inPagingMold()) {
+					//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
+					//must update paginal totalSize or exception in setActivePage
+					final Paginal pgi = getPaginal();
+					Pageable m = _model instanceof Pageable ? (Pageable) _model : null;
+					//if pageable model contain non-default values, sync from model to pgi
+					//otherwise, sync from pgi to model
+					if (m != null) {
+						if (m.getPageSize() > 0) { //min page size is 1
+							pgi.setPageSize(m.getPageSize());
+						} else {
+							m.setPageSize(pgi.getPageSize());
+						}
 					}
-				}
-				pgi.setTotalSize(getDataLoader().getTotalSize());
-				if (m != null) {
-					if (m.getActivePage() >= 0) { //min page index is 0
-						pgi.setActivePage(m.getActivePage());
-					} else {
-						m.setActivePage(pgi.getActivePage());
+					pgi.setTotalSize(getDataLoader().getTotalSize());
+					if (m != null) {
+						if (m.getActivePage() >= 0) { //min page index is 0
+							pgi.setActivePage(m.getActivePage());
+						} else {
+							m.setActivePage(pgi.getActivePage());
+						}
 					}
 				}
 			}

@@ -546,6 +546,10 @@ public class Tree extends MeshElement {
 		public void onEvent(Event event) {
 			if (inPagingMold() && event instanceof PagingEvent) {
 				PagingEvent pe = (PagingEvent) event;
+				if (_model instanceof Pageable) {
+					((Pageable) _model).setPageSize(pe.getPageable().getPageSize());
+					((Pageable) _model).setActivePage(pe.getPageable().getActivePage());
+				}
 				if (WebApps.getFeature("ee") && getModel() != null) {
 					if (_rodPagingIndex == null)
 						_rodPagingIndex = new LinkedList<Integer>();
@@ -1798,18 +1802,15 @@ public class Tree extends MeshElement {
 				}
 				setModelDirectly(model);
 				initDataListener();
-			}
-			if (inPagingMold()) {
-				if (_model instanceof PagingEventPublisher && _pgListener != null) {
-					((PagingEventPublisher) _model).addPagingEventListener((PagingListener) _pgListener);
-				}
-				if (_model instanceof Pageable) {
-					Pageable m = (Pageable) _model;
-					if (m.getPageSize() <= 0) { //check for invalid value, min page size is 1
-						m.setPageSize(_pgi.getPageSize());
-					}
-					if (m.getActivePage() < 0) { //check for invalid value, min page index is 0
-						m.setActivePage(_pgi.getActivePage());
+				if (inPagingMold()) {
+					if (_model instanceof Pageable) {
+						Pageable m = (Pageable) _model;
+						if (m.getPageSize() <= 0) { //check for invalid value, min page size is 1
+							m.setPageSize(_pgi.getPageSize());
+						}
+						if (m.getActivePage() < 0) { //check for invalid value, min page index is 0
+							m.setActivePage(_pgi.getActivePage());
+						}
 					}
 				}
 			}

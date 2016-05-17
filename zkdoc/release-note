@@ -65,6 +65,7 @@ ZK 8.0.2
   ZK-3207: Clients.resize() keeps increasing a component's height with vflex="min"
   ZK-3210: Spinner custom constraint error message partially wrong
   ZK-3103: listbox setSelectedIndex does not scroll selected item into view
+  ZK-3208: Using a custom paging with a mesh component in MVVM cause ListModelList pageSize to be reset
 
 * Upgrade Notes
   + Remove the method getOptionId(Object) in Chosenbox.java

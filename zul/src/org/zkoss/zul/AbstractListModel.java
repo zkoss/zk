@@ -336,6 +336,9 @@ public abstract class AbstractListModel<E>
 		if (size < 0) {
 			throw new WrongValueException("page size should >= 0");
 		}
+		
+		if (_pageSize == size) return; //no change
+		
 		int oldPageSize = _pageSize;
 		_pageSize = size;
 		
@@ -382,6 +385,9 @@ public abstract class AbstractListModel<E>
 		if (pg >= getPageCount()) {
 			pg = getPageCount() - 1; //set to last valid page
 		}
+		
+		if (_activePage == pg) return; //no change
+		
 		_activePage = pg;
 		for (PagingListener p : _pagingListeners) {
 			try {
