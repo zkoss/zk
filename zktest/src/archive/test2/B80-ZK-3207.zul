@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3207.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, May 16, 2016 12:28:00 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<style>
+.z-groupbox.padding > .z-groupbox-header {
+padding: 15px;
+}
+
+</style>
+	<window border="normal" title="hello" apply="org.zkoss.zktest.test2.B80_ZK_3207"
+	vflex="1">
+		<label multiline="true">
+			1. Click resize button
+			2. the groupbox should keep height
+		</label>
+		<button id="toggle" label="resize" />
+
+		<groupbox id="groupbox" closable="false" hflex="min" sclass="padding"
+		vflex="min">
+			<caption label="Boxes Caption" />
+			<grid hflex="min" vflex="1">
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="field" />
+						<cell>
+							<label id="label" value="label" />
+						</cell>
+					</row>
+					<row>
+						<label value="some date" />
+						<datebox />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+	</window>
+</zk>
