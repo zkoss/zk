@@ -2553,7 +2553,7 @@ function () {
 		}
 		if (has && !this.z_isDataHandlerBound) {
 			this.z_isDataHandlerBound = function () {
-				for(var nm in dh)
+				for (var nm in dh)
 					zk.getDataHandler(nm).run(this, dh[nm]);
 			};
 			this.listen({onBind: this.z_isDataHandlerBound});
@@ -3315,7 +3315,7 @@ unbind_: function (skipper, after) {
 		if (attr == 'w') {
 			// feature #ZK-314: zjq.minWidth function return extra 1px in IE9/10/11
 			var wd = zjq.minWidth(wgt);
-			if(zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
+			if (zk.ie > 8 && zk.isLoaded('zul.wgt') && wgt.$instanceof(zul.wgt.Image)) {
 				wd = zk(wgt).offsetWidth();
 			}
 			return wd;

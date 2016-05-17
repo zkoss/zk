@@ -92,8 +92,8 @@ if (!zk.css3) {
 			cns[1].style.height = jq.px0(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
 
 			var stackup = this.stackup;
-			if(opts.stackup) {
-				if(!stackup)
+			if (opts.stackup) {
+				if (!stackup)
 					stackup = this.stackup = jq.newStackup(node, node.id + '-sdwstk', shadow);
 
 				st = stackup.style;

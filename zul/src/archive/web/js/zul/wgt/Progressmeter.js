@@ -29,7 +29,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		 * @param int value
 		 */
 		value: function () {
-			if(this.$n())
+			if (this.$n())
 				this._fixImgWidth();
 		}
 	},

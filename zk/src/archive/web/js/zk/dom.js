@@ -189,7 +189,7 @@ zjq = function (jq) { //ZK extension
 			el = zk.gecko && el != document.body ?
 				_ofsParent(el) : el.offsetParent;
 			if (el) {
-				if(jq.nodeName(el, 'body')) break;
+				if (jq.nodeName(el, 'body')) break;
 				var p = jq(el).css('position');
 				if (p == 'relative' || p == 'absolute') break;
 			}
@@ -847,7 +847,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	 */
 	revisedOffset: function (ofs) {
 		var el = this.jq[0];
-		if(!ofs) {
+		if (!ofs) {
 			if (el.getBoundingClientRect) { // IE and FF3
 				var elst, oldvisi;
 				if (zk.ie < 11 && el.style.display == 'none') {
@@ -1198,7 +1198,7 @@ jq(el).zk.center(); //same as 'center'
 			y -= jq.innerY();
 		}
 		*/
-		switch(where) {
+		switch (where) {
 		case 'before_start':
 			y -= hgh;
 			break;
@@ -1574,7 +1574,7 @@ jq(el).zk.center(); //same as 'center'
 					cls = n ? n.className : '',
 					idOrCls = n ? (n.id ? '#' + n.id : '.' + cls) : '',
 					selector = s ? s : '*';
-				if(idOrCls == '' && selector == '*')
+				if (idOrCls == '' && selector == '*')
 					return this;
 				style.type = 'text/css';
 				
@@ -1786,7 +1786,7 @@ jq(el).zk.center(); //same as 'center'
 				var range = document.selection.createRange();
 				var rangetwo = inp.createTextRange();
 				var stored_range = '';
-				if(inp.type.toLowerCase() == 'text') {
+				if (inp.type.toLowerCase() == 'text') {
 					stored_range = rangetwo.duplicate();
 				} else {
 					stored_range = range.duplicate();
@@ -1819,7 +1819,7 @@ jq(el).zk.center(); //same as 'center'
 			inp.setSelectionRange(start, end);
 		} else if (inp.createTextRange) {
 			var range = inp.createTextRange();
-			if(start != end) {
+			if (start != end) {
 				range.moveEnd('character', end - range.text.length);
 				range.moveStart('character', start);
 			} else {

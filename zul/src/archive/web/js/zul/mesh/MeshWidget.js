@@ -765,7 +765,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					}
 				}
 
-				if(header._visible) {
+				if (header._visible) {
 					//B70-ZK-2559: description as mentioned
 					var n = header.$n();
 					if (n)
@@ -1320,7 +1320,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this._calcSize();
 			if (this.head) {
 				this._fixHeaders(true);/* B50-3315594.zul */
-				for(var w = this.head.firstChild; w; w = w.nextSibling)
+				for (var w = this.head.firstChild; w; w = w.nextSibling)
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
 						return null;
 			}

@@ -78,7 +78,7 @@ function delegateEventFunc (event) {
 	
 	var evt;
 	
-	if(evt = _toMouseEvent(event, touchEvt.changedTouches[0]))
+	if (evt = _toMouseEvent(event, touchEvt.changedTouches[0]))
 		_doEvt(event.type, event, evt);
 }
 zk.copy(zjq, {

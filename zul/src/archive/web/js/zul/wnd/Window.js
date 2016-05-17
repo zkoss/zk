@@ -35,9 +35,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _startmove(dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node;
-		if(el.style.top && el.style.top.indexOf('%') >= 0)
+		if (el.style.top && el.style.top.indexOf('%') >= 0)
 			 el.style.top = el.offsetTop + 'px';
-		if(el.style.left && el.style.left.indexOf('%') >= 0)
+		if (el.style.left && el.style.left.indexOf('%') >= 0)
 			 el.style.left = el.offsetLeft + 'px';
 
 		//ZK-1309: Add a flag to identify is dragging or not in onFloatUp()
@@ -94,7 +94,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		case wgt.$n('min'):
 			return true; //ignore special buttons
 		}
-		if(wgt != (wtar = zk.Widget.$(tar)) && wgt.caption != wtar)
+		if (wgt != (wtar = zk.Widget.$(tar)) && wgt.caption != wtar)
 			return true; //ignore child widget of caption, Bug B50-3166874
 		if (!wgt.isSizable()
 		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0]
@@ -1026,7 +1026,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	setZindex: _zkf,
 	focus_: function (timeout) {
 		var cap = this.caption;
-		if(!zk.mobile) { //Bug ZK-1314: avoid focus on input widget to show keyboard on ipad
+		if (!zk.mobile) { //Bug ZK-1314: avoid focus on input widget to show keyboard on ipad
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				//B65-ZK-1797: avoid focusing on removed widge when enable client ROD
 				if (w.desktop && w != cap && w.focus_(timeout))

@@ -204,7 +204,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		return old;
 	},
 	$n: function (nm) {
-		if(this.isTopmost())
+		if (this.isTopmost())
 			return this.getTree().$n('rows');
 		if (this.firstChild)
 			return nm ? this.firstChild.$n(nm) : this.firstChild.$n();

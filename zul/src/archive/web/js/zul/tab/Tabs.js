@@ -142,7 +142,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._showbutton(false);
 				}
 			}
-		} else if(!tabbox.inAccordionMold()) {
+		} else if (!tabbox.inAccordionMold()) {
 			var cave = this.$n('cave'),
 				sel = tabbox.getSelectedTab(),
 				node = tb ? tb.$n() : (sel ? sel.$n() : null),
@@ -275,7 +275,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			jq(tabbox).removeClass(cls);
 			if (show) {
 				// ZK-1959: the height of arrow should not change when the tabbox add tab
-				if(!tabbox.isVertical() && !tabbox.inAccordionMold()) {
+				if (!tabbox.isVertical() && !tabbox.inAccordionMold()) {
 					var tb = tabbox.toolbar;
 					tabbox.$n('left').style.height = tabbox.$n('right').style.height = '';
 					if (tb)
@@ -363,7 +363,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			}
 			tabs.style.height = jq.px0(zk(tbx).contentHeight() - zk(tabs).marginHeight());
 
-			if(u && d) {
+			if (u && d) {
 				u.style.width = d.style.width = tabs.style.width;
 			}
 		} else {

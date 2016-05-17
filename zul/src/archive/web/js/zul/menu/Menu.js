@@ -385,7 +385,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			this._showContentHandler();
 		} else {
 			if (!this.menupopup.isOpen()) {
-				if(this.isTopmost())
+				if (this.isTopmost())
 					_toggleClickableCSS(this);
 				this.menupopup.open();
 			} else if (this.isTopmost())
@@ -401,7 +401,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 
 		var	topmost = this.isTopmost();
-		if(topmost)
+		if (topmost)
 			_toggleClickableCSS(this);
 		if (topmost && zk.ie < 11 && !jq.isAncestor(this.getAnchor_(), evt.domTarget))
 				return; // don't activate
@@ -490,7 +490,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			menupopup = wgt.menupopup,
 			cls = top ? (!ignoreSeld && menupopup && menupopup.isOpen()) ? wgt.$s('selected') : wgt.$s('hover') : wgt.$s('hover');
 		var anode = jq(n).removeClass(cls);
-		if(top && !(anode.hasClass(wgt.$s('selected')) || anode.hasClass(wgt.$s('hover'))))
+		if (top && !(anode.hasClass(wgt.$s('selected')) || anode.hasClass(wgt.$s('hover'))))
 			_toggleClickableCSS(wgt, true);
 	}
 });

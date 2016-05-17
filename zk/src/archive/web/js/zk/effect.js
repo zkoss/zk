@@ -78,8 +78,8 @@ zk.eff = {
 			w = node.offsetWidth, h = node.offsetHeight,
 			stackup = this.stackup;
 			
-		if(opts.stackup) {
-			if(!stackup)
+		if (opts.stackup) {
+			if (!stackup)
 				stackup = this.stackup = jq.newStackup(node, node.id + '-sdwstk', node);
 
 			var st = stackup.style;

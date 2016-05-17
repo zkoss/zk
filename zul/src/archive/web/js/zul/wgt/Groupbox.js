@@ -184,7 +184,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 		var tt;
 		if (this.getTitle() && (tt = this.$n('title')))
 			this.domListen_(tt, 'onClick', '_doTitleClick');
-		if(zk.ie == 8)
+		if (zk.ie == 8)
 			zk(this).redoCSS();
 
 	},

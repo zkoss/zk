@@ -23,7 +23,7 @@ zul.inp.SimpleDoubleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		var cstList = cst.replace(/ +/g,' ').split(/[, ]/),
 			len = cstList.length,
 		isSpinner;
-		for(var i = 0; i < len + 1; i++) {
+		for (var i = 0; i < len + 1; i++) {
 			if (cstList[i] == 'min') {
 				this._min = cstList[++i] * 1;
 				isSpinner = true;
@@ -45,7 +45,7 @@ zul.inp.SimpleDoubleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 							this._min + ' ~ ' + this._max : '>= ' + this._min : '<= ' + this._max + ')';
 				}
 		}
-		if(msg)
+		if (msg)
 			return msg;
 		else
 			return this.$supers('validate',arguments);

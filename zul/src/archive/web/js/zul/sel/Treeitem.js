@@ -383,7 +383,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		this.$supers('replaceWidget', arguments);
 	},
 	_removeChildHTML: function (n) {
-		for(var cn, w = this.firstChild; w; w = w.nextSibling) {
+		for (var cn, w = this.firstChild; w; w = w.nextSibling) {
 			if (w != this.treerow && (cn = w.$n()))
 				w.removeHTML_(cn);
 		}

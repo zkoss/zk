@@ -307,7 +307,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			}
 		}
 
-		if(focusInfo && focusInfo.uuid === this.uuid) {
+		if (focusInfo && focusInfo.uuid === this.uuid) {
 			var pos = focusInfo.lastPos,
 				zinp = zk(input[focusInfo.inpIdx]);
 			zinp.focus();
@@ -344,13 +344,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	go: function (anc, pgno, inp) {
 		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$(anc);
 		if (wgt && wgt.getActivePage() != pgno) {
-			if(inp) {
+			if (inp) {
 				var uuid = wgt.uuid,
 					focusInfo = zul.mesh.Paging._autoFocusInfo = {uuid: uuid};
 				focusInfo.lastPos = zk(inp).getSelectionRange();
 				// concern about _pagingPosition equals "both"
 				jq(jq.$$(uuid, 'real')).each(function (idx) {
-					if(this == inp) {
+					if (this == inp) {
 						focusInfo.inpIdx = idx;
 						return false;
 					}
@@ -367,7 +367,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			return;
 
 		var code = evt.keyCode;
-		switch(code){
+		switch (code){
 		case 48:case 96://0
 		case 49:case 97://1
 		case 50:case 98://2

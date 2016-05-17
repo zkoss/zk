@@ -588,7 +588,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	doKeyDown_: function (evt) {
 		if (this.getCtrlKeys() || this.isListen('onOK') || this.isListen('onCancel')) {
 			//B70-ZK-2532: if afterKeyDown_ doesn't handle evt, then propagate to super
-			if(!this.afterKeyDown_(evt))
+			if (!this.afterKeyDown_(evt))
 				this.$supers('doKeyDown_', arguments);
 		} else
 			this.$supers('doKeyDown_', arguments);

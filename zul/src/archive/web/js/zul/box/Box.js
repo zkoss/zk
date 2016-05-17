@@ -45,7 +45,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		//when align is stretched must release the children, then must "shrink td" manually
 		var vert = this.isVertical();
 		if (this._isStretchAlign() || (vert && this._nhflex) || (!vert && this._nvflex)) {
-			for(var child = this.firstChild; child; child = child.nextSibling) {
+			for (var child = this.firstChild; child; child = child.nextSibling) {
 				if (child.isVisible()) {
 					var c = child.$n();
 					if (vert) {
@@ -507,11 +507,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		}
 
 		// Bug 3185686, B50-ZK-452
-		if(zkp.hasVScroll()) //with vertical scrollbar
+		if (zkp.hasVScroll()) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
 
 		// B50-3312936.zul
-		if(zkp.hasHScroll()) //with horizontal scrollbar
+		if (zkp.hasHScroll()) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
 
 		for (; xc; xc = xc.nextSibling) {
@@ -771,7 +771,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				zktd = zk(td),
 				tdsz = vert ? zktd.revisedWidth(td.offsetWidth) : zktd.revisedHeight(td.offsetHeight);
 
-			for(var child = this.firstChild, c; child; child = child.nextSibling) {
+			for (var child = this.firstChild, c; child; child = child.nextSibling) {
 				if (child.isVisible() && (c = child.$n())) {
 					//20100120, Henri Chen: Strange! After set c.style.height/width, the margin is gone in safari/chrome
 					if (vert)
@@ -830,7 +830,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (zk(d).isVisible())
 				if (vert) {
 					var diff = d.offsetHeight;
-					if(d.id && !d.id.endsWith('-chdex2')) { //TR
+					if (d.id && !d.id.endsWith('-chdex2')) { //TR
 						//Bug 1917905: we have to manipulate height of TD in Safari
 						if (d.cells.length) {
 							var c = d.cells[0];
@@ -845,7 +845,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					var diff = d.offsetWidth;
 					//!sizes  B50-ZK-887: hbox's widths properties specified in Chrome is not precise
 					//if user set the widths , we freeze the with directly
-					if(!sizes && d.id && !d.id.endsWith('-chdex2')) //TD
+					if (!sizes && d.id && !d.id.endsWith('-chdex2')) //TD
 						d.style.width = zk(d).revisedWidth(i ? diff : total) + 'px';
 					total -= diff;
 				}

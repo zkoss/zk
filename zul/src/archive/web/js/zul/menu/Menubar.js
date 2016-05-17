@@ -226,7 +226,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 					movePos = currScrollLeft - (currScrollLeft - preChild.offsetLeft);
 					if (isNaN(movePos)) return;
 					self._runId = setInterval(function () {
-						if(!self._moveTo(body, movePos)) {
+						if (!self._moveTo(body, movePos)) {
 							clearInterval(self._runId);
 							self._runId = null;
 						}

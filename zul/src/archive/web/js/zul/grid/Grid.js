@@ -59,7 +59,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		 * @since 5.0.7
 		 */
 		emptyMessage: function (msg) {
-			if(this.desktop)
+			if (this.desktop)
 				jq(this.$n('empty')).html(msg);
 		}
 	},

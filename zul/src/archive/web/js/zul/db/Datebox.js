@@ -27,7 +27,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			n = db.$n(),
 			inp = db.getInputNode();
 
-		if(pp) {
+		if (pp) {
 			zk(pp).position(n, 'after_start', {dodgeRef: n});
 			db._pop.syncShadow();
 			if (!silent)
@@ -224,7 +224,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		lenient: null,
 		localizedSymbols: [
 			function (val) {
-				if(val) {
+				if (val) {
 					if (!globallocalizedSymbols[val[0]])
 						globallocalizedSymbols[val[0]] = val[1];
 					return globallocalizedSymbols[val[0]];
@@ -358,7 +358,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, this._value, this._localizedSymbols);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			// B70-ZK-2382 escape shouldn't be used in format including hour
-			if(!format.match(/[HkKh]/))
+			if (!format.match(/[HkKh]/))
 				d = new zk.fmt.Calendar().escapeDSTConflict(d);
 			return d;
 		}
@@ -686,7 +686,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 
 			// B70-ZK-2382 escape shouldn't be used in format including hour
-			if(!fmt.match(/[HkKh]/))
+			if (!fmt.match(/[HkKh]/))
 				date = cal.escapeDSTConflict(date);
 		} else if (oldDate) {
 			date = new Date(date.getFullYear(), date.getMonth(),
@@ -696,7 +696,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			//since Date object will adjust month if date larger than max one
 
 			// B70-ZK-2382 escape shouldn't be used in format including hour
-			if(!this.getFormat().match(/[HkKh]/))
+			if (!this.getFormat().match(/[HkKh]/))
 				date = cal.escapeDSTConflict(date);
 		}
 
@@ -709,7 +709,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 			// Bug 3122159 and 3301374
 			evt.data.value = date;
-			if(!_equalDate(date, oldDate))
+			if (!_equalDate(date, oldDate))
 				db.updateChange_();
 		}
 		evt.stop();
@@ -794,7 +794,7 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 		var	date = db.coerceFromString_(dateTime, pattern);
 
 		// do nothing if date converted from String is not a valid Date object e.g. dateTime = "2014/10/10 1 :  :     "
-		if(date instanceof Date) {
+		if (date instanceof Date) {
 			db.getInputNode().value = evt.data.value
 				= db.coerceToString_(date);
 			db.fire(evt.name, evt.data); //onChanging

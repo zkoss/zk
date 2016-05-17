@@ -38,7 +38,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (pp) {
 				var $pp = jq(pp),
 					wd = jq(wgt).width();
-				if($pp.width() < wd) {
+				if ($pp.width() < wd) {
 					$pp.width(wd - zk(pp).padBorderWidth());
 
 					// popup onShow()

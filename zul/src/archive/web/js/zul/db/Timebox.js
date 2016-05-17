@@ -226,7 +226,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		},
 		localizedSymbols: [
 			function (val) {
-				if(val) {
+				if (val) {
 					if (!globallocalizedSymbols[val[0]])
 						globallocalizedSymbols[val[0]] = val[1];
 					return globallocalizedSymbols[val[0]];
@@ -336,7 +336,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// control input keys only when no custom unformater is given
 		if (!Timebox._unformater) {
 			var code = evt.keyCode;
-			switch(code){
+			switch (code){
 			case 48:case 96://0
 			case 49:case 97://1
 			case 50:case 98://2
@@ -613,7 +613,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
-		if(this.timerId) {
+		if (this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}

@@ -45,13 +45,13 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 			if (valind >= 0 && valind < rawind) {
 				vallen -= valind;
 				len -= rawind;
-				for(var zerolen = rawind - valind; zerolen-- > 0;)
+				for (var zerolen = rawind - valind; zerolen-- > 0;)
 					valstr = '0' + valstr;
 			}
 
 			//post zeros
 			if (vallen < len) {
-				for(var zerolen = len - vallen; zerolen-- > 0;)
+				for (var zerolen = len - vallen; zerolen-- > 0;)
 					valstr += '0';
 			}
 
@@ -62,7 +62,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 			}
 		}
 
-		if(this._rounding == 7 && (this._errmsg/*server has to clean up*/
+		if (this._rounding == 7 && (this._errmsg/*server has to clean up*/
 			|| zk.fmt.Number.isRoundingRequired(value, this.getFormat(), this._localizedSymbols)))
 					return {server: true};
 
@@ -70,7 +70,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.NumberInputWidget, {
 		return val;
 	},
 	_allzero: function (val) {
-		for(var len = val.length; len-- > 0;)
+		for (var len = val.length; len-- > 0;)
 			if (val.charAt(len) != '0') return false;
 		return true;
 	},

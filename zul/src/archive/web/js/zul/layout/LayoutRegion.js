@@ -560,7 +560,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					jq(real).hide();
 				}
 
-				if(!this._visible) {
+				if (!this._visible) {
 					var colled = this.$n('colled'),
 						real = this.$n('real');
 					jq(real).hide();
@@ -904,7 +904,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_reszSp2: zk.$void,
 	getIconClass_: function (collapsed) {
 		var BL = zul.layout.Borderlayout;
-		switch(this.getPosition()) {
+		switch (this.getPosition()) {
 		case BL.NORTH:
 			return collapsed ? 'z-icon-chevron-down' : 'z-icon-chevron-up';
 		case BL.SOUTH:

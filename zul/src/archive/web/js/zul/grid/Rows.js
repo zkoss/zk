@@ -94,12 +94,12 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		}
 	},
 	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
-		if(child._renderdefer) {
+		if (child._renderdefer) {
 			var scOdd = this.getGrid().getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
 
 			this.$supers('replaceChildHTML_', arguments);
-			if(isOdd) jq(child).addClass(scOdd);
+			if (isOdd) jq(child).addClass(scOdd);
 		} else
 			this.$supers('replaceChildHTML_', arguments);
 	},

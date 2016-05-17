@@ -189,9 +189,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var screenY = jq.innerY();
 		var screenHeight = jq.innerHeight();
 
-		if(screenY + screenHeight - inpTop - inpHeight > ppHeight) {
+		if (screenY + screenHeight - inpTop - inpHeight > ppHeight) {
 			$pp.position(inp, 'after_start');
-		} else if(inpTop - screenY > ppHeight) {
+		} else if (inpTop - screenY > ppHeight) {
 			$pp.position(inp, 'before_start');
 		} else {
 			$pp.position(inp, 'after_start', {overflow: true});
@@ -241,7 +241,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inpBottom = inpDim.top + inpDim.height,
 			inpRight = inpDim.left + inpDim.width;
 
-		if(ppRelativeBottom >= jq.innerHeight()
+		if (ppRelativeBottom >= jq.innerHeight()
 			|| (ppDim.top < inpDim.top && ppBottom < inpDim.top)
 			|| ppDim.left < inpRight
 			&& ppRight > inpDim.left

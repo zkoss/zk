@@ -219,9 +219,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var cnt = 2;
 		var msg;
 		if (!this.isSelected())	return this.getLabel();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			var item = iterator.next();
-			if(item.isSelected()) {
+			if (item.isSelected()) {
 				var label = item.getLabel();
 				if (label.length > 9)
 					label = label.substring(0, 9) + '...';

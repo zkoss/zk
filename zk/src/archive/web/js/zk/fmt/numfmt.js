@@ -81,7 +81,7 @@ zk.fmt.Number = {
 	},
 	//Test if rounding is required (used if Rounding is UNNECESSARY
 	isRoundingRequired: function (val, fmt, localizedSymbols) {
-		if(!fmt || val == null || val == '')
+		if (!fmt || val == null || val == '')
 			return false;
 		
 		var useMinsuFmt;
@@ -105,7 +105,7 @@ zk.fmt.Number = {
 			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,
 			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei + 1), 10));
 			
-		if(ei > 0) valStr = valStr.substring(0, ei);
+		if (ei > 0) valStr = valStr.substring(0, ei);
 		if (shift > 0) {
 			if (indVal >= 0) { //with dot
 				if (valFixed > shift) {
@@ -117,13 +117,13 @@ zk.fmt.Number = {
 		} else if (shift < 0) {
 			// ZK-1737 varStr is not correct variable name
 			var nind = (indVal < 0 ? valStr.length : indVal) + shift;
-			if(nind > 0) {
+			if (nind > 0) {
 				valFixed -= shift;
 			} else {
 				//TODO finetune logic to prevent string operation.
-				if(indVal >= 0)
+				if (indVal >= 0)
 					valStr = valStr.substring(0, indVal) + valStr.substring(indVal + 1);
-				for(; nind++ < 0;)
+				for (; nind++ < 0;)
 					valStr = '0' + valStr;
 				valStr = '0.' + valStr;
 				valFixed = valStr.length - 2;
@@ -133,7 +133,7 @@ zk.fmt.Number = {
 		return valFixed > fixed;
 	},
 	rounding: function (valStr, ri, rounding, minus) {
-		switch(rounding) {
+		switch (rounding) {
 			case 0: //UP
 				valStr = up(valStr, ri);
 				break;
@@ -191,7 +191,7 @@ zk.fmt.Number = {
 			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,
 			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei + 1), 10));
 			
-		if(ei > 0) valStr = valStr.substring(0, ei);
+		if (ei > 0) valStr = valStr.substring(0, ei);
 		if (shift > 0) {
 			if (indVal >= 0) { //with dot
 				if (valFixed > shift) {
@@ -200,27 +200,27 @@ zk.fmt.Number = {
 					indVal += shift;
 				} else {
 					valStr = valStr.substring(0, indVal) + valStr.substring(indVal + 1);
-					for(var len = shift - valFixed; len-- > 0;)
+					for (var len = shift - valFixed; len-- > 0;)
 						valStr = valStr + '0';
 					indVal = -1;
 					valFixed = 0;
 				}
 			} else { //without dot
-				for(var len = shift; len-- > 0;)
+				for (var len = shift; len-- > 0;)
 					valStr = valStr + '0';
 			}
 		} else if (shift < 0) {
 			// ZK-1737 varStr is not correct variable name
 			var nind = (indVal < 0 ? valStr.length : indVal) + shift;
-			if(nind > 0) {
+			if (nind > 0) {
 				valStr = valStr.substring(0, nind) + '.'
 					+ (indVal < 0 ? valStr.substring(nind) : valStr.substring(nind, indVar) + valStr.substring(indVar + 1));
 				valFixed -= shift;
 				indVal = nind;
 			} else {
-				if(indVal >= 0)
+				if (indVal >= 0)
 					valStr = valStr.substring(0, indVal) + valStr.substring(indVal + 1);
-				for(; nind++ < 0;)
+				for (; nind++ < 0;)
 					valStr = '0' + valStr;
 				valStr = '0.' + valStr;
 				indVal = 1;
@@ -232,7 +232,7 @@ zk.fmt.Number = {
 		if (valFixed <= fixed) {
 			if (indVal == -1)
 				valStr += '.';
-			for(var len = fixed - valFixed; len-- > 0;)
+			for (var len = fixed - valFixed; len-- > 0;)
 				valStr = valStr + '0';
 		} else { //preprocess for rounding
 			var ri = indVal + fixed + 1;
@@ -362,7 +362,7 @@ zk.fmt.Number = {
 					
 				if (cc == '#' || cc == '0')
 					pure += cc;
-				else if(cc == '.') {
+				else if (cc == '.') {
 					if (purejdot < 0)
 						purejdot = pure.length;
 					if (jdot < 0)
@@ -376,7 +376,7 @@ zk.fmt.Number = {
 	},
 	_extraFmtIndex: function (fmt) {
 		var j = 0;
-		for(var len = fmt.length; j < len; ++j) {
+		for (var len = fmt.length; j < len; ++j) {
 			var c = fmt.charAt(j);
 			if (c == '#' || c == '0' || c == ',')
 				break;
@@ -386,7 +386,7 @@ zk.fmt.Number = {
 	_removePrefixSharps: function (val, localizedSymbols) {
 		var ret = '',
 			sharp = true;
-		for(var len = val.length, j = 0; j < len; ++j) {
+		for (var len = val.length, j = 0; j < len; ++j) {
 			var cc = val.charAt(j);
 			if (sharp) {
 				if (cc == '#' || cc == localizedSymbols.GROUPING) continue;

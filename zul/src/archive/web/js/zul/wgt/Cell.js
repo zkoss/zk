@@ -95,7 +95,7 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 	_colHtmlPre: function () {
 		var s = '',
 			p = this.parent;
-		if(zk.isLoaded('zkex.grid') && p.$instanceof(zkex.grid.Group) && this == p.firstChild)
+		if (zk.isLoaded('zkex.grid') && p.$instanceof(zkex.grid.Group) && this == p.firstChild)
 			s += p.domContent_();
 		return s;
 	},

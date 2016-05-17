@@ -565,7 +565,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	clearSelection: function () {
 		if (this._selItems.length) {
-			for(var item;(item = this._selItems.pop());)
+			for (var item;(item = this._selItems.pop());)
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 			this._updHeaderCM();
@@ -965,7 +965,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			offs = [oldLeft ? oldLeft : 0, oldTop ? oldTop : 0];
 
 		this.fixAnchor_(offs, focusEl);
-		if(this._anchorTop != offs[1] || this._anchorLeft != offs[0]) {
+		if (this._anchorTop != offs[1] || this._anchorLeft != offs[0]) {
 			//ZK-798, to prevent firing onAnchorPos too many times when moust over a rod listbox,
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
 			this._anchorTop = offs[1];
@@ -1100,7 +1100,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				}
 				this._changeSelect(selItem, false);
 				if (row)
-					if(!skipFocus) this._setFocus(selItem, false);
+					if (!skipFocus) this._setFocus(selItem, false);
 			}
 			if (row && !skipFocus) this._unsetFocusExcept(row);
 		}
@@ -1122,7 +1122,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		this._changeSelect(row, toSel);
-		if(!skipFocus) this._focus(row);
+		if (!skipFocus) this._focus(row);
 
 		//notify server
 		this.fireOnSelect(row, evt);

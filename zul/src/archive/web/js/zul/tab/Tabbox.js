@@ -415,7 +415,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 				pnls = tabbox.getTabpanels(),
 				fc = pnls.firstChild;
 
-			for(var c = fc; c; c = c.nextSibling) {
+			for (var c = fc; c; c = c.nextSibling) {
 				var panel = c ? c.getCaveNode() : null;
 				if (!panel)
 					return;
@@ -426,7 +426,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 				}
 			}
 
-			for(var c = fc; c; c = c.nextSibling) {
+			for (var c = fc; c; c = c.nextSibling) {
 				var panel = c.getCaveNode();
 				if (panel)
 					panel.style.height = jq.px0(max);

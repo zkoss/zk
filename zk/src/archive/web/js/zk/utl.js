@@ -137,7 +137,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				var tmp = [],
 					re = new RegExp(quote, 'g'),
 					key = '', t, pair;
-				while((t = ps.shift()) !== undefined) {
+				while ((t = ps.shift()) !== undefined) {
 					if ((pair = (key += t).match(re)) && pair.length != 1) {
 						if (key)
 							tmp.push(key);
@@ -516,7 +516,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 
 				var j = url.indexOf('#');
 				//bug 3363687, only if '#" exist, has to reload()
-				if(j < 0)
+				if (j < 0)
 					return;
 				
 				var	un = j >= 0 ? url.substring(0, j) : url,

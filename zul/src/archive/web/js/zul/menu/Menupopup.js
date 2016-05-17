@@ -129,7 +129,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				n.style.top = jq.px0(zk.parseInt(n.style.top)
 							+ zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
 
-			while(mp && !mp.$instanceof(zul.menu.Menupopup))
+			while (mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
 
 			/* ZK-2040: should sync position
@@ -248,7 +248,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.zsync();
 		var anc = this.$n('a');
 		if (anc) {
-			if(zk(anc).isRealVisible()) {
+			if (zk(anc).isRealVisible()) {
 				anc.focus();
 				zk.currentFocus = this; //Bug 2807475: (IE only) s.t. _docMouseDown will focus later (since menupop becomes invisible)
 			}

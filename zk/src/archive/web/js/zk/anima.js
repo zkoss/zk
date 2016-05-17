@@ -49,14 +49,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	function _saveProp(self, set) {
 		var ele = self.jq;
-		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
+		for (var i = set.length; i--;)
+			if (set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
 		return self;
 	}
 	function _restoreProp(self, set) {
 		var ele = self.jq;
-		for(var i = set.length; i--;)
-			if(set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
+		for (var i = set.length; i--;)
+			if (set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
 		return self;
 	}
 	function _checkAnimated(self, wgt, opts, anima) {
@@ -134,8 +134,8 @@ zk.copy(zjq.prototype, {
 		var animationSpeed = jq(this.$().$n()).data('animationspeed'),
 			jqSpeed = jq.fx.speeds;
 		
-		if(typeof animationSpeed === 'string') {
-			if(jqSpeed[animationSpeed])
+		if (typeof animationSpeed === 'string') {
+			if (jqSpeed[animationSpeed])
 				return jqSpeed[animationSpeed];
 			else
 				animationSpeed = parseInt(animationSpeed);

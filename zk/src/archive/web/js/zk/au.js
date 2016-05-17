@@ -234,7 +234,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 			ajaxReq = ajaxReqInf = null;
 			try {
-				if(req && typeof req.abort == 'function') req.abort();
+				if (req && typeof req.abort == 'function') req.abort();
 			} catch (e2) {
 			}
 
@@ -280,7 +280,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		if (!dt) {
 			//original dt is decided by aureq.target.desktop, so start by it's parent.
 			var wgt = aureq.target.parent;
-			while(!wgt.desktop) {
+			while (!wgt.desktop) {
 				wgt = wgt.parent;
 			}
 			dt = wgt.desktop;
@@ -323,7 +323,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		} catch (e) {
 			//handle error
 			try {
-				if(typeof req.abort == 'function') req.abort();
+				if (typeof req.abort == 'function') req.abort();
 			} catch (e2) {
 			}
 
@@ -817,7 +817,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			portlet2Namespace = '';
 			
 		// B65-ZK-2210: add porlet namespace
-		if(zk.portlet2Data && zk.portlet2Data[dt.id]) {
+		if (zk.portlet2Data && zk.portlet2Data[dt.id]) {
 			portlet2Namespace = zk.portlet2Data[dt.id].namespace || '';
 		}
 		var content = j ? '' : portlet2Namespace + 'dtid=' + dt.id;
@@ -909,7 +909,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 		
 		// B65-ZK-2210: get resourceURL by desktop id
-		if(zk.portlet2Data && zk.portlet2Data[dt.id]) {
+		if (zk.portlet2Data && zk.portlet2Data[dt.id]) {
 			requri = zk.portlet2Data[dt.id].resourceURL;
 		}
 		
@@ -1084,7 +1084,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			return $eval(msg.substring(7));
 
 		// ZK-2397: prevent from showing reload dialog again while browser is reloading
-		if(zk._isReloadingInObsolete)
+		if (zk._isReloadingInObsolete)
 			return;
 		
 		var v = zk.Desktop.$(dtid);

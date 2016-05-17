@@ -74,7 +74,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				//will update it later in onResponse with _fixsz
 				if (pp) {
 					pp.style.width = 'auto';
-					if(zk.webkit) this._shallRedoCss = true;
+					if (zk.webkit) this._shallRedoCss = true;
 				}
 			}
 			this._repos = false;
@@ -276,7 +276,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 					}
 				}
 				var nextitem = this._next(item, bUp);
-				if(item == nextitem) break;  //prevent infinite loop
+				if (item == nextitem) break;  //prevent infinite loop
 				if ((item = nextitem) == beg)
 					break;
 			}

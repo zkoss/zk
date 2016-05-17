@@ -1027,7 +1027,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	onChildVisible_: function (child) {
 		this.$supers('onChildVisible_', arguments);
-		if((child == this.tbar || child == this.bbar || child == this.fbar) && this.$n())
+		if ((child == this.tbar || child == this.bbar || child == this.fbar) && this.$n())
 			this._fixHgh();
 	},
 	//@Override, Bug ZK-1524: caption children should not considered.
@@ -1085,9 +1085,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		dg.control._hideShadow();
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node;
-		if(el.style.top && el.style.top.indexOf('%') >= 0)
+		if (el.style.top && el.style.top.indexOf('%') >= 0)
 			 el.style.top = el.offsetTop + 'px';
-		if(el.style.left && el.style.left.indexOf('%') >= 0)
+		if (el.style.left && el.style.left.indexOf('%') >= 0)
 			 el.style.left = el.offsetLeft + 'px';
 		//zkau.closeFloats(cmp, handle);
 	},

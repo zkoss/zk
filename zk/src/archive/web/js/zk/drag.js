@@ -38,14 +38,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _docmousemove(devt) {
-		if(!_activedg || _activedg.dead) return;
+		if (!_activedg || _activedg.dead) return;
 
 		var evt = jq.Event.zk(devt),
 			pt = [evt.pageX, evt.pageY];
 		
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)
-		if(_lastPt && _lastPt[0] == pt[0]
+		if (_lastPt && _lastPt[0] == pt[0]
 		&& _lastPt[1] == pt[1])
 			return;
 
@@ -56,13 +56,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			//IMG (but still happens if dragging fast)
 	}
 	function _docmouseup(devt) {
-		if(_actTmout) {
+		if (_actTmout) {
 			clearTimeout(_actTmout);
 			_actTmout = null;
 		}
 		var evt = jq.Event.zk(devt),
 			adg = _activedg;
-		if(!adg) {
+		if (!adg) {
 			// B50-ZK-221: need to clear _dnEvt here
 			if (evt.which == 1)
 				_dnEvt = null;
@@ -73,13 +73,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		adg._endDrag(evt);
 		if (evt.domStopped) devt.stop();
 		// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
-		if(adg._suicide) {
+		if (adg._suicide) {
 			adg._suicide = false;
 			adg.destroy();
 		}
 	}
 	function _dockeypress(devt) {
-		if(_activedg) _activedg._keypress(devt);
+		if (_activedg) _activedg._keypress(devt);
 	}
 
 	//default effect//
@@ -330,10 +330,10 @@ String scroll; //DOM Element's ID</code></pre>
 				opts.starteffect = _defStartEffect;
 		}
 
-		if(opts.handle) this.handle = jq(opts.handle, zk)[0];
-		if(!this.handle) this.handle = node;
+		if (opts.handle) this.handle = jq(opts.handle, zk)[0];
+		if (!this.handle) this.handle = node;
 
-		if(opts.scroll && !opts.scroll.scrollTo && !opts.scroll.outerHTML) {
+		if (opts.scroll && !opts.scroll.scrollTo && !opts.scroll.outerHTML) {
 			opts.scroll = jq(opts.scroll, zk)[0];
 			this._isScrollChild = zUtl.isAncestor(opts.scroll, node);
 		}
@@ -347,7 +347,7 @@ String scroll; //DOM Element's ID</code></pre>
 				.bind('dragstart', _disableDragStart);
 
 		//register
-		if(_drags.length == 0)
+		if (_drags.length == 0)
 			jq(document).bind('zmouseup', _docmouseup)
 				.bind('zmousemove', _docmousemove)
 				.keypress(_dockeypress);
@@ -356,7 +356,7 @@ String scroll; //DOM Element's ID</code></pre>
 	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
 	destroy: function () {
-		if(this.dragging) {
+		if (this.dragging) {
 			// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
 			// destroy later
 			this._suicide = true;
@@ -367,7 +367,7 @@ String scroll; //DOM Element's ID</code></pre>
 
 		//unregister
 		_drags.$remove(this);
-		if(_drags.length == 0)
+		if (_drags.length == 0)
 			jq(document).unbind('zmouseup', _docmouseup)
 				.unbind('zmousemove', _docmousemove)
 				.unbind('keypress', _dockeypress);
@@ -403,7 +403,7 @@ String scroll; //DOM Element's ID</code></pre>
 
 		var node = this.node,
 			opt;
-		if(opt = this.opts.ghosting)
+		if (opt = this.opts.ghosting)
 			if (typeof opt == 'function') {
 				this.delta = this._currentDelta();
 				this.orgnode = this.node;
@@ -435,7 +435,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		this.orgZ = -1;
-		if(opt = this.opts.zIndex) { //after ghosting
+		if (opt = this.opts.zIndex) { //after ghosting
 			if (typeof opt == 'function')
 				opt = opt(this);
 			if (opt >= 0) {
@@ -444,7 +444,7 @@ String scroll; //DOM Element's ID</code></pre>
 			}
 		}
 
-		if(this.opts.scroll) {
+		if (this.opts.scroll) {
 			if (this.opts.scroll == window) {
 				var where = this._getWndScroll(this.opts.scroll);
 				this.orgScrlLeft = where.left;
@@ -455,7 +455,7 @@ String scroll; //DOM Element's ID</code></pre>
 			}
 		}
 
-		if(this.opts.starteffect)
+		if (this.opts.starteffect)
 			this.opts.starteffect(this, evt);
 	},
 	_syncStackup: function () {
@@ -471,7 +471,7 @@ String scroll; //DOM Element's ID</code></pre>
 	},
 
 	_updateDrag: function (pt, evt) {
-		if(!this.dragging) {
+		if (!this.dragging) {
 			var v = this.opts.initSensitivity;
 			if (v && pt[0] <= _initPt[0] + v && pt[0] >= _initPt[0] - v
 			&& pt[1] <= _initPt[1] + v && pt[1] >= _initPt[1] - v)
@@ -484,7 +484,7 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.opts.change) this.opts.change(this, pt, evt);
 		this._syncStackup();
 
-		if(this.opts.scroll) {
+		if (this.opts.scroll) {
 			this._stopScrolling();
 
 			var p;
@@ -501,15 +501,15 @@ String scroll; //DOM Element's ID</code></pre>
 
 			var speed = [0,0],
 				v = this.opts.scrollSensitivity;
-			if(pt[0] < (p[0] + v)) speed[0] = pt[0] - (p[0] + v);
-			if(pt[1] < (p[1] + v)) speed[1] = pt[1] - (p[1] + v);
-			if(pt[0] > (p[2] - v)) speed[0] = pt[0] - (p[2] - v);
-			if(pt[1] > (p[3] - v)) speed[1] = pt[1] - (p[3] - v);
+			if (pt[0] < (p[0] + v)) speed[0] = pt[0] - (p[0] + v);
+			if (pt[1] < (p[1] + v)) speed[1] = pt[1] - (p[1] + v);
+			if (pt[0] > (p[2] - v)) speed[0] = pt[0] - (p[2] - v);
+			if (pt[1] > (p[3] - v)) speed[1] = pt[1] - (p[3] - v);
 			this._startScrolling(speed);
 		}
 
 		// fix AppleWebKit rendering
-		if(navigator.appVersion.indexOf('AppleWebKit') > 0) window.scrollBy(0,0);
+		if (navigator.appVersion.indexOf('AppleWebKit') > 0) window.scrollBy(0,0);
 
 		evt.stop();
 	},
@@ -533,7 +533,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		var node = this.node;
-		if(this.opts.ghosting)
+		if (this.opts.ghosting)
 			if (typeof this.opts.ghosting == 'function') {
 				if (this.opts.endghosting)
 					this.opts.endghosting(this, this.orgnode);
@@ -553,22 +553,22 @@ String scroll; //DOM Element's ID</code></pre>
 
 		var pt = [evt.pageX, evt.pageY];
 		var revert = this.opts.revert;
-		if(revert && typeof revert == 'function')
+		if (revert && typeof revert == 'function')
 			revert = revert(this, pt, evt);
 
 		var d = this._currentDelta(),
 			d2 = this.delta;
-		if(revert && this.opts.reverteffect) {
+		if (revert && this.opts.reverteffect) {
 			this.opts.reverteffect(this,
 				[d[0] - this.delta[0], d[1] - this.delta[1]]);
 		} else {
 			this.delta = d;
 		}
 
-		if(this.orgZ != -1)
+		if (this.orgZ != -1)
 			node.style.zIndex = this.orgZ;
 
-		if(this.opts.endeffect)
+		if (this.opts.endeffect)
 			this.opts.endeffect(this, evt);
 
 		var wgt = this.control;
@@ -625,14 +625,14 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	},
 	_keypress: function (devt) {
-		if(devt.keyCode == 27) {
+		if (devt.keyCode == 27) {
 			this._finishDrag(jq.Event.zk(devt), false);
 			devt.stop();
 		}
 	},
 
 	_endDrag: function (evt) {
-		if(this.dragging) {
+		if (this.dragging) {
 			this._stopScrolling();
 			this._finishDrag(evt, true);
 			evt.stop();
@@ -645,7 +645,7 @@ String scroll; //DOM Element's ID</code></pre>
 			$node = zk(node),
 			pos = $node.cmOffset(),
 			opts = this.opts;
-		if(opts.ghosting) {
+		if (opts.ghosting) {
 			var r = $node.scrollOffset();
 			pos[0] += r[0] - this._innerOfs[0]; pos[1] += r[1] - this._innerOfs[1];
 		}
@@ -654,7 +654,7 @@ String scroll; //DOM Element's ID</code></pre>
 			scroll = opts.scroll;
 		pos[0] -= d[0]; pos[1] -= d[1];
 
-		if(scroll && (scroll != window && this._isScrollChild)) {
+		if (scroll && (scroll != window && this._isScrollChild)) {
 			pos[0] -= scroll.scrollLeft - this.orgScrlLeft;
 			pos[1] -= scroll.scrollTop - this.orgScrlTop;
 		}
@@ -663,11 +663,11 @@ String scroll; //DOM Element's ID</code></pre>
 			point[1] - pos[1] - this.offset[1]],
 			snap = opts.snap;
 
-		if(snap)
-			if(typeof snap == 'function') {
+		if (snap)
+			if (typeof snap == 'function') {
 				p = snap(this, p);
 			} else {
-				if(snap instanceof Array) {
+				if (snap instanceof Array) {
 					p = [Math.round(p[0] / snap[0]) * snap[0],
 						Math.round(p[1] / snap[1]) * snap[1]];
 				} else {
@@ -692,24 +692,24 @@ String scroll; //DOM Element's ID</code></pre>
 			style.top = jq.px(p[1]);
 		} else {
 			p = this.snap_(p, opts);
-			if((!opts.constraint) || (opts.constraint == 'horizontal'))
+			if ((!opts.constraint) || (opts.constraint == 'horizontal'))
 				style.left = jq.px(p[0]);
-			if((!opts.constraint) || (opts.constraint == 'vertical'))
+			if ((!opts.constraint) || (opts.constraint == 'vertical'))
 				style.top = jq.px(p[1]);
 		}
 
-		if(style.visibility == 'hidden') style.visibility = ''; // fix gecko rendering
+		if (style.visibility == 'hidden') style.visibility = ''; // fix gecko rendering
 	},
 
 	_stopScrolling: function () {
-		if(this.scrollInterval) {
+		if (this.scrollInterval) {
 			clearInterval(this.scrollInterval);
 			this.scrollInterval = null;
 			_lastScrlPt = null;
 		}
 	},
 	_startScrolling: function (speed) {
-		if(speed[0] || speed[1]) {
+		if (speed[0] || speed[1]) {
 			this.scrollSpeed = [speed[0] * this.opts.scrollSpeed,speed[1] * this.opts.scrollSpeed];
 			this.lastScrolled = new Date();
 			this.scrollInterval = setInterval(this.proxy(this._scroll), 10);
@@ -720,7 +720,7 @@ String scroll; //DOM Element's ID</code></pre>
 		var current = new Date(),
 			delta = current - this.lastScrolled;
 		this.lastScrolled = current;
-		if(this.opts.scroll == window) {
+		if (this.opts.scroll == window) {
 			if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
 				var o = this._getWndScroll(this.opts.scroll),
 					d = delta / 1000;
@@ -744,7 +744,7 @@ String scroll; //DOM Element's ID</code></pre>
 			this._draw(_lastScrlPt);
 		}
 
-		if(this.opts.change) {
+		if (this.opts.change) {
 			var devt = window.event ? jq.event.fix(window.event) : null,
 				evt = devt ? jq.Event.zk(devt) : null;
 			this.opts.change(this,

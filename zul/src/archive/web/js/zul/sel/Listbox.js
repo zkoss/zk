@@ -81,7 +81,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		 * @since 5.0.7
 		 */
 		emptyMessage: function (msg) {
-			if(this.desktop)
+			if (this.desktop)
 				jq(this.$n('empty')).html(msg);
 		}
 	},
@@ -175,7 +175,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			}
 		}
 		setTimeout(function () {
-			if(self.desktop) {
+			if (self.desktop) {
 				if (canInitScrollbar) {
 					self.refreshBar_();
 				}
@@ -395,12 +395,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this._emptyMessage ,'</td></tr></tbody>');
 	},
 	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
-		if(child._renderdefer) {
+		if (child._renderdefer) {
 			var scOdd = this.getOddRowSclass(),
 				isOdd = jq(n).hasClass(scOdd); // supers will change this result, we need to cache it
 
 			this.$supers('replaceChildHTML_', arguments);
-			if(isOdd) jq(child).addClass(scOdd);
+			if (isOdd) jq(child).addClass(scOdd);
 		} else
 			this.$supers('replaceChildHTML_', arguments);
 	},
@@ -479,7 +479,7 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 		if (!this._isInit) {
 			this._isInit = true;
 			var p = this.box.firstItem;
-			if(this.opts && this.opts.skipHidden)
+			if (this.opts && this.opts.skipHidden)
 				for (; p && !p.isVisible(); p = p.nextSibling) {}
 			this.p = p;
 		}

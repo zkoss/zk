@@ -18,6 +18,7 @@
 	/*"requireCapitalizedConstructors": true,*/
 	"requireSemicolons": true,
 	"requireSpaceAfterBinaryOperators": true,
+	"requireSpaceAfterKeywords": ["do", "for", "if", "else", "switch", "case", "try", "catch", "while", "return", "typeof", "function"],
 	"requireSpaceBeforeBinaryOperators": true,
 	"requireSpaceBeforeBlockStatements": true,
 	"requireSpaceBeforeKeywords": ["else", "catch"],
@@ -26,7 +27,7 @@
 	"requireSpacesInConditionalExpression": true,
 	"requireSpacesInNamedFunctionExpression": {"beforeOpeningCurlyBrace": true},
 	/*"validateIndentation": {"value": "\t", "allExcept": ["comments"]},*/
-    /*"validateLineBreaks": "CRLF",*/
+    /*"validateLineBreaks": "LF",*/
 	"validateParameterSeparator": ", ",
 	"validateQuoteMarks": { "mark": "'", "escape": true }
 	

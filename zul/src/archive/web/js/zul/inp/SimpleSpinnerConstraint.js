@@ -24,7 +24,7 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 			len = cstList.length,
 			isSpinner,
 			arr = this._cstArr;
-		for(var i = 0; i < len + 1; i++) {
+		for (var i = 0; i < len + 1; i++) {
 			if (cstList[i] == 'min') {
 				this._min = cstList[++i] * 1;
 				isSpinner = true;

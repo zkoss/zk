@@ -165,7 +165,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								ignore = wgt.ignoreChildNodeOffset_(o),
 								first = c,
 								refDim;
-							for(; c; c = c.nextSibling) {
+							for (; c; c = c.nextSibling) {
 								//Skip absolute or fixed DOM element size
 								isText = c.nodeType == 3; // Bug ZK-2275, we need to update c.nodeType
 								if (!isText) {
@@ -177,7 +177,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								var zkc = zk(c),
 									sz = 0;
 								if (ignore) {
-									for(var el = c.firstChild; el; el = el.nextSibling) {
+									for (var el = c.firstChild; el; el = el.nextSibling) {
 										var txt = el && el.nodeType == 3 ? el.nodeValue : null,
 											zel;
 										if (txt) {
@@ -311,11 +311,11 @@ zFlex = { //static methods
 			scrWdh;
 		
 		// Bug 3185686, B50-ZK-452
-		if(zkp.hasVScroll()) //with vertical scrollbar
+		if (zkp.hasVScroll()) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
 			
 		// B50-3312936.zul
-		if(zkp.hasHScroll()) //with horizontal scrollbar
+		if (zkp.hasHScroll()) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
 			
 		for (; c; c = c.nextSibling)

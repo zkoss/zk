@@ -137,7 +137,7 @@ zul.db.Renderer = {
 			maxyear = wgt._maxyear;
 
 
-		switch(view) {
+		switch (view) {
 		case 'day':
 			out.push('<span id="', uuid, '-tm" class="', text, '">',
 					localizedSymbols.SMON[m], '</span> <span id="', uuid,
@@ -477,7 +477,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var oldTime = this.getTime(),
 		shiftTime = new Date(oldTime.getTime());
 
-		switch(this._view) {
+		switch (this._view) {
 		case 'day':
 			shiftTime.setDate(oldTime.getDate() + ofs);
 			break;
@@ -511,7 +511,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this._shiftDate(this._view, ofs);
 
 		var newTime = this.getTime();
-		switch(this._view) {
+		switch (this._view) {
 		case 'day':
 			if (oldTime.getYear() == newTime.getYear()
 				&& oldTime.getMonth() == newTime.getMonth()) {
@@ -606,7 +606,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 	},
 	_clickArrow: function (evt) {
-		if(zk.animating()) return; // ignore
+		if (zk.animating()) return; // ignore
 		var node = jq.nodeName(evt.domTarget, 'a') ? evt.domTarget
 					: jq(evt.domTarget).parent('a')[0];
 		if (jq(node).attr('disabled'))
@@ -620,7 +620,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this._setView('day');
 	},
 	_shiftView: function (ofs, disableAnima) {
-		switch(this._view) {
+		switch (this._view) {
 		case 'day' :
 			this._shiftDate('month', ofs);
 			break;
@@ -686,7 +686,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (target && !jq(target).hasClass(this.$s('disabled'))) {
 			var cell = target,
 				dateobj = this.getTime();
-			switch(this._view) {
+			switch (this._view) {
 			case 'day' :
 				var oldTime = this.getTime();
 				this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
@@ -720,7 +720,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			month = dateobj.getMonth(),
 			day = dateobj.getDate(),
 			nofix;
-		switch(opt) {
+		switch (opt) {
 		case 'day' :
 			day += ofs;
 			nofix = true;

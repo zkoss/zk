@@ -186,7 +186,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			attr += ' href="' + v + '"';
 		else
 			attr += ' href="javascript:;"';
-		if(this._disabled)
+		if (this._disabled)
 			attr += ' disabled="disabled"';
 		return attr;
 	},

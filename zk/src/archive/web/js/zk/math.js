@@ -67,7 +67,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		var j = this._value.length - this._precision,
 			valFixed = '';
 		if (j < 0)
-			for(var len = -j; len-- > 0;)
+			for (var len = -j; len-- > 0;)
 				valFixed += '0';
 		return this._value.substring(0, j) + (this._dot || this._precision ? '.' + valFixed + this._value.substring(j) : '');
 	},
@@ -79,7 +79,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		var j = this._value.length - this._precision;
 		if (j <= 0) {
 			var valFixed = '';
-			for(var len = -j; len-- > 0;)
+			for (var len = -j; len-- > 0;)
 				valFixed += '0';
 			return '0' + (this._precision ? zk.DECIMAL + valFixed + this._value : '');
 		}
@@ -107,9 +107,9 @@ zk.Long = zk.$extends(zk.Object, {
 				break;
 			}
 		}
-		if(len == 1) {
+		if (len == 1) {
 			var c = value.charAt(0);
-			if(cc < '0' || cc > '9')
+			if (cc < '0' || cc > '9')
 				value = 'NaN';
 		}
 		this._value = value;

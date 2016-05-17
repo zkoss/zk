@@ -100,7 +100,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 			var n = child.$n('chdex');
 			this._shallSize = true;
 			//Bug ZK-1732: change chdex display style according to child widget
-			if(n) n.style.display = child.isVisible() ? '' : 'none';
+			if (n) n.style.display = child.isVisible() ? '' : 'none';
 		}
 	},
 	onChildRemoved_: function () {
@@ -112,7 +112,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdex', zk).remove();
 		var rmsp = this.lastChild == child;
-		if(this._spacing != 'auto' && this.lastChild == child)
+		if (this._spacing != 'auto' && this.lastChild == child)
 			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	},
 	/** Enclose child with HTML tag such as DIV,
@@ -262,11 +262,11 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		}
 
 		// Bug 3185686, B50-ZK-452
-		if(zkp.hasVScroll()) //with vertical scrollbar
+		if (zkp.hasVScroll()) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
 
 		// B50-3312936.zul
-		if(zkp.hasHScroll()) //with horizontal scrollbar
+		if (zkp.hasHScroll()) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
 
 		for (; xc; xc = xc.nextSibling) {

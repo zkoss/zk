@@ -35,7 +35,7 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.NumberInputWidget, {
 		if (info.raw != sval && info.raw != '-' + sval) //1e2 not supported (unlike Doublebox)
 			return {error: zk.fmt.Text.format(msgzul.NUMBER_REQUIRED, value)};
 
-		if(this._rounding == 7 && (this._errmsg/*server has to clean up*/
+		if (this._rounding == 7 && (this._errmsg/*server has to clean up*/
 			|| zk.fmt.Number.isRoundingRequired(value, this.getFormat(), this._localizedSymbols)))
 			return {server: true};
 

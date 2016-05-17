@@ -74,7 +74,7 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 	},
 	_sel: function (toSel, animation) { //don't rename (zkmax counts on it)!!
 		var tabbox = this.getTabbox();
-		if(!tabbox) return; //Bug ZK-1808 removed tabpanel is no longer in hierarchy, and cannot be removed
+		if (!tabbox) return; //Bug ZK-1808 removed tabpanel is no longer in hierarchy, and cannot be removed
 		var accd = tabbox.inAccordionMold();
 
 		if (accd && animation) {

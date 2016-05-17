@@ -55,7 +55,7 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		rounding: null,
 		localizedSymbols: [
 			function (val) {
-				if(val) {
+				if (val) {
 					var ary = jq.evalJSON(val);
 					if (!globallocalizedSymbols[ary[0]])
 						globallocalizedSymbols[ary[0]] = ary[1];

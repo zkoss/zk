@@ -141,7 +141,7 @@ zk.copy(zjq.prototype, {
 		var cell = this.jq[0];
 		if (cell) {
 			var cells = cell.parentNode.cells;
-			for(var j = 0, cl = cells.length; j < cl; j++)
+			for (var j = 0, cl = cells.length; j < cl; j++)
 				if (cells[j] == cell)
 					return j;
 		}

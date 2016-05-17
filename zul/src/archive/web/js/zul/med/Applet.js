@@ -172,7 +172,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 		if (n)
 			try {
 				n[name] = value;
-			} catch(e) {
+			} catch (e) {
 				zk.error('Failed to set applet\'s field: ' + name + '\n' + e.message);
 			}
 	},

@@ -34,7 +34,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			ofs = zk(wgt.$n()).cmOffset(),
 			totalLen = isVertical ? wgt._getHeight() : wgt._getWidth(),
 			x = totalLen > 0 ? ((curpos - wgt._minpos) * totalLen) / (wgt._maxpos - wgt._minpos) : 0;
-		if(!isDecimal)
+		if (!isDecimal)
 			x = Math.round(x);
 
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
@@ -203,7 +203,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		 */
 		mode: function () {
 			this._fixStep();
-			if(this.desktop) {
+			if (this.desktop) {
 				this._fixPos();
 			}
 		}
@@ -428,7 +428,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		var step = _getStep(this);
 		if (this._drag) {
 			if (step <= 0) {
-				if(this._drag.opts.snap)
+				if (this._drag.opts.snap)
 					delete this._drag.opts.snap;
 			} else
 				this._drag.opts.snap = this._getStepOffset();
@@ -483,7 +483,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
 		this._fixSize();
 		//fix B70-ZK-2438
-		if(this.isRealVisible())
+		if (this.isRealVisible())
 			this._makeDraggable();
 
 		zWatch.listen({

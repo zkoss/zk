@@ -65,14 +65,14 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Radio, 'bind_', arguments);
-		if(this._group && this.desktop && !this._attachExternal) {
+		if (this._group && this.desktop && !this._attachExternal) {
 			this._group._addExtern(this);
 			this._attachExternal = true;
 		}
 	},
 	unbind_: function () {
 		this.$supers(zul.wgt.Radio, 'unbind_', arguments);
-		if(this._group && this._attachExternal) {
+		if (this._group && this._attachExternal) {
 			this._group._rmExtern(this);
 			this._attachExternal = false;
 		}

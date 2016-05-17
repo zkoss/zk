@@ -130,7 +130,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 			for (w = parent.firstChild; w; w = w.nextSibling) {
 				if (w.$instanceof(zul.sel.Option)) {
 					ret++;
-					if(w == this) break;
+					if (w == this) break;
 				}
 			}
 		}

@@ -141,8 +141,8 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 			min = this._min,
 			max = this._max;
 
-		if(!inp.value) {
-			if(min && max)
+		if (!inp.value) {
+			if (min && max)
 				inp.value = (min <= 0 && 0 <= max) ? 0 : min;
 			else if (min)
 				inp.value = min <= 0 ? 0 : min;
@@ -195,13 +195,13 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 	},
 	_startAutoIncProc: function (isup) {
 		var widget = this;
-		if(this.timerId)
+		if (this.timerId)
 			clearInterval(this.timerId);
 
 		this.timerId = setInterval(function () {widget._increase(isup);}, 200);
 	},
 	_stopAutoIncProc: function () {
-		if(this.timerId)
+		if (this.timerId)
 			clearTimeout(this.timerId);
 
 		this.timerId = null;
@@ -230,20 +230,20 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this.$supers(zul.inp.Spinner, 'bind_', arguments);
 
 		var btn;
-		if(btn = this.$n('btn'))
+		if (btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')
 				.domListen_(btn, 'onZMouseUp', '_btnUp');
 
 		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
-		if(this.timerId) {
+		if (this.timerId) {
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}
 		zWatch.unlisten({onSize: this});
 		var btn = this.$n('btn');
-		if(btn)
+		if (btn)
 			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')
 				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 

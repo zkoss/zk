@@ -186,7 +186,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		if (!item)
 			this.setSelectedIndex(-1);
 		else if (this._multiple || !item.isSelected()) {
-			if(item.getOptionIndex_)
+			if (item.getOptionIndex_)
 				this.setSelectedIndex(item.getOptionIndex_());
 			else
 				this.setSelectedIndex(item.getChildIndex());
@@ -222,7 +222,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	clearSelection: function () {
 		if (this._selItems.length) {
 			var item;
-			for(;(item = this._selItems.pop());)
+			for (;(item = this._selItems.pop());)
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 		}
