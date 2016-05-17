@@ -18,7 +18,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		'after_end', 'after_start', 'start_after', 'start_before',
 		'overlap', 'overlap_end', 'overlap_before', 'overlap_after',
 		'at_pointer', 'after_pointer'
-	];
+		],
+		_baseConstraints = {
+		'no positive': 'NO_POSITIVE', 'no negative': 'NO_NEGATIVE', 'no zero': 'NO_ZERO', 'no empty': 'NO_EMPTY',
+		'no future': 'NO_FUTURE', 'no past': 'NO_PAST', 'no today': 'NO_TODAY', 'strict': 'STRICT', 'server': 'SERVER'
+		};
 
 /**
  * The default constraint supporting no empty, regular expressions and so on.
@@ -145,34 +149,11 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		var f = this._flags;
 		var arr = this._cstArr;
 
-		if (cst == 'no positive') {
-			f.NO_POSITIVE = true;
-			arr[arr.length] = 'NO_POSITIVE';
-		} else if (cst == 'no negative') {
-			f.NO_NEGATIVE = true;
-			arr[arr.length] = 'NO_NEGATIVE';
-		} else if (cst == 'no zero') {
-			f.NO_ZERO = true;
-			arr[arr.length] = 'NO_ZERO';
-		} else if (cst == 'no empty') {
-			f.NO_EMPTY = true;
-			arr[arr.length] = 'NO_EMPTY';
-		} else if (cst == 'no future') {
-			f.NO_FUTURE = true;
-			arr[arr.length] = 'NO_FUTURE';
-		} else if (cst == 'no past') {
-			f.NO_PAST = true;
-			arr[arr.length] = 'NO_PAST';
-		} else if (cst == 'no today') {
-			f.NO_TODAY = true;
-			arr[arr.length] = 'NO_TODAY';
-		} else if (cst == 'strict') {
-			f.STRICT = true;
-			arr[arr.length] = 'STRICT';
-		} else if (cst == 'server') {
-			f.SERVER = true;
-			this.serverValidate = true;
-			arr[arr.length] = 'SERVER';
+		var bsCst = _baseConstraints[cst];
+		if (cst && bsCst) {
+			if (cst == 'server') this.serverValidate = true;
+			f[bsCst] = true;
+			arr[arr.length] = bsCst;
 		} else if (cst && _posAllowed.$contains(cst))
 			this._pos = cst;
 		else if (!arr.length && zk.debugJS)
