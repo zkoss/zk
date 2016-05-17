@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3210.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 16 17:27:23 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. input "1" in the first spinner, should show errorbox "should be between 5 and 10 (incl.)"
+        2. input "1" in the second spinner, should show errorbox "min is 5"
+        3. input "11" in the second spinner, should show errorbox "max is 10"
+        4. focus on the third spinner and blur, should show errorbox "This field may not be empty or contain only spaces."
+
+    </label>
+    <vlayout>
+        <spinner constraint="min 5 max 10:should be between 5 and 10 (incl.)"/>
+        <spinner constraint="min 5:min is 5,max 10:max is 10"/>
+        <spinner constraint="no empty"/>
+    </vlayout>
+</zk>
