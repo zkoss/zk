@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3188.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 18, 2016  4:54:49 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. check your zk.xml have the following preference entries in them
+			- CometServerPush.retry.count
+			- CometServerPush.retry.delay
+			- CometServerPush.ajax.timeout
+		2. open the dev tool of your browser and switch to "network" panel
+		3. click "enable server push" and you'll see there are zkau requests fired and waiting for server response
+		4. if the ajax timeout preference value is low, you'll see a lot of canceled requests and new requests fired
+		5. place a break point in the CometServerExtension service() method and you'll see consecutive canceled requests as many as the preference of retry count
+	</label>
+	<button label="enable server push" onClick="desktop.enableServerPush(true);"/>
+	<button label="disable server push" onClick="desktop.enableServerPush(false);"/>
+</zk>

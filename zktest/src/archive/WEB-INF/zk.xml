@@ -690,4 +690,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
     <listener>
         <listener-class>org.zkoss.zktest.test2.B80_ZK_3149ProxyHandler</listener-class>
     </listener>
+    <!-- for F80-ZK-3188 -->
+    <preference>
+		<name>CometServerPush.retry.count</name>
+		<value>4</value>
+	</preference>
+	<preference>
+		<name>CometServerPush.retry.delay</name>
+		<value>350</value>
+	</preference>
+	<!--<preference>
+		<name>CometServerPush.ajax.timeout</name>
+		<value>3000</value>
+	</preference>-->
 </zk>
