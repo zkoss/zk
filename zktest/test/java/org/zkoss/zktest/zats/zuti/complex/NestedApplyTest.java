@@ -15,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -46,8 +47,12 @@ public class NestedApplyTest extends ZutiBasicTestCase {
 		DesktopAgent desktop = connect();
 		List<ComponentAgent> rows = desktop.queryAll("row");
 		Iterator<ComponentAgent> itRows = rows.iterator();
-		for (Locale loc : Locale.getAvailableLocales()) {
-			assertEquals(loc.getDisplayName(), itRows.next().getFirstChild().as(Label.class).getValue().trim());
+		List<String> list = new ArrayList<String>();
+        for (int i = 0; i < 100; i++) {
+            list.add("item" + i);
+        }
+		for (String loc : list) {
+			assertEquals(loc, itRows.next().getFirstChild().as(Label.class).getValue().trim());
 		}
 		assertEquals(0, getAllShadowSize(desktop.query("#host")));
 	}
