@@ -11,8 +11,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import org.apache.commons.codec.Charsets;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
