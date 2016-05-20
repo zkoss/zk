@@ -362,7 +362,7 @@ public abstract class AbstractListModel<E>
 
 	public int getPageCount() {
 		int size = getSize();
-		if (size > 0) {
+		if (size > 0 && _pageSize > 0) { //_pageSize default value is -1
 			int pageCount = size / _pageSize;
 			if (size % _pageSize == 0) {
 				return pageCount;
