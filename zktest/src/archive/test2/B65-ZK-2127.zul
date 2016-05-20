@@ -4,7 +4,7 @@
 		<zscript><![CDATA[
 class SelectionModel{
             String ticketAuthorType = "CURRENT";
-            selectedAuthorContact = null;
+            String selectedAuthorContact = null;
 
             public String getTicketAuthorType() {
                 return ticketAuthorType;
@@ -45,7 +45,7 @@ class SelectionModel{
 			return !"CONTACT".equals(selectionModel.ticketAuthorType);
 		}
 	}
-	controller = new MyClass();
+	MyClass controller = new MyClass();
 ]]>
         </zscript>
         <div> Click 'CONTACT' then the combobox should be enable
