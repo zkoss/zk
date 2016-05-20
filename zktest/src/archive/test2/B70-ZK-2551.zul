@@ -16,10 +16,12 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 <zk>
   <window border="normal" title="hello" >
     	<vbox>
-          <label value="1. Scroll to the far right in the listbox"/>
-          <label value="2. Click the button to fire CONTENTS_CHANGED for first item in model"/>
-          <label value="3. The horisontal scroll will be reset to its leftmost position"/>
-          <label value="4. Remove the paging mold from the listbox and the bug will not appear"/>
+            <label multiline="true">
+                1. scroll to the far right in the listbox
+                2. click the button to fire CONTENTS_CHANGED fro first item in model
+                3. the horizontal scroll bar shouldn't scroll to the leftmost of the listbox
+
+            </label>
     ROD false
   	<listbox id="lb" mold="paging" width="300px" height="200px" >	
   	<custom-attributes org.zkoss.zul.listbox.rod="false"/>
