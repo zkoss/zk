@@ -4,9 +4,9 @@
 B80-ZK-3048.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jan  4 18:45:43 CST 2016, Created by wenning
 
@@ -24,8 +24,12 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 
 	</label>
 	<zscript><![CDATA[
-	ListModelList model = new ListModelList(Locale.getAvailableLocales());
-]]></zscript>
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList model = new ListModelList(list);
+	]]></zscript>
 	<custom-attributes org.zkoss.zul.nativebar="false"/>
 	<listbox width="1225px" id="browseListbox1" mold="paging"
 			 rows="9" pageSize="10" model="${model}" pagingPosition="bottom">

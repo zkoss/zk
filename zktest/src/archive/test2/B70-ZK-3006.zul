@@ -4,9 +4,9 @@
 B70-ZK-3006.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri, Dec 11, 2015  3:48:28 PM, Created by Christopher
 
@@ -15,7 +15,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 <zscript><![CDATA[
-        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+	List list = new ArrayList();
+	for (int i = 0; i < 100; i++) {
+		list.add("item" + i);
+	}
+	ListModelList model = new ListModelList(list);
 ]]></zscript>
 <label multiline="true">
 	1. change you input method to German (add one if you don't already have it in your system)

@@ -4,9 +4,9 @@
 B80-ZK-3082.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Feb 17 14:12:46 CST 2016, Created by jameschu
 
@@ -15,12 +15,16 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label>
-        Type a in each chosenbox and click backspace, you should see two onSearching in zk log.
+        Type 'i' in each chosenbox and click backspace, you should see two onSearching in zk log.
     </label>
-    <zscript>
-        ListModel model = new ListModelList(Locale.getAvailableLocales());
-        ListModel subModel = ListModels.toListSubModel(new ListModelList(Locale.getAvailableLocales()));
-    </zscript>
+    <zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList model = new ListModelList(list);
+        ListModel subModel = ListModels.toListSubModel(new ListModelList(list));
+    ]]></zscript>
     <div>
         <label>model : </label>
         <chosenbox width="300px" model="${model}" onSearching='Clients.log("onSearching");'/>

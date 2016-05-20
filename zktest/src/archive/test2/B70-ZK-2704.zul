@@ -4,9 +4,9 @@
 B70-ZK-2704.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue, Jun 9, 2015 14:30:29 PM, Created by Jameschu
 
@@ -16,10 +16,13 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 <zk>
 	<zscript><![CDATA[
 		ListModelList locales = new ListModelList();
-		
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
 		public void loadOnDemand(OpenEvent event) {
 			if(event.isOpen()) {
-				List allLocales = new ArrayList(Arrays.asList(Locale.getAvailableLocales()));
+				List allLocales = new ArrayList(list);
 				allLocales.removeAll(locales.getSelection());
 				locales.addAll(allLocales);
 			} else {

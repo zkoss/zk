@@ -4,9 +4,9 @@
 B80-ZK-2968.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Nov 27 17:43:46 CST 2015, Created by wenning
 
@@ -21,7 +21,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 	</label>
 	<zscript><![CDATA[
 	    //create a large model
-		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList model = new ListModelList(list);
 		model.addAll(model); //x2
 		model.addAll(model); //x4
 		model.addAll(model); //x8

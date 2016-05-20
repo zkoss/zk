@@ -14,12 +14,16 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label multiline="true">
-        Type 's' and select one option in the chosenbox, and click 'Invalidate', you should not see any selected item disappear.
+        Type 'i' and select one option in the chosenbox, and click 'Invalidate', you should not see any selected item disappear.
     </label>
-    <zscript>
-        ListModelList myModel = new ListModelList(Locale.getAvailableLocales());
+    <zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList myModel = new ListModelList(list);
         ListModel mySubModel = ListModels.toListSubModel(myModel);
-    </zscript>
+    ]]></zscript>
     <vlayout id="hl">
         <chosenbox id="myCb" style="min-width:75px;" hflex="1"
                    creatable="true" model="${mySubModel}"

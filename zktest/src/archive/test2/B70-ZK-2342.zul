@@ -4,9 +4,9 @@
 B70-ZK-2342.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed, Jul 02, 2014  5:40:28 PM, Created by jumperchen
 
@@ -25,7 +25,11 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -> look for large post body and it would contain many onAnchorPos events (more than 10 times) with similar anchor positions (If true, that's a bug)
 	</label>
     <zscript><![CDATA[
-    ListModelList model = new ListModelList(Locale.getAvailableLocales());
+	List list = new ArrayList();
+	for (int i = 0; i < 100; i++) {
+		list.add("item" + i);
+	}
+	ListModelList model = new ListModelList(list);
     for (int i = 0; i < 10; i++)
         model.addAll(model);
     ]]></zscript>

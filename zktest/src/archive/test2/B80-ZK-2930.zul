@@ -17,7 +17,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
     </label>
 	<button id="btn" onClick="add()" label="add chosenbox"/>
 	<zscript><![CDATA[
-		ListModel model = new ListModelList(Locale.getAvailableLocales());
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList model = new ListModelList(list);
         public void add() {
             Chosenbox box = new Chosenbox();
             box.setModel(model);

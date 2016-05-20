@@ -4,9 +4,9 @@
 B65-ZK-2379.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu, Jul 31, 2014 11:42:56 AM, Created by jumperchen
 
@@ -14,16 +14,20 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<zscript>
-		ListModelList model = new ListModelList(Locale.getAvailableLocales());
-	</zscript>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList model = new ListModelList(list);
+	]]></zscript>
 	<div>
 		<button label="Click Me, you should not see any error exception" onClick="parent.invalidate();" />
 	</div>
 	<div id="parent">
 		<selectbox id="select" model="${model}" hflex="1">
 			<template name="model">
-				<label value="${each.displayName}"/>
+				<label value="${each}"/>
 			</template>
 		</selectbox>
 	</div>

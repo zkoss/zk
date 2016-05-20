@@ -4,9 +4,9 @@
 B70-ZK-2992.zul
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Nov 26 15:28:48 CST 2015, Created by jumperchen
 
@@ -14,9 +14,13 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<zscript>
-	ListModelList model = new ListModelList(Locale.getAvailableLocales());
-	</zscript>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList model = new ListModelList(list);
+	]]></zscript>
     <script>
         zk.afterMount(function () {
             alert("If you see the value is not true that's a bug, value = [" + zk('@grid').$()._nativebar +"] IPad with PE version only");
