@@ -219,7 +219,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 		if (property == null && _node != null) { // means update
 			_node.setParent(parent);
 		} else {
-			_node = new ProxyNode(property, parent);
+			_node = new ProxyNodeImpl(property, parent);
 			for (Entry<K, V> e : _cache.entrySet()) {
 				if (e.getValue() instanceof FormProxyObject)
 					((FormProxyObject) _cache.get(e.getKey())).setPath(null, _node);

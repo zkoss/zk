@@ -12,7 +12,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.zkoss.bind.sys.SavePropertyBinding;
@@ -20,61 +19,27 @@ import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.util.Callback;
 
 /**
- * A proxy object node (For caching SavePropertyBinding)
+ * A proxy object node (For the relationship of proxies)
  *
  * @author jameschu
  * @since 8.0.2
  */
-/* package */class ProxyNode implements Serializable {
-	private String _property;
-	private ProxyNode _parent;
-	private Set<Pair<String, SavePropertyBinding>> _cachedSavePropertyBinding;
-	private transient Callback _onDirtyChangeCallback;
-	private transient Callback _onDataChangeCallback;
+public interface ProxyNode extends Serializable {
+	public String getProperty();
 
-	public ProxyNode(String property, ProxyNode parent) {
-		this._property = property;
-		this._parent = parent;
-		_cachedSavePropertyBinding = new HashSet<Pair<String, SavePropertyBinding>>(2);
-	}
+	public void setProperty(String property);
 
-	public String getProperty() {
-		return _property;
-	}
+	public ProxyNode getParent();
 
-	public void setProperty(String property) {
-		this._property = property;
-	}
+	public void setParent(ProxyNode parent);
 
-	public ProxyNode getParent() {
-		return _parent;
-	}
+	public Set<Pair<String, SavePropertyBinding>> getCachedSavePropertyBinding();
 
-	public void setParent(ProxyNode parent) {
-		this._parent = parent;
-	}
+	public Callback getOnDirtyChangeCallback();
 
-	public Set<Pair<String, SavePropertyBinding>> getCachedSavePropertyBinding() {
-		return _cachedSavePropertyBinding;
-	}
+	public void setOnDirtyChangeCallback(Callback onDirtyChangeCallback);
 
-	public Callback getOnDirtyChangeCallback() {
-		return _onDirtyChangeCallback;
-	}
+	public Callback getOnDataChangeCallback();
 
-	public void setOnDirtyChangeCallback(Callback onDirtyChangeCallback) {
-		if (_parent != null)
-			throw new UnsupportedOperationException("Not support!");
-		_onDirtyChangeCallback = onDirtyChangeCallback;
-	}
-
-	public Callback getOnDataChangeCallback() {
-		return _onDataChangeCallback;
-	}
-
-	public void setOnDataChangeCallback(Callback onDataChangeCallback) {
-		if (_parent != null)
-			throw new UnsupportedOperationException("Not support!");
-		_onDataChangeCallback = onDataChangeCallback;
-	}
+	public void setOnDataChangeCallback(Callback onDataChangeCallback);
 }

@@ -87,7 +87,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 		if (property == null && _node != null) // means update
 			_node.setParent(parent);
 		else
-			_node = new ProxyNode(property, parent);
+			_node = new ProxyNodeImpl(property, parent);
 	}
 
 	public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Exception {

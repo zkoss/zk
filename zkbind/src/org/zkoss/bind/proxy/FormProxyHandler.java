@@ -84,7 +84,7 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 	public FormProxyHandler(T origin) {
 		super(origin);
 		_status = new FormStatusImpl();
-		_node = new ProxyNode("", null);
+		_node = new ProxyNodeImpl("", null);
 	}
 
 	private class FormStatusImpl implements FormStatus, Serializable {

@@ -283,7 +283,7 @@ public abstract class AbstractCollectionProxy<E>
 		if (property == null && _node != null) { // means update
 			_node.setParent(parent);
 		} else {
-			_node = new ProxyNode(property, parent);
+			_node = new ProxyNodeImpl(property, parent);
 			for (E e : _cache) {
 				if (e instanceof FormProxyObject)
 					((FormProxyObject) e).setPath("[$INDEX$]", _node);
