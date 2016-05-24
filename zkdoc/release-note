@@ -16,6 +16,7 @@ ZK 8.0.2
   ZK-3185: Enable form validation with reference and collection binding
   ZK-3086: Users can customize file size exceeding message for Dropupload
   ZK-3188: Implement configurable ajax-timeout/retry/retry-delay for Comet serverpush
+  ZK-3135: enable form proxies in a modular classloading environment
 
 * Bugs
   ZK-3131: protocol relative URL erroneously prefixed with current context path
