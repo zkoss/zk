@@ -27,7 +27,7 @@
 		<report.dir>debug/report/</report.dir>
 		<test.dir>debug/test-classes</test.dir>
 	</properties>
-	<version>8.0.2-SNAPSHOT</version>
+	<version>8.0.2</version>
 	<name>ZK Test</name>
 	<url>http://www.zkoss.org/</url>
 	<description>ZK Test</description>
