@@ -1,5 +1,6 @@
    --------
 ZK 8.0.2
+May 24, 2016
 * Features
   ZK-3100: support a way to customize classloading
   ZK-3105: Users can specify uploading target path
