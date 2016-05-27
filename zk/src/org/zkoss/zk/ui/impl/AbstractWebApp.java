@@ -16,7 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -393,7 +396,21 @@ public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 	public static synchronized String loadBuild() {
 		if (_build == null) {
 			final String FILE = "/metainfo/zk/build";
-			InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(FILE);
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			InputStream is = null;
+			try {
+				Enumeration<URL> en = cl.getResources(FILE.substring(1)); // should not start with "/"
+				while (en.hasMoreElements()) {
+					URL url = en.nextElement();
+					String path = url.getPath();
+					if (path != null && (path.contains("zk.jar!" + FILE) || path.matches("(.*)zk-\\d.*\\.jar\\!" + FILE))) { //the filename of jar might change
+						is = url.openStream();
+						break;
+					}
+				}
+			} catch (IOException e) {
+				//do nothing
+			}
 			if (is == null) {
 				is = AbstractWebApp.class.getResourceAsStream(FILE);
 				if (is == null)
