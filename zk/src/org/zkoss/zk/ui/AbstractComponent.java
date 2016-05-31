@@ -2912,7 +2912,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (_auxinf != null && _auxinf.listeners != null)
 			for (Iterator<List<EventListenerInfo>> it = CollectionsX
 					.comodifiableIterator(_auxinf.listeners.values()); it.hasNext();)
-				for (EventListenerInfo li : it.next()) {
+				for (Iterator<EventListenerInfo> itli = CollectionsX.comodifiableIterator(it.next()); itli.hasNext();) {
+					EventListenerInfo li = itli.next();
 					if (uniqueAttrs.add(li.listener)) //ZK-2701: only activate the same object once
 						didActivate(li.listener);
 				}
