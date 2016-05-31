@@ -25,15 +25,17 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
             border: 1px solid red;
         }
     </style>
-    <div hflex="1">
-        <menubar scrollable="true" hflex="1">
-            <menuitem label="test long long test" />
-            <menuitem label="test long long test" />
-            <menuitem label="test long long test" />
-            <menuitem label="test long long test" />
-            <menuitem label="test long long test" />
-            <menuitem label="test long long test" />
-            <menuitem label="test long long test" />
-        </menubar>
-    </div>
+    <vlayout>
+        <div hflex="1">
+            <menubar scrollable="true" hflex="1">
+                <menuitem label="test long long test" />
+                <menuitem label="test long long test" />
+                <menuitem label="test long long test" />
+                <menuitem label="test long long test" />
+                <menuitem label="test long long test" />
+                <menuitem label="test long long test" />
+                <menuitem label="test long long test" />
+            </menubar>
+        </div>
+    </vlayout>
 </zk>

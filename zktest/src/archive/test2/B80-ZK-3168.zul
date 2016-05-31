@@ -19,7 +19,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
     <zscript><![CDATA[
 		List list = new ArrayList();
 		for (int i = 0; i < 100; i++) {
-			list.add("item" + i);
+			list.add("Item" + i);
 		}
 		ListModelList myModel = new ListModelList(list);
         ListModel mySubModel = ListModels.toListSubModel(myModel);
