@@ -82,9 +82,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	onResponse: function () {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
+		var args = arguments;
 		if (this.isOpen() && jq(this.getPopupNode_()).is(':animated')) {
 			var self = this;
-			var args = arguments;
 			setTimeout(function () {if (self.desktop) self.onResponse.apply(self, args);}, 50);
 			return;
 		}
@@ -93,7 +93,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			zk(this.getPopupNode_()).redoCSS(-1);
 			this._shallRedoCss = null;
 		}
-		if (this._shallCheckPopupPosition) {
+		//ZK-3204 check popup position after onChanging
+		if (this._shallCheckPopupPosition || (args[1] && args[1].rtags && args[1].rtags.onChanging && this.isOpen())) {
 			this._checkPopupPosition();
 			this._shallCheckPopupPosition = false;
 		}
