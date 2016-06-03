@@ -23,11 +23,8 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 	<zscript><![CDATA[
 	    public class MyComparator implements Comparator {
 			public int compare(Object a, Object b) {
-				//return 0;
 				String aString = ((String)a).toLowerCase();
 				String bString = ((Locale)b).getDisplayName(Locale.US).toLowerCase();
-				System.out.println(a);
-				System.out.println(bString);
 				return bString.startsWith(aString) ? 0 : 1;
 			}
 	    }

@@ -28,6 +28,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 		</toolbar>
 		<button id="btn1"/>
 		<button id="btn2"/>
-		<button/>
+		<button id="btn3"/>
 	</window>
 </zk>

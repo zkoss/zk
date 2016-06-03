@@ -13,7 +13,9 @@ package org.zkoss.zktest.test2;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -25,8 +27,11 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
  *
  */
 public class B80_ZK_3158 extends SelectorComposer<Component> {
-	public void doAfterCompose(Component comp) throws Exception {
-		super.doAfterCompose(comp);
+
+	@Override
+	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) {
+		Executions.getCurrent().getSession().setAttribute("ZK3158", true);
+		return super.doBeforeCompose(page, parent, compInfo);
 	}
 
 	@Listen("onClick=#btn")
@@ -39,4 +44,8 @@ public class B80_ZK_3158 extends SelectorComposer<Component> {
 		root[0].setPage(this.getPage());
 	}
 
+	@Listen("onClick=#btn1")
+	public void cancel(){
+		Executions.getCurrent().getSession().removeAttribute("ZK3158");
+	}
 }

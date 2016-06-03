@@ -22,7 +22,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 	</label>
 	<vlayout>
 		<hlayout>
-			<panel border="normal" collapsible="true" closable="true" maximizable="true">
+			<panel id="p1" border="normal" collapsible="true" closable="true" maximizable="true">
 				<caption label="Panel with caption" />
 				<panelchildren>
 					<vlayout>
@@ -32,7 +32,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 					</vlayout>
 				</panelchildren>
 			</panel>
-			<panel title="Panel with title" border="normal" collapsible="true" closable="true" maximizable="true">
+			<panel id="p2" title="Panel with title" border="normal" collapsible="true" closable="true" maximizable="true">
 				<panelchildren>
 					<vlayout>
 						<label value="some content here"></label>
@@ -56,13 +56,13 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 			</groupbox>
 		</hlayout>
 		<hlayout>
-			<window border="normal" closable="true" maximizable="true">
+			<window id="w1" border="normal" closable="true" maximizable="true">
 				<caption label="Window with caption" />
 				<label value="some content here"></label>
 				<label value="some content here"></label>
 				<label value="some content here"></label>
 			</window>
-			<window title="Window with title" border="normal" closable="true" maximizable="true">
+			<window id="w2" title="Window with title" border="normal" closable="true" maximizable="true">
 				<label value="some content here"></label>
 				<label value="some content here"></label>
 				<label value="some content here"></label>
