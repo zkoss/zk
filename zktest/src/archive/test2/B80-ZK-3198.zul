@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    B80-ZK-3198.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 3 14:27:23 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <div apply="org.zkoss.zktest.test2.B80_ZK_3198Composer">
+        <tree rows="20" id="selectionTree" nonselectableTags="" checkmark="true">
+            <custom-attributes org.zkoss.zul.tree.initRodSize="-1" />
+        </tree>
+    </div>
+    <button label="click me">
+        <attribute w:name="onClick"><![CDATA[
+			var t = jq('.z-treecell-text:contains("test99")').size();
+			zk.log(t);
+		]]></attribute>
+    </button>
+</zk>

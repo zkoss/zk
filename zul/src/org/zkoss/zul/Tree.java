@@ -2045,13 +2045,13 @@ public class Tree extends MeshElement {
 			Object childNode = _model.getChild(node, i);
 			// Bug ZK-1696: must render all opened node to have correct page count
 			TreeOpenableModel model = (TreeOpenableModel) _model;
-			// only render opened node or nodes within ROD range
-			if (model.isPathOpened(_model.getPath(childNode)) || (initSize >= 0 && i < initSize)) {
+			// render nodes when no ROD or within ROD range or opened node
+			if (initSize < 0 || (initSize >= 0 && i < initSize) || model.isPathOpened(_model.getPath(childNode))) {
 				renderChildren0(renderer, parent, ti, childNode, i);
-				continue;
+			} else { //render empty row
+				ti.appendChild(new Treerow());
+				ti.getTreerow().appendChild(new Treecell());
 			}
-			ti.appendChild(new Treerow());
-			ti.getTreerow().appendChild(new Treecell());
 		}
 	}
 
