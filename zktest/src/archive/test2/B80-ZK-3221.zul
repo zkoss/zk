@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3221.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 3 17:27:23 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        1. drag it, and you should see '123456789123456789' in the dragging content.
+    </label>
+	<listbox>
+        <listitem draggable="true" droppable="true">
+            <listcell src="/widgets/effects/drag_n_drop/img/document.png" label="123456789123456789"/>
+        </listitem>
+    </listbox>
+</zk>
