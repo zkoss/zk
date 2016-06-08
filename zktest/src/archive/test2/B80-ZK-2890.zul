@@ -28,19 +28,19 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
                <treecol label="Description" />
             </treecols>
             <treechildren>
-               <treeitem draggable="true">
+               <treeitem draggable="true" selected="true">
                   <treerow>
                      <treecell label="1" />
                      <treecell label="1 description" />
                   </treerow>
                </treeitem>
-               <treeitem draggable="true">
+               <treeitem draggable="true" selected="true">
                   <treerow>
                      <treecell label="2" />
                      <treecell label="2 description" />
                   </treerow>
                   <treechildren>
-                     <treeitem draggable="true">
+                     <treeitem draggable="true" selected="true">
                         <treerow>
                            <treecell label="2.1" />
                            <treecell label="2.1 description" />
