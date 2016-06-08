@@ -445,6 +445,7 @@ zk.fmt.Number = {
 			}
 		}
 		if (sb == null) sb = val;
+		if (parseFloat(sb) == 0) return {raw: '0', divscale: divscale};
 		if (minus) sb = '-' + sb;
 		for (;;) {
 			cc = sb.charAt(0);
