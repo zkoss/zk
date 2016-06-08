@@ -25,8 +25,11 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 		<textbox id="textbox"></textbox>
 		<button label="switch labels">
 			<attribute name="onClick"><![CDATA[
-				org.zkoss.zk.ui.Executions.getCurrent().getSession().setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, org.zkoss.util.Locales.getLocale(textbox.getValue()));
-				org.zkoss.zk.ui.Executions.sendRedirect(null);
+				Locale locale = org.zkoss.util.Locales.getLocale(textbox.getValue());
+				Sessions.getCurrent().setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, locale);
+				Clients.reloadMessages(locale);
+				org.zkoss.util.Locales.setThreadLocal(locale);
+				self.getParent().invalidate();
 			]]>
 			</attribute>
 		</button>
