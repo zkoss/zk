@@ -136,6 +136,7 @@ public class AuDropUploader implements AuExtension {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
+			response.getWriter().write("error:" + alert);
 		}
 		if (log.isTraceEnabled())
 			log.trace(Objects.toString(attrs));
