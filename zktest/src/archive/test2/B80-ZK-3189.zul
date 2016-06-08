@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3189.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun  3 10:09:41 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">1. drop a file that is exactly 1024000bytes into the dropupload
+        2. should see error alert "the request was rejected because its size (1024190) exceeds the configured maximum (1024000)"
+        3. click "ok" on the alert error
+        4. drop a file smaller than 1020000bytes
+        5. drop the file in the first step before the upload of the previous file finished
+        6. should see error alert "the request was rejected because its size (1024190) exceeds the configured maximum (1024000)"
+        7. click "ok" on the alert error
+        8. should see the name of the file which was dropped in the forth step show in the second dropupload
+
+    </label>
+    <!--<div>-->
+        <!--<button label="Button Upload (max. 1000KB)" upload="true,maxsize=1000,multiple=true">-->
+            <!--<attribute name="onUpload"><![CDATA[-->
+                <!--import org.zkoss.util.media.Media;-->
+                <!--import org.apache.commons.lang.StringUtils;-->
+                <!--Media[] ma = event.medias;-->
+                <!--ArrayList data = new ArrayList();-->
+                <!--String[] datas;-->
+                <!--for (int i = 0; i < ma.length; i++) {-->
+                    <!--data.add(ma[i].name);-->
+                <!--}-->
+                <!--datas = data.toArray(new String[0]);-->
+                <!--uploadResult.setValue("uploaded: " + StringUtils.join(datas, ","));-->
+            <!--]]></attribute>-->
+        <!--</button>-->
+        <!--<label id="uploadResult"/>-->
+    <!--</div>-->
+    <!--<space/>-->
+    <div width="300px" height="150px" style="outline: 1px solid red;">
+        Drop Upload (max. 1000KB)
+        <dropupload maxsize="1000" anchor="${self.parent}">
+            <attribute name="onUpload"><![CDATA[
+                import org.zkoss.util.media.Media;
+                import org.apache.commons.lang.StringUtils;
+                Media[] ma = event.medias;
+                ArrayList data = new ArrayList();
+                String[] datas;
+                for (int i = 0; i < ma.length; i++) {
+                    data.add(ma[i].name);
+                }
+                datas = data.toArray(new String[0]);
+                dropUploadResult.setValue("uploaded: " + StringUtils.join(datas, ","));
+            ]]></attribute>
+        </dropupload>
+        <label id="dropUploadResult"/>
+    </div>
+</zk>
