@@ -324,8 +324,14 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				}
 			} else {
 				var root = _getRootMenu(this);
-				if (root && (root = root._getPrevVisibleMenu()))
-					_activateNextMenu(root);
+				if (root)
+					//ZK-3176 get next visible and no disabled menu
+					while (root = root._getPrevVisibleMenu()) {
+						if (!root.getDisabled()) {
+							_activateNextMenu(root);
+							break;
+						}
+					}
 				else // the parent is not menu widget
 					this.close();
 
@@ -338,8 +344,14 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				w._togglePopup();
 			} else {
 				var root = _getRootMenu(this);
-				if (root && (root = root._getNextVisibleMenu()))
-					_activateNextMenu(root);
+				if (root)
+					//ZK-3176 get next visible and no disabled menu
+					while (root = root._getNextVisibleMenu()) {
+						if (!root.getDisabled()) {
+							_activateNextMenu(root);
+							break;
+						}
+					}
 			}
 			break;
 		case 13: //ENTER
