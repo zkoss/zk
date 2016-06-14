@@ -34,7 +34,7 @@ public class F80_ZK_2707Test extends WebDriverTestCase {
 		
 		click(jq(".z-timebox-icon.z-timebox-up")); //change the value in the timebox
 		waitResponse(true);
-		click(jq(".z-label")); //click on whatever to blur and force onChange on the timebox
+		blur(jq(".z-timebox input")); //blur and force onChange on the timebox
 		waitResponse(true);
 		
 		checkEquals(); //check the values are still the same after changing the value in timebox
