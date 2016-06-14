@@ -391,19 +391,18 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 	}
 
 	private void applyChangesToContent() {
-		// FIX: 2011.01.18 Iantsai
-		// in fixModeOnly(), we set _instantMode to false, and which means afterCompose() 
-		// won't be called, but we got no logic to clear the content!
-		// We assumed that the onPageAttached will handle this, 
-		// but if setSrc(null); happened in a button click, this wont work.
-		if (_instantMode && _afterComposed)
-			afterCompose();
-		else if (_src == null && !getChildren().isEmpty())
-			// !getChildren().isEmpty() is for performance.
-			getChildren().clear();
-		else if (!_instantMode && "auto".equals(getMode()) && !getChildren().isEmpty())
-			//Bug ZK-1437: auto mode has no chance to clear the content if src is changed (_instantMode become false)
-			getChildren().clear();
+		if (_src == null) {
+			if (!getChildren().isEmpty())
+				getChildren().clear();
+			else if (!_instantMode && getChildPage() != null)
+				getChildPage().removeComponents();
+		} else {
+			if (_instantMode && _afterComposed)
+				afterCompose();
+			else if (!_instantMode && "auto".equals(getMode()) && !getChildren().isEmpty())
+				//Bug ZK-1437: auto mode has no chance to clear the content if src is changed (_instantMode become false)
+				getChildren().clear();
+		}
 	}
 
 	/** Returns whether the source depends on the current Locale.
