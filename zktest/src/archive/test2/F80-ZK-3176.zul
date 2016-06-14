@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3176.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 13, 2016  2:48:48 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		void toggleDisable() {
+			theMenu.setDisabled(!theMenu.isDisabled());
+		}
+	]]>
+	</zscript>
+	<label multiline="true">
+		menu supports disabled attribute, click "toggle disable" button to switch "Disabled Menu" menu's disable status
+	</label>
+	<menubar>
+		<menu label="Menu">
+			<menupopup>
+				<menuitem label="Item1"/>
+				<menuitem label="Item2"/>
+			</menupopup>
+		</menu>
+		<menu id="theMenu" label="Disabled Menu" disabled="true">
+			<menupopup>
+				<menuitem label="Item3"/>
+				<menuitem label="Item4"/>
+			</menupopup>
+		</menu>
+	</menubar>
+	<button label="toggle disable" onClick="toggleDisable()"/>
+</zk>

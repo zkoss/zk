@@ -42,6 +42,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Menu extends LabelImageElement {
 	private Menupopup _popup;
 	private String _content = "";
+	private boolean _disabled = false;
 
 	static {
 		addClientEvent(Menu.class, Events.ON_CLICK, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -104,6 +105,24 @@ public class Menu extends LabelImageElement {
 		}
 	}
 
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 8.0.3
+	 */
+	public boolean isDisabled() {
+		return _disabled;
+	}
+
+	/** Sets whether it is disabled.
+	 * @since 8.0.3
+	 */
+	public void setDisabled(boolean disabled) {
+		if (disabled != _disabled) {
+			_disabled = disabled;
+			smartUpdate("disabled", _disabled);
+		}
+	}
+
 	/**
 	 * Opens the menupopup that belongs to the menu.
 	 * <p>
@@ -123,6 +142,7 @@ public class Menu extends LabelImageElement {
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 		render(renderer, "content", _content);
+		render(renderer, "disabled", _disabled);
 	}
 
 	public void beforeParentChanged(Component parent) {

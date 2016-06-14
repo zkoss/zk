@@ -104,6 +104,27 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			} else
 				this._contentHandler.setContent(content);
 		},
+		 /** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @since 8.0.3
+		 * @return boolean
+		 */
+		 /** Sets whether it is disabled.
+		 * @param boolean disabled
+		 * @since 8.0.3
+		 */
+		disabled: function (disabled) {
+			if (!this.desktop) return;
+			if (disabled) {
+				jq(this.$n('a'))
+					.attr('disabled', 'disabled')
+					.attr('tabindex', '-1');
+			} else {
+				jq(this.$n('a'))
+					.removeAttr('disabled')
+					.removeAttr('tabindex');
+			}
+		},
 		image: function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
 			this.rerender();
@@ -278,7 +299,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			case 40: //DOWN
 				// 1. open menupopup if any.
 				// 2. pass the focus control to menupopup
-				if (this.menupopup) {
+				if (this.menupopup && !this._disabled) {
 					jq(this.$n()).addClass(this.$s('selected')).removeClass(this.$s('hover'));
 					this.menupopup._shallClose = false;
 					this.menupopup.open();
@@ -289,9 +310,14 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			case 39: //RIGHT
 				// LEFT: 1. jump to the previous menu if any, otherwise, jump to the last one
 				// RIGHT: 1. jump to the next menu if any, otherwise, jump to the first one
-				var target = keyCode == 37 ? this._getPrevVisibleMenu() : this._getNextVisibleMenu();
-				if (target)
+				var target = this;
+				//ZK-3176 get next visible and no disabled menu
+				while (target = keyCode == 37 ? target._getPrevVisibleMenu() : target._getNextVisibleMenu()) {
+					if (!target._disabled) {
 					target.focus();
+						break;
+					}
+				}
 				evt.stop();
 				break;
 			case 13: //ENTER
@@ -363,13 +389,15 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			content.onShow();
 	},
 	doClick_: function (evt) {
-		if (this.menupopup) {
-			if (this.isTopmost())
-				this.getMenubar()._lastTarget = this;
-			// toggle the open/close status of menupopup/contenthandler
-			_doClick(this, evt);
-		} else {
-			this._showContentHandler();
+		if (!this._disabled) {
+			if (this.menupopup) {
+				if (this.isTopmost())
+					this.getMenubar()._lastTarget = this;
+				// toggle the open/close status of menupopup/contenthandler
+				_doClick(this, evt);
+			} else {
+				this._showContentHandler();
+			}
 		}
 		evt.stop();
 	},
@@ -399,7 +427,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (menubar) {
 			menubar._noFloatUp = false;
 		}
-
+		if (this._disabled) return;
 		var	topmost = this.isTopmost();
 		if (topmost)
 			_toggleClickableCSS(this);
@@ -430,7 +458,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_doMouseLeave: function (evt) { //not zk.Widget.doMouseOut_
 		var menubar = this.getMenubar();
 		this._updateHoverImage(); // remove hover image if any
-
+		if (this._disabled) return;
 		var topmost = this.isTopmost(),
 			menupopup = this.menupopup;
 		if (topmost) { //implies menubar
