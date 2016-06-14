@@ -6,6 +6,7 @@ ZK 8.0.3
   ZK-3221: Dragging element background can cover the whole text
   ZK-3198: org.zkoss.zul.tree.initRodSize = "-1" no longer disable ROD in tree on ZK8
   ZK-3189: DropUpload causes NPE when filesize is close to or equal maxsize.
+  ZK-2601: Format "#00" breaks Spinner when value is 0
 
 * Upgrade Notes
 
