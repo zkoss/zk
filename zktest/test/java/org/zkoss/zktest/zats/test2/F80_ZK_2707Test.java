@@ -52,7 +52,7 @@ public class F80_ZK_2707Test extends WebDriverTestCase {
 		int tp4 = Integer.valueOf(initTimepicker.eq(3).val().substring(0, 2));
 		assertTrue("Expecting: " + timeboxVal + " in timepicker #4, got: " + tp4, timeboxVal == tp4);
 		int tp5 = Integer.valueOf(initTimepicker.eq(4).val().substring(0, 2));
-		assertTrue("Expecting: " + timeboxVal + " in timepicker #5, got: " + tp5, (timeboxVal > 12 ? timeboxVal -= 12 : timeboxVal) == tp5);
+		assertTrue("Expecting: " + timeboxVal + " in timepicker #5, got: " + tp5, (timeboxVal > 12 || timeboxVal == 0 ? timeboxVal -= 12 : timeboxVal) == tp5);
 	}
 	
 	@Test
