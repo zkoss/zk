@@ -25,7 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return null;
 	}
 	function _isActiveItem(wgt) {
-		return wgt.isVisible() && (wgt.$instanceof(zul.menu.Menu) || (wgt.$instanceof(zul.menu.Menuitem) && !wgt.isDisabled()));
+		return wgt.isVisible() && (wgt.$instanceof(zul.menu.Menu) || wgt.$instanceof(zul.menu.Menuitem)) && !wgt.isDisabled();
 	}
 	//child must be _currentChild()
 	function _prevChild(popup, child) {
@@ -324,14 +324,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				}
 			} else {
 				var root = _getRootMenu(this);
-				if (root)
-					//ZK-3176 get next visible and no disabled menu
-					while (root = root._getPrevVisibleMenu()) {
-						if (!root.getDisabled()) {
-							_activateNextMenu(root);
-							break;
-						}
-					}
+				if (root && (root = root._getPrevVisibleMenu()))
+					_activateNextMenu(root);
 				else // the parent is not menu widget
 					this.close();
 
@@ -340,18 +334,12 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		case 39: //RIGHT
 			// 1. Open the descendant menupopup if any
 			// 2. jump to the next topmost menu
-			if (w && w.$instanceof(zul.menu.Menu)) {
+			if (w && w.$instanceof(zul.menu.Menu) && !w.isDisabled()) {
 				w._togglePopup();
 			} else {
 				var root = _getRootMenu(this);
-				if (root)
-					//ZK-3176 get next visible and no disabled menu
-					while (root = root._getNextVisibleMenu()) {
-						if (!root.getDisabled()) {
-							_activateNextMenu(root);
-							break;
-						}
-					}
+				if (root && (root = root._getNextVisibleMenu()))
+					_activateNextMenu(root);
 			}
 			break;
 		case 13: //ENTER

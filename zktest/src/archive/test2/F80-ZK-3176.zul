@@ -33,9 +33,22 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		<menu id="theMenu" label="Disabled Menu" disabled="true">
 			<menupopup>
 				<menuitem label="Item3"/>
-				<menuitem label="Item4"/>
+				<menu label="Item4" disabled="true">
+					<menupopup>
+						<menuitem label="Item4-1"/>
+						<menuitem label="Item4-2"/>
+					</menupopup>
+				</menu>
+				<menuitem label="Item5"/>
 			</menupopup>
 		</menu>
+		<menu label="Menu">
+			<menupopup>
+				<menuitem label="Item6"/>
+				<menuitem label="Item7"/>
+			</menupopup>
+		</menu>
+
 	</menubar>
 	<button label="toggle disable" onClick="toggleDisable()"/>
 </zk>
