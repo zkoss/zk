@@ -1074,6 +1074,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (head)
 					head.style.height = '';
 			} else {
+				//ZK-3074
+				sz.height += zk(this.ebody).hasHScroll() ? jq.scrollbarHeight() : 0;
 				return this.$supers('setFlexSize_', arguments);
 			}
 		}
@@ -1084,6 +1086,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (head)
 					head.style.width = '';
 			} else {
+				//ZK-3074
+				sz.width += zk(this.ebody).hasVScroll() ? jq.scrollbarWidth() : 0;
 				return this.$supers('setFlexSize_', arguments);
 			}
 		}
