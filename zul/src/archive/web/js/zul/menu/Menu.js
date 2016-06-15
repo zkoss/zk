@@ -40,7 +40,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _isActiveItem(wgt) {
-		return wgt.isVisible() && wgt.$instanceof(zul.menu.Menu);
+		return wgt.isVisible() && wgt.$instanceof(zul.menu.Menu) && !wgt.isDisabled();
 	}
 	function _nextVisibleMenu(menu) {
 		for (var m = menu; m; m = m.nextSibling) {
@@ -310,14 +310,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			case 39: //RIGHT
 				// LEFT: 1. jump to the previous menu if any, otherwise, jump to the last one
 				// RIGHT: 1. jump to the next menu if any, otherwise, jump to the first one
-				var target = this;
-				//ZK-3176 get next visible and no disabled menu
-				while (target = keyCode == 37 ? target._getPrevVisibleMenu() : target._getNextVisibleMenu()) {
-					if (!target._disabled) {
+				var target = keyCode == 37 ? this._getPrevVisibleMenu() : this._getNextVisibleMenu();
+				if (target)
 					target.focus();
-						break;
-					}
-				}
 				evt.stop();
 				break;
 			case 13: //ENTER

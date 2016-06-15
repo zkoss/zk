@@ -38,5 +38,11 @@ public class F80_ZK_3176Test extends WebDriverTestCase{
         waitResponse();
         menuPopup = jq("@menupopup");
         Assert.assertTrue(menuPopup.exists());
+
+        JQuery subMenu = menuPopup.find("@menu");
+        click(subMenu);
+        waitResponse();
+        menuPopup = jq("@menupopup");
+        Assert.assertEquals(1, menuPopup.length());
     }
 }
