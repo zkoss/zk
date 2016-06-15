@@ -14,15 +14,30 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script>
+		function log() {
+			if (this.readyState == 4 &amp;&amp; this.status == 200)
+				zk.log(this.getResponseHeader('content-type'))
+		}
+		var func = function () {
+			var url = jq('.z-image')[1].src;
+			var x = new XMLHttpRequest();
+			x.open('GET', url, false);
+			x.onreadystatechange = log;
+			x.send();
+		}
+	</script>
 	<zscript><![CDATA[
 		import org.zkoss.lang.Library;
 		Library.setProperty("org.zkoss.util.media.MediaTypeResolverImpl.class","org.zkoss.zktest.test2.F80_ZK_2959");
 	]]></zscript>
 	<label multiline="true">
-		1. open developer tools go to Network and reload the page
-		2. the content-type of "notif-close.gif" should be "image/gif;charset=UTF-8"
-		3. and the content-type of "fontawesome-webfont.svg" should be "image/svg+xml(F80-ZK-2959);charset=UTF-8"
+		1. should see "image/svg+xml(F80-ZK-2959);charset=UTF-8" in zklog
+
 	</label>
-	<image src="~./zul/img/popup/notif-close.gif"/>
-	<image src="~./zul/less/font/fontawesome-webfont.svg"/>
+	<vlayout>
+		<button label="get content-type" onClick='Clients.evalJavaScript("func()")'/>
+		<image src="~./zul/img/popup/notif-close.gif"/>
+		<image src="~./zul/less/font/fontawesome-webfont.svg"/>
+	</vlayout>
 </zk>
