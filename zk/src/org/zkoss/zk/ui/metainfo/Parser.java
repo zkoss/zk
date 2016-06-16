@@ -600,7 +600,7 @@ public class Parser {
 			final Class cls = clsresolver.resolveClass(clsnm);
 			mtd = Classes.getMethodBySignature(cls, sig, null, clsresolver);
 		} catch (ClassNotFoundException ex) {
-			throw new UiException(message("Class not found: " + clsnm, pi));
+			throw new UiException(message("Class not found: " + ex.getMessage(), pi));
 		} catch (Exception ex) {
 			throw new UiException(message("Method not found: " + sig + " in " + clsnm, pi));
 		}
