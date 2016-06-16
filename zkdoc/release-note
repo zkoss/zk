@@ -10,6 +10,7 @@ ZK 8.0.3
   ZK-2601: Format "#00" breaks Spinner when value is 0
   ZK-3074: Listbox doesn't extends it width with hflex="min" and predefined height
   ZK-3225: CardLayout tabbing issue
+  ZK-3076: Wrong error message from org.zkoss.zk.ui.metainfo.Parser
 
 * Upgrade Notes
 
