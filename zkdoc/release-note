@@ -9,6 +9,7 @@ ZK 8.0.3
   ZK-3189: DropUpload causes NPE when filesize is close to or equal maxsize.
   ZK-2601: Format "#00" breaks Spinner when value is 0
   ZK-3074: Listbox doesn't extends it width with hflex="min" and predefined height
+  ZK-3225: CardLayout tabbing issue
 
 * Upgrade Notes
 

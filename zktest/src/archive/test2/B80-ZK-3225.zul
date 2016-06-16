@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3225.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun 10 16:07:58 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.15px;" vflex="1">
+
+-->
+<zk>
+	<label multiline="true">1. click the button "next" to switch to the second panel
+		2. focus on the first textbox
+		3. press "tab" key twice
+		4. focus should be on the button "next" (if focus is on the first textbox in the third panel it's a bug)
+		5. focus back on the first textbox on the second
+		6. press "shift+tab" key
+		7. focus should not be on the last textbox on the first panel
+
+	</label>
+	<cardlayout id="cardLayout" width="300px" height="300px" style="box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4); margin: 15px;">
+		<div style="background-color: DarkSeaGreen; padding: 15px;" vflex="1">
+			<textbox value="1" />
+			<textbox value="2" />
+		</div>
+		<div style="background-color: BurlyWood; padding: 15px;" vflex="1">
+			<textbox value="1" />
+			<textbox value="2" />
+		</div>
+		<div style="background-color: LightSalmon; padding: 15px;" vflex="1">
+			<textbox value="1" />
+			<textbox value="2" />
+		</div>
+		<div style="background-color: lightgreen; padding: 15px;" vflex="1">
+			<textbox value="1" />
+			<textbox value="2" />
+		</div>
+		<div style="background-color: palevioletred; padding: 15px;" vflex="1">
+			<textbox value="1" />
+			<textbox value="2" />
+		</div>
+	</cardlayout>
+	<button label="next" onClick="cardLayout.setSelectedIndex((cardLayout.getSelectedIndex() + 1) % 5)"/>
+</zk>
