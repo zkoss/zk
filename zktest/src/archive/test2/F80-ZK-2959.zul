@@ -14,30 +14,14 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<script>
-		function log() {
-			if (this.readyState == 4 &amp;&amp; this.status == 200)
-				zk.log(this.getResponseHeader('content-type'))
-		}
-		var func = function () {
-			var url = jq('.z-image')[1].src;
-			var x = new XMLHttpRequest();
-			x.open('GET', url, false);
-			x.onreadystatechange = log;
-			x.send();
-		}
-	</script>
-	<zscript><![CDATA[
-		import org.zkoss.lang.Library;
-		Library.setProperty("org.zkoss.util.media.MediaTypeResolverImpl.class","org.zkoss.zktest.test2.F80_ZK_2959");
-	]]></zscript>
 	<label multiline="true">
-		1. should see "image/svg+xml(F80-ZK-2959);charset=UTF-8" in zklog
+		1. click the button
+		2. should see "done" in zklog
 
 	</label>
-	<vlayout>
-		<button label="get content-type" onClick='Clients.evalJavaScript("func()")'/>
-		<image src="~./zul/img/popup/notif-close.gif"/>
+	<vlayout apply="org.zkoss.zktest.test2.F80_ZK_2959">
+		<button id="btn" label="log"/>
+		<image id="img1" src="~./zul/img/popup/notif-close.gif"/>
 		<image src="~./zul/less/font/fontawesome-webfont.svg"/>
 	</vlayout>
 </zk>

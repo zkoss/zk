@@ -12,6 +12,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+
+	<library-property>
+		<name>org.zkoss.util.media.MediaTypeResolverImpl.class</name>
+		<value>org.zkoss.zktest.test2.F80_ZK_2959</value>
+	</library-property>
+
 	<!-- Defines the application's name -->
 	<preference>
 		<name>org.zkoss.zk.ui.WebApp.name</name>
