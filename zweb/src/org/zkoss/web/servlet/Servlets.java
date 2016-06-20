@@ -77,6 +77,7 @@ public class Servlets {
 			_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
 			_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
 			_randroid = Pattern.compile(".*(android)[ /]([\\w.]+).*"),
+			_redge = Pattern.compile(".*(edge)[ /]([\\w.]+).*"),
 			_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*"), _rtrident = Pattern.compile("trident/([0-9\\.]+)");
 
 	private static final boolean _svl24, _svl23, _svl3;
@@ -401,6 +402,11 @@ public class Servlets {
 				m = _rsafari.matcher(ua);
 				if (!matchChrome && m.matches())
 					zk.put("safari", getVersion(m));
+
+				m = _redge.matcher(ua);
+				if (m.matches()) {
+					zk.put("edge", getVersion(m));
+				}
 
 				m = _randroid.matcher(ua);
 				if (m.matches()) {

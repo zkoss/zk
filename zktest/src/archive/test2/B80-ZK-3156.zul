@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3156.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 16 18:42:02 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">ONLY EDGE
+        should see "edge: xxxxx" (xxxxx is the version of your ie edge, should be some numbers)
+    </label>
+
+    <label value="edge: ${zk.edge}"/>
+</zk>

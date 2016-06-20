@@ -12,6 +12,7 @@ ZK 8.0.3
   ZK-3225: CardLayout tabbing issue
   ZK-3076: Wrong error message from org.zkoss.zk.ui.metainfo.Parser
   ZK-3187: include problems when clearing the "src" attribute
+  ZK-3156: browser detection inconsistent
 
 * Upgrade Notes
 
