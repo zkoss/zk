@@ -11,6 +11,7 @@ ZK 8.0.3
   ZK-3074: Listbox doesn't extends it width with hflex="min" and predefined height
   ZK-3225: CardLayout tabbing issue
   ZK-3076: Wrong error message from org.zkoss.zk.ui.metainfo.Parser
+  ZK-3187: include problems when clearing the "src" attribute
 
 * Upgrade Notes
 
