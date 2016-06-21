@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3144.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 17 15:48:58 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">1. click each button twice
+        2. should not alert any error
+
+    </label>
+    <div id="mycontainer" width="500px" height="400px" style="border: 1px solid green;">
+        <div id="mydiv" width="200px" height="300px" style="border: 1px solid red;"></div>
+    </div>
+    <button label="make it hflex" onClick='mydiv.setWidth(null); mydiv.setHflex("1")' />
+    <button label="make it fixed width" onClick='mydiv.setHflex(null); mydiv.setWidth("300px")' />
+    <button label="vflex" onClick='mydiv.setHeight(null); mydiv.setVflex("1")' />
+    <button label="fixed height" onClick='mydiv.setVflex(null); mydiv.setHeight("300px")' />
+</zk>

@@ -167,7 +167,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	/** Sets the height. If null, the best fit is used.
 	 */
 	public void setHeight(String height) {
-		if (getVflex() != null && !getVflex().equals("min")) {
+		if (getVflex() != null && !(height == null || getVflex().equals("min"))) {
 			throw new UiException("Not allowed to set vflex and height at the same time except vflex=\"min\"");
 		}
 		setHeight0(height);
@@ -197,7 +197,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @see #disableClientUpdate
 	 */
 	public void setWidth(String width) {
-		if (getHflex() != null && !getHflex().equals("min")) {
+		if (getHflex() != null && !(width == null || getHflex().equals("min"))) {
 			throw new UiException("Not allowed to set hflex and width at the same time except hflex=\"min\"");
 		}
 		setWidth0(width);
@@ -499,7 +499,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @see #getVflex 
 	 */
 	public void setVflex(String flex) {
-		if (getHeight() != null && !"min".equals(flex)) {
+		if (getHeight() != null && !(flex == null || "min".equals(flex))) {
 			throw new UiException("Not allowed to set vflex and height at the same time except vflex=\"min\"");
 		}
 		setVflex0(flex);
@@ -552,7 +552,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * @see #getHflex 
 	 */
 	public void setHflex(String flex) {
-		if (getWidth() != null && !"min".equals(flex)) {
+		if (getWidth() != null && !(flex == null || "min".equals(flex))) {
 			throw new UiException("Not allowed to set hflex and width at the same time except hflex=\"min\"");
 		}
 		setHflex0(flex);
