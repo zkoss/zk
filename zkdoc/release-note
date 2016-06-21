@@ -17,6 +17,7 @@ ZK 8.0.3
   ZK-3204: combobox popup detached when using invisible comboitems
   ZK-3243: Combobox popup width exceeds browser width
   ZK-3183: Special characters trigger unexpected onChanging event (IE10/IE11)
+  ZK-3219: Recursive internationalization labels causes PotentialDeadLockException
 
 * Upgrade Notes
 

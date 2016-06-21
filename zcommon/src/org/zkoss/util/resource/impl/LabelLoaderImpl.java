@@ -320,7 +320,10 @@ public class LabelLoaderImpl implements LabelLoader {
 	//expend ${} EL in labels recursively
 	private String expendValue(Map labels, String value) {
 		if (labels != null && value != null && value.startsWith("${") && value.endsWith("}")) {
-			Object expend = labels.get(value.substring(2, value.length() - 1));
+			String expStr = value.substring(2, value.length() - 1);
+			if (expStr.endsWith(".$"))
+				expStr = expStr.substring(0, expStr.length() - 2);
+			Object expend = labels.get(expStr);
 			if (expend != null) {
 				if (expend instanceof String)
 					return expendValue(labels, (String) expend);
