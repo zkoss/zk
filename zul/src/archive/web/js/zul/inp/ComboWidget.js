@@ -213,7 +213,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 					var hgh = 0;
 					for (var j = rows.length; j--;)
 						hgh += rows[j].offsetHeight;
-					pp.style.height = (hgh + 20) + 'px';
+					pp.style.height = jq.px0((hgh + 20));
 						//add the height of scrollbar (18 is an experimental number)
 				}
 			}
@@ -360,14 +360,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (ppofs[0] == 'auto') {
 			var cb = this.$n();
 			if (pp.offsetWidth <= cb.offsetWidth) {
-				pp.style.width = zk(pp).revisedWidth(cb.offsetWidth) + 'px';
+				pp.style.width = jq.px0(zk(pp).revisedWidth(cb.offsetWidth));
 				if (pp2) pp2.style.width = '100%';
 					//Note: we have to set width to auto and then 100%
 					//Otherwise, the width is too wide in IE
 			} else {
 				var wd = jq.innerWidth() - 20;
 				if (wd < cb.offsetWidth) wd = cb.offsetWidth;
-				if (pp.offsetWidth > wd) pp.style.width = wd;
+				if (pp.offsetWidth > wd) pp.style.width = jq.px0(wd);
 			}
 		}
 	},
