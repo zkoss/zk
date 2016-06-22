@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3183.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jun 22, 2016  4:59:13 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		void log() {
+			Clients.log("onChanging");
+		}
+	]]></zscript>
+	<label multiline="true">
+		This is a bug in IE10 and IE11
+		1.click "show" button
+		2.it should not see any message in the zk log
+	</label>
+	<button id="show" label="show"/>
+	<div fulfill="show.onClick">
+		<div>
+			<textbox value="很好" onChanging="log()"/> <!-- triggers onChanging -->
+		</div>
+		<div>
+			<textbox value="Gebühren" onChanging="log()"/> <!-- triggers onChanging -->
+		</div>
+		<div>
+			<textbox value="no special char" onChanging="log()"/> <!-- no onChanging - OK -->
+		</div>
+	</div>
+</zk>

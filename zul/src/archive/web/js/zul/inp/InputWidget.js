@@ -849,8 +849,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_')
-			.domListen_(n, 'onSelect')
-			.domListen_(n, 'onInput', 'doInput_');
+			.domListen_(n, 'onSelect');
+		//prevent unexpected onInput bug in IE10 and IE11, see https://connect.microsoft.com/IE/feedback/details/816137
+		if (zk.ie10_ || zk.ie11_) {
+			var self = this;
+			setTimeout(function () {
+				self.domListen_(n, 'onInput', 'doInput_');
+			}, 100);
+		} else {
+			this.domListen_(n, 'onInput', 'doInput_');
+		}
 
 		if (zk.ios)
 			this.domListen_(n, 'onTouchStart', '_doTouch');
