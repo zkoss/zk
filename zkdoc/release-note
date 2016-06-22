@@ -15,6 +15,7 @@ ZK 8.0.3
   ZK-3187: include problems when clearing the "src" attribute
   ZK-3156: browser detection inconsistent
   ZK-3204: combobox popup detached when using invisible comboitems
+  ZK-3243: Combobox popup width exceeds browser width
 
 * Upgrade Notes
 
