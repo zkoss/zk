@@ -16,9 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.zkoss.zk.ui.ArithmeticWrongValueException;
 import org.zkoss.zk.ui.Component;
@@ -137,14 +138,20 @@ public class Doublebox extends NumberInputElement {
 	}
 
 	/*package*/ static String toLocaleString(Double v, java.util.Locale locale) {
-		// B65-ZK-1909: Remove .0 part
-		final DecimalFormat df = new DecimalFormat("#.#");
 		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
 		final char DECIMAL = symbols.getDecimalSeparator();
 		final char MINUS = symbols.getMinusSign();
+		String valStr = v.toString();
+		String patternStr = "\\.0+$";
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(v.toString());
+		int zIndex = valStr.length();
+		if (matcher.find())
+			zIndex = matcher.start();
 		// only replace MINUS and DECIMAL as toPlainString() implementation
-		// only involves these two chars. 
-		return df.format(v).toString().replace('.', DECIMAL).replace('-', MINUS);
+		// only involves these two chars.
+		// B65-ZK-1909: Remove .0 part
+		return valStr.substring(0, zIndex).replace('.', DECIMAL).replace('-', MINUS);
 	}
 
 	//--ComponentCtrl--//

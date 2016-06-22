@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    B80-ZK-3218.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jun 20 11:44:23 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Click the button, and you should see ">>0.001" in zk log without any error.
+    </label>
+    <window border="normal" title="hello" >
+        <doublebox id="db" constraint="no zero" />
+        <button id="btn" label="Click" onClick="print()"/>
+        <zscript><![CDATA[
+            db.setValue(0.001);
+            public void print(){
+                Clients.log(">>" + db.getValue());
+            }
+         ]]>
+        </zscript>
+    </window>
+</zk>
