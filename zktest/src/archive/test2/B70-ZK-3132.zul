@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-3132.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jun 23, 2016 12:48:53 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.case happen when property "org.zkoss.zul.listbox.checkmarkDeselectOthers" in zk.xml is true
+        2.click first and second row's check mark, select the first and second items, the intbox on the bottom should be 2
+        3.click next paging button, switch to page 2
+        4.click first row's check mark twice, select then unselect the first item, the intbox on the bottom should be 2
+    </label>
+	<listbox width="250px" height="100px" multiple="true" checkmark="true" mold="paging" pageSize="2"
+             onSelect="count.setValue(self.getSelectedCount());" onPaging="count.setValue(self.getSelectedCount());" >
+       <listitem label="hello" />
+       <listitem label="world" />
+       <listitem label="hello" />
+       <listitem label="you" />
+</listbox>
+<intbox id="count"  />
+</zk>
