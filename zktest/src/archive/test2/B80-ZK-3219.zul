@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3219.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 21, 2016 11:38:05 AM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.Load this page
+		2.It shouldn't appear any exception
+		3.The value of three labels are "test", "{c=org.zkoss.util.resource.impl.LabelLoaderImpl$ExValue...", "test"
+
+	</label>
+	<div>
+		<vlayout>
+			<label value="${labels.my.app.a.$}"/>
+			<label value="${labels.my.app.a.b}"/>
+			<label value="${labels.my.app.a.b.c}"/>
+		</vlayout>
+	</div>
+</zk>
