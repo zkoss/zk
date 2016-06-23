@@ -79,6 +79,7 @@ public class Datebox extends FormatInputElement {
 	private static Map<Locale, Object> _symbols = new HashMap<Locale, Object>(8);
 	private boolean _weekOfYear;
 	private boolean _showTodayLink = false;
+	private String _position = "after_start";
 
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -210,6 +211,53 @@ public class Datebox extends FormatInputElement {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
 			smartUpdate("buttonVisible", visible);
+		}
+	}
+
+	/**
+	 * @return the datebox popup position
+	 * @since 8.0.3
+     */
+	public String getPosition() {
+		return _position;
+	}
+
+	/**
+	 * Position the popup datebox to the specified location.
+	 * @param position where to position. Default: <code>after_start</code>
+	 * Allowed values:</br>
+	 * <ul>
+	 * 	<li><b>before_start</b><br/> the element appears above the anchor, aligned to the left.</li>
+	 * 	<li><b>before_center</b><br/> the element appears above the anchor, aligned to the center.</li>
+	 *  <li><b>before_end</b><br/> the element appears above the anchor, aligned to the right.</li>
+	 *  <li><b>after_start</b><br/> the element appears below the anchor, aligned to the left.</li>
+	 *  <li><b>after_center</b><br/> the element appears below the anchor, aligned to the center.</li>
+	 *  <li><b>after_end</b><br/> the element appears below the anchor, aligned to the right.</li>
+	 *  <li><b>start_before</b><br/> the element appears to the left of the anchor, aligned to the top.</li>
+	 *  <li><b>start_center</b><br/> the element appears to the left of the anchor, aligned to the middle.</li>
+	 *  <li><b>start_after</b><br/> the element appears to the left of the anchor, aligned to the bottom.</li>
+	 *  <li><b>end_before</b><br/> the element appears to the right of the anchor, aligned to the top.</li>
+	 *  <li><b>end_center</b><br/> the element appears to the right of the anchor, aligned to the middle.</li>
+	 *  <li><b>end_after</b><br/> the element appears to the right of the anchor, aligned to the bottom.</li>
+	 *  <li><b>overlap/top_left</b><br/> the element overlaps the anchor, with anchor and element aligned at top-left.</li>
+	 *  <li><b>top_center</b><br/> the element overlaps the anchor, with anchor and element aligned at top-center.</li>
+	 *  <li><b>overlap_end/top_right</b><br/> the element overlaps the anchor, with anchor and element aligned at top-right.</li>
+	 *  <li><b>middle_left</b><br/> the element overlaps the anchor, with anchor and element aligned at middle-left.</li>
+	 *  <li><b>middle_center</b><br/> the element overlaps the anchor, with anchor and element aligned at middle-center.</li>
+	 *  <li><b>middle_right</b><br/> the element overlaps the anchor, with anchor and element aligned at middle-right.</li>
+	 *  <li><b>overlap_before/bottom_left</b><br/> the element overlaps the anchor, with anchor and element aligned at bottom-left.</li>
+	 *  <li><b>bottom_center</b><br/> the element overlaps the anchor, with anchor and element aligned at bottom-center.</li>
+	 *  <li><b>overlap_after/bottom_right</b><br/> the element overlaps the anchor, with anchor and element aligned at bottom-right.</li>
+	 *  <li><b>at_pointer</b><br/> the element appears with the upper-left aligned with the mouse cursor.</li>
+	 *  <li><b>after_pointer</b><br/> the element appears with the top aligned with
+	 *  	the bottom of the mouse cursor, with the left side of the element at the horizontal position of the mouse cursor.</li>
+	 * </ul>
+	 * @since 8.0.3
+     */
+	public void setPosition(String position) {
+		if (!Objects.equals(_position, position)) {
+			_position = position;
+			smartUpdate("position", _position);
 		}
 	}
 
@@ -953,6 +1001,7 @@ public class Datebox extends FormatInputElement {
 		}
 
 		render(renderer, "weekOfYear", _weekOfYear);
+		render(renderer, "position", _position);
 
 		if (_tzone != null)
 			renderer.render("timeZone", _tzone.getID());

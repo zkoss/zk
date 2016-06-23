@@ -28,7 +28,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			inp = db.getInputNode();
 
 		if (pp) {
-			zk(pp).position(n, 'after_start', {dodgeRef: n});
+			zk(pp).position(n, db.position, {dodgeRef: n});
 			db._pop.syncShadow();
 			if (!silent)
 				zk(inp).focus();
@@ -634,7 +634,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		var inp = db.getInputNode(),
 			dbEl = db.$n();
-		zk(pp).position(dbEl, 'after_start', {dodgeRef: dbEl});
+		zk(pp).position(dbEl, db.position, {dodgeRef: dbEl});
 		delete db._shortcut;
 
 		var self = this;
