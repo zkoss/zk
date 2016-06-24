@@ -1858,15 +1858,17 @@ wgt.$f().main.setTitle("foo");
 			//Alertinative is to introduce another isVisibleXxx but not worth
 				if (!zk(wgt.$n()).isVisible(opts.strict))
 					return _markCache(cache, visited, false);
-			} else if (!wgt._visible) // TODO: wgt._visible is not accurate, if tabpanel is not selected, we should fix in ZK 7.(B65-ZK-1076)
+			} else if (!wgt.isVisible())
 				return _markCache(cache, visited, false);
 
 			//check if it is hidden by parent, such as child of hbox/vbox or border-layout
 			var wp = wgt.parent, p, n;
-			if (wp && wp._visible && (p = wp.$n()) && (n = wgt.$n()))
-				while ((n = zk(n).vparentNode(true)) && p != n)
-					if ((n.style || {}).display == 'none') //hidden by parent
+			if (wp && wp._visible && (n = wgt.$n()) && (p = zk(n).vparentNode(true)))
+				while (p && p != n) {
+					if (p.style && p.style.display == 'none') //hidden by parent
 						return _markCache(cache, visited, false);
+					p = zk(p).vparentNode(true);
+				}
 
 			if (opts && opts.until == wgt)
 				break;
