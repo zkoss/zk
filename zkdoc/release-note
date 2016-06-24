@@ -22,6 +22,7 @@ ZK 8.0.3
   ZK-3231: Listbox doesn't keep selection after switching pages with org.zkoss.zul.listbox.checkmarkDeselectOthers enabled (true)
   ZK-3218: Doublebox shows a validation error when value is 0.001
   ZK-3217: Possible improvement in datebox calendar open() method
+  ZK-3230: Tree enforces to scroll up when you scroll down
 
 * Upgrade Notes
 
