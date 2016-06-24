@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3216.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 17 17:51:54 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">1. click the datebox button
+        2. the popup calendar should be at the right and top align with the datebox button
+
+    </label>
+    <hlayout>
+        <div style="height: 500px; width: 200px;"/>
+        <datebox position="end_before"/>
+    </hlayout>
+</zk>
