@@ -634,16 +634,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		var inp = db.getInputNode(),
 			dbEl = db.$n();
-		zk(pp).position(dbEl, db.position, {dodgeRef: dbEl});
 		delete db._shortcut;
 
-		var self = this;
-		setTimeout(function () {
-			_reposition(db, silent);
-			zWatch.fireDown('onVParent', self.parent.$n('pp'), { shadow: self._shadow });
-		}, 150);
-		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
-		//in Chinese language might not be correct here.
 		var fmt = db.getTimeFormat(),
 			unf = Datebox._unformater,
 			value = unf ? unf(inp.value) : null;
@@ -665,6 +657,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		//add extra CSS class for easy customize
 		jq(pp).addClass(db.$s('open'));
+
+		_reposition(db, silent); //ZK-3217: only need to calculate position once during open
 	},
 	syncShadow: function () {
 		if (!this._shadow)
