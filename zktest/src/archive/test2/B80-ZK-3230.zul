@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3230.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jun 24, 2016 12:08:24 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:w="client" xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	<label multiline="true">
+		1.case happened under IE
+		2.click the first item
+		3.click the down arrow on the scroll-bar several times
+		4.the scroll-bar would not enforces scroll back
+	</label>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3230VM')" vflex="1">
+		<borderlayout >
+			<center>
+				<tree model="@load(vm.dataList)" vflex="1" >
+					<template name="model" var="node">
+						<treeitem>
+							<treerow>
+								<treecell>
+									<label value="${node}" />
+								</treecell>
+							</treerow>
+						</treeitem>
+					</template>
+				</tree>
+			</center>
+		</borderlayout>
+	</window>
+</zk>
