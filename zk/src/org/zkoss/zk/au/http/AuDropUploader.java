@@ -126,6 +126,9 @@ public class AuDropUploader implements AuExtension {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
 			} else if (ex instanceof IOFileUploadException) {
 				log.debug("File upload cancelled!");
+			} else if (ex instanceof FileUploadBase.SizeLimitExceededException) {
+				alert = Exceptions.getMessage(ex);
+				response.getWriter().write("error:" + alert);
 			} else {
 				alert = handleError(ex);
 			}
@@ -136,7 +139,6 @@ public class AuDropUploader implements AuExtension {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
-			response.getWriter().write("error:" + alert);
 		}
 		if (log.isTraceEnabled())
 			log.trace(Objects.toString(attrs));
