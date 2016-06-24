@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3245.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 23 16:09:24 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">1. drop two files named "2048bytes-1.txt" and "2048bytes-2.txt" and are both 2KB
+    2. should see alert message
+        2048bytes-1.txt
+        The request was rejected because its size (2 KB) exceeds the configured maximum (1 KB)
+        2048bytes-2.txt
+        The request was rejected because its size (2 KB) exceeds the configured maximum (1 KB)
+
+    </label>
+    <dropupload maxsize="1" detection="none">
+        <attribute name="content"><![CDATA[
+            <b>Drop Here</b><br/>
+            size < 1k
+        ]]></attribute>
+    </dropupload>
+</zk>
