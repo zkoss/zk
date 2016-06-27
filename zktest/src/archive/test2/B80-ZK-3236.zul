@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3236.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 27 12:57:32 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">1. click the caption and title of the groupboxs
+		2. click the buttons "gb1 rerender" and "gb2 rerender"
+		3. the groupboxs should both remain open, and should see "true true" in zklog
+	</label>
+	<div id="mydiv">
+		<groupbox id="gb1" closable="false">
+			<caption>caption</caption>
+			content 1
+		</groupbox>
+		<groupbox title="title" id="gb2" closable="false">
+			content 2
+		</groupbox>
+		<button w:onClick="zk.$('$gb1').rerender();" label="gb1 rerender" onClick='Clients.log(gb1.isOpen().toString())'/>
+		<button w:onClick="zk.$('$gb2').rerender();" label="gb2 rerender" onClick='Clients.log(gb2.isOpen().toString())'/>
+	</div>
+</zk>

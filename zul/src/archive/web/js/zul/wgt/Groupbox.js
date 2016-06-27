@@ -197,7 +197,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 	},
 	// will be called while click on title and title exists but no caption
 	_doTitleClick: function () {
-		this.setOpen(!this.isOpen());
+		if (this._closable) this.setOpen(!this.isOpen());
 		this.$supers('doClick_', arguments);
 	},
 	onChildAdded_: function (child) {
