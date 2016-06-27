@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2633.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 27, 2016 11:05:31, Created by Chris
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window title="test" border="normal" width="10000px" height="10000px" onClientInfo=''>
+	<label multiline="true">
+		1. scroll both down and right a little bit
+		2. zoom in to 150%, should not see any error
+		3. zoom out to 75%, should not see any error
+	</label>
+</window>

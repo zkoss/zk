@@ -2003,15 +2003,15 @@ zk.copy(jq, {
 	 * @return int
 	 */
 	innerX: function () {
-		return window.pageXOffset
-			|| DocRoot().scrollLeft || 0;
+		return Math.round(window.pageXOffset
+			|| DocRoot().scrollLeft || 0); //ZK-2633: browser might return decimal number
 	},
 	/** Returns the Y coordination of the visible part of the browser window.
 	 * @return int
 	 */
 	innerY: function () {
-		return window.pageYOffset
-			|| DocRoot().scrollTop || 0;
+		return Math.round(window.pageYOffset
+			|| DocRoot().scrollTop || 0); //ZK-2633: browser might return decimal number
 	},
 	/** Returns the height of the viewport (visible part) of the browser window.
 	 * It is the same as jq(window).width().
