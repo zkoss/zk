@@ -74,7 +74,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		return sc + (parent._closable ? '' : ' ' + this.$s('readonly'));
 	},
 	doClick_: function () {
-		if (this.parent.$instanceof(zul.wgt.Groupbox))
+		if (this.parent.$instanceof(zul.wgt.Groupbox) && this.parent.isClosable())
 			this.parent.setOpen(!this.parent.isOpen());
 		this.$supers('doClick_', arguments);
 	},
