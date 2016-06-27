@@ -24,6 +24,7 @@ ZK 8.0.3
   ZK-3217: Possible improvement in datebox calendar open() method
   ZK-3230: Tree enforces to scroll up when you scroll down
   ZK-3245: Should check the size of the dropped files separately in DropUpload
+  ZK-2633: ClassCastException in ClientInfoEvent with zoomed view in Windows/Chrome
 
 * Upgrade Notes
 
