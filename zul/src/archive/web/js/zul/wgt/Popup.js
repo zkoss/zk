@@ -250,13 +250,19 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		// F70-ZK-2007: Clear toggle type.
 		this._shallToggle = false;
 
-		// firefox only
 		try {
-			if (zk.ff && zk.currentFocus) {
-				var n = zk.currentFocus.getInputNode ?
-						zk.currentFocus.getInputNode() : zk.currentFocus.$n();
-				if (jq.nodeName(n, 'input') && jq.isAncestor(this.$n(), n)) // Bug ZK-2922, check ancestor first.
-					jq(n).blur(); // trigger a missing blur event.
+			//fix firefox and ie issue
+			if ((zk.ie || zk.ff) && zk.currentFocus) {
+				 // Bug ZK-2922, check ancestor first.
+				var n = zk.currentFocus.getInputNode ? zk.currentFocus.getInputNode() : zk.currentFocus.$n();
+				if (jq.nodeName(n, 'input')) {
+					if (zk.ff && jq.isAncestor(this.$n(), n)) {
+						jq(n).blur(); // trigger a missing blur event.
+					} else if (zk.ie && document.activateElement !== n) {
+						//ZK-3244 popup miss focus on input on IE
+						jq(n).focus();
+					}
+				}
 			}
 		} catch (e) {
 			// do nothing
