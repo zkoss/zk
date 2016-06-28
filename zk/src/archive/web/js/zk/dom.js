@@ -263,7 +263,16 @@ zk.copy(zjq, {
 		return zk(el).offsetWidth() + 1;
 	},
 
-	fixInput: zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
+	fixInput: zk.ie == 11 ? function (el) { //ZK-3237: including domie.js for IE 11 will have many side effects
+		try {
+			var $n = zk(el), pos;
+			if ($n.isInput()) {
+				pos = $n.getSelectionRange();
+				$n.setSelectionRange(pos[0], pos[1]);
+			}
+		} catch (e) { //ignore
+		}
+	} : zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
 		el.className += ' ';
 		if (el.offsetHeight)

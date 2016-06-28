@@ -72,7 +72,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return code >= 32;
 		},
 
-		_fixInput = zk.ie < 11 ? function (wgt) { //ZK-426
+		_fixInput = zk.ie ? function (wgt) { //ZK-426; ZK-3237: IE 11 also have this problem
 			setTimeout(function () { //we have to delay since zk.currentFocus might not be ready
 				if (wgt == zk.currentFocus)
 					zjq.fixInput(wgt.getInputNode());

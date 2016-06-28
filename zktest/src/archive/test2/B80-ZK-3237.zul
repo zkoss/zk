@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3237.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 28, 2016 11:46:23, Created by Chris
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-textbox:focus{
+			background-color:#00cc00;
+		}
+	</style>
+	<zscript><![CDATA[
+		class MyVm{
+			private String cmbValue = "";
+			public String getCmbValue(){
+				return cmbValue;
+			}
+			public void setCmbValue(String cmbValue){
+				this.cmbValue = cmbValue;
+			}
+		}
+	]]></zscript>
+	<label multiline="true">
+		NOTE: this is a IE 11 only bug (actually all IE, but previous fix didn't include IE 11)
+		1. type any string into the combobox
+		2. quickly hit TAB and start typing anything
+		3. should see whatever you typed appears in the previously readonly textbox
+	</label>
+	<window viewModel="@id('vm')@init('MyVm')">
+		<combobox instant="true" value="@bind(vm.cmbValue)" >
+			<comboitem label="a item 1"/>
+			<comboitem label="b item 2"/>
+			<comboitem label="b item 3"/>
+		</combobox>
+		<textbox readonly="@load(empty vm.cmbValue)"/>
+	</window>
+</zk>
