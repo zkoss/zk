@@ -47,6 +47,9 @@ public class InputEvent extends Event {
 	}
 
 	/** Constructs a input-relevant event.
+	 * @param name the name of the event
+	 * @param target the component to receive this event,
+	 * or null to indicate broadcasting the event to all root components.
 	 * @param val the new value
 	 * @param oldValue the previous value
 	 * @since 5.0.4
@@ -56,6 +59,9 @@ public class InputEvent extends Event {
 	}
 
 	/** Constructs an input event
+	 * @param name the name of the event
+	 * @param target the component to receive this event,
+	 * or null to indicate broadcasting the event to all root components.
 	 * @param val the new value
 	 * @param oldValue the previous value
 	 * @param selbk whether this event is caused by user's selecting a list

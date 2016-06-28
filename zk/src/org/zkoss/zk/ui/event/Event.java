@@ -57,6 +57,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	/** Constructs a simple event without target.
+	 * @param name the name of the event
 	 * @since 5.0.0
 	 */
 	public Event(String name) {
@@ -64,6 +65,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	/** Constructs a simple event.
+	 * @param name the name of the event
 	 * @param target the component to receive this event,
 	 * or null to indicate broadcasting the event to all root components.
 	 */
@@ -76,6 +78,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	/** Constructs a simple event.
+	 * @param name the name of the event
 	 * @param target the component to receive this event,
 	 * or null to indicate broadcasting the event to all root components.
 	 * @param data an arbitrary data

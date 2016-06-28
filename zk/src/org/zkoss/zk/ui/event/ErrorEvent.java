@@ -43,6 +43,9 @@ public class ErrorEvent extends InputEvent {
 	}
 
 	/** Constructs an error-relevant event.
+	 * @param name the name of the event
+	 * @param target the component to receive this event,
+	 * or null to indicate broadcasting the event to all root components.
 	 * @param val the new value that caused the error
 	 * @param oldValue the previous value.
 	 * @param msg the error message if not null. If null, it means the
