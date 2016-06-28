@@ -31,6 +31,7 @@ ZK 8.0.3
   ZK-3226: Javadoc not up to date for ErrorEvent constructor
   ZK-3237: IE 11 input readonly require focus-out before accepting edit
   ZK-3248: PortalChildren doesn't resize when its children cause a scrollbar, covers the children panel
+  ZK-3214: Desktop cleanup cleans current execution even if not related
 
 * Upgrade Notes
 
