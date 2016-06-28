@@ -29,6 +29,7 @@ ZK 8.0.3
   ZK-3236: Groupbox closable != true still update the open status when clicking the caption/title
   ZK-3242: Tabpanel children return isRealVisible true when their panel is not selected
   ZK-3226: Javadoc not up to date for ErrorEvent constructor
+  ZK-3237: IE 11 input readonly require focus-out before accepting edit
 
 * Upgrade Notes
 
