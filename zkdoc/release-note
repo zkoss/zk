@@ -27,6 +27,7 @@ ZK 8.0.3
   ZK-2633: ClassCastException in ClientInfoEvent with zoomed view in Windows/Chrome
   ZK-3244: leaving an input widget and opening a popup in the same click prevent blur on the input on IE11
   ZK-3236: Groupbox closable != true still update the open status when clicking the caption/title
+  ZK-3242: Tabpanel children return isRealVisible true when their panel is not selected
 
 * Upgrade Notes
 
