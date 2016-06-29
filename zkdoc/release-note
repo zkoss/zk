@@ -30,6 +30,7 @@ ZK 8.0.3
   ZK-3242: Tabpanel children return isRealVisible true when their panel is not selected
   ZK-3226: Javadoc not up to date for ErrorEvent constructor
   ZK-3237: IE 11 input readonly require focus-out before accepting edit
+  ZK-3248: PortalChildren doesn't resize when its children cause a scrollbar, covers the children panel
 
 * Upgrade Notes
 
