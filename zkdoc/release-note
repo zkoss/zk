@@ -37,6 +37,7 @@ ZK 8.0.3
   ZK-3213: Ambiguous setter in Image component
   ZK-3253: htmlBasedComponent.getTabIndex causes null pointer exception
   ZK-3233: An Errorbox can open again when its parent component becomes visible from invisible state
+  ZK-3241: Setting error message on non-visible components show the error message on the top of the screen
 
 * Upgrade Notes
 
