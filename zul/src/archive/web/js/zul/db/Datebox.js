@@ -451,7 +451,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.listen({onSize: this, onScroll: this});
+		zWatch.listen({onSize: this, onScroll: this, onShow: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
@@ -464,7 +464,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._inplace) this.domUnlisten_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.unlisten({onSize: this, onScroll: this});
+		zWatch.unlisten({onSize: this, onScroll: this, onShow: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
@@ -505,6 +505,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				else
 					pp.close();
 			}
+		}
+	},
+	onShow: function () {
+		if (this.__ebox) {
+			this.setFloating_(true);
+			this.__ebox.open();
 		}
 	},
 	/** Returns the label of the time zone

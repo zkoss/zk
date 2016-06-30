@@ -36,6 +36,7 @@ ZK 8.0.3
   ZK-3203: Dropupload with folder diables the component (in FF)
   ZK-3213: Ambiguous setter in Image component
   ZK-3253: htmlBasedComponent.getTabIndex causes null pointer exception
+  ZK-3233: An Errorbox can open again when its parent component becomes visible from invisible state
 
 * Upgrade Notes
 
