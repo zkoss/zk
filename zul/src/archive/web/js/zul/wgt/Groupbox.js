@@ -244,17 +244,24 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 
 		this.$supers('afterAnima_', arguments);
 
-		// ZK-2138: parent should resize if parent has child with vflex
-		var p = this.parent;
-		for (var c = p.firstChild; c; c = c.nextSibling) {
-			if (c == this)
-				continue;
-			var vflex = c.getVflex();
-			if (vflex && vflex != 'min') {
-				zUtl.fireSized(p);
-				break;
+		var p = this.parent,
+			parentHasFlex = (p.getHflex() && p.getHflex() != 'min') || (p.getVflex() && p.getVflex() != 'min');
+		if (parentHasFlex) {
+			// ZK-3248: parent should resize if parent itself has flex
+			zUtl.fireSized(p);
+		} else {
+			// ZK-2138: parent should resize if parent has child with vflex
+			for (var c = p.firstChild; c; c = c.nextSibling) {
+				if (c == this)
+					continue;
+				var vflex = c.getVflex();
+				if (vflex && vflex != 'min') {
+					zUtl.fireSized(p);
+					break;
+				}
 			}
 		}
+
 		// ZK-2978: should appear zul.Scrollbar after setOpen
 		this.doResizeScroll_();
 	}
