@@ -4,6 +4,7 @@ ZK 8.0.3
   ZK-3176: Add a disable attribut to Menu
   ZK-3144: simplify switching between flex and fixed width
   ZK-3216: Datebox calendar popup position customization
+  ZK-2955: Shadow element could be used in root element <zk>
 
 * Bugs
   ZK-3221: Dragging element background can cover the whole text

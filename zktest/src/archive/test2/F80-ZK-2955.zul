@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2955.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 11 10:12:46 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <template name="tmp1">
+        You should see this without exception.
+        Click the button "Switch Template"
+    </template>
+    <template name="tmp2">
+        You should see this without exception. (recreated)
+    </template>
+        <apply id="ap" template="tmp1" dynamicValue="true"/>
+    <separator />
+    <button label="Switch Template">
+        <attribute name="onClick"><![CDATA[
+            self.previousSibling.previousSibling.getShadowFellowIfAny("ap").setTemplate("tmp2");
+            self.previousSibling.previousSibling.getShadowFellowIfAny("ap").recreate();
+        ]]></attribute>
+    </button>
+</zk>

@@ -21,6 +21,7 @@ import java.io.Reader;
 
 import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -106,8 +107,11 @@ public abstract class AbstractUiFactory implements UiFactory {
 			parent.insertBefore(comp, insertBefore);
 		} else if (parent != null) {
 			((ShadowElementCtrl) comp).setShadowHost(parent, insertBefore);
-		} else { // TODO, for Page case
-
+		} else { //ZK-2955: Shadow element could be used in root element <zk>
+			Component emptyRoot = new AbstractComponent();
+			emptyRoot.setWidgetClass("zk.Native");
+			emptyRoot.setPage(page);
+			((ShadowElementCtrl) comp).setShadowHost(emptyRoot, insertBefore);
 		}
 
 		if (comp instanceof BeforeCompose)
