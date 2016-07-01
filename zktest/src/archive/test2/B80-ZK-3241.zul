@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3241.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon, Jun 27, 2016 11:46:23, Created by Jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout>
+        Click the buttons, and you should not see any errorbox.
+        <textbox/>
+        <textbox visible="false" id="tx1"/>
+        <textbox visible="false" id="tx2" constraint="/.[a-z]+/"/>
+        <button onClick='tx1.setErrorMessage("on non visible")' label="textbox setErrorMessage" />
+        <button onClick='tx2.setValue("123")' label="textbox setValue" />
+    </vlayout>
+</zk>

@@ -654,7 +654,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_markError: function (msg, val, noOnError) {
 		this._errmsg = msg;
 
-		if (this.desktop) { //err not visible if not attached
+		if (this.desktop && this.isRealVisible()) { //err not visible if not attached
 			jq(this.getInputNode()).addClass(this.$s('invalid'));
 
 			var cst = this._cst, errbox;
