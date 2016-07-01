@@ -35,6 +35,7 @@ ZK 8.0.3
   ZK-3214: Desktop cleanup cleans current execution even if not related
   ZK-3203: Dropupload with folder diables the component (in FF)
   ZK-3213: Ambiguous setter in Image component
+  ZK-3253: htmlBasedComponent.getTabIndex causes null pointer exception
 
 * Upgrade Notes
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3253.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul  1 12:46:44 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">1. click the button
+    2. should see "0 null" in zklog
+
+    </label>
+    <textbox id="tb"/>
+    <button label="getTabindex() and getTabIndexInteger()" onClick='Clients.log(tb.getTabindex().toString());Clients.log(tb.getTabindexInteger() == null ? "null" : "not null");'/>
+</zk>
