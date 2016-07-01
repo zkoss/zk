@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3213.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 29 17:52:46 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zul.Image;
+		import java.awt.image.RenderedImage;
+		import org.zkoss.zk.ui.util.Clients;
+		public class TestImage extends Image {
+			public void setContent(RenderedImage image) {
+				Clients.log("null");
+				super.setContent(image);
+			}
+		}
+	</zscript>
+	<label multiline="true">1. click the button "setContent(null)"
+		2. should see "null" in zklog without any exception
+
+	</label>
+	<button label="setContent(null)" onClick='TestImage image = new TestImage(); image.setContent(null)'/>
+</zk>

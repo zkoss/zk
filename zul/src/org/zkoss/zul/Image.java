@@ -221,7 +221,7 @@ public class Image extends XulElement {
 	 */
 	public void setContent(RenderedImage image) {
 		try {
-			setContent(Images.encode("a.png", image));
+			setContent(image == null ? (org.zkoss.image.Image) null : Images.encode("a.png", image));
 		} catch (java.io.IOException ex) {
 			throw new UiException(ex);
 		}

@@ -34,6 +34,7 @@ ZK 8.0.3
   ZK-3248: PortalChildren doesn't resize when its children cause a scrollbar, covers the children panel
   ZK-3214: Desktop cleanup cleans current execution even if not related
   ZK-3203: Dropupload with folder diables the component (in FF)
+  ZK-3213: Ambiguous setter in Image component
 
 * Upgrade Notes
 
