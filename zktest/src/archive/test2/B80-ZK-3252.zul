@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3252.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul  1 20:45:41 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">1. focus on the intbox
+		2. click somewhere else to blur the intbox
+		3. the popup errorbox should be at the bottom and left align with the intbox
+
+	</label>
+	<div style="height:100px;"/>
+	<div style="height:100px;width:400px;display:inline-block;"/>
+	<intbox id="test" />
+	<zscript><![CDATA[
+        test.setConstraint(new SimpleConstraint(SimpleConstraint.AFTER_START | SimpleConstraint.NO_EMPTY));
+  	]]></zscript>
+</zk>

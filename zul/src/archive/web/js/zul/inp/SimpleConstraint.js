@@ -172,21 +172,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		if (v & 0x200)
 			f.STRICT = true;
 		if (v = (v & 0xf000))
-			this._pos = _posAllowed[v >> 12];
-		return f;
-	},
-	_cvtNum: function (v) { //compatible with server side
-		var f = {};
-		if (v & 1)
-			f.NO_POSITIVE = f.NO_FUTURE = true;
-		if (v & 2)
-			f.NO_NEGATIVE = f.NO_PAST = true;
-		if (v & 4)
-			f.NO_ZERO = f.NO_TODAY = true;
-		if (v & 0x100)
-			f.NO_EMPTY = true;
-		if (v & 0x200)
-			f.STRICT = true;
+			this._pos = _posAllowed[(v >> 12) - 1];
 		return f;
 	},
 	/** validation for flag, validate date if val is date
