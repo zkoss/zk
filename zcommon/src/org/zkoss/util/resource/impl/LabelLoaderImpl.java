@@ -319,16 +319,31 @@ public class LabelLoaderImpl implements LabelLoader {
 
 	//expend ${} EL in labels recursively
 	private String expendValue(Map labels, String value) {
-		if (labels != null && value != null && value.startsWith("${") && value.endsWith("}")) {
-			String expStr = value.substring(2, value.length() - 1);
-			if (expStr.endsWith(".$"))
-				expStr = expStr.substring(0, expStr.length() - 2);
-			Object expend = labels.get(expStr);
-			if (expend != null) {
-				if (expend instanceof String)
-					return expendValue(labels, (String) expend);
-				else if (expend instanceof ExValue)
-					return expendValue(labels, ((ExValue) expend).getValue());
+		if (labels != null && value != null) {
+			int offset = 0;
+			while (offset < value.length()) {
+				int start = value.indexOf("${", offset);
+				if (start != -1) {
+					int end = value.indexOf("}", start);
+					if (end != -1) {
+						String exp = value.substring(start, end + 1);
+						String expStr = exp.substring(2, exp.length() - 1);
+						if (expStr.endsWith(".$"))
+							expStr = expStr.substring(0, expStr.length() - 2);
+						Object expend = labels.get(expStr);
+						String expended = "";
+						if (expend instanceof String)
+							expended = expendValue(labels, (String) expend);
+						else if (expend instanceof ExValue)
+							expended = expendValue(labels, ((ExValue) expend).getValue());
+						value = value.substring(0, start) + expended + value.substring(start + exp.length());
+						offset += start + expended.length();
+					} else {
+						break;
+					}
+				} else {
+					break;
+				}
 			}
 		}
 		return value;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3251.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jul  1, 2016  3:16:36 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.load this page and should not appear PotentialDeadLockException
+	</label>
+	<window title="${labels.rpi.app.title.l}" border="normal">
+		<label value="${labels.your.app.i.lab.ref.projects2.V1.V1.H2.t1.$}"/>
+	</window>
+</zk>
