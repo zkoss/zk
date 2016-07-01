@@ -26,7 +26,9 @@ import org.zkoss.util.CacheMap;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.sys.DesktopCache;
@@ -125,8 +127,9 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		final Session sess = desktop.getSession();
 		final Execution exec = new ExecutionImpl(desktop.getWebApp().getServletContext(), null, null, desktop, null);
 		final DesktopCtrl desktopCtrl = (DesktopCtrl) desktop;
-		final Execution oldExce = desktop.getExecution();
+		final Execution oldExec = desktop.getExecution();
 		final Visualizer oldVi = desktopCtrl.getVisualizer();
+		final Execution currentExec = Executions.getCurrent();
 
 		try {
 			// For ZK-1890: Can't subscribe eventqueue in desktop cleanup
@@ -162,9 +165,10 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 			}
 		} finally {
 			// reset
-			ExecutionsCtrl.setCurrent(null);
+			//ZK-3214: Desktop session might not current session
+			ExecutionsCtrl.setCurrent((sess != Sessions.getCurrent()) ? currentExec : null);
 			desktopCtrl.setVisualizer(oldVi);
-			desktopCtrl.setExecution(oldExce);
+			desktopCtrl.setExecution(oldExec);
 		}
 	}
 
