@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3203.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 27 17:52:56 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="dropTarget" width="400px" height="200px" style="background-color: #FAB;">
+		<label multiline="true"> 1. drop a folder here (only in FF)
+			2. should do nothing
+			3. drop a file
+			4. should upload as expect
+		</label>
+	</div>
+	<dropupload anchor="${dropTarget}" onUpload="Clients.showNotification(event.getMedia().getName());"/>
+</zk>
