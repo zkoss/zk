@@ -652,7 +652,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * <p>Default: 0
 	 */
 	public int getTabindex() {
-		return _auxinf != null ? _auxinf.tabindex : 0;
+		return (_auxinf != null && _auxinf.tabindex != null) ? _auxinf.tabindex : 0;
 	}
 
 	/**
