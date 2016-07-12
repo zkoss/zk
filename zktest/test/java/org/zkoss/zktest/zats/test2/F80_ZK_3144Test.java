@@ -1,43 +1,41 @@
 package org.zkoss.zktest.zats.test2;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.Element;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zktest.zats.ZATSTestCase;
+import org.zkoss.zul.Div;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 /**
  * Created by wenning on 6/17/16.
  */
-public class F80_ZK_3144Test extends WebDriverTestCase {
+public class F80_ZK_3144Test extends ZATSTestCase {
 
     @Test
-    public void test() {
-        connect();
-        Element btn1 = jq("@button").get(0);
-        Element btn2 = jq("@button").get(1);
-        Element btn3 = jq("@button").get(2);
-        Element btn4 = jq("@button").get(3);
-        click(btn1);
-        waitResponse(true);
-        click(btn1);
-        waitResponse(true);
-        assertFalse(jq(".z-messagebox-error:eq(0)").exists());
-        click(btn2);
-        waitResponse(true);
-        click(btn2);
-        waitResponse(true);
-        assertFalse(jq(".z-messagebox-error:eq(0)").exists());
-        click(btn3);
-        waitResponse(true);
-        click(btn3);
-        waitResponse(true);
-        assertFalse(jq(".z-messagebox-error:eq(0)").exists());
-        click(btn4);
-        waitResponse(true);
-        click(btn4);
-        waitResponse(true);
-        assertFalse(jq(".z-messagebox-error:eq(0)").exists());
+    public void testWidth2FlexViaNull() {
+        try {
+            Div div = new Div();
+            div.setWidth("200px");
+            Assert.assertEquals("200px", div.getWidth());
+            div.setWidth(null);
+            div.setHflex("1");
+            div.setWidth(null);
+            div.setHflex("1");
+            Assert.assertEquals("1", div.getHflex());
+        } catch (UiException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+    }
+
+    @Test(expected = UiException.class)
+    public void testWidth2FlexFail() {
+        Div div = new Div();
+        div.setWidth("200px");
+        div.setHflex("1");
     }
 
 }
