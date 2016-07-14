@@ -97,6 +97,11 @@ public class AnnotateBinderHelper {
 						.getAttribute((String) kid.getAttribute(BindComposer.BINDER_ID));
 				new AnnotateBinderHelper(nestedBinder).initComponentBindings(kid);
 				BinderUtil.markHandling(kid, nestedBinder);
+				((BinderImpl) nestedBinder).initQueue();
+				((BinderImpl) nestedBinder).initActivator();
+				if (kid instanceof ComponentCtrl)
+					((ComponentCtrl) kid).enableBindingAnnotation();
+				nestedBinder.loadComponent(kid, true);
 			}
 		}
 

@@ -312,9 +312,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		setViewModel(viewModel);
 		_dummyTarget.addEventListener(ON_POST_COMMAND, new PostCommandListener());
 		_dummyTarget.addEventListener(ON_VMSGS_CHANGED, new VMsgsChangedListener());
-		//subscribe queue 
-		subscribeQueue(_quename, _quescope, _queueListener);
 		
+		initQueue();
+
 		if (viewModel instanceof Composer<?> && !(viewModel instanceof BindComposer<?>)) { //do we need to warn this?
 			//show a warn only
 			_log.warn("you are using a composer [{}] as a view model", viewModel);
@@ -324,8 +324,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				return annotation.superclass();
 			}
 		}.invokeMethod(this, initArgs);
-		
-		_rootComp.setAttribute(ACTIVATOR, new Activator()); //keep only one instance in root comp
+
+		initActivator();
 		//F80 - store subtree's binder annotation count
 		if (comp instanceof ComponentCtrl)
 			((ComponentCtrl) comp).enableBindingAnnotation();
@@ -2685,8 +2685,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		public void didActivate(Component comp) {
 			if (_rootComp.equals(comp)) {
 				//zk 1442, don't do multiple subscribed if didActivate is called every request (e.x. jboss5)
-				if (!isSubscribed(_quename, _quescope, _queueListener))
-					subscribeQueue(_quename, _quescope, _queueListener);
+				initQueue();
 				if (_deferredActivator == null) {
 					//defer activation to execution only for the first didActivate when failover
 					comp.getDesktop().addListener(_deferredActivator = new DeferredActivator());
@@ -2780,5 +2779,24 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 		init();
+	}
+
+	/**
+	 * Internal use only.
+	 * Check and init queue
+	 */
+	public void initQueue() {
+		//subscribe queue
+		if (!isSubscribed(_quename, _quescope, _queueListener))
+			subscribeQueue(_quename, _quescope, _queueListener);
+	}
+
+	/**
+	 * Internal use only.
+	 * Check and init Activator
+	 */
+	public void initActivator() {
+		if (_rootComp != null && !_rootComp.hasAttribute(ACTIVATOR))
+			_rootComp.setAttribute(ACTIVATOR, new Activator()); //keep only one instance in root comp
 	}
 }

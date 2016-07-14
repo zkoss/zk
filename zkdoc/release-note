@@ -40,6 +40,7 @@ ZK 8.0.3
   ZK-3241: Setting error message on non-visible components show the error message on the top of the screen
   ZK-3251: Internationalization label with multi line value causes org.zkoss.lang.PotentialDeadLockException
   ZK-3252: SimpleConstraint created by (int flag) constructor doesn't follow the position
+  ZK-3211: MVVM relocating components with ViewModels within borderlayout
 
 * Upgrade Notes
 
