@@ -40,4 +40,15 @@ public interface Paginated {
 	 * @since 3.0.7
 	 */
 	public String getPagingPosition();
+
+	/** Returns whether the Paging component of this component is disabled.
+	 * <p>Default: false.
+	 * @since 8.0.3
+	 */
+	public boolean isDisablePaging();
+
+	/** Sets whether the Paging component of this component is disabled.
+	 * @since 8.0.3
+	 */
+	public void setDisablePaging(boolean disablePaging);
 }

@@ -5,6 +5,8 @@ ZK 8.0.3
   ZK-3144: simplify switching between flex and fixed width
   ZK-3216: Datebox calendar popup position customization
   ZK-2955: Shadow element could be used in root element <zk>
+  ZK-3234: Add a disable attribute to paging component
+  ZK-3060: Add a way to disabled paging in mold="paging" for grid
 
 * Bugs
   ZK-3221: Dragging element background can cover the whole text

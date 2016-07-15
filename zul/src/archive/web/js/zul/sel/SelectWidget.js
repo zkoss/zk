@@ -823,7 +823,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		case 33: //PgUp
 		case 34: //PgDn
 			var pgnl = this.paging || this._paginal;
-			if (row && pgnl) { // F60-ZK-715
+			if (row && pgnl && !pgnl.isDisabled()) { // F60-ZK-715
 				var npg = this.getActivePage() + (data.keyCode == 33 ? -1 : 1);
 				// TODO: concern ctrl
 				if (npg > -1 && npg < this.getPageCount())
@@ -886,7 +886,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					if (endless)
 						break; // ignore Home/End key
 					var pg = this.paging || this._paginal, pnum;
-					if (pg) {
+					if (pg && !pg.isDisabled()) {
 						pnum = pg.getActivePage();
 						// TODO: concern ctrl
 						if (step > 0 ? (pnum + 1 < pg.getPageCount()) : pnum > 0) {

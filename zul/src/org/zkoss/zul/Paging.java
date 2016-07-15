@@ -46,6 +46,8 @@ public class Paging extends XulElement implements Paginal {
 	/** Whether to show detailed info. */
 	private boolean _detailed;
 
+	private boolean _disabled;
+
 	static {
 		addClientEvent(Paging.class, ZulEvents.ON_PAGING, CE_IMPORTANT);
 	}
@@ -206,6 +208,7 @@ public class Paging extends XulElement implements Paginal {
 			renderer.render("pageIncrement", _pginc);
 		render(renderer, "detailed", _detailed);
 		render(renderer, "autohide", isAutohide());
+		render(renderer, "disabled", _disabled);
 	}
 
 	public String getZclass() {
@@ -237,5 +240,23 @@ public class Paging extends XulElement implements Paginal {
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
+	}
+
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 8.0.3
+	 */
+	public boolean isDisabled() {
+		return _disabled;
+	}
+
+	/** Sets whether it is disabled.
+	 * @since 8.0.3
+	 */
+	public void setDisabled(boolean disabled) {
+		if (_disabled != disabled) {
+			_disabled = disabled;
+			smartUpdate("disabled", _disabled);
+		}
 	}
 }

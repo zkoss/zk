@@ -36,6 +36,7 @@ public abstract class MeshElement extends XulElement implements Paginated {
 	private boolean _sizedByContent;
 	private boolean _autopaging;
 	private String _pagingPosition = "bottom";
+	private boolean _disablePaging;
 
 	/**
 	 * Return column span hint of this component.
@@ -256,6 +257,18 @@ public abstract class MeshElement extends XulElement implements Paginated {
 			// iscroll bar is only available for EE version B70-ZK-2992
 			boolean isMobile = Servlets.getBrowser(request, "mobile") != null && WebApps.getFeature("ee");
 			return Utils.testAttribute(this, "org.zkoss.zul.nativebar", !isMobile, true);
+		}
+	}
+
+	public boolean isDisablePaging() {
+		return _disablePaging;
+	}
+
+	public void setDisablePaging(boolean disablePaging) {
+		if (_disablePaging  != disablePaging) {
+			pgi().setDisabled(disablePaging);
+			_disablePaging = disablePaging;
+			smartUpdate("disablePaging", disablePaging);
 		}
 	}
 

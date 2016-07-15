@@ -104,10 +104,18 @@
 		padding: 3px 0;
 		line-height: 20px;
 		vertical-align: baseline;
+		&[disabled] {
+			color: @disabledColor;
+			.opacity(@disabledOpacity);
+			cursor: default;
+		}
 	}
 	&-text {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
 		margin-right: 12px;
+		&-disabled {
+			color: @disabledColor;
+		}
 	}
 	&-info {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
