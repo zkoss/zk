@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3060.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul  7 12:28:34 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_3060VM')">
+        <label multiline="true">With MVVm
+            1. click "Toggle Disable" button
+            2. all paging comps should be enabled
+            3. click the button again
+            4. all paging comps should be disabled
+
+        </label>
+        <button label="Toggle Disable" onClick="@command('select')"/>
+        <separator height="30px"/>
+        <div style="border: 1px solid grey; padding: 10px;">
+            <label value="Grid"/>
+            <grid mold="paging" pageSize="2" pagingPosition="both" disablePaging="@bind(vm.disablePaging)">
+                <rows>
+                    <row>
+                        <label value="1"/>
+                    </row>
+                    <row>
+                        <label value="1"/>
+                    </row>
+                    <row>
+                        <label value="1"/>
+                    </row>
+                </rows>
+            </grid>
+        </div>
+        <separator height="30px"/>
+        <div style="border: 1px solid grey; padding: 10px;">
+            <label value="Listbox"/>
+            <!--<paging id="pg2" pageSize="2" disabled="true" mold="os"/>-->
+            <!--<listbox mold="paging" paginal="${pg2}"  pageSize="2" disablePaging="@bind(vm.disablePaging)" checkmark="true" multiple="true">-->
+            <listbox mold="paging" pageSize="2" pagingPosition="both" disablePaging="@bind(vm.disablePaging)" checkmark="true" multiple="true">
+                <listhead>
+                    <listheader label="col 1" />
+                    <listheader label="col 2" />
+                </listhead>
+                <listitem>
+                    <listcell>
+                        <label value="1" />
+                    </listcell>
+                    <listcell>
+                        <label value="1" />
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <label value="1" />
+                    </listcell>
+                    <listcell>
+                        <label value="1" />
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <label value="1" />
+                    </listcell>
+                    <listcell>
+                        <label value="1" />
+                    </listcell>
+                </listitem>
+            </listbox>
+        </div>
+        <separator height="30px"/>
+        <div style="border: 1px solid grey; padding: 10px;">
+            <label value="Tree"/>
+            <tree mold="paging" pageSize="2" pagingPosition="both" disablePaging="@bind(vm.disablePaging)">
+                <treecols>
+                    <treecol label='col 1' />
+                    <treecol label='col 2' />
+                </treecols>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label='1' />
+                            <treecell label='1' />
+                        </treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label='1' />
+                            <treecell label='1' />
+                        </treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label='1' />
+                            <treecell label='1' />
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </tree>
+        </div>
+    </div>
+</zk>

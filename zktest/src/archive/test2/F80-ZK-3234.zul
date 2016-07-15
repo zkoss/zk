@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3234.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul  5 15:00:53 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">1. all buttons and inputbox of paging comps should be disabled
+		2. click "setMold("os")" button
+		3. paging comp of all comp should remain disabled
+		4. click "setMold("default")" button
+		5. paging comp of all comp should remain disabled
+		6. click "setDisable(false)" button
+		7. all buttons and inputbox of paging comps should be enabled
+		8. click "setDisable(true)" button
+		9. all buttons and inputbox of paging comps should be disabled
+		10. focus on the paging input of all paging comps, they shouldn't be able to be focus, then press "Page Down" key
+		11. all comps shouldn't be able to change to the next page
+		12. focus on the listitem of the listbox comp, click "down" key
+		13. the listbox shouldn't be able to change to the next page
+
+	</label>
+	<button onClick='gd.getPaginal().setMold("os");lb.getPaginal().setMold("os");tree.getPaginal().setMold("os");' label='setMold("os")'/>
+	<button onClick='gd.getPaginal().setMold("default");lb.getPaginal().setMold("default");tree.getPaginal().setMold("default");' label='setMold("default")'/>
+	<button onClick='gd.getPaginal().setDisabled(true);lb.getPaginal().setDisabled(true);tree.getPaginal().setDisabled(true);' label="setDisable(true)"/>
+	<button onClick='gd.getPaginal().setDisabled(false);lb.getPaginal().setDisabled(false);tree.getPaginal().setDisabled(false);' label="setDisable(false)"/>
+	<separator height="30px"/>
+	<div style="border: 1px solid grey; padding: 10px;">
+		<label value="Grid"/>
+		<paging id="pg1" pageSize="2" disabled="true"/>
+		<grid id="gd" mold="paging" pageSize="2" paginal="${pg1}" pagingPosition="both">
+			<rows>
+				<row>
+					<label value="1"/>
+				</row>
+				<row>
+					<label value="2"/>
+				</row>
+				<row>
+					<label value="3"/>
+				</row>
+				<row>
+					<label value="4"/>
+				</row>
+				<row>
+					<label value="5"/>
+				</row>
+			</rows>
+		</grid>
+	</div>
+	<separator height="30px"/>
+	<div style="border: 1px solid grey; padding: 10px;">
+		<label value="Listbox"/>
+		<paging id="pg2" pageSize="2" disabled="true"/>
+		<listbox id="lb" mold="paging" pageSize="2" paginal="${pg2}" pagingPosition="both">
+			<listhead>
+				<listheader label="col 1" />
+				<listheader label="col 2" />
+			</listhead>
+			<listitem>
+				<listcell>
+					<label value="1" />
+				</listcell>
+				<listcell>
+					<label value="1" />
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell>
+					<label value="2" />
+				</listcell>
+				<listcell>
+					<label value="2" />
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell>
+					<label value="3" />
+				</listcell>
+				<listcell>
+					<label value="3" />
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell>
+					<label value="4" />
+				</listcell>
+				<listcell>
+					<label value="4" />
+				</listcell>
+			</listitem>
+			<listitem>
+				<listcell>
+					<label value="5" />
+				</listcell>
+				<listcell>
+					<label value="5" />
+				</listcell>
+			</listitem>
+		</listbox>
+	</div>
+	<separator height="30px"/>
+	<div style="border: 1px solid grey; padding: 10px;">
+		<label value="Tree"/>
+		<paging id="pg3" pageSize="2" disabled="true"/>
+		<tree id="tree" mold="paging" pageSize="2" paginal="${pg3}" pagingPosition="both">
+			<treecols>
+				<treecol label='col 1' />
+				<treecol label='col 2' />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label='1' />
+						<treecell label='1' />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label='2' />
+						<treecell label='2' />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label='3' />
+						<treecell label='3' />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label='4' />
+						<treecell label='4' />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label='5' />
+						<treecell label='5' />
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</div>
+</zk>

@@ -19,6 +19,7 @@ package org.zkoss.zul.ext;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.ext.Disable;
 
 /**
  * Represents a component that is used to control how to display
@@ -53,7 +54,7 @@ import org.zkoss.zk.ui.event.EventListener;
  * @author tomyeh
  * @see Paginated
  */
-public interface Paginal extends Pageable {
+public interface Paginal extends Pageable, Disable {
 
 	/**
 	 * Returns whether to automatically hide the paging if
