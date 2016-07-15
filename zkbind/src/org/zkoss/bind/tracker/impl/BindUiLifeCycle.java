@@ -89,89 +89,96 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				return;
 		}
 		if (comp.getDesktop() != null || comp instanceof ShadowElement) {
-			//check if this component already binded
-			Binder selfBinder = BinderUtil.getBinder(comp);
-			if (selfBinder == null) {
-				//check if parent exists any binder
-				Binder parentBinder = BinderUtil.getBinder(comp, true);
-				if (parentBinder == null && comp instanceof ShadowElement) {
-					Component shadowHost = ((ShadowElement) comp).getShadowHost();
-					if (shadowHost != null)
-						parentBinder = BinderUtil.getBinder(shadowHost, true);
+			//ZK-603, ZK-604, ZK-605
+			//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
+			comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
+
+				public void onEvent(Event event) throws Exception {
+					final Component comp = event.getTarget();
+					comp.removeEventListener(BinderImpl.ON_BIND_INIT, this);
+					reInitBinder(comp);
 				}
+			});
+			//post ON_BIND_INIT event
+			Events.postEvent(new Event(BinderImpl.ON_BIND_INIT, comp));
+		}
+	}
 
-				//post event to let the binder to handle binding later
-				if ((parentBinder != null && (parentBinder instanceof BinderImpl))
-						// if the owner of the ViewModel has detached and then attach later,
-						// it should be re-init again.
-						|| comp.hasAttribute(BindComposer.BINDER_ID)) {
-					//ZK-603, ZK-604, ZK-605
-					//register internal ON_BIND_INIT event listener to delay the timing of init and loading bindings
-					comp.addEventListener(10000, BinderImpl.ON_BIND_INIT, new EventListener<Event>() {
-
-						public void onEvent(Event event) throws Exception {
-							final Component comp = event.getTarget();
-							comp.removeEventListener(BinderImpl.ON_BIND_INIT, this);
-							//ZK-611 have wrong binding on a removed treecell in a template
-							//if it was detached, ignore it
-							if (comp.getPage() == null && !(comp instanceof ShadowElement)) {
-								return;
-							}
-
-							final Binder innerBinder = BinderUtil.getBinder(comp);
-							if (innerBinder != null) { //it was already handled by innerBinder, ignore it								
-								return;
-							}
-
-							//ZK-1640 command send 2 wrong ViewModel
-							//check if there any parent binder again, don't use out-side parentBinder, it is not correct
-							Binder binder = null;
-							String bid = (String) comp.getAttribute(BindComposer.BINDER_ID);
-							if (bid != null) {
-								// comp is the binder owner.
-								// fixed for B01887DetachAttach issue since 8.0.0 optimised some part of code.
-								binder = (Binder) comp.getAttribute(bid);
-							} else {
-								binder = BinderUtil.getBinder(comp, true);
-							}
-							if (binder == null) {
-								if (comp instanceof ShadowElement) {
-									Component shadowHost = ((ShadowElement) comp).getShadowHost();
-									if (shadowHost != null)
-										binder = BinderUtil.getBinder(shadowHost, true);
-								}
-								if (binder == null)
-									return;
-							}
-
-							//ZK-1699 Performance issue ZK-Bind getters are called multiple times
-							//check if it is handling, if yes then skip to evaluate it.
-							if (getExtension().isLifeCycleHandling(comp)) {
-								return;
-							}
-
-							if (binder instanceof AnnotateBinder) {
-								new AnnotateBinderHelper(binder).initComponentBindings(comp);
-							}
-
-							//ZK-1699, mark the comp and it's children are handling.
-							//note:mark handing before load, because of some load will change(create or reset) the children structure
-							//(consider F00769.zul if you bind to tree open , it will load children in loadComponent)
-							getExtension().markLifeCycleHandling(comp);
-
-							binder.loadComponent(comp, true);
-
-							//[Dennis,20120925], this code was added when fixing issue zk-739, 
-							//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.
-							if (comp.hasAttribute(BinderImpl.VAR) || bid != null)
-								BinderUtil.markHandling(comp, binder);
-						}
-					});
-					//post ON_BIND_INIT event
-					Events.postEvent(new Event(BinderImpl.ON_BIND_INIT, comp));
+	private void reInitBinder(Component comp) {
+		boolean recursive = reInitBinder0(comp);
+		if (recursive) {
+			for (final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext(); ) {
+				final Component kid = it.next();
+				if (kid != null) {
+					reInitBinder(kid);
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return true if need to continue tracking children
+	 */
+	private boolean reInitBinder0(Component comp) {
+		//ZK-611 have wrong binding on a removed treecell in a template
+		//if it was detached, ignore it
+		if (comp.getPage() == null && !(comp instanceof ShadowElement)) {
+			return false;
+		}
+
+		final Binder innerBinder = BinderUtil.getBinder(comp);
+		if (innerBinder != null) { //it was already handled by innerBinder, ignore it
+			return false;
+		}
+
+		//ZK-1640 command send 2 wrong ViewModel
+		//check if there any parent binder again, don't use out-side parentBinder, it is not correct
+		Binder binder = null;
+		String bid = (String) comp.getAttribute(BindComposer.BINDER_ID);
+		if (bid != null) {
+			// comp is the binder owner.
+			// fixed for B01887DetachAttach issue since 8.0.0 optimised some part of code.
+			binder = (Binder) comp.getAttribute(bid);
+		} else {
+			binder = BinderUtil.getBinder(comp, true);
+		}
+		if (binder == null) {
+			if (comp instanceof ShadowElement) {
+				Component shadowHost = ((ShadowElement) comp).getShadowHost();
+				if (shadowHost != null)
+					binder = BinderUtil.getBinder(shadowHost, true);
+			}
+			if (binder == null)
+				return true;
+		}
+
+		//ZK-1699 Performance issue ZK-Bind getters are called multiple times
+		//check if it is handling, if yes then skip to evaluate it.
+		if (BindUiLifeCycle.getExtension().isLifeCycleHandling(comp)) {
+			return false;
+		}
+
+		if (binder instanceof AnnotateBinder) {
+			new AnnotateBinderHelper(binder).initComponentBindings(comp);
+		}
+
+		//ZK-1699, mark the comp and it's children are handling.
+		//note:mark handing before load, because of some load will change(create or reset) the children structure
+		//(consider F00769.zul if you bind to tree open , it will load children in loadComponent)
+		BindUiLifeCycle.getExtension().markLifeCycleHandling(comp);
+
+		binder.loadComponent(comp, true);
+
+		((BinderImpl) binder).initQueue();
+		((BinderImpl) binder).initActivator();
+		if (comp instanceof ComponentCtrl)
+			((ComponentCtrl) comp).enableBindingAnnotation();
+
+		//[Dennis,20120925], this code was added when fixing issue zk-739,
+		//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.
+		if (comp.hasAttribute(BinderImpl.VAR) || bid != null)
+			BinderUtil.markHandling(comp, binder);
+		return false;
 	}
 
 	public void afterComponentDetached(Component comp, Page prevpage) {
