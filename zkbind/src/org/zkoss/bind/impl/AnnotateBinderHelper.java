@@ -99,8 +99,6 @@ public class AnnotateBinderHelper {
 				BinderUtil.markHandling(kid, nestedBinder);
 				((BinderImpl) nestedBinder).initQueue();
 				((BinderImpl) nestedBinder).initActivator();
-				if (kid instanceof ComponentCtrl)
-					((ComponentCtrl) kid).enableBindingAnnotation();
 				nestedBinder.loadComponent(kid, true);
 			}
 		}

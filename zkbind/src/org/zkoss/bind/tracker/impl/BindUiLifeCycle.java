@@ -106,7 +106,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 
 	private void reInitBinder(Component comp) {
 		boolean recursive = reInitBinder0(comp);
-		if (recursive) {
+		if (recursive && !(comp instanceof ShadowElement)) {
 			for (final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext(); ) {
 				final Component kid = it.next();
 				if (kid != null) {
@@ -171,8 +171,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 
 		((BinderImpl) binder).initQueue();
 		((BinderImpl) binder).initActivator();
-		if (comp instanceof ComponentCtrl)
-			((ComponentCtrl) comp).enableBindingAnnotation();
 
 		//[Dennis,20120925], this code was added when fixing issue zk-739,
 		//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.
