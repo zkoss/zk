@@ -63,4 +63,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zk.au.http.AuRedirect</listener-class>
 	</listener>
+    <library-property>
+        <name>org.zkoss.zk.ui.ShadowDefaultHost.class</name>
+        <value>org.zkoss.zul.Transparent</value>
+    </library-property>
 </config>

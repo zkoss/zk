@@ -19,9 +19,12 @@ package org.zkoss.zk.ui.impl;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
-import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -53,7 +56,7 @@ import org.zkoss.zk.ui.util.Composer;
  * @author tomyeh
  */
 public abstract class AbstractUiFactory implements UiFactory {
-
+	private static final Logger log = LoggerFactory.getLogger(AbstractUiFactory.class);
 	//-- UiFactory --//
 	public void start(WebApp wapp) {
 	}
@@ -108,10 +111,17 @@ public abstract class AbstractUiFactory implements UiFactory {
 		} else if (parent != null) {
 			((ShadowElementCtrl) comp).setShadowHost(parent, insertBefore);
 		} else { //ZK-2955: Shadow element could be used in root element <zk>
-			Component emptyRoot = new AbstractComponent();
-			emptyRoot.setWidgetClass("zk.Native");
-			emptyRoot.setPage(page);
-			((ShadowElementCtrl) comp).setShadowHost(emptyRoot, insertBefore);
+			Component emptyRoot = null;
+			String clsnm = Library.getProperty("org.zkoss.zk.ui.ShadowDefaultHost.class");
+			if (clsnm != null) {
+				try {
+					emptyRoot = (Component) Classes.newInstanceByThread(clsnm);
+					emptyRoot.setPage(page);
+					((ShadowElementCtrl) comp).setShadowHost(emptyRoot, insertBefore);
+				} catch (Throwable ex) {
+					log.warn("Unable to load " + clsnm, ex);
+				}
+			}
 		}
 
 		if (comp instanceof BeforeCompose)

@@ -687,6 +687,10 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/idspace.js</mold-uri>
 		</mold>
+        <mold>
+            <mold-name>no-dom</mold-name>
+            <mold-uri>mold/idspace.js</mold-uri>
+        </mold>
 		<preserve-blank/>
 	</component>
 	<component>
@@ -1262,6 +1266,11 @@ def alert(m):
 			<css-uri>css/toolbar.css.dsp</css-uri>
 		</mold>
 	</component>
+    <component>
+        <component-name>transparent</component-name>
+        <component-class>org.zkoss.zul.Transparent</component-class>
+        <widget-class>zul.wgt.Transparent</widget-class>
+    </component>
 	<component>
 		<component-name>tree</component-name>
 		<component-class>org.zkoss.zul.Tree</component-class>

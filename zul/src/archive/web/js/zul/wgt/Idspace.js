@@ -22,3 +22,5 @@ zul.wgt.Idspace = zk.$extends(zul.wgt.Div, {
 		this.$supers('$init', arguments);
 	}
 });
+//ZK-3255: support no-dom mold
+zk.$intercepts(zul.wgt.Idspace, zk.NoDom);
