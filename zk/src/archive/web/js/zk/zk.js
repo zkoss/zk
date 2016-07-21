@@ -1363,6 +1363,68 @@ zk.log('value is", value);
 			}};
 		}
 		zk.error('not found: ' + name);
+	},
+	/** Intercepts a widget, when specific method has been called, the interceptor would be called first.
+	 * <p>Example,
+<pre><code>
+zk.$intercepts(zul.inp.Combobox, {
+	open: function () {
+		var context = this.$getInterceptorContext$();
+		console.log('open');
+		context.stop = false;
+	}
+});
+</code></pre>
+	 * <p>In the interceptor function, you could call this.$getInterceptorContext$() to get the context object.
+	 * The context object has several properties, it would help you the deal with the interceptor:
+	 * <ul>
+	 * <li>context.stop - whether to call the original method in the widget.</li>
+	 * <li>context.result - the return value of the widget function.</li>
+	 * <li>context.args - the original arguments in the function of widget, you could update it for calling the original method.</li>
+	 * </ul>
+	 * @param targetClass the destination object to override
+	 * @param interceptor the interceptor map corresponds to the widget methods
+	 * @since 8.0.3
+	 */
+	$intercepts: function (targetClass, interceptor) {
+		if (!targetClass)
+			throw 'unknown targetClass';
+		if (!interceptor)
+			throw 'unknown interceptor';
+
+		if (targetClass && targetClass.$copied === false) {
+			var f = targetClass.$copyf;
+			targetClass.$copyf = function () {
+				f();
+				targetClass.$copied = true;
+				zk.$intercepts(targetClass, interceptor);
+			};
+			return;
+		}
+
+		var targetpt = targetClass.prototype;
+		for (var nm in interceptor) {
+			if (targetpt[nm]) {
+				//init interceptor function
+				if (!targetpt['$getInterceptorContext$']) {
+					targetpt['_$$interceptorContext'] = [];
+					targetpt['$getInterceptorContext$'] = function () {
+						return this._$$interceptorContext[this._$$interceptorContext.length - 1];
+					};
+				}
+				(function (nm, oldFunc) {
+					targetpt[nm] = function () {
+						var context = {stop: false, result: null, args: arguments};
+						var arr = this._$$interceptorContext;
+						arr.push(context);
+						interceptor[nm].apply(this, arguments);
+						var result = context.stop ? context.result : oldFunc.apply(this, context.args);
+						arr.splice(arr.indexOf(context), 1);
+						return result;
+					};
+				})(nm, targetpt[nm]);
+			}
+		}
 	}
 });
 

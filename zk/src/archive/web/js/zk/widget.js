@@ -5674,6 +5674,227 @@ setClosable: function (closable) {
 //@};
 zk.Skipper.nonCaptionSkipper = new zk.Skipper();
 
+/**
+ * It's a object contains some interceptors.
+ * You could use this to intercept a widget, and its node would change to comment node (start node and end node).
+<pre><code>
+zk.$intercepts(zul.wgt.Idspace, zk.NoDOM);
+</pre></code>
+ * @since 8.0.3
+ */
+zk.NoDOM = {
+	bind_: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			this.$supers('bind_', context.args);
+			var node = this.$n('tmp'),
+				desc = this.getZclass() + ' ' + this.uuid,
+				startDesc = desc + ' start',
+				endDesc = desc + ' end';
+			if (node) {
+				var start = document.createComment(startDesc);
+				var end = document.createComment(endDesc);
+				var parentNode = node.parentNode;
+				parentNode.insertBefore(start, node);
+				var lastChildNode = this.lastChild ? this.lastChild.$n() : null;
+				if (lastChildNode)
+					parentNode.insertBefore(end, lastChildNode.nextSibling);
+				else
+					parentNode.insertBefore(end, node.nextSibling);
+				this._startNode = start;
+				this._endNode = end;
+				var id = '_z_nodomfs0';
+				var f = jq('#' + id);
+				if (f.length == 0) {
+					var fd = document.createElement('div');
+					fd.id = id;
+					document.body.appendChild(fd);
+					f = jq('#' + id);
+				}
+				node.id = this.uuid + '-fake';
+				f.append(node);
+			}
+			context.stop = true;
+		}
+	},
+
+	removeHTML_: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			//clear the dom between start node and end node
+			var node = this._startNode ? this._startNode.nextSibling : null;
+			while (node && node != this._endNode) {
+				next = node.nextSibling;
+				jq(node).remove();
+				node = next;
+			}
+			jq(this._startNode).remove();
+			jq(this._endNode).remove();
+			jq(this._node).remove();
+			this.clearCache();
+			context.stop = true;
+		}
+	},
+
+	setDomVisible_: function (n, visible, opts) {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			for (var w = this.firstChild; w; w = w.nextSibling) {
+				if (visible)
+					w.setDomVisible_(w.$n(), w.isVisible(), opts);
+				else
+					w.setDomVisible_(w.$n(), visible, opts);
+			}
+			context.stop = true;
+		}
+	},
+
+	isRealVisible: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			context.result = this._visible && (this.parent ? this.parent.isRealVisible() : true);
+			context.stop = true;
+		}
+	},
+
+	getFirstNode_: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			context.result = this._startNode;
+			context.stop = true;
+		}
+	},
+
+	insertChildHTML_: function (child, before, desktop) {
+		if (this.getMold() == 'nodom' && !before) {
+			var context = this.$getInterceptorContext$();
+			jq(this._endNode).before(child.redrawHTML_());
+			child.bind(desktop);
+			context.stop = true;
+		}
+	},
+
+	detach: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			if (this.parent) this.parent.removeChild(this);
+			else {
+				var cf = zk.currentFocus;
+				if (cf && zUtl.isAncestor(this, cf))
+					zk.currentFocus = null;
+				var n = this.$n();
+				if (n) {
+					this.removeHTML_();
+					this.unbind();
+				}
+			}
+			context.stop = true;
+		}
+	},
+	getOldWidget_: function (n) {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			context.result = this._oldWgt;
+			context.stop = true;
+		}
+	},
+	replaceHTML: function (n, desktop, skipper, _trim_, _callback_) {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			if (!desktop) {
+				desktop = this.desktop;
+				if (!zk.Desktop._ndt) zk.stateless();
+			}
+
+			var oldwgt = this.getOldWidget_(n);
+			if (oldwgt) {
+				//remove end and children
+				for (var child = oldwgt.firstChild; child; child = child.nextSibling)
+					oldwgt.removeChildHTML_(child, false);
+				//unbind (w/o removal)
+				oldwgt.unbind(skipper);
+			}
+			jq(this._endNode).remove();
+			jq(n).remove();
+			jq(this._startNode).replaceWith(this.redrawHTML_(skipper, _trim_));
+			this.bind(desktop, skipper);
+
+			if (!skipper) {
+				if (!jq.isArray(_callback_))
+					zUtl.fireSized(this);
+				else {
+					// for Bug ZK-2271, we delay this calculation
+					var self = this;
+					_callback_.push(function () {
+						zUtl.fireSized(self);
+					});
+				}
+			}
+			context.result = this;
+			context.stop = true;
+		}
+	},
+	replaceWidget: function (newwgt) {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			newwgt._startNode = this._startNode;
+			newwgt._endNode = this._endNode;
+			newwgt._oldWgt = this;
+		}
+	},
+	$n: function (subId) {
+		if (!subId && this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			var n = this._node;
+			if (!n && this.desktop && !this._nodeSolved) {
+				this._node = n = jq(this.uuid + '-fake', zk)[0];
+				this._nodeSolved = true;
+			}
+			context.result = n;
+			context.stop = true;
+		}
+	},
+	redraw: function (out) {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			out.push('<div id="', this.uuid, '-tmp', '" style="display:none"></div>');
+			for (var w = this.firstChild; w; w = w.nextSibling)
+				w.redraw(out);
+			context.stop = true;
+		}
+	},
+
+	ignoreFlexSize_: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			context.stop = true;
+			context.result = true;
+		}
+	},
+
+	ignoreChildNodeOffset_: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			context.stop = true;
+			context.result = true;
+		}
+	},
+
+	isExcludedHflex_: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			context.stop = true;
+			context.result = true;
+		}
+	},
+	isExcludedVflex_: function () {
+		if (this.getMold() == 'nodom') {
+			var context = this.$getInterceptorContext$();
+			context.stop = true;
+			context.result = true;
+		}
+	}
+};
 //Extra//
 
 function zkopt(opts) {
