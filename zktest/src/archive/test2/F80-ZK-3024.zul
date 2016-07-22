@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3024.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 21 11:13:03 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">1. open the bandbox, the popup width should be auto.
+		2. click button "130%" of bandbox, and open it, the popup width should be 390px
+		3. click button "200px" of bandbox, and open it, the popup width should be 200px
+		4. click button "null" of bandbox, and open it, the popup width should be auto
+
+
+	</label>
+	bandbox
+	<hbox height="200px">
+		<vlayout>
+			<button onClick='bb.setPopupWidth(null)' label="setPopupWidth(null)"/>
+			<button onClick='bb.setPopupWidth("130%")' label="setPopupWidth(130%)"/>
+			<button onClick='bb.setPopupWidth("200px")' label="setPopupWidth(200px)"/>
+		</vlayout>
+		<bandbox id="bb" width="300px">
+			<bandpopup>
+				<vlayout>
+					long long long long long long long long long long long long long long long long long long long long long
+					<button onClick='bb.setPopupWidth(null)' label="setPopupWidth(null)"/>
+					<button onClick='bb.setPopupWidth("130%")' label="setPopupWidth(130%)"/>
+					<button onClick='bb.setPopupWidth("200px")' label="setPopupWidth(200px)"/>
+				</vlayout>
+			</bandpopup>
+		</bandbox>
+	</hbox>
+</zk>

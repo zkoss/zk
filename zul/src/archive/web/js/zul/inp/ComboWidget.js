@@ -38,7 +38,32 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		 * this text box.
 		 * @param boolean autodrop
 		 */
-		autodrop: null
+		autodrop: null,
+		/** Returns the width of the popup of this component.
+		 * @return string
+		 * @since 8.0.3
+		 */
+		/**
+		 * Sets the width of the popup of this component
+		 * If the input is a percentage, the popup width will be calculated by multiplying the width of this component with the percentage.
+		 * (e.g. if the input string is 130%, and the width of this component is 300px, the popup width will be 390px = 300px * 130%)
+		 * Others will be set directly.
+		 * @param string the width of the popup of this component
+		 * @since 8.0.3
+		 */
+		popupWidth: function (v) {
+			if (this._open) {
+				var pp = this.getPopupNode_(),
+					inp = this.getInputNode(),
+					pp2 = this.getPopupNode_(true);
+				if (!pp) return;
+
+				var ppofs = this._getPopupSize(pp, pp2);
+				this._fixsz(ppofs);
+				this._checkPopupSpaceAndPosition(pp, inp);
+				this._fixFfWhileBothScrollbar(pp, pp2);
+			}
+		}
 	},
 	setWidth: function () {
 		this.$supers('setWidth', arguments);
@@ -141,27 +166,19 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.focus();
 
 		var pp = this.getPopupNode_(),
-			inp = this.getInputNode();
+			inp = this.getInputNode(),
+			pp2 = this.getPopupNode_(true);
 		if (!pp) return;
 
 		this.setFloating_(true, {node: pp});
 		zWatch.fire('onFloatUp', this); //notify all
 		var topZIndex = this.setTopmost();
 
-		var ppofs = this.getPopupSize_(pp);
-		pp.style.width = ppofs[0];
-		pp.style.height = 'auto';
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1; //on-top of everything
-
-		var pp2 = this.getPopupNode_(true);
-		if (pp2) pp2.style.width = pp2.style.height = 'auto';
-
 		pp.style.position = 'absolute'; //just in case
 		pp.style.display = 'block';
 
-		// B50-ZK-859: need to carry out min size here
-		if (this.presize_())
-			ppofs = this.getPopupSize_(pp);
+		var ppofs = this._getPopupSize(pp, pp2);
 		// B70-ZK-2742: arrange method fixsz execution order
 		this._fixsz(ppofs);//fix size
 		// throw out
@@ -180,8 +197,41 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// throw in
 		pp.style.left = '';
 
+		this._checkPopupSpaceAndPosition(pp, inp);
+		this._shallSyncPopupPosition = false;
+
+		pp.style.display = 'none';
+		pp.style.visibility = '';
+		this.slideDown_(pp);
+
+		this._fixFfWhileBothScrollbar(pp, pp2);
+
+		if (!this._shadow)
+			this._shadow = new zk.eff.Shadow(pp,
+				{left: -4, right: 4, top: -2, bottom: 3});
+
+		if (opts && opts.sendOnOpen)
+			this.fire('onOpen', {open: true, value: inp.value}, {rtags: {onOpen: 1}});
+
+		//add extra CSS class for easy customize
+		jq(pp).addClass(this.$s('open'));
+	},
+	_getPopupSize: function (pp, pp2) {
+		var ppofs = this.getPopupSize_(pp);
+		pp.style.width = ppofs[0];
+		pp.style.height = 'auto';
+
+		if (pp2) pp2.style.width = pp2.style.height = 'auto';
+
+		// B50-ZK-859: need to carry out min size here
+		if (this.presize_())
+			ppofs = this.getPopupSize_(pp);
+		return ppofs;
+	},
+	_checkPopupSpaceAndPosition: function (pp, inp) {
 		//B80-ZK-3051
 		//check the popup space before position()
+		var $pp = zk(pp);
 		var ppHeight = $pp.dimension().height;
 		var inpDim = (inp.nodeType ? zk(inp) : inp).dimension(true);
 		var inpTop = inpDim.top;
@@ -196,12 +246,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		} else {
 			$pp.position(inp, 'after_start', {overflow: true});
 		}
-		this._shallSyncPopupPosition = false;
-
-		pp.style.display = 'none';
-		pp.style.visibility = '';
-		this.slideDown_(pp);
-
+	},
+	_fixFfWhileBothScrollbar: function (pp, pp2) {
 		//FF issue:
 		//If both horz and vert scrollbar are visible:
 		//a row might be hidden by the horz bar.
@@ -218,16 +264,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				}
 			}
 		}
-
-		if (!this._shadow)
-			this._shadow = new zk.eff.Shadow(pp,
-				{left: -4, right: 4, top: -2, bottom: 3});
-
-		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open: true, value: inp.value}, {rtags: {onOpen: 1}});
-
-		//add extra CSS class for easy customize
-		jq(pp).addClass(this.$s('open'));
 	},
 	_checkPopupPosition: function () {
 		var pp = this.getPopupNode_(),
@@ -357,8 +393,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				this._shadow.sync();
 		}
 
+		var cb = this.$n(), i;
+		if (i = this.getPopupWidth()) {
+			if (i.endsWith('%')) {
+				pp.style.width = jq.px0(cb.offsetWidth * parseFloat(i) / 100.0);
+			} else {
+				pp.style.width = i;
+			}
+			if (pp2) pp2.style.width = '100%';
+			return;
+		}
+
 		if (ppofs[0] == 'auto') {
-			var cb = this.$n();
 			if (pp.offsetWidth <= cb.offsetWidth) {
 				pp.style.width = jq.px0(zk(pp).revisedWidth(cb.offsetWidth));
 				if (pp2) pp2.style.width = '100%';
