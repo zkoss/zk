@@ -7,6 +7,8 @@ ZK 8.0.3
   ZK-2955: Shadow element could be used in root element <zk>
   ZK-3234: Add a disable attribute to paging component
   ZK-3060: Add a way to disabled paging in mold="paging" for grid
+  ZK-3050: flags to control Long comboitem label causing endless growth of combobox drop down menu
+  ZK-3024: Adding a flag to bandpopup / bandbox to force bandpopup follow the bandbox width.
 
 * Bugs
   ZK-3221: Dragging element background can cover the whole text

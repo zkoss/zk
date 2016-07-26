@@ -458,7 +458,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		var pp = this.getPopupNode_();
 		pp.style.width = 'auto';
 		this.$supers('_fixsz', arguments);
-		if (zk(pp).hasVScroll()) {
+		if (zk(pp).hasVScroll() && !this.getPopupWidth()) {
 			pp.style.width = jq.px(pp.offsetWidth + jq.scrollbarWidth());
 		}
 	}

@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.event.OpenEvent;
  */
 public class Bandbox extends Textbox {
 	private boolean _autodrop, _btnVisible = true, _open;
+	private String _popupWidth;
 
 	static {
 		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
@@ -170,6 +171,8 @@ public class Bandbox extends Textbox {
 		render(renderer, "autodrop", _autodrop);
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
+		if (_popupWidth != null)
+			renderer.render("popupWidth", _popupWidth);
 	}
 
 	/** Processes an AU request.
@@ -200,5 +203,28 @@ public class Bandbox extends Textbox {
 	/** Childable. */
 	protected boolean isChildable() {
 		return true;
+	}
+
+	/**
+	 * @return the width of the popup of this component
+	 * @since 8.0.3
+	 */
+	public String getPopupWidth() {
+		return _popupWidth;
+	}
+
+	/**
+	 * Sets the width of the popup of this component.
+	 * If the input is a percentage, the popup width will be calculated by multiplying the width of this component with the percentage.
+	 * (e.g. if the input string is 130%, and the width of this component is 300px, the popup width will be 390px = 300px * 130%)
+	 * Others will be set directly.
+	 * @param popupWidth the width of the popup of this component
+	 * @since 8.0.3
+	 */
+	public void setPopupWidth(String popupWidth) {
+		if (popupWidth != _popupWidth) {
+			_popupWidth = popupWidth;
+			smartUpdate("popupWidth", popupWidth);
+		}
 	}
 }

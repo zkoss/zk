@@ -79,7 +79,7 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		var pp = this.getPopupNode_(),
 			zkpp = zk(pp),
 			ppfc = pp.firstChild;
-		if (ppofs[0].endsWith('%')) {
+		if (ppofs[0].endsWith('%') || this.getPopupWidth()) {
 			ppfc.style.width = '100%';
 		} else if (ppofs[0] != 'auto') {
 			pp.style.width = zkpp.revisedWidth(ppfc.offsetWidth + zkpp.padBorderWidth()) + 'px';
