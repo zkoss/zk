@@ -36,7 +36,6 @@ public abstract class MeshElement extends XulElement implements Paginated {
 	private boolean _sizedByContent;
 	private boolean _autopaging;
 	private String _pagingPosition = "bottom";
-	private boolean _disablePaging;
 
 	/**
 	 * Return column span hint of this component.
@@ -260,16 +259,21 @@ public abstract class MeshElement extends XulElement implements Paginated {
 		}
 	}
 
+	/**
+	 * @return whether the paging component of this component is disabled
+	 * @since 8.0.3
+	 */
 	public boolean isDisablePaging() {
-		return _disablePaging;
+		return pgi().isDisabled();
 	}
 
+	/**
+	 * Sets whether to disable the Paging component of this component
+	 * @param disablePaging
+	 * @since 8.0.3
+	 */
 	public void setDisablePaging(boolean disablePaging) {
-		if (_disablePaging  != disablePaging) {
 			pgi().setDisabled(disablePaging);
-			_disablePaging = disablePaging;
-			smartUpdate("disablePaging", disablePaging);
-		}
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {

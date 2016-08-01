@@ -46,6 +46,7 @@ ZK 8.0.3
   ZK-3252: SimpleConstraint created by (int flag) constructor doesn't follow the position
   ZK-3211: MVVM relocating components with ViewModels within borderlayout
   ZK-3224: Session Serialization: ConcurrentModificationException in AbstractComponent.sessionDidActivate(AbstractComponent.java:2915)
+  ZK-3261: Cardlayout not notifying children of being shown/hidden
 
 * Upgrade Notes
 
