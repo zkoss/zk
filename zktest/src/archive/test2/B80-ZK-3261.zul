@@ -13,37 +13,18 @@ B80-ZK-3261.zul
 Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
-	<script><![CDATA[
-       zk.afterLoad('zul.menu', function () {
-          var _xMenupopup = {};
-          zk.override(zul.menu.Menupopup.prototype, _xMenupopup, {
-             onHide: function () {
-                _xMenupopup.onHide.apply(this, arguments);
-                zk.log('popupmenu onHide');
-             }
-          });
-       });
-    ]]></script>
-    <label multiline="true">should see "popupmenu onHide" in zklog within 10 seconds
+<zk xmlns:w="client">
+    <label multiline="true">1. click "goto2" button, after switching to panel 2, click "goto3" button
+    2. after switching to panel 3, should see "hide panel3 show panel3 hide panel2" below the buttons
 
     </label>
-    <cardlayout id="cardLayout" width="300px" height="300px" style="box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4); margin: 15px;">
-        <div id="pane1" style="background-color: DarkSeaGreen; padding: 15px;" vflex="1">
-            pane1
-            <menubar id="menubar" width="200px">
-                <menu id="mn1" label="Test">
-                    <menupopup>
-                        <menuitem label="href1" href="http://www.zkoss.org"/>
-                        <menuitem label="href2" href="/test2/test.zul"/>
-                    </menupopup>
-                </menu>
-            </menubar>
-        </div>
-        <div id="pane2" style="background-color: BurlyWood; padding: 15px;" vflex="1">
-            pane2
-        </div>
+    <cardlayout id="cl" width="100px" height="100px">
+        <div>Panel 1</div>
+        <div w:onShow="this.$f('lb').setValue(this.$f('lb').getValue() + ' show panel2')" w:onHide="this.$f('lb').setValue(this.$f('lb').getValue() + ' hide panel2')">Panel 2</div>
+        <div w:onShow="this.$f('lb').setValue(this.$f('lb').getValue() + ' show panel3')" w:onHide="this.$f('lb').setValue(this.$f('lb').getValue() + ' hide panel3')">Panel 3</div>
     </cardlayout>
-    <timer delay="5000" onTimer="javascript:mn1.open()"/>
-    <timer delay="7000" onTimer="cardLayout.setSelectedIndex(1)"/>
+    <button label="goto2" w:onClick="this.$f('cl').setSelectedIndex(1);"/>
+    <button label="goto3" w:onClick="this.$f('cl').setSelectedIndex(2);"/>
+    <separator/>
+    <label id="lb" value=""/>
 </zk>
