@@ -47,7 +47,6 @@ ZK 8.0.3
   ZK-3211: MVVM relocating components with ViewModels within borderlayout
   ZK-3224: Session Serialization: ConcurrentModificationException in AbstractComponent.sessionDidActivate(AbstractComponent.java:2915)
   ZK-3261: Cardlayout not notifying children of being shown/hidden
-  ZK-3290: Tomcat not shutting down properly using a FL version
 
 * Upgrade Notes
 
