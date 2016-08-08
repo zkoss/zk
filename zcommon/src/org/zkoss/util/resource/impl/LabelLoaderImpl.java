@@ -337,7 +337,7 @@ public class LabelLoaderImpl implements LabelLoader {
 						else if (expend instanceof ExValue)
 							expended = expendValue(labels, ((ExValue) expend).getValue());
 						value = value.substring(0, start) + expended + value.substring(start + exp.length());
-						offset += start + expended.length();
+						offset = start + expended.length();
 					} else {
 						break;
 					}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3258.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug  8, 2016 12:48:32 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="${labels.rpi.app.title.l}" border="normal">
+		<label value="${labels.transf.content.innovation.lab.ref.projects2.V1.V1.H2.t1.$}"/>
+	</window>
+</zk>
