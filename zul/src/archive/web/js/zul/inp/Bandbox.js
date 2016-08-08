@@ -84,5 +84,9 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		} else if (ppofs[0] != 'auto') {
 			pp.style.width = zkpp.revisedWidth(ppfc.offsetWidth + zkpp.padBorderWidth()) + 'px';
 		}
+	},
+	doFocus_: function (evt) {
+		var target = evt.domTarget;
+		if (!(target != this.getInputNode() && target != this.$n('btn'))) this.$supers('doFocus_', arguments);
 	}
 });
