@@ -51,6 +51,7 @@ ZK 8.0.3
   ZK-3288: Borderlayout not resizing content after toggling autoscroll
   ZK-3258: Internationalization label with complex value causes org.zkoss.lang.PotentialDeadLockException
   ZK-3280: zul.tab.Tab widget _bind cause wrong selection if after-mount is triggered after another selection
+  ZK-3260: Datebox calendar doesn't register clicks on days on Mac Safari after ZK-3193
 
 * Upgrade Notes
 
