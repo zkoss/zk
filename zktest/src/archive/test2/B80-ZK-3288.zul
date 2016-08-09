@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3288.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug  2 18:13:24 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">1. click button (A)
+		2. click button (B), should appear vertical scrollbar only
+		3. the #container div should not overlap with the scrollbar
+		4. click button (C), scroll bar should disappear
+		5. the width of the #container div should enlarge to fill the blank space of the disappeared vertical scrollbar
+
+	</label>
+	<zscript><![CDATA[
+		public void addContent() {
+			container.getTemplate("content").create(container, null, null, null);
+		}
+		public void toggleAutoscroll(boolean enabled) {
+			mycenter.setAutoscroll(enabled);
+		}
+	]]></zscript>
+	<borderlayout width="400px" height="500px">
+		<north height="50px" style="background-color: RosyBrown">
+			<div>
+				<button label="(A) add content" onClick="addContent();"/>
+				<button label="(B) enable autoscroll" onClick="toggleAutoscroll(true);"/>
+				<button label="(C) disable autoscroll" onClick="toggleAutoscroll(false);"/>
+			</div>
+		</north>
+		<center id="mycenter">
+			<div id="container" hflex="1">
+				<template name="content">
+					<vlayout hflex="1" spacing="0">
+						<div hflex="1" height="200px" style="background-color: Goldenrod;">left</div>
+						<div hflex="1" height="200px" style="background-color: MediumSeaGreen; text-align: right;">right</div>
+						<div hflex="1" height="200px" style="background-color: Goldenrod;">left</div>
+						<div hflex="1" height="200px" style="background-color: MediumSeaGreen; text-align: right;">right</div>
+					</vlayout>
+				</template>
+			</div>
+		</center>
+	</borderlayout>
+</zk>
