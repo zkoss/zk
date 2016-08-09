@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3264.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug  9 15:43:35 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml" xmlns:ca="client/attribute" xmlns:w="client">
+	<label multiline="true">1. click the button
+		2. should see "true" at the right of the button
+
+	</label>
+	<x:input id="input1" ca:data-test="test-value"/>
+	<x:div id="div1" ca:data-test="test-value"/>
+	<button label="button" w:onClick="this.$f('lb').setValue(div1.outerHTML.indexOf('data-test') != -1 &amp;&amp; input1.outerHTML.indexOf('data-test') != -1)"/>
+	<label id="lb"/>
+</zk>
