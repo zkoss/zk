@@ -263,7 +263,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 					if (cave && cave.style.display == 'none')
 						panel._sel(true, true);
 				}
-				tab._sel(false, true);
+				if (tab.isSelected()) tab._sel(false, true);
 			});
 		}
 
