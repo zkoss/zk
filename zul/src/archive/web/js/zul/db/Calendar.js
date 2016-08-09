@@ -989,8 +989,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								if (Renderer.disabled(this, y, m + monofs, v, today)) {
 									$cell.addClass(disdClass);
 								}
-								$cell.html(Renderer.cellHTML(this, y, m + monofs, v, monofs))
-									.data('value', v);
+								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs);
+								$cell.data('value', v);
 							}
 						}
 					}
