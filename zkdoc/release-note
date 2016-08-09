@@ -53,6 +53,7 @@ ZK 8.0.3
   ZK-3280: zul.tab.Tab widget _bind cause wrong selection if after-mount is triggered after another selection
   ZK-3260: Datebox calendar doesn't register clicks on days on Mac Safari after ZK-3193
   ZK-3264: client-attributes on xhtml element corrupt rendered html
+  ZK-3257: 2 menus overlap each other after clicking it 
 
 * Upgrade Notes
 
