@@ -5334,7 +5334,8 @@ zk.Native = zk.$extends(zk.Widget, {
 			}
 			// B80-ZK-2957
 			if (this.domExtraAttrs) {
-				s = s.substring(0, s.indexOf('/>')) + this.domExtraAttrs_() + '/>';
+				var postTag = s.indexOf('/>') == -1 ? '>' : '/>';
+				s = s.replace(postTag, this.domExtraAttrs_() + postTag);
 			}
 			// B65-ZK-1836 and B70-ZK-2622
 			out.push(zk.Native.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));

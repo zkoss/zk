@@ -45,10 +45,10 @@ public interface Paginated {
 	 * <p>Default: false.
 	 * @since 8.0.3
 	 */
-	public boolean isDisablePaging();
+	public boolean isPagingDisabled();
 
 	/** Sets whether the Paging component of this component is disabled.
 	 * @since 8.0.3
 	 */
-	public void setDisablePaging(boolean disablePaging);
+	public void setPagingDisabled(boolean pagingDisabled);
 }

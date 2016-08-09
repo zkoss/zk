@@ -263,17 +263,17 @@ public abstract class MeshElement extends XulElement implements Paginated {
 	 * @return whether the paging component of this component is disabled
 	 * @since 8.0.3
 	 */
-	public boolean isDisablePaging() {
+	public boolean isPagingDisabled() {
 		return pgi().isDisabled();
 	}
 
 	/**
 	 * Sets whether to disable the Paging component of this component
-	 * @param disablePaging
+	 * @param pagingDisabled
 	 * @since 8.0.3
 	 */
-	public void setDisablePaging(boolean disablePaging) {
-			pgi().setDisabled(disablePaging);
+	public void setPagingDisabled(boolean pagingDisabled) {
+			pgi().setDisabled(pagingDisabled);
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {

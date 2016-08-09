@@ -8,19 +8,19 @@ import org.zkoss.bind.annotation.NotifyChange;
  */
 public class F80_ZK_3060VM {
 
-    private boolean _disablePaging = true;
+    private boolean _pagingDisabled = true;
 
-    public boolean isDisablePaging() {
-        return _disablePaging;
+    public boolean isPagingDisabled() {
+        return _pagingDisabled;
     }
 
-    public void setDisablePaging(boolean disablePaging) {
-        _disablePaging = disablePaging;
+    public void setPagingDisabled(boolean pagingDisabled) {
+        _pagingDisabled = pagingDisabled;
     }
 
     @Command
-    @NotifyChange("disablePaging")
+    @NotifyChange("pagingDisabled")
     public void select() {
-        _disablePaging = !_disablePaging;
+        _pagingDisabled = !_pagingDisabled;
     }
 }
