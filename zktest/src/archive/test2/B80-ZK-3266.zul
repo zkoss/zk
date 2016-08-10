@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3266.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Aug 10, 2016  3:28:07 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1.load this page, grid should inside the div with red border and no any JS Error
+		2.click "resize grid" button, the grid size should not change
+	</label>
+	<div sclass="container" width="200px" height="150px" style="border: 1px solid red;">
+		<grid id="mygrid" hflex="1" vflex="1">
+			<columns>
+				<column width="90px">aaa</column>
+				<column width="90px">aaa</column>
+				<column width="90px">aaa</column>
+			</columns>
+			<rows>
+				<row><div>aaa</div><div>aaa</div><div>aaa</div></row>
+				<row><div>aaa</div><div>aaa</div><div>aaa</div></row>
+				<row><div>aaa</div><div>aaa</div><div>aaa</div></row>
+				<row><div>aaa</div><div>aaa</div><div>aaa</div></row>
+				<row><div>aaa</div><div>aaa</div><div>aaa</div></row>
+			</rows>
+			<foot>
+				<footer span="6"/>
+			</foot>
+		</grid>
+	</div>
+
+	<button label="resize grid" w:onClick="zUtl.fireSized(zk.$('$mygrid'))"/> 
+</zk>
