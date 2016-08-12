@@ -723,8 +723,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			} else {
 				this._calcMinWds();
 				this._fixHeaders();
-				this.onSize();
 			}
+			this.onSize();
 		}
 	},
 	onResponse: function () {
@@ -1074,8 +1074,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (head)
 					head.style.height = '';
 			} else {
-				//ZK-3074
-				sz.height += zk(this.ebody).hasHScroll() ? jq.scrollbarHeight() : 0;
 				return this.$supers('setFlexSize_', arguments);
 			}
 		}
@@ -1086,8 +1084,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				if (head)
 					head.style.width = '';
 			} else {
-				//ZK-3074
-				sz.width += zk(this.ebody).hasVScroll() ? jq.scrollbarWidth() : 0;
 				return this.$supers('setFlexSize_', arguments);
 			}
 		}
@@ -1173,6 +1169,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
+
+		if (ebody) {
+			if (this._hflex == 'min' && zk(ebody).hasVScroll()) {
+				n.style.width = parseInt(n.style.width) + jq.scrollbarWidth() + 'px';
+				ebody.style.width = '';
+				if (ehead) ehead.style.width = '';
+				if (efoot) efoot.style.width = '';
+			}
+			if (this._vflex == 'min' && zk(ebody).hasHScroll()) {
+				n.style.height = parseInt(n.style.height) + jq.scrollbarWidth() + 'px';
+				ebody.style.height = '';
+			}
+		}
 
 		this._afterCalcSize();
 	},
