@@ -291,7 +291,9 @@ zFlex = { //static methods
 			&& (wgt._hflex === undefined || (wgt._hflexsz && wgt._hflex == 'min')))
 			return;
 
-		
+		if (wgt.ignoreFlexSize_('w') && wgt.ignoreFlexSize_('h'))
+			return;
+
 		if (!wgt.parent.beforeChildrenFlex_(wgt)) { //don't do fixflex if return false
 			return;
 		}
@@ -450,10 +452,10 @@ zFlex = { //static methods
 			c = wgt.$n();
 		if (c && zk(c).isVisible()) {
 			// Bug ZK-3014: offsetWidth will be available only when wgt is real visible
-			if (wgt._hflex == 'min' && wgt._hflexsz === undefined && wgt.isRealVisible())
+			if (wgt._hflex == 'min' && wgt._hflexsz === undefined && wgt.isRealVisible() && !wgt.ignoreFlexSize_('w'))
 				zFlex.fixMinFlex(wgt, c, 'w');
 			// Bug ZK-3014: offsetHeight will be available only when wgt is real visible
-			if (wgt._vflex == 'min' && wgt._vflexsz === undefined && wgt.isRealVisible())
+			if (wgt._vflex == 'min' && wgt._vflexsz === undefined && wgt.isRealVisible() && !wgt.ignoreFlexSize_('h'))
 				zFlex.fixMinFlex(wgt, c, 'h');
 		}
 	},
