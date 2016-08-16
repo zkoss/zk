@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3287.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Aug 16, 2016  1:01:22 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.move mouse on any listbox cell
+		2.it shouldn't appear red border on it
+	</label>
+	<style>
+		.z-draggable-over {
+			outline: 1px solid red;
+		}
+	</style>
+	<grid width="300px" height="200px">
+		<rows>
+			<row draggable="true" droppable="true">
+				aaa
+			</row>
+			<row draggable="true" droppable="true">
+				bbb
+			</row>
+			<row draggable="true" droppable="true">
+				ccc
+			</row>
+		</rows>
+	</grid>
+</zk>

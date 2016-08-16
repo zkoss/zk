@@ -57,6 +57,7 @@ ZK 8.0.3
   ZK-3264: client-attributes on xhtml element corrupt rendered html
   ZK-3257: 2 menus overlap each other after clicking it 
   ZK-3266: JS Error with flex grid
+  ZK-3287: D'n'D Missing style class in Chrome
 
 * Upgrade Notes
 
