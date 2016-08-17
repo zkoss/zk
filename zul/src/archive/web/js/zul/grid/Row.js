@@ -290,14 +290,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (this._musin)
 			return;
 		this._musin = true;
-		var n = this.$n();
-
-		// ZK-2250: all children should apply -moz-user-select: none
-		if (n && zk.gecko && this._draggable
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
-			jq(n).addClass('z-draggable-over');
-		}
-
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
@@ -309,13 +301,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			return;
 		}
 		this._musin = false;
-
-		// ZK-2250: all children should unapply -moz-user-select: none
-		if (n && zk.gecko && this._draggable
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
-			jq(n).removeClass('z-draggable-over');
-		}
-
 		this.$supers('doMouseOut_', arguments);
 	},
 	domClass_: function () {

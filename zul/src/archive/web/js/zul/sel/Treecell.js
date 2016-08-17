@@ -106,26 +106,6 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	doMouseOver_: function (evt) {
-		var n = this.$n();
-
-		// ZK-2136: all children should apply -moz-user-select: none
-		if (n && zk.gecko && (this._draggable || this.parent._draggable)
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
-			jq(n).addClass('z-draggable-over');
-		}
-		this.$supers('doMouseOver_', arguments);
-	},
-	doMouseOut_: function (evt) {
-		var n = this.$n();
-
-		// ZK-2136: all children should apply -moz-user-select: none
-		if (n && zk.gecko && (this._draggable || this.parent._draggable)
-				&& !jq.nodeName(evt.domTarget, 'input', 'textarea')) {
-			jq(n).removeClass('z-draggable-over'); // Bug ZK-580
-		}
-		this.$supers('doMouseOut_', arguments);
-	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
 		//sync frozen
