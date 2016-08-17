@@ -16,9 +16,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A no-dom widget with comment scope
  * @since 8.0.3
  */
-zul.wgt.NoDOM = zk.$extends(zk.Widget, {
+zul.wgt.Nodom = zk.$extends(zk.Widget, {
 	getMold: function () {
 		return 'nodom';
 	}
 });
-zk.$intercepts(zul.wgt.NoDOM, zk.NoDOM);
+zk.$intercepts(zul.wgt.Nodom, zk.NoDOM);
