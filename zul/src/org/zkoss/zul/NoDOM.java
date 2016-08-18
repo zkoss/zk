@@ -33,7 +33,7 @@ public class NoDOM extends AbstractComponent {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		for (Component child = getFirstChild(); child != null; child = child.getNextSibling()) {
-			if (child instanceof HtmlBasedComponent && ((HtmlBasedComponent) child).getHflex() != null || ((HtmlBasedComponent) child).getVflex() != null)
+			if (child instanceof HtmlBasedComponent && (((HtmlBasedComponent) child).getHflex() != null || ((HtmlBasedComponent) child).getVflex() != null))
 				log.warn("You should not use hflex/vflex inside NoDOM component.");
 		}
 	}

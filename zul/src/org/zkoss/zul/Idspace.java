@@ -37,7 +37,7 @@ public class Idspace extends Div implements org.zkoss.zk.ui.IdSpace {
 		super.renderProperties(renderer);
 		if (this.getMold() == "nodom") {
 			for (Component child = getFirstChild(); child != null; child = child.getNextSibling()) {
-				if (child instanceof HtmlBasedComponent && ((HtmlBasedComponent) child).getHflex() != null || ((HtmlBasedComponent) child).getVflex() != null)
+				if (child instanceof HtmlBasedComponent && (((HtmlBasedComponent) child).getHflex() != null || ((HtmlBasedComponent) child).getVflex() != null))
 					log.warn("You should not use hflex/vflex inside Idspace component with \"nodom\" mold.");
 			}
 		}
