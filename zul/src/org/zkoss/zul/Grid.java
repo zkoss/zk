@@ -1060,6 +1060,7 @@ public class Grid extends MeshElement {
 		if ((type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.CONTENTS_CHANGED)
 				&& !isIgnoreSortWhenChanged()) {
 			doSort(this);
+			getDataLoader().updateModelInfo();
 		} else {
 			if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
 					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))

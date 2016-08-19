@@ -2605,6 +2605,7 @@ public class Listbox extends MeshElement {
 		if ((type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.CONTENTS_CHANGED)
 				&& !isIgnoreSortWhenChanged()) {
 			doSort(this);
+			getDataLoader().updateModelInfo();
 		} else if (type == ListDataEvent.SELECTION_CHANGED) {
 			if (!_ignoreDataSelectionEvent) {
 				if (event.getIndex0() > -1) {
