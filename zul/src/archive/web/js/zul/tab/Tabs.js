@@ -42,6 +42,19 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		// Bug Z35-tabbox-004.zul, we need to check again.
 		this._scrollcheck('init');
 	},
+	beforeSize: function () {
+		var tabbox = this.getTabbox(),
+			width = tabbox.getWidth(),
+			style = this.$n().style;
+		if ((!width || width.endsWith('%') || width == 'auto') && !tabbox.inAccordionMold() && !tabbox.isVertical()) {
+			this.$n('cave').style.width = '';
+			if (style.width) {
+				style.width = '';
+				if (!tabbox.isTabscroll())
+					tabbox.$n().style.width = '';
+			}
+		}
+	},
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
 		if (before)
@@ -69,10 +82,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tabs, 'bind_', arguments);
-		zWatch.listen({onSize: this, onResponse: this});
+		zWatch.listen({onSize: this, onResponse: this, beforeSize: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onResponse: this});
+		zWatch.unlisten({onSize: this, onResponse: this, beforeSize: this});
 		this.$supers(zul.tab.Tabs, 'unbind_', arguments);
 	},
 	_scrollcheck: function (way, tb) {
@@ -179,6 +192,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._doScroll(d >= 0 ? 'right' : 'left', d >= 0 ? d : Math.abs(d));
 					break;
 				case 'init':
+					this.$n('cave').style.width = '5555px';
 				case 'sel':
 					if (nodeOffsetLeft == tabsScrollLeft) // nothing to do
 						break;
@@ -338,6 +352,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixHgh: function (toSel) {
+		if (this.getTabbox()._scrolling) return;
 		var tabbox = this.getTabbox();
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
