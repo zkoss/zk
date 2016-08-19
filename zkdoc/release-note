@@ -58,6 +58,7 @@ ZK 8.0.3
   ZK-3257: 2 menus overlap each other after clicking it 
   ZK-3266: JS Error with flex grid
   ZK-2715: ListModelList.set(int, Object) triggers repaint of ALL tabs in Tabbox
+  ZK-3250: Listbox always re-creates all Listitems when adding an entry in a ListModel with ROD is enabled
 
 * Upgrade Notes
 
