@@ -60,6 +60,7 @@ ZK 8.0.3
   ZK-2715: ListModelList.set(int, Object) triggers repaint of ALL tabs in Tabbox
   ZK-3250: Listbox always re-creates all Listitems when adding an entry in a ListModel with ROD is enabled
   ZK-3293: splitter fails to work with a tabbox
+  ZK-3262: Datebox trigger onChange and validation when clicking on the calendar buttons
 
 * Upgrade Notes
 

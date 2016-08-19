@@ -540,6 +540,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			out.push('</select></div>');
 			// B50-ZK-577: Rendering Issue using Datebox with displayedTimeZones
 		}
+	},
+	updateChange_: function () {
+		if (this.isOpen()) return;
+		this.$supers('updateChange_', arguments);
 	}
 });
 
