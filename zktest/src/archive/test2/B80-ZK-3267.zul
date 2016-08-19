@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3267.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Aug 16, 2016  4:05:25 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.in IE, click the combobox
+		2.type any letter, it should not open the drop down popup
+	</label>
+	<combobox disabled="true" autodrop="true">
+	    <comboitem label="test1" />
+	    <comboitem label="test2" />
+	    <comboitem label="test3" />
+	</combobox>
+</zk>

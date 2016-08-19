@@ -61,6 +61,7 @@ ZK 8.0.3
   ZK-3250: Listbox always re-creates all Listitems when adding an entry in a ListModel with ROD is enabled
   ZK-3293: splitter fails to work with a tabbox
   ZK-3262: Datebox trigger onChange and validation when clicking on the calendar buttons
+  ZK-3267: Disabled Combobox with autodrop still open in IE 11
 
 * Upgrade Notes
 
