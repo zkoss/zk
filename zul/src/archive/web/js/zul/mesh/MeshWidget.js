@@ -719,12 +719,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			this.clearCachedSize_();
 			if (this._hflex == 'min') {
-				zFlex.onFitSize.apply(this);
+				zWatch.fire('onFitSize', this, {reverse: true});
 			} else {
 				this._calcMinWds();
 				this._fixHeaders();
 			}
-			this.onSize();
+			zWatch.fire('onSize', this, {reverse: true});
 		}
 	},
 	onResponse: function () {
@@ -1172,14 +1172,24 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		if (ebody) {
 			if (this._hflex == 'min' && zk(ebody).hasVScroll()) {
-				n.style.width = parseInt(n.style.width) + jq.scrollbarWidth() + 'px';
+				var w = parseInt(n.style.width) + jq.scrollbarWidth();
+				n.style.width = w + 'px';
+				this._hflexsz = w;
 				ebody.style.width = '';
+				//ZK-3301: if parent hflex is min, delete parent._hflexsz force parent widget re-calculate size
+				if (this.parent && this.parent._hflex == 'min')
+					delete this.parent._hflexsz;
 				if (ehead) ehead.style.width = '';
 				if (efoot) efoot.style.width = '';
 			}
 			if (this._vflex == 'min' && zk(ebody).hasHScroll()) {
-				n.style.height = parseInt(n.style.height) + jq.scrollbarWidth() + 'px';
+				var h = parseInt(n.style.height) + jq.scrollbarWidth();
+				n.style.height = h + 'px';
+				this._vflexsz = h;
 				ebody.style.height = '';
+				//ZK-3301: if parent vflex is min, delete parent._vflexsz force parent widget re-calculate size
+				if (this.parent && this.parent._vflex == 'min')
+					delete this.parent._vflexsz;
 			}
 		}
 

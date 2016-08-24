@@ -63,6 +63,7 @@ ZK 8.0.3
   ZK-3262: Datebox trigger onChange and validation when clicking on the calendar buttons
   ZK-3267: Disabled Combobox with autodrop still open in IE 11
   ZK-3265: ListModelList in grid with ROD and AutoSort cause unexpected "Adding causes a smaller list?" UIException
+  ZK-3301: hflex min calculation around meshwidget with scrollbar
 
 * Upgrade Notes
 
