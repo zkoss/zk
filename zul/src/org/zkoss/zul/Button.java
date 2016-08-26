@@ -16,8 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
@@ -269,6 +273,18 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
 			onUploadChanged(upload);
 			initAuxInfo().upload = upload;
+			if (upload != null) { //for AuUploader
+				Matcher matcher = Pattern.compile("maxsize=([^,]+)").matcher(upload);
+				if (matcher.find()) {
+					try {
+						Integer maxsz = Integer.parseInt(matcher.group(1));
+						setAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE, maxsz);
+					} catch (NumberFormatException e) {
+						throw new UiException("The upload max size should be a positive integer.");
+					}
+
+				}
+			}
 			smartUpdate("upload", getUpload());
 		}
 	}
