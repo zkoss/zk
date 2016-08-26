@@ -41,7 +41,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			dt = wgt.desktop,
 
 			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid
-					+ (upload.maxsize !== '' ? '&maxsize=' + upload.maxsize : '')
 					+ (upload.isNative ? '&native=true' : ''), {desktop: dt,au: true}),
 			form = n.form;
 		form.action = action;

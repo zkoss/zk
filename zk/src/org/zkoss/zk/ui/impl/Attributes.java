@@ -33,6 +33,11 @@ public class Attributes extends org.zkoss.zk.ui.sys.Attributes {
 	 */
 	public static final String UPLOAD_SIZE = "org.zkoss.zk.upload.size";
 
+	/** A component attribute used to indicate the max-size of file upload.
+	 * It is a non-negative integer.
+	 */
+	public static final String UPLOAD_MAX_SIZE = "org.zkoss.zk.upload.maxsize";
+
 	//Component//
 	/** A desktop attribute used to store a map of data associated
 	 * with the echo event ({@link org.zkoss.zk.ui.event.Events#echoEvent}).

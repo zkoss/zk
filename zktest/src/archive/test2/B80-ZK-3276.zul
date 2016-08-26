@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    B80-ZK-3276.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jul 19 12:21:48 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true"> <![CDATA[
+        1. Use button and dropupload to upload a file (1KB < file < 1MB). You should see the error message.
+        2. Click the button to "override limits at client side"
+        3. Upload again, you should still see the same error message.
+    ]]>
+    </label>
+	<div>
+		<button id="buttonUpl" label="Button Upload (max. 1KB)" upload="true,maxsize=1" onUpload='buttonUploadResult.setValue("uploaded: " + event.media.name);'/>
+		<label id="buttonUploadResult"/>
+	</div>
+	<space/>
+	<div width="300px" height="150px" style="outline: 1px solid red;">
+		Drop Upload (max. 1KB) 
+		<dropupload id="dropUpl" maxsize="1" onUpload='dropUploadResult.setValue("uploaded: " + event.media.name);' anchor="${self.parent}"/>
+		<label id="dropUploadResult"/>
+	</div>
+    <button label="override limits at client side" w:onClick="
+		zk.$('$dropUpl').setMaxsize(1024);
+		zk.$('$buttonUpl').setUpload('true,maxsize=1024');
+		zk.log('now override to 1 MB');
+	"/>
+</zk>
