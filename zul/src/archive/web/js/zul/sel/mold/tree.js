@@ -50,7 +50,12 @@ function (out) {
 	if (this._autopaging)
 		out.push(' ', this.$s('autopaging'));
 	
-	out.push('"><table id="', uuid, '-cave"', width, 
+	out.push('"');
+
+	var hgh = this.getHeight();
+	if (hgh)
+		out.push(' style="height:', hgh, '"');
+	out.push('><table id="', uuid, '-cave"', width,
 			' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.treecols)
