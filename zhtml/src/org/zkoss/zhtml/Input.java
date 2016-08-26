@@ -72,7 +72,7 @@ public class Input extends AbstractTag {
 	 * Sets if the input is checked (type: checkbox or radio).
 	 */
 	public void setChecked(boolean checked) {
-		setDynamicProperty("checked", Boolean.valueOf(checked));
+		setDynamicProperty("checked", checked ? Boolean.valueOf(checked) : null);
 	}
 
 	// -- Component --//
