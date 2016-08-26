@@ -234,12 +234,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				map[sizePos] = size + wgt[contentPos](size);
 				var s = wgt.setFlexSize_(map, true);
 				sz = {height: n.offsetHeight, width: (s && s.width) || n.offsetWidth};
-				if (sz && sz[sizePos] >= 0) {
+				if (sz && sz[sizePos] >= 0)
 					wgt[flexsz] = sz[sizePos] + margin;
-					//ZK-3301: if parent flex is min, delete parent[flexsz] force parent widget re-calculate size
-					if (wgt.parent && wgt.parent[flex] == 'min')
-						delete wgt.parent[flexsz];
-				}
 				wgt.afterChildrenMinFlex_(o);
 				
 				// notify my parent when my size has been changed and my parent is not in min flex
