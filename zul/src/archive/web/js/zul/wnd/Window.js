@@ -1345,8 +1345,13 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	_endghostsizing: function (dg, origin) {
 		var el = dg.node; //ghostvar org = zkau.getGhostOrgin(dg);
 		if (origin) {
+			var offset = zk(origin).cmOffset(),
+				s = origin.style,
+				offsetX = offset[0] - parseInt(s.left),
+				offsetY = offset[1] - parseInt(s.top);
 			dg.z_szofs = {
-				top: el.offsetTop + 'px', left: el.offsetLeft + 'px',
+				top: jq.px(el.offsetTop - offsetY),
+				left: jq.px(el.offsetLeft - offsetX),
 				height: jq.px0(zk(el).revisedHeight(el.offsetHeight)),
 				width: jq.px0(zk(el).revisedWidth(el.offsetWidth))
 			};
