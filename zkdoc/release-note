@@ -66,6 +66,7 @@ ZK 8.0.3
   ZK-3265: ListModelList in grid with ROD and AutoSort cause unexpected "Adding causes a smaller list?" UIException
   ZK-3276: Fileupload size limit can be overridden from the client side
   ZK-3299: zhtml inconsistent "checked" property
+  ZK-3275: CometServerPush ignores retryDelay on IE9
 
 * Upgrade Notes
 
