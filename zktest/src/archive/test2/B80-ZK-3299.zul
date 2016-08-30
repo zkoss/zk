@@ -1,0 +1,68 @@
+<zk xmlns:x="xhtml" xmlns:zk="zk">
+	Press the buttons below, and the result should be the same as description.
+
+	<div>
+		<x:input id="cb1" type="checkbox" checked="true"/><!-- initially checked -->
+		<x:input id="cb2" type="checkbox" checked="false"/><!-- initially unchecked -->
+		<button label="check #1, #2">
+            <attribute name="onClick"><![CDATA[
+                cb1.setChecked(true);
+		  	    cb2.setChecked(true);
+		  	    showStatus(1);
+            ]]>
+            </attribute>
+        </button>
+		<button label="uncheck #1, #2">
+            <attribute name="onClick"><![CDATA[
+                cb1.setChecked(false);
+		  	    cb2.setChecked(false);
+		  	    showStatus(1);
+            ]]>
+            </attribute>
+        </button>
+
+		<button label="check #1 3 times">
+            <attribute name="onClick"><![CDATA[
+                cb1.setChecked(true);
+		  	    cb1.setChecked(true);
+		  	    cb1.setChecked(true);
+		  	    showStatus(1);
+            ]]>
+            </attribute>
+        </button>
+	</div>
+	<div>
+		<x:input id="cb3" type="checkbox" />
+		<x:input id="cb4" type="checkbox" />
+
+		<button label="check #3, #4">
+            <attribute name="onClick"><![CDATA[
+                cb3.setDynamicProperty("checked", "checked");
+		  	    cb4.setDynamicProperty("checked", "checked");
+		  	    showStatus(2);
+            ]]>
+            </attribute>
+        </button>
+		<button label="uncheck #3, #4">
+            <attribute name="onClick"><![CDATA[
+                cb3.setDynamicProperty("checked", null);
+		  	    cb4.setDynamicProperty("checked", null);
+		  	    showStatus(2);
+            ]]>
+            </attribute>
+        </button>
+	</div>
+	<zscript>
+		/* same as using the checked property at the element
+	    cb1.setChecked(true);
+	    cb2.setChecked(false);
+		*/
+	    cb3.setDynamicProperty("checked", "checked");
+	    cb4.setDynamicProperty("checked", null);
+        public void showStatus(int step) {
+            String id1 = "cb" + (step == 1 ? 1 : 3);
+            String id2 = "cb" + (step == 1 ? 2 : 4);
+            Clients.evalJavaScript("var checked1=zk.Widget.$('" + id1 + "').$n().checked; var checked2=zk.Widget.$('" + id2 + "').$n().checked; zk.log(checked1 + ',' + checked2);");
+        }
+	</zscript>
+</zk>

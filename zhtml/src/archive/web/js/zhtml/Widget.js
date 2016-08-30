@@ -29,7 +29,7 @@ zhtml.Widget = zk.$extends(zk.Widget, {
 			var nm = prop[0], val = prop[1];
 			switch (nm) {
 			case 'checked':
-				n.checked = this._defChecked = 'true' == val;
+				n.checked = this._defChecked = val != null;
 				break;
 			case 'value':
 				n.value = this._defValue = val;
