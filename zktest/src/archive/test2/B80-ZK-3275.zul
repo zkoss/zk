@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3275.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Aug 30, 2016  5:11:09 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. IE9 only
+		2. check your zk.xml have the following preference entries in them
+			- CometServerPush.retry.count
+			- CometServerPush.retry.delay
+			- CometServerPush.ajax.timeout
+		3. open the dev tool of IE9 and switch to "network" panel
+		4. retry delay should work as expect when request was timeout
+	</label>
+	<button label="enable server push" onClick="desktop.enableServerPush(true);"/>
+	<button label="disable server push" onClick="desktop.enableServerPush(false);"/>
+</zk>
