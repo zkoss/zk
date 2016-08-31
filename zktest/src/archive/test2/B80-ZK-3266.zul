@@ -15,9 +15,10 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:w="client">
 	<label multiline="true">
-		1.load this page, grid should inside the div with red border and no any JS Error
+		1.load this page, grid and listbox should inside the div with red border and no any JS Error
 		2.click "resize grid" button, the grid size should not change
 	</label>
+	<button label="resize grid" w:onClick="zUtl.fireSized(zk.$('$mygrid'))"/>
 	<div sclass="container" width="200px" height="150px" style="border: 1px solid red;">
 		<grid id="mygrid" hflex="1" vflex="1">
 			<columns>
@@ -38,5 +39,16 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		</grid>
 	</div>
 
-	<button label="resize grid" w:onClick="zUtl.fireSized(zk.$('$mygrid'))"/> 
+	<div hflex="min" vflex="min" style="border: 1px solid red;">
+		<listbox height="150px" hflex="min">
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+			<listitem><listcell>aaabbbccc</listcell></listitem>
+		</listbox>
+	</div>
 </zk>

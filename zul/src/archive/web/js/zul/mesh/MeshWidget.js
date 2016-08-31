@@ -214,7 +214,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			meshmin = wgt._hflex == 'min';
 		if (!wgt.head && (meshmin || sbc)) {
 			var bdw = zk(wgt.$n()).padBorderWidth(),
-				wd = _getMinWd(wgt) + bdw, // has to call _getMinWd first so wgt._minWd will be available
+				wd = _getMinWd(wgt) + (zk(wgt.ebody).hasVScroll() ? jq.scrollbarWidth() : 0) + bdw, // has to call _getMinWd first so wgt._minWd will be available
 				tr = wgt.ebodytbl,
 				wds = wgt._minWd.wds,
 				wlen = wds.length;
@@ -1169,19 +1169,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
-
-		if (ebody) {
-			if (this._hflex == 'min' && zk(ebody).hasVScroll()) {
-				n.style.width = parseInt(n.style.width) + jq.scrollbarWidth() + 'px';
-				ebody.style.width = '';
-				if (ehead) ehead.style.width = '';
-				if (efoot) efoot.style.width = '';
-			}
-			if (this._vflex == 'min' && zk(ebody).hasHScroll()) {
-				n.style.height = parseInt(n.style.height) + jq.scrollbarWidth() + 'px';
-				ebody.style.height = '';
-			}
-		}
 
 		this._afterCalcSize();
 	},

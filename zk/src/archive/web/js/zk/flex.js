@@ -236,6 +236,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				sz = {height: n.offsetHeight, width: (s && s.width) || n.offsetWidth};
 				if (sz && sz[sizePos] >= 0)
 					wgt[flexsz] = sz[sizePos] + margin;
+
+				var ebody = wgt.ebody;
+				if (ebody && wgt[flex] == 'min')
+					wgt[flexsz] += (zk(ebody)[isVflex ? 'hasHScroll' : 'hasVScroll']() ? jq.scrollbarWidth() : 0);
+
 				wgt.afterChildrenMinFlex_(o);
 				
 				// notify my parent when my size has been changed and my parent is not in min flex
