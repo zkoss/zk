@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3282.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 22, 2016 12:33:01 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.work with Tomcat 8, configure zk session serialization in zk.xml:
+            <system-config>
+                <ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
+            </system-config>
+        2.load this page
+        3.shutdown Tomcat server
+        4.startup Tomcat server
+        5.Log file should not appear NPE
+    </label>
+    <chosenbox/>
+</zk>

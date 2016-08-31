@@ -67,6 +67,7 @@ ZK 8.0.3
   ZK-3276: Fileupload size limit can be overridden from the client side
   ZK-3299: zhtml inconsistent "checked" property
   ZK-3275: CometServerPush ignores retryDelay on IE9
+  ZK-3282: Error deserializing Chosenbox
 
 * Upgrade Notes
 
