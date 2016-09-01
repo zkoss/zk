@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3304.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Aug 31, 2016  6:40:10 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	    application.getConfiguration().setPreference("CometServerPush.retry.delay", "0");
+	    application.getConfiguration().setPreference("CometServerPush.retry.count", "20");
+	    application.getConfiguration().setPreference("CometServerPush.ajax.timeout", "6000");
+
+	    session.setMaxInactiveInterval(12);
+
+	    desktop.enableServerPush(true);
+	]]></zscript>
+	<label multiline="true">
+		1. check your zk.xml have the following preference entries in them
+			-<session-config>
+				-<automatic-timeout />
+				-<timeout-uri>/timeout.zul</timeout-uri>
+				-<timer-keep-alive>false</timer-keep-alive>
+			-</session-config>
+		2. reload this page
+		3. it should redirect to timeout.zul after 17s later
+	</label>
+</zk>
