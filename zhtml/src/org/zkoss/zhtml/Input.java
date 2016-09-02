@@ -75,6 +75,337 @@ public class Input extends AbstractTag {
 		setDynamicProperty("checked", checked ? Boolean.valueOf(checked) : null);
 	}
 
+	/**
+	 * Returns the accept of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getAccept() {
+		return (String) getDynamicProperty("accept");
+	}
+
+	/**
+	 * Sets the accept of this input tag
+	 * @since 8.0.3
+	 */
+	public void setAccept(String accept) throws WrongValueException {
+		setDynamicProperty("accept", accept);
+	};
+	/**
+	 * Returns the alt of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getAlt() {
+		return (String) getDynamicProperty("alt");
+	}
+
+	/**
+	 * Sets the alt of this input tag
+	 * @since 8.0.3
+	 */
+	public void setAlt(String alt) throws WrongValueException {
+		setDynamicProperty("alt", alt);
+	};
+	/**
+	 * Returns the autocomplete of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getAutocomplete() {
+		return (String) getDynamicProperty("autocomplete");
+	}
+
+	/**
+	 * Sets the autocomplete of this input tag
+	 * @since 8.0.3
+	 */
+	public void setAutocomplete(String autocomplete) throws WrongValueException {
+		setDynamicProperty("autocomplete", autocomplete);
+	};
+	/**
+	 * Returns the autofocus of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getAutofocus() {
+		return (String) getDynamicProperty("autofocus");
+	}
+
+	/**
+	 * Sets the autofocus of this input tag
+	 * @since 8.0.3
+	 */
+	public void setAutofocus(String autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus);
+	};
+	/**
+	 * Returns the dirname of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getDirname() {
+		return (String) getDynamicProperty("dirname");
+	}
+
+	/**
+	 * Sets the dirname of this input tag
+	 * @since 8.0.3
+	 */
+	public void setDirname(String dirname) throws WrongValueException {
+		setDynamicProperty("dirname", dirname);
+	};
+	/**
+	 * Returns the disabled of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getDisabled() {
+		return (String) getDynamicProperty("disabled");
+	}
+
+	/**
+	 * Sets the disabled of this input tag
+	 * @since 8.0.3
+	 */
+	public void setDisabled(String disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled);
+	};
+	/**
+	 * Returns the height of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getHeight() {
+		return (String) getDynamicProperty("height");
+	}
+
+	/**
+	 * Sets the height of this input tag
+	 * @since 8.0.3
+	 */
+	public void setHeight(String height) throws WrongValueException {
+		setDynamicProperty("height", height);
+	};
+	/**
+	 * Returns the list of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getList() {
+		return (String) getDynamicProperty("list");
+	}
+
+	/**
+	 * Sets the list of this input tag
+	 * @since 8.0.3
+	 */
+	public void setList(String list) throws WrongValueException {
+		setDynamicProperty("list", list);
+	};
+	/**
+	 * Returns the max of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getMax() {
+		return (String) getDynamicProperty("max");
+	}
+
+	/**
+	 * Sets the max of this input tag
+	 * @since 8.0.3
+	 */
+	public void setMax(String max) throws WrongValueException {
+		setDynamicProperty("max", max);
+	};
+	/**
+	 * Returns the maxlength of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getMaxlength() {
+		return (String) getDynamicProperty("maxlength");
+	}
+
+	/**
+	 * Sets the maxlength of this input tag
+	 * @since 8.0.3
+	 */
+	public void setMaxlength(String maxlength) throws WrongValueException {
+		setDynamicProperty("maxlength", maxlength);
+	};
+	/**
+	 * Returns the min of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getMin() {
+		return (String) getDynamicProperty("min");
+	}
+
+	/**
+	 * Sets the min of this input tag
+	 * @since 8.0.3
+	 */
+	public void setMin(String min) throws WrongValueException {
+		setDynamicProperty("min", min);
+	};
+	/**
+	 * Returns the multiple of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getMultiple() {
+		return (String) getDynamicProperty("multiple");
+	}
+
+	/**
+	 * Sets the multiple of this input tag
+	 * @since 8.0.3
+	 */
+	public void setMultiple(String multiple) throws WrongValueException {
+		setDynamicProperty("multiple", multiple);
+	};
+	/**
+	 * Returns the name of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getName() {
+		return (String) getDynamicProperty("name");
+	}
+
+	/**
+	 * Sets the name of this input tag
+	 * @since 8.0.3
+	 */
+	public void setName(String name) throws WrongValueException {
+		setDynamicProperty("name", name);
+	};
+	/**
+	 * Returns the pattern of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getPattern() {
+		return (String) getDynamicProperty("pattern");
+	}
+
+	/**
+	 * Sets the pattern of this input tag
+	 * @since 8.0.3
+	 */
+	public void setPattern(String pattern) throws WrongValueException {
+		setDynamicProperty("pattern", pattern);
+	};
+	/**
+	 * Returns the placeholder of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getPlaceholder() {
+		return (String) getDynamicProperty("placeholder");
+	}
+
+	/**
+	 * Sets the placeholder of this input tag
+	 * @since 8.0.3
+	 */
+	public void setPlaceholder(String placeholder) throws WrongValueException {
+		setDynamicProperty("placeholder", placeholder);
+	};
+	/**
+	 * Returns the readonly of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getReadonly() {
+		return (String) getDynamicProperty("readonly");
+	}
+
+	/**
+	 * Sets the readonly of this input tag
+	 * @since 8.0.3
+	 */
+	public void setReadonly(String readonly) throws WrongValueException {
+		setDynamicProperty("readonly", readonly);
+	};
+	/**
+	 * Returns the required of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getRequired() {
+		return (String) getDynamicProperty("required");
+	}
+
+	/**
+	 * Sets the required of this input tag
+	 * @since 8.0.3
+	 */
+	public void setRequired(String required) throws WrongValueException {
+		setDynamicProperty("required", required);
+	};
+	/**
+	 * Returns the size of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getSize() {
+		return (String) getDynamicProperty("size");
+	}
+
+	/**
+	 * Sets the size of this input tag
+	 * @since 8.0.3
+	 */
+	public void setSize(String size) throws WrongValueException {
+		setDynamicProperty("size", size);
+	};
+	/**
+	 * Returns the src of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getSrc() {
+		return (String) getDynamicProperty("src");
+	}
+
+	/**
+	 * Sets the src of this input tag
+	 * @since 8.0.3
+	 */
+	public void setSrc(String src) throws WrongValueException {
+		setDynamicProperty("src", src);
+	};
+	/**
+	 * Returns the step of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getStep() {
+		return (String) getDynamicProperty("step");
+	}
+
+	/**
+	 * Sets the step of this input tag
+	 * @since 8.0.3
+	 */
+	public void setStep(String step) throws WrongValueException {
+		setDynamicProperty("step", step);
+	};
+	/**
+	 * Returns the type of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getType() {
+		return (String) getDynamicProperty("type");
+	}
+
+	/**
+	 * Sets the type of this input tag
+	 * @since 8.0.3
+	 */
+	public void setType(String type) throws WrongValueException {
+		setDynamicProperty("type", type);
+	};
+	/**
+	 * Returns the width of this input tag.
+	 * @since 8.0.3
+	 */
+	public String getWidth() {
+		return (String) getDynamicProperty("width");
+	}
+
+	/**
+	 * Sets the width of this input tag
+	 * @since 8.0.3
+	 */
+	public void setWidth(String width) throws WrongValueException {
+		setDynamicProperty("width", width);
+	};
+
 	// -- Component --//
 	/**
 	 * Returns the widget class, "zhtml.Input".

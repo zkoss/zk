@@ -38,8 +38,10 @@ zhtml.Input = zk.$extends(zhtml.Widget, {
 			this._defValue = n.value;
 			this.domListen_(n, 'onChange');
 		}
-		if (this.isListen('onCheck', {any: true}) && (n = this.$n()))
+		if (this.isListen('onCheck', {any: true}) && (n = this.$n())) {
 			this._defChecked = n.checked;
+			this.domListen_(n, 'onCheck');
+		}
 	},
 	unbind_: function () {
 		if (this._defValue !== undefined)

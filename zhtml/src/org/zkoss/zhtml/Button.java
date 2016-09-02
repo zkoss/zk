@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The BUTTON tag.
@@ -27,4 +28,79 @@ public class Button extends AbstractTag {
 	public Button() {
 		super("button");
 	}
+	/**
+	 * Returns the autofocus of this button tag.
+	 * @since 8.0.3
+	 */
+	public String getAutofocus() {
+		return (String) getDynamicProperty("autofocus");
+	}
+
+	/**
+	 * Sets the autofocus of this button tag.
+	 * @since 8.0.3
+	 */
+	public void setAutofocus(String autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus);
+	};
+	/**
+	 * Returns the disabled of this button tag.
+	 * @since 8.0.3
+	 */
+	public String getDisabled() {
+		return (String) getDynamicProperty("disabled");
+	}
+
+	/**
+	 * Sets the disabled of this button tag.
+	 * @since 8.0.3
+	 */
+	public void setDisabled(String disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled);
+	};
+	/**
+	 * Returns the name of this button tag.
+	 * @since 8.0.3
+	 */
+	public String getName() {
+		return (String) getDynamicProperty("name");
+	}
+
+	/**
+	 * Sets the name of this button tag.
+	 * @since 8.0.3
+	 */
+	public void setName(String name) throws WrongValueException {
+		setDynamicProperty("name", name);
+	};
+	/**
+	 * Returns the type of this button tag.
+	 * @since 8.0.3
+	 */
+	public String getType() {
+		return (String) getDynamicProperty("type");
+	}
+
+	/**
+	 * Sets the type of this button tag.
+	 * @since 8.0.3
+	 */
+	public void setType(String type) throws WrongValueException {
+		setDynamicProperty("type", type);
+	};
+	/**
+	 * Returns the value of this button tag.
+	 * @since 8.0.3
+	 */
+	public String getValue() {
+		return (String) getDynamicProperty("value");
+	}
+
+	/**
+	 * Sets the value of this button tag.
+	 * @since 8.0.3
+	 */
+	public void setValue(String value) throws WrongValueException {
+		setDynamicProperty("value", value);
+	};
 }

@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
+import org.zkoss.zk.ui.WrongValueException;
+
 /**
  * The STYLE tag.
  * 
@@ -29,4 +31,49 @@ public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	public Style(String content) {
 		super("style", content);
 	}
+	/**
+	 * Returns the media of this style tag.
+	 * @since 8.0.3
+	 */
+	public String getMedia() {
+		return (String) getDynamicProperty("media");
+	}
+
+	/**
+	 * Sets the media of this style tag.
+	 * @since 8.0.3
+	 */
+	public void setMedia(String media) throws WrongValueException {
+		setDynamicProperty("media", media);
+	};
+	/**
+	 * Returns the scoped of this style tag.
+	 * @since 8.0.3
+	 */
+	public String getScoped() {
+		return (String) getDynamicProperty("scoped");
+	}
+
+	/**
+	 * Sets the scoped of this style tag.
+	 * @since 8.0.3
+	 */
+	public void setScoped(String scoped) throws WrongValueException {
+		setDynamicProperty("scoped", scoped);
+	};
+	/**
+	 * Returns the type of this style tag.
+	 * @since 8.0.3
+	 */
+	public String getType() {
+		return (String) getDynamicProperty("type");
+	}
+
+	/**
+	 * Sets the type of this style tag.
+	 * @since 8.0.3
+	 */
+	public void setType(String type) throws WrongValueException {
+		setDynamicProperty("type", type);
+	};
 }

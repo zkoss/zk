@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The FIELDSET tag.
@@ -27,4 +28,38 @@ public class Fieldset extends AbstractTag {
 	public Fieldset() {
 		super("fieldset");
 	}
+	/**
+	 * Returns the disabled of this fieldset tag.
+	 * @since 8.0.3
+	 */
+	public String getDisabled() {
+		return (String) getDynamicProperty("disabled");
+	}
+
+	/**
+	 * Sets the disabled of this fieldset tag.
+	 * @since 8.0.3
+	 */
+	public void setDisabled(String disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled);
+	};
+	/**
+	 * Returns the form of this fieldset tag.
+	 * @since 8.0.3
+	 */
+	public String getForm() {
+		return (String) getDynamicProperty("form");
+	}
+
+	public String getName() {
+		return (String) getDynamicProperty("name");
+	}
+
+	/**
+	 * Sets the name of this fieldset tag.
+	 * @since 8.0.3
+	 */
+	public void setName(String name) throws WrongValueException {
+		setDynamicProperty("name", name);
+	};
 }

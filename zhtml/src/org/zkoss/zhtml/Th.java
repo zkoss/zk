@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The TH tag.
@@ -27,4 +28,94 @@ public class Th extends AbstractTag {
 	public Th() {
 		super("th");
 	}
+	/**
+	 * Returns the abbr of this th tag.
+	 * @since 8.0.3
+	 */
+	public String getAbbr() {
+		return (String) getDynamicProperty("abbr");
+	}
+
+	/**
+	 * Sets the abbr of this th tag.
+	 * @since 8.0.3
+	 */
+	public void setAbbr(String abbr) throws WrongValueException {
+		setDynamicProperty("abbr", abbr);
+	};
+	/**
+	 * Returns the colspan of this th tag.
+	 * @since 8.0.3
+	 */
+	public String getColspan() {
+		return (String) getDynamicProperty("colspan");
+	}
+
+	/**
+	 * Sets the colspan of this th tag.
+	 * @since 8.0.3
+	 */
+	public void setColspan(String colspan) throws WrongValueException {
+		setDynamicProperty("colspan", colspan);
+	};
+	/**
+	 * Returns the headers of this th tag.
+	 * @since 8.0.3
+	 */
+	public String getHeaders() {
+		return (String) getDynamicProperty("headers");
+	}
+
+	/**
+	 * Sets the headers of this th tag.
+	 * @since 8.0.3
+	 */
+	public void setHeaders(String headers) throws WrongValueException {
+		setDynamicProperty("headers", headers);
+	};
+	/**
+	 * Returns the rowspan of this th tag.
+	 * @since 8.0.3
+	 */
+	public String getRowspan() {
+		return (String) getDynamicProperty("rowspan");
+	}
+
+	/**
+	 * Sets the rowspan of this th tag.
+	 * @since 8.0.3
+	 */
+	public void setRowspan(String rowspan) throws WrongValueException {
+		setDynamicProperty("rowspan", rowspan);
+	};
+	/**
+	 * Returns the scope of this th tag.
+	 * @since 8.0.3
+	 */
+	public String getScope() {
+		return (String) getDynamicProperty("scope");
+	}
+
+	/**
+	 * Sets the scope of this th tag.
+	 * @since 8.0.3
+	 */
+	public void setScope(String scope) throws WrongValueException {
+		setDynamicProperty("scope", scope);
+	};
+	/**
+	 * Returns the sorted of this th tag.
+	 * @since 8.0.3
+	 */
+	public String getSorted() {
+		return (String) getDynamicProperty("sorted");
+	}
+
+	/**
+	 * Sets the sorted of this th tag.
+	 * @since 8.0.3
+	 */
+	public void setSorted(String sorted) throws WrongValueException {
+		setDynamicProperty("sorted", sorted);
+	};
 }

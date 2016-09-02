@@ -12,6 +12,7 @@ ZK 8.0.3
   ZK-3255: <Idspace> support no-dom widget
   ZK-3279: Support a transparent component (no dom)
   ZK-3302: Security Upgrade to commons-fileupload
+  ZK-3300: Zhtml components support MVVM
 
 * Bugs
   ZK-3221: Dragging element background can cover the whole text

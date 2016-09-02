@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The TD tag.
@@ -27,4 +28,49 @@ public class Td extends AbstractTag {
 	public Td() {
 		super("td");
 	}
+	/**
+	 * Returns the colspan of this td tag.
+	 * @since 8.0.3
+	 */
+	public String getColspan() {
+		return (String) getDynamicProperty("colspan");
+	}
+
+	/**
+	 * Sets the colspan of this td tag.
+	 * @since 8.0.3
+	 */
+	public void setColspan(String colspan) throws WrongValueException {
+		setDynamicProperty("colspan", colspan);
+	};
+	/**
+	 * Returns the headers of this td tag.
+	 * @since 8.0.3
+	 */
+	public String getHeaders() {
+		return (String) getDynamicProperty("headers");
+	}
+
+	/**
+	 * Sets the headers of this td tag.
+	 * @since 8.0.3
+	 */
+	public void setHeaders(String headers) throws WrongValueException {
+		setDynamicProperty("headers", headers);
+	};
+	/**
+	 * Returns the rowspan of this td tag.
+	 * @since 8.0.3
+	 */
+	public String getRowspan() {
+		return (String) getDynamicProperty("rowspan");
+	}
+
+	/**
+	 * Sets the rowspan of this td tag.
+	 * @since 8.0.3
+	 */
+	public void setRowspan(String rowspan) throws WrongValueException {
+		setDynamicProperty("rowspan", rowspan);
+	};
 }
