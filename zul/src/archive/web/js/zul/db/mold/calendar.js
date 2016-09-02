@@ -21,19 +21,20 @@ function (out) {
 		tagnm = zk.ie < 11 || zk.gecko ? 'a' : 'button',
 		localizedSymbols = this.getLocalizedSymbols(),
 		icon = this.$s('icon'),
-		outRange = this.isOutOfRange(true) ? ' disabled="disabled"' : '',
+		outRangeL = this.isOutOfRange(true) ? ' disabled="disabled"' : '',
+		outRangeR = this.isOutOfRange() ? ' disabled="disabled"' : '',
 		showTodayLink = this._showTodayLink;
 	
 	// header
 	out.push('<div id="', uuid, '"', this.domAttrs_(), '><div class="',
 			this.$s('header'), '"><a id="', uuid, '-left" href="javascript:;" class="', icon, ' ',
-			this.$s('left'), '"', outRange,	'><i class="z-icon-caret-left"></i></a>',
+			this.$s('left'), '"', outRangeL,	'><i class="z-icon-caret-left"></i></a>',
 			'<a id="', uuid, '-title" href="javascript:;" class="', this.$s('title'), '">');
 	
 	renderer.titleHTML(this, out, localizedSymbols);
 
 	out.push('</a><a id="', uuid, '-right" href="javascript:;" class="', icon, ' ',
-			this.$s('right'), '"', outRange, '><i class="z-icon-caret-right"></i></a></div>');
+			this.$s('right'), '"', outRangeR, '><i class="z-icon-caret-right"></i></a></div>');
 	
 	switch(view) {
 	case "day" :

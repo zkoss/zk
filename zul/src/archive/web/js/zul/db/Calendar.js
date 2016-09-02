@@ -231,7 +231,7 @@ zul.db.Renderer = {
 
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			if (yofs + ydelta < minyear || yofs + ydelta > maxyear) {
+			if (yofs < minyear || yofs > maxyear) {
 				out.push('<td class="', disd, '">&nbsp;</td>');
 				if (j + 1 == 12)
 					out.push('</tr>');
@@ -893,7 +893,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var view = this._view,
 			val = date || this.getTime(),
 			y = val.getFullYear(),
-			ydelta = new zk.fmt.Calendar(val, this._localizedSymbols).getYear() - y,
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
 			minyear = this._minyear,
@@ -904,17 +903,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			maxdec = zk.parseInt(maxyear / 10) * 10;
 
 		if (view == 'decade') {
-			var value = ydec * 100 + ydelta;
+			var value = ydec * 100;
 			return left ? value == mincen : value == maxcen;
 		} else if (view == 'year') {
-			var value = yofs + ydelta;
+			var value = yofs;
 			return left ? value < minyear : value + 10 >= maxyear;
 		} else if (view == 'day') {
-			var value = y + ydelta,
+			var value = y,
 				m = val.getMonth();
 			return left ? value <= minyear && m == 0 : value >= maxyear && m == 11;
 		} else {
-			var value = y + ydelta;
+			var value = y;
 			return left ? value <= minyear : value >= maxyear;
 		}
 
