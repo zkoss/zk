@@ -13,6 +13,8 @@ package org.zkoss.bind.proxy;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -22,6 +24,7 @@ import java.util.Set;
 
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
+import javassist.util.proxy.ProxyFactory;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.ImmutableElements;
@@ -47,7 +50,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 
 	public MapProxy(Map<K, V> origin, Annotation[] callerAnnots) {
 		_origin = origin;
-		_cache = new LinkedHashMap<K, V>(origin.size());
+		_cache = new MapForCache<K, V>(origin.size());
 		if (callerAnnots != null) {
 			for (Annotation annot : callerAnnots) {
 				if (annot.annotationType().isAssignableFrom(ImmutableElements.class)) {
@@ -80,7 +83,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 		setDirty(false);
 		for (Map.Entry<K, V> me : ((Map<K, V>) getOriginObject()).entrySet()) {
 			V o = createProxyObject(me.getValue());
-			_cache.put(me.getKey(), o);
+			_cache.put(createProxyObject(me.getKey()), o);
 			if (o instanceof FormProxyObject)
 				setCreatedProxyPath((FormProxyObject) o, me.getKey());
 		}
@@ -224,6 +227,60 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 				if (e.getValue() instanceof FormProxyObject)
 					((FormProxyObject) _cache.get(e.getKey())).setPath(null, _node);
 			}
+		}
+	}
+
+	private class MapForCache<K, V> extends LinkedHashMap {
+		private transient Set<Map.Entry<K, V>> _entrySetProxy = null;
+		private transient Set<K> _keySetProxy = null;
+		public MapForCache() {
+			super();
+		}
+		public MapForCache(int size) {
+			super(size);
+		}
+		@Override
+		public Set<Map.Entry<K, V>> entrySet() {
+			return _entrySetProxy == null ? createProxy(true) : _entrySetProxy;
+		}
+		@Override
+		public Set<K> keySet() {
+			return _keySetProxy == null ? createProxy(false) : _keySetProxy;
+		}
+		private Set createProxy(boolean isEntry) {
+			Set proxy = null;
+			ProxyFactory factory = new ProxyFactory();
+			factory.setSuperclass(AbstractSet.class);
+			factory.createClass();
+			try {
+				if (isEntry) {
+					proxy = _entrySetProxy = (Set<Map.Entry<K, V>>) factory.createClass().newInstance();
+					((Proxy) _entrySetProxy).setHandler(new SetHandlerForCache(super.entrySet()));
+				} else {
+					proxy = _keySetProxy = (Set<K>) factory.createClass().newInstance();
+					((Proxy) _keySetProxy).setHandler(new SetHandlerForCache(super.keySet()));
+				}
+			} catch (Exception e) {
+				//should not error
+				e.printStackTrace();
+			}
+			return proxy;
+		}
+	}
+
+	private class SetHandlerForCache implements MethodHandler {
+		private Set _origin;
+		public SetHandlerForCache(Set origin) {
+			_origin = origin;
+		}
+		public Object invoke(Object self, Method method, Method proceed, Object[] args) throws Throwable {
+			final String mname = method.getName();
+			if (mname.equals("contains")) {
+				return method.invoke(_origin, createProxyObject(args[0]));
+			} else if (mname.equals("remove")) {
+				return method.invoke(_origin, createProxyObject(args[0]));
+			}
+			return method.invoke(_origin, args);
 		}
 	}
 }
