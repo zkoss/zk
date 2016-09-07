@@ -833,6 +833,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	onMove: function (evt) {
 		this._left = evt.left;
 		this._top = evt.top;
+		if (this._visible) //notify children onMove
+			zWatch.fireDown('onMove', this);
 	},
 	onMaximize: function (evt) {
 		var data = evt.data;

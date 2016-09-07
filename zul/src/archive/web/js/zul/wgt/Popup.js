@@ -95,7 +95,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		// B50-ZK-391
 		// should keep openInfo each time,
 		// maybe have to reposition in onResponse if the child changed with onOpen event,
-		this._openInfo = arguments;
+		if (arguments.length != 0) //do not update _openInfo when just call open()
+			this._openInfo = arguments;
 
 		//F70-ZK-2007: Check if it is toggle type.
 		this._shallToggle = opts && opts.type == 'toggle';
