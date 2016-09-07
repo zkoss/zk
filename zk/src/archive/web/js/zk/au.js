@@ -173,7 +173,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						return;
 					}
 					if (v != 410 //not timeout (SC_GONE)
-					&& reqInf.content.indexOf('cmd_0=dummy') == -1 //ZK-3304: dummy request shouldn't reset timeout
+					&& !(reqInf.rtags && reqInf.rtags.isDummy) //ZK-3304: dummy request shouldn't reset timeout
 					&& (!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout
 						zAu._resetTimeout();
 
@@ -415,8 +415,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		zAu.cmd0.clientInfo();
 	}
 	function sendTimeout() {
-		zAu.send(new zk.Event(null, 'dummy', null, {ignorable: true, serverAlive: true}));
+		zAu.send(new zk.Event(null, 'dummy', null, {ignorable: true, serverAlive: true, rtags: {isDummy: true}}));
 			//serverAlive: the server shall not ignore it if session timeout
+		zk.isTimeout = true; //ZK-3304: already timeout
 	}
 
 	//store all widgets into a map
@@ -1179,7 +1180,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 				return; //no need to send more
 			}
 		}
-		zAu.send(new zk.Event(dt, 'dummy', null, {ignorable: true}));
+		zAu.send(new zk.Event(dt, 'dummy', null, {ignorable: true, rtags: {isDummy: true}}));
 	},
 	/** Ask the client to echo back globally.
 	 * <p>Unlike {@link #echo}, it will search all browser windows for

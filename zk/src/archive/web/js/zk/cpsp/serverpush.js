@@ -39,7 +39,7 @@ zk.cpsp.SPush = zk.$extends(zk.Object, {
 			}
 
 			if (doNow)
-				zAu.send(new zk.Event(this.desktop, 'dummy', null, {ignorable: true}));
+				zAu.send(new zk.Event(this.desktop, 'dummy', null, {ignorable: true, rtags: {isDummy: true}}));
 		}
 	}
 });
