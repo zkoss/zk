@@ -85,7 +85,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			ignoredrag: Errorbox._ignoredrag,
 			change: Errorbox._change
 		});
-		zWatch.listen({onScroll: this});
+		zWatch.listen({onScroll: this, onMove: this});
 	},
 	unbind_: function () {
 		// bug ZK-1143
@@ -93,7 +93,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this._drag = null;
 		if (drag)
 			drag.destroy();
-		zWatch.unlisten({onScroll: this});
+		zWatch.unlisten({onScroll: this, onMove: this});
 
 		// just in case
 		if (this.parent)
@@ -120,6 +120,26 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			}
 		}
 	},
+	onMove: function () {
+		this.reposition();
+		this._fixarrow();
+	},
+
+	/** Reposition popup
+	 * @since 8.0.3
+	 */
+	reposition: function () {
+		var openInfo = this._openInfo;
+		//once opened
+		if (openInfo) {
+			//openInfo: ref, offset, position, opts
+			var posInfo = this._posInfo(openInfo[0], openInfo[1], openInfo[2]);
+
+			if (posInfo)
+				jq(this.$n()).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
+		}
+	},
+	
 	setDomVisible_: function (node, visible) {
 		this.$supers('setDomVisible_', arguments);
 		var stackup = this._stackup;

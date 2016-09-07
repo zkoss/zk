@@ -70,6 +70,7 @@ ZK 8.0.3
   ZK-3282: Error deserializing Chosenbox
   ZK-2496: Panel moves onSize in BorderLayout
   ZK-3304: server push doubles the auto-timeout delay
+  ZK-3141: ZK popups re-positioning next to their target on browser size.
 
 * Upgrade Notes
 
