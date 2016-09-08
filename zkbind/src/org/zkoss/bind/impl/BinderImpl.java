@@ -2079,6 +2079,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			methods.clear();
 			//scan
 			for (Method m : clz.getMethods()) {
+				if (m.isBridge()) continue;
 				if (cmdInfo.isDefaultMethod(m)) {
 					if (methods.get(COMMAND_METHOD_DEFAULT) != null) {
 						throw new UiException("there are more than one " + cmdInfo.getDefaultAnnotationName()
