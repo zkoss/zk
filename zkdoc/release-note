@@ -73,6 +73,7 @@ ZK 8.0.3
   ZK-3304: server push doubles the auto-timeout delay
   ZK-3141: ZK popups re-positioning next to their target on browser size.
   ZK-3229: MapProxy failing contains get problem
+  ZK-3311: Native scrollbar is not the default setting for mobile browsers
 
 * Upgrade Notes
 

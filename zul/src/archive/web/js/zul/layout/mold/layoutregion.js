@@ -22,7 +22,10 @@ function (out) {
 			this.domAttrs_({id: 1}), '>');
 	
 	this.titleRenderer_(out);
-	out.push('<div id="', uuid, '-cave" class="', this.$s('body'), '">');
+	out.push('<div id="', uuid, '-cave" class="', this.$s('body'), '"');
+	if (zk.ios && this._nativebar)
+		out.push(' style="-webkit-overflow-scrolling:touch;"');
+	out.push('>');
 	
 	var firstChild = this.getFirstChild();
 	if (firstChild)
