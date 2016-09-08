@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The COLGROUP tag.
@@ -27,4 +28,19 @@ public class Colgroup extends AbstractTag {
 	public Colgroup() {
 		super("colgroup");
 	}
+	/**
+	 * Returns the span of this colgroup tag.
+	 * @since 8.0.3
+	 */
+	public String getSpan() {
+		return (String) getDynamicProperty("span");
+	}
+
+	/**
+	 * Sets the span of this colgroup tag.
+	 * @since 8.0.3
+	 */
+	public void setSpan(String span) throws WrongValueException {
+		setDynamicProperty("span", span);
+	};
 }

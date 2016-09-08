@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The LABEL tag.
@@ -27,4 +28,19 @@ public class Label extends AbstractTag {
 	public Label() {
 		super("label");
 	}
+	/**
+	 * Returns the for of this label tag.
+	 * @since 8.0.3
+	 */
+	public String getFor() {
+		return (String) getDynamicProperty("for");
+	}
+
+	/**
+	 * Sets the for of this label tag.
+	 * @since 8.0.3
+	 */
+	public void setFor(String forValue) throws WrongValueException {
+		setDynamicProperty("for", forValue);
+	};
 }

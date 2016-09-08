@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3300.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Aug 16 16:46:51 CST 2016, Created by jameschu
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:x="xhtml">
+    <window viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_3300VM')">
+        <vlayout>
+            <div>
+                Value: <label value="@bind(vm.checked1)" />
+            </div>
+            <div>
+                checkbox: <checkbox checked="@bind(vm.checked1)"/> ** Click this, you should see input(load), input(bind) checked
+            </div>
+            <div>
+                 input(init): <x:input type="checkbox" checked="@init(vm.checked1)"/> ** Click this, you should see only itself checked
+            </div>
+            <div>
+                input(load): <x:input type="checkbox" checked="@load(vm.checked1)"/> ** Click this, you should see only itself checked
+            </div>
+            <div>
+                input(bind): <x:input type="checkbox" checked="@bind(vm.checked1)" value="@bind(vm.desc)"/> ** Click this, you should see checkbox, input(load) are in same checked status
+            </div>
+            <separator />
+            <div>
+                Value: <label value="@bind(vm.desc)" />
+            </div>
+            <div>
+                textbox  <textbox value="@bind(vm.desc)" /> ** Type "a" here, you should see input(load), input(bind) changed
+            </div>
+            <div>
+                input(init):  <x:input type="text" value="@init(vm.desc)" /> ** Type "s" here, you should see only itself changed
+            </div>
+            <div>
+                input(load):  <x:input type="text" value="@load(vm.desc)" /> ** Type "d" here, you should see only itself changed
+            </div>
+            <div>
+                input(bind):  <x:input type="text" value="@bind(vm.desc)" /> ** Type "f" here, you should see textbox, input(load) changed
+            </div>
+            <separator />
+            <label>Normal tag</label>
+            <label>init</label>
+            <div>
+                <x:a href="@init(vm.href)" download="@init(vm.download)" >
+                    ** check download attr</x:a>
+            </div>
+            <div>
+                <x:a href="@init(vm.href)" media="@init(vm.media)">
+                    ** check media attr</x:a>
+            </div>
+            <div>
+                <x:a rel="@init(vm.rel)" href="@init(vm.href)" target="@init(vm.target)" type="@init(vm.type)">** Click here and open a new tab</x:a>
+            </div>
+            <separator />
+            <button label="Click this, and the following a tag attr would change" onClick="@command('change')" />
+            <label>load</label>
+            <div>
+                <x:a href="@load(vm.href)" download="@load(vm.download)" >
+                    ** After button clicked, check download attr</x:a>
+            </div>
+            <div>
+                <x:a href="@load(vm.href)" media="@load(vm.media)">
+                    ** After button clicked, check media attr</x:a>
+            </div>
+            <div>
+                <x:a rel="@load(vm.rel)" href="@load(vm.href)" target="@load(vm.target)" type="@load(vm.type)">**After button clicked,  Click here and open zkoss website in the same tab</x:a>
+            </div>
+        </vlayout>
+    </window>
+</zk>

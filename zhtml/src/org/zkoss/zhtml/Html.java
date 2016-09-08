@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The HTML tag.
@@ -36,7 +37,36 @@ public class Html extends AbstractTag {
 	public Html() {
 		super("html");
 	}
+	/**
+	 * Returns the manifest of this html tag.
+	 * @since 8.0.3
+	 */
+	public String getManifest() {
+		return (String) getDynamicProperty("manifest");
+	}
 
+	/**
+	 * Sets the manifest of this html tag.
+	 * @since 8.0.3
+	 */
+	public void setManifest(String manifest) throws WrongValueException {
+		setDynamicProperty("manifest", manifest);
+	};
+	/**
+	 * Returns the xmlns of this html tag.
+	 * @since 8.0.3
+	 */
+	public String getXmlns() {
+		return (String) getDynamicProperty("xmlns");
+	}
+
+	/**
+	 * Sets the xmlns of this html tag.
+	 * @since 8.0.3
+	 */
+	public void setXmlns(String xmlns) throws WrongValueException {
+		setDynamicProperty("xmlns", xmlns);
+	};
 	// -- super --//
 	public void invalidate() {
 		final Execution exec = Executions.getCurrent();

@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The BLOCKQUOTE tag.
@@ -27,4 +28,19 @@ public class Blockquote extends AbstractTag {
 	public Blockquote() {
 		super("blockquote");
 	}
+	/**
+	 * Returns the cite of this blockquote tag.
+	 * @since 8.0.3
+	 */
+	public String getCite() {
+		return (String) getDynamicProperty("cite");
+	}
+
+	/**
+	 * Sets the cite of this blockquote tag.
+	 * @since 8.0.3
+	 */
+	public void setCite(String cite) throws WrongValueException {
+		setDynamicProperty("cite", cite);
+	};
 }

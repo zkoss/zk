@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The OL tag.
@@ -27,4 +28,49 @@ public class Ol extends AbstractTag {
 	public Ol() {
 		super("ol");
 	}
+	/**
+	 * Returns the reversed of this ol tag.
+	 * @since 8.0.3
+	 */
+	public String getReversed() {
+		return (String) getDynamicProperty("reversed");
+	}
+
+	/**
+	 * Sets the reversed of this ol tag.
+	 * @since 8.0.3
+	 */
+	public void setReversed(String reversed) throws WrongValueException {
+		setDynamicProperty("reversed", reversed);
+	};
+	/**
+	 * Returns the start of this ol tag.
+	 * @since 8.0.3
+	 */
+	public String getStart() {
+		return (String) getDynamicProperty("start");
+	}
+
+	/**
+	 * Sets the start of this ol tag.
+	 * @since 8.0.3
+	 */
+	public void setStart(String start) throws WrongValueException {
+		setDynamicProperty("start", start);
+	};
+	/**
+	 * Returns the type of this ol tag.
+	 * @since 8.0.3
+	 */
+	public String getType() {
+		return (String) getDynamicProperty("type");
+	}
+
+	/**
+	 * Sets the type of this ol tag.
+	 * @since 8.0.3
+	 */
+	public void setType(String type) throws WrongValueException {
+		setDynamicProperty("type", type);
+	};
 }

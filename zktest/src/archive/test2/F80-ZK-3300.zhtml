@@ -1,0 +1,98 @@
+<!--
+F80-ZK-3300.zhtml
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Aug 16 16:46:51 CST 2016, Created by jameschu
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+-->
+<html xmlns:z="zul">
+    <head>
+    </head>
+    <body>
+        <z:window viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_3300VM')">
+            <z:vlayout>
+                <div>
+                    <z:label>Value: </z:label>
+                    <z:label value="@bind(vm.checked1)" />
+                </div>
+                <div>
+                    <z:label>checkbox: </z:label>
+                    <z:checkbox checked="@bind(vm.checked1)"/>
+                    <z:label> ** Click this, you should see input(load), input(bind) checked</z:label>
+                </div>
+                <div>
+                    <z:label>input(init):</z:label>
+                    <input type="checkbox" checked="@init(vm.checked1)"/>
+                    <z:label> ** Click this, you should see only itself checked</z:label>
+                </div>
+                <div>
+                    <z:label>input(load): </z:label>
+                    <input type="checkbox" checked="@load(vm.checked1)"/>
+                    <z:label> ** Click this, you should see only itself checked</z:label>
+                </div>
+                <div>
+                    <z:label>input(bind): </z:label>
+                    <input type="checkbox" checked="@bind(vm.checked1)" value="@bind(vm.desc)"/>
+                    <z:label> ** Click this, you should see checkbox, input(load) are in same checked status</z:label>
+                </div>
+                <z:separator />
+                <div>
+                    <z:label>Value: </z:label>
+                    <z:label value="@bind(vm.desc)" />
+                </div>
+                <div>
+                    <z:label>textbox </z:label>
+                    <z:textbox value="@bind(vm.desc)" />
+                    <z:label> ** Type "a" here, you should see input(load), input(bind) changed</z:label>
+                </div>
+                <div>
+                    <z:label>input(init): </z:label>
+                    <input type="text" value="@init(vm.desc)" />
+                    <z:label> ** Type "s" here, you should see only itself changed</z:label>
+                </div>
+                <div>
+                    <z:label>input(load): </z:label>
+                    <input type="text" value="@load(vm.desc)" />
+                    <z:label> ** Type "d" here, you should see only itself changed</z:label>
+                </div>
+                <div>
+                    <z:label>input(bind): </z:label>
+                    <input type="text" value="@bind(vm.desc)" />
+                    <z:label> ** Type "f" here, you should see textbox, input(load) changed</z:label>
+                </div>
+                <z:separator />
+                <z:label>Normal tag</z:label>
+                <z:label>init</z:label>
+                <div>
+                    <a href="@init(vm.href)" download="@init(vm.download)" >
+                        ** check download attr</a>
+                </div>
+                <div>
+                    <a href="@init(vm.href)" media="@init(vm.media)">
+                        ** check media attr</a>
+                </div>
+                <div>
+                    <a rel="@init(vm.rel)" href="@init(vm.href)" target="@init(vm.target)" type="@init(vm.type)">** Click here and open a new tab</a>
+                </div>
+                <z:separator />
+                <z:button label="Click this, and the following a tag attr would change" onClick="@command('change')" />
+                <z:label>load</z:label>
+                <div>
+                    <a href="@load(vm.href)" download="@load(vm.download)" >
+                        ** After button clicked, check download attr</a>
+                </div>
+                <div>
+                    <a href="@load(vm.href)" media="@load(vm.media)">
+                        ** After button clicked, check media attr</a>
+                </div>
+                <div>
+                    <a rel="@load(vm.rel)" href="@load(vm.href)" target="@load(vm.target)" type="@load(vm.type)">**After button clicked,  Click here and open zkoss website in the same tab</a>
+                </div>
+            </z:vlayout>
+        </z:window>
+    </body>
+</html>
