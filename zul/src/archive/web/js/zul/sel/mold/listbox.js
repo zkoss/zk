@@ -49,9 +49,10 @@ function (out) {
 		out.push(' ', this.$s('autopaging'));
 	out.push('"');
 	
-	var hgh = this.getHeight();
-	if (hgh)
-		out.push(' style="overflow:hidden;height:', hgh, '"');
+	var hgh = this.getHeight(),
+		iOSNativeBar = zk.ios && this._nativebar;
+	if (hgh || iOSNativeBar)
+		out.push(' style="overflow:hidden;', hgh ? 'height:' + hgh + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
 	out.push('>');
 	
 	if (this.domPad_ && !inPaging)
