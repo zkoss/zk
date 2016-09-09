@@ -22,12 +22,15 @@ import java.util.Set;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
@@ -519,5 +522,22 @@ public class Selectbox extends HtmlBasedComponent {
 		didActivate(_renderer);
 		if (_model != null)
 			postOnInitRender();
+	}
+
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 *
+	 * <p>If a component requires more client controls, it is suggested to
+	 * override {@link #getExtraCtrl} to return an instance that extends from
+	 * this class.
+	 */
+	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements Blockable {
+		public boolean shallBlock(AuRequest request) {
+			return isDisabled() || !Components.isRealVisible(Selectbox.this);
+		}
 	}
 }

@@ -46,10 +46,12 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -63,6 +65,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -3800,7 +3803,7 @@ public class Listbox extends MeshElement {
 	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
 	 * component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Cropper, Padding {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Cropper, Padding, Blockable {
 		// --Padding--//
 		public int getHeight() {
 			return _topPad;
@@ -3821,6 +3824,10 @@ public class Listbox extends MeshElement {
 
 		public Set<? extends Component> getAvailableAtClient() {
 			return ((Cropper) getDataLoader()).getAvailableAtClient();
+		}
+
+		public boolean shallBlock(AuRequest request) {
+			return isDisabled() || !Components.isRealVisible(Listbox.this);
 		}
 	}
 

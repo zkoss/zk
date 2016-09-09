@@ -20,7 +20,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The DIR tag.
- * 
+ * @deprecated Not supported in HTML5.
  * @author tomyeh
  */
 public class Dir extends AbstractTag {

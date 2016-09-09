@@ -20,7 +20,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The ISINDEX tag.
- * 
+ * @deprecated Not supported in HTML5.
  * @author tomyeh
  */
 public class Isindex extends AbstractTag {

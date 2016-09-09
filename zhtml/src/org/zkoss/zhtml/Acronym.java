@@ -20,7 +20,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The ACRONYM tag.
- * 
+ * @deprecated Not supported in HTML5.
  * @author tomyeh
  */
 public class Acronym extends AbstractTag {

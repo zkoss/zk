@@ -20,7 +20,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The NOBR tag.
- * 
+ * @deprecated Not standard HTML.
  * @author tomyeh
  */
 public class Nobr extends AbstractTag {

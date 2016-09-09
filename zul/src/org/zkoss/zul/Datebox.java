@@ -821,8 +821,8 @@ public class Datebox extends FormatInputElement {
 			final String cmd = request.getCommand();
 			if (Events.ON_OPEN.equals(cmd))
 				return false;
-			return !Components.isRealVisible(Datebox.this) || isDisabled()
-					|| (isReadonly() && Events.ON_CHANGING.equals(cmd));
+			return isDisabled() || (isReadonly() && Events.ON_CHANGING.equals(cmd))
+					|| !Components.isRealVisible(Datebox.this);
 		}
 	}
 

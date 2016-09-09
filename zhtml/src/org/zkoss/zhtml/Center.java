@@ -20,7 +20,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
  * The CENTER tag.
- *
+ * @deprecated Not supported in HTML5.
  * @author tomyeh
  * @since 2.4.0
  */
