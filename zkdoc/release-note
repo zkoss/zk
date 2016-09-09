@@ -74,6 +74,7 @@ ZK 8.0.3
   ZK-3141: ZK popups re-positioning next to their target on browser size.
   ZK-3229: MapProxy failing contains get problem
   ZK-3311: Native scrollbar is not the default setting for mobile browsers
+  ZK-3201: Zk Java 8  BinderImpl returns error on @Command @Override two methods error, make difficult DRY
 
 * Upgrade Notes
 
