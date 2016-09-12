@@ -1,9 +1,9 @@
 /** ProxyHelper.java.
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		12:03:06 PM Dec 25, 2014, Created by jumperchen
 
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javassist.Modifier;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
-
+import javassist.util.proxy.ProxyObject;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.ImmutableElements;
@@ -44,6 +44,7 @@ import org.zkoss.zk.ui.UiException;
 public class ProxyHelper {
 	private static Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<Class<?>, Boolean>();
 	private static List<ProxyTargetHandler> _proxyTargetHandlers;
+	private static ProxyDecorator _proxyDecorator;
 
 	static {
 		List<String> classes = Library.getProperties("org.zkoss.bind.proxy.IgnoredProxyClasses");
@@ -57,6 +58,15 @@ public class ProxyHelper {
 			}
 		}
 		_proxyTargetHandlers = new LinkedList<ProxyTargetHandler>(ZKProxyTargetHandlers.getSystemProxyTargetHandlers());
+
+		String cls = Library.getProperty("org.zkoss.bind.proxy.ProxyDecoratorClass");
+		if (cls != null) {
+			try {
+				_proxyDecorator = (ProxyDecorator) Classes.newInstanceByThread(cls.trim());
+			} catch (Exception e) {
+				throw new SystemException("Failed to load class " + cls);
+			}
+		}
 	}
 	/**
 	 * Creates a proxy object from the given origin object, if any.
@@ -124,7 +134,7 @@ public class ProxyHelper {
 			}
 
 			((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));
-			return (T) p1;
+			return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) :(T) p1;
 		}
 	}
 
@@ -132,6 +142,9 @@ public class ProxyHelper {
 	 * Adds an ignored proxy class type. Once the data binder try to create a proxy
 	 * object for the form binding, it will check whether the origin class type
 	 * should be ignored.
+	 * <p>Default it will apply these classes from the library property
+	 * <code>org.zkoss.bind.proxy.IgnoredProxyClasses</code>
+	 * </p>
 	 */
 	public static void addIgnoredProxyClass(Class<?> type) {
 		_ignoredClasses.put(type, Boolean.TRUE);
@@ -231,7 +244,7 @@ public class ProxyHelper {
 		}
 
 		((Proxy) p1).setHandler(new FormProxyHandler<T>(origin));
-		return (T) p1;
+		return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) :(T) p1;
 	}
 
 	/**
@@ -278,5 +291,18 @@ public class ProxyHelper {
 				node = parent;
 			}
 		}
+	}
+
+	/**
+	 * An interface to decorate the {@link ProxyObject} for some purposes, like
+	 * providing custom validation logic or adding extra handler on it.
+	 *
+	 * <p>To specify the custom proxy decorator class, you can specify the library
+	 * property <code>org.zkoss.bind.proxy.ProxyDecoratorClass</code> in zk.xml
+	 * </p>
+	 * since 8.0.3
+	 */
+	public interface ProxyDecorator {
+		public ProxyObject decorate(ProxyObject proxyObject);
 	}
 }
