@@ -190,7 +190,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			try {
 				updateServlet.denoteSessionTimeout(wapp, httpreq, httpres, compress);
 			} catch (ServletException e) {
-				e.printStackTrace();
+				log.warn("", e);
 			}
 			return;
 		}
@@ -204,7 +204,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 
 			updateServlet.process(sess, httpreq, httpres, compress);
 		} catch (ServletException e) {
-			e.printStackTrace();
+			log.warn("", e);
 		} finally {
 			I18Ns.cleanup(httpreq, old);
 			SessionsCtrl.requestExit(sess);

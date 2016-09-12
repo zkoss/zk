@@ -25,6 +25,8 @@ import java.util.Set;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.ImmutableElements;
@@ -39,6 +41,7 @@ import org.zkoss.util.Pair;
  * @since 8.0.0
  */
 public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serializable {
+	private static final Logger log = LoggerFactory.getLogger(MapProxy.class);
 	private Map<K, V> _cache;
 	private boolean _dirty;
 	private Map<K, V> _origin;
@@ -262,7 +265,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 				}
 			} catch (Exception e) {
 				//should not error
-				e.printStackTrace();
+				log.warn("", e);
 			}
 			return proxy;
 		}

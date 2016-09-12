@@ -445,7 +445,7 @@ public abstract class AbstractExecution implements Execution, ExecutionCtrl {
 				resp.setHeader("Location", updateURI);
 				resp.setStatus(HttpServletResponse.SC_FOUND);
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				_zklog.warn("", e);
 			}
 		}
 	}

@@ -577,7 +577,8 @@ public class Https extends Servlets {
 					}
 				}
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				// ignore it, if not supported
+				log.warn("", e);
 			}
 		}
 
