@@ -24,6 +24,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
@@ -42,6 +45,9 @@ import org.zkoss.zul.ext.SelectionControl;
  */
 public abstract class AbstractListModel<E>
 		implements ListModel<E>, Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
+
+	private static final Logger log = LoggerFactory.getLogger(AbstractListModel.class);
+
 	private transient List<ListDataListener> _listeners = new ArrayList<ListDataListener>();
 	private transient List<PagingListener> _pagingListeners = new ArrayList<PagingListener>();
 
@@ -355,7 +361,7 @@ public abstract class AbstractListModel<E>
 			try {
 				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, _activePage));
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.warn("Failed to publish internal paging event", e);
 			}
 		}
 	}
@@ -393,7 +399,7 @@ public abstract class AbstractListModel<E>
 			try {
 				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, pg));
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.warn("Failed to publish internal paging event", e);
 			}
 		}
 	}

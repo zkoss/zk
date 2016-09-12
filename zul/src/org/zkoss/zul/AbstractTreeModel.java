@@ -24,6 +24,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
@@ -61,6 +64,9 @@ import org.zkoss.zul.ext.TreeSelectableModel;
  */
 public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectableModel, TreeOpenableModel,
 		Selectable<E>, Openable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
+
+	private static final Logger log = LoggerFactory.getLogger(AbstractTreeModel.class);
+
 	/**
 	 * The root object to be return by method {@link #getRoot()}.
 	 */
@@ -784,7 +790,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 			try {
 				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, _activePage));
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.warn("Failed to publish internal paging event", e);
 			}
 		}
 	}
@@ -861,7 +867,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 			try {
 				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, pg));
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.warn("Failed to publish internal paging event", e);
 			}
 		}
 	}

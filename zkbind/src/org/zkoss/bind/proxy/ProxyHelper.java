@@ -23,6 +23,7 @@ import javassist.Modifier;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
+
 import org.zkoss.bind.Form;
 import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.annotation.ImmutableElements;
@@ -134,7 +135,7 @@ public class ProxyHelper {
 			}
 
 			((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));
-			return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) :(T) p1;
+			return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) : (T) p1;
 		}
 	}
 
@@ -244,7 +245,7 @@ public class ProxyHelper {
 		}
 
 		((Proxy) p1).setHandler(new FormProxyHandler<T>(origin));
-		return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) :(T) p1;
+		return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) : (T) p1;
 	}
 
 	/**
