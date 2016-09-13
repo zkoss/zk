@@ -14,6 +14,7 @@ ZK 8.0.3
   ZK-3302: Security Upgrade to commons-fileupload
   ZK-3300: Zhtml components support MVVM
   ZK-3325: Allow form proxy customization
+  ZK-3274: Allow infinite CometServerPush.retry.count
 
 * Bugs
   ZK-3221: Dragging element background can cover the whole text
