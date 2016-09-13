@@ -32,32 +32,32 @@ public class Button extends AbstractTag {
 	 * Returns the autofocus of this button tag.
 	 * @since 8.0.3
 	 */
-	public String getAutofocus() {
-		return (String) getDynamicProperty("autofocus");
+	public Boolean isAutofocus() {
+		return getDynamicProperty("autofocus") != null;
 	}
 
 	/**
 	 * Sets the autofocus of this button tag.
 	 * @since 8.0.3
 	 */
-	public void setAutofocus(String autofocus) throws WrongValueException {
-		setDynamicProperty("autofocus", autofocus);
-	};
+	public void setAutofocus(Boolean autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus ? true : null);
+	}
 	/**
 	 * Returns the disabled of this button tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public Boolean isDisabled() {
+		return getDynamicProperty("disabled") != null;
 	}
 
 	/**
 	 * Sets the disabled of this button tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(Boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? true : null);
+	}
 	/**
 	 * Returns the name of this button tag.
 	 * @since 8.0.3
@@ -72,7 +72,7 @@ public class Button extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the type of this button tag.
 	 * @since 8.0.3
@@ -87,7 +87,7 @@ public class Button extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 	/**
 	 * Returns the value of this button tag.
 	 * @since 8.0.3
@@ -102,5 +102,5 @@ public class Button extends AbstractTag {
 	 */
 	public void setValue(String value) throws WrongValueException {
 		setDynamicProperty("value", value);
-	};
+	}
 }

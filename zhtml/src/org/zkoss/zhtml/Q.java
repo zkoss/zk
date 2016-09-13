@@ -42,5 +42,5 @@ public class Q extends AbstractTag {
 	 */
 	public void setCite(String cite) throws WrongValueException {
 		setDynamicProperty("cite", cite);
-	};
+	}
 }

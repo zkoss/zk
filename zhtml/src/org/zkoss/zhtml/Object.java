@@ -42,7 +42,7 @@ public class Object extends AbstractTag {
 	 */
 	public void setData(String data) throws WrongValueException {
 		setDynamicProperty("data", data);
-	};
+	}
 	/**
 	 * Returns the height of this object tag.
 	 * @since 8.0.3
@@ -57,7 +57,7 @@ public class Object extends AbstractTag {
 	 */
 	public void setHeight(String height) throws WrongValueException {
 		setDynamicProperty("height", height);
-	};
+	}
 	/**
 	 * Returns the name of this object tag.
 	 * @since 8.0.3
@@ -72,7 +72,7 @@ public class Object extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the type of this object tag.
 	 * @since 8.0.3
@@ -87,7 +87,7 @@ public class Object extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 	/**
 	 * Returns the usemap of this object tag.
 	 * @since 8.0.3
@@ -102,7 +102,7 @@ public class Object extends AbstractTag {
 	 */
 	public void setUsemap(String usemap) throws WrongValueException {
 		setDynamicProperty("usemap", usemap);
-	};
+	}
 	/**
 	 * Returns the width of this object tag.
 	 * @since 8.0.3
@@ -117,5 +117,5 @@ public class Object extends AbstractTag {
 	 */
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
-	};
+	}
 }

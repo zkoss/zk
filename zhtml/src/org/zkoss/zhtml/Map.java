@@ -42,5 +42,5 @@ public class Map extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 }

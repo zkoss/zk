@@ -42,7 +42,7 @@ public class Embed extends AbstractTag {
 	 */
 	public void setHeight(String height) throws WrongValueException {
 		setDynamicProperty("height", height);
-	};
+	}
 	/**
 	 * Returns the src of this embed tag.
 	 * @since 8.0.3
@@ -57,7 +57,7 @@ public class Embed extends AbstractTag {
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		setDynamicProperty("src", src);
-	};
+	}
 	/**
 	 * Returns the type of this embed tag.
 	 * @since 8.0.3
@@ -72,7 +72,7 @@ public class Embed extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 	/**
 	 * Returns the width of this embed tag.
 	 * @since 8.0.3
@@ -87,5 +87,5 @@ public class Embed extends AbstractTag {
 	 */
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
-	};
+	}
 }

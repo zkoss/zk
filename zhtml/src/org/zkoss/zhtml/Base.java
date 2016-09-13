@@ -42,7 +42,7 @@ public class Base extends AbstractTag {
 	 */
 	public void setHref(String href) throws WrongValueException {
 		setDynamicProperty("href", href);
-	};
+	}
 	/**
 	 * Returns the target of this base tag.
 	 * @since 8.0.3
@@ -57,5 +57,5 @@ public class Base extends AbstractTag {
 	 */
 	public void setTarget(String target) throws WrongValueException {
 		setDynamicProperty("target", target);
-	};
+	}
 }

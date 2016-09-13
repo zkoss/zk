@@ -57,32 +57,32 @@ public class Textarea extends Input implements AfterCompose {
 	 * Returns the autofocus of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public String getAutofocus() {
-		return (String) getDynamicProperty("autofocus");
+	public Boolean isAutofocus() {
+		return getDynamicProperty("autofocus") != null;
 	}
 
 	/**
 	 * Sets the autofocus of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public void setAutofocus(String autofocus) throws WrongValueException {
-		setDynamicProperty("autofocus", autofocus);
-	};
+	public void setAutofocus(Boolean autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus ? true : null);
+	}
 	/**
 	 * Returns the cols of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public String getCols() {
-		return (String) getDynamicProperty("cols");
+	public Integer getCols() {
+		return (Integer) getDynamicProperty("cols");
 	}
 
 	/**
 	 * Sets the cols of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public void setCols(String cols) throws WrongValueException {
+	public void setCols(Integer cols) throws WrongValueException {
 		setDynamicProperty("cols", cols);
-	};
+	}
 	/**
 	 * Returns the dirname of this textarea tag.
 	 * @since 8.0.3
@@ -97,37 +97,37 @@ public class Textarea extends Input implements AfterCompose {
 	 */
 	public void setDirname(String dirname) throws WrongValueException {
 		setDynamicProperty("dirname", dirname);
-	};
+	}
 	/**
 	 * Returns the disabled of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public Boolean isDisabled() {
+		return getDynamicProperty("disabled") != null;
 	}
 
 	/**
 	 * Sets the disabled of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(Boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? true : null);
+	}
 	/**
 	 * Returns the maxlength of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public String getMaxlength() {
-		return (String) getDynamicProperty("maxlength");
+	public Integer getMaxlength() {
+		return (Integer) getDynamicProperty("maxlength");
 	}
 
 	/**
 	 * Sets the maxlength of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public void setMaxlength(String maxlength) throws WrongValueException {
+	public void setMaxlength(Integer maxlength) throws WrongValueException {
 		setDynamicProperty("maxlength", maxlength);
-	};
+	}
 	/**
 	 * Returns the name of this textarea tag.
 	 * @since 8.0.3
@@ -142,7 +142,7 @@ public class Textarea extends Input implements AfterCompose {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the placeholder of this textarea tag.
 	 * @since 8.0.3
@@ -157,52 +157,52 @@ public class Textarea extends Input implements AfterCompose {
 	 */
 	public void setPlaceholder(String placeholder) throws WrongValueException {
 		setDynamicProperty("placeholder", placeholder);
-	};
+	}
 	/**
 	 * Returns the readonly of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public String getReadonly() {
-		return (String) getDynamicProperty("readonly");
+	public Boolean isReadonly() {
+		return getDynamicProperty("readonly") != null;
 	}
 
 	/**
 	 * Sets the readonly of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public void setReadonly(String readonly) throws WrongValueException {
-		setDynamicProperty("readonly", readonly);
-	};
+	public void setReadonly(Boolean readonly) throws WrongValueException {
+		setDynamicProperty("readonly", readonly ? true : null);
+	}
 	/**
 	 * Returns the required of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public String getRequired() {
-		return (String) getDynamicProperty("required");
+	public Boolean isRequired() {
+		return getDynamicProperty("required") != null;
 	}
 
 	/**
 	 * Sets the required of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public void setRequired(String required) throws WrongValueException {
-		setDynamicProperty("required", required);
-	};
+	public void setRequired(Boolean required) throws WrongValueException {
+		setDynamicProperty("required", required ? true : null);
+	}
 	/**
 	 * Returns the rows of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public String getRows() {
-		return (String) getDynamicProperty("rows");
+	public Integer getRows() {
+		return (Integer) getDynamicProperty("rows");
 	}
 
 	/**
 	 * Sets the rows of this textarea tag.
 	 * @since 8.0.3
 	 */
-	public void setRows(String rows) throws WrongValueException {
+	public void setRows(Integer rows) throws WrongValueException {
 		setDynamicProperty("rows", rows);
-	};
+	}
 	/**
 	 * Returns the wrap of this textarea tag.
 	 * @since 8.0.3
@@ -217,7 +217,7 @@ public class Textarea extends Input implements AfterCompose {
 	 */
 	public void setWrap(String wrap) throws WrongValueException {
 		setDynamicProperty("wrap", wrap);
-	};
+	}
 
 	public void afterCompose() {
 		String content = PageRenderer.childrenToContent(this);

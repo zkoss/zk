@@ -42,7 +42,7 @@ public class Img extends AbstractTag {
 	 */
 	public void setAlt(String alt) throws WrongValueException {
 		setDynamicProperty("alt", alt);
-	};
+	}
 	/**
 	 * Returns the crossorigin of this img tag.
 	 * @since 8.0.3
@@ -57,7 +57,7 @@ public class Img extends AbstractTag {
 	 */
 	public void setCrossorigin(String crossorigin) throws WrongValueException {
 		setDynamicProperty("crossorigin", crossorigin);
-	};
+	}
 	/**
 	 * Returns the height of this img tag.
 	 * @since 8.0.3
@@ -72,22 +72,22 @@ public class Img extends AbstractTag {
 	 */
 	public void setHeight(String height) throws WrongValueException {
 		setDynamicProperty("height", height);
-	};
+	}
 	/**
 	 * Returns the ismap of this img tag.
 	 * @since 8.0.3
 	 */
-	public String getIsmap() {
-		return (String) getDynamicProperty("ismap");
+	public Boolean isIsmap() {
+		return getDynamicProperty("ismap") != null;
 	}
 
 	/**
 	 * Sets the ismap of this img tag.
 	 * @since 8.0.3
 	 */
-	public void setIsmap(String ismap) throws WrongValueException {
-		setDynamicProperty("ismap", ismap);
-	};
+	public void setIsmap(Boolean ismap) throws WrongValueException {
+		setDynamicProperty("ismap", ismap ? true : null);
+	}
 	/**
 	 * Returns the longdesc of this img tag.
 	 * @since 8.0.3
@@ -102,7 +102,7 @@ public class Img extends AbstractTag {
 	 */
 	public void setLongdesc(String longdesc) throws WrongValueException {
 		setDynamicProperty("longdesc", longdesc);
-	};
+	}
 	/**
 	 * Returns the src of this img tag.
 	 * @since 8.0.3
@@ -117,7 +117,7 @@ public class Img extends AbstractTag {
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		setDynamicProperty("src", src);
-	};
+	}
 	/**
 	 * Returns the usemap of this img tag.
 	 * @since 8.0.3
@@ -132,7 +132,7 @@ public class Img extends AbstractTag {
 	 */
 	public void setUsemap(String usemap) throws WrongValueException {
 		setDynamicProperty("usemap", usemap);
-	};
+	}
 	/**
 	 * Returns the width of this img tag.
 	 * @since 8.0.3
@@ -147,5 +147,5 @@ public class Img extends AbstractTag {
 	 */
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
-	};
+	}
 }

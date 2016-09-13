@@ -42,7 +42,7 @@ public class Del extends AbstractTag {
 	 */
 	public void setCite(String cite) throws WrongValueException {
 		setDynamicProperty("cite", cite);
-	};
+	}
 	/**
 	 * Returns the datetime of this del tag.
 	 * @since 8.0.3
@@ -57,5 +57,5 @@ public class Del extends AbstractTag {
 	 */
 	public void setDatetime(String datetime) throws WrongValueException {
 		setDynamicProperty("datetime", datetime);
-	};
+	}
 }

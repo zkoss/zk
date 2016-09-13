@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * The TD tag.
- * 
+ *
  * @author tomyeh
  */
 public class Td extends AbstractTag {
@@ -32,17 +32,17 @@ public class Td extends AbstractTag {
 	 * Returns the colspan of this td tag.
 	 * @since 8.0.3
 	 */
-	public String getColspan() {
-		return (String) getDynamicProperty("colspan");
+	public Integer getColspan() {
+		return (Integer) getDynamicProperty("colspan");
 	}
 
 	/**
 	 * Sets the colspan of this td tag.
 	 * @since 8.0.3
 	 */
-	public void setColspan(String colspan) throws WrongValueException {
+	public void setColspan(Integer colspan) throws WrongValueException {
 		setDynamicProperty("colspan", colspan);
-	};
+	}
 	/**
 	 * Returns the headers of this td tag.
 	 * @since 8.0.3
@@ -57,20 +57,20 @@ public class Td extends AbstractTag {
 	 */
 	public void setHeaders(String headers) throws WrongValueException {
 		setDynamicProperty("headers", headers);
-	};
+	}
 	/**
 	 * Returns the rowspan of this td tag.
 	 * @since 8.0.3
 	 */
-	public String getRowspan() {
-		return (String) getDynamicProperty("rowspan");
+	public Integer getRowspan() {
+		return (Integer) getDynamicProperty("rowspan");
 	}
 
 	/**
 	 * Sets the rowspan of this td tag.
 	 * @since 8.0.3
 	 */
-	public void setRowspan(String rowspan) throws WrongValueException {
+	public void setRowspan(Integer rowspan) throws WrongValueException {
 		setDynamicProperty("rowspan", rowspan);
-	};
+	}
 }

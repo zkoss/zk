@@ -42,7 +42,7 @@ public class Link extends AbstractTag {
 	 */
 	public void setCrossorigin(String crossorigin) throws WrongValueException {
 		setDynamicProperty("crossorigin", crossorigin);
-	};
+	}
 	/**
 	 * Returns the href of this link tag.
 	 * @since 8.0.3
@@ -57,7 +57,7 @@ public class Link extends AbstractTag {
 	 */
 	public void setHref(String href) throws WrongValueException {
 		setDynamicProperty("href", href);
-	};
+	}
 	/**
 	 * Returns the hreflang of this link tag.
 	 * @since 8.0.3
@@ -72,7 +72,7 @@ public class Link extends AbstractTag {
 	 */
 	public void setHreflang(String hreflang) throws WrongValueException {
 		setDynamicProperty("hreflang", hreflang);
-	};
+	}
 	/**
 	 * Returns the media of this link tag.
 	 * @since 8.0.3
@@ -87,7 +87,7 @@ public class Link extends AbstractTag {
 	 */
 	public void setMedia(String media) throws WrongValueException {
 		setDynamicProperty("media", media);
-	};
+	}
 	/**
 	 * Returns the rel of this link tag.
 	 * @since 8.0.3
@@ -102,7 +102,7 @@ public class Link extends AbstractTag {
 	 */
 	public void setRel(String rel) throws WrongValueException {
 		setDynamicProperty("rel", rel);
-	};
+	}
 	/**
 	 * Returns the sizes of this link tag.
 	 * @since 8.0.3
@@ -117,7 +117,7 @@ public class Link extends AbstractTag {
 	 */
 	public void setSizes(String sizes) throws WrongValueException {
 		setDynamicProperty("sizes", sizes);
-	};
+	}
 	/**
 	 * Returns the type of this link tag.
 	 * @since 8.0.3
@@ -132,5 +132,5 @@ public class Link extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

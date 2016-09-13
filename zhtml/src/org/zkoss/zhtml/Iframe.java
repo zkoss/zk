@@ -42,7 +42,7 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setHeight(String height) throws WrongValueException {
 		setDynamicProperty("height", height);
-	};
+	}
 	/**
 	 * Returns the name of this iframe tag.
 	 * @since 8.0.3
@@ -57,22 +57,22 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the sandbox of this iframe tag.
 	 * @since 8.0.3
 	 */
-	public String getSandbox() {
-		return (String) getDynamicProperty("sandbox");
+	public Boolean isSandbox() {
+		return getDynamicProperty("sandbox") != null;
 	}
 
 	/**
 	 * Sets the sandbox of this iframe tag.
 	 * @since 8.0.3
 	 */
-	public void setSandbox(String sandbox) throws WrongValueException {
-		setDynamicProperty("sandbox", sandbox);
-	};
+	public void setSandbox(Boolean sandbox) throws WrongValueException {
+		setDynamicProperty("sandbox", sandbox ? true : null);
+	}
 	/**
 	 * Returns the src of this iframe tag.
 	 * @since 8.0.3
@@ -87,7 +87,7 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		setDynamicProperty("src", src);
-	};
+	}
 	/**
 	 * Returns the srcdoc of this iframe tag.
 	 * @since 8.0.3
@@ -102,7 +102,7 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setSrcdoc(String srcdoc) throws WrongValueException {
 		setDynamicProperty("srcdoc", srcdoc);
-	};
+	}
 	/**
 	 * Returns the width of this iframe tag.
 	 * @since 8.0.3
@@ -117,5 +117,5 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
-	};
+	}
 }

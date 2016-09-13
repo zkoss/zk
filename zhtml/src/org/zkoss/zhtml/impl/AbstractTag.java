@@ -126,22 +126,22 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	 */
 	public void setAccesskey(String accesskey) throws WrongValueException {
 		setDynamicProperty("accesskey", accesskey);
-	};
+	}
 	/**
 	 * Returns the contenteditable of this tag.
 	 * @since 8.0.3
 	 */
-	public String getContenteditable() {
-		return (String) getDynamicProperty("contenteditable");
+	public Boolean isContenteditable() {
+		return (Boolean) getDynamicProperty("contenteditable");
 	}
 
 	/**
 	 * Sets the contenteditable of this tag.
 	 * @since 8.0.3
 	 */
-	public void setContenteditable(String contenteditable) throws WrongValueException {
+	public void setContenteditable(Boolean contenteditable) throws WrongValueException {
 		setDynamicProperty("contenteditable", contenteditable);
-	};
+	}
 	/**
 	 * Returns the dir of this tag.
 	 * @since 8.0.3
@@ -156,37 +156,37 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	 */
 	public void setDir(String dir) throws WrongValueException {
 		setDynamicProperty("dir", dir);
-	};
+	}
 	/**
 	 * Returns the draggable of this tag.
 	 * @since 8.0.3
 	 */
-	public String getDraggable() {
-		return (String) getDynamicProperty("draggable");
+	public Boolean isDraggable() {
+		return (Boolean) getDynamicProperty("draggable");
 	}
 
 	/**
 	 * Sets the draggable of this tag.
 	 * @since 8.0.3
 	 */
-	public void setDraggable(String draggable) throws WrongValueException {
+	public void setDraggable(Boolean draggable) throws WrongValueException {
 		setDynamicProperty("draggable", draggable);
-	};
+	}
 	/**
 	 * Returns the hidden of this tag.
 	 * @since 8.0.3
 	 */
-	public String getHidden() {
-		return (String) getDynamicProperty("hidden");
+	public Boolean isHidden() {
+		return getDynamicProperty("hidden") != null;
 	}
 
 	/**
 	 * Sets the hidden of this tag.
 	 * @since 8.0.3
 	 */
-	public void setHidden(String hidden) throws WrongValueException {
-		setDynamicProperty("hidden", hidden);
-	};
+	public void setHidden(Boolean hidden) throws WrongValueException {
+		setDynamicProperty("hidden", hidden ? true : null);
+	}
 	/**
 	 * Returns the lang of this tag.
 	 * @since 8.0.3
@@ -201,37 +201,37 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	 */
 	public void setLang(String lang) throws WrongValueException {
 		setDynamicProperty("lang", lang);
-	};
+	}
 	/**
 	 * Returns the spellcheck of this tag.
 	 * @since 8.0.3
 	 */
-	public String getSpellcheck() {
-		return (String) getDynamicProperty("spellcheck");
+	public Boolean isSpellcheck() {
+		return (Boolean) getDynamicProperty("spellcheck");
 	}
 
 	/**
 	 * Sets the spellcheck of this tag.
 	 * @since 8.0.3
 	 */
-	public void setSpellcheck(String spellcheck) throws WrongValueException {
+	public void setSpellcheck(Boolean spellcheck) throws WrongValueException {
 		setDynamicProperty("spellcheck", spellcheck);
-	};
+	}
 	/**
 	 * Returns the tabindex of this tag.
 	 * @since 8.0.3
 	 */
-	public String getTabindex() {
-		return (String) getDynamicProperty("tabindex");
+	public Integer getTabindex() {
+		return (Integer) getDynamicProperty("tabindex");
 	}
 
 	/**
 	 * Sets the tabindex of this tag.
 	 * @since 8.0.3
 	 */
-	public void setTabindex(String tabindex) throws WrongValueException {
+	public void setTabindex(Integer tabindex) throws WrongValueException {
 		setDynamicProperty("tabindex", tabindex);
-	};
+	}
 	/**
 	 * Returns the title of this tag.
 	 * @since 8.0.3
@@ -246,7 +246,7 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	 */
 	public void setTitle(String title) throws WrongValueException {
 		setDynamicProperty("title", title);
-	};
+	}
 
 	/**
 	 * Returns the tag name.

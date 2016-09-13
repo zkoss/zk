@@ -32,32 +32,32 @@ public class Ol extends AbstractTag {
 	 * Returns the reversed of this ol tag.
 	 * @since 8.0.3
 	 */
-	public String getReversed() {
-		return (String) getDynamicProperty("reversed");
+	public Boolean isReversed() {
+		return getDynamicProperty("reversed") != null;
 	}
 
 	/**
 	 * Sets the reversed of this ol tag.
 	 * @since 8.0.3
 	 */
-	public void setReversed(String reversed) throws WrongValueException {
-		setDynamicProperty("reversed", reversed);
-	};
+	public void setReversed(Boolean reversed) throws WrongValueException {
+		setDynamicProperty("reversed", reversed ? true : null);
+	}
 	/**
 	 * Returns the start of this ol tag.
 	 * @since 8.0.3
 	 */
-	public String getStart() {
-		return (String) getDynamicProperty("start");
+	public Integer getStart() {
+		return (Integer) getDynamicProperty("start");
 	}
 
 	/**
 	 * Sets the start of this ol tag.
 	 * @since 8.0.3
 	 */
-	public void setStart(String start) throws WrongValueException {
+	public void setStart(Integer start) throws WrongValueException {
 		setDynamicProperty("start", start);
-	};
+	}
 	/**
 	 * Returns the type of this ol tag.
 	 * @since 8.0.3
@@ -72,5 +72,5 @@ public class Ol extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

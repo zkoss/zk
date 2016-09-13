@@ -42,5 +42,5 @@ public class Li extends AbstractTag {
 	 */
 	public void setValue(String value) throws WrongValueException {
 		setDynamicProperty("value", value);
-	};
+	}
 }

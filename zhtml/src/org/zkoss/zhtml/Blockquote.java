@@ -42,5 +42,5 @@ public class Blockquote extends AbstractTag {
 	 */
 	public void setCite(String cite) throws WrongValueException {
 		setDynamicProperty("cite", cite);
-	};
+	}
 }
