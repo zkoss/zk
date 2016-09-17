@@ -15,7 +15,7 @@
 		Clients.reloadMessages(null);
 	</zscript>
 	<div>
-		Enter '00' in the Intbox below and click on somewhere else. You should see an error message. Otherwise it is a bug.
+		Enter '-1' in the Intbox below and click on somewhere else. You should see an error message. Otherwise it is a bug.
 	</div>
-	<intbox />
+    <intbox constraint="no negative"/>
 </zk>
