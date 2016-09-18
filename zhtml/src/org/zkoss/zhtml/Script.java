@@ -35,17 +35,17 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	 * Returns the async of this script tag.
 	 * @since 8.0.3
 	 */
-	public String getAsync() {
-		return (String) getDynamicProperty("async");
+	public Boolean isAsync() {
+		return getDynamicProperty("async") != null;
 	}
 
 	/**
 	 * Sets the async of this script tag.
 	 * @since 8.0.3
 	 */
-	public void setAsync(String async) throws WrongValueException {
-		setDynamicProperty("async", async);
-	};
+	public void setAsync(Boolean async) throws WrongValueException {
+		setDynamicProperty("async", async ? true : null);
+	}
 	/**
 	 * Returns the charset of this script tag.
 	 * @since 8.0.3
@@ -60,22 +60,22 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setCharset(String charset) throws WrongValueException {
 		setDynamicProperty("charset", charset);
-	};
+	}
 	/**
 	 * Returns the defer of this script tag.
 	 * @since 8.0.3
 	 */
-	public String getDefer() {
-		return (String) getDynamicProperty("defer");
+	public Boolean isDefer() {
+		return getDynamicProperty("defer") != null;
 	}
 
 	/**
 	 * Sets the defer of this script tag.
 	 * @since 8.0.3
 	 */
-	public void setDefer(String defer) throws WrongValueException {
-		setDynamicProperty("defer", defer);
-	};
+	public void setDefer(Boolean defer) throws WrongValueException {
+		setDynamicProperty("defer", defer ? true : null);
+	}
 	/**
 	 * Returns the src of this script tag.
 	 * @since 8.0.3
@@ -90,7 +90,7 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		setDynamicProperty("src", src);
-	};
+	}
 	/**
 	 * Returns the type of this script tag.
 	 * @since 8.0.3
@@ -105,5 +105,5 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

@@ -51,7 +51,7 @@ public class Html extends AbstractTag {
 	 */
 	public void setManifest(String manifest) throws WrongValueException {
 		setDynamicProperty("manifest", manifest);
-	};
+	}
 	/**
 	 * Returns the xmlns of this html tag.
 	 * @since 8.0.3
@@ -66,7 +66,7 @@ public class Html extends AbstractTag {
 	 */
 	public void setXmlns(String xmlns) throws WrongValueException {
 		setDynamicProperty("xmlns", xmlns);
-	};
+	}
 	// -- super --//
 	public void invalidate() {
 		final Execution exec = Executions.getCurrent();

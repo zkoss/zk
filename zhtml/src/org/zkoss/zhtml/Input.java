@@ -89,7 +89,7 @@ public class Input extends AbstractTag {
 	 */
 	public void setAccept(String accept) throws WrongValueException {
 		setDynamicProperty("accept", accept);
-	};
+	}
 	/**
 	 * Returns the alt of this input tag.
 	 * @since 8.0.3
@@ -104,37 +104,37 @@ public class Input extends AbstractTag {
 	 */
 	public void setAlt(String alt) throws WrongValueException {
 		setDynamicProperty("alt", alt);
-	};
+	}
 	/**
 	 * Returns the autocomplete of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getAutocomplete() {
-		return (String) getDynamicProperty("autocomplete");
+	public Boolean isAutocomplete() {
+		return !"off".equals(getDynamicProperty("autocomplete"));
 	}
 
 	/**
 	 * Sets the autocomplete of this input tag
 	 * @since 8.0.3
 	 */
-	public void setAutocomplete(String autocomplete) throws WrongValueException {
-		setDynamicProperty("autocomplete", autocomplete);
-	};
+	public void setAutocomplete(Boolean autocomplete) throws WrongValueException {
+		setDynamicProperty("autocomplete", autocomplete == null ? null : autocomplete ? "on" : "off");
+	}
 	/**
 	 * Returns the autofocus of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getAutofocus() {
-		return (String) getDynamicProperty("autofocus");
+	public Boolean isAutofocus() {
+		return getDynamicProperty("autofocus") != null;
 	}
 
 	/**
 	 * Sets the autofocus of this input tag
 	 * @since 8.0.3
 	 */
-	public void setAutofocus(String autofocus) throws WrongValueException {
-		setDynamicProperty("autofocus", autofocus);
-	};
+	public void setAutofocus(Boolean autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus ? true : null);
+	}
 	/**
 	 * Returns the dirname of this input tag.
 	 * @since 8.0.3
@@ -149,22 +149,22 @@ public class Input extends AbstractTag {
 	 */
 	public void setDirname(String dirname) throws WrongValueException {
 		setDynamicProperty("dirname", dirname);
-	};
+	}
 	/**
 	 * Returns the disabled of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public Boolean isDisabled() {
+		return getDynamicProperty("disabled") != null;
 	}
 
 	/**
 	 * Sets the disabled of this input tag
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(Boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? true : null);
+	}
 	/**
 	 * Returns the height of this input tag.
 	 * @since 8.0.3
@@ -179,7 +179,7 @@ public class Input extends AbstractTag {
 	 */
 	public void setHeight(String height) throws WrongValueException {
 		setDynamicProperty("height", height);
-	};
+	}
 	/**
 	 * Returns the list of this input tag.
 	 * @since 8.0.3
@@ -194,7 +194,7 @@ public class Input extends AbstractTag {
 	 */
 	public void setList(String list) throws WrongValueException {
 		setDynamicProperty("list", list);
-	};
+	}
 	/**
 	 * Returns the max of this input tag.
 	 * @since 8.0.3
@@ -209,22 +209,22 @@ public class Input extends AbstractTag {
 	 */
 	public void setMax(String max) throws WrongValueException {
 		setDynamicProperty("max", max);
-	};
+	}
 	/**
 	 * Returns the maxlength of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getMaxlength() {
-		return (String) getDynamicProperty("maxlength");
+	public Integer getMaxlength() {
+		return (Integer) getDynamicProperty("maxlength");
 	}
 
 	/**
 	 * Sets the maxlength of this input tag
 	 * @since 8.0.3
 	 */
-	public void setMaxlength(String maxlength) throws WrongValueException {
+	public void setMaxlength(Integer maxlength) throws WrongValueException {
 		setDynamicProperty("maxlength", maxlength);
-	};
+	}
 	/**
 	 * Returns the min of this input tag.
 	 * @since 8.0.3
@@ -239,22 +239,22 @@ public class Input extends AbstractTag {
 	 */
 	public void setMin(String min) throws WrongValueException {
 		setDynamicProperty("min", min);
-	};
+	}
 	/**
 	 * Returns the multiple of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getMultiple() {
-		return (String) getDynamicProperty("multiple");
+	public Boolean isMultiple() {
+		return getDynamicProperty("multiple") != null;
 	}
 
 	/**
 	 * Sets the multiple of this input tag
 	 * @since 8.0.3
 	 */
-	public void setMultiple(String multiple) throws WrongValueException {
-		setDynamicProperty("multiple", multiple);
-	};
+	public void setMultiple(Boolean multiple) throws WrongValueException {
+		setDynamicProperty("multiple", multiple ? true : null);
+	}
 	/**
 	 * Returns the name of this input tag.
 	 * @since 8.0.3
@@ -269,7 +269,7 @@ public class Input extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the pattern of this input tag.
 	 * @since 8.0.3
@@ -284,7 +284,7 @@ public class Input extends AbstractTag {
 	 */
 	public void setPattern(String pattern) throws WrongValueException {
 		setDynamicProperty("pattern", pattern);
-	};
+	}
 	/**
 	 * Returns the placeholder of this input tag.
 	 * @since 8.0.3
@@ -299,52 +299,52 @@ public class Input extends AbstractTag {
 	 */
 	public void setPlaceholder(String placeholder) throws WrongValueException {
 		setDynamicProperty("placeholder", placeholder);
-	};
+	}
 	/**
 	 * Returns the readonly of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getReadonly() {
-		return (String) getDynamicProperty("readonly");
+	public Boolean isReadonly() {
+		return getDynamicProperty("readonly") != null;
 	}
 
 	/**
 	 * Sets the readonly of this input tag
 	 * @since 8.0.3
 	 */
-	public void setReadonly(String readonly) throws WrongValueException {
-		setDynamicProperty("readonly", readonly);
-	};
+	public void setReadonly(Boolean readonly) throws WrongValueException {
+		setDynamicProperty("readonly", readonly ? true : null);
+	}
 	/**
 	 * Returns the required of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getRequired() {
-		return (String) getDynamicProperty("required");
+	public Boolean isRequired() {
+		return getDynamicProperty("required") != null;
 	}
 
 	/**
 	 * Sets the required of this input tag
 	 * @since 8.0.3
 	 */
-	public void setRequired(String required) throws WrongValueException {
-		setDynamicProperty("required", required);
-	};
+	public void setRequired(Boolean required) throws WrongValueException {
+		setDynamicProperty("required", required ? true : null);
+	}
 	/**
 	 * Returns the size of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getSize() {
-		return (String) getDynamicProperty("size");
+	public Integer getSize() {
+		return (Integer) getDynamicProperty("size");
 	}
 
 	/**
 	 * Sets the size of this input tag
 	 * @since 8.0.3
 	 */
-	public void setSize(String size) throws WrongValueException {
+	public void setSize(Integer size) throws WrongValueException {
 		setDynamicProperty("size", size);
-	};
+	}
 	/**
 	 * Returns the src of this input tag.
 	 * @since 8.0.3
@@ -359,22 +359,22 @@ public class Input extends AbstractTag {
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		setDynamicProperty("src", src);
-	};
+	}
 	/**
 	 * Returns the step of this input tag.
 	 * @since 8.0.3
 	 */
-	public String getStep() {
-		return (String) getDynamicProperty("step");
+	public Integer getStep() {
+		return (Integer) getDynamicProperty("step");
 	}
 
 	/**
 	 * Sets the step of this input tag
 	 * @since 8.0.3
 	 */
-	public void setStep(String step) throws WrongValueException {
+	public void setStep(Integer step) throws WrongValueException {
 		setDynamicProperty("step", step);
-	};
+	}
 	/**
 	 * Returns the type of this input tag.
 	 * @since 8.0.3
@@ -389,7 +389,7 @@ public class Input extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 	/**
 	 * Returns the width of this input tag.
 	 * @since 8.0.3
@@ -404,7 +404,7 @@ public class Input extends AbstractTag {
 	 */
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
-	};
+	}
 
 	// -- Component --//
 	/**

@@ -32,17 +32,17 @@ public class Option extends AbstractTag {
 	 * Returns the disabled of this option tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public Boolean isDisabled() {
+		return getDynamicProperty("disabled") != null;
 	}
 
 	/**
 	 * Sets the disabled of this option tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(Boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? true : null);
+	}
 	/**
 	 * Returns the label of this option tag.
 	 * @since 8.0.3
@@ -57,22 +57,22 @@ public class Option extends AbstractTag {
 	 */
 	public void setLabel(String label) throws WrongValueException {
 		setDynamicProperty("label", label);
-	};
+	}
 	/**
 	 * Returns the selected of this option tag.
 	 * @since 8.0.3
 	 */
-	public String getSelected() {
-		return (String) getDynamicProperty("selected");
+	public Boolean isSelected() {
+		return getDynamicProperty("selected") != null;
 	}
 
 	/**
 	 * Sets the selected of this option tag.
 	 * @since 8.0.3
 	 */
-	public void setSelected(String selected) throws WrongValueException {
-		setDynamicProperty("selected", selected);
-	};
+	public void setSelected(Boolean selected) throws WrongValueException {
+		setDynamicProperty("selected", selected ? true : null);
+	}
 	/**
 	 * Returns the value of this option tag.
 	 * @since 8.0.3
@@ -87,5 +87,5 @@ public class Option extends AbstractTag {
 	 */
 	public void setValue(String value) throws WrongValueException {
 		setDynamicProperty("value", value);
-	};
+	}
 }

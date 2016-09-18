@@ -42,7 +42,7 @@ public class Table extends AbstractTag {
 	 */
 	public void setBorder(String border) throws WrongValueException {
 		setDynamicProperty("border", border);
-	};
+	}
 	/**
 	 * Returns the sortable of this table tag.
 	 * @since 8.0.3
@@ -57,5 +57,5 @@ public class Table extends AbstractTag {
 	 */
 	public void setSortable(String sortable) throws WrongValueException {
 		setDynamicProperty("sortable", sortable);
-	};
+	}
 }

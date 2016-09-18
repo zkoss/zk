@@ -32,17 +32,17 @@ public class Fieldset extends AbstractTag {
 	 * Returns the disabled of this fieldset tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public Boolean isDisabled() {
+		return getDynamicProperty("disabled") != null;
 	}
 
 	/**
 	 * Sets the disabled of this fieldset tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setAutofocus(Boolean autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus ? true : null);
+	}
 	/**
 	 * Returns the form of this fieldset tag.
 	 * @since 8.0.3
@@ -61,5 +61,5 @@ public class Fieldset extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 }
