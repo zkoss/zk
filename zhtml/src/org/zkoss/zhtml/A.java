@@ -31,6 +31,8 @@ public class A extends AbstractTag {
 
 	/**
 	 * Returns the download of this a tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getDownload() {
@@ -39,11 +41,13 @@ public class A extends AbstractTag {
 
 	/**
 	 * Sets the download of this a tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setDownload(String download) throws WrongValueException {
 		setDynamicProperty("download", download);
-	};
+	}
 	/**
 	 * Returns the href of this a tag.
 	 * @since 8.0.3
@@ -58,7 +62,7 @@ public class A extends AbstractTag {
 	 */
 	public void setHref(String href) throws WrongValueException {
 		setDynamicProperty("href", href);
-	};
+	}
 	/**
 	 * Returns the hreflang of this a tag.
 	 * @since 8.0.3
@@ -73,9 +77,11 @@ public class A extends AbstractTag {
 	 */
 	public void setHreflang(String hreflang) throws WrongValueException {
 		setDynamicProperty("hreflang", hreflang);
-	};
+	}
 	/**
 	 * Returns the media of this a tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getMedia() {
@@ -84,11 +90,13 @@ public class A extends AbstractTag {
 
 	/**
 	 * Sets the media of this a tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setMedia(String media) throws WrongValueException {
 		setDynamicProperty("media", media);
-	};
+	}
 	/**
 	 * Returns the rel of this a tag.
 	 * @since 8.0.3
@@ -103,7 +111,7 @@ public class A extends AbstractTag {
 	 */
 	public void setRel(String rel) throws WrongValueException {
 		setDynamicProperty("rel", rel);
-	};
+	}
 	/**
 	 * Returns the target of this a tag.
 	 * @since 8.0.3
@@ -118,7 +126,7 @@ public class A extends AbstractTag {
 	 */
 	public void setTarget(String target) throws WrongValueException {
 		setDynamicProperty("target", target);
-	};
+	}
 	/**
 	 * Returns the type of this a tag.
 	 * @since 8.0.3
@@ -133,5 +141,5 @@ public class A extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

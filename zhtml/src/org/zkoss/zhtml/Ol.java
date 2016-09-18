@@ -30,34 +30,43 @@ public class Ol extends AbstractTag {
 	}
 	/**
 	 * Returns the reversed of this ol tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getReversed() {
-		return (String) getDynamicProperty("reversed");
+	public boolean isReversed() {
+		final Boolean b = (Boolean) getDynamicProperty("reversed");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the reversed of this ol tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setReversed(String reversed) throws WrongValueException {
-		setDynamicProperty("reversed", reversed);
-	};
+	public void setReversed(boolean reversed) throws WrongValueException {
+		setDynamicProperty("reversed", reversed ? Boolean.valueOf(reversed) : null);
+	}
 	/**
 	 * Returns the start of this ol tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getStart() {
-		return (String) getDynamicProperty("start");
+	public Integer getStart() {
+		return (Integer) getDynamicProperty("start");
 	}
 
 	/**
 	 * Sets the start of this ol tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setStart(String start) throws WrongValueException {
+	public void setStart(Integer start) throws WrongValueException {
 		setDynamicProperty("start", start);
-	};
+	}
 	/**
 	 * Returns the type of this ol tag.
 	 * @since 8.0.3
@@ -72,5 +81,5 @@ public class Ol extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

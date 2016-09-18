@@ -30,25 +30,23 @@ public class Fieldset extends AbstractTag {
 	}
 	/**
 	 * Returns the disabled of this fieldset tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public boolean isDisabled() {
+		final Boolean b = (Boolean) getDynamicProperty("disabled");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the disabled of this fieldset tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
-	/**
-	 * Returns the form of this fieldset tag.
-	 * @since 8.0.3
-	 */
-	public String getForm() {
-		return (String) getDynamicProperty("form");
+	public void setDisabled(boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? Boolean.valueOf(disabled) : null);
 	}
 
 	public String getName() {
@@ -57,9 +55,11 @@ public class Fieldset extends AbstractTag {
 
 	/**
 	 * Sets the name of this fieldset tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 }

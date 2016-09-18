@@ -30,34 +30,40 @@ public class Button extends AbstractTag {
 	}
 	/**
 	 * Returns the autofocus of this button tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getAutofocus() {
-		return (String) getDynamicProperty("autofocus");
+	public boolean isAutofocus() {
+		final Boolean b = (Boolean) getDynamicProperty("autofocus");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the autofocus of this button tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setAutofocus(String autofocus) throws WrongValueException {
-		setDynamicProperty("autofocus", autofocus);
-	};
+	public void setAutofocus(boolean autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus ? Boolean.valueOf(autofocus) : null);
+	}
 	/**
 	 * Returns the disabled of this button tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public boolean isDisabled() {
+		final Boolean b = (Boolean) getDynamicProperty("disabled");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the disabled of this button tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? Boolean.valueOf(disabled) : null);
+	}
 	/**
 	 * Returns the name of this button tag.
 	 * @since 8.0.3
@@ -72,7 +78,7 @@ public class Button extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the type of this button tag.
 	 * @since 8.0.3
@@ -87,7 +93,7 @@ public class Button extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 	/**
 	 * Returns the value of this button tag.
 	 * @since 8.0.3
@@ -102,5 +108,5 @@ public class Button extends AbstractTag {
 	 */
 	public void setValue(String value) throws WrongValueException {
 		setDynamicProperty("value", value);
-	};
+	}
 }

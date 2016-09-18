@@ -37,49 +37,56 @@ public class Select extends AbstractTag {
 
 	/**
 	 * Returns the autofocus of this select tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getAutofocus() {
-		return (String) getDynamicProperty("autofocus");
+	public boolean isAutofocus() {
+		final Boolean b = (Boolean) getDynamicProperty("autofocus");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the autofocus of this select tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setAutofocus(String autofocus) throws WrongValueException {
-		setDynamicProperty("autofocus", autofocus);
-	};
+	public void setAutofocus(boolean autofocus) throws WrongValueException {
+		setDynamicProperty("autofocus", autofocus ? Boolean.valueOf(autofocus) : null);
+	}
 	/**
 	 * Returns the disabled of this select tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public boolean isDisabled() {
+		final Boolean b = (Boolean) getDynamicProperty("disabled");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the disabled of this select tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? Boolean.valueOf(disabled) : null);
+	}
 	/**
 	 * Returns the multiple of this select tag.
 	 * @since 8.0.3
 	 */
-	public String getMultiple() {
-		return (String) getDynamicProperty("multiple");
+	public boolean isMultiple() {
+		final Boolean b = (Boolean) getDynamicProperty("multiple");
+		return b != null && b.booleanValue();
 	}
 
 	/**
-	 * Sets the multiple of this select tag.
+	 * Sets the multiple of this select tag
 	 * @since 8.0.3
 	 */
-	public void setMultiple(String multiple) throws WrongValueException {
-		setDynamicProperty("multiple", multiple);
-	};
+	public void setMultiple(boolean multiple) throws WrongValueException {
+		setDynamicProperty("multiple", multiple ? Boolean.valueOf(multiple) : null);
+	}
 	/**
 	 * Returns the name of this select tag.
 	 * @since 8.0.3
@@ -94,37 +101,42 @@ public class Select extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the required of this select tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getRequired() {
-		return (String) getDynamicProperty("required");
+	public boolean isRequired() {
+		final Boolean b = (Boolean) getDynamicProperty("required");
+		return b != null && b.booleanValue();
 	}
 
 	/**
-	 * Sets the required of this select tag.
+	 * Sets the required of this select tag
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setRequired(String required) throws WrongValueException {
-		setDynamicProperty("required", required);
-	};
+	public void setRequired(boolean required) throws WrongValueException {
+		setDynamicProperty("required", required ? Boolean.valueOf(required) : null);
+	}
 	/**
 	 * Returns the size of this select tag.
 	 * @since 8.0.3
 	 */
-	public String getSize() {
-		return (String) getDynamicProperty("size");
+	public Integer getSize() {
+		return (Integer) getDynamicProperty("size");
 	}
 
 	/**
 	 * Sets the size of this select tag.
 	 * @since 8.0.3
 	 */
-	public void setSize(String size) throws WrongValueException {
+	public void setSize(Integer size) throws WrongValueException {
 		setDynamicProperty("size", size);
-	};
+	}
 
 	// -- Component --//
 	/**

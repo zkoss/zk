@@ -42,5 +42,5 @@ public class Label extends AbstractTag {
 	 */
 	public void setFor(String forValue) throws WrongValueException {
 		setDynamicProperty("for", forValue);
-	};
+	}
 }

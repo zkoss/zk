@@ -32,17 +32,18 @@ public class Option extends AbstractTag {
 	 * Returns the disabled of this option tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public boolean isDisabled() {
+		final Boolean b = (Boolean) getDynamicProperty("disabled");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the disabled of this option tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? Boolean.valueOf(disabled) : null);
+	}
 	/**
 	 * Returns the label of this option tag.
 	 * @since 8.0.3
@@ -57,22 +58,23 @@ public class Option extends AbstractTag {
 	 */
 	public void setLabel(String label) throws WrongValueException {
 		setDynamicProperty("label", label);
-	};
+	}
 	/**
 	 * Returns the selected of this option tag.
 	 * @since 8.0.3
 	 */
-	public String getSelected() {
-		return (String) getDynamicProperty("selected");
+	public boolean isSelected() {
+		final Boolean b = (Boolean) getDynamicProperty("selected");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the selected of this option tag.
 	 * @since 8.0.3
 	 */
-	public void setSelected(String selected) throws WrongValueException {
-		setDynamicProperty("selected", selected);
-	};
+	public void setSelected(boolean selected) throws WrongValueException {
+		setDynamicProperty("selected", selected ? Boolean.valueOf(selected) : null);
+	}
 	/**
 	 * Returns the value of this option tag.
 	 * @since 8.0.3
@@ -87,5 +89,5 @@ public class Option extends AbstractTag {
 	 */
 	public void setValue(String value) throws WrongValueException {
 		setDynamicProperty("value", value);
-	};
+	}
 }

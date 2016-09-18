@@ -45,22 +45,23 @@ public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setMedia(String media) throws WrongValueException {
 		setDynamicProperty("media", media);
-	};
+	}
 	/**
 	 * Returns the scoped of this style tag.
 	 * @since 8.0.3
 	 */
-	public String getScoped() {
-		return (String) getDynamicProperty("scoped");
+	public boolean isScoped() {
+		final Boolean b = (Boolean) getDynamicProperty("scoped");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the scoped of this style tag.
 	 * @since 8.0.3
 	 */
-	public void setScoped(String scoped) throws WrongValueException {
-		setDynamicProperty("scoped", scoped);
-	};
+	public void setScoped(boolean scoped) throws WrongValueException {
+		setDynamicProperty("scoped", scoped ? Boolean.valueOf(scoped) : null);
+	}
 	/**
 	 * Returns the type of this style tag.
 	 * @since 8.0.3
@@ -75,5 +76,5 @@ public class Style extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

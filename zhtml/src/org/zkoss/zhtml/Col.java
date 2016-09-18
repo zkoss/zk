@@ -32,15 +32,15 @@ public class Col extends AbstractTag {
 	 * Returns the span of this col tag.
 	 * @since 8.0.3
 	 */
-	public String getSpan() {
-		return (String) getDynamicProperty("span");
+	public Integer getSpan() {
+		return (Integer) getDynamicProperty("span");
 	}
 
 	/**
 	 * Sets the span of this col tag.
 	 * @since 8.0.3
 	 */
-	public void setSpan(String span) throws WrongValueException {
+	public void setSpan(Integer span) throws WrongValueException {
 		setDynamicProperty("span", span);
-	};
+	}
 }
