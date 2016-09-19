@@ -597,7 +597,7 @@ jq(function () {
 			body = document.body,
 			old = zk.currentFocus;
 		if ((target != body && target != body.parentNode)
-				&& (evt.pageX < (target.offsetLeft + target.clientWidth) && evt.pageY < (target.offsetTop + target.clientHeight))
+				&& (evt.domEvent.offsetX < target.clientWidth && evt.domEvent.offsetY < target.clientHeight)
 				&& (evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
