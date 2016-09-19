@@ -43,7 +43,7 @@ public class Meta extends AbstractTag {
 	 */
 	public void setCharset(String charset) throws WrongValueException {
 		setDynamicProperty("charset", charset);
-	};
+	}
 	/**
 	 * Returns the content of this meta tag.
 	 * @since 8.0.3
@@ -58,7 +58,7 @@ public class Meta extends AbstractTag {
 	 */
 	public void setContent(String content) throws WrongValueException {
 		setDynamicProperty("content", content);
-	};
+	}
 	/**
 	 * Returns the http-equiv of this meta tag.
 	 * @since 8.0.3
@@ -73,7 +73,7 @@ public class Meta extends AbstractTag {
 	 */
 	public void setHttpequiv(String httpequiv) throws WrongValueException {
 		setDynamicProperty("http-equiv", httpequiv);
-	};
+	}
 	/**
 	 * Returns the name of this meta tag.
 	 * @since 8.0.3
@@ -88,5 +88,5 @@ public class Meta extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 }

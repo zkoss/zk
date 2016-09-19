@@ -32,17 +32,18 @@ public class Optgroup extends AbstractTag {
 	 * Returns the disabled of this optgroup tag.
 	 * @since 8.0.3
 	 */
-	public String getDisabled() {
-		return (String) getDynamicProperty("disabled");
+	public boolean isDisabled() {
+		final Boolean b = (Boolean) getDynamicProperty("disabled");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the disabled of this optgroup tag.
 	 * @since 8.0.3
 	 */
-	public void setDisabled(String disabled) throws WrongValueException {
-		setDynamicProperty("disabled", disabled);
-	};
+	public void setDisabled(boolean disabled) throws WrongValueException {
+		setDynamicProperty("disabled", disabled ? Boolean.valueOf(disabled) : null);
+	}
 	/**
 	 * Returns the label of this optgroup tag.
 	 * @since 8.0.3
@@ -57,5 +58,5 @@ public class Optgroup extends AbstractTag {
 	 */
 	public void setLabel(String label) throws WrongValueException {
 		setDynamicProperty("label", label);
-	};
+	}
 }

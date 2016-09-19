@@ -42,7 +42,7 @@ public class Form extends AbstractTag {
 	 */
 	public void setAcceptcharset(String acceptcharset) throws WrongValueException {
 		setDynamicProperty("accept-charset", acceptcharset);
-	};
+	}
 	/**
 	 * Returns the action of this form tag.
 	 * @since 8.0.3
@@ -57,22 +57,26 @@ public class Form extends AbstractTag {
 	 */
 	public void setAction(String action) throws WrongValueException {
 		setDynamicProperty("action", action);
-	};
+	}
 	/**
 	 * Returns the autocomplete of this form tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getAutocomplete() {
-		return (String) getDynamicProperty("autocomplete");
+	public boolean isAutocomplete() {
+		return !"off".equals(getDynamicProperty("autocomplete"));
 	}
 
 	/**
 	 * Sets the autocomplete of this form tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setAutocomplete(String autocomplete) throws WrongValueException {
-		setDynamicProperty("autocomplete", autocomplete);
-	};
+	public void setAutocomplete(boolean autocomplete) throws WrongValueException {
+		setDynamicProperty("autocomplete", autocomplete ? "on" : "off");
+	}
 	/**
 	 * Returns the enctype of this form tag.
 	 * @since 8.0.3
@@ -87,7 +91,7 @@ public class Form extends AbstractTag {
 	 */
 	public void setEnctype(String enctype) throws WrongValueException {
 		setDynamicProperty("enctype", enctype);
-	};
+	}
 	/**
 	 * Returns the method of this form tag.
 	 * @since 8.0.3
@@ -102,7 +106,7 @@ public class Form extends AbstractTag {
 	 */
 	public void setMethod(String method) throws WrongValueException {
 		setDynamicProperty("method", method);
-	};
+	}
 	/**
 	 * Returns the name of this form tag.
 	 * @since 8.0.3
@@ -117,22 +121,27 @@ public class Form extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the novalidate of this form tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getNovalidate() {
-		return (String) getDynamicProperty("novalidate");
+	public boolean isNovalidate() {
+		final Boolean b = (Boolean) getDynamicProperty("novalidate");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the novalidate of this form tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setNovalidate(String novalidate) throws WrongValueException {
-		setDynamicProperty("novalidate", novalidate);
-	};
+	public void setNovalidate(boolean novalidate) throws WrongValueException {
+		setDynamicProperty("novalidate", novalidate ? Boolean.valueOf(novalidate) : null);
+	}
 	/**
 	 * Returns the target of this form tag.
 	 * @since 8.0.3
@@ -147,5 +156,5 @@ public class Form extends AbstractTag {
 	 */
 	public void setTarget(String target) throws WrongValueException {
 		setDynamicProperty("target", target);
-	};
+	}
 }

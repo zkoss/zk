@@ -3815,6 +3815,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+        <annotation>
+            <annotation-name>ZKBIND</annotation-name>
+            <property-name>inputmode</property-name>
+            <attribute>
+                <attribute-name>ACCESS</attribute-name>
+                <attribute-value>load</attribute-value>
+            </attribute>
+        </annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>list</property-name>
@@ -3895,6 +3903,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+        <annotation>
+            <annotation-name>ZKBIND</annotation-name>
+            <property-name>selectiondirection</property-name>
+            <attribute>
+                <attribute-name>ACCESS</attribute-name>
+                <attribute-value>load</attribute-value>
+            </attribute>
+        </annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>size</property-name>
@@ -4929,6 +4945,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
+        <annotation>
+            <annotation-name>ZKBIND</annotation-name>
+            <property-name>typemustmatch</property-name>
+            <attribute>
+                <attribute-name>ACCESS</attribute-name>
+                <attribute-value>load</attribute-value>
+            </attribute>
+        </annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>usemap</property-name>
@@ -6475,23 +6499,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value>load</attribute-value>
 			</attribute>
 		</annotation>
-		<!-- Custom annotations -->
-		<annotation>
-			<annotation-name>ZKBIND</annotation-name>
-			<property-name>border</property-name>
-			<attribute>
-				<attribute-name>ACCESS</attribute-name>
-				<attribute-value>load</attribute-value>
-			</attribute>
-		</annotation>
-		<annotation>
-			<annotation-name>ZKBIND</annotation-name>
-			<property-name>sortable</property-name>
-			<attribute>
-				<attribute-name>ACCESS</attribute-name>
-				<attribute-value>load</attribute-value>
-			</attribute>
-		</annotation>
 	</component>
 	<component>
 		<component-name>tbody</component-name>
@@ -7016,14 +7023,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<!-- Custom annotations -->
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
-			<property-name>abbr</property-name>
-			<attribute>
-				<attribute-name>ACCESS</attribute-name>
-				<attribute-value>load</attribute-value>
-			</attribute>
-		</annotation>
-		<annotation>
-			<annotation-name>ZKBIND</annotation-name>
 			<property-name>colspan</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
@@ -7049,14 +7048,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
 			<property-name>scope</property-name>
-			<attribute>
-				<attribute-name>ACCESS</attribute-name>
-				<attribute-value>load</attribute-value>
-			</attribute>
-		</annotation>
-		<annotation>
-			<annotation-name>ZKBIND</annotation-name>
-			<property-name>sorted</property-name>
 			<attribute>
 				<attribute-name>ACCESS</attribute-name>
 				<attribute-value>load</attribute-value>

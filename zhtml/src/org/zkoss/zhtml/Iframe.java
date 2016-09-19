@@ -42,7 +42,7 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setHeight(String height) throws WrongValueException {
 		setDynamicProperty("height", height);
-	};
+	}
 	/**
 	 * Returns the name of this iframe tag.
 	 * @since 8.0.3
@@ -57,9 +57,11 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setName(String name) throws WrongValueException {
 		setDynamicProperty("name", name);
-	};
+	}
 	/**
 	 * Returns the sandbox of this iframe tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getSandbox() {
@@ -68,11 +70,13 @@ public class Iframe extends AbstractTag {
 
 	/**
 	 * Sets the sandbox of this iframe tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setSandbox(String sandbox) throws WrongValueException {
 		setDynamicProperty("sandbox", sandbox);
-	};
+	}
 	/**
 	 * Returns the src of this iframe tag.
 	 * @since 8.0.3
@@ -87,9 +91,11 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		setDynamicProperty("src", src);
-	};
+	}
 	/**
 	 * Returns the srcdoc of this iframe tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getSrcdoc() {
@@ -98,11 +104,13 @@ public class Iframe extends AbstractTag {
 
 	/**
 	 * Sets the srcdoc of this iframe tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setSrcdoc(String srcdoc) throws WrongValueException {
 		setDynamicProperty("srcdoc", srcdoc);
-	};
+	}
 	/**
 	 * Returns the width of this iframe tag.
 	 * @since 8.0.3
@@ -117,5 +125,5 @@ public class Iframe extends AbstractTag {
 	 */
 	public void setWidth(String width) throws WrongValueException {
 		setDynamicProperty("width", width);
-	};
+	}
 }

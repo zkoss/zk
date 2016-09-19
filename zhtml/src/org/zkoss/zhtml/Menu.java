@@ -42,7 +42,7 @@ public class Menu extends AbstractTag {
 	 */
 	public void setLabel(String label) throws WrongValueException {
 		setDynamicProperty("label", label);
-	};
+	}
 	/**
 	 * Returns the type of this menu tag.
 	 * @since 8.0.3
@@ -57,5 +57,5 @@ public class Menu extends AbstractTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

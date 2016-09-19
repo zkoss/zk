@@ -42,7 +42,7 @@ public class Area extends AbstractTag {
 	 */
 	public void setAlt(String alt) throws WrongValueException {
 		setDynamicProperty("alt", alt);
-	};
+	}
 	/**
 	 * Returns the coords of this area tag.
 	 * @since 8.0.3
@@ -57,9 +57,11 @@ public class Area extends AbstractTag {
 	 */
 	public void setCoords(String coords) throws WrongValueException {
 		setDynamicProperty("coords", coords);
-	};
+	}
 	/**
 	 * Returns the download of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getDownload() {
@@ -68,11 +70,13 @@ public class Area extends AbstractTag {
 
 	/**
 	 * Sets the download of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setDownload(String download) throws WrongValueException {
 		setDynamicProperty("download", download);
-	};
+	}
 	/**
 	 * Returns the href of this area tag.
 	 * @since 8.0.3
@@ -87,9 +91,11 @@ public class Area extends AbstractTag {
 	 */
 	public void setHref(String href) throws WrongValueException {
 		setDynamicProperty("href", href);
-	};
+	}
 	/**
 	 * Returns the hreflang of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getHreflang() {
@@ -98,13 +104,17 @@ public class Area extends AbstractTag {
 
 	/**
 	 * Sets the hreflang of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setHreflang(String hreflang) throws WrongValueException {
 		setDynamicProperty("hreflang", hreflang);
-	};
+	}
 	/**
 	 * Returns the media of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getMedia() {
@@ -113,13 +123,17 @@ public class Area extends AbstractTag {
 
 	/**
 	 * Sets the media of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setMedia(String media) throws WrongValueException {
 		setDynamicProperty("media", media);
-	};
+	}
 	/**
 	 * Returns the rel of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getRel() {
@@ -128,11 +142,13 @@ public class Area extends AbstractTag {
 
 	/**
 	 * Sets the rel of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setRel(String rel) throws WrongValueException {
 		setDynamicProperty("rel", rel);
-	};
+	}
 	/**
 	 * Returns the shape of this area tag.
 	 * @since 8.0.3
@@ -147,7 +163,7 @@ public class Area extends AbstractTag {
 	 */
 	public void setShape(String shape) throws WrongValueException {
 		setDynamicProperty("shape", shape);
-	};
+	}
 	/**
 	 * Returns the target of this area tag.
 	 * @since 8.0.3
@@ -162,9 +178,11 @@ public class Area extends AbstractTag {
 	 */
 	public void setTarget(String target) throws WrongValueException {
 		setDynamicProperty("target", target);
-	};
+	}
 	/**
 	 * Returns the type of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getType() {
@@ -173,9 +191,11 @@ public class Area extends AbstractTag {
 
 	/**
 	 * Sets the type of this area tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

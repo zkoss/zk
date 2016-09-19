@@ -33,19 +33,24 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	}
 	/**
 	 * Returns the async of this script tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getAsync() {
-		return (String) getDynamicProperty("async");
+	public boolean isAsync() {
+		final Boolean b = (Boolean) getDynamicProperty("async");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the async of this script tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setAsync(String async) throws WrongValueException {
-		setDynamicProperty("async", async);
-	};
+	public void setAsync(boolean async) throws WrongValueException {
+		setDynamicProperty("async", async ? Boolean.valueOf(async) : null);
+	}
 	/**
 	 * Returns the charset of this script tag.
 	 * @since 8.0.3
@@ -60,22 +65,23 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setCharset(String charset) throws WrongValueException {
 		setDynamicProperty("charset", charset);
-	};
+	}
 	/**
 	 * Returns the defer of this script tag.
 	 * @since 8.0.3
 	 */
-	public String getDefer() {
-		return (String) getDynamicProperty("defer");
+	public boolean isDefer() {
+		final Boolean b = (Boolean) getDynamicProperty("defer");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the defer of this script tag.
 	 * @since 8.0.3
 	 */
-	public void setDefer(String defer) throws WrongValueException {
-		setDynamicProperty("defer", defer);
-	};
+	public void setDefer(boolean defer) throws WrongValueException {
+		setDynamicProperty("defer", defer ? Boolean.valueOf(defer) : null);
+	}
 	/**
 	 * Returns the src of this script tag.
 	 * @since 8.0.3
@@ -90,7 +96,7 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setSrc(String src) throws WrongValueException {
 		setDynamicProperty("src", src);
-	};
+	}
 	/**
 	 * Returns the type of this script tag.
 	 * @since 8.0.3
@@ -105,5 +111,5 @@ public class Script extends org.zkoss.zhtml.impl.ContentTag {
 	 */
 	public void setType(String type) throws WrongValueException {
 		setDynamicProperty("type", type);
-	};
+	}
 }

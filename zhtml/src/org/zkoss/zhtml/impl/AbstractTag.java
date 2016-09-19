@@ -114,6 +114,8 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 	/**
 	 * Returns the accesskey of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getAccesskey() {
@@ -122,28 +124,37 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 	/**
 	 * Sets the accesskey of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setAccesskey(String accesskey) throws WrongValueException {
 		setDynamicProperty("accesskey", accesskey);
-	};
+	}
 	/**
 	 * Returns the contenteditable of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getContenteditable() {
-		return (String) getDynamicProperty("contenteditable");
+	public boolean isContenteditable() {
+		final Boolean b = (Boolean) getDynamicProperty("contenteditable");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the contenteditable of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setContenteditable(String contenteditable) throws WrongValueException {
-		setDynamicProperty("contenteditable", contenteditable);
-	};
+	public void setContenteditable(boolean contenteditable) throws WrongValueException {
+		setDynamicProperty("contenteditable", contenteditable ? Boolean.valueOf(contenteditable) : null);
+	}
 	/**
 	 * Returns the dir of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getDir() {
@@ -152,43 +163,57 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 	/**
 	 * Sets the dir of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setDir(String dir) throws WrongValueException {
 		setDynamicProperty("dir", dir);
-	};
+	}
 	/**
 	 * Returns the draggable of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getDraggable() {
-		return (String) getDynamicProperty("draggable");
+	public boolean isDraggable() {
+		final Boolean b = (Boolean) getDynamicProperty("draggable");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the draggable of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setDraggable(String draggable) throws WrongValueException {
-		setDynamicProperty("draggable", draggable);
-	};
+	public void setDraggable(boolean draggable) throws WrongValueException {
+		setDynamicProperty("draggable", draggable ? Boolean.valueOf(draggable) : null);
+	}
 	/**
 	 * Returns the hidden of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getHidden() {
-		return (String) getDynamicProperty("hidden");
+	public boolean isHidden() {
+		final Boolean b = (Boolean) getDynamicProperty("hidden");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the hidden of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setHidden(String hidden) throws WrongValueException {
-		setDynamicProperty("hidden", hidden);
-	};
+	public void setHidden(boolean hidden) throws WrongValueException {
+		setDynamicProperty("hidden", hidden ? Boolean.valueOf(hidden) : null);
+	}
 	/**
 	 * Returns the lang of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getLang() {
@@ -197,43 +222,56 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 	/**
 	 * Sets the lang of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setLang(String lang) throws WrongValueException {
 		setDynamicProperty("lang", lang);
-	};
+	}
 	/**
 	 * Returns the spellcheck of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getSpellcheck() {
-		return (String) getDynamicProperty("spellcheck");
+	public boolean isSpellcheck() {
+		final Boolean b = (Boolean) getDynamicProperty("spellcheck");
+		return b != null && b.booleanValue();
 	}
 
 	/**
 	 * Sets the spellcheck of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setSpellcheck(String spellcheck) throws WrongValueException {
-		setDynamicProperty("spellcheck", spellcheck);
-	};
+	public void setSpellcheck(boolean spellcheck) throws WrongValueException {
+		setDynamicProperty("spellcheck", spellcheck ? Boolean.valueOf(spellcheck) : null);
+	}
 	/**
 	 * Returns the tabindex of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public String getTabindex() {
-		return (String) getDynamicProperty("tabindex");
+	public Integer getTabindex() {
+		return (Integer) getDynamicProperty("tabindex");
 	}
 
 	/**
 	 * Sets the tabindex of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
-	public void setTabindex(String tabindex) throws WrongValueException {
+	public void setTabindex(Integer tabindex) throws WrongValueException {
 		setDynamicProperty("tabindex", tabindex);
-	};
+	}
 	/**
 	 * Returns the title of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public String getTitle() {
@@ -242,11 +280,13 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 
 	/**
 	 * Sets the title of this tag.
+	 * <p>Notice that this attribute refers to the corresponding attribute of the HTML5 specification.
+	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.0.3
 	 */
 	public void setTitle(String title) throws WrongValueException {
 		setDynamicProperty("title", title);
-	};
+	}
 
 	/**
 	 * Returns the tag name.
