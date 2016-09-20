@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.1.201605271518">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.1.201609201242">
     <!--
     SIMPLETYPE
     -->
@@ -917,6 +917,7 @@
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- bandpopup -->
 	<xs:element name="bandpopup" type="bandpopupType" />
@@ -1287,6 +1288,7 @@
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- comboitem -->
 	<xs:element name="comboitem" type="comboitemType" />
@@ -1339,6 +1341,7 @@
 		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attribute name="weekOfYear" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="position" type="PopupPositionAttrType" use="optional" />
 	</xs:complexType>
     <!-- decimalbox -->
 	<xs:element name="decimalbox" type="decimalboxType" />
@@ -1681,6 +1684,7 @@
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
+		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
 	</xs:complexType>
 
     <!-- groupbox -->
@@ -1947,6 +1951,7 @@
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
+		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="pagingPositionAttrType">
 		<xs:union>
@@ -2074,6 +2079,7 @@
 		</xs:sequence>
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="content" type="mediaType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- menubar -->
 	<xs:element name="menubar" type="menubarType" />
@@ -2245,6 +2251,7 @@
 		<xs:attribute name="pageIncrement" type="intType" use="optional" />
 		<xs:attribute name="detailed" type="booleanType" use="optional" />
 		<xs:attribute name="autohide" type="booleanType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- pivottable -->
 	<xs:element name="pivottable" type="pivottableType" />
@@ -2910,6 +2917,7 @@
 		<xs:attribute name="nonselectableTags" type="xs:string" use="optional" />
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
+		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
 	</xs:complexType>
     <!-- treecell -->
 	<xs:element name="treecell" type="treecellType" />
@@ -3169,6 +3177,44 @@
 					<xs:enumeration value="right,center" />
 					<xs:enumeration value="right,bottom" />
 					<xs:enumeration value="parent" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="PopupPositionAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="before_start" />
+					<xs:enumeration value="before_center" />
+					<xs:enumeration value="before_end" />
+					<xs:enumeration value="after_start" />
+					<xs:enumeration value="after_center" />
+					<xs:enumeration value="after_end" />
+					<xs:enumeration value="start_before" />
+					<xs:enumeration value="start_center" />
+					<xs:enumeration value="start_after" />
+					<xs:enumeration value="end_before" />
+					<xs:enumeration value="end_center" />
+					<xs:enumeration value="end_after" />
+					<xs:enumeration value="overlap" />
+					<xs:enumeration value="top_left" />
+					<xs:enumeration value="top_center" />
+					<xs:enumeration value="overlap_end" />
+					<xs:enumeration value="top_right" />
+					<xs:enumeration value="middle_left" />
+					<xs:enumeration value="middle_center" />
+					<xs:enumeration value="middle_right" />
+					<xs:enumeration value="overlap_before" />
+					<xs:enumeration value="bottom_left" />
+					<xs:enumeration value="bottom_center" />
+					<xs:enumeration value="overlap_after" />
+					<xs:enumeration value="bottom_right" />
+					<xs:enumeration value="at_pointer" />
+					<xs:enumeration value="after_pointer" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
