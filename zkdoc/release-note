@@ -78,6 +78,7 @@ ZK 8.0.3
   ZK-3311: Native scrollbar is not the default setting for mobile browsers
   ZK-3201: Zk Java 8  BinderImpl returns error on @Command @Override two methods error, make difficult DRY
   ZK-3283: InaccessibleWidgetService misses to block events
+  ZK-3333: tbeditor is missing binding annotations in lang-addon.xml
 
 * Upgrade Notes
 
