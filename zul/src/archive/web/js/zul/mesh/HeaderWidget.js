@@ -135,6 +135,14 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
 			this.updateMesh_('visible', visible);
+			//ZK-3332 update server side component width
+			var mesh = this.getMeshWidget();
+			if (mesh && mesh.desktop && !this._hflexWidth && this.getWidth())
+				this.parent.fire('onColSize', {
+					index: zk(this.$n()).cellIndex(),
+					column: this,
+					width: this.isVisible() ? this._width : '-1'
+				}, null, 0);
 		}
 	},
 	getTextNode: function () {
