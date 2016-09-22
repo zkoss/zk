@@ -17,6 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ColSizeEvent;
@@ -73,13 +74,23 @@ public abstract class HeadersElement extends XulElement {
 		if (cmd.equals(ZulEvents.ON_COL_SIZE)) {
 			((MeshElement) this.getParent()).setSpan(false); //clear span
 			((MeshElement) this.getParent()).setSizedByContent(false); //clear sizedByContent
+			//ZK-3332: update single column width if widths was not given
+			List<String> wdlist = (List<String>) request.getData().get("widths");
 			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
-			int j = 0;
-			for (Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
-				final HeaderElement header = (HeaderElement) it.next();
-				header.setWidthByClient(evt.getWidth(j));
+			if (wdlist == null) {
+				final HeaderElement header = (HeaderElement) evt.getColumn();
+				header.setWidthByClient(evt.getWidth());
 				if (header.getHflex() != null) {
 					header.setHflexByClient(null);
+				}
+			} else {
+				int j = 0;
+				for (Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
+					final HeaderElement header = (HeaderElement) it.next();
+					header.setWidthByClient(evt.getWidth(j));
+					if (header.getHflex() != null) {
+						header.setHflexByClient(null);
+					}
 				}
 			}
 			Events.postEvent(evt);
