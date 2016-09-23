@@ -291,6 +291,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	onSize: function () {
 		zul.inp.RoundUtl.onSize(this);
+		if (this.isOpen())
+			_reposition(this, true);
 	},
 	/** Returns the Time format of the specified format
 	 * @return String
@@ -451,7 +453,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.listen({onSize: this, onScroll: this, onShow: this});
+		zWatch.listen({onSize: this, onScroll: this, onShow: this, onSize: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
@@ -464,7 +466,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._inplace) this.domUnlisten_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.unlisten({onSize: this, onScroll: this, onShow: this});
+		zWatch.unlisten({onSize: this, onScroll: this, onShow: this, onSize: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {

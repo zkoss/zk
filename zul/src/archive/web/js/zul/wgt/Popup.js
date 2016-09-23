@@ -345,7 +345,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Popup, 'bind_', arguments);
-		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this});
+		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this, onSize: this});
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -357,9 +357,25 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._openInfo)
 			this._openInfo = null;
 		this._shallToggle = null;
-		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this});
+		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this, onSize: this});
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
+	},
+	onSize: function () {
+		this.reposition();
+	},
+	/** Reposition popup
+	 * @since 8.0.3
+	 */
+	reposition: function () {
+		var openInfo = this._openInfo;
+		//once opened
+		if (openInfo) {
+			//openInfo: ref, offset, position, opts
+			var posInfo = this._posInfo(openInfo[0], openInfo[1], openInfo[2]);
+			if (posInfo)
+				jq(this.$n()).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
+		}
 	},
 	onShow: function (ctl) {
 		//bug 3034505: call children's onShow to calculate the height first

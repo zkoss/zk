@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3334.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Sep 21 12:00:42 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div width="100%">
+        <label multiline="true"><![CDATA[
+                1. Open the popup of bandbox, and resize the browser. The popup should move to the correct position.
+                2. Open the popup of combobox, and resize the browser. The popup should move to the correct position.
+                3. Open the popup of chosenbox, and resize the browser. The popup should move to the correct position.
+                4. Open the popup of datebox, and resize the browser. The popup should move to the correct position.
+                5. Open the popup of menu, and resize the browser. The popup should move to the correct position.
+                6. Focus the textbox and focus out. You should see the error box appear.
+                7. Resize the browser, then the error box should move to the correct position.
+            ]]>
+        </label>
+        <window id="exampleWindow" hflex="1" vflex="1" border="normal">
+            <div align="right">
+                <textbox id="text" constraint="no empty" />
+                <zscript><![CDATA[
+                    String[] languages = {"Ada","Basic","C","C++","CSS","Cobol","Forth","Fortran",
+                    "Go","Groovy","Haskell","HTML","Java","JavaScript","Lisp","Python","Ruby",
+                    "Scala","Scheme"};
+                    ListModelList model = new ListModelList(languages);
+                ]]></zscript>
+                <bandbox id="bd" mold="rounded" autodrop="true">
+                    <bandpopup>
+                        <listbox height="250px" width="450px" mold="paging" autopaging="true"
+                                 onSelect="bd.value=self.selectedItem.label; bd.close();">
+                            <listhead>
+                                <listheader label="Programming Languages" />
+                            </listhead>
+                            <listitem label="${each}" forEach="${languages}" />
+                        </listbox>
+                    </bandpopup>
+                </bandbox>
+                <combobox model="${model}" />
+                <chosenbox model="${model}" />
+                <datebox />
+                <menubar id="menubar">
+                    <menu label="File">
+                        <menupopup>
+                            <menuitem label="New" />
+                            <menuitem label="Open" />
+                            <menuitem label="Save" />
+                            <menuseparator />
+                            <menuitem label="Exit" />
+                        </menupopup>
+                    </menu>
+                </menubar>
+            </div>
+        </window>
+    </div>
+</zk>

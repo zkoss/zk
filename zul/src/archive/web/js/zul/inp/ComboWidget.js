@@ -73,6 +73,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	onSize: function () {
 		zul.inp.RoundUtl.onSize(this);
+		if (this._open) {
+			var pp = this.getPopupNode_();
+			if (pp)
+				this._checkPopupSpaceAndPosition(pp, this.getInputNode());
+		}
 	},
 
 	onFloatUp: function (ctl) {
