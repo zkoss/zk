@@ -81,6 +81,7 @@ ZK 8.0.3
   ZK-3333: tbeditor is missing binding annotations in lang-addon.xml
   ZK-3332: Flex problem in grid after resizing a column
   ZK-3334: Popup doesn't follow target component
+  ZK-3326: Bandbox unexpected onChanging event
 
 * Upgrade Notes
 

@@ -46,7 +46,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//Note: "this" is available here
 		var inp = this.getInputNode(),
 			val = this.valueEnter_ || inp.value;
-		if (this._lastChg != val) {
+		if (this._lastChg != null && this._lastChg != val) {
 			this._lastChg = val;
 			var valsel = this.valueSel_;
 			this.valueSel_ = null;
