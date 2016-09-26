@@ -1382,8 +1382,8 @@ zk.$intercepts(zul.inp.Combobox, {
 	 * <li>context.result - the return value of the widget function.</li>
 	 * <li>context.args - the original arguments in the function of widget, you could update it for calling the original method.</li>
 	 * </ul>
-	 * @param targetClass the destination object to override
-	 * @param interceptor the interceptor map corresponds to the widget methods
+	 * @param Class targetClass the destination object to override
+	 * @param Object interceptor the interceptor map corresponds to the widget methods
 	 * @since 8.0.3
 	 */
 	$intercepts: function (targetClass, interceptor) {

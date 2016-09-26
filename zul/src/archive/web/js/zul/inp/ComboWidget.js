@@ -40,7 +40,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		 */
 		autodrop: null,
 		/** Returns the width of the popup of this component.
-		 * @return string
+		 * @return String
 		 * @since 8.0.3
 		 */
 		/**
@@ -48,7 +48,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		 * If the input is a percentage, the popup width will be calculated by multiplying the width of this component with the percentage.
 		 * (e.g. if the input string is 130%, and the width of this component is 300px, the popup width will be 390px = 300px * 130%)
 		 * Others will be set directly.
-		 * @param string the width of the popup of this component
+		 * @param String width of the popup of this component
 		 * @since 8.0.3
 		 */
 		popupWidth: function (v) {
