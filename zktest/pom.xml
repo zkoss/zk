@@ -390,7 +390,16 @@
             <version>1.4.01</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.easymock/easymock -->
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.4</version>
+		</dependency>
+
+
+	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
