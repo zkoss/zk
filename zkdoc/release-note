@@ -1,5 +1,6 @@
    --------
 ZK 8.0.3
+Sep 27, 2016
 * Features
   ZK-3176: Add a disable attribut to Menu
   ZK-3144: simplify switching between flex and fixed width
