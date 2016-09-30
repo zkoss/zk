@@ -13,20 +13,22 @@ B80-ZK-3257.zul
 Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
-<label multiline="true">
-	in IE, click first menu, it should not overlap each other menu
-</label>
-<menubar>
-	<menu label="First Menu">
-		<menupopup>
-			<menuitem label="SOME OTHER ITEM" />
-			<menuitem label="some item" />
-		</menupopup>
-	</menu>
-	<menu label="2nd menu">
-		<menupopup>
-			<menuitem label="SOME OTHER ITEM" />
-			<menuitem label="some item" />
-		</menupopup>
-	</menu>
-</menubar>
+<zk>
+	<label multiline="true">
+		in IE, click first menu, it should not overlap each other menu
+	</label>
+	<menubar>
+		<menu label="First Menu">
+			<menupopup>
+				<menuitem label="SOME OTHER ITEM" />
+				<menuitem label="some item" />
+			</menupopup>
+		</menu>
+		<menu label="2nd menu">
+			<menupopup>
+				<menuitem label="SOME OTHER ITEM" />
+				<menuitem label="some item" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>
