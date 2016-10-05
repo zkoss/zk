@@ -4,6 +4,8 @@ and mobile applications.
 
 ##Resources
 
+[![Join the chat at https://gitter.im/zkoss/zk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zkoss/zk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ###Documentation
 
 * [Tutorial](http://books.zkoss.org/wiki/ZK_Getting_Started/Tutorial)
