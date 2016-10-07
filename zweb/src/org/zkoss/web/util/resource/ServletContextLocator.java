@@ -34,12 +34,13 @@ public class ServletContextLocator implements Locator {
 	private final ServletContext _ctx;
 	private final String _dir, _prefix;
 	private final boolean _acceptURL;
+	private final String _externalPrefix;
 
 	/** Constructor.
 	 * A short cut of ServletContextLocator(ctx, null, null, false)
 	 */
 	public ServletContextLocator(ServletContext ctx) {
-		this(ctx, null, null, false);
+		this(ctx, null, null, false, null);
 	}
 
 	/** Constructor.
@@ -50,24 +51,31 @@ public class ServletContextLocator implements Locator {
 	 * @since 5.0.7
 	 */
 	public ServletContextLocator(ServletContext ctx, boolean acceptURL) {
-		this(ctx, null, null, acceptURL);
+		this(ctx, null, null, acceptURL, null);
 	}
 
 	/** Constructor.
-	 * A short of ServletContextLocator(ctx, dir, null, false).
+	 * A short of ServletContextLocator(ctx, dir, null, false, null).
 	 * @param dir the directory used when relative path is specified
 	 * (for {@link #getResource} and {@link #getResourceAsStream}).
 	 * It must be null, empty, or starts with /.
 	 */
 	public ServletContextLocator(ServletContext ctx, String dir) {
-		this(ctx, dir, null, false);
+		this(ctx, dir, null, false, null);
 	}
 
 	/** Constructor.
-	 * A short cut of ServletContextLocator(ctx, dir, prefix, false).
+	 * A short cut of ServletContextLocator(ctx, dir, prefix, false, null).
 	 */
 	public ServletContextLocator(ServletContext ctx, String dir, String prefix) {
-		this(ctx, dir, prefix, false);
+		this(ctx, dir, prefix, false, null);
+	}
+
+	/** Constructor.
+	 * A short cut of ServletContextLocator(ctx, dir, prefix, acceptURL, null).
+	 */
+	public ServletContextLocator(ServletContext ctx, String dir, String prefix, boolean acceptURL) {
+		this(ctx, dir, prefix, acceptURL, null);
 	}
 
 	/** Constructor.
@@ -87,7 +95,7 @@ public class ServletContextLocator implements Locator {
 	 * ftp://) are accepted. In other words, {@link Servlets#getResource}
 	 * will be used.
 	 */
-	public ServletContextLocator(ServletContext ctx, String dir, String prefix, boolean acceptURL) {
+	public ServletContextLocator(ServletContext ctx, String dir, String prefix, boolean acceptURL, String externalPrefix) {
 		if (ctx == null)
 			throw new IllegalArgumentException("null");
 		if (dir != null) {
@@ -119,6 +127,7 @@ public class ServletContextLocator implements Locator {
 		_dir = dir;
 		_prefix = prefix;
 		_acceptURL = acceptURL;
+		_externalPrefix = externalPrefix;
 	}
 
 	/** Returns the servlet context. */
@@ -129,7 +138,7 @@ public class ServletContextLocator implements Locator {
 	private String fixName(String name, boolean prefix) {
 		name = name.length() > 0 && name.charAt(0) != '/'
 				? _dir != null ? _dir + name : prefix && _prefix != null ? '/' + name : name : name;
-		return prefix && _prefix != null ? _prefix + name : name;
+		return prefix && _prefix != null ? _prefix + name : (_externalPrefix == null ?  "" : _externalPrefix) + name;
 	}
 
 	//-- Locator --//
