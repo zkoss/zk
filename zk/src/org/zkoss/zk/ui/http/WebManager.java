@@ -198,7 +198,7 @@ public class WebManager {
 		if (s != null && s.length() > 0) {
 			if (s.charAt(0) != '/')
 				s = '/' + s;
-			_cwr.setExtraLocator(new ServletContextLocator(_ctx, null, s)); //for safety, not accept URL
+			_cwr.setExtraLocator(new ServletContextLocator(_ctx, null, s, false, ClassWebResource.PATH_PREFIX)); //for safety, not accept URL
 		}
 
 		String[] labellocs = config.getLabelLocations();
