@@ -36,8 +36,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.bind.Version</version-class>
-		<version-uid>7.0.8</version-uid>
-		<zk-version>7.0.8</zk-version><!-- or later -->
+		<version-uid>7.0.8.1</version-uid>
+		<zk-version>7.0.8.1</zk-version><!-- or later -->
 	</version>
 
 	<zscript language="Java">
