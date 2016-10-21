@@ -21,11 +21,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
         <button id="trigger" label="fails"/>
         <button id="trigger2" label="works"/>
 
-        <div fulfill="trigger.onClick" style="border: 1px solid red">
+        <div id="d1" fulfill="trigger.onClick" style="border: 1px solid red">
             <apply template="mainContent" templateName="contentTemplateFails"/>
         </div>
 
-        <div fulfill="trigger2.onClick" style="border: 1px solid green">
+        <div id="d2" fulfill="trigger2.onClick" style="border: 1px solid green">
             <apply template="mainContent" templateName="contentTemplateWorks"/>
         </div>
 
