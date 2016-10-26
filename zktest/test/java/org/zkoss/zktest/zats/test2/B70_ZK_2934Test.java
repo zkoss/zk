@@ -22,7 +22,6 @@ public class B70_ZK_2934Test extends WebDriverTestCase {
     @Test
     public void test() {
 		connect();
-		click(jq(".z-page"));
 		waitResponse(true);
 		assertEquals(getEval("zk.currentFocus.uuid"), jq("@button").get(1).get("id"));
     }

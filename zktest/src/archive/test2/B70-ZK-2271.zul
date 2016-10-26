@@ -15,7 +15,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	Please click the button, and then it should not show any JS error.
-    <button label="Invalidate Listheader" onClick="listhead.invalidate()"/>
+    <button id="btn" label="Invalidate Listheader" onClick="listhead.invalidate()"/>
     <listbox>
        <listhead id="listhead">
            <listheader label="Column 1" hflex="min"/>

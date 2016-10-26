@@ -27,7 +27,7 @@ public class B80_ZK_3284Test extends WebDriverTestCase{
     public void test() {
         connect();
         click(jq(".z-bandbox-button"));
-        waitResponse();
+        waitResponse(true);
         Assert.assertEquals("bandbox focused", jq("@label:eq(1)").text().trim());
     }
 }
