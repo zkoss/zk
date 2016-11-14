@@ -351,25 +351,27 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				Cookie[] cookies = ((HttpServletRequest) Executions.getCurrent().getNativeRequest()).getCookies();
 				String[] matchMedias = null;
 				JSONObject args = new JSONObject();
-				for (Cookie c : cookies) {
-					// ZKMatchMeida and ZKClientInfo are both refer to the cookie names in Binder.js
-					String name = c.getName();
-					String value = c.getValue();
-					if ("ZKMatchMedia".equals(name)) {
-						matchMedias = value.trim().split(",");
-					} else if ("ZKClientInfo".equals(name)) {
-						args.put(BinderCtrl.CLIENT_INFO, JSONValue.parse(value));
-					}
-					if (matchMedias != null && args.size() != 0) {
-						if (!matchMedias[0].isEmpty()) {
-							for (String s : matchMedias) {
-								if (!_matchMediaValues.containsKey(s))
-									continue;
-								final Event evt = new Event(ON_POST_COMMAND, _dummyTarget, new Object[] { s, args });
-								Events.postEvent(-1, evt);
-							}
+				if (cookies != null) {
+					for (Cookie c : cookies) {
+						// ZKMatchMeida and ZKClientInfo are both refer to the cookie names in Binder.js
+						String name = c.getName();
+						String value = c.getValue();
+						if ("ZKMatchMedia".equals(name)) {
+							matchMedias = value.trim().split(",");
+						} else if ("ZKClientInfo".equals(name)) {
+							args.put(BinderCtrl.CLIENT_INFO, JSONValue.parse(value));
 						}
-						break;
+						if (matchMedias != null && args.size() != 0) {
+							if (!matchMedias[0].isEmpty()) {
+								for (String s : matchMedias) {
+									if (!_matchMediaValues.containsKey(s))
+										continue;
+									final Event evt = new Event(ON_POST_COMMAND, _dummyTarget, new Object[] { s, args });
+									Events.postEvent(-1, evt);
+								}
+							}
+							break;
+						}
 					}
 				}
 			}
