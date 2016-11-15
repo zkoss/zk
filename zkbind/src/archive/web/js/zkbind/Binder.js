@@ -11,7 +11,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 */
 (function () {
 	var _WidgetX = {},
-		_zkMatchMediaRegexPattern = /ZKMatchMedia=[^;]*/,
+		_zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
 		_portrait = {'0': true, '180': true}, //default portrait definition
 		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 		_initDefault = _portrait[window.orientation]; //default orientation
@@ -107,11 +107,11 @@ zkbind.$ = function (n, opts) {
 			// $ZKCLIENTINFO$ refers to CLIENT_INFO string in BinderCtrl.java
 			binder.command(value, {'$ZKCLIENTINFO$': ci});
 			if (!cookies.$contains(value)) cookies.push(value);
-			document.cookie = 'ZKMatchMedia=' + cookies;
-			document.cookie = 'ZKClientInfo=' + JSON.stringify(ci);
+			document.cookie = 'ZKMatchMedia=' + encodeURIComponent(cookies);
+			document.cookie = 'ZKClientInfo=' + encodeURIComponent(JSON.stringify(ci));
 		} else {
 			cookies.$remove(value);
-			document.cookie = 'ZKMatchMedia=' + cookies;
+			document.cookie = 'ZKMatchMedia=' + encodeURIComponent(cookies);
 		}
 	}
 /**
@@ -127,9 +127,12 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		//ZK-3133
 		if (widget['$ZKMATCHMEDIA$']) {
 			var cookies = [];
-			matched = document.cookie.match(_zkMatchMediaRegexPattern);
-			if (matched && !matched[0].trim().endsWith('='))
-				cookies = matched[0].split('=')[1].split(',');
+			if (matched = _zkMatchMediaRegexPattern.exec(document.cookie)) {
+				var m = matched[1];
+				if (m) {
+					cookies = decodeURIComponent(m).trim().split(',');
+				}
+			}
 			this._cookies = cookies;
 			var binder = this;
 			var mqls = [];
