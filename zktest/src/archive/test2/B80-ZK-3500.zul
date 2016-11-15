@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3338.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 15 12:08:40 CST 2016, Created by Jack Wei
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+
+    <zscript>
+    ListModelList model = new ListModelList();
+    model.add("a");
+    model.add("b");
+    </zscript>
+    
+    <label multiline="true"><attribute name="value"><![CDATA[
+1. type 'a' and press enter:
+'a' should be added.
+
+2. type 'aa' and press enter QUICKLY:
+drop down list will update and 'aa' will be added.
+
+Wrong Case:
+(1) 'aa' is not added if enter was pressed before drop down list updated.
+(2) following (1), pressing enter (even multiple times) has no effect now.
+
+    ]]></attribute></label>
+    <space orient="horizontal" />
+
+    <chosenbox id="lbxThree" width="440px" creatable="true" model="${model}"
+        emptyMessage=" Please select some items." separator=","
+        noResultsText=" No such item - {0} - and it is already in the model."
+    createMessage=" No such item -{0} - but it is not in model either, you can try to create it." 
+        >
+        <attribute name="onSearch">
+            Object obj = event.getValue();
+            lbxThree.getModel().add(obj);
+            self.addItemToSelection(obj);
+        </attribute>
+    </chosenbox>
+</zk>
