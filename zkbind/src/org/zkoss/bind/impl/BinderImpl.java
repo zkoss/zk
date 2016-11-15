@@ -13,9 +13,11 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -356,6 +358,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 						// ZKMatchMeida and ZKClientInfo are both refer to the cookie names in Binder.js
 						String name = c.getName();
 						String value = c.getValue();
+						try {
+							value = URLDecoder.decode(value, "UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							_log.error("Failed to decode cookie " + name, e);
+							continue;
+						}
 						if ("ZKMatchMedia".equals(name)) {
 							matchMedias = value.trim().split(",");
 						} else if ("ZKClientInfo".equals(name)) {
