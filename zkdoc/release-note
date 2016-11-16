@@ -5,6 +5,7 @@ ZK 8.0.4
 * Bugs
   ZK-3338: @MatchMedia: NPE in BinderImpl if cookies are null
   ZK-3339: @MatchMedia uses invalid cookie syntax, cause error run-jetty-run
+  ZK-3346: popups not closing in older FF versions
   ZK-3518: Drag Groupbox's content doesn't give "droppable" effect in Firefox
 
 * Upgrade Notes
