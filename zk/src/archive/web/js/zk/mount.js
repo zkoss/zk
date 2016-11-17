@@ -595,13 +595,16 @@ jq(function () {
 
 		var target = evt.domTarget,
 			body = document.body,
-			old = zk.currentFocus;
+			old = zk.currentFocus,
+			// B80-ZK-3346: offset is not used on Firefox before version 3.8
+			evtX = (evt.domEvent.offsetX == undefined) ? evt.domEvent.originalEvent.layerX - jq(evt.domTarget).position().left : evt.domEvent.offsetX,
+			evtY = (evt.domEvent.offsetY == undefined) ? evt.domEvent.originalEvent.layerY - jq(evt.domTarget).position().top : evt.domEvent.offsetY;
 		if ((target != body && target != body.parentNode)
-				&& ((!target.clientWidth && !target.clientHeight) || evt.domEvent.offsetX < target.clientWidth && evt.domEvent.offsetY < target.clientHeight)
+				&& ((!target.clientWidth && !target.clientHeight) || evtX < target.clientWidth && evtY < target.clientHeight)
 				&& (evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
-			
+
 		_doEvt(evt);
 		
 		//Bug 2799334, 2635555 and 2807475: need to enforce a focus event (IE only)
