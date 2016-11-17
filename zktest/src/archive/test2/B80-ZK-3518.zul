@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3518.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 17 09:58:42 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (Only in FireFox)
+        1. should see 0 at bottom
+        2. mousedown on the green place, mousemove to the red bordered div and drop it
+        3. 0 should change to 1
+        4. mousedown on the orange place, mousemove to the red bordered div and drop it
+        5. 1 should change to 2
+
+    </label>
+    <hbox xmlns:w="client" width="300px">
+        <vbox droppable="yes" onDrop='lb.setValue((Integer.parseInt(lb.getValue()) + 1).toString())' height="300px">
+            <groupbox mold="3d" draggable="yes" width="150px" height="150px" style="background: green;">
+                <caption label="A" />
+                <div width="100px" style="background: orange;" height="50px">
+                </div>
+                <button label="btn"/>
+            </groupbox>
+            <div style="border: 2px solid red" hflex="1" vflex="1">
+
+            </div>
+        </vbox>
+    </hbox>
+    <label id="lb" value="0"/>
+</zk>
