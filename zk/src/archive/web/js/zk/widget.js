@@ -331,7 +331,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		getDropTarget: function (evt, drag) {
 			var wgt;
 			// Firefox's bug -  https://bugzilla.mozilla.org/show_bug.cgi?id=1259357
-			if ((zk.ff && jq(evt.target).css('overflow') == 'hidden') ||
+			if ((zk.ff && jq(evt.domTarget).css('overflow') == 'hidden') ||
 				// IE 9~11 and Edge may receive a wrong target when dragging with an Image.
 				((zk.ie > 8 || zk.edge) && jq.nodeName(evt.domTarget, 'img'))) {
 				var n = document.elementFromPoint(evt.domEvent.clientX, evt.domEvent.clientY);
