@@ -5,6 +5,7 @@ ZK 7.0.9
 * Bugs
   ZK-3068: A toolbar with a toolbarbutton does not count as a focusable control when giving focus to the first element of a modal window
   ZK-3232: Listbox doesn't keep selection after deselecting an item with org.zkoss.zul.listbox.checkmarkDeselectOthers enabled (true)
+  ZK-3501: slow hover style in bigger listboxes (IE11)
 
 * Upgrade Notes
 
