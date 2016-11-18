@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3501.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 18 16:24:03 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Only in IE11
+        1. run the attached example in IE11 and move the mouse over the rows
+        2. hover style should not be slow and lag behind the mouse
+
+    </label>
+    <zscript><![CDATA[
+        List cellData = Collections.nCopies(50, "cell");
+        List rowData = Collections.nCopies(30, cellData);
+        ListModelList model = new ListModelList(rowData);
+    ]]></zscript>
+    <listbox model="${model}">
+        <listhead>
+            <listheader forEach="${cellData}" label="col-${forEachStatus.index}" width="90px"/>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <custom-attributes rowStatus="${forEachStatus}"/>
+                <listcell forEach="${each}" label="row-${rowStatus.index}-cell-${forEachStatus.index}" />
+            </listitem>
+        </template>
+    </listbox>
+</zk>

@@ -7,6 +7,7 @@ ZK 8.0.4
   ZK-3339: @MatchMedia uses invalid cookie syntax, cause error run-jetty-run
   ZK-3346: popups not closing in older FF versions
   ZK-3518: Drag Groupbox's content doesn't give "droppable" effect in Firefox
+  ZK-3501: slow hover style in bigger listboxes (IE11)
 
 * Upgrade Notes
 
