@@ -64,14 +64,6 @@
 			</c:if>
 			.boxShadow('inset 1px 1px 1px #91AAB7');
 		}
-		input[disabled] + & {
-			&:hover,
-			&:active {
-				border-color: @inputBorderColor;
-				.resetGradient();
-				.boxShadow('none');
-			}
-		}
 	}
 
 	&-disabled {
@@ -102,6 +94,23 @@
 		border-right: 1px solid @inputBorderColor;
 		.borderRadius(@borderRadiusSmall);
 	}
+}
+
+.z-combobox-disabled>.z-combobox-button:hover,
+.z-bandbox-disabled>.z-bandbox-button:hover,
+.z-datebox-disabled>.z-datebox-button:hover,
+.z-timebox-disabled>.z-timebox-button:hover,
+.z-spinner-disabled>.z-spinner-button:hover,
+.z-doublespinner-disabled>.z-doublespinner-button:hover,
+.z-combobox-disabled>.z-combobox-button:active,
+.z-bandbox-disabled>.z-bandbox-button:active,
+.z-datebox-disabled>.z-datebox-button:active,
+.z-timebox-disabled>.z-timebox-button:active,
+.z-spinner-disabled>.z-spinner-button:active,
+.z-doublespinner-disabled>.z-doublespinner-button:active {
+	border-color: @inputBorderColor;
+	.resetGradient();
+	.boxShadow('none');
 }
 
 .z-combobox-input,
