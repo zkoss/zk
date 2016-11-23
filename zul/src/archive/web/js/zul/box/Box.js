@@ -526,7 +526,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			fixedSize = false;
 			if (zkc.isVisible()) {
 				var j = c.id ? c.id.indexOf('-') : 1,
-						cwgt = j < 0 ? zk.Widget.$(c.id) : null;
+					cwgt = j < 0 ? zk.Widget.$(c.id) : null,
+					boxFlexSize = this._hflexsz,
+					clearWidth = zk.chrome && boxFlexSize;
 
 				if (szes && cwgt && !cwgt.$instanceof(zul.box.Splitter) && !cwgt.$instanceof(zul.wgt.Cell)) {
 					++k;
@@ -536,6 +538,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						fixedSize = szes[k].endsWith('px');
 					}
 				}
+				if (clearWidth)
+					n.style.width = '';
 				var offhgh = fixedSize && vert ? zk.parseInt(szes[k]) :
 						zk.ie < 11 && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ?
 						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
@@ -543,6 +547,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					cwdh = offwdh + zkc.marginWidth(),
 					chgh = offhgh + zkc.marginHeight();
 
+				if (clearWidth)
+					n.style.width = jq.px0(boxFlexSize);
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
 					if (cwgt !== child)
