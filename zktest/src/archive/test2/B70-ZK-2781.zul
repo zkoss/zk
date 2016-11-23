@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2781.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 23 17:07:37 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">"Hello" and "ZK" should have the same font color (please inspect css style)
+
+    </label>
+    <grid>
+        <rows>
+            <row>
+                <cell colspan="2" align="center">
+                    <label value="Hello" />
+                </cell>
+                <label value="ZK" />
+            </row>
+        </rows>
+    </grid>
+</zk>
