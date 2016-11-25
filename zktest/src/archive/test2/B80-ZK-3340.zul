@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3340.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 25 17:19:52 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. focus on the bandbox input -> should see 'bandbox focussed:onFocus' in zklog
+		2. type a few chars -> should see 'bandbox changing:onChanging' added in zklog
+		3. open the bandbox dropdown with the bandbox button -> should see 'bandbox focussed:onFocus' added in zklog
+		4. click on the pink-backgrounded place -> should see 'bandbox focussed:onFocus' added in zklog
+		5. click out side the bandbox to close the bandbox -> should see 'bandbox changed:onChange bandbox blurred:onBlur' added in zklog
+
+	</label>
+	<div>
+		<bandbox value="aaa" id="withListbox"
+			onFocus='Clients.log("bandbox focussed:" + event.name)'
+			onBlur='Clients.log("bandbox blurred:" + event.name)'
+			onChange='Clients.log("bandbox changed:" + event.name)'
+			onChanging='Clients.log("bandbox changing:" + event.name)'
+			>
+			<bandpopup width="200px" style="background:pink">
+				<listbox height="100px" width="150px">
+					<listitem label="1" />
+					<listitem label="2" />
+					<listitem label="3" />
+					<listitem label="4" />
+					<listitem label="5" />
+					<listitem label="6" />
+				</listbox>
+			</bandpopup>
+		</bandbox>
+	</div>
+</zk>

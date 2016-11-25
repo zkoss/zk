@@ -33,5 +33,10 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 				zk(pp)._updateProp(['width']);
 			}
 		}
+	},
+	doClick_: function (evt) {
+		if (evt.domTarget == this.$n())
+			this.parent.focus();
+		this.$supers('doClick_', arguments);
 	}
 });
