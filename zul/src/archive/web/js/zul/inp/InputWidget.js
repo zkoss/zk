@@ -956,6 +956,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	beforeCtrlKeys_: function (evt) {
 		this.updateChange_();
+	},
+	shallIgnoreClick_: function (evt) {
+		return this.isDisabled();
 	}
 },{
 	/** The delay for sending the onChanging event (unit: milliseconds).

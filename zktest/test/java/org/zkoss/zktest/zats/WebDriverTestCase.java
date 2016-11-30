@@ -29,9 +29,11 @@ import org.junit.BeforeClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -397,6 +399,19 @@ public abstract class WebDriverTestCase {
 	}
 
 	/**
+	 * Returns the text of zk.log from client side.
+	 */
+	protected boolean isZKLogAvailable() {
+		WebElement log = null;
+		try {
+			log = getWebDriver().findElement(By.id("zk_log"));
+		} catch (NoSuchElementException e) {
+			//do nothing
+		}
+		return log != null;
+	}
+
+	/**
 	 * Closes the zk.log console and removes it.
 	 */
 	protected void closeZKLog() {
@@ -427,6 +442,16 @@ public abstract class WebDriverTestCase {
 	 */
 	protected void click(ClientWidget locator) {
 		toElement(locator).click();
+	}
+
+	/**
+	 * Right clicks upon the given locator.
+	 * @param locator
+	 */
+	protected void rightClick(ClientWidget locator) {
+		Actions act = new Actions(driver);
+		act.contextClick(toElement(locator));
+		act.perform();
 	}
 
 	/**
