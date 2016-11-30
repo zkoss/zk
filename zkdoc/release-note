@@ -12,6 +12,7 @@ ZK 8.0.4
   ZK-2781: [GRID] Label having different color if they are in a cell
   ZK-3298: "Jumping" width in hbox (Chrome)
   ZK-3526: grid/listbox: rod + autosort errors
+  ZK-3519: Inconsistent behavior in disabled input based controls
 
 * Upgrade Notes
 
