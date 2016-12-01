@@ -20,7 +20,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
-	_tabindex: 0,
 	$define: {
 	},
 	//super//
