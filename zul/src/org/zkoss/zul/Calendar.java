@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.mesg.Messages;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
@@ -30,6 +31,7 @@ import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * A calendar.
@@ -52,6 +54,7 @@ public class Calendar extends XulElement {
 	private Date _value;
 	private boolean _weekOfYear;
 	private boolean _showTodayLink = false;
+	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
 
 	/** The name. */
 	private String _name;
@@ -184,6 +187,28 @@ public class Calendar extends XulElement {
 		}
 	}
 
+	/**
+	 * Returns the label of the link that jump to today in day view
+	 * <p>Default: Today
+	 * @since 8.0.4
+	 * @return String
+	 */
+	public String getTodayLinkLabel() {
+		return _todayLinkLabel;
+	}
+
+	/**
+	 * Sets the label of the link that jump to today in day view
+	 * @param todayLinkLabel today link label
+	 * @since 8.0.4
+	 */
+	public void setTodayLinkLabel(String todayLinkLabel) {
+		if (!Objects.equals(_todayLinkLabel, todayLinkLabel)) {
+			_todayLinkLabel = todayLinkLabel;
+			smartUpdate("todayLinkLabel", todayLinkLabel);
+		}
+	}
+
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-calendar" : _zclass;
@@ -220,5 +245,6 @@ public class Calendar extends XulElement {
 		render(renderer, "weekOfYear", _weekOfYear);
 		render(renderer, "value", _value);
 		render(renderer, "showTodayLink", _showTodayLink);
+		render(renderer, "todayLinkLabel", _todayLinkLabel);
 	}
 }

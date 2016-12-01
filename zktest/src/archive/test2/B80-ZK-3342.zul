@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3342.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 29 14:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        1. You should see "Today" in the bottom of Calendar.
+        2. open datebox popup, you should see the date of today in "dd/MM/yyyy" format.
+    </label>
+    <calendar showTodayLink="true" width="200px"/>
+    <datebox showTodayLink="true" todayLinkLabel="" format="HH:mm dd/MM/yyyy" width="200px"/>
+</zk>
