@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3505.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 25 16:55:30 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Left panel, groupbox, window
+		should be able to tab on the caption buttons, but should not be able to tab on the caption label.
+
+		Right panel, groupbox, window
+		should be able to tab on the caption buttons, and also be able to tab on the caption label.
+
+	</label>
+	<vlayout>
+		<hlayout>
+			<panel id="p1" border="normal" collapsible="true" closable="true" maximizable="true">
+				<caption label="Panel with caption"/>
+				<panelchildren>
+					<vlayout>
+						<label value="some content here"></label>
+					</vlayout>
+				</panelchildren>
+			</panel>
+			<panel id="p2" border="normal" collapsible="true" closable="true" maximizable="true">
+				<caption label="Panel with caption" tabindex="0"/>
+				<panelchildren>
+					<vlayout>
+						<label value="some content here"></label>
+					</vlayout>
+				</panelchildren>
+			</panel>
+		</hlayout>
+		<hlayout>
+			<groupbox closable="true">
+				<caption label="Groupbox with caption" />
+				<label value="some content here"></label>
+			</groupbox>
+			<groupbox closable="true">
+				<caption label="Groupbox with caption" tabindex="0"/>
+				<label value="some content here"></label>
+			</groupbox>
+		</hlayout>
+		<hlayout>
+			<window id="w1" border="normal" closable="true" maximizable="true">
+				<caption label="Window with caption" />
+				<label value="some content here"></label>
+			</window>
+			<window id="w2" border="normal" closable="true" maximizable="true">
+				<caption label="Window with caption" tabindex="0"/>
+				<label value="some content here"></label>
+			</window>
+		</hlayout>
+	</vlayout>
+</zk>
