@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2894.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 30 15:00:42 CST 2016, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. open the first nav
+	2. click another nav (same layer)
+	3. the first nav should not be closed
+	</label>
+    <navbar orient="horizontal" autoclose="false">
+        <nav id="nav1" label="Admin" badgeText=">>" onOpen='Clients.log("open event")'>
+            <navitem label="Analysis Hierarchies Administration"/>
+            <navitem label="Fab Layout Administration"/>
+            <navitem label="PULSE Adminstration Client"/>
+            <nav label="PULSE Documentation" badgeText=">>">
+                <navitem label="PULSE Administrators Guide"/>
+                <navitem label="PULSE Integerators Guide"/>
+                <navitem label="PULSE Release Notes"/>
+                <navitem label="PULSE Users Guide"/>
+            </nav>
+        </nav>
+        <navitem id="nav2" label="Sitemap"/>
+        <navitem label="Help"/>
+        <navitem label="About..."/>
+    </navbar>
+</zk>
