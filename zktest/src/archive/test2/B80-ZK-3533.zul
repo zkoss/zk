@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3533.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 1 16:00:12 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        Locale locale = org.zkoss.util.Locales.getLocale("ru");
+        Sessions.getCurrent().setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, locale);
+        Clients.reloadMessages(locale);
+        org.zkoss.util.Locales.setThreadLocal(locale);
+    ]]></zscript>
+	<label multiline="true">
+		1. click on maximize, the icon should change to minimize, also its tooltip
+		2. mouse hover on the restore button, its tooltip should be correct.
+	</label>
+	<vlayout>
+        <panel border="normal" collapsible="true" closable="true" maximizable="true">
+            <caption label="Panel with caption" />
+            <panelchildren>
+                <vlayout>
+                    <label value="some content here"></label>
+                    <label value="some content here"></label>
+                    <label value="some content here"></label>
+                </vlayout>
+            </panelchildren>
+        </panel>
+	</vlayout>
+</zk>
