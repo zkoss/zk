@@ -231,6 +231,9 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 	getTextNode: function () {
 		return this.$n('cnt');
+	},
+	shallIgnoreClick_: function (evt) {
+		return this.isDisabled();
 	}
 });
 

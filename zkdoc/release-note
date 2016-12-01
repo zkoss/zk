@@ -15,6 +15,7 @@ ZK 8.0.4
   ZK-3526: grid/listbox: rod + autosort errors
   ZK-3340: Bandbox: missing onBlur/onChange
   ZK-3505: Caption have a default tabindex of 0
+  ZK-3519: Inconsistent behavior in disabled input based controls
 
 * Upgrade Notes
 
