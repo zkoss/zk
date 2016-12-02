@@ -272,6 +272,21 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._pop) {
 				this._pop.setShowTodayLink(v);
 			}
+		},
+		/**
+		 * Sets the label of the link that jump to today in day view
+		 * @since 8.0.4
+		 * @param String todayLinkLabel
+		 */
+		/**
+		 * Returns the label of the link that jump to today in day view
+		 * @since 8.0.4
+		 * @return String
+		 */
+		todayLinkLabel: function (v) {
+			if (this._pop) {
+				this._pop.setTodayLinkLabel(v);
+			}
 		}
 	},
 	getIconClass_: function () {
@@ -330,7 +345,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	 * @return String
 	 */
 	getDateFormat: function () {
-		return this._format.replace(/[ahKHksm]/g, '');
+		return this._format.replace(/[ahKHksm]*:*(s\.S{1,3})*/g, '').trim();
 	},
 	/** Drops down or closes the calendar to select a date.
 	 */

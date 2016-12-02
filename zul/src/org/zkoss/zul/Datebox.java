@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.mesg.Messages;
 import org.zkoss.text.DateFormats;
 import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
@@ -80,6 +81,7 @@ public class Datebox extends FormatInputElement {
 	private boolean _weekOfYear;
 	private boolean _showTodayLink = false;
 	private String _position = "after_start";
+	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
 
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -937,6 +939,28 @@ public class Datebox extends FormatInputElement {
 
 	}
 
+	/**
+	 * Returns the label of the link that jump to today in day view
+	 * <p>Default: Today
+	 * @since 8.0.4
+	 * @return String
+	 */
+	public String getTodayLinkLabel() {
+		return _todayLinkLabel;
+	}
+
+	/**
+	 * Sets the label of the link that jump to today in day view
+	 * @param todayLinkLabel today link label
+	 * @since 8.0.4
+	 */
+	public void setTodayLinkLabel(String todayLinkLabel) {
+		if (!Objects.equals(_todayLinkLabel, todayLinkLabel)) {
+			_todayLinkLabel = todayLinkLabel;
+			smartUpdate("todayLinkLabel", todayLinkLabel);
+		}
+	}
+
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
 
@@ -1015,5 +1039,6 @@ public class Datebox extends FormatInputElement {
 			renderer.render("localizedSymbols", getRealSymbols(_locale, this));
 
 		render(renderer, "showTodayLink", _showTodayLink);
+		render(renderer, "todayLinkLabel", _todayLinkLabel);
 	}
 }

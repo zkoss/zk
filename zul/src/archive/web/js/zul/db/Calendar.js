@@ -296,8 +296,9 @@ zul.db.Renderer = {
 	 * @since 8.0.0
 	 */
 	todayView: function (wgt, out, localizedSymbols) {
-		var val = zUtl.today(wgt.parent);
-		val = new zk.fmt.Calendar().formatDate(val, wgt.getFormat(), localizedSymbols);
+		var val = wgt.getTodayLinkLabel();
+		if (val == null || val.length == 0)
+			val = new zk.fmt.Calendar().formatDate(zUtl.today(wgt.parent), wgt.getFormat(), localizedSymbols);
 		out.push(val);
 	}
 };
@@ -429,6 +430,19 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	     * @return boolean
 	     */
 		showTodayLink: function () {
+			this.rerender();
+		},
+		/**
+		 * Sets the label of the link that jump to today in day view
+		 * @since 8.0.4
+		 * @param String todayLinkLabel
+		 */
+		/**
+		 * Returns the label of the link that jump to today in day view
+		 * @since 8.0.4
+		 * @return String
+		 */
+		todayLinkLabel: function () {
 			this.rerender();
 		}
 	},
