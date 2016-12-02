@@ -17,6 +17,7 @@ ZK 8.0.4
   ZK-3505: Caption have a default tabindex of 0
   ZK-3519: Inconsistent behavior in disabled input based controls
   ZK-3342: Datebox today link date-format
+  ZK-3533: Message code not found in msgzul
 
 * Upgrade Notes
 
