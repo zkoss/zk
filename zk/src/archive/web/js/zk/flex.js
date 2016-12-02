@@ -315,8 +315,8 @@ zFlex = { //static methods
 			hgh = psz.height,
 			wdh = psz.width,
 			c = p.firstChild,
-			scrWdh;
-		
+			scrWdh,
+			vflexsRe = [];
 		// Bug 3185686, B50-ZK-452
 		if (zkp.hasVScroll()) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
@@ -395,6 +395,7 @@ zFlex = { //static methods
 						hgh -= zFlex.fixMinFlex(cwgt, c, 'h');
 					} else {
 						vflexs.push(cwgt);
+						vflexsRe.push(cwgt);
 						vflexsz += cwgt._nvflex;
 					}
 				} else if (!cwgt || !cwgt.isExcludedVflex_()) {
@@ -405,25 +406,30 @@ zFlex = { //static methods
 				pretxt = false;
 			}
 		}
-		
+
+		// ZK-3411: use local function for setting up height
+		var setHghForVflexChild = function (vfxs, h, lsz) {
+			for (var j = vfxs.length - 1; j > 0; --j) {
+				var cwgt = vfxs.shift(),
+					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0; //cast to integer
+				cwgt.setFlexSize_({height: vsz});
+				cwgt._vflexsz = vsz;
+				if (!cwgt.isExcludedVflex_())
+					lsz -= vsz;
+			}
+			//last one with vflex
+			if (vfxs.length) {
+				var cwgt = vfxs.shift();
+				cwgt.setFlexSize_({height: lsz});
+				cwgt._vflexsz = lsz;
+			}
+		};
+
 		//setup the height for the vflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		var lastsz = hgh = Math.max(hgh, 0);
-		for (var j = vflexs.length - 1; j > 0; --j) {
-			var cwgt = vflexs.shift(),
-				vsz = cwgt.isExcludedVflex_() ? hgh :
-						(cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
-			cwgt.setFlexSize_({height: vsz});
-			cwgt._vflexsz = vsz;
-			if (!cwgt.isExcludedVflex_())
-				lastsz -= vsz;
-		}
-		//last one with vflex
-		if (vflexs.length) {
-			var cwgt = vflexs.shift();
-			cwgt.setFlexSize_({height: lastsz});
-			cwgt._vflexsz = lastsz;
-		}
+		setHghForVflexChild(vflexs, hgh, lastsz);
+
 		//3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
 		//vertical scrollbar might disappear after height was set
 		var newpsz = wgt.getParentSize_(p);
@@ -447,7 +453,14 @@ zFlex = { //static methods
 			cwgt.setFlexSize_({width: lastsz});
 			cwgt._hflexsz = lastsz;
 		}
-		
+
+		// ZK-3411: height need to be reset if the horizontal scrollbar disappeared
+		if (newpsz.height > psz.height) {   //horizontal scrollbar disappeared
+			hgh += (newpsz.height - psz.height);
+			lastsz = hgh = Math.max(hgh, 0);
+			setHghForVflexChild(vflexsRe, hgh, lastsz);
+		}
+
 		//notify parent widget that all of its children with hflex/vflex is done.
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
