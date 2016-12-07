@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3308.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec  1 18:16:50 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click the button "toggle open close", the groups should be closed, and all the group icons should be changed to ">"
+        2. click the button again, the groups should be opened, and all the group icons should be changed to "v"
+
+    </label>
+    <window apply="org.zkoss.zktest.test2.B80_ZK_3308composer">
+        <grid id="grid"/>
+        <button label="toggle open close" id="btn"/>
+    </window>
+</zk>

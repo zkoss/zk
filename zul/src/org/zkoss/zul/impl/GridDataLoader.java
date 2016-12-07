@@ -117,6 +117,9 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 			RowRenderer renderer = null;
 			final Component next = min < oldsz ? rows.getChildren().get(min) : null;
+			Group g = (Group) rows.getChildren().get(min - 1);
+			if (!g.isOpen())
+				g.setOpen(true);
 			while (--cnt >= 0) {
 				if (renderer == null)
 					renderer = (RowRenderer) getRealRenderer();
@@ -149,6 +152,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 				comp.detach();
 				comp = p;
 			}
+			if (((Group) comp).isOpen())
+				((Group) comp).setOpen(false);
 			break;
 
 		default: //CONTENTS_CHANGED
