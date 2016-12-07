@@ -880,6 +880,17 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	},
 	//watch//
 	onResponse: _zkf,
+	onCommandReady: function () {
+		if (this.desktop && this._shallSize) {
+			this._shallSize = false;
+			for (var w = this.firstChild; w; w = w.nextSibling) {
+				if (w._nvflex || w._nhflex) {
+					zUtl.fireSized(this);
+					break;
+				}
+			}
+		}
+	},
 	onShow: function (ctl) {
 		var w = ctl.origin;
 		if (this != w && this._mode != 'embedded'
@@ -1080,7 +1091,12 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		cls += ' ' + this.$s(this._mode);
 		return cls;
 	},
-
+	onChildVisible_: function (child) {
+		this.$supers('onChildVisible_', arguments);
+		if (this.desktop) {
+			this._shallSize = true;
+		}
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption)) {
@@ -1093,6 +1109,9 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (child == this.caption) {
 			this.caption = null;
 			this.rerender(this._skipper); // B50-ZK-275
+		}
+		if (this.desktop) {
+			this._shallSize = true;
 		}
 	},
 	insertChildHTML_: function (child, before, desktop) {
@@ -1137,6 +1156,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			jq.onzsync(this); //sync shadow if it is implemented with div
 			zWatch.listen({onResponse: this});
 		}
+		zWatch.listen({onCommandReady: this});
 	},
 	detach: function () {
 		// ZK-2247: remove iframe to prevent load twice
@@ -1188,7 +1208,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			onSize: this,
 			onShow: this,
 			onHide: this,
-			onResponse: this
+			onResponse: this,
+			onCommandReady: this
 		});
 		this.setFloating_(false);
 
