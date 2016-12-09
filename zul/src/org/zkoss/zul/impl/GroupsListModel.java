@@ -393,9 +393,9 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 				init(); //re-initialize the model information
 				boolean open = _gpopens[index];
 				if (open)
-					type = ListDataEvent.INTERVAL_ADDED;
+					type = ListDataEvent.INTERVAL_ADDED_WHEN_GROUPS_OPENED;
 				else
-					type = ListDataEvent.INTERVAL_REMOVED;
+					type = ListDataEvent.INTERVAL_REMOVED_WHEN_GROUPS_CLOSED;
 				j0 = _gpofs[index] + 1;
 				j1 = 0;
 				break;

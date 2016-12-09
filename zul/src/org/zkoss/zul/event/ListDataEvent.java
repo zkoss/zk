@@ -54,6 +54,17 @@ public class ListDataEvent {
 	 */
 	public static final int ENABLE_CLIENT_UPDATE = 12;
 
+	/**
+	 * Identifies the Group open status to update after interval added.
+	 * @since 8.0.4
+	 */
+	public static final int INTERVAL_ADDED_WHEN_GROUPS_OPENED = 13;
+	/**
+	 * Identifies the Group open status to update after interval removed.
+	 * @since 8.0.4
+	 */
+	public static final int INTERVAL_REMOVED_WHEN_GROUPS_CLOSED = 14;
+
 	private final ListModel _model;
 	private final int _type, _index0, _index1;
 

@@ -90,8 +90,11 @@ public class GridDataLoader implements DataLoader, Cropper {
 		final Rows rows = _grid.getRows();
 		final int newsz = event.getModel().getSize(), oldsz = rows == null ? 0 : rows.getChildren().size();
 		int min = event.getIndex0(), max = event.getIndex1(), cnt;
+		boolean shouldUpdateOpenStatus = false;
 
 		switch (event.getType()) {
+		case ListDataEvent.INTERVAL_ADDED_WHEN_GROUPS_OPENED:
+			shouldUpdateOpenStatus = true;
 		case ListDataEvent.INTERVAL_ADDED:
 			cnt = newsz - oldsz;
 			if (cnt <= 0) {
@@ -116,6 +119,9 @@ public class GridDataLoader implements DataLoader, Cropper {
 				min = oldsz;
 
 			RowRenderer renderer = null;
+			if (shouldUpdateOpenStatus) {
+				((Group) rows.getChildren().get(min - 1)).setOpen(true);
+			}
 			final Component next = min < oldsz ? rows.getChildren().get(min) : null;
 			while (--cnt >= 0) {
 				if (renderer == null)
@@ -123,7 +129,8 @@ public class GridDataLoader implements DataLoader, Cropper {
 				rows.insertBefore(newUnloadedItem(renderer, min++), next);
 			}
 			break;
-
+		case ListDataEvent.INTERVAL_REMOVED_WHEN_GROUPS_CLOSED:
+			shouldUpdateOpenStatus = true;
 		case ListDataEvent.INTERVAL_REMOVED:
 			cnt = oldsz - newsz;
 			if (cnt <= 0) {
@@ -148,6 +155,9 @@ public class GridDataLoader implements DataLoader, Cropper {
 				Component p = comp.getPreviousSibling();
 				comp.detach();
 				comp = p;
+			}
+			if (shouldUpdateOpenStatus) {
+				((Group) rows.getChildren().get(min - 1)).setOpen(false);
 			}
 			break;
 
