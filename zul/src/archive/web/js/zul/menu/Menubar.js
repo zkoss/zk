@@ -147,26 +147,21 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		if (zk.ie) // child width (text node) is not integer in IE
 			totalWidth += childs.length;
 
-		var fixedSize = nodeWidth
-			- zk(this.$n('left')).offsetWidth()
-			- zk(this.$n('right')).offsetWidth();
-		if (this._scrolling) {
-			if (totalWidth < nodeWidth) {
-				this._scrolling = false;
-				body.scrollLeft = 0;
-				 //ZK-3094: Scrollable menubar body is not properly resized after container resizing.
-				body.style.width = '';
-			} else {
-				body.style.width = jq.px0(fixedSize);
-				this._fixScrollPos(node);
-			}
-		} else {
-			if (totalWidth >= nodeWidth) {
-				this._scrolling = true;
-				body.style.width = jq.px0(fixedSize);
-			}
+		if (totalWidth >= nodeWidth)
+			this._scrolling = true;
+		else {
+			this._scrolling = false;
+			body.scrollLeft = 0;
+			 //ZK-3094: Scrollable menubar body is not properly resized after container resizing.
+			body.style.width = '';
 		}
 		this._fixButtonPos(node);
+
+		var fixedSize = nodeWidth - zk(this.$n('left')).offsetWidth() - zk(this.$n('right')).offsetWidth();
+		if (this._scrolling) {
+			body.style.width = jq.px0(fixedSize);
+			this._fixScrollPos(node);
+		}
 	},
 	_fixScrollPos: function () {
 		var body = this.$n('body'),
@@ -183,10 +178,10 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			right = this.$n('right'),
 			css = this._scrolling ? 'addClass' : 'removeClass';
 
-		body.style.marginLeft = this._scrolling ? jq.px(left.offsetWidth) : '0';
-		body.style.marginRight = this._scrolling ? jq.px(right.offsetWidth) : '0';
 		left.style.display = right.style.display = this._scrolling ? 'block' : 'none';
 		jq(node)[css](this.$s('scroll'));
+		body.style.marginLeft = this._scrolling ? jq.px(left.offsetWidth) : '0';
+		body.style.marginRight = this._scrolling ? jq.px(right.offsetWidth) : '0';
 	},
 	_forceStyle: function (node, value) {
 		if (zk.parseInt(value) < 0)

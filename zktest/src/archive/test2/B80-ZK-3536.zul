@@ -1,0 +1,129 @@
+<zk>
+    <label>
+        Press the "enlarge width" and "shrink width", then scroll to the right most.
+        You should see the last menuitem displayed normally.
+    </label>
+	<div id="block">
+		<menubar id="bar" orient="horizontal" scrollable="true" hflex="1"
+			sclass="easit-menubar" >
+			<menu label="Organisation">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Kontakt">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="�rende">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Avvikelse">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Projekt">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Inventarie">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Artikel">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Avtal">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="S�lj">
+				<menupopup>
+					<menuitem label="Lista" />
+					<menu
+						label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Easidocs">
+				<menupopup>
+					<menuitem label="Lista"/>
+					<menu label="Ny">
+						<menupopup />
+					</menu>
+				</menupopup>
+			</menu>
+			<menu label="Rapport">
+				<menupopup>
+					<menuitem label="Lista"/>
+					<menuitem label="Portal"/>
+				</menupopup>
+			</menu>
+			<menu label="Ekonomi">
+				<menupopup>
+					<menuitem label="Attest" />
+					<menuitem label="Attestjournal"/>
+					<menuitem label="Periodisk fakturering"/>
+					<menuitem label="Fakturering"/>
+					<menuitem label="Fakturajournal"/>
+					<menuitem label="Transaktionsredovisning" />
+				</menupopup>
+			</menu>
+		</menubar>
+	</div>
+	<button label="enlarge width" onClick="enlarge()"/>
+	<button label="shrink width" onClick="shrink()"/>
+	<zscript><![CDATA[
+public void enlarge(){
+	block.setWidth("1000px");
+	Clients.resize(bar);
+}
+
+public void shrink(){
+	block.setWidth("500px");
+	Clients.resize(bar);
+}
+	]]></zscript>
+</zk>
