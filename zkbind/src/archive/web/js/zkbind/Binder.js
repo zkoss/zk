@@ -88,7 +88,11 @@ zkbind.$ = function (n, opts) {
 	}
 	//ZK-3133
 	function _matchMedia(event, binder, value) {
-		var cookies = binder._cookies;
+		var cookies = binder._cookies,
+			// see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+			encodeRFC5987ValueChars = function (str) {
+				return encodeURIComponent(str).replace(/['()]/g, escape).replace(/\*/g, '%2A').replace(/%(?:7C|60|5E)/g, unescape);
+			};
 		if (event.matches) {
 			var orient = '',
 				dpr = 1;
@@ -107,11 +111,11 @@ zkbind.$ = function (n, opts) {
 			// $ZKCLIENTINFO$ refers to CLIENT_INFO string in BinderCtrl.java
 			binder.command(value, {'$ZKCLIENTINFO$': ci});
 			if (!cookies.$contains(value)) cookies.push(value);
-			document.cookie = 'ZKMatchMedia=' + encodeURIComponent(cookies);
-			document.cookie = 'ZKClientInfo=' + encodeURIComponent(JSON.stringify(ci));
+			document.cookie = 'ZKMatchMedia=' + encodeRFC5987ValueChars(cookies);
+			document.cookie = 'ZKClientInfo=' + encodeRFC5987ValueChars(JSON.stringify(ci));
 		} else {
 			cookies.$remove(value);
-			document.cookie = 'ZKMatchMedia=' + encodeURIComponent(cookies);
+			document.cookie = 'ZKMatchMedia=' + encodeRFC5987ValueChars(cookies);
 		}
 	}
 /**
