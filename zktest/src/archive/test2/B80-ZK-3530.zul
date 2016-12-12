@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3530.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec  7 19:05:21 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Focus the textbox and press [ESC] -> should not have js error at dev tool console
+	<textbox onChanging="" onCancel="self.detach()"/>
+</zk>
