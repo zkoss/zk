@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3508.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec  5 14:34:13 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the first button
+		2. the blue div and the first button should disappear, and should see label "aaa"
+		3. reload this page
+		4. click the second button, and then click the third button
+		5. the blue div should desappear, and should see label "bbb"
+
+	</label>
+	<style>.big { width: 100%;height: 400px; background-color: lightblue}</style>
+	<window apply="org.zkoss.zktest.test2.B80_ZK_3508composer" xmlns:c="client" id="window" style="height:400px">
+		<button id="button">Hide Box, add Element</button>
+		<button id="button1">add Element</button>
+		<button id="button2">remove Box</button>
+		<div class="big" id="bigDiv"></div>
+	</window>
+</zk>

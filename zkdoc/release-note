@@ -20,6 +20,7 @@ ZK 8.0.4
   ZK-3533: Message code not found in msgzul
   ZK-3411: a component's height doesn't fill up its parent with vflex="1" when there is a vertical scrollbar
   ZK-3308: ArrayGroupsModel addopengroup and removeopengroup do not sync with MeshComponent open group status
+  ZK-3508: adding a component with vflex="1" doesn't produce an expected height
 
 * Upgrade Notes
 
