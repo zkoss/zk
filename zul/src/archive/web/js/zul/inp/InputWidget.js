@@ -43,18 +43,20 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
 	}
 	function _onChanging(timeout) {
-		//Note: "this" is available here
-		var inp = this.getInputNode(),
-			val = this.valueEnter_ || inp.value;
-		if (this._lastChg != null && this._lastChg != val) {
-			this._lastChg = val;
-			var valsel = this.valueSel_;
-			this.valueSel_ = null;
-			if (this.isListen('onChanging'))
-				this.fire('onChanging', _onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
-					{ignorable: 1, rtags: {onChanging: 1}}, timeout || 5);
-			if (this._instant)
-				this.updateChange_();
+		if (this.desktop) {
+			//Note: "this" is available here
+			var inp = this.getInputNode(),
+				val = this.valueEnter_ || inp.value;
+			if (this._lastChg != null && this._lastChg != val) {
+				this._lastChg = val;
+				var valsel = this.valueSel_;
+				this.valueSel_ = null;
+				if (this.isListen('onChanging'))
+					this.fire('onChanging', _onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
+						{ignorable: 1, rtags: {onChanging: 1}}, timeout || 5);
+				if (this._instant)
+					this.updateChange_();
+			}
 		}
 	}
 

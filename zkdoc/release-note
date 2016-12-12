@@ -22,6 +22,7 @@ ZK 8.0.4
   ZK-3308: ArrayGroupsModel addopengroup and removeopengroup do not sync with MeshComponent open group status
   ZK-3508: adding a component with vflex="1" doesn't produce an expected height
   ZK-3247: @MatchMedia causes error on Jetty
+  ZK-3530: JS error when detaching during onChanging timer
 
 * Upgrade Notes
 
