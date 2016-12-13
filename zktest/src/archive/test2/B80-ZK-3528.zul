@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3528.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 13 11:54:48 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. focus on any listitem and press "ENTER" -> the model shoul be clear, and the focus should remain in listbox
+        2. press Enter/ESC to trigger the event listeners onOK/onCancel -> should see the corresponding events logged in zklog
+
+    </label>
+    <!-- debugging styles -->
+    <style>
+        .z-focus-a:focus {
+            border: 1px solid red!important;
+            width: 5px!important;
+            height: 5px!important;
+            display: inline-block;
+        }
+    </style>
+    <zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add("aaa");
+		model.add("bbb");
+		model.add("ccc");
+		model.addToSelection(model.get(0));
+		public void log(Event evt) {
+			Clients.log(evt.getName() +  ": " + evt.getTarget().getId());
+		}
+	]]></zscript>
+    <button label="focus dummy 1"/>
+    <div>
+        <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+        <listbox id="lb" model="${model}" height="200px" onClick="self.focus();"
+                 onOK="Clients.log(event.toString())" onCancel="Clients.log(event.toString())">
+            <template name="model">
+                <listitem onOK="model.clear();" label="${each}"/>
+            </template>
+        </listbox>
+    </div>
+    <button label="focus dummy 2"/>
+</zk>
