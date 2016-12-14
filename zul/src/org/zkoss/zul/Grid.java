@@ -53,6 +53,8 @@ import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.event.DataLoadingEvent;
+import org.zkoss.zul.event.GroupsDataEvent;
+import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.PageSizeEvent;
@@ -232,6 +234,7 @@ public class Grid extends MeshElement {
 	private transient ListModel<?> _model;
 	private transient RowRenderer<?> _renderer;
 	private transient ListDataListener _dataListener;
+	private transient GroupsDataListener _groupsDataListener;
 	/** The paging controller, used only if mold = "paging". */
 	private transient Paginal _pgi;
 	/** The paging controller, used only if mold = "paging" and user
@@ -825,6 +828,18 @@ public class Grid extends MeshElement {
 				}
 			};
 		_model.addListDataListener(_dataListener);
+
+		// ZK-3088: for updating group status
+		if (_model instanceof GroupsListModel) {
+			if (_groupsDataListener == null) {
+				_groupsDataListener = new GroupsDataListener() {
+					public void onChange(GroupsDataEvent event) {
+						onGroupsDataChange(event);
+					}
+				};
+			}
+			((GroupsListModel) _model).getGroupsModel().addGroupsDataListener(_groupsDataListener);
+		}
 	}
 
 	/**
@@ -1050,6 +1065,10 @@ public class Grid extends MeshElement {
 			setAttribute(ATTR_ON_PAGING_INIT_RENDERER_POSTED, Boolean.TRUE);
 			Events.postEvent("onPagingInitRender", this, null);
 		}
+	}
+
+	private void onGroupsDataChange(GroupsDataEvent event) {
+		getDataLoader().doGroupsDataChange(event);
 	}
 
 	/** Handles when the list model's content changed.

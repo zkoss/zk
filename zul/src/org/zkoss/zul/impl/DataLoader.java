@@ -18,6 +18,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.ListDataEvent;
 
 /**
@@ -60,6 +61,13 @@ public interface DataLoader {
 	 * Handle event when ListDataEvent is fired from owner component.
 	 */
 	public void doListDataChange(ListDataEvent event);
+
+	/**
+	 * Handle event when GroupsDataEvent is fired from owner component.
+	 * @param event the corresponding GroupsDataEvent
+	 * @since 8.0.4
+	 */
+	public void doGroupsDataChange(GroupsDataEvent event);
 
 	/**
 	 * Returns the total size of the data.

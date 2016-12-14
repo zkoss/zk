@@ -39,6 +39,7 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.RowRendererExt;
 import org.zkoss.zul.Rows;
+import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupingInfo;
 import org.zkoss.zul.ext.Paginal;
@@ -80,6 +81,15 @@ public class GridDataLoader implements DataLoader, Cropper {
 	}
 
 	private int INVALIDATE_THRESHOLD = -1;
+
+	public void doGroupsDataChange(GroupsDataEvent event) {
+		if (event.getType() == GroupsDataEvent.GROUPS_OPENED) {
+			Grid grid = (Grid) getOwner();
+			GroupsListModel groupsListModel = ((GroupsListModel) grid.getModel());
+			int offset = groupsListModel.getGroupOffset(event.getGroupIndex());
+			((Group) grid.getRows().getChildren().get(offset)).setOpen(groupsListModel.getDataInfo(offset).isOpen());
+		}
+	}
 
 	public void doListDataChange(ListDataEvent event) {
 		if (INVALIDATE_THRESHOLD == -1) {
