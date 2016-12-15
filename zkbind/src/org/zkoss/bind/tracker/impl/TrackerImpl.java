@@ -666,12 +666,18 @@ public class TrackerImpl implements Tracker, Serializable {
 		}
 
 		public Set<Object> getEqualBeans(Object bean) {
-			EqualBeans equalBeans = _innerMap.get(bean);
+			Map checkMap1 = _innerMap;
+			Map checkMap2 = _identityMap;
+			if (bean instanceof Collection) {
+				checkMap1 = _identityMap;
+				checkMap2 = _innerMap;
+			}
+			EqualBeans equalBeans = (EqualBeans) checkMap1.get(bean);
 			if (equalBeans == null) { //hashcode might changed
-				equalBeans = _identityMap.remove(bean);
+				equalBeans = (EqualBeans) checkMap2.remove(bean);
 				if (equalBeans != null) { //hashcode is changed
 					syncInnerMap(equalBeans, bean);
-					equalBeans = _identityMap.get(bean);
+					equalBeans = (EqualBeans) checkMap2.get(bean);
 				}
 			}
 			return equalBeans == null ? Collections.emptySet() : equalBeans.getBeans();
