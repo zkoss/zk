@@ -345,7 +345,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	 * @return String
 	 */
 	getDateFormat: function () {
-		return this._format.replace(/[ahKHksm]*:*(s\.S{1,3})*/g, '').trim();
+		return this._format.replace(/[(s\.S{1,3})ahKHksm]*:?/g, '').trim();
 	},
 	/** Drops down or closes the calendar to select a date.
 	 */
