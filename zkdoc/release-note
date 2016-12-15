@@ -25,6 +25,7 @@ ZK 8.0.4
   ZK-3536: A Menuitem cannot display itself completely after shrinking Menubar's width
   ZK-3510: FR - NL localisation improvement
   ZK-3308: ArrayGroupsModel addopengroup and removeopengroup do not sync with MeshComponent open group status
+  ZK-3528: Keyboard events in ROD listbox failing
 
 * Upgrade Notes
 
