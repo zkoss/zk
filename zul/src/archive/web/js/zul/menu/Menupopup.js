@@ -126,8 +126,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 			// ZK-2356 should sync position after calling super.onResponse()
 			if (menu.isTopmost() && ori == 'horizontal' && n)
-				n.style.top = jq.px0(zk.parseInt(n.style.top)
-							+ zk.parseInt(jq(this.getMenubar()).css('paddingBottom')));
+				n.style.top = jq.px0(zk.parseInt(n.style.top));
 
 			while (mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
