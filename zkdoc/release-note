@@ -29,6 +29,7 @@ ZK 8.0.4
   ZK-3514: Multiple rm commands sent on model clear event using ArrayList model
   ZK-3312: Unexpected @load binding triggers
   ZK-3499: Difficult to select menuitem in line wrapped menubar
+  ZK-3517: ForEach cause NoSuchElementException when using ListModel
 
 * Upgrade Notes
 

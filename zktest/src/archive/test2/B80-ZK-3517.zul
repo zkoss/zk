@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3517.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Nov 03 17:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+        <zscript><![CDATA[
+            ListModelList model = new ListModelList(Arrays.asList(new String[] { "David",
+                "Thomas", "Steven", "John", "Henry"}));
+        ]]></zscript>
+		<window id="w" title="ZK-3517" border="normal">
+            <label>You should not see any exception in this page.</label>
+            <separator />
+            <forEach items="${model}" step="2">
+                <label value="${each}"/>
+                <separator />
+            </forEach>
+        </window>
+	</div>
+</zk>
