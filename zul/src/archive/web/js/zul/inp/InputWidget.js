@@ -17,56 +17,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 //zk.$package('zul.inp');
 
 (function () {
-	function _onChangeData(wgt, inf, selbk) {
-		inf.start = zk(wgt.getInputNode()).getSelectionRange()[0];
-		if (selbk) inf.bySelectBack = true;
-		return inf;
-	}
-	function _startOnChanging(wgt) {
-		_stopOnChanging(wgt);
-		wgt._tidChg = setTimeout(
-			wgt.proxy(_onChanging), zul.inp.InputWidget.onChangingDelay);
-	}
-	function _stopOnChanging(wgt, onBlur) {
-		if (wgt._tidChg) {
-			clearTimeout(wgt._tidChg);
-			wgt._tidChg = null;
-		}
-		if (onBlur) {
-			if ((zul.inp.InputWidget.onChangingForced
-				&& wgt.isListen('onChanging')) || wgt._instant)
-				_onChanging.call(wgt, -1); //force
-			_clearOnChanging(wgt);
-		}
-	}
-	function _clearOnChanging(wgt) {
-		wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
-	}
-	function _onChanging(timeout) {
-		if (this.desktop) {
-			//Note: "this" is available here
-			var inp = this.getInputNode(),
-				val = this.valueEnter_ || inp.value;
-			if (this._lastChg != null && this._lastChg != val) {
-				this._lastChg = val;
-				var valsel = this.valueSel_;
-				this.valueSel_ = null;
-				if (this.isListen('onChanging'))
-					this.fire('onChanging', _onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
-						{ignorable: 1, rtags: {onChanging: 1}}, timeout || 5);
-				if (this._instant)
-					this.updateChange_();
-			}
-		}
-	}
-
-	function _clearInplaceTimeout(widget) {
-		if (widget._inplaceTimerId) {
-			clearTimeout(widget._inplaceTimerId);
-			widget._inplaceTimerId = null;
-		}
-	}
-
 	var _keyIgnorable = zk.ie < 11 ? function () {return true;} :
 		zk.opera ? function (code) {
 			return code == 32 || code > 46; //DEL
@@ -411,7 +361,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			value = vi.value;
 		}
 
-		_clearOnChanging(this);
+		this.$class._clearOnChanging(this);
 
 		//Note: for performance reason, we don't send value back if
 		//the validation shall be done at server, i.e., if (vi.server)
@@ -470,7 +420,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		return html;
 	},
-	_onChanging: _onChanging,
+	_onChanging: function (timeout) {
+		this.$class._onChanging(timeout);
+	},
 	_areaText: function () {
 		return zUtl.encodeXML(this.coerceToString_(this._value));
 	},
@@ -518,13 +470,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	doBlur_: function (evt) {
-		_stopOnChanging(this, true);
+		this.$class._stopOnChanging(this, true);
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus)) {
 			this.updateChange_();
 			this.$supers('doBlur_', arguments);
 		}
 		if (this._inplace) {
-			_clearInplaceTimeout(this);
+			this.$class._clearInplaceTimeout(this);
 			if (!this._inplaceIgnore) {
 				var self = this;
 				self._inplaceTimerId = setTimeout(function () {
@@ -795,7 +747,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 			if (upd || vi.server)
 				this.fire('onChange',
-					_onChangeData(this,
+					this.$class._onChangeData(this,
 						data != null ? data : {value: this.marshall_(vi.value)}),
 					vi.server ? {toServer: true} : null, 90);
 		}
@@ -809,7 +761,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 */
 	fireOnChange: function (opts) {
 		this.fire('onChange',
-			_onChangeData(this, {value: this.marshall_(this.getValue())}), opts);
+			this.$class._onChangeData(this, {value: this.marshall_(this.getValue())}), opts);
 	},
 
 	_resetForm: function () {
@@ -869,6 +821,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(n).bind('reset', this.proxy(this._resetForm));
 	},
 	unbind_: function () {
+		this.$class._stopOnChanging(this);
 		this.clearErrorMessage(true);
 
 		var n = this.getInputNode();
@@ -924,7 +877,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return;
 		}
 
-		_stopOnChanging(this); //wait for key up
+		this.$class._stopOnChanging(this); //wait for key up
 
 		this.$supers('doKeyDown_', arguments);
 	},
@@ -940,7 +893,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 
 		if (this.isListen('onChanging') || this._instant)
-			_startOnChanging(this);
+			this.$class._startOnChanging(this);
 
 		this.$supers('doKeyUp_', arguments);
 	},
@@ -983,6 +936,57 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_isInView: function (wgt) {
 		var n = wgt.getInputNode();
 		return zk(n).isRealScrollIntoView(true);
+	},
+	_onChanging: function (timeout) {
+		//Note: "this" is available here
+		if (this.desktop) {
+			var inp = this.getInputNode(),
+				val = this.valueEnter_ || inp.value;
+			if (this._lastChg != null && this._lastChg != val) {
+				this._lastChg = val;
+				var valsel = this.valueSel_;
+				this.valueSel_ = null;
+				if (this.isListen('onChanging'))
+					this.fire('onChanging', zul.inp.InputWidget._onChangeData(this, {value: val}, valsel == val), //pass inp.value directly
+						{ignorable: 1, rtags: {onChanging: 1}}, timeout || 5);
+				if (this._instant)
+					this.updateChange_();
+			}
+		}
+	},
+	_onChangeData: function (wgt, inf, selbk) {
+		inf.start = zk(wgt.getInputNode()).getSelectionRange()[0];
+		if (selbk) inf.bySelectBack = true;
+		return inf;
+	},
+	_startOnChanging: function (wgt) {
+		var inputWidget = zul.inp.InputWidget;
+		inputWidget._stopOnChanging(wgt);
+		wgt._tidChg = setTimeout(
+			wgt.proxy(inputWidget._onChanging), inputWidget.onChangingDelay);
+	},
+	_stopOnChanging: function (wgt, onBlur) {
+		if (wgt._tidChg) {
+			clearTimeout(wgt._tidChg);
+			wgt._tidChg = null;
+		}
+		if (onBlur) {
+			var inputWidget = zul.inp.InputWidget;
+			if ((inputWidget.onChangingForced
+				&& wgt.isListen('onChanging')) || wgt._instant) {
+				inputWidget._onChanging.call(wgt, -1); //force
+			}
+			inputWidget._clearOnChanging(wgt);
+		}
+	},
+	_clearOnChanging: function (wgt) {
+		wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
+	},
+	_clearInplaceTimeout: function (widget) {
+		if (widget._inplaceTimerId) {
+			clearTimeout(widget._inplaceTimerId);
+			widget._inplaceTimerId = null;
+		}
 	}
 });
 
