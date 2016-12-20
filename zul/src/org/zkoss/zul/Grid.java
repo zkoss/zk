@@ -303,12 +303,24 @@ public class Grid extends MeshElement {
 			_model.removeListDataListener(_dataListener);
 			_model.addListDataListener(_dataListener);
 		}
+		if (_groupsDataListener != null) {
+			GroupsModel g = getGroupsModel();
+			if (g != null) {
+				g.addGroupsDataListener(_groupsDataListener);
+				g.removeGroupsDataListener(_groupsDataListener);
+			}
+		}
 	}
 
 	public void onPageDetached(Page page) {
 		super.onPageDetached(page);
 		if (_model != null && _dataListener != null) {
 			_model.removeListDataListener(_dataListener);
+		}
+		if (_groupsDataListener != null) {
+			GroupsModel g = getGroupsModel();
+			if (g != null)
+				g.removeGroupsDataListener(_groupsDataListener);
 		}
 	}
 
@@ -738,6 +750,9 @@ public class Grid extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					GroupsModel g = getGroupsModel();
+					if (g != null)
+						g.removeGroupsDataListener(_groupsDataListener);
 					/* Bug ZK-1512: should clear row anyway
 					if (_model instanceof GroupsListModel)
 						_rows.getChildren().clear();*/
@@ -798,6 +813,9 @@ public class Grid extends MeshElement {
 			//(to save a round trip)
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
+			GroupsModel g = getGroupsModel();
+			if (g != null)
+				g.removeGroupsDataListener(_groupsDataListener);
 			_model = null;
 			if (_rows != null)
 				_rows.getChildren().clear();
@@ -837,7 +855,8 @@ public class Grid extends MeshElement {
 		_model.addListDataListener(_dataListener);
 
 		// ZK-3088: for updating group status
-		if (_model instanceof GroupsListModel) {
+		GroupsModel g = getGroupsModel();
+		if (g != null) {
 			if (_groupsDataListener == null) {
 				_groupsDataListener = new GroupsDataListener() {
 					public void onChange(GroupsDataEvent event) {
@@ -845,7 +864,7 @@ public class Grid extends MeshElement {
 					}
 				};
 			}
-			((GroupsListModel) _model).getGroupsModel().addGroupsDataListener(_groupsDataListener);
+			g.addGroupsDataListener(_groupsDataListener);
 		}
 	}
 

@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var p = this.parent,
 		cnt = this.domContent_(),
-		tabi = this._tabindex ? this._tabindex : 0;
+		tabi = this._tabindex || 0;
 	
 	// ZK-2209: should show correct when caption has child
 	out.push('<div', this.domAttrs_(), '>',
@@ -33,12 +33,12 @@ function (out) {
 	var puuid = p.uuid,
 		picon = p.$s('icon');
 	if (this._isCloseVisible()) {
-		out.push('<div id="', puuid , '-close" class="', picon, ' ', p.$s('close'), '" tabindex="', tabi , '"');
+		out.push('<div id="', puuid , '-close" class="', picon, ' ', p.$s('close'), '" tabindex="', tabi, '"');
 		out.push(' title="', msgzul.PANEL_CLOSE, '"><i class="', p.getClosableIconClass_(), '"></i></div>');
 	}
 	if (this._isMaximizeVisible()) {
 		var maxd = this._maximized;
-		out.push('<div id="', puuid, '-max" class="', picon, ' ', p.$s('maximize'), '" tabindex="', tabi , '"');
+		out.push('<div id="', puuid, '-max" class="', picon, ' ', p.$s('maximize'), '" tabindex="', tabi, '"');
 		if (maxd)
 			out.push(' ', p.$s('maximized'));
 		var maxIcon = maxd ? p.getMaximizedIconClass_() : p.getMaximizableIconClass_();
@@ -46,13 +46,13 @@ function (out) {
 	}
 	if (this._isMinimizeVisible()) {
 		out.push('<div id="', puuid , '-min" class="', picon, ' ',
-				p.$s('minimize'), '" tabindex="', tabi , '"');
+				p.$s('minimize'), '" tabindex="', tabi, '"');
 		out.push(' title="', msgzul.PANEL_MINIMIZE, '"><i class="', p.getMinimizableIconClass_(), '"></i></div>');
 	}
 	if (this._isCollapsibleVisible()) {
 		var openIcon = p._open ? p.getCollapseOpenIconClass_() : p.getCollapseCloseIconClass_();
 		out.push('<div id="', puuid , '-exp" class="', picon, ' ',
-			p.$s('expand'), '" tabindex="', tabi , '"');
+			p.$s('expand'), '" tabindex="', tabi, '"');
 		if (openIcon)
 			out.push(' title="', msgzul.PANEL_COLLAPSE, '"')
 		else
