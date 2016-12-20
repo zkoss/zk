@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3312.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Dec 29 11:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3312VM')">
+		Click the buttons in order a, b, c (--> selected LIST size label should be same as selected SET size label)
+		<separator/>
+		<div>
+			Original list: <label value="@load(vm.originalList)"/> <label value="@load(vm.originalList.size())"/>
+		</div>
+		<separator/>
+		<div>
+			Selected list: <label value="@load(vm.selectedList)"/> <label value="@load(vm.selectedList.size())"/> <!-- this label does not update when original and selected list are equal -->
+			<div>
+				Equal with originalList: <label value="@load(vm.selectedList eq vm.originalList)"/>
+			</div>
+		</div>
+		<separator/>
+		<div>
+			Selected Set: <label value="@load(vm.selectedSet)"/> <label value="@load(vm.selectedSet.size())"/>
+			<div>
+				Equal with originalList: <label value="@load(vm.selectedSet eq vm.originalList)"/>
+			</div>
+		</div>
+		<button label="add item 'a'" onClick="@command('addToSelection', index=0)"/>
+		<button label="add item 'b'" onClick="@command('addToSelection', index=1)"/>
+		<button label="add item 'c'" onClick="@command('addToSelection', index=2)"/>
+        <separator/>
+        Another test: click "remove an item" button and click "notify unrelated list" button, the first listitem of the listbox should be removed.
+        <div>
+            <listbox id="lb" model="@load(vm.originalList)"/>
+            <button label="remove an item" onClick="@command('remove')"/>
+            <button label="notify unrelated list" onClick="@command('refreshCopyList')"/>
+        </div>
+    </div>
+</zk>
