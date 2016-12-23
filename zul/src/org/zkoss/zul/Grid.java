@@ -740,7 +740,7 @@ public class Grid extends MeshElement {
 	 */
 	public void setModel(ListModel<?> model) {
 		//ZK-3514: speed up
-		if (_model != null && !_model.equals(model)) {
+		if (_model != null && _model != model) {
 			int threshold = Utils.getIntAttribute(this, "org.zkoss.zul.invalidateThreshold", 10, true);
 			int diff = Math.abs((model != null ? model.getSize() : 0) - _model.getSize());
 			if (diff > threshold)
