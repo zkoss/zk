@@ -18,15 +18,15 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		1.You should see two items in each component without any exceptions.
 	</label>
 	<div id="d" apply="org.zkoss.zktest.test2.B70_ZK_2682_Composer">
-		<combobox id="combo" />
+		<combobox id="combo" onSelect=""/>
 		<separator />
 		<grid id="gd" />
 		<separator />
-		<listbox id="listb" />
+		<listbox id="listb" onSelect=""/>
 		<separator />
 		<grid id="gdp"/>
 		<separator />
-		<listbox id="listbp"/>
+		<listbox id="listbp" onSelect=""/>
 		<separator />
 	</div>
 </zk>

@@ -24,7 +24,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 ]]></html>
 	<vbox>
 		<hbox>
-			<checkbox id="ok" onClick="" label="ok" autodisable="self, +cancel" />
+			<checkbox id="ok" label="ok" autodisable="self, +cancel" />
 			<checkbox id="cancel" label="cancel" autodisable="self, +ok" />
 		</hbox>
 		<hbox>
