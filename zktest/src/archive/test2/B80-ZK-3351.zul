@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3351.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Dec 22 14:20:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        import org.zkoss.zk.ui.Executions;
+        Executions.getCurrent().setAttribute("3351", "3351");
+    </zscript>
+    <label>
+        Click the button, you should see label "done".
+    </label>
+    <div apply="org.zkoss.bind.BindComposer" />
+    <label id="lb" />
+    <button id="btn" label="click">
+        <attribute name="onClick"><![CDATA[
+             String status = Executions.getCurrent().getDesktop().getAttribute("3351");
+             lb.setValue(status);
+        ]]></attribute>
+    </button>
+</zk>

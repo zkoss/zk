@@ -31,6 +31,7 @@ ZK 8.0.4
   ZK-3499: Difficult to select menuitem in line wrapped menubar
   ZK-3517: ForEach cause NoSuchElementException when using ListModel
   ZK-3534: Function call loop starting at zul.wgt.Popup.close() causes full browser crash on IE11
+  ZK-3351: class caching in BinderImpl
 
 * Upgrade Notes
 

@@ -72,7 +72,7 @@ public class MiscUtil {
 		if (clz != null) {
 			final Object v;
 			try {
-				v = Classes.newInstanceByThread(clz);
+				v = Classes.newInstance(Classes.getContextClassLoader(type).loadClass(clz), null);
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex);
 			}
