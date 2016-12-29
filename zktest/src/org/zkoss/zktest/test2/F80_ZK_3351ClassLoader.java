@@ -8,7 +8,7 @@ import org.zkoss.zk.ui.Executions;
 /**
  * @author jameschu
  */
-public class B80_ZK_3351ClassLoader implements ContextClassLoaderFactory {
+public class F80_ZK_3351ClassLoader implements ContextClassLoaderFactory {
 	@Override
 	public ClassLoader getContextClassLoader(Class<?> reference) {
 		Execution exc = Executions.getCurrent();
