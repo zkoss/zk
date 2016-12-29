@@ -12,7 +12,7 @@ import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Group;
 import org.zkoss.zul.Label;
 
-public class B80_ZK_3351Test extends ZATSTestCase {
+public class F80_ZK_3351Test extends ZATSTestCase {
 	@Test
 	public void test() {
 		DesktopAgent desktop = connect();

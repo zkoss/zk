@@ -712,6 +712,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
     <!-- for B80-ZK-3351 -->
     <library-property>
         <name>org.zkoss.lang.contextClassLoader.class</name>
-        <value>org.zkoss.zktest.test2.B80_ZK_3351ClassLoader</value>
+        <value>org.zkoss.zktest.test2.F80_ZK_3351ClassLoader</value>
     </library-property>
 </zk>
