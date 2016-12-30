@@ -1037,7 +1037,7 @@ public class Servlets {
 	 * {@link #getRequestDispatcher} did.
 	 * <p>Since 5.0.7, file://, http://, https:// and ftp:// are supported.
 	 */
-	public static final URL getResource(ServletContext ctx, String uri) {
+	public static final URL getResource(ServletContext ctx, String uri) throws UnsupportedEncodingException {
 		try {
 			if (uri != null && uri.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://")) {
 				final File file = new File(new URI(uri));
@@ -1050,7 +1050,7 @@ public class Servlets {
 				return url; //unfortunately, we cannot detect if it exists
 			return new ParsedURI(ctx, uri).getResource();
 		} catch (Throwable ex) {
-			log.warn("Ignored: failed to load " + uri, ex);
+			log.warn("Ignored: failed to load " + Encodes.encodeURI(uri), ex);
 			return null; //spec: return null if not found
 		}
 	}
@@ -1073,7 +1073,7 @@ public class Servlets {
 				return url.openStream();
 			return new ParsedURI(ctx, uri).getResourceAsStream();
 		} catch (Throwable ex) {
-			log.warn("Ignored: failed to load " + uri, ex);
+			log.warn("Ignored: failed to load " + Encodes.encodeURI(uri), ex);
 			return null; //spec: return null if not found
 		}
 	}

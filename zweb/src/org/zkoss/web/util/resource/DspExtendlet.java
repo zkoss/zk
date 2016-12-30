@@ -37,6 +37,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 import org.zkoss.web.servlet.dsp.Interpretation;
 import org.zkoss.web.servlet.dsp.Interpreter;
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.xml.XMLs;
 
@@ -81,7 +82,7 @@ public class DspExtendlet implements Extendlet {
 		final Interpretation cnt = _cache.get(path);
 		if (cnt == null) {
 			if (Servlets.isIncluded(request)) {
-				log.error("Failed to load the resource: " + path);
+				log.error("Failed to load the resource: " + Encodes.encodeURI(path));
 				//It might be eaten, so log the error
 				throw new java.io.FileNotFoundException("Failed to load the resource: " + path);
 				//have the includer to handle it
