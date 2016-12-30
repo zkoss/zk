@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.util.resource;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -152,6 +153,8 @@ public class ServletContextLocator implements Locator {
 			return url == null && _prefix != null ? getResource0(fixName(name, false)) : url;
 		} catch (java.net.MalformedURLException ex) {
 			throw new SystemException(ex);
+		} catch (UnsupportedEncodingException e) {
+			throw new SystemException(e);
 		}
 	}
 
@@ -164,7 +167,7 @@ public class ServletContextLocator implements Locator {
 		}
 	}
 
-	private URL getResource0(String path) throws java.net.MalformedURLException {
+	private URL getResource0(String path) throws java.net.MalformedURLException, UnsupportedEncodingException {
 		return _acceptURL ? Servlets.getResource(_ctx, path) : _ctx.getResource(path);
 	}
 

@@ -579,7 +579,7 @@ public class ClassWebResource {
 			if (j >= 0)
 				pi = pi.substring(j);
 			else
-				log.warn("Unknown path info: " + pi);
+				log.warn("Unknown path info: " + Encodes.encodeURI(pi));
 		} else if (_encURLPrefix != null && pi.startsWith(_encURLPrefix)) {
 			final int len1 = pi.length(), len2 = _encURLPrefix.length();
 			if (len1 > len2 && pi.charAt(len2) == '/')
@@ -657,7 +657,7 @@ public class ClassWebResource {
 				//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request))
-					log.error("Resource not found: " + pi);
+					log.error("Resource not found: " + Encodes.encodeURI(pi));
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(pi));
 				return;
 			}
