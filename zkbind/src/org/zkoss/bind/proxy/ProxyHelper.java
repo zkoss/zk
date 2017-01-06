@@ -258,7 +258,10 @@ public class ProxyHelper {
 				node.getCachedSavePropertyBinding().add(new Pair<String, SavePropertyBinding>(property, savePropertyBinding));
 				break;
 			} else {
-				property = parent.getProperty() + property;
+				String parentProperty = parent.getProperty();
+				if (!property.startsWith("[") && parentProperty != null && parentProperty.length() != 0)
+					parentProperty += ".";
+				property = parentProperty + property;
 				node = parent;
 			}
 		}
