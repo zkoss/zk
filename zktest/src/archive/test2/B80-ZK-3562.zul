@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3562.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jan 6 17:25:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3562VM')"
+		validationMessages="@id('vmsgs')">
+		<div form="@id('fx') @load(vm.level1) @save(vm.level1, after='save')">
+			<textbox value="@bind(fx.level2.level3.value)"/>
+		</div>
+		<button id="btn" label="save" onClick="@command('save')"/>
+	</div>
+</zk>
