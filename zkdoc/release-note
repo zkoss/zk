@@ -1,5 +1,6 @@
    --------
 ZK 8.0.4
+Jan 10, 2017
 * Features
   ZK-2894: Navbar supports configurable auto-closing a Nav
   ZK-3351: class loading in BinderImpl
