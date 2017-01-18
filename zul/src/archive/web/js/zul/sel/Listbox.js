@@ -82,7 +82,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		 */
 		emptyMessage: function (msg) {
 			if (this.desktop)
-				jq(this.$n('empty')).html(msg);
+				jq(this.$n('empty')).html(jq('<div/>').text(msg).html());
 		}
 	},
 	$init: function () {
@@ -394,7 +394,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	redrawEmpty_: function (out) {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
 				this.uuid, '-empty" style="display:none">',
-				this._emptyMessage ,'</td></tr></tbody>');
+				jq('<div/>').text(this._emptyMessage).html() ,'</td></tr></tbody>');
 	},
 	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
 		if (child._renderdefer) {

@@ -60,7 +60,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		 */
 		emptyMessage: function (msg) {
 			if (this.desktop)
-				jq(this.$n('empty')).html(msg);
+				jq(this.$n('empty')).html(jq('<div/>').text(msg).html());
 		}
 	},
 	/** Returns the specified cell, or null if not available.
@@ -171,7 +171,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	redrawEmpty_: function (out) {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="'
 				, this.uuid, '-empty" style="display:none">',
-				this._emptyMessage ,'</td></tr></tbody>');
+				jq('<div/>').text(this._emptyMessage).html(),'</td></tr></tbody>');
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Grid, 'bind_', arguments);

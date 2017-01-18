@@ -1,4 +1,13 @@
    --------
+ZK 8.0.5
+* Features
+
+* Bugs
+  ZK-3567: Listbox is vulnerable to XSS attacks
+
+* Upgrade Notes
+
+   --------
 ZK 8.0.4
 Jan 10, 2017
 * Features
