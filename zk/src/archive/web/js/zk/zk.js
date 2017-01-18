@@ -1892,7 +1892,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 		jq('#' + id + ' .errornumbers')
 			.html(++_errcnt + ' Errors');
 		jq('#' + id + ' .messages')
-			.append('<div class="newmessage">' + msg + '</hr></div>');
+			.append('<div class="newmessage">' + jq('<div/>').text(msg).html() + '</hr></div>');
 		jq('#' + id + ' .newmessage')
 			.removeClass('newmessage').addClass('message').slideDown(600);
 	},
