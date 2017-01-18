@@ -274,7 +274,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 			// don't use jq.newHidden() in this case, because the performance is not good.
 			var data = '',
-				tmp = '<input type="hidden" name="' + this._name + '" value="';
+				tmp = '<input type="hidden" name="' + jq('<div/>').text(this._name).html() + '" value="';
 			for (var i = 0, j = this._selItems.length; i < j; i++)
 				data += tmp + this._selItems[i].getValue() + '"/>';
 

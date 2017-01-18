@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3567.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 17 17:14:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window title="You should not see any zk log!" border="normal">
+        <listbox >
+            <listhead>
+                <listheader label="Xss - drag the row to see it burn!"/>
+            </listhead>
+            <listitem height="28px" label="&lt;img src=x onerror=zk.log('xss')&gt;" draggable="true"/>
+            <listitem height="28px" label="&lt;111&gt;" draggable="true"/>
+        </listbox>
+        <listbox emptyMessage="&lt;img src=x onerror=zk.log('xss')&gt;">
+            <listhead sizable="true">
+                <listheader label="Type" width="520px" />
+                <listheader label="Content" hflex="min" />
+                <listheader label="Content" hflex="1" />
+            </listhead>
+        </listbox>
+        <listbox name='"&gt;&lt;img src=x onerror=zk.log("xss")&gt;'>
+            <listitem selected="true"></listitem>
+        </listbox>
+        <grid emptyMessage="&lt;img src=x onerror=zk.log('xss')&gt;">
+            <columns sizable="true">
+                <column label="Type" width="520px" />
+                <column label="Content" hflex="min" />
+                <column label="Content" hflex="1" />
+            </columns>
+        </grid>
+        <button autodisable="self" upload="true,multiple=false,native" tooltiptext='"&gt; &lt;img src=x onerror=zk.log("xss")/&gt;'
+                onUpload="Clients.showNotification(event.getMedia().getName())" label="button with tooltiptext"/>
+    </window>
+</zk>
