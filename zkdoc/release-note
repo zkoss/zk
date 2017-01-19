@@ -4,6 +4,7 @@ ZK 8.0.5
 
 * Bugs
   ZK-3567: Listbox is vulnerable to XSS attacks
+  ZK-3576: forEach element still creates components when you provide an empty list
 
 * Upgrade Notes
 
