@@ -144,7 +144,7 @@ zul.Upload = zk.$extends(zk.Object, {
 			parent = this._parent,
 			ref = wgt.$n(), dt = wgt.desktop,
 			html = '<span class="z-upload"'
-				 + (this._tooltiptext ? ' title="' + jq('<div/>').text(this._tooltiptext).html() + '"' : '') // ZK-751
+				 + (this._tooltiptext ? ' title="' + zUtl.escapeHTMLText(this._tooltiptext) + '"' : '') // ZK-751
 				 + '><form enctype="multipart/form-data" method="POST">'
 				 + '<input name="file" type="file"'
 				// multiple="" for Firefox, multiple for Chrome
