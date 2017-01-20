@@ -362,7 +362,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (msg != null) {
 				jq(document.body).append(
 					'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
-					+ ofs[1] + 'px;left:' + ofs[0] + 'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>&nbsp;' + jq('<div/>').text(msg).html() + '</div></div>');
+					+ ofs[1] + 'px;left:' + ofs[0] + 'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>&nbsp;' + zUtl.escapeHTMLText(msg) + '</div></div>');
 				drag._dragImg = jq('#zk_ddghost-img')[0];
 				return jq('#zk_ddghost')[0];
 			}
