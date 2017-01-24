@@ -26,5 +26,5 @@ public class Version {
 	/**
 	 * Returns the version UID.
 	 */
-	public static final String UID = "8.0.4";
+	public static final String UID = "8.0.4.1";
 }
