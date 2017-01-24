@@ -1,5 +1,6 @@
    --------
-ZK 8.0.5
+ZK 8.0.4.1
+Jan 24, 2017
 * Features
 
 * Bugs
@@ -7,6 +8,7 @@ ZK 8.0.5
   ZK-3576: forEach element still creates components when you provide an empty list
 
 * Upgrade Notes
+  + The two attributes begin/end in ForEach.java must be greater or equal to zero now.
 
    --------
 ZK 8.0.4
