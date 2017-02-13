@@ -218,13 +218,14 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var iterator = this.getMeshWidget().itemIterator();
 		var cnt = 2;
 		var msg;
-		if (!this.isSelected())	return this.getLabel();
+		if (!this.isSelected())	return zUtl.encodeXML(this.getLabel());
 		while (iterator.hasNext()) {
 			var item = iterator.next();
 			if (item.isSelected()) {
 				var label = item.getLabel();
 				if (label.length > 9)
 					label = label.substring(0, 9) + '...';
+				label = zUtl.encodeXML(label);
 				if (!msg)
 					msg = label;
 				else

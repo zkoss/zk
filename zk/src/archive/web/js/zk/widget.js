@@ -362,7 +362,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (msg != null) {
 				jq(document.body).append(
 					'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
-					+ ofs[1] + 'px;left:' + ofs[0] + 'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>&nbsp;' + zUtl.escapeHTMLText(msg) + '</div></div>');
+					+ ofs[1] + 'px;left:' + ofs[0] + 'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>&nbsp;' + msg + '</div></div>');
 				drag._dragImg = jq('#zk_ddghost-img')[0];
 				return jq('#zk_ddghost')[0];
 			}
@@ -3491,12 +3491,14 @@ unbind_: function (skipper, after) {
 	},
 	/** Returns the message to show when an user is dragging this widget, or null if it prefers to clone the widget with {@link #cloneDrag_}.
 	 * <p>Default, it return the inner text if if {@link #$n} returns a TR, TD, or TH element. Otherwise, it returns null and {@link #cloneDrag_} will be called to create a DOM element to indicate dragging.
+	 * <p>Notice that the text would be encoded for XSS issue since 8.0.4.2. It should be considered when overriding.
 	 * @return String the message to indicate the dragging, or null if clone is required
 	 */
 	getDragMessage_: function () {
 		if (jq.nodeName(this.getDragNode(), 'tr', 'td', 'th')) {
-			var n = this.$n('real') || this.getCaveNode();
-			return n ? n.textContent || n.innerText || '' : '';
+			var n = this.$n('real') || this.getCaveNode(),
+				msg = n ? n.textContent || n.innerText || '' : '';
+			return msg ? zUtl.encodeXML(msg) : msg;
 		}
 	},
 	/** Called to fire the onDrop event.

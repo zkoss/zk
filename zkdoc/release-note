@@ -1,4 +1,13 @@
    --------
+ZK 8.0.4.2
+* Features
+
+* Bugs
+  ZK-3598: Bugged tooltip dragging multiple labels
+
+* Upgrade Notes
+
+   --------
 ZK 8.0.4.1
 Jan 24, 2017
 * Features

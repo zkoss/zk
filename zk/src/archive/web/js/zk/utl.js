@@ -687,16 +687,6 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		for (var n in _imgMap)
 			return true;
 		return false;
-	},
-	/**
-	 * escape html text
-	 * For example,
-	 * &lt; img / &gt; -> <img />
-	 * @param String original html text
-	 * @since 8.0.4.1
-	 */
-	escapeHTMLText: function (text) {
-		return jq('<div/>').text(text).html();
 	}
 };
 
