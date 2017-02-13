@@ -225,6 +225,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 				var label = item.getLabel();
 				if (label.length > 9)
 					label = label.substring(0, 9) + '...';
+				label = zUtl.encodeXML(label);
 				if (!msg)
 					msg = label;
 				else

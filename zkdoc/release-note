@@ -3,6 +3,7 @@ ZK 8.0.5
 * Features
 
 * Bugs
+  ZK-3598: Bugged tooltip dragging multiple labels
 
 * Upgrade Notes
 
