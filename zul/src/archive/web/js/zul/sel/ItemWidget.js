@@ -218,7 +218,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var iterator = this.getMeshWidget().itemIterator();
 		var cnt = 2;
 		var msg;
-		if (!this.isSelected())	return this.getLabel();
+		if (!this.isSelected())	return zUtl.encodeXML(this.getLabel());
 		while (iterator.hasNext()) {
 			var item = iterator.next();
 			if (item.isSelected()) {
