@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3575.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jan 26 10:11:40 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div>
+        <label>Resize any panel, you should not see the border of panel disappear.</label>
+        <portallayout id="portalLayout" maximizedMode="whole" width="100%" style="border: solid 2px blue">
+            <portalchildren style="padding: 5px; border: solid 5px red" width="30%">
+                <panel id="calendar" sizable="true" title="Calendar" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                    <panelchildren>
+                        <calendar hflex="1"/>
+                    </panelchildren>
+                </panel>
+                <panel id="translate" sizable="true" title="Translate" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                    <panelchildren>
+                        translate
+                    </panelchildren>
+                </panel>
+            </portalchildren>
+            <portalchildren style="padding: 5px" width="40%">
+                <panel id="todo" sizable="true" title="ToDo" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                    <panelchildren>
+                        todo
+                    </panelchildren>
+                </panel>
+                <panel id="clock"  sizable="true" height="250px" title="Clock" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                    <panelchildren>
+                        clock
+                    </panelchildren>
+                </panel>
+            </portalchildren>
+            <portalchildren style="padding: 5px" width="30%">
+                <panel id="weather"  sizable="true" title="Weather" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                    <panelchildren>
+                        weather
+                    </panelchildren>
+                </panel>
+            </portalchildren>
+        </portallayout>
+    </div>
+</zk>
