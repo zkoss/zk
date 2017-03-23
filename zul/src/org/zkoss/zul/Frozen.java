@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -27,7 +28,6 @@ import org.zkoss.zul.impl.XulElement;
  * @since 5.0.0
  */
 public class Frozen extends XulElement {
-
 	private int _columns;
 	private int _start;
 
@@ -92,6 +92,15 @@ public class Frozen extends XulElement {
 		return 0;
 	}
 
+	/**
+	 * Returns frozen is smooth or not.
+	 * <p>Default: true
+	 * @since 8.5.0
+	 */
+	public boolean isSmooth() {
+		return Utils.testAttribute(this, "org.zkoss.zul.frozen.smooth", true, true);
+	}
+
 	public String getZclass() {
 		return _zclass == null ? "z-frozen" : _zclass;
 	}
@@ -109,5 +118,9 @@ public class Frozen extends XulElement {
 			renderer.render("columns", _columns);
 		if (_columns > 0 && _start > 0)
 			renderer.render("start", _start);
+
+		//F85-ZK-3525: frozen support smooth mode (ee only)
+		if (!isSmooth())
+			renderer.render("smooth", false);
 	}
 }

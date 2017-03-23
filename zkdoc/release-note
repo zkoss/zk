@@ -1,7 +1,7 @@
    --------
 ZK 8.5.0
 * Features
-
+  ZK-3525: implement frozen alternative
 * Bugs
 
 * Upgrade Notes
