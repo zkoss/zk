@@ -86,7 +86,7 @@
 	}
 }
 .z-treecol {
-	border-left: 1px solid @meshTitleBorderColor;
+	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	.verGradient(@baseGradientStart, @baseGradientEnd);
@@ -116,11 +116,11 @@
 // ZK-2151: use strict selector to prevent nest problem
 //tree row and cell
 .z-treerow {
-	background: @meshBackgroundColor;
 	//tree cell
 	.z-treecell {
 		overflow: hidden;
 		cursor: pointer;
+		background: @meshBackgroundColor;
 	}
 	&:hover {
 		> .z-treecell {

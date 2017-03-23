@@ -16,6 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
@@ -30,6 +31,8 @@ public class Frozen extends XulElement {
 
 	private int _columns;
 	private int _start;
+	//F85-ZK-3525: frozen support smooth mode (ee only)
+	private boolean _smooth = isDefaultSmooth();
 
 	/**
 	 * Sets the start position of the scrollbar.
@@ -84,12 +87,31 @@ public class Frozen extends XulElement {
 		throw new UnsupportedOperationException("Unsupported yet!"); //B70-ZK-2879
 	}
 
+	private static boolean isDefaultSmooth() {
+		if (_defSmooth == null)
+			_defSmooth = Boolean.valueOf(Library.getProperty("org.zkoss.zul.frozen.smooth", "true"));
+		return _defSmooth.booleanValue();
+	}
+
+	private static Boolean _defSmooth;
 	/**
-	 * Returns the number of rows to freeze.
-	 * <p>Default: 0
+	 * Returns frozen is smooth or not.
+	 * <p>Default: false
+	 * @since 8.5.0
 	 */
-	public int getRows() {
-		return 0;
+	public boolean isSmooth() {
+		return _smooth;
+	}
+
+	/**
+	 * Sets frozen is smooth or not.
+	 * @since 8.5.0
+	 */
+	public void setSmmoth(boolean smooth) {
+		if (_smooth != smooth) {
+			_smooth = smooth;
+			smartUpdate("_smooth", smooth);
+		}
 	}
 
 	public String getZclass() {
@@ -109,5 +131,9 @@ public class Frozen extends XulElement {
 			renderer.render("columns", _columns);
 		if (_columns > 0 && _start > 0)
 			renderer.render("start", _start);
+
+		//F85-ZK-3525: frozen support smooth mode (ee only)
+		if (_smooth)
+			renderer.render("smooth", _smooth);
 	}
 }

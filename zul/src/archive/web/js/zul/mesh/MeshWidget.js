@@ -913,7 +913,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_doScroll: function () { //called zkmax, overriden in Listbox
 		var t = zul.mesh.Scrollbar.getScrollPosV(this),
 			l = zul.mesh.Scrollbar.getScrollPosH(this),
-			scrolled = (t != this._currentTop || l != this._currentLeft),
+			hScrolled = l != this._currentLeft,
+			scrolled = (t != this._currentTop || hScrolled),
 			ebody = this.ebody,
 			ehead = this.ehead,
 			efoot = this.efoot;
@@ -944,7 +945,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (scrolled)
 			this._fireOnScrollPos();
 
-		if (this.frozen)
+		if (this.frozen && hScrolled)
 			this.frozen.syncScrollByParentBody();
 	},
 	_doSyncScroll: function () { //sync scroll for input tab key scroll
