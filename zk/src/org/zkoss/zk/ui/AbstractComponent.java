@@ -1298,6 +1298,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	 * @param child the child (will-be). It cannot be null.
 	 */
 	private static void checkParentChild(Component parent, Component child) throws UiException {
+		if (child == null)
+			throw new UiException("Child cannot be null");
 		if (parent != null) {
 			final AbstractComponent acp = (AbstractComponent) parent;
 			if (acp.initChildInfo().inAdding(child))
