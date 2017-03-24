@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3335.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Dec 24 13:23:05 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+  <label multiline="true">
+    1. cursor focus after "9", and press "Enter" key.
+    2. line "123456789" shouldn't jump down
+
+  </label>
+  <tbeditor value="123456789"/>
+</zk>
