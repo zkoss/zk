@@ -158,6 +158,17 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	</filter-mapping>
 	-->
 
+	<!-- Uncomment while using WebSocketServerPush
+	<filter>
+		<filter-name>wsspFilter</filter-name>
+		<filter-class>org.zkoss.zkmax.ui.websocket.WebSocketServerPushFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>wsspFilter</filter-name>
+		<url-pattern>/zkwsspep/*</url-pattern>
+	</filter-mapping>
+	-->
+
 	<!-- ///////////// -->
 	<!-- DSP (optional) -->
 	<!-- Uncomment it if you want to use DSP
