@@ -4,6 +4,7 @@ ZK 8.0.5
 
 * Bugs
   ZK-3575: A panel size doesn't fit its parent inside a portallayout after resizing it
+  ZK-3343: Chosen box disappearing in Popup
 
 * Upgrade Notes
 
