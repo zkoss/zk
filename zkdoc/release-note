@@ -6,6 +6,7 @@ ZK 8.0.5
   ZK-3575: A panel size doesn't fit its parent inside a portallayout after resizing it
   ZK-3343: Chosen box disappearing in Popup
   ZK-3335: tbeditor p element style receive margin from browser
+  ZK-3546: Apply.recreate() creates a redundant template
 
 * Upgrade Notes
 
