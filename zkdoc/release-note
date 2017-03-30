@@ -7,6 +7,7 @@ ZK 8.0.5
   ZK-3343: Chosen box disappearing in Popup
   ZK-3335: tbeditor p element style receive margin from browser
   ZK-3546: Apply.recreate() creates a redundant template
+  ZK-3612: Textbox doesn't fire onChange event after being invalidated
 
 * Upgrade Notes
 
