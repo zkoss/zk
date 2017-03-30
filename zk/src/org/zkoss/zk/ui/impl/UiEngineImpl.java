@@ -767,8 +767,7 @@ public class UiEngineImpl implements UiEngine {
 		//might be called from a page other than instance's
 		if (!parentInfo.getChildren().isEmpty()) {
 			final ReplaceableText replaceableText = new ReplaceableText();
-			for (Iterator it = parentInfo.getChildren().iterator(); it.hasNext();) {
-				final Object meta = it.next();
+			for (final NodeInfo meta : parentInfo.getChildren()) {
 				if (meta instanceof ComponentInfo) {
 					final ComponentInfo childInfo = (ComponentInfo) meta;
 					final ForEach forEach = childInfo.resolveForEach(page, parent);
@@ -776,16 +775,14 @@ public class UiEngineImpl implements UiEngine {
 						if (isEffective(childInfo, page, parent)) {
 							final Component[] children = execCreateChild(ci, parent, childInfo, replaceableText,
 									insertBefore);
-							for (int j = 0; j < children.length; ++j)
-								created.add(children[j]);
+							Collections.addAll(created, children);
 						}
 					} else {
 						while (forEach.next()) {
 							if (isEffective(childInfo, page, parent)) {
 								final Component[] children = execCreateChild(ci, parent, childInfo, replaceableText,
 										insertBefore);
-								for (int j = 0; j < children.length; ++j)
-									created.add(children[j]);
+								Collections.addAll(created, children);
 							}
 						}
 					}
@@ -796,16 +793,14 @@ public class UiEngineImpl implements UiEngine {
 						if (isEffective(childInfo, page, parent)) {
 							final Component[] children = execCreateChild(ci, parent, childInfo, replaceableText,
 									insertBefore);
-							for (int j = 0; j < children.length; ++j)
-								created.add(children[j]);
+							Collections.addAll(created, children);
 						}
 					} else {
 						while (forEach.next()) {
 							if (isEffective(childInfo, page, parent)) {
 								final Component[] children = execCreateChild(ci, parent, childInfo, replaceableText,
 										insertBefore);
-								for (int j = 0; j < children.length; ++j)
-									created.add(children[j]);
+								Collections.addAll(created, children);
 							}
 						}
 					}
@@ -825,8 +820,7 @@ public class UiEngineImpl implements UiEngine {
 					final ShadowInfo shadow = (ShadowInfo) meta;
 					if (isEffective(shadow, page, parent)) {
 						final Component[] children = execCreateChild(ci, parent, shadow, insertBefore);
-						for (int j = 0; j < children.length; ++j)
-							created.add(children[j]);
+						Collections.addAll(created, children);
 					}
 				} else {
 					execNonComponent(ci, parent, meta);
@@ -858,12 +852,9 @@ public class UiEngineImpl implements UiEngine {
 			if (child instanceof AfterCompose)
 				((AfterCompose) child).afterCompose();
 		} catch (Throwable ex) {
-			boolean ignore = false;
-			if (!ignore) {
-				ignore = ci.doCatch(ex, bRoot);
-				if (!ignore)
-					throw UiException.Aide.wrap(ex);
-			}
+			boolean ignore = ci.doCatch(ex, bRoot);
+			if (!ignore)
+				throw UiException.Aide.wrap(ex);
 		}
 
 		return child != null ? new Component[] { child } : new Component[0];
@@ -1003,8 +994,8 @@ public class UiEngineImpl implements UiEngine {
 		if (!switchInfo.getChildren().isEmpty()) {
 			final Object switchCond = switchInfo.resolveSwitch(page, parent);
 
-			for (Iterator it = switchInfo.getChildren().iterator(); it.hasNext();) {
-				final ZkInfo caseInfo = (ZkInfo) it.next();
+			for (NodeInfo nodeInfo : switchInfo.getChildren()) {
+				final ZkInfo caseInfo = (ZkInfo) nodeInfo;
 				final ForEach forEach = caseInfo.resolveForEach(page, parent);
 				if (forEach == null) {
 					if (isEffective(caseInfo, page, parent) && isCaseMatched(caseInfo, page, parent, switchCond)) {
@@ -1015,8 +1006,7 @@ public class UiEngineImpl implements UiEngine {
 					while (forEach.next()) {
 						if (isEffective(caseInfo, page, parent) && isCaseMatched(caseInfo, page, parent, switchCond)) {
 							final Component[] children = execCreateChild(ci, parent, caseInfo, null, insertBefore);
-							for (int j = 0; j < children.length; ++j)
-								created.add(children[j]);
+							Collections.addAll(created, children);
 							return created.toArray(new Component[created.size()]);
 							//only once (AND condition)
 						}
@@ -1032,9 +1022,9 @@ public class UiEngineImpl implements UiEngine {
 			return true; //default clause
 
 		final Object[] caseValues = caseInfo.resolveCase(page, parent);
-		for (int j = 0; j < caseValues.length; ++j) {
-			if (caseValues[j] instanceof String && switchCond instanceof String) {
-				final String casev = (String) caseValues[j];
+		for (Object caseValue : caseValues) {
+			if (caseValue instanceof String && switchCond instanceof String) {
+				final String casev = (String) caseValue;
 				final int len = casev.length();
 				if (len >= 2 && casev.charAt(0) == '/' && casev.charAt(len - 1) == '/') { //regex
 					if (Pattern.compile(casev.substring(1, len - 1)).matcher((String) switchCond).matches())
@@ -1043,7 +1033,7 @@ public class UiEngineImpl implements UiEngine {
 						continue;
 				}
 			}
-			if (Objects.equals(switchCond, caseValues[j]))
+			if (Objects.equals(switchCond, caseValue))
 				return true; //OR condition
 		}
 		return false;
@@ -1153,8 +1143,8 @@ public class UiEngineImpl implements UiEngine {
 
 			//Notice: if parent is not null, comps[j].page == parent.page
 			if (fakepg && parent == null)
-				for (int j = 0; j < comps.length; ++j)
-					comps[j].detach();
+				for (Component comp : comps)
+					comp.detach();
 
 			afterCreate(exec, comps);
 			return comps;
@@ -1435,8 +1425,8 @@ public class UiEngineImpl implements UiEngine {
 		final List<AuResponse> responses = getResponses(exec, ui.uv, errs, false);
 
 		final JSONArray rs = new JSONArray();
-		for (Iterator it = responses.iterator(); it.hasNext();)
-			rs.add(AuWriters.toJSON((AuResponse) it.next()));
+		for (AuResponse response : responses)
+			rs.add(AuWriters.toJSON(response));
 		return rs;
 	}
 
@@ -1501,10 +1491,10 @@ public class UiEngineImpl implements UiEngine {
 		} else if (ex instanceof WrongValuesException) {
 			final WrongValueException[] wves = ((WrongValuesException) ex).getWrongValueExceptions();
 			final LinkedList<String> infs = new LinkedList<String>();
-			for (int i = 0; i < wves.length; i++) {
-				final Component comp = wves[i].getComponent();
+			for (WrongValueException wve1 : wves) {
+				final Component comp = wve1.getComponent();
 				if (comp != null) {
-					WrongValueException wve = ((ComponentCtrl) comp).onWrongValue(wves[i]);
+					WrongValueException wve = ((ComponentCtrl) comp).onWrongValue(wve1);
 					if (wve != null) {
 						Component c = wve.getComponent();
 						if (c == null)
@@ -2329,8 +2319,8 @@ public class UiEngineImpl implements UiEngine {
 
 				//Notice: if parent is not null, cs[j].page == parent.page
 				if (fakepg && parent == null)
-					for (int j = 0; j < cs.length; ++j)
-						cs[j].detach();
+					for (Component c : cs)
+						c.detach();
 
 				afterCreate(exec, null, cs);
 			} finally {
