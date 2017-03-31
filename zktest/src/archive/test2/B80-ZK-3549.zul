@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3549.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 28 12:49:05 CST 2017, Created by Chris
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 500; i += 1) {
+			model.add("item " + i);
+		}
+	]]></zscript>
+	<label multiline="true">
+		1. scroll down a little bit to trigger the rod loading
+		2. should not see any JS error in the console
+		=======
+		Alternatively
+		1. open dev console and reload this page
+		2. should see in the initial response of B80-ZK-3549.ZUL, listitem do not have "prolog" attribute
+		3. check that the ebodyrows.childNodes and ebodyrows.children of the listbox should have the same amount of nodes
+	</label>
+	<listbox id="box1" rows="3" model="${model}">
+		<custom-attributes org.zkoss.zul.listbox.initRodSize="5"/>
+		<template name="model">
+			<apply template="heavy"/>
+		</template>
+	</listbox>
+	<template name="heavy">
+		<listitem>
+			<listcell>
+				<label value="${each}" />
+			</listcell>
+		</listitem>
+	</template>
+</zk>

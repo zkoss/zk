@@ -874,7 +874,10 @@ public class UiEngineImpl implements UiEngine {
 		} else {
 			String rt = null;
 			if (replaceableText != null) {
-				rt = replaceableText.text;
+				// ZK-3549 should ignore blank but was not able to do so in Parser, e.g. applying template
+				if (parent == null || parent.getDefinition().isBlankPreserved()) {
+					rt = replaceableText.text;
+				}
 				replaceableText.text = childInfo.getReplaceableText();
 				if (replaceableText.text != null)
 					return new Component[0];
