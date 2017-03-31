@@ -26,7 +26,7 @@ public class B80_ZK_3546Test extends ZATSTestCase {
     public void test(){
 		DesktopAgent desktop = connect();
 		// check init condition
-		assertEquals("Expecting 4 labels at init", 4, desktop.queryAll("label").size());
+		assertEquals("Expecting 5 labels at init", 5, desktop.queryAll("label").size());
 		assertEquals("Expecting 3 buttons at init", 3, desktop.queryAll("button").size());
 		// switch templates 3 times
 		desktop.query("#t2").click();
@@ -37,7 +37,7 @@ public class B80_ZK_3546Test extends ZATSTestCase {
 		desktop.query("#add").click();
 		desktop.query("#add").click();
 		// check final condition
-		assertEquals("Expecting 0 labels after lots of clicking", 0, desktop.queryAll("label").size());
+		assertEquals("Expecting 1 labels after lots of clicking", 1, desktop.queryAll("label").size());
 		assertEquals("Expecting 10 buttons after lots of clicking", 10, desktop.queryAll("button").size());
     }
 }
