@@ -10,6 +10,7 @@ ZK 8.0.5
   ZK-3612: Textbox doesn't fire onChange event after being invalidated
   ZK-3549: can't use <apply> inside a Listbox's <template>
   ZK-3605: zWatch unlisten not always working
+  ZK-3616: Listbox selection lost with ROD
 
 * Upgrade Notes
 
