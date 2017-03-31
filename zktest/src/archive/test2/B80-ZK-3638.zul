@@ -1,0 +1,34 @@
+<zk xmlns:w="client">
+    <label>
+        Click the first button, it should act the same as the second one (appear "onCustomzkevent, ..." in the zk log at the first time)
+    </label>
+	<button label="domListen_ and fire immediately">
+		<attribute w:name="onClick"><![CDATA[
+			this.domListen_(document, 'onCustomzkevent', 'doCustomevent');
+			zk.log('trigger now')
+			jq(document).trigger('customzkevent');
+			zk.log('after trigger')
+		]]></attribute>
+
+		<attribute w:name="doCustomevent"><![CDATA[
+			function(event) {
+				zk.log(event.name || event.type, event, event.data);
+			}
+		]]></attribute>
+	</button>
+
+	<button label="jq listen and fire immediately">
+		<attribute w:name="onClick"><![CDATA[
+			jq(document).on('customjqevent', this.doCustomevent);
+			zk.log('trigger now')
+			jq(document).trigger('customjqevent');
+			zk.log('after trigger')
+		]]></attribute>
+
+		<attribute w:name="doCustomevent"><![CDATA[
+			function(event) {
+				zk.log(event.name || event.type, event, event.data);
+			}
+		]]></attribute>
+	</button>
+</zk>
