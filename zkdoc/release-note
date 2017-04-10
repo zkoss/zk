@@ -12,6 +12,7 @@ ZK 8.0.5
   ZK-3605: zWatch unlisten not always working
   ZK-3616: Listbox selection lost with ROD
   ZK-3638: missed events due delayed listening (zkmax only)
+  ZK-3263: Scroll position jumps up when clicking on scrollbar
 
 * Upgrade Notes
 
