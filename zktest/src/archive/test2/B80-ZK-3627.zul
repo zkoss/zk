@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3627.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 28 14:10:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label>
+        Scroll to the middle and scroll back 20 times. When scroll to the middle, listbox should not be empty.
+    </label>
+	<zscript><![CDATA[
+	    int i;
+		ListModelList model = new ListModelList();
+		for(i = 0; i < 1000; i++) {
+			model.add("item-" + i);
+		}
+	]]></zscript>
+	
+	<timer id="timer1" running="true" repeats="true" delay="2000">
+        <attribute name="onTimer"><![CDATA[
+  			model.add("item-" + (i++));
+ 		]]></attribute>
+	</timer>
+	
+	<listbox id="lb" model="${model}" height="400px" width="400px">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<template name="model">
+			<listitem value="${each}" label="${each}"/>
+		</template>
+	</listbox>
+	<button label="stop timer (for easier debugging in the network tab)" onClick="timer1.stop()"/>
+</zk>

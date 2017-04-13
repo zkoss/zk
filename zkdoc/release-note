@@ -13,6 +13,7 @@ ZK 8.0.5
   ZK-3616: Listbox selection lost with ROD
   ZK-3638: missed events due delayed listening (zkmax only)
   ZK-3263: Scroll position jumps up when clicking on scrollbar
+  ZK-3627: ROD Listbox scroll offset
 
 * Upgrade Notes
 
