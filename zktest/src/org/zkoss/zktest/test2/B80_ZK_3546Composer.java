@@ -13,7 +13,8 @@ public class B80_ZK_3546Composer extends SelectorComposer<Component> {
 	@Wire("::shadow")
 	private Apply listArea;
 	private ListModelList model = new ListModelList();
-	private int sequence = 5;
+	private ListModelList submodel = new ListModelList();
+	private int sequence = 3;
 	private String templateName = "t1";
 
 	@Override
@@ -21,8 +22,10 @@ public class B80_ZK_3546Composer extends SelectorComposer<Component> {
 		super.doBeforeComposeChildren(comp);
 		for (int i = 1; i < sequence; i++) {
 			model.add("item " + i);
+			submodel.add("inside " + i);
 		}
 		comp.setAttribute("model", model);
+		comp.setAttribute("submodel", submodel);
 	}
 
 	@Listen("onClick = #t1")
@@ -32,16 +35,10 @@ public class B80_ZK_3546Composer extends SelectorComposer<Component> {
 		listArea.recreate();
 	}
 
-	@Listen("onClick = #t2")
-	public void template2() {
-		templateName = "t2";
-		listArea.setTemplate(templateName);
-		listArea.recreate();
-	}
-
 	@Listen("onClick = #add")
 	public void add() {
 		model.add("item " + sequence);
+		submodel.add("inside " + sequence);
 		sequence++;
 	}
 
@@ -51,6 +48,14 @@ public class B80_ZK_3546Composer extends SelectorComposer<Component> {
 
 	public void setModel(ListModelList model) {
 		this.model = model;
+	}
+
+	public ListModelList getSubmodel() {
+		return submodel;
+	}
+
+	public void setSubmodel(ListModelList submodel) {
+		this.submodel = submodel;
 	}
 
 	public String getTemplateName() {

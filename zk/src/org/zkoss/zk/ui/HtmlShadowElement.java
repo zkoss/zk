@@ -1296,8 +1296,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	 */
 	public void recreate() {
 		if (_afterComposed) { // execute after composed
-			if (!getChildren().isEmpty()) { // clean up all and then re-attached
-				getChildren().clear();
+			if (getFirstChild() != null) {
+				removeChildren(getFirstChild());
 			}
 
 			if (_firstInsertion != null) {
@@ -1310,6 +1310,25 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			_afterComposed = false; // reset
 			afterCompose();
 		}
+	}
+
+	private void removeChildren(Component firstChild) {
+		for (Component next = firstChild; next != null;) {
+			// recursively remove all children, depth first
+			if (next.getFirstChild() != null) {
+				removeChildren(next.getFirstChild());
+			}
+			Component tmp = next.getNextSibling();
+			((HtmlShadowElement) next).removeFromParent();
+			next = tmp;
+		}
+	}
+
+	protected void removeFromParent() {
+		if (_parent == null) {
+			throw new UiException("The parent shadow cannot be null.");
+		}
+		_parent.removeChild(this);
 	}
 
 	public Component getShadowHostIfAny() {

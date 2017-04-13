@@ -7,37 +7,36 @@ B80-ZK-3546.zul
 	Description:
 
 	History:
-		Thu Dec 29 11:14:32 CST 2016, Created by jameschu
+		Thu Apr 06 11:14:32 CST 2017, Created by christopher
 
-Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
 	<label multiline="true">
-		1. Should see item 1~4 at init
-		2. click "t2" button to change template
-		3. should see item 1~4 changed from label to button
+		1. Should see many labels and a few buttons at init
+		2. click "re-create" button to trigger Apply.recreate
+		3. should see the same labels and buttons as init
 		4. click "add" button
-		5. should see only item 5 is added, nothing else is changed
-		(original bug was that item 5 will be added twice, one after item4, another one after "add" button, which is obviously wrong)
+		5. should see "item 3" is added, also every item now have "inside 3" added too
 	</label>
 	<separator bar="true" />
 	<div apply="org.zkoss.zktest.test2.B80_ZK_3546Composer">
-		<apply id="listArea" template="t1" model2="${model}" dynamicValue="true" />
+		<apply id="listArea" template="t1" model2="${model}" model3="${submodel}" dynamicValue="true" />
 
 		<template name="t1">
 			<forEach items="${model2}">
-				<label value="${each}" />
-			</forEach>
-		</template>
-		<template name="t2">
-			<forEach items="${model2}">
 				<button label="${each}" />
+			</forEach>
+			<forEach items="${model2}">
+				<label style="font-size: 20pt;" value="${each}" />
+				<forEach items="${model3}" var="inside">
+					<label value="${inside}" />
+				</forEach>
 			</forEach>
 		</template>
 		<separator bar="true" />
-		<button id="t1" label="t1" />
-		<button id="t2" label="t2" />
+		<button id="t1" label="re-create" />
 		<button id="add" label="add" />
 	</div>
 </zk>
