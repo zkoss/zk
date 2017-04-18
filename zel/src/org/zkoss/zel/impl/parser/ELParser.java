@@ -2031,7 +2031,7 @@ public class ELParser/*@bgen(jjtree)*/implements ELParserTreeConstants, ELParser
 
   /** Constructor. */
   public ELParser(java.io.Reader stream) {
-    jj_input_stream = new SimpleCharStream(stream, 1, 1);
+    jj_input_stream = new SimpleCharStream(stream, 1, 1, 128);
     token_source = new ELParserTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;

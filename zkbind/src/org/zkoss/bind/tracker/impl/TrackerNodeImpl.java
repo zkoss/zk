@@ -14,6 +14,7 @@ package org.zkoss.bind.tracker.impl;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,23 +33,35 @@ import org.zkoss.bind.sys.tracker.TrackerNode;
 public class TrackerNodeImpl implements TrackerNode,Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
-	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
-	private final Map<Object, Object> _brackets; //property -> bracket script
-	private final Set<LoadBinding> _bindings; //associated bindings
-	private final Set<ReferenceBinding> _refBindings; //associated ReferenceBindings
-	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
+	private Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
+	private Map<Object, Object> _brackets; //property -> bracket script
+	private Set<LoadBinding> _bindings; //associated bindings
+	private Set<ReferenceBinding> _refBindings; //associated ReferenceBindings
+	private Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
 	private transient WeakReference<Object> _bean; //associated bean value
 	
 	public TrackerNodeImpl(Object property) {
 		_script = property;
-		_dependents = new HashMap<Object, TrackerNode>(4);
-		_bindings = new HashSet<LoadBinding>(4);
-		_refBindings = new HashSet<ReferenceBinding>(2);
-		_brackets = new HashMap<Object, Object>(4);
-		_associates = new HashSet<TrackerNode>(4);
+		_dependents = Collections.emptyMap();
+		_bindings = Collections.emptySet();
+		_refBindings = Collections.emptySet();
+		_brackets = Collections.emptyMap();
+		_associates = Collections.emptySet();
 	}
-	 public void addAssociate(TrackerNode node) {
-		_associates.add(node);
+	
+	public void addAssociate(TrackerNode node) {
+		 if (_associates.isEmpty()) {
+			 //collection is empty map, create singleton set to minimize memory footprint
+			 _associates = Collections.singleton(node);
+		 } else if (_associates.size() == 1) {
+			 //collection is singleton map, create hashset
+			 Set<TrackerNode> oldAssociates = _associates;
+			 _associates = new HashSet<TrackerNode>(4);
+			 _associates.addAll(oldAssociates);
+			 _associates.add(node);
+		 } else {
+			 _associates.add(node);
+		 }
 	}
 	
 	public TrackerNode getDependent(Object property) {
@@ -67,7 +80,18 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 	}
 
 	public void addDependent(Object script, TrackerNode dependent) {
-		_dependents.put(script, dependent);
+		if (_dependents.isEmpty()) {
+			//collection is empty map, create singleton map to minimize memory footprint
+			_dependents = Collections.singletonMap(script, dependent);
+		} else if (_dependents.size() == 1) {
+			//collection is singleton map, create hash map
+			Map<Object, TrackerNode> oldDependents = _dependents;
+			_dependents = new HashMap<Object, TrackerNode>(4);
+			_dependents.putAll(oldDependents);
+			_dependents.put(script, dependent);
+		} else {
+			_dependents.put(script, dependent);
+		}
 	}
 	
 	public void tieProperty(Object property, Object script) {
@@ -76,17 +100,39 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 			return;
 		}
 		if (oldscript != null) {
-			_brackets.remove(property);
+			if (_brackets.size() == 1 && _brackets.containsKey(property)) {
+				//_brackets is probably singletonMap, than initialize map as empty
+				_brackets = Collections.emptyMap();
+			} else if (_brackets.size() > 1) {
+				//brackets is HashMap, remove property
+				_brackets.remove(property);
+			}
 		}
 		for (final Iterator<Object> it = _brackets.values().iterator(); it.hasNext();) {
 			final Object bracket = it.next();
 			if (script.equals(bracket)) {
-				it.remove();
+				if (_brackets.size() == 1) {
+					//brackets is probably singleton map, 
+					_brackets = Collections.emptyMap();
+				} else {
+					it.remove();
+				}
 				break;
 			}
 		}
 		if (property != null) {
-			_brackets.put(property, script);
+			if (_brackets.isEmpty()) {
+				//create singleton map to reduce memory footprint
+				_brackets = Collections.singletonMap(property, script);
+			} else if (_brackets.size() == 1) {
+				//collection is probably singleton map, create new hash map
+				Map<Object, Object> oldBrackets = _brackets;
+				_brackets = new HashMap<Object, Object>(4);
+				_brackets.putAll(oldBrackets);
+				_brackets.put(property, script);
+			} else {
+				_brackets.put(property, script);
+			}
 		}
 	}
 
@@ -100,9 +146,34 @@ public class TrackerNodeImpl implements TrackerNode,Serializable {
 
 	public void addBinding(Binding binding) {
 		if (binding instanceof ReferenceBinding) {
-			_refBindings.add((ReferenceBinding)binding);
+			
+			if (_refBindings.isEmpty()) {
+				//create singleton set to reduce memory footprint
+				_refBindings = Collections.singleton((ReferenceBinding)binding);
+			} else if (_refBindings.size() == 1) {
+				//collection is probably singleton set, create new has set
+				Set<ReferenceBinding> oldRefBindings = _refBindings;
+				_refBindings = new HashSet<ReferenceBinding>(2);
+				_refBindings.addAll(oldRefBindings);
+				_refBindings.add((ReferenceBinding)binding);
+			} else {
+				_refBindings.add((ReferenceBinding)binding);
+			}
+			
+			
 		} else {
-			_bindings.add((LoadBinding)binding);
+			if (_bindings.isEmpty()) {
+				//create singleton set to reduce memory footprint
+				_bindings = Collections.singleton((LoadBinding)binding);
+			} else if (_bindings.size() == 1) {
+				//collection is probably singleton set, create new has set
+				Set<LoadBinding> oldBindinds = _bindings;
+				_bindings = new HashSet<LoadBinding>(4);
+				_bindings.addAll(oldBindinds);
+				_bindings.add((LoadBinding)binding);
+			} else {
+				_bindings.add((LoadBinding)binding);	
+			}
 		}
 	}
 	

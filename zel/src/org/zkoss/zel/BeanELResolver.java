@@ -32,12 +32,12 @@ import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.zkoss.zel.impl.util.ClassUtil;
+import org.zkoss.zel.impl.util.ReflectionCache;
 
 public class BeanELResolver extends ELResolver {
 
@@ -63,7 +63,8 @@ public class BeanELResolver extends ELResolver {
 
     private final boolean readOnly;
 
-    private final ConcurrentCache<String, BeanProperties> cache =
+    //this cache can be static - it allow reuse cache across multiple instances
+    private static final ConcurrentCache<String, BeanProperties> cache =
         new ConcurrentCache<String, BeanProperties>(CACHE_SIZE);
 
     public BeanELResolver() {
@@ -138,31 +139,15 @@ public class BeanELResolver extends ELResolver {
         //XXX refactored into write() ?
         if (!checkType(m, value)) {
         	Class<?> baseClass = base.getClass();
-    		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
-    		//XXX the same in AstValue#setValue()
-    		String propertySetterName = property.toString();
-    		if(propertySetterName != null && propertySetterName.length()>0){
-    			propertySetterName = 
-    				"set"+ 
-    				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
-    				propertySetterName.substring(1);
-    		}
-    		////
-    		
-        	for (Method method : baseClass.getMethods()) {
-        		//method name must the same as t.property (getter)
-        		if (method.getName().equals(propertySetterName)) {
-        			Class<?>[] clazzes = method.getParameterTypes();
-        			if (clazzes.length!=1) { //not standard setter
-        				break;
-        			}
-        			if (ClassUtil.isInstance(value, clazzes[0])) {
-        				m = method;
-        				break;
-        			}
-        		}
+
+        	for (Method method : ReflectionCache.getSetter(baseClass, property.toString())) {
+    			Class<?>[] clazzes = method.getParameterTypes();
+    			if (ClassUtil.isInstance(value, clazzes[0])) {
+    				m = method;
+    				break;
+    			}
         	}        	
-        }        
+        }
     	//// <=ZK-1178
         
         try {

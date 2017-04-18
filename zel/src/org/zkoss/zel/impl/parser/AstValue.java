@@ -21,7 +21,6 @@ package org.zkoss.zel.impl.parser;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Locale;
 
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
@@ -32,6 +31,7 @@ import org.zkoss.zel.impl.lang.ELSupport;
 import org.zkoss.zel.impl.lang.EvaluationContext;
 import org.zkoss.zel.impl.util.ClassUtil;
 import org.zkoss.zel.impl.util.MessageFactory;
+import org.zkoss.zel.impl.util.ReflectionCache;
 import org.zkoss.zel.impl.util.ReflectionUtil;
 
 
@@ -214,31 +214,14 @@ public final class AstValue extends SimpleNode {
         	//for ZK-1178: check t.property(method name) of t.base has polymorphism?
         	boolean flag = false;
         	Class<?> baseClass = t.base.getClass();
-        	
-    		//logic of propertySetterName is from java.beans.NameGenerator#capitalize()
-    		//XXX the same in BeanELResolver#setValue()
-    		String propertySetterName = t.property.toString();
-    		if(propertySetterName != null && propertySetterName.length()>0){
-    			propertySetterName = 
-    				"set"+ 
-    				propertySetterName.substring(0,1).toUpperCase(Locale.ENGLISH) +
-    				propertySetterName.substring(1);
-    		}
-    		////
-    		
-        	for (Method m : baseClass.getMethods()) {
-        		//method name must the same as t.property (setter)
-        		if (m.getName().equals(propertySetterName)) {
-        			Class<?>[] clazzes = m.getParameterTypes();
-        			if (clazzes.length!=1) { //not standard setter
-        				break;
-        			}
-        			if (ClassUtil.isInstance(value, clazzes[0])) {
-    					resolver.setValue(ctx, t.base, t.property, value);
-    					flag = true;
-    					break;
-        			}
-        		}
+
+        	for (Method m : ReflectionCache.getSetter(baseClass, t.property.toString())) {
+    			Class<?>[] clazzes = m.getParameterTypes();
+    			if (ClassUtil.isInstance(value, clazzes[0])) {
+					resolver.setValue(ctx, t.base, t.property, value);
+					flag = true;
+					break;
+    			}
         	}
         	//// <=ZK-1178
         	
