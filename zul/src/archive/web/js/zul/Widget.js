@@ -529,7 +529,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				if (params.type && params.type == 'toggle' && popup.isOpen()) {
 					popup.close({sendOnOpen: true});
 				} else {
-					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
+					zk.afterAnimate(function () { // F70-ZK-2007: Add the type and button number information
 						popup.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 1});
 					}, 0);
 				}
@@ -554,7 +554,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
 					ctx.close({sendOnOpen: true});
 				} else {
-					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
+					zk.afterAnimate(function () { // F70-ZK-2007: Add the type and button number information
 						ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
 					}, 0);
 				}

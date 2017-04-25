@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3350.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Apr 25 10:20:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        1. Click the button. Click the first listitem, and you should see Notification disappear and popup appear.
+        2. Reload and click the button. Right click the second listitem, and you should see Notification disappear and popup appear.
+    </label>
+    <separator />
+    <button label="click it"
+            onClick='Clients.showNotification("So orange! Now right click a list item.", "warning", l, "middle_center", 0)' />
+    <listbox id="l">
+        <!-- 		<custom-attributes org.zkoss.zul.listbox.rightSelect="false" /> -->
+        <listitem label="Click here" popup="p" />
+        <listitem label="Right click here" context="p" />
+        <listitem label="3" context="p" />
+        <listitem label="4" context="p" />
+        <listitem label="5" context="p" />
+        <listitem label="6" context="p" />
+    </listbox>
+    <menupopup id="p">
+        <menuitem label="hello" />
+        <menuitem label="there," />
+        <menuitem id="i" label="friend" />
+    </menupopup>
+</zk>
