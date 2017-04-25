@@ -15,6 +15,7 @@ ZK 8.0.5
   ZK-3263: Scroll position jumps up when clicking on scrollbar
   ZK-3627: ROD Listbox scroll offset
   ZK-3611: nested reference binding - inconsistent @load triggers
+  ZK-3350: Notification closing context menu on listitem/treeitem
 
 * Upgrade Notes
 
