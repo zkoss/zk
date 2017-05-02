@@ -5,6 +5,7 @@ ZK 8.5.0
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
   ZK-3617: XSD duplicate definitions
+  ZK-3574: Chosenbox doesn't serialize option uuids
 
 * Upgrade Notes
 
