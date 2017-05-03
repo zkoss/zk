@@ -175,6 +175,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				}
 			}
 		}
+		this.fixFaker_();
 	},
 	unbind_: function () {
 		if (this._dragsz) {
@@ -198,6 +199,33 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				endeffect: $Header._aftersizing
 			});
 		}
+	},
+	/**
+	 * Fixes the faker (an visible row for adjusting column), if any.
+	 */
+	fixFaker_: function () {
+		if (!this.parent.$instanceof(zul.mesh.Auxhead)) {
+			var n = this.$n(),
+				index = zk(n).cellIndex(),
+				owner = this.getMeshWidget();
+			for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
+				faker = owner['e' + fs[i]]; // internal element
+				if (faker && !this.$n(fs[i])) {
+					faker[faker.childNodes.length > index ? 'insertBefore' : 'appendChild']
+					(this._createFaker(n, fs[i]), faker.childNodes[index]);
+					this._subnodes[fs[i]] = null; // clear inner cache
+				}
+			}
+		}
+	},
+	_createFaker: function (n, postfix) {
+		var wd = this._hflexWidth ? this._hflexWidth + 'px' : this.getWidth(),
+			visible = !this.isVisible() ? 'display:none;' : '',
+			t = document.createElement('col');
+		wd = wd ? 'width: ' + wd + ';' : '';
+		t.id = n.id + '-' + postfix;
+		t.style.cssText = wd + visible;
+		return t;
 	},
 	doClick_: function (evt) {
 		var tg = evt.domTarget,
