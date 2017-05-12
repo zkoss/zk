@@ -1051,7 +1051,7 @@ zAu.ajaxErrorHandler = function (req, status, statusText, ajaxReqTries) {
         return 0; // no retry;
     return ajaxReqTries;
 }
-</code></p>
+</code></pre>
      * @param Object req the object of XMLHttpRequest
      * @param int status the status of the request
      * @param String statusText the text of the status from the request
