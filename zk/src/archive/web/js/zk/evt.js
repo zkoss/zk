@@ -496,8 +496,10 @@ zWatch.listen({
 				var inf = infs[name],
 					o = _target(inf);
 				for (var j = wts.length; j--;)
-					if (wts[j][0] == o) {
-						wts[j][1].$remove(inf);
+					// ZK-3605 might failed to remove listener because we remove in reverse order
+					// listeners listening on the same event might be shadowed and failed to remove
+					// should continue searching if the event name is a match but failed to remove
+					if (wts[j][0] == o && wts[j][1].$remove(inf)) {
 						if (!wts[j][1].length)
 							wts.splice(j, 1);
 						break;

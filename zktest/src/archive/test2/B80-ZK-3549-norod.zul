@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3549-norod.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 10 12:49:05 CST 2017, Created by Chris
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 500; i += 1) {
+			model.add("item " + i);
+		}
+	]]></zscript>
+	<label multiline="true">
+		1. scroll down to trigger the listitem rendering
+		2. should not see any ERROR popup or JS error in the console
+	</label>
+	<listbox id="box1" rows="3" model="${model}">
+		<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+		<template name="model">
+			<apply template="heavy"/>
+		</template>
+	</listbox>
+	<template name="heavy">
+		<listitem>
+			<listcell>
+				<label value="${each}" />
+			</listcell>
+		</listitem>
+	</template>
+</zk>

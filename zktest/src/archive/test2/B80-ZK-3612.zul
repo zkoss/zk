@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3612.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 29 12:01:18 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">1. enter "ab" in the textbox
+		2. label show "ab"
+		3. then, enter "i", the label shows "abi"
+		4. then, enter "cd", the label should show "abicd" (do not blur the textbox after entering "cd")
+
+	</label>
+	<textbox id="box" instant="true" width="100px" onChange="change()" />
+	<label id="msg"/>
+	<zscript><![CDATA[
+		public void change(){
+			msg.setValue(box.getValue());
+			if (box.getValue().contains("i")){
+				box.invalidate();
+			}
+		}
+	]]></zscript>
+</zk>

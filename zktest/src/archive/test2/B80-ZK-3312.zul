@@ -16,18 +16,18 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3312VM')">
 		Click the buttons in order a, b, c (--> selected LIST size label should be same as selected SET size label)
 		<separator/>
-		<div>
+		<div id="info_origin">
 			Original list: <label value="@load(vm.originalList)"/> <label value="@load(vm.originalList.size())"/>
 		</div>
 		<separator/>
-		<div>
+		<div id="info_selList">
 			Selected list: <label value="@load(vm.selectedList)"/> <label value="@load(vm.selectedList.size())"/> <!-- this label does not update when original and selected list are equal -->
 			<div>
 				Equal with originalList: <label value="@load(vm.selectedList eq vm.originalList)"/>
 			</div>
 		</div>
 		<separator/>
-		<div>
+        <div id="info_selSet">
 			Selected Set: <label value="@load(vm.selectedSet)"/> <label value="@load(vm.selectedSet.size())"/>
 			<div>
 				Equal with originalList: <label value="@load(vm.selectedSet eq vm.originalList)"/>

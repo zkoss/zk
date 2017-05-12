@@ -358,7 +358,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					lastChild._nextInsertion = child;
 					seChild._previousInsertion = lastChild;
 				}
-			} else if (seRefChild != null) {
+			} else {
 				//throw new IllegalAccessError("not implemented yet");
 				//				if (isAncestor(asShadow(seRefChild.getParent()), seChild)) {
 
@@ -632,9 +632,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 				if (previous != null) {
 					Component newPrevious = child._previousInsertion;
-					if (newPrevious == null && previous != null) {
+					if (newPrevious == null) {
 						setPrevInsertion(child, previous);
-					} else if (previous != null) {
+					} else {
 						setPrevInsertion(newPrevious, previous);
 					}
 					previous = null;
@@ -667,27 +667,24 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			throw new UiException("The parent shadow cannot be null.");
 		HtmlShadowElement oldParent = (HtmlShadowElement) _parent;
 
-		if (host != _host) {
-			HtmlShadowElement parent = (HtmlShadowElement) _parent;
-			_parent = null;
-			((ComponentCtrl) host).addShadowRootBefore(this, (ShadowElement) parent);
-			_host = host;
+		HtmlShadowElement parent = (HtmlShadowElement) _parent;
+		_parent = null;
+		((ComponentCtrl) host).addShadowRootBefore(this, (ShadowElement) parent);
+		_host = host;
 
-			// remove children reference
-			++parent._chdinf.modCntChd;
-			--parent._chdinf.nChild;
-			if (parent._chdinf.first == this)
-				parent._chdinf.first = this._next;
-			if (parent._chdinf.last == this) {
-				if (parent._chdinf.first != null)
-					parent._chdinf.last = this._prev;
-				else
-					parent._chdinf.last = null;
-			}
-
-			return true;
+		// remove children reference
+		++parent._chdinf.modCntChd;
+		--parent._chdinf.nChild;
+		if (parent._chdinf.first == this)
+			parent._chdinf.first = this._next;
+		if (parent._chdinf.last == this) {
+			if (parent._chdinf.first != null)
+				parent._chdinf.last = this._prev;
+			else
+				parent._chdinf.last = null;
 		}
-		return false;
+
+		return true;
 	}
 
 	private void rebuildShadowTree() {
@@ -773,7 +770,15 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				asShadow(currentInfo).beforeHostChildRemoved(child, indexOfChild);
 				return; // finish
 			}
-		} else { // out of our control, we have to do Binary search for this  to 
+		} else { // out of our control, we have to do Binary search for this  to
+			// ZK-3549: should always update previous/next insertion first, before moving on to other conditions
+			// resync index
+			if (_previousInsertion == child) {
+				setPrevInsertion(this, child.getPreviousSibling());
+			} else if (_nextInsertion == child) {
+				setPrevInsertion(child.getNextSibling(), this);
+			}
+
 			if (_firstInsertion == null)
 				return; // out of our range;
 
@@ -785,15 +790,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			Map<Component, Integer> indexMap = fillUpIndexMap(_firstInsertion, _lastInsertion);
 			int[] selfIndex = getInsertionIndex(_firstInsertion, _lastInsertion,
 					fillUpIndexMap(_firstInsertion, _lastInsertion));
-			if (selfIndex[1] < indexOfChild) {
-				// resync index
-				if (_previousInsertion == child) {
-					setPrevInsertion(this, child.getPreviousSibling());
-				} else if (_nextInsertion == child) {
-					setPrevInsertion(child.getNextSibling(), this);
-				}
-				return; // out of our range;
-			}
+			if (selfIndex[1] < indexOfChild) return; // out of our range;
 
 			HtmlShadowElement node = queryIntersectedShadowIfAny(indexOfChild, indexMap);
 			if (node != null) {
@@ -1050,8 +1047,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		case LAST:
 			List<HtmlShadowElement> children = se.getChildren();
 			if (!children.isEmpty()) {
-				for (Iterator<HtmlShadowElement> sit = children.iterator(); sit.hasNext();) {
-					if (adjustInsertionForRemove(sit.next(), removed))
+				for (HtmlShadowElement aChildren : children) {
+					if (adjustInsertionForRemove(aChildren, removed))
 						return true;
 				}
 			} else { // Bug ZK-2837
@@ -1102,8 +1099,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 				}
 			} else {
-				for (Iterator<HtmlShadowElement> sit = children.iterator(); sit.hasNext();) {
-					if (adjustInsertionForInsertBefore(sit.next(), target, insertBefore))
+				for (HtmlShadowElement aChildren : children) {
+					if (adjustInsertionForInsertBefore(aChildren, target, insertBefore))
 						return true;
 				}
 			}
@@ -1299,8 +1296,8 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	 */
 	public void recreate() {
 		if (_afterComposed) { // execute after composed
-			if (!getChildren().isEmpty()) { // clean up all and then re-attached
-				getChildren().clear();
+			if (getFirstChild() != null) {
+				removeChildren(getFirstChild());
 			}
 
 			if (_firstInsertion != null) {
@@ -1313,6 +1310,25 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			_afterComposed = false; // reset
 			afterCompose();
 		}
+	}
+
+	private void removeChildren(Component firstChild) {
+		for (Component next = firstChild; next != null;) {
+			// recursively remove all children, depth first
+			if (next.getFirstChild() != null) {
+				removeChildren(next.getFirstChild());
+			}
+			Component tmp = next.getNextSibling();
+			((HtmlShadowElement) next).removeFromParent();
+			next = tmp;
+		}
+	}
+
+	protected void removeFromParent() {
+		if (_parent == null) {
+			throw new UiException("The parent shadow cannot be null.");
+		}
+		_parent.removeChild(this);
 	}
 
 	public Component getShadowHostIfAny() {

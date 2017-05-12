@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3546.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 06 11:14:32 CST 2017, Created by christopher
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Should see many labels and a few buttons at init
+		2. click "re-create" button to trigger Apply.recreate
+		3. should see the same labels and buttons as init
+		4. click "add" button
+		5. should see "item 3" is added, also every item now have "inside 3" added too
+	</label>
+	<separator bar="true" />
+	<div apply="org.zkoss.zktest.test2.B80_ZK_3546Composer">
+		<apply id="listArea" template="t1" model2="${model}" model3="${submodel}" dynamicValue="true" />
+
+		<template name="t1">
+			<forEach items="${model2}">
+				<button label="${each}" />
+			</forEach>
+			<forEach items="${model2}">
+				<label style="font-size: 20pt;" value="${each}" />
+				<forEach items="${model3}" var="inside">
+					<label value="${inside}" />
+				</forEach>
+			</forEach>
+		</template>
+		<separator bar="true" />
+		<button id="t1" label="re-create" />
+		<button id="add" label="add" />
+	</div>
+</zk>

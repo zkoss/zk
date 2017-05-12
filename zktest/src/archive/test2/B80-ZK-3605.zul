@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3605.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 30 17:32:12 CST 2017, Created by Chris
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. click listen A on P1
+		2. click listen B on P2
+		3. click listen C on P1
+		4. click fire
+		5. should see
+		"onAnyWatch, A, p1
+		onAnyWatch, B, p2
+		onAnyWatch, C, p1"
+		in zk log
+		6. click unlisten A
+		7. click unlisten B
+		8. click unlisten C
+		9. click fire
+		10. should not see anything new in zk log
+		11. repeat all the steps, but do 6, 7, 8 in 8, 7, 6, should see the same result
+	</label>
+	<div>
+		<div id="p1">P1</div>
+		<div id="p2">P2</div>
+	</div>
+
+<script><![CDATA[
+var infoA, infoB, infoC;
+
+zk.afterMount(function() {
+    var p1 = zk.$('$p1');
+    var p2 = zk.$('$p2');
+	
+    var listenerA = { id: 'A', onAnyWatch: function() { zk.log('onAnyWatch', 'A', this.id) } };
+	var listenerB = { id: 'B', onAnyWatch: function() { zk.log('onAnyWatch', 'B', this.id) } };
+	var listenerC = { id: 'C', onAnyWatch: function() { zk.log('onAnyWatch', 'C', this.id) } };
+	
+	infoA = {onAnyWatch: [p1, listenerA.onAnyWatch]}
+	infoB = {onAnyWatch: [p2, listenerB.onAnyWatch]}
+	infoC = {onAnyWatch: [p1, listenerC.onAnyWatch]}
+});
+
+]]></script>
+	<div>
+		<button id="btnA1" label="listen A on P1" w:onClick="zWatch.listen(infoA)"/>
+		<button id="btnB1" label="listen B on P2" w:onClick="zWatch.listen(infoB)"/>
+		<button id="btnC1" label="listen C on P1" w:onClick="zWatch.listen(infoC)"/>
+	</div>
+
+	<div>
+		<button id="btnA2" label="unlisten A" w:onClick="zWatch.unlisten(infoA)"/>
+		<button id="btnB2" label="unlisten B" w:onClick="zWatch.unlisten(infoB)"/>
+		<button id="btnC2" label="unlisten C" w:onClick="zWatch.unlisten(infoC)"/>
+	</div>
+
+	<button id="fire" label="fire" w:onClick="zWatch.fire('onAnyWatch')"/>
+</zk>

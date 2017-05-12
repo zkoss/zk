@@ -799,7 +799,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers(InputWidget, 'bind_', arguments);
 		var n = this.getInputNode();
 
-		this._defRawVal = n.value;
+		this._lastChg = this._defRawVal = n.value;
 
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_')

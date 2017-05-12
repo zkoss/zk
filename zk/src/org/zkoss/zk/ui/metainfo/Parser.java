@@ -216,8 +216,7 @@ public class Parser {
 		if (!imports.isEmpty()) {
 			final RequestInfo ri = new RequestInfoImpl(_wapp, null, null, null, getLocator());
 			final UiFactory uf = ((WebAppCtrl) _wapp).getUiFactory();
-			for (Iterator it = imports.iterator(); it.hasNext();) {
-				final String[] imprt = (String[]) it.next();
+			for (final String[] imprt : imports) {
 				final String path = imprt[0], dirs = imprt[1];
 				try {
 					final PageDefinition pd = uf.getPageDefinition(ri, path);
@@ -234,8 +233,8 @@ public class Parser {
 			pgdef.addImportedClass(impcls);
 
 		//4. Processing the rest of processing instructions at the top level
-		for (Iterator it = pis.iterator(); it.hasNext();)
-			parse(pgdef, (ProcessingInstruction) it.next());
+		for (ProcessingInstruction pi : pis)
+			parse(pgdef, pi);
 
 		//5. Processing from the root element
 		final Element root = doc.getRootElement();
@@ -276,7 +275,7 @@ public class Parser {
 			//if (log.isDebugEnabled()) log.debug("taglib: prefix="+prefix+" uri="+uri);
 			noEL("prefix", prefix, pi);
 			noEL("uri", uri, pi); //not support EL (kind of chicken-egg issue)
-			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri, false)));
+			pgdef.addTaglib(new Taglib(prefix, toAbsoluteURI(uri)));
 		} else if ("evaluator".equals(target)) {
 			parseEvaluatorDirective(pgdef, pi, params);
 		} else if ("xel-method".equals(target)) {
@@ -289,8 +288,8 @@ public class Parser {
 			pgdef.addResponseHeaderInfo(new ResponseHeaderInfo(params.remove("name"), params.remove("value"),
 					params.remove("append"), ConditionImpl.getInstance(params.remove("if"), params.remove("unless"))));
 		} else if ("root-attributes".equals(target)) {
-			for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry) it.next();
+			for (Map.Entry<String, String> stringStringEntry : pi.parseData().entrySet()) {
+				final Map.Entry me = (Map.Entry) stringStringEntry;
 				pgdef.setRootAttribute((String) me.getKey(), (String) me.getValue());
 			}
 		} else if ("forward".equals(target)) { //forward
@@ -342,7 +341,7 @@ public class Parser {
 			checkZScriptEnabled(pi.getLocator());
 			ZScript zs = null;
 			final String zslang = pgdef.getZScriptLanguage();
-			if (zsrc.indexOf("${") < 0) {
+			if (!zsrc.contains("${")) {
 				final URL url = getLocator().getResource(zsrc);
 				if (url != null)
 					zs = new ZScript(zslang, url);
@@ -447,7 +446,7 @@ public class Parser {
 			//no EL because pagedef must be loaded to resolve
 			//the implementing class before creating an instance of shadow
 
-			compdef = langdef.getShadowDefinition(name, pgdef, toAbsoluteURI(templateURI, false));
+			compdef = langdef.getShadowDefinition(name, pgdef, toAbsoluteURI(templateURI));
 			if (!isEmpty(clsnm)) {
 				noEL("class", clsnm, pi);
 				compdef.setImplementationClass(clsnm);
@@ -463,7 +462,7 @@ public class Parser {
 			//the implementing class before creating an instance of macro
 
 			final boolean bInline = "true".equals(inline);
-			compdef = langdef.getMacroDefinition(name, toAbsoluteURI(macroURI, false), bInline, pgdef);
+			compdef = langdef.getMacroDefinition(name, toAbsoluteURI(macroURI), bInline, pgdef);
 			if (!isEmpty(clsnm)) {
 				if (bInline)
 					throw new UiException(message("class not allowed with inline macros", pi));
@@ -617,7 +616,7 @@ public class Parser {
 	}
 
 	private static void noEL(String nm, String val, Item item) throws UiException {
-		if (val != null && val.indexOf("${") >= 0)
+		if (val != null && val.contains("${"))
 			throw new UiException(message(nm + " does not support EL expressions", item));
 	}
 
@@ -629,10 +628,10 @@ public class Parser {
 			throw new UiException(message(nm + " cannot be empty", item));
 	}
 
-	private String toAbsoluteURI(String uri, boolean allowEL) {
+	private String toAbsoluteURI(String uri) {
 		if (uri != null && uri.length() > 0) {
 			final char cc = uri.charAt(0);
-			if (cc != '/' && cc != '~' && (!allowEL || uri.indexOf("${") < 0) && !Servlets.isUniversalURL(uri)) {
+			if (cc != '/' && cc != '~' && !Servlets.isUniversalURL(uri)) {
 				final String dir = getLocator().getDirectory();
 				if (dir != null && dir.length() > 0)
 					return dir.charAt(dir.length() - 1) == '/' ? dir + uri : dir + '/' + uri;
@@ -669,14 +668,12 @@ public class Parser {
 		NativeInfo preNativeInfo = null; //check if brother is native
 
 		//ZK-2632: Parser support disorder template tag
-		for (Iterator it = items.iterator(); it.hasNext();) {
-			final Object o = it.next();
+		for (final Object o : items) {
 			if (o instanceof Element)
 				parseItem(pgdef, parent, (Element) o, annHelper, bNativeContent, ParsingState.FIRST);
 		}
 
-		for (Iterator it = items.iterator(); it.hasNext();) {
-			final Object o = it.next();
+		for (final Object o : items) {
 			if (o instanceof Element) {
 				breakLine = false;
 				preNativeInfo = (NativeInfo) parseItem(pgdef, parent, (Element) o, annHelper, bNativeContent,
@@ -694,7 +691,7 @@ public class Parser {
 				}
 			} else if ((o instanceof Text) || (o instanceof CData)) {
 				String label = ((Item) o).getText(), trimLabel = !isXHTML ? label.trim() : label; // do not trim with xhtml
-				if (breakLine && (o instanceof Text) && label.trim().isEmpty()) {
+				if (breakLine && (o instanceof Text) && isEmpty(label.trim())) {
 					// we need to merge the breakLine into the previous one to save memory
 					List<NodeInfo> children = parent.getChildren();
 					final String labelAttr = parentlang.getLabelAttribute();
@@ -705,24 +702,24 @@ public class Parser {
 					}
 					continue;
 				}
-				if (label.length() == 0)
+				if (isEmpty(label))
 					continue;
 
 				if (bZkSwitch) {
-					if (trimLabel.length() == 0)
+					if (isEmpty(trimLabel))
 						continue;
 					throw new UiException(message("Only <zk> can be used in <zk switch>", (Item) o));
 				}
 
 				//ZK-2760: if parent is xhtml and no other sibling and length of label is 0, don't create TextInfo to it
-				if (isXHTML && items.size() <= 1 && trimLabel.trim().length() == 0) {
+				if (isXHTML && items.size() <= 1 && isEmpty(trimLabel.trim())) {
 					continue; //don't create Text
-				} else if (trimLabel.length() == 0 && ((pi != null && !pi.isBlankPreserved() && !isNativeText(pi))))
+				} else if (isEmpty(trimLabel) && (pi != null && !pi.isBlankPreserved() && !isNativeText(pi)))
 					continue; //Ignore blank text if no need to preserved
-				else if (label.trim().isEmpty() && !isAllBlankPreserved)
+				else if (isEmpty(label.trim()) && !isAllBlankPreserved)
 					continue;
 
-				if (!isXHTML && (o instanceof Text) && label.trim().isEmpty())
+				if (!isXHTML && (o instanceof Text) && isEmpty(label.trim()))
 					breakLine = true;
 
 				//consider as a label
@@ -736,12 +733,12 @@ public class Parser {
 					// Bug ZK-2845: ShadowInfo does not allow TextInfo as child
 					if (!(parent instanceof ShadowInfo)) {
 						// It's possible to replace multiple whitespace characters with single space
-						new TextInfo(parent,  trimLabel.length() == 0 ? " " : label);
+						new TextInfo(parent, isEmpty(trimLabel) ? " " : label);
 					}
 					//Don't trim if native (3.5.0)
 				} else {
 					if (textAs != null) { //implies pi != null (parent is ComponentInfo)
-						if (trimLabel.length() != 0)
+						if (!isEmpty(trimLabel))
 							if (textAsBuffer != null) //implies pi == parent
 								textAsBuffer.append(label); //concatenate all together
 							else if (!(parent instanceof TemplateInfo))
@@ -749,19 +746,19 @@ public class Parser {
 										message("Not allowed in text-as", ((Item) o).getParent()));
 					} else { // shadow element shouldn't support empty LabelInfo
 						if (parent instanceof ShadowInfo) {
-							if (trimLabel.isEmpty())
+							if (isEmpty(trimLabel))
 								continue; //ignore
 						}
 						if (isTrimLabel() && !parentlang.isRawLabel()) {
-							if (trimLabel.length() == 0)
+							if (isEmpty(trimLabel))
 								continue; //ignore
 							label = trimLabel;
 						}
-						if (isXHTML && preNativeInfo != null && label.trim().length() == 0) { //Merge break line between two NativeInfo when using zhtml
+						if (isXHTML && preNativeInfo != null && isEmpty(label.trim())) { //Merge break line between two NativeInfo when using zhtml
 							preNativeInfo.addEpilogChild(new TextInfo(null, label));
 						} else {
 							final ComponentInfo labelInfo = parentlang.newLabelInfo(parent, label);
-							if (trimLabel.length() == 0)
+							if (isEmpty(trimLabel))
 								labelInfo.setReplaceableText(" "); //yes, it can be replaced by a text, and it's possible to replace multiple whitespace characters with single space
 						}
 					}
@@ -778,7 +775,7 @@ public class Parser {
 			if (pi == null || !pi.isBlankPreserved())
 				trimLabel = trimLabel.trim();
 
-			if (trimLabel.length() != 0)
+			if (!isEmpty(trimLabel))
 				pi.addProperty(textAs, trimLabel, null);
 		}
 	}
@@ -934,8 +931,7 @@ public class Parser {
 				AnnotationHelper attrAnnHelper = null;
 				//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
 				boolean isMVVM = false;
-				for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
-					final Attribute attr = (Attribute) it.next();
+				for (final Attribute attr : el.getAttributeItems()) {
 					final Namespace attrns = attr.getNamespace();
 					final String attURI = attrns != null ? attrns.getURI() : "";
 					final String attnm = attr.getLocalName();
@@ -998,7 +994,7 @@ public class Parser {
 						if (!"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 								&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 							if (!bNativeContent && !bNative
-							//ZK 6: non-annotation namespace mandates non-annotation
+									//ZK 6: non-annotation namespace mandates non-annotation
 									&& (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
 									&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { //annotation
 								if (attrAnnHelper == null)
@@ -1011,7 +1007,7 @@ public class Parser {
 								//F80 - store subtree's binder annotation count
 								Set<String> binderAnnotations = config.getBinderAnnotations();
 								for (String annot : binderAnnotations) {
-									if (attvaltrim.indexOf(annot) != -1) {
+									if (attvaltrim.contains(annot)) {
 										compInfo.enableBindingAnnotation();
 										break;
 									}
@@ -1182,7 +1178,7 @@ public class Parser {
 		final ConditionImpl cond = ConditionImpl.getInstance(ifc, unless);
 		if (!isEmpty(zsrc)) { //ignore empty (not error)
 			ZScriptInfo zs = null;
-			if (zsrc.indexOf("${") < 0) {
+			if (!zsrc.contains("${")) {
 				final URL url = getLocator().getResource(zsrc);
 				if (url != null)
 					zs = new ZScriptInfo(parent, zslang, url, cond);
@@ -1218,8 +1214,7 @@ public class Parser {
 
 		//Test if any element is used
 		String elFound = null;
-		for (Iterator it = el.getChildren().iterator(); it.hasNext();) {
-			final Object o = it.next();
+		for (final Item o : el.getChildren()) {
 			if (o instanceof Element) {
 				elFound = ((Element) o).getName();
 				break;
@@ -1262,8 +1257,7 @@ public class Parser {
 		String ifc = null, unless = null, scope = null, composite = null;
 		final Map<String, String> attrs = new LinkedHashMap<String, String>();
 		AnnotationHelper attrAnnHelper = null;
-		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
-			final Attribute attr = (Attribute) it.next();
+		for (final Attribute attr : el.getAttributeItems()) {
 			final Namespace attrns = attr.getNamespace();
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
@@ -1302,8 +1296,7 @@ public class Parser {
 		String ifc = null, unless = null, composite = null;
 		boolean local = false;
 		final Map<String, String> vars = new LinkedHashMap<String, String>();
-		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
-			final Attribute attr = (Attribute) it.next();
+		for (final Attribute attr : el.getAttributeItems()) {
 			final Namespace attrns = attr.getNamespace();
 			final String attnm = attr.getLocalName();
 			final String attval = attr.getValue();
@@ -1330,8 +1323,7 @@ public class Parser {
 			throw new UiException(message("Child elements are not allowed for the annotations", el));
 
 		final Map<String, String[]> attrs = new LinkedHashMap<String, String[]>();
-		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
-			final Attribute attr = (Attribute) it.next();
+		for (final Attribute attr : el.getAttributeItems()) {
 			attrs.put(attr.getLocalName(),
 					AnnotationHelper.parseAttributeValue(attr.getValue().trim(), location(attr)));
 		}
@@ -1347,8 +1339,7 @@ public class Parser {
 				: pgdef.getComponentDefinitionMap().get(name);
 		final ShadowInfo compInfo = new ShadowInfo(parent, shadowDefinition, name,
 				ConditionImpl.getInstance(ifc, unless));
-		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
-			final Attribute attr = (Attribute) it.next();
+		for (final Attribute attr : el.getAttributeItems()) {
 			final Namespace attrns = attr.getNamespace();
 			final String attURI = attrns != null ? attrns.getURI() : "";
 			final String attnm = attr.getLocalName();
@@ -1375,7 +1366,7 @@ public class Parser {
 						//F80 - store subtree's binder annotation count
 						Set<String> binderAnnotations = WebApps.getCurrent().getConfiguration().getBinderAnnotations();
 						for (String annot : binderAnnotations) {
-							if (attvaltrim.indexOf(annot) != -1) {
+							if (attvaltrim.contains(annot)) {
 								compInfo.enableBindingAnnotation();
 								break;
 							}
@@ -1395,7 +1386,7 @@ public class Parser {
 		Node root = el.getFirstChild();
 		while (root != null && !(root instanceof Element)) {
 			if (root instanceof Text) {
-				if (!((Text) root).getText().trim().isEmpty())
+				if (!isEmpty(((Text) root).getText().trim()))
 					break;
 			}
 			root = root.getNextSibling();
@@ -1424,8 +1415,7 @@ public class Parser {
 
 		String ifc = null, unless = null, name = null, src = null;
 		final Map<String, String> params = new LinkedHashMap<String, String>(); //reserve the order
-		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
-			final Attribute attr = (Attribute) it.next();
+		for (final Attribute attr : el.getAttributeItems()) {
 			final Namespace attrns = attr.getNamespace();
 			final String attURI = attrns != null ? attrns.getURI() : "";
 			final String attnm = attr.getLocalName();
@@ -1440,7 +1430,7 @@ public class Parser {
 				unless = attval;
 			} else {
 				final String attPref = attrns != null ? attrns.getPrefix() : null;
-				if (!"xmlns".equals(attnm) && !"xml".equals(attnm) && attURI.indexOf("w3.org") < 0
+				if (!"xmlns".equals(attnm) && !"xml".equals(attnm) && !attURI.contains("w3.org")
 						&& (attPref == null || (!"xmlns".equals(attPref) && !"xml".equals(attPref))))
 					params.put(attnm, attval);
 			}
@@ -1460,8 +1450,7 @@ public class Parser {
 
 		final ZkInfo zi = new ZkInfo(parent, null);
 		String ifc = null, unless = null, forEach = null, forEachBegin = null, forEachEnd = null, forEachStep = null;
-		for (Iterator it = el.getAttributeItems().iterator(); it.hasNext();) {
-			final Attribute attr = (Attribute) it.next();
+		for (final Attribute attr : el.getAttributeItems()) {
 			final Namespace attrns = attr.getNamespace();
 			final String attURI = attrns != null ? attrns.getURI() : "";
 			final String attnm = attr.getLocalName();
@@ -1488,7 +1477,7 @@ public class Parser {
 				zi.setCase(attval);
 			} else {
 				final String attPref = attrns != null ? attrns.getPrefix() : null;
-				if (!"xmlns".equals(attnm) && !"xml".equals(attnm) && attURI.indexOf("w3.org") < 0
+				if (!"xmlns".equals(attnm) && !"xml".equals(attnm) && !attURI.contains("w3.org")
 						&& (attPref == null || (!"xmlns".equals(attPref) && !"xml".equals(attPref))))
 					warnWrongZkAttr(attr);
 			}
