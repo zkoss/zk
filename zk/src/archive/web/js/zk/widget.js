@@ -2268,12 +2268,12 @@ wgt.$f().main.setTitle("foo");
 
 	/** Generates the HTML fragment for this widget.
 	 * The HTML fragment shall be pushed to out. For example,
-<pre><code>
+<pre>{@code
 out.push('<div', this.domAttrs_(), '>');
 for (var w = this.firstChild; w; w = w.nextSibling)
 	w.redraw(out);
 out.push('</div>');
-</code></pre>
+}
 	 * <p>Default: it retrieves the redraw function associated with
 	 * the mold ({@link #getMold}) and then invoke it.
 	 * The redraw function must have the same signature as this method.
@@ -2489,13 +2489,13 @@ redraw: function (out) {
 	},
 	/** Returns the HTML attributes that is used to generate DOM element of this widget.
 	 * It is usually used to implement a mold ({@link #redraw}):
-</pre><code>
+<pre>{@code
 function () {
  return '<div' + this.domAttrs_() + '></div>';
-}</code></pre>
+}}
 	 * <p>Default: it generates id, style, class, and tooltiptext.
 	 * Notice that it invokes {@link #domClass_} and {@link #domStyle_},
-	 * unless they are disabled by the <code>no<code> argument.
+	 * unless they are disabled by the <code>no</code> argument.
 	 *
 	 * @param Map no [options] the attributes to exclude (i.e., to turn off).
 	 * If omitted, it means none (i.e., all included). For example, you don't
@@ -4942,7 +4942,7 @@ zk.Widget.getClass('combobox');
  */
 //@{
 	/**
-	 * A shortcut of <code>Widget.$()<code> function.
+	 * A shortcut of <code>Widget.$()</code> function.
 	 *
 	 * Note: Widget is the same as <code>zk.Widget</code>.
 	 * @return Widget

@@ -14,12 +14,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<div height="15px" />
-	<div height="25px">You should not see two buttons in the popup of the datebox.</div>
-	<custom-attributes org.zkoss.zul.client.rod="false"
-		scope="page"/>
-	<datebox format="short" timeZonesReadonly="true"
-		displayedTimeZones="UTC" /> 
-	<button label="Test #1" />
-	<button label="Test #2" />
+    <div height="15px"/>
+    <div height="25px">You should not see two buttons in the popup of the datebox. (no rod only)</div>
+    <custom-attributes org.zkoss.zul.client.rod="false"
+                       scope="page"/>
+    <datebox id="dbx" format="short" timeZonesReadonly="true"
+             displayedTimeZones="UTC"/>
+    <button id="btn1" label="Test #1"/>
+    <button id="btn2" label="Test #2"/>
 </zk>
