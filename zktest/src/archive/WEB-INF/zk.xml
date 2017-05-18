@@ -714,4 +714,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
         <name>org.zkoss.lang.contextClassLoader.class</name>
         <value>org.zkoss.zktest.test2.F80_ZK_3351ClassLoader</value>
     </library-property>
+
+    <!-- for F85-ZK-3525 -->
+	<library-property>
+	   <name>org.zkoss.zul.frozen.smooth</name>
+	   <value>true</value>
+	</library-property>
 </zk>

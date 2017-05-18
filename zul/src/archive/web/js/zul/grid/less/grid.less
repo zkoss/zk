@@ -50,13 +50,16 @@
 	//grid footer
 	&-footer {
 		border-top: 1px solid @baseBorderColor;
-		background: @meshFootBackgroundColor;
 		overflow: hidden;
 		.resetTable();
 		
 		.z-footer {
 			overflow: hidden;
+			background: @meshFootBackgroundColor;
 		}
+	}
+	.z-row-inner, .z-cell {
+		background: @meshBackgroundColor;
 	}
 	&-odd > .z-row-inner,
 	&-odd > .z-cell {
@@ -66,12 +69,13 @@
 //column
 .z-columns {
 	th:first-child {
-		border-left: none;
-
 		// B50-3306729: the first header should have border-left when the first column is covered with other header
 		&.z-columns-border {
 			border-left: 1px solid @meshTitleBorderColor;
 		}
+	}
+	th.z-column:last-child {
+		border-right: none;
 	}
 	&-bar {
 		border-left: 1px solid @meshTitleBorderColor;
@@ -79,7 +83,7 @@
 	}
 }
 .z-column {
-	border-left: 1px solid @meshTitleBorderColor;
+	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	.verGradient(@baseGradientStart, @baseGradientEnd);
@@ -135,12 +139,12 @@
 }
 //row and cell
 .z-row {
-	td:first-child {
-		border-left: none;
+	td:last-child {
+		border-right: none;
 	}
 	.z-row-inner,
 	.z-cell {
-		border-left: 1px solid @meshContentBorderColor;
+		border-right: 1px solid @meshContentBorderColor;
 		overflow: hidden;
 	}
 	&:hover {
