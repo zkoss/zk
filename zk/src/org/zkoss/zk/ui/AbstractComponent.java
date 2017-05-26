@@ -1310,14 +1310,16 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			if (!acp.isChildable())
 				throw new UiException("Child not allowed in " + parent.getClass().getName());
 
-			final Page parentpg = parent.getPage(), childpg = child.getPage();
-			if (parentpg != null && childpg != null && parentpg.getDesktop() != childpg.getDesktop())
-				throw new UiException("The parent and child must be in the same desktop: " + parent);
+			if (child != null) {
+				final Page parentpg = parent.getPage(), childpg = child.getPage();
+				if (parentpg != null && childpg != null && parentpg.getDesktop() != childpg.getDesktop())
+					throw new UiException("The parent and child must be in the same desktop: " + parent);
 
-			final Component oldparent = child.getParent();
-			if (spaceOwnerNoVirtual(parent) != (oldparent != null ? spaceOwnerNoVirtual(oldparent) : childpg))
-				checkIdSpacesDown(child, parent);
-		} else {
+				final Component oldparent = child.getParent();
+				if (spaceOwnerNoVirtual(parent) != (oldparent != null ? spaceOwnerNoVirtual(oldparent) : childpg))
+					checkIdSpacesDown(child, parent);
+			}
+		} else if (child != null) {
 			final Page childpg = child.getPage();
 			if (childpg != null)
 				checkDetach(childpg);
