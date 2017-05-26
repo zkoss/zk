@@ -227,7 +227,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	 * @param Map opts a map of options to zk.Event, if any.
 	 * @param int timeout the time (milliseconds) to wait before sending the request.
 	 */
-	globalCommand: function (cmd, args, timeout) {
+	globalCommand: function (cmd, args, opts, timeout) {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)
