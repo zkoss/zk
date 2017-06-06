@@ -2,6 +2,7 @@
 ZK 8.5.0
 * Features
   ZK-3525: implement frozen alternative
+  ZK-3681: Add a new Fragment component
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
   ZK-3617: XSD duplicate definitions

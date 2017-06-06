@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3681-Validator-Form.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 02 14:25:36 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <fragment viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3681_Validator_VM')"
+              validationMessages="@id('vmsgs')"
+              form="@id('fx') @load(vm.selected) @save(vm.selected, before='save') @validator('formBeanValidator', prefix='p_')"
+              issueId="@bind(fx.id)"
+              issueIdInvalidMessage="@bind(vmsgs['p_id'])"
+              issueDescription="@bind(fx.description)"
+              issueDescriptionInvalidMessage="@bind(vmsgs['p_description'])"
+              selected="@bind(vm.selected)"><![CDATA[
+        <div>
+            <h1>Editing selected issue</h1>
+            <p>
+                Issue ID:
+                <input type="text" value="@bind(issueId)"/>
+                <span textContent="@load(issueIdInvalidMessage)"/>
+            </p>
+            <p>
+                Issue Description:
+                <input type="text" value="@bind(issueDescription)"/>
+                <span textContent="@load(issueDescriptionInvalidMessage)"/>
+            </p>
+            <p><button onclick="@command('save')">Save</button></p>
+
+            <h1>Result</h1>
+            <p>Issue ID: <span textContent="@load(selected.id)"/></p>
+            <p>Issue Description: <span textContent="@load(selected.description)"/></p>
+        </div>
+    ]]></fragment>
+</zk>

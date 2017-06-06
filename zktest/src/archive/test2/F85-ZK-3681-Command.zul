@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3681-Command.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 02 11:14:44 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3681_Databinding_VM')" />
+    <fragment viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3681_Command_VM')"
+              status="@bind(vm.status)"><![CDATA[
+        <div>
+            <input type="checkbox" onchange="@command('onCheck', checked=event.checked)" />
+            Check this checkbox: <span textContent="@load(status)"/>
+        </div>
+
+        <div>
+            <button onclick="@global-command('callGlobal', text='Hello', num=1)">Call global (1)</button>
+            <button onclick="@global-command('callGlobal', text='World', num=2)">Call global (2)</button>
+        </div>
+    ]]></fragment>
+</zk>
