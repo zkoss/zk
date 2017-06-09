@@ -7,6 +7,27 @@ ZK 8.5.0
 * Upgrade Notes
 
    --------
+ZK 8.0.5
+May 16, 2017
+* Features
+
+* Bugs
+  ZK-3575: A panel size doesn't fit its parent inside a portallayout after resizing it
+  ZK-3343: Chosen box disappearing in Popup
+  ZK-3335: tbeditor p element style receive margin from browser
+  ZK-3546: Apply.recreate() creates a redundant template
+  ZK-3612: Textbox doesn't fire onChange event after being invalidated
+  ZK-3549: can't use <apply> inside a Listbox's <template>
+  ZK-3605: zWatch unlisten not always working
+  ZK-3616: Listbox selection lost with ROD
+  ZK-3638: missed events due delayed listening (zkmax only)
+  ZK-3263: Scroll position jumps up when clicking on scrollbar
+  ZK-3627: ROD Listbox scroll offset
+  ZK-3611: nested reference binding - inconsistent @load triggers
+
+* Upgrade Notes
+
+   --------
 ZK 8.0.4.2
 Feb 14, 2017
 * Features
