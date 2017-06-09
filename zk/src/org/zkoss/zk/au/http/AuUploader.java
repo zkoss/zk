@@ -418,11 +418,13 @@ public class AuUploader implements AuExtension {
 
 		sfu.setProgressListener(fty.new ProgressCallback());
 
-		Integer maxsz = conf.getMaxUploadSize();
+		Integer maxsz = null;
 		try {
-			maxsz = (Integer) desktop.getComponentByUuid(request.getParameter("uuid"))
-					.getAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE);
+			Integer compMaxsz = (Integer) desktop.getComponentByUuid(request.getParameter("uuid"))
+					.getAttribute(Attributes.UPLOAD_MAX_SIZE);
+			maxsz = compMaxsz != null ? compMaxsz : conf.getMaxUploadSize();
 		} catch (NumberFormatException e) {
+			throw new UiException("The upload max size must be a number");
 		}
 
 		sfu.setSizeMax(maxsz != null ? (maxsz >= 0 ? 1024L * maxsz : -1) : -1);

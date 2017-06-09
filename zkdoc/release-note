@@ -3,6 +3,7 @@ ZK 8.5.0
 * Features
   ZK-3525: implement frozen alternative
 * Bugs
+  ZK-3659: global <max-upload-size> is ignored
 
 * Upgrade Notes
 

@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
@@ -321,11 +322,13 @@ public class AuDropUploader implements AuExtension {
 		final ItemFactory fty = new ItemFactory(sizeThreadHold, repository, dfiFactory);
 		final ServletFileUpload sfu = new ServletFileUpload(fty);
 
-		Integer maxsz = conf.getMaxUploadSize();
+		Integer maxsz = null;
 		try {
-			maxsz = (Integer) desktop.getComponentByUuid(request.getParameter("uuid"))
-					.getAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE);
+			Integer compMaxsz = (Integer) desktop.getComponentByUuid(request.getParameter("uuid"))
+					.getAttribute(Attributes.UPLOAD_MAX_SIZE);
+			maxsz = compMaxsz != null ? compMaxsz : conf.getMaxUploadSize();
 		} catch (NumberFormatException e) {
+			throw new UiException("The upload max size must be a number");
 		}
 
 		sfu.setSizeMax(maxsz != null ? (maxsz >= 0 ? 1024L * maxsz : -1) : -1);
