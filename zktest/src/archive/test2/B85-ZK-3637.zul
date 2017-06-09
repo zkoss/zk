@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3637.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue June 6 17:14:22 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<vlayout xmlns:w="client">
+	<window id="vm" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3637VM')">
+        <vlayout>
+            Please click the buttons, you should see a message "clicked_local" (2nd ~ 5th) or "clicked_local" (5th ~ 9th) in zk log.
+            <button label="Click Me (MVVM)" onClick="@command('doEventClickedLocal')"/>
+            <button label="Click Me (repeatIgnore) call vm binder command twice" w:onClick="zkbind.$('$vm').command('doEventClickedLocal', null, {'repeatIgnore': true});zkbind.$('$vm').command('doEventClickedLocal', null, {'repeatIgnore': true})"/>
+            <button label="Click Me (duplicateIgnore) call vm binder command twice" w:onClick="zkbind.$('$vm').command('doEventClickedLocal', null, {'duplicateIgnore': true});zkbind.$('$vm').command('doEventClickedLocal', null, {'duplicateIgnore': true})"/>
+            <button label="Click Me (repeatIgnore) call static command twice" w:onClick="zkbind.Binder.postCommand(jq('$vm')[0],'doEventClickedLocal', null, {'repeatIgnore': true});zkbind.Binder.postCommand(jq('$vm')[0],'doEventClickedLocal', null, {'repeatIgnore': true})"/>
+            <button label="Click Me (duplicateIgnore) call static command twice" w:onClick="zkbind.Binder.postCommand(jq('$vm')[0],'doEventClickedLocal', null, {'duplicateIgnore': true});zkbind.Binder.postCommand(jq('$vm')[0],'doEventClickedLocal', null, {'duplicateIgnore': true})"/>
+            <button label="Click Me (repeatIgnore) call vm binder global command twice" w:onClick="zkbind.$('$vm').globalCommand('doEventClickedGlobal', null, {'repeatIgnore': true});zkbind.$('$vm').globalCommand('doEventClickedGlobal', null, {'repeatIgnore': true})"/>
+            <button label="Click Me (duplicateIgnore) call vm binder global command twice" w:onClick="zkbind.$('$vm').globalCommand('doEventClickedGlobal', null, {'duplicateIgnore': true});zkbind.$('$vm').globalCommand('doEventClickedGlobal', null, {'duplicateIgnore': true})"/>
+            <button label="Click Me (repeatIgnore) call static global command twice" w:onClick="zkbind.Binder.postGlobalCommand(jq('$vm')[0],'doEventClickedGlobal', null, {'repeatIgnore': true});zkbind.Binder.postGlobalCommand(jq('$vm')[0],'doEventClickedGlobal', null, {'repeatIgnore': true})"/>
+            <button label="Click Me (duplicateIgnore) call static global command twice" w:onClick="zkbind.Binder.postGlobalCommand(jq('$vm')[0],'doEventClickedGlobal', null, {'duplicateIgnore': true});zkbind.Binder.postGlobalCommand(jq('$vm')[0],'doEventClickedGlobal', null, {'duplicateIgnore': true})"/>
+        </vlayout>
+	</window>
+</vlayout>

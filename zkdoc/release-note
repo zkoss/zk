@@ -10,6 +10,7 @@ ZK 8.5.0
   ZK-3631: navbar fires onSelect event when triggered from server
   ZK-3570: NPE when removing listmodel element
   ZK-3600: Wrong size of grid scrollbar having first column invisible
+  ZK-3637: Client side @command and @global-command should work with options "duplicateIgnore" and "repeatIgnore"
 
 * Upgrade Notes
 
