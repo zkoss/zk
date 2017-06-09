@@ -8,6 +8,7 @@ ZK 8.5.0
   ZK-3574: Chosenbox doesn't serialize option uuids
   ZK-3643: JS error when resizing after adding column and invalidate
   ZK-3631: navbar fires onSelect event when triggered from server
+  ZK-3570: NPE when removing listmodel element
 
 * Upgrade Notes
 

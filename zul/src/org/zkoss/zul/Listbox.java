@@ -462,7 +462,7 @@ public class Listbox extends MeshElement {
 	}
 
 	private int getRealIndex(int index) {
-		final int offset = _model != null ? getDataLoader().getOffset() : 0;
+		final int offset = _model != null && !_renderAll ? getDataLoader().getOffset() : 0;
 		return index - (offset < 0 ? 0 : offset);
 	}
 
