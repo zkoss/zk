@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3684.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jun 12 09:52:29 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3684VM')" validationMessages="@id('vmsgs')">
+        <textbox value="@bind(vm.person.firstName) @validator('beanValidator', key='fn')"/>
+        <label value="@load(vmsgs.texts['fn'])"/>
+    </div>
+    <label multiline="true">
+        1. Input nothing, the validation message will be shown.
+        2. Input numbers, the validation message will be shown.
+        3. Input a valid name, the validation message is empty.
+    </label>
+</zk>

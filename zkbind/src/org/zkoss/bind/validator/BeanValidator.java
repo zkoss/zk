@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
@@ -31,6 +30,8 @@ import org.zkoss.bind.ValidationContext;
  * <p/> 
  * It validates a single property of a bean and sets the invalid message by 
  * {@link AbstractValidator#addInvalidMessage(ValidationContext, String)}. <p/>
+ * Since 8.5, you can assign a self-defined message key by appending a key parameter.
+ * <p/>
  * 
  * To use this class, you have to add <code>@validator('beanValidator')</code> or <code>@validator('org.zkoss.bind.validator.BeanValidator')</code> to the property-binding
  * <p/> 
@@ -39,7 +40,13 @@ import org.zkoss.bind.ValidationContext;
  * <grid width="600px">
  *   <textbox id="tb" value="@bind(vm.person.firstName) @validator('beanValidator')"/>
  *   <label value="@load(vmsgs[tb])"/> 
- *</grid>
+ * </grid>
+ * }</pre>
+ * <pre>{@code
+ * <grid width="600px">
+ *   <textbox value="@bind(vm.person.firstName) @validator('beanValidator', key='fn')"/>
+ *   <label value="@load(vmsgs['fn'])"/>
+ * </grid>
  * }</pre>
  * 
  * <b>Note</b><p/>
@@ -124,10 +131,11 @@ public class BeanValidator extends AbstractValidator {
 	 * @since 6.0.1
 	 */
 	protected void handleConstraintViolation(ValidationContext ctx, Set<ConstraintViolation<?>> violations) {
+		final String key = (String) ctx.getValidatorArg("key");
 		final int s = violations.size();
 
 		if (s == 1) {
-			addInvalidMessage(ctx, violations.iterator().next().getMessage());
+			addInvalidMessage(ctx, key, violations.iterator().next().getMessage());
 		} else if (s > 0) {
 			String[] msgs = new String[violations.size()];
 			// it is a Set, I tested in hibernate 4 , it doesn't guarantee the
@@ -138,7 +146,7 @@ public class BeanValidator extends AbstractValidator {
 			for (int i = 0; i < msgs.length; i++) {
 				msgs[i] = l.get(i).getMessage();
 			}
-			addInvalidMessages(ctx, msgs);
+			addInvalidMessages(ctx, key, msgs);
 		}
 	}
 }
