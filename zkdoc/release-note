@@ -6,6 +6,7 @@ ZK 8.5.0
   ZK-3659: global <max-upload-size> is ignored
   ZK-3617: XSD duplicate definitions
   ZK-3574: Chosenbox doesn't serialize option uuids
+  ZK-3643: JS error when resizing after adding column and invalidate
 
 * Upgrade Notes
 

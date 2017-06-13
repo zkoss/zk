@@ -175,20 +175,16 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			for (var i = 0; i < fakers.length; i++) {
 				faker = fakers[i];
 				var $faker = jq(mesh['e' + faker]);
-				if ($faker[0] != null && $faker.find(child.$n(faker))[0] == null) {
-					var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
-						visible = !child.isVisible() ? 'display:none;' : '';
-					wd = wd ? 'width:' + wd + ';' : '';
+				// ZK-3643: Handle fakerbar/bar even if the faker exists
+				if ($faker[0] != null) {
 					//B70-ZK-2130: virtual bar doesn't have to add fakerbar
 					//fkaker bar need recover if native bar has vscrollbar
-					var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>',
-						$bar = jq(mesh).find('.' + head.$s('bar')), // head.$n('bar') still exists after remove
+					var $bar = jq(mesh).find('.' + head.$s('bar')), // head.$n('bar') still exists after remove
 						bar = $bar[0],
 						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
 						hdfakerbar = $hdfakerbar[0],
 						barstyle = '', hdfakerbarstyle = '',
-						recoverFakerbar = !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false,
-						index = child.getChildIndex();
+						recoverFakerbar = !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false;
 
 					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding
 					// B30-1926480: the bar should be removed
@@ -208,11 +204,18 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						$hdfakerbar.remove();
 					}
 
-					// B30-1926480: child can be added after any brother node
-					if (index > 0)
-						jq($faker.find('col')[index - 1]).after(html);
-					else
-						$faker.append(html);
+					if (!$faker.find(child.$n(faker)).length) {
+						var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
+							visible = !child.isVisible() ? 'display:none;' : '';
+						wd = wd ? 'width:' + wd + ';' : '';
+						var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>',
+							index = child.getChildIndex();
+						// B30-1926480: child can be added after any brother node
+						if (index > 0)
+							jq($faker.find('col')[index - 1]).after(html);
+						else
+							$faker.append(html);
+					}
 
 					// resync var
 					$bar = jq(mesh).find('.' + head.$s('bar'));
