@@ -2,9 +2,9 @@
 ZK is a highly productive Java framework for building amazing enterprise web
 and mobile applications.
 
-##Resources
+## Resources
 
-###Documentation
+### Documentation
 
 * [Tutorial](http://books.zkoss.org/wiki/ZK_Getting_Started/Tutorial)
 * [ZK Essentials](http://books.zkoss.org/wiki/ZK_Essentials)
@@ -12,17 +12,17 @@ and mobile applications.
 * [Javadoc API](http://www.zkoss.org/javadoc/latest/zk/)
 * [More](http://books.zkoss.org)
 
-###Download
+### Download
 
 * [Download](http://www.zkoss.org/download/zk/ce)
 
-###License
+### License
 
  * [LGPL](http://www.gnu.org/licenses/lgpl-2.1.html)
 
-##[Product Overview](http://www.zkoss.org/product/zk)
+## [Product Overview](http://www.zkoss.org/product/zk)
 
-###Simply Java
+### Simply Java
 
 > ZK is renowned for its "Ajax without JavaScript" approach since 2005,
 > enabling developers to build rich internet applications transparently
@@ -42,7 +42,7 @@ and mobile applications.
 > are readily available.
 
 
-###Server+client Fusion
+### Server+client Fusion
 
 > ZK's Server+client Fusion gives developers the freedom to leverage the best
 > of both sides.
@@ -58,7 +58,7 @@ and mobile applications.
 > to work directly with ZK's jQuery based widgets to further enhance user
 > experience.
 
-###Declarative Programming
+### Declarative Programming
 
 > ZK User Interface Markup Language (ZUML) makes the design of rich user interfaces
 > as simple as authoring HTML pages. ZUML is a variant of XUL inheriting all
