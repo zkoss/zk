@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3570.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 04 16:21:36 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Scroll to the bottom.
+		2. Remove the last item.
+		3. No "Unknown exception: java.lang.NullPointerException." error popup.
+	</label>
+	<listbox id="lb" height="300px" width="150px">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<template name="model">
+			<listitem>
+				<custom-attributes item="${each}"/>
+				<listcell label="${each}"/>
+				<listcell>
+					<button label="x" onClick="model.remove(item);"/>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<grid id="gr" height="300px" width="150px">
+		<custom-attributes org.zkoss.zul.grid.rod="true"/>
+		<template name="model">
+			<row>
+				<custom-attributes item="${each}"/>
+				<label value="${each}"/>
+				<button label="x" onClick="model.remove(item);"/>
+			</row>
+		</template>
+	</grid>
+
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		int count = 0;
+		while (++count <= 100) {
+			model.add(count);
+		}
+		lb.setModel(model);
+		lb.renderAll();
+		gr.setModel(model);
+		gr.renderAll();
+	]]></zscript>
+</zk>
