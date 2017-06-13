@@ -187,9 +187,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//-- super --//
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments),
+			box = this.getListbox(),
 			head = this.getListheader();
 		if (head) {
-			if (!head.isVisible())
+			// ZK-3600: Prevent the dummy cell from hiding if the first header is invisible
+			if (!head.isVisible() && !(box && box._model && !this.parent._loaded))
 				style += 'display:none;';
 			if (head._align)
 				style += 'text-align:' + head._align + ';';
