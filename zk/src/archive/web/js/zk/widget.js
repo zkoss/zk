@@ -5467,12 +5467,10 @@ zkservice = {
 	}
 };
 (function () {
-	function _fixCommandName(prefix, opts, prop) {
+	function _fixCommandName(prefix, cmd, opts, prop) {
 		if (opts[prop]) {
 			var ignores = {};
-			for (var key in opts[prop]) {
-				ignores[prefix + key] = opts[prop][key];
-			}
+			ignores[prefix + cmd] = true;
 			opts[prop] = ignores;
 		}
 	}
@@ -5536,9 +5534,9 @@ zkservice = {
 		var wgt = this.$view;
 		if (opts) {
 			if (opts.duplicateIgnore)
-				_fixCommandName('onAuServiceCommand$', opts, 'duplicateIgnore');
+				_fixCommandName('onAuServiceCommand$', cmd, opts, 'duplicateIgnore');
 			if (opts.repeatIgnore)
-				_fixCommandName('onAuServiceCommand$', opts, 'repeatIgnore');
+				_fixCommandName('onAuServiceCommand$', cmd, opts, 'repeatIgnore');
 		}
 		zAu.send(new zk.Event(wgt, 'onAuServiceCommand$' + cmd, {cmd: cmd, args: args}, zk.copy({toServer: true}, opts)), timeout != undefined ? timeout : 38);
 		this._lastcmd = cmd;
