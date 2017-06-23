@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F85-ZK-3636.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 16 14:14:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window>
+        you should see 'home' and 'check' icon in the button
+        <button iconSclass="z-icon-home;z-icon-check" />
+    </window>
+</zk>
