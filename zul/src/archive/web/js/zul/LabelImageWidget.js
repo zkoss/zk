@@ -96,8 +96,26 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 * @since 7.0.0
 	 */
 	domIcon_: function () {
-		var icon = this.getIconSclass(); // use getIconSclass() to allow overriding
-		return icon ? '<i class="' + icon + '"></i>' : '';
+		var icon = this.getIconSclass(), // use getIconSclass() to allow overriding
+			result = '';
+		//ZK-3636: Added simple support for stacked font awesome icons
+		if (icon) {
+			var icons = icon.split(';'),
+				length = icons.length;
+			if (length > 1) {
+				var arr = ['<span class="z-icon-stack">'];
+				for (var i = 0; i < length; i++) {
+					var ic = icons[i];
+					if (ic)
+						arr.push('<i class="' + ic + '"></i>')
+				}
+				arr.push('</span>');
+				result = arr.join('');
+			} else {
+				result = '<i class="' + icon + '"></i>';
+			}
+		}
+		return result;
 	},
 	/**
 	 * Returns the encoded label.
