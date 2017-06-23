@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3681-Databinding.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 02 10:52:52 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <fragment viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3681_Databinding_VM')"
+              name="@bind(vm.name)" money="@bind(vm.money)" assets="@bind(vm.assets)" issue="@bind(vm.issue)"><![CDATA[
+        <p>vm.name: <span textContent="@bind(name)" /></p>
+        <p>@bind(name): <input type="text" value="@bind(name)" /></p>
+        <p>@load(name): <input type="text" value="@load(name)" /></p>
+        <p>@save(name): <input type="text" value="@save(name)" /></p>
+        <hr/>
+        <p>vm.money: <span textContent="@load(money)" /></p>
+        <p>Money: <input type="text" value="@bind(money)" /></p>
+        <p>vm.assets: <span textContent="@load(assets)" /></p>
+        <p>Assets: <input type="text" value="@bind(assets)" /></p>
+        <p>vm.issue: <span textContent="@load(issue)" /></p>
+        <p>isDone: <input type="text" value="@bind(issue.isDone)" /></p>
+    ]]></fragment>
+    <label multiline="true">
+        1. Test @bind, @load, @save.
+        2. Data coercion test
+        - text on an integer property
+        - json-like text on an text property
+        - text on a BigInteger property
+        - text on a boolean property of a object
+    </label>
+</zk>

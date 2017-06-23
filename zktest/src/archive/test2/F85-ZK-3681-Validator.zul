@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3681-Validator.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jun 02 14:25:36 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <fragment viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3681_Validator_VM')"
+              validationMessages="@id('vmsgs')"
+              issueId="@bind(vm.selected.id) @validator(vm.regexValidator, key='issueId', regex='^[A-Z]+-\\d+$')"
+              issueIdInvalidMessage="@bind(vmsgs['issueId'])"
+              issueDescription="@bind(vm.selected.description)"><![CDATA[
+        <div>
+            <h1>Editing selected issue</h1>
+            <p>
+                Issue ID:
+                <input type="text" value="@bind(issueId)"/>
+                <span textContent="@load(issueIdInvalidMessage)"/>
+            </p>
+            <p>
+                Issue Description:
+                <input type="text" value="@bind(issueDescription)"/>
+            </p>
+
+            <h1>Result</h1>
+            <p>Issue ID: <span textContent="@load(issueId)"/></p>
+            <p>Issue Description: <span textContent="@load(issueDescription)"/></p>
+        </div>
+    ]]></fragment>
+</zk>
