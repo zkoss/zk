@@ -4,6 +4,8 @@ ZK 8.5.0
   ZK-3525: implement frozen alternative
   ZK-3681: Add a new Fragment component
   ZK-3636: Added simple support for stacked font awesome icons
+  ZK-3683: Add a new Splitpane component
+
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
   ZK-3617: XSD duplicate definitions
