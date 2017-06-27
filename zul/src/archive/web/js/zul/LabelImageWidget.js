@@ -107,7 +107,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 				for (var i = 0; i < length; i++) {
 					var ic = icons[i];
 					if (ic)
-						arr.push('<i class="' + ic + '"></i>')
+						arr.push('<i class="' + ic + '"></i>');
 				}
 				arr.push('</span>');
 				result = arr.join('');
