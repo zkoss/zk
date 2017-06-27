@@ -1,5 +1,5 @@
 {
-	"excludeFiles":["/**/mold/", "/**/debug/", "/**/codegen/", "/**/.git/", "/**/node_module/", "/**/jquery.js"],
+	"excludeFiles":["/**/mold/", "/**/debug/", "/**/codegen/", "/**/.git/", "/**/node_module/", "/**/jquery.js", "/**/ext/"],
 	/*"disallowEmptyBlocks": true,*/
 	"disallowKeywords": ["with"],
 	"disallowMixedSpacesAndTabs": "smart",
