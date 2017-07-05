@@ -3,7 +3,7 @@ package org.zkoss.zktest.test2;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zkmax.zul.Splitpane;
+import org.zkoss.zkmax.zul.Splitlayout;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Window;
 
@@ -12,9 +12,9 @@ import org.zkoss.zul.Window;
  */
 public class F85_ZK_3683 extends SelectorComposer<Window> {
 	@Wire
-	private Splitpane sp1;
+	private Splitlayout sp1;
 
-	private Splitpane lastSp;
+	private Splitlayout lastSp;
 
 	private int count = 0;
 
@@ -24,27 +24,27 @@ public class F85_ZK_3683 extends SelectorComposer<Window> {
 	}
 
 	@Listen("onClick = #btn")
-	public void btnAddNestedSplitPane() {
+	public void btnAddNestedSplitlayout() {
 		if (count > 2)
 			return;
 		Window win;
-		Splitpane parentSp = lastSp;
+		Splitlayout parentSp = lastSp;
 		if (parentSp != null) {
 			win = (Window) parentSp.getChildren().get(1);
 			win.detach();
 			if (count % 2 == 0) {
-				appendSplitpane(parentSp, false);
+				appendSplitlayout(parentSp, false);
 			}
 			else {
-				appendSplitpane(parentSp, true);
+				appendSplitlayout(parentSp, true);
 			}
 			count++;
 		}
 	}
 
-	private void appendSplitpane(Splitpane parentSp, boolean isVertical) {
+	private void appendSplitlayout(Splitlayout parentSp, boolean isVertical) {
 		String orient = isVertical ? "vertical" : "horizontal";
-		Splitpane newSp = new Splitpane();
+		Splitlayout newSp = new Splitlayout();
 		newSp.setOrient(orient);
 		newSp.setHeight("100%");
 		newSp.setWidth("100%");

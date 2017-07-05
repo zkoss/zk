@@ -15,16 +15,16 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <window apply="org.zkoss.zktest.test2.F85_ZK_3683" sizable="true"
-            title="ZK SplitPane" height="600px" width="700px" border="normal" style="margin:50px 0 0 200px">
+            title="ZK Splitlayout" height="600px" width="700px" border="normal" style="margin:50px 0 0 200px">
         <vlayout vflex="1">
-            <splitpane id="sp1" vflex="1" hflex="1" collapse="before">
+            <splitlayout id="sp1" vflex="1" hflex="1" collapse="before">
                 <window title="Window 1" border="normal" vflex="2">
                     Drag/drop the splitter and click the add child button, it should work fine.
                 </window>
                 <window title="Window 2" border="normal" vflex="1">
                     Hello, World!
                 </window>
-            </splitpane>
+            </splitlayout>
             <button id="btn" label="add child"/>
         </vlayout>
     </window>
