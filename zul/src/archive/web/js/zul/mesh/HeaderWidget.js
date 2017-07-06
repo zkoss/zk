@@ -260,6 +260,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				var mesh = this.getMeshWidget(),
 					max = zk(this.$n('cave')).textSize()[0],
 					cIndex = $n.cellIndex();
+				mesh.clearCachedSize_();
 				mesh._calcMinWds();
 				var sz = mesh._minWd.wds[cIndex];
 				this.$class._aftersizing({control: this, _zszofs: sz}, evt);
