@@ -75,7 +75,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			headn.style.width = '';
 		if (wgt.efoottbl) {//clear and backup footers widths
 			wgt.efoot.style.width = '';
-			efoottblw = eheadtblw;
+			efoottblw = eheadtblw || wgt.efoottbl.width;
 			wgt.efoottbl.width = '';
 			wgt.efoottbl.style.width = '';
 			efoottblfix = wgt.efoottbl.style.tableLayout;
@@ -97,7 +97,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (wgt.ebodytbl) {//clear and backup body faker widths
 			wgt.ebody.style.width = '';
-			ebodytblw = eheadtblw;
+			ebodytblw = eheadtblw || wgt.ebodytbl.width;
 			wgt.ebodytbl.width = '';
 			wgt.ebodytbl.style.width = '';
 			ebodytblfix = wgt.ebodytbl.style.tableLayout;
