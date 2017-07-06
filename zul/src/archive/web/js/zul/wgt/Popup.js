@@ -259,7 +259,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				if (jq.nodeName(n, 'input')) {
 					if (zk.ff && jq.isAncestor(this.$n(), n)) {
 						jq(n).blur(); // trigger a missing blur event.
-					} else if (zk.ie && document.activateElement !== n) {
+					} else if (zk.ie && document.activeElement !== n) {
 						//ZK-3244 popup miss focus on input on IE
 						zk(n).focus();
 					}
