@@ -48,7 +48,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		if (wgt.eheadtbl && headn) {//clear and backup headers widths
 			wgt.ehead.style.width = '';
-			eheadtblw = wgt.eheadtbl.width;
+			eheadtblw = wgt.getInnerWidth() || '';
 			wgt.eheadtbl.width = '';
 			wgt.eheadtbl.style.width = '';
 			eheadtblfix = wgt.eheadtbl.style.tableLayout;
@@ -75,7 +75,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			headn.style.width = '';
 		if (wgt.efoottbl) {//clear and backup footers widths
 			wgt.efoot.style.width = '';
-			efoottblw = wgt.efoottbl.width;
+			efoottblw = eheadtblw;
 			wgt.efoottbl.width = '';
 			wgt.efoottbl.style.width = '';
 			efoottblfix = wgt.efoottbl.style.tableLayout;
@@ -97,7 +97,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		if (wgt.ebodytbl) {//clear and backup body faker widths
 			wgt.ebody.style.width = '';
-			ebodytblw = wgt.ebodytbl.width;
+			ebodytblw = eheadtblw;
 			wgt.ebodytbl.width = '';
 			wgt.ebodytbl.style.width = '';
 			ebodytblfix = wgt.ebodytbl.style.tableLayout;
@@ -164,7 +164,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 
 		if (wgt.eheadtbl && headn) {//restore headers widths
-			wgt.eheadtbl.width = eheadtblw || '';
+			if (eheadtblw.indexOf('%') < 0) { // once sized and consider faker bar
+				var $hdfakerbar = jq(wgt.head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
+					hdfakerbar = $hdfakerbar[0];
+				if (hdfakerbar) eheadtblw = jq.px0(parseInt(eheadtblw) + parseInt(hdfakerbar.style.width));
+				wgt.eheadtbl.style.width = eheadtblw;
+			} else
+				wgt.eheadtbl.width = eheadtblw || '';
+
 			wgt.eheadtbl.style.tableLayout = eheadtblfix || '';
 			if (zk.chrome)
 				wgt.eheadtbl.style.display = '';
