@@ -16,6 +16,7 @@ ZK 8.5.0
   ZK-3600: Wrong size of grid scrollbar having first column invisible
   ZK-3637: Client side @command and @global-command should work with options "duplicateIgnore" and "repeatIgnore"
   ZK-3660: MeshWidget auto col sizing only working once
+  ZK-3645: columns losing widths after resize
 
 * Upgrade Notes
 

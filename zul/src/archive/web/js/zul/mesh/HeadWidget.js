@@ -108,9 +108,16 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	},
 
 	onColSize: function (evt) {
-		var owner = this.parent;
+		var owner = this.parent,
+			widths = evt.widths,
+			headWidth = 0;
 		evt.column._width = evt.width;
-		owner._innerWidth = owner.eheadtbl.width || owner.eheadtbl.style.width;
+		if (widths) {
+			for (var i = 0; i < widths.length; i++)
+				headWidth += parseInt(widths[i]);
+			if (headWidth != 0) headWidth = jq.px0(headWidth);
+		}
+		owner._innerWidth = headWidth || owner.eheadtbl.width || owner.eheadtbl.style.width;
 		owner.fire('onInnerWidth', owner._innerWidth);
 		owner.fireOnRender(zk.gecko ? 200 : 60);
 	},

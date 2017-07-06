@@ -1,0 +1,43 @@
+<zk xmlns:w="client">
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	model.add("aaa"); model.add("bbb"); model.add("ccc"); model.add("ddd"); model.add("eee");
+
+	List headers = new ArrayList();
+	headers.add("lh1"); headers.add("lh2"); headers.add("lh3"); headers.add("lh4");
+
+	public void createHeaders() {
+		lh.getChildren().clear();
+		for(String hdr : headers) {
+			lh.appendChild(new Listheader(hdr));
+		}
+	}
+	]]></zscript>
+    <label>
+        Resize any column and click "add" button, the size of head/body cells should fit.
+    </label>
+    <separator />
+	<button label="add" onClick='
+		headers.add("new hdr");
+		createHeaders();
+		lb.setModel(lb.getModel());
+	'></button>
+	<button label="remove" onClick='
+		headers.remove(headers.size() -1);
+		createHeaders();
+		lb.setModel(lb.getModel());
+	'></button>
+    <separator />
+	<div id="d1">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<listbox id="lb" hflex="1" height="100px" model="${model}">
+			<listhead id="lh" sizable="true" onCreate="createHeaders()"/>
+			<template name="model">
+				<listitem>
+					<custom-attributes rs="${each}"/>
+					<listcell forEach="${headers}">${rs}-${each}</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>
