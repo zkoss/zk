@@ -1715,7 +1715,7 @@ public class Grid extends MeshElement {
 		renderer.render("_totalSize", getDataLoader().getTotalSize());
 		renderer.render("_offset", getDataLoader().getOffset());
 
-		if (_rod) {
+		if (_rod && !_renderAll) {
 			if (((Cropper) getDataLoader()).isCropper())//bug #2936064 
 				renderer.render("_grid$rod", true);
 			int sz = initRodSize();
