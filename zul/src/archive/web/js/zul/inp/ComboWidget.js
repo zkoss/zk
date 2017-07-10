@@ -137,7 +137,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				if (inp && zul.inp.InputWidget._isInView(this))
 					zk(this.getPopupNode_()).position(inp, 'after_start');
 				else
-					this.close();
+					this.close({sendOnOpen: true});
 			}
 		}
 	},
