@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3696.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jul 10 15:36:49 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		The grids below have 4 auxheads and 1 column. So 5 headers should be displayed.
+	</label>
+
+	<label value="Dynamic generated headers" />
+	<grid id="grid1" >
+		<rows>
+			<row>
+				<label value="1,000" />
+				<label value="1,100" />
+			</row>
+			<row>
+				<label value="1,500" />
+				<label value="2,100" />
+			</row>
+		</rows>
+	</grid>
+
+	<label value="Static headers" />
+	<grid id="grid2" vflex="1">
+		<auxhead>
+			<auxheader label="H1'07" />
+			<auxheader label="H2'07" />
+		</auxhead>
+		<auxhead>
+			<auxheader label="Q1" />
+			<auxheader label="Q2" />
+		</auxhead>
+		<auxhead>
+			<auxheader label="Q11" />
+			<auxheader label="Q21" />
+		</auxhead>
+		<auxhead>
+			<auxheader label="Q12" />
+			<auxheader label="Q22" />
+		</auxhead>
+		<columns>
+			<column label="Jan" />
+			<column label="Feb" />
+		</columns>
+		<rows>
+			<row>
+				<label value="1,000" />
+				<label value="1,100" />
+			</row>
+			<row>
+				<label value="1,500" />
+				<label value="2,100" />
+			</row>
+		</rows>
+	</grid>
+
+	<zscript>
+	<![CDATA[
+		Auxhead head = new Auxhead();
+		head.appendChild(new Auxheader("H1'07"));
+		head.appendChild(new Auxheader("H2'07"));
+		grid1.appendChild(head);
+
+		head = new Auxhead();
+		head.appendChild(new Auxheader("Q1"));
+		head.appendChild(new Auxheader("Q2"));
+		grid1.appendChild(head);
+
+		head = new Auxhead();
+		head.appendChild(new Auxheader("Q11"));
+		head.appendChild(new Auxheader("Q21"));
+		grid1.appendChild(head);
+
+		head = new Auxhead();
+		head.appendChild(new Auxheader("Q12"));
+		head.appendChild(new Auxheader("Q22"));
+		grid1.appendChild(head);
+
+		Columns cs = new Columns();
+		cs.appendChild(new Column("Jan"));
+		cs.appendChild(new Column("Feb"));
+		grid1.appendChild(cs);
+	]]>
+	</zscript>
+</zk>
