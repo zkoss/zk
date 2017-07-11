@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3642.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jul 07 18:21:54 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <include src="../bind/el/F80-ZK-2596.zul" />
+</zk>

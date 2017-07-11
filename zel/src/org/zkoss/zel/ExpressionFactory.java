@@ -17,20 +17,10 @@
 
 package org.zkoss.zel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,60 +36,16 @@ import org.zkoss.zel.impl.util.ClassUtil;
  * @since 2.1
  */
 public abstract class ExpressionFactory {
-
-    private static final boolean IS_SECURITY_ENABLED =
-        (System.getSecurityManager() != null);
-
-    private static final String SERVICE_RESOURCE_NAME =
-        "META-INF/services/javax.el.ExpressionFactory";
-
-    private static final String PROPERTY_NAME = "javax.el.ExpressionFactory";
-
-    private static final String SEP;
-    private static final String PROPERTY_FILE;
-
     private static final CacheValue nullTcclFactory = new CacheValue();
     private static final ConcurrentMap<CacheKey, CacheValue> factoryCache =
             new ConcurrentHashMap<CacheKey, CacheValue>();
-
-    static {
-        if (IS_SECURITY_ENABLED) {
-            SEP = AccessController.doPrivileged(
-                    new PrivilegedAction<String>(){
-                        
-                        public String run() {
-                            return System.getProperty("file.separator");
-                        }
-
-                    }
-            );
-            PROPERTY_FILE = AccessController.doPrivileged(
-                    new PrivilegedAction<String>(){
-                        
-                        public String run() {
-                            return System.getProperty("java.home") + SEP +
-                                    "lib" + SEP + "el.properties";
-                        }
-
-                    }
-            );
-        } else {
-            SEP = System.getProperty("file.separator");
-            PROPERTY_FILE = System.getProperty("java.home") + SEP + "lib" +
-                    SEP + "el.properties";
-        }
-    }
+    private static final String FACTORY_IMPL_CLASSNAME =
+            "org.zkoss.zel.impl.ExpressionFactoryImpl";
 
     /**
-     * Create a new {@link ExpressionFactory}. The class to use is determined by
-     * the following search order:
-     * <ol>
-     * <li>services API (META-INF/services/javax.el.ExpressionFactory)</li>
-     * <li>$JRE_HOME/lib/el.properties - key javax.el.ExpressionFactory</li>
-     * <li>javax.el.ExpressionFactory</li>
-     * <li>Platform default implementation -
-     *     org.zkoss.zel.impl.ExpressionFactoryImpl</li>
-     * </ol>
+     * Create a new {@link ExpressionFactory}. The class to use is
+     * org.zkoss.zel.impl.ExpressionFactoryImpl.
+     *
      * @return the new ExpressionFactory
      */
     public static ExpressionFactory newInstance() {
@@ -151,7 +97,7 @@ public abstract class ExpressionFactory {
                 try {
                     className = cacheValue.getFactoryClassName();
                     if (className == null) {
-                        className = discoverClassName(tccl);
+                        className = FACTORY_IMPL_CLASSNAME;
                         cacheValue.setFactoryClassName(className);
                     }
                     if (tccl == null) {
@@ -282,7 +228,7 @@ public abstract class ExpressionFactory {
      *
      * @since EL 3.0
      */
-    public Map<String,Method> getInitFunctionMap() {
+    public Map<String, Method> getInitFunctionMap() {
         return null;
     }
 
@@ -349,123 +295,4 @@ public abstract class ExpressionFactory {
             ref = new WeakReference<Class<?>>(clazz);
         }
     }
-
-    /**
-     * Discover the name of class that implements ExpressionFactory.
-     *
-     * @param tccl
-     *            {@code ClassLoader}
-     * @return Class name. There is default, so it is never {@code null}.
-     */
-    private static String discoverClassName(ClassLoader tccl) {
-        String className = null;
-
-        // First services API
-        className = getClassNameServices(tccl);
-        if (className == null) {
-            if (IS_SECURITY_ENABLED) {
-                className = AccessController.doPrivileged(
-                        new PrivilegedAction<String>() {
-                            
-                            public String run() {
-                                return getClassNameJreDir();
-                            }
-                        }
-                );
-            } else {
-                // Second el.properties file
-                className = getClassNameJreDir();
-            }
-        }
-        if (className == null) {
-            if (IS_SECURITY_ENABLED) {
-                className = AccessController.doPrivileged(
-                        new PrivilegedAction<String>() {
-                            
-                            public String run() {
-                                return getClassNameSysProp();
-                            }
-                        }
-                );
-            } else {
-                // Third system property
-                className = getClassNameSysProp();
-            }
-        }
-        if (className == null) {
-            // Fourth - default
-            className = "org.zkoss.zel.impl.ExpressionFactoryImpl";
-        }
-        return className;
-    }
-
-    private static String getClassNameServices(ClassLoader tccl) {
-        InputStream is = null;
-
-        if (tccl == null) {
-            is = ClassLoader.getSystemResourceAsStream(SERVICE_RESOURCE_NAME);
-        } else {
-            is = tccl.getResourceAsStream(SERVICE_RESOURCE_NAME);
-        }
-
-        if (is != null) {
-            String line = null;
-            InputStreamReader isr = null;
-            BufferedReader br = null;
-            try {
-            	isr = new InputStreamReader(is, "UTF-8");
-            	br = new BufferedReader(isr);
-                line = br.readLine();
-                if (line != null && line.trim().length() > 0) {
-                    return line.trim();
-                }
-            } catch (UnsupportedEncodingException e) {
-                // Should never happen with UTF-8
-                // If it does - ignore & return null
-            } catch (IOException e) {
-                throw new ELException("Failed to read " + SERVICE_RESOURCE_NAME,
-                        e);
-            } finally {
-                try {
-                    is.close();
-                } catch (IOException ioe) {/*Ignore*/}
-            }
-        }
-
-        return null;
-    }
-
-    private static String getClassNameJreDir() {
-        File file = new File(PROPERTY_FILE);
-        if (file.canRead()) {
-        	InputStream is = null;
-            try {
-            	is = new FileInputStream(file);
-                Properties props = new Properties();
-                props.load(is);
-                String value = props.getProperty(PROPERTY_NAME);
-                if (value != null && value.trim().length() > 0) {
-                    return value.trim();
-                }
-            } catch (FileNotFoundException e) {
-                // Should not happen - ignore it if it does
-            } catch (IOException e) {
-                throw new ELException("Failed to read " + PROPERTY_FILE, e);
-            } finally {
-            	try {
-                    is.close();
-                } catch (IOException ioe) {/*Ignore*/}
-            }
-        }
-        return null;
-    }
-
-    private static final String getClassNameSysProp() {
-        String value = System.getProperty(PROPERTY_NAME);
-        if (value != null && value.trim().length() > 0) {
-            return value.trim();
-        }
-        return null;
-    }
-
 }
