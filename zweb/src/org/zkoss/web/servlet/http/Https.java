@@ -43,7 +43,6 @@ import org.zkoss.io.Files;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
 import org.zkoss.lang.Strings;
-import org.zkoss.lang.SystemException;
 import org.zkoss.util.media.Media;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -97,11 +96,8 @@ public class Https extends Servlets {
 	 */
 	public static final String getCompleteServerName(HttpServletRequest hreq) {
 		final StringBuffer sb = hreq.getRequestURL();
-		final String ctx = hreq.getContextPath();
-		final int j = sb.indexOf(ctx);
-		if (j < 0)
-			throw new SystemException("Unknown request: url=" + sb + ", ctx=" + ctx);
-		return sb.delete(j, sb.length()).toString();
+		final String uri = hreq.getRequestURI();
+		return sb.substring(0, sb.length() - uri.length());
 	}
 
 	/**
@@ -111,11 +107,9 @@ public class Https extends Servlets {
 	 */
 	public static final String getCompleteContext(HttpServletRequest hreq) {
 		final StringBuffer sb = hreq.getRequestURL();
+		final String uri = hreq.getRequestURI();
 		final String ctx = hreq.getContextPath();
-		final int j = sb.indexOf(ctx);
-		if (j < 0)
-			throw new SystemException("Unknown request: url=" + sb + ", ctx=" + ctx);
-		return sb.delete(j + ctx.length(), sb.length()).toString();
+		return sb.substring(0, sb.length() - uri.length() + ctx.length());
 	}
 
 	/** Gets the value of the specified cookie, or null if not found.
