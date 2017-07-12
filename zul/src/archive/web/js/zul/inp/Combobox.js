@@ -337,10 +337,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		}
 	},
 	otherPressed_: function (evt) {
-		var wgt = this,
-			keyCode = evt.keyCode,
-			bDel;
-		this._bDel = bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/; //jscs:ignore
+		var keyCode = evt.keyCode;
+		this._bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/; //jscs:ignore
 		if (this._readonly)
 			switch (keyCode) {
 			case 35://End
@@ -364,9 +362,17 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				if (sel)
 					this._select(sel, {sendOnSelect: true});
 			}
-		else
-			setTimeout(function () {wgt._typeahead(bDel);}, zk.opera || zk.webkit ? 10 : 0);
-			//use timeout, since, when key down, value not ready yet, opear and safari need extra time to set value to dom
+	},
+	doKeyUp_: function (evt) {
+		if (!this._disabled) {
+			if (!this._readonly) {
+				var keyCode = evt.keyCode,
+					bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/; //jscs:ignore
+				// ZK-3607: The value is not ready in onKeyDown, but is ready in onKeyUp
+				this._typeahead(bDel);
+			}
+			this.$supers('doKeyUp_', arguments);
+		}
 	},
 	_typeahead: function (bDel, ofs) {
 		if (zk.currentFocus != this) return;
