@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3700.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jul 7 12:36:49 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script id="script" src="./js/zk-3700.js" />
+    <label>
+        1.Click the button, and you should not see the script tag (zk-3700.js) in the dom.
+    </label>
+    <button label="remove script" onClick="remove(script)"/>
+	<zscript><![CDATA[
+        public void remove(Component c){
+            c.detach();
+        }
+	]]></zscript>
+</zk>

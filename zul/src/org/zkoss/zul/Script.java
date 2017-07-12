@@ -252,7 +252,9 @@ public class Script extends AbstractComponent {
 			final HtmlPageRenders.RenderContext rc = _defer ? null : HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.perm != null) {
 				final Writer cwout = rc.perm;
-				cwout.write("\n<script type=\"text/javascript\" src=\"");
+				cwout.write("\n<script id=\"");
+				cwout.write(getUuid());
+				cwout.write("\" type=\"text/javascript\" src=\"");
 				cwout.write(getEncodedSrcURL());
 				cwout.write('"');
 				if (_charset != null) {

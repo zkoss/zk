@@ -92,8 +92,25 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		}
 		if (this._src && !this._srcrun) {
 			this._srcrun = true; //run only once
-			zk.loadScript(this._src, null, this._charset);
+			var e = document.createElement('script');
+			e.id = this.uuid;
+			e.type = 'text/javascript';
+			e.charset = this._charset || 'UTF-8';
+			e.src = this._src;
+			var n = this.$n(),
+				nextSib;
+			if (n) {
+				nextSib = n.nextSibling;
+			 	jq(n).remove();
+			}
+
+			if (nextSib) //use jq here would load this script twice in IE8/9
+				nextSib.parentNode.insertBefore(e, nextSib);
+			else
+				document.body.appendChild(e);
 		}
+		//update node
+		this._node = jq(this.uuid, zk)[0];
 	},
 	ignoreFlexSize_: function (attr) {
 		// ZK-2248: ignore widget dimension in vflex/hflex calculation
