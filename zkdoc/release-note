@@ -21,6 +21,7 @@ ZK 8.5.0
   ZK-3680: Combowigdets closed by scrolling off view don't send an openevent back to the server
   ZK-3661: typo in popup.js after ZK-3244
   ZK-3693: NPE + IndexOutOfBoundsException when replacing a listitem
+  ZK-3696: Grid doesn't render more than 3 Auxhead components
 
 * Upgrade Notes
 

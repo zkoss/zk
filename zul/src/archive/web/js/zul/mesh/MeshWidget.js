@@ -752,13 +752,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
 			for (var i = this.heads.length; i-- > 0;) {
 				var header = this.heads[i],
-					emptyHeader = true;
+					emptyHeader = true,
+					column = 0;
 				for (var w = header.firstChild; w; w = w.nextSibling) {
 					//B70-ZK-2559: when dynamic adding auxhead, there has already
 					//been auxhead widget while dom element hasn't attached yet
-					var childNode = this.ehdfaker.childNodes[i];
-					if (!childNode) continue;
-					if (hdsmin && !childNode.style.width && !w._nhflex) {
+					var childNode = this.ehdfaker.childNodes[column++];
+					if (hdsmin && (childNode && !childNode.style.width) && !w._nhflex) {
 						// B50-3357475: assume header hflex min if width/hflex unspecified
 						w._hflex = 'min';
 						w._nhflex = -65500; // min
