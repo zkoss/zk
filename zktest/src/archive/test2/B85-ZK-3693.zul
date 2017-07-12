@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3693.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 16 12:50:26 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		[renderAll() called before page loading]
+		1. scroll to the bottom of the listbox/grid dragging the scrollbar
+		2. click the last item
+		3. no exception is thrown
+	</label>
+	<hlayout>
+		<listbox id="lb" height="300px" width="150px">
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<template name="model">
+				<listitem onClick="model.set(self.getIndex(), self.getValue());">
+					<listcell label="${each}"/>
+				</listitem>
+			</template>
+		</listbox>
+
+		<grid id="gr" height="300px" width="150px">
+			<custom-attributes org.zkoss.zul.grid.rod="true"/>
+			<template name="model">
+				<row onClick="model.set(self.getIndex(), self.getValue());">
+					<label value="${each}" />
+				</row>
+			</template>
+		</grid>
+	</hlayout>
+	<separator bar="true"/>
+	<label multiline="true">
+		[renderAll not called before page loading (trigger manually)]
+		1. scroll the listbox/grid to trigger ROD once
+		2. hit the renderAll() button
+		3. scroll to the bottom of the listbox/grid dragging the scrollbar
+		4. click the last item
+		5. no exception is thrown
+	</label>
+	<hlayout>
+		<div>
+			<listbox id="lb_m" height="300px" width="150px">
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<template name="model">
+					<listitem onClick="model.set(self.getIndex(), self.getValue());">
+						<listcell label="${each}"/>
+					</listitem>
+				</template>
+			</listbox>
+			<button onClick="lb_m.renderAll();">renderAll()</button>
+		</div>
+
+		<div>
+			<grid id="gr_m" height="300px" width="150px">
+				<custom-attributes org.zkoss.zul.grid.rod="true"/>
+				<template name="model">
+					<row onClick="model.set(self.getIndex(), self.getValue());">
+						<label value="${each}" />
+					</row>
+				</template>
+			</grid>
+			<button onClick="gr_m.renderAll();">renderAll()</button>
+		</div>
+	</hlayout>
+
+	<zscript><![CDATA[
+		Integer[] numbers = new Integer[200];
+		for (int i = 0; i < 200; i++) numbers[i] = i;
+
+		ListModelList model = new ListModelList(numbers);
+		lb.setModel(model);
+		lb.renderAll();
+
+		ListModelList model2 = new ListModelList(numbers);
+		gr.setModel(model2);
+		gr.renderAll();
+
+		ListModelList model3 = new ListModelList(numbers);
+		lb_m.setModel(model3);
+
+		ListModelList model4 = new ListModelList(numbers);
+		gr_m.setModel(model4);
+	]]></zscript>
+</zk>
