@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3303.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 11 10:54:59 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	List children = new ArrayList();
+	children.add(new DefaultTreeNode("aaa", new ArrayList()));
+	children.get(0).add(new DefaultTreeNode("aaa-1"));
+	DefaultTreeNode root = new DefaultTreeNode("root", children);
+	DefaultTreeModel model = new DefaultTreeModel(root);
+	model.setMultiple(false);
+	]]></zscript>
+
+	<label multiline="true">
+		1. Click the node 'aaa'.
+		2. Open the node 'aaa', 'aaa-1' should be selected and 'aaa' should not.
+	</label>
+
+	<tree model="${model}">
+		<attribute name="onSelect"><![CDATA[
+			DefaultTreeNode selected = event.getSelectedObjects().iterator().next();
+			if (selected.getChildren() != null && selected.getChildren().size() > 0) {
+				model.addToSelection(selected.getChildren().get(0));
+			}
+		]]></attribute>
+	</tree>
+	<button onClick="model.addOpenPath(new int[]{0});">Open 'aaa'</button>
+</zk>

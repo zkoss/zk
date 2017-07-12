@@ -337,7 +337,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 				} else {
 					if (!_selection.contains(path)) {
 						added = true;
-						_selection.clear();
+						clearSelection();
 						_selection.add(path);
 						fireSelectionChanged(path.path);
 					}
