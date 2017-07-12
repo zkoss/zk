@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3607.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 12 09:42:38 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Type 'abab' in the combobox
+        2. The label shows 'abab', not 'aba'
+    </label>
+    <combobox autodrop="false" onChanging="lbl.value = event.value" />
+    <label id="lbl" />
+</zk>
