@@ -18,6 +18,7 @@ ZK 8.5.0
   ZK-3660: MeshWidget auto col sizing only working once
   ZK-3645: columns losing widths after resize
   ZK-3584: Https helper functions return wrong values if server name equals application context name
+  ZK-3680: Combowigdets closed by scrolling off view don't send an openevent back to the server
 
 * Upgrade Notes
 
