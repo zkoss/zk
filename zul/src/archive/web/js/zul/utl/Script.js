@@ -101,7 +101,7 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 				nextSib;
 			if (n) {
 				nextSib = n.nextSibling;
-			 	jq(n).remove();
+				jq(n).remove();
 			}
 
 			if (nextSib) //use jq here would load this script twice in IE8/9
