@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3699.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jul 7 15:16:49 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml">
+<x:script id="myscript"></x:script>
+<button label="set script" onClick="set()"/>
+<zscript><![CDATA[
+public void set(){
+	myscript.setSrc("script.js");
+}
+]]></zscript>
+</zk>
