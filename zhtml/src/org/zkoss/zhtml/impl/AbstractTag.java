@@ -329,8 +329,7 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 			// ZK-3011: should defer until render
 			EncodedURL url = new EncodedURL(sval);
 			setDynaProp(name, url);
-			smartUpdate("dynamicProperty", new Object[] { name, url }, true);
-			return;
+			sval = (String) url.getValue();
 		} else if ("textContent".equals(name)) {
 			setDynaProp(name, sval);
 			if (!getChildren().isEmpty())
