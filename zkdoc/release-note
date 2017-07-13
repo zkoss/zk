@@ -32,6 +32,7 @@ ZK 8.5.0
   ZK-3685: Datebox shows its popup out of the visible range
   ZK-3682: combobox shows its popup out of the visible range
   ZK-3686: Timebox and Timepicker show their popup out of visible range
+  ZK-3687: loadScript loads file multiple times unnecessarily
 
 * Upgrade Notes
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3687.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jul 7 12:36:49 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <script><![CDATA[
+		zk.loadScript('./js/zk-3687.js', 'loadedScript');
+		zk.afterLoad('loadedScript', function() {
+			zk.log('afterLoad: loadedScript');
+		});
+	]]></script>
+    <button label="check loaded" w:onClick="zk.log('isLoaded', zk.isLoaded('loadedScript'), 'num script elements: ', jq('script[src=\'loadedScript.js\']').length);"/>
+    <button label="reload script" w:onClick="zk.loadScript('loadedScript.js', 'loadedScript');"/>
+</zk>
