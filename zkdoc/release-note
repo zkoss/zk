@@ -29,6 +29,9 @@ ZK 8.5.0
   ZK-3701: set Script's src produce a new <script> instead of changing the existing one
   ZK-3642: ZK can't work with Java unified expression language standard implementation
   ZK-3699: xhtml script setSrc() doesn't convert to a valid URL to a browser
+  ZK-3685: Datebox shows its popup out of the visible range
+  ZK-3682: combobox shows its popup out of the visible range
+  ZK-3686: Timebox and Timepicker show their popup out of visible range
 
 * Upgrade Notes
 
