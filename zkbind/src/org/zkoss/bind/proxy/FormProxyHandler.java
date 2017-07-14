@@ -196,9 +196,9 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 	}
 
 	private void addCallbacks() {
-		_node.setOnDataChangeCallback(new Callback() {
-			public void call(Object data) {
-				_binding.getBinder().notifyChange(data, ".");
+		_node.setOnDataChangeCallback(new Callback<Object[]>() {
+			public void call(Object[] data) {
+				_binding.getBinder().notifyChange(data[0], (String) data[1]);
 			}
 		});
 		_node.setOnDirtyChangeCallback(new Callback() {

@@ -36,6 +36,7 @@ ZK 8.5.0
   ZK-3686: Timebox and Timepicker show their popup out of visible range
   ZK-3687: loadScript loads file multiple times unnecessarily
   ZK-3313: Listbox with min hflex cannot display empty message
+  ZK-3585: Programmatic changes to form property are not notified
 
 * Upgrade Notes
 

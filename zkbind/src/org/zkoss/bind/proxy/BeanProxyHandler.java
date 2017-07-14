@@ -214,7 +214,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 
 					addCache(attrName, args[0]);
 					addDirtyField(attrName);
-					ProxyHelper.callOnDataChange(_node, args[0]);
+					ProxyHelper.callOnDataChange(_node, new Object[]{self, attrName});
 					ProxyHelper.callOnDirtyChange(_node);
 				}
 			}
