@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3315.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 14 11:30:17 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+    zk.afterLoad(function() {
+        var _zAu = {};
+        zk.override(zAu, _zAu, {
+            _onResponseReady: function () {
+                zk.log('[Au] injected.');
+                return _zAu._onResponseReady.apply(this, arguments);
+            },
+            _respSuccess: function (req, reqInf, sid) {
+                zk.log('[Au] success. SID = ' + sid);
+                return _zAu._respSuccess.apply(this, arguments);
+            },
+            _respFailure: function (req, reqInf, rstatus) {
+                zk.log('[Au] failed. status = ' + rstatus);
+                return _zAu._respFailure.apply(this, arguments);
+            },
+            _respException: function (req, reqInf, e) {
+                zk.log('[Au] exception, e = ' + e.message);
+                return _zAu._respException.apply(this, arguments);
+            }
+        });
+    });
+    ]]>
+    </script>
+    <div>
+        <label multiline="true">
+            zAu override
+            1. Type some text and press Enter
+            2. Some hook text appeared in zk log
+        </label>
+        <textbox onChange="lbl.value = self.value" onOK="lbl.value = self.value"/>
+        <label id="lbl"/>
+    </div>
+
+    <a href="F85-ZK-3315-comet.zul">ZKComet override</a>
+</zk>
