@@ -1082,7 +1082,12 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			if (val != null || hasAttribute(name))
 				return val;
 
-			if (!(this instanceof ShadowElement)) {
+			if (this instanceof ShadowElement) {
+				// Bug fixed for the test case SimpleELResolverTest.java
+				final Object value = ((ShadowElementCtrl) this).resolveVariable(null, name, recurse);
+				if (value != null)
+					return value;
+			} else {
 				ComponentCtrl ctrl = this;
 				List<HtmlShadowElement> shadowRoots = ctrl.getShadowRoots();
 				if (!shadowRoots.isEmpty()) {
@@ -1099,25 +1104,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 								case IN_RANGE:
 								case FIRST:
 								case LAST:
-									HtmlShadowElement current = shadow;
-									label_: {
-
-										List<ShadowElement> list = cast(current.getChildren());
-										if (!list.isEmpty()) {
-											for (ShadowElement sh : list) {
-												if (sh instanceof HtmlShadowElement) {
-													HtmlShadowElement shadow0 = (HtmlShadowElement) sh;
-													switch (HtmlShadowElement.inRange(shadow0, baseChild)) {
-													case IN_RANGE:
-													case FIRST:
-													case LAST:
-														current = shadow0;
-														break label_;
-													}
-												}
-											}
-										}
-									}
+									HtmlShadowElement current = findNearestShadow(shadow, baseChild);
 									return current.resolveVariable(baseChild, name, recurse);
 								}
 							} else {
@@ -1136,12 +1123,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 					return _parent.getShadowVariable0(this, name, recurse);
 
 				if (this instanceof ShadowElement) {
-
-					// Bug fixed for the test case SimpleELResolverTest.java
-					final Object value = ((ShadowElementCtrl) this).resolveVariable(null, name, recurse);
-					if (value != null)
-						return value;
-
 					AbstractComponent shadowHost = (AbstractComponent) ((ShadowElement) this).getShadowHost();
 					if (shadowHost != null) {
 						if (shadowHost._variableSeeking) {
@@ -1159,6 +1140,22 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		} finally {
 			_variableSeeking = false;
 		}
+	}
+
+	private HtmlShadowElement findNearestShadow(HtmlShadowElement current, Component baseChild) {
+		List<ShadowElement> list = cast(current.getChildren());
+		for (ShadowElement sh : list) {
+			if (sh instanceof HtmlShadowElement) {
+				HtmlShadowElement shadow0 = (HtmlShadowElement) sh;
+				switch (HtmlShadowElement.inRange(shadow0, baseChild)) {
+					case IN_RANGE:
+					case FIRST:
+					case LAST:
+						return findNearestShadow(shadow0, baseChild);
+				}
+			}
+		}
+		return current;
 	}
 
 	public boolean hasAttributeOrFellow(String name, boolean recurse) {

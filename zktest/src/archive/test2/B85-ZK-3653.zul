@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3653.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jul 17 18:46:01 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Problem: Level 3 shows the wrong value for 'myvar'
+	<div>
+		<apply myvar="111">
+			Level 1 myvar=${myvar} |
+			<apply myvar="222">
+				Level 2 myvar=${myvar} |
+				<apply myvar="333">
+					Level 3 myvar=${myvar} |
+					<apply myvar="444">
+						Level 4 myvar=${myvar} |
+						<apply myvar="555">
+							Level 5 myvar=${myvar} |
+							<apply myvar="666">
+								Level 6 myvar=${myvar} |
+								<apply myvar="777">
+									Level 7 myvar=${myvar} |
+									<apply myvar="888">
+										Level 8 myvar=${myvar} |
+										<apply> <!-- lack myvar intentionally -->
+											Level 9 myvar=${myvar} |
+											<apply> <!-- lack myvar intentionally -->
+												Level 10 myvar=${myvar} |
+											</apply>
+										</apply>
+									</apply>
+								</apply>
+							</apply>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+	</div>
+	<separator/>
+	Problem: same effect with bind annotations
+	<div apply="org.zkoss.bind.BindComposer">
+		<apply myvar="@load('111')">
+			Level 1 myvar=<label id="b1" value="@load(myvar)"/> |
+			<apply myvar="@load('222')">
+				Level 2 myvar=<label id="b2" value="@load(myvar)"/> |
+				<apply myvar="@load('333')">
+					Level 3 myvar=<label id="b3" value="@load(myvar)"/> |
+					<apply myvar="@load('444')">
+						Level 4 myvar=<label id="b4" value="@load(myvar)"/> |
+						<apply myvar="@load('555')">
+							Level 5 myvar=<label id="b5" value="@load(myvar)"/> |
+							<apply myvar="@load('666')">
+								Level 6 myvar=<label id="b6" value="@load(myvar)"/> |
+								<apply myvar="@load('777')">
+									Level 7 myvar=<label id="b7" value="@load(myvar)"/> |
+									<apply myvar="@load('888')">
+										Level 8 myvar=<label id="b8" value="@load(myvar)"/> |
+										<apply> <!-- lack myvar intentionally -->
+											Level 9 myvar=<label id="b9" value="@load(myvar)"/> |
+											<apply> <!-- lack myvar intentionally -->
+												Level 10 myvar=<label id="b10" value="@load(myvar)"/> |
+											</apply>
+										</apply>
+									</apply>
+								</apply>
+							</apply>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</apply>
+	</div>
+	<separator/>
+	Workaround: add real components around each level
+	<div>
+		<apply myvar="111">
+			<span>
+				Level 1 myvar=${myvar} |
+				<apply myvar="222">
+					<span>
+						Level 2 myvar=${myvar} |
+						<apply myvar="333">
+							Level 3 myvar=${myvar} |
+						</apply>
+					</span>
+				</apply>
+			</span>
+		</apply>
+	</div>
+</zk>
