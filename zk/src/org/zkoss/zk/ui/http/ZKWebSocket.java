@@ -19,7 +19,9 @@ import javax.websocket.Session;
 import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.Storage;
@@ -41,9 +43,18 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	/**
 	 * Returns a storage in desktop scope from the given websocket session.
 	 * @param wsession websocket session
-	 * @return a storage, never null.
+	 * @return a storage, null if desktop not found.
 	 */
 	public static Storage getDesktopStorage(Session wsession) {
+		Desktop desktop = getDesktop(wsession);
+		return desktop == null ? null : desktop.getStorage();
+	}
+	/**
+	 * Returns the desktop from the given websocket session.
+	 * @param wsession websocket session
+	 * @return a desktop, null if desktop not found
+	 */
+	public static Desktop getDesktop(Session wsession) {
 		org.zkoss.zk.ui.Session session = (org.zkoss.zk.ui.Session) wsession.getUserProperties()
 				.get(ZKWebSocket.class.getName());
 		if (session == null)
@@ -51,6 +62,6 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 		List<String> dtids = wsession.getRequestParameterMap().get("dtid");
 		if (dtids.isEmpty())
 			throw new IllegalStateException("the value of the key with 'dtid' cannot be null!");
-		return ((SessionCtrl) session).getDesktopCache().getDesktop(dtids.get(0)).getStorage();
+		return ((SessionCtrl) session).getDesktopCache().getDesktopIfAny(dtids.get(0));
 	}
 }
