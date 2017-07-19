@@ -365,6 +365,8 @@ public class Utils {
 		Object val = comp.getAttribute(name, recurse);
 		if (val == null)
 			val = Library.getProperty(name);
+		if (val == null)
+			return defValue;
 		if (val instanceof Integer)
 			return ((Integer) val).intValue();
 
