@@ -6,6 +6,8 @@ ZK 8.5.0
   ZK-3636: Added simple support for stacked font awesome icons
   ZK-3683: Add a new Splitlayout component
   ZK-3684: BeanValidator allows to set a self-defined message key
+  ZK-550: Server Push: add a Web Socket based implementation
+  ZK-3709: Update Engine: add a Web Socket based implementation
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored

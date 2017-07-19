@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.io.Serializables;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -779,6 +780,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			final Map<String, Object> data = request.getData();
 			if (data != null)
 				log.error(this + " client error: " + data.get("message"));
+		} else if ("fallbackServerPushClass".equals(cmd)){
+			try {
+				getDevice().setServerPushClass(Classes.forNameByThread("org.zkoss.zkex.ui.comet.CometServerPush"));
+			} catch (ClassNotFoundException e) {
+				throw new UiException("Class not found: org.zkoss.zkex.ui.comet.CometServerPush");
+			}
 		} else
 			Events.postEvent(Event.getEvent(request));
 	}

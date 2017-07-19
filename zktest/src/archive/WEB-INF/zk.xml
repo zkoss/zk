@@ -12,6 +12,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<!-- turn on while using websocket update engine and websocket serverpush-->
+	<!--<listener>
+		<listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit</listener-class>
+	</listener>
+	<library-property>
+		<name>org.zkoss.zkmax.au.websocket.WebSocketEndPoint.urlPattern</name>
+		<value>/myappws/</value>
+	</library-property>-->
 
 	<library-property>
 		<name>org.zkoss.util.media.MediaTypeResolverImpl.class</name>
