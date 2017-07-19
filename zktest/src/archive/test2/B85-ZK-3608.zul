@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3608.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 18 11:27:15 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        List model = new ArrayList(50);
+        for (var i = 0; i < 50; i++)
+            model.add(i);
+    ]]></zscript>
+    <style>
+    .navbar-system-scrollbar {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+    </style>
+    <borderlayout height="300px">
+        <west sclass="navbar-system-scrollbar">
+            <navbar orient="vertical" sclass="compact" hflex="min">
+                <nav label="Category">
+                    <forEach items="${model}">
+                        <navitem label="Link ${each}" iconSclass="z-icon-cogs"
+                                 onClick='Messagebox.show("clicked " + self.label)' />
+                    </forEach>
+                    <navitem label="Click me in IE after navbar is scrolled down......."
+                             iconSclass="z-icon-cogs" onClick='Messagebox.show("clicked last")' />
+                </nav>
+            </navbar>
+        </west>
+        <center>
+            <label multiline="true">
+            Only reproducible in IE
+            1. Open the navitem
+            2. Scroll down to the last item
+            3. Click the last item
+            4. Expected result: 1. Navbar scroll doesn't change 2. item selection triggers
+            </label>
+        </center>
+    </borderlayout>
+
+    See also: <a href="B80-ZK-3230.zul">B80-ZK-3230.zul</a>
+    <include src="B80-ZK-3257.zul"/>
+</zk>
