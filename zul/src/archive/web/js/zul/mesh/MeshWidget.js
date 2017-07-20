@@ -163,6 +163,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 
+		// ZK-3313: The width of empty message counts
+		var empty = wgt.$n('empty');
+		if (empty && empty.style.display != 'none') {
+			var emptyWidth = empty.offsetWidth;
+			if (emptyWidth > width)
+				width = emptyWidth;
+		}
+
 		if (wgt.eheadtbl && headn) {//restore headers widths
 			if (eheadtblw.indexOf('%') < 0) { // once sized and consider faker bar
 				var $hdfakerbar = jq(wgt.head.$n('hdfaker')).find('[id*=hdfaker-bar]'),

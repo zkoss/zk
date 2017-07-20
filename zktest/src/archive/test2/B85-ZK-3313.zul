@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3313.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 12 15:28:58 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (listbox/grid/tree)
+        You can only see a border.
+    </label>
+    <listbox hflex="min" />
+    <grid hflex="min" />
+    <tree hflex="min" />
+
+    <label multiline="true">
+        (listbox/grid)
+        You can see 'no items here'.
+    </label>
+    <listbox emptyMessage="no items here" hflex="min" />
+    <grid emptyMessage="no items here" hflex="min" />
+
+    <label multiline="true">
+        (listbox/grid/tree)
+        You can see 'squeeze'.
+    </label>
+    <listbox emptyMessage="no items here" hflex="min">
+        <listitem>
+            <listcell>squeeze</listcell>
+        </listitem>
+    </listbox>
+    <grid emptyMessage="no items here" hflex="min">
+        <rows>
+            <row>squeeze</row>
+        </rows>
+    </grid>
+    <tree hflex="min">
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell>squeeze</treecell>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>
