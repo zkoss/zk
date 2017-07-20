@@ -4754,14 +4754,7 @@ _doFooSelect: function (evt) {
 				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
 				if (wgt && (wgtVParent = wgt.$n('a')) && jq.nodeName(wgtVParent, 'button', 'input', 'textarea', 'a', 'select', 'iframe')) {
-					//ZK-3230: ie lost the focus when click on scroll bar, to prevent scroll into view automatically, set VParent's position to "fixed" temporary.
-					var oldStyle;
-					if (zk.ie) {
-						oldStyle = wgtVParent.style.position;
-						wgtVParent.style.position = 'fixed';
-					}
 					wgt.focus();
-					if (zk.ie) wgtVParent.style.position = oldStyle;
 				}
 				zk._cfByMD = true;
 				setTimeout(function () {zk._cfByMD = false; zk._prevFocus = null;}, 0);

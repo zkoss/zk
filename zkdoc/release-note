@@ -37,6 +37,7 @@ ZK 8.5.0
   ZK-3687: loadScript loads file multiple times unnecessarily
   ZK-3313: Listbox with min hflex cannot display empty message
   ZK-3585: Programmatic changes to form property are not notified
+  ZK-3608: Click in scrolled navbar cause up jump after ZK-3230 in IE
 
 * Upgrade Notes
 
