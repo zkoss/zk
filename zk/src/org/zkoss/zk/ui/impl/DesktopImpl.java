@@ -780,7 +780,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			final Map<String, Object> data = request.getData();
 			if (data != null)
 				log.error(this + " client error: " + data.get("message"));
-		} else if ("fallbackServerPushClass".equals(cmd)){
+		} else if ("fallbackServerPushClass".equals(cmd)) {
 			try {
 				getDevice().setServerPushClass(Classes.forNameByThread("org.zkoss.zkex.ui.comet.CometServerPush"));
 			} catch (ClassNotFoundException e) {

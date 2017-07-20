@@ -21,13 +21,13 @@ import javax.websocket.server.ServerEndpointConfig;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApps;
-import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.Storage;
 
 /**
  * A web socket util class
+ *
  * @author jumperchen
  * @since 8.0.0
  */
@@ -42,6 +42,7 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 
 	/**
 	 * Returns a storage in desktop scope from the given websocket session.
+	 *
 	 * @param wsession websocket session
 	 * @return a storage, null if desktop not found.
 	 */
@@ -49,8 +50,10 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 		Desktop desktop = getDesktop(wsession);
 		return desktop == null ? null : desktop.getStorage();
 	}
+
 	/**
 	 * Returns the desktop from the given websocket session.
+	 *
 	 * @param wsession websocket session
 	 * @return a desktop, null if desktop not found
 	 */

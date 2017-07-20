@@ -1043,23 +1043,23 @@ zAu.beforeSend = function (uri, req, dt) {
 	_errURIs: {},
 	//Perfomance Meter//
 	// Returns request IDs sent from the server separated by space.
-	pfGetIds: function(req) {
+	pfGetIds: function (req) {
 		return req.getResponseHeader('ZK-Client-Complete');
 	},
-	pfAddIds: function(dt, prop, pfIds) {
+	pfAddIds: function (dt, prop, pfIds) {
 		if (pfIds && (pfIds = pfIds.trim())) {
 			var s = pfIds + '=' + Math.round(jq.now());
 			if (dt[prop]) dt[prop] += ',' + s;
 			else dt[prop] = s;
 		}
 	},
-	ajaxReqResend: function(reqInf, timeout) {
+	ajaxReqResend: function (reqInf, timeout) {
 		if (zAu.seqId == reqInf.sid) {//skip if the response was recived
 			zAu.pendingReqInf = reqInf; //store as a pending request info
 			setTimeout(ajaxReqResend2, timeout ? timeout : 0);
 		}
 	},
-	onError: function(req, errCode) {
+	onError: function (req, errCode) {
 		//$clone first since it might add or remove onError
 		for (var errs = _onErrs.$clone(), fn; fn = errs.shift();)
 			if (fn(req, errCode))
