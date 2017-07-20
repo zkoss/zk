@@ -79,7 +79,7 @@ public abstract class AbstractCollectionProxy<E>
 	}
 
 	public void onDataChange(Object o) {
-		ProxyHelper.callOnDataChange(_node, o);
+		ProxyHelper.callOnDataChange(_node, new Object[]{o, "."});
 	}
 
 	protected void setDirty(boolean d) {

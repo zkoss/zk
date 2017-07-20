@@ -114,7 +114,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 	}
 
 	public void onDataChange(Object o) {
-		ProxyHelper.callOnDataChange(_node, o);
+		ProxyHelper.callOnDataChange(_node, new Object[]{o, "."});
 	}
 
 	protected void setDirty(boolean d) {
