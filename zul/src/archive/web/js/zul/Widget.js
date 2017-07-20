@@ -92,21 +92,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var tip = _tt_tip;
 		if (tip && tip.desktop) { //check still attached to desktop
 			// Bug ZK-1222, ZK-1594
-			//
 			// If the tooltip (popup) and mouse pointer overlapped, a TooltipOut event
 			// will be triggered again that closes the tooltip immediately, then another
 			// TooltipOver event will open the tooltip again...
-			//
-			// FireFox only. If mouse pointer still overlapped on tooltip, do not close.
-			// IE10: Bug ZK-1519
-			if (zk.ie == 10 || zk.ff) {
-				var $tip = jq(tip.$n()),
-					$tipOff = $tip.offset(),
-					pointer = zk.currentPointer;
-				if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width()))
-					&& (pointer[1] >= $tipOff.top && pointer[1] <= ($tipOff.top + $tip.height())))
-					return;
-			}
+			// If mouse pointer still overlapped on tooltip, do not close.
+			// IE10: Bug ZK-1519, Chrome: Bug ZK-3583
+			var $tip = jq(tip.$n()),
+				$tipOff = $tip.offset(),
+				pointer = zk.currentPointer;
+			if ((pointer[0] >= $tipOff.left && pointer[0] <= ($tipOff.left + $tip.width()))
+				&& (pointer[1] >= $tipOff.top && pointer[1] <= ($tipOff.top + $tip.height())))
+				return;
 			_tt_tip = _tt_ref = null;
 			tip.close({sendOnOpen: true});
 		}
