@@ -2,7 +2,7 @@
 	apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00911FormNotifyChange')">
 	<label multiline="true">
-		1.click notify1, label 1,2,3 should change to Alex, but 4,5,6 doesn't change
+		1.click notify1, label 1,2,3 should change to Alex and 4,5,6 change to B
 	</label>
 	<hbox form="@id('fx') @load(vm.person)">
 		

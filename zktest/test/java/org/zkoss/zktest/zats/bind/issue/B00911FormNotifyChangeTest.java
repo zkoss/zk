@@ -2,16 +2,12 @@ package org.zkoss.zktest.zats.bind.issue;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zats.mimic.DesktopAgent;
-import org.zkoss.zats.mimic.Zats;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Textbox;
 
 public class B00911FormNotifyChangeTest extends ZATSTestCase {
 	@Test
@@ -37,8 +33,8 @@ public class B00911FormNotifyChangeTest extends ZATSTestCase {
 		assertEquals("Alex", l1.as(Label.class).getValue());
 		assertEquals("Alex", l2.as(Label.class).getValue());
 		assertEquals("Alex", l3.as(Label.class).getValue());
-		assertEquals("A", l4.as(Label.class).getValue());
-		assertEquals("A", l5.as(Label.class).getValue());
-		assertEquals("A", l6.as(Label.class).getValue());
+		assertEquals("B", l4.as(Label.class).getValue());
+		assertEquals("B", l5.as(Label.class).getValue());
+		assertEquals("B", l6.as(Label.class).getValue());
 	}
 }
