@@ -135,6 +135,10 @@ public class BindELResolver extends XelELResolver {
 		//ZK-950: The expression reference doesn't update while change the instant of the reference
 		final ReferenceBinding rbinding = value instanceof ReferenceBinding ? (ReferenceBinding) value : null;
 		if (rbinding != null) {
+			//ZK-3320 cause stack overflow
+			if (property.equals(rbinding.getPropertyString())) {
+				throw new RuntimeException("Property \"" + property + "\" is not allowed to be same as the reference expression in reference binding");
+			}
 			//ZK-1299 Use @ref and save after will cause null point exception
 			if (Boolean.TRUE.equals(ignoreRefVal)) {
 				return rbinding;
