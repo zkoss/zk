@@ -41,6 +41,7 @@ ZK 8.5.0
   ZK-3320: Nested @ref bindings in Shadow elements with same variable name cause Stack overflow
   ZK-3653: Shadow elements nested parameter leak
   ZK-3618: onClick listener doesn't work on iPad
+  ZK-3583: hovering a disabled button closes a popup immediately
 
 * Upgrade Notes
 
