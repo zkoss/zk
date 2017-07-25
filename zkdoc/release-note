@@ -39,6 +39,7 @@ ZK 8.5.0
   ZK-3585: Programmatic changes to form property are not notified
   ZK-3608: Click in scrolled navbar cause up jump after ZK-3230 in IE
   ZK-3320: Nested @ref bindings in Shadow elements with same variable name cause Stack overflow
+  ZK-3653: Shadow elements nested parameter leak
 
 * Upgrade Notes
 
