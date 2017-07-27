@@ -42,6 +42,8 @@ ZK 8.5.0
   ZK-3653: Shadow elements nested parameter leak
   ZK-3618: onClick listener doesn't work on iPad
   ZK-3583: hovering a disabled button closes a popup immediately
+  ZK-3707: splitlayout splitter cursor icon shows only one direction
+  ZK-3708: splitlayout splitter uses inline style makes CSS customization harder
 
 * Upgrade Notes
 

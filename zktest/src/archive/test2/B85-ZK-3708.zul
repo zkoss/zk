@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3708.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 19 09:56:00 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <div width="600px" height="500px">
+        <label>
+            The splitter width/height should be 100% in css.
+        </label>
+        <vlayout vflex="1" hflex="1">
+            <splitlayout vflex="1" hflex="1">
+                <div vflex="1">
+                    <label value="Area 1"/>
+                </div>
+                <div vflex="1">
+                    <label value="Area 2" />
+                </div>
+            </splitlayout>
+            <splitlayout orient="horizontal" vflex="1" hflex="1">
+                <div hflex="1">
+                    <label value="Area 1"/>
+                </div>
+                <div hflex="1">
+                    <label value="Area 2" />
+                </div>
+            </splitlayout>
+        </vlayout>
+    </div>
+</zk>
