@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -1811,30 +1810,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				if (commandArgs != null) {
 					parCall.setBindingArgs(commandArgs);
 				}
-				final SmartNotifyChange sannt = method.getAnnotation(SmartNotifyChange.class);
-				if (sannt != null) {
-					Set<Property> properties = new LinkedHashSet<Property>(5);
-					properties.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
-
-					parCall.call(viewModel, method);
-
-					for (Iterator<Property> it = properties.iterator(); it.hasNext();) {
-						Property prop = it.next();
-						Object result = null;
-						try {
-							result = Fields.get(prop.getBase(), prop.getProperty());
-							if (Objects.equals(result, prop.getValue()))
-								it.remove();
-
-						} catch (NoSuchMethodException e) {
-						}
-					}
-					notifys.addAll(properties);
-				} else {
-					parCall.call(viewModel, method);
-
-					notifys.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
-				}
+				handleNotifyChange(ctx, viewModel, method, parCall, notifys);
 			} else {
 				//do nothing
 				if (_log.isDebugEnabled()) {
@@ -1846,6 +1822,35 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 		} finally {
 			doPostPhase(Phase.EXECUTE, ctx);
+		}
+	}
+
+	static void handleNotifyChange(BindContext ctx, Object viewModel,
+	                                         Method method, ParamCall parCall,
+	                                         Set<Property> notifys) {
+		final SmartNotifyChange sannt = method.getAnnotation(SmartNotifyChange.class);
+		if (sannt != null) {
+			Set<Property> properties = new LinkedHashSet<Property>(5);
+			properties.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
+
+			parCall.call(viewModel, method);
+
+			for (Iterator<Property> it = properties.iterator(); it.hasNext();) {
+				Property prop = it.next();
+				Object result = null;
+				try {
+					result = Fields.get(prop.getBase(), prop.getProperty());
+					if (Objects.equals(result, prop.getValue()))
+						it.remove();
+
+				} catch (NoSuchMethodException e) {
+				}
+			}
+			notifys.addAll(properties);
+		} else {
+			parCall.call(viewModel, method);
+
+			notifys.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
 		}
 	}
 
@@ -2012,30 +2017,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				if (commandArgs != null) {
 					parCall.setBindingArgs(commandArgs);
 				}
-				final SmartNotifyChange sannt = method.getAnnotation(SmartNotifyChange.class);
-				if (sannt != null) {
-					Set<Property> properties = new LinkedHashSet<Property>(5);
-					properties.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
-
-					parCall.call(viewModel, method);
-
-					for (Iterator<Property> it = properties.iterator(); it.hasNext();) {
-						Property prop = it.next();
-						Object result = null;
-						try {
-							result = Fields.get(prop.getBase(), prop.getProperty());
-							if (Objects.equals(result, prop.getValue()))
-								it.remove();
-
-						} catch (NoSuchMethodException e) {
-						}
-					}
-					notifys.addAll(properties);
-				} else {
-					parCall.call(viewModel, method);
-
-					notifys.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
-				}
+				handleNotifyChange(ctx, viewModel, method, parCall, notifys);
 			} else if (_notifyCommands == null || !_notifyCommands.containsKey(command)) {
 
 				// F80-ZK-2951, ignore starting with ':' and '/'

@@ -261,6 +261,12 @@ public class Events {
 	 */
 	public static final String ON_SLIDE = "onSlide";
 
+	/**
+	 * The onHistoryPopState event (used with {@link HistoryPopStateEvent}).
+	 * @since 8.5.0
+	 */
+	public static final String ON_HISTORY_POP_STATE = "onHistoryPopState";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

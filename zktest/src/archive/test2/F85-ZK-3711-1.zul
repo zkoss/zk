@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3711-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 26 12:52:42 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        The @HistoryPopState can not be annotated more than once.
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3711ChildVM')"/>
+</zk>

@@ -1513,7 +1513,20 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String media the media attribute. Ignored if not specified.
 	 * @since 8.0.0
 	 */
-	loadCSS: zk.loadCSS
+	loadCSS: zk.loadCSS,
+	/** Pushes or replaces a history state.
+	 * @param boolean replace if true, it will replace the current history without creating a new one.
+	 * @param Object state a state object.
+	 * @param String title a title for the state. May be ignored by some browsers.
+	 * @param String url the new history entry's URL. Ignored if not specified.
+	 * @since 8.5.0
+	 */
+	historyState: function (replace, state, title, url) {
+		if (replace && window.history.replaceState)
+			window.history.replaceState(state, title, url);
+		if (!replace && window.history.pushState)
+			window.history.pushState(state, title, url);
+	}
 };
 /** @class zk.AuCmd1
  * The AU command handler for processes commands related to widgets,

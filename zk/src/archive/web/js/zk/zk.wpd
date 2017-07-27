@@ -45,6 +45,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="pkg.js" jsdoc="true"/>
 	<script src="mount.js" jsdoc="true"/>
 	<script src="bookmark.js"/>
+	<script src="historystate.js"/>
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
 	<script src="zswipe.js" jsdoc="true" browser="ios,android"/>
