@@ -175,7 +175,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	_hilite: function (opts) {
 		this._hilite2(
-			this._findItem(this.getInputNode().value,
+			this._findItem(this.valueEnter_ = this.getInputNode().value,
 				this._isStrict() || (opts && opts.strict)), opts);
 	},
 	_hilite2: function (sel, opts) {
