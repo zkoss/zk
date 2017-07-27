@@ -44,6 +44,7 @@ ZK 8.5.0
   ZK-3583: hovering a disabled button closes a popup immediately
   ZK-3707: splitlayout splitter cursor icon shows only one direction
   ZK-3708: splitlayout splitter uses inline style makes CSS customization harder
+  ZK-3309: Combobox doesn't update value before triggering onOpen
 
 * Upgrade Notes
 
