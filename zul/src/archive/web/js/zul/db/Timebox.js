@@ -489,7 +489,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (zk.opera) zk(inp).focus();
 			//unfortunately, in opera, it won't gain focus if we set in _btnDown
 
-		this._onChanging();
+		this._onChanging(this);
 		this._stopAutoIncProc();
 
 		if ((zk.ie < 11 || zk.webkit) && this._lastPos)
@@ -504,12 +504,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_doUp: function () {
 		this._changed = true;
 		this.getTimeHandler().increase(this, 1);
-		this._onChanging();
+		this._onChanging(this);
 	},
 	_doDown: function () {
 		this._changed = true;
 		this.getTimeHandler().increase(this, -1);
-		this._onChanging();
+		this._onChanging(this);
 	},
 	_doBack: function () {
 		this._changed = true;

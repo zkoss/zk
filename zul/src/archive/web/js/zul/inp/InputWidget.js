@@ -420,8 +420,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		return html;
 	},
-	_onChanging: function (timeout) {
-		this.$class._onChanging(timeout);
+	_onChanging: function (wgt, timeout) {
+		this.$class._onChanging.call(wgt, timeout);
 	},
 	_areaText: function () {
 		return zUtl.encodeXML(this.coerceToString_(this._value));

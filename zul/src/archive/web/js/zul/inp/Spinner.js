@@ -155,7 +155,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 	_btnUp: function (evt) {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
-		this._onChanging();
+		this._onChanging(this);
 		this._stopAutoIncProc();
 
 		var inp = this.getInputNode();
@@ -186,7 +186,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		inp.value = this.coerceToString_(result); //ZK-1851 convert result using pattern
 
-		this._onChanging();
+		this._onChanging(this);
 
 	},
 	_clearValue: function () {
