@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3664.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 25 18:16:15 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+    <label multiline="true">
+        The popup of the three comboboxs should have the same size
+
+    </label>
+    <button label="breeze" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.preferred", "breeze");Executions.sendRedirect(null);' />
+    <button label="sapphire" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.preferred", "sapphire");Executions.sendRedirect(null);' />
+    <button label="silvertail" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.preferred", "silvertail");Executions.sendRedirect(null);' />
+    <button label="atlantic" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.preferred", "atlantic");Executions.sendRedirect(null);' />
+    <grid id="contentPanelGrid" >
+        <columns>
+            <column id="column1" width="200px"></column>
+        </columns>
+        <rows>
+            <row height="150px">
+                <combobox id="titleCombobox" mold="rounded"></combobox>
+            </row>
+        </rows>
+    </grid>
+
+    <listbox>
+        <listitem>
+            <listcell>
+                <combobox id="titleCombobox2" mold="rounded"></combobox>
+            </listcell>
+        </listitem>
+    </listbox>
+    <div vflex="min">
+        <label value="Title" />
+        <combobox id="smartCombobox" mold="rounded" />
+    </div>
+    <zscript>
+        <![CDATA[
+	String[] titles = new String[] { "Dame", "Dr", "Fr", "Madam", "Miss", "Mr",
+			"Mrs", "Ms", "Pastor", "Prof", "Rev", "Sir" };
+	List dataList = Arrays.asList(titles);
+	ListModelList listModelList = new ListModelList(dataList);
+	titleCombobox.setModel(listModelList);
+	titleCombobox2.setModel(listModelList);
+	smartCombobox.setModel(listModelList);
+]]>
+    </zscript>
+
+</zk>

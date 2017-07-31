@@ -45,6 +45,7 @@ ZK 8.5.0
   ZK-3707: splitlayout splitter cursor icon shows only one direction
   ZK-3708: splitlayout splitter uses inline style makes CSS customization harder
   ZK-3309: Combobox doesn't update value before triggering onOpen
+  ZK-3664: A combobox popup in a Grid/Listbox produces extra height
 
 * Upgrade Notes
 
