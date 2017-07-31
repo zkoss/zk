@@ -183,9 +183,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.position = 'absolute'; //just in case
 		pp.style.display = 'block';
 
-		var ppofs = this._getPopupSize(pp, pp2);
-		// B70-ZK-2742: arrange method fixsz execution order
-		this._fixsz(ppofs);//fix size
+		var ppofs = this._getPopupSize(pp, pp2),
+			ie10up = zk.ie10_ || zk.ie11_;
+		if (ie10up) {
+			// B70-ZK-2742: arrange method fixsz execution order
+			this._fixsz(ppofs);//fix size
+		}
 		// throw out
 		pp.style.visibility = 'hidden';
 		pp.style.left = '-10000px';
@@ -198,6 +201,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var $pp = zk(pp);
 		$pp.makeVParent();
 		zWatch.fireDown('onVParent', this);
+
+		if (ie10up)
+			pp.style.height = pp.style.width = 'auto';
+		this._fixsz(ppofs);
 
 		// throw in
 		pp.style.left = '';
