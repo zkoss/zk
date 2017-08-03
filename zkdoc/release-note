@@ -49,6 +49,7 @@ ZK 8.5.0
   ZK-3664: A combobox popup in a Grid/Listbox produces extra height
   ZK-3649: Spinner doesn't send onChanging events following ZK-3530
   ZK-3714: Sessions.getCurrent() returns null during WebSocket AU
+  ZK-3715: URL encoding in Websocket AU requests causes NPE -> UiException
 
 * Upgrade Notes
 
