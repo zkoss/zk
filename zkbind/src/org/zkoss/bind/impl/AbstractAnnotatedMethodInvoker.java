@@ -32,12 +32,14 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
+import org.zkoss.bind.Property;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
 
 /**
  * 
@@ -61,7 +63,20 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		this.annoMethodCache = annoMethodCache;
 	}
 
+	public boolean hasAnnotatedMethod(Binder binder) {
+		Component rootComp = binder.getView();
+		Object viewModel = rootComp.getAttribute(VM);
+
+		final Class<?> vmClz = viewModel.getClass();
+		List<Method> methods = getAnnotateMethods(annoClass, vmClz);
+		return (!methods.isEmpty());
+	}
+
 	public void invokeMethod(Binder binder, Map<String, Object> bindingArgs) {
+		invokeMethod(binder, bindingArgs, null, false);
+	}
+
+	public void invokeMethod(Binder binder, Map<String, Object> bindingArgs, Event triggeringEvent, boolean notifyChange) {
 
 		Component rootComp = binder.getView();
 		Object viewModel = rootComp.getAttribute(VM);
@@ -75,8 +90,12 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 			bindingArgs = BindEvaluatorXUtil.evalArgs(binder.getEvaluatorX(), rootComp, bindingArgs);
 		}
 
+		Set<Property> changes = Collections.emptySet();
+		if (notifyChange) {
+			changes = new HashSet<Property>();
+		}
 		for (Method m : methods) { //TODO: why paramCall need to be prepared each time?
-			final BindContext ctx = BindContextUtil.newBindContext(binder, null, false, null, rootComp, null);
+			final BindContext ctx = BindContextUtil.newBindContext(binder, null, false, null, rootComp, triggeringEvent);
 
 			try {
 				ParamCall parCall = binder instanceof BinderImpl ? ((BinderImpl) binder).createParamCall(ctx)
@@ -84,13 +103,21 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 				if (bindingArgs != null) {
 					parCall.setBindingArgs(bindingArgs);
 				}
-				parCall.call(viewModel, m);
+
+				if (notifyChange) {
+					BinderImpl.handleNotifyChange(ctx, viewModel, m, parCall, changes);
+				} else {
+					parCall.call(viewModel, m);
+				}
 			} catch (Exception e) {
 				synchronized (annoMethodCache) { //remove it for the hot deploy case if getting any error
 					annoMethodCache.remove(vmClz);
 				}
 				throw UiException.Aide.wrap(e, e.getMessage());
 			}
+		}
+		if (!changes.isEmpty() && binder instanceof BinderImpl) {
+			((BinderImpl) binder).fireNotifyChanges(changes);
 		}
 	}
 
@@ -171,5 +198,4 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		}
 		return call;
 	}
-
 }

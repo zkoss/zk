@@ -48,6 +48,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuBookmark;
 import org.zkoss.zk.au.out.AuClientInfo;
+import org.zkoss.zk.au.out.AuHistoryState;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.DeviceNotFoundException;
 import org.zkoss.zk.device.Devices;
@@ -69,6 +70,7 @@ import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.HistoryPopStateEvent;
 import org.zkoss.zk.ui.event.VisibilityChangeEvent;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.ScopeListener;
@@ -769,6 +771,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			Events.postEvent(ClientInfoEvent.getClientInfoEvent(request));
 		} else if (Events.ON_VISIBILITY_CHANGE.equals(cmd)) {
 			Events.postEvent(VisibilityChangeEvent.getVisibilityChangeEvent(request));
+		} else if (Events.ON_HISTORY_POP_STATE.equals(cmd)) {
+			Events.postEvent(HistoryPopStateEvent.getHistoryPopStateEvent(request));
 		} else if ("rmDesktop".equals(cmd)) {
 			((WebAppCtrl) request.getDesktop().getWebApp()).getUiEngine()
 					.setAbortingReason(new org.zkoss.zk.ui.impl.AbortByRemoveDesktop());
@@ -1709,6 +1713,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		} finally {
 			_storageLock.unlock();
 		}
+	}
+
+	public void pushHistoryState(Object state, String title, String url) {
+		addResponse(new AuHistoryState(false, state, title, url));
+	}
+
+	public void replaceHistoryState(Object state, String title, String url) {
+		addResponse(new AuHistoryState(true, state, title, url));
 	}
 
 	private static class ReqResult {

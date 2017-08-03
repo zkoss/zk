@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.HistoryPopState;
 import org.zkoss.bind.annotation.ToServerCommand;
 import org.zkoss.bind.impl.AbstractAnnotatedMethodInvoker;
 import org.zkoss.bind.impl.AnnotationUtil;
@@ -51,6 +52,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.HistoryPopStateEvent;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.Selectors;
@@ -97,6 +99,8 @@ public class BindComposer<T extends Component>
 	protected static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
 
 	private static final Map<Class<?>, List<Method>> _afterComposeMethodCache = new CacheMap<Class<?>, List<Method>>(
+			600, CacheMap.DEFAULT_LIFETIME);
+	private static final Map<Class<?>, List<Method>> _historyPopStateMethodCache = new CacheMap<Class<?>, List<Method>>(
 			600, CacheMap.DEFAULT_LIFETIME);
 
 	public BindComposer() {
@@ -188,6 +192,24 @@ public class BindComposer<T extends Component>
 		}
 
 		comp.setAuService(this);
+
+		// ZK-3711 Listen to HistoryPopStateEvent if @HistoryPopState exists.
+		final AbstractAnnotatedMethodInvoker<HistoryPopState> historyPopStateInvoker =
+		new AbstractAnnotatedMethodInvoker<HistoryPopState>(HistoryPopState.class, _historyPopStateMethodCache) {
+			protected boolean shouldLookupSuperclass(HistoryPopState annotation) {
+				return false;
+			}
+		};
+		if (historyPopStateInvoker.hasAnnotatedMethod(_binder)) {
+			Page page = comp.getPage();
+			if (page != null) {
+				page.addEventListener(Events.ON_HISTORY_POP_STATE, new EventListener<HistoryPopStateEvent>() {
+					public void onEvent(HistoryPopStateEvent event) throws Exception {
+						historyPopStateInvoker.invokeMethod(getBinder(), null, event, true);
+					}
+				});
+			}
+		}
 	}
 
 	private Map<String, Object> getViewModelInitArgs(BindEvaluatorX evalx, Component comp) {

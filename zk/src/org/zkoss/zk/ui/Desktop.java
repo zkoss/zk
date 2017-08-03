@@ -322,4 +322,22 @@ public interface Desktop extends Scope {
 	 * @since 8.0.0
 	 */
 	public Storage getStorage();
+
+	/**
+	 * Pushes a new history state.
+	 * @param state a state object.
+	 * @param title a title for the state. May be ignored by some browsers.
+	 * @param url the history entry's URL. Could be null.
+	 * @since 8.5.0
+	 */
+	public void pushHistoryState(Object state, String title, String url);
+
+	/**
+	 * Replaces the current history state.
+	 * @param state a state object.
+	 * @param title a title for the state. May be ignored by some browsers.
+	 * @param url the history entry's URL. Could be null.
+	 * @since 8.5.0
+	 */
+	public void replaceHistoryState(Object state, String title, String url);
 }
