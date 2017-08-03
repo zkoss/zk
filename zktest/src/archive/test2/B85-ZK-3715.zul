@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3715.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug  2 18:38:17 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click the button
+        2. should not have any exceptions
+
+    </label>
+    <button label="encodeURL" id="encodeURL" onClick='execution.encodeURL("~./some/resource.png")'/>
+</zk>
