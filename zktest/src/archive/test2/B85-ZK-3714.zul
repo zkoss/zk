@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3714.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug  2 10:57:52 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click both buttons
+        2. the two labels should have the same session instance, not null
+
+    </label>
+    <button label="show current Session (Bug)" onClick='sessionLabel1.setValue("Session: " + Sessions.getCurrent());'/>
+    <button label="show current Session (Workaround)" onClick='sessionLabel2.setValue("Session: " + Executions.getCurrent().getSession());'/>
+    <separator/>
+    <label id="sessionLabel1"/>
+    <separator/>
+    <label id="sessionLabel2"/>
+</zk>
