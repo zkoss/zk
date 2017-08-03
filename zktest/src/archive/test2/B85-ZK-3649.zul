@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3649.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 26 18:12:13 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        the value of the textboxs on the right side of the three components, should each be changed after clicking spinner up or down (before blur).
+
+    </label>
+    <vbox xmlns:w="client">
+        spinner
+        <hbox>
+            onChanging
+            <spinner w:onChanging="this.nextSibling.setValue(event.value)" />
+            <textbox />
+        </hbox>
+        <separator/>
+        timebox
+        <hbox>
+            onChanging
+            <timebox width="100px" w:onChanging="this.nextSibling.setValue(event.value)" />
+            <textbox />
+        </hbox>
+        <separator/>
+        doublespinner
+        <hbox>
+            onChanging
+            <doublespinner w:onChanging="this.nextSibling.setValue(event.value)" />
+            <textbox />
+        </hbox>
+    </vbox>
+</zk>
