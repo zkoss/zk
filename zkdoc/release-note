@@ -9,6 +9,7 @@ ZK 8.5.0
   ZK-550: Server Push: add a Web Socket based implementation
   ZK-3709: Update Engine: add a Web Socket based implementation
   ZK-3711: Support HTML5 history API
+  ZK-3336: tbeditor version update
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F85-ZK-3336.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug  3 18:10:28 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        tbeditor upgrade trumbowyg version to 2.6.0
+
+    </label>
+    <include src="F80-ZK-2698.zul" height="100%"/>
+</zk>
