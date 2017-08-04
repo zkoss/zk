@@ -60,23 +60,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	if (zk.opera) { //opera only
 		var _syncQue = [], _syncId;
-		function _syncNow() {
+		var _syncNow = function () {
 			for (var j = _syncQue.length; j--;)
 				_syncQue[j].sync();
-		}
-		function _addSyncQue(upld) {
+		};
+		var _addSyncQue = function (upld) {
 			if (!_syncQue.length)
 				_syncId = setInterval(_syncNow, 1500);
-
 			_syncQue.push(upld);
-		}
-		function _rmSyncQue(upld) {
+		};
+		var _rmSyncQue = function (upld) {
 			_syncQue.$remove(upld);
 			if (_syncId && !_syncQue.length) {
 				clearInterval(_syncId);
 				_syncId = null;
 			}
-		}
+		};
 	}
 
 /** Helper class for implementing the fileupload.

@@ -126,7 +126,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					// only for 5501 & 5502
 					var v;
 					if ((v = req.getResponseHeader('ZK-Error'))
-					&& !zAu.onError(req, v = zk.parseInt(v) || v)
+					&& !zAu.onResponseError(req, v = zk.parseInt(v) || v)
 					&& (v == 5501 || v == 5502) //Handle only ZK's SC_OUT_OF_SEQUENCE or SC_ACTIVATION_TIMEOUT
 					&& zAu.confirmRetry('FAILED_TO_RESPONSE',
 							v == 5501 ? 'Request out of sequence' : 'Activation timeout')) {
@@ -145,7 +145,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						zAu.pendingReqInf = null;
 					}
 				} else if ((!sid || sid == zAu.seqId) //ignore only if out-of-seq (note: 467 w/o sid)
-				&& !zAu.onError(req, zAu._errCode = rstatus)) {
+				&& !zAu.onResponseError(req, zAu._errCode = rstatus)) {
 					var eru = zAu._errURIs['' + rstatus];
 					if (typeof eru == 'string') {
 						zUtl.go(eru);
@@ -1059,7 +1059,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			setTimeout(ajaxReqResend2, timeout ? timeout : 0);
 		}
 	},
-	onError: function (req, errCode) {
+	onResponseError: function (req, errCode) {
 		//$clone first since it might add or remove onError
 		for (var errs = _onErrs.$clone(), fn; fn = errs.shift();)
 			if (fn(req, errCode))

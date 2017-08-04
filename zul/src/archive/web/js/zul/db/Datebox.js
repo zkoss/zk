@@ -468,7 +468,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.listen({onSize: this, onScroll: this, onShow: this, onSize: this});
+		zWatch.listen({onSize: this, onScroll: this, onShow: this});
 		this._pop.setFormat(this.getDateFormat());
 	},
 	unbind_: function () {
@@ -481,7 +481,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._inplace) this.domUnlisten_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		zWatch.unlisten({onSize: this, onScroll: this, onShow: this, onSize: this});
+		zWatch.unlisten({onSize: this, onScroll: this, onShow: this});
 		this.$supers(Datebox, 'unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {

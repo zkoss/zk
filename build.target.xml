@@ -196,6 +196,7 @@ if="deploy.tomcat.required">
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/closure-compiler.jar"/>
 		</classpath>
 	</java>
 	
@@ -211,6 +212,7 @@ if="deploy.tomcat.required">
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
 			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
+			<pathelement location="${dist.lib.ext.dir}/closure-compiler.jar"/>
 		</classpath>
 	</java>
 </target>
