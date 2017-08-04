@@ -1867,7 +1867,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 			var n;
 			this.dg = new zk.Draggable(null, n = jq($id)[0], {
 				handle: jq($id + '-p')[0], zIndex: n.style.zIndex,
-				starteffect: zk.$void, starteffect: zk.$void,
+				starteffect: zk.$void,
 				endeffect: zk.$void});
 		} catch (e) {
 		}
