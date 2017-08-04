@@ -471,8 +471,13 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 	private void writeAppInfo(RequestContext reqctx, OutputStream out, WebApp wapp)
 			throws IOException, ServletException {
+		final String verInfoEnabled = Library.getProperty("org.zkoss.zk.ui.versionInfo.enabled", "true");
+		final boolean exposeVer = "true".equals(verInfoEnabled);
 		final StringBuffer sb = new StringBuffer(256);
-		sb.append("\nzkver('").append(wapp.getVersion()).append("','").append(wapp.getBuild());
+		if (exposeVer)
+			sb.append("\nzkver('").append(wapp.getVersion()).append("','").append(wapp.getBuild());
+		else
+			sb.append("\nzkver('','");
 
 		final ServletContext ctx = getServletContext();
 		String s = Encodes.encodeURL(ctx, reqctx.request, reqctx.response, "/");
@@ -488,7 +493,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			final LanguageDefinition langdef = (LanguageDefinition) it.next();
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry) e.next();
-				sb.append('\'').append(me.getKey()).append("':'").append(me.getValue()).append("',");
+				sb.append('\'').append(me.getKey()).append("':'")
+					.append(obfuscateVer(exposeVer, me.getValue(), verInfoEnabled)).append("',");
 			}
 			removeLast(sb, ',');
 		}
@@ -536,6 +542,10 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 		sb.append("});");
 		write(out, sb.toString());
+	}
+
+	private Object obfuscateVer(boolean exposeVersion, Object ver, String salt) {
+		return exposeVersion ? ver : Integer.toHexString(37 * ver.hashCode() + salt.hashCode());
 	}
 
 	private void outErrReloads(RequestContext reqctx, Configuration config, StringBuffer sb, Object[][] infs) {
