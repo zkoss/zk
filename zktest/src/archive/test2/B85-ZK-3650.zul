@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3650.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 28 14:56:20 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click arrow up of the spinner, the value of the textbox should also change to 1
+        2. click out side of the spinner
+        3. click arrow up of the spinner again, the value of the textbox should change to 2
+
+    </label>
+    <hbox xmlns:w="client">
+        onChanging
+        <spinner w:onChanging="this.nextSibling.setValue(event.value)" />
+        <textbox />
+    </hbox>
+</zk>

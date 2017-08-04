@@ -942,7 +942,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			var inp = this.getInputNode(),
 				val = this.valueEnter_ || inp.value;
-			if (this._lastChg != null && this._lastChg != val) {
+			if (this._lastChg != val) {
 				this._lastChg = val;
 				var valsel = this.valueSel_;
 				this.valueSel_ = null;
@@ -980,7 +980,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_clearOnChanging: function (wgt) {
-		wgt._lastChg = wgt.valueEnter_ = wgt.valueSel_ = null;
+		wgt.valueEnter_ = wgt.valueSel_ = null;
 	},
 	_clearInplaceTimeout: function (widget) {
 		if (widget._inplaceTimerId) {
