@@ -166,7 +166,7 @@ zk.copy(zjq.prototype, {
 			return this;
 
 		var anchor = opts ? opts.anchor || 't' : 't',
-			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
+			prop = ['top', 'left', 'height', 'width', 'overflow', 'position', 'border', 'margin', 'padding'],
 			anima = {},
 			css = {overflow: 'hidden'},
 			dims = this.dimension();
@@ -197,8 +197,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this.defaultAnimaOpts(wgt, opts, prop, true)
-			.jq.css(css).show().animate(anima, {
+		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
+			.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 250),
 			complete: opts.afterAnima
 		});
@@ -225,7 +225,7 @@ zk.copy(zjq.prototype, {
 			return this;
 		
 		var anchor = opts ? opts.anchor || 't' : 't',
-			prop = ['top', 'left', 'height', 'width', 'overflow', 'position'],
+			prop = ['top', 'left', 'height', 'width', 'overflow', 'position', 'border', 'margin', 'padding'],
 			anima = {},
 			css = {overflow: 'hidden'},
 			dims = this.dimension();
@@ -252,8 +252,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this.defaultAnimaOpts(wgt, opts, prop)
-			.jq.css(css).animate(anima, {
+		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
+			.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 250),
 			complete: opts.afterAnima
 		});
@@ -280,7 +280,7 @@ zk.copy(zjq.prototype, {
 			return this;
 		
 		var anchor = opts ? opts.anchor || 't' : 't',
-			prop = ['top', 'left', 'position'],
+			prop = ['top', 'left', 'position', 'border', 'margin', 'padding'],
 			anima = {},
 			css = {},
 			dims = this.dimension();
@@ -303,8 +303,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this.defaultAnimaOpts(wgt, opts, prop)
-			.jq.css(css).animate(anima, {
+		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
+			.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 350),
 			complete: opts.afterAnima
 		});
@@ -331,7 +331,7 @@ zk.copy(zjq.prototype, {
 			return this;
 		
 		var anchor = opts ? opts.anchor || 't' : 't',
-			prop = ['top', 'left', 'position'],
+			prop = ['top', 'left', 'position', 'border', 'margin', 'padding'],
 			anima = {},
 			css = {},
 			dims = this.dimension();
@@ -358,8 +358,8 @@ zk.copy(zjq.prototype, {
 			break;
 		}
 
-		return this.defaultAnimaOpts(wgt, opts, prop, true)
-			.jq.css(css).show().animate(anima, {
+		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
+			.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 350),
 			complete: opts.afterAnima
 		});
@@ -391,6 +391,7 @@ zk.copy(zjq.prototype, {
 
 		var aftfn = opts.afterAnima;
 		opts.afterAnima = function () {
+			self._removeWrapper(self.jq);
 			if (prop) _restoreProp(self, prop);
 			if (visible) {
 				/*
@@ -409,6 +410,70 @@ zk.copy(zjq.prototype, {
 			});
 		};
 		return this;
+	},
+	// Wraps the content of a element with an inner wrapper that copies position properties to avoid jumpy animation.
+	// The methods are borrowed from jquery-ui ui/effect.js, MIT license.
+	_createWrapper: function (element) {
+		// If the element is already wrapped, return it
+		var wrapped = element.children('.ui-effects-wrapper');
+		if (wrapped.length) {
+			return element;
+		}
+
+		var innerHeight = element.height(),
+			innerWidth = element.width(),
+			outerHeight = element.outerHeight(true),
+			outerWidth = element.outerWidth(true);
+		// No padding, border, or margin, no need to wrap.
+		if (innerHeight == outerHeight && innerWidth == outerWidth) {
+			return element;
+		}
+
+		// Wrap the element
+		var props = zk.copy({
+				boxSizing: 'border-box',
+				height: '100%',
+				width: '100%'
+			}, element.css([
+				'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
+				'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom',
+				'borderLeftWidth', 'borderRightWidth', 'borderTopWidth', 'borderBottomWidth',
+				'borderLeftColor', 'borderRightColor', 'borderTopColor', 'borderBottomColor',
+				'borderLeftStyle', 'borderRightStyle', 'borderTopStyle', 'borderBottomStyle'
+			])),
+			wrapper = jq('<div></div>')
+				.addClass('ui-effects-wrapper')
+				.css(props),
+			active = document.activeElement;
+
+		try {
+			active.id;
+		} catch (e) {
+			active = document.body;
+		}
+
+		element.wrapInner(wrapper);
+
+		if (element[0] === active || jq.contains(element[0], active)) {
+			jq(active).trigger('focus');
+		}
+
+		return element.css({
+			border: 'none',
+			margin: 0,
+			padding: 0
+		});
+	},
+	_removeWrapper: function (element) {
+		var active = document.activeElement,
+			wrapped = element.children('.ui-effects-wrapper');
+		if (wrapped.length) {
+			wrapped.contents().unwrap();
+			if (element[0] === active || jq.contains(element[0], active)) {
+				jq(active).trigger('focus');
+			}
+		}
+		return element;
 	}
 });
 })();
