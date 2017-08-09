@@ -3705,10 +3705,12 @@ public class Listbox extends MeshElement {
 			if (cnt == 0)
 				return; // nothing to do
 
-			cnt = 20 - cnt;
-			if (cnt > 0 && _preloadsz > 0) { // Feature 1740072: pre-load
-				if (cnt > _preloadsz)
-					cnt = _preloadsz; // at most 8 more to load
+			// B85-ZK-3572 get size using preloadSize()
+			int size = preloadSize();
+			cnt = size - cnt;
+			if (cnt > 0 && size > 0) { // Feature 1740072: pre-load
+				if (cnt > size)
+					cnt = size; // at most 8 more to load
 
 				// 1. locate the first item found in items
 				final List<Listitem> toload = new LinkedList<Listitem>();
