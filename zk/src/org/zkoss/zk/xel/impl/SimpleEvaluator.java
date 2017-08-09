@@ -133,7 +133,7 @@ public class SimpleEvaluator implements Evaluator {
 				return null;
 		}
 		if (resolver instanceof ExecutionResolver)
-			((ExecutionResolver) resolver).setSelf(ref);
+			return new ExecutionResolver.Wrapper(((ExecutionResolver) resolver), ref);
 		return resolver;
 	}
 }

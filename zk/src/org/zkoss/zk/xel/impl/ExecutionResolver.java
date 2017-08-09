@@ -74,6 +74,10 @@ public class ExecutionResolver implements VariableResolverX {
 
 	//-- VariableResolverX --//
 	public Object resolveVariable(XelContext ctx, Object base, Object onm) {
+		return resolveVariable0(_self, ctx, base, onm);
+	}
+
+	private Object resolveVariable0(Object self, XelContext ctx, Object base, Object onm) {
 		if (base != null) {
 			Object o = ((ExecutionCtrl) _exec).getExtraXelVariable(ctx, base, onm);
 			if (o != null)
@@ -96,8 +100,8 @@ public class ExecutionResolver implements VariableResolverX {
 		if ("arg".equals(name))
 			return _exec.getArg();
 		if ("componentScope".equals(name)) {
-			if (_self instanceof Component)
-				return ((Component) _self).getAttributes(Component.COMPONENT_SCOPE);
+			if (self instanceof Component)
+				return ((Component) self).getAttributes(Component.COMPONENT_SCOPE);
 			return Collections.EMPTY_MAP;
 		}
 		if ("desktopScope".equals(name))
@@ -107,48 +111,48 @@ public class ExecutionResolver implements VariableResolverX {
 		if ("execution".equals(name))
 			return _exec;
 		if ("pageScope".equals(name)) {
-			if (_self instanceof Component)
-				return ((Component) _self).getAttributes(Component.PAGE_SCOPE);
-			if (_self instanceof Page)
-				return ((Page) _self).getAttributes();
+			if (self instanceof Component)
+				return ((Component) self).getAttributes(Component.PAGE_SCOPE);
+			if (self instanceof Page)
+				return ((Page) self).getAttributes();
 			final Page page = ((ExecutionCtrl) _exec).getCurrentPage();
 			return page != null ? page.getAttributes() : Collections.EMPTY_MAP;
 		}
 		if ("page".equals(name)) {
-			if (_self instanceof Component)
-				return Components.getCurrentPage((Component) _self);
-			if (_self instanceof Page)
-				return _self;
+			if (self instanceof Component)
+				return Components.getCurrentPage((Component) self);
+			if (self instanceof Page)
+				return self;
 			return ((ExecutionCtrl) _exec).getCurrentPage();
 		}
 		if ("requestScope".equals(name))
 			return _exec.getAttributes();
 		if ("self".equals(name))
-			return _self;
+			return self;
 		if ("sessionScope".equals(name))
 			return _exec.getDesktop().getSession().getAttributes();
 		if ("session".equals(name))
 			return _exec.getDesktop().getSession();
 		if ("spaceOwner".equals(name)) {
-			if (_self instanceof Component)
-				return ((Component) _self).getSpaceOwner();
-			if (_self instanceof Page)
-				return _self;
+			if (self instanceof Component)
+				return ((Component) self).getSpaceOwner();
+			if (self instanceof Page)
+				return self;
 			return null;
 		}
 		if ("spaceScope".equals(name)) {
-			if (_self instanceof Component)
-				return ((Component) _self).getAttributes(Component.SPACE_SCOPE);
-			if (_self instanceof Page)
-				return ((Page) _self).getAttributes();
+			if (self instanceof Component)
+				return ((Component) self).getAttributes(Component.SPACE_SCOPE);
+			if (self instanceof Page)
+				return ((Page) self).getAttributes();
 			return Collections.EMPTY_MAP;
 		}
 		if ("param".equals(name) || "paramValues".equals(name))
 			return Evaluators.resolveVariable(_parent, name);
 		//Bug 3131983: cannot go through getZScriptVariable
 
-		if (_self instanceof Component) {
-			final Component comp = (Component) _self;
+		if (self instanceof Component) {
+			final Component comp = (Component) self;
 
 			//We have to look getZScriptVariable first and then namespace
 			//so it is in the same order of interpreter
@@ -192,8 +196,8 @@ public class ExecutionResolver implements VariableResolverX {
 			}
 		} else {
 			Page page;
-			if (_self instanceof Page) {
-				page = (Page) _self;
+			if (self instanceof Page) {
+				page = (Page) self;
 			} else {
 				page = ((ExecutionCtrl) _exec).getCurrentPage();
 			}
@@ -239,5 +243,30 @@ public class ExecutionResolver implements VariableResolverX {
 	//Object//
 	public String toString() {
 		return "[ExecutionResolver: " + _self + ']';
+	}
+
+	/**
+	 * A wrapper that prevents _self from being changed in the nested resolving process.
+	 */
+	static class Wrapper implements VariableResolverX {
+		private final ExecutionResolver _resolver;
+		private final Object _ref;
+
+		Wrapper(ExecutionResolver resolver, Object ref) {
+			this._resolver = resolver;
+			this._ref = ref;
+		}
+
+		public Object resolveVariable(XelContext ctx, Object base, Object name) throws XelException {
+			return _resolver.resolveVariable0(_ref, ctx, base, name);
+		}
+
+		public Object resolveVariable(String name) throws XelException {
+			return _resolver.resolveVariable0(_ref, null, null, name);
+		}
+
+		public String toString() {
+			return "[ExecutionResolver.Wrapper: " + _ref + ']';
+		}
 	}
 }
