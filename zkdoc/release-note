@@ -53,6 +53,7 @@ ZK 8.5.0
   ZK-3714: Sessions.getCurrent() returns null during WebSocket AU
   ZK-3715: URL encoding in Websocket AU requests causes NPE -> UiException
   ZK-3650: Spinner missing onChanging if _lastChg == null
+  ZK-3614: Chosenbox: getOptIdByElement fails if the desktop of the chosenbox is null
 
 * Upgrade Notes
 
