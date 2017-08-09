@@ -54,6 +54,7 @@ ZK 8.5.0
   ZK-3715: URL encoding in Websocket AU requests causes NPE -> UiException
   ZK-3650: Spinner missing onChanging if _lastChg == null
   ZK-3614: Chosenbox: getOptIdByElement fails if the desktop of the chosenbox is null
+  ZK-3695: jumpy tabbox accordion animation
 
 * Upgrade Notes
 
