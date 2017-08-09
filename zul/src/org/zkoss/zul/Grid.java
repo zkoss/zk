@@ -256,6 +256,7 @@ public class Grid extends MeshElement {
 	private transient boolean _rod;
 	/** the message to display when there are no items */
 	private String _emptyMessage;
+	private int _visibleRows; //since 8.5.0
 
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
@@ -500,6 +501,29 @@ public class Grid extends MeshElement {
 	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public void setAlign(String align) {
+	}
+
+	/** Returns the visible rows. Zero means no limitation.
+	 * <p>Default: 0.
+	 * @since 8.5.0
+	 */
+	public int getVisibleRows() {
+		return _visibleRows;
+	}
+
+	/** Sets the visible rows.
+	 * <p>Note: if both {@link #setHeight} is specified with non-empty,
+	 * {@link #setVisibleRows(int)} is ignored
+	 * @since 8.5.0
+	 */
+	public void setVisibleRows(int visibleRows) throws WrongValueException {
+		if (visibleRows < 0)
+			throw new WrongValueException("Illegal rows: " + visibleRows);
+
+		if (_visibleRows != visibleRows) {
+			_visibleRows = visibleRows;
+			smartUpdate("rows", _visibleRows);
+		}
 	}
 
 	//--Paging--//
@@ -1714,6 +1738,9 @@ public class Grid extends MeshElement {
 
 		renderer.render("_totalSize", getDataLoader().getTotalSize());
 		renderer.render("_offset", getDataLoader().getOffset());
+
+		if (_visibleRows > 0)
+			renderer.render("rows", _visibleRows);
 
 		if (_rod && !_renderAll) {
 			if (((Cropper) getDataLoader()).isCropper())//bug #2936064 

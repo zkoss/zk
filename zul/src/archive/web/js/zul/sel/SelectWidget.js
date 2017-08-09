@@ -36,19 +36,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return true;
 	}
-
-	function listenOnFitSize(wgt) {
-		if (wgt._rows && !wgt._rowsOnFitSize) {
-			zWatch.listen({onFitSize: wgt});
-			wgt._rowsOnFitSize = true;
-		}
-	}
-	function unlistenOnFitSize(wgt) {
-		if (wgt._rowsOnFitSize) {
-			zWatch.unlisten({onFitSize: wgt});
-			delete wgt._rowsOnFitSize;
-		}
-	}
 	function _updHeaderCM(box) { //update header's checkmark
 		if (box.$$selectAll != undefined)
 			return; // update by server's state
@@ -90,7 +77,6 @@ var SelectWidget =
  * A skeletal implementation for a select widget.
  */
 zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
-	_rows: 0,
 	/** Whether to change a list item selection on right click
 	 * <p>Default: true (unless the server changes the setting)
 	 * @since 5.0.5
@@ -105,27 +91,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this._selItems = [];
 	},
 	$define: {
-		/**
-		 * Returns the rows. Zero means no limitation.
-		 * <p>
-		 * Default: 0.
-		 * @return int
-		 */
-		/**
-		 * Sets the rows.
-		 * <p>
-		 * Note: if both {@link #setHeight} is specified with non-empty,
-		 * {@link #setRows} is ignored
-		 * @param int rows
-		 */
-		rows: function (rows) {
-			listenOnFitSize(this);
-			var n = this.$n();
-			if (n) {
-				n._lastsz = null;
-				this.onSize();
-			}
-		},
 		/**
 		 * Returns whether the check mark shall be displayed in front of each item.
 		 * <p>
@@ -382,129 +347,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		this.$supers('_afterCalcSize', arguments);
 	},
-	onFitSize: function () {
-		// B50-ZK-598: when having rows, height needs to be determined when onFitSize
-		if (this._rows)
-			this._calcHgh();
-	},
-	_calcHgh: function () {
-		var rows = this.ebodyrows.rows,
-			n = this.$n(),
-			hgh = n.style.height,
-			isHgh = hgh && hgh != 'auto' && hgh.indexOf('%') < 0;
-		if (isHgh) {
-			hgh = zk.parseInt(hgh) - zk(n).padBorderHeight();
-			if (hgh) {
-				hgh -= this._headHgh(0);
-				if (hgh < 20) hgh = 20;
-				var sz = 0;
-				l_out:
-				for (var h, j = 0, rl = rows.length; j < rl; ++sz, ++j) {
-					//next visible row
-					var r;
-					for (;; ++j) {//no need to check length again
-						if (j >= rl) break l_out;
-						r = rows[j];
-						if (zk(r).isVisible()) break;
-					}
-
-					var $r = zk(r);
-					h = $r.offsetTop() + $r.offsetHeight();
-					if (h >= hgh) {
-						if (h > hgh + 2) ++sz; //experimental
-						break;
-					}
-				}
-				sz = Math.ceil(sz && h ? (hgh * sz) / h : hgh / this._headHgh(20));
-				this._visibleRows(sz);
-				hgh -= (this.efoot ? this.efoot.offsetHeight : 0);
-				//bug# 3036398: frozen scrollbar disappear when listbox with vflex="1"
-				hgh -= (this.efrozen && this._nativebar ? this.efrozen.offsetHeight : 0);
-				this.ebody.style.height = (hgh < 0 ? 0 : hgh) + 'px';
-				return; //done
-			}
-		}
-
-		var nVisiRows = 0, nRows = this.getRows(), lastVisiRow, firstVisiRow, midVisiRow;
-		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
-			var r = rows[j];
-			if (zk(r).isVisible()) {
-				++nVisiRows;
-				if (!firstVisiRow)
-					firstVisiRow = r;
-
-				if (nRows === nVisiRows) {
-					midVisiRow = r;
-					break;
-					//nVisiRows and lastVisiRow useful only if nRows is larger,
-					//so ok to break here
-				}
-				lastVisiRow = r;
-			}
-		}
-
-		hgh = 0;
-		var diff = 2;/*experiment*/
-		if (!nRows) {
-			if (this.isVflex()) {
-				hgh = this._vflexSize(n.style.height);
-
-				if (zk.ie < 11 && this._cachehgh != hgh) {
-					hgh -= 1; // need to display the bottom border.
-					this._cachehgh = hgh;
-				}
-				if (hgh < 25) hgh = 25;
-
-				var rowhgh = firstVisiRow ? zk(firstVisiRow).offsetHeight() : null;
-				if (!rowhgh)
-					rowhgh = this._headHgh(20);
-
-				nRows = Math.round((hgh - diff) / rowhgh);
-			}
-			this._visibleRows(nRows);
-		}
-
-		if (nRows) {
-			if (!hgh) {
-				if (!nVisiRows) {
-					hgh = this._headHgh(20, true) * nRows;
-				} else if (nRows <= nVisiRows) {
-					var $midVisiRow = zk(midVisiRow);
-					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
-				} else {
-					var $lastVisiRow = zk(lastVisiRow);
-					hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight();
-					hgh = Math.ceil((nRows * hgh) / nVisiRows);
-				}
-			}
-			this.ebody.style.height = hgh + 'px';
-		} else {
-			this.ebody.style.height = '';
-			var focusEL = this.$n('a');
-			if ((this.paging || this._paginal) && focusEL)
-				focusEL.style.top = '0px'; // Bug ZK-1715: focus has no chance to sync if don't select item after changing page.
-		}
-	},
-	/* Returns the real # of rows (aka., real size). */
-	_visibleRows: function (v) {
-		if ('number' == typeof v) {
-			this._visiRows = v;
-		} else
-			return this.getRows() || this._visiRows || 0;
-	},
-	/* Height of the head row. If no header, defval is returned. */
-	_headHgh: function (defVal, isExcludeAuxhead) {
-		var headWidget = this.getHeadWidget(), //Bug ZK-1297: get head height exclude auxhead
-			head = this.ehead,
-			hgh = isExcludeAuxhead ? (headWidget ? headWidget.$n().offsetHeight : 0) : (head ? head.offsetHeight : 0);
-		if (this.paging) {
-			var pgit = this.$n('pgit'),
-				pgib = this.$n('pgib');
-			if (pgit) hgh += pgit.offsetHeight;
-			if (pgib) hgh += pgib.offsetHeight;
-		}
-		return hgh ? hgh : defVal;
-	},
 	/**
 	 * Returns the index of the ItemWidget
 	 * @param ItemWidget item
@@ -620,7 +462,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this._updHeaderCM();
 	},
 	unbind_: function () {
-		unlistenOnFitSize(this);
 		var btn = this.$n('a');
 		if (btn)
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
