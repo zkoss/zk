@@ -105,117 +105,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				ajaxSendNow(reqInf);
 		}
 	}
-	// Called when the response is received from zAu.ajaxReq.
-	function onResponseReady() {
-		var req = zAu.ajaxReq, reqInf = zAu.ajaxReqInf, sid;
-		try {
-			if (req && req.readyState == 4) {
-				zAu.ajaxReq = zAu.ajaxReqInf = null;
-				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, zAu.pfGetIds(req));
-
-				sid = req.getResponseHeader('ZK-SID');
-
-				var rstatus;
-				if ((rstatus = req.status) == 200) { //correct
-					if (sid && sid != zAu.seqId) {
-						zAu._errCode = 'ZK-SID ' + (sid ? 'mismatch' : 'required');
-						zAu.afterResponse(); //continue the pending request if any
-						return;
-					} //if sid null, always process (usually for error msg)
-
-					// only for 5501 & 5502
-					var v;
-					if ((v = req.getResponseHeader('ZK-Error'))
-					&& !zAu.onResponseError(req, v = zk.parseInt(v) || v)
-					&& (v == 5501 || v == 5502) //Handle only ZK's SC_OUT_OF_SEQUENCE or SC_ACTIVATION_TIMEOUT
-					&& zAu.confirmRetry('FAILED_TO_RESPONSE',
-							v == 5501 ? 'Request out of sequence' : 'Activation timeout')) {
-						zAu.ajaxReqResend(reqInf);
-						return;
-					}
-					if (v != 410 //not timeout (SC_GONE)
-					&& !(reqInf.rtags && reqInf.rtags.isDummy) //ZK-3304: dummy request shouldn't reset timeout
-					&& (!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout
-						zAu._resetTimeout();
-
-					if (zAu.pushReqCmds(reqInf, req)) { //valid response
-						//advance SID to avoid receive the same response twice
-						if (sid && ++zAu.seqId > 9999) zAu.seqId = 1;
-						zAu.ajaxReqTries = 0;
-						zAu.pendingReqInf = null;
-					}
-				} else if ((!sid || sid == zAu.seqId) //ignore only if out-of-seq (note: 467 w/o sid)
-				&& !zAu.onResponseError(req, zAu._errCode = rstatus)) {
-					var eru = zAu._errURIs['' + rstatus];
-					if (typeof eru == 'string') {
-						zUtl.go(eru);
-						return;
-					}
-
-					if (typeof zAu.ajaxErrorHandler == 'function') {
-						zAu.ajaxReqTries = zAu.ajaxErrorHandler(req, rstatus, req.statusText, zAu.ajaxReqTries);
-						if (zAu.ajaxReqTries > 0) {
-							zAu.ajaxReqTries--;
-							zAu.ajaxReqResend(reqInf, zk.resendTimeout);
-							return;
-						}
-					} else {
-					//handle MSIE's buggy HTTP status codes
-					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
-						switch (rstatus) { //auto-retry for certain case
-						default:
-							if (!zAu.ajaxReqTries) break;
-							//fall thru
-						case 12002: //server timeout
-						case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
-						case 12031:
-						case 12152: // Connection closed by server.
-						case 12159:
-						case 13030:
-						case 503: //service unavailable
-							if (!zAu.ajaxReqTries) zAu.ajaxReqTries = 3; //two more try
-							if (--zAu.ajaxReqTries) {
-								zAu.ajaxReqResend(reqInf, zk.resendTimeout);
-								return;
-							}
-						}
-						if (!reqInf.ignorable && !zk.unloading) {
-							var msg = req.statusText;
-							if (zAu.confirmRetry('FAILED_TO_RESPONSE', rstatus + (msg ? ': ' + msg : ''))) {
-								zAu.ajaxReqTries = 2; //one more try
-								zAu.ajaxReqResend(reqInf);
-								return;
-							}
-						}
-					}
-				}
-			}
-		} catch (e) {
-			if (!window.zAu)
-				return; //the doc has been unloaded
-
-			zAu.ajaxReq = zAu.ajaxReqInf = null;
-			try {
-				if (req && typeof req.abort == 'function') req.abort();
-			} catch (e2) {
-			}
-
-			//NOTE: if connection is off and req.status is accessed,
-			//Mozilla throws exception while IE returns a value
-			if (reqInf && !reqInf.ignorable && !zk.unloading) {
-				var msg = _exmsg(e);
-				zAu._errCode = '[Receive] ' + msg;
-				//if (e.fileName) _errCode += ", "+e.fileName;
-				//if (e.lineNumber) _errCode += ", "+e.lineNumber;
-				if (zAu.confirmRetry('FAILED_TO_RESPONSE', (msg && msg.indexOf('NOT_AVAILABLE') < 0 ? msg : ''))) {
-					zAu.ajaxReqResend(reqInf);
-					return;
-				}
-			}
-		}
-
-		zAu.afterResponse(sid);
-	}
 	function _exmsg(e) {
 		var msg = e.message || e, m2 = '';
 		if (e.name) m2 = ' ' + e.name;
@@ -253,7 +142,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
 		try {
 			zk.ausending = true;
-			req.onreadystatechange = onResponseReady;
+			req.onreadystatechange = zAu._onResponseReady;
 			req.open('POST', reqInf.uri, true);
 			req.setRequestHeader('Content-Type', setting.contentType);
 			req.setRequestHeader('ZK-SID', reqInf.sid);
@@ -961,6 +850,125 @@ zAu.beforeSend = function (uri, req, dt) {
 	wrongValue_: function (wgt, msg) {
 		if (msg !== false)
 			jq.alert(msg);
+	},
+	// Called when the response is received from zAu.ajaxReq.
+	_onResponseReady: function () {
+		var req = zAu.ajaxReq, reqInf = zAu.ajaxReqInf, sid;
+		try {
+			if (req && req.readyState == 4) {
+				zAu.ajaxReq = zAu.ajaxReqInf = null;
+				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, zAu.pfGetIds(req));
+
+				sid = req.getResponseHeader('ZK-SID');
+
+				var rstatus;
+				if ((rstatus = req.status) == 200) { //correct
+					if (zAu._respSuccess(req, reqInf, sid)) return;
+				} else if ((!sid || sid == zAu.seqId) //ignore only if out-of-seq (note: 467 w/o sid)
+				&& !zAu.onResponseError(req, zAu._errCode = rstatus)) {
+					if (zAu._respFailure(req, reqInf, rstatus)) return;
+				}
+			}
+		} catch (e) {
+			if (zAu._respException(req, reqInf, e)) return;
+		}
+
+		zAu.afterResponse(sid);
+	},
+	_respSuccess: function (req, reqInf, sid) {
+		if (sid && sid != zAu.seqId) {
+			zAu._errCode = 'ZK-SID ' + (sid ? 'mismatch' : 'required');
+			zAu.afterResponse(); //continue the pending request if any
+			return true;
+		} //if sid null, always process (usually for error msg)
+
+		var v;
+		if ((v = req.getResponseHeader('ZK-Error'))
+		&& !zAu.onResponseError(req, v = zk.parseInt(v) || v)
+		&& (v == 5501 || v == 5502) //Handle only ZK's SC_OUT_OF_SEQUENCE or SC_ACTIVATION_TIMEOUT
+		&& zAu.confirmRetry('FAILED_TO_RESPONSE',
+				v == 5501 ? 'Request out of sequence' : 'Activation timeout')) {
+			zAu.ajaxReqResend(reqInf);
+			return true;
+		}
+		if (v != 410 //not timeout (SC_GONE)
+		&& !(reqInf.rtags && reqInf.rtags.isDummy) //ZK-3304: dummy request shouldn't reset timeout
+		&& (!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout
+			zAu._resetTimeout();
+
+		if (zAu.pushReqCmds(reqInf, req)) { //valid response
+			//advance SID to avoid receive the same response twice
+			if (sid && ++zAu.seqId > 9999) zAu.seqId = 1;
+			zAu.ajaxReqTries = 0;
+			zAu.pendingReqInf = null;
+		}
+	},
+	_respFailure: function (req, reqInf, rstatus) {
+		var eru = zAu._errURIs['' + rstatus];
+		if (typeof eru == 'string') {
+			zUtl.go(eru);
+			return true;
+		}
+
+		if (typeof zAu.ajaxErrorHandler == 'function') {
+			zAu.ajaxReqTries = zAu.ajaxErrorHandler(req, rstatus, req.statusText, zAu.ajaxReqTries);
+			if (zAu.ajaxReqTries > 0) {
+				zAu.ajaxReqTries--;
+				zAu.ajaxReqResend(reqInf, zk.resendTimeout);
+				return true;
+			}
+		} else {
+		//handle MSIE's buggy HTTP status codes
+		//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
+			switch (rstatus) { //auto-retry for certain case
+			default:
+				if (!zAu.ajaxReqTries) break;
+				//fall thru
+			case 12002: //server timeout
+			case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
+			case 12031:
+			case 12152: // Connection closed by server.
+			case 12159:
+			case 13030:
+			case 503: //service unavailable
+				if (!zAu.ajaxReqTries) zAu.ajaxReqTries = 3; //two more try
+				if (--zAu.ajaxReqTries) {
+					zAu.ajaxReqResend(reqInf, zk.resendTimeout);
+					return true;
+				}
+			}
+			if (!reqInf.ignorable && !zk.unloading) {
+				var msg = req.statusText;
+				if (zAu.confirmRetry('FAILED_TO_RESPONSE', rstatus + (msg ? ': ' + msg : ''))) {
+					zAu.ajaxReqTries = 2; //one more try
+					zAu.ajaxReqResend(reqInf);
+					return true;
+				}
+			}
+		}
+	},
+	_respException: function (req, reqInf, e) {
+		if (!window.zAu)
+			return true; //the doc has been unloaded
+
+		zAu.ajaxReq = zAu.ajaxReqInf = null;
+		try {
+			if (req && typeof req.abort == 'function') req.abort();
+		} catch (e2) {
+		}
+
+		//NOTE: if connection is off and req.status is accessed,
+		//Mozilla throws exception while IE returns a value
+		if (reqInf && !reqInf.ignorable && !zk.unloading) {
+			var msg = _exmsg(e);
+			zAu._errCode = '[Receive] ' + msg;
+			//if (e.fileName) _errCode += ", "+e.fileName;
+			//if (e.lineNumber) _errCode += ", "+e.lineNumber;
+			if (zAu.confirmRetry('FAILED_TO_RESPONSE', (msg && msg.indexOf('NOT_AVAILABLE') < 0 ? msg : ''))) {
+				zAu.ajaxReqResend(reqInf);
+				return true;
+			}
+		}
 	},
 
 	/** The AU command handler that handles commands not related to widgets.
