@@ -142,6 +142,14 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 			if (b1 != b2)
 				box._updHeaderCM();
 		}
-	}
+	},
+	//@Override
+    compareRowPos: function (item) {
+        // return -1 if item is before this,
+        // return  0 if item is the same as this,
+        // return  1 if item is after this,
+        var thisIndex = this._index, itemIndex = item._index;
+        return thisIndex == itemIndex ? 0 : thisIndex > itemIndex ? -1 : 1;
+    }
 });
 })();
