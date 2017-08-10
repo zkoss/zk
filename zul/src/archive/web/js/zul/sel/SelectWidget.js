@@ -713,7 +713,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (step > 0 || (step < 0 && row)) {
 			if (row && shift && !row.isDisabled() && row.isSelectable()) // Bug ZK-1715: not select item if disabled.
-				this._toggleSelect(row, true, evt);
+				this._toggleSelect(row, step > 0, evt); // F85-ZK-3507: shift + down: select multiple items, shift + up: deselect multiple items
 			var nrow = row ? row.$n() : null;
 			for (;;) {
 				if (!nrow) { // no focused/selected item yet
