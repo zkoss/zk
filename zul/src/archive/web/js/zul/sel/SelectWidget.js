@@ -86,6 +86,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_anchorTop: 0,
 	_anchorLeft: 0,
 	_isSelecting: true,
+	_startRow: null,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
@@ -657,6 +658,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (shift && !this._multiple)
 			shift = false; //OK to
 
+		// F85-ZK-3507
+		if (this._startRow && !shift && this._multiple)
+			this._startRow = null;
+		else if (!this._startRow && shift)
+			this._startRow = row;
+
 		var endless = false, step, lastrow;
 
 		// for test tool when browser is webkit
@@ -712,8 +719,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		if (step > 0 || (step < 0 && row)) {
-			if (row && shift && !row.isDisabled() && row.isSelectable()) // Bug ZK-1715: not select item if disabled.
-				this._toggleSelect(row, true, evt);
+			if (row && shift && !row.isDisabled() && row.isSelectable()) { // Bug ZK-1715: not select item if disabled.
+				// F85-ZK-3507: shift + up/down: select item when moving outwards,
+				// and deselect item when moving inwards
+				this._toggleSelect(row, this._getToSelFlag(row, this._startRow, step), evt);
+			}
 			var nrow = row ? row.$n() : null;
 			for (;;) {
 				if (!nrow) { // no focused/selected item yet
@@ -752,7 +762,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (r.$instanceof(zul.sel.Treerow))
 					r = r.parent;
 				if (!r.isDisabled() && r.isSelectable()) {
-					if (shift) this._toggleSelect(r, true, evt);
+					// F85-ZK-3507
+					if (shift) this._toggleSelect(r, endless ? this._getToSelFlag(r, this._startRow, step) : true, evt);
 
 					if (zk(nrow).isVisible()) {
 						// ZK-2971: save last row even when pressing shift
@@ -785,6 +796,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 
 		return _afterChildKey(evt);
+	},
+	_getToSelFlag: function (row, startRow, step) { // F85-ZK-3507
+		if (!startRow)
+			return true;
+		var pos = startRow.compareItemPos_(row);
+		return pos == 0 || (pos == -1 && step == -1) || (pos == 1 && step == 1);
 	},
 	_doKeyUp: function (evt) { //called by ItemWidget only
 		return _beforeChildKey(this, evt) || _afterChildKey(evt);

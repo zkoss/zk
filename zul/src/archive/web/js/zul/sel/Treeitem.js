@@ -86,6 +86,45 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return target;
 	}
 
+	function _getTreePath(tree, node) {
+		var p = node,
+			paths = [p.getChildIndex()];
+		while (p) {
+			p = p.parent.parent;
+			if (p.$instanceof(zul.sel.Treeitem)) {
+				paths.unshift(p.getChildIndex());
+			} else {
+				break;
+			}
+		}
+		return paths;
+	}
+
+	// return -1 if thisPath is before itemPath,
+	// return 1 if thisPath is after itemPath,
+	function _compareTreePath(thisPath, itemPath) {
+		var depth = 0;
+		while (true) {
+			if (thisPath[depth] < itemPath[depth]) {
+				return -1;
+			} else if (thisPath[depth] > itemPath[depth]) {
+				return 1;
+			} else if (thisPath[depth] == itemPath[depth]) {
+				if (thisPath[depth] == undefined) //just in case, it should never be run into this line.
+					break;
+				depth++;
+				continue;
+			} else {
+				if (thisPath[depth] == undefined) { // shorter is at before
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+		}
+		return 1;
+	}
+
 /**
  * A treeitem.
  *
@@ -389,44 +428,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		}
 	},
 	_renderChildHTML: (function () {
-		function _getTreePath(tree, node) {
-			var p = node,
-				paths = [p.getChildIndex()];
-			while (p) {
-				p = p.parent.parent;
-				if (p.$instanceof(zul.sel.Treeitem)) {
-					paths.unshift(p.getChildIndex());
-				} else {
-					break;
-				}
-			}
-			return paths;
-		}
-
-		// return -1 if thisPath is before itemPath,
-		// return 1 if thisPath is after itemPath,
-		function _compareTreePath(thisPath, itemPath) {
-			var depth = 0;
-			while (true) {
-				if (thisPath[depth] < itemPath[depth]) {
-					return -1;
-				} else if (thisPath[depth] > itemPath[depth]) {
-					return 1;
-				} else if (thisPath[depth] == itemPath[depth]) {
-					if (thisPath[depth] == undefined) //just in case, it should never be run into this line.
-						break;
-					depth++;
-					continue;
-				} else {
-					if (thisPath[depth] == undefined) { // shorter is at before
-						return -1;
-					} else {
-						return 1;
-					}
-				}
-			}
-			return 1;
-		}
 		return function (childHTML) {
 			var tree = this.getTree(),
 				erows = tree.ebodyrows;
@@ -495,6 +496,13 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				for (i = i.firstChild; i; i = i.nextSibling)
 					i._syncIcon(isRemoved);
 		}
+	},
+	//@Override
+	compareItemPos_: function (item) {
+		if (this == item)
+			return 0;
+		var tree = this.getTree();
+		return _compareTreePath(_getTreePath(tree, item), _getTreePath(tree, this));
 	}
 },{
 	//package utiltiy: sync selected items for replaceWidget
