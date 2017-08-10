@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3507.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 10 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label value="listbox"/>
+    <listbox id="box" multiple="true" checkmark="true" width="300px">
+        <listitem label="Mary"></listitem>
+        <listitem label="John"></listitem>
+        <listitem label="Jane"></listitem>
+        <listitem label="Henry"></listitem>
+        <listitem label="Mark"></listitem>
+        <listitem label="Bess"></listitem>
+        <listitem label="Cathy"></listitem>
+    </listbox>
+    <label value="tree"/>
+    <tree id="tree" rows="7" multiple="true" checkmark="true" width="300px">
+	    <treechildren>
+	        <treeitem label="Item 1"/>
+	        <treeitem>
+	            <treerow label="Item 2"/>
+	            <treechildren>
+	                <treeitem>
+	                    <treerow label="Item 2.1"/>
+	                    <treechildren>
+	                    	<treeitem label="Item 2.1.1"/>
+	                    	<treeitem label="Item 2.1.2"/>
+	                    </treechildren>
+	                </treeitem>
+	                <treeitem label="Item 2.2"/>
+	            </treechildren>
+	        </treeitem>
+	        <treeitem label="Item 3"/>
+	    </treechildren>
+	</tree>
+	<label multiline="true">
+		1. Select a random item, except the last one
+		2. Press Shift + down, and next item will be selected
+		3. Press Shift + up, deselect one item
+	</label>
+</zk>
