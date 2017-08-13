@@ -58,7 +58,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			btns.push(newButton(nm, typeof f == 'function' ? f : null));
 		}
 		if (!btns.length)
-			btns.push(newButton('OK'));
+			btns.push(newButton(msgzul.OK));
 		return btns;
 	}
 
