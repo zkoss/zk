@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3328.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 2 16:56:00 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <zscript><![CDATA[
+	import java.util.Locale;
+	import org.zkoss.web.Attributes;
+	import org.zkoss.zk.ui.Sessions;
+	import org.zkoss.util.Locales;
+	import org.zkoss.zk.ui.util.Clients;
+	Locale locale = new Locale("zh", "ZH");
+	Sessions.getCurrent().setAttribute(Attributes.PREFERRED_LOCALE, locale);
+	Clients.reloadMessages(locale);
+	Locales.setThreadLocal(locale);
+]]></zscript>
+    <label>Click the btn, and you should see the "ok" in Chinese.</label>
+    <button id="btn" label="click" w:onClick="jq.alert('test');"/>
+</zk>

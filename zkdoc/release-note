@@ -57,6 +57,7 @@ ZK 8.5.0
   ZK-3614: Chosenbox: getOptIdByElement fails if the desktop of the chosenbox is null
   ZK-3695: jumpy tabbox accordion animation
   ZK-3572: Listbox uses deprecated setPreloadSize instead of library property org.zkoss.zul.listbox.preloadSize
+  ZK-3328: jq.alert default "OK" button doesn't use internationalized messages
 
 * Upgrade Notes
 
