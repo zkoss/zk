@@ -303,6 +303,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
-	}
+	},
+    compareRowPos: function (item) {
+		return 0;
+    }
 });
 })();
