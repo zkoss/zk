@@ -61,6 +61,7 @@ ZK 8.5.0
   ZK-3572: Listbox uses deprecated setPreloadSize instead of library property org.zkoss.zul.listbox.preloadSize
   ZK-3328: jq.alert default "OK" button doesn't use internationalized messages
   ZK-3554: Tooltip/Popup/Context ignoring usage errors
+  ZK-3721: avoid 2 separate au requests for onBookmarkChange onHistoryPopState
 
 * Upgrade Notes
 

@@ -59,6 +59,8 @@ zk.bmk = (function () { //used internally
 	var _startCheck = function () {
 		_startCheck = null;
 		checkBookmark();
+		jq(window).on('hashchange', checkBookmark);
+		// Kept for a workaround that history.pushState() never causes a hashchange event to be fired
 		setInterval(checkBookmark, 250);
 			//Though IE use bookmark.html, timer is still required
 			//because user might specify URL directly

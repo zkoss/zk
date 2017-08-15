@@ -26,7 +26,7 @@ zk.historystate = (function () {
 				state: event.originalEvent.state,
 				url: location.href
 			};
-			zAu.send(new zk.Event(null, 'onHistoryPopState', data, { implicit: true }));
+			zAu.send(new zk.Event(null, 'onHistoryPopState', data, { implicit: true }), 50);
 		},
 		register: function () {
 			jq(window).bind('popstate', this.onPopState);
