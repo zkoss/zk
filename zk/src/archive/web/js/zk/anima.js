@@ -468,7 +468,8 @@ zk.copy(zjq.prototype, {
 		var active = document.activeElement,
 			wrapped = element.children('.ui-effects-wrapper');
 		if (wrapped.length) {
-			wrapped.contents().unwrap();
+			var children = wrapped.contents();
+			children.length ? children.unwrap() : wrapped.remove();
 			if (element[0] === active || jq.contains(element[0], active)) {
 				jq(active).trigger('focus');
 			}
