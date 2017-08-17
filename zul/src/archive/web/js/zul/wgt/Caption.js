@@ -36,7 +36,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			title = this.parent ? this.parent._title : '',
 			iconSclass = this.domIcon_();
 		if (title) label = label ? title + ' - ' + label : title;
-		label = zUtl.encodeXML(label);
+		label = '<span class="' + this.$s('label') + '">' + zUtl.encodeXML(label) + '</span>';
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
