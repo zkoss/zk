@@ -303,6 +303,18 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
+	},
+	/**
+	 * This method should be overridden by its subwidget.
+	 * Returns -1 if item is before this object,
+	 * returns  0 if item is the same as this object,
+	 * returns  1 if item is after this object.
+	 * @param zul.sel.ItemWidget
+	 * @return int
+	 * @since 8.5.0
+	 */
+	compareItemPos_: function (item) {
+		return 0;
 	}
 });
 })();

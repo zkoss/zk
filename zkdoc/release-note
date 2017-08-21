@@ -12,6 +12,7 @@ ZK 8.5.0
   ZK-3336: tbeditor version update
   ZK-3315: allow JS overrides for onResponseReady callback
   ZK-3690: Size by n-rows support for all MeshWidgets
+  ZK-3507: Shift + up key can deselect listitems
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
