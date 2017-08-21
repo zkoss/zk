@@ -351,10 +351,10 @@ public abstract class XulElement extends HtmlBasedComponent {
 	static {
 		_properties.put("context", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object context) {
-				if (context instanceof String)
-					((XulElement) cmp).setContext((String) context);
-				else if (context instanceof Popup)
+				if (context instanceof Popup)
 					((XulElement) cmp).setContext((Popup) context);
+				else if (context != null)
+					((XulElement) cmp).setContext(String.valueOf(context));
 			}
 
 			public String getValue(Component cmp) {
@@ -363,10 +363,10 @@ public abstract class XulElement extends HtmlBasedComponent {
 		});
 		_properties.put("popup", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object popup) {
-				if (popup instanceof String)
-					((XulElement) cmp).setPopup((String) popup);
-				else if (popup instanceof Popup)
+				if (popup instanceof Popup)
 					((XulElement) cmp).setPopup((Popup) popup);
+				else if (popup != null)
+					((XulElement) cmp).setPopup(String.valueOf(popup));
 			}
 
 			public String getValue(Component cmp) {
@@ -376,10 +376,10 @@ public abstract class XulElement extends HtmlBasedComponent {
 
 		_properties.put("tooltip", new ObjectPropertyAccess() {
 			public void setValue(Component cmp, Object tooltip) {
-				if (tooltip instanceof String)
-					((XulElement) cmp).setTooltip((String) tooltip);
-				else if (tooltip instanceof Popup)
+				if (tooltip instanceof Popup)
 					((XulElement) cmp).setTooltip((Popup) tooltip);
+				else if (tooltip != null)
+					((XulElement) cmp).setTooltip(String.valueOf(tooltip));
 			}
 
 			public String getValue(Component cmp) {
