@@ -412,14 +412,15 @@ zul.Widget = zk.$extends(zk.Widget, {
 			return;
 		}
 		//ext(#), ctrl(001), alt(010), ctrl + alt(011), shift(100), ctrl + shift(101), alt + shift(110), ctrl + alt + shift(111)
-		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0;
+		var parsed = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}], which = 0;
 		for (var j = 0, len = keys.length; j < len; ++j) {
 			var cc = keys.charAt(j); //ext
 			switch (cc) {
 			case '^': //ctrl
 			case '@': //alt
 			case '$': //shift
-				var flag = cc == '^' ? 1 : cc == '@' ? 2 : 4;
+			case '%': //meta
+				var flag = cc == '^' ? 1 : cc == '@' ? 2 : cc == '$' ? 4 : 8;
 				if ((which & flag) != 0)
 					return _setCtrlKeysErr('Unexpected key combination: ' + keys);
 				else
@@ -603,7 +604,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 * @see #setCtrlKeys
 	 */
 	afterKeyDown_: function (evt/*, simulated*/) {
-		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel;
+		var keyCode = evt.keyCode, evtnm = 'onCtrlKey', okcancel, commandKey = zk.mac && evt.metaKey;
 		switch (keyCode) {
 		case 13: //ENTER
 			var target = evt.domTarget, tn = jq.nodeName(target);
@@ -628,7 +629,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		default:
 			if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D
 			|| (keyCode >= 112 && keyCode <= 123) //F1: 112, F12: 123
-			|| evt.ctrlKey || evt.altKey)
+			|| evt.ctrlKey || evt.altKey || commandKey)
 				break;
 			return;
 		}
@@ -649,6 +650,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 					which |= 2;
 				if (evt.shiftKey)
 					which |= 4;
+				if (commandKey)
+					which |= 8;
 				if (parsed[which][keyCode])
 					break; //found
 			}
