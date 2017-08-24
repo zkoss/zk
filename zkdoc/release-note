@@ -13,6 +13,7 @@ ZK 8.5.0
   ZK-3315: allow JS overrides for onResponseReady callback
   ZK-3690: Size by n-rows support for all MeshWidgets
   ZK-3507: Shift + up key can deselect listitems
+  ZK-3506: KeyEvent supports to detect the command key pressed
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored

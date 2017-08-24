@@ -60,12 +60,12 @@ public class KeyEvent extends Event {
 		final Map<String, Object> data = request.getData();
 		return new KeyEvent(request.getCommand(), request.getComponent(), AuRequests.getInt(data, "keyCode", 0),
 				AuRequests.getBoolean(data, "ctrlKey"), AuRequests.getBoolean(data, "shiftKey"),
-				AuRequests.getBoolean(data, "altKey"),
+				AuRequests.getBoolean(data, "altKey"), AuRequests.getBoolean(data, "metaKey"),
 				request.getDesktop().getComponentByUuidIfAny((String) data.get("reference")));
 	}
 
 	private final int _keyCode;
-	private final boolean _ctrlKey, _shiftKey, _altKey;
+	private final boolean _ctrlKey, _shiftKey, _altKey, _metaKey;
 	private final Component _ref;
 
 	public KeyEvent(String name, Component target, int keyCode, boolean ctrlKey, boolean shiftKey, boolean altKey) {
@@ -76,11 +76,20 @@ public class KeyEvent extends Event {
 	 */
 	public KeyEvent(String name, Component target, int keyCode, boolean ctrlKey, boolean shiftKey, boolean altKey,
 			Component ref) {
+		this(name, target, keyCode, ctrlKey, shiftKey, altKey, false, ref);
+	}
+
+	/**
+	 * Constructs an event with MetaKey
+	 */
+	public KeyEvent(String name, Component target, int keyCode, boolean ctrlKey, boolean shiftKey, boolean altKey, boolean metaKey,
+			Component ref) {
 		super(name, target);
 		_keyCode = keyCode;
 		_ctrlKey = ctrlKey;
 		_shiftKey = shiftKey;
 		_altKey = altKey;
+		_metaKey = metaKey;
 		_ref = ref;
 	}
 
@@ -106,6 +115,12 @@ public class KeyEvent extends Event {
 	 */
 	public final boolean isAltKey() {
 		return _altKey;
+	}
+
+	/** Returns whether META is pressed.
+	 */
+	public final boolean isMetaKey() {
+		return _metaKey;
 	}
 
 	/** 
