@@ -316,8 +316,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 
 		jq(document.body)
 			.append('<div id="zul_slidetip" class="z-slider-popup"'
-			+ 'style="position:absolute;display:none;z-index:60000;'
-			+ 'background-color:white;border: 1px outset">' + widget.slidepos
+			+ ' style="position:absolute;display:none;z-index:60000;'
+			+ '">' + widget.slidepos
 			+ '</div>');
 
 		widget.slidetip = jq('#zul_slidetip')[0];
@@ -328,7 +328,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				slideStyle.left = '0px';
 			}
 			slideStyle.display = 'block';
-			zk(widget.slidetip).position(widget.$n(), vert ? 'end_before' : 'after_start');
+			zk(widget.slidetip).position(widget.$n('btn'), vert ? 'end_before' : 'before_start');
 		}
 	},
 	_dragging: function (dg) {
@@ -422,7 +422,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixPos: function () {
-		this.$n('btn').style[this.isVertical() ? 'top' : 'left'] = jq.px0(_getBtnNewPos(this));
+		var btn = this.$n('btn'),
+			vert = this.isVertical();
+		btn.style[vert ? 'top' : 'left'] = jq.px0(_getBtnNewPos(this));
+		if (this.slidetip)
+			zk(this.slidetip).position(btn, vert ? 'end_before' : 'before_start');
 	},
 	_fixStep: function () {
 		var step = _getStep(this);
