@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
- * A comonent used to embed the browser native content (i.e., HTML tags)
+ * A component used to embed the browser native content (i.e., HTML tags)
  * into the output sent to the browser.
  * The browser native content is specified by {@link #setContent}.
  *

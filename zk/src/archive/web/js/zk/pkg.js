@@ -177,7 +177,7 @@ zk.load('zul.utl', function () {
 	 * when the script is loaded. Otherwise, @{link zk#loading} won't be zero
 	 * and ZK Client Engine is halted.
 	 * @param String charset the charset. UTF-8 is assumed if null.
-	 * @param ignore the script is loading or loaded
+	 * @param boolean force the script to be loaded. (no matter it is loading or loaded)
 	 * @return zk
 	 */
 	loadScript: function (src, name, charset, force) {
