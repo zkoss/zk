@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3721.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 15 09:38:58 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. When the bookmark changed, both onHistoryPopState and onBookmarkChange will be sent in one request.
+        2. When history.pushState that changed the bookmark, an onBookmarkChange will be sent.
+        3. When history.pushState that doesn't change the bookmark, no request will be sent.
+        4. When history changed by prev or next button, onHistoryPopState will be sent.
+           (If the bookmark changed, onBookmarkChange will be also sent in one request)
+    </label>
+    <a href="#bookmark1" label="goto bookmark1"/>
+    <a href="#bookmark2" label="goto bookmark2"/>
+    <button w:onClick="('pushState' in history) &amp;&amp; window.history.pushState({a: 1}, 'state1', '#state1')">push state1 (change bookmark)</button>
+    <button w:onClick="('pushState' in history) &amp;&amp; window.history.pushState({a: 2}, 'state2', null)">push state2 (no change bookmark)</button>
+</zk>
