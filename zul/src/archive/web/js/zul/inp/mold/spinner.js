@@ -16,7 +16,7 @@ function (out) {
 	var uuid = this.uuid,
 		isButtonVisible = this._buttonVisible;
 	
-	out.push('<span', this.domAttrs_({text:true}), '>',
+	out.push('<span', this.domAttrs_({text: true, tabindex: true}), '>',
 			'<input id="', uuid,'-real"', 'class="', this.$s('input'));
 
 	if (!isButtonVisible)

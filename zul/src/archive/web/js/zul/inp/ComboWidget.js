@@ -620,7 +620,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var uuid = this.uuid,
 			isButtonVisible = this._buttonVisible;
 
-		out.push('<span', this.domAttrs_({text: true}), '><input id="',
+		out.push('<span', this.domAttrs_({text: true, tabindex: true}), '><input id="',
 			uuid, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)
