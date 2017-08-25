@@ -62,6 +62,7 @@ ZK 8.5.0
   ZK-3328: jq.alert default "OK" button doesn't use internationalized messages
   ZK-3554: Tooltip/Popup/Context ignoring usage errors
   ZK-3721: avoid 2 separate au requests for onBookmarkChange onHistoryPopState
+  ZK-3725: Interrupting Executions.activate() stops Server Push
 
 * Upgrade Notes
 

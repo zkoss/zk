@@ -156,7 +156,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zAu.ajaxReq = req;
 			zAu.ajaxReqInf = reqInf;
 			
-			if (zWs && zWs.webSocketEndPoint) {
+			if (zWs != undefined && zWs.webSocketEndPoint) {
 				zWs.send(req, reqInf);
 				return;
 			}
@@ -708,7 +708,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content, rtags = {},
 			requri = uri || zk.ajaxURI(null, {desktop: dt,au: true}),
-			ws = zWs && zWs.webSocketEndPoint;
+			ws = zWs != undefined && zWs.webSocketEndPoint;
 		if (ws) {
 			content = {};
 		} else {
@@ -728,9 +728,6 @@ zAu.beforeSend = function (uri, req, dt) {
 				content += zAu.encode(j, aureq, dt);
 			}
 			zk.copy(rtags, (aureq.opts || {}).rtags);
-		}
-		if (ws) {
-			content = JSON.stringify(content);
 		}
 		// B65-ZK-2210: get resourceURL by desktop id
 		if (zk.portlet2Data && zk.portlet2Data[dt.id]) {
@@ -785,7 +782,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	// Sets performance rquest IDs to the request's header
 	// Called by moun.js, too
 	_pfsend: function (dt, req, completeOnly) {
-		var zws = zWs && zWs.webSocketEndPoint;
+		var zws = zWs != undefined && zWs.webSocketEndPoint;
 		if (!completeOnly) {
 			var dtt = dt.id + '-' + pfIndex++ + '=' + Math.round(jq.now());
 			req.setRequestHeader('ZK-Client-Start', dtt);
