@@ -328,7 +328,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				slideStyle.left = '0px';
 			}
 			slideStyle.display = 'block';
-			zk(widget.slidetip).position(widget.$n('btn'), vert ? 'end_before' : 'before_start');
 		}
 	},
 	_dragging: function (dg) {
@@ -423,8 +422,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	_fixPos: function () {
 		var btn = this.$n('btn'),
-			vert = this.isVertical();
-		btn.style[vert ? 'top' : 'left'] = jq.px0(_getBtnNewPos(this));
+			vert = this.isVertical(),
+			newPos = jq.px0(_getBtnNewPos(this));
+		this.$n('area').style[vert ? 'height' : 'width'] = newPos;
+		btn.style[vert ? 'top' : 'left'] = newPos;
 		if (this.slidetip)
 			zk(this.slidetip).position(btn, vert ? 'end_before' : 'before_start');
 	},
