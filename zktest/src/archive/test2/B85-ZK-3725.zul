@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3725.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 16 16:25:43 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true"><![CDATA[
+        1. should see
+                T1 TaskResult for UI
+                T3 TaskResult for UI
+                T4 TaskResult for UI
+           in zklog within 10 secs,
+           otherwise it's a bug.
+
+    ]]></label>
+    <div apply="org.zkoss.zktest.test2.B85_ZK_3725"/>
+</zk>
