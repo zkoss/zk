@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3516.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 25 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div style="position: fixed; background: white; border: 1px solid black; padding: 10px">
+		<label multiline="true">
+			1. Increase the width of the browser quickly. Expected: the width of splitter should always stay the same
+			2. Reduce the height of the browser, Expected: no scrollbar gap on the right
+		</label>
+	</div>
+	<div height="100%" width="100%">
+		<hbox hflex="1" vflex="1">
+			<cell>
+				<div hflex="1" vflex="1" style="border: 1px solid red"></div>
+			</cell>
+			<splitter/>
+			<cell>
+				<div hflex="1" vflex="1" style="border: 1px solid red"></div>
+			</cell>
+		</hbox>
+	</div>
+</zk>

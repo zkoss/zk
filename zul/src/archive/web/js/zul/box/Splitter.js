@@ -259,6 +259,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		var node = this.$n(), pn = node.parentNode;
 		if (pn) {
+			// B85-ZK-3516: remove width of parent node
+			pn.style.width = '';
+
 			var bfcolps = 'before' == this.getCollapse();
 			if (this.isVertical()) {
 				node.style.width = '100%'; // Sandbox-Splitter: the width should be same as parent
@@ -278,6 +281,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	onSize: _zkf,
 	beforeSize: function () {
 		this.$n().style[this.isVertical() ? 'width' : 'height'] = '';
+		this.$n('btn').style[this.isVertical() ? 'margin-left' : 'margin-top'] = '';
 	},
 
 	_fixszAll: function () {

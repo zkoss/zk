@@ -436,6 +436,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	//bug#3042306
 	resetSize_: function (orient) { //@Overrid zk.Widget#resetSize_, called when beforeSize
 		this.$supers(zul.Widget, 'resetSize_', arguments);
+
+		// B85-ZK-3516: remove size of frame
+		if (!zk.ie) {
+			var n = this.$n();
+			if (!n.scrollTop && !n.scrollLeft)
+				this.$n('frame').style[orient == 'w' ? 'width' : 'height'] = '';
+		}
+
 		var	vert = this.isVertical(),
 		k = -1,
 		szes = this._sizes;
