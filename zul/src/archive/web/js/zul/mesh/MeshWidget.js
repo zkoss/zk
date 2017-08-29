@@ -1312,7 +1312,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			var wd = w._hflexWidth ? w._hflexWidth + 'px' : w.getWidth(),
-				visible = !w.isVisible() ? 'display:none;' : '';
+				visible = !w.isVisible() ? 'width : 0.1px' : '';
 			// B70-ZK-2036: Style width should end with 'px'.
 			wd = wd ? 'width: ' + wd + ';' : '';
 			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visible, '"/>');
