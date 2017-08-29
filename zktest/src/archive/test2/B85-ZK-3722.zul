@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3722.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 23 12:45:57 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		all numbers in cells should be matched to the months in headers in both grids
+
+	</label>
+	<grid>
+		<columns>
+			<column label="Jan"/>
+			<column label="Feb"/>
+			<column label="Mar"/>
+			<column label="Apr" visible="false"/>
+			<column label="May" visible="false"/>
+			<column label="Jun"/>
+			<column label="Jul"/>
+			<column label="Aug"/>
+			<column label="Sep"/>
+			<column label="Oct"/>
+			<column label="Nov"/>
+			<column label="Dec"/>
+		</columns>
+		<rows>
+			<row>
+				<cell colspan="2" style="border: 1px solid salmon;">
+					<label value="1"/>
+				</cell>
+				<label value="3"/>
+				<label value="4"/>
+				<label value="5"/>
+				<label value="6"/>
+				<label value="7"/>
+				<cell rowspan="3" style="border: 1px solid salmon;">
+					<label value="8"/>
+				</cell>
+				<label value="9"/>
+				<label value="10"/>
+				<label value="11"/>
+				<label value="12"/>
+			</row>
+			<row>
+				<label value="1"/>
+				<cell rowspan="2" style="border: 1px solid salmon;">
+					<label value="2"/>
+				</cell>
+				<label value="3"/>
+				<label value="4"/>
+				<label value="5"/>
+				<label value="6"/>
+				<label value="7"/>
+				<label value="9"/>
+				<cell rowspan="3" colspan="2" style="border: 1px solid salmon;">
+					<label value="10"/>
+				</cell>
+				<label value="12"/>
+			</row>
+			<row>
+				<label value="1"/>
+				<label value="3"/>
+				<label value="4"/>
+				<label value="5"/>
+				<label value="6"/>
+				<label value="7"/>
+				<label value="9"/>
+				<label value="12"/>
+			</row>
+			<row>
+				<cell colspan="3" rowspan="3" style="border: 1px solid salmon;">
+					<label value="1"/>
+				</cell>
+				<label value="4"/>
+				<label value="5"/>
+				<label value="6"/>
+				<label value="7"/>
+				<label value="8"/>
+				<label value="9"/>
+				<label value="12"/>
+			</row>
+			<row>
+				<label value="4"/>
+				<label value="5"/>
+				<label value="6"/>
+				<cell colspan="3" rowspan="2" style="border: 1px solid salmon;">
+					<label value="7"/>
+				</cell>
+				<label value="10"/>
+				<label value="11"/>
+				<label value="12"/>
+			</row>
+			<row>
+				<label value="4"/>
+				<label value="5"/>
+				<label value="6"/>
+				<label value="10"/>
+				<label value="11"/>
+				<label value="12"/>
+			</row>
+		</rows>
+	</grid>
+	<label multiline="true">
+		row spans conflict with cell colspan with "visible=false"
+
+	</label>
+	<grid>
+		<columns>
+			<column label="Jan"/>
+			<column label="Feb"/>
+			<column label="Mar"/>
+			<column label="Apr" visible="false"/>
+			<column label="May" visible="false"/>
+			<column label="Jun"/>
+			<column label="Jul"/>
+			<column label="Aug"/>
+			<column label="Sep"/>
+			<column label="Oct"/>
+			<column label="Nov"/>
+			<column label="Dec"/>
+		</columns>
+		<rows>
+			<row spans="2,1,1,2,3">
+				<cell colspan="3">
+					<label value="1"/>
+				</cell>
+				<label value="4"/>
+				<label value="5"/>
+				<label value="6"/>
+				<label value="8"/>
+				<label value="11"/>
+				<label value="12"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

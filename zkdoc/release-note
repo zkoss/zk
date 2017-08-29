@@ -64,6 +64,7 @@ ZK 8.5.0
   ZK-3721: avoid 2 separate au requests for onBookmarkChange onHistoryPopState
   ZK-3725: Interrupting Executions.activate() stops Server Push
   ZK-3692: CometServerPush synchronization issue
+  ZK-3722: Grid Row childAttributes calculation ignores colspan and rowspan defined on Cell
 
 * Upgrade Notes
 
