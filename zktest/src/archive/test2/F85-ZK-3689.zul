@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3689.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 04 15:56:37 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        String enabled = org.zkoss.lang.Library.getProperty("org.zkoss.zk.ui.versionInfo.enabled", "true");
+    </zscript>
+    <label multiline="true">
+        *org.zkoss.zk.ui.versionInfo.enabled = ${enabled}
+        If the textbox is still filled with ZK version and build, then the test is failed.
+    </label>
+    zk.version = <textbox id="zkver"/>
+    zk.build = <textbox id="zkbuild"/>
+
+    <label multiline="true">
+        This is filled with hex code that need to be used as cache.
+    </label>
+    ckez version = <textbox id="ckezver"/>
+    <script><![CDATA[
+    zk.afterMount(function() {
+        zk.$('$zkver').setValue(zk.version);
+        zk.$('$zkbuild').setValue(zk.build);
+        zk.$('$ckezver').setValue(zk.getVersion('ckez'));
+    });
+    ]]>
+    </script>
+</zk>
