@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3692.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 14 12:03:21 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div apply="org.zkoss.zktest.test2.B85_ZK_3692"/>
+    <label multiline="true"><![CDATA[
+        1. should use debug mode to test if this bug still exist
+        2. break point on line 395 and 405 (_ai = ai;) of zkex/.../CometServerPush.java
+        3. refresh this page
+        4. thread stopped at breakpoint
+        5. after one of the WAITING responded as ___:0 or ___:1, resume the thread.
+        6. should not see any WAITING remain after all request responded
+
+    ]]></label>
+    <!--<button onClick=""/>-->
+</zk>

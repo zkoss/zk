@@ -63,6 +63,7 @@ ZK 8.5.0
   ZK-3554: Tooltip/Popup/Context ignoring usage errors
   ZK-3721: avoid 2 separate au requests for onBookmarkChange onHistoryPopState
   ZK-3725: Interrupting Executions.activate() stops Server Push
+  ZK-3692: CometServerPush synchronization issue
 
 * Upgrade Notes
 
