@@ -138,16 +138,18 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 		final boolean cacheable;
 		final RequestContext reqctx = new RequestContext(this, request, response);
-		final Object rawdata = content.parse(reqctx);
-		if (rawdata instanceof ByteContent) {
-			final ByteContent bc = (ByteContent) rawdata;
-			data = bc.content;
-			cacheable = bc.cacheable;
-		} else {
-			final WpdContent wc = (WpdContent) rawdata;
-			data = wc.toByteArray(reqctx);
-			pkg = wc.name;
-			cacheable = wc.cacheable;
+		synchronized (content) {
+			final Object rawdata = content.parse(reqctx);
+			if (rawdata instanceof ByteContent) {
+				final ByteContent bc = (ByteContent) rawdata;
+				data = bc.content;
+				cacheable = bc.cacheable;
+			} else {
+				final WpdContent wc = (WpdContent) rawdata;
+				data = wc.toByteArray(reqctx);
+				pkg = wc.name;
+				cacheable = wc.cacheable;
+			}
 		}
 		if (cacheable)
 			org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(), request, response,

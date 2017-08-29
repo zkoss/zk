@@ -65,6 +65,7 @@ ZK 8.5.0
   ZK-3725: Interrupting Executions.activate() stops Server Push
   ZK-3692: CometServerPush synchronization issue
   ZK-3722: Grid Row childAttributes calculation ignores colspan and rowspan defined on Cell
+  ZK-3655: Concurrency issue in WpdExtendlet
 
 * Upgrade Notes
 
