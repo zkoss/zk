@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3713.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 07 18:24:13 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    public class MyListBean{
+        String field1;
+
+        public MyListBean(String field1){
+            this.field1 = field1;
+        }
+        public String getField1(){
+            return this.field1;
+        }
+    }
+
+    public class MyHeadBean{
+        String name;
+        String type;
+
+        public MyHeadBean(String name, String type){
+            this.name = name;
+            this.type = type;
+        }
+        public String getName(){
+            return this.name;
+        }
+        public String getType(){
+            return this.type;
+        }
+    }
+
+    List fieldList = new ArrayList();
+    fieldList.add(new MyHeadBean("field1","type1"));
+
+    ListModelList myModel = new ListModelList();
+    myModel.add(new MyListBean("value1"));
+    ]]>
+    </zscript>
+    <label multiline="true">
+        You should see: "result bean[fieldVariable]: value1".
+        If value1 is missing, the test is failed.
+    </label>
+    <listbox model="@init(myModel)" apply="org.zkoss.bind.BindComposer">
+        <template name="model" var="entry">
+            <listitem>
+                <forEach var="cellDef" items="@init(fieldList)">
+                    <listcell>
+                        <choose>
+                            <when test="@init(cellDef.type eq 'type1')">
+                                <hlayout>
+                                    <label value="result bean[fieldVariable]: "/>
+                                    <label value="${entry[cellDef.name]}" />
+                                </hlayout>
+                            </when>
+                        </choose>
+                    </listcell>
+                </forEach>
+            </listitem>
+        </template>
+    </listbox>
+</zk>
