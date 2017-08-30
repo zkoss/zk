@@ -189,6 +189,30 @@ public abstract class XulElement extends HtmlBasedComponent {
 		}
 	}
 
+	/**
+	 * Sets the Attributes for the Context Popup
+	 *
+	 * Note that position will be ignored if coordinates are set.
+	 *
+	 * @param popup the Context popup component, can be null
+	 * @param position e.g. "after_start", can be null
+	 * @param x e.g. "50" or "(zk.currentPointer[0] + 10)", can be null
+	 * @param y e.g. "50" or "(zk.currentPointer[0] + 10)", can be null
+	 * @param type e.g. "toggle", can be null
+	 *
+	 * @since 8.5.0
+	 */
+	public void setContextAttributes(Popup popup, String position, String x, String y, String type) {
+		setContext(popup);
+		if (_auxinf != null && _auxinf.context != null) {
+			DeferedUuid pp = (DeferedUuid) _auxinf.context;
+			pp.setPosition(position);
+			pp.setCoordinates(x, y);
+			pp.setType(type);
+			smartUpdate("context", _auxinf.context);
+		}
+	}
+
 	/** Returns the ID of the popup ({@link Popup}) that should appear
 	 * when the user clicks on the element.
 	 *
@@ -254,6 +278,30 @@ public abstract class XulElement extends HtmlBasedComponent {
 	public void setPopup(Popup popup) {
 		if (!Objects.equals(_auxinf != null ? _auxinf.popup : null, popup)) {
 			initAuxInfo().popup = new DeferedUuid(popup);
+			smartUpdate("popup", _auxinf.popup);
+		}
+	}
+
+	/**
+	 * Sets the Attributes for the Popup
+	 *
+	 * Note that position will be ignored if coordinates are set.
+	 *
+	 * @param popup the popup component, can be null
+	 * @param position e.g. "after_start", can be null
+	 * @param x e.g. "50" or "(zk.currentPointer[0] + 10)", can be null
+	 * @param y e.g. "50" or "(zk.currentPointer[0] + 10)", can be null
+	 * @param type e.g. "toggle", can be null
+	 *
+	 * @since 8.5.0
+	 */
+	public void setPopupAttributes(Popup popup, String position, String x, String y, String type) {
+		setPopup(popup);
+		if (_auxinf != null && _auxinf.popup != null) {
+			DeferedUuid pp = (DeferedUuid) _auxinf.popup;
+			pp.setPosition(position);
+			pp.setCoordinates(x, y);
+			pp.setType(type);
 			smartUpdate("popup", _auxinf.popup);
 		}
 	}
@@ -330,6 +378,30 @@ public abstract class XulElement extends HtmlBasedComponent {
 		// ZK-816, component keep wrong tooltip reference if set tooltip before tooltip attached
 		if (!Objects.equals(_auxinf != null ? _auxinf.tooltip : null, popup)) {
 			initAuxInfo().tooltip = new DeferedUuid(popup);
+			smartUpdate("tooltip", _auxinf.tooltip);
+		}
+	}
+
+	/**
+	 * Sets the Attributes for the Tooltip Popup
+	 *
+	 * Note that position will be ignored if coordinates are set.
+	 *
+	 * @param popup the tooltip popup component, can be null
+	 * @param position e.g. "after_start", can be null
+	 * @param x e.g. "50" or "(zk.currentPointer[0] + 10)", can be null
+	 * @param y e.g. "50" or "(zk.currentPointer[0] + 10)", can be null
+	 * @param delay in milliseconds, can be null
+	 *
+	 * @since 8.5.0
+	 */
+	public void setTooltipAttributes(Popup popup, String position, String x, String y, Integer delay) {
+		setTooltip(popup);
+		if (_auxinf != null && _auxinf.tooltip != null) {
+			DeferedUuid pp = (DeferedUuid) _auxinf.tooltip;
+			pp.setPosition(position);
+			pp.setCoordinates(x, y);
+			pp.setDelay(delay);
 			smartUpdate("tooltip", _auxinf.tooltip);
 		}
 	}
@@ -447,6 +519,10 @@ public abstract class XulElement extends HtmlBasedComponent {
 
 		private Popup popup;
 		private String popupString;
+		private String position;
+		private String[] coordinates;
+		private Integer delay;
+		private String type;
 
 		public DeferedUuid(String popupString) {
 			super();
@@ -458,11 +534,42 @@ public abstract class XulElement extends HtmlBasedComponent {
 			this.popup = tooltip;
 		}
 
+		public void setPosition(String position) {
+			this.position = position;
+		}
+
+		public void setCoordinates(String x, String y) {
+			this.coordinates = new String[]{x, y};
+		}
+
+		public void setDelay(Integer delay) {
+			this.delay = delay;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
 		public Object getValue() {
 			if (popupString != null) {
 				return popupString;
 			} else if (popup != null) {
-				return "uuid(" + popup.getUuid() + ")";
+				String uuidString = "uuid(" + popup.getUuid() + ")";
+				if (position != null) {
+					uuidString += ", " + position;
+				} else if (coordinates != null) {
+					if (coordinates[0] != null)
+						uuidString += ", x=" + coordinates[0];
+					if (coordinates[1] != null)
+						uuidString += ", y=" + coordinates[1];
+				}
+				if (delay != null) {
+					uuidString += ", delay=" + delay;
+				}
+				if (type != null) {
+					uuidString += ", type=" + type;
+				}
+				return uuidString;
 			} else {
 				return null;
 			}

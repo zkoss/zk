@@ -15,6 +15,7 @@ ZK 8.5.0
   ZK-3507: Shift + up key can deselect listitems
   ZK-3506: KeyEvent supports to detect the command key pressed
   ZK-3689: Using org.zkoss.zk.ui.versionInfo.enabled should also make WPDExtendlet hide version to client
+  ZK-3520: Update tooltip JAVA API
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
