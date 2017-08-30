@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F85-ZK-3520.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 22 12:03:20 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<window apply="org.zkoss.zktest.test2.F85_ZK_3520">
+    <label multiline="true">
+        1. Hover on the blue area, should see Tooltip show at position "before_start" of the blue area after a 100ms delay (default delay is 800ms)
+        2. Click on the pink area, should see Popup show at 20px below of the cursor
+        3. Click the pink area again, popup should close
+        4. Right click on the yellow area, Context should show at 50px left of the cursor
+        5. Right click the yellow area again, the Context should remain open
+        6. Click the "change" button
+        7. Hover the blue area, should see Tooltip show at 40px right of the cursor
+        8. Click on the pink area, should see Popup show at the "after_center" position of the pink area
+        9. Right click on the yellow area the Context should show, click it again and should see the Context closed
+
+    </label>
+    <popup id="pop">
+        <label value="tooltip" />
+    </popup>
+    <hlayout>
+        <div id="div1" style="width:200px; height:200px; background:cyan;">
+            Tooltip
+        </div>
+        <div id="div2" style="width:200px; height:200px; background:pink;">
+            Popup
+        </div>
+        <div id="div3" style="width:200px; height:200px; background:yellow;">
+            Context
+        </div>
+    </hlayout>
+    <separator/>
+    <button id="btn1" label="change"/>
+</window>
