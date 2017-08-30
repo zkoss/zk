@@ -12,3 +12,5 @@
 ../dist/lib/ext/slf4j-api.jar
 ../dist/lib/ext/javaee-api.jar
 ../dist/lib/ext/commons-codec.jar
+../dist/lib/ext/commons-io.jar
+../dist/lib/ext/closure-compiler.jar

@@ -233,8 +233,12 @@ public class WebManager {
 		((WebAppCtrl) _wapp).init(_ctx, config);
 
 		_cwr.setEncodeURLPrefix(getCWRURLPrefix());
-		_cwr.setDebugJS(config.isDebugJS());
-		checkAndAddExtendlet("wpd", new WpdExtendlet()); //add after _cwr.setDebugJS (since it calls back)
+		boolean isDebugJS = config.isDebugJS();
+		_cwr.setDebugJS(isDebugJS);
+		Extendlet wpdExtendlet = new WpdExtendlet();
+		checkAndAddExtendlet("wpd", wpdExtendlet); //add after _cwr.setDebugJS (since it calls back)
+		if (isDebugJS) //only handle sourcemap in debugJS mode
+			checkAndAddExtendlet("map", wpdExtendlet);
 		checkAndAddExtendlet("wcs", new WcsExtendlet());
 
 		//Register resource processors for each extension
