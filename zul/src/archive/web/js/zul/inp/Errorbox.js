@@ -85,7 +85,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			ignoredrag: Errorbox._ignoredrag,
 			change: Errorbox._change
 		});
-		zWatch.listen({onScroll: this, onMove: this, onSize: this});
+		zWatch.listen({onMove: this, onSize: this});
 	},
 	unbind_: function () {
 		// bug ZK-1143
@@ -93,7 +93,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this._drag = null;
 		if (drag)
 			drag.destroy();
-		zWatch.unlisten({onScroll: this, onMove: this, onSize: this});
+		zWatch.unlisten({onMove: this, onSize: this});
 
 		// just in case
 		if (this.parent)
@@ -103,22 +103,6 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	},
 	getInputNode: function () {
 		return this.parent ? this.parent.$n() : null;
-	},
-	/** Reset the position on scroll
-	 * @param zk.Widget wgt
-	 */
-	onScroll: function (wgt) {
-		if (wgt) { //scroll requires only if inside, say, borderlayout
-			if (zul.inp.InputWidget._isInView(this)) {// B65-ZK-1632
-				if (!this.isOpen()) // for ZK-2371, we need to show it back when inside viewport.
-					this.open();
-				var p = this.parent, cstp = p ? p._cst && p._cst._pos : false;
-				this.position(p, null, cstp || 'end_before', {dodgeRef: !cstp});
-				this._fixarrow();
-			} else {
-				this.close();
-			}
-		}
 	},
 	onMove: function () {
 		if (this.isOpen()) {
@@ -153,12 +137,6 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this.$supers('open', arguments);
 		this.setTopmost();
 		this._fixarrow();
-	},
-	afterCloseAnima_: function (opts) {
-		this.setVisible(false);
-		this.setFloating_(false);
-		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open: false});
 	},
 	redraw: function (out) {
 		var uuid = this.uuid,
@@ -295,6 +273,13 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 
 		pointer.className = this.$s('pointer') + (_dirMap[dir] ? ' ' + this.$s(_dirMap[dir]) : '');
 		jq(pointer).show();
+	},
+	isInView_: function () {
+		return zul.inp.InputWidget._isInView(this);
+	},
+	getPositionArgs_: function () {
+		var p = this.parent, cstp = p ? p._cst && p._cst._pos : false;
+		return [p, null, cstp || 'end_before', {dodgeRef: !cstp}];
 	}
 },{
 	_enddrag: function (dg) {

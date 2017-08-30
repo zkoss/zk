@@ -85,6 +85,8 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		}
 		if (!this._closable && this._dur <= 0)
 			this.close({sendOnOpen: true});
+		// detach when onFloatUp
+		this.detach();
 	},
 	open: function (ref, offset, position, opts) {
 		this.$supers(zul.wgt.Notification, 'open', arguments);
@@ -209,7 +211,13 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		});
 	},
 	afterCloseAnima_: function (opts) {
-		this.detach();
+		this.setVisible(false);
+		this.setFloating_(false);
+		if (opts && opts.sendOnOpen)
+			this.fire('onOpen', {open: false});
+	},
+	getPositionArgs_: function () {
+		return [this.parent, null, this._nftPos, null];
 	}
 }, {
 
@@ -247,6 +255,8 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			parent = zk.Desktop.$().firstChild;
 		}
 		parent.appendChild(ntf);
+		ntf.parent = opts.ref; // B85-ZK-3606: fake parent
+		ntf._nftPos = pos;
 		ntf.open(ref, off, pos);
 
 		// auto dismiss
