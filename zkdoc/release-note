@@ -72,6 +72,7 @@ ZK 8.5.0
   ZK-3713: Listbox template and shadow missing value in first iteration
   ZK-3723: Combobox and Bandbox ignores type="password"
   ZK-3582: radio render tabindex on a span, then users need to press 1 more redudant tab to put the focus on the radio
+  ZK-3724: jquery issue - Ajax: Mitigate possible XSS vulnerability
 
 * Upgrade Notes
 
