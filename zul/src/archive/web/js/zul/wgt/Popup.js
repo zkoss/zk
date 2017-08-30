@@ -166,6 +166,16 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (openInfo) {
 			this.position.apply(this, openInfo);
 		}
+
+		// B85-ZK-3606: for adjusting popup position
+		if (ref) {
+			var refDim = zk(ref).dimension(true), thisDim = zk(this).dimension(true);
+			if (refDim && thisDim) {
+				this._adjustLeft = thisDim.left - refDim.left;
+				this._adjustTop = thisDim.top - refDim.top;
+			}
+			this._keepVisible = true;
+		}
 	},
 	/** Returns whether to instantiate a stackup when {@link #open}
 	 * is called.
@@ -193,6 +203,23 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var posInfo = this._posInfo(ref, offset, position);
 		if (posInfo)
 			zk(this.$n()).position(posInfo.dim, posInfo.pos, opts);
+	},
+	/** Reset the position on scroll
+	 * @param zk.Widget wgt
+	 */
+	onScroll: function (wgt) {
+		if (wgt) {
+			if (this.isInView_()) {
+				var args = this.getPositionArgs_();
+				if (!this.isOpen() && this._keepVisible) {
+					this.open.apply(this, args);
+				} else {
+					this.position.apply(this, args);
+				}
+			} else if (this.isOpen()) {
+				this.close({keepVisible: true});
+			}
+		}
 	},
 	_posInfo: function (ref, offset, position, opts) {
 		var pos, dim;
@@ -267,6 +294,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 		} catch (e) {
 			if (zk.debugJS) console.log(e.message || e);// do nothing
+		}
+
+		// remove visible flag
+		if (!opts || !opts.keepVisible) {
+			this._keepVisible = false;
 		}
 
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
@@ -345,7 +377,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Popup, 'bind_', arguments);
-		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this, onSize: this});
+		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this, onSize: this, onScroll: this});
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -357,7 +389,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._openInfo)
 			this._openInfo = null;
 		this._shallToggle = null;
-		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this, onSize: this});
+		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this, onSize: this, onScroll: this});
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},
@@ -368,24 +400,23 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @since 8.0.3
 	 */
 	reposition: function () {
-		var openInfo = this._openInfo;
-		//once opened
-		if (openInfo) {
-			//openInfo: ref, offset, position, opts
-			var posInfo = this._posInfo(openInfo[0], openInfo[1], openInfo[2]);
-			if (posInfo)
-				jq(this.$n()).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
+		if (this.parent) {
+			// B85-ZK-3606: reposition based on the current position of the item
+			this.position.apply(this, this.getPositionArgs_());
+		} else {
+			var openInfo = this._openInfo;
+			//once opened
+			if (openInfo) {
+				//openInfo: ref, offset, position, opts
+				var posInfo = this._posInfo(openInfo[0], openInfo[1], openInfo[2]);
+				if (posInfo)
+					jq(this.$n()).zk.position(posInfo.dim, posInfo.pos, openInfo[3]);
+			}
 		}
 	},
 	onShow: function (ctl) {
 		//bug 3034505: call children's onShow to calculate the height first
 		ctl.fire(this.firstChild);
-		var openInfo = this._openInfo;
-		if (openInfo) {
-			this.position.apply(this, openInfo);
-			// B50-ZK-391
-			// should keep openInfo, maybe used in onResponse later.
-		}
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	},
 	setHeight: function (height) {
@@ -401,5 +432,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	prologHTML_: function (out) {
 	},
 	epilogHTML_: function (out) {
+	},
+	isInView_: function () {
+		return this.parent ? zk(this.parent).isRealScrollIntoView(true) : false;
+	},
+	getPositionArgs_: function () {
+		var p = this.parent, dim = zk(p).dimension(true);
+		return [p, [dim.left + this._adjustLeft, dim.top + this._adjustTop] , null, {dodgeRef: false}];
 	}
 });
