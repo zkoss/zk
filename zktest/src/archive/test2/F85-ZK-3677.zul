@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3677.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 13 10:47:11 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open in the browser which supports source map
+        2. set the client-config "debug-js" true (in zk.xml)
+        3. Enable source map, then you could see it works in browser devTool.
+    </label>
+</zk>

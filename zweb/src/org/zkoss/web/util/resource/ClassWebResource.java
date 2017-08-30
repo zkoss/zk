@@ -858,24 +858,13 @@ public class ClassWebResource {
 			}
 			return true;
 		}
-
+		//Note: Due to the source map since 8.5.0, it doesn't handle _debugJS
 		public URL getResource(String uri) {
-			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
-				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
-				URL url = ClassWebResource.this.getResource(orgpi);
-				if (url != null)
-					return url;
-			}
 			return ClassWebResource.this.getResource(uri);
 		}
 
+		//Note: Due to the source map since 8.5.0, it doesn't handle _debugJS
 		public InputStream getResourceAsStream(String uri) {
-			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
-				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
-				InputStream is = ClassWebResource.this.getResourceAsStream(orgpi);
-				if (is != null)
-					return is;
-			}
 			return ClassWebResource.this.getResourceAsStream(uri);
 		}
 	}

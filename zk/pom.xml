@@ -134,6 +134,11 @@
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.javascript</groupId>
+			<artifactId>closure-compiler</artifactId>
+			<version>v20170626</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>

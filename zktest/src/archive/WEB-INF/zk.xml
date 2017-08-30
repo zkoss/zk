@@ -43,10 +43,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<!-- Turn on if you want to debug JavaScript.
 		Once turned on, the uncompressed JavaScript files will be loaded.
+	-->
 	<client-config>
 		<debug-js>true</debug-js>
 	</client-config>
-	-->
 	<!-- Uncomment if you turn off the caching of resources loaded from
 		the class path (aka., class Web resources).
 		By default, class Web resources are cached by the browser until
