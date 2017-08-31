@@ -74,6 +74,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					id: 'aualert',
 					closable: true,
 					width: '250pt',
+					sclass: 'z-messagebox-window',
 					title: opts.title || zk.appName,
 					border: 'normal',
 					listeners: {onClose: function () {
@@ -104,10 +105,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								})
 							]
 						}),
-						new zul.wgt.Separator({bar: true}),
-						new zul.box.Box({
-							mold: 'horizontal',
-							style: 'margin-left:auto; margin-right:auto',
+						new zul.wgt.Separator(),
+						new zul.box.Hlayout({
+							sclass: 'z-messagebox-buttons',
 							children: getButtons(opts.button)
 						})
 					],
