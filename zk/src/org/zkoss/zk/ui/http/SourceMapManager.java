@@ -14,7 +14,6 @@ package org.zkoss.zk.ui.http;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.google.debugging.sourcemap.SourceMapGeneratorV3;
 import com.google.debugging.sourcemap.SourceMapParseException;
