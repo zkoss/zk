@@ -63,6 +63,23 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				this._checkPopupSpaceAndPosition(pp, inp);
 				this._fixFfWhileBothScrollbar(pp, pp2);
 			}
+		},
+		/** Returns the type.
+		 * <p>Default: text.
+		 * @return String
+		 */
+		/** Sets the type.
+		 * @param String type the type. Acceptable values are "text" and "password".
+		 * Unlike XUL, "timed" is redudant because it is enabled as long as
+		 * onChanging is added.
+		 * @since 8.5.0
+		 */
+		type: zk.ie < 11 ? function () {
+			this.rerender(); //though IE9 allows type to change but value is reset
+		} : function (type) {
+			var inp = this.getInputNode();
+			if (inp)
+				inp.type = type;
 		}
 	},
 	setWidth: function () {

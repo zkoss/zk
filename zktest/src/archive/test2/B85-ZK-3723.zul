@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3723.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Aug 30 3:30:53 PM CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        Type aaa in these two components, you should see password format.
+    </label>
+    <combobox type="password"/>
+    <bandbox type="password"/>
+</zk>
