@@ -333,7 +333,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 					n.focus();
 					zk.currentFocus = self;
 					zjq.fixInput(n);
-			} catch (e) {
+				} catch (e) {
+					if (zk.debugJS) console.log(e.message || e);
 				}
 			}, timeout);
 			return true;

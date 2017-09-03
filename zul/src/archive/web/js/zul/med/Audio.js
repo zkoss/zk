@@ -36,6 +36,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				// Do not show alert if the browser did not support the source format.
 				/* if (!wgt._isUnbinded)
 					jq.alert(msgzul.NO_AUDIO_SUPPORT + '\n' + e.message); */
+				if (zk.debugJS) console.log(e.message || e);
 			}
 		}
 	}

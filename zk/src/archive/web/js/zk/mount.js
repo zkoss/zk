@@ -619,7 +619,8 @@ jq(function () {
 							zk.focusBackFix = true;
 							cf.focus();
 						}
-					} catch (e) { //ignore
+					} catch (e) {
+						if (zk.debugJS) console.log(e.message || e);//ignore
 					} finally {
 						delete zk.focusBackFix;
 					}
@@ -864,7 +865,8 @@ jq(function () {
 				var dts = zk.Desktop.all;
 				for (var dtid in dts)
 					zAu._rmDesktop(dts[dtid], !bRmDesktop);
-			} catch (e) { //silent
+			} catch (e) {
+				if (zk.debugJS) console.log(e.message || e);//silent
 			}
 		}
 	};

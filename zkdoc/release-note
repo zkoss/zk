@@ -17,6 +17,7 @@ ZK 8.5.0
   ZK-3689: Using org.zkoss.zk.ui.versionInfo.enabled should also make WPDExtendlet hide version to client
   ZK-3520: Update tooltip JAVA API
   ZK-3677: Support source maps for wpd files
+  ZK-3537: Improve client side error handling/logging
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored

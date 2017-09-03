@@ -58,6 +58,7 @@ zjq = function (jq) { //ZK extension
 
 				zjq.fixInput(n);
 			} catch (e) {
+				if (zk.debugJS) console.log(e.message || e);
 			}
 		}, -1); //FF cannot change focus to a DOM element being animated
 	}
@@ -65,6 +66,7 @@ zjq = function (jq) { //ZK extension
 		try {
 			n.select();
 		} catch (e) {
+			if (zk.debugJS) console.log(e.message || e);
 		}
 	}
 
@@ -216,6 +218,7 @@ zjq = function (jq) { //ZK extension
 				try {
 					zjq._fixCSS(el);
 				} catch (e) {
+					if (zk.debugJS) console.log(e.message || e);
 				}
 		
 			// just in case
@@ -270,7 +273,8 @@ zk.copy(zjq, {
 				pos = $n.getSelectionRange();
 				$n.setSelectionRange(pos[0], pos[1]);
 			}
-		} catch (e) { //ignore
+		} catch (e) {
+		 	if (zk.debugJS) console.log(e.message || e);//ignore
 		}
 	} : zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
@@ -1892,7 +1896,8 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 				&& st[nm] && typeof st[nm] == 'string')
 					try {
 						st[nm] = '';
-					} catch (e) { //ignore
+					} catch (e) {
+					 	if (zk.debugJS) console.log(e.message || e);//ignore
 					}
 		return this;
 	},
@@ -2277,7 +2282,11 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		try {
 			return confirm(msg);
 		} finally {
-			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
+			try {
+				zk.alerting = false;
+			} catch (e) {
+				if (zk.debugJS) console.log(e.message || e);
+			} //doc might be unloaded
 		}
 	},
 	/** Shows up a message.
@@ -2349,7 +2358,11 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 		try {
 			alert(msg);
 		} finally {
-			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
+			try {
+				zk.alerting = false;
+			} catch (e) {
+				if (zk.debugJS) console.log(e.message || e);
+			} //doc might be unloaded
 		}
 	},
 	/** To register one object for the <code>zsync</code> invocation.

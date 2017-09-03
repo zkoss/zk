@@ -1333,7 +1333,9 @@ zk.log('value is", value);
 					fun = jq.evalJSON(fun);
 				try {
 					dataValue = jq.parseJSON(dataValue);
-				} catch (e) {}
+				} catch (e) {
+					if (zk.debugJS) console.log(e.message || e);
+				}
 				var dataHandlerService,
 					w = wgt;
 				for (; w; w = w.parent) {
@@ -1870,6 +1872,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 				starteffect: zk.$void,
 				endeffect: zk.$void});
 		} catch (e) {
+			if (zk.debugJS) console.log(e.message || e);
 		}
 		jq($id).slideDown(1000);
 	},
