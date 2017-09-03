@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3728.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 31 6:36 PM:49 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>You should see all icons are two stack icons.</label>
+    <separator />
+    <style>
+        .red{
+        color: red;
+        }
+    </style>
+
+    <button iconSclass="z-icon-camera z-icon-stack-1x ; z-icon-ban z-icon-stack-2x red"></button>
+    <checkbox iconSclass="z-icon-circle z-icon-stack-2x ; z-icon-flag z-icon-stack-1x z-icon-inverse"></checkbox>
+    <window>
+        <caption iconSclass="z-icon-square-o z-icon-stack-2x;z-icon-twitter z-icon-stack-1x"></caption>
+    </window>
+    <a iconSclass="z-icon-square-o z-icon-stack-2x; z-icon-twitter z-icon-stack-1x"></a>
+    <combobox>
+        <comboitem iconSclass="z-icon-square-o z-icon-stack-2x;z-icon-twitter z-icon-stack-1x"></comboitem>
+    </combobox>
+
+    <menubar>
+        <menu label="main" iconSclass="z-icon-square-o z-icon-stack-2x;z-icon-twitter z-icon-stack-1x">
+            <menupopup>
+                <menuitem label="item 1" iconSclass="z-icon-circle z-icon-stack-3x ; z-icon-flag z-icon-stack-1x z-icon-inverse"></menuitem>
+            </menupopup>
+        </menu>
+    </menubar>
+    <separator height="50px"></separator>
+    <tabbox>
+        <tabs>
+            <tab iconSclass="z-icon-circle z-icon-stack-2x ; z-icon-flag z-icon-stack-1x z-icon-inverse" ></tab>
+            <tab iconSclass="z-icon-camera z-icon-stack-1x ; z-icon-ban z-icon-stack-2x red"></tab>
+        </tabs>
+    </tabbox>
+</zk>
