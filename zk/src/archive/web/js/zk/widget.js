@@ -4751,12 +4751,8 @@ _doFooSelect: function (evt) {
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			if (!noFocusChange) {
-				var wgtVParent;
 				zk._prevFocus = zk.currentFocus;
 				zk.currentFocus = wgt;
-				if (wgt && (wgtVParent = wgt.$n('a')) && jq.nodeName(wgtVParent, 'button', 'input', 'textarea', 'a', 'select', 'iframe')) {
-					wgt.focus();
-				}
 				zk._cfByMD = true;
 				setTimeout(function () {zk._cfByMD = false; zk._prevFocus = null;}, 0);
 					//turn it off later since onBlur_ needs it
