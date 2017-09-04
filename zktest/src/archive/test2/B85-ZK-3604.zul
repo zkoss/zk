@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3604.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 30 12:42:42 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the button 'toggle'
+		2. the first column should disappear, should not remain visible but empty
+		3. toggle it back, should appear as in step 1
+
+	</label>
+	<listbox sizedByContent="true">
+		<listhead menupopup="auto">
+			<listheader id="lh1" label="aaa (hide me)" visible="true"/>
+			<listheader label="bbb"/>
+			<listheader label="ccc"/>
+			<listheader label="ddd"/>
+		</listhead>
+		<listitem>
+			<listcell label="aaaaaaaa1"></listcell>
+			<listcell label="b1"></listcell>
+			<listcell label="cc1"></listcell>
+			<listcell label="dddd1"></listcell>
+		</listitem>
+	</listbox>
+	<button onClick="lh1.setVisible(lh1.isVisible() ? false : true)" label="toggle"/>
+</zk>

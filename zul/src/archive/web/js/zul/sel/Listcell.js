@@ -192,7 +192,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (head) {
 			// ZK-3600: Prevent the dummy cell from hiding if the first header is invisible
 			if (!head.isVisible() && !(box && box._model && !this.parent._loaded))
-				style += 'display:none;';
+				style += 'width: 0.1px';
 			if (head._align)
 				style += 'text-align:' + head._align + ';';
 			if (head._valign)

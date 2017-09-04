@@ -1596,25 +1596,36 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 
 		for (var i = 0; hwgt; hwgt = hwgt.nextSibling, i++) {
-			// sizedByContent shall not override column width
-			if (hwgt._width || wds[i] == 0) {
-				if (wds[i] == 0) {
-					hdcol.style.width = zk.chrome ? '0.1px' : '0px';
-					bdcol.style.width = '0px';
+			if (hwgt.isVisible()) {
+				// sizedByContent shall not override column width
+				if (hwgt._width || wds[i] == 0) {
+					if (wds[i] == 0) {
+						hdcol.style.width = zk.chrome ? '0.1px' : '0px';
+						bdcol.style.width = '0px';
+						if (ftcol)
+							ftcol.style.width = '0px';
+					}
+					hdcol = hdcol.nextSibling;
+					bdcol = bdcol.nextSibling;
 					if (ftcol)
-						ftcol.style.width = '0px';
+						ftcol = ftcol.nextSibling;
+				} else if (!this.frozen || !this.frozen.getStart()) {
+					var wd = jq.px(wds[i]);
+					hdcol.style.width = bdcol.style.width = wd;
+					hdcol = hdcol.nextSibling;
+					bdcol = bdcol.nextSibling;
+					if (ftcol) {
+						ftcol.style.width = wd;
+						ftcol = ftcol.nextSibling;
+					}
 				}
-				hdcol = hdcol.nextSibling;
-				bdcol = bdcol.nextSibling;
-				if (ftcol)
-					ftcol = ftcol.nextSibling;
-			} else if (!this.frozen || !this.frozen.getStart()) {
-				var wd = jq.px(wds[i]);
-				hdcol.style.width = bdcol.style.width = wd;
+			} else {
+				hdcol.style.width = zk.chrome ? '0.1px' : '0px';
+				bdcol.style.width = '0px';
 				hdcol = hdcol.nextSibling;
 				bdcol = bdcol.nextSibling;
 				if (ftcol) {
-					ftcol.style.width = wd;
+					ftcol.style.width = '0px';
 					ftcol = ftcol.nextSibling;
 				}
 			}

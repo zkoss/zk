@@ -95,7 +95,7 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 
 		var style = this.$supers('domStyle_', arguments),
 			group = this.getListgroup();
-		return group && !group.isOpen() ? style + 'display:none;' : style;
+		return group && !group.isOpen() ? style + 'width: 0.1px' : style;
 	},
 	domClass_: function () {
 		var cls = this.$supers('domClass_', arguments),
