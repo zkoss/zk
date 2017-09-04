@@ -82,7 +82,9 @@ function _dumpAttrs0(out, nm, wgt) {
 					}
 				}
 					
-			} catch (e) {}
+			} catch (e) {
+				if (zk.debugJS) console.log(e.message || e);
+			}
 		}
 	} else if (nm.startsWith('is') && nm.length > 2 && !nm.endsWith('_')) {
 		var setting = 'set' + nm.substring(2),
@@ -107,7 +109,9 @@ function _dumpAttrs0(out, nm, wgt) {
 						out.push(' ', key, '="', value, '"');
 					}
 				}
-			} catch (e) {}
+			} catch (e) {
+				if (zk.debugJS) console.log(e.message || e);
+			}
 		}
 	}
 }

@@ -567,7 +567,9 @@ zul.Uploader = zk.$extends(zk.Object, {
 						// Bug 2987059: IE may cause JS error in the appendChild()
 						try {
 							this.appendChild(prog);
-						} catch (e) {}
+						} catch (e) {
+							if (zk.debugJS) console.log(e.message || e);
+						}
 						this._files[id] = prog;
 					}
 					return prog;

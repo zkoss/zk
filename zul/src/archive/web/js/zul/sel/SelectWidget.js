@@ -522,6 +522,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 							return true; //vparent
 					}
 			} catch (e) {
+				if (zk.debugJS) console.log(e.message || e);
 			}
 
 			if (typeof (bSel = this.nonselectableTags) == 'string') {

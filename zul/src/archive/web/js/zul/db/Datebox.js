@@ -603,7 +603,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 					jq(n).blur(); // trigger a missing blur event.
 			}
 		} catch (e) {
-			// do nothing
+			if (zk.debugJS) console.log(e.message || e);// do nothing
 		}
 
 		if (this._shadow) {

@@ -266,7 +266,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				}
 			}
 		} catch (e) {
-			// do nothing
+			if (zk.debugJS) console.log(e.message || e);// do nothing
 		}
 
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
