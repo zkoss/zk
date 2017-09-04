@@ -139,9 +139,9 @@ zul.db.Renderer = {
 
 		switch (view) {
 		case 'day':
-			out.push('<span id="', uuid, '-tm" class="', text, '">',
+			out.push('<span id="', uuid, '-tm" class="', text, ' ', text ,'-month">',
 					localizedSymbols.SMON[m], '</span> <span id="', uuid,
-					'-ty" class="', text, '">', y + ydelta, '</span>');
+					'-ty" class="', text, ' ', text ,'-year">', y + ydelta, '</span>');
 			break;
 		case 'month':
 			out.push('<span id="', uuid,
@@ -578,6 +578,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			mid = this.$n('mid'),
 			left = this.$n('left'),
 			right = this.$n('right'),
+			leftYear = this.$n('left-year'),
+			rightYear = this.$n('right-year'),
 			today = this.$n('today');
 		if (this._view != 'decade')
 			this._markCal({silent: true});
@@ -588,6 +590,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(right, 'onClick', '_clickArrow')
 			.domListen_(today, 'onClick', '_clickToday')
 			.domListen_(node, 'onMousewheel');
+		if (zul.db.Calendar._showYearArrow)
+			this.domListen_(leftYear, 'onClick', '_clickArrow')
+				.domListen_(rightYear, 'onClick', '_clickArrow');
 
 		this._updFormData(this.getTime());
 	},
@@ -597,7 +602,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			mid = this.$n('mid'),
 			left = this.$n('left'),
 			right = this.$n('right'),
+			leftYear = this.$n('left-year'),
+			rightYear = this.$n('right-year'),
 			today = this.$n('today');
+
+		if (zul.db.Calendar._showYearArrow)
+			this.domUnlisten_(leftYear, 'onClick', '_clickArrow')
+				.domUnlisten_(rightYear, 'onClick', '_clickArrow');
 		this.domUnlisten_(title, 'onClick', '_changeView')
 			.domUnlisten_(mid, 'onClick', '_clickDate')
 			.domUnlisten_(left, 'onClick', '_clickArrow')
@@ -622,10 +633,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_clickArrow: function (evt) {
 		if (zk.animating()) return; // ignore
 		var node = jq.nodeName(evt.domTarget, 'a') ? evt.domTarget
-					: jq(evt.domTarget).parent('a')[0];
+					: jq(evt.domTarget).parent('a')[0],
+			ofs = jq(node).hasClass(this.$s('left')) ? -1 : 1;
 		if (jq(node).attr('disabled'))
 			return;
-		this._shiftView(jq(node).hasClass(this.$s('left')) ? -1 : 1);
+		if (node.id.indexOf('-year') != -1) {
+			this._shiftDate('year', ofs);
+			this._setView(this._view, ofs);
+		} else
+			this._shiftView(ofs);
 		//ZK-2679: prevent default behavior of clicking anchor
 		evt.stop();
 	},
@@ -1022,5 +1038,5 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					jq(node).addClass(seldClass);
 		}
 	}
-});
+}, {_showYearArrow: true});
 })();
