@@ -274,7 +274,7 @@ zk.copy(zjq, {
 				$n.setSelectionRange(pos[0], pos[1]);
 			}
 		} catch (e) {
-		 	if (zk.debugJS) console.log(e.message || e);//ignore
+			if (zk.debugJS) console.log(e.message || e);//ignore
 		}
 	} : zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
@@ -1897,7 +1897,7 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 					try {
 						st[nm] = '';
 					} catch (e) {
-					 	if (zk.debugJS) console.log(e.message || e);//ignore
+						if (zk.debugJS) console.log(e.message || e);//ignore
 					}
 		return this;
 	},
