@@ -57,7 +57,7 @@ function (out) {
 	}
 	
 	if (showTodayLink) {
-		out.push('<div class="', this.$s('header'), '"><a id="', uuid, '-today" href="javascript:;" class="',
+		out.push('<div class="', this.$s('header'), ' ', this.$s('today'), '"><a id="', uuid, '-today" href="javascript:;" class="',
 				this.$s('title'), '">');
 		renderer.todayView(this, out, localizedSymbols);
 		out.push('</a></div>');
