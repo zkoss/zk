@@ -262,19 +262,22 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			offset = null; // update by _curpos
 		}
 		// B65-ZK-1884: Avoid button's animation out of range
-		var nextPos = _getNextPos(this, offset);
+		var nextPos = _getNextPos(this, offset),
+			speed = $btn.zk.getAnimationSpeed('slow');
 		if (isVertical && zk.parseInt(nextPos.top) > height)
 			nextPos.top = jq.px0(height);
 		if (!isVertical && zk.parseInt(nextPos.left) > width)
 			nextPos.left = jq.px0(width);
 		//ZK-2332 use the speed set in the client-attribute, use the default value 'slow'
-		$btn.animate(nextPos, $btn.zk.getAnimationSpeed('slow'), function () {
+		$btn.animate(nextPos, {duration: speed, queue: false}, function () {
 			pos = moveToCursor ? wgt._realpos() : wgt._curpos;
 			pos = wgt._constraintPos(pos);
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
-			if (moveToCursor)
-				wgt._fixPos();
+			wgt._fixPos();
 		});
+		jq(this.$n('area')).animate(
+			isVertical ? {height: nextPos.top} : {width: nextPos.left},
+			{duration: speed, queue: false});
 		this.$supers('doClick_', arguments);
 	},
 	_makeDraggable: function () {
