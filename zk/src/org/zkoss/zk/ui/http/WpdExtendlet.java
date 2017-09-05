@@ -281,11 +281,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		String depends = null;
 		SourceMapManager sourceMapManager = null;
 		String requestURI = reqctx.request.getRequestURI();
-		if (isDebugJS()) {
-			String encodeURLPrefix = WebManager.getWebManager(getServletContext()).getClassWebResource()
-					.getEncodeURLPrefix();
-			String sourceRoot = requestURI.substring(0,
-					requestURI.lastIndexOf(encodeURLPrefix) + encodeURLPrefix.length()) + "/";
+		if (isDebugJS() && reqctx.request.getAttribute(SOURCE_MAP_SUPPORTED) != null) {
+			String sourceRoot = requestURI.substring(0, requestURI.indexOf("js/"));
 			sourceMapManager = new SourceMapManager(name, sourceRoot, reqctx.request.getSession().getId());
 		}
 		if (zk) {
@@ -527,7 +524,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			path = Files.normalize(dir, path);
 
 		//source map browser issue
-		if (isDebugJS() && reqctx.request.getAttribute(SOURCE_MAP_SUPPORTED) == null && "js".equals(Servlets.getExtension(path)) && !path.endsWith(".src.js"))
+		if (isDebugJS() && sourceMapManager == null && "js".equals(Servlets.getExtension(path)) && !path.endsWith(".src.js"))
 			path = path.substring(0, path.length() - 3) + ".src.js";
 
 		final InputStream is = reqctx.getResourceAsStream(path, locate);
