@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3717.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 16 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		public void print(event, c){
+			display.setValue(display.getValue() + "\n" + event.toString() + c.getValue());
+		}
+	]]></zscript>
+	Datebox:
+	<datebox
+		onOK='print(event, self);'
+		onClick='print(event, self);'
+		onFocus='print(event, self);'
+		onChange='print(event, self);'
+		onBlur='print(event, self);'
+	/>
+	<separator/>
+	Timebox:
+	<timebox
+		cols="11"
+		onOK='print(event, self);'
+		onClick='print(event, self);'
+		onFocus='print(event, self);'
+		onChange='print(event, self);'
+		onBlur='print(event, self);'
+	/>
+	<separator/>
+	<textbox/>
+	<separator/>
+	<label multiline="true">
+		Open this page on mobile device.
+
+		Datebox:
+		1. Hit the calendar icon
+		2. Select a date
+		3. Hit OK (should trigger: onFocus, onChange)
+		4. Hit textbox (should trigger: onBlur)
+
+		Timebox:
+		1. Hit the clock icon
+		2. Select a time
+		3. Hit OK (should trigger: onFocus, onChange)
+		4. Hit textbox (should trigger: onBlur)
+	</label>
+	<separator/>
+	Event print: <label id="display" multiline="true"></label>
+</zk>

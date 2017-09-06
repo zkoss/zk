@@ -18,6 +18,7 @@ ZK 8.5.0
   ZK-3520: Update tooltip JAVA API
   ZK-3677: Support source maps for wpd files
   ZK-3537: Improve client side error handling/logging
+  ZK-3717: onBlur event missing on IOS Datebox
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
