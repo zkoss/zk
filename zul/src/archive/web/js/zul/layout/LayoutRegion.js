@@ -307,6 +307,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					this.$n('btn').style.display = 'none';
 				s.visibility = '';
 				s.display = 'none';
+				jq(real).addClass(this.$s('slide'));
 				zk(real).slideDown(this, {
 					anchor: this.sanchor,
 					afterAnima: this.$class.afterSlideDown
@@ -1010,6 +1011,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.zIndex = '';
 		if (this.$n('btn'))
 			this.$n('btn').style.display = '';
+		jq(n).removeClass(this.$s('slide'));
 		jq(document).unbind('click', this.proxy(this._docClick));
 		this._isSlide = false;
 		this._fixFontIcon();
