@@ -445,7 +445,9 @@
                     <webAppSourceDirectory>${project.basedir}/src/archive/</webAppSourceDirectory>
                     <webApp>
                         <contextPath>/${project.artifactId}</contextPath>
-                    </webApp>
+						<webInfIncludeJarPattern>^$</webInfIncludeJarPattern>
+						<containerIncludeJarPattern>^$</containerIncludeJarPattern>
+					</webApp>
                 </configuration>
                 <executions>
                     <execution>
