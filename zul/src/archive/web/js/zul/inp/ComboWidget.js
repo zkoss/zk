@@ -243,7 +243,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.fire('onOpen', {open: true, value: inp.value}, {rtags: {onOpen: 1}});
 
 		//add extra CSS class for easy customize
-		jq(pp).addClass(this.$s('open'));
+		var openClass = this.$s('open');
+		jq(this.$n()).addClass(openClass);
+		jq(pp).addClass(openClass);
 	},
 	_getPopupSize: function (pp, pp2) {
 		var ppofs = this.getPopupSize_(pp);
@@ -406,7 +408,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.fire('onOpen', {open: false, value: this.getInputNode().value}, {rtags: {onOpen: 1}});
 
 		//remove extra CSS class
-		jq(pp).removeClass(this.$s('open'));
+		var openClass = this.$s('open');
+		jq(this.$n()).removeClass(openClass);
+		jq(pp).removeClass(openClass);
 	},
 	_fixsz: function (ppofs) {
 		var pp = this.getPopupNode_();
