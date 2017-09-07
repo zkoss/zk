@@ -639,7 +639,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return;
 		if (node.id.indexOf('-year') != -1) {
 			this._shiftDate('year', ofs);
-			this._setView(this._view, ofs);
+			this.rerender(); // year has no animation
 		} else
 			this._shiftView(ofs);
 		//ZK-2679: prevent default behavior of clicking anchor
@@ -807,6 +807,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			} else {
 				jq(wgt.$n('right')).removeAttr('disabled');
 			}
+			if (zul.db.Calendar._showYearArrow) {
+				var y = wgt.getTime().getFullYear();
+				jq(wgt.$n('left-year')).attr('disabled', y <= wgt._minyear ? 'disabled' : null);
+				jq(wgt.$n('right-year')).attr('disabled', y >= wgt._maxyear ? 'disabled' : null);
+			}
 		}
 		return function (view, force) {
 			if (this._view != view) {
@@ -920,8 +925,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @since 6.5.3
 	 */
 	isOutOfRange: function (left, date) {
-		var view = this._view,
-			val = date || this.getTime(),
+		return this._isOutOfRange(this._view, left, date);
+	},
+	_isOutOfRange: function (view, left, date) {
+		var val = date || this.getTime(),
 			y = val.getFullYear(),
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
