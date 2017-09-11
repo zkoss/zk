@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3731.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Sep 01 10:25 AM:05 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:x="xhtml">
+    <label>All of the a tag line should work.</label>
+    <separator />
+    <div onClick='Clients.log("test")'>
+        <label value="test"/>
+        <html>
+            <![CDATA[
+      	<a target="_blank" href="http://google.com">content native a tag</a>
+        ]]>
+        </html>
+        <html>
+            <a onClick="event.stopPropagation" target="_blank" href="http://google.com">zk a component</a>
+            <n:a target="_blank" href="http://google.com">native</n:a>
+        </html>
+        <a target="_blank" href="http://google.com">outside</a>
+        <n:a target="_blank" href="http://google.com">outside native</n:a>
+        <n:span>
+            <n:a target="_blank" href="http://google.com">outside span native</n:a>
+        </n:span>
+        <x:a target="_blank" href="http://google.com">outside xhtml</x:a>
+    </div>
+    <separator />
+    <div>
+        no onClick
+        <separator />
+        <n:a target="_blank" href="http://google.com">outside native</n:a>
+        <separator />
+        <x:a target="_blank" href="http://google.com">outside xhtml</x:a>
+    </div>
+</zk>
