@@ -26,7 +26,7 @@ zk.bmk = (function () { //used internally
 		var nm = getBookmark();
 		if (nm != _curbk) {
 			_curbk = nm;
-			zAu.send(new zk.Event(null, 'onBookmarkChange', nm), 50);
+			zAu.send(new zk.Event(null, 'onBookmarkChange', nm), 1);
 			zk.bmk.onURLChange();
 		}
 	}
@@ -68,6 +68,7 @@ zk.bmk = (function () { //used internally
 	zk._apac(_startCheck); //see mount.js (after page AU cmds)
 
 	return {
+		checkBookmark: checkBookmark,
 		/** Sets a bookmark that user can use forward and back buttons */
 		bookmark: function (nm, replace) {
 			if (_startCheck)

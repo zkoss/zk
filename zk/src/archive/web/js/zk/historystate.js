@@ -26,7 +26,9 @@ zk.historystate = (function () {
 				state: event.originalEvent.state,
 				url: location.href
 			};
-			zAu.send(new zk.Event(null, 'onHistoryPopState', data, { implicit: true }), 50);
+			zAu.send(new zk.Event(null, 'onHistoryPopState', data, { implicit: true }), 1);
+			if (zk.bmk.checkBookmark)
+				zk.bmk.checkBookmark();
 		},
 		register: function () {
 			jq(window).bind('popstate', this.onPopState);
