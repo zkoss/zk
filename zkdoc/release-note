@@ -78,6 +78,7 @@ ZK 8.5.0
   ZK-3604: hiding the first column causes inconsitent column widths
   ZK-3286: Labels of days can't be clicked with safari
   ZK-3731: native <a> tag link suppresed inside a zk component with click listener
+  ZK-3516: horizontal splitter resizing incorrectly
 
 * Upgrade Notes
 
