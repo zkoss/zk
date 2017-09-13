@@ -116,8 +116,6 @@ public class SourceMapManager {
 		sb.append("{\n\"version\":3,\n\"file\":\"empty\",\n\"lineCount\":");
 		sb.append(lineCount + "");
 		sb.append(",\n\"mappings\":\"");
-		for (int i = 0; i < lineCount; i++)
-			sb.append(";");
 		sb.append("\",\n\"_sources\":[],\n\"names\":[]\n}");
 		return sb.toString();
 	}
