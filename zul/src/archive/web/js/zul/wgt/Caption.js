@@ -36,12 +36,12 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 			title = this.parent ? this.parent._title : '',
 			iconSclass = this.domIcon_();
 		if (title) label = label ? title + ' - ' + label : title;
-		label = '<span class="' + this.$s('label') + '">' + zUtl.encodeXML(label) + '</span>';
+		label = zUtl.encodeXML(label);
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
 		else img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" />' + (iconSclass ? ' ' + iconSclass : '');
-		return label ? img + ' ' + label : img;
+		return label ? img + ' ' + '<span class="' + this.$s('label') + '">' + label + '</span>' : img;
 	},
 	updateDomContent_: function () {
 		var cnt = this.domContent_(),
