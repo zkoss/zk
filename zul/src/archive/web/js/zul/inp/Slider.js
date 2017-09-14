@@ -269,7 +269,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (!isVertical && zk.parseInt(nextPos.left) > width)
 			nextPos.left = jq.px0(width);
 		//ZK-2332 use the speed set in the client-attribute, use the default value 'slow'
-		$btn.animate(nextPos, {duration: speed, queue: false}, function () {
+		$btn.animate(nextPos, speed, function () {
 			pos = moveToCursor ? wgt._realpos() : wgt._curpos;
 			pos = wgt._constraintPos(pos);
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
@@ -277,7 +277,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		});
 		jq(this.$n('area')).animate(
 			isVertical ? {height: nextPos.top} : {width: nextPos.left},
-			{duration: speed, queue: false});
+			speed);
 		this.$supers('doClick_', arguments);
 	},
 	_makeDraggable: function () {
