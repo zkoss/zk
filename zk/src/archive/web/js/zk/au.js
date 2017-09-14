@@ -156,7 +156,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zAu.ajaxReq = req;
 			zAu.ajaxReqInf = reqInf;
 			
-			if (zWs != undefined && zWs.webSocketEndPoint) {
+			if (typeof zWs != 'undefined' && zWs.webSocketEndPoint) {
 				zWs.send(req, reqInf);
 				return;
 			}
@@ -709,7 +709,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content, rtags = {},
 			requri = uri || zk.ajaxURI(null, {desktop: dt,au: true}),
-			ws = zWs != undefined && zWs.webSocketEndPoint;
+			ws = typeof zWs != 'undefined' && zWs.webSocketEndPoint;
 		if (ws) {
 			content = {};
 		} else {
@@ -783,11 +783,11 @@ zAu.beforeSend = function (uri, req, dt) {
 	// Sets performance rquest IDs to the request's header
 	// Called by moun.js, too
 	_pfsend: function (dt, req, completeOnly) {
-		var zws = zWs != undefined && zWs.webSocketEndPoint;
+		var ws = typeof zWs != 'undefined' && zWs.webSocketEndPoint;
 		if (!completeOnly) {
 			var dtt = dt.id + '-' + pfIndex++ + '=' + Math.round(jq.now());
 			req.setRequestHeader('ZK-Client-Start', dtt);
-			if (zws) {
+			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Start', dtt);
 			}
 		}
@@ -795,14 +795,14 @@ zAu.beforeSend = function (uri, req, dt) {
 		var ids;
 		if (ids = dt._pfRecvIds) {
 			req.setRequestHeader('ZK-Client-Receive', ids);
-			if (zws) {
+			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Receive', ids);
 			}
 			dt._pfRecvIds = null;
 		}
 		if (ids = dt._pfDoneIds) {
 			req.setRequestHeader('ZK-Client-Complete', ids);
-			if (zws) {
+			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Complete', ids);
 			}
 			dt._pfDoneIds = null;
