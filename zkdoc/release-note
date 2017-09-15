@@ -19,6 +19,7 @@ ZK 8.5.0
   ZK-3677: Support source maps for wpd files
   ZK-3537: Improve client side error handling/logging
   ZK-3717: onBlur event missing on IOS Datebox
+  ZK-3512: preserve comments in .src.js files
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
@@ -79,6 +80,7 @@ ZK 8.5.0
   ZK-3286: Labels of days can't be clicked with safari
   ZK-3731: native <a> tag link suppresed inside a zk component with click listener
   ZK-3516: horizontal splitter resizing incorrectly
+  ZK-3742: Download packages are missing the closure-compiler.jar
 
 * Upgrade Notes
 
