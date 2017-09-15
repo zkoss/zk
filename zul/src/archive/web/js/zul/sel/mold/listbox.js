@@ -34,7 +34,7 @@ function (out) {
 
 	if (this.listhead) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
-			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;',
+			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;border-collapse:collapse;',
 			wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
 		
@@ -58,7 +58,7 @@ function (out) {
 	if (this.domPad_ && !inPaging)
 		this.domPad_(out, '-tpad');
 	
-	out.push('<table', wdAttr, ' id="', uuid, '-cave"', ' style="table-layout:fixed;', wdStyle,'">');
+	out.push('<table', wdAttr, ' id="', uuid, '-cave"', ' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
 	
 	if (this.listhead)
 		this.domFaker_(out, '-bdfaker', zcls);
@@ -90,7 +90,7 @@ function (out) {
 
 	if (this.listfoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
-			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
+			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
 		if (this.listhead) 
 			this.domFaker_(out, '-ftfaker');
 		
