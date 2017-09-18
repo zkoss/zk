@@ -139,9 +139,9 @@ zul.db.Renderer = {
 
 		switch (view) {
 		case 'day':
-			out.push('<span id="', uuid, '-tm" class="', text, ' ', text ,'-month">',
+			out.push('<span id="', uuid, '-tm" class="', text, '">',
 					localizedSymbols.SMON[m], '</span> <span id="', uuid,
-					'-ty" class="', text, ' ', text ,'-year">', y + ydelta, '</span>');
+					'-ty" class="', text, '">', y + ydelta, '</span>');
 			break;
 		case 'month':
 			out.push('<span id="', uuid,
@@ -578,8 +578,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			mid = this.$n('mid'),
 			left = this.$n('left'),
 			right = this.$n('right'),
-			leftYear = this.$n('left-year'),
-			rightYear = this.$n('right-year'),
 			today = this.$n('today');
 		if (this._view != 'decade')
 			this._markCal({silent: true});
@@ -590,9 +588,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(right, 'onClick', '_clickArrow')
 			.domListen_(today, 'onClick', '_clickToday')
 			.domListen_(node, 'onMousewheel');
-		if (zul.db.Calendar._showYearArrow)
-			this.domListen_(leftYear, 'onClick', '_clickArrow')
-				.domListen_(rightYear, 'onClick', '_clickArrow');
 
 		this._updFormData(this.getTime());
 	},
@@ -602,13 +597,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			mid = this.$n('mid'),
 			left = this.$n('left'),
 			right = this.$n('right'),
-			leftYear = this.$n('left-year'),
-			rightYear = this.$n('right-year'),
 			today = this.$n('today');
-
-		if (zul.db.Calendar._showYearArrow)
-			this.domUnlisten_(leftYear, 'onClick', '_clickArrow')
-				.domUnlisten_(rightYear, 'onClick', '_clickArrow');
 		this.domUnlisten_(title, 'onClick', '_changeView')
 			.domUnlisten_(mid, 'onClick', '_clickDate')
 			.domUnlisten_(left, 'onClick', '_clickArrow')
@@ -633,15 +622,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_clickArrow: function (evt) {
 		if (zk.animating()) return; // ignore
 		var node = jq.nodeName(evt.domTarget, 'a') ? evt.domTarget
-					: jq(evt.domTarget).parent('a')[0],
-			ofs = jq(node).hasClass(this.$s('left')) ? -1 : 1;
+					: jq(evt.domTarget).parent('a')[0];
 		if (jq(node).attr('disabled'))
 			return;
-		if (node.id.indexOf('-year') != -1) {
-			this._shiftDate('year', ofs);
-			this.rerender(); // year has no animation
-		} else
-			this._shiftView(ofs);
+		this._shiftView(jq(node).hasClass(this.$s('left')) ? -1 : 1);
 		//ZK-2679: prevent default behavior of clicking anchor
 		evt.stop();
 	},
@@ -807,11 +791,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			} else {
 				jq(wgt.$n('right')).removeAttr('disabled');
 			}
-			if (zul.db.Calendar._showYearArrow) {
-				var y = wgt.getTime().getFullYear();
-				jq(wgt.$n('left-year')).attr('disabled', y <= wgt._minyear ? 'disabled' : null);
-				jq(wgt.$n('right-year')).attr('disabled', y >= wgt._maxyear ? 'disabled' : null);
-			}
 		}
 		return function (view, force) {
 			if (this._view != view) {
@@ -854,7 +833,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					width = oldMid.offsetWidth,
 					x = width * -1,
 					self = this,
-					animaCSS = this.$s('anima');
+					animaCSS = this.$s('anima'),
+					todayBtn = this.isShowTodayLink() ? jq(this.$n('today')).parent() : jq();
+
+				todayBtn.is(':hidden') && todayBtn.css('display', 'none');
 
 				Renderer[view + 'View'](this, out, localizedSymbols);
 
@@ -895,6 +877,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 						Renderer.titleHTML(self, out, localizedSymbols);
 						jq(self.$n('title')).html(out.join(''));
 						self.clearCache();
+						todayBtn.css('display', '');
 					}
 				});
 
@@ -925,10 +908,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @since 6.5.3
 	 */
 	isOutOfRange: function (left, date) {
-		return this._isOutOfRange(this._view, left, date);
-	},
-	_isOutOfRange: function (view, left, date) {
-		var val = date || this.getTime(),
+		var view = this._view,
+			val = date || this.getTime(),
 			y = val.getFullYear(),
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
@@ -1044,6 +1025,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (index == j && (node = this.$n(field + j)))
 					jq(node).addClass(seldClass);
 		}
+	},
+	domClass_: function (no) {
+		var cls = '';
+		if (this._weekOfYear)
+			cls += this.$s('wk') + ' ';
+		return cls + this.$supers('domClass_', arguments);
 	}
-}, {_showYearArrow: true});
+});
 })();
