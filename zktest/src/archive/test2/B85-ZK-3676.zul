@@ -1,0 +1,12 @@
+<zk>
+    <label>Please open it on tablet and follow those steps</label>
+    <separator />
+	<div style="background-color: PaleGreen" height="100px">
+		Clicking this green area closes the INFO.
+	</div>
+	<div style="background-color: FireBrick; color: white" height="100px">
+		Clicking this red area fails to close the INFO.
+		<textbox id="tb3" onCreate='Clients.showNotification("INFO", self, false);'/>
+	</div>
+	Clicking outside also closes the INFO
+</zk>

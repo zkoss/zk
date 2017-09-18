@@ -86,6 +86,7 @@ ZK 8.5.0
   ZK-3737: inconsistent header borders between tree/grid/listbox
   ZK-3744: error when enabling websocket serverpush via au-event
   ZK-3606: data-scrollable doesn't work on top page level components
+  ZK-3676: notifications not closing on touch devices
 
 * Upgrade Notes
 
