@@ -1148,7 +1148,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_ghosting: function (dg, ofs, evt) {
 		var el = dg.node, $el = zk(el);
-		jq(document.body).prepend('<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
+		jq(document.body).prepend('<div id="zk_layoutghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
 			+ $el.offsetWidth() + 'px;height:' + $el.offsetHeight()
 			+ 'px;cursor:' + el.style.cursor + ';"></div>');
