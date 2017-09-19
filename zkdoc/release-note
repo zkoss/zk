@@ -82,6 +82,7 @@ ZK 8.5.0
   ZK-3516: horizontal splitter resizing incorrectly
   ZK-3742: Download packages are missing the closure-compiler.jar
   ZK-3737: inconsistent header borders between tree/grid/listbox
+  ZK-3744: error when enabling websocket serverpush via au-event
 
 * Upgrade Notes
 
