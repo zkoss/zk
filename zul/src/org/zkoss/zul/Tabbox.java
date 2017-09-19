@@ -35,6 +35,7 @@ import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.impl.TabboxEngine;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -608,6 +609,10 @@ public class Tabbox extends XulElement {
 		return _zclass == null ? "z-tabbox" : _zclass;
 	}
 
+	//ZK-3678: Provide a switch to enable/disable iscroll
+	/*package*/ boolean isNativeScrollbar() {
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
+	}
 	// -- Component --//
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Toolbar) {
@@ -790,5 +795,8 @@ public class Tabbox extends XulElement {
 			renderer.render("z$rod", false);
 			renderer.render("maximalHeight", _maximalHeight);
 		}
+		//ZK-3678: Provide a switch to enable/disable iscroll
+		if (isNativeScrollbar())
+			renderer.render("_nativebar", true);
 	}
 }

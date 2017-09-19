@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.event.MaximizeEvent;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.ext.Framable;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -571,6 +572,11 @@ public class Panel extends XulElement implements Framable {
 		return _zclass == null ? "z-panel" : _zclass;
 	}
 
+	//ZK-3678: Provide a switch to enable/disable iscroll
+	/*package*/ boolean isNativeScrollbar() {
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
+	}
+
 	//-- Component --//
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Caption) {
@@ -703,6 +709,10 @@ public class Panel extends XulElement implements Framable {
 
 		if (!"none".equals(_border))
 			renderer.render("border", _border);
+
+		//ZK-3678: Provide a switch to enable/disable iscroll
+		if (isNativeScrollbar())
+			renderer.render("_nativebar", true);
 	}
 
 	//-- ComponentCtrl --//
