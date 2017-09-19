@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -87,6 +88,11 @@ public class Groupbox extends XulElement {
 		}
 	}
 
+	//ZK-3678: Provide a switch to enable/disable iscroll
+	/*package*/ boolean isNativeScrollbar() {
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
+	}
+
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
@@ -98,6 +104,9 @@ public class Groupbox extends XulElement {
 			renderer.render("open", false);
 		if (!_closable)
 			renderer.render("closable", false);
+		//ZK-3678: Provide a switch to enable/disable iscroll
+		if (isNativeScrollbar())
+			renderer.render("_nativebar", true);
 	}
 
 	public String getZclass() {

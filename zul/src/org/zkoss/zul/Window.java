@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.event.MaximizeEvent;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.ext.Framable;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -873,6 +874,11 @@ public class Window extends XulElement implements Framable, IdSpace {
 		smartUpdate("topmost", true);
 	}
 
+	//ZK-3678: Provide a switch to enable/disable iscroll
+	/*package*/ boolean isNativeScrollbar() {
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
+	}
+
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
@@ -898,6 +904,10 @@ public class Window extends XulElement implements Framable, IdSpace {
 		if (_mode != EMBEDDED)
 			renderer.render("mode", modeToString(_mode));
 		//render mode as the last property
+
+		//ZK-3678: Provide a switch to enable/disable iscroll
+		if (isNativeScrollbar())
+			renderer.render("_nativebar", true);
 	}
 
 	public String getZclass() {
