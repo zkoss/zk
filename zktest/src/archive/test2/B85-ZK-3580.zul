@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3680.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 19 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3580VM')">
+		<hlayout form="@id('fx') @load(vm.selected)">
+			<div>SUCCESS!!!</div>
+		</hlayout>
+		<label multiline="true">
+			1. load this page without exception
+		</label>
+	</vlayout>
+</zk>
