@@ -179,7 +179,9 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		jq(dg._epos).delay(300).fadeOut(500).css('opacity', old);
 	};
 	function ignoredrag(dg, p, evt) {
-		return dg.node != evt.domTarget;
+		var node = dg.node,
+			target = evt.domTarget;
+		return node != target && node != target.parentNode;
 	}
 
 /**
@@ -693,6 +695,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 				+ '<div class="' + zcls + '-drag">'
 					+ '<div class="' + zcls + '-home" title="' + msgzul.WS_HOME + '"></div>'
 					+ '<div class="' + zcls + '-up" title="' + msgzul.WS_PREV + '"></div>'
+					+ '<div class="' + zcls + '-body"></div>'
 					+ '<div class="' + zcls + '-down" title="' + msgzul.WS_NEXT + '"></div>'
 					+ '<div class="' + zcls + '-end" title="' + msgzul.WS_END + '"></div>'
 				+ '</div>'
