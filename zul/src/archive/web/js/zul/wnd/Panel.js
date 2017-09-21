@@ -1068,10 +1068,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 	},
 	getCollapseOpenIconClass_: function () {
-		return 'z-icon-caret-up';
+		return 'z-icon-angle-up';
 	},
 	getCollapseCloseIconClass_: function () {
-		return 'z-icon-caret-down';
+		return 'z-icon-angle-down';
 	},
 	getClosableIconClass_: function () {
 		return 'z-icon-times';

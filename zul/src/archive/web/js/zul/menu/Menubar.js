@@ -222,8 +222,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 					if (isNaN(movePos)) return;
 					self._runId = setInterval(function () {
 						if (!self._moveTo(body, movePos)) {
-							clearInterval(self._runId);
-							self._runId = null;
+							self._afterMove();
 						}
 					}, 10);
 					return;
@@ -239,8 +238,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 					if (isNaN(movePos)) return;
 					self._runId = setInterval(function () {
 						if (!self._moveTo(body, movePos)) {
-							clearInterval(self._runId);
-							self._runId = null;
+							self._afterMove();
 						}
 					}, 10);
 					return;
@@ -262,6 +260,10 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 
 		body.scrollLeft = setTo;
 		return true;
+	},
+	_afterMove: function () {
+		clearInterval(this._runId);
+		this._runId = null;
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		var vert = 'vertical' == this.getOrient();

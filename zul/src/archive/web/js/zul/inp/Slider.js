@@ -262,19 +262,22 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			offset = null; // update by _curpos
 		}
 		// B65-ZK-1884: Avoid button's animation out of range
-		var nextPos = _getNextPos(this, offset);
+		var nextPos = _getNextPos(this, offset),
+			speed = $btn.zk.getAnimationSpeed('slow');
 		if (isVertical && zk.parseInt(nextPos.top) > height)
 			nextPos.top = jq.px0(height);
 		if (!isVertical && zk.parseInt(nextPos.left) > width)
 			nextPos.left = jq.px0(width);
 		//ZK-2332 use the speed set in the client-attribute, use the default value 'slow'
-		$btn.animate(nextPos, $btn.zk.getAnimationSpeed('slow'), function () {
+		$btn.animate(nextPos, speed, function () {
 			pos = moveToCursor ? wgt._realpos() : wgt._curpos;
 			pos = wgt._constraintPos(pos);
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
-			if (moveToCursor)
-				wgt._fixPos();
+			wgt._fixPos();
 		});
+		jq(this.$n('area')).animate(
+			isVertical ? {height: nextPos.top} : {width: nextPos.left},
+			speed);
 		this.$supers('doClick_', arguments);
 	},
 	_makeDraggable: function () {
@@ -316,8 +319,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 
 		jq(document.body)
 			.append('<div id="zul_slidetip" class="z-slider-popup"'
-			+ 'style="position:absolute;display:none;z-index:60000;'
-			+ 'background-color:white;border: 1px outset">' + widget.slidepos
+			+ ' style="position:absolute;display:none;z-index:60000;'
+			+ '">' + widget.slidepos
 			+ '</div>');
 
 		widget.slidetip = jq('#zul_slidetip')[0];
@@ -328,7 +331,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				slideStyle.left = '0px';
 			}
 			slideStyle.display = 'block';
-			zk(widget.slidetip).position(widget.$n(), vert ? 'end_before' : 'after_start');
 		}
 	},
 	_dragging: function (dg) {
@@ -422,7 +424,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixPos: function () {
-		this.$n('btn').style[this.isVertical() ? 'top' : 'left'] = jq.px0(_getBtnNewPos(this));
+		var btn = this.$n('btn'),
+			vert = this.isVertical(),
+			newPos = jq.px0(_getBtnNewPos(this));
+		this.$n('area').style[vert ? 'height' : 'width'] = newPos;
+		btn.style[vert ? 'top' : 'left'] = newPos;
+		if (this.slidetip)
+			zk(this.slidetip).position(btn, vert ? 'end_before' : 'before_start');
 	},
 	_fixStep: function () {
 		var step = _getStep(this);

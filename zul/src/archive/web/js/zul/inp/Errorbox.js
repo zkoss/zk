@@ -24,6 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * A error message box that is displayed as a popup.
  */
 zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
+	_defaultPos: 'end_before',
 	$init: function (owner, msg) {
 		this.parent = owner; //fake
 		this.parent.__ebox = this;
@@ -51,7 +52,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		// ZK-2069: show only if is in view
 		setTimeout(function () {
 			if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if
-				self.open(self.parent, null, cstp || 'end_before', {dodgeRef: !cstp});
+				self.open(self.parent, null, cstp || self._defaultPos, {dodgeRef: !cstp});
 		}, 50); // B36-2935398: add time
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
@@ -113,7 +114,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 				if (!this.isOpen()) // for ZK-2371, we need to show it back when inside viewport.
 					this.open();
 				var p = this.parent, cstp = p ? p._cst && p._cst._pos : false;
-				this.position(p, null, cstp || 'end_before', {dodgeRef: !cstp});
+				this.position(p, null, cstp || this._defaultPos, {dodgeRef: !cstp});
 				this._fixarrow();
 			} else {
 				this.close();

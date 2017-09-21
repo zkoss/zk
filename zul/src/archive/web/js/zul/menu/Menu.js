@@ -172,7 +172,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 					+ this.$s('image') + '" align="absmiddle" />';
 			}
 		}
-		return img + ' ' + label + ' ' + separator + icon;
+		return img + label + separator + icon;
 	},
 	/** Returns whether this is an top-level menu, i.e., not owning
 	 * by another {@link Menupopup}.

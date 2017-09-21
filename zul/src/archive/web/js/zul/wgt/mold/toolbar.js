@@ -20,8 +20,8 @@ function (out) {
 			' class="', this.$s('content'), ' ', this.$s(this.getAlign()), '" >');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling) {
-		out.push(space);
 		w.redraw(out);
+		out.push(space);
 	}
 	out.push('</div><div class="z-clear"></div></div>');
 }

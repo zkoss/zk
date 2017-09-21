@@ -107,14 +107,15 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 		this._fixWidth();
 	},
 	_fixWidth: function () {
-		var parent = this.parent.$n();
+		var parent = this.parent.$n(),
+			$parent = jq(parent);
 		if (this.__width || !zk(parent).isRealVisible())
 			return;
 
-		var width = parent.offsetWidth,
+		var width = $parent.width(),
 			n = this.$n();
 
-		width -= jq(parent).find('>div:first')[0].offsetWidth;
+		width -= $parent.find('>div:first')[0].offsetWidth;
 
 		n.style.width = jq.px0(width);
 	},

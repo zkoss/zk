@@ -27,6 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _fireOnOpen (wgt, opts, o) {
+		jq(wgt.$n()).toggleClass(wgt.$s('open'), o);
 		if (opts && opts.sendOnOpen)
 			wgt.fire('onOpen', {open: o, value: wgt.getLabel()}, {rtags: {onOpen: 1}});
 	}

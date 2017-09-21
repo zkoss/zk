@@ -622,7 +622,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		else if (zul.db.DateboxCtrl.isPreservedFocus(this))
 			zk(db.getInputNode()).focus();
 		//remove extra CSS class
-		jq(pp).removeClass(db.$s('open'));
+		var openClass = db.$s('open');
+		jq(db.$n()).removeClass(openClass);
+		jq(pp).removeClass(openClass);
 	},
 	isOpen: function () {
 		return zk(this.parent.$n('pp')).isVisible();
@@ -683,7 +685,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			db._tm.setVisible(false);
 		}
 		//add extra CSS class for easy customize
-		jq(pp).addClass(db.$s('open'));
+		var openClass = db.$s('open');
+		jq(db.$n()).addClass(openClass);
+		jq(pp).addClass(openClass);
 
 		_reposition(db, silent); //ZK-3217: only need to calculate position once during open
 	},
