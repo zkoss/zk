@@ -17,7 +17,7 @@ var West =
  * A west region of a border layout.
  * <p>Default {@link #getZclass}: z-west.
  *
- * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
+ * <p>Default: {@link #getCmargins()} is "0,0,0,0"</p>
  */
 zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	_sumFlexWidth: true, //indicate shall add this flex width for borderlayout. @See _fixMinFlex in widget.js
@@ -33,7 +33,7 @@ zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 
 	$init: function () {
 		this.$supers('$init', arguments);
-		this._cmargins = [0, 3, 3, 0];
+		this._cmargins = [0, 0, 0, 0];
 	},
 	/**
 	 * Returns {@link Borderlayout#WEST}.

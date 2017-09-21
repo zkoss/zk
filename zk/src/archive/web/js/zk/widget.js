@@ -360,9 +360,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 */
 		ghost: function (drag, ofs, msg) {
 			if (msg != null) {
+				if (msg)
+					msg = '<span class="z-drop-text">' + msg + '</span>';
 				jq(document.body).append(
 					'<div id="zk_ddghost" class="z-drop-ghost z-drop-disallow" style="position:absolute;top:'
-					+ ofs[1] + 'px;left:' + ofs[0] + 'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>&nbsp;' + msg + '</div></div>');
+					+ ofs[1] + 'px;left:' + ofs[0] + 'px;"><div class="z-drop-content"><span id="zk_ddghost-img" class="z-drop-icon"></span>' + msg + '</div></div>');
 				drag._dragImg = jq('#zk_ddghost-img')[0];
 				return jq('#zk_ddghost')[0];
 			}
@@ -420,11 +422,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (found) {
 				jq(drag.node).removeClass('z-drop-disallow').addClass('z-drop-allow');
 				// ZK-2008: should use jQuery
-				jq(dragImg).removeClass('z-icon-times').addClass('z-icon-check');
+				jq(dragImg).removeClass('z-icon-ban').addClass('z-icon-plus-circle');
 			} else {
 				jq(drag.node).removeClass('z-drop-allow').addClass('z-drop-disallow');
 				// ZK-2008: should use jQuery
-				jq(dragImg).removeClass('z-icon-check').addClass('z-icon-times');
+				jq(dragImg).removeClass('z-icon-plus-circle').addClass('z-icon-ban');
 			}
 		}
 

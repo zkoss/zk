@@ -178,7 +178,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				var btnsize = this._getArrowSize();
 				tabbox.$n('right').style.right = toolbarWidth + 'px';
 
-				if (tabs.offsetWidth <= btnsize) return;
 				if (childWidth <= tabsOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);

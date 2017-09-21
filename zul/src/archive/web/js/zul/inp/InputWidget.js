@@ -463,7 +463,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				var self = this, cstp = self._cst && self._cst._pos;
 				setTimeout(function () {
 					if (self._errbox)
-						self._errbox.open(self, null, cstp || 'end_before',
+						self._errbox.open(self, null, cstp || self._errbox._defaultPos,
 								{dodgeRef: !cstp}); // Bug 3251564
 				});
 			}

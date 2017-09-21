@@ -23,12 +23,9 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 			if (zk.ie < 9)
 				style.filter = 'alpha(opacity=' + 100 * opacity + ')';
 		}
-		if (embed) { // always show if enabled
+		if (embed) {
 			style = embed.style;
-			style.display = 'block';
-			style.opacity = isHide ? 0.2 : 0;
-			if (zk.ie < 9)
-				style.filter = isHide ? 'alpha(opacity=20)' : 'alpha(opacity=0)';
+			style.display = isHide ? 'block' : 'none';
 		}
 	};
 	function _setScrollPos(position, min, max) {

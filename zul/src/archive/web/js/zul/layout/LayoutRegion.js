@@ -307,6 +307,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					this.$n('btn').style.display = 'none';
 				s.visibility = '';
 				s.display = 'none';
+				jq(real).addClass(this.$s('slide'));
 				zk(real).slideDown(this, {
 					anchor: this.sanchor,
 					afterAnima: this.$class.afterSlideDown
@@ -915,13 +916,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var BL = zul.layout.Borderlayout;
 		switch (this.getPosition()) {
 		case BL.NORTH:
-			return collapsed ? 'z-icon-chevron-down' : 'z-icon-chevron-up';
+			return collapsed ? 'z-icon-angle-double-down' : 'z-icon-angle-double-up';
 		case BL.SOUTH:
-			return collapsed ? 'z-icon-chevron-up' : 'z-icon-chevron-down';
+			return collapsed ? 'z-icon-angle-double-up' : 'z-icon-angle-double-down';
 		case BL.WEST:
-			return collapsed ? 'z-icon-chevron-right' : 'z-icon-chevron-left';
+			return collapsed ? 'z-icon-angle-double-right' : 'z-icon-angle-double-left';
 		case BL.EAST:
-			return collapsed ? 'z-icon-chevron-left' : 'z-icon-chevron-right';
+			return collapsed ? 'z-icon-angle-double-left' : 'z-icon-angle-double-right';
 		}
 		return ''; // no icon
 	},
@@ -1010,6 +1011,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.zIndex = '';
 		if (this.$n('btn'))
 			this.$n('btn').style.display = '';
+		jq(n).removeClass(this.$s('slide'));
 		jq(document).unbind('click', this.proxy(this._docClick));
 		this._isSlide = false;
 		this._fixFontIcon();
@@ -1146,7 +1148,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_ghosting: function (dg, ofs, evt) {
 		var el = dg.node, $el = zk(el);
-		jq(document.body).prepend('<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
+		jq(document.body).prepend('<div id="zk_layoutghost" class="z-splitter-ghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ ofs[1] + 'px;left:' + ofs[0] + 'px;width:'
 			+ $el.offsetWidth() + 'px;height:' + $el.offsetHeight()
 			+ 'px;cursor:' + el.style.cursor + ';"></div>');

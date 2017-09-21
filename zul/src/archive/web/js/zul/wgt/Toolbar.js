@@ -62,6 +62,8 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 				sc += ' ' + tabs;
 			if (this.inPanelMold())
 				sc += ' ' + this.$s('panel');
+			if ('vertical' == this.getOrient())
+				sc += ' ' + this.$s('vertical');
 		}
 		return sc;
 	},

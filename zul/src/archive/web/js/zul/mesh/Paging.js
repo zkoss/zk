@@ -289,14 +289,17 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	appendAnchor: function (out, label, val, seld) {
 		var isInt = _isUnsignedInteger(label),
-			cls = this.$s('button');
+			cls = this.$s('button'),
+			navCls = '';
 
-		if (!isInt)
+		if (!isInt) {
 			cls += ' ' + this.$s('noborder');
+			navCls = ' class="' + this.$s('navigate') + '"';
+		}
 		if (seld)
 			cls += ' ' + this.$s('selected');
 
-		out.push('<li><a name="', this.uuid ,'-button" class="', cls,
+		out.push('<li', navCls,'><a name="', this.uuid ,'-button" class="', cls,
 				'" href="javascript:;" onclick="if (!zk.Widget.$(this)._disabled) zul.mesh.Paging.go(this,', val,
 				')">', label, '</a></li>');
 	},
