@@ -100,7 +100,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 			result = '';
 		//ZK-3636: Added simple support for stacked font awesome icons
 		if (icon) {
-			var icons = icon.split(';'),
+			var icons = icon.split(','),
 				length = icons.length;
 			if (length > 1) {
 				var arr = ['<span class="z-icon-stack">'];
