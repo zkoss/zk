@@ -4,16 +4,15 @@
 	padding-top: 16px;
 
 	> .z-groupbox-header {
-		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
+		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @textColorLight);
 		.size(100%, @baseIconHeight);
 		border: 1px solid @baseBorderColor;
 		border-bottom: 0;
-		padding-left: 10px;
+		padding-left: 12px;
 		line-height: @baseLineHeight;
 		zoom: 1;
 
 		.z-groupbox-title {
-			font-size: 12px;
 			height: auto;
 			min-height: 24px;
 			white-space: nowrap;
@@ -21,16 +20,16 @@
 
 		.z-groupbox-title-content {
 			display: inline-block;
-			padding: 4px 0;
-			line-height: 16px;
+			line-height: @baseButtonHeight;
+			padding: 0 4px;
 		}
 
 		.z-caption, .z-groupbox-title {
 			display: inline;
 			width: auto;
-			padding: 0px 4px;
-			line-height: @baseIconHeight;
-			background: @baseBackgroundColor;
+			padding: 0 4px;
+			line-height: @baseButtonHeight;
+			background: @colorBackground3;
 			position: relative;
 			cursor: pointer;
 
@@ -49,11 +48,12 @@
 	}
 	
 	&-content {
+		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @baseTextColor);
 		display: block;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
 		border: 1px solid @baseBorderColor;
 		border-top: 0;
-		padding: 5px;
+		padding: 8px 16px 16px;
 		overflow: hidden;
 		zoom: 1;
 	}
@@ -63,6 +63,7 @@
 
 		.z-groupbox-content {
 			border-top: 1px solid @baseBorderColor;
+			padding: 16px;
 		}
 	}
 
@@ -75,27 +76,35 @@
 		padding: 0;
 
 		> .z-groupbox-header {
-			font-weight: bold;
 			height: auto;
 			min-height: @baseBarHeight;
 			border-bottom: 1px solid @baseBorderColor;
-			padding: 3px 4px;
-			.verGradient(@baseGradientStart, @baseGradientEnd);
+			padding: 0;
 
 			.z-caption, .z-groupbox-title {
 				display: inline-block;
 				width: 100%;
 				margin: 0;
-				padding: 0;
+				padding: 12px 16px;
 				line-height: @baseButtonHeight;
 				background: none;
-				top: 0px;
+				top: 0;
 			}
 
-			.z-caption-content {
-				padding: 4px 0px 4px 0px;
+			.z-caption-content, .z-groupbox-title-content {
 				line-height: @baseIconHeight;
+				font-size: @fontSizeLarge;
+				color: @textColorLight;
+				padding: 0;
+				> .z-caption-image {
+					margin-left: 0;
+					margin-right: 4px;
+				}
 			}
+		}
+
+		> .z-groupbox-content {
+			padding: 16px;
 		}
 	}
 }

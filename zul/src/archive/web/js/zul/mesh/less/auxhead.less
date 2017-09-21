@@ -19,15 +19,14 @@
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	.verGradient(@baseGradientStart, @baseGradientEnd);
-	background-clip: padding-box;
+	background-color: @colorPrimary;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
 
 	&-content {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, bold, @textColorGrayLight);
-		padding: 4px 5px 3px;
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorDefault3);
+		padding: 8px 16px;
 		line-height: @baseButtonHeight;
 		overflow: hidden;
 	}
@@ -36,6 +35,5 @@
 .ie8 {
 	.z-auxheader {
 		position: static;
-		background: @meshBackgroundColorIE8;
 	}
 }

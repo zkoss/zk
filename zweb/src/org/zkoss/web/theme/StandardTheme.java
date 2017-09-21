@@ -33,11 +33,11 @@ public final class StandardTheme extends Theme {
 	/**
 	 * Name used to identify the default theme
 	 */
-	public static final String DEFAULT_NAME = "breeze";
+	public static final String DEFAULT_NAME = "default";
 	/**
 	 * Name used to display the default theme
 	 */
-	public static final String DEFAULT_DISPLAY = "Breeze";
+	public static final String DEFAULT_DISPLAY = "Default";
 	/**
 	 * Priority of the default theme
 	 */
@@ -60,7 +60,7 @@ public final class StandardTheme extends Theme {
 	 * Instantiate a default theme
 	 */
 	public StandardTheme() {
-		super(DEFAULT_NAME);
+		this(DEFAULT_NAME, DEFAULT_DISPLAY, DEFAULT_PRIORITY);
 	}
 
 	/**

@@ -2,26 +2,27 @@
 
 .z-toolbar {
 	display: block;
-	border-color: @baseBorderColor;
-	border-style: solid;
-	border-width: 0 0 1px;
-	padding: 4px 4px 3px;
-	.verGradient(@baseGradientStart, @baseGradientEnd);
+	border: 0;
+	padding: 6px 16px;
+	background: @colorBackground3;
 	position: relative;
 }
+
+// Toolbar in Tabbox
+.z-toolbar.z-toolbar-tabs {
+	background-color: transparent;
+	position: absolute;
+	right: 0;
+	top: 0;
+	overflow: hidden;
+	z-index: 1;
+}
+
 .z-caption .z-toolbar {
 	background: none;
 	border: 0;
 }
-.z-toolbar-tabs .z-toolbar-content,
-.z-toolbar-tabs .z-toolbar-content span,
-.z-toolbar-content, .z-toolbar-content span {
-	font-size: @fontSizeSmall;
-}
-.z-toolbar-panel .z-toolbar-content,
-.z-toolbar-panel .z-toolbar-content span {
-	font-size: @fontSizeMedium;
-}
+
 // toolbar horizontal alignment
 .z-toolbar-start {
 	float: left;
@@ -37,9 +38,7 @@
 }
 // Toolbar Panel Mold
 .z-toolbar-panel {
-	border-width: 0;
-	padding: 5px;
-	.resetGradient();
+	background-color: transparent;
 }
 
 .z-toolbar-panel .z-toolbar-horizontal,
@@ -48,70 +47,75 @@
 	padding: 0;
 }
 .z-toolbar-panel .z-toolbar-horizontal {
-	padding-left: 3px;
+	padding-left: 8px;
 }
 .z-toolbar-panel .z-toolbar-vertical {
-	padding-bottom: 1px;
+	padding-bottom: 8px;
 }
 
 // Toolbarbutton
 .z-toolbarbutton {
 	display: inline-block;
-	border: 1px solid transparent;
-	.borderRadius(@borderRadiusSmall);
-	margin: 0 2px;
-	padding: 1px 0;
-	line-height: @baseLineHeight;
 	position: relative;
 	cursor: pointer;
 
-	&:hover {
-		border-color: @hoverBorderColor;
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
-	}
-	&:active {
-		border: 1px solid @activeBorderColor;
-		.verGradient(@activeGradientStart, @activeGradientEnd);
-		.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75), 0 0 7px #CFCFCF');
-	}
-	&[disabled] {
-		color: @disabledColor !important;
-		border: 1px solid transparent;
-		.resetGradient();
-		.opacity(@disabledOpacity);
-		cursor: default !important;
-		.boxShadow('none');
+	&-content {
+		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @toolbarButtonColor);
+		background-color: @toolbarButtonBackgroundColor;
+		border: 2px solid transparent;
+		.borderRadius(@inputBorderRadius);
+		padding: @toolbarButtonPadding;
+		line-height: @fontSizeLarge;
+		display: inline-block;
+		vertical-align: middle;
+		position: relative;
+		white-space: nowrap;
+		> img, > i {
+			margin-right: 4px;
+			max-height: 20px;
+			max-width: 20px;
+			font-size: 20px;
+			vertical-align: middle;
+		}
+
+		.z-toolbarbutton:hover & {
+			color: @buttonHoverColor;
+			border-color: @buttonHoverBorderColor;
+			background-color: @buttonHoverBackgroundColor;
+		}
+		.z-toolbarbutton:active & {
+			color: @buttonActiveColor;
+			border-color: @buttonActiveBorderColor;
+			background-color: @buttonActiveBackgroundColor;
+		}
+		.z-toolbarbutton:focus & {
+			color: @buttonFocusColor;
+			border-color: @buttonFocusBorderColor;
+			background-color: @buttonFocusBackgroundColor;
+		}
+		.z-toolbarbutton[disabled] & {
+			color: @buttonDisableColor !important;
+			border-color: @buttonDisableBorderColor;
+			background-color: @buttonDisableBackgroundColor;
+			cursor: default !important;
+		}
+		.z-toolbarbutton-checked & {
+			color: @toolbarButtonCheckedColor;
+			background-color: @toolbarButtonCheckedBackgroundColor;
+		}
 	}
 }
 
-.z-toolbarbutton-checked {
-	border: 1px solid @checkedBorderColor;
-	.borderRadius(@borderRadiusSmall);
-	.verGradient(@checkedGradientStart, @checkedGradientEnd);
-}
-.z-toolbarbutton-content {
-	.fontStyle(@baseTitleFontFamily, @fontSizeSmall, normal, @baseTextColor);
-	padding: 2px;
-	line-height: @baseLineHeight + 6; // 20px for IE to v-align center
-	vertical-align: middle;
-	position: relative;
-	text-shadow: 0 1px #FFFFFF;
-	white-space:nowrap;
+.z-toolbar-content > * {
+	margin-left: 8px;
+	&:first-child {
+		margin-left: 0;
+	}
 }
 
-.ie8 {
-	.z-toolbar {
-		.gradientFallback(@baseGradientStart, @baseGradientEnd);
-	}
-	.z-toolbarbutton {
-		&:hover {
-			.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
-		}
-		&:active {
-			.gradientFallback(@activeGradientStart, @activeGradientEnd);
-		}
-	}
-	.z-toolbarbutton-checked {
-		.gradientFallback(@checkedGradientStart, @checkedGradientEnd);
+.z-toolbar-vertical {
+	.z-toolbar-content > * {
+		margin-left: 0;
 	}
 }
+

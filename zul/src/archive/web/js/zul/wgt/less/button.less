@@ -1,58 +1,44 @@
 @import "~./zul/less/_header.less";
 
 .z-button {
-	.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @baseTextColor);
+	.fontStyle(@baseTitleFontFamily, @inputTextSize, normal, @buttonColor);
 	min-height: @baseButtonHeight;
-	border: 1px solid @buttonBorderColor;
-	.borderRadius(@baseBorderRadius);
-	padding: 3px 12px;
+	border: 2px solid @buttonBorderColor;
+	.borderRadius(@inputBorderRadius);
+	padding: @buttonPadding;
 	line-height: @baseLineHeight;
-	.verGradient(@buttonGradientStart, @buttonGradientEnd);
-	text-shadow: 0 1px #FFFFFF;
+	background-color: @buttonBackgroundColor;
+	.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
 	cursor: pointer;
 	white-space: nowrap;
 
 	&:hover {
-		border-color: @hoverBorderColor;
-		.verGradient(@hoverGradientStart, @hoverGradientEnd);
+		color: @buttonHoverColor;
+		border-color: @buttonHoverBorderColor;
+		background-color: @buttonHoverBackgroundColor;
 	}
 	&:focus {
-		color: @focusColor;
-		border-color: @focusBorderColor;
-		.verGradient(@focusGradientStart, @focusGradientEnd);
-		.boxShadow('inset 0 0 2px #0CBCFF');
+		color: @buttonFocusColor;
+		border-color: @buttonFocusBorderColor;
+		background-color: @buttonFocusBackgroundColor;
 	}
 	&:active {
-		border-color: @activeBorderColor;
-		.verGradient(@activeGradientStart, @activeGradientEnd);
+		color: @buttonActiveColor;
+		border-color: @buttonActiveBorderColor;
+		background-color: @buttonActiveBackgroundColor;
 	}
 	&[disabled] {
-		border-color: @buttonBorderColor;
-		.verGradient(@buttonGradientStart, @buttonGradientEnd);
-		.opacity(@disabledOpacity);
-		.boxShadow('none');
+		color: @buttonDisableColor;
+		border-color: @buttonDisableBorderColor;
+		background-color: @buttonDisableBackgroundColor;
 		cursor: default;
 	}
 	img {
 		vertical-align: middle;
+		max-width: 18px;
+		max-height: 18px;
 	}
-}
-
-.ie8 {
-	.z-button {
-		min-height: @baseButtonHeight - 8; //minus padding border height
-		.gradientFallback(@buttonGradientStart, @buttonGradientEnd);
-		&:hover {
-			.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
-		}
-		&:focus {
-			.gradientFallback(@focusGradientStart, @focusGradientEnd);
-		}
-		&:active {
-			.gradientFallback(@activeGradientStart, @activeGradientEnd);
-		}
-		&[disabled] {
-			.gradientFallback(@buttonGradientStart, @buttonGradientEnd);
-		}
+	i {
+		font-size: 18px;
 	}
 }

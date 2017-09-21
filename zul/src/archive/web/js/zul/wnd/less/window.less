@@ -8,19 +8,19 @@
 .z-window {
 	// ZK-2115: the style should apply [overflow: hidden]
 	.defaultOverflowZoom();
-	border: 1px solid @windowBorderColor;
-	.borderRadius(@baseBorderRadius);
-	padding: @windowFramePadding;
-	background: @windowBackgroundColor;
+	border: 1px solid @containerBorderColor;
+	.borderRadius(@containerBorderRadius);
+	padding: @containerPadding;
+	background-color: @containerBackground;
 
 	&-shadow {
-		.boxShadow('0 0 4px rgba(0, 0, 0, 0.25)');
+		.boxShadow('0 3px 6px rgba(0, 0, 0, 0.24)');
 	}
 
 	&-header {
-		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
-		padding: 3px 0 5px 0;
+		.fontStyle(@baseTitleFontFamily, @containerHeaderTextSize, normal, @containerHeaderColor);
 		line-height: @baseButtonWidth;
+		padding-bottom: @containerPadding;
 		.defaultOverflowZoom();
 		cursor: default;
 
@@ -30,22 +30,18 @@
 	}
 
 	&-content {
-		border: 1px solid @baseBorderColor;
-		margin: 0px;
-		padding: 4px;
-		background: @baseBackgroundColor;
+		padding: @containerPadding;
+		background: @colorBackground3;
 		.defaultOverflowZoom();
 	}
 
 	&-icon {
-		font-size: @fontSizeLarge;
-		color: @iconColor;
+		font-size: @containerButtonSize;
+		color: @containerButtonColor;
 		.displaySize(block, @baseButtonWidth + 4, @baseButtonHeight);
-		border: 1px solid @baseBorderColor;
-		.borderRadius(@baseBorderRadius);
 		margin: auto 1px;
+		padding: 4px;
 		line-height: @baseButtonHeight;
-		.verGradient(@baseGradientStart, @baseGradientEnd);
 		text-align: center;
 		overflow: hidden;
 		cursor: pointer;
@@ -53,20 +49,9 @@
 
 		&:hover {
 			color: @iconHoverColor;
-			border-color: @hoverBorderColor;
-			.resetGradient();
-			background: @hoverBackgroundColor;
 		}
 	}
 
-	&-close {
-		font-size: @fontSizeXLarge;
-		line-height: 23px;
-	}
-
-	&-minimize {
-		padding-top: 5px;
-	}
 
 	&-resize-faker {
 		border: 1px dashed #1854C2;
@@ -80,8 +65,8 @@
 	}
 
 	&-move-ghost {
-		border: 1px solid #9F9F9F;
-		.topBorderRadius(@baseBorderRadius);
+		border: 1px solid @containerBorderColor;
+		.borderRadius(@containerBorderRadius);
 		padding: 0;
 		background: #D7E6F7;
 		.opacity(0.65);
@@ -89,14 +74,10 @@
 		overflow: hidden;
 		cursor: move !important;
 
-		.z-window-header {
-			padding: 7px 4px 5px 4px;
-		}
-
 		dl {
 			font-size: 0;
 			display: block;
-			border-top: 1px solid @baseBorderColor;
+			border-top: 1px solid @containerBorderColor;
 			margin: 0;
 			padding: 0;
 			line-height: 0;
@@ -104,36 +85,7 @@
 		}
 	}
 
-	&-popup {
-		.topBorderRadius(@baseBorderRadius);
-		padding: @windowFramePadding @windowFramePadding 0;
-		
-		> .z-window-content {
-			border-width: 0;
-			margin: 0 -1*@windowFramePadding 0 -1*@windowFramePadding;
-		}
-
-		&.z-window-noheader {
-			padding-top: 0;
-			
-			> .z-window-content {
-				margin: 0 -1*@windowFramePadding;
-			}
-		}
-
-		&.z-window-noborder > .z-window-content {
-			margin: 0 -1*@windowFramePadding -1*@windowFramePadding;
-		}
-	}
-
-	&-modal&-shadow, &-highlighted&-shadow {
-		.borderRadius(@baseBorderRadius);
-		.boxShadow('inset 0px 1px 1px #FFFFFF, 0 0 4px rgba(0, 0, 0, 0.7)');
-	}
-
 	&-embedded {
-		.borderRadius(0);
-
 		.z-window-shadow {
 			.boxShadow('none');
 		}
@@ -141,38 +93,36 @@
 
 	&-noborder {
 		border: 0;
-		padding: @windowFramePadding @windowFramePadding 0;
 
 		> .z-window-content {
 			border: 0;
-			margin: 0 -1*@windowFramePadding;
-		}
-
-		&.z-window-noheader {
-			padding: 0;
-
-			> .z-window-content {
-				margin: 0;
-			}
-		}
-
-		&.z-window-shadow {
-			.boxShadow('0 0 3px rgba(0, 0, 0, 0.5)');
 		}
 	}
 }
 
 .z-messagebox {
+	margin-left: 16px;
+
 	&-window.z-window-modal .z-window-content, 
 	&-window.z-window-highlighted .z-window-content {
-		padding: 17px;
-		padding-bottom: 15px;
+		padding: 16px;
+	}
+
+	&-window .z-separator {
+		height: 32px !important;
 	}
 
 	.z-label {
 		font-family: @baseContentFontFamily;
-		font-size: @fontSizeMedium;
-		color: @textColorGrayDark;
+		font-size: @baseFontSize;
+		color: @baseTextColor;
+	}
+
+	&-buttons {
+		text-align: right;
+		& > * {
+			margin-left: 8px;
+		}
 	}
 
 	&-button {
@@ -209,7 +159,6 @@
 
 .ie8 {
 	.z-window-icon {
-		.gradientFallback(@baseGradientStart, @baseGradientEnd);
 		.z-icon-minus {
 			margin-left: 1px;
 		}

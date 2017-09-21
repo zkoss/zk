@@ -1,16 +1,11 @@
 @import "~./zul/less/_header.less";
 
 .z-paging {
-	height: @baseBarHeight;
-	border-bottom: 1px solid @pagingBorderColor;
-	padding: 4px 10px 3px;
+	height: @pagingHeight;
+	padding: 4px 16px 3px;
 	background: @pagingBackgroundColor;
 	position: relative;
-	
-	&-os {
-		border-bottom: none;
-		padding-bottom: 4px;
-	}
+
 	ul {
 		display: inline-block;
 		margin: 0;
@@ -18,19 +13,22 @@
 		
 		> li {
 			display: inline;
+			margin-left: 2px;
+			&:first-child {
+				margin-left: 0;
+			}
 		}
 	}
 	&-button {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @pagingColor);
+		.fontStyle(@baseContentFontFamily, @fontSizeLarge, normal, @pagingColor);
 		display: inline-block;
-		min-width: @baseButtonWidth;
-		height: @baseButtonHeight;
-		border: 1px solid @pagingBorderColor;
+		min-width: @pagingButtonMinWidth;
+		height: @pagingButtonHeight;
 		.borderRadius(@borderRadiusSmall);
-		margin-right: 6px;
-		padding: 4px 0px;
-		line-height: @baseLineHeight;
-		.verGradient(@baseGradientStart, @baseGradientEnd);
+		padding: 4px;
+		margin: 5px 0;
+		line-height: normal;
+		background-color: transparent;
 		text-align: center;
 		vertical-align: top;
 		cursor: pointer;
@@ -38,71 +36,43 @@
 		white-space: nowrap;
 		
 		&:hover {
-			border-color: @pagingActiveBorderColor;
-			.boxShadow('0 0 2px rgba(0, 0, 0, 0.34)');
+			background-color: @pagingItemHoverBackgroundColor;
 		}
 		&:active {
-			border-color: @pagingActiveBorderColor @pagingBorderColor;
-			.verGradient(@baseGradientEnd, @baseGradientStart);
+			color: @pagingItemActiveColor;
+			background-color: @pagingItemActiveBackgroundColor;
 		}
 		&[disabled] {
 			color: @disabledColor;
 			.opacity(@disabledOpacity);
 			cursor: default;
-			
 			&:hover {
-				border-color: @pagingBorderColor;
-				.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
-			}
-			&:active {
-				border-color: @pagingBorderColor;
-				.verGradient(@baseGradientStart, @baseGradientEnd);
-			}
-			.z-paging-icon,
-			.z-paging-icon:hover {
-				color: @disabledColor;
+				background-color: transparent;
 			}
 		}
 	}
 	.z-paging-icon {
-		.iconFontStyle(@fontSizeXLarge, @pagingColor);
+		font-size: @fontSizeLarge;
 		line-height: @baseLineHeight;
 	}
 	&-noborder {
 		border-color: transparent;
-		.resetGradient();
-		&:hover {
+		&:hover, &:active {
 			border-color: transparent;
-			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
-			text-decoration: underline;
-		}
-		&:active {
-			border-color: transparent;
-			.resetGradient();
 		}
 	}
 	&-selected {
-		color: @pagingSelectedColor;
-		border-color: @pagingActiveBorderColor;
-		.resetGradient();
-		background: @pagingSelectedBackgroundColor;
-		&:hover {
-			border-color: @pagingActiveBorderColor;
-			.boxShadow('0 0 0 rgba(0, 0, 0, 0)');
-		}
-		&:active {
-			border-color: @pagingActiveBorderColor;
-			.resetGradient();
-			background: @pagingSelectedBackgroundColor;
-		}
+		color: @pagingItemSelectedColor;
+		background: @pagingItemSelectedBackgroundColor;
 	}
 	&-input {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
-		height: @baseButtonHeight;
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @pagingColor);
+		.size(42px, 36px);
 		border: 1px solid @pagingBorderColor;
+		.borderRadius(@baseBorderRadius);
 		margin-left: 6px;
-		padding: 3px 0;
-		line-height: 20px;
+		padding: @inputPadding;
+		line-height: @baseLineHeight;
 		vertical-align: baseline;
 		&[disabled] {
 			color: @disabledColor;
@@ -111,18 +81,42 @@
 		}
 	}
 	&-text {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
-		margin-right: 12px;
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @pagingColor);
+		margin-right: 6px;
 		&-disabled {
 			color: @disabledColor;
 		}
 	}
 	&-info {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayDark);
-		padding: 4px 0;
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorLighter);
+		padding: 10px 0;
 		position: absolute;
 		top: 4px;
-		right: 10px;
+		right: 16px;
+	}
+}
+
+.z-paging-os {
+	border-bottom: none;
+	padding-bottom: 4px;
+
+	ul {
+		> li {
+			margin-left: 4px;
+		}
+		> li.z-paging-navigate + li,
+		> li + li.z-paging-navigate {
+			margin-left: 8px;
+		}
+		// for special case
+		> li.z-paging-navigate + li.z-paging-navigate {
+			margin-left: 4px;
+		}
+	}
+
+	.z-paging-button {
+		font-size: @fontSizeMedium;
+		padding: 4px 8px;
 	}
 }
 
@@ -130,17 +124,6 @@
 	.z-paging {
 		&-input {
 			vertical-align: middle;
-		}
-		&-button {
-			.gradientFallback(@baseGradientStart, @baseGradientEnd);
-			&:active {
-				.gradientFallback(@baseGradientEnd, @baseGradientStart);
-			}
-			&[disabled] {
-				&:active {
-					.gradientFallback(@baseGradientStart, @baseGradientEnd);
-				}
-			}
 		}
 	}
 }

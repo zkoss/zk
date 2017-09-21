@@ -42,30 +42,34 @@ td.z-splitter-outer {
 	padding: 0;
 }
 .z-splitter {
-	border: 1px solid @baseBorderColor;
-	
+	border: 1px solid @splitterBorderColor;
+	background-color: @splitterBackgroundColor;
+
+	&:hover {
+		background-color: @splitterHoverBackgroundColor;
+	}
+
 	&-horizontal {
 		width: @splitterSize;
 		border-width: 0 1px;
-		.horGradient(@splitterGradientStart, @splitterGradientEnd);
 		overflow: hidden;
-		cursor: e-resize;
+		cursor: col-resize;
 		
 		> .z-splitter-button {
 			.size(@splitterSize, 30px);
 			border-width: 1px 0;
 		}
 		.z-splitter-icon {
-			font-size: @fontSizeXSmall + 1; // add 1px more for .z-icon-caret
+			font-size: @splitterButtonTextSize;
 			position: absolute;
 			top: 9px;
-			left: 1px;
+			left: -1px;
 			
 			&.z-icon-ellipsis-v {
-				font-size: @fontSizeXSmall;
 				top: -21px;
 				left: 2px;
-				cursor: e-resize;
+				cursor: col-resize;
+				visibility: hidden;
 			}
 			&.z-icon-ellipsis-v ~ .z-splitter-icon.z-icon-ellipsis-v {
 				top: 39px;
@@ -75,25 +79,25 @@ td.z-splitter-outer {
 	&-vertical {
 		height: @splitterSize;
 		border-width: 1px 0;
-		.verGradient(@splitterGradientStart, @splitterGradientEnd);
 		overflow: hidden;
-		cursor: s-resize;
+		cursor: row-resize;
 		
 		> .z-splitter-button {
 			.size(30px, @splitterSize);
 			border-width: 0 1px;
 		}
 		.z-splitter-icon {
-			font-size: @fontSizeXSmall;
+			font-size: @splitterButtonTextSize;
 			line-height: normal;
 			position: absolute;
-			top: -3px;
+			top: -2px;
 			left: 11px;
 			
 			&.z-icon-ellipsis-h {
 				top: -2px;
 				left: -16px;
-				cursor: s-resize;
+				cursor: row-resize;
+				visibility: hidden;
 			}
 			&.z-icon-ellipsis-h ~ .z-splitter-icon.z-icon-ellipsis-h {
 				left: 36px;
@@ -101,9 +105,8 @@ td.z-splitter-outer {
 		}
 	}
 	&-button {
-		color: @iconColor;
+		color: @splitterButtonTextColor;
 		display: inline-block;
-		border: 1px solid @baseBorderColor;
 		position: relative;
 		vertical-align: top; //vertical-align: make it looks same in diff browsers
 		cursor: pointer;
@@ -112,33 +115,24 @@ td.z-splitter-outer {
 			border: 0;
 			
 			.z-splitter-vertical & {
-				cursor: s-resize;
+				cursor: row-resize;
 			}
 			.z-splitter-horizontal & {
-				cursor: e-resize;
+				cursor: col-resize;
 			}
 		}
-	}
-	&-icon {
-		.opacity(0.5);
 	}
 	&-nosplitter {
 		cursor: default;
 	}
-}
-.z-icon-caret-up,
-.z-icon-caret-down,
-.z-icon-caret-right,
-.z-icon-caret-left {
-	.z-splitter-button:hover & {
-		.opacity(1);
+	&-ghost {
+		background: @splitterDragBackgroundColor !important;
 	}
 }
 
 .ie8 {
 	.z-splitter {
 		&-horizontal {
-			.gradientFallback(@splitterGradientStart, @splitterGradientEnd);
 			.z-splitter-icon {
 				&.z-icon-ellipsis-v {
 					font-size: @baseFontSize;
@@ -149,7 +143,6 @@ td.z-splitter-outer {
 			}
 		}
 		&-vertical {
-			.gradientFallback(@splitterGradientStart, @splitterGradientEnd);
 			.z-splitter-icon {
 				&.z-icon-ellipsis-h {
 					font-size: @baseFontSize;

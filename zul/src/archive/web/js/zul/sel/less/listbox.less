@@ -3,7 +3,7 @@
 //reset table
 .resetTable() {
 	table {
-		border-spacing: 0;
+		border-collapse: collapse;
 		th, td {
 			background-clip: padding-box;
 			padding: 0;
@@ -14,6 +14,17 @@
 	}
 }
 
+// checkbox style
+.checkable() {
+	.displaySize(inline-block, 20px, 20px);
+	.iconFontStyle(@checkedIconSize, @checkedColor);
+	border: 1px solid @checkedBorderColor;
+	background: @checkedBackgroundColor;
+	vertical-align: text-top;
+	margin-right: 8px;
+	.borderRadius(@baseBorderRadius);
+}
+
 //listbox
 .z-listbox {
 	border: 1px solid @baseBorderColor;
@@ -22,7 +33,7 @@
 	//listbox header
 	&-header {
 		width: 100%;
-		.verGradient(@baseGradientStart, @baseGradientEnd);
+		background-color: @meshTitleBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -40,29 +51,18 @@
 		//ZK-3263: scroll issue (chrome scroll anchor bug)
 		overflow-anchor: none;
 	}
-	&-emptybody td {
+	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
-		font-style: italic;
-		text-align: center;
+		text-align: left;
 		height: 1px;
+		padding: 12px 16px;
 	}
 	//listbox footer
 	&-footer {
+		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		.resetTable();
-
-		.z-listfooter {
-			background: @meshFootBackgroundColor;
-		}
-	}
-
-	.z-listcell {
-		background: @meshBackgroundColor;
-	}
-
-	&-odd > .z-listcell {
-		background: @meshStripeBackgroundColor;
 	}
 }
 //listhead
@@ -77,97 +77,105 @@
 		border-right: none;
 	}
 	&-bar {
-		border-right: 1px solid @meshTitleBorderColor;
+		border-left: 1px solid @meshTitleBorderColor;
 		border-bottom: 1px solid @meshTitleBorderColor;
+	}
+	th.z-listheader + th.z-listhead-bar {
+		border-right: none;
 	}
 }
 .z-listheader {
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	.verGradient(@baseGradientStart, @baseGradientEnd);
-	background-clip: padding-box;
+	background-color: @meshTitleBackgroundColor;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
-	
-	&-hover {
-		.verGradient(@meshTitleHoverStart, @meshTitleHoverEnd);
-	}
+
 	&-sort {
 		.z-listheader-content {
 			cursor: pointer;
 		}
 		.z-listheader-sorticon {
-			color: @iconColor;
+			.iconFontStyle(@fontSizeLarge, @meshTitleColor);
 			position: absolute;
 			top: -7px;
 			left: 50%;
 		}
+		:active {
+			background-color: @meshTitleActiveBackgroundColor;
+		}
 	}
-	&-hover .z-listheader-button {
-		display: block;
+	&-hover {
+		background-color: @meshTitleHoverBackgroundColor;
+		.z-listheader-button {
+			display: block;
+		}
+	}
+	&-visited {
+		background-color: @meshTitleBackgroundColor;
+		.z-listheader-button {
+			background-color: @meshTitleBorderColor;
+		}
 	}
 	&-checkable {
-		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
-		border: 1px solid @checkedBorderColor;
-		background: @checkedBackgroundColor;
-		vertical-align: text-top;
+		.checkable();
 		
 		.z-listheader-icon {
 			display: none;
 			cursor: default;
 		}
 		&.z-listheader-checked .z-listheader-icon {
-			color: @checkedColor;
 			display: block;
-			padding-left: 1px;
-			line-height: @baseLineHeight;
+			line-height: @checkedIconSize;
 		}
 	}
 	&-button {
-		color: @iconColor;
-		.displaySize(none, @baseButtonWidth - 1, @baseBarHeight);
-		border-right: 1px solid darken(@meshTitleHoverStart, 15%);
-		line-height: @baseBarHeight;
+		.iconFontStyle(@fontSizeLarge, @meshTitleColor);
+		display: none;
+		.size(34px, 48px);
+		line-height: 48px;
 		text-align: center;
 		position: absolute;
 		top: 0;
 		right: 0;
 		text-decoration: none;
 		cursor: pointer;
+		.boxShadow('inset 1px 0 @{meshTitleBorderColor}');
 		z-index: 15;
-		.boxShadow('inset 1px 0 #FFFFFF');
-		
-		&:hover {
-			.verGradient(darken(@meshTitleHoverStart, 5%), darken(@meshTitleHoverEnd, 10%));
-		}
 	}
+
 	&-sizing,
 	&-sizing .z-listheader-button,
 	&-sizing.z-listheader-sort .z-listheader-content {
-		cursor: e-resize;
+		cursor: col-resize;
 	}
 }
 // ZK-2151: use strict selector to prevent nest problem
 //list item and cell
 .z-listitem {
 	background: @meshBackgroundColor;
-	
-	td:last-child {
-		border-right: none;
+
+	&.z-listbox-odd {
+		background: @meshStripeBackgroundColor;
 	}
+
+	&:first-child {
+		.z-listcell {
+			border-top-width: 0;
+		}
+	}
+	
 	//list cell
 	.z-listcell {
-		border-right: 1px solid @meshContentBorderColor;
+		border-top: 1px solid @meshContentBorderColor;
 		overflow: hidden;
 		cursor: pointer;
 	}
 	&:hover {
+		background-color: @hoverBackgroundColor;
 		> .z-listcell {
-			.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
-			background-clip: padding-box;
-
 			> .z-listcell-content {
 				color: @hoverColor;
 			}
@@ -175,13 +183,10 @@
 	}
 	//check mark
 	&-checkable {
-		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
-		border: 1px solid @checkedBorderColor;
-		background: @checkedBackgroundColor;
-		vertical-align: text-top;
+		.checkable();
 		
 		&.z-listitem-radio {
-			.borderRadius(@baseIconWidth / 2);
+			.borderRadius(50%);
 		}
 		.z-listitem-icon {
 			display: none;
@@ -190,10 +195,8 @@
 	}
 	//selected list cell
 	&.z-listitem-selected {
+		background-color: @selectedBackgroundColor;
 		> .z-listcell {
-			border-color: @selectedGradientStart;
-			.verGradient(@selectedGradientStart, @selectedGradientEnd);
-			background-clip: padding-box;
 			position: relative;
 
 			> .z-listcell-content {
@@ -201,9 +204,8 @@
 			}
 		}
 		&:hover {
+			background-color: @selectedHoverBackgroundColor;
 			> .z-listcell {
-				border-color: @selectedHoverGradientStart;
-				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 				position: relative;
 			}
 			.z-listcell-content {
@@ -212,10 +214,8 @@
 		}
 	}
 	&.z-listitem-selected.z-listitem-focus {
+		background-color: @selectedFocusBackgroundColor;
 		> .z-listcell {
-			border-color: @selectedGradientStart;
-			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
-			background-clip: padding-box;
 			position: relative;
 
 			> .z-listcell-content {
@@ -223,9 +223,8 @@
 			}
 		}
 		&:hover {
+			background-color: @selectedHoverBackgroundColor;
 			> .z-listcell {
-				border-color: @selectedHoverGradientStart;
-				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 				position: relative;
 			}
 			.z-listcell-content {
@@ -234,9 +233,8 @@
 		}
 	}
 	&-focus {
+		background-color: @meshContentFocusBackgroundColor;
 		> .z-listcell {
-			.verGradient(@meshContentFocusStart, @meshContentFocusEnd);
-			background-clip: padding-box;
 			position: relative;
 		}
 		.z-listcell-content {
@@ -247,19 +245,19 @@
 	&-selected {
 		> .z-listcell > .z-listcell-content 
 			> .z-listitem-checkable .z-listitem-icon {
-			color: @checkedColor;
 			display: block;
-			padding-left: 1px;
-			line-height: @baseLineHeight;
+			line-height: @checkedIconSize;
 			cursor: pointer;
 			
 			&.z-icon-check {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
-				.size(@baseIconWidth / 2, @baseIconWidth / 2);
-				.borderRadius(@baseIconWidth / 4);
-				margin: 3px;
-				padding: 0;
+				.size(10px, 10px);
+				.borderRadius(50%);
 				background: @checkedColor;
+				position: relative;
+				top: 50%;
+				left: 50%;
+				.transform('translate(-50%, -50%)');
 			}
 		}
 	}
@@ -270,7 +268,6 @@
 			cursor: default !important;
 		}
 		&:hover > .z-listcell {
-			.resetGradient();
 			position: relative;
 		}
 		a, a:visited, a:hover {
@@ -295,25 +292,27 @@ body:not(.gecko) {
 //Group
 .z-listgroup {
 	&-inner {
-		border: 1px solid @meshTitleBorderColor;
-		border-left: none;
-		border-right: none;
-		.verGradient(@groupGradientStart, @groupGradientEnd);
+		border-top: 1px solid @meshContentBorderColor;
+		border-bottom: 1px solid @meshGroupBorderColor;
+		background-color: @meshGroupBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		
 		.z-listcell-content,
 		.z-listgroup-content {
-			padding: 3px 5px;
+			padding: 8px 16px;
+		}
+	}
+	&&-open &-inner {
+		border-bottom: 2px solid @meshGroupOpenBorderColor;
+		& .z-listgroup-icon,
+		& .z-listcell-content {
+			color: @meshGroupOpenColor;
 		}
 	}
 	//check mark
 	&-checkable {
-		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
-		border: 1px solid @checkedBorderColor;
-		margin-right: 2px;
-		background: @checkedBackgroundColor;
-		vertical-align: text-top;
+		.checkable();
 		
 		.z-listgroup-icon {
 			display: none;
@@ -335,45 +334,51 @@ body:not(.gecko) {
 		}
 	}
 	&-icon {
-		.iconFontStyle(@baseFontSize, @iconColor);
+		.iconFontStyle(@fontSizeLarge, @meshGroupColor);
 		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
 		line-height: @baseIconHeight;
 		text-align: center;
 		vertical-align: text-top;
 		position: relative;
 		cursor: pointer;
-		
-		&:hover {
-			color: @iconHoverColor;
-		}
+		margin-right: 8px;
 	}
 }
-.z-listgroupfoot-inner {
-	.verGradient(@groupGradientEnd, @groupGradientStart);
-	overflow: hidden;
-}
+
 //content
 .z-listheader-content,
 .z-listcell-content,
 .z-listgroup-content,
 .z-listgroupfoot-content,
 .z-listfooter-content {
-	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayLight);
-	padding: 4px 5px;
-	line-height: @baseButtonHeight;
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
+	line-height: 1.3em;
 	overflow: hidden;
+	padding: 12px 16px;
 }
 .z-listheader-content {
-	font-weight: bold;
-	padding: 4px 5px 3px;
+	color: @meshTitleColor;
 	position: relative;
 }
-.z-listgroup-content,
-.z-listgroupfoot-content {
-	.z-label {
-		font-weight: bold;
+.z-listfooter-content {
+	color: @textColorLight;
+}
+.z-listgroup .z-listcell-content {
+	color: @meshGroupColor;
+}
+.z-listgroupfoot {
+	&-inner {
+		border-top: 1px solid @meshContentBorderColor;
+	}
+	& .z-listcell-content {
+		color: @meshGroupFooterColor;
+		padding: 8px 16px;
+		.z-listgroup-open& {
+			color: @meshGroupFooterOpenColor;
+		}
 	}
 }
+
 //paging
 .z-listbox-paging {
 	&-top {
@@ -410,35 +415,26 @@ body:not(.gecko) {
 	font-size: @fontSizeMedium;
 }
 
+.ie {
+	// Prevent sub-pixel rounding that causes scrollbar appear
+	.z-listbox-body table {
+		overflow: hidden;
+	}
+}
+
 // ZK-2151: use strict selector to prevent nest problem
 // IE8
-.ie8 { 
-	.z-listbox-header {
-		background: @meshBackgroundColorIE8;
-	}
+.ie8 {
 	.z-listheader {
 		position: static;
-		background: @meshBackgroundColorIE8;
-		&-hover {
-			background: @meshHoverBackgroundColorIE8;
-		}
-
-		&-button:hover {
-			background: darken(@meshHoverBackgroundColorIE8, 3%);
-		}
 	}
 	.z-listitem {
-		&:hover > .z-listcell {
-			background: @meshHoverBackgroundColorIE8;
-		}
 		&.z-listitem-selected {
 			> .z-listcell {
 				position: static;
-				background: @meshSelectedBackgroundColorIE8;
 			}
 			&:hover > .z-listcell {
 				position: static;
-				background: @meshSelectedHoverBackgroundColorIE8;
 			}
 		}
 	}
@@ -467,12 +463,6 @@ body:not(.gecko) {
 		.displaySize(block, 13px, 13px);
 		margin: 0;
 		background-position: -26px -13px;
-	}
-	.z-listgroup-inner {
-		background: @meshGroupBackgroundColorIE8;
-	}
-	.z-listgroupfoot-inner {
-		background: @meshGroupFooterBackgroundColorIE8;
 	}
 }
 .ie8-checkable-icon(@comp) {
