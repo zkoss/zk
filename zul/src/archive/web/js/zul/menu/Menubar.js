@@ -33,7 +33,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
-
+	_bodyScrollLeft: 0,
 	$define: {
 		/** Returns the orient.
 		 * <p>Default: "horizontal".
@@ -118,7 +118,6 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	onSize: function () {
 		this._checkScrolling();
 	},
-
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._checkScrolling();
@@ -151,7 +150,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			this._scrolling = true;
 		else {
 			this._scrolling = false;
-			body.scrollLeft = 0;
+			this._fixBodyScrollLeft(0);
 			 //ZK-3094: Scrollable menubar body is not properly resized after container resizing.
 			body.style.width = '';
 		}
@@ -166,9 +165,9 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_fixScrollPos: function () {
 		var body = this.$n('body'),
 			childs = jq(this.$n('cave')).children();
-		if (childs[childs.length - 1].offsetLeft < body.scrollLeft) {
+		if (childs[childs.length - 1].offsetLeft < this._bodyScrollLeft) {
 			var movePos = childs[childs.length - 1].offsetLeft;
-			body.scrollLeft = movePos;
+			this._fixBodyScrollLeft(movePos);
 		}
 	},
 	_fixButtonPos: function (node) {
@@ -199,11 +198,14 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_doScroll: function (evt) {
 		this._scroll(evt.domTarget == this.$n('left') || evt.domTarget.parentNode == this.$n('left') ? 'left' : 'right');
 	},
+	_fixBodyScrollLeft: function (scrollLeft) {
+		this.$n('body').scrollLeft = this._bodyScrollLeft = scrollLeft;
+	},
 	_scroll: function (direction) {
 		if (!this.checkScrollable() || this._runId) return;
 		var self = this,
 			body = this.$n('body'),
-			currScrollLeft = body.scrollLeft,
+			currScrollLeft = this._bodyScrollLeft,
 			childs = jq(this.$n('cave')).children(),
 			childLen = childs.length,
 			movePos = 0;
@@ -218,7 +220,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 					|| childs[i].offsetLeft + (childs[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
 					var preChild = childs[i].previousSibling;
 					if (!preChild)	return;
-					movePos = currScrollLeft - (currScrollLeft - preChild.offsetLeft);
+					movePos = preChild.offsetLeft;
 					if (isNaN(movePos)) return;
 					self._runId = setInterval(function () {
 						if (!self._moveTo(body, movePos)) {
@@ -248,7 +250,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		}
 	},
 	_moveTo: function (body, moveDest) {
-		var currPos = body.scrollLeft;
+		var currPos = this._bodyScrollLeft;
 		if (currPos == moveDest)
 			return false;
 
@@ -258,7 +260,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		if ((setTo < moveDest && delta < 0) || (setTo > moveDest && delta > 0))
 			setTo = moveDest;
 
-		body.scrollLeft = setTo;
+		this._fixBodyScrollLeft(setTo);
 		return true;
 	},
 	_afterMove: function () {

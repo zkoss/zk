@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3626.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 20 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<menubar width="300px" scrollable="true">
+		<menu label="Menu1">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+		<menu label="Menu2">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+		<menu label="Menu3">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+		<menu label="Menu4">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+		<menu label="Menu5">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+		<menu label="Menu6">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+		<menu label="Menu7">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+		<menu label="Menu8">
+			<menupopup>
+				<menuitem label="Submenu"/>
+			</menupopup>
+		</menu>
+	</menubar>
+	<separator/>
+	<tabbox width="300px" height="100px">
+		<tabs>
+			<tab label="Tab 1"/>
+			<tab label="Tab 2"/>
+			<tab label="Tab 3"/>
+			<tab label="Tab 4"/>
+			<tab label="Tab 5"/>
+			<tab label="Tab 6"/>
+			<tab label="Tab 7"/>
+			<tab label="Tab 8"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel style="color:#336699;">Panel 1</tabpanel>
+			<tabpanel style="color:#333399;">Panel 2</tabpanel>
+			<tabpanel style="color:#663366;">Panel 3</tabpanel>
+			<tabpanel style="color:#CC0033;">Panel 4</tabpanel>
+			<tabpanel style="color:#CC3300;">Panel 5</tabpanel>
+			<tabpanel style="color:#FF9900;">Panel 6</tabpanel>
+			<tabpanel style="color:#ABEA14;">Panel 7</tabpanel>
+			<tabpanel style="color:#008DB7;">Panel 8</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<separator/>
+	<tabbox orient="vertical" width="300px" height="150px">
+		<tabs width="200px">
+			<tab label="Tab 1"/>
+			<tab label="Tab 2"/>
+			<tab label="Tab 3"/>
+			<tab label="Tab 4"/>
+			<tab label="Tab 5"/>
+			<tab label="Tab 6"/>
+			<tab label="Tab 7"/>
+			<tab label="Tab 8"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel style="color:#336699;">Panel 1</tabpanel>
+			<tabpanel style="color:#333399;">Panel 2</tabpanel>
+			<tabpanel style="color:#663366;">Panel 3</tabpanel>
+			<tabpanel style="color:#CC0033;">Panel 4</tabpanel>
+			<tabpanel style="color:#CC3300;">Panel 5</tabpanel>
+			<tabpanel style="color:#FF9900;">Panel 6</tabpanel>
+			<tabpanel style="color:#ABEA14;">Panel 7</tabpanel>
+			<tabpanel style="color:#008DB7;">Panel 8</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<label multiline="true">
+		1. open this page with Chrome
+		2. zoom to 110%
+		3. click right/left button, should be able to see Menu 1 - 8 in Menubar and tab 1 - 8 in Tabbox.
+	</label>
+</zk>
