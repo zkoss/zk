@@ -7,8 +7,6 @@
 
 .z-panel {
 	.defaultOverflowZoom();
-	border: 1px solid @containerBorderColor;
-	.borderRadius(@containerBorderRadius);
 	padding: 0;
 	background: @containerBackground;
 	
@@ -22,6 +20,9 @@
 	
 	&-head {
 		overflow: hidden;
+		border: 1px solid @containerBorderColor;
+		border-bottom: 0;
+		.topBorderRadius(@containerBorderRadius);
 	}
 	
 	&-header {
@@ -41,7 +42,10 @@
 		padding: @containerPadding;
 		background-color: @colorBackground3;
 		.defaultOverflowZoom();
-		
+		border: 1px solid @containerBorderColor;
+		border-top: 0;
+		.bottomBorderRadius(@containerBorderRadius);
+
 		&:first-child {
 			height: 100%;
 		}
@@ -117,7 +121,12 @@
 			border-top: 0;
 		}
 	}
-	
+
+	&-noheader &-body {
+		border-top: 1px solid @containerBorderColor;
+		.borderRadius(@containerBorderRadius);
+	}
+
 	&-noheader&-noframe &-body {
 		border: 0;
 		.borderRadius(0);

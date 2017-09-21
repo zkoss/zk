@@ -68,11 +68,15 @@
 		border: 1px solid @containerBorderColor;
 		.borderRadius(@containerBorderRadius);
 		padding: 0;
-		background: #D7E6F7;
+		background: @colorPrimaryLighter;
 		.opacity(0.65);
 		position: absolute;
 		overflow: hidden;
 		cursor: move !important;
+
+		.z-window-header-move {
+			padding: 16px;
+		}
 
 		dl {
 			font-size: 0;
