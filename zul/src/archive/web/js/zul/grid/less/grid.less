@@ -3,7 +3,7 @@
 //reset table
 .resetTable() {
 	table {
-		border-spacing: 0;
+		border-collapse: collapse;
 		th, td {
 			background-clip: padding-box;
 			padding: 0;
@@ -22,7 +22,7 @@
 	//grid header
 	&-header {
 		width: 100%;
-		.verGradient(@baseGradientStart, @baseGradientEnd);
+		background-color: @meshTitleBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -41,21 +41,21 @@
 		//ZK-3263: scroll issue (chrome scroll anchor bug)
 		overflow-anchor: none;
 	}
-	&-emptybody td {
+	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
-		font-style: italic;
-		text-align: center;
+		text-align: left;
 		height: 1px;
+		padding: 12px 16px;
 	}
 	//grid footer
 	&-footer {
+		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		.resetTable();
 		
 		.z-footer {
 			overflow: hidden;
-			background: @meshFootBackgroundColor;
 		}
 	}
 	.z-row-inner, .z-cell {
@@ -74,28 +74,35 @@
 			border-left: 1px solid @meshTitleBorderColor;
 		}
 	}
-	th.z-column:last-child {
+	th:last-child {
 		border-right: none;
 	}
 	&-bar {
 		border-left: 1px solid @meshTitleBorderColor;
 		border-bottom: 1px solid @meshTitleBorderColor;
 	}
+	th.z-column + th.z-columns-bar {
+		border-right: none;
+	}
 }
 .z-column {
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	.verGradient(@baseGradientStart, @baseGradientEnd);
-	background-clip: padding-box;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
 
 	&-hover {
-		.verGradient(@meshTitleHoverStart, @meshTitleHoverEnd);
+		background-color: @meshTitleHoverBackgroundColor;
 		.z-column-button {
 			display: block;
+		}
+	}
+	&-visited {
+		background-color: @meshTitleBackgroundColor;
+		.z-column-button {
+			background-color: @meshTitleBorderColor;
 		}
 	}
 	.z-column-content {
@@ -106,18 +113,20 @@
 			cursor: pointer;
 		}
 		.z-column-sorticon {
-			color: @iconColor;
+			.iconFontStyle(@fontSizeLarge, @meshTitleColor);
 			position: absolute;
 			top: -7px;
 			left: 50%;
 		}
+		:active {
+			background-color: @meshTitleActiveBackgroundColor;
+		}
 	}
 	&-button {
-		color: @iconColor;
+		.iconFontStyle(@fontSizeLarge, @meshTitleColor);
 		display: none;
-		.size(@baseButtonWidth - 1, @baseBarHeight);
-		border-left: 1px solid darken(@meshTitleHoverStart, 15%);
-		line-height: @baseBarHeight;
+		.size(34px, 48px);
+		line-height: 48px;
 		text-align: center;
 		position: absolute;
 		top: 0;
@@ -125,33 +134,31 @@
 		z-index: 15;
 		cursor: pointer;
 		text-decoration: none;
-		.boxShadow('inset 1px 0 #FFFFFF');
-		
-		&:hover {
-			.verGradient(darken(@meshTitleHoverStart, 5%), darken(@meshTitleHoverEnd, 10%));
-		}
+		.boxShadow('inset 1px 0 @{meshTitleBorderColor}');
 	}
 	&-sizing,
 	&-sizing .z-column-button,
 	&-sizing.z-column-sort .z-column-content {
-		cursor: e-resize;
+		cursor: col-resize;
 	}
 }
 //row and cell
 .z-row {
-	td:last-child {
-		border-right: none;
+	&:first-child {
+		.z-row-inner,
+		.z-cell {
+			border-top-width: 0;
+		}
 	}
 	.z-row-inner,
 	.z-cell {
-		border-right: 1px solid @meshContentBorderColor;
+		border-top: 1px solid @meshContentBorderColor;
 		overflow: hidden;
 	}
 	&:hover {
 		> .z-row-inner,
 		> .z-cell {
-			.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
-			background-clip: padding-box;
+			background-color: @hoverBackgroundColor;
 		}
 		> .z-row-inner > .z-row-content { //for nest issue
 			color: @hoverColor;
@@ -184,32 +191,37 @@ body:not(.gecko) {
 //Group
 .z-group {
 	&-inner {
-		border-top: 1px solid @meshTitleBorderColor;
-		border-bottom: 1px solid @meshTitleBorderColor;
-		.verGradient(@groupGradientStart, @groupGradientEnd);
+		border-top: 1px solid @meshContentBorderColor;
+		border-bottom: 1px solid @meshGroupBorderColor;
+		background-color: @meshGroupBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		
 		.z-group-content,
 		.z-cell {
-			padding: 3px 5px;
+			padding: 8px 16px;
+		}
+	}
+	&&-open &-inner {
+		border-bottom: 2px solid @meshGroupOpenBorderColor;
+		& .z-group-icon,
+		& .z-group-content {
+			color: @meshGroupOpenColor;
 		}
 	}
 	&-icon {
-		.iconFontStyle(@baseFontSize, @iconColor);
+		.iconFontStyle(@fontSizeMedium, @meshGroupColor);
 		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
 		line-height: @baseIconHeight;
 		text-align: center;
 		position: relative;
 		cursor: pointer;
-		
-		&:hover {
-			color: @iconHoverColor;
-		}
+		margin-right: 8px;
 	}
 }
 .z-groupfoot-inner {
-	.verGradient(@groupGradientEnd, @groupGradientStart);
+	border-top: 1px solid @meshContentBorderColor;
+	background-color: @meshGroupFooterBackgroundColor;
 	overflow: hidden;
 }
 //content
@@ -218,23 +230,28 @@ body:not(.gecko) {
 .z-group-content,
 .z-groupfoot-content,
 .z-footer-content {
-	font-family: @baseContentFontFamily;
-	font-size: @fontSizeMedium;
-	color: @textColorGrayLight;
-	padding: 4px 5px;
-	line-height: @baseButtonHeight;
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
+	line-height: 1.3em;
 	overflow: hidden;
+	padding: 12px 16px;
 }
 .z-column-content {
-	font-weight: bold;
-	padding: 4px 5px 3px;
+	color: @meshTitleColor;
 }
-.z-group-content,
+.z-footer-content {
+	color: @textColorLight;
+}
+.z-group-content {
+	color: @meshGroupColor;
+}
 .z-groupfoot-content {
-	.z-label {
-		font-weight: bold;
+	color: @meshGroupFooterColor;
+	padding: 8px 16px;
+	.z-group-open & {
+		color: @meshGroupFooterOpenColor;
 	}
 }
+
 //Cell Content
 .z-grid-body .z-cell {
 	font-family: @baseContentFontFamily;
@@ -283,31 +300,20 @@ body:not(.gecko) {
 }
 // IE 8
 .ie8 {
-	.z-grid-header {
-		background: @meshBackgroundColorIE8;
-	}
 	.z-column {
 		position: static;
-		background: @meshBackgroundColorIE8;
-		&-hover {
-			background: @meshHoverBackgroundColorIE8;
-		}
-
-		&-button:hover {
-			background: darken(@meshHoverBackgroundColorIE8, 3%);
-		}
 	}
 	.z-row:hover {
 		> .z-row-inner,
 		> .z-cell {
 			position: static;
-			background: @meshHoverBackgroundColorIE8;
 		}
 	}
-	.z-group-inner {
-		background: @meshGroupBackgroundColorIE8;
-	}
-	.z-groupfoot-inner {
-		background: @meshGroupFooterBackgroundColorIE8;
+}
+
+.ie {
+	// Prevent sub-pixel rounding that causes scrollbar appear
+	.z-grid-body table {
+		overflow: hidden;
 	}
 }

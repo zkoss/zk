@@ -3,7 +3,7 @@
 //reset table
 .resetTable() {
 	table {
-		border-spacing: 0;
+		border-collapse: collapse;
 		th, td {
 			background-clip: padding-box;
 			padding: 0;
@@ -22,7 +22,6 @@
 	//tree header div
 	&-header {
 		width: 100%;
-		.verGradient(@baseGradientStart, @baseGradientEnd);
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -38,11 +37,11 @@
 		overflow: hidden;
 		.resetTable();
 	}
-	&-emptybody td {
+	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
-		font-style: italic;
-		text-align: center;
+		text-align: left;
 		height: 1px;
+		padding: 12px 16px;
 	}
 	//tree footer div
 	&-footer {
@@ -61,48 +60,44 @@
 		vertical-align: middle;
 	}
 	&-icon {
-		.iconFontStyle(@baseFontSize, @iconColor);
+		.iconFontStyle(@fontSizeLarge, @textColorDefault);
 		text-align: center;
 		cursor: pointer;
-		
-		&:hover {
-			color: @iconHoverColor;
-		}
 	}
 }
 //treecols
 .z-treecols {
 	th:first-child {
-		border-left: none;
-
 		// B50-3306729: the first header should have border-left when the first column is covered with other header
 		&.z-treecols-border {
 			border-left: 1px solid @meshTitleBorderColor;
 		}
 	}
+	th:last-child {
+		border-right: none;
+	}
 	&-bar {
 		border-left: 1px solid @meshTitleBorderColor;
 		border-bottom: 1px solid @meshTitleBorderColor;
+	}
+	th.z-treecol + th.z-treecols-bar {
+		border-right: none;
 	}
 }
 .z-treecol {
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	.verGradient(@baseGradientStart, @baseGradientEnd);
-	background-clip: padding-box;
+	background-color: @meshTitleBackgroundColor;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
 	
 	&-sort {
 		cursor: pointer;
-		
-		&:hover {
-			.verGradient(@meshTitleHoverStart, @meshTitleHoverEnd);
-		}
+
 		.z-treecol-sorticon {
-			color: @iconColor;
+			color: @meshTitleColor;
 			position: absolute;
 			top: -7px;
 			left: 50%;
@@ -110,23 +105,28 @@
 	}
 	&-sizing,
 	&-sizing .z-treecol-content {
-		cursor: e-resize;
+		cursor: col-resize;
 	}
 }
 // ZK-2151: use strict selector to prevent nest problem
 //tree row and cell
 .z-treerow {
+	background: @meshBackgroundColor;
+	&:first-child {
+		.z-treecell {
+			border-top-width: 0;
+		}
+	}
 	//tree cell
 	.z-treecell {
+		border-top: 1px solid @meshContentBorderColor;
 		overflow: hidden;
 		cursor: pointer;
-		background: @meshBackgroundColor;
 	}
-	&:hover {
-		> .z-treecell {
-			.verGradient(@meshContentHoverStart, @meshContentHoverEnd);
-			background-clip: padding-box;
 
+	&:hover {
+		background-color: @hoverBackgroundColor;
+		> .z-treecell {
 			> .z-treecell-content {
 				color: @hoverColor;
 			}
@@ -134,13 +134,16 @@
 	}
 	//check mark
 	&-checkable {
-		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
-		border: 1px solid @checkedBorderColor;
-		background: @checkedBackgroundColor;
-		vertical-align: middle;
-		
+		.displaySize(inline-block, 20px, 20px);
+    	.iconFontStyle(@checkedIconSize, @checkedColor);
+    	border: 1px solid @checkedBorderColor;
+    	background: @checkedBackgroundColor;
+    	vertical-align: text-top;
+    	margin-right: 8px;
+    	.borderRadius(@baseBorderRadius);
+
 		&.z-treerow-radio {
-			.borderRadius(@baseIconWidth / 2);
+			.borderRadius(50%);
 		}
 		.z-treerow-icon {
 			display: none;
@@ -149,9 +152,8 @@
 	}
 	//selected tree cell
 	&.z-treerow-selected {
+		background-color: @selectedBackgroundColor;
 		> .z-treecell {
-			.verGradient(@selectedGradientStart, @selectedGradientEnd);
-			background-clip: padding-box;
 			position: relative;
 
 			> .z-treecell-content {
@@ -160,8 +162,8 @@
 		}
 		
 		&:hover {
+			background-color: @selectedHoverBackgroundColor;
 			> .z-treecell {
-				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 				> .z-treecell-content {
 					color: @selectedHoverColor;
 				}
@@ -169,9 +171,8 @@
 		}
 	}
 	&.z-treerow-selected.z-treerow-focus {
+		background-color: @selectedFocusBackgroundColor;
 		> .z-treecell {
-			.verGradient(@selectedFocusGradientStart, @selectedFocusGradientEnd);
-			background-clip: padding-box;
 			position: relative;
 
 			> .z-treecell-content {
@@ -179,8 +180,8 @@
 			}
 		}
 		&:hover {
+			background-color: @selectedHoverBackgroundColor;
 			> .z-treecell {
-				.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
 				> .z-treecell-content {
 					color: @selectedHoverColor;
 				}
@@ -188,8 +189,8 @@
 		}
 	}
 	&-focus {
+		background-color: @meshContentFocusBackgroundColor;
 		> .z-treecell {
-			.verGradient(@meshContentFocusStart, @meshContentFocusEnd);
 			position: relative;
 			> .z-treecell-content {
 				color: @hoverColor;
@@ -207,11 +208,13 @@
 			
 			&.z-icon-check {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
-				.size(@baseIconWidth / 2, @baseIconWidth / 2);
-				.borderRadius(@baseIconWidth / 4);
-				margin: 3px;
-				padding: 0;
+				.size(10px, 10px);
+				.borderRadius(50%);
 				background: @checkedColor;
+				position: relative;
+				top: 50%;
+				left: 50%;
+				.transform('translate(-50%, -50%)');
 			}
 		}
 	}
@@ -222,7 +225,6 @@
 			cursor: default !important;
 		}
 		&:hover > .z-treecell {
-			.resetGradient();
 			position: relative;
 		}
 	}
@@ -242,22 +244,21 @@ body:not(.gecko) {
 .z-treecol-content,
 .z-treecell-content,
 .z-treefooter-content {
-	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGrayLight);
-	padding: 4px 5px;
-	line-height: @baseButtonHeight;
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
+	padding: 12px 16px;
+	line-height: 1.3em;
 	overflow: hidden;
 }
 .z-treecol-content {
-	font-weight: bold;
-	padding: 4px 5px 3px;
+	color: @meshTitleColor;
 	position: relative;
 }
 .z-treecell-content {
-	padding: 4px 2px;
 	line-height: @baseLineHeight;
 }
 .z-treecell-text {
 	vertical-align: middle;
+	margin-left: 8px;
 }
 //paging
 .z-tree-paging {
@@ -279,28 +280,17 @@ body:not(.gecko) {
 // ZK-2151: use strict selector to prevent nest problem
 // IE8
 .ie8 {
-	.z-tree-header {
-		background: @meshBackgroundColorIE8;
-	}
+
 	.z-treecol {
 		position: static;
-		background: @meshBackgroundColorIE8;
-		&-hover, &-sort:hover {
-			background: @meshHoverBackgroundColorIE8;
-		}
 	}
 	.z-treerow {
-		&:hover > .z-treecell {
-			background: @meshHoverBackgroundColorIE8;
-		}
 		&.z-treerow-selected {
 			> .z-treecell {
 				position: static;
-				background: @meshSelectedBackgroundColorIE8;
 			}
 			&:hover > .z-treecell {
 				position: static;
-				background: @meshSelectedHoverBackgroundColorIE8;
 			}
 		}
 	}

@@ -2,25 +2,24 @@
 
 .z-popup {
 	border: 1px solid @popupBorderColor;
-	.borderRadius(1px);
-	.verGradient(@popupGradientStart, @popupGradientEnd);
+	.borderRadius(@baseBorderRadius);
+	background-color: @popupBackgroundColor;
 	position: absolute;
 	top: 0;
 	left: 0;
 	overflow: hidden;
-	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
 
 	&-content {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorGray);
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
 		height: 100%;
-		padding: 10px;
+		padding: 8px 16px;
 		line-height: @baseLineHeight;
 	}
 }
 
 // notification
 .z-notification {
-	color: #FFFFFF;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -28,57 +27,53 @@
 
 .z-notification-icon {
 	position: absolute;
-	top: 50%;	
-	left: 2px;
 	z-index: 1;
-
-	&.z-icon-times {
-		margin-top: -5px;
-	}
 
 	&.z-icon-times-circle, 
 	&.z-icon-exclamation-circle,
 	&.z-icon-info-circle {
-		font-size: 24px;
-		margin-top: -12px;
-		left: 12px;
+		.size(32px, 32px);
+		top: 50%;
+		font-size: 32px;
+		line-height: 32px;
+		margin-top: -16px;
+		left: 16px;
 	}
 }
 
 .z-notification-pointer + .z-notification-icon {
-	left: 14px;
+	left: 8px;
 }
 
 .z-notification-left + .z-notification-icon {
-	left: 24px;
+	left: 20px;
 }
 
 .z-notification-up + .z-notification-icon {
-	margin-top: -6px;
+	margin-top: -12px;
 }
 
 .z-notification-down + .z-notification-icon {
-	margin-top: -18px;
+	margin-top: -22px;
 }
 
 .z-notification-content {
 	font-family: @baseContentFontFamily;
-	font-size: @fontSizeSmall;
+	font-size: @fontSizeMedium;
 	font-weight: normal;
-	width: 250px;
-	min-height: 130px;
-	.borderRadius(10px);
-	padding: 15px 18px 15px 45px;
+	width: 288px;
+	min-height: 80px;
+	padding: 24px 16px 24px 56px;
 	position: relative;
 	overflow: hidden;
-	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
+	.borderRadius(@baseBorderRadius);
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
 }
 
 .z-notification-pointer ~ .z-notification-content {
-	.displaySize(table-cell, 125px, 60px);
+	.displaySize(table-cell, 260px, 60px);
 	min-height: 60px; // fix for IE9
-	.borderRadius(5px);
-	padding: 5px 18px 5px 45px;
+	padding: 8px 34px 8px 48px;
 	vertical-align: middle;
 }
 
@@ -96,231 +91,87 @@
 .z-notification-down {
 	border: 10px solid transparent;
 }
-.z-notification-left {
-	border-right-color: @notificationArrowColor;
-}
-.z-notification-right {
-	border-left-color: @notificationArrowColor;
-}
-.z-notification-up {
-	border-bottom-color: @notificationArrowColor;
-}
-.z-notification-down {
-	border-top-color: @notificationArrowColor;
-}
 
 // notification arrow: info
-.z-notification-info .z-notification-content {
-	background: @notificationInfoColor;
-}
-.z-notification-info .z-notification-left {
-	border-right-color: @notificationInfoColor;
-}
-.z-notification-info .z-notification-right {
-	border-left-color: @notificationInfoColor;
-}
-.z-notification-info .z-notification-up {
-	border-bottom-color: @notificationInfoColor;
-}
-.z-notification-info .z-notification-down {
-	border-top-color: @notificationInfoColor;
+.z-notification-info {
+	.z-notification-icon,
+	.z-notification-close,
+	.z-notification-content {
+		color: @notificationInfoColor;
+		background-color: @notificationInfoBackgroundColor;
+	}
+	.z-notification-left {
+		border-right-color: @notificationInfoBackgroundColor;
+	}
+	.z-notification-right {
+		border-left-color: @notificationInfoBackgroundColor;
+	}
+	.z-notification-up {
+		border-bottom-color: @notificationInfoBackgroundColor;
+	}
+	.z-notification-down {
+		border-top-color: @notificationInfoBackgroundColor;
+	}
 }
 
 // notification arrow: warning
-.z-notification-warning .z-notification-content {
-	background: @notificationWarningColor;
-}
-.z-notification-warning .z-notification-left {
-	border-right-color: @notificationWarningColor;
-}
-.z-notification-warning .z-notification-right {
-	border-left-color: @notificationWarningColor;
-}
-.z-notification-warning .z-notification-up {
-	border-bottom-color: @notificationWarningColor;
-}
-.z-notification-warning .z-notification-down {
-	border-top-color: @notificationWarningColor;
+.z-notification-warning {
+	.z-notification-icon,
+	.z-notification-close,
+	.z-notification-content {
+		color: @notificationWarningColor;
+		background-color: @notificationWarningBackgroundColor;
+	}
+	.z-notification-left {
+		border-right-color: @notificationWarningBackgroundColor;
+	}
+	.z-notification-right {
+		border-left-color: @notificationWarningBackgroundColor;
+	}
+	.z-notification-up {
+		border-bottom-color: @notificationWarningBackgroundColor;
+	}
+	.z-notification-down {
+		border-top-color: @notificationWarningBackgroundColor;
+	}
 }
 
 // notification arrow: error
-.z-notification-error .z-notification-content {
-	background: @notificationErrorColor;
-}
-.z-notification-error .z-notification-left {
-	border-right-color: @notificationErrorColor;
-}
-.z-notification-error .z-notification-right {
-	border-left-color: @notificationErrorColor;
-}
-.z-notification-error .z-notification-up {
-	border-bottom-color: @notificationErrorColor;
-}
-.z-notification-error .z-notification-down {
-	border-top-color: @notificationErrorColor;
+.z-notification-error {
+	.z-notification-icon,
+	.z-notification-close,
+	.z-notification-content {
+		color: @notificationErrorColor;
+		background-color: @notificationErrorBackgroundColor;
+	}
+	.z-notification-left {
+		border-right-color: @notificationErrorBackgroundColor;
+	}
+	.z-notification-right {
+		border-left-color: @notificationErrorBackgroundColor;
+	}
+	.z-notification-up {
+		border-bottom-color: @notificationErrorBackgroundColor;
+	}
+	.z-notification-down {
+		border-top-color: @notificationErrorBackgroundColor;
+	}
 }
 
 .z-notification-close {
-	font-size: 10px;
-	.size(12px, 12px);
+	font-size: 18px;
+	.size(20px, 20px);
 	padding: 0 2px;
-	line-height: 11px;
-	.opacity(0.6);
-	text-align: center;
+	line-height: 18px;
 	position: absolute;
 	top: 8px;
 	right: 8px;
 	cursor: pointer;
-
-	&:hover {
-		.borderRadius(@borderRadiusSmall - 1);
-		background: @baseBackgroundColor;
-		opacity: 1;
-	}
 }
 
-.z-notification-pointer ~ .z-notification-close {
-	top: 5px;
-	right: 5px;
-}
 .z-notification-right ~ .z-notification-close {
-	top: 5px;
-	right: 17px;
+	right: 16px;
 }
 .z-notification-up ~ .z-notification-close {
-	top: 17px;
-}
-
-.z-notification-info .z-notification-close:hover {
-	color: @notificationInfoColor;
-}
-.z-notification-warning .z-notification-close:hover {
-	color: @notificationWarningColor;
-}
-.z-notification-error .z-notification-close:hover {
-	color: @notificationErrorColor;
-}
-
-.ie8 {
-	.z-popup {
-		.gradientFallback(@popupGradientStart, @popupGradientEnd);
-	}
-}
-
-.ie8 {
-	.z-notification-left {
-		border-right-color: @notificationArrowColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-right {
-		border-left-color: @notificationArrowColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-up {
-		border-bottom-color: @notificationArrowColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-down {
-		border-top-color: @notificationArrowColorIE8;
-	}
-}
-
-// notification arrow: info
-.ie8 {
-	.z-notification-info .z-notification-content {
-		background: @notificationInfoColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-info .z-notification-left {
-		border-right-color: @notificationInfoColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-info .z-notification-right {
-		border-left-color: @notificationInfoColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-info .z-notification-up {
-		border-bottom-color: @notificationInfoColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-info .z-notification-down {
-		border-top-color: @notificationInfoColorIE8;
-	}
-}
-
-// notification arrow: warning
-.ie8 {
-	.z-notification-warning .z-notification-content {
-		background: @notificationWarningColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-warning .z-notification-left {
-		border-right-color: @notificationWarningColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-warning .z-notification-right {
-		border-left-color: @notificationWarningColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-warning .z-notification-up {
-		border-bottom-color: @notificationWarningColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-warning .z-notification-down {
-		border-top-color: @notificationWarningColorIE8;
-	}
-}
-
-// notification arrow: error
-.ie8 {
-	.z-notification-error .z-notification-content {
-		background: @notificationErrorColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-error .z-notification-left {
-		border-right-color: @notificationErrorColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-error .z-notification-right {
-		border-left-color: @notificationErrorColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-error .z-notification-up {
-		border-bottom-color: @notificationErrorColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-error .z-notification-down {
-		border-top-color: @notificationErrorColorIE8;
-	}
-}
-
-.ie8 {
-	.z-notification-info .z-notification-close:hover {
-		color: @notificationInfoColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-warning .z-notification-close:hover {
-		color: @notificationWarningColorIE8;
-	}
-}
-.ie8 {
-	.z-notification-error .z-notification-close:hover {
-		color: @notificationErrorColorIE8;
-	}
+	top: 16px;
 }

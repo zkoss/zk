@@ -2,22 +2,21 @@
 
 .hoverStyle() {
 	border-color: @hoverBorderColor;
-	.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	background-color: @hoverBackgroundColor;
 }
 .activeStyle() {
+	color: @activeColor;
 	border-color: @menuActiveBorderColorTR @menuActiveBorderColorBL @menuActiveBorderColorBL @menuActiveBorderColorTR;
-	.verGradient(@baseGradientStart, @baseGradientEnd);
-	.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
+	background-color: @menuActiveBackground;
 }
 .restUl() {
 	background: transparent none repeat 0 0;
 	border: 0;
+	.borderRadius(@baseBorderRadius);
 	padding: 0;
 	margin: 0;
 	position: relative;
-	list-style-image: none;
-	list-style-position: outside;
-	list-style-type: none;
+	list-style: none outside none;
 }
 
 // define common font property
@@ -25,9 +24,9 @@
 	display: block;
 	border-top: 1px solid @baseBorderColor;
 	border-bottom: 1px solid @baseBorderColor;
-	padding: 3px 0;
-	.verGradient(@baseGradientStart, @baseGradientEnd);
+	padding: 4px;
 	position: relative;
+	background: @menuPopupBackground;
 
 	ul {
 		overflow: hidden;
@@ -41,26 +40,29 @@
 
 	&-horizontal {
 		li {
-			margin: 0 2px;
+			margin: 2px 0;
 			float: left;
 		}
 		.z-menuseparator {
 			display: block;
 			width: 1px;
 			border-left: 1px solid @menuSeparatorBorderColor;
-			line-height: @baseButtonHeight;
+			line-height: @baseBarHeight;
+			margin: 0 4px;
 		}
 	}
 	&-vertical {
+		padding: 4px 2px;
 		ul {
 			display: inline-table;
 		}
 		li {
-			margin: 3px 2px 4px;
-			&:first-child {
-				margin: 2px;
-			}
+			margin: 2px;
 		}
+		.z-menu-clickable .z-menu-text {
+			margin-right: 20px;
+		}
+
 		.z-menuseparator {
 			height: 0;
 			min-height: 0;
@@ -69,9 +71,8 @@
 		}
 		.z-menu {
 			&-icon {
-				position: absolute;
-				right: 5px;
-				top: 5px;
+				right: 8px;
+				top: 8px;
 			}
 		}
 	}
@@ -86,11 +87,10 @@
 	.restUl(); //avoid using none default zclass
 	&-text {
 		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeMedium;
+		font-size: @fontSizeLarge;
 		font-weight: normal;
 		display: inline-block;
 		line-height: @baseIconHeight;
-		text-shadow: 0 1px #FFFFFF;
 		
 		// align for img + text
 		img ~ & {
@@ -98,18 +98,22 @@
 		}
 		&:empty {
 			display: none;
+
+			& ~ .z-menu-icon {
+				padding-left: 0;
+			}
 		}
 	}
 	&-image {
 		max-width: @menuImageSize;
-		margin-right: 3px;
+		margin-right: 8px;
 	}
 	&-content {
 		color: @textColorGray;
 		display: block;
 		border: 1px solid transparent;
 		.borderRadius(@baseBorderRadius);
-		padding: 3px 6px 3px;
+		padding: 6px 12px;
 		line-height: @baseLineHeight - 2;
 		position: relative;
 		cursor: pointer;
@@ -127,7 +131,7 @@
 			.activeStyle();
 		}
 		&[disabled] {
-			.opacity(@disabledOpacity);
+			.opacity(0.6);
 			border: 1px solid transparent;
 			.resetGradient();
 			cursor: default;
@@ -147,45 +151,32 @@
 	&-clickable {
 		.z-menu-separator {
 			.size(1px, 100%);
-			background: @hoverBorderColor;
+			display: block;
+			background: transparent;
 			position: absolute;
 			top: 0;
-			right: 18px;
-		}
-		&.z-menu:hover .z-menu-separator {
-			display: block;
+			right: 30px;
 		}
 		&.z-menu:active,
 		&.z-menu-selected {
+			outline: 2px solid @focusBorderColor;
 			.z-menu-separator {
 				background: @menuSeparatorBackgroundColor;
 			}
 		}
 		.z-menu-text {
-			margin-right: 3px;
+			margin-right: 0;
 		}
-	}
-	&-content {
-		padding-right: 18px;
 	}
 
 	&-icon {
-		position: absolute;
-		top: 5px;
-		right: 5px;
-
-		&.z-icon-caret-down {
-			font-size: @fontSizeLarge;
-		}
-
-		&.z-icon-caret-right {
-			font-size: 15px;
-		}
+		font-size: @fontSizeLarge;
+		padding-left: 6px;
+		margin-right: -4px;
 	}
 	&-icon,
 	&-icon:hover,
 	&-icon:active {
-		color: @iconColor;
 		vertical-align: text-bottom;
 	}
 	&-selected > &-content {
@@ -203,7 +194,7 @@
 .z-menu-palette-popup,
 .z-menu-picker-popup,
 .z-menu-content-popup {
-	.boxShadow('1px 1px 2px rgba(0, 0, 0, 0.2)');
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
 }
 
 .z-menu-content-popup {
@@ -214,7 +205,8 @@
 }
 .z-menupopup {
 	border: 1px solid @baseBorderColor;
-	padding: 3px;
+	.borderRadius(4px);
+	padding: 4px;
 	background: @menuPopupBackground;
 	left: 0;
 	top: 0;
@@ -225,36 +217,27 @@
 		.restUl();
 	}
 	&-separator {
-		.size(2px, 100%);
-		border-width: 3px 1px 3px 0;
-		border-style: solid;
-		border-color: @menuPopupSeparatorBorder;
-		background: @menuPopupSeparatorBackground;
-		position: absolute;
-		top: 0;
-		left: 31px;
-		z-index: 10;
+		display: none;
 	}
 	.z-menu-image,
 	.z-menuitem-image {
 		min-width:  @menuImageSize;
 		min-height:  @menuImageSize;
-		margin-right: 9px;
+		background-repeat: no-repeat;
 	}
 	.z-menuitem-icon {
-		.iconFontStyle(14px, @checkedColor);
+		.iconFontStyle(16px, @menuCheckedColor);
 		display: none;
 		position: absolute;
-		top: 5px;
-		left: 7px;
+		top: 8px;
+		left: 13px;
 	}
 	.z-menu-content {
 		padding-right: 16px;
 	}
 	.z-menu-icon {
-		position: absolute;
-		top: 5px;
-		right: 5px;
+		right: 8px;
+		top: 8px;
 	}
 	.z-menuseparator {
 		font-size: 1px;
@@ -262,9 +245,9 @@
 		width: auto;
 		min-height: 2px;
 		border-bottom: 1px solid @menuPopupSeparatorBorder;
-		padding: 0px;
+		padding: 0;
 		line-height: 1px;
-		background: @menuPopupSeparatorBackground;
+		margin: 4px 0;
 		position: relative;
 	}
 	[class^="z-icon"] {
@@ -277,7 +260,8 @@
 //define checked menuitem effect in menupopup
 .z-menuitem-checkable .z-menuitem-image {
 	border: 1px solid @checkedBorderColor;
-	background: @checkedBackgroundColor;
+	.borderRadius(@baseBorderRadius);
+	background: @menuCheckedBackgroundColor;
 }
 .z-menuitem-checked.z-menuitem-checkable .z-menuitem-icon {
 	display: block;
@@ -290,8 +274,7 @@
 	}
 	&-body {
 		width: 100%;
-		margin-left: 32px;
-		margin-right: 32px;
+		margin: 0 @baseBarWidth;
 		position: relative;
 		overflow: hidden;
 	}
@@ -299,24 +282,18 @@
 		width: 5000px;
 	}
 	&-icon {
-		.iconFontStyle(@fontSizeMedium, @iconColor);
-		.opacity(0.7);
-		margin-top: -@fontSizeMedium/2;
-		margin-left: -@fontSizeMedium/2 + 2;
+		.iconFontStyle(@fontSizeXLarge, @iconColor);
+		margin-top: -@fontSizeXLarge/2;
+		margin-left: -@fontSizeXLarge/2 + 2;
 		position: absolute;
 		top: 50%;
 		left: 50%;
 	}
 	&-left,
 	&-right {
-		&:active {
-			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
-		}
 		&:hover {
 			> .z-menubar-icon {
 				color: @iconHoverColor;
-				opacity: 1;
-				text-shadow: 1px 0 #C2E0F9;
 			}
 		}
 	}
@@ -325,10 +302,7 @@
 	}
 	&-scrollable {
 		.size(@baseBarWidth, 100%);
-		border: 1px solid @baseBorderColor;
-		border-width: 0 1px;
 		line-height: normal;
-		.verGradient(@baseGradientStart, @baseGradientEnd);
 		position: absolute;
 		top: 0;
 		right: 0;

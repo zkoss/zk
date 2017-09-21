@@ -71,27 +71,26 @@ body {
 .z-error {
 	display: none;
 	width: 450px;
+	color: @errorboxColor;
 	border: 1px solid @errorboxBorderColor;
-	padding: 3px 5px 3px 3px;
+	.borderRadius(@baseBorderRadius);
+	padding: 16px;
 	background: @errorboxBackgroundColor;
 	position: absolute;
 	top: 0;
 	left: 40%;
-	.boxShadow('1px 1px 3px rgba(0, 0, 0, 0.35)');
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
 	z-index: 9999999;
-	
+
 	.messagecontent {
-		border: 1px solid @errorboxBorderColor;
-		padding: 0;
-		background: @baseBackgroundColor;
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal);
+		padding-top: 24px;
 	}
 	.messages {
-		padding: 2px 3px 15px;
 		word-wrap: break-word;
 		overflow: auto;
-		
 		.message {
-			padding: 3px 0 2px;
+			margin-top: 8px;
 		}
 	}
 	.newmessage {
@@ -99,25 +98,22 @@ body {
 		display: none;
 	}
 	.button {
-		color: @errorboxColor;
+		font-size: @fontSizeLarge;
 		.size(@baseIconWidth, @baseIconHeight);
-		margin-left: 4px;
-		cursor: pointer;	
+		margin-left: 8px;
+		cursor: pointer;
 		float: right;
 		
-		> .z-icon-remove {
+		> .z-icon-times {
 			font-size: @fontSizeXLarge;
 		}
 	}
 	#zk_err-p {
 		height: 24px;
-		padding-top: 6px;
 		cursor: move;
 	}
 	.errornumbers {
-		font-weight: bold;
-		color: @errorboxColor;
-		padding-left: 4px;
+		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, 700);
 		float: left;
 	}
 }
@@ -167,16 +163,99 @@ div.z-log {
 
 //radio, radiogroup
 input[type="radio"] {
-	-webkit-appearance: radio;
-	-moz-appearance: radio;
-	margin: 0px 2px 2px;
+	margin: 0 4px 2px 8px;
+	background: @inputBackgroundColor;
+	border: 1px solid @inputBorderColor;
+	.borderRadius(50%);
+	.size(20px, 20px);
+	&:hover {
+		border-color: @checkboxHoverBorderColor;
+	}
+
+	&:before {
+		content: '';
+		.displaySize(block, 12px, 12px);
+		.borderRadius(50%);
+		position: relative;
+		top: 50%;
+		left: 50%;
+		.transform('translate(-50%, -50%)');
+	}
+
+	&:checked {
+		border-color: @checkedColor;
+		&:before {
+			background-color: @checkedColor;
+		}
+	}
+
+	&:focus {
+		outline: 2px solid @focusBorderColor;
+	}
+
+	&[disabled] {
+		cursor: default;
+		background-color: @inputDisableBackgroundColor;
+		&:checked {
+			border-color: @inputDisableColor;
+			&:before {
+				background-color: @inputDisableColor;
+			}
+			&:hover {
+				border-color: @inputDisableColor;
+			}
+		}
+		&:hover {
+			border-color: @inputBorderColor;
+		}
+	}
 }
 
 //checkbox
 input[type="checkbox"] {
-	-webkit-appearance: checkbox;
-	-moz-appearance: checkbox;
-	margin: 0px 2px 2px;
+	.baseIconFont();
+	font-size: 18px;
+	margin: 0 4px 2px 8px;
+	background: @inputBackgroundColor;
+	border: 1px solid @inputBorderColor;
+	.borderRadius(@inputBorderRadius);
+	.size(20px, 20px);
+	&:hover {
+		border-color: @checkboxHoverBorderColor;
+	}
+
+	&:checked {
+		background-color: @checkedColor;
+		color: @checkedBackgroundColor;
+		&:before {
+			content: "\f00c";
+		}
+	}
+
+	&:focus {
+		outline: 2px solid @focusBorderColor;
+	}
+
+	&[disabled] {
+		cursor: default;
+		color: @inputDisableColor;
+		background-color: @inputDisableBackgroundColor;
+		&:hover {
+			border-color: @inputBorderColor;
+		}
+	}
+}
+
+.ie8 {
+	input[type="checkbox"] {
+		&[checked] {
+			background-color: @checkedColor;
+			color: @checkedBackgroundColor;
+			&:before {
+				content: "\f00c";
+			}
+		}
+	}
 }
 
 //label
@@ -222,9 +301,8 @@ input[type="checkbox"] {
 
 .z-loading,
 .z-apply-loading {
-	border: 1px solid @baseBorderColor;
-	padding: 3px;
 	background: @loadingBackgroundColor;
+	.borderRadius(@baseBorderRadius);
 	position: absolute;
 	cursor: wait;
 	white-space: nowrap;
@@ -240,31 +318,45 @@ input[type="checkbox"] {
 }
 .z-loading-indicator,
 .z-apply-loading-indicator {
-	color: @textColorGrayDark;
-	border: 1px solid @baseBorderColor;
-	background: @baseBackgroundColor;
+	color: @loadingTextColor;
+	background: @loadingBackgroundColor;
 	white-space: nowrap;
 }
 .z-loading-indicator {
-	padding: 6px;
+	padding: 24px 16px;
+	text-align: center;
 }
 .z-apply-loading-indicator {
 	font-family: @baseTitleFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
-	padding: 2px;
+	padding: 12px 32px 12px 56px;
+	position: relative;
 }
 .z-apply-loading-icon,
-.z-loading-icon,
 .z-renderdefer {
-	.size(16px, 16px);
+	.size(32px, 32px);
 	background: transparent no-repeat center;
-	.encodeThemeURL(background-image, '~./zul/img/misc/progress.gif');
+	.encodeThemeURL(background-image, '~./zul/img/misc/progress-32.gif');
 }
-.z-apply-loading-icon,
 .z-loading-icon {
+	.size(72px, 72px);
+	background: transparent no-repeat center;
+	.encodeThemeURL(background-image, '~./zul/img/misc/progress-72.gif');
+	display: block;
+	vertical-align: top;
+	position: relative;
+	left: 50%;
+	margin-left: -36px;
+	margin-bottom: 8px;
+}
+.z-apply-loading-icon {
 	display: inline-block;
 	vertical-align: top;
+	position: absolute;
+	left: 16px;
+	top: 50%;
+	margin-top: -16px;
 }
 .z-apply-mask {
 	.size(100%, 100%);
@@ -300,7 +392,6 @@ input[type="checkbox"] {
 .z-temp * { //temporary
 	font-size: 5px;
 	color: #FFFFFF;
-	background: #FFFFFF;
 	text-decoration: none;
 }
 .z-temp {
@@ -411,7 +502,7 @@ input[type="checkbox"] {
 }
 .z-drag {
 	&-over {
-		background: @dragHoverBackgroundColor;
+		background: @dragHoverBackgroundColor !important;
 	}
 	&-ghost {
 		list-style: none;
@@ -427,38 +518,47 @@ input[type="checkbox"] {
 }
 .z-drop {
 	&-allow {
-		background: @dragAllowBackgroundColor;
-
+		background: @dragBackgroundColor;
+		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+		.borderRadius(@baseBorderRadius);
+		overflow: hidden;
+		.z-drop-content {
+			background: @dragAllowBackgroundColor;
+		}
 		.z-drop-icon {
-			color: @dragAllowBackgroundColor;
+			color: @dragAllowIconColor;
 		}
 	}
 	&-disallow {
-		background: @dragDisAllowBackgroundColor;
-
+		background: @dragBackgroundColor;
+		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+		.borderRadius(@baseBorderRadius);
+		overflow: hidden;
+		.z-drop-content {
+			background: @dragDisAllowBackgroundColor;
+		}
 		.z-drop-icon {
-			color: @dragDisAllowBackgroundColor;
-			padding-right: 1px;
+			color: @dragDisAllowIconColor;
+		}
+		.z-drop-text {
+			color: @disabledColor;
 		}
 	}
 	&-content {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @dragColor);
-		.size(auto, @baseButtonHeight);
-		padding: 4px;
-		padding-left: @baseIconWidth + 8; // for icon
-		line-height: @baseButtonHeight - 8;
+		padding: 12px;
+		line-height: @baseHeight - 12;
 		position: relative;
 	}
 	&-icon {
-		font-size: @fontSizeMedium;
-		.size(@baseIconWidth, @baseIconHeight);
-		.borderRadius(@baseIconWidth / 2);
-		line-height: @baseIconHeight;
-		background: @baseBackgroundColor;
+		font-size: @fontSizeXLarge;
+		.size(@fontSizeXLarge, @fontSizeXLarge);
+		line-height: @fontSizeXLarge;
+		background: transparent;
 		text-align: center;
-		position: absolute;
-		top: 4px;
-		left: 6px;
+	}
+	&-text {
+		padding-left: 8px;
 	}
 }
 
@@ -551,161 +651,146 @@ span.z-upload input {
 //scrollbar
 .z-scrollbar {
 	display: none;
-	.opacity(0);
 	position: absolute;
 	line-height: 1;
 
+	&-wrapper {
+		position: absolute;
+	}
+
+	&-indicator {
+		border: 1px solid @scrollbarBorderColor;
+		.borderRadius(@scrollbarBarSize / 2);
+		background-color: @scrollbarBarBackgroundColor;
+		position: absolute;
+		cursor: pointer;
+		z-index: 100;
+		&:hover {
+			background-color: @scrollbarBarHoverBackground;
+		}
+	}
+
+	&-rail {
+		position: absolute;
+		.size(100%, 100%);
+		background: @scrollbarBackgroundColor;
+		.borderRadius(@scrollbarRailSize / 2);
+	}
+
+	&-icon {
+		display: @scrollbarIconDisplay;
+		color: @iconColor;
+		.size(@baseIconWidth, @baseIconHeight);
+		position: absolute;
+	}
+
+	.embedBase() {
+		.borderRadius(@scrollbarEmbeddedSize / 2);
+		background-color: @scrollbarEmbeddedColor;
+		position: absolute;
+		.size(@scrollbarEmbeddedSize, @scrollbarEmbeddedSize);
+	}
+
+	.buttonBase() {
+		.iconFontStyle(@fontSizeXLarge, @scrollbarButtonColor);
+		.size(@baseIconWidth, @baseIconHeight);
+		background: @scrollbarButtonBackground;
+		position: absolute;
+		cursor: pointer;
+		&:hover {
+			color: @scrollbarButtonHoverColor;
+			background: @scrollbarButtonHoverBackground;
+		}
+	}
+
 	//vertical
 	&-vertical {
-		.size(@scrollbarWidth, 100%);
+		.size(@scrollbarSize, 100%);
 		top: 0;
 		right: 0;
+		margin-right: 4px;
 
 		.z-scrollbar {
 			&-wrapper {
 				width: 100%;
-				position: absolute;
 				top: @baseIconHeight;
 				left: 0;
 			}
-			&-indicator {
-				width: @scrollbarWidth - 2;
-				border: 1px solid @scrollbarBorderColor;
-				.borderRadius(2px);
-				.horGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
-				position: absolute;
-				left: 1px;
-				cursor: pointer;
-				z-index: 100;
-			}
 			&-rail {
-				.size(100%, 100%);
-			    background: @scrollbarBackgroundColor;
+				width: @scrollbarRailSize;
+				left: 3px;
+			}
+			&-indicator {
+				width: @scrollbarBarSize;
+				left: 1px;
 			}
 			&-icon {
-				color: @iconColor;
-				.size(@baseIconWidth, @baseIconHeight);
 				margin-top: -8px;
-				position: absolute;
 				left: -1px;
 				top: 50%;
 				.transform('scale(0.5, 0.7)');
 			}
 		}
 		&-embed {
-			.size(@scrollbarWidth / 2, 100%);
-			.borderRadius(@baseBorderRadius);
-			background: #000000;
-			.opacity(0.2);
-			position: absolute;
+			.embedBase();
+			height: 100%;
 			top: 0;
 			right: 0;
-			.boxShadow('inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07)');
+			margin-right: 2px;
 		}
 	}
 	&-up,
 	&-down {
-		.iconFontStyle(@baseFontSize, @iconColor);
-		.size(@baseIconWidth, @baseIconHeight);
-		background: @scrollbarBackgroundColor;
-		position: absolute;
-		cursor: pointer;
-	}
-	&-up {
-		> .z-icon-caret-up:before {
-			.size(@baseIconWidth, @baseIconHeight);
-			position: absolute;
-			left: 4px;
-			top: -1px;
-		}
+		.buttonBase();
+		margin-left: -4px;
 	}
 	&-down {
 		bottom: 0;
-		> .z-icon-caret-down:before {
-			.size(@baseIconWidth, @baseIconHeight);
-			position: absolute;
-			left: 4px;
-			top: 1px;
-		}
 	}
 
 	//horizontal
 	&-horizontal {
-		.size(100%, @scrollbarHeight);
+		.size(100%, @scrollbarSize);
 		left: 0;
 		bottom: 0;
+		margin-bottom: 4px;
 
 		.z-scrollbar {
 			&-wrapper {
 				height: 100%;
-				position: absolute;
 				bottom: 0;
 				left: @baseIconWidth;
 			}
-			&-indicator {
-				height: @scrollbarHeight - 2;
-				border: 1px solid @scrollbarBorderColor;
-				.borderRadius(2px);
-				.verGradient(@scrollbarGradientStart, @scrollbarGradientEnd);
-				position: absolute;
-				top: 1px;
-				cursor: pointer;
-				z-index: 100;
-			}
 			&-rail {
-				.size(100%, 100%);
-				background: @scrollbarBackgroundColor;
+				height: @scrollbarRailSize;
+				top: 3px;
+			}
+			&-indicator {
+				height: @scrollbarBarSize;
+				top: 1px;
 			}
 			&-icon {
-				color: @iconColor;
 				margin-left: -8px;
-				position: absolute;
 				left: 50%;
 				top: -1px;
 				.transform('rotate(90deg) scale(0.5, 0.7)');
 			}
 		}
 		&-embed {
-			.size(100%, @scrollbarHeight / 2);
-			.borderRadius(@baseBorderRadius);
-			background: #000000;
-			.opacity(0.2);
-			position: absolute;
+			.embedBase();
+			width: 100%;
 			bottom: 0;
 			left: 0;
-			.boxShadow('inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07)');
+			margin-bottom: 2px;
 		}
 	}
 	&-left,
 	&-right {
-		.iconFontStyle(@baseFontSize, @iconColor);
-		.size(@baseIconWidth, @baseIconHeight);
-		padding: 1px 6px 0 5px;
-		background: @scrollbarBackgroundColor;
-		position: absolute;
-		cursor: pointer;
+		.buttonBase();
+		margin-top: -4px;
 	}
 	&-right {
 		right: 0;
-	}
-}
-
-.ie8 {
-	.z-scrollbar {
-		&-vertical {
-			.z-scrollbar {
-				&-indicator {
-					.gradientFallback(@scrollbarGradientStart, @scrollbarGradientEnd);
-				}
-			}
-		}
-		&-horizontal {
-			.z-scrollbar {
-				&-indicator {
-					.gradientFallback(@scrollbarGradientStart, @scrollbarGradientEnd);
-				}
-			}
-		}
 	}
 }
 

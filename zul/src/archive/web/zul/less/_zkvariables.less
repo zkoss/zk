@@ -2,10 +2,10 @@
 // -------------------------------------
 // Typography
 // -------------------------------------
-@baseFontSize:                 14px;
+@baseFontSize:                 16px;
 @baseTitleFontFamily:          "Helvetica Neue", Helvetica, Arial, sans-serif;
-@baseContentFontFamily:        Arial, Sans-serif;
-@baseLineHeight:               14px;
+@baseContentFontFamily:        @baseTitleFontFamily;
+@baseLineHeight:               16px;
 
 // Component height
 @baseHeight:                   8px;
@@ -24,275 +24,383 @@
 // Component sizing
 // -------------------------------------
 // Based on 14px font-size and 20px line-height
-@fontSizeXLarge:               ceil(@baseFontSize * 1.25); // 18px
-@fontSizeLarge:                floor(@baseFontSize * 1.15); // 16px
-@fontSizeMedium:               ceil(@baseFontSize * 0.85); // 12px
-@fontSizeSmall:                floor(@baseFontSize * 0.8); // 11px
-@fontSizeXSmall:               ceil(@baseFontSize * 0.7); // 10px
+@fontSizeXLarge:               ceil(@baseFontSize * 1.25);   // 20px
+@fontSizeLarge:                floor(@baseFontSize * 1.125); // 18px
+@fontSizeMedium:               ceil(@baseFontSize);          // 16px
+@fontSizeSmall:                floor(@baseFontSize * 0.875); // 14px
+@fontSizeXSmall:               ceil(@baseFontSize * 0.75);   // 12px
 
 @baseBorderRadius:             4px;
 @borderRadiusLarge:            6px;
 @borderRadiusSmall:            3px;
 
-@basePopupZIndex:              88000;
+
 
 // -------------------------------------
 // Component Basic Coloring
 // -------------------------------------
 // Font color
-@baseTextColor:                #000000;
-@textColorGray:                #555555;
-@textColorGrayDark:            #363636;
-@textColorGrayLight:           #636363;
-@textColorBlue:                #2184BA;
-@textColorGreen:               #46A546;
-@textColorOrange:              #F7941D;
+@textColorDefault:             rgba(0, 0, 0, 0.9);
+@textColorLight:               rgba(0, 0, 0, 0.57);
+@textColorLighter:             rgba(0, 0, 0, 0.34);
+@textColorDefault3:            #FFFFFF;
+@textColorActive:              #0093F9;
+
+@colorPrimary:                 #0093F9;
+@colorPrimaryDark:             #0064ED; //darken(@colorPrimary, 20%);
+@colorPrimaryLight:            #4FB7FF; //lighten(@colorPrimary, 20%);
+@colorPrimaryLighter:          #E8F5FF; // List hover Bg
+@colorAccent:                  #FFA516;
+@colorAccent2:                 #FF4051;
+@colorAccent3:                 #261429; // Tooltip Bg
+@colorBackground1:             #F9FCFF; // Window Bg, Panel Bg
+@colorBackground3:             #FFFFFF; // Container Bg
+@colorGreyDark:                rgba(0, 0, 0, 0.34);
+@colorGreyLight:               rgba(0, 0, 0, 0.15); // Btn disabled Bg
+@colorGreyLighter:             rgba(0, 0, 0, 0.05); // Field disabled Bg
+
+@baseTextColor:                @textColorDefault;
+@textColorGray:                @textColorLight;
+@textColorGrayDark:            @textColorLight;
+@textColorGrayLight:           @textColorLight;
 
 // Border color
-@baseBorderColor:              #CFCFCF;
+@baseBorderColor:              @colorGreyLight;
 
 // Background color
-@baseBackgroundColor:          #FFFFFF;
+@baseBackgroundColor:          @colorBackground1;
 
 // Gradient background
-@baseGradientStart:            #FEFEFE;
-@baseGradientEnd:              #EEEEEE;
+@baseGradientStart:            @colorBackground1;
+@baseGradientEnd:              @colorBackground1;
 
 // -------------------------------------
 // Icon font color (used for font-awesome)
 // -------------------------------------
-@iconColor:                    #636363;
-@iconHoverColor:               #636363;
-@iconDisabledColor:            #AAAAAA;
-
-// -------------------------------------
-// Button (used for button, combobutton)
-// -------------------------------------
-@buttonBorderColor:            #A9A9A9;
-@buttonGradientStart:          #FEFEFE;
-@buttonGradientEnd:            #EEEEEE;
-
-// -------------------------------------
-// Input (used for textbox, intbox, spinner, ...)
-// -------------------------------------
-@inputBorderColor:             @baseBorderColor;
-@inputBackgroundColor:         @baseBackgroundColor;
+@iconColor:                    @textColorLight;
+@iconHoverColor:               @textColorDefault;
+@iconDisabledColor:            @textColorLighter;
 
 // -------------------------------------
 // Mesh Table (used for grid, listbox, tree, biglistbox)
 // -------------------------------------
-@meshTitleBorderColor:         @baseBorderColor;
-@meshContentBorderColor:       #FFFFFF;
-@meshBackgroundColor:          #FFFFFF;
-@meshStripeBackgroundColor:    #F7F7F7;
-@meshFootBackgroundColor:      #FAFAFA;
-@meshTitleHoverStart:          #F2F9FE;
-@meshTitleHoverEnd:            #D6F0FD;
-@meshContentHoverStart:        #FFFFFF;
-@meshContentHoverEnd:          #E4E4E4;
-@meshContentFocusStart:        #FCFEFE;
-@meshContentFocusEnd:          #E4F2FC;
 @meshAutoPagingRowHeight:      32px;
+@meshBackgroundColor:          @colorBackground3;
+@meshStripeBackgroundColor:    @meshBackgroundColor;
+@meshTitleColor:               @textColorDefault3;
+@meshTitleBackgroundColor:     @colorPrimary;
+@meshTitleHoverBackgroundColor:@colorPrimaryLight;
+@meshTitleActiveBackgroundColor: @colorPrimaryDark;
+@meshTitleBorderColor:         @colorPrimaryDark;
+@meshContentBorderColor:       @colorGreyLighter;
+@meshContentFocusBackgroundColor: @colorPrimaryLighter;
+@meshFootBackgroundColor:      @colorGreyLighter;
+@meshGroupColor:               @textColorLight;
+@meshGroupBorderColor:         @colorGreyLight;
+@meshGroupBackgroundColor:     @colorBackground3;
+@meshGroupFooterColor:         @textColorLighter;
+@meshGroupFooterBackgroundColor: @colorBackground3;
+@meshGroupOpenColor:           @colorPrimary;
+@meshGroupOpenBorderColor:     @colorPrimary;
+@meshGroupFooterOpenColor:     @colorPrimaryLight;
+@gridDetailContentPadding:     0 12px 12px 0;
+@gridDetailContentBeforeMargin: 0 0 12px 16px;
 
 // -------------------------------------
 // Component State
 // -------------------------------------
 // Active
-@activeColor:                  @baseTextColor;
-@activeBorderColor:            #499EB3;
-@activeBackgroundColor:        #86E2F9;
-@activeGradientStart:          #C3F5FE;
-@activeGradientEnd:            #86E2F9;
+@activeColor:                  @textColorDefault3;
+@activeBorderColor:            transparent;
+@activeBackgroundColor:        @colorPrimaryDark;
+@activeGradientStart:          @activeBackgroundColor;
+@activeGradientEnd:            @activeBackgroundColor;
 
 // Focus
-@focusColor:                   @baseTextColor;
-@focusBorderColor:             #00B9FF;
-@focusBackgroundColor:         @baseGradientEnd;
-@focusGradientStart:           @baseGradientStart;
-@focusGradientEnd:             @baseGradientEnd;
+@focusColor:                   @textColorDefault3;
+@focusBorderColor:             @colorAccent;
+@focusBackgroundColor:         @colorPrimary;
+@focusGradientStart:           @focusBackgroundColor;
+@focusGradientEnd:             @focusBackgroundColor;
 
 // Hover
-@hoverColor:                   @textColorGrayLight;
-@hoverBorderColor:             #8FB9D0;
-@hoverBackgroundColor:         #D6F0FD;
-@hoverGradientStart:           #FFFFFF;
-@hoverGradientEnd:             #E4E4E4;
+@hoverColor:                   @baseTextColor;
+@hoverBorderColor:             transparent;
+@hoverBackgroundColor:         @colorPrimaryLighter;
+@hoverGradientStart:           @hoverBackgroundColor;
+@hoverGradientEnd:             @hoverBackgroundColor;
 
 // Disabled
-@disabledColor:                #AAAAAA;
-@disabledBackgroundColor:      #F0F0F0;
-@disabledOpacity:              0.6;
+@disabledColor:                @textColorLighter;
+@disabledBackgroundColor:      @colorGreyLighter;
+@disabledOpacity:              1;
 
 // Invalid
-@invalidBorderColor:           #DD7777;
+@invalidBorderColor:           @colorAccent2;
 
 // Read-only
-@readonlyBorderColor:          #E6E6E6;
-@readonlyBackgroundColor:      #FAFAFA;
+@readonlyBorderColor:          @colorGreyLight;
+@readonlyBackgroundColor:      @colorGreyLighter;
 
 // Selected (used on listbox, tree, comboitem)
-@selectedColor:                @textColorGrayLight;
-@selectedBorderColor:          @baseBorderColor;
-@selectedBackgroundColor:      #BEE7FC;
-@selectedGradientStart:        #E5F4FB;
-@selectedGradientEnd:          #D3EDFA;
+@selectedColor:                @baseTextColor;
+@selectedBorderColor:          transparent;
+@selectedBackgroundColor:      @colorPrimaryLighter;
 
 // Selected Hover (used on listbox, tree, comboitem)
-@selectedHoverColor:           @textColorGrayLight;
-@selectedHoverBorderColor:     @baseBorderColor;
-@selectedHoverBackgroundColor: #C5E7F8;
-@selectedHoverGradientStart:   #D5E4EA;
-@selectedHoverGradientEnd:     #B7D2E2;
+@selectedHoverColor:           @baseTextColor;
+@selectedHoverBorderColor:     transparent;
+@selectedHoverBackgroundColor: @colorPrimaryLighter;
 
 // Selected Focus (used on listbox, tree, comboitem)
-@selectedFocusColor:           @textColorGrayLight;
-@selectedFocusBorderColor:     #8FB9D0;
-@selectedFocusBackgroundColor: #D6F0FD;
-@selectedFocusGradientStart:   #CFEAF7;
-@selectedFocusGradientEnd:     #A5D9F4;
+@selectedFocusColor:           @baseTextColor;
+@selectedFocusBorderColor:     transparent;
+@selectedFocusBackgroundColor: @colorPrimaryLighter;
 
 // Checked (used on menuitem, listbox, tree, toolbarbutton)
-@checkedColor:                 #2184BA;
-@checkedBorderColor:           #8E8F8F;
-@checkedBackgroundColor:       #F8F8F8;
-@checkedGradientStart:         #F4FAFD;
-@checkedGradientEnd:           #E2EFF6;
-
-// Collapsed (used on Borderlayout)
-@collapsedBorderColor:         @baseBorderColor;
-@collapsedBackgroundColor:     #FCFCFC;
+@checkedIconSize:              @fontSizeLarge;
+@checkedColor:                 @colorPrimary;
+@checkedBorderColor:           @colorGreyLight;
+@checkedBackgroundColor:       @textColorDefault3;
 
 // -------------------------------------
 // Component independent variables
 // -------------------------------------
+// Container (Window, Panel)
+@containerBackground:          @colorBackground1;
+@containerPadding:             16px;
+@containerBorderColor:         @colorGreyDark;
+@containerBorderRadius:        @baseBorderRadius;
+@containerHeaderTextSize:      @fontSizeLarge;
+@containerHeaderColor:         @textColorLight;
+@containerBodyTextSize:        @fontSizeMedium;
+@containerBodyColor:           @textColorDefault;
+@containerButtonSize:          @fontSizeLarge;
+@containerButtonColor:         @textColorLight;
+
+// Input (used for textbox, intbox, spinner, ...)
+@inputTextSize:                @fontSizeMedium;
+@inputBorderColor:             @colorGreyLight;
+@inputBorderRadius:            @baseBorderRadius;
+@inputBackgroundColor:         @colorBackground3;
+@inputMargin:                  0 8px;
+@inputPadding:                 8px;
+@inputColor:                   @textColorDefault;
+@inputPlaceholderColor:        @textColorLighter;
+@inputHoverBorderColor:        @colorGreyDark;
+@inputFocusBorderColor:        @colorPrimary;
+@inputDisableColor:            @textColorLighter;
+@inputDisableBackgroundColor:  @colorGreyLighter;
+@inputReadonlyColor:           @textColorDefault;
+@inputReadonlyBackgroundColor: @colorGreyLighter;
+
+// Checkbox/Radio
+@checkboxHoverBorderColor:     @colorPrimary;
+
+// Button (used for button, combobutton)
+@buttonPadding:                8px 16px;
+@buttonColor:                  @textColorDefault3;
+@buttonBackgroundColor:        @colorPrimary;
+@buttonBorderColor:            transparent;
+@buttonHoverColor:             @textColorDefault3;
+@buttonHoverBackgroundColor:   @colorPrimaryLight;
+@buttonHoverBorderColor:       transparent;
+@buttonFocusColor:             @textColorDefault3;
+@buttonFocusBackgroundColor:   @colorPrimary;
+@buttonFocusBorderColor:       @colorAccent;
+@buttonActiveColor:            @textColorDefault3;
+@buttonActiveBackgroundColor:  @colorPrimaryDark;
+@buttonActiveBorderColor:      transparent;
+@buttonDisableColor:           @textColorLighter;
+@buttonDisableBackgroundColor: @colorGreyLight;
+@buttonDisableBorderColor:     transparent;
+@buttonSeparatorBorderColor:   @colorPrimaryDark;
+@buttonDisableSeparatorBorderColor:   @colorGreyLight;
+// Toolbar button
+@toolbarButtonPadding:         6px 12px;
+@toolbarButtonColor:           @textColorLight;
+@toolbarButtonBackgroundColor: transparent;
+@toolbarButtonCheckedColor:           @textColorDefault3;
+@toolbarButtonCheckedBackgroundColor: @colorPrimary;
+
+// ComboInput (combobox, datebox, bandbox, timebox, spinner...)
+@comboButtonIconSize:          18px;
+@comboButtonIconColor:         @textColorDefault;
+@comboButtonHoverBorderColor:  @colorPrimaryLight;
+@comboButtonHoverBackgroundColor: @colorPrimaryLighter;
+@comboButtonActiveIconColor:   @textColorDefault3;
+@comboButtonActiveBorderColor: @colorPrimaryDark;
+@comboButtonActiveBackgroundColor: @colorPrimary;
+@comboPopupBorderColor:        @colorPrimary;
+@comboPopupItemSize:           @fontSizeMedium;
+@comboPopupItemColor:          @textColorDefault;
+@comboPopupIconSize:           @fontSizeLarge;
+@comboPopupIconColor:          @textColorDefault;
+@comboPopupDescSize:           @fontSizeXSmall;
+@comboPopupDescColor:          @textColorLight;
+@comboPopupItemHoverBackgroundColor: @colorPrimaryLighter;
+@comboPopupItemSelectedColor:  @colorPrimary;
+
 // mask and loading
 @maskBackgroundColor:          #E0E1E3;
-@loadingBackgroundColor:       #E3E3E3;
+@loadingBackgroundColor:       #FFFFFF;
+@loadingTextColor:             @textColorLight;
 
 // scrollbar
-@scrollbarWidth:               16px;
-@scrollbarHeight:              16px;
-@scrollbarBorderColor:         #838383;
-@scrollbarBackgroundColor:     #DDDDDD;
-@scrollbarGradientStart:       #FFFFFF;
-@scrollbarGradientEnd:         #CFCFCF;
+@scrollbarSize:                10px;
+@scrollbarEmbeddedSize:        10px;
+@scrollbarBarSize:             10px;
+@scrollbarRailSize:            6px;
+@scrollbarEmbeddedColor:       @colorGreyLight;
+
+@scrollbarBorderColor:         transparent;
+@scrollbarBackgroundColor:     @colorGreyLight;
+
+@scrollbarBarBackgroundColor:  @colorPrimary;
+@scrollbarBarHoverBackground:  @colorPrimaryDark;
+@scrollbarIconDisplay:         none;
+@scrollbarButtonBackground:    transparent;
+@scrollbarButtonHoverBackground: transparent;
+@scrollbarButtonColor:         @colorPrimary;
+@scrollbarButtonHoverColor:    @colorPrimaryDark;
 
 // drag and drop
-@dragColor:                    #FFFFFF;
-@dragBackgroundColor:          #E0EAF0;
-@dragHoverBackgroundColor:     #ADD2FF;
-@dragAllowBorderColor:         #11AA33;
-@dragAllowBackgroundColor:     #11AA33;
-@dragDisAllowBorderColor:      #C13634;
-@dragDisAllowBackgroundColor:  #C13634;
+@dragColor:                    @textColorDefault;
+@dragBackgroundColor:          @colorBackground3;
+@dragHoverBackgroundColor:     @colorPrimaryLighter;
+@dragAllowIconColor:           @colorPrimary;
+@dragAllowBorderColor:         @colorPrimary;
+@dragAllowBackgroundColor:     @colorBackground3;
+@dragDisAllowIconColor:        @textColorLighter;
+@dragDisAllowBorderColor:      transparent;
+@dragDisAllowBackgroundColor:  @colorGreyLighter;
 
 // splitter (hbox, vbox, borderlayout)
 @splitterSize:                 8px;
-@splitterGradientStart:        #FDFDFD;
-@splitterGradientEnd:          #F1F1F1;
+@splitterBorderColor:          @colorGreyLight;
+@splitterBackgroundColor:      @colorBackground1;
+@splitterHoverBackgroundColor: @colorPrimaryLighter;
+@splitterButtonTextSize:       8px;
+@splitterButtonTextColor:      @textColorLighter;
+@splitterDragBackgroundColor:  @colorGreyLight;
 
 // calendar
-@calendarTitleColor:           @textColorGrayLight;
-@calendarTitleHoverColor:      @textColorGrayLight;
-@calendarCellColor:            @textColorGrayLight;
-@calendarSelectedColor:        #008BB6;
-@calendarSelectedHoverColor:   #008BB6;
-@weekendColor:                 @textColorOrange;
-@weekendBackgroundColor:       #F2F2F2;
-@weekColor:                    @textColorGrayLight;
-@weekofyearColor:              #FFFFFF;
-@weekofyearBackgroundColor:    #636363;
+@calendarBackgroundColor:      @colorBackground3;
+@calendarTodayColor:           @textColorLight;
+@calendarTitleColor:           @baseTextColor;
+@calendarTitleHoverColor:      @baseTextColor;
+@calendarCellColor:            @baseTextColor;
+@calendarCellHoverBackgroundColor: @colorPrimaryLighter;
+@calendarSelectedColor:        @textColorDefault3;
+@calendarSelectedHoverColor:   @textColorDefault3;
+@calendarSelectedBackgroundColor: @colorPrimary;
+@calendarSelectedHoverBackgroundColor: @colorPrimary;
+@calendarWeekTitleColor:       @textColorLight;
+@weekendColor:                 @baseTextColor;
+@weekendBackgroundColor:       @calendarBackgroundColor;
+@weekdayColor:                 @baseTextColor;
+@weekdayBackgroundColor:       @calendarBackgroundColor;
+@weekofyearColor:              @textColorLighter;
+@weekofyearBackgroundColor:    @calendarBackgroundColor;
 
 // popup
-@popupBorderColor:             @baseBorderColor;
-@popupBackgroundColor:         @baseBackgroundColor;
-@popupGradientStart:           @baseBackgroundColor;
-@popupGradientEnd:             #F5F5F5;
-
-// group (group, listgroup)
-@groupGradientStart:           #FFFFFF;
-@groupGradientEnd:             #E9F2FB;
+@basePopupZIndex:              88000;
+@popupBorderColor:             @colorGreyLight;
+@popupBackgroundColor:         @colorBackground3;
 
 // paging
-@pagingColor:                  @textColorBlue;
-@pagingSelectedColor:          @textColorGrayDark;
-@pagingBorderColor:            @baseBorderColor;
-@pagingActiveBorderColor:      #A9A9A9;
-@pagingBackgroundColor:        #FAFAFA;
-@pagingSelectedBackgroundColor:#E6E6E6;
+@pagingColor:                  @textColorDefault;
+@pagingHeight:                 44px;
+@pagingBorderColor:            @colorGreyLight;
+@pagingBackgroundColor:        @colorGreyLighter;
+@pagingItemHoverBackgroundColor:   @colorPrimaryLighter;
+@pagingItemActiveColor:            @textColorDefault3;
+@pagingItemActiveBackgroundColor:  @colorPrimary;
+@pagingItemSelectedColor:          @colorPrimary;
+@pagingItemSelectedBackgroundColor:transparent;
+@pagingButtonMinWidth:         26px;
+@pagingButtonHeight:           26px;
 
 // slider
-@sliderBorderColor:            @baseBorderColor;
-@sliderActiveBorderColor:      #838383;
+@sliderPopupBackgroundColor:   @colorAccent3;
+@sliderPopupColor:             @textColorDefault3;
+@sliderAreaSize:               6px;
+@sliderBackgroundColor:        @colorGreyLight;
+@sliderAreaBackgroundColor:    @colorPrimary;
 
 // errorbox (input constraint)
-@errorboxColor:                #990000;
-@errorboxBorderColor:          #990000;
-@errorboxBackgroundColor:      #FFEEEE;
+@errorboxColor:                @colorAccent2;
+@errorboxBorderColor:          transparent;
+@errorboxBackgroundColor:      #FFEAEC;
 
 // notification
-@notificationInfoColor:        rgba(33, 155, 166, 0.88);
-@notificationWarningColor:     rgba(234, 67, 23, 0.88);
-@notificationErrorColor:       rgba(190, 0, 5, 0.88);
-@notificationArrowColor:       rgba(51, 51, 51, 0.9);
-@notificationInfoColorIE8:     rgb(33, 155, 166);
-@notificationWarningColorIE8:  rgb(234, 67, 23);
-@notificationErrorColorIE8:    rgb(190, 0, 5);
-@notificationArrowColorIE8:    rgb(51, 51, 51);
+@notificationInfoColor:        #78C129;
+@notificationWarningColor:     #FF8501;
+@notificationErrorColor:       #FF4051;
+@notificationInfoBackgroundColor:        #F0F7E8;
+@notificationWarningBackgroundColor:     #FFF3E7;
+@notificationErrorBackgroundColor:       #FFEAEC;
 
 // progressmeter
-@progressmeterGradientStart:   #E8F6FD;
-@progressmeterGradientEnd:     #C6E9FA;
-
-// window
-@windowBorderColor:            #9C9C9C;
-@windowBackgroundColor:        #D9E5EF;
-@windowFramePadding:           4px;
+@progressmeterBorderColor:     @colorGreyLight;
+@progressmeterBackgroundColor: @colorPrimary;
 
 // tabbox
-@tabSelectedBackgroundColor:   #FFFFFF;
-
-// panel
-@panelBorderColor:             #9C9C9C;
-@panelBackgroundColor:         #E1EDF4;
-@panelBodyBackground:          #F0F6F9;
+@tabboxBackgroundColor:        @colorBackground3;
+@tabboxTabsColor:              @textColorLight;
+@tabboxTabsHoverColor:         @textColorDefault;
+@tabboxTabsBackgroundColor:    @colorBackground3;
+@tabboxSelectedColor:          @colorPrimary;
+@tabboxSelectedHoverColor:     @colorPrimaryDark;
+@tabboxSelectedBackgroundColor:@colorBackground3;
 
 // menu
-@menuImageSize:                16px;
-@menuActiveBorderColorTR:      #838383;
-@menuActiveBorderColorBL:      #B6B6B6;
-@menuPopupBackground:          #FAFAFA;
-@menuSeparatorBorderColor:     #838383;
-@menuSeparatorBackgroundColor: #B8B8B8;
-@menuPopupSeparatorBorder:     #FFFFFF;
-@menuPopupSeparatorBackground: #E0E0E0;
+@menuImageSize:                20px;
+@menuActiveBackground:         @colorPrimary;
+@menuActiveBorderColorTR:      transparent;
+@menuActiveBorderColorBL:      transparent;
+@menuPopupBackground:          @colorBackground3;
+@menuSeparatorBorderColor:     @colorGreyLight;
+@menuSeparatorBackgroundColor: @colorGreyLight;
+@menuPopupSeparatorBorder:     @colorGreyLight;
+@menuPopupSeparatorBackground: @colorGreyLight;
+@menuCheckedColor:             @textColorDefault3;
+@menuCheckedBackgroundColor:   @colorPrimary;
 
 // navbar
-@navImageSize:                 16px;
-@navColor:                     #333333;
-@navBorderColor:               #F4F4F3;
-@navBackgroundColor:           #FFFFFF; //first level, each level is 3% darker (darken(@navBackgroundColor, 3 * level));
-@navHoverBackgroundColor:      #E8E8E8;
-@navSelectedColor:             #FFFFFF;
-@navSelectedBackgroundColor:   #372F2B;
-@navSeparatorColor:            #838383;
+@navImageSize:                 20px;
+@navColor:                     @textColorLight;
+@navBorderColor:               @colorGreyLight;
+@navBackgroundColor:           #FFFFFF;
+@navHoverBackgroundColor:      @navBackgroundColor;
+@navSelectedColor:             @colorPrimary;
+@navSelectedBackgroundColor:   #FFFFFF;
+@navSeparatorColor:            @colorGreyLight;
 @navCollapsedWidth:            32px;
-
-// colorbox
-@colorboxBorderColor:          #9C9C9C;
+@navBadgeTextColor:            @textColorLight;
+@navBadgeBackgroundColor:      @colorGreyLight;
 
 // chosenbox
-@chosenboxItemBorderColor:     #B3B3B3;
-@chosenboxCreateIconColor:     @textColorGreen;
+@chosenboxIconSize:            @fontSizeMedium;
+@chosenboxItemSize:            @fontSizeMedium;
+@chosenboxItemColor:           @textColorDefault3;
+@chosenboxItemBorderColor:     @colorPrimaryDark;
+@chosenboxItemBackgroundColor: @colorPrimary;
+@chosenboxItemFocusBackgroundColor: @colorPrimaryDark;
+@chosenboxItemDisabledColor:   @textColorLighter;
+@chosenboxItemDisabledBorderColor: @colorGreyLight;
+@chosenboxItemDisabledBackgroundColor: @colorGreyLight;
+@chosenboxPopupHoverBackgroundColor: @colorPrimaryLighter;
+@chosenboxCreateIconSize:      @fontSizeLarge;
+@chosenboxCreateIconColor:     @colorPrimary;
 
 // biglistbox
-@biglistboxBackgroundColor:    #F0F0F0;
-@biglistboxFrozenBackground:   #E0E0E0;
-
-// mesh for ie8
-@meshBackgroundColorIE8:              #F5F5F5;
-@meshHoverBackgroundColorIE8:         #E4E4E4;
-@meshSelectedBackgroundColorIE8:      #E5F7FF;
-@meshSelectedHoverBackgroundColorIE8: #D9F2FF;
-@meshGroupBackgroundColorIE8:         #EDF6FF;
-@meshGroupFooterBackgroundColorIE8:   #F2F9FF;
+@biglistboxFrozenBackgroundColor:   @colorGreyLight;
+@biglistboxFrozenGhostBackgroundColor: @colorPrimary;
+@biglistboxScrollBarBorderColor: @colorGreyLight;
+@biglistboxScrollBarTextColor: @textColorLight;
+@biglistboxScrollBarEndBarBackgroundColor: @colorGreyLighter;
+@biglistboxScrollBarHoverBackgroundColor: @colorPrimaryLighter;
+@biglistboxScrollBarActiveBackgroundColor: @colorPrimary;
+@biglistboxScrollBarActiveBorderColor: @colorGreyLight;
+@biglistboxScrollBarHoverBorderColor: @colorGreyDark;

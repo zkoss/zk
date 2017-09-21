@@ -7,40 +7,50 @@
 .z-spinner,
 .z-doublespinner {
 	display: inline-block;
-	min-height: @baseButtonHeight;
+	height: 34px;
 	white-space: nowrap;
 
 	&-input {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
-		height: @baseButtonHeight;
+		.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
+		height: 34px;
 		border: 1px solid @inputBorderColor;
 		border-right: 0;
-		.leftBorderRadius(@borderRadiusSmall);
+		.leftBorderRadius(@baseBorderRadius);
 		margin: 0;
-		padding: 4px 5px;
+		padding: @inputPadding;
 		line-height: @baseLineHeight;
 		background: @inputBackgroundColor;
 
+		&:hover {
+			border-color: @inputHoverBorderColor;
+		}
+		&:hover + * {
+			border-color: @inputHoverBorderColor;
+		}
 		&:focus {
-			.boxShadow('inset 1px 1px 1px rgba(210, 210, 210, 0.75)');
+			border-color: @inputFocusBorderColor;
+		}
+		&:focus + * {
+			border-left: 1px solid @inputFocusBorderColor;
 		}
 		&[readonly] {
-			border-color: @readonlyBorderColor;
-			background: @readonlyBackgroundColor;
+			color: @inputReadonlyColor;
+			background: @inputReadonlyBackgroundColor;
 		}
-		&[readonly]:focus {
-			.boxShadow('none');
+		&[readonly] + * {
+			color: @inputReadonlyColor;
+			background-color: @colorBackground3;
 		}
 	}
 
 	&-button {
-		.iconFontStyle(@baseFontSize, @iconColor);
+		.iconFontStyle(@comboButtonIconSize, @comboButtonIconColor);
 		display: inline-block;
 		min-width: @baseButtonWidth;
-		height: @baseButtonHeight;
+		height: 34px;
 		border: 1px solid @inputBorderColor;
-		.rightBorderRadius(@borderRadiusSmall);
-		padding: 4px;
+		.rightBorderRadius(@baseBorderRadius);
+		padding: 6px 8px 0;
 		line-height: @baseLineHeight;
 		background: @inputBackgroundColor;
 		text-align: left;
@@ -49,61 +59,48 @@
 		cursor: pointer;
 
 		&:hover {
-			border-color: @hoverBorderColor;
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			border-color: @comboButtonHoverBorderColor;
+			background: @comboButtonHoverBackgroundColor;
 		}
 		&:active {
-			border-color: @activeBorderColor;
-			.verGradient(@activeGradientStart, @activeGradientEnd);
-			.boxShadow('inset 1px 1px 1px #91AAB7');
+			color: @comboButtonActiveIconColor;
+			border-color: @comboButtonActiveBorderColor;
+			background-color: @comboButtonActiveBackgroundColor;
 		}
 	}
 
 	&-disabled {
 		.opacity(@disabledOpacity);
-		& * {
-			color: @disabledColor !important;
-			background: @disabledBackgroundColor !important;
+		& > * {
+			color: @inputDisableColor !important;
+			background: @inputDisableBackgroundColor !important;
 			cursor: default !important;
+			&:hover {
+				border-color: @inputBorderColor;
+			}
+			&:hover + * {
+				border-color: @inputBorderColor;
+			}
 		}
 	}
 
 	&-invalid {
-		border: 1px solid @invalidBorderColor !important;
-		margin-right: -1px;
-		background: @baseBackgroundColor;
-		.boxShadow(inset -1px 0 0 @invalidBorderColor);
-	}
-
-	&-readonly:focus {
-		border-color: @readonlyBorderColor;
-		border-right-width: 0;
-		background: transparent repeat-x 0 0;
-		cursor: default;
-		.boxShadow(none);
+		border-color: @invalidBorderColor !important;
+		& + * {
+			border-left: 1px solid @invalidBorderColor !important;
+		}
 	}
 
 	&-rightedge {
 		border-right: 1px solid @inputBorderColor;
-		.borderRadius(@borderRadiusSmall);
+		.borderRadius(@baseBorderRadius);
 	}
 }
 
-.z-combobox-disabled>.z-combobox-button:hover,
-.z-bandbox-disabled>.z-bandbox-button:hover,
-.z-datebox-disabled>.z-datebox-button:hover,
-.z-timebox-disabled>.z-timebox-button:hover,
-.z-spinner-disabled>.z-spinner-button:hover,
-.z-doublespinner-disabled>.z-doublespinner-button:hover,
-.z-combobox-disabled>.z-combobox-button:active,
-.z-bandbox-disabled>.z-bandbox-button:active,
-.z-datebox-disabled>.z-datebox-button:active,
-.z-timebox-disabled>.z-timebox-button:active,
-.z-spinner-disabled>.z-spinner-button:active,
-.z-doublespinner-disabled>.z-doublespinner-button:active {
-    border-color: @inputBorderColor;
-    .resetGradient();
-    .boxShadow('none');
+.z-combobox-open .z-combobox-button,
+.z-bandbox-open .z-bandbox-button,
+.z-datebox-open .z-datebox-button {
+	border-color: @inputFocusBorderColor;
 }
 
 .z-combobox-input,
@@ -123,11 +120,12 @@
 	display: none;
 }
 
+.z-datebox-button,
+.z-bandbox-button,
 .z-combobox-button {
-	font-size: @fontSizeLarge;
+	font-size: 22px;
 	min-height: @baseButtonHeight;
-	padding-left: 7px;
-	padding-top: 5px;
+	padding-top: 8px;
 }
 
 .z-datebox-button,
@@ -138,40 +136,28 @@
 .z-timebox-button,
 .z-spinner-button,
 .z-doublespinner-button {
+	width: 34px;
 	padding: 0;
 	position: relative;
 
 	&:hover,
 	&:active {
-		.resetGradient();
-		.boxShadow(none);
+		background: @inputBackgroundColor;
 	}
 
 	& > a {
+		display: block;
 		color: @iconColor;
-		.size(@baseButtonWidth, @baseButtonHeight / 2);
-		padding: 0 7px;
-		background: @baseBackgroundColor;
-		position: absolute;
-		left: 0;
+		height: @baseBarHeight / 2;
+		padding: 0 8px;
 		overflow: hidden;
 		text-decoration: none;
 
-		&:first-child {// up icon
-			top: -1px;
-
-			&:active {
-				top: 0;
-			}
-		}
 		&:hover {
-			border-color: @hoverBorderColor;
-			.verGradient(@hoverGradientStart, @hoverGradientEnd);
+			background: @comboButtonHoverBackgroundColor;
 		}
 		&:active {
-			border-color: @activeBorderColor;
-			.verGradient(@activeGradientStart, @activeGradientEnd);
-			.boxShadow('inset 1px 1px 1px #91AAB7');
+			background: @comboButtonActiveBackgroundColor;
 		}
 	}
 	// separator
@@ -179,40 +165,22 @@
 		z-index: 2; // greater than arrow icon
 	}
 	&:hover > i {
-		.size(@baseButtonWidth, 1px);
-		border-top: 1px solid @hoverBorderColor;
+		.size(34px, 1px);
+		border-top: 1px solid @comboButtonHoverBorderColor;
 		position: absolute;
-		top: 11px;
+		top: 15px;
 		left: 0;
-	}
-	& > a ~ a {// bottom icon
-		bottom: -1px;
-
-		& > i { // fix 1px alignment
-			position: relative;
-			top: -2px;
-		}
-		&:active {
-			bottom: -2px;
-		}
 	}
 }
 
 .z-timebox-disabled a,
 .z-spinner-disabled a,
 .z-doublespinner-disabled a {
+	color: @disabledColor;
 	&:active,
 	&:hover {
-		.resetGradient();
-		.boxShadow('none');
+		background: 0;
 	}
-	&:first-child:active { // up icon
-		top: -1px; // same as default one
-	}
-	& ~ a:active { // bottom icon
-		bottom: -1px; // same as default one
-	}
-
 	// separator
 	& + i[class*='-separator'] {
 		display: none;
@@ -229,11 +197,6 @@
 	border: 0;
 	padding: 3px;
 	background: none;
-
-	&:focus {
-		.resetGradient();
-		.boxShadow('none');
-	}
 }
 .z-combobox-inplace .z-combobox-button,
 .z-bandbox-inplace .z-bandbox-button,
@@ -247,55 +210,55 @@
 // Comboitem
 .z-comboitem,
 .z-comboitem-button {
-	font-size: @fontSizeMedium;
+	font-size: @comboPopupItemSize;
 	white-space: nowrap;
 	cursor: pointer;
 }
 .z-comboitem {
 	display: block;
-	padding: 3px 2px;
+	padding: 4px 8px;
 	position: relative;
-	text-shadow: 0 1px #FFFFFF;
 	min-height: 20px; //ZK-2783: give default height to empty item
+	.borderRadius(@baseBorderRadius);
 }
 .z-comboitem-inner,
 .z-comboitem-content {//description
-	.iconFontStyle(@fontSizeXSmall, @textColorGray);
+	.iconFontStyle(@comboPopupDescSize, @comboPopupDescColor);
 }
 .z-comboitem,
 .z-comboitem a,
 .z-comboitem a:visited {
-	font-size: @fontSizeMedium;
+	font-size: @comboPopupItemSize;
 	font-weight: normal;
-	color: @baseTextColor;
+	color: @comboPopupItemColor;
 	text-decoration: none;
 }
 .z-comboitem:hover {
-	.verGradient(@hoverGradientStart, @hoverGradientEnd);
+	background-color: @comboPopupItemHoverBackgroundColor;
 }
 .z-comboitem-selected {
-	.verGradient(@selectedGradientStart, @selectedGradientEnd);
-	.z-comboitem-text {
-		color: @selectedColor;
+	color: @comboPopupItemSelectedColor;
+	& * {
+		color: @comboPopupItemSelectedColor;
 	}
 }
-.z-comboitem-selected:hover {
-	.verGradient(@selectedHoverGradientStart, @selectedHoverGradientEnd);
-	.z-comboitem-text {
-		color: @selectedHoverColor;
-	}
+.z-comboitem-text {
+	line-height: @comboPopupItemSize + 2;
 }
 .z-comboitem-image {
 	margin-top: -4px;
-	margin-right: 3px;
+	margin-right: 4px;
 	float: left;
-	
+	max-width: 18px;
+	max-height: 18px;
+
 	&:empty {
-		margin-right: 0px;
+		margin-right: 0;
 	}
 }
 .z-comboitem-icon {
-	padding: 0 4px 0 3px;
+	.iconFontStyle(@comboPopupIconSize, @comboPopupIconColor);
+	padding-right: 4px;
 }
 .z-combobox-popup,
 .z-bandbox-popup,
@@ -305,8 +268,9 @@
 	font-weight: normal;
 	font-size: @fontSizeMedium;
 	display: block;
-	border: 1px solid @popupBorderColor;
-	padding: 2px;
+	border: 1px solid @comboPopupBorderColor;
+	.borderRadius(@baseBorderRadius);
+	padding: 4px 8px;
 	background: @popupBackgroundColor;
 	position: absolute;
 	overflow: hidden;
@@ -318,7 +282,7 @@
 
 .z-bandbox-popup {
 	overflow: auto;
-	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
+	padding: 8px;
 }
 
 .z-combobox-content {
@@ -327,17 +291,14 @@
 	margin: 0;
 	background: transparent none repeat 0 0;
 	position: relative;
-	list-style-image: none;
-	list-style-position: outside;
-	list-style-type: none;
+	list-style: none outside none;
 }
 
 //Shadow
 .z-combobox-shadow,
 .z-bandbox-shadow,
 .z-datebox-shadow {
-	.borderRadius(@borderRadiusSmall);
-	.boxShadow('0 0 15px rgba(0, 0, 0, 0.35)');
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
 }
 
 .ie8 {
@@ -349,12 +310,6 @@
 	.z-doublespinner {
 		&-button {
 			min-width: @baseButtonWidth - 10;
-			&:hover {
-				.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
-			}
-			&:active {
-				.gradientFallback(@activeGradientStart, @activeGradientEnd);
-			}
 		}
 	}
 
@@ -363,31 +318,11 @@
 	.z-doublespinner {
 		&-button {
 			min-width: @baseButtonWidth - 2;
-			& > a {
-				&:hover {
-					.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
-				}
-				&:active {
-					.gradientFallback(@activeGradientStart, @activeGradientEnd);
-				}
-			}
 		}
 	}
 
 	.z-combobox-button {
 		min-width: @baseButtonHeight - 13;
 		min-height: @baseButtonWidth - 11;
-	}
-
-	.z-comboitem {
-		&-selected {
-			.gradientFallback(@selectedGradientStart, @selectedGradientEnd);
-		}
-		&:hover {
-			.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
-		}
-		&-selected:hover {
-			.gradientFallback(@selectedHoverGradientStart, @selectedHoverGradientEnd);
-		}
 	}
 }
