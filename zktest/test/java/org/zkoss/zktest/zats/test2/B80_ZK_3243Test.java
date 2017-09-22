@@ -15,7 +15,7 @@ public class B80_ZK_3243Test extends WebDriverTestCase {
         connect();
         click(jq(".z-combobox-button"));
         waitResponse(true);
-        assertTrue(jq(".z-combobox-popup").outerWidth() < parseInt(getEval("jq.innerWidth()")));
+        assertTrue(parseInt(jq(".z-combobox-popup").css("width")) < parseInt(getEval("jq.innerWidth()")));
     }
 
 }
