@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3606.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 30 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click label "test" or button or textfield, and scroll
+		2. the popup, notification, errorbox should follow the scroll
+	</label>
+	<window xmlns:ca="client/attribute" ca:data-scrollable="true" height="100%" contentStyle="overflow:auto; border: 1px black solid;">
+		<style>
+			body{
+			//	border: 1px red solid;
+			}
+		</style>
+		<div height="500px"/>
+		<hlayout>
+			<div width="100px"></div>
+			<div>
+				<label style="font-size: 50px;" popup="test1" context="test2" tooltip="test3" value="test"/><separator/>
+			</div>
+			<button label="show notification" width="200px" height="200px">
+				<attribute name="onClick"><![CDATA[
+					import org.zkoss.zk.ui.util.Clients;
+					import org.zkoss.zk.ui.Component;
+
+					String msg = "Notification";
+					String type = Clients.NOTIFICATION_TYPE_ERROR;
+					Component ref = self;
+					int dur = -1;
+					boolean closable = false;
+
+					Clients.showNotification(msg, type, ref, "before_start", dur, closable);
+					Clients.showNotification(msg, type, ref, "before_center", dur, closable);
+					Clients.showNotification(msg, type, ref, "before_end", dur, closable);
+					Clients.showNotification(msg, type, ref, "after_start", dur, closable);
+					Clients.showNotification(msg, type, ref, "after_center", dur, closable);
+					Clients.showNotification(msg, type, ref, "after_end", dur, closable);
+					Clients.showNotification(msg, type, ref, "start_before", dur, closable);
+					Clients.showNotification(msg, type, ref, "start_center", dur, closable);
+					Clients.showNotification(msg, type, ref, "start_after", dur, closable);
+					Clients.showNotification(msg, type, ref, "end_before", dur, closable);
+					Clients.showNotification(msg, type, ref, "end_center", dur, closable);
+					Clients.showNotification(msg, type, ref, "end_after", dur, closable);
+
+					Clients.showNotification(msg, type, ref, "middle_left", dur, closable);
+					Clients.showNotification(msg, type, ref, "middle_center", dur, closable);
+					Clients.showNotification(msg, type, ref, "middle_right", dur, closable);
+
+			]]></attribute>
+			</button>
+			<textbox constraint="no empty, before_start"></textbox>
+		</hlayout>
+		<div height="5000px"/>
+		<popup id="test1">
+			popup
+		</popup>
+		<popup id="test2">
+			context
+		</popup>
+		<popup id="test3">
+			tooltip
+		</popup>
+	</window>
+</zk>
