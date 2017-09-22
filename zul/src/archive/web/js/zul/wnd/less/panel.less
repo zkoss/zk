@@ -8,7 +8,9 @@
 .z-panel {
 	.defaultOverflowZoom();
 	padding: 0;
+	border: 1px solid @containerBorderColor;
 	background: @containerBackground;
+	.borderRadius(@containerBorderRadius);
 	
 	&-shadow {
 		.boxShadow('0 3px 6px rgba(0, 0, 0, 0.24)');
@@ -20,9 +22,6 @@
 	
 	&-head {
 		overflow: hidden;
-		border: 1px solid @containerBorderColor;
-		border-bottom: 0;
-		.topBorderRadius(@containerBorderRadius);
 	}
 	
 	&-header {
@@ -39,13 +38,10 @@
 	
 	&-body {
 		margin: 0;
-		padding: @containerPadding;
+		padding: 0;
 		background-color: @colorBackground3;
 		.defaultOverflowZoom();
-		border: 1px solid @containerBorderColor;
-		border-top: 0;
-		.bottomBorderRadius(@containerBorderRadius);
-
+		
 		&:first-child {
 			height: 100%;
 		}
@@ -108,33 +104,14 @@
 		}
 	}
 	
+	&-noborder {
+		border: 0;
+	}
+
  	&-move-block {
 	 	border: 2px dashed #B2CAD6;
 	}
 	
-	&-noframe &-body {
-		border: 0;
-		.borderRadius(0);
-		padding: 0;
-		
-		.z-panelchildren {
-			border-top: 0;
-		}
-	}
-
-	&-noheader &-body {
-		border-top: 1px solid @containerBorderColor;
-		.borderRadius(@containerBorderRadius);
-	}
-
-	&-noheader&-noframe &-body {
-		border: 0;
-		.borderRadius(0);
-	}
-	
-	&-noborder&-noframe .z-panelchildren {
-		border: none;
-	}
 }
 
 .z-panelchildren {
