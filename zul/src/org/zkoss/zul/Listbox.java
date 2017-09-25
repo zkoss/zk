@@ -2548,6 +2548,10 @@ public class Listbox extends MeshElement {
 
 	@SuppressWarnings("rawtypes")
 	private void doInitRenderer() {
+		// ZK-3732: skip rendering if the listbox is detached
+		if (this.getPage() == null)
+			return;
+
 		// sync the multiple status from model
 		if (_model != null)
 			setMultiple(((Selectable) _model).isMultiple());
