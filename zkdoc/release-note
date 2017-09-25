@@ -97,6 +97,7 @@ ZK 8.5.0
   ZK-3580: IncompatibleClassChangeError when form object is null and its declared type is an interface
   ZK-3345: Frozen scroll performance
   ZK-3750: Following zk-3722, hidden cell / row style is incorrect
+  ZK-3732: add and clear a ListModel causes IndexOutOfBoundsException
 
 * Upgrade Notes
 
