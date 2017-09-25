@@ -156,16 +156,16 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				dst.display = 'block';
 			}
 		}
-		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
-		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
-		//add extra CSS class for easy customize
-		jq(node).addClass(this.$s('open'));
-
 		// resync position if the content is not calculated. Bug ZK-2257
 		var openInfo = this._openInfo;
 		if (openInfo) {
 			this.position.apply(this, openInfo);
 		}
+
+		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
+		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
+		//add extra CSS class for easy customize
+		jq(node).addClass(this.$s('open'));
 
 		// B85-ZK-3606: for adjusting popup position
 		if (ref) {
