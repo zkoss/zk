@@ -14,8 +14,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<tr', this.domAttrs_(), '>');
-	var	zcls = this.getZclass();
-	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++)
-		this.encloseChildHTML_({child:w, index: j, zclass: zcls, out: out});
+	var zcls = this.getZclass(),
+		grid = this.getGrid(),
+		head = grid.getHeadWidget();
+	var h;
+	if (head)
+		h = head.firstChild;
+	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++) {
+		var opts = {child:w, index: j, zclass: zcls, out: out};
+		if (head)
+			opts.visible = h.isVisible();
+		this.encloseChildHTML_(opts);
+		if (head)
+			h = h.nextSibling;
+	}
 	out.push('</tr>');
 }

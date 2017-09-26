@@ -87,6 +87,7 @@ ZK 8.5.0
   ZK-3744: error when enabling websocket serverpush via au-event
   ZK-3606: data-scrollable doesn't work on top page level components
   ZK-3676: notifications not closing on touch devices
+  ZK-3758: Row height changed after column sets visibility
 
 * Upgrade Notes
 
