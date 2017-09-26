@@ -107,7 +107,11 @@
 .z-messagebox {
 	margin-left: 16px;
 
-	&-window.z-window-modal .z-window-content, 
+	&-window {
+		padding: 0;
+	}
+
+	&-window .z-window-header, &-window.z-window-modal .z-window-content, 
 	&-window.z-window-highlighted .z-window-content {
 		padding: 16px;
 	}
