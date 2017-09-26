@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3758.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 26 10:11:57 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the header button of the second column to hide the second column, the height of the rows should remain
+		2. repeat step one on the last column
+
+	</label>
+	<grid>
+		<columns menupopup="auto" sizable="true">
+			<column label="Author" />
+			<column label="Title" sort="auto" />
+			<column label="Publisher"/>
+			<column label="Hardcover"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Michael Greenberg"/>
+				<label value="Painless Vocabulary (Painless)"/>
+				<label value="Barron's Educational Series (September 1, 2001)"/>
+				<label value="292 pages"/>
+			</row>
+			<row>
+				<label value="Rick Perlstein"/>
+				<label value="Nixonland: The Rise of a President and the Fracturing of America"/>
+				<label value="Scribner; 1st Scribner Hardcover Ed edition (May 13, 2008)"/>
+				<label value="896 pages"/>
+			</row>
+			<row>
+				<label value="Rick Perlstein"/>
+				<label value="Nixonland"/>
+				<label value="Simon &amp; Schuster (May 13, 2008)"/>
+				<label value="0 pages"/>
+			</row>
+		</rows>
+	</grid>
+</zk>
