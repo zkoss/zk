@@ -300,7 +300,9 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.tab.Tab, 'rerender', arguments);
 	},
 	contentRenderer_: function (out) {
-		out.push('<span id="', this.uuid, '-cnt" class="', this.$s('text'), '">', this.domContent_(), '</span>');
+		var tooltip = zUtl.encodeXML(this.getLabel());
+		tooltip = tooltip ? ' title="' + tooltip + '"' : '';
+		out.push('<span id="', this.uuid, '-cnt" class="', this.$s('text'), '"', tooltip, '>', this.domContent_(), '</span>');
 	}
 });
 /** @class zul.tab.TabRenderer

@@ -100,7 +100,7 @@
 		.z-listheader-sorticon {
 			.iconFontStyle(@fontSizeLarge, @meshTitleColor);
 			position: absolute;
-			top: -7px;
+			top: -3px;
 			left: 50%;
 		}
 		:active {
@@ -152,6 +152,11 @@
 		cursor: col-resize;
 	}
 }
+.z-listhead-menupopup .z-listheader-content {
+	padding-right: 34px;
+	text-overflow: ellipsis;
+}
+
 // ZK-2151: use strict selector to prevent nest problem
 //list item and cell
 .z-listitem {

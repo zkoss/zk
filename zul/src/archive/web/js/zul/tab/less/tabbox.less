@@ -255,7 +255,7 @@
 	position: relative;
 
 	&-content {
-		display: table;
+		display: flex;
 		width: 100%;
 		border-collapse: separate;
 		border-spacing: 0;
@@ -409,6 +409,12 @@
 }
 .z-tabbox-down-scroll > i:before {
 	content: '\f107';
+}
+
+.ie {
+	.z-tabs-content {
+		display: table;
+	}
 }
 
 // ZK-2158: Tab should not be click on blank area next to last tab
