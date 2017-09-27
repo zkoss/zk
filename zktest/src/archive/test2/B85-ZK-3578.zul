@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3578.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 21 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		 viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3578VM')">
+		<button id="toggle" label="toggle" onClick="@command('toggle')"></button>
+		<grid visible="@load(!vm.showColumn)">
+			<columns>
+				<forEach items="@load(vm.columnList)">
+					<column label="@load(each)" width="150px"/>
+				</forEach>
+				<column label="aa" width="150px"/>
+				<column label="bb" width="150px"/>
+			</columns>
+		</grid>
+	</div>
+	<label multiline="true">
+		1. click "Open dialog", and close dialog
+		2. click "Add new tag"
+		3. click "Open dialog"
+			expect: No Exception, 
+			error: NullPointerException	
+	</label>
+</zk>

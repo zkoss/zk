@@ -247,10 +247,8 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				this.parent.onSize();
 			this.parent._minWd = null;
 			// Fix IE, FF for the issue B30-1926480-1.zul and B30-1926480.zul
-			if (!zk.safari) {
-				var mesh = this.getMeshWidget();
-				mesh.rerender(1);
-			}
+			var mesh = this.getMeshWidget();
+			mesh.rerender(1);
 		}
 	},
 	beforeChildrenFlex_: function (hwgt) { //HeaderWidget
