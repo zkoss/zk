@@ -18,7 +18,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		1. click the button 'toggle'
 		2. the first column should disappear, should not remain visible but empty
 		3. toggle it back, should appear as in step 1
-
+		4. the listgroup is collapsed properly
 	</label>
 	<listbox sizedByContent="true">
 		<listhead menupopup="auto">
@@ -32,6 +32,13 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 			<listcell label="b1"></listcell>
 			<listcell label="cc1"></listcell>
 			<listcell label="dddd1"></listcell>
+		</listitem>
+		<listgroup label="Group 2" open="false"/>
+		<listitem>
+			<listcell label="aaaaaaaa2"/>
+			<listcell label="b2" />
+			<listcell label="cc2"/>
+			<listcell label="dddd2" />
 		</listitem>
 	</listbox>
 	<button onClick="lh1.setVisible(lh1.isVisible() ? false : true)" label="toggle"/>
