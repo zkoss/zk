@@ -184,6 +184,7 @@ public class Configuration {
 	private String _binderInitAttribute = null;
 	private Set<String> _binderAnnotations;
 
+	private boolean _sourceMapEnabled = false;
 	/** Constructor.
 	 */
 	public Configuration() {
@@ -3242,4 +3243,21 @@ public class Configuration {
 	public Map<String, DataHandlerInfo> getDataHandlers() {
 		return _dataHandlers;
 	}
+
+	/** Sets whether source map is enabled.
+	 * <p>Default: false (disabled).
+	 * @since 8.5.0
+	 */
+	public void enableSourceMap(boolean enable) {
+		_sourceMapEnabled = enable;
+	}
+
+	/** Returns whether source map is enabled.
+	 * <p>Default: false (disabled).
+	 * @since 8.5.0
+	 */
+	public boolean isSourceMapEnabled() {
+		return _sourceMapEnabled;
+	}
+
 }
