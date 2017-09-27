@@ -16,7 +16,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//handle theme
 	jq(function () {
 		var zktheme = zk.themeName,
-			tname = 'breeze'; // shall sync with default theme name
+			tname = 'default'; // shall sync with default theme name
 		if (zktheme)
 			tname = zktheme;
 		jq(document.body).addClass(tname);

@@ -147,7 +147,7 @@
 
 	& > a {
 		display: block;
-		color: @iconColor;
+		color: @textColorDefault;
 		height: @baseBarHeight / 2;
 		padding: 0 8px;
 		overflow: hidden;
@@ -157,6 +157,8 @@
 			background: @comboButtonHoverBackgroundColor;
 		}
 		&:active {
+			color: @comboButtonActiveIconColor;
+			border-color: @comboButtonActiveBorderColor;
 			background: @comboButtonActiveBackgroundColor;
 		}
 	}

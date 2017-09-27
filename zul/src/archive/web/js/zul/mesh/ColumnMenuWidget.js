@@ -176,7 +176,13 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		var mesh = this.getMeshWidget();
 		if (mesh) mesh._syncEmpty();
 	},
-	getGroupPackage_: zk.$void
+	getGroupPackage_: zk.$void,
+	domClass_: function (no) {
+		var cls = '';
+		if (this._menupopup != 'none')
+			cls += this.$s('menupopup') + ' ';
+		return cls + this.$supers('domClass_', arguments);
+	}
 });
 
 /**
