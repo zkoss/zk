@@ -728,4 +728,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	   <name>org.zkoss.zul.frozen.smooth</name>
 	   <value>true</value>
 	</library-property>
+
+	<!-- for F85-ZK-3620 -->
+	<library-property>
+		<name>org.zkoss.web.servlet.http.URLEncoder</name>
+		<value>org.zkoss.zktest.test2.B85_ZK_3620_CustomUrlEncoder</value>
+	</library-property>
 </zk>
