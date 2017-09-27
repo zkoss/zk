@@ -126,7 +126,7 @@ zk.bmk = (function () { //used internally
 					$ifr.attr('z_xurl', url);
 				}
 			} catch (e) { //due to JS sandbox, we cannot access if not from same host
-				if (zk.debugJS) console.log(e.message || e);
+				zk.debugLog(e.message || e);
 			}
 		}
 	};

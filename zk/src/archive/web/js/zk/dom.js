@@ -58,7 +58,7 @@ zjq = function (jq) { //ZK extension
 
 				zjq.fixInput(n);
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);
+				zk.debugLog(e.message || e);
 			}
 		}, -1); //FF cannot change focus to a DOM element being animated
 	}
@@ -66,7 +66,7 @@ zjq = function (jq) { //ZK extension
 		try {
 			n.select();
 		} catch (e) {
-			if (zk.debugJS) console.log(e.message || e);
+			zk.debugLog(e.message || e);
 		}
 	}
 
@@ -218,7 +218,7 @@ zjq = function (jq) { //ZK extension
 				try {
 					zjq._fixCSS(el);
 				} catch (e) {
-					if (zk.debugJS) console.log(e.message || e);
+					zk.debugLog(e.message || e);
 				}
 		
 			// just in case
@@ -274,7 +274,7 @@ zk.copy(zjq, {
 				$n.setSelectionRange(pos[0], pos[1]);
 			}
 		} catch (e) {
-			if (zk.debugJS) console.log(e.message || e);//ignore
+			zk.debugLog(e.message || e);
 		}
 	} : zk.$void, //overriden in dom.js to fix the focus issue (losing caret...)
 	_fixCSS: function (el) { //overriden in domie.js , domsafari.js , domopera.js
@@ -1897,7 +1897,7 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 					try {
 						st[nm] = '';
 					} catch (e) {
-						if (zk.debugJS) console.log(e.message || e);//ignore
+						zk.debugLog(e.message || e);
 					}
 		return this;
 	},
@@ -2285,7 +2285,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 			try {
 				zk.alerting = false;
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);
+				zk.debugLog(e.message || e);
 			} //doc might be unloaded
 		}
 	},
@@ -2361,7 +2361,7 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 			try {
 				zk.alerting = false;
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);
+				zk.debugLog(e.message || e);
 			} //doc might be unloaded
 		}
 	},

@@ -51,7 +51,7 @@ zk.override(jq.fn, _jq, {
 				return this;
 			}
 		} catch (e) {
-			if (zk.debugJS) console.log(e.message || e);
+			zk.debugLog(e.message || e);
 		}
 		return done ? this : _jq.replaceWith.apply(this, arguments);
 	}
@@ -73,7 +73,7 @@ zk.override(zjq, _zjq, {
 			try {
 				el.style.zoom = zoom;
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);
+				zk.debugLog(e.message || e);
 			}
 		});
 	}
@@ -92,7 +92,7 @@ zk.copy(zjq, {
 				$n.setSelectionRange(pos[0], pos[1]);
 			}
 		} catch (e) {
-			if (zk.debugJS) console.log(e.message || e);//ignore
+			zk.debugLog(e.message || e);
 		}
 	},
 
@@ -104,7 +104,7 @@ zk.copy(zjq, {
 				for (var ns = el.getElementsByTagName('iframe'), j = ns.length; j--;)
 					zk(ns[j]).redoSrc();
 		} catch (e) {
-			if (zk.debugJS) console.log(e.message || e);
+			zk.debugLog(e.message || e);
 		}
 	},
 
