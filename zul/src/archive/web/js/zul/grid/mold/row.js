@@ -22,10 +22,10 @@ function (out) {
 		h = head.firstChild;
 	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++) {
 		var opts = {child:w, index: j, zclass: zcls, out: out};
-		if (head)
+		if (h)
 			opts.visible = h.isVisible();
 		this.encloseChildHTML_(opts);
-		if (head)
+		if (h)
 			h = h.nextSibling;
 	}
 	out.push('</tr>');
