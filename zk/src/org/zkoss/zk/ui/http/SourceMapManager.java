@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.debugging.sourcemap.SourceMapGeneratorV3;
-import com.google.debugging.sourcemap.SourceMapParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A source map manager can handle source map info during the wpd file generating.
@@ -24,6 +25,7 @@ import com.google.debugging.sourcemap.SourceMapParseException;
  * @since 8.5.0
  */
 public class SourceMapManager {
+	static final Logger log = LoggerFactory.getLogger(SourceMapManager.class);
 	private final SourceMapGeneratorV3 _generator;
 	private final String _name;
 	private final String _sourceRoot;
@@ -69,11 +71,7 @@ public class SourceMapManager {
 	 * @param jsLineCount the number of javascript file lines
 	 */
 	public void insertEmptySourceMap(int index, int jsLineCount) {
-		try {
-			insertSourceMap(index, "", jsLineCount, null);
-		} catch (SourceMapParseException e) {
-			//Should not error
-		}
+		insertSourceMap(index, "", jsLineCount, null);
 	}
 
 	/**
@@ -91,7 +89,7 @@ public class SourceMapManager {
 	 * @param jsLineCount the number of javascript file lines
 	 * @param sourcePath the javascript source path
 	 */
-	public void appendSourceMap(String sourceMapContent, int jsLineCount, String sourcePath) throws SourceMapParseException {
+	public void appendSourceMap(String sourceMapContent, int jsLineCount, String sourcePath) {
 		insertSourceMap(-1, sourceMapContent, jsLineCount, sourcePath);
 	}
 
@@ -102,7 +100,7 @@ public class SourceMapManager {
 	 * @param jsLineCount the number of javascript file lines
 	 * @param sourcePath the javascript source path
 	 */
-	public void insertSourceMap(int index, String sourceMapContent, int jsLineCount, String sourcePath) throws SourceMapParseException {
+	public void insertSourceMap(int index, String sourceMapContent, int jsLineCount, String sourcePath) {
 		if (sourceMapContent == null || sourceMapContent.length() == 0) //add Empty
 			sourceMapContent = getEmptySourceMap(jsLineCount);
 		if (index > -1) //if -1, append
@@ -124,41 +122,44 @@ public class SourceMapManager {
 	 * Generate the source map of this mananger.
 	 * @return the merged source map content
 	 */
-	public String getSourceMapContent() throws IOException, SourceMapParseException {
+	public String getSourceMapContent() throws IOException {
 		String mapContentStr = _generatedSourceMapContent;
 		if (mapContentStr != null && mapContentStr.length() != 0)
 			return mapContentStr;
-
-		int lineCount = 0;
-		List<String> sourcePathList = new ArrayList<String>(16);
-		for (int i = 0; i < _sourceMapInfoList.size(); i++) {
-			SourceMapInfo sourceMapInfo = _sourceMapInfoList.get(i);
-			String content = sourceMapInfo.getContent();
-			if (content == null || content.length() == 0) //skip empty map
-				continue;
-			_generator.mergeMapSection(lineCount, 0, content);
-			lineCount += sourceMapInfo.getLineCount();
-			String sourcePath = sourceMapInfo.getSourcePath();
-			if (sourcePath != null && sourcePath.length() != 0)
-				sourcePathList.add(sourcePath);
+		try {
+			int lineCount = 0;
+			List<String> sourcePathList = new ArrayList<String>(16);
+			for (int i = 0; i < _sourceMapInfoList.size(); i++) {
+				SourceMapInfo sourceMapInfo = _sourceMapInfoList.get(i);
+				String content = sourceMapInfo.getContent();
+				if (content == null || content.length() == 0) //skip empty map
+					continue;
+				_generator.mergeMapSection(lineCount, 0, content);
+				lineCount += sourceMapInfo.getLineCount();
+				String sourcePath = sourceMapInfo.getSourcePath();
+				if (sourcePath != null && sourcePath.length() != 0)
+					sourcePathList.add(sourcePath);
+			}
+			StringBuilder mapContents = new StringBuilder();
+			_generator.appendTo(mapContents, _name + ".wpd");
+			mapContentStr = mapContents.toString();
+			StringBuilder sourcesBuilder = new StringBuilder();
+			sourcesBuilder.append("\"sources\":[");
+			for (int i = 0, max = sourcePathList.size() - 1; i <= max; i++) {
+				sourcesBuilder.append("\"");
+				sourcesBuilder.append(sourcePathList.get(i));
+				sourcesBuilder.append("\"");
+				if (i != max)
+					sourcesBuilder.append(",");
+			}
+			sourcesBuilder.append("],\"sourceRoot\":\"");
+			sourcesBuilder.append(_sourceRoot);
+			sourcesBuilder.append("\",");
+			mapContentStr = mapContentStr.replaceAll("\"sources\".*\\]\\,",  sourcesBuilder.toString());
+			_generatedSourceMapContent = mapContentStr;
+		} catch (Exception e) {
+			log.warn("Failed to parse source map file. " + e.getMessage());
 		}
-		StringBuilder mapContents = new StringBuilder();
-		_generator.appendTo(mapContents, _name + ".wpd");
-		mapContentStr = mapContents.toString();
-		StringBuilder sourcesBuilder = new StringBuilder();
-		sourcesBuilder.append("\"sources\":[");
-		for (int i = 0, max = sourcePathList.size() - 1; i <= max; i++) {
-			sourcesBuilder.append("\"");
-			sourcesBuilder.append(sourcePathList.get(i));
-			sourcesBuilder.append("\"");
-			if (i != max)
-				sourcesBuilder.append(",");
-		}
-		sourcesBuilder.append("],\"sourceRoot\":\"");
-		sourcesBuilder.append(_sourceRoot);
-		sourcesBuilder.append("\",");
-		mapContentStr = mapContentStr.replaceAll("\"sources\".*\\]\\,",  sourcesBuilder.toString());
-		_generatedSourceMapContent = mapContentStr;
 		return mapContentStr;
 	}
 

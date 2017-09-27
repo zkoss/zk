@@ -32,7 +32,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.debugging.sourcemap.SourceMapParseException;
 import org.apache.commons.io.IOUtils;
 
 import org.zkoss.idom.Element;
@@ -44,6 +43,7 @@ import org.zkoss.json.JSONObject;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
@@ -86,14 +86,22 @@ import org.zkoss.zk.ui.util.URIInfo;
  */
 public class WpdExtendlet extends AbstractExtendlet<Object> {
 	//source map
+	private Boolean _sourceMapEnabled;
 	private static final String HANDLE_SOURCE_MAPPING_URL = "zk$handlesourcemappingurl";
 	private static final String SOURCE_MAP_PREFIX = "zk$sourcemap$";
 	private static final String SOURCE_MAP_SUPPORTED = "zk$sourcemapsupported";
+	//check closure compiler existence
+	private Boolean CLOSURE_COMPILER_AVAILABLE;
 
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
-		if (!isDebugJS())
+		if (!isDebugJS()) {
 			config.addCompressExtension("wpd");
+		} else if (isSourceMapEnabled() && CLOSURE_COMPILER_AVAILABLE == null) {
+			CLOSURE_COMPILER_AVAILABLE = Classes.existsByThread("com.google.debugging.sourcemap.SourceMapGeneratorV3");
+			if (!CLOSURE_COMPILER_AVAILABLE)
+				log.warn("Closure compiler is not available.");
+		}
 	}
 
 	public void service(HttpServletRequest request, HttpServletResponse response, String path)
@@ -127,23 +135,19 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		Boolean shouldHandleSourceMappingURL = null;
 		if (isDebugJS()) {
 			String userAgent = request.getHeader("user-agent");
-			isSourceMapSupported = Servlets.isBrowser(userAgent, "chrome") ||
-					Servlets.isBrowser(userAgent, "ff") ||
-					Servlets.isBrowser(userAgent, "ie11") || Servlets.isBrowser(userAgent, "safari");
+			isSourceMapSupported = Objects.equals(CLOSURE_COMPILER_AVAILABLE, true)
+					&& (Servlets.isBrowser(userAgent, "chrome") || Servlets.isBrowser(userAgent, "ff")
+					|| Servlets.isBrowser(userAgent, "ie11") || Servlets.isBrowser(userAgent, "safari"));
 			if (isSourceMapSupported) {
 				if (path.endsWith("map")) {
 					String name = path.substring(path.lastIndexOf("/") + 1).replaceAll(".map", "");
-					SourceMapManager sourceMapManager = (SourceMapManager) request.getSession().getAttribute(SOURCE_MAP_PREFIX + name);
+					SourceMapManager sourceMapManager = (SourceMapManager) request.getSession()
+							.getAttribute(SOURCE_MAP_PREFIX + name);
 					if (sourceMapManager == null) {
 						log.warn("Failed to load the source map resource: " + path);
 						return "".getBytes();
 					}
-					String sourceMapContent = "";
-					try {
-						sourceMapContent = sourceMapManager.getSourceMapContent();
-					} catch (SourceMapParseException e) {
-						log.warn("Failed to parse source map file. " + e.getMessage());
-					}
+					String sourceMapContent = sourceMapManager.getSourceMapContent();
 					return sourceMapContent.getBytes();
 				}
 				shouldHandleSourceMappingURL = (Boolean) request.getAttribute(HANDLE_SOURCE_MAPPING_URL);
@@ -523,9 +527,16 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		else if (path.charAt(0) != '/')
 			path = Files.normalize(dir, path);
 
-		//source map browser issue
-		if (isDebugJS() && sourceMapManager == null && "js".equals(Servlets.getExtension(path)) && !path.endsWith(".src.js"))
-			path = path.substring(0, path.length() - 3) + ".src.js";
+		//source map browser issue and check source map file is available or not
+		InputStream isSourceMap = null;
+		if (isDebugJS()) {
+			if (sourceMapManager != null)
+				isSourceMap = reqctx.getResourceAsStream(path + ".map", locate);
+			if ("js".equals(Servlets.getExtension(path)) && !path.endsWith(".src.js")
+					&& (isSourceMap == null || sourceMapManager == null)) {
+				path = path.substring(0, path.length() - 3) + ".src.js";
+			}
+		}
 
 		final InputStream is = reqctx.getResourceAsStream(path, locate);
 		if (is == null) {
@@ -536,28 +547,22 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 
 		if (sourceMapManager != null) {
-			String sourceMapPath = path + ".map";
-			final InputStream is_sourceMap = reqctx.getResourceAsStream(sourceMapPath, locate);
 			String sourceMapContent = "";
-			final InputStream is_copy = reqctx.getResourceAsStream(path, locate);
-			String jsContent = IOUtils.toString(is_copy);
-			if (is_sourceMap != null)
-				sourceMapContent = IOUtils.toString(is_sourceMap);
-			try {
-				String sourceMapSourcePath = path.substring(1); //skip first "/"
-				if (!sourceMapSourcePath.endsWith(".src.js"))
-					sourceMapSourcePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3) + ".src.js";
-				sourceMapManager.insertSourceMap(index, sourceMapContent, countLines(jsContent), sourceMapSourcePath);
-				sourceMapManager.insertEmptySourceMap((index == -1) ? -1 : index + 1, 1); //for \n
-				if (index != -1) {
-					sourceMapManager.getSourceMapInfoList().remove(index + 2);
-					sourceMapManager.getSourceMapInfoList().remove(index + 2);
-				}
-			} catch (SourceMapParseException e) {
-				log.warn("Failed to parse source map file. " + e.getMessage());
+			final InputStream isCopy = reqctx.getResourceAsStream(path, locate);
+			String jsContent = IOUtils.toString(isCopy);
+			if (isSourceMap != null)
+				sourceMapContent = IOUtils.toString(isSourceMap);
+			String sourceMapSourcePath = path.substring(1); //skip first "/"
+			if (!sourceMapSourcePath.endsWith(".src.js"))
+				sourceMapSourcePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3) + ".src.js";
+			sourceMapManager.insertSourceMap(index, sourceMapContent, countLines(jsContent), sourceMapSourcePath);
+			sourceMapManager.insertEmptySourceMap((index == -1) ? -1 : index + 1, 1); //for \n
+			if (index != -1) {
+				sourceMapManager.getSourceMapInfoList().remove(index + 2);
+				sourceMapManager.getSourceMapInfoList().remove(index + 2);
 			}
-			Files.close(is_copy);
-			Files.close(is_sourceMap);
+			Files.close(isCopy);
+			Files.close(isSourceMap);
 		}
 
 		Files.copy(out, is);
@@ -643,7 +648,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			for (Iterator e = langdef.getJavaScriptModules().entrySet().iterator(); e.hasNext();) {
 				final Map.Entry me = (Map.Entry) e.next();
 				sb.append('\'').append(me.getKey()).append("':'")
-					.append(obfuscateVer(exposeVer, me.getValue(), verInfoEnabled)).append("',");
+						.append(obfuscateVer(exposeVer, me.getValue(), verInfoEnabled)).append("',");
 			}
 			removeLast(sb, ',');
 		}
@@ -917,5 +922,16 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			}
 			return out.toByteArray();
 		}
+	}
+
+	/** Returns whether to use source map to debug. */
+	private boolean isSourceMapEnabled() {
+		if (_sourceMapEnabled == null) {
+			final WebApp wapp = getWebApp();
+			if (wapp == null)
+				return false; //zk lighter
+			_sourceMapEnabled = Boolean.valueOf(wapp.getConfiguration().isSourceMapEnabled());
+		}
+		return _sourceMapEnabled.booleanValue();
 	}
 }

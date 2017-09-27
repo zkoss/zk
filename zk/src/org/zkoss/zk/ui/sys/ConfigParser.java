@@ -385,6 +385,7 @@ public class ConfigParser {
 				//	tooltip-delay
 				//  resend-delay
 				//  debug-js
+				//  enable-source-map
 				//  auto-resend-timeout
 				parseClientConfig(config, el);
 
@@ -795,6 +796,10 @@ public class ConfigParser {
 		s = conf.getElementValue("debug-js", true);
 		if (s != null)
 			config.setDebugJS(!"false".equals(s));
+
+		s = conf.getElementValue("enable-source-map", true);
+		if (s != null)
+			config.enableSourceMap(!"false".equals(s));
 
 		//F70-ZK-2495: add new config to customize crash script
 		s = conf.getElementValue("init-crash-script", true);
