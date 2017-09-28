@@ -529,21 +529,29 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 		//source map browser issue and check source map file is available or not
 		InputStream isSourceMap = null;
+		String originalPath = "";
 		if (isDebugJS()) {
 			if (sourceMapManager != null)
 				isSourceMap = reqctx.getResourceAsStream(path + ".map", locate);
 			if ("js".equals(Servlets.getExtension(path)) && !path.endsWith(".src.js")
 					&& (isSourceMap == null || sourceMapManager == null)) {
+				originalPath = path; //if .src.js not exist -> roll back
 				path = path.substring(0, path.length() - 3) + ".src.js";
 			}
 		}
 
-		final InputStream is = reqctx.getResourceAsStream(path, locate);
-		if (is == null) {
-			write(out, "zk.log('");
-			write(out, path);
-			write(out, " not found');");
-			return false;
+		InputStream is = reqctx.getResourceAsStream(path, locate);
+		while (is == null) {
+			if (Strings.isEmpty(originalPath)) {
+				write(out, "zk.log('");
+				write(out, path);
+				write(out, " not found');");
+				return false;
+			} else {
+				path = originalPath;
+				is = reqctx.getResourceAsStream(path, locate);
+				originalPath = null;
+			}
 		}
 
 		if (sourceMapManager != null) {
