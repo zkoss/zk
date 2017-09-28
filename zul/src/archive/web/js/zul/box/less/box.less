@@ -129,29 +129,3 @@ td.z-splitter-outer {
 		background: @splitterDragBackgroundColor !important;
 	}
 }
-
-.ie8 {
-	.z-splitter {
-		&-horizontal {
-			.z-splitter-icon {
-				&.z-icon-ellipsis-v {
-					font-size: @baseFontSize;
-				}
-				&.z-icon-ellipsis-v ~ .z-splitter-icon.z-icon-ellipsis-v {
-					top: 37px;
-				}
-			}
-		}
-		&-vertical {
-			.z-splitter-icon {
-				&.z-icon-ellipsis-h {
-					font-size: @baseFontSize;
-					top: -3px;
-				}
-				&.z-icon-ellipsis-h ~ .z-splitter-icon.z-icon-ellipsis-h {
-					left: 38px;
-				}
-			}
-		}
-	}
-}

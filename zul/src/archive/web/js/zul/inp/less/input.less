@@ -159,21 +159,6 @@ textarea.z-textbox {
 	top: 17px;
 }
 
-.ie8 {
-	.z-textbox,
-	.z-decimalbox,
-	.z-intbox,
-	.z-longbox,
-	.z-doublebox {
-		min-height: @baseButtonHeight - 10 + 1;
-		// Inplace editing
-		&-inplace {
-			min-height: @baseButtonHeight - 6;
-			line-height: @baseIconHeight;
-		}
-	}
-}
-
 body:not(.ie8) {
 	.z-errorbox-close {
 		.opacity(0.6);
