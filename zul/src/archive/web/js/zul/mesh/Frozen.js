@@ -291,10 +291,17 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			num = Math.ceil(n);
 		if (this._lastScale == num)
 			return;
-		this._lastScale = num;
-		this._doScrollNow(num);
-		this.smartUpdate('start', num);
-		this._start = num;
+		var self = this;
+		if (this._delayedScroll) {
+			clearTimeout(this._delayedScroll);
+		}
+		this._delayedScroll = setTimeout(function () {
+			self._lastScale = num;
+			self._doScrollNow(num);
+			self.smartUpdate('start', num);
+			self._start = num;
+			self.delayedScroll = null;
+		}, 0);
 	},
 	_doScrollNow: function (num, force) {
 		var totalWidth = 0,
@@ -325,6 +332,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					}
 				}
 			}
+
+			var updateBatch = [];
 			// B70-ZK-2071: Use mesh.head to get column.
 			for (var i = c, faker; i < totalCols; i++) {
 				var n = hdcells[i],
@@ -369,34 +378,32 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					cellWidth = '0.1px';
 
 				if (force || shallUpdate) {
-					if ((faker = jq('#' + n.id + '-hdfaker')[0]))
-						faker.style.width = cellWidth;
-					if ((faker = jq('#' + n.id + '-bdfaker')[0]) && isVisible)
-						faker.style.width = cellWidth;
-					if ((faker = jq('#' + n.id + '-ftfaker')[0]))
-						faker.style.width = cellWidth;
+					updateBatch.push({node: n, index: i, width: cellWidth});
+				}
+			}
 
+			//hide the element without losing focus
+			jq(mesh).css({position: 'absolute', left: -9999});
+
+			var update;
+			while (update = updateBatch.shift()) {
+				var n = update.node;
+				var cellWidth = update.width;
+				var i = update.index;
+
+				if ((faker = jq('#' + n.id + '-hdfaker')[0]))
+					faker.style.width = cellWidth;
+				if ((faker = jq('#' + n.id + '-bdfaker')[0]) && isVisible)
+					faker.style.width = cellWidth;
+				if ((faker = jq('#' + n.id + '-ftfaker')[0]))
+					faker.style.width = cellWidth;
+				// ZK-2071: display causes wrong in colspan case
+				hdcells[i].style.width = cellWidth;
+				// foot
+				if (ftcells) {
 					// ZK-2071: display causes wrong in colspan case
-					// var cw = zk.parseInt(cellWidth),
-					//	hidden = cw == 0;
-					//
-					// if (mesh._nativebar && (!hdWgt._hflex || hdWgt._hflex == 'min')) {
-					//	mesh.ehdfaker.childNodes[i].style.display = hidden ? 'none' : '';
-					//	hdcells[i].style.display = hidden ? 'none' : '';
-					// }
-
-					hdcells[i].style.width = cellWidth;
-					// foot
-					if (ftcells) {
-						// ZK-2071: display causes wrong in colspan case
-						//
-						// if (mesh._nativebar) {
-						//	mesh.eftfaker.childNodes[i].style.display = hidden ? 'none' : '';
-						//	ftcells[i].style.display = hidden ? 'none' : '';
-						// }
-						if (ftcells.length > i)
-							ftcells[i].style.width = cellWidth;
-					}
+					if (ftcells.length > i)
+						ftcells[i].style.width = cellWidth;
 				}
 			}
 
@@ -405,6 +412,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				if (hdcol.style.display != 'none')
 					totalWidth += zk.parseInt(hdcol.style.width);
 			}
+
+			//hide the element without losing focus
+			jq(mesh).css({position: '', left: ''});
 		}
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
