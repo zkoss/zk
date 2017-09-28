@@ -179,9 +179,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		jq(dg._epos).delay(300).fadeOut(500).css('opacity', old);
 	};
 	function ignoredrag(dg, p, evt) {
-		var node = dg.node,
-			target = evt.domTarget;
-		return node != target && node != target.parentNode;
+		return dg.control.edragBody != evt.domTarget;
 	}
 
 /**
@@ -659,6 +657,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			uuid = this.uid + '-' + orient + 'bar';
 		this.node = jq(uuid, zk)[0];
 		this.edrag = this.node.firstChild;
+		this.edragBody = this.edrag.childNodes[2];
 		this.epos = this.edrag.nextSibling;
 		this.eend = this.node.lastChild;
 
