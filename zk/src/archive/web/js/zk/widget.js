@@ -4731,7 +4731,7 @@ _doFooSelect: function (evt) {
 					}
 				}
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);//ignore
+				zk.debugLog(e.message || e);
 			}
 			if (opts.strict)
 				break;
@@ -5202,7 +5202,7 @@ zk._wgtutl = { //internal utilities
 						try {
 							n.setAttribute('z_ahvis', n.style.visibility);
 						} catch (e) {
-							if (zk.debugJS) console.log(e.message || e);
+							zk.debugLog(e.message || e);
 						}
 						n.style.visibility = 'hidden';
 					}
@@ -5376,7 +5376,7 @@ zk.Native = zk.$extends(zk.Widget, {
 				}
 				return str;
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);/*eat the exception if happen*/
+				zk.debugLog(e.message || e);
 			}
 			return str;
 		};

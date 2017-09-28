@@ -170,7 +170,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			try {
 				if (typeof req.abort == 'function') req.abort();
 			} catch (e2) {
-				if (zk.debugJS) console.log(e2.message || e2);
+				zk.debugLog(e2.message || e2);
 			}
 
 			if (!reqInf.ignorable && !zk.unloading) {
@@ -953,7 +953,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		try {
 			if (req && typeof req.abort == 'function') req.abort();
 		} catch (e2) {
-			if (zk.debugJS) console.log(e2.message || e2);
+			zk.debugLog(e2.message || e2);
 		}
 
 		//NOTE: if connection is off and req.status is accessed,

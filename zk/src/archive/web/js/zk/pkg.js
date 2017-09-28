@@ -78,7 +78,7 @@ zk.copy(zk, (function () {
 			try {
 				zk.enableESC();
 			} catch (ex) {
-				if (zk.debugJS) console.log(ex.message || ex);
+				zk.debugLog(ex.message || ex);
 			}
 			doEnd(_afterLoadFronts);
 			doEnd(_afterLoads, 1);

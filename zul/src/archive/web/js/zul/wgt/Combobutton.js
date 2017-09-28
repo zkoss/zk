@@ -251,7 +251,7 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 					zk.currentFocus = self;
 					zjq.fixInput(n);
 				} catch (e) {
-					if (zk.debugJS) console.log(e.message || e);
+					zk.debugLog(e.message || e);
 				}
 			}, timeout);
 		}

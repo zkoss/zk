@@ -293,7 +293,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				}
 			}
 		} catch (e) {
-			if (zk.debugJS) console.log(e.message || e);// do nothing
+			zk.debugLog(e.message || e);
 		}
 
 		// remove visible flag

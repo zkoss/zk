@@ -1176,6 +1176,16 @@ zk.endProcessing();
 		zAu.send(new zk.Event(null, 'error', {message: msg}, {ignorable: true}), 800);
 		zk._Erbx.push(msg);
 	},
+	//DEBUG//
+	/** If in debug-js, use console log to display an log message to indicate an debug log.
+	 *  Example:
+<pre><code>zk.debugLog('Oops! Something wrong:(');</code></pre>
+	 * @param String msg the warning message
+	 * @since 8.5.0
+	 */
+	debugLog: function (msg) {
+		if (zk.debugJS) console.log(msg);
+	},
 	/** Closes all error messages shown by {@link #error}.
    	 * Example:
 <pre><code>zk.errorDismiss();</code></pre>
@@ -1334,7 +1344,7 @@ zk.log('value is", value);
 				try {
 					dataValue = jq.parseJSON(dataValue);
 				} catch (e) {
-					if (zk.debugJS) console.log(e.message || e);
+					zk.debugLog(e.message || e);
 				}
 				var dataHandlerService,
 					w = wgt;
@@ -1872,7 +1882,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 				starteffect: zk.$void,
 				endeffect: zk.$void});
 		} catch (e) {
-			if (zk.debugJS) console.log(e.message || e);
+			zk.debugLog(e.message || e);
 		}
 		jq($id).slideDown(1000);
 	},

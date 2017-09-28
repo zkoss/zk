@@ -568,7 +568,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 						try {
 							this.appendChild(prog);
 						} catch (e) {
-							if (zk.debugJS) console.log(e.message || e);
+							zk.debugLog(e.message || e);
 						}
 						this._files[id] = prog;
 					}

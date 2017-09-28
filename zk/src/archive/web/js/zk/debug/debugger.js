@@ -83,7 +83,7 @@ function _dumpAttrs0(out, nm, wgt) {
 				}
 					
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);
+				zk.debugLog(e.message || e);
 			}
 		}
 	} else if (nm.startsWith('is') && nm.length > 2 && !nm.endsWith('_')) {
@@ -110,7 +110,7 @@ function _dumpAttrs0(out, nm, wgt) {
 					}
 				}
 			} catch (e) {
-				if (zk.debugJS) console.log(e.message || e);
+				zk.debugLog(e.message || e);
 			}
 		}
 	}
