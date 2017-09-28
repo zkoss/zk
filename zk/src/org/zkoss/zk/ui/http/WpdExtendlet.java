@@ -250,7 +250,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				data = retrieve(request, response, path);
 				if (data != null) {
 					out.write(data);
-					if (isDebugJS()) {
+					if (request.getAttribute(SOURCE_MAP_SUPPORTED) != null) {
 						//merge source map
 						SourceMapManager sourceMapManager = (SourceMapManager) request
 								.getAttribute(SOURCE_MAP_PREFIX + pkg);
