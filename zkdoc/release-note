@@ -91,6 +91,7 @@ ZK 8.5.0
   ZK-3759: Disabled Menu can be clicked in mobile devices
   ZK-3728: <a> renders a stacked font awesome icon with incorrect alignment
   ZK-3756: Error: websocket + include mode="defer"
+  ZK-3761: Websocket error when changing the current theme
 
 * Upgrade Notes
 
