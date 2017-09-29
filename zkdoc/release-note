@@ -95,6 +95,7 @@ ZK 8.5.0
   ZK-3757: websocket Tomcat logs errors on refresh
   ZK-3626: Scrollable menubar infinite loop in zoomed browser
   ZK-3580: IncompatibleClassChangeError when form object is null and its declared type is an interface
+  ZK-3345: Frozen scroll performance
 
 * Upgrade Notes
 
