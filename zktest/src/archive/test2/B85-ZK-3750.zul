@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3750.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 22 18:16:59 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		the second column and cells should be align to the right
+
+	</label>
+	<div apply="org.zkoss.bind.BindComposer">
+		<grid span="true" sizedByContent="true" width="500px"
+			height="200px" model="@init(([1, 2, 3, 4, 5].stream().toList()))">
+			<columns>
+				<column label="test" />
+				<column label="test" visible="false" align="right" />
+				<column label="test" align="right" />
+			</columns>
+			<template name="model">
+				<row>
+					<label value="@load(each)" />
+					<label value="@load(each)" />
+					<label value="@load(each)" />
+				</row>
+			</template>
+			<foot>
+				<footer label="test"></footer>
+				<footer label="test"></footer>
+				<footer label="test"></footer>
+			</foot>
+		</grid>
+	</div>
+</zk>
