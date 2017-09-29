@@ -183,17 +183,6 @@ body:not(.gecko) {
 	}
 }
 
-.ie8 { //IE8 does not support :not() pseudo class
-	.z-row {
-		&:hover {
-			> .z-row-inner,
-			> .z-cell {
-				position: relative;
-			}
-		}
-	}
-}
-
 //Group
 .z-group {
 	&-inner {
@@ -303,18 +292,6 @@ body:not(.gecko) {
 }
 .z-columns-menudescending .z-menuitem-image {
 	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowdown.png');
-}
-// IE 8
-.ie8 {
-	.z-column {
-		position: static;
-	}
-	.z-row:hover {
-		> .z-row-inner,
-		> .z-cell {
-			position: static;
-		}
-	}
 }
 
 .ie {

@@ -313,32 +313,3 @@
 		z-index: 25;
 	}
 }
-
-.ie8 {
-	.z-menu-hover > .z-menu-content, 
-	.z-menuitem-hover > .z-menuitem-content {
-		.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
-	}
-
-	.z-menu, .z-menuitem { 
-		&-content {
-			&:hover, &:focus {
-				.gradientFallback(@hoverGradientStart, @hoverGradientEnd);
-			}
-			&:active {
-				.gradientFallback(@baseGradientStart, @baseGradientEnd);
-			}
-		}
-
-		&-selected > &-content {
-			.gradientFallback(@baseGradientStart, @baseGradientEnd);
-		}
-	}
-
-	.z-menupopup {
-		.z-menuitem-icon {
-			top: 6px;
-			left: 8px;
-		}
-	}
-}
