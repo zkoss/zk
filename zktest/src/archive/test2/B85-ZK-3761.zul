@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3761.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 29 16:40:59 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Click the button, the page should be reloaded and the theme should be changed to breeze
+
+    </label>
+    <button onClick='Themes.setTheme(Executions.getCurrent(),"breeze");Executions.sendRedirect(null);' label="Change Theme to Breeze"/>
+</zk>

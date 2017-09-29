@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3756.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 29 16:43:28 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. should see a button and one "included" text on the page
+        2. click the button
+        3. should see one more "included" appear
+
+    </label>
+    <div>
+        <button label="set include src" onClick='inc.setSrc("websocket-inc.zul")'/>
+        <include id="inc" mode="defer"/>
+        <include mode="defer" src="websocket-inc.zul"/>
+    </div>
+</zk>
