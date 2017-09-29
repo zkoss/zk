@@ -90,6 +90,7 @@ ZK 8.5.0
   ZK-3758: Row height changed after column sets visibility
   ZK-3759: Disabled Menu can be clicked in mobile devices
   ZK-3728: <a> renders a stacked font awesome icon with incorrect alignment
+  ZK-3732: add and clear a ListModel causes IndexOutOfBoundsException
 
 * Upgrade Notes
 
