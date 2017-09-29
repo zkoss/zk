@@ -204,7 +204,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				if (realIndex < cols.nChildren) {
 					var col = cols.getChildAt(realIndex);
 					// ZK-3600: Prevent the dummy cell from hiding if the first column is invisible
-					visible = headerNotVisible ? 'text-overflow: ellipsis;white-space: nowrap;' : (grid._model && this._loaded) ? 'width: 0.1px' : '';
+					visible = headerNotVisible ? 'text-overflow: ellipsis;white-space: nowrap;' : (grid._model && this._loaded) ? 'width: 0.1px;' : '';
 					hgh = col.getHeight();
 					align = col.getAlign();
 					valign = col.getValign();
