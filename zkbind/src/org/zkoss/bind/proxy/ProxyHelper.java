@@ -222,18 +222,26 @@ public class ProxyHelper {
 			type = ((FormProxyObject) origin).getOriginObject().getClass();
 		else if (origin != null)
 			type = getTargetClassIfProxied(origin.getClass());
-		factory.setSuperclass(type);
-		if (interfaces == null) {
-			factory.setInterfaces(new Class[] { FormProxyObject.class, Form.class, FormFieldCleaner.class });
-		} else {
-			int len0 = interfaces.length;
-			Class[] newArray = new Class[len0 + 3];
+
+		// set super class
+		boolean isTypeInterface = type.isInterface();
+		if (!isTypeInterface)
+			factory.setSuperclass(type);
+
+		// set interface
+		int i = 0;
+		int len0 = interfaces != null ? interfaces.length : 0;
+		Class[] newArray = new Class[len0 + 3 + (isTypeInterface ? 1 : 0)];
+		if (interfaces != null) {
+			i += len0;
 			System.arraycopy(interfaces, 0, newArray, 0, len0);
-			newArray[len0] = FormProxyObject.class;
-			newArray[len0 + 1] = Form.class;
-			newArray[len0 + 2] = FormFieldCleaner.class;
-			factory.setInterfaces(newArray);
 		}
+		newArray[i++] = FormProxyObject.class;
+		newArray[i++] = Form.class;
+		newArray[i++] = FormFieldCleaner.class;
+		if (isTypeInterface)
+			newArray[i++] = type;
+		factory.setInterfaces(newArray);
 
 		Class<?> proxyClass = factory.createClass();
 		Object p1 = null;
