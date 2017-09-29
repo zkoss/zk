@@ -287,7 +287,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			tabbox = this,
 			head = this.tabs.$n(),
 			isVert = tabbox.isVertical(),
-			scrollLength = isVert ? head.scrollTop : head.scrollLeft,
+			scrollLength = isVert ? this.tabs._tabsScrollTop : this.tabs._tabsScrollLeft,
 			offsetLength = isVert ? head.offsetHeight : head.offsetWidth,
 			plus = scrollLength + offsetLength;
 		//Scroll to next right tab

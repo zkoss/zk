@@ -93,6 +93,7 @@ ZK 8.5.0
   ZK-3756: Error: websocket + include mode="defer"
   ZK-3761: Websocket error when changing the current theme
   ZK-3757: websocket Tomcat logs errors on refresh
+  ZK-3626: Scrollable menubar infinite loop in zoomed browser
 
 * Upgrade Notes
 

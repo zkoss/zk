@@ -20,6 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * <p>Default {@link #getZclass}: z-tabs.
  */
 zul.tab.Tabs = zk.$extends(zul.Widget, {
+	_tabsScrollLeft: 0,
+	_tabsScrollTop: 0,
 	/** Returns the tabbox owns this component.
 	 * @return Tabbox
 	 */
@@ -162,7 +164,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				nodeOffsetLeft = node ? node.offsetLeft : 0,
 				nodeOffsetWidth = node ? node.offsetWidth : 0,
 				tabsOffsetWidth = tabs.offsetWidth,
-				tabsScrollLeft = tabs.scrollLeft,
+				tabsScrollLeft = this._tabsScrollLeft,
 				childWidth = 0,
 				toolbar = tabbox.toolbar,
 				toolbarWidth = 0;
@@ -182,7 +184,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					tabbox._scrolling = false;
 					this._showbutton(false);
 					tabs.style.width = jq.px0(tbx.offsetWidth - toolbarWidth);
-					tabs.scrollLeft = 0;
+					this._fixTabsScrollLeft(0);
 				}
 				// scroll to specific position
 				switch (way) {
@@ -243,19 +245,21 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var goscroll = function (tabs, to, step) {
 			switch (to) {
 			case 'right':
-				tabs.scrollLeft += step;
+				self._fixTabsScrollLeft(self._tabsScrollLeft + step);
 				break;
 			case 'left':
-				tabs.scrollLeft -= step;
+				self._fixTabsScrollLeft(self._tabsScrollLeft - step);
 				break;
 			case 'up':
-				tabs.scrollTop -= step;
+				self._fixTabsScrollTop(self._tabsScrollTop - step);
 				break;
 			default:
-				tabs.scrollTop += step;
+				self._fixTabsScrollTop(self._tabsScrollTop + step);
 			}
-			tabs.scrollLeft = (tabs.scrollLeft <= 0 ? 0 : tabs.scrollLeft);
-			tabs.scrollTop = (tabs.scrollTop <= 0 ? 0 : tabs.scrollTop);
+			var tabsScrollLeft = self._tabsScrollLeft,
+				tabsScrollTop = self._tabsScrollTop;
+			self._fixTabsScrollLeft(tabsScrollLeft <= 0 ? 0 : tabsScrollLeft);
+			self._fixTabsScrollTop(tabsScrollTop <= 0 ? 0 : tabsScrollTop);
 		};
 		var run = setInterval(function () {
 			if (!move) {
@@ -420,5 +424,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var p = this.getTabbox();
 		return (p.isVertical() && 'h' == attr)
 			|| (p.isHorizontal() && 'w' == attr);
+	},
+	_fixTabsScrollLeft: function (scrollLeft) {
+		this.$n().scrollLeft = this._tabsScrollLeft = scrollLeft;
+	},
+	_fixTabsScrollTop: function (scrollTop) {
+		this.$n().scrollTop = this._tabsScrollTop = scrollTop;
 	}
 });
