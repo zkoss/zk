@@ -2,6 +2,8 @@
 
 .z-separator {
 	opacity: 0.69;
+	text-align: center;
+	position: relative;
 	&-horizontal,
 	&-horizontal-bar {
 		font-size: 0;
@@ -9,10 +11,14 @@
 		line-height: 0;
 		overflow: hidden;
 	}
-	&-horizontal-bar {
-		.encodeURL(background-image, "~./img/dot.gif");
-		background-position: center left; 
-		background-repeat: repeat-x;
+	&-horizontal-bar:after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		border-top: 1px solid @colorGreyDark;
+		.transform('translate(0, -50%)');
 	}
 	
 	&-vertical,
@@ -21,9 +27,13 @@
 		width: 10px;
 		overflow: hidden;
 	}
-	&-vertical-bar {
-		.encodeURL(background-image, "~./img/dot.gif");
-		background-position: top center; 
-		background-repeat: repeat-y;
+	&-vertical-bar:after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 0;
+		bottom: 0;
+		border-left: 1px solid @colorGreyDark;
+		.transform('translate(-50%)');
 	}
 }
