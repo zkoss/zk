@@ -73,6 +73,7 @@
 			&-icon {
 				right: 8px;
 				top: 8px;
+				position: absolute;
 			}
 		}
 	}
@@ -98,15 +99,11 @@
 		}
 		&:empty {
 			display: none;
-
-			& ~ .z-menu-icon {
-				padding-left: 0;
-			}
 		}
 	}
 	&-image {
 		max-width: @menuImageSize;
-		margin-right: 8px;
+		margin-right: 4px;
 	}
 	&-content {
 		color: @textColorGray;
@@ -168,14 +165,18 @@
 			}
 		}
 		.z-menu-text {
-			margin-right: 0;
+			margin-right: 8px;
 		}
+	}
+	&-content {
+		padding-right: 32px;
 	}
 
 	&-icon {
 		font-size: @fontSizeLarge;
-		padding-left: 6px;
-		margin-right: -4px;
+		position: absolute;
+		top: 8px;
+		right: 8px;
 	}
 	&-icon,
 	&-icon:hover,
@@ -227,6 +228,7 @@
 		min-width:  @menuImageSize;
 		min-height:  @menuImageSize;
 		background-repeat: no-repeat;
+		margin-right: 8px;
 	}
 	.z-menuitem-icon {
 		.iconFontStyle(16px, @menuCheckedColor);
@@ -234,13 +236,6 @@
 		position: absolute;
 		top: 8px;
 		left: 13px;
-	}
-	.z-menu-content {
-		padding-right: 16px;
-	}
-	.z-menu-icon {
-		right: 8px;
-		top: 8px;
 	}
 	.z-menuseparator {
 		font-size: 1px;
@@ -257,7 +252,8 @@
 		text-align: center;
 		display: inline-block;
 		min-width: @menuImageSize;
-		margin-right: 9px;
+		min-height: @menuImageSize;
+		margin-right: 8px;
 	}
 }
 //define checked menuitem effect in menupopup
