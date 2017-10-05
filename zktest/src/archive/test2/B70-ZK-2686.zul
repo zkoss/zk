@@ -3,48 +3,46 @@
 <!--
 B70-ZK-2686.zul
 
-	Purpose:
-		
-	Description:
-		
-	History:
-		Wed, Jun 24, 2015  16:30:29 AM, Created by Jameschu
+  Purpose:
+
+  Description:
+
+  History:
+    Fri Jun 12 14:50:20 CST 2015, Created by jumperchen
 
 Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:w="client">
-	<label multiline="true">
-		1.Use ZK CE,PE version.
-		2.Click button
-		3.Select second and third panel, you see non-zero px border-layout
-	</label>
-	<button onClick="" label="onResponse causes never opened west-elements to resize to 0px"/>
-	<tabbox width="500px" height="300px">
-		<tabs>
-			<tab label="tab1"/>
-			<tab label="tab2"/>
-			<tab label="tab3"/>
-		</tabs>
-		<tabpanels>
-			<tabpanel>
-				<borderlayout id="bl1">
-					<west title="West" splittable="true" collapsible="true" open="true" size="150px"/>
-					<center>CENTER</center>
-				</borderlayout>
-			</tabpanel>
-			<tabpanel>
-				<borderlayout id="bl2">
-					<west title="West" splittable="true" collapsible="true" open="true" size="200px"/>
-					<center>CENTER</center>
-				</borderlayout>
-			</tabpanel>
-			<tabpanel>
-				<borderlayout id="bl3">
-					<west title="West" splittable="true" collapsible="true" open="true" size="250px"/>
-					<center>CENTER</center>
-				</borderlayout>
-			</tabpanel>
-		</tabpanels>
-	</tabbox>
+<zk>
+	<custom-attributes org.zkoss.zul.nativebar="false"/>
+	<borderlayout height="400px" width="600px">
+		<west size="150px">
+		</west>
+		<center autoscroll="true" id="center">
+			<grid id="grid">
+				<rows>
+					<row>
+						<cell>
+							<div id="click1" onClick="inc1.setVisible(!inc1.isVisible())">div toggle tree on click</div>
+							<div id="inc1" visible="false" height="300px" style="background-color: red"/>
+						</cell>
+					</row>
+					<row>
+						<cell>
+							<div id="click2" onClick="inc2.setVisible(!inc2.isVisible())">div toggle tree on click</div>
+							<div id="inc2" visible="false" height="300px" style="background-color: green"/>
+						</cell>
+					</row>
+					<row>
+						<cell>
+							<div onClick="inc3.setVisible(!inc3.isVisible())">div toggle tree on click</div>
+							<div id="inc3" visible="false" height="300px" style="background-color: red"/>
+						</cell>
+					</row>
+				</rows>
+			</grid>
+		</center>
+		<east size="150px">
+		</east>
+	</borderlayout>
 </zk>
