@@ -1441,7 +1441,12 @@ jq(el).zk.center(); //same as 'center'
 	 * @return int the offset width
 	 */
 	offsetWidth: function () {
-		return this.jq[0].offsetWidth;
+		var n = this.jq[0];
+		if (typeof n.getBoundingClientRect != 'undefined') {
+			var rect = n.getBoundingClientRect();
+			return rect.width || rect.right - rect.left;
+		}
+		return n.offsetWidth;
 	},
 	/** Returns the offset height. It is similar to el.offsetHeight, except it solves some browser's bug or limitation.
 	 * @return int the offset height

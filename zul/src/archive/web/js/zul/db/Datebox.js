@@ -489,7 +489,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!this._buttonVisible) return;
 		if (!this._disabled)
 			this.setOpen(!jq(this.$n('pp')).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
-		evt.stop();
+		// Bug ZK-2544, B70-ZK-2849
+		evt.stop((this._pop && this._pop._open ? {propagation: 1} : null));
 	},
 	_doBtnMouseDown: function () {
 		this._inplaceIgnore = true;

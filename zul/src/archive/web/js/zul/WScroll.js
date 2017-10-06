@@ -174,6 +174,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 		}
 		ctrl.opts.startStep = dg._steps;
+		ctrl._syncButtonStatus();
 		var $jq = jq(dg._epos),
 			old = $jq.css('opacity'); // fix old IE version
 		jq(dg._epos).delay(300).fadeOut(500).css('opacity', old);
@@ -283,6 +284,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this._listenMouseEvent();
 		if (this.opts.syncSize !== false)
 			this.syncSize();
+		this._syncButtonStatus();
 	},
 	/**
 	 * Syncs the scrolling area and control bar size.
@@ -583,6 +585,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			}
 			break;
 		}
+		this._syncButtonStatus();
 	},
 	_mousewheelY: function (evt, delta, deltaX, deltaY) {
 		deltaY = deltaY;
@@ -615,7 +618,8 @@ zul.WScroll = zk.$extends(zk.Object, {
 
 			this.edrag.style.top = moving + 'px';
 			if (typeof this.opts.onScrollY == 'function')
-			this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
+				this.opts.onScrollY.call(this.widget, opts.startStep + opts.offset);
+			this._syncButtonStatus();
 		}
 	},
 	_mousewheelX: function (evt, delta, deltaX, deltaY) {
@@ -650,6 +654,7 @@ zul.WScroll = zk.$extends(zk.Object, {
 			this.edrag.style.left = moving + 'px';
 			if (typeof this.opts.onScrollX == 'function')
 				this.opts.onScrollX.call(this.widget, opts.startStep + opts.offset);
+			this._syncButtonStatus();
 		}
 	},
 	_initDragdrop: function () {
@@ -701,6 +706,13 @@ zul.WScroll = zk.$extends(zk.Object, {
 				+ '<div class="' + zcls + '-pos"></div>'
 				+ '<div class="' + zcls + '-endbar"></div>'
 			+ '</div>');
+	},
+	_syncButtonStatus: function () {
+		var zcls = this.zcls + '-wscroll',
+			$drag = jq(this.edrag),
+			opts = this.opts;
+		$drag.toggleClass(zcls + '-head', opts.startStep == 0);
+		$drag.toggleClass(zcls + '-tail', opts.startStep == opts.endStep - opts.viewport);
 	}
 }, {
 	/**
