@@ -23,12 +23,12 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 		when clicking the combo buttons close to the screen bottom, the combobox should display above the input area.
 	</label>
 	<vlayout vflex="1">
-		<listbox model="${model}" width="500px" ca:data-scrollable="true" vflex="1">
+		<listbox model="${model}" width="700px" ca:data-scrollable="true" vflex="1">
 			<custom-attributes org.zkoss.zul.nativebar="false"/>
 			<listhead>
-				<listheader label="col1" width="200px"/>
-				<listheader label="col2" width="200px"/>
-				<listheader label="col3" width="200px"/>
+				<listheader label="col1" width="300px"/>
+				<listheader label="col2" width="300px"/>
+				<listheader label="col3" width="300px"/>
 			</listhead>
 			<template name="model">
 				<listitem>

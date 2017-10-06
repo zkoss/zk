@@ -101,20 +101,22 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 					}
 				}
 			</zscript>
-			<tabbox id="t4" model="${model4}"  hflex="1" tabboxRenderer="${renderer}"/>
-			<button label="add New Tab" onClick='model4.add("Tab4")'/>
-			<button label="remove First Tab" onClick='model4.remove("Tab1")'/>
-			<button label="change model">
-				<attribute name="onClick">
-				ListModelList model5 = new ListModelList();
-				model5.add("Model 1");
-				model5.add("Model 2");
-				t4.setModel(model5);
-				
-				</attribute>
-			</button>
-			<button label="change model's selection" onClick='model5.addToSelection("Model 2")'/>
-			<button label="check model's selection" onClick='alert(model5.getSelection())'/>
+			<tabbox id="t4" model="${model4}"  hflex="min" tabboxRenderer="${renderer}"/>
+			<vlayout>
+				<button label="add New Tab" onClick='model4.add("Tab4")'/>
+				<button label="remove First Tab" onClick='model4.remove("Tab1")'/>
+				<button label="change model">
+					<attribute name="onClick">
+					ListModelList model5 = new ListModelList();
+					model5.add("Model 1");
+					model5.add("Model 2");
+					t4.setModel(model5);
+
+					</attribute>
+				</button>
+				<button label="change model's selection" onClick='model5.addToSelection("Model 2")'/>
+				<button label="check model's selection" onClick='alert(model5.getSelection())'/>
+			</vlayout>
 		</hlayout>
 	</vlayout>
 </zk>

@@ -27,7 +27,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
         2. Please click the tab "tab 1" and then click the button "Show Items" again
         3. Check whether the combobox is shown in the tab "Items"
         </label>
-		<tabbox hflex="1" vflex="1">
+		<tabbox width="600px" vflex="1">
 			<tabs>
 				<tab label="tab 1" />
 				<tab label="Items" id="tabItems" />
@@ -39,7 +39,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 				</tabpanel>
 				<tabpanel>
 					<borderlayout height="100%" width="100%">
-						<north size="30px" splittable="true" minsize="30" maxsize="30" >
+						<north size="60px" splittable="true" minsize="60" maxsize="60" >
 							<combobox hflex="1" vflex="1" />
 						</north>
 						<center autoscroll="true">
@@ -48,14 +48,6 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 									<listheader label="id" />
 									<listheader label="descricao" />
 								</listhead>
-                                               <!--            <template name="model">
-                                                          <listitem >
-										<listcell
-											label="${eacn}-1" />
-										<listcell
-											label="${each}-2" />
-									</listitem>
-                                                          </template> -->
 							</listbox>
 						</center>
 					</borderlayout>

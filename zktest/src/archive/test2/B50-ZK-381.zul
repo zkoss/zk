@@ -21,7 +21,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <li>The bug is fixed if do above without any problem.</li>
 </ol>
 ]]></html>
-	<menubar id="menubar" width="130px" scrollable="true">
+	<menubar id="menubar" width="200px" scrollable="true">
 		<menu label="Project" image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
 			<menupopup>
 				<menuitem label="New" onClick="alert(self.label)"  />

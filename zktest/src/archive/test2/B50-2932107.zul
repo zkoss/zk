@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 Please select a drop down list, and than you should see the selected item still exists.
-<listbox id="listbox" mold="paging" width="200px">
+<listbox id="listbox" mold="paging" width="500px">
 <auxhead>
 <auxheader colspan="1">
 <combobox id="insideHeaderCombobox" onSelect="loadItemsFromInside()">

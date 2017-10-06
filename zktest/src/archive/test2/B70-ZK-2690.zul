@@ -21,7 +21,7 @@ The hidden column of the grid should be scrolled back too. (IE only)
 		-->
 		<h:tr>
 			<h:td>
-				<grid sizedByContent="true">
+				<grid width="800px">
 					<rows>
 						<row>
 							<label value="person 1" />
@@ -64,15 +64,15 @@ The hidden column of the grid should be scrolled back too. (IE only)
 					</auxhead>
 					<frozen columns="3" />
 					<columns sizable="true">
-						<column width="200px" label="Name" />
-						<column width="100px" label="Anfangsbuchstabe" />
-						<column width="100px" label="Abteilung" />
-						<column width="90px" />
-						<column width="90px" />
-						<column width="90px" />
-						<column width="90px" />
-						<column width="90px" />
-						<column width="90px" />
+						<column width="300px" label="Name" />
+						<column width="200px" label="Anfangsbuchstabe" />
+						<column width="200px" label="Abteilung" />
+						<column width="190px" />
+						<column width="190px" />
+						<column width="190px" />
+						<column width="190px" />
+						<column width="190px" />
+						<column width="190px" />
 					</columns>
 				</grid>
 			</h:td>

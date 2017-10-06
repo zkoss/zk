@@ -3,7 +3,8 @@
 	    <rows>
 	        <row>
 	            <vbox height="1800px">
-	                <textbox width="400px" id="tb1Id" value="Please scroll down and click the Validate button"/>
+					<textbox />
+					Please scroll down and click the Validate button, and you should see one errorbox appear.
 	            </vbox>
 	        </row>      
 	        <row>

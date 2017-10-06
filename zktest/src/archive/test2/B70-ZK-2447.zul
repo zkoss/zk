@@ -2,7 +2,7 @@
 	<zscript><![CDATA[
         String[] data = new String[3];
         for(int j=0; j < data.length; ++j) {
-            data[j] = "item "+j;
+            data[j] = "item " + (j + 1);
         }
         ListModel strset = new ListModelList(data);
     ]]></zscript>

@@ -31,7 +31,7 @@ Left:
 <button label="save" onClick='win2.top = top.value + "px";win2.left =
 left.value + "px";' />
 </hbox>
-<window id="win2" border="normal" width="450px" top="50px" height="200px"
+<window id="win2" border="normal" width="450px" top="50px" height="300px"
 style="overflow:visible;" mode="overlapped"
 left="50px" title="InnerWindow- top=50px, left=50px- position=parent"
 position="parent"
