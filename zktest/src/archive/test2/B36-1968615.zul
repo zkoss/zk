@@ -31,7 +31,7 @@
 	a.add(aa);
 	a.add(ba);
 </zscript>
-<listbox model="@{a}">
+<listbox id="lb" model="@{a}">
 	<listitem self="@{each=r}" value="@{r}">
 		<listcell label="@{r}"/>
 		<listcell>

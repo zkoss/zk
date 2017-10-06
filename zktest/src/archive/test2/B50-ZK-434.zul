@@ -18,5 +18,5 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <separator/>
 2. Please delete the whole number area, for example 12:12:12, and then type 121212, it should appear "AM/PM" 12:12:12
 <separator/>
-<timebox format="a h:m:s" width="150px" onCreate="self.value = new Date()" />
+<timebox id="tb" format="a h:m:s" width="150px" onCreate="self.value = new Date()" />
 </zk>

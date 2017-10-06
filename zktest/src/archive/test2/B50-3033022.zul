@@ -1,6 +1,6 @@
 <zk>
 	<hbox>
-		<window border="normal" height="300px" width="300px">
+		<window border="normal" height="500px" width="300px">
 			<tabbox mold="accordion" height="100%">
 				<tabs>
 					<tab label="Tab 1" closable="true" />
