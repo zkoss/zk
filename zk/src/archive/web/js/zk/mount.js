@@ -597,9 +597,8 @@ jq(function () {
 			body = document.body,
 			old = zk.currentFocus,
 			// B80-ZK-3346: offset is not used on Firefox before version 3.8
-			targetPos = jq(target).position(),
-			evtX = evt.domEvent.clientX - targetPos.left,
-			evtY = evt.domEvent.clientY - targetPos.top;
+			evtX = evt.domEvent.offsetX ? evt.domEvent.offsetX : (evt.domEvent.originalEvent ? evt.domEvent.originalEvent.layerX - jq(evt.domTarget).position().left : undefined),
+            evtY = evt.domEvent.offsetY ? evt.domEvent.offsetY : (evt.domEvent.originalEvent ? evt.domEvent.originalEvent.layerY - jq(evt.domTarget).position().top : undefined);
 		if ((target != body && target != body.parentNode)
 				&& ((!target.clientWidth && !target.clientHeight) || evtX < target.clientWidth && evtY < target.clientHeight)
 				&& (evt.pageX < body.clientWidth && evt.pageY < body.clientHeight)) //not click on scrollbar
