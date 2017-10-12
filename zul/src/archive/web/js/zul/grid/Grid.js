@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.desktop) {
 			var empty = wgt.$n('empty'),
 				colspan = 0;
-			if (wgt.rows && wgt.rows.nChildren) {
+			if (!empty.innerHTML || (wgt.rows && wgt.rows.nChildren)) {
 				empty.style.display = 'none';
 			} else {
 				if (wgt.columns) {
@@ -59,8 +59,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		 * @since 5.0.7
 		 */
 		emptyMessage: function (msg) {
-			if (this.desktop)
+			if (this.desktop) {
 				jq(this.$n('empty')).html(msg);
+				_fixForEmpty(this);
+			}
 		}
 	},
 	/** Returns the specified cell, or null if not available.
