@@ -16,7 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
     <textbox id="tb" constraint="no empty"/>
     Please scroll down to press the button.
-    <div height="1400px"/>
-    <button label="Click me to show an errorbox on the textbox." onClick='Clients.scrollIntoView(tb); tb.getValue();'/>
+	<div id="div" height="1400px"/>
+	<button id="btn" label="Click me to show an errorbox on the textbox." onClick='Clients.scrollIntoView(tb); tb.getValue();'/>
 </zk>
 

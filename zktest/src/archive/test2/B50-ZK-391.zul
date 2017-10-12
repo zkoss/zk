@@ -33,9 +33,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</popup>
 		<vlayout id="container">
-			<label tooltip="zulPu1, position=after_end">Popup created in zul - good positioning</label>
-			<label tooltip="zulPu2, position=after_end">Popup created in zul, check for children and add child in Java - bad positioning, good on second hover</label>
-			<label tooltip="zulPu3, position=after_end">Popup created in zul 2, add child with no check for children in Java - bad positioning, good on second hover</label>
+			<label id="lb1" tooltip="zulPu1, position=after_end">Popup created in zul - good positioning</label>
+			<label id="lb2" tooltip="zulPu2, position=after_end">Popup created in zul, check for children and add child in Java - bad positioning, good on second hover</label>
+			<label id="lb3" tooltip="zulPu3, position=after_end">Popup created in zul 2, add child with no check for children in Java - bad positioning, good on second hover</label>
 			<label id="javaLbl">
 				<attribute name="onCreate">
 					final Popup javaPu = new Popup();

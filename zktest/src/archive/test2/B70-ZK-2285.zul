@@ -20,7 +20,7 @@ In IE browsers, after two items were selected, the "two-item" selection shifted 
 The selection should expand to include more items.(if not, that's a bug)
 2. Click the button of "toggle test8 selection", and the button should work as expected.
 </label>
-<listbox multiple="true" mold="select">
+<listbox id="lb" multiple="true" mold="select">
 	<listitem label="test1" />
 	<listitem label="test2" />
 	<listitem label="test3" />

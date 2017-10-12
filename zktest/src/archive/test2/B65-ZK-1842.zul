@@ -66,8 +66,8 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 
 	</vlayout>
 
-	<window id="win" border="normal" title="Listboxwin" width="200px"
-		height="200px" position="center" mode="overlapped" visible="false">
+	<window id="win" border="normal" title="Listboxwin" width="300px"
+		height="300px" position="center" mode="overlapped" visible="false">
 		<menubar>
 			<menuitem label="Close me" onClick="win.setVisible(false);" />
 		</menubar>

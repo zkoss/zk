@@ -29,12 +29,12 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
         </label>
 		<tabbox width="600px" vflex="1">
 			<tabs>
-				<tab label="tab 1" />
+				<tab id="tab1" label="tab 1" />
 				<tab label="Items" id="tabItems" />
 			</tabs>
 			<tabpanels>
 				<tabpanel>
-					<button label="Show Items"
+					<button id="btn" label="Show Items"
 						onClick='listbox.invalidate();tabItems.setSelected(true)' />
 				</tabpanel>
 				<tabpanel>
