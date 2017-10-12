@@ -250,7 +250,7 @@ zjq = function (jq) { //ZK extension
 		var docRoot,
 			// document.body may not be initiated.
 			initDocRoot = function () {
-				return docRoot = (zk.webkit || zk.opera) ? document.body : document.documentElement;
+				return docRoot = (zk.safari || zk.opera) ? document.body : document.documentElement;
 			};
 		return function () {
 			return docRoot || initDocRoot();
