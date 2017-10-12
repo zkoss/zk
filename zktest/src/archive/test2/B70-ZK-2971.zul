@@ -46,7 +46,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 			<vlayout>
 				//single selection works as expected
-				<listbox id="lb1" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="false">
+				<listbox id="lb1" width="300px" mold="paging" pageSize="20" rows="3" checkmark="true" pagingPosition="top" multiple="false">
 					<listhead>
 						<listheader label="col"/>
 					</listhead>
@@ -56,7 +56,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 	
 			<vlayout>
 				//multiple selection: the scroll position is not updated when navigating across the page to the element 20 using keyboard controls
-				<listbox id="lb2" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="true">
+				<listbox id="lb2" width="300px" mold="paging" pageSize="20" rows="3" checkmark="true" pagingPosition="top" multiple="true">
 					<listhead>
 						<listheader label="col"/>
 					</listhead>
@@ -69,7 +69,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
 			<vlayout>
 				//single selection works as expected
-				<listbox id="lb3" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="false">
+				<listbox id="lb3" width="300px" mold="paging" pageSize="20" rows="3" checkmark="true" pagingPosition="top" multiple="false">
 					<listhead>
 						<listheader label="col"/>
 					</listhead>
@@ -79,7 +79,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 	
 			<vlayout>
 				//multiple selection: the scroll position is not updated when navigating across the page to the element 20 using keyboard controls
-				<listbox id="lb4" width="300px" mold="paging" pageSize="20" height="300px" checkmark="true" pagingPosition="top" multiple="true">
+				<listbox id="lb4" width="300px" mold="paging" pageSize="20" rows="3" checkmark="true" pagingPosition="top" multiple="true">
 					<listhead>
 						<listheader label="col"/>
 					</listhead>

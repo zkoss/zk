@@ -28,7 +28,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
     
     <window title='ca:data-scrollable="true"'   
         contentStyle="overflow:auto" border="normal" width="500px"
-        height="300px" ca:data-scrollable="true">
+        height="400px" ca:data-scrollable="true">
         <vlayout>
             <html><![CDATA[
                 Steps:
