@@ -1713,7 +1713,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			hgh = zk.parseInt(hgh) - zk(n).padBorderHeight();
 			if (hgh) {
 				hgh -= this._headHgh(0);
-				if (hgh < 20) hgh = 20;
+				if (hgh < 0) hgh = 0;
 				var sz = 0;
 				l_out:
 					for (var h, j = 0, rl = rows.length; j < rl; ++sz, ++j) {
