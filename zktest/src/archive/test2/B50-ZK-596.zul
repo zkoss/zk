@@ -17,7 +17,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <div height="25px">1. Click the buttons below from left to right. </div>
 <div height="25px">2. The header of tabbox should shrink or expand while</div>
 <hbox><div height="25px" width="20px"></div><div height="25px"> the toolbar expand or shrink.</div></hbox>
-	<tabbox width="500px">
+	<tabbox width="800px">
 		<tabs>
 			<tab label="Tab 1" closable="true" />
 			<tab label="Tab 2" closable="true"/>
@@ -83,12 +83,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	</button>
 	<button label="shrink toolbar width">
 		<attribute name="onClick">
-			tbar.setWidth("100px");
+			tbar.setWidth("200px");
 		</attribute>
 	</button>
 	<button label="enlarge toolbar width">
 		<attribute name="onClick">
-			tbar.setWidth("300px");
+			tbar.setWidth("400px");
 		</attribute>
 	</button>
 </zk>

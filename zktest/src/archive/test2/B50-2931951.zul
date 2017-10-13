@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <div>
 Please click addRow button, than you should see a paging toolbar.
-	<grid id="grid" mold="paging" height="60px">
+	<grid id="grid" mold="paging" height="88px">
 		<columns>
 			<column label="column1" align="Center" />
 			<column label="column2" align="Center" />
