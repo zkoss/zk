@@ -220,7 +220,7 @@
 	display: block;
 	padding: 4px 8px;
 	position: relative;
-	min-height: 20px; //ZK-2783: give default height to empty item
+	min-height: @comboPopupItemSize + 2px + 4px * 2; //ZK-2783: give default height to empty item
 	.borderRadius(@baseBorderRadius);
 }
 .z-comboitem-inner,
