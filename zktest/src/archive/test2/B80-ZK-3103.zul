@@ -36,7 +36,9 @@
 		11. switch back to 1st page by clicking the paging control button in all four listboxes (the bottom two listboxes used the same model, so click just one of them)
 		12. should see all four listboxes DID NOT SCROLL to reveal the selected "Item 17", if "Item 17" is somehow visible, the bug is not fixed
 	</label>
-	<button id="select" label="select" onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());model.addToSelection(model.getElementAt(index.getValue()));"/><intbox id="index"/>
+	<button id="select" label="select" onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());model.addToSelection(model.getElementAt(index.getValue()));"/>
+	<button id="clear" label="clear" onClick="index.setValue(0)"/>
+	<intbox id="index"/>
 	<vlayout>
 		<hlayout>
 			<listbox id="lb1" width="300px" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
