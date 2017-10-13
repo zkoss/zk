@@ -33,11 +33,11 @@ public final class StandardTheme extends Theme {
 	/**
 	 * Name used to identify the default theme
 	 */
-	public static final String DEFAULT_NAME = "default";
+	public static final String DEFAULT_NAME = "iceblue";
 	/**
 	 * Name used to display the default theme
 	 */
-	public static final String DEFAULT_DISPLAY = "Default";
+	public static final String DEFAULT_DISPLAY = "Iceblue";
 	/**
 	 * Priority of the default theme
 	 */
