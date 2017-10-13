@@ -60,19 +60,12 @@
 @colorGreyLighter:             rgba(0, 0, 0, 0.05); // Field disabled Bg
 
 @baseTextColor:                @textColorDefault;
-@textColorGray:                @textColorLight;
-@textColorGrayDark:            @textColorLight;
-@textColorGrayLight:           @textColorLight;
 
 // Border color
 @baseBorderColor:              @colorGreyLight;
 
 // Background color
-@baseBackgroundColor:          @colorBackground1;
-
-// Gradient background
-@baseGradientStart:            @colorBackground1;
-@baseGradientEnd:              @colorBackground1;
+@baseBackgroundColor:          @colorBackground3;
 
 // -------------------------------------
 // Icon font color (used for font-awesome)
@@ -183,7 +176,6 @@
 @inputBorderColor:             @colorGreyLight;
 @inputBorderRadius:            @baseBorderRadius;
 @inputBackgroundColor:         @colorBackground3;
-@inputMargin:                  0 8px;
 @inputPadding:                 8px;
 @inputColor:                   @textColorDefault;
 @inputPlaceholderColor:        @textColorLighter;
@@ -243,7 +235,7 @@
 
 // mask and loading
 @maskBackgroundColor:          #E0E1E3;
-@loadingBackgroundColor:       #FFFFFF;
+@loadingBackgroundColor:       @baseBackgroundColor;
 @loadingTextColor:             @textColorLight;
 
 // scrollbar
@@ -266,11 +258,11 @@
 
 // drag and drop
 @dragColor:                    @textColorDefault;
-@dragBackgroundColor:          @colorBackground3;
+@dragBackgroundColor:          @popupBackgroundColor;
 @dragHoverBackgroundColor:     @colorPrimaryLighter;
 @dragAllowIconColor:           @colorPrimary;
 @dragAllowBorderColor:         @colorPrimary;
-@dragAllowBackgroundColor:     @colorBackground3;
+@dragAllowBackgroundColor:     @popupBackgroundColor;
 @dragDisAllowIconColor:        @textColorLighter;
 @dragDisAllowBorderColor:      transparent;
 @dragDisAllowBackgroundColor:  @colorGreyLighter;
@@ -322,11 +314,13 @@
 @pagingButtonHeight:           26px;
 
 // slider
-@sliderPopupBackgroundColor:   @colorAccent3;
-@sliderPopupColor:             @textColorDefault3;
 @sliderAreaSize:               6px;
 @sliderBackgroundColor:        @colorGreyLight;
 @sliderAreaBackgroundColor:    @colorPrimary;
+
+// tooltip (used in slider, fisheyebar)
+@tooltipColor:                 @textColorDefault3;
+@tooltipBackgroundColor:       @colorAccent3;
 
 // errorbox (input constraint)
 @errorboxColor:                @colorAccent2;
@@ -359,7 +353,7 @@
 @menuActiveBackground:         @colorPrimary;
 @menuActiveBorderColorTR:      transparent;
 @menuActiveBorderColorBL:      transparent;
-@menuPopupBackground:          @colorBackground3;
+@menuPopupBackground:          @popupBackgroundColor;
 @menuSeparatorBorderColor:     @colorGreyLight;
 @menuSeparatorBackgroundColor: @colorGreyLight;
 @menuPopupSeparatorBorder:     @colorGreyLight;
@@ -371,10 +365,10 @@
 @navImageSize:                 20px;
 @navColor:                     @textColorLight;
 @navBorderColor:               @colorGreyLight;
-@navBackgroundColor:           #FFFFFF;
+@navBackgroundColor:           @colorBackground3;
 @navHoverBackgroundColor:      @navBackgroundColor;
 @navSelectedColor:             @colorPrimary;
-@navSelectedBackgroundColor:   #FFFFFF;
+@navSelectedBackgroundColor:   @navBackgroundColor;
 @navSeparatorColor:            @colorGreyLight;
 @navCollapsedWidth:            32px;
 @navBadgeTextColor:            @textColorLight;

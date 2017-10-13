@@ -26,7 +26,7 @@
 	border-bottom: 1px solid @baseBorderColor;
 	padding: 4px;
 	position: relative;
-	background: @menuPopupBackground;
+	background: @baseBackgroundColor;
 
 	ul {
 		overflow: hidden;
@@ -106,7 +106,7 @@
 		margin-right: 4px;
 	}
 	&-content {
-		color: @textColorGray;
+		color: @textColorLight;
 		display: block;
 		border: 1px solid transparent;
 		.borderRadius(@baseBorderRadius);
@@ -134,7 +134,7 @@
 			cursor: default;
 			.boxShadow('none');
 			&:active {
-				color: @textColorGray;
+				color: @textColorLight;
 			}
 		}
 	}
@@ -308,4 +308,12 @@
 		cursor: pointer;
 		z-index: 25;
 	}
+}
+
+// Icon replacement
+.z-menubar-left > i:before {
+	content: '\f104';
+}
+.z-menubar-right > i:before {
+	content: '\f105';
 }

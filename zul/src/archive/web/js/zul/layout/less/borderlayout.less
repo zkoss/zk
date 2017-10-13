@@ -17,7 +17,7 @@
 .z-borderlayout {
 	.size(100%, 100%);
 	border: 0;
-	background: @colorBackground3;
+	background: @baseBackgroundColor;
 	overflow: hidden;
 
 	&-icon {
@@ -42,7 +42,7 @@
 .z-center,
 .z-east {
 	border: 1px solid @baseBorderColor;
-	background: @colorBackground3;
+	background: @baseBackgroundColor;
 	position: absolute;
 	overflow: hidden;
 
@@ -50,7 +50,7 @@
 		border: 0;
 	}
 	&-header {
-		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @textColorGray);
+		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @textColorLight);
 		border-bottom: 1px solid @baseBorderColor;
 		padding: 12px 16px;
 		overflow: hidden;
@@ -68,7 +68,7 @@
 		.size(40px, 40px);
 		border: 1px solid @baseBorderColor;
 		padding: 8px;
-		background: @baseBackgroundColor;
+		background: @colorBackground1;
 		position: absolute;
 		overflow: hidden;
 	 	cursor: pointer; // ios issue
@@ -78,7 +78,7 @@
 	}
 
 	&-slide ~ &-collapsed {
-		background: @colorBackground3;
+		background: @baseBackgroundColor;
 		&:hover {
 			background: @hoverBackgroundColor;
 		}
