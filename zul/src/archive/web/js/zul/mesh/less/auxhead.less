@@ -19,13 +19,13 @@
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	background-color: @colorPrimary;
+	background-color: @meshTitleBackgroundColor;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
 
 	&-content {
-		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorDefault3);
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @meshTitleColor);
 		padding: 8px 16px;
 		line-height: @baseButtonHeight;
 		overflow: hidden;

@@ -5,9 +5,19 @@
 	background-color: @hoverBackgroundColor;
 }
 .activeStyle() {
-	color: @activeColor;
-	border-color: @menuActiveBorderColorTR @menuActiveBorderColorBL @menuActiveBorderColorBL @menuActiveBorderColorTR;
-	background-color: @menuActiveBackground;
+	color: @menuItemActiveColor;
+	background-color: @menuItemActiveBackground;
+}
+.disabledStyle(@bgColor) {
+	border: 1px solid transparent;
+	cursor: default;
+	color: @disabledColor;
+	background: @bgColor;
+	text-decoration: none;
+	&:active, &:hover {
+		color: @disabledColor;
+		background: 0;
+	}
 }
 .restUl() {
 	background: transparent none repeat 0 0;
@@ -26,7 +36,7 @@
 	border-bottom: 1px solid @baseBorderColor;
 	padding: 4px;
 	position: relative;
-	background: @baseBackgroundColor;
+	background: @menuBackground;
 
 	ul {
 		overflow: hidden;
@@ -106,7 +116,8 @@
 		margin-right: 4px;
 	}
 	&-content {
-		color: @textColorLight;
+		color: @menuItemColor;
+		background: @menuItemBackground;
 		display: block;
 		border: 1px solid transparent;
 		.borderRadius(@baseBorderRadius);
@@ -128,14 +139,7 @@
 			.activeStyle();
 		}
 		&[disabled] {
-			.opacity(0.6);
-			border: 1px solid transparent;
-			.resetGradient();
-			cursor: default;
-			.boxShadow('none');
-			&:active {
-				color: @textColorLight;
-			}
+			.disabledStyle(@menuItemBackground);
 		}
 	}
 
@@ -222,6 +226,24 @@
 	}
 	&-separator {
 		display: none;
+	}
+	.z-menu-content,
+	.z-menuitem-content {
+		color: @menuPopupItemColor;
+		background: @menuPopupItemBackground;
+		&:hover {
+			.hoverStyle();
+		}
+		&:focus {
+			.hoverStyle();
+		}
+		&:active {
+			color: @menuPopupItemActiveColor;
+			background: @menuPopupItemActiveBackground;
+		}
+		&[disabled] {
+			.disabledStyle(@menuPopupItemBackground);
+		}
 	}
 	.z-menu-image,
 	.z-menuitem-image {

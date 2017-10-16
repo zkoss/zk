@@ -171,6 +171,13 @@
 @containerButtonSize:          @fontSizeLarge;
 @containerButtonColor:         @textColorLight;
 
+// Borderlayout
+@borderlayoutHeaderColor:      @textColorLight;
+@borderlayoutHeaderBackgrundColor: @baseBackgroundColor;
+
+// Groupbox
+@groupboxHeaderColor:          @textColorLight;
+
 // Input (used for textbox, intbox, spinner, ...)
 @inputTextSize:                @fontSizeMedium;
 @inputBorderColor:             @colorGreyLight;
@@ -244,10 +251,8 @@
 @scrollbarBarSize:             10px;
 @scrollbarRailSize:            6px;
 @scrollbarEmbeddedColor:       @colorGreyLight;
-
 @scrollbarBorderColor:         transparent;
 @scrollbarBackgroundColor:     @colorGreyLight;
-
 @scrollbarBarBackgroundColor:  @colorPrimary;
 @scrollbarBarHoverBackground:  @colorPrimaryDark;
 @scrollbarIconDisplay:         none;
@@ -341,25 +346,39 @@
 
 // tabbox
 @tabboxBackgroundColor:        @colorBackground3;
-@tabboxTabsColor:              @textColorLight;
-@tabboxTabsHoverColor:         @textColorDefault;
 @tabboxTabsBackgroundColor:    @colorBackground3;
+@tabboxToolbarBackgroundColor: @tabboxTabsBackgroundColor;
+@tabboxTabColor:               @textColorLight;
+@tabboxTabBackgroundColor:     @colorBackground3;
+@tabboxTabHoverColor:          @textColorDefault;
+@tabboxTabHoverBackgroundColor:@colorBackground3;
+@tabboxTabButtonColor:         @iconColor;
+@tabboxTabButtonHoverColor:    @iconHoverColor;
 @tabboxSelectedColor:          @colorPrimary;
+@tabboxSelectedBorderColor:    @colorPrimary;
 @tabboxSelectedHoverColor:     @colorPrimaryDark;
 @tabboxSelectedBackgroundColor:@colorBackground3;
+@tabboxSelectedHoverBackgroundColor:@colorBackground3;
+@tabboxScrollIconColor:        @iconColor;
+@tabboxScrollIconHoverColor:   @iconHoverColor;
 
 // menu
-@menuImageSize:                20px;
-@menuActiveBackground:         @colorPrimary;
-@menuActiveBorderColorTR:      transparent;
-@menuActiveBorderColorBL:      transparent;
-@menuPopupBackground:          @popupBackgroundColor;
+@menuBackground:               @baseBackgroundColor;
+@menuItemBackground:           @baseBackgroundColor;
+@menuItemColor:                @textColorLight;
+@menuItemActiveColor:          @activeColor;
+@menuItemActiveBackground:     @colorPrimary;
 @menuSeparatorBorderColor:     @colorGreyLight;
 @menuSeparatorBackgroundColor: @colorGreyLight;
+@menuPopupBackground:          @popupBackgroundColor;
+@menuPopupItemBackground:      @popupBackgroundColor;
+@menuPopupItemColor:           @textColorLight;
+@menuPopupItemActiveColor:     @activeColor;
+@menuPopupItemActiveBackground:@colorPrimary;
 @menuPopupSeparatorBorder:     @colorGreyLight;
-@menuPopupSeparatorBackground: @colorGreyLight;
-@menuCheckedColor:             @textColorDefault3;
-@menuCheckedBackgroundColor:   @colorPrimary;
+@menuImageSize:                20px;
+@menuCheckedColor:             @checkedBackgroundColor;
+@menuCheckedBackgroundColor:   @checkedColor;
 
 // navbar
 @navImageSize:                 20px;

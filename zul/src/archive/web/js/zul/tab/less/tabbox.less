@@ -76,7 +76,7 @@
 
 	// horizontal (default)
 	&-icon {
-		.iconFontStyle(@fontSizeXLarge, @iconColor);
+		.iconFontStyle(@fontSizeXLarge, @tabboxScrollIconColor);
 		display: none;
 		padding: 12px 8px;
 		line-height: @fontSizeXLarge;
@@ -85,13 +85,14 @@
 		top: 0;
 		cursor: pointer;
 		z-index: 25;
+		background: @tabboxTabsBackgroundColor;
 		.userSelect();
 		
 		> i {
 			.opacity(0.7);
 		}
 		&:hover {
-			color: @iconHoverColor;
+			color: @tabboxScrollIconHoverColor;
 			> i {
 				.opacity(1);
 			}
@@ -130,7 +131,7 @@
 				bottom: 0;
 
 				&.z-tab-selected {
-					border-top: 2px solid @tabboxSelectedColor;
+					border-top: 2px solid @tabboxSelectedBorderColor;
 					border-bottom: 0;
 				}
 			}
@@ -153,7 +154,7 @@
 			.z-tab {
 				border-right: 2px solid transparent;
 				&.z-tab-selected {
-					border-right: 2px solid @tabboxSelectedColor;
+					border-right: 2px solid @tabboxSelectedBorderColor;
 				}
 			}
 
@@ -189,7 +190,7 @@
 			.z-tab {
 				border-left: 2px solid transparent;
 				&.z-tab-selected {
-					border-left: 2px solid @tabboxSelectedColor;
+					border-left: 2px solid @tabboxSelectedBorderColor;
 				}
 			}
 		}
@@ -253,6 +254,7 @@
 	line-height: @baseButtonHeight;
 	overflow: hidden;
 	position: relative;
+	background: @tabboxTabsBackgroundColor;
 
 	&-content {
 		display: flex;
@@ -275,8 +277,7 @@
 	border-bottom: 2px solid transparent;
 	margin: 0;
 	line-height: @baseButtonHeight + 6;
-	background: @tabboxTabsBackgroundColor;
-	color: @tabboxTabsColor;
+	background: @tabboxTabBackgroundColor;
 	text-align: center;
 	position: relative;
 	cursor: pointer;
@@ -288,7 +289,7 @@
 	}
 
 	&:hover {
-		color: @tabboxTabsHoverColor;
+		background: @tabboxTabHoverBackgroundColor;
 	}
 
 	&-icon {
@@ -303,7 +304,7 @@
 
 	&-text {
 		font-style: normal;
-		color: @textColorLight;
+		color: @tabboxTabColor;
 		display: block;
 		line-height: @baseButtonHeight;
 		overflow: hidden;
@@ -311,7 +312,7 @@
 		white-space: nowrap;
 
 		&:hover {
-			color: @iconHoverColor;
+			color: @tabboxTabHoverColor;
 		}
 	}
 
@@ -323,7 +324,7 @@
 	}
 
 	&-button {
-		.iconFontStyle(@fontSizeLarge, @iconColor);
+		.iconFontStyle(@fontSizeLarge, @tabboxTabButtonColor);
 		.displaySize(block, @baseButtonHeight, 100%);
 		line-height: normal;
 		text-align: center;
@@ -335,7 +336,7 @@
 		.userSelect();
 		
 		&:hover {
-			color: @iconHoverColor;
+			color: @tabboxTabButtonHoverColor;
 		}
 		& + .z-tab-text {
 			margin-right: 8px;
@@ -345,10 +346,11 @@
 		margin: auto;
 	}
 	&-selected {
-		border-bottom: 2px solid @tabboxSelectedColor;
+		border-bottom: 2px solid @tabboxSelectedBorderColor;
+		background: @tabboxSelectedBackgroundColor;
 
 		&:hover {
-			background: @tabboxSelectedBackgroundColor;
+			background: @tabboxSelectedHoverBackgroundColor;
 		}
 		.z-tab-button {
 			color: @tabboxSelectedColor;
