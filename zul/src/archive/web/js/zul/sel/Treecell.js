@@ -58,7 +58,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			tc = this.getTreecol();
 			// B70-ZK-2946: adds the text-align from treecol, same as Listcell
 		if (tc) if (tc._align) style += 'text-align: ' + tc._align + ';';
-		return this.isVisible() && tc && !tc.isVisible() ? style + 'display:none;' : style;
+		return this.isVisible() && tc && !tc.isVisible() ? style + 'width: 0.1px;' : style;
 	},
 	/** Returns the tree col associated with this cell, or null if not available.
 	 * @return Treecol
