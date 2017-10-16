@@ -87,7 +87,7 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 		else if (header && header._valign)
 			style += 'vertical-align:' + header._valign + ';';
 		if (header && !header.isVisible()) //Bug ZK-1425
-			style += 'display: none;';
+			style += 'visibility: hidden; width: 0.1px;';
 
 		return style + this.$super('domStyle_', no);
 	},
