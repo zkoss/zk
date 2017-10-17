@@ -83,23 +83,23 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 		<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 		<hlayout>
 			<vlayout hflex="1">
+				<button label="add 3 rows to 1" onClick='model0.addAll(add3in0);'/>
+				<button label="add 4 rows to 1" onClick='model0.addAll(add4in0);'/>
 				<listbox model="${model0}">
 					<custom-attributes org.zkoss.zul.invalidateThreshold="3"/>
 				</listbox>
-				<button label="add 3 rows to 1" onClick='model0.addAll(add3in0);'/>
-				<button label="add 4 rows to 1" onClick='model0.addAll(add4in0);'/>
 			</vlayout>
 			<vlayout hflex="1">
+				<button label="add 4 rows to 2" onClick='model1.addAll(add4in1);'/>
+				<button label="add 5 rows to 2" onClick='model1.addAll(add5in1);'/>
 				<listbox model="${model1}">
 					<custom-attributes org.zkoss.zul.invalidateThreshold="4"/>
 				</listbox>
-				<button label="add 4 rows to 2" onClick='model1.addAll(add4in1);'/>
-				<button label="add 5 rows to 2" onClick='model1.addAll(add5in1);'/>
 			</vlayout>
 			<vlayout hflex="1">
-				<listbox model="${model2}"/>
 				<button label="add 6 rows to 3" onClick='model2.addAll(add6in2);'/>
 				<button label="add 7 rows to 3" onClick='model2.addAll(add7in2);'/>
+				<listbox model="${model2}"/>
 			</vlayout>
 		</hlayout>
 	</div>
