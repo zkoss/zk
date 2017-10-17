@@ -22,7 +22,7 @@
 	//tree header div
 	&-header {
 		width: 100%;
-		background-color: @meshTitleBackgroundColor;
+		background: @meshTitleBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -47,9 +47,12 @@
 	//tree footer div
 	&-footer {
 		border-top: 1px solid @baseBorderColor;
-		background: @meshFootBackgroundColor;
 		overflow: hidden;
 		.resetTable();
+
+		.z-treefooter {
+			background: @meshFootBackgroundColor;
+		}
 	}
 }
 //tree open icon and indent space
@@ -86,6 +89,7 @@
 	}
 }
 .z-treecol {
+	background: @meshTitleBackgroundColor;
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
@@ -111,7 +115,6 @@
 // ZK-2151: use strict selector to prevent nest problem
 //tree row and cell
 .z-treerow {
-	background: @meshBackgroundColor;
 	&:first-child {
 		.z-treecell {
 			border-top-width: 0;
@@ -122,11 +125,12 @@
 		border-top: 1px solid @meshContentBorderColor;
 		overflow: hidden;
 		cursor: pointer;
+		background: @meshBackgroundColor;
 	}
 
 	&:hover {
-		background-color: @hoverBackgroundColor;
 		> .z-treecell {
+			background: @hoverBackgroundColor;
 			> .z-treecell-content {
 				color: @hoverColor;
 			}
@@ -152,8 +156,8 @@
 	}
 	//selected tree cell
 	&.z-treerow-selected {
-		background-color: @selectedBackgroundColor;
 		> .z-treecell {
+			background: @selectedBackgroundColor;
 			position: relative;
 
 			> .z-treecell-content {
@@ -162,8 +166,8 @@
 		}
 		
 		&:hover {
-			background-color: @selectedHoverBackgroundColor;
 			> .z-treecell {
+				background: @selectedHoverBackgroundColor;
 				> .z-treecell-content {
 					color: @selectedHoverColor;
 				}
@@ -171,8 +175,8 @@
 		}
 	}
 	&.z-treerow-selected.z-treerow-focus {
-		background-color: @selectedFocusBackgroundColor;
 		> .z-treecell {
+			background: @selectedFocusBackgroundColor;
 			position: relative;
 
 			> .z-treecell-content {
@@ -180,8 +184,8 @@
 			}
 		}
 		&:hover {
-			background-color: @selectedHoverBackgroundColor;
 			> .z-treecell {
+				background: @selectedHoverBackgroundColor;
 				> .z-treecell-content {
 					color: @selectedHoverColor;
 				}
@@ -189,8 +193,8 @@
 		}
 	}
 	&-focus {
-		background-color: @meshContentFocusBackgroundColor;
 		> .z-treecell {
+			background: @meshContentFocusBackgroundColor;
 			position: relative;
 			> .z-treecell-content {
 				color: @hoverColor;

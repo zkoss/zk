@@ -33,7 +33,7 @@
 	//listbox header
 	&-header {
 		width: 100%;
-		background-color: @meshTitleBackgroundColor;
+		background: @meshTitleBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -59,10 +59,21 @@
 	}
 	//listbox footer
 	&-footer {
-		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		.resetTable();
+
+		.z-listfooter {
+			background: @meshFootBackgroundColor;
+		}
+	}
+
+	.z-listcell {
+		background: @meshBackgroundColor;
+	}
+
+	&-odd > .z-listcell {
+		background: @meshStripeBackgroundColor;
 	}
 }
 //listhead
@@ -88,7 +99,7 @@
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
-	background-color: @meshTitleBackgroundColor;
+	background: @meshTitleBackgroundColor;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
@@ -104,19 +115,19 @@
 			left: 50%;
 		}
 		:active {
-			background-color: @meshTitleActiveBackgroundColor;
+			background: @meshTitleActiveBackgroundColor;
 		}
 	}
 	&-hover {
-		background-color: @meshTitleHoverBackgroundColor;
+		background: @meshTitleHoverBackgroundColor;
 		.z-listheader-button {
 			display: block;
 		}
 	}
 	&-visited {
-		background-color: @meshTitleBackgroundColor;
+		background: @meshTitleBackgroundColor;
 		.z-listheader-button {
-			background-color: @meshTitleBorderColor;
+			background: @meshTitleBorderColor;
 		}
 	}
 	&-checkable {
@@ -160,12 +171,6 @@
 // ZK-2151: use strict selector to prevent nest problem
 //list item and cell
 .z-listitem {
-	background: @meshBackgroundColor;
-
-	&.z-listbox-odd {
-		background: @meshStripeBackgroundColor;
-	}
-
 	&:first-child {
 		.z-listcell {
 			border-top-width: 0;
@@ -179,8 +184,8 @@
 		cursor: pointer;
 	}
 	&:hover {
-		background-color: @hoverBackgroundColor;
 		> .z-listcell {
+			background: @hoverBackgroundColor;
 			> .z-listcell-content {
 				color: @hoverColor;
 			}
@@ -200,8 +205,8 @@
 	}
 	//selected list cell
 	&.z-listitem-selected {
-		background-color: @selectedBackgroundColor;
 		> .z-listcell {
+			background: @selectedBackgroundColor;
 			position: relative;
 
 			> .z-listcell-content {
@@ -209,8 +214,8 @@
 			}
 		}
 		&:hover {
-			background-color: @selectedHoverBackgroundColor;
 			> .z-listcell {
+				background: @selectedHoverBackgroundColor;
 				position: relative;
 			}
 			.z-listcell-content {
@@ -219,8 +224,8 @@
 		}
 	}
 	&.z-listitem-selected.z-listitem-focus {
-		background-color: @selectedFocusBackgroundColor;
 		> .z-listcell {
+			background: @selectedFocusBackgroundColor;
 			position: relative;
 
 			> .z-listcell-content {
@@ -228,8 +233,8 @@
 			}
 		}
 		&:hover {
-			background-color: @selectedHoverBackgroundColor;
 			> .z-listcell {
+				background: @selectedHoverBackgroundColor;
 				position: relative;
 			}
 			.z-listcell-content {
@@ -238,8 +243,8 @@
 		}
 	}
 	&-focus {
-		background-color: @meshContentFocusBackgroundColor;
 		> .z-listcell {
+			background: @meshContentFocusBackgroundColor;
 			position: relative;
 		}
 		.z-listcell-content {
@@ -299,7 +304,7 @@ body:not(.gecko) {
 	&-inner {
 		border-top: 1px solid @meshContentBorderColor;
 		border-bottom: 1px solid @meshGroupBorderColor;
-		background-color: @meshGroupBackgroundColor;
+		background: @meshGroupBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		

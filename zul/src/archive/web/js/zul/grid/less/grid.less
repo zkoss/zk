@@ -22,7 +22,7 @@
 	//grid header
 	&-header {
 		width: 100%;
-		background-color: @meshTitleBackgroundColor;
+		background: @meshTitleBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		.resetTable();
@@ -49,13 +49,13 @@
 	}
 	//grid footer
 	&-footer {
-		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		.resetTable();
 		
 		.z-footer {
 			overflow: hidden;
+			background: @meshFootBackgroundColor;
 		}
 	}
 	.z-row-inner, .z-cell {
@@ -86,6 +86,7 @@
 	}
 }
 .z-column {
+	background: @meshTitleBackgroundColor;
 	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
@@ -94,15 +95,15 @@
 	white-space: nowrap;
 
 	&-hover {
-		background-color: @meshTitleHoverBackgroundColor;
+		background: @meshTitleHoverBackgroundColor;
 		.z-column-button {
 			display: block;
 		}
 	}
 	&-visited {
-		background-color: @meshTitleBackgroundColor;
+		background: @meshTitleBackgroundColor;
 		.z-column-button {
-			background-color: @meshTitleBorderColor;
+			background: @meshTitleBorderColor;
 		}
 	}
 	.z-column-content {
@@ -119,7 +120,7 @@
 			left: 50%;
 		}
 		:active {
-			background-color: @meshTitleActiveBackgroundColor;
+			background: @meshTitleActiveBackgroundColor;
 		}
 	}
 	&-button {
@@ -164,7 +165,7 @@
 	&:hover {
 		> .z-row-inner,
 		> .z-cell {
-			background-color: @hoverBackgroundColor;
+			background: @hoverBackgroundColor;
 		}
 		> .z-row-inner > .z-row-content { //for nest issue
 			color: @hoverColor;
@@ -188,7 +189,7 @@ body:not(.gecko) {
 	&-inner {
 		border-top: 1px solid @meshContentBorderColor;
 		border-bottom: 1px solid @meshGroupBorderColor;
-		background-color: @meshGroupBackgroundColor;
+		background: @meshGroupBackgroundColor;
 		position: relative;
 		overflow: hidden;
 		
@@ -216,7 +217,7 @@ body:not(.gecko) {
 }
 .z-groupfoot-inner {
 	border-top: 1px solid @meshContentBorderColor;
-	background-color: @meshGroupFooterBackgroundColor;
+	background: @meshGroupFooterBackgroundColor;
 	overflow: hidden;
 }
 //content
