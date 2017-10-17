@@ -36,19 +36,20 @@
 		11. switch back to 1st page by clicking the paging control button in all four listboxes (the bottom two listboxes used the same model, so click just one of them)
 		12. should see all four listboxes DID NOT SCROLL to reveal the selected "Item 17", if "Item 17" is somehow visible, the bug is not fixed
 	</label>
-	<button id="select" label="select" onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());model.addToSelection(model.getElementAt(index.getValue()));"/>
-	<button id="clear" label="clear" onClick="index.setValue(0)"/>
+	<button id="select" label="select"
+			onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());model.addToSelection(model.getElementAt(index.getValue()));"/>
+edgeedge	<button id="clear" label="clear" onClick="index.setValue(0)"/>
 	<intbox id="index"/>
 	<vlayout>
 		<hlayout>
-			<listbox id="lb1" width="300px" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+			<listbox id="lb1" width="500px" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
 				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 				<listhead>
 					<listheader label="no model, no rod"/>
 				</listhead>
 				<listitem forEach="${items}" label="${each}"/>
 			</listbox>
-			<listbox id="lb2" width="300px" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+			<listbox id="lb2" width="500px" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
 				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
 				<listhead>
 					<listheader label="mo nodel, rod"/>
@@ -57,13 +58,13 @@
 			</listbox>
 		</hlayout>
 		<hlayout>
-			<listbox id="lb3" width="300px" model="${model}" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+			<listbox id="lb3" width="500px" model="${model}" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
 				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
 				<listhead>
 					<listheader label="model, rod"/>
 				</listhead>
 			</listbox>
-			<listbox id="lb4" width="300px" model="${model}" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
+			<listbox id="lb4" width="500px" model="${model}" mold="paging" pageSize="20" height="200px" checkmark="true" pagingPosition="top" multiple="false">
 				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
 				<listhead>
 					<listheader label="model, no rod"/>
