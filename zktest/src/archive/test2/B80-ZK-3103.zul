@@ -38,7 +38,7 @@
 	</label>
 	<button id="select" label="select"
 			onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());model.addToSelection(model.getElementAt(index.getValue()));"/>
-edgeedge	<button id="clear" label="clear" onClick="index.setValue(0)"/>
+	<button id="clear" label="clear" onClick="index.setValue(0)"/>
 	<intbox id="index"/>
 	<vlayout>
 		<hlayout>
