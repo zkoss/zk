@@ -59,6 +59,7 @@
 	}
 	//listbox footer
 	&-footer {
+		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		.resetTable();
@@ -310,7 +311,7 @@ body:not(.gecko) {
 		
 		.z-listcell-content,
 		.z-listgroup-content {
-			padding: 8px 16px;
+			padding: 12px 16px;
 		}
 	}
 	&&-open &-inner {
@@ -382,7 +383,7 @@ body:not(.gecko) {
 	}
 	& .z-listcell-content {
 		color: @meshGroupFooterColor;
-		padding: 8px 16px;
+		padding: 12px 16px;
 		.z-listgroup-open& {
 			color: @meshGroupFooterOpenColor;
 		}

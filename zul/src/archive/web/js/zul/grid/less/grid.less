@@ -49,6 +49,7 @@
 	}
 	//grid footer
 	&-footer {
+		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
 		.resetTable();
@@ -195,7 +196,7 @@ body:not(.gecko) {
 		
 		.z-group-content,
 		.z-cell {
-			padding: 8px 16px;
+			padding: 12px 16px;
 		}
 	}
 	&&-open &-inner {
@@ -242,7 +243,7 @@ body:not(.gecko) {
 }
 .z-groupfoot-content {
 	color: @meshGroupFooterColor;
-	padding: 8px 16px;
+	padding: 12px 16px;
 	.z-group-open & {
 		color: @meshGroupFooterOpenColor;
 	}
