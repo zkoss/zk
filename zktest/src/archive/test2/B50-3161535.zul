@@ -15,24 +15,24 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<html><![CDATA[
-	    <b style="color:red;">Breeze Theme and IE 7 only</b>
+		<b style="color:red;">Breeze Theme and IE 7 only</b>
 		<ol>
 			<li>The first column shall align left</li>
 			<li>The second column shall align center</li>
 			<li>The third column shall align right</li>
 		</ol>
 	]]></html>
-	<grid >
+	<grid>
 		<columns menupopup="auto">
-			<column label="Align Left" align="left" />
-			<column label="Align Center" sort="auto" align="center" />
-			<column label="Align Right" sort="auto" align="right" />
+			<column id="c1" label="Align Left" align="left"/>
+			<column label="Align Center" sort="auto" align="center"/>
+			<column label="Align Right" sort="auto" align="right"/>
 		</columns>
 		<rows>
 			<row>
-				<label value="1"></label>
-				<label value="1"></label>
-				<label value="1"></label>
+				<label id="l1" value="1"></label>
+				<label id="l2" value="1"></label>
+				<label id="l3" value="1"></label>
 			</row>
 		</rows>
 	</grid>

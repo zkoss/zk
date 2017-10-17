@@ -8,7 +8,7 @@
 		<columns menupopup="auto">
 			<column label="Author" sort="auto" />
 			<column label="Title" sort="auto" />
-			<column label="Publisher" sort="auto" />
+			<column id="col" label="Publisher" sort="auto" />
 			<column label="Hardcover" sort="auto" />
 		</columns>
 		<rows>

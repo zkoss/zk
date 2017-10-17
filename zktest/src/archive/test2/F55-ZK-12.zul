@@ -13,27 +13,47 @@ F55-ZK-12.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
-<html><![CDATA[
-<ol>
-<li>Click 'ok' checkbox, the 'ok' checkbox should be disabled and enable again in a moment, the 'cancel' checkbox should be disabled.</li>
-<li>Click 'active cancel checkbox' button, the 'cancel' checkbox should be enabled.</li>
-<li>Click 'cancel' checkbox, the 'cancel' checkbox should be disabled and enable again in a moment, the 'ok' checkbox should be disabled.</li>
-<li>Click 'active ok checkbox' button, the 'ok' checkbox should be enabled.</li>
-</ol>
-]]></html>
+<zk xmlns:w="client">
+	<html><![CDATA[
+			<ol>
+			<li>Click 'ok' checkbox, the 'ok' checkbox should be disabled and enable again in a moment, the 'cancel' checkbox should be disabled.</li>
+			<li>Click 'active cancel checkbox' button, the 'cancel' checkbox should be enabled.</li>
+			<li>Click 'cancel' checkbox, the 'cancel' checkbox should be disabled and enable again in a moment, the 'ok' checkbox should be disabled.</li>
+			<li>Click 'active ok checkbox' button, the 'ok' checkbox should be enabled.</li>
+			</ol>
+			]]></html>
 	<vbox>
 		<hbox>
-			<checkbox id="ok" label="ok" autodisable="self, +cancel" />
-			<checkbox id="cancel" label="cancel" autodisable="self, +ok" />
+			<checkbox id="ok" onClick="" label="ok" autodisable="self, +cancel">
+				<attribute w:name="setDisabled">
+					function (v, opts) {
+					if (v)
+						zk.log(" ok is disabled");
+					else
+						zk.log(" ok is enabled");
+					this.$setDisabled(v, opts);
+					}
+				</attribute>
+			</checkbox>
+			<checkbox id="cancel" label="cancel" autodisable="self, +ok">
+				<attribute w:name="setDisabled">
+					function (v, opts) {
+					if (v)
+					zk.log(" cancel is disabled");
+					else
+					zk.log(" cancel is enabled");
+					this.$setDisabled(v, opts);
+					}
+				</attribute>
+			</checkbox>
 		</hbox>
 		<hbox>
-			<button label="active cancel checkbox">
+			<button id="btnOne" label="active cancel checkbox">
 				<attribute name="onClick">
 					cancel.setDisabled(false);
 				</attribute>
 			</button>
-			<button label="active ok checkbox">
+			<button id="btnTwo" label="active ok checkbox">
 				<attribute name="onClick">
 					ok.setDisabled(false);
 				</attribute>

@@ -19,5 +19,5 @@
 	}
 	set()
 	</zscript>
-	<button label="reset" onClick="set()"/>
+	<button id="btn" label="reset" onClick="set()"/>
 </window>

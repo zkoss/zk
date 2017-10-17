@@ -1,10 +1,11 @@
 <zk>
 <zscript><![CDATA[
+import org.zkoss.zk.ui.IdSpace;
 class MyDiv extends org.zkoss.zul.Div implements IdSpace {
 }
 ]]></zscript>
 <div use="MyDiv"/>
-<button label="Click me, then close the messabebox, and click me again, you should not see any error" width="150px">
+<button id="btn" label="Click me, then close the messabebox, and click me again, you should not see any error" width="150px">
 <attribute name="onClick">
 Messagebox.show("Question is pressed. Are you sure?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
 </attribute>
