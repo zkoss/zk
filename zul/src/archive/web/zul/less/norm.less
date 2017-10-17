@@ -326,12 +326,12 @@ input[type="checkbox"] {
 .z-renderdefer {
 	.size(32px, 32px);
 	background: transparent no-repeat center;
-	.encodeThemeURL(background-image, '~./zul/img/misc/progress-32.gif');
+	.encodeThemeURL(background-image, @loadingAnimationDefer);
 }
 .z-loading-icon {
 	.size(72px, 72px);
 	background: transparent no-repeat center;
-	.encodeThemeURL(background-image, '~./zul/img/misc/progress-72.gif');
+	.encodeThemeURL(background-image, @loadingAnimationLoad);
 	display: block;
 	vertical-align: top;
 	position: relative;
