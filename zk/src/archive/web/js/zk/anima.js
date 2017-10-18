@@ -392,6 +392,7 @@ zk.copy(zjq.prototype, {
 		var aftfn = opts.afterAnima;
 		opts.afterAnima = function () {
 			self._removeWrapper(self.jq);
+			zWatch.fire('onRestore', null);
 			if (prop) _restoreProp(self, prop);
 			if (visible) {
 				/*
