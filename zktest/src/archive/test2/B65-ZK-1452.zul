@@ -40,7 +40,7 @@
 		</label>
 		<grid id="gridExample" sizedByContent="false" width="99%">
 			<columns>
-				<column label="A" sortAscending="${desc}" sortDescending="${asc}" />
+				<column id="col" label="A" sortAscending="${desc}" sortDescending="${asc}" />
 				<column label="B" />
 				<column label="C" />
 			</columns>
