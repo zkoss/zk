@@ -93,7 +93,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								new zul.wgt.Div({
 									id: 'content',
 									sclass: 'z-messagebox',
-									width: '210pt',
 									style: 'overflow:auto',
 									children: [
 										new zul.wgt.Label({
