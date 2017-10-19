@@ -99,6 +99,7 @@ ZK 8.5.0
   ZK-3750: Following zk-3722, hidden cell / row style is incorrect
   ZK-3732: add and clear a ListModel causes IndexOutOfBoundsException
   ZK-3754: Horizontal navbar unexpected resize
+  ZK-3773: Message box button styles in "classic" themes
 
 * Upgrade Notes
 
