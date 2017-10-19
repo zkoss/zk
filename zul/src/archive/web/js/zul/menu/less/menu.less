@@ -282,10 +282,15 @@
 .z-menuitem-checkable .z-menuitem-image {
 	border: 1px solid @checkedBorderColor;
 	.borderRadius(@baseBorderRadius);
-	background: @menuCheckedBackgroundColor;
+	background: @checkedBackgroundColor;
 }
-.z-menuitem-checked.z-menuitem-checkable .z-menuitem-icon {
-	display: block;
+.z-menuitem-checked.z-menuitem-checkable {
+	.z-menuitem-image {
+		background: @menuCheckedBackgroundColor;
+	}
+	.z-menuitem-icon {
+		display: block;
+	}
 }
 
 //define menubar hor scroll
