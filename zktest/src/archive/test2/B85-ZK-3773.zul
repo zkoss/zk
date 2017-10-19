@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3773.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 19 15:06:24 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    import org.zkoss.zul.theme.*;
+
+    String currentTheme = Themes.getDisplayName(Themes.getCurrentTheme());
+    String[] themes = { "breeze", "sapphire", "silvertail", "atlantic" };
+
+    void msgbox() {
+        Messagebox.show("The backup has been done.", new Messagebox.Button[] {Messagebox.Button.NO, Messagebox.Button.YES}, null);
+    }
+    void chgTheme(name) {
+        Themes.setTheme(Executions.getCurrent(), name);
+        Executions.sendRedirect("");
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        Theme: breeze, sapphire, silvertail, atlantic only
+        The buttons of messagebox should be centered. And there are some spaces between buttons.
+    </label>
+    <button label="Messagebox" onClick="msgbox()"/>
+
+    <groupbox title="Theme change">
+        <label>Current: ${currentTheme}</label>
+        <button label="${each}" forEach="${themes}" onClick='chgTheme(self.label)'/>
+    </groupbox>
+</zk>
