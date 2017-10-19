@@ -81,23 +81,29 @@
 	th:last-child {
 		border-right: none;
 	}
+	//consider bar
+	th:nth-last-child(2) > .z-treecol-content {
+		border-right: none;
+	}
+	//if no bar, add it back
+	th:nth-last-child(1) > .z-treecol-content {
+		border-left: 1px solid @meshTitleBorderColor;
+	}
 	&-bar {
 		border-left: 1px solid @meshTitleBorderColor;
 		border-bottom: 1px solid @meshTitleBorderColor;
 	}
-	th.z-treecol + th.z-treecols-bar {
-		border-right: none;
-	}
 }
 .z-treecol {
 	background: @meshTitleBackgroundColor;
-	border-right: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
-	
+	&-content {
+		border-right: 1px solid @meshTitleBorderColor;
+	}
 	&-sort {
 		cursor: pointer;
 
