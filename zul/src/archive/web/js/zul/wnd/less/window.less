@@ -32,12 +32,13 @@
 	&-content {
 		padding: @containerPadding;
 		background: @baseBackgroundColor;
+		color: @containerBodyColor;
 		.defaultOverflowZoom();
 	}
 
 	&-icon {
 		font-size: @containerButtonSize;
-		color: @containerButtonColor;
+		color: extract(@containerButtonColors, 1);
 		.displaySize(block, @baseButtonWidth + 4, @baseButtonHeight);
 		margin: auto 1px;
 		padding: 4px;
@@ -48,7 +49,7 @@
 		float: right;
 
 		&:hover {
-			color: @iconHoverColor;
+			color: extract(@containerButtonColors, 2);
 		}
 	}
 

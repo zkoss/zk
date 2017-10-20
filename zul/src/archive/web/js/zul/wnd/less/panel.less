@@ -39,7 +39,8 @@
 	&-body {
 		margin: 0;
 		padding: 0;
-		background-color: @baseBackgroundColor;
+		background: @baseBackgroundColor;
+		color: @containerBodyColor;
 		.defaultOverflowZoom();
 		
 		&:first-child {
@@ -48,8 +49,8 @@
 	}
 
 	&-icon {
-		background: @colorBackground1;
-		color: @containerButtonColor;
+		background: transparent;
+		color: extract(@containerButtonColors, 1);
 		margin: auto 1px;
 		padding: 4px;
 		text-align: center;
@@ -59,6 +60,10 @@
 		font-size: @containerButtonSize;
 		.displaySize(block, @baseButtonWidth + 4, @baseButtonHeight);
 		line-height: @baseButtonHeight;
+
+		&:hover {
+			color: extract(@containerButtonColors, 2);
+		}
 	}
 
 	&-close {

@@ -75,10 +75,19 @@
 		padding: @inputPadding;
 		line-height: @baseLineHeight;
 		vertical-align: baseline;
+		&:hover {
+			border-color: @inputHoverBorderColor;
+		}
+		&:focus {
+			border-color: @inputFocusBorderColor;
+		}
 		&[disabled] {
 			color: @disabledColor;
 			.opacity(@disabledOpacity);
 			cursor: default;
+			&:hover, &:focus {
+				border-color: @pagingBorderColor;
+			}
 		}
 	}
 	&-text {
