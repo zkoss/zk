@@ -411,15 +411,19 @@ zFlex = { //static methods
 		var setHghForVflexChild = function (vfxs, h, lsz) {
 			for (var j = vfxs.length - 1; j > 0; --j) {
 				var cwgt = vfxs.shift(),
-					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0; //cast to integer
-				cwgt.setFlexSize_({height: vsz});
-				cwgt._vflexsz = vsz;
+					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0, //cast to integer
+					jqcwgt = jq(cwgt.$n()),
+					h = vsz - jqcwgt.outerHeight(true) + jqcwgt.outerHeight(); // remove margin height
+				cwgt.setFlexSize_({height: h});
+				cwgt._vflexsz = h;
 				if (!cwgt.isExcludedVflex_())
 					lsz -= vsz;
 			}
 			//last one with vflex
 			if (vfxs.length) {
-				var cwgt = vfxs.shift();
+				var cwgt = vfxs.shift(),
+					jqcwgt = jq(cwgt.$n());
+				lsz -= jqcwgt.outerHeight(true) - jqcwgt.outerHeight(); // remove margin height
 				cwgt.setFlexSize_({height: lsz});
 				cwgt._vflexsz = lsz;
 			}
