@@ -441,15 +441,19 @@ zFlex = { //static methods
 		lastsz = wdh = Math.max(wdh, 0);
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex}
-				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
-			cwgt.setFlexSize_({width: hsz});
-			cwgt._hflexsz = hsz;
+				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0, //cast to integer
+				jqcwgt = jq(cwgt.$n()),
+				w = hsz - jqcwgt.outerWidth(true) + jqcwgt.outerWidth(); // remove margin width
+			cwgt.setFlexSize_({width: w});
+			cwgt._hflexsz = w;
 			if (!cwgt.isExcludedHflex_())
 				lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
-			var cwgt = hflexs.shift();
+			var cwgt = hflexs.shift(),
+				jqcwgt = jq(cwgt.$n());
+			lastsz -= jqcwgt.outerWidth(true) - jqcwgt.outerWidth(); // remove margin width
 			cwgt.setFlexSize_({width: lastsz});
 			cwgt._hflexsz = lastsz;
 		}
