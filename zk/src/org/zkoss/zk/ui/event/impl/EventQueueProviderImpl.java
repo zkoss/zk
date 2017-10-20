@@ -31,6 +31,8 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.impl.DesktopImpl;
+import org.zkoss.zk.ui.impl.PollingServerPush;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.util.Callback;
 
@@ -145,9 +147,11 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			}
 			if (eq != null) {
 				Execution execution = Executions.getCurrent();
+				DesktopImpl desktopImpl = (DesktopImpl) execution.getDesktop();
 
 				// if the runtime is not in servlet 3.0, we use the original way to close.
-				if (execution == null || WebApps.getCurrent().getServletContext().getMajorVersion() < 3) {
+				if (execution == null || WebApps.getCurrent().getServletContext().getMajorVersion() < 3
+						|| (desktopImpl.isServerPushEnabled() && desktopImpl.getServerPush() instanceof PollingServerPush)) {
 					eq.close();
 				} else {
 					// Bug ZK-2574
