@@ -1,12 +1,8 @@
 @import "~./zul/less/_header.less";
 
-.hoverStyle() {
-	border-color: @hoverBorderColor;
-	background-color: @hoverBackgroundColor;
-}
-.activeStyle() {
-	color: @menuItemActiveColor;
-	background-color: @menuItemActiveBackground;
+.contentStyle(@color, @bgcolor) {
+	color: @color;
+	background-color: @bgcolor;
 }
 .disabledStyle(@bgColor) {
 	border: 1px solid transparent;
@@ -88,10 +84,6 @@
 		}
 	}
 }
-.z-menu-hover > .z-menu-content,
-.z-menuitem-hover > .z-menuitem-content {
-	.hoverStyle();
-}
 
 .z-menu,
 .z-menuitem {
@@ -130,13 +122,13 @@
 		z-index: 20; // the 20 is greater than menupopup-separator's z-index
 
 		&:hover {
-			.hoverStyle();
+			.contentStyle(@menuItemHoverColor, @menuItemHoverBackground);
 		}
 		&:focus {
-			.hoverStyle();
+			.contentStyle(@menuItemHoverColor, @menuItemHoverBackground);
 		}
 		&:active {
-			.activeStyle();
+			.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
 		}
 		&[disabled] {
 			.disabledStyle(@menuItemBackground);
@@ -188,12 +180,12 @@
 		vertical-align: text-bottom;
 	}
 	&-selected > &-content {
-		.activeStyle();
+		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
 	}
 }
 .z-menuitem {
 	&-selected > &-content {
-		.activeStyle();
+		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
 	}
 }
 
@@ -232,14 +224,13 @@
 		color: @menuPopupItemColor;
 		background: @menuPopupItemBackground;
 		&:hover {
-			.hoverStyle();
+			.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackground);
 		}
 		&:focus {
-			.hoverStyle();
+			.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackground);
 		}
 		&:active {
-			color: @menuPopupItemActiveColor;
-			background: @menuPopupItemActiveBackground;
+			.contentStyle(@menuPopupItemActiveColor, @menuPopupItemActiveBackground);
 		}
 		&[disabled] {
 			.disabledStyle(@menuPopupItemBackground);
@@ -308,7 +299,7 @@
 		width: 5000px;
 	}
 	&-icon {
-		.iconFontStyle(@fontSizeXLarge, @iconColor);
+		.iconFontStyle(@fontSizeXLarge, extract(@menuScrollableIconColors, 1));
 		margin-top: -@fontSizeXLarge/2;
 		margin-left: -@fontSizeXLarge/2 + 2;
 		position: absolute;
@@ -319,7 +310,7 @@
 	&-right {
 		&:hover {
 			> .z-menubar-icon {
-				color: @iconHoverColor;
+				color: extract(@menuScrollableIconColors, 2);
 			}
 		}
 	}
