@@ -139,7 +139,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wd = ftwd;
 				wds[i] = wd;
 				// Bug ZK-2772 don't plus one when frozen exists.
-				if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+				if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
 					++wds[i];
 				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
 				if (w)
