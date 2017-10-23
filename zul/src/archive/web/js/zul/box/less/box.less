@@ -47,6 +47,9 @@ td.z-splitter-outer {
 
 	&:hover {
 		background-color: @splitterHoverBackgroundColor;
+		.z-splitter-button {
+			color: extract(@splitterButtonTextColors, 2);
+		}
 	}
 
 	&-horizontal {
@@ -105,7 +108,7 @@ td.z-splitter-outer {
 		}
 	}
 	&-button {
-		color: @splitterButtonTextColor;
+		color: extract(@splitterButtonTextColors, 1);
 		display: inline-block;
 		position: relative;
 		vertical-align: top; //vertical-align: make it looks same in diff browsers
