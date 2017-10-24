@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3780.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 24 17:45:44 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        If you see only this text, the test is correct.
+        If you see an error popup, the test is failed.
+    </label>
+    <fragment>
+        <paper-fab icon="favorite"></paper-fab>
+    </fragment>
+</zk>

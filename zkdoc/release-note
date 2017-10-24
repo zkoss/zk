@@ -22,6 +22,7 @@ ZK 8.5.0
   ZK-3512: preserve comments in .src.js files
   ZK-3678: Provide a switch to enable/disable iscroll in container
   ZK-3720: Provide a new theme as the default theme since ZK 8.5
+  ZK-3780: Fragment supports using a custom element
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored
