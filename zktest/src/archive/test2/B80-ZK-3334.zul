@@ -25,7 +25,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
                 7. Resize the browser, then the error box should move to the correct position.
             ]]>
         </label>
-        <window id="exampleWindow" hflex="2" vflex="1" border="normal">
+        <window id="exampleWindow" hflex="2" height="600px" border="normal">
             <div align="right">
                 <textbox id="text" constraint="no empty" />
                 <zscript><![CDATA[

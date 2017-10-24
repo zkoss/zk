@@ -34,7 +34,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
                 <menuitem label="test long long test" />
                 <menuitem label="test long long test" />
                 <menuitem label="test long long test" />
-                <menuitem label="test long long test" />
             </menubar>
         </div>
     </vlayout>

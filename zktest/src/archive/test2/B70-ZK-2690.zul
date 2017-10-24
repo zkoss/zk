@@ -17,11 +17,10 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 Please scroll the frozen scrollbar to right, and then scroll it back to left.
 The hidden column of the grid should be scrolled back too. (IE only)
 	<h:table>
-		<!--
-		-->
 		<h:tr>
 			<h:td>
 				<grid width="800px">
+					<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
 					<rows>
 						<row>
 							<label value="person 1" />
