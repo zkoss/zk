@@ -32,7 +32,7 @@ function (out) {
 
 	if (this.columns) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
-			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
+			'<table id="', uuid, '-headtbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
 		
 		out.push('<tbody id="', uuid, '-headrows">');
@@ -57,7 +57,7 @@ function (out) {
 	if (this.rows && this.domPad_ && !this.inPagingMold())
 		this.domPad_(out, '-tpad');
 	
-	out.push('<table id="', uuid, '-cave"', wdAttr, ' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
+	out.push('<table id="', uuid, '-cave"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.columns)
 		this.domFaker_(out, '-bdfaker');
@@ -82,7 +82,7 @@ function (out) {
 	
 	if (this.foot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
-			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
+			'<table id="', uuid, '-foottbl"', wdAttr, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.columns) 
 			this.domFaker_(out, '-ftfaker');
 		

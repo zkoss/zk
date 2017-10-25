@@ -35,7 +35,7 @@ function (out) {
 	if (this.treecols) {
 		out.push('<div id="', uuid, '-head" class="', this.$s('header'), '">',
 				'<table id="', uuid, '-headtbl"', width,
-				' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
+				' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '-hdfaker');
 		
 		out.push('<tbody id="', uuid, '-headrows">');
@@ -57,7 +57,7 @@ function (out) {
 	if (hgh || iOSNativeBar)
 		out.push(' style="', hgh ? 'height:' + hgh + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
 	out.push('><table id="', uuid, '-cave"', width,
-			' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
+			' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.treecols)
 		this.domFaker_(out, '-bdfaker');
@@ -83,7 +83,7 @@ function (out) {
 	//foot
 	if (this.treefoot) {
 		out.push('<div id="', uuid, '-foot" class="', this.$s('footer'), '">',
-				'<table id="', uuid, '-foottbl"', width, ' style="table-layout:fixed;border-collapse:collapse;', wdStyle,'">');
+				'<table id="', uuid, '-foottbl"', width, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.treecols)
 			this.domFaker_(out, '-ftfaker');
 		

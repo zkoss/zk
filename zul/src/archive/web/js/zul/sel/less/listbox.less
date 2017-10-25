@@ -3,7 +3,7 @@
 //reset table
 .resetTable() {
 	table {
-		border-collapse: collapse;
+		border-spacing: 0;
 		th, td {
 			background-clip: padding-box;
 			padding: 0;
@@ -81,21 +81,11 @@
 //listhead
 .z-listhead {
 	th:first-child {
+		border-left: none;
 		// B50-3306729: the first header should have border-left when the first column is covered with other header
 		&.z-listhead-border {
 			border-left: 1px solid @meshTitleBorderColor;
 		}
-	}
-	th:last-child {
-		border-right: none;
-	}
-	//consider bar
-	th:nth-last-child(2) > .z-listheader-content {
-		border-right: none;
-	}
-	//if no bar, add it back
-	th:nth-last-child(1) > .z-listheader-content {
-		border-left: 1px solid @meshTitleBorderColor;
 	}
 	&-bar {
 		border-left: 1px solid @meshTitleBorderColor;
@@ -103,15 +93,13 @@
 	}
 }
 .z-listheader {
+	border-left: 1px solid @meshTitleBorderColor;
 	border-bottom: 1px solid @meshTitleBorderColor;
 	padding: 0;
 	background: @meshTitleBackgroundColor;
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
-	&-content {
-		border-right: 1px solid @meshTitleBorderColor;
-	}
 	&-sort {
 		.z-listheader-content {
 			cursor: pointer;
