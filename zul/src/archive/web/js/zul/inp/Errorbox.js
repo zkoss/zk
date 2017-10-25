@@ -86,7 +86,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 			ignoredrag: Errorbox._ignoredrag,
 			change: Errorbox._change
 		});
-		zWatch.listen({onMove: this, onSize: this});
+		zWatch.listen({onMove: this});
 	},
 	unbind_: function () {
 		// bug ZK-1143
@@ -94,7 +94,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this._drag = null;
 		if (drag)
 			drag.destroy();
-		zWatch.unlisten({onMove: this, onSize: this});
+		zWatch.unlisten({onMove: this});
 
 		// just in case
 		if (this.parent)

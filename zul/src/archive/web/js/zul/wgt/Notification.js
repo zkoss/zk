@@ -85,8 +85,6 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		}
 		if (!this._closable && this._dur <= 0)
 			this.close({sendOnOpen: true});
-		// detach when onFloatUp
-		this.detach();
 	},
 	open: function (ref, offset, position, opts) {
 		this.$supers(zul.wgt.Notification, 'open', arguments);

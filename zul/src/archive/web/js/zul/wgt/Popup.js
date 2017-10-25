@@ -300,6 +300,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (!opts || !opts.keepVisible) {
 			this._keepVisible = false;
 		}
+		if (this.parent && this.parent._isFakeParent) {
+			this.parent._isFakeParent = false;
+		}
 
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
 	},
