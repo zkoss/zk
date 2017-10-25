@@ -4,6 +4,7 @@
 	padding-top: 16px;
 
 	> .z-groupbox-header {
+		background: @baseBackgroundColor;
 		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @groupboxHeaderColor);
 		.size(100%, @baseIconHeight);
 		border: 1px solid @baseBorderColor;
@@ -49,6 +50,7 @@
 	
 	&-content {
 		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @baseTextColor);
+		background: @baseBackgroundColor;
 		display: block;
 		height: inherit; // Firefox bug: content cant be collapsed when scrolling
 		border: 1px solid @baseBorderColor;
