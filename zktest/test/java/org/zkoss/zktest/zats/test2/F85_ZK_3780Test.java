@@ -16,6 +16,7 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.zktest.zats.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -24,6 +25,10 @@ public class F85_ZK_3780Test extends WebDriverTestCase {
 	@Test
 	public void testNoParsingError() throws Exception {
 		connect();
-		assertFalse("Might be a parsing error.", jq(".z-error").exists());
+		JQuery errMsg = jq(".z-error .messages");
+		boolean hasError = errMsg.exists();
+		assertFalse(
+				"Might be a parsing error.",
+				hasError && errMsg.text().contains("Lexical error"));
 	}
 }
