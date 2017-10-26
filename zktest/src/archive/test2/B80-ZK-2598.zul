@@ -18,5 +18,5 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		1. the page should be rendered without any exception
 		2. click on each of the three buttons, should all alert the forward event.
 	</label>
-	<include src="B80-ZK-2598_forward.zul"/>
+	<include src="/test2/B80-ZK-2598_forward.zul"/>
 </zk>

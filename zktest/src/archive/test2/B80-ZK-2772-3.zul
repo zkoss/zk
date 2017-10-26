@@ -28,6 +28,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
               height="400px"
               span="true"
               model="@load(vm.customers)">
+			<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
             <auxhead>
                 <auxheader label="First 5 Columns" colspan="5"/>
                 <auxheader label="Next 5 Columns" colspan="5"/>

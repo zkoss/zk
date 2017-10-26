@@ -20,13 +20,13 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 		<columns>
 
-			<column width="38px" />
+			<column width="38px"/>
 
-			<column label="Product Name" />
+			<column label="Product Name"/>
 
-			<column label="Price" />
+			<column label="Price"/>
 
-			<column label="Item location" visible="false" /><!-- I DON'T
+			<column label="Item location" visible="false"/><!-- I DON'T
 				WANT TO
 				
 				SHOW THIS COLUMN -->
@@ -41,29 +41,29 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 					<vbox>
 
-						<label value="Item Specifics - Item Condition" />
+						<label value="Item Specifics - Item Condition"/>
 
 						<hbox>
 
-							<label value="Condition:" />
+							<label value="Condition:"/>
 
-							<label value="Used" />
+							<label value="Used"/>
 
 						</hbox>
 
 						<hbox>
 
-							<label value="Brand:" />
+							<label value="Brand:"/>
 
-							<label value="Apple" />
+							<label value="Apple"/>
 
 						</hbox>
 
 						<hbox>
 
-							<label value="Technology:" />
+							<label value="Technology:"/>
 
-							<label value="DVI" />
+							<label value="DVI"/>
 
 						</hbox>
 
@@ -72,11 +72,11 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 				</detail>
 
 				<label
-					value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+						value="Apple 20-inch Aluminum Cinema Display M9177/A"/>
 
-				<label value="US $202.50" />
+				<label value="US $202.50"/>
 
-				<label value="tulsa, ok, United States" />
+				<label value="tulsa, ok, United States"/>
 
 			</row>
 
@@ -86,38 +86,38 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 					<vbox>
 
-						<label value="Item Specifics" />
+						<label value="Item Specifics"/>
 
 						<hbox>
 
-							<label value="Condition:" />
+							<label value="Condition:"/>
 
-							<label value="Used" />
+							<label value="Used"/>
 
 						</hbox>
 
 						<hbox>
 
-							<label value="Brand:" />
+							<label value="Brand:"/>
 
-							<label value="Kyocera" />
+							<label value="Kyocera"/>
 
 						</hbox>
 
 						<hbox>
 
-							<label value="Phone Type:" />
+							<label value="Phone Type:"/>
 
 							<label
-								value="Phones without Service Contrac" />
+									value="Phones without Service Contrac"/>
 
 						</hbox>
 
 						<hbox>
 
-							<label value="Product Type:" />
+							<label value="Product Type:"/>
 
-							<label value="Cell Phones" />
+							<label value="Cell Phones"/>
 
 						</hbox>
 
@@ -126,11 +126,11 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 				</detail>
 
 				<label
-					value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K" />
+						value="Kyocera Strobe K612B MetroPCS Metro PCS Cell Phone L@@K"/>
 
-				<label value="US $74.99" />
+				<label value="US $74.99"/>
 
-				<label value="Speedy Shipping, USA, United States" />
+				<label value="Speedy Shipping, USA, United States"/>
 
 			</row>
 

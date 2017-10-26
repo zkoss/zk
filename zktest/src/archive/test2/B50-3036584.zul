@@ -23,6 +23,7 @@
 			</menupopup>
 		</menu>
 	</menubar>
+	<separator />
 	<window title="Test" mode="popup" border="normal">
 		Test...
 	</window>

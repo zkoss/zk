@@ -108,6 +108,7 @@ public class TestVM
               height="400px"
               span="false"
               model="@load(vm.customers)">
+			<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
             <auxhead>
                 <auxheader label="First 3 Columns" colspan="3"/>
                 <auxheader label="Next 3 Columns" colspan="3"/>
