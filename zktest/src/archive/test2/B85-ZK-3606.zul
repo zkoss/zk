@@ -25,7 +25,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		</style>
 		<div height="500px"/>
 		<hlayout>
-			<div width="100px"></div>
+			<div width="200px"></div>
 			<div>
 				<label style="font-size: 50px;" popup="test1" context="test2" tooltip="test3" value="test"/><separator/>
 			</div>
@@ -59,7 +59,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 
 			]]></attribute>
 			</button>
-			<textbox constraint="no empty, before_start"></textbox>
+			<textbox constraint="no empty"></textbox>
 		</hlayout>
 		<div height="5000px"/>
 		<popup id="test1">

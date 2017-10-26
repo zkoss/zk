@@ -516,7 +516,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 			var params = this._popup ? this._parsePopParams(this._popup, evt) : {},
 				popup = this._smartFellow(params.id);
 			if (popup) {
-				popup.parent = this; // B85-ZK-3606: fake parent
 				evt.contextSelected = true;
 
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
@@ -526,7 +525,9 @@ zul.Widget = zk.$extends(zk.Widget, {
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && popup.isOpen()) {
 					popup.close({sendOnOpen: true});
-				} else {
+				} else if (!this._isFakeParent) {
+					popup.parent = this; // B85-ZK-3606: fake parent
+					this._isFakeParent = true;
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						popup.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 1});
 					}, 0);
@@ -542,7 +543,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 			var params = this._context ? this._parsePopParams(this._context, evt) : {},
 				ctx = this._smartFellow(params.id);
 			if (ctx) {
-				ctx.parent = this; // B85-ZK-3606: fake parent
 				evt.contextSelected = true;
 
 				// to avoid a focus in IE, we have to pop up it later. for example, zksandbox/#t5
@@ -552,7 +552,9 @@ zul.Widget = zk.$extends(zk.Widget, {
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
 					ctx.close({sendOnOpen: true});
-				} else {
+				} else if (!this._isFakeParent) {
+					ctx.parent = this; // B85-ZK-3606: fake parent
+					this._isFakeParent = true;
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
 					}, 0);
@@ -567,7 +569,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
 				tip = this._smartFellow(params.id);
 			if (tip) {
-				tip.parent = this; // B85-ZK-3606: fake parent
 				evt.tooltipped = true;
 					//still call parent's doTooltipOver_ for better extensibility (though not necessary)
 				_tt_begin(tip, this, params, evt);
