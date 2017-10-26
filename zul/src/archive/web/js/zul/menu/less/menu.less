@@ -105,6 +105,7 @@
 	}
 	&-image {
 		max-width: @menuImageSize;
+		line-height: normal;
 		margin-right: 4px;
 	}
 	&-content {
@@ -240,6 +241,7 @@
 	.z-menuitem-image {
 		min-width:  @menuImageSize;
 		min-height:  @menuImageSize;
+		line-height: normal;
 		background-repeat: no-repeat;
 		margin-right: 8px;
 	}
@@ -267,6 +269,7 @@
 		min-width: @menuImageSize;
 		min-height: @menuImageSize;
 		margin-right: 8px;
+		line-height: normal;
 	}
 }
 //define checked menuitem effect in menupopup
@@ -334,4 +337,13 @@
 }
 .z-menubar-right > i:before {
 	content: '\f105';
+}
+
+// a:active workaround: https://connect.microsoft.com/IE/feedbackdetail/view/917034
+// only works in IE11
+.ie11 {
+	.z-menu-content > *,
+	.z-menuitem-content > * {
+		pointer-events: none;
+	}
 }
