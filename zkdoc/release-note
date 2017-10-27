@@ -103,6 +103,7 @@ ZK 8.5.0
   ZK-3773: Message box button styles in "classic" themes
   ZK-3746: frozen issues in grid with rowspan
   ZK-3772: splitlayout shows incorrect cursor for horizontal splitter
+  ZK-3786: Selected item in Listbox did not scrolled into view automatically on Edge
 
 * Upgrade Notes
 

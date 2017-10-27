@@ -272,7 +272,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					zk(item).scrollIntoView(this.ebody);
 			}
 
-			if (zk.ff >= 4 && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
+			if ((zk.edge || zk.ff >= 4) && this.ebody && this._nativebar) { // B50-ZK-293: FF5 misses to fire onScroll
 				// B50-ZK-440: ebody can be null when ROD
 				this._currentTop = this.ebody.scrollTop;
 				this._currentLeft = this.ebody.scrollLeft;
