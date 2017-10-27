@@ -525,11 +525,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && popup.isOpen()) {
 					popup.close({sendOnOpen: true});
-				} else if (!this._isFakeParent) {
+				} else {
 					popup.parent = this; // B85-ZK-3606: fake parent
-					this._isFakeParent = true;
+					popup._hasFakeParent = true;
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
-						popup.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 1});
+						if (self.desktop)
+							popup.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 1});
 					}, 0);
 				}
 				evt.stop({dom: true});
@@ -552,11 +553,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 				// F70-ZK-2007: When type=toggle, close the popup
 				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
 					ctx.close({sendOnOpen: true});
-				} else if (!this._isFakeParent) {
+				} else {
 					ctx.parent = this; // B85-ZK-3606: fake parent
-					this._isFakeParent = true;
+					ctx._hasFakeParent = true;
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
-						ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
+						if (self.desktop)
+							ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
 					}, 0);
 				}
 				evt.stop({dom: true}); //prevent default context menu to appear

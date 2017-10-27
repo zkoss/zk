@@ -168,7 +168,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		jq(node).addClass(this.$s('open'));
 
 		// B85-ZK-3606: for adjusting popup position
-		if (ref) {
+		if (ref && ref.desktop && this.desktop) {
 			var refDim = zk(ref).dimension(true), thisDim = zk(this).dimension(true);
 			if (refDim && thisDim) {
 				this._adjustLeft = thisDim.left - refDim.left;
@@ -300,8 +300,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (!opts || !opts.keepVisible) {
 			this._keepVisible = false;
 		}
-		if (this.parent && this.parent._isFakeParent) {
-			this.parent._isFakeParent = false;
+		// remove fake parent flag
+		if (this._hasFakeParent) {
+			this._hasFakeParent = false;
 		}
 
 		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
@@ -442,5 +443,20 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	getPositionArgs_: function () {
 		var p = this.parent, dim = zk(p).dimension(true);
 		return [p, [dim.left + this._adjustLeft, dim.top + this._adjustTop] , null, {dodgeRef: false}];
+	},
+	doClick_: function (evt, popupOnly) {
+		if (this._hasFakeParent)
+			evt.stop(); // B85-ZK-3606: prevent event from bubbling up to its fake parent
+		this.$supers('doClick_', arguments);
+	},
+	doRightClick_: function (evt) {
+		if (this._hasFakeParent)
+			evt.stop(); // B85-ZK-3606: prevent event from bubbling up to its fake parent
+		this.$supers('doRightClick_', arguments);
+	},
+	doTooltipOver_: function (evt) {
+		if (this._hasFakeParent)
+			evt.stop(); // B85-ZK-3606: prevent event from bubbling up to its fake parent
+		this.$supers('doTooltipOver_', arguments);
 	}
 });
