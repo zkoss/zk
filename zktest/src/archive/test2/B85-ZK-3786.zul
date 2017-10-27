@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3786.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 27 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Open this page on Edge
+		2. hit button 'add under bottom' or 'add upon top'
+		3. should see the data being added and
+			see the added data in the view without scroll manually
+	</label>
+	<tree id="tree" width="400px" rows="3">
+		<treecols sizable="true">
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren id="t">
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+						</treerow>
+						<treechildren id="tc">
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.2.1"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"/>
+		</treechildren>
+	</tree>
+	<button label="add under bottom">
+		<attribute name="onClick">
+			Treeitem ti = new Treeitem();
+			Treerow tr = new Treerow();
+			tr.appendChild(new Treecell("test"));
+			ti.appendChild(tr);
+			tc.appendChild(ti);
+			ti.setSelected(true);
+		</attribute>
+	</button>
+	<button label="add upon top">
+		<attribute name="onClick">
+			Treeitem ti = new Treeitem();
+			Treerow tr = new Treerow();
+			tr.appendChild(new Treecell("test"));
+			ti.appendChild(tr);
+			t.insertBefore(ti, t.firstChild);
+			ti.setSelected(true);
+		</attribute>
+	</button>
+</zk>
