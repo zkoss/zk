@@ -25,7 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.desktop) {
 			var empty = wgt.$n('empty'),
 				colspan = 0;
-			if (!empty.innerHTML || wgt._nrows) {
+			if (wgt._nrows) {
 				empty.style.display = 'none';
 			} else {
 				if (wgt.listhead) {
@@ -82,8 +82,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		 */
 		emptyMessage: function (msg) {
 			if (this.desktop) {
-				jq(this.$n('empty')).html(msg);
-				_fixForEmpty(this);
+				var emptyContentDiv = jq(this.$n('empty-content')),
+					emptyContentClz = this.$s('emptybody-content');
+				if (msg && msg.trim().length != 0)
+					emptyContentDiv.addClass(emptyContentClz);
+				else
+					emptyContentDiv.removeClass(emptyContentClz);
+				emptyContentDiv.html(msg);
 			}
 		}
 	},
@@ -396,7 +401,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	redrawEmpty_: function (out) {
 		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
 				this.uuid, '-empty" style="display:none">',
-				this._emptyMessage,'</td></tr></tbody>');
+				'<div id="', this.uuid, '-empty-content"');
+		if (this._emptyMessage && this._emptyMessage.trim().length != 0)
+			out.push('class="', this.$s('emptybody-content'), '"');
+		out.push('>', this._emptyMessage, '</div></td></tr></tbody>');
 	},
 	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
 		if (child._renderdefer) {
