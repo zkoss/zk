@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3784.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Fri Oct 27 12:42:48 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList();
+        for (int i = 0; i < 100; i++) {
+            model.add(i);
+        }
+
+        void setWidth(w) {
+            p1.setWidth(w);
+        }
+
+        void setMold(m) {
+            p1.setMold(m);
+        }
+    ]]>
+    </zscript>
+
+    <label multiline="true">
+    1. If the width is too small, the detail will be hidden to prevent overlapping paging controls
+    2. If the width is much smaller, the First/Last button will be hidden. (mold=default)
+    </label>
+    <button onClick='setMold("default")' label="mold: default" />
+    <button onClick='setMold("os")' label="mold: os" />
+    <button onClick='setWidth("100px")' label="width: 100px" />
+    <button onClick='setWidth("200px")' label="width: 200px" />
+    <button onClick='setWidth("400px")' label="width: 400px" />
+    <button onClick='setWidth("600px")' label="width: 600px" />
+    <paging id="p1" width="200px" pageSize="5" totalSize="100" detailed="true" />
+
+    <borderlayout>
+        <west splittable="true">
+            change width to see if the behavior is correct
+        </west>
+        <center>
+            <caption>
+                <button label="Change Paging Mold">
+                    <attribute name="onClick">
+                        g1.pagingChild.mold = "os".equals(g1.pagingChild.mold) ? "default" : "os";
+                    </attribute>
+                </button>
+            </caption>
+            <grid id="g1" mold="paging" pageSize="5" model="${model}" hflex="1" pagingPosition="both">
+                <columns>
+                    <column label="aaa"/>
+                    <column label="bbb"/>
+                </columns>
+                <rows>
+                    <template name="model">
+                        <row>
+                            <label value="${forEachStatus.index}"/>
+                            <label value="${forEachStatus.index}"/>
+                        </row>
+                    </template>
+                </rows>
+            </grid>
+        </center>
+    </borderlayout>
+</zk>
