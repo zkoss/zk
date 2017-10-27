@@ -603,10 +603,10 @@ jq(function () {
 			dEventOfsX = dEvent.offsetX,
 			dEventOfsY = dEvent.offsetY,
 			evtX = dEventOfsX ?
-				(zk.mobile ? dEventOfsX - targetPos.left : dEventOfsX)) :
+				(zk.mobile ? dEventOfsX - targetPos.left : dEventOfsX) :
 				(oriEvent ? oriEvent.layerX - targetPos.left : undefined),
 			evtY = dEventOfsY ?
-				(zk.mobile ? dEventOfsY - targetPos.top : dEventOfsY)) :
+				(zk.mobile ? dEventOfsY - targetPos.top : dEventOfsY) :
 				(oriEvent ? oriEvent.layerY - targetPos.top : undefined);
 		if ((target != body && target != body.parentNode)
 				&& ((!target.clientWidth && !target.clientHeight) || evtX < target.clientWidth && evtY < target.clientHeight)
