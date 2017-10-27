@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.desktop) {
 			var empty = wgt.$n('empty'),
 				colspan = 0;
-			if (!empty.innerHTML || (wgt.rows && wgt.rows.nChildren)) {
+			if (wgt.rows && wgt.rows.nChildren) {
 				empty.style.display = 'none';
 			} else {
 				if (wgt.columns) {
@@ -60,8 +60,13 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		 */
 		emptyMessage: function (msg) {
 			if (this.desktop) {
-				jq(this.$n('empty')).html(msg);
-				_fixForEmpty(this);
+				var emptyContentDiv = jq(this.$n('empty-content')),
+					emptyContentClz = this.$s('emptybody-content');
+				if (msg && msg.trim().length != 0)
+					emptyContentDiv.addClass(emptyContentClz);
+				else
+					emptyContentDiv.removeClass(emptyContentClz);
+				emptyContentDiv.html(msg);
 			}
 		}
 	},
@@ -171,9 +176,12 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * 			it usually come from mold(redraw_).
 	 */
 	redrawEmpty_: function (out) {
-		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="'
-				, this.uuid, '-empty" style="display:none">',
-				this._emptyMessage,'</td></tr></tbody>');
+		out.push('<tbody class="', this.$s('emptybody'), '"><tr><td id="',
+				this.uuid, '-empty" style="display:none">',
+				'<div id="', this.uuid, '-empty-content"');
+		if (this._emptyMessage && this._emptyMessage.trim().length != 0)
+			out.push('class="', this.$s('emptybody-content'), '"');
+		out.push('>', this._emptyMessage, '</div></td></tr></tbody>');
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(Grid, 'bind_', arguments);
