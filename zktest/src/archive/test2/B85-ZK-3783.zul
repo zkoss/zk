@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3783.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 30 15:16:25 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<?import org.zkoss.zul.theme.Themes?>
+<zk>
+    <label multiline="true">
+        style of close buttons should be consistent in window and panel
+        (should test in all themes)
+
+
+    </label>
+    <zscript><![CDATA[
+		themeModel = new ListModelList(Themes.getThemes());
+		themeModel.addToSelection(Themes.getCurrentTheme());
+	]]></zscript>
+    <combobox id="themeSelection" model="${themeModel}"
+              onChange="Themes.setTheme(execution, self.getValue()); execution.sendRedirect(null);"/>
+    <panel title="Panel" border="normal" closable="true" minimizable="true" maximizable="true" collapsible="true" width="300px">
+        <panelchildren>content</panelchildren>
+    </panel>
+
+    <window title="Window" border="normal" closable="true" minimizable="true" maximizable="true" width="300px">
+        content
+    </window>
+</zk>
