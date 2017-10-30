@@ -1298,7 +1298,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var allwidths = true;
 		for (var w = this.head.firstChild; w; w = w.nextSibling) {
 			if (allwidths
-					&& (w._width === undefined || w._width.indexOf('px') <= 0)
+					&& (w._width == undefined || w._width.indexOf('px') <= 0)
 					&& (w._hflex != 'min' || w._hflexsz === undefined)
 					&& w.isVisible()) {
 				allwidths = false;

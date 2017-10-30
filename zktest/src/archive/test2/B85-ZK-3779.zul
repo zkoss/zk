@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3779.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 30 16:03:21 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Click the button 'Zoom' twice, should not have js error in browser devtool
+        
+    </label>
+    <tree width="400px" height="120px">
+        <treecols>
+            <treecol width="200px" label="1" />
+            <treecol id="secondCol" label="2" />
+        </treecols>
+        <treechildren>
+            <treeitem forEach="A, B, C, D, E">
+                <treerow>
+                    <treecell label="${each}" />
+                    <treecell label="${each}" />
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+    <button label="Zoom" onClick='secondCol.setWidth(secondCol.getWidth() == null ? "500px" : null)' />
+</zk>
