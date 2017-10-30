@@ -106,6 +106,7 @@ Oct 31, 2017
   ZK-3772: splitlayout shows incorrect cursor for horizontal splitter
   ZK-3786: Selected item in Listbox did not scrolled into view automatically on Edge
   ZK-3784: Paging indicator overlapped buttons if the width is too small
+  ZK-3783: panel/window close button markup/style inconsistent
 
 * Upgrade Notes
   + The default theme is replaced with Iceblue. Breeze is packaged as an external theme.
