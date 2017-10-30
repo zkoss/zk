@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3778.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 3 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<style>
+		.z-slider-popup.slidertext-hidden {
+			display: none;
+		}
+	</style>
+	<script>
+		zk.afterLoad("zul.inp", function() {
+			zul.inp.MySlider = zk.$extends(zul.inp.Slider, {
+				_startDrag: function(dg) {
+					var widget = dg.control;
+					widget.$supers("_startDrag", arguments);
+					zk.log(jq("#zul_slidetip").is(':visible'));
+				}
+			});
+		});
+	</script>
+	<hlayout>
+		<slider vflex="1" maxpos="4" orient="vertical" slidingtext="Test" sclass="slidertext-hidden"
+				w:use="zul.inp.MySlider"/>
+		<slider vflex="1" maxpos="4" orient="vertical" slidingtext="Test" w:use="zul.inp.MySlider"/>
+	</hlayout>
+	<label multiline="true">
+		1. drag the slider
+		2. should not see slidertip on the left one
+			should see slidertip on the right one
+	</label>
+</zk>
