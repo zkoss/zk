@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3777.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 30 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<slider vflex="1" maxpos="4" orient="vertical" slidingtext="Test {0}"/>
+	</div>
+	<label multiline="true">
+		1. drag the slider
+		2. should see 'Test 0...4' instead of '0...4'
+	</label>
+</zk>
