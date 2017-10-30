@@ -1,5 +1,6 @@
    --------
 ZK 8.5.0
+Oct 31, 2017
 * Features
   ZK-3525: implement frozen alternative
   ZK-3681: Add a new Fragment component
@@ -107,6 +108,9 @@ ZK 8.5.0
   ZK-3784: Paging indicator overlapped buttons if the width is too small
 
 * Upgrade Notes
+  + The default theme is replaced with Iceblue. Breeze is packaged as an external theme.
+  + The support of Internet Explorer 8 is dropped. The minimum support version of Internet Explorer is 9.
+  + The input box of Timebox and Datebox are now readonly on mobile devices.
 
    --------
 ZK 8.0.5
