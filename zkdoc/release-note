@@ -24,6 +24,7 @@ Oct 31, 2017
   ZK-3678: Provide a switch to enable/disable iscroll in container
   ZK-3720: Provide a new theme as the default theme since ZK 8.5
   ZK-3780: Fragment supports using a custom element
+  ZK-3778: set sclass for slidingtext popup
 
 * Bugs
   ZK-3659: global <max-upload-size> is ignored

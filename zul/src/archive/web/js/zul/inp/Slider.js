@@ -318,19 +318,22 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		vert = widget.isVertical();
 
 		jq(document.body)
-			.append('<div id="zul_slidetip" class="z-slider-popup"'
-			+ ' style="position:absolute;display:none;z-index:60000;'
-			+ '">' + widget._slidingtext.replace(/\{0\}/g, widget.slidepos)
+			.append('<div id="zul_slidetip" class="'
+			+ widget.$s('popup') + ' '
+			+ widget.$s('popup-hidden')
+			+ (widget.getSclass() ? ' ' + widget.getSclass() : '')
+			+ '" style="position:absolute;z-index:60000;">'
+			+ widget._slidingtext.replace(/\{0\}/g, widget.slidepos)
 			+ '</div>');
 
-		widget.slidetip = jq('#zul_slidetip')[0];
-		if (widget.slidetip) {
-			var slideStyle = widget.slidetip.style;
+		var st = widget.slidetip = jq('#zul_slidetip')[0];
+		if (st) {
+			var slideStyle = st.style;
 			if (zk.webkit) { //give initial position to avoid browser scrollbar
 				slideStyle.top = '0px';
 				slideStyle.left = '0px';
 			}
-			slideStyle.display = 'block';
+			st.className = st.className.replace(widget.$s('popup-hidden'), '');
 		}
 	},
 	_dragging: function (dg) {
