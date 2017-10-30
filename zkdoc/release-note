@@ -104,6 +104,7 @@ ZK 8.5.0
   ZK-3746: frozen issues in grid with rowspan
   ZK-3772: splitlayout shows incorrect cursor for horizontal splitter
   ZK-3786: Selected item in Listbox did not scrolled into view automatically on Edge
+  ZK-3784: Paging indicator overlapped buttons if the width is too small
 
 * Upgrade Notes
 

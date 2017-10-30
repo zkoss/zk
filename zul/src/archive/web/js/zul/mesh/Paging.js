@@ -36,6 +36,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_pageCount: 1,
 	_activePage: 0,
 	_pageIncrement: zk.mobile ? 5 : 10,
+	_showFirstLast: true,
 
 	$define: { //zk.def
 		/** Returns the total number of items.
@@ -139,6 +140,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	setWidth: function () {
 		this.$supers('setWidth', arguments);
 		_rerenderIfBothPaging(this);
+		if (this.desktop)
+			zUtl.fireSized(this, -1);
 	},
 	setHeight: function () {
 		this.$supers('setHeight', arguments);
@@ -314,6 +317,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.mesh.Paging, 'bind_', arguments);
+		zWatch.listen({onSize: this});
 		var uuid = this.uuid,
 			input = jq.$$(uuid, 'real'),
 			Paging = this.$class,
@@ -371,7 +375,25 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 					jq(btn[j]).unbind('click', Paging['_dom' + postfix[k] + 'Click']);
 			}
 		}
+		zWatch.unlisten({onSize: this});
 		this.$supers(zul.mesh.Paging, 'unbind_', arguments);
+	},
+	onSize: function () {
+		if (this.desktop) {
+			// There are two nodes if using pagingPosition="both"
+			var nodes = jq.$$(this.uuid);
+			if (nodes.length > 0) {
+				var node = nodes[0],
+					navWidth = this.$class._getNavWidth(node, this),
+					tolerant = 50,
+					isWide = jq(node).width() > navWidth + tolerant,
+					wideChanged = this._lastIsWide != isWide;
+				if (wideChanged)
+					this._lastIsWide = this._showFirstLast = isWide;
+				for (var i = 0; i < nodes.length; i++)
+					this.$class._fixControl(nodes[i], this, wideChanged);
+			}
+		}
 	}
 }, { //static
 	/**
@@ -538,6 +560,35 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
 					jq(btn[i]).attr('disabled', true);
 		}
+	},
+	_fixControl: function (node, wgt, wideChanged) {
+		var control = jq('> ul', node),
+			info = jq('> .z-paging-info', node),
+			mold = wgt.getMold(),
+			showFirstLast = wgt._showFirstLast;
+
+		if (wideChanged) {
+			// in mode=os, developer sets pageIncrement smaller manually
+			if (mold == 'default') {
+				var navs = control.find('li');
+				navs.first().toggle(showFirstLast);
+				navs.last().toggle(showFirstLast);
+			}
+		}
+		info.css('visibility', function () {
+			return zk(control).isOverlapped(this, 1) ? 'hidden' : '';
+		});
+	},
+	_getNavWidth: function (node, wgt) {
+		if (wgt._navWidth)
+			return wgt._navWidth;
+
+		var navWidth = 0;
+		jq('ul > li', node).each(function () {
+			navWidth += jq(this).outerWidth(true);
+		});
+		wgt._navWidth = navWidth;
+		return navWidth;
 	}
 });
 
