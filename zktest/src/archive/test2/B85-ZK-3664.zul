@@ -27,7 +27,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
     <button label="atlantic" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.preferred", "atlantic");Executions.sendRedirect(null);' />
     <grid id="contentPanelGrid" >
         <columns>
-            <column id="column1" width="200px"></column>
+            <column id="column1" width="400px"></column>
         </columns>
         <rows>
             <row height="150px">

@@ -27,10 +27,10 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		</grid>
 	</div>
 	<label multiline="true">
-		1. click "Open dialog", and close dialog
-		2. click "Add new tag"
-		3. click "Open dialog"
-			expect: No Exception, 
-			error: NullPointerException	
+		1. open this page in safari
+		2. should see 4 columns
+		3. click button labeled "toggle" to hide the grid
+		4. click button again to show the grid
+		5. should still see 4 columns
 	</label>
 </zk>
