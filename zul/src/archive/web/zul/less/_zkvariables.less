@@ -94,7 +94,8 @@
 @meshGroupFooterColor:         @textColorLighter;
 @meshGroupFooterBackgroundColor: @colorBackground3;
 @meshGroupOpenColor:           @colorPrimary;
-@meshGroupOpenBorderColor:     @colorPrimary;
+@meshGroupOpenBackgroundColor: @colorBackground3;
+@meshGroupOpenBorder:          2px solid @colorPrimary;
 @meshGroupFooterOpenColor:     @colorPrimaryLight;
 @gridDetailContentPadding:     0 12px 12px 0;
 @gridDetailContentBeforeMargin: 0 0 12px 0;
@@ -297,11 +298,11 @@
 @calendarSelectedHoverBackgroundColor: @colorPrimary;
 @calendarWeekTitleColor:       @textColorLight;
 @weekendColor:                 @baseTextColor;
-@weekendBackgroundColor:       @calendarBackgroundColor;
+@weekendBackgroundColor:       transparent;
 @weekdayColor:                 @baseTextColor;
-@weekdayBackgroundColor:       @calendarBackgroundColor;
+@weekdayBackgroundColor:       transparent;
 @weekofyearColor:              @textColorLighter;
-@weekofyearBackgroundColor:    @calendarBackgroundColor;
+@weekofyearBackgroundColor:    transparent;
 
 // popup
 @basePopupZIndex:              88000;
@@ -358,6 +359,7 @@
 @tabboxTabHoverBackgroundColor:@colorBackground3;
 @tabboxTabButtonColor:         @iconColor;
 @tabboxTabButtonHoverColor:    @iconHoverColor;
+@tabboxSelectedRadius:         0;
 @tabboxSelectedColor:          @colorPrimary;
 @tabboxSelectedBorderColor:    @colorPrimary;
 @tabboxSelectedHoverColor:     @colorPrimaryDark;

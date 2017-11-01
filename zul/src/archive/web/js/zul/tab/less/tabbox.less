@@ -133,6 +133,7 @@
 				&.z-tab-selected {
 					border-top: 2px solid @tabboxSelectedBorderColor;
 					border-bottom: 0;
+					.bottomBorderRadius(@tabboxSelectedRadius);
 				}
 			}
 		}
@@ -155,6 +156,7 @@
 				border-right: 2px solid transparent;
 				&.z-tab-selected {
 					border-right: 2px solid @tabboxSelectedBorderColor;
+					.leftBorderRadius(@tabboxSelectedRadius);
 				}
 			}
 
@@ -191,6 +193,7 @@
 				border-left: 2px solid transparent;
 				&.z-tab-selected {
 					border-left: 2px solid @tabboxSelectedBorderColor;
+					.rightBorderRadius(@tabboxSelectedRadius);
 				}
 			}
 		}
@@ -347,6 +350,7 @@
 		margin: auto;
 	}
 	&-selected {
+		.topBorderRadius(@tabboxSelectedRadius);
 		border-bottom: 2px solid @tabboxSelectedBorderColor;
 		background: @tabboxSelectedBackgroundColor;
 

@@ -16,6 +16,7 @@
 
 //tree
 .z-tree {
+	background: @meshBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
@@ -37,7 +38,6 @@
 		position: relative;
 		overflow: hidden;
 		.resetTable();
-		background: @meshBackgroundColor;
 	}
 	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);

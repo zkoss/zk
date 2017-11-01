@@ -27,6 +27,7 @@
 
 //listbox
 .z-listbox {
+	background: @meshBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
@@ -50,7 +51,6 @@
 		.resetTable();
 		//ZK-3263: scroll issue (chrome scroll anchor bug)
 		overflow-anchor: none;
-		background: @meshBackgroundColor;
 	}
 	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
@@ -58,6 +58,7 @@
 		height: 1px;
 	}
 	&-body &-emptybody &-emptybody-content {
+		background: @meshBackgroundColor;
 		padding: 12px 16px;
 	}
 	//listbox footer
@@ -312,7 +313,8 @@ body:not(.gecko) {
 		}
 	}
 	&&-open &-inner {
-		border-bottom: 2px solid @meshGroupOpenBorderColor;
+		background: @meshGroupOpenBackgroundColor;
+		border-bottom: @meshGroupOpenBorder;
 		& .z-listgroup-icon,
 		& .z-listcell-content {
 			color: @meshGroupOpenColor;
