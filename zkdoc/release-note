@@ -3,6 +3,7 @@ ZK 8.5.1
 * Features
 
 * Bugs
+  ZK-3785: cleanup unused (6.5) images from themes
 
 * Upgrade Notes
 
