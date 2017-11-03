@@ -174,6 +174,7 @@ zk.fmt.Date = {
 
 		localizedSymbols = localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
+			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
 			   SDOW: zk.SDOW,
@@ -396,6 +397,7 @@ zk.fmt.Date = {
 
 		localizedSymbols = localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
+			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
 			   SDOW: zk.SDOW,

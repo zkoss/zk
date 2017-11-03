@@ -161,6 +161,7 @@ public class Wpds {
 		if (firstDayOfWeek < 0)
 			firstDayOfWeek = cal.getFirstDayOfWeek();
 		sb.append("zk.DOW_1ST=").append(firstDayOfWeek - Calendar.SUNDAY).append(";\n");
+		sb.append("zk.MINDAYS=").append(cal.getMinimalDaysInFirstWeek()).append(";\n");
 
 		//Note: no need to df.setTimeZone(TimeZones.getCurrent()) since
 		//it is used to generate locale-dependent labels

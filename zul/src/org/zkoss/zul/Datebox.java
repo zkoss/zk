@@ -631,6 +631,7 @@ public class Datebox extends FormatInputElement {
 			if (firstDayOfWeek < 0)
 				firstDayOfWeek = cal.getFirstDayOfWeek();
 			map.put("DOW_1ST", Integer.valueOf(firstDayOfWeek - Calendar.SUNDAY));
+			map.put("MINDAYS", cal.getMinimalDaysInFirstWeek());
 
 			final boolean zhlang = locale.getLanguage().equals("zh");
 			SimpleDateFormat df = new SimpleDateFormat("E", locale);
