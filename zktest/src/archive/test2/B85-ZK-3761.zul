@@ -18,5 +18,5 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
         Click the button, the page should be reloaded and the theme should be changed to breeze
 
     </label>
-    <button onClick='Themes.setTheme(Executions.getCurrent(),"breeze");Executions.sendRedirect(null);' label="Change Theme to Breeze"/>
+    <button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"breeze");Executions.sendRedirect(null);' label="Change Theme to Breeze"/>
 </zk>

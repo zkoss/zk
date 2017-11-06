@@ -21,8 +21,8 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 
     </label>
     <div>
-        <button label="set include src" onClick='inc.setSrc("websocket-inc.zul")'/>
+        <button label="set include src" onClick='inc.setSrc("B85-ZK-3756-1.zul")'/>
         <include id="inc" mode="defer"/>
-        <include mode="defer" src="websocket-inc.zul"/>
+        <include mode="defer" src="B85-ZK-3756-1.zul"/>
     </div>
 </zk>
