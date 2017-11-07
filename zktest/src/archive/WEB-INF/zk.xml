@@ -734,4 +734,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.web.servlet.http.URLEncoder</name>
 		<value>org.zkoss.zktest.test2.B85_ZK_3620_CustomUrlEncoder</value>
 	</library-property>
+
+	<!-- Default theme -->
+	<library-property>
+		<name>org.zkoss.theme.preferred</name>
+		<value>iceblue</value>
+	</library-property>
+	<!-- It will break ZK-3131 even if Atlantic is not the default theme, so we turn it off -->
+	<library-property>
+		<name>org.zkoss.theme.atlantic.useGoogleFont.disabled</name>
+		<value>true</value>
+	</library-property>
 </zk>
