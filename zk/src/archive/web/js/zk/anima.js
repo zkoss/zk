@@ -392,14 +392,18 @@ zk.copy(zjq.prototype, {
 		var aftfn = opts.afterAnima;
 		opts.afterAnima = function () {
 			self._removeWrapper(self.jq);
-			zWatch.fire('onRestore', null);
 			if (prop) _restoreProp(self, prop);
 			if (visible) {
 				/*
 				 * fixed a bug of the finished animation for IE
 				 * refix for ZK-568: Open combobox then select last item. reopen combobox then you should see selected item without scroll
 				 */
-				if (zk.ie == 8 || zk.ie == 10) zk(self.jq[0]).redoCSS();
+				var zkie = zk.ie;
+				if (zkie || zk.edge || zk.safari) {
+					// ZK_3789: refine ZK-3695, fire down onRestore after the wrapper was removed
+					zWatch.fireDown('onRestore', wgt);
+					if (zkie == 8 || zkie == 10) zk(self.jq[0]).redoCSS();
+				}
 				zUtl.fireShown(wgt);
 			} else {
 				self.jq.hide();
