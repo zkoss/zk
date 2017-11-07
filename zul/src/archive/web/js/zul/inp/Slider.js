@@ -312,15 +312,17 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		return [x, y];
 	},
 	_startDrag: function (dg) {
-		var widget = dg.control;
+		var widget = dg.control,
+			sclass = widget.getSclass();
 		widget.$n('btn').title = ''; //to avoid annoying effect
 		widget.slidepos = widget._curpos,
 		vert = widget.isVertical();
 
 		jq(document.body)
-			.append('<div id="zul_slidetip" class="z-slider-popup"'
-			+ ' style="position:absolute;display:none;z-index:60000;'
-			+ '">' + widget._slidingtext.replace(/\{0\}/g, widget.slidepos)
+			.append('<div id="zul_slidetip" class="'
+			+ widget.$s('popup') + ' '
+			+ (sclass ? ' ' + sclass + '">' : '">')
+			+ widget._slidingtext.replace(/\{0\}/g, widget.slidepos)
 			+ '</div>');
 
 		widget.slidetip = jq('#zul_slidetip')[0];
@@ -330,7 +332,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				slideStyle.top = '0px';
 				slideStyle.left = '0px';
 			}
-			slideStyle.display = 'block';
 		}
 	},
 	_dragging: function (dg) {
