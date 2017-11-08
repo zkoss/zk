@@ -320,7 +320,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 
 		jq(document.body)
 			.append('<div id="zul_slidetip" class="'
-			+ widget.$s('popup') + ' '
+			+ widget.$s('popup')
 			+ (sclass ? ' ' + sclass + '">' : '">')
 			+ widget._slidingtext.replace(/\{0\}/g, widget.slidepos)
 			+ '</div>');
