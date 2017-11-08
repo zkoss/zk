@@ -29,6 +29,7 @@ import javassist.util.proxy.SerializedProxyX;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormStatus;
+import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
@@ -45,15 +46,19 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 	private static final long serialVersionUID = 20150109113926L;
 	protected static MethodFilter FORM_METHOD_FILTER = new MethodFilter() {
 		public boolean isHandled(Method m) {
-			if (m.getName().startsWith("set") || m.getName().startsWith("get") || m.getName().startsWith("is")
-					|| m.getName().equals("hashCode"))
+			if (m.isAnnotationPresent(Transient.class))
+				return false;
+			final String name = m.getName();
+			if (name.startsWith("set"))
+				return isSetMethodHandled(m);
+			if (name.startsWith("get") || name.startsWith("is") || name.equals("hashCode"))
 				return true;
 			try {
-				FormProxyObject.class.getMethod(m.getName(), m.getParameterTypes());
+				FormProxyObject.class.getMethod(name, m.getParameterTypes());
 				return true;
 			} catch (NoSuchMethodException e) {
 				try {
-					Form.class.getMethod(m.getName(), m.getParameterTypes());
+					Form.class.getMethod(name, m.getParameterTypes());
 					return true;
 				} catch (NoSuchMethodException ex) {
 					return false;
