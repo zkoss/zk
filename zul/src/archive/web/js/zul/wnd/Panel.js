@@ -47,6 +47,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_open: true,
 	_minheight: 100,
 	_minwidth: 200,
+	_minzindex: -1,
 	_tabindex: 0,
 
 	$init: function () {
@@ -82,6 +83,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		 * @return int
 		 */
 		minwidth: null, //TODO
+		/** Sets the minimal Z index.
+		 * <p>Default: -1
+		 * @since 8.5.1
+		 */
+		/**
+		 * Returns the minimum Z index.
+		 * <p>Default: -1.
+		 * @return int
+		 */
+		minzindex: null,
 		/** Sets whether the panel is sizable.
 		 * If true, an user can drag the border to change the panel width.
 		 * <p>Default: false.

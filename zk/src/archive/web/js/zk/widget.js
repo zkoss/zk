@@ -2201,7 +2201,10 @@ wgt.$f().main.setTitle("foo");
 	 * @return int
 	 */
 	getZIndex: _zkf = function () {
-		return this._zIndex;
+		if (this._minzindex)
+			return Math.max(this._minzindex, this._zIndex || -1);
+		else
+			return this._zIndex;
 	},
 	getZindex: _zkf,
 	/** Sets the Z index.
@@ -2210,6 +2213,8 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget this widget.
 	 */
 	setZIndex: _zkf = function (zIndex, opts) {
+		if (this._minzindex)
+			zIndex = Math.max(this._minzindex, zIndex || -1);
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
 			var n = this.$n();

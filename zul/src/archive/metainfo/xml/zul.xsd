@@ -2204,6 +2204,7 @@
 		<xs:attribute name="maximized" type="booleanType" use="optional" />
 		<xs:attribute name="minimized" type="booleanType" use="optional" />
 		<xs:attribute name="minimizable" type="booleanType" use="optional" />
+		<xs:attribute name="minzindex" type="intType" use="optional"/>
 		<xs:attribute name="movable" type="booleanType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="title" type="xs:string" use="optional" />
@@ -2271,6 +2272,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="minzindex" type="intType" use="optional"/>
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- portalchildren -->
@@ -3075,6 +3077,7 @@
 		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
 		<xs:attribute name="minheight" type="intType" use="optional" />
 		<xs:attribute name="minwidth" type="intType" use="optional" />
+		<xs:attribute name="minzindex" type="intType" use="optional"/>
 		<xs:attribute name="defaultActionOnShow" type="windowActionOnShowAttrType" use="optional" />
 		<xs:attribute name="maximizable" type="booleanType" use="optional" />
 		<xs:attribute name="maximized" type="booleanType" use="optional" />

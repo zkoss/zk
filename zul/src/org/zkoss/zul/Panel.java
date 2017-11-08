@@ -61,7 +61,7 @@ public class Panel extends XulElement implements Framable {
 
 	private String _border = "none";
 	private String _title = "";
-	private int _minheight = 100, _minwidth = 200;
+	private int _minheight = 100, _minwidth = 200, _minzindex = -1;
 	private boolean _closable, _collapsible, _floatable, _movable, _maximizable, _minimizable, _maximized, _minimized,
 			_sizable, _open = true, _framableBC/*backward compatible*/;
 
@@ -375,6 +375,30 @@ public class Panel extends XulElement implements Framable {
 	 */
 	public int getMinwidth() {
 		return _minwidth;
+	}
+
+	/**
+	 * Returns the minimal Z index.
+	 * <p>Default: -1 means system default;
+	 *
+	 * @since 8.5.1
+	 */
+	public int getMinzindex() {
+		return this._minzindex;
+	}
+
+	/**
+	 * Sets the minimal Z index.
+	 *
+	 * @since 8.5.1
+	 */
+	public void setMinzindex(int minzindex) {
+		if (minzindex < -1)
+			minzindex = -1;
+		if (_minzindex != minzindex) {
+			_minzindex = minzindex;
+			smartUpdate("minzindex", minzindex);
+		}
 	}
 
 	public void setHflex(String flex) {
@@ -703,6 +727,8 @@ public class Panel extends XulElement implements Framable {
 			renderer.render("minheight", _minheight);
 		if (_minwidth != 200)
 			renderer.render("minwidth", _minwidth);
+		if (_minzindex >= 0)
+			renderer.render("minzindex", _minzindex);
 
 		if (!_open)
 			renderer.render("open", false);
