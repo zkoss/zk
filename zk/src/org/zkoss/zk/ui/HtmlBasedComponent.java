@@ -157,6 +157,49 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		setZIndex(zIndex);
 	}
 
+	/**
+	 * Returns the minimal Z index.
+	 * <p>Default: -1 means system default;
+	 * @since 8.5.1
+	 */
+	public int getMinZIndex() {
+		return _auxinf != null ? _auxinf.minZIndex : -1;
+	}
+
+	/**
+	 * Sets the minimal Z index.
+	 * @since 8.5.1
+	 */
+	public void setMinZIndex(int minZIndex) {
+		if (minZIndex < -1)
+			minZIndex = -1;
+		if ((_auxinf != null ? _auxinf.minZIndex : -1) != minZIndex) {
+			initAuxInfo().minZIndex = minZIndex;
+			if (minZIndex < 0)
+				smartUpdate("minZIndex", (Object) null);
+			else
+				smartUpdate("minZIndex", minZIndex);
+		}
+	}
+
+	/**
+	 * Returns the minimal Z index.
+	 * It is the same as {@link #getMinZIndex}.
+	 * @since 8.5.1
+	 */
+	public int getMinzindex() {
+		return getMinZIndex();
+	}
+
+	/**
+	 * Sets the minimal Z index.
+	 * It is the same as {@link #setMinZIndex}.
+	 * @since 8.5.1
+	 */
+	public void setMinzindex(int minZIndex) {
+		setMinZIndex(minZIndex);
+	}
+
 	/** Returns the height. If null, the best fit is used.
 	 * <p>Default: null.
 	 */
@@ -705,6 +748,8 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 
 			if (_auxinf.zIndex >= 0)
 				renderer.render("zIndex", _auxinf.zIndex);
+			if (_auxinf.minZIndex >= 0)
+				renderer.render("minZIndex", _auxinf.minZIndex);
 			if (_auxinf.renderdefer >= 0)
 				renderer.render("renderdefer", _auxinf.renderdefer);
 			if (_auxinf.tabindex != null)
@@ -823,6 +868,15 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 
 			public Integer getValue(Component cmp) {
 				return ((HtmlBasedComponent) cmp).getZIndex();
+			}
+		});
+		_properties.put("minzindex", new IntPropertyAccess() {
+			public void setValue(Component cmp, Integer minzindex) {
+				((HtmlBasedComponent) cmp).setMinZIndex(minzindex);
+			}
+
+			public Integer getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getMinZIndex();
 			}
 		});
 		_properties.put("renderdefer", new IntPropertyAccess() {
@@ -985,6 +1039,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		private String droppable;
 		private String action;
 		private int zIndex = -1;
+		private int minZIndex = -1;
 		private int renderdefer = -1;
 		private Integer tabindex;
 

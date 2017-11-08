@@ -2201,7 +2201,10 @@ wgt.$f().main.setTitle("foo");
 	 * @return int
 	 */
 	getZIndex: _zkf = function () {
-		return this._zIndex;
+		if (this._minZIndex)
+			return Math.max(this._minZIndex, this._zIndex || -1);
+		else
+			return this._zIndex;
 	},
 	getZindex: _zkf,
 	/** Sets the Z index.
@@ -2210,6 +2213,8 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget this widget.
 	 */
 	setZIndex: _zkf = function (zIndex, opts) {
+		if (this._minZIndex)
+			zIndex = Math.max(this._minZIndex, zIndex || -1);
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
 			var n = this.$n();
@@ -2221,7 +2226,16 @@ wgt.$f().main.setTitle("foo");
 		return this;
 	},
 	setZindex: _zkf,
-
+	/** Sets the minimal Z index.
+	 * @param int minZIndex the minimal Z index to assign to
+	 * @since 8.5.1
+	 */
+	setMinZIndex: _zkf = function (minZIndex) {
+		if (this._minZIndex != minZIndex) {
+			this._minZIndex = minZIndex;
+		}
+	},
+	setMinzindex: _zkf,
 	/** Returns the scoll top of the associated DOM element of this widget.
 	 * <p>0 is always returned if this widget is not bound to a DOM element yet.
 	 * @return int
