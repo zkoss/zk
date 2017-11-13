@@ -63,7 +63,10 @@
 	}
 
 	> .z-tabpanels {
-		border-top: 0;
+		height: 100%;
+		.z-tabpanel {
+			border-top: 0;
+		}
 	}
 }
 
@@ -101,6 +104,7 @@
 	&-left-scroll,
 	&-right-scroll {
 		width: @baseBarWidth;
+		min-height: 48px;
 	}
 	&-right-scroll {
 		right: 0;
@@ -115,9 +119,9 @@
 	}
 	// bottom
 	&-bottom {
-		> .z-tabpanels {
+		.z-tabpanel {
 			border-top: 0;
-			border-bottom: 1px solid @baseBorderColor;
+			border-bottom: 1px solid @tabboxTabSeparatorColor;
 		}
 
 		> .z-tabbox-icon {
@@ -169,9 +173,8 @@
 				}
 			}
 		}
-		> .z-tabpanels {
-			height: 100%;
-			border-left: 1px solid @baseBorderColor;
+		.z-tabpanel {
+			border-left: 1px solid @tabboxTabSeparatorColor;
 		}
 	}
 
@@ -197,9 +200,8 @@
 				}
 			}
 		}
-		> .z-tabpanels {
-			height: 100%;
-			border-right: 1px solid @baseBorderColor;
+		.z-tabpanel {
+			border-right: 1px solid @tabboxTabSeparatorColor;
 		}
 	}
 
@@ -209,7 +211,7 @@
 			border: 0;
 
 			> .z-tabpanel {
-				border-top: 1px solid @baseBorderColor;
+				border-top: 1px solid @tabboxTabSeparatorColor;
 				padding: 0;
 				&:first-child {
 					border-top: 0;
@@ -258,6 +260,7 @@
 	overflow: hidden;
 	position: relative;
 	background: @tabboxTabsBackgroundColor;
+	min-height: 48px;
 
 	&-content {
 		display: flex;
@@ -397,13 +400,13 @@
 }
 
 .z-tabpanels {
-	border-top: 1px solid @baseBorderColor;
 	zoom: 1;
 	overflow: hidden;
 	position: relative;
 }
 
 .z-tabpanel {
+	border-top: 1px solid @tabboxTabSeparatorColor;
 	padding: 16px;
 	zoom: 1;
 	color: @baseTextColor;
@@ -426,6 +429,13 @@
 .ie {
 	.z-tabs-content {
 		display: table;
+	}
+	.z-tabbox {
+		&-top, &-left, &-right, &-bottom {
+			.z-tab {
+				min-height: 48px;
+			}
+		}
 	}
 }
 
