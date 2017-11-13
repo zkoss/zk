@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3794.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 13 18:17:07 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (Iceblue-like themes only, Firefox only)
+        Compare the text of textbox with the label.
+        The bottom of text should not be cut.
+    </label>
+    <textbox value="gjpqy" />gjpqy
+</zk>
