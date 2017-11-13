@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3795.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 13 18:48:15 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (Test on Firefox on Windows. Iceblue-like themes only)
+        The progressmeter should be completely filled (height)
+    </label>
+    <progressmeter value="40" width="200px" />
+</zk>

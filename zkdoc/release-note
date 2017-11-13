@@ -7,6 +7,7 @@ ZK 8.5.1
   ZK-3785: cleanup unused (6.5) images from themes
   ZK-3789: Animation onRestore cause redrawn in CKEditor
   ZK-3794: Textbox cut the bottom of text
+  ZK-3795: Progressmeter is not completely filled
 
 * Upgrade Notes
 
