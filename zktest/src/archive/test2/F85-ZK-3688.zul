@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3688.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 8 11:30:17 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<script>
+		zk.afterLoad("zul.wgt", function() {
+			zul.wgt.MyPopup = zk.$extends(zul.wgt.Popup, {
+				open: function() {
+					this.$supers("open", arguments);
+					zk.log(this.getZIndex());
+				}
+			});
+		});
+		zk.afterLoad("zul.wnd", function() {
+			zul.wnd.MyWindow = zk.$extends(zul.wnd.Window, {
+				setVisible: function(visible) {
+					this.$supers("setVisible", arguments);
+					if (visible)
+						zk.log(this.getZIndex());
+				}
+			});
+		});
+	</script>
+
+	<label multiline="true">
+		1. click the button from left to right
+		2. see the z-index being printed in the client log
+		the output should be '1800 5000 5001 10000'
+	</label>
+
+	<button label="win1 open window at default zindex" onClick='win1.setTop("140px"); win1.doOverlapped()'/>
+	<button label="win2 open window at min zindex 5000" onClick='win2.setTop("180px"); win2.doOverlapped()'/>
+	<button label="pop1 at default zindex" popup="pop1,type=toggle"/>
+	<button label="pop2 at min zindex 10000" popup="pop2,type=toggle"/>
+
+	<window id="win1" w:use="zul.wnd.MyWindow" visible="false">Window 1</window>
+	<window id="win2" w:use="zul.wnd.MyWindow" visible="false" minzindex="5000">Window 2</window>
+	<popup id="pop1" w:use="zul.wgt.MyPopup">POP 1</popup>
+	<popup id="pop2" w:use="zul.wgt.MyPopup" minzindex="10000">POP 2</popup>
+</zk>

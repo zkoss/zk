@@ -2,6 +2,7 @@
 ZK 8.5.1
 * Features
   ZK-3778: set sclass for slidingtext popup
+  ZK-3688: Add min-z-index property to modal windows
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes
