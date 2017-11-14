@@ -430,13 +430,6 @@
 	.z-tabs-content {
 		display: table;
 	}
-	.z-tabbox {
-		&-top, &-left, &-right, &-bottom {
-			.z-tab {
-				min-height: 48px;
-			}
-		}
-	}
 }
 
 // ZK-2158: Tab should not be click on blank area next to last tab
@@ -445,6 +438,32 @@
 		line-height: 1px;
 		> .z-tabs-content {
 			display: inline-block;
+		}
+	}
+}
+
+// IE9/IE10 bug: min-height ignores border-box
+.ie9, .ie10 {
+	.z-tabbox {
+		&-top, &-left, &-right, &-bottom {
+			.z-tab {
+				height: 48px;
+			}
+		}
+		&-left-scroll,
+		&-right-scroll {
+			min-height: 0;
+			height: 48px;
+		}
+	}
+}
+
+.ie11 {
+	.z-tabbox {
+		&-top, &-left, &-right, &-bottom {
+			.z-tab {
+				min-height: 48px;
+			}
 		}
 	}
 }
