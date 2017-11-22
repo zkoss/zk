@@ -403,7 +403,7 @@ public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 				while (en.hasMoreElements()) {
 					URL url = en.nextElement();
 					String path = url.getPath();
-					if (path != null && (path.contains("zk.jar!" + FILE) || path.matches("(.*)zk-\\d.*\\.jar\\!" + FILE))) { //the filename of jar might change
+					if (path != null && path.matches(".*/zk(-\\d[^/]*?)?\\.jar\\!?" + FILE + "$")) { //the filename of jar might change
 						is = url.openStream();
 						break;
 					}
