@@ -34,6 +34,8 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Popup extends XulElement {
+	private int _minzindex = -1;
+
 	static {
 		addClientEvent(Popup.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
@@ -181,6 +183,36 @@ public class Popup extends XulElement {
 	 */
 	public boolean setVisible(boolean visible) {
 		throw new UnsupportedOperationException("Use open/close instead");
+	}
+
+	/**
+	 * Returns the minimal Z index.
+	 * <p>Default: -1 means system default;
+	 *
+	 * @since 8.5.1
+	 */
+	public int getMinzindex() {
+		return this._minzindex;
+	}
+
+	/**
+	 * Sets the minimal Z index.
+	 *
+	 * @since 8.5.1
+	 */
+	public void setMinzindex(int minzindex) {
+		if (minzindex < -1)
+			minzindex = -1;
+		if (_minzindex != minzindex) {
+			_minzindex = minzindex;
+			smartUpdate("minzindex", minzindex);
+		}
+	}
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_minzindex >= 0)
+			renderer.render("minzindex", _minzindex);
 	}
 
 	public String getZclass() {

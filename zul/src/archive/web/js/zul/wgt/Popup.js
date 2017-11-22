@@ -23,6 +23,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
 	_visible: false,
+	_minzindex: -1,
+	$define: {
+		/** Sets the minimal Z index.
+		 * <p>Default: -1
+		 * @since 8.5.1
+		 */
+		/**
+		 * Returns the minimum Z index.
+		 * <p>Default: -1.
+		 * @return int
+		 */
+		minzindex: null
+	},
 	/**
 	 * Returns whether the popup is visible.
 	 * @return boolean

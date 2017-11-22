@@ -399,6 +399,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
+	_minzindex: -1,
 	_shadow: true,
 	_tabindex: 0,
 
@@ -741,6 +742,16 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		 * @return int
 		 */
 		minwidth: null, //TODO
+		/** Sets the minimal Z index.
+		 * <p>Default: -1
+		 * @since 8.5.1
+		 */
+		/**
+		 * Returns the minimum Z index.
+		 * <p>Default: -1.
+		 * @return int
+		 */
+		minzindex: null,
 		/** Sets whether to show the shadow of an overlapped/popup/modal
 		 * window. It is meaningless if it is an embedded window.
 		 * <p>Default: true.
