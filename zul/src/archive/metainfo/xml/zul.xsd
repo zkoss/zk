@@ -426,6 +426,32 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:simpleType name="portallayoutMaximizedModeTpye">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="column" />
+					<xs:enumeration value="whole" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="sliderMode">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="integer" />
+					<xs:enumeration value="decimal" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<!--
 	ATTRIBUTEGROUP
 	-->
@@ -468,6 +494,7 @@
 		<xs:attribute name="viewModel" type="xs:string" use="optional" />
 		<xs:attribute name="validationMessages" type="xs:string" use="optional" />
 		<xs:attribute name="visible" type="booleanType" use="optional" />
+		<xs:attribute name="parent" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="htmlBasedComponentAttrGroup">
 		<xs:attributeGroup ref="abstractComponentAttrGroup" />
@@ -1012,6 +1039,7 @@
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attribute name="onWeekClick" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="showTodayLink" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- calendars -->
 	<xs:element name="calendars" type="calendarsType" />
@@ -1043,6 +1071,7 @@
 	<xs:complexType name="captionType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 	</xs:complexType>
 
 	<!-- captcha -->
@@ -1208,7 +1237,9 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="onSearch" type="xs:string" use="optional" />
 		<xs:attribute name="onSearching" type="xs:string" use="optional" />
+		<xs:attribute name="onItemClick" type="xs:string" use="optional" />
 		<xs:attribute name="selectedObjects" type="xs:string" use="optional" />
+		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- colorbox -->
 	<xs:element name="colorbox" type="colorboxType" />
@@ -1291,6 +1322,7 @@
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
+		<xs:attribute name="errorMessage" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- comboitem -->
 	<xs:element name="comboitem" type="comboitemType" />
@@ -1342,6 +1374,7 @@
 		<xs:attribute name="timeZonesReadonly" type="booleanType" use="optional" />
 		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attribute name="weekOfYear" type="booleanType" use="optional" />
+		<xs:attribute name="showTodayLink" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="position" type="PopupPositionAttrType" use="optional" />
 	</xs:complexType>
@@ -1404,6 +1437,8 @@
 		<xs:attribute name="detection" type="xs:string" use="optional" />
 		<xs:attribute name="native" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="onUpload" type="xs:string" use="optional" />
+		<xs:attribute name="anchor" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- east -->
 	<xs:element name="east" type="eastType" />
@@ -1541,6 +1576,7 @@
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="columns" type="intType" use="required" />
+		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="start" type="intType" use="optional" />
 	</xs:complexType>
 
@@ -1684,6 +1720,8 @@
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
+		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
+		<xs:attribute name="activePage" type="intType" use="optional" />
 	</xs:complexType>
 
 	<!-- groupbox -->
@@ -1946,6 +1984,12 @@
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
+		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
+		<xs:attribute name="activePage" type="intType" use="optional" />
+		<xs:attribute name="onFocus" type="xs:string" use="optional" />
+		<xs:attribute name="onBlur" type="xs:string" use="optional" />
+		<xs:attribute name="onOK" type="xs:string" use="optional" />
+		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="pagingPositionAttrType">
 		<xs:union>
@@ -1967,6 +2011,7 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="span" type="intType" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- listfoot -->
 	<xs:element name="listfoot" type="listfootType" />
@@ -2145,6 +2190,7 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="collapsed" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
+		<xs:attribute name="autoclose" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- navitem -->
@@ -2295,6 +2341,8 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="maximizedMode" type="portallayoutMaximizedModeTpye" use="optional" />
+		<xs:attribute name="onPortalMove" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- progressmeter -->
 	<xs:element name="progressmeter" type="progressmeterType" />
@@ -2419,6 +2467,7 @@
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- separator -->
 	<xs:element name="separator" type="separatorType" />
@@ -2442,6 +2491,9 @@
 		<xs:attribute name="pageIncrement" type="intType" use="optional" />
 		<xs:attribute name="onScroll" type="xs:string" use="optional" />
 		<xs:attribute name="onScrolling" type="xs:string" use="optional" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="mode" type="sliderMode" use="optional" />
+		<xs:attribute name="step" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- south -->
@@ -2521,6 +2573,7 @@
 		<xs:attribute name="selected" type="booleanType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="onClose" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- tabbox -->
 	<xs:element name="tabbox" type="tabboxType" />
@@ -2541,6 +2594,8 @@
 		<xs:attribute name="maximalHeight" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="tabboxRenderer" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="tabOrientAttrType">
 		<xs:union>
@@ -2691,6 +2746,8 @@
 		<xs:attribute name="tabbable" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="errorMessage" type="xs:string" use="optional" />
+		<xs:attribute name="errorboxSclass" type="xs:string" use="optional" />
+		<xs:attribute name="errorboxIconSclass" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- timer -->
 	<xs:element name="timer" type="timerType" />
@@ -2755,6 +2812,7 @@
 		<xs:attribute name="checked" type="booleanType" use="optional" />
 		<xs:attribute name="upload" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="onUpload" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- nodom -->
 	<xs:element name="nodom" type="nodomType" />
@@ -2908,6 +2966,8 @@
 		<xs:attribute name="autopaging" type="booleanType" use="optional" />
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
+		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
+		<xs:attribute name="activePage" type="intType" use="optional" />
 	</xs:complexType>
 	<!-- treecell -->
 	<xs:element name="treecell" type="treecellType" />
@@ -3513,8 +3573,8 @@
 		<xs:attribute name="begin" type="intType" use="optional" />
 		<xs:attribute name="end" type="intType" use="optional" />
 		<xs:attribute name="step" type="intType" use="optional" />
-		<xs:attribute name="var" type="xs:string" use="required" />
-		<xs:attribute name="varStatus" type="xs:string" use="required" />
+		<xs:attribute name="var" type="xs:string" use="optional" />
+		<xs:attribute name="varStatus" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- shadow element: choose -->
 	<xs:element name="choose" type="chooseType" />
@@ -3577,6 +3637,7 @@
 		<xs:attribute name="forEach" type="xs:string" use="optional" />
 		<xs:attribute name="forEachBegin" type="xs:string" use="optional" />
 		<xs:attribute name="forEachEnd" type="xs:string" use="optional" />
+		<xs:attribute name="forEachStep" type="intType" use="optional" />
 		<xs:attribute name="if" type="xs:string" use="optional" />
 		<xs:attribute name="self" type="xs:string" use="optional" />
 		<xs:attribute name="unless" type="xs:string" use="optional" />
