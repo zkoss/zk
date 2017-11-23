@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.0.1.201609201242">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.5.0.201711221716">
 	<!--
 	SIMPLETYPE
 	-->
@@ -613,6 +613,7 @@
 			<xs:element ref="flashchart" />
 			<xs:element ref="forEach" />
 			<xs:element ref="fusionchart" />
+			<xs:element ref="fragment" />
 			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
@@ -650,6 +651,7 @@
 			<xs:element ref="slider" />
 			<xs:element ref="space" />
 			<xs:element ref="spinner" />
+			<xs:element ref="splitlayout" />
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
 			<xs:element ref="tablelayout" />
@@ -708,6 +710,7 @@
 				<xs:element ref="flashchart" />
 				<xs:element ref="forEach" />
 				<xs:element ref="fusionchart" />
+				<xs:element ref="fragment" />
 				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
@@ -745,6 +748,7 @@
 				<xs:element ref="slider" />
 				<xs:element ref="space" />
 				<xs:element ref="spinner" />
+				<xs:element ref="splitlayout" />
 				<xs:element ref="style" />
 				<xs:element ref="tabbox" />
 				<xs:element ref="tbeditor" />
@@ -3537,6 +3541,60 @@
 		<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
 		<xs:attribute name="test" type="booleanType" use="required" />
 	</xs:complexType>
-
-
+	<!-- splitlayout -->
+	<xs:element name="splitlayout" type="splitlayoutType"/>
+	<xs:complexType name="splitlayoutType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="collapse" type="collapseAttrType" use="optional" />
+		<xs:attribute name="heights" type="xs:string" use="optional" />
+		<xs:attribute name="minHeights" type="xs:string" use="optional" />
+		<xs:attribute name="minWidths" type="xs:string" use="optional" />
+		<xs:attribute name="open" type="booleanType" use="optional" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="resizable" type="booleanType" use="optional" />
+		<xs:attribute name="widths" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="onDivisionSize" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- fragment -->
+	<xs:element name="fragment" type="fragmentType" />
+	<xs:complexType name="fragmentType">
+		<xs:sequence>
+			<xs:any maxOccurs="unbounded" processContents="lax" />
+		</xs:sequence>
+		<xs:attributeGroup ref="abstractComponentAttrGroupForFragment" />
+		<xs:attribute name="content" type="xs:string" use="optional" />
+		<xs:attribute name="recoverId" type="xs:string" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="onRecover" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:anyAttribute processContents="skip" />
+	</xs:complexType>
+	<!-- FIXME: Copied from abstractComponentAttrGroup to avoid processContents="lax" -->
+	<xs:attributeGroup name="abstractComponentAttrGroupForFragment">
+		<xs:attribute name="forEach" type="xs:string" use="optional" />
+		<xs:attribute name="forEachBegin" type="xs:string" use="optional" />
+		<xs:attribute name="forEachEnd" type="xs:string" use="optional" />
+		<xs:attribute name="if" type="xs:string" use="optional" />
+		<xs:attribute name="self" type="xs:string" use="optional" />
+		<xs:attribute name="unless" type="xs:string" use="optional" />
+		<xs:attribute name="apply" type="xs:string" use="optional" />
+		<xs:attribute name="auService" type="xs:string" use="optional" />
+		<xs:attribute name="autag" type="xs:string" use="optional" />
+		<xs:attribute name="binder" type="xs:string" use="optional" />
+		<xs:attribute name="children" type="xs:string" use="optional" />
+		<xs:attribute name="form" type="xs:string" use="optional" />
+		<xs:attribute name="forward" type="xs:string" use="optional" />
+		<xs:attribute name="fulfill" type="xs:string" use="optional" />
+		<xs:attribute name="id" type="xs:string" use="optional" />
+		<xs:attribute name="mold" type="xs:string" use="optional" />
+		<xs:attribute name="onFulfill" type="xs:string" use="optional" />
+		<xs:attribute name="stubonly" type="xs:string" use="optional" />
+		<xs:attribute name="use" type="xs:string" use="optional" />
+		<xs:attribute name="viewModel" type="xs:string" use="optional" />
+		<xs:attribute name="validationMessages" type="xs:string" use="optional" />
+		<xs:attribute name="visible" type="booleanType" use="optional" />
+	</xs:attributeGroup>
 </xs:schema>
