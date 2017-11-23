@@ -10,6 +10,9 @@ ZK 8.5.1
   ZK-3794: Textbox cut the bottom of text
   ZK-3795: Progressmeter is not completely filled
   ZK-3796: unexpectedly loaded metainfo/zk/build in zpoi.jar causes license checking failure
+  ZK-3745: zul xsd doesn't define "src" attribute for <caption>
+  ZK-3730: zul xsd doesn't define "disabled" attribute for "tab"
+  ZK-3753: XSD defines "var" and "varStatus" are required 
 
 * Upgrade Notes
 
