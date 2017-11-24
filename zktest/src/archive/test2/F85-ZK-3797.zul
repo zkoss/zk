@@ -1,0 +1,73 @@
+<zk xmlns:x="xhtml">
+	<x:header>
+		<x:h1>The page should be able to display</x:h1>
+	</x:header>
+	<x:main>
+		<x:article>
+			<x:p>Article here</x:p>
+			<x:aside>
+				<x:p>
+					Aside
+				</x:p>
+			</x:aside>
+		</x:article>
+		<x:audio src="/media/guitar.wav" autoplay="true">
+		</x:audio>
+		<x:bdi>ARABIC_PLACEHOLDER</x:bdi>
+		<x:bdo>This text will go right to left.</x:bdo>
+		<x:canvas width="300" height="300">
+			canvas
+		</x:canvas>
+		<x:data value="398">Mini Ketchup</x:data>
+		<x:datalist>
+			<x:option value="Chrome"/>
+			<x:option value="Firefox"/>
+			<x:option value="Internet Explorer"/>
+			<x:option value="Opera"/>
+			<x:option value="Safari"/>
+			<x:option value="Microsoft Edge"/>
+		</x:datalist>
+		<x:details>
+			<x:summary>Some details</x:summary>
+			<x:p>More info about the details.</x:p>
+		</x:details>
+		<x:figure>
+			<x:img src="/img/ZK-Logo.gif" alt="An awesome picture"/>
+			<x:figcaption>ZK Logo</x:figcaption>
+		</x:figure>
+		<x:mark>highlight</x:mark>
+		<x:meter min="200" max="500" value="350">350 degrees</x:meter>
+		<x:nav>
+			<x:ul>
+				<x:li><x:a href="#">Home</x:a></x:li>
+				<x:li><x:a href="#">About</x:a></x:li>
+				<x:li><x:a href="#">Contact</x:a></x:li>
+			</x:ul>
+		</x:nav>
+		<x:output name="result">60</x:output>
+		<x:object data="movie.swf" type="application/x-shockwave-flash">
+			<x:param name="foo" value="bar" />
+		</x:object>
+		<x:progress value="70" max="100">70 %</x:progress>
+		<x:ruby>
+			<x:rb>旧</x:rb>
+			<x:rt>jiù</x:rt>
+			<x:rtc>San Francisco</x:rtc>
+		</x:ruby>
+		<x:section>
+			<x:p>Section</x:p>
+		</x:section>
+		<x:template>
+			template
+		</x:template>
+		<x:u>Today's Special</x:u>
+		<x:video controls="true">
+			<x:source src="foo.webm" type="video/webm" />
+			<x:track kind="captions" src="sampleCaptions.vtt" srclang="en" />
+		</x:video>
+		<x:wbr />
+	</x:main>
+	<x:footer>
+		ZK Footer
+	</x:footer>
+</zk>
