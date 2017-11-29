@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.TimeZone;
 
 import org.zkoss.util.TimeZones;
 
@@ -53,7 +54,7 @@ public class JSONs {
 	}
 	private static final SimpleDateFormat getDateFormat() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy.M.d.H.m.s.S", Locale.US);
-		df.setTimeZone(TimeZones.getCurrent());
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return df;
 	}
 }

@@ -37,7 +37,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.text.DateFormats;
-import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.WaitLock;
@@ -72,7 +71,7 @@ public class Datebox extends FormatInputElement {
 	private static final Logger log = LoggerFactory.getLogger(Datebox.class);
 	private static final String DEFAULT_FORMAT = "yyyy/MM/dd";
 
-	private TimeZone _tzone;
+	private TimeZone _tzone = TimeZones.getCurrent();
 	private List<TimeZone> _dtzones;
 	/** The locale associated with this datebox. */
 	private Locale _locale;
@@ -468,6 +467,9 @@ public class Datebox extends FormatInputElement {
 			} else {
 				_tzone = tzone;
 			}
+			SimpleDateConstraint cst = ((SimpleDateConstraint) this.getConstraint());
+			if (cst != null)
+				cst.setTimeZone(_tzone);
 			smartUpdate("timeZone", _tzone.getID());
 			smartUpdate("_value", marshall(_value));
 		}
@@ -835,28 +837,7 @@ public class Datebox extends FormatInputElement {
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug 2564298
-	}
-
-	protected Object marshall(Object value) {
-		if (value == null || _tzone == null)
-			return value;
-		Date date = (Date) value;
-		return new Date((date).getTime() - Dates.getTimezoneOffset(TimeZones.getCurrent(), date)
-				+ Dates.getTimezoneOffset(_tzone, date));
-	}
-
-	protected Object unmarshall(Object value) {
-		if (value == null || _tzone == null)
-			return value;
-
-		if (!(value instanceof Date)) {
-			throw new WrongValueException(this, MZul.NUMBER_REQUIRED, value);
-		}
-
-		Date date = (Date) value;
-		return new Date((date).getTime() + Dates.getTimezoneOffset(TimeZones.getCurrent(), date)
-				- Dates.getTimezoneOffset(_tzone, date));
+		setConstraint(constr != null ? new SimpleDateConstraint(constr, this.getTimeZone()) : null); // Bug 2564298
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {
@@ -1027,9 +1008,7 @@ public class Datebox extends FormatInputElement {
 
 		render(renderer, "weekOfYear", _weekOfYear);
 		render(renderer, "position", _position);
-
-		if (_tzone != null)
-			renderer.render("timeZone", _tzone.getID());
+		renderer.render("timeZone", _tzone.getID());
 		renderer.render("localizedFormat", getLocalizedFormat());
 
 		String unformater = getUnformater();

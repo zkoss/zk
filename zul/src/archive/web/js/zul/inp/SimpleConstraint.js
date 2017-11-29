@@ -30,6 +30,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @disable(zkgwt)
  */
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
+	_finishParseCst: true,
 	/** Constructor.
 	 * @param Object a
 	 * It can be String or number, the number or name of flag,
@@ -42,7 +43,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this._flags = {};
 			this._errmsg = {};
 			this._cstArr = [];
-			this._init(a);
+			this._cst = a;
+			this._finishParseCst = false;
 		} else {
 			this._flags = typeof a == 'number' ? this._cvtNum(a) : a || {};
 			this._regex = typeof b == 'string' ? new RegExp(b, 'g') : b;
@@ -181,6 +183,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 * such as "no positive", 0x0001.
 	 */
 	validate: function (wgt, val) {
+		if (!this._finishParseCst) {
+			this._init(this._cst);
+			this._finishParseCst = true;
+		}
 		var f = this._flags,
 			msg = this._errmsg;
 
@@ -214,8 +220,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		}
 
 		if (val && val.getFullYear) {
-			var today = zUtl.today(),
-				val = new Date(val.getFullYear(), val.getMonth(), val.getDate());
+			var tz = val.getTimeZone(),
+				today = zUtl.today(null, tz),
+				val = Dates.newInstance([val.getFullYear(), val.getMonth(), val.getDate()], tz);
 			if ((today - val) / 86400000 < 0) {
 				if (f.NO_FUTURE) return msg['NO_FUTURE'] || this._msgDateDenied();
 			} else if (val - today == 0) {
@@ -252,6 +259,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		else if (f.NO_TODAY)
 			return msg['NO_TODAY'] || msgzul.NO_TODAY;
 		return msg || msgzul.ILLEGAL_VALUE;
+	},
+	reparseConstraint: function () {
+		this._finishParseCst = false;
 	}
 });
 })();

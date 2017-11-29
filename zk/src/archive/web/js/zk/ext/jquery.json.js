@@ -213,12 +213,12 @@
 		//yyyy.M.d.H.m.s.S (see org.zkoss.json.JSONs.d2j)
 		if (s == null) return null;
 		var s = s.split('.');
-		return new Date(parseInt(s[0], 10), parseInt(s[1]) - 1, parseInt(s[2]),
-			parseInt(s[3]), parseInt(s[4]), parseInt(s[5]), parseInt(s[6]));
+		return Dates.newInstance([parseInt(s[0], 10), parseInt(s[1]) - 1, parseInt(s[2]),
+			parseInt(s[3]), parseInt(s[4]), parseInt(s[5]), parseInt(s[6])], 'UTC');
 	};
 	$.d2j = function (d) { //date to json
-		return d ? [d.getFullYear(), d.getMonth() + 1, d.getDate(),
-			d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()].join('.') : null;
+		return d ? [d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(),
+			d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()].join('.') : null;
 	};
 //Tom//    }
 }(jq)); //Tom: jQuery might be another copy

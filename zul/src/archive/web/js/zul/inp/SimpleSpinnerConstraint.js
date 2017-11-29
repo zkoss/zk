@@ -44,6 +44,7 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 			return this.$supers('parseConstraint_', arguments);
 	},
 	validate: function (wgt, val) {
+		var result = this.$supers('validate',arguments);
 		switch (typeof val) {
 			case 'number':
 				var maxErr = this._max && val > this._max,
@@ -55,6 +56,6 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 							this._min + ' - ' + this._max : '>= ' + this._min : '<= ' + this._max);
 				}
 		}
-		return msg || this.$supers('validate',arguments);
+		return msg || result;
 	}
 });
