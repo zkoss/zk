@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.zkoss.bind.annotation.Transient;
 import org.zkoss.bind.proxy.ProxyHelper;
 
-public class B80_ZK_3556Test {
+public class B85_ZK_3556Test {
 
 	private PojoWithTransientField pojo;
 
@@ -41,9 +41,9 @@ public class B80_ZK_3556Test {
 	}
 
 	private void testTransientPropertyUpdate(PojoWithTransientField proxy) {
-//		assertEquals("Test, Peter", proxy.getFormattedName());
-//		proxy.setFirstName("Martin");
-//		assertEquals("Test, Martin", proxy.getFormattedName());
+		assertEquals("Test, Peter", proxy.getFormattedName());
+		proxy.setFirstName("Martin");
+		assertEquals("Test, Martin", proxy.getFormattedName());
 	}
 
 	public static class NestedPojo {

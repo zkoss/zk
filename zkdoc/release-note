@@ -15,6 +15,7 @@ ZK 8.5.1
   ZK-3730: zul xsd doesn't define "disabled" attribute for "tab"
   ZK-3753: XSD defines "var" and "varStatus" are required 
   ZK-3726: Datebox displays the week number incorrectly
+  ZK-3556: @Transient is ignored in FormProxyHandler
 
 * Upgrade Notes
 

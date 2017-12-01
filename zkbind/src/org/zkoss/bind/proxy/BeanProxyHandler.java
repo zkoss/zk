@@ -40,21 +40,12 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 			if (m.isAnnotationPresent(Transient.class))
 				return false;
 			final String name = m.getName();
-			if (name.startsWith("set")) {
-				try {
-					final String getter = toGetter(toAttrName(m));
-					final Method getMethod = Classes.getMethodByObject(m.getDeclaringClass(), getter, null);
-					if (getMethod.isAnnotationPresent(Transient.class))
-						return false;
-				} catch (NoSuchMethodException e) {
-					// ignore if no getter available
-				}
-				return true;
-			}
+			if (name.startsWith("set"))
+				return isSetMethodHandled(m);
 			if (name.startsWith("get") || name.startsWith("is") || name.equals("hashCode") || name.equals("equals"))
 				return true;
 			try {
-				FormProxyObject.class.getMethod(m.getName(), m.getParameterTypes());
+				FormProxyObject.class.getMethod(name, m.getParameterTypes());
 				return true;
 			} catch (NoSuchMethodException e) {
 				return false;
@@ -72,6 +63,18 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 
 	public BeanProxyHandler(T origin) {
 		_origin = origin;
+	}
+
+	protected static boolean isSetMethodHandled(Method m) {
+		try {
+			final String getter = toGetter(toAttrName(m));
+			final Method getMethod = Classes.getMethodByObject(m.getDeclaringClass(), getter, null);
+			if (getMethod.isAnnotationPresent(Transient.class))
+				return false;
+		} catch (NoSuchMethodException e) {
+			// ignore if no getter available
+		}
+		return true;
 	}
 
 	private void addCache(String key, Object value) {
