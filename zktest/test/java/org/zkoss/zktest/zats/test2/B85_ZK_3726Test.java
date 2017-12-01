@@ -1,0 +1,32 @@
+package org.zkoss.zktest.zats.test2;
+
+import org.junit.Test;
+import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.zktest.zats.ztl.JQuery;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+/**
+ * @author bob peng
+ */
+public class B85_ZK_3726Test extends WebDriverTestCase {
+	@Test
+	public void test() {
+		connect();
+		JQuery body = jq("body");
+
+		click(jq(".z-datebox-icon.z-icon-calendar:eq(0)"));
+		waitResponse();
+		click(body);
+		waitResponse();
+
+		click(jq(".z-datebox-icon.z-icon-calendar:eq(1)"));
+		waitResponse();
+		click(body);
+		waitResponse();
+
+		assertEquals("The week number of 2012/01/01 in the first datebox should be 1.\n" +
+				"The week number of 2012/01/01 in the second datebox should be 52.", "1 52", getZKLog());
+	}
+}

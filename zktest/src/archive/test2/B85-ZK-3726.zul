@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3726.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 3 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		boolean db1Flag = true, db2Flag = true;
+	</zscript>
+	<datebox weekOfYear="true" sclass="db1">
+		<attribute name="onCreate">
+			import java.text.SimpleDateFormat;
+			self.setValue(new SimpleDateFormat("yyyyMMdd").parse("20120101"));
+		</attribute>
+		<attribute name="onFocus">
+			<![CDATA[
+			if (db1Flag) {
+				db1Flag = false;
+				Clients.evalJavaScript("zk.log(jq('.db1 .z-calendar-cell.z-calendar-weekofyear:eq(0)').text())");
+			}
+			]]>
+		</attribute>
+	</datebox>
+	<separator/>
+	<datebox weekOfYear="true" sclass="db2" locale="de">
+		<attribute name="onCreate">
+			import java.text.SimpleDateFormat;
+			self.setValue(new SimpleDateFormat("yyyyMMdd").parse("20120101"));
+		</attribute>
+		<attribute name="onFocus">
+			<![CDATA[
+			if (db2Flag) {
+				db2Flag = false;
+				Clients.evalJavaScript("zk.log(jq('.db2 .z-calendar-cell.z-calendar-weekofyear:eq(0)').text())");
+			}
+			]]>
+		</attribute>
+	</datebox>
+	<label multiline="true">
+		1. click the calendar icon
+		2. check the week number
+	</label>
+	The week number of 2012/01/01 in the first datebox should be 1. <a href="https://www.timeanddate.com/calendar/?year=2012&amp;country=1&amp;wno=1">ref</a>
+	<separator/>
+	The week number of 2012/01/01 in the second datebox should be 52. <a href="https://www.timeanddate.com/calendar/?year=2012&amp;country=8&amp;wno=1">ref</a>
+</zk>
