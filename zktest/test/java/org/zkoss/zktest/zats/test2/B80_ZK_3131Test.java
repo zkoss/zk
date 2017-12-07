@@ -11,6 +11,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class B80_ZK_3131Test extends WebDriverTestCase {
 		for (int i = 0 ; i < length ; i++){
 			String sheet = getEval("document.styleSheets[" + i + "].href");
 			if (sheet.contains("googleapis")) {
-				assertTrue("was expecting //fonts.googleapis.com/css?family=Open+Sans:400,700, got: " + sheet, "//fonts.googleapis.com/css?family=Open+Sans:400,700".equals(sheet));
+				assertEquals("http://fonts.googleapis.com/css?family=Open+Sans:400,700", sheet);
 			}
 		}
 	}

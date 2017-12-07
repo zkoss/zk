@@ -21,7 +21,7 @@ public class B80_ZK_3236Test extends WebDriverTestCase {
         waitResponse(true);
         click(jq("@button").get(1));
         waitResponse(true);
-        assertEquals("true true", getZKLog());
+        assertEquals("true\ntrue", getZKLog());
     }
 
 }

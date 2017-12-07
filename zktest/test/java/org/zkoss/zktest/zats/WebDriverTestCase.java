@@ -34,8 +34,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.zktest.zats.ztl.ClientWidget;
@@ -370,11 +368,11 @@ public abstract class WebDriverTestCase {
 	 * @param locator the element where it waits for.
 	 * @param timeoutInSeconds the timeout in seconds.
 	 */
-	protected void waitFor(ClientWidget locator, int timeoutInSeconds) {
-		WebDriverWait wait = new WebDriverWait(getWebDriver(),
-				timeoutInSeconds);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-	}
+//	protected void waitFor(ClientWidget locator, int timeoutInSeconds) {
+//		WebDriverWait wait = new WebDriverWait(getWebDriver(), timeoutInSeconds);
+//		ExpectedCondition<WebElement> cond = ExpectedConditions.visibilityOfElementLocated(locator);
+//		wait.until((Function<? super WebDriver, Object>) cond);
+//	}
 
 	public static WebElement toElement(ClientWidget locator) {
 		WebDriver webDriver = _local.get();
@@ -395,7 +393,7 @@ public abstract class WebDriverTestCase {
 	 * Returns the text of zk.log from client side.
 	 */
 	protected String getZKLog() {
-		return getWebDriver().findElement(By.id("zk_log")).getText();
+		return getWebDriver().findElement(By.id("zk_log")).getAttribute("value").trim();
 	}
 
 	/**

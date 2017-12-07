@@ -24,7 +24,7 @@ public class B85_ZK_3701Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 		waitResponse();
-		Assert.assertEquals("zk-3701-1 zk-3701-d1", getZKLog());
+		Assert.assertEquals("zk-3701-1\nzk-3701-d1", getZKLog());
 		closeZKLog();
 		click(jq("@button").eq(0));
 		waitResponse();

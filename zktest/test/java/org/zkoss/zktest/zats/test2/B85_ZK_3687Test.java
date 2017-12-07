@@ -24,7 +24,7 @@ public class B85_ZK_3687Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 		waitResponse();
-		Assert.assertEquals("loadedScript executed afterLoad: loadedScript", getZKLog());
+		Assert.assertEquals("loadedScript executed\nafterLoad: loadedScript", getZKLog());
 		closeZKLog();
 		click(jq("@button").eq(0));
 		waitResponse();

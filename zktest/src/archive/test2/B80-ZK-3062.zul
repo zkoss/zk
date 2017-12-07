@@ -23,7 +23,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         "?>
 <zk>
 	If you see the message "true" in zk.log console, that bug has fixed.
-    <groupbox title="parent groupbox" mold="3d" closable="false" vflex="min" >
+    <groupbox id="g" title="parent groupbox" mold="3d" closable="false" vflex="min" >
         <vlayout style="height:50px;background:#fff;"  >
             <label value="content with defined height" />
         </vlayout>
@@ -31,7 +31,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
     <script><![CDATA[
         zk.afterMount(function () {
             var h = jq('@vlayout').height();
-            zk.log(h <= zk(jq('@vlayout').parent()).contentHeight());
+            zk.log(h <= zk(jq('$g')).contentHeight());
         });
     ]]></script>
 </zk>

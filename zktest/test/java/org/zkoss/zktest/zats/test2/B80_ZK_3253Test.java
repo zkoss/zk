@@ -15,8 +15,7 @@ public class B80_ZK_3253Test extends WebDriverTestCase {
         connect();
         click(jq("@button").get(0));
         waitResponse(true);
-        System.out.println(getZKLog());
-        assertEquals("0 null", getZKLog());
+        assertEquals("0\nnull", getZKLog());
     }
 
 }

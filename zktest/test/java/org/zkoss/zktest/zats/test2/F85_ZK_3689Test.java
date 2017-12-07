@@ -23,7 +23,7 @@ public class F85_ZK_3689Test extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect();
-
+		sleep(2000);
 		Assert.assertEquals("", jq("$zkver").val());
 		Assert.assertEquals("", jq("$zkbuild").val());
 		Assert.assertTrue(

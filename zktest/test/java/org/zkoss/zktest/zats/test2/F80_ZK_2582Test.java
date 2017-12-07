@@ -21,7 +21,7 @@ public class F80_ZK_2582Test extends WebDriverTestCase {
         waitResponse();
         click(jq(".z-page"));
         waitResponse();
-        assertEquals("100 99 0 -100", getZKLog());
+        assertEquals("100\n99\n0\n-100", getZKLog());
     }
 
 }

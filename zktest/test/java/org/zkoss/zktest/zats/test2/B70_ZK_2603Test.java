@@ -24,6 +24,6 @@ public class B70_ZK_2603Test extends WebDriverTestCase {
 				"tree init tree1 tree init tree2 listbox init list1 listbox init list2 listbox " +
 				"init list1 listbox init list2 grid init grid1 grid init grid2 grid init grid1 grid " +
 				"init grid2 tree init tree1 tree init tree2";
-        assertEquals(log, getZKLog().trim());
+        assertEquals(log, getZKLog().trim().replaceAll("\n", " "));
     }
 }

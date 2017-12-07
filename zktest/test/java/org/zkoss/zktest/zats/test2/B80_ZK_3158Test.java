@@ -29,7 +29,7 @@ public class B80_ZK_3158Test extends WebDriverTestCase{
 		connect();
 		click(jq("$btn"));
 		waitResponse();
-		assertEquals("B80_ZK_3158_LifeCycle: afterShadowAttached B80_ZK_3158_LifeCycle: afterShadowDetached", getZKLog());
+		assertEquals("B80_ZK_3158_LifeCycle: afterShadowAttached\nB80_ZK_3158_LifeCycle: afterShadowDetached", getZKLog());
 		waitResponse();
 		click(jq("$btn1"));
 		waitResponse();

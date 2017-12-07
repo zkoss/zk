@@ -14,19 +14,16 @@ public class B85_ZK_3726Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		JQuery body = jq("body");
-
 		click(jq(".z-datebox-icon.z-icon-calendar:eq(0)"));
 		waitResponse();
-		click(body);
+		blur(jq(".z-datebox-icon.z-icon-calendar:eq(0)"));
 		waitResponse();
-
 		click(jq(".z-datebox-icon.z-icon-calendar:eq(1)"));
 		waitResponse();
-		click(body);
+		blur(jq(".z-datebox-icon.z-icon-calendar:eq(1)"));
 		waitResponse();
 
 		assertEquals("The week number of 2012/01/01 in the first datebox should be 1.\n" +
-				"The week number of 2012/01/01 in the second datebox should be 52.", "1 52", getZKLog());
+				"The week number of 2012/01/01 in the second datebox should be 52.", "1\n52", getZKLog());
 	}
 }

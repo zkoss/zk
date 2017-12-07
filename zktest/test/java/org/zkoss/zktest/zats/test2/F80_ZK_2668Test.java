@@ -27,14 +27,15 @@ public class F80_ZK_2668Test extends WebDriverTestCase {
 	@Test
 	public void test() throws IOException {
 		connect();
+		sleep(2000);
 		JQuery $timebox = jq("@timebox input");
 		JQuery $datebox = jq("@datebox input");
 		JQuery $textbox = jq("@textbox");
 		String oldDate = $datebox.val().substring(0, $datebox.val().indexOf(" "));
 		click($textbox);
-		waitResponse();
+		waitResponse(true);
 		click(jq(".ui-timepicker-list li:first"));
-		waitResponse();
+		waitResponse(true);
 		String newTime = $textbox.val();
 		int newTimeSpaceIndex = newTime.indexOf(" ");
 		assertEquals((newTime.substring(newTimeSpaceIndex, newTime.length()) + " " + newTime.substring(0, newTimeSpaceIndex) + ":00").trim(), $timebox.val());

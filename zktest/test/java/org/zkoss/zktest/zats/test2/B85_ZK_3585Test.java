@@ -29,7 +29,6 @@ public class B85_ZK_3585Test extends ZATSTestCase {
 		Textbox city = desktop.queryAll("textbox").get(2).as(Textbox.class);
 		String cityValue = city.getValue();
 		desktop.queryAll("button").get(0).click();
-
-		Assert.assertFalse("That should be changed.", cityValue.equals(city.getValue()));
+		Assert.assertNotEquals(cityValue, city.getValue());
 	}
 }

@@ -33,7 +33,7 @@ public class F80_ZK_2584Test extends WebDriverTestCase {
 
 		click(button.get(1));
 		waitResponse();
-		assertEquals("Foo0 Bar0 Foo0 Bar0", getZKLog());
+		assertEquals("Foo0 Bar0\nFoo0 Bar0", getZKLog());
 		closeZKLog();
 
 		click(button.get(2));

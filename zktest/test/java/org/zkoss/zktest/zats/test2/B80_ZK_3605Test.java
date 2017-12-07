@@ -41,7 +41,7 @@ public class B80_ZK_3605Test extends WebDriverTestCase {
 		waitResponse();
 
 		// should see the expected result, minus the trimmed new line chars
-		String expected = "onAnyWatch, A, p1 onAnyWatch, B, p2 onAnyWatch, C, p1";
+		String expected = "onAnyWatch, A, p1\nonAnyWatch, B, p2\nonAnyWatch, C, p1";
 		assertEquals("should contain text from all three listeners", expected, getZKLog().replaceAll(Pattern.quote("\n|\r\n|\r"), ""));
 		closeZKLog();
 		waitResponse();
@@ -78,7 +78,7 @@ public class B80_ZK_3605Test extends WebDriverTestCase {
 		waitResponse();
 
 		// should see the expected result, minus the trimmed new line chars
-		String expected = "onAnyWatch, A, p1 onAnyWatch, B, p2 onAnyWatch, C, p1";
+		String expected = "onAnyWatch, A, p1\nonAnyWatch, B, p2\nonAnyWatch, C, p1";
 		assertEquals("should contain text from all three listeners", expected, getZKLog().replaceAll(Pattern.quote("\n|\r\n|\r"), ""));
 		closeZKLog();
 		waitResponse();
