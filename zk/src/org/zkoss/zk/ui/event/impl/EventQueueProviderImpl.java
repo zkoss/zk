@@ -147,11 +147,11 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 			}
 			if (eq != null) {
 				Execution execution = Executions.getCurrent();
-				DesktopImpl desktopImpl = (DesktopImpl) execution.getDesktop();
+				DesktopImpl desktopImpl = (execution != null ? (DesktopImpl) execution.getDesktop() : null);
 
 				// if the runtime is not in servlet 3.0, we use the original way to close.
 				if (execution == null || WebApps.getCurrent().getServletContext().getMajorVersion() < 3
-						|| (desktopImpl.isServerPushEnabled() && desktopImpl.getServerPush() instanceof PollingServerPush)) {
+						|| (desktopImpl != null && desktopImpl.isServerPushEnabled() && desktopImpl.getServerPush() instanceof PollingServerPush)) {
 					eq.close();
 				} else {
 					// Bug ZK-2574
