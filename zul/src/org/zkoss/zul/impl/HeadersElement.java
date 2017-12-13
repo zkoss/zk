@@ -16,9 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ColSizeEvent;
 import org.zkoss.zul.event.ZulEvents;
@@ -75,22 +76,17 @@ public abstract class HeadersElement extends XulElement {
 			((MeshElement) this.getParent()).setSpan(false); //clear span
 			((MeshElement) this.getParent()).setSizedByContent(false); //clear sizedByContent
 			//ZK-3332: update single column width if widths was not given
-			List<String> wdlist = (List<String>) request.getData().get("widths");
+			boolean isMultiple = request.getData().containsKey("widths");
 			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
-			if (wdlist == null) {
-				final HeaderElement header = (HeaderElement) evt.getColumn();
-				header.setWidthByClient(evt.getWidth());
+			List<Component> headers = isMultiple ? getChildren() : Collections.singletonList(evt.getColumn());
+			for (int i = 0; i < headers.size(); i++) {
+				final HeaderElement header = (HeaderElement) headers.get(i);
+				final String width = isMultiple ? evt.getWidth(i) : evt.getWidth();
+				if (header.isVisible()) { // ZK-3768: Avoid clearing the original width
+					header.setWidthByClient(width);
+				}
 				if (header.getHflex() != null) {
 					header.setHflexByClient(null);
-				}
-			} else {
-				int j = 0;
-				for (Iterator it = getChildren().iterator(); it.hasNext(); ++j) {
-					final HeaderElement header = (HeaderElement) it.next();
-					header.setWidthByClient(evt.getWidth(j));
-					if (header.getHflex() != null) {
-						header.setHflexByClient(null);
-					}
 				}
 			}
 			Events.postEvent(evt);

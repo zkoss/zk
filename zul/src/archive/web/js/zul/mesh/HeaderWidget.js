@@ -38,10 +38,16 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		valign: function (v) {
 			this.adjustDOMAlign_('valign', v);
 		},
-		width: _zkf = function () {
+		height: function () {
 			this.updateMesh_();
-		},
-		height: _zkf
+		}
+	},
+	getWidth: function () {
+		return this.isVisible() ? this._width : 0;
+	},
+	setWidth: function (w) {
+		this._width = w;
+		this.updateMesh_();
 	},
 	// Bug ZK-2401
 	doFocus_: function (evt) {
@@ -64,11 +70,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
 			if (wgt) {
-				var minWds = wgt._calcMinWds();
 				// B70-ZK-2036: Clear min width cache before rerender.
 				wgt._minWd = null;
 				wgt.rerender();
-				this._syncMeshSize(minWds);
 			}
 		}
 	},
@@ -322,51 +326,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (mw = this.getMeshWidget())
 			mw._clearCachedSize();
 	},
-	_syncMeshSize: function (minWds) {
-		var mesh = this.getMeshWidget(),
-			parent = this.parent;
-
-		if (!mesh || !parent) return;
-
-		var hdtbl = mesh.eheadtbl,
-			hdtblWd = jq(hdtbl).width(),
-			hdcols = mesh.ehdfaker.childNodes,
-			updCols = [],
-			wd = 0;
-
-		if (!hdtblWd) return;
-
-		for (var w = parent.firstChild, i = 0; w; w = w.nextSibling, i++) {
-			if (w.isVisible()) {
-				var chdStyleWd = hdcols[i].style.width,
-					chdWd = w.getWidth();
-
-				if (chdWd == '-1') //sizable + visible false -> true
-					updCols.push({index: i, wgt: w});
-				else {
-					if (chdWd)
-						wd += zk.parseInt(chdWd);
-					else
-						wd += zk.parseInt(chdStyleWd);
-				}
-			}
-		}
-		var cnt = updCols.length,
-			updWd = hdtblWd - wd,
-			expandWd = 0;
-
-		if (cnt > 0) {
-			var eachWd = updWd > 0 ? (updWd / cnt) : -1;
-			for (var j = 0; j < cnt; j++) {
-				var minWd = minWds.wds[updCols[j].index];
-				if (eachWd > 0 && eachWd > minWd)
-					updCols[j].wgt._width = jq.px0(eachWd);
-				else
-					updCols[j].wgt._width = jq.px0(minWd);
-			}
-		}
-		zUtl.fireSized(mesh, -1);
-	},
 	//@Override to get width/height of MeshWidget
 	getParentSize_: function () {
 		//to be overridden
@@ -470,12 +429,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				}
 				w._width = wds[i] = origWd;
 			} else {
-				w._width = wds[i] = w.isVisible() ? (isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth)) : '-1';
+				wds[i] = isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth);
+				if (w.isVisible()) w._width = wds[i];
 			}
 			if (!isFixedWidth) {
-				hdcols[i].style.width = bdcols[i].style.width = w._width;
+				hdcols[i].style.width = bdcols[i].style.width = wds[i];
 				if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
-					ftcols[i].style.width = w._width;
+					ftcols[i].style.width = wds[i];
 			}
 
 			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
