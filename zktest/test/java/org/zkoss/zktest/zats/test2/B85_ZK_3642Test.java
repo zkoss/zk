@@ -25,6 +25,7 @@ public class B85_ZK_3642Test extends ZATSTestCase {
 		try {
 			connect();
 		} catch (Throwable e) {
+			e.printStackTrace();
 			Assert.fail("No exception allowed.");
 		}
 	}
