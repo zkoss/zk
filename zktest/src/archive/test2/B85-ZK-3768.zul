@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3768.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 12 18:57:57 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Test 1
+        1. hide a column ("Name")
+        2. resize another column ("Gender")
+        3. show the column again ("Name")
+        4. the column reappears with 150px as initially defined
+
+        Test 2
+        1. hide a column ("Name")
+        2. resize another column ("Gender")
+        3. click "invalidate"
+        3. show the column again ("Name")
+        4. the column reappears with 150px as initially defined
+    </label>
+    <listbox width="602px" id="lb1">
+        <listhead sizable="true" menupopup="auto">
+            <listheader id="h" label="Name" width="150px"/>
+            <listheader label="Gender" width="150px"/>
+            <listheader label="Age" width="150px"/>
+            <listheader label="Description" width="150px"/>
+        </listhead>
+        <listitem>
+            <listcell label="Jane"/>
+            <listcell label="FEMALE"/>
+            <listcell label="32"/>
+            <listcell label="A remarkable artist."/>
+        </listitem>
+        <listitem>
+            <listcell label="Henry"/>
+            <listcell label="MALE"/>
+            <listcell label="29"/>
+            <listcell label="A graduate."/>
+        </listitem>
+        <listfoot>
+            <listfooter label="footer1"/>
+            <listfooter label="footer2"/>
+            <listfooter label="footer3"/>
+            <listfooter label="footer4"/>
+        </listfoot>
+    </listbox>
+    <button label="invalidate" onClick="lb1.invalidate()"/>
+    <button label="toggle display" onClick="h.visible = !h.visible"/>
+    <button label="resize 500px" onClick='h.width = "500px"'/>
+    <button label="resize 0px" onClick='h.width = "0px"'/>
+</zk>

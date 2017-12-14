@@ -16,6 +16,7 @@ ZK 8.5.1
   ZK-3753: XSD defines "var" and "varStatus" are required 
   ZK-3726: Datebox displays the week number incorrectly
   ZK-3556: @Transient is ignored in FormProxyHandler
+  ZK-3768: resize while columns are hidden
 
 * Upgrade Notes
 

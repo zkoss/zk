@@ -111,7 +111,6 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		var owner = this.parent,
 			widths = evt.widths,
 			headWidth = 0;
-		evt.column._width = evt.width;
 		if (widths) {
 			for (var i = 0; i < widths.length; i++)
 				headWidth += parseInt(widths[i]);
