@@ -6,6 +6,7 @@ ZK 8.5.1
   ZK-3797: Zhtml support html5 tags
   ZK-3819: lookup license file in context path
   ZK-3762: Enhance ContextClassLoaderFactory
+  ZK-3806: ValidationMessagesImpl's getters return empty array instead of null
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes

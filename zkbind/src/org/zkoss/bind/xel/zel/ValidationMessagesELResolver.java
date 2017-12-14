@@ -168,7 +168,7 @@ public class ValidationMessagesELResolver extends ELResolver {
 			} else if (property instanceof Number) { //case vmsgs.texts[index]
 				context.setPropertyResolved(true);
 				msgs = _vms.getMessages();
-				return msgs == null ? null : msgs[((Number) property).intValue()];
+				return msgs.length == 0 ? null : msgs[((Number) property).intValue()];
 			}
 			return null;
 		}
@@ -192,7 +192,7 @@ public class ValidationMessagesELResolver extends ELResolver {
 			} else if (property instanceof Number) { //vmsgs.texts[tb1][index]
 				context.setPropertyResolved(true);
 				msgs = _vms.getMessages(_comp);
-				return msgs == null ? null : msgs[((Number) property).intValue()];
+				return msgs.length == 0 ? null : msgs[((Number) property).intValue()];
 			}
 			return null;
 		}
