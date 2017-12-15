@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3762.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 15 17:01:00 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <zscript><![CDATA[
+    try {
+        org.zkoss.lang.Classes.newInstanceByThread("test.3762");
+    } catch (Exception expected) {
+        Clients.log("Expected: " + expected.toString());
+    }
+    ]]></zscript>
+    <label>
+        Click the button, you should see label "done".
+    </label>
+    <div>
+    Loading class dynamically: <label id="lb3762" /><n:br />
+    Loading org.zkoss.util.resource.LabelLoader.class (zk.xml): <label id="lbLabels" />
+    </div>
+    <button id="btn" label="click">
+        <attribute name="onClick"><![CDATA[
+            lb3762.setValue(desktop.getAttribute("3762-test"));
+            lbLabels.setValue(org.zkoss.lang.Library.getProperty("3762-labels"));
+        ]]></attribute>
+    </button>
+</zk>

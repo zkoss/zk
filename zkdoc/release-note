@@ -5,6 +5,7 @@ ZK 8.5.1
   ZK-3801: Add support for new components ZK 8/8.5 in zul.xsd
   ZK-3797: Zhtml support html5 tags
   ZK-3819: lookup license file in context path
+  ZK-3762: Enhance ContextClassLoaderFactory
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes
@@ -21,6 +22,9 @@ ZK 8.5.1
   ZK-3821: timeout message not localized
 
 * Upgrade Notes
+  + The ContextClassLoaderFactory interface adds a new method:
+    ClassLoader getContextClassLoaderForName(String) that breaks compatibility.
+    If you have a customized class loader factory, please implement this new method.
 
    --------
 ZK 8.5.0

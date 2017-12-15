@@ -34,6 +34,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.CollectionsX;
@@ -192,6 +193,7 @@ public class WebManager {
 		}
 
 		//after zk.xml is loaded since it depends on the configuration
+		Classes.configureContextClassLoader();
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 		_cwr.setCompress(new String[] { "js", "css", "html", "xml" });
 		String s = Library.getProperty("org.zkoss.web.util.resource.dir");
