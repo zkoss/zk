@@ -19,6 +19,7 @@ ZK 8.5.1
   ZK-3556: @Transient is ignored in FormProxyHandler
   ZK-3768: resize while columns are hidden
   ZK-3821: timeout message not localized
+  ZK-3718: vlayout sizing issue with vflex child - IE9-11
 
 * Upgrade Notes
 
