@@ -212,7 +212,7 @@ public class Radiogroup extends XulElement {
 	/** Returns the selected radio button.
 	 */
 	public Radio getSelectedItem() {
-		return _jsel >= 0 ? getItemAtIndex(_jsel) : null;
+		return _jsel >= 0 && _jsel < this.getItemCount() ? getItemAtIndex(_jsel) : null;
 	}
 
 	/**  Deselects all of the currently selected radio buttons and selects
@@ -272,6 +272,49 @@ public class Radiogroup extends XulElement {
 		if (!Objects.equals(_name, name)) {
 			_name = name;
 			smartUpdate("name", _name);
+		}
+	}
+
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		final List<Radio> items = new ArrayList<Radio>();
+		if (child instanceof Radio) {
+			items.add((Radio) child);
+		} else {
+			getItems0(child, items);
+		}
+		boolean shouldFix = false;
+		for (Radio radio : items) {
+			if (_jsel >= 0 && radio.isSelected()) {
+				radio.setSelected(false); //it will call fixSelectedIndex
+				shouldFix = false;
+			} else {
+				shouldFix = true;
+			}
+		}
+		if (shouldFix) {
+			fixSelectedIndex();
+		}
+	}
+
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		final List<Radio> items = new ArrayList<Radio>();
+		if (child instanceof Radio) {
+			items.add((Radio) child);
+		} else {
+			getItems0(child, items);
+		}
+		boolean shouldFix = false;
+		for (Radio radio : items) {
+			if (radio.isSelected()) {
+				_jsel = -1;
+			} else if (_jsel > 0) { //excluding 0
+				shouldFix = true;
+			}
+		}
+		if (shouldFix) {
+			fixSelectedIndex();
 		}
 	}
 
