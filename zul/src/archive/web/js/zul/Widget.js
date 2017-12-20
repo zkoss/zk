@@ -112,7 +112,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _parseParamFunc(event, funcBody) {
 		if (funcBody.indexOf('(') != -1 && funcBody.indexOf(')') != -1) {
-			var func = new Function('event', 'return ' + funcBody + ';');
+			var func = zk.newFunction('event', 'return ' + funcBody + ';');
 			return func(event);
 		} else {
 			return zk.parseInt(funcBody);

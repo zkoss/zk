@@ -1128,7 +1128,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	obsolete: function (dtid, msg) {
 		if (msg.startsWith('script:'))
-			return $eval(msg.substring(7));
+			return zk.eval(msg.substring(7));
 
 		// ZK-2397: prevent from showing reload dialog again while browser is reloading
 		if (zk._isReloadingInObsolete)

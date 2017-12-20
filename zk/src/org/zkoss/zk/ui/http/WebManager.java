@@ -59,6 +59,7 @@ import org.zkoss.zk.ui.impl.Utils;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
@@ -266,6 +267,12 @@ public class WebManager {
 					log.error("", ex);
 				}
 			}
+		}
+
+		// handle content security policy
+		String cspEnabledString = Library.getProperty("org.zkoss.web.csp.enabled");
+		if ("true".equals(cspEnabledString)) {
+			_wapp.setAttribute(Attributes.CSP_NONCE, _wapp.getBuild());
 		}
 
 		Registry.sign(_wapp, Registry.class, WebManager.class, WebAppFactoryImpl.class);

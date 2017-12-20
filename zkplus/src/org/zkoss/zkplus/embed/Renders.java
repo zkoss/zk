@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.I18Ns;
 import org.zkoss.zk.ui.http.WebManager;
@@ -194,7 +195,9 @@ public class Renders {
 			}
 
 			final Desktop desktop = _exec.getDesktop();
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">zkpb('");
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(org.zkoss.zk.ui.sys.Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(org.zkoss.zk.ui.sys.Attributes.CSP_NONCE) + "\" " : "";
+			out.write("<script class=\"z-runonce\" " + nonce + "type=\"text/javascript\">zkpb('");
 			out.write(page.getUuid());
 			out.write("','");
 			out.write(desktop.getId());

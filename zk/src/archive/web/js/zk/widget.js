@@ -4050,7 +4050,7 @@ wgt.setListeners({
 		}
 		if (fn) {
 			inf[evt] = bklsns[evt]
-				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
+				= typeof fn != 'function' ? zk.newFunction('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}
 	},
@@ -4066,7 +4066,7 @@ wgt.setListeners({
 			inf = {};
 		if (fn) {
 			inf[evt] = bklsns[evt]
-				= typeof fn != 'function' ? new Function('var event=arguments[0];' + fn) : fn;
+				= typeof fn != 'function' ? zk.newFunction('var event=arguments[0];' + fn) : fn;
 			this.listen(inf);
 		}
 	},
@@ -5924,7 +5924,8 @@ function zkopt(opts) {
 			break;
 		case 'eu': zAu.setErrorURI(val); break;
 		case 'ppos': zk.progPos = val; break;
-		case 'eup': zAu.setPushErrorURI(val);
+		case 'eup': zAu.setPushErrorURI(val); break;
+		case 'csp': zk.csp = val; break;
 		}
 	}
 }

@@ -67,6 +67,8 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -296,6 +298,34 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (s != null)
 			_hdaft = s;
 		_hdres = config.getResponseHeaders();
+		//handle csp
+		WebApp webApp = WebApps.getCurrent();
+		Collection<Object[]> newHdres = new LinkedList<Object[]>();
+		if (webApp.hasAttribute(Attributes.CSP_NONCE)) {
+			int i = 0;
+			for (Object[] header: _hdres) {
+				String name = (String) header[0];
+				if (name != null && name.contains("Content-Security-Policy")) {
+					String value = (String) header[1];
+					String nonceInfo = "script-src 'nonce-" + webApp.getAttribute(Attributes.CSP_NONCE) + "' ";
+					if (value != null) {
+						if (value.contains("script-src")) {
+							if (!value.contains("nonce"))
+								value = value.replace("script-src", nonceInfo);
+						} else {
+							value += nonceInfo;
+						}
+						header[1] = value;
+					}
+					break;
+				}
+				newHdres.add(header);
+			}
+
+		}
+		if (!newHdres.isEmpty()) {
+			_hdres = newHdres;
+		}
 		if (_hdres.isEmpty())
 			_hdres = null;
 	}
