@@ -13,7 +13,7 @@ package org.zkoss.lang;
 
 /**
  * An interface to provide a pluggable context class loader, which is used for
- * {@link Classes#getContextClassLoader(Class)}
+ * {@link Classes#getContextClassLoader(Class)} and {@link Classes#getContextClassLoaderForName(String)}
  * @author jumperchen
  * @since 8.0.2
  */
@@ -24,4 +24,11 @@ public interface ContextClassLoaderFactory {
 	 * @param reference the reference class where it is invoked from.
 	 */
 	public ClassLoader getContextClassLoader(Class<?> reference);
+
+	/**
+	 * Returns the context ClassLoader for a class name.
+	 * @param className the reference class name where it is invoked from.
+	 * @since 8.5.1
+	 */
+	public ClassLoader getContextClassLoaderForName(String className);
 }

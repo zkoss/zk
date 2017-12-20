@@ -48,7 +48,9 @@ public class Classes {
 	private static final Logger log = LoggerFactory.getLogger(Classes.class);
 
 	private static final Object NOT_FOUND = new Object();
-	
+
+	private static String _contextClassLoaderName = null;
+
 	/**
 	 * Instantiates a new instance of the specified class with
 	 * the specified arguments and argument types.
@@ -263,13 +265,16 @@ public class Classes {
 		if (cls != null)
 			return cls;
 
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		// ZK-3762: Use the default class loader first if the property is not ready
+		ClassLoader cl = _contextClassLoaderName == null
+				? Thread.currentThread().getContextClassLoader()
+				: getContextClassLoaderForName(clsName);
 		if (cl != null)
 			try {
 				return Class.forName(clsName, true, cl);
 			} catch (ClassNotFoundException ex) { //ignore and try the other
 			}
-		return Classes.class.forName(clsName);
+		return Class.forName(clsName);
 	}
 
 	/** Returns whether the specified class exists for the current thread's
@@ -1508,10 +1513,8 @@ public class Classes {
 		static {
 			ContextClassLoaderFactory factory = null;
 			try {
-				String property = Library
-						.getProperty("org.zkoss.lang.contextClassLoader.class");
-				if (property != null)
-					factory = (ContextClassLoaderFactory) newInstanceByThread(property);
+				if (!Strings.isEmpty(_contextClassLoaderName))
+					factory = (ContextClassLoaderFactory) newInstanceByThread(_contextClassLoaderName);
 				else factory = new ThreadBasedContextClassLoaderFactory();
 			} catch (Exception e) {
 				log.warn("", e);
@@ -1529,6 +1532,10 @@ public class Classes {
 		public ClassLoader getContextClassLoader(Class<?> reference) {
 			return Thread.currentThread().getContextClassLoader();
 		}
+
+		public ClassLoader getContextClassLoaderForName(String className) {
+			return Thread.currentThread().getContextClassLoader();
+		}
 	}
 
 	/**
@@ -1543,5 +1550,32 @@ public class Classes {
 	 */
 	public static ClassLoader getContextClassLoader(Class<?> reference) {
 		return LazyInitializationHolder.instance.getContextClassLoader(reference);
+	}
+
+	/**
+	 * Returns the context ClassLoader for the given class name
+	 * <p>Default: return from the current thread.
+	 * <br/>
+	 * Or specify the library property of <code>org.zkoss.lang.contextClassLoader.class</code>
+	 * in zk.xml to provide a customized class loader.
+	 * </p>
+	 * @param className the class name to be loaded by the returned class loader
+	 * @since 8.5.1
+	 */
+	public static ClassLoader getContextClassLoaderForName(String className) {
+		// Avoid loading "org.zkoss.lang.contextClassLoader.class" looping
+		if (LazyInitializationHolder.instance == null)
+			return Thread.currentThread().getContextClassLoader();
+		return LazyInitializationHolder.instance.getContextClassLoaderForName(className);
+	}
+
+	/**
+	 * Sets the customized context ClassLoader name by the library property
+	 * of <code>org.zkoss.lang.contextClassLoader.class</code>.
+	 * It is intended to be called by ZK internally.
+	 * @since 8.5.1
+	 */
+	public static void configureContextClassLoader() {
+		_contextClassLoaderName = Library.getProperty("org.zkoss.lang.contextClassLoader.class", "");
 	}
 }
