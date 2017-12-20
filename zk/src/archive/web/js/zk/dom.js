@@ -1481,6 +1481,35 @@ jq(el).zk.center(); //same as 'center'
 		return this.jq[0].offsetLeft;
 	},
 
+	/** Returns the offset width. The value will not be rounded.
+	 * @return double the offset width
+	 * @since 8.5.1
+	 */
+	offsetWidthDoubleValue: function () {
+		return this.jq[0].getBoundingClientRect().width;
+	},
+	/** Returns the offset height. The value will not be rounded.
+	 * @return double the offset height
+	 * @since 8.5.1
+	 */
+	offsetHeightDoubleValue: function () {
+		return this.jq[0].getBoundingClientRect().height;
+	},
+	/** Returns the offset top. The value will not be rounded.
+	 * @return double the offset top
+	 * @since 8.5.1
+	 */
+	offsetTopDoubleValue: function () {
+		return this.jq[0].getBoundingClientRect().top;
+	},
+	/** Returns the offset left. The value will not be rounded.
+	 * @return double the offset left
+	 * @since 8.5.1
+	 */
+	offsetLeftDoubleValue: function () {
+		return this.jq[0].getBoundingClientRect().left;
+	},
+
 	/** Returns the X/Y coordinates of the first matched element relative to the viewport.
 	 * @return Offset the coordinates
 	 * @see #cmOffset
