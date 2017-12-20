@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3821.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 18 12:34:22 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<?import org.zkoss.util.Locales?>
+<zk>
+    <zscript><![CDATA[
+        // Set timeout popup
+        WebApps.getCurrent().getConfiguration().setTimeoutURI("ajax", null, 1);
+        session.setMaxInactiveInterval(1);
+    ]]></zscript>
+    <label multiline="true">
+        1. Wait a second
+        2. Click the button
+        3. The session timeout message should be localized
+    </label>
+    <label onCreate="self.setValue(Locales.getCurrent().toString());"/>
+    <button label="click after 1 second" onClick=""/>
+</zk>

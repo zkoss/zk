@@ -466,9 +466,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//AU
 		if (sess == null) {
-			final WebApp wapp = WebManager.getWebAppIfAny(ctx);
-			denoteSessionTimeout(wapp, request, response, _compress);
-			return;
+			final Object old = Charsets.setup(null, request, response, "UTF-8");
+			try {
+				final WebApp wapp = WebManager.getWebAppIfAny(ctx);
+				denoteSessionTimeout(wapp, request, response, _compress);
+				return;
+			} finally {
+				Charsets.cleanup(request, old);
+			}
 		}
 
 		// Feature 3285074 add no-cache for security risk.
