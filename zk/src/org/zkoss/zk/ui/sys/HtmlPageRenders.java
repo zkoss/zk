@@ -201,8 +201,11 @@ public class HtmlPageRenders {
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256);
-		if (!directJS)
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac(");
+		if (!directJS) {
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(Attributes.CSP_NONCE) + "\" " : "";
+			sb.append("<script class=\"z-runonce\" " + nonce + "type=\"text/javascript\">\nzkac(");
+		}
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
@@ -309,7 +312,9 @@ public class HtmlPageRenders {
 				groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({");
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(Attributes.CSP_NONCE) + "\" " : "";
+			sb.append("<script class=\"z-runonce\" " + nonce + "type=\"text/javascript\">\nzkopt({");
 
 			if (keepDesktop)
 				sb.append("kd:1,");
@@ -605,7 +610,9 @@ public class HtmlPageRenders {
 			out = new StringWriter();
 		} else if (divRequired) {
 			//generate JS second
-			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">\n");
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(Attributes.CSP_NONCE) + "\" " : "";
+			out.write("\n<script class=\"z-runonce\" " + nonce + "type=\"text/javascript\">\n");
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
@@ -952,11 +959,11 @@ public class HtmlPageRenders {
 				outDivTemplateBegin(out, comp.getUuid());
 				outDivTemplateEnd(comp.getPage(), out);
 			}
-
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\n");
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(Attributes.CSP_NONCE) + "\" " : "";
+			out.write("<script class=\"z-runonce\" " + nonce + "type=\"text/javascript\">\n");
 
 			// zkdh should run before zkmx()
-			WebApp webApp = WebApps.getCurrent();
 			Configuration configuration = webApp.getConfiguration();
 
 			if (exec.getAttribute(ATTR_ZK_DATAHANDLER_SCRIPTS_GENERATED) == null) {
@@ -1077,7 +1084,9 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkdt('").append(desktop.getId())
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(Attributes.CSP_NONCE) + "\" " : "";
+			sb.append("<script class=\"z-runonce\" " + nonce + "type=\"text/javascript\">\nzkdt('").append(desktop.getId())
 					.append("','").append(getContextURI(exec)).append("','").append(desktop.getUpdateURI(null))
 					.append("','").append(desktop.getRequestPath()).append("');").append(outSpecialJS(desktop))
 					.append("\n</script>\n");
@@ -1206,7 +1215,9 @@ public class HtmlPageRenders {
 		int timeout = config.getInitCrashTimeout();
 		final StringBuffer sb = new StringBuffer(512);
 		if (script != null || timeout >= 0) {
-			sb.append("<script type=\"text/javascript\">\n");
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(Attributes.CSP_NONCE) + "\" " : "";
+			sb.append("<script type=\"text/javascript\" " + nonce + ">\n");
 		}
 		if (timeout >= 0) {
 			sb.append("window.zkInitCrashTimeout = " + timeout + ";\n");

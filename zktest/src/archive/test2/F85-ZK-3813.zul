@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?header name="Content-Security-Policy-Report-Only"	value="report-uri ''; default-src 'none';frame-src 'self';script-src 'self';connect-src 'self';img-src 'self';style-src 'self' 'unsafe-inline'; font-src 'self' data:"?>
+<!--
+F85-ZK-3813.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Dec 8 11:52:15 CST 2017, Created by jameschu
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+		Set the following library property to enable csp support, and you should not see any javascript console error in this page.
+		<library-property>
+			<name>org.zkoss.web.csp.enabled</name>
+			<value>true</value>
+		</library-property>
+	]]></label>
+</zk>

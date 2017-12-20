@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.WidgetDefinition;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.URIInfo;
 
@@ -699,7 +700,10 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			outErrReloads(reqctx, config, sb, infs);
 			sb.append("},");
 		}
-
+		//handle csp
+		if (wapp.hasAttribute(Attributes.CSP_NONCE)) {
+			sb.append("csp:").append(wapp.getAttribute(Attributes.CSP_NONCE)).append(',');
+		}
 		removeLast(sb, ',');
 
 		sb.append("});");

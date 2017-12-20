@@ -163,7 +163,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 				t = s.substring(k + 2, l); //EL
 
 				try {
-					var fn = new Function('var _=arguments[0];return ' + t);
+					var fn = zk.newFunction('var _=arguments[0];return ' + t);
 					t = wgt ? fn.call(wgt, args) : fn(args);
 				} catch (e) {
 					throw 'Failed to evaluate ' + t;

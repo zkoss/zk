@@ -65,7 +65,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function defGet(nm) {
-		return new Function('return this.' + nm + ';');
+		return zk.newFunction('return this.' + nm + ';');
 	}
 	function defSet00(nm) {
 		return function (v) {
@@ -1913,4 +1913,15 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 		if (_erbx) _erbx.destroy();
 	}
 });
+
+//for csp issue
+(function () {
+	zk.eval = function (codeStr) {
+		eval(codeStr);
+	};
+	zk.newFunction = function () {
+        return Function.apply(null, arguments);
+	};
+})();
+
 })();

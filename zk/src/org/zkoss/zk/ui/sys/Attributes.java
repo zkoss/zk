@@ -204,4 +204,9 @@ public class Attributes {
 	 * @since 5.0.8
 	 */
 	public static final String ZK_SESSION = "javax.zkoss.zk.ui.Session";
+
+	/** An String attribute used to store inline script nonce in content security policy.
+	 * @since 8.5.1
+	 */
+	public static final String CSP_NONCE = "org.zkoss.web.csp.nonce";
 }

@@ -338,7 +338,7 @@ zWatch = (function () {
 		if (name == 'onSize' || name == 'onShow' || name == 'onHide') {
 			jq.zsync(org);
 			if (name == 'onSize')
-                setTimeout('zk.doAfterResize()', 20); // invoked after mounted
+                setTimeout(function () {zk.doAfterResize();}, 20); // invoked after mounted
 		}
 		if (name == 'onResponse')
 			jq.doSyncScroll();

@@ -23,7 +23,10 @@ import org.zkoss.lang.Strings;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
@@ -54,8 +57,10 @@ public class TagRenderContext {
 	 */
 	public String complete() {
 		if (_jsout.length() > 0) {
+			WebApp webApp = WebApps.getCurrent();
+			String nonce = webApp.hasAttribute(Attributes.CSP_NONCE) ? "nonce=\"" + webApp.getAttribute(Attributes.CSP_NONCE) + "\" " : "";
 			_jsout.insert(0,
-					"<script class=\"z-runonce\" type=\"text/javascript\">\nzkmb(true);try{");
+					"<script class=\"z-runonce\" " + nonce + "type=\"text/javascript\">\nzkmb(true);try{");
 			_jsout.append("\n}finally{zkme();}</script>");
 			final String txt = _jsout.toString();
 			_jsout.setLength(0); // reset

@@ -222,7 +222,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return String the unformater function
 		 */
 		unformater: function (unf) {
-			eval('Timebox._unformater = ' + unf);
+			zk.eval('Timebox._unformater = ' + unf);
 		},
 		localizedSymbols: [
 			function (val) {
