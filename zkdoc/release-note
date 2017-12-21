@@ -21,6 +21,7 @@ ZK 8.5.1
   ZK-3768: resize while columns are hidden
   ZK-3821: timeout message not localized
   ZK-3718: vlayout sizing issue with vflex child - IE9-11
+  ZK-3347: Avoid memory buffering when building hash codes
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:

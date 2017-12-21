@@ -11,12 +11,8 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
@@ -136,33 +132,16 @@ public class Registry {
 
 	private synchronized String loadValue(Class cls) {
 		InputStream is = null;
-		Reader in = null;
 		try {
 			URL location = cls.getResource(
 					"/" + cls.getName().replace(".", "/") + toString(new byte[] { 46, 99, 108, 97, 115, 115 }));
 			is = location.openStream();
-			in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-			StringWriter sw = new StringWriter();
-
-			char[] buf = new char[1024];
-			int len;
-			while ((len = in.read(buf, 0, buf.length)) >= 0)
-				sw.write(buf, 0, len);
-			buf = null;
-
-			StringBuffer sb = sw.getBuffer();
-			return DigestUtilsHelper.md5Hex(sb.toString());
+			return DigestUtilsHelper.md5Hex(is);
 		} catch (Exception e) {
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
-				} catch (IOException e) {
-				}
-			}
-			if (in != null) {
-				try {
-					in.close();
 				} catch (IOException e) {
 				}
 			}

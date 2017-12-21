@@ -6,10 +6,13 @@ if (args == null || args.length != 1) {
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import org.apache.commons.codec.digest.DigestUtils;
 import java.io.*;
 
 String md5Hex(String data) {
+    return encodeHexString(md5(data));
+}
+
+String md5Hex(InputStream data) throws IOException {
     return encodeHexString(md5(data));
 }
 
@@ -17,15 +20,18 @@ byte[] md5(String data) {
     return md5(getBytesUtf8(data));
 }
 
-byte[] getBytesUtf8(String string) {
-    return getBytes(string, Charset.forName("UTF-8"));
+byte[] md5(InputStream data) throws IOException {
+    MessageDigest md = getMd5Digest();
+    final byte[] buf = new byte[1024 * 4];
+    for (int v; (v = data.read(buf)) >= 0;) {
+        if (v > 0)
+            md.update(buf, 0, v);
+    }
+    return md.digest();
 }
 
-Charset forName(String charsetName) {
-    Charset cs = lookup(charsetName);
-    if (cs != null)
-        return cs;
-    throw new IllegalArgumentException(charsetName);
+byte[] getBytesUtf8(String string) {
+    return getBytes(string, Charset.forName("UTF-8"));
 }
 
 byte[] getBytes(String string, Charset charset) {
@@ -77,21 +83,20 @@ char[] encodeHex(byte[] data, char[] toDigits) {
 }
 
 if (args[0].endsWith(".class")) {
-	InputStream is = new FileInputStream(args[0]);
-	Reader in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-	StringWriter sw = new StringWriter();
-
-	char[] buf = new char[1024];
-	int len;
-	while ((len = in.read(buf, 0, buf.length)) >= 0)
-		sw.write(buf, 0, len);
-	buf = null;
-	in.close();
-	is.close();
-
-	StringBuffer sb = sw.getBuffer();
-	System.out.println(md5Hex(sb.toString()));
+    InputStream is = null;
+    try {
+        is = new FileInputStream(args[0]);
+        System.out.println(md5Hex(is));
+    } catch (Exception e) {
+    } finally {
+        if (is != null) {
+            try {
+                is.close();
+            } catch (IOException e) {
+            }
+        }
+    }
 } else {
-	 System.out.println(md5Hex(args[0]));
+    System.out.println(md5Hex(args[0]));
 }
 
