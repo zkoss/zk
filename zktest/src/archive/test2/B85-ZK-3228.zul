@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3228.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 21 15:43:52 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <div>
+        <label multiline="true">
+            1. click the first button to fill contents
+            2. Two initialized ckeditors are expected
+            3. click the second button to verify ck1/ck2 status. "CK1=true,CK2=true" means OK.
+        </label>
+        <button label="click me to add fill the panel/div content" id="btn"/>
+        <button label="check ck1/ck2 status">
+            <attribute w:name="onClick"><![CDATA[
+            var ck1 = zk.$('$ck1'),
+                ck2 = zk.$('$ck2'),
+                ck1cnt = ck1 && ck1.$n('cnt'),
+                ck2cnt = ck2 && ck2.$n('cnt'),
+                ck1ok = ck1cnt ? jq('#cke_' + ck1cnt.id).size() > 0 : false,
+                ck2ok = ck2cnt ? jq('#cke_' + ck2cnt.id).size() > 0 : false;
+            zk.log("CK1=" + ck1ok + ",CK2=" + ck2ok);
+            ]]></attribute>
+        </button>
+    </div>
+    ckeditor in panel below not working
+    <panel fulfill="btn.onClick">
+        <panelchildren>
+            <ckeditor id="ck1" width="600px">
+                <attribute name="value"><![CDATA[<b>hello</b>]]></attribute>
+            </ckeditor>
+        </panelchildren>
+    </panel>
+    ckeditor in div below working
+    <div fulfill="btn.onClick">
+        <div>
+            <ckeditor id="ck2" width="600px">
+                <attribute name="value"><![CDATA[<i>world</i>]]></attribute>
+            </ckeditor>
+        </div>
+    </div>
+</zk>
