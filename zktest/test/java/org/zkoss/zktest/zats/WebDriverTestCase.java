@@ -491,9 +491,10 @@ public abstract class WebDriverTestCase {
 	 */
 	protected Widget selectComboitem(Widget combobox, int index) {
 		click(combobox.$n("btn"));
-		waitResponse();
+		waitResponse(true);
 		Element element = jq(combobox.$n("pp")).find(".z-comboitem").get(index);
 		click(element);
+		waitResponse(true);
 		return widget(element);
 	}
 }

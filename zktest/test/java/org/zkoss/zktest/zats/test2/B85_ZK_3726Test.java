@@ -16,11 +16,11 @@ public class B85_ZK_3726Test extends WebDriverTestCase {
 		connect();
 		click(jq(".z-datebox-icon.z-icon-calendar:eq(0)"));
 		waitResponse();
-		blur(jq(".z-datebox-icon.z-icon-calendar:eq(0)"));
+		click(jq("body"));
 		waitResponse();
 		click(jq(".z-datebox-icon.z-icon-calendar:eq(1)"));
 		waitResponse();
-		blur(jq(".z-datebox-icon.z-icon-calendar:eq(1)"));
+		click(jq("body"));
 		waitResponse();
 
 		assertEquals("The week number of 2012/01/01 in the first datebox should be 1.\n" +

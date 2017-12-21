@@ -27,7 +27,7 @@ public class B80_ZK_3326Test extends WebDriverTestCase{
     public void test () {
         connect();
         click(jq(".z-bandbox-button"));
-        waitResponse();
+        waitResponse(true);
         click(jq("@listitem"));
         waitResponse();
         click(jq("@bandpopup"));
