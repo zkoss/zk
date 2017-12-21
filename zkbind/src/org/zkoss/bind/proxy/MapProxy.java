@@ -253,6 +253,7 @@ public class MapProxy<K, V> implements Map<K, V>, Proxy, FormProxyObject, Serial
 		private Set createProxy(boolean isEntry) {
 			Set proxy = null;
 			ProxyFactory factory = new ProxyFactory();
+			factory.setUseWriteReplace(false);
 			factory.setSuperclass(AbstractSet.class);
 			factory.createClass();
 			try {

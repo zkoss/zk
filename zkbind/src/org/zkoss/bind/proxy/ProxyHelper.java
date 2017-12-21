@@ -108,6 +108,7 @@ public class ProxyHelper {
 			return origin;
 
 		ProxyFactory factory = new ProxyFactory();
+		factory.setUseWriteReplace(false);
 		if (origin instanceof List) {
 			return (T) new ListProxy((List) origin, annotations);
 		} else if (origin instanceof Set) {
@@ -218,6 +219,7 @@ public class ProxyHelper {
 			return origin;
 		origin = getOriginObject(origin);
 		ProxyFactory factory = new ProxyFactory();
+		factory.setUseWriteReplace(false);
 		factory.setFilter(FormProxyHandler.FORM_METHOD_FILTER);
 		if (origin instanceof FormProxyObject)
 			type = ((FormProxyObject) origin).getOriginObject().getClass();
