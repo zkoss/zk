@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3657.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 21 17:13:23 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <style>
+    .outer {
+        background-color: Crimson;
+        padding: 20px;
+    }
+    .inner {
+        background-color: DeepSkyBlue;
+    }
+    </style>
+
+    <div id="outer1" sclass="outer" hflex="min" vflex="min">
+        <div id="inner1" sclass="inner" width="400px" height="60px">
+            sized correctly - outer is 440px
+        </div>
+    </div>
+    <separator/>
+    <div id="outer2" sclass="outer" hflex="min" vflex="min">
+        <div id="inner2" sclass="inner" width="400px" height="60px" renderdefer="5000">
+            sized incorrectly - outer is 400px - missing the paddings
+        </div>
+    </div>
+    <separator/>
+    <div id="outer3" sclass="outer" hflex="min" vflex="min">
+        <div id="inner3" sclass="inner" width="400px" height="60px" renderdefer="5000" w:onBind="zUtl.fireSized(this.parent)">
+            workaround calling fireSized on parent
+        </div>
+    </div>
+
+    <label multiline="true">
+        The width of three outer div elements that hflex="min" should be 440px (400px + 20px padding * 2).
+        The height of three outer div elements that vflex="min" should be 100px (60px + 20px padding * 2).
+    </label>
+</zk>
