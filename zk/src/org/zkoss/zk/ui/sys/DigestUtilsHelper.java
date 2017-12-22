@@ -11,6 +11,8 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -26,11 +28,20 @@ import java.security.NoSuchAlgorithmException;
 public class DigestUtilsHelper {
 
 	/**
-	 * Calculates the MD5 digest and returns the value as a 32 charactor hex string.
+	 * Calculates the MD5 digest and returns the value as a 32 character hex string.
 	 * @param data data to digest
 	 * @return MD5 digest as a hex string
 	 */
 	public static String md5Hex(String data) {
+		return encodeHexString(md5(data));
+	}
+
+	/**
+	 * Calculates the MD5 digest and returns the value as a 32 character hex string.
+	 * @param data data stream to digest (will not be closed)
+	 * @return MD5 digest as a hex string
+	 */
+	public static String md5Hex(InputStream data) throws IOException {
 		return encodeHexString(md5(data));
 	}
 
@@ -50,6 +61,21 @@ public class DigestUtilsHelper {
      */
 	public static byte[] md5(byte[] data) {
 		return getMd5Digest().digest(data);
+	}
+
+	/**
+	 * Calculates the MD5 digest and returns the value as a 16 element <code>byte[]</code>.
+	 * @param data data stream to digest (will not be closed)
+	 * @return MD5 digest
+	 */
+	public static byte[] md5(InputStream data) throws IOException {
+		MessageDigest md = getMd5Digest();
+		final byte[] buf = new byte[1024 * 4];
+		for (int v; (v = data.read(buf)) >= 0;) {
+			if (v > 0)
+				md.update(buf, 0, v);
+		}
+		return md.digest();
 	}
 
 	/**
