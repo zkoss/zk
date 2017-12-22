@@ -14,6 +14,7 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -32,6 +33,11 @@ import org.zkoss.zk.ui.Component;
 public class ValidationMessagesImpl implements ValidationMessages, Collection<Object>, Serializable {
 	//this class implement collection to support empty expression in EL
 	private static final long serialVersionUID = 1L;
+
+	// null objects
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
+	private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+	private static final Component[] EMPTY_COMPONENT_ARRAY = new Component[0];
 
 	private final List<Message> _messages; //all the messages
 
@@ -147,62 +153,63 @@ public class ValidationMessagesImpl implements ValidationMessages, Collection<Ob
 	public String[] getMessages(Component comp, String attr) {
 		List<Message> compMsgs = _compMsgsMap.get(comp);
 		if (compMsgs == null || compMsgs.size() == 0) {
-			return null;
+			return EMPTY_STRING_ARRAY;
 		}
 		List<String> msgs = new ArrayList<String>();
 		for (Message msg : compMsgs) {
 			if (Objects.equals(msg.attr, attr))
 				msgs.add(msg.msg);
 		}
-		return msgs.size() == 0 ? null : msgs.toArray(new String[msgs.size()]);
+		return msgs.toArray(EMPTY_STRING_ARRAY);
 	}
 
 	public String[] getMessages(Component comp) {
 		List<Message> compMsgs = _compMsgsMap.get(comp);
 		if (compMsgs == null || compMsgs.size() == 0) {
-			return null;
+			return EMPTY_STRING_ARRAY;
 		}
-		List<String> msgs = new ArrayList<String>();
-		for (Message msg : compMsgs) {
-			msgs.add(msg.msg);
-		}
-		return msgs.toArray(new String[msgs.size()]);
+		return getMessages0(compMsgs, compMsgs.size());
 	}
 
 	public String[] getMessages() {
-		if (_messages.size() == 0) {
-			return null;
+		int len = _messages.size();
+		if (len == 0) {
+			return EMPTY_STRING_ARRAY;
 		}
-		List<String> msgs = new ArrayList<String>(_messages.size());
-		for (Message mm : _messages) {
-			msgs.add(mm.msg);
+		return getMessages0(_messages, len);
+	}
+
+	private static String[] getMessages0(List<Message> msgs, int len) {
+		String[] messages = new String[len];
+		for (int i = 0; i < len; i++) {
+			messages[i] = msgs.get(i).msg;
 		}
-		return msgs.size() == 0 ? null : msgs.toArray(new String[msgs.size()]);
+		return messages;
 	}
 
 	public String[] getKeyMessages(Component comp, String key) {
 		List<Message> compMsgs = _compMsgsMap.get(comp);
 		if (compMsgs == null || compMsgs.size() == 0) {
-			return null;
+			return EMPTY_STRING_ARRAY;
 		}
 		List<String> msgs = new ArrayList<String>();
 		for (Message msg : compMsgs) {
 			if (Objects.equals(msg.key, key))
 				msgs.add(msg.msg);
 		}
-		return msgs.size() == 0 ? null : msgs.toArray(new String[msgs.size()]);
+		return msgs.toArray(EMPTY_STRING_ARRAY);
 	}
 
 	public String[] getKeyMessages(String key) {
 		List<Message> keyMsgs = _keyMsgsMap.get(key);
 		if (keyMsgs == null || keyMsgs.size() == 0) {
-			return null;
+			return EMPTY_STRING_ARRAY;
 		}
 		List<String> msgs = new ArrayList<String>();
 		for (Message msg : keyMsgs) {
 			msgs.add(msg.msg);
 		}
-		return msgs.toArray(new String[msgs.size()]);
+		return msgs.toArray(EMPTY_STRING_ARRAY);
 	}
 
 	public void setMessages(Component comp, String attr, String key, String[] messages) {
@@ -241,7 +248,7 @@ public class ValidationMessagesImpl implements ValidationMessages, Collection<Ob
 	private List<Message> getMessage(Component comp, String key) {
 		List<Message> compMsgs = _compMsgsMap.get(comp);
 		if (compMsgs == null || compMsgs.size() == 0) {
-			return null;
+			return Collections.emptyList();
 		}
 		List<Message> msgs = new ArrayList<Message>();
 		for (Message msg : compMsgs) {
@@ -267,12 +274,12 @@ public class ValidationMessagesImpl implements ValidationMessages, Collection<Ob
 	public Object[] getFieldValues(String key) {
 		List<Message> keyMsgs = _keyMsgsMap.get(key);
 		if (keyMsgs == null || keyMsgs.size() == 0) {
-			return null;
+			return EMPTY_OBJECT_ARRAY;
 		}
 		List<Object> msgs = new ArrayList<Object>();
 		for (Message msg : keyMsgs)
 			msgs.add(msg.value);
-		return msgs.toArray(new Object[0]);
+		return msgs.toArray(EMPTY_OBJECT_ARRAY);
 	}
 
 	public Object[] getFieldValues(Component comp, String key) {
@@ -280,7 +287,7 @@ public class ValidationMessagesImpl implements ValidationMessages, Collection<Ob
 		List<Object> msgs = new ArrayList<Object>();
 		for (Message msg : messages)
 			msgs.add(msg.value);
-		return msgs.toArray(new Object[0]);
+		return msgs.toArray(EMPTY_OBJECT_ARRAY);
 	}
 
 	public Component getAssociate(String key) {
@@ -294,12 +301,12 @@ public class ValidationMessagesImpl implements ValidationMessages, Collection<Ob
 	public Component[] getAssociates(String key) {
 		List<Message> keyMsgs = _keyMsgsMap.get(key);
 		if (keyMsgs == null || keyMsgs.size() == 0) {
-			return null;
+			return EMPTY_COMPONENT_ARRAY;
 		}
 		List<Component> msgs = new ArrayList<Component>();
 		for (Message msg : keyMsgs)
 			msgs.add(msg.comp);
-		return msgs.toArray(new Component[0]);
+		return msgs.toArray(EMPTY_COMPONENT_ARRAY);
 	}
 
 	//interface for collection

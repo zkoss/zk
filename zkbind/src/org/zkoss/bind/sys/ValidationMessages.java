@@ -50,32 +50,32 @@ public interface ValidationMessages {
 
 	/**
 	 * get validation messages of a component and special attribute
-	 * @return null if no message in component and attribute
+	 * @return messages. Always not null. Empty if no message in component and attribute
 	 */
 	String[] getMessages(Component comp, String attr);
 
 	/**
 	 * get validation messages of a component
-	 * @return null if no message of component
+	 * @return messages. Always not null. Empty if no message of component
 	 */
 	String[] getMessages(Component comp);
 
 	/**
 	 * get all validation messages
-	 * @return null if no messages
+	 * @return messages. Always not null. Empty if no messages
 	 * @since 6.0.1
 	 */
 	String[] getMessages();
 
 	/**
 	 * get validation message of component and a special key
-	 * @return null if no message of key
+	 * @return messages. Always not null. Empty if no message of key
 	 */
 	String[] getKeyMessages(Component comp, String key);
 
 	/**
 	 * get validation message of a special key
-	 * @return null if no message of key
+	 * @return messages. Always not null. Empty if no message of key
 	 */
 	String[] getKeyMessages(String key);
 
@@ -122,6 +122,7 @@ public interface ValidationMessages {
 	/**
 	 * Returns the first field value from the given key, if any.
 	 * @param key the custom key refers to this messages, nullable
+	 * @return value. Nullable.
 	 * @since 8.0.1
 	 */
 	Object getFieldValue(String key);
@@ -130,6 +131,7 @@ public interface ValidationMessages {
 	 * Returns the first field value from the given key and component, if any.
 	 * @param comp the component refers to the value
 	 * @param key the custom key refers to this value, nullable
+	 * @return value. Nullable.
 	 * @since 8.0.1
 	 */
 	Object getFieldValue(Component comp, String key);
@@ -137,6 +139,7 @@ public interface ValidationMessages {
 	/**
 	 * Returns all field values from the given key, if any.
 	 * @param key the custom key refers to this messages, nullable
+	 * @return values. Always not null.
 	 * @since 8.0.1
 	 */
 	Object[] getFieldValues(String key);
@@ -145,6 +148,7 @@ public interface ValidationMessages {
 	 * Returns all field values from the given key and component, if any.
 	 * @param comp the component refers to the value
 	 * @param key the custom key refers to this value, nullable
+	 * @return values. Always not null.
 	 * @since 8.0.1
 	 */
 	Object[] getFieldValues(Component comp, String key);
@@ -152,6 +156,7 @@ public interface ValidationMessages {
 	/**
 	 * Returns the first associated component from the given key, if any.
 	 * @param key the custom key refers to this messages, nullable
+	 * @return component. Nullable.
 	 * @since 8.0.1
 	 */
 	Component getAssociate(String key);
@@ -159,6 +164,7 @@ public interface ValidationMessages {
 	/**
 	 * Returns all associated components from the given key, if any.
 	 * @param key the custom key refers to this messages, nullable
+	 * @return components. Always not null.
 	 * @since 8.0.1
 	 */
 	Component[] getAssociates(String key);
