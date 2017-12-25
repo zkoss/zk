@@ -16,7 +16,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.Map;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
@@ -28,8 +31,13 @@ import org.zkoss.zul.impl.XulElement;
  * @since 5.0.0
  */
 public class Frozen extends XulElement {
+	static {
+		addClientEvent(Frozen.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); // only used in [ZK EE]
+	}
 	private int _columns;
 	private int _start;
+	/** maintain the number of the visible item in Paging mold. Only in smooth mold [ZK EE] */
+	private int _currentLeft = 0;
 
 	/**
 	 * Sets the start position of the scrollbar.
@@ -120,7 +128,19 @@ public class Frozen extends XulElement {
 			renderer.render("start", _start);
 
 		//F85-ZK-3525: frozen support smooth mode (ee only)
-		if (!isSmooth())
+		if (!isSmooth()) {
 			renderer.render("smooth", false);
+		} else {
+			renderer.render("currentLeft", _currentLeft);
+		}
+	}
+
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (isSmooth() && cmd.equals("onScrollPos")) {
+			final Map<String, Object> data = request.getData();
+			_currentLeft = AuRequests.getInt(data, "left", 0);
+		} else
+			super.service(request, everError);
 	}
 }

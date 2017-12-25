@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3776.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+            Tue Dec 19 10:25:05 AM CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+-->
+<window>
+	<label>
+		Scroll to the right and switch to the next page, the scroll position should be the same
+		and the data should not disappear.
+	</label>
+	<zk>
+		<window title="new page title" border="normal">
+			Frozen
+			<listbox sizedByContent="true" multiple="true" checkmark="true" mold="paging" pageSize="3" activePage="0">
+				<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+				<apply template="lbContent" />
+			</listbox>
+			Smooth Frozen
+			<listbox sizedByContent="true" multiple="true" checkmark="true" mold="paging" pageSize="3" activePage="0">
+				<custom-attributes org.zkoss.zul.frozen.smooth="true"/>
+				<apply template="lbContent" />
+			</listbox>
+			<template name="lbContent">
+				<frozen style="background: #DFDED8" columns="1">
+					<div style="padding: 0 10px;"/>
+				</frozen>
+				<listhead columnshide="false" sizable="true">
+					<listheader width="50px" align="center"/>
+					<listheader label="column 1"/>
+					<listheader label="column 2"/>
+					<listheader label="column 3"/>
+				</listhead>
+				<listitem selectable="true">
+					<listcell></listcell>
+					<listcell label="value 1"></listcell>
+					<listcell label="value 2"></listcell>
+					<listcell label="value 3"></listcell>
+				</listitem>
+				<listitem selectable="true">
+					<listcell></listcell>
+					<listcell label="value 1"></listcell>
+					<listcell label="value 2"></listcell>
+					<listcell label="value 3"></listcell>
+				</listitem>
+				<listitem selectable="true">
+					<listcell></listcell>
+					<listcell label="value 1"></listcell>
+					<listcell label="value 2"></listcell>
+					<listcell label="value 3"></listcell>
+				</listitem>
+				<listitem selectable="true">
+					<listcell></listcell>
+					<listcell label="4 value 1"></listcell>
+					<listcell label="4 value 2"></listcell>
+					<listcell label="4 value 3"></listcell>
+				</listitem>
+				<listitem selectable="true">
+					<listcell></listcell>
+					<listcell label="value 1"></listcell>
+					<listcell label="value 2"></listcell>
+					<listcell label="value 3"></listcell>
+				</listitem>
+				<listitem selectable="true">
+					<listcell></listcell>
+					<listcell label="value 1"></listcell>
+					<listcell label="value 2"></listcell>
+					<listcell label="value 3"></listcell>
+				</listitem>
+			</template>
+		</window>
+	</zk>
+</window>
