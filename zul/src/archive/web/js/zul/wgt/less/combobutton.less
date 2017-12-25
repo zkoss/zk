@@ -13,14 +13,18 @@
 		.borderRadius(@inputBorderRadius);
 		padding: @buttonPadding;
 		padding-right: 46px;
-		line-height: @inputTextSize;
+		line-height: normal;
 		background-color: @buttonBackgroundColor;
 		vertical-align: middle;
 		position: relative;
 		white-space: nowrap;
+
+		> i {
+			vertical-align: text-bottom;
+		}
 	}
 	&-image {
-		vertical-align: middle;
+		vertical-align: text-bottom;
 	}
 	&-button {
 		font-weight: normal;

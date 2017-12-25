@@ -6,7 +6,7 @@
 	border: 2px solid @buttonBorderColor;
 	.borderRadius(@inputBorderRadius);
 	padding: @buttonPadding;
-	line-height: @baseLineHeight;
+	line-height: normal;
 	background-color: @buttonBackgroundColor;
 	.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
 	cursor: pointer;
@@ -34,11 +34,12 @@
 		cursor: default;
 	}
 	img {
-		vertical-align: middle;
+		vertical-align: text-bottom;
 		max-width: 18px;
 		max-height: 18px;
 	}
 	i {
 		font-size: 18px;
+		vertical-align: text-bottom;
 	}
 }

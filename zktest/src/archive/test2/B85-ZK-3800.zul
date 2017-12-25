@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3800.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 22 10:14:19 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        The buttons should have the same height.
+    </label>
+    <div id="test-area">
+        <button label="submit"/>
+        <button label="submit" iconSclass="z-icon-search"/>
+        <button label="submit" image="/img/search.png"/>
+        <combobutton label="submit"/>
+        <combobutton label="submit" iconSclass="z-icon-search"/>
+        <combobutton label="submit" image="/img/search.png"/>
+        <textbox/>
+    </div>
+
+    <button id="btnCheck" xmlns:w="client" label="Check">
+        <attribute w:name="onClick"><![CDATA[
+        var heights = [];
+        jq('$test-area @button, $test-area @combobutton').each(function () {
+            var h = this.getBoundingClientRect().height;
+            heights.push(h);
+            zk.log(h);
+        });
+        var result = heights.every(function (val, i, arr) { return val == arr[0]; });
+        zk.Widget.$('$result').setValue(result);
+        zk.log(result);
+        ]]></attribute>
+    </button>
+    <label id="result" />
+</zk>
