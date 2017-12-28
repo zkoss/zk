@@ -2105,6 +2105,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="checkable" type="booleanType" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
+		<xs:attribute name="selectable" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- menu -->
 	<xs:element name="menu" type="menuType" />

@@ -1609,7 +1609,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					bdcol = bdcol.nextSibling;
 					if (ftcol)
 						ftcol = ftcol.nextSibling;
-				} else if (!this.frozen || !this.frozen.getStart()) {
+				} else if (!this.frozen || !this.frozen.getStart() || hdcol.style.width === '') {
 					var wd = jq.px(wds[i]);
 					hdcol.style.width = bdcol.style.width = wd;
 					hdcol = hdcol.nextSibling;
