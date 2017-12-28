@@ -31,10 +31,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zk(n).focus();
 		};
 
-	function _newDate(year, month, day, bFix) {
-		var v = new Date(year, month, day);
+	function _newDate(year, month, day, bFix, tz) {
+		var v = Dates.newInstance([year, month, day], tz);
 		return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
-			new Date(year, month + 1, 0)/*last day of month*/: v;
+			Dates.newInstance([year, month + 1, 0], tz)/*last day of month*/: v;
+	}
+
+	function _getTimeZone(wgt) {
+		var parent = wgt.parent,
+			tz = parent && parent.getTimeZone && parent.getTimeZone();
+		return tz ? tz : wgt._defaultTzone;
 	}
 
 var Renderer =
@@ -75,7 +81,7 @@ zul.db.Renderer = {
 	 * @return boolean
 	 */
 	disabled: function (cal, y, m, v, today) {
-		var d = new Date(y, m, v, 0, 0, 0, 0),
+		var d = Dates.newInstance([y, m, v, 0, 0, 0, 0], _getTimeZone(cal)),
 			constraint;
 
 		if ((constraint = cal._constraint) && typeof constraint == 'string') {
@@ -297,8 +303,10 @@ zul.db.Renderer = {
 	 */
 	todayView: function (wgt, out, localizedSymbols) {
 		var val = wgt.getTodayLinkLabel();
-		if (!val)
-			val = new zk.fmt.Calendar().formatDate(zUtl.today(wgt.parent), wgt.getFormat(), localizedSymbols);
+		if (!val) {
+			var tz = _getTimeZone(wgt);
+			val = new zk.fmt.Calendar().formatDate(zUtl.today(parent, tz), wgt.getFormat(), localizedSymbols);
+		}
 		out.push(val);
 	}
 };
@@ -311,9 +319,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_view: 'day', //"day", "month", "year", "decade",
 	_minyear: 1900,
 	_maxyear: 2099,
-	_minDate: new Date(1899, 11, 31, 23, 59, 59),
-	_maxDate: new Date(2099, 11, 31, 23, 59, 59),
-
+	_minDate: Dates.newInstance([1899, 11, 31, 23, 59, 59], _getTimeZone(this)),
+	_maxDate: Dates.newInstance([2099, 11, 31, 23, 59, 59], _getTimeZone(this)),
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onChange: this}, -1000);
@@ -326,8 +333,19 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		 * @return Date
 	 	 */
 		value: function () {
+			var parent = this.parent;
+			if (!parent || !parent.getTimeZone) {
+				this._value.tz(this._defaultTzone);
+			}
 			this.rerender();
 		},
+		/** Sets default time zone that this calendar belongs to.
+		 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+		 */
+		/** Returns default time zone that this calendar belongs to.
+		 * @return String the time zone's ID, such as "America/Los_Angeles".
+		 */
+		defaultTzone: null,
 		/** Set the date limit for this component with yyyyMMdd format,
 		 * such as 20100101 is mean Jan 01 2010
 		 *
@@ -344,39 +362,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		 * @return String
 		 */
 		constraint: function () {
-			var constraint = this._constraint || '';
-			if (typeof this._constraint != 'string') return;
-			// B50-ZK-591: Datebox constraint combination yyyymmdd and
-			// no empty cause javascript error in zksandbox
-			var constraints = constraint.split(','),
-				format = 'yyyyMMdd',
-				len = format.length + 1;
-			for (var i = 0; i < constraints.length; i++) {
-				constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
-				if (constraint.startsWith('between')) {
-					var j = constraint.indexOf('and', 7);
-					if (j < 0 && zk.debugJS)
-						zk.error('Unknown constraint: ' + constraint);
-					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), format);
-					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format);
-					if (this._beg.getTime() > this._end.getTime()) {
-						var d = this._beg;
-						this._beg = this._end;
-						this._end = d;
-					}
-
-					this._beg.setHours(0, 0, 0, 0);
-					this._end.setHours(0, 0, 0, 0);
-				} else if (constraint.startsWith('before_') || constraint.startsWith('after_')) {
-					continue; //Constraint start with 'before_' and 'after_' means errorbox position, skip it
-				} else if (constraint.startsWith('before')) {
-					this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), format);
-					this._end.setHours(0, 0, 0, 0);
-				} else if (constraint.startsWith('after')) {
-					this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), format);
-					this._beg.setHours(0, 0, 0, 0);
-				}
-			}
+			this._fixConstraint();
 		},
 		/** Sets the name of this component.
 		 * <p>The name is used only to work with "legacy" Web application that
@@ -489,7 +475,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	_shift: function (ofs, opts) {
 		var oldTime = this.getTime(),
-		shiftTime = new Date(oldTime.getTime());
+			shiftTime = Dates.newInstance(oldTime.getTime(), _getTimeZone(this));
 
 		switch (this._view) {
 		case 'day':
@@ -543,6 +529,41 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			break;
 		default:
 			this.rerender();
+		}
+	},
+	_fixConstraint: function () {
+		var constraint = this._constraint || '';
+		if (typeof this._constraint != 'string') return;
+		// B50-ZK-591: Datebox constraint combination yyyymmdd and
+		// no empty cause javascript error in zksandbox
+		var constraints = constraint.split(','),
+			format = 'yyyyMMdd',
+			len = format.length + 1,
+			tz = _getTimeZone(this);
+		for (var i = 0; i < constraints.length; i++) {
+			constraint = jq.trim(constraints[i]); //Bug ZK-1718: should trim whitespace
+			if (constraint.startsWith('between')) {
+				var j = constraint.indexOf('and', 7);
+				if (j < 0 && zk.debugJS)
+					zk.error('Unknown constraint: ' + constraint);
+				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), format, null, null, null, tz);
+				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), format, null, null, null, tz);
+				if (this._beg.getTime() > this._end.getTime()) {
+					var d = this._beg;
+					this._beg = this._end;
+					this._end = d;
+				}
+				this._beg.setHours(0, 0, 0, 0);
+				this._end.setHours(0, 0, 0, 0);
+			} else if (constraint.startsWith('before_') || constraint.startsWith('after_')) {
+				continue; //Constraint start with 'before_' and 'after_' means errorbox position, skip it
+			} else if (constraint.startsWith('before')) {
+				this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), format, null, null, null, tz);
+				this._end.setHours(0, 0, 0, 0);
+			} else if (constraint.startsWith('after')) {
+				this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), format, null, null, null, tz);
+				this._beg.setHours(0, 0, 0, 0);
+			}
 		}
 	},
 	/** Returns the format of this component.
@@ -630,7 +651,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		evt.stop();
 	},
 	_clickToday: function () {
-		this.setValue(zUtl.today(this.parent));
+		this.setValue(zUtl.today(parent, _getTimeZone(this)));
 		this._setView('day');
 	},
 	_shiftView: function (ofs, disableAnima) {
@@ -664,14 +685,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return Date
 	 */
 	getTime: function () {
-		return this._value || zUtl.today(this.getFormat());
+		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
 	},
 	_setTime: function (y, m, d, fireOnChange) {
 		var dateobj = this.getTime(),
 			year = y != null ? y : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate(),
-			val = new zk.fmt.Calendar().escapeDSTConflict(_newDate(year, month, day, d == null)); // B70-ZK-2382
+			tz = _getTimeZone(this);
+			val = new zk.fmt.Calendar().escapeDSTConflict(_newDate(year, month, day, d == null, tz), tz); // B70-ZK-2382
 
 		this._value = val;
 		if (fireOnChange)
@@ -733,6 +755,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			year = dateobj.getFullYear(),
 			month = dateobj.getMonth(),
 			day = dateobj.getDate(),
+			parent = this.parent,
+			tz = _getTimeZone(this),
 			nofix;
 		switch (opt) {
 		case 'day' :
@@ -749,7 +773,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			year += ofs;
 			break;
 		}
-		var newTime = _newDate(year, month, day, !nofix);
+		var newTime = _newDate(year, month, day, !nofix, tz);
 		if (!ignoreUpdate) {
 			this._value = newTime;
 			this.fire('onChange', {value: this._value, shallClose: false, shiftView: true});
@@ -961,10 +985,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				DOW_1ST = this._localizedSymbols.DOW_1ST;
 			}
 			var d = seldate.getDate(),
-				v = new Date(y, m, 1).getDay() - DOW_1ST,
-				last = new Date(y, m + 1, 0).getDate(), //last date of this month
-				prev = new Date(y, m, 0).getDate(), //last date of previous month
-				today = zUtl.today(), //no time part
+				tz = seldate.getTimeZone(),
+				v = Dates.newInstance([y, m, 1], tz).getDay() - DOW_1ST,
+				last = Dates.newInstance([y, m + 1, 0], tz).getDate(), //last date of this month
+				prev = Dates.newInstance([y, m, 0], tz).getDate(), //last date of previous month
+				today = zUtl.today(null, tz), //no time part
 				outsideClass = this.$s('outside'),
 				disdClass = this.$s('disabled');
 

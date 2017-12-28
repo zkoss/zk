@@ -115,6 +115,7 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 	}
 
 	public void validate(Component comp, Object value) throws WrongValueException {
+		super.validate(comp, value);
 		if (value instanceof Integer) {
 			final Integer intValue = (Integer) value;
 
@@ -123,7 +124,6 @@ public class SimpleSpinnerConstraint extends SimpleConstraint {
 			if (_max != null && _max.compareTo(intValue) < 0)
 				throw outOfRangeValue(comp);
 		}
-		super.validate(comp, value);
 	}
 
 	private WrongValueException outOfRangeValue(Component comp) {

@@ -117,9 +117,11 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	/** The constraints. A combination of {@link #NO_POSITIVE} and others.
 	 */
 	protected int _flags;
+	protected boolean _finishParseCst = true;
 	private Pattern _regex;
 	private String _errmsg;
 	private String _raw;
+	private String _refined;
 
 	/** Constructs a constraint with flags.
 	 *
@@ -195,39 +197,45 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	 * @since 3.0.2
 	 */
 	public SimpleConstraint(String constraint) {
+		_raw = constraint;
+		_finishParseCst = false;
+	}
+
+	private void parseCst(String constraint) {
 		String regex = null, errmsg = null;
-		l_out: for (int j = 0, k = 0, len = constraint.length(); k >= 0; j = k + 1) {
-			for (;; ++j) {
+		l_out:
+		for (int j = 0, k = 0, len = constraint.length(); k >= 0; j = k + 1) {
+			for (; ; ++j) {
 				if (j >= len)
 					break l_out; //done
 
 				char cc = constraint.charAt(j);
 				switch (cc) {
-				case '/':
-					for (k = ++j;; ++k) { //look for ending /
-						if (k >= len) { //no ending /
-							k = -1;
-							break;
-						}
+					case '/':
+						for (k = ++j; ; ++k) { //look for ending /
+							if (k >= len) { //no ending /
+								k = -1;
+								break;
+							}
 
-						cc = constraint.charAt(k);
-						if (cc == '/')
-							break; //ending / found
-						if (cc == '\\')
-							++k; //skip one
-					}
-					regex = k >= 0 ? constraint.substring(j, k) : constraint.substring(j);
-					continue l_out;
-				case ':':
-					errmsg = constraint.substring(j + 1).trim();
-					break l_out; //done
+							cc = constraint.charAt(k);
+							if (cc == '/')
+								break; //ending / found
+							if (cc == '\\')
+								++k; //skip one
+						}
+						regex = k >= 0 ? constraint.substring(j, k) : constraint.substring(j);
+						continue l_out;
+					case ':':
+						errmsg = constraint.substring(j + 1).trim();
+						break l_out; //done
 				}
 				if (!Character.isWhitespace(cc))
 					break;
 			}
 
 			String s;
-			for (k = j;; ++k) {
+			for (k = j; ; ++k) {
 				if (k >= len) {
 					s = constraint.substring(j);
 					k = -1;
@@ -244,8 +252,6 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 
 			_flags |= parseConstraint(s.trim().toLowerCase(java.util.Locale.ENGLISH));
 		}
-
-		_raw = constraint;
 		_regex = regex == null || regex.length() == 0 ? null : Pattern.compile(regex);
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null : errmsg;
 	}
@@ -338,6 +344,10 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 
 	//-- Constraint --//
 	public void validate(Component comp, Object value) throws WrongValueException {
+		if (!_finishParseCst) {
+			parseCst(_raw);
+			_finishParseCst = true;
+		}
 		if (value == null) {
 			if ((_flags & NO_EMPTY) != 0)
 				throw wrongValue(comp, MZul.EMPTY_NOT_ALLOWED);

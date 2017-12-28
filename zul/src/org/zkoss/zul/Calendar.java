@@ -52,6 +52,7 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Calendar extends XulElement {
 	private Date _value;
+	private TimeZone _defaultTzone = TimeZones.getCurrent();
 	private boolean _weekOfYear;
 	private boolean _showTodayLink = false;
 	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
@@ -242,6 +243,7 @@ public class Calendar extends XulElement {
 		super.renderProperties(renderer);
 		if (_name != null)
 			render(renderer, "name", _name);
+		render(renderer, "defaultTzone", _defaultTzone.getID());
 		render(renderer, "weekOfYear", _weekOfYear);
 		render(renderer, "value", _value);
 		render(renderer, "showTodayLink", _showTodayLink);

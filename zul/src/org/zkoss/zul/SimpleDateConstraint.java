@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 import org.zkoss.util.Dates;
@@ -37,9 +38,11 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class SimpleDateConstraint extends SimpleConstraint {
 	private Date _beg, _end;
+	private TimeZone _tzone;
 
-	public SimpleDateConstraint(int flags) {
+	public SimpleDateConstraint(int flags, TimeZone tzone) {
 		super(flags);
+		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -49,8 +52,9 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * {@link #NO_ZERO}, and so on.
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 */
-	public SimpleDateConstraint(int flags, String errmsg) {
+	public SimpleDateConstraint(int flags, String errmsg, TimeZone tzone) {
 		super(flags, errmsg);
+		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -58,10 +62,11 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 *
 	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
 	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(Pattern, String)}
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(Pattern, String, TimeZone)}
 	 */
-	public SimpleDateConstraint(String regex, String errmsg) {
+	public SimpleDateConstraint(String regex, String errmsg, TimeZone tzone) {
 		super(regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
+		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -71,8 +76,9 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 * @since 8.0.1
 	 */
-	public SimpleDateConstraint(Pattern regex, String errmsg) {
+	public SimpleDateConstraint(Pattern regex, String errmsg, TimeZone tzone) {
 		super(regex, errmsg);
+		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -82,9 +88,9 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * {@link #NO_ZERO}, and so on.
 	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
 	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(int, Pattern, String)}
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(int, Pattern, String, TimeZone)}
 	 */
-	public SimpleDateConstraint(int flags, String regex, String errmsg) {
+	public SimpleDateConstraint(int flags, String regex, String errmsg, TimeZone tzone) {
 		super(flags, regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
 		fixConstraint();
 	}
@@ -97,8 +103,9 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 * @since 8.0.1
 	 */
-	public SimpleDateConstraint(int flags, Pattern regex, String errmsg) {
+	public SimpleDateConstraint(int flags, Pattern regex, String errmsg, TimeZone tzone) {
 		super(flags, regex, errmsg);
+		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -112,10 +119,11 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * date.
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 */
-	public SimpleDateConstraint(int flags, Date begin, Date end, String errmsg) {
+	public SimpleDateConstraint(int flags, Date begin, Date end, String errmsg, TimeZone tzone) {
 		super(flags, errmsg);
 		_beg = begin;
 		_end = end;
+		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -124,9 +132,18 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @param constraint a list of constraints separated by comma.
 	 * Example: "between 20071012 and 20071223", "before 20080103"
 	 */
-	public SimpleDateConstraint(String constraint) {
+	public SimpleDateConstraint(String constraint, TimeZone tzone) {
 		super(constraint);
+		_tzone = tzone;
 		fixConstraint();
+	}
+
+	/**
+	 * Sets time zone that this date constraint belongs to
+	 */
+	public void setTimeZone(TimeZone tzone) {
+		this._tzone = tzone;
+		this._finishParseCst = false;
 	}
 
 	private void fixConstraint() {
@@ -156,8 +173,8 @@ public class SimpleDateConstraint extends SimpleConstraint {
 			final int j = constraint.indexOf("and", 7);
 			if (j < 0)
 				throw new UiException("Constraint syntax error: " + constraint);
-			_beg = parseDate(constraint.substring(7, j));
-			_end = parseDate(constraint.substring(j + 3));
+			_beg = parseDate(constraint.substring(7, j), _tzone);
+			_end = parseDate(constraint.substring(j + 3), _tzone);
 			if (_beg.compareTo(_end) > 0) {
 				final Date d = _beg;
 				_beg = _end;
@@ -165,38 +182,40 @@ public class SimpleDateConstraint extends SimpleConstraint {
 			}
 			return 0;
 		} else if (constraint.startsWith("before") && !constraint.startsWith("before_")) {
-			_end = parseDate(constraint.substring(6));
+			_end = parseDate(constraint.substring(6), _tzone);
 			return 0;
 		} else if (constraint.startsWith("after") && !constraint.startsWith("after_")) {
-			_beg = parseDate(constraint.substring(5));
+			_beg = parseDate(constraint.substring(5), _tzone);
 			return 0;
 		}
 		return super.parseConstraint(constraint);
 	}
 
-	private static Date parseDate(String val) throws UiException {
+	private static Date parseDate(String val, TimeZone tzone) throws UiException {
 		try {
-			return getDateFormat().parse(val.trim());
+			return getDateFormat(tzone).parse(val.trim());
 		} catch (ParseException ex) {
 			throw new UiException("Not a date: " + val + ". Format: yyyyMMdd", ex);
 		}
 	}
 
-	private static SimpleDateFormat getDateFormat() {
+	private static SimpleDateFormat getDateFormat(TimeZone tzone) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locales.getCurrent());
-		df.setTimeZone(TimeZones.getCurrent());
+		df.setTimeZone(tzone != null ? tzone : TimeZones.getCurrent());
 		return df;
 	}
 
 	public void validate(Component comp, Object value) throws WrongValueException {
-		if (value instanceof Date) {
-			final Date d = Dates.beginOfDate((Date) value, TimeZones.getCurrent());
-			if (_beg != null && _beg.compareTo(d) > 0)
-				throw outOfRangeValue(comp);
-			if (_end != null && _end.compareTo(d) < 0)
-				throw outOfRangeValue(comp);
-		}
 		super.validate(comp, value);
+		if (value instanceof Date) {
+			final Date d = Dates.beginOfDate((Date) value, _tzone);
+			if (_beg != null && _beg.compareTo(d) > 0) {
+				throw outOfRangeValue(comp);
+			}
+			if (_end != null && _end.compareTo(d) < 0) {
+				throw outOfRangeValue(comp);
+			}
+		}
 	}
 
 	private WrongValueException outOfRangeValue(Component comp) {
@@ -204,16 +223,16 @@ public class SimpleDateConstraint extends SimpleConstraint {
 		if (errmsg != null)
 			return new WrongValueException(comp, errmsg);
 
-		final String s = _beg != null ? _end != null ? dateToString(comp, _beg) + " ~ " + dateToString(comp, _end)
-				: ">= " + dateToString(comp, _beg) : "<= " + dateToString(comp, _end);
+		final String s = _beg != null ? _end != null ? dateToString(comp, _beg, _tzone) + " ~ " + dateToString(comp, _end, _tzone)
+				: ">= " + dateToString(comp, _beg, _tzone) : "<= " + dateToString(comp, _end, _tzone);
 		return new WrongValueException(comp, MZul.OUT_OF_RANGE, s);
 	}
 
-	private static String dateToString(Component comp, Date d) {
+	private static String dateToString(Component comp, Date d, TimeZone tzone) {
 		if (d == null)
 			return "";
 		if (comp instanceof Datebox)
 			return ((Datebox) comp).coerceToString(d);
-		return getDateFormat().format(d);
+		return getDateFormat(tzone).format(d);
 	}
 }

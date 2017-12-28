@@ -23,6 +23,7 @@ ZK 8.5.1
   ZK-3821: timeout message not localized
   ZK-3718: vlayout sizing issue with vflex child - IE9-11
   ZK-3347: Avoid memory buffering when building hash codes
+  ZK-3527: Timezone issues with historically varying DST and Offsets rules
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:

@@ -25,19 +25,22 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	 * @since 5.0.8
 	 */
 	$init: function (a, wgt) {
-		this.$super('$init', a);
+		this._wgt = wgt;
 		this._localizedSymbols = wgt._localizedSymbols;
+		this.$super('$init', a);
 	},
 	format: 'yyyyMMdd',
 	parseConstraint_: function (constraint) {
-		var len = this.format.length + 1;
-		var arr = this._cstArr;
+		var len = this.format.length + 1,
+			arr = this._cstArr,
+			wgt = this._wgt,
+			tz = wgt && wgt.getTimeZone && wgt.getTimeZone();
 		if (constraint.startsWith('between')) {
 			var j = constraint.indexOf('and', 7);
 			if (j < 0 && zk.debugJS)
 				zk.error('Unknown constraint: ' + constraint);
-			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format);
-			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), this.format);
+			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(7, j), this.format, null, null, null, tz);
+			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(j + 3, j + 3 + len), this.format, null, null, null, tz);
 			if (this._beg.getTime() > this._end.getTime()) {
 				var d = this._beg;
 				this._beg = this._end;
@@ -48,26 +51,27 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 			this._end.setHours(0,0,0,0);
 			arr[arr.length] = 'between';
 		} else if (constraint.startsWith('before') && !constraint.startsWith('before_')) {
-			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format);
+			this._end = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(6, 6 + len), this.format, null, null, null, tz);
 			this._end.setHours(0,0,0,0);
 			arr[arr.length] = 'before';
 		} else if (constraint.startsWith('after') && !constraint.startsWith('after_')) {
-			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format);
+			this._beg = new zk.fmt.Calendar(null, this._localizedSymbols).parseDate(constraint.substring(5, 5 + len), this.format, null, null, null, tz);
 			this._beg.setHours(0,0,0,0);
 			arr[arr.length] = 'after';
 		}
 		return this.$supers('parseConstraint_', arguments);
 	},
 	validate: function (wgt, val) {
-		if (jq.type(val) == 'date') {
+		var result = this.$supers('validate', arguments);
+		if (val instanceof DateImpl) {
 			var msg = this._errmsg;
-			var v = new Date(val.getFullYear(), val.getMonth(), val.getDate());
+			var v = Dates.newInstance([val.getFullYear(), val.getMonth(), val.getDate()], val.getTimeZone());
 			if (this._beg != null && this._beg.getTime() > v.getTime())
 				return msg['between'] || msg['after'] || this.outOfRangeValue();
 			if (this._end != null && this._end.getTime() < v.getTime())
 				return msg['between'] || msg['before'] || this.outOfRangeValue();
 		}
-		return this.$supers('validate', arguments);
+		return result;
 	},
 	/** Returns the message about out of range value
 	 * @return String

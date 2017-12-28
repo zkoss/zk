@@ -15,36 +15,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 (function () {
-	function _initPopup () {
-		this._pop = new zul.db.CalendarPop();
-		this._tm = new zul.db.CalendarTime();
-		this.appendChild(this._pop);
-		this.appendChild(this._tm);
-	}
-	function _reposition(db, silent) {
-		if (!db.$n()) return;
-		var pp = db.$n('pp'),
-			n = db.$n(),
-			inp = db.getInputNode();
-
-		if (pp) {
-			zk(pp).position(n, db.position, {dodgeRef: n});
-			db._pop.syncShadow();
-			if (!silent)
-				zk(inp).focus();
-		}
-	}
-	function _equalDate(d1, d2) {
-		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
-	}
-	function _prepareTimeFormat(h, m, s) {
-		var o = [];
-		if (h) o.push(h);
-		if (m) o.push(m);
-		if (s) o.push(s);
-		return o.join(':');
-	}
-
 var globallocalizedSymbols = {},
 	_quotePattern = /\'/g, // move pattern string here to avoid jsdoc failure
 	_innerDateFormat = 'yyyy/MM/dd ',
@@ -58,7 +28,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_lenient: true,
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.afterInit(_initPopup);
+		this.afterInit(this.$class._initPopup);
 		this.listen({onChange: this}, -1000);
 	},
 
@@ -167,7 +137,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		timeZone: function (timezone) {
 			this._timezone = timezone;
+			this._tm.setTimezone(timezone);
 			this._setTimeZonesIndex();
+			this._value && this._value.tz(timezone);
+			this._pop && this._pop._fixConstraint();
+			this._cst && this._cst.reparseConstraint();
 		},
 		/** Sets whether the list of the time zones to display is readonly.
 		 * If readonly, the user cannot change the time zone at the client.
@@ -307,7 +281,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	onSize: function () {
 		zul.inp.RoundUtl.onSize(this);
 		if (this.isOpen())
-			_reposition(this, true);
+			this.$class._reposition(this, true);
 	},
 	/** Returns the Time format of the specified format
 	 * @return String
@@ -330,7 +304,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			sv = ss > -1 ? 'ss' : '';
 
 		if (hasHour1) {
-			var time = _prepareTimeFormat(hh < KK ? 'KK' : 'hh', mv, sv);
+			var time = this.$class._prepareTimeFormat(hh < KK ? 'KK' : 'hh', mv, sv);
 			if (aa == -1)
 				return time;
 			else if ((hh != -1 && aa < hh) || (KK != -1 && aa < KK))
@@ -338,7 +312,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			else
 				return time + ' a';
 		} else
-			return _prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
+			return this.$class._prepareTimeFormat(HH < kk ? 'kk' : HH > -1 ? 'HH' : '', mv, sv);
 
 	},
 	/** Returns the Date format of the specified format
@@ -361,8 +335,14 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	isOpen: function () {
 		return this._pop && this._pop.isOpen();
 	},
+	setValue: function (value, fromServer) {
+		var tz = this.getTimeZone();
+		if (tz && value) value.tz(tz);
+		this.$supers('setValue', arguments);
+	},
 	coerceFromString_: function (val, pattern) {
-		var unf = Datebox._unformater;
+		var unf = Datebox._unformater,
+			tz = this.getTimeZone();
 		if (unf && jq.isFunction(unf)) {
 			var cusv = unf(val);
 			if (cusv) {
@@ -372,11 +352,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		if (val) {
 			var format = this.getFormat(),
-				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, this._value, this._localizedSymbols);
+				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, this._value, this._localizedSymbols, tz);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!format.match(/[HkKh]/))
-				d = new zk.fmt.Calendar().escapeDSTConflict(d);
+				d = new zk.fmt.Calendar().escapeDSTConflict(d, tz);
 			return d;
 		}
 		return null;
@@ -519,7 +499,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (wgt && (pp = this._pop)) {
 				// ZK-2211: should close when the input is out of view
 				if (this.getInputNode() && zul.inp.InputWidget._isInView(this))
-					_reposition(this, true);
+					this.$class._reposition(this, true);
 				else
 					pp.close();
 			}
@@ -562,6 +542,33 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	updateChange_: function () {
 		if (this.isOpen()) return;
 		this.$supers('updateChange_', arguments);
+	}
+}, {
+	_initPopup: function () {
+		this._pop = new zul.db.CalendarPop();
+		this._tm = new zul.db.CalendarTime();
+		this.appendChild(this._pop);
+		this.appendChild(this._tm);
+	},
+	_reposition: function (db, silent) {
+		if (!db.$n()) return;
+		var pp = db.$n('pp'),
+			n = db.$n(),
+			inp = db.getInputNode();
+
+		if (pp) {
+			zk(pp).position(n, db.position, {dodgeRef: n});
+			db._pop.syncShadow();
+			if (!silent)
+				zk(inp).focus();
+		}
+	},
+	_prepareTimeFormat: function (h, m, s) {
+		var o = [];
+		if (h) o.push(h);
+		if (m) o.push(m);
+		if (s) o.push(s);
+		return o.join(':');
 	}
 });
 
@@ -667,12 +674,13 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		delete db._shortcut;
 
 		var fmt = db.getTimeFormat(),
+			tz = db.getTimeZone(),
 			unf = Datebox._unformater,
 			value = unf ? unf(inp.value) : null;
 		//we should use UTC date instead of Locale date to our value.
 		if (!value)
-			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value, this._localizedSymbols), this._localizedSymbols).toUTCDate()
-				|| (inp.value ? db._value : zUtl.today(fmt));
+			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value, this._localizedSymbols, tz), this._localizedSymbols).toUTCDate()
+				|| (inp.value ? db._value : zUtl.today(fmt, tz));
 
 		if (value)
 			this.setValue(value);
@@ -680,7 +688,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			var tm = db._tm;
 			tm.setVisible(true);
 			tm.setFormat(fmt);
-			tm.setValue(value || new Date());
+			tm.setValue(value || Dates.newInstance().tz(tz));
 			tm.onSize();
 		} else {
 			db._tm.setVisible(false);
@@ -690,7 +698,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		jq(db.$n()).addClass(openClass);
 		jq(pp).addClass(openClass);
 
-		_reposition(db, silent); //ZK-3217: only need to calculate position once during open
+		db.$class._reposition(db, silent); //ZK-3217: only need to calculate position once during open
 	},
 	syncShadow: function () {
 		if (!this._shadow)
@@ -704,6 +712,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			fmt = db.getTimeFormat(),
 			oldDate = db.getValue(),
 			readonly = db.isReadonly(),
+			tz = db.getTimeZone(),
 			cal = new zk.fmt.Calendar();
 
 		if (fmt) {
@@ -713,17 +722,17 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!fmt.match(/[HkKh]/))
-				date = cal.escapeDSTConflict(date);
+				date = cal.escapeDSTConflict(date, tz);
 		} else if (oldDate) {
-			date = new Date(date.getFullYear(), date.getMonth(),
+			date = Dates.newInstance([date.getFullYear(), date.getMonth(),
 				date.getDate(), oldDate.getHours(),
-				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds());
+				oldDate.getMinutes(), oldDate.getSeconds(), oldDate.getMilliseconds()], tz);
 			//Note: we cannot call setFullYear(), setMonth(), then setDate(),
 			//since Date object will adjust month if date larger than max one
 
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!this.getFormat().match(/[HkKh]/))
-				date = cal.escapeDSTConflict(date);
+				date = cal.escapeDSTConflict(date, tz);
 		}
 
 		//Bug ZK-1712: no need to set datebox input value when shift view
@@ -735,7 +744,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 			// Bug 3122159 and 3301374
 			evt.data.value = date;
-			if (!_equalDate(date, oldDate))
+			if (!this.$class._equalDate(date, oldDate))
 				db.updateChange_();
 		}
 		evt.stop();
@@ -799,6 +808,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			this.parent.escPressed_(evt);
 		}
 	}
+}, {
+	_equalDate: function (d1, d2) {
+		return (d1 == d2) || (d1 && d2 && d1.getTime() == d2.getTime());
+	}
 });
 zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 	$init: function () {
@@ -820,7 +833,7 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 		var	date = db.coerceFromString_(dateTime, pattern);
 
 		// do nothing if date converted from String is not a valid Date object e.g. dateTime = "2014/10/10 1 :  :     "
-		if (date instanceof Date) {
+		if (date instanceof DateImpl) {
 			db.getInputNode().value = evt.data.value
 				= db.coerceToString_(date);
 			db.fire(evt.name, evt.data); //onChanging

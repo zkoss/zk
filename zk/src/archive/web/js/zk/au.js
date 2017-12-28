@@ -1031,7 +1031,7 @@ zAu.beforeSend = function (uri, req, dt) {
 
 			var v;
 			for (var n in data)
-				if (jq.type(v = data[n]) == 'date')
+				if ((v = data[n]) instanceof DateImpl)
 					data[n] = '$z!t#d:' + jq.d2j(v);
 		}
 		return jq.toJSON(data);

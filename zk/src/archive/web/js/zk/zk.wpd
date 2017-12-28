@@ -50,10 +50,13 @@ window.$eval=function(s){return eval(s);};
 	<script src="flex.js"/>
 	<script src="zswipe.js" jsdoc="true" browser="ios,android"/>
 	<script src="domtouch.js" browser="ios,android"/>
+	<script src="dateImpl.js"/>
 
 	<script src="zkie.js" browser="ie"/>
 
 	<script src="ext/jquery.json.js"/>
 	<script src="ext/jquery.mousewheel.js"/>
 	<script src="ext/jquery.transit.js"/>
+	<script src="ext/moment.js"/>
+	<script src="ext/moment-timezone-with-data.js"/>
 </package>

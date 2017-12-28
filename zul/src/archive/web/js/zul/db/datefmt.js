@@ -73,16 +73,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			s = '0' + s;
 		return s;
 	}
-	function _dayInYear(d, ref) {
-		return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - ref) / 864e5);
+	function _dayInYear(d, tz, ref) {
+		return Math.round((Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate(), tz]) - ref) / 864e5);
 	}
 	// Converts milli-second to day.
 //	function _ms2day(t) {
 //		return Math.round(t / 86400000);
 //	}
 	// Day in year (starting at 1).
-	function dayInYear(d, ref) {
-		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+	function dayInYear(d, tz, ref) {
+		if (!ref) ref = Dates.newInstance([d.getFullYear(), 0, 1], tz);
 		return _digitFixed(1 + _dayInYear(d, ref));
 	}
 	//Day in month (starting at 1).
@@ -90,27 +90,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return d.getDate();
 	}
 	//Week in year (starting at 1).
-	function weekInYear(d, ref) {
-		if (!ref) ref = new Date(d.getFullYear(), 0, 1);
+	function weekInYear(d, tz, ref) {
+		if (!ref) ref = Dates.newInstance([d.getFullYear(), 0, 1], tz);
 		var wday = ref.getDay();
 		if (wday == 7) wday = 0;
 		return _digitFixed(1 + Math.floor((_dayInYear(d, ref) + wday) / 7));
 	}
 	//Week in month (starting at 1).
-	function weekInMonth(d) {
-		return weekInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+	function weekInMonth(d, tz) {
+		return weekInYear(d, Dates.newInstance([d.getFullYear(), d.getMonth(), 1], tz));
 	}
 	//Day of week in month.
-	function dayOfWeekInMonth(d) {
-		return _digitFixed(1 + Math.floor(_dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1)) / 7));
+	function dayOfWeekInMonth(d, tz) {
+		return _digitFixed(1 + Math.floor(_dayInYear(d, Dates.newInstance([d.getFullYear(), d.getMonth(), 1], tz)) / 7));
 	}
 
 // a proxy of Date object for leap day on Thai locale - B60-ZK-1010
 var LeapDay = zk.$extends(zk.Object, {
-	$init: function (y, m, d, hr, min, sec, msec) {
+	$init: function (y, m, d, hr, min, sec, msec, tz) {
 		this.$supers('$init', arguments);
 		if (arguments.length > 1) {
-			this._date = new Date(y, m, d, hr, min, sec, msec);
+			this._date = Dates.newInstance([y, m, d, hr, min, sec, msec], tz);
 		} else
 			this._date = y;
 	},
@@ -168,9 +168,9 @@ var LeapDay = zk.$extends(zk.Object, {
 	}
 });
 zk.fmt.Date = {
-	parseDate: function (txt, fmt, strict, refval, localizedSymbols) {
+	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz) {
 		if (!fmt) fmt = 'yyyy/MM/dd';
-		refval = refval || zUtl.today(fmt);
+		refval = refval || zUtl.today(fmt, tz);
 
 		localizedSymbols = localizedSymbols || {
 			DOW_1ST: zk.DOW_1ST,
@@ -369,13 +369,13 @@ zk.fmt.Date = {
 			hr += 12;
 		var dt;
 		if (m == 1 && d == 29 && localizedSymbols.YDELTA) {
-			dt = new LeapDay(y - localizedSymbols.YDELTA, m, d, hr, min, sec, msec);
+			dt = new LeapDay(y - localizedSymbols.YDELTA, m, d, hr, min, sec, msec, tz);
 			dt.setOffset(localizedSymbols.YDELTA);
 		} else {
-			dt = new Date(y, m, d, hr, min, sec, msec);
+			dt = Dates.newInstance([y, m, d, hr, min, sec, msec], tz);
 		}
 		if (!dFound && dt.getMonth() != m)
-			dt = new Date(y, m + 1, 0, hr, min, sec, msec); //last date of m
+			dt = Dates.newInstance([y, m + 1, 0, hr, min, sec, msec], tz); //last date of m
 		if (strict) {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d
 				|| dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec) //ignore msec (safer though not accurate)
@@ -408,7 +408,8 @@ zk.fmt.Date = {
 			   FMON: zk.FMON,
 			    APM: zk.APM
 		};
-		var txt = '';
+		var txt = '',
+			tz = val.getTimeZone();
 		for (var j = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
@@ -540,7 +541,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 				d = new LeapDay(val); // a proxy of Date
 				d.setOffset(this._offset);
 			} else {
-				d = new Date(val);
+				d = Dates.newInstance(val);
 				d.setFullYear(d.getFullYear() + this._offset);
 			}
 		}
@@ -551,12 +552,12 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		return this._date.getRealDate();
 		var d;
 		if ((d = this._date) && this._offset)
-		(d = new Date(d))
+		(d = Dates.newInstance(d))
 		.setFullYear(d.getFullYear() - this._offset);
 		return d;
 	},
-	parseDate: function (txt, fmt, strict, refval, localizedSymbols) {
-		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols);
+	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz) {
+		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols, tz);
 		if (localizedSymbols)
 			this._offset = localizedSymbols.YDELTA;
 
@@ -588,9 +589,9 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	// B70-ZK-2382: in Daylight Saving Time (DST), choose the last time at the end of this mechanism, it will display previous day.
 	// e.g. 2014/10/19 at Brasilia (UTC-03:00), it will show 2014/10/18 23:00:00
 	// so we need to increase a hour.
-	escapeDSTConflict: function (val) {
+	escapeDSTConflict: function (val, tz) {
 		if (!val) return;
-		var newVal = new Date(val.getTime() + 3600000); //plus 60*60*1000
+		var newVal = Dates.newInstance(val.getTime() + 3600000, tz); //plus 60*60*1000
 		return newVal.getHours() != ((val.getHours() + 1) % 24) ? newVal : val;
 	}
 });

@@ -340,8 +340,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @return Date
 	 * @since 5.0.6
 	 */
-	today: function (fmt) {
-		var d = new Date(), hr = 0, min = 0, sec = 0, msec = 0;
+	today: function (fmt, tz) {
+		var d = Dates.newInstance().tz(tz), hr = 0, min = 0, sec = 0, msec = 0;
 		if (typeof fmt == 'string') {
 			var fmt0 = fmt.toLowerCase();
 			if (fmt0.indexOf('h') >= 0 || fmt0.indexOf('k') >= 0) hr = d.getHours();
@@ -350,10 +350,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			if (fmt.indexOf('S') >= 0) msec = d.getMilliseconds();
 		} else if (fmt)
 			return d;
-		return new Date(d.getFullYear(), d.getMonth(), d.getDate(),
-			hr, min, sec, msec);
+		return Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate(),
+			hr, min, sec, msec], tz);
 	},
-
 	/** Returns if one is ancestor of the other.
 	 * It assumes the object has either a method called <code>getParent</code>
 	 * or a field called <code>parent</code>.

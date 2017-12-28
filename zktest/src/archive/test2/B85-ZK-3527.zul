@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3527.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 13 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import java.text.*;
+		import java.util.Calendar;
+		import org.zkoss.lang.Library;
+		import org.zkoss.util.TimeZones;
+
+		TimeZone lisbonZone = TimeZone.getTimeZone("Europe/Lisbon");
+		TimeZone berlinZone = TimeZone.getTimeZone("Europe/Berlin");
+
+		DateFormat lisbonFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm zzz");
+		lisbonFormat.setTimeZone(lisbonZone);
+		DateFormat berlinFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm zzz");
+		berlinFormat.setTimeZone(berlinZone);
+
+		public Calendar getCalendar(int year, int month, int day, TimeZone zone) {
+			Calendar calendar = null;
+			if (zone == null)
+				calendar = Calendar.getInstance(TimeZones.getCurrent());
+			else
+				calendar = Calendar.getInstance(zone);
+			calendar.set(Calendar.YEAR, year);
+			calendar.set(Calendar.MONTH, month);
+			calendar.set(Calendar.DAY_OF_MONTH, day);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			return calendar;
+		}
+
+		Date d1 = this.getCalendar(1976, Calendar.MARCH, 1, lisbonZone).getTime();
+		Date d2 = this.getCalendar(1979, Calendar.JULY, 1, berlinZone).getTime();
+		Date d3 = this.getCalendar(1912, Calendar.JANUARY, 1, lisbonZone).getTime();
+		Date d4 = this.getCalendar(1947, Calendar.AUGUST, 10, berlinZone).getTime();
+	]]></zscript>
+
+	(1) Lisbon:
+	<datebox id="db1" format="yyyy-MM-dd HH:mm" timeZone="Europe/Lisbon" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+	(2) Berlin:
+	<datebox id="db2" format="yyyy-MM-dd HH:mm" timeZone="Europe/Berlin" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+	(3) Lisbon:
+	<datebox id="db3" format="yyyy-MM-dd HH:mm" timeZone="Europe/Lisbon" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+	(4) Berlin:
+	<datebox id="db4" format="yyyy-MM-dd HH:mm" timeZone="Europe/Berlin" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+
+	<zscript><![CDATA[
+		db1.setValue(d1);
+		db2.setValue(d2);
+		db3.setValue(d3);
+		db4.setValue(d4);
+	]]></zscript>
+	<label multiline="true">
+		Check the string in datebox, hours and minutes should be 00:00 except the third one.
+		The third one should be 00:36.
+
+		Info:
+		Clock Changes in Lisbon, Portugal (Lisboa) in 1912
+		1 Jan 1912 - Time Zone Change (LMT → WET)
+		When local standard time was about to reach
+		Monday, 1 January 1912, 00:00:00 clocks were turned forward 0:36:45 hours to
+		Monday, 1 January 1912, 00:36:45 local standard time instead.
+	</label>
+</zk>

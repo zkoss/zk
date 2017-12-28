@@ -32,7 +32,6 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.text.DateFormats;
-import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.zk.ui.Component;
@@ -65,7 +64,7 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Timebox extends FormatInputElement {
 	/*package*/ static final String DEFAULT_FORMAT = "HH:mm";
-	private TimeZone _tzone;
+	private TimeZone _tzone = TimeZones.getCurrent();
 	/** The locale associated with this timebox. */
 	private Locale _locale;
 	private boolean _btnVisible = true;
@@ -231,6 +230,7 @@ public class Timebox extends FormatInputElement {
 		if (_tzone != tzone) {
 			_tzone = tzone;
 			smartUpdate("_value", marshall(_value));
+			smartUpdate("timezone", _tzone.getID());
 		}
 	}
 
@@ -276,22 +276,6 @@ public class Timebox extends FormatInputElement {
 	protected String getDefaultFormat() {
 		return DateFormats.getTimeFormat(DateFormat.DEFAULT, _locale, "HH:mm");
 		//We use HH:mm for backward compatibility
-	}
-
-	protected Object marshall(Object value) {
-		if (value == null || _tzone == null)
-			return value;
-		Date date = (Date) value;
-		return new Date((date).getTime() - Dates.getTimezoneOffset(TimeZones.getCurrent(), date)
-				+ Dates.getTimezoneOffset(_tzone, date));
-	}
-
-	protected Object unmarshall(Object value) {
-		if (value == null || _tzone == null)
-			return value;
-		Date date = (Date) value;
-		return new Date((date).getTime() + Dates.getTimezoneOffset(TimeZones.getCurrent(), date)
-				- Dates.getTimezoneOffset(_tzone, date));
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {
@@ -366,8 +350,11 @@ public class Timebox extends FormatInputElement {
 		String realformat = getRealFormat();
 		if (realformat.indexOf("z") != -1) {
 			String timezone = getFormattedTimezone();
-			renderer.render("timezone", timezone);
+			renderer.render("timezoneAbbr", timezone);
 		}
+
+		if (_tzone != null)
+			renderer.render("timezone", _tzone.getID());
 
 		if (!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);

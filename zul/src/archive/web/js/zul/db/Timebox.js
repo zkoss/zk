@@ -42,142 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 * @type int
 		 */
 		HOUR3_FIELD = 7;
-	function _updFormat(wgt, fmt) {
-		var index = [],
-			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM : zk.APM;
-		for (var i = 0, l = fmt.length; i < l; i++) {
-			var c = fmt.charAt(i);
-			switch (c) {
-			case 'a':
-				var len = APM[0].length;
-				index.push(new zul.inp.AMPMHandler([i, i + len - 1], AM_PM_FIELD, wgt));
-				break;
-			case 'K':
-				var start = i,
-					end = fmt.charAt(i + 1) == 'K' ? ++i : i;
-				index.push(new zul.inp.HourHandler2([start, end], HOUR3_FIELD));
-				break;
-			case 'h':
-				var start = i,
-					end = fmt.charAt(i + 1) == 'h' ? ++i : i;
-				index.push(new zul.inp.HourHandler([start, end], HOUR2_FIELD));
-				break;
-			case 'H':
-				var start = i,
-					end = fmt.charAt(i + 1) == 'H' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD));
-				break;;
-			case 'k':
-				var start = i,
-					end = fmt.charAt(i + 1) == 'k' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler2([start, end], HOUR1_FIELD));
-				break;
-			case 'm':
-				var start = i,
-					end = fmt.charAt(i + 1) == 'm' ? ++i : i;
-				index.push(new zul.inp.MinuteHandler([start, end], MINUTE_FIELD));
-				break;
-			case 's':
-				var start = i,
-					end = fmt.charAt(i + 1) == 's' ? ++i : i;
-				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD));
-				break;
-			case 'z':
-				index.push({index: [i, i],format: (function (text) {
-					return function () {
-						return text;
-					};
-				})(wgt._timezone)});
-				break;
-			default:
-				var ary = '',
-					start = i,
-					end = i;
 
-				while ((ary += c) && ++end < l) {
-					c = fmt.charAt(end);
-					if (LEGAL_CHARS.indexOf(c) != -1) {
-						end--;
-						break;
-					}
-				}
-				index.push({index: [start, end], format: (function (text) {
-					return function () {
-						return text;
-					};
-				})(ary)});
-				i = end;
-			}
-		}
-		for (var shift, i = 0, l = index.length; i < l; i++) {
-			if (index[i].type == AM_PM_FIELD) {
-				shift = index[i].index[1] - index[i].index[0];
-				if (!shift) break; // no need to shift.
-			} else if (shift) {
-				index[i].index[0] += shift;
-				index[i].index[1] += shift;
-			}
-		}
-		wgt._fmthdler = index;
-	}
-	function _cleanSelectionText (wgt, startHandler) {
-		var inp = wgt.getInputNode(),
-			sel = zk(inp).getSelectionRange(),
-			pos = sel[0],
-			selEnd = sel[1],
-			fmthdler = wgt._fmthdler,
-			index = fmthdler.$indexOf(startHandler),
-			text = '',
-			hdler = startHandler,
-			isFirst = true,
-			prevStart, ofs, hStart, hEnd, posOfs;
-
-		//restore separator
-		do {
-			hStart = hdler.index[0];
-			hEnd = hdler.index[1] + 1;
-
-			if (hdler.type && (posOfs = hdler.isSingleLength())) {
-				//sync handler index
-				hdler._doShift(wgt, posOfs);
-				selEnd--;
-			}
-
-			//latest one
-			if (hEnd >= selEnd && hdler.type) {
-				ofs = selEnd - hStart;
-				while (ofs-- > 0) //replace by space (after)
-					text += ' ';
-				break;
-			}
-
-			if (hdler.type) {
-				prevStart = isFirst ? pos : hStart;
-				isFirst = false;
-				continue;
-			}
-			ofs = hStart - prevStart;
-			while (ofs-- > 0) //replace by space (before)
-				text += ' ';
-
-			text += hdler.format();
-
-		} while (hdler = fmthdler[++index]);
-		return text;
-	}
-	function _getMaxLen (wgt) {
-		var val = wgt.getInputNode().value,
-			len = 0, th, lastTh;
-		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
-			th = f[i];
-			if (i == l - 1) {
-				len += th.format().length;
-			} else
-				len += (th.type ? th.getText(val) : th.format()).length;
-			if (th.type) lastTh = th;
-		}
-		return (lastTh.digits == 1) ? ++len : len;
-	}
 	var globallocalizedSymbols = {};
 
 var Timebox =
@@ -196,14 +61,25 @@ var Timebox =
 zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_format: 'HH:mm',
+	_timezoneAbbr: '',
 	_timezone: '',
 	$init: function () {
 		this.$supers('$init', arguments);
-		_updFormat(this, this._format);
+		this.$class._updFormat(this, this._format);
 	},
 	$define: {
+		timezoneAbbr: function (v) {
+			this.$class._updFormat(this, this._format);
+		},
+		/** Sets the time zone ID that this time box belongs to.
+		 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+		 */
+		/** Returns the time zone ID that this time box belongs to.
+		 * @return String the time zone's ID, such as "America/Los_Angeles".
+		 * @since 8.5.1
+		 */
 		timezone: function (v) {
-			_updFormat(this, this._format);
+			this._value && this._value.tz(v);
 		},
 		/** Returns whether the button (on the right of the textbox) is visible.
 		 * <p>Default: true.
@@ -240,10 +116,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	setFormat: function (fmt) {
 		fmt = fmt ? fmt.replace(/\'/g, '') : fmt;
-		_updFormat(this, fmt);
+		this.$class._updFormat(this, fmt);
 		this.$supers('setFormat', arguments);
 	},
 	setValue: function (value, fromServer) {
+		var tz = this.getTimezone();
+		if (tz && value) value.tz(tz);
 		if (fromServer && value === null) //Bug ZK-1322: if from server side, return empty string
 			this._changed = false;
 		this.$supers('setValue', arguments);
@@ -263,7 +141,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		return out;
 	},
 	coerceFromString_: function (val) {
-		var unf = Timebox._unformater;
+		var unf = Timebox._unformater,
+			tz = this.getTimezone();
 		if (unf && jq.isFunction(unf)) {
 			var cusv = unf(val);
 			if (cusv) {
@@ -276,7 +155,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// F65-ZK-1825: use this._value instead of "today"
 		// We cannot use this._value in this case, which won't trigger onChange
 		// event. Using clone date instead.
-		var date = this._value ? new Date(this._value.getTime()) : zUtl.today(this._format),
+		var date = this._value ? Dates.newInstance(this._value.getTime(), tz) : zUtl.today(this._format, tz),
 			hasAM, isAM, hasHour1,
 			fmt = [], emptyCount = 0;
 		date.setSeconds(0);
@@ -632,6 +511,85 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	getBtnDownIconClass_: function () {
 		return 'z-icon-angle-down';
 	}
+}, {
+	_updFormat: function (wgt, fmt) {
+		var index = [],
+			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM : zk.APM;
+		for (var i = 0, l = fmt.length; i < l; i++) {
+			var c = fmt.charAt(i);
+			switch (c) {
+			case 'a':
+				var len = APM[0].length;
+				index.push(new zul.inp.AMPMHandler([i, i + len - 1], AM_PM_FIELD, wgt));
+				break;
+			case 'K':
+				var start = i,
+					end = fmt.charAt(i + 1) == 'K' ? ++i : i;
+				index.push(new zul.inp.HourHandler2([start, end], HOUR3_FIELD));
+				break;
+			case 'h':
+				var start = i,
+					end = fmt.charAt(i + 1) == 'h' ? ++i : i;
+				index.push(new zul.inp.HourHandler([start, end], HOUR2_FIELD));
+				break;
+			case 'H':
+				var start = i,
+					end = fmt.charAt(i + 1) == 'H' ? ++i : i;
+				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD));
+				break;;
+			case 'k':
+				var start = i,
+					end = fmt.charAt(i + 1) == 'k' ? ++i : i;
+				index.push(new zul.inp.HourInDayHandler2([start, end], HOUR1_FIELD));
+				break;
+			case 'm':
+				var start = i,
+					end = fmt.charAt(i + 1) == 'm' ? ++i : i;
+				index.push(new zul.inp.MinuteHandler([start, end], MINUTE_FIELD));
+				break;
+			case 's':
+				var start = i,
+					end = fmt.charAt(i + 1) == 's' ? ++i : i;
+				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD));
+				break;
+			case 'z':
+				index.push({index: [i, i],format: (function (text) {
+					return function () {
+						return text;
+					};
+				})(wgt._timezoneAbbr)});
+				break;
+			default:
+				var ary = '',
+					start = i,
+					end = i;
+
+				while ((ary += c) && ++end < l) {
+					c = fmt.charAt(end);
+					if (LEGAL_CHARS.indexOf(c) != -1) {
+						end--;
+						break;
+					}
+				}
+				index.push({index: [start, end], format: (function (text) {
+					return function () {
+						return text;
+					};
+				})(ary)});
+				i = end;
+			}
+		}
+		for (var shift, i = 0, l = index.length; i < l; i++) {
+			if (index[i].type == AM_PM_FIELD) {
+				shift = index[i].index[1] - index[i].index[0];
+				if (!shift) break; // no need to shift.
+			} else if (shift) {
+				index[i].index[0] += shift;
+				index[i].index[1] += shift;
+			}
+		}
+		wgt._fmthdler = index;
+	}
 });
 zul.inp.TimeHandler = zk.$extends(zk.Object, {
 	maxsize: 59,
@@ -691,7 +649,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			sel = zk(inp).getSelectionRange(),
 			pos = sel[0],
 			val = inp.value,
-			maxLength = _getMaxLen(wgt);
+			maxLength = this.$class._getMaxLen(wgt);
 
 		// clean over text
 		if (val.length > maxLength) {
@@ -702,7 +660,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 
 		if (pos != sel[1]) {
 			//select delete
-			inp.value = val.substring(0, pos) + _cleanSelectionText(wgt, this)
+			inp.value = val.substring(0, pos) + this.$class._cleanSelectionText(wgt, this)
 							+ val.substring(sel[1]);
 		} else {
 			var fmthdler = wgt._fmthdler,
@@ -746,7 +704,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			sel = zk(inp).getSelectionRange(),
 			val = inp.value,
 			pos = sel[0],
-			maxLength = _getMaxLen(wgt),
+			maxLength = this.$class._getMaxLen(wgt),
 			posOfs = this.isSingleLength();
 
 		// clean over text
@@ -806,7 +764,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 
 		if (pos != sel[1]) {
 			//select edit
-			var s = _cleanSelectionText(wgt, this),
+			var s = this.$class._cleanSelectionText(wgt, this),
 				ofs;
 			//in middle position
 			if (posOfs !== false && (ofs = pos - this.index[1]))
@@ -839,6 +797,65 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 	},
 	isSingleLength: function () {
 		return this.digits == 1 && (this.index[0] - this.index[1]);
+	}
+}, {
+	_getMaxLen: function (wgt) {
+		var val = wgt.getInputNode().value,
+			len = 0, th, lastTh;
+		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
+			th = f[i];
+			if (i == l - 1) {
+				len += th.format().length;
+			} else
+				len += (th.type ? th.getText(val) : th.format()).length;
+			if (th.type) lastTh = th;
+		}
+		return (lastTh.digits == 1) ? ++len : len;
+	},
+	_cleanSelectionText: function (wgt, startHandler) {
+		var inp = wgt.getInputNode(),
+			sel = zk(inp).getSelectionRange(),
+			pos = sel[0],
+			selEnd = sel[1],
+			fmthdler = wgt._fmthdler,
+			index = fmthdler.$indexOf(startHandler),
+			text = '',
+			hdler = startHandler,
+			isFirst = true,
+			prevStart, ofs, hStart, hEnd, posOfs;
+
+		//restore separator
+		do {
+			hStart = hdler.index[0];
+			hEnd = hdler.index[1] + 1;
+
+			if (hdler.type && (posOfs = hdler.isSingleLength())) {
+				//sync handler index
+				hdler._doShift(wgt, posOfs);
+				selEnd--;
+			}
+
+			//latest one
+			if (hEnd >= selEnd && hdler.type) {
+				ofs = selEnd - hStart;
+				while (ofs-- > 0) //replace by space (after)
+					text += ' ';
+				break;
+			}
+
+			if (hdler.type) {
+				prevStart = isFirst ? pos : hStart;
+				isFirst = false;
+				continue;
+			}
+			ofs = hStart - prevStart;
+			while (ofs-- > 0) //replace by space (before)
+				text += ' ';
+
+			text += hdler.format();
+
+		} while (hdler = fmthdler[++index]);
+		return text;
 	}
 });
 zul.inp.HourInDayHandler = zk.$extends(zul.inp.TimeHandler, {
