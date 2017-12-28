@@ -3346,7 +3346,7 @@ unbind_: function (skipper, after) {
 		while (fc && fc.ignoreFlexSize_('h'))
 			fc = fc.nextSibling;
 		
-		var c = fc ? fc.$n() : p.firstChild,
+		var c = (fc && fc.$n()) || p.firstChild,
 			zkp = zk(p),
 			h = zkp.padBorderHeight();
 		
@@ -3359,7 +3359,7 @@ unbind_: function (skipper, after) {
 			}
 			return h;
 		}
-		return 0;
+		return h;
 	},
 	getContentEdgeWidth_: function (width/*current calculated width*/) {
 		var p = this.$n(),
@@ -3371,7 +3371,7 @@ unbind_: function (skipper, after) {
 		while (fc && fc.ignoreFlexSize_('w'))
 			fc = fc.nextSibling;
 		
-		var	c = fc ? fc.$n() : p.firstChild,
+		var c = (fc && fc.$n()) || p.firstChild,
 			zkp = zk(p),
 			w = zkp.padBorderWidth();
 		
@@ -3384,7 +3384,7 @@ unbind_: function (skipper, after) {
 			}
 			return w;
 		}
-		return 0;
+		return w;
 	},
 	fixFlex_: function () {
 		zFlex.fixFlex(this);
