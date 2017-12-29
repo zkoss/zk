@@ -61,6 +61,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	protected Map<Component, Map<Object, TrackerNode>> _compMap; //comp -> path -> head TrackerNode
 	protected Map<Object, Set<TrackerNode>> _nullMap = new LinkedHashMap<Object, Set<TrackerNode>>(); //property -> Set of head TrackerNode that eval to null
 	protected transient Map<Object, Set<TrackerNode>> _beanMap = new WeakIdentityMap<Object, Set<TrackerNode>>(); //bean -> Set of TrackerNode
+	protected transient Map<TrackerNode, Set<Object>> _nodeMap = new WeakIdentityMap<TrackerNode, Set<Object>>(); //TrackerNode -> Set of bean, added in ZK-3808
 	protected transient EqualBeansMap _equalBeansMap; //bean -> beans (use to manage equal beans)
 
 	public TrackerImpl() {
@@ -377,6 +378,13 @@ public class TrackerImpl implements Tracker, Serializable {
 			}
 			//only when value is not a primitive that we shall store it
 			node.setBean(value);
+
+			// ZK-3808: performance tuning
+			Set<Object> values = _nodeMap.get(node);
+			final Set<Object> values0 = AllocUtil.inst.addLinkedHashSet(values, value);
+			if (values != values0) {
+				_nodeMap.put(node, values0);
+			}
 			//}
 		}
 
@@ -508,16 +516,19 @@ public class TrackerImpl implements Tracker, Serializable {
 
 	//remove all specified nodes from the _beanMap 
 	protected void removeAllFromBeanMap(Collection<TrackerNode> removed) {
-		final Collection<Entry<Object, Set<TrackerNode>>> nodesets = _beanMap.entrySet();
-		for (final Iterator<Entry<Object, Set<TrackerNode>>> it = nodesets.iterator(); it.hasNext();) {
-			final Entry<Object, Set<TrackerNode>> nodeset = it.next();
-			final Object bean = nodeset.getKey();
-			nodeset.getValue().removeAll(removed);
-			if (nodeset.getValue().isEmpty()) {
-				it.remove();
-				_equalBeansMap.remove(bean);
+		// ZK-3808: performance tuning
+		for (TrackerNode tn : removed) {
+			Set<Object> beans = _nodeMap.get(tn);
+			for (Object o : beans) {
+				Set<TrackerNode> tns = _beanMap.get(o);
+				tns.removeAll(removed);
+				if (tns.isEmpty()) {
+					_beanMap.remove(o);
+					_equalBeansMap.remove(o);
+				}
 			}
 		}
+		_nodeMap.keySet().removeAll(removed);
 	}
 
 	private void removeNodes(Collection<Set<TrackerNode>> nodesets, Collection<TrackerNode> removed) {

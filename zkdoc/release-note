@@ -26,6 +26,7 @@ ZK 8.5.1
   ZK-3527: Timezone issues with historically varying DST and Offsets rules
   ZK-3657: hflex/vflex min with renderdefer
   ZK-3776: Frozen with paging and columns without size definition displayed blank after page change
+  ZK-3808: Provide performance tuning options for meshes
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
