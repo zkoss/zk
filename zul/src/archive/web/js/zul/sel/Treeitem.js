@@ -427,48 +427,44 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 				w.removeHTML_(cn);
 		}
 	},
-	_renderChildHTML: (function () {
-		return function (childHTML) {
-			var tree = this.getTree(),
-				erows = tree.ebodyrows;
+	_renderChildHTML: function (childHTML) {
+		var tree = this.getTree(),
+			erows = tree.ebodyrows;
 
-			// has children
-			if (erows && erows.childNodes.length) {
-				// do binary search for the insertion point
-				var low = 0,
-					children = erows.childNodes,
-					high = children.length - 1,
-					mid = 0,
-					thisPath = _getTreePath(tree, this);
+		// has children
+		if (erows && erows.childNodes.length) {
+			// do binary search for the insertion point
+			var low = 0,
+				children = erows.childNodes,
+				high = children.length - 1,
+				mid = 0,
+				thisPath = _getTreePath(tree, this);
 
-				while (low <= high) {
-					mid = (low + high) >>> 1;
+			while (low <= high) {
+				mid = (low + high) >>> 1;
 
-					var item = zk.Widget.$(children[mid].id).parent,
-						itemPath = _getTreePath(tree, item);
+				var item = zk.Widget.$(children[mid].id).parent,
+					itemPath = _getTreePath(tree, item);
 
-					if (_compareTreePath(thisPath, itemPath) == 1) {
-						low = mid + 1;
-					} else {
-						high = mid - 1;
-						if (low >= high)
-							mid -= 1;
-
-					}
+				if (_compareTreePath(thisPath, itemPath) == 1) {
+					low = mid + 1;
+				} else {
+					high = mid - 1;
+					if (low >= high)
+						mid -= 1;
 				}
-
-				if (mid >= 0)
-					jq(children[mid]).after(childHTML);
-				else if (erows.firstChild) // the first one
-					jq(erows.firstChild).before(childHTML);
-				else
-					jq(erows).append(childHTML);
-			} else {
-				jq(erows).append(childHTML);
 			}
 
-		};
-	})(),
+			if (mid >= 0)
+				jq(children[mid]).after(childHTML);
+			else if (erows.firstChild) // the first one
+				jq(erows.firstChild).before(childHTML);
+			else
+				jq(erows).append(childHTML);
+		} else {
+			jq(erows).append(childHTML);
+		}
+	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before = before ? before.getFirstNode_() : null)
 			jq(before).before(child.redrawHTML_());

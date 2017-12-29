@@ -771,7 +771,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this._hflex == 'min') {
 				zFlex.onFitSize.apply(this);
 			} else {
-				this._calcMinWds();
 				this._fixHeaders();
 			}
 			this.onSize();

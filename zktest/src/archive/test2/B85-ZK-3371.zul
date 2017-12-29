@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3371.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 25 16:54:05 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		DefaultTreeNode root = new DefaultTreeNode("ROOT", new ArrayList());
+		DefaultTreeModel stm = new DefaultTreeModel(root);
+		DefaultTreeNode visibleRoot = new DefaultTreeNode("Visible ROOT", new ArrayList());
+		root.add(visibleRoot);
+		for (int i = 0; i < 10000; i++) {
+			visibleRoot.add(new DefaultTreeNode(i, Collections.emptyList()));
+		}
+	]]></zscript>
+	<label multiline="true">
+		1. Open the tree node. IE/Edge is very slow compared with other browsers.
+		2. Scroll the tree to trigger ROD.
+		---
+		Better ways:
+		1. Use mode="paging"
+		2. Set height/hflex to enable ROD (or it will render the other 9950 items at once)
+	</label>
+	<tree width="300px" model="${stm}" vflex="1">
+		<!--<attribute name="mold">paging</attribute>&lt;!&ndash; comment out to use paging mold &ndash;&gt;-->
+	</tree>
+</zk>
