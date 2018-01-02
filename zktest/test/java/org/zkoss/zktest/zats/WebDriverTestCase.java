@@ -144,6 +144,7 @@ public abstract class WebDriverTestCase {
 			}
 		}
 		_local.set(webDriver);
+		waitResponse();
 		return webDriver;
 	}
 
@@ -188,7 +189,6 @@ public abstract class WebDriverTestCase {
 
 	/**
 	 * Waits for Ajax response. (excluding animation check)
-	 * <p>By default the timeout time is specified in config.properties
 	 * @see #waitResponse(int)
 	 */
 	protected void waitResponse() {
@@ -207,11 +207,11 @@ public abstract class WebDriverTestCase {
 
 	/**
 	 * Returns the wait response speed.
-	 * <p>Default: 300ms</p>
+	 * <p>Default: 500ms</p>
 	 * @return
 	 */
 	protected int getSpeed() {
-		return 300;
+		return 500;
 	}
 
 	/**
@@ -362,17 +362,6 @@ public abstract class WebDriverTestCase {
 	protected void trigger(ClientWidget widget, String event) {
 		((JavascriptExecutor) driver).executeScript(jq(widget).toLocator() + ".trigger('"+ event + "')");
 	}
-
-	/**
-	 * Waits for an element to be visible.
-	 * @param locator the element where it waits for.
-	 * @param timeoutInSeconds the timeout in seconds.
-	 */
-//	protected void waitFor(ClientWidget locator, int timeoutInSeconds) {
-//		WebDriverWait wait = new WebDriverWait(getWebDriver(), timeoutInSeconds);
-//		ExpectedCondition<WebElement> cond = ExpectedConditions.visibilityOfElementLocated(locator);
-//		wait.until((Function<? super WebDriver, Object>) cond);
-//	}
 
 	public static WebElement toElement(ClientWidget locator) {
 		WebDriver webDriver = _local.get();
