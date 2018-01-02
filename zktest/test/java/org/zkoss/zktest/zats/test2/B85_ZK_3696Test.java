@@ -25,7 +25,7 @@ public class B85_ZK_3696Test extends WebDriverTestCase {
 	@Test
 	public void testDynamic() throws Exception {
 		connect();
-
+		sleep(1000);
 		Element headrows = jq("@grid:eq(0)").toWidget().$n("headrows");
 		JQuery hidden = jq(widget(headrows)).find("tr:hidden");
 		Assert.assertEquals("There are hidden headers not displayed properly.", 0, hidden.length());
@@ -34,7 +34,7 @@ public class B85_ZK_3696Test extends WebDriverTestCase {
 	@Test
 	public void testStatic() throws Exception {
 		connect();
-
+		sleep(1000);
 		Element headrows = jq("@grid:eq(1)").toWidget().$n("headrows");
 		JQuery hidden = jq(widget(headrows)).find("tr:hidden");
 		Assert.assertEquals("There are hidden headers not displayed properly.", 0, hidden.length());

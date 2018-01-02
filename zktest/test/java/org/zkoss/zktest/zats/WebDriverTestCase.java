@@ -144,7 +144,7 @@ public abstract class WebDriverTestCase {
 			}
 		}
 		_local.set(webDriver);
-		waitResponse();
+		waitResponse(true);
 		return webDriver;
 	}
 
