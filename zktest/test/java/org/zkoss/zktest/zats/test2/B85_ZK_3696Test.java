@@ -23,20 +23,20 @@ import org.zkoss.zktest.zats.ztl.JQuery;
  */
 public class B85_ZK_3696Test extends WebDriverTestCase {
 	@Test
-	public void testDynamic() throws Exception {
+	public void testDynamic() {
 		connect();
 		sleep(1000);
 		Element headrows = jq("@grid:eq(0)").toWidget().$n("headrows");
-		JQuery hidden = jq(widget(headrows)).find("tr:hidden");
-		Assert.assertEquals("There are hidden headers not displayed properly.", 0, hidden.length());
+		JQuery visible = jq(headrows).find("tr:visible");
+		Assert.assertEquals("There are hidden headers not displayed properly.", 5, visible.length());
 	}
 
 	@Test
-	public void testStatic() throws Exception {
+	public void testStatic() {
 		connect();
 		sleep(1000);
 		Element headrows = jq("@grid:eq(1)").toWidget().$n("headrows");
-		JQuery hidden = jq(widget(headrows)).find("tr:hidden");
-		Assert.assertEquals("There are hidden headers not displayed properly.", 0, hidden.length());
+		JQuery visible = jq(headrows).find("tr:visible");
+		Assert.assertEquals("There are hidden headers not displayed properly.", 5, visible.length());
 	}
 }
