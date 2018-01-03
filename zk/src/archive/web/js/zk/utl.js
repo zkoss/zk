@@ -686,6 +686,17 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		for (var n in _imgMap)
 			return true;
 		return false;
+	},
+	/**
+	 * Get week numbers of year for a specific date
+	 * @since 8.5.1
+	 */
+	getWeekOfYear: function (year, month, date, firstDayOfWeek, minimalDaysInFirstWeek) {
+		var d = Dates.newInstance([year, month, date, 0, 0, 0, 0], 'UTC'),
+			day = d.getDay();
+		d.setDate(date - minimalDaysInFirstWeek + firstDayOfWeek - (firstDayOfWeek > day ? day : day - 7));
+		var yearStart = Dates.newInstance([d.getFullYear(), 0, 1], 'UTC');
+		return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
 	}
 };
 

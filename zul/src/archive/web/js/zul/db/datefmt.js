@@ -73,36 +73,33 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			s = '0' + s;
 		return s;
 	}
-	function _dayInYear(d, tz, ref) {
-		return Math.round((Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate(), tz]) - ref) / 864e5);
+	function _dayInYear(d, ref) {
+		return Math.round((Dates.newInstance([d.getFullYear(), d.getMonth(), d.getDate()], d.getTimeZone()) - ref) / 864e5);
 	}
 	// Converts milli-second to day.
 //	function _ms2day(t) {
 //		return Math.round(t / 86400000);
 //	}
 	// Day in year (starting at 1).
-	function dayInYear(d, tz, ref) {
-		if (!ref) ref = Dates.newInstance([d.getFullYear(), 0, 1], tz);
+	function dayInYear(d) {
+		var ref = Dates.newInstance([d.getFullYear(), 0, 1], d.getTimeZone());
 		return _digitFixed(1 + _dayInYear(d, ref));
 	}
 	//Day in month (starting at 1).
 	function dayInMonth(d) {
 		return d.getDate();
 	}
-	//Week in year (starting at 1).
-	function weekInYear(d, tz, ref) {
-		if (!ref) ref = Dates.newInstance([d.getFullYear(), 0, 1], tz);
-		var wday = ref.getDay();
-		if (wday == 7) wday = 0;
-		return _digitFixed(1 + Math.floor((_dayInYear(d, ref) + wday) / 7));
-	}
 	//Week in month (starting at 1).
-	function weekInMonth(d, tz) {
-		return weekInYear(d, Dates.newInstance([d.getFullYear(), d.getMonth(), 1], tz));
+	function weekInMonth(d, firstDayOfWeek) {
+		var ref = Dates.newInstance([d.getFullYear(), d.getMonth(), 1], d.getTimeZone()),
+			day = ref.getDay(),
+			shift = (firstDayOfWeek > day ? day + 7 : day) - firstDayOfWeek;
+		return _digitFixed(1 + Math.floor((_dayInYear(d, ref) + shift) / 7));
 	}
 	//Day of week in month.
-	function dayOfWeekInMonth(d, tz) {
-		return _digitFixed(1 + Math.floor(_dayInYear(d, Dates.newInstance([d.getFullYear(), d.getMonth(), 1], tz)) / 7));
+	function dayOfWeekInMonth(d) {
+		var ref = Dates.newInstance([d.getFullYear(), d.getMonth(), 1], d.getTimeZone());
+		return _digitFixed(1 + Math.floor(_dayInYear(d, ref) / 7));
 	}
 
 // a proxy of Date object for leap day on Thai locale - B60-ZK-1010
@@ -441,10 +438,10 @@ zk.fmt.Date = {
 					txt += dayInYear(val);
 					break;
 				case 'w':
-					txt += weekInYear(val);
+					txt += zUtl.getWeekOfYear(val.getFullYear(), val.getMonth(), val.getDate(), localizedSymbols.DOW_1ST, localizedSymbols.MINDAYS);
 					break;
 				case 'W':
-					txt += weekInMonth(val);
+					txt += weekInMonth(val, localizedSymbols.DOW_1ST);
 					break;
 				case 'G':
 					txt += localizedSymbols.ERA;

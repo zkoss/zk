@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3833.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 4 11:52:15 CST 2018, Created by bobpeng
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import java.util.Calendar;
+
+		TimeZone lisbonZone = TimeZone.getTimeZone("Europe/Lisbon");
+		TimeZone berlinZone = TimeZone.getTimeZone("Europe/Berlin");
+
+		public Calendar getCalendar(int year, int month, int day, TimeZone zone) {
+			Calendar calendar = Calendar.getInstance(zone);
+			calendar.set(Calendar.YEAR, year);
+			calendar.set(Calendar.MONTH, month);
+			calendar.set(Calendar.DAY_OF_MONTH, day);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			return calendar;
+		}
+
+		Date d1 = this.getCalendar(1912, Calendar.JANUARY, 1, lisbonZone).getTime();
+		Date d2 = this.getCalendar(1912, Calendar.JANUARY, 1, berlinZone).getTime();
+	]]></zscript>
+	<label multiline="true">
+		Open the calendar, date 1912/01/01 should be on Monday.
+	</label>
+	Lisbon:
+	<datebox value="${d1}" format="yyyy-MM-dd HH:mm" timeZone="Europe/Lisbon" width="300px"/>
+	<separator/>
+	Berlin:
+	<datebox value="${d2}" format="yyyy-MM-dd HH:mm" timeZone="Europe/Berlin" width="300px"/>
+	<separator/>
+</zk>
