@@ -209,6 +209,19 @@
 	visibility: hidden; // Bug ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
 }
 
+// combobox emptySearchMessage
+.z-combobox-emptySearchMessage {
+	display: block;
+	padding: 4px 8px;
+	position: relative;
+	min-height: @comboPopupItemSize + 2px + 4px * 2;
+	.borderRadius(@baseBorderRadius);
+	color: @disabledColor;
+}
+.z-combobox-emptySearchMessage-hidden {
+	display: none;
+}
+
 // Comboitem
 .z-comboitem,
 .z-comboitem-button {
@@ -281,11 +294,13 @@
 
 .z-combobox-popup {
 	overflow: auto;
+	min-height: 10px;
 }
 
 .z-bandbox-popup {
 	overflow: auto;
 	padding: 8px;
+	min-height: 10px;
 }
 
 .z-combobox-content {

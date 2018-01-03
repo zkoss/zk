@@ -117,6 +117,7 @@ public class Combobox extends Textbox {
 	/**Used to detect whether to sync Comboitem's index later. */
 	private boolean _syncItemIndicesLater;
 	private String _popupWidth;
+	private String _emptySearchMessage;
 
 	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
 
@@ -209,6 +210,19 @@ public class Combobox extends Textbox {
 			_subModel = null;
 			if (!getItems().isEmpty())
 				getItems().clear();
+		}
+	}
+
+	/** Sets empty search message.
+	 * This message would be displayed, when no matching results was found.
+	 *
+	 * @param msg
+	 * @since 8.5.1
+	 */
+	public void setEmptySearchMessage(String msg) {
+		if (_emptySearchMessage != msg) {
+			_emptySearchMessage = msg;
+			smartUpdate("emptySearchMessage", _emptySearchMessage);
 		}
 	}
 
@@ -903,6 +917,8 @@ public class Combobox extends Textbox {
 			renderer.render("selectedItemUuid_", _selItem.getUuid());
 		if (_popupWidth != null)
 			renderer.render("popupWidth", _popupWidth);
+		if (_emptySearchMessage != null)
+			renderer.render("emptySearchMessage", _emptySearchMessage);
 	}
 
 	/** Processes an AU request.
