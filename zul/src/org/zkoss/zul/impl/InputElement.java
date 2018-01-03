@@ -25,7 +25,9 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.au.out.AuSelect;
 import org.zkoss.zk.au.out.AuWrongValue;
 import org.zkoss.zk.ui.Component;
@@ -688,6 +690,18 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 */
 	public void setSelectionRange(int start, int end) {
 		response(new AuSelect(this, start, end));
+	}
+
+	/**
+	 * Inserts the text at the current cursor position.
+	 * It would trigger focus and change event.
+	 *
+	 * @param text the text to be inserted
+	 * @since 8.5.1
+	 */
+	public void insertAtCaret(String text) {
+		if (!Strings.isEmpty(text))
+			response(new AuInvoke(this, "insertAtCaret", text));
 	}
 
 	/** Checks whether user entered a wrong value (and not correct it yet).
