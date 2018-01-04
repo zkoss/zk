@@ -1016,14 +1016,16 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					keep = false;
 				} else {
 					var tg = evt.domTarget,
-						cm = ref.$n('cm');
+						cm = ref && ref.$n('cm');
 					keep = (edata.ctrlKey || edata.metaKey) || edata.shiftKey
 							|| (this._checkmark && (!this._cdo || (tg == cm || tg.parentNode == cm) || checkSelectAll));
 				}
 			}
 		}
 
-		this.fire('onSelect', zk.copy({items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll}, edata));
+		this.fire('onSelect',
+			zk.copy({items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll}, edata),
+			{rtags: {selectAll: checkSelectAll}});
 	},
 	/* Changes the specified row as focused. */
 	_focus: function (row) {
@@ -1155,7 +1157,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		return this._rows > 0;
 	},
 	//@Override
-	onResponse: function () {
+	onResponse: function (ctl, opts) {
 		if (this._shallSyncFocus) {
 			var child = this._shallSyncFocus;
 
@@ -1191,7 +1193,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._shallSyncFocus = false;
 		}
 		if (this._shallSyncCM) {
-			this._updHeaderCM();
+			if (!opts.rtags.selectAll)
+				this._updHeaderCM();
 			this._shallSyncCM = false;
 		}
 		this.$supers(SelectWidget, 'onResponse', arguments);

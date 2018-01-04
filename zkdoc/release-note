@@ -34,6 +34,7 @@ ZK 8.5.1
   ZK-3330: selected tree item not scrolling into view
   ZK-3625: Menubar scrollable trigger doesn't exclude invisible items from calculation
   ZK-3228: issue with panel, dynamic panelchildren and ckeditor
+  ZK-3656: Select all cause exception if no selectable item is rendered yet
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
