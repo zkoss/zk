@@ -53,6 +53,17 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 * @param boolean autocomplete
 		 */
 		autocomplete: null,
+		/**
+		 * Returns the message to display when no matching results was found
+		 * @return String
+		 * @since 8.5.1
+		 */
+		/**
+		 * Sets the message to display when no matching results was found
+		 * @param String msg
+		 * @since 8.5.1
+		 */
+		emptySearchMessage: null,
 		/** Update the value of the input element in this component
 		 */
 		repos: function () {
@@ -97,6 +108,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (this._shallCheckPopupPosition || (args[1] && args[1].rtags && args[1].rtags.onChanging && this.isOpen())) {
 			this._checkPopupPosition();
 			this._shallCheckPopupPosition = false;
+			// F85-ZK-3827: Combobox empty search message
+			this._fixEmptySearchMessage();
 		}
 		// B65-ZK-1990: Fix position of popup when it appears above the input, aligned to the left
 		if (this.isOpen() && this._shallSyncPopupPosition) {
@@ -443,10 +456,19 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	//@Override
 	redrawpp_: function (out) {
-		var uuid = this.uuid;
+		var uuid = this.uuid,
+			msg = this._emptySearchMessage;
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'),
-		' ', this.getSclass(), '" style="display:none"><ul id="',
-		uuid, '-cave" class="', this.$s('content'), '" >');
+		' ', this.getSclass(), '" style="display:none">');
+
+		// F85-ZK-3827: Combobox empty search message
+		if (msg) {
+			out.push('<div id="', uuid,'-emptySearchMessage" class="',
+			this.$s('emptySearchMessage'), ' ', this.$s('emptySearchMessage-hidden'),
+			'">', msg, '</div>');
+		}
+
+		out.push('<ul id="', uuid, '-cave" class="', this.$s('content'), '" >');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -466,6 +488,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this.$supers('_fixsz', arguments);
 		if (zk(pp).hasVScroll() && !this.getPopupWidth()) {
 			pp.style.width = jq.px(pp.offsetWidth + jq.scrollbarWidth());
+		}
+	},
+	_fixEmptySearchMessage: function () {
+		if (this._emptySearchMessage) {
+			jq(this.$n('emptySearchMessage')).toggleClass(
+				this.$s('emptySearchMessage-hidden'), this.nChildren > 0);
 		}
 	}
 });

@@ -420,7 +420,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (ppofs[1] == 'auto' && pp.offsetHeight > 350) {
 			pp.style.height = '350px';
 		} else if (pp.offsetHeight < 10) {
-			pp.style.height = '10px'; //minimal
 			// B65-ZK-2021: Only need to manually sync shadow when there is no item matched.
 			if (this._shadow)
 				this._shadow.sync();

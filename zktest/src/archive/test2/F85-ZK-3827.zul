@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3827.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 2 11:52:15 CST 2018, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. type 'a' in the combobox, should see some results with first letter 'a'
+		2. type 'g', should see 'No suggestions'
+	</label>
+	<button label="change to iceblue">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "iceblue"); // iceblue
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<separator/>
+	<button label="change to atlantic">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "atlantic");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<separator/>
+	<button label="change to breeze">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<separator/>
+	<button label="change to sapphire">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "sapphire"); // sapphire
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<separator/>
+	<button label="change to silvertail">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "silvertail"); // silvertail
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<separator/>
+	<combobox id="combo" autodrop="true" autocomplete="true" emptySearchMessage="No suggestions"/>
+	<zscript>
+		String[] _dict = {
+		"abacus", "accuracy", "acuity", "adage", "afar", "after", "apple",
+		"jump", "jungle", "jungle fever"
+		};
+		ListModel dictModel = new SimpleListModel(_dict);
+		combo.setModel(dictModel);
+	</zscript>
+</zk>
