@@ -227,14 +227,12 @@ public class Radio extends Checkbox {
 					_group.removeExternal(this);
 					_attachExternal = false;
 				}
-				oldgp.fixOnRemove(this);
 			}
 			if (newgp != null) {
 				if (!_attachExternal && newgp == _group) {
 					_group.addExternal(this);
 					_attachExternal = true;
 				}
-				newgp.fixOnAdd(this);
 			}
 		}
 	}
