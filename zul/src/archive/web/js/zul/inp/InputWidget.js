@@ -914,6 +914,32 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	shallIgnoreClick_: function (evt) {
 		return this.isDisabled();
+	},
+	/**
+	 * Inserts the text at the current cursor position.
+	 * It would trigger focus and change event.
+	 *
+	 * @param String text the text to be inserted
+	 * @since 8.5.1
+	 */
+	insertAtCaret: function (text) {
+		if (text) {
+			var inp = this.getInputNode();
+			if (inp) {
+				var zkinp = zk(inp);
+				// IE/Edge would get caretPos as 0 if not getting focus first
+				if (zk.currentFocus != inp)
+					zkinp.focus();
+				var caretPos = zkinp.getSelectionRange()[0],
+					txt = this.getText(),
+					before = txt.substring(0, caretPos),
+					after = txt.substring(caretPos);
+				caretPos += text.length;
+				this.setText(before + text + after);
+				this.select(caretPos, caretPos);
+				this.fireOnChange();
+			}
+		}
 	}
 },{
 	/** The delay for sending the onChanging event (unit: milliseconds).

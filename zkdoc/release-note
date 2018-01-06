@@ -8,6 +8,7 @@ ZK 8.5.1
   ZK-3762: Enhance ContextClassLoaderFactory
   ZK-3806: ValidationMessagesImpl's getters return empty array instead of null
   ZK-3827: Combobox empty search message
+  ZK-3739: Support to insert text at the current cursor position in a Textbox
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes
