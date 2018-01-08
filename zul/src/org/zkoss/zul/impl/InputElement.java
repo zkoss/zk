@@ -699,9 +699,9 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @param text the text to be inserted
 	 * @since 8.5.1
 	 */
-	public void insertAtCaret(String text) {
+	public void setInsertedText(String text) {
 		if (!Strings.isEmpty(text))
-			response(new AuInvoke(this, "insertAtCaret", text));
+			response(new AuInvoke(this, "setInsertedText", text));
 	}
 
 	/** Checks whether user entered a wrong value (and not correct it yet).

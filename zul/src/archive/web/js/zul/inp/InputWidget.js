@@ -922,7 +922,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	 * @param String text the text to be inserted
 	 * @since 8.5.1
 	 */
-	insertAtCaret: function (text) {
+	setInsertedText: function (text) {
 		if (text) {
 			var inp = this.getInputNode();
 			if (inp) {
