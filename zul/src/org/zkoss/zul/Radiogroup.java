@@ -16,10 +16,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +64,15 @@ public class Radiogroup extends XulElement {
 	private ListModel<?> _model;
 	private RadioRenderer<?> _renderer;
 	private transient ListDataListener _dataListener;
+	/** Items that will be used to fix selected index later **/
+	private Queue<Radio> _fixOnAddQueue = new LinkedList<Radio>();
+	private Queue<Radio> _fixOnremoveQueue = new LinkedList<Radio>();
+	/** Number that indicates whether the queue is allowed access.
+	 * number > 0  : allow access
+	 * number <= 0 : disallow access
+	 **/
+	private int _accessAddQueue;
+	private int _accessRemoveQueue;
 
 	static {
 		addClientEvent(Radiogroup.class, Events.ON_CHECK, CE_IMPORTANT | CE_REPEAT_IGNORE);
@@ -81,6 +87,14 @@ public class Radiogroup extends XulElement {
 	 */
 	public String getOrient() {
 		return _orient;
+	}
+
+	void addToAddQueue(Radio radio) {
+		if (_accessAddQueue > 0) _fixOnAddQueue.offer(radio);
+	}
+
+	void addToRemoveQueue(Radio radio) {
+		if (_accessRemoveQueue > 0) _fixOnremoveQueue.offer(radio);
 	}
 
 	/** Sets the orient.
@@ -717,4 +731,35 @@ public class Radiogroup extends XulElement {
 		}
 	}
 
+	public void beforeChildAdded(Component child, Component insertBefore) {
+		super.beforeChildAdded(child, insertBefore);
+		if (_accessAddQueue == 0) {
+			_fixOnAddQueue.clear();
+		}
+		_accessAddQueue++;
+	}
+
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		while (!_fixOnAddQueue.isEmpty()) {
+			this.fixOnAdd(_fixOnAddQueue.poll());
+		}
+		_accessAddQueue--;
+	}
+
+	public void beforeChildRemoved(Component child) {
+		super.beforeChildRemoved(child);
+		if (_accessRemoveQueue == 0) {
+			_fixOnremoveQueue.clear();
+		}
+		_accessRemoveQueue++;
+	}
+
+	public void onChildRemoved(Component child) {
+		super.onChildRemoved(child);
+		while (!_fixOnremoveQueue.isEmpty()) {
+			this.fixOnRemove(_fixOnremoveQueue.poll());
+		}
+		_accessRemoveQueue--;
+	}
 }
