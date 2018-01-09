@@ -14,16 +14,18 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label>
-		New feature: add InputElement.insertAtCaret(String) API.
+		New feature: add InputElement.setInsertedText(String) API.
 	</label>
-	<toolbar>
-		<toolbarbutton label="SELECT " onClick="textbox.insertAtCaret(self.label)"/>
-		<toolbarbutton label="FROM " onClick="textbox.insertAtCaret(self.label)"/>
-		<toolbarbutton label="WHERE " onClick="textbox.insertAtCaret(self.label)"/>
-		<toolbarbutton label="DISTINCT " onClick="textbox.insertAtCaret(self.label)"/>
-	</toolbar>
-	<textbox id="textbox" rows="10" width="100%" value="========================"/>
-	<button label="print" onClick="print()"/>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3739VM')">
+		<toolbar>
+			<toolbarbutton label="SELECT " onClick="textbox.insertedText = self.label"/>
+			<toolbarbutton label="FROM " onClick="textbox.insertedText = self.label"/>
+			<toolbarbutton label="WHERE " onClick="@command('insertText', text = self.label)"/>
+			<toolbarbutton label="DISTINCT " onClick="@command('insertText', text = self.label)"/>
+		</toolbar>
+		<textbox id="textbox" rows="10" width="100%" value="========================" insertedText="@load(vm.insertedText)"/>
+		<button label="print" onClick="print()"/>
+	</div>
 	<zscript><![CDATA[
 	public void print() {
 		String val = textbox.getValue();
