@@ -986,9 +986,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 			var d = seldate.getDate(),
 				tz = seldate.getTimeZone(),
-				v = Dates.newInstance([y, m, 1], tz).getDay() - DOW_1ST,
-				last = Dates.newInstance([y, m + 1, 0], tz).getDate(), //last date of this month
-				prev = Dates.newInstance([y, m, 0], tz).getDate(), //last date of previous month
+				v = Dates.newInstance([y, m, 1], 'UTC').getDay() - DOW_1ST,
+				last = Dates.newInstance([y, m + 1, 0], 'UTC').getDate(), //last date of this month
+				prev = Dates.newInstance([y, m, 0], 'UTC').getDate(), //last date of previous month
 				today = zUtl.today(null, tz), //no time part
 				outsideClass = this.$s('outside'),
 				disdClass = this.$s('disabled');

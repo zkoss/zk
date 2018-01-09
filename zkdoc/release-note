@@ -29,6 +29,7 @@ ZK 8.5.1
   ZK-3657: hflex/vflex min with renderdefer
   ZK-3776: Frozen with paging and columns without size definition displayed blank after page change
   ZK-3808: Provide performance tuning options for meshes
+  ZK-3833: Calendar Popup for Lisbon/Timezone for Jan/1912
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
