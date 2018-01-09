@@ -17,10 +17,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.util.Callback;
 import org.zkoss.zul.impl.Utils;
 
 /**
@@ -46,6 +50,7 @@ public class Radio extends Checkbox {
 	/** At most one of _group and _groupId will be non-null. */
 	private String _groupId;
 	private boolean _attachExternal = false;
+	private boolean _explictGroup = false;
 
 	public Radio() {
 	}
@@ -87,6 +92,7 @@ public class Radio extends Checkbox {
 		boolean inGroup = _groupId != null;
 		_groupId = null;
 		if (inGroup || radiogroup != _group) {
+			_explictGroup = radiogroup != null;
 			if (_group != null) {
 				_group.removeExternal(this);
 				_attachExternal = false;
@@ -118,6 +124,7 @@ public class Radio extends Checkbox {
 
 		_group = null;
 		_groupId = radiogroupId;
+		_explictGroup = true;
 		if (resolveGroup(true)) //try to bind as soon as possible since they relate to each other
 			smartUpdate("radiogroup", _group);
 		else
@@ -223,18 +230,16 @@ public class Radio extends Checkbox {
 
 		if (oldgp != newgp) {
 			if (oldgp != null) { //removed from the component tree  
-				if (oldgp == _group) {
+				if (_explictGroup && oldgp == _group) {
 					_group.removeExternal(this);
 					_attachExternal = false;
 				}
-				oldgp.fixOnRemove(this);
 			}
 			if (newgp != null) {
-				if (!_attachExternal && newgp == _group) {
+				if (_explictGroup && !_attachExternal && newgp == _group) {
 					_group.addExternal(this);
 					_attachExternal = true;
 				}
-				newgp.fixOnAdd(this);
 			}
 		}
 	}
@@ -272,6 +277,40 @@ public class Radio extends Checkbox {
 		final Radiogroup rg = getRadiogroup();
 		if (rg != null) {
 			rg.removeExternal(this);
+		}
+
+		// ZK-3818: update selected index in the callback
+		if (!_explictGroup) {
+			_group = null;
+		}
+		Component rootParent = ComponentsCtrl.getRootParent();
+		if (rg != null && rootParent != null && rootParent instanceof ComponentCtrl
+				&& (!Components.isAncestor(rootParent, rg) || rootParent == rg)) {
+			final Radio radio = this;
+			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_REMOVED, new Callback<Component>() {
+				public void call(Component rootParent) {
+					rg.fixOnRemove(radio);
+				}
+			});
+		}
+	}
+
+	public void onPageAttached(Page newpage, Page oldpage) {
+		super.onPageAttached(newpage, oldpage);
+		Component rootParent = ComponentsCtrl.getRootParent();
+
+		// ZK-3818: update selected index in the callback
+		if (!_explictGroup) {
+			_group = this.getRadiogroup();
+		}
+		if (_group != null && rootParent != null && rootParent instanceof ComponentCtrl
+				&& (!Components.isAncestor(rootParent, _group) || rootParent == _group)) {
+			final Radio radio = this;
+			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_ADDED, new Callback<Component>() {
+				public void call(Component rootParent) {
+					_group.fixOnAdd(radio);
+				}
+			});
 		}
 	}
 }
