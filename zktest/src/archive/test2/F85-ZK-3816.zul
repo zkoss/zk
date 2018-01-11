@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F85-ZK-3816.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Dec 26 11:00:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<window id="win" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3816VM')">
+			<label multiline="true">
+				1. Click the following three buttons, you should see "+*-"
+				2. Click the "serialize/deserialize" button, it should work fine.
+				3. Click those buttons again, you should see "+*-" appended.
+			</label>
+			<button onClick="@command('expandLabelAuto')" label="click (auto)"/>
+			<button onClick="@command('expandLabelOrigin')" label="click (@NotifyChange)"/>
+			<button onClick="@command('expandLabel')" label="click (@NotifyChange with getter/setter)"/>
+			<button onClick="@command('concatString')" label="click (@NotifyChange with another getter)"/>
+			<label id="result" value="@load(vm.label)"/>
+			<separator/>
+			<label id="str" value="@load(vm.str)"/>
+			<separator/>
+			<hlayout>message:
+				<label id="msg"/>
+			</hlayout>
+			<button id="serialize" label="serialize/deserialize"
+					onClick='win.getAttribute("vm").doSerialize(win, msg)'/>
+		</window>
+	</div>
+</zk>

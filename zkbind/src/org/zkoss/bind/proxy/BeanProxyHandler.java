@@ -67,7 +67,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 
 	protected static boolean isSetMethodHandled(Method m) {
 		try {
-			final String getter = toGetter(toAttrName(m));
+			final String getter = ProxyHelper.toGetter(ProxyHelper.toAttrName(m));
 			final Method getMethod = Classes.getMethodByObject(m.getDeclaringClass(), getter, null);
 			if (getMethod.isAnnotationPresent(Transient.class))
 				return false;
@@ -123,7 +123,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 							}
 
 							if (_dirtyFieldNames != null && _dirtyFieldNames.contains(me.getKey())) {
-								final String setter = toSetter(me.getKey());
+								final String setter = ProxyHelper.toSetter(me.getKey());
 								try {
 									final Method m = Classes.getMethodByObject(_origin.getClass(), setter,
 											new Object[] { value });
@@ -181,7 +181,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 					if (_origin == null)
 						return null;
 
-					final String attr = toAttrName(method);
+					final String attr = ProxyHelper.toAttrName(method);
 					if (_cache != null) {
 						if (_cache.containsKey(attr)) {
 							return _cache.get(attr);
@@ -205,7 +205,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 					if (_origin == null)
 						return false;
 
-					final String attr = toAttrName(method, 2);
+					final String attr = ProxyHelper.toAttrName(method, 2);
 					if (_cache != null) {
 						if (_cache.containsKey(attr)) {
 							return _cache.get(attr);
@@ -213,7 +213,7 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 					}
 					return method.invoke(_origin, args);
 				} else {
-					final String attrName = toAttrName(method);
+					final String attrName = ProxyHelper.toAttrName(method);
 
 					addCache(attrName, args[0]);
 					addDirtyField(attrName);
@@ -225,29 +225,5 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 			throw UiException.Aide.wrap(e);
 		}
 		return null;
-	}
-
-	protected static String toSetter(String attr) {
-		return capitalize("set", attr);
-	}
-
-	protected static String toGetter(String attr) {
-		return capitalize("get", attr);
-	}
-
-	protected static String capitalize(String prefix, String attr) {
-		return new StringBuilder(prefix).append(Character.toUpperCase(attr.charAt(0))).append(attr.substring(1))
-				.toString();
-	}
-
-	protected static String toAttrName(Method method, int prefix) {
-		final String name = method.getName();
-		final String attrName = name.substring(prefix, name.length());
-		return new StringBuilder(attrName.length()).append(Character.toLowerCase(attrName.charAt(0)))
-				.append(attrName.substring(1)).toString();
-	}
-
-	protected static String toAttrName(Method method) {
-		return toAttrName(method, 3);
 	}
 }

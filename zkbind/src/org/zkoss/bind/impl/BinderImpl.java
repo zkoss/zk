@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
@@ -57,6 +58,7 @@ import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.SmartNotifyChange;
 import org.zkoss.bind.init.ZKBinderPhaseListeners;
+import org.zkoss.bind.proxy.ViewModelProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
@@ -298,9 +300,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 	
 	/**
-	 * 
-	 * 
-	 * 
 	 * @since 6.0.1
 	 */
 	public void init(Component comp, Object viewModel, Map<String, Object> initArgs) {
@@ -331,7 +330,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		if (comp instanceof ComponentCtrl)
 			((ComponentCtrl) comp).enableBindingAnnotation();
 		//ZK-3133
-		for (Method m : getViewModel().getClass().getDeclaredMethods()) {
+		for (Method m : BindUtils.getViewModelClass(getViewModel()).getDeclaredMethods()) {
 			MatchMedia annomm = m.getAnnotation(MatchMedia.class);
 			if (annomm != null) {
 				if (_matchMediaValues == null)
@@ -496,8 +495,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private transient Map<String, NotifyCommand> _notifyCommands;
 
 	private void collectNotifyCommands(Object vm) {
-		NotifyCommands commands = vm.getClass().getAnnotation(NotifyCommands.class);
-		NotifyCommand command = vm.getClass().getAnnotation(NotifyCommand.class);
+		Class<?> viewModelClz = BindUtils.getViewModelClass(vm);
+		NotifyCommands commands = viewModelClz.getAnnotation(NotifyCommands.class);
+		NotifyCommand command = viewModelClz.getAnnotation(NotifyCommand.class);
 		if (_notifyCommands != null)
 			_notifyCommands.clear();
 
@@ -517,7 +517,18 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	public Object getViewModel() {
 		checkInit();
+		return getOriginViewModel(_rootComp.getAttribute(BinderCtrl.VM));
+	}
+
+	private Object getViewModelInView() {
+		checkInit();
 		return _rootComp.getAttribute(BinderCtrl.VM);
+	}
+
+	private static Object getOriginViewModel(Object vm) {
+		if (vm instanceof ViewModelProxyObject)
+			vm = ((ViewModelProxyObject) vm).getOriginObject();
+		return vm;
 	}
 
 	//Note: assume system converter is state-less
@@ -526,7 +537,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		Converter converter = null;
 		if (_hasGetConverterMethod) {
 			Object vm = getViewModel();
-			Class<? extends Object> clz = vm.getClass();
+			Class<? extends Object> clz = BindUtils.getViewModelClass(vm);
 			Method m = null;
 			Object result = null;
 			try {
@@ -568,7 +579,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		Validator validator = null;
 		if (_hasGetValidatorMethod) {
 			Object vm = getViewModel();
-			Class<? extends Object> clz = vm.getClass();
+			Class<? extends Object> clz = BindUtils.getViewModelClass(vm);
 			Method m = null;
 			Object result = null;
 			try {
@@ -1793,9 +1804,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 
-			final Object viewModel = getViewModel();
+			final Object viewModel = getViewModelInView();
 
-			Method method = getCommandMethod(viewModel.getClass(), command, _globalCommandMethodInfoProvider,
+			Method method = getCommandMethod(BindUtils.getViewModelClass(viewModel), command, _globalCommandMethodInfoProvider,
 					_globalCommandMethodCache);
 
 			if (method != null) {
@@ -1829,9 +1840,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	                                         Method method, ParamCall parCall,
 	                                         Set<Property> notifys) {
 		final SmartNotifyChange sannt = method.getAnnotation(SmartNotifyChange.class);
+		Object originViewModel = getOriginViewModel(viewModel);
 		if (sannt != null) {
 			Set<Property> properties = new LinkedHashSet<Property>(5);
-			properties.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
+			properties.addAll(BindELContext.getNotifys(method, originViewModel, (String) null, (Object) null, ctx)); // collect notifyChange
 
 			parCall.call(viewModel, method);
 
@@ -1849,8 +1861,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			notifys.addAll(properties);
 		} else {
 			parCall.call(viewModel, method);
-
-			notifys.addAll(BindELContext.getNotifys(method, viewModel, (String) null, (Object) null, ctx)); // collect notifyChange
+			notifys.addAll(BindELContext.getNotifys(method, originViewModel, (String) null, (Object) null, ctx)); // collect notifyChange
 		}
 	}
 
@@ -2000,9 +2011,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 			doPrePhase(Phase.EXECUTE, ctx);
 
-			final Object viewModel = getViewModel();
+			final Object viewModel = getViewModelInView();
 
-			Method method = getCommandMethod(viewModel.getClass(), command, _commandMethodInfoProvider,
+			Method method = getCommandMethod(BindUtils.getViewModelClass(viewModel), command, _commandMethodInfoProvider,
 					_commandMethodCache);
 
 			if (method != null) {
