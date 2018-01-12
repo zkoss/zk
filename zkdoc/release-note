@@ -36,6 +36,7 @@ ZK 8.5.1
   ZK-3228: issue with panel, dynamic panelchildren and ckeditor
   ZK-3656: Select all cause exception if no selectable item is rendered yet
   ZK-3817: Filedownload on Android not working
+  ZK-3818: Radiogroup getSelectedItem() cause exception if radio are in subcomponents
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:

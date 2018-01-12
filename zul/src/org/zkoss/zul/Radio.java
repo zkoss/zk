@@ -45,6 +45,7 @@ public class Radio extends Checkbox {
 	private Radiogroup _group;
 	/** At most one of _group and _groupId will be non-null. */
 	private String _groupId;
+	private Radiogroup _rg;
 	private boolean _attachExternal = false;
 
 	public Radio() {
@@ -91,7 +92,7 @@ public class Radio extends Checkbox {
 				_group.removeExternal(this);
 				_attachExternal = false;
 			}
-			_group = radiogroup;
+			_rg = _group = radiogroup;
 
 			//ZK-1073 it's better not to add the external when component is not attached.
 			if (_group != null && getDesktop() != null) {
@@ -127,7 +128,7 @@ public class Radio extends Checkbox {
 	/** @param silent whether NOT to throw an exception if not found. */
 	private boolean resolveGroup(boolean silent) {
 		if (_groupId != null) {
-			_group = (Radiogroup) Utils.getComponentById(this, _groupId);
+			_rg = _group = (Radiogroup) Utils.getComponentById(this, _groupId);
 			if (_group == null) {
 				if (!silent)
 					throw new WrongValueException("Radiogroup not found: " + _groupId);
@@ -227,14 +228,12 @@ public class Radio extends Checkbox {
 					_group.removeExternal(this);
 					_attachExternal = false;
 				}
-				oldgp.fixOnRemove(this);
 			}
 			if (newgp != null) {
 				if (!_attachExternal && newgp == _group) {
 					_group.addExternal(this);
 					_attachExternal = true;
 				}
-				newgp.fixOnAdd(this);
 			}
 		}
 	}
@@ -272,6 +271,18 @@ public class Radio extends Checkbox {
 		final Radiogroup rg = getRadiogroup();
 		if (rg != null) {
 			rg.removeExternal(this);
+		}
+
+		if (_rg != null) {
+			_rg.addToRemoveQueue(this);
+		}
+	}
+
+	public void onPageAttached(Page newpage, Page oldpage) {
+		super.onPageAttached(newpage, oldpage);
+		_rg = this.getRadiogroup();
+		if (_rg != null) {
+			_rg.addToAddQueue(this);
 		}
 	}
 }
