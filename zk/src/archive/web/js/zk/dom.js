@@ -649,6 +649,14 @@ zjq.prototype = {
 	 * @return jqzk this object
 	 */
 	scrollIntoView: function (parent) {
+		// ZK-3330: scroll into view after animation
+		var self = this;
+		zk.afterAnimate(function () {
+			self._scrollIntoView(parent);
+		}, -1);
+		return this;
+	},
+	_scrollIntoView: function (parent) {
 		var n = this.jq[0];
 		if (n) {
 			var real = jq('#' + n.id + '-real')[0];
