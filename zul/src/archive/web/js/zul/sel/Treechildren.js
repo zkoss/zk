@@ -136,7 +136,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	},
 	//@Override
 	isRealVisible: function () {
-		this._isRealVisible() && this.$supers('isRealVisible', arguments);
+		return this._isRealVisible() && this.$supers('isRealVisible', arguments);
 	},
 	_isRealVisible: function () {
 		var p;
@@ -167,11 +167,15 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	 * <p>Note: the performance is no good.
 	 * @return int
 	 */
-	getItemCount: function () {
-		var sz = 0;
-		for (var w = this.firstChild; w; w = w.nextSibling, ++sz)
-			if (w.treechildren)
-				sz += w.treechildren.getItemCount();
+	getItemCount: function (opts) {
+		var sz = 0,
+			skiphd = opts && opts.skipHidden;
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (!skiphd || w.isVisible()) {
+				sz++;
+				if (w.treechildren && (!skiphd || w.isOpen()))
+					sz += w.treechildren.getItemCount(opts);
+			}
 		return sz;
 	},
 	beforeParentChanged_: function (newParent) {

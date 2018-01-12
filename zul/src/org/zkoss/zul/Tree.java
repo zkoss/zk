@@ -2571,7 +2571,9 @@ public class Tree extends MeshElement {
 			renderer.render("_anchorTop", _anchorTop);
 		if (_anchorLeft != 0)
 			renderer.render("_anchorLeft", _anchorLeft);
-
+		int preloadSz = preloadSize();
+		if (preloadSz != _preloadsz)
+			renderer.render("preloadSize", preloadSz);
 	}
 
 	/** Returns whether to toggle a list item selection on right click
