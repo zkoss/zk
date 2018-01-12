@@ -30,6 +30,7 @@ ZK 8.5.1
   ZK-3776: Frozen with paging and columns without size definition displayed blank after page change
   ZK-3833: Calendar Popup for Lisbon/Timezone for Jan/1912
   ZK-3800: a button with a font awesome icon is higher than a default button
+  ZK-3579: combobutton not using its defined/available width
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
