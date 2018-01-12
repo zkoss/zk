@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3625.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 04 16:19:51 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Resize to 500px" or resize the width of window manually.
+        2. If the bug still exists, the scroll control appears. But it doesn't need to appear due to the width is enough for 3 visible menu items.
+    </label>
+    <button onClick='win1.width = "500px"' label="Resize to 500px" />
+    <window border="normal" sizable="true" id="win1">
+        <menubar hflex="1" scrollable="true">
+            <menu label="Menu1" visible="false">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+            <menu visible="false" label="Menu2">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+            <menu visible="false" label="Menu3">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+            <menu visible="false" label="Menu4">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+            <menu visible="false" label="Menu5">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+            <menu label="Menu6">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+            <menu label="Menu7">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+            <menu label="Menu8">
+                <menupopup>
+                    <menuitem label="Submenu" />
+                </menupopup>
+            </menu>
+        </menubar>
+    </window>
+</zk>

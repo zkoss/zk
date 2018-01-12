@@ -137,14 +137,15 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 
 		var nodeWidth = zk(node).offsetWidth(),
 			body = this.$n('body'),
-			childs = jq(this.$n('cave')).children(),
+			children = jq(this.$n('cave')).children().filter(':visible'),
+			childrenLen = children.length,
 			totalWidth = 0;
 
-		for (var i = childs.length; i--;)
-			totalWidth += jq(childs[i]).outerWidth(true); //ZK-3095
+		for (var i = childrenLen; i--;)
+			totalWidth += jq(children[i]).outerWidth(true); //ZK-3095
 
 		if (zk.ie) // child width (text node) is not integer in IE
-			totalWidth += childs.length;
+			totalWidth += childrenLen;
 
 		if (totalWidth >= nodeWidth)
 			this._scrolling = true;
@@ -159,15 +160,15 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		var fixedSize = nodeWidth - zk(this.$n('left')).offsetWidth() - zk(this.$n('right')).offsetWidth();
 		if (this._scrolling) {
 			body.style.width = jq.px0(fixedSize);
-			this._fixScrollPos(node);
+			this._fixScrollPos(children.last()[0]);
 		}
 	},
-	_fixScrollPos: function () {
-		var body = this.$n('body'),
-			childs = jq(this.$n('cave')).children();
-		if (childs[childs.length - 1].offsetLeft < this._bodyScrollLeft) {
-			var movePos = childs[childs.length - 1].offsetLeft;
-			this._fixBodyScrollLeft(movePos);
+	_fixScrollPos: function (lastChild) {
+		if (lastChild) {
+			var offsetLeft = lastChild.offsetLeft;
+			if (offsetLeft < this._bodyScrollLeft) {
+				this._fixBodyScrollLeft(offsetLeft);
+			}
 		}
 	},
 	_fixButtonPos: function (node) {
@@ -206,19 +207,19 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		var self = this,
 			body = this.$n('body'),
 			currScrollLeft = this._bodyScrollLeft,
-			childs = jq(this.$n('cave')).children(),
-			childLen = childs.length,
+			children = jq(this.$n('cave')).children().filter(':visible'),
+			childrenLen = children.length,
 			movePos = 0;
 
-		if (!childLen) return;
+		if (!childrenLen) return;
 		switch (direction) {
 		case 'left':
-			for (var i = 0; i < childLen; i++) {
+			for (var i = 0; i < childrenLen; i++) {
 				// B50-ZK-381: Menu scrolling bug
 				// child width may be larger than body.offsetWidth
-				if (childs[i].offsetLeft >= currScrollLeft
-					|| childs[i].offsetLeft + (childs[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
-					var preChild = childs[i].previousSibling;
+				if (children[i].offsetLeft >= currScrollLeft
+					|| children[i].offsetLeft + (children[i].offsetWidth - body.offsetWidth) >= currScrollLeft) {
+					var preChild = children[i].previousSibling;
 					if (!preChild)	return;
 					movePos = preChild.offsetLeft;
 					if (isNaN(movePos)) return;
@@ -233,8 +234,8 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			break;
 		case 'right':
 			var currRight = currScrollLeft + body.offsetWidth;
-			for (var i = 0; i < childLen; i++) {
-				var currChildRight = childs[i].offsetLeft + childs[i].offsetWidth;
+			for (var i = 0; i < childrenLen; i++) {
+				var currChildRight = children[i].offsetLeft + children[i].offsetWidth;
 				if (currChildRight > currRight) {
 					movePos = currScrollLeft + (currChildRight - currRight);
 					if (isNaN(movePos)) return;
