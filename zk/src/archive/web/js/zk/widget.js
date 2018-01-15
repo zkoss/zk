@@ -128,13 +128,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt.id)
 			_addGlobal(wgt);
 	}
-	function _unbind0(wgt) {
-		if (wgt.id)
-			_rmGlobal(wgt);
-		delete _binds[wgt.uuid];
-		wgt.desktop = null;
-		wgt.clearCache();
-	}
 	function _bindrod(wgt) {
 		_bind0(wgt);
 		if (!wgt.z_rod)
@@ -142,20 +135,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		for (var child = wgt.firstChild; child; child = child.nextSibling)
 			_bindrod(child);
-	}
-	function _unbindrod(wgt, nest) {
-		_unbind0(wgt);
-
-		if (!nest || wgt.z_rod === 9) { //Bug 2948829: don't delete value set by real ROD
-			delete wgt.z_rod;
-
-			for (var child = wgt.firstChild; child; child = child.nextSibling) {
-				_unbindrod(child, true);
-				//Bug ZK-1827: native component with rod should also store the widget for used in mount.js(create function)
-				if (child.$instanceof(zk.Native))
-					zAu._storeStub(child);
-			}
-		}
 	}
 
 	function _fixBindLevel(wgt, v) {
@@ -212,13 +191,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			gs.push(wgt);
 		else
 			_globals[wgt.id] = [wgt];
-	}
-	function _rmGlobal(wgt) {
-		var gs = _globals[wgt.id];
-		if (gs) {
-			gs.$remove(wgt);
-			if (!gs.length) delete _globals[wgt.id];
-		}
 	}
 
 	//check if a desktop exists
@@ -1255,7 +1227,7 @@ wgt.$f().main.setTitle("foo");
 		if (id != this.id) {
 			if (this.id) {
 				_rmIdSpace(this);
-				_rmGlobal(this); //no need to check this.desktop
+				this.$class._rmGlobal(this); //no need to check this.desktop
 			}
 
 			if (id && (zk.spaceless || this.rawId))
@@ -1630,7 +1602,7 @@ wgt.$f().main.setTitle("foo");
 
 		//Note: remove HTML and unbind first, so unbind_ will have all info
 		if (child.z_rod) {
-			_unbindrod(child);
+			this.$class._unbindrod(child);
 			
 			// Bug ZK-454
 			jq(child.uuid, zk).remove();
@@ -1701,7 +1673,7 @@ wgt.$f().main.setTitle("foo");
 			p = this.parent, shallReplace,
 			dt = newwgt.desktop || this.desktop;
 		if (this.z_rod) {
-			_unbindrod(this);
+			this.$class._unbindrod(this);
 			if (!(shallReplace = (dt = dt || (p ? p.desktop : p))
 			&& (node = jq('#' + this.uuid))))
 				_bindrod(newwgt);
@@ -2623,7 +2595,7 @@ function () {
 		else {
 			var oldwgt = this.getOldWidget_(n);
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-			else if (this.z_rod) _unbindrod(this); //possible (if replace directly)
+			else if (this.z_rod) this.$class._unbindrod(this); //possible (if replace directly)
 			jq(n).replaceWith(this.redrawHTML_(skipper, _trim_));
 			this.bind(desktop, skipper);
 		}
@@ -2761,7 +2733,7 @@ function () {
 		var oldwgt = child.getOldWidget_(n);
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		else if (this.shallChildROD_(child))
-			_unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
+			this.$class._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 		jq(n).replaceWith(child.redrawHTML_(skipper, _trim_));
 		child.bind(desktop, skipper);
 	},
@@ -3062,7 +3034,7 @@ function () {
 		}
 		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
-			_unbindrod(this);
+			this.$class._unbindrod(this);
 		else {
 			var after = [];
 			this.unbind_(skipper, after);
@@ -3181,7 +3153,7 @@ unbind_: function (skipper, after) {
 </code></pre>
 	 */
 	unbind_: function (skipper, after) {
-		_unbind0(this);
+		this.$class._unbind0(this);
 		_unlistenFlex(this);
 
 		this.unbindChildren_(skipper, after);
@@ -3219,7 +3191,7 @@ unbind_: function (skipper, after) {
 
 			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
 			if (!skipper || !skipper.skipped(this, child)) {
-				if (child.z_rod) _unbindrod(child);
+				if (child.z_rod) this.$class._unbindrod(child);
 				else if (child.desktop) {
 					child.unbind_(null, after); //don't pass skipper
 					//Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
@@ -4934,7 +4906,35 @@ zk.Widget.getClass('combobox');
 	 * @since 5.0.8
 	 * @type int
 	 */
-	auDelay: 38
+	auDelay: 38,
+	_unbindrod: function (wgt, nest) {
+		this._unbind0(wgt);
+
+		if (!nest || wgt.z_rod === 9) { //Bug 2948829: don't delete value set by real ROD
+			delete wgt.z_rod;
+
+			for (var child = wgt.firstChild; child; child = child.nextSibling) {
+				this._unbindrod(child, true);
+				//Bug ZK-1827: native component with rod should also store the widget for used in mount.js(create function)
+				if (child.$instanceof(zk.Native))
+					zAu._storeStub(child);
+			}
+		}
+	},
+	_unbind0: function (wgt) {
+		if (wgt.id)
+			this._rmGlobal(wgt);
+		delete _binds[wgt.uuid];
+		wgt.desktop = null;
+		wgt.clearCache();
+	},
+	_rmGlobal: function (wgt) {
+		var gs = _globals[wgt.id];
+		if (gs) {
+			gs.$remove(wgt);
+			if (!gs.length) delete _globals[wgt.id];
+		}
+	}
 });
 /**	@partial zk
  */

@@ -168,7 +168,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	/*package*/ void setRendered(boolean rendered) {
 		if (_rendered != rendered) {
 			_rendered = rendered;
-			smartUpdate("_loaded", _loaded);
+			smartUpdate("_loaded", _rendered);
 		}
 	}
 

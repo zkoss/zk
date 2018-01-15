@@ -231,6 +231,32 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		var selItems = this._selItems, len;
 		if (this.desktop)
 			this.getTree()._syncSize();
+	},
+	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
+		var oldwgt = child.getOldWidget_(n);
+		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
+		else if (this.shallChildROD_(child))
+			this.$class._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
+		var content = child.redrawHTML_(skipper, _trim_);
+		if (zk.ie11_ || zk.edge) { // Zk-3371: IE/Edge performance workaround (domie not apply to ie 11)
+			var jqelem = jq(n),
+				len = content.length,
+				elem = jqelem[0];
+			if (len > 1048576) {
+				var chunkSize = len / 2,
+					splitPos = content.lastIndexOf('</tr>', chunkSize),
+					chunk1 = content.substr(0, splitPos),
+					chunk2 = content.substr(splitPos);
+				elem.insertAdjacentHTML('afterend', chunk2);
+				elem.insertAdjacentHTML('afterend', chunk1);
+			} else {
+				elem.insertAdjacentHTML('afterend', content);
+			}
+			jqelem.remove();
+		} else {
+			jq(n).replaceWith(content);
+		}
+		child.bind(desktop, skipper);
 	}
 });
 
