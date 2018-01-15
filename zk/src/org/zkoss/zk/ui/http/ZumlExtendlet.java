@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
@@ -93,6 +93,10 @@ public class ZumlExtendlet implements Extendlet {
 
 	public void service(HttpServletRequest request, HttpServletResponse response, String path)
 			throws ServletException, IOException {
+		String resourceCache = Library.getProperty("org.zkoss.zk.ZUML.cache", "true");
+		if (!Boolean.valueOf(resourceCache))
+			_cache.clear();
+
 		final Session sess = WebManager.getSession(getServletContext(), request);
 		final PageDefinition pagedef = _cache.get(path);
 		if (pagedef == null) {
