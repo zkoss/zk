@@ -40,6 +40,7 @@ ZK 8.5.1
   ZK-3371: Tree performance on IE 11
   ZK-3818: Radiogroup getSelectedItem() cause exception if radio are in subcomponents
   ZK-3830: <choose> w/o <otherwise> inconsistent behavior
+  ZK-3765: adding components in @AfterCompose fails binding initialization
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:

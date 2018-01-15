@@ -23,10 +23,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.zkoss.bind.AnnotateBinder;
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.Binder;
-import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.BinderUtil;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -156,10 +154,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		//check if it is handling, if yes then skip to evaluate it.
 		if (BindUiLifeCycle.getExtension().isLifeCycleHandling(comp)) {
 			return false;
-		}
-
-		if (binder instanceof AnnotateBinder) {
-			new AnnotateBinderHelper(binder).initComponentBindings(comp);
 		}
 
 		//ZK-1699, mark the comp and it's children are handling.

@@ -2431,7 +2431,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		_propertyBindingHandler.doLoad(comp, bkey);
 	}
 
-	private void loadComponent0(Component comp, boolean loadinit) {
+	protected void loadComponent0(Component comp, boolean loadinit) {
 		loadComponentProperties0(comp, loadinit);
 
 		final Map<String, List<Binding>> compBindings = _bindings.get(comp);
