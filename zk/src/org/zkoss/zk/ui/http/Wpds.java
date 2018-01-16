@@ -30,6 +30,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.idom.Document;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -58,6 +61,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @since 5.0.0
  */
 public class Wpds {
+	private static final Logger log = LoggerFactory.getLogger(Wpds.class);
 	/** Generates all widgets in the specified language.
 	 * @param lang the language to look at
 	 */
@@ -108,6 +112,37 @@ public class Wpds {
 			for (MessageLoader loader : langdef.getMessageLoaders())
 				loader.load(result, exec);
 
+		return result.toString();
+	}
+
+	/**
+	 * Generates moment.js and moment-timezone-with-data.js string.
+	 *
+	 * @since 8.5.1
+	 */
+	public static final String outMomentJavascript(ServletRequest request, ServletResponse response)
+			throws IOException {
+		final StringBuffer result = new StringBuffer();
+		final WebApp webApp = WebApps.getCurrent();
+		final Execution exec = new FakeExecution(webApp.getServletContext(), request, response, null, null);
+		result.append("if (!zk.mm) { var temp; if (window.moment) { temp = window.moment; }");
+		result.append(Devices.loadJavaScript(exec, "~./js/zk/ext/moment.js"));
+		result.append(Devices.loadJavaScript(exec, "~./js/zk/ext/moment-timezone-with-data.js"));
+		result.append("zk.mm = window.moment; window.moment = temp; }");
+		String path = Library.getProperty("org.zkoss.zk.moment.timezone.path");
+		if (path != null) {
+			String json = null;
+			try {
+				json = Devices.loadFileContentAsString(exec, path);
+			} catch (Exception e) {
+				log.warn(e.getMessage());
+			}
+			if (json != null) {
+				result.append("var tzdata =");
+				result.append(json);
+				result.append("; zk.mm.tz.load(tzdata);");
+			}
+		}
 		return result.toString();
 	}
 
