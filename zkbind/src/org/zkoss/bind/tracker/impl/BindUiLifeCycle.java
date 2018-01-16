@@ -269,7 +269,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		if (installed != null) {
 			BindELContext.removeModel(comp);
 		}
-		final Binder binder = BinderUtil.getBinder(comp);
+
+		final Binder binder = BinderUtil.getBinder(comp, comp.hasAttribute(BinderCtrl.IS_TEMPLATE_MODEL_ENABLED_ATTR));
 		if (binder != null) {
 			if (batchRemove != null) {
 				//ZK-2224 batch remove component and it kids to enhance performance.

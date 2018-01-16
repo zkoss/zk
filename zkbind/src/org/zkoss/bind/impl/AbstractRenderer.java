@@ -43,7 +43,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	protected static final String STATUS_ATTR = TemplateResolver.STATUS_ATTR;
 	protected static final String STATUS_POST_VAR = "Status";
 	protected static final String EACH_STATUS_VAR = TemplateResolver.EACH_STATUS_VAR;
-	protected static final String IS_TEMPLATE_MODEL_ENABLED_ATTR = "$isTemplateModelEnabled$";
+	protected static final String IS_TEMPLATE_MODEL_ENABLED_ATTR = BinderCtrl.IS_TEMPLATE_MODEL_ENABLED_ATTR;
 	protected static final String CURRENT_INDEX_RESOLVER_ATTR = "$currentIndexResolver$";
 	protected static final String RENDERED_COMPONENTS = "$RENDERED_COMPONENTS$";
 

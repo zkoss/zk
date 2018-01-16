@@ -45,6 +45,7 @@ ZK 8.5.1
   ZK-3809: Filedownload name encoding
   ZK-3589: Popup fail to close when clicking outside the topmost area
   ZK-3782: new frozen broken scrollbars IE and Edge
+  ZK-3322: NPEs when recreating a form using children or model binding
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:

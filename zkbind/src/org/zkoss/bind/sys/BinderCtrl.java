@@ -62,6 +62,7 @@ public interface BinderCtrl {
 	public static final String DEPENDS_ON_COMP = "$DEPENDS_ON_COMP"; //dependsOn component
 	public static final String RENDERER_INSTALLED = "$RENDERER_INSTALLED$";
 	public static final String REMOVE_BINDINGS = "$REMOVE_BINDINGS$"; // a mark for removed bindings
+	public static final String IS_TEMPLATE_MODEL_ENABLED_ATTR = "$isTemplateModelEnabled$"; // for template model enable, internal use only
 
 	public static final String LOAD_FORM_EXPRESSION = "$LOAD_FORM_EXPR$"; //The attribute name of a loaded bean class, internal use only
 	public static final String LOAD_FORM_COMPONENT = "$LOAD_FORM_COMP$"; //The attribute name of a loaded bean class, internal use only

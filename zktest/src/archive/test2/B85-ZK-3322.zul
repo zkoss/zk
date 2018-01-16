@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3322.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Jan 19 5:32 PM:43 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		public class Option {
+			private String label;
+			public Option() {}
+			public Option(String label) { this.label = label; }
+			public String getLabel() { return label; }
+			public void setLabel(String label) { this.label = label; }
+		}	                  
+		public class Pojo {
+			private List options = new ArrayList();
+			public List getOptions() { return options; }
+		}
+		Pojo pojo = new Pojo();
+		pojo.getOptions().add(new Option("aaa"));
+		pojo.getOptions().add(new Option("bbb"));
+		
+		boolean editorVisible = false;
+		
+		public void toggleEditor(String templateName) {
+			if(editorVisible) { 
+				editor.detach(); 
+			} else {
+				root.getTemplate(templateName).create(root, null, null, null);
+			}
+			editorVisible = !editorVisible;			
+		}
+	]]></zscript>
+
+	<div id="root" apply="org.zkoss.bind.BindComposer">
+		<div>
+			<button label="A) toggle editor with children binding ERROR" onClick='toggleEditor("editorChildrenBinding");'/>
+			<button label="B) toggle editor with forEach workaround" onClick='toggleEditor("editorForEachWorkaround");'/>
+		</div>
+
+		<div>
+			<button label="C) toggle editor with grid/model ERROR" onClick='toggleEditor("editorGridModel");'/>
+			<button label="D) toggle editor with grid/forEach workaround" onClick='toggleEditor("editorGridForEachWorkaround");'/>
+		</div>
+
+		<template name="editorChildrenBinding">
+			<div id="editor" form="@id('fx') @load(pojo)" children="@load(fx.options)">
+				<template name="children" var="opt">
+					<div>
+						<textbox value="@bind(opt.label)" />
+					</div>
+				</template>
+			</div>
+		</template>
+
+		<template name="editorGridModel">
+			<grid id="editor" form="@id('fx') @load(pojo)" model="@load(fx.options)">
+				<template name="model" var="opt">
+					<row>
+						<textbox value="@bind(opt.label)" />
+					</row>
+				</template>
+			</grid>
+		</template>
+
+		<!-- workaround -->
+		<template name="editorForEachWorkaround">
+			<div id="editor" form="@id('fx') @load(pojo)">
+				<forEach items="@load(fx.options)" var="opt">
+					<div>
+						<textbox value="@bind(opt.label)" />
+					</div>
+				</forEach>
+			</div>
+		</template>
+		<template name="editorGridForEachWorkaround">
+			<grid id="editor" form="@id('fx') @load(pojo)">
+				<rows>
+					<forEach items="@load(fx.options)" var="opt">
+						<row>
+							<textbox value="@bind(opt.label)" />
+						</row>
+					</forEach>
+				</rows>
+			</grid>
+		</template>
+	</div>
+</zk>	
