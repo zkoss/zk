@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3840.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 17 12:02:02 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" sizable="true" id="win1" width="800px">
+        <hlayout>
+            <div id="div1" hflex="1" style="border: 1px solid red">hflex div</div>
+            <fragment id="fr1"><i>Fragment content(fr1)</i></fragment>
+        </hlayout>
+        <vlayout height="300px">
+            <div vflex="1" style="border: 1px solid red">vflex div</div>
+            <fragment><b>Fragment content</b></fragment>
+        </vlayout>
+        <button label="Invalidate fr1" onClick="fr1.invalidate()"/>
+        <button label="Invalidate window" onClick="win1.invalidate()"/>
+        <button label="window width: 600px" onClick='win1.width = "600px"'/>
+        <button label="window width: 500px" onClick='win1.width = "500px"'/>
+    </window>
+    <label multiline="true">
+        1. When you visit this page, the dev console of the browser should not have any exception.
+        2. Click "Invalidate fr1" then resize the window, the flex acts normally.
+        3. Click "Invalidate window" then resize the window, the flex acts normally.
+    </label>
+</zk>
