@@ -58,6 +58,7 @@ import org.zkoss.zk.xel.ExValue;
  */
 public class ComponentsCtrl {
 	private static final ThreadLocal<Object> _compdef = new ThreadLocal<Object>();
+	private static final ThreadLocal<Component> _rootParent = new ThreadLocal<Component>();
 
 	/** Returns the automatically generate component's UUID/ID.
 	 */
@@ -148,6 +149,26 @@ public class ComponentsCtrl {
 		return name != null && !"use".equals(name) && !"if".equals(name) && !"unless".equals(name)
 				&& !"apply".equals(name) && !"forEach".equals(name);
 	}
+
+	/** Returns the root parent when being called in
+	 * {@link org.zkoss.zk.ui.sys.ComponentCtrl#onPageAttached}
+	 * and {@link org.zkoss.zk.ui.sys.ComponentCtrl#onPageDetached}
+	 *
+	 * @since 8.5.1
+	 */
+	public static final Component getRootParent() {
+		return _rootParent.get();
+	}
+
+	/** Sets root parent
+	 * <p>Used only internally.
+	 *
+	 * @since 8.5.1
+	 */
+	public static final void setRootParent(Component comp) {
+		_rootParent.set(comp);
+	}
+
 
 	/** Returns the current component info {@link ComponentInfo},
 	 * definition ({@link ComponentDefinition} or null, which is used only by

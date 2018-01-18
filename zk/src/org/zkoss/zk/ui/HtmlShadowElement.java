@@ -257,7 +257,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			((ComponentCtrl) host).addCallback(AFTER_PAGE_ATTACHED, new Callback<Component>() {
 				public void call(Component host) {
 					host.getDesktop().getWebApp().getConfiguration().afterShadowAttached(se, host);
-					((ComponentCtrl) host).removeCallback(AFTER_PAGE_ATTACHED, this);
 				}
 			});
 		}
@@ -283,7 +282,6 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				((ComponentCtrl) prevhost).addCallback(AFTER_PAGE_DETACHED, new Callback<Component>() {
 					public void call(Component host) {
 						host.getDesktop().getWebApp().getConfiguration().afterShadowDetached(se, host);
-						((ComponentCtrl) host).removeCallback(AFTER_PAGE_DETACHED, this);
 					}
 				});
 			}
