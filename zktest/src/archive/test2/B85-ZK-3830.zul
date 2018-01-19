@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+test.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jan 18 5:48 PM:26 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		public class Pojo {
+			private String status = "yellow";
+			public String getStatus() {return status;}
+			public void setStatus(String status) {this.status = status;}
+		}
+		Pojo pojo = new Pojo();
+		pojo.setStatus("red");
+	]]></zscript>
+
+	<div apply="org.zkoss.bind.BindComposer">
+		<combobox value="@bind(pojo.status)">
+			<comboitem label="red"/>
+			<comboitem label="green"/>
+			<comboitem label="other"/>
+		</combobox>
+		<!-- workaround 2: reapply the whole <choose> element -->
+		<!--<apply changingParam="@load(pojo.status)">-->
+			<choose>
+				<when test="@load(pojo.status eq 'red')">
+					<button label="RED" style="background-color: red"/>
+				</when>
+				<when test="@load(pojo.status eq 'green')">
+					<button label="GREEN" style="background-color: green"/>
+				</when>
+				<!-- workaround 1: empty <otherwise/> -->
+				<!--<otherwise/>-->
+			</choose>
+		<!--</apply>-->
+	</div>
+	<label multiline="true">
+		1. When you visit the page, there is a combobox and a button right of it.
+		2. Click the combobox and select the "otherwise", the button should be dismissed.
+	</label>
+</zk>
