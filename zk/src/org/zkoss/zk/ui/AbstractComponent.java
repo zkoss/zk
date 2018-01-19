@@ -143,6 +143,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	protected static String AFTER_PAGE_ATTACHED = "afterPageAttached";
 	protected static String AFTER_PAGE_DETACHED = "afterPageDetached";
+	protected static String AFTER_CHILD_ADDED = "afterChildAdded";
+	protected static String AFTER_CHILD_REMOVED = "afterChildRemoved";
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -1252,7 +1254,12 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		//correct _page
 		final Page newpg = _parent != null ? _parent.getPage() : null, oldpg = _page;
 		addMoved(op, _page, newpg); //Not depends on UUID
-		setPage0(newpg); //UUID might be changed here
+		try {
+			ComponentsCtrl.setRootParent(parent != null ? parent : op);
+			setPage0(newpg); //UUID might be changed here
+		} finally {
+			ComponentsCtrl.setRootParent(null);
+		}
 
 		if (_auxinf != null && _auxinf.attrs != null)
 			_auxinf.attrs.notifyParentChanged(_parent != null ? _parent : (Scope) _page);
@@ -1968,16 +1975,18 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	public void beforeParentChanged(Component parent) {
 	}
 
-	/** Default: does nothing.
+	/** Default: handles special event listeners.
 	 * @see ComponentCtrl#onChildAdded
 	 */
 	public void onChildAdded(Component child) {
+		processCallback(AFTER_CHILD_ADDED);
 	}
 
-	/** Default: does nothing.
+	/** Default: handles special event listeners.
 	 * @see ComponentCtrl#onChildRemoved
 	 */
 	public void onChildRemoved(Component child) {
+		processCallback(AFTER_CHILD_REMOVED);
 	}
 
 	/** Default: handles special event listeners.
@@ -1987,10 +1996,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	public void onPageAttached(Page newpage, Page oldpage) {
 		if (oldpage == null) //new added
 			onListenerChange(newpage.getDesktop(), true);
-		Collection<Callback> callbacks = getCallback(AFTER_PAGE_ATTACHED);
-		for (Callback callback : callbacks) {
-			callback.call(this);
-		}
+		processCallback(AFTER_PAGE_ATTACHED);
 	}
 
 	/** Default: handles special event listeners.
@@ -1999,9 +2005,14 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	 */
 	public void onPageDetached(Page page) {
 		onListenerChange(page.getDesktop(), false);
-		Collection<Callback> callbacks = getCallback(AFTER_PAGE_DETACHED);
-		for (Callback callback : callbacks) {
+		processCallback(AFTER_PAGE_DETACHED);
+	}
+
+	private void processCallback(String name) {
+		Collection<Callback> callbacks = getCallback(name);
+		for (Callback callback : new ArrayList<Callback>(callbacks)) {
 			callback.call(this);
+			removeCallback(name, callback);
 		}
 	}
 
