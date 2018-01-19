@@ -75,4 +75,9 @@ public class AnnotateBinder extends BinderImpl {
 		//mark this component was handled by binder after init
 		BinderUtil.markHandling(this.getView(), this);
 	}
+
+	protected void loadComponent0(Component comp, boolean loadinit) {
+		new AnnotateBinderHelper(this).initComponentBindings(comp);
+		super.loadComponent0(comp, loadinit);
+	}
 }

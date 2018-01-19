@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3765-include.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 15 15:02:55 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <button label="Label2" visible="@load(vm.visible2)" onClick="@command('onClick2')" />
+</zk>
