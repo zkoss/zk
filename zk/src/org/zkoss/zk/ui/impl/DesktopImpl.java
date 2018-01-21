@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,9 +41,11 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
+import org.zkoss.lang.SystemException;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.media.Media;
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuService;
@@ -466,11 +469,23 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Strings.encode(sb, System.identityHashCode(media) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
-			if (pathInfo.charAt(0) != '/')
-				sb.append('/');
-			sb.append(pathInfo);
+			sb.append('/');
+			if (pathInfo.charAt(0) == '/')
+				pathInfo = pathInfo.substring(1);
 		}
-		return getUpdateURI(sb.toString());
+		return getUpdateURI(sb.toString()) + encodeFilename(pathInfo);
+	}
+
+	// ZK-3809: # is valid in URL as a reference, but it is invalid as a filename
+	private String encodeFilename(String filename) {
+		if (filename == null)
+			return "";
+
+		try {
+			return Encodes.encodeURIComponent(filename);
+		} catch (UnsupportedEncodingException ex) {
+			throw new SystemException(ex);
+		}
 	}
 
 	public Media getDownloadMedia(String medId, boolean reserved) {
