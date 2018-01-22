@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.util.Callback;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
@@ -152,7 +153,20 @@ public class BindComposer<T extends Component>
 		return compInfo;
 	}
 
-	public void doBeforeComposeChildren(Component comp) throws Exception {
+	public void doBeforeComposeChildren(final Component comp) throws Exception {
+		//ZK-3831
+		if (comp.getPage() == null) {
+			((ComponentCtrl) comp).addCallback(ComponentCtrl.AFTER_PAGE_ATTACHED, new Callback() {
+				public void call(Object data) {
+					try {
+						doBeforeComposeChildren(comp);
+					} catch (Exception e) {
+						throw UiException.Aide.wrap(e);
+					}
+				}
+			});
+			return;
+		}
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
 		_binder = initBinder(evalx, comp);
@@ -188,7 +202,20 @@ public class BindComposer<T extends Component>
 	}
 
 	//--Composer--//
-	public void doAfterCompose(T comp) throws Exception {
+	public void doAfterCompose(final T comp) throws Exception {
+		//ZK-3831
+		if (comp.getPage() == null) {
+			((ComponentCtrl) comp).addCallback(ComponentCtrl.AFTER_PAGE_ATTACHED, new Callback() {
+				public void call(Object data) {
+					try {
+						doAfterCompose(comp);
+					} catch (Exception e) {
+						throw UiException.Aide.wrap(e);
+					}
+				}
+			});
+			return;
+		}
 		_binder.initAnnotatedBindings();
 
 		// trigger ViewModel's @AfterCompose method.

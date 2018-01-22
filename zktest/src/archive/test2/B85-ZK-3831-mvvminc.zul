@@ -1,0 +1,5 @@
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3831_ViewModel')">
+		<label id="innerLabel" value="@load(vm.someValue)"/>
+	</div>
+</zk>
