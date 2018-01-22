@@ -44,6 +44,7 @@ ZK 8.5.1
   ZK-3840: fragment component flex error when inside v/hlayout
   ZK-3809: Filedownload name encoding
   ZK-3589: Popup fail to close when clicking outside the topmost area
+  ZK-3782: new frozen broken scrollbars IE and Edge
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:

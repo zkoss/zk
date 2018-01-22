@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<div height="2000px">
+		<label multiline="true">
+			(Only in IE11 and edge)
+			1. scroll the grid to the right
+			2. scroll to the page bottom
+			3. scroll the page back up (using the mouse wheel) quickly so that the mouse cursor is above the grid
+			4. the vertical scroll bar should not be locked.
+		</label>
+		<grid height="300px" width="500px">
+			<frozen columns="3"></frozen>
+			<columns>
+				<column label="Year" width="80px"/>
+				<column label="Quarter" width="80px"/>
+				<column label="Month" width="80px"/>
+				<forEach begin="1" end="6">
+					<column label="Col ${each}" width="200px"/>
+				</forEach>
+			</columns>
+			<rows>
+				<apply template="row" year="2017" quarter="Q1" month="01"/>
+				<apply template="row"                          month="02"/>
+				<apply template="row"                          month="03"/>
+				<apply template="row"             quarter="Q2" month="04"/>
+				<apply template="row"                          month="05"/>
+				<apply template="row"                          month="06"/>
+				<apply template="row"             quarter="Q3" month="07"/>
+				<apply template="row"                          month="08"/>
+				<apply template="row"                          month="09"/>
+				<apply template="row"             quarter="Q4" month="10"/>
+				<apply template="row"                          month="11"/>
+				<apply template="row"                          month="12"/>
+
+				<template name="row">
+					<row>
+						<cell if="${not empty year}" rowspan="12">${year}</cell>
+						<cell if="${not empty quarter}" rowspan="3">${quarter}</cell>
+						<cell>${month}</cell>
+						<forEach begin="1" end="6">
+							<cell><label value="Data ${each}" style="background-color: red;"/></cell>
+						</forEach>
+					</row>
+				</template>
+			</rows>
+			<foot>
+				<footer label="Footer Year"/>
+				<footer label="Footer Quarter"/>
+				<footer label="Footer Month"/>
+				<forEach begin="1" end="6">
+					<footer>Footer ${each}</footer>
+				</forEach>
+			</foot>
+		</grid>
+	</div>
+</zk>
