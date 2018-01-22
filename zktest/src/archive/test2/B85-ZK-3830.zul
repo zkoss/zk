@@ -27,6 +27,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		<combobox value="@bind(pojo.status)">
 			<comboitem label="red"/>
 			<comboitem label="green"/>
+			<comboitem label="blue"/>
+			<comboitem label="pink"/>
 			<comboitem label="other"/>
 		</combobox>
 		<!-- workaround 2: reapply the whole <choose> element -->
@@ -38,7 +40,9 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 				<when test="@load(pojo.status eq 'green')">
 					<button label="GREEN" style="background-color: green"/>
 				</when>
-				<!-- workaround 1: empty <otherwise/> -->
+				<when test="@load(pojo.status ne 'other')">
+					<button label="${pojo.status}" style="background-color: ${pojo.status}"/>
+				</when>
 				<!--<otherwise/>-->
 			</choose>
 		<!--</apply>-->
@@ -46,5 +50,6 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 	<label multiline="true">
 		1. When you visit the page, there is a combobox and a button right of it.
 		2. Click the combobox and select the "otherwise", the button should be dismissed.
+		3. Choosing blue is testing the not equal condition
 	</label>
 </zk>
