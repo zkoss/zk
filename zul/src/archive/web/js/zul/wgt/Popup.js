@@ -338,6 +338,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		jq(node).removeClass(this.$s('open'));
 	},
 	onFloatUp: function (ctl, opts) {
+		this._keepVisible = false;
 		if (!this.isVisible())
 			return;
 		var openInfo = this._openInfo,

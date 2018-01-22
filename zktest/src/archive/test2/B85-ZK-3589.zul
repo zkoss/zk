@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3589.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 03 17:10:30 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style>
+    body {
+        border: 1px red solid;
+    }
+    </style>
+    <button label="top" id="btnTop" />
+    <div height="500px"/>
+    <label popup="test">
+        Click text to show popup. And it can be closed when clicking outside of the body (below the red border)
+    </label>
+    <div height="5000px"/>
+    <button label="bottom" id="btnBottom" />
+    <popup id="test">
+        test
+    </popup>
+</zk>
