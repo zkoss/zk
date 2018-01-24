@@ -10,6 +10,7 @@ ZK 8.5.1
   ZK-3827: Combobox empty search message
   ZK-3739: Support to insert text at the current cursor position in a Textbox
   ZK-3839: provide a switch to disable caching for ZumlExtendlet
+  ZK-3799: simplify spring boot integration for websockets
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes
