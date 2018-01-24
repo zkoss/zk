@@ -678,13 +678,24 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_shallIgnore: function (evt, keys) {
+		if (evt.keyCode || evt.charCode) {
 		// ZK-1736 add metakey on mac
-		if (zk.mac && evt.metaKey)
-			return;
-		else {
-			var code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode;
-			if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
-			&& keys.indexOf(String.fromCharCode(code)) < 0) {
+			if (zk.mac && evt.metaKey)
+				return;
+			else {
+				var code = (zk.ie < 11 || zk.opera) ? evt.keyCode : evt.charCode;
+				if (!evt.altKey && !evt.ctrlKey && _keyIgnorable(code)
+				&& keys.indexOf(String.fromCharCode(code)) < 0) {
+					evt.stop();
+					return true;
+				}
+			}
+		} else {
+			var orgEvtText = evt.domEvent.originalEvent.clipboardData.getData('text'),
+				text = (orgEvtText) ? orgEvtText : window.clipboardData.getData('text'),
+			keys = keys.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+			var regKey = '^[' + keys + ']+$';
+			if (! new RegExp(regKey).test(text)) {
 				evt.stop();
 				return true;
 			}

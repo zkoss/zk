@@ -4329,6 +4329,26 @@ wgt.setListeners({
 			if (p) p.doKeyPress_(evt);
 		}
 	},
+	/** Called when the user paste text to this widget which has been the focused ({@link #focus}).
+	 * <p>Notice that not every widget can have the focus.
+	 * A widget doesn't need to listen the paste DOM event.
+	 * Rather, it shall override this method if necessary.
+	 * <p>Default: fire the widget event ({@link #fireX}), and
+	 * call parent's doPaste_ if the event propagation is not stopped ({@link zk.Event#stopped}).
+	 * It is the so-called event propagation.
+	 * <p>See also <a href="http://books.zkoss.org/wiki/ZK_Client-side_Reference/Notifications">ZK Client-side Reference: Notifications</a>
+	 * @param zk.Event evt the widget event.
+	 * The original DOM event and target can be retrieved by {@link zk.Event#domEvent} and {@link zk.Event#domTarget}
+	 * @see #doKeyDown_
+	 * @see #doKeyUp_
+	 * @see #doKeyPress_
+	 */
+	doPaste_: function (evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doPaste_(evt);
+		}
+	},
 	/** Called when the user swipe left/right/up/down this widget.
 	 * <p>For example,
 <pre><code>
