@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.bind.BindContext;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.annotation.AfterCompose;
@@ -67,7 +68,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		Component rootComp = binder.getView();
 		Object viewModel = rootComp.getAttribute(VM);
 
-		final Class<?> vmClz = viewModel.getClass();
+		final Class<?> vmClz = BindUtils.getViewModelClass(viewModel);
 		List<Method> methods = getAnnotateMethods(annoClass, vmClz);
 		return (!methods.isEmpty());
 	}
@@ -81,7 +82,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		Component rootComp = binder.getView();
 		Object viewModel = rootComp.getAttribute(VM);
 
-		final Class<?> vmClz = viewModel.getClass();
+		final Class<?> vmClz = BindUtils.getViewModelClass(viewModel);
 		List<Method> methods = getAnnotateMethods(annoClass, vmClz);
 		if (methods.size() == 0)
 			return; //no annotated method

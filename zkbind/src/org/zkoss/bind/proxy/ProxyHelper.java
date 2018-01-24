@@ -12,6 +12,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.proxy;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -316,5 +317,44 @@ public class ProxyHelper {
 	 */
 	public interface ProxyDecorator {
 		public ProxyObject decorate(ProxyObject proxyObject);
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	public static String toSetter(String attr) {
+		return capitalize("set", attr);
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	public static String toGetter(String attr) {
+		return capitalize("get", attr);
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	public static String capitalize(String prefix, String attr) {
+		return new StringBuilder(prefix).append(Character.toUpperCase(attr.charAt(0))).append(attr.substring(1))
+				.toString();
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	public static String toAttrName(Method method, int prefix) {
+		final String name = method.getName();
+		final String attrName = name.substring(prefix, name.length());
+		return new StringBuilder(attrName.length()).append(Character.toLowerCase(attrName.charAt(0)))
+				.append(attrName.substring(1)).toString();
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	public static String toAttrName(Method method) {
+		return toAttrName(method, 3);
 	}
 }

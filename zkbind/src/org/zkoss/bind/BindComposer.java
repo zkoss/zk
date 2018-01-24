@@ -118,7 +118,10 @@ public class BindComposer<T extends Component>
 	public void setViewModel(Object viewModel) {
 		_viewModel = viewModel;
 		if (this._binder != null) {
-			this._binder.setViewModel(_viewModel);
+			//do view model proxy
+			Object vm = this._binder.createViewModelProxyIfEnabled(_viewModel);
+			this._binder.setViewModel(vm);
+			_viewModel = vm;
 		}
 	}
 
@@ -153,10 +156,20 @@ public class BindComposer<T extends Component>
 		//init viewmodel first
 		_viewModel = initViewModel(evalx, comp);
 		_binder = initBinder(evalx, comp);
+
+		//do view model proxy
+		if (!this.equals(_viewModel)) {
+			Object vmProxy = _binder.createViewModelProxyIfEnabled(_viewModel);
+			if (vmProxy != null) {
+				_viewModel = vmProxy;
+				comp.setAttribute((String) comp.getAttribute(VM_ID), vmProxy);
+			}
+		}
+
 		ValidationMessages _vmsgs = initValidationMessages(evalx, comp, _binder);
 
 		//wire before call init
-		Selectors.wireVariables(comp, _viewModel, Selectors.newVariableResolvers(_viewModel.getClass(), null));
+		Selectors.wireVariables(comp, _viewModel, Selectors.newVariableResolvers(BindUtils.getViewModelClass(_viewModel), null));
 		if (_vmsgs != null) {
 			_binder.setValidationMessages(_vmsgs);
 		}
@@ -452,7 +465,7 @@ public class BindComposer<T extends Component>
 	// Bug fixed for B70-ZK-2843
 	public void didActivate(Component comp) {
 		Selectors.rewireVariablesOnActivate(comp, this.getViewModel(),
-				Selectors.newVariableResolvers(this.getViewModel().getClass(), null));
+				Selectors.newVariableResolvers(BindUtils.getViewModelClass(_viewModel), null));
 	}
 
 	public void willPassivate(Component comp) {
@@ -561,7 +574,7 @@ public class BindComposer<T extends Component>
 			final Map<String, Object> data = request.getData();
 			String vcmd = data.get("cmd").toString();
 
-			final ToServerCommand ccmd = getViewModel().getClass().getAnnotation(ToServerCommand.class);
+			final ToServerCommand ccmd = BindUtils.getViewModelClass(_viewModel).getAnnotation(ToServerCommand.class);
 			List<String> asList = new ArrayList<String>();
 			if (ccmd != null) {
 				asList.addAll(Arrays.asList(ccmd.value()));

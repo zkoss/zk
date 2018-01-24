@@ -80,4 +80,11 @@ public class AnnotateBinder extends BinderImpl {
 		new AnnotateBinderHelper(this).initComponentBindings(comp);
 		super.loadComponent0(comp, loadinit);
 	}
+
+	/**
+	 * Internal use only
+	 */
+	public Object createViewModelProxyIfEnabled(Object viewModel) {
+		return viewModel;
+	}
 }

@@ -14,6 +14,7 @@ package org.zkoss.bind;
 import java.util.Map;
 
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.proxy.ViewModelProxyObject;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.event.Event;
@@ -60,5 +61,11 @@ public class BindUtils {
 		if (que != null) {
 			que.publish(new PropertyChangeEvent(null, bean, property));
 		}
+	}
+
+	public static Class<?> getViewModelClass(Object viewModel) {
+		if (viewModel instanceof ViewModelProxyObject)
+			return ((ViewModelProxyObject) viewModel).getOriginClass();
+		return viewModel.getClass();
 	}
 }
