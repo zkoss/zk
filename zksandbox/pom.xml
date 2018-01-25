@@ -155,6 +155,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.theme</groupId>
+			<artifactId>breeze</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.theme</groupId>
 			<artifactId>sapphire</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -163,13 +168,6 @@
 			<artifactId>silvertail</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--  
-		<dependency>
-			<groupId>org.zkoss.theme</groupId>
-			<artifactId>classicblue</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
 			<artifactId>zweb</artifactId>
