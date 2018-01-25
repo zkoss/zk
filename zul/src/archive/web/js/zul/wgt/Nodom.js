@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 8.0.3
  */
 zul.wgt.Nodom = zk.$extends(zk.Widget, {
+	z_virnd: true,
 	getMold: function () {
 		return 'nodom';
 	}
