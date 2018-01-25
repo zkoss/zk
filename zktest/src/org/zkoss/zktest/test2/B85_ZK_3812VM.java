@@ -15,7 +15,7 @@ public class B85_ZK_3812VM {
 
 	@Init
 	public void init() {
-		List<String> data = new ArrayList<>();
+		List<String> data = new ArrayList<String>();
 		for (int i = 1; i <= 10; i++)
 			data.add("d" + i);
 		myBeans = new MyBeanList(data);
