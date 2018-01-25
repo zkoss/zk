@@ -56,7 +56,12 @@ function (out) {
 		iOSNativeBar = zk.ios && this._nativebar;
 	if (hgh || iOSNativeBar)
 		out.push(' style="', hgh ? 'height:' + hgh + ';' : '', iOSNativeBar ? '-webkit-overflow-scrolling:touch;' : '', '"');
-	out.push('><table id="', uuid, '-cave"', width,
+	out.push('>');
+
+	if (this.domPad_ && !inPaging)
+		this.domPad_(out, '-tpad');
+
+	out.push('<table id="', uuid, '-cave"', width,
 			' style="table-layout:fixed;', wdStyle,'">');
 	
 	if (this.treecols)
@@ -67,7 +72,12 @@ function (out) {
 	else
 		out.push('<tbody id="', this.uuid, '-rows"/>');
 	
-	out.push('</table><', tag, ' style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" id="', uuid, 
+	out.push('</table>');
+
+	if (this.domPad_ && !inPaging)
+		this.domPad_(out, '-bpad');
+
+	out.push('<', tag, ' style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" id="', uuid,
 			 '-a"  onclick="return false;" href="javascript:;" class="z-focus-a"');
 	var tabindex = this._tabindex; // Feature ZK-2531
 	if (tabindex != undefined)

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3835.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 08 10:28:45 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		DefaultTreeNode root = new DefaultTreeNode("ROOT", new ArrayList());
+		DefaultTreeModel stm = new DefaultTreeModel(root);
+		DefaultTreeNode visibleRoot = new DefaultTreeNode("Visible ROOT", new ArrayList());
+		root.add(visibleRoot);
+
+		// add a tree node which has 2000 children
+		DefaultTreeNode node2 = new DefaultTreeNode("0", Collections.emptyList());
+		for (int i = 0; i < 2000; i++) {
+			node2.add(new DefaultTreeNode(i, Collections.emptyList()));
+		}
+		visibleRoot.add(node2);
+
+		// add other nodes
+		for (int i = 1; i < 2000; i++) {
+			visibleRoot.add(new DefaultTreeNode(i, Collections.emptyList()));
+		}
+		for (int i = 0; i < 2000; i++) {
+			root.add(new DefaultTreeNode(Integer.toHexString(i), Collections.emptyList()));
+		}
+
+		int childSize = root.getChildCount();
+		DefaultTreeNode lastNode = root.getChildAt(childSize - 1);
+		for (int i = 0; i < 2000; i++) {
+			lastNode.add(new DefaultTreeNode(i, Collections.emptyList()));
+		}
+	]]></zscript>
+	<label multiline="true">
+		1. It's a client ROD enhancement. The widget will only render partial treeitems to speed up rendering time.
+		- If org.zkoss.zul.client.rod = true (true by default)
+		- org.zkoss.zul.tree.preloadSize (50 by default)
+		- org.zkoss.zul.tree.initRodSize (50 by default, -1 mean there is no live data for faster rendering)
+		2. Try to scroll the tree to trigger client ROD and live data.
+		3. Try to open/close the "Visible ROOT" node and "Visible ROOT/0" node.
+	</label>
+	<tree width="300px" model="${stm}" vflex="1">
+		<!--<custom-attributes org.zkoss.zul.client.rod="false"/>-->
+		<!--<custom-attributes org.zkoss.zul.tree.initRodSize="-1"/>-->
+		<custom-attributes org.zkoss.zul.tree.preloadSize="200"/>
+	</tree>
+</zk>

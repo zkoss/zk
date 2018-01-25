@@ -301,8 +301,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 * <p>Note: the performance of this method is no good.
 	 * @return int
 	 */
-	getItemCount: function () {
-		return this.treechildren != null ? this.treechildren.getItemCount() : 0;
+	getItemCount: function (opts) {
+		return this.treechildren != null ? this.treechildren.getItemCount(opts) : 0;
 	},
 	_doLeft: function (row) {
 		if (row.isOpen()) {

@@ -1059,7 +1059,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (!w._loaded) {
 				//B70-ZK-2589: w and rows[j] belongs to different widget,
 				//w shouldn't depend on rows[j], origin -> row = rows[j];
-				var row = w.$n(), $row = zk(row),
+				var row = w.$n();
+				if (row == null) continue;
+				var $row = zk(row),
 					top = $row.offsetTop();
 
 				if (top + $row.offsetHeight() < min) continue;
