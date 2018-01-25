@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F85-ZK-3808.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 16 14:48:04 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <label multiline="true">
+        1. look into Network of browser dev tool
+        2. scroll to the position at about 80% of the scrollbar
+        3. scroll to the position at about 20% of the scrollbar
+        4. repeat step 2 and 3 again
+        5. reload this page
+        6. repeat step 2 and 3 five times
+        7. both zkau time should not be slow (like not &gt; 1 sec)
+
+    </label>
+    <window title="Dynamic Listbox Columns"
+            height="500px" width="800px" closable="true" border="normal" sizable="true" minheight="500" minwidth="700"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3808VM')">
+        <custom-attributes org.zkoss.zul.listbox.initRodSize="10"/>
+        <custom-attributes org.zkoss.zul.listbox.preloadSize="100"/>
+        <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+        <listbox model="@load(vm.data)" vflex="true" width="100%" sclass="center-cells">
+            <template name="model" var="line">
+                <listitem>
+                    <forEach items="@init(line)" var="cell">
+                        <listcell label="@load(cell)"/>
+                    </forEach>
+                </listitem>
+            </template>
+        </listbox>
+    </window>
+</zk>

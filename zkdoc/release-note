@@ -12,6 +12,7 @@ ZK 8.5.1
   ZK-3839: provide a switch to disable caching for ZumlExtendlet
   ZK-3799: simplify spring boot integration for websockets
   ZK-3816: Support a dirty checking mechanism for a ViewModel's properties, so that users don't need to notify changes by themselves
+  ZK-3808: Provide performance tuning options for meshes
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes
