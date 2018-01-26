@@ -408,6 +408,15 @@ public class Devices {
 	 * @since 5.0.11
 	 */
 	public static String loadJavaScript(Execution exec, String path) throws IOException {
+		return loadFileContentAsString(exec, path);
+	}
+
+	/**
+	 * Loads the content of a file as a String.
+	 *
+	 * @since 8.5.1
+	 */
+	public static String loadFileContentAsString(Execution exec, String path) throws IOException {
 		path = exec.locate(path);
 		//ZK-1345: use WebApps.getCurrent() instead of exec.getDesktop().getWebApp()
 		InputStream is = WebApps.getCurrent().getResourceAsStream(path);

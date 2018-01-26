@@ -745,4 +745,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.theme.atlantic.useGoogleFont.disabled</name>
 		<value>true</value>
 	</library-property>
+	<!-- B85-ZK-3527 -->
+	<library-property>
+		<name>org.zkoss.zk.moment.timezone.path</name>
+		<value>/test2/data/2017a.json</value>
+	</library-property>
 </zk>

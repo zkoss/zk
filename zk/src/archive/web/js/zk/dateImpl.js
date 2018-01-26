@@ -20,17 +20,17 @@ var Dates = {
 		if (tz)
 			tz = parseTzId(tz);
 		else
-			tz = moment.tz.guess();
+			tz = zk.mm.tz.guess();
 		if (arguments.length == 0) {
-			m = moment();
+			m = zk.mm();
 		} else if (typeof param == 'number') {
-			m = moment(param);
+			m = zk.mm(param);
 		} else if (param instanceof DateImpl) {
-			m = moment(param);
+			m = zk.mm(param);
 			tz = param.getTimeZone();
 		} else if (param instanceof Array) { // [y, m, d, hr, min, sec, millisec]
 			var d = new Date(Date.UTC.apply(null, param));
-			m = moment.tz([d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),
+			m = zk.mm.tz([d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),
 				d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()], tz);
 		}
 		return new DateImpl(m, tz);
@@ -160,7 +160,7 @@ DateImpl.prototype = {
 		return this._getTzMoment().second(v).valueOf();
 	},
 	setTime: function (v) {
-		this._moment = moment(v);
+		this._moment = zk.mm(v);
 		return this._moment.valueOf();
 	},
 	setUTCDate: function (v) {
