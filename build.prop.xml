@@ -90,3 +90,8 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 <!-- checkstyle -->
 <property name="checkstyle.java.severity" value="ignore"/>
+
+<!-- current year -->
+<tstamp>
+     <format property="currentYear" pattern="yyyy"/>
+</tstamp>

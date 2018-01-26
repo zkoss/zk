@@ -14,6 +14,7 @@ ZK 8.5.1
   ZK-3816: Support a dirty checking mechanism for a ViewModel's properties, so that users don't need to notify changes by themselves
   ZK-3808: Provide performance tuning options for meshes
   ZK-3835: Improve Tree client ROD rendering method
+  ZK-3793: support for Java 9 module system (fix split package issue)
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes

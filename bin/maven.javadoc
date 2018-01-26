@@ -38,7 +38,7 @@ function jvdoc {
 	
 	cd $1
 	echo Generating javadoc for $1
-	mvn --quiet javadoc:jar
+	mvn --quiet javadoc:jar -Ddoclint=none
 
 	mv -f pom.xml.bak pom.xml
 	
