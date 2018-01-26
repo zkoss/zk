@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3836.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 17 14:39:14 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		WebSocket should not be enabled
+
+		1. click the button 1 time within 3 seconds
+		2. should see "MouseEvent onClick" in zklog
+
+	</label>
+	<zscript><![CDATA[
+		import org.zkoss.lang.Threads;
+		import org.zkoss.zk.au.http.*;
+		import javax.servlet.ServletException;
+		import javax.servlet.http.HttpServletRequest;
+		import javax.servlet.http.HttpServletResponse;
+		import java.io.IOException;
+		public class RedirectAuExt implements AuExtension {
+			public void service(HttpServletRequest request, HttpServletResponse response, String pi) throws ServletException, IOException {
+				Threads.sleep(3000);
+				response.sendRedirect("/doesnt/matter.html");
+			}
+			public void init(DHtmlUpdateServlet servlet) throws ServletException {}
+			public void destroy() {}
+		}
+		DHtmlUpdateServlet.addAuExtension(desktop.getWebApp(), "/wstest", new RedirectAuExt());
+	]]></zscript>
+	<button label="Click within 3 seconds (check JS console)" onClick="Clients.log(event.toString())"/>
+	<script><![CDATA[
+		zk.afterLoad(() => {
+			//manually start websocket with redirecting endpoint (after 3 seconds)
+			zWs.start('/zkau/wstest', false);
+		});
+	]]></script>
+</zk>

@@ -156,7 +156,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			zAu.ajaxReq = req;
 			zAu.ajaxReqInf = reqInf;
 			
-			if (typeof zWs != 'undefined' && zWs.webSocketEndPoint) {
+			if (typeof zWs != 'undefined' && zWs.ready) {
 				zWs.send(req, reqInf);
 				return;
 			}
@@ -709,7 +709,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content, rtags = {},
 			requri = uri || zk.ajaxURI(null, {desktop: dt,au: true}),
-			ws = typeof zWs != 'undefined' && zWs.webSocketEndPoint;
+			ws = typeof zWs != 'undefined' && zWs.ready;
 		if (ws) {
 			content = {};
 		} else {
@@ -783,7 +783,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	// Sets performance rquest IDs to the request's header
 	// Called by moun.js, too
 	_pfsend: function (dt, req, completeOnly) {
-		var ws = typeof zWs != 'undefined' && zWs.webSocketEndPoint;
+		var ws = typeof zWs != 'undefined' && zWs.ready;
 		if (!completeOnly) {
 			var dtt = dt.id + '-' + pfIndex++ + '=' + Math.round(jq.now());
 			req.setRequestHeader('ZK-Client-Start', dtt);
