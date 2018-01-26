@@ -52,6 +52,7 @@ ZK 8.5.1
   ZK-3322: NPEs when recreating a form using children or model binding
   ZK-3812: Nested collections bindings with templates stop firing after ZK 3611
   ZK-3836: WebSocket JS error in onClose
+  ZK-3805: Websocket NPE when re-directing or refreshing page
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
