@@ -27,7 +27,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		2. Open the node 'aaa', 'aaa-1' should be selected and 'aaa' should not.
 	</label>
 
-	<tree model="${model}">
+	<tree model="${model}" checkmark="true">
 		<attribute name="onSelect"><![CDATA[
 			DefaultTreeNode selected = event.getSelectedObjects().iterator().next();
 			if (selected.getChildren() != null && selected.getChildren().size() > 0) {
