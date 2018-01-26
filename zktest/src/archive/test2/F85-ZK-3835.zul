@@ -44,7 +44,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		1. It's a client ROD enhancement. The widget will only render partial treeitems to speed up rendering time.
 		- If org.zkoss.zul.client.rod = true (true by default)
 		- org.zkoss.zul.tree.preloadSize (50 by default)
-		- org.zkoss.zul.tree.initRodSize (50 by default, -1 mean there is no live data for faster rendering)
+		- org.zkoss.zul.tree.initRodSize (50 by default, -1 means no ROD)
 		2. Try to scroll the tree to trigger client ROD and live data.
 		3. Try to open/close the "Visible ROOT" node and "Visible ROOT/0" node.
 	</label>
