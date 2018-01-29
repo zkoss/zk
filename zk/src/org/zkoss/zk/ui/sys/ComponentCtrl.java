@@ -47,6 +47,16 @@ import org.zkoss.zk.ui.util.Callback;
  * @author tomyeh
  */
 public interface ComponentCtrl {
+	/**
+	 * For page attached callback, use in {@link #addCallback(String, Callback)}
+	 */
+	public static String AFTER_PAGE_ATTACHED = "afterPageAttached";
+
+	/**
+	 * For page detached callback, use in {@link #addCallback(String, Callback)}
+	 */
+	public static String AFTER_PAGE_DETACHED = "afterPageDetached";
+
 	/** Sets the component definition.
 	 *
 	 * <p>The component definition affects how a component behaves.

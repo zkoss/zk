@@ -4,7 +4,6 @@
 		<attribute name="onClick"><![CDATA[
 			Div div = new Div();
 			Executions.createComponents("B01547NPEWhenCreateNonPageX.zul", div, null);
-			
 			cnt.appendChild(div);
 		]]></attribute>
 	</button>

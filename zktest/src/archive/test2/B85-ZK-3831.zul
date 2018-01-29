@@ -1,0 +1,32 @@
+<?import org.zkoss.zk.ui.util.*?>
+<!--
+B85-ZK-3831.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jan 4 11:52:15 CST 2018, Created by Klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		public class MyComposer implements Composer {
+			public void doAfterCompose(Component comp) {
+				Div newDiv = new Div();
+				Executions.createComponents("B85-ZK-3831-mvvminc.zul", newDiv, null);
+				comp.appendChild(newDiv);
+			}
+		}
+	]]></zscript>
+	<div apply="MyComposer">
+		something there
+	</div>
+	<label multiline="true">
+		1. Originally, creating Component cannot attach to a component whose page is null, if we put
+		"Executions.createComp..." before "comp.appendCh.." will show error, and we fixed it.
+	</label>
+</zk>

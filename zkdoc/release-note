@@ -172,6 +172,7 @@ Oct 31, 2017
   ZK-3783: panel/window close button markup/style inconsistent
   ZK-3779: setWidth(null) causes a JavaScript error
   ZK-3777: slider doesn't show custom slidertext initially
+  ZK-3831: initViewModel fails during createComponents on detached parent
 
 * Upgrade Notes
   + The default theme is replaced with Iceblue. Breeze is packaged as an external theme.

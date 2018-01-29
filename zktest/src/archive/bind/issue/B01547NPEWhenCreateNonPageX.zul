@@ -11,7 +11,7 @@
 		}
 	]]></zscript>
 	<window id="win" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('MyVM2')">
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01547_ViewModel')">
 		<label id="lb" value="@bind(vm.value)"/>
 		<textbox value="@bind(vm.value)"/>
 	</window>

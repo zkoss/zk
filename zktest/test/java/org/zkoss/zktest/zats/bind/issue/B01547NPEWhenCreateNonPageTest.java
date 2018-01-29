@@ -23,13 +23,14 @@ public class B01547NPEWhenCreateNonPageTest extends ZATSTestCase{
 	public void test() {
 		DesktopAgent desktop = connect();
 		ComponentAgent btn1 = desktop.query("#btn1");
+		btn1.click();
+		assertEquals("A", desktop.query("#cnt #win #lb").as(Label.class).getValue());
+	}
+
+	@Test
+	public void testB() {
+		DesktopAgent desktop = connect();
 		ComponentAgent btn2 = desktop.query("#btn2");
-		
-		try {
-			btn1.click();
-		} catch(Exception e) {
-			assertTrue(e.getCause().toString().contains("UiException: can't find Page to resolve a view model class :'MyVM2'"));
-		}
 		btn2.click();
 		assertEquals("A", desktop.query("#cnt #win #lb").as(Label.class).getValue());
 	}
