@@ -22,6 +22,7 @@ ZK 8.5.2
   ZK-3867: nested shadow component order
   ZK-3884: a grid with a frozen column cuts the text in the last column
   ZK-3868: failing format patterns
+  ZK-3749: ListElResolver does not support standard EL syntax
 
 * Upgrade Notes
 

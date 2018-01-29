@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3749.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Jan 26 6:36 PM:42 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3749_ViewModel')">
+        <listbox mold="paging" onCreate="self.setPaginal(pagingId)"
+                 model="@init(vm.list)" >
+            <!-- not shown -->
+            <template name="model" var="item">
+                <listitem><listcell label="@load(item)"></listcell></listitem>
+            </template>
+        </listbox>
+        <paging id="pagingId" pageSize="@init(vm.list.pageSize)" />
+    </window>
+</zk>

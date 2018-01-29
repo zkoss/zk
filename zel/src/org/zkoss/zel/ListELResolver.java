@@ -66,12 +66,12 @@ public class ListELResolver extends ELResolver {
         }
 
         if (base instanceof List<?>) {
-            context.setPropertyResolved(base, property);
             List<?> list = (List<?>) base;
             int idx = coerce(property);
             if (idx < 0 || idx >= list.size()) {
                 return null;
             }
+            context.setPropertyResolved(base, property);
             return list.get(idx);
         }
 
@@ -155,9 +155,12 @@ public class ListELResolver extends ELResolver {
             return (((Boolean) property).booleanValue() ? 1 : 0);
         }
         if (property instanceof String) {
-            return Integer.parseInt((String) property);
+            try {
+                return Integer.parseInt((String) property);
+            } catch (NumberFormatException ex) {
+                //do nothing
+            }
         }
-        throw new IllegalArgumentException(property != null ?
-                property.toString() : "null");
+        return -1;
     }
 }
