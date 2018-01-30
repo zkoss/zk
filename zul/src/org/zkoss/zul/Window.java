@@ -945,6 +945,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	}
 
 	public void onPageDetached(Page page) {
+		super.onPageDetached(page);
 		if (_mode == MODAL && getPage() == null)
 			leaveModal(OVERLAPPED);
 	}
