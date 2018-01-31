@@ -2762,8 +2762,7 @@ public class Tree extends MeshElement {
 				prevSeldObjects = null;
 				unselectedObjects = null;
 			} else {
-				for (Treeitem i : curSeldItems)
-					selectedObjects.add(_model.getChild(getTreeitemPath(Tree.this, i)));
+				selectedObjects = smodel.getSelection();
 				unselectedObjects = collectUnselectedObjects(prevSeldObjects, smodel.getSelection());
 			}
 			if (sitems == null || sitems.isEmpty() || _model == null)
