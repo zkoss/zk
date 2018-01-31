@@ -67,7 +67,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		  ));
 		int index = 0;
 	]]></zscript>
-	<tree model="${model}">
+	<tree id="trOne" model="${model}">
 		<template name="model">
 			<treeitem context="menupopup">
 				<treerow>
@@ -102,7 +102,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		}
 		TreeitemRenderer render = new FiledInfoRenderer();
 	]]></zscript>
-	<tree model="${model}" itemRenderer="${render}">
+	<tree id="trTwo" model="${model}" itemRenderer="${render}">
 	    <treecols>
 	        <treecol label="Path"/>
 	        <treecol label="Description"/>

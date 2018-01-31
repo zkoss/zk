@@ -5,12 +5,12 @@
 </ul>
 ]]></html>
 
-<tree>
+<tree id="tree">
 	<treechildren>
 		<treeitem label="A">
 		</treeitem>
 		<treeitem disabled="true">
-			<treerow label="B"/>
+			<treerow id="tr" label="B"/>
 			<treechildren>
 				<treeitem label="C"/>
 				<treeitem label="D"/>
