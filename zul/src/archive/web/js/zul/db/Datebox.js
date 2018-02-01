@@ -657,6 +657,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		pp.style.width = 'auto'; //reset
 		pp.style.display = 'block';
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1;
+		this.setDomVisible_(pp, true, {visibility: true});
 
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
