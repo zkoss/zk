@@ -24,5 +24,3 @@
 ../dist/lib/ext/zats-mimic.jar
 ../dist/lib/ext/javassist.jar
 ../dist/lib/ext/gson.jar
-../dist/lib/ext/jackson-databind.jar
-../dist/lib/ext/jackson-core.jar

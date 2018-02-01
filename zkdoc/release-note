@@ -16,6 +16,7 @@ ZK 8.5.1
   ZK-3835: Improve Tree client ROD rendering method
   ZK-3793: support for Java 9 module system (fix split package issue)
   ZK-3859: upgrade commons fileupload
+  ZK-3857: upgrade jackson library
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes
@@ -62,6 +63,8 @@ ZK 8.5.1
   + The ContextClassLoaderFactory interface adds a new method:
     ClassLoader getContextClassLoaderForName(String) that breaks compatibility.
     If you have a customized class loader factory, please implement this new method.
+  + The default converters for Binding Parameter and Service Parameter are now GsonConverter.
+    And now Jackson-databind is an optional dependency.
 
    --------
 ZK 8.5.0
