@@ -38,7 +38,7 @@ public class B70_ZK_2747AsyncController extends SelectorComposer<Window> impleme
 	private class Runner implements Runnable {
 		public void run() {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(3000);
 			} catch (final InterruptedException e) {
 			}
 			reportResult();

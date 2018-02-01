@@ -51,7 +51,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 				</tabpanel>
 				<tabpanel>
 					<borderlayout height="100%" width="100%">
-						<north size="30px" splittable="true" minsize="30" maxsize="30" >
+						<north size="80px" splittable="true" minsize="80" maxsize="80" >
 							<combobox vflex="1" />
 						</north>
 						<center autoscroll="true">

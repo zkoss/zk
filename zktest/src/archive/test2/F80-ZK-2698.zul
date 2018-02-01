@@ -35,6 +35,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 				 
 				w:onChange="console.log('from zul: ' + zk.$('$myComp').getValue())"/>
 
+			<separator height="50px" /> <!-- FIXME: To avoid ZK-3787 -->
 			<div vflex="1" style="background: green;">
 				<textbox id="tb" onOK="@command('changeValue', val=self.value)"
 					value="@bind(vm.value)"></textbox>

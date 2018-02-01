@@ -18,7 +18,7 @@ Copyright (C)  2015 Potix Corporation. All Rights Reserved.
 	1. scroll back and forth and you WILL NOT see that auxiliary headers loose sync with their associated columns
 	ex. There are only Jan and Feb in Q1 but Mar goes to Q2.
 	</label>
-	<grid>
+	<grid width="600px" sizedByContent="true">
 		<auxhead>
 			<auxheader label="H1'07" colspan="6"/>
 			<auxheader label="H2'07" colspan="6"/>

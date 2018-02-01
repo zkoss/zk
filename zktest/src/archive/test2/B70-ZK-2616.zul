@@ -13,7 +13,7 @@ B70-ZK-2616.zul
 Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
+<zk xmlns:w="client">
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm')@init('org.zkoss.zktest.test2.ZK_2616VM')"
 		validationMessages="@id('vmsgs')">
@@ -23,6 +23,6 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 			3. After the process loading icon disappeared, you should not see a timeout page. (i.e. the page should stay in the same page)
 		</label>
 		<button label="Hit me first!" onClick="@command('cmd')"/>
-      <button label="Hit me second!" onClick="@command('cmd2')" />
+      <button label="Hit me second!" onClick="@command('cmd2')" w:onClick="zk.log('hit')" />
 	</window>
 </zk>
