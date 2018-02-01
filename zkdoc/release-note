@@ -15,6 +15,7 @@ ZK 8.5.1
   ZK-3808: Provide performance tuning options for meshes
   ZK-3835: Improve Tree client ROD rendering method
   ZK-3793: support for Java 9 module system (fix split package issue)
+  ZK-3859: upgrade commons fileupload
 
 * Bugs
   ZK-3785: cleanup unused (6.5) images from themes
