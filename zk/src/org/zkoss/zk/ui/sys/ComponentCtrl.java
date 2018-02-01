@@ -57,6 +57,16 @@ public interface ComponentCtrl {
 	 */
 	public static String AFTER_PAGE_DETACHED = "afterPageDetached";
 
+	/**
+	 * For after child added callback, use in {@link #addCallback(String, Callback)}
+	 */
+	public static String AFTER_CHILD_ADDED = "afterChildAdded";
+
+	/**
+	 * For after child removed callback, use in {@link #addCallback(String, Callback)}
+	 */
+	public static String  AFTER_CHILD_REMOVED = "afterChildRemoved";
+
 	/** Sets the component definition.
 	 *
 	 * <p>The component definition affects how a component behaves.

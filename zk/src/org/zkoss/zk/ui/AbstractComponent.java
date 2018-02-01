@@ -141,11 +141,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	private Map<String, ShadowElement> _shadowIdMap; //to speed up id only shadow selector
 
-	protected static String AFTER_PAGE_ATTACHED = "afterPageAttached";
-	protected static String AFTER_PAGE_DETACHED = "afterPageDetached";
-	protected static String AFTER_CHILD_ADDED = "afterChildAdded";
-	protected static String AFTER_CHILD_REMOVED = "afterChildRemoved";
-
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
 	 */

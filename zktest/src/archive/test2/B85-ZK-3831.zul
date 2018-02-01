@@ -17,7 +17,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		public class MyComposer implements Composer {
 			public void doAfterCompose(Component comp) {
 				Div newDiv = new Div();
-				Executions.createComponents("B85-ZK-3831-mvvminc.zul", newDiv, null);
+				Map args = new HashMap();
+				args.put("arg1","This is arg1");
+				args.put("arg2","This is arg2");
+				Executions.createComponents("B85-ZK-3831-mvvminc.zul", newDiv, args);
 				comp.appendChild(newDiv);
 			}
 		}

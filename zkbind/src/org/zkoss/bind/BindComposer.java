@@ -47,6 +47,7 @@ import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
@@ -156,12 +157,16 @@ public class BindComposer<T extends Component>
 	public void doBeforeComposeChildren(final Component comp) throws Exception {
 		//ZK-3831
 		if (comp.getPage() == null) {
+			final Map<?, ?> currentArg = Executions.getCurrent().getArg();
 			((ComponentCtrl) comp).addCallback(ComponentCtrl.AFTER_PAGE_ATTACHED, new Callback() {
 				public void call(Object data) {
 					try {
+						Executions.getCurrent().pushArg(currentArg);
 						doBeforeComposeChildren(comp);
 					} catch (Exception e) {
 						throw UiException.Aide.wrap(e);
+					} finally {
+						Executions.getCurrent().popArg();
 					}
 				}
 			});
@@ -205,12 +210,16 @@ public class BindComposer<T extends Component>
 	public void doAfterCompose(final T comp) throws Exception {
 		//ZK-3831
 		if (comp.getPage() == null) {
+			final Map<?, ?> currentArg = Executions.getCurrent().getArg();
 			((ComponentCtrl) comp).addCallback(ComponentCtrl.AFTER_PAGE_ATTACHED, new Callback() {
 				public void call(Object data) {
 					try {
+						Executions.getCurrent().pushArg(currentArg);
 						doAfterCompose(comp);
 					} catch (Exception e) {
 						throw UiException.Aide.wrap(e);
+					} finally {
+						Executions.getCurrent().popArg();
 					}
 				}
 			});
