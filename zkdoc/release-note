@@ -56,6 +56,7 @@ ZK 8.5.1
   ZK-3836: WebSocket JS error in onClose
   ZK-3805: Websocket NPE when re-directing or refreshing page
   ZK-3810: Localization doesn't work using ZK 8.5 with WebSockets
+  ZK-3743: NPEs while using two event queues with Comet server push
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
