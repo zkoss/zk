@@ -26,8 +26,8 @@ var Dates = {
 		} else if (typeof param == 'number') {
 			m = zk.mm(param);
 		} else if (param instanceof DateImpl) {
-			m = zk.mm(param);
-			tz = param.getTimeZone();
+			m = zk.mm(param._moment);
+			tz = param._timezone;
 		} else if (param instanceof Array) { // [y, m, d, hr, min, sec, millisec]
 			var d = new Date(Date.UTC.apply(null, param));
 			m = zk.mm.tz([d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),

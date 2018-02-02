@@ -162,6 +162,9 @@ var LeapDay = zk.$extends(zk.Object, {
 	},
 	getRealDate: function () {
 		return this._date;
+	},
+	getTimeZone: function () {
+		return this._date.getTimeZone();
 	}
 });
 zk.fmt.Date = {
