@@ -209,10 +209,14 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		});
 	},
 	afterCloseAnima_: function (opts) {
-		this.setVisible(false);
-		this.setFloating_(false);
-		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open: false});
+		if (opts && opts.keepVisible) {
+			this.setVisible(false);
+			this.setFloating_(false);
+			if (opts.sendOnOpen)
+				this.fire('onOpen', {open: false});
+		} else {
+			this.detach();
+		}
 	},
 	getPositionArgs_: function () {
 		return [this.parent, null, this._nftPos, null];

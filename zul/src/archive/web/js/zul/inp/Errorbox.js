@@ -139,6 +139,12 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		this.setTopmost();
 		this._fixarrow();
 	},
+	afterCloseAnima_: function (opts) {
+		this.setVisible(false);
+		this.setFloating_(false);
+		if (opts && opts.sendOnOpen)
+			this.fire('onOpen', {open: false});
+	},
 	redraw: function (out) {
 		var uuid = this.uuid,
 			icon = this.$s('icon'),

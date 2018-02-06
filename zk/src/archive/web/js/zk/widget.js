@@ -1889,7 +1889,7 @@ wgt.$f().main.setTitle("foo");
 
 			var p = this.parent, ocvCalled;
 			if (this.desktop) {
-				var parentVisible = !p || p.isRealVisible(),
+				var parentVisible = !p || p.isRealVisible() || this._hasFakeParent,
 					node = this.$n(),
 					floating = this._floating;
 
