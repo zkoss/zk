@@ -3,44 +3,44 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 
 <window title="Tasks" border="normal">
-A data bound grid consisting of a progress bar and a label appears to
-suffer from sizing issues upon refresh. The refresh is taking place via a
-timer every second. This problem does not happen in Firefox 2.
+	A data bound grid consisting of a progress bar and a label appears to
+	suffer from sizing issues upon refresh. The refresh is taking place via a
+	timer every second. This problem does not happen in Firefox 2.
 
-	<zscript><![CDATA[						
-    					public class Task {
-    						int progress = 0;
-    						String message = "blah";
-    						
-    						void increment() {
-    							if(progress >= 100)
-    								progress = 0;
-    							else
-    								progress = progress + 10;
-    						}
-    						
-    						public int getProgress() { return progress;}
-    						public String getMessage() { return message;}
-    						public void setProgress(int arg1) { this.progress = arg1; }
-    						public void setMessage(String arg1) { this.message = arg1; }
-    					}
-    					
-						List tasks = java.util.Arrays.asList(new Task[] {new Task(),new Task(),new Task()});
-									
-					    void refresh() {
-					    	Object del = null;
-					    	for(Task task:tasks) {
-					    		task.increment();
-					    	}
-					    						    	
-					    	grid.setModel(grid.getModel());
-					    						    	
-					    }
-					]]></zscript>
+	<zscript><![CDATA[
+		public class Task {
+			int progress = 0;
+			String message = "blah";
 
+			void increment() {
+				if(progress >= 100)
+					progress = 0;
+				else
+					progress = progress + 10;
+			}
+
+			public int getProgress() { return progress;}
+			public String getMessage() { return message;}
+			public void setProgress(int arg1) { this.progress = arg1; }
+			public void setMessage(String arg1) { this.message = arg1; }
+		}
+
+		List tasks = java.util.Arrays.asList(new Task[] {new Task(),new Task(),new Task()});
+		Clients.evalJavaScript("jq('$gridInitWidth').html(jq('$grid').outerWidth());");
+		Clients.evalJavaScript("jq('$gridCurrentWidth').html(jq('$grid').outerWidth());");
+		void refresh() {
+			Object del = null;
+			for(Task task:tasks) {
+				task.increment();
+			}
+			grid.setModel(grid.getModel());
+			Clients.evalJavaScript("jq('$gridCurrentWidth').html(jq('$grid').outerWidth());");
+		}
+	]]></zscript>
 	<hbox width="100%" widths="20%,80%">
-		<div />
-
+		<div>
+			<label id="gridInitWidth"></label><label id="gridCurrentWidth"></label>
+		</div>
 		<grid id="grid" self="@{bind(model='tasks')}">
 			<columns>
 				<column width="35%"/>
