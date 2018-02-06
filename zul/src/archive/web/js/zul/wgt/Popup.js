@@ -296,6 +296,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			zk.debugLog(e.message || e);
 		}
 
+		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
+
 		// remove visible flag
 		if (!opts || !opts.keepVisible) {
 			this._keepVisible = false;
@@ -304,8 +306,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._hasFakeParent) {
 			this._hasFakeParent = false;
 		}
-
-		this.closeAnima_(opts);  // Bug ZK-1124: should pass arguments to closeAnima_ function
 	},
 	/** The effect for closing the popup. Override this function to provide
 	 * closing effect. afterCloseAnima_ needs to be called after the effect.
@@ -459,5 +459,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._hasFakeParent)
 			evt.stop(); // B85-ZK-3606: prevent event from bubbling up to its fake parent
 		this.$supers('doTooltipOver_', arguments);
+	},
+	setVisible: function (visible) {
+		this.$supers('setVisible', [visible, this._hasFakeParent]);
 	}
 });
