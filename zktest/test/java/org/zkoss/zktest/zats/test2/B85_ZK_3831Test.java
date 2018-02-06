@@ -22,8 +22,8 @@ public class B85_ZK_3831Test extends WebDriverTestCase {
     public void test() {
         connect();
         Assert.assertTrue(jq("$innerLabel").exists());
-        Assert.assertEquals("someValue",jq("$innerLabel").text());
-        Assert.assertEquals("This is arg1", jq("$label1").text());
-        Assert.assertEquals("This is arg2", jq("$label2").text());
+        Assert.assertEquals("someValue",jq("$innerLabel").text().trim());
+        Assert.assertEquals("This is arg1", jq("$label1").text().trim());
+        Assert.assertEquals("This is arg2", jq("$label2").text().trim());
     }
 }

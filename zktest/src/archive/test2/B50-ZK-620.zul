@@ -2,7 +2,7 @@
 	<custom-attributes org.zkoss.zul.client.rod="false" />
 	<tabs>
 		<tab label="Definition" />
-		<tab label="Discovery" />
+		<tab id="tab" label="Discovery" />
 	</tabs>
 	<tabpanels>
 		<tabpanel>
@@ -18,11 +18,9 @@
 				<north>
 					<window title="x" vflex="1" border="normal"></window>
 				</north>
-				
 				<center >
 					<window title="x" vflex="1" border="normal"></window>
 				</center>
-				
 			</borderlayout>
 		</tabpanel>
 	</tabpanels>
