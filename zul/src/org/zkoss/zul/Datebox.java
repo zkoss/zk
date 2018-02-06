@@ -837,7 +837,12 @@ public class Datebox extends FormatInputElement {
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleDateConstraint(constr, this.getTimeZone()) : null); // Bug 2564298
+		SimpleDateConstraint sc = null;
+		if (constr != null) {
+			sc = new SimpleDateConstraint(constr);
+			sc.setTimeZone(this.getTimeZone());
+		}
+		setConstraint(sc); // Bug 2564298
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {

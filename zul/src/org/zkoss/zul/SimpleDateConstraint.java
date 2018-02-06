@@ -38,11 +38,10 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class SimpleDateConstraint extends SimpleConstraint {
 	private Date _beg, _end;
-	private TimeZone _tzone;
+	private TimeZone _tzone = TimeZones.getCurrent();
 
-	public SimpleDateConstraint(int flags, TimeZone tzone) {
+	public SimpleDateConstraint(int flags) {
 		super(flags);
-		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -52,9 +51,8 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * {@link #NO_ZERO}, and so on.
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 */
-	public SimpleDateConstraint(int flags, String errmsg, TimeZone tzone) {
+	public SimpleDateConstraint(int flags, String errmsg) {
 		super(flags, errmsg);
-		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -62,11 +60,10 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 *
 	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
 	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(Pattern, String, TimeZone)}
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(Pattern, String)}
 	 */
-	public SimpleDateConstraint(String regex, String errmsg, TimeZone tzone) {
+	public SimpleDateConstraint(String regex, String errmsg) {
 		super(regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
-		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -76,9 +73,8 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 * @since 8.0.1
 	 */
-	public SimpleDateConstraint(Pattern regex, String errmsg, TimeZone tzone) {
+	public SimpleDateConstraint(Pattern regex, String errmsg) {
 		super(regex, errmsg);
-		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -88,9 +84,9 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * {@link #NO_ZERO}, and so on.
 	 * @param regex ignored if null or empty. Unlike constraint, the regex doesn't need to enclose with '/'.
 	 * @param errmsg the error message to display. Ignored if null or empty.
-	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(int, Pattern, String, TimeZone)}
+	 * @deprecated As of release 8.0.1, replaced with {@link #SimpleDateConstraint(int, Pattern, String)}
 	 */
-	public SimpleDateConstraint(int flags, String regex, String errmsg, TimeZone tzone) {
+	public SimpleDateConstraint(int flags, String regex, String errmsg) {
 		super(flags, regex == null || regex.length() == 0 ? null : Pattern.compile(regex), errmsg);
 		fixConstraint();
 	}
@@ -103,9 +99,8 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 * @since 8.0.1
 	 */
-	public SimpleDateConstraint(int flags, Pattern regex, String errmsg, TimeZone tzone) {
+	public SimpleDateConstraint(int flags, Pattern regex, String errmsg) {
 		super(flags, regex, errmsg);
-		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -119,11 +114,10 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * date.
 	 * @param errmsg the error message to display. Ignored if null or empty.
 	 */
-	public SimpleDateConstraint(int flags, Date begin, Date end, String errmsg, TimeZone tzone) {
+	public SimpleDateConstraint(int flags, Date begin, Date end, String errmsg) {
 		super(flags, errmsg);
 		_beg = begin;
 		_end = end;
-		_tzone = tzone;
 		fixConstraint();
 	}
 
@@ -132,9 +126,8 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 * @param constraint a list of constraints separated by comma.
 	 * Example: "between 20071012 and 20071223", "before 20080103"
 	 */
-	public SimpleDateConstraint(String constraint, TimeZone tzone) {
+	public SimpleDateConstraint(String constraint) {
 		super(constraint);
-		_tzone = tzone;
 		fixConstraint();
 	}
 
