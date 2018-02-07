@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3866.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 13 11:52:15 CST 2018, Created by bobpeng
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the button, a popup with radios will pop up.
+		2. change selection of the radio by clicking the unselected radio, it should work properly.
+	</label>
+	<button id="btn" label="click me" popup="zoomLevelPopup, after_start"/>
+	<popup id="zoomLevelPopup">
+		<radiogroup id="rg" onCheck='Clients.log("index"+self.getSelectedIndex())'>
+			<radio label="0" selected="true"/>
+			<vlayout>
+				<radio label="1"/>
+			</vlayout>
+		</radiogroup>
+		<radio label="2" radiogroup="rg"/>
+	</popup>
+</zk>
