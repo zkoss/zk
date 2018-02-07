@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3804.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb  7 15:49:03 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		should not see any red-backgrounded column
+		
+	</label>
+	<div apply="org.zkoss.bind.BindComposer">
+		<grid span="true" sizedByContent="true" width="500px"
+			height="200px" model="@init(([1, 2, 3, 4, 5].stream().toList()))">
+			<columns>
+				<column label="test" />
+				<column label="test" visible="false" align="right" />
+				<column label="test" align="right" />
+			</columns>
+			<template name="model">
+				<row>
+					<cell>
+						<label value="a${each}" />
+					</cell>
+					<cell style="background-color:red;1">
+						<label value="b${each}" />
+					</cell>
+					<cell>
+						<label value="c${each}" />
+					</cell>
+				</row>
+			</template>
+			<foot>
+				<footer label="test"></footer>
+				<footer label="test"></footer>
+				<footer label="test"></footer>
+			</foot>
+		</grid>
+	</div>
+</zk>
