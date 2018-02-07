@@ -780,9 +780,11 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		//ZK-3173: increased page size might causes active page to exceed page count
 		//need to correct the active page value before sending out paging event
 		if (size > oldPageSize) {
-			int maxPageIndex = getPageCount() - 1;
-			if (_activePage > maxPageIndex) {
-				_activePage =  maxPageIndex;
+			if (_activePage > 0) {
+				int maxPageIndex = getPageCount() - 1;
+				if (_activePage > maxPageIndex) {
+					_activePage = maxPageIndex;
+				}
 			}
 		}
 		
@@ -855,11 +857,12 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		if (pg < 0) {
 			throw new WrongValueException("expecting positive non zero value, got: " + pg);
 		}
-		int pc = _pageCount == -1 ? getPageCount() : _pageCount;
-		if (pg >= pc) {
-			pg = pc - 1; //set to last valid page
+		if (pg > 0) {
+			int pc = _pageCount == -1 ? getPageCount() : _pageCount;
+			if (pg >= pc) {
+				pg = pc - 1; //set to last valid page
+			}
 		}
-		
 		if (_activePage == pg) return; //no change
 		
 		_activePage = pg;

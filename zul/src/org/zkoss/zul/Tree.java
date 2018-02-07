@@ -308,9 +308,11 @@ public class Tree extends MeshElement {
 			if (count < 0 && _model instanceof Pageable) {
 				Pageable p = (Pageable) _model;
 				int actpg = p.getActivePage();
-				int maxPageIndex = p.getPageCount() - 1;
-				if (actpg > maxPageIndex) {
-					p.setActivePage(maxPageIndex);
+				if (actpg > 0) {
+					int maxPageIndex = p.getPageCount() - 1;
+					if (actpg > maxPageIndex) {
+						p.setActivePage(maxPageIndex);
+					}
 				}
 			}
 			pgi.setTotalSize(totalSize);
