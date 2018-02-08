@@ -436,7 +436,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					// Bug ZK-2987: _currentTop might still holds the value from
 					// previous page, make sure the anchor does not goes beyond
 					// table height
-					var offsetTop = zul.mesh.Scrollbar.getScrollPosV(this);
+					var offsetTop = this.ebody.scrollHeight;
 					if (this._currentTop > offsetTop)
 						btn.style.top = offsetTop + 'px';
 					else
