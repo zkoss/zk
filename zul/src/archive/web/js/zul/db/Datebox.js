@@ -141,7 +141,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._setTimeZonesIndex();
 			this._value && this._value.tz(timezone);
 			this._pop && this._pop._fixConstraint();
-			this._cst && this._cst.reparseConstraint();
+			var cst = this._cst;
+			if (cst && cst instanceof zul.inp.SimpleConstraint)
+				cst.reparseConstraint();
 		},
 		/** Sets whether the list of the time zones to display is readonly.
 		 * If readonly, the user cannot change the time zone at the client.
