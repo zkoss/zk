@@ -1881,15 +1881,16 @@ wgt.$f().main.setTitle("foo");
 	 * <li>setVisible invokes {@link #setDomVisible_} to change the visibility of a child DOM element, so override it if necessary.</li>
 	 * </ul>
 	 * @param boolean visible whether to be visible
+	 * @param boolean isParentVisible whether parent is visible
 	 * @return zk.Widget this widget
 	 */
-	setVisible: function (visible) {
+	setVisible: function (visible, isParentVisible) {
 		if (this._visible != visible) {
 			this._visible = visible;
 
 			var p = this.parent, ocvCalled;
 			if (this.desktop) {
-				var parentVisible = !p || p.isRealVisible(),
+				var parentVisible = isParentVisible || !p || p.isRealVisible(),
 					node = this.$n(),
 					floating = this._floating;
 
