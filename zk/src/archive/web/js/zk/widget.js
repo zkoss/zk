@@ -123,20 +123,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		else if (p) p.lastChild = to;
 	}
 
-	function _bind0(wgt) { //always called no matter ROD or not
-		_binds[wgt.uuid] = wgt;
-		if (wgt.id)
-			_addGlobal(wgt);
-	}
-	function _bindrod(wgt) {
-		_bind0(wgt);
-		if (!wgt.z_rod)
-			wgt.z_rod = 9; //Bug 2948829: don't use true which is used by real ROD, such as combo-rod.js
-
-		for (var child = wgt.firstChild; child; child = child.nextSibling)
-			_bindrod(child);
-	}
-
 	function _fixBindLevel(wgt, v) {
 		wgt.bindLevel = v++;
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
@@ -184,15 +170,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 				_rmIdSpaceDown0(wgt, owner);
 	}
-	//note: wgt.id must be checked before calling this method
-	function _addGlobal(wgt) {
-		var gs = _globals[wgt.id];
-		if (gs)
-			gs.push(wgt);
-		else
-			_globals[wgt.id] = [wgt];
-	}
-
 	//check if a desktop exists
 	function _exists(wgt) {
 		if (document.getElementById(wgt.uuid)) //don't use $n() since it caches
@@ -1237,7 +1214,7 @@ wgt.$f().main.setTitle("foo");
 			if (id) {
 				_addIdSpace(this);
 				if (this.desktop || this.z_rod)
-					_addGlobal(this);
+					this.$class._addGlobal(this);
 			}
 		}
 		return this;
@@ -1481,7 +1458,7 @@ wgt.$f().main.setTitle("foo");
 
 		if (!ignoreDom) {
 			if (this.shallChildROD_(child))
-				_bindrod(child);
+				this.$class._bindrod(child);
 			else {
 				var dt = this.desktop;
 				if (dt) this.insertChildHTML_(child, null, dt);
@@ -1560,7 +1537,7 @@ wgt.$f().main.setTitle("foo");
 
 		if (!ignoreDom) {
 			if (this.shallChildROD_(child))
-				_bindrod(child);
+				this.$class._bindrod(child);
 			else {
 				var dt = this.desktop;
 				if (dt) this.insertChildHTML_(child, sibling, dt);
@@ -1676,7 +1653,7 @@ wgt.$f().main.setTitle("foo");
 			this.$class._unbindrod(this);
 			if (!(shallReplace = (dt = dt || (p ? p.desktop : p))
 			&& (node = jq('#' + this.uuid))))
-				_bindrod(newwgt);
+				this.$class._bindrod(newwgt);
 		} else
 			shallReplace = dt;
 
@@ -3002,7 +2979,7 @@ function () {
 
 		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
-			_bindrod(this);
+			this.$class._bindrod(this);
 		else {
 			var after = [], fn;
 			this.bind_(desktop, skipper, after);
@@ -3073,7 +3050,7 @@ bind_: function (desktop, skipper, after) {
 </code></pre>
 	 */
 	bind_: function (desktop, skipper, after) {
-		_bind0(this);
+		this.$class._bind0(this);
 
 		this.desktop = desktop || (desktop = zk.Desktop.$(this.parent));
 
@@ -3122,7 +3099,7 @@ bind_: function (desktop, skipper, after) {
 				//we have to store first since RefWidget will replace widget
 
 			if (!skipper || !skipper.skipped(this, child)) {
-				if (child.z_rod) _bindrod(child);
+				if (child.z_rod) this.$class._bindrod(child);
 				else child.bind_(desktop, null, after); //don't pass skipper
 			}
 		}
@@ -4908,6 +4885,26 @@ zk.Widget.getClass('combobox');
 	 * @type int
 	 */
 	auDelay: 38,
+	_bindrod: function (wgt) {
+		this._bind0(wgt);
+		if (!wgt.z_rod)
+			wgt.z_rod = 9; //Bug 2948829: don't use true which is used by real ROD, such as combo-rod.js
+
+		for (var child = wgt.firstChild; child; child = child.nextSibling)
+			this._bindrod(child);
+	},
+	_bind0: function (wgt) { //always called no matter ROD or not
+		_binds[wgt.uuid] = wgt;
+		if (wgt.id)
+			this._addGlobal(wgt);
+	},
+	_addGlobal: function (wgt) { //note: wgt.id must be checked before calling this method
+		var gs = _globals[wgt.id];
+		if (gs)
+			gs.push(wgt);
+		else
+			_globals[wgt.id] = [wgt];
+	},
 	_unbindrod: function (wgt, nest) {
 		this._unbind0(wgt);
 
