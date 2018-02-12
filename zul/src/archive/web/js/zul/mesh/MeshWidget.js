@@ -1593,18 +1593,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			hdcol = hdfaker.firstChild,
 			bdcol = bdfaker.firstChild,
 			ftcol = ftfaker ? ftfaker.firstChild : null,
-			hwgt = this.head.firstChild;
-
+			hwgt = this.head.firstChild,
+			notVisibleWidth = zk.chrome ? '0.1px' : '0px';
 
 		for (var i = 0; hwgt; hwgt = hwgt.nextSibling, i++) {
 			if (hwgt.isVisible()) {
 				// sizedByContent shall not override column width
 				if (hwgt._width || wds[i] == 0) {
 					if (wds[i] == 0) {
-						hdcol.style.width = zk.chrome ? '0.1px' : '0px';
-						bdcol.style.width = '0px';
+						hdcol.style.width = notVisibleWidth;
+						bdcol.style.width = notVisibleWidth;
 						if (ftcol)
-							ftcol.style.width = '0px';
+							ftcol.style.width = notVisibleWidth;
 					}
 					hdcol = hdcol.nextSibling;
 					bdcol = bdcol.nextSibling;
@@ -1621,12 +1621,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					}
 				}
 			} else {
-				hdcol.style.width = zk.chrome ? '0.1px' : '0px';
-				bdcol.style.width = '0px';
+				hdcol.style.width = notVisibleWidth;
+				bdcol.style.width = notVisibleWidth;
 				hdcol = hdcol.nextSibling;
 				bdcol = bdcol.nextSibling;
 				if (ftcol) {
-					ftcol.style.width = '0px';
+					ftcol.style.width = notVisibleWidth;
 					ftcol = ftcol.nextSibling;
 				}
 			}
