@@ -38,4 +38,5 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
         <label>Current: ${currentTheme}</label>
         <button label="${each}" forEach="${themes}" onClick='chgTheme(self.label)'/>
     </groupbox>
+    <button id="restore" label="restore theme" onClick='chgTheme("")'/>
 </zk>

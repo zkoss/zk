@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-2976323.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 13 11:52:15 CST 2018, Created by bobpeng
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window border="none" height="100%">
+		<zscript><![CDATA[
+			public void check(Event event) {
+				Menuitem dragged = (Menuitem)((org.zkoss.zk.ui.event.DropEvent)event).getDragged();
+				Menuitem dropped = (Menuitem)event.getTarget();
+				List a = dropped.getParent().getChildren();
+				if (a.indexOf(dragged) > a.indexOf(dropped)) {
+					a.remove(dragged);
+					a.add(a.indexOf(dropped), dragged);
+				} else {
+					a.remove(dragged);
+					a.add(a.indexOf(dropped)+1, dragged);
+				}
+			}
+		]]></zscript>
+		<menubar id="mb">
+			<menuitem id="one" label="One" draggable="true" droppable="true" onDrop="check(event)"/>
+			<menuitem id="two" label="Two" draggable="true" droppable="true" onDrop="check(event)"/>
+		</menubar>
+	</window>
+</zk>
