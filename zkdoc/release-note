@@ -59,6 +59,7 @@ ZK 8.5.1
   ZK-3810: Localization doesn't work using ZK 8.5 with WebSockets
   ZK-3743: NPEs while using two event queues with Comet server push
   ZK-3804: Chrome meshwidget visible="false" column not hidden after ZK-3722
+  ZK-3866: popup doClick prevents DOM state update after ZK 3606
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
