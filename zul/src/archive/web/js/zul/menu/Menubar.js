@@ -135,7 +135,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		if (!node) return;
 		jq(node).addClass(this.$s('scroll'));
 
-		var nodeWidth = zk(node).offsetWidth(),
+		var nodeWidth = zk(node).contentWidth(),
 			body = this.$n('body'),
 			children = jq(this.$n('cave')).children().filter(':visible'),
 			childrenLen = children.length,
