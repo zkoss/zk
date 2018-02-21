@@ -94,7 +94,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 									<listheader label="Name" />
 									<listheader label="Description" />
 								</listhead>
-								<listitem>
+								<listitem id="li">
 									<listcell label="John" />
 									<listcell label="CEO" />
 								</listitem>
@@ -163,7 +163,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 						<menuitem label="Exit" image="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
 					</menupopup>
 				</menu>
-				<menu label="Help" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+				<menu label="Help" id="mbHelp" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
 					<menupopup>
 						<menuitem label="Index" onClick="alert(self.label)" />
 						<menu label="About">
@@ -183,13 +183,23 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 					</menupopup>
 				</menu>
 			</menubar>
-			<checkbox label="auto drop">
+			<checkbox label="auto drop" id="cbx">
 				<attribute name="onCheck">
 					bd.setAutodrop(self.checked);
 					bd2.setAutodrop(self.checked);
 				</attribute>
 			</checkbox>
 			<hbox>
+				<button label="open combobutton one">
+					<attribute name="onClick">
+						bd.setOpen(true);
+					</attribute>
+				</button>
+				<button label="open combobutton two">
+					<attribute name="onClick">
+						bd2.setOpen(true);
+					</attribute>
+				</button>
 				<button label="change child" onClick="">
 					<attribute name="onClick">
 						Component a = ppOne;
@@ -213,16 +223,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 							bd.setImage(i2);
 							bd2.setImage(i1);
 						}
-					</attribute>
-				</button>
-				<button label="open combobutton one">
-					<attribute name="onClick">
-						bd.setOpen(true);
-					</attribute>
-				</button>
-				<button label="open combobutton two">
-					<attribute name="onClick">
-						bd2.setOpen(true);
 					</attribute>
 				</button>
 			</hbox>
