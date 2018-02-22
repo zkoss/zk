@@ -1,13 +1,6 @@
 <!-- B30-1908188.zul -->	
 <window id="testWindow" border="normal" mode="modal"
  title="Test Window" width="600px" sizable="true" contentStyle="overflow:auto">
-<html><![CDATA[
-<ol>
-	<li>Click "Test" and then "Show popup below component..."<br/>
-	You will see popup shown right below "Test"</li>
-	<li>Click "Test" and then "Show popup at x,y position..."<br/>
-	You will see popup shown at (x=50px, y=50px) according to browser's top-left corner.</li>
-]]></html>
 	<zscript>
 		public class PopupOpenEventListener implements EventListener {
 		
@@ -77,4 +70,11 @@
 			</menupopup>
 		</menu>
 	</menubar>
+	<html><![CDATA[
+<ol>
+	<li>Click "Test" and then "Show popup below component..."<br/>
+	You will see popup shown right below "Test"</li>
+	<li>Click "Test" and then "Show popup at x,y position..."<br/>
+	You will see popup shown at (x=50px, y=50px) according to browser's top-left corner.</li>
+]]></html>
  </window> 

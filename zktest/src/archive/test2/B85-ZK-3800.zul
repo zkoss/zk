@@ -34,10 +34,15 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
             heights.push(h);
             zk.log(h);
         });
-        var result = heights.every(function (val, i, arr) { return val == arr[0]; });
+        // IE9 getBoundingClientRect() is rounding int
+        var funSame = zk.ie9 ? function (val, i, arr) { return Math.abs(val - arr[0]) <= 1; } : function (val, i, arr) { return val == arr[0]; };
+        var result = heights.every(funSame);
         zk.Widget.$('$result').setValue(result);
         zk.log(result);
         ]]></attribute>
     </button>
     <label id="result" />
+    <label>
+        (Notice: IE9 getBoundingClientRect() returns a rounding int, so you might see different values. A value +- 1 is acceptable)
+    </label>
 </zk>
