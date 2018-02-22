@@ -19,4 +19,5 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 
     </label>
     <button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"breeze");Executions.sendRedirect(null);' label="Change Theme to Breeze"/>
+    <button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"");Executions.sendRedirect(null);' label="Change Theme back to default"/>
 </zk>
