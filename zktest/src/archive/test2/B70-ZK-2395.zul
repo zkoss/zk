@@ -17,10 +17,24 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	<zscript>
 	Object[] obj = new Object[50];
 	</zscript>
-	
-	<div>
-		if you see the header and content misaligned, it's a bug.
-	</div>
+	<style>
+	/* draw line for better visibility */
+	td.z-treecell, td.z-listcell, td.z-row-inner {
+		outline: 1px solid black;
+	}
+	</style>
+
+	<label multiline="true">
+		1. if you see the header and content misaligned, it's a bug.
+		2. Click "Fire Resize". if the listbox/grid columns with non-nativebar are misaligned, it's a bug.
+	</label>
+	<button label="Fire Resize" xmlns:w="client">
+		<attribute w:name="onClick">
+			zWatch.fire('beforeSize');
+			zWatch.fire('onFitSize', null, {reverse: true});
+			zWatch.fire('onSize');
+		</attribute>
+	</button>
 	<hlayout>
 		<div>
 			<custom-attributes org.zkoss.zul.nativebar="true"/>
