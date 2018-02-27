@@ -14,7 +14,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<html><![CDATA[
+	<groupbox title="Instructions (open to see detail)" open="false">
+		<html><![CDATA[
 <ol>
 <li>Click test combobutton one, message box should display 'combobutton one clicked'.</li>
 <li>Click right arrow of test combobutton one, message box should display 'combobutton one opened', message box two should display 'popup opened' and a drop down should opened.</li>
@@ -34,7 +35,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <li>Do above for each theme, everything should be ok.</li>
 </ol>
 ]]>
-</html>
+		</html>
+	</groupbox>
 	<zscript>
 		int count = 0;
 	</zscript>
