@@ -24,6 +24,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         Click text to show popup. And it can be closed when clicking outside of the body (below the red border)
     </label>
     <div height="5000px"/>
+    <button label="fixed" id="btnFixed" style="position: fixed; bottom: 0; right: 0" />
     <button label="bottom" id="btnBottom" />
     <popup id="test">
         test
