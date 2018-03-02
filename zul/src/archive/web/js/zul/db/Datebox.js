@@ -604,9 +604,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 				if (db.desktop) jq(db.$n()).addClass(db.getInplaceCSS());
 			}, db._inplaceTimeout);
 		}
-		// firefox only
+		// firefox and safari only
 		try {
-			if (zk.ff && zk.currentFocus) {
+			if ((zk.ff || zk.safari) && zk.currentFocus) {
 				var n = zk.currentFocus.getInputNode ?
 						zk.currentFocus.getInputNode() : zk.currentFocus.$n();
 				if (jq.nodeName(n, 'input') && jq.isAncestor(pp, n)) // Bug ZK-2922, check ancestor first.

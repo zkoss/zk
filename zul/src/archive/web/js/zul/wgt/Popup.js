@@ -279,12 +279,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this._shallToggle = false;
 
 		try {
-			//fix firefox and ie issue
-			if ((zk.ie || zk.ff) && zk.currentFocus) {
+			//fix firefox, safari and ie issue
+			if ((zk.ie || zk.ff || zk.safari) && zk.currentFocus) {
 				 // Bug ZK-2922, check ancestor first.
 				var n = zk.currentFocus.getInputNode ? zk.currentFocus.getInputNode() : zk.currentFocus.$n();
 				if (jq.nodeName(n, 'input')) {
-					if (zk.ff && jq.isAncestor(this.$n(), n)) {
+					if ((zk.ff || zk.safari) && jq.isAncestor(this.$n(), n)) {
 						jq(n).blur(); // trigger a missing blur event.
 					} else if (zk.ie && document.activeElement !== n) {
 						//ZK-3244 popup miss focus on input on IE
