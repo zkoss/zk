@@ -51,6 +51,7 @@ import org.zkoss.util.CollectionsX;
  */
 public class ClassLocator implements XMLResourcesLocator {
 	private static final Logger log = LoggerFactory.getLogger(ClassLocator.class);
+	private static final String[] ZK_MODULES = new String[]{"zkbind", "zkplus", "zk", "zul"};
 
 	public ClassLocator() {
 	}
@@ -105,6 +106,8 @@ public class ClassLocator implements XMLResourcesLocator {
 	List<Resource> rcs, Map<String, XMLResource> rcmap, Set<String> resolving) {
 		if (!resolving.add(xr.name))
 			throw new IllegalStateException("Recusrive reference among "+resolving);
+		
+		checkCompDenpendency(xr, rcmap);
 
 		for (String nm: xr.depends) {
 			final XMLResource dep = rcmap.remove(nm);
@@ -116,6 +119,37 @@ public class ClassLocator implements XMLResourcesLocator {
 		resolving.remove(xr.name);
 
 		if (log.isDebugEnabled()) log.debug("Adding resolved resource: "+xr.name);
+	}
+
+	private static void checkCompDenpendency(XMLResource xr, Map<String, XMLResource> rcmap) {
+		if (xr.depends.size() > 0) {
+			return;
+		}
+
+		for (String zkModule : ZK_MODULES) {
+			if (zkModule.equals(xr.name)) //if it is not client component
+				return;
+		}
+		for (Iterator it = xr.document.getRootElement().getElements("component").iterator(); it.hasNext(); ) {
+			final Element el = (Element) it.next();
+			if (el.getElement("extends") == null)
+				continue;
+			for (Iterator itr = rcmap.entrySet().iterator(); itr.hasNext(); ) {
+				Element root = ((XMLResource) ((Map.Entry) itr.next()).getValue()).document.getRootElement();
+				if (root == null)
+					continue;
+				for (Element zkbindEl : root.getElements("component")) {
+					String extendedEl = el.getElementValue("extends", true);
+					String zkbindCompName = zkbindEl.getElementValue("component-name", true);
+					if (zkbindCompName != null && zkbindCompName.equals(extendedEl)) {
+						log.warn("In " + xr.url + ", component extends " + extendedEl +
+								", maybe need to add <depends>" +
+								root.getElement("addon-name").getFirstChild().getNodeValue() + "</depends>");
+						break;
+					}
+				}
+			}
+		}
 	}
 	/** Info used with getDependentXMLResource. */
 	private static class XMLResource {
