@@ -21,13 +21,13 @@
 		3. Press TAB key once again, and press DOWN key. You should see Treeitem A selected.
 	</div>
 	<separator />
-	<textbox />
-	<listbox>
+	<textbox id="tbxOne"/>
+	<listbox id="lbx" onSelect='tbxTwo.setValue(""+self.getSelectedItem().equals(self.getItems().get(0)))'>
 		<listitem label="${each}" forEach="0,1,2,3,4,5" />
 	</listbox>
-	<tree>
+	<tree id="tree" onSelect='tbxOne.setValue(""+self.getSelectedItem().equals(ti));'>
 		<treechildren>
-			<treeitem label="A">
+			<treeitem label="A" id="ti">
 				<treechildren>
 					<treeitem label="B" />
 					<treeitem label="C" />
@@ -37,5 +37,5 @@
 			<treeitem label="E" />
 		</treechildren>
 	</tree>
-	<textbox />
+	<textbox id="tbxTwo" />
 </zk>
