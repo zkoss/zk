@@ -1,5 +1,6 @@
    --------
 ZK 8.5.1
+Mar 6, 2018
 * Features
   ZK-3778: set sclass for slidingtext popup
   ZK-3801: Add support for new components ZK 8/8.5 in zul.xsd
