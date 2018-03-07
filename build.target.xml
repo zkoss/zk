@@ -134,6 +134,7 @@ if="deploy.tomcat.required">
 </target>
 
 <target name="dev" depends="config, gentime">
+	<delete file="${zkcmldir}/zkex/${codegen.archive.dir}/metainfo/zk/buildsign" verbose="true" failonerror="false" />
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/genmd5sign"/>
 		<arg value="${codegen.dir}/${signdir}"/>
