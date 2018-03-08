@@ -319,8 +319,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_view: 'day', //"day", "month", "year", "decade",
 	_minyear: 1900,
 	_maxyear: 2099,
-	_minDate: Dates.newInstance([1899, 11, 31, 23, 59, 59], _getTimeZone(this)),
-	_maxDate: Dates.newInstance([2099, 11, 31, 23, 59, 59], _getTimeZone(this)),
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen({onChange: this}, -1000);
@@ -462,7 +460,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		} else {
 			this._minyear = 1900;
 		}
-		this._minDate.setYear(this._minyear);
 	},
 	setMaxYear_: function (v) {
 		if (v) {
@@ -471,11 +468,13 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		} else {
 			this._maxyear = 2099;;
 		}
-		this._maxDate.setYear(this._maxyear);
 	},
 	_shift: function (ofs, opts) {
 		var oldTime = this.getTime(),
-			shiftTime = Dates.newInstance(oldTime.getTime(), _getTimeZone(this));
+			tz = _getTimeZone(this),
+			shiftTime = Dates.newInstance(oldTime.getTime(), tz),
+			minTime = Dates.newInstance([this._minyear, 0, 1, 0, 0, 0, 0], tz),
+			maxTime = Dates.newInstance([this._maxyear, 11, 31, 23, 59, 59, 999], tz);
 
 		switch (this._view) {
 		case 'day':
@@ -505,7 +504,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			break;
 		}
 		//Bug B65-ZK-1804: Constraint the shifted time should not be out of range between _minyear and _maxyear
-		if (shiftTime.getTime() < this._minDate.getTime() || shiftTime.getTime() > this._maxDate.getTime())
+		if (shiftTime.getTime() < minTime.getTime() || shiftTime.getTime() > maxTime.getTime())
 			return; // out of range
 
 		this._shiftDate(this._view, ofs);
