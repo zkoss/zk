@@ -1460,6 +1460,12 @@ public class Tree extends MeshElement {
 			clone._dataListener = null;
 			clone.initDataListener();
 
+			if (clone.inPagingMold()) {
+				final Paginal pgi = clone.getPaginal();
+				if (pgi != null)
+					clone.removePagingListener(pgi);
+				clone.addPagingListener(pgi);
+			}
 			// As the bug in B30-1892446.zul, the component clone won't
 			// clone the posted event, so we need to remove the attributes here.
 			clone.removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
@@ -1794,6 +1800,11 @@ public class Tree extends MeshElement {
 				setModelDirectly(model);
 				initDataListener();
 				if (inPagingMold()) {
+					final Paginal pgi = getPaginal();
+					if (pgi != null)
+						removePagingListener(pgi);
+					addPagingListener(pgi);
+
 					if (_model instanceof Pageable) {
 						Pageable m = (Pageable) _model;
 						if (m.getPageSize() <= 0) { //check for invalid value, min page size is 1
