@@ -244,18 +244,29 @@ zk.fmt.Date = {
 						isNumber0 = !isNaN(token);
 					if (!mon) break;
 					if (!isNumber0 && token) {
-						for (var index = localizedSymbols.SMON.length, brkswch; --index >= 0;) {
-							var smon = localizedSymbols.SMON[index].toLowerCase();
-							if ((strict && mon == smon) || (!strict && mon.startsWith(smon))) {
-								token = localizedSymbols.SMON[index];
-								m = index;
-								brkswch = true;
-								break; // shall break to switch level: B50-3314513
-							}
-						}
-						if (brkswch)
-							break;
-					}
+                    	// MMM or MMMM
+                    	if (len == 3)
+                    		var symbols = localizedSymbols.SMON;
+                    	else if (len == 4)
+                    		var symbols = localizedSymbols.FMON;
+
+                    	for (var index = symbols.length, brkswch; --index >= 0;) {
+                    		var monStr = symbols[index].toLowerCase();
+
+                    		if ((strict && mon == monStr) || (!strict && mon.startsWith(monStr))) {
+                    			var monStrLen = monStr.length;
+
+                    			if (token && token.length > monStrLen)
+                    				ts[--i] = token.substring(monStrLen);
+
+                    			m = index;
+                    			brkswch = true;
+                    			break; // shall break to switch level: B50-3314513
+                    		}
+                    	}
+                    	if (brkswch)
+                    		break;
+                    }
 					if (len == 3 && token) {
 						if (nosep)
 							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
