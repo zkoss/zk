@@ -789,6 +789,10 @@ public class Grid extends MeshElement {
 					//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
 					//must update paginal totalSize or exception in setActivePage
 					final Paginal pgi = getPaginal();
+					if (pgi != null)
+						removePagingListener(pgi);
+					addPagingListener(pgi);
+
 					Pageable m = _model instanceof Pageable ? (Pageable) _model : null;
 					//if pageable model contain non-default values, sync from model to pgi
 					//otherwise, sync from pgi to model
@@ -1591,6 +1595,13 @@ public class Grid extends MeshElement {
 			}
 			clone._dataListener = null;
 			clone.initDataListener();
+
+			if (clone.inPagingMold()) {
+				final Paginal pgi = clone.getPaginal();
+				if (pgi != null)
+					clone.removePagingListener(pgi);
+				clone.addPagingListener(pgi);
+			}
 
 			// As the bug in tree - B30-1892446.zul, the component clone won't
 			// clone the posted event, so we need to remove the attributes here.
