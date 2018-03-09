@@ -244,10 +244,24 @@ zk.fmt.Date = {
 						isNumber0 = !isNaN(token);
 					if (!mon) break;
 					if (!isNumber0 && token) {
-						for (var index = localizedSymbols.SMON.length, brkswch; --index >= 0;) {
-							var smon = localizedSymbols.SMON[index].toLowerCase();
-							if ((strict && mon == smon) || (!strict && mon.startsWith(smon))) {
-								token = localizedSymbols.SMON[index];
+						// MMM or MMMM
+						var symbols;
+						if (len == 3)
+							symbols = localizedSymbols.SMON;
+						else if (len == 4)
+							symbols = localizedSymbols.FMON;
+						else
+							break;
+
+						for (var index = symbols.length, brkswch; --index >= 0;) {
+							var monStr = symbols[index].toLowerCase();
+
+							if ((strict && mon == monStr) || (!strict && mon.startsWith(monStr))) {
+								var monStrLen = monStr.length;
+
+								if (token && token.length > monStrLen)
+									ts[--i] = token.substring(monStrLen);
+
 								m = index;
 								brkswch = true;
 								break; // shall break to switch level: B50-3314513

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3868.zul
+
+    Purpose:
+                
+    Description:
+
+    History:
+            Wed Mar 07 17:36:46 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+-->
+<?import java.text.*?>
+
+<zk>
+    <zscript>
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date test = df.parse("2018-02-09");
+    </zscript>
+
+    <label multiline="true">
+        1. Change the year in the dateboxes below, either by typing or popup selection
+        2. Year should be format correctly
+    </label>
+    <separator/>
+    <datebox value="${test}" format="MMMyy"/> wrong
+    <separator/>
+    <datebox value="${test}" format="MMMyyyy"/> wrong
+    <separator/>
+    <datebox value="${test}" format="MMMMyy"/> wrong
+    <separator/>
+    <datebox value="${test}" format="MMMMyyyy"/> wrong
+    <separator/>
+    <datebox value="${test}" format="MMM-yy"/> works
+    <separator/>
+    <datebox value="${test}" format="MMyyyy"/> works
+    <separator/>
+    <datebox value="${test}" format="yyMMM"/> works
+    <separator/>
+    <datebox value="${test}" format="yyyyMMM"/> works
+</zk>
