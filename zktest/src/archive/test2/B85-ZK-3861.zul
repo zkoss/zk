@@ -13,7 +13,14 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-    <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B85_ZK_3861VM)">
+    <label multiline="true">
+        1. Click Next button.
+        2. Check if there is a page change.
+        3. Click Previous button.
+        4. Check if there is a page change.
+    </label>
+
+    <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B85_ZK_3861VM')">
         <grid model="@init(vm.model)" mold="paging">
             <columns>
                 <column label="Locale"/>
