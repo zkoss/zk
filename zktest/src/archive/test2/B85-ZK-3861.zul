@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3861.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+            Fri Mar 09 10:16:54 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B85_ZK_3861VM)">
+        <grid model="@init(vm.model)" mold="paging">
+            <columns>
+                <column label="Locale"/>
+            </columns>
+            <template name="model">
+                <row>
+                    ${each}
+                </row>
+            </template>
+        </grid>
+        <button label="Previous" onClick="@command('previous')"/>
+        <button label="Next" onClick="@command('next')"/>
+    </div>
+</zk>
