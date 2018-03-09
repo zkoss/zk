@@ -1297,7 +1297,7 @@ public class Listbox extends MeshElement {
 				PagingEvent pe = (PagingEvent) event;
 				int pgsz = pe.getPageable().getPageSize();
 				int actpg = pe.getActivePage();
-				if (PagingEventPublisher.INTERNAL_EVENT.equals(event.getName())) {
+				if (PageableModel.INTERNAL_EVENT.equals(event.getName())) {
 					if (pgsz > 0) //min page size is 1
 						_pgi.setPageSize(pgsz);
 					if (actpg >= 0) //min page index is 0
@@ -1350,8 +1350,8 @@ public class Listbox extends MeshElement {
 		if (_pgListener == null)
 			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
-		if (_model instanceof PagingEventPublisher) {
-			((PagingEventPublisher) _model).addPagingEventListener((PagingListener) _pgListener);
+		if (_model instanceof PageableModel) {
+			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 		}
 		if (_pgImpListener == null)
 			_pgImpListener = new PGImpListener();
@@ -1361,8 +1361,8 @@ public class Listbox extends MeshElement {
 
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
-		if (_model instanceof PagingEventPublisher) {
-			((PagingEventPublisher) _model).removePagingEventListener((PagingListener) _pgListener);
+		if (_model instanceof PageableModel) {
+			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 		}
 		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
 		pgi.removeEventListener("onPagingImpl", _pgImpListener);
@@ -2317,6 +2317,9 @@ public class Listbox extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					if (_model instanceof PageableModel && _pgListener != null)
+						((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
+
 					/* Bug ZK-1512: should clear listitem anyway
 					if (_model instanceof GroupsListModel)
 						getItems().clear();*/
@@ -2334,6 +2337,8 @@ public class Listbox extends MeshElement {
 				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
 				//ZK-3173: move the block here to avoid modifying pgi "again" before PagingEvent is handled
 				if (inPagingMold()) {
+					((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
+
 					//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
 					//must update paginal totalSize or exception in setActivePage
 					final Paginal pgi = getPaginal();

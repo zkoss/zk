@@ -23,8 +23,10 @@ Mar 20, 2018
   ZK-3902: popup.reposition put the popup in the wrong location after zk-3606
   ZK-3847: Include invalidate cause an NPE when WebSocket is enabled
   ZK-3893: NPE with Websockets + include in defer mode
+  ZK-3861: ListModelList setActivePage doesn't change Grid paging in MVVM pattern
 
 * Upgrade Notes
+  + Deprecated PagingEventPublisher, please use PageableModel instead.
 
    --------
 ZK 8.5.1
