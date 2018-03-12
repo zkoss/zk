@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Hbox;
 
 /**
  * @author rudyhuang
@@ -29,5 +30,20 @@ public class B85_ZK_3585Test extends ZATSTestCase {
 		String cityValue = city.getValue();
 		desktop.queryAll("button").get(0).click();
 		Assert.assertNotEquals(cityValue, city.getValue());
+
+		Hbox collectionHbox = desktop.queryAll("hbox").get(5).as(Hbox.class);
+		int numOfCollectionLabel = collectionHbox.getLastChild().getChildren().size();
+		desktop.queryAll("button").get(3).click();
+		Assert.assertEquals(numOfCollectionLabel + 1, collectionHbox.getLastChild().getChildren().size());
+
+		Hbox mapHbox = desktop.queryAll("hbox").get(6).as(Hbox.class);
+		int numOfMapDiv = mapHbox.getLastChild().getChildren().size();
+		desktop.queryAll("button").get(4).click();
+		Assert.assertEquals(numOfMapDiv + 1, mapHbox.getLastChild().getChildren().size());
+
+		Textbox childName = desktop.queryAll("textbox").get(3).as(Textbox.class);
+		String name = childName.getValue();
+		desktop.queryAll("button").get(5).click();
+		Assert.assertNotEquals(name, childName.getValue());
 	}
 }
