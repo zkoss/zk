@@ -3,6 +3,8 @@ ZK 8.5.1.1
 
 * Bugs
   ZK-3897: datebox js error causes cross-origin errors
+  ZK-3898: Opening a popup and adding a page level component at the same time cause corrupted dom after ZK 3606
+  ZK-3902: popup.reposition put the popup in the wrong location after zk-3606
 
 * Upgrade Notes
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3898.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 13 11:33:49 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Click "Attach popup to listitem(tg)", a popup(Option 1) will be attached to listitem(tg).
+        2. Right click listitem(tg), a popup(Option 1) will be visible and a popup(Option 2) will be attached to button(tg2).
+        3. Right click button(tg2), a popup(Option 2) will be visible.
+        4. Click somewhere to close the popup. Then check where it is attached.
+        5. If the bug still exists, the parent node of this popup(Option 2) is &lt;tr class="z-listitem"&gt; (it should be &lt;div class="z-page"&gt;).
+    </label>
+    <div viewModel="@id('model') @init('org.zkoss.zktest.test2.B85_ZK_3898VM')">
+        <button onClick="@command('doOnePp', tg=tg)" label="Attach popup to listitem(tg)"/>
+        <div id="container">
+            <listbox onSelect="@command('doTwoPp', tg=tg2)">
+                <listitem id="tg" label="tg"/>
+            </listbox>
+            <button id="tg2" label="tg2"/>
+            <button id="checkPopupParent" label="Check Popup(Option 2) Parent" w:onClick="checkPopupParent()" />
+        </div>
+    </div>
+    <script><![CDATA[
+    function checkPopupParent() {
+        var popup = jq('@menupopup:contains("Option 2")');
+        if (popup.size()) {
+            var parentClass = popup.parent()[0].className;
+            zk.log('The parent of Popup(Option 2) is "' + parentClass + '."');
+        } else {
+            zk.log('The Popup(Option 2) is not found.');
+        }
+    }
+    ]]>
+    </script>
+</zk>
