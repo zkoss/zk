@@ -20,6 +20,7 @@ ZK 8.5.2
   ZK-3736: Datebox popup is set to visible:false when closed by another popup closing itself
   ZK-3738: Tree SelectEvent.getSelectedObjects() inconsistent with TreeModel.getSelection()
   ZK-3867: nested shadow component order
+  ZK-3884: a grid with a frozen column cuts the text in the last column
 
 * Upgrade Notes
 

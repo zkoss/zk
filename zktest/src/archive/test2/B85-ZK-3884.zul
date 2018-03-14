@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3884.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Mar 14 11:14:57 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Scroll bars.
+        2. See the text completely. (Text should not be cut)
+    </label>
+    <grid width="280px" height="100px">
+        <columns>
+            <column width="80px">A</column>
+            <column width="280px">B</column>
+        </columns>
+        <frozen columns="1"/>
+        <rows>
+            <row>
+                <cell>1234</cell>
+                <cell>Lorem ipsum ladida hello world 1234</cell>
+            </row>
+        </rows>
+    </grid>
+</zk>
