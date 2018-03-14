@@ -78,6 +78,9 @@ function md5java {
 		# need to parse with cygpath for correct path on cygwin/windows
 		# also need semi-colon instead of colon for java classpath
 		java -cp "$maindir/dist/lib/ext/commons-codec.jar;$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $(cygpath -mp $maindir/bin/md5java) $src
+	elif [ "$OSTYPE" = "msys" ] ; then
+		# MinGW, git-bash
+		java -cp "$maindir/dist/lib/ext/commons-codec.jar;$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
 	else
 		java -cp "$maindir/dist/lib/ext/commons-codec.jar:$maindir/dist/lib/ext/bsh.jar" bsh.Interpreter $maindir/bin/md5java $src
 	fi
