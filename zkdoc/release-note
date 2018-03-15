@@ -6,6 +6,7 @@ ZK 8.5.1.1
   ZK-3898: Opening a popup and adding a page level component at the same time cause corrupted dom after ZK 3606
   ZK-3902: popup.reposition put the popup in the wrong location after zk-3606
   ZK-3847: Include invalidate cause an NPE when WebSocket is enabled
+  ZK-3893: NPE with Websockets + include in defer mode
 
 * Upgrade Notes
 
