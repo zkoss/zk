@@ -302,10 +302,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (!opts || !opts.keepVisible) {
 			this._keepVisible = false;
 		}
-		// remove fake parent flag
-		if (this._hasFakeParent) {
-			this._hasFakeParent = false;
-		}
 	},
 	/** The effect for closing the popup. Override this function to provide
 	 * closing effect. afterCloseAnima_ needs to be called after the effect.
@@ -405,7 +401,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @since 8.0.3
 	 */
 	reposition: function () {
-		if (this.parent) {
+		if (this._fakeParent) {
 			// B85-ZK-3606: reposition based on the current position of the item
 			this.position.apply(this, this.getPositionArgs_());
 		} else {
@@ -439,28 +435,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	epilogHTML_: function (out) {
 	},
 	isInView_: function () {
-		return this.parent ? zk(this.parent).isRealScrollIntoView(true) : false;
+		return this._fakeParent ? zk(this._fakeParent).isRealScrollIntoView(true) : false;
 	},
 	getPositionArgs_: function () {
-		var p = this.parent, dim = zk(p).dimension(true);
+		var p = this._fakeParent, dim = zk(p).dimension(true);
 		return [p, [dim.left + this._adjustLeft, dim.top + this._adjustTop] , null, {dodgeRef: false}];
-	},
-	doClick_: function (evt, popupOnly) {
-		if (this._hasFakeParent)
-			evt.stop(); // B85-ZK-3606: prevent event from bubbling up to its fake parent
-		this.$supers('doClick_', arguments);
-	},
-	doRightClick_: function (evt) {
-		if (this._hasFakeParent)
-			evt.stop(); // B85-ZK-3606: prevent event from bubbling up to its fake parent
-		this.$supers('doRightClick_', arguments);
-	},
-	doTooltipOver_: function (evt) {
-		if (this._hasFakeParent)
-			evt.stop(); // B85-ZK-3606: prevent event from bubbling up to its fake parent
-		this.$supers('doTooltipOver_', arguments);
-	},
-	setVisible: function (visible) {
-		this.$supers('setVisible', [visible, this._hasFakeParent]);
 	}
 });
