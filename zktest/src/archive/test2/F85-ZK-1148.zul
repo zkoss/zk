@@ -1,0 +1,18 @@
+<zk>
+    <label multiline="true">
+        1. click the detach button.
+        2. you should see destroy info on the clients log.
+
+    </label>
+    <window id="win"
+            viewModel="@id('vm')@init('org.zkoss.zktest.test2.F85_ZK_1148_DestroyD')">
+        <button label="toggle VM value" onClick="@command('toggleMyValue')"/>
+        <button label="show vm attribute"
+                onClick='System.out.println("vm = " + win.getAttributes().get(org.zkoss.bind.sys.BinderCtrl.VM));'/>
+        <label visible="@load(vm.myValue)" value="show label if value is true"/>
+
+    </window>
+    <button id="delBtn" label="detach window" onClick='win.detach();'/>
+    <button label="attach window" onClick=''/>
+    <label id="resultLabel"></label>
+</zk>

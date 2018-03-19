@@ -51,6 +51,7 @@ import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DefaultCommand;
 import org.zkoss.bind.annotation.DefaultGlobalCommand;
+import org.zkoss.bind.annotation.Destroy;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.MatchMedia;
@@ -143,6 +144,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	//TODO make it configurable
 	private static final Map<Class<?>, List<Method>> _initMethodCache = new CacheMap<Class<?>, List<Method>>(600,
 			CacheMap.DEFAULT_LIFETIME); //class,list<init method>
+	private static final Map<Class<?>, List<Method>> _destroyMethodCache = new CacheMap<Class<?>, List<Method>>(600,
+			CacheMap.DEFAULT_LIFETIME); //class,list<destroy method>
 
 	private static final Map<Class<?>, Map<String, CachedItem<Method>>> _commandMethodCache = new CacheMap<Class<?>, Map<String, CachedItem<Method>>>(
 			200, CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
@@ -382,6 +385,14 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				}
 			}
 		}
+	}
+
+	public void destroy(Component comp, Object viewModel) {
+		new AbstractAnnotatedMethodInvoker<Destroy>(Destroy.class, _destroyMethodCache) {
+			protected boolean shouldLookupSuperclass(Destroy annotation) {
+				return annotation.superclass();
+			}
+		}.invokeMethod(this, null);
 	}
 
 	private class QueueListener implements EventListener<Event>, Serializable {
