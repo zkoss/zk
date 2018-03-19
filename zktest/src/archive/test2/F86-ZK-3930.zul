@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3930.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Apr 16 12:48:48 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-camera-recording {
+			animation: blink 2s infinite alternate;
+			width: 30px;
+			height: 30px;
+			top: 30px;
+			left: 30px;
+			position: absolute;
+			background-color: red;
+			border-radius: 50%;
+		}
+		
+		@keyframes blink {
+			from {
+				opacity: 1;
+			}
+			to {
+				opacity: 0;
+			}
+		}
+		
+		.z-camera-pause {
+			width: 30px;
+			height: 30px;
+			top: 30px;
+			left: 30px;
+			position: absolute;
+			border-left: 10px solid red;
+			border-right: 10px solid red;
+		}
+		
+		.z-camera-stop {
+			width: 30px;
+			height: 30px;
+			top: 30px;
+			left: 30px;
+			position: absolute;
+			background: red;
+		}
+	</style>
+	
+	<camera id="camera" width="600px" maxsize="-1" lengthLimit="60"
+			onVideoUpload='video.setContent(event.getMedia())'
+			onSnapshotUpload='image.setContent(event.getMedia())'
+			onLengthLimitExceed='Clients.log(event.getName())'
+			onStateChange="Clients.log(event.getState().toString())">
+		<attribute name="onMaxsizeExceed">
+			Clients.log(event.getName() + ": dataSize is " + event.getData().toString() + "KB.");
+		</attribute>
+	</camera>
+	
+	<separator/>
+	
+	<button onClick="camera.requestCamera()" label="Request camera"/>
+	<button onClick="camera.start()" label="Start record video"/>
+	<button onClick="camera.stop()" label="Stop record video"/>
+	<button onClick="camera.pause()" label="Pause record video"/>
+	<button onClick="camera.resume()" label="Resume record video"/>
+	<button onClick="camera.snapshot()" label="Snapshot"/>
+	
+	<separator/>
+	
+	<button onClick='camera.setPreviewRecord(true)' label="setPreviewRecord(true)"/>
+	<button onClick='camera.setPreviewRecord(false)' label="setPreviewRecord(false)"/>
+	<button onClick='camera.setRecording(true)' label="setRecording(true)"/>
+	<button onClick='camera.setRecording(false)' label="setRecording(false)"/>
+	<button onClick='Clients.log(camera.isRecording().toString())' label="isRecording()"/>
+	<button onClick='Clients.log(camera.isStopped().toString())' label="isStopped()"/>
+	<button onClick='Clients.log(camera.isPaused().toString())' label="isPaused()"/>
+	
+	<separator/>
+	
+	<image id="image"/>
+	
+	<separator/>
+	
+	<video width="600px" id="video" controls="true"/>
+	
+	<separator/>
+	
+	<button label="LogContentName">
+		<attribute name="onClick">
+			Object media = video.getContent();
+			Clients.log(media.getClass().toString());
+			Clients.log(media.getName());
+		</attribute>
+	</button>
+</zk>

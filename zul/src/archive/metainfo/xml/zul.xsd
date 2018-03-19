@@ -610,6 +610,7 @@
 			<xs:element ref="apply"/>
 			<xs:element ref="audio" />
 			<xs:element ref="video" />
+			<xs:element ref="camera" />
 			<xs:element ref="bandbox" />
 			<xs:element ref="biglistbox" />
 			<xs:element ref="borderlayout" />
@@ -708,6 +709,7 @@
 				<xs:element ref="apply"/>
 				<xs:element ref="audio" />
 				<xs:element ref="video" />
+				<xs:element ref="camera" />
 				<xs:element ref="bandbox" />
 				<xs:element ref="biglistbox" />
 				<xs:element ref="borderlayout" />
@@ -949,6 +951,25 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<!-- camera -->
+	<xs:element name="camera" type="cameraType" />
+	<xs:complexType name="cameraType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="recording" type="booleanType" use="optional" />
+		<xs:attribute name="audio" type="booleanType" use="optional" />
+		<xs:attribute name="previewRecord" type="booleanType" use="optional" />
+		<xs:attribute name="maxsize" type="intType" use="optional" />
+		<xs:attribute name="lengthLimit" type="intType" use="optional" />
+		<xs:attribute name="onVideoUpload" type="xs:string" use="optional" />
+		<xs:attribute name="onSnapshotUpload" type="xs:string" use="optional" />
+		<xs:attribute name="onLengthLimitExceed" type="xs:string" use="optional" />
+		<xs:attribute name="onStateChange" type="xs:string" use="optional" />
+		<xs:attribute name="onMaxsizeExceed" type="xs:string" use="optional" />
+		<xs:attribute name="snapshotFormat" type="xs:string" use="optional" />
+		<xs:attribute name="recordFormat" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
 	<!-- auxhead -->
 	<xs:element name="auxhead" type="auxheadType" />
 	<xs:complexType name="auxheadType">
