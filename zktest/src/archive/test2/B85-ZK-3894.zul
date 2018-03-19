@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3894.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Mar 19 11:46:43 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Add <listener><listener-class>org.zkoss.zktest.test2.B85_ZK_3894DesktopInit</listener-class></listener> in zk.xml
+        2. Restart server
+        3. Connect to http://localhost:8080/zktest/test2/B85-ZK-3894.zul
+        4. Should be sendRedirect to http://localhost:8080/zktest/test
+    </label>
+</zk>
