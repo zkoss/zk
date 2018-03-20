@@ -408,8 +408,7 @@ zk.fmt.Date = {
 			   FMON: zk.FMON,
 			    APM: zk.APM
 		};
-		var txt = '',
-			tz = val.getTimeZone();
+		var txt = '';
 		for (var j = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {

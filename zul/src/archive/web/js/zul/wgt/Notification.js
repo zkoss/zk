@@ -219,7 +219,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		}
 	},
 	getPositionArgs_: function () {
-		return [this.parent, null, this._nftPos, null];
+		return [this._fakeParent, null, this._nftPos, null];
 	}
 }, {
 
@@ -257,7 +257,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			parent = zk.Desktop.$().firstChild;
 		}
 		parent.appendChild(ntf);
-		ntf.parent = opts.ref; // B85-ZK-3606: fake parent
+		ntf.parent = ntf._fakeParent = opts.ref; // B85-ZK-3606: fake parent
 		ntf._nftPos = pos;
 		ntf.open(ref, off, pos);
 

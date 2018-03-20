@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3902.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Fri Mar 16 16:44:12 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window>
+        <zscript><![CDATA[
+            void doTheThing() {
+                pop.open(target, "after_start");
+                String script = "zUtl.fireSized(zk.$('@window'))";
+                Clients.evalJavaScript(script);
+            }
+        ]]></zscript>
+        <div>
+            <div height="300px">
+                <label multiline="true">
+                    1. Click "Click to see popup".
+                    2. You will see a popup "test" just at bottom left of listitem "test".
+                </label>
+            </div>
+            <listbox>
+                <listitem label="test" id="target"/>
+            </listbox>
+            <button onClick="doTheThing()" label="Click to see popup" />
+            <popup id='pop'>
+                <label value="test" />
+            </popup>
+        </div>
+    </window>
+</zk>

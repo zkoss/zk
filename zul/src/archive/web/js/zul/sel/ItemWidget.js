@@ -309,7 +309,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	 * Returns -1 if item is before this object,
 	 * returns  0 if item is the same as this object,
 	 * returns  1 if item is after this object.
-	 * @param zul.sel.ItemWidget
+	 * @param zul.sel.ItemWidget item
 	 * @return int
 	 * @since 8.5.0
 	 */
