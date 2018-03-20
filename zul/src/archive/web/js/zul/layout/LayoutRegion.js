@@ -66,8 +66,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		flex: function (v) {
+			var skipper = -1;
 			_setFirstChildFlex(this, v);
-			this.rerender();
+			this.rerender(skipper);
 		},
 		/**
 		 * Sets the border (either none or normal).
@@ -494,6 +495,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					this.parent.resize();
 			}
 		}
+	},
+	insertChildHTML_: function (child, before, desktop) {
+		if (child.$instanceof(zul.layout.Borderlayout)) return;
+		//it will setFlex later and do replaceHTML so return;
+		else this.$super('insertChildHTML_', child, before, desktop);
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
