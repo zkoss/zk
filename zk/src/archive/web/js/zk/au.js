@@ -1342,11 +1342,13 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	cfmClose: function (msg) {
 		zk.confirmClose = msg;
 	},
-	/** Shows a notifaction popup.
+	/** Shows a notification popup.
 	 * @param String msg message to show
+	 * @param String type the notification type (warning, info, error)
 	 * @param String pid uuid of the page to which it belongs
 	 * @param String ref uuid of a reference component
 	 * @param String pos the position of notification
+	 * @param Offset off the offset of x and y
 	 * @param int dur the duration of notification
 	 * @param boolean closable the close button of notification
 	 */
