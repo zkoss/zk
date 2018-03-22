@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3896.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Mar 22 09:32:55 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+		List testPatterns = Arrays.asList(new String[] {
+			"E MMM dd yyyy",
+			"E, yyyy-MM-dd",
+			"dd E MMM yyyy",
+		});
+		Date now = new Date();
+	]]></zscript>
+    <label multiline="true">
+        1. Change the date of each datebox.
+        2. Date should change and not cause constraint violations.
+    </label>
+    <separator/>
+    <zk forEach="${testPatterns}">
+        <div>
+            <div>
+                #${forEachStatus.index + 1} date format: ${each}
+            </div>
+            <datebox format="${each}" width="300px" value="${now}"/>
+        </div>
+        <separator/>
+    </zk>
+</zk>

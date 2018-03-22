@@ -3,6 +3,7 @@ ZK 8.5.2
 * Features
 
 * Bugs
+  ZK-3896: Datebox failing format patterns (containing weekday)
 
 * Upgrade Notes
 
