@@ -7,6 +7,7 @@ ZK 8.5.2
   ZK-3878: missing import org.zkoss.zk.ui.sys in zkex osgi bundle
   ZK-3903: Caption duplicating label when changing icon sclass
   ZK-3641: Iframe autohide not working consistently
+  ZK-3858: Window inside a <center> with autoscroll true doesn't resize itself correctly
 
 * Upgrade Notes
 

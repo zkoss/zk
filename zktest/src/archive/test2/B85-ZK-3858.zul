@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3858.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Mar 20 09:40:24 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Click Button
+        2. The width of window in center should be the same as the width of window in north
+    </label>
+    <button label="Button" onClick='container.setHeight("600px")'/>
+    <window id="container" height="1080px">
+        <borderlayout sclass="content-wrapper" hflex="1">
+            <north border="none" collapsible="false" splittable="false" hflex="1">
+                <window hflex="1" vflex="1" border="normal">
+                    in north
+                </window>
+            </north>
+            <center border="none" autoscroll="true">
+                <window hflex="1" vflex="1" border="normal">
+                    in center
+                </window>
+            </center>
+        </borderlayout>
+    </window>
+</zk>
