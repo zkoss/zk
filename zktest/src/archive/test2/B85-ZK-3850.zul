@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3850.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Mar 23 11:54:10 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click Close Button.
+        2. The height of the 3rd row should be the same as before hiding.
+    </label>
+    <separator/>
+    <button label="Close" onClick="c3.setVisible(false);"/>
+    <separator/>
+    <grid width="602px">
+        <columns menupopup="auto">
+            <column width="200px" label="Col 1"/>
+            <column width="200px" label="Col 2"/>
+            <column id="c3" width="200px" label="Col 3"/>
+        </columns>
+        <rows>
+            <row>
+                <label value="AAA"/>
+                <label value="BBB"/>
+                <label value="CCC"/>
+            </row>
+            <row>
+                <label value="AAA AAA"/>
+                <label value="BBB BBB"/>
+                <label value="CCC CCC"/>
+            </row>
+            <row>
+                <label value="AAA AAA AAA"/>
+                <label value="BBB BBB BBB"/>
+                <cell align="right">
+                    <label value="CCC CCC CCC"/>
+                </cell>
+            </row>
+        </rows>
+    </grid>
+</zk>

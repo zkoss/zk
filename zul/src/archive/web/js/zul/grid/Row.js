@@ -174,7 +174,10 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		var out = opts.out || new zk.Buffer(),
 			child = opts.child,
 			isCell = child.$instanceof(zul.wgt.Cell);
-		if (!isCell) {
+
+		if (isCell)
+			child._headerVisible = opts.visible;
+		else {
 			out.push('<td id="', child.uuid, '-chdextr"',
 				this._childAttrs(child, opts.index, !opts.visible), '><div id="', child.uuid,
 				'-cell" class="', opts.zclass, '-content">');

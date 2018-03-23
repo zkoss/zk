@@ -87,7 +87,7 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 		return this._rowType;
 	},
 	_getRowAttrs: function () {
-		return this.parent._childAttrs(this, this.getChildIndex());
+		return this.parent._childAttrs(this, this.getChildIndex(), !this._headerVisible);
 	},
 	_getBoxAttrs: function () {
 		return this.parent._childInnerAttrs(this);
