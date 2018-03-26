@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3587.zul.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Mar 20 12:45 PM:52 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <listbox id="lb" height="300px" width="400px">
+        <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+        <!--<custom-attributes org.zkoss.zul.listbox.rod="false"/>-->
+        <template name="model">
+            <listitem>
+                <listcell label="${each}"/>
+                <listcell>
+                    <textbox value="${each}" onCreate="self.focus()"/>
+                </listcell>
+            </listitem>
+        </template>
+    </listbox>
+
+    <button label="add item" onClick="addItem();"/> should focus the new textbox, only works with listbox ROD disabled
+
+    <zscript><![CDATA[
+		public void addItem() {
+			model.add("item-" + count++);
+		}
+
+		int count = 0;
+	    ListModelList model = new ListModelList();
+	    addItem();
+		lb.setModel(model);
+	]]></zscript>
+</zk>
