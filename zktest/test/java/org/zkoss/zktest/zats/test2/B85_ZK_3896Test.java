@@ -31,8 +31,8 @@ public class B85_ZK_3896Test extends WebDriverTestCase {
 		click(datebox.find(".z-datebox-button"));
 		waitResponse(true);
 
-		JQuery today = jq("div.z-datebox-popup.z-datebox-open.z-datebox-shadow")
-				.find("td.z-calendar-cell.z-calendar-weekday.z-calendar-selected");
+		JQuery today = jq("div.z-datebox-popup.z-datebox-open")
+				.find("td.z-calendar-cell.z-calendar-selected");
 		JQuery prevSibling = today.prev();
 		click(prevSibling.exists() ? prevSibling : today.next());
 		waitResponse(true);
