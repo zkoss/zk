@@ -2087,7 +2087,7 @@ public class Listbox extends MeshElement {
 	}
 
 	private void fixGroupsInfoBeforeInsert(Component newChild, Component refChild, boolean isReorder) {
-		if (_isReplacingItem) //@see Renderer#render
+		if (_isReplacingItem && getAttribute(Listbox.LOADING_MODEL) == null) //@see Renderer#render
 			return; //called by #insertBefore(), skip handling GroupInfo
 
 		if (newChild instanceof Listgroupfoot) {
@@ -2148,7 +2148,7 @@ public class Listbox extends MeshElement {
 	}
 
 	private void fixGroupsInfoAfterInsert(Listitem newItem) {
-		if (_isReplacingItem) //@see Renderer#render
+		if (_isReplacingItem && getAttribute(Listbox.LOADING_MODEL) == null) //@see Renderer#render
 			return; //called by #insertBefore(), skip handling GroupInfo
 
 		if (newItem instanceof Listgroup) {
@@ -2189,8 +2189,9 @@ public class Listbox extends MeshElement {
 	}
 
 	private void fixGroupsInfoAfterRemove(Component child, int index) {
-		if (!_isReplacingItem) { //@see Renderer#render
+		if (!_isReplacingItem && getAttribute(Listbox.LOADING_MODEL) == null) { //@see Renderer#render
 			//called by #removeChild(), handling GroupInfo if !isReplcingItem
+			//@see LiveListboxDataLoader loadModel
 			if (child instanceof Listgroup) {
 				int[] prev = null, remove = null;
 				for (int[] g : _groupsInfo) {
@@ -3408,8 +3409,17 @@ public class Listbox extends MeshElement {
 				_shallSyncSelInView = false;
 			}
 		}
-		if (_focusIndex > -1)
+		if (_focusIndex > -1) {
 			renderer.render("focusIndex", _focusIndex); // F60-ZK-715
+		}
+		for (Listitem item : _items) {
+			item.setItemInvalid(false);
+		}
+		int preloadsz = Utils.getIntAttribute(this, "org.zkoss.zul.listbox.preloadSize", _preloadsz, true);
+		if (preloadsz != _preloadsz) {
+			_preloadsz = preloadsz; 
+			renderer.render("_preloadsz", _preloadsz);
+		}
 	}
 
 	/** Returns whether to toggle a list item selection on right click

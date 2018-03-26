@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.LabelImageElement;
 
@@ -188,5 +189,8 @@ public class Listcell extends LabelImageElement {
 			}
 		}
 	}
-
+	
+	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
+		super.addMoved(oldparent, oldpg, newpg);
+	}
 }

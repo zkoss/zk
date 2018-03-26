@@ -96,6 +96,7 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			final Listitem nli = (Listitem) items[0];
 			nli.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 
+			nli.setItemInvalid(item.isItemInvalid());
 			// ZK-2552
 			recordRenderedIndex(listbox, items.length);
 			nli.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
