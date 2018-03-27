@@ -1294,19 +1294,23 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 	 */
 	public void recreate() {
 		if (_afterComposed) { // execute after composed
-			if (getFirstChild() != null) {
-				removeChildren(getFirstChild());
-			}
-
-			if (_firstInsertion != null) {
-				for (Component next = _firstInsertion, end = _lastInsertion.getNextSibling(); next != end;) {
-					Component tmp = next.getNextSibling();
-					next.detach();
-					next = tmp;
-				}
-			}
+			clearChildren();
 			_afterComposed = false; // reset
 			afterCompose();
+		}
+	}
+
+	public void clearChildren() {
+		if (getFirstChild() != null) {
+			removeChildren(getFirstChild());
+		}
+
+		if (_firstInsertion != null) {
+			for (Component next = _firstInsertion, end = _lastInsertion.getNextSibling(); next != end;) {
+				Component tmp = next.getNextSibling();
+				next.detach();
+				next = tmp;
+			}
 		}
 	}
 
