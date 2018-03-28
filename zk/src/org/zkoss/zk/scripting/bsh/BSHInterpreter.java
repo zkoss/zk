@@ -28,6 +28,7 @@ import java.util.Map;
 
 import bsh.BshClassManager;
 import bsh.BshMethod;
+import bsh.ClassIdentifier;
 import bsh.EvalError;
 import bsh.NameSpace;
 import bsh.Primitive;
@@ -163,7 +164,7 @@ public class BSHInterpreter extends GenericInterpreter implements SerializableAw
 
 	protected Object get(String name) {
 		try {
-			return Primitive.unwrap(_ip.get(name));
+			return unwrap(_ip.get(name));
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -176,7 +177,7 @@ public class BSHInterpreter extends GenericInterpreter implements SerializableAw
 			//to have the correct chain
 			if (bshns != _bshns) {
 				try {
-					return Primitive.unwrap(bshns.getVariable(name));
+					return unwrap(bshns.getVariable(name));
 				} catch (UtilEvalError ex) {
 					throw UiException.Aide.wrap(ex);
 				}
@@ -185,6 +186,11 @@ public class BSHInterpreter extends GenericInterpreter implements SerializableAw
 		return get(name);
 	}
 
+	private static Object unwrap(Object val) {
+		return val instanceof ClassIdentifier ?
+				NameSpace.identifierToClass((ClassIdentifier) val) : Primitive.unwrap(val);
+	}
+	
 	protected void set(String name, Object val) {
 		try {
 			_ip.set(name, val);
