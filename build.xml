@@ -77,6 +77,9 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<condition property="build.zkbind">
 			<equals arg1="${project.name}" arg2="zkbind"/>
 		</condition>
+		<condition property="build.zkex">
+			<equals arg1="${project.name}" arg2="zkex"/>
+		</condition>
 		<condition property="build.jar.required">
 			<or>
 				<equals arg1="${format}" arg2="jar"/>
