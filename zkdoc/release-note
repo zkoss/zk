@@ -4,6 +4,7 @@ ZK 8.5.2
 
 * Bugs
   ZK-3896: Datebox failing format patterns (containing weekday)
+  ZK-3878: missing import org.zkoss.zk.ui.sys in zkex osgi bundle
 
 * Upgrade Notes
 

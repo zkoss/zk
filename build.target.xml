@@ -332,7 +332,11 @@ if="deploy.tomcat.required">
 	</exec>
 </target>
 
-<target name="build.osgi" depends="build.osgi1, build.osgi2, build.osgi3, build.osgi4" if="build.jar.required">
+<target name="build.osgi5" depends="build.jar" if="build.zkex">
+	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="true" message="${line.separator}Import-Package:org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional"/>
+</target>
+
+<target name="build.osgi" depends="build.osgi1, build.osgi2, build.osgi3, build.osgi4, build.osgi5" if="build.jar.required">
 	<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${bnd.lib.jar}"/>
 	<bndwrap output="${dist.osgi.dir}" definitions="${dist.osgi.dir}">
 		<fileset dir="${out.dir}" includes="${jar.name}, ${jar2.name}"/>
