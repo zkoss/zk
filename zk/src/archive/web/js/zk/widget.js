@@ -401,9 +401,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	function _topnode(n) {
-		for (var v, body = document.body; n && n != body; n = n.parentNode) //no need to check vparentNode
-			if ((v = n.style) && ((v = v.position) == 'absolute' || v == 'relative'))
+		for (var body = document.body; n && n != body; n = n.parentNode) { //no need to check vparentNode
+			var position = jq(n).css('position');
+			if (position == 'absolute' || position == 'relative')
 				return n;
+		}
 	}
 	function _zIndex(n) {
 		return n ? zk.parseInt(n.style.zIndex) : 0;

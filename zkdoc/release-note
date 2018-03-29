@@ -5,6 +5,7 @@ ZK 8.5.2
 * Bugs
   ZK-3896: Datebox failing format patterns (containing weekday)
   ZK-3878: missing import org.zkoss.zk.ui.sys in zkex osgi bundle
+  ZK-3641: Iframe autohide not working consistently
 
 * Upgrade Notes
 
