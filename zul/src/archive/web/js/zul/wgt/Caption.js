@@ -45,20 +45,16 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	},
 	updateDomContent_: function () {
 		var cnt = this.domContent_(),
-			dn = this.$n('cave'),
-			size = this.nChildren,
-			// B70-ZK-2519: Do not count the empty text nodes created by prolog
-			total = jq(dn).contents().filter(function () {
-				return !(this.nodeType == 3 && !this.nodeValue.trim().length);
-			}).length,
-			index = 0;
-
-		 // B50-ZK-313: only replace dom content
+		dn = this.$n('cave');
 		if (dn) {
-			// remove dom content
-			jq(dn).contents().filter(function () {
-				return (size + index++) < total;
-			}).remove();
+			var firstWgtDom;
+			if (this.firstChild) {
+				firstWgtDom = this.firstChild.$n();
+			}
+			for (var child = dn.firstChild, nextChild; child && child !== firstWgtDom; child = nextChild) {
+				nextChild = child.nextSibling;
+				child.remove();
+			}
 			this.clearCache(); //B70-ZK-2370: clearCache after remove dom content
 			jq(dn).prepend(cnt ? cnt : '&nbsp;');
 		}
