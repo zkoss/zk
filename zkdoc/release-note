@@ -11,6 +11,7 @@ ZK 8.5.2
   ZK-3841: listheader setVisible(false) makes items "tall"
   ZK-3916: Automatic session timeout redirects unreliable with websockets enabled
   ZK-3915: Automatic session timeout causes exceptions with websockets enabled
+  ZK-3503: double right-click detected in FF
 
 * Upgrade Notes
 
