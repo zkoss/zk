@@ -316,13 +316,16 @@ zFlex = { //static methods
 			wdh = psz.width,
 			c = p.firstChild,
 			scrWdh,
-			vflexsRe = [];
+			vflexsRe = [],
+			hasVScroll = zkp.hasVScroll(),
+			hasHScroll = zkp.hasHScroll();
+
 		// Bug 3185686, B50-ZK-452
-		if (zkp.hasVScroll()) //with vertical scrollbar
+		if (hasVScroll) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
 			
 		// B50-3312936.zul
-		if (zkp.hasHScroll()) //with horizontal scrollbar
+		if (hasHScroll) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
 			
 		for (; c; c = c.nextSibling)
@@ -472,6 +475,10 @@ zFlex = { //static methods
 		//notify parent widget that all of its children with hflex/vflex is done.
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
+
+		// ZK-3858: Window inside a <center> with autoscroll true doesn't resize itself correctly
+		if (zkp.hasVScroll() != hasVScroll || zkp.hasHScroll() != hasHScroll)
+			zFlex.fixFlex(wgt);
 	},
 	onFitSize: function () {
 		var wgt = this,
