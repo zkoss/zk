@@ -12,6 +12,7 @@ ZK 8.5.2
   ZK-3916: Automatic session timeout redirects unreliable with websockets enabled
   ZK-3915: Automatic session timeout causes exceptions with websockets enabled
   ZK-3503: double right-click detected in FF
+  ZK-3914: listbox empty message sizing with hidden columns (wrong colspan)
 
 * Upgrade Notes
 
