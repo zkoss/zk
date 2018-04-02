@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3841.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 16 15:43:20 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+  <label multiline="true">
+    click the "hide" button, and click the "show" button, the height of the listitems should not get TALL
+
+  </label>
+  <window style="max-width:1400px; width:100%; margin: auto;">
+    <button label="hide" onClick="email.setVisible(false);"/>
+    <button label="show" onClick="email.setVisible(true);"/>
+    <listbox multiple="true" checkmark="true" mold="paging" pageSize="10" width="100%">
+      <listhead>
+        <listheader width="35px"/>
+        <listheader label="Name"/>
+        <listheader id="email" label="Email" width="150px" align="right"/>
+        <listheader label="Value" />
+        <listheader label="Comment"/>
+      </listhead>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label=""/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label=""/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label=""/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="soming@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="shing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+      <listitem>
+        <listcell />
+        <listcell label="Steve"/>
+        <listcell label="somthing@anything.com"/>
+        <listcell label="300"/>
+        <listcell label="Somthing comment"/>
+      </listitem>
+    </listbox>
+  </window>
+</zk>
+
