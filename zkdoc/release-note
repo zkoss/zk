@@ -8,6 +8,7 @@ ZK 8.5.2
   ZK-3903: Caption duplicating label when changing icon sclass
   ZK-3641: Iframe autohide not working consistently
   ZK-3858: Window inside a <center> with autoscroll true doesn't resize itself correctly
+  ZK-3841: listheader setVisible(false) makes items "tall"
 
 * Upgrade Notes
 
