@@ -1,3 +1,5 @@
 8.5.2
 unchecked=off
 deprecation=off
+source=1.7
+target=1.7
