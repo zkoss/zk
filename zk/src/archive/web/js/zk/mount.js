@@ -714,7 +714,7 @@ jq(function () {
 	.bind('zcontextmenu', function (evt) {
 		//ios: zcontextmenu shall be listened first,
 		//due to need stop other event (ex: click, mouseup)
-		
+
 		zk.clickPointer[0] = evt.pageX;
 		zk.clickPointer[1] = evt.pageY;
 
@@ -794,7 +794,7 @@ jq(function () {
 		if (zk.Draggable.ignoreClick()) return;
 
 		var wgt = Widget.$(evt, {child: true});
-		if (wgt) {
+		if (wgt && evt.which == 1) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {}, evt);
 			_doEvt(wevt);
 			if (wevt.domStopped)
