@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3915.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr  2 14:36:01 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Only with websocket enabled
+
+		1. unmark the session-config of ZK-3915 in zk.xml to enable automatic session timeout
+		2. look into browser devtool tab Network
+		3. enable [Preserve log] and filter [XHR, Doc, WS] requests
+		4. when the websocket connection timeouts, it'll redirect to the same page.
+		5. reload this page right after the websocket connection has connected.
+		6. automatic session-timeout should still work
+		(work means session and desktop should both change continuously with gaps around 10 secs)
+		7. should not have any exception thrown
+
+	</label>
+	<label multiline="true">
+		Session: ${session.nativeSession.id}
+		Desktop: ${desktop.id}
+
+	</label>
+</zk>

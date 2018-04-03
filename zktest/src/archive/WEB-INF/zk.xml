@@ -750,4 +750,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zk.moment.timezone.path</name>
 		<value>/test2/data/2017a.json</value>
 	</library-property>
+
+	<!--for ZK-3916 and ZK-3915-->
+	<!--<session-config>
+		<device-type>ajax</device-type>
+		<timeout-uri>/test2/B85-ZK-3916.zul</timeout-uri>
+		<automatic-timeout>true</automatic-timeout>
+		<session-timeout>10</session-timeout>
+	</session-config>-->
+
 </zk>

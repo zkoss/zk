@@ -21,6 +21,7 @@ import javax.websocket.server.ServerEndpointConfig;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.Storage;
@@ -65,6 +66,7 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 		List<String> dtids = wsession.getRequestParameterMap().get("dtid");
 		if (dtids.isEmpty())
 			throw new IllegalStateException("the value of the key with 'dtid' cannot be null!");
-		return ((SessionCtrl) session).getDesktopCache().getDesktopIfAny(dtids.get(0));
+		DesktopCache desktopCache = ((SessionCtrl) session).getDesktopCache();
+		return desktopCache != null ? desktopCache.getDesktopIfAny(dtids.get(0)) : null;
 	}
 }
