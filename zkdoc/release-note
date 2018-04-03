@@ -3,6 +3,7 @@ Apr 10, 2018
 * Features
 
 * Bugs
+  ZK-3916: Automatic session timeout redirects unreliable with websockets enabled
 
 * Upgrade Notes
 

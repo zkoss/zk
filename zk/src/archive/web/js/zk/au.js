@@ -151,12 +151,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				zAu._errCode = null;
 			}
 
-			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req);
+			var forceAjax = reqInf.forceAjax;
+			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req, false, forceAjax);
 
 			zAu.ajaxReq = req;
 			zAu.ajaxReqInf = reqInf;
 			
-			if (typeof zWs != 'undefined' && zWs.ready) {
+			if (!forceAjax && typeof zWs != 'undefined' && zWs.ready) {
 				zWs.send(req, reqInf);
 				return;
 			}
@@ -227,7 +228,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		zAu.cmd0.clientInfo();
 	}
 	function sendTimeout() {
-		zAu.send(new zk.Event(null, 'dummy', null, {ignorable: true, serverAlive: true, rtags: {isDummy: true}}));
+		zAu.send(new zk.Event(null, 'dummy', null, {ignorable: true, serverAlive: true, rtags: {isDummy: true}, forceAjax: true}));
 			//serverAlive: the server shall not ignore it if session timeout
 		zk.isTimeout = true; //ZK-3304: already timeout
 	}
@@ -456,7 +457,7 @@ zAu = {
 			url: zk.ajaxURI(null, {desktop: dt,au: true}),
 			data: {dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'},
 			beforeSend: function (xhr) {
-				if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
+				if (zk.pfmeter) zAu._pfsend(dt, xhr, true, false);
 			},
 			//2011/04/22 feature 3291332
 			//Use sync request for chrome, safari and firefox (4 and later).
@@ -706,11 +707,20 @@ zAu.beforeSend = function (uri, req, dt) {
 			|| !(ignorable = ignorable && opts.ignorable)) //all ignorable
 				break;
 		}
+		var forceAjax = false;
+		for (var j = 0, el = es.length; j < el; ++j) {
+			var aureq = es[j],
+				opts = aureq.opts || {};
+			if (opts.forceAjax) {
+				forceAjax = true;
+				break;
+			}
+		}
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content, rtags = {},
 			requri = uri || zk.ajaxURI(null, {desktop: dt,au: true}),
 			ws = typeof zWs != 'undefined' && zWs.ready;
-		if (ws) {
+		if (!forceAjax && ws) {
 			content = {};
 		} else {
 			content = '';
@@ -723,7 +733,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			}
 
 			requri = zAu.beforeSend(requri, aureq, dt);
-			if (ws) {
+			if (!forceAjax && ws) {
 				zk.copy(content, zWs.encode(j, aureq, dt));
 			} else {
 				content += zAu.encode(j, aureq, dt);
@@ -741,7 +751,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			ajaxSendNow({
 				sid: zAu.seqId, uri: requri, dt: dt, content: content,
 				implicit: implicit,
-				ignorable: ignorable, tmout: 0, rtags: rtags
+				ignorable: ignorable, tmout: 0, rtags: rtags, forceAjax: forceAjax
 			});
 		return true;
 	},
@@ -782,8 +792,8 @@ zAu.beforeSend = function (uri, req, dt) {
 	},
 	// Sets performance rquest IDs to the request's header
 	// Called by moun.js, too
-	_pfsend: function (dt, req, completeOnly) {
-		var ws = typeof zWs != 'undefined' && zWs.ready;
+	_pfsend: function (dt, req, completeOnly, forceAjax) {
+		var ws = !forceAjax && typeof zWs != 'undefined' && zWs.ready;
 		if (!completeOnly) {
 			var dtt = dt.id + '-' + pfIndex++ + '=' + Math.round(jq.now());
 			req.setRequestHeader('ZK-Client-Start', dtt);
