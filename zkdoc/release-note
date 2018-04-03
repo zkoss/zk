@@ -29,6 +29,7 @@ ZK 8.5.2
   ZK-3850: a hidden column increases a row height
   ZK-3848: Check more for lang-addon.xml when there is <extends> without <depends>
   ZK-3815: zscript causes MethodNotFoundException when calling a static method in EL
+  ZK-3691: Listgroups are selected by the selectAll checkmark in listbox
 
 * Upgrade Notes
 
