@@ -606,7 +606,7 @@ public class Grid extends MeshElement {
 				PagingEvent pe = (PagingEvent) event;
 				int pgsz = pe.getPageable().getPageSize();
 				int actpg = pe.getActivePage();
-				if (PageableModel.INTERNAL_EVENT.equals(pe.getName())) {
+				if (PagingEventPublisher.INTERNAL_EVENT.equals(pe.getName())) {
 					if (pgsz > 0) //min page size is 1
 						_pgi.setPageSize(pgsz);
 					if (actpg >= 0) //min page index is 0
@@ -668,8 +668,8 @@ public class Grid extends MeshElement {
 		if (_pgListener == null)
 			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
-		if (_model instanceof PageableModel) {
-			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
+		if (_model instanceof PagingEventPublisher) {
+			((PagingEventPublisher) _model).addPagingEventListener((PagingListener) _pgListener);
 		}
 
 		if (_pgImpListener == null)
@@ -679,8 +679,8 @@ public class Grid extends MeshElement {
 
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
-		if (_model instanceof PageableModel) {
-			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
+		if (_model instanceof PagingEventPublisher) {
+			((PagingEventPublisher) _model).removePagingEventListener((PagingListener) _pgListener);
 		}
 		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
 		pgi.removeEventListener("onPagingImpl", _pgImpListener);
@@ -767,9 +767,6 @@ public class Grid extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
-					if (_model instanceof PageableModel)
-						((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
-
 					GroupsModel g = getGroupsModel();
 					if (g != null)
 						g.removeGroupsDataListener(_groupsDataListener);
@@ -789,8 +786,6 @@ public class Grid extends MeshElement {
 				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
 				//ZK-3173: move the block here to avoid modifying pgi "again" before PagingEvent is handled
 				if (inPagingMold()) {
-					((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
-
 					//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
 					//must update paginal totalSize or exception in setActivePage
 					final Paginal pgi = getPaginal();

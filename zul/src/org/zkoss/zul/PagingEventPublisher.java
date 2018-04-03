@@ -24,9 +24,7 @@ import org.zkoss.zul.event.PagingListener;
  * @author Christopher
  * @see PagingEvent
  * @since 8.0.0
- * @deprecated As of release 8.5.2, please use {@link PageableModel} instead.
  */
-@Deprecated
 public interface PagingEventPublisher {
 	/**
 	 * A flag different from standard PagingEvent, differentiating standard 
