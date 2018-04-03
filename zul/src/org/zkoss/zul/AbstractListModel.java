@@ -34,7 +34,6 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.PagingListener;
-import org.zkoss.zul.ext.Pageable;
 import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
 
@@ -44,7 +43,7 @@ import org.zkoss.zul.ext.SelectionControl;
  * @author tomyeh
  */
 public abstract class AbstractListModel<E>
-		implements ListModel<E>, Selectable<E>, java.io.Serializable, Pageable, PagingEventPublisher {
+		implements ListModel<E>, Selectable<E>, java.io.Serializable, PageableModel {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractListModel.class);
 
@@ -359,7 +358,7 @@ public abstract class AbstractListModel<E>
 		
 		for (PagingListener p : _pagingListeners) {
 			try {
-				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, _activePage));
+				p.onEvent(new PagingEvent(PageableModel.INTERNAL_EVENT, null, this, _activePage));
 			} catch (Exception e) {
 				log.warn("Failed to publish internal paging event", e);
 			}
@@ -397,7 +396,7 @@ public abstract class AbstractListModel<E>
 		_activePage = pg;
 		for (PagingListener p : _pagingListeners) {
 			try {
-				p.onEvent(new PagingEvent(PagingEventPublisher.INTERNAL_EVENT, null, this, pg));
+				p.onEvent(new PagingEvent(PageableModel.INTERNAL_EVENT, null, this, pg));
 			} catch (Exception e) {
 				log.warn("Failed to publish internal paging event", e);
 			}

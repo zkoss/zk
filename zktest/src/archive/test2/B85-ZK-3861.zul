@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3861.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+			Mon Mar 12 14:07:11 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click Next button.
+        2. Check if there is a page change.
+        3. Click Previous button.
+        4. Check if there is a page change.
+        5. Click ChangeModel button.
+        6. Repeat steps 1-4
+    </label>
+    <hlayout>
+        <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B85_ZK_3861VM')" hflex="1">
+            <grid model="@load(vm.listModel)" mold="paging">
+                <columns>
+                    <column label="Locale (Grid)"/>
+                </columns>
+                <template name="model">
+                    <row>
+                        ${each}
+                    </row>
+                </template>
+            </grid>
+            <button label="Previous" onClick="@command('previousList')"/>
+            <button label="Next" onClick="@command('nextList')"/>
+            <button label="ChangeModel" onClick="@command('changeListModel')"/>
+        </div>
+        <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B85_ZK_3861VM')" hflex="1">
+            <listbox model="@load(vm.listModel)" mold="paging">
+                <listhead>
+                    <listheader label="Locale (Listbox)"/>
+                </listhead>
+                <template name="model">
+                    <listitem>
+                        <listcell label="${each}"/>
+                    </listitem>
+                </template>
+            </listbox>
+            <button label="Previous" onClick="@command('previousList')"/>
+            <button label="Next" onClick="@command('nextList')"/>
+            <button label="ChangeModel" onClick="@command('changeListModel')"/>
+        </div>
+        <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B85_ZK_3861VM')" hflex="1">
+            <tree model="@load(vm.treeModel)" mold="paging">
+                <treecols>
+                    <treecol label="Locale (Tree)"/>
+                </treecols>
+                <template name="model">
+                    <treeitem>
+                        <treerow>
+                            <treecell label="${each}"/>
+                        </treerow>
+                    </treeitem>
+                </template>
+            </tree>
+            <button label="Previous" onClick="@command('previousTree')"/>
+            <button label="Next" onClick="@command('nextTree')"/>
+            <button label="ChangeModel" onClick="@command('changeTreeModel')"/>
+        </div>
+    </hlayout>
+</zk>

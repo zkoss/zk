@@ -1297,7 +1297,7 @@ public class Listbox extends MeshElement {
 				PagingEvent pe = (PagingEvent) event;
 				int pgsz = pe.getPageable().getPageSize();
 				int actpg = pe.getActivePage();
-				if (PagingEventPublisher.INTERNAL_EVENT.equals(event.getName())) {
+				if (PageableModel.INTERNAL_EVENT.equals(event.getName())) {
 					if (pgsz > 0) //min page size is 1
 						_pgi.setPageSize(pgsz);
 					if (actpg >= 0) //min page index is 0
@@ -1350,8 +1350,8 @@ public class Listbox extends MeshElement {
 		if (_pgListener == null)
 			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
-		if (_model instanceof PagingEventPublisher) {
-			((PagingEventPublisher) _model).addPagingEventListener((PagingListener) _pgListener);
+		if (_model instanceof PageableModel) {
+			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 		}
 		if (_pgImpListener == null)
 			_pgImpListener = new PGImpListener();
@@ -1361,8 +1361,8 @@ public class Listbox extends MeshElement {
 
 	/** Removes the event listener for the onPaging event. */
 	private void removePagingListener(Paginal pgi) {
-		if (_model instanceof PagingEventPublisher) {
-			((PagingEventPublisher) _model).removePagingEventListener((PagingListener) _pgListener);
+		if (_model instanceof PageableModel) {
+			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 		}
 		pgi.removeEventListener(ZulEvents.ON_PAGING, _pgListener);
 		pgi.removeEventListener("onPagingImpl", _pgImpListener);
@@ -3900,5 +3900,22 @@ public class Listbox extends MeshElement {
 			((Pageable) _model).setPageSize(pgsz);
 		}
 		super.setPageSize(pgsz);
+	}
+	
+	public void onAfterRender() {
+		if (inPagingMold() && _model instanceof Pageable) {
+			Pageable m = (Pageable) _model;
+			if (m.getPageSize() > 0) { //min page size is 1
+				_pgi.setPageSize(m.getPageSize());
+			} else {
+				m.setPageSize(_pgi.getPageSize());
+			}
+			_pgi.setTotalSize(getDataLoader().getTotalSize());
+			if (m.getActivePage() >= 0) { //min page index is 0
+				_pgi.setActivePage(m.getActivePage());
+			} else {
+				m.setActivePage(_pgi.getActivePage());
+			}
+		}
 	}
 }
