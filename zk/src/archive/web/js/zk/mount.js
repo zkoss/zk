@@ -602,14 +602,14 @@ jq(function () {
 			oriEvent = target.originalEvent,
 			dEventOfsX = dEvent.offsetX,
 			dEventOfsY = dEvent.offsetY,
-			evtX = dEventOfsX ?
+			evtX = dEventOfsX != null ?
 				(zk.mobile ? dEventOfsX - targetPos.left : dEventOfsX) :
 				(oriEvent ? oriEvent.layerX - targetPos.left : undefined),
-			evtY = dEventOfsY ?
+			evtY = dEventOfsY != null ?
 				(zk.mobile ? dEventOfsY - targetPos.top : dEventOfsY) :
 				(oriEvent ? oriEvent.layerY - targetPos.top : undefined);
 		if ((target != body && target != body.parentNode)
-				&& ((!target.clientWidth && !target.clientHeight) || evtX < target.clientWidth && evtY < target.clientHeight)
+				&& ((!target.clientWidth && !target.clientHeight) || evtX < target.offsetWidth && evtY < target.offsetHeight)
 				&& (evt.pageX < body.scrollWidth && evt.pageY < body.scrollHeight)) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
