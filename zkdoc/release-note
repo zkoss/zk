@@ -13,6 +13,7 @@ ZK 8.5.2
   ZK-3915: Automatic session timeout causes exceptions with websockets enabled
   ZK-3503: double right-click detected in FF
   ZK-3914: listbox empty message sizing with hidden columns (wrong colspan)
+  ZK-3771: AFTER_PAGE_DETACHED callback doesn't work for Window component
 
 * Upgrade Notes
 
