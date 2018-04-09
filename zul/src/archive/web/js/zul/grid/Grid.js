@@ -23,7 +23,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else {
 				if (wgt.columns) {
 					for (var w = wgt.columns.firstChild; w; w = w.nextSibling)
-						if (w.isVisible())
 							colspan++;
 				}
 				empty.colSpan = colspan || 1;

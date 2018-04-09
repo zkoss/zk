@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3914.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Mar 30 14:56:30 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-listbox-emptybody-content,
+		.z-grid-emptybody-content {
+		text-align: center;
+		border: 1px solid red;
+		}
+	</style>
+
+	<label multiline="true">
+		1. The width of empty message cell should be the same as the width of widget
+	</label>
+	<separator/>
+	<label>Grid</label>
+	<grid emptyMessage="No data to show at this moment.">
+		<columns>
+			<column label="column1" visible="false"/>
+			<column label="column2"/>
+		</columns>
+	</grid>
+	<separator/>
+	<label>Listbox</label>
+	<listbox emptyMessage="No data to show at this moment.">
+		<listhead>
+			<listheader label="listheader1" visible="false"/>
+			<listheader label="listheader2"/>
+		</listhead>
+	</listbox>
+</zk>

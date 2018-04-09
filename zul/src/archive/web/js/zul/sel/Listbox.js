@@ -30,7 +30,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			} else {
 				if (wgt.listhead) {
 					for (var w = wgt.listhead.firstChild; w; w = w.nextSibling)
-						if (w.isVisible())
 							colspan++;
 				}
 				empty.colSpan = colspan || 1;
