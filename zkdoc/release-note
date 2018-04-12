@@ -18,6 +18,18 @@ ZK 8.5.2
 * Upgrade Notes
 
    --------
+ZK 8.5.1.2
+Apr 10, 2018
+* Features
+
+* Bugs
+  ZK-3916: Automatic session timeout redirects unreliable with websockets enabled
+  ZK-3915: Automatic session timeout causes exceptions with websockets enabled
+  ZK-3878: missing import org.zkoss.zk.ui.sys in zkex osgi bundle
+
+* Upgrade Notes
+
+   --------
 ZK 8.5.1.1
 Mar 20, 2018
 * Features
