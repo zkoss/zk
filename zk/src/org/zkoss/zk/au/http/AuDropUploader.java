@@ -52,6 +52,7 @@ import org.zkoss.sound.AAudio;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.media.Media;
+import org.zkoss.video.AVideo;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
@@ -245,6 +246,13 @@ public class AuDropUploader implements AuExtension {
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
 					return fi.isInMemory() ? new AAudio(name, fi.get()) : new StreamAudio(name, fi, ctypelc);
+				} catch (Throwable ex) {
+					if (log.isDebugEnabled())
+						log.debug("Unknown file format: " + ctype);
+				}
+			} else if (ctypelc.startsWith("video/")) {
+				try {
+					return fi.isInMemory() ? new AVideo(name, fi.get()) : new StreamVideo(name, fi, ctypelc);
 				} catch (Throwable ex) {
 					if (log.isDebugEnabled())
 						log.debug("Unknown file format: " + ctype);
@@ -445,6 +453,37 @@ public class AuDropUploader implements AuExtension {
 			_ctype = ctype;
 		}
 
+		public java.io.InputStream getStreamData() {
+			try {
+				return _fi.getInputStream();
+			} catch (IOException ex) {
+				throw new UiException("Unable to read " + _fi, ex);
+			}
+		}
+
+		public String getFormat() {
+			if (_format == null) {
+				_format = ContentTypes.getFormat(getContentType());
+			}
+			return _format;
+		}
+
+		public String getContentType() {
+			return _ctype != null ? _ctype : _fi.getContentType();
+		}
+	}
+	
+	private static class StreamVideo extends AVideo {
+		private final FileItem _fi;
+		private String _format;
+		private String _ctype;
+		
+		public StreamVideo(String name, FileItem fi, String ctype) throws IOException {
+			super(name, DYNAMIC_STREAM);
+			_fi = fi;
+			_ctype = ctype;
+		}
+		
 		public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();

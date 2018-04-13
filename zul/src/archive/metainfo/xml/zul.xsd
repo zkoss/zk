@@ -609,6 +609,7 @@
 			<xs:element ref="anchorlayout"/>
 			<xs:element ref="apply"/>
 			<xs:element ref="audio" />
+			<xs:element ref="video" />
 			<xs:element ref="bandbox" />
 			<xs:element ref="biglistbox" />
 			<xs:element ref="borderlayout" />
@@ -706,6 +707,7 @@
 				<xs:element ref="anchorlayout"/>
 				<xs:element ref="apply"/>
 				<xs:element ref="audio" />
+				<xs:element ref="video" />
 				<xs:element ref="bandbox" />
 				<xs:element ref="biglistbox" />
 				<xs:element ref="borderlayout" />
@@ -896,6 +898,44 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<xs:simpleType name="audioPreloadAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none" />
+					<xs:enumeration value="auto" />
+					<xs:enumeration value="metadata" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<!-- video -->
+	<xs:element name="video" type="videoType" />
+	<xs:complexType name="videoType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="dimBackground" type="booleanType" use="optional" />
+		<xs:attribute name="muted" type="booleanType" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="poster" type="xs:string" use="optional" />
+		<xs:attribute name="crossorigin" type="xs:string" use="optional" />
+		<xs:attribute name="preload" type="videoPreloadAttrType" use="optional" />
+		<xs:attribute name="controls" type="booleanType" use="optional" />
+		<xs:attribute name="loop" type="booleanType" use="optional" />
+		<xs:attribute name="autoplay" type="booleanType" use="optional" />
+		<xs:attribute name="playsinline" type="booleanType" use="optional" />
+		<xs:attribute name="playing" type="booleanType" use="optional" />
+		<xs:attribute name="clipToFit" type="booleanType" use="optional" />
+		<xs:attribute name="currentTime" type="doubleType" use="optional" />
+		<xs:attribute name="volume" type="doubleType" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
+		<xs:attribute name="onStateChange" type="xs:string" use="optional" />
+		<xs:attribute name="playbackRate" type="doubleType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<xs:simpleType name="videoPreloadAttrType">
 		<xs:union>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
