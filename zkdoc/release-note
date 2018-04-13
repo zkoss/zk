@@ -15,6 +15,7 @@ ZK 8.5.2
   ZK-3914: listbox empty message sizing with hidden columns (wrong colspan)
   ZK-3771: AFTER_PAGE_DETACHED callback doesn't work for Window component
   ZK-3788: frozen grid doesn't show scrollbar af first loading
+  ZK-3736: Datebox popup is set to visible:false when closed by another popup closing itself
 
 * Upgrade Notes
 

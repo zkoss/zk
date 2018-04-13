@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3736.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Feb 01 9:58 AM:39 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <window>
+        <label multiline="true">
+            1. click the button popup test.
+            2. click the calendar icon.
+            3. click the area outside of the calendar.
+            4. click popup again.
+            5. click the calendar icon, and you should see the calendar again.
+
+        </label>
+        <button popup="datePopup" label="popup test"/>
+        <popup id="datePopup" width="500px">
+            <vlayout spacing="15px">
+                <hlayout spacing="5px" valign="middle" hflex="min">
+                    <datebox id="dueDateStartRangeDbox" />
+                </hlayout>
+            </vlayout>
+        </popup>
+    </window>
+</zk>
