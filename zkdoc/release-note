@@ -16,6 +16,7 @@ ZK 8.5.2
   ZK-3771: AFTER_PAGE_DETACHED callback doesn't work for Window component
   ZK-3788: frozen grid doesn't show scrollbar af first loading
   ZK-3736: Datebox popup is set to visible:false when closed by another popup closing itself
+  ZK-3738: Tree SelectEvent.getSelectedObjects() inconsistent with TreeModel.getSelection()
 
 * Upgrade Notes
 
