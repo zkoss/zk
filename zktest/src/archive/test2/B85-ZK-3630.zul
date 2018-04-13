@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3630.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jan 31 11:27 AM:03 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <div apply="org.zkoss.bind.BindComposer">
+        <zscript><![CDATA[
+]]></zscript>
+        <label multiline="true">
+            1. Before fixing the bug, the template in the listbox cannot put a choose/when in the listListBox.
+            2. At first you will see 3 button in listbox and 3 button in grid.
+            3. Click the button labeled by "change", it will change the B85_ZK_3630VM, and show 5 buttons in grid and 5 buttons in listbox.
+            4. Click the button labeled by "back", and it will go back to the status described as line 2.
+
+        </label>
+
+        <!-- an exception happens in below listbox
+         -->
+        <window viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_shadowTestVM')">
+
+            <button id="changeBtn" label="change" onClick="@command('changeModel')"/>
+            <button id="backBtn" label="back" onClick="@command('back')"/>
+
+            <grid width="400px" model="@load(vm.model)">
+                <columns>
+                    <column label="index"/>
+                    <column label="name"/>
+                </columns>
+                <template name="model">
+                    <choose>
+                        <when test="@load(each.show)">
+                            <row>
+                                <button label="@load(each.text)"/>
+                            </row>
+                        </when>
+                        <otherwise>
+                            <row>
+                                <label value="@load(each.text)"/>
+                            </row>
+                        </otherwise>
+                    </choose>
+                </template>
+            </grid>
+
+
+            <listbox width="400px" model="@load(vm.model)">
+                <!--@template(each eq 'item1' ? 'editable' : 'readonly')">-->
+                <!--<template name="editable">-->
+                <!--<listitem label="editable"/>-->
+                <!--</template>-->
+                <!--<template name="readonly">-->
+                <!--<listitem label="readonly"/>-->
+                <!--</template>-->
+
+
+                <template name="model">
+                    <choose>
+                        <!--<when test="${each eq 'last'}">-->
+                        <when test="@init(each.show)">
+                            <listitem>
+                                <listcell>
+                                    <button label="@load(each.text)" />
+                                </listcell>
+                            </listitem>
+                        </when>
+                        <otherwise>
+                            <listitem>
+                                <listcell label="@load(each.text)"/>
+                            </listitem>
+                        </otherwise>
+
+                    </choose>
+                </template>
+            </listbox>
+
+
+
+        </window>
+    </div>
+</zk>
