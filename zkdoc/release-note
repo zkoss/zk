@@ -23,6 +23,7 @@ ZK 8.5.2
   ZK-3884: a grid with a frozen column cuts the text in the last column
   ZK-3868: failing format patterns
   ZK-3749: ListElResolver does not support standard EL syntax
+  ZK-3871: shadow components inside a Listbox doesn't work in nested way
 
 * Upgrade Notes
 

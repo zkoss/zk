@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3871-if.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jan 31 11:27 AM:03 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <div apply="org.zkoss.bind.BindComposer">
+        <zscript><![CDATA[
+]]></zscript>
+        <label multiline="true">
+            1. Before fixing the bug, the template in the listbox cannot use a nested shadow elements in collection
+            component.
+            2. At first you will see 3 buttons in listbox and 2 buttons for control.
+            3. Click the button labeled by "change", it will change the B85_ZK_3871VM, and show 5 buttons in grid and 5
+            buttons in listbox.
+            4. Click the button labeled by "back", and it will go back to the status described as line 2.
+            5. This is a test case for nested if in listbox (originally, two-nested-if works but three-nested-if fail).
+
+        </label>
+
+        <!-- an exception happens in below listbox
+         -->
+        <window viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3871VM')">
+            <button id="changeBtn" label="change" onClick="@command('changeModel')"/>
+            <button id="backBtn" label="back" onClick="@command('back')"/>
+
+            <listbox width="400px" model="@load(vm.model)">
+                <template name="model">
+                    <if test="@load(each.show)">
+                        <if test="@load(each.show)">
+                            <if test="@load(each.show)">
+                                <listitem>
+                                    <listcell>
+                                        <button label="@load(each.text)"/>
+                                    </listcell>
+                                </listitem>
+                            </if>
+                        </if>
+                    </if>
+                </template>
+            </listbox>
+        </window>
+    </div>
+</zk>
