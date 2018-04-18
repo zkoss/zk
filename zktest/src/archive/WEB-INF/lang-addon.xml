@@ -80,4 +80,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<macro-uri>/WEB-INF/tool/debugger.zul</macro-uri>
 		<inline>true</inline>
 	</component>
+
+	<component>
+		<component-name>teststeps</component-name>
+		<extends>label</extends>
+		<component-class>org.zkoss.zktest.comp.Teststeps</component-class>
+	</component>
 </language-addon>
