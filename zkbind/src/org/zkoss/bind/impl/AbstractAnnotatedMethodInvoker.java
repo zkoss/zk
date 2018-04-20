@@ -35,6 +35,7 @@ import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.annotation.AfterCompose;
+import org.zkoss.bind.annotation.Destroy;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -166,8 +167,13 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 						signs.add(sign);
 					}
 
-					//super first
-					methods.add(0, currm);
+					if (annotation.annotationType() == Destroy.class) {
+						//super last
+						methods.add(currm);
+					} else {
+						//super first
+						methods.add(0, currm);
+					}
 				}
 				//check if we should take care super's annotated methods also.
 				curr = (annotation != null && shouldLookupSuperclass(annotation)) ? curr.getSuperclass() : null;

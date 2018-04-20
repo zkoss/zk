@@ -100,6 +100,15 @@ public interface Binder {
 	public void init(Component root, Object viewModel, Map<String, Object> initArgs);
 
 	/**
+	 * Destroys the binder with a root component and viewModel object.
+	 * You should never call this if you use {@link AnnotateBinder} and zk annotation
+	 * @param root root component of binder
+	 * @param viewModel viewModel object
+	 * @since 8.5.2
+	 */
+	public void destroy(Component comp, Object viewModel);
+
+	/**
 	 * Load the load-binding of the component. <br/>
 	 * By calling this method, all load-bindings in the component (including load-bindings in its descendant) will reload the value to components. 
 	 *   
