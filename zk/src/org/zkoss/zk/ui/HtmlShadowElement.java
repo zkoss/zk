@@ -936,7 +936,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				HtmlShadowElement asShadow = asShadow(currentInfo);
 				if (isAncestor(this, asShadow)) { // do only my descendent
 					Component lastChild = asShadow.getLastChild();
-					if (lastChild != null)
+					if (lastChild != null && asShadow(lastChild)._nextInsertion == null)
 						asShadow(lastChild)._nextInsertion = child;
 				} else if (asShadow.getShadowHostIfAny() != getShadowHostIfAny()) { // not my ancestor, it may create by template and another host
 					if (_nextInsertion == null)
