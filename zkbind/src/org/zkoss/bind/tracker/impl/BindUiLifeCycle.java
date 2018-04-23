@@ -198,9 +198,11 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			}
 		});
 		//ZK-1148, add a @destroy annotation method.
-		if (((AbstractComponent) comp).getAnnotations("viewModel") != null) {
+		if (!((AbstractComponent) comp).getAnnotations("viewModel").isEmpty()) {
 			Binder binder = BinderUtil.getBinder(comp);
-			binder.destroy(comp, binder.getViewModel());
+			if (binder != null) {
+				binder.destroy(comp, binder.getViewModel());
+			}
 		}
 		//ZK-2022, make it is in queue of remove.
 		comp.setAttribute(REMOVE_MARK, Boolean.TRUE);
