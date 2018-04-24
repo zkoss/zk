@@ -12,6 +12,7 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ShadowElement;
@@ -75,19 +76,10 @@ public class ShadowElementsCtrl {
 			return shadows;
 		int length = shadows.length;
 
-		// fixed ZK-3046
+		// fixed ZK-3046, ZK-3871
 		//to force init and load
-		for (Component shadow : shadows) {
-			if (shadow instanceof ShadowElement) {
-				ShadowElement se = (ShadowElement) shadow;
-				if (se.getDistributedChildren().isEmpty()) {
-					if (((ShadowElementCtrl) se).isDynamicValue()) {
-						Events.sendEvent(new Event("onBindInit", (Component) se));
-						Events.sendEvent(new Event("onBindingReady", (Component) se));
-					}
-				}
-			}
-		}
+		doBindChildrenInFilter(shadows);
+
 		if (length == 1) {
 			if (shadows[0] instanceof ShadowElement) {
 				ShadowElement se = ((ShadowElement) shadows[0]);
@@ -127,5 +119,22 @@ public class ShadowElementsCtrl {
 			return list.toArray(new Component[0]);
 		}
 		return shadows;
+	}
+
+	private static void doBindChildrenInFilter(Component[] shadows) {
+		for (Component shadow : shadows) {
+			if (shadow instanceof ShadowElement) {
+				ShadowElement se = (ShadowElement) shadow;
+				if (!se.getDistributedChildren().isEmpty() || !((ShadowElementCtrl) se).isDynamicValue())
+					continue;
+				List<Component> children = shadow.getChildren();
+				if (children.size() > 0) {
+					doBindChildrenInFilter(children.toArray(new Component[children.size()]));
+				} else {
+					Events.sendEvent(new Event("onBindInit", (Component) se));
+					Events.sendEvent(new Event("onBindingReady", (Component) se));
+				}
+			}
+		}
 	}
 }
