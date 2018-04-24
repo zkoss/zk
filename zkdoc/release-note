@@ -32,6 +32,7 @@ Apr 10, 2018
   ZK-3916: Automatic session timeout redirects unreliable with websockets enabled
   ZK-3915: Automatic session timeout causes exceptions with websockets enabled
   ZK-3878: missing import org.zkoss.zk.ui.sys in zkex osgi bundle
+  ZK-3635: Blur after tabbing out of non-input widget in bandpopup closes the popup
 
 * Upgrade Notes
 
