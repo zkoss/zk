@@ -92,6 +92,7 @@ ZK 8.5.2
   ZK-3969: MVVM viewmodel name bleed into include / other idspace
   ZK-3968: the widget of a custom component that implements IdSpace doesn't have _fellows initialized
   ZK-3973: potentially locked resource files
+  ZK-3919: NPE fileupload when using Websockets (Tomcat)
 
 * Upgrade Notes
 
