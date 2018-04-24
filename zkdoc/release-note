@@ -24,6 +24,7 @@ ZK 8.5.2
   ZK-3868: failing format patterns
   ZK-3749: ListElResolver does not support standard EL syntax
   ZK-3871: shadow components inside a Listbox doesn't work in nested way
+  ZK-3894: sendRedirect from DesktopInit omits contextPath
 
 * Upgrade Notes
 

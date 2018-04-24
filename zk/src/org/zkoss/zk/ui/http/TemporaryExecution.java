@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 
 	public void sendRedirect(String uri) { //getUiEngine not ready yet
 		try {
-			((HttpServletResponse) getNativeResponse()).sendRedirect(uri != null ? uri : "");
+			((HttpServletResponse) getNativeResponse()).sendRedirect(uri != null ? encodeURL(uri) : "");
 			setVoided(true);
 		} catch (IOException ex) {
 			throw new UiException(ex);
