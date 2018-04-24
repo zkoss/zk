@@ -36,12 +36,19 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
             <listbox width="400px" model="@load(vm.model)">
                 <template name="model">
-                    <if test="@load(each.show)">
-                        <if test="@load(each.show)">
+                    <if test="@load(true)">
+                        <if test="@load(true)">
                             <if test="@load(each.show)">
                                 <listitem>
                                     <listcell>
                                         <button label="@load(each.text)"/>
+                                    </listcell>
+                                </listitem>
+                            </if>
+                            <if test="@load(!each.show)">
+                                <listitem>
+                                    <listcell>
+                                        <label value="@load(each.text)"/>
                                     </listcell>
                                 </listitem>
                             </if>
