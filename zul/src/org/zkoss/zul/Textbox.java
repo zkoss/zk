@@ -163,6 +163,30 @@ public class Textbox extends InputElement {
 		}
 	}
 
+	/** Returns whether it is submitByEnter,
+	 * If submitByEnter is true, press enter will fire onOK event instead of move to next line,
+	 * you should press shift + enter if you want to move to next line.
+	 * <p>Default: false.
+	 * @return true if it is submitByEnter.
+	 * @since 8.5.2
+	 */
+	public boolean isSubmitByEnter() {
+		return _auxinf != null && _auxinf.submitByEnter;
+	}
+
+	/** Sets whether it is submitByEnter.
+	 * If submitByEnter is true, press enter will fire onOK event instead of move to next line,
+	 * you should press shift + enter if you want to move to next line.
+	 * @param submitByEnter whether it is submitByEnter
+	 * @since 8.5.2
+	 */
+	public void setSubmitByEnter(boolean submitByEnter) {
+		if ((_auxinf != null && _auxinf.submitByEnter) != submitByEnter) {
+			initAuxInfo().submitByEnter = submitByEnter;
+			smartUpdate("submitByEnter", isSubmitByEnter());
+		}
+	}
+
 	//Cloneable//
 	public Object clone() {
 		final Textbox clone = (Textbox) super.clone();
@@ -220,6 +244,15 @@ public class Textbox extends InputElement {
 				return ((Textbox) cmp).isMultiline();
 			}
 		});
+		_properties.put("submitByEnter", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean submitByEnter) {
+				((Textbox) cmp).setSubmitByEnter(submitByEnter);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Textbox) cmp).isSubmitByEnter();
+			}
+		});
 	}
 
 	public PropertyAccess getPropertyAccess(String prop) {
@@ -241,6 +274,7 @@ public class Textbox extends InputElement {
 		final String type = getType();
 		if (!TEXT.equals(type))
 			renderer.render("type", type);
+		render(renderer, "submitByEnter", isSubmitByEnter());
 	}
 
 	public String getZclass() {
@@ -260,6 +294,7 @@ public class Textbox extends InputElement {
 		private int rows = 1;
 		private boolean multiline;
 		private boolean tabbable;
+		private boolean submitByEnter;
 
 		public Object clone() {
 			try {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3875.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Mar 28 11:23:34 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Focus in textbox and press Enter
+        2. See the log "onOK" and cusor didn't move
+        3. Open Network and see the onOK event send
+        3. Focus in textbox and press Shift + Enter
+        4. Cusor move to the new line and no new log
+        5. Click button
+        6. Focus in textbox and press Enter
+        7. Cusor move to the new line and no new log
+    </label>
+    <separator/>
+    <button label="TurnOffSubmitByEnter" onClick="tb.setSubmitByEnter(false)"/>
+    <separator/>
+    <textbox id="tb" multiline="true" submitByEnter="true" rows="5" onOK='Clients.log("onOK")'/>
+</zk>

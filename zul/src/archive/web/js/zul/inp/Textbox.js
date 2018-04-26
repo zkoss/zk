@@ -71,7 +71,15 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.type = type;
-		}
+		},
+		/** Returns whether it is submitByEnter.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is submitByEnter.
+		 * @param boolean submitByEnter
+		 */
+		submitByEnter: null
 	},
 	bind_: function () {
 		this.$supers(zul.inp.Textbox, 'bind_', arguments);
@@ -93,5 +101,12 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		if (this._multiline)
 			html += ' rows="' + this._rows + '"';
 		return html;
+	},
+	doKeyDown_: function (evt, simulated) {
+		if (evt.keyCode == 13 && this._submitByEnter && this._multiline && !evt.shiftKey) {
+			evt.stop();
+			this.fire('onOK');
+		}
+		this.$supers('doKeyDown_', arguments);
 	}
 });
