@@ -76,17 +76,8 @@ public final class AstIdentifier extends SimpleNode {
             }
         }
 
-        // EL Resolvers
-        ctx.setPropertyResolved(false);
-        ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
-        ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
-        Object result = ctx.getELResolver().getValue(ctx, null, this.image);
-        if (ctx.isPropertyResolved()) {
-            return result;
-        }
-
         // Import
-        result = ctx.getImportHandler().resolveClass(this.image);
+        Object result = ctx.getImportHandler().resolveClass(this.image);
         if (result != null) {
             return new ELClass((Class<?>) result);
         }
@@ -103,6 +94,17 @@ public final class AstIdentifier extends SimpleNode {
             } catch (SecurityException e) {
                 throw new ELException(e);
             }
+        }
+
+        // EL Resolvers
+        ctx.setPropertyResolved(false);
+        ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
+        ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
+        result = ctx.getELResolver().getValue(ctx, null, this.image);
+        if (ctx.isPropertyResolved()) {
+            if (result instanceof Class)
+                return new ELClass((Class<?>) result);
+            return result;
         }
 
         //user can set property as resolved to hide null type exception, default is true
