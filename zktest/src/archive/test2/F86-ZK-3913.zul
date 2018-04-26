@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<?script src="./js/zk-3913-PDF417lib.js"?>-->
+<!--
+F86-ZK-3913.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Apr 10 6:23 PM:38 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <window viewModel="@id('vm')@init('org.zkoss.zktest.test2.F86_ZK_3913VM')">
+
+
+        <label multiline="true">
+            1. At the combobox, you can change the type you like.
+            2. Click the button under "Value:" you want to choose, you can render the barcode as the value you choose.
+            3. Click the button under "Change_Other_Attribute", you can change the barcode attribute.
+        </label>
+        <div>
+            value:
+            <label value="@load(vm.value)"/>
+        </div>
+        <div height="120px">
+            <barcode id="brcode" type="@load(vm.type)" value="@load(vm.value)" height="@load(vm.height)"
+                     displayValue="@load(vm.displayValue)" fontSize="@load(vm.fontSize)"
+                     barWidth="@load(vm.barWidth)"/>
+        </div>
+        <separator/>
+        <div height="150px" width="200px">
+            <barcode id="brcode2" type="qr" value="@load(vm.value)" vflex="1"
+                     displayValue="@load(vm.displayValue)" fontSize="@load(vm.fontSize)"
+                     barWidth="@load(vm.barWidth)"/>
+        </div>
+        <div>
+            custom library
+        </div>
+        <div>
+            <combobox model="@load(vm.types)" selectedItem="@bind(vm.type)">
+                <template name="model">
+                    <comboitem label="@load(each)"/>
+                </template>
+            </combobox>
+        </div>
+        <div height="120px">
+            <barcode type="pdf417" value="@load(vm.value)" height="@load(vm.height)"
+                     displayValue="@load(vm.displayValue)" fontSize="@load(vm.fontSize)"
+                     barWidth="@load(vm.barWidth)"/>
+        </div>
+        <div style="text-align: left;">
+            <div width="100px">
+                <label value="Value:" width="100px" style="text-align: left;"/>
+            </div>
+            <button label="1234" onClick="@command('setValue1234')" width="200px"/>
+            <button label="123456789012" onClick="@command('setValue123456789012')" width="200px"/>
+            <button id="act1" label="https://www.zkoss.org" onClick="@command('setValueZKWeb')" width="200px"/>
+        </div>
+        <div style="text-align: left;">
+            <div width="100px">
+                <label value="Change_Other_Attribute:" width="100px" style="text-align: left;"/>
+            </div>
+            <button label="height" onClick="@command('changeHeight')" width="150px"/>
+            <button label="displayValue" onClick="@command('changeDisplayValue')" width="150px"/>
+            <button label="fontSize" onClick="@command('changeFontSize')" width="150px"/>
+            <button label="barWidth" onClick="@command('changeBarWidth')" width="150px"/>
+        </div>
+        <!--<script src="./js/zk-3913-l.js"></script>-->
+    </window>
+</zk>
