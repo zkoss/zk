@@ -75,6 +75,14 @@ public final class AstIdentifier extends SimpleNode {
                 return expr.getValue(ctx.getELContext());
             }
         }
+        
+        ctx.setPropertyResolved(false);
+        ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
+        ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
+        // ctx.getELResolver().getValue(ctx, null, this.image) must be called before import,
+        // because the first time to call PathELResolver's getValue(ELContext ctx, Object base, Object property),
+        // argument base must to be null to initialize PathELResolver's _numOfKids,
+        Object elResult = ctx.getELResolver().getValue(ctx, null, this.image);
 
         // Import
         Object result = ctx.getImportHandler().resolveClass(this.image);
@@ -97,10 +105,7 @@ public final class AstIdentifier extends SimpleNode {
         }
 
         // EL Resolvers
-        ctx.setPropertyResolved(false);
-        ctx.putContext(AstIdentifier.class, Integer.valueOf(jjtGetNumSiblings())); //20110909, henrichen: might be one variable series, see AstValue
-        ctx.putContext(Node.class, this); //20110909, henrichen: might be one variable series, see AstValue
-        result = ctx.getELResolver().getValue(ctx, null, this.image);
+        result = elResult;
         if (ctx.isPropertyResolved()) {
             if (result instanceof Class)
                 return new ELClass((Class<?>) result);
