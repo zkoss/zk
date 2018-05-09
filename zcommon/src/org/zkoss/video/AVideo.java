@@ -34,7 +34,7 @@ import java.net.URL;
  * you have to extend this class, and provide the implementation to
  * serialize and deserialize {@link #_isdata}.
  *
- * @since 8.5.2
+ * @since 8.6.0
  */
 public class AVideo implements Video, java.io.Serializable {
 	/**

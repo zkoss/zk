@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-F85-ZK-3845-Video.zul
+F86-ZK-3845.zul
 
         Purpose:
                 
@@ -13,8 +13,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<video id="pl" width="600px" src="F85-ZK-3845-Video.mp4" controls="true"
-		   poster="img/F85-ZK-3845-Video.png" loop="true"
+	<video id="pl" width="600px" src="F86-ZK-3845.mp4" controls="true"
+		   poster="img/F86-ZK-3845.png" loop="true"
 		   onStateChange="Clients.log(event.state.toString())"/>
 	
 	<separator/>
@@ -34,7 +34,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 	<button label="setMuted(true)" onClick="pl.setMuted(true)"/>
 	<button label="setPlaybackRate(-1)" onClick="pl.setPlaybackRate(-1)"/>
 	<button label="setDimBackground(true)" onClick='pl.setDimBackground(true)'/>
-	<button label="ChangeSrc" onClick='pl.setSrc("F85-ZK-3845-Video.webm")'/>
+	<button label="ChangeSrc" onClick='pl.setSrc("F86-ZK-3845.webm")'/>
 	<button xmlns:w="client" label="Fullscreen" w:onClick="zk.$('$pl').enableFullScreen()"/>
 	
 	<separator/>
