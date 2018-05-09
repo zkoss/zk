@@ -1,4 +1,12 @@
    --------
+ZK 8.6.0
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+   --------
 ZK 8.5.2
 * Features
   ZK-1148: Able to handle the destroyed of a ViewModel.
