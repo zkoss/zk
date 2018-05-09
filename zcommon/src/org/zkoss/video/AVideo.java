@@ -41,7 +41,7 @@ public class AVideo implements Video, java.io.Serializable {
 	 * Used if you want to implement a media whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 *
-	 * @see #AVideo(String, , InputStream)
+	 * @see #AVideo(String, InputStream)
 	 */
 	protected static final InputStream DYNAMIC_STREAM = new NullInputStream();
 	/**
@@ -96,7 +96,7 @@ public class AVideo implements Video, java.io.Serializable {
 	 */
 	public AVideo(String name, InputStream isdata) throws IOException {
 		if (isdata == null)
-			throw new IllegalArgumentException("null stream");
+			throw new IllegalArgumentException("stream cannot be null");
 		_name = name;
 		_isdata = isdata;
 		_data = null;
@@ -109,7 +109,7 @@ public class AVideo implements Video, java.io.Serializable {
 	 */
 	public AVideo(URL url) {
 		if (url == null)
-			throw new IllegalArgumentException("null url");
+			throw new IllegalArgumentException("url cannot be null");
 		_name = getName(url);
 		_url = url;
 		_isdata = DYNAMIC_STREAM;
@@ -122,7 +122,7 @@ public class AVideo implements Video, java.io.Serializable {
 	 */
 	public AVideo(File file) {
 		if (file == null)
-			throw new IllegalArgumentException("null url");
+			throw new IllegalArgumentException("file cannot be null");
 		_name = file.getName();
 		_file = file;
 		_isdata = DYNAMIC_STREAM;
@@ -153,10 +153,10 @@ public class AVideo implements Video, java.io.Serializable {
 	private String getName(URL url) {
 		String name = url.getPath();
 		if (name != null) {
-			{
-				final int j = name.lastIndexOf(File.pathSeparatorChar);
-				if (j >= 0) name = name.substring(j + 1);
-			}
+			
+			final int i = name.lastIndexOf(File.pathSeparatorChar);
+			if (i >= 0) name = name.substring(i + 1);
+			
 			if (File.pathSeparatorChar != '/') {
 				final int j = name.lastIndexOf('/');
 				if (j >= 0) name = name.substring(j + 1);
