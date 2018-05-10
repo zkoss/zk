@@ -35,6 +35,7 @@ ZK 8.5.2
   ZK-3698: NPE in Decimalbox.setValue(String)
   ZK-3905: listbox selectAll checkbox stops synchronizing
   ZK-3865: incorrect flex calculation with margins
+  ZK-3928: tree item selection changes scroll position
 
 * Upgrade Notes
 
