@@ -21,6 +21,7 @@ ZK 8.5.2
   ZK-3852: chosenbox supports inplace edit
   ZK-3955: Allow custom-attribute setting for checkmarkDeselectOthers
   ZK-3953: update zel implementation
+  ZK-3564: Slider snap to multiple of step when dragging
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception

@@ -349,7 +349,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	_endDrag: function (dg) {
 		var widget = dg.control,
-			pos = widget._realpos();
+			pos = widget._constraintPos(widget._realpos());
 
 		widget.fire('onScroll', widget.isDecimal() ? {decimal: pos} : pos);
 
@@ -380,7 +380,15 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	},
 	_constraintPos: function (pos) {
-		return pos < this._minpos ? this._minpos : (pos > this._maxpos ? this._maxpos : pos);
+		var step = _getStep(this),
+			max = this._maxpos;
+
+		if (pos < max) {
+			pos -= (pos - this._minpos) % step;
+		} else {
+			pos = max;
+		}
+		return pos;
 	},
 	_getSteppedPos: function (pos) {
 		var minpos = this._minpos,
