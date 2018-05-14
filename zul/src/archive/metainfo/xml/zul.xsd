@@ -1017,6 +1017,17 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
+	<!-- barScanner -->
+	<xs:element name="barScanner" type="barScannerType" />
+	<xs:complexType name="barScannerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="type" type="xs:string" use="optional" />
+		<xs:attribute name="contScan" type="booleanType" use="optional" />
+		<xs:attribute name="scanRate" type="doubleType" use="optional" />
+		<xs:attribute name="open" type="booleanType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
 	<!-- biglistbox -->
 	<xs:element name="biglistbox" type="biglistboxType" />
 	<xs:complexType name="biglistboxType" mixed="true">
