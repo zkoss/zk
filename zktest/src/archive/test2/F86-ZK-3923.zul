@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3923.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Apr 26 12:11 PM:17 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <window viewModel="@id('vm')@init('org.zkoss.zktest.test2.F86_ZK_3923VM')">
+        <label multiline="true">
+            1. use mobile, open "http://localhost:8080/zktest/img/qrcode.png",
+               let the camera scan the qr code,
+               you should see {"type":"qr","value":"https:\/\/www.zkoss.org\/"} at client log.
+            2. use mobile, open "http://localhost:8080/zktest/img/qrcode.png",
+               let the camera scan the barcode code,
+               you should see {"type":"code128","value":"https:\/\/www.zkoss.org\/"}
+
+        </label>
+        <div height="800px">
+            <barScanner type="@bind(vm.type)" height="@bind(vm.height)" width="600px" contScan="@bind(vm.contScan)"
+                        scanRate="@bind(vm.scanRate)" open="@bind(vm.open)"
+                        onDetected='Clients.log(event.getData().toString())'/>
+        </div>
+
+        <hlayout>
+            type:
+            <label value="@load(vm.type)"/>
+            cont:
+            <label value="@load(vm.contScan)"/>
+            rate:
+            <label value="@load(vm.scanRate)"/>
+            open:
+            <label value="@load(vm.open)"/>
+        </hlayout>
+        <hlayout>
+            <button label="change type" onClick="@command('changeType')"/>
+            <button label="change cont" onClick="@command('changeContScan')"/>
+            <button label="change rate" onClick="@command('changeScanRate')"/>
+            <button label="change open" onClick="@command('changeOpen')"/>
+            <button label="change high" onClick="@command('changeHeight')"/>
+        </hlayout>
+    </window>
+    <script>
+        window.onload = function () {
+        bs = jq('.z-barscanner').zk.$();
+        }
+    </script>
+</zk>
