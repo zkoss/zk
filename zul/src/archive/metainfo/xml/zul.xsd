@@ -1017,6 +1017,18 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
+	<!-- barcodescanner -->
+	<xs:element name="barcodescanner" type="barcodescannerType" />
+	<xs:complexType name="barcodescannerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="type" type="xs:string" use="optional" />
+		<xs:attribute name="continuous" type="booleanType" use="optional" />
+		<xs:attribute name="interval" type="doubleType" use="optional" />
+		<xs:attribute name="enable" type="booleanType" use="optional" />
+		<xs:attribute name="onDetect" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
 	<!-- biglistbox -->
 	<xs:element name="biglistbox" type="biglistboxType" />
 	<xs:complexType name="biglistboxType" mixed="true">
