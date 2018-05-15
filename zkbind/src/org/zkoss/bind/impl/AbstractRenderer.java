@@ -14,6 +14,7 @@ package org.zkoss.bind.impl;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.Binder;
@@ -149,7 +150,22 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		for (Component item : items) {
 			checkShadowElementAndCreateSubChildren(item);
 		}
-		return hasShadow ? ShadowElementsCtrl.filterOutShadows(items) : items;
+		Component[] filterOutShadows = hasShadow ? ShadowElementsCtrl.filterOutShadows(items) : items;
+		removeCurrentTemplateShadowRoots(parent);
+		return filterOutShadows;
+	}
+
+	//if it doesn't removeShadowRoot, it would cause memory leak (In AbstactRenderer
+	//checkShadowElementAndCreateSubChildren pCtrl.getShadowRoots(), it would compute O(n2) rather than
+	//O(n)), and when change the model, the shadow element would create again but old shadows won't be cleared. It
+	//cause memory leak.
+	private void removeCurrentTemplateShadowRoots(Component host) {
+		List<ShadowElement> shadows = ((ComponentCtrl) host).getShadowRoots();
+		for (int i = 0 ; i < shadows.size() ; i++) {
+			if (host != null && host instanceof ComponentCtrl) {
+				((ComponentCtrl) host).removeShadowRoot(shadows.get(i));
+			}
+		}
 	}
 
 	//ZK-739: Allow dynamic template for collection binding.
