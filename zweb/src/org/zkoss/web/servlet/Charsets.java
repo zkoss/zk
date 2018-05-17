@@ -190,6 +190,8 @@ public class Charsets {
 	 * @param sess the session to look for the preferred locale. Ignored if null.
 	 */
 	public static final Locale getPreferredLocale(HttpSession sess, ServletRequest request) {
+		final String s = Library.getProperty(Attributes.PREFERRED_LOCALE);
+		final Locale l = (s != null) ? Locales.getLocale(s) : request.getLocale();
 		if (sess != null) {
 			Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
 			if (v == null)
@@ -209,12 +211,10 @@ public class Charsets {
 				logLocaleError(v);
 			}
 
-			final String s = Library.getProperty(Attributes.PREFERRED_LOCALE);
-			if (s != null)
-				return Locales.getLocale(s);
+			if (s != null) {
+				return l;
+			}
 		}
-
-		Locale l = request.getLocale();
 		// B65-ZK-1916: convert zh_HANS-XX and zh_HANT-XX to zh_XX
 		return l != null ? fixZhLocale(l) : Locale.getDefault();
 	}

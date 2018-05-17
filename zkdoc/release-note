@@ -34,6 +34,7 @@ ZK 8.5.2
   ZK-3910: ZK destroys all iframes elements on some containers when changing DOM location
   ZK-3698: NPE in Decimalbox.setValue(String)
   ZK-3905: listbox selectAll checkbox stops synchronizing
+  ZK-3907: session timeout message ignores application wide preferred locale
 
 * Upgrade Notes
 
