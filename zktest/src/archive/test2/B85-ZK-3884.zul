@@ -14,13 +14,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label multiline="true">
-        1. Scroll bars.
+        1. Scroll the bar.
         2. See the text completely. (Text should not be cut)
     </label>
-    <grid width="280px" height="100px">
+    <grid width="250px" height="80px">
         <columns>
-            <column width="80px">A</column>
-            <column width="280px">B</column>
+            <column width="50px">A</column>
+            <column width="210px">B</column>
         </columns>
         <frozen columns="1"/>
         <rows>

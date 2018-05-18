@@ -1269,24 +1269,23 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					bdtbl.style.width = this.ebody.style.width;
 			}
 		}
-		if (!this.frozen) {
-			var zkb = zk(this.ebody),
-				hScroll = zkb.hasHScroll(),
-				vScroll = zkb.hasVScroll(),
-				hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
-				ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null;
-			if (vScroll) {
-				if (hdfakerbar)
-					hdfakerbar.style.width = vScroll + 'px';
-				if (ftfakerbar)
-					ftfakerbar.style.width = vScroll + 'px';
-			} else {
-				//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
-				if (hdfakerbar)
-					hdfakerbar.style.width = 0.1 + 'px';
-				if (ftfakerbar)
-					ftfakerbar.style.width = 0.1 + 'px';
-			}
+		var zkb = zk(this.ebody),
+			hScroll = zkb.hasHScroll(),
+			vScroll = zkb.hasVScroll(),
+			hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
+			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null;
+
+		if (vScroll) {
+			if (hdfakerbar)
+				hdfakerbar.style.width = vScroll + 'px';
+			if (ftfakerbar)
+				ftfakerbar.style.width = vScroll + 'px';
+		} else {
+			//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
+			if (hdfakerbar)
+				hdfakerbar.style.width = 0.1 + 'px';
+			if (ftfakerbar)
+				ftfakerbar.style.width = 0.1 + 'px';
 		}
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
@@ -1318,7 +1317,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			wd = wd ? 'width: ' + wd + ';' : '';
 			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visible, '"/>');
 		}
-		if (!this.frozen && (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0))
+		if (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0)
 			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" />');
 		out.push('</colgroup>');
 	},
