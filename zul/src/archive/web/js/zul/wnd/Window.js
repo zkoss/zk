@@ -1163,6 +1163,9 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (zk.ie > 8 || zk.chrome) {
 			var $jq = jq(this.$n()).find('iframe');
 			if ($jq.length)
+				// ZK-3910: the side effect of the removing iframe, the ckeditor would throw the error message
+				// at console. It should unbind ckeditor before remove it.
+				this.unbindChildren_();
 				$jq.hide().remove();
 		}
 		this.$supers(Window, 'detach', arguments);
