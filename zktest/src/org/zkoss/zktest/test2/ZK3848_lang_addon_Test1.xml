@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-3848.zul
+ZK3848_lang_addon_Test1.xml
 
         Purpose:
 
@@ -14,6 +14,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 <language-addon>
     <addon-name>mycomp</addon-name>
+    <strict>true</strict>
     <!--<depends>zkbind</depends>-->
     <version>
         <version-class>zk.test.Version</version-class>
@@ -29,18 +30,6 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         <mold>
             <mold-name>default</mold-name>
             <mold-uri>mold/mycomp.js</mold-uri>
-
-            <!--
-            == Tip in advance ==
-                You don't have to specify a css.dsp if you need not ,
-                but usually you need it.
-
-                You could assign a .css file ,too.
-
-                The css.dsp is almost as same as CSS file ,
-                but have more powerful enhancement.	(like EL support.)
-            ====
-            -->
             <css-uri>css/mycomp.css.dsp</css-uri>
         </mold>
     </component>
