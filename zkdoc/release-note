@@ -2,6 +2,7 @@
 ZK 8.6.0
 * Features
   ZK-3845: Provide a video component
+  ZK-3930: Provide a camera component
 
 * Bugs
 
