@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.5.0.201711221716">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.5.2.201805171543">
 	<!--
 	SIMPLETYPE
 	-->
@@ -1443,8 +1443,8 @@
 		<xs:attribute name="anchor" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- east -->
-	<xs:element name="east" type="eastType" />
-	<xs:complexType name="eastType">
+	<xs:element name="east" type="layoutRegionType" />
+	<xs:complexType name="layoutRegionType">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
@@ -1462,8 +1462,11 @@
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="onSize" type="xs:string" use="optional" />
 		<xs:attribute name="onSlide" type="xs:string" use="optional" />
 		<xs:attribute name="title" type="xs:string" use="optional" />
+		<xs:attribute name="slidable" type="booleanType" use="optional" />
+		<xs:attribute name="closable" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- fileupload -->
 	<xs:element name="fileupload" type="fileuploadType" />
@@ -2214,28 +2217,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- north -->
-	<xs:element name="north" type="northType" />
-	<xs:complexType name="northType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
-		</xs:sequence>
-		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="flex" type="booleanType" use="optional" />
-		<xs:attribute name="size" type="intType" use="optional" />
-		<xs:attribute name="splittable" type="booleanType" use="optional" />
-		<xs:attribute name="collapsible" type="booleanType" use="optional" />
-		<xs:attribute name="margins" type="xs:string" use="optional" />
-		<xs:attribute name="open" type="booleanType" use="optional" />
-		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
-		<xs:attribute name="border" type="xs:string" use="optional" />
-		<xs:attribute name="maxsize" type="intType" use="optional" />
-		<xs:attribute name="minsize" type="intType" use="optional" />
-		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onSlide" type="xs:string" use="optional" />
-		<xs:attribute name="title" type="xs:string" use="optional" />
-	</xs:complexType>
+	<xs:element name="north" type="layoutRegionType" />
 	<!-- panel -->
 	<xs:element name="panel" type="panelType" />
 	<xs:complexType name="panelType">
@@ -2500,28 +2482,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- south -->
-	<xs:element name="south" type="southType" />
-	<xs:complexType name="southType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
-		</xs:sequence>
-		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="flex" type="booleanType" use="optional" />
-		<xs:attribute name="size" type="xs:string" use="optional" />
-		<xs:attribute name="splittable" type="booleanType" use="optional" />
-		<xs:attribute name="collapsible" type="booleanType" use="optional" />
-		<xs:attribute name="margins" type="xs:string" use="optional" />
-		<xs:attribute name="open" type="booleanType" use="optional" />
-		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
-		<xs:attribute name="border" type="layoutBorderAttrType" use="optional" />
-		<xs:attribute name="maxsize" type="intType" use="optional" />
-		<xs:attribute name="minsize" type="intType" use="optional" />
-		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onSlide" type="xs:string" use="optional" />
-		<xs:attribute name="title" type="xs:string" use="optional" />
-	</xs:complexType>
+	<xs:element name="south" type="layoutRegionType" />
 	<!-- space -->
 	<xs:element name="space" type="spaceType" />
 	<xs:complexType name="spaceType">
@@ -3101,28 +3062,7 @@
 		<xs:attribute name="spacing" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- west -->
-	<xs:element name="west" type="westType" />
-	<xs:complexType name="westType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
- 			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
-		</xs:sequence>
-		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="flex" type="booleanType" use="optional" />
-		<xs:attribute name="size" type="xs:string" use="optional" />
-		<xs:attribute name="splittable" type="booleanType" use="optional" />
-		<xs:attribute name="collapsible" type="booleanType" use="optional" />
-		<xs:attribute name="margins" type="xs:string" use="optional" />
-		<xs:attribute name="open" type="booleanType" use="optional" />
-		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
-		<xs:attribute name="border" type="layoutBorderAttrType" use="optional" />
-		<xs:attribute name="maxsize" type="intType" use="optional" />
-		<xs:attribute name="minsize" type="intType" use="optional" />
-		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onSlide" type="xs:string" use="optional" />
-		<xs:attribute name="title" type="xs:string" use="optional" />
-	</xs:complexType>
+	<xs:element name="west" type="layoutRegionType" />
 	<!-- window -->
 	<xs:element name="window" type="windowType" />
 	<xs:complexType name="windowType" mixed="true">

@@ -23,6 +23,7 @@ package org.zkoss.zul;
  * {@link #setCollapsible(boolean)}, {@link #setMaxsize(int)},
  * {@link #setMinsize(int)}, {@link #setHeight(String)},
  * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
+ * {@link #setSlide(boolean)}, {@link #setSlidable(boolean)}, {@link #setClosable(boolean)}
  * and {@link #setVisible(boolean)}.
  * 
  * <p>Default {@link #getZclass}: z-center.
@@ -121,6 +122,27 @@ public class Center extends LayoutRegion {
 	 * The size can't be specified in this component.
 	 */
 	public void setSize(String size) {
+		throw new UnsupportedOperationException("readonly");
+	}
+
+	/**
+	 * Center region can't be slided.
+	 */
+	public void setSlide(boolean slide) {
+		throw new UnsupportedOperationException("readonly");
+	}
+
+	/**
+	 * Center region can't be slided.
+	 */
+	public void setSlidable(boolean slidable) {
+		throw new UnsupportedOperationException("readonly");
+	}
+
+	/**
+	 * Center region can't be closed.
+	 */
+	public void setClosable(boolean closable) {
 		throw new UnsupportedOperationException("readonly");
 	}
 
