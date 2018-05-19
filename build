@@ -517,8 +517,8 @@ function invoke_ant
 		-Dshare.javadoc.dir="$javadocdir" \
 		-Djavadoc.class.path="$DCP" -Dapp.name=$app $unziplist \
 		-Droot.context=$rootContext -Dgentime=$gentime \
-		-Dsigndir=$signdir -Dsignclasses=$signclasses -Dbuildstamp=$buildstamp \
-		$dfnList -buildfile $maindir/build.xml $1
+		-Dsigndir=$signdir -Dsignclasses=$signclasses -Dbuildstamp=\'$buildstamp\' \
+		$dfnList -buildfile "$maindir/build.xml" $1
 	fi
 
 	if [ $? -ne 0 ] ; then
