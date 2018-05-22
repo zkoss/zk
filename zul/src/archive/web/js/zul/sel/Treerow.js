@@ -73,6 +73,7 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		if (tg == this.$n('open') || tg == this.$n('icon')) {
 			ti.setOpen(!ti._open);
 			evt.stop();
+			this.getTree().focus();
 		} else if (!ti.isDisabled())
 			this.$supers('doClick_', arguments);
 	},
