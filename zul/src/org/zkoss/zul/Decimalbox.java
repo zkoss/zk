@@ -17,10 +17,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.zkoss.math.BigDecimals;
 import org.zkoss.zk.ui.ArithmeticWrongValueException;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.ObjectPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zul.impl.NumberInputElement;
 import org.zkoss.zul.mesg.MZul;
 
@@ -91,7 +96,7 @@ public class Decimalbox extends NumberInputElement {
 	}
 
 	public void setValue(String str) {
-		this.setValue(new BigDecimal(str));
+		this.setValue(str == null ? null : new BigDecimal(str));
 	}
 
 	/** Returns the scale for the decimal number storing in this component,
@@ -185,5 +190,30 @@ public class Decimalbox extends NumberInputElement {
 
 		if (_scale != AUTO)
 			renderer.render("scale", _scale);
+	}
+
+	//--ComponentCtrl--//
+	private static Map<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
+
+	static {
+		_properties.put("value", new ObjectPropertyAccess() {
+			public void setValue(Component cmp, Object value) {
+				if (value instanceof BigDecimal)
+					((Decimalbox) cmp).setValue((BigDecimal) value);
+				else if (value instanceof String || value == null) // ZK-3698: Handle null
+					((Decimalbox) cmp).setValue((String) value);
+			}
+
+			public BigDecimal getValue(Component cmp) {
+				return ((Decimalbox) cmp).getValue();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3698.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 22 12:15:46 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "MVVM set null", no error message pops up.
+        2. Click "Reset".
+        3. Click "MVC set null", no error message pops up.
+    </label>
+    <zscript><![CDATA[
+    void testSetNull() {
+        comp1.setValue(null);
+        comp2.setValue(null);
+        comp3.setValue(null);
+        comp4.setValue(null);
+        comp5.setValue(null);
+        comp6.setValue(null);
+        comp7.setValue(null);
+        comp8.setValue(null);
+        comp9.setValue(null);
+        comp10.setValue(null);
+        comp11.setValue(null);
+        comp12.setValue(null);
+    }
+    ]]></zscript>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3698VM')">
+        <bandbox id="comp1" value="@bind(vm.strVal)" />
+        <combobox id="comp2" value="@bind(vm.strVal)" />
+        <textbox id="comp3" value="@bind(vm.strVal)" />
+        <separator />
+        <decimalbox id="comp4" value="@bind(vm.strVal)" />
+        <intbox id="comp5" value="@bind(vm.strVal)" />
+        <longbox id="comp6" value="@bind(vm.strVal)" />
+        <spinner id="comp7" value="@bind(vm.strVal)" />
+        <doublebox id="comp8" value="@bind(vm.strVal)" />
+        <doublespinner id="comp9" value="@bind(vm.strVal)" />
+        <separator />
+        <datebox id="comp10" value="@bind(vm.dateVal)" />
+        <timebox id="comp11" value="@bind(vm.dateVal)" />
+        <timepicker id="comp12" value="@bind(vm.dateVal)" />
+        <separator />
+        <button label="MVVM set null" onClick="@command('testSetNull')" />
+        <button label="Reset" onClick="@command('reset')" />
+        <button label="MVC set null" onClick="testSetNull()" />
+    </div>
+</zk>
