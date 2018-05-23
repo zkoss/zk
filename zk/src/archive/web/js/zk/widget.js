@@ -4615,6 +4615,13 @@ _doFooSelect: function (evt) {
 	// internal use only in zkmax package
 	getDomEvtInf_: function (wgt, evtnm, fn, keyword) {
 		return _domEvtInf(wgt, evtnm, fn, keyword);
+	},
+	/**
+	 * Returns whether a widget should fireSized later when addChd was invoked
+	 * Default: false.
+	 */
+	shallFireSizedLaterWhenAddChd_: function () {
+		return false;
 	}
 
 }, {

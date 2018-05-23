@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3733.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed May 23 09:54:27 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		 viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3733_ListboxExample')">
+		<listbox model="@load(vm.groupModel)" itemRenderer="@load(vm.itemRenderer)">
+			<listhead sizable="true">
+				<listheader
+						label="Header1"
+						tooltiptext="Header1"
+						width="20%">
+				</listheader>
+				<listheader
+						label="Header2"
+						tooltiptext="Header2"
+						width="20%">
+				</listheader>
+				<listheader width="20%"
+							label="Header3"
+							tooltiptext="Header3">
+				</listheader>
+				<listheader width="20%"
+							label="Header4"
+							tooltiptext="Header4">
+				</listheader>
+			</listhead>
+		</listbox>
+	</div>
+</zk>
