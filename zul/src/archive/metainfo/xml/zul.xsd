@@ -1041,6 +1041,7 @@
 		<xs:attribute name="onWeekClick" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="showTodayLink" type="booleanType" use="optional" />
+		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 	</xs:complexType>
 	<!-- calendars -->
 	<xs:element name="calendars" type="calendarsType" />

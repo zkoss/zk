@@ -361,6 +361,11 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		 */
 		constraint: function () {
 			this._fixConstraint();
+			// ZK-3619, this method could be called when datebox opening the calendar,
+			// inServer means there is a calendar tag in zul file.
+			if (this.desktop && this.inServer) {
+				this.rerender();
+			}
 		},
 		/** Sets the name of this component.
 		 * <p>The name is used only to work with "legacy" Web application that

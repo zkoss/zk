@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Objects;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.Dates;
@@ -30,6 +31,7 @@ import org.zkoss.util.TimeZones;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zul.ext.Constrainted;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
 
@@ -50,12 +52,13 @@ import org.zkoss.zul.mesg.MZul;
  * 
  * @author tomyeh
  */
-public class Calendar extends XulElement {
+public class Calendar extends XulElement implements Constrainted {
 	private Date _value;
 	private TimeZone _defaultTzone = TimeZones.getCurrent();
 	private boolean _weekOfYear;
 	private boolean _showTodayLink = false;
 	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
+	private SimpleDateConstraint _constraint;
 
 	/** The name. */
 	private String _name;
@@ -209,6 +212,28 @@ public class Calendar extends XulElement {
 			smartUpdate("todayLinkLabel", todayLinkLabel);
 		}
 	}
+	
+	/**
+	 * Sets a list of constraints separated by comma.
+	 * Example: "between 20071012 and 20071223", "before 20080103".
+	 * @param constr a list of constraints separated by comma.
+	 */
+	public void setConstraint(String constr) {
+		if (constr != null) {
+			setConstraint(new SimpleDateConstraint(constr));
+		}
+	}
+	
+	public void setConstraint(Constraint constr) {
+		if (!Objects.equals(_constraint, constr)) {
+			_constraint = (SimpleDateConstraint) constr;
+			smartUpdate("constraint", new JavaScriptValue(_constraint.getClientConstraint()));
+		}
+	}
+	
+	public Constraint getConstraint() {
+		return _constraint;
+	}
 
 	//-- super --//
 	public String getZclass() {
@@ -248,5 +273,8 @@ public class Calendar extends XulElement {
 		render(renderer, "value", _value);
 		render(renderer, "showTodayLink", _showTodayLink);
 		render(renderer, "todayLinkLabel", _todayLinkLabel);
+		if (_constraint != null) {
+			render(renderer, "constraint", new JavaScriptValue(_constraint.getClientConstraint()));
+		}
 	}
 }
