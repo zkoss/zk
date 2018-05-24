@@ -428,7 +428,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 				zul.Uploader._tmupload = undefined;
 			}
 		};
-		zul.Uploader._tmupload = setInterval(t, 1000);
+		zul.Uploader._tmupload = setInterval(t, 100);
 		//B50-3304877: autodisable and Upload
 		zul.wgt.ADBS.autodisable(wgt);
 	},
