@@ -157,6 +157,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop) {
+			var _getWidth = zul.mesh.MeshWidget._getWidth;
 			if (!_fixOnChildChanged(this) && this.parent._fixHeaders()) {
 				// refix-ZK-2466 : grid dynamic add childern should 'syncSize' at the end (instead of 'add one and trigger one's onSize')
 				this.parent._syncSize();
@@ -211,10 +212,9 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 					}
 
 					if (!$faker.find(child.$n(faker)).length) {
-						var wd = child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth(),
-							visible = !child.isVisible() ? 'display:none;' : '';
+						var wd = _getWidth(child, child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth());
 						wd = wd ? 'width:' + wd + ';' : '';
-						var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + visible + '"/>',
+						var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + '"/>',
 							index = child.getChildIndex();
 						// B30-1926480: child can be added after any brother node
 						if (index > 0)

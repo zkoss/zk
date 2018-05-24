@@ -200,6 +200,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			}
 		}
 		var visible, hgh, align, valign,
+			width0 = zul.mesh.MeshWidget.WIDTH0,
 			grid = this.getGrid();
 		if (grid) {
 			var cols = grid.columns;
@@ -207,7 +208,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				if (realIndex < cols.nChildren) {
 					var col = cols.getChildAt(realIndex);
 					// ZK-3600: Prevent the dummy cell from hiding if the first column is invisible
-					visible = headerNotVisible ? 'text-overflow: ellipsis;white-space: nowrap;' : col.isVisible() || (grid._model && !this._loaded) ? '' : 'width: 0.1px;';
+					visible = headerNotVisible ? 'text-overflow: ellipsis;white-space: nowrap;' : col.isVisible() || (grid._model && !this._loaded) ? '' : 'width: ' + width0 + ';';
 					hgh = col.getHeight();
 					align = col.getAlign();
 					valign = col.getValign();
