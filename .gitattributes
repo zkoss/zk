@@ -1,0 +1,2 @@
+zkdoc/release-note merge=union
+zktest/src/archive/test2/config.properties merge=union
