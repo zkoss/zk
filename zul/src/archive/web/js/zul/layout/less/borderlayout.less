@@ -242,6 +242,28 @@
 	border-width: 0 1px;
 }
 
+.z-north,
+.z-south {
+	&-title {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+}
+
+.z-west,
+.z-east {
+	&-title {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		transform: rotate(90deg);
+		transform-origin: left bottom;
+		-ms-transform: rotate(90deg);
+		-ms-transform-origin: left bottom;
+	}
+}
+
 .ie9 {
 	.z-north-splitter,
 	.z-south-splitter {
