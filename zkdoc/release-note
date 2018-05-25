@@ -42,6 +42,7 @@ ZK 8.5.2
   ZK-3865: incorrect flex calculation with margins
   ZK-3928: tree item selection changes scroll position
   ZK-3885: dynamically added nested borderlayout triggers onBind twice
+  ZK-3935: look up an application scope event queue causes an exception when a session unavailable
 
 
 * Upgrade Notes

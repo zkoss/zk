@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3935.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 25 17:29:35 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        // Set timeout popup
+        WebApps.getCurrent().getConfiguration().setTimeoutURI("ajax", null, 1);
+        session.setMaxInactiveInterval(1);
+    ]]></zscript>
+    <div apply="org.zkoss.zktest.test2.B85_ZK_3935Composer">
+        <label multiline="true">
+            1. Wait for a second for session timeout / desktop cleanup
+            2. Click "send".
+            3. The server should not receive an IllegalStateException. (It's normal that client popped up a timeout message)
+        </label>
+        <button label="send"/>
+    </div>
+</zk>

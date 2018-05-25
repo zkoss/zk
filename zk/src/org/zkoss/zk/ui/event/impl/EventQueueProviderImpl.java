@@ -52,13 +52,13 @@ public class EventQueueProviderImpl implements EventQueueProvider {
 	public <T extends Event> EventQueue<T> lookup(String name, String scope, boolean autoCreate) {
 
 		final boolean bAppScope = EventQueues.APPLICATION.equals(scope);
+		final boolean bSessionScope = EventQueues.SESSION.equals(scope);
 
 		// if the scope is in session or application, it won't need an Execution
 		// to work with this event queue for publishing
-		if (bAppScope || EventQueues.SESSION.equals(scope)) {
-			if (Sessions.getCurrent() == null)
-				throw new IllegalStateException("Not in an execution");
-
+		if (bSessionScope && Sessions.getCurrent() == null) {
+			throw new IllegalStateException("Current session is not available");
+		} else if (bAppScope || bSessionScope) {
 			return lookup0(name, bAppScope ? (Scope) WebApps.getCurrent() : Sessions.getCurrent(), autoCreate);
 		} else if (EventQueues.DESKTOP.equals(scope)) {
 			final Execution exec = Executions.getCurrent();
