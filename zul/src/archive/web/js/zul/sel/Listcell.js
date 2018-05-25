@@ -188,11 +188,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments),
 			box = this.getListbox(),
-			head = this.getListheader();
+			head = this.getListheader(),
+			width0 = zul.mesh.MeshWidget.WIDTH0;
 		if (head) {
 			// ZK-3600: Prevent the dummy cell from hiding if the first header is invisible
 			if (!head.isVisible() && !(box && box._model && !this.parent._loaded))
-				style += 'width: 0.1px;';
+				style += 'width:' + width0 + ';';
 			if (head._align)
 				style += 'text-align:' + head._align + ';';
 			if (head._valign)

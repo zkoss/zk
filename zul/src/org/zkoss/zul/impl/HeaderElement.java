@@ -24,7 +24,7 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  */
 public abstract class HeaderElement extends LabelImageElement {
-	private String _align, _valign;
+	private String _align, _valign, _width;
 
 	protected HeaderElement() {
 	}
@@ -82,6 +82,20 @@ public abstract class HeaderElement extends LabelImageElement {
 	//feature#3177275: Listheader should override hflex when sized by end user
 	void setHflexByClient(String hflex) {
 		setHflexDirectly(hflex);
+	}
+
+	// ZK-3791: width="%" acts differently in various browsers. Use hflex would be better.
+	public void setWidth(String width) {
+		if (!Objects.equals(_width, width)) {
+			_width = width;
+			if (width != null && width.endsWith("%")) {
+				super.setWidth0(null);
+				setHflex0(width.substring(0, width.length() - 1));
+			} else {
+				super.setWidth(width);
+				setHflex0(null);
+			}
+		}
 	}
 
 	// super

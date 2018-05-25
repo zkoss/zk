@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3791.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 23 12:26:59 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Hide "Column 2"
+        2. Show "Column 2"
+        3. The width of "Column 2" is the same size of initial state.
+    </label>
+
+    Listbox: <button label="Toggle Column 2" onClick="listCol2.visible=!listCol2.visible" />
+    <listbox height="250px">
+        <auxhead>
+            <auxheader align="center" colspan="3">Order Information</auxheader>
+        </auxhead>
+        <listhead menupopup="auto">
+            <listheader width="30%" label="Column 1"/>
+            <listheader width="20%" label="Column 2" id="listCol2"/>
+            <listheader width="50%" label="Column 3"/>
+        </listhead>
+        <forEach begin="1" end="5" step="1">
+            <listitem>
+                <listcell forEach="1,2,3" label="cell ${each}"/>
+            </listitem>
+        </forEach>
+        <listfoot>
+            <listfooter forEach="1,2,3" label="Column ${each}"/>
+        </listfoot>
+    </listbox>
+
+    Grid: <button label="Toggle Column 2" onClick="gridCol2.visible=!gridCol2.visible" />
+    <grid height="250px">
+        <auxhead>
+            <auxheader align="center" colspan="3">Order Information</auxheader>
+        </auxhead>
+        <columns menupopup="auto">
+            <column width="30%" label="Column 1"/>
+            <column width="20%" label="Column 2" id="gridCol2"/>
+            <column width="50%" label="Column 3"/>
+        </columns>
+        <rows>
+            <forEach begin="1" end="5" step="1">
+                <row>
+                    <cell forEach="1,2,3">cell ${each}</cell>
+                </row>
+            </forEach>
+        </rows>
+        <foot>
+            <footer forEach="1,2,3" label="Column ${each}"/>
+        </foot>
+    </grid>
+
+    Tree: <button label="Toggle Column 2" onClick="treeCol2.visible=!treeCol2.visible" />
+    <tree height="250px">
+        <auxhead>
+            <auxheader align="center" colspan="3">Order Information</auxheader>
+        </auxhead>
+        <treecols>
+            <treecol width="30%" label="Column 1"/>
+            <treecol width="20%" label="Column 2" id="treeCol2"/>
+            <treecol width="50%" label="Column 3"/>
+        </treecols>
+        <treechildren>
+            <forEach begin="1" end="5" step="1">
+                <treeitem>
+                    <treerow>
+                        <treecell forEach="1,2,3" label="Column ${each}" />
+                    </treerow>
+                </treeitem>
+            </forEach>
+        </treechildren>
+        <treefoot>
+            <treefooter forEach="1,2,3" label="Column ${each}"/>
+        </treefoot>
+    </tree>
+</zk>

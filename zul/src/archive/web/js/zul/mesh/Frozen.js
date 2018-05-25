@@ -300,7 +300,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			mesh = this.parent,
 			cnt = num,
 			rows = mesh.ebodyrows,
-			c = this._columns;
+			c = this._columns,
+			width0 = zul.mesh.MeshWidget.WIDTH0;
 
 		if (mesh.head) {
 			// set fixed size
@@ -361,13 +362,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					//ZK-2776: consider faker's width first for layout consistent
 					if (faker.style.width && zk.parseInt(faker.style.width) > 1)
 						hdWgt._origWd = faker.style.width;
-					cellWidth = '0px';
+					cellWidth = width0;
 					shallUpdate = true;
 				}
-
-				// ZK-2101: should give 0.1px for chrome and safari
-				if ((zk.chrome || zk.safari) && cellWidth && (parseInt(cellWidth) == 0))
-					cellWidth = '0.1px';
 
 				if (force || shallUpdate) {
 					updateBatch.push({node: n, index: i, width: cellWidth});
