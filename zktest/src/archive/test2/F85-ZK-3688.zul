@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3688.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 24 12:09 PM:18 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk xmlns:w="client">
+
+	<script><![CDATA[
+/* #4518 allow a minimum zindex via w:minZIndex */
+
+
+
+/* #4518 ensure a minimum zindex in w:onZIndex event listener */
+function ensureMinZIndex(event, minZIndex) {
+	if(event.data < minZIndex) event.target.setZIndex(minZIndex);
+}
+]]></script>
+
+	<hlayout>
+		<div width="500px">
+			<div height="300px"></div>
+			<button id="btn" label="button"
+					onClick='win3.setTop("350px"); win3.doOverlapped()'/>
+			<window id="win3" visible="false" border="true">Window 3</window>
+
+			<div style="border: 1px solid black; height: 500px; "></div>
+		</div>
+		<div>
+			<label multiline="true">
+				1. click the button from left to right
+				2. see the z-index being printed in the client log
+				the output should be '2001 5000 5001 10000'
+			</label>
+			<vlayout>
+				<button id="btn1" label="1. win1 open window at default zindex" onClick='win1.setTop("140px"); win1.doOverlapped();'/>
+				<button id="btn2" label="2. win2 open window at min zindex 5000" onClick='win2.setTop("180px"); win2.doOverlapped();'/>
+				<button id="btn3" label="3. pop1 at default zindex" popup="pop1,type=toggle"/>
+				<button id="btn4" label="4. pop2 at min zindex 10000" popup="pop2,type=toggle"/>
+			</vlayout>
+			<window id="win1" visible="false">Window 1</window>
+			<window id="win2" visible="false" minzindex="5000">Window 2</window>
+			<popup id="pop1">POP 1</popup>
+			<popup id="pop2" minzindex="10000">POP 2</popup>
+
+			<panel height="300px" style="margin-top:50px" floatable="true" minzindex="2000">
+				<panelchildren>panel with min zindex 2000</panelchildren>
+			</panel>
+		</div>
+	</hlayout>
+</zk>

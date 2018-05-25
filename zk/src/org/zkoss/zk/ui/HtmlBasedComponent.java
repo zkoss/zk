@@ -132,12 +132,38 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	public void setZIndex(int zIndex) {
 		if (zIndex < -1)
 			zIndex = -1;
+		int minZIndex = (_auxinf != null ? _auxinf.minZIndex : -1);
+		if (minZIndex > zIndex)
+			zIndex = minZIndex;
 		if ((_auxinf != null ? _auxinf.zIndex : -1) != zIndex) {
 			initAuxInfo().zIndex = zIndex;
 			if (zIndex < 0)
 				smartUpdate("zIndex", (Object) null);
 			else
 				smartUpdate("zIndex", zIndex);
+		}
+	}
+
+	/** Returns the min Z index.
+	 * <p>Default: -1 (means system default;
+	 */
+	public int getMinzindex() {
+		return _auxinf != null ? _auxinf.minZIndex : -1;
+	}
+
+	/** Sets the min Z index.
+	 */
+	public void setMinzindex(int minZIndex) {
+		if (minZIndex < -1)
+			minZIndex = -1;
+		if ((_auxinf != null ? _auxinf.minZIndex : -1) != minZIndex) {
+			initAuxInfo().minZIndex = minZIndex;
+			if ((_auxinf != null ? _auxinf.zIndex : -1) < minZIndex)
+				setZIndex(minZIndex);
+			if (minZIndex < 0)
+				smartUpdate("minZIndex", (Object) null);
+			else
+				smartUpdate("minZIndex", minZIndex);
 		}
 	}
 
@@ -705,6 +731,8 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 
 			if (_auxinf.zIndex >= 0)
 				renderer.render("zIndex", _auxinf.zIndex);
+			if (_auxinf.minZIndex >= 0)
+				renderer.render("minZIndex", _auxinf.minZIndex);
 			if (_auxinf.renderdefer >= 0)
 				renderer.render("renderdefer", _auxinf.renderdefer);
 			if (_auxinf.tabindex != null)
@@ -823,6 +851,15 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 
 			public Integer getValue(Component cmp) {
 				return ((HtmlBasedComponent) cmp).getZIndex();
+			}
+		});
+		_properties.put("minzindex", new IntPropertyAccess() {
+			public void setValue(Component cmp, Integer minzindex) {
+				((HtmlBasedComponent) cmp).setMinzindex(minzindex);
+			}
+			
+			public Integer getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getMinzindex();
 			}
 		});
 		_properties.put("renderdefer", new IntPropertyAccess() {
@@ -987,6 +1024,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		private int zIndex = -1;
 		private int renderdefer = -1;
 		private Integer tabindex;
+		private int minZIndex = -1;
 
 		public Object clone() {
 			try {
