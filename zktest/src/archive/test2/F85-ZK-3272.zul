@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3272.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 24 6:24 PM:51 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Drag a file whose size is larger than 1MB to the "drag to here".
+		2. You should see (xxMB) or (xxGB) in the Messagebox.
+	</label>
+	<div apply="org.zkoss.bind.BindComposer"
+		 viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3272VM')">
+		<div style="border-style:solid;" height="100px" width="100px">
+			<label value="drag to here"/>
+			<dropupload maxsize="200" detection="browser" anchor="${img}"
+						content="Drag your photo here (max 50KB)"
+						onUpload="@command('doUploadPhoto', photo=event.media)"/>
+		</div>
+	</div>
+</zk>
