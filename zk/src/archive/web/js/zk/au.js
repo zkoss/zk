@@ -1557,6 +1557,16 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			window.history.replaceState(state, title, url);
 		if (!replace && window.history.pushState)
 			window.history.pushState(state, title, url);
+	},
+	/** Ask the client to sync all the errorboxes and its reference widget position on the desktop.
+	 * @since 8.5.2
+	 */
+	syncAllErrorbox: function () {
+		jq('.z-errorbox').toArray().forEach(function (ebox) {
+			ebox = jq(ebox).zk.$();
+			ebox.reposition();
+			ebox._fixarrow();
+		});
 	}
 };
 /** @class zk.AuCmd1
@@ -1755,6 +1765,16 @@ zAu.cmd1 = /*prototype*/ {
 	 */
 	resizeWgt: function (wgt) {
 		zUtl.fireSized(wgt, 1); //force cleanup
+	},
+	/** Ask the client to sync a target widget and its errorbox position.
+	 * @param zk.Widget wgt the widget
+	 * @since 8.5.2
+	 */
+	syncErrorbox: function (wgt) {
+		if (wgt._errbox) {
+			wgt._errbox.reposition();
+			wgt._errbox._fixarrow();
+		}
 	}
 };
 /** @partial zk

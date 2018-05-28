@@ -44,16 +44,19 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	 * @see zul.wgt.Popup#open
 	 */
 	show: function () {
-		jq(document.body).append(this);
+		if (!this.$n())
+			jq(document.body).append(this);
 		var cstp = this.parent._cst && this.parent._cst._pos;
 
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
-		// ZK-2069: show only if is in view
-		setTimeout(function () {
-			if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if
-				self.open(self.parent, null, cstp || self._defaultPos, {dodgeRef: !cstp});
-		}, 50); // B36-2935398: add time
+		// ZK-2069: show only if is in view //B85-ZK-3321
+		if (this.parent.isRealVisible()) {
+			setTimeout(function () {
+				if (self.parent && zul.inp.InputWidget._isInView(self)) //Bug #3067998: if
+					self.open(self.parent, null, cstp || self._defaultPos, {dodgeRef: !cstp});
+			}, 50); // B36-2935398: add time
+		}
 		zWatch.listen({onHide: [this.parent, this.onParentHide]});
 	},
 	/**
@@ -287,6 +290,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		return [p, null, cstp || 'end_before', {dodgeRef: !cstp}];
 	}
 },{
+
 	_enddrag: function (dg) {
 		var errbox = dg.control;
 		errbox.setTopmost();

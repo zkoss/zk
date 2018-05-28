@@ -608,7 +608,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_markError: function (msg, val, noOnError) {
 		this._errmsg = msg;
 
-		if (this.desktop && this.isRealVisible()) { //err not visible if not attached
+		if (this.desktop) { //err not visible if not attached //B85-ZK-3321
 			jq(this.getInputNode()).addClass(this.$s('invalid'));
 
 			var cst = this._cst, errbox;
@@ -709,6 +709,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var eb = new zul.inp.Errorbox(this, msg);
 		eb.show();
 		return eb;
+	},
+	onShow: function () {
+		if (this.__ebox) {
+			this.setFloating_(true);
+			this.__ebox.show();
+		}
 	},
 	_equalValue: function (a, b) {
 		return a == b || this.marshall_(a) == this.marshall_(b);
@@ -830,8 +836,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		if (n = n.form)
 			jq(n).bind('reset', this.proxy(this._resetForm));
+		zWatch.listen({onShow: this});
 	},
 	unbind_: function () {
+		zWatch.unlisten({onShow: this});
 		this.$class._stopOnChanging(this);
 		this.clearErrorMessage(true);
 
