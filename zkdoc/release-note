@@ -13,6 +13,7 @@ ZK 8.5.2
   ZK-2459: Add BindUtils postNotifyChange method accepting multiple property names
   ZK-3624: Spinner - improve initial value
   ZK-3272: Display file size message with the most readable unit
+  ZK-3569: Popup slide-in direction change depending on position relative to input
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception
