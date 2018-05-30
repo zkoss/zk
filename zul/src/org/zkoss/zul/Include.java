@@ -123,7 +123,7 @@ import org.zkoss.zul.mesg.MZul;
  * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
  * with true will imply the <code>defer</code> mode (if the mode is <code>auto</code>).
  *
- * <p><b>Backward Compatibility:<b/>
+ * <p><b>Backward Compatibility:</b>
  * Since 3.6.2, there are three modes: auto (default), instant and defer.
  * The behavior prior to 3.6.2 is the same as the defer mode.
  * The default mode is <code>auto</code> since 5.0.
@@ -178,7 +178,7 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>In additions to macro and {@link Include}, you can use the fulfill
  * attribute as follows:
- * <code>&lt;div fulfill="=/my/foo.zul"&gt;...&lt;/div&gt;
+ * <code>&lt;div fulfill="=/my/foo.zul"&gt;...&lt;/div&gt;</code>
  *
  * <h3>Custom Attribute</h3>
  * <dl>
@@ -439,13 +439,13 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 	 *
 	 * <p>It is useful if you want to include non-HTML content.
 	 * For example, 
-	 * <pre><code><include src="a.xml" comment="true"/></code></pre>
+	 * <pre><code>&lt;include src="a.xml" comment="true"/&gt;</code></pre>
 	 * Then, it will generate
 	 * <pre><code>&lt;div id="uuid"&gt;
 	 *&lt;!--
 	 * //the content of a.xml
 	 *--&gt;
-	 *</div></code></pre>
+	 *&lt;/div&gt;</code></pre>
 	 *
 	 * <p>Notice that it is ignored in the instance mode ({@link #getMode}).
 	 * @since 5.0.0
