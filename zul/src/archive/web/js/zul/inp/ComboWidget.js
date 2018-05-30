@@ -595,8 +595,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			return;
 		}
 
-		if (keyCode == 18 || keyCode == 27 || keyCode == 13
-		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
+		if (keyCode == 18 || keyCode == 27 || keyCode == 13 || keyCode == 93 || keyCode == 17
+		|| (keyCode >= 112 && keyCode <= 123)) //18 ALT, 27 ESC, 13 Enter, Fn, 93 WIN Menu, 17 Ctrl
 			return; //ignore it (doc will handle it)
 
 		if (this._autodrop && !bOpen)
