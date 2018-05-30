@@ -1876,8 +1876,8 @@ wgt.$f().main.setTitle("foo");
 					if (!floating) this.setDomVisible_(node, visible);
 				} else if (visible) {
 					var zi;
-					if (floating)
-						this.setZIndex(zi = _topZIndex(this), {fire: true});
+					if (floating && !this.userZIndex)
+						this.setZIndex(zi = _topZIndex(this), {fire: true, floatZIndex: true});
 
 					this.setDomVisible_(node, true);
 
@@ -2049,6 +2049,7 @@ wgt.$f().main.setTitle("foo");
 	 */
 	setTopmost: function () {
 		if (!this.desktop) return -1;
+		if (this.userZIndex) return;
 
 		for (var wgt = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
@@ -2077,7 +2078,7 @@ wgt.$f().main.setTitle("foo");
 	 */
 	setFloatZIndex_: function (node, zi) {
 		if (node != this.$n()) node.style.zIndex = zi; //only a portion
-		else this.setZIndex(zi, {fire: true});
+		else this.setZIndex(zi, {fire: true, floatZIndex: true});
 	},
 	/** Returns the z-index of a floating widget.
 	 * It is called by {@link #setTopmost} to decide the topmost z-index,
@@ -2161,6 +2162,10 @@ wgt.$f().main.setTitle("foo");
 	 * @return zk.Widget this widget.
 	 */
 	setZIndex: _zkf = function (zIndex, opts) {
+		if (!opts.floatZIndex)
+			this.userZIndex = true;
+		if (!zIndex)
+			delete this.userZIndex;
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
 			var n = this.$n();
