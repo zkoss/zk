@@ -98,6 +98,7 @@ ZK 8.5.2
   ZK-3926: Typo in Borderlayout animation.disabled property
   ZK-3895: wrong implementation in the widget function zul.tab.Tabbox.isRight()
   ZK-3974: spinner doesn't prevent users from violating its constraint
+  ZK-3702: Combowidget components with autodrop trigger popup on non content relevant keys
 
 * Upgrade Notes
 
