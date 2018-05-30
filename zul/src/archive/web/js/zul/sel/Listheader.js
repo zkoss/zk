@@ -265,7 +265,6 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			$n.removeClass(this.$s('checked'));
 			box._select(null, evt);
 		}
-		box.$$selectAll = this._checked;
 		box.fire('onCheckSelectAll', this._checked, {toServer: true});
 	},
 	//@Override
