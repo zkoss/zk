@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3792.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 31 10:56:07 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Focus on the datebox, and type "03:00 am"
+		2. The datebox should be updated as "03:00 AM"
+	</label>
+	<datebox format="KK:mm a" lenient="true"/>
+</zk>

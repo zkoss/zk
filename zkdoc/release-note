@@ -53,6 +53,7 @@ ZK 8.5.2
   ZK-3268: uploader and dropupload progress update interval are different
   ZK-3943: popup wrong position
   ZK-3646: href with mailto in chrome remove target frame too early
+  ZK-3792: enter am but Datebox converts it to PM
 
 * Upgrade Notes
 
