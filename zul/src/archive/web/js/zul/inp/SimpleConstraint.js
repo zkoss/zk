@@ -45,6 +45,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this._cstArr = [];
 			this._cst = a;
 			this._finishParseCst = false;
+			this._init(a);
 		} else {
 			this._flags = typeof a == 'number' ? this._cvtNum(a) : a || {};
 			this._regex = typeof b == 'string' ? new RegExp(b, 'g') : b;

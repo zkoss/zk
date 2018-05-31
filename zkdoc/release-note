@@ -6,6 +6,7 @@ ZK 8.5.2
   ZK-3844: Include the latest 4.x font awesome icon
   ZK-3329: Collapsible Borderlayout region in slide or open mode only
   ZK-3538: Do not change focus when opening a Treeitem
+  ZK-3624: Spinner - improve initial value
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception
