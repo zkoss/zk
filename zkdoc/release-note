@@ -63,6 +63,7 @@ ZK 8.5.2
   ZK-3792: enter am but Datebox converts it to PM
   ZK-3838: users can paste non-digital characters into a intbox
   ZK-3921: ROD grid loses scroll position when hiding/showing columns
+  ZK-3734: Doublebox with format attribute specified doesn't trigger a numeric keyboard in iPad
 
 * Upgrade Notes
 
