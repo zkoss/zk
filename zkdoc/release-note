@@ -4,6 +4,7 @@ ZK 8.5.2
   ZK-1148: Able to handle the destroyed of a ViewModel.
   ZK-3875: Multiline Textbox fires onOK event when pressing enter key which is configurable
   ZK-3844: Include the latest 4.x font awesome icon
+  ZK-3624: Spinner - improve initial value
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception

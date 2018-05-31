@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3624.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed May 30 16:06:07 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click spinner up button, the value should be 1
+		2. Empty spinner text
+		3. Click button setConstraint("min 0")
+		4. Click spinner up button, the value should be 1
+		5. Empty spinner text
+		6. Click button setConstraint("min 2")
+		7. Click spinner up button, the value should be 2
+	</label>
+	<spinner id="sp" constraint="min -1"/>
+	<separator/>
+	<button label='setConstraint("min 0")' onClick='sp.setConstraint("min 0")'/>
+	<button label='setConstraint("min 2")' onClick='sp.setConstraint("min 2")'/>
+</zk>
