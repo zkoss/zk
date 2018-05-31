@@ -195,7 +195,10 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		// ZK-2506: use iframe to open a 'mailto' href
 		if (href && href.toLowerCase().startsWith('mailto:')) {
 			var ifrm = jq.newFrame('mailtoFrame', href, null);
-			jq(ifrm).remove();
+			if (zk.chrome) // ZK-3646: for chrome, it need to let iframe exist for a longer time.
+				setTimeout(function () {jq(ifrm).remove();}, 100);
+			else
+				jq(ifrm).remove();
 			evt.stop();
 		}
 		// Bug ZK-2422
