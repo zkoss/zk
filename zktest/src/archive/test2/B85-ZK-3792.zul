@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3792.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 31 10:56:07 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<datebox format="KK:mm a" lenient="true"/>
+</zk>
