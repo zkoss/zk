@@ -10,6 +10,7 @@ ZK 8.5.2
   ZK-3181: redundant requests filtering with clientInfo listeners
   ZK-3324: multiple ZKBIND annotations at a field undecided
   ZK-3529: Add title label to collapsed borderlayout region if title is set
+  ZK-2459: Add BindUtils postNotifyChange method accepting multiple property names
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception

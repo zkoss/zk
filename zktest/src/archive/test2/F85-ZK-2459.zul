@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-2459.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 31 10:13:46 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click changeProperties button
+		2. The first label should be "one"
+		3. The second label should be "two"
+		4. The third label should be "three"
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_2459VM')">
+		<label id="lb1" value="@load(vm.propertyOne)"/>
+		<label id="lb2" value="@load(vm.propertyTwo)"/>
+		<label id="lb3" value="@load(vm.propertyThree)"/>
+		<separator/>
+		<button id="btn" label="changeProperties" onClick="@command('changeProperties')"/>
+	</div>
+</zk>
