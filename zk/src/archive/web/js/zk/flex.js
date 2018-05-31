@@ -414,19 +414,15 @@ zFlex = { //static methods
 		var setHghForVflexChild = function (vfxs, h, lsz) {
 			for (var j = vfxs.length - 1; j > 0; --j) {
 				var cwgt = vfxs.shift(),
-					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0, //cast to integer
-					jqcwgt = jq(cwgt.$n()),
-					h = vsz - jqcwgt.outerHeight(true) + jqcwgt.outerHeight(); // remove margin height
-				cwgt.setFlexSize_({height: h});
-				cwgt._vflexsz = h;
+					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0; //cast to integer
+				cwgt.setFlexSize_({height: vsz});
+				cwgt._vflexsz = vsz;
 				if (!cwgt.isExcludedVflex_())
 					lsz -= vsz;
 			}
 			//last one with vflex
 			if (vfxs.length) {
-				var cwgt = vfxs.shift(),
-					jqcwgt = jq(cwgt.$n());
-				lsz -= jqcwgt.outerHeight(true) - jqcwgt.outerHeight(); // remove margin height
+				var cwgt = vfxs.shift();
 				cwgt.setFlexSize_({height: lsz});
 				cwgt._vflexsz = lsz;
 			}
@@ -448,19 +444,15 @@ zFlex = { //static methods
 		lastsz = wdh = Math.max(wdh, 0);
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex}
-				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0, //cast to integer
-				jqcwgt = jq(cwgt.$n()),
-				w = hsz - jqcwgt.outerWidth(true) + jqcwgt.outerWidth(); // remove margin width
-			cwgt.setFlexSize_({width: w});
-			cwgt._hflexsz = w;
+				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
+			cwgt.setFlexSize_({width: hsz});
+			cwgt._hflexsz = hsz;
 			if (!cwgt.isExcludedHflex_())
 				lastsz -= hsz;
 		}
 		//last one with hflex
 		if (hflexs.length) {
-			var cwgt = hflexs.shift(),
-				jqcwgt = jq(cwgt.$n());
-			lastsz -= jqcwgt.outerWidth(true) - jqcwgt.outerWidth(); // remove margin width
+			var cwgt = hflexs.shift();
 			cwgt.setFlexSize_({width: lastsz});
 			cwgt._hflexsz = lastsz;
 		}

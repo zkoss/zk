@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3865.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon May 28 09:43:50 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label pre="true" multiline="true">
+		1. The width and height of inner div should be calculated correctly according to flex with margin.
+			For example: inner div hflex="1" and margin-left is 10px, the width of inner div should be outer width - 10px.
+	</label>
+	<div sclass="outer" width="200px" height="150px" style="border: 1px solid gray;">
+		<div sclass="inner" hflex="1" style="margin-left: 10px; background: gray;">
+			margin left
+		</div>
+	</div>
+	<div sclass="outer" width="200px" height="150px" style="border: 1px solid gray;">
+		<div sclass="inner" hflex="1" style="margin-right: 10px; background: gray;">
+			margin right
+		</div>
+	</div>
+	<div sclass="outer" width="200px" height="150px" style="border: 1px solid gray;">
+		<div sclass="inner" vflex="1" style="margin-top: 10px; background: gray;">
+			margin top
+		</div>
+	</div>
+	<div sclass="outer" width="200px" height="150px" style="border: 1px solid gray;">
+		<div sclass="inner" vflex="1" style=" margin-bottom: 10px; background: gray;">
+			margin bottom
+		</div>
+	</div>
+	<div sclass="outer" width="200px" height="150px" style="border: 1px solid gray;">
+		<div sclass="inner" hflex="1" vflex="1" style="margin: 10px; background: gray;">
+			margin both
+		</div>
+	</div>
+</zk>
