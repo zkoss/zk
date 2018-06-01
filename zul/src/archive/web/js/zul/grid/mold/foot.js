@@ -18,7 +18,7 @@ function (out) {
 		w.redraw(out);
 	
 	var grid = this.getGrid();
-	if (grid._nativebar && !grid.frozen)
+	if (grid._nativebar)
 		out.push('<td class="', this.$s('bar'), '" />');
 	
 	out.push('</tr>');
