@@ -185,7 +185,6 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 							{toServer: tree.inPagingMold() || tree.isModel()});
 
 				tree._syncFocus(this);
-				tree.focus();
 
 				if (ebodytbl) {
 					tree._fixhdwcnt = tree._fixhdwcnt || 0;
