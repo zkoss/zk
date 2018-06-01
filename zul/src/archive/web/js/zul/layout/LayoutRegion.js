@@ -36,7 +36,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * A layout region in a border layout.
  * <p>
- * Events:<br/> onOpen, onSize.<br/>
+ * Events:<br/> onOpen, onSize, onSlide.<br/>
  */
 zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_open: true,
@@ -44,6 +44,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_maxsize: 2000,
 	_minsize: 0,
 	_scrollbar: null,
+	_slidable: true,
+	_closable: true,
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -160,7 +162,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 */
 		collapsible: function (collapsible) {
 			var btn = this.$n(this._open ? 'btn' : 'btned');
-			if (btn)
+			if (btn && (!collapsible || this._closable))
 				btn.style.display = collapsible ? '' : 'none';
 		},
 		/**
@@ -219,7 +221,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		open: function (open, fromServer, nonAnima) {
-			if (!this.$n() || !this.isCollapsible() || !this.parent) {
+			if (!this.$n() || !this.isCollapsible() || !this.parent || (!fromServer && !this._closable)) {
 				return; //nothing changed
 			}
 
@@ -323,6 +325,45 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 			if (!fromServer) this.fire('onSlide', {slide: slide});
+		},
+		/**
+		 * Sets whether users can slide (preview) the region when clicked on a collapsed region.
+		 * Meaningful only if {@link #isCollapsible()} is true and {@link #isOpen()} is false.
+		 *
+		 * @param slidable whether users can slide (preview) the region.
+		 * @since 8.5.2
+		 */
+		/**
+		 * Returns whether users can slide (preview) the region when clicked on a collapsed region.
+		 * In other words, if false, clicking on a collapsed region will open it instead of sliding.
+		 * <p>Default: true.
+		 *
+		 * @return whether users can slide (preview) the region.
+		 * @since 8.5.2
+		 */
+		slidable: null,
+		/**
+		 * Sets whether users can open or close the region.
+		 * Meaningful only if {@link #isCollapsible()} is true.
+		 *
+		 * @param closable whether users can open or close the region.
+		 * @since 8.5.2
+		 */
+		/**
+		 * Returns whether users can open or close the region.
+		 * In other words, if false, users are no longer allowed to
+		 * change the open status (by clicking the button on the bar).
+		 * <p>Default: true.
+		 *
+		 * @return whether users can open or close the region.
+		 * @since 8.5.2
+		 */
+		closable: function (v) {
+			if (this.desktop && this._collapsible) {
+				jq(this.$n('btn')).toggle(v);
+				jq(this.$n('btned')).toggle(v);
+				jq(this.$n('splitbtn')).toggleClass(this.$s('splitter-button-disabled'), !v);
+			}
 		}
 	},
 	//bug #3014664
@@ -718,12 +759,17 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (!target.id)
 			target = target.parentNode;
 		switch (target) {
+		case this.$n('colled'):
+			if (this._slidable) {
+				this.setSlide(!this._isSlide);
+				break;
+			}
 		case this.$n('btn'):
 		case this.$n('btned'):
 		case this.$n('splitbtn'):
-			if (!this.isCollapsible() || this._isSlide || zk.animating())
+			if (!this.isCollapsible() || this._isSlide || zk.animating() || !this._closable)
 				return;
-			if (this.$n('btned') == target) {
+			if (!this._open) {
 				var s = this.$n('real').style;
 				s.visibility = 'hidden';
 				s.display = '';
@@ -733,9 +779,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}
 			this.setOpen(!this._open);
 			break;
-		case this.$n('colled'):
-			this.setSlide(!this._isSlide);
-			break;
 		}
 		this.$supers('doClick_', arguments);
 	},
@@ -743,7 +786,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var target = evt.target;
 		if (this._isSlide && !jq.isAncestor(this.$n('real'), target)) {
 			var btned = this.$n('btned');
-			if (btned == target || btned == target.parentNode) {
+			if (this._closable && (btned == target || btned == target.parentNode)) {
 				this.setSlide(false, false, true);
 				this.setOpen(true, false, true);
 				this.$n('real').style.zIndex = ''; //reset
@@ -943,7 +986,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (noCenter) {
 				out.push('<i id="', uuid, '-btn" class="', parent.$s('icon'),
 						' ', this.getIconClass_(), '"');
-				if (!this._collapsible)
+				if (!this._collapsible || !this._closable)
 					out.push(' style="display:none;"');
 				out.push('></i>');
 			}
@@ -1016,7 +1059,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		n._lastSize = null;// reset size for Borderlayout
 		s.zIndex = '';
 		if (this.$n('btn'))
-			this.$n('btn').style.display = '';
+			this.$n('btn').style.display = this._closable ? '' : 'none';
 		jq(n).removeClass(this.$s('slide'));
 		jq(document).unbind('click', this.proxy(this._docClick));
 		this._isSlide = false;

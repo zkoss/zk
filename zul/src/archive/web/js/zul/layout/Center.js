@@ -19,6 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * {@link #setCollapsible(boolean)}, {@link #setMaxsize(int)},
  * {@link #setMinsize(int)}, {@link #setHeight(String)},
  * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
+ * {@link #setSlide(boolean)}, {@link #setSlidable(boolean)}, {@link #setClosable(boolean)}
  * and {@link #setVisible(boolean)}.
  *
  * <p>Default {@link #getZclass}: z-center.
@@ -84,6 +85,21 @@ zul.layout.Center = zk.$extends(zul.layout.LayoutRegion, {
 	 * @param int minsize
 	 */
 	setMinsize: zk.$void,     // readonly
+	/**
+	 * Center region can't be slided.
+	 * @param boolean slide
+	 */
+	setSlide: zk.$void,       // readonly
+	/**
+	 * Center region can't be slided.
+	 * @param boolean slidable
+	 */
+	setSlidable: zk.$void,    // readonly
+	/**
+	 * Center region can't be closed.
+	 * @param boolean closable
+	 */
+	setClosable: zk.$void,    // readonly
 	doMouseOver_: zk.$void,   // do nothing.
 	doMouseOut_: zk.$void,    // do nothing.
 	doClick_: zk.$void,       // do nothing.

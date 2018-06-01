@@ -55,7 +55,7 @@ function (out) {
 		}
 		out.push('<div id="', uuid, '-split" class="', this.$s('splitter'),
 			'"><span id="', uuid, '-splitbtn" class="', this.$s('splitter-button'));
-		if (!this._collapsible)
+		if (!this._collapsible || !this._closable)
 			out.push(' ', this.$s('splitter-button-disabled'));
 		out.push('">',
 			'<i class="', icon, doticon, '"></i>',
@@ -65,7 +65,7 @@ function (out) {
 				this.$s('collapsed'), '" style="display:none"');
 		if (title = this._title) out.push(' title="', title, '"');
 		out.push('><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
-		if (!this._collapsible)
+		if (!this._collapsible || !this._closable)
 			out.push(' style="display:none;"');
 		out.push('></i></div>');
 	}

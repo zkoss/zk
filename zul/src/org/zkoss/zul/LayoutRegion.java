@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A layout region in a border layout.
  * <p>
- * Events:<br/> onOpen, onSize.<br/>
+ * Events:<br/> onOpen, onSize, onSlide.<br/>
  * 
  * <h3>Support Caption component</h3>
  * [ZK EE]
@@ -57,6 +57,8 @@ public abstract class LayoutRegion extends XulElement {
 	private int[] _cmargins;
 	private boolean _splittable;
 	private boolean _collapsible;
+	private boolean _closable = true;
+	private boolean _slidable = true;
 	private boolean _open = true;
 	private boolean _slide = false;
 	private transient Caption _caption;
@@ -364,6 +366,59 @@ public abstract class LayoutRegion extends XulElement {
 		}
 	}
 
+	/**
+	 * Returns whether users can slide (preview) the region when clicked on a collapsed region.
+	 * In other words, if false, clicking on a collapsed region will open it instead of sliding.
+	 * <p>Default: true.
+	 *
+	 * @return whether users can slide (preview) the region.
+	 * @since 8.5.2
+	 */
+	public boolean isSlidable() {
+		return _slidable;
+	}
+
+	/**
+	 * Sets whether users can slide (preview) the region when clicked on a collapsed region.
+	 * Meaningful only if {@link #isCollapsible()} is true and {@link #isOpen()} is false.
+	 *
+	 * @param slidable whether users can slide (preview) the region.
+	 * @since 8.5.2
+	 */
+	public void setSlidable(boolean slidable) {
+		if (_slidable != slidable) {
+			_slidable = slidable;
+			smartUpdate("slidable", slidable);
+		}
+	}
+
+	/**
+	 * Returns whether users can open or close the region.
+	 * In other words, if false, users are no longer allowed to
+	 * change the open status (by clicking the button on the bar).
+	 * <p>Default: true.
+	 *
+	 * @return whether users can open or close the region.
+	 * @since 8.5.2
+	 */
+	public boolean isClosable() {
+		return _closable;
+	}
+
+	/**
+	 * Sets whether users can open or close the region.
+	 * Meaningful only if {@link #isCollapsible()} is true.
+	 *
+	 * @param closable whether users can open or close the region.
+	 * @since 8.5.2
+	 */
+	public void setClosable(boolean closable) {
+		if (_closable != closable) {
+			_closable = closable;
+			smartUpdate("closable", closable);
+		}
+	}
+
 	/*package*/ boolean isNativeScrollbar() {
 		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
 	}
@@ -445,6 +500,11 @@ public abstract class LayoutRegion extends XulElement {
 
 		if (isNativeScrollbar())
 			renderer.render("_nativebar", true);
+
+		if (!_slidable)
+			renderer.render("slidable", false);
+		if (!_closable)
+			renderer.render("closable", false);
 	}
 
 	/** Processes an AU request.
