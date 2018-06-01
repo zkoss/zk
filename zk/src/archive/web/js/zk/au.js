@@ -1269,11 +1269,23 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		
 		if (window.devicePixelRatio)
 			dpr = window.devicePixelRatio;
-		
-		zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onClientInfo',
-			[new Date().getTimezoneOffset(),
+
+		var clientInfo = [new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient],
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient];
+
+		// ZK-3181: only send when value changed
+		var oldClientInfo = zAu._clientInfo;
+		if (oldClientInfo) {
+			var same = oldClientInfo.every(function (el, index) {
+				return el === clientInfo[index];
+			});
+			if (same) return;
+		}
+
+		zAu._clientInfo = clientInfo;
+		zAu.send(new zk.Event(zk.Desktop.$(dtid), 'onClientInfo',
+			zAu._clientInfo,
 			{implicit: true, rtags: {onClientInfo: 1}}));
 	},
 	visibilityChange: function (dtid) {
