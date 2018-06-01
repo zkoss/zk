@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3688.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed May 30 16:01:48 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<hlayout>
+		<div>
+			<label multiline="true">
+				1. Click the button 1 2 3 orderly.
+				2. You should see the window 3 overlaps on window 2, window 2 overlaps on window 1.
+				3. Click the window 1 2 3 orderly, the clicked one would be on the top.
+				4. Click button 4, the window 3 should be on the buttom.
+				5. Do step 3 again, it should be the same result.
+				6. Click button 5, the window 3 should be on the top.
+				7. Do step 3 again, the window 3 should on the button.
+				8. Do step 4 and step 5 again, it should be the same result.
+			</label>
+
+			<window id="win1" visible="false" top="200px">window 1</window>
+			<window id="win2" visible="false" top="250px" left="50px">window 2</window>
+			<window id="win3" visible="false" border="true" top="300px" left="100px">Window 3</window>
+			<window id="win4" visible="false" top="350px" left="150px" zindex="5000">window 4</window>
+			<window id="win5" visible="false" top="400px" left="200px" zindex="5000">window 5</window>
+			<div id="div1" style="border: 1px solid black; height: 500px; background-color:black;" zindex="2000"></div>
+		</div>
+		<vlayout>
+			<button id="btn1" label="1. win1: no zindex" onClick='win1.doOverlapped();'/>
+			<button id="btn2" label="2. win2: no zindex" onClick='win2.doOverlapped();'/>
+			<button id="btn3" label="3. win3" onClick='win3.doOverlapped()'/>
+			<button id="btn4" label="4. win3Zindex -1" onClick='win3.setZIndex(-1);'/>
+			<button id="btn5" label="5. win3Zindex 5000" onClick='win3.setZIndex(5000);'/>
+			<button id="btn6" label="6. win4: zindex=5000" onClick='win4.doOverlapped()'/>
+			<button id="btn7" label="7. win5: zindex=5000" onClick='win5.doOverlapped()'/>
+		</vlayout>
+	</hlayout>
+</zk>
