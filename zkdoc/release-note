@@ -36,6 +36,7 @@ ZK 8.5.2
   ZK-3905: listbox selectAll checkbox stops synchronizing
   ZK-3865: incorrect flex calculation with margins
   ZK-3928: tree item selection changes scroll position
+  ZK-3885: dynamically added nested borderlayout triggers onBind twice
 
 * Upgrade Notes
 
