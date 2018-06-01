@@ -74,9 +74,9 @@ public class AnnotationUtil {
 			if (annos.size() <= 0)
 				return null;
 		}
-		//TODO decide which one should use, currently I use the last one
+		//Use custom ZKBIND annotation instead of default ZKBIND annotation if any
 		if (annos instanceof List) {
-			return (Annotation) ((List) annos).get(((List) annos).size() - 1);
+			return (Annotation) ((List) annos).get(0);
 		}
 		Iterator<Annotation> it = annos.iterator();
 		Annotation anno = it.next();

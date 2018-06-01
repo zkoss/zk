@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3324.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Jun 01 10:21:22 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Type in the textbox
+		2. Blur the textbox, the label should remain empty
+		3. Focus in the textbox
+		4. Press enter, you should see the label value is same as the textbox input
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3324VM')">
+		<textbox id="textbox" value="@bind(vm.value)" use="org.zkoss.zktest.test2.F85_ZK_3324Component"/>
+		<separator/>
+		<label id="label" value="@load(vm.value)"/>
+	</div>
+</zk>
