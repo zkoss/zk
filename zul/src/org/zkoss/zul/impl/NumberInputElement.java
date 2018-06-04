@@ -142,11 +142,17 @@ public abstract class NumberInputElement extends FormatInputElement {
 	 * @since 5.0.8
 	 */
 	private String getRealSymbols() {
-		if (_locale != null) {
-			final String localeName = _locale.toString();
+		String format = getFormat();
+		boolean useLocaleFormat = (format != null && format.startsWith("locale:"));
+		if (_locale != null || useLocaleFormat) {
+			String localeName;
+			if (useLocaleFormat)
+				localeName = format.substring(format.indexOf(":") + 1);
+			else
+				localeName = _locale.toString();
 			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(getDesktop(),
 					"org.zkoss.zul.impl.NumberInputElement" + localeName)) {
-				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(_locale);
+				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale(localeName));
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("GROUPING", String.valueOf(symbols.getGroupingSeparator()));
 				map.put("DECIMAL", String.valueOf(symbols.getDecimalSeparator()));
