@@ -759,4 +759,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<session-timeout>10</session-timeout>
 	</session-config>-->
 
+	<!-- for F85-ZK-3824 -->
+	<!--<library-property>-->
+		<!--<name>org.zkoss.zk.au.AuWriters.ContentType</name>-->
+		<!--<value>json/application;charset=UTF-8</value>-->
+	<!--</library-property>-->
 </zk>
