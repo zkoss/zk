@@ -101,6 +101,9 @@
 			<resource>
 				<directory>${project.basedir}/src/archive</directory>
 			</resource>
+			<resource>
+				<directory>${project.basedir}/codegen/archive</directory>
+			</resource>
 		</resources>
 		<plugins>
 			<!--<plugin>
