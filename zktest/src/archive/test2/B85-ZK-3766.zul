@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3766.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 05 11:12:13 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window mode="overlapped" position="center">
+        <label multiline="true">
+            1. Click each bandboxes button to drop down the popup.
+            2. Test right-middle bandbox. See if the position of popup is after_end.
+        </label>
+    </window>
+    <hlayout hflex="1" vflex="1">
+        <vbox hflex="1" vflex="1">
+            <bandbox>
+                <bandpopup width="600px" height="600px" />
+            </bandbox>
+            <separator vflex="1" />
+            <bandbox>
+                <bandpopup width="600px" height="600px" />
+            </bandbox>
+            <separator vflex="1" />
+            <bandbox>
+                <bandpopup width="600px" height="600px" />
+            </bandbox>
+        </vbox>
+        <vbox hflex="1" vflex="1" align="end">
+            <bandbox value="Ok, left below">
+                <bandpopup width="600px" height="800px" />
+            </bandbox>
+            <separator vflex="1" />
+            <bandbox id="target" value="Not Ok, at default position">
+                <bandpopup width="600px" height="800px" />
+            </bandbox>
+            <separator vflex="1" />
+            <bandbox value="Ok, left above">
+                <bandpopup width="600px" height="800px" />
+            </bandbox>
+        </vbox>
+    </hlayout>
+</zk>
