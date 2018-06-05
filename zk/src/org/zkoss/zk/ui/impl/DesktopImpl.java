@@ -974,7 +974,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		try {
 			final List<Page> pages = new ArrayList<Page>(_pages);
-			_pages.clear();
 			for (Page page : pages) {
 				try {
 					((PageCtrl) page).destroy();
@@ -982,6 +981,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					log.warn("Failed to destroy " + page, ex);
 				}
 			}
+			_pages.clear();
 		} catch (Throwable ex) {
 			log.warn("Failed to clean up pages of " + this, ex);
 		}

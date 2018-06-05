@@ -751,6 +751,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public void destroy() {
 		super.destroy();
 
+		for (Component root: this.getRoots()) {
+			root.detach();
+		}
 		try {
 			if (_ips != null) {
 				final List<Interpreter> ips = new ArrayList<Interpreter>(_ips.values());

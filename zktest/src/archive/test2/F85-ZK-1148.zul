@@ -1,18 +1,25 @@
 <zk>
-    <label multiline="true">
-        1. click the detach button.
-        2. you should see destroy info on the clients log.
+	<label multiline="true">
+		1. Click the "detach window" button.
+		2. You should see destroy info on the client's log. (DestroyD DestroyC)
+		3. Reload this page, you should see 
+		   "WARNING: execute the DestroyA method" and "WARNING: execute the DestroyA method" at system console.
+		4. Click the "detach out window" button.
+		5. You should see destroy info on the client's log. (DestroyD DestroyC)
 
-    </label>
-    <window id="win"
-            viewModel="@id('vm')@init('org.zkoss.zktest.test2.F85_ZK_1148_DestroyD')">
-        <button label="toggle VM value" onClick="@command('toggleMyValue')"/>
-        <button label="show vm attribute"
-                onClick='System.out.println("vm = " + win.getAttributes().get(org.zkoss.bind.sys.BinderCtrl.VM));'/>
-        <label visible="@load(vm.myValue)" value="show label if value is true"/>
+	</label>
+	<window id="outWin">
+		<window id="win"
+				viewModel="@id('vm')@init('org.zkoss.zktest.test2.F85_ZK_1148_DestroyD')">
+			<button label="toggle VM value" onClick="@command('toggleMyValue')"/>
+			<button label="show vm attribute"
+					onClick='System.out.println("vm = " + win.getAttributes().get(org.zkoss.bind.sys.BinderCtrl.VM));'/>
+			<label visible="@load(vm.myValue)" value="show label if value is true"/>
 
-    </window>
-    <button id="delBtn" label="detach window" onClick='win.detach();'/>
-    <button label="attach window" onClick=''/>
-    <label id="resultLabel"></label>
+		</window>
+		<button id="delBtn" label="detach window" onClick='win.detach();'/>
+	</window>
+	<button id="delBtno" label="detach out window" onClick='outWin.detach();'/>
+	<button label="attach window" onClick=''/>
+	<label id="resultLabel"></label>
 </zk>

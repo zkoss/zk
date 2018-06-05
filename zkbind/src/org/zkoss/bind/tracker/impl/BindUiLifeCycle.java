@@ -198,12 +198,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			}
 		});
 		//ZK-1148, add a @destroy annotation method.
-		if (!((AbstractComponent) comp).getAnnotations("viewModel").isEmpty()) {
-			Binder binder = BinderUtil.getBinder(comp);
-			if (binder != null) {
-				binder.destroy(comp, binder.getViewModel());
-			}
-		}
+		destroyBinder(comp);
+
 		//ZK-2022, make it is in queue of remove.
 		comp.setAttribute(REMOVE_MARK, Boolean.TRUE);
 		//ZK-2545 - Children binding support list model
@@ -219,6 +215,18 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		//F80: Speed up render, check component's subBinderAnnotation
 		comp.setAttribute(SKIP_BIND_INIT, false);
 		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));
+	}
+
+	private void destroyBinder(Component comp) {
+		if (!((AbstractComponent) comp).getAnnotations("viewModel").isEmpty()) {
+			Binder binder = BinderUtil.getBinder(comp);
+			if (binder != null) {
+				binder.destroy(comp, binder.getViewModel());
+			}
+		} 
+		for (Component child: comp.getChildren()) {
+			destroyBinder(child);
+		}
 	}
 
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
