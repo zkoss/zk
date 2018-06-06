@@ -301,6 +301,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		// remove visible flag
 		if (!opts || !opts.keepVisible) {
 			this._keepVisible = false;
+			this._fakeParent = null;
 		}
 	},
 	/** The effect for closing the popup. Override this function to provide
@@ -378,7 +379,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Popup, 'bind_', arguments);
-		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this, onSize: this, onScroll: this});
+		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this, afterSize: this, onScroll: this});
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -390,11 +391,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._openInfo)
 			this._openInfo = null;
 		this._shallToggle = null;
-		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this, onSize: this, onScroll: this});
+		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this, afterSize: this, onScroll: this});
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},
-	onSize: function () {
+	afterSize: function () {
 		this.reposition();
 	},
 	/** Reposition popup
