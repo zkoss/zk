@@ -24,6 +24,9 @@ import org.zkoss.io.Serializables;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.ConventionWires;
@@ -169,7 +172,15 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 
 			exec.createComponents(_uri != null ? _uri : getDefinition().getMacroURI(), this, _props);
 		}
+		addEventListener(-10000, Events.ON_CREATE, new EventListener<Event>() {
+			public void onEvent(Event event) throws Exception {
+				HtmlMacroComponent.this.wireMarcoComponent();
+			}
+		});
 
+	}
+
+	private void wireMarcoComponent() {
 		switch (getAutowireFlag()) {
 		case 0: //by selector
 			Selectors.wireComponents(this, this, false);
