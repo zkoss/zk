@@ -45,6 +45,11 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable {
+	/*package*/ enum SelectionState {
+		FULL, 
+		PARTIAL, 
+		NONE
+	}
 	private transient Treerow _treerow;
 	private transient Treechildren _treechildren;
 	private Object _value;
@@ -58,6 +63,7 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	 */
 	private boolean _loaded;
 	private boolean _rendered;
+	private SelectionState _selectionState;
 
 	static {
 		addClientEvent(Treeitem.class, Events.ON_OPEN, CE_IMPORTANT);
@@ -672,6 +678,17 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 
 		if (_value instanceof String)
 			render(renderer, "value", _value);
+	}
+
+	/*package*/ void setSelectionState(SelectionState state) {
+		if (_selectionState != state) {
+			_selectionState = state;
+			if (state == SelectionState.PARTIAL) {
+				smartUpdate("_selectionState", true); //partial state
+			} else {
+				smartUpdate("_selectionState", false); //non-partial state
+			}
+		}
 	}
 
 	/** Processes an AU request.

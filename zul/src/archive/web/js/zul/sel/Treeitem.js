@@ -200,6 +200,15 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 		}
 	},
+	// Sets the selection state of the {@link Treeitem}.
+	// <p>If partial is true, it means the tree item is not selected but some of its children are selected.
+	set_selectionState: function (partial) {
+		this._partial = partial;
+		if (partial)
+			jq(this.treerow.$n()).addClass(this.$s('partial'));
+		else
+			jq(this.treerow.$n()).removeClass(this.$s('partial'));
+	},
 	_showKids: function (open) {
 		var tc = this.treechildren;
 		if (tc)

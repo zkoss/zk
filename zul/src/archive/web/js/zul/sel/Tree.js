@@ -314,6 +314,10 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			row.setOpen(true);
 		}
 	},
+	_toggleSelect: function () {
+		this._asaps.onSelect = true;
+		this.$supers('_toggleSelect', arguments);
+	},
 
 	/** Returns whether to ignore the selection.
 	 * It is called when selecting an item ({@link ItemWidget#doSelect_}).

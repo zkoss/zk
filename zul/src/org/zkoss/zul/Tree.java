@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Vector;
 
@@ -80,6 +81,7 @@ import org.zkoss.zul.ext.TreeSelectableModel;
 import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.Treeitem.SelectionState;
 
 /**
  *  A container which can be used to hold a tabular
@@ -230,11 +232,12 @@ public class Tree extends MeshElement {
 	private static final int INIT_LIMIT = -1; // since 7.0.0
 	private int _preloadsz = 50; // since 7.0.0
 	private transient LinkedList<Integer> _rodPagingIndex; // since 7.0.0
+	private Map<TreeNode<TreeNode>, SelectionState> _selectionStates = new HashMap<TreeNode<TreeNode>, SelectionState>();
 
 	static {
 		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
-		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
@@ -2218,6 +2221,7 @@ public class Tree extends MeshElement {
 					if (item.getTreerow() != null) // just in case
 						item.getTreerow().detach();
 					Treechildren tc = item.getTreechildren();
+					setSelectionState(item, node);
 					_renderer.render(item, node, index);
 					Object newTreeitem = item.getAttribute(Attributes.MODEL_RENDERAS);
 					if (newTreeitem instanceof Treeitem) {
@@ -2765,6 +2769,36 @@ public class Tree extends MeshElement {
 				selectedObjects = smodel.getSelection();
 				unselectedObjects = collectUnselectedObjects(prevSeldObjects, smodel.getSelection());
 			}
+
+			//start to add TriState mechanism
+			Treeitem selectedItem = (Treeitem) desktop.getComponentByUuidIfAny((String) data.get("reference"));
+			Set<Treeitem> previousSelectedItems = prevSeldItems;
+			TreeNode selectedNode = selectedItem.getValue();
+			toggleSubtree(selectedNode, selectedItem.isSelected());
+			toggleAncestors(selectedNode, selectedItem.isSelected());
+			
+			Set<Treeitem> selectedItems = selectedItem.getTree().getSelectedItems();
+			//update currentItem;
+			selectedItem.setSelectionState(selectedItem.isSelected() ? SelectionState.FULL : SelectionState.NONE);
+			//update child items;
+			for (Treeitem treeitem : selectedItems) {
+				treeitem.setSelectionState(SelectionState.FULL);
+			}
+			//update unselected icons
+			previousSelectedItems.removeAll(selectedItems);
+			for (Treeitem treeitem : previousSelectedItems) {
+				treeitem.setSelectionState(SelectionState.NONE);
+			}
+			//update ancestor icons
+			Treeitem ancestorItem = selectedItem.getParentItem();
+			while (ancestorItem != null) {
+				DefaultTreeNode ancestorNode = ancestorItem.getValue();
+				if (ancestorNode == null) break; //stop at root
+				ancestorItem.setSelectionState(calculateSelectionState(ancestorNode));
+				ancestorItem = ancestorItem.getParentItem();
+			}
+			//end to add TriState mechanism
+
 			if (sitems == null || sitems.isEmpty() || _model == null)
 				selectedObjects = null;
 			SelectEvent evt = new SelectEvent(Events.ON_SELECT, this, curSeldItems, prevSeldItems, unselectedItems,
@@ -2912,6 +2946,100 @@ public class Tree extends MeshElement {
 			} else {
 				m.setActivePage(_pgi.getActivePage());
 			}
+		}
+	}
+
+	private void toggleSubtree(TreeNode<TreeNode> node, final boolean selected) {
+		if (node.getChildren() != null) {
+			Selectable selectableModel = (Selectable) getModel();
+			Queue<TreeNode<TreeNode>> childQueue = new LinkedList<TreeNode<TreeNode>>(node.getChildren());
+			while (!childQueue.isEmpty()) {
+				TreeNode<TreeNode> childNode = childQueue.remove();
+				if (childNode.getChildren() != null) {
+					childQueue.addAll(childNode.getChildren());
+				}
+				if (selected) {
+					selectableModel.addToSelection(childNode);
+				} else {
+					selectableModel.removeFromSelection(childNode);
+				}
+			}
+		}
+	}
+
+	private void toggleAncestors(TreeNode<TreeNode> node, boolean selected) {
+		TreeNode<TreeNode> ancestorNode = node.getParent();
+		Selectable selectableModel = (Selectable) getModel();
+		while (ancestorNode != getRoot() && ancestorNode != null) {
+			if (!selected) {
+				selectableModel.removeFromSelection(ancestorNode);
+			}
+			SelectionState state = calculateSelectionState(ancestorNode);
+			
+			_selectionStates.put(node, state);
+			if (state == SelectionState.FULL) {
+				selectableModel.addToSelection(ancestorNode);
+			}
+			ancestorNode = ancestorNode.getParent();
+		}
+	}
+
+	private SelectionState calculateSelectionState(TreeNode<TreeNode> node) {
+		Selectable selectableModel = ((Selectable) getModel());
+		if (selectableModel.isSelected(node)) {
+			return SelectionState.FULL; //short circuit
+		}
+		
+		List<TreeNode<TreeNode>> children = node.getChildren();
+		if (children == null || children.isEmpty()) {
+			return SelectionState.NONE;
+		}
+		
+		boolean atLeastOneSelected = false;
+		boolean fullySelected = true;
+		for (TreeNode<TreeNode> child : children) {
+			if (selectableModel.isSelected(child)) {
+				atLeastOneSelected = true;
+			} else {
+				SelectionState childSelectionState = calculateSelectionState(child);
+				switch (childSelectionState) {
+				case FULL:
+					atLeastOneSelected = true;
+					break;
+				case PARTIAL:
+					atLeastOneSelected = true;
+					fullySelected = false;
+					break;
+				default:
+					fullySelected = false;
+					break;
+				}
+			}
+			if (atLeastOneSelected && !fullySelected) return SelectionState.PARTIAL; //short circuit
+		}
+		if (fullySelected) {
+			return SelectionState.FULL;
+		} else {
+			return SelectionState.NONE;
+		} 
+	}
+
+	private void setSelectionState(Treeitem ti, Object tnode) {
+		if (!(tnode instanceof TreeNode)) 
+			return;
+		if (getSelectionState((TreeNode) tnode) == SelectionState.PARTIAL) {
+			ti.setSelectionState(SelectionState.PARTIAL);
+		} else {
+			ti.setSelectionState(null);
+		}
+	}
+
+	private SelectionState getSelectionState(TreeNode<TreeNode> node) {
+		SelectionState state = _selectionStates.get(node);
+		if (state == null) {
+			return SelectionState.NONE;
+		} else {
+			return state;
 		}
 	}
 }

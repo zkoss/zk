@@ -45,6 +45,8 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 				scls += (scls ? ' ' : '') + this.$s('disabled');
 			if (p.isSelected())
 				scls += (scls ? ' ' : '') + this.$s('selected');
+			if (this._partial)
+				scls += (scls ? ' ' : '') + this.$s('partial');
 		}
 		return scls;
 	},
