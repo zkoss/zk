@@ -17,6 +17,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-treerow
  */
 zul.sel.Treerow = zk.$extends(zul.Widget, {
+	
+	setPartialState: function (partial) {
+		this._partial = partial;
+		if (partial) 
+			jq(this.$n()).addClass(this.$s('partial'));
+		else
+			jq(this.$n()).removeClass(this.$s('partial'));
+	},
 	/** Returns the {@link Tree} instance containing this element.
 	 * @return Tree
 	 */
@@ -45,6 +53,8 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 				scls += (scls ? ' ' : '') + this.$s('disabled');
 			if (p.isSelected())
 				scls += (scls ? ' ' : '') + this.$s('selected');
+			if (this._partial)
+				scls += (scls ? ' ' : '') + this.$s('partial');
 		}
 		return scls;
 	},
