@@ -17,11 +17,9 @@
 
 package org.zkoss.zel;
 
-import java.beans.BeanInfo;
 import java.beans.FeatureDescriptor;
 import java.beans.IndexedPropertyDescriptor;
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +29,6 @@ import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -344,8 +341,7 @@ public class BeanELResolver extends ELResolver {
         }
 
         try {
-            BeanInfo info = Introspector.getBeanInfo(base.getClass());
-            PropertyDescriptor[] pds = info.getPropertyDescriptors();
+            PropertyDescriptor[] pds = Util.getPropertyDescriptors(base.getClass());
             for (int i = 0; i < pds.length; i++) {
             	//20110927, henrichen: Instrospector see getAbc(int) as IndexedPropertyDescriptor
             	final PropertyDescriptor pd = pds[i]; 
@@ -382,8 +378,7 @@ public class BeanELResolver extends ELResolver {
             this.type = type;
             this.properties = new HashMap<String, BeanProperty>();
             try {
-                BeanInfo info = Introspector.getBeanInfo(this.type);
-                PropertyDescriptor[] pds = info.getPropertyDescriptors();
+                PropertyDescriptor[] pds = Util.getPropertyDescriptors(this.type);
                 //20110927, henrichen: Introspector sees getAbc(int) as IndexedPropertyDescriptor
                 //which might override getAbc() PropertyDescriptor; have to recover the case
                 for (int i = 0; i < pds.length; i++) {

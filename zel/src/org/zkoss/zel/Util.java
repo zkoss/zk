@@ -16,6 +16,9 @@
  */
 package org.zkoss.zel;
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -783,5 +786,11 @@ class Util {
             }
             return cmp;
         }
+    }
+
+    // A workaround for https://bugs.openjdk.java.net/browse/JDK-8071693
+    // ZK-3814: Java 8 default interface methods not recognized as managed bean properties in EL
+    static PropertyDescriptor[] getPropertyDescriptors(Class<?> beanClass) throws IntrospectionException {
+        return new ClassIntrospector().getPropertyDescriptors(Introspector.getBeanInfo(beanClass), beanClass);
     }
 }
