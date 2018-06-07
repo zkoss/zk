@@ -18,6 +18,7 @@ ZK 8.5.2
   ZK-3278: Dropupload can limit max uploading file count
   ZK-3824: Provide a content-type control for AU response
   ZK-3704: Decimalbox supports Indian numbering system format
+  ZK-3846: use date format in data constraint error messages and localize range separator
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception
