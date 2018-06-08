@@ -376,6 +376,9 @@ zFlex = { //static methods
 				if (cwgt && cwgt._nhflex) {
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
+					var minWidth = jq(cwgt).css('min-width');
+					cwgt._minWidth = minWidth ? zk.parseInt(minWidth.replace('px', '')) : 0;
+					wdh -= cwgt._minWidth;
 					if (cwgt._hflex == 'min') {
 						wdh -= zFlex.fixMinFlex(cwgt, c, 'w');
 					} else {
@@ -394,6 +397,9 @@ zFlex = { //static methods
 				if (cwgt && cwgt._nvflex) {
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
+					var minHeight = jq(cwgt).css('min-height');
+					cwgt._minHeight = minHeight ? zk.parseInt(minHeight.replace('px', '')) : 0;
+					hgh -= cwgt._minHeight;
 					if (cwgt._vflex == 'min') {
 						hgh -= zFlex.fixMinFlex(cwgt, c, 'h');
 					} else {
@@ -414,11 +420,11 @@ zFlex = { //static methods
 		var setHghForVflexChild = function (vfxs, h, lsz) {
 			for (var j = vfxs.length - 1; j > 0; --j) {
 				var cwgt = vfxs.shift(),
-					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0; //cast to integer
+					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0 + cwgt._minHeight; //cast to integer
 				cwgt.setFlexSize_({height: vsz});
 				cwgt._vflexsz = vsz;
 				if (!cwgt.isExcludedVflex_())
-					lsz -= vsz;
+					lsz += cwgt._minHeight - vsz;
 			}
 			//last one with vflex
 			if (vfxs.length) {
@@ -426,6 +432,7 @@ zFlex = { //static methods
 				cwgt.setFlexSize_({height: lsz});
 				cwgt._vflexsz = lsz;
 			}
+			delete cwgt._minHeight;
 		};
 
 		//setup the height for the vflex child
@@ -444,17 +451,19 @@ zFlex = { //static methods
 		lastsz = wdh = Math.max(wdh, 0);
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex}
-				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
+				hsz = (cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0) + cwgt._minWidth; //cast to integer
 			cwgt.setFlexSize_({width: hsz});
 			cwgt._hflexsz = hsz;
 			if (!cwgt.isExcludedHflex_())
-				lastsz -= hsz;
+				lastsz += cwgt._minWidth - hsz;
+			delete cwgt._minWidth;
 		}
 		//last one with hflex
 		if (hflexs.length) {
 			var cwgt = hflexs.shift();
 			cwgt.setFlexSize_({width: lastsz});
 			cwgt._hflexsz = lastsz;
+			delete cwgt._minWidth;
 		}
 
 		// ZK-3411: height need to be reset if the horizontal scrollbar disappeared
