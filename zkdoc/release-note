@@ -45,6 +45,7 @@ ZK 8.5.2
   ZK-3885: dynamically added nested borderlayout triggers onBind twice
   ZK-3935: look up an application scope event queue causes an exception when a session unavailable
   ZK-3864: frozen overlap with position: relative/absolute
+  ZK-3942: AJAX commands execute before Initial page response
 
 * Upgrade Notes
 

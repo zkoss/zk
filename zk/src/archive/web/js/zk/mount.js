@@ -97,6 +97,9 @@ function zkamn(pkg, fn) {
 					_paci = null;
 					for (var f; f = fs.shift();)
 						f();
+					if (zk._fireOnClientInfo) {
+						zk._fireOnClientInfo();
+					}
 				} else
 					_paci.e = _paci.s;
 		}, 25);
@@ -462,7 +465,9 @@ function zkamn(pkg, fn) {
 						owner = Widget.$(owner);
 					var zf;
 					if ((zf = zk.feature) && (zf.pe || zf.ee) && zk.clientinfo !== undefined) {
-						zAu.cmd0.clientInfo(dt.uuid);
+						zk._fireOnClientInfo = function () {
+							zAu.cmd0.clientInfo(dt.uuid);
+						};
 						if (extra) {
 							var newExtra = [];
 							for (var j = 0; j < extra.length; j += 2) {
