@@ -9,6 +9,7 @@ ZK 8.5.2
   ZK-3619: Calendar supports those constraints as Datebox
   ZK-3181: redundant requests filtering with clientInfo listeners
   ZK-3324: multiple ZKBIND annotations at a field undecided
+  ZK-3798: Flex with minimum and maximum size  
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception
