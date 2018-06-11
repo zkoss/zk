@@ -3011,19 +3011,20 @@ function () {
 	 * @param zk.Desktop dt [optional] the desktop the DOM element belongs to.
 	 * If not specified, ZK will decide it automatically.
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper.
+	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 * @return zk.Widget this widget
 	 */
-	unbind: function (skipper) {
+	unbind: function (skipper, keepRod) {
 		if (this._$service) {
 			this._$service.destroy();
 			this._$service = null;
 		}
 		_rerenderDone(this, skipper); //cancel pending async rerender
 		if (this.z_rod)
-			this.$class._unbindrod(this);
+			this.$class._unbindrod(this, keepRod);
 		else {
 			var after = [];
-			this.unbind_(skipper, after);
+			this.unbind_(skipper, after, keepRod);
 			for (var j = 0, len = after.length; j < len;)
 				after[j++]();
 		}
@@ -3137,12 +3138,13 @@ unbind_: function (skipper, after) {
   this.$supers('unbind_', arguments);
 }
 </code></pre>
+	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 */
-	unbind_: function (skipper, after) {
+	unbind_: function (skipper, after, keepRod) {
 		this.$class._unbind0(this);
 		_unlistenFlex(this);
 
-		this.unbindChildren_(skipper, after);
+		this.unbindChildren_(skipper, after, keepRod);
 		this.cleanDrag_(); //ok to invoke even if not init
 		this.unbindSwipe_();
 		this.unbindDoubleTap_();
@@ -3169,17 +3171,18 @@ unbind_: function (skipper, after) {
 	 * It is called by {@link #unbind_} to invoke child's {@link #unbind_} one-by-one.
 	 * @param zk.Skipper skipper [optional] used if {@link #rerender} is called with a non-null skipper
 	 * @param Array after an array of function ({@link Function})that will be invoked after {@link #unbind_} has been called. For example,
+	 * @param boolean keepRod [optional] used if the ROD flag needs to be kept.
 	 * @since 5.0.5
 	 */
-	unbindChildren_: function (skipper, after) {
+	unbindChildren_: function (skipper, after, keepRod) {
 		for (var child = this.firstChild, nxt; child; child = nxt) {
 			nxt = child.nextSibling; //just in case
 
 			// check child's desktop for bug 3035079: Dom elem isn't exist when parent do appendChild and rerender
 			if (!skipper || !skipper.skipped(this, child)) {
-				if (child.z_rod) this.$class._unbindrod(child);
+				if (child.z_rod) this.$class._unbindrod(child, keepRod);
 				else if (child.desktop) {
-					child.unbind_(null, after); //don't pass skipper
+					child.unbind_(null, after, keepRod); //don't pass skipper
 					//Bug ZK-1596: native will be transfer to stub in EE, store the widget for used in mount.js
 					if (child.$instanceof(zk.Native))
 						zAu._storeStub(child);
@@ -4940,14 +4943,14 @@ zk.Widget.getClass('combobox');
 		else
 			_globals[wgt.id] = [wgt];
 	},
-	_unbindrod: function (wgt, nest) {
+	_unbindrod: function (wgt, nest, keepRod) {
 		this._unbind0(wgt);
 
 		if (!nest || wgt.z_rod === 9) { //Bug 2948829: don't delete value set by real ROD
-			delete wgt.z_rod;
+			if (!keepRod) delete wgt.z_rod;
 
 			for (var child = wgt.firstChild; child; child = child.nextSibling) {
-				this._unbindrod(child, true);
+				this._unbindrod(child, true, keepRod);
 				//Bug ZK-1827: native component with rod should also store the widget for used in mount.js(create function)
 				if (child.$instanceof(zk.Native))
 					zAu._storeStub(child);

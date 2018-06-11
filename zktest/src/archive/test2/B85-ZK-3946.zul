@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3946.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 08 16:01:54 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the "add tree item" buttons.
+        2. The zk log should not be appeared. Or check browser console, shouldn't have any error.
+        3. Click the "open" buttons.
+        4. The hidden listbox and textbox should be appeared.
+    </label>
+
+    <script><![CDATA[
+    jq(window).error(function (e, url, line) {
+        zk.log(e.originalEvent.error);
+    });
+    ]]>
+    </script>
+
+    <button id="btn" label="add tree item with listbox in hidden div"/>
+    <button label="open div" onClick="inner1.setVisible(true)"/>
+    <tree>
+        <!--<custom-attributes org.zkoss.zul.client.rod="false"/>-->
+        <treechildren fulfill="btn.onClick">
+            <treeitem>
+                <treerow>
+                    <treecell>
+                        <div id="inner1" visible="false">
+                            <!--<custom-attributes org.zkoss.zul.client.rod="false"/>-->
+                            <listbox/>
+                        </div>
+                    </treecell>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+
+    <button id="btn2" label="add tree item with textbox in hidden window"/>
+    <button label="open win" onClick="inner2.setVisible(true)"/>
+    <tree>
+        <!--<custom-attributes org.zkoss.zul.client.rod="false"/>-->
+        <treechildren fulfill="btn2.onClick">
+            <treeitem>
+                <treerow>
+                    <treecell>
+                        <window id="inner2" visible="false">
+                            <!--<custom-attributes org.zkoss.zul.client.rod="false"/>-->
+                            <textbox />
+                        </window>
+                    </treecell>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>
