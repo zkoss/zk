@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3920.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jun 11 14:36:38 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Scroll down to the item 2-5.
+		2. Select the item 2-5.
+		3. Scroll up to the group 2.
+		4. Select the item 2-5.
+		5. The scroll bar should disappear. 
+	</label>
+	<listbox height="200px" checkmark="true" multiple="true">
+		<listgroup id="group1" label="group 1" open="false"/>
+		<listitem label="item 1-1"/>
+		<listitem label="item 1-2"/>
+		<listitem label="item 1-3"/>
+		<listitem label="item 1-4"/>
+		<listitem label="item 1-5"/>
+		<listgroup id="group2" label="group 2" open="true"/>
+		<listitem label="item 2-1"/>
+		<listitem label="item 2-2"/>
+		<listitem label="item 2-3"/>
+		<listitem label="item 2-4"/>
+		<listitem label="item 2-5"/>
+		<listgroup id="group3" label="group 3" open="false"/>
+		<listitem label="item 3-1"/>
+		<listitem label="item 3-2"/>
+		<listitem label="item 3-3"/>
+		<listitem label="item 3-4"/>
+		<listitem label="item 3-5"/>
+	</listbox>
+</zk>
