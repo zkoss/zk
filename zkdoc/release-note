@@ -74,6 +74,7 @@ ZK 8.5.2
   ZK-3733: listbox with listgroup causes ie11 long running script warning
   ZK-3870: wrong theme css class at body element
   ZK-3906: colorbox not initializing hex value in palette popup
+  ZK-3950: Accordion mold tabbox doesn't properly resize when adding or removing items dynamically
 
 * Upgrade Notes
 
