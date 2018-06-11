@@ -760,6 +760,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			target = target.parentNode;
 		switch (target) {
 		case this.$n('colled'):
+		case this.$n('title'):
 			if (this._slidable) {
 				this.setSlide(!this._isSlide);
 				break;

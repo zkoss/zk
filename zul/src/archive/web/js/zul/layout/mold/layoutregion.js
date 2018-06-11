@@ -67,7 +67,7 @@ function (out) {
 		out.push('><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
 		if (!this._collapsible || !this._closable)
 			out.push(' style="display:none;"');
-		out.push('></i></div>');
+		out.push('></i><div id="', this.uuid, '-title" class="', this.$s('title'), '">', this._title, '</div></div>');
 	}
 	out.push('</div>');
 }
