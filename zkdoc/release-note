@@ -76,6 +76,7 @@ ZK 8.5.2
   ZK-3906: colorbox not initializing hex value in palette popup
   ZK-3950: Accordion mold tabbox doesn't properly resize when adding or removing items dynamically
   ZK-3920: listbox wrong scroll-height caused by focus-a position
+  ZK-3924: stuck notification message
 
 * Upgrade Notes
 

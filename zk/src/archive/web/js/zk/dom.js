@@ -708,8 +708,10 @@ zjq.prototype = {
 	 * @since 7.0.6
 	 */
 	isRealScrollIntoView: function () {
-		var wgt = this.$(),
-			desktop = wgt.desktop,
+		var wgt = this.$();
+		if (!wgt)
+			return;
+		var desktop = wgt.desktop,
 			p = wgt.parent,
 			n = this.jq[0],
 			bar = null,
