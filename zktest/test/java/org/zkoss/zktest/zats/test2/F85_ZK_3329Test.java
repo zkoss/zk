@@ -28,6 +28,7 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 	public void testSlidable() {
 		connect();
 
+		waitResponse(true);
 		JQuery regionBar = jq("$east .z-east-collapsed");
 		JQuery slide = jq("$east .z-east-slide");
 		JQuery btn = jq("$east .z-borderlayout-icon:visible");
