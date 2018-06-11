@@ -333,7 +333,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		if (comp instanceof ComponentCtrl)
 			((ComponentCtrl) comp).enableBindingAnnotation();
 		//ZK-3133
-		for (Method m : BindUtils.getViewModelClass(getViewModel()).getDeclaredMethods()) {
+		for (Method m : BindUtils.getViewModelClass(getViewModel()).getMethods()) {
 			MatchMedia annomm = m.getAnnotation(MatchMedia.class);
 			if (annomm != null) {
 				if (_matchMediaValues == null)
