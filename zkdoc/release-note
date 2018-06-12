@@ -68,6 +68,7 @@ ZK 8.5.2
   ZK-3843: wire an event listener doesn't work for a Listitem in HtmlMacroComponent
   ZK-3965: Callback issues in radiogroup with model after ZK-3818
   ZK-3814: Java 8 default interface methods not recognized as managed bean properties in EL
+  ZK-3936: Combobox size in tree
 
 * Upgrade Notes
 
