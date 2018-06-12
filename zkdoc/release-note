@@ -48,6 +48,7 @@ ZK 8.5.2
   ZK-3864: frozen overlap with position: relative/absolute
   ZK-3911: On binder BinderImpl line 333 change getDeclaredMethods for getMethods for MatchMedia inheritance
   ZK-3766: Bandpopup checking horizontal position similar to vertical position
+  ZK-3268: uploader and dropupload progress update interval are different
 
 * Upgrade Notes
 
