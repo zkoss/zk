@@ -901,6 +901,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 
 			_adjMinWd(this);
+			this._afterCalcSize();
 		}
 	},
 	_bindDomNode: function () {

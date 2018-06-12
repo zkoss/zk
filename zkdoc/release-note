@@ -81,6 +81,7 @@ ZK 8.5.2
   ZK-3918: colorbox palette/picker input: copy/paste/home/end not working
   ZK-3946: JS error: treeitem client ROD with hidden children
   ZK-3949: Setting image attribute of caption to empty string or null cause it to display a missing image
+  ZK-3927: listbox column alignment with hflex=min columns
 
 * Upgrade Notes
 
