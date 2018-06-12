@@ -657,6 +657,7 @@ jq(function () {
 			zWatch.fire('beforeSize'); //notify all
 			zWatch.fire('onFitSize', null, {reverse: true}); //notify all
 			zWatch.fire('onSize'); //notify all
+			zWatch.fire('afterSize'); //notify all
 			_reszInf.lastTime = jq.now() + 8;
 		} finally {
 			_reszInf.inResize = false;

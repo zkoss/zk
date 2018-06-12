@@ -623,7 +623,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	appendAttr: function (nm, val, force) {
 		return val || force ? ' ' + nm + '="' + val + '"' : '';
 	},
-	/** Fires beforeSize, onFitSize and onSize
+	/** Fires beforeSize, onFitSize, onSize and afterSize
 	 * @param Widget wgt the widget which the zWatch event will be fired against.
 	 * @param int bfsz the beforeSize mode:
 	 * <ul>
@@ -649,9 +649,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				zWatch.fireDown('beforeSize', wgt, null, bfsz > 0);
 			zWatch.fireDown('onFitSize', wgt, {reverse: true});
 			zWatch.fireDown('onSize', wgt);
+			zWatch.fireDown('afterSize', wgt);
 		}
 	},
-	/** Fires onBeforeSize, onShow, onFitSize, and onSize
+	/** Fires beforeSize, onShow, onFitSize, onSize and afterSize
 	 * @param Widget wgt the widget which the zWatch event will be fired against.
 	 * @param int bfsz the beforeSize mode:
 	 * <ul>
