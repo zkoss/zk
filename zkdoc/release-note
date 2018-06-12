@@ -77,6 +77,7 @@ ZK 8.5.2
   ZK-3920: listbox wrong scroll-height caused by focus-a position
   ZK-3924: stuck notification message
   ZK-3951: Grid doesn't render on demand when visibleRows specified
+  ZK-3918: colorbox palette/picker input: copy/paste/home/end not working
 
 * Upgrade Notes
 
