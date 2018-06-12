@@ -28,10 +28,10 @@ public class F85_ZK_3324Test extends ZATSTestCase {
 		
 		ComponentAgent textboxAgent = desktop.query("#textbox");
 		textboxAgent.type("xxx");
-		textboxAgent.blur();
 		
 		Label label = desktop.query("#label").as(Label.class);
 		Assert.assertTrue(label.getValue().isEmpty());
+		Assert.assertEquals("xxx", textboxAgent.as(Textbox.class).getValue());
 		
 		textboxAgent.stroke("#enter");
 		Assert.assertEquals(textboxAgent.as(Textbox.class).getValue(), label.getValue());
