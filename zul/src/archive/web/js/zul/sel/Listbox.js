@@ -283,6 +283,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	rerender: function () {
 		this.$supers(Listbox, 'rerender', arguments);
 		this._syncStripe();
+		if (this._listbox$rod) {
+			this._initPadSizes();
+		}
 		return this;
 	},
 	getCaveNode: function () {

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3921.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 12 10:35:09 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList listModel = new ListModelList(Collections.nCopies(500, "test"));
+		List treeNodes = new ArrayList();
+		for (int i = 0; i < 500; i++){
+			treeNodes.add(new DefaultTreeNode(i));
+		}
+		DefaultTreeModel treeModel = new DefaultTreeModel(new DefaultTreeNode(null, treeNodes));
+	]]></zscript>
+	<label multiline="true">
+		1. Scroll down grid until ROD loads new datas
+		2. Click ToggleGridCol button, the scroll position should not change
+		3. Scroll down grid until ROD loads new datas
+		4. Click RemoveGridCol button, the scroll position should not change
+		5. Scroll down listbox until ROD loads new datas
+		6. Click ToggleListboxCol button, the scroll position should not change
+		7. Scroll down listbox until ROD loads new datas
+		8. Click RemoveListboxCol button, the scroll position should not change
+		9. Scroll down tree until ROD loads new datas
+		10. Click ToggleTreeCol, the scroll position should not change
+		11. Scroll down tree until ROD loads new datas
+		12. Click RemoveTreeCol, the scroll position should not change
+	</label>
+	<hlayout>
+		<vlayout>
+			<custom-attributes org.zkoss.zul.grid.rod="true"/>
+			<grid model="${listModel}" width="500px" height="400px">
+				<columns id="columns">
+					<column label="col 1"/>
+					<column id="gridCol2" label="col 2"/>
+					<column id="gridCol3" label="col 3"/>
+				</columns>
+				<template name="model">
+					<row>
+						<label value="${forEachStatus.index}"/>
+						<label value="${forEachStatus.index}"/>
+						<label value="${forEachStatus.index}"/>
+					</row>
+				</template>
+			</grid>
+			<div>
+				<button label="ToggleGridCol"
+						onClick="gridCol2.setVisible(!gridCol2.isVisible())"/>
+				<button label="RemoveGridCol" onClick="columns.removeChild(gridCol3)"/>
+			</div>
+		</vlayout>
+		<vlayout>
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<listbox model="${listModel}" width="500px" height="400px">
+				<listhead id="listhead">
+					<listheader label="col 1"/>
+					<listheader id="listboxCol2" label="col 2"/>
+					<listheader id="listboxCol3" label="col 3"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="${forEachStatus.index}"/>
+						<listcell label="${forEachStatus.index}"/>
+						<listcell label="${forEachStatus.index}"/>
+					</listitem>
+				</template>
+			</listbox>
+			<div>
+				<button label="ToggleListboxCol"
+						onClick="listboxCol2.setVisible(!listboxCol2.isVisible())"/>
+				<button label="RemoveListboxCol" onClick="listhead.removeChild(listboxCol3)"/>
+			</div>
+		</vlayout>
+		<vlayout>
+			<tree model="${treeModel}" width="500px" height="400px">
+				<treecols id="treecols">
+					<treecol label="col 1"/>
+					<treecol id="treeCol2" label="col 2"/>
+					<treecol id="treeCol3" label="col 3"/>
+				</treecols>
+			</tree>
+			<div>
+				<button label="ToggleTreeCol"
+						onClick="treeCol2.setVisible(!treeCol2.isVisible())"/>
+				<button label="RemoveTreeCol" onClick="treecols.removeChild(treeCol3)"/>
+			</div>
+		</vlayout>
+	</hlayout>
+</zk>
