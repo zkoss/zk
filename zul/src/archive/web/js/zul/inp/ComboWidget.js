@@ -54,13 +54,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		popupWidth: function (v) {
 			if (this._open) {
 				var pp = this.getPopupNode_(),
-					inp = this.getInputNode(),
 					pp2 = this.getPopupNode_(true);
 				if (!pp) return;
 
 				var ppofs = this._getPopupSize(pp, pp2);
 				this._fixsz(ppofs);
-				this._checkPopupSpaceAndPosition(pp, inp);
+				this._checkPopupSpaceAndPosition(pp, this.$n());
 				this._fixFfWhileBothScrollbar(pp, pp2);
 			}
 		},
@@ -93,7 +92,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (this._open) {
 			var pp = this.getPopupNode_();
 			if (pp)
-				this._checkPopupSpaceAndPosition(pp, this.getInputNode());
+				this._checkPopupSpaceAndPosition(pp, this.$n());
 		}
 	},
 
@@ -226,7 +225,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// throw in
 		pp.style.left = '';
 
-		this._checkPopupSpaceAndPosition(pp, inp);
+		this._checkPopupSpaceAndPosition(pp, this.$n());
 		this._shallSyncPopupPosition = false;
 
 		pp.style.display = 'none';
@@ -262,21 +261,38 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_checkPopupSpaceAndPosition: function (pp, inp) {
 		//B80-ZK-3051
 		//check the popup space before position()
-		var $pp = zk(pp);
-		var ppHeight = $pp.dimension().height;
-		var inpDim = (inp.nodeType ? zk(inp) : inp).dimension(true);
-		var inpTop = inpDim.top;
-		var inpHeight = inpDim.height;
-		var screenY = jq.innerY();
-		var screenHeight = jq.innerHeight();
+		var $pp = zk(pp),
+			ppHeight = $pp.dimension().height,
+			ppWidth = $pp.dimension().width,
+			inpDim = (inp.nodeType ? zk(inp) : inp).dimension(true),
+			inpTop = inpDim.top,
+			inpLeft = inpDim.left,
+			inpHeight = inpDim.height,
+			inpWidth = inpDim.width,
+			screenX = jq.innerX(),
+			screenY = jq.innerY(),
+			screenHeight = jq.innerHeight(),
+			screenWidth = jq.innerWidth(),
+			hPosition = 'start',
+			vPosition = 'after',
+			opts;
 
-		if (screenY + screenHeight - inpTop - inpHeight > ppHeight) {
-			$pp.position(inp, 'after_start');
-		} else if (inpTop - screenY > ppHeight) {
-			$pp.position(inp, 'before_start');
+		if (screenX + screenWidth - inpLeft - inpWidth > ppWidth) {
+			hPosition = 'start';
+		} else if (inpLeft - screenX > ppWidth) {
+			hPosition = 'end';
 		} else {
-			$pp.position(inp, 'after_start', {overflow: true});
+			opts = {overflow: true};
 		}
+		if (screenY + screenHeight - inpTop - inpHeight > ppHeight) {
+			vPosition = 'after';
+		} else if (inpTop - screenY > ppHeight) {
+			vPosition = 'before';
+		} else {
+			opts = {overflow: true};
+		}
+
+		$pp.position(inp, vPosition + '_' + hPosition, opts);
 	},
 	_fixFfWhileBothScrollbar: function (pp, pp2) {
 		//FF issue:
