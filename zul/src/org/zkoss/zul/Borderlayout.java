@@ -18,6 +18,9 @@ package org.zkoss.zul;
 
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -74,6 +77,7 @@ import org.zkoss.zk.ui.UiException;
  * @since 5.0.0
  */
 public class Borderlayout extends HtmlBasedComponent {
+	private static final Logger log = LoggerFactory.getLogger(Borderlayout.class);
 
 	/**
 	 * The north layout constraint (top of container).
@@ -116,9 +120,16 @@ public class Borderlayout extends HtmlBasedComponent {
 	}
 
 	private static boolean isDefaultAnimationDisabled() {
-		if (_defAnimation == null)
-			_defAnimation = Boolean
-					.valueOf(Library.getProperty("org.zkoss.zul.borderlayout.animation.disabed", "false"));
+		if (_defAnimation == null) {
+			String oldProperty = "org.zkoss.zul.borderlayout.animation.disabed";
+			String newProperty = "org.zkoss.zul.borderlayout.animation.disabled";
+			_defAnimation = Boolean.valueOf(Library.getProperty(oldProperty, "false"));
+			if (_defAnimation) {
+				log.warn("The library-property setting: {} was changed to {}, please use the new one instead.", oldProperty, newProperty);
+			} else {
+				_defAnimation = Boolean.valueOf(Library.getProperty(newProperty, "false"));
+			}
+		}
 		return _defAnimation.booleanValue();
 	}
 
