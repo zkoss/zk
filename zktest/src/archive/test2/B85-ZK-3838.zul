@@ -1,0 +1,25 @@
+<zk>
+
+    label1
+    <window>
+        <textbox id ="textbox1" value="Should not be able to pasted"/>
+    </window>
+
+    label2
+    <window>
+        <textbox id ="textbox2" value="123"/>
+    </window>
+    avoid pasting non-number characters
+    <intbox/>
+
+
+
+    <label  multiline="true">
+        1. The intbox can limit the input even though by paste method.
+        2. Copy the value in label1 and paste it to intbox.
+        3. The word should not be pasted to the intbox.
+        4. Copy the value in label2 and paste it to intbox.
+        5. The number should be able to pasted to the intbox.
+    </label>
+
+</zk>

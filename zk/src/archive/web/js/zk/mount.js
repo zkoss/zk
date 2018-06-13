@@ -712,6 +712,11 @@ jq(function () {
 		if (!wgt) wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
+	.bind('paste', function (evt) {
+		var wgt = zk.keyCapture;
+		if (!wgt) wgt = Widget.$(evt, {child: true});
+		_doEvt(new zk.Event(wgt, 'onPaste', evt.keyData(), null, evt));
+	})
 	.bind('zcontextmenu', function (evt) {
 		//ios: zcontextmenu shall be listened first,
 		//due to need stop other event (ex: click, mouseup)

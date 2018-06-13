@@ -86,6 +86,13 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		if (!this._shallIgnore(evt, this.getAllowedKeys_()))
 			this.$supers('doKeyPress_', arguments);
 	},
+	doPaste_: function (evt) {
+		//Bug ZK-3838: add a paste event dealer
+		if (evt.ctrlKey && evt.altKey)
+			evt.stop();
+		if (!this._shallIgnore(evt, this.getAllowedKeys_()))
+			this.$supers('doPaste_', arguments);
+	},
 	getType: function () {
 		return zk.mobile && !this._format && !this._locale ? 'number' : this._type;
 	}
