@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ZK3848_lang_addon_Test2.xml.xml
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Mar 05 12:46 PM:11 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<language-addon>
+	<addon-name>mycomp</addon-name>
+	<strict>false</strict>
+	<!--<depends>zkbind</depends>-->
+	<version>
+		<version-class>zk.test.Version</version-class>
+		<version-uid>1.0-SNAPSHOT</version-uid>
+		<zk-version>8.5.1-SNAPSHOT</zk-version><!-- or later -->
+	</version>
+	<language-name>xul/html</language-name>
+	<component>
+		<component-name>mycomp</component-name> <!-- required -->
+		<component-class>zk.test.Mycomp</component-class> <!-- required -->
+		<extends>decimalbox</extends>
+		<widget-class>mycomp.Mycomp</widget-class> <!-- required -->
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/mycomp.js</mold-uri>
+			<css-uri>css/mycomp.css.dsp</css-uri>
+		</mold>
+	</component>
+</language-addon>

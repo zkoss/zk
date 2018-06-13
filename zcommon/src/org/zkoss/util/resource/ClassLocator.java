@@ -19,6 +19,7 @@ package org.zkoss.util.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.CollectionsX;
 
 /**
@@ -130,25 +132,52 @@ public class ClassLocator implements XMLResourcesLocator {
 			if (zkModule.equals(xr.name)) //if it is not client component
 				return;
 		}
-		for (Iterator it = xr.document.getRootElement().getElements("component").iterator(); it.hasNext(); ) {
-			final Element el = (Element) it.next();
+		Element xrRoot = xr.document.getRootElement();
+		Element strictElement = xrRoot.getElement("strict");
+		boolean strict = strictElement == null ? false : Boolean.parseBoolean(strictElement.getText(true));
+		for (Element el : xrRoot.getElements("component")) {
 			if (el.getElement("extends") == null)
 				continue;
-			for (Iterator itr = rcmap.entrySet().iterator(); itr.hasNext(); ) {
-				Element root = ((XMLResource) ((Map.Entry) itr.next()).getValue()).document.getRootElement();
-				if (root == null)
-					continue;
-				for (Element zkbindEl : root.getElements("component")) {
-					String extendedEl = el.getElementValue("extends", true);
-					String zkbindCompName = zkbindEl.getElementValue("component-name", true);
-					if (zkbindCompName != null && zkbindCompName.equals(extendedEl)) {
-						log.warn("In " + xr.url + ", component extends " + extendedEl +
-								", maybe need to add <depends>" +
-								root.getElement("addon-name").getFirstChild().getNodeValue() + "</depends>");
-						break;
-					}
+			List<Element> ambigComps = findAmbiguousComps(rcmap, el);
+			if (!ambigComps.isEmpty()) {
+				StringBuilder addonNameBuilder = new StringBuilder();
+				String addonName = "";
+				for (Element ambigComp : ambigComps) {
+					Element ambigRoot = ambigComp.getDocument().getRootElement();
+					addonNameBuilder.append("'").append(ambigRoot.getElement("addon-name").getFirstChild().getNodeValue()).append("', ");
+				}
+				String message = "In {}, you are extending component {} which is defined in {}please define <depends> element";
+				String[] messageArgs = new String[]{xr.url.toString(), el.getElementValue("extends", true), addonNameBuilder.toString()};
+				warningMessage(message, messageArgs, strict);
+			}
+		}
+	}
+
+	private static List<Element> findAmbiguousComps(Map<String, XMLResource> rcmap, Element el) {
+		List<Element> ambigComps = new ArrayList<Element>();
+		for (Map.Entry<String, XMLResource> entry: rcmap.entrySet()) { // find Ambiguous Components
+			Element root = entry.getValue().document.getRootElement();
+			if (root == null)
+				continue;
+			for (Element comp : root.getElements("component")) {
+				String extendedElName = el.getElementValue("extends", true);
+				String compName = comp.getElementValue("component-name", true);
+				if (compName != null && compName.equals(extendedElName)) {
+					ambigComps.add(comp);
+					break;
 				}
 			}
+		}
+		return ambigComps;
+	}
+
+	private static void warningMessage(String message, String[] args, boolean strict) {
+		if (strict) {
+			String f = message.replace("{}", "%s");
+			String result = String.format(f, args);
+			throw new SystemException(result);
+		} else {
+			log.warn(message, args);
 		}
 	}
 	/** Info used with getDependentXMLResource. */

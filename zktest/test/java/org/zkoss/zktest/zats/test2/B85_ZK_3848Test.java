@@ -17,11 +17,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
 import org.zkoss.util.resource.ClassLocator;
 
 import java.io.File;
@@ -31,19 +32,20 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import static org.powermock.api.mockito.PowerMockito.doCallRealMethod;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith (PowerMockRunner.class)
-//@PrepareForTest ({LoggerFactory.class, Logger.class, ClassLocator.class})
 @PrepareForTest ({LoggerFactory.class})
 public class B85_ZK_3848Test {
+	private static final Logger slf4logger = LoggerFactory.getLogger(ClassLocator.class);;
 	private Logger logger;
 	private static ArrayList<String> results = new ArrayList();;
 	private int calledNumber = 0;
@@ -53,20 +55,16 @@ public class B85_ZK_3848Test {
 	@Before
 	public void setUp() throws Exception {
 		mockStatic(LoggerFactory.class);
-		logger = Mockito.mock(MyLogger.class);
-		//logger = Mockito.mock(Logger.class); // use Mockito.mock(Logger.class also works)
+		logger = Mockito.mock(Logger.class);
 		when(LoggerFactory.getLogger(any(Class.class))).thenReturn(logger);
-		doCallRealMethod().when(logger).warn(anyString());
-		
 		clToTest = new ClassLocator();
 	}
-
+	
 	@Test
-	public void checkClientCompDenpendency() throws IOException {
+	public void test1() throws Exception {
 		
-		File p = new File(".");
-		File src = new File(p, "/src/org/zkoss/zktest/test2/ZK3848_lang_addon.xml");
-		File dst = new File(p, "/debug/classes/metainfo/zk/lang-addon.xml");
+		File src = new File("src/org/zkoss/zktest/test2/ZK3848_lang_addon_Test1.xml");
+		File dst = new File("debug/classes/metainfo/zk/lang-addon.xml");
 		
 		String name = "metainfo/zk/lang-addon.xml";
 		String elName = "addon-name";
@@ -76,330 +74,60 @@ public class B85_ZK_3848Test {
 		if (!Files.exists(zkPath))
 			Files.createDirectories(zkPath);
 		Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		boolean throwError = false;
 		try {
 			clToTest.getDependentXMLResources(name, elName, elDepends);
-			verify(logger, times(2)).warn(anyString());
 		} catch (Exception ex) {
-			Assert.fail();
+			Assert.assertThat(ex.getMessage(), containsString("you are extending component decimalbox which is defined in 'zkplus', 'zkbind', please define <depends> element"));
+			throwError = true;
 		} finally {
 			Files.delete(dst.toPath());
 			Path metainfoPath = zkPath.getParent();
 			Files.delete(zkPath);
 			Files.delete(metainfoPath);
 		}
-		System.out.println(results.size());
+		if (!throwError) {
+			throw new Exception("An exception is expected");
+		}
 	}
 
-	public class MyLogger implements Logger {
-		
-		@Override
-		public String getName() {
-			return "MyLogger";
-		}
-		
-		@Override
-		public boolean isTraceEnabled() {
-			return true;
-		}
-		
-		@Override
-		public void trace(String s) {
-		
-		}
-		
-		@Override
-		public void trace(String s, Object o) {
-		
-		}
-		
-		@Override
-		public void trace(String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void trace(String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void trace(String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isTraceEnabled(Marker marker) {
-			return true;
-		}
-		
-		@Override
-		public void trace(Marker marker, String s) {
-		
-		}
-		
-		@Override
-		public void trace(Marker marker, String s, Object o) {
-		
-		}
-		
-		@Override
-		public void trace(Marker marker, String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void trace(Marker marker, String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void trace(Marker marker, String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isDebugEnabled() {
-			return true;
-		}
-		
-		@Override
-		public void debug(String s) {
-		
-		}
-		
-		@Override
-		public void debug(String s, Object o) {
-		
-		}
-		
-		@Override
-		public void debug(String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void debug(String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void debug(String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isDebugEnabled(Marker marker) {
-			return true;
-		}
-		
-		@Override
-		public void debug(Marker marker, String s) {
-		
-		}
-		
-		@Override
-		public void debug(Marker marker, String s, Object o) {
-		
-		}
-		
-		@Override
-		public void debug(Marker marker, String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void debug(Marker marker, String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void debug(Marker marker, String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isInfoEnabled() {
-			return true;
-		}
-		
-		@Override
-		public void info(String s) {
-		
-		}
-		
-		@Override
-		public void info(String s, Object o) {
-		
-		}
-		
-		@Override
-		public void info(String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void info(String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void info(String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isInfoEnabled(Marker marker) {
-			return true;
-		}
-		
-		@Override
-		public void info(Marker marker, String s) {
-		
-		}
-		
-		@Override
-		public void info(Marker marker, String s, Object o) {
-		
-		}
-		
-		@Override
-		public void info(Marker marker, String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void info(Marker marker, String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void info(Marker marker, String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isWarnEnabled() {
-			return true;
-		}
-		
-		@Override
-		public void warn(String s) {
-			System.out.println(s);
-			B85_ZK_3848Test temp = B85_ZK_3848Test.this;
-			B85_ZK_3848Test.this.results.add(s);
-		}
-		
-		@Override
-		public void warn(String s, Object o) {
-			System.out.println(s);
-			B85_ZK_3848Test.this.results.add(s);
-		}
-		
-		@Override
-		public void warn(String s, Object[] objects) {
-			System.out.println(s);
-			B85_ZK_3848Test.this.results.add(s);
-		}
-		
-		@Override
-		public void warn(String s, Object o, Object o1) {
-			System.out.println(s);
-			B85_ZK_3848Test.this.results.add(s);
-		}
-		
-		@Override
-		public void warn(String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isWarnEnabled(Marker marker) {
-			return true;
-		}
-		
-		@Override
-		public void warn(Marker marker, String s) {
-		
-		}
-		
-		@Override
-		public void warn(Marker marker, String s, Object o) {
-		
-		}
-		
-		@Override
-		public void warn(Marker marker, String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void warn(Marker marker, String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void warn(Marker marker, String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isErrorEnabled() {
-			return true;
-		}
-		
-		@Override
-		public void error(String s) {
-		
-		}
-		
-		@Override
-		public void error(String s, Object o) {
-		
-		}
-		
-		@Override
-		public void error(String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void error(String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void error(String s, Throwable throwable) {
-		
-		}
-		
-		@Override
-		public boolean isErrorEnabled(Marker marker) {
-			return true;
-		}
-		
-		@Override
-		public void error(Marker marker, String s) {
-		
-		}
-		
-		@Override
-		public void error(Marker marker, String s, Object o) {
-		
-		}
-		
-		@Override
-		public void error(Marker marker, String s, Object o, Object o1) {
-		
-		}
-		
-		@Override
-		public void error(Marker marker, String s, Object[] objects) {
-		
-		}
-		
-		@Override
-		public void error(Marker marker, String s, Throwable throwable) {
-		
+	@Test
+	public void test2() throws IOException {
+		
+		File src = new File("src/org/zkoss/zktest/test2/ZK3848_lang_addon_Test2.xml");
+		File dst = new File("debug/classes/metainfo/zk/lang-addon.xml");
+		
+		String name = "metainfo/zk/lang-addon.xml";
+		String elName = "addon-name";
+		String elDepends = "depends";
+		
+		Path zkPath = dst.toPath().getParent();
+		if (!Files.exists(zkPath))
+			Files.createDirectories(zkPath);
+		doAnswer(new Answer() {
+			@Override
+			public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+				Object[] arguments = invocationOnMock.getArguments();
+				String[] args = (String[]) arguments[1];
+				slf4logger.warn((String) arguments[0], args);
+				String f = ((String) arguments[0]).replace("{}", "%s");
+				String result = String.format(f, args[0], args[1], args[2]);
+				results.add(result);
+				return null;
+			}
+		}).when(logger).warn(anyString(), any(String[].class));
+		Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		try {
+			clToTest.getDependentXMLResources(name, elName, elDepends);
+			verify(logger, times(1)).warn(anyString(), any(String[].class));
+			Assert.assertThat(results.get(0), containsString("you are extending component decimalbox which is defined in 'zkplus', 'zkbind', please define <depends> element"));
+		} catch (Exception ex) {
+			throw ex;
+		} finally {
+			Files.delete(dst.toPath());
+			Path metainfoPath = zkPath.getParent();
+			Files.delete(zkPath);
+			Files.delete(metainfoPath);
 		}
 	}
 }
