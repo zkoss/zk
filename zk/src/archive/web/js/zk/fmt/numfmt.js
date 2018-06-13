@@ -170,6 +170,9 @@ zk.fmt.Number = {
 		if (val == null) return '';
 		if (!fmt) return val + '';
 		
+		if (fmt.startsWith('locale:')) {
+			return new Intl.NumberFormat(fmt.substring(fmt.indexOf(':') + 1)).format(parseFloat(val));
+		}
 		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {
 			fmt = fmt.split(';');
