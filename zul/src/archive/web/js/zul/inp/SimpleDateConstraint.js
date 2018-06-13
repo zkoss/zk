@@ -77,10 +77,12 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	 * @return String
 	 */
 	outOfRangeValue: function () {
+		var format = this._wgt._format,
+			separator = msgzul.OUT_OF_RANGE_SEPARATOR ? ' ' + msgzul.OUT_OF_RANGE_SEPARATOR + ' ' : ' ~ ';
 		return msgzul.OUT_OF_RANGE + ': ' + (this._beg != null ? this._end != null ?
-				new zk.fmt.Calendar(null, this._localizedSymbols).formatDate(this._beg, this.format) + ' ~ '
-					+ new zk.fmt.Calendar().formatDate(this._end, this.format) :
-					'>= ' + new zk.fmt.Calendar().formatDate(this._beg, this.format) :
-					'<= ' + new zk.fmt.Calendar().formatDate(this._end, this.format));
+				new zk.fmt.Calendar(null, this._localizedSymbols).formatDate(this._beg, format) + separator
+					+ new zk.fmt.Calendar().formatDate(this._end, format) :
+					'>= ' + new zk.fmt.Calendar().formatDate(this._beg, format) :
+					'<= ' + new zk.fmt.Calendar().formatDate(this._end, format));
 	}
 });
