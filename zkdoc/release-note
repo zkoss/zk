@@ -14,6 +14,7 @@ ZK 8.5.2
   ZK-3624: Spinner - improve initial value
   ZK-3272: Display file size message with the most readable unit
   ZK-3569: Popup slide-in direction change depending on position relative to input
+  ZK-3658: Listbox invalidates the whole widget instead of the items
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception
