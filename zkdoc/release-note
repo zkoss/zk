@@ -52,6 +52,7 @@ ZK 8.5.2
   ZK-3766: Bandpopup checking horizontal position similar to vertical position
   ZK-3268: uploader and dropupload progress update interval are different
   ZK-3943: popup wrong position
+  ZK-3646: href with mailto in chrome remove target frame too early
 
 * Upgrade Notes
 
