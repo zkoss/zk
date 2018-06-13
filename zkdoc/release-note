@@ -16,6 +16,7 @@ ZK 8.5.2
   ZK-3569: Popup slide-in direction change depending on position relative to input
   ZK-3658: Listbox invalidates the whole widget instead of the items
   ZK-3278: Dropupload can limit max uploading file count
+  ZK-3824: Provide a content-type control for AU response
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception

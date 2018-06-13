@@ -18,6 +18,7 @@ package org.zkoss.zk.au;
 
 import org.zkoss.json.JSONArray;
 import org.zkoss.json.JSONObject;
+import org.zkoss.lang.Library;
 import org.zkoss.zk.au.http.HttpAuWriter;
 import org.zkoss.zk.ui.UiException;
 
@@ -94,5 +95,5 @@ public class AuWriters {
 	/** The content type of the output.
 	 * @since 3.5.0
 	 */
-	public static final String CONTENT_TYPE = "text/plain;charset=UTF-8";
+	public static final String CONTENT_TYPE = Library.getProperty("org.zkoss.zk.au.AuWriters.ContentType", "text/plain;charset=UTF-8");
 }
