@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3569.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue May 29 12:35:00 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<div width="400px" vflex="1">
+		<label multiline="true">
+			1. Click the combobox.
+			2. The combobox's popup should grow upward.
+		</label>
+	</div>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3569VM')">
+		<hlayout>
+			<combobox width="150px" model="@load(vm.colors)">
+				<template name="model">
+					<comboitem label="@load(each)"/>
+				</template>
+			</combobox>
+			<bandbox>
+				<bandpopup></bandpopup>
+			</bandbox>
+		</hlayout>
+	</div>
+</zk>

@@ -230,7 +230,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		pp.style.display = 'none';
 		pp.style.visibility = '';
-		this.slideDown_(pp);
+		if (jq(this.$n()).offset().top > jq(pp).offset().top)
+			this.slideDown_(pp, 'b');
+		else
+			this.slideDown_(pp);
 
 		this._fixFfWhileBothScrollbar(pp, pp2);
 
@@ -344,8 +347,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 * @param DOMElement pp the DOM element of the drop-down list.
 	 * @since 5.0.4
 	 */
-	slideDown_: function (pp) {
-		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown, duration: 100});
+	slideDown_: function (pp, anchor) {
+		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown, duration: 100, anchor: anchor});
 	},
 	/** Slides up the drop-down list.
 	 * <p>Default: <code>pp.style.display = "none";</code><br/>
