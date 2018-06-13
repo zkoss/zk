@@ -38,5 +38,30 @@ zk.fmt.Text = {
 		}
 		if (sb) sb += msg.substring(i);
 		return sb || msg;
+	},
+	/**
+	 * Formatting a filesize depending on its value:
+	 * >= 1024 GB: 1.0 TB,
+	 * >= 1024 MB: 1.0 GB,
+	 * >= 1024 KB: 1.0 MB,
+	 * >= 1024 B : 1.0 KB,
+	 * else: bytes. Decimal point is determined by System language.
+	 */
+	formatFileSize: function (bytes) {
+		var divider = 1024;
+
+		if (Math.abs(bytes) < divider) {
+			return bytes + msgzk.BYTES;
+		}
+
+		var units = [msgzk.KBYTES, msgzk.MBYTES, msgzk.GBYTES, msgzk.TBYTES];
+		var unit = -1;
+
+		do {
+			bytes /= divider;
+			++unit;
+		} while (Math.abs(bytes) >= divider && unit < units.length - 1);
+
+		return bytes.toFixed(1) + ' ' + units[unit];
 	}
 };
