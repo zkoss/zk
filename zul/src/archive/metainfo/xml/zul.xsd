@@ -1442,6 +1442,8 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="onUpload" type="xs:string" use="optional" />
 		<xs:attribute name="anchor" type="xs:string" use="optional" />
+		<xs:attribute name="maxFileCount" type="intType" use="optional" />
+		<xs:attribute name="onMaxFileCountExceed" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- east -->
 	<xs:element name="east" type="layoutRegionType" />
