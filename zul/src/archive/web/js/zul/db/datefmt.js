@@ -371,7 +371,7 @@ zk.fmt.Date = {
 					if (!hasHour1)
 						break;
 					if (!token) return; //failed
-					isAM = token.startsWith(localizedSymbols.APM[0]);
+					isAM = token.toUpperCase().startsWith(localizedSymbols.APM[0].toUpperCase());
 					break;
 				//default: ignored
 				}
