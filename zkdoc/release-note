@@ -82,6 +82,7 @@ ZK 8.5.2
   ZK-3946: JS error: treeitem client ROD with hidden children
   ZK-3949: Setting image attribute of caption to empty string or null cause it to display a missing image
   ZK-3927: listbox column alignment with hflex=min columns
+  ZK-3912: tab component replaces manual tooltiptext
 
 * Upgrade Notes
 
