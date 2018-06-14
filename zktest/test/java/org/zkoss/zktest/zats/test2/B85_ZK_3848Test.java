@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -45,15 +46,13 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith (PowerMockRunner.class)
 @PrepareForTest ({LoggerFactory.class})
 public class B85_ZK_3848Test {
-	private static final Logger slf4logger = LoggerFactory.getLogger(ClassLocator.class);;
-	private Logger logger;
-	private static ArrayList<String> results = new ArrayList();;
-	private int calledNumber = 0;
-
-	private ClassLocator clToTest;
-
-	@Before
-	public void setUp() throws Exception {
+	private static final Logger slf4logger = LoggerFactory.getLogger(ClassLocator.class);
+	private static Logger logger;
+	private static ArrayList<String> results = new ArrayList();
+	private static ClassLocator clToTest;
+	
+	@BeforeClass
+	public static void setUp() throws Exception {
 		mockStatic(LoggerFactory.class);
 		logger = Mockito.mock(Logger.class);
 		when(LoggerFactory.getLogger(any(Class.class))).thenReturn(logger);
