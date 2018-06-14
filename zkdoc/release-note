@@ -65,6 +65,7 @@ ZK 8.5.2
   ZK-3921: ROD grid loses scroll position when hiding/showing columns
   ZK-3734: Doublebox with format attribute specified doesn't trigger a numeric keyboard in iPad
   ZK-3945: Popup's z-index doesn't work properly
+  ZK-3843: wire an event listener doesn't work for a Listitem in HtmlMacroComponent
 
 * Upgrade Notes
 

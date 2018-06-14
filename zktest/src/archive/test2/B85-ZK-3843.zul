@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3843.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jun 06 12:28:32 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<?component name="mylistbox" macroURI="B85-ZK-3843-mylistbox.zul"
+	class="org.zkoss.zktest.test2.B85_ZK_3843Listbox"?>
+<zk>
+	<label multiline="true">
+		1. Click the listitem labeled "test";
+		2. You should see the notification on the client desktop. 
+	</label>
+	<div>
+		<window id="win">
+			<mylistbox/>
+		</window>
+	</div>
+</zk>
