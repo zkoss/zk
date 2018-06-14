@@ -225,12 +225,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// throw in
 		pp.style.left = '';
 
-		this._checkPopupSpaceAndPosition(pp, this.$n());
+		var n = this.$n(),
+			jqn = jq(n), jqpp = jq(pp);
+
+		this._checkPopupSpaceAndPosition(pp, n);
 		this._shallSyncPopupPosition = false;
+
+		var pptop = jqpp.offset().top;
 
 		pp.style.display = 'none';
 		pp.style.visibility = '';
-		if (jq(this.$n()).offset().top > jq(pp).offset().top)
+		
+		if (jqn.offset().top > pptop)
 			this.slideDown_(pp, 'b');
 		else
 			this.slideDown_(pp);
@@ -246,8 +252,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		//add extra CSS class for easy customize
 		var openClass = this.$s('open');
-		jq(this.$n()).addClass(openClass);
-		jq(pp).addClass(openClass);
+		jqn.addClass(openClass);
+		jqpp.addClass(openClass);
 	},
 	_getPopupSize: function (pp, pp2) {
 		var ppofs = this.getPopupSize_(pp);

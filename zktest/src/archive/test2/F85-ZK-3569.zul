@@ -14,14 +14,14 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
-	<div width="400px" vflex="1">
-		<label multiline="true">
-			1. Click the combobox.
-			2. The combobox's popup should grow upward.
-		</label>
-	</div>
-	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3569VM')">
-		<hlayout>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3569VM')" vflex="1">
+		<div width="400px" vflex="1">
+			<label multiline="true">
+				1. Click the combobox at the bottom of the desktop.
+				2. The combobox's popup should grow upward from combobox's top.
+				3. Click the combobox at the top of the desktop.
+				4. The combobox's popup should grow down from combobox's bottom.
+			</label>
 			<combobox width="150px" model="@load(vm.colors)">
 				<template name="model">
 					<comboitem label="@load(each)"/>
@@ -30,6 +30,18 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			<bandbox>
 				<bandpopup></bandpopup>
 			</bandbox>
-		</hlayout>
+		</div>
+		<div>
+			<hlayout>
+				<combobox width="150px" model="@load(vm.colors)">
+					<template name="model">
+						<comboitem label="@load(each)"/>
+					</template>
+				</combobox>
+				<bandbox>
+					<bandpopup></bandpopup>
+				</bandbox>
+			</hlayout>
+		</div>
 	</div>
 </zk>
