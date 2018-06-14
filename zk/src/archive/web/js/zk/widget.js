@@ -1877,7 +1877,7 @@ wgt.$f().main.setTitle("foo");
 				} else if (visible) {
 					var zi;
 					if (floating)
-						this.setZIndex(zi = _topZIndex(this), {fire: true});
+						this.setZIndex(zi = _topZIndex(this), {fire: true, floatZIndex: true});
 
 					this.setDomVisible_(node, true);
 
@@ -2049,6 +2049,7 @@ wgt.$f().main.setTitle("foo");
 	 */
 	setTopmost: function () {
 		if (!this.desktop) return -1;
+		if (this._userZIndex) return;
 
 		for (var wgt = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
@@ -2077,7 +2078,7 @@ wgt.$f().main.setTitle("foo");
 	 */
 	setFloatZIndex_: function (node, zi) {
 		if (node != this.$n()) node.style.zIndex = zi; //only a portion
-		else this.setZIndex(zi, {fire: true});
+		else this.setZIndex(zi, {fire: true, floatZIndex: true});
 	},
 	/** Returns the z-index of a floating widget.
 	 * It is called by {@link #setTopmost} to decide the topmost z-index,
@@ -2157,10 +2158,16 @@ wgt.$f().main.setTitle("foo");
 	getZindex: _zkf,
 	/** Sets the Z index.
 	 * @param int zIndex the Z index to assign to
-	 * @param Map opts if opts.fire is specified, the onZIndex event will be triggered.
+	 * @param Map opts if opts.fire is specified the onZIndex event will be triggered. If opts.floatZIndex is false, represent it is not from setFloatZIndex, so the userZIndex may be true.
 	 * @return zk.Widget this widget.
 	 */
 	setZIndex: _zkf = function (zIndex, opts) {
+		if (opts.floatZIndex && this._userZIndex)
+			return;
+		if (!opts.floatZIndex)
+			this._userZIndex = true;
+		if (!zIndex)
+			this._userZIndex = false;
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
 			var n = this.$n();
