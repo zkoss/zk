@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3734.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 31 11:51:20 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Open the zul by ipad or android device.
+		2. Tap the first doublebox then tap the second double box again, you should see the same type of input keyboards.
+	</label>
+	<doublebox/>
+	<doublebox format="#,###,##0.00"/>
+</zk>

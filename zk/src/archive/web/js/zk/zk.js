@@ -1502,6 +1502,12 @@ zk.$intercepts(zul.inp.Combobox, {
 		|| // ZK-2888, in iphone with chrome, it may not have version attribute.
 		(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', ''));
 
+	zk.ipad = zk.webkit && /ipad/.test(agent) && (
+		//ZK-2245: add version info to zk.ios
+		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '')
+		|| // ZK-2888, in iphone with chrome, it may not have version attribute.
+		(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', ''));
+
 	zk.android = zk.webkit && (agent.indexOf('android') >= 0);
 	zk.mobile = zk.ios || zk.android;
 	zk.css3 = true;
