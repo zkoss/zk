@@ -278,8 +278,8 @@ public class Radiogroup extends XulElement {
 	//utilities for radio//
 	/** Called when a radio is added to this group.
 	 */
-	/*package*/ void fixOnAdd(Radio child) {
-		if (_jsel >= 0 && child.isSelected()) {
+	/*package*/ void fixOnAdd(Radio child, boolean external) {
+		if (external && _jsel >= 0 && child.isSelected()) {
 			child.setSelected(false); //it will call fixSelectedIndex
 		} else {
 			fixSelectedIndex();
@@ -339,7 +339,7 @@ public class Radiogroup extends XulElement {
 			_externs = new LinkedList<Radio>();
 		_externs.add(radio);
 		if (!isRedudant(radio))
-			fixOnAdd(radio);
+			fixOnAdd(radio, true);
 	}
 
 	/** Removes an external radio.
