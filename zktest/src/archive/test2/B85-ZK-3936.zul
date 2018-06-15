@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3936.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 12 16:25:15 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. Close the tree.
+		2. The width of the combobox should not change.(The input in the combobox should be still 60px) 
+	</label>
+	<tree width="300px">
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>
+						<combobox id="combo1" width="100px"/> close /open me
+					</treecell>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell>
+								<combobox width="100px"/> Text after combobox
+							</treecell>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
