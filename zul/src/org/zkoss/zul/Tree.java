@@ -2617,11 +2617,11 @@ public class Tree extends MeshElement {
 	/** Returns whether to toggle the selection if clicking on a list item
 	 * with a checkmark.
 	 */
-	private static boolean isCheckmarkDeselectOther() {
+	private boolean isCheckmarkDeselectOther() {
 		if (_ckDeselectOther == null) //ok to race
 			_ckDeselectOther = Boolean
 					.valueOf("true".equals(Library.getProperty("org.zkoss.zul.tree.checkmarkDeselectOthers")));
-		return _ckDeselectOther.booleanValue();
+		return Utils.testAttribute(this, "org.zkoss.zul.tree.checkmarkDeselectOthers", _ckDeselectOther.booleanValue(), true);
 	}
 
 	protected boolean isSelectOnHighlightDisabled() {
