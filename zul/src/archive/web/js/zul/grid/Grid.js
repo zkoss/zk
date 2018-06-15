@@ -281,6 +281,21 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	hasGroup: function () {
 		return this.rows && this.rows.hasGroup();
+	},
+	/**
+	 * Scroll to the specified row by the given index.
+	 * @param int the index of row
+	 * @param double the scroll ratio
+	 * @since 8.5.2
+	 */
+	scrollToIndex: function (index, scrollRatio) {
+		this.$supers(Grid, '_scrollToIndex', arguments);
+	},
+	_getFirstItemIndex: function () {
+		return this.rows.firstChild._index;
+	},
+	_getLastItemIndex: function () {
+		return this.rows.lastChild._index;
 	}
 });
 })();

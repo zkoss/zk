@@ -39,6 +39,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -1923,5 +1924,19 @@ public class Grid extends MeshElement {
 				m.setActivePage(_pgi.getActivePage());
 			}
 		}
+	}
+	
+	/**
+	 * Scroll to the specified row by the given index.
+	 * @param index the index of row
+	 * @since 8.5.2
+	 */
+	public void scrollToIndex(int index) {
+		ListModel<Object> model = getModel();
+		int rowCount = model != null ? model.getSize() : getRows().getChildren().size();
+		if (index < 0 || index > rowCount - 1) {
+			throw new IndexOutOfBoundsException("Illegal index: " + index);
+		}
+		response(new AuInvoke(this, "scrollToIndex", index, (double) index / rowCount));
 	}
 }

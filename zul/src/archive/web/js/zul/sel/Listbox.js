@@ -472,6 +472,21 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				}
 			}
 		}
+	},
+	/**
+	 * Scroll to the specified item by the given index.
+	 * @param int the index of listitem
+	 * @param double the scroll ratio
+	 * @since 8.5.2
+	 */
+	scrollToIndex: function (index, scrollRatio) {
+		this.$supers(Listbox, '_scrollToIndex', arguments);
+	},
+	_getFirstItemIndex: function () {
+		return this.firstItem._index;
+	},
+	_getLastItemIndex: function () {
+		return this.lastItem._index;
 	}
 });
 /**

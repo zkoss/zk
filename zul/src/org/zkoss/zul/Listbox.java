@@ -3918,4 +3918,18 @@ public class Listbox extends MeshElement {
 			}
 		}
 	}
+	
+	/**
+	 * Scroll to the specified item by the given index.
+	 * @param index the index of item
+	 * @since 8.5.2
+	 */
+	public void scrollToIndex(int index) {
+		ListModel<Object> model = getModel();
+		int itemCount = model != null ? model.getSize() : getItemCount();
+		if (index < 0 || index > itemCount - 1) {
+			throw new IndexOutOfBoundsException("Illegal index: " + index);
+		}
+		response(new AuInvoke(this, "scrollToIndex", index, (double) index / itemCount));
+	}
 }
