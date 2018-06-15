@@ -284,12 +284,11 @@ public class Radio extends Checkbox {
 			_group = null;
 		}
 		Component rootParent = ComponentsCtrl.getRootParent();
-		if (rg != null && rootParent != null && rootParent instanceof ComponentCtrl
+		if (rg != null && rootParent instanceof ComponentCtrl
 				&& (!Components.isAncestor(rootParent, rg) || rootParent == rg)) {
-			final Radio radio = this;
 			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_REMOVED, new Callback<Component>() {
 				public void call(Component rootParent) {
-					rg.fixOnRemove(radio);
+					rg.fixOnRemove(Radio.this);
 				}
 			});
 		}
@@ -298,17 +297,17 @@ public class Radio extends Checkbox {
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		Component rootParent = ComponentsCtrl.getRootParent();
+		final Radiogroup rg = getRadiogroup();
 
 		// ZK-3818: update selected index in the callback
 		if (!_explictGroup) {
 			_group = this.getRadiogroup();
 		}
-		if (_group != null && rootParent != null && rootParent instanceof ComponentCtrl
-				&& (!Components.isAncestor(rootParent, _group) || rootParent == _group)) {
-			final Radio radio = this;
+		if (rg != null && rootParent instanceof ComponentCtrl
+				&& (!Components.isAncestor(rootParent, rg) || rootParent == rg)) {
 			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_ADDED, new Callback<Component>() {
 				public void call(Component rootParent) {
-					_group.fixOnAdd(radio);
+					rg.fixOnAdd(Radio.this, false);
 				}
 			});
 		}
