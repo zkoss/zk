@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3811.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 19 12:35:09 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+
+
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<label multiline="true">
+		1. connect the desktop.
+		2. no exception.
+	</label>
+	<separator/>
+	<div id="div1" apply="org.zkoss.bind.BindComposer">
+		<label id="lb1" value="@load(c:getCurrentLocale().country)"></label>
+		<label id="lb2" value="@load(c:getCurrentLocale().displayName)"></label>
+		<label id="lb3" value="@load(c:getCurrentLocale().language)"></label>
+	</div>
+</zk>

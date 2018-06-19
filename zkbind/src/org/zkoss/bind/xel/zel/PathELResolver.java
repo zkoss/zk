@@ -51,8 +51,8 @@ public class PathELResolver extends ELResolver {
 			numOfKids = (Integer) ctx.getContext(AstIdentifier.class); //Number of siblings of AstIdentifier
 			path = new Path();
 		} else {
-			numOfKids = _numOfKids.removeFirst();
-			path = _paths.removeFirst();
+			numOfKids = !_numOfKids.isEmpty() ? _numOfKids.removeFirst() : null;
+			path = !_paths.isEmpty() ? _paths.removeFirst() : new Path();
 		}
 
 		//ZK-2808: numOfKids may be null when calling static method or class constructor

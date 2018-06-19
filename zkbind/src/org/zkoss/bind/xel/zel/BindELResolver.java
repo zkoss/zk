@@ -274,16 +274,16 @@ public class BindELResolver extends XelELResolver {
 			//ZK-1189, form shouldn't count on property directly
 			String formFieldName = null;
 			if (isForm) {
-				script = path.getTrackFieldName(); //script is the expression, ex, bean[a.b.c]
-				formFieldName = path.getAccessFieldName(); //filedname is the evaluated value, ex, bean.k (a.b.c is k in script case)
+				script = path != null ? path.getTrackFieldName() : null; //script is the expression, ex, bean[a.b.c]
+				formFieldName = path != null ? path.getAccessFieldName() : null; //filedname is the evaluated value, ex, bean.k (a.b.c is k in script case)
 			} else {
-				script = path.getTrackProperty();
+				script = path != null ? path.getTrackProperty() : null;
 			}
 			final Binder binder = binding.getBinder();
 			final BindContext bctx = (BindContext) ctx.getAttribute(BinderImpl.BINDCTX);
 			final Component ctxcomp = bctx != null ? bctx.getComponent() : binding.getComponent();
 			((BinderCtrl) binder).getTracker().tieValue(ctxcomp, base, script, propName, value,
-					path.getTrackBasePath());
+					path != null ? path.getTrackBasePath() : null);
 
 			if (base != null) {
 				if (binding instanceof SaveBinding) {
@@ -324,12 +324,12 @@ public class BindELResolver extends XelELResolver {
 						final boolean prompt = bctx != null && bctx.getCommandName() == null;
 						if (prompt) {
 							//FormBinding shall not check @DependsOn() for dependent nodes
-							String basePath = path.getTrackBasePath();
+							String basePath = path != null ? path.getTrackBasePath() : null;
 							boolean skipAddingDependsOn = (basePath == null || basePath.length() == 0); //Should ignore empty base
 							if (!skipAddingDependsOn && (!(binding instanceof LoadFormBindingImpl)
 									|| ((LoadFormBindingImpl) binding).getSeriesLength() <= path.size())) {
-								BindELContext.addDependsOnTrackings(m, basePath, path.getTrackFieldsList(), binding,
-										bctx);
+								BindELContext.addDependsOnTrackings(m, basePath, path != null ? path.getTrackFieldsList() : null, 
+								binding, bctx);
 							}
 						}
 					}

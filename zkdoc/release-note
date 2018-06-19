@@ -84,6 +84,7 @@ ZK 8.5.2
   ZK-3927: listbox column alignment with hflex=min columns
   ZK-3912: tab component replaces manual tooltiptext
   ZK-3956: popup causes spacing vlayout
+  ZK-3811: PathELResolver.getValue cause a NPE
 
 * Upgrade Notes
 
