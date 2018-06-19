@@ -612,6 +612,7 @@
 			<xs:element ref="video" />
 			<xs:element ref="camera" />
 			<xs:element ref="bandbox" />
+			<xs:element ref="barcode" />
 			<xs:element ref="biglistbox" />
 			<xs:element ref="borderlayout" />
 			<xs:element ref="box" />
@@ -711,6 +712,7 @@
 				<xs:element ref="video" />
 				<xs:element ref="camera" />
 				<xs:element ref="bandbox" />
+				<xs:element ref="barcode" />
 				<xs:element ref="biglistbox" />
 				<xs:element ref="borderlayout" />
 				<xs:element ref="box" />
@@ -1016,6 +1018,17 @@
 	<xs:complexType name="bandpopupType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!--barcode-->
+	<xs:element name="barcode" type="barcodeType"/>
+	<xs:complexType name="barcodeType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="height" type="xs:string" use="optional"/>
+		<xs:attribute name="displayValue" type="booleanType" use="optional"/>
+		<xs:attribute name="fontSize" type="intType" use="optional"/>
+		<xs:attribute name="barWidth" type="intType" use="optional"/>
 	</xs:complexType>
 	<!-- barcodescanner -->
 	<xs:element name="barcodescanner" type="barcodescannerType" />
