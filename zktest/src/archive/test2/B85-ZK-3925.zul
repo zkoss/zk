@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3925.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 19 17:59:54 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<panel id="wnd" title="View" height="300px" width="400px" maximizable="true" maximized="true"
+		  closable="true" sizable="true" movable="true" floatable="true" border="rounded">
+		<panelchildren>
+			<label multiline="true">
+				1. un-maximize the window
+				2. click the button
+				3. while the notification is visible maximize the panel
+				4. after the notification disappeared un-maximize the panel
+				5. The height of the panel sized should be 300px,
+				   and the width of the panel size should be 400px 
+			</label>
+			<button label="Click" style="float:right;"
+				onClick='Clients.showNotification("Hello", "info", wnd, "middle_center", 1000);' />
+		</panelchildren>
+	</panel>
+</zk>
