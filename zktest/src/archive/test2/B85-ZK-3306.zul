@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3306.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jun 20 12:49:19 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Click the button
+		2. The text color of the home menuItem should be red,
+		the background-color should be green,
+		the margin should be 0px,
+		the width of span in the home menuItem should be undefined.
+	</label>
+	<menubar>
+	 <menu label="File">
+		<menupopup>
+			<menuitem label="New" onClick="alert(self.label)"/>
+			<menuitem label="Open" onClick="alert(self.label)"/>
+			<menuitem label="Save" onClick="alert(self.label)"/>
+			<menuseparator/>
+			<menuitem label="Exit" onClick="alert(self.label)"/>
+		</menupopup>
+	 </menu>
+	 <menuitem id="mhome" label="Home"/>
+	</menubar>
+	<button onClick='mhome.setStyle("color: red; background-color: green; width: 100px; margin: 0px;")' label="click"/>
+</zk>
