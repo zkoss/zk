@@ -243,6 +243,16 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		}
 		return img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + label;
 	},
+	setStyle: function (style) {
+		this.$supers('setStyle', arguments);
+		var n = this.$n();
+		if (n) {
+			var jstyle = jq.parseStyle(style),
+				jqn = jq(n);
+			jqn.find('a').css(jstyle);
+			jqn.find('span').css(jstyle).css('width', '').css('height', '');
+		}
+	},
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
 	 */
