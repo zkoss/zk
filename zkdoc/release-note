@@ -22,6 +22,7 @@ ZK 8.5.2
   ZK-3955: Allow custom-attribute setting for checkmarkDeselectOthers
   ZK-3953: update zel implementation
   ZK-3564: Slider snap to multiple of step when dragging
+  ZK-3823: org.zkoss.lang.Library must not use synchronized blocks
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception
