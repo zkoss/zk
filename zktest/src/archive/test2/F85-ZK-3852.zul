@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3852.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jun 06 14:40:08 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click chosenbox, select a item
+		2. The selected item should be rendered as text
+		3. Click chosenbox, select two items
+		4. The selected items should be separated by commas
+		5. Click setInplace(false) button
+		6. The selected items should be rendered as buttons
+	</label>
+	<chosenbox id="chosenbox" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3852VM')"
+			   model="@load(vm.model)" inplace="true" creatable="true" width="300px"
+			   selectedObjects="@bind(vm.selected)" onSearch="@command('create', item=event.value)"/>
+	<separator/>
+	<button label="setInplace(true)" onClick="chosenbox.setInplace(true)"/>
+	<button label="setInplace(false)" onClick="chosenbox.setInplace(false)"/>
+</zk>
