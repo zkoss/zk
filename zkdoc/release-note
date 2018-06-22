@@ -73,6 +73,7 @@ ZK 8.5.2
   ZK-3321: Put error message on hold if set on non-visible components
   ZK-3733: listbox with listgroup causes ie11 long running script warning
   ZK-3870: wrong theme css class at body element
+  ZK-3906: colorbox not initializing hex value in palette popup
 
 * Upgrade Notes
 

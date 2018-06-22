@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3906.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 11 09:42:07 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open the colorbox.
+        2. The color palette popup should have the default value (#6677FF).
+    </label>
+    <colorbox value="#6677FF"/>
+</zk>
