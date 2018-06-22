@@ -510,7 +510,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	onShow: function () {
 		if (this.__ebox) {
 			this.setFloating_(true);
-			this.__ebox.open();
+			this.__ebox.show();
 		}
 	},
 	/** Returns the label of the time zone

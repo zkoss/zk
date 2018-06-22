@@ -83,17 +83,9 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.inp.Textbox, 'bind_', arguments);
-		zWatch.listen({onShow: this});
 	},
 	unbind_: function () {
 		zWatch.unlisten({onShow: this});
-		this.$supers(zul.inp.Textbox, 'unbind_', arguments);
-	},
-	onShow: function () {
-		if (this.__ebox) {
-			this.setFloating_(true);
-			this.__ebox.open();
-		}
 	},
 	//super//
 	textAttrs_: function () {

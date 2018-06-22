@@ -42,6 +42,7 @@ import org.zkoss.zk.au.out.AuScrollIntoView;
 import org.zkoss.zk.au.out.AuScrollTo;
 import org.zkoss.zk.au.out.AuShowBusy;
 import org.zkoss.zk.au.out.AuSubmitForm;
+import org.zkoss.zk.au.out.AuSyncErrorbox;
 import org.zkoss.zk.au.out.AuWrongValue;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -596,5 +597,22 @@ public class Clients {
 	 */
 	public static final void sendClientCommand(Component component, String commandName, Object data) {
 		response(new AuInvoke(component, "$afterCommand", new Object[] { commandName, data }));
+	}
+
+	/**
+	 * Send a command to sync all the errorboxes and its reference component position on the desktop.
+	 * @since 8.5.2
+	 */
+	public static final void syncErrorbox () {
+		response(new AuSyncErrorbox());
+	}
+
+	/**
+	 * Send a command to sync a target component and its errorbox position.
+	 * @param component target component
+	 * @since 8.5.2
+	 */
+	public static final void syncErrorbox (Component component) {
+		response(new AuSyncErrorbox(component));
 	}
 }
