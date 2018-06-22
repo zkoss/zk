@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3924.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jun 11 12:26:53 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. click the "show message" button.
+		2. after 1, click the window close button when the desktop showing "processing";
+		3. The popup should not jump to the center and console.log should not have any error message.  
+	</label>
+	<window id="wnd" title="View" closable="true" width="400px" height="300px">
+		<button label="show message" onClick='
+			Thread.sleep(1000);
+			Clients.showNotification("Hello", "info", self, "middle_center", 2000);' />
+	</window>
+</zk>
