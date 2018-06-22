@@ -147,6 +147,23 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	compareItemPos_: function (item) {
 		var thisIndex = this._index, itemIndex = item._index;
 		return thisIndex == itemIndex ? 0 : thisIndex > itemIndex ? -1 : 1;
+	},
+	//@Override
+	shallFireSizedLaterWhenAddChd_: function () {
+		if (this.getListbox()._model == 'group') {
+			zWatch.listen({
+				 onCommandReady: this
+			});
+			return true;
+		}
+		this.$supers('shallFireSizedLaterWhenAddChd_', arguments);
+	},
+	// ZK-3733
+	onCommandReady: function (ctl) {
+		zUtl.fireSized(this);
+		zWatch.unlisten({
+			 onCommandReady: this
+		});
 	}
 });
 })();

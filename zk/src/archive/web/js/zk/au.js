@@ -1664,9 +1664,10 @@ zAu.cmd1 = /*prototype*/ {
 	addChd: function (wgt) {
 		if (wgt) {
 			var fn = function (child) {
-				var act = _beforeAction(child, 'show');
+				var act = _beforeAction(child, 'show'),
+					shallFireSizedLater = wgt.shallFireSizedLaterWhenAddChd_();
 				wgt.appendChild(child);
-				if (!_afterAction(child, act) && !child.z_rod)
+				if (!_afterAction(child, act) && !child.z_rod && !shallFireSizedLater)
 					zUtl.fireSized(child);
 			};
 			for (var args = arguments, j = 1; j < args.length; ++j)
