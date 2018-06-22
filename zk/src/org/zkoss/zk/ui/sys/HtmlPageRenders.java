@@ -845,19 +845,10 @@ public class HtmlPageRenders {
 		}
 
 		//output zktheme cookie
-		String oldthemenm = (String) desktop.getAttribute(ATTR_THEMENM);
-		if (oldthemenm == null)
-			oldthemenm = "";
-		final Object request = desktop.getExecution().getNativeRequest();
-		String themenm = "";
-		if (request instanceof HttpServletRequest) {
-			themenm = ThemeFns.getThemeResolver().getTheme((HttpServletRequest) request);
-		}
-		if (!oldthemenm.equals(themenm)) {
-			sb.append("zk.themeName='");
-			Strings.escape(sb, themenm, Strings.ESCAPE_JAVASCRIPT).append("';");
-			desktop.setAttribute(ATTR_THEMENM, themenm);
-		}
+		String themenm = ThemeFns.getCurrentTheme();
+		sb.append("zk.themeName='");
+		Strings.escape(sb, themenm, Strings.ESCAPE_JAVASCRIPT).append("';");
+		desktop.setAttribute(ATTR_THEMENM, themenm);
 
 		//output ZK ICON
 		final Session sess = Sessions.getCurrent();

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3870.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 08 14:53:41 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        You should see the current theme name regardless which theme is applied.
+    </label>
+    Current theme: <label id="themeName" w:onAfterSize="this.setValue(zk.themeName)" />
+    <button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"breeze");Executions.sendRedirect(null);' label="Change Theme to Breeze"/>
+    <button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"");Executions.sendRedirect(null);' label="Change Theme back to default"/>
+</zk>
