@@ -419,7 +419,15 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			this._shallCheck = true;
 		this.$supers('onChildAdded_', arguments);
 	},
-
+	onChildVisible_: function () {
+		if (this.desktop) {
+			var tabbox = this.getTabbox();
+			if (tabbox.inAccordionMold() && tabbox.getHeight()) {
+				tabbox.syncSize();
+			}
+		}
+		this.$supers('onChildVisible_', arguments);
+	},
 	ignoreFlexSize_: function (attr) {
 		var p = this.getTabbox();
 		return (p.isVertical() && 'h' == attr)
