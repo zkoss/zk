@@ -156,14 +156,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.mesh.HeaderWidget, 'bind_', arguments);
 		if (this.parent.isSizable())
 			this._initsz();
-		var mesh = this.getMeshWidget();
+		var mesh = this.getMeshWidget(),
+			width0 = zul.mesh.MeshWidget.WIDTH0;
 		if (mesh) {
 			var $n = jq(this.$n()),
 				$faker = jq(this.$n('hdfaker')),
 				w = this.getWidth();
 			if (!this.isVisible()) {
 				// B70-ZK-2036: Set width to 1px if browser is safari.
-				var wd = (zk.chrome || zk.safari) ? '0.1px' : '0';
+				var wd = width0;
 				$n.css('display', '');
 				// B70-ZK-2036: Change the header width.
 				$n.css('width', wd);
@@ -223,12 +224,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	_createFaker: function (n, postfix) {
-		var wd = this._hflexWidth ? this._hflexWidth + 'px' : this.getWidth(),
-			visible = !this.isVisible() ? 'display:none;' : '',
+		var _getWidth = zul.mesh.MeshWidget._getWidth,
+			wd = _getWidth(this, this._hflexWidth ? this._hflexWidth + 'px' : this.getWidth()),
 			t = document.createElement('col');
 		wd = wd ? 'width: ' + wd + ';' : '';
 		t.id = n.id + '-' + postfix;
-		t.style.cssText = wd + visible;
+		t.style.cssText = wd;
 		return t;
 	},
 	doClick_: function (evt) {

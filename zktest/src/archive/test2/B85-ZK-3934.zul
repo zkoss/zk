@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3934.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 25 12:15:25 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style>
+    .z-listheader, .z-listcell, .z-listfooter,
+    .z-column, .z-cell, .z-footer,
+    .z-treecol, .z-treecell, .z-treefooter {
+        border: none;
+        border-right: 1px solid red;
+    }
+    </style>
+    <script><![CDATA[
+    function testMeshes(selector) {
+        var col1Left = jq(selector + ":eq(0)").offset().left,
+            col2Left = jq(selector + ":eq(1)").offset().left,
+            col3Left = jq(selector + ":eq(2)").offset().left,
+            col10Left = jq(selector + ":eq(9)").offset().left;
+        zk.log(selector + " : " + (col2Left - col1Left) + " / " + (col10Left - col3Left));
+    }
+    ]]>
+    </script>
+
+    <label multiline="true">
+        1. The width of border between col 3 and 10 should be the same as others (e.g. border between col 1 and 2).
+        2. Click the following buttons to calculate the differences. If both numbers are different, the bug may exist.
+    </label>
+
+    <div xmlns:w="client">
+        <button label="Listbox" w:onClick="testMeshes('.z-listcell')"/>
+        <button label="Grid" w:onClick="testMeshes('.z-cell')"/>
+        <button label="Tree" w:onClick="testMeshes('.z-treecell')"/>
+    </div>
+
+    Listbox
+    <listbox>
+        <listhead menupopup="auto">
+            <listheader width="150px" label="col 1"/>
+            <listheader width="150px" label="col 2"/>
+            <listheader width="150px" label="col 3"/>
+            <listheader width="150px" label="col 4" visible="false"/>
+            <listheader width="150px" label="col 5" visible="false"/>
+            <listheader width="150px" label="col 6" visible="false"/>
+            <listheader width="150px" label="col 7" visible="false"/>
+            <listheader width="150px" label="col 8" visible="false"/>
+            <listheader width="150px" label="col 9" visible="false"/>
+            <listheader width="150px" label="col 10"/>
+            <listheader width="150px" label="col 11"/>
+        </listhead>
+        <listitem>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+            <listcell/>
+        </listitem>
+        <listfoot>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+            <listfooter/>
+        </listfoot>
+    </listbox>
+    Grid
+    <grid>
+        <columns>
+            <column width="150px" label="col 1"/>
+            <column width="150px" label="col 2"/>
+            <column width="150px" label="col 3"/>
+            <column width="150px" label="col 4" visible="false"/>
+            <column width="150px" label="col 5" visible="false"/>
+            <column width="150px" label="col 6" visible="false"/>
+            <column width="150px" label="col 7" visible="false"/>
+            <column width="150px" label="col 8" visible="false"/>
+            <column width="150px" label="col 9" visible="false"/>
+            <column width="150px" label="col 10"/>
+            <column width="150px" label="col 11"/>
+        </columns>
+        <rows>
+            <row>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+                <cell/>
+            </row>
+        </rows>
+        <foot>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+            <footer/>
+        </foot>
+    </grid>
+    Tree
+    <tree>
+        <treecols>
+            <treecol width="150px" label="col 1"/>
+            <treecol width="150px" label="col 2"/>
+            <treecol width="150px" label="col 3"/>
+            <treecol width="150px" label="col 4" visible="false"/>
+            <treecol width="150px" label="col 5" visible="false"/>
+            <treecol width="150px" label="col 6" visible="false"/>
+            <treecol width="150px" label="col 7" visible="false"/>
+            <treecol width="150px" label="col 8" visible="false"/>
+            <treecol width="150px" label="col 9" visible="false"/>
+            <treecol width="150px" label="col 10"/>
+            <treecol width="150px" label="col 11"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                    <treecell/>
+                </treerow>
+            </treeitem>
+        </treechildren>
+        <treefoot>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+            <treefooter/>
+        </treefoot>
+    </tree>
+</zk>

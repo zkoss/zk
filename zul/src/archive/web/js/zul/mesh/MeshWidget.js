@@ -1282,11 +1282,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (ftfakerbar)
 				ftfakerbar.style.width = vScroll + 'px';
 		} else {
+			var zero = this.$class.WIDTH0;
 			//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
 			if (hdfakerbar)
-				hdfakerbar.style.width = 0.1 + 'px';
+				hdfakerbar.style.width = zero;
 			if (ftfakerbar)
-				ftfakerbar.style.width = 0.1 + 'px';
+				ftfakerbar.style.width = zero;
 		}
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
@@ -1312,11 +1313,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var head = this.head;
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {
-			var wd = w._hflexWidth ? w._hflexWidth + 'px' : w.getWidth(),
-				visible = !w.isVisible() ? 'width : 0.1px' : '';
+			var wd = this.$class._getWidth(w, w._hflexWidth ? w._hflexWidth + 'px' : w.getWidth()),
 			// B70-ZK-2036: Style width should end with 'px'.
 			wd = wd ? 'width: ' + wd + ';' : '';
-			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visible, '"/>');
+			out.push('<col id="', w.uuid, fakeId, '" style="', wd, '"/>');
 		}
 		if (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0)
 			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" />');
@@ -1594,7 +1594,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			bdcol = bdfaker.firstChild,
 			ftcol = ftfaker ? ftfaker.firstChild : null,
 			hwgt = this.head.firstChild,
-			notVisibleWidth = zk.chrome ? '0.1px' : '0px';
+			notVisibleWidth = this.$class.WIDTH0;
 
 		for (var i = 0; hwgt; hwgt = hwgt.nextSibling, i++) {
 			if (hwgt.isVisible()) {
@@ -1822,6 +1822,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (pgib) hgh += pgib.offsetHeight;
 		}
 		return hgh ? hgh : defVal;
+	}
+}, {
+	WIDTH0: zk.webkit ? '0.001px' : '0',
+	_getWidth: function (wgt, width) {
+		if (wgt.isVisible())
+			return width;
+		return this.WIDTH0;
 	}
 });
 /** @class zul.mesh.Scrollbar
