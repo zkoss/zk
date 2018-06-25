@@ -25,9 +25,9 @@ public class B80_ZK_3241Test extends WebDriverTestCase {
         connect();
 		click(jq("@button").first());
 		waitResponse();
-		assertEquals(0, jq(".z-errorbox").length());
+		assertEquals(0, jq(".z-errorbox:visible").length());
 		click(jq("@button").last());
 		waitResponse();
-		assertEquals(0, jq(".z-errorbox").length());
+		assertEquals(0, jq(".z-errorbox:visible").length());
     }
 }
