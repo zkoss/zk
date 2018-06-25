@@ -115,9 +115,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (cnt == 0) //no change, nothing to do here
 				return;
 			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
-				for (Listitem listitem : _listbox.getItems()) {
-					listitem.invalidate();
-				}
+				_listbox.invalidate();
 			//Bug 3147518: avoid memory leak
 			//Also better performance (outer better than remove a lot)
 			if (min < 0)
@@ -151,9 +149,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				max = oldsz - 1;
 
 			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
-				for (Listitem listitem : _listbox.getItems()) {
-					listitem.invalidate();
-				}
+				_listbox.invalidate();
 			//Bug 3147518: avoid memory leak
 			//Also better performance (outer better than remove a lot)
 
@@ -396,9 +392,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				//must be detached before group
 				newcnt += cnt; //add affected later
 				if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD) && !inPaging)
-					for (Listitem listitem : _listbox.getItems()) {
-						listitem.invalidate();
-					}
+					_listbox.invalidate();
 				//Bug 3147518: avoid memory leak
 				//Also better performance (outer better than remove a lot)
 
@@ -440,9 +434,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 				if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
 						&& !inPagingMold())
-					for (Listitem listitem : _listbox.getItems()) {
-						listitem.invalidate();
-					}
+					_listbox.invalidate();
 				//Bug 3147518: avoid memory leak
 				//Also better performance (outer better than remove a lot)
 			}

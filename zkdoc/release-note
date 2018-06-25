@@ -14,7 +14,6 @@ ZK 8.5.2
   ZK-3624: Spinner - improve initial value
   ZK-3272: Display file size message with the most readable unit
   ZK-3569: Popup slide-in direction change depending on position relative to input
-  ZK-3658: Listbox invalidates the whole widget instead of the items
   ZK-3278: Dropupload can limit max uploading file count
   ZK-3824: Provide a content-type control for AU response
   ZK-3704: Decimalbox supports Indian numbering system format
