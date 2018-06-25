@@ -723,12 +723,6 @@ new zul.wnd.Window({
 		this.effects_ = {};
 		this._subzcls = {}; // cache the zclass + subclass name, like zclass + '-hover'
 
-		//There are two ways to specify IdSpace at client
-		//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
-		//2) Assign this.z$is to true (used by AbstractComponent.java)
-		if (this.z$is)
-			this._fellows = {};
-
 		//zkac is a token used by create() in mount.js for optimizing performance
 		if (props !== zkac)
 			this.afterInit(function () {

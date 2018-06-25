@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3968.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 25 17:50:44 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Click the two "Find thelabel ..." buttons.
+        2. The second result should not be the same as the first one.
+        3. Click the two "Find thefirstdiv/theseconddiv ..." buttons.
+        4. It should print out the results in zk log without any exception.
+    </label>
+    <div id="thefirstdiv" use="org.zkoss.zktest.test2.B85_ZK_3968Div">
+        <vbox>
+            <label id="thelabel" value="This is the first label with id thelabel" />
+            <button label="Find thelabel in first div's ID space">
+                <attribute w:name="onClick"><![CDATA[
+                    zk.log('Found label ' + this.$f('thelabel').$n().id);
+            ]]></attribute>
+            </button>
+            <button label="Find thefirstdiv in first div's ID space">
+                <attribute w:name="onClick"><![CDATA[
+                    zk.log('Found div ' + this.$f('thefirstdiv').$n().id);
+            ]]></attribute>
+            </button>
+        </vbox>
+    </div>
+
+    <div id="theseconddiv" use="org.zkoss.zktest.test2.B85_ZK_3968Div">
+        <vbox>
+            <label id="thelabel" value="This is the second label with id thelabel" />
+            <button label="Find thelabel in second div's ID space">
+                <attribute w:name="onClick"><![CDATA[
+                    zk.log('Found label ' + this.$f('thelabel').$n().id);
+            ]]></attribute>
+            </button>
+            <button label="Find theseconddiv in second div's ID space">
+                <attribute w:name="onClick"><![CDATA[
+                    zk.log('Found div ' + this.$f('theseconddiv').$n().id);
+            ]]></attribute>
+            </button>
+        </vbox>
+    </div>
+</zk>
