@@ -1443,9 +1443,7 @@ public class Listbox extends MeshElement {
 					}
 				}
 				pgi.setTotalSize(totalSize);
-				for (Listitem listitem : _items) {
-					listitem.invalidate(); // the set of visible items might change
-				}
+				invalidate(); // the set of visible items might change
 			} else if (((Cropper) getDataLoader()).isCropper()) {
 				getDataLoader().updateModelInfo();
 			} else {
