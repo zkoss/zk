@@ -18,12 +18,14 @@ package org.zkoss.zktest.bind.issue;
 
 import java.util.HashMap;
 
+import org.zkoss.bind.Binder;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Default;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.impl.AnnotateBinderHelper;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -82,7 +84,8 @@ public class B01194NestedVMInit {
 	
 	@AfterCompose
 	public void doAfterCompose(@BindingParam("type")@Default("user") String type,
-			@ContextParam(ContextType.VIEW) Component self) {
+			@ContextParam(ContextType.VIEW) Component self, 
+			@ContextParam(ContextType.BINDER) Binder binder) {
 		
 		Selectors.wireComponents(self, this, false);
 		HashMap<String, String[]> annotAttrs = new HashMap<String, String[]>();
@@ -91,6 +94,7 @@ public class B01194NestedVMInit {
 		headerNameLb.setParent(headerNameLbOuter);
 		headerNameLb.setId("headerNameLb");
 		headerNameLb.addAnnotation("value", "load", annotAttrs);
+		new AnnotateBinderHelper(binder).initComponentBindings(headerNameLb);
 	}
 	
 	public VM2 getInnerVm() {
