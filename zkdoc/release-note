@@ -88,6 +88,7 @@ ZK 8.5.2
   ZK-3811: PathELResolver.getValue cause a NPE
   ZK-3925: notification message affects panel size after maximize
   ZK-3934: hidden columns shifting cells
+  ZK-3944: Getting IllegalStateException: can only add one element
 
 * Upgrade Notes
 
