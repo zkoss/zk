@@ -100,6 +100,7 @@ ZK 8.5.2
   ZK-3974: spinner doesn't prevent users from violating its constraint
   ZK-3702: Combowidget components with autodrop trigger popup on non content relevant keys
   ZK-3972: java.lang.NoClassDefFoundError: org/zkoss/zk/ui/util/forEachStatus caused by import Handler
+  ZK-3829: using the annotation namespace sometimes fails to initialize the value
 
 * Upgrade Notes
 

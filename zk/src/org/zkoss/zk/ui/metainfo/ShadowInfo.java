@@ -39,6 +39,8 @@ public class ShadowInfo extends BranchInfo {
 	//F80 - store subtree's binder annotation count
 	private boolean _hasBindingAnnotation = false;
 
+	private boolean _isAnnotationNamespacedRoot = false;
+
 	/** Creates a shadow.
 	 *
 	 * @param parent the parent node (never null)
@@ -211,5 +213,22 @@ public class ShadowInfo extends BranchInfo {
 
 	public void disableBindingAnnotation() {
 		this._hasBindingAnnotation = false;
+	}
+
+	/**
+	 * @return whether this ShadowInfo is the first ShadowInfo that has annotation namespace or binding annotation.
+	 * @since 8.5.2
+	 */
+	public boolean isAnnotationNamespacedRoot() {
+		return _isAnnotationNamespacedRoot;
+	}
+
+	/**
+	 * Sets whether this ShadowInfo is the first ShadowInfo that has annotation namespace or binding annotation.
+	 * @param annotationNamespacedRoot
+	 * @since 8.5.2
+	 */
+	public void setAnnotationNamespacedRoot(boolean annotationNamespacedRoot) {
+		_isAnnotationNamespacedRoot = annotationNamespacedRoot;
 	}
 }
