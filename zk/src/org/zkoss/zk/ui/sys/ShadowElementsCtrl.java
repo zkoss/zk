@@ -128,12 +128,13 @@ public class ShadowElementsCtrl {
 				if (!se.getDistributedChildren().isEmpty() || !((ShadowElementCtrl) se).isDynamicValue())
 					continue;
 				List<Component> children = shadow.getChildren();
-				if (children.size() > 0) {
-					doBindChildrenInFilter(children.toArray(new Component[children.size()]));
-				} else {
+				if (children.size() == 0) {
 					Events.sendEvent(new Event("onBindInit", (Component) se));
 					Events.sendEvent(new Event("onBindingReady", (Component) se));
+					children = shadow.getChildren();
 				}
+				if (children.size() > 0) 
+					doBindChildrenInFilter(children.toArray(new Component[children.size()]));
 			}
 		}
 	}
