@@ -19,6 +19,7 @@ package org.zkoss.web.util.resource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,11 +63,21 @@ public abstract class ResourceLoader<V> implements Loader<ResourceInfo, V> {
 
 	public long getLastModified(ResourceInfo src) {
 		if (src.url != null) {
+			URLConnection conn = null;
 			try {
-				final long v = src.url.openConnection().getLastModified();
+				conn = src.url.openConnection();
+				final long v = conn.getLastModified();
 				return v != -1 ? v : 0; //not to reload (5.0.6 for better performance)
 			} catch (Throwable ex) {
 				return -1; //reload (might be removed)
+			} finally {
+				if (conn != null) {
+					try {
+						conn.getInputStream().close();
+					} catch (Throwable e) {
+						log.warn("The connection cannot be closed", e);
+					}
+				}
 			}
 		}
 
