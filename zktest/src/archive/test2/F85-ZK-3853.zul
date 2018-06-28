@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3853.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jun 07 10:30:53 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<?page title="tree" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. Click the "A" and open "A", 
+		2. You should see the under all nodes are checked.
+		3. Open B and B3 and click the "C3" (unselect C3).
+		4. You should B3 and A are with class partial, and C3 is unchecked.
+		5. Click C3 (select C3).
+		6. You should see all nodes are checked. 
+	</label>
+	<div apply="org.zkoss.zktest.test2.F85_ZK_3853Composer" >
+		<tree id="tree1" width="400px" checkmark="true"/>
+		<button id="print" label="Print"/>
+	</div>
+</zk>

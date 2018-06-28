@@ -18,10 +18,13 @@ package org.zkoss.zul;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -39,6 +42,7 @@ import org.zkoss.zul.ext.Selectable;
 import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
+import org.zkoss.zul.ext.TriStateTreeModel;
 
 /**
  * A skeletal implementation for {@link TreeModel}.
@@ -62,7 +66,7 @@ import org.zkoss.zul.ext.TreeSelectableModel;
  * @since 3.0.0
  */
 public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectableModel, TreeOpenableModel,
-		Selectable<E>, Openable<E>, java.io.Serializable, PageableModel {
+		TriStateTreeModel<E>, Selectable<E>, Openable<E>, java.io.Serializable, PageableModel {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractTreeModel.class);
 
@@ -79,6 +83,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	private boolean _multiple;
 
 	private SelectionControl<E> _ctrl;
+	private Map<TreeNode<E>, SelectionState> selectionState = new HashMap<TreeNode<E>, SelectionState>();	
 
 	public void setSelectionControl(SelectionControl ctrl) {
 		_ctrl = ctrl;
@@ -953,4 +958,106 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	public void removePagingEventListener(PagingListener listener) {
 		_pagingListeners.remove(listener);
 	}
+
+	/**
+	 * update selection status of a node's subtree.
+	 * Tree already add the selected treenode into the selection, we only add its sub-nodes 
+	 * @param node
+	 * @param selected
+	 */
+	public void toggleSubtree(TreeNode<E> node, final boolean selected) {
+		
+		if (node.getChildren() != null) {
+			Queue<TreeNode<E>> childQueue = new LinkedList<TreeNode<E>>(node.getChildren());
+			while (!childQueue.isEmpty()) {
+				TreeNode<E> childNode = childQueue.remove();
+				if (childNode.getChildren() != null) {
+					childQueue.addAll(childNode.getChildren());
+				}
+				if (selected) {
+					addToSelection((E) childNode);
+				} else {
+					removeFromSelection(childNode);
+				}
+			}
+		}
+	}
+
+	/**
+	 *  update selection status of a node's ancestors / i.e. make them none/partial/full and automatically add/ remove them from selection
+	 * @param node
+	 * @param selected
+	 */
+	public void toggleAncestors(TreeNode<E> node, boolean selected) {
+		TreeNode<E> ancestorNode = node.getParent();
+		while (ancestorNode != getRoot()) {
+			if (!selected) {
+				removeFromSelection(ancestorNode);
+			}
+			TriStateTreeModel.SelectionState state = calculateSelectionState(ancestorNode);
+			selectionState.put(node, state);
+			if (state == TriStateTreeModel.SelectionState.FULL) {
+				addToSelection((E) ancestorNode);
+			}
+			ancestorNode = ancestorNode.getParent();
+		}
+	}
+
+	/**
+	 * Performance notice!!! for a larger tree I suggest caching results, as long as the model does not change
+	 * @param node
+	 * @return selection state
+	 */
+	public TriStateTreeModel.SelectionState calculateSelectionState(TreeNode<E> node) {
+		if (isSelected(node)) {
+			return TriStateTreeModel.SelectionState.FULL; //short circuit
+		}
+		
+		List<TreeNode<E>> children = node.getChildren();
+		if (children == null || children.isEmpty()) {
+			return TriStateTreeModel.SelectionState.NONE;
+		}
+		
+		boolean atLeastOneSelected = false;
+		boolean fullySelected = true;
+		for (TreeNode<E> child : children) {
+			if (isSelected(child)) {
+				atLeastOneSelected = true;
+			} else {
+				TriStateTreeModel.SelectionState childSelectionState = calculateSelectionState(child);
+				switch (childSelectionState) {
+				case FULL:
+					atLeastOneSelected = true;
+					break;
+				case PARTIAL:
+					atLeastOneSelected = true;
+					fullySelected = false;
+					break;
+				default:
+					fullySelected = false;
+					break;
+				}
+			}
+			if (atLeastOneSelected && !fullySelected) return TriStateTreeModel.SelectionState.PARTIAL; //short circuit
+		}
+		if (fullySelected) {
+			return TriStateTreeModel.SelectionState.FULL;
+		} else {
+			return TriStateTreeModel.SelectionState.NONE;
+		} 
+	}
+
+	/**
+	 * Return the selection state of the tree
+	 * @param node
+	 * @return selection state
+	 */
+	public TriStateTreeModel.SelectionState getSelectionState(TreeNode<E> node) {
+		TriStateTreeModel.SelectionState state = selectionState.get(node);
+		if (state == null) {
+			return TriStateTreeModel.SelectionState.NONE;
+		} else {
+			return state;
+		}
+	}	
 }

@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.TreeOpenableModel;
+import org.zkoss.zul.ext.TriStateTreeModel;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -672,6 +673,14 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 
 		if (_value instanceof String)
 			render(renderer, "value", _value);
+	}
+	
+	/*package*/ void setSelectionState(TriStateTreeModel.SelectionState state) {
+		if (state == TriStateTreeModel.SelectionState.PARTIAL) {
+			this.getTreerow().smartUpdate("partialState",true);
+		} else {
+			this.getTreerow().smartUpdate("partialState",false);
+		}
 	}
 
 	/** Processes an AU request.

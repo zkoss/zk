@@ -77,6 +77,7 @@ import org.zkoss.zul.ext.SelectionControl;
 import org.zkoss.zul.ext.Sortable;
 import org.zkoss.zul.ext.TreeOpenableModel;
 import org.zkoss.zul.ext.TreeSelectableModel;
+import org.zkoss.zul.ext.TriStateTreeModel;
 import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
@@ -234,7 +235,7 @@ public class Tree extends MeshElement {
 	static {
 		addClientEvent(Tree.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
 		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
-		addClientEvent(Tree.class, Events.ON_SELECT, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
 		addClientEvent(Tree.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
@@ -2114,7 +2115,7 @@ public class Tree extends MeshElement {
 
 	@SuppressWarnings("rawtypes")
 	private static final TreeitemRenderer _defRend = new TreeitemRenderer() {
-		public void render(Treeitem ti, final Object node, final int index) {
+		public void render(final Treeitem ti, final Object node, final int index) {
 			Tree tree = ti.getTree();
 			final Template tm = tree.getTemplate("model");
 			if (tm == null) {
@@ -2129,6 +2130,15 @@ public class Tree extends MeshElement {
 					tr.getChildren().clear();
 				}
 				tc.setParent(tr);
+				if (node instanceof DefaultTreeNode) {
+					DefaultTreeNode dtnode = (DefaultTreeNode) node;
+					TriStateTreeModel model = dtnode.getModel();
+					if (model.getSelectionState(dtnode) == TriStateTreeModel.SelectionState.PARTIAL) {
+						ti.setSelectionState(TriStateTreeModel.SelectionState.PARTIAL);
+					} else {
+						ti.setSelectionState(null);
+					}
+				}
 			} else {
 				final Component[] items = ShadowElementsCtrl
 						.filterOutShadows(tm.create(ti.getParent(), ti, new VariableResolver() {
@@ -2765,6 +2775,36 @@ public class Tree extends MeshElement {
 				selectedObjects = smodel.getSelection();
 				unselectedObjects = collectUnselectedObjects(prevSeldObjects, smodel.getSelection());
 			}
+
+			//start to add TriState mechanism
+			Treeitem selectedItem = (Treeitem) desktop.getComponentByUuidIfAny((String) data.get("reference"));
+			TriStateTreeModel model = (TriStateTreeModel) getModel();
+			Set<Treeitem> previousSelectedItems = prevSeldItems;
+			model.toggleSubtree((DefaultTreeNode) selectedItem.getValue(), selectedItem.isSelected());
+			model.toggleAncestors((DefaultTreeNode) selectedItem.getValue(), selectedItem.isSelected());
+			
+			Set<Treeitem> selectedItems = selectedItem.getTree().getSelectedItems();
+			//update currentItem;
+			selectedItem.setSelectionState(selectedItem.isSelected() ? TriStateTreeModel.SelectionState.FULL : TriStateTreeModel.SelectionState.NONE);
+			//update child items;
+			for (Treeitem treeitem : selectedItems) {
+				treeitem.setSelectionState(TriStateTreeModel.SelectionState.FULL);
+			}
+			//update unselected icons
+			previousSelectedItems.removeAll(selectedItems);
+			for (Treeitem treeitem : previousSelectedItems) {
+				treeitem.setSelectionState(TriStateTreeModel.SelectionState.NONE);
+			}
+			//update ancestor icons
+			Treeitem ancestorItem = selectedItem.getParentItem();
+			while (ancestorItem != null) {
+				DefaultTreeNode ancestorNode = ancestorItem.getValue();
+				if (ancestorNode == null) break; //stop at root
+				ancestorItem.setSelectionState(model.calculateSelectionState(ancestorNode));
+				ancestorItem = ancestorItem.getParentItem();
+			}
+			//end to add TriState mechanism
+
 			if (sitems == null || sitems.isEmpty() || _model == null)
 				selectedObjects = null;
 			SelectEvent evt = new SelectEvent(Events.ON_SELECT, this, curSeldItems, prevSeldItems, unselectedItems,
