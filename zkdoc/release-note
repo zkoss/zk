@@ -104,6 +104,7 @@ ZK 8.5.2
   ZK-3829: using the annotation namespace sometimes fails to initialize the value
   ZK-3908: vertical toolbar has sometimes <br> between items
   ZK-3058: Filedownload adds the session id to the file name
+  ZK-3828: @DependsOn + EL with enum causes PropertyNotFoundException
 
 * Upgrade Notes
 

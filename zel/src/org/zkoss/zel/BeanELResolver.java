@@ -98,6 +98,7 @@ public class BeanELResolver extends ELResolver {
         Method m = this.property(context, base, property).read(context);
         try {
         	final Object result = m.invoke(base, (Object[]) null);
+        	context.putContext(MethodInfo.class, base);
         	context.putContext(Method.class, m);
         	return result;
         } catch (InvocationTargetException e) {
@@ -133,6 +134,7 @@ public class BeanELResolver extends ELResolver {
         
         try {
             m.invoke(base, value);
+            context.putContext(MethodInfo.class, base);
             context.putContext(Method.class, m);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
@@ -154,6 +156,7 @@ public class BeanELResolver extends ELResolver {
 			}
 			try {
 				m.invoke(base, value);
+				context.putContext(MethodInfo.class, base);
 				context.putContext(Method.class, m);
 			} catch (InvocationTargetException ee) {
 				Throwable cause = ee.getCause();

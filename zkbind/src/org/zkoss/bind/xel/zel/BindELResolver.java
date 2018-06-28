@@ -35,6 +35,7 @@ import org.zkoss.zel.CompositeELResolver;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELException;
 import org.zkoss.zel.ELResolver;
+import org.zkoss.zel.MethodInfo;
 import org.zkoss.zel.MethodNotFoundException;
 import org.zkoss.zel.PropertyNotFoundException;
 import org.zkoss.zel.PropertyNotWritableException;
@@ -320,7 +321,8 @@ public class BindELResolver extends XelELResolver {
 				} else if (!(base instanceof Form) && binding instanceof LoadBinding) { //no @DependsOn in Form bean
 					//parse @DependsOn and add into dependency tracking
 					final Method m = (Method) ctx.getContext(Method.class);
-					if (m != null) {
+					final Object mBase = ctx.getContext(MethodInfo.class);
+					if (m != null && mBase == base) {
 						final boolean prompt = bctx != null && bctx.getCommandName() == null;
 						if (prompt) {
 							//FormBinding shall not check @DependsOn() for dependent nodes
