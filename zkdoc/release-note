@@ -95,6 +95,7 @@ ZK 8.5.2
   ZK-3919: NPE fileupload when using Websockets (Tomcat)
   ZK-3976: Tree with treecol fails to open/close nodes
   ZK-3926: Typo in Borderlayout animation.disabled property
+  ZK-3895: wrong implementation in the widget function zul.tab.Tabbox.isRight()
 
 * Upgrade Notes
 

@@ -1,0 +1,70 @@
+３<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3895.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 28 18:58:39 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. should see two label "Tabbox1 is right: true" and "Tabbox2 is left: true"
+        2. should also see "Tabbox1 is right: true Tabbox2 is left: true" in zklog
+
+    </label>
+    <script>
+        zk.afterMount(function() {
+            zk.log('Tabbox1 is right: ' + zk.Widget.$(jq("$tb1")).isRight());
+            zk.log('Tabbox2 is left: ' + zk.Widget.$(jq("$tb2")).isLeft());
+        })
+    </script>
+    1. right
+    <tabbox maximalHeight="true" width="300px" orient="right" id="tb1">
+        <tabs>
+            <tab label="Tab1" />
+            <tab label="Tab2" />
+            <tab label="Tab3" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                <div>Tabpanel Content 1</div>
+            </tabpanel>
+            <tabpanel>
+                <div>Tabpanel Content 2</div>
+            </tabpanel>
+            <tabpanel>
+                <div>Tabpanel Content 3</div>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+    2. left
+    <tabbox maximalHeight="true" width="300px" orient="left" id="tb2">
+        <tabs>
+            <tab label="Tab1" />
+            <tab label="Tab2" />
+            <tab label="Tab3" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                <div>Tabpanel Content 1</div>
+            </tabpanel>
+            <tabpanel>
+                <div>Tabpanel Content 2</div>
+            </tabpanel>
+            <tabpanel>
+                <div>Tabpanel Content 3</div>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+    Tabbox1 is right: <label value="${tb1.isRight()}"/>
+    <label id="lb2"/>
+    <separator/>
+    Tabbox2 is left: <label value="${tb2.isLeft()}"/>
+</zk>
