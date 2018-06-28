@@ -117,6 +117,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * <p>Calling this method implies setImageContent(null).
 	 * In other words, the last invocation of {@link #setImage} overrides
 	 * the previous {@link #setImageContent}, if any.
+	 * The image would hide if src == null </p>
 	 * @see #setImageContent(Image)
 	 * @see #setImageContent(RenderedImage)
 	 */

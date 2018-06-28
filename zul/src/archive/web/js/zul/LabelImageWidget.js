@@ -43,7 +43,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		 * @since 7.0.0
 		 */
 		iconSclass: _zkf,
-		/** Sets the image URI.
+		/** Sets the image URI. The image would hide if src == null </p>
 		 * @param String image the URI of the image
 		 */
 		/** Returns the image URI.
@@ -52,13 +52,15 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		 */
 		image: function (v) {
 			if (v && this._preloadImage) zUtl.loadImage(v);
-			var n = this.getImageNode();
+			var n = this.getImageNode(),
+				jqn = jq(n);
 			if (n) {
 				var img = v || '';
 				if (jq.nodeName(n, 'img')) // ZK-1100
 					n.src = img;
 				else
-					jq(n).css('background-image', 'url(' + img + ')');
+					jqn.css('background-image', 'url(' + img + ')');
+				jqn[!img ? 'hide' : 'show']();
 			} else if (this.desktop) //<IMG> might not be generated (Bug 3007738)
 				this.updateDomContent_();
 		},
