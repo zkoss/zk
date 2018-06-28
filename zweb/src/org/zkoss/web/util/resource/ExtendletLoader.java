@@ -18,6 +18,7 @@ package org.zkoss.web.util.resource;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,13 +76,23 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 		if (getCheckPeriod() < 0)
 			return 1; //any value (because it is not dynamic)
 
+		URLConnection conn = null;
 		try {
 			final URL url = getExtendletContext().getResource(src);
 			if (url != null) {
-				final long v = url.openConnection().getLastModified();
+				conn = url.openConnection();
+				final long v = conn.getLastModified();
 				return v != -1 ? v : 0; //not to reload (5.0.6 for better performance)
 			}
 		} catch (Throwable ex) {
+		} finally {
+			if (conn != null) {
+				try {
+					conn.getInputStream().close();
+				} catch (Throwable e) {
+					log.warn("The connection cannot be closed", e);
+				}
+			}
 		}
 		return -1; //reload (might be removed)
 	}

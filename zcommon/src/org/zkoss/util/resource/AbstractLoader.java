@@ -18,13 +18,19 @@ package org.zkoss.util.resource;
 
 import java.io.File;
 import java.net.URL;
+import java.net.URLConnection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A skeletal implementation that assumes the source is either URL or File.
  *
  * @author tomyeh
  */
-abstract public class AbstractLoader<K, V> implements Loader<K, V> {
+public abstract class AbstractLoader<K, V> implements Loader<K, V> {
+	private static final Logger log = LoggerFactory.getLogger(AbstractLoader.class);
+
 	//-- Loader --//
 	public boolean shallCheck(K src, long expiredMillis) {
 		return expiredMillis > 0;
@@ -32,20 +38,30 @@ abstract public class AbstractLoader<K, V> implements Loader<K, V> {
 	}
 	public long getLastModified(K src) {
 		if (src instanceof URL) {
+			URLConnection conn = null;
 			try {
-				final long v = ((URL)src).openConnection().getLastModified();
-				return v != -1 ? v: 0; //not to reload if unknown (5.0.6 for better performance)
+				conn = ((URL) src).openConnection();
+				final long v = conn.getLastModified();
+				return v != -1 ? v : 0; //not to reload if unknown (5.0.6 for better performance)
 			} catch (Throwable ex) {
 				return -1; //reload (might be removed)
+			} finally {
+				if (conn != null) {
+					try {
+						conn.getInputStream().close();
+					} catch (Throwable e) {
+						log.warn("The connection cannot be closed", e);
+					}
+				}
 			}
 		} else if (src instanceof File) {
-			final long v = ((File)src).lastModified();
-			return v == -1 ? 0: //not to reload if unknown (5.0.6 for better performance)
-				v == 0 ? -1: v; //0 means nonexistent so reload
+			final long v = ((File) src).lastModified();
+			return v == -1 ? 0 : //not to reload if unknown (5.0.6 for better performance)
+				v == 0 ? -1 : v; //0 means nonexistent so reload
 		} else if (src == null) {
 			throw new NullPointerException();
 		} else {
-			throw new IllegalArgumentException("Unknown soruce: "+src+"\nOnly File and URL are supported");
+			throw new IllegalArgumentException("Unknown source: " + src + "\nOnly File and URL are supported");
 		}
 	}
 }
