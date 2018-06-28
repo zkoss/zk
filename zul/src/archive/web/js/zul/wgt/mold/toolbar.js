@@ -13,15 +13,14 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	// ZK-1706: the width of empty space does not always equal 3px in ie9, ie10 
-	var space = 'vertical' != this.getOrient() ? (zk.ie9 ? '<span></span>' : '') : '<br/>';
-		
 	out.push('<div ', this.domAttrs_(), '><div id="', this.uuid, '-cave"',
 			' class="', this.$s('content'), ' ', this.$s(this.getAlign()), '" >');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling) {
 		w.redraw(out);
-		out.push(space);
+		// ZK-1706: the width of empty space does not always equal 3px in ie9
+		if ('horizontal' == this.getOrient() && zk.ie9)
+			out.push('<span></span>');
 	}
 	out.push('</div><div class="z-clear"></div></div>');
 }
