@@ -363,7 +363,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					s.width = jq.px0(sw);
 					s.height = jq.px0(sh);
 
-					this._lastSize = {l: l, t: t, w: w, h: h};
+					if (!this._lastSize)
+						this._lastSize = {l: l, t: t, w: w, h: h};
 
 					// restore.
 					s.top = '0';

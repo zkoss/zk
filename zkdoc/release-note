@@ -85,6 +85,7 @@ ZK 8.5.2
   ZK-3912: tab component replaces manual tooltiptext
   ZK-3956: popup causes spacing vlayout
   ZK-3811: PathELResolver.getValue cause a NPE
+  ZK-3925: notification message affects panel size after maximize
 
 * Upgrade Notes
 
