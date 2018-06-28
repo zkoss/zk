@@ -1715,6 +1715,7 @@
 				</xs:sequence>
 			</xs:choice>
 		</xs:sequence>
+		<xs:attribute name="visibleRows" type="intType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="pageSize" type="intType" use="optional" />
 		<xs:attribute name="paginal" type="xs:string" use="optional" />
