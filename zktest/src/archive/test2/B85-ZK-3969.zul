@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3969.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 26 11:27:12 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        //any vm object
+        class OuterVm{}
+        OuterVm out = new OuterVm();
+    </zscript>
+    <window viewModel="@id('vm') @init(out)">
+        <include src='@load("./B85-ZK-3969-include.zul")' />
+    </window>
+</zk>
