@@ -19,6 +19,7 @@ ZK 8.5.2
   ZK-3704: Decimalbox supports Indian numbering system format
   ZK-3846: use date format in data constraint error messages and localize range separator
   ZK-3852: chosenbox supports inplace edit
+  ZK-3955: Allow custom-attribute setting for checkmarkDeselectOthers
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception

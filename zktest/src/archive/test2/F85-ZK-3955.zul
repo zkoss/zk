@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3955.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jun 14 15:32:29 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Case happen when property "org.zkoss.zul.listbox.checkmarkDeselectOthers" in zk.xml is true.
+		2. At the left listbox, select the first item(hello) and then select the second(world) item (not the checkmark).
+		3. The intbox1 should be with value 2.
+		4. At the right listbox, select the first item(hello) and then select the second(world) item (not the checkmark).
+		5. The intbox2 should be with value 1.
+		6. At the left tree, select the items orderly (not the checkmark).
+		7. The intbox3 should be with value 3.
+		8. At the right tree, select the items orderly (not the checkmark).
+		9. The intbox4 should be with value 1.
+	</label>
+	<hlayout>
+		<listbox id="listbox1" width="250px" height="300px" multiple="true" checkmark="true" mold="paging" pageSize="2"
+				 onSelect="count1.setValue(self.getSelectedCount());" onPaging="count1.setValue(self.getSelectedCount());">
+				<custom-attributes org.zkoss.zul.listbox.checkmarkDeselectOthers="false"/>
+			<listitem id="item1-1" label="hello" />
+			<listitem id="item1-2" label="world" />
+			<listitem id="item1-3" label="hello" />
+			<listitem id="item1-4" label="you" />
+		</listbox>
+		<vbox>
+			<label value="intbox1"/>
+			<intbox id="count1"/>
+		</vbox>
+		<listbox id="listbox2" width="250px" height="300px" multiple="true" checkmark="true" mold="paging" pageSize="2"
+				 onSelect="count2.setValue(self.getSelectedCount());" onPaging="count2.setValue(self.getSelectedCount());" >
+			<listitem id="item2-1" label="hello" />
+			<listitem id="item2-2" label="world" />
+			<listitem id="item2-3" label="hello" />
+			<listitem id="item2-4" label="you" />
+		</listbox>
+		<vbox>
+			<label value="intbox2"/>
+			<intbox id="count2"/>
+		</vbox>
+	</hlayout>
+	<hlayout>
+	<tree id="tree1" rows="3" width="250px" multiple="true" checkmark="true"
+		onSelect="count3.setValue(self.getSelectedCount());">
+		<custom-attributes org.zkoss.zul.listbox.checkmarkDeselectOthers="false"/>
+		<treecols sizable="true">
+			<treecol label="Name" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<vbox>
+		<label value="intbox3"/>
+		<intbox id="count3"/>
+	</vbox>
+	<tree id="tree2" rows="3" width="250px" multiple="true" checkmark="true"
+		onSelect="count4.setValue(self.getSelectedCount());">
+		<treecols sizable="true">
+			<treecol label="Name" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<vbox>
+		<label value="intbox4"/>
+		<intbox id="count4"/>
+	</vbox>
+	</hlayout>
+</zk>
