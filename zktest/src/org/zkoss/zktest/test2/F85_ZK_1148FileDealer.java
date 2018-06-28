@@ -21,17 +21,19 @@ import java.io.IOException;
 public class F85_ZK_1148FileDealer {
 
 	public static void writeMsg(String msg) {
+		writeMsg(msg, true);
+	}
+
+	public static void writeMsg(String msg, boolean append) {
 		try {
 			File src = new File("src/org/zkoss/zktest/test2/ZK1148.txt");
-			FileWriter fw = new FileWriter(src, true);
+			FileWriter fw = new FileWriter(src, append);
 			BufferedWriter bw = new BufferedWriter(fw);;
 			bw.write(msg);
 			bw.close();
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			
 		}
 	}
 

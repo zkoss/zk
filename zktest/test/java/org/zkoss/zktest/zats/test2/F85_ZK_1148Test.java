@@ -11,6 +11,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +31,12 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 		ComponentAgent btn = wout.query("#delBtn");
 		btn.click();
 		ComponentAgent label = da.query("#resultLabel");
-		Assert.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
+		try {
+			Assert.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
+		} finally {
+			F85_ZK_1148FileDealer.writeMsg("", false);
+			F85_ZK_1148FileDealer.close();
+		}
 	}
 
 	@Test
@@ -39,17 +45,23 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 		ComponentAgent btn = da.query("#delBtno");
 		btn.click();
 		ComponentAgent label = da.query("#resultLabel");
-		Assert.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
-
+		try {
+			Assert.assertEquals("DestroyD DestroyC", label.as(Label.class).getValue().trim());
+		} finally {
+			F85_ZK_1148FileDealer.writeMsg("", false);
+			F85_ZK_1148FileDealer.close();
+		}
 	}
 
 	@Test
 	public void testDesktopDestroy() {
 		DesktopAgent da = connect();
 		da.destroy();
-		Assert.assertEquals("DestroyD is called!DestroyC is called!", F85_ZK_1148FileDealer.readMsg());
-		F85_ZK_1148FileDealer.close();
+		try {
+			Assert.assertEquals("DestroyD is called!DestroyC is called!", F85_ZK_1148FileDealer.readMsg());
+		} finally {
+			F85_ZK_1148FileDealer.writeMsg("", false);
+			F85_ZK_1148FileDealer.close();
+		}
 	}
-
-
 }

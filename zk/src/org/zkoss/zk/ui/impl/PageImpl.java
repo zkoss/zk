@@ -749,11 +749,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public void destroy() {
-		super.destroy();
-
 		for (Component root: this.getRoots()) {
 			root.detach();
 		}
+		super.destroy();
 		try {
 			if (_ips != null) {
 				final List<Interpreter> ips = new ArrayList<Interpreter>(_ips.values());
