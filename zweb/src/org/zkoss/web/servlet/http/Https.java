@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -422,10 +423,18 @@ public class Https extends Servlets {
 					// for Bug ZK-2350, we don't specify the filename when coming with ZK Fileupload, but invoke this directly as Bug ZK-1619
 					//					final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
 					//					flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
+					// ZK-3058: remove jsessionid if any
+					int jsessionPos = temp.indexOf(";jsessionid=");
+					if (jsessionPos != -1)
+						flnm = URLDecoder.decode(
+							temp.substring(temp.lastIndexOf("/") + 1, jsessionPos),
+							"UTF-8"
+						);
 				} else
 					flnm = media.getName();
+				// ZK-3058: filename for legacy browsers, filename* for modern browsers
 				if (flnm != null && flnm.length() > 0)
-					value += ";filename=" + encodeFilename(request, flnm);
+					value += ";filename=" + encodeFilename(request, flnm) + ";filename*=UTF-8''" + encodeRfc3986(flnm);
 				if (media.isContentDisposition())
 					response.setHeader("Content-Disposition", value);
 				//response.setHeader("Content-Transfer-Encoding", "binary");
@@ -560,15 +569,7 @@ public class Https extends Servlets {
 		if (agent != null) {
 			try {
 				if (agent.contains("Trident")) {
-					// as Bug ZK-2350, the space of the filename in IE will be encoded to a '+' word as described in the URLEncoder's JAVA doc
-					// and we have no smarter way to decode that precisely so leave it there when user invokes the Https.write() directly.
-					filename = URLEncoder.encode(filename, "UTF-8");
-				} else if (agent.contains("Mozilla")) {
-					byte[] bytes = filename.getBytes("UTF-8");
-					filename = "";
-					for (byte b : bytes) {
-						filename += (char) (b & 0xff);
-					}
+					filename = encodeRfc3986(filename);
 				}
 			} catch (UnsupportedEncodingException e) {
 				// ignore it, if not supported
@@ -577,6 +578,10 @@ public class Https extends Servlets {
 		}
 
 		return '"' + Strings.escape(filename, "\"") + '"';
+	}
+
+	private static String encodeRfc3986(String data) throws UnsupportedEncodingException {
+		return URLEncoder.encode(data, "UTF-8").replaceAll("\\+", "%20");
 	}
 
 	private static String getCharset(String contentType) {

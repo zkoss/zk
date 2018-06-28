@@ -136,6 +136,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** A special event for scheduling a task for server push.
 	 */
 	private static final String ON_SCHEDULE = "onSchedule";
+	/** Represents a file name (it needs to be encoded separately) holder with {@link #getDownloadMediaURI}.
+	 */
+	private static final String FILENAME_HOLDER = "$zk_fn$";
 
 	private transient WebApp _wapp;
 	private transient Session _sess;
@@ -469,11 +472,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Strings.encode(sb, System.identityHashCode(media) & 0xffff);
 
 		if (pathInfo != null && pathInfo.length() > 0) {
-			sb.append('/');
+			sb.append('/').append(FILENAME_HOLDER);
 			if (pathInfo.charAt(0) == '/')
 				pathInfo = pathInfo.substring(1);
+			String uri = getUpdateURI(sb.toString());
+			int holderPos = uri.lastIndexOf(FILENAME_HOLDER);
+			return uri.substring(0, holderPos)
+				+ encodeFilename(pathInfo)
+				+ uri.substring(holderPos + FILENAME_HOLDER.length());
 		}
-		return getUpdateURI(sb.toString()) + encodeFilename(pathInfo);
+		return getUpdateURI(sb.toString());
 	}
 
 	// ZK-3809: # is valid in URL as a reference, but it is invalid as a filename
