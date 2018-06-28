@@ -112,9 +112,6 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers(Grid, 'rerender', arguments);
 		if (this.rows)
 			this.rows._syncStripe();
-		if (this._grid$rod) {
-			this._initPadSizes();
-		}
 		return this;
 	},
 	insertBefore: function (child, sibling, ignoreDom) {

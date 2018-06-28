@@ -353,13 +353,6 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 				}
 			}
 		}
-	},
-	rerender: function () {
-		this.$supers(Tree, 'rerender', arguments);
-		if (this.z$rod) {
-			this._initPadSizes();
-		}
-		return this;
 	}
 });
 /**
