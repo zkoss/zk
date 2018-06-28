@@ -365,6 +365,15 @@ function zkamn(pkg, fn) {
 			}
 			if (parent) parent.appendChild(wgt, ignoreDom);
 
+			//z$is: IdSpace
+			//There are two ways to specify IdSpace at client
+			//1) Override $init and assign _fellows (e.g., Macro/Include/Window)
+			//2) Assign this.z$is to true (used by AbstractComponent.java)
+			if (v = zk.cut(props, 'z$is')) {
+				wgt.z$is = true;
+				wgt._fellows = {};
+			}
+
 			//z$al: afterLoad
 			if (v = zk.cut(props, 'z$al'))
 				zk.afterLoad(function () {
