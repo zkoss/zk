@@ -525,8 +525,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);
-		var btn, 
-			inp = this.getInputNode(), 
+		var btn,
 			wgt = this;
 
 		if (btn = this.$n('btn')) {
