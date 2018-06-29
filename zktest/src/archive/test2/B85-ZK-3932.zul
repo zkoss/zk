@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3932.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jun 27 16:55:02 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click ListboxSelect button
+		2. No error is shown
+		3. Click TreeSelect button
+		4. No error is shown
+		(the error should be: Cannot set property 'scrollTop' of undefined (TypeError))
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3932VM')">
+		<bandbox>
+			<bandpopup>
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<listbox id="listbox" height="500px" model="@load(vm.listModel)"/>
+			</bandpopup>
+		</bandbox>
+		<button label="ListboxSelect" onClick="listbox.setSelectedIndex(800);"/>
+		<bandbox>
+			<bandpopup>
+				<tree id="tree" height="500px" model="@load(vm.treeModel)"/>
+			</bandpopup>
+		</bandbox>
+		<button label="TreeSelect" onClick="tree.setSelectedItem(tree.getItems().toArray()[800])"/>
+	</div>
+</zk>
