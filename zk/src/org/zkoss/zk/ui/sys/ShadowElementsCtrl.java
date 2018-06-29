@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlShadowElement;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.ShadowElementCtrl;
 import org.zkoss.zk.ui.event.Event;
@@ -87,13 +88,8 @@ public class ShadowElementsCtrl {
 			}
 		} else {
 			Component parent = null;
-			Component start = null;
-			if (shadows[0] instanceof ShadowElementCtrl) {
-				ShadowElementCtrl se = ((ShadowElementCtrl) shadows[0]);
-				start = se.getFirstInsertion();
-			} else {
-				start = shadows[0];
-				parent = start.getParent();
+			if (!(shadows[0] instanceof ShadowElementCtrl)) {
+				parent = shadows[0].getParent();
 			}
 
 			if (parent instanceof ComponentCtrl) {
@@ -103,18 +99,16 @@ public class ShadowElementsCtrl {
 			}
 
 			// the following code will filter the shadow element if any.
-			Component end = shadows[length - 1];
-			if (end instanceof ShadowElementCtrl) {
-				ShadowElementCtrl se = (ShadowElementCtrl) end;
-				end = se.getLastInsertion();
-			}
-
+			// in multiple shadows case, some of nextInsertion would point to the useless component, which would detach
+			// later. So here rewrite the list add method.
 			LinkedList<Component> list = new LinkedList<Component>();
-			while (start != null) {
-				list.add(start);
-				if (start == end)
-					break;
-				start = start.getNextSibling();
+			for (Component comp : shadows) {
+				if (comp instanceof HtmlShadowElement) {
+					HtmlShadowElement hse = (HtmlShadowElement) comp;
+					list.addAll(hse.getDistributedChildren());
+				} else {
+					list.add(comp);
+				}
 			}
 			return list.toArray(new Component[0]);
 		}

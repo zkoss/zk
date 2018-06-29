@@ -201,6 +201,7 @@ Mar 6, 2018
   ZK-3743: NPEs while using two event queues with Comet server push
   ZK-3804: Chrome meshwidget visible="false" column not hidden after ZK-3722
   ZK-3866: popup doClick prevents DOM state update after ZK 3606
+  ZK-3881: shadow components inside a Listbox doesn't work in parallel way
 
 * Upgrade Notes
   + The ContextClassLoaderFactory interface adds a new method:
