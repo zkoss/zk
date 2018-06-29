@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3974.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jun 28 16:50:20 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click down arrow button twice
+		2. The value of spinner should be 1
+	</label>
+	<spinner constraint="min 1"/>
+</zk>
