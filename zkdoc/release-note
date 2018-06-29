@@ -94,6 +94,7 @@ ZK 8.5.2
   ZK-3973: potentially locked resource files
   ZK-3919: NPE fileupload when using Websockets (Tomcat)
   ZK-3976: Tree with treecol fails to open/close nodes
+  ZK-3926: Typo in Borderlayout animation.disabled property
 
 * Upgrade Notes
 
