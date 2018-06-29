@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3976.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 29 14:55:45 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open/close the tree node.
+        2. It should be open/close.
+    </label>
+    <tree height="300px" width="300px">
+        <custom-attributes org.zkoss.zul.tree.initRodSize="1000" />
+        <custom-attributes org.zkoss.zul.client.rod="true"/>
+        <treecols>
+            <treecol label="item" width="200px"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true" label="1">
+                <treechildren>
+                    <treeitem open="true" label="1.1">
+                        <treechildren>
+                            <treeitem open="true" label="1.1.1" />
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+
+    <tree height="300px" width="300px">
+        <custom-attributes org.zkoss.zul.tree.initRodSize="1000" />
+        <custom-attributes org.zkoss.zul.client.rod="true"/>
+        <treecols>
+            <treecol label="item"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true" label="1">
+                <treechildren>
+                    <treeitem open="true" label="1.1">
+                        <treechildren>
+                            <treeitem open="true" label="1.1.1" />
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>
