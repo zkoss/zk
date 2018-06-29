@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3952.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jun 13 18:04:19 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Type "3333" into Intbox and blur
+		2. The first item in Grid and Listbox should be "data 3333"
+		3. Type "6666" into Intbox and blur
+		4. The first item in Grid and Listbox should be "data 6666"
+		5. Type "9999" into Intbox and blur
+		6. The last item in Grid and Listbox should be "data 9999"
+		7. Type "0" into Intbox and blur
+		8. The first item in Grid and Listbox should be "data 0"
+	</label>
+	<window apply="org.zkoss.zktest.test2.F85_ZK_3952Composer">
+		<zscript><![CDATA[
+			ListModelList model = new ListModelList();
+			for (int i = 0; i < 10000; i++){
+				model.add("data " + i);
+			}
+		]]></zscript>
+		<hlayout>
+			<vlayout>
+				<custom-attributes org.zkoss.zul.grid.rod="true"/>
+				<grid id="grid" width="400px" height="300px" model="${model}">
+					<columns>
+						<column label="Grid"/>
+					</columns>
+				</grid>
+				<label value="Search by index: "/>
+				<intbox id="intbox"/>
+			</vlayout>
+			<vlayout>
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<listbox id="listbox" width="400px" height="300px" model="${model}">
+					<listhead>
+						<listheader label="Listbox"/>
+					</listhead>
+				</listbox>
+			</vlayout>
+		</hlayout>
+	</window>
+</zk>

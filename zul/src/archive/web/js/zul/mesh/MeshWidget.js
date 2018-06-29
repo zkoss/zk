@@ -1099,6 +1099,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 			this._shallSize = false;
+			if (this._keepScroll) {
+				this._scrollToIndex(this._targetIndex);
+			}
 		}
 	},
 	_vflexSize: function () {
@@ -1822,6 +1825,43 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (pgib) hgh += pgib.offsetHeight;
 		}
 		return hgh ? hgh : defVal;
+	},
+	/**
+	 * Scroll to the specified item by the given index, used by Grid and Listbox,
+	 * this function could be invoked by server-side or client-side,
+	 * when invoked by client-side, scrollRatio will be undefined.
+	 * @param int the index of item
+	 * @param double the scroll ratio
+	 */
+	_scrollToIndex: function (index, scrollRatio) {
+		var firstItemIndex = this._getFirstItemIndex(),
+			lastItemIndex = this._getLastItemIndex(),
+			body = this.ebody;
+		this._targetIndex = index;
+		this._keepScroll = true;
+
+		if (index >= firstItemIndex && index <= lastItemIndex) {
+			var itemIterator = this.getBodyWidgetIterator();
+			while (itemIterator.hasNext()) {
+				var item = itemIterator.next();
+				if (item._index == index) {
+					item.$n().scrollIntoView(true);
+					this._keepScroll = false;
+					this._topBoundary = this._bottomBoundary = undefined;
+					return;
+				}
+			}
+		} else if (scrollRatio != undefined) {
+			body.scrollTop = body.scrollHeight * scrollRatio;
+		} else if (index < firstItemIndex) {
+			this._bottomBoundary = body.scrollTop;
+			this._topBoundary = this._topBoundary == undefined ? 0 : this._topBoundary;
+			body.scrollTop -= (body.scrollTop - this._topBoundary) / 2;
+		} else if (index > lastItemIndex) {
+			this._topBoundary = body.scrollTop;
+			this._bottomBoundary = this._bottomBoundary == undefined ? body.scrollHeight : this._bottomBoundary;
+			body.scrollTop += (this._bottomBoundary - body.scrollTop) / 2;
+		}
 	}
 }, {
 	WIDTH0: zk.webkit ? '0.001px' : '0',
