@@ -14,6 +14,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<script><![CDATA[
+	zk.afterLoad(function () {
+		// UPLOAD_ERROR_EXCEED_MAXSIZE Auto:{0},{1} Byte:{2},{3} KB:{4},{5} MB:{6},{7}
+		msgzul.UPLOAD_ERROR_EXCEED_MAXSIZE = '(Notice) The request was rejected because the file size ({0}) exceeds the configured maximum ({1})';
+		zk.log(msgzul.UPLOAD_ERROR_EXCEED_MAXSIZE);
+	});
+	]]></script>
 	<label multiline="true">
 		1. Drag a file whose size is larger than 1MB to the "drag to here".
 		2. You should see (xxMB) or (xxGB) in the Messagebox.
