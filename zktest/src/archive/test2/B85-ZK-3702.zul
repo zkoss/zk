@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3702.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed May 30 17:40:36 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. click the combobox and should focus on the combobox.
+		2. input "space", the combobox popup should be seen.
+		3. click the outside of combobox.
+		4. click the combobox and should focus on the combobox again.
+		5. input "ctrl" or "command" by mac, the combobox popup should not be seen.
+	</label>
+	<combobox autodrop="true">
+		<comboitem label="item1"/>
+		<comboitem label="item2"/>
+		<comboitem label="item3"/>
+	</combobox>
+</zk>

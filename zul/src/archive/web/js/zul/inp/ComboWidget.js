@@ -525,12 +525,19 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);
-		var btn, inp = this.getInputNode();
+		var btn, 
+			inp = this.getInputNode(), 
+			wgt = this;
 
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
+
+		this.domListen_(this.$n('real'), 'onInput', function () {
+			if (wgt._autodrop && !wgt._open)
+				wgt.open({sendOnOpen: true});
+		});
 
 		zWatch.listen({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.onzsync(this);
@@ -546,6 +553,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		zWatch.unlisten({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.unzsync(this);
+
+		this.domUnlisten_(this.$n('real'), 'onInput');
 
 		this.$supers(zul.inp.ComboWidget, 'unbind_', arguments);
 	},
@@ -619,13 +628,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			else this.escPressed_(evt);
 			return;
 		}
-
-		if (keyCode == 18 || keyCode == 27 || keyCode == 13
-		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
-			return; //ignore it (doc will handle it)
-
-		if (this._autodrop && !bOpen)
-			this.open({sendOnOpen: true});
 
 		if (keyCode == 38) this.upPressed_(evt);
 		else if (keyCode == 40) this.dnPressed_(evt);
