@@ -16,10 +16,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.lang;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Library {
 	private static final Logger log = LoggerFactory.getLogger(Library.class);
-	private static final Map<String, List<String>> _props = new HashMap<String, List<String>>();
+	//ZK-3823: Using the ConcurrentHashMap to substitute synchronized HashMap can avoid the thread lock issue.
+	//Enhance the performance of the code. 
+	private static final Map<String, List<String>> _props = new ConcurrentHashMap<String, List<String>>();
 
 	private Library() {}
 
@@ -64,13 +66,11 @@ public class Library {
 	 */
 	public static String getProperty(String key) {
 		final String v;
-		synchronized (_props) {
-			List<String> valList = _props.get(key);
-			if (valList != null && valList.size() > 0)
-				v = valList.get(0);
-			else
-				v = null;
-		}
+		List<String> valList = _props.get(key);
+		if (valList != null && valList.size() > 0)
+			v = valList.get(0);
+		else
+			v = null;
 		try {
 			//Unlike System.getProperty, we make the inocation as safe as possible
 			return v != null || key == null || key.length() == 0 ?
@@ -93,13 +93,11 @@ public class Library {
 	 */
 	public static String getProperty(String key, String def) {
 		final String v;
-		synchronized (_props) {
-			List<String> valList = _props.get(key);
-			if (valList != null && valList.size() > 0)
-				v = valList.get(0);
-			else
-				v = null;
-		}
+		List<String> valList = _props.get(key);
+		if (valList != null && valList.size() > 0)
+			v = valList.get(0);
+		else
+			v = null;
 		try {
 			return v != null ? v: System.getProperty(key, def);
 		} catch (SecurityException ex) {
@@ -117,12 +115,10 @@ public class Library {
 		if (key == null) throw new NullPointerException();
 		if (key.length() == 0) throw new IllegalArgumentException();
 
-		synchronized (_props) {
-			List<String> vals = new LinkedList<String>();
-			vals.add(value);
-			List<String> prev = _props.put(key, vals);
-			return prev != null && prev.size() > 0 ? prev.get(0) : null;
-		}
+		List<String> vals = new LinkedList<String>();
+		vals.add(value);
+		List<String> prev = _props.put(key, vals);
+		return prev != null && prev.size() > 0 ? prev.get(0) : null;
 	}
 
 	/** Parses the property value to an integer.
@@ -194,9 +190,7 @@ public class Library {
 		if (key == null) throw new NullPointerException();
 		if (key.length() == 0) throw new IllegalArgumentException();
 
-		synchronized (_props) {
-			return _props.put(key, new LinkedList<String>(values));
-		}
+		return _props.put(key, new LinkedList<String>(values));
 	}
 
 	/** Returns the library properties indicated by the specified key.
@@ -212,10 +206,6 @@ public class Library {
 	 * @see #setProperties
 	 */
 	public static List<String> getProperties(String key) {
-		final List<String> v;
-		synchronized (_props) {
-			v = _props.get(key);
-		}
-		return v;
+		return  _props.get(key);
 	}
 }
