@@ -182,15 +182,15 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * @return boolean
 	 */
 	isRight: function () {
-		var orient = this.getOrient();
-		return 'vertical' == orient || 'left' == orient;
+		return 'right' == this.getOrient();
 	},
 	/**
 	 * Returns whether it is the left orientation.
 	 * @return boolean
 	 */
 	isLeft: function () {
-		return 'left' == this.getOrient();
+		var orient = this.getOrient();
+		return 'vertical' == orient || 'left' == orient;
 	},
 	/**
 	 * Returns whether it is in the accordion mold.
