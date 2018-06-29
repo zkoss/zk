@@ -19,28 +19,26 @@ package org.zkoss.zel;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.zkoss.zel.impl.util.ClassUtil;
 
 /**
  * @since EL 3.0
  */
 public class ImportHandler {
 
-    private List<String> packages = new ArrayList<String>();
-    private Map<String,Class<?>> clazzes = new HashMap<String,Class<?>>();
-    private Map<String,Class<?>> statics = new HashMap<String,Class<?>>();
+    private static final String JAVA_LANG_PACKAGE = "java.lang";
+    private List<String> basicPackage = Collections.singletonList(JAVA_LANG_PACKAGE);
+    private Map<String, List<String>> importPackages = new HashMap<String, List<String>>();
+    private Map<String, Class<?>> clazzes = new HashMap<String, Class<?>>();
+    private Map<String, Class<?>> statics = new HashMap<String, Class<?>>();
+    
     private static class SingletonHolder {
     	private static final ImportHandler INSTANCE = new ImportHandler();
-    }
-
-    private ImportHandler() {
-        importPackage("java.lang");
     }
     
     public static ImportHandler getImportHandler() {
@@ -147,11 +145,24 @@ public class ImportHandler {
         // a) for sake of performance when used in JSPs (BZ 57142),
         // b) java.lang.Package.getPackage(name) is not reliable (BZ 57574),
         // c) such check is not required by specification.
-        packages.add(name);
+        String rqpath = ServletRequestsAttr.getCurrentURL();
+        List<String> packages = importPackages.get(rqpath);
+        if (packages == null) {
+            packages = new ArrayList(Arrays.asList(JAVA_LANG_PACKAGE));
+        }
+        packages.add(name);    
+        importPackages.put(rqpath , packages);
     }
 
 
     public java.lang.Class<?> resolveClass(String name) {
+        String rqpath = ServletRequestsAttr.getCurrentURL();
+        List<String> packages = importPackages.get(rqpath);
+        
+        if (packages == null) {
+            packages = basicPackage;
+        }
+
         if (name == null || name.contains(".")) {
             return null;
         }

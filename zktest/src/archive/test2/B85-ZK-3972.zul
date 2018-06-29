@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.zk.ui.util.*?>
+<!--
+B85-ZK-3972.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jun 25 15:17:51 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. connect the /zktest/test2/B85-ZK-3972.zul.
+		2. then click the button, it will connect to the /zktest/test2/B85-ZK-3972-2.zul.
+		3. No throwException should happen.
+	</label>
+	<button label="sendRedirect" onClick='execution.sendRedirect("/test2/B85-ZK-3972-2.zul")'/>
+</zk>
