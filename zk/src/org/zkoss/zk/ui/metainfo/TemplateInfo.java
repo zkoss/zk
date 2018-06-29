@@ -30,6 +30,8 @@ public class TemplateInfo extends BranchInfo {
 	private final ExValue _src;
 	private final Map<String, ExValue> _params;
 
+	private boolean _isAnnotationNamespacedRoot = false;
+
 	/** Creates a template.
 	 *
 	 * @param parent the parent node (never null)
@@ -80,5 +82,22 @@ public class TemplateInfo extends BranchInfo {
 	//Object//
 	public String toString() {
 		return "[template:" + _name + ']';
+	}
+
+	/**
+	 * @return whether this TemplateInfo is the first TemplateInfo that has annotation namespace or binding annotation.
+	 * @since 8.5.2
+	 */
+	public boolean isAnnotationNamespacedRoot() {
+		return _isAnnotationNamespacedRoot;
+	}
+
+	/**
+	 * Sets whether this TemplateInfo is the first TemplateInfo that has annotation namespace or binding annotation.
+	 * @param annotationNamespacedRoot
+	 * @since 8.5.2
+	 */
+	public void setAnnotationNamespacedRoot(boolean annotationNamespacedRoot) {
+		_isAnnotationNamespacedRoot = annotationNamespacedRoot;
 	}
 }

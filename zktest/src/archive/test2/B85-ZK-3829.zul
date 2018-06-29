@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3829.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 26 11:56:31 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:a="annotation">
+	<div apply="org.zkoss.bind.BindComposer">
+		<label multiline="true">
+			should see one red-colored 'fails' and one red-colored 'fails2'
+
+		</label>
+		<separator height="30px"/>
+		<div>
+			<label value="${'works'}"/>
+			<label value="@init('works')"/>
+			<label a:value="@init('works')"/>
+		</div>
+		<div>
+			<apply myprop="works2">
+				<label value="${myprop}"/>
+				<label value="@init(myprop)"/>
+				<label a:value="@init(myprop)"/>
+			</apply>
+		</div>
+		<div>
+			<apply myprop="@init('fails')">
+				<label value="${myprop}"/>
+				<label value="@init(myprop)"/>
+				<label style="color: red;" a:value="@init(myprop)"/> <!-- bug if failed to show -->
+			</apply>
+		</div>
+		<div>
+			<apply a:myprop="@init('fails2')">
+				<apply myprop2="@init(myprop)">
+					<label value="${myprop2}" id="lb10"/>
+					<label value="@init(myprop2)" id="lb11"/>
+					<label style="color: red;" a:value="@init(myprop2)" id="lb12"/> <!-- bug if failed to show -->
+				</apply>
+			</apply>
+		</div>
+	</div>
+</zk>

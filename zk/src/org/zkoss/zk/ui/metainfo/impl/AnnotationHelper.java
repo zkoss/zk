@@ -50,6 +50,8 @@ public class AnnotationHelper {
 	/** A list of AnnotInfo */
 	final List<AnnotInfo> _annots = new LinkedList<AnnotInfo>();
 
+	private boolean _ignoreAnnotNamespace;
+
 	/** Test if the given value is an annotation.
 	 * In other words, it returns true if the value matches
 	 * one of two kinds of format described in {@link #addByCompoundValue}.
@@ -474,6 +476,24 @@ public class AnnotationHelper {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Where to ignore annotation namespace.
+	 * @return true if should ignore annotation namespace.
+	 * @since 8.5.2
+	 */
+	public boolean shouldIgnoreAnnotNamespace() {
+		return _ignoreAnnotNamespace;
+	}
+
+	/**
+	 * Sets where to ignore annotation namespace.
+	 * @param boolean
+	 * @since 8.5.2
+	 */
+	public void setIgnoreAnnotNamespace(boolean ignoreAnnotNamespace) {
+		_ignoreAnnotNamespace = ignoreAnnotNamespace;
 	}
 
 	private static class AnnotInfo {
