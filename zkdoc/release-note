@@ -103,6 +103,7 @@ ZK 8.5.2
   ZK-3972: java.lang.NoClassDefFoundError: org/zkoss/zk/ui/util/forEachStatus caused by import Handler
   ZK-3829: using the annotation namespace sometimes fails to initialize the value
   ZK-3908: vertical toolbar has sometimes <br> between items
+  ZK-3058: Filedownload adds the session id to the file name
 
 * Upgrade Notes
 
