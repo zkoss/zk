@@ -1,5 +1,6 @@
 <zk>
 	<label multiline="true">
+		Part 1:
 		1. Click the "detach window" button.
 		2. You should see destroy info on the client's log. (DestroyD DestroyC)
 		3. Reload this page, you should see 
@@ -22,4 +23,15 @@
 	<button id="delBtno" label="detach out window" onClick='outWin.detach();'/>
 	<button label="attach window" onClick=''/>
 	<label id="resultLabel"></label>
+	<separator/>
+	<label multiline="true">
+		Part 2:
+		1. click the reload button.
+		2. You should see a "IncludeVM is called!" at server console.
+	</label>
+	<window id="reloadWin"
+		viewModel="@id('vm')@init('org.zkoss.zktest.test2.F85_ZK_1148ReloadVM')">
+		<include id="inc1" src="@load(vm.url) @converter(vm.converter)"/>
+		<button id="reload" label="reload" onClick="@command('reload')"/>
+	</window>
 </zk>

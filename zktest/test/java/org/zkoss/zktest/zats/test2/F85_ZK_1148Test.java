@@ -45,11 +45,28 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 
 	@Test
 	public void testDesktopDestroy() {
+		F85_ZK_1148FileDealer.writeMsg("", false);
 		DesktopAgent da = connect();
 		da.destroy();
-		Assert.assertEquals("DestroyD is called!DestroyC is called!", F85_ZK_1148FileDealer.readMsg());
-		F85_ZK_1148FileDealer.close();
+		try {
+			Assert.assertEquals("DestroyD is called!DestroyC is called!IncludeVM is called!", F85_ZK_1148FileDealer.readMsg());
+		} finally {
+			F85_ZK_1148FileDealer.close();
+		}
 	}
 
+	@Test
+	public void testIncludeDestroy() {
+		F85_ZK_1148FileDealer.writeMsg("", false);
+		DesktopAgent da = connect();
+		ComponentAgent reloadWin = da.query("#reloadWin");
+		ComponentAgent btn = reloadWin.query("#reload");
+		btn.click();
+		try {
+			Assert.assertEquals("IncludeVM is called!", F85_ZK_1148FileDealer.readMsg());
+		} finally {
+			F85_ZK_1148FileDealer.close();
+		}
+	}
 
 }

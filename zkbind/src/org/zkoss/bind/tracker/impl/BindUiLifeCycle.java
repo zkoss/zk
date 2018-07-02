@@ -34,7 +34,6 @@ import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
-import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -204,9 +203,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 				removeBindings(comp);
 			}
 		});
-		//ZK-1148, add a @destroy annotation method.
-		destroyBinder(comp);
-
 		//ZK-2022, make it is in queue of remove.
 		comp.setAttribute(REMOVE_MARK, Boolean.TRUE);
 		//ZK-2545 - Children binding support list model
@@ -223,19 +219,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		comp.setAttribute(SKIP_BIND_INIT, false);
 		Events.postEvent(new Event(BinderImpl.ON_BIND_CLEAN, comp));
 	}
-
-	private void destroyBinder(Component comp) {
-		if (!((AbstractComponent) comp).getAnnotations("viewModel").isEmpty()) {
-			Binder binder = BinderUtil.getBinder(comp);
-			if (binder != null) {
-				binder.destroy(comp, binder.getViewModel());
-			}
-		} 
-		for (Component child: comp.getChildren()) {
-			destroyBinder(child);
-		}
-	}
-
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
 		//do nothing
 	}

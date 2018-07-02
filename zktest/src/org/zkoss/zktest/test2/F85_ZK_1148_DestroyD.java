@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.bind.annotation.Destroy;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.Clients;
@@ -24,6 +25,12 @@ import org.zkoss.zul.Label;
 
 public class F85_ZK_1148_DestroyD extends F85_ZK_1148_DestroyC {
 	private static final Logger log = LoggerFactory.getLogger(F85_ZK_1148_DestroyD.class);
+	
+	@Init
+	public void init() {
+		Clients.log("init DestroyD");
+	}
+	
 	@Destroy(superclass = true)
 	public void destroyD() {
 		Component comp = null;

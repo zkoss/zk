@@ -396,6 +396,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	public void setPageBefore(Page page, Component refRoot) {
+		beforeComponentPageChanged(page);
 		if (refRoot != null && (page == null || refRoot.getParent() != null || refRoot.getPage() != page))
 			refRoot = null;
 		if (refRoot != null /*&& refRoot.getPage() == page (checked)*/
@@ -1272,6 +1273,11 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		}
 	}
 
+	private void beforeComponentPageChanged(Page page) {
+		//ZK-1148, add a @destroy annotation method.
+		if (page == null)
+			WebApps.getCurrent().getConfiguration().invokeCallback("destroy", this);
+	}
 	private void afterComponentPageChanged(Page newpg, Page oldpg) {
 		if (newpg == oldpg)
 			return;
@@ -1963,11 +1969,14 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	public void beforeChildRemoved(Component child) {
 	}
 
-	/** Default: does nothing.
+	/** Default: If parent is null, execute the @Destroy method if any.
 	 * @see ComponentCtrl#beforeParentChanged
 	 * @since 3.6.2
 	 */
 	public void beforeParentChanged(Component parent) {
+		//ZK-1148, add a @destroy annotation method.
+		if (parent == null)//detach
+			WebApps.getCurrent().getConfiguration().invokeCallback("destroy", this);
 	}
 
 	/** Default: handles special event listeners.

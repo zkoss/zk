@@ -58,6 +58,7 @@ import org.zkoss.bind.annotation.MatchMedia;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.SmartNotifyChange;
+import org.zkoss.bind.callback.DestroyCallback;
 import org.zkoss.bind.init.ZKBinderPhaseListeners;
 import org.zkoss.bind.proxy.ViewModelProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -109,6 +110,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.event.Deferrable;
@@ -193,6 +195,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			return method.getAnnotation(DefaultGlobalCommand.class) != null;
 		}
 	};
+
+	static {
+		WebApps.getCurrent().getConfiguration().registerCallBack("destroy", new DestroyCallback());
+	}
 
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
