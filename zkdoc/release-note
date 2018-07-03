@@ -5,6 +5,7 @@ ZK 8.6.0
   ZK-3930: Provide a camera component
   ZK-3923: Provide a barcode scanner
   ZK-3913: Provide a barcode/QR code component
+  ZK-3658: Listbox invalidates the whole widget instead of the items
 
 * Bugs
 
