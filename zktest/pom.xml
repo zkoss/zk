@@ -187,6 +187,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.zkoss.common</groupId>
+			<artifactId>zel</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.zkoss.zkforge.el</groupId>
 			<artifactId>zcommons-el</artifactId>
 			<version>${zkel.version}</version>
