@@ -523,20 +523,20 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		return this.$supers('afterKeyDown_', arguments);
 	},
+	_dnInputOpen: function () {
+		if (this._autodrop && !this._open)
+			this.open({sendOnOpen: true});
+	},
 	bind_: function () {
 		this.$supers(zul.inp.ComboWidget, 'bind_', arguments);
-		var btn,
-			wgt = this;
+		var btn;
 
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
 			if (this._inplace) this.domListen_(btn, 'onMouseDown', '_doBtnMouseDown');
 		}
 
-		this.domListen_(this.$n('real'), 'onInput', function () {
-			if (wgt._autodrop && !wgt._open)
-				wgt.open({sendOnOpen: true});
-		});
+		this.domListen_(this.$n('real'), 'onInput', '_dnInputOpen');
 
 		zWatch.listen({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.onzsync(this);
@@ -553,7 +553,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.unlisten({onSize: this, onFloatUp: this, onResponse: this, onScroll: this});
 		if (!zk.css3) jq.unzsync(this);
 
-		this.domUnlisten_(this.$n('real'), 'onInput');
+		this.domUnlisten_(this.$n('real'), 'onInput', '_dnInputOpen');
 
 		this.$supers(zul.inp.ComboWidget, 'unbind_', arguments);
 	},
