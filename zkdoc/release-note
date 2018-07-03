@@ -7,6 +7,7 @@ ZK 8.6.0
   ZK-3913: Provide a barcode/QR code component
 
 * Bugs
+  ZK-3869: IE11 stackup iframe initially in wrong position
 
 * Upgrade Notes
 

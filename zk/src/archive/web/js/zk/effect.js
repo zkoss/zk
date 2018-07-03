@@ -17,26 +17,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 
-	var _defSKUOpts, _useSKU;
+	var _defSKUOpts;
 
 /** The effects, such as mask and shadow.
  */
 //zk.$package('zk.eff');
 zk.eff = {
-	shallStackup: function () {
-		return _useSKU;
-	},
 	_skuOpts: function (opts) {
-		return zk.$default(opts,
-			_defSKUOpts || (_defSKUOpts = {stackup: zk.eff.shallStackup()}));
-	},
-	// ZK-1904: stackup should be moved from wgt to document.body
-	_onVParent: function (evt, opts) {
-		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) {
-			var $stk = jq(stackup);
-			if ($stk.parent()[0] != document.body)
-				$stk.insertBefore(sdw.node);
-		}
+		return zk.$default(opts, _defSKUOpts);
 	}
 };
 
@@ -47,53 +35,24 @@ zk.eff = {
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = zk.eff._skuOpts(opts);
 		this.node = element;
-		// ZK-1904: listen onVParent
-		zWatch.listen({ onVParent: [this.node, zk.eff._onVParent] });
 	},
 	destroy: function () {
-		jq(this.stackup).remove();
 		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
-		zWatch.unlisten({ onVParent: [this.node, zk.eff._onVParent] }); // ZK-2586
-		this.wgt = this.node = this.stackup = null;
+		this.wgt = this.node = null;
 	},
 	hide: function () {
-		jq(this.stackup).hide();
 		jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
 	},
 	sync: function () {
 		var node = this.node, $node = jq(node);
 		if (!node || !$node.zk.isVisible(true)) {
-			if (this.opts.stackup && node) {
-				if (!this.stackup)
-					this.stackup = jq.newStackup(node, node.id + '-sdwstk', node);
-			}
 			this.hide();
 			return false;
 		}
 		
 		$node.addClass(this.wgt.getZclass() + '-shadow');
-		
-		var opts = this.opts,
-			l = node.offsetLeft, t = node.offsetTop,
-			w = node.offsetWidth, h = node.offsetHeight,
-			stackup = this.stackup;
-			
-		if (opts.stackup) {
-			if (!stackup)
-				stackup = this.stackup = jq.newStackup(node, node.id + '-sdwstk', node);
 
-			var st = stackup.style;
-			st.left = jq.px(l);
-			st.top = jq.px(t);
-			st.width = jq.px0(w);
-			st.height = jq.px0(h);
-			st.zIndex = zk.parseInt($node.css('zIndex'));
-			st.display = 'block';
-		}
 		return true;
-	},
-	getBottomElement: function () {
-		return this.stackup;
 	}
 });
 
@@ -108,9 +67,6 @@ zk.eff = {
 			st.top = jq.px(ofs[1]);
 			st.width = jq.px0(jq.innerWidth());
 			st.height = jq.px0(jq.innerHeight());
-
-			if (n = this.stackup)
-				zk.set(n.style, st, ['left', 'top', 'width', 'height']);
 		}
 	}
 
@@ -155,8 +111,6 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 				jq(document.body).append(html);
 			mask = this.mask = jq(maskId, zk)[0];
 		}
-		if (opts.stackup)
-			this.stackup = jq.newStackup(mask, mask.id + '-mkstk');
 
 		_syncMaskPos.call(this);
 
@@ -173,15 +127,13 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 			.remove();
 		jq(window).unbind('resize', f = this.proxy(_syncMaskPos))
 			.unbind('scroll', f);
-		jq(this.stackup).remove();
-		this.mask = this.stackup = null;
+		this.mask = null;
 	},
 	/** Hide the full mask. Application developers rarely need to invoke this method.
 	 * Rather, use {@link #sync} to synchronized the visual states.
 	 */
 	hide: function () {
 		this.mask.style.display = 'none';
-		if (this.stackup) this.stackup.style.display = 'none';
 	},
 	/** Synchronizes the visual states of the full mask with the specified element and the browser window.
 	 * The visual states include the visibility and Z Index.
@@ -195,8 +147,6 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		if (this.mask.nextSibling != el) {
 			var p = el.parentNode;
 			p.insertBefore(this.mask, el);
-			if (this.stackup)
-				p.insertBefore(this.stackup, this.mask);
 		}
 
 		var st = this.mask.style;
@@ -205,11 +155,6 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 
 		_syncMaskPos.call(this, true);
 
-		if (this.stackup) {
-			st = this.stackup.style;
-			st.display = 'block';
-			st.zIndex = el.style.zIndex;
-		}
 	}
 });
 
@@ -452,17 +397,6 @@ jq(function () {
 				zk._wgtutl.autohide();
 		}, 100); //filter
 	}
-
-	_useSKU = zk.useStackup;
-	if (_useSKU == 'auto' || (_callback = _useSKU == 'auto/gecko')) {
-		if (zk.gecko && _callback)
-			_useSKU = false;
-		else {
-			_callback = zk.webkit || zk.opera;
-			_useSKU = !_callback || zk.ie; // ZK-1748 should include all ie
-		}
-	} else if (_useSKU == null)
-		_useSKU = zk.ie; // ZK-1748 should include all ie
 
 	//if (_callback) { all browser should support autohide
 		var w2hide = function (name) {

@@ -184,9 +184,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 
 		this._syncPos(); //ZK-1248: re-sync position if sub-menu is overlapped on parent menu
 	},
-	shallStackup_: function () {
-		return false;
-	},
 	setTopmost: function () {
 		this.$supers('setTopmost', arguments);
 		this.zsync();
