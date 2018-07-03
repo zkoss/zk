@@ -18,8 +18,10 @@ package org.zkoss.zul;
 
 import java.util.HashMap;
 
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.IntPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
@@ -277,6 +279,13 @@ public class Textbox extends InputElement {
 		render(renderer, "submitByEnter", isSubmitByEnter());
 	}
 
+	@Override
+	public void service(AuRequest request, boolean everError) {
+		if (request.getCommand().equals(Events.ON_CHANGING))
+			setValue(request.getData().get("value").toString());
+		super.service(request, everError);
+	}
+	
 	public String getZclass() {
 		return _zclass != null ? _zclass : "z-textbox";
 	}
