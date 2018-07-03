@@ -13,14 +13,19 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script>
+		jq(window).error(function (error) {
+			zk.log(error.originalEvent.error);
+		});
+	</script>
 	<label multiline="true">
 		1. Click ListboxSelect button
-		2. No error is shown
+		2. No error is logged
 		3. Click TreeSelect button
-		4. No error is shown
+		4. No error is logged
 		(the error should be: Cannot set property 'scrollTop' of undefined (TypeError))
 	</label>
-	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3932VM')">
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3932VM')">
 		<bandbox>
 			<bandpopup>
 				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
@@ -34,5 +39,5 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			</bandpopup>
 		</bandbox>
 		<button label="TreeSelect" onClick="tree.setSelectedItem(tree.getItems().toArray()[800])"/>
-	</div>
+	</vlayout>
 </zk>
