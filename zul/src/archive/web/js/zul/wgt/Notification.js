@@ -92,7 +92,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		zk(this).redoCSS(-1, {'fixFontIcon': true});
 	},
 	position: function (ref, offset, position, opts) {
-		if (!ref.$n())
+		if (ref && !ref.$n())
 			return;
 		this.$supers(zul.wgt.Notification, 'position', arguments);
 		this._fixarrow(ref); //ZK-1583: modify arrow position based on reference component

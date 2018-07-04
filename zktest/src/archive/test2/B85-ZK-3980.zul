@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3980.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 04 11:38:56 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    public void show() {
+        Clients.showNotification("test");
+    }
+    ]]></zscript>
+    <script><![CDATA[
+    jq(window).error(function (e, url, line) {
+        zk.log(e.originalEvent.error);
+    });
+    ]]>
+    </script>
+
+    <label multiline="true">
+        1. Click "notification" button.
+        2. A notification showed and no exception occurred.
+        3. Clicking on elsewhere can close the notification.
+    </label>
+    <button label="notification" onClick="show()" />
+</zk>

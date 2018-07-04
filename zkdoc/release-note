@@ -108,6 +108,7 @@ ZK 8.5.2
   ZK-3828: @DependsOn + EL with enum causes PropertyNotFoundException
   ZK-3931: user agent information missing during websocket request
   ZK-3932: zul.sel.Listbox.setSelInView() tries to access non-existing DOM element
+  ZK-3980: show a notification produces a javascript error
 
 * Upgrade Notes
 
