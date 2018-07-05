@@ -33,7 +33,7 @@ public class ImportHandler {
 
     private static final String JAVA_LANG_PACKAGE = "java.lang";
     private List<String> basicPackage = Collections.singletonList(JAVA_LANG_PACKAGE);
-    private Map<String, List<String>> importPackages = new HashMap<String, List<String>>();
+    private Map<Object, List<String>> importPackages = new HashMap<Object, List<String>>();
     private Map<String, Class<?>> clazzes = new HashMap<String, Class<?>>();
     private Map<String, Class<?>> statics = new HashMap<String, Class<?>>();
     
@@ -145,19 +145,19 @@ public class ImportHandler {
         // a) for sake of performance when used in JSPs (BZ 57142),
         // b) java.lang.Package.getPackage(name) is not reliable (BZ 57574),
         // c) such check is not required by specification.
-        String rqpath = ServletRequestsAttr.getCurrentURL();
-        List<String> packages = importPackages.get(rqpath);
+        Object pageDef = ThreadLocalsManager.getCurrentPageDef();
+        List<String> packages = importPackages.get(pageDef);
         if (packages == null) {
             packages = new ArrayList(Arrays.asList(JAVA_LANG_PACKAGE));
         }
         packages.add(name);    
-        importPackages.put(rqpath , packages);
+        importPackages.put(pageDef , packages);
     }
 
 
     public java.lang.Class<?> resolveClass(String name) {
-        String rqpath = ServletRequestsAttr.getCurrentURL();
-        List<String> packages = importPackages.get(rqpath);
+        Object pageDef = ThreadLocalsManager.getCurrentPageDef();
+        List<String> packages = importPackages.get(pageDef);
         
         if (packages == null) {
             packages = basicPackage;
