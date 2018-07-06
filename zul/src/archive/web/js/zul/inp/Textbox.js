@@ -81,12 +81,6 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		 */
 		submitByEnter: null
 	},
-	bind_: function () {
-		this.$supers(zul.inp.Textbox, 'bind_', arguments);
-	},
-	unbind_: function () {
-		zWatch.unlisten({onShow: this});
-	},
 	//super//
 	textAttrs_: function () {
 		var html = this.$supers('textAttrs_', arguments);
