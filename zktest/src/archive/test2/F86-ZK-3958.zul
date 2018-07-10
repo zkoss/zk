@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+F86-ZK-3958.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jul 10 09:35:35 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click Switch button
+		2. The default checkbox should be invisible
+		3. The checkbox should have class name: "z-checkbox-switch-off"
+		4. Click isChecked button, should see "false" on zk log
+		5. Click checkbox, it should have class name: "z-checkbox-switch-on"
+		6. Click isChecked button, should see "true" on zk log
+		7. Click Toggle button
+		8. The checkbox should have class name: "z-checkbox-toggle-on"
+		9. Click checkbox, it should have class name: "z-checkbox-toggle-off"
+		10. Click isChecked button, should see "false" on zk log
+		11. Click setDisabled button
+		12. The checkbox should have class name: "z-checkbox-toggle-disabled"
+		13. Click checkbox, it should have class name: "z-checkbox-toggle-off"
+		14. Click isChecked button, should see "false" on zk log
+	</label>
+	<vlayout>
+		<checkbox id="checkbox"/>
+		<hlayout>
+			<button label='Default' onClick='checkbox.setMold("default")'/>
+			<button label='Switch' onClick='checkbox.setMold("switch")'/>
+			<button label='Toggle' onClick='checkbox.setMold("toggle")'/>
+		</hlayout>
+		<hlayout>
+			<button label="isChecked" onClick="Clients.log(checkbox.isChecked().toString())"/>
+			<button label="setChecked" onClick="checkbox.setChecked(!checkbox.isChecked())"/>
+			<button label="setDisabled" onClick="checkbox.setDisabled(!checkbox.isDisabled())"/>
+		</hlayout>
+		<combobox>
+			<comboitem label="iceblue"/>
+			<comboitem label="breeze"/>
+			<comboitem label="sapphire"/>
+			<comboitem label="silvertail"/>
+			<comboitem label="atlantic"/>
+			<attribute name="onChange">
+				Library.setProperty("org.zkoss.theme.preferred", event.value);
+				Executions.sendRedirect("");
+			</attribute>
+		</combobox>
+	</vlayout>
+</zk>

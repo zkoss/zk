@@ -15,9 +15,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid, content = this.domContent_();
 	//tabindex attribute will be set in input element
-	out.push('<span', this.domAttrs_({tabindex: 1}), '><input type="checkbox" id="', uuid,
-			'-real"', this.contentAttrs_(), '/><label for="', uuid,
-			'-real" id="', uuid, '-cnt"', this.domTextStyleAttr_(), 
-			' class="', this.$s('content') ,'">', this.domContent_(),
-			'</label></span>');
+	out.push('<span', this.domAttrs_({tabindex: 1}), '>');
+	out.push('<input type="checkbox" id="', uuid, '-real"', this.contentAttrs_(), '/>');
+	if (zk.feature.ee)
+		out.push('<label for="', uuid, '-real" id="', uuid, '-mold" class="', this.$s('mold'), '"/>');
+	out.push('<label for="', uuid, '-real" id="', uuid, '-cnt"', this.domTextStyleAttr_(),
+			' class="', this.$s('content') ,'">');
+	out.push(this.domContent_(), '</label></span>');
 }
