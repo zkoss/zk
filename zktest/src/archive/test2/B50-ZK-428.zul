@@ -1,4 +1,4 @@
-<zk>
+<zk xmlns:w="client">
 	<zscript><![CDATA[
 		import java.util.ArrayList;
 		ArrayList productList = new ArrayList();
@@ -33,11 +33,19 @@
 			listModel.addAll(productList);
 		}
 	]]></zscript>
+	<script><![CDATA[
+		var time = 1;
+		function logTime() {
+			setInterval(function(){
+				zk.log(time++ + 'sec ');
+			}, 1000);
+		}
+	]]></script>
 	<window title="new page title" border="normal">
 		<div>Click on the button. If it takes more than 20 seconds to run on the client side, it is a bug.</div>
 		ListModelList Size:
 		<intbox id="modelSize" value="50" />
-		<button label="change" id="button">
+		<button label="change" id="button" w:onClick="logTime()">
 			<attribute name="onClick">
 				setProdListModel(modelSize.getValue());
 				grdProductProductions.setModel(listModel);

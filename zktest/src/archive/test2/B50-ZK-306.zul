@@ -15,7 +15,10 @@
 			StringBuffer sb = new StringBuffer();
 			while (it.hasNext())
 				sb.append(it.next()).append("\n");
-			tb.setValue(sb.toString());
+			String result = sb.toString();
+			if (result.length() > 0)
+				result = result.split("@")[1];
+			tb.setValue(result);
 		]]></attribute>
 	</button>
 	<label id="tb" />
@@ -35,7 +38,12 @@
 			StringBuffer sb = new StringBuffer();
 			while (it.hasNext())
 				sb.append(it.next()).append("\n");
-			tb2.setValue(sb.toString());
+			int cnt = 0;
+			String result = sb.toString();
+			if (result.length() > 0) {
+				cnt = result.split("@").length - 1;
+			}
+			tb2.setValue(cnt + "");
 		]]></attribute>
 	</button>
 	<label id="tb2" />

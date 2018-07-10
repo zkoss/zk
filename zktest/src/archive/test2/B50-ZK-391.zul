@@ -14,12 +14,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<html><![CDATA[
-<ol>
-<li>mouseover and wait until the tootip showed for each label below twice</li>
-<li>the right side of tooltip should align with the right side of label it belongs.</li>
-</ol>
-]]></html>
+	<label id="l1" multiline="true"><![CDATA[
+		<ol>
+		<li>mouseover and wait until the tootip showed for each label below twice</li>
+		<li>the right side of tooltip should align with the right side of label it belongs.</li>
+		</ol>
+]]></label>
 	<window>
 		<popup id="zulPu1"><label>content here</label></popup>
 		<popup id="zulPu2">
@@ -54,5 +54,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				Popup created in java, check for children and add child in Java - bad positioning, good on second hover
 			</label>
 		</vlayout>
+
 	</window>
 </zk>

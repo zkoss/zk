@@ -54,5 +54,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 				tree.selectedItem.children.get(0).children.get(0).setLabel(tbox.value);
 			}
 		</zscript>
+		<script>
+			function getText() {
+				return jq("@treerow:eq(0)").text();
+			}
+		</script>
 	</window>
 </zk>

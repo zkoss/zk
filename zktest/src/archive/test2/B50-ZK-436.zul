@@ -13,7 +13,17 @@ B50-ZK-436.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
-You shouldn't see a "false" text in the page (IE only)
-<iframe/>
+<zk xmlns:w="client">
+	You shouldn't see a "false" text in the page (IE only)
+	<iframe/>
+	<script><![CDATA[
+		function check() {
+			var bodyHTML = jq("body").get(0).innerHTML;
+			var first = bodyHTML.indexOf("false");
+			var last = bodyHTML.lastIndexOf("false");
+			var first2 = bodyHTML.indexOf("\"false\"");
+			zk.log((first == last) && (first - first2 == 1));
+		}
+	]]></script>
+	<button w:onClick="check()"/>
 </zk>

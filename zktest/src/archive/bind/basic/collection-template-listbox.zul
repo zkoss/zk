@@ -72,8 +72,8 @@
 
 	<hbox>
 		<button label="reload" onClick="@command('reload')" />
-		<button label="change1" onClick="@command('change1')" />
-		<button label="change2" onClick="@command('change2')" />		
+		<button id="chgBtn1" label="change1" onClick="@command('change1')" />
+		<button id="chgBtn2" label="change2" onClick="@command('change2')" />
 		<button label="invalidate" onClick="outerbox.invalidate()" />
 		<button label="Dump" onClick="binder.getTracker().dump()" />
 	</hbox>	

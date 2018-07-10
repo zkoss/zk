@@ -10,22 +10,46 @@
 	
 	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 -->
-<window width="400px" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B60_ZK_919_ViewModel')">
-<label pre="true">
-1. You shall see 4 type of dates whose time part are the same. 
-2. Change the date of each datebox.
-3. If no exception, then it is OK. 
-</label>
-	<grid>
-		<columns>
-			<column hflex="min"></column>
-			<column></column>
-		</columns>
-		<rows>
-			<row>java.util.Date: <datebox value="@bind(vm.utildate)"  format="medium+medium" hflex="true"/></row>
-			<row>java.sql.Date: <datebox value="@bind(vm.sqldate)"  format="medium+medium" hflex="true"/></row>
-			<row>java.sql.Time:<datebox value="@bind(vm.sqltime)"  format="medium+medium" hflex="true"/></row>
-			<row>java.sql.Timestamp<datebox value="@bind(vm.sqltimestamp)"  format="medium+medium" hflex="true"/></row>
-		</rows>
-	</grid>
-</window>
+<zk xmlns:w="client">
+	<window width="600px" apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.B60_ZK_919_ViewModel')">
+		<label pre="true">
+			1. You shall see 4 type of dates whose time part are the same.
+			2. Change the date of each datebox.
+			3. If no exception, then it is OK.
+		</label>
+		<grid>
+			<columns>
+				<column hflex="min"></column>
+				<column></column>
+			</columns>
+			<rows>
+				<row>java.util.Date:
+					<datebox id="d1" value="@bind(vm.utildate)" format="medium+medium" width="300px"/>
+				</row>
+				<row>java.sql.Date:
+					<datebox id="d2" value="@bind(vm.sqldate)" format="medium+medium" width="300px"/>
+				</row>
+				<row>java.sql.Time:
+					<datebox id="d3" value="@bind(vm.sqltime)" format="medium+medium" width="300px"/>
+				</row>
+				<row>java.sql.Timestamp
+					<datebox id="d4" value="@bind(vm.sqltimestamp)" format="medium+medium" width="300px"/>
+				</row>
+			</rows>
+		</grid>
+		<script><![CDATA[
+			function matchDateFormat(str) {
+				return str.match(/.*\d?\d:\d\d:\d\d.*/)
+			}
+			function checkDateFormat() {
+				var d1 = matchDateFormat(zk.$('$d1').$n('real').value)
+				var d2 = matchDateFormat(zk.$('$d2').$n('real').value)
+				var d3 = matchDateFormat(zk.$('$d3').$n('real').value)
+				var d4 = matchDateFormat(zk.$('$d4').$n('real').value)
+				zk.log(d1 != null && d2 != null && d3 != null && d4 != null)
+			}
+		]]></script>
+		<button id="checkBtn" label="check format" w:onClick="checkDateFormat()"/>
+	</window>
+</zk>

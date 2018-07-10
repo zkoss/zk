@@ -13,10 +13,26 @@ B36-2710830.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
-You should see the window displays on the center.
-<window width="300px" title="Position Issue" closable="true" position="center"
-border="normal" mode="overlapped">
-<label value="Hello world!" />
-</window>
+<zk xmlns:w="client">
+	You should see the window displays on the center.
+	<window width="300px" title="Position Issue" closable="true" position="center"
+			border="normal" mode="overlapped">
+		<label value="Hello world!"/>
+		<button label="click" w:onClick="checkPos()" />
+	</window>
+	<script><![CDATA[
+		function checkPos() {
+			var node = jq("@window")[0]
+			var $node = jq(node)
+			var screenWidth = jq(node.parentNode).outerWidth()
+			var screenHeight = jq(node.parentNode).innerHeight()
+			var offsetLeft = $node.offset().left
+			var offsetTop = $node.offset().top
+			var winWidth = $node.outerWidth()
+			var winHeight = $node.outerHeight()
+			var widthDiff = Math.abs(((screenWidth - winWidth) / 2) - offsetLeft)
+			var heightDiff = Math.abs(((screenHeight - winHeight) / 2) - offsetTop)
+			zk.log(widthDiff <= 3 && widthDiff >= 0 && heightDiff <= 3 && heightDiff >= 0)
+		}
+	]]></script>
 </zk>
