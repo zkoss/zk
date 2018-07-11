@@ -82,9 +82,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			</row>
 		</rows>
 	</grid>
-	<button label="Change width" onClick="changeWidth()"/>
-	<button label="Add row" onClick="addRow()"/>
-	<button label="Insert row" onClick="insRow()"/>
+	<button id="btnWid" label="Change width" onClick="changeWidth()"/>
+	<button id="addRow" label="Add row" onClick="addRow()"/>
+	<button id="insRow" label="Insert row" onClick="insRow()"/>
 	<zscript>
 	void changeWidth() {
 		col.setWidth("200px");
