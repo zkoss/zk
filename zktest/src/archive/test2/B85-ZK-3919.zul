@@ -20,6 +20,24 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         3. repeat step1,2 10 times, should not see "response is: null" in zklog
 
     </label>
+    <zscript>
+        import org.zkoss.zk.au.http.AuExtension;
+        import org.zkoss.zk.au.http.DHtmlUpdateServlet;
+        import javax.servlet.http.HttpServletRequest;
+        import javax.servlet.http.HttpServletResponse;
+
+        AuExtension auExt = new AuExtension() {
+        public void init(DHtmlUpdateServlet servlet) {
+        }
+        public void destroy() {
+        }
+        public void service(HttpServletRequest req, HttpServletResponse res, String pi) {
+            res.getWriter().write("response is: " + req.getParameter("myParam"));
+            res.getWriter().flush();
+        }
+        };
+        DHtmlUpdateServlet.getUpdateServlet(application).addAuExtension("/auext", auExt);
+    </zscript>
     <button label="cause problem" onClick='Executions.getCurrent().getParameter("")'/>
     <button label="trigger au extension with url parameters">
         <attribute w:name="onClick"><![CDATA[
