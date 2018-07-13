@@ -21,7 +21,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <vbox>
 <paging id="pg" pageSize="4"/>
 <hbox>
-	<grid width="300px" mold="paging" paginal="${pg}">
+	<grid id="grid1" width="300px" mold="paging" paginal="${pg}">
 		<columns>
 			<column label="Left"/>
 			<column label="Right"/>
@@ -60,7 +60,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			</row>
 		</rows>
 	</grid>
-	<grid width="300px" mold="paging" paginal="${pg}">
+	<grid id="grid2" width="300px" mold="paging" paginal="${pg}">
 		<columns>
 			<column label="Left"/>
 			<column label="Right"/>
