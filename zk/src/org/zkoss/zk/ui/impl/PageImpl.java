@@ -67,6 +67,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -91,6 +92,7 @@ import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Condition;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.PageActivationListener;
 import org.zkoss.zk.ui.util.PageSerializationListener;
 import org.zkoss.zk.ui.util.Template;
@@ -749,11 +751,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public void destroy() {
-		super.destroy();
-
+		Configuration config = WebApps.getCurrent().getConfiguration();
 		for (Component root: this.getRoots()) {
-			root.detach();
+			config.invokeCallback("destroy", root);
 		}
+		super.destroy();
 		try {
 			if (_ips != null) {
 				final List<Interpreter> ips = new ArrayList<Interpreter>(_ips.values());

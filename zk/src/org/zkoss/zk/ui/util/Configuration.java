@@ -127,8 +127,10 @@ public class Configuration {
 	/** Map(String deviceType, TimeoutURIInfo ti) */
 	private final Map<String, TimeoutURIInfo> _timeoutURIs = Collections
 			.synchronizedMap(new HashMap<String, TimeoutURIInfo>());
-	/** Since 8.0.0 Map(String String) */
+	/** Since 8.0.0 Map(String DataHandlerInfo) */
 	private final Map<String, DataHandlerInfo> _dataHandlers = new HashMap<String, DataHandlerInfo>();
+	/** Since 8.5.2 Map(String Callback) */
+	private final Map<String, Callback> _callbacks = new HashMap<String, Callback>();
 
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
@@ -1156,6 +1158,34 @@ public class Configuration {
 				log.error("Failed to invoke " + ary[j], ex);
 			}
 		}
+	}
+
+	/** Invokes a callback function {@link Callback#call(Object data)}
+	 * @param name the name of the callback function.
+	 * @param data the parameter for the callback function.
+	 * @since 8.5.2
+	 */
+	public void invokeCallback(String name, Object data) {
+		Callback callback = _callbacks.get(name);
+		if (callback != null)
+			callback.call(data);
+	}
+
+	/** Register a callback function {@link Callback#call(Object data)}
+	 * @param name the name of the callback function.
+	 * @param callback the callback function to register into Configuration class. 
+	 * @since 8.5.2
+	 */
+	public void registerCallBack(String name, Callback callback) {
+		_callbacks.put(name, callback);
+	}
+
+	/** Unregister a callback function {@link Callback#call(Object data)}
+	 * @param name the name of the callback function.
+	 * @since 8.5.2
+	 */
+	public void unregisterCallBack(String name) {
+		_callbacks.remove(name);
 	}
 
 	/** Invokes {@link UiLifeCycle#afterShadowAttached(ShadowElement, Component)}

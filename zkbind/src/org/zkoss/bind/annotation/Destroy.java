@@ -21,8 +21,10 @@ import java.lang.annotation.Target;
  * <p>
  * Marker annotation to identify a destroy method. <br/>
  * Only one (could be zero) destroy method is allowed in a particular class.
- * The destroy method would occur when a component binded with a view model is detached;
- * After detaching, it will execute the function which has @Destroy.
+ * If a component is bound with a viewModel which has @Destroy methods,
+ * The @Destroy method would be executed before the component detaching, or before the page or desktop which has this component being destroyed.
+ * If it is triggered by detach, the @Destroy method can interact with UI,
+ * but if it is triggered by destroying page or desktop, the @Destroy method won't interact with UI.
  * If you want binder to call super class's Destroy method also, you have to set {@link #superclass()} to true,
  * and super class's Destroy method will be called last.
  * You could annotate it on the type if the class doesn't has a Destroy method but super-class has.
