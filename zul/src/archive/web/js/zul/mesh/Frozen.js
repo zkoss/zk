@@ -157,6 +157,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		}
 		// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
 		zWatch.listen({onResponse: this});
+		if (body)
+			jq(body).addClass('z-word-nowrap');
+		if (foot)
+			jq(foot).addClass('z-word-nowrap');
 	},
 	unbind_: function () {
 		var p = this.parent,
@@ -176,6 +180,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		}
 		// refix-ZK-3100455 : grid/listbox with frozen trigger "invalidate" should _syncFrozenNow
 		zWatch.unlisten({onResponse: this});
+		if (body)
+			jq(body).removeClass('z-word-nowrap');
+		if (foot)
+			jq(foot).removeClass('z-word-nowrap');
 		this.$supers(zul.mesh.Frozen, 'unbind_', arguments);
 	},
 	// Bug ZK-2264, we should resync the variable of _scrollScale, which do the same as HeadWidget.js
