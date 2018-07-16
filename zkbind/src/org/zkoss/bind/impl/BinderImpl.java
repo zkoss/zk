@@ -197,7 +197,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	};
 
 	static {
-		WebApps.getCurrent().getConfiguration().registerCallBack("destroy", new DestroyCallback());
+		WebApps.getCurrent().getConfiguration().registerGlobalCallBack("destroy", new DestroyCallback());
 	}
 
 	private Component _rootComp;
