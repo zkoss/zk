@@ -504,6 +504,7 @@
 					<forkCount>1C</forkCount>
 					<reuseForks>true</reuseForks>
 					<runOrder>alphabetical</runOrder>
+					<rerunFailingTestsCount>2</rerunFailingTestsCount>
 					<testClassesDirectory>${test.dir}</testClassesDirectory>
 					<includes>
 						<include>**/*Test.java</include>
