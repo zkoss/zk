@@ -1276,7 +1276,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	private void beforeComponentPageChanged(Page page) {
 		//ZK-1148, add a @destroy annotation method.
 		if (page == null)
-			WebApps.getCurrent().getConfiguration().invokeCallback("destroy", this);
+			WebApps.getCurrent().getConfiguration().invokeGlobalCallback("destroy", this);
 	}
 	private void afterComponentPageChanged(Page newpg, Page oldpg) {
 		if (newpg == oldpg)
@@ -1976,7 +1976,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	public void beforeParentChanged(Component parent) {
 		//ZK-1148, add a @destroy annotation method.
 		if (parent == null)//detach
-			WebApps.getCurrent().getConfiguration().invokeCallback("destroy", this);
+			WebApps.getCurrent().getConfiguration().invokeGlobalCallback("destroy", this);
 	}
 
 	/** Default: handles special event listeners.
