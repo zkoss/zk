@@ -305,7 +305,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		out.push('<tr', this.domAttrs_(), ' style="text-align: left;">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push('<th id="', this.uuid, '-bar" class="', this.$s('bar'), '" />');
+
+		var mesh = this.getMeshWidget();
+		if (mesh && mesh._nativebar)
+			out.push('<th id="', this.uuid, '-bar" class="', this.$s('bar'), '" />');
 		out.push('</tr>');
 	}
 });
