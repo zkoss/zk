@@ -14,16 +14,16 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-<hbox>No Past:
-<datebox constraint="no past"/>
-Today can be selected
-</hbox>
-<hbox>No Today:
-<datebox constraint="no today"/>
-Today can't be selected
-</hbox>
-<hbox>No After:
-<datebox constraint="no future"/>
-Today can be selected
-</hbox>
+	<hbox>No Past:
+		<datebox id="dtbx1" constraint="no past"/>
+		Today can be selected
+	</hbox>
+	<hbox>No Today:
+		<datebox id="dtbx2" constraint="no today"/>
+		Today can't be selected
+	</hbox>
+	<hbox>No After:
+		<datebox  id="dtbx3" constraint="no future"/>
+		Today can be selected
+	</hbox>
 </zk>

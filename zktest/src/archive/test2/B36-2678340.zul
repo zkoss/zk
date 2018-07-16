@@ -19,19 +19,18 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<window>
-		<html><![CDATA[  
-		step1.click timebox btn to scroll the time value <br />
-		step2.click show value btn , the label has correct date string (check the time string)  <br />
-		step3.click timebox btn to scroll the time value again, after value changing, press 'tab' to change focus,  <br />
-		step4.click show value btn, the label <span style="color:red">should change to new time string</span> <br />
+		<html><![CDATA[
+    step1.click timebox btn to scroll the time value <br />
+    step2.click show value btn , the label has correct date string (check the time string)  <br />
+    step3.click timebox btn to scroll the time value again, after value changing, press 'tab' to change focus,  <br />
+    step4.click show value btn, the label <span style="color:red">should change to new time string</span> <br />
         ]]></html>
-		<timebox id="tb1" />
-		<label id="lab" value="1" />
-
-		<button label="show value" mold="os">
-			<attribute name="onClick"><![CDATA[  
-				lab.setValue(""+tb1.getValue());
-				]]></attribute>
+		<timebox id="tb1" format="hh:mm:ss a"/>
+		<label id="lab" value="1"/>
+		<button id="show" label="show value" mold="os">
+			<attribute name="onClick"><![CDATA[
+        lab.setValue(""+tb1.getValue());
+        ]]></attribute>
 		</button>
 	</window>
 </zk>

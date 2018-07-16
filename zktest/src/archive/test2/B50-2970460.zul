@@ -1,0 +1,17 @@
+<window id="win" border="normal" sizable="true" onMaximize="onMaximizeWin()"
+		title="eee" width="600px" minheight="300" height="300px" maximizable="true" closable="true">
+	<zscript>
+		<![CDATA[
+            void onMaximizeWin() {
+          top.value = win.top;
+          left.value = win.left;
+          height.value = win.height;
+          width.value = win.width;
+        }
+          ]]>
+	</zscript>
+	<label id="top"/>
+	<label id="left"/>
+	<label id="height"/>
+	<label id="width"/>
+</window>

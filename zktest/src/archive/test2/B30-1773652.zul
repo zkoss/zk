@@ -3,5 +3,5 @@
 	<separator/>
 	org.zkoss.zk.ui.UiException: File not found: abc.zs, at ...
 	<separator/>
-	<iframe src="B30-1773652_1.zul" width="500px" height="500px"/>
+	<iframe id="frameid" src="B30-1773652_1.zul" width="500px" height="500px"/>
 </zk>
