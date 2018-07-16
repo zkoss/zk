@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3988.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Jul 13 17:24:11 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Connect to this page.
+		2. You should not see the exception
+	</label>
+	<B85_ZK_3988MyComp/>
+</zk>

@@ -172,19 +172,15 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 
 			exec.createComponents(_uri != null ? _uri : getDefinition().getMacroURI(), this, _props);
 		}
-		addEventListener(-10000, Events.ON_CREATE, new EventListener<Event>() {
-			public void onEvent(Event event) throws Exception {
-				HtmlMacroComponent.this.wireMarcoComponent();
-			}
-		});
-
-	}
-
-	private void wireMarcoComponent() {
 		switch (getAutowireFlag()) {
 		case 0: //by selector
 			Selectors.wireComponents(this, this, false);
-			Selectors.wireEventListeners(this, this);
+			addEventListener(-10000, Events.ON_CREATE, new EventListener<Event>() {
+				HtmlMacroComponent hmcomp = HtmlMacroComponent.this;
+				public void onEvent(Event event) throws Exception {
+					Selectors.wireEventListeners(hmcomp, hmcomp);
+				}
+			});
 			break;
 		case 1: //by convention
 			ConventionWires.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
