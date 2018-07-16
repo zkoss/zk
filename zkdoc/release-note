@@ -111,6 +111,7 @@ ZK 8.5.2
   ZK-3932: zul.sel.Listbox.setSelInView() tries to access non-existing DOM element
   ZK-3980: show a notification produces a javascript error
   ZK-3975: grouped listbox scroll wrong scrollbar pos
+  ZK-3988: HtmlMacroComponent compose() doesn't resolve @Wire before doAfterCompose
 
 * Upgrade Notes
 

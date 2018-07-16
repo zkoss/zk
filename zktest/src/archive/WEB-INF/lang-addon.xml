@@ -86,4 +86,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<extends>label</extends>
 		<component-class>org.zkoss.zktest.comp.Teststeps</component-class>
 	</component>
+	<component>
+		<component-name>B85_ZK_3988MyComp</component-name>
+		<macro-uri>/test2/B85-ZK-3988MyComp.zul</macro-uri>
+		<component-class>org.zkoss.zktest.test2.B85_ZK_3988MyComp</component-class>
+	</component>
 </language-addon>
