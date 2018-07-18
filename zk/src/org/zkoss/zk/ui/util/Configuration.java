@@ -130,7 +130,7 @@ public class Configuration {
 	/** Since 8.0.0 Map(String DataHandlerInfo) */
 	private final Map<String, DataHandlerInfo> _dataHandlers = new HashMap<String, DataHandlerInfo>();
 	/** Since 8.5.2 Map(String Callback) */
-	private static final Map<String, Callback> _callbacks = new HashMap<String, Callback>();
+	private final Map<String, Callback> _callbacks = new HashMap<String, Callback>();
 
 	private Monitor _monitor;
 	private PerformanceMeter _pfmeter;
@@ -1160,32 +1160,41 @@ public class Configuration {
 		}
 	}
 
-	/** Invokes a global callback function {@link Callback#call(Object data)}
+	/** Invokes a callback function {@link Callback#call(Object data)}
 	 * @param name the name of the callback function.
 	 * @param data the parameter for the callback function.
 	 * @since 8.5.2
 	 */
-	public void invokeGlobalCallback(String name, Object data) {
+	public void invokeCallback(String name, Object data) {
 		Callback callback = _callbacks.get(name);
 		if (callback != null)
 			callback.call(data);
 	}
 
-	/** Register a global callback function {@link Callback#call(Object data)}
+	/** Register a callback function {@link Callback#call(Object data)}
 	 * @param name the name of the callback function.
 	 * @param callback the callback function to register into Configuration class. 
 	 * @since 8.5.2
 	 */
-	public void registerGlobalCallBack(String name, Callback callback) {
+	public void registerCallBack(String name, Callback callback) {
 		_callbacks.put(name, callback);
 	}
 
-	/** Unregister a global callback function {@link Callback#call(Object data)}
+	/** Unregister a callback function {@link Callback#call(Object data)}
 	 * @param name the name of the callback function.
 	 * @since 8.5.2
 	 */
-	public void unregisterGlobalCallBack(String name) {
+	public void unregisterCallBack(String name) {
 		_callbacks.remove(name);
+	}
+
+	/** Returns if a callback function {@link Callback#call(Object data)} is registered.
+	 * @param name the name of the callback function.
+	 * @return If a callback function is registered.
+	 * @since 8.5.2
+	 */
+	public boolean hasCallBack(String name) {
+		return _callbacks.containsKey(name);
 	}
 
 	/** Invokes {@link UiLifeCycle#afterShadowAttached(ShadowElement, Component)}

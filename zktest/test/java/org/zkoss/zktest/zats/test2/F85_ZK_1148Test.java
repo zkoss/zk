@@ -11,8 +11,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.zkoss.zats.mimic.ComponentAgent;
@@ -21,7 +21,6 @@ import org.zkoss.zktest.test2.F85_ZK_1148FileDealer;
 import org.zkoss.zktest.zats.ZATSTestCase;
 import org.zkoss.zul.Label;
 
-@Ignore
 public class F85_ZK_1148Test extends ZATSTestCase {
 
 	@Test
@@ -68,6 +67,11 @@ public class F85_ZK_1148Test extends ZATSTestCase {
 		} finally {
 			F85_ZK_1148FileDealer.close();
 		}
+	}
+
+	@AfterClass
+	public static void cleanUp() {
+		F85_ZK_1148FileDealer.close();
 	}
 
 }

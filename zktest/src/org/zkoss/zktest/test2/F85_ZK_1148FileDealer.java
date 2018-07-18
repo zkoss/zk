@@ -57,7 +57,6 @@ public class F85_ZK_1148FileDealer {
 
 	public static void close() { 
 		File src = new File("src/org/zkoss/zktest/test2/ZK1148.txt");
-		writeMsg("", false);
 		if (src.delete()) {
 			System.out.println(src.getName() + " is deleted!");
 		} else {
