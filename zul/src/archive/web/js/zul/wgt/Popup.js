@@ -144,18 +144,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 		}
 
-		// B30-1819264 : should skip null
-		if (this.shallStackup_() && node) {
-			if (!this._stackup)
-				this._stackup = jq.newStackup(node, node.id + '-stk');
-			else {
-				var dst, src;
-				(dst = this._stackup.style).top = (src = node.style).top;
-				dst.left = src.left;
-				dst.zIndex = src.zIndex;
-				dst.display = 'block';
-			}
-		}
 		// resync position if the content is not calculated. Bug ZK-2257
 		var openInfo = this._openInfo;
 		if (openInfo) {
@@ -176,15 +164,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 			this._keepVisible = true;
 		}
-	},
-	/** Returns whether to instantiate a stackup when {@link #open}
-	 * is called.
-	 * <p>If the derive class created its own stackup (such as creating
-	 * a shadow), it shall override this method to return false.
-	 * @return boolean
-	 */
-	shallStackup_: function () {
-		return zk.eff.shallStackup();
 	},
 	/**
 	 * Sets the popup position.
@@ -273,8 +252,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @param Map opts if opts.sendOnOpen exists, it will fire onOpen event.
 	 */
 	close: function (opts) {
-		if (this._stackup)
-			this._stackup.style.display = 'none';
 		// F70-ZK-2007: Clear toggle type.
 		this._shallToggle = false;
 
@@ -364,13 +341,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		this.close({sendOnOpen: true});
 	},
-	// ZK-2990: should also change the zIndex of the stackup of the widget
-	setFloatZIndex_: function (node, zi) {
-		this.$supers('setFloatZIndex_', arguments);
-		if (this._stackup) {
-			this._stackup.style.zIndex = zi;
-		}
-	},
 	onVParent: function (ctl) {
 		// ZK-2554: call _doFloatUp when triggered onVParent only if _shallToggle is true
 		if (this._shallToggle)
@@ -383,10 +353,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zk(this.$n()).undoVParent(); //Bug 3079480
-		if (this._stackup) {
-			jq(this._stackup).remove();
-			this._stackup = null;
-		}
 		if (this._openInfo)
 			this._openInfo = null;
 		this._shallToggle = null;

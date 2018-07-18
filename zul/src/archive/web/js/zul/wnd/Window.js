@@ -162,10 +162,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		wgt.setTopmost();
 
 		if (!wgt._mask) {
-			var anchor = wgt._shadowWgt ? wgt._shadowWgt.getBottomElement() : null;
 			wgt._mask = new zk.eff.FullMask({
 				id: wgt.uuid + '-mask',
-				anchor: anchor ? anchor : wgt.$n(),
+				anchor: wgt.$n(),
 				//bug 1510218: we have to make it as a sibling
 				zIndex: wgt._zIndex,
 				visible: realVisible
@@ -819,7 +818,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					this._shadowWgt.sync();
 			}
 			if (this._mask) { //ZK-1079
-				var n = (this._shadowWgt && this._shadowWgt.getBottomElement()) || this.$n(); //null if ff3.5 (no shadow/stackup)
+				var n = this.$n(); //null if ff3.5 (no shadow/stackup)
 				if (n) this._mask.sync(n);
 			}
 		}

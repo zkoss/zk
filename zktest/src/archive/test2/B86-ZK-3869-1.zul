@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3869-1.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jul 09 16:50:28 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-iframe{
+			border: 3px red solid;
+		}
+	</style>
+	<label multiline="true">
+		1. Click button
+		2. The popup should above iframe
+	</label>
+	<vlayout>
+		<button popup="popup" label="Click me"/>
+		<iframe width="500px" height="400px" src="B1896797.pdf"/>
+		<popup id="popup" width="200px" height="150px">Popup</popup>
+	</vlayout>
+</zk>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3869.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jul 02 18:01:42 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in IE9, 10, 11
+		2. Each included file should pass test
+	</label>
+	<hlayout>
+		<window title="B65-ZK-1904.zul">
+			<include src="B65-ZK-1904.zul"/>
+		</window>
+		<window title="B50-ZK-1079.zul">
+			<include src="B50-ZK-1079.zul"/>
+		</window>
+		<window title="B86-ZK-3869-1.zul">
+			<include src="B86-ZK-3869-1.zul"/>
+		</window>
+	</hlayout>
+</zk>
