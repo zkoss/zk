@@ -753,7 +753,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public void destroy() {
 		Configuration config = WebApps.getCurrent().getConfiguration();
 		for (Component root: this.getRoots()) {
-			config.invokeGlobalCallback("destroy", root);
+			config.invokeCallback("destroy", root);
 		}
 		super.destroy();
 		try {

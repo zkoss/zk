@@ -58,6 +58,7 @@ import org.zkoss.bind.annotation.MatchMedia;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.SmartNotifyChange;
+import org.zkoss.bind.callback.DestroyCallback;
 import org.zkoss.bind.init.ZKBinderPhaseListeners;
 import org.zkoss.bind.proxy.ViewModelProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -109,6 +110,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.event.Deferrable;
@@ -122,6 +124,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ExecutionInit;
 
 /**
@@ -193,10 +196,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			return method.getAnnotation(DefaultGlobalCommand.class) != null;
 		}
 	};
-
-//	static {
-//		WebApps.getCurrent().getConfiguration().registerGlobalCallBack("destroy", new DestroyCallback());
-//	}
 
 	private Component _rootComp;
 	private BindEvaluatorX _eval;
@@ -296,6 +295,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			} catch (Exception e) {
 				_log.error("Error when initial phase listener:" + clz, e);
 			}
+		}
+
+		// ZK-1148: @Destroy support
+		Configuration conf = WebApps.getCurrent().getConfiguration();
+		if (!conf.hasCallBack("destroy")) {
+			conf.registerCallBack("destroy", new DestroyCallback());
 		}
 	}
 	

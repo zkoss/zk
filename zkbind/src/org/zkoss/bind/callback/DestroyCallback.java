@@ -33,7 +33,7 @@ public class DestroyCallback implements Callback<Component> {
 	}
 
 	// A method to invoke @Destroy method in viewModel bound to a component or its children 
-	public static void destroyBinder(Component comp) {
+	private static void destroyBinder(Component comp) {
 		if (!((AbstractComponent) comp).getAnnotations("viewModel").isEmpty()) {
 			Binder binder = BinderUtil.getBinder(comp);
 			if (binder != null) {
