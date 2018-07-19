@@ -32,7 +32,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
       <listitem>
         <listcell />
         <listcell label="Steve"/>
-        <listcell label="somthing@anything.com"/>
+        <listcell label="somthing @ anything.com"/>
         <listcell label="300"/>
         <listcell label="Somthing comment"/>
       </listitem>
