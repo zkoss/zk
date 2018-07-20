@@ -243,8 +243,11 @@
 }
 
 .z-north,
-.z-south {
+.z-south,
+.z-west,
+.z-east {
 	&-title {
+		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @borderlayoutHeaderColor);
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
@@ -254,13 +257,8 @@
 .z-west,
 .z-east {
 	&-title {
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		overflow: hidden;
-		transform: rotate(90deg);
-		transform-origin: left bottom;
-		-ms-transform: rotate(90deg);
-		-ms-transform-origin: left bottom;
+		.transform('rotate(90deg)');
+		.applyCSS3('transform-origin', 'left bottom');
 	}
 }
 

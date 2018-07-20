@@ -113,6 +113,7 @@ ZK 8.5.2
   ZK-3975: grouped listbox scroll wrong scrollbar pos
   ZK-3988: HtmlMacroComponent compose() doesn't resolve @Wire before doAfterCompose
   ZK-4002: H/Vlayout prevents submenu from opening after ZK-3956
+  ZK-4001: new feature title on collapse borderlayout region missing style in some themes
 
 * Upgrade Notes
 
