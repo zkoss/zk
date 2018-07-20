@@ -91,7 +91,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if (this.desktop) {
 			this._shallSize = true;
 			//Bug ZK-1650: change chdex display style according to child widget
-			child.$n('chdex').style.display = child.isVisible() && !child.isFloating_() ? '' : 'none';
+			child.$n('chdex').style.display = child.isVisible() ? '' : 'none';
 		}
 	},
 	onChildAdded_: function (child) {
@@ -130,7 +130,7 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		if (spc && spc != 'auto') {
 			oo.push(' style="', !child.isVisible() ? 'display:none;' : ''); //Bug ZK-1650: set chdex display style according to child widget
 			var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
-			if (next && !next.$instanceof(zul.wgt.Popup))
+			if (next && !next.$instanceof(zul.wgt.Popup) && !child.$instanceof(zul.wgt.Popup))
 				oo.push('padding-', vert ? 'bottom:' : 'right:', spc);
 			oo.push('"');
 		}

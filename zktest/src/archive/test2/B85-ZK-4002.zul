@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-4002.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Jul 20 15:08:53 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Click the button, then a menu popup should be seen.
+		2. Click the Menu2, then the second menu popup should be seen.
+		
+	</label>
+	<hlayout>
+		<button iconSclass="z-icon-reorder" popup="mnpMenu, after_end"/>
+		<menupopup id="mnpMenu">
+			<menuitem label="Menu item 1"/>
+			<menuseparator/>
+			<menu id="menu2" label="Menu 2" iconSclass="z-icon-cog">
+				<menupopup id="secondmnp">
+					<menuitem label="Load Settings" iconSclass="z-icon-upload"/>
+					<menuitem label="Save Settings" iconSclass="z-icon-download"/>
+				</menupopup>
+			</menu>
+			<menuitem label="Menu Item 3" iconSclass="z-icon-external-link"/>
+		</menupopup>
+	</hlayout>
+</zk>
