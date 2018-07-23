@@ -14,6 +14,15 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script><![CDATA[
+		var oldGhost = zk.DnD.ghost;
+		zk.DnD.ghost = function(drag, ofs, msg) {
+			var g = oldGhost(drag, ofs, msg);
+			zk.log('>>>' + jq(".z-drop-content").length);
+			zk.log(jq('.z-drop-content').eq(0).text().endsWith("1") && jq('.z-drop-content').eq(1).text().endsWith("2") && jq('.z-drop-content').eq(2).text().endsWith("2.1"));
+			return g;
+		}
+	]]></script>
 	<label multiline="true">
 	There are 2 errors on drag ghost from Tree / Treeitem component.
 	On multiple selection, only the dragged item text is showed, and when the Tree has Treecols, the drag message generated is one concatenation of all Treecells.

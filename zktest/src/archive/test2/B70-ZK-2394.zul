@@ -1,9 +1,9 @@
 <zk>
-  <label multiline="true">
-  1. click the button
-  2. you should see zk.log shows two "Yes" to indicate the table width is the same with colgroup width
-  </label>
-  <script type="text/javascript"><![CDATA[
+	<label multiline="true">
+		1. click the button
+		2. you should see zk.log shows two "Yes" to indicate the table width is the same with colgroup width
+	</label>
+	<script type="text/javascript"><![CDATA[
 
   	function getWidth() {
   		var hdcolwidth = 0;
@@ -21,25 +21,37 @@
 		zk.log(Math.abs(bdtblwidth-bdcolwidth) < 1? 'Yes' : 'No');
   	}
   ]]></script>
-  <button label="button" onClick='Clients.evalJavaScript("getWidth()")' />
-  <grid>
-    <columns>
-      <column hflex="min" label="Column1"/>
-      <column hflex="min" label="Column2"/>
-    </columns>
-    <rows>
-      <row>
-        <cell><label value="Label"/></cell>
-        <cell><label value="Label2"/></cell>
-      </row>
-      <row>
-        <cell><label value="Label"/></cell>
-        <cell><label value="Label2"/></cell>
-      </row>
-      <row>
-        <cell><label value="Label"/></cell>
-        <cell><label value="Label2"/></cell>
-      </row>
-    </rows>
-  </grid>
+	<button label="button" onClick='Clients.evalJavaScript("getWidth()")'/>
+	<grid>
+		<columns>
+			<column hflex="min" label="Column1"/>
+			<column hflex="min" label="Column2"/>
+		</columns>
+		<rows>
+			<row>
+				<cell>
+					<label value="Label"/>
+				</cell>
+				<cell>
+					<label value="Label2"/>
+				</cell>
+			</row>
+			<row>
+				<cell>
+					<label value="Label"/>
+				</cell>
+				<cell>
+					<label value="Label2"/>
+				</cell>
+			</row>
+			<row>
+				<cell>
+					<label value="Label"/>
+				</cell>
+				<cell>
+					<label value="Label2"/>
+				</cell>
+			</row>
+		</rows>
+	</grid>
 </zk>

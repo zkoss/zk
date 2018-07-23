@@ -1,20 +1,20 @@
 <!--
 F80-ZK-2708.zul
 
-	Purpose:
-		
-	Description:
-		
-	History:
-		Mon, May 04, 2015 02:30:24 PM, Created by jameschu
+  Purpose:
+
+  Description:
+
+  History:
+    Mon, May 04, 2015 02:30:24 PM, Created by jameschu
 Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk xmlns:n="native">
 	<style>
-	.z-rowlayout:hover {
+		.z-rowlayout:hover {
 		background-color: #84FFB9;
-	}
+		}
 	</style>
 	<n:p>Please enter content directly into window to change its height.</n:p>
 	<n:b>Default: ncols=12, spacing=1/3</n:b>
@@ -61,9 +61,9 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		</rowchildren>
 		<rowchildren>
 			<window border="normal" title="colspan=1" hflex="1" />
-		</rowchildren>		
+		</rowchildren>
 	</rowlayout>
-	
+
 	<n:b>offset=10, subsequent child</n:b>
 	<rowlayout>
 		<rowchildren>
@@ -71,14 +71,14 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		</rowchildren>
 		<rowchildren offset="10">
 			<window border="normal" title="offset=10" hflex="1" />
-		</rowchildren>		
+		</rowchildren>
 	</rowlayout>
 	<separator />
-	<separator />	
+	<separator />
 	<n:b>Using MVVM to control rowlayout's parameters</n:b>
-	<window 
-		apply="org.zkoss.bind.BindComposer" 
-		viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2708_VM')">
+	<window
+			apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2708_VM')">
 		<rowlayout ncols="10" spacing="1/12">
 			<rowchildren>ncols</rowchildren>
 			<rowchildren>
@@ -89,7 +89,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 				<textbox hflex="1" value="@bind(vm.spacing)" />
 			</rowchildren>
 		</rowlayout>
-		
+
 		<rowlayout id="rowlayout1" ncols="@bind(vm.ncols)" spacing="@bind(vm.spacing)">
 			<rowchildren forEach="1,1,1,1,1,1,1,1,1,1,1,1" colspan="${each}">
 				<window border="normal" title="colspan=1" hflex="1" />
@@ -97,7 +97,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		</rowlayout>
 	</window>
 	<separator />
-	<separator />	
+	<separator />
 	<n:h2>Reference: ncols = 12, spacing = 1/3</n:h2>
 	<window>
 		<rowlayout>
@@ -106,19 +106,27 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 			</rowchildren>
 		</rowlayout>
 	</window>
-	
+
 	<n:h2>Rowchildren: colspan and offset</n:h2>
 	<window id="win" apply="org.zkoss.zktest.test2.F80_ZK_2708_Composer">
 		<hlayout>
 			colspan: <spinner id="colspan" value="1" constraint="no empty,min 1 max 12" />
 			offset:  <spinner id="offset" value="0" constraint="no empty,min 0 max 11" />
 			<button id="add">Add child</button>
-		</hlayout>	
+		</hlayout>
 	</window>
-		
-	<script defer="true">
-	jq('.z-window-embedded-cnt')
+
+	<script defer="true"><![CDATA[
+		jq('.z-window-embedded-cnt')
 		.attr('contentEditable', '')
 		.css('min-height', '30px');
-	</script>
+		var sumRowChildrenWidth = function(layoutIndex, count) {
+			var total = 0;
+			var children = jq(".z-rowlayout").eq(layoutIndex).children();
+			for (var i = 0; i < count; i++) {
+				total += children.eq(i).outerWidth();
+			}
+			return total;
+		}
+	]]></script>
 </zk>

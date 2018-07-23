@@ -14,11 +14,22 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 
 -->
 <div>
+	<script><![CDATA[
+		zk.afterLoad(function () {
+			var oldGhost = zkmax.layout.Portallayout._changeMove;
+			zkmax.layout.Portallayout._changeMove = function (dg, pointer, event) {
+				jq('$pos').html(jq(".z-panel-header").offset().top);
+				var g = oldGhost(dg, pointer, event);
+				return g;
+			}
+		});
+	]]></script>
 	<label multiline="true">
 		1. Please click the 'Rename' button.
 		2. Try to drag the title of the panel, and it should be able to drag and drop.
 	</label>
     <button id="btn" label="Rename" onClick="onClick()"/>
+	<label id="pos" />
     <portallayout>
         <portalchildren>
             <panel id="panel" title="Change Me" border="normal">

@@ -1,11 +1,20 @@
 <zk>
+	<script><![CDATA[
+		var _xDraggable = {};
+		zk.override(zk.Draggable.prototype, _xDraggable, {
+			_finishDrag: function (mold) {
+				zk.log(jq('.z-drop-ghost').hasClass('z-drop-allow'));
+				_xDraggable._finishDrag.apply(this, arguments);
+			}
+		});
+	]]></script>
 	Dragging the cell label to hover the drop area should work fine
 	<tree width="400px">
 		<treechildren>
 			<treeitem>
 				<treerow draggable="true">
-					<treecell label="First Item" />
-					<treecell label="Second Item" />
+					<treecell id="item1" label="First Item"/>
+					<treecell label="Second Item"/>
 					<treecell>
 						<div>Inner div</div>
 					</treecell>
@@ -15,15 +24,15 @@
 	</tree>
 	<listbox width="400px">
 		<listitem draggable="true">
-			<listcell label="First Item" />
-			<listcell label="Second Item" />
+			<listcell label="First Item"/>
+			<listcell label="Second Item"/>
 			<listcell>
 				<div>Inner div</div>
 			</listcell>
 		</listitem>
 	</listbox>
-	<div droppable="true" style="background-color: green" width="100px"
-		height="100px">
+	<div id="target" droppable="true" style="background-color: green" width="100px"
+		 height="100px">
 		DROP HERE
 	</div>
 </zk>

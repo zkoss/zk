@@ -12,6 +12,15 @@ B50-3147909.zul
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	<script><![CDATA[
+		var oldGhost = zk.DnD.ghost;
+		zk.DnD.ghost = function(drag, ofs, msg) {
+			var g = oldGhost(drag, ofs, msg);
+			jq('$w').html(jq(".z-drag-ghost").width());
+			jq('$h').html(jq(".z-drag-ghost").height());
+			return g;
+		}
+	]]></script>
 	<html><![CDATA[
 		<ol>
 			<li>Click on both listboxes. Their drop down should appear normally.</li>
@@ -25,10 +34,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<listitem label="A1" />
 			<listitem label="A2" />
 		</listbox>
-		<div draggable="true" style="background: #99CCCC" width="100px">Inner Div</div>
+		<div id="inner" draggable="true" style="background: #99CCCC" width="100px">Inner Div</div>
 	</div>
 	<listbox mold="select" draggable="true">
 		<listitem label="B1" />
 		<listitem label="B2" />
 	</listbox>
+	<label id="w"></label>
+	<label id="h"></label>
 </zk>

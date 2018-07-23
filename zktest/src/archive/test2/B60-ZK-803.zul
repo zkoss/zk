@@ -14,6 +14,15 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script><![CDATA[
+		var oldGhost = zk.DnD.ghost;
+		zk.DnD.ghost = function(drag, ofs, msg) {
+			var g = oldGhost(drag, ofs, msg);
+			zk.log(">>>" + jq('.z-drop-content').length);
+			zk.log(jq('#zk_ddghost').html());
+			return g;
+		}
+	]]></script>
 	<div>1. Select first item and second item.</div>
 	<div>2. Drag first item, you should see two selected items dragged.</div>
 	<div>3. Drag third item, you should see only third item dragged</div>

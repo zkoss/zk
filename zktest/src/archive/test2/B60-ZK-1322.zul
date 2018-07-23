@@ -11,5 +11,5 @@
 	2. Click on the button, setting value to null -> timebox should be blank.
 	</div>
 	<button label="Date to null" onClick="setValueForDatebox()"/>
-	<timebox id="tm" value="${d}"/>
+	<timebox width="300px" id="tm" value="${d}"/>
 </zk>
