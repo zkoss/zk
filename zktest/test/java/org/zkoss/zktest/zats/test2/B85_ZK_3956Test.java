@@ -21,8 +21,10 @@ public class B85_ZK_3956Test extends WebDriverTestCase{
 	@Test
 	public void test() {
 		connect();
+		Assert.assertEquals("none", jq(".z-vlayout-inner").eq(1).css("display"));
 		click(jq("@button").get(0));
 		waitResponse();
-		Assert.assertEquals("none", jq(".z-vlayout-inner").eq(1).css("display"));
+		Assert.assertEquals("block", jq(".z-vlayout-inner").eq(1).css("display"));
+		Assert.assertEquals("0px", jq(".z-vlayout-inner").eq(1).css("padding-bottom"));
 	}
 }
