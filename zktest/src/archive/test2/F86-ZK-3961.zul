@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3961.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jul 12 15:51:26 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<div>
+		<label multiline="true">
+			1. click the knob, it will change the current position.
+			2. do mouse down and move the mouse, it will change the current position, and the input value should be changed.
+			3. wheel the mouse, it will change the current position, and the input value should be changed.
+			4. click button label as "set Angle 270", the angle curve should be as 270 degree, and input should inside the arc curve.
+			5. click button label as "set Angle 140", the angle curve should be as 140 degree, and input should inside the arc curve. 
+			6. click button label as "set SW 20", the stroke width of the curve should be as 20.
+			7. click button label as "set H 300", the height of the widget should be 300px, and the input position should not be changed.
+			8. click button label as "set H 50%", the height of the widget should be 150px(50%), and the input position should not be changed.
+			9. click button label as "setMold default", the mold of the slider should be a default slider.
+		</label>
+		<div width="300px" height="300px">
+			<slider id="knobs1" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" hflex="0.6" vflex="0.6" style="border: 1px solid black;"/>
+		</div>
+		<slider id="knobs2" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" width="300px" height="300px" style="border: 1px solid black;"/>
+		<div width="300px" height="300px">
+			<slider id="knobs" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" width="80%" height="80%" style="border: 1px solid black;"/>
+		</div>
+		<button label="set H 300px" onClick='knobs.setHeight("300px")'/>
+		<button label="set H 100px" onClick='knobs.setHeight("100px")'/>
+		<button label="set H 50%" onClick='knobs.setHeight("50%")'/>
+		<button label="set H 100%" onClick='knobs.setHeight("100%")'/>
+		<button label="set H null" onClick='knobs.setHeight(null)'/>
+		<separator/>
+		<button label="set W 300" onClick='knobs.setWidth("300px")'/>
+		<button label="set W 100" onClick='knobs.setWidth("100px")'/>
+		<button label="set W 50%" onClick='knobs.setWidth("50%")'/>
+		<button label="set W 100%" onClick='knobs.setWidth("100%")'/>
+		<separator/>
+		<button label="set Angle 360" onClick="knobs.setAngleArc(360)"/>
+		<button label="set Angle 270" onClick="knobs.setAngleArc(270)"/>
+		<button label="set Angle 140" onClick="knobs.setAngleArc(130)"/>
+		<separator/>
+		<button label="set SW 10" onClick="knobs.setStrokeWidth(10)"/>
+		<button label="set SW 20" onClick="knobs.setStrokeWidth(20)"/>
+		<separator/>
+		<button label="setMold knob" onClick='knobs.setMold("knob")'/>
+		<button label="setMold default" onClick='knobs.setMold("default")'/>
+		<button label="setMold scale" onClick='knobs.setMold("scale")'/>
+		<button label="setMold sphere" onClick='knobs.setMold("sphere")'/>
+	</div>
+</zk>

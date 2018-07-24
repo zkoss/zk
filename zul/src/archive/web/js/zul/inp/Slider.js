@@ -233,11 +233,19 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			jq(document).unbind('zmouseup', widget.onup_);
 	},
 	doMouseDown_: function (evt) {
+		if (this._mold == 'knob') {
+			this.$supers('doMouseDown_', arguments);
+			return;
+		}
 		jq(document).bind('zmouseup', this.onup_);
 		zul.inp.Slider.down_btn = this.$n('btn');
 		this.$supers('doMouseDown_', arguments);
 	},
 	doClick_: function (evt) {
+		if (this._mold == 'knob') {
+			this.$supers('doClick_', arguments);
+			return;
+		}
 		var $btn = jq(this.$n('btn')),
 			pos = $btn.zk.revisedOffset(),
 			wgt = this,
@@ -498,6 +506,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
+		if (this._mold == 'knob')
+			return;
 		this._fixSize();
 		//fix B70-ZK-2438
 		if (this.isRealVisible())
@@ -512,6 +522,10 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this._fixPos();
 	},
 	unbind_: function () {
+		if (this._mold == 'knob') {
+			this.$supers(zul.inp.Slider, 'unbind_', arguments);
+			return;
+		}
 		this.efield = null;
 		if (this._drag) {
 			this._drag.destroy();

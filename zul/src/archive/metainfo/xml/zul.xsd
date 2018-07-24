@@ -2566,6 +2566,7 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="curpos" type="intType" use="optional" />
 		<xs:attribute name="maxpos" type="intType" use="optional" />
+		<xs:attribute name="minpos" type="intType" use="optional" />
 		<xs:attribute name="slidingtext" type="xs:string" use="optional" />
 		<xs:attribute name="pageIncrement" type="intType" use="optional" />
 		<xs:attribute name="onScroll" type="xs:string" use="optional" />
@@ -2573,6 +2574,8 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="mode" type="sliderMode" use="optional" />
 		<xs:attribute name="step" type="xs:string" use="optional" />
+		<xs:attribute name="arcAngle" type="doubleType" use="optional" />
+		<xs:attribute name="strokeWidth" type="doubleType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- south -->

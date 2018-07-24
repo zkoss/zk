@@ -8,6 +8,7 @@ ZK 8.6.0
   ZK-3941: upgrade jasperreport for the latest japerreport version 6.5
   ZK-3958: Checkbox new molds (switch, toggle)
   ZK-3960: A rating component
+  ZK-3961: Slider new mold (knob)
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
