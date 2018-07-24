@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+B85-ZK-4001.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Jul 20 11:11:32 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		public void changeTheme(String theme) {
+			Library.setProperty("org.zkoss.theme.preferred", theme);
+			Executions.sendRedirect("");
+		}
+	</zscript>
+	<label multiline="true" pre="true">
+		1. Click breeze, sapphire, silvertail and atlantic buttons to change theme
+		2. Each time theme changed, you should see:
+			the title in north and south are rendered horizontally
+			the title in east and west are rendered vertically
+	</label>
+	<borderlayout width="300px" height="300px">
+		<north title="north title title title title title title title" collapsible="true" open="false"/>
+		<east title="east title title title title title title title" collapsible="true" open="false"/>
+		<west title="west title title title title title title title" collapsible="true" open="false"/>
+		<south title="south title title title title title title title" collapsible="true" open="false"/>
+		<center>CENTER</center>
+	</borderlayout>
+	<separator/>
+	<button label="iceblue" onClick="changeTheme(self.label)"/>
+	<button label="breeze" onClick="changeTheme(self.label)"/>
+	<button label="sapphire" onClick="changeTheme(self.label)"/>
+	<button label="silvertail" onClick="changeTheme(self.label)"/>
+	<button label="atlantic" onClick="changeTheme(self.label)"/>
+</zk>
