@@ -7,6 +7,7 @@ ZK 8.6.0
   ZK-3913: Provide a barcode/QR code component
 
 * Bugs
+  ZK-4008: Grid renders its column width incorrectly with span=true
 
 * Upgrade Notes
 
