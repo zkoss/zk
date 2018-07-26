@@ -11,7 +11,7 @@
 		width: 300px;
 	}
 	</style>
-	<vlayout vflex="1">
+	<vlayout vflex="0.5">
 		<label multiline="true">
 			1. Select notification position then click "show info" button.
 			2. Should see the ARROW of notification point to center of GREEN component.
@@ -23,7 +23,7 @@
 				<radio label="${each}"/>
 			</template>
 		</radiogroup>
-		<hlayout vflex="1">
+		<hlayout vflex="0.5">
 			<button label="show info">
 				<attribute name="onClick">
 					Clients.showNotification("Info Message", Clients.NOTIFICATION_TYPE_INFO, info, position.getSelectedItem().getLabel(), -1);
@@ -40,8 +40,9 @@
 				</attribute>
 			</button>
 		</hlayout>
+		<div hflex="1" height="100px"></div>
 		<hlayout spacing="3px" height="30px">
-			<div hflex="1"></div>
+			<div width="400px"></div>
 			<div id="info" width="25px" height="25px" style="background: green" />
 			<div id="warn" width="25px" height="25px" style="background: yellow" />
 			<div id="error" width="25px" height="25px" style="background: red" />
