@@ -143,4 +143,16 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 			</row>
 		</rows>
 	</grid>
+	<script><![CDATA[
+		var monthStrArr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		var pos0 = {};
+		var pos1 = {};
+		var recordWidths = function() {
+			for (var i = 0; i < 12; i++) {
+				var monthStr = monthStrArr[i];
+				pos0[monthStr] = jq(".z-column:contains('"+ monthStr +"'):eq(0)").offset().left;
+				pos1[monthStr] = jq(".z-column:contains('"+ monthStr +"'):eq(1)").offset().left;
+			}
+		}
+	]]></script>
 </zk>

@@ -8,17 +8,14 @@
 			<treecol hflex="2" label="Size" />
 		</treecols>
 	</tree>
-	<button label="show selected">
+	<button id="btn" label="show selected">
 		<attribute name="onClick"><![CDATA[
 			Set s = tree.getModel().getSelection();
 			Iterator it = s.iterator();
 			StringBuffer sb = new StringBuffer();
 			while (it.hasNext())
 				sb.append(it.next()).append("\n");
-			String result = sb.toString();
-			if (result.length() > 0)
-				result = result.split("@")[1];
-			tb.setValue(result);
+			tb.setValue(sb.toString());
 		]]></attribute>
 	</button>
 	<label id="tb" />
@@ -31,19 +28,14 @@
 			<treecol hflex="2" label="Size" />
 		</treecols>
 	</tree>
-	<button label="show selected">
+	<button id="btn2" label="show selected">
 		<attribute name="onClick"><![CDATA[
-			Set s =  tree2.getModel().getSelection();
+			Set s = tree2.getModel().getSelection();
 			Iterator it = s.iterator();
 			StringBuffer sb = new StringBuffer();
 			while (it.hasNext())
 				sb.append(it.next()).append("\n");
-			int cnt = 0;
-			String result = sb.toString();
-			if (result.length() > 0) {
-				cnt = result.split("@").length - 1;
-			}
-			tb2.setValue(cnt + "");
+			tb2.setValue(sb.toString());
 		]]></attribute>
 	</button>
 	<label id="tb2" />
@@ -54,4 +46,9 @@
 		tree2.setModel(new org.zkoss.zul.DefaultTreeModel(org.zkoss.zktest.test2.tree.PackageData.getRoot()));
 		tree2.getModel().setMultiple(true);
 	]]></zscript>
+	<script><![CDATA[
+		function getAnnotCnt(dom) {
+			return dom.innerHTML.split("@").length;
+		}
+	]]></script>
 </zk>

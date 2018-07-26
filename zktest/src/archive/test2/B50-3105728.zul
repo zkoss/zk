@@ -6,4 +6,6 @@
 		</ol>
 	]]></html>
 	<datebox width="300px" format="MM/dd/yyyy, HH:mm:ss.SSS" />
+	<label>123</label>
+	<datebox id="current" format="yyyy" onCreate="self.value = new Date();"/>
 </zk>

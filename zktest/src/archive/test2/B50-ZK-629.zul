@@ -11,25 +11,33 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	<zscript><![CDATA[
+		Sessions.getCurrent().setAttribute("px_preferred_locale", new Locale("de","DE"));
+	]]></zscript>
 	<div>Change browser locale to Germany for this test case.</div>
 	<div>You should see the values in each input element "0,5" or "0,00...5", not "5".</div>
 	<div>
-		<doublebox id="db1" value="0.5" constraint="no negative" />
-		<doublespinner id="db2" value="0.5" constraint="no negative" />
-		<decimalbox id="db3" value="0.5" constraint="no negative" />
-		<decimalbox id="db4" constraint="no negative" />
+		<doublebox id="db1" value="0.5" constraint="no negative"/>
+		<doublespinner id="db2" value="0.5" constraint="no negative"/>
+		<decimalbox id="db3" value="0.5" constraint="no negative"/>
+		<decimalbox id="db4" constraint="no negative"/>
 		<div>
-			<decimalbox id="db5" width="500px" constraint="no negative" />
+			<decimalbox id="db5" width="500px" constraint="no negative"/>
 		</div>
 	</div>
 	<zscript>
 		db4.value = new java.math.BigDecimal(0.5);
 		db5.value = new java.math.BigDecimal("5E-50");
-		
+
 		db1.getValue();
 		db2.getValue();
 		db3.getValue();
 		db4.getValue();
 		db5.getValue();
 	</zscript>
+	<button label="reset">
+		<attribute name="onClick">
+			Sessions.getCurrent().removeAttribute("px_preferred_locale");
+		</attribute>
+	</button>
 </zk>
