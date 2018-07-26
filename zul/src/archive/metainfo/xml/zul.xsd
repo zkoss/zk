@@ -700,6 +700,7 @@
 			<xs:element ref="when" />
 			<xs:element ref="window" />
 			<xs:element ref="zscript" />
+			<xs:element ref="organigram" />
 		</xs:choice>
 	</xs:group>
 	<xs:group name="anyGroupSingle">
@@ -801,6 +802,7 @@
 				<xs:element ref="when" />
 				<xs:element ref="window" />
 				<xs:element ref="zscript" />
+				<xs:element ref="organigram" />
 			</xs:choice>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -2786,6 +2788,9 @@
 			<xs:element ref="treeitem"/>
 			<xs:element ref="treerow"/>
 			<xs:element ref="west"/>
+			<xs:element ref="orgchildren"/>
+			<xs:element ref="orgitem"/>
+			<xs:element ref="orgnode"/>
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
@@ -3672,6 +3677,53 @@
 		<xs:attribute name="onRecover" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:anyAttribute processContents="skip" />
+	</xs:complexType>
+	<!-- organigram -->
+	<xs:element name="organigram" type="organigramType"/>
+	<xs:complexType name="organigramType">
+		<xs:sequence minOccurs="0">
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="orgchildren" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="selectedItem" type="xs:string" use="optional"/>
+		<xs:attribute name="model" type="xs:string" use="optional"/>
+		<xs:attribute name="itemRenderer" type="xs:string" use="optional"/>
+		<xs:attribute name="onSelect" type="xs:string" use="optional"/>
+		<xs:attributeGroup ref="rootAttrGroup"/>
+	</xs:complexType>
+	<!-- orgchildren -->
+	<xs:element name="orgchildren" type="orgchildrenType"/>
+	<xs:complexType name="orgchildrenType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup"/>
+			<xs:element ref="orgitem"/>
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup"/>
+	</xs:complexType>
+	<!-- orgitem -->
+	<xs:element name="orgitem" type="orgitemType"/>
+	<xs:complexType name="orgitemType">
+		<xs:sequence minOccurs="0">
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="orgnode" minOccurs="0"/>
+			<xs:element ref="orgchildren" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="open" type="booleanType" use="optional"/>
+		<xs:attribute name="selected" type="booleanType" use="optional"/>
+		<xs:attribute name="selectable" type="booleanType" use="optional"/>
+		<xs:attribute name="image" type="xs:string" use="optional"/>
+		<xs:attribute name="disabled" type="booleanType" use="optional"/>
+		<xs:attribute name="onOpen" type="xs:string" use="optional"/>
+		<xs:attribute name="label" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<!-- orgnode -->
+	<xs:element name="orgnode" type="orgnodeType"/>
+	<xs:complexType name="orgnodeType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:attributeGroup ref="labelImageElementAttrGroup"/>
 	</xs:complexType>
 	<!-- FIXME: Copied from abstractComponentAttrGroup to avoid processContents="lax" -->
 	<xs:attributeGroup name="abstractComponentAttrGroupForFragment">
