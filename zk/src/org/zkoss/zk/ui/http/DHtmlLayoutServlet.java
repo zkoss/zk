@@ -36,7 +36,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
-import org.zkoss.zel.ServletRequestsAttr;
+import org.zkoss.zel.ThreadLocalsManager;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
@@ -170,8 +170,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final DesktopRecycle dtrc = bInclude ? null : config.getDesktopRecycle();
 		final ServletContext ctx = getServletContext();
 		Desktop desktop = dtrc != null ? DesktopRecycles.beforeService(dtrc, ctx, sess, request, response, path) : null;
-		ServletRequestsAttr.setCurrentURL(request.getRequestURI());
-		
+
 		try {
 			if (desktop != null) { //recycle
 				final Page page = Utils.getMainPage(desktop);
@@ -205,6 +204,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 					//no need to set device type here, since UiEngine will do it later
 				} else {
 					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
+					ThreadLocalsManager.setCurrentPageDef(pagedef);
 					if (pagedef == null)
 						return false; //not found
 
