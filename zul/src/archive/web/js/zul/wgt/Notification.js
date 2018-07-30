@@ -222,6 +222,10 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	},
 	getPositionArgs_: function () {
 		return [this._fakeParent, null, this._nftPos, null];
+	},
+	reposition: function () {
+		this.$supers('reposition', arguments);
+		this._fixarrow();
 	}
 }, {
 
