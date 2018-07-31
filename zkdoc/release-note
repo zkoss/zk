@@ -1,5 +1,6 @@
    --------
 ZK 8.5.2
+Jul 31, 2018
 * Features
   ZK-1148: Able to handle the destroyed of a ViewModel.
   ZK-3875: Multiline Textbox fires onOK event when pressing enter key which is configurable
