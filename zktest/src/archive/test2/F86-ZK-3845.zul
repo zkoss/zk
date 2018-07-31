@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3845.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Apr 11 14:46:05 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<video id="pl" width="600px" src="F86-ZK-3845.mp4" controls="true"
+		   poster="img/F86-ZK-3845.png" loop="true"
+		   onStateChange="Clients.log(event.state.toString())"/>
+	
+	<separator/>
+	
+	<button label="Play" onClick="pl.play()"/>
+	<button label="Stop" onClick="pl.stop()"/>
+	<button label="Pause" onClick="pl.pause()"/>
+	<button label="setPlaying(true)" onClick="pl.setPlaying(true)"/>
+	<button label="setPlaying(false)" onClick="pl.setPlaying(false)"/>
+	<button label="setCurrentTime(60)" onClick="pl.setCurrentTime(60)"/>
+	<button label="setClipToFit(true)" onClick="pl.setClipToFit(true)"/>
+	<button label="setClipToFit(false)" onClick="pl.setClipToFit(false)"/>
+	
+	<separator/>
+	
+	<button label="setVolume(0.5)" onClick="pl.setVolume(0.5)"/>
+	<button label="setMuted(true)" onClick="pl.setMuted(true)"/>
+	<button label="setPlaybackRate(-1)" onClick="pl.setPlaybackRate(-1)"/>
+	<button label="setDimBackground(true)" onClick='pl.setDimBackground(true)'/>
+	<button label="ChangeSrc" onClick='pl.setSrc("F86-ZK-3845.webm")'/>
+	<button xmlns:w="client" label="Fullscreen" w:onClick="zk.$('$pl').enableFullScreen()"/>
+	
+	<separator/>
+	
+	<video id="pl2" width="600px" controls="true"/>
+	
+	<separator/>
+	
+	<fileupload label="Upload">
+		<attribute name="onUpload">
+			Object media = event.getMedia();
+			pl2.setContent(media);
+		</attribute>
+	</fileupload>
+	<button label="Play" onClick="pl2.play()"/>
+	<button label="Stop" onClick="pl2.stop()"/>
+	<button label="LogContentName">
+		<attribute name="onClick">
+			Object media = pl2.getContent();
+			Clients.log(media.getClass().toString());
+			Clients.log(media.getName());
+		</attribute>
+	</button>
+</zk>

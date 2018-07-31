@@ -22,6 +22,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- you can specify addition JavaScript files
 	<javascript src="/js/my.js" charset="UTF-8"/>
 	-->
+	<javascript src="/test2/js/zk-3913-PDF417lib.js"/>
+	<javascript src="/test2/js/zk-3913-l.js"/>
 
 	<!-- an example
 	<component>

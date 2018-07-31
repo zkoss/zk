@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.5.2.201805171543">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.0.201807311647">
 	<!--
 	SIMPLETYPE
 	-->
@@ -609,7 +609,11 @@
 			<xs:element ref="anchorlayout"/>
 			<xs:element ref="apply"/>
 			<xs:element ref="audio" />
+			<xs:element ref="video" />
+			<xs:element ref="camera" />
 			<xs:element ref="bandbox" />
+			<xs:element ref="barcode" />
+			<xs:element ref="barcodescanner" />
 			<xs:element ref="biglistbox" />
 			<xs:element ref="borderlayout" />
 			<xs:element ref="box" />
@@ -706,7 +710,11 @@
 				<xs:element ref="anchorlayout"/>
 				<xs:element ref="apply"/>
 				<xs:element ref="audio" />
+				<xs:element ref="video" />
+				<xs:element ref="camera" />
 				<xs:element ref="bandbox" />
+				<xs:element ref="barcode" />
+				<xs:element ref="barcodescanner" />
 				<xs:element ref="biglistbox" />
 				<xs:element ref="borderlayout" />
 				<xs:element ref="box" />
@@ -909,6 +917,63 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<!-- video -->
+	<xs:element name="video" type="videoType" />
+	<xs:complexType name="videoType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="dimBackground" type="booleanType" use="optional" />
+		<xs:attribute name="muted" type="booleanType" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="poster" type="xs:string" use="optional" />
+		<xs:attribute name="crossorigin" type="xs:string" use="optional" />
+		<xs:attribute name="preload" type="videoPreloadAttrType" use="optional" />
+		<xs:attribute name="controls" type="booleanType" use="optional" />
+		<xs:attribute name="loop" type="booleanType" use="optional" />
+		<xs:attribute name="autoplay" type="booleanType" use="optional" />
+		<xs:attribute name="playsinline" type="booleanType" use="optional" />
+		<xs:attribute name="playing" type="booleanType" use="optional" />
+		<xs:attribute name="clipToFit" type="booleanType" use="optional" />
+		<xs:attribute name="currentTime" type="doubleType" use="optional" />
+		<xs:attribute name="volume" type="doubleType" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
+		<xs:attribute name="onStateChange" type="xs:string" use="optional" />
+		<xs:attribute name="playbackRate" type="doubleType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<xs:simpleType name="videoPreloadAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none" />
+					<xs:enumeration value="auto" />
+					<xs:enumeration value="metadata" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<!-- camera -->
+	<xs:element name="camera" type="cameraType" />
+	<xs:complexType name="cameraType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="recording" type="booleanType" use="optional" />
+		<xs:attribute name="audio" type="booleanType" use="optional" />
+		<xs:attribute name="previewRecord" type="booleanType" use="optional" />
+		<xs:attribute name="maxsize" type="intType" use="optional" />
+		<xs:attribute name="lengthLimit" type="intType" use="optional" />
+		<xs:attribute name="onVideoUpload" type="xs:string" use="optional" />
+		<xs:attribute name="onSnapshotUpload" type="xs:string" use="optional" />
+		<xs:attribute name="onLengthLimitExceed" type="xs:string" use="optional" />
+		<xs:attribute name="onStateChange" type="xs:string" use="optional" />
+		<xs:attribute name="onMaxsizeExceed" type="xs:string" use="optional" />
+		<xs:attribute name="snapshotFormat" type="xs:string" use="optional" />
+		<xs:attribute name="recordFormat" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
 	<!-- auxhead -->
 	<xs:element name="auxhead" type="auxheadType" />
 	<xs:complexType name="auxheadType">
@@ -955,6 +1020,29 @@
 	<xs:complexType name="bandpopupType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!--barcode-->
+	<xs:element name="barcode" type="barcodeType"/>
+	<xs:complexType name="barcodeType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="height" type="xs:string" use="optional"/>
+		<xs:attribute name="displayValue" type="booleanType" use="optional"/>
+		<xs:attribute name="fontSize" type="intType" use="optional"/>
+		<xs:attribute name="barWidth" type="intType" use="optional"/>
+	</xs:complexType>
+	<!-- barcodescanner -->
+	<xs:element name="barcodescanner" type="barcodescannerType" />
+	<xs:complexType name="barcodescannerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="type" type="xs:string" use="optional" />
+		<xs:attribute name="continuous" type="booleanType" use="optional" />
+		<xs:attribute name="interval" type="doubleType" use="optional" />
+		<xs:attribute name="enable" type="booleanType" use="optional" />
+		<xs:attribute name="onDetect" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- biglistbox -->
 	<xs:element name="biglistbox" type="biglistboxType" />

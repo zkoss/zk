@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +51,7 @@ import org.zkoss.sound.AAudio;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.media.Media;
+import org.zkoss.video.AVideo;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
@@ -114,7 +114,7 @@ public class AuDropUploader implements AuExtension {
 				}
 			}
 		} catch (Throwable ex) {
-			//TODO how to handle exception occur by xhr.abort()? 
+			//TODO how to handle exception occur by xhr.abort()?
 			if (uuid == null) {
 				uuid = request.getParameter("uuid");
 				if (uuid != null)
@@ -155,7 +155,7 @@ public class AuDropUploader implements AuExtension {
 	 *
 	 * <p>If you prefer not to log or to generate the custom error message,
 	 * you can extend this class and override this method.
-	 * Then, specify it in web.xml as follows. 
+	 * Then, specify it in web.xml as follows.
 	 * (we change from processor0 to extension0 after ZK5.)
 	 * @see DHtmlUpdateServlet
 	<code><pre>&lt;servlet&gt;
@@ -245,6 +245,13 @@ public class AuDropUploader implements AuExtension {
 			} else if (ctypelc.startsWith("audio/")) {
 				try {
 					return fi.isInMemory() ? new AAudio(name, fi.get()) : new StreamAudio(name, fi, ctypelc);
+				} catch (Throwable ex) {
+					if (log.isDebugEnabled())
+						log.debug("Unknown file format: " + ctype);
+				}
+			} else if (ctypelc.startsWith("video/")) {
+				try {
+					return fi.isInMemory() ? new AVideo(name, fi.get()) : new StreamVideo(name, fi, ctypelc);
 				} catch (Throwable ex) {
 					if (log.isDebugEnabled())
 						log.debug("Unknown file format: " + ctype);
@@ -440,6 +447,37 @@ public class AuDropUploader implements AuExtension {
 		private String _ctype;
 
 		public StreamAudio(String name, FileItem fi, String ctype) throws IOException {
+			super(name, DYNAMIC_STREAM);
+			_fi = fi;
+			_ctype = ctype;
+		}
+
+		public java.io.InputStream getStreamData() {
+			try {
+				return _fi.getInputStream();
+			} catch (IOException ex) {
+				throw new UiException("Unable to read " + _fi, ex);
+			}
+		}
+
+		public String getFormat() {
+			if (_format == null) {
+				_format = ContentTypes.getFormat(getContentType());
+			}
+			return _format;
+		}
+
+		public String getContentType() {
+			return _ctype != null ? _ctype : _fi.getContentType();
+		}
+	}
+
+	private static class StreamVideo extends AVideo {
+		private final FileItem _fi;
+		private String _format;
+		private String _ctype;
+
+		public StreamVideo(String name, FileItem fi, String ctype) throws IOException {
 			super(name, DYNAMIC_STREAM);
 			_fi = fi;
 			_ctype = ctype;
