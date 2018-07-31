@@ -106,7 +106,7 @@ public interface Binder {
 	 * @param viewModel viewModel object
 	 * @since 8.5.2
 	 */
-	public void destroy(Component comp, Object viewModel);
+	public void destroy(Component root, Object viewModel);
 
 	/**
 	 * Load the load-binding of the component. <br/>

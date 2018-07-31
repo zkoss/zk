@@ -284,8 +284,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/**
 	 * Scroll to the specified row by the given index.
-	 * @param int the index of row
-	 * @param double the scroll ratio
+	 * @param int index the index of row
+	 * @param double scrollRatio the scroll ratio
 	 * @since 8.5.2
 	 */
 	scrollToIndex: function (index, scrollRatio) {

@@ -285,7 +285,7 @@ public class AnnotationHelper {
 	 * Otherwise, the value is returned directly (without any processing).
 	 * @param val the value. This method assumes val has been trimmed before the
 	 * call.
-	 * @exception NullPointException if val is null.
+	 * @exception NullPointerException if val is null.
 	 * @param loc the location information of the value for displaying better
 	 * error message. Ignored if null.
 	 * @since 6.0.0
@@ -479,7 +479,7 @@ public class AnnotationHelper {
 	}
 
 	/**
-	 * Where to ignore annotation namespace.
+	 * Whether to ignore annotation namespace.
 	 * @return true if should ignore annotation namespace.
 	 * @since 8.5.2
 	 */
@@ -488,8 +488,8 @@ public class AnnotationHelper {
 	}
 
 	/**
-	 * Sets where to ignore annotation namespace.
-	 * @param boolean
+	 * Sets whether to ignore annotation namespace.
+	 * @param ignoreAnnotNamespace whether to ignore annotation namespace
 	 * @since 8.5.2
 	 */
 	public void setIgnoreAnnotNamespace(boolean ignoreAnnotNamespace) {

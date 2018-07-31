@@ -1830,8 +1830,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * Scroll to the specified item by the given index, used by Grid and Listbox,
 	 * this function could be invoked by server-side or client-side,
 	 * when invoked by client-side, scrollRatio will be undefined.
-	 * @param int the index of item
-	 * @param double the scroll ratio
+	 * @param int index the index of item
+	 * @param double scrollRatio the scroll ratio
 	 */
 	_scrollToIndex: function (index, scrollRatio) {
 		var firstItemIndex = this._getFirstItemIndex(),

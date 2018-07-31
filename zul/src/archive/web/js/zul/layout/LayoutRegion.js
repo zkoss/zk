@@ -330,7 +330,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * Sets whether users can slide (preview) the region when clicked on a collapsed region.
 		 * Meaningful only if {@link #isCollapsible()} is true and {@link #isOpen()} is false.
 		 *
-		 * @param slidable whether users can slide (preview) the region.
+		 * @param boolean slidable whether users can slide (preview) the region.
 		 * @since 8.5.2
 		 */
 		/**
@@ -338,7 +338,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * In other words, if false, clicking on a collapsed region will open it instead of sliding.
 		 * <p>Default: true.
 		 *
-		 * @return whether users can slide (preview) the region.
+		 * @return boolean whether users can slide (preview) the region.
 		 * @since 8.5.2
 		 */
 		slidable: null,
@@ -346,7 +346,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * Sets whether users can open or close the region.
 		 * Meaningful only if {@link #isCollapsible()} is true.
 		 *
-		 * @param closable whether users can open or close the region.
+		 * @param boolean closable whether users can open or close the region.
 		 * @since 8.5.2
 		 */
 		/**
@@ -355,7 +355,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * change the open status (by clicking the button on the bar).
 		 * <p>Default: true.
 		 *
-		 * @return whether users can open or close the region.
+		 * @return boolean whether users can open or close the region.
 		 * @since 8.5.2
 		 */
 		closable: function (v) {
