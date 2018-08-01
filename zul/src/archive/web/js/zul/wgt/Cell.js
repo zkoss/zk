@@ -87,7 +87,7 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 		return this._rowType;
 	},
 	_getRowAttrs: function () {
-		return this.parent._childAttrs(this, this.getChildIndex(), !this._headerVisible);
+		return this.parent._childAttrs(this, this.getChildIndex());
 	},
 	_getBoxAttrs: function () {
 		return this.parent._childInnerAttrs(this);
@@ -98,6 +98,13 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 		if (zk.isLoaded('zkex.grid') && p.$instanceof(zkex.grid.Group) && this == p.firstChild)
 			s += p.domContent_();
 		return s;
+	},
+	domClass_: function (no) {
+		var scls = this.$supers('domClass_', arguments);
+		if (this._getParentType() == this._rowType) {
+			if (this._headerVisible === false) scls += ' ' + this.$s('hidden-column');
+		}
+		return scls;
 	},
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments);

@@ -187,19 +187,22 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//-- super --//
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments),
-			box = this.getListbox(),
-			head = this.getListheader(),
-			width0 = zul.mesh.MeshWidget.WIDTH0;
+			head = this.getListheader();
 		if (head) {
-			// ZK-3600: Prevent the dummy cell from hiding if the first header is invisible
-			if (!head.isVisible() && !(box && box._model && !this.parent._loaded))
-				style += 'width:' + width0 + ';white-space: nowrap;';
 			if (head._align)
 				style += 'text-align:' + head._align + ';';
 			if (head._valign)
 				style += 'vertical-align:' + head._valign + ';';
 		}
 		return style;
+	},
+	domClass_: function (no) {
+		var scls = this.$supers('domClass_', arguments),
+			head = this.getListheader();
+		if (head) {
+			if (!head.isVisible()) scls += ' ' + this.$s('hidden-header');
+		}
+		return scls;
 	},
 	bindChildren_: function () {
 		var p;

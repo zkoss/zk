@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4011-tree.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 01 12:50:22 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    DefaultTreeNode root = new DefaultTreeNode("ROOT", new ArrayList());
+    DefaultTreeModel stm = new DefaultTreeModel(root);
+
+    DefaultTreeNode node2 = new DefaultTreeNode("0", Collections.emptyList());
+    for (int i = 0; i < 100; i++) {
+        root.add(new DefaultTreeNode(i));
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. You can only see column 2, 3 and 5 at first.
+        2. Click "switch 1 visible" button, column 1 will be visible.
+        3. Click "switch 6 visible" button, column 6 will be visible and Aux 3 is visible.
+    </label>
+    <tree model="${stm}" height="300px">
+        <auxhead>
+            <auxheader colspan="3" label="Aux 1"/>
+            <auxheader colspan="2" label="Aux 2"/>
+            <auxheader colspan="1" label="Aux 3"/>
+        </auxhead>
+        <treecols sizable="true">
+            <treecol id="c1" width="4%"  label="1 hidden" visible="false" />
+            <treecol id="c2" width="15%" label="2 visible" />
+            <treecol id="c3" width="25%" label="3 visible" />
+            <treecol id="c4" width="35%" label="4 hidden" visible="false" />
+            <treecol id="c5" width="25%" label="5 visible" />
+            <treecol id="c6" width="12%" label="6 hidden " visible="false" />
+        </treecols>
+        <template name="model">
+            <treeitem>
+                <treerow>
+                    <treecell>1</treecell>
+                    <treecell>2</treecell>
+                    <treecell>3</treecell>
+                    <treecell>4</treecell>
+                    <treecell>5</treecell>
+                    <treecell>6</treecell>
+                </treerow>
+            </treeitem>
+        </template>
+        <treefoot>
+            <treefooter label="ft 1"/>
+            <treefooter label="ft 2"/>
+            <treefooter label="ft 3"/>
+            <treefooter label="ft 4"/>
+            <treefooter label="ft 5"/>
+            <treefooter label="ft 6"/>
+        </treefoot>
+    </tree>
+    <button label="switch 1 visible" onClick="c1.visible = !c1.visible"/>
+    <button label="switch 6 visible" onClick="c6.visible = !c6.visible"/>
+</zk>

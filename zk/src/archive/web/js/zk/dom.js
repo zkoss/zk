@@ -615,7 +615,7 @@ zjq.prototype = {
 	 */
 	isVisible: function (strict) {
 		var n = this.jq[0];
-		return n && (!n.style || (n.style.display != 'none' && (!strict || n.style.visibility != 'hidden')));
+		return n && (!n.style || (n.style.display != 'none' && (!strict || jq.inArray(n.style.visibility, ['hidden', 'collapse']) == -1)));
 	},
 	/** Returns whether the first match element is really visible.
 	 * By real visible we mean the element and all its ancestors are visible.

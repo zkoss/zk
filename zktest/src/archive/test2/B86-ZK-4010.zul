@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4010.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 01 12:50:22 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    List list = new ArrayList();
+    for (int i = 0; i < 100; i++) {
+        list.add(i);
+    }
+    ListModelList model = new ListModelList(list);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. You can only see column 2, 3 and 5 at first.
+        2. Click "switch 1 visible" button, column 1 will be visible.
+        3. Click "switch 6 visible" button, column 6 will be visible and Aux 3 is visible.
+    </label>
+    <listbox model="${model}" height="300px">
+        <auxhead>
+            <auxheader colspan="3" label="Aux 1"/>
+            <auxheader colspan="2" label="Aux 2"/>
+            <auxheader colspan="1" label="Aux 3"/>
+        </auxhead>
+        <listhead sizable="true">
+            <listheader id="lh1" width="4%"  label="1 hidden" visible="false" />
+            <listheader id="lh2" width="15%" label="2 visible" />
+            <listheader id="lh3" width="25%" label="3 visible" />
+            <listheader id="lh4" width="35%" label="4 hidden"  visible="false" />
+            <listheader id="lh5" width="25%" label="5 visible" />
+            <listheader id="lh6" width="12%" label="6 hidden " visible="false" />
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell label="1"/>
+                <listcell label="2"/>
+                <listcell label="3"/>
+                <listcell label="4"/>
+                <listcell label="5"/>
+                <listcell label="6"/>
+            </listitem>
+        </template>
+        <listfoot>
+            <listfooter label="ft 1"/>
+            <listfooter label="ft 2"/>
+            <listfooter label="ft 3"/>
+            <listfooter label="ft 4"/>
+            <listfooter label="ft 5"/>
+            <listfooter label="ft 6"/>
+        </listfoot>
+    </listbox>
+    <button label="switch 1 visible" onClick="lh1.visible = !lh1.visible"/>
+    <button label="switch 6 visible" onClick="lh6.visible = !lh6.visible"/>
+</zk>

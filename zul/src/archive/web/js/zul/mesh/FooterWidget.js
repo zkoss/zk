@@ -77,7 +77,6 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 	//super
 	domStyle_: function (no) {
 		var style = '',
-			width0 = zul.mesh.MeshWidget.WIDTH0,
 			header = this.getHeaderWidget();
 		if (this._align)
 			style += 'text-align:' + this._align + ';';
@@ -87,8 +86,6 @@ zul.mesh.FooterWidget = zk.$extends(zul.LabelImageWidget, {
 			style += 'vertical-align:' + this._align + ';';
 		else if (header && header._valign)
 			style += 'vertical-align:' + header._valign + ';';
-		if (header && !header.isVisible()) //Bug ZK-1425
-			style += 'visibility: hidden; width: ' + width0 + ';';
 
 		return this.$super('domStyle_', no) + style;
 	},
