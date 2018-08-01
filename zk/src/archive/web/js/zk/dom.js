@@ -800,8 +800,8 @@ zjq.prototype = {
 		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
 			return w._scrollbar.hasVScroll();
 		}
-		var n, v;
-		return (n = this.jq[0]) && (v = n.clientWidth) && (v = n.offsetWidth - v) > 11 ? v : 0;
+		var n, v;//zk-3938: if zoom-in, the v will be smaller than 11.
+		return (n = this.jq[0]) && (v = n.clientWidth) && (v = n.offsetWidth - v) > 0 ? v : 0;
 	},
 	/** Tests if the first matched DOM element has the horizontal scrollbar
 	 * @return int the difference of offsetHeight and clientHeight if the element has the horizontal scrollbar,
@@ -813,8 +813,8 @@ zjq.prototype = {
 		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
 			return w._scrollbar.hasHScroll();
 		}
-		var n, v;
-		return (n = this.jq[0]) && (v = n.clientHeight) && (v = n.offsetHeight - v) > 11 ? v : 0;
+		var n, v;//zk-3938: if zoom-in, the v will be smaller than 11.
+		return (n = this.jq[0]) && (v = n.clientHeight) && (v = n.offsetHeight - v) > 0 ? v : 0;
 	},
 
 	/** Tests if the first matched element is overlapped with the specified

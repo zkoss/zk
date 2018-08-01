@@ -33,6 +33,7 @@ ZK 8.6.0
   ZK-4031: fragment-component table/tr/td problems on IE
   ZK-3735: Listbox.getVisibleItemCount() does not reset its value after Listbox.setModel()
   ZK-3826: Datebox does not display correct range of years
+  ZK-3938: Support screen scaling (chrome) to align column headers
 
 * Upgrade Notes
 
