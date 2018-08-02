@@ -587,7 +587,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this._multiple) {
 				if (evt.data.shiftKey)
 					this._selectUpto(row, evt, skipFocus);
-				else if (evt.data.ctrlKey || evt.data.metaKey || zk.mobile) //let multiple selection without checkmark work on tablet
+				else if (evt.data.ctrlKey || evt.data.metaKey) //let multiple selection without checkmark work on tablet
 					this._toggleSelect(row, !row.isSelected(), evt, skipFocus);
 				else if (!alwaysSelect || !row.isSelected())// Bug: 1973470
 					this._select(row, evt, skipFocus);

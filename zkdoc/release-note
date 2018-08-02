@@ -34,6 +34,7 @@ ZK 8.6.0
   ZK-3735: Listbox.getVisibleItemCount() does not reset its value after Listbox.setModel()
   ZK-3826: Datebox does not display correct range of years
   ZK-3938: Support screen scaling (chrome) to align column headers
+  ZK-3993: selecting an item doesn't deselect others with a mobile device
 
 * Upgrade Notes
 
