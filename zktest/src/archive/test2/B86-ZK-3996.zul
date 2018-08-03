@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3996.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 18 14:54:25 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <fragment><![CDATA[
+    測試
+        <span><pre>
+        You can see this page without error popup (Failed to parse the content: Lexical error)
+        </pre></span>
+        <ul>
+            <li>Emojis: 😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 💩</li>
+            <li>Chinese: 我的中文不好。我是意大利人。你知道吗？</li>
+            <li>Japanese: どうもありがとう</li>
+            <li>Korean: 안녕하세요</li>
+            <li>Amharic: የኔ ማንዣበቢያ መኪና በዓሣዎች ተሞልቷል</li>
+            <li>Bengali: আমার হভারক্রাফ্ট কুঁচে মাছ-এ ভরা হয়ে গেছে</li>
+            <li>Georgian: ჩემი ხომალდი საჰაერო ბალიშზე სავსეა გველთევზებით</li>
+            <li>Macedonian: Моето летачко возило е полно со јагули</li>
+            <li>Vietnamese: Tàu cánh ngầm của tôi đầy lươn</li>
+        </ul>
+        <h1 title="測試😀&quot;">test</h1>
+    ]]>
+    </fragment>
+</zk>

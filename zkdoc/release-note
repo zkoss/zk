@@ -8,6 +8,7 @@ ZK 8.6.0
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
+  ZK-3996: fragment can't parse Chinese characters
 
 * Upgrade Notes
 
