@@ -12,6 +12,11 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.Assert.fail;
+import static org.zkoss.zktest.zats.WebDriverTestCase.getStatusCode;
+
+import java.net.InetSocketAddress;
+
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Server;
@@ -19,23 +24,15 @@ import org.eclipse.jetty.util.resource.JarResource;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-
-import java.net.InetSocketAddress;
-
-import static org.junit.Assert.fail;
 
 /**
  * @author jameschu
  */
 public class B80_ZK_3123Test {
 	private static Server server;
-	private WebDriver driver;
 	private static int port;
 	private static int getPort() {
 		return port;
@@ -45,21 +42,6 @@ public class B80_ZK_3123Test {
 	}
 	private static String getHost() {
 		return "127.0.0.1";
-	}
-
-	protected WebDriver getWebDriver() {
-		if (driver == null) {
-			driver = new WebDriverTestCase.ZKWebDriver(true);
-		}
-		return driver;
-	}
-
-	@After
-	public void stop() {
-		if (driver != null) {
-			driver.quit();
-			driver = null;
-		}
 	}
 
 	@BeforeClass
@@ -92,11 +74,10 @@ public class B80_ZK_3123Test {
 
 	@Test
 	public void test() {
-		WebDriverTestCase.ZKWebDriver webDriver = (WebDriverTestCase.ZKWebDriver)getWebDriver();
-		webDriver.get("http://" + getHost() + ":" + getPort() + getContextPath() + "/index.zhtml");
-		int errCode = webDriver.lastPage().getWebResponse().getStatusCode();
+		String url = "http://" + getHost() + ":" + getPort() + getContextPath() + "/index.zhtml";
+		int errCode = getStatusCode(url);
 		if (errCode == 404) {
-			fail("Error Code: " + errCode + ", from URL[" + webDriver.lastPage().getUrl() + "]");
+			fail("Error Code: " + errCode + ", from URL[" + url + "]");
 		}
 	}
 }

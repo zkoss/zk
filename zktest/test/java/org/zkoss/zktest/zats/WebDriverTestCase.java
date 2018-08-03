@@ -14,7 +14,9 @@ package org.zkoss.zktest.zats;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.net.URL;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.Page;
@@ -32,10 +34,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.zkoss.zktest.zats.ztl.ClientWidget;
 import org.zkoss.zktest.zats.ztl.Element;
 import org.zkoss.zktest.zats.ztl.JQuery;
@@ -44,7 +48,7 @@ import org.zkoss.zktest.zats.ztl.ZK;
 
 /**
  * A base class to test using WebDriver.
- * <p>Currently support HtmlUnit only</p>
+ * <p>Currently support Chromium headless and HtmlUnit</p>
  * @author jumperchen
  */
 public abstract class WebDriverTestCase {
@@ -70,11 +74,25 @@ public abstract class WebDriverTestCase {
 
 	protected WebDriver getWebDriver() {
 		if (driver == null) {
-			driver = new ZKWebDriver(true);
+			driver = new ChromiumHeadlessDriver(getWebDriverOptions());
 		}
 		return driver;
 	}
 
+	/**
+	 * Gets the WebDriver options.
+	 * You can add arguments for Chromium to change settings like locale or user-agent string.
+	 * A list of available options can be found at <a href="http://chromedriver.chromium.org/capabilities">Capabilities & ChromeOptions</a>.
+	 *
+	 * @return WebDriver options
+	 */
+	protected ChromeOptions getWebDriverOptions() {
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("window-size=1920,1080");
+		return options;
+	}
+
+	@Deprecated
 	public static class ZKWebDriver extends HtmlUnitDriver {
 		public ZKWebDriver() {
 		}
@@ -120,28 +138,30 @@ public abstract class WebDriverTestCase {
 		return className.substring(0, lastTest) + ".zul";
 	}
 	public WebDriver connect(String location) {
-		ZKWebDriver webDriver = (ZKWebDriver)getWebDriver();
+		WebDriver webDriver = getWebDriver();
 		if (location == null || location.length() <= 0) {
 			location = getFileLocation();
-			webDriver.get(getAddress() + location);
-			int errCode = webDriver.lastPage().getWebResponse().getStatusCode();
+			String loc = getAddress() + location;
+			int errCode = getStatusCode(loc);
 			if (errCode == 404) {
-				webDriver.get(getAddress() + location.replace("_", "-"));
-				errCode = webDriver.lastPage().getWebResponse().getStatusCode();
+				loc = getAddress() + location.replace("_", "-");
+				errCode = getStatusCode(loc);
 				if (errCode == 404) {
-					webDriver.get(getAddress() + location.replace("-", "_"));
-					errCode = webDriver.lastPage().getWebResponse().getStatusCode();
+					loc = getAddress() + location.replace("-", "_");
+					errCode = getStatusCode(loc);
 				}
 				if (errCode == 404) {
-					fail("Error Code: " + errCode + ", from URL[" + webDriver.lastPage().getUrl() + "]");
+					fail("Error Code: " + errCode + ", from URL[" + loc + "]");
 				}
+				webDriver.get(loc);
 			}
 		} else {
-			webDriver.get(getAddress() + location);
-			int errCode = webDriver.lastPage().getWebResponse().getStatusCode();
+			String loc = getAddress() + location;
+			int errCode = getStatusCode(loc);
 			if (errCode != 200) {
-				fail("Error Code: " + errCode + ", from URL[" + webDriver.lastPage().getUrl() + "]");
+				fail("Error Code: " + errCode + ", from URL[" + loc + "]");
 			}
+			webDriver.get(loc);
 		}
 		_local.set(webDriver);
 		return webDriver;
@@ -484,5 +504,34 @@ public abstract class WebDriverTestCase {
 		click(element);
 		waitResponse(true);
 		return widget(element);
+	}
+
+	/**
+	 * Gets the HTTP response status code.
+	 *
+	 * @param url the URL
+	 * @return status code. -1 if the connection has any exception.
+	 */
+	public static int getStatusCode(String url) {
+		HttpURLConnection http = null;
+		try {
+			URL u = new URL(url);
+			http = (HttpURLConnection) u.openConnection();
+			return http.getResponseCode();
+		} catch (Exception e) {
+			return -1;
+		} finally {
+			if (http != null) http.disconnect();
+		}
+	}
+
+	/**
+	 * Strips ;jsessionid= in URL because it is annoying when comparing URLs.
+	 *
+	 * @param url the original URL
+	 * @return stripped URL
+	 */
+	protected String stripJsessionid(String url) {
+		return url.replaceAll(";jsessionid=[^?]*", "");
 	}
 }

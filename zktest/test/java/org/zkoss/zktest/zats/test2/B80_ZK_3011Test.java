@@ -9,11 +9,12 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by wenning on 12/25/15.
@@ -25,10 +26,10 @@ public class B80_ZK_3011Test extends WebDriverTestCase {
         JQuery img = jq("img");
         String img1Src = img.get(0).get("src");
         int i = img1Src.indexOf("img/");
-        assertEquals("img/icon_users.png", img1Src.substring(i));
+        assertEquals("img/icon_users.png", stripJsessionid(img1Src.substring(i)));
         click(jq("@button"));
         waitResponse();
         String img2Src = img.get(1).get("src");
-        assertEquals("img/icon_users.png", img2Src.substring(i));
+        assertEquals("img/icon_users.png", stripJsessionid(img2Src.substring(i)));
     }
 }

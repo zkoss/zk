@@ -11,12 +11,12 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.startsWith;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
@@ -25,17 +25,10 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
  */
 public class B85_ZK_3821Test extends WebDriverTestCase {
 	@Override
-	protected WebDriver getWebDriver() {
-		if (driver == null) {
-			final String locale = "de-DE"; // German locale
-			BrowserVersion browser = new BrowserVersion.BrowserVersionBuilder(BrowserVersion.getDefault())
-					.setSystemLanguage(locale)
-					.setBrowserLanguage(locale)
-					.setUserLanguage(locale)
-					.build();
-			driver = new ZKWebDriver(browser, true);
-		}
-		return driver;
+	protected ChromeOptions getWebDriverOptions() {
+		ChromeOptions options = super.getWebDriverOptions();
+		options.addArguments("lang=de");
+		return options;
 	}
 
 	@Test
