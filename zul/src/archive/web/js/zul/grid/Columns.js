@@ -36,5 +36,19 @@ zul.grid.Columns = zk.$extends(zul.mesh.ColumnMenuWidget, {
 	},
 	getGroupPackage_: function () {
 		return 'zkex.grid';
+	},
+	//@Override
+	shallFireSizedLaterWhenAddChd_: function () {
+		zWatch.listen({
+			onCommandReady: this
+		});
+		return true;
+	},
+	// ZK-4008
+	onCommandReady: function () {
+		zUtl.fireSized(this);
+		zWatch.unlisten({
+			onCommandReady: this
+		});
 	}
 });
