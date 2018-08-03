@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!--
+F86-ZK-3941.zul
+
+        Purpose:
+        
+        Description:
+        
+        History:
+                Mon Jul 02 11:22:14 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click listbox to choose different types
+		2. The jasperreport should work in all types
+	</label>
+	<window title="jasperreport demo" border="normal" width="100%" height="100%">
+		<listbox id="format" mold="select" onSelect="showReport()">
+			<listitem label="PDF" value="pdf" selected="true"/>
+			<listitem label="XML" value="xml"/>
+			<listitem label="HTML" value="html"/>
+			<listitem label="Word (RTF)" value="rtf"/>
+			<listitem label="Excel" value="xls"/>
+			<listitem label="Excel (JXL)" value="jxl"/>
+			<listitem label="CSV" value="csv"/>
+			<listitem label="OpenOffice (ODT)" value="odt" unless="${c:isExplorer()}"/>
+			<listitem label="XLSX" value="xlsx"/>
+			<listitem label="DOCX" value="docx"/>
+			<listitem label="GRAPHICS 2D" value="graphic2d"/>
+			<listitem label="ODS" value="ods"/>
+			<listitem label="PPTX" value="pptx"/>
+			<listitem label="TXT" value="txt"/>
+			<listitem label="XHTML" value="xhtml"/>
+		</listbox>
+		<button label="Report!" onClick='showReport()'/>
+		<jasperreport id="report"/>
+		<zscript><![CDATA[
+		import org.zkoss.zktest.test2.jasperreport.CustomDataSource;
+		
+		void showReport() {
+			//Preparing parameters
+			Map parameters = new HashMap();
+			parameters.put("ReportTitle", "Address Report");
+			parameters.put("DataFile", "CustomDataSource from java");
+			
+			report.setSrc("/data/jasperreport.jasper");
+			report.setParameters(parameters);
+			report.setDatasource(new CustomDataSource());
+			report.setType((String) format.getSelectedItem().getValue());
+		}
+	]]></zscript>
+	</window>
+</zk>
