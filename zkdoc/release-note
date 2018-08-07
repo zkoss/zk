@@ -10,6 +10,7 @@ ZK 8.6.0
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
   ZK-3996: fragment can't parse Chinese characters
+  ZK-4015: Bandbox popup doesn't close when it lose focus
 
 * Upgrade Notes
 

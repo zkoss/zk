@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4015modal.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 07 10:12:28 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window title="" border="none">
+        <div>
+            <forEach begin="0" end="5">
+                <grid sizedByContent="true" width="600px">
+                    <columns>
+                        <column></column>
+                        <column></column>
+                        <column></column>
+                        <column hflex="true"></column>
+                    </columns>
+                    <rows>
+                        <row>
+                            <cell><space height="0px" width="0px"/>*
+                            </cell>
+                            <cell>
+                                <label/>
+                            </cell>
+                            <cell>
+                                <hbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                </hbox>
+                            </cell>
+                            <cell></cell>
+                        </row>
+                        <row>
+                            <cell><space height="0px" width="0px"/>*
+                            </cell>
+                            <cell>
+                                <label/>
+                            </cell>
+                            <cell>
+                                <hbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                </hbox>
+                            </cell>
+                            <cell></cell>
+                        </row>
+                        <row>
+                            <cell><space height="0px" width="0px"/>*
+                            </cell>
+                            <cell>
+                                <label/>
+                            </cell>
+                            <cell>
+                                <hbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                </hbox>
+                            </cell>
+                            <cell></cell>
+                        </row>
+                        <row>
+                            <cell><space height="0px" width="0px"/>*
+                            </cell>
+                            <cell>
+                                <label/>
+                            </cell>
+                            <cell>
+                                <hbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                </hbox>
+                            </cell>
+                            <cell></cell>
+                        </row>
+                        <row>
+                            <cell><space height="0px" width="0px"/>*
+                            </cell>
+                            <cell>
+                                <label/>
+                            </cell>
+                            <cell>
+                                <hbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                    <bandbox>
+                                        <bandpopup>
+                                            <window height="300px"></window>
+                                        </bandpopup>
+                                    </bandbox>
+                                </hbox>
+                            </cell>
+                        </row>
+                    </rows>
+                </grid>
+            </forEach>
+        </div>
+    </window>
+</zk>
