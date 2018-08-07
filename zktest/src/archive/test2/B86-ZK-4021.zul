@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4021.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 07 15:02:56 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. View this page.
+        2. No error in zk log and browser console.
+    </label>
+    <include src="B85-ZK-3676.zul" />
+    <script><![CDATA[
+    jq(window).error(function (e, url, line) {
+        zk.log(e.originalEvent.error);
+    });
+    ]]>
+    </script>
+</zk>
