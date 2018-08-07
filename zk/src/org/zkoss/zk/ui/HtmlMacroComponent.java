@@ -175,6 +175,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		switch (getAutowireFlag()) {
 		case 0: //by selector
 			Selectors.wireComponents(this, this, false);
+			Selectors.wireEventListeners(this, this);
 			addEventListener(-10000, Events.ON_CREATE, new EventListener<Event>() {
 				HtmlMacroComponent hmcomp = HtmlMacroComponent.this;
 				public void onEvent(Event event) throws Exception {

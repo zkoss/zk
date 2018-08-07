@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4016.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Aug 07 14:42:46 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<?component name="mylistbox" macroURI="B86-ZK-4016-mylistbox.zul"
+	class="org.zkoss.zktest.test2.B86_ZK_4016HMComponent"?>
+<zk>
+	<label multiline="true">
+		1. connect to this page.
+		2. click the first listitem(labeled this)
+		3. you should see the class org.zkoss.zktest.test2.B86_ZK_4016HMComponentonCreate click on Client log.
+	</label>
+	<div apply="org.zkoss.zktest.test2.B86_ZK_4016Composer">
+		<mylistbox id="mylistbox"/>
+	</div>
+</zk>
