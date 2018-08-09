@@ -4747,13 +4747,12 @@ _doFooSelect: function (evt) {
 				setTimeout(function () {zk._cfByMD = false; zk._prevFocus = null;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
-
-			if (wgt) // F70-ZK-2007: Add the button number information.
-				zWatch.fire('onFloatUp', wgt, {triggerByClick: which}); //notify all
-			else
-				for (var dtid in zk.Desktop.all)
-					zWatch.fire('onFloatUp', zk.Desktop.all[dtid]); //notify all
 		}
+		if (wgt) // F70-ZK-2007: Add the button number information.
+			zWatch.fire('onFloatUp', wgt, {triggerByClick: which}); //notify all
+		else
+			for (var dtid in zk.Desktop.all)
+				zWatch.fire('onFloatUp', zk.Desktop.all[dtid]); //notify all
 	},
 	/**
 	 * Returns all elements with the given widget name.

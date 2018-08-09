@@ -619,7 +619,7 @@ jq(function () {
 				(oriEvent ? oriEvent.layerY - targetPos.top : undefined);
 		if ((target != body && target != body.parentNode)
 				&& ((!target.clientWidth && !target.clientHeight) || evtX < target.clientWidth && evtY < target.clientHeight)
-				&& (evt.pageX < body.scrollWidth && evt.pageY < body.scrollHeight)) //not click on scrollbar
+				&& (dEvent.clientX < body.clientWidth && dEvent.clientY < body.clientHeight)) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
 
