@@ -6,6 +6,7 @@ ZK 8.6.0
   ZK-3923: Provide a barcode scanner
   ZK-3913: Provide a barcode/QR code component
   ZK-3941: upgrade jasperreport for the latest japerreport version 6.5
+  ZK-3958: Checkbox new molds (switch, toggle)
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true

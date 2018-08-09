@@ -32,6 +32,7 @@ var Checkbox =
 zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	//_tabindex: 0,
 	_checked: false,
+	_disabled: false,
 
 	$define: {
 		/** Returns whether it is disabled.
