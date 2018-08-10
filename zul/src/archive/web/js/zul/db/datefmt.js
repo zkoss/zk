@@ -168,7 +168,7 @@ var LeapDay = zk.$extends(zk.Object, {
 	}
 });
 zk.fmt.Date = {
-	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz) {
+	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz, strictDate) {
 		if (!fmt) fmt = 'yyyy/MM/dd';
 		refval = refval || zUtl.today(fmt, tz);
 
@@ -322,7 +322,7 @@ zk.fmt.Date = {
 					if (!isNaN(nv = _parseInt(token))) {
 						d = nv;
 						dFound = true;
-						if (d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
+						if ((d < 0 || d > 31) && strictDate) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
 							return; //failed
 					}
 					break;
@@ -569,8 +569,8 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		.setFullYear(d.getFullYear() - this._offset);
 		return d;
 	},
-	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz) {
-		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols, tz);
+	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz, strictDate) {
+		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols, tz, strictDate);
 		if (localizedSymbols)
 			this._offset = localizedSymbols.YDELTA;
 

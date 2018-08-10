@@ -26,6 +26,7 @@ var globallocalizedSymbols = {},
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_lenient: true,
+	_strictDate: false,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.afterInit(this.$class._initPopup);
@@ -263,7 +264,18 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (this._pop) {
 				this._pop.setTodayLinkLabel(v);
 			}
-		}
+		},
+		/**
+		 * Sets the strictDate property in datebox. If strictDate is false, it allows the value of date larger than 31 and recalculate it to the correct date.
+		 * @since 8.6.0
+		 * @param boolean strictDate
+		 */
+		/**
+		 * Returns the boolean value of the strictDate
+		 * @since 8.6.0
+		 * @return boolean
+		 */
+		strictDate: null
 	},
 	getIconClass_: function () {
 		return 'z-icon-calendar';
@@ -354,7 +366,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		if (val) {
 			var format = this.getFormat(),
-				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, this._value, this._localizedSymbols, tz);
+				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, this._value, this._localizedSymbols, tz, this._strictDate);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!format.match(/[HkKh]/))
