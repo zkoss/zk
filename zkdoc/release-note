@@ -12,6 +12,8 @@ ZK 8.6.0
   ZK-4008: Grid renders its column width incorrectly with span=true
   ZK-3996: fragment can't parse Chinese characters
   ZK-4015: Bandbox popup doesn't close when it lose focus
+  ZK-3981: shrink a width with a splitter doesn't work
+  ZK-3983: a component doesn't resize correctly with a splitter in a vbox
 
 * Upgrade Notes
 

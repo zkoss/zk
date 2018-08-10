@@ -347,7 +347,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			fd = 'width';
 		}
 		//B70-ZK-2514: make runNext always the same block with the dragging direction, ex. drag to up, up is runNext
-		var runNext = run.next, runPrev = run.prev;
+		var runNext = run.next, runPrev = run.prev, runNextWgt = run.nextwgt, runPrevWgt = run.prevwgt;
 		if (diff < 0) {
 			runNext = run.prev;
 			runPrev = run.next;
@@ -357,34 +357,38 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (!diff) return; //nothing to do
 
-		//F70-ZK-112: clear flex once splitter is moved, that is, make splitter resizeable
-		if (w = run.nextwgt) {
-			if (w.getHflex())
-				w.setHflex('false');
-			if (w.getVflex())
-				w.setVflex('false');
-			zWatch.fireDown('beforeSize', w);
-		}
-		if (w = run.prevwgt) {
-			if (w.getHflex())
-				w.setHflex('false');
-			if (w.getVflex())
-				w.setVflex('false');
-			zWatch.fireDown('beforeSize', w);
-		}
-
+		var wgts = [runNextWgt, runPrevWgt],
+			flexReset = [false, false];
 		//B70-ZK-2514: assign fd to each block separately and count on clientFd in the end
 		if (runNext && runPrev) {
-			var s = zk.parseInt(runNext.style[fd]),
-				s2 = zk.parseInt(runPrev.style[fd]),
+			var upperFd = fd.charAt(0).toUpperCase() + fd.slice(1),
+				s = runNext['client' + upperFd],
+				s2 = runPrev['client' + upperFd],
 				totalFd = s + s2;
+
+			//F70-ZK-112: clear flex once splitter is moved, that is, make splitter resizeable
+			for (var i = 0, w; i < 2; i++) {
+				if (w = wgts[i]) {
+					if (w.getHflex()) {
+						w.setHflex('false');
+						if (!vert)
+							flexReset[i] = true;
+					}
+					if (w.getVflex()) {
+						w.setVflex('false');
+						if (vert)
+							flexReset[i] = true;
+					}
+					zWatch.fireDown('beforeSize', w);
+				}
+			}
 
 			s -= diff;
 			if (s < 0) s = 0;
 			var minusS = totalFd - s;
 			runNext.style[fd] = s + 'px';
 			runPrev.style[fd] = minusS + 'px';
-			var nextClientFd = runNext['client' + fd.charAt(0).toUpperCase() + fd.slice(1)];
+			var nextClientFd = runNext['client' + upperFd];
 			var prevClientFd = totalFd - nextClientFd;
 			if (nextClientFd != s)
 				runNext.style[fd] = nextClientFd + 'px'; //count on clientFd
@@ -397,10 +401,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				runPrev.style.overflow = 'hidden';
 		}
 
-		if (w = run.nextwgt)
+		for (var i = 0, w; i < 2; i++) {
+			w = wgts[i];
+			if (w && flexReset[i]) {
+				w['set' + upperFd]('100%');
+			}
 			zUtl.fireSized(w, -1); //no beforeSize
-		if (w = run.prevwgt)
-			zUtl.fireSized(w, -1); //no beforeSize
+		}
 
 		Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it
