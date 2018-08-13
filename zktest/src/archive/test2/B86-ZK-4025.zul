@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4025.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 13 12:56:47 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        You can see this page without error popup (Failed to parse the content: Lexical error)
+    </label>
+    <fragment><![CDATA[
+		<button onClick="@command('doSomething', data='aaa.bbb')">'.' in string works</button>
+	]]></fragment>
+    <fragment><![CDATA[
+		<button onClick="@command('doSomething', data='aaa_bbb')">'_' in string fails</button>
+	]]></fragment>
+    <fragment><![CDATA[
+		<button onClick="@command('doSomething', data='aaa+bbb')">'+' in string fails</button>
+	]]></fragment>
+    <fragment><![CDATA[
+		<button onClick="@command('doSomething', data='aaa-bbb')">'-' in string fails</button>
+	]]></fragment>
+    <fragment><![CDATA[
+		<button onClick="@command('doSomething', data='aaa@bbb')">'@' in string fails</button>
+	]]></fragment>
+    <fragment><![CDATA[
+		<button onClick="@command('doSomething', data='aaa好bbb')">'好' in string fails</button>
+	]]></fragment>
+    <fragment aaa="bbb"><![CDATA[
+		<button onClick="@command('doSomething', data=aaa, data2=aaa)">data=aaa, data2=aaa</button>
+	]]></fragment>
+    <fragment aaa="bbb"><![CDATA[
+		<button onClick="@command('doSomething', data='aaa', data2=aaa)">data='aaa', data2=aaa</button>
+	]]></fragment>
+    <fragment aaa="bbb"><![CDATA[
+		<button onClick="@command('doSomething', data=aaa, data2='aaa')">data=aaa, data2='aaa'</button>
+	]]></fragment>
+    <fragment aaa="bbb"><![CDATA[
+		<button onClick="@command('doSomething', data='aaa', data2='aaa')">data='aaa', data2='aaa'</button>
+	]]></fragment>
+</zk>
