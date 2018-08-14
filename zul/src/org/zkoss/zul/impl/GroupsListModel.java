@@ -101,6 +101,17 @@ public class GroupsListModel<D, G, F> extends AbstractListModel<Object> implemen
 
 	}
 
+	/**
+	 * Clean up internal listener,
+	 * it will be called when components detached or changing model.
+	 * 
+	 * @since 8.6.0
+	 */
+	public void cleanInternalListener() {
+		if (_model != null && _listener != null)
+			_model.removeGroupsDataListener(_listener);
+	}
+
 	public List<int[]> getGroupsInfos() {
 		_gpinfo = new LinkedList<int[]>();
 		for (int j = 0; j < _gpofs.length; ++j) {

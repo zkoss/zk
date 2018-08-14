@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3977.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Aug 10 15:41:57 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click Toggle
+		2. Click ShowListenersSize
+		3. Record the size of listeners in each component's model (on zk log)
+		4. Click Toggle twice
+		5. Click ShowListenersSize
+		6. Each component's model should have the same size of listeners as before (on zk log)
+	</label>
+	<window apply="org.zkoss.zktest.test2.B86_ZK_3977Composer">
+		<hlayout>
+			<button id="toggle" label="Toggle"/>
+			<button id="showListenersSize" label="ShowListenersSize"/>
+		</hlayout>
+		<div id="container"/>
+	</window>
+</zk>

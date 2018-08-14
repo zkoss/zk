@@ -56,6 +56,7 @@ Aug 28, 2018
   ZK-3987: a label in a cell has a different default color
   ZK-4004: Invisible columns affect mesh column span width count with flex
   ZK-3869: IE11 stackup iframe initially in wrong position
+  ZK-3977: ListModel listdatalistener not cleared when component is destroyed
 
 * Upgrade Notes
 
