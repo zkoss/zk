@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3978.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 14 12:30:33 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Scroll to trigger a ROD load (The position doesn't matter)
+        2. When open/close any tree node, the _onDataLoading should be printed once.
+    </label>
+    <tree height="300px">
+        <custom-attributes org.zkoss.zul.client.rod="true"/>
+        <treecols>
+            <treecol label="item" width="200px"/>
+            <forEach begin="1" end="15" var="col">
+                <treecol label="col-${col}" width="200px"/>
+            </forEach>
+        </treecols>
+        <treechildren>
+            <forEach begin="1" end="10" var="level1">
+                <treeitem>
+                    <apply template="row" level="${level1}"/>
+                    <treechildren>
+                        <forEach begin="1" end="7" var="level2">
+                            <treeitem open="true">
+                                <apply template="row" level="${level1}-${level2}"/>
+                                <treechildren>
+                                    <forEach begin="1" end="5" var="level3">
+                                        <treeitem open="true">
+                                            <apply template="row" level="${level1}-${level2}-${level3}"/>
+                                        </treeitem>
+                                    </forEach>
+                                </treechildren>
+                            </treeitem>
+                        </forEach>
+                    </treechildren>
+                </treeitem>
+            </forEach>
+        </treechildren>
+    </tree>
+
+    <template name="row">
+        <treerow>
+            <treecell label="item-${level}"/>
+            <forEach begin="1" end="15" var="cell">
+                <treecell label="cell-${cell}"/>
+            </forEach>
+        </treerow>
+    </template>
+
+    <script><![CDATA[
+    zk.afterLoad('zul.sel', function () {
+        var _xTree = {};
+        zk.override(zul.sel.Tree.prototype, _xTree, {
+            _onDataLoading: function () {
+                zk.log('_onDataLoading: ', new Date().getTime());
+                _xTree._onDataLoading.apply(this, arguments);
+            }
+        });
+    })
+    ]]></script>
+</zk>
