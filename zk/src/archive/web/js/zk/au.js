@@ -74,6 +74,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	}
 	function doProcess(cmd, data) { //decoded
 		if (!dataNotReady(cmd, data)) {
+			if (!zAu.processPhase) {
+				zAu.processPhase = cmd;
+			}
 			//1. process zAu.cmd1 (cmd1 has higher priority)
 			var fn = zAu.cmd1[cmd];
 			if (fn) {
@@ -87,6 +90,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					return;
 				}
 
+				if (cmd == 'setAttr') {
+					if (!zAu.doAfterProcessWgts) {
+						zAu.doAfterProcessWgts = [];
+					}
+					zAu.doAfterProcessWgts.push(data[0]);
+				}
+
 			} else {
 				//2. process zAu.cmd0
 				fn = zAu.cmd0[cmd];
@@ -94,6 +104,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					return zAu.showError('ILLEGAL_RESPONSE', 'Unknown', cmd);
 			}
 			fn.apply(zAu, data);
+			zAu.processPhase = null;
 		}
 	}
 
@@ -198,6 +209,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					zAu.showError('FAILED_TO_PROCESS', null, cmd.cmd, e);
 					if (!ex) ex = e;
 				}
+			}
+			if (zAu.doAfterProcessWgts) {
+				zAu.doAfterProcessWgts.forEach(function (wgt) {
+					if (wgt.doAfterProcessRerenderArgs) {
+						wgt.rerender.apply(wgt, wgt.doAfterProcessRerenderArgs);
+						wgt.doAfterProcessRerenderArgs = null;
+					}
+				});
+				zAu.doAfterProcessWgts = null;
 			}
 		} finally {
 		//Bug #2871135, always fire since the client might send back empty

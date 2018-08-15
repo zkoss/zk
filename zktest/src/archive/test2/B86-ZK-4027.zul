@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4027.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Aug 15 12:47:34 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<script><![CDATA[ 
+	zk.count = 0;
+	zk.afterLoad('zul.sel', function() {
+		var xListbox = {};
+		zk.override(zul.sel.Listbox.prototype, xListbox ,{
+			replaceHTML: function () {
+				zk.count++;
+				zk.log('replaceHTML:' + zk.count);
+				this.$supers('replaceHTML', arguments);
+			}
+		});//zk.override
+	});//zk.afterLoad
+	]]></script>
+
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+		boolean check = false;
+		
+		void doUpdate(){
+			check = !check;
+			listbox.setCheckmark(check);
+			model.setMultiple(check);
+		}
+	]]></zscript>
+	
+	<label multiline="true">
+		1. click the button
+		2. "replaceHTML:1" should be seen on zk log(replaceHTML:1 replaceHTML:2 is wrong)
+	</label>
+	<div height="500px">
+		<button onClick="doUpdate()"/>
+		<listbox id="listbox"
+	         model="${model}" vflex="1">
+		</listbox>
+	</div>
+</zk>

@@ -107,7 +107,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		 */
 		checkmark: function (checkmark) {
 			if (this.desktop)
-				this.rerender();
+				this.rerenderLater_();
 		},
 		/**
 		 * Returns whether multiple selections are allowed.
@@ -132,7 +132,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				this._selItems.push(item);
 			}
 			if (this._checkmark && this.desktop)
-				this.rerender();
+				this.rerenderLater_();
 		},
 		/**
 		 * Returns the index of the selected item (-1 if no one is selected).
