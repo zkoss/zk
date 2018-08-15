@@ -1,0 +1,89 @@
+/*
+ Copied from
+ https://github.com/zkoss-demo/zk-template-examples/blob/master/src/main/webapp/stepbar/stepbar.css
+*/
+
+.stepbar {
+    display: flex;
+}
+
+.stepbar > .step {
+    position: relative;
+    flex: 1;
+    display: inline-block;
+    text-align: center;
+}
+
+.stepbar > .step > .step-icon {
+    display: inline-block;
+    background-color: LightSkyBlue;
+    color: white;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 26px;
+    line-height: 40px;
+    transition: all 0.5s;
+}
+
+.stepbar > .step:before {
+    content: ' ';
+    position: absolute;
+    display: block;
+    top: 18px;
+    height: 4px;
+    left: 0px;
+    right: 0px;
+    background-color: LightSkyBlue;
+    z-index: -1;
+}
+
+.stepbar > .step {
+    cursor: pointer;
+}
+
+.stepbar > .step:first-child:before {
+    left: 50%;
+}
+
+.stepbar > .step:last-child:before {
+    right: 50%;
+}
+
+.stepbar > .step.current:before {
+    background-image: linear-gradient(to right, LightSkyBlue, SandyBrown 50%, LightGrey);
+}
+
+.stepbar > .step.current {
+    cursor: default;
+}
+
+.stepbar > .step:first-child.current:before {
+    background-image: linear-gradient(to right, SandyBrown, LightGrey);
+}
+.stepbar > .step:last-child.current:before {
+    background-image: linear-gradient(to right, LightSkyBlue, SandyBrown);
+}
+
+.stepbar > .step.current > .step-icon {
+    background-color: SandyBrown;
+    color: white;
+}
+
+.stepbar > .step > .step-label {
+    display: block;
+    padding: 5px;
+}
+
+.stepbar > .step.current ~ .step:before {
+    background-color: LightGrey;
+}
+
+.stepbar > .step.current ~ .step {
+    cursor: default;
+}
+
+.stepbar > .step.current ~ .step > .step-icon {
+    background-color: LightGrey;
+    color: DarkGray;
+}
