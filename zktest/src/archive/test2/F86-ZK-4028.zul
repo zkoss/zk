@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4028.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Aug 15 17:02:51 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zk.ui.Component;
+        import org.zkoss.zk.ui.sys.ComponentCtrl;
+        import org.zkoss.zk.ui.util.Clients;
+        import java.io.ByteArrayInputStream;
+        import java.io.ByteArrayOutputStream;
+        import java.io.ObjectInputStream;
+        import java.io.ObjectOutputStream;
+
+        byte[] _bytes;
+
+        public void doSerialize(Component comp) {
+            try {
+                doSerialize0(comp);
+                doDeserialize0(comp);
+            } catch(Exception x) {
+                x.printStackTrace();
+                Clients.log("error :" + x.getClass() + "," + x.getMessage());
+            }
+        }
+
+        public void doSerialize0(Component comp) throws Exception {
+            Page pg = comp.getPage();
+            ((ComponentCtrl) comp).sessionWillPassivate(pg); //simulate
+            ByteArrayOutputStream oaos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(oaos);
+            oos.writeObject(comp);
+            oos.close();
+            oaos.close();
+            _bytes = oaos.toByteArray();
+        }
+
+        public void doDeserialize0(Component comp) throws Exception {
+            ByteArrayInputStream oaos = new ByteArrayInputStream(_bytes);
+            ObjectInputStream oos = new ObjectInputStream(oaos);
+
+            Component newComp = (Component) oos.readObject();
+            Page pg = comp.getPage();
+            Component parent = comp.getParent();
+            Component ref = comp.getNextSibling();
+            comp.detach();
+            oos.close();
+            oaos.close();
+            parent.insertBefore(newComp, ref);
+            //for load component back.
+            ((ComponentCtrl) newComp).sessionDidActivate(newComp.getPage()); //simulate
+            Clients.log("done deserialize: " + _bytes.length);
+        }
+    ]]>
+    </zscript>
+    <hlayout>
+        <label multiline="true">
+            Navigation
+            1. Click button "Direct NavTo Configuration/Authentication/AAA Profiles".
+            2. You can see Level 1 Configuration, Level 2 Authentication and Level 3 AAA Profiles.
+            3. Click link "Maintenance".
+            4. You can see Level 1 Maintenance.
+            5. Click button "NavTo Configuration".
+            6. You can see Level 1 Configuration but no Level 2.
+        </label>
+        <label multiline="true">
+            Insert / Remove
+            1. Click button "InsertBefore Diagnostics"
+            2. You can see the link "New Item" was added.
+            3. Click button "InsertBefore Diagnostics" again, an error popped up.
+            4. Click link "Diagnostics" then click button "Remove Diagnostics".
+            5. You can see the link "Diagnostics" was removed and the navigation of Level 1 is Maintenance.
+            6. Click button "Remove Maintenance".
+            7. You can see the link "Maintenance" was removed and the navigation of Level 1 is New Item.
+        </label>
+        <label multiline="true">
+            Test serialize/deserialize
+            1. Click button "Direct NavTo Configuration/Authentication/AAA Profiles".
+            2. Click button "Test serialize/deserialize".
+            3. Click link "Auth Servers", and the Level 3 is now Auth Servers
+        </label>
+    </hlayout>
+
+    <nodom>
+        <div id="main" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_4028VM')">
+            <vlayout>
+                <forEach items="@load(vm.navModel.child eq null ? [] : vm.navModel.child.items)">
+                    <a onClick="@command('levelNavTo', level=vm.navModel.child, key=self.label)" label="@init(each.x)"/>
+                </forEach>
+            </vlayout>
+
+            <button label="Remove Diagnostics" onClick='@command("remove", path="Diagnostics")' />
+            <button label="Remove Maintenance" onClick='@command("remove", path="Maintenance")' />
+            <button label="InsertBefore Diagnostics" onClick='@command("insert")' />
+            <button label="Direct NavTo Configuration/Authentication/AAA Profiles" onClick='@command("navTo", path="Configuration/Authentication/AAA Profiles")'/>
+
+            <navigation level="@load(vm.navModel.child)"
+                        templateURI="@load(self.level.current eq null ? null : self.level.current.url)"
+                        data="@load(self.level.current)"
+                        context="@load(self.level.context)"/>
+        </div>
+        <button label="Test serialize/deserialize" onClick='doSerialize(main)' />
+    </nodom>
+</zk>

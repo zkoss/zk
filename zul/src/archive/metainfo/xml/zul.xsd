@@ -666,6 +666,7 @@
 			<xs:element ref="menubar" />
 			<xs:element ref="menupopup" />
 			<xs:element ref="navbar" />
+			<xs:element ref="navigation" />
 			<xs:element ref="otherwise" />
 			<xs:element ref="paging" />
 			<xs:element ref="panel" />
@@ -769,6 +770,7 @@
 				<xs:element ref="menubar" />
 				<xs:element ref="menupopup" />
 				<xs:element ref="navbar" />
+				<xs:element ref="navigation" />
 				<xs:element ref="otherwise" />
 				<xs:element ref="paging" />
 				<xs:element ref="panel" />
@@ -2316,6 +2318,15 @@
 	<xs:complexType name="navseparatorType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!-- navigation -->
+	<xs:element name="navigation" type="navigationType" />
+	<xs:complexType name="navigationType">
+		<xs:simpleContent>
+			<xs:extension base="applyType">
+				<xs:attribute name="level" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<!-- north -->
 	<xs:element name="north" type="layoutRegionType" />
