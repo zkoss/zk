@@ -27,6 +27,7 @@ ZK 8.6.0
   ZK-3879: listbox autopaging does not work with external paginal
   ZK-4033: tree items cause JS error with radiogroup
   ZK-3760: Navbar submenu appears in the wrong position
+  ZK-4026: shadow <if> re-renders too eagerly
 
 * Upgrade Notes
 

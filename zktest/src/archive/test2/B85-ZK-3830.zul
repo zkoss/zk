@@ -17,7 +17,9 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		public class Pojo {
 			private String status = "yellow";
 			public String getStatus() {return status;}
-			public void setStatus(String status) {this.status = status;}
+			public void setStatus(String status) {
+				this.status = status;
+			}
 		}
 		Pojo pojo = new Pojo();
 		pojo.setStatus("red");
@@ -41,7 +43,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 					<button label="GREEN" style="background-color: green"/>
 				</when>
 				<when test="@load(pojo.status ne 'other')">
-					<button label="${pojo.status}" style="background-color: ${pojo.status}"/>
+					<button label="@load(pojo.status)" style="@load('background-color: '.concat(pojo.status))"/>
 				</when>
 				<!--<otherwise/>-->
 			</choose>
