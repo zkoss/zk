@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3981.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Aug 7 10:44:40 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Drag splitter, the splitter position should be display as expect.
+	<hbox spacing="0" width="100%" height="100%" widths="25%,50%,25%">
+		area 1
+		<splitter/>
+		area 2
+		<splitter/>
+		area 3
+	</hbox>
+</zk>
