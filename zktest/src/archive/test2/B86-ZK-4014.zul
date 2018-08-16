@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4014.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Thu Aug 02 16:50:35 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+    jq(window).error(function (error) {
+        zk.log(error.originalEvent.error);
+    });
+    ]]>
+    </script>
+    <label multiline="true">
+        1. You should see "0 3 6 9" and "test3 test4".
+        2. You shouldn't see zk log with an exception.
+    </label>
+    <fragment viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4014VM')" lists="@load(vm.model)"><![CDATA[
+        <forEach begin="0" end="10" step="3" var="x">
+            <div textContent="@load(x)" />
+        </forEach>
+        <forEach begin="2" items="@load(lists)">
+            <div textContent="@load(each)" />
+        </forEach>
+    ]]></fragment>
+</zk>

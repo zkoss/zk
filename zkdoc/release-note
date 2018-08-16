@@ -15,6 +15,7 @@ ZK 8.6.0
   ZK-4015: Bandbox popup doesn't close when it lose focus
   ZK-3981: shrink a width with a splitter doesn't work
   ZK-3983: a component doesn't resize correctly with a splitter in a vbox
+  ZK-4014: Fragment doesn't support forEach with iterative variable
 
 * Upgrade Notes
 
