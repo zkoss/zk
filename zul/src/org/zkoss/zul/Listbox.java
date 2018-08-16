@@ -2419,8 +2419,7 @@ public class Listbox extends MeshElement {
 			final Listheader hd = (Listheader) it.next();
 			String dir = hd.getSortDirection();
 			if (!"natural".equals(dir)) {
-				hd.doSort("ascending".equals(dir));
-				return true;
+				return hd.doSort("ascending".equals(dir));
 			}
 		}
 		return false;
@@ -2634,8 +2633,12 @@ public class Listbox extends MeshElement {
 		int type = event.getType();
 		if ((type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.CONTENTS_CHANGED)
 				&& !isIgnoreSortWhenChanged()) {
-			doSort(this);
-			getDataLoader().updateModelInfo();
+			if (doSort(this)) {
+				getDataLoader().updateModelInfo();
+			} else {
+				getDataLoader().doListDataChange(event);
+				postOnInitRender(); // to improve performance
+			}
 		} else if (type == ListDataEvent.SELECTION_CHANGED) {
 			if (!_ignoreDataSelectionEvent) {
 				if (event.getIndex0() > -1) {

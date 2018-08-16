@@ -898,8 +898,7 @@ public class Grid extends MeshElement {
 			final Column hd = (Column) it.next();
 			String dir = hd.getSortDirection();
 			if (!"natural".equals(dir)) {
-				hd.doSort("ascending".equals(dir));
-				return true;
+				return hd.doSort("ascending".equals(dir));
 			}
 		}
 		return false;
@@ -1122,8 +1121,12 @@ public class Grid extends MeshElement {
 		int type = event.getType();
 		if ((type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.CONTENTS_CHANGED)
 				&& !isIgnoreSortWhenChanged()) {
-			doSort(this);
-			getDataLoader().updateModelInfo();
+			if (doSort(this)) {
+				getDataLoader().updateModelInfo();
+			} else {
+				getDataLoader().doListDataChange(event);
+				postOnInitRender(); // to improve performance
+			}
 		} else {
 			if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
 					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))

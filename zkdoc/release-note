@@ -16,6 +16,7 @@ ZK 8.6.0
   ZK-3981: shrink a width with a splitter doesn't work
   ZK-3983: a component doesn't resize correctly with a splitter in a vbox
   ZK-4014: Fragment doesn't support forEach with iterative variable
+  ZK-4017: Grid renders nothing after clear() and addAll()
 
 * Upgrade Notes
 
