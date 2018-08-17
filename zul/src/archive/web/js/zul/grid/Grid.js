@@ -221,7 +221,6 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			if (this._shallFixEmpty)
 				_fixForEmpty(this);
 		}
-		this.$supers(Grid, 'onResponse', arguments);
 	},
 	// this function is used for Grid, Rows, and Columns
 	_syncEmpty: function () {

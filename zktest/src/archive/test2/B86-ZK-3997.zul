@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3997.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 9 14:43:20 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+    ListModelList model = new ListModelList();
+    model.add("");
+  ]]></zscript>
+	<div>
+		<label>Click "+1" button, and you should see that the size of those component inside listbox should be correct.</label>
+		<custom-attributes org.zkoss.zul.listbox.rod="true" />
+		<style>
+			.z-listcell-content>z-bandbox>.z-bandbox-input { width: calc(100% - 21px); }
+		</style>
+		<button label="+1" onClick='model.add("");model.add("");model.add("");' />
+		<listbox id="list" model="${model}">
+			<template name="model">
+				<listitem>
+					<listcell hflex="1"> <textbox width="100%" /> </listcell>
+					<listcell hflex="1"> <combobox width="100%" /> </listcell>
+					<listcell hflex="1"> <bandbox width="100%" /> </listcell>
+					<listcell> <datebox width="100%" /> </listcell>
+					<listcell> <timebox width="100%" /> </listcell>
+					<listcell> <timepicker width="100%" /> </listcell>
+					<listcell> <spinner width="100%" /> </listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>
