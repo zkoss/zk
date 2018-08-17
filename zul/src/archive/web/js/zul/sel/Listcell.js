@@ -107,10 +107,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments),
-			p = this.parent;
+			p = this.parent,
+			head = this.getListheader();
 
 		if ((!no || !no.zclass) && (_isListgroup(p) || _isListgroupfoot(p)))
 			scls += ' ' + p.$s('inner');
+		if (head && !head.isVisible())
+			scls += ' ' + this.$s('hidden-header');
 
 		return scls;
 	},
@@ -195,14 +198,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				style += 'vertical-align:' + head._valign + ';';
 		}
 		return style;
-	},
-	domClass_: function (no) {
-		var scls = this.$supers('domClass_', arguments),
-			head = this.getListheader();
-		if (head) {
-			if (!head.isVisible()) scls += ' ' + this.$s('hidden-header');
-		}
-		return scls;
 	},
 	bindChildren_: function () {
 		var p;
