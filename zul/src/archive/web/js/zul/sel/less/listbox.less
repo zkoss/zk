@@ -66,9 +66,11 @@
 		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
+		white-space: nowrap;
 		.resetTable();
 
 		.z-listfooter {
+			overflow: hidden;
 			background: @meshFootBackgroundColor;
 		}
 	}
@@ -425,6 +427,11 @@ body:not(.gecko) {
 .z-select {
 	font-family: @baseContentFontFamily;
 	font-size: @fontSizeMedium;
+}
+// hidden header
+.z-listcell-hidden-header {
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .ie {

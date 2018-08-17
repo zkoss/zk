@@ -50,9 +50,11 @@
 		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
+		white-space: nowrap;
 		.resetTable();
 
 		.z-treefooter {
+			overflow: hidden;
 			background: @meshFootBackgroundColor;
 		}
 	}
@@ -230,6 +232,11 @@
 			position: relative;
 		}
 	}
+}
+// hidden col
+.z-treecell-hidden-col {
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 body:not(.gecko) {

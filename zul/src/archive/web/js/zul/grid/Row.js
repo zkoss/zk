@@ -179,7 +179,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			child._headerVisible = opts.visible;
 		else {
 			out.push('<td id="', child.uuid, '-chdextr"',
-				this._childAttrs(child, opts.index, !opts.visible), '><div id="', child.uuid,
+				this._childAttrs(child, opts.index), '><div id="', child.uuid,
 				'-cell" class="', opts.zclass, '-content">');
 		}
 		child.redraw(out);
@@ -188,7 +188,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (!opts.out)
 			return out.join('');
 	},
-	_childAttrs: function (child, index, headerNotVisible) {
+	_childAttrs: function (child, index) {
 		var realIndex = index, span = 1;
 		if (this._spans) {
 			for (var j = 0, k = this._spans.length; j < k; ++j) {
@@ -200,15 +200,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			}
 		}
 		var visible, hgh, align, valign,
-			width0 = zul.mesh.MeshWidget.WIDTH0,
 			grid = this.getGrid();
 		if (grid) {
 			var cols = grid.columns;
 			if (cols) {
 				if (realIndex < cols.nChildren) {
 					var col = cols.getChildAt(realIndex);
-					// ZK-3600: Prevent the dummy cell from hiding if the first column is invisible
-					visible = headerNotVisible ? 'text-overflow: ellipsis;white-space: nowrap;' : col.isVisible() || (grid._model && !this._loaded) ? '' : 'width: ' + width0 + ';';
+					visible = col.isVisible();
 					hgh = col.getHeight();
 					align = col.getAlign();
 					valign = col.getValign();
@@ -222,8 +220,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			if (wd)
 				style += 'width:' + wd + ';';
 		}
-		if (visible || hgh || align || valign) {
-			style += visible;
+		if (hgh || align || valign) {
 			if (hgh)
 				style += 'height:' + hgh + ';';
 			if (align)
@@ -239,6 +236,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			attrs += ' nowrap="nowrap"';
 		if (style)
 			attrs += ' style="' + style + '"';
+		if (visible === false)
+			clx += ' ' + this.$s('hidden-column');
 		return attrs + ' class="' + clx + '"';
 	},
 	/**

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4011.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 01 12:50:22 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    List list = new ArrayList();
+    for (int i = 0; i < 100; i++) {
+        list.add(i);
+    }
+    ListModelList model = new ListModelList(list);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. You can only see column 2, 3 and 5 at first.
+        2. Click "switch 1 visible" button, column 1 will be visible.
+        3. Click "switch 6 visible" button, column 6 will be visible and Aux 3 is visible.
+    </label>
+    <grid model="${model}" height="300px">
+        <auxhead>
+            <auxheader colspan="3" label="Aux 1"/>
+            <auxheader colspan="2" label="Aux 2"/>
+            <auxheader colspan="1" label="Aux 3"/>
+        </auxhead>
+        <columns sizable="true">
+            <column id="c1" width="4%"  label="1 hidden" visible="false" />
+            <column id="c2" width="15%" label="2 visible" />
+            <column id="c3" width="25%" label="3 visible" />
+            <column id="c4" width="35%" label="4 hidden" visible="false" />
+            <column id="c5" width="25%" label="5 visible" />
+            <column id="c6" width="12%" label="6 hidden " visible="false" />
+        </columns>
+        <template name="model">
+            <row>
+                <cell>1</cell>
+                <cell>2</cell>
+                <cell>3</cell>
+                <cell>4</cell>
+                <cell>5</cell>
+                <cell>6</cell>
+            </row>
+        </template>
+        <foot>
+            <footer label="ft 1"/>
+            <footer label="ft 2"/>
+            <footer label="ft 3"/>
+            <footer label="ft 4"/>
+            <footer label="ft 5"/>
+            <footer label="ft 6"/>
+        </foot>
+    </grid>
+    <button label="switch 1 visible" onClick="c1.visible = !c1.visible"/>
+    <button label="switch 6 visible" onClick="c6.visible = !c6.visible"/>
+</zk>

@@ -1317,9 +1317,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		out.push('<colgroup id="', head.uuid, fakeId, '">');
 		for (var w = head.firstChild; w; w = w.nextSibling) {
 			var wd = this.$class._getWidth(w, w._hflexWidth ? w._hflexWidth + 'px' : w.getWidth()),
+				visibility = w.isVisible() ? '' : 'visibility: collapse;';
 			// B70-ZK-2036: Style width should end with 'px'.
-			wd = wd ? 'width: ' + wd + ';' : '';
-			out.push('<col id="', w.uuid, fakeId, '" style="', wd, '"/>');
+			wd = wd != null ? 'width: ' + wd + ';' : '';
+			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visibility, '"/>');
 		}
 		if (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0)
 			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" />');

@@ -56,6 +56,7 @@
 		background: @meshFootBackgroundColor;
 		border-top: 1px solid @baseBorderColor;
 		overflow: hidden;
+		white-space: nowrap;
 		.resetTable();
 		
 		.z-footer {
@@ -291,6 +292,11 @@ body:not(.gecko) {
 }
 .z-columns-menudescending .z-menuitem-image {
 	.encodeThemeURL(background-image, '~./zul/img/grid/menu-arrowdown.png');
+}
+// Hidden column
+.z-cell-hidden-column, .z-row-hidden-column {
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .ie {

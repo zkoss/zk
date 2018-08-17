@@ -163,15 +163,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				$faker = jq(this.$n('hdfaker')),
 				w = this.getWidth();
 			if (!this.isVisible()) {
-				// B70-ZK-2036: Set width to 1px if browser is safari.
-				var wd = width0;
 				$n.css('display', '');
-				// B70-ZK-2036: Change the header width.
-				$n.css('width', wd);
-				$n.css('visibility', 'hidden');
 				$faker.css('display', '');
-				$faker.css('visibility', 'hidden');
-				$faker.css('width', wd);
+				$faker.css('visibility', 'collapse');
+				$faker.css('width', width0);
 			} else {
 				$faker.css('visibility', '');
 				// B70-ZK-2036: Check if header has hflex width first.

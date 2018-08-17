@@ -55,11 +55,10 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	domStyle_: function (no) {
 		var style = this.$super('domStyle_', zk.copy(no, {width: true})),
 				//bug#3185657: not span content if given width
-			tc = this.getTreecol(),
-			width0 = zul.mesh.MeshWidget.WIDTH0;
+			tc = this.getTreecol();
 			// B70-ZK-2946: adds the text-align from treecol, same as Listcell
 		if (tc) if (tc._align) style += 'text-align: ' + tc._align + ';';
-		return this.isVisible() && tc && !tc.isVisible() ? style + 'width: ' + width0 + ';' : style;
+		return this.isVisible() && tc && style;
 	},
 	/** Returns the tree col associated with this cell, or null if not available.
 	 * @return Treecol
@@ -249,6 +248,14 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	domAttrs_: function () {
 		return this.$supers('domAttrs_', arguments)
 			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '');
+	},
+	domClass_: function (no) {
+		var scls = this.$supers('domClass_', arguments),
+			col = this.getTreecol();
+		if (col) {
+			if (!col.isVisible()) scls += ' ' + this.$s('hidden-col');
+		}
+		return scls;
 	},
 	updateDomContent_: function () {
 		this.$supers('updateDomContent_', arguments);

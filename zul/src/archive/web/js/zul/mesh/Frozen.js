@@ -345,7 +345,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 				//ZK-2776, once a column is hidden, there is an additional style
 				var style = n.style;
-				if (style.visibility == 'hidden' || style.display == 'none' /*just in case*/)
+				if (style.visibility == 'hidden' || style.visibility == 'collapse' || style.display == 'none' /*just in case*/)
 					continue; //skip column which is hide
 
 				if (cnt-- <= 0) { //show
