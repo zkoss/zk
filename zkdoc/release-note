@@ -18,6 +18,7 @@ ZK 8.6.0
   ZK-3983: a component doesn't resize correctly with a splitter in a vbox
   ZK-4014: Fragment doesn't support forEach with iterative variable
   ZK-4017: Grid renders nothing after clear() and addAll()
+  ZK-4025: fragment-component parser fails to parse string-literals with special chars
 
 * Upgrade Notes
 
