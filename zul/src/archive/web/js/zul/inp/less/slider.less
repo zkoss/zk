@@ -2,6 +2,7 @@
 
 .z-slider {
 	background-image: none;
+	overflow: hidden;
 
 	&-center {
 		background-color: @sliderBackgroundColor;
@@ -27,6 +28,30 @@
 	&-area {
 		position: absolute;
 		background-color: @sliderAreaBackgroundColor;
+	}
+
+	&-knob-area {
+		stroke: @sliderAreaBackgroundColor;
+		data-angleOffset: 0;
+	}
+
+	&-knob-inner {
+		stroke: @sliderBackgroundColor;
+		data-angleOffset: 0;
+	}
+
+	&-knob-svg {
+		cursor: pointer;
+	}
+
+	&-input {
+		border: 1px solid @sliderAreaBackgroundColor;
+		background: none;
+		-webkit-appearance: none;
+		color: @sliderAreaBackgroundColor;
+		text-align: center;
+		position: relative;
+		font: bold 12px Arial;
 	}
 
 	&-horizontal {

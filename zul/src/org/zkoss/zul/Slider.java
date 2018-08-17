@@ -38,6 +38,10 @@ public class Slider extends XulElement {
 	private String _slidingtext = "{0}";
 	private boolean _resetWidth = true; //B80-ZK-2895
 
+	//knob mode property
+	private double _angleArc = 360.0;
+	private double _strokeWidth = 10.0;
+
 	/** Represent integer slider.
 	 * @since 7.0.1
 	 */
@@ -458,6 +462,50 @@ public class Slider extends XulElement {
 		setMaxpos(maxpos);
 	}
 
+	/** Sets the degree of arc for the knob slider.
+	 * <p>Default : 360.0
+	 * @param angleArc is the degree of arc of the knob slider. The unit is degrees (360° for a circle).
+	 * @since 8.6.0
+	 */
+	public void setAngleArc(double angleArc) {
+		if (angleArc > 360 || angleArc < 0) {
+			throw new WrongValueException("The value of angleArc should be between 0 and 360 degree");
+		} else if (_angleArc != angleArc) {
+			_angleArc = angleArc;
+			smartUpdate("angleArc", _angleArc);
+		}
+	}
+
+	/** Returns the degree of arc of the knob slider.
+	 * <p>Default: 360.0
+	 * @since 8.6.0
+	 */
+	public double getAngleArc(double angleArc) {
+		return _angleArc;
+	}
+
+	/** Sets the stroke width of the knob slider.
+	 * <p>Default: 10.0 
+	 * @param strokeWidth is the stroke width for the knob slider
+	 * @since 8.6.0
+	 */
+	public void setStrokeWidth(double strokeWidth) {
+		if (strokeWidth <= 0)
+			throw new WrongValueException("The value of strokeWidth should be larger than 0");
+		if (_strokeWidth != strokeWidth) {
+			_strokeWidth = strokeWidth;
+			smartUpdate("strokeWidth", _strokeWidth);
+		}
+	}
+
+	/** Returns the stroke width of the knob slider.
+	 * <p>Default: 
+	 * @since 8.6.0
+	 */
+	public double getStrokeWidth(double strokeWidth) {
+		return _strokeWidth;
+	}
+
 	//-- super --//
 
 	//-- Component --//
@@ -503,6 +551,10 @@ public class Slider extends XulElement {
 			renderer.render("pageIncrement", _pginc);
 		if (_step > 0)
 			renderer.render("step", _step);
+		if (_strokeWidth != 10.0)
+			renderer.render("strokeWidth", _strokeWidth);
+		if (_angleArc != 360.0)
+			renderer.render("angleArc", _angleArc);
 		if (_name != null)
 			renderer.render("name", _name);
 		if (!INTEGER.equals(_mode))
