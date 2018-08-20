@@ -23,6 +23,7 @@ ZK 8.6.0
   ZK-4010: invisible listheaders are still visible in IE
   ZK-4011: invisible columns are still visible in IE
   ZK-4019: z-columns-bar doesn't have correct width when a scrollbar appears
+  ZK-3997: Listbox items not resized after ROD triggers zk.Widget.prototype.replaceCavedChildren_
 
 * Upgrade Notes
 

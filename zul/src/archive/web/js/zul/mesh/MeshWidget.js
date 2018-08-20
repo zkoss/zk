@@ -739,11 +739,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.efrozen)
 				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
 		}
-		zWatch.listen({onSize: this, onResponse: this});
+		zWatch.listen({onSize: this, onCommandReady: this});
 	},
 	unbind_: function () {
 		unlistenOnFitSize(this);
-		zWatch.unlisten({onSize: this, onResponse: this});
+		zWatch.unlisten({onSize: this, onCommandReady: this});
 		if (this.ehead) //sync scroll for input tab key scroll
 			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
 		var ebody = this.ebody;
@@ -773,10 +773,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			} else {
 				this._fixHeaders();
 			}
-			this.onSize();
+			zWatch.fireDown('onSize', this);
 		}
 	},
-	onResponse: function () {
+	onCommandReady: function () {
 		if (this._shallSize) {
 			this.syncSize();
 			this._shallSize = false; // just in case
