@@ -12,7 +12,6 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -26,11 +25,11 @@ public class B80_ZK_3131Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		Integer length = Integer.parseInt(getEval("document.styleSheets.length"));
+		int length = Integer.parseInt(getEval("document.styleSheets.length"));
 		for (int i = 0 ; i < length ; i++){
 			String sheet = getEval("document.styleSheets[" + i + "].href");
 			if (sheet.contains("googleapis")) {
-				assertEquals("http://fonts.googleapis.com/css?family=Open+Sans:400,700", sheet);
+				assertEquals("http://fonts.googleapis.com/css?family=Open+Sans:400,700", stripJsessionid(sheet));
 			}
 		}
 	}
