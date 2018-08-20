@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4019.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Aug 15 11:25:19 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	public void add(){
+		model.add(System.currentTimeMillis() + "");
+	}
+	]]></zscript>
+	<label multiline="true">
+		1. click "add" button 3 times to produce a vertical scrollbar in the first Grid
+		2. jq('.z-columns-bar') should have non-zero px width
+	</label>
+	<button label="add" onClick="add()"/>
+	<grid  model="${model}" height="100px">
+		<custom-attributes org.zkoss.zul.grid.rod="false"/>
+		<columns>
+			<column label="col 1" />
+			<column label="col 2" />
+		</columns>
+		<template name="model">
+			<row>
+				<label value="${each}"/>
+				<label value="${each}"/>
+			</row>
+		</template>
+	</grid>
+
+</zk>

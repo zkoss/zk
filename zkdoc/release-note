@@ -22,6 +22,7 @@ ZK 8.6.0
   ZK-4025: fragment-component parser fails to parse string-literals with special chars
   ZK-4010: invisible listheaders are still visible in IE
   ZK-4011: invisible columns are still visible in IE
+  ZK-4019: z-columns-bar doesn't have correct width when a scrollbar appears
 
 * Upgrade Notes
 
