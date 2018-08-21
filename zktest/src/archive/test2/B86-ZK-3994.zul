@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3994.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 20 18:22:26 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. You should see headers "h2, h3, h4" and columns "c2, c3, c4".
+        2. Click "Toggle h1 visible"
+        3. You should see headers "h1, h2, h3, h4" and columns "c2, c3, c4".
+        4. Click "Toggle h1 visible" again
+        5. (The same as step 1) You should see headers "h2, h3, h4" and columns "c2, c3, c4".
+    </label>
+    <zscript><![CDATA[
+    void toggleHeader() {
+        tg1.visible = !tg1.visible;
+        tg2.visible = !tg2.visible;
+        tg3.visible = !tg3.visible;
+    }
+    ]]>
+    </zscript>
+    <button onClick="toggleHeader()" label="Toggle h1 visible" />
+    <vlayout>
+        Listbox
+        <listbox>
+            <listhead>
+                <listheader id="tg1" label="h1" visible="false"/>
+                <listheader label="h2"/>
+                <listheader label="h3"/>
+                <listheader label="h4"/>
+            </listhead>
+            <listitem>
+                <listcell visible="false" label="c1"/>
+                <listcell label="c2" />
+                <listcell label="c3"/>
+                <listcell label="c4"/>
+            </listitem>
+        </listbox>
+        Grid
+        <grid>
+            <columns>
+                <column id="tg2" label="h1" visible="false"/>
+                <column label="h2"/>
+                <column label="h3"/>
+                <column label="h4"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell visible="false"><label value="c1" /></cell>
+                    <cell><label value="c2" /></cell>
+                    <cell><label value="c3" /></cell>
+                    <cell><label value="c4" /></cell>
+                </row>
+            </rows>
+        </grid>
+        Tree
+        <tree>
+            <treecols>
+                <treecol id="tg3" label="h1" visible="false"/>
+                <treecol label="h2"/>
+                <treecol label="h3"/>
+                <treecol label="h4"/>
+            </treecols>
+            <treechildren>
+                <treeitem>
+                    <treerow>
+                        <treecell visible="false" label="c1"/>
+                        <treecell label="c2" />
+                        <treecell label="c3"/>
+                        <treecell label="c4"/>
+                    </treerow>
+                </treeitem>
+            </treechildren>
+        </tree>
+    </vlayout>
+</zk>

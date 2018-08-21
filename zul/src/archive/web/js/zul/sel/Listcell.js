@@ -189,15 +189,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	},
 	//-- super --//
 	domStyle_: function (no) {
-		var style = this.$supers('domStyle_', arguments),
+		var style = '',
 			head = this.getListheader();
 		if (head) {
 			if (head._align)
 				style += 'text-align:' + head._align + ';';
 			if (head._valign)
 				style += 'vertical-align:' + head._valign + ';';
+			if (!head.isVisible())
+				no = zk.copy(no, {visible: true});
 		}
-		return style;
+		return this.$supers('domStyle_', [no]) + style;
 	},
 	bindChildren_: function () {
 		var p;
