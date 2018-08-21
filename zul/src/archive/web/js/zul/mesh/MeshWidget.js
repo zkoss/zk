@@ -282,7 +282,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				pgibHgh = pgib.offsetHeight;
 			var withPgibMax = max + pgibHgh;
 			if (top <= withPgibMax) { //row not exceeds the height, estimate
-				var totalsz = wgt.paging.getTotalSize(),
+				var paging = (wgt.paging) ? wgt.paging : wgt.getPaginal(),
+					totalsz = paging.getTotalSize(),
 					rowsHgh = hgh + row.offsetHeight,
 					j1 = Math.floor(j * max / rowsHgh),
 					j2 = Math.floor(j * withPgibMax / rowsHgh);
