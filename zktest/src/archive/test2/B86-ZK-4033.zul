@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4033.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 21 12:37:27 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        int counter = 0;
+        DefaultTreeNode rootNode = new DefaultTreeNode(null, new ArrayList());
+        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+
+        public void refreshTreeModel() {
+            rootNode.getChildren().clear();
+            rootNode.add(new DefaultTreeNode("" + (++counter)));
+            rootNode.add(new DefaultTreeNode("" + (++counter)));
+        }
+
+        public void rerenderRadioGroup() {
+            winContent.getChildren().clear();
+            winContent.getTemplate("radioGroup").create(winContent, null, null, null);
+        }
+    </zscript>
+    <div>
+        <label multiline="true">
+            1. Click "refresh tree" twice.
+            2. Click "rerender radio group".
+            3. No error popup "Failed to mount: group.getName is not a function" showed.
+        </label>
+        <tree id="tree" model="${treeModel}">
+            <custom-attributes org.zkoss.zul.client.rod="true"/>
+        </tree>
+        <button label="refresh tree" onClick="refreshTreeModel();"/>
+        <button label="rerender radio group" onClick="rerenderRadioGroup()"/>
+    </div>
+    <div id="winContent">
+        <template name="radioGroup">
+            <radiogroup id="myRadioGroup" orient="vertical">
+                <radio label="opt 1"/>
+                <radio label="opt 2"/>
+                <radio label="opt 3"/>
+            </radiogroup>
+        </template>
+    </div>
+</zk>
