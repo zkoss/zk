@@ -26,13 +26,39 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			8. click button label as "set H 50%", the height of the widget should be 150px(50%), and the input position should not be changed.
 			9. click button label as "setMold default", the mold of the slider should be a default slider.
 		</label>
-		<div width="300px" height="300px">
-			<slider id="knobs1" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" hflex="0.6" vflex="0.6" style="border: 1px solid black;"/>
-		</div>
-		<slider id="knobs2" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" width="300px" height="300px" style="border: 1px solid black;"/>
-		<div width="300px" height="300px">
-			<slider id="knobs" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" width="80%" height="80%" style="border: 1px solid black;"/>
-		</div>
+		<style>
+			.knob1 .z-slider-knob-area {
+				stroke: black;
+			}
+			.knob2 .z-slider-knob-area {
+				stroke: green;
+			}
+			.knob3 .z-slider-knob-area {
+				stroke: red;
+			}
+			.knob1 .z-slider-input {
+				border-color: black;
+				color: black;
+			}
+			.knob2 .z-slider-input {
+				border-color: green;
+				color: green;
+			}
+			.knob3 .z-slider-input {
+				border-color: black;
+				color: red;
+			}
+		</style>
+		<hlayout>
+			<slider id="knobs" sclass="knob" mold="knob" minpos="0.0" maxpos="100.0" curpos="80.0" step="0.5" width="300px" style="border: 1px solid black;"  angleArc="360" strokeWidth="10"/>
+			<div width="250px" style="float:left;">
+				<slider id="knob1" sclass="knob1" mold="knob" minpos="0.0" maxpos="100.0" curpos="65.0" step="0.5" hflex="1" style="border: 1px solid black;" angleArc="270" strokeWidth="10"/>
+			</div>
+			<slider id="knob2" sclass="knob2" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" width="200px" style="border: 1px solid black;" angleArc="210" strokeWidth="15"/>
+			<div width="300px" height="300px">
+				<slider id="knob3" sclass="knob3" mold="knob" minpos="0.0" maxpos="100.0" curpos="25.0" step="0.5" width="50%" height="20%" style="border: 1px solid black;"  angleArc="150" strokeWidth="15"/>
+			</div>
+		</hlayout>
 		<button label="set H 300px" onClick='knobs.setHeight("300px")'/>
 		<button label="set H 100px" onClick='knobs.setHeight("100px")'/>
 		<button label="set H 50%" onClick='knobs.setHeight("50%")'/>
