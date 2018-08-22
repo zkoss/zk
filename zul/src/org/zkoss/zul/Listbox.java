@@ -2324,6 +2324,7 @@ public class Listbox extends MeshElement {
 					resetDataLoader(); // Bug 3357641
 				}
 				getItems().clear(); // Bug 1807414, ZK-1512
+				_visibleItemCount = 0; //Bug ZK-3735: should clear _visibleItemCount before syncModel.
 
 				if (!inSelectMold()) {
 					smartUpdate("model",
