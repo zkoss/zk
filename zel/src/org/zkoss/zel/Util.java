@@ -539,7 +539,6 @@ class Util {
                 }
             } catch (NoSuchMethodException e) {
                 // Ignore
-            	e.printStackTrace();
             }
         }
         Class<?> sup = type.getSuperclass();
@@ -552,7 +551,6 @@ class Util {
                 }
             } catch (NoSuchMethodException e) {
                 // Ignore
-            	e.printStackTrace();
             }
         }
         return null;

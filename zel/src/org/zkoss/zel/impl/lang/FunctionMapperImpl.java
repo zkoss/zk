@@ -24,6 +24,9 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.zel.FunctionMapper;
 import org.zkoss.zel.impl.util.ReflectionUtil;
 
@@ -34,6 +37,7 @@ import org.zkoss.zel.impl.util.ReflectionUtil;
 public class FunctionMapperImpl extends FunctionMapper implements
         Externalizable {
 
+    private static final Logger log = LoggerFactory.getLogger(FunctionMapperImpl.class);
     private static final long serialVersionUID = 1L;
 
     protected Map<String, Function> functions = new ConcurrentHashMap<String, Function>();
@@ -158,7 +162,7 @@ public class FunctionMapperImpl extends FunctionMapper implements
                     Class<?>[] p = ReflectionUtil.toTypeArray(this.types);
                     this.m = t.getMethod(this.name, p);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.info("", e);
                 }
             }
             return this.m;
