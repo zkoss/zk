@@ -126,6 +126,17 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	afterOpenAnima_: function (ref, offset, position, opts) {
 		var node = this.$n(),
 			sendOnOpen = opts && opts.sendOnOpen;
+		// B85-ZK-3606: for adjusting popup position
+		// B86-ZK-4030: because afterSize, in setVisible would use the this._adjustLeft property.
+		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
+		if (ref && ref.desktop && this.desktop) {
+			var refDim = zk(ref).dimension(true), thisDim = zk(this).dimension(true);
+			if (refDim && thisDim) {
+				this._adjustLeft = thisDim.left - refDim.left;
+				this._adjustTop = thisDim.top - refDim.top;
+			}
+			this._keepVisible = true;
+		}
 		this.setVisible(true);
 		if ((!opts || !opts.disableMask) && this.isListen('onOpen', {asapOnly: true})) {
 			//Racing? Previous onResponse has not been fired and user triggers open again
@@ -162,20 +173,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			this.position.apply(this, openInfo);
 		}
 
-		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
 		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
 		//add extra CSS class for easy customize
 		jq(node).addClass(this.$s('open'));
-
-		// B85-ZK-3606: for adjusting popup position
-		if (ref && ref.desktop && this.desktop) {
-			var refDim = zk(ref).dimension(true), thisDim = zk(this).dimension(true);
-			if (refDim && thisDim) {
-				this._adjustLeft = thisDim.left - refDim.left;
-				this._adjustTop = thisDim.top - refDim.top;
-			}
-			this._keepVisible = true;
-		}
 	},
 	/** Returns whether to instantiate a stackup when {@link #open}
 	 * is called.

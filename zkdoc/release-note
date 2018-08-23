@@ -28,6 +28,7 @@ ZK 8.6.0
   ZK-4033: tree items cause JS error with radiogroup
   ZK-3760: Navbar submenu appears in the wrong position
   ZK-4026: shadow <if> re-renders too eagerly
+  ZK-4030: popup loading overlay in wrong position
 
 * Upgrade Notes
 
