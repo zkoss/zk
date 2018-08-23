@@ -111,7 +111,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//delete wgt._isDragging;
 
 		// Bug for ZK-385 clear position value after move
-		if (wgt._position && wgt._position != 'parent') {
+		// ZK-4007: shouldn't clear position if nocenter
+		if (wgt._position && wgt._position != 'parent' && wgt._position != 'nocenter') {
 			wgt._position = null;
 		}
 		wgt.zsync();

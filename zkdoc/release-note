@@ -32,6 +32,7 @@ ZK 8.6.0
   ZK-3994: Header visibility cause missing cells after 3604
   ZK-4031: fragment-component table/tr/td problems on IE
   ZK-3735: Listbox.getVisibleItemCount() does not reset its value after Listbox.setModel()
+  ZK-4007: position="nocenter" is ignored after moving modal window
 
 * Upgrade Notes
 
