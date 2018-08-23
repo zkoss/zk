@@ -164,16 +164,14 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			}
 			_syncFrozen(this);
 			this.parent._minWd = null;
-			var mesh = this.getMeshWidget();
+			var mesh = this.getMeshWidget(),
+				frozen = mesh ? mesh.frozen : null;
+			if (frozen)
+				frozen.onSize();
 
 			// B70-ZK-2128: Auxhead doesn't have to add faker.
-			if (this.$instanceof(zul.mesh.Auxhead)) {
-				var frozen = mesh ? mesh.frozen : null;
-				if (frozen) {
-					frozen.onSize();
-				}
+			if (this.$instanceof(zul.mesh.Auxhead))
 				return;
-			}
 
 			// ZK-2098: recovery the header faker if not exists
 			var head = this,

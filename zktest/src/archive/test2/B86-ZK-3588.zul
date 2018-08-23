@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3588.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Aug 23 15:08:58 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click add header
+		2. The width of frozen should be the same as first column (both in Listbox and Grid)
+	</label>
+	<window apply="org.zkoss.zktest.test2.B86_ZK_3588Composer">
+		<listbox>
+			<listhead id="listhead">
+				<listheader label="1"/>
+				<listheader label="2"/>
+				<listheader label="3"/>
+			</listhead>
+			<frozen columns="1"/>
+			<listitem>
+				<listcell label="1"/>
+				<listcell label="2"/>
+				<listcell label="3"/>
+			</listitem>
+		</listbox>
+		<grid>
+			<columns id="columns">
+				<column label="1"/>
+				<column label="2"/>
+				<column label="3"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row>
+					<label value="1"/>
+					<label value="2"/>
+					<label value="3"/>
+				</row>
+			</rows>
+		</grid>
+		<button id="button" label="add header"/>
+	</window>
+</zk>
