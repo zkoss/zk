@@ -29,6 +29,7 @@ ZK 8.6.0
   ZK-3760: Navbar submenu appears in the wrong position
   ZK-4026: shadow <if> re-renders too eagerly
   ZK-4030: popup loading overlay in wrong position
+  ZK-3994: Header visibility cause missing cells after 3604
 
 * Upgrade Notes
 

@@ -107,12 +107,14 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 		return scls;
 	},
 	domStyle_: function (no) {
-		var style = this.$supers('domStyle_', arguments);
+		var style = '';
 		if (this._align)
 			style += ' text-align:' + this._align + ';';
 		if (this._valign)
 			style += ' vertical-align:' + this._valign + ';';
-		return style;
+		if (this._getParentType() == this._rowType && this._headerVisible === false)
+			no = zk.copy(no, {visible: true});
+		return this.$supers('domStyle_', [no]) + style;
 	},
 	//super//
 	domAttrs_: function (no) {
