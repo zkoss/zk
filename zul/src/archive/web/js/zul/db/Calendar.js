@@ -154,15 +154,23 @@ zul.db.Renderer = {
 					'-ty" class="', text, '">', y + ydelta, '</span>');
 			break;
 		case 'year':
+			var yearGap = 11,
+				startYear = yofs < minyear ? minyear : yofs,
+				expectedEndYear = yofs + yearGap;
+				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear;
 			out.push('<span id="', uuid, '-tyd" class="', text, '">',
-					(yofs + 1 > minyear ? yofs + 1 : minyear) + ydelta, '-',
-					(yofs + 10 < maxyear ? yofs + 10 : maxyear) + ydelta, '</span>');
+					startYear + ydelta, '-', endYear + ydelta, '</span>');
 			break;
 		case 'decade':
-			var ycen = ydec * 100;
+			// each start year of cell is ten more than previous one,
+			// so the end year of last cell equals the start year of first cell add 10 * 11 + 9.
+			var yearGap = 10 * 11 + 9,
+				expectedStartYear = ydec * 100 - 10,
+				startYear = expectedStartYear < minyear ? minyear : expectedStartYear,
+				expectedEndYear = expectedStartYear + yearGap,
+				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear;
 			out.push('<span id="', uuid, '-tyd" class="', text, '">',
-					(ycen > minyear ? ycen : minyear) + ydelta, '-',
-					(ycen + 99 < maxyear ? ycen + 99 : maxyear) + ydelta, '</span>');
+					startYear + ydelta, '-', endYear + ydelta, '</span>');
 			break;
 		}
 	},
