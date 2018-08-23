@@ -79,6 +79,7 @@ Aug 28, 2018
   ZK-4039: a caption inside a borderlayout causes a javascript error
   ZK-4023: Add strict valid date support to Datebox without lenient mode
   ZK-3588: frozen + added listheader doesn't update UI properly
+  ZK-4035: Failing to set slider hflex in hlayout
 
 * Upgrade Notes
 
