@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3826.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Aug 22 18:06:42 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true" pre="true">
+		1. Click calender title to open year selection view
+		2. The title should display as (start year in the calendar)-(end year in the calendar).
+			For example:
+			If the calender looks like following
+				2009	2010	2011	2012
+				2013	2014	2015	2016
+				2017	2018	2019	2020
+			The title should be 2009-2020
+		3. Click calender title to open decade selection view
+		4. The title should display as (start year in the calendar)-(end year in the calendar).
+	</label>
+	<calendar/>
+</zk>
