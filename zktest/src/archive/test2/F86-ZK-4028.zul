@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?style src="F86-ZK-4028.css"?>
+<?import org.zkoss.zktest.test2.F86_ZK_4028Step?>
+<?import org.zkoss.zktest.test2.F86_ZK_4028Model?>
+<!--
+F86-ZK-4028.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 15 17:02:51 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(new F86_ZK_4028Step[] {
+            new F86_ZK_4028Step("Destination", "z-icon-globe", "/test2/F86-ZK-4028-step1.zul"),
+            new F86_ZK_4028Step("Accommodation", "z-icon-hotel", "/test2/F86-ZK-4028-step2.zul"),
+            new F86_ZK_4028Step("Personal Details", "z-icon-user", "/test2/F86-ZK-4028-stepn.zul"),
+            new F86_ZK_4028Step("Payment", "z-icon-credit-card", "/test2/F86-ZK-4028-stepn.zul"),
+            new F86_ZK_4028Step("Enjoy Holiday", "z-icon-smile-o", "/test2/F86-ZK-4028-stepn.zul")
+        });
+        F86_ZK_4028Model navModel = new F86_ZK_4028Model(model);
+
+        void showHistoryState(HistoryPopStateEvent e) {
+            Clients.log(e.getUrl() + ": " + Objects.toString(e.getState()));
+            if (e.getState() != null && e.getState().get("index") > -1)
+                navModel.navigateToByIndex(e.getState().get("index"), false);
+        }
+    ]]>
+    </zscript>
+    <div apply="org.zkoss.bind.BindComposer" onHistoryPopState="showHistoryState(event)">
+        <label multiline="true">
+            1. Click "Next", Current: Accommodation. Is first: false. Is last: false.
+            2. Click "Switch Car". A "Rent Car" step will be added.
+            3. Choose "Enjoy Holiday" from selectbox. Current: Enjoy Holiday. Is first: false. Is last: true.
+            4. Click "Back", Current: Payment. Is first: false. Is last: false.
+            5. Click "Switch Car". The "Rent Car" step will be deleted.
+        </label>
+        <div>
+            <div sclass="stepbar">
+                <forEach items="@load(navModel.items)" var="item">
+                    <div sclass="@load(('step' += (item == navModel.current ? ' current' : '')))"
+                         onClick="if (navModel.getPosition(item) &lt;= 0) navModel.navigateTo(item);">
+                        <span sclass="@init(('step-icon ' += item.iconClass))" />
+                        <label sclass="step-label" value="@init(item.text)"/>
+                    </div>
+                </forEach>
+            </div>
+            <include src="@load(navModel.current.url)" />
+        </div>
+
+        <groupbox>
+            <caption>Test</caption>
+            <label id="curr" value="@load('Current: '.concat(navModel.current.text))" />
+            <label id="isfirst" value="@load('Is first: '.concat(navModel.first))" />
+            <label id="islast" value="@load('Is last: '.concat(navModel.last))" />
+            <separator />
+            <button onClick="navModel.back()" label="Back" disabled="@load(navModel.first)" />
+            <button onClick="navModel.next()" label="Next" disabled="@load(navModel.last)" />
+            <button onClick="navModel.switchCar()" label="Switch Car" />
+            <button onClick="navModel.switchHistorySupport()" label="Switch History Support" />
+            <selectbox model="${model}">
+                <template name="model">
+                    ${each.text}
+                </template>
+                <attribute name="onSelect"><![CDATA[
+                navModel.navigateTo(model.getElementAt(self.selectedIndex));
+                ]]></attribute>
+            </selectbox>
+        </groupbox>
+    </div>
+</zk>
