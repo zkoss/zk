@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4031.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Mon Aug 20 12:14:28 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        public Map createCar(int id, String startDate, String type, String city) {
+            Map car = new HashMap();
+            car.put("id", id);
+            car.put("cars_no", id + "000");
+            car.put("start_date", startDate);
+            car.put("cars_type", type);
+            car.put("city_name", city);
+            car.put("service_type", "no service");
+            return car;
+        }
+
+        Map myvm = new HashMap();
+        myvm.put("data", "asdf");
+        myvm.put("cars", new Map[] {
+            createCar(11, "2018-01-09", "VW", "Hannover"),
+            createCar(12, "2018-03-14", "BMW", "Munich"),
+            createCar(13, "2018-07-23", "Porsche", "Ingolstadt")
+        });
+
+    ]]></zscript>
+    <label multiline="true">
+        1. (IE only) Browse the page
+        2. You should see 3 rows and a selectbox without any exception
+    </label>
+    <fragment viewModel="@id('vm') @init(myvm)" data="@load(vm.data)" cars="@load(vm.cars)">
+        <![CDATA[
+            <table>
+                <forEach items="@load(cars)">
+                    <tr>
+                        <td>
+                            <div textContent="@load(each)"/>
+                        </td>
+                    </tr>
+                </forEach>
+            </table>
+            <select>
+                <forEach items="@load(cars)">
+                    <option textContent="@load(each.cars_type)"/>
+                </forEach>
+            </select>
+        ]]>
+    </fragment>
+    <script><![CDATA[
+    jq(window).error(function (error) {
+        zk.log(error.originalEvent.error);
+    });
+    ]]>
+    </script>
+</zk>
