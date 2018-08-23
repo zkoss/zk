@@ -31,6 +31,7 @@ ZK 8.6.0
   ZK-4030: popup loading overlay in wrong position
   ZK-3994: Header visibility cause missing cells after 3604
   ZK-4031: fragment-component table/tr/td problems on IE
+  ZK-3735: Listbox.getVisibleItemCount() does not reset its value after Listbox.setModel()
 
 * Upgrade Notes
 
