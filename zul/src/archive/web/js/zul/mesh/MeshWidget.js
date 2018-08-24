@@ -1246,35 +1246,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
-		var allWidths = this._isAllWidths();
-		if (allWidths) {
-			var hdtbl = this.eheadtbl,
-				bdtbl = this.ebodytbl,
-				fttbl = this.efoottbl;
-
-			if (hdtbl) {
-				var wd = 0;
-				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling) {
-					if (w.style.display != 'none' && !w.id.endsWith('hdfaker-bar')) // B70-ZK-2307 and B70-ZK-2358
-						wd += zk.parseInt(w.style.width);
-				}
-				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
-					hdtbl.style.width = wd + 'px';
-					if (bdtbl)
-						bdtbl.style.width = wd + 'px';
-					if (fttbl)
-						fttbl.style.width = wd + 'px';
-				}
-			}
-		} else if (this.frozen) {
-			//B70-ZK-2468: should sync ebody width with ebodytbl width
-			if (this.ebody) {
-				var bdtbl = this.ebodytbl;
-				if (bdtbl)
-					bdtbl.style.width = this.ebody.style.width;
-			}
-		}
-		var zkb = zk(this.ebody),
+		var allWidths = this._isAllWidths(),
+			zkb = zk(this.ebody),
 			hScroll = zkb.hasHScroll(),
 			vScroll = zkb.hasVScroll(),
 			hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
@@ -1292,6 +1265,33 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				hdfakerbar.style.width = zero;
 			if (ftfakerbar)
 				ftfakerbar.style.width = zero;
+		}
+		if (allWidths) {
+			var hdtbl = this.eheadtbl,
+				bdtbl = this.ebodytbl,
+				fttbl = this.efoottbl;
+
+			if (hdtbl) {
+				var wd = 0;
+				for (var w = this.ehdfaker.firstChild; w; w = w.nextSibling) {
+					if (w.style.display != 'none' && !w.id.endsWith('hdfaker-bar')) // B70-ZK-2307 and B70-ZK-2358
+						wd += zk.parseInt(w.style.width);
+				}
+				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
+					hdtbl.style.width = (hdfakerbar) ? wd + vScroll + 'px' : wd + 'px';
+					if (bdtbl)
+						bdtbl.style.width = wd + 'px';
+					if (fttbl)
+						fttbl.style.width = wd + 'px';
+				}
+			}
+		} else if (this.frozen) {
+			//B70-ZK-2468: should sync ebody width with ebodytbl width
+			if (this.ebody) {
+				var bdtbl = this.ebodytbl;
+				if (bdtbl)
+					bdtbl.style.width = this.ebody.style.width;
+			}
 		}
 	},
 	//return if all widths of columns are fixed (directly or indirectly)
