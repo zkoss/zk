@@ -18,7 +18,6 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         1) move zk window to new position
         2) resize browser window
         -> the position of zk window shouldn't move to center
-
     </label>
     <window id="window" border="normal" width="200px" height="200px" title="Complex Window"
             position="nocenter" mode="modal" sizable="true" >
