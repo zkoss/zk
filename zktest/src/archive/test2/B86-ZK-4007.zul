@@ -17,8 +17,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         position="nocenter" is ignored after moving modal window
         1) move zk window to new position
         2) resize browser window
-        -> zk window is centered regardless position="nocenter"
-        it shouldn't be centered if position="nocenter"
+        -> the position of zk window shouldn't move to center
+
     </label>
     <window id="window" border="normal" width="200px" height="200px" title="Complex Window"
             position="nocenter" mode="modal" sizable="true" >
