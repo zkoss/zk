@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4039.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 27 12:14:49 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+    jq(window).error(function (error) {
+        zk.log(error.originalEvent.error);
+    });
+    ]]>
+    </script>
+    <borderlayout>
+        <west>
+        </west>
+        <center>
+            <div>
+                Browse this page, and it shouldn't have any exception in zklog.
+                <window closable="true" border="normal">
+                    <caption>Window</caption>
+                    Window
+                </window>
+                <panel closable="true" border="normal" collapsible="true">
+                    <caption>Panel</caption>
+                    <panelchildren>
+                        Panel
+                    </panelchildren>
+                </panel>
+                <groupbox closable="true">
+                    <caption>Groupbox</caption>
+                    Groupbox
+                </groupbox>
+                <groupbox closable="true" mold="3d">
+                    <caption>Groupbox 3D</caption>
+                    Groupbox 3D
+                </groupbox>
+            </div>
+        </center>
+        <east collapsible="true" closable="true">
+            <caption>EAST 1</caption>
+        </east>
+    </borderlayout>
+</zk>
+
