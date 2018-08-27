@@ -35,6 +35,7 @@ ZK 8.6.0
   ZK-3826: Datebox does not display correct range of years
   ZK-3938: Support screen scaling (chrome) to align column headers
   ZK-3993: selecting an item doesn't deselect others with a mobile device
+  ZK-4039: a caption inside a borderlayout causes a javascript error
 
 * Upgrade Notes
 

@@ -77,26 +77,25 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	_getBlank: function () {
 		return '&nbsp;';
 	},
-	/** Whether to generate a collapsible button. */
+	/** Whether to generate a collapsible button (determined by parent only). */
 	_isCollapsibleVisible: function () {
 		var parent = this.parent;
-		return parent.isCollapsible && parent.isCollapsible();
+		return parent.isCollapsible && parent.getCollapseOpenIconClass_ && parent.isCollapsible();
 	},
-	/** Whether to generate a close button. */
+	/** Whether to generate a close button (determined by parent only). */
 	_isCloseVisible: function () {
 		var parent = this.parent;
-		return parent.isClosable && parent.isClosable()
-			&& !parent.$instanceof(zul.wgt.Groupbox);
+		return parent.isClosable && parent.getClosableIconClass_ && parent.isClosable();
 	},
-	/** Whether to generate a minimize button. */
+	/** Whether to generate a minimize button (determined by parent only). */
 	_isMinimizeVisible: function () {
 		var parent = this.parent;
-		return parent.isMinimizable && parent.isMinimizable();
+		return parent.isMinimizable && parent.getMinimizableIconClass_ && parent.isMinimizable();
 	},
-	/** Whether to generate a maximize button. */
+	/** Whether to generate a maximize button (determined by parent only). */
 	_isMaximizeVisible: function () {
 		var parent = this.parent;
-		return parent.isMaximizable && parent.isMaximizable();
+		return parent.isMaximizable && parent.getMaximizableIconClass_ && parent.isMaximizable();
 	},
 	beforeMinFlex_: function (o) { // Fixed for B50-3343388.zul
 		if (o == 'w')
