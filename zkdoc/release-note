@@ -19,6 +19,13 @@ ZK 8.5.2.1
   ZK-3760: Navbar submenu appears in the wrong position
   ZK-4026: shadow <if> re-renders too eagerly
   ZK-4030: popup loading overlay in wrong position
+  ZK-3994: Header visibility cause missing cells after 3604
+  ZK-4031: fragment-component table/tr/td problems on IE
+  ZK-3735: Listbox.getVisibleItemCount() does not reset its value after Listbox.setModel()
+  ZK-3826: Datebox does not display correct range of years
+  ZK-3938: Support screen scaling (chrome) to align column headers
+  ZK-3993: selecting an item doesn't deselect others with a mobile device
+  ZK-4039: a caption inside a borderlayout causes a javascript error
 
 * Upgrade Notes
 
