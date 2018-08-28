@@ -42,6 +42,19 @@ ZK 8.6.0
 * Upgrade Notes
 
    --------
+ZK 8.5.2.1
+Aug 28, 2018
+* Features
+
+* Bugs
+  ZK-4026: shadow <if> re-renders too eagerly
+  ZK-4030: popup loading overlay in wrong position
+  ZK-4001: new feature title on collapse borderlayout region missing style in some themes
+  ZK-4039: a caption inside a borderlayout causes a javascript error
+
+* Upgrade Notes
+
+   --------
 ZK 8.5.2
 Jul 31, 2018
 * Features
