@@ -244,6 +244,14 @@ input[type="checkbox"] {
 			border-color: @inputBorderColor;
 		}
 	}
+
+	&:indeterminate {
+		background-color: @checkedColor;
+		color: @checkedBackgroundColor;
+		&:before {
+			content: "\f068";
+		}
+	}
 }
 
 //label

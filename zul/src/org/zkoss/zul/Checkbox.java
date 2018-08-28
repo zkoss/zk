@@ -40,6 +40,8 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	/*package*/ boolean _checked;
 	private boolean _disabled;
 	private String _autodisable;
+	private boolean _indeterminate;
+	private boolean _init = true;
 
 	static {
 		addClientEvent(Checkbox.class, Events.ON_CHECK, CE_IMPORTANT | CE_REPEAT_IGNORE);
@@ -56,6 +58,30 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 
 	public Checkbox(String label, String image) {
 		super(label, image);
+	}
+
+	/**
+	 * Return whether checkbox is in indeterminate state.
+	 * Default: false.
+	 *
+	 * @return true if checkbox is indeterminate
+	 * @since 8.6.0
+	 */
+	public boolean isIndeterminate() {
+		return _indeterminate;
+	}
+
+	/**
+	 * Set whether checkbox is in indeterminate state.
+	 *
+	 * @param indeterminate whether checkbox is indeterminate
+	 * @since 8.6.0
+	 */
+	public void setIndeterminate(boolean indeterminate) {
+		if (_indeterminate != indeterminate) {
+			_indeterminate = indeterminate;
+			smartUpdate("indeterminate", _indeterminate);
+		}
 	}
 
 	/** Returns a list of component IDs that shall be disabled when the user
@@ -125,12 +151,16 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		return _checked;
 	}
 
-	/** Sets whether it is checked.
+	/** Sets whether it is checked,
+	 * changing checked will set indeterminate to false.
 	 */
 	public void setChecked(boolean checked) {
 		if (_checked != checked) {
 			_checked = checked;
 			smartUpdate("checked", _checked);
+			if (!_init && _indeterminate) {
+				setIndeterminate(false);
+			}
 		}
 	}
 
@@ -205,6 +235,8 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
+		if (_init)
+			_init = false;
 		if (_value != null)
 			render(renderer, "value", _value);
 		if (_autodisable != null)
@@ -212,6 +244,7 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", _name);
+		render(renderer, "indeterminate", _indeterminate);
 		if (_checked)
 			render(renderer, "checked", _checked);
 	}
@@ -228,6 +261,7 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		if (cmd.equals(Events.ON_CHECK)) {
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
 			_checked = evt.isChecked();
+			_indeterminate = false;
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
