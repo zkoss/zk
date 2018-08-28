@@ -1,30 +1,11 @@
 ZK 8.5.2.1
+Aug 28, 2018
 * Features
 
 * Bugs
-  ZK-4008: Grid renders its column width incorrectly with span=true
-  ZK-3996: fragment can't parse Chinese characters
-  ZK-4015: Bandbox popup doesn't close when it lose focus
-  ZK-3981: shrink a width with a splitter doesn't work
-  ZK-3983: a component doesn't resize correctly with a splitter in a vbox
-  ZK-4014: Fragment doesn't support forEach with iterative variable
-  ZK-4017: Grid renders nothing after clear() and addAll()
-  ZK-4025: fragment-component parser fails to parse string-literals with special chars
-  ZK-4010: invisible listheaders are still visible in IE
-  ZK-4011: invisible columns are still visible in IE
-  ZK-4019: z-columns-bar doesn't have correct width when a scrollbar appears
-  ZK-3997: Listbox items not resized after ROD triggers zk.Widget.prototype.replaceCavedChildren_
-  ZK-3879: listbox autopaging does not work with external paginal
-  ZK-4033: tree items cause JS error with radiogroup
-  ZK-3760: Navbar submenu appears in the wrong position
   ZK-4026: shadow <if> re-renders too eagerly
   ZK-4030: popup loading overlay in wrong position
-  ZK-3994: Header visibility cause missing cells after 3604
-  ZK-4031: fragment-component table/tr/td problems on IE
-  ZK-3735: Listbox.getVisibleItemCount() does not reset its value after Listbox.setModel()
-  ZK-3826: Datebox does not display correct range of years
-  ZK-3938: Support screen scaling (chrome) to align column headers
-  ZK-3993: selecting an item doesn't deselect others with a mobile device
+  ZK-4001: new feature title on collapse borderlayout region missing style in some themes
   ZK-4039: a caption inside a borderlayout causes a javascript error
 
 * Upgrade Notes
