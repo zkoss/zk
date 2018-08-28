@@ -1346,6 +1346,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 },{ //static
 	// drag sizing (also referenced by Panel.js)
 	_startsizing: function (dg) {
+		_hideShadow(wgt); //ZK-3877: startsizing is the better event to hideShadow
 		zWatch.fire('onFloatUp', dg.control); //notify all
 	},
 	_snapsizing: function (dg, pos) {
@@ -1415,7 +1416,6 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		var offs = zk(el).revisedOffset(),
 			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);
 		if (v) {
-			_hideShadow(wgt);
 			dg.z_dir = v;
 			dg.z_box = {
 				top: offs[1], left: offs[0] ,height: el.offsetHeight,
