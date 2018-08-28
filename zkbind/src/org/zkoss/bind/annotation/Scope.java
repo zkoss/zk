@@ -48,7 +48,12 @@ public enum Scope {
 	/**
 	 * Search the value from the implicit applicationScope
 	 */
-	APPLICATION("applicationScope");
+	APPLICATION("applicationScope"),
+	/**
+	 * Search the value from the implicit executionScope
+	 * @since 8.6.0
+	 */
+	EXECUTION("executionScope");
 
 	private String _name;
 

@@ -10,6 +10,7 @@ ZK 8.6.0
   ZK-3960: A rating component
   ZK-3961: Slider new mold (knob)
   ZK-3978: tree rod open node performance
+  ZK-4036: @ScopeParam with scopes = Scope.AUTO would look up an attribute in Execution scope
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
