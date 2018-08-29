@@ -585,6 +585,10 @@ public class Components {
 			final WebApp app = comp != null ? getWebApp(comp) : page.getDesktop().getWebApp();
 			return app != null ? app.getAttributes() : Collections.EMPTY_MAP;
 		}
+		if ("executionScope".equals(name)) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null ? exec.getAttributes() : Collections.EMPTY_MAP;
+		}
 		if ("requestScope".equals(name))
 			return REQUEST_SCOPE_PROXY;
 		if ("execution".equals(name))

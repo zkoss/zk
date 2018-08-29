@@ -228,7 +228,8 @@ public class ParamCall {
 					switch (s) {
 					case AUTO:
 						if (ss.length == 1) {
-							val = _component.getAttribute(name, true);
+							if (_execution != null) val = _execution.getAttribute(name);
+							if (val == null) val = _component.getAttribute(name, true);
 						} else {
 							throw new UiException("don't use " + s + " with other scopes " + Arrays.toString(ss));
 						}
