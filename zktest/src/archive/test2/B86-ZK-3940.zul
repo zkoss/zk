@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-3940.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 27 14:14:20 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        In Tomcat
+        1. click button '7500', should see 'received Length: 7500' in zklog.
+        2. click button '8100', should see 'received Length: 8100' in zklog.
+
+        In Jetty
+        1. click button '65000', should see 'received Length: 65000' in zklog.
+        1. click button '66000', should see 'received Length: 66000' in zklog.
+
+    </label>
+    <script>
+        function fireData ({ size }) {
+            zk.$('$comp').fire('onData', {text : 'a'.repeat(size)}, {toServer: true});
+        }
+    </script>
+    <div id="comp" onData='Clients.log("received Length: " + event.getData().get("text").length())'/>
+    For Tomcat:
+    <button label="7500" w:onClick="fireData({size: +this._label})"/>
+    <button label="8100" w:onClick="fireData({size: +this._label})" style="background-color: red;"/>
+    <separator/>
+    For Jetty:
+    <button label="65000" w:onClick="fireData({size: +this._label})"/>
+    <button label="66000" w:onClick="fireData({size: +this._label})" style="background-color: red;"/>
+</zk>

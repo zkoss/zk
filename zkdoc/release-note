@@ -75,6 +75,7 @@ ZK 8.6.0
   ZK-4061: @HistoryPopState called multiple times
   ZK-3990: Datebox throws a javascript error when opening it with a mobile browser
   ZK-3982: opened group scrolled out of view
+  ZK-3940: Websockets (error) handling larger incoming messages
 
 * Upgrade Notes
 
