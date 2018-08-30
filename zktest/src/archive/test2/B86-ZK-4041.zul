@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+B86-ZK-4041.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Aug 30 12:54:45 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click menu, menupopup should be displayed under the menu
+		2. Click "more items"
+		3. Click menu, menupopup should be displayed to the right of the menu
+		4. Change browser width to 400px
+		5. Click menu, menupopup should be displayed to the left of the menu
+	</label>
+	<vlayout apply="org.zkoss.zktest.test2.B86_ZK_4041Composer">
+		<menubar width="500px">
+			<menuitem width="300px" label="padding"/>
+			<menu id="menu" label="menu"/>
+		</menubar>
+		<button id="button" label="more items"/>
+	</vlayout>
+	<combobox>
+		<comboitem label="iceblue"/>
+		<comboitem label="breeze"/>
+		<comboitem label="sapphire"/>
+		<comboitem label="silvertail"/>
+		<comboitem label="atlantic"/>
+		<attribute name="onChange">
+			Library.setProperty("org.zkoss.theme.preferred", event.value);
+			Executions.sendRedirect("");
+		</attribute>
+	</combobox>
+</zk>
