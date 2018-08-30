@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4034.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Aug 30 10:00:21 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<window border="normal" onCreate='Clients.confirmClose("Trying to close");'>
+		<label multiline="true">
+			1. Use the ie 11.
+			2. Press CTRL + W or close the tab (not the window) manually.
+			3. When popup shows, choose to stay on the page. 
+			4. Click the download-button.
+			5. The same popup should not show again.
+		</label>
+		<div></div>
+			<button label="Download">
+			<attribute name="onClick"><![CDATA[
+			org.zkoss.zul.Filedownload.save("content", "text/plain", "test.txt");
+		]]></attribute>
+		</button>
+  </window>
+</zk>
