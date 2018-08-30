@@ -1299,6 +1299,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String url the URL to download from
 	 */
 	download: function (url) {
+		//B86-ZK-4034: changing the iframe.src would trigger onbeforeunload event.
+		var beforeUnloadCallback;
+		if (zk.ie) {
+			beforeUnloadCallback = window.onbeforeunload;
+			window.onbeforeunload = null;
+		}
 		if (url) {
 			var ifr = jq('#zk_download')[0];
 			if (ifr) {
@@ -1308,6 +1314,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 				+ '" id="zk_download" name="zk_download" style="display:none;width:0;height:0;border:0" frameborder="0"></iframe>';
 				jq(document.body).append(html);
 			}
+		}
+		if (zk.ie) {
+			setTimeout(function () {
+				window.onbeforeunload = beforeUnloadCallback;
+			}, 100);
 		}
 	},
 	/** Prints the content of the browser window.
