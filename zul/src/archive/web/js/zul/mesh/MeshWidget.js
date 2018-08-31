@@ -1088,7 +1088,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 			if (this._nativebar) { // Bug ZK-355: keep scrollbar position
 				var ebody = this.ebody;
-				if (ebody.scrollHeight >= this._currentTop)
+				// ZK-3647: if Listbox enable ROD and need to init pad sizes, it will adjust scrollTop when _initPadSizes().
+				if (ebody.scrollHeight >= this._currentTop && !this._adjustScrollTopLater)
 					ebody.scrollTop = this._currentTop;
 
 				if (ebody.scrollWidth >= this._currentLeft) {
