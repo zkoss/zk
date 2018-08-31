@@ -66,6 +66,7 @@ ZK 8.6.0
   ZK-3883: The Grid/Listbox header and context are misaligned after resized
   ZK-4055: conditional native rendering problems
   ZK-4043: Client error with MessageBox / duplicate UUIDs and script elements
+  ZK-4044: 1px column header misalignment on zoomed displays
 
 * Upgrade Notes
 
