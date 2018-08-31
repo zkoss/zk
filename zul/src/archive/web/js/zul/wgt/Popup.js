@@ -155,6 +155,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 		}
 
+		// resync position if the content is not calculated. Bug ZK-2257
+		var openInfo = this._openInfo;
+		if (openInfo) {
+			this.position.apply(this, openInfo);
+		}
 		// B30-1819264 : should skip null
 		if (this.shallStackup_() && node) {
 			if (!this._stackup)
@@ -166,11 +171,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				dst.zIndex = src.zIndex;
 				dst.display = 'block';
 			}
-		}
-		// resync position if the content is not calculated. Bug ZK-2257
-		var openInfo = this._openInfo;
-		if (openInfo) {
-			this.position.apply(this, openInfo);
 		}
 
 		if (sendOnOpen) this.fire('onOpen', {open: true, reference: ref});
