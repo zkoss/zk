@@ -72,6 +72,7 @@ ZK 8.6.0
   ZK-3995: colobox doesn't allow "id" attribute
   ZK-4056: InputElement select() setSelectionRange() not working in chrome
   ZK-4061: @HistoryPopState called multiple times
+  ZK-3853: Tree supports 3-states selection
 
 * Upgrade Notes
 

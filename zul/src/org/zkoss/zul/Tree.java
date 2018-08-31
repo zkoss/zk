@@ -1570,7 +1570,7 @@ public class Tree extends MeshElement {
 	/**
 	 * Handles when the tree model's content changed
 	 */
-	private void onTreeDataChange(TreeDataEvent event) {
+	protected void onTreeDataChange(TreeDataEvent event) {
 		final int type = event.getType();
 		final int[] path = event.getPath();
 		final Component target = path != null ? getChildByPath(path) : null;

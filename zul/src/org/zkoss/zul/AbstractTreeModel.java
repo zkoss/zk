@@ -194,6 +194,18 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	}
 
 	/**
+	 * Fires a {@link TreeDataEvent} for all registered listener when tri selection state
+	 * has changed.
+	 *
+	 * @since 8.6.0
+	 */
+	protected void fireSelectionStateChanged(int[] path) {
+		final TreeDataEvent evt = new TreeDataEvent(this, TreeDataEvent.SELECTION_STATE_CHANGED, path, 0, 1);
+		for (TreeDataListener l : _listeners)
+			l.onChange(evt);
+	}
+
+	/**
 	 * Fires a {@link TreeDataEvent} for all registered listener when open
 	 * status has changed.
 	 * 
