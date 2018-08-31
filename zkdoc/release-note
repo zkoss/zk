@@ -54,6 +54,7 @@ Aug 28, 2018
   ZK-4039: a caption inside a borderlayout causes a javascript error
   ZK-4021: TypeError: ref is undefined after ZK-3943
   ZK-3987: a label in a cell has a different default color
+  ZK-4004: Invisible columns affect mesh column span width count with flex
 
 * Upgrade Notes
 

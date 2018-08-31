@@ -1443,7 +1443,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			hdlen = this.head.nChildren;
 
 		for (var temphdcol = hdcol, w = this.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
-			if (zk(temphdcol).isVisible()) {
+			if (zk(temphdcol).isVisible(true)) {
 				var wdh = w._width;
 
 				if (w._hflex == 'min')
@@ -1528,7 +1528,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		} else { //feature#3184415: span to a specific column
 			visj = this._nspan - 1;
 			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
-				if (!zk(hdcol).isVisible()) {
+				if (!zk(hdcol).isVisible(true)) {
 					bdcol = bdcol.nextSibling;
 					if (ftcol)
 						ftcol = ftcol.nextSibling;
