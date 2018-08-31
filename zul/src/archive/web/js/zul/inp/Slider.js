@@ -209,8 +209,11 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	domClass_: function () {
-		var scls = this.$supers('domClass_', arguments),
-			isVertical = this.isVertical();
+		var scls = this.$supers('domClass_', arguments);
+		if (this._mold == 'knob')
+			return scls;
+
+		var isVertical = this.isVertical();
 		if (isVertical)
 			scls += ' ' + this.$s('vertical');
 		else
