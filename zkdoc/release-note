@@ -53,6 +53,7 @@ ZK 8.6.0
   ZK-3647: Listbox scroll bug after sort with ROD
   ZK-4041: Menubar menupopup display position if height below button is too small is always to the left
   ZK-3977: ListModel listdatalistener not cleared when component is destroyed
+  ZK-3853: Tree supports 3-states selection
 
 * Upgrade Notes
 

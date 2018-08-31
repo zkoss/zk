@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3853-2.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Sep 12 15:57:10 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Click the "item2" 
+		2. You should see the sub-nodes of item2 are checked.
+		3. Click the "item2.1".
+		4. You should see only "item2.2" is selected and "item2" is partial-selected
+		5. Click "enable indeterminate"
+		6. You should see all the selection and partial-selected sign are cleared.
+		7. Click the "item2"
+		8. You Should see only "item2" is selected.
+	</label>
+	<tree id="tree" rows="7" multiple="true" checkmark="true" indeterminate="true">
+		<treecols>
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 description"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"/>
+		</treechildren>
+	</tree>
+	<vlayout>
+		<checkbox label="Enable checkmark" checked="true" onCheck="tree.checkmark = self.checked" />
+		<checkbox label="Multiple selection" checked="true" onCheck="tree.multiple = self.checked" />
+		<checkbox id="ind" label="enable indeterminate" checked="true" onCheck="tree.indeterminate = self.checked" />
+	</vlayout>
+</zk>
