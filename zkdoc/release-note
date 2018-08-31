@@ -74,6 +74,7 @@ ZK 8.6.0
   ZK-4056: InputElement select() setSelectionRange() not working in chrome
   ZK-4061: @HistoryPopState called multiple times
   ZK-3990: Datebox throws a javascript error when opening it with a mobile browser
+  ZK-3982: opened group scrolled out of view
 
 * Upgrade Notes
 
