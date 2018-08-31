@@ -225,7 +225,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	},
 	reposition: function () {
 		this.$supers('reposition', arguments);
-		this._fixarrow();
+		if (this._ref) this._fixarrow(this._ref);
 	}
 }, {
 
