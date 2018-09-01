@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4016-mylistbox.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Aug 20 11:36:23 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+import java.util.*;
+ListModelList model = new ListModelList();
+model.add("test");
+
+public void add(){
+    model.add(System.currentTimeMillis()+"");
+}
+]]></zscript>
+	<listbox id="box" model="${model}" rows="5">
+		<template name="model">
+			<listitem label="${each}"></listitem>
+		</template>
+	</listbox>
+	<button onClick="add()"/>
+</zk>
+
