@@ -1634,8 +1634,6 @@ public class Listbox extends MeshElement {
 
 	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
-			if (newChild instanceof Listgroup && inSelectMold())
-				throw new UnsupportedOperationException("Unsupported Listgroup in Select mold!");
 			if (newChild instanceof Listgroupfoot) {
 				if (!hasGroup())
 					throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");

@@ -50,9 +50,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (this.desktop) {
 			var p = this.parent;
 			if (_isListgroup(p))
-						p.rerender();
-			else if (p.$instanceof(zul.sel.Option))
-				this.getListbox().rerender(); // for IE, we cannot use this.parent.rerender();
+				p.rerender();
+			else if (p.$instanceof(zul.sel.Option) || p.$instanceof(zul.sel.Optgroup))
+				p.updateLabel_();
 		}
 	},
 	/** Returns the list box that it belongs to.
@@ -203,12 +203,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	},
 	bindChildren_: function () {
 		var p;
-		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
+		if (!(p = this.parent) || !(p.$instanceof(zul.sel.Option) || p.$instanceof(zul.sel.Optgroup)))
 			this.$supers('bindChildren_', arguments);
 	},
 	unbindChildren_: function () {
 		var p;
-		if (!(p = this.parent) || !p.$instanceof(zul.sel.Option))
+		if (!(p = this.parent) || !(p.$instanceof(zul.sel.Option) || p.$instanceof(zul.sel.Optgroup)))
 			this.$supers('unbindChildren_', arguments);
 	},
 	deferRedrawHTML_: function (out) {

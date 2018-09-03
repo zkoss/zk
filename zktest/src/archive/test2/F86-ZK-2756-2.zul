@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-2756-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 04 09:36:52 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Look the dropdown menu of select and check these:
+        - You should see Group 1 which is no item.
+        - You should see Group 2 which Item 4 and 5 are unselectable.
+        - You should see Group 3 which has Item 6
+        - You should see Item 7 not in Group 3.
+        - You shouldn't see Group 4.
+        2. Click button "Toggle Group 1 open". Now the Item 1 and Item 3 are visible (Item 2 still invisible).
+        3. Click button "Toggle Item 2 visible". Now the Item 2 is visible.
+        4. Click button "Toggle Group 2 disabled". Now the items of Group 2 are selectable.
+        5. Click button "Toggle Group 4 visible". Now the Group 4 is visible and Item 7 is in Group 4.
+        6. Click button "Detach Group 3". Now Group 2 has Item 4, 5 and 6.
+        7. Click button "Insert Group 5 before Group 1". The Group 5 is at the top position.
+        8. Click button "Insert Item 1.1 before Item 2". The Item 1.1 is before Item 2.
+        9. Click button "Change Group 4 label" and "Change Item 7 label". The label will be changed.
+        10. Click button "Set maxlength 5". All items can be seem the first 5 characters.
+    </label>
+    <listbox id="lb" mold="select">
+        <listgroup id="g1" label="Group 1" open="false"/>
+        <listitem label="Item 1" />
+        <listitem id="i2" label="Item 2" visible="false" />
+        <listitem label="Item 3" />
+        <listgroup id="g2" label="Group 2" disabled="true"/>
+        <listitem label="Item 4" />
+        <listitem label="Item 5" />
+        <listgroup id="g3" label="Group 3" />
+        <listitem label="Item 6" />
+        <listgroup id="g4" label="Group 4" visible="false"/>
+        <listitem id="i7" label="Item 7" />
+    </listbox>
+    <hlayout>
+        <vlayout>
+            <button onClick="g1.open = !g1.open" label="Toggle Group 1 open"/>
+            <button onClick="i2.visible = !i2.visible" label="Toggle Item 2 visible"/>
+            <button onClick="g2.disabled = !g2.disabled" label="Toggle Group 2 disabled"/>
+            <button onClick="g4.visible = !g4.visible" label="Toggle Group 4 visible"/>
+            <button onClick='g3.detach()' label="Detach Group 3"/>
+            <button onClick='lb.insertBefore(new Listgroup("Group 5"), g1)' label="Insert Group 5 before Group 1"/>
+        </vlayout>
+        <vlayout>
+            <button onClick='lb.insertBefore(new Listitem("Item 1.1"), i2)' label="Insert Item 1.1 before Item 2"/>
+            <button onClick='g4.label += "."' label="Change Group 4 label"/>
+            <button onClick='i7.label += "."' label="Change Item 7 label"/>
+            <button onClick='lb.maxlength = 5' label="Set maxlength 5"/>
+            <button onClick='lb.mold = (lb.mold == "default" ? "select" : "default")' label="Toggle mold"/>
+        </vlayout>
+    </hlayout>
+</zk>

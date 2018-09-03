@@ -21,6 +21,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
+		this._groupsInfo = [];
 	},
 	$define: {
 		/**
@@ -136,9 +137,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		 * Sets the maximal length of each item's label.
 		 * @param int maxlength
 		 */
-		maxlength: function (maxlength) {
+		maxlength: function (maxlength, fromServer) {
 			if (this.desktop)
-				this.rerender();
+				this.requestRerender_(fromServer);
 		}
 	},
 
@@ -248,10 +249,12 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			var fn = [this, this._fixSelIndex];
 			zWatch.listen({onRestore: fn, onVParent: fn});
 		}
+		zWatch.listen({onCommandReady: this});
 
 		this._fixSelIndex();
 	},
 	unbind_: function () {
+		zWatch.unlisten({onCommandReady: this});
 		var n = this.$n();
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
@@ -314,11 +317,45 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	beforeCtrlKeys_: function (evt) {
 		this._doChange(evt);
 	},
-	onChildAdded_: function (/*child*/) {
-		this.rerender();
+	onChildAdded_: function (child) {
+		if (child.$instanceof(zul.sel.Optgroup))
+			this._groupsInfo.push(child);
+		this.requestRerender_(true);
 	},
-	onChildRemoved_: function (/*child*/) {
+	onChildRemoved_: function (child) {
+		if (child.$instanceof(zul.sel.Optgroup))
+			this._groupsInfo.$remove(child);
 		if (!this.childReplacing_)
+			this.requestRerender_(true);
+	},
+	requestRerender_: function (fromServer) {
+		if (fromServer)
+			this._shouldRerenderFlag = true;
+		else
 			this.rerender();
+	},
+	onCommandReady: function () {
+		if (this._shouldRerenderFlag) {
+			this._shouldRerenderFlag = false;
+			this.rerender();
+		}
+	},
+	/** Returns whether Group exists.
+	 * @return boolean
+	 */
+	hasGroup: function () {
+		return this._groupsInfo.length;
+	},
+	/** Returns the number of groups.
+	 * @return int
+	 */
+	getGroupCount: function () {
+		return this._groupsInfo.length;
+	},
+	/** Returns a list of all {@link Group}. The order is unmaintained.
+	 * @return Array
+	 */
+	getGroups: function () {
+		return this._groupsInfo.$clone();
 	}
 });
