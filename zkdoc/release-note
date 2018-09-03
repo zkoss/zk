@@ -46,6 +46,7 @@ ZK 8.6.0
   ZK-4004: Invisible columns affect mesh column span width count with flex
   ZK-3869: IE11 stackup iframe initially in wrong position
   ZK-4032: zul.sel.ItemIter will return non-item object if all items are visible(false) during init
+  ZK-4038: hbox's children shrinks their height unexpectedly after dragging a splitter 
 
 * Upgrade Notes
 

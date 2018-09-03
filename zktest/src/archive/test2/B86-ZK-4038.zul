@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4038.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Aug 28 16:23:11 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<hbox spacing="0" width="100%" height="100%" widths="50%,50%">
+		<panel title="Dashboard 2.1" border="normal" vflex="true" hflex="true">
+			<panelchildren>
+				<div>Drag splitter, the heights should not become smaller</div>
+			</panelchildren>
+		</panel>
+		<splitter/>
+		<panel title="Dashboard 2.2" border="normal" vflex="true" hflex="true">
+			<panelchildren>
+				<div>Dashboard components</div>
+			</panelchildren>
+		</panel>
+	</hbox>
+</zk>
