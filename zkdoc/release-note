@@ -39,6 +39,11 @@ ZK 8.6.0
   ZK-4039: a caption inside a borderlayout causes a javascript error
   ZK-4007: position="nocenter" is ignored after moving modal window
   ZK-3877: modal window shadow gets removed after clicking to border
+  ZK-4021: TypeError: ref is undefined after ZK-3943
+  ZK-3987: a label in a cell has a different default color
+  ZK-4004: Invisible columns affect mesh column span width count with flex
+  ZK-3869: IE11 stackup iframe initially in wrong position
+  ZK-3977: ListModel listdatalistener not cleared when component is destroyed
 
 * Upgrade Notes
 
@@ -52,11 +57,6 @@ Aug 28, 2018
   ZK-4030: popup loading overlay in wrong position
   ZK-4001: new feature title on collapse borderlayout region missing style in some themes
   ZK-4039: a caption inside a borderlayout causes a javascript error
-  ZK-4021: TypeError: ref is undefined after ZK-3943
-  ZK-3987: a label in a cell has a different default color
-  ZK-4004: Invisible columns affect mesh column span width count with flex
-  ZK-3869: IE11 stackup iframe initially in wrong position
-  ZK-3977: ListModel listdatalistener not cleared when component is destroyed
 
 * Upgrade Notes
 
