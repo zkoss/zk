@@ -39,6 +39,7 @@ ZK 8.6.0
   ZK-4039: a caption inside a borderlayout causes a javascript error
   ZK-4007: position="nocenter" is ignored after moving modal window
   ZK-3877: modal window shadow gets removed after clicking to border
+  ZK-3986: chsenbox updates only the necessary DOM elements
 
 * Upgrade Notes
 

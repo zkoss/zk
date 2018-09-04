@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-3986.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  4 12:26:03 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. type 'a' in the chosenbox
+        2. wait 3 seconds
+        3. should see dropdown list re-rendered with a new item, and the 'a' in the chosenbox remain
+
+    </label>
+    <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B86_ZK_3986VM')">
+        <chosenbox id="chb" model="@load(vm.model)" hflex="1"/>
+        <timer id="timer" repeats="true" delay="3000" onTimer="@command('update')" />
+        <zscript><![CDATA[
+            timer.start();
+        ]]></zscript>
+    </div>
+</zk>
