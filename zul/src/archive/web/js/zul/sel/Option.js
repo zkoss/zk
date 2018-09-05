@@ -58,11 +58,11 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	},
 
 	//@Override
-	setVisible: function (visible) {
+	setVisible: function (visible, fromServer) {
 		if (this._visible != visible) {
 			this._visible = visible;
 			if (this.desktop)
-				this.parent.rerender();
+				this.parent.requestRerender_(fromServer);
 		}
 	},
 	/** Sets whether it is selected.
@@ -106,6 +106,10 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	 */
 	getLabel: function () {
 		return this.firstChild ? this.firstChild.getLabel() : null;
+	},
+	updateLabel_: function () {
+		var n = this.$n();
+		if (n) jq(n).html(this.domLabel_());
 	},
 	/** Returns the maximal length of each item's label.
 	 * It is a shortcut of {@link Select#getMaxlength}.

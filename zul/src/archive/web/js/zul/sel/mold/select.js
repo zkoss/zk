@@ -14,10 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<select', this.domAttrs_(), '>');
-	
-	for (var w = this.firstChild; w; w = w.nextSibling) {
-		if (w.$instanceof(zul.sel.Option) && w.isVisible()) w.redraw(out);
-	}
-		
+
+	var w;
+	if (this.hasGroup())
+		for (w = this.firstChild; w; w = w.nextSibling) {
+			if (w.$instanceof(zul.sel.Optgroup)) w.redraw(out);
+		}
+	else
+		for (w = this.firstChild; w; w = w.nextSibling) {
+			if (w.$instanceof(zul.sel.Option) && w.isVisible()) w.redraw(out);
+		}
+
 	out.push('</select>');
 }
