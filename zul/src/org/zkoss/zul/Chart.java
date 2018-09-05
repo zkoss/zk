@@ -28,7 +28,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -1028,20 +1027,5 @@ public class Chart extends Imagemap {
 		}
 
 		return clone;
-	}
-
-	public void onPageAttached(Page newpage, Page oldpage) {
-		super.onPageAttached(newpage, oldpage);
-		if (_model != null && _dataListener != null) {
-			_model.removeChartDataListener(_dataListener);
-			_model.addChartDataListener(_dataListener);
-		}
-	}
-
-	public void onPageDetached(Page page) {
-		super.onPageDetached(page);
-		if (_model != null && _dataListener != null) {
-			_model.removeChartDataListener(_dataListener);
-		}
 	}
 }

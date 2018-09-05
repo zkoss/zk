@@ -31,7 +31,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -718,18 +717,4 @@ public class Radiogroup extends XulElement {
 		}
 	}
 
-	public void onPageAttached(Page newpage, Page oldpage) {
-		super.onPageAttached(newpage, oldpage);
-		if (_model != null && _dataListener != null) {
-			_model.removeListDataListener(_dataListener);
-			_model.addListDataListener(_dataListener);
-		}
-	}
-
-	public void onPageDetached(Page page) {
-		super.onPageDetached(page);
-		if (_model != null && _dataListener != null) {
-			_model.removeListDataListener(_dataListener);
-		}
-	}
 }

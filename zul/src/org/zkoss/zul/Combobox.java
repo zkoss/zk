@@ -1143,19 +1143,4 @@ public class Combobox extends Textbox {
 			return pa;
 		return super.getPropertyAccess(prop);
 	}
-
-	public void onPageAttached(Page newpage, Page oldpage) {
-		super.onPageAttached(newpage, oldpage);
-		if (_model != null && _dataListener != null) {
-			_model.removeListDataListener(_dataListener);
-			_model.addListDataListener(_dataListener);
-		}
-	}
-
-	public void onPageDetached(Page page) {
-		super.onPageDetached(page);
-		if (_model != null && _dataListener != null) {
-			_model.removeListDataListener(_dataListener);
-		}
-	}
 }

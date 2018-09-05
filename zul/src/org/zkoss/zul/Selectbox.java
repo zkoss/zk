@@ -413,17 +413,6 @@ public class Selectbox extends HtmlBasedComponent {
 	public void onPageAttached(Page newpage, Page oldpage) {
 		super.onPageAttached(newpage, oldpage);
 		prepareDatas();
-		if (_model != null && _dataListener != null) {
-			_model.removeListDataListener(_dataListener);
-			_model.addListDataListener(_dataListener);
-		}
-	}
-
-	public void onPageDetached(Page page) {
-		super.onPageDetached(page);
-		if (_model != null && _dataListener != null) {
-			_model.removeListDataListener(_dataListener);
-		}
 	}
 
 	private void prepareDatas() {
