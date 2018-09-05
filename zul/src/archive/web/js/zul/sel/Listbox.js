@@ -506,7 +506,7 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 			this._isInit = true;
 			var p = this.box.firstItem;
 			if (this.opts && this.opts.skipHidden)
-				for (; p && !p.isVisible(); p = p.nextSibling) {}
+				for (; p && !p.isVisible(); p = this.box.nextItem(p)) {}
 			this.p = p;
 		}
 	},
