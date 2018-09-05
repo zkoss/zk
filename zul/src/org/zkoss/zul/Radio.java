@@ -288,7 +288,7 @@ public class Radio extends Checkbox {
 				&& (!Components.isAncestor(rootParent, rg) || rootParent == rg)) {
 			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_REMOVED, new Callback<Component>() {
 				public void call(Component rootParent) {
-					rg.fixOnRemove(Radio.this);
+					rg.fixOnRemove(Radio.this, false);
 				}
 			});
 		}

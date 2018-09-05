@@ -288,8 +288,8 @@ public class Radiogroup extends XulElement {
 
 	/** Called when a radio is removed from this group.
 	 */
-	/*package*/ void fixOnRemove(Radio child) {
-		if (child.isSelected()) {
+	/*package*/ void fixOnRemove(Radio child, boolean external) {
+		if (external && child.isSelected()) {
 			_jsel = -1;
 		} else if (_jsel > 0) { //excluding 0
 			fixSelectedIndex();
@@ -347,7 +347,7 @@ public class Radiogroup extends XulElement {
 	/*package*/ boolean removeExternal(Radio radio) {
 		if (_externs != null && _externs.remove(radio)) {
 			if (!isRedudant(radio))
-				fixOnRemove(radio);
+				fixOnRemove(radio, true);
 			return true;
 		}
 		return false;
