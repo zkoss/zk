@@ -333,18 +333,19 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			Splitter = zul.box.Splitter,
 			flInfo = Splitter._fixLayout(wgt),
 			bfcolps = 'before' == wgt.getCollapse(),
-			run = draggable.run, diff, fd, w;
+			run = draggable.run, diff, fd, w,
+			fdArr = ['width', 'height'];
 
 		if (vert) {
 			diff = run.z_point[1];
-			fd = 'height';
+			fd = fdArr[1];
 
 			//We adjust height of TD if vert
 			if (run.next && run.next.cells.length) run.next = run.next.cells[0];
 			if (run.prev && run.prev.cells.length) run.prev = run.prev.cells[0];
 		} else {
 			diff = run.z_point[0];
-			fd = 'width';
+			fd = fdArr[0];
 		}
 		//B70-ZK-2514: make runNext always the same block with the dragging direction, ex. drag to up, up is runNext
 		var runNext = run.next, runPrev = run.prev, runNextWgt = run.nextwgt, runPrevWgt = run.prevwgt;
@@ -358,10 +359,15 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (!diff) return; //nothing to do
 
 		var wgts = [runNextWgt, runPrevWgt],
-			flexReset = [false, false];
+			hflexReset = [],
+			vflexReset = [];
 		//B70-ZK-2514: assign fd to each block separately and count on clientFd in the end
 		if (runNext && runPrev) {
-			var upperFd = fd.charAt(0).toUpperCase() + fd.slice(1),
+			var upperFdArr = [];
+			for (var i = 0; i < 2; i++) {
+				upperFdArr[i] = fdArr[i].charAt(0).toUpperCase() + fdArr[i].slice(1);
+			}
+			var upperFd = vert ? upperFdArr[1] : upperFdArr[0];
 				s = runNext['client' + upperFd],
 				s2 = runPrev['client' + upperFd],
 				totalFd = s + s2;
@@ -371,13 +377,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				if (w = wgts[i]) {
 					if (w.getHflex()) {
 						w.setHflex('false');
-						if (!vert)
-							flexReset[i] = true;
+						hflexReset[i] = true;
 					}
 					if (w.getVflex()) {
 						w.setVflex('false');
-						if (vert)
-							flexReset[i] = true;
+						vflexReset[i] = true;
 					}
 					zWatch.fireDown('beforeSize', w);
 				}
@@ -403,8 +407,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		for (var i = 0, w; i < 2; i++) {
 			w = wgts[i];
-			if (w && flexReset[i]) {
-				w['set' + upperFd]('100%');
+			if (w && hflexReset[i]) {
+				w['set' + upperFdArr[0]]('100%');
+			}
+			if (w && vflexReset[i]) {
+				w['set' + upperFdArr[1]]('100%');
 			}
 			zUtl.fireSized(w, -1); //no beforeSize
 		}
