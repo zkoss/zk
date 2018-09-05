@@ -12,6 +12,7 @@ ZK 8.6.0
   ZK-3978: tree rod open node performance
   ZK-4036: @ScopeParam with scopes = Scope.AUTO would look up an attribute in Execution scope
   ZK-2756: Listbox supports listgroup like optgroup in select mold
+  ZK-3954: GoldenLayout component
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
