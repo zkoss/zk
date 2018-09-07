@@ -25,8 +25,8 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.ConventionWires;
@@ -175,17 +175,25 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		switch (getAutowireFlag()) {
 		case 0: //by selector
 			Selectors.wireComponents(this, this, false);
-			addEventListener(-10000, Events.ON_CREATE, new EventListener<Event>() {
-				HtmlMacroComponent hmcomp = HtmlMacroComponent.this;
-				public void onEvent(Event event) throws Exception {
-					Selectors.wireEventListeners(hmcomp, hmcomp);
-				}
-			});
+			Selectors.wireEventListeners(this, this);
+			addEventListener(-10000, Events.ON_CREATE, new AfterCreateWireListener());
 			break;
 		case 1: //by convention
 			ConventionWires.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
 			ConventionWires.addForwards(this, this, '$');
 			break;
+		}
+	}
+
+	//borrow from SelectorComposer
+	private class AfterCreateWireListener implements SerializableEventListener<Event> {
+		private static final long serialVersionUID = 1L;
+
+		public void onEvent(Event event) throws Exception {
+			HtmlMacroComponent hmcomp = HtmlMacroComponent.this;
+			// second event listener wiring, for components created since doAfterCompose()
+			Selectors.wireEventListeners(hmcomp, hmcomp);
+			removeEventListener(Events.ON_CREATE, this); // called only once
 		}
 	}
 
