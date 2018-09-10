@@ -48,7 +48,7 @@ public class Bandbox extends Textbox {
 	private String _popupWidth;
 
 	static {
-		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
+		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
 	public Bandbox() {
@@ -115,14 +115,11 @@ public class Bandbox extends Textbox {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (_open != open) {
-			_open = open;
-			if (isVisible()) {
-				if (open)
-					open();
-				else
-					close();
-			}
+		if (isVisible()) {
+			if (open)
+				open();
+			else
+				close();
 		}
 	}
 

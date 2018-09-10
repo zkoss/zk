@@ -122,7 +122,7 @@ public class Combobox extends Textbox {
 	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
 
 	static {
-		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
+		addClientEvent(Combobox.class, Events.ON_OPEN, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
@@ -691,14 +691,11 @@ public class Combobox extends Textbox {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (_open != open) {
-			_open = open;
-			if (isVisible()) {
-				if (open)
-					open();
-				else
-					close();
-			}
+		if (isVisible()) {
+			if (open)
+				open();
+			else
+				close();
 		}
 	}
 
