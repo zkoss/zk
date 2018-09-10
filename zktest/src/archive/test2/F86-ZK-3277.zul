@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3277.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Aug 20 14:56:42 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in ZKEE, if browser is IE, use IE10 or above
+		2. Open developer tool and observe Network
+		3. Upload a file, you should see file name on zk log, request type should be XMLHttpRequest
+		4. Click setMaxsize(1KB)
+		5. Upload a file larger than 1KB, you should see error message, and no upload request should be send
+	</label>
+	<vlayout>
+		<button id="upload" label="Click to upload"
+				upload="true,maxsize=-1,multiple=true">
+			<attribute name="onUpload"><![CDATA[
+				import org.zkoss.util.media.Media;
+				for (Media media : event.getMedias()) {
+					Clients.log(media.getName());
+				}
+			]]></attribute>
+		</button>
+		<button label="setMaxsize(1KB)" onClick='upload.setUpload("true,maxsize=1,multiple=true")'/>
+	</vlayout>
+</zk>

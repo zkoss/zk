@@ -24,8 +24,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _initUploader(o, form, val) {
 		var key = o.getKey(o.sid),
 			uplder = new zul.Uploader(o, key, form, val);
-		zul.Upload.start(uplder);
-		o.uploaders[key] = uplder;
+		if (zul.Upload.start(uplder))
+			o.uploaders[key] = uplder;
 	}
 	function _start(o, form, val) { //start upload
 		//B50-ZK-255: FileUploadBase$SizeLimitExceededException
@@ -292,6 +292,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	/**
 	 * Starts the uploader to upload a file.
 	 * @param Object uplder the uploader
+	 * @return boolean
 	 */
 	start: function (uplder) {
 		var files = zul.Upload.files;
@@ -301,6 +302,7 @@ zul.Upload = zk.$extends(zk.Object, {
 			files[0].isStart = true;
 			files[0].start();
 		}
+		return true;
 	},
 	/**
 	 * Destroys the uploader to upload
@@ -488,6 +490,9 @@ zul.Uploader = zk.$extends(zk.Object, {
 			wgt._uplder.sync();
 			delete wgt._autodisable_self;
 		}
+	},
+	_isAjaxUpload: function () {
+		return false;
 	}
 });
 
@@ -556,7 +561,10 @@ zul.Uploader = zk.$extends(zk.Object, {
 									listeners: {
 										onClick: function () {
 											var uuid = id.substring(0, id.indexOf('_uplder_'));
-											zul.Uploader.clearInterval(id);
+											if (uplder._isAjaxUpload())
+												uplder._xhr.abort();
+											else
+												zul.Uploader.clearInterval(id);
 											var wgt = zk.Widget.$(uuid);
 											if (wgt) wgt._uplder.cancel(id.substring(id.lastIndexOf('_') + 1, id.length));
 										}

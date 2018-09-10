@@ -26,6 +26,7 @@ ZK 8.6.0
   ZK-4028: Add Navigation Model
   ZK-3551: Menupopup active/highlight position from serverside
   ZK-3964: Iceblue theme narrow version
+  ZK-3277: Implement a Fileupload (using modern APIs)
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
