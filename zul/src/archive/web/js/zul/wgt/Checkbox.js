@@ -69,7 +69,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 * <p>Default: false.
 		 * @return boolean
 		 */
-		/** Sets whether it is checked.
+		/** Sets whether it is checked,
+		 * changing checked will set indeterminate to false.
 		 * @param boolean checked
 		 */
 		checked: function (v) {
@@ -173,7 +174,26 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		/** Sets whether to disable the checkbox after the user clicks it.
 		 * @param String autodisable
 		 */
-		autodisable: null
+		autodisable: null,
+		/**
+		 * Return whether checkbox is in indeterminate state.
+		 * Default: false.
+		 *
+		 * @return boolean
+		 * @since 8.6.0
+		 */
+		/**
+		 * Set whether checkbox is in indeterminate state.
+		 *
+		 * @param boolean indeterminate whether checkbox is indeterminate
+		 * @since 8.6.0
+		 */
+		indeterminate: function (v) {
+			var n = this.$n('real');
+			if (n) {
+				jq(n).prop('indeterminate', v);
+			}
+		}
 	},
 
 	//super//
@@ -199,11 +219,14 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	bind_: function (desktop) {
 		this.$supers(Checkbox, 'bind_', arguments);
 
-		var n = this.$n('real');
+		var n = this.$n('real'),
+			indeterminate = this.getIndeterminate();
 
 		// Bug 2383106
 		if (n.checked != n.defaultChecked)
 			n.checked = n.defaultChecked;
+		if (indeterminate)
+			n.indeterminate = true;
 
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
@@ -229,6 +252,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				checked = real.checked;
 			if (checked != this._checked) { //changed
 				this.setChecked(checked); //so Radio has a chance to override it
+				this.setIndeterminate(false);
 				this.fireOnCheck_(checked);
 			}
 			if (zk.webkit && !zk.mobile)
