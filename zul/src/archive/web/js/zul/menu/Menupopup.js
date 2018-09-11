@@ -139,7 +139,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 					|| ((nol < mol + mwd / 2) && (ori == 'vertical'))))
 					|| (mp && mp._shallSync)) {
 				this._shallSync = true;
-				n.style.left = jq.px0(mol - nwd);
+				var left = mol + mwd,
+					right = left + nwd,
+					viewportRight = jq.innerX() + jq.innerWidth();
+				n.style.left = right < viewportRight ? jq.px0(left) : jq.px0(mol - nwd);
 				// ZK-2119: should sync again for ie
 				if (zk.ie)
 					this.onShow();
