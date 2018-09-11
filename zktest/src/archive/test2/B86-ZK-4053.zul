@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4053.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 11 10:11:31 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click button "bandbox open" and wait 1 second.
+        2. You'll see the popup showed and closed, "true" and "false" printed in zk log.
+        3. Repeat step 1 and 2 on "combobox open" and "combobutton open" button.
+    </label>
+
+    <zscript><![CDATA[
+        void closeComp1() {
+            comp1.close();
+            Clients.log(comp1.isOpen() + "");
+        }
+
+        void closeComp2() {
+            comp2.close();
+            Clients.log(comp2.isOpen() + "");
+        }
+
+        void closeComp3() {
+            comp3.close();
+            Clients.log(comp3.isOpen() + "");
+        }
+    ]]>
+    </zscript>
+
+    <hlayout>
+        <button label="bandbox open" onClick='comp1.open(); Clients.log(comp1.isOpen()+""); timer1.start();'/>
+        <button label="combobox open" onClick='comp2.open(); Clients.log(comp2.isOpen()+""); timer2.start();'/>
+        <button label="combobutton open" onClick='comp3.open(); Clients.log(comp3.isOpen()+""); timer3.start();'/>
+        <!-- These hidden buttons are intended for ZATS use -->
+        <button label="bandbox close" onClick='closeComp1();' visible="false"/>
+        <button label="combobox close" onClick='closeComp2();' visible="false"/>
+        <button label="combobutton close" onClick='closeComp3();' visible="false"/>
+    </hlayout>
+
+    <timer id="timer1" delay="1000" repeats="false" running="false" onTimer='closeComp1();' />
+    <timer id="timer2" delay="1000" repeats="false" running="false" onTimer='closeComp2();' />
+    <timer id="timer3" delay="1000" repeats="false" running="false" onTimer='closeComp3();' />
+
+    <bandbox id="comp1">
+        <bandpopup>
+            pp
+        </bandpopup>
+    </bandbox>
+
+    <combobox id="comp2">
+        <comboitem>pp</comboitem>
+    </combobox>
+
+    <combobutton id="comp3" label="button">
+        <popup>
+            pp
+        </popup>
+    </combobutton>
+</zk>

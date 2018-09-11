@@ -708,6 +708,7 @@ public class Combobox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public void open() {
+		_open = true;
 		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
 
@@ -718,6 +719,7 @@ public class Combobox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public void close() {
+		_open = false;
 		response("open", new AuInvoke(this, "setOpen", false)); //don't use smartUpdate
 	}
 

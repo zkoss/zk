@@ -57,6 +57,7 @@ ZK 8.6.0
   ZK-3977: ListModel listdatalistener not cleared when component is destroyed
   ZK-4020: Grid creates more row than expected
   ZK-3977: ListModel listdatalistener not cleared when component is destroyed
+  ZK-4053: open a bandbox but isOpen() still returns false
 
 * Upgrade Notes
 
