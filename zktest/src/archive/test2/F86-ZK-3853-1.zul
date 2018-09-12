@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3853-1.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Aug 30 17:07:41 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<?page title="tree" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. Click the "A" and open "A", then open "B" 
+		2. You should see the under all nodes are checked.
+		3. Click the C1.
+		4. You should see c1 is unselected and A and B are partial selected.
+		5. Close B and open B again.
+		6. You should see the selection status is unchanged.
+		7. Click "enable indeterminate"
+		8. You should see all the selection and partial-selected sign are cleared.
+		9. Click the "A"
+		10.You Should see only "A" is selected.
+	</label>
+	<div apply="org.zkoss.zktest.test2.F86_ZK_3853Composer" >
+		<tree id="treem" width="400px" checkmark="true" indeterminate="true"/>
+		<button id="print" label="Print"/>
+		<checkbox id="ind" label="enable indeterminate" checked="true" onCheck="treem.indeterminate = self.checked" />
+	</div>
+	<button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"iceblue");Executions.sendRedirect(null);' label="Change Theme to Iceblue"/>
+	<button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"breeze");Executions.sendRedirect(null);' label="Change Theme to Breeze"/>
+	<button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"silvertail");Executions.sendRedirect(null);' label="Change Theme to silvertail"/>
+	<button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"sapphire");Executions.sendRedirect(null);' label="Change Theme to sapphire"/>
+	<button onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(),"atlantic");Executions.sendRedirect(null);' label="Change Theme to atlantic"/>
+</zk>
