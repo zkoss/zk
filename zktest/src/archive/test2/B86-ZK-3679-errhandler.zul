@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3679-errhandler.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 12 14:55:59 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        The test is successful.
+    </label>
+    <window title="Custom Error Handler: Error ${requestScope['javax.servlet.error.status_code']}">
+        Cause: ${requestScope['javax.servlet.error.message']}
+    </window>
+</zk>

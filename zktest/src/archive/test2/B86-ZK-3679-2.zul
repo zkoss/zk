@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3679-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 12 14:55:59 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    throw new org.zkoss.zktest.test2.B86_ZK_3679Exception();
+    ]]></zscript>
+</zk>
