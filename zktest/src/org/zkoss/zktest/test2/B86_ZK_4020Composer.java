@@ -19,8 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.base.Strings;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
@@ -67,7 +65,7 @@ public class B86_ZK_4020Composer extends GenericForwardComposer<Component>  {
 		ArrayList<MyItem> list = new ArrayList<>();
 		gridItemList = new ArrayList<>();
 		for (int i = 0; i < 10000; i++) {
-			list.add(new MyItem("a" + (10000 - i), Strings.repeat("b", i % 5) + i, i));
+			list.add(new MyItem("a" + (10000 - i), B86_ZK_4020Composer.repeat("b", i % 5) + i, i));
 		}
 		
 		this.gridItemList = new ArrayList<>(list);
@@ -78,7 +76,7 @@ public class B86_ZK_4020Composer extends GenericForwardComposer<Component>  {
 	ArrayList<MyItem> list = new ArrayList<>();
 	listboxItemList = new ArrayList<>();
 	for (int i = 0; i < 10000; i++) {
-		list.add(new MyItem("a" + (10000 - i), Strings.repeat("b", i % 5) + i, i));
+		list.add(new MyItem("a" + (10000 - i), B86_ZK_4020Composer.repeat("b", i % 5) + i, i));
 	}
 
 	this.listboxItemList = new ArrayList<>(list);
@@ -150,4 +148,27 @@ public class B86_ZK_4020Composer extends GenericForwardComposer<Component>  {
 		}
 	}
 
+	// Copied from Guava Strings.repeat
+	public static String repeat(String string, int count) {
+		if (count <= 1) {
+			return (count == 0) ? "" : string;
+		}
+
+		// IF YOU MODIFY THE CODE HERE, you must update StringsRepeatBenchmark
+		final int len = string.length();
+		final long longSize = (long) len * (long) count;
+		final int size = (int) longSize;
+		if (size != longSize) {
+			throw new ArrayIndexOutOfBoundsException("Required array size too large: " + longSize);
+		}
+
+		final char[] array = new char[size];
+		string.getChars(0, len, array, 0);
+		int n;
+		for (n = len; n < size - n; n <<= 1) {
+			System.arraycopy(array, 0, array, n, n);
+		}
+		System.arraycopy(array, 0, array, n, size - n);
+		return new String(array);
+	}
 }
