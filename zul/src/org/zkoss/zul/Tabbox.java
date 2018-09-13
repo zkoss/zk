@@ -23,7 +23,6 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
@@ -799,22 +798,5 @@ public class Tabbox extends XulElement {
 		//ZK-3678: Provide a switch to enable/disable iscroll
 		if (isNativeScrollbar())
 			renderer.render("_nativebar", true);
-	}
-
-	public void onPageAttached(Page newpage, Page oldpage) {
-		super.onPageAttached(newpage, oldpage);
-		if (_model != null) {
-			postOnInitRender();
-			if (_dataListener != null) {
-				_model.removeListDataListener(_dataListener);
-				_model.addListDataListener(_dataListener);
-			}
-		}
-	}
-
-	public void onPageDetached(Page page) {
-		super.onPageDetached(page);
-		if (_model != null && _dataListener != null)
-			_model.removeListDataListener(_dataListener);
 	}
 }
