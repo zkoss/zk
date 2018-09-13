@@ -30,7 +30,7 @@ public class B70_ZK_3045Test extends ZATSTestCase {
 		assertEquals("1", msg.as(Label.class).getValue());
 		for (int i = 0; i < 5; i++) {
 			desktopAgent.query("button").click();
-			assertEquals("6", msg.as(Label.class).getValue());
+			assertEquals("2", msg.as(Label.class).getValue());
 		}
 	}
 }
