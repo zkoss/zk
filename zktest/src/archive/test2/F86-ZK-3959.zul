@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3959.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jul 25 15:44:07 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Click the "set H xxx" and "set W xxx" button, You can change the height and width.
+		2. Use the signature pad to write a name on it.
+		3. Click the "undo" button, the last step will be undone.
+		4. Click the "save" button, the signature will save to the server, and an alert occur.
+		5. Use the signature pad to write a name on it again.
+		6. Click the "clear" button, the signature pad will be cleared, and an alert occur. 
+		7. Click the "setPenSize6" button, the size of signature pen  becomes 6px(thicker).
+		8. Click the "setPenColorBlue" button, the color of signature pen becomes blue.
+		9. Click the "toggleToolbar" button, toolbar should be invisible.
+		10. Use the color box, color of signature pen can be control the color box.
+	</label>
+	<signature id="s" height="100px" width="400px" style="border: 1px solid black;" onSave='alert("onSave")' onClear='alert("onClear")'/>
+	<signature style="border: 1px solid black;"/>
+	<colorbox id="c" onChange='s.setPenColor(c.getValue())'/>
+	<separator/>
+	<zscript>
+		public void setTheme(String theme) {
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), theme);
+			Executions.sendRedirect(null);
+		}
+	</zscript>
+	<button label="breeze" onClick='setTheme("breeze")'/>
+	<button label="iceblue" onClick='setTheme("iceblue")'/>
+	<button label="sapphire" onClick='setTheme("sapphire")'/>
+	<button label="silvertail" onClick='setTheme("silvertail")'/>
+	<button label="atlantic" onClick='setTheme("atlantic")'/>
+	<div height="100px"/>
+	<button label="set H 200" onClick='s.setHeight("200px")'/>
+	<button label="set H 100" onClick='s.setHeight("100px")'/>
+	<button label="set W 600" onClick='s.setWidth("200px")'/>
+	<button label="set W 400" onClick='s.setWidth("400px")'/>
+	<button label="undo" onClick='s.undo()'/>
+	<button label="save" onClick='s.save()'/>
+	<button label="clear" onClick='s.clear()'/>
+	<button label="setPenSize6" onClick='s.setPenSize(6)'/>
+	<button label="setPenColorBlue" onClick='s.setPenColor("Blue")'/>
+	<button label="getImage" onClick='s.getImage()'/>
+	<button label="toggleToolbar" onClick='s.setToolbarVisible(!s.isToolbarVisible())'/>
+</zk>

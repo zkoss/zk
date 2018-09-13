@@ -15,6 +15,7 @@ ZK 8.6.0
   ZK-3954: GoldenLayout component
   ZK-3963: Organigram component
   ZK-136: Three status checkbox support
+  ZK-3959: A new component for signing a signature
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
