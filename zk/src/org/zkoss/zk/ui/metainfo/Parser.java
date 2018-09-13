@@ -1688,7 +1688,7 @@ public class Parser {
 						}
 					}
 				}
-			} else if (o instanceof ComponentInfo || o instanceof ShadowInfo) {
+			} else if (o instanceof ComponentInfo || o instanceof ZkInfo || o instanceof ShadowInfo) {
 				break;
 			}
 
@@ -1710,7 +1710,7 @@ public class Parser {
 						break;
 					}
 					childInfo.setParentDirectly(null);
-				} else if (o instanceof ComponentInfo || o instanceof ShadowInfo) {
+				} else if (o instanceof ComponentInfo || o instanceof ZkInfo || o instanceof ShadowInfo) {
 					it.next();
 					break;
 				}
