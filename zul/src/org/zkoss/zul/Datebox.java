@@ -79,6 +79,7 @@ public class Datebox extends FormatInputElement {
 	private static Map<Locale, Object> _symbols = new HashMap<Locale, Object>(8);
 	private boolean _weekOfYear;
 	private boolean _showTodayLink = false;
+	private boolean _strictDate = false;
 	private String _position = "after_start";
 	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
 
@@ -125,6 +126,17 @@ public class Datebox extends FormatInputElement {
 	 */
 	public boolean isWeekOfYear() {
 		return _weekOfYear;
+	}
+
+	public void setStrictDate(boolean strictDate) {
+		if (_strictDate != strictDate) {
+			_strictDate = strictDate;
+			smartUpdate("strictDate", strictDate);
+		}
+	}
+
+	public boolean isStrictDate() {
+		return _strictDate;
 	}
 
 	/**
@@ -1022,6 +1034,9 @@ public class Datebox extends FormatInputElement {
 
 		if (_locale != null)
 			renderer.render("localizedSymbols", getRealSymbols(_locale, this));
+
+		if (_strictDate)
+			render(renderer, "strictDate", _strictDate);
 
 		render(renderer, "showTodayLink", _showTodayLink);
 		render(renderer, "todayLinkLabel", _todayLinkLabel);

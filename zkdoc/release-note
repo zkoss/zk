@@ -68,6 +68,7 @@ Aug 28, 2018
   ZK-4030: popup loading overlay in wrong position
   ZK-4001: new feature title on collapse borderlayout region missing style in some themes
   ZK-4039: a caption inside a borderlayout causes a javascript error
+  ZK-4023: Add strict valid date support to Datebox without lenient mode
 
 * Upgrade Notes
 
