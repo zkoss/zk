@@ -49,7 +49,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	</zscript>
 	<label multiline="true">
 	1. you should see "init list1" and "init list2"
-	2. click the "detach" button, you should see only "init list1" and "init list2" are added.
+	2. click the "detach" button, you should see only "init list1" is added.
 	3. click the "attach" button, you should see "init list1" and "init list2" are added.
 	 and the content of both listbox are "abc"
 	</label>

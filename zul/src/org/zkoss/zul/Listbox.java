@@ -2546,6 +2546,8 @@ public class Listbox extends MeshElement {
 
 	@SuppressWarnings("rawtypes")
 	private void doInitRenderer() {
+		if (getPage() == null)
+			return;
 		// sync the multiple status from model
 		if (_model != null)
 			setMultiple(((Selectable) _model).isMultiple());
