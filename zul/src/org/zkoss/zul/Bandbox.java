@@ -48,7 +48,7 @@ public class Bandbox extends Textbox {
 	private String _popupWidth;
 
 	static {
-		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
+		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
 	}
 
 	public Bandbox() {
@@ -115,14 +115,11 @@ public class Bandbox extends Textbox {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (_open != open) {
-			_open = open;
-			if (isVisible()) {
-				if (open)
-					open();
-				else
-					close();
-			}
+		if (isVisible()) {
+			if (open)
+				open();
+			else
+				close();
 		}
 	}
 
@@ -132,6 +129,7 @@ public class Bandbox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public void open() {
+		_open = true;
 		response("open", new AuInvoke(this, "setOpen", true), -1000); //don't use smartUpdate
 	}
 
@@ -141,6 +139,7 @@ public class Bandbox extends Textbox {
 	 * @since 3.0.1
 	 */
 	public void close() {
+		_open = false;
 		response("open", new AuInvoke(this, "setOpen", false), -1000); //don't use smartUpdate
 	}
 

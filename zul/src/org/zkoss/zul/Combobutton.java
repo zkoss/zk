@@ -93,14 +93,11 @@ public class Combobutton extends Button {
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open != _open) {
-			_open = open;
-			if (isVisible()) {
-				if (open)
-					open();
-				else
-					close();
-			}
+		if (isVisible()) {
+			if (open)
+				open();
+			else
+				close();
 		}
 	}
 
@@ -117,6 +114,7 @@ public class Combobutton extends Button {
 	 * The same as setOpen(true).
 	 */
 	public void open() {
+		_open = true;
 		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
 
@@ -124,6 +122,7 @@ public class Combobutton extends Button {
 	 * The same as setOpen(false).
 	 */
 	public void close() {
+		_open = false;
 		response("open", new AuInvoke(this, "setOpen", false)); //don't use smartUpdate
 	}
 
