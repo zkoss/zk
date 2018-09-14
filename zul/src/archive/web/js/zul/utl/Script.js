@@ -111,6 +111,7 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		}
 		//update node
 		this._node = jq(this.uuid, zk)[0];
+		this._nodeSolved = true;
 	},
 	ignoreFlexSize_: function (attr) {
 		// ZK-2248: ignore widget dimension in vflex/hflex calculation
@@ -123,5 +124,9 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		this.$supers(zul.utl.Script, 'bind_', arguments);
 		this._visible = false; //Bug ZK-1516: no DOM element widget should always return false.
 		this._exec();
+	},
+	unbind_: function () {
+		jq(this._node).remove(); // ZK-4043: the script DOM is appended in body, a manual remove is needed.
+		this.$supers(zul.utl.Script, 'unbind_', arguments);
 	}
 });

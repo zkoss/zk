@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4043.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 14 11:11:40 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Sequence: A, B, OK, C, A, B
+        2. No exception is thrown.
+    </label>
+    <separator/>
+    <button id="btn" label="(A) show window" onClick='container.getTemplate("mywin").create(container, null, null, null);'/>
+    <div id="container">
+        <template name="mywin">
+            <window border="normal" mode="modal">
+                <script src="someScript.js" />
+                <label/><!-- somehow a component is needed here to cause the problem -->
+                <button onClick='Messagebox.show("my message")' label="(B) message box"/>
+                <button onClick='self.parent.detach()' label="(C) close window"/>
+            </window>
+        </template>
+    </div>
+    <script><![CDATA[
+    jq(window).error(function (error) {
+        zk.log(error.originalEvent.error);
+    });
+    ]]>
+    </script>
+</zk>
