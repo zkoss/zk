@@ -1045,6 +1045,8 @@ public class Grid extends MeshElement {
 	}
 
 	private void doInitRenderer() {
+		if (getPage() == null)
+			return;
 		final Renderer renderer = new Renderer();
 		try {
 			int pgsz, ofs;
