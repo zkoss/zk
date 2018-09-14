@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Expectable;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
@@ -40,6 +41,7 @@ import org.zkoss.zel.ThreadLocalsManager;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.OperationException;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Session;
@@ -251,6 +253,11 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	private void handleError(Session sess, HttpServletRequest request, HttpServletResponse response, String path,
 			Throwable err) throws ServletException, IOException {
 		Utils.resetOwner();
+
+		// ZK-3679
+		Throwable cause;
+		if (err instanceof OperationException && (cause = err.getCause()) instanceof Expectable)
+			err = cause;
 
 		//Note: if not included, it is handled by Web container
 		if (err != null && Servlets.isIncluded(request)) {

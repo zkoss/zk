@@ -59,6 +59,7 @@ ZK 8.6.0
   ZK-3977: ListModel listdatalistener not cleared when component is destroyed
   ZK-4053: open a bandbox but isOpen() still returns false
   ZK-4054: setOpen() should not change open state of an invisible bandbox
+  ZK-3679: a custom checked exception is wrapped as OperationException
 
 * Upgrade Notes
 
