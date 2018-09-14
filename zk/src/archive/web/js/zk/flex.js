@@ -373,7 +373,7 @@ zFlex = { //static methods
 						hgh -= size[1];
 				}
 				//horizontal size
-				if (cwgt && cwgt._nhflex) {
+				if (cwgt && cwgt._nhflex && cwgt.isVisible()) { //Bug ZK-3883: to prevent invisible cwgt
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
@@ -391,7 +391,7 @@ zFlex = { //static methods
 				}
 				
 				//vertical size
-				if (cwgt && cwgt._nvflex) {
+				if (cwgt && cwgt._nvflex && cwgt.isVisible()) { //Bug ZK-3883: to prevent invisible cwgt
 					if (cwgt !== wgt)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {

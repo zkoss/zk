@@ -1254,7 +1254,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
 			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null;
 
-		if (vScroll) {
+		if (vScroll && this._nativebar) { //ZK-3883: fakerbar should be remove when there is no native scrollbar
 			if (hdfakerbar)
 				hdfakerbar.style.width = vScroll + 'px';
 			if (ftfakerbar)
