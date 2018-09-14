@@ -3203,7 +3203,7 @@ unbind_: function (skipper, after) {
 		var n = this.$n(),
 			zkn = zk(n);
 		if (sz.height !== undefined) {
-			if (sz.height == 'auto')
+			if (sz.height == 'auto' || sz.height == '')
 				n.style.height = '';
 			else if (sz.height != '' || (sz.height === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
 				this.setFlexSizeH_(n, zkn, sz.height, isFlexMin);
@@ -3211,7 +3211,7 @@ unbind_: function (skipper, after) {
 				n.style.height = this._height || '';
 		}
 		if (sz.width !== undefined) {
-			if (sz.width == 'auto')
+			if (sz.width == 'auto' || sz.width == '')
 				n.style.width = '';
 			else if (sz.width != '' || (sz.width === 0 && !this.isFloating_())) //bug #2943174, #2979776, ZK-1159, ZK-1358
 				this.setFlexSizeW_(n, zkn, sz.width, isFlexMin);
