@@ -13,22 +13,24 @@ import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 
 public class F02545ChildrenBindingSupportListModelTest extends ZATSTestCase {
+	private DesktopAgent desktop;
+	private ComponentAgent list_init;
+	private ComponentAgent list_load;
+	private ComponentAgent array_1d;
+	private ComponentAgent array_2d;
+	private ComponentAgent map;
+	private ComponentAgent set;
+	private ComponentAgent btn_add;
+	private ComponentAgent btn_update;
+	private ComponentAgent btn_remove;
+	private ComponentAgent btn_change_model;
+	private ComponentAgent btn_serialization;
+
 	@Test
 	public void test() {
-		DesktopAgent desktop = connect();
-		
-		ComponentAgent list_init = desktop.query("#w #list #cbmi");
-		ComponentAgent list_load = desktop.query("#w #list #cbml");
-		ComponentAgent array_1d = desktop.query("#w #array #cbml_a1d");
-		ComponentAgent array_2d = desktop.query("#w #array #cbml_a2d");
-		ComponentAgent map = desktop.query("#w #map_set #cbml_m");
-		ComponentAgent set = desktop.query("#w #map_set #cbml_s");
-		ComponentAgent btn_add = desktop.query("#w #add");
-		ComponentAgent btn_update = desktop.query("#w #update");
-		ComponentAgent btn_remove = desktop.query("#w #remove");
-		ComponentAgent btn_change_model = desktop.query("#w #change_model");
-		ComponentAgent btn_serialization = desktop.query("#serialization");
-		
+		desktop = connect();
+		queryComponents();
+
 		/* initial test */
 		assertEquals(list_init.getChildren().size(), 5);
 		assertEquals(list_load.getChildren().size(), 5);
@@ -59,6 +61,7 @@ public class F02545ChildrenBindingSupportListModelTest extends ZATSTestCase {
 		
 		/* event - serialization */
 		btn_serialization.click();
+		queryComponents();
 		/* event - add */
 		btn_add.click();
 		checkList(desktop);
@@ -95,6 +98,7 @@ public class F02545ChildrenBindingSupportListModelTest extends ZATSTestCase {
 		
 		/* event - serialization */
 		btn_serialization.click();
+		queryComponents();
 		/* event - add */
 		btn_add.click();
 		checkList(desktop);
@@ -200,5 +204,19 @@ public class F02545ChildrenBindingSupportListModelTest extends ZATSTestCase {
 			assertEquals(id_lb, id_cbm);
 			assertEquals(name_lb, name_cbm);
 		}
+	}
+
+	private void queryComponents() {
+		list_init = desktop.query("#w #list #cbmi");
+		list_load = desktop.query("#w #list #cbml");
+		array_1d = desktop.query("#w #array #cbml_a1d");
+		array_2d = desktop.query("#w #array #cbml_a2d");
+		map = desktop.query("#w #map_set #cbml_m");
+		set = desktop.query("#w #map_set #cbml_s");
+		btn_add = desktop.query("#w #add");
+		btn_update = desktop.query("#w #update");
+		btn_remove = desktop.query("#w #remove");
+		btn_change_model = desktop.query("#w #change_model");
+		btn_serialization = desktop.query("#serialization");
 	}
 }

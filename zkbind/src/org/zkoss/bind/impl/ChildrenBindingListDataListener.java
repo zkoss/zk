@@ -70,9 +70,9 @@ public class ChildrenBindingListDataListener implements ListDataListener, java.i
 				renderModelData(model, index0, index1);
 				cbrCompsList = (List<Component[]>) _owner.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
 				int count = (index1 - index0) + 1;
-				for (int i = index1; i < count; i++) {
-					//remove old
-					int oIndex = i + count;
+				//remove old
+				int oIndex = index1 + 1;
+				for (int i = 0; i < count; i++) {
 					Component[] oldComps = cbrCompsList.get(oIndex);
 					for (Component oc : oldComps)
 						oc.detach();
