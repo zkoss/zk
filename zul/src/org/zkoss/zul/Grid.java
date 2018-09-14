@@ -301,22 +301,28 @@ public class Grid extends MeshElement {
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
-		if (_groupsDataListener != null) {
-			GroupsModel g = getGroupsModel();
-			if (g != null) {
-				g.addGroupsDataListener(_groupsDataListener);
-				g.removeGroupsDataListener(_groupsDataListener);
-			}
+		GroupsModel groupsModel = getGroupsModel();
+		if (_model != null || groupsModel != null) {
+			getDataLoader().syncModel(-1, -1);
+			postOnInitRender();
+		}
+		if (_model != null && _dataListener != null) {
+			_model.removeListDataListener(_dataListener);
+			_model.addListDataListener(_dataListener);
+		}
+		if (groupsModel != null && _groupsDataListener != null) {
+			groupsModel.removeGroupsDataListener(_groupsDataListener);
+			groupsModel.addGroupsDataListener(_groupsDataListener);
 		}
 	}
 
 	public void onPageDetached(Page page) {
 		super.onPageDetached(page);
-		if (_groupsDataListener != null) {
-			GroupsModel g = getGroupsModel();
-			if (g != null)
-				g.removeGroupsDataListener(_groupsDataListener);
-		}
+		if (_model != null && _dataListener != null)
+			_model.removeListDataListener(_dataListener);
+		GroupsModel groupsModel = getGroupsModel();
+		if (groupsModel != null && _groupsDataListener != null)
+			groupsModel.removeGroupsDataListener(_groupsDataListener);
 	}
 
 	private void resetDataLoader() {
@@ -768,9 +774,11 @@ public class Grid extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
-					GroupsModel g = getGroupsModel();
-					if (g != null)
-						g.removeGroupsDataListener(_groupsDataListener);
+					GroupsModel groupsModel = getGroupsModel();
+					if (groupsModel != null) {
+						((GroupsListModel) _model).cleanInternalListener();
+						groupsModel.removeGroupsDataListener(_groupsDataListener);
+					}
 					/* Bug ZK-1512: should clear row anyway
 					if (_model instanceof GroupsListModel)
 						_rows.getChildren().clear();*/

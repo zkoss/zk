@@ -275,6 +275,20 @@ public class Tree extends MeshElement {
 			this.addEventListener("onInitModel", _modelInitListener = new ModelInitListener());
 			Events.postEvent(20000, new Event("onInitModel", this)); //first event to be called
 		}
+		if (_model != null) {
+			postOnInitRender();
+			if (_dataListener != null) {
+				_model.removeTreeDataListener(_dataListener);
+				_model.addTreeDataListener(_dataListener);
+			}
+
+		}
+	}
+
+	public void onPageDetached(Page page) {
+		super.onPageDetached(page);
+		if (_model != null && _dataListener != null)
+			_model.removeTreeDataListener(_dataListener);
 	}
 
 	private class ModelInitListener implements SerializableEventListener<Event>, CloneableEventListener<Event> {
