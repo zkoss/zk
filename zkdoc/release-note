@@ -63,6 +63,7 @@ ZK 8.6.0
   ZK-3679: a custom checked exception is wrapped as OperationException
   ZK-3883: The Grid/Listbox header and context are misaligned after resized
   ZK-4055: conditional native rendering problems
+  ZK-4043: Client error with MessageBox / duplicate UUIDs and script elements
 
 * Upgrade Notes
 
