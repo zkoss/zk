@@ -193,8 +193,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					this._doScroll(d >= 0 ? 'right' : 'left', d >= 0 ? d : Math.abs(d));
 					break;
 				case 'init':
-					this.$n('cave').style.width = (childWidth + btnsize) + 'px';
 				case 'sel':
+					this.$n('cave').style.width = (childWidth + btnsize) + 'px';
 					if (nodeOffsetLeft == tabsScrollLeft) // nothing to do
 						break;
 
