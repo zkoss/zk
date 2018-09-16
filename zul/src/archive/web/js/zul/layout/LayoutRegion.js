@@ -199,13 +199,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						zWatch.unlisten({onSize: this});
 					}
 				}
-				// only fire when child has h/vflex
-				for (var w = this.firstChild; w; w = w.nextSibling) {
-					if (w._nvflex > 0 || w._nhflex > 0) {
-						zUtl.fireSized(this);
-						break;
-					}
-				}
+				this._fireSizedIfChildFlex();
 			}
 		},
 		/**
@@ -753,6 +747,16 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	doResizeScroll_: function () {
 		this.$supers('doResizeScroll_', arguments);
 		this.refreshBar_(true);
+		this._fireSizedIfChildFlex();
+	},
+	_fireSizedIfChildFlex: function () {
+		// only fire when child has h/vflex
+		for (var w = this.firstChild; w; w = w.nextSibling) {
+			if (w._nvflex > 0 || w._nhflex > 0) {
+				zUtl.fireSized(this);
+				break;
+			}
+		}
 	},
 	doClick_: function (evt) {
 		var target = evt.domTarget;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3288.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Sep 04 10:36:06 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click toggle autoscroll
+		2. Click add content
+		3. The content should not be overlapped by scroll bar
+	</label>
+	<borderlayout width="350px" height="300px" apply="org.zkoss.zktest.test2.B86_ZK_3288Composer">
+		<north height="50px" style="background-color: RosyBrown">
+			<div>
+				<button id="btn1" label="add content"/>
+				<button id="btn2" label="toggle autoscroll"/>
+			</div>
+		</north>
+		<center id="center">
+			<div id="container" hflex="1">
+				<template name="content">
+					<div hflex="1" height="300px" style="background-color: Goldenrod;"/>
+				</template>
+			</div>
+		</center>
+	</borderlayout>
+</zk>

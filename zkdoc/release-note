@@ -18,6 +18,7 @@ ZK 8.6.0
   ZK-3959: A new component for signing a signature
   ZK-3998: org.zkoss.zel.Util outputs exceptions to the console directly - change to logger
   ZK-3138: Data loading indicator for ROD
+  ZK-3288: Borderlayout not resizing content after toggling autoscroll
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
