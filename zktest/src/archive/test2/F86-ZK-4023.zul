@@ -17,7 +17,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 	<label multiline="true">
 		1. key Aug 32, 2018 in the first datebox, it should turn into Sep 1, 2018.
 		2. key Aug 32, 2018 in the second datebox, it should be an error message.
+		3. key Feb 30, 2018 in the second datebox, it should be an error message.
+		4. key Feb 0, 2018 in the second datebox, it should be an error message.
 	</label>
 	<datebox format="MMM d, yyyy"  id="d1" lenient="true" strictDate="false"/>
 	<datebox format="MMM d, yyyy"  id="d2" lenient="true" strictDate="true"/>
+	<separator height="500px"/>
+	<button id="dummy" label="dummy"/>
 </zk>

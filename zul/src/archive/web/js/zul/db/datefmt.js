@@ -322,8 +322,12 @@ zk.fmt.Date = {
 					if (!isNaN(nv = _parseInt(token))) {
 						d = nv;
 						dFound = true;
-						if ((d < 0 || d > 31) && strictDate) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
-							return; //failed
+						if (strictDate) {
+							dt = new LeapDay(y - localizedSymbols.YDELTA, m, d, hr, min, sec, msec, tz);
+							dt.setOffset(localizedSymbols.YDELTA);
+							if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d)
+								return; //failed
+						}
 					}
 					break;
 				case 'H':
