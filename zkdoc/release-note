@@ -19,6 +19,7 @@ ZK 8.6.0
   ZK-3998: org.zkoss.zel.Util outputs exceptions to the console directly - change to logger
   ZK-3138: Data loading indicator for ROD
   ZK-3288: Borderlayout not resizing content after toggling autoscroll
+  ZK-3751: Handle smartConnect with websocket
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true

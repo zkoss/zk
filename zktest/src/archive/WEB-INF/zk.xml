@@ -21,6 +21,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>/myappws/</value>
 	</library-property>-->
 
+    <!-- ZK-3751 Handle smartConnect with websocket
+	<library-property>
+		<name>org.zkoss.zkmax.au.websocket.smartconnection.disabled</name>
+		<value>false</value>
+	</library-property>
+	-->
+
 	<library-property>
 		<name>org.zkoss.util.media.MediaTypeResolverImpl.class</name>
 		<value>org.zkoss.zktest.test2.F80_ZK_2959</value>
