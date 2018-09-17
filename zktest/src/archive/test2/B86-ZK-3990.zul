@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3990.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 17 18:24:32 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (Only on mobile devices)
+        1. Open the datebox by clicking the button or inputbox.
+        2. No exception occurs. (Error ==> is empty)
+    </label>
+    <script><![CDATA[
+    jq(window).error(function (e, url, line) {
+        zk.$('$err').setValue(e.originalEvent.error);
+    });
+    ]]>
+    </script>
+    <datebox />
+    Error ==> <label id="err" style="color: red;" />
+</zk>
