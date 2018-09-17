@@ -41,9 +41,6 @@
 		.resetTable();
 		//ZK-3263: scroll issue (chrome scroll anchor bug)
 		overflow-anchor: none;
-		// ZK-3138: ROD loading indicator
-		background: transparent no-repeat center;
-		.encodeThemeURL(background-image, @loadingAnimationLoad);
 	}
 	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
@@ -73,6 +70,11 @@
 	&-odd > .z-row-inner,
 	&-odd > .z-cell {
 		background: @meshStripeBackgroundColor;
+	}
+	// ZK-3138: ROD loading indicator
+	&-loading {
+		background: transparent no-repeat center;
+		.encodeThemeURL(background-image, @loadingAnimationLoad);
 	}
 }
 //column

@@ -14,35 +14,56 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <zscript><![CDATA[
-        ListModelList model = new ListModelList();
+        ListModelList model1k = new ListModelList();
         for (int i = 0; i < 1000; i++) {
-            model.add(i);
+            model1k.add(i);
         }
 
         DefaultTreeNode root = new DefaultTreeNode("ROOT", new ArrayList());
-        DefaultTreeModel stm = new DefaultTreeModel(root);
+        DefaultTreeModel tmodel1k = new DefaultTreeModel(root);
         for (int i = 0; i < 1000; i++) {
             root.add(new DefaultTreeNode(i));
         }
+
+        ListModelList model1 = new ListModelList();
+        model1.add(0);
+
+        DefaultTreeNode root1 = new DefaultTreeNode("ROOT", new ArrayList());
+        DefaultTreeModel tmodel1 = new DefaultTreeModel(root1);
+        root1.add(new DefaultTreeNode(0));
     ]]></zscript>
     <label multiline="true">
         1. Scroll the Listbox/Grid/Tree to trigger a ROD load.
         2. You can see a loading indicator.
+        3. Click button "model 1".
+        4. You shouldn't see a loading indicator.
     </label>
     <hlayout>
-        <listbox model="${model}" height="500px" hflex="1">
+        <button label="model 1">
+            <attribute name="onClick"><![CDATA[
+            lb.model = model1; gr.model = model1; tr.model = tmodel1;
+            ]]></attribute>
+        </button>
+        <button label="model 1k">
+            <attribute name="onClick"><![CDATA[
+            lb.model = model1k; gr.model = model1k; tr.model = tmodel1k;
+            ]]></attribute>
+        </button>
+    </hlayout>
+    <hlayout>
+        <listbox id="lb" model="${model1k}" height="500px" hflex="1">
             <custom-attributes org.zkoss.zul.listbox.rod="true"/>
             <listhead>
                 <listheader label="col 1" />
             </listhead>
         </listbox>
-        <grid model="${model}" height="500px" hflex="1">
+        <grid id="gr" model="${model1k}" height="500px" hflex="1">
             <custom-attributes org.zkoss.zul.grid.rod="true"/>
             <columns>
                 <column label="col 1" />
             </columns>
         </grid>
-        <tree model="${stm}" height="500px" hflex="1">
+        <tree id="tr" model="${tmodel1k}" height="500px" hflex="1">
             <custom-attributes org.zkoss.zul.client.rod="true"/>
             <treecols>
                 <treecol label="col 1" />
