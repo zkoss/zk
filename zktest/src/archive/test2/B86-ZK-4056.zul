@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-4056.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 14 16:12:12 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the 'select' button, 'testing' in the textbox should ALL be selected.
+        2. Click the 'select testi' button, should see 'testi' be selected.
+
+    </label>
+    <textbox id="input" value="testing"/>
+    <button label="select" onClick="input.select()" />
+    <button label="select testi" onClick="input.setSelectionRange(0, 5)" />
+</zk>
