@@ -24,7 +24,7 @@ public class F86_ZK_4023Test extends WebDriverTestCase {
 		sendKeys(jq("$d1").toWidget().$n("real"), "Aug 32, 2018");
 		waitResponse();
 		click(jq("body"));
-		waitResponse();
+		waitResponse(true);
 		Assert.assertEquals("Sep 1, 2018", jq("$d1").toWidget().$n("real").get("value"));
 		sendKeys(jq("$d2").toWidget().$n("real"), "Aug 32, 2018");
 		waitResponse();
