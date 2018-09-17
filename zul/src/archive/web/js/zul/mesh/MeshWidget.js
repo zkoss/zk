@@ -1078,12 +1078,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	onSize: function () {
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n();
+			this._calcSize();// Bug #1813722 // Bug-ZK-4044
 			if (n._lastsz && n._lastsz.height == n.offsetHeight
 					&& n._lastsz.width == n.offsetWidth) {
 				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
 			}
-			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
 
 			if (this._nativebar) { // Bug ZK-355: keep scrollbar position
