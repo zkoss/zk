@@ -507,6 +507,14 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._makeDraggable();
 		}
 	},
+	setFlexSize_: function (sz, isFlexMin) {
+		this.$supers('setFlexSize_', arguments);
+		var n = this.$n();
+		if (sz.height !== undefined && sz.height == '')
+			n.style.height = '';
+		if (sz.width !== undefined && sz.width == '')
+			n.style.width = '';
+	},
 	bind_: function () {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
 		if (this._mold == 'knob')
