@@ -22,6 +22,7 @@ ZK 8.6.0
   ZK-3751: Handle smartConnect with websocket
   ZK-3719: Toolbar can have an overflow button that contains those buttons weren't able to fit in the toolbar
   ZK-3992: InputWidget uses setSelectionRange instead of select in inputWidget.select()
+  ZK-4046: a property for reloading Labels when one desktop is created
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
