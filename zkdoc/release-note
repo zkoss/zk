@@ -20,6 +20,7 @@ ZK 8.6.0
   ZK-3138: Data loading indicator for ROD
   ZK-3288: Borderlayout not resizing content after toggling autoscroll
   ZK-3751: Handle smartConnect with websocket
+  ZK-3719: Toolbar can have an overflow button that contains those buttons weren't able to fit in the toolbar
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true

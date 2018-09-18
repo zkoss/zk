@@ -34,8 +34,10 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Toolbar extends XulElement {
+	private static final String PRELOAD_IMAGE = "org.zkoss.zul.image.preload";
 	private String _orient = "horizontal";
 	private String _align = "start";
+	private boolean _overflowPopup;
 
 	public Toolbar() {
 	}
@@ -105,11 +107,44 @@ public class Toolbar extends XulElement {
 		}
 	}
 
+	/**
+	 * Return whether toolbar has a button that shows a popup
+	 * which contains those content weren't able to fit in the toolbar.
+	 * If overflowPopup is false, toolbar will display multiple rows when content is wider than toolbar.
+	 * Default: false.
+	 *
+	 * @return whether toolbar has a button that shows a popup
+	 * @since 8.6.0
+	 */
+	public boolean isOverflowPopup() {
+		return _overflowPopup;
+	}
+
+	/**
+	 * Set whether toolbar has a button that shows a popup
+	 * which contains those content weren't able to fit in the toolbar.
+	 * If overflowPopup is false, toolbar will display multiple rows when content is wider than toolbar.
+	 *
+	 * @param overflowPopup whether toolbar has a button that shows a popup
+	 * @since 8.6.0
+	 */
+	public void setOverflowPopup(boolean overflowPopup) {
+		if (_overflowPopup != overflowPopup) {
+			_overflowPopup = overflowPopup;
+			smartUpdate("overflowPopup", _overflowPopup);
+			if (_overflowPopup)
+				setAttribute(PRELOAD_IMAGE, "true");
+			else
+				removeAttribute(PRELOAD_IMAGE);
+		}
+	}
+
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);
 		if (!"start".equals(_align))
 			render(renderer, "align", _align);
+		render(renderer, "overflowPopup", _overflowPopup);
 	}
 }

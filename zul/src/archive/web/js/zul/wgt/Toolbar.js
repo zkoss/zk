@@ -50,7 +50,133 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		/** Sets the orient.
 		 * @param String orient either "horizontal" or "vertical".
 		 */
-		orient: _zkf
+		orient: _zkf,
+		/**
+		 * Return whether toolbar has a button that shows a popup
+		 * which contains those content weren't able to fit in the toolbar.
+		 * If overflowPopup is false, toolbar will display multiple rows when content is wider than toolbar.
+		 * Default: false.
+		 *
+		 * @return boolean
+		 * @since 8.6.0
+		 */
+		 /**
+		 * Set whether toolbar has a button that shows a popup
+		 * which contains those content weren't able to fit in the toolbar.
+		 * If overflowPopup is false, toolbar will display multiple rows when content is wider than toolbar.
+		 *
+		 * @param boolean overflowPopup whether toolbar has a button that shows a popup
+		 * @since 8.6.0
+		 */
+		overflowPopup: function () {
+			this.rerender();
+		}
+	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		if (this.isOverflowPopup()) {
+			zWatch.listen({onFloatUp: this, onCommandReady: this, onSize: this});
+			this.domListen_(this.$n('overflowpopup-button'), 'onClick', '_openPopup');
+		}
+	},
+	unbind_: function () {
+		var popup = this.$n('pp');
+		if (popup) {
+			this.domUnlisten_(this.$n('overflowpopup-button'), 'onClick', '_openPopup');
+			zWatch.unlisten({onFloatUp: this, onCommandReady: this, onSize: this});
+		}
+		this.$supers('unbind_', arguments);
+	},
+	_openPopup: function (evt) {
+		if (this._open)
+			return;
+
+		this._open = true;
+		var popup = this.$n('pp');
+		this.setFloating_(true, {node: popup});
+		zWatch.fire('onFloatUp', this);
+		var topZIndex = this.setTopmost();
+		popup.style.zIndex = topZIndex > 0 ? topZIndex : 1;
+		jq(popup).removeClass(this.$s('popup-close')).addClass(this.$s('popup-open')).zk.makeVParent();
+		this._syncPopupPosition();
+	},
+	_syncPopupPosition: function () {
+		zk(this.$n('pp')).position(this.$n(), 'after_end');
+	},
+	onFloatUp: function (ctl) {
+		if (!zUtl.isAncestor(this, ctl.origin))
+			this._closePopup();
+	},
+	_closePopup: function () {
+		if (!this._open)
+			return;
+
+		this._open = false;
+		var jqPopup = jq(this.$n('pp'));
+		jqPopup.removeClass(this.$s('popup-open')).addClass(this.$s('popup-close')).zk.undoVParent();
+		this.setFloating_(false);
+	},
+	onCommandReady: function () {
+		if (this.desktop && this.isOverflowPopup())
+			this._adjustContent();
+	},
+	onSize: function () {
+		this.$supers('onSize', arguments);
+		if (this.desktop && this.isOverflowPopup()) {
+			this._adjustContent();
+			if (this._open)
+				this._syncPopupPosition();
+		}
+	},
+	_adjustContent: function () {
+		if (zUtl.isImageLoading()) {
+			setTimeout(this.proxy(this._adjustContent), 20);
+			return;
+		}
+
+		var jqToolbar = jq(this),
+			contentWidth = jqToolbar.width() - jq(this.$n('overflowpopup-button')).width(),
+			popup = this.$n('pp'),
+			cave = this.$n('cave'),
+			oldToolbarChildren = jq(cave).children().toArray(),
+			oldPopupChildren = jq(popup).children().toArray(),
+			children = oldToolbarChildren.concat(oldPopupChildren),
+			childrenAmount = children.length,
+			tempChildrenWidth = 0,
+			newPopupChildrenAmount = 0;
+
+		// Calculate width to decide how many children should be displayed on popup.
+		for (var i = 0; i < childrenAmount; i++) {
+			tempChildrenWidth += jq(children[i]).outerWidth(true);
+			if (tempChildrenWidth >= contentWidth) {
+				newPopupChildrenAmount = childrenAmount - i;
+				break;
+			}
+		}
+
+		var popupChildrenDiff = newPopupChildrenAmount - oldPopupChildren.length;
+		if (!popupChildrenDiff)
+			return;
+
+		// Start to move children
+		var overflowpopupOn = this.$s('overflowpopup-on'),
+			overflowpopupOff = this.$s('overflowpopup-off');
+		if (newPopupChildrenAmount) {
+			jqToolbar.removeClass(overflowpopupOff).addClass(overflowpopupOn);
+			if (popupChildrenDiff > 0) {
+				for (var i = 0; i < popupChildrenDiff; i++)
+					popup.insertBefore(oldToolbarChildren.pop(), popup.children[0]);
+			} else {
+				for (var i = 0; i < -popupChildrenDiff; i++)
+					cave.appendChild(oldPopupChildren.shift());
+			}
+		} else {
+			jqToolbar.removeClass(overflowpopupOn).addClass(overflowpopupOff);
+			if (this._open)
+				this._closePopup();
+			while (oldPopupChildren.length)
+				cave.appendChild(oldPopupChildren.shift());
+		}
 	},
 	// super
 	domClass_: function (no) {
@@ -64,6 +190,8 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 				sc += ' ' + this.$s('panel');
 			if ('vertical' == this.getOrient())
 				sc += ' ' + this.$s('vertical');
+			if (this.isOverflowPopup())
+				sc += ' ' + this.$s('overflowpopup') + ' ' + this.$s('overflowpopup-off');
 		}
 		return sc;
 	},
@@ -83,6 +211,19 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	 */
 	inPanelMold: function () {
 		return this._mold == 'panel';
+	},
+	appendChild: function (child) {
+		this.$supers('appendChild', arguments);
+		var popup = this.$n('pp');
+		if (popup && popup.children.length > 0)
+			popup.appendChild(child.$n());
+	},
+	removeChild: function (child) {
+		var popup = this.$n('pp');
+			childOnPopup = child.$n().parentNode == popup;
+		if (childOnPopup && popup.children.length == 1)
+			jq(this.$n()).removeClass(this.$s('overflowpopup-on')).addClass(this.$s('overflowpopup-off'));
+		this.$supers('removeChild', arguments);
 	},
 	// protected
 	onChildAdded_: function () {

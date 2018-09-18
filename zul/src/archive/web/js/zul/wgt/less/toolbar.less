@@ -6,6 +6,57 @@
 	padding: 6px 16px;
 	background: @baseBackgroundColor;
 	position: relative;
+
+	&-overflowpopup {
+		white-space: nowrap;
+		font-size: 0;
+
+		&-button {
+			font-size: @fontSizeLarge;
+		}
+
+		&-on > .z-toolbar-overflowpopup-button {
+			cursor: pointer;
+			float: right;
+			position: absolute;
+			top: 50%;
+			.transform('translateY(-50%)');
+			right: 16px;
+
+			&:hover {
+				color: @colorPrimaryLighter;
+			}
+		}
+
+		&-off > .z-toolbar-overflowpopup-button {
+			display: none;
+		}
+	}
+
+	&-popup {
+		border: 1px solid @popupBorderColor;
+		.borderRadius(@baseBorderRadius);
+		background-color: @popupBackgroundColor;
+		.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
+		display: block;
+		position: absolute;
+		padding: 0 4px;
+		overflow: auto;
+		max-height: 350px;
+
+		> * {
+			display: table !important;
+			margin: 4px 0 4px 8px;
+		}
+
+		&-open {
+			visibility: visible;
+		}
+
+		&-close {
+			visibility: hidden;
+		}
+	}
 }
 
 // Toolbar in Tabbox
