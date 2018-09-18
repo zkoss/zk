@@ -67,6 +67,7 @@ ZK 8.6.0
   ZK-4055: conditional native rendering problems
   ZK-4043: Client error with MessageBox / duplicate UUIDs and script elements
   ZK-4044: 1px column header misalignment on zoomed displays
+  ZK-4027: setCheckmark and setMultiple are sequential on client side
 
 * Upgrade Notes
 

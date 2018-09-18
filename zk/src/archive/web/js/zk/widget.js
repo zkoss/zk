@@ -2700,6 +2700,19 @@ function () {
 		return this;
 	},
 
+	/** A function that postpones the invoke of rerender function until all the cmds from server are processed.
+	 * This avoids rerendering twice or more. It works only in the setAttrs phase,
+	 * otherwise rerender will be invoked immediately.
+	 * @return zk.Widget this widget.
+	 * @since 8.6.0
+	 */
+	rerenderLater_: function () {
+		if (zAu.processPhase == 'setAttr')
+			this.doAfterProcessRerenderArgs = arguments;
+		else
+			this.rerender.apply(this, arguments);
+	},
+
 	/** Replaces the DOM element(s) of the specified child widget.
 	 * It is called by {@link #replaceHTML} to give the parent a chance to
 	 * do something special for particular child widgets.
