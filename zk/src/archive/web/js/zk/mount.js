@@ -602,24 +602,10 @@ jq(function () {
 
 		if (!wgt) wgt = evt.target;
 
-		var target = evt.domTarget,
-			dEvent = evt.domEvent,
+		var dEvent = evt.domEvent,
 			body = document.body,
-			old = zk.currentFocus,
-			// B80-ZK-3346: offset is not used on Firefox before version 3.8
-			targetPos = jq(target).position(),
-			oriEvent = target.originalEvent,
-			dEventOfsX = dEvent.offsetX,
-			dEventOfsY = dEvent.offsetY,
-			evtX = dEventOfsX ?
-				(zk.mobile ? dEventOfsX - targetPos.left : dEventOfsX) :
-				(oriEvent ? oriEvent.layerX - targetPos.left : undefined),
-			evtY = dEventOfsY ?
-				(zk.mobile ? dEventOfsY - targetPos.top : dEventOfsY) :
-				(oriEvent ? oriEvent.layerY - targetPos.top : undefined);
-		if ((target != body && target != body.parentNode)
-				&& ((!target.clientWidth && !target.clientHeight) || evtX < target.clientWidth && evtY < target.clientHeight)
-				&& (dEvent.clientX < body.clientWidth && dEvent.clientY < body.clientHeight)) //not click on scrollbar
+			old = zk.currentFocus;
+		if (dEvent.clientX <= body.clientWidth && dEvent.clientY <= body.clientHeight) //not click on scrollbar
 			// F70-ZK-2007: Add the button information in it.
 			Widget.mimicMouseDown_(wgt, noFocusChange, evt.which); //wgt is null if mask
 

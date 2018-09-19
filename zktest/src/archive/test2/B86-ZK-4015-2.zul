@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4015-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 10 12:05:04 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div height="2000px" style="background: pink">
+        <label multiline="true">
+            1. Scroll to the page bottom.
+            2. Open the bandbox popup.
+            3. Click the white area (anywhere but the bandbox itself and the pink area).
+            4. The popup should be closed.
+        </label>
+    </div>
+    <bandbox id="bb1">
+        <bandpopup>
+            <window height="300px"/>
+        </bandpopup>
+    </bandbox>
+    <div width="2000px">
+        <bandbox id="bb2" style="float: right">
+            <bandpopup>
+                <window height="300px"/>
+            </bandpopup>
+        </bandbox>
+    </div>
+</zk>
