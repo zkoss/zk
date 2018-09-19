@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.HistoryPopStateEvent;
+import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.Selectors;
@@ -252,9 +253,14 @@ public class BindComposer<T extends Component>
 		if (historyPopStateInvoker.hasAnnotatedMethod(_binder)) {
 			Page page = comp.getPage();
 			if (page != null) {
-				page.addEventListener(Events.ON_HISTORY_POP_STATE, new EventListener<HistoryPopStateEvent>() {
+				page.addEventListener(Events.ON_HISTORY_POP_STATE, new SerializableEventListener<HistoryPopStateEvent>() {
+					// ZK-4061: Prevent from duplicated handling because of multiple root components
+					private HistoryPopStateEvent _handling = null;
 					public void onEvent(HistoryPopStateEvent event) throws Exception {
-						historyPopStateInvoker.invokeMethod(getBinder(), null, event, true);
+						if (event != _handling) {
+							_handling = event;
+							historyPopStateInvoker.invokeMethod(getBinder(), null, event, true);
+						}
 					}
 				});
 			}

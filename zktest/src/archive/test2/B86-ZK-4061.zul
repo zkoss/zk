@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4061.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 19 10:34:41 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div/><!-- 3 root elements trigger @HistoryPopState 3 times -->
+    <div/>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4061VM')">
+        <label multiline="true">
+            1. Click button "Push History State" twice.
+            2. Click browser back button.
+            3. The zk log should be only one line.
+        </label>
+        <button label="Push History State" onClick="@command('pushHistoryState')"/>
+    </div>
+</zk>
+
