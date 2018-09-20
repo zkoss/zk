@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3179.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Aug 24 17:22:07 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style><![CDATA[
+	.z-toolbar {
+		border: solid 1px black;
+	}
+	]]></style>
+	<vlayout apply="org.zkoss.zktest.test2.B86_ZK_3179Composer">
+		<label multiline="true">
+			1. Click setWidth("200px"), the overflow icon should appear
+			2. Click overflow button
+			3. Overflow popup should have children
+			4. Number of toolbar children plus number of popup children should equals 6
+			5. Click resetWidth and maximize browser, the overflow icon should disappear
+			6. Number of toolbar children should equals 6
+		</label>
+		<toolbar id="toolbar" overflowPopup="true">
+			<toolbarbutton label="one" image="img/home.gif"/>
+			<toolbarbutton label="two" image="img/home.gif"/>
+			<toolbarbutton label="three" image="img/home.gif"/>
+			<toolbarbutton label="four" image="img/home.gif"/>
+			<toolbarbutton label="five" image="img/home.gif"/>
+			<toolbarbutton label="six" image="img/home.gif"/>
+		</toolbar>
+		<button id="toggleOverflow" label="toggleOverflow"/>
+		<button id="isOverflow" label="isOverflow"/>
+		<button id="setWidth200" label='setWidth("200px")'/>
+		<button id="resetWidth" label='resetWidth'/>
+		<button id="increaseChild5Width" label="increaseChild5Width"/>
+		<button id="resetChild5Width" label="resetChild5Width"/>
+		<button id="insertBefore5" label="insertBefore5"/>
+		<button id="appendChild" label='appendChild'/>
+		<button id="removeSecondChild" label="removeSecondChild"/>
+		<button id="removeFirstChild" label="removeFirstChild"/>
+		<button id="removeLastChild" label='removeLastChild'/>
+		<combobox id="combobox">
+			<comboitem label="iceblue"/>
+			<comboitem label="breeze"/>
+			<comboitem label="sapphire"/>
+			<comboitem label="silvertail"/>
+			<comboitem label="atlantic"/>
+		</combobox>
+	</vlayout>
+</zk>
