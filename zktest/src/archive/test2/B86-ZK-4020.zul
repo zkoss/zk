@@ -37,10 +37,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		</vlayout>
 	
 		<listbox id="listbox" width="500px" rows="5" itemRenderer="org.zkoss.zktest.test2.B86_ZK_4020ListitemRenderer">
-			<custom-attributes org.zkoss.zul.lisbox.rod="true"/>
-			<custom-attributes org.zkoss.zul.lisbox.preloadSize="100" />
-			<custom-attributes org.zkoss.zul.lisbox.initRodSize="50" />
-			<custom-attributes org.zkoss.zul.lisbox.autoSort="ignore.change"/>
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<custom-attributes org.zkoss.zul.listbox.preloadSize="100" />
+			<custom-attributes org.zkoss.zul.listbox.initRodSize="50" />
+			<custom-attributes org.zkoss.zul.listbox.autoSort="ignore.change"/>
 			<listhead>
 				<listheader label="A" sort="auto(v1)" sortDirection="ascending"/>
 				<listheader label="B" />

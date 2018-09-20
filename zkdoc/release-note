@@ -118,6 +118,7 @@ Jul 31, 2018
   ZK-3823: org.zkoss.lang.Library must not use synchronized blocks
   ZK-3952: Grid/Listbox provide an API to scroll itself by item index
   ZK-3979: WS support tomcat's request recycle
+  ZK-3909: Enhance Listbox ROD loadmodel mechanism
 
 * Bugs
   ZK-3630: shadow components inside a Listbox' template cause an exception

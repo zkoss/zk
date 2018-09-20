@@ -335,7 +335,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				if (nli instanceof Listgroup && item instanceof Listgroup) {
 					((Listgroup) nli).setOpen(((Listgroup) item).isOpen());
 				}
-
+				nli.setItemInvalid(item.isItemInvalid());
 				if (nli.getValue() == null) //template might set it
 					nli.setValue(data);
 				item.setAttribute(Attributes.MODEL_RENDERAS, nli);
@@ -523,30 +523,31 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (frozen != null)
 				avail.add(frozen);
 		}
+		return (_listbox.getItemCount() > 0) ? checkAvailItems(avail, offset, limit) : avail;
+	}
 
+	protected Set<? extends Component> checkAvailItems(Set<Component> avail, int offset, int limit) {
 		int pgsz = limit;
 		int ofs = offset;
-		if (_listbox.getItemCount() > 0) {
-			Component item = _listbox.getItems().get(0);
-			while (item != null) {
-				if (pgsz == 0)
-					break;
-				if (item.isVisible() && item instanceof Listitem) {
-					if (--ofs < 0) {
-						--pgsz;
-						avail.add(item);
-					}
+		Component item = _listbox.getItems().get(0);
+		while (item != null) {
+			if (pgsz == 0)
+				break;
+			if (item.isVisible() && item instanceof Listitem) {
+				if (--ofs < 0) {
+					--pgsz;
+					avail.add(item);
 				}
-				if (item instanceof Listgroup) {
-					final Listgroup g = (Listgroup) item;
-					if (!g.isOpen()) {
-						for (int j = 0, len = g.getItemCount(); j < len; j++)
-							item = item.getNextSibling();
-					}
-				}
-				if (item != null)
-					item = item.getNextSibling();
 			}
+			if (item instanceof Listgroup) {
+				final Listgroup g = (Listgroup) item;
+				if (!g.isOpen()) {
+					for (int j = 0, len = g.getItemCount(); j < len; j++)
+						item = item.getNextSibling();
+				}
+			}
+			if (item != null)
+				item = item.getNextSibling();
 		}
 		return avail;
 	}

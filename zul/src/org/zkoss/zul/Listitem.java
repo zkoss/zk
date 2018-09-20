@@ -43,6 +43,8 @@ public class Listitem extends XulElement {
 	 */
 	private boolean _loaded;
 
+	private boolean _itemInvalid = false;//for ROD
+
 	public Listitem() {
 	}
 
@@ -274,7 +276,6 @@ public class Listitem extends XulElement {
 	public int getIndex() {
 		return _index;
 	}
-
 	/** Sets whether the content of this item is loaded; used if
 	 * the listbox owning this item is using a list model.
 	 */
@@ -298,6 +299,16 @@ public class Listitem extends XulElement {
 		return _loaded;
 	}
 
+	public boolean isItemInvalid() {
+		return _itemInvalid;
+	}
+
+	public void setItemInvalid(boolean itemInvalid) {
+		if (_itemInvalid != itemInvalid) {
+			_itemInvalid = itemInvalid;
+		}
+	}
+	
 	//-- Utilities for implementation only (called by Listbox) */
 	/*package*/ void setIndexDirectly(int index) {
 		setIndex(index);
@@ -383,9 +394,7 @@ public class Listitem extends XulElement {
 	}
 
 	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
-		if (oldparent == null || !((Listbox) oldparent).isLoadingModel()) {
-			super.addMoved(oldparent, oldpg, newpg);
-		}
+		super.addMoved(oldparent, oldpg, newpg);
 	}
 
 	//-- Component --//
