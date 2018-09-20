@@ -294,7 +294,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	select: function (start, end) {
 		// bug ZK-1695: need to focus input and set selection range in Firefox
 		var inpNode = this.getInputNode();
-		if (zk.ff && zk.currentFocus != inpNode)
+		if (zk.currentFocus != inpNode)
 			this.focus_();
 
 		zk(inpNode).setSelectionRange(start, end);
