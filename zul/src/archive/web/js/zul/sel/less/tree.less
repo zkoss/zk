@@ -38,9 +38,6 @@
 		position: relative;
 		overflow: hidden;
 		.resetTable();
-		// ZK-3138: ROD loading indicator
-		background: transparent no-repeat center;
-		.encodeThemeURL(background-image, @loadingAnimationLoad);
 	}
 	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
@@ -60,6 +57,11 @@
 			overflow: hidden;
 			background: @meshFootBackgroundColor;
 		}
+	}
+	// ZK-3138: ROD loading indicator
+	&-loading {
+		background: transparent no-repeat center;
+		.encodeThemeURL(background-image, @loadingAnimationLoad);
 	}
 }
 //tree open icon and indent space
