@@ -71,6 +71,7 @@ ZK 8.6.0
   ZK-4027: setCheckmark and setMultiple are sequential on client side
   ZK-3995: colobox doesn't allow "id" attribute
   ZK-4056: InputElement select() setSelectionRange() not working in chrome
+  ZK-4061: @HistoryPopState called multiple times
 
 * Upgrade Notes
 
