@@ -41,6 +41,10 @@ public class TreeDataEvent {
 	 * @since 6.0.0
 	 */
 	public static final int MULTIPLE_CHANGED = 6;
+	/** Identified the state of tri selection is changed.
+	 * @since 8.6.0
+	 */
+	public static final int SELECTION_STATE_CHANGED = 7;
 	/**
 	 * Identified the state that Component's client update to be disabled
 	 * @since 8.0.0

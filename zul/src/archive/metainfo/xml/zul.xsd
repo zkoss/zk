@@ -3051,6 +3051,7 @@
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
 		<xs:attribute name="fixedLayout" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
+		<xs:attribute name="indeterminate" type="boolean" use="optional" />
 	</xs:complexType>
 	<!-- treecell -->
 	<xs:element name="treecell" type="treecellType" />
