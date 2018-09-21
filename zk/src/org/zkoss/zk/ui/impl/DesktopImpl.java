@@ -45,6 +45,7 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.media.Media;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -275,6 +276,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				ComponentsCtrl.checkUuid(_id);
 			updateUuidPrefix();
 
+			resetLabels();
 			config.invokeDesktopInits(this, request); //it might throw exception
 			if (exec != null && exec.isVoided())
 				return; //sendredirect or forward
@@ -364,6 +366,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		} else {
 			return (char) (v + ('a' - 36));
 		}
+	}
+
+	private void resetLabels() {
+		if (!Boolean.valueOf(Library.getProperty("org.zkoss.util.label.cache", "true")))
+			Labels.reset();
 	}
 
 	public String getId() {
