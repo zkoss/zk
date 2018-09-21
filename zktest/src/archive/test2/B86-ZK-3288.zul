@@ -28,7 +28,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		<center id="center">
 			<div id="container" hflex="1">
 				<template name="content">
-					<div hflex="1" height="300px" style="background-color: Goldenrod;"/>
+					<vlayout hflex="1" height="300px" style="background-color: Goldenrod;"/>
 				</template>
 			</div>
 		</center>
