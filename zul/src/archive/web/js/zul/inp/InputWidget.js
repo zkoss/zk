@@ -297,7 +297,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (zk.currentFocus != inpNode)
 			this.focus_();
 
-		zk(inpNode).setSelectionRange(start, end);
+		if (start == null && end == null)
+			inpNode.select();
+		else
+			zk(inpNode).setSelectionRange(start, end);
 	},
 	/** Returns the type.
 	 * <p>Default: text.
