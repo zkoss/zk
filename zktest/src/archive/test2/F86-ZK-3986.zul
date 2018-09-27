@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F86-ZK-3986.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 10 12:57:18 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Focus on the chosenbox, the popup should open.
+        2. After 3 secs, should see new items added to the list without popup closing and reopening.
+        3. After `item3` appear, select `item1` and `item3`, and reopen the popup immediately.
+        4. Wait until `item5` appear.
+        5. Wait 3 secs, `item0` in the popup and the selected `item1` should be removed, popup should remain open.
+        6. Wait 3 secs, `item2` in the popup and the selected `item3` should be removed, popup should remain open.
+
+    </label>
+    <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.F86_ZK_3986')">
+        <vlayout>
+            <chosenbox model="@load(vm.model)" width="80%"/>
+            <timer id="timer" repeats="true" delay="3000" onTimer="@command('update', comp=self)"/>
+        </vlayout>
+    </div>
+</zk>
