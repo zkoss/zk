@@ -139,6 +139,11 @@
 			<artifactId>closure-compiler-unshaded</artifactId>
 			<version>v20170626</version>
 		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkwebfragment</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
