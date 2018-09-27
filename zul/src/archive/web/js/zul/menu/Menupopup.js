@@ -434,6 +434,32 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			if (menubar._autodrop)
 				menubar._closeOnOut();
 		}
+	},
+	/**
+	 * Sets the current active item in this menupopup.
+	 * @param int childIndex the index of menupopup children
+	 * @since 8.6.0
+	 */
+	setActive: function (childIndex) {
+		if (childIndex >= 0 && childIndex < this.nChildren) {
+			var newCurrIndex = -1;
+			for (var w = this.firstChild, i = 0, visibleIndex = 0; w; w = w.nextSibling, i++) {
+				var isActive = _isActiveItem(w);
+				if (childIndex === i && isActive) {
+					newCurrIndex = visibleIndex;
+					break;
+				}
+				if (isActive) visibleIndex++;
+			}
+			if (newCurrIndex >= 0) { // The item is eligible to be active
+				var item = _currentChild(this);
+				if (item) item.$class._rmActive(item);
+
+				this._curIndex = newCurrIndex;
+				var target = this.getChildAt(childIndex);
+				if (target) target.$class._addActive(target);
+			}
+		}
 	}
 }, {
 	_rmActive: function (wgt) {

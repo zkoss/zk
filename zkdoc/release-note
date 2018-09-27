@@ -24,6 +24,7 @@ ZK 8.6.0
   ZK-4046: a property for reloading Labels when one desktop is created
   ZK-3986: chsenbox updates only the necessary DOM elements
   ZK-4028: Add Navigation Model
+  ZK-3551: Menupopup active/highlight position from serverside
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true

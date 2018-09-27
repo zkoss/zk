@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-mean. (since 3.5.0)
  * @author tomyeh
  */
-public class Menu extends LabelImageElement {
+public class Menu extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
 	private Menupopup _popup;
 	private String _content = "";
 	private boolean _disabled = false;
