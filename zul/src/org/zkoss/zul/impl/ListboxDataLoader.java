@@ -148,8 +148,10 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (max > oldsz - 1)
 				max = oldsz - 1;
 
-			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
+			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold()) {
+				_listbox.shallUpdateScrollPos(true);
 				_listbox.invalidate();
+			}
 			//Bug 3147518: avoid memory leak
 			//Also better performance (outer better than remove a lot)
 

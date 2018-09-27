@@ -207,6 +207,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			_fixForEmpty(w);
 		});
 		this._shallScrollIntoView = true;
+		if (this._listbox$shallUpdateScrollPos) {
+			this._fireOnScrollPos();
+		}
 		zWatch.listen({onCommandReady: this}); //ZK-3152
 	},
 	unbind_: function () {

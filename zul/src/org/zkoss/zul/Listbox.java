@@ -349,6 +349,8 @@ public class Listbox extends MeshElement {
 	private String _emptyMessage;
 	//ZK-3103: if setSelectedIndex is called, should force scroll into view
 	private boolean _shallSyncSelInView = false;
+	//ZK-3982: opened group scrolled out of view
+	private boolean _shallUpdateScrollPos = false;
 
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
@@ -3410,6 +3412,11 @@ public class Listbox extends MeshElement {
 		}
 		if (_focusIndex > -1)
 			renderer.render("focusIndex", _focusIndex); // F60-ZK-715
+
+		if (_shallUpdateScrollPos) {
+			renderer.render("_listbox$shallUpdateScrollPos", true);
+			_shallUpdateScrollPos = false;
+		}
 	}
 
 	/** Returns whether to toggle a list item selection on right click
@@ -3962,5 +3969,16 @@ public class Listbox extends MeshElement {
 			throw new IndexOutOfBoundsException("Illegal index: " + index);
 		}
 		response(new AuInvoke(this, "scrollToIndex", index, (double) index / itemCount));
+	}
+
+	/**
+	 * Sets whether to update the scroll position on init
+	 * <p>Default: false.
+	 * <p>Note: internal use only
+	 * @param shallUpdateScrollPos whether update the scroll position on init
+	 * @since 8.6.0
+	 */
+	public void shallUpdateScrollPos(boolean shallUpdateScrollPos) {
+		_shallUpdateScrollPos = shallUpdateScrollPos;
 	}
 }
