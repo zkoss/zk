@@ -31,6 +31,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 
@@ -108,7 +109,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			throws ServletException, IOException {
 		// handle sourcemapping URL
 		if (isDebugJS() && path.endsWith("wpd"))
-			request.setAttribute(HANDLE_SOURCE_MAPPING_URL, true);
+			request.getSession().setAttribute(HANDLE_SOURCE_MAPPING_URL, true);
 		byte[] data = retrieve(request, response, path);
 		if (data == null)
 			return;
@@ -139,10 +140,10 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					&& (Servlets.isBrowser(userAgent, "chrome") || Servlets.isBrowser(userAgent, "ff")
 					|| Servlets.isBrowser(userAgent, "ie11") || Servlets.isBrowser(userAgent, "safari"));
 			if (isSourceMapSupported) {
+				HttpSession session = request.getSession();
 				if (path.endsWith("map")) {
 					String name = path.substring(path.lastIndexOf("/") + 1).replaceAll(".map", "");
-					SourceMapManager sourceMapManager = (SourceMapManager) request.getSession()
-							.getAttribute(SOURCE_MAP_PREFIX + name);
+					SourceMapManager sourceMapManager = (SourceMapManager) session.getAttribute(SOURCE_MAP_PREFIX + name);
 					if (sourceMapManager == null) {
 						log.warn("Failed to load the source map resource: " + path);
 						return "".getBytes();
@@ -150,9 +151,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					String sourceMapContent = sourceMapManager.getSourceMapContent();
 					return sourceMapContent.getBytes();
 				}
-				shouldHandleSourceMappingURL = (Boolean) request.getAttribute(HANDLE_SOURCE_MAPPING_URL);
+				shouldHandleSourceMappingURL = (Boolean) session.getAttribute(HANDLE_SOURCE_MAPPING_URL);
 				if (shouldHandleSourceMappingURL != null)
-					request.removeAttribute(HANDLE_SOURCE_MAPPING_URL);
+					session.removeAttribute(HANDLE_SOURCE_MAPPING_URL);
 				request.setAttribute(SOURCE_MAP_SUPPORTED, true);
 			}
 		}
