@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F86-ZK-3962.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug  9 16:25:09 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. You can see a pre-selected area on the image.
+		2. You can select a area in the image.
+		3. You can move the area.
+		4. You can resize the area.
+		5. Should see toolbar above or below the selected area, click button 'Toggle toolbar visibility' twice, the visibility of the toolbar should be toggled.
+		6. Click button 'Crop', should see the selected area appear below the whole image.
+		7. Click button 'Move to 20, 30', the selected area should move to position top: 20px, left: 30px.
+		8. Click button 'Resize to 50, 60' the selected area should be set to width: 50px, height: 60px, with the position remained.
+		9. Click button 'Cancel', the selected area should be canceled.
+		10. Select an area, click button 'Ratio 16/9', should resize to the ratio of 16/9 with the top left position remained.
+		11. Resize the selected area, the ratio should always be 16/9 while resize.
+		12. Click button 'Ratio 0', the selected area should be able to be resize to any ratio.
+		13. Click button 'invalidate', the selected area should remain.
+		14. Click the 'crop' button on the toolbar, the selected area should appear to replace the previous cropped image below.
+		15. Click the 'cancel' button on the toolbar, the selected area should be canceled.
+
+	</label>
+	<vlayout>
+		<cropper id="cr1" x="50" y="100" w="100" h="100" onCrop="img1.setContent(event.getImage())" toolbarVisible="true">
+			<image id="img" src="/test2/img/F86-ZK-3962.jpg"/>
+		</cropper>
+		<image id="img1"/>
+		<vlayout>
+			<hlayout>
+				<button label="Crop" onClick='cr1.crop()'/>
+				<button label="Move to 20, 30" onClick="cr1.moveTo(20, 30)" />
+				<button label="Resize to 50, 60" onClick="cr1.resizeTo(50, 60)" />
+				<button label="Cancel" onClick="cr1.cancel()" />
+			</hlayout>
+			<hlayout>
+				<button label="Ratio 16/9" onClick="cr1.setAspectRatio(16/9.0)" />
+				<button label="Ratio 0" onClick="cr1.setAspectRatio(0)" />
+				<button label="Invalidate"  onClick="cr1.invalidate()" />
+				<button label="Toggle toolbar visibility"  onClick="cr1.setToolbarVisible(!cr1.isToolbarVisible())" />
+			</hlayout>
+		</vlayout>
+	</vlayout>
+</zk>
