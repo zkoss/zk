@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4028-mvc-lvl.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 25 17:18:48 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div style="border: 1px solid blue">
+        <label value="${'Level ' += currentLevel.level}"/>
+        <label value="${currentLevel.currentKey}"/>
+        <label value="${data}" />
+        <label value="${context}" />
+
+        <navigation level="${currentLevel.child}" dynamicValue="true" />
+
+        <vlayout>
+            <forEach items="${currentLevel.child.items}">
+                <a label="${each.x}" onClick="currentLevel.child.navigateTo(self.label)"/>
+            </forEach>
+        </vlayout>
+    </div>
+</zk>
