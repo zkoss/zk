@@ -1,0 +1,12 @@
+<zk>
+	<button label="test"/>
+	<label multiline="true"><![CDATA[
+		1. enable sourcemap
+			<client-config>
+				<debug-js>true</debug-js>
+				<enable-source-map>true</enable-source-map>
+			</client-config>
+		2. open browser dev tool, you would see source map
+		3. reload page, you would see source map works as usual.
+	]]></label>
+</zk>
