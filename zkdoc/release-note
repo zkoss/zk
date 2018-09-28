@@ -25,6 +25,7 @@ ZK 8.6.0
   ZK-3986: chsenbox updates only the necessary DOM elements
   ZK-4028: Add Navigation Model
   ZK-3551: Menupopup active/highlight position from serverside
+  ZK-3964: Iceblue theme narrow version
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
