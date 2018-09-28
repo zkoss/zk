@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4003.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Aug 14 11:34:20 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<hbox apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4003VM')">
+		<label multiline="true">
+			1. Click 'Load' button
+			2. select first item '1' of the first combobox
+			3. open the second combobox, you should see '1' in the dropdown.
+		</label>
+		<combobox id="rootCombo" selectedItem="@bind(vm.selectedRootItem)"
+				  model="@load(vm.availableRoots)">
+			<template name="model">
+				<comboitem label="@load(each)"/>
+			</template>
+		</combobox>
+		<combobox id="childCombo" selectedItem="@bind(vm.selectedChildItem)" model="@load(vm.availableChildren)">
+			<template name="model">
+				<comboitem label="@load(each)"/>
+			</template>
+		</combobox>
+		<button id="loadButton" label="Load" onClick="@command('loadValues')" />
+		<button id="resetButton" label="Reset" disabled="@load(empty vm.selectedRootItem)" />
+	</hbox>
+</zk>
