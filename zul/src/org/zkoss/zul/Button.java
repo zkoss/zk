@@ -20,10 +20,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -364,6 +366,15 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		if (_auxinf == null)
 			_auxinf = new AuxInfo();
 		return _auxinf;
+	}
+
+	@Override
+	public void service(AuRequest request, boolean everError) {
+		String cmd = request.getCommand();
+		if (Events.ON_UPLOAD.equals(cmd)) {
+			Events.postEvent(UploadEvent.getUploadEvent(cmd, this));
+		} else
+			super.service(request, everError);
 	}
 
 	private static final String HORIZONTAL = "horizontal", NORMAL = "normal", BUTTON = "button";

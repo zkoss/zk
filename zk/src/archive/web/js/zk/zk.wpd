@@ -51,6 +51,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="zswipe.js" jsdoc="true" browser="ios,android"/>
 	<script src="domtouch.js" browser="ios,android"/>
 	<script src="dateImpl.js"/>
+	<script src="uploadUtils.js"/>
 
 	<script src="zkie.js" browser="ie"/>
 

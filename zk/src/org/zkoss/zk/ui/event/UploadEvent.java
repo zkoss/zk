@@ -16,8 +16,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import static org.zkoss.lang.Generics.cast;
+
+import java.util.List;
+
+import org.zkoss.util.UploadUtils;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 
 /**
  * Represents that user has uploaded one or several files from
@@ -50,5 +56,21 @@ public class UploadEvent extends Event {
 	 */
 	public final Media[] getMedias() {
 		return _meds;
+	}
+
+	/**
+	 * Creates an instance of {@link UploadEvent} based on the event name and component.
+	 *
+	 * @param name event name
+	 * @param component component that triggers the upload event
+	 * @return upload event
+	 * @since 8.6.0
+	 */
+	public static UploadEvent getUploadEvent(String name, Component component) {
+		Desktop desktop = component.getDesktop();
+		String uuid = component.getUuid();
+		final List<Media> result = cast((List) desktop.getAttribute(uuid));
+		desktop.removeAttribute(uuid);
+		return new UploadEvent(name, desktop.getComponentByUuid(uuid), UploadUtils.parseResult(result));
 	}
 }
