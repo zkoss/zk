@@ -16,8 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.List;
+
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.ext.Disable;
 
 /**
  * A container used to display menus. It should be placed inside a
@@ -47,5 +52,26 @@ public class Menupopup extends Popup {
 		if (!(child instanceof Menuitem) && !(child instanceof Menuseparator) && !(child instanceof Menu))
 			throw new UiException("Unsupported child for menupopup: " + child);
 		super.beforeChildAdded(child, refChild);
+	}
+
+	/**
+	 * Sets the current active item in this menupopup.
+	 *
+	 * @param childIndex the index of menupopup children
+	 * @since 8.6.0
+	 */
+	public void setActive(int childIndex) {
+		List<Component> children = getChildren();
+		int nChild = children.size();
+		if (childIndex < 0 || childIndex >= nChild)
+			throw new WrongValueException("Out of bound: " + childIndex + " while size=" + nChild);
+
+		Component child = children.get(childIndex);
+		if (!(child instanceof Menuitem) && !(child instanceof Menu))
+			throw new WrongValueException("Unsupported child for setActive: " + child);
+		if (((Disable) child).isDisabled() || !child.isVisible())
+			throw new UiException("Set active on disabled or invisible child: " + child);
+
+		response("menupopup", new AuInvoke(this, "setActive", childIndex));
 	}
 }

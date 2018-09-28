@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3551.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 27 17:09:58 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void activeMenuPopup(Menu menu, int i) {
+        menu.open();
+        menu.getMenupopup().setActive(i);
+    }
+    ]]></zscript>
+    <label multiline="true">
+        1. Click button "Set Undo active". You can see a menupopup opened with "Undo" being highlighted.
+        2. Click button "Set Redo active". You can see an error message.
+        3. Click button "Set --- active". You can see an error message.
+        4. Click button "Set Delete active". You can see an error message.
+        5. Click button "Set Convert Indents active". You can see a menupopup opened with "Convert Indents" being highlighted.
+        6. Click button "Set Undo active" again. You can see a menupopup opened with only "Undo" being highlighted.
+        7. Click button "Invalid Index (-1)" and "Invalid Index (100)". Both you can see an error message.
+    </label>
+    <hlayout>
+        <vlayout>
+            <button onClick="activeMenuPopup(targetMenu, 0)" label="Set Undo active" />
+            <button onClick="activeMenuPopup(targetMenu, 1)" label="Set Redo active" />
+            <button onClick="activeMenuPopup(targetMenu, 2)" label="Set --- active" />
+            <button onClick="activeMenuPopup(targetMenu, 8)" label="Set Delete active" />
+            <button onClick="activeMenuPopup(targetMenu, 10)" label="Set Convert Indents active" />
+        </vlayout>
+        <vlayout>
+            <button onClick="activeMenuPopup(targetMenu, -1)" label="Invalid Index (-1)" />
+            <button onClick="activeMenuPopup(targetMenu, 100)" label="Invalid Index (100)" />
+        </vlayout>
+    </hlayout>
+
+    <panel border="normal" title="ZK Report Viewer">
+        <panelchildren>
+            <menubar id="menubar" width="100%">
+                <menu label="File">
+                    <menupopup>
+                        <menu label="New">
+                            <menupopup>
+                                <menuitem label="Document" />
+                                <menuitem label="Spreadsheet" />
+                                <menuitem label="Presentation" />
+                            </menupopup>
+                        </menu>
+                        <menuitem label="Open.." />
+                        <menuseparator/>
+                        <menuitem label="Save" />
+                        <menuitem label="Save As..." />
+                        <menuitem label="Save All" />
+                        <menuitem label="Close" />
+                        <menuitem label="Close All" />
+                        <menuseparator/>
+                        <menuitem label="Import" />
+                        <menuitem label="Export" disabled="true" />
+                        <menuseparator/>
+                        <menuitem label="Exit" disabled="true" />
+                    </menupopup>
+                </menu>
+                <menu id="targetMenu" label="Edit">
+                    <menupopup>
+                        <menuitem label="Undo" />
+                        <menuitem label="Redo" disabled="true" />
+                        <menuseparator/>
+                        <menuitem label="Cut" />
+                        <menuitem label="Copy" />
+                        <menuitem label="Paste" />
+                        <menuseparator/>
+                        <menuitem label="Select All" />
+                        <menuitem label="Delete" visible="false" />
+                        <menuseparator/>
+                        <menu label="Convert Indents">
+                            <menupopup>
+                                <menuitem label="To Space" />
+                                <menuitem label="To Tab" />
+                            </menupopup>
+                        </menu>
+                    </menupopup>
+                </menu>
+                <menu label="Help">
+                    <menupopup>
+                        <menuitem label="Issue tracker" target="_zkdemo" href="http://tracker.zkoss.org" />
+                        <menu label="About">
+                            <menupopup>
+                                <menuitem label="About Potix" target="_zkdemo" href="http://www.zkoss.org/support/about" />
+                            </menupopup>
+                        </menu>
+                    </menupopup>
+                </menu>
+                <menuitem label="ZK Web Framework" target="_zkdemo" href="http://www.zkoss.org/download" />
+            </menubar>
+        </panelchildren>
+    </panel>
+</zk>
