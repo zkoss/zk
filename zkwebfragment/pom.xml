@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.zkoss.zk</groupId>
-  <artifactId>zkwebfragment</artifactId>
-  <version>8.6.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>ZK Web Fragment</name>
-  <description>ZK Web Fragment</description>
-  <licenses>
-    <license>
-      <name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
-      <url>http://www.gnu.org/licenses/lgpl.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.zkoss.zk</groupId>
+	<artifactId>zkwebfragment</artifactId>
+	<version>8.6.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>ZK Web Fragment</name>
+	<description>ZK Web Fragment</description>
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<build>
+		<directory>${project.basedir}/debug</directory>
+		<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/archive</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/codegen/archive</directory>
+			</resource>
+		</resources>
+	</build>
 </project>
