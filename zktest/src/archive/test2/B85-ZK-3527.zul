@@ -14,39 +14,23 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<zscript><![CDATA[
-		import java.text.*;
-		import java.util.Calendar;
-		import org.zkoss.lang.Library;
-		import org.zkoss.util.TimeZones;
+		import java.time.LocalDateTime;
+		import java.time.ZoneId;
+		import java.time.ZonedDateTime;
 
-		TimeZone lisbonZone = TimeZone.getTimeZone("Europe/Lisbon");
-		TimeZone berlinZone = TimeZone.getTimeZone("Europe/Berlin");
+		ZoneId lisbonZone = ZoneId.of("Europe/Lisbon");
+		ZoneId berlinZone = ZoneId.of("Europe/Berlin");
 
-		DateFormat lisbonFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm zzz");
-		lisbonFormat.setTimeZone(lisbonZone);
-		DateFormat berlinFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm zzz");
-		berlinFormat.setTimeZone(berlinZone);
-
-		public Calendar getCalendar(int year, int month, int day, TimeZone zone) {
-			Calendar calendar = null;
-			if (zone == null)
-				calendar = Calendar.getInstance(TimeZones.getCurrent());
-			else
-				calendar = Calendar.getInstance(zone);
-			calendar.set(Calendar.YEAR, year);
-			calendar.set(Calendar.MONTH, month);
-			calendar.set(Calendar.DAY_OF_MONTH, day);
-			calendar.set(Calendar.HOUR_OF_DAY, 0);
-			calendar.set(Calendar.MINUTE, 0);
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			return calendar;
+		public Date getCalendar(int year, int month, int day, ZoneId zone) {
+			LocalDateTime ldt = LocalDateTime.of(year, month, day, 0, 0, 0);
+			ZonedDateTime zdt = ZonedDateTime.of(ldt, zone);
+			return Date.from(zdt.toInstant());
 		}
 
-		Date d1 = this.getCalendar(1976, Calendar.MARCH, 1, lisbonZone).getTime();
-		Date d2 = this.getCalendar(1979, Calendar.JULY, 1, berlinZone).getTime();
-		Date d3 = this.getCalendar(1912, Calendar.JANUARY, 1, lisbonZone).getTime();
-		Date d4 = this.getCalendar(1947, Calendar.AUGUST, 10, berlinZone).getTime();
+		Date d1 = getCalendar(1976, 3, 1, lisbonZone);
+		Date d2 = getCalendar(1979, 7, 1, berlinZone);
+		Date d3 = getCalendar(1912, 1, 2, lisbonZone);
+		Date d4 = getCalendar(1947, 8, 10, berlinZone);
 	]]></zscript>
 
 	(1) Lisbon:
@@ -73,8 +57,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		db4.setValue(d4);
 	]]></zscript>
 	<label multiline="true">
-		Check the string in datebox, hours and minutes should be 00:00 except the third one.
-		The third one should be 00:36.
+		Check the string in datebox, hours and minutes should be 00:00.
 
 		Info:
 		Clock Changes in Lisbon, Portugal (Lisboa) in 1912
@@ -82,5 +65,9 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		When local standard time was about to reach
 		Monday, 1 January 1912, 00:00:00 clocks were turned forward 0:36:45 hours to
 		Monday, 1 January 1912, 00:36:45 local standard time instead.
+
+		Update since tzdata 2018d (tested in java 10.0.2 / 1.8.0_181):
+		According to a Portuguese decree,
+		Lisbon was at -0:36:44.68, but switched to GMT on 1912-01-01 at 00:00
 	</label>
 </zk>
