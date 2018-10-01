@@ -17,9 +17,9 @@ public class B85_ZK_3527Test extends WebDriverTestCase {
 		for (int i = 0; i < 4; i++) {
 			String str = jq(".z-datebox-input:eq(" + i + ")").val();
 			if (i == 2) {
-				assertTrue("Wrong hours or minutes", str.contains("00:36"));
+				assertTrue("Wrong hours or minutes : " + str, str.contains("00:36"));
 			} else {
-				assertTrue("Wrong hours or minutes", str.contains("00:00"));
+				assertTrue("Wrong hours or minutes : " + str, str.contains("00:00"));
 			}
 		}
 	}
