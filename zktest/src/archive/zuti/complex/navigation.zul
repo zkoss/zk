@@ -1,4 +1,4 @@
-<?component name="navigation" templateURI="include/navigation_menu.zul"?>
+<?component name="navigation-menu" templateURI="include/navigation_menu.zul"?>
 <zk>
 	<window id="window" border="normal" width="600px" height="500px"
 		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.NavigationViewModel')"
@@ -10,7 +10,7 @@
 				<checkbox label="verticle orient"
 					checked="@load(vm.verticle)" onCheck="@command('changeOrient')" />
 			</hlayout>
-			<navigation data="@ref(vm.data)"
+			<navigation-menu data="@ref(vm.data)"
 				multiple="@ref(vm.multiple)" activeCommand="@ref('doActive')" />
 				
 			<!-- content panel area -->	
