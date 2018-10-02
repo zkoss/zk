@@ -133,15 +133,13 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 
 			// @since 8.6.0 for supporting narrow theme patch
 			String uri = "~./zul/css/patch.css.dsp";
-			if (getWebApp().getResource(uri) != null) {
-				try {
-					if (tp != null) uri = tp.beforeWidgetCSS(exec, uri);
-					if (uri != null) {
-						_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
-					}
-				} catch (Throwable ex) {
-					log.error("Unable to load " + uri, ex);
-				}
+			try {
+				if (tp != null)
+					uri = tp.beforeWidgetCSS(exec, uri);
+				if (uri != null && getWebApp().getResource(uri) != null)
+					_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
+			} catch (Throwable ex) {
+				log.error("Unable to load " + uri, ex);
 			}
 		} finally {
 			((ExecutionCtrl) exec).onDeactivate();
