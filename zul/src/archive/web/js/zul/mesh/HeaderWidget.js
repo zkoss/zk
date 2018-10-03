@@ -221,11 +221,57 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_createFaker: function (n, postfix) {
 		var _getWidth = zul.mesh.MeshWidget._getWidth,
 			wd = _getWidth(this, this._hflexWidth ? this._hflexWidth + 'px' : this.getWidth()),
-			t = document.createElement('col');
+			t = document.createElement('col'),
+			frozen = this.getMeshWidget().frozen;
 		wd = wd ? 'width: ' + wd + ';' : '';
+		if (!wd && frozen && !frozen._smooth)
+			wd = this._calcFakerWidth(postfix);
 		t.id = n.id + '-' + postfix;
 		t.style.cssText = wd;
 		return t;
+	},
+	_calcFakerWidth: function (postfix) {
+		var parent = this.parent,
+			child = parent.firstChild,
+			totalWidth = 0,
+			fakerCount = 1;
+
+		while (child) {
+			if (!child.getWidth() && !child.getHflex() && child != this) {
+				var fakerWidth = child.$n(postfix).style.width;
+				if (fakerWidth == '')
+					break;
+				if (fakerWidth == zul.mesh.MeshWidget.WIDTH0)
+					totalWidth += parseFloat(child._origWd);
+				else
+					totalWidth += parseFloat(fakerWidth);
+				fakerCount++;
+			}
+			child = child.nextSibling;
+		}
+		if (totalWidth == 0)
+			return '';
+		else {
+			var eachWidth = jq.px0(totalWidth / fakerCount);
+			this._syncFakerWidth(eachWidth, postfix);
+			return 'width: ' + eachWidth;
+		}
+	},
+	_syncFakerWidth: function (width, postfix) {
+		var parent = this.parent,
+			child = parent.firstChild;
+
+		while (child) {
+			if (!child.getWidth() && !child.getHflex() && child != this) {
+				var faker = child.$n(postfix);
+				if (faker.style.width == zul.mesh.MeshWidget.WIDTH0) {
+					if (postfix == 'hdfaker')
+						child._origWd = width;
+				} else
+					faker.style.width = width;
+			}
+			child = child.nextSibling;
+		}
 	},
 	doClick_: function (evt) {
 		var tg = evt.domTarget,
