@@ -53,11 +53,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		you upgraded ZK to a newer version.
 		However, it is better to turn the cache off when you are developing
 		a theme or a component.
+	-->
 	<library-property>
 		<name>org.zkoss.web.classWebResource.cache</name>
 		<value>false</value>
 	</library-property>
-	-->
 	
 	<!-- Turn on if you want to cache by etag for dynamic resource.
 	<library-property>

@@ -95,6 +95,8 @@ public class ResourceCache<K, V> extends CacheMap<Object, Object> {
 	@SuppressWarnings("unchecked")
 	public V get(Object src) {
 		WaitLock lock = null;
+		String resourceCachest = Library.getProperty("org.zkoss.web.classWebResource.cache");
+		boolean resourceCache = resourceCachest != null ? Boolean.parseBoolean(resourceCachest) : true;
 		for (;;) {
 			Info ri = null;
 			synchronized (this) {
@@ -112,7 +114,7 @@ public class ResourceCache<K, V> extends CacheMap<Object, Object> {
 			//check whether cached is valid
 			if (ri != null) {
 				synchronized (ri) {
-					if (ri.isValid())
+					if (ri.isValid() && resourceCache)
 						return ri.getResource(); //reuse cached
 				}
 				//invalid, so remove it (if not updated by others)
