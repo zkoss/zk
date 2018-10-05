@@ -252,7 +252,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		//ZK-3152: stripe here will be after all commands and before onResponse to avoid flickering
 		if (this._shallStripe)
 			this.stripe();
-		this.$supers(Listbox, 'onCommandReady', arguments);
 	},
 	onResponse: function (ctl, opts) {
 		if (this.desktop) {
@@ -260,6 +259,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (this._shallFixEmpty)
 				_fixForEmpty(this);
 		}
+		this.$supers(Listbox, 'onResponse', arguments);
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
