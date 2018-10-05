@@ -14,72 +14,59 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
-	<div>
+	<div vflex="1">
 		<label multiline="true">
-			1. click the knob, it will change the current position.
-			2. do mouse down and move the mouse, it will change the current position, and the input value should be changed.
-			3. wheel the mouse, it will change the current position, and the input value should be changed.
-			4. click button label as "set Angle 270", the angle curve should be as 270 degree, and input should inside the arc curve.
-			5. click button label as "set Angle 140", the angle curve should be as 140 degree, and input should inside the arc curve. 
-			6. click button label as "set SW 20", the stroke width of the curve should be as 20.
-			7. click button label as "set H 300", the height of the widget should be 300px, and the input position should not be changed.
-			8. click button label as "set H 50%", the height of the widget should be 150px(50%), and the input position should not be changed.
-			9. click button label as "setMold default", the mold of the slider should be a default slider.
+			1. Clock on the stock, the stroke colored length should change to the position as we clicked, and the input value be calculated and update as percentage * 100.
+			2. Mouse down and move the mouse on the first knob, the stroke colored length should be moved to where the cursor is, and the input value should also be updated as percentage * 100.
+			3. Repeat step2 with the wheel.
+			4. Click button 'set H 300px', should not see ant changes.
+			5. Click button 'setW 300', should see the first knob changed to both width and height 300px.
+			6. Click button 'set Angle 181' , should see the first knob change from a whole circle to a 181 degree knob. And the Colored stoke length should be at about the percentage of input value / 100.
+			7. Click button 'set SE 40', should see the stroke of the first knob changed from 10 to 40px.
+			8. Click button 'Input size * 1.5', should see the input of the first knob become 1.5 times larger.
+
 		</label>
 		<style>
-			.knob1 .z-slider-knob-area {
+			.knob2 .z-slider-knob-area {
 				stroke: black;
 			}
-			.knob2 .z-slider-knob-area {
-				stroke: green;
-			}
-			.knob3 .z-slider-knob-area {
-				stroke: red;
-			}
-			.knob1 .z-slider-input {
-				border-color: black;
+			.knob2 .z-slider-input {
 				color: black;
 			}
-			.knob2 .z-slider-input {
-				border-color: green;
-				color: green;
-			}
-			.knob3 .z-slider-input {
-				border-color: black;
-				color: red;
+			.knob2 .z-slider-input:hover {
+				border-color: #aaa;
 			}
 		</style>
 		<hlayout>
-			<slider id="knobs" sclass="knob" mold="knob" minpos="0.0" maxpos="100.0" curpos="80.0" step="0.5" width="300px" style="border: 1px solid black;"  angleArc="360" strokeWidth="10"/>
-			<div width="250px" style="float:left;">
-				<slider id="knob1" sclass="knob1" mold="knob" minpos="0.0" maxpos="100.0" curpos="65.0" step="0.5" hflex="1" style="border: 1px solid black;" angleArc="270" strokeWidth="10"/>
+			<div height="400px">
+				<slider id="knob1" sclass="knob1" mold="knob" minpos="0.0" maxpos="100.0" curpos="80.0" step="0.5" angleArc="360" strokeWidth="10"/>
 			</div>
-			<slider id="knob2" sclass="knob2" mold="knob" minpos="0.0" maxpos="100.0" curpos="40.0" step="0.5" width="200px" style="border: 1px solid black;" angleArc="210" strokeWidth="15"/>
-			<div width="300px" height="300px">
-				<slider id="knob3" sclass="knob3" mold="knob" minpos="0.0" maxpos="100.0" curpos="25.0" step="0.5" width="50%" height="20%" style="border: 1px solid black;"  angleArc="150" strokeWidth="15"/>
+			<div height="400px">
+				<slider id="knob2" sclass="knob2" mold="knob" minpos="0.0" maxpos="100.0" curpos="65.0" step="1" vflex="1" angleArc="270" strokeWidth="10"/>
 			</div>
 		</hlayout>
-		<button label="set H 300px" onClick='knobs.setHeight("300px")'/>
-		<button label="set H 100px" onClick='knobs.setHeight("100px")'/>
-		<button label="set H 50%" onClick='knobs.setHeight("50%")'/>
-		<button label="set H 100%" onClick='knobs.setHeight("100%")'/>
-		<button label="set H null" onClick='knobs.setHeight(null)'/>
+		<button label="set H 300px" onClick='knob1.setHeight("300px")'/>
+		<button label="set H 100px" onClick='knob1.setHeight("100px")'/>
+		<button label="set H 50%" onClick='knob1.setHeight("50%")'/>
+		<button label="set H 100%" onClick='knob1.setHeight("100%")'/>
+		<button label="set H null" onClick='knob1.setHeight(null)'/>
 		<separator/>
-		<button label="set W 300" onClick='knobs.setWidth("300px")'/>
-		<button label="set W 100" onClick='knobs.setWidth("100px")'/>
-		<button label="set W 50%" onClick='knobs.setWidth("50%")'/>
-		<button label="set W 100%" onClick='knobs.setWidth("100%")'/>
+		<button label="set W 300" onClick='knob1.setWidth("300px")'/>
+		<button label="set W 100" onClick='knob1.setWidth("100px")'/>
+		<button label="set W 50%" onClick='knob1.setWidth("50%")'/>
+		<button label="set W 100%" onClick='knob1.setWidth("100%")'/>
 		<separator/>
-		<button label="set Angle 360" onClick="knobs.setAngleArc(360)"/>
-		<button label="set Angle 270" onClick="knobs.setAngleArc(270)"/>
-		<button label="set Angle 140" onClick="knobs.setAngleArc(130)"/>
+		<button label="set Angle 360" onClick="knob1.setAngleArc(360)"/>
+		<button label="set Angle 270" onClick="knob1.setAngleArc(270)"/>
+		<button label="set Angle 181" onClick="knob1.setAngleArc(181)"/>
+		<button label="set Angle 140" onClick="knob1.setAngleArc(130)"/>
 		<separator/>
-		<button label="set SW 10" onClick="knobs.setStrokeWidth(10)"/>
-		<button label="set SW 20" onClick="knobs.setStrokeWidth(20)"/>
+		<button label="set SW 10" onClick="knob1.setStrokeWidth(10)"/>
+		<button label="set SW 20" onClick="knob1.setStrokeWidth(20)"/>
+		<button label="set SW 40" onClick="knob1.setStrokeWidth(40)"/>
 		<separator/>
-		<button label="setMold knob" onClick='knobs.setMold("knob")'/>
-		<button label="setMold default" onClick='knobs.setMold("default")'/>
-		<button label="setMold scale" onClick='knobs.setMold("scale")'/>
-		<button label="setMold sphere" onClick='knobs.setMold("sphere")'/>
+		<button label="Input size * 0.7" onClick="knob1.setScaleInput(0.7)"/>
+		<button label="Input size * 1.0" onClick="knob1.setScaleInput(1.0)"/>
+		<button label="Input size * 1.5" onClick="knob1.setScaleInput(1.5)"/>
 	</div>
 </zk>

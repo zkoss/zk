@@ -3,6 +3,7 @@
 .z-slider {
 	background-image: none;
 	overflow: hidden;
+	position: relative;
 
 	&-center {
 		background-color: @sliderBackgroundColor;
@@ -47,13 +48,22 @@
 	}
 
 	&-input {
-		border: 1px solid @sliderAreaBackgroundColor;
-		background: none;
+		border: 1px solid @inputBorderColor;
+		.borderRadius(@baseBorderRadius);
+		background: @inputBackgroundColor;
 		-webkit-appearance: none;
-		color: @sliderAreaBackgroundColor;
 		text-align: center;
-		position: relative;
-		font: bold 12px Arial;
+		position: absolute;
+		line-height: 1.5;
+		.fontStyle(@baseContentFontFamily, @inputTextSize, bold, @sliderInputColor);
+
+		&:hover {
+			border-color: @inputHoverBorderColor;
+		}
+
+		&:focus {
+			border-color: @inputFocusBorderColor;
+		}
 	}
 
 	&-horizontal {

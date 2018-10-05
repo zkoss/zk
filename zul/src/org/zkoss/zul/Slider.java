@@ -41,6 +41,7 @@ public class Slider extends XulElement {
 	//knob mode property
 	private double _angleArc = 360.0;
 	private double _strokeWidth = 10.0;
+	private double _scaleInput = 1.0;
 
 	/** Represent integer slider.
 	 * @since 7.0.1
@@ -468,7 +469,7 @@ public class Slider extends XulElement {
 	 * @since 8.6.0
 	 */
 	public void setAngleArc(double angleArc) {
-		if (angleArc > 360 || angleArc < 0) {
+		if (angleArc > 360 || angleArc <= 0) {
 			throw new WrongValueException("The value of angleArc should be between 0 and 360 degree");
 		} else if (_angleArc != angleArc) {
 			_angleArc = angleArc;
@@ -478,14 +479,17 @@ public class Slider extends XulElement {
 
 	/** Returns the degree of arc of the knob slider.
 	 * <p>Default: 360.0
+	 *
+	 * @return double
 	 * @since 8.6.0
 	 */
-	public double getAngleArc(double angleArc) {
+	public double getAngleArc() {
 		return _angleArc;
 	}
 
 	/** Sets the stroke width of the knob slider.
-	 * <p>Default: 10.0 
+	 * <p>Default: 10.0
+	 *
 	 * @param strokeWidth is the stroke width for the knob slider
 	 * @since 8.6.0
 	 */
@@ -499,11 +503,40 @@ public class Slider extends XulElement {
 	}
 
 	/** Returns the stroke width of the knob slider.
-	 * <p>Default: 
+	 * <p>Default: 10.0
+	 *
+	 * @return double
 	 * @since 8.6.0
 	 */
-	public double getStrokeWidth(double strokeWidth) {
+	public double getStrokeWidth() {
 		return _strokeWidth;
+	}
+
+	/**
+	 * Sets the scale ratio of the input in knob mold.
+	 * e.g.: 1.5
+	 * This will enlarge or narrow the whole input the scale ratio.
+	 * Default: 1.0
+	 *
+	 * @param scaleInput is a number in double that scales the input size.
+	 * @since 8.6.0
+	 */
+	public void setScaleInput(double scaleInput) {
+		if (_scaleInput <= 0)
+			throw new WrongValueException("The value of scaleInput should be larger than 0");
+		if (_scaleInput != scaleInput) {
+			_scaleInput = scaleInput;
+			smartUpdate("scaleInput", _scaleInput);
+		}
+	}
+
+	/**
+	 * Returns the scale ratio of the input in knob mold.
+	 * @return double
+	 * @since 8.6.0
+	 */
+	public double getScaleInput() {
+		return _scaleInput;
 	}
 
 	//-- super --//
