@@ -993,6 +993,16 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>rating</component-name>
+		<component-class>org.zkoss.zul.Rating</component-class>
+		<widget-class>zul.wgt.Rating</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/rating.js</mold-uri>
+			<css-uri>css/rating.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>row</component-name>
 		<component-class>org.zkoss.zul.Row</component-class>
 		<widget-class>zul.grid.Row</widget-class>

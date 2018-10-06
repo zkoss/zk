@@ -13,7 +13,7 @@ F86-ZK-3960.zul
 Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
-<window viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_3960VM')">
+<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_3960VM')">
     <label multiline="true">
         for the rating component in the Font awesome window
         1. should see rating 3, and the icons should be Font awesome z-icon-home icon
@@ -49,27 +49,32 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         7. rate 2 again to cancel the rating, the rating should be able to cancel
         7. click button 11, rate it 2, rate it again, should not be able to cancel
 
+        for the rating component in the Readonly window
+        1. should see right arrow as icons
+        2. hover on the icons, should see default cursor
+        3. click the button 'toggle readonly', and hover on the icons again, should see the cursor changed to style of `a` tag.
+
         for the rating component in the emoji window
         1. should see 5 poopoo as rating icon
         2. should have hover style and selected style customized by css hue-rotate
             (we customized the emoji style with css here, by default, there's no selected style for emojis, due to the emoji's color should be set by css hue-rotate)
 
     </label>
-    <hlayout>
+    <hlayout hflex="min">
         <window border="normal" title="Font awesome">
             <vlayout>
                 <button onClick='r1.setSymbol("z-icon-flag")' label="1. set to Font awesome z-icon-flag"/>
-                <button onClick='r1.setSymbol("U+0260E")' label="2. set to U+0260E &#9742;"/>
+                <button onClick='r1.setSymbol("\u260E")' label="2. set to \u260E &#9742;"/>
                 <button onClick='r1.setMax(10)' label="3. set size 10"/>
                 <button onClick='r1.setMax(5)' label="4. set size 5"/>
                 <rating id="r1" symbol="z-icon-home" rating="@bind(vm.rating1)" cancelable="false"/>
                 <div>Rated: <label value="@load(vm.rating1)"/></div>
             </vlayout>
         </window>
-        <separator width="50px"/>
+        <separator width="20px"/>
         <window border="normal" title="default star unicode">
             <vlayout>
-                <button onClick='r2.setSymbol("U+02716")' label="5. set to U+02716 &#10006;"/>
+                <button onClick='r2.setSymbol("\u2716")' label="5. set to \u2716 &#10006;"/>
                 <button onClick='r2.setSymbol("z-icon-flag")' label="6. set to Font awesome z-icon-flag"/>
                 <button onClick='r2.setRating(4)' label="7. set rating to 4"/>
                 <button onClick='r2.setRating(10)' label="8. set rating to 10"/>
@@ -78,7 +83,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
                 <div>Rated: <label value="@load(vm.rating2)"/></div>
             </vlayout>
         </window>
-        <separator width="50px"/>
+        <separator width="20px"/>
         <window border="normal" title="Disabled">
             <vlayout>
                 <button onClick="disable.setDisabled(!disable.isDisabled())" label="10. toggle disabled"/>
@@ -90,7 +95,14 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
                 <rating disabled="true" rating="3"/>
             </vlayout>
         </window>
-        <separator width="50px"/>
+        <separator width="20px"/>
+        <window border="normal" title="Readonly">
+            <vlayout>
+                <button onClick="readonly.setReadonly(!readonly.isReadonly())" label="10. toggle readonly"/>
+                <rating id="readonly" symbol="&#x21E8;" rating="2" readonly="true"/>
+            </vlayout>
+        </window>
+        <separator width="20px"/>
         <window border="normal" title="emoji">
             <style>
                 .emoji .z-rating-hover {
@@ -108,4 +120,5 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
             </vlayout>
         </window>
     </hlayout>
-</window>
+    <textbox/>
+</div>

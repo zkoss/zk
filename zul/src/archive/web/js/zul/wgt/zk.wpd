@@ -42,4 +42,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Combobutton"/>
 	<widget name="Selectbox"/>
 	<widget name="Notification"/>
+	<widget name="Rating" />
 </package>
