@@ -15,12 +15,12 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		1. You can see a pre-selected area on the image.
+		1. You can see a pre-selected area on the first image.
 		2. You can select a area in the image.
 		3. You can move the area.
 		4. You can resize the area.
 		5. Should see toolbar above or below the selected area, click button 'Toggle toolbar visibility' twice, the visibility of the toolbar should be toggled.
-		6. Click button 'Crop', should see the selected area appear below the whole image.
+		6. Click button 'Crop', should see the selected area appear on the right.
 		7. Click button 'Move to 20, 30', the selected area should move to position top: 20px, left: 30px.
 		8. Click button 'Resize to 50, 60' the selected area should be set to width: 50px, height: 60px, with the position remained.
 		9. Click button 'Cancel', the selected area should be canceled.
@@ -30,26 +30,58 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		13. Click button 'invalidate', the selected area should remain.
 		14. Click the 'crop' button on the toolbar, the selected area should appear to replace the previous cropped image below.
 		15. Click the 'cancel' button on the toolbar, the selected area should be canceled.
+		16. Select a range and click button 'invalidate' and re-select another range, should not appear a duplicated toolbar.
+		17. Resize the selected area on the second image, the values in the two textboxs should be changed according to the size.
+		18. Crop the selected area, the cropped image should show on the right without any difference with the selected area.
+		19. Click button 'invalidate' below the second image, should not see two cropper appear.
+		20. Select a range on the third cropper, should crop without any exception.
 
 	</label>
-	<vlayout>
-		<cropper id="cr1" x="50" y="100" w="100" h="100" onCrop="img1.setContent(event.getImage())" toolbarVisible="true">
-			<image id="img" src="/test2/img/F86-ZK-3962.jpg"/>
-		</cropper>
-		<image id="img1"/>
-		<vlayout>
-			<hlayout>
-				<button label="Crop" onClick='cr1.crop()'/>
-				<button label="Move to 20, 30" onClick="cr1.moveTo(20, 30)" />
-				<button label="Resize to 50, 60" onClick="cr1.resizeTo(50, 60)" />
-				<button label="Cancel" onClick="cr1.cancel()" />
-			</hlayout>
-			<hlayout>
-				<button label="Ratio 16/9" onClick="cr1.setAspectRatio(16/9.0)" />
-				<button label="Ratio 0" onClick="cr1.setAspectRatio(0)" />
-				<button label="Invalidate"  onClick="cr1.invalidate()" />
-				<button label="Toggle toolbar visibility"  onClick="cr1.setToolbarVisible(!cr1.isToolbarVisible())" />
-			</hlayout>
-		</vlayout>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_3962VM')">
+		<hlayout>
+			<cropper id="cr1" x="50" y="100" w="100" h="100" onCrop="img1.setContent(event.getImage())" toolbarVisible="true" croppedFormat="image/jpeg">
+				<image id="img" src="/test2/img/F86-ZK-3962.jpg"/>
+			</cropper>
+			<image id="img1"/>
+		</hlayout>
+		<hlayout>
+			<button label="Crop" onClick='cr1.crop()'/>
+			<button label="Move to 20, 30" onClick="cr1.moveTo(20, 30)" />
+			<button label="Resize to 50, 60" onClick="cr1.resizeTo(50, 60)" />
+			<button label="Cancel" onClick="cr1.cancel()" />
+		</hlayout>
+		<hlayout>
+			<button label="Ratio 16/9" onClick="cr1.setAspectRatio(16/9.0)" />
+			<button label="Ratio 0" onClick="cr1.setAspectRatio(0)" />
+			<button label="Invalidate"  onClick="cr1.invalidate()" />
+			<button label="Toggle toolbar visibility"  onClick="cr1.setToolbarVisible(!cr1.isToolbarVisible())" />
+		</hlayout>
+		<hlayout>
+			<cropper id="cr2" onCrop="img2.setContent(event.getImage())" toolbarVisible="true" w="@bind(vm.width)" h="@bind(vm.height)" onChange="@command('cropperOnChange', c=self)" onChanging="@command('cropperOnChanging', c=self)">
+				<image src="https://upload.wikimedia.org/wikipedia/en/3/36/Characters.png" width="600px"/>
+			</cropper>
+			<vlayout>
+				width: <textbox value="@bind(vm.width)" width="80px"/>
+				height: <textbox value="@bind(vm.height)" width="80px"/>
+				<image id="img2" />
+			</vlayout>
+		</hlayout>
+		<button label="invalidate" onClick="cr2.invalidate()"/>
+		<separator height="15px"/>
+		<hlayout>
+			<zscript><![CDATA[
+			import java.net.URL;
+			import org.zkoss.image.AImage;
+
+			URL url = new URL("https://upload.wikimedia.org/wikipedia/en/3/36/Characters.png");
+			AImage img = new AImage(url);
+		]]>
+			</zscript>
+			<cropper id="cr3" onCrop="img3.setContent(event.getImage())" toolbarVisible="true">
+				<image content="${img}" width="600px"/>
+			</cropper>
+			<image id="img3" />
+		</hlayout>
+		<button label="invalidate" onClick="cr3.invalidate()"/>
 	</vlayout>
 </zk>
