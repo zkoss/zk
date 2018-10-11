@@ -20,7 +20,7 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Div;
-import org.zkoss.zuti.zul.Navigation;
+import org.zkoss.zuti.zul.Apply;
 import org.zkoss.zuti.zul.NavigationLevel;
 import org.zkoss.zuti.zul.NavigationModel;
 import org.zkoss.zuti.zul.event.NavigationEvent;
@@ -31,19 +31,19 @@ import org.zkoss.zuti.zul.event.NavigationEvent;
 public class F86_ZK_4028Composer extends SelectorComposer<Div> implements EventListener<NavigationEvent<String>> {
 	private NavigationModel<String> navModel = new NavigationModel<>();
 
-	@Wire("::shadow#nav1") private Navigation nav1;
+	@Wire("::shadow#nav1") private Apply nav1;
 	@Wire private A s1;
 	@Wire private A s2;
 	@Wire private A s3;
 
 	public F86_ZK_4028Composer() {
 		navModel.put("Step 1", "/test2/F86-ZK-4028-mvc-lvl.zul");
-		navModel.put("Step 1/Step 1-1", "/test2/F86-ZK-4028-mvc-lvl.zul");
+		navModel.put("Step 1/Step 1-1", "/test2/F86-ZK-4028-mvc-lvl2.zul");
 		navModel.put("Step 2", "/test2/F86-ZK-4028-mvc-lvl.zul");
-		navModel.put("Step 2/Step 2-1", "/test2/F86-ZK-4028-mvc-lvl.zul");
-		navModel.put("Step 2/Step 2-2", "/test2/F86-ZK-4028-mvc-lvl.zul");
-		navModel.put("Step 2/Step 2-2/Step 2-2-1", "/test2/F86-ZK-4028-mvc-lvl.zul");
-		navModel.put("Step 2/Step 2-2/Step 2-2-2", "/test2/F86-ZK-4028-mvc-lvl.zul");
+		navModel.put("Step 2/Step 2-1", "/test2/F86-ZK-4028-mvc-lvl2.zul");
+		navModel.put("Step 2/Step 2-2", "/test2/F86-ZK-4028-mvc-lvl2.zul");
+		navModel.put("Step 2/Step 2-2/Step 2-2-1", "/test2/F86-ZK-4028-mvc-lvl3.zul");
+		navModel.put("Step 2/Step 2-2/Step 2-2-2", "/test2/F86-ZK-4028-mvc-lvl3.zul");
 		navModel.put("Step 3", "/test2/F86-ZK-4028-mvc-lvl.zul");
 	}
 
@@ -51,13 +51,13 @@ public class F86_ZK_4028Composer extends SelectorComposer<Div> implements EventL
 	public void doAfterCompose(Div comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		NavigationLevel<String> firstLevel = navModel.getChild();
-		nav1.setLevel(firstLevel);
+		NavigationLevel<String> firstLevel = navModel.getRoot();
+		nav1.setDynamicProperty("level", firstLevel);
 		updateLevel(nav1, firstLevel);
 		navModel.addEventListener(this);
 	}
 
-	private void updateLevel(Navigation nav, NavigationLevel<String> level) {
+	private void updateLevel(Apply nav, NavigationLevel<String> level) {
 		nav.setTemplateURI(level.getCurrent());
 		nav.setDynamicProperty("data", level.getCurrent());
 		nav.setDynamicProperty("context", level.getContext());
@@ -78,16 +78,16 @@ public class F86_ZK_4028Composer extends SelectorComposer<Div> implements EventL
 	public void onEvent(NavigationEvent<String> event) throws Exception {
 		Clients.log(event.toString());
 		if (event.getType() == NavigationEvent.Type.NAVIGATE) {
-			Navigation nav = getNavigation(event.getLevel().getLevel());
+			Apply nav = getNavigation(event.getLevel().getLevel());
 			if (nav != null)
 				updateLevel(nav, event.getLevel());
 		}
 	}
 
-	private Navigation getNavigation(int level) {
-		Navigation base = nav1;
+	private Apply getNavigation(int level) {
+		Apply base = nav1;
 		while (level > 1) {
-			base = (Navigation) Selectors.iterable(base.getDistributedChildren().get(0), "::shadow").iterator().next();
+			base = (Apply) Selectors.iterable(base.getDistributedChildren().get(0), "::shadow").iterator().next();
 			if (base == null)
 				return null;
 			level--;

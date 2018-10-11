@@ -15,12 +15,12 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 <zk>
     <label multiline="true">
         1. Click link "Step 2", you can see "Level 1 Step 2 /test2/F86-ZK-4028-mvc-lvl.zul"
-        2. Click link "Step 2-2", you can see "Level 2 Step 2-2 /test2/F86-ZK-4028-mvc-lvl.zul".
-        3. Click link "Step 2-2-1", you can see "Level 3 Step 2-2-1 /test2/F86-ZK-4028-mvc-lvl.zul".
-        4. Click button "Direct NavTo Step 1/Step 1-1", you can see "Level 2 Step 1-1 /test2/F86-ZK-4028-mvc-lvl.zul".
+        2. Click link "Step 2-2", you can see "Level 2 Step 2-2 /test2/F86-ZK-4028-mvc-lvl2.zul".
+        3. Click link "Step 2-2-1", you can see "Level 3 Step 2-2-1 /test2/F86-ZK-4028-mvc-lvl3.zul".
+        4. Click button "Direct NavTo Step 1/Step 1-1", you can see "Level 2 Step 1-1 /test2/F86-ZK-4028-mvc-lvl2.zul".
     </label>
     <div apply="org.zkoss.zktest.test2.F86_ZK_4028Composer">
-        <navigation id="nav1" dynamicValue="true" />
+        <apply id="nav1" dynamicValue="true" />
 
         <vlayout>
             <a id="s1" label="Step 1"/>

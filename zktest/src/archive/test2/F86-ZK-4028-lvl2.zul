@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk>
     <div style="border: 1px solid green">
-        <label value="@init('Level '.concat(currentLevel.level))"/>
+        <label value="@init('Level '.concat(level1.level))"/>
         <label value="@load(data.text)" />
         <label value="@load(context)" />
 
         <vlayout>
-            <forEach items="@load(currentLevel.child eq null ? [] : currentLevel.child.items)">
-                <a onClick="@command('levelNavTo', level=currentLevel.child, key=self.label)" label="@init(each.x)"/>
+            <forEach items="@load(level1.child eq null ? [] : level1.child.items)">
+                <a onClick="@command('levelNavTo', level=level1.child, key=self.label)" label="@init(each.x)"/>
             </forEach>
         </vlayout>
 
         <div>
-            <button onClick='currentLevel.setContext(Collections.singletonMap("test", new Random().nextInt()))' label="Random Context"/>
-            <button onClick='currentLevel.navigateTo("Access Point")' label="NavTo Access Point"/>
+            <button onClick='level1.setContext(Collections.singletonMap("test", new Random().nextInt()))' label="Random Context"/>
+            <button onClick='level1.navigateTo("Access Point")' label="NavTo Access Point"/>
         </div>
 
-        <navigation level="@load(currentLevel.child)"
-                    templateURI="@load(self.level.current eq null ? null : self.level.current.url)"
-                    data="@load(self.level.current)"
-                    context="@load(self.level.context)"/>
+        <apply level2="@load(level1.child)"
+                    templateURI="@load(level2.current eq null ? null : level2.current.url)"
+                    data="@load(level2.current)"
+                    context="@load(level2.context)"/>
     </div>
 </zk>
