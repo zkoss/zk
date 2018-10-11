@@ -21,6 +21,8 @@ public class F86_ZK_3960VM {
 
 	private int _rating4 = 0;
 
+	private int _rating5 = 3;
+
 	public int getRating1() {
 		return _rating1;
 	}
@@ -51,5 +53,13 @@ public class F86_ZK_3960VM {
 
 	public void setRating4(int rating4) {
 		_rating4 = rating4;
+	}
+
+	public int getRating5() {
+		return _rating5;
+	}
+
+	public void setRating5(int rating5) {
+		_rating5 = rating5;
 	}
 }
