@@ -68,7 +68,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         });
     })
     function getZKLogLineCnt() {
-    	return jq("#zk_log").val().split(',').length
+    	return jq("#zk_log").val().trim().split("\n").length;
     }
     ]]></script>
 </zk>
