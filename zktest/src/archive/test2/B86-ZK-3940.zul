@@ -16,20 +16,49 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 <zk xmlns:w="client">
     <label multiline="true">
         In Tomcat
-        1. click button '7500', should see 'received Length: 7500' in zklog.
-        2. click button '8100', should see 'received Length: 8100' in zklog.
+        1. Click button '7500', should see 'true' in zklog.
+        2. Click button '8100', should see 'true' in zklog.
 
         In Jetty
-        1. click button '65000', should see 'received Length: 65000' in zklog.
-        1. click button '66000', should see 'received Length: 66000' in zklog.
+        1. Click button '65000', should see 'true' in zklog.
+        1. Click button '66000', should see 'true' in zklog.
+
+        In any server
+        Click button 'rare words', should see 'true' in zklog.
+        (true means the sent and received messages are the same)
 
     </label>
     <script>
+        var data,
+            originalMsgBufferedSize;
+
         function fireData ({ size }) {
-            zk.$('$comp').fire('onData', {text : 'a'.repeat(size)}, {toServer: true});
+            if (originalMsgBufferedSize == undefined)
+                originalMsgBufferedSize = zWs._maxTextMessageBufferSize;
+            zWs._maxTextMessageBufferSize = originalMsgBufferedSize;
+            data = 'a'.repeat(size);
+            zk.$('$comp').fire('onData', {text: data}, {toServer: true});
         }
+
+        function testOthers() {
+            if (originalMsgBufferedSize == undefined)
+                originalMsgBufferedSize = zWs._maxTextMessageBufferSize;
+            zWs._maxTextMessageBufferSize = 176; // bytes length to the first 𬶨 is 178, and it's a three bytes character, so 176 could see if it's splitting well
+            data = 'にっぽんご❤☀☻/にほんご😆𬶨bb𬶨ad𬶨𬶨€g𬶨สบายดีหรือ?或สบ☆☂ายดีไหม?q𬶨hht𬶨wewЗдравств♞уй(те)!ewew우리가족은모☭→두넷이에요.아버지와어머니가계시고저와동새☯이있☢어요.ewe';
+            zk.$('$comp').fire('onData', {text: data}, {toServer: true});
+        }
+
+        function assertEqual(receivedData) {
+            zk.log(data == receivedData);
+        }
+
     </script>
-    <div id="comp" onData='Clients.log("received Length: " + event.getData().get("text").length())'/>
+    <div id="comp">
+        <attribute name="onData">
+            String text = event.getData().get("text");
+            Clients.evalJavaScript("assertEqual('" + text + "')");
+        </attribute>
+    </div>
     For Tomcat:
     <button label="7500" w:onClick="fireData({size: +this._label})"/>
     <button label="8100" w:onClick="fireData({size: +this._label})" style="background-color: red;"/>
@@ -37,4 +66,6 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
     For Jetty:
     <button label="65000" w:onClick="fireData({size: +this._label})"/>
     <button label="66000" w:onClick="fireData({size: +this._label})" style="background-color: red;"/>
+    <separator/>
+    <button label="rare words" w:onClick="testOthers()" style="background-color: green;"/>
 </zk>
