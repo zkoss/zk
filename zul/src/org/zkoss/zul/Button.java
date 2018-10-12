@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -250,7 +251,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	 *  <pre><code>&lt;button label="Upload" upload="true,maxsize=-1,multiple=true,accept=audio/*|video/*|image/*,native"</code></pre>
 	 *  <ul>
 	 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
-	 * a negative value if no limit.</li>
+	 * a negative value if no limit, if the maxsize is not specified, it will use {@link Configuration#getMaxUploadSize()}</li>
 	 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
 	 * image, audio or text files.</li>
 	 *  <li>multiple: treating the file chooser allows multiple files to upload,
@@ -273,19 +274,22 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		if (upload != null && (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
 		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
-			onUploadChanged(upload);
-			initAuxInfo().upload = upload;
 			if (upload != null) { //for AuUploader
 				Matcher matcher = Pattern.compile("maxsize=([^,]+)").matcher(upload);
+				Integer maxsz;
 				if (matcher.find()) {
 					try {
-						Integer maxsz = Integer.parseInt(matcher.group(1));
-						setAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE, maxsz);
+						maxsz = Integer.parseInt(matcher.group(1));
 					} catch (NumberFormatException e) {
 						throw new UiException("The upload max size should be a positive integer.");
 					}
-
+				} else {
+					maxsz = this.getDesktop().getWebApp().getConfiguration().getMaxUploadSize();
+					upload = upload.concat(",maxsize=" + maxsz);
 				}
+				setAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE, maxsz);
+				onUploadChanged(upload);
+				initAuxInfo().upload = upload;
 			}
 			smartUpdate("upload", getUpload());
 		}

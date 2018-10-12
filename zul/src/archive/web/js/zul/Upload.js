@@ -490,9 +490,6 @@ zul.Uploader = zk.$extends(zk.Object, {
 			wgt._uplder.sync();
 			delete wgt._autodisable_self;
 		}
-	},
-	_isAjaxUpload: function () {
-		return false;
 	}
 });
 
@@ -560,13 +557,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 									sclass: 'z-fileupload-remove z-icon-times',
 									listeners: {
 										onClick: function () {
-											var uuid = id.substring(0, id.indexOf('_uplder_'));
-											if (uplder._isAjaxUpload())
-												uplder._xhr.abort();
-											else
-												zul.Uploader.clearInterval(id);
-											var wgt = zk.Widget.$(uuid);
-											if (wgt) wgt._uplder.cancel(id.substring(id.lastIndexOf('_') + 1, id.length));
+											uplder.cancel();
 										}
 									}
 								})]
