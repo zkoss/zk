@@ -800,8 +800,13 @@ zjq.prototype = {
 		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
 			return w._scrollbar.hasVScroll();
 		}
-		var n, v;//zk-3938: if zoom-in, the v will be smaller than 11.
-		return (n = this.jq[0]) && (v = n.clientWidth) && (v = n.offsetWidth - v) > 0 ? v : 0;
+		var n, scrollbarWidth = 0; //zk-3938: if zoom-in, the scrollbarWidth will be smaller than 11.
+		if (n = this.jq[0]) {
+			var borderWidth = Math.round(jq.css(n, 'borderLeftWidth', true))
+					+ Math.round(jq.css(n, 'borderRightWidth', true)),
+				scrollbarWidth = n.offsetWidth - borderWidth - n.clientWidth;
+		}
+		return scrollbarWidth > 0 ? scrollbarWidth : 0;
 	},
 	/** Tests if the first matched DOM element has the horizontal scrollbar
 	 * @return int the difference of offsetHeight and clientHeight if the element has the horizontal scrollbar,
@@ -813,8 +818,13 @@ zjq.prototype = {
 		if ((w = this.$()) && w._scrollbar) {// support a fake scrollbar
 			return w._scrollbar.hasHScroll();
 		}
-		var n, v;//zk-3938: if zoom-in, the v will be smaller than 11.
-		return (n = this.jq[0]) && (v = n.clientHeight) && (v = n.offsetHeight - v) > 0 ? v : 0;
+		var n, scrollbarHeight = 0; //zk-3938: if zoom-in, the scrollbarHeight will be smaller than 11.
+		if (n = this.jq[0]) {
+			var borderHeight = Math.round(jq.css(n, 'borderTopWidth', true))
+					+ Math.round(jq.css(n, 'borderBottomWidth', true)),
+				scrollbarHeight = n.offsetHeight - borderHeight - n.clientHeight;
+		}
+		return scrollbarHeight > 0 ? scrollbarHeight : 0;
 	},
 
 	/** Tests if the first matched element is overlapped with the specified
