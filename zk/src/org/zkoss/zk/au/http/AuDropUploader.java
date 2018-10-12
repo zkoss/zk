@@ -129,6 +129,7 @@ public class AuDropUploader implements AuExtension {
 				log.debug("File upload cancelled!");
 			} else if (ex instanceof FileUploadBase.SizeLimitExceededException) {
 				alert = Exceptions.getMessage(ex);
+				log.error(alert);
 				response.getWriter().write("error:" + alert);
 			} else {
 				alert = handleError(ex);
