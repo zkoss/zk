@@ -70,7 +70,7 @@ public class F86_ZK_4028_2Test {
 		expectAnyException(() -> model.insertBefore("AAA/BBB/DDD", "EEE", "data"));
 		expectAnyException(() -> model.insertBefore("DDD", "EEE", "data"));
 		expectNoException(() -> model.insertBefore("AAA/BBB/DDD", "FFF", "data"));
-		String[] keys = model.getChild().getChild().getChild().getItems()
+		String[] keys = model.getRoot().getChild().getChild().getItems()
 				.stream()
 				.map(Pair::getX)
 				.toArray(String[]::new);
@@ -168,7 +168,7 @@ public class F86_ZK_4028_2Test {
 
 	@Test
 	public void testEmpty() {
-		NavigationLevel<String> level1 = model.getChild();
+		NavigationLevel<String> level1 = model.getRoot();
 		NavigationLevel<String> level2 = level1.getChild();
 
 		List<Pair<String, String>> items = level1.getItems();
@@ -190,7 +190,7 @@ public class F86_ZK_4028_2Test {
 		model.put("AAA/BBB/EEE", "data3");
 		model.put("AAA/BBB/FFF", "data4");
 
-		NavigationLevel<String> lvl1 = model.getChild();
+		NavigationLevel<String> lvl1 = model.getRoot();
 		lvl1.setContext(Collections.singletonMap("readonly", true)).navigateTo("AAA");
 
 		NavigationLevel<String> lvl2 = lvl1.getChild();
@@ -218,7 +218,7 @@ public class F86_ZK_4028_2Test {
 
 		model.navigateToByPath(new String[] {"AAA", "BBB", "FFF"});
 		model.navigateToByPath("AAA/CCC");
-		NavigationLevel<String> lvl1 = model.getChild();
+		NavigationLevel<String> lvl1 = model.getRoot();
 		NavigationLevel<String> lvl2 = lvl1.getChild();
 		NavigationLevel<String> lvl3 = lvl2.getChild();
 		Assert.assertEquals("CCC", lvl2.getCurrentKey());
@@ -256,7 +256,7 @@ public class F86_ZK_4028_2Test {
 		expectAnyException(() -> model.append("AAA/BBB/DDD", "CCC", "data"));
 		expectAnyException(() -> model.append("AAA/BBB/DDD", "EEE", "data"));
 		expectNoException(() -> model.append("AAA/BBB/DDD", "FFF", "data"));
-		String[] keys = model.getChild().getChild().getChild().getItems()
+		String[] keys = model.getRoot().getChild().getChild().getItems()
 				.stream()
 				.map(Pair::getX)
 				.toArray(String[]::new);

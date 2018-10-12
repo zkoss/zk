@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-F86-ZK-4028-mvc-lvl.zul
+F86-ZK-4028-mvc-lvl3.zul
 
 	Purpose:
 		
@@ -14,16 +14,16 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <div style="border: 1px solid blue">
-        <label value="${'Level ' += level.level}"/>
-        <label value="${level.currentKey}"/>
+        <label value="${'Level ' += level3.level}"/>
+        <label value="${level3.currentKey}"/>
         <label value="${data}" />
         <label value="${context}" />
 
-        <apply level2="${level.child}" dynamicValue="true" />
+        <apply level4="${level3.child}" dynamicValue="true" />
 
         <vlayout>
-            <forEach items="${level.child.items}">
-                <a label="${each.x}" onClick="level.child.navigateTo(self.label)"/>
+            <forEach items="${level3.child.items}">
+                <a label="${each.x}" onClick="level3.child.navigateTo(self.label)"/>
             </forEach>
         </vlayout>
     </div>
