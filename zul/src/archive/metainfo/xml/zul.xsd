@@ -2584,6 +2584,13 @@
 		<xs:attribute name="penSize" type="xs:string" use="optional" />
 		<xs:attribute name="penColor" type="xs:string" use="optional" />
 		<xs:attribute name="backgroundColor" type="xs:string" use="optional" />
+		<xs:attribute name="saveType" type="xs:string" use="optional" />
+		<xs:attribute name="undoLabel" type="xs:string" use="optional" />
+		<xs:attribute name="saveLabel" type="xs:string" use="optional" />
+		<xs:attribute name="clearLabel" type="xs:string" use="optional" />
+		<xs:attribute name="toolbarVisible" type="xs:boolean" use="optional"/>
+		<xs:attribute name="onSave" type="xs:string" use="optional" />
+		<xs:attribute name="onClear" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- slider -->

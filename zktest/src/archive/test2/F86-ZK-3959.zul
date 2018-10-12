@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
 <!--
 F86-ZK-3959.zul
 
-        Purpose:
-                
-        Description:
-                
-        History:
-                Wed Jul 25 15:44:07 CST 2018, Created by klyve
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Jul 25 15:44:07 CST 2018, Created by klyve
 
 Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
@@ -15,42 +16,59 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 <zk>
 	<label multiline="true">
-		1. Click the "set H xxx" and "set W xxx" button, You can change the height and width.
-		2. Use the signature pad to write a name on it.
-		3. Click the "undo" button, the last step will be undone.
-		4. Click the "save" button, the signature will save to the server, and an alert occur.
-		5. Use the signature pad to write a name on it again.
-		6. Click the "clear" button, the signature pad will be cleared, and an alert occur. 
-		7. Click the "setPenSize6" button, the size of signature pen  becomes 6px(thicker).
-		8. Click the "setPenColorBlue" button, the color of signature pen becomes blue.
-		9. Click the "toggleToolbar" button, toolbar should be invisible.
-		10. Use the color box, color of signature pen can be control the color box.
+		1. Use the signature pad to write name on it.
+		2. Click the "setLabels" button, you should see labels appear.
+		3. Click the "Undo" button, the last step should be undone.
+		4. Click the "Save" button, the signature should be saved to the server.
+		5. Click the "Clear" button, the signature should be cleared.
+		6. Click the "toggleToolbar" button, toolbar should be invisible.
+		7. Use first colorbox and write something, the pen color should change.
+		8. Use second colorbox, the background color should change.
+		9. Use intbox and write something, the pen size should change.
+		10. Click the "set H 100" and "set W 400" button, the height and width should change.
+		11. Click detach, the signature should be removed without error.
 	</label>
-	<signature id="s" height="100px" width="400px" style="border: 1px solid black;" onSave='alert("onSave")' onClear='alert("onClear")'/>
-	<signature style="border: 1px solid black;"/>
-	<colorbox id="c" onChange='s.setPenColor(c.getValue())'/>
+	<signature id="s" width="600px" height="200px"
+			   onSave="image.setContent(event.media)" onClear='Clients.log("onClear")'/>
 	<separator/>
-	<zscript>
-		public void setTheme(String theme) {
-			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), theme);
-			Executions.sendRedirect(null);
-		}
-	</zscript>
-	<button label="breeze" onClick='setTheme("breeze")'/>
-	<button label="iceblue" onClick='setTheme("iceblue")'/>
-	<button label="sapphire" onClick='setTheme("sapphire")'/>
-	<button label="silvertail" onClick='setTheme("silvertail")'/>
-	<button label="atlantic" onClick='setTheme("atlantic")'/>
-	<div height="100px"/>
-	<button label="set H 200" onClick='s.setHeight("200px")'/>
-	<button label="set H 100" onClick='s.setHeight("100px")'/>
-	<button label="set W 600" onClick='s.setWidth("200px")'/>
-	<button label="set W 400" onClick='s.setWidth("400px")'/>
-	<button label="undo" onClick='s.undo()'/>
-	<button label="save" onClick='s.save()'/>
-	<button label="clear" onClick='s.clear()'/>
-	<button label="setPenSize6" onClick='s.setPenSize(6)'/>
-	<button label="setPenColorBlue" onClick='s.setPenColor("Blue")'/>
-	<button label="getImage" onClick='s.getImage()'/>
-	<button label="toggleToolbar" onClick='s.setToolbarVisible(!s.isToolbarVisible())'/>
+	<label value="change pen color: "/>
+	<colorbox id="c1" onChange='s.setPenColor(c1.getValue())'/>
+	<label value="change background color: "/>
+	<colorbox id="c2" onChange='s.setBackgroundColor(c2.getValue())'/>
+	<label value="change pen size: "/>
+	<intbox id="intbox" onChange="s.setPenSize(Integer.valueOf(intbox.getValue()))"/>
+	<separator/>
+	<hlayout>
+		<button label="set H 100" onClick='s.setHeight("100px")'/>
+		<button label="set W 400" onClick='s.setWidth("400px")'/>
+		<button label="undo" onClick='s.undo()'/>
+		<button label="save" onClick='s.save()'/>
+		<button label="clear" onClick='s.clear()'/>
+		<combobox>
+			<comboitem label="iceblue"/>
+			<comboitem label="breeze"/>
+			<comboitem label="sapphire"/>
+			<comboitem label="silvertail"/>
+			<comboitem label="atlantic"/>
+			<attribute name="onChange">
+				Library.setProperty("org.zkoss.theme.preferred", event.value);
+				Executions.sendRedirect("");
+			</attribute>
+		</combobox>
+	</hlayout>
+	<separator/>
+	<hlayout>
+		<button label="toggleToolbar" onClick='s.setToolbarVisible(!s.isToolbarVisible())'/>
+		<button label="changeSaveType" onClick='s.setSaveType("image/jpeg")'/>
+		<button label="setLabels">
+			<attribute name="onClick">
+				s.setUndoLabel("Undo");
+				s.setSaveLabel("Save");
+				s.setClearLabel("Clear");
+			</attribute>
+		</button>
+		<button label="detach" onClick="s.detach()"/>
+	</hlayout>
+	<separator/>
+	<image id="image" width="600px" height="200px"/>
 </zk>

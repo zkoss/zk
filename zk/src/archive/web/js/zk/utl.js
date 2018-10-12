@@ -698,6 +698,23 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		d.setDate(date - minimalDaysInFirstWeek + firstDayOfWeek - (firstDayOfWeek > day ? day : day - 7));
 		var yearStart = Dates.newInstance([d.getFullYear(), 0, 1], 'UTC');
 		return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+	},
+	/**
+	 * Converts the dataURL to Blob object.
+	 * This function is not supported in IE9 and below.
+	 */
+	convertDataURLtoBlob: function (dataURL) {
+		var byteString = window.atob(dataURL.split(',')[1]),
+			mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0],
+			len = byteString.length,
+			arrayBuffer = new ArrayBuffer(len),
+			uint8Array = new Uint8Array(arrayBuffer);
+
+		for (var i = 0; i < len; i++) {
+			uint8Array[i] = byteString.charCodeAt(i);
+		}
+
+		return new Blob([arrayBuffer], {type: mimeString});
 	}
 };
 

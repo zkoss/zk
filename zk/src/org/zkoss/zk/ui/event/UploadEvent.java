@@ -59,14 +59,16 @@ public class UploadEvent extends Event {
 	}
 
 	/**
-	 * Creates an instance of {@link UploadEvent} based on the event name and component.
+	 * Creates an instance of {@link UploadEvent} based on the event name and component,
+	 * the {@link UploadEvent} contains the latest upload media from user.
+	 * Internal Use Only.
 	 *
 	 * @param name event name
 	 * @param component component that triggers the upload event
 	 * @return upload event
 	 * @since 8.6.0
 	 */
-	public static UploadEvent getUploadEvent(String name, Component component) {
+	public static UploadEvent getLatestUploadEvent(String name, Component component) {
 		Desktop desktop = component.getDesktop();
 		String uuid = component.getUuid();
 		final List<Media> result = cast((List) desktop.getAttribute(uuid));
