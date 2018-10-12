@@ -17,4 +17,21 @@
 		line-height: 0;
 		background-color: @progressmeterBackgroundColor;
 	}
+
+	&-indeterminate {
+		position: relative;
+		opacity: 0.9;
+		width: 150%;
+
+		>.z-progressmeter-image {
+			position: absolute;
+			height: 100%;
+			animation: decrease 1.5s 0.5s infinite;
+		}
+
+		@keyframes decrease {
+			from { left: -80%; width: 80%; }
+			to { left: 110%; width: 10%; }
+		}
+	}
 }

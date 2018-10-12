@@ -2516,6 +2516,7 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="value" type="intType" use="optional" />
+		<xs:attribute name="indeterminate" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- radio -->
 	<xs:element name="radio" type="radioType" />

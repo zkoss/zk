@@ -14,6 +14,7 @@ ZK 8.6.1
   ZK-4184: improve iterating a list to fail fast in a children binding
   ZK-4192: camera component: improve recording time accuracy
   ZK-4191: add possibility to handle camera unavailability
+  ZK-3629: Indeterminate progressmeter
 
 * Bugs
   ZK-4114: orgnode label missing font styles

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3629.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Oct 12 12:10:16 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<hlayout>
+		<a href="?zktheme=breeze" label="Breeze"/>
+		<a href="?zktheme=sapphire" label="Sapphire"/>
+		<a href="?zktheme=silvertail" label="Silvertail"/>
+		<a href="?zktheme=atlantic" label="Atlantic"/>
+		<a href="?zktheme=default" label="Default"/>
+	</hlayout>
+	<label multiline="true">
+		Follow these steps to test Indeterminate:
+		1.Progressmeter1 shows indeterminate animation and Progressmeter2 not.
+		2.Click the "isIndeterminate" button, you should see the default state of progressmeter "false" in log.
+		3.Click the "setIndeterminate=true" button, Progressmeter2 should turn into indeterminate style.
+		4.Click the "isIndeterminate" button, you should see "true" in log.
+		5.Click the "setValue 75" button, you should see value: 75/100.
+		6.Click the "setValue 25" button, you should see value: 25/100.
+		7.Click the "setIndeterminate=false" button, Progressmeter2 should turn back to normal style and display progress bar 25% correctly.
+		8.Click the "isIndeterminate" button, you should see "false" in log.
+	</label>
+	<div>
+		Progressmeter1:
+		<progressmeter id="pm1" value="50" width="200px" indeterminate="true"/>
+		Progressmeter2:
+		<progressmeter id="pm2" value="50" width="200px" />
+		<separator orient="vertical" spacing="3px" />
+		value:
+		<label id="lb" value="50" />/100
+		<separator />
+		<button id="setTrue" label="setIndeterminate=true" onClick='pm2.setIndeterminate(true)' />
+		<button id="setFalse" label="setIndeterminate=false" onClick='pm2.setIndeterminate(false)' />
+		<button id="isIndeterminate" label="isIndeterminate" onClick='Clients.log(String.valueOf(pm2.isIndeterminate()))' />
+		<separator />
+		<button id="setValue75" label="setValue 75" onClick='pm2.setValue(75);lb.setValue(String.valueOf(pm2.getValue()));' />
+		<button id="setValue50" label="setValue 50" onClick='pm2.setValue(50);lb.setValue(String.valueOf(pm2.getValue()));' />
+		<button id="setValue25" label="setValue 25" onClick='pm2.setValue(25);lb.setValue(String.valueOf(pm2.getValue()));' />
+	</div>
+</zk>
