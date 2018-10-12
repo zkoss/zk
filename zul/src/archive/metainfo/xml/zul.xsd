@@ -238,6 +238,19 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:simpleType name="crossOriginAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="anonymous" />
+					<xs:enumeration value="use-credentials" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<xs:simpleType name="dirAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -932,7 +945,7 @@
 		<xs:attribute name="muted" type="booleanType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="poster" type="xs:string" use="optional" />
-		<xs:attribute name="crossorigin" type="xs:string" use="optional" />
+		<xs:attribute name="crossorigin" type="crossOriginAttrType" use="optional" />
 		<xs:attribute name="preload" type="videoPreloadAttrType" use="optional" />
 		<xs:attribute name="controls" type="booleanType" use="optional" />
 		<xs:attribute name="loop" type="booleanType" use="optional" />
@@ -1456,6 +1469,34 @@
 		<xs:attribute name="autodisable" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
+
+	<!-- cropper -->
+	<xs:element name="cropper" type="cropperType"/>
+	<xs:complexType name="cropperType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="aspectRatio" type="doubleType" use="optional" />
+		<xs:attribute name="w" type="intType" use="optional" />
+		<xs:attribute name="h" type="intType" use="optional" />
+		<xs:attribute name="x" type="intType" use="optional" />
+		<xs:attribute name="y" type="intType" use="optional" />
+		<xs:attribute name="maxHeights" type="intType" use="optional" />
+		<xs:attribute name="maxWidths" type="intType" use="optional" />
+		<xs:attribute name="minHeights" type="intType" use="optional" />
+		<xs:attribute name="minWidths" type="intType" use="optional" />
+		<xs:attribute name="toolbarVisible" type="booleanType" use="optional" />
+		<xs:attribute name="instant" type="booleanType" use="optional" />
+		<xs:attribute name="croppedFormat" type="xs:string" use="optional" />
+		<xs:attribute name="crossOrigin" type="crossOriginAttrType" use="optional" />
+		<xs:attribute name="onCrop" type="xs:string" use="optional" />
+		<xs:attribute name="onCancel" type="xs:string" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+
 	<!-- custom-attributes -->
 	<xs:element name="custom-attributes" type="custom-attributesType" />
 	<xs:complexType name="custom-attributesType">
@@ -1685,6 +1726,34 @@
 		<xs:attribute name="columns" type="intType" use="required" />
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="start" type="intType" use="optional" />
+	</xs:complexType>
+
+	<!-- goldenlayout -->
+	<xs:element name="goldenlayout" type="goldenlayoutType"/>
+	<xs:complexType name="goldenlayoutType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="goldenpanel" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="areas" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+
+	<!-- goldenpanel -->
+	<xs:element name="goldenpanel" type="goldenpanelType"/>
+	<xs:complexType name="goldenpanelType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="area" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
+		<xs:attribute name="draggable" type="booleanType" use="optional" />
+		<xs:attribute name="droppable" type="booleanType" use="optional" />
+		<xs:attribute name="closable" type="booleanType" use="optional" />
+		<xs:attribute name="onPanelDrop" type="xs:string" use="optional" />
+		<xs:attribute name="onActive" type="xs:string" use="optional" />
+		<xs:attribute name="onFlexSize" type="xs:string" use="optional" />
 	</xs:complexType>
 
 	<!-- grid -->
@@ -2474,6 +2543,23 @@
 		<xs:attribute name="radioRenderer" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
+
+	<!-- rating -->
+	<xs:element name="rating" type="ratingType"/>
+	<xs:complexType name="ratingType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="max" type="intType" use="optional" />
+		<xs:attribute name="rating" type="intType" use="optional" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="readonly" type="booleanType" use="optional" />
+		<xs:attribute name="cancelable" type="booleanType" use="optional" />
+		<xs:attribute name="symbol" type="xs:string" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+
 	<!-- row -->
 	<xs:element name="row" type="rowType" />
 	<xs:complexType name="rowType" mixed="true">
