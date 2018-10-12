@@ -430,6 +430,17 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/checkbox.js</mold-uri>
+			<css-uri>css/checkbox.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>switch</mold-name>
+			<mold-uri>mold/checkbox.js</mold-uri>
+			<css-uri>css/checkbox.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>toggle</mold-name>
+			<mold-uri>mold/checkbox.js</mold-uri>
+			<css-uri>css/checkbox.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

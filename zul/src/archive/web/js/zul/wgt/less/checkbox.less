@@ -1,0 +1,100 @@
+@import "~./zul/less/_header.less";
+
+.z-checkbox {
+	&-default > &-mold {
+		display: none;
+	}
+	&-switch {
+		display: inline-block;
+	}
+	&-switch > input[type="checkbox"] {
+		display: none;
+	}
+	&-switch > &-mold {
+		margin: 4px;
+		position: relative;
+		width: 50px;
+		height: 29px;
+		transition: .4s;
+		border-radius: 29px;
+		display: inline-block;
+		float: left;
+
+		&:before {
+			content: "";
+			position: absolute;
+			width: 21px;
+			height: 21px;
+			left: 4px;
+			bottom: 4px;
+			transition: .4s;
+			border-radius: 50%;
+			background-color: white;
+		}
+
+		&:focus {
+			.boxShadow(0 0 0px 2px @focusBorderColor);
+			transition: unset;
+		}
+	}
+	&-switch > &-content {
+		display: inline-block;
+		.transform('translateY(50%)');
+	}
+	&-switch-off > &-mold {
+		background-color: @disabledColor;
+	}
+	&-switch-on > &-mold {
+		background-color: @checkedColor;
+
+		&:before {
+			.transform('translateX(21px)');
+		}
+	}
+	&-switch-disabled > &-mold {
+		opacity: .5;
+		cursor: default;
+	}
+	&-toggle {
+		display: inline-block;
+	}
+	&-toggle > input[type="checkbox"] {
+		display: none;
+	}
+	&-toggle > &-mold {
+		margin: 4px;
+		width: 30px;
+		height: 30px;
+		border-radius: 4px;
+		transition: .1s;
+		display: inline-block;
+		float: left;
+	}
+	&-toggle > &-content {
+		display: inline-block;
+		.transform('translateY(50%)');
+	}
+	&-toggle-off > &-mold {
+		background-color: @disabledColor;
+		.boxShadow('0 4px 1px rgba(0, 0, 0, 0.39)');
+
+		&:focus {
+			.boxShadow('0 4px 1px rgba(0, 0, 0, 0.39), 0 1px 0px 2px @{focusBorderColor}');
+			transition: unset;
+		}
+	}
+	&-toggle-on > &-mold {
+		background-color: @checkedColor;
+		.boxShadow('0 0 5px rgba(0, 0, 0, 0.48), 0 0 6px 2px rgba(0, 0, 0, 0.35) inset');
+		.transform('translateY(4px)');
+
+		&:focus {
+			.boxShadow('0 0 5px rgba(0, 0, 0, 0.48), 0 0 6px 2px rgba(0, 0, 0, 0.35) inset, 0 1px 0px 2px @{focusBorderColor}');
+			transition: unset;
+		}
+	}
+	&-toggle-disabled > &-mold {
+		opacity: .5;
+		cursor: default;
+	}
+}

@@ -62,7 +62,13 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			},
 			function (v) {
 				var n = this.$n('real');
-				if (n) n.disabled = v;
+				if (n) {
+					n.disabled = v;
+					if (!this._isDefaultMold()) {
+						jq(this.$n()).toggleClass(this.$s(this.getMold() + '-disabled'), v);
+						this._setTabIndexForMold();
+					}
+				}
 			}
 		],
 		/** Returns whether it is checked.
@@ -78,6 +84,12 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			if (n) {
 				//B70-ZK-2057: prop() method can access right property values;
 				jq(n).prop('checked', v);
+				if (!this._isDefaultMold()) {
+					var mold = this.getMold();
+					jq(this.$n())
+						.toggleClass(this.$s(mold + '-on'), v)
+						.toggleClass(this.$s(mold + '-off'), !v);
+				}
 			}
 		},
 		/** Returns the name of this component.
@@ -220,6 +232,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(Checkbox, 'bind_', arguments);
 
 		var n = this.$n('real'),
+			mold = this.$n('mold'),
 			indeterminate = this.getIndeterminate();
 
 		// Bug 2383106
@@ -229,15 +242,28 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			n.indeterminate = true;
 
 		this.domListen_(n, 'onFocus', 'doFocus_')
-			.domListen_(n, 'onBlur', 'doBlur_');
+			.domListen_(n, 'onBlur', 'doBlur_')
+			.domListen_(mold, 'onMouseDown', '_doMoldMouseDown');
+
+		this._setTabIndexForMold();
 	},
 	unbind_: function () {
-		var n = this.$n('real');
+		var n = this.$n('real'),
+			mold = this.$n('mold');
 
-		this.domUnlisten_(n, 'onFocus', 'doFocus_')
+		this.domUnlisten_(mold, 'onMouseDown', '_doMoldMouseDown')
+			.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
 		this.$supers(Checkbox, 'unbind_', arguments);
+	},
+	_setTabIndexForMold: function () {
+		var mold = this.$n('mold');
+		if (mold)
+			mold.tabIndex = this._canTabOnMold() ? 0 : -1;
+	},
+	_canTabOnMold: function () {
+		return !this._isDefaultMold() && !this.isDisabled();
 	},
 	doSelect_: function (evt) {
 		if (!_shallIgnore(evt))
@@ -271,6 +297,10 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
+	_doMoldMouseDown: function (evt) {
+		if (this.isDisabled())
+			evt.stop();
+	},
 	fireOnCheck_: function (checked) {
 		this.fire('onCheck', checked);
 	},
@@ -283,6 +313,30 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 	shallIgnoreClick_: function (evt) {
 		return this.isDisabled();
+	},
+	domClass_: function () {
+		var cls = this.$supers('domClass_', arguments),
+			mold = this.getMold();
+
+		cls += ' ' + this.$s(mold);
+		if (!this._isDefaultMold()) {
+			cls += ' ' + this.$s(mold + (this.isChecked() ? '-on' : '-off'));
+			if (this.isDisabled())
+				cls += ' ' + this.$s(mold + '-disabled');
+		}
+		return cls;
+	},
+	_isDefaultMold: function () {
+		return this.getMold() == 'default';
+	},
+	doKeyDown_: function (evt) {
+		this.$supers('doKeyDown_', arguments);
+		var spaceKeyCode = 32;
+		if (evt.domTarget == this.$n('mold') && evt.keyCode == spaceKeyCode) {
+			var checked = !this.isChecked();
+			this.setChecked(checked);
+			this.fireOnCheck_(checked);
+		}
 	}
 });
 
