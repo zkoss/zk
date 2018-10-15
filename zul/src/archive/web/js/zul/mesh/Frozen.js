@@ -25,7 +25,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		// ZK-2130: should skip fake scroll bar
 		if (parent.eheadtbl && parent._nativebar) {
 			var cells = parent._getFirstRowCells(parent.eheadrows),
-				totalcols = cells.length,
+				head = parent.head,
+				totalcols = cells.length - jq(head).find(head.$n('bar')).length;
 				cellsSize = totalcols,
 				columns = wgt._columns,
 				leftWidth = 0;
@@ -55,7 +56,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			parent.$n('frozen').style.width = jq.px0(width);
 			width -= leftWidth;
 			scroll.style.width = jq.px0(width);
-			var scrollScale = totalcols - columns - 2; /* fixed a bug related to the feature #3025419*/
+			var scrollScale = totalcols - columns - 1;
 			scroll.firstChild.style.width = jq.px0(width + 50 * scrollScale);
 			wgt.syncScroll();
 		}
@@ -423,6 +424,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (foottbl = mesh.efoottbl)
 			foottbl.style.width = jq.px(totalWidth);
 
+		this.onSize();
 		mesh._restoreFocus();
 
 		// Bug ZK-601, Bug ZK-1572
