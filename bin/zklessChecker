@@ -7,6 +7,6 @@ fi
 
 cd bin
 
-# install zkless-engine anyway
-echo "installing zkless-engine@latest"
-npm install zkless-engine
+# install npm dependencies
+echo "installing zkless-engine and npm dependencies"
+npm install || exit 1

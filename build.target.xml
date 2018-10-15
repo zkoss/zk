@@ -49,8 +49,9 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		<arg value="${bin.dir}/jscheck"/>
 		<arg value="${bin.dir}"/>
 		<arg value="${src.dir}"/>
-		<arg value="--config=${bin.dir}/zk_jscheck.json"/>
-		<arg value="--max-errors=-1"/>
+		<arg value="--config=${bin.dir}/.eslintrc.json"/>
+		<arg value="--ignore-path=${bin.dir}/.eslintignore"/>
+		<arg value="--max-warnings=-1"/>
 	</exec>
 </target>
 

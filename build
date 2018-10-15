@@ -103,8 +103,8 @@ if [ "$ZKCML" = "" ] ; then
 	fi
 fi
 
-#check if node.js and zkless-engine are installed
-if [ "$1" = "" ] || [ "$1" = "lessc" ] ; then
+#check if node.js, zkless-engine and npm dependencies are installed
+if [ "$1" = "" ] || [ "$1" = "lessc" ] || [ "$1" = "checkstyle" ] ; then
 	chmod +x $maindir/bin/zklessChecker
 	$maindir/bin/zklessChecker
 fi

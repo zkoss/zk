@@ -5,7 +5,7 @@
 	Description:
 
 	History:
-　　Tranlated by Ayman Elgharabawy (aaaeg@hotmail.com) 6 April 2008
+		Tranlated by Ayman Elgharabawy (aaaeg@hotmail.com) 6 April 2008
 
 Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 

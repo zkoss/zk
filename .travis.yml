@@ -4,6 +4,6 @@ branches:
     - /.*-Stable$/
 script:
     - cd bin
-    - npm install zkless-engine
+    - npm install
     - cd ..
     - ./build zel zcommon zweb zk zul zkbind zhtml zkplus

@@ -7,17 +7,12 @@ fi
 
 maindir="$(pwd)"
 cd $1
+shift
 
-echo "check jscs installation"
-jscsChecker="$(npm list jscs)"
-if [[ $jscsChecker == *"empty"* ]] ; then
-	echo 'installing jscs'
-	npm cache clean
-	npm install jscs || exit 1
-fi
-
-echo "check js code style : $maindir/$2"
-OUT="$(node_modules/jscs/bin/jscs $maindir/$2 $3 $4)" || {
+srcdir="$1"
+shift
+echo "check js code style : $maindir/$srcdir"
+OUT="$(node_modules/.bin/eslint $maindir/$srcdir $@)" || {
 	echo $OUT
 	#Coding Style Error found.
 	exit 1

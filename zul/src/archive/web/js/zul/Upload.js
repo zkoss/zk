@@ -596,11 +596,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 					if (prog)
 						prog.detach();
 					delete this._files[id];
-					var close = true;
-					for (var p in this._files)
-						if (!(close = false))
-							break;
-
+					var close = Object.keys(this._files).length === 0;
 					if (close)
 						this.close();
 				},

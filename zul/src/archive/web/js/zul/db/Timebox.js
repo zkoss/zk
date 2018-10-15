@@ -98,7 +98,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return String the unformater function
 		 */
 		unformater: function (unf) {
-			eval('Timebox._unformater = ' + unf);
+			eval('Timebox._unformater = ' + unf); // eslint-disable-line no-eval
 		},
 		localizedSymbols: [
 			function (val) {
@@ -215,7 +215,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// control input keys only when no custom unformater is given
 		if (!Timebox._unformater) {
 			var code = evt.keyCode;
-			switch (code){
+			switch (code) {
 			case 48:case 96://0
 			case 49:case 97://1
 			case 50:case 98://2
@@ -536,7 +536,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				var start = i,
 					end = fmt.charAt(i + 1) == 'H' ? ++i : i;
 				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD));
-				break;;
+				break;
 			case 'k':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'k' ? ++i : i;

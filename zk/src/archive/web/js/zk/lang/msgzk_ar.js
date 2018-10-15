@@ -1,4 +1,4 @@
-﻿/* msgzk.js "charset=utf-8"
+/* msgzk.js "charset=utf-8"
  * created by Ayman Elgharabawy (aaaeg@hotmail.com) 28 Mars2008
  * Copyright (C) 2005,2008 Potix Corporation
  */

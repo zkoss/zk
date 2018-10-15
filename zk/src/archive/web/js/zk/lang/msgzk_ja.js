@@ -6,7 +6,7 @@
 		
 	History:
 		Created on Mar. 7, 2007, by Poli Lee
-	　　　　Modified on Jun.25,2007 by Jean
+		Modified on Jun.25,2007 by Jean
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 

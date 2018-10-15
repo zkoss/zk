@@ -199,7 +199,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					else
 						wgt.focus();
 				}
-			}, -1);});
+			}, -1);
+		});
 	}
 	function _unmarkModal(wgt) {
 		_modals.$remove(wgt);

@@ -1,4 +1,4 @@
-﻿/* msgzk_vi.js "charset=utf-8"
+/* msgzk_vi.js "charset=utf-8"
 
 	Purpose:
 		Locale dependent message

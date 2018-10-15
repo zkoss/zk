@@ -427,7 +427,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			return;
 
 		var code = evt.keyCode;
-		switch (code){
+		switch (code) {
 		case 48:case 96://0
 		case 49:case 97://1
 		case 50:case 98://2

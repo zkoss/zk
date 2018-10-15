@@ -211,8 +211,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
 				faker = owner['e' + fs[i]]; // internal element
 				if (faker && !this.$n(fs[i])) {
-					faker[faker.childNodes.length > index ? 'insertBefore' : 'appendChild']
-					(this._createFaker(n, fs[i]), faker.childNodes[index]);
+					faker[faker.childNodes.length > index ? 'insertBefore' : 'appendChild'](this._createFaker(n, fs[i]), faker.childNodes[index]);
 					this._subnodes[fs[i]] = null; // clear inner cache
 				}
 			}

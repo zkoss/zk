@@ -55,7 +55,6 @@ function _toMouseEvent(event, changedTouch) {
 				changedTouch.clientX,
 				changedTouch.clientY),
 				'mouseup', 0, changedTouch);
-		break;
 	case 'touchmove':
 		var ele = document.elementFromPoint(changedTouch.clientX,changedTouch.clientY);
 		return (ele && _createJQEvent(ele, 'mousemove', 0, changedTouch)) || null;

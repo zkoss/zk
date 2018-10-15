@@ -1,4 +1,4 @@
-﻿/* Spinner.js
+/* Spinner.js
 
 	Purpose:
 

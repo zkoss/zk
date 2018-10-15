@@ -65,7 +65,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var devt = evt; //make a copy since we will change evt (and arguments) in the following line
 			evt = jq.Event.zk(devt, wgt); //also change arguments[0]
 
-			switch (devt.type){
+			switch (devt.type) {
 			case 'focus':
 				if (wgt.canActivate()) {
 					zk.currentFocus = wgt;
@@ -5233,23 +5233,23 @@ zk._wgtutl = { //internal utilities
 				|| (!i && !n.getAttribute('z_autohide') && !n.getAttribute('z.autohide'))) //check z_autohide (5.0) and z.autohide (3.6) if iframe
 					continue; //ignore
 
-				var tc = _topnode(n);
-				function hide(f) {
-					var tf = _topnode(f);
-					if (tf == tc || _zIndex(tf) < _zIndex(tc) || !$n.isOverlapped(f))
-						return;
+				var tc = _topnode(n),
+					hide = function (f) {
+						var tf = _topnode(f);
+						if (tf == tc || _zIndex(tf) < _zIndex(tc) || !$n.isOverlapped(f))
+							return;
 
-					if (visi) {
-						_hidden.push(n);
-						try {
-							n.setAttribute('z_ahvis', n.style.visibility);
-						} catch (e) {
-							zk.debugLog(e.message || e);
+						if (visi) {
+							_hidden.push(n);
+							try {
+								n.setAttribute('z_ahvis', n.style.visibility);
+							} catch (e) {
+								zk.debugLog(e.message || e);
+							}
+							n.style.visibility = 'hidden';
 						}
-						n.style.visibility = 'hidden';
-					}
-					return true; //processed
-				}
+						return true; //processed
+					};
 
 				for (var k = _floatings.length; k--;)
 					if (hide(_floatings[k].node))
