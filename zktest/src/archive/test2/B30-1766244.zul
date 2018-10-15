@@ -1,14 +1,4 @@
 <window title="Bug: combox in scrollable grid">
-	<script><![CDATA[
-		function getComboRevisedOffsetX(isBtn) {
-			var arrStr = isBtn? zk(zk.Widget.$(jq('$cb'))).revisedOffset() : zk(zk.Widget.$(jq('$cb')).$n('btn')).revisedOffset();
-			return arrStr[0];
-		}
-		function getComboRevisedOffsetY(isBtn) {
-			var arrStr = isBtn? zk(zk.Widget.$(jq('$cb'))).revisedOffset() : zk(zk.Widget.$(jq('$cb')).$n('btn')).revisedOffset();
-			return arrStr[1];
-		}
-		]]></script>
 	<grid id="grid" height="105px">
 		<columns>
 			<column/>
