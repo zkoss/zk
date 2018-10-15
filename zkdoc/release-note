@@ -17,7 +17,6 @@ ZK 8.6.0
   ZK-136: Three status checkbox support
   ZK-3959: A new component for signing a signature
   ZK-3998: org.zkoss.zel.Util outputs exceptions to the console directly - change to logger
-  ZK-3138: Data loading indicator for ROD
   ZK-3288: Borderlayout not resizing content after toggling autoscroll
   ZK-3719: Toolbar can have an overflow button that contains those buttons weren't able to fit in the toolbar
   ZK-3992: InputWidget uses setSelectionRange instead of select in inputWidget.select()
