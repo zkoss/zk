@@ -24,7 +24,7 @@ ZK 8.6.0
   ZK-3986: chsenbox updates only the necessary DOM elements
   ZK-4028: Add Navigation Model
   ZK-3551: Menupopup active/highlight position from serverside
-  ZK-3964: Iceblue theme narrow version
+  ZK-3964: Iceblue theme compact version
   ZK-3277: Implement a Fileupload (using modern APIs)
   ZK-3962: A new component that can select a range of image
 
