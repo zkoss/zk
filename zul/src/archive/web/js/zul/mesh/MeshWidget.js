@@ -1279,7 +1279,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						wd += zk.parseInt(w.style.width);
 				}
 				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
-					hdtbl.style.width = (hdfakerbar) ? wd + vScroll + 'px' : wd + 'px';
+					hdtbl.style.width = (hdfakerbar && zk.chrome) ? wd + vScroll + 'px' : wd + 'px';
 					if (bdtbl)
 						bdtbl.style.width = wd + 'px';
 					if (fttbl)
