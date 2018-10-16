@@ -588,6 +588,8 @@ public class Slider extends XulElement {
 			renderer.render("strokeWidth", _strokeWidth);
 		if (_angleArc != 360.0)
 			renderer.render("angleArc", _angleArc);
+		if (_scaleInput != 1.0)
+			renderer.render("scaleInput", _scaleInput);
 		if (_name != null)
 			renderer.render("name", _name);
 		if (!INTEGER.equals(_mode))
