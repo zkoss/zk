@@ -522,6 +522,7 @@ Jan 10, 2017
   ZK-3534: Function call loop starting at zul.wgt.Popup.close() causes full browser crash on IE11
   ZK-3557: Improper Output Neutralization for Logs
   ZK-3562: error when saving nested form property
+  ZK-4081: ForEachStatus isLast() returns wrong value
 
 * Upgrade Notes
 
