@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4083.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 17 15:53:34 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(Collections.nCopies(500, "dummy"));
+    ]]></zscript>
+
+    <label multiline="true">
+        1. (IE only) Drag the scrollbar up and down quickly. Both upper one and lower one.
+        2. It shouldn't be unresponsive.
+    </label>
+    <vlayout vflex="1">
+        <panel width="100%" vflex="1">
+            <panelchildren>
+                <grid model="${model}" vflex="1">
+                    <custom-attributes org.zkoss.zul.grid.rod="true"/>
+                    <template name="model">
+                        <row>
+                            <cell>Cell</cell><cell>Cell</cell><cell>Cell</cell>
+                        </row>
+                    </template>
+                </grid>
+            </panelchildren>
+        </panel>
+        <window width="100%" vflex="1">
+            <grid model="${model}" vflex="1">
+                <custom-attributes org.zkoss.zul.grid.rod="true"/>
+                <template name="model">
+                    <row>
+                        <cell>Cell</cell><cell>Cell</cell><cell>Cell</cell>
+                    </row>
+                </template>
+            </grid>
+        </window>
+    </vlayout>
+</zk>

@@ -86,6 +86,7 @@ ZK 8.6.0
   ZK-4051: scrollable tabbox tabs breaking in classic themes
   ZK-4003: can't get selected item correctly
   ZK-3752: browser can't download source map after reloading a page
+  ZK-4083: IE performance - border-radius styles in iceblue
 
 * Upgrade Notes
 
