@@ -1076,13 +1076,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	onSize: function () {
+		var devicePixelRatio = window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight
-					&& n._lastsz.width == n.offsetWidth) {
+					&& n._lastsz.width == n.offsetWidth
+					&& this._lastDevicePixelRatio == devicePixelRatio) {
 				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
 			}
+			this._lastDevicePixelRatio = devicePixelRatio;
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
 
@@ -1248,17 +1251,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
 		var allWidths = this._isAllWidths(),
-			zkb = zk(this.ebody),
-			hScroll = zkb.hasHScroll(),
-			vScroll = zkb.hasVScroll(),
 			hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
-			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null;
+			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null,
+			scrollbarWidth = jq.scrollbarWidth();
 
-		if (vScroll) {
+		if (zk(this.ebody).hasVScroll()) {
 			if (hdfakerbar)
-				hdfakerbar.style.width = vScroll + 'px';
+				hdfakerbar.style.width = scrollbarWidth + 'px';
 			if (ftfakerbar)
-				ftfakerbar.style.width = vScroll + 'px';
+				ftfakerbar.style.width = scrollbarWidth + 'px';
 		} else {
 			var zero = this.$class.WIDTH0;
 			//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
@@ -1279,7 +1280,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						wd += zk.parseInt(w.style.width);
 				}
 				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
-					hdtbl.style.width = (hdfakerbar && zk.chrome) ? wd + vScroll + 'px' : wd + 'px';
+					hdtbl.style.width = (hdfakerbar && zk.chrome) ? wd + scrollbarWidth + 'px' : wd + 'px';
 					if (bdtbl)
 						bdtbl.style.width = wd + 'px';
 					if (fttbl)
