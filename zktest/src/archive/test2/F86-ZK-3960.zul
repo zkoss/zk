@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"?>
 
 <!--
 F86-ZK-3960.zul
@@ -13,112 +14,48 @@ F86-ZK-3960.zul
 Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
-<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_3960VM')">
-    <label multiline="true">
-        for the rating component in the Font awesome window
-        1. should see rating 3, and the icons should be Font awesome z-icon-home icon
-        2. click button 1, the icons should be set to Font awesome z-icon-flag icon
-        3. click button 2, the icons should be set to a unicode phone icon
-        4. click button 3, the max rate should be set to 10 (should see 10 phone icons, and should remain rating 3
-        5. click button 4, the max rate should be set to 5 (should see 5 phone icons, and should remain rating 3
-        6. click the 3rd icon, the rating should be remained, and should see 'Rated: 3' below
-        7. tab onto the 4th icon by keyboard, press [Enter] key, rating should be changed to 4
-        8. press [Enter] key again, rating should remain 4
-        9. repeat step 7 and 8 with the 3rd icon and press with [space] key, result should be the same but with 3
+<!--<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_3960VM')">-->
+<div>
+    <style>
+        .myGiftIcon:before {
+            content: '🎁';
+        }
+    </style>
+    <vlayout>
+        <label multiline="true">1. Should see the 1st rating icon as z-icon-star.
+            2. The 2nd rating with z-icon-bolt (lightening symbol).
+            3. The 3rd rating with bootstrap glyphicons star.
+            4. The 4th rating with 🎁.
+            5. Click button 'Set Rating 0', the rating of the 1st rating should be canceled.
+            6. Click button 'Set Rating 3', the rating of the 1st rating should be set to 3.
+            7. Click button 'Set Rating 5', the rating of the 1st rating should be set to 5.
+            8. Click button 'Set Max 10', the 1st rating should changed to 10 icons.
+            9. Click button 'Set IconSclass to z-icon-home', the icons should be changed to z-icon-home.
+            10. Click button 'Toggle Disabled', the 1st rating's style should be changed to opacity 0.5,
+            should have default cursor while hovered, click the 3rd icon, rating should not be changed to 3. Click 'Toggle Disabled' button again to enable the rating.
+            11. Click button 'Toggle Readonly', the icon style should remain, and the rating should still be 5. Hover on the icons, should not have box-shadow around the icon. Click the button again to disable readonly.
+            12. Click button 'Toggle Cancelable' and click the current rating icon (5), the rating should not be canceled. Click the button again, and click the same icon again, the rating 5 should be canceled.
+            13. Click button 'Toggle Orient', the 1st rating should be changed to vertical. And the rating should be started from bottom.
+            14. Click on any icon, the rating should be changed to the clicked icon.
 
-        for the rating component in the default star unicode window
-        1. should see no rating, and the icons should be unicode star icon, the orient should be vertical
-        2. click button 5, the icons should be set to a bold X unicode icon
-        3. click button 6, the icons should be set to Font awesome z-icon-flag icon
-        4. click button 7, the rating should be set to 4
-        4. click button 8, should throw UiException out of bound
-        5. click button 9, the orient should be set to horizontal
-        6. click button 10 again, the orient should be set to vertical
-        7. click the 4th icon, should see rating cleared, and should also see 'Rated: 0' below
-        8. tab onto the 3rd icon and press [Enter] key, rating should change to 3
-        9. press [Enter] key again, rating should be 0
-        10. repeat step 8 and 9 again with [space] key, the result should be the same
-
-        for the rating component in the Disabled window
-        1. should see only the first rating component is able to rate
-        2. rate 2 for this component
-        3. click the button 9, the rating component should change to disabled with rating 2 remain
-        4. click on the 4th star to change the rate, rating should remain 2
-        5. tab on the 4th start and press [Enter] key to change the rate, rating should remain 2
-        6. click the button again, the rating component should change back to not disabled style with rating 2 remained
-        7. rate 2 again to cancel the rating, the rating should be able to cancel
-        7. click button 11, rate it 2, rate it again, should not be able to cancel
-
-        for the rating component in the Readonly window
-        1. should see right arrow as icons
-        2. hover on the icons, should see default cursor
-        3. click the button 'toggle readonly', and hover on the icons again, should see the cursor changed to style of `a` tag.
-
-        for the rating component in the emoji window
-        1. should see 5 poopoo as rating icon
-        2. should have hover style and selected style customized by css hue-rotate
-            (we customized the emoji style with css here, by default, there's no selected style for emojis, due to the emoji's color should be set by css hue-rotate)
-
-    </label>
-    <hlayout hflex="min">
-        <window border="normal" title="Font awesome">
-            <vlayout>
-                <button onClick='r1.setSymbol("z-icon-flag")' label="1. set to Font awesome z-icon-flag"/>
-                <button onClick='r1.setSymbol("\u260E")' label="2. set to \u260E &#9742;"/>
-                <button onClick='r1.setMax(10)' label="3. set size 10"/>
-                <button onClick='r1.setMax(5)' label="4. set size 5"/>
-                <rating id="r1" symbol="z-icon-home" rating="@bind(vm.rating1)" cancelable="false"/>
-                <div>Rated: <label value="@load(vm.rating1)"/></div>
-            </vlayout>
-        </window>
-        <separator width="20px"/>
-        <window border="normal" title="default star unicode">
-            <vlayout>
-                <button onClick='r2.setSymbol("\u2716")' label="5. set to \u2716 &#10006;"/>
-                <button onClick='r2.setSymbol("z-icon-flag")' label="6. set to Font awesome z-icon-flag"/>
-                <button onClick='r2.setRating(4)' label="7. set rating to 4"/>
-                <button onClick='r2.setRating(10)' label="8. set rating to 10"/>
-                <button onClick='r2.setOrient("horizontal".equals(r2.getOrient()) ? "vertical" : "horizontal")' label="9. toggle orient"/>
-                <rating id="r2" orient="vertical" rating="@bind(vm.rating2)"/>
-                <div>Rated: <label value="@load(vm.rating2)"/></div>
-            </vlayout>
-        </window>
-        <separator width="20px"/>
-        <window border="normal" title="Disabled">
-            <vlayout>
-                <button onClick="disable.setDisabled(!disable.isDisabled())" label="10. toggle disabled"/>
-                <button onClick="disable.setCancelable(!disable.isCancelable())" label="11. toggle cancelable"/>
-                <rating id="disable" rating="@bind(vm.rating3)"/>
-                <div>Rated: <label value="@load(vm.rating3)"/></div>
-                <separator bar="true"/>
-                <rating disabled="true"/>
-                <rating disabled="true" rating="3"/>
-            </vlayout>
-        </window>
-        <separator width="20px"/>
-        <window border="normal" title="Readonly">
-            <vlayout>
-                <button onClick="readonly.setReadonly(!readonly.isReadonly())" label="10. toggle readonly"/>
-                <rating id="readonly" symbol="&#x21E8;" rating="2" readonly="true"/>
-            </vlayout>
-        </window>
-        <separator width="20px"/>
-        <window border="normal" title="emoji">
-            <style>
-                .emoji .z-rating-hover {
-                    -webkit-filter: hue-rotate(160deg);
-                    filter: hue-rotate(160deg);
-                }
-                .emoji .z-rating-selected {
-                    -webkit-filter: hue-rotate(180deg);
-                    filter: hue-rotate(180deg);
-                }
-            </style>
-            <vlayout>
-                <rating id="emoji" sclass="emoji" symbol="💩" rating="@bind(vm.rating4)"/>
-                <div>Rated: <label value="@load(vm.rating4)"/></div>
-            </vlayout>
-        </window>
-    </hlayout>
-    <textbox/>
+        </label>
+        <vlayout width="300px" height="300px">
+            default(z-icon-star) <rating id="rt0" iconSclass="glyphicon glyphicon-star" rating="3" onChange='Clients.log(self.rating.toString())'/>
+        </vlayout>
+        <div>
+            <button label="Set Rating 0" onClick="rt0.setRating(0)"/>
+            <button label="Set Rating 3" onClick="rt0.setRating(3)"/>
+            <button label="Set Rating 5" onClick="rt0.setRating(5)"/>
+            <separator/>
+            <button label="Set Max 10" onClick="rt0.max = 10"/>
+            <button label="Set IconSclass to z-icon-home" onClick='rt0.iconSclass = "z-icon-home"'/>
+            <button label="Toggle Disabled" onClick="rt0.disabled = !rt0.disabled"/>
+            <button label="Toggle Readonly" onClick="rt0.readonly = !rt0.readonly"/>
+            <button label="Toggle Cancelable" onClick="rt0.cancelable = !rt0.cancelable"/>
+            <button label="Toggle Orient" onClick='rt0.orient = (rt0.orient == "vertical" ? "horizontal" : "vertical")'/>
+        </div>
+        z-icon-bolt <rating iconSclass="z-icon-bolt" rating="3" max="7"/>
+        glyphicons <rating iconSclass="glyphicon glyphicon-star" rating="3"/>
+        CSS :before content <rating iconSclass="myGiftIcon" rating="3"/>
+    </vlayout>
 </div>
