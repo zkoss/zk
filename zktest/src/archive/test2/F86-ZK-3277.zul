@@ -13,15 +13,19 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<label multiline="true">
-		1. Test in ZKEE, if browser is IE, use IE10 or above
-		2. Open developer tool and observe Network
-		3. Upload a file, you should see file name on zk log, request type should be XMLHttpRequest
-		4. Click setMaxsize(1KB)
-		5. Upload a file larger than 1KB, you should see error message, and no upload request should be send
+	<label multiline="true" pre="true">
+		1. Test in ZKEE, if browser is IE, use IE10 or above.
+		2. Open developer tool and observe Network.
+		3. Click uploadButton to upload a file, you should see file name on zk log, request type should be XMLHttpRequest.
+		4. Click setMaxsize(1KB).
+		5. Click uploadButton to upload a file larger than 1KB, you should see error message, and no upload request should be send.
+		6. Click createUploadButtonWithoutAttach, you should not see any exception.
+		7. Click attachButton, you should see newUploadButton was attached.
+		8. Click newUploadButton to upload a file larger than default maximal allowed upload size (usually 5120KB),
+			you should see error message, and no upload request should be send.
 	</label>
-	<vlayout>
-		<button id="upload" label="Click to upload"
+	<vlayout id="vlayout">
+		<button id="upload" label="uploadButton"
 				upload="true,maxsize=-1,multiple=true">
 			<attribute name="onUpload"><![CDATA[
 				import org.zkoss.util.media.Media;
@@ -31,5 +35,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			]]></attribute>
 		</button>
 		<button label="setMaxsize(1KB)" onClick='upload.setUpload("true,maxsize=1,multiple=true")'/>
+		<button label="uploadButtonWithoutMaxsize" upload="true"/>
+		<button label="createUploadButtonWithoutAttach">
+			<attribute name="onClick">
+				Button button = new Button("newUploadButton");
+				button.setUpload("true");
+			</attribute>
+		</button>
+		<button label="attachButton" onClick="vlayout.appendChild(button)"/>
 	</vlayout>
 </zk>
