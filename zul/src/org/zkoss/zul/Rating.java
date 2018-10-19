@@ -14,11 +14,9 @@ package org.zkoss.zul;
 import java.util.Map;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Disable;
@@ -44,8 +42,6 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 		addClientEvent(Rating.class, Events.ON_CHANGE, CE_IMPORTANT | CE_REPEAT_IGNORE);
 	}
 
-	private String _symbol = "\u2605";
-
 	private String _orient = "horizontal";
 
 	private int _rating = 0;
@@ -60,27 +56,24 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 
 	private boolean _readonly = false;
 
+	private String _iconSclass = "z-icon-star";
+
 	/**
-	 * Returns the symbol string.
-	 * @return a String of unicode or Font awesome z-icon prefixed icon name.
+	 * Returns the iconSclass name of this rating.
+	 * @return the iconSclass name
 	 */
-	public String getSymbol() {
-		return _symbol;
+	public String getIconSclass() {
+		return _iconSclass;
 	}
 
 	/**
-	 * Sets a unicode encodings or Font awesome z-icon prefixed icon name.
-	 * Default: \u2605
-	 * @param symbol the icon String.
+	 * Sets the iconSclass name of this rating.
+	 * @param iconSclass String
 	 */
-	public void setSymbol(String symbol) throws WrongValueException {
-		if (symbol == null)
-			throw new WrongValueException("Symbol should not be null");
-		if (Strings.isEmpty(symbol))
-			throw new WrongValueException("Symbol should not be empty");
-		if (!Objects.equals(_symbol, symbol)) {
-			_symbol = symbol;
-			smartUpdate("symbol", _symbol);
+	public void setIconSclass(String iconSclass) {
+		if (!Objects.equals(_iconSclass, iconSclass)) {
+			_iconSclass = iconSclass;
+			smartUpdate("iconSclass", _iconSclass);
 		}
 	}
 
@@ -228,23 +221,24 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 		if (_rating != 0) {
 			render(renderer, "rating", _rating);
 		}
+		if (_max != 5) {
+			render(renderer, "_max", _max);
+		}
 		if (_disabled) {
 			renderer.render("disabled", true);
 		}
 		if (_readonly) {
 			renderer.render("readonly", true);
 		}
-		if (!"horizontal".equals(_orient)) {
-			render(renderer, "_orient", _orient);
-		}
-		if (_max != 5) {
-			render(renderer, "_max", _max);
-		}
 		if (!_cancelable) {
 			renderer.render("_cancelable", false);
 		}
-		if (!"\u2605".equals(_symbol))
-			render(renderer, "symbol", _symbol);
+		if (!"horizontal".equals(_orient)) {
+			render(renderer, "_orient", "vertical");
+		}
+		if (!"z-icon-star".equals(_iconSclass)) {
+			render(renderer, "iconSclass", _iconSclass);
+		}
 
 	}
 

@@ -17,14 +17,40 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
  * @since 8.6.0
  */
 zul.wgt.Rating = zk.$extends(zul.Widget, {
-	_symbol: '\u2605',
 	_orient: 'horizontal',
 	_rating: 0,
 	_cancelable: true,
 	_max: 5,
 	_disabled: false,
+	_iconSclass: 'z-icon-star',
 
 	$define: {
+		/**
+		 * Sets the iconSclass.
+		 * @param String sclass
+		 */
+		/**
+		 * Returns the iconSclass.
+		 * @returns String
+		 */
+		iconSclass: function (sclass) {
+			if (this.desktop) {
+				this.rerender();
+			}
+		},
+		/**
+		 * Sets the rating.
+		 * @param int rating
+		 */
+		/**
+		 * Returns the rating.
+		 * @returns int
+		 */
+		rating: function (rating) {
+			if (this.desktop) {
+				this._toggleClass('selected', rating);
+			}
+		},
 		/**
 		 * Sets whether this widget is disabled
 		 * @param boolean disabled
@@ -35,7 +61,7 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 		 */
 		disabled: function (disabled) {
 			if (this.desktop) {
-				this._toggleClass('disabled', disabled);
+				jq(this).children().toggleClass(this.$s('disabled'), disabled);
 			}
 		},
 		/**
@@ -48,81 +74,32 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 		 */
 		readonly: function (readonly) {
 			if (this.desktop) {
-				this._toggleClass('readonly', readonly);
+				jq(this).children().toggleClass(this.$s('readonly'), readonly);
 			}
 		}
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Rating, 'bind_', arguments);
-		for (var i = 1; i <= this._max; i++) {
-			this.domListen_(this.$n('a-' + i), 'onMouseOver', '_doMouseOver').domListen_(this.$n('a-' + i), 'onMouseOut', '_doMouseOut');
-		}
+		var wgt = this,
+			isVertical = 'vertical' == wgt._orient;
+		jq(wgt).children().each(function (i) {
+			jq(this).data('rate', isVertical ? wgt._max - i : i + 1);
+			wgt.domListen_(this, 'onMouseOver', '_doMouseOver').domListen_(this, 'onMouseOut', '_doMouseOut');
+		});
 	},
 	unbind_: function () {
-		for (var i = 1; i <= this._max; i++) {
-			this.domUnlisten_(this.$n('a-' + i), 'onMouseOver', '_doMouseOver').domUnlisten_(this.$n('a-' + i), 'onMouseOut', '_doMouseOut');
-		}
+		var wgt = this;
+		jq(wgt).children().each(function () {
+			wgt.domUnlisten_(this, 'onMouseOver', '_doMouseOver').domUnlisten_(this, 'onMouseOut', '_doMouseOut');
+		});
 		this.$supers(zul.wgt.Rating, 'unbind_', arguments);
 	},
-	_toggleClass: function (name, toggle) {
-		var rating = this._rating;
-		for (var i = 1; i <= rating; i++) {
-			jq(this.$n('a-' + i)).toggleClass(this.$s(name + '-selected'), toggle).toggleClass(this.$s('selected'), !toggle);
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			sc += ' ' + this.$s(this._orient);
 		}
-		for (var i = rating + 1; i <= this._max; i++) {
-			jq(this.$n('a-' + i)).toggleClass(this.$s(name), toggle);
-		}
-	},
-	/**
-	 * Sets the rating.
-	 * @param int rating
-	 */
-	setRating: function (rating) {
-		if (this.desktop) {
-			for (var i = 1; i <= rating; i++) {
-				jq(this.$n('a-' + i)).addClass(this.$s('selected'));
-			}
-			for (var i = rating + 1; i <= this._rating; i++) {
-				jq(this.$n('a-' + i)).removeClass(this.$s('selected'));
-			}
-		}
-		this._rating = rating;
-	},
-	/**
-	 * Returns the rating.
-	 * @returns int
-	 */
-	getRating: function () {
-		return this._rating;
-	},
-	/**
-	 * Sets the symbols.
-	 * @param String symbol unicode or z-icon prefixed Font awesome icon string.
-	 */
-	setSymbol: function (symbol) {
-		if (this.desktop) {
-			var oldSymbol = this._symbol;
-			for (var i = 1; i <= this._max; i++) {
-				if (oldSymbol.startsWith('z-icon-')) {
-					jq(this.$n('a-' + i)).removeClass(oldSymbol);
-				} else {
-					this.$n('a-' + i).innerHTML = '';
-				}
-				if (symbol.startsWith('z-icon-')) {
-					jq(this.$n('a-' + i)).addClass(symbol);
-				} else {
-					this.$n('a-' + i).innerHTML = symbol;
-				}
-			}
-		}
-		this._symbol = symbol;
-	},
-	/**
-	 * Returns the symbol.
-	 * @returns String unicode or z-icon prefixed Font awesome icon string.
-	 */
-	getSymbol: function () {
-		return this._symbol;
+		return sc;
 	},
 	doSelect_: function (evt) {
 		if (this._disabled || this._readonly)
@@ -130,66 +107,31 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 		this._changeRating(evt);
 	},
 	_changeRating: function (evt) {
-		var id = evt.domTarget.id,
-			oldRating = this._rating,
-			rating = parseInt(id.substring(id.lastIndexOf('-') + 1));
-		if (this._cancelable && oldRating == rating) {
-			for (var i = 1; i <= rating; i++) {
-				jq(this.$n('a-' + i)).removeClass(this.$s('selected'));
-				jq(this.$n('a-' + i)).removeClass(this.$s('hover'));
-			}
-			this._rating = 0;
-		} else {
-			for (var i = 1; i <= rating; i++) {
-				jq(this.$n('a-' + i)).addClass(this.$s('selected'));
-			}
-			this._rating = rating;
-		}
+		var rating = jq(evt.domTarget).data('rate'),
+			isCanceling = this._cancelable && this._rating == rating;
+		if (isCanceling)
+			jq(this).children().removeClass(this.$s('selected'));
+		else
+			this._toggleClass('selected', rating);
+		jq(this).children().removeClass(this.$s('hover'));
+		this._rating = isCanceling ? 0 : rating;
 		this.fire('onChange', {rating: this._rating});
 	},
 	_doMouseOver: function (evt) {
 		if (this._disabled || this._readonly)
 			return;
-		if (this._rating > 0) {
-			for (var i = 1; i <= this._rating; i++) {
-				jq(this.$n('a-' + i)).removeClass(this.$s('selected'));
-			}
-		}
-		var n = evt.domTarget,
-			id = n.id,
-			hoveredIndex = parseInt(id.substring(id.lastIndexOf('-') + 1));
-		for (var i = 1; i <= hoveredIndex; i++) {
-			jq(this.$n('a-' + i)).addClass(this.$s('hover'));
-		}
+		this._toggleClass('hover', jq(evt.domTarget).data('rate'));
 	},
 	_doMouseOut: function (evt) {
 		if (this._disabled || this._readonly)
 			return;
-		var n = evt.domTarget,
-			id = n.id,
-			hoveredIndex = parseInt(id.substring(id.lastIndexOf('-') + 1));
-		for (var i = 1; i <= hoveredIndex; i++) {
-			jq(this.$n('a-' + i)).removeClass(this.$s('hover'));
-		}
-		if (this._rating > 0) {
-			for (var i = 1; i <= this._rating; i++) {
-				jq(this.$n('a-' + i)).addClass(this.$s('selected'));
-			}
-		}
+		jq(this).children().removeClass(this.$s('hover'));
 	},
-	doKeyDown_: function (evt) {
-		if (this._disabled || this._readonly)
-			return;
-		var keyCode = evt.keyCode,
-			id = evt.domTarget.id,
-			oldRating = this._rating,
-			rating = parseInt(id.substring(id.lastIndexOf('-') + 1));
-		if (keyCode == 32 || keyCode == 13) {
-			for (var i = rating; i <= oldRating; i++) {
-				jq(this.$n('a-' + i)).removeClass(this.$s('selected'));
-			}
-			this._changeRating(evt);
-			evt.stop();
-		}
+	_toggleClass: function (name, rate) {
+		var wgt = this;
+		jq(wgt).children().each(function () {
+			var jqCh = jq(this);
+			jqCh.toggleClass(wgt.$s(name), jqCh.data('rate') <= rate);
+		});
 	}
 });
