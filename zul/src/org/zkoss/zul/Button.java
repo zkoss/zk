@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
@@ -274,25 +275,29 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		if (upload != null && (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
 		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
+			onUploadChanged(upload);
+			initAuxInfo().upload = upload;
 			if (upload != null) { //for AuUploader
 				Matcher matcher = Pattern.compile("maxsize=([^,]+)").matcher(upload);
-				Integer maxsz;
 				if (matcher.find()) {
 					try {
-						maxsz = Integer.parseInt(matcher.group(1));
+						Integer maxsz = Integer.parseInt(matcher.group(1));
+						setAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE, maxsz);
 					} catch (NumberFormatException e) {
 						throw new UiException("The upload max size should be a positive integer.");
 					}
-				} else {
-					maxsz = this.getDesktop().getWebApp().getConfiguration().getMaxUploadSize();
-					upload = upload.concat(",maxsize=" + maxsz);
 				}
-				setAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE, maxsz);
-				onUploadChanged(upload);
-				initAuxInfo().upload = upload;
 			}
-			smartUpdate("upload", getUpload());
+			smartUpdate("upload", getRealUpload());
 		}
+	}
+
+	private String getRealUpload() {
+		Desktop desktop = getDesktop();
+		String upload = getUpload();
+		if (desktop != null && !Strings.isEmpty(upload) && !upload.contains("maxsize="))
+			upload = upload.concat(",maxsize=" + desktop.getWebApp().getConfiguration().getMaxUploadSize());
+		return upload;
 	}
 
 	/** Called when the upload attribute is modified. */
@@ -324,7 +329,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		final String href;
 		render(renderer, "href", href = getEncodedHref());
 		render(renderer, "target", getTarget());
-		render(renderer, "upload", getUpload());
+		render(renderer, "upload", getRealUpload());
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}
