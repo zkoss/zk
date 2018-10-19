@@ -38,9 +38,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 
 			//ZK-2776: don't take hidden column, like setVisible(false), into account
-			for (var hdcol = parent.ehdfaker.firstChild; hdcol; hdcol = hdcol.nextSibling) {
-				var style = hdcol.style;
-				if (style.visibility == 'hidden' || style.display == 'none' /*just in case*/)
+			for (var header = parent.head.firstChild; header; header = header.nextSibling) {
+				if (!header.isVisible())
 					totalcols -= 1;
 			}
 			for (var i = 0; i < columns; i++)
@@ -345,8 +344,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 					cellWidth;
 
 				//ZK-2776, once a column is hidden, there is an additional style
-				var style = n.style;
-				if (style.visibility == 'hidden' || style.visibility == 'collapse' || style.display == 'none' /*just in case*/)
+				if (!hdWgt.isVisible())
 					continue; //skip column which is hide
 
 				if (cnt-- <= 0) { //show
