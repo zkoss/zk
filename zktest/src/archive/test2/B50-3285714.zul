@@ -9,11 +9,21 @@
 		for(int i = 0; i < 10000; i++)
 			rows[i] = "Row " + i;
 	]]></zscript>
-	<grid width="200px" height="300px">
+	<grid id="grid" width="200px" height="300px">
 		<rows>
 			<row forEach="${rows}">
 				<label value="${each}" />
 			</row>
 		</rows>
 	</grid>
+	<script><![CDATA[
+		function getTopRowTextAndVerify(i, curTop) {
+          var row = jq(".z-row").eq(i);
+          if (parseInt(row.offset().top) >= curTop || (i + 1) >= jq(".z-row").length) {
+          	return Math.abs(5000 - parseInt(row.find('.z-label').html().replace('Row ', '').trim())) <= 50;
+          } else {
+            return getTopRowTextAndVerify(i + 1);
+          }
+        }
+	]]></script>
 </zk>
