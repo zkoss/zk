@@ -715,6 +715,15 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		}
 
 		return new Blob([arrayBuffer], {type: mimeString});
+	},
+	/**
+	 * Returns the ratio of the resolution in physical pixels to the resolution in CSS pixels for the current display device.
+	 * For more information, please visit https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
+	 * @return double the devicePixelRatio
+	 * @since 8.6.0
+	 */
+	getDevicePixelRatio: function () {
+		return window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
 	}
 };
 

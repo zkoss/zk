@@ -1076,7 +1076,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	onSize: function () {
-		var devicePixelRatio = window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
+		var devicePixelRatio = zUtl.getDevicePixelRatio();
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight
