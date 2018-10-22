@@ -39,9 +39,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 	</label>
 	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_3962VM')">
 		<hlayout>
-			<cropper id="cr1" x="50" y="100" w="100" h="100" onCrop="img1.setContent(event.getImage())" toolbarVisible="true" croppedFormat="image/jpeg">
-				<image id="img" src="/test2/img/F86-ZK-3962.jpg"/>
-			</cropper>
+			<cropper id="cr1" src="/test2/img/F86-ZK-3962.jpg" x="50" y="100" w="100" h="100" onCrop="img1.setContent(event.getMedia())" toolbarVisible="true" croppedFormat="image/jpeg"/>
 			<image id="img1"/>
 		</hlayout>
 		<hlayout>
@@ -57,9 +55,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			<button label="Toggle toolbar visibility"  onClick="cr1.setToolbarVisible(!cr1.isToolbarVisible())" />
 		</hlayout>
 		<hlayout>
-			<cropper id="cr2" onCrop="img2.setContent(event.getImage())" toolbarVisible="true" w="@bind(vm.width)" h="@bind(vm.height)" onChange="@command('cropperOnChange', c=self)" onChanging="@command('cropperOnChanging', c=self)">
-				<image src="https://upload.wikimedia.org/wikipedia/en/3/36/Characters.png" width="600px"/>
-			</cropper>
+			<cropper id="cr2" src="https://upload.wikimedia.org/wikipedia/en/3/36/Characters.png" onCrop="img2.setContent(event.getMedia())" toolbarVisible="true" w="@bind(vm.width)" h="@bind(vm.height)" instant="true" crossOrigin="anonymous"/>
 			<vlayout>
 				width: <textbox value="@bind(vm.width)" width="80px"/>
 				height: <textbox value="@bind(vm.height)" width="80px"/>
@@ -70,18 +66,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		<separator height="15px"/>
 		<hlayout>
 			<zscript><![CDATA[
-			import java.net.URL;
-			import org.zkoss.image.AImage;
-
-			URL url = new URL("https://upload.wikimedia.org/wikipedia/en/3/36/Characters.png");
-			AImage img = new AImage(url);
-		]]>
-			</zscript>
-			<cropper id="cr3" onCrop="img3.setContent(event.getImage())" toolbarVisible="true">
-				<image content="${img}" width="600px"/>
-			</cropper>
+				import java.net.URL;
+				import org.zkoss.image.AImage;
+				URL url = new URL("https://upload.wikimedia.org/wikipedia/en/3/36/Characters.png");
+				AImage img = new AImage(url);
+			]]></zscript>
+			<cropper id="cr3" content="${img}" onCrop="img3.setContent(event.getMedia())" toolbarVisible="true"/>
 			<image id="img3" />
 		</hlayout>
-		<button label="invalidate" onClick="cr3.invalidate()"/>
 	</vlayout>
 </zk>
