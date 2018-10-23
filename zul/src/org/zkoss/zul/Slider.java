@@ -22,6 +22,8 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ScrollEvent;
+import org.zkoss.zk.ui.sys.ContentRenderer;
+import org.zkoss.zk.ui.util.Callback;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -37,6 +39,7 @@ public class Slider extends XulElement {
 	private String _name;
 	private String _slidingtext = "{0}";
 	private boolean _resetWidth = true; //B80-ZK-2895
+	private boolean _resetHeight = true;
 
 	//knob mode property
 	private double _angleArc = 360.0;
@@ -59,7 +62,14 @@ public class Slider extends XulElement {
 	}
 
 	public Slider() {
-		super.setWidth("200px");
+		addRedrawCallback(new Callback<ContentRenderer>() {
+			public void call(ContentRenderer data) {
+				if (_resetHeight)
+					setHeightDirectly("200px");
+				if (_resetWidth)
+					setWidthDirectly("200px");
+			}
+		});
 	}
 
 	/**
@@ -93,8 +103,27 @@ public class Slider extends XulElement {
 	@Override
 	public void setHflex(String flex) { //B80-ZK-2895
 		if (_resetWidth)
-			super.setWidth("");
+			setWidth("");
 		super.setHflex(flex);
+	}
+
+	/** Overrides the method in HtmlBasedComponent, to avoid misuse vflex and height at the same time.
+	 * @since 8.6.0
+	 */
+	@Override
+	public void setHeight(String height) {
+		_resetHeight = false;
+		super.setHeight(height);
+	}
+
+	/** Overrides the method in HtmlBasedComponent, to avoid misuse vflex and height at the same time.
+	 * @since 8.6.0
+	 */
+	@Override
+	public void setVflex(String flex) {
+		if (_resetHeight)
+			setHeight("");
+		super.setVflex(flex);
 	}
 
 	// super

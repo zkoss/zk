@@ -91,6 +91,7 @@ ZK 8.6.0
   ZK-3752: browser can't download source map after reloading a page
   ZK-4083: IE performance - border-radius styles in iceblue
   ZK-4044: 1px column header misalignment on zoomed displays
+  ZK-4102: Slider flex sizing does not update the default 200px
 
 * Upgrade Notes
 

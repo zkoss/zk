@@ -21,6 +21,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 	_height: '200px',
 	_width: '200px',
+	_resetHeight: true,
+	_resetWidth: true,
 	_curpos: 0,
 	_minpos: 0,
 	_maxpos: 100,
@@ -161,6 +163,56 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 				this._fixPos();
 			}
 		}
+	},
+	domStyle_: function (no) {
+		var style = '',
+			isVert = this.isVertical();
+		if (isVert) {
+			if (!this._resetWidth && this._width != null && this._width != '') {
+				style += 'width: ' + this._width + ';';
+			}
+			if (this._resetHeight) {
+				this._height = '200px';
+			}
+			if (this._height != null && this._height != '') {
+				style += 'height: ' + this._height + ';';
+			}
+		} else {
+			if (!this._resetHeight && this._height != null && this._height != '') {
+				style += 'height: ' + this._height + ';';
+			}
+			if (this._resetWidth) {
+				this._width = '200px';
+			}
+			if (this._width != null && this._width != '') {
+				style += 'width: ' + this._width + ';';
+			}
+		}
+		return style + this.$super('domStyle_', no);
+	},
+	setWidth: function (w) {
+		this._resetWidth = false;
+		this.$supers('setWidth', arguments);
+		if (this.desktop && this._mold != 'knob') {
+			this.onSize();
+		}
+	},
+	setHeight: function (h) {
+		this._resetHeight = false;
+		this.$supers('setHeight', arguments);
+		if (this.desktop && this._mold != 'knob') {
+			this.onSize();
+		}
+	},
+	setHflex: function (flex) {
+		if (this._resetWidth)
+			this.setWidth(null);
+		this.$supers('setHflex', arguments);
+	},
+	setVflex: function (flex) {
+		if (this._resetHeight)
+			this.setHeight(null);
+		this.$supers('setVflex', arguments);
 	},
 	domClass_: function () {
 		var scls = this.$supers('domClass_', arguments);
@@ -463,11 +515,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	setFlexSize_: function (sz, isFlexMin) {
 		this.$supers('setFlexSize_', arguments);
-		var n = this.$n();
-		if (sz.height !== undefined && sz.height == '')
-			n.style.height = '';
-		if (sz.width !== undefined && sz.width == '')
-			n.style.width = '';
+		if (this._mold != 'knob') {
+			this.onSize();
+		}
 	},
 	bind_: function () {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
@@ -485,6 +535,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		});
 		this.updateFormData(this._curpos);
 		this._fixPos();
+		var isVert = this.isVertical();
+		if (isVert && this._resetWidth) {
+			this._width = '';
+		}
+		if (!isVert && this._resetHeight) {
+			this._height = '';
+		}
 	},
 	unbind_: function () {
 		if (this._mold == 'knob') {
