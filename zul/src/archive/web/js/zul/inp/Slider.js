@@ -19,8 +19,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.Slider = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
-	_height: '200px',
-	_width: '200px',
 	_curpos: 0,
 	_minpos: 0,
 	_maxpos: 100,
@@ -160,6 +158,18 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			if (this.desktop) {
 				this._fixPos();
 			}
+		}
+	},
+	setWidth: function (w) {
+		this.$supers('setWidth', arguments);
+		if (this.desktop && this._mold != 'knob') {
+			this.onSize();
+		}
+	},
+	setHeight: function (h) {
+		this.$supers('setHeight', arguments);
+		if (this.desktop && this._mold != 'knob') {
+			this.onSize();
 		}
 	},
 	domClass_: function () {
@@ -462,11 +472,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	setFlexSize_: function (sz, isFlexMin) {
 		this.$supers('setFlexSize_', arguments);
-		var n = this.$n();
-		if (sz.height !== undefined && sz.height == '')
-			n.style.height = '';
-		if (sz.width !== undefined && sz.width == '')
-			n.style.width = '';
+		if (this._mold != 'knob') {
+			this.onSize();
+		}
 	},
 	bind_: function () {
 		this.$supers(zul.inp.Slider, 'bind_', arguments);
