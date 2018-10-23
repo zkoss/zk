@@ -90,15 +90,27 @@ public class LabelLoaderImpl implements LabelLoader {
 			public Object filter(Object key, Object value) {
 				Object o = value instanceof ExValue ?
 					((ExValue)value).getValue(): value;
-				if (o == null && log.isWarnEnabled()) {
+				if (o == null) {
 					// it's possible like missing a label.
-					log.warn("The key of [" + key + "] is not found in labels!");
+					o = handleMissingLabel(key);
 				}
 				return o;
 			}
 		};
 		_expf = Expressions.newExpressionFactory();
 		_xelc = new SimpleXelContext(new Resolver(), null);
+	}
+
+	/**
+	 * Handles the missing label. The default action is logging a message.
+	 *
+	 * @param key the specified key
+	 * @return the fallback value, or null if no fallback value available
+	 * @since 8.6.0
+	 */
+	protected Object handleMissingLabel(Object key) {
+		log.debug("The key of [{}] is not found in labels!", key);
+		return null;
 	}
 
 	/** Returns the label of the specified key for the current locale,
