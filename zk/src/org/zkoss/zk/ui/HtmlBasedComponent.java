@@ -19,6 +19,7 @@ package org.zkoss.zk.ui;
 import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
 import org.zkoss.zk.ui.event.AfterSizeEvent;
@@ -364,6 +365,60 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 */
 	public void setClass(String sclass) {
 		setSclass(sclass);
+	}
+
+	/** Add the CSS class(es) to a component's sclass property if the component doesn't have this cssClass.
+	 *
+	 * @param cssClass One or more space-separated CSS className to be added to the component's sclass property.
+	 * @since 8.6.1
+	 */
+	public void addSclass(String cssClass) {
+		if (!Strings.isEmpty(cssClass)) {
+			String sclass = getSclass();
+			if (sclass == null) {
+				setSclass(cssClass);
+			} else {
+				String[] input = cssClass.split(" ");
+				StringBuilder stringBuilder = new StringBuilder(sclass);
+				String cur = " " + sclass + " ";
+				for (String inputClass : input) {
+					if (!cur.contains(" " + inputClass + " ")) {
+						stringBuilder.append(" ").append(inputClass);
+					}
+				}
+				setSclass(stringBuilder.toString());
+			}
+		}
+	}
+
+	/** Remove the CSS class(es) from a component's sclass property if the component has this cssClass.
+	 *  If the component doesn't have the CSS class sclass, do nothing.
+	 *  If no class names are specified in the parameter, all classes will be removed.
+	 *
+	 * @param cssClass One or more space-separated CSS className to be removed from a component's sclass property.
+	 * @since 8.6.1
+	 */
+	public void removeSclass(String cssClass) {
+		String sclass = getSclass();
+		if (sclass != null) {
+			String[] input = cssClass.split(" ");
+			String cur = " " + sclass + " ";
+			for (String inputClass : input) {
+				String curInput = " " + inputClass + " ";
+				if (cur.contains(curInput)) {
+					cur = cur.replace(curInput, " ");
+				}
+			}
+			setSclass(cur.trim());
+		}
+	}
+
+	/** Remove all CSS classes from a component's sclass property.
+	 *
+	 * @since 8.6.1
+	 */
+	public void removeSclass() {
+		setSclass("");
 	}
 
 	/** Returns the CSS style.
