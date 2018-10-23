@@ -52,10 +52,12 @@ import org.zkoss.zk.xel.ExValue;
 			try {
 				return cls.getConstructor(new Class[] { Map.class }).newInstance(new Object[] { args });
 			} catch (NoSuchMethodException ex) {
+				// expected
 			}
 			try {
 				return cls.getConstructor(new Class[] { Object[].class }).newInstance(new Object[] { toArray(args) });
 			} catch (NoSuchMethodException e2) {
+				// expected
 			}
 		}
 		return cls.newInstance();

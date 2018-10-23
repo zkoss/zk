@@ -1222,7 +1222,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			if (o instanceof Class) {
 				try {
 					sp = (ServerPush) ((Class) o).newInstance();
-				} catch (Throwable ex) {
+				} catch (Throwable ignored) {
 				}
 			} else
 				sp = (ServerPush) o;

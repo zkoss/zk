@@ -45,8 +45,8 @@ public class Track extends AbstractTag {
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.5.1
 	 */
-	public void setDefault(String _default) throws WrongValueException {
-		setDynamicProperty("default", _default);
+	public void setDefault(String propDefault) throws WrongValueException {
+		setDynamicProperty("default", propDefault);
 	}
 	/**
 	 * Returns the kind of this track tag.

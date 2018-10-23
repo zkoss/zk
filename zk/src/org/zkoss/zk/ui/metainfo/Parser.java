@@ -939,7 +939,7 @@ public class Parser {
 				AnnotationHelper attrAnnHelper = null;
 				//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
 				boolean isMVVM = false;
-				boolean _shouldIgnoreAnnotNamespace = annHelper.shouldIgnoreAnnotNamespace();
+				boolean shouldIgnoreAnnotNamespace = annHelper.shouldIgnoreAnnotNamespace();
 				for (final Attribute attr : el.getAttributeItems()) {
 					final Namespace attrns = attr.getNamespace();
 					final String attURI = attrns != null ? attrns.getURI() : "";
@@ -993,7 +993,7 @@ public class Parser {
 						forEachEnd = attval;
 					} else if ("fulfill".equals(attnm) && isZkAttr(langdef, attrns, bNativeContent)) {
 						compInfo.setFulfill(attval);
-					} else if (!_shouldIgnoreAnnotNamespace && (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI) || "annotation".equals(attURI))) {
+					} else if (!shouldIgnoreAnnotNamespace && (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI) || "annotation".equals(attURI))) {
 						//ZK 6: annotation namespace mandates annotation
 						if (attrAnnHelper == null)
 							attrAnnHelper = new AnnotationHelper();
@@ -1002,7 +1002,7 @@ public class Parser {
 						final String attvaltrim;
 						if (!"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 								&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-							if (!bNativeContent && !bNative && (_shouldIgnoreAnnotNamespace || (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))) && AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) {
+							if (!bNativeContent && !bNative && (shouldIgnoreAnnotNamespace || (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))) && AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) {
 								if (attrAnnHelper == null)
 									attrAnnHelper = new AnnotationHelper();
 								applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
@@ -1345,8 +1345,8 @@ public class Parser {
 				: pgdef.getComponentDefinitionMap().get(name);
 		final ShadowInfo compInfo = new ShadowInfo(parent, shadowDefinition, name,
 				ConditionImpl.getInstance(ifc, unless));
-		boolean _annotationed = false;
-		boolean _shouldIgnoreAnnotNamespace = annHelper.shouldIgnoreAnnotNamespace();
+		boolean annotated = false;
+		boolean shouldIgnoreAnnotNamespace = annHelper.shouldIgnoreAnnotNamespace();
 		for (final Attribute attr: el.getAttributeItems()) {
 			final Namespace attrns = attr.getNamespace();
 			final String attURI = attrns != null ? attrns.getURI() : "";
@@ -1356,8 +1356,8 @@ public class Parser {
 				ifc = attval;
 			} else if ("unless".equals(attnm)) {
 				unless = attval;
-			} else if (!_shouldIgnoreAnnotNamespace && (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI) || "annotation".equals(attURI))) {
-				_annotationed = true;
+			} else if (!shouldIgnoreAnnotNamespace && (LanguageDefinition.ANNOTATION_NAMESPACE.equals(attURI) || "annotation".equals(attURI))) {
+				annotated = true;
 				//ZK 6: annotation namespace mandates annotation
 				if (attrAnnHelper == null)
 					attrAnnHelper = new AnnotationHelper();
@@ -1377,7 +1377,7 @@ public class Parser {
 						for (String annot : binderAnnotations) {
 							if (attvaltrim.contains(annot)) {
 								compInfo.enableBindingAnnotation();
-								_annotationed = true;
+								annotated = true;
 								break;
 							}
 						}
@@ -1411,14 +1411,14 @@ public class Parser {
 					item = item.getNextSibling();
 				}
 				TemplateInfo templateInfo = new TemplateInfo(compInfo, "", null, null, null);
-				if (!_shouldIgnoreAnnotNamespace && _annotationed) {
+				if (!shouldIgnoreAnnotNamespace && annotated) {
 					annHelper.setIgnoreAnnotNamespace(true);
 					templateInfo.setAnnotationNamespacedRoot(true);
 				}
 				return templateInfo;
 			}
 		}
-		if (!_shouldIgnoreAnnotNamespace && _annotationed) {
+		if (!shouldIgnoreAnnotNamespace && annotated) {
 			annHelper.setIgnoreAnnotNamespace(true);
 			compInfo.setAnnotationNamespacedRoot(true);
 		}
@@ -1761,18 +1761,14 @@ public class Parser {
 	/** Returns whether the given uri is a known namespace in ZK or not
 	 */
 	private static boolean isZKNamespace(String uri) {
-		if (LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri)
+		return LanguageDefinition.ZK_NAMESPACE.equals(uri) || "zk".equals(uri)
 				|| LanguageDefinition.NATIVE_NAMESPACE.equals(uri) || "native".equals(uri) || "annotation".equals(uri)
 				|| LanguageDefinition.ANNOTATION_NAMESPACE.equals(uri) || "client".equals(uri)
 				|| LanguageDefinition.CLIENT_NAMESPACE.equals(uri) || "client/attribute".equals(uri)
 				|| LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri) || "xhtml".equals(uri)
 				|| "http://www.w3.org/1999/xhtml/".equals(uri) || "zul".equals(uri)
 				|| "http://www.zkoss.org/2005/zul/".equals(uri) || "xml".equals(uri)
-				|| "http://www.zkoss.org/2007/xml".equals(uri) || langdefLookup(uri) != null) {
-			return true;
-		} else {
-			return false;
-		}
+				|| "http://www.zkoss.org/2007/xml".equals(uri) || langdefLookup(uri) != null;
 	}
 
 	/** Returns whether the given uri is in native namespace or not

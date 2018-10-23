@@ -137,14 +137,14 @@ public class WebManager {
 		}
 
 		//load metainfo/zk/zk.xml
-		String XML = "metainfo/zk/zk.xml";
+		String xml = "metainfo/zk/zk.xml";
 		try {
 			final XMLResourcesLocator loc = Utils.getXMLResourcesLocator();
 
 			// B65-ZK-1671: ThemeProvider specified in metainfo/zk/zk.xml may get overridden by default
 			//   Also need to enforce configuration loading order (zul -> zkex -> zkmax) so that correct
 			//   versions of StandardThemeProvider, ThemeRegistry, and ThemeResolver are configured
-			final List<XMLResourcesLocator.Resource> xmls = loc.getDependentXMLResources(XML, "config-name", "depends");
+			final List<XMLResourcesLocator.Resource> xmls = loc.getDependentXMLResources(xml, "config-name", "depends");
 			for (XMLResourcesLocator.Resource res : xmls) {
 				final URL cfgUrl = res.url;
 				try {
@@ -154,40 +154,40 @@ public class WebManager {
 				}
 			}
 		} catch (Throwable ex) {
-			log.error("Unable to load " + XML, ex);
+			log.error("Unable to load " + xml, ex);
 		}
 
 		//load /WEB-INF/zk.xml
-		XML = "/WEB-INF/zk.xml";
+		xml = "/WEB-INF/zk.xml";
 		try {
-			final URL cfgUrl = _ctx.getResource(XML);
+			final URL cfgUrl = _ctx.getResource(xml);
 			if (cfgUrl != null)
 				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx, true));
 			//accept URL, so zk.xml could contain URL
 		} catch (Throwable ex) {
-			log.error("Unable to load " + XML, ex);
+			log.error("Unable to load " + xml, ex);
 		}
 
 		LogConfigurer.configure();
 
 		//load additional configuration file
-		XML = Library.getProperty("org.zkoss.zk.config.path");
-		if (XML != null && XML.length() > 0) {
-			log.info("Parsing " + XML);
+		xml = Library.getProperty("org.zkoss.zk.config.path");
+		if (xml != null && xml.length() > 0) {
+			log.info("Parsing " + xml);
 			InputStream is = null;
 			try {
-				is = Servlets.getResourceAsStream(_ctx, XML);
+				is = Servlets.getResourceAsStream(_ctx, xml);
 				if (is != null)
 					parser.parse(is, config, new ServletContextLocator(_ctx, true));
 				else
-					log.error("File not found: " + XML);
+					log.error("File not found: " + xml);
 			} catch (Throwable ex) {
-				log.error("Unable to load " + XML, ex);
+				log.error("Unable to load " + xml, ex);
 			} finally {
 				if (is != null)
 					try {
 						is.close();
-					} catch (Throwable t) {
+					} catch (Throwable ignored) {
 					}
 			}
 		}

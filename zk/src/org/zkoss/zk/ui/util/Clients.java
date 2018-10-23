@@ -603,7 +603,7 @@ public class Clients {
 	 * Send a command to sync all the errorboxes and its reference component position on the desktop.
 	 * @since 8.5.2
 	 */
-	public static final void syncErrorbox () {
+	public static final void syncErrorbox() {
 		response(new AuSyncErrorbox());
 	}
 
@@ -612,7 +612,7 @@ public class Clients {
 	 * @param component target component
 	 * @since 8.5.2
 	 */
-	public static final void syncErrorbox (Component component) {
+	public static final void syncErrorbox(Component component) {
 		response(new AuSyncErrorbox(component));
 	}
 }

@@ -186,12 +186,12 @@ public class BindComposer<T extends Component>
 			}
 		}
 
-		ValidationMessages _vmsgs = initValidationMessages(evalx, comp, _binder);
+		ValidationMessages vmsgs = initValidationMessages(evalx, comp, _binder);
 
 		//wire before call init
 		Selectors.wireVariables(comp, _viewModel, Selectors.newVariableResolvers(BindUtils.getViewModelClass(_viewModel), null));
-		if (_vmsgs != null) {
-			_binder.setValidationMessages(_vmsgs);
+		if (vmsgs != null) {
+			_binder.setValidationMessages(vmsgs);
 		}
 
 		try {
@@ -589,9 +589,9 @@ public class BindComposer<T extends Component>
 			Binder binder;
 			Component comp;
 
-			public Loader(Binder _binder, Component comp) {
+			public Loader(Binder binder, Component comp) {
 				super();
-				this.binder = _binder;
+				this.binder = binder;
 				this.comp = comp;
 			}
 

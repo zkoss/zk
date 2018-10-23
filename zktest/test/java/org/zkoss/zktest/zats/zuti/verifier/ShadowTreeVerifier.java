@@ -11,16 +11,14 @@ Copyright (C) 2014 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.zuti.verifier;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.omg.CORBA.UNKNOWN;
-import org.zkoss.json.JSONArray;
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.JSONValue;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlShadowElement;

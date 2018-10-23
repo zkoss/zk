@@ -787,6 +787,7 @@ public class PageDefinition implements NodeInfo {
 		try {
 			return getLanguageDefinition().getComponentDefinition(name);
 		} catch (DefinitionNotFoundException ex) {
+			// expected
 		}
 		return null;
 	}
@@ -811,6 +812,7 @@ public class PageDefinition implements NodeInfo {
 			try { // try with shadow element
 				return getLanguageDefinition().getShadowDefinition(cls);
 			} catch (DefinitionNotFoundException eex) {
+				// expected
 			}
 		}
 		return null;

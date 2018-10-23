@@ -246,11 +246,11 @@ public class ComponentsCtrl {
 				target = null;
 
 				// ZK-2598: try to evaluate the path even if its not enclosed by ${}
-				String el_path = path.indexOf("${") >= 0 ? path : "${" + path + "}";
+				String elPath = path.indexOf("${") >= 0 ? path : "${" + path + "}";
 
 				Object v = null;
 				try {
-					v = Executions.evaluate(comp, el_path, Object.class);
+					v = Executions.evaluate(comp, elPath, Object.class);
 				} catch (Exception e) {
 					//eat, path may be . or ..
 				}
@@ -376,6 +376,7 @@ public class ComponentsCtrl {
 			try {
 				mtd = cls.getMethod(evtnm); //no argument case
 			} catch (NoSuchMethodException e2) {
+				// expected
 			}
 		}
 		_evtmtds.put(key, mtd != null ? mtd : Objects.UNKNOWN);

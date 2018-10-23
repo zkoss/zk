@@ -18,7 +18,6 @@ package org.zkoss.zhtml;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.Object;
 
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Execution;
@@ -50,7 +49,7 @@ public class Zkhead extends AbstractComponent {
 		}
 	}
 
-	public Object getExtraCtrl() {
+	public java.lang.Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 

@@ -291,6 +291,7 @@ public class Property extends ConditionValue {
 								m = mtds[j];
 								break;
 							} catch (Throwable ex) {
+								// expected
 							}
 						}
 					}
@@ -308,6 +309,7 @@ public class Property extends ConditionValue {
 								m = mtds[j];
 								break;
 							} catch (Throwable ex) {
+								// expected
 							}
 						}
 					}
@@ -317,6 +319,7 @@ public class Property extends ConditionValue {
 								val = Classes.coerce(String.class, val);
 								m = strmtd;
 							} catch (Throwable ex) {
+								// expected
 							}
 						}
 						if (m == null)

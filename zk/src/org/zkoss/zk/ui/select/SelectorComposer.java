@@ -226,9 +226,7 @@ public class SelectorComposer<T extends Component> implements Composer<T>, Compo
 			event.getTarget().removeEventListener(ON_WIRE_CLONE, this);
 
 			final Component clone = (Component) ((Object[]) event.getData())[0];
-			final SelectorComposer<Component> composerClone = (SelectorComposer<Component>) ((Object[]) event
-					.getData())[1];
-			;
+			final SelectorComposer<Component> composerClone = (SelectorComposer<Component>) ((Object[]) event.getData())[1];
 			ConventionWires.wireController(clone, composerClone);
 			Selectors.wireVariables(clone.getPage(), this, composerClone._resolvers);
 			Selectors.wireComponents(clone, this, false);

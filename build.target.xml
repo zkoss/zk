@@ -29,7 +29,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ================ -->
 
 <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
-		 classpath="${bin.dir}/checkstyle-6.14.1-all.jar"/>
+		 classpath="${bin.dir}/checkstyle-8.14-all.jar"/>
 
 <target name="checkstyle.java"
 		 description="Check java code style"
@@ -53,6 +53,9 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		<arg value="--max-errors=-1"/>
 	</exec>
 </target>
+
+<target name="checkstyle"
+		depends="checkstyle.js, checkstyle.java" />
 
 <!-- ======= -->
 <!-- COMPILE -->

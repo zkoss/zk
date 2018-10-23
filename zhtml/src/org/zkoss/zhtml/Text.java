@@ -18,7 +18,6 @@ package org.zkoss.zhtml;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.Object;
 import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
@@ -208,7 +207,7 @@ public class Text extends AbstractComponent implements RawId {
 		return false;
 	}
 
-	public Object getExtraCtrl() {
+	public java.lang.Object getExtraCtrl() {
 		return new ExtraCtrl();
 	}
 

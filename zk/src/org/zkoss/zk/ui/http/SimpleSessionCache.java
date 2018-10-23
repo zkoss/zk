@@ -34,14 +34,14 @@ public class SimpleSessionCache implements SessionCache {
 	}
 
 	public void put(Session sess) {
-		SessionAgent.agent.put(sess);
+		SessionAgent.AGENT.put(sess);
 	}
 
 	public Session get(Object navsess) {
-		return SessionAgent.agent.get(navsess);
+		return SessionAgent.AGENT.get(navsess);
 	}
 
 	public void remove(Session sess) {
-		SessionAgent.agent.remove(sess);
+		SessionAgent.AGENT.remove(sess);
 	}
 }

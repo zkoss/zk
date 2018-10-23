@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Page;
  * @since 3.0.4
  */
 public class JythonInterpreter extends GenericInterpreter {
-	PythonInterpreter _ip;
+	private PythonInterpreter _ip;
 
 	public JythonInterpreter() {
 	}
@@ -73,6 +73,7 @@ public class JythonInterpreter extends GenericInterpreter {
 	//helper classes//
 	/** The global scope. */
 	private class Variables extends PyStringMap {
+		@SuppressWarnings("checkstyle:MethodName")
 		public synchronized PyObject __finditem__(String key) {
 			PyObject pyo = super.__finditem__(key);
 

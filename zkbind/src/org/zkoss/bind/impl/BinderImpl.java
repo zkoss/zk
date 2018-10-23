@@ -1875,7 +1875,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 					if (Objects.equals(result, prop.getValue()))
 						it.remove();
 
-				} catch (NoSuchMethodException e) {
+				} catch (NoSuchMethodException ignored) {
 				}
 			}
 			notifys.addAll(properties);

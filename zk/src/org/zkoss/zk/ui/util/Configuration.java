@@ -3237,8 +3237,8 @@ public class Configuration {
 	 * Set binder init attribute name
 	 * @since 8.0.0
 	 */
-	public void setBinderInitAttribute(String _binderInitAttribute) {
-		this._binderInitAttribute = _binderInitAttribute;
+	public void setBinderInitAttribute(String binderInitAttribute) {
+		this._binderInitAttribute = binderInitAttribute;
 	}
 
 	/**

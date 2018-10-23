@@ -85,6 +85,7 @@ public abstract class ExtendletLoader<V> implements Loader<String, V> {
 				return v != -1 ? v : 0; //not to reload (5.0.6 for better performance)
 			}
 		} catch (Throwable ex) {
+			// expected
 		} finally {
 			if (conn != null) {
 				try {

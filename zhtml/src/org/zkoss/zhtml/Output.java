@@ -45,8 +45,8 @@ public class Output extends AbstractTag {
 	 * Hence, it would still be rendered to client-side as a DOM attribute even if the browser doesn’t support it.
 	 * @since 8.5.1
 	 */
-	public void setFor(String _for) throws WrongValueException {
-		setDynamicProperty("for", _for);
+	public void setFor(String propFor) throws WrongValueException {
+		setDynamicProperty("for", propFor);
 	}
 	/**
 	 * Returns the form of this output tag.

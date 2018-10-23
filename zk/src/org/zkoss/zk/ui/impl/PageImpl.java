@@ -1187,6 +1187,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			try { // try with shadow element
 				return _langdef.getShadowDefinition(name);
 			} catch (DefinitionNotFoundException exe) {
+				// expected
 			}
 		}
 		return null;
@@ -1203,6 +1204,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			try { // try with shadow element
 				return _langdef.getShadowDefinition(cls);
 			} catch (DefinitionNotFoundException eex) {
+				// expected
 			}
 		}
 		return null;

@@ -317,7 +317,7 @@ public abstract class NumberInputElement extends FormatInputElement {
 					final char cc = fmt.charAt(k);
 					if (cc == '%')
 						divscale -= 2;
-					else if (cc == '\u2030')
+					else if (cc == '‰')
 						divscale -= 3;
 					else if (cc == '\'') {
 						++k;

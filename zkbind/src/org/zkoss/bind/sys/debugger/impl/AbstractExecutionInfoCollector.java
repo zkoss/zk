@@ -39,6 +39,7 @@ public abstract class AbstractExecutionInfoCollector implements BindingExecution
 		try {
 			sid0 = sid == null ? sid0 : Integer.parseInt(sid);
 		} catch (Exception x) {
+			// expected
 		}
 		json.put("sid", Integer.valueOf(sid0));
 		

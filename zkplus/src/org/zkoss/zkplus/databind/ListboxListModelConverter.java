@@ -34,11 +34,10 @@ public class ListboxListModelConverter extends ListModelConverter {
 		final Listbox listbox = (Listbox) comp;
 		if (wrappedModel instanceof Selectable) {
 			if (((Selectable<?>) wrappedModel).isMultiple() != listbox.isMultiple())
-				;
 			//since the model was wrapped. I should respect the setting on the component
 			//user might set the multiple on the listbox by <listbox multiple="true" 
 			//or <listbox multiple="@bind(true)" or <listbox multiple="@bind(vm.multiple)"
-			((Selectable<?>) wrappedModel).setMultiple(listbox.isMultiple());
+				((Selectable<?>) wrappedModel).setMultiple(listbox.isMultiple());
 		}
 		return wrappedModel;
 	}

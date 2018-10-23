@@ -112,18 +112,18 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 		}
 	}
 
-	private static final String $COMPVALUE$ = "$COMPVALUE$";
-	private static final String $COMPVALUENOCONVERT$ = "$COMPVALUENOCONVERT$";
-	private static final String $VALUEREF$ = "$VALUEREF$";
+	private static final String COMPVALUE = "$COMPVALUE$";
+	private static final String COMPVALUENOCONVERT = "$COMPVALUENOCONVERT$";
+	private static final String VALUEREF = "$VALUEREF$";
 
 	private Object getComponentValue(BindContext ctx) {
-		if (!containsAttribute(ctx, $COMPVALUE$)) {
+		if (!containsAttribute(ctx, COMPVALUE)) {
 			final Component comp = getComponent(); //ctx.getComponent();
 			final BindEvaluatorX eval = getBinder().getEvaluatorX();
 
 			//get data from component attribute
 			Object value = eval.getValue(null, comp, _fieldExpr);
-			setAttribute(ctx, $COMPVALUENOCONVERT$, value);
+			setAttribute(ctx, COMPVALUENOCONVERT, value);
 			//use converter to convert type if any
 			@SuppressWarnings("unchecked")
 			final Converter<Object, Object, Component> conv = getConverter();
@@ -134,9 +134,9 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 				//					//see BinderImpl$CommandEventListener#onEvent()
 				//				BindELContext.addNotifys(getConverterMethod(conv.getClass()), ref.getBase(), null, value, ctx);
 			}
-			setAttribute(ctx, $COMPVALUE$, value);
+			setAttribute(ctx, COMPVALUE, value);
 		}
-		return getAttribute(ctx, $COMPVALUE$);
+		return getAttribute(ctx, COMPVALUE);
 	}
 
 	public String getValidatorExpressionString() {
@@ -151,7 +151,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 
 		if (value == Converter.IGNORED_VALUE) {
 			if (collector != null) {
-				Object old = getAttribute(ctx, $COMPVALUENOCONVERT$);
+				Object old = getAttribute(ctx, COMPVALUENOCONVERT);
 				collector.addInfo(new SaveInfo(SaveInfo.PROP_SAVE, comp, getConditionString(ctx), getFieldName(),
 						getPropertyString(), old, getArgs(), "*Converter.IGNORED_VALUE"));
 			}
@@ -182,7 +182,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 
 	//get and cache value reference of this binding
 	private ValueReference getValueReference(BindContext ctx) {
-		ValueReference valref = (ValueReference) getAttribute(ctx, $VALUEREF$);
+		ValueReference valref = (ValueReference) getAttribute(ctx, VALUEREF);
 		if (valref == null) {
 			//ZK-1017: Property of a form is not correct when validation
 			if (_formFieldInfo != null && _formFieldInfo._fieldName.indexOf("[$INDEX$]") == -1) { // skip collection field name
@@ -199,7 +199,7 @@ public class SavePropertyBindingImpl extends PropertyBindingImpl implements Save
 							+ "], check if you are trying to save to a variable only expression");
 				}
 			}
-			setAttribute(ctx, $VALUEREF$, valref);
+			setAttribute(ctx, VALUEREF, valref);
 		}
 		return valref;
 	}

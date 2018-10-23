@@ -67,7 +67,7 @@ import org.zkoss.mesg.Messages;
 			if (is != null)
 				try {
 					is.close();
-				} catch (Throwable ex) {
+				} catch (Throwable ignored) {
 				}
 		}
 	}
