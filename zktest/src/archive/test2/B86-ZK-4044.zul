@@ -25,12 +25,15 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		List items = Collections.nCopies(7, "dummy");
 	]]></zscript>
 	<label multiline="true">
-		Test in chrome
 		1. Zoom to 125%
 		2. Refresh page
 		3. Zoom to 110%
 		4. Scroll to the right most
 		5. The headers and cells should be aligned
+		6. Zoom to 200%
+		7. Refresh page
+		8. Scroll to the right most
+		9. The headers and cells should be aligned
 	</label>
 	<listbox height="200px" width="500px" sizedByContent="true" span="true">
 		<listhead>
