@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4096.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 23 16:21:37 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        When accessed this page, your server log shouldn't have such a message:
+
+        org.zkoss.util.resource.impl.LabelLoaderImpl$1 filter
+        WARNING: The key of [missing_label] is not found in labels!
+    </label>
+    <label value="${labels.missing_label}" />
+</zk>
