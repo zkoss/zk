@@ -2126,14 +2126,21 @@ zk.copy(jq, {
 	 * @return int
 	 */
 	scrollbarWidth: function () {
-		var _sbwDiv = document.createElement('div'),
-			body = document.body,
-			result;
-		_sbwDiv.style.cssText = 'top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;';
-		body.appendChild(_sbwDiv);
-		result = _sbwDiv._value || (_sbwDiv._value = _sbwDiv.offsetWidth - _sbwDiv.clientWidth);
-		body.removeChild(_sbwDiv);
-		return result;
+		var devicePixelRatio = zUtl.getDevicePixelRatio(),
+			body = document.body;
+		if (this._lastDevicePixelRatio != devicePixelRatio) {
+			this._lastDevicePixelRatio = devicePixelRatio;
+			if (_sbwDiv) {
+				body.removeChild(_sbwDiv);
+				_sbwDiv = null;
+			}
+		}
+		if (!_sbwDiv) {
+			_sbwDiv = document.createElement('div');
+			_sbwDiv.style.cssText = 'top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;';
+			body.appendChild(_sbwDiv);
+		}
+		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.offsetWidth - _sbwDiv.clientWidth);
 	},
     /** Returns if the specified rectangles are overlapped with each other.
      * @param Offset ofs1 the offset of the first rectangle
