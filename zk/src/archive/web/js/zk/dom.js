@@ -2138,9 +2138,10 @@ zk.copy(jq, {
 		if (!_sbwDiv) {
 			_sbwDiv = document.createElement('div');
 			_sbwDiv.style.cssText = 'top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;';
+			_sbwDiv.appendChild(document.createElement('div'));
 			body.appendChild(_sbwDiv);
 		}
-		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.offsetWidth - _sbwDiv.clientWidth);
+		return _sbwDiv._value || (_sbwDiv._value = _sbwDiv.getBoundingClientRect().width - _sbwDiv.firstChild.getBoundingClientRect().width);
 	},
     /** Returns if the specified rectangles are overlapped with each other.
      * @param Offset ofs1 the offset of the first rectangle
