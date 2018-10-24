@@ -11,7 +11,8 @@
 
 	&-image {
 		font-size: 0;
-		display: block;  // inline-block has filled bug in Firefox
+		display: inline-block;  // inline-block has filled bug in Firefox
+		vertical-align: top;  // prevent filled bug
 		height: @baseIconHeight - 2;
 		line-height: 0;
 		background-color: @progressmeterBackgroundColor;
