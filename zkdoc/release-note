@@ -4,6 +4,7 @@ ZK 8.6.1
 
 * Bugs
   ZK-4114: orgnode label missing font styles
+  ZK-4097: nativebar=false causes "after mounting error"
 
 * Upgrade Notes
 
