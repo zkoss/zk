@@ -13,6 +13,7 @@ package org.zkoss.bind.proxy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javassist.Modifier;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
@@ -341,6 +341,27 @@ public class ProxyHelper {
 	public static String capitalize(String prefix, String attr) {
 		return new StringBuilder(prefix).append(Character.toUpperCase(attr.charAt(0))).append(attr.substring(1))
 				.toString();
+	}
+
+	/**
+	 * Internal use only.
+	 */
+	public static boolean isAttribute(Method method) {
+		if (!Modifier.isPublic(method.getModifiers()))
+			return false;
+
+		final String nm = method.getName();
+		final int len = nm.length();
+		switch (method.getParameterTypes().length) {
+			case 0:
+				if (len >= 3 && nm.startsWith("is"))
+					return true;
+				return len >= 4 && nm.startsWith("get");
+			case 1:
+				return len >= 4 && nm.startsWith("set");
+			default:
+				return false;
+		}
 	}
 
 	/**
