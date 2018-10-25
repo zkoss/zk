@@ -29,6 +29,7 @@ ZK 8.6.0
   ZK-3962: A new component that can select a range of image
   ZK-3138: Data loading indicator for ROD
   ZK-4096: LabelLoaderImpl: fine tune logging
+  ZK-4094: camera should provide default recording status indicator
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
