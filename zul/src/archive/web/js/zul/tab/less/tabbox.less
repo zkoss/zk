@@ -1,14 +1,5 @@
 @import "~./zul/less/_header.less";
 
-.userSelect() {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
 // ZK-2100: use strict selector to prevent nest problem
 .verticalStyle() {
 	> .z-tabs {
@@ -89,7 +80,7 @@
 		cursor: pointer;
 		z-index: 25;
 		background: @tabboxTabsBackgroundColor;
-		.userSelect();
+		.userSelectNone();
 		
 		> i {
 			.opacity(0.7);
@@ -340,7 +331,7 @@
 		top: 0;
 		z-index: 15;
 		zoom: 1;
-		.userSelect();
+		.userSelectNone();
 		
 		&:hover {
 			color: @tabboxTabButtonHoverColor;
