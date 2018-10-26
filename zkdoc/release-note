@@ -30,6 +30,7 @@ ZK 8.6.0
   ZK-3138: Data loading indicator for ROD
   ZK-4096: LabelLoaderImpl: fine tune logging
   ZK-4094: camera should provide default recording status indicator
+  ZK-4092: Add option to select front-facing or user-facing camera to video-enabled components
 
 * Bugs
   ZK-4008: Grid renders its column width incorrectly with span=true
