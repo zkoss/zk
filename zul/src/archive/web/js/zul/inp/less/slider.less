@@ -51,7 +51,8 @@
 		border: 1px solid @inputBorderColor;
 		.borderRadius(@baseBorderRadius);
 		background: @inputBackgroundColor;
-		-webkit-appearance: none;
+		-webkit-appearance: textfield;
+		-moz-appearance: textfield;
 		text-align: center;
 		position: absolute;
 		line-height: 1.5;
@@ -63,6 +64,8 @@
 
 		&:focus {
 			border-color: @inputFocusBorderColor;
+			-webkit-appearance: textfield;
+			-moz-appearance: textfield;
 		}
 	}
 

@@ -210,6 +210,10 @@
 		
 		&.z-listitem-radio {
 			.borderRadius(50%);
+
+			&:hover {
+				border-color: @checkboxHoverBorderColor;
+			}
 		}
 		.z-listitem-icon {
 			display: none;
@@ -224,6 +228,10 @@
 
 			> .z-listcell-content {
 				color: @selectedColor;
+
+				> .z-listitem-checkable.z-listitem-radio {
+					border-color: @checkboxHoverBorderColor;
+				}
 			}
 		}
 		&:hover {
