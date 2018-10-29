@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4095.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 23 18:03:30 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Start scan"
+        2. Permit to use your webcam
+        3. Set the scan type (EAN and/or QR)
+        4. Scan some EAN-13 product barcode or Qrcode. The result will be updated on barcode components.
+    </label>
+    <zscript><![CDATA[
+    void onDetect(org.zkoss.zkmax.zul.event.DetectEvent e) {
+        if ("qr".equalsIgnoreCase(e.getType()))
+            resultQR.setValue(e.getResult());
+        else
+            resultEan.setValue(e.getResult());
+    }
+    ]]>
+    </zscript>
+    <vlayout>
+        <barcode id="resultEan" type="ean13" value="0000000000000" displayValue="true" height="100px" width="300px"/>
+        <barcode id="resultQR" type="QR" value="0000000000000" displayValue="true" height="300px" width="300px"/>
+
+        <button label="Start scan" onClick='scanner.doModal(); scanner.getFellow("bs").setEnable(true)'/>
+        <window id="scanner" minimizable="true" visible="false" title="Scanner"
+                onMinimize='scanner.getFellow("bs").setEnable(!event.minimized)'>
+            <barcodescanner id="bs" type="" continuous="true" interval="100"
+                            width="640px" height="480px"
+                            consistencyBufferSize="5"
+                            consistencyThreshold="3"
+                            onDetect='onDetect(event)' />
+            <hlayout>
+                <button label="QR" onClick='bs.setType("QR")'/>
+                <button label="QR + EAN" onClick='bs.setType("QR,ean")' />
+                <button label="EAN" onClick='bs.setType("ean")' />
+            </hlayout>
+        </window>
+
+        <button label="Reset" onClick='resultEan.setValue("0000000000000"); resultQR.setValue("0000000000000");' />
+    </vlayout>
+</zk>
