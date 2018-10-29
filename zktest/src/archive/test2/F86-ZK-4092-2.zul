@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4092-2.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Oct 26 10:22:49 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true" pre="true">
+		1. Click setConstraintsString
+		2. Click invalidate, barcodescanner ratio should be 1:1
+		3. Click getRatio, you should see "1"
+		4. Click setConstraints
+		5. Click invalidate, barcodescanner ratio should be 16:9
+		6. Click getRatio, you should see "1.7777777777777777"
+		7. Click getConstraints, you should see, "{video={aspectRatio=1.7777777777777777}}"
+
+		Test in mobile:
+		1. Click facingMode: environment
+		2. Click invalidate, you should see the barcodescanner facing toward environment
+		3. Click facingMode: user
+		4. Click invalidate, you should see the barcodescanner facing toward user
+	</label>
+	<vlayout apply="org.zkoss.zktest.test2.F86_ZK_4092Composer_2">
+		<hlayout>
+			<button id="invalidate" label="invalidate"/>
+			<button id="setConstraintsString" label="setConstraintsString"/>
+			<button id="setConstraints" label="setConstraints"/>
+			<button id="getConstraints" label="getConstraints"/>
+			<button label="getRatio" xmlns:w="client" w:onClick="getRatio()"/>
+			<button id="facingModeEnvironment" label="facingMode: environment"/>
+			<button id="facingModeUser" label="facingMode: user"/>
+		</hlayout>
+		<barcodescanner id="barcodescanner" width="300px"/>
+	</vlayout>
+	<script><![CDATA[
+		function getRatio() {
+			var barcodescanner = document.getElementsByTagName('video')[0];
+			zk.log(barcodescanner.videoWidth / barcodescanner.videoHeight);
+		}
+	]]></script>
+</zk>
