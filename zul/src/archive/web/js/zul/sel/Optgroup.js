@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 /**
  * A HTML optgroup tag.
+ * @since 8.6.0
  */
 zul.sel.Optgroup = zk.$extends(zul.Widget, {
 	_open: true,

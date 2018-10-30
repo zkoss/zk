@@ -340,20 +340,23 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
-	/** Returns whether Group exists.
+	/** Returns whether any {@link Optgroup} exists.
 	 * @return boolean
+	 * @since 8.6.0
 	 */
 	hasGroup: function () {
 		return this._groupsInfo.length;
 	},
-	/** Returns the number of groups.
+	/** Returns the number of {@link Optgroup}.
 	 * @return int
+	 * @since 8.6.0
 	 */
 	getGroupCount: function () {
 		return this._groupsInfo.length;
 	},
-	/** Returns a list of all {@link Group}. The order is unmaintained.
+	/** Returns a list of all {@link Optgroup}. The order is unmaintained.
 	 * @return Array
+	 * @since 8.6.0
 	 */
 	getGroups: function () {
 		return this._groupsInfo.$clone();

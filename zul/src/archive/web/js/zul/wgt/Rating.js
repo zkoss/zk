@@ -31,7 +31,7 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 		 */
 		/**
 		 * Returns the iconSclass.
-		 * @returns String
+		 * @return String
 		 */
 		iconSclass: function (sclass) {
 			if (this.desktop) {
@@ -44,7 +44,7 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 		 */
 		/**
 		 * Returns the rating.
-		 * @returns int
+		 * @return int
 		 */
 		rating: function (rating) {
 			if (this.desktop) {
@@ -57,7 +57,7 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 		 */
 		/**
 		 * Returns whether this widget is disabled
-		 * @returns boolean
+		 * @return boolean
 		 */
 		disabled: function (disabled) {
 			if (this.desktop) {
@@ -70,7 +70,7 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 		 */
 		/**
 		 * Returns whether this widget is readonly
-		 * @returns boolean
+		 * @return boolean
 		 */
 		readonly: function (readonly) {
 			if (this.desktop) {
