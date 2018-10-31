@@ -31,7 +31,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 		14. Click isChecked button, should see "false" on zk log
 	</label>
 	<vlayout>
-		<checkbox id="checkbox"/>
+		<checkbox id="checkbox" label="checkbox"/>
 		<hlayout>
 			<button label='Default' onClick='checkbox.setMold("default")'/>
 			<button label='Switch' onClick='checkbox.setMold("switch")'/>
