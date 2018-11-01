@@ -16,8 +16,8 @@ function (out) {
 	var uuid = this.uuid;
 	//tabindex attribute will be set in input element
 	out.push('<span', this.domAttrs_({tabindex: 1}), '>');
-	out.push('<input type="checkbox" id="', uuid, '-real"', this.contentAttrs_(), '/>');
-	out.push('<label for="', uuid, '-real" id="', uuid, '-mold" class="', this.$s('mold'), '"/>');
+	out.push('<input type="checkbox" id="', uuid, '-real"', this.contentAttrs_(), '></input>');
+	out.push('<label for="', uuid, '-real" id="', uuid, '-mold" class="', this.$s('mold'), '"></label>');
 	out.push('<label for="', uuid, '-real" id="', uuid, '-cnt"', this.domTextStyleAttr_(),
 			' class="', this.$s('content') ,'">');
 	out.push(this.domContent_(), '</label></span>');
