@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4113.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Nov 02 09:57:21 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. After load this page, you should not see any error at console
+		2. Close Item1, you should not see any error at console
+		3. Open Item1, you should not see any error at console
+	</label>
+	<window title="Organigram1" width="600px">
+		<organigram>
+			<orgchildren>
+				<orgitem label="Item1">
+					<orgchildren>
+						<orgitem>
+							<orgnode label="Item2">
+								<textbox/>
+							</orgnode>
+						</orgitem>
+					</orgchildren>
+				</orgitem>
+			</orgchildren>
+		</organigram>
+	</window>
+	<window title="Organigram2" width="600px">
+		<organigram>
+			<orgchildren>
+				<orgitem label="Item3" open="false">
+					<orgchildren>
+						<orgitem>
+							<orgnode label="Item4">
+								<textbox id="textbox"/>
+							</orgnode>
+						</orgitem>
+					</orgchildren>
+				</orgitem>
+			</orgchildren>
+		</organigram>
+	</window>
+</zk>
