@@ -93,6 +93,7 @@ ZK 8.6.0
   ZK-4083: IE performance - border-radius styles in iceblue
   ZK-4044: 1px column header misalignment on zoomed displays
   ZK-4095: Add a false positive check threshold on the barcode scanner
+  ZK-4113: orgitem and orgnode trigger bind / unbind even if not in the dom, cause errors
 
 * Upgrade Notes
 
