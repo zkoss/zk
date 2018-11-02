@@ -28,7 +28,7 @@ function (out) {
 			out.push(' ', this.$s('disabled'));
 		if (this._readonly)
 			out.push(' ', this.$s('readonly'));
-		out.push('"/>');
+		out.push('"></a>');
 	}
 	out.push('</div>');
 
