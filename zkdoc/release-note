@@ -17,6 +17,7 @@ ZK 8.6.1
   ZK-4129: typo in barcodescanner component getter
   ZK-4102: Slider flex sizing does not update the default 200px
   ZK-4048: chosenbox doesn't have consistent vertical align with other input components
+  ZK-4116: Spinner/Timebox button active style not working
 
 * Upgrade Notes
 

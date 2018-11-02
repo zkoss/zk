@@ -175,11 +175,6 @@
 		&:hover {
 			background: @comboButtonHoverBackgroundColor;
 		}
-		&:active {
-			color: @comboButtonActiveIconColor;
-			border-color: @comboButtonActiveBorderColor;
-			background: @comboButtonActiveBackgroundColor;
-		}
 	}
 	// separator
 	& > i {
@@ -193,12 +188,26 @@
 		left: 0;
 	}
 }
+// button active
+.btnActive(@parent) {
+	@selector: ~'@{parent}';
+	@{selector} {
+		&-active&-icon,
+		&-active&-icon:hover {
+			color: @comboButtonActiveIconColor;
+			border-color: @comboButtonActiveBorderColor;
+			background: @comboButtonActiveBackgroundColor;
+		}
+	}
+}
+.btnActive('.z-timebox');
+.btnActive('.z-spinner');
+.btnActive('.z-doublespinner');
 
 .z-timebox-disabled a,
 .z-spinner-disabled a,
 .z-doublespinner-disabled a {
 	color: @disabledColor;
-	&:active,
 	&:hover {
 		background: 0;
 	}

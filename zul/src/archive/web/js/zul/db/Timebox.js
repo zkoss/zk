@@ -441,12 +441,14 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				zk(self.getInputNode()).setSelectionRange(self._lastPos, self._lastPos);
 			self[fn]();
 		}, 300);
+		jq(this.$n('btn-' + (up ? 'up' : 'down'))).addClass(this.$s('active'));
 	},
 	_stopAutoIncProc: function () {
 		if (this.timerId)
 			clearTimeout(this.timerId);
 		this.currentStep = this.defaultStep;
 		this.timerId = null;
+		jq('.' + this.$s('icon'), this.$n('btn')).removeClass(this.$s('active'));
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);

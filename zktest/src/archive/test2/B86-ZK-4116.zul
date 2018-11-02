@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4116.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 12 15:45:14 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        [Firefox / IE issue]
+        1. Click up/down button to add/subtract the value. (Datebox: open the popup first)
+        2. When clicking, the button has an active style.
+        3. The disabled components shouldn't be interactive.
+    </label>
+    <hlayout>
+        <vlayout>
+            <spinner cols="11" />
+            <doublespinner cols="11" />
+            <timebox cols="11" />
+            <datebox cols="11" format="long+medium" />
+        </vlayout>
+        <vlayout>
+            <spinner cols="11" disabled="true" />
+            <doublespinner cols="11" disabled="true" />
+            <timebox cols="11" disabled="true" />
+            <datebox cols="11" format="long+medium" disabled="true" />
+        </vlayout>
+    </hlayout>
+    <hlayout>
+        <a href="?zktheme=breeze" label="Breeze" />
+        <a href="?zktheme=sapphire" label="Sapphire" />
+        <a href="?zktheme=silvertail" label="Silvertail" />
+        <a href="?zktheme=atlantic" label="Atlantic" />
+        <a href="?zktheme=default" label="Default" />
+    </hlayout>
+</zk>
