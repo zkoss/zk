@@ -121,6 +121,11 @@
 			position: absolute;
 			top: -3px;
 			left: 50%;
+			.transform('translateX(-50%)');
+
+			:active {
+				background: rgba(0, 0, 0, 0);
+			}
 		}
 		:active {
 			background: @meshTitleActiveBackgroundColor;

@@ -205,6 +205,27 @@ input[type="radio"] {
 			border-color: @inputBorderColor;
 		}
 	}
+
+	&::-ms-check {
+		border: 0;
+	}
+
+	&:checked::-ms-check {
+		border-color: @checkedBorderColor;
+		color: @checkedColor;
+	}
+
+	&[disabled]:checked::-ms-check {
+		border-color: @inputDisableColor;
+		color: @inputDisableColor;
+		border-radius: 50%;
+	}
+}
+
+.ie11 {
+	input[type="radio"]::-ms-check {
+		border: 1px solid @checkedBorderColor;
+	}
 }
 
 //checkbox
@@ -243,6 +264,29 @@ input[type="checkbox"] {
 		&:before {
 			content: "\f068";
 		}
+	}
+
+	&::-ms-check {
+		border: 0;
+		.borderRadius(@inputBorderRadius);
+	}
+
+	&:checked::-ms-check {
+		border: 0;
+		background-clip: content-box;
+		background-color: @checkedColor;
+		color: @checkedBackgroundColor;
+	}
+
+	&[disabled]:checked::-ms-check {
+		background-color: @inputDisableBackgroundColor;
+		color: @inputDisableColor;
+	}
+}
+
+.ie11 {
+	input[type="checkbox"]::-ms-check {
+		border: 1px solid @checkedBorderColor;
 	}
 }
 
