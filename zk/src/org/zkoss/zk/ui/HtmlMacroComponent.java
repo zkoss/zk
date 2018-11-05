@@ -176,7 +176,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		case 0: //by selector
 			Selectors.wireComponents(this, this, false);
 			Selectors.wireEventListeners(this, this);
-			addEventListener(-10000, Events.ON_CREATE, new AfterCreateWireListener());
+			addEventListener(Events.ON_CREATE, new AfterCreateWireListener());
 			break;
 		case 1: //by convention
 			ConventionWires.wireVariables(this, this, '$', true, true); //ignore zscript and variable resolvers
@@ -185,7 +185,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		}
 	}
 
-	//borrow from SelectorComposer
+	//brought from SelectorComposer
 	private class AfterCreateWireListener implements SerializableEventListener<Event> {
 		private static final long serialVersionUID = 1L;
 
