@@ -115,6 +115,9 @@
 	&-sort {
 		.z-column-content {
 			cursor: pointer;
+			&:active {
+				background: @meshTitleActiveBackgroundColor;
+			}
 		}
 		.z-column-sorticon {
 			.iconFontStyle(@fontSizeLarge, @meshTitleColor);
@@ -126,9 +129,6 @@
 			:active {
 				background: rgba(0, 0, 0, 0);
 			}
-		}
-		:active {
-			background: @meshTitleActiveBackgroundColor;
 		}
 	}
 	&-button {
