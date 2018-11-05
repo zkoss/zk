@@ -113,6 +113,9 @@
 	&-sort {
 		.z-listheader-content {
 			cursor: pointer;
+			&:active {
+				background: @meshTitleActiveBackgroundColor;
+			}
 		}
 		.z-listheader-sorticon {
 			.iconFontStyle(@fontSizeLarge, @meshTitleColor);
@@ -124,9 +127,6 @@
 			:active {
 				background: rgba(0, 0, 0, 0);
 			}
-		}
-		:active {
-			background: @meshTitleActiveBackgroundColor;
 		}
 	}
 	&-hover {
