@@ -205,6 +205,9 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			if (n) {
 				jq(n).prop('indeterminate', v);
 			}
+		},
+		mold: function () {
+			this.rerender();
 		}
 	},
 
