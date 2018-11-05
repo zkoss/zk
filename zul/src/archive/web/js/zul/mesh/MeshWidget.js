@@ -1253,9 +1253,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var allWidths = this._isAllWidths(),
 			hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
 			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null,
-			scrollbarWidth = jq.scrollbarWidth();
+			scrollbarWidth = jq.scrollbarWidth(),
+			hasVScroll = zk(this.ebody).hasVScroll();
 
-		if (zk(this.ebody).hasVScroll()) {
+		if (hasVScroll) {
 			if (hdfakerbar)
 				hdfakerbar.style.width = scrollbarWidth + 'px';
 			if (ftfakerbar)
@@ -1280,7 +1281,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						wd += zk.parseInt(w.style.width);
 				}
 				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
-					hdtbl.style.width = (hdfakerbar && zk.chrome) ? wd + scrollbarWidth + 'px' : wd + 'px';
+					//ZK-3938: only adjust width in Chrome, but zk.chrome returns true in Edge, we need to check !zk.edge
+					hdtbl.style.width = (hdfakerbar && hasVScroll && zk.chrome && !zk.edge) ? wd + scrollbarWidth + 'px' : wd + 'px';
 					if (bdtbl)
 						bdtbl.style.width = wd + 'px';
 					if (fttbl)
