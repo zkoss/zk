@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4119.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 06 09:53:13 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. The header and cell should be aligned properly
+	</label>
+	Grid
+	<grid width="302px">
+		<columns>
+			<column width="100px" label="A"/>
+			<column width="100px" label="A"/>
+			<column width="100px" label="A"/>
+		</columns>
+		<rows>
+			<row>
+				<cell>A</cell>
+				<cell>A</cell>
+				<cell>A</cell>
+			</row>
+		</rows>
+	</grid>
+	Listbox
+	<listbox width="302px">
+		<listhead>
+			<listheader width="100px" label="A"/>
+			<listheader width="100px" label="A"/>
+			<listheader width="100px" label="A"/>
+		</listhead>
+		<listitem>
+			<listcell>A</listcell>
+			<listcell>A</listcell>
+			<listcell>A</listcell>
+		</listitem>
+	</listbox>
+	Tree
+	<tree width="302px">
+		<treecols>
+			<treecol width="100px" label="A"/>
+			<treecol width="100px" label="A"/>
+			<treecol width="100px" label="A"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>A</treecell>
+					<treecell>A</treecell>
+					<treecell>A</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
