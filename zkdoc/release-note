@@ -95,6 +95,7 @@ ZK 8.6.0
   ZK-4095: Add a false positive check threshold on the barcode scanner
   ZK-4113: orgitem and orgnode trigger bind / unbind even if not in the dom, cause errors
   ZK-4119: grid columns misaligned
+  ZK-4112: Listbox ROD is empty when scroll down
 
 * Upgrade Notes
 
