@@ -3,6 +3,7 @@ ZK 8.6.1
 * Features
 
 * Bugs
+  ZK-4114: orgnode label missing font styles
 
 * Upgrade Notes
 
