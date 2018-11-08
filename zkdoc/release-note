@@ -3,6 +3,7 @@ ZK 8.6.0.1
 * Features
 
 * Bugs
+  ZK-4103: video.setContent() doesn't show an uploaded video
 
 * Upgrade Notes
 
