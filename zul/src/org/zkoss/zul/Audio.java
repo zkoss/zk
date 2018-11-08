@@ -239,7 +239,7 @@ public class Audio extends XulElement {
 	 * <p>Calling this method implies setSrc(null).
 	 * In other words, the last invocation of {@link #setContent} overrides
 	 * the previous {@link #setSrc}, if any.
-	 * Note: setContent doesn't support in Chrome.
+	 *
 	 * @param audio the audio to display.
 	 * @see #setSrc
 	 */
