@@ -43,8 +43,8 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 			if (zk(n).isRealVisible()) { //Bug 3134159
 				var $img = jq(img);
 				$img.animate({
-					width: Math.round((jq(n).innerWidth() * this._value) / 100) + 'px'
-				}, $img.zk.getAnimationSpeed('slow'));
+					width: this._value + '%'
+				}, { duration: $img.zk.getAnimationSpeed('slow'), queue: false, easing: 'linear' }); //ZK-4079: progressmeter animation not catching up with actual value
 			}
 		}
 	},

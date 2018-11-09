@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4079.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Oct 18 16:12:15 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script><![CDATA[
+		function simulateProgress(steps, delay) {
+			var pm = zk.$('$prog');
+			pm.setValue(0);
+			var id = setInterval(function() {
+				var newValue = pm.getValue() + (100 / steps);
+				if(newValue > 100) {
+					clearInterval(id);
+					alert('100% and the bar width is: ' + $('.z-progressmeter-image').width());
+					return;
+				}
+				console.log('progress: ' + newValue + '%');
+				$('$lb')[0].innerHTML = newValue;
+				pm.setValue(Math.min(newValue, 100));
+			}, delay);
+		}
+	]]></script>
+	<label multiline="true">
+		1.Click the "progress animation low rate" button, the animation should catching up with actual value.
+		2.Click the "reset" button.
+		3.Click the "progress animation high rate" button, the animation and actual value should not be too far apart.
+		4.Click the "reset" button.
+		5.Click the "progress animation very high rate" button, the animation and actual value should not be too far apart.
+	</label>
+	<progressmeter id="prog" width="1000px"/>
+	progress: <label id="lb" >0</label>%(actual value)
+	<separator/>
+	<button id="low" label="progress animation low rate"
+			w:onClick="simulateProgress(5, 1000);"/>
+	<button id="high" label="progress animation high rate"
+			w:onClick="simulateProgress(50, 100);"/>
+	<button id="veryhigh" label="progress animation very high rate"
+			w:onClick="simulateProgress(200, 25);"/>
+	<button id="reset" label="reset" w:onClick="zk.$('$prog').setValue(0); $('$lb')[0].innerHTML = 0;" />
+</zk>
