@@ -742,7 +742,7 @@ foo.Widget = zk.$extends(zk.Widget, {
 			jclass.$copyf();
 			jclass.$copied = true;
 		} else {
-			function _init() { this.constructor = jclass; };
+			var _init = function () { this.constructor = jclass; };
 			_init.prototype = superclass.prototype;
 			jclass.prototype = new _init();
 			thispt = jclass.prototype;
@@ -1184,7 +1184,7 @@ zk.endProcessing();
 	 * @since 8.5.0
 	 */
 	debugLog: function (msg) {
-		if (zk.debugJS) console.log(msg);
+		if (zk.debugJS) console.log(msg); // eslint-disable-line no-console
 	},
 	/** Closes all error messages shown by {@link #error}.
    	 * Example:
@@ -1216,7 +1216,7 @@ zk.log('value is", value);
 		);
 		_logmsg = (_logmsg ? _logmsg + msg : msg) + '\n';
 		if (zk.mobile) {
-			console.log(_logmsg);
+			console.log(_logmsg); // eslint-disable-line no-console
 			_logmsg = null;
 		} else setTimeout(function () {jq(doLog);}, 300);
 	},

@@ -52,7 +52,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			dg._lastPos = move;
 		}
 		return pointer;
-	};
+	}
 
 	function starteffect(dg) {
 		var ctrl = dg.control,
@@ -150,7 +150,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				dg._timer = setTimeout(function () {running(orient);}, timeout);
 			};
 		dg._timer = setTimeout(function () {running((dg._isVer ? 'top' : 'left'));}, 50);
-	};
+	}
 	function endeffect(dg, evt) {
 		var ctrl = dg.control,
 			target = evt.domTarget;
@@ -178,7 +178,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		var $jq = jq(dg._epos),
 			old = $jq.css('opacity'); // fix old IE version
 		jq(dg._epos).delay(300).fadeOut(500).css('opacity', old);
-	};
+	}
 	function ignoredrag(dg, p, evt) {
 		return dg.control.edragBody != evt.domTarget;
 	}

@@ -317,7 +317,7 @@ zul.grid.RowIter = zk.$extends(zk.Object, {
 			this._isInit = true;
 			var p = this.grid.rows ? this.grid.rows.firstChild : null;
 			if (this.opts && this.opts.skipHidden)
-				for (; p && !p.isVisible(); p = p.nextSibling) {}
+				for (; p && !p.isVisible(); p = p.nextSibling) { /* empty */ }
 			this.p = p;
 		}
 	},
@@ -339,7 +339,7 @@ zul.grid.RowIter = zk.$extends(zk.Object, {
 		var p = this.p,
 			q = p ? p.nextSibling : null;
 		if (this.opts && this.opts.skipHidden)
-			for (; q && !q.isVisible(); q = q.nextSibling) {}
+			for (; q && !q.isVisible(); q = q.nextSibling) { /* empty */ }
 		if (p)
 			this.p = q;
 		return p;

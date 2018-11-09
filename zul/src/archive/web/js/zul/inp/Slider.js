@@ -217,7 +217,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 
 		if (!moveToCursor) {
 			if (pageIncrement > 0) {
-				var curpos = this._curpos + (offset > 0 ? pageIncrement : - pageIncrement);
+				var curpos = this._curpos + (offset > 0 ? pageIncrement : -pageIncrement);
 				this._curpos = this.$class._roundDecimal(this._constraintPos(curpos), this.$class._digitsAfterDecimal(pageIncrement));
 			} else {
 				var total = isVertical ? height : width,
@@ -340,8 +340,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			pos = Math.round(pos);
 		if (step > 0) {
 			return this._curpos = pos > 0 ? this.$class._roundDecimal(pos + minpos, this.$class._digitsAfterDecimal(step)) : minpos;
-		}
-		else
+		} else
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	},
 	_constraintPos: function (pos) {

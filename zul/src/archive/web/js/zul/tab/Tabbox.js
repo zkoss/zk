@@ -313,8 +313,8 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 					if (isNaN(move)) return;
 					this.tabs._doScroll('left', move);
 					return;
-				};
-			};
+				}
+			}
 			move = scrollLength - allTab[allTab.length - 1].offsetLeft;
 			if (isNaN(move)) return;
 			this.tabs._doScroll('left', move);
@@ -327,8 +327,8 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 					move = scrollLength - preli.offsetTop;
 					this.tabs._doScroll('up', move);
 					return;
-				};
-			};
+				}
+			}
 			var preli = allTab[allTab.length - 1];
 			if (!preli) return;
 			move = scrollLength - preli.offsetTop;
@@ -341,7 +341,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 					if (!move || isNaN(move)) return;
 					this.tabs._doScroll('down', move);
 					return;
-				};
+				}
 			}
 			break;
 		}

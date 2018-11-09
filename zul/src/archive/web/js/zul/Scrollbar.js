@@ -27,7 +27,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 			style = embed.style;
 			style.display = isHide ? 'block' : 'none';
 		}
-	};
+	}
 	function _setScrollPos(position, min, max) {
 		if (min > max)
 			return position;
@@ -36,7 +36,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 		if (position > max)
 			position = max;
 		return position;
-	};
+	}
 /**
  * A Scrollbar used to replace browser native scrollbar on Mesh Element to
  * navigate the content, such as Grid/Listbox/Tree.

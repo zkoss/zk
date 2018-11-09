@@ -1736,7 +1736,8 @@ zAu.cmd1 = /*prototype*/ {
 						wgt.focus(100);
 					else
 						wgt.focus(0); //wgt.focus() failed in FF
-				}, -1);});
+				}, -1);
+			});
 		}
 	},
 	/** Selects all text of the specified widget.
@@ -1827,4 +1828,4 @@ function onIframeURLChange(uuid, url) { //doc in jsdoc
 		var wgt = zk.Widget.$(uuid);
 		if (wgt) wgt.fire('onURIChange', url);
 	}
-};
+}

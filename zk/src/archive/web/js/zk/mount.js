@@ -879,7 +879,7 @@ jq(function () {
 				zk.debugLog(e.message || e);
 			}
 		}
-	};
+	}
 
 	var _oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = function () {

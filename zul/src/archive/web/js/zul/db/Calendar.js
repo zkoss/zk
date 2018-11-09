@@ -34,7 +34,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	function _newDate(year, month, day, bFix, tz) {
 		var v = Dates.newInstance([year, month, day], tz);
 		return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
-			Dates.newInstance([year, month + 1, 0], tz)/*last day of month*/: v;
+			Dates.newInstance([year, month + 1, 0], tz)/*last day of month*/ : v;
 	}
 
 	function _getTimeZone(wgt) {
@@ -479,7 +479,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var y = this.getTime().getFullYear();
 			this._maxyear = v < y ? y : (v > this._minyear ? v : this._minyear);
 		} else {
-			this._maxyear = 2099;;
+			this._maxyear = 2099;
 		}
 	},
 	_shift: function (ofs, opts) {

@@ -5,7 +5,7 @@
 	Description:
 
 	History:
-　　Tranlated by Boril Yonchev (yonchev@gmail.com) 10 January 2007
+		Tranlated by Boril Yonchev (yonchev@gmail.com) 10 January 2007
 
 Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 

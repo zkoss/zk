@@ -486,8 +486,7 @@ zFlex = { //static methods
 	},
 	fixMinFlex: function (wgt, wgtn, o) {
 		//find the max size of all children
-		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)
-			(wgt, wgtn, o, wgt.beforeMinFlex_(o));
+		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 	}
 };
 })();

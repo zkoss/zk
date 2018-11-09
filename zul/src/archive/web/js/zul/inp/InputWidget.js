@@ -698,7 +698,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				text = (orgEvtText) ? orgEvtText : window.clipboardData.getData('text'),
 			keys = keys.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 			var regKey = '^[' + keys + ']+$';
-			if (! new RegExp(regKey).test(text)) {
+			if (!new RegExp(regKey).test(text)) {
 				evt.stop();
 				return true;
 			}
