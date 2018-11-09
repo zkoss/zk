@@ -6,6 +6,7 @@ ZK 8.6.1
   ZK-4114: orgnode label missing font styles
   ZK-4097: nativebar=false causes "after mounting error"
   ZK-3763: Clients.showNotification will not show even the target component is in the viewport
+  ZK-4103: video.setContent() doesn't show an uploaded video
 
 * Upgrade Notes
 

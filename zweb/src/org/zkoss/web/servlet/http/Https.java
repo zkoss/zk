@@ -544,8 +544,8 @@ public class Https extends Servlets {
 			if (from >= 0) { //partial
 				response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 
-				int f = from <= data.length ? from : data.length;
-				int t = to >= 0 && to < data.length ? to : data.length;
+				int f = from <= data.length ? from : data.length - 1;
+				int t = to >= 0 && to < data.length ? to : data.length - 1;
 				int cnt = t - f + 1;
 				response.setContentLength(cnt);
 				response.setHeader("Content-Range", "bytes " + f + "-" + t + "/" + data.length);
@@ -647,8 +647,8 @@ public class Https extends Servlets {
 		response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 		response.setContentLength(_cnt);
 
-		int from = _from <= _ofs ? _from : _ofs;
-		int to = _to >= 0 && _to <= _ofs ? _to : _ofs;
+		int from = _from <= _ofs ? _from : _ofs - 1;
+		int to = _to >= 0 && _to <= _ofs ? _to : _ofs - 1;
 		response.setHeader("Content-Range", "bytes " + from + "-" + to + "/" + _ofs);
 
 		writeTo(response.getOutputStream());
