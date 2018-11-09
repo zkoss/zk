@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4126.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 9 17:52:15 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Collapse groupbox and panel, you should not see any js error in console
+	<groupbox>
+		<attribute name="onOpen"><![CDATA[
+				self.invalidate();
+			]]></attribute>
+		<caption>Wizard</caption>
+	</groupbox>
+	<panel title="Panel" border="normal"
+		   collapsible="true" width="150px">
+		<attribute name="onOpen"><![CDATA[
+				self.invalidate();
+			]]></attribute>
+		<panelchildren>
+			<button label="test button" />
+		</panelchildren>
+	</panel>
+</zk>
