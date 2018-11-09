@@ -747,7 +747,7 @@ zjq.prototype = {
 						te = el;
 				}
 				if (!le) {
-					if (el == DocRoot() || el == document.body || el.style.overflow == 'auto' || el.style.overflowX == 'auto' || jq(el).css('overflow-x') == 'auto')
+					if (el == DocRoot() || el.style.overflow == 'auto' || el.style.overflowX == 'auto' || jq(el).css('overflow-x') == 'auto')
 						le = el;
 				}
 				if (te && le) {
