@@ -58,7 +58,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var headcol = hdfaker.firstChild,
 				headcell = headn.firstChild;
 			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
-				var headcave = headcell.firstChild;
+				var headcave = headcell ? headcell.firstChild : null;
 				if (!headcave)
 					continue;
 				hdfakerws[i] = headcol.style.width;
@@ -186,7 +186,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var headcol = hdfaker.firstChild,
 				headcell = headn.firstChild;
 			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
-				var headcave = headcell.firstChild;
+				var headcave = headcell ? headcell.firstChild : null;
 				if (!headcave)
 					continue;
 				headcol.style.width = hdfakerws[i];
