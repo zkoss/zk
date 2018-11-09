@@ -423,7 +423,7 @@ public abstract class AbstractWebApp implements WebApp, WebAppCtrl {
 			} finally {
 				try {
 					is.close();
-				} catch (Throwable ex) {
+				} catch (Throwable ignored) {
 				}
 			}
 		}

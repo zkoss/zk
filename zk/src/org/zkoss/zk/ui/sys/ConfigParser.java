@@ -199,7 +199,7 @@ public class ConfigParser {
 										inputStream.close();
 								}
 							}
-						} catch (Exception e) {
+						} catch (Exception ignored) {
 						}
 						final Element el = res.document.getRootElement();
 						if (!syscfgLoaded) {

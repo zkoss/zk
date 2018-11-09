@@ -88,6 +88,7 @@ public class Servlets {
 			HttpSession.class.forName("javax.servlet.annotation.WebServlet");
 			b = true;
 		} catch (Throwable ex) {
+			// expected
 		}
 		_svl3 = b;
 
@@ -96,6 +97,7 @@ public class Servlets {
 				ServletResponse.class.getMethod("getContentType", new Class[0]);
 				b = true;
 			} catch (Throwable ex) {
+				// expected
 			}
 		}
 		_svl24 = b;
@@ -105,6 +107,7 @@ public class Servlets {
 				HttpSession.class.getMethod("getServletContext", new Class[0]);
 				b = true;
 			} catch (Throwable ex) {
+				// expected
 			}
 		}
 		_svl23 = b;
@@ -452,6 +455,7 @@ public class Servlets {
 								try {
 									version = Double.parseDouble(ua.substring(j, k));
 								} catch (Throwable ex) {
+									// expected
 								}
 							}
 						}
@@ -560,6 +564,7 @@ public class Servlets {
 			try {
 				vtype = Double.parseDouble(type.substring(j, last));
 			} catch (Throwable t) {
+				// expected
 			}
 			last = j;
 		}

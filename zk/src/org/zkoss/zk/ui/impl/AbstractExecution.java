@@ -198,8 +198,8 @@ public abstract class AbstractExecution implements Execution, ExecutionCtrl {
 
 	public final void setCurrentPage(Page curpage) {
 		if (_curpage != null && curpage != null && _curpage != curpage) {
-			Desktop _curdt = _curpage.getDesktop(), curdt = curpage.getDesktop();
-			if (_curdt != null && curdt != null && _curdt != curdt)
+			Desktop curdtPrev = _curpage.getDesktop(), curdt = curpage.getDesktop();
+			if (curdtPrev != null && curdt != null && curdtPrev != curdt)
 				throw new IllegalStateException("Change current page to another desktop? " + curpage);
 		}
 		_curpage = curpage;

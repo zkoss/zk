@@ -359,7 +359,7 @@ public class PollingServerPush implements ServerPush {
 
 				try {
 					Thread.sleep(100);
-				} catch (Throwable ex) {
+				} catch (Throwable ignored) {
 				}
 				//to minimize the chance that the server-push thread
 				//activate again, before onPiggback polls next _pending

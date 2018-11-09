@@ -43,7 +43,7 @@ import org.zkoss.zk.ui.sys.Attributes;
 		((HttpSession) sess.getNativeSession()).removeAttribute(Attributes.ZK_SESSION);
 	}
 
-	/*package*/ static final SessionAgent agent;
+	/*package*/ static final SessionAgent AGENT;
 
 	static {
 		SessionAgent sa;
@@ -80,6 +80,6 @@ import org.zkoss.zk.ui.sys.Attributes;
 		} catch (Throwable t) {
 			sa = new SessionAgent();
 		}
-		agent = sa;
+		AGENT = sa;
 	}
 }

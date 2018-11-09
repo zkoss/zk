@@ -75,6 +75,7 @@ public class ServletPortletDispatcher implements PortletRequestDispatcher {
 						}
 						hreq = (HttpServletRequest) m.invoke(request);
 					} catch (Throwable ex) {
+						// expected
 					}
 
 					HttpServletResponse hres = null;
@@ -86,6 +87,7 @@ public class ServletPortletDispatcher implements PortletRequestDispatcher {
 						}
 						hres = (HttpServletResponse) m.invoke(response);
 					} catch (Throwable ex) {
+						// expected
 					}
 
 					// To avoid casting exceptions when strict Servlet 2.5 compliance

@@ -33,26 +33,26 @@ public class Registry {
 	private final Map<String, String> keys = new ConcurrentHashMap<String, String>(10);
 	private final Map<String, String> signs = new ConcurrentHashMap<String, String>(10);
 	private final Map<String, String> values = new ConcurrentHashMap<String, String>(10);
-	private static final Map<String, byte[]> byteMap = new HashMap<String, byte[]>(10);
+	private static final Map<String, byte[]> BYTE_MAP = new HashMap<String, byte[]>(10);
 
 	public static final byte[] PREFS_0;
 	public static final byte[] PREFS_1;
 	public static final byte[] PREFS_2;
 
 	static {
-		byteMap.put(toString(new byte[] { 112, 114, 101, 102, 115, 48 }),
+		BYTE_MAP.put(toString(new byte[] { 112, 114, 101, 102, 115, 48 }),
 				PREFS_0 = new byte[] { 98, 117, 105, 108, 100, 115, 105, 103, 110 });
-		byteMap.put(toString(new byte[] { 112, 114, 101, 102, 115, 49 }),
+		BYTE_MAP.put(toString(new byte[] { 112, 114, 101, 102, 115, 49 }),
 				PREFS_1 = new byte[] { 111, 114, 103, 46, 122, 107, 111, 115, 115, 46, 122, 107, 46, 117, 105, 46, 99,
 						108, 105, 101, 110, 116, 46, 110, 111, 116, 105, 99, 101 });
-		byteMap.put(toString(new byte[] { 112, 114, 101, 102, 115, 50 }),
+		BYTE_MAP.put(toString(new byte[] { 112, 114, 101, 102, 115, 50 }),
 				PREFS_2 = new byte[] { 89, 111, 117, 114, 32, 90, 75, 32, 98, 105, 110, 97, 114, 121, 32, 105, 115, 32,
 						98, 101, 105, 110, 103, 32, 97, 108, 116, 101, 114, 101, 100, 32, 97, 110, 100, 32, 109, 97,
 						121, 32, 110, 111, 116, 32, 119, 111, 114, 107, 32, 97, 115, 32, 101, 120, 112, 101, 99, 116,
 						101, 100, 46, 32, 80, 108, 101, 97, 115, 101, 32, 99, 111, 110, 116, 97, 99, 116, 32, 117, 115,
 						32, 97, 116, 32, 105, 110, 102, 111, 64, 122, 107, 111, 115, 115, 46, 111, 114, 103, 32, 102,
 						111, 114, 32, 97, 115, 115, 105, 115, 116, 97, 110, 99, 101, 46 });
-		byteMap.put(toString(new byte[] { 109, 115, 103, 48 }),
+		BYTE_MAP.put(toString(new byte[] { 109, 115, 103, 48 }),
 				new byte[] { 10, 60, 115, 99, 114, 105, 112, 116, 32, 99, 108, 97, 115, 115, 61, 34, 122, 45, 114, 117,
 						110, 111, 110, 99, 101, 34, 32, 116, 121, 112, 101, 61, 34, 116, 101, 120, 116, 47, 106, 97,
 						118, 97, 115, 99, 114, 105, 112, 116, 34, 62, 10, 122, 65, 117, 46, 115, 104, 111, 119, 69, 114,
@@ -126,7 +126,7 @@ public class Registry {
 	}
 
 	private static String gen(String msg, String error) {
-		return String.format(toString(byteMap.get(toString(new byte[] { 109, 115, 103, 48 }))), msg,
+		return String.format(toString(BYTE_MAP.get(toString(new byte[] { 109, 115, 103, 48 }))), msg,
 				error != null ? toString(new byte[] { 69, 114, 114, 111, 114, 58 }) + error : "");
 	}
 
@@ -137,12 +137,12 @@ public class Registry {
 					"/" + cls.getName().replace(".", "/") + toString(new byte[] { 46, 99, 108, 97, 115, 115 }));
 			is = location.openStream();
 			return DigestUtilsHelper.md5Hex(is);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
-				} catch (IOException e) {
+				} catch (IOException ignored) {
 				}
 			}
 		}

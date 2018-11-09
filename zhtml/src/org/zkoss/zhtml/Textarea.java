@@ -16,8 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import java.lang.Object;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.zhtml.impl.PageRenderer;
 import org.zkoss.zhtml.impl.TagRenderContext;
@@ -109,7 +107,7 @@ public class Textarea extends Input implements AfterCompose {
 			setValue(content);
 	}
 
-	public void setDynamicProperty(String name, Object value) throws WrongValueException {
+	public void setDynamicProperty(String name, java.lang.Object value) throws WrongValueException {
 		if ("value".equals(name)) {
 			_value = Objects.toString(value);
 			if (_value == null)
@@ -119,7 +117,7 @@ public class Textarea extends Input implements AfterCompose {
 		}
 	}
 
-	public Object getDynamicProperty(String name) {
+	public java.lang.Object getDynamicProperty(String name) {
 		return "value".equals(name) ? _value : super.getDynamicProperty(name);
 	}
 

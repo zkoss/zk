@@ -16,8 +16,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import java.lang.Object; //since we have org.zkoss.zhtml.Object
-
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.CheckEvent;
@@ -517,7 +515,7 @@ public class Input extends AbstractTag {
 	}
 
 	// super//
-	protected void smartUpdate(String attr, Object value) {
+	protected void smartUpdate(String attr, java.lang.Object value) {
 		if (!_byClient)
 			super.smartUpdate(attr, value);
 	}

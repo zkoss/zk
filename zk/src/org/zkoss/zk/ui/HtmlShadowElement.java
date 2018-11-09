@@ -1341,6 +1341,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		return ((ShadowElement) parent).getShadowHost();
 	}
 
+	@SuppressWarnings("checkstyle:MethodName")
 	private final int nDChild() {
 		if (_firstInsertion != null) {
 			int size = 1;
@@ -1567,4 +1568,4 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			}
 		}
 	}
-}
+}

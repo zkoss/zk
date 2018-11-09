@@ -753,11 +753,13 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	}
 
 	/** Returns the number of children. */
+	@SuppressWarnings("checkstyle:MethodName")
 	/*package*/ final int nChild() { //called by HtmlNativeComponent
 		return _chdinf != null ? _chdinf.nChild : 0;
 	}
 
 	/** Returns the number of children. It assumes _chdinf not null. */
+	@SuppressWarnings("checkstyle:MethodName")
 	/*package*/ final void nChild(AbstractComponent first, AbstractComponent last, int nChild) {
 		_chdinf.first = first;
 		_chdinf.last = last;
@@ -2927,7 +2929,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			for (Iterator<List<EventListenerInfo>> it = CollectionsX
 					.comodifiableIterator(_auxinf.listeners.values()); it.hasNext();)
 				//ZK-3224: Prevent ConcurrentModificationException
-				for (Iterator<EventListenerInfo> itli = CollectionsX.comodifiableIterator(it.next()); itli.hasNext(); ) {
+				for (Iterator<EventListenerInfo> itli = CollectionsX.comodifiableIterator(it.next()); itli.hasNext();) {
 					EventListenerInfo li = itli.next();
 					if (uniqueAttrs.add(li.listener)) //ZK-2701: only activate the same object once
 						didActivate(li.listener);
@@ -3261,11 +3263,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		return "<" + clsnm.substring(j + 1) + ' ' + _uuid + (Strings.isEmpty(_id) ? "" : "#" + _id) + '>';
 	}
 
-	// no need to override hashCode in object
-	public boolean equals(Object o) { //no more override
-		return this == o;
-	}
-
 	/** Holds info shared of the same ID space. */
 	private class SpaceInfo {
 		/** A map of ((String id, Component fellow). */
@@ -3499,6 +3496,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			try {
 				langdef = LanguageDefinition.lookup((String) def);
 			} catch (DefinitionNotFoundException ex) {
+				// expected
 			}
 			if (langdef != null) {
 				_def = langdef.getComponentDefinitionIfAny((String) s.readObject());

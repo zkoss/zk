@@ -643,7 +643,7 @@ public class Executions {
 		if (cci.created) {
 			try {
 				((WebAppCtrl) cci.exec.getDesktop().getWebApp()).getUiEngine().deactivate(cci.exec);
-			} catch (Throwable ex) {
+			} catch (Throwable ignored) {
 			}
 		}
 	}

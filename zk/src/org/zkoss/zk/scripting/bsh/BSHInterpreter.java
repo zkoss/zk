@@ -187,8 +187,8 @@ public class BSHInterpreter extends GenericInterpreter implements SerializableAw
 	}
 
 	private static Object unwrap(Object val) {
-		return val instanceof ClassIdentifier ?
-				NameSpace.identifierToClass((ClassIdentifier) val) : Primitive.unwrap(val);
+		return val instanceof ClassIdentifier
+				? NameSpace.identifierToClass((ClassIdentifier) val) : Primitive.unwrap(val);
 	}
 	
 	protected void set(String name, Object val) {

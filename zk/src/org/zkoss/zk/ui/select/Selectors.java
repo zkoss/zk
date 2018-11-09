@@ -656,7 +656,8 @@ public class Selectors {
 		try {
 			return (Collection) clazz.getConstructor().newInstance();
 		} catch (Exception e) {
-		} // ignore
+			// ignore
+		}
 		return null;
 	}
 

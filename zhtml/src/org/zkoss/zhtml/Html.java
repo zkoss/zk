@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import java.io.StringWriter;
-import java.lang.Object;
 
 import org.zkoss.zhtml.impl.AbstractTag;
 import org.zkoss.zhtml.impl.PageRenderer;
@@ -87,7 +86,7 @@ public class Html extends AbstractTag {
 		final Execution exec = Executions.getCurrent();
 		final StringWriter bufout = new StringWriter();
 		final Page page = getPage();
-		final Object ret = PageRenderer.beforeRenderHtml(exec, page, bufout);
+		final java.lang.Object ret = PageRenderer.beforeRenderHtml(exec, page, bufout);
 		super.redraw(bufout);
 		PageRenderer.afterRenderHtml(exec, page, bufout, ret);
 

@@ -89,7 +89,8 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="dist.osgi.dir" value="${dist.lib.dir}/osgi"/>
 
 <!-- checkstyle -->
-<property name="checkstyle.java.severity" value="ignore"/>
+<property name="checkstyle.java.severity" value="error"/>
+<property name="checkstyle.report.severity" value="info"/>
 
 <!-- current year -->
 <tstamp>

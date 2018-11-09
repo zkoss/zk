@@ -224,7 +224,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	 * @since 5.0.6
 	 */
 	public int getIndexOfChild(E parent, E child) {
-		final int cnt = _childCount(parent);
+		final int cnt = getChildCountOptimized(parent);
 		for (int j = 0; j < cnt; ++j)
 			if (Objects.equals(child, getChild(parent, j)))
 				return j;
@@ -234,7 +234,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	public E getChild(int[] path) {
 		E node = getRoot();
 		for (int childCount = 0, i = 0; i < path.length && node != null; i++) {
-			if (path[i] < 0 || path[i] > (childCount = _childCount(node)))
+			if (path[i] < 0 || path[i] > (childCount = getChildCountOptimized(node)))
 				return null;
 			node = getChild(node, path[i]);
 		}
@@ -242,7 +242,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	}
 
 	//Retrieves the child count. Note: it won't call getChildCount if isLeaf
-	private int _childCount(E parent) {
+	private int getChildCountOptimized(E parent) {
 		return isLeaf(parent) ? 0 : getChildCount(parent);
 	}
 
@@ -268,7 +268,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		if (node.equals(target))
 			return true;
 
-		for (int i = 0, size = _childCount(node); i < size; i++)
+		for (int i = 0, size = getChildCountOptimized(node); i < size; i++)
 			if (dfSearch(path, getChild(node, i), target)) {
 				path.add(0, new Integer(i));
 				return true;

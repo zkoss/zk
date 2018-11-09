@@ -108,8 +108,7 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	private void reInitBinder(Component comp) {
 		boolean recursive = reInitBinder0(comp);
 		if (recursive && !(comp instanceof ShadowElement)) {
-			for (final Iterator<Component> it = comp.getChildren().iterator(); it.hasNext(); ) {
-				final Component kid = it.next();
+			for (final Component kid : comp.getChildren()) {
 				if (kid != null) {
 					reInitBinder(kid);
 				}

@@ -135,9 +135,9 @@ public class StubComponent extends AbstractComponent {
 	/** Post event to the non-stub ancestor. */
 	/*package*/ void postToNonStubAncestor(StubEvent event) {
 		Component target = event.getTarget();
-		for (; target != null
-				&& (target instanceof Native || target instanceof StubComponent); target = target.getParent())
-			;
+		while (target instanceof Native || target instanceof StubComponent) {
+			target = target.getParent();
+		}
 		if (target != null)
 			Events.postEvent(new StubEvent(event, target));
 	}

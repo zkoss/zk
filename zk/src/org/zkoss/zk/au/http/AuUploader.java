@@ -255,10 +255,10 @@ public class AuUploader implements AuExtension {
 				String[] units = new String[] { " Bytes", " KB", " MB" };
 				int i1 = (int) (Math.log(size) / Math.log(1024));
 				int i2 = (int) (Math.log(limit) / Math.log(1024));
-				String size_auto = Math.round(size / Math.pow(1024, i1)) + units[i1];
-				String limit_auto = Math.round(limit / Math.pow(1024, i2)) + units[i2];
+				String sizeAuto = Math.round(size / Math.pow(1024, i1)) + units[i1];
+				String limitAuto = Math.round(limit / Math.pow(1024, i2)) + units[i2];
 
-				Object[] args = new Object[] { size_auto, limit_auto, size, limit,
+				Object[] args = new Object[] { sizeAuto, limitAuto, size, limit,
 						String.valueOf((Long) (size / divisor1)) + units[1],
 						String.valueOf((Long) (limit / divisor1)) + units[1],
 						String.valueOf((Long) (size / divisor2)) + units[2],

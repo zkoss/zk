@@ -83,7 +83,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 
 	private String _border = "none";
 	private String _title = "";
-	/** One of MODAL, _MODAL_, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
+	/** One of MODAL, MODAL_EVENT_THREAD_DISABLED, EMBEDDED, OVERLAPPED, HIGHLIGHTED, POPUP. */
 	private int _mode = EMBEDDED;
 	/** Used for doModal. */
 	private Mutex _mutex = new Mutex();
@@ -123,7 +123,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	 */
 	public static final int MODAL = 1;
 	//Represent a modal when the event thread is disabled (internal)
-	private static final int _MODAL_ = -100;
+	private static final int MODAL_EVENT_THREAD_DISABLED = -100;
 	/** Makes the window as overlapped other components.
 	 */
 	public static final int OVERLAPPED = 2;
@@ -422,7 +422,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	private static String modeToString(int mode) {
 		switch (mode) {
 		case MODAL:
-		case _MODAL_:
+		case MODAL_EVENT_THREAD_DISABLED:
 			return "modal";
 		case POPUP:
 			return "popup";
@@ -519,7 +519,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	private static Mode toModeType(int mode) {
 		switch (mode) {
 		case MODAL:
-		case _MODAL_:
+		case MODAL_EVENT_THREAD_DISABLED:
 			return Mode.MODAL;
 		case POPUP:
 			return Mode.POPUP;
@@ -535,7 +535,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 	/** Returns whether this is a modal dialog.
 	 */
 	public boolean inModal() {
-		return _mode == MODAL || _mode == _MODAL_;
+		return _mode == MODAL || _mode == MODAL_EVENT_THREAD_DISABLED;
 	}
 
 	/** Returns whether this is embedded with other components (Default).
@@ -579,8 +579,8 @@ public class Window extends XulElement implements Framable, IdSpace {
 	 */
 	public void doModal() {
 		if (!isEventThreadEnabled(true)) {
-			checkOverlappable(_MODAL_);
-			setNonModalMode(_MODAL_);
+			checkOverlappable(MODAL_EVENT_THREAD_DISABLED);
+			setNonModalMode(MODAL_EVENT_THREAD_DISABLED);
 			return;
 		}
 
@@ -1109,8 +1109,4 @@ public class Window extends XulElement implements Framable, IdSpace {
 			this.id = v;
 		}
 	}
-}
-
-/** Any serializable object. */
-/*package*/ class Mutex implements java.io.Serializable {
 }

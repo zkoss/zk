@@ -51,7 +51,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 	private final ExpressionX _validator;
 	private final Map<String, Object> _validatorArgs;
 
-	private static final String $VALUEREF$ = "$VALUEREF$";
+	private static final String VALUEREF = "$VALUEREF$";
 
 	public SaveFormBindingImpl(Binder binder, Component comp, String formId, String saveExpr,
 			ConditionType conditionType, String command, Map<String, Object> bindingArgs, String validatorExpr,
@@ -243,7 +243,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 
 	//get and cache value reference of this binding
 	private ValueReference getValueReference(BindContext ctx) {
-		ValueReference valref = (ValueReference) getAttribute(ctx, $VALUEREF$);
+		ValueReference valref = (ValueReference) getAttribute(ctx, VALUEREF);
 		if (valref == null) {
 			final Component comp = getComponent(); //ctx.getComponent();
 			final BindEvaluatorX eval = getBinder().getEvaluatorX();
@@ -253,7 +253,7 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 						"value reference not found by expression [" + _accessInfo.getProperty().getExpressionString()
 								+ "], check if you are trying to save to a variable only expression");
 			}
-			setAttribute(ctx, $VALUEREF$, valref);
+			setAttribute(ctx, VALUEREF, valref);
 		}
 		return valref;
 	}
