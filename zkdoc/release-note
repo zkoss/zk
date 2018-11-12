@@ -10,6 +10,7 @@ ZK 8.6.1
   ZK-4103: video.setContent() doesn't show an uploaded video
   ZK-4126: Open/Collapse Panel and Groupbox cause js error in console
   ZK-4079: progressmeter animation not catching up with actual value
+  ZK-4127: Rendering performance listbox in borderlayout
 
 * Upgrade Notes
 
