@@ -4,6 +4,7 @@ ZK 8.6.0.1
 
 * Bugs
   ZK-4103: video.setContent() doesn't show an uploaded video
+  ZK-4127: Rendering performance listbox in borderlayout
 
 * Upgrade Notes
 

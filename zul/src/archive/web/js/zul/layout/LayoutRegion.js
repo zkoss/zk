@@ -187,6 +187,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						bodyEl.style.overflow = 'auto';
 						bodyEl.style.position = 'relative';
 						this.domListen_(bodyEl, 'onScroll');
+						zWatch.listen({onResponse: this});
 					} else {
 						zWatch.listen({onSize: this});
 					}
@@ -195,6 +196,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						bodyEl.style.overflow = 'hidden';
 						bodyEl.style.position = '';
 						this.domUnlisten_(bodyEl, 'onScroll');
+						zWatch.unlisten({onResponse: this});
 					} else {
 						zWatch.unlisten({onSize: this});
 					}
@@ -747,6 +749,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	doResizeScroll_: function () {
 		this.$supers('doResizeScroll_', arguments);
 		this.refreshBar_(true);
+	},
+	onResponse: function () {
 		this._fireSizedIfChildFlex();
 	},
 	_fireSizedIfChildFlex: function () {
