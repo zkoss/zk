@@ -6,6 +6,7 @@ ZK 8.6.0.1
   ZK-4103: video.setContent() doesn't show an uploaded video
   ZK-4127: Rendering performance listbox in borderlayout
   ZK-4133: menuitem doesn't pass an UploadEvent for onUpload
+  ZK-4129: typo in barcodescanner component getter
 
 * Upgrade Notes
 
