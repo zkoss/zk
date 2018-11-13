@@ -41,6 +41,25 @@
 			color: @inputReadonlyColor;
 			background-color: @inputBackgroundColor;
 		}
+
+		// Placeholder ZK-3876: combobox does not provide proper placeholder style
+		&::-webkit-input-placeholder {
+			color: @inputPlaceholderColor;
+		}
+		&:-moz-placeholder {
+			/* FF 4-18 */
+			color: @inputPlaceholderColor;
+			opacity: 1;
+		}
+		&::-moz-placeholder {
+			/* FF 19+ */
+			color: @inputPlaceholderColor;
+			opacity: 1;
+		}
+		&:-ms-input-placeholder {
+			/* IE 10+ */
+			color: @inputPlaceholderColor;
+		}
 	}
 
 	&-button {
