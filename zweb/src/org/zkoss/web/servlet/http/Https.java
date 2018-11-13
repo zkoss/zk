@@ -411,33 +411,37 @@ public class Https extends Servlets {
 			if (ctype != null)
 				response.setContentType(ctype);
 
-			if (download) {
-				String value = "attachment";
-
-				// Bug ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
-				StringBuffer temp = request.getRequestURL();
-				final String update_uri = (String) request.getSession().getServletContext()
-						.getAttribute("org.zkoss.zk.ui.http.update-uri"); //B65-ZK-1619
+			if (media.isContentDisposition()) {
+				String contentDisposition;
 				String flnm = "";
-				if (update_uri != null && temp.toString().contains(update_uri + "/view")) {
-					// for Bug ZK-2350, we don't specify the filename when coming with ZK Fileupload, but invoke this directly as Bug ZK-1619
-					//					final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
-					//					flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
-					// ZK-3058: remove jsessionid if any
-					int jsessionPos = temp.indexOf(";jsessionid=");
-					if (jsessionPos != -1)
-						flnm = URLDecoder.decode(
-							temp.substring(temp.lastIndexOf("/") + 1, jsessionPos),
-							"UTF-8"
-						);
-				} else
+				if (download) {
+					contentDisposition = "attachment";
+
+					// Bug ZK-1257: Filedownload.save(media, filename) does not save the media as the specified filename
+					StringBuffer temp = request.getRequestURL();
+					final String update_uri = (String) request.getSession().getServletContext()
+							.getAttribute("org.zkoss.zk.ui.http.update-uri"); //B65-ZK-1619
+					if (update_uri != null && temp.toString().contains(update_uri + "/view")) {
+						// for Bug ZK-2350, we don't specify the filename when coming with ZK Fileupload, but invoke this directly as Bug ZK-1619
+						//					final String saveAs = URLDecoder.decode(temp.substring(temp.lastIndexOf("/")+1), "UTF-8");
+						//					flnm = ("".equals(saveAs)) ? media.getName() : saveAs;
+						// ZK-3058: remove jsessionid if any
+						int jsessionPos = temp.indexOf(";jsessionid=");
+						if (jsessionPos != -1)
+							flnm = URLDecoder.decode(
+									temp.substring(temp.lastIndexOf("/") + 1, jsessionPos),
+									"UTF-8"
+							);
+					} else
+						flnm = media.getName();
+				} else {
+					contentDisposition = "inline";
 					flnm = media.getName();
+				}
 				// ZK-3058: filename for legacy browsers, filename* for modern browsers
 				if (flnm != null && flnm.length() > 0)
-					value += ";filename=" + encodeFilename(request, flnm) + ";filename*=UTF-8''" + encodeRfc3986(flnm);
-				if (media.isContentDisposition())
-					response.setHeader("Content-Disposition", value);
-				//response.setHeader("Content-Transfer-Encoding", "binary");
+					contentDisposition += ";filename=" + encodeFilename(request, flnm) + ";filename*=UTF-8''" + encodeRfc3986(flnm);
+				response.setHeader("Content-Disposition", contentDisposition);
 			}
 
 			final String rs = request.getHeader("Range");
