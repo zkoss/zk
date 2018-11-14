@@ -68,13 +68,14 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		 * format:<br/>
 		 * <code>uuid(comp_uuid)</code>
 		 *
-		 * @param String mpop an ID of the menupopup component, "none", or "auto".
+		 * @param String mpop an ID of the menupopup component, "none", "auto" or "auto-keep".
 		 * 	"none" is assumed by default, "auto" means the menupopup component is
-		 *  created automatically.
+		 *  created automatically, "auto-keep" means the menupopup component is
+		 *  created automatically and keep the menupopup open after setting column visibility.
 		 * @see #setMenupopup(String)
 		 */
 		menupopup: function () {
-			if (this._menupopup != 'auto')
+			if (this._menupopup != 'auto' && this._menupopup != 'auto-keep')
 				this._mpop = null;
 			this.rerender();
 		}
@@ -83,7 +84,7 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		this.$supers(zul.mesh.ColumnMenuWidget, 'bind_', arguments);
 		zWatch.listen({onResponse: this});
 		var w = this;
-		if (this._menupopup == 'auto') {
+		if (this._menupopup == 'auto' || this._menupopup == 'auto-keep') {
 			after.push(function () {
 				w._initColMenu();
 			});
@@ -92,7 +93,8 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
 		if (this._mpop) {
-			this._mpop.parent.removeChild(this._mpop);
+			if (this._menupopup != 'auto-keep')
+				this._mpop.parent.removeChild(this._mpop);
 			this._shallColMenu = this._mpop = null;
 		}
 		this.$supers(zul.mesh.ColumnMenuWidget, 'unbind_', arguments);
@@ -108,6 +110,8 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		if (this._mpop)
 			this._mpop.parent.removeChild(this._mpop);
 		this._mpop = new zul.mesh.ColumnMenupopup({columns: this});
+		if (this._menupopup == 'auto-keep')
+			this._mpop._keepOpen = true; //ZK-4059: prevent menupopup closed after menuitem doClick
 	},
 	/** Synchronizes the menu of this widget.
 	 * This method is called automatically if the widget is created
@@ -124,7 +128,8 @@ zul.mesh.ColumnMenuWidget = zk.$extends(zul.mesh.HeadWidget, {
 		var item = evt.currentTarget,
 			pp = item.parent;
 
-		pp.close({sendOnOpen: true});
+		if (this._menupopup != 'auto-keep')
+			pp.close({sendOnOpen: true});
 		var checked = 0;
 		for (var w = pp.firstChild; w; w = w.nextSibling) {
 			if (w.$instanceof(zul.menu.Menuitem) && w.isChecked())
