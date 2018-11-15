@@ -12,6 +12,7 @@ ZK 8.6.1
   ZK-4079: progressmeter animation not catching up with actual value
   ZK-4127: Rendering performance listbox in borderlayout
   ZK-3876: combobox does not provide proper placeholder style
+  ZK-4129: typo in barcodescanner component getter
 
 * Upgrade Notes
 
