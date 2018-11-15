@@ -495,11 +495,14 @@ zul.Uploader = zk.$extends(zk.Object, {
 
 // default UploadViewer
 	function _addUM(uplder, flnm) {
-		var flman = zul.UploadViewer.flman;
+		var wgt = uplder.getWidget(),
+			flman = zul.UploadViewer.flman;
+		if (!wgt)
+			return;
 		if (!flman || !flman.desktop) {
 			if (flman) flman.detach();
 			zul.UploadViewer.flman = flman = new zul.UploadManager();
-			uplder.getWidget().getPage().appendChild(flman);
+			wgt.getPage().appendChild(flman);
 		}
 		flman.removeFile(uplder);
 		flman.addFile(uplder);
