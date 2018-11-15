@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4040.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 13 10:06:02 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click Report, you should see the file with a name contains "report" being downloaded
+		2. Click setExportName("test")
+		3. Click Report, you should see the file with a name contains "test" being downloaded
+		4. Click setExportName("中文")
+		5. Click Report, you should see the file with a name contains "中文" being downloaded
+		6. Click setExportName(""), you should see the error message
+	</label>
+	<vlayout>
+		<listbox id="format" mold="select">
+			<listitem label="Excel" value="xls" selected="true"/>
+			<listitem label="Word (RTF)" value="rtf"/>
+			<listitem label="Excel (JXL)" value="jxl"/>
+			<listitem label="CSV" value="csv"/>
+			<listitem label="PDF" value="pdf"/>
+		</listbox>
+		<hlayout>
+			<button label="Report" onClick='showReport()'/>
+			<button label='setExportName("test")' onClick='report.setExportName("test")'/>
+			<button label='setExportName("中文")' onClick='report.setExportName("中文")'/>
+			<button label='setExportName("")' onClick='report.setExportName("")'/>
+		</hlayout>
+	</vlayout>
+	<jasperreport id="report"/>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.test2.jasperreport.CustomDataSource;
+
+		void showReport() {
+			//Preparing parameters
+			Map parameters = new HashMap();
+			parameters.put("ReportTitle", "Address Report");
+			parameters.put("DataFile", "CustomDataSource from java");
+
+			report.setSrc("/data/jasperreport.jasper");
+			report.setParameters(parameters);
+			report.setDatasource(new CustomDataSource());
+			report.setType((String) format.getSelectedItem().getValue());
+		}
+	]]></zscript>
+</zk>

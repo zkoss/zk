@@ -3708,6 +3708,7 @@
 		<xs:attribute name="source" type="xs:string" use="optional" />
 		<xs:attribute name="parameters" type="xs:string" use="optional" />
 		<xs:attribute name="datasource" type="xs:string" use="optional" />
+		<xs:attribute name="exportName" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="jasperreportTypeAttrType" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="jasperreportTypeAttrType">
