@@ -38,23 +38,23 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			}
 		</style>
 		<hlayout>
-			<div height="400px">
-				<slider id="knob1" sclass="knob1" mold="knob" minpos="0.0" maxpos="100.0" curpos="80.0" step="0.5" angleArc="360" strokeWidth="10"/>
+			<div height="400px" hflex="1">
+				<slider id="knob1" hflex="1" vflex="1" sclass="knob1" mold="knob" minpos="0.0" maxpos="100.0" curpos="80.0" step="0.5" angleArc="360" strokeWidth="10"/>
 			</div>
-			<div height="400px">
-				<slider id="knob2" sclass="knob2" mold="knob" minpos="0.0" maxpos="100.0" curpos="65.0" step="1" vflex="1" angleArc="270" strokeWidth="10"/>
+			<div height="400px" hflex="1">
+				<slider id="knob2" hflex="1" vflex="1" sclass="knob2" mold="knob" minpos="0.0" maxpos="100.0" curpos="65.0" step="1" angleArc="270" strokeWidth="10"/>
 			</div>
 		</hlayout>
-		<button label="set H 300px" onClick='knob1.setHeight("300px")'/>
-		<button label="set H 100px" onClick='knob1.setHeight("100px")'/>
-		<button label="set H 50%" onClick='knob1.setHeight("50%")'/>
-		<button label="set H 100%" onClick='knob1.setHeight("100%")'/>
-		<button label="set H null" onClick='knob1.setHeight(null)'/>
+		<button label="set H 300px" onClick='knob1.setVflex(null);knob1.setHeight("300px")'/>
+		<button label="set H 100px" onClick='knob1.setVflex(null);knob1.setHeight("100px")'/>
+		<button label="set H 50%" onClick='knob1.setVflex(null);knob1.setHeight("50%")'/>
+		<button label="set H 100%" onClick='knob1.setVflex(null);knob1.setHeight("100%")'/>
+		<button label="set H null" onClick='knob1.setVflex(null);knob1.setHeight(null)'/>
 		<separator/>
-		<button label="set W 300" onClick='knob1.setWidth("300px")'/>
-		<button label="set W 100" onClick='knob1.setWidth("100px")'/>
-		<button label="set W 50%" onClick='knob1.setWidth("50%")'/>
-		<button label="set W 100%" onClick='knob1.setWidth("100%")'/>
+		<button label="set W 300" onClick='knob1.setHflex(null);knob1.setWidth("300px")'/>
+		<button label="set W 100" onClick='knob1.setHflex(null);knob1.setWidth("100px")'/>
+		<button label="set W 50%" onClick='knob1.setHflex(null);knob1.setWidth("50%")'/>
+		<button label="set W 100%" onClick='knob1.setHflex(null);knob1.setWidth("100%")'/>
 		<separator/>
 		<button label="set Angle 360" onClick="knob1.setAngleArc(360)"/>
 		<button label="set Angle 270" onClick="knob1.setAngleArc(270)"/>

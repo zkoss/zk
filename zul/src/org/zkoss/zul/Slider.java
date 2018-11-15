@@ -36,7 +36,6 @@ public class Slider extends XulElement {
 	/** The name. */
 	private String _name;
 	private String _slidingtext = "{0}";
-	private boolean _resetWidth = true; //B80-ZK-2895
 
 	//knob mode property
 	private double _angleArc = 360.0;
@@ -59,7 +58,6 @@ public class Slider extends XulElement {
 	}
 
 	public Slider() {
-		super.setWidth("200px");
 	}
 
 	/**
@@ -76,25 +74,6 @@ public class Slider extends XulElement {
 
 	/*package*/ boolean inSphereMold() {
 		return "sphere".equals(getMold());
-	}
-
-	/** Overrides the method in HtmlBasedComponent, to avoid misuse hflex and width at the same time.
-	 * @since 8.0.1
-	 */
-	@Override
-	public void setWidth(String width) { //B80-ZK-2895
-		_resetWidth = false;
-		super.setWidth(width);
-	}
-
-	/** Overrides the method in HtmlBasedComponent, to avoid misuse hflex and width at the same time.
-	 * @since 8.0.1
-	 */
-	@Override
-	public void setHflex(String flex) { //B80-ZK-2895
-		if (_resetWidth)
-			super.setWidth("");
-		super.setHflex(flex);
 	}
 
 	// super

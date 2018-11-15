@@ -14,6 +14,7 @@ ZK 8.6.1
   ZK-4127: Rendering performance listbox in borderlayout
   ZK-3876: combobox does not provide proper placeholder style
   ZK-4129: typo in barcodescanner component getter
+  ZK-4102: Slider flex sizing does not update the default 200px
 
 * Upgrade Notes
 
