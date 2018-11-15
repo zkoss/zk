@@ -378,7 +378,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	doKeyUp_: function (evt) {
 		if (!this._disabled) {
-			if (!this._readonly) {
+			if (!this._readonly && !this._autoCompleteSuppressed) {
 				var keyCode = evt.keyCode,
 					bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/; //jscs:ignore
 				// ZK-3607: The value is not ready in onKeyDown, but is ready in onKeyUp
@@ -445,14 +445,28 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this.setSelectedItemUuid_(this._initSelUuid);
 			this._initSelUuid = null;
 		}
+		var input = this.getInputNode();
+		this.domListen_(input, 'onCompositionstart', '_doCompositionstart')
+			.domListen_(input, 'onCompositionend', '_doCompositionend');
 	},
 	unbind_: function () {
 		this._hilite2();
 		this._sel = this._lastsel = null;
+		var input = this.getInputNode();
+		this.domUnlisten_(input, 'onCompositionend', '_doCompositionend')
+			.domUnlisten_(input, 'onCompositionstart', '_doCompositionstart');
 		// Bug ZK-403
 		if (this.isListen('onOpen'))
 			this.unlisten({onChanging: zk.$void});
 		this.$supers(zul.inp.Combobox, 'unbind_', arguments);
+	},
+	_doCompositionstart: function () {
+		this._autoCompleteSuppressed = true;
+	},
+	_doCompositionend: function () {
+		this._autoCompleteSuppressed = false;
+		if (zk.edge && !this._disabled && !this._readonly)
+			this._typeahead(false);
 	},
 	//@Override
 	redrawpp_: function (out) {

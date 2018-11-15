@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4075.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Nov 14 11:54:23 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Use pinyin input type
+		2. Type 牛, combobox should only contain "牛"
+		3. Type 肉, combobox should only contain "牛肉"
+		4. Press enter, combobox should contain "牛肉麵"
+		5. The comboitem with label "牛肉麵" should be selected
+		6. Empty combobox and type B
+		7. the combobox should contain "Beef noodle"
+		8. The comboitem with label "Beef noodle" should be selected
+	</label>
+	<combobox autodrop="true" autocomplete="true">
+		<comboitem label="牛肉麵"/>
+		<comboitem label="Beef noodle"/>
+	</combobox>
+</zk>
