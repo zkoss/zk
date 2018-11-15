@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.0.201807311647">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.0.201811151240">
 	<!--
 	SIMPLETYPE
 	-->
@@ -2332,6 +2332,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="upload" type="xs:string" use="optional" />
+		<xs:attribute name="onUpload" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- menupopup -->
 	<xs:element name="menupopup" type="menupopupType" />

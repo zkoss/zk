@@ -21,6 +21,7 @@ ZK 8.6.1
   ZK-4116: Spinner/Timebox button active style not working
   ZK-4134: Chosenbox - remove interval doesn't remove the last selection
   ZK-3860: Chosenbox - Createable does disable Select
+  ZK-4133: menuitem doesn't pass an UploadEvent for onUpload
 
 * Upgrade Notes
 
