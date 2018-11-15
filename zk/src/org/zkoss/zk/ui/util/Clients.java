@@ -56,6 +56,11 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  * <p>Utilities here are mainly to control how the client (a.k.a., the browser window)
  * behaves. To get the status, you might refer to {@link org.zkoss.zk.ui.event.ClientInfoEvent}.
  *
+ * Note: this class makes accessing 'client-side' more directly.
+ * Methods such as {@link #showBusy(String)} or {@link #showNotification(String)} will not encode the strings passed into them,
+ * thus the formatting of messages at 'client-side' is allowed.
+ * User input should be escaped carefully especially when using {@link #evalJavaScript(String)} to execute dynamically concatenated JavaScript code.
+ *
  * @author tomyeh
  * @see org.zkoss.zk.ui.event.ClientInfoEvent
  */
