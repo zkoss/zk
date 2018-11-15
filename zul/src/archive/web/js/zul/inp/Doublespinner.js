@@ -280,12 +280,14 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			clearInterval(this.timerId);
 
 		this.timerId = setInterval(function () {widget._increase(isup);}, 200);
+		jq(this.$n('btn-' + (isup ? 'up' : 'down'))).addClass(this.$s('active'));
 	},
 	_stopAutoIncProc: function () {
 		if (this.timerId)
 			clearTimeout(this.timerId);
 
 		this.timerId = null;
+		jq('.' + this.$s('icon'), this.$n('btn')).removeClass(this.$s('active'));
 	},
 	/** Synchronizes the input element's width of this component
 	 */
