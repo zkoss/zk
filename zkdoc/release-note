@@ -20,6 +20,7 @@ ZK 8.6.1
   ZK-4048: chosenbox doesn't have consistent vertical align with other input components
   ZK-4116: Spinner/Timebox button active style not working
   ZK-4134: Chosenbox - remove interval doesn't remove the last selection
+  ZK-3860: Chosenbox - Createable does disable Select
 
 * Upgrade Notes
 
