@@ -43,10 +43,14 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 			if (m.isAnnotationPresent(Transient.class))
 				return false;
 			final String name = m.getName();
-			if (name.startsWith("set"))
-				return isSetMethodHandled(m);
-			if (name.startsWith("get") || name.startsWith("is") || name.equals("hashCode"))
+			if ("hashCode".equals(name))
 				return true;
+			if (ProxyHelper.isAttribute(m)) {
+				if (name.startsWith("set"))
+					return isSetMethodHandled(m);
+				if (name.startsWith("get") || name.startsWith("is"))
+					return true;
+			}
 			try {
 				FormProxyObject.class.getMethod(name, m.getParameterTypes());
 				return true;
