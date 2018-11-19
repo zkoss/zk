@@ -43,6 +43,7 @@ Nov 20, 2018
   ZK-4129: typo in barcodescanner component getter
   ZK-4124: console warnings/errors with camera component
   ZK-4075: Combobox browser inconsistent autocomplete behavior
+  ZK-4140: The height of chosenbox should be the same as other input components
 
 * Upgrade Notes
 
