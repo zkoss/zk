@@ -23,6 +23,7 @@ ZK 8.6.1
   ZK-3860: Chosenbox - Createable does disable Select
   ZK-4133: menuitem doesn't pass an UploadEvent for onUpload
   ZK-4099: ProxyHandler on method "set" causes error
+  ZK-4086: knob paddings wasting space
 
 * Upgrade Notes
 
