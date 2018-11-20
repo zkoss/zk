@@ -13,6 +13,12 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script><![CDATA[
+	jq(window).error(function (e, url, line) {
+		zk.log(e.originalEvent.error);
+	});
+	]]>
+	</script>
 	<label multiline="true">
 		1. After load this page, you should not see any error at console
 		2. Close Item1, you should not see any error at console
