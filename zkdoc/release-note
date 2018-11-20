@@ -28,6 +28,19 @@ ZK 8.6.1
 * Upgrade Notes
 
    --------
+ZK 8.6.0.1
+Nov 20, 2018
+* Features
+
+* Bugs
+  ZK-4103: video.setContent() doesn't show an uploaded video
+  ZK-4127: Rendering performance listbox in borderlayout
+  ZK-4133: menuitem doesn't pass an UploadEvent for onUpload
+  ZK-4129: typo in barcodescanner component getter
+
+* Upgrade Notes
+
+   --------
 ZK 8.6.0
 Nov 7, 2018
 * Features
