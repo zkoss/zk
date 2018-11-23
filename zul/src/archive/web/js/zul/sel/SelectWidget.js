@@ -840,7 +840,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	_toStyleOffset: function (el, x, y) {
 		var ofs1 = zk(el).revisedOffset(),
-		x2 = zk.parseInt(el.style.left), y2 = zk.parseInt(el.style.top);
+		x2 = zk.parseFloat(el.style.left), y2 = zk.parseFloat(el.style.top);
 		return [x - ofs1[0] + x2, y - ofs1[1] + y2];
 	},
 	/**

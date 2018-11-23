@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4109.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 13 10:36:06 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		ListModelList model = new ListModelList(Collections.nCopies(100000,"item"));
+	</zscript>
+	<label>
+		Scroll to the middle and select one row, the scroll position should not be changed.
+	</label>
+	<listbox width="200px" height="540px" model="${model}">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<listhead>
+			<listheader label="Load On Demand" sort="auto" />
+		</listhead>
+	</listbox>
+</zk>
