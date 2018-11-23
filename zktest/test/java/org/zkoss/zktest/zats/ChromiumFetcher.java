@@ -41,10 +41,10 @@ class ChromiumFetcher {
 	private static final Map<Arch, String> URLS = new EnumMap<>(Arch.class);
 
 	static {
-		URLS.put(Arch.LINUX, "%s/chromium-browser-snapshots/Linux_x64/%d/chrome-linux.zip");
-		URLS.put(Arch.MAC, "%s/chromium-browser-snapshots/Mac/%d/chrome-mac.zip");
-		URLS.put(Arch.WIN32, "%s/chromium-browser-snapshots/Win/%d/chrome-win32.zip");
-		URLS.put(Arch.WIN64, "%s/chromium-browser-snapshots/Win_x64/%d/chrome-win32.zip");
+		URLS.put(Arch.LINUX, "%s/chromium-browser-snapshots/Linux_x64/%d/%s.zip");
+		URLS.put(Arch.MAC, "%s/chromium-browser-snapshots/Mac/%d/%s.zip");
+		URLS.put(Arch.WIN32, "%s/chromium-browser-snapshots/Win/%d/%s.zip");
+		URLS.put(Arch.WIN64, "%s/chromium-browser-snapshots/Win_x64/%d/%s.zip");
 	}
 
 	private final String downloadFolder;
@@ -92,7 +92,19 @@ class ChromiumFetcher {
 	}
 
 	private URL getUrl(int revision) throws MalformedURLException {
-		return new URL(String.format(URLS.get(this.platform), this.downloadHost, revision));
+		return new URL(String.format(URLS.get(this.platform), this.downloadHost, revision, archiveName(platform, revision)));
+	}
+
+	private String archiveName(Arch platform, int revision) {
+		if (platform == Arch.LINUX)
+			return "chrome-linux";
+		if (platform == Arch.MAC)
+			return "chrome-mac";
+		if (platform == Arch.WIN32 || platform == Arch.WIN64) {
+			// Windows archive name changed at r591479.
+			return revision > 591479 ? "chrome-win" : "chrome-win32";
+		}
+		return null;
 	}
 
 	public void download(int revision) throws IOException {
@@ -136,6 +148,9 @@ class ChromiumFetcher {
 				} else {
 					try (InputStream in = zipFile.getInputStream(entry)) {
 						Files.copy(in, file);
+						if ((entry.getUnixMode() & 0111) != 0) { // oct(111) means --x--x--x
+							file.toFile().setExecutable(true);
+						}
 					}
 				}
 			}
