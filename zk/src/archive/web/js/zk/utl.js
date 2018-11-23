@@ -724,6 +724,31 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 */
 	getDevicePixelRatio: function () {
 		return window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
+	},
+	/**
+	 * Returns the Promise whose fulfillment handler receives a MediaStream object when the requested media has successfully been obtained.
+	 * Note: this function may returns a Promise that is rejected, if this browser not support getUserMedia.
+	 * For more information, please visit https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+	 *
+	 * @param String constraints a constraints object specifying the types of media to request
+	 * @return Promise
+	 * @since 8.6.1
+	 */
+	getUserMedia: function (constraints) {
+		var polyfillGUM = function (constraints, success, error) {
+			var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+				navigator.mozGetUserMedia || navigator.msGetUserMedia ||
+				navigator.oGetUserMedia;
+			if (!getUserMedia)
+				return Promise.reject(new Error('Cannot polyfill getUserMedia'));
+			return new Promise(function (constraints, success, error) {
+				getUserMedia.call(navigator, constraints, success, error);
+			});
+		};
+
+		if (navigator.mediaDevices === undefined) navigator.mediaDevices = {};
+		if (navigator.mediaDevices.getUserMedia === undefined) navigator.mediaDevices.getUserMedia = polyfillGUM;
+		return navigator.mediaDevices.getUserMedia(constraints);
 	}
 };
 

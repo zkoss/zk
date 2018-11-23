@@ -141,6 +141,8 @@ public class AuDropUploader implements AuExtension {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
+		} else {
+			response.setContentType("text/plain;charset=UTF-8");
 		}
 		if (log.isTraceEnabled())
 			log.trace(Objects.toString(attrs));
