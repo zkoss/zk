@@ -30,6 +30,7 @@ ZK 8.6.1
   ZK-3197: Listbox Scroll down automatically
   Zk-4098: button icon size alignment (iceblue_c)
   ZK-3985: Listbox size change when click the listitem
+  ZK-4147: Comboitem icon display issue in Iceblue Compact
 
 * Upgrade Notes
 
