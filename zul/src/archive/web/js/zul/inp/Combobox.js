@@ -465,7 +465,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	_doCompositionend: function () {
 		this._autoCompleteSuppressed = false;
-		if (zk.edge && !this._disabled && !this._readonly)
+		if (!this._disabled && !this._readonly)
 			this._typeahead(false);
 	},
 	//@Override
