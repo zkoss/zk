@@ -27,6 +27,7 @@ ZK 8.6.1
   ZK-3787: Tbeditor vflex overlapped other elements
   ZK-4109: listbox changes scroll position on selection (huge ROD)
   ZK-3197: Listbox Scroll down automatically
+  Zk-4098: button icon size alignment (iceblue_c)
 
 * Upgrade Notes
 
