@@ -271,7 +271,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			//for not removing hover effect when moving mouse on menupopup
 			jq(this.$n()).addClass(this.$s('visited'));
 
-			if (pp == 'auto' && this.parent._mpop)
+			if ((pp == 'auto' || pp == 'auto-keep') && this.parent._mpop)
 				pp = this.parent._mpop;
 			else
 				pp = this.$f(this.parent._menupopup);

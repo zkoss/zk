@@ -5,6 +5,7 @@ ZK 8.6.1
   ZK-4040: Add an export file name property for JasperReport
   ZK-3532: HtmlBasedComponent supports addSclass() removeSclass()	
   ZK-4047: a xsd file for zk.xml
+  ZK-4059: Add option to keep menupopup=auto open after setting column visibility
 
 * Bugs
   ZK-4114: orgnode label missing font styles

@@ -98,6 +98,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	_curIndex: -1,
+	_keepOpen: false,
 
 	zsync: function () {
 		this.$supers('zsync', arguments);
