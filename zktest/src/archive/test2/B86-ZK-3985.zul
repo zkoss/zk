@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3985.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Nov 13 09:35:04 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script>
+		function sizeLog() {
+			var lbh = jq('.z-listbox').height()
+			zk.log('listbox height : ' + lbh)
+		}
+	</script>
+	<label multiline="true">
+		1.Test with ie9.
+		2.Click the listitem. You should NOT see the listbox height changing.
+	</label>
+	<listbox width="400px">
+		<listhead>
+			<listheader label="Column 1" width="250px" />
+			<listheader label="Column 2" width="250px" />
+			<listheader label="Column 3" hflex="2" />
+			<listheader label="Column 4" hflex="1" />
+		</listhead>
+		<listitem forEach="1,2,3" w:onClick="sizeLog();" >
+			<listcell forEach="1,2,3,4">Listcell</listcell>
+		</listitem>
+	</listbox>
+</zk>

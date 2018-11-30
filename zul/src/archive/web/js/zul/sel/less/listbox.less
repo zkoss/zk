@@ -464,6 +464,13 @@ body:not(.gecko) {
 }
 
 .ie9 {
+	.z-listbox {
+		&-body {
+			display: inline-block; // ZK-3985: Listbox size change when click the listitem
+			vertical-align: middle;
+		}
+	}
+
 	.z-listitem {
 		.z-listcell {
 			position: static;
