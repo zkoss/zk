@@ -1,5 +1,17 @@
 <zk>
-	<button label="test"/>
+	<zscript>
+		public void sessionLog() {
+			Session session = Sessions.getCurrent();
+			String sourcemap = session.getAttributes().toString();
+			if (sourcemap.contains("zk$sourcemap")) {
+				Clients.log("with SourceMap");
+			} else {
+				Clients.log("no SourceMap");
+			}
+		}
+	</zscript>
+	<button label="test" onClick="sessionLog()"/>
+	<button id="findMap" xmlns:w="client" label="findMap" w:onClick="window.location.href = '/zktest/zkau/web/js/zkbind.map';"/>
 	<label multiline="true"><![CDATA[
 		1. enable sourcemap
 			<client-config>

@@ -59,4 +59,8 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			<listcell label="${forEachStatus.index}-9"/>
 		</listitem>
 	</listbox>
+	<div xmlns:w="client">
+		<button label="scrollRight" w:onClick="$('.z-listbox-body').scrollLeft(500)" />
+		<button label="refresh" w:onClick="location.reload()" />
+	</div>
 </zk>
