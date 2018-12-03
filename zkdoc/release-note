@@ -31,8 +31,11 @@ ZK 8.6.1
   Zk-4098: button icon size alignment (iceblue_c)
   ZK-3985: Listbox size change when click the listitem
   ZK-4147: Comboitem icon display issue in Iceblue Compact
+  ZK-4161: Change return type of hasVScroll and hasHScroll
 
 * Upgrade Notes
+  + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
+    to get real scrollbar width, use jq.scrollbarWidth() instead.
 
    --------
 ZK 8.6.0.1
