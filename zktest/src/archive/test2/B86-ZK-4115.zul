@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4115.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Dec 04 10:18:04 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Scroll to the right
+		2. Scroll to the left
+		3. Increase the browser width
+		4. Record headers width
+		5. Scroll to the right
+		6. Scroll to the left
+		7. The headers width should remain the same
+	</label>
+	<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+	<listbox>
+		<listhead>
+			<listheader label="a"/>
+			<listheader label="b"/>
+			<listheader label="c"/>
+		</listhead>
+		<frozen columns="1"/>
+		<listitem>
+			<listcell label="a0"/>
+			<listcell label="b0"/>
+			<listcell label="c0"/>
+		</listitem>
+		<listitem>
+			<listcell label="a1"/>
+			<listcell label="b1"/>
+			<listcell label="c1"/>
+		</listitem>
+		<listitem>
+			<listcell label="a2"/>
+			<listcell label="b2"/>
+			<listcell label="c2"/>
+		</listitem>
+		<listfoot>
+			<listfooter label="a"/>
+			<listfooter label="b"/>
+			<listfooter label="c"/>
+		</listfoot>
+	</listbox>
+</zk>
