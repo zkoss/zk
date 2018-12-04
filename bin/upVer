@@ -124,4 +124,5 @@ upVer zkmax
 upVer zml
 upVer zkrt
 upVer zuti
+upVer zkthemebuilder
 cd $maindir
