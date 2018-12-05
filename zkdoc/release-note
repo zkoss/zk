@@ -17,6 +17,9 @@ ZK 8.6.1
   ZK-4127: Rendering performance listbox in borderlayout
   ZK-3876: combobox does not provide proper placeholder style
   ZK-4129: typo in barcodescanner component getter
+  ZK-4124: console warnings/errors with camera component
+  ZK-4075: Combobox browser inconsistent autocomplete behavior
+  ZK-4140: The height of chosenbox should be the same as other input components
   ZK-4102: Slider flex sizing does not update the default 200px
   ZK-4048: chosenbox doesn't have consistent vertical align with other input components
   ZK-4116: Spinner/Timebox button active style not working
@@ -47,9 +50,6 @@ Nov 20, 2018
   ZK-4127: Rendering performance listbox in borderlayout
   ZK-4133: menuitem doesn't pass an UploadEvent for onUpload
   ZK-4129: typo in barcodescanner component getter
-  ZK-4124: console warnings/errors with camera component
-  ZK-4075: Combobox browser inconsistent autocomplete behavior
-  ZK-4140: The height of chosenbox should be the same as other input components
 
 * Upgrade Notes
 
