@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4013.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Dec 05 09:48:19 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. First header width should be 100px
+		2. Other headers should distribute the remaining width equally
+		3. The sum of all headers width should equal to head width
+	</label>
+	<vlayout>
+		<listbox sizedByContent="true" span="true">
+			<listhead sizable="true">
+				<listheader label="Fixed" width="100px"/>
+				<listheader label="Flexed"/>
+				<listheader label="Flexed"/>
+			</listhead>
+			<listitem>
+				<listcell label="Listbox"/>
+				<listcell label="Hello"/>
+				<listcell label="Hello"/>
+			</listitem>
+		</listbox>
+		<grid sizedByContent="true" span="true">
+			<columns sizable="true">
+				<column label="Fixed" width="100px"/>
+				<column label="Flexed"/>
+				<column label="Flexed"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="Grid"/>
+					<label value="Hello"/>
+					<label value="Hello"/>
+				</row>
+			</rows>
+		</grid>
+		<tree sizedByContent="true" span="true">
+			<treecols>
+				<treecol label="Fixed" width="100px"/>
+				<treecol label="Flexed"/>
+				<treecol label="Flexed"/>
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Tree"/>
+						<treecell label="Hello"/>
+						<treecell label="Hello"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</vlayout>
+</zk>

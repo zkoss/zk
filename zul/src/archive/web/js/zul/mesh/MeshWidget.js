@@ -1450,26 +1450,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			hdcol = hdfaker.firstChild,
 			bdcol = bdfaker.firstChild,
 			_minwds = this._minWd.wds,
-			hdlen = this.head.nChildren;
+			hdlen = this.head.nChildren,
+			total = this.ebody.clientWidth;
 
 		for (var temphdcol = hdcol, w = this.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			if (zk(temphdcol).isVisible(true)) {
 				var wdh = w._width;
 
-				if (w._hflex == 'min')
-					wd = wds[i] = _minwds[i];
-				else if (wdh && wdh.endsWith('px'))
+				if (w._hflex != 'min' && wdh && wdh.endsWith('px')) {
 					wd = wds[i] = zk.parseInt(wdh);
-				else
+					total -= wd;
+				} else {
 					wd = wds[i] = _minwds[i];
-
-				width += wd;
+					width += wd;
+				}
 			}
 			temphdcol = temphdcol.nextSibling;
 		}
 
 		var	ftcol = ftfaker ? ftfaker.firstChild : null,
-			total = this.ebody.clientWidth,
 			extSum = total - width,
 			count = total,
 			visj = -1,
@@ -1480,7 +1479,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 
 			var hasFrozenScrolled = this.frozen && this.frozen.getStart();
-			for (var i = 0; hdcol && i < hdlen; hdcol = hdcol.nextSibling, i++) {
+			for (var i = 0, header = this.head.firstChild; hdcol && i < hdlen;
+					hdcol = hdcol.nextSibling, header = header.nextSibling, i++) {
 				// ZK-2222: should check visibility
 				if (!zk(hdcol).isVisible(true)) {
 					bdcol = bdcol.nextSibling;
@@ -1502,10 +1502,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 							}
 						}
 					} else {
-						wds[i] = wd = extSum <= 0 ? wds[i] : Math.round(((wds[i] * total / width) + 0.5) || 0);
+						var headerWidth = header._width;
+						if (header._hflex != 'min' && headerWidth && headerWidth.endsWith('px'))
+							wd = wds[i];
+						else {
+							wds[i] = wd = extSum <= 0 ? wds[i] : Math.round(((wds[i] * total / width) + 0.5) || 0);
+							count -= wd;
+						}
 					}
 					var stylew = jq.px0(wd);
-					count -= wd;
 					visj = i;
 
 					hdcol.style.width = stylew;
