@@ -32,6 +32,7 @@ ZK 8.6.1
   ZK-3985: Listbox size change when click the listitem
   ZK-4147: Comboitem icon display issue in Iceblue Compact
   ZK-4161: Change return type of hasVScroll and hasHScroll
+  ZK-4125: Vertical slider area is not aligned with button
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
