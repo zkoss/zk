@@ -318,7 +318,15 @@ zFlex = { //static methods
 			scrWdh,
 			vflexsRe = [],
 			hasVScroll = zkp.hasVScroll(),
-			hasHScroll = zkp.hasHScroll();
+			hasHScroll = zkp.hasHScroll(),
+			isMeshLoaded = zk.isLoaded('zul.mesh');
+
+		// B86-ZK-4123
+		if (isMeshLoaded && wgt.$instanceof(zul.mesh.HeaderWidget)) {
+			var body = wgt.parent.parent.ebody;
+			hasVScroll = zkp.hasVScroll() || zk(body).hasVScroll();
+			hasHScroll = zkp.hasHScroll() || zk(body).hasHScroll();
+		}
 
 		// Bug 3185686, B50-ZK-452
 		if (hasVScroll) //with vertical scrollbar
@@ -349,7 +357,6 @@ zFlex = { //static methods
 					cwgt = zk.Widget.$(c, {exact: 1});
 					
 				//ZK-2776: we can't and shouldn't set width to auxheader
-				var isMeshLoaded = zk.isLoaded('zul.mesh');
 				if (cwgt && isMeshLoaded && cwgt.$instanceof(zul.mesh.Auxheader))
 					continue;
 				

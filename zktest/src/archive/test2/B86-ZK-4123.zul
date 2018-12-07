@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4123.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Nov 29 12:15:53 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		function withoutHScrollbar() {
+			var gridHasHScrollbar = $('.z-grid-body')[0].scrollWidth > $('.z-grid-body')[0].clientWidth;
+			var listboxHasHscrollbar = $('.z-listbox-body')[0].scrollWidth > $('.z-listbox-body')[0].clientWidth;
+			var treeHasHscrollbar = $('.z-tree-body')[0].scrollWidth > $('.z-tree-body')[0].clientWidth;
+			return !gridHasHScrollbar && !listboxHasHscrollbar && !treeHasHscrollbar;
+		}
+		]]>
+	</script>
+	<label>
+		1.load this page, the grid, listbox and tree should not have any horizontal scrollbar.
+	</label>
+	<button id="btn1" label="withoutHScrollbar" xmlns:w="client" w:onClick="zk.log(withoutHScrollbar())" />
+	<grid id="grid1" height="150px">
+		<columns sizable="true">
+			<column hflex="min"/>
+			<column hflex="1"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="1st cell"/>
+				<label value="cell content"/>
+			</row>
+			<row>
+				<label value="1st cell"/>
+				<label value="cell content"/>
+			</row>
+			<row>
+				<label value="1st cell"/>
+				<label value="cell content"/>
+			</row>
+			<row>
+				<label value="1st cell"/>
+				<label value="cell content"/>
+			</row>
+			<row>
+				<label value="1st cell"/>
+				<label value="cell content"/>
+			</row>
+			<row>
+				<label value="1st cell"/>
+				<label value="cell content"/>
+			</row>
+			<row>
+				<label value="1st cell"/>
+				<label value="cell content"/>
+			</row>
+		</rows>
+	</grid>
+	<separator/>
+	<listbox id="listbox1" rows="3">
+		<listhead sizable="true">
+			<listheader hflex="min" />
+			<listheader hflex="1" />
+		</listhead>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+		<listitem>
+			<listcell label="1st cell" />
+			<listcell label="cell content" />
+		</listitem>
+	</listbox>
+	<separator/>
+	<tree id="tree1" rows="3">
+		<treecols sizable="true">
+			<treecol hflex="min" />
+			<treecol hflex="1" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1" />
+					<treecell label="Item 1 description" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2" />
+					<treecell label="Item 2 description" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1" />
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2" />
+							<treecell label="Item 2.2" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3" />
+		</treechildren>
+	</tree>
+</zk>
