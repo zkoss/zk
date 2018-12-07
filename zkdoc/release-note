@@ -36,6 +36,7 @@ ZK 8.6.1
   ZK-4147: Comboitem icon display issue in Iceblue Compact
   ZK-4161: Change return type of hasVScroll and hasHScroll
   ZK-4125: Vertical slider area is not aligned with button
+  ZK-4149: slider JS when calling setCurpos
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

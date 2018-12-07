@@ -401,6 +401,7 @@ public class Slider extends XulElement {
 
 	/** Sets the mode.
 	 * <p>Default : "integer" 
+	 * Note: Knob mold does not support this method, please use {@link #setStep(double)} instead.
 	 * @param mode either "integer" or "decimal".
 	 * @since 7.0.1
 	 */
