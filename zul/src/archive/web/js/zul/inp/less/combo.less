@@ -23,23 +23,15 @@
 
 		&:hover {
 			border-color: @inputHoverBorderColor;
-		}
-		&:hover + * {
-			border-color: @inputHoverBorderColor;
+			& + a, & + span {
+				border-color: @inputHoverBorderColor;
+			}
 		}
 		&:focus {
 			border-color: @inputFocusBorderColor;
-		}
-		&:focus + * {
-			border-left: 1px solid @inputFocusBorderColor;
-		}
-		&[readonly] {
-			color: @inputReadonlyColor;
-			background: @inputReadonlyBackgroundColor;
-		}
-		&[readonly] + * {
-			color: @inputReadonlyColor;
-			background-color: @inputBackgroundColor;
+			& + a, & + span {
+				border-left: 1px solid @inputFocusBorderColor;
+			}
 		}
 
 		// Placeholder ZK-3876: combobox does not provide proper placeholder style
@@ -90,14 +82,22 @@
 
 	&-disabled {
 		.opacity(@disabledOpacity);
-		& > * {
+		& > input {
 			color: @inputDisableColor !important;
 			background: @inputDisableBackgroundColor !important;
 			cursor: default !important;
 			&:hover {
 				border-color: @inputBorderColor;
+				& + a, & + span {
+					border-color: @inputBorderColor;
+				}
 			}
-			&:hover + * {
+		}
+		& > a, & > span {
+			color: @inputDisableColor !important;
+			background: @inputDisableBackgroundColor !important;
+			cursor: default !important;
+			&:hover {
 				border-color: @inputBorderColor;
 			}
 		}
@@ -105,7 +105,7 @@
 
 	&-invalid {
 		border-color: @invalidBorderColor !important;
-		& + * {
+		& + a, & + span {
 			border-left: 1px solid @invalidBorderColor !important;
 		}
 	}
@@ -113,6 +113,17 @@
 	&-rightedge {
 		border-right: 1px solid @inputBorderColor;
 		.borderRadius(@baseBorderRadius);
+	}
+
+	&-readonly {
+		& > input {
+			color: @inputReadonlyColor;
+			background: @inputReadonlyBackgroundColor;
+		}
+		& > a, & > span {
+			color: @inputReadonlyColor;
+			background-color: @inputBackgroundColor;
+		}
 	}
 }
 
@@ -122,10 +133,10 @@
 	border-color: @inputFocusBorderColor;
 }
 
-.z-combobox-input,
-.z-bandbox-input,
-.z-datebox-input {
-	&[readonly] {
+.z-combobox-readonly,
+.z-bandbox-readonly,
+.z-datebox-readonly {
+	& > input {
 		cursor: pointer;
 	}
 }
@@ -211,8 +222,12 @@
 	&:hover {
 		background: 0;
 	}
-	// separator
-	& + i[class*='-separator'] {
+}
+// separator
+.z-timebox-disabled span,
+.z-spinner-disabled span,
+.z-doublespinner-disabled span {
+	& > i {
 		display: none;
 	}
 }
@@ -281,9 +296,6 @@
 }
 .z-comboitem-selected {
 	color: @comboPopupItemSelectedColor;
-	& * {
-		color: @comboPopupItemSelectedColor;
-	}
 }
 .z-comboitem-text {
 	line-height: @comboPopupItemSize + 2;

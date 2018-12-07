@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4158.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Dec 04 14:48:59 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.load this page using themepack themes
+		2.scroll down to trigger new rows to be renderer
+		3.observe the browsers console, renderer should not be slow(over 500ms before fixed)
+	</label>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(400, "dummy"));
+	]]></zscript>
+	
+	<script>
+		zk.afterMount(function() {
+		var old = zAu._onResponseReady;
+		zAu._onResponseReady = function() {
+		console.time('zAu._onResponseReady');
+		old.apply(this, arguments);
+		console.timeEnd('zAu._onResponseReady');
+		}
+		});
+	</script>
+	
+	<grid model="${model}" height="500px">
+		<custom-attributes org.zkoss.zul.grid.rod="false"/>
+		<columns>
+			<column label="col1"/>
+			<column label="col2"/>
+		</columns>
+		<template name="model">
+			<row>
+				<label value="row-${forEachStatus.index}"/>
+				<combobox/>
+			</row>
+		</template>
+	</grid>
+</zk>
