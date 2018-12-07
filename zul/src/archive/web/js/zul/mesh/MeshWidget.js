@@ -1291,16 +1291,73 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		} else if (this.frozen) {
 			//B70-ZK-2468: should sync ebody width with ebodytbl width
-			if (this.ebody) {
-				var bdtbl = this.ebodytbl;
-					hdtbl = this.eheadtbl,
-					fttbl = this.efoottbl;
-				if (bdtbl)
-					bdtbl.style.width = this.ebody.style.width;
-				if (hdtbl)
-					hdtbl.style.width = this.ehead.style.width;
-				if (fttbl)
-					fttbl.style.width = this.efoot.style.width;
+			var ehead = this.ehead,
+				hdtbl = this.eheadtbl,
+				ebody = this.ebody,
+				bdtbl = this.ebodytbl,
+				efoot = this.efoot,
+				fttbl = this.efoottbl;
+			if (ehead && hdtbl)
+				hdtbl.style.width = ehead.style.width;
+			if (ebody && bdtbl) {
+				var ebodyWidth = ebody.style.width;
+				if (hasVScroll)
+					bdtbl.style.width = jq.px0(parseInt(ebodyWidth) - scrollbarWidth);
+				else
+					bdtbl.style.width = ebodyWidth;
+			}
+			if (efoot && fttbl)
+				fttbl.style.width = efoot.style.width;
+
+			if (!this.frozen._smooth)
+				this._syncFaker();
+		}
+	},
+	_syncFaker: function () {
+		var head = this.head;
+		if (!head)
+			return;
+
+		var totalCols = head.nChildren,
+			width0 = zul.mesh.MeshWidget.WIDTH0,
+			newTotalWidth = parseFloat(this.ebodytbl.style.width),
+			oldTotalWidth = 0;
+		for (var i = 0, header = head.firstChild, hdcol = this.ehdfaker.firstChild; i < totalCols;
+				header = header.nextSibling, hdcol = hdcol.nextSibling, i++) {
+			var fakerStyleWidth = hdcol.style.width;
+			if (fakerStyleWidth == '')
+				return;
+
+			var isHidden = fakerStyleWidth == width0,
+				width = isHidden ? parseFloat(header._origWd) : parseFloat(fakerStyleWidth);
+			if (header.getWidth() || header.getHflex())
+				newTotalWidth -= width;
+			else
+				oldTotalWidth += width;
+		}
+
+		if (newTotalWidth == oldTotalWidth)
+			return;
+
+		for (var i = 0, header = head.firstChild, hdcol = this.ehdfaker.firstChild; i < totalCols;
+				header = header.nextSibling, hdcol = hdcol.nextSibling, i++) {
+			if (header.getWidth() || header.getHflex())
+				continue;
+
+			var fakerStyleWidth = hdcol.style.width,
+				multiplier = newTotalWidth / oldTotalWidth,
+				isHidden = fakerStyleWidth == width0;
+			if (isHidden)
+				header._origWd = jq.px0(parseFloat(header._origWd) * multiplier);
+			else {
+				var newStyleWidth = jq.px0(parseFloat(fakerStyleWidth) * multiplier),
+					bdfaker = header.$n('bdfaker'),
+					ftfaker = header.$n('ftfaker');
+				hdcol.style.width = newStyleWidth;
+				if (bdfaker)
+					bdfaker.style.width = newStyleWidth;
+				if (ftfaker)
+					ftfaker.style.width = newStyleWidth;
 			}
 		}
 	},

@@ -307,14 +307,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		var totalWidth = 0,
 			mesh = this.parent,
 			cnt = num,
-			rows = mesh.ebodyrows,
 			c = this._columns,
 			width0 = zul.mesh.MeshWidget.WIDTH0;
 
 		if (mesh.head) {
 			// set fixed size
 			var totalCols = mesh.head.nChildren,
-				hdrows = mesh.eheadrows.rows,
 				// B70-ZK-2071: Use mesh.head to get columns.
 				hdcells = mesh.head.$n().cells,
 				hdcol = mesh.ehdfaker.firstChild,
@@ -403,11 +401,15 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 			}
 
+			var hasVScroll = zk(mesh.ebody).hasVScroll(),
+				scrollbarWidth = jq.scrollbarWidth();
 			hdcol = mesh.ehdfaker.firstChild;
 			for (var i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
 				if (hdcol.style.display != 'none')
 					totalWidth += zk.parseInt(hdcol.style.width);
 			}
+			if (hasVScroll)
+				totalWidth += scrollbarWidth;
 
 			//hide the element without losing focus
 			jq(mesh).css({position: '', left: ''});
@@ -418,7 +420,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (headtbl = mesh.eheadtbl)
 			headtbl.style.width = jq.px(totalWidth);
 		if (bodytbl = mesh.ebodytbl)
-			bodytbl.style.width = jq.px(totalWidth);
+			bodytbl.style.width = jq.px(totalWidth - (hasVScroll ? scrollbarWidth : 0));
 		if (foottbl = mesh.efoottbl)
 			foottbl.style.width = jq.px(totalWidth);
 

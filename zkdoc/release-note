@@ -38,6 +38,7 @@ ZK 8.6.1
   ZK-4125: Vertical slider area is not aligned with button
   ZK-4149: slider JS when calling setCurpos
   ZK-4158: bad render performance when using themepack themes
+  ZK-4115: listbox + frozen column widths resetting when scrolling
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
