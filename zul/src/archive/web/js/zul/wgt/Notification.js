@@ -263,7 +263,6 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 			parent = zk.Desktop.$().firstChild;
 		}
 		parent.appendChild(ntf);
-		ntf.parent = ntf._fakeParent = opts.ref; // B85-ZK-3606: fake parent
 		ntf._nftPos = pos;
 		ntf.open(ref, off, pos);
 

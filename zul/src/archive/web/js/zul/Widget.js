@@ -526,7 +526,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 				if (params.type && params.type == 'toggle' && popup.isOpen()) {
 					popup.close({sendOnOpen: true});
 				} else {
-					popup._fakeParent = this; // B85-ZK-3606: fake parent
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						if (self.desktop)
 							popup.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 1});
@@ -553,7 +552,6 @@ zul.Widget = zk.$extends(zk.Widget, {
 				if (params.type && params.type == 'toggle' && ctx.isOpen()) {
 					ctx.close({sendOnOpen: true});
 				} else {
-					ctx._fakeParent = this; // B85-ZK-3606: fake parent
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						if (self.desktop)
 							ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620

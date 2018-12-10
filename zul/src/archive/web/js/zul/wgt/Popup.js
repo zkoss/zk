@@ -85,6 +85,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 *  @see #open(zk.Widget, Offset, String, Map)
 	 */
 	open: function (ref, offset, position, opts) {
+		this._fakeParent = zk.$(ref);
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
 			top = node.style.top,
