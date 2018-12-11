@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4072.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Dec 11 11:10:08 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		function isSelectedTabScrollIntoView() {
+			if (!$('.z-tab-selected')[0])
+				return;
+			var rightEdge = $('.z-tab-selected').position().left < $('.z-tabs')[0].offsetLeft + $('.z-tabs')[0].clientWidth;
+			var leftEdge = $('.z-tab-selected').position().left >= $('.z-tabs')[0].offsetLeft;
+			zk.log(rightEdge && leftEdge);
+		}
+	]]></script>
+	<hlayout>
+		<a id="breeze" href="?zktheme=breeze" label="Breeze" />
+		<a id="sapphire" href="?zktheme=sapphire" label="Sapphire" />
+		<a id="silvertail" href="?zktheme=silvertail" label="Silvertail" />
+		<a id="atlantic" href="?zktheme=atlantic" label="Atlantic" />
+		<a id="default" href="?zktheme=default" label="Default" />
+	</hlayout>
+	<label multiline="true">
+		1.test this page with all themes breeze/sapphire/silvertail/atlantic/iceblue.
+		2.click "Add Tab" button to add tabs until the tabs become scrollable.
+		3.the last selected tab should be scroll into view.
+	</label>
+	<tabbox width="500px">
+		<tabs id="tabs"/>
+		<tabpanels height="100px"/>
+	</tabbox>
+	<button id="add" label="Add Tab">
+		<attribute name="onClick"><![CDATA[
+			Tab tb = new Tab();
+			tb.setLabel("Tab panel test test test test");
+			tb.setClosable(true);
+			tb.setSelected(true);
+			tabs.appendChild(tb);
+		]]></attribute>
+	</button>
+	<button id="test" label="isSelectedTabScrollIntoView" xmlns:w="client" w:onClick="isSelectedTabScrollIntoView()" />
+</zk>

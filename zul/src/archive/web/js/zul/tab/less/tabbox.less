@@ -256,7 +256,6 @@
 	&-content {
 		display: flex;
 		min-height: 48px;
-		width: 100%;
 		border-collapse: separate;
 		border-spacing: 0;
 		margin: 0;
@@ -265,13 +264,14 @@
 		list-style: none outside none;
 		zoom: 1;
 		clear: both;
+		white-space: nowrap;
 	}
 }
 
 .z-tab {
 	font-family: @baseTitleFontFamily;
 	font-size: @fontSizeLarge;
-	display: block;
+	display: inline-block;
 	border-bottom: 2px solid transparent;
 	margin: 0;
 	line-height: @baseButtonHeight + 6;
@@ -279,8 +279,8 @@
 	text-align: center;
 	position: relative;
 	cursor: pointer;
-	float: left;
 	padding: 10px 16px;
+	vertical-align: bottom;
 
 	&-content {
 		display: block;
