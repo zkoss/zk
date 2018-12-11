@@ -323,17 +323,20 @@ zFlex = { //static methods
 
 		// B86-ZK-4123
 		if (isMeshLoaded && wgt.$instanceof(zul.mesh.HeaderWidget)) {
-			var body = wgt.parent.parent.ebody;
-			hasVScroll = zkp.hasVScroll() || zk(body).hasVScroll();
-			hasHScroll = zkp.hasHScroll() || zk(body).hasHScroll();
+			var mesh = wgt.parent.parent;
+			if (mesh._nativebar) {
+				var body = mesh.ebody,
+					meshBodyHasVScroll = zk(body).hasVScroll(),
+					meshBodyHasHScroll = zk(body).hasHScroll();
+			}
 		}
 
 		// Bug 3185686, B50-ZK-452
-		if (hasVScroll) //with vertical scrollbar
+		if (hasVScroll || meshBodyHasVScroll) //with vertical scrollbar
 			wdh -= (scrWdh = jq.scrollbarWidth());
 			
 		// B50-3312936.zul
-		if (hasHScroll) //with horizontal scrollbar
+		if (hasHScroll || meshBodyHasHScroll) //with horizontal scrollbar
 			hgh -= scrWdh || jq.scrollbarWidth();
 			
 		for (; c; c = c.nextSibling)
