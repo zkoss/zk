@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4154.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 10 12:15:46 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open DevTools > Performance (Chrome)
+        2. Record.
+        3. Resize the browser width once.
+        4. Stop Record.
+        5. Manually counting the "forced reflow" warnings. It should be fewer than 100.
+    </label>
+    <div vflex="1" width="100%" style="border: 1px solid red;">
+        <vlayout vflex="1" hflex="1">
+            <forEach begin="1" end="5" varStatus="outer">
+                <hlayout vflex="1" hflex="1">
+                    <forEach begin="1" end="10" varStatus="inner">
+                        <div hflex="1">
+                            ${outer.index}-${inner.index}
+                        </div>
+                    </forEach>
+                </hlayout>
+            </forEach>
+        </vlayout>
+    </div>
+</zk>

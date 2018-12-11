@@ -3366,9 +3366,15 @@ unbind_: function (skipper, after) {
 	},
 	resetSize_: function (orient) {
 		var n = this.$n();
-		if (n.scrollTop || n.scrollLeft) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
-			return;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
-		n.style[orient == 'w' ? 'width' : 'height'] = '';
+		fastdom.measure(function () {
+			// keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
+			// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
+			if (!n.scrollTop && !n.scrollLeft) {
+				fastdom.mutate(function () {
+					n.style[orient == 'w' ? 'width' : 'height'] = '';
+				});
+			}
+		});
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).

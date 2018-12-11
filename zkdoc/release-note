@@ -47,6 +47,7 @@ ZK 8.6.1
   ZK-4072: selected tab not scrolling into view
   ZK-4110: OSGI conflict between imports after ZK-3878
   ZK-4151: Inconsistent drag message in grid with masterdetail
+  ZK-4154: css reflows caused by old fix for IE8
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
