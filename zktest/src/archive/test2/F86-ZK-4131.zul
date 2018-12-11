@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4131.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Dec 10 17:38:15 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in all themes
+		2. Click menu
+		3. The menupopup should have vertical scrollbar
+	</label>
+	<hlayout>
+		<a href="?zktheme=breeze" label="Breeze"/>
+		<a href="?zktheme=sapphire" label="Sapphire"/>
+		<a href="?zktheme=silvertail" label="Silvertail"/>
+		<a href="?zktheme=atlantic" label="Atlantic"/>
+		<a href="?zktheme=default" label="Default"/>
+	</hlayout>
+	<hlayout>
+		<menubar>
+			<menu label="menu">
+				<menupopup>
+					<forEach begin="0" end="100">
+						<menuitem label="Item ${each}"/>
+					</forEach>
+				</menupopup>
+			</menu>
+		</menubar>
+	</hlayout>
+</zk>
