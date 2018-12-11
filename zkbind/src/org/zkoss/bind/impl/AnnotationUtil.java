@@ -38,11 +38,16 @@ public class AnnotationUtil {
 	@SuppressWarnings("rawtypes")
 	public static Annotation getOverrideAnnotation(ComponentCtrl compCtrl, String propName, String annoName) {
 		Collection<Annotation> annos = compCtrl.getAnnotations(propName, annoName);
-		if (annos.size() <= 0)
+		if (annos.isEmpty())
 			return null;
-		//TODO the real implementation, currently I use the last one
+		return getActivatedAnnotation(annos);
+	}
+
+	// Deal with multiple annotations
+	private static Annotation getActivatedAnnotation(Collection<Annotation> annos) {
+		// Use last defined annotation instead of default annotation if any
 		if (annos instanceof List) {
-			return (Annotation) ((List) annos).get(((List) annos).size() - 1);
+			return ((List<Annotation>) annos).get(annos.size() - 1);
 		}
 		Iterator<Annotation> it = annos.iterator();
 		Annotation anno = it.next();
@@ -67,23 +72,15 @@ public class AnnotationUtil {
 	public static Annotation getSystemAnnotation(ComponentCtrl compCtrl, String propName) {
 		//compatible to old spec, gets no ZKBIND prefix in annotation property first
 		Collection<Annotation> annos = compCtrl.getAnnotations(propName, Binder.ZKBIND);
-		if (annos.size() <= 0) {
+		if (annos.isEmpty()) {
 			if (propName == null)
 				return null;
 			annos = compCtrl.getAnnotations(ZKBIND_PREFIX + propName, Binder.ZKBIND);
-			if (annos.size() <= 0)
+			if (annos.isEmpty())
 				return null;
 		}
-		//Use custom ZKBIND annotation instead of default ZKBIND annotation if any
-		if (annos instanceof List) {
-			return (Annotation) ((List) annos).get(0);
-		}
-		Iterator<Annotation> it = annos.iterator();
-		Annotation anno = it.next();
-		while (it.hasNext()) {
-			anno = it.next();
-		}
-		return anno;
+
+		return getActivatedAnnotation(annos);
 	}
 
 	//ZK-1908 Databinding Load order causing problems on Paging component.
