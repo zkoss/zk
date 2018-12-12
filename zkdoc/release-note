@@ -42,6 +42,7 @@ ZK 8.6.1
   ZK-4115: listbox + frozen column widths resetting when scrolling
   ZK-3989: Firefox default document-level mouseUp event sometime prevents selection in input
   ZK-4123: Listbox renders a horizontal scrollbar unexpectedly
+  ZK-4130: menu popup closes when scrolling
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
