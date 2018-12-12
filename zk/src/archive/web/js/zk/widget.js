@@ -3467,7 +3467,7 @@ unbind_: function (skipper, after) {
 	getDragMessage_: function () {
 		if (jq.nodeName(this.getDragNode(), 'tr', 'td', 'th')) {
 			var n = this.$n('real') || this.getCaveNode(),
-				msg = n ? n.textContent || n.innerText || '' : '';
+				msg = n ? n.innerText || '' : '';
 			return msg ? zUtl.encodeXML(msg) : msg;
 		}
 	},
