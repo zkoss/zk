@@ -320,12 +320,13 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		if (child.$instanceof(zul.sel.Optgroup))
 			this._groupsInfo.push(child);
-		this.requestRerender_(true);
+		if (this.desktop)
+			this.requestRerender_(true);
 	},
 	onChildRemoved_: function (child) {
 		if (child.$instanceof(zul.sel.Optgroup))
 			this._groupsInfo.$remove(child);
-		if (!this.childReplacing_)
+		if (this.desktop && !this.childReplacing_)
 			this.requestRerender_(true);
 	},
 	requestRerender_: function (fromServer) {
