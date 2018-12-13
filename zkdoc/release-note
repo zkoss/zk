@@ -44,6 +44,7 @@ ZK 8.6.1
   ZK-4123: Listbox renders a horizontal scrollbar unexpectedly
   ZK-4130: menu popup closes when scrolling
   ZK-4072: selected tab not scrolling into view
+  ZK-4110: OSGI conflict between imports after ZK-3878
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
