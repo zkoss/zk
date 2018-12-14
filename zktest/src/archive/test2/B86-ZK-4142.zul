@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4142.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Dec 13 15:24:33 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in all browsers on Windows (except Firefox)
+		2. Select the text from "text before" to "text after"
+		3. Drag the knob
+		4. Text should not be dragged, the drag behavior should be the same as normal slider
+	</label>
+	Text before
+	<slider mold="knob" minpos="0.0" maxpos="100.0"
+			curpos="80" step="1" width="300px" angleArc="360"
+			style="border: 1px solid black;" strokeWidth="120"/>
+	Text after
+	<separator/>
+	Text before
+	<slider minpos="0.0" maxpos="100.0"
+			curpos="80" step="1" width="300px"/>
+	Text after
+</zk>
