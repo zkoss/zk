@@ -22,6 +22,7 @@ import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.Path;
 import org.zkoss.bind.impl.SimpleBindXelContext;
+import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.bind.sys.LoadBinding;
@@ -237,8 +238,17 @@ public class BindELResolver extends XelELResolver {
 			final Binder binder = bctx.getBinder();
 			final TrackerImpl tracker = (TrackerImpl) ((BinderCtrl) binder).getTracker();
 			final Set<Object> beans = tracker.getEqualBeans(base);
+			Object originalBean = base;
+			if (base instanceof FormProxyObject) {
+				originalBean = ((FormProxyObject) base).getOriginObject();
+			}
 			beans.remove(base);
 			for (Object candidate : beans) {
+				if (candidate instanceof FormProxyObject) {
+					Object originalCandidate = ((FormProxyObject) candidate).getOriginObject();
+					if (Objects.equals(originalBean, originalCandidate))
+						continue;
+				}
 				super.setValue(elCtx, candidate, prop, value); //might recursive back
 			}
 		} finally {

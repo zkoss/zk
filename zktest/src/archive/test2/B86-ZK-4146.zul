@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4146.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Sep 19 10:34:41 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Click button, and the "Form Dirty Flag" should be false
+	</label>
+	<window border="normal" title="hello" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4146VM')">
+		<div id="testForm"
+			 form="@id('formData') @load(vm.formBean)">
+			<button id="btn" label="add save binding"/>
+			<separator/>
+			<checkbox label="load binding" checked="@load(formData.dataBean.checked)" />
+			<div fulfill="btn.onClick">
+				<checkbox label="save binding" checked="@bind(formData.dataBeanHolder.dataBean.checked)" />
+			</div>
+			<separator/>
+			<label value="Form Dirty Flag:" />
+			<label id="flag" value="@load(formDataStatus.dirty)" />
+		</div>
+	</window>
+</zk>
+
+
