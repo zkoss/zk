@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4151.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Dec 12 14:35:07 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.drag the row when detail(arrow on the left) is opened/closed.
+		2.you should see the drag message consistent.
+	</label>
+	<grid fixedLayout="true" width="600px">
+		<columns>
+			<column width="40px" />
+			<column>Product Name</column>
+			<column>Price</column>
+			<column>Item location</column>
+		</columns>
+		<rows>
+			<row id="row" draggable="my message">
+				<detail id="detail">
+					<window>
+						<image width="200px" height="200px" src="/test2/img/icon_update.png" />
+						<vlayout>
+							<label value="Item Specifics - Item Condition    " style="font-weight:bold;font-style: italic;" />
+							<hlayout>
+								<label value="Condition:" />
+								<label value="Used" style="font-weight:bold;" />
+							</hlayout>
+							<hlayout>
+								<label value="Brand:" />
+								<label value="Apple" style="font-weight:bold;" />
+							</hlayout>
+							<hlayout>
+								<label value="Technology:" />
+								<label value="DVI" style="font-weight:bold;" />
+							</hlayout>
+							<hlayout>
+								<label value="Monitor Type:" />
+								<label value="LCD/Flat Panel" style="font-weight:bold;" />
+							</hlayout>
+						</vlayout>
+					</window>
+				</detail>
+				<label value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+				<label style="color:green;float:right;" value="US $202.50" />
+				<label value="tulsa, ok, United States" />
+			</row>
+		</rows>
+	</grid>
+</zk>
