@@ -15,6 +15,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <language-addon>
 	<!-- The name of this addon. It must be unique -->
 	<addon-name>zktest</addon-name>
+	<depends>zkmax</depends>
 
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
@@ -92,5 +93,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<component-name>B85_ZK_3988MyComp</component-name>
 		<macro-uri>/test2/B85-ZK-3988MyComp.zul</macro-uri>
 		<component-class>org.zkoss.zktest.test2.B85_ZK_3988MyComp</component-class>
+	</component>
+
+	<!-- ZK-4128 -->
+	<component>
+		<component-name>zk4128listbox</component-name>
+		<extends>listbox</extends>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.zktest.test2.B86_ZK_4128Converter</attribute-value>
+			</attribute>
+		</annotation>
 	</component>
 </language-addon>

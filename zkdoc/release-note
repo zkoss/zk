@@ -49,6 +49,7 @@ ZK 8.6.1
   ZK-4151: Inconsistent drag message in grid with masterdetail
   ZK-4154: css reflows caused by old fix for IE8
   ZK-4159: listbox (mold="select") re-renders after first au response
+  ZK-4128: overriding zkbind listbox model converter doesn't work
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

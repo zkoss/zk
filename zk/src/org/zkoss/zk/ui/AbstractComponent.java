@@ -149,8 +149,6 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (mold != null && mold.length() > 0 && !DEFAULT.equals(mold))
 			initAuxInfo().mold = mold;
 
-		addSharedAnnotationMap(Impls.getClassAnnotationMap(this.getClass()));
-
 		final Execution exec = Executions.getCurrent();
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
 		if (curInfo != null) {
@@ -182,6 +180,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			else
 				_def = ComponentsCtrl.DUMMY;
 		}
+
+		addSharedAnnotationMap(Impls.getClassAnnotationMap(this.getClass()));
 
 		if (this instanceof IdSpace)
 			initAuxInfo().spaceInfo = new SpaceInfo();
