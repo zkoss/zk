@@ -51,6 +51,7 @@ ZK 8.6.1
   ZK-4159: listbox (mold="select") re-renders after first au response
   ZK-4128: overriding zkbind listbox model converter doesn't work
   ZK-4152: FF drag from inside div with overflow:auto fails to drop
+  ZK-4137: redirect + confirmClose = client engine stops
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
