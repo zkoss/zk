@@ -52,6 +52,7 @@ ZK 8.6.1
   ZK-4128: overriding zkbind listbox model converter doesn't work
   ZK-4152: FF drag from inside div with overflow:auto fails to drop
   ZK-4137: redirect + confirmClose = client engine stops
+  ZK-4146: form set to dirty if a save binding point to same bean as a previous load binding
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
