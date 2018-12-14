@@ -884,8 +884,14 @@ jq(function () {
 	var _oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = function () {
 		if (!zk.skipBfUnload) {
-			if (zk.confirmClose)
+			if (zk.confirmClose) {
+				if (zAu.disabledRequest) {
+					setTimeout(function () { //If user click 'cancel', the disabledRequest should be false. Ref: https://stackoverflow.com/questions/4650692/
+						zAu.disabledRequest = false;
+					}, 0);
+				}
 				return zk.confirmClose;
+			}
 
 			for (var j = 0; j < _bfUploads.length; ++j) {
 				var s = _bfUploads[j]();
