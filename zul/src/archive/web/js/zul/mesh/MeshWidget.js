@@ -871,10 +871,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					var revisedWidth = zk(bdcol).revisedWidth(Math.round(wd));
 					//B70-ZK-2509: w.$n().offsetWidth is small when there are many columns at beginning, so save revised width if any
 					w._origWd = revisedWidth + 'px';
-					bdcol.style.width = revisedWidth + 'px';
-					hdcol.style.width = bdcol.style.width;
-					if (ftcol)
-						ftcol.style.width = bdcol.style.width;
+					this._syncWidth(bdcol, hdcol, ftcol, revisedWidth);
 
 					//B70-ZK-2394: store total bdcol width
 					tblWidth += revisedWidth;
@@ -893,17 +890,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					fttbl = this.efoottbl;
 
 				if (hdtbl) {
-					hdtbl.style.width = tblWidth + 'px';
-					if (bdtbl)
-						bdtbl.style.width = tblWidth + 'px';
-					if (fttbl)
-						fttbl.style.width = tblWidth + 'px';
+					this._syncWidth(hdtbl, bdtbl, fttbl, tblWidth);
 				}
 			}
 
 			_adjMinWd(this);
 			this._afterCalcSize();
 		}
+	},
+	_syncWidth: function (body, head, foot, width) {
+		fastdom.mutate(function () {
+			var widthPx = jq.px0(width);
+			body.style.width = widthPx;
+			if (head) head.style.width = widthPx;
+			if (foot) foot.style.width = widthPx;
+		});
 	},
 	_bindDomNode: function () {
 		this.ehead = this.$n('head');
