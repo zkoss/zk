@@ -61,6 +61,7 @@ ZK 8.6.1
   ZK-4178: "Aug 32, 2018" became valid in lenient datebox after ZK-4023
   ZK-4076: update JS polyfills for String prototype functions
   ZK-4157: contentEditable is not working on ios mobile device
+  ZK-4170: Slider in knob mold default height is calculated from the parent component, breaks layout
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
