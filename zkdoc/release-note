@@ -59,6 +59,7 @@ ZK 8.6.1
   ZK-4074: Applet method invoke errors (IE)
   ZK-4100: strictDate evaluated too early in ZK-4023
   ZK-4178: "Aug 32, 2018" became valid in lenient datebox after ZK-4023
+  ZK-4076: update JS polyfills for String prototype functions
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

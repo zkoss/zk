@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4076.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 19 16:52:12 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+    window.onerror = function (message, source, lineno, colno, error) {
+        zk.log(message);
+    };
+
+    function assertEquals(actual, expected) {
+        if (actual !== expected)
+            throw new Error('Expected ' + expected + ' but got ' + actual);
+    }
+    ]]>
+    </script>
+    <label>
+        Click every button, and it shouldn't cause any JavaScript exception.
+    </label>
+
+    <vlayout xmlns:w="client">
+        <button label="test String.prototype.startsWith">
+            <attribute w:name="onClick"><![CDATA[
+            var string = 'I\xF1t\xEBrn\xE2ti\xF4n\xE0liz\xE6ti\xF8n\u2603\uD83D\uDCA9';
+            assertEquals(string.startsWith('\xF1t\xEBr'), false);
+            assertEquals(string.startsWith('\xF1t\xEBr', 1), true);
+            assertEquals('[a-z]+(bar)?'.startsWith('(bar)?', 6), true);
+            assertEquals('[a-z]+(bar)?'.startsWith('[a-z]+'), true);
+            zk.log('test ok');
+            ]]>
+            </attribute>
+        </button>
+        <button label="test String.prototype.endsWith">
+            <attribute w:name="onClick"><![CDATA[
+            var string = 'I\xF1t\xEBrn\xE2ti\xF4n\xE0liz\xE6ti\xF8n\u2603\uD83D\uDCA9';
+            assertEquals(string.endsWith('\xF1t\xEBr'), false);
+            assertEquals(string.endsWith('\xF1t\xEBr', 5), true);
+            assertEquals('[a-z]+(bar)?'.endsWith('(bar)?'), true);
+            assertEquals('[a-z]+(bar)?'.endsWith('[a-z]+', 6), true);
+            zk.log('test ok');
+            ]]>
+            </attribute>
+        </button>
+    </vlayout>
+</zk>
