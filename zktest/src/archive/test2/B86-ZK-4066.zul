@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4066.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Wed Dec 12 11:57:59 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        List cols = Collections.nCopies(50, "col");
+        ListModelList rows = new ListModelList(Collections.nCopies(100, "row"));
+    ]]></zscript>
+    <label multiline="true">
+        1. Open DevTools (Chrome) &gt; Performance.
+        2. Click "Start profiling and reload page".
+        3. When the page completes loading, click "Stop".
+        4. The rendering time should be less than 2000ms (or observe "Forced reflow" count under _adjFlexWd).
+    </label>
+    <grid height="600px" model="${rows}" span="true">
+        <custom-attributes org.zkoss.zul.grid.rod="true"/>
+        <columns>
+            <forEach items="${cols}">
+                <column hflex="min" label="col-${forEachStatus.index}" />
+            </forEach>
+        </columns>
+        <template name="model">
+            <row>
+                <forEach items="${cols}">
+                    <cell>
+                        cell
+                    </cell>
+                </forEach>
+            </row>
+        </template>
+    </grid>
+</zk>
