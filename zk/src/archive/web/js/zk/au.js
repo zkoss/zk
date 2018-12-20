@@ -1323,14 +1323,32 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 */
 	download: function (url) {
 		if (url) {
-			var ifr = jq('#zk_download')[0];
-			if (ifr) {
-				ifr.src = url; //It is OK to reuse the same iframe
-			} else {
-				var html = '<iframe src="' + url
-				+ '" id="zk_download" name="zk_download" style="display:none;width:0;height:0;border:0" frameborder="0"></iframe>';
-				jq(document.body).append(html);
+			var ifr = jq('#zk_download')[0],
+				ie = zk.ie,
+				sbu = zk.skipBfUnload;
+			if (ie) zk.skipBfUnload = true;
+
+			if (!ifr) {
+				ifr = document.createElement('iframe');
+				ifr.id = ifr.name = 'zk_download';
+				ifr.style.display = 'none';
+				ifr.style.width = ifr.style.height = ifr.style.border = ifr.frameBorder = '0';
+				document.body.appendChild(ifr);
 			}
+
+			if (ie < 11) { // Since IE11 dropped onreadystatechange support: https://stackoverflow.com/a/26835889
+				// Use onreadystatechange to listen if iframe is loaded
+				ifr.onreadystatechange = function () {
+					var state = ifr.contentWindow.document.readyState;
+					if (state === 'interactive')
+						setTimeout(function () { zk.skipBfUnload = sbu; }, 0);
+				};
+			}
+			ifr.src = url; //It is OK to reuse the same iframe
+
+			// Workaround for IE11: wait a second (not perfect) for iframe loading
+			if (ie === 11)
+				setTimeout(function () { zk.skipBfUnload = sbu; }, 1000);
 		}
 	},
 	/** Prints the content of the browser window.
