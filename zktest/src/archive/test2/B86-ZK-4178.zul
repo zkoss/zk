@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4178.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 20 12:49:13 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. key Aug 32, 2018 in the first datebox, it should be an error message.
+        2. key Aug 32, 2018 in the second datebox, it should be an error message.
+    </label>
+    <datebox format="MMM d, yyyy" id="d1" lenient="true" strictDate="false"/>
+    <datebox format="MMM d, yyyy" id="d2" lenient="true" strictDate="true"/>
+</zk>

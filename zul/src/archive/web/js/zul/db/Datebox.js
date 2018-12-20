@@ -266,12 +266,15 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		},
 		/**
-		 * Sets the strictDate property in datebox. If strictDate is false, it allows the value of date larger than 31 and recalculate it to the correct date.
+		 * Sets whether or not date/time should be strict.
+		 * If true, any invalid input like "Jan 0" or "Nov 31" would be refused.
+		 * If false, it won't be checked and let lenient parsing decide.
 		 * @since 8.6.0
 		 * @param boolean strictDate
 		 */
 		/**
-		 * Returns the boolean value of the strictDate
+		 * Returns whether or not date/time should be strict.
+		 * <p>Default: false.
 		 * @since 8.6.0
 		 * @return boolean
 		 */

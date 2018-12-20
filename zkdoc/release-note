@@ -57,6 +57,8 @@ ZK 8.6.1
   ZK-4066: forced CSS reflow loop in MeshWidget
   ZK-4034: IE11 file download triggers onBeforeUnload
   ZK-4074: Applet method invoke errors (IE)
+  ZK-4100: strictDate evaluated too early in ZK-4023
+  ZK-4178: "Aug 32, 2018" became valid in lenient datebox after ZK-4023
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

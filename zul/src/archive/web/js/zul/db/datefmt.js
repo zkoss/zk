@@ -168,7 +168,9 @@ var LeapDay = zk.$extends(zk.Object, {
 	}
 });
 zk.fmt.Date = {
-	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz, strictDate) {
+	// strictDate: No invalid date allowed (e.g., Jan 0 or Nov 31)
+	// nonLenient: strictDate + inputs must match this object's format (no additional character allowed)
+	parseDate: function (txt, fmt, nonLenient, refval, localizedSymbols, tz, strictDate) {
 		if (!fmt) fmt = 'yyyy/MM/dd';
 		refval = refval || zUtl.today(fmt, tz);
 
@@ -218,8 +220,8 @@ zk.fmt.Date = {
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
-					// ZK-1985: Determine if token's length is less than the expected when strict is true.
-					if (strict && token && (token.length < len))
+					// ZK-1985: Determine if token's length is less than the expected when nonLenient is true.
+					if (nonLenient && token && (token.length < len))
 						return;
 
 					if (nosep) {
@@ -230,8 +232,8 @@ zk.fmt.Date = {
 						}
 					}
 
-					// ZK-1985:	Determine if token contains non-digital word when strict is true.
-					if (strict && token && regexp.test(token))
+					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
+					if (nonLenient && token && regexp.test(token))
 						return;
 
 					if (!isNaN(nv = _parseInt(token))) {
@@ -256,7 +258,7 @@ zk.fmt.Date = {
 						for (var index = symbols.length, brkswch; --index >= 0;) {
 							var monStr = symbols[index].toLowerCase();
 
-							if ((strict && mon == monStr) || (!strict && mon.startsWith(monStr))) {
+							if ((nonLenient && mon == monStr) || (!nonLenient && mon.startsWith(monStr))) {
 								var monStrLen = monStr.length;
 
 								if (token && token.length > monStrLen)
@@ -308,34 +310,30 @@ zk.fmt.Date = {
 						_parseToken(token, ts, --i, len);
 					break;
 				case 'd':
-					// ZK-1985:	Determine if token's length is less than expected when strict is true.
-					if (strict && token && (token.length < len))
+					// ZK-1985:	Determine if token's length is less than expected when nonLenient is true.
+					if (nonLenient && token && (token.length < len))
 						return;
 
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 
-					// ZK-1985:	Determine if token contains non-digital word when strict is true.
-					if (strict && token && regexp.test(token))
+					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
+					if (nonLenient && token && regexp.test(token))
 						return;
 
 					if (!isNaN(nv = _parseInt(token))) {
 						d = nv;
 						dFound = true;
-						if (strictDate) {
-							dt = new LeapDay(y - localizedSymbols.YDELTA, m, d, hr, min, sec, msec, tz);
-							dt.setOffset(localizedSymbols.YDELTA);
-							if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d)
-								return; //failed
-						}
+						if (d < 0 || d > 31) //restrict since user might input year for day (ok to allow 0 and 31 for easy entry)
+							return; //failed
 					}
 					break;
 				case 'H':
 				case 'h':
 				case 'K':
 				case 'k':
-					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
-					if (strict && token && (token.length < len))
+					// ZK-1985:	Determine if token's length is less than the expected when nonLenient is true.
+					if (nonLenient && token && (token.length < len))
 						return;
 
 					if (hasHour1 ? (cc == 'H' || cc == 'k') : (cc == 'h' || cc == 'K'))
@@ -343,8 +341,8 @@ zk.fmt.Date = {
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 
-					// ZK-1985:	Determine if token contains non-digital word when strict is true.
-					if (strict && token && regexp.test(token))
+					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
+					if (nonLenient && token && regexp.test(token))
 						return;
 
 					if (!isNaN(nv = _parseInt(token)))
@@ -354,15 +352,15 @@ zk.fmt.Date = {
 				case 'm':
 				case 's':
 				case 'S':
-					// ZK-1985:	Determine if token's length is less than the expected when strict is true.
-					if (strict && token && (token.length < len))
+					// ZK-1985:	Determine if token's length is less than the expected when nonLenient is true.
+					if (nonLenient && token && (token.length < len))
 						return;
 
 					if (nosep)
 						token = _parseToken(token, ts, --i, len);
 
-					// ZK-1985:	Determine if token contains non-digital word when strict is true.
-					if (strict && token && regexp.test(token))
+					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
+					if (nonLenient && token && regexp.test(token))
 						return;
 
 					if (!isNaN(nv = _parseInt(token))) {
@@ -394,10 +392,11 @@ zk.fmt.Date = {
 		}
 		if (!dFound && dt.getMonth() != m)
 			dt = Dates.newInstance([y, m + 1, 0, hr, min, sec, msec], tz); //last date of m
-		if (strict) {
+		if (nonLenient || strictDate)
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d
 				|| dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec) //ignore msec (safer though not accurate)
 				return; //failed
+		if (nonLenient) {
 			txt = txt.trim();
 			for (var j = 0; j < ts.length; j++)
 				txt = txt.replace(ts[j], '');
