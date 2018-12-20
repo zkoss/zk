@@ -128,6 +128,13 @@ public class Datebox extends FormatInputElement {
 		return _weekOfYear;
 	}
 
+	/**
+	 * Sets whether or not date/time should be strict.
+	 * If true, any invalid input like "Jan 0" or "Nov 31" would be refused.
+	 * If false, it won't be checked and let lenient parsing decide.
+	 *
+	 * @since 8.6.0
+	 */
 	public void setStrictDate(boolean strictDate) {
 		if (_strictDate != strictDate) {
 			_strictDate = strictDate;
@@ -135,6 +142,12 @@ public class Datebox extends FormatInputElement {
 		}
 	}
 
+	/**
+	 * Returns whether or not date/time should be strict.
+	 * <p>Default: false.
+	 *
+	 * @since 8.6.0
+	 */
 	public boolean isStrictDate() {
 		return _strictDate;
 	}

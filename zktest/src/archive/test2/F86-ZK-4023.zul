@@ -15,13 +15,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 <zk>
 	<label multiline="true">
-		1. key Aug 32, 2018 in the first datebox, it should turn into Sep 1, 2018.
-		2. key Aug 32, 2018 in the second datebox, it should be an error message.
-		3. key Feb 30, 2018 in the second datebox, it should be an error message.
-		4. key Feb 0, 2018 in the second datebox, it should be an error message.
+		1. key Jan 0, 2018 in the first datebox, it should turn into Dec 31, 2017.
+		2. key Feb 31, 2018 in the first datebox, it should turn into Mar 3, 2018.
+		3. key Dec 20, 2018 in the first datebox, it should remain Dec 20, 2018.
+		4. key Jan 0, 2018 in the second datebox, it should be an error message.
+		5. key Feb 31, 2018 in the second datebox, it should be an error message.
+		6. key Dec 20, 2018 in the second datebox, it should remain Dec 20, 2018.
 	</label>
-	<datebox format="MMM d, yyyy"  id="d1" lenient="true" strictDate="false"/>
-	<datebox format="MMM d, yyyy"  id="d2" lenient="true" strictDate="true"/>
-	<separator height="500px"/>
-	<button id="dummy" label="dummy"/>
+	<datebox format="MMM d, yyyy" id="d1" lenient="true" strictDate="false"/>
+	<datebox format="MMM d, yyyy" id="d2" lenient="true" strictDate="true"/>
 </zk>
