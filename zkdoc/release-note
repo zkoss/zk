@@ -56,6 +56,7 @@ ZK 8.6.1
   ZK-4142: slider knob text selection issues
   ZK-4066: forced CSS reflow loop in MeshWidget
   ZK-4034: IE11 file download triggers onBeforeUnload
+  ZK-4074: Applet method invoke errors (IE)
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

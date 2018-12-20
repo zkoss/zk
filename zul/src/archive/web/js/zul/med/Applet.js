@@ -114,20 +114,19 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 		var n = this.$n(),
 			len = arguments.length;
 		if (n && len >= 1) {
-			var single = len < 3,
-				begin = single ? '(' : '([',
-				end = single ? ')' : '])',
-				expr = 'n.' + arguments[0] + begin;
-			for (var j = 1; j < len;) {
-				if (j != 1) expr += ',';
-				var s = arguments[j++];
-				expr += '"' + (s ? s.replace('"', '\\"') : '') + '"';
-			}
+			var fn = arguments[0];
 			try {
-				// eslint-disable-next-line no-eval
-				eval(expr + end); //don't use $eval since this function shall not be compressed
+				if (len === 1)
+					n[fn]();
+				else if (len === 2)
+					n[fn](arguments[1]);
+				else {
+					var args = Array.apply(null, arguments);
+					args.shift();
+					n[fn](args);
+				}
 			} catch (e) {
-				zk.error('Failed to invoke applet\'s method: ' + expr + '\n' + e.message);
+				zk.error('Failed to invoke applet\'s method: ' + fn + '\n' + e.message);
 			}
 		}
 	} : function () {
