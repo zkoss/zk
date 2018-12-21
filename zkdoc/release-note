@@ -8,6 +8,7 @@ ZK 8.6.1
   ZK-4059: Add option to keep menupopup=auto open after setting column visibility
   ZK-4052: add a warning in javadoc of Clients.showNotification() about not escaped content
   ZK-4131: make menupopups with many menuitems scrollable
+  ZK-4121: Add the error acceptance median as a settable attribute in barcodescanner
 
 * Bugs
   ZK-4114: orgnode label missing font styles
