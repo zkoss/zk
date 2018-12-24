@@ -21,5 +21,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	  the current servlet context will be passed.
 	<function class="foo.Foo" name="outFoo"/>
 	-->
+	<stylesheet href="~./zul/font/font-awesome.css.dsp"/>
 	<stylesheet href="~./zul/css/norm.css.dsp"/>
 </css>

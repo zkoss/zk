@@ -1,13 +1,15 @@
+@import "~./zul/less/_zkmixins.less";
+
 /* FONT AWESOME CORE
  * -------------------------- */
 
-[class^="z-icon-"],
-[class*=" z-icon-"] {
+[class^="@{fa-css-prefix}-"],
+[class*=" @{fa-css-prefix}-"] {
   .baseIconFont();
 }
 
-[class^="z-icon-"]:before,
-[class*=" z-icon-"]:before {
+[class^="@{fa-css-prefix}-"]:before,
+[class*=" @{fa-css-prefix}-"]:before {
   text-decoration: inherit;
   display: inline-block;
   speak: none;
