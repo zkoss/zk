@@ -68,6 +68,7 @@ ZK 8.6.1
   ZK-4163: file cancel link missing in fileupload dialog
   ZK-4143: all columns hidden become visible in chrome
   ZK-4063: hard coded timeout for zk.endProcessing
+  ZK-4141: Desktop.setBookmark escapes slash symbols wrongly
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

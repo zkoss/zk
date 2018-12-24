@@ -40,7 +40,7 @@ zk.bmk = (function () { //used internally
 		return url;
 	}
 	function _toHash(nm, hashRequired) {
-		nm = encodeURIComponent(nm);
+		nm = encodeURI(nm); //ZK-4141: Desktop.setBookmark escapes slash symbols wrongly
 		return (!hashRequired && zk.webkit) || !nm ? nm : '#' + nm;
 	}
 	function _bookmark(nm, replace) {
