@@ -16,7 +16,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 	<zscript>
 		boolean db1Flag = true, db2Flag = true;
 	</zscript>
-	<datebox weekOfYear="true" sclass="db1">
+	<datebox weekOfYear="true" sclass="db1" locale="en_US">
 		<attribute name="onCreate">
 			import java.text.SimpleDateFormat;
 			self.setValue(new SimpleDateFormat("yyyyMMdd").parse("20120101"));
@@ -31,7 +31,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</datebox>
 	<separator/>
-	<datebox weekOfYear="true" sclass="db2" locale="de">
+	<datebox weekOfYear="true" sclass="db2" locale="de_DE">
 		<attribute name="onCreate">
 			import java.text.SimpleDateFormat;
 			self.setValue(new SimpleDateFormat("yyyyMMdd").parse("20120101"));
