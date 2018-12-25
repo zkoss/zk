@@ -228,7 +228,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		// Bug ZK-1295 and ZK-2935: Disabled buttons cannot regain focus by re-enabling and then setting focus
 		var wgt = this,
 			btn = this.$n();
-		if (btn.disabled) {
+		if (btn && btn.disabled) {
 			if (!wgt._delayFocus) {
 				wgt._delayFocus = true;
 				setTimeout(function () {
@@ -245,7 +245,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		// Bug ZK-354: refer to _docMouseDown in mount.js for details
 		if (!zk.focusBackFix || !this._upload) {
-			zk(this.$n()).focus(timeout);
+			zk(btn).focus(timeout);
 		}
 		return true;
 	},
