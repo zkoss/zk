@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zk/config"
-	targetNamespace="http://www.zkoss.org/2005/zk/config" elementFormDefault="qualified" version="8.6.1.201811121230">
+	targetNamespace="http://www.zkoss.org/2005/zk/config" elementFormDefault="qualified" version="8.6.1.201812251209">
 	<xs:element name="zk">
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -35,6 +35,7 @@
 				<xs:element ref="auto-resend-timeout"/>
 				<xs:element ref="init-crash-script"/>
 				<xs:element ref="init-crash-timeout"/>
+				<xs:element ref="enable-history-state"/>
 			</xs:choice>
 		</xs:complexType>
 	</xs:element>
@@ -81,6 +82,8 @@
 	<xs:element name="init-crash-script" type="xs:string"/>
 
 	<xs:element name="init-crash-timeout" type="xs:integer"/>
+
+	<xs:element name="enable-history-state" type="xs:boolean"/>
 
 	<xs:element name="desktop-config">
 		<xs:complexType>
