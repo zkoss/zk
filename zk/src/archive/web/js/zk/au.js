@@ -228,12 +228,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					// Bug ZK-2516
 					zWatch.fire('onCommandReady', null, {timeout: -1, rtags: rtags}); //won't use setTimeout
 					zWatch.fire('onResponse', null, {timeout: 0, rtags: rtags}); //use setTimeout
+					if (rtags.onClientInfo) {
+						setTimeout(zk.endProcessing, 50); // always stop the processing
+						delete zk.clientinfo;
+					}
 				}, -1);
-				if (rtags.onClientInfo) {
-					setTimeout(zk.endProcessing, 50); // always stop the processing
-					delete zk.clientinfo;
-				}
-					
 			}
 			zk.ausending = false;
 			zk.doAfterAuResponse();
