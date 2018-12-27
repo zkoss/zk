@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4141.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Dec 24 16:31:03 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click "test" button then click "hash log" button, you should see "#/error/404".
+	</label>
+	<button id="test" onClick='desktop.setBookmark("/error/404")' label="test"/>
+	<button id="log" xmlns:w="client" w:onClick='zk.log(location.hash)' label="hash log"/>
+</zk>
