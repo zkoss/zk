@@ -18,8 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.Page;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Server;
@@ -29,13 +27,11 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +44,7 @@ import org.zkoss.zktest.zats.ztl.ZK;
 
 /**
  * A base class to test using WebDriver.
- * <p>Currently support Chromium headless and HtmlUnit</p>
+ * <p>Currently support Chromium headless</p>
  * @author jumperchen
  */
 public abstract class WebDriverTestCase {
@@ -74,7 +70,7 @@ public abstract class WebDriverTestCase {
 
 	protected WebDriver getWebDriver() {
 		if (driver == null) {
-			driver = new ChromiumHeadlessDriver(getWebDriverOptions());
+			driver = new ChromiumHeadlessDriver(getWebDriverOptions(), true);
 		}
 		return driver;
 	}
@@ -92,37 +88,6 @@ public abstract class WebDriverTestCase {
 		return options;
 	}
 
-	@Deprecated
-	public static class ZKWebDriver extends HtmlUnitDriver {
-		public ZKWebDriver() {
-		}
-
-		public ZKWebDriver(boolean enableJavascript) {
-			super(enableJavascript);
-		}
-
-		public ZKWebDriver(BrowserVersion version, boolean enableJavascript) {
-			super(version, enableJavascript);
-		}
-
-		public ZKWebDriver(BrowserVersion version) {
-			super(version);
-		}
-
-		public ZKWebDriver(Capabilities capabilities) {
-			super(capabilities);
-		}
-
-		public ZKWebDriver(Capabilities desiredCapabilities,
-				Capabilities requiredCapabilities) {
-			super(desiredCapabilities, requiredCapabilities);
-		}
-
-		public Page lastPage() {
-			return super.lastPage();
-		}
-
-	}
 	public WebDriver connect() {
 		return connect("");
 	}

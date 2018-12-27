@@ -2,9 +2,7 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.Assert.assertEquals;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
