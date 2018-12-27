@@ -811,6 +811,11 @@ public class ConfigParser {
 		if (v != null)
 			config.setInitCrashTimeout(v.intValue());
 
+		//ZK-4179: add new config to disable ZK history API
+		s = conf.getElementValue("enable-history-state", true);
+		if (s != null)
+			config.enableHistoryState(Boolean.parseBoolean(s));
+
 		//client (JS) packages
 		for (Iterator it = conf.getElements("package").iterator(); it.hasNext();) {
 			config.addClientPackage(IDOMs.getRequiredElementValue((Element) it.next(), "package-name"));

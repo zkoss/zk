@@ -187,6 +187,8 @@ public class Configuration {
 	private Set<String> _binderAnnotations;
 
 	private boolean _sourceMapEnabled = false;
+	private boolean _historyStateEnabled = true;
+
 	/** Constructor.
 	 */
 	public Configuration() {
@@ -3297,6 +3299,24 @@ public class Configuration {
 	 */
 	public boolean isSourceMapEnabled() {
 		return _sourceMapEnabled;
+	}
+
+	/** Sets whether history state handle is enabled.
+	 * If disabled, ZK won't generate any onHistoryPopState event even if history state is popped.
+	 * It is desirable to avoid unnecessary events back to server if history state is handled by front-end.
+	 * <p>Default: true (enabled).
+	 * @since 8.6.1
+	 */
+	public void enableHistoryState(boolean enable) {
+		_historyStateEnabled = enable;
+	}
+
+	/** Returns whether history state handle is enabled.
+	 * <p>Default: true (enabled).
+	 * @since 8.6.1
+	 */
+	public boolean isHistoryStateEnabled() {
+		return _historyStateEnabled;
 	}
 
 }

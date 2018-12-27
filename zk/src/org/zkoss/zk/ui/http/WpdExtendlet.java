@@ -686,6 +686,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			sb.append("kd:1,");
 		if (config.getPerformanceMeter() != null)
 			sb.append("pf:1,");
+		if (!config.isHistoryStateEnabled())
+			sb.append("hs:0,");
 
 		final String deviceType = getDeviceType();
 		Object[][] infs = config.getClientErrorReloads(deviceType, null);

@@ -764,4 +764,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<!--<name>org.zkoss.zk.au.AuWriters.ContentType</name>-->
 		<!--<value>json/application;charset=UTF-8</value>-->
 	<!--</library-property>-->
+
+	<!-- for F86-ZK-4179.zul -->
+	<!--<client-config>-->
+		<!--<enable-history-state>false</enable-history-state>-->
+	<!--</client-config>-->
 </zk>

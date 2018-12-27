@@ -17,13 +17,14 @@ zk.historystate = (function () {
 		initialURL = location.href;
 
 	return {
+		enabled: true,
 		onPopState: function (event) {
 			var initialPop = !popped && location.href == initialURL;
 			popped = true;
 			if (initialPop) return;
 
 			var data = {
-				state: event.originalEvent.state,
+				state: event.state,
 				url: location.href
 			};
 			zAu.send(new zk.Event(null, 'onHistoryPopState', data, { implicit: true }), 1);
@@ -31,7 +32,8 @@ zk.historystate = (function () {
 				zk.bmk.checkBookmark();
 		},
 		register: function () {
-			jq(window).bind('popstate', this.onPopState);
+			if (zk.historystate.enabled)
+				window.addEventListener('popstate', this.onPopState);
 		}
 	};
 })();
