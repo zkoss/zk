@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4120.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 24 11:01:03 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    You can use the same version of <a id="fa-css" href="~./zul/font/font-awesome.css.dsp" label="Font Awesome" /> in every theme.
+    <panel title="Window" width="500px" border="normal">
+        <panelchildren>
+            <hlayout>
+                <button iconSclass="z-icon-user-circle-o" label="My Info" />
+                <button iconSclass="z-icon-address-book" label="Contact" />
+                <button iconSclass="z-icon-microchip" label="Clean RAM" />
+            </hlayout>
+        </panelchildren>
+        <toolbar>
+            <hlayout>
+                <a href="?zktheme=breeze" label="Breeze" />
+                <a href="?zktheme=sapphire" label="Sapphire" />
+                <a href="?zktheme=silvertail" label="Silvertail" />
+                <a href="?zktheme=atlantic" label="Atlantic" />
+                <a href="?zktheme=default" label="Default" />
+            </hlayout>
+        </toolbar>
+    </panel>
+
+</zk>
