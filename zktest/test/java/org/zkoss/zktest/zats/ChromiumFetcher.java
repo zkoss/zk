@@ -167,14 +167,14 @@ class ChromiumFetcher {
 		Path executablePath;
 		switch (this.platform) {
 			case MAC:
-				executablePath = Paths.get("chrome-mac", "Chromium.app", "Contents", "MacOS", "Chromium");
+				executablePath = Paths.get(archiveName(this.platform, revision), "Chromium.app", "Contents", "MacOS", "Chromium");
 				break;
 			case LINUX:
-				executablePath = Paths.get("chrome-linux", "chrome");
+				executablePath = Paths.get(archiveName(this.platform, revision), "chrome");
 				break;
 			case WIN32:
 			case WIN64:
-				executablePath = Paths.get("chrome-win32", "chrome.exe");
+				executablePath = Paths.get(archiveName(this.platform, revision), "chrome.exe");
 				break;
 			default:
 				throw new IllegalArgumentException("Unsupported platform");
