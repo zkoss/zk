@@ -65,6 +65,7 @@ ZK 8.6.1
   ZK-4170: Slider in knob mold default height is calculated from the parent component, breaks layout
   ZK-4120: Upgrade/Align Fontawesome versions for all themes
   ZK-4144: Groupbox doesn't register content onScroll if closed during bind
+  ZK-4163: file cancel link missing in fileupload dialog
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
