@@ -2,8 +2,13 @@ language: java
 branches:
   except:
     - /.*-Stable$/
+install: nvm install stable
 script:
     - cd bin
-    - npm install
+    - npm ci
     - cd ..
     - ./build zel zcommon zweb zk zul zkbind zhtml zkplus
+# keep the npm cache around to speed up installs
+cache:
+  directories:
+  - "$HOME/.npm"

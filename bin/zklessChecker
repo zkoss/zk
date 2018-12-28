@@ -9,4 +9,4 @@ cd bin
 
 # install npm dependencies
 echo "installing zkless-engine and npm dependencies"
-npm update --dev --no-save || exit 1
+npm ci || exit 1

@@ -6,10 +6,9 @@
     "type": "git",
     "url": "https://github.com/zkoss/zk/"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "eslint": "^5.9.0",
-    "zkless-engine": "latest"
+  "dependencies": {
+    "eslint": "^5.11.1",
+    "zkless-engine": "^0.1.22"
   },
   "scripts": {},
   "author": "Potix",
