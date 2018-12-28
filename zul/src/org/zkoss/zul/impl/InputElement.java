@@ -80,6 +80,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	private boolean _valided;
 	private boolean _inplace;
 	private String _placeholder;
+	private Map<String, String> _inputAttributes;
 
 	/**
 	 * Returns the placeholder text
@@ -768,6 +769,47 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 			smartUpdate("errorboxIconSclass", getErrorboxIconSclass());
 		}
 	}
+	
+	/**
+	 * Returns the additional attributes which is set by setInputAttributes(Map<String, String> inputAttributes).
+	 * @return inputAttributes a Map with attribute names as the keys.
+	 * @since 8.6.1
+	 */
+	public Map<String, String> getInputAttributes() {
+		return _inputAttributes;
+	}
+
+	/**
+	 * Sets some additional attributes to the input html tag in the component.
+	 * This will only reset the additional attributes that are set by this method.
+	 * @param inputAttributes a Map with attribute names as the keys.
+	 * @since 8.6.1
+	 */
+	public void setInputAttributes(Map<String, String> inputAttributes) {
+		if (!Objects.equals(_inputAttributes, inputAttributes)) {
+			_inputAttributes = inputAttributes;
+			smartUpdate("inputAttributes", _inputAttributes);
+		}
+	}
+	
+	/**
+	 * Sets some additional attributes to the input html tag in the component.
+	 * This will only reset the additional attributes that are set by this method.
+	 * @param inputAttributes a String of attribute separate by ";" and follow name=value rule.
+	 * for example: "spellcheck=true;autocorrect=on"
+	 * @since 8.6.1
+	 */
+	public void setInputAttributes(String inputAttributes) {
+		if (!Strings.isEmpty(inputAttributes)) {
+			Map<String, String> map = new HashMap<String, String>();
+			String[] attributes = inputAttributes.split(";");
+			for (String attr : attributes) {
+				String[] keyAndValue = attr.split("=");
+				map.put(keyAndValue[0], keyAndValue[1]);
+			}
+			setInputAttributes(map);
+		}
+	}
 
 	//-- Component --//
 	/** Not childable. */
@@ -895,6 +937,8 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 
 		if (_placeholder != null)
 			render(renderer, "placeholder", _placeholder);
+		if (_inputAttributes != null)
+			render(renderer, "inputAttributes", _inputAttributes);
 
 		int v;
 		if ((v = getMaxlength()) > 0)
