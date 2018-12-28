@@ -73,6 +73,7 @@ ZK 8.6.1
   ZK-4091: Collapsing a Groupbox with invalidate causes a JavaScript error
   ZK-4145: nested menupopup opening direction
   ZK-4174: java component creation performance (unnecessary exception handling)
+  ZK-4162: select-all checkmark puts selected items in a reversed order
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

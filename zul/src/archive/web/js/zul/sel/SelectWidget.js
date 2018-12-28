@@ -999,7 +999,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	fireOnSelect: function (ref, evt) {
 		var data = [];
 
-		for (var it = this.getSelectedItems(), j = it.length; j--;)
+		for (var it = this.getSelectedItems(), len = it.length, j = 0; j < len; j++)
 			if (it[j].isSelected())
 				data.push(it[j]);
 

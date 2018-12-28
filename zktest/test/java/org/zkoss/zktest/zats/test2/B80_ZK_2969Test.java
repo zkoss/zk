@@ -53,6 +53,8 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 		// check to select all and un-select item 2, then compare selected items from both listbox
 		click(jq(".z-listheader-checkable").eq(0));
 		click(jq(".z-listbox").eq(0).find(".z-listitem-checkable").eq(1));
+		// it jumped to the last page since item 12 was the last checked item. We need jump back to page 1 first.
+		click(jq(".z-listbox").eq(1).find(".z-paging-first"));
 		waitResponse(true);
 		Iterator<JQuery> iterNonPaging = jq(".z-listbox").eq(0).find(".z-listitem-selected").iterator();
 		Iterator<JQuery> iterPaging = jq(".z-listbox").eq(1).find(".z-listitem-selected").iterator();
