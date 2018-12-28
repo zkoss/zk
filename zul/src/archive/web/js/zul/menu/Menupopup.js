@@ -123,7 +123,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				mwd = $m.outerWidth(),
 				mp = menu.parent,
 				mb = menu.getMenubar(),
-				ori = mb ? mb.getOrient() : '';
+				ori = mb ? mb.getOrient() : '',
+				calculateToRight = false,
+				left = -1;
 
 			// ZK-2356 should sync position after calling super.onResponse()
 			if (menu.isTopmost() && ori == 'horizontal' && n)
@@ -132,18 +134,45 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			while (mp && !mp.$instanceof(zul.menu.Menupopup))
 				mp = mp.parent;
 
+			// sync menupopup position according to parent menupopup if any,
+			// once expected position exceed the border, reverse open direction.
+			if (mp) {
+				if (mp._reverseDirection) {
+					// calculateToLeft
+					var expectedLeft = mol - nwd,
+						leftBorderExceeded = expectedLeft < 0,
+						expectedLeft = leftBorderExceeded ? mol + mwd : expectedLeft,
+						expectedRight = expectedLeft + nwd,
+						viewportRight = jq.innerX() + jq.innerWidth();
+					left = expectedRight > viewportRight ? viewportRight - nwd : expectedLeft;
+					this._reverseDirection = !leftBorderExceeded;
+				} else {
+					calculateToRight = true;
+				}
+			}
+
 			/* ZK-2040: should sync position
-			 * when the overlap between submenupopup and menupoup is greater than 5px
+			 * when the overlap between menu and menupopup is greater than 5px,
+			 * only check the overlap situation when parent menupopup does not exist
 			 */
-			if ((zk(n).isOverlapped(m, 1)
+			if (!mp && zk(n).isOverlapped(m, 1)
 					&& (((mol + mwd - nol > 5) && (ori != 'vertical'))
-					|| ((nol < mol + mwd / 2) && (ori == 'vertical'))))
-					|| (mp && mp._shallSync)) {
-				this._shallSync = true;
-				var left = mol + mwd,
-					right = left + nwd,
-					viewportRight = jq.innerX() + jq.innerWidth();
-				n.style.left = right < viewportRight ? jq.px0(left) : jq.px0(mol - nwd);
+					|| ((nol < mol + mwd / 2) && (ori == 'vertical')))) {
+				calculateToRight = true;
+			}
+
+			if (calculateToRight) {
+				var expectedLeft = mol + mwd,
+					expectedRight = expectedLeft + nwd,
+					viewportRight = jq.innerX() + jq.innerWidth(),
+					rightBorderExceeded = expectedRight > viewportRight,
+					expectedLeft = rightBorderExceeded ? mol - nwd : expectedLeft;
+				left = Math.max(expectedLeft, 0);
+				this._reverseDirection = rightBorderExceeded;
+			}
+
+			if (left >= 0) {
+				n.style.left = jq.px0(left);
 				// ZK-2119: should sync again for ie
 				if (zk.ie)
 					this.onShow();
@@ -165,8 +194,6 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (item) item.$class._rmActive(item);
 		this._curIndex = -1;
 		this.$class._rmActive(this);
-
-		this._shallSync = null;
 	},
 	open: function (ref, offset, position, opts) {
 		if (!this.isOpen())

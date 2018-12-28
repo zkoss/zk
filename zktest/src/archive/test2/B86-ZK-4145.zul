@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4145.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Dec 21 15:50:47 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click top left button
+		2. Hover on second menu recursively
+		3. Menupopup should open at right side until reach the right border
+		4. Click top right button
+		5. Hover on second menu recursively
+		6. Menupopup should open at left side until reach the left border
+	</label>
+	<hlayout width="100%">
+		<div hflex="1">
+			<button iconSclass="z-icon-bars" popup="menu"/>
+		</div>
+		<div align="right" hflex="1">
+			<button iconSclass="z-icon-bars" popup="menu"/>
+		</div>
+	</hlayout>
+	<menupopup id="menu">
+		<apply template="submenu" labelPrefix="menu" level="1"/>
+		<template name="submenu">
+			<menuitem label="${labelPrefix}-1"/>
+			<menu label="${labelPrefix}-2">
+				<if test="${level lt 30}">
+					<menupopup>
+						<apply template="submenu" labelPrefix="${labelPrefix}-2" level="${level + 1}"/>
+					</menupopup>
+				</if>
+			</menu>
+			<menuitem label="${labelPrefix}-3"/>
+		</template>
+	</menupopup>
+</zk>
