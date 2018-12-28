@@ -75,6 +75,7 @@ ZK 8.6.1
   ZK-4174: java component creation performance (unnecessary exception handling)
   ZK-4162: select-all checkmark puts selected items in a reversed order
   ZK-4108: can't use mouse wheel to control slider knob in some browser
+  ZK-4067: Header sort icon not cleared on model change
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

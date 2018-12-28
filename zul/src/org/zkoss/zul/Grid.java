@@ -900,8 +900,14 @@ public class Grid extends MeshElement {
 	 */
 	private static boolean doSort(Grid grid) {
 		Columns cols = grid.getColumns();
-		if (!grid.isAutosort() || cols == null)
+		if (cols == null)
 			return false;
+		if (!grid.isAutosort()) {
+			for (Component column : cols.getChildren()) {
+				((Column) column).setSortDirection("natural");
+			}
+			return false;
+		}
 		for (Iterator it = cols.getChildren().iterator(); it.hasNext();) {
 			final Column hd = (Column) it.next();
 			String dir = hd.getSortDirection();

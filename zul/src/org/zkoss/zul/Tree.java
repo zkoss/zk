@@ -1867,8 +1867,14 @@ public class Tree extends MeshElement {
 
 	private static boolean doSort(Tree tree) {
 		Treecols cols = tree.getTreecols();
-		if (!tree.isAutosort() || cols == null)
+		if (cols == null)
 			return false;
+		if (!tree.isAutosort()) {
+			for (Component treecol : cols.getChildren()) {
+				((Treecol) treecol).setSortDirection("natural");
+			}
+			return false;
+		}
 		for (Component c : cols.getChildren()) {
 			final Treecol hd = (Treecol) c;
 			String dir = hd.getSortDirection();
