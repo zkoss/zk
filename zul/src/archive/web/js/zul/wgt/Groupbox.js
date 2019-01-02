@@ -174,7 +174,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 	focus_: function (timeout) {
 		var cap = this.caption;
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != cap && w.focus_(timeout))
+			if (w.desktop && w != cap && w.focus_(timeout))
 				return true;
 		return cap && cap.focus_(timeout);
 	},
