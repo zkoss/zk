@@ -28,7 +28,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletRequest;
 
 import org.slf4j.Logger;
@@ -77,7 +76,6 @@ import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
-import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.ZScript;
@@ -1177,37 +1175,25 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public ComponentDefinition getComponentDefinition(String name, boolean recurse) {
-		final ComponentDefinition compdef = _compdefs.get(name);
+		ComponentDefinition compdef = _compdefs.get(name);
 		if (!recurse || compdef != null)
 			return compdef;
 
-		try {
-			return _langdef.getComponentDefinition(name);
-		} catch (DefinitionNotFoundException ex) {
-			try { // try with shadow element
-				return _langdef.getShadowDefinition(name);
-			} catch (DefinitionNotFoundException exe) {
-				// expected
-			}
-		}
-		return null;
+		compdef = _langdef.getComponentDefinitionIfAny(name);
+		if (compdef == null)
+			compdef = _langdef.getShadowDefinitionIfAny(name);
+		return compdef;
 	}
 
 	public ComponentDefinition getComponentDefinition(Class<? extends Component> cls, boolean recurse) {
-		final ComponentDefinition compdef = _compdefs.get(cls);
+		ComponentDefinition compdef = _compdefs.get(cls);
 		if (!recurse || compdef != null)
 			return compdef;
 
-		try {
-			return _langdef.getComponentDefinition(cls);
-		} catch (DefinitionNotFoundException ex) {
-			try { // try with shadow element
-				return _langdef.getShadowDefinition(cls);
-			} catch (DefinitionNotFoundException eex) {
-				// expected
-			}
-		}
-		return null;
+		compdef = _langdef.getComponentDefinitionIfAny(cls);
+		if (compdef == null)
+			compdef = _langdef.getShadowDefinitionIfAny(cls);
+		return compdef;
 	}
 
 	public Class<? extends ExpressionFactory> getExpressionFactoryClass() {

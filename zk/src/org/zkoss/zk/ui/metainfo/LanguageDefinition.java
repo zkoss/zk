@@ -564,6 +564,17 @@ public class LanguageDefinition {
 		return _shadowdefs.get(name);
 	}
 
+	/** Returns {@link ComponentDefinition} of the specified class, or null if not found.
+	 * It is the same as {@link #getShadowDefinition(Class)}, except this method
+	 * won't throw any exception.
+	 *
+	 * @param klass the class that implements the shadow element.
+	 * @since 8.6.1
+	 */
+	public ComponentDefinition getShadowDefinitionIfAny(Class klass) {
+		return _shadowdefs.get(klass);
+	}
+
 	/** Returns whether the specified shadow element is defined.
 	 * @since 8.0.0
 	 */
@@ -621,6 +632,17 @@ public class LanguageDefinition {
 	 */
 	public ComponentDefinition getComponentDefinitionIfAny(String name) {
 		return _compdefs.get(name);
+	}
+
+	/** Returns {@link ComponentDefinition} of the specified class, or null if not found.
+	 * It is the same as {@link #getComponentDefinition(Class)}, except this method
+	 * won't throw any exception.
+	 *
+	 * @param klass the class that implements the component.
+	 * @since 8.6.1
+	 */
+	public ComponentDefinition getComponentDefinitionIfAny(Class klass) {
+		return _compdefs.get(klass);
 	}
 
 	/** Returns whether the specified component is defined.

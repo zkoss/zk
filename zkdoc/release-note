@@ -72,6 +72,7 @@ ZK 8.6.1
   ZK-4141: Desktop.setBookmark escapes slash symbols wrongly
   ZK-4091: Collapsing a Groupbox with invalidate causes a JavaScript error
   ZK-4145: nested menupopup opening direction
+  ZK-4174: java component creation performance (unnecessary exception handling)
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
