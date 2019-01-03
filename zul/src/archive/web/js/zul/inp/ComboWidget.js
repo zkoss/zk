@@ -457,7 +457,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			} else {
 				pp.style.width = i;
 			}
-			if (pp2) pp2.style.width = '100%';
 			return;
 		}
 

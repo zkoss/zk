@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4148.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jan 03 09:53:08 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModel model = new ListModelList();
+		model.add("some text");
+	]]></zscript>
+	<hlayout>
+		<a href="?zktheme=breeze" label="Breeze" />
+		<a href="?zktheme=sapphire" label="Sapphire" />
+		<a href="?zktheme=silvertail" label="Silvertail" />
+		<a href="?zktheme=atlantic" label="Atlantic" />
+		<a href="?zktheme=default" label="Default" />
+	</hlayout>
+	<label multiline="true">
+		click the down arrow button of the combobox and chosenbox to open the popup.
+		move your mouse on to popup content
+		the hover style(background color) should cover the whole width of the highlighted comboitem(or chosenbox option)
+		check all themes work
+	</label>
+	<vlayout>
+		<combobox popupWidth="100%">
+			<template name="model" />
+			<comboitem label="short text" />
+			<comboitem label="a longer text here, at least longer than box is wide." />
+		</combobox>
+		<chosenbox model="${model}" />
+	</vlayout>
+</zk>
