@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4169.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 03 12:43:30 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        The intbox and doublebox shouldn't have any prefix (including ' ') before 123.
+        For example: 123 XYZAB (Correct), X123 XYZAB (Wrong)
+    </label>
+    <vlayout width="300px">
+        <intbox value="123" format="#,##0 'XYZA'" width="100%" />
+        <intbox value="123" format="#,##0 'XYZAB'" width="100%" />
+        <intbox value="123" format="#,##0.0 'XYZAB'" width="100%" />
+        <intbox value="123" format="#,##0 'XYZABC'" width="100%" />
+        <intbox value="123" format="#,##0.0 'XYZABC'" width="100%" />
+        <doublebox value="123" format="#,##0 'XYZABCDEF'" width="100%" />
+        <doublebox value="123" format="#,##0.0 'XYZABCDEF'" width="100%" />
+        <doublebox value="123" format="#,##0 'XYZABCDEFGHIJKLM'" width="100%" />
+        <doublebox value="123" format="#,##0.0 'XYZABCDEFGHIJKLM'" width="100%" />
+    </vlayout>
+</zk>

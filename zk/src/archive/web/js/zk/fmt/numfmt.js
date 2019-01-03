@@ -293,15 +293,7 @@ zk.fmt.Number = {
 		}
 		if (j >= 0)
 			pre = valStr.substr(0, j + 1) + pre;
-		
-		// Bug #2926718
-		var len = (indFmt < 0 ? fmt.length : indFmt) - (ind < 0 ? pureFmtStr.length : ind),
-			prej = efmt.prej;
-		if (len > 0) {
-			var p = fmt.substring(prej, prefmt > 0 ? prefmt : len).replace(new RegExp('[#0.,]', 'g'), '');
-			if (p)
-				pre = p + pre;
-		}
+
 		//sufpart
 		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl; i++) {
 			var fmtcc = fmt.charAt(i);
@@ -331,7 +323,7 @@ zk.fmt.Number = {
 		
 		//combine
 		if (pre)
-			pre = fmt.substring(0, prej) + this._removePrefixSharps(pre, localizedSymbols);
+			pre = fmt.substring(0, efmt.prej) + this._removePrefixSharps(pre, localizedSymbols);
 		if (!pre && fmt.charAt(indFmt + 1) == '#')
 			pre = '0';
 		if (!suf && (pre == localizedSymbols.PERCENT || pre == localizedSymbols.PER_MILL))
