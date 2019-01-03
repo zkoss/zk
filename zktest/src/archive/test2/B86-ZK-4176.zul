@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4176.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 02 15:05:53 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Drag the horizontal scrollbar of the listbox slowly.
+        2. You shouldn't see any flickering when dragging.
+    </label>
+    <listbox>
+        <custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+        <listhead>
+            <listheader label="a"/>
+            <listheader label="b"/>
+            <listheader label="c"/>
+            <listheader label="d"/>
+            <listheader label="e"/>
+            <listheader label="f"/>
+            <listheader label="g"/>
+            <listheader label="h"/>
+            <listheader label="i"/>
+            <listheader label="j"/>
+        </listhead>
+        <frozen columns="1"/>
+        <listitem forEach="0,1,2">
+            <listcell label="a${each}"/>
+            <listcell label="b${each}"/>
+            <listcell label="c${each}"/>
+            <listcell label="d${each}"/>
+            <listcell label="e${each}"/>
+            <listcell label="f${each}"/>
+            <listcell label="g${each}"/>
+            <listcell label="h${each}"/>
+            <listcell label="i${each}"/>
+            <listcell label="j${each}"/>
+        </listitem>
+    </listbox>
+</zk>
