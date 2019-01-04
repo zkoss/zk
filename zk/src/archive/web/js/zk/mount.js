@@ -885,11 +885,9 @@ jq(function () {
 	window.onbeforeunload = function () {
 		if (!zk.skipBfUnload) {
 			if (zk.confirmClose) {
-				if (zAu.disabledRequest) {
-					setTimeout(function () { //If user click 'cancel', the disabledRequest should be false. Ref: https://stackoverflow.com/questions/4650692/
-						zAu.disabledRequest = false;
-					}, 0);
-				}
+				setTimeout(function () { //If user click 'cancel', the disabledRequest should be false. Ref: https://stackoverflow.com/questions/4650692/
+					zAu.disabledRequest = false;
+				}, 0);
 				return zk.confirmClose;
 			}
 
