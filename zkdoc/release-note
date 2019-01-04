@@ -76,6 +76,7 @@ ZK 8.6.1
   ZK-4162: select-all checkmark puts selected items in a reversed order
   ZK-4108: can't use mouse wheel to control slider knob in some browser
   ZK-4067: Header sort icon not cleared on model change
+  ZK-4169: number formatter adds prefix if format suffix is longer than format string
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
