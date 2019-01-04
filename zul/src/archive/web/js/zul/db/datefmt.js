@@ -26,7 +26,21 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
 			var c = txt.charAt(k),
-				f = fmtlen > i ? fmt.charAt(i) : '';
+				f = fmtlen > i ? fmt.charAt(i) : '',
+				lastf = i > 0 ? fmt.charAt(i - 1) : f,
+				lastfReg = new RegExp(lastf, 'g');
+			if (lastf.match(/a/g) && fmt.match(lastfReg).length < 2 && i >= k) { // ZK-4068: to handle single format 'a'
+				i--;
+				f = fmt.charAt(i);
+			}
+			if (ary.length) { // ZK-4068: datebox failing date format
+				var lastc = ary[ary.length - 1],
+				isNextFormat = f.match(/[a-zA-Z]/) && f != lastf;
+				if (isNextFormat) {
+					ts.push(ary.join(''));
+					ary = [];
+				}
+			}
 			if (c.match(/\d/)) {
 				ary.push(c);
 			} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
