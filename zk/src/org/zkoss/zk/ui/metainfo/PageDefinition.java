@@ -780,16 +780,14 @@ public class PageDefinition implements NodeInfo {
 	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
 	public ComponentDefinition getComponentDefinition(String name, boolean recurse) {
-		final ComponentDefinition compdef = _compdefs.get(name);
+		ComponentDefinition compdef = _compdefs.get(name);
 		if (!recurse || compdef != null)
 			return compdef;
 
-		try {
-			return getLanguageDefinition().getComponentDefinition(name);
-		} catch (DefinitionNotFoundException ex) {
-			// expected
-		}
-		return null;
+		compdef = _langdef.getComponentDefinitionIfAny(name);
+		if (compdef == null)
+			compdef = _langdef.getShadowDefinitionIfAny(name);
+		return compdef;
 	}
 
 	/** Returns the component definition of the specified class, or null
@@ -802,20 +800,14 @@ public class PageDefinition implements NodeInfo {
 	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
 	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse) {
-		final ComponentDefinition compdef = _compdefs.get(cls);
+		ComponentDefinition compdef = _compdefs.get(cls);
 		if (!recurse || compdef != null)
 			return compdef;
 
-		try {
-			return getLanguageDefinition().getComponentDefinition(cls);
-		} catch (DefinitionNotFoundException ex) {
-			try { // try with shadow element
-				return getLanguageDefinition().getShadowDefinition(cls);
-			} catch (DefinitionNotFoundException eex) {
-				// expected
-			}
-		}
-		return null;
+		compdef = _langdef.getComponentDefinitionIfAny(cls);
+		if (compdef == null)
+			compdef = _langdef.getShadowDefinitionIfAny(cls);
+		return compdef;
 	}
 
 	/** Adds a tag lib. */
