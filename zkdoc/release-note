@@ -78,6 +78,7 @@ ZK 8.6.1
   ZK-4067: Header sort icon not cleared on model change
   ZK-4169: number formatter adds prefix if format suffix is longer than format string
   ZK-4176: frozen scrollbar flickering when dragging
+  ZK-4117: Timebox using flex will cause page error on touch devices
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
