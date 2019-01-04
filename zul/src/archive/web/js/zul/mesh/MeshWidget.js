@@ -721,6 +721,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
+	disableAutoSizing_: function () {
+		this._span = false;
+		this._nspan = 0;
+		this._sizedByContent = false;
+	},
+
 	bind_: function () {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 

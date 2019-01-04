@@ -73,8 +73,13 @@ public abstract class HeadersElement extends XulElement {
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals(ZulEvents.ON_COL_SIZE)) {
-			((MeshElement) this.getParent()).setSpan(false); //clear span
-			((MeshElement) this.getParent()).setSizedByContent(false); //clear sizedByContent
+			disableClientUpdate(true); //ZK-4077
+			try {
+				((MeshElement) this.getParent()).setSpan(false); //clear span
+				((MeshElement) this.getParent()).setSizedByContent(false); //clear sizedByContent
+			} finally {
+				disableClientUpdate(false);
+			}
 			//ZK-3332: update single column width if widths was not given
 			boolean isMultiple = request.getData().containsKey("widths");
 			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
