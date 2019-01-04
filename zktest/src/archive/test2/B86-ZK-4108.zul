@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4108.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jan 02 14:38:30 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in Firefox and IE11
+		2. Use mouse wheel to scroll knob
+		3. Value should change
+	</label>
+	<div height="400px">
+		<slider id="knob1" mold="knob" minpos="0.0" maxpos="100.0"
+				curpos="80.0" step="0.5" angleArc="360" strokeWidth="10"/>
+	</div>
+</zk>
