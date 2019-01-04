@@ -2419,8 +2419,14 @@ public class Listbox extends MeshElement {
 
 	private static boolean doSort(Listbox listbox) {
 		Listhead hds = listbox.getListhead();
-		if (!listbox.isAutosort() || hds == null)
+		if (hds == null)
 			return false;
+		if (!listbox.isAutosort()) {
+			for (Component listheader : hds.getChildren()) {
+				((Listheader) listheader).setSortDirection("natural");
+			}
+			return false;
+		}
 		for (Iterator<Component> it = hds.getChildren().iterator(); it.hasNext();) {
 			final Listheader hd = (Listheader) it.next();
 			String dir = hd.getSortDirection();
