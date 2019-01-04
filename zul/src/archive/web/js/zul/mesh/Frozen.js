@@ -13,26 +13,20 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _colspan(c) { //colspan specified in widget
-		var v = zk.Widget.$(c)._colspan;
-		return v ? v : 1;
-	}
 	// Bug 3218078
 	function _onSizeLater(wgt) {
-		var parent = wgt.parent,
-			bdfaker = parent.ebdfaker;
+		var parent = wgt.parent;
 
 		// ZK-2130: should skip fake scroll bar
 		if (parent.eheadtbl && parent._nativebar) {
 			var cells = parent._getFirstRowCells(parent.eheadrows),
 				head = parent.head,
-				totalcols = cells.length - jq(head).find(head.$n('bar')).length;
-				cellsSize = totalcols,
+				totalcols = cells.length - jq(head).find(head.$n('bar')).length,
 				columns = wgt._columns,
 				leftWidth = 0;
 
 			//B70-ZK-2553: one may specify frozen without any real column
-			if (!cells || cellsSize <= 0) {
+			if (!cells || totalcols <= 0) {
 				//no need to do the following computation since there is no any column
 				return;
 			}
@@ -300,7 +294,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			self._doScrollNow(num);
 			self.smartUpdate('start', num);
 			self._start = num;
-			self.delayedScroll = null;
+			self._delayedScroll = null;
 		}, 0);
 	},
 	_doScrollNow: function (num, force) {
@@ -308,8 +302,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			mesh = this.parent,
 			cnt = num,
 			c = this._columns,
-			width0 = zul.mesh.MeshWidget.WIDTH0;
-
+			width0 = zul.mesh.MeshWidget.WIDTH0,
+			hasVScroll = zk(mesh.ebody).hasVScroll(),
+			scrollbarWidth = hasVScroll ? jq.scrollbarWidth() : 0;
 		if (mesh.head) {
 			// set fixed size
 			var totalCols = mesh.head.nChildren,
@@ -401,15 +396,12 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				}
 			}
 
-			var hasVScroll = zk(mesh.ebody).hasVScroll(),
-				scrollbarWidth = jq.scrollbarWidth();
 			hdcol = mesh.ehdfaker.firstChild;
 			for (var i = 0; hdcol && i < totalCols; hdcol = hdcol.nextSibling, i++) {
 				if (hdcol.style.display != 'none')
 					totalWidth += zk.parseInt(hdcol.style.width);
 			}
-			if (hasVScroll)
-				totalWidth += scrollbarWidth;
+			totalWidth += scrollbarWidth;
 
 			//hide the element without losing focus
 			jq(mesh).css({position: '', left: ''});
@@ -420,11 +412,10 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		if (headtbl = mesh.eheadtbl)
 			headtbl.style.width = jq.px(totalWidth);
 		if (bodytbl = mesh.ebodytbl)
-			bodytbl.style.width = jq.px(totalWidth - (hasVScroll ? scrollbarWidth : 0));
+			bodytbl.style.width = jq.px(totalWidth - scrollbarWidth);
 		if (foottbl = mesh.efoottbl)
 			foottbl.style.width = jq.px(totalWidth);
 
-		this.onSize();
 		mesh._restoreFocus();
 
 		// Bug ZK-601, Bug ZK-1572
