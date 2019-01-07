@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4183.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jan 02 17:51:04 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		1. Content of Grid, Listbox and Tree should be visible
+	</label>
+	<grid>
+		<columns>
+			<column hflex="min" label="col-1"/>
+			<column hflex="min" label="col-2"/>
+			<column hflex="min" label="col-3"/>
+		</columns>
+		<rows>
+			<row>
+				<cell>cell-1</cell>
+				<cell>cell-2</cell>
+				<cell>cell-3</cell>
+			</row>
+		</rows>
+		<foot>
+			<footer label="footer-1"/>
+			<footer label="footer-2"/>
+			<footer label="footer-3"/>
+		</foot>
+	</grid>
+	<listbox>
+		<listhead>
+			<listheader hflex="min" label="col-1"/>
+			<listheader hflex="min" label="col-2"/>
+			<listheader hflex="min" label="col-3"/>
+		</listhead>
+		<listitem>
+			<listcell>cell-1</listcell>
+			<listcell>cell-2</listcell>
+			<listcell>cell-3</listcell>
+		</listitem>
+		<listfoot>
+			<listfooter label="footer-1"/>
+			<listfooter label="footer-2"/>
+			<listfooter label="footer-3"/>
+		</listfoot>
+	</listbox>
+	<tree>
+		<treecols>
+			<treecol hflex="min" label="col-1"/>
+			<treecol hflex="min" label="col-2"/>
+			<treecol hflex="min" label="col-3"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>cell-1</treecell>
+					<treecell>cell-2</treecell>
+					<treecell>cell-3</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+		<treefoot>
+			<treefooter label="footer-1"/>
+			<treefooter label="footer-2"/>
+			<treefooter label="footer-3"/>
+		</treefoot>
+	</tree>
+</zk>

@@ -1295,11 +1295,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (fttbl)
 						fttbl.style.width = wd + 'px';
 				} else {
-					hdtbl.style.visibility = 'hidden';
-					if (bdtbl)
-						bdtbl.style.visibility = 'hidden';
-					if (fttbl)
-						fttbl.style.visibility = 'hidden';
+					var hideTable = true;
+					for (var header = this.head.firstChild; header; header = header.nextSibling) {
+						if (header.isVisible()) {
+							hideTable = false;
+							break;
+						}
+					}
+					if (hideTable) {
+						hdtbl.style.visibility = 'hidden';
+						if (bdtbl)
+							bdtbl.style.visibility = 'hidden';
+						if (fttbl)
+							fttbl.style.visibility = 'hidden';
+					}
 				}
 			}
 		} else if (this.frozen) {
