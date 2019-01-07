@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4077.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Dec 28 16:34:41 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Resize the first Column of the 2 listbox, then click the bandbox button to open popup.
+		The popup should be opened.
+	</label>
+	<listbox sizedByContent="true">
+		<listhead sizable="true">
+			<listheader label="1" />
+			<listheader label="2" />
+		</listhead>
+		<listitem>
+			<listcell>
+				<bandbox onOpen="Clients.log(event.toString())">
+					<bandpopup>
+						<window>
+							<label value="foo" />
+						</window>
+					</bandpopup>
+				</bandbox>
+			</listcell>
+		</listitem>
+	</listbox>
+	<listbox span="true">
+		<listhead sizable="true">
+			<listheader label="1" />
+			<listheader label="2" />
+		</listhead>
+		<listitem>
+			<listcell>
+				<bandbox onOpen="Clients.log(event.toString())">
+					<bandpopup>
+						<window>
+							<label value="foo" />
+						</window>
+					</bandpopup>
+				</bandbox>
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>

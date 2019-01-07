@@ -119,6 +119,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		owner._innerWidth = headWidth || owner.eheadtbl.width || owner.eheadtbl.style.width;
 		owner.fire('onInnerWidth', owner._innerWidth);
 		owner.fireOnRender(zk.gecko ? 200 : 60);
+		owner.disableAutoSizing_(); // clear span and sizedByContent without rerender
 	},
 
 	bind_: function (desktop, skipper, after) {
