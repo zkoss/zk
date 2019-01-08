@@ -93,8 +93,9 @@ public class InitChildrenBindingImpl extends ChildrenBindingImpl implements Init
 					((ListModel<?>) old).removeListDataListener((ListDataListener) attribute);
 			}
 			int size = data.size();
-			for (int i = 0; i < size; i++) {
-				renderer.render(comp, data.get(i), i, size, isUsingListModel);
+			int i = 0;
+			for (Object obj : data) {
+				renderer.render(comp, obj, i++, size, isUsingListModel);
 			}
 		}
 
