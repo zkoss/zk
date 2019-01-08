@@ -89,6 +89,7 @@ ZK 8.6.1
   ZK-4182: zul.inp.Errorbox is shown regardless the component visibility
   ZK-4148: comboitem + popupwidth: hover style too short (also chosenbox)
   ZK-4090: Opening a groupbox takes unexpected long time
+  ZK-4085: knob slider rendering artifacts in extreme cases
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
