@@ -1512,8 +1512,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 				//ZK-2687: create a closure to record the current wgt
 				var toSetErrMsg = function (w, m) {
 					return function () {
-						if (w.setErrorMessage) w.setErrorMessage(m);
-						else zAu.wrongValue_(w, m);
+						zk.afterAnimate(function () {
+							if (w.setErrorMessage) w.setErrorMessage(m);
+							else zAu.wrongValue_(w, m);
+						}, -1);
 					};
 				};
 				zk.delayFunction(uuid, toSetErrMsg(wgt, msg));
