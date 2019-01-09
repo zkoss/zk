@@ -10,6 +10,7 @@ ZK 8.6.1
   ZK-4131: make menupopups with many menuitems scrollable
   ZK-4121: Add the error acceptance median as a settable attribute in barcodescanner
   ZK-4179: Add a library property to disable ZK history API
+  ZK-4185: Combobox: provide option to reduce onSelect/onChange events when using keyboard
 
 * Bugs
   ZK-4114: orgnode label missing font styles

@@ -1444,6 +1444,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
 		<xs:attribute name="errorMessage" type="xs:string" use="optional" />
+		<xs:attribute name="instantSelect" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- comboitem -->
 	<xs:element name="comboitem" type="comboitemType" />
