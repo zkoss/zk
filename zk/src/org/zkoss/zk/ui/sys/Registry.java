@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
 
 /**
@@ -107,20 +108,23 @@ public class Registry {
 
 	// sign the cls to the webapp
 	public static void sign(WebApp wapp, Class... clses) {
-		for (Class cls : clses) {
-			if (!INSTANCE.isValid(cls)) {
-				String sign = INSTANCE.getSign(cls);
-				String key = Strings.toString(Registry.PREFS_1);
-				if (sign == null) {
-					sign = INSTANCE.getKey(cls);
-				}
-				if (sign != null) {
-					if (sign.length() > 8)
-						sign = sign.substring(0, 9);
-				}
+		if (wapp == null || "CE".equals(WebApps.getEdition())
+				|| wapp.getAttribute("org.zkoss.zk.ui.notice") != null) {
+			for (Class cls : clses) {
+				if (!INSTANCE.isValid(cls)) {
+					String sign = INSTANCE.getSign(cls);
+					String key = Strings.toString(Registry.PREFS_1);
+					if (sign == null) {
+						sign = INSTANCE.getKey(cls);
+					}
+					if (sign != null) {
+						if (sign.length() > 8)
+							sign = sign.substring(0, 9);
+					}
 
-				wapp.setAttribute(key, gen(Strings.toString(Registry.PREFS_2), sign));
-				return; // done
+					wapp.setAttribute(key, gen(Strings.toString(Registry.PREFS_2), sign));
+					return; // done
+				}
 			}
 		}
 	}
