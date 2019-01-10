@@ -11,6 +11,7 @@ ZK 8.6.1
   ZK-4121: Add the error acceptance median as a settable attribute in barcodescanner
   ZK-4179: Add a library property to disable ZK history API
   ZK-4185: Combobox: provide option to reduce onSelect/onChange events when using keyboard
+  ZK-4184: improve iterating a list to fail fast in a children binding
 
 * Bugs
   ZK-4114: orgnode label missing font styles
