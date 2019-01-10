@@ -83,6 +83,7 @@ ZK 8.6.1
   ZK-4177: slider knob mousewheel issues
   ZK-4077: sizedByContent and sizabled trigger delayed rerender breaking UI on next event
   ZK-4183: grid with hflex=min columns renders invisible
+  ZK-4135: JS error when detaching frozen component
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
