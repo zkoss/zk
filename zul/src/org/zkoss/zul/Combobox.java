@@ -118,6 +118,7 @@ public class Combobox extends Textbox {
 	private boolean _syncItemIndicesLater;
 	private String _popupWidth;
 	private String _emptySearchMessage;
+	private boolean _instantSelect = true;
 
 	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
 
@@ -736,6 +737,31 @@ public class Combobox extends Textbox {
 		}
 	}
 
+	/**
+	 * Returns true if onSelect event is sent as soon as user selects using keyboard navigation.
+	 * <p>Default: true
+	 *
+	 * @since 8.6.1
+	 */
+	public boolean isInstantSelect() {
+		return _instantSelect;
+	}
+
+	/**
+	 * Sets the instantSelect attribute. When the attribute is true, onSelect event
+	 * will be fired as soon as user selects using keyboard navigation.
+	 *
+	 * If the attribute is false, user needs to press Enter key to finish the selection using keyboard navigation.
+	 *
+	 * @since 8.6.1
+	 */
+	public void setInstantSelect(boolean instantSelect) {
+		if (_instantSelect != instantSelect) {
+			_instantSelect = instantSelect;
+			smartUpdate("instantSelect", instantSelect);
+		}
+	}
+
 	/** Returns a 'live' list of all {@link Comboitem}.
 	 * By live we mean you can add or remove them directly with
 	 * the List interface.
@@ -918,6 +944,8 @@ public class Combobox extends Textbox {
 			renderer.render("popupWidth", _popupWidth);
 		if (_emptySearchMessage != null)
 			renderer.render("emptySearchMessage", _emptySearchMessage);
+		if (!_instantSelect)
+			renderer.render("instantSelect", false);
 	}
 
 	/** Processes an AU request.
@@ -1132,6 +1160,15 @@ public class Combobox extends Textbox {
 
 			public Boolean getValue(Component cmp) {
 				return ((Combobox) cmp).isAutodrop();
+			}
+		});
+		_properties.put("instantSelect", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean value) {
+				((Combobox) cmp).setInstantSelect(value);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Combobox) cmp).isInstantSelect();
 			}
 		});
 	}

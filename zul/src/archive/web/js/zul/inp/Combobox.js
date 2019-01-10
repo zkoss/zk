@@ -30,6 +30,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_autocomplete: true,
+	_instantSelect: true,
 
 	$define: {
 		/** Returns whether to automatically complete this text box
@@ -89,7 +90,23 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				}
 			}
 			this._repos = false;
-		}
+		},
+		/**
+		 * Returns true if onSelect event is sent as soon as user selects using keyboard navigation.
+		 * <p>Default: true
+		 *
+		 * @return boolean
+		 * @since 8.6.1
+		 */
+		/**
+		 * Sets the instantSelect attribute. When the attribute is true, onSelect event
+		 * will be fired as soon as user selects using keyboard navigation.
+		 *
+		 * If the attribute is false, user needs to press Enter key to finish the selection using keyboard navigation.
+		 * @param boolean instantSelect
+		 * @since 8.6.1
+		 */
+		instantSelect: null
 	},
 	onResponse: function () {
 		// Bug ZK-2960: need to wait until the animation is finished before calling super
@@ -200,7 +217,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._hiliteOpt(oldsel, sel);
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
-			this._lastsel = sel;
 			if (sel) { //set back since _findItem ignores cases
 				var inp = this.getInputNode(),
 					val = sel.getLabel();
@@ -218,7 +234,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 
-			this.fire('onSelect', {items: sel ? [sel] : [], reference: sel, prevSeld: oldsel});
+			this.fire('onSelect', {items: sel ? [sel] : [], reference: sel, prevSeld: this._lastsel});
+			this._lastsel = sel;
 			//spec change (diff from zk 3): onSelect fired after onChange
 			//purpose: onSelect can retrieve the value correctly
 			//If we want to change this spec, we have to modify Combobox.java about _lastCkVal
@@ -314,7 +331,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			zk(sel).scrollIntoView(this.$n('pp'));
 
 		//B70-ZK-2548: fire onChange event to notify server the current value
-		this._select(sel, {sendOnSelect: true, sendOnChange: true});
+		var highlightOnly = !this._instantSelect && this._open;
+		this._select(sel, highlightOnly ? {} : {sendOnSelect: true, sendOnChange: true});
 		evt.stop();
 	},
 	_next: (function () {
@@ -375,6 +393,15 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 				if (sel)
 					this._select(sel, {sendOnSelect: true});
 			}
+	},
+	escPressed_: function () {
+		var highlightOnly = !this._instantSelect && this._open;
+		if (highlightOnly && this._lastsel != this._sel) {
+			this._hilite2(this._lastsel);
+			var lastVal = this._lastsel ? this._lastsel.getLabel() : '';
+			this.valueSel_ = this.valueEnter_ = this.getInputNode().value = lastVal;
+		}
+		this.$supers('escPressed_', arguments);
 	},
 	doKeyUp_: function (evt) {
 		if (!this._disabled) {
