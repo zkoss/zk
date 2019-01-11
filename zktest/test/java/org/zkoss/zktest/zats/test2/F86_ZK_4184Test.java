@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.Assert;
 import org.junit.Test;
 
+import org.zkoss.lang.Threads;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
 
@@ -24,6 +25,9 @@ public class F86_ZK_4184Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+
+		// To ensure the background thread is ready
+		Threads.sleep(1000);
 
 		testUpdate();
 		// Test 4 more times
