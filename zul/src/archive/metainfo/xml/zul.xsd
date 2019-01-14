@@ -994,6 +994,7 @@
 		<xs:attribute name="recordFormat" type="xs:string" use="optional" />
 		<xs:attribute name="constraints" type="xs:string" use="optional"/>
 		<xs:attribute name="constraintsString" type="xs:string" use="optional"/>
+		<xs:attribute name="onCameraUnavailable" type="xs:string" use="optional"/>
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- auxhead -->
