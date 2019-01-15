@@ -92,6 +92,7 @@ ZK 8.6.1
   ZK-4085: knob slider rendering artifacts in extreme cases
   ZK-4189: slider input looks ugly on FF
   ZK-4160: Tree _initPadSizes while not visible cause tree height to shink to 2 treeitems
+  ZK-4188: enabling etag produces 304 with non empty response body
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
