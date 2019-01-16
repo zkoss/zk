@@ -239,7 +239,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			//spec change (diff from zk 3): onSelect fired after onChange
 			//purpose: onSelect can retrieve the value correctly
 			//If we want to change this spec, we have to modify Combobox.java about _lastCkVal
-		}
+		} else if (opts.sendOnChange) // The value still didn't match any item, but onChange is still needed.
+			this.$supers('updateChange_', []);
 	},
 	_hiliteOpt: function (oldTarget, newTarget) {
 		if (oldTarget && oldTarget.parent == this) {
@@ -456,8 +457,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	updateChange_: function () {
 		var chng = this._value != this.getInputNode().value; // B50-ZK-297
-		if (this.$supers('updateChange_', arguments) && chng) {
-			this._hilite({sendOnSelect: true, noSelectRange: true});
+		if (chng) {
+			this._hilite({sendOnSelect: true, sendOnChange: true, noSelectRange: true});
 			return true;
 		}
 		this.valueEnter_ = null;
