@@ -97,7 +97,6 @@ public class BindListitemRenderer extends AbstractRenderer implements ListitemRe
 			nli.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 
 			// ZK-2552
-			recordRenderedIndex(listbox, items.length);
 			nli.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 
 			nli.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {

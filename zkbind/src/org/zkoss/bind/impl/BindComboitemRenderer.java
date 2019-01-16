@@ -102,8 +102,6 @@ public class BindComboitemRenderer extends AbstractRenderer implements Comboitem
 				nci.setAttribute(varnm, data);
 			} else {
 				// ZK-2552
-				recordRenderedIndex(cb, items.length);
-
 				nci.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 				nci.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 					public Binder getBinder() {

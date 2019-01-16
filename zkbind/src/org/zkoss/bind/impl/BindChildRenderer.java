@@ -106,9 +106,7 @@ public class BindChildRenderer extends AbstractRenderer {
 		//ZK-2545 - Children binding support list model
 		if (isListModel)
 			addChildrenBindingRenderedComps(owner, items, index);
-		else
-			recordRenderedIndex(owner, items.length);
-		
+
 		for (final Component comp : items) {
 			comp.setAttribute(BinderCtrl.VAR, varnm);
 			// ZK-2552
@@ -163,36 +161,6 @@ public class BindChildRenderer extends AbstractRenderer {
 			
 			//to force init and load
 			Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, comp));
-		}
-	}
-
-	protected void recordRenderedIndex(Component owner, int itemSize) {
-		List<Component[]> indexList = (List<Component[]>) owner
-				.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
-		if (indexList == null) {
-			super.recordRenderedIndex(owner, itemSize);
-		}
-	}
-
-	protected int getRenderedIndex(Component owner, int childIndex) {
-		List<Component[]> indexList = (List<Component[]>) owner
-				.getAttribute(BinderCtrl.CHILDREN_BINDING_RENDERED_COMPONENTS);
-		if (indexList == null) {
-			return super.getRenderedIndex(owner, childIndex);
-		} else {
-			if (childIndex == 0)
-				return 0; // speed up
-			if (indexList != null) {
-				int index = 0;
-				int currentIndex = 0;
-				for (Component[] list : indexList) {
-					if ((currentIndex += list.length) > childIndex)
-						break;
-					index++;
-				}
-				return index;
-			}
-			return childIndex;
 		}
 	}
 

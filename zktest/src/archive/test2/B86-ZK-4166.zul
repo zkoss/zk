@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4166.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jan 3 12:32:33 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk >
+	<label>
+		You should not see zk log.
+	</label>
+	<div id="divIndex" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4166VM')">
+		<listbox id="lb" model="@load(vm.beansLeak)">
+			<template name="model"
+					  var="bean">
+				<listitem>
+					<listcell label="" />
+					<listcell
+							label="@load(bean)"/>
+				</listitem>
+			</template>
+		</listbox>
+		<button id="refresh" visible="true" label="refresh" mold="default" onClick="@command('refreshCmd')"/>
+		<timer id="timer" delay="100" repeats="true" onTimer="@command('refreshCmd',lb=lb)" />
+	</div>
+</zk>

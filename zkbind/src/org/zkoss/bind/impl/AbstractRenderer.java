@@ -12,9 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -87,35 +84,6 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 	}
 
 	private boolean isFirstTime = false;
-
-	protected void recordRenderedIndex(Component owner, int itemSize) {
-
-		// clean up first for first time to invoke
-		if (!isFirstTime) {
-			isFirstTime = true;
-			owner.removeAttribute(RENDERED_COMPONENTS);
-		}
-		Map<String, Integer> indexes = (Map<String, Integer>) owner.getAttribute(RENDERED_COMPONENTS);
-		if (indexes == null) {
-			indexes = new LinkedHashMap<String, Integer>();
-			owner.setAttribute(RENDERED_COMPONENTS, indexes);
-		}
-		int index = indexes.isEmpty() ? 0 : new LinkedList<Integer>(indexes.values()).getLast().intValue() + 1;
-		for (int size = indexes.size(), start = 0; start < itemSize; start++) {
-			indexes.put(String.valueOf(size + start), index);
-		}
-	}
-
-	protected int getRenderedIndex(Component owner, int childIndex) {
-		Map<String, Integer> indexes = (Map<String, Integer>) owner.getAttribute(RENDERED_COMPONENTS);
-		if (indexes != null) {
-			Integer result = indexes.get(String.valueOf(childIndex));
-			if (result == null)
-				return childIndex;
-			return result;
-		}
-		return childIndex;
-	}
 
 	private boolean checkShadowElementAndCreateSubChildren(Component parent) {
 		boolean hasShadow = false;
