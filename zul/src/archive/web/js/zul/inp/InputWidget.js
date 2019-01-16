@@ -115,6 +115,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	//_tabindex: 0,
 	_type: 'text',
 	_placeholder: null,
+	_inputAttributes: null,
+	_lastinputAttributes: null,
 	_inplaceTimerId: null,
 	_inplaceTimeout: 150,
 	_inplaceIgnore: false,
@@ -243,6 +245,30 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		 */
 		placeholder: function (placeholder) {
 			this.rerender();
+		},
+		/**
+		 * Returns the additional attributes which is set by setinputAttributes(inputAttributes).
+		 * @since 8.6.1
+		 * @return Map inputAttributes
+		 */
+		/**
+		 * Sets some additional attributes to the input html tag in the component.
+		 * this will only reset the additional attributes that are set by this method.
+		 * @since 8.6.1
+		 * @param Map inputAttributes
+		 */
+		inputAttributes: function (inputAttributes) {
+			if (this.desktop) {
+				var inpNode = this.getInputNode();
+				for (var key in this._lastinputAttributes) {
+					inpNode.removeAttribute(key);
+				}
+				for (var key in this._inputAttributes) {
+					var val = this._inputAttributes[key];
+					inpNode.setAttribute(key, val);
+				}
+			}
+			this._lastinputAttributes = inputAttributes;
 		},
 		/** Returns whether to send onChange event as soon as user types in the
 		 * input.
@@ -417,6 +443,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		if (this._placeholder) html += ' placeholder="' + zUtl.encodeXML(this._placeholder) + '"';
+		if (this._inputAttributes) {
+			for (var key in this._inputAttributes) {
+				var val = this._inputAttributes[key];
+				html += (' ' + key + '="' + val + '"');
+			}
+		}
 
 		var s = jq.filterTextStyle(this.domStyle_({width: true, height: true, top: true, left: true}));
 		if (s) html += ' style="' + s + '"';
