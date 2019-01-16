@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4188.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 15 16:24:22 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true"><![CDATA[
+         1. Add the following setting in zk.xml
+        <library-property>
+            <name>org.zkoss.web.classWebResource.cache.etag</name>
+            <value>true</value>
+        </library-property>
+        2. Refresh this page (so you'll browse this page twice)
+        3. Should have no exception in server log (and you can see this text again).
+    ]]>
+    </label>
+</zk>

@@ -769,4 +769,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!--<client-config>-->
 		<!--<enable-history-state>false</enable-history-state>-->
 	<!--</client-config>-->
+
+	<!-- for B86-ZK-4188.zul -->
+	<!--<library-property>-->
+		<!--<name>org.zkoss.web.classWebResource.cache.etag</name>-->
+		<!--<value>true</value>-->
+	<!--</library-property>-->
 </zk>

@@ -196,9 +196,12 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				cacheable = wc.cacheable;
 			}
 		}
-		if (cacheable)
-			org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(), request, response,
+		if (cacheable) {
+			boolean isNotModified = org.zkoss.zk.fn.JspFns.setCacheControl(getServletContext(), request, response,
 					"org.zkoss.web.classWebResource.cache", 8760);
+			if (isNotModified)
+				return null;
+		}
 
 		if (pkg != null)
 			data = mergeJavaScript(request, response, pkg, data);

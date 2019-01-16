@@ -92,9 +92,12 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 				}
 				hours = tp.getWCSCacheControl(exec, p);
 			}
-			if (hours > 0)
-				JspFns.setCacheControl(getServletContext(), request, response, "org.zkoss.web.classWebResource.cache",
+			if (hours > 0) {
+				boolean isNotModified = JspFns.setCacheControl(getServletContext(), request, response, "org.zkoss.web.classWebResource.cache",
 						hours);
+				if (isNotModified)
+					return;
+			}
 
 			for (int j = 0; j < wi.items.length; ++j) {
 				final Object o = wi.items[j];
