@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4172-tree.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 16 16:36:25 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <zscript><![CDATA[
+        List list = new ArrayList();
+        for (int i = 0; i < 200; i++) {
+            list.add(new DefaultTreeNode("Item " + i));
+        }
+        DefaultTreeNode root = new DefaultTreeNode(null, list);
+        DefaultTreeModel model = new DefaultTreeModel(root);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Scroll the tree to trigger a ROD load.
+        2. Click any of three buttons. The scrollbar position should be not changed.
+    </label>
+    <button label="client rerender" w:onClick="zk.$('$res').getTree().rerender()"/>
+    <button label="client setWidth" w:onClick="zk.$('$res').setWidth('100px')"/>
+    <button label="server setWidth" onClick='res.setWidth("100px")'/>
+    <tree model="${model}" width="100%" height="500px">
+        <custom-attributes org.zkoss.zul.tree.rod="true"/>
+        <custom-attributes org.zkoss.zul.tree.preloadSize="50"/>
+        <custom-attributes org.zkoss.zul.tree.initRodSize="50"/>
+        <custom-attributes org.zkoss.zul.tree.autoSort="true"/>
+        <treecols sizable="true">
+            <treecol label="1" width="300px"/>
+            <treecol label="2" width="300px"/>
+            <treecol id="res" label="3" width="300px"/>
+            <treecol label="4" width="300px"/>
+            <treecol label="5" width="300px"/>
+            <treecol label="6" width="300px"/>
+        </treecols>
+        <template name="model">
+            <treeitem>
+                <treerow>
+                    <treecell label="${each}"/>
+                    <treecell label="${forEachStatus.index}" />
+                    <treecell label="Item 1.2" />
+                    <treecell label="Item 1.2" />
+                    <treecell label="Item 1.2" />
+                    <treecell label="Item 1.2" />
+                </treerow>
+            </treeitem>
+        </template>
+    </tree>
+</zk>
+

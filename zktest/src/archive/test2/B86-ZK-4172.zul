@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4172.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Wed Jan 16 10:33:28 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <zscript><![CDATA[
+        List list = new ArrayList();
+        for (int i = 0; i < 200; i++) {
+            list.add("Item " + i);
+        }
+        ListModelList model = new ListModelList(list);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Scroll the grid to trigger a ROD load.
+        2. Click any of three buttons. The scrollbar position should be not changed.
+    </label>
+    <button label="client rerender" w:onClick="zk.$('$res').getGrid().rerender()"/>
+    <button label="client setWidth" w:onClick="zk.$('$res').setWidth('100px')"/>
+    <button label="server setWidth" onClick='res.setWidth("100px")'/>
+    <grid model="${model}" width="100%" height="500px">
+        <custom-attributes org.zkoss.zul.grid.rod="true"/>
+        <custom-attributes org.zkoss.zul.grid.preloadSize="50"/>
+        <custom-attributes org.zkoss.zul.grid.initRodSize="50"/>
+        <custom-attributes org.zkoss.zul.grid.autoSort="true"/>
+        <columns sizable="true">
+            <column label="1" width="300px"/>
+            <column label="2" width="300px"/>
+            <column id="res" label="3" width="300px"/>
+            <column label="4" width="300px"/>
+            <column label="5" width="300px"/>
+            <column label="6" width="300px"/>
+        </columns>
+        <template name="model">
+            <row>
+                <label value="${each}" />
+                <label value="${forEachStatus.index}" />
+                <label value="Item 1.2" />
+                <label value="Item 1.2" />
+                <label value="Item 1.2" />
+                <label value="Item 1.2" />
+            </row>
+        </template>
+    </grid>
+</zk>
