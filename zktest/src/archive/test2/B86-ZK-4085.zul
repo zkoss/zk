@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4085.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jan 07 15:27:11 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style><![CDATA[
+		.z-slider {
+			border: 1px solid black;
+		}
+	]]>
+	</style>
+	<label multiline="true">
+		1. The layout of knobs should not be broken
+		2. StrokeWidth should not be larger than half of shorter side
+	</label>
+	<slider mold="knob" width="500px" height="300px" curpos="66" strokeWidth="666"/>
+	<slider mold="knob" width="500px" curpos="66" strokeWidth="666"/>
+	<slider mold="knob" width="500px" curpos="99.999987" step="0.000001" strokeWidth="2"/>
+	<slider mold="knob" width="500px" curpos="99.999984" step="0.000001" strokeWidth="2"/>
+</zk>
