@@ -87,6 +87,7 @@ ZK 8.6.1
   ZK-4135: JS error when detaching frozen component
   ZK-3609: Wrong rendering of collapsed navbar with pre-selected menuitem
   ZK-4182: zul.inp.Errorbox is shown regardless the component visibility
+  ZK-4148: comboitem + popupwidth: hover style too short (also chosenbox)
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
