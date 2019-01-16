@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4189.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Jan 11 10:21:54 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in all themes on Firefox
+		2. The knob input should not show the up and down arrow
+	</label>
+	<slider mold="knob" minpos="0.0" maxpos="100.0"
+			curpos="100" step="1" width="300px" angleArc="360"
+			style="border: 1px solid black;" strokeWidth="120"/>
+	<hlayout>
+		<a href="?zktheme=default" label="Default"/>
+		<a href="?zktheme=breeze" label="Breeze"/>
+		<a href="?zktheme=sapphire" label="Sapphire"/>
+		<a href="?zktheme=silvertail" label="Silvertail"/>
+		<a href="?zktheme=atlantic" label="Atlantic"/>
+	</hlayout>
+</zk>
