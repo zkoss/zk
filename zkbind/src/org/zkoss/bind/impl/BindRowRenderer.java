@@ -101,8 +101,6 @@ public class BindRowRenderer extends AbstractRenderer implements RowRenderer<Obj
 			nr.setAttribute(BinderCtrl.VAR, varnm);
 
 			// ZK-2552
-			recordRenderedIndex(grid, items.length);
-
 			nr.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {

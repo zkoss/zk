@@ -93,7 +93,6 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			nr.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 
 			// ZK-2552
-			recordRenderedIndex(radiogroup, items.length);
 			nr.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			nr.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {

@@ -97,7 +97,6 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			ntab.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 
 			// ZK-2552
-			recordRenderedIndex(tabs, items.length);
 			ntab.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			ntab.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
 				public Binder getBinder() {
@@ -178,7 +177,6 @@ public class BindTabboxRenderer extends AbstractRenderer implements TabboxRender
 			final Tabpanel ntabpanel = (Tabpanel) items[0];
 			ntabpanel.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 			// ZK-2552
-			recordRenderedIndex(tabpanels, items.length);
 
 			ntabpanel.setAttribute(AbstractRenderer.IS_TEMPLATE_MODEL_ENABLED_ATTR, true);
 			ntabpanel.setAttribute(AbstractRenderer.CURRENT_INDEX_RESOLVER_ATTR, new IndirectBinding(data) {
