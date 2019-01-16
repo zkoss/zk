@@ -35,11 +35,16 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 		open: function (open, fromServer) {
 			var node = this.$n();
 			if (node && this._closable) {
+				var caveNode = this.getCaveNode();
 				if (open) {
 					jq(node).removeClass(this.$s('collapsed'));
 					zk(this).redoCSS(-1, {'fixFontIcon': true});
 				}
-				zk(this.getCaveNode())[open ? 'slideDown' : 'slideUp'](this);
+				if (zk(this).getAnimationSpeed() === 1) {
+					jq(caveNode)[open ? 'show' : 'hide']();
+					this._afterOpen(open);
+				} else
+					zk(caveNode)[open ? 'slideDown' : 'slideUp'](this);
 
 				if (!fromServer) this.fire('onOpen', {open: open});
 			}
@@ -239,10 +244,12 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 		return cls;
 	},
 	afterAnima_: function (visible) {
+		this.$supers('afterAnima_', arguments);
+		this._afterOpen(visible);
+	},
+	_afterOpen: function (visible) {
 		if (!visible && this._isDefault())
 			jq(this.$n()).addClass(this.$s('collapsed'));
-
-		this.$supers('afterAnima_', arguments);
 
 		var p = this.parent;
 		if (p) {
