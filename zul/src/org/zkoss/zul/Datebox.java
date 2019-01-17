@@ -492,9 +492,9 @@ public class Datebox extends FormatInputElement {
 			} else {
 				_tzone = tzone;
 			}
-			SimpleDateConstraint cst = ((SimpleDateConstraint) this.getConstraint());
-			if (cst != null)
-				cst.setTimeZone(_tzone);
+			Constraint cst = getConstraint();
+			if (cst instanceof SimpleDateConstraint)
+				((SimpleDateConstraint) cst).setTimeZone(_tzone);
 			smartUpdate("timeZone", _tzone.getID());
 			smartUpdate("_value", marshall(_value));
 		}
@@ -862,12 +862,15 @@ public class Datebox extends FormatInputElement {
 	 */
 	// -- super --//
 	public void setConstraint(String constr) {
-		SimpleDateConstraint sc = null;
-		if (constr != null) {
-			sc = new SimpleDateConstraint(constr);
-			sc.setTimeZone(this.getTimeZone());
+		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug 2564298
+	}
+
+	@Override
+	public void setConstraint(Constraint constr) {
+		if (constr instanceof SimpleDateConstraint) {
+			((SimpleDateConstraint) constr).setTimeZone(this.getTimeZone());
 		}
-		setConstraint(sc); // Bug 2564298
+		super.setConstraint(constr);
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {

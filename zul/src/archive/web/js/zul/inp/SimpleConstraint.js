@@ -185,7 +185,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 */
 	validate: function (wgt, val) {
 		if (!this._finishParseCst) {
-			this._init(this._cst);
+			this._cst && this._init(this._cst);
 			this._finishParseCst = true;
 		}
 		var f = this._flags,

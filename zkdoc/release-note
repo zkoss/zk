@@ -102,6 +102,7 @@ ZK 8.6.1
   ZK-4172: ROD grid rerender cause scroll jumps and scroll size desync
   ZK-4198: Decimalbox implementation broken when using languages with comma as decimal separator
   ZK-4106: ZK flex calculation rounding error on subpx with chrome with zoom
+  ZK-4190: SimpleConstraint created by flag causes JS error
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
