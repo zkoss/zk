@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletRequest;
 
 import org.slf4j.Logger;
@@ -66,7 +67,6 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -90,7 +90,6 @@ import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Condition;
-import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.PageActivationListener;
 import org.zkoss.zk.ui.util.PageSerializationListener;
 import org.zkoss.zk.ui.util.Template;
@@ -749,10 +748,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public void destroy() {
-		Configuration config = WebApps.getCurrent().getConfiguration();
-		for (Component root: this.getRoots()) {
-			config.invokeCallback("destroy", root);
-		}
 		super.destroy();
 		try {
 			if (_ips != null) {

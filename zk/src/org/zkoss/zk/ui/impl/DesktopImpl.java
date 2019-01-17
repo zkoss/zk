@@ -914,17 +914,26 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				log.debug("After removed, pages: {}", _pages);
 		}
 		removeComponents(page.getRoots());
+		// should be before afterPageDetached to access binder information
+		beforeDestroyPage(page, _wapp.getConfiguration());
 
 		afterPageDetached(page, this);
+		_wapp.getConfiguration().afterPageDetached(page, this);
 
 		((PageCtrl) page).destroy();
-		_wapp.getConfiguration().afterPageDetached(page, this);
 	}
 
 	private void removeComponents(Collection<Component> comps) {
 		for (Component comp : comps) {
 			removeComponents(comp.getChildren()); //recursive
 			removeComponent(comp, true);
+		}
+	}
+
+	private void beforeDestroyPage(Page page, Configuration config) {
+		// ZK-1148: @Destroy support
+		for (Component root: page.getRoots()) {
+			config.invokeCallback("destroy", root);
 		}
 	}
 
@@ -989,8 +998,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		try {
 			final List<Page> pages = new ArrayList<Page>(_pages);
+			final Configuration config = _wapp.getConfiguration();
 			for (Page page : pages) {
 				try {
+					beforeDestroyPage(page, config);
 					((PageCtrl) page).destroy();
 				} catch (Throwable ex) {
 					log.warn("Failed to destroy " + page, ex);
