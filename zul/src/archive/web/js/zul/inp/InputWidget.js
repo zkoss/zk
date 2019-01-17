@@ -936,20 +936,33 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function () {
+		this._updateValue();
+		this.$supers('doKeyUp_', arguments);
+	},
+	doPaste_: function (event) {
+		this._updateValue(event);
+		this.$supers('doPaste_', arguments);
+	},
+	_updateValue: function (pasteEvent) {
 		//Support maxlength for Textarea
 		if (this.isMultiline()) {
 			var maxlen = this._maxlength;
 			if (maxlen > 0) {
-				var inp = this.getInputNode(), val = inp.value;
-				if (val != this._defRawVal && val.length > maxlen)
+				var inp = this.getInputNode(),
+					clipboardEvent = pasteEvent ? pasteEvent.domEvent.originalEvent : null,
+					val = clipboardEvent ? clipboardEvent.clipboardData.getData('text') : inp.value;
+				if (val != this._defRawVal && val.length > maxlen) {
 					inp.value = val.substring(0, maxlen);
+					if (pasteEvent)
+						pasteEvent.stop();
+				}
 			}
 		}
-
+		this._startOnChanging();
+	},
+	_startOnChanging: function () {
 		if (this.isListen('onChanging') || this._instant)
 			this.$class._startOnChanging(this);
-
-		this.$supers('doKeyUp_', arguments);
 	},
 	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace) {

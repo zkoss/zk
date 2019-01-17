@@ -96,6 +96,7 @@ ZK 8.6.1
   ZK-4188: enabling etag produces 304 with non empty response body
   ZK-4166: Abstract renderer stores rendered item index indefinitely
   ZK-4105: Combobox upper/lowercase to selected item trigger too late before onChange
+  ZK-2700: Textbox with multiple rows allows to input more symbols when define in textbox property 'maxlength'
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
