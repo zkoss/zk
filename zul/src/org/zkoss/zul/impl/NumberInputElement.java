@@ -145,14 +145,13 @@ public abstract class NumberInputElement extends FormatInputElement {
 		String format = getFormat();
 		boolean useLocaleFormat = (format != null && format.startsWith("locale:"));
 		if (_locale != null || useLocaleFormat) {
-			String localeName;
-			if (useLocaleFormat)
-				localeName = format.substring(format.indexOf(":") + 1);
-			else
-				localeName = _locale.toString();
+			Locale usedLocale = useLocaleFormat
+					? Locales.getLocale(format.substring(format.indexOf(":") + 1), '-')
+					: _locale;
+			String localeName = usedLocale.toString();
 			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(getDesktop(),
 					"org.zkoss.zul.impl.NumberInputElement" + localeName)) {
-				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale(localeName));
+				final DecimalFormatSymbols symbols = new DecimalFormatSymbols(usedLocale);
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("GROUPING", String.valueOf(symbols.getGroupingSeparator()));
 				map.put("DECIMAL", String.valueOf(symbols.getDecimalSeparator()));
