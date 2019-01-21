@@ -107,6 +107,7 @@ ZK 8.6.1
   ZK-4197: getAnimationSpeed in anima.js always return +1 value
   ZK-4029: memory leak (during desktop lifetime) with method binding
   ZK-4069: Can't resize an area with a splitter inside a vbox
+  ZK-4153: additional slow hover styles in bigger listboxes (IE11)
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,

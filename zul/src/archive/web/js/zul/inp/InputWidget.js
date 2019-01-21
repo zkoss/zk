@@ -544,6 +544,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				selected: inp.value.substring(b, e)});
 		}
 	},
+	_doMouseOver: function () {
+		if (this._disabled)
+			return;
+		jq(this.getInputNode()).addClass(this.$s('hover'));
+	},
+	_doMouseOut: function () {
+		if (this._disabled)
+			return;
+		jq(this.getInputNode()).removeClass(this.$s('hover'));
+	},
 	/** Returns shall be update or not
 	 * @param zk.Widget focus
 	 */
@@ -855,7 +865,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_')
-			.domListen_(n, 'onSelect');
+			.domListen_(n, 'onSelect')
+			.domListen_(n, 'onMouseOver')
+			.domListen_(n, 'onMouseOut');
 		//prevent unexpected onInput bug in IE10 and IE11, see https://connect.microsoft.com/IE/feedback/details/816137
 		if (zk.ie10_ || zk.ie11_) {
 			var self = this;
@@ -882,6 +894,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
 			.domUnlisten_(n, 'onSelect')
+			.domUnlisten_(n, 'onMouseOver')
+			.domUnlisten_(n, 'onMouseOut')
 			.domUnlisten_(n, 'onInput', 'doInput_');
 
 		if (zk.ios)
