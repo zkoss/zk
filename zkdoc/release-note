@@ -100,6 +100,7 @@ ZK 8.6.1
   ZK-2700: Textbox with multiple rows allows to input more symbols when define in textbox property 'maxlength'
   ZK-4195: global command binding causes NPE
   ZK-4172: ROD grid rerender cause scroll jumps and scroll size desync
+  ZK-4198: Decimalbox implementation broken when using languages with comma as decimal separator
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
