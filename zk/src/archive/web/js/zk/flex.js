@@ -315,10 +315,10 @@ zFlex = { //static methods
 			hgh = psz.height,
 			wdh = psz.width,
 			c = p.firstChild,
-			scrWdh,
 			vflexsRe = [],
 			hasVScroll = zkp.hasVScroll(),
 			hasHScroll = zkp.hasHScroll(),
+			scrollbarWidth = jq.scrollbarWidth(),
 			isMeshLoaded = zk.isLoaded('zul.mesh');
 
 		// B86-ZK-4123
@@ -333,11 +333,11 @@ zFlex = { //static methods
 
 		// Bug 3185686, B50-ZK-452
 		if (hasVScroll || meshBodyHasVScroll) //with vertical scrollbar
-			wdh -= (scrWdh = jq.scrollbarWidth());
+			wdh -= scrollbarWidth;
 			
 		// B50-3312936.zul
 		if (hasHScroll || meshBodyHasHScroll) //with horizontal scrollbar
-			hgh -= scrWdh || jq.scrollbarWidth();
+			hgh -= scrollbarWidth;
 			
 		for (; c; c = c.nextSibling)
 			if (c.nodeType != 3) break; //until not a text node
@@ -445,9 +445,8 @@ zFlex = { //static methods
 
 		//3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
 		//vertical scrollbar might disappear after height was set
-		var newpsz = wgt.getParentSize_(p);
-		if (newpsz.width > psz.width) //yes, the scrollbar gone!
-			wdh += (newpsz.width - psz.width);
+		if (!zkp.hasVScroll() && hasVScroll) //yes, the scrollbar gone!
+			wdh += scrollbarWidth;
 
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
@@ -468,8 +467,8 @@ zFlex = { //static methods
 		}
 
 		// ZK-3411: height need to be reset if the horizontal scrollbar disappeared
-		if (newpsz.height > psz.height) {   //horizontal scrollbar disappeared
-			hgh += (newpsz.height - psz.height);
+		if (!zkp.hasHScroll() && hasHScroll) {   //horizontal scrollbar disappeared
+			hgh += scrollbarWidth;
 			lastsz = hgh = Math.max(hgh, 0);
 			setHghForVflexChild(vflexsRe, hgh, lastsz);
 		}
@@ -477,10 +476,6 @@ zFlex = { //static methods
 		//notify parent widget that all of its children with hflex/vflex is done.
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
-
-		// ZK-3858: Window inside a <center> with autoscroll true doesn't resize itself correctly
-		if (zkp.hasVScroll() != hasVScroll || zkp.hasHScroll() != hasHScroll)
-			zFlex.fixFlex(wgt);
 	},
 	onFitSize: function () {
 		var wgt = this,
