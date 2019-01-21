@@ -345,7 +345,7 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	//-- Constraint --//
 	public void validate(Component comp, Object value) throws WrongValueException {
 		if (!_finishParseCst) {
-			parseCst(_raw);
+			if (_raw != null) parseCst(_raw);
 			_finishParseCst = true;
 		}
 		if (value == null) {
