@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4172-listbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 16 16:36:25 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <zscript><![CDATA[
+        List list = new ArrayList();
+        for (int i = 0; i < 200; i++) {
+            list.add("Item " + i);
+        }
+        ListModelList model = new ListModelList(list);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Scroll the listbox to trigger a ROD load.
+        2. Click any of three buttons. The scrollbar position should be not changed.
+    </label>
+    <button label="client rerender" w:onClick="zk.$('$res').getListbox().rerender()"/>
+    <button label="client setWidth" w:onClick="zk.$('$res').setWidth('100px')"/>
+    <button label="server setWidth" onClick='res.setWidth("100px")'/>
+    <listbox model="${model}" width="100%" height="500px">
+        <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+        <custom-attributes org.zkoss.zul.listbox.preloadSize="50"/>
+        <custom-attributes org.zkoss.zul.listbox.initRodSize="50"/>
+        <custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+        <listhead sizable="true">
+            <listheader label="1" width="300px"/>
+            <listheader label="2" width="300px"/>
+            <listheader id="res" label="3" width="300px"/>
+            <listheader label="4" width="300px"/>
+            <listheader label="5" width="300px"/>
+            <listheader label="6" width="300px"/>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell label="${each}"/>
+                <listcell label="${forEachStatus.index}" />
+                <listcell label="Item 1.2" />
+                <listcell label="Item 1.2" />
+                <listcell label="Item 1.2" />
+                <listcell label="Item 1.2" />
+            </listitem>
+        </template>
+    </listbox>
+</zk>
+
