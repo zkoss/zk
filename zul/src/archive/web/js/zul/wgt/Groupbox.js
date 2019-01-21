@@ -40,7 +40,7 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 					jq(node).removeClass(this.$s('collapsed'));
 					zk(this).redoCSS(-1, {'fixFontIcon': true});
 				}
-				if (zk(this).getAnimationSpeed() === 1) {
+				if (zk(this).getAnimationSpeed() === 0) {
 					jq(caveNode)[open ? 'show' : 'hide']();
 					this._afterOpen(open);
 				} else

@@ -141,8 +141,7 @@ zk.copy(zjq.prototype, {
 				animationSpeed = parseInt(animationSpeed);
 		}
 		
-		// Here are four animation functions in this class, which can't use 0 as duration so we increase animationSpeed by 1
-		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed + 1 : (defaultValue || jqSpeed._default);
+		return typeof animationSpeed === 'number' && !isNaN(animationSpeed) ? animationSpeed : (defaultValue === 0 ? 0 : defaultValue || jqSpeed._default);
 	},
 	/** Slides down (show) of the matched DOM element(s).
 	 * @param Widget wgt the widget that owns the DOM element
@@ -199,7 +198,7 @@ zk.copy(zjq.prototype, {
 
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
 			.css(css).show().animate(anima, {
-			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 250),
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 250),
 			complete: opts.afterAnima
 		});
 	},
@@ -254,7 +253,7 @@ zk.copy(zjq.prototype, {
 
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
 			.css(css).animate(anima, {
-			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 250),
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 250),
 			complete: opts.afterAnima
 		});
 	},
@@ -305,7 +304,7 @@ zk.copy(zjq.prototype, {
 
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
 			.css(css).animate(anima, {
-			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 350),
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 350),
 			complete: opts.afterAnima
 		});
 	},
@@ -360,7 +359,7 @@ zk.copy(zjq.prototype, {
 
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
 			.css(css).show().animate(anima, {
-			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration || 350),
+			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 350),
 			complete: opts.afterAnima
 		});
 	},
