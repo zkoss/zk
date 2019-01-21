@@ -104,6 +104,7 @@ ZK 8.6.1
   ZK-4106: ZK flex calculation rounding error on subpx with chrome with zoom
   ZK-4190: SimpleConstraint created by flag causes JS error
   ZK-4196: camera component not stopping streams when detaching
+  ZK-4197: getAnimationSpeed in anima.js always return +1 value
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
