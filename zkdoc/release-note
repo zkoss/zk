@@ -108,6 +108,7 @@ ZK 8.6.1
   ZK-4029: memory leak (during desktop lifetime) with method binding
   ZK-4069: Can't resize an area with a splitter inside a vbox
   ZK-4153: additional slow hover styles in bigger listboxes (IE11)
+  ZK-3764: Button renders a stacked font awesome icon incorrectly
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
