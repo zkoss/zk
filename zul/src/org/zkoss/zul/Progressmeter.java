@@ -31,6 +31,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Progressmeter extends XulElement {
 	private int _val;
 	private boolean _resetWidth = true; //B80-ZK-2895
+	private boolean _indeterminate = false; //F86-ZK-3629
 
 	public Progressmeter() {
 		super.setWidth("100px");
@@ -78,6 +79,23 @@ public class Progressmeter extends XulElement {
 		return _val;
 	}
 
+	/** Sets the indeterminate state of the progress meter.
+	 * @since 8.6.1
+	 */
+	public void setIndeterminate(boolean indeterminate) {
+		if (_indeterminate != indeterminate) {
+			_indeterminate = indeterminate;
+			smartUpdate("indeterminate", _indeterminate);
+		}
+	}
+	
+	/** Returns the indeterminate state of the progress meter.(default false)
+	 * @since 8.6.1
+	 */
+	public boolean isIndeterminate() {
+		return _indeterminate;
+	}
+
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-progressmeter" : _zclass;
@@ -92,6 +110,6 @@ public class Progressmeter extends XulElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 		render(renderer, "value", "" + _val);
-
+		render(renderer, "indeterminate", _indeterminate);
 	}
 }

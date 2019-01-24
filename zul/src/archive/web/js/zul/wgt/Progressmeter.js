@@ -19,6 +19,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	_value: 0,
+	_indeterminate: false,
+	_indeterminateAnimation: false,
 
 	$define: {
 		/** Returns the current value of the progress meter.
@@ -31,6 +33,18 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		value: function () {
 			if (this.$n())
 				this._fixImgWidth();
+		},
+		/** Returns the indeterminate state of the progress meter.(default false)
+		 * @return boolean
+		 */
+		/** Sets the indeterminate state of the progress meter.
+		 * @param boolean indeterminate
+		 */
+		indeterminate: function (indeterminate) {
+			if (this.$n()) {
+				jq(this.$n()).toggleClass(this.$s('indeterminate'));
+				this._handleIndeterminateAnimation();
+			}
 		}
 	},
 
@@ -40,7 +54,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 			img = this.$n('img');
 		if (img) {
 			//B70-ZK-2453 remember to add brackets
-			if (zk(n).isRealVisible()) { //Bug 3134159
+			if (zk(n).isRealVisible() && !this._indeterminateAnimation) { //Bug 3134159
 				var $img = jq(img);
 				$img.animate({
 					width: this._value + '%'
@@ -48,10 +62,32 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 			}
 		}
 	},
+	_handleIndeterminateAnimation: zk.ie9 ? function () { // ZK-3629: for ie9 indetermination animation
+		var $img = jq(this.$n('img'));
+		if (this._indeterminate) {
+			$img.css({width: '50%'});
+			this._startIndeterminateAnimation($img);
+			this._indeterminateAnimation = true;
+		} else if (this._indeterminateAnimation) {
+			$img.stop(true);
+			this._indeterminateAnimation = false;
+			this._fixImgWidth();
+		}
+	} : zk.$void,
+	_startIndeterminateAnimation: function (target) { // ZK-3629: for ie9 indetermination animation
+		var self = this;
+		target.css({left: '-100%'});
+		target.animate({
+			left: '100%',
+		}, 1500, 'linear', function () {
+			self._startIndeterminateAnimation(target);
+		});
+	},
 	onSize: _zkf,
 	bind_: function () {//after compose
 		this.$supers(zul.wgt.Progressmeter, 'bind_', arguments);
 		this._fixImgWidth(this._value);
+		this._handleIndeterminateAnimation();
 		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
@@ -61,6 +97,14 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	setWidth: function (val) {
 		this.$supers('setWidth', arguments);
 		this._fixImgWidth();
+	},
+	domClass_: function (no) {
+		var scls = this.$supers('domClass_', arguments);
+		if (!no || !no.zclass) {
+			if (this._indeterminate)
+				scls += ' ' + this.$s('indeterminate');
+		}
+		return scls;
 	}
 });
 
