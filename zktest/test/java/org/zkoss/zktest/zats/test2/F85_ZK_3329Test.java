@@ -30,7 +30,7 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 
 		waitResponse(true);
 		JQuery regionBar = jq("$east .z-east-collapsed");
-		JQuery slide = jq("$east .z-east-slide");
+		JQuery slide = jq("$east.z-east-slide .z-east");
 		JQuery btn = jq("$east .z-borderlayout-icon:visible");
 		JQuery slideToggle = jq("@button:contains(east toggle slide)");
 		JQuery slidableToggle = jq("@checkbox:contains(east slidable) > input");
@@ -59,7 +59,7 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 		connect();
 
 		JQuery regionBar = jq("$west .z-west-collapsed");
-		JQuery slide = jq("$west .z-west-slide");
+		JQuery slide = jq("$west.z-west-slide .z-west");
 		JQuery real = jq("$west .z-west");
 		JQuery btn = jq("$west .z-borderlayout-icon:visible");
 		JQuery openToggle = jq("@button:contains(west toggle open)");
