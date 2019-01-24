@@ -1,131 +1,141 @@
 @import "~./zul/less/_header.less";
 
-.z-combobox,
-.z-bandbox,
-.z-datebox,
-.z-timebox,
-.z-spinner,
-.z-doublespinner {
-	display: inline-block;
-	height: 34px;
-	white-space: nowrap;
-
-	&-input {
-		.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
-		height: 34px;
-		border: 1px solid @inputBorderColor;
-		border-right: 0;
-		.leftBorderRadius(@baseBorderRadius);
-		margin: 0;
-		padding: @inputPadding;
-		line-height: @baseLineHeight;
-		background: @inputBackgroundColor;
-
-		&:hover {
-			border-color: @inputHoverBorderColor;
-			& + a, & + span {
-				border-color: @inputHoverBorderColor;
-			}
-		}
-		&:focus {
-			border-color: @inputFocusBorderColor;
-			& + a, & + span {
-				border-left: 1px solid @inputFocusBorderColor;
-			}
-		}
-
-		// Placeholder ZK-3876: combobox does not provide proper placeholder style
-		&::-webkit-input-placeholder {
-			color: @inputPlaceholderColor;
-		}
-		&:-moz-placeholder {
-			/* FF 4-18 */
-			color: @inputPlaceholderColor;
-			opacity: 1;
-		}
-		&::-moz-placeholder {
-			/* FF 19+ */
-			color: @inputPlaceholderColor;
-			opacity: 1;
-		}
-		&:-ms-input-placeholder {
-			/* IE 10+ */
-			color: @inputPlaceholderColor;
-		}
-	}
-
-	&-button {
-		.iconFontStyle(@comboButtonIconSize, @comboButtonIconColor);
+@components: z-combobox, z-bandbox, z-datebox, z-timebox, z-spinner, z-doublespinner;
+each(@components, {
+	.@{value} {
 		display: inline-block;
-		min-width: @baseButtonWidth + 8px * 2;
 		height: 34px;
-		border: 1px solid @inputBorderColor;
-		.rightBorderRadius(@baseBorderRadius);
-		padding: 6px 8px 0;
-		line-height: @baseLineHeight;
-		background: @inputBackgroundColor;
-		text-align: center;
-		vertical-align: middle;
-		overflow: hidden;
-		cursor: pointer;
+		white-space: nowrap;
 
-		&:hover {
-			border-color: @comboButtonHoverBorderColor;
-			background: @comboButtonHoverBackgroundColor;
-		}
-		&:active {
-			color: @comboButtonActiveIconColor;
-			border-color: @comboButtonActiveBorderColor;
-			background-color: @comboButtonActiveBackgroundColor;
-		}
-	}
+		&-input {
+			.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
+			height: 34px;
+			border: 1px solid @inputBorderColor;
+			border-right: 0;
+			.leftBorderRadius(@baseBorderRadius);
+			margin: 0;
+			padding: @inputPadding;
+			line-height: @baseLineHeight;
+			background: @inputBackgroundColor;
 
-	&-disabled {
-		.opacity(@disabledOpacity);
-		& > input {
-			color: @inputDisableColor !important;
-			background: @inputDisableBackgroundColor !important;
-			cursor: default !important;
-			&:hover {
-				border-color: @inputBorderColor;
-				& + a, & + span {
-					border-color: @inputBorderColor;
-				}
+			// Placeholder ZK-3876: combobox does not provide proper placeholder style
+			&::-webkit-input-placeholder {
+				color: @inputPlaceholderColor;
+			}
+
+			&:-moz-placeholder {
+				/* FF 4-18 */
+				color: @inputPlaceholderColor;
+				opacity: 1;
+			}
+
+			&::-moz-placeholder {
+				/* FF 19+ */
+				color: @inputPlaceholderColor;
+				opacity: 1;
+			}
+
+			&:-ms-input-placeholder {
+				/* IE 10+ */
+				color: @inputPlaceholderColor;
 			}
 		}
-		& > a, & > span {
-			color: @inputDisableColor !important;
-			background: @inputDisableBackgroundColor !important;
-			cursor: default !important;
+
+		&-input&-hover, &-input&-hover + &-button {
+			border-color: @inputHoverBorderColor;
+		}
+
+		&-input:focus {
+			border-color: @inputFocusBorderColor;
+		}
+		&-input:focus + &-button {
+			border-left: 1px solid @inputFocusBorderColor;
+		}
+
+		&-button {
+			.iconFontStyle(@comboButtonIconSize, @comboButtonIconColor);
+			display: inline-block;
+			min-width: @baseButtonWidth + 8px * 2;
+			height: 34px;
+			border: 1px solid @inputBorderColor;
+			.rightBorderRadius(@baseBorderRadius);
+			padding: 6px 8px 0;
+			line-height: @baseLineHeight;
+			background: @inputBackgroundColor;
+			text-align: center;
+			vertical-align: middle;
+			overflow: hidden;
+			cursor: pointer;
+
 			&:hover {
-				border-color: @inputBorderColor;
+				border-color: @comboButtonHoverBorderColor;
+				background: @comboButtonHoverBackgroundColor;
+			}
+
+			&:active {
+				color: @comboButtonActiveIconColor;
+				border-color: @comboButtonActiveBorderColor;
+				background-color: @comboButtonActiveBackgroundColor;
 			}
 		}
-	}
 
-	&-invalid {
-		border-color: @invalidBorderColor !important;
-		& + a, & + span {
+		&-disabled {
+			.opacity(@disabledOpacity);
+
+			& > input {
+				color: @inputDisableColor !important;
+				background: @inputDisableBackgroundColor !important;
+				cursor: default !important;
+			}
+
+			& > a, & > span {
+				color: @inputDisableColor !important;
+				background: @inputDisableBackgroundColor !important;
+				cursor: default !important;
+			}
+		}
+		&-disabled &-button:hover {
+			border-color: @inputBorderColor;
+		}
+
+		&-button&-disabled { // buttonVisible="false"
+			display: none;
+		}
+
+		&-invalid {
+			border-color: @invalidBorderColor !important;
+		}
+		&-invalid + &-button {
 			border-left: 1px solid @invalidBorderColor !important;
 		}
-	}
 
-	&-rightedge {
-		border-right: 1px solid @inputBorderColor;
-		.borderRadius(@baseBorderRadius);
-	}
-
-	&-readonly {
-		& > input {
-			color: @inputReadonlyColor;
-			background: @inputReadonlyBackgroundColor;
+		&-rightedge {
+			border-right: 1px solid @inputBorderColor;
+			.borderRadius(@baseBorderRadius);
 		}
-		& > a, & > span {
+
+		&-readonly {
+			& > input {
+				color: @inputReadonlyColor;
+				background: @inputReadonlyBackgroundColor;
+			}
+		}
+		&-readonly &-button {
 			color: @inputReadonlyColor;
 			background-color: @inputBackgroundColor;
 		}
+
+		// Inplace editing
+		&-inplace &-input {
+			border: 0;
+			padding: 3px;
+			background: none;
+		}
+		&-inplace &-button {
+			visibility: hidden; // Bug ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
+		}
 	}
-}
+});
 
 .z-combobox-open .z-combobox-button,
 .z-bandbox-open .z-bandbox-button,
@@ -139,15 +149,6 @@
 	& > input {
 		cursor: pointer;
 	}
-}
-
-.z-combobox-button.z-combobox-disabled,
-.z-bandbox-button.z-bandbox-disabled,
-.z-datebox-button.z-datebox-disabled,
-.z-timebox-button.z-timebox-disabled,
-.z-spinner-button.z-spinner-disabled,
-.z-doublespinner-button.z-doublespinner-disabled {
-	display: none;
 }
 
 .z-datebox-button,
@@ -230,26 +231,6 @@
 	& > i {
 		display: none;
 	}
-}
-
-// Inplace editing
-.z-combobox-inplace .z-combobox-input,
-.z-bandbox-inplace .z-bandbox-input,
-.z-datebox-inplace .z-datebox-input,
-.z-timebox-inplace .z-timebox-input,
-.z-spinner-inplace .z-spinner-input,
-.z-doublespinner-inplace .z-doublespinner-input {
-	border: 0;
-	padding: 3px;
-	background: none;
-}
-.z-combobox-inplace .z-combobox-button,
-.z-bandbox-inplace .z-bandbox-button,
-.z-datebox-inplace .z-datebox-button,
-.z-timebox-inplace .z-timebox-button,
-.z-spinner-inplace .z-spinner-button,
-.z-doublespinner-inplace .z-doublespinner-button {
-	visibility: hidden; // Bug ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
 }
 
 // combobox emptySearchMessage
