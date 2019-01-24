@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3764.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 23 11:17:54 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style><![CDATA[
+    .red { color: red; }
+    ]]></style>
+    <hlayout>
+        <custom-attributes pageSelf="${desktop.getRequestPath()}"/>
+        <a href="${pageSelf}?zktheme=breeze" label="Breeze"/>
+        <a href="${pageSelf}?zktheme=sapphire" label="Sapphire"/>
+        <a href="${pageSelf}?zktheme=silvertail" label="Silvertail"/>
+        <a href="${pageSelf}?zktheme=atlantic" label="Atlantic"/>
+        <a href="${pageSelf}?zktheme=default" label="Default"/>
+    </hlayout>
+    <label multiline="true">
+        The icons should be similar (the red circle size)
+    </label>
+    <vlayout>
+        <label value="Control group:"/>
+        <html>
+            <span class="z-icon-stack">
+                <i class="z-icon-camera z-icon-stack-1x"/>
+                <i class="z-icon-ban z-icon-stack-2x red"/>
+            </span>
+        </html>
+        <label value="Experimental group:"/>
+        <button iconSclass="z-icon-camera z-icon-stack-1x, z-icon-ban z-icon-stack-2x red"/>
+    </vlayout>
+    <navbar>
+        <nav iconSclass="z-icon-camera z-icon-stack-1x, z-icon-ban z-icon-stack-2x red" label="Test">
+            <navitem iconSclass="z-icon-camera z-icon-stack-1x, z-icon-ban z-icon-stack-2x red" label="Test" />
+            <navitem iconSclass="z-icon-camera" label="Test2" />
+            <navitem image="/img/battery.gif" label="Test3" />
+            <navitem label="Test4" />
+        </nav>
+        <nav iconSclass="z-icon-camera" label="Test2" />
+        <nav image="/img/battery.gif" label="Test3" />
+        <nav label="Test4" />
+    </navbar>
+</zk>
