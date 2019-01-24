@@ -391,28 +391,29 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			var minusS = totalFd - s;
 			runNext.style[fd] = s + 'px';
 			runPrev.style[fd] = minusS + 'px';
+
+			if (!bfcolps)
+				runNext.style.overflow = 'hidden';
+			else
+				runPrev.style.overflow = 'hidden';
+
+			for (var i = 0, w; i < 2; i++) {
+				w = wgts[i];
+				if (w && hflexReset[i]) {
+					w['set' + upperFdArr[0]]('100%');
+				}
+				if (w && vflexReset[i]) {
+					w['set' + upperFdArr[1]]('100%');
+				}
+				zUtl.fireSized(w, -1); //no beforeSize
+			}
+
 			var nextClientFd = runNext['client' + upperFd];
 			var prevClientFd = totalFd - nextClientFd;
 			if (nextClientFd != s)
 				runNext.style[fd] = nextClientFd + 'px'; //count on clientFd
 			if (prevClientFd != minusS)
 				runPrev.style[fd] = prevClientFd + 'px'; //count on clientFd
-
-			if (!bfcolps)
-				runNext.style.overflow = 'hidden';
-			else
-				runPrev.style.overflow = 'hidden';
-		}
-
-		for (var i = 0, w; i < 2; i++) {
-			w = wgts[i];
-			if (w && hflexReset[i]) {
-				w['set' + upperFdArr[0]]('100%');
-			}
-			if (w && vflexReset[i]) {
-				w['set' + upperFdArr[1]]('100%');
-			}
-			zUtl.fireSized(w, -1); //no beforeSize
 		}
 
 		Splitter._unfixLayout(flInfo);
