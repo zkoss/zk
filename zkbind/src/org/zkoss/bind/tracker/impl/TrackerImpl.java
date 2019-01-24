@@ -317,7 +317,7 @@ public class TrackerImpl implements Tracker, Serializable {
 						}
 
 						// ZK-2552: we need to ignore if the target component in reference binding
-						// is different from the given comopnent, because they may bind with a same
+						// is different from the given component, because they may bind with a same
 						// data object with the same EL expression.
 						boolean ignore = false;
 						for (ReferenceBinding refBinding : node.getReferenceBindings()) {
@@ -333,7 +333,13 @@ public class TrackerImpl implements Tracker, Serializable {
 
 						propNodes.add(node);
 						if (BindELContext.isBracket((String) script)) {
-							baseNode.tieProperty(propName, script);
+							for (Iterator<Binding> it = node.getBindings().iterator(); it.hasNext();) {
+								Binding binding = it.next();
+								if (comp.equals(binding.getComponent())) {
+									baseNode.tieProperty(propName, node);
+									break;
+								}
+							}
 						}
 					}
 				}
@@ -877,13 +883,13 @@ public class TrackerImpl implements Tracker, Serializable {
 		if (node.getPropNameMapping().size() == 0)
 			return; //don't dump if empty
 		System.out.println(dumpSpace(spaces) + "[propertys:");
-		for (Entry<Object, Object> entry : node.getPropNameMapping().entrySet()) {
+		for (Entry<Object, TrackerNode> entry : node.getPropNameMapping().entrySet()) {
 			dumpEntry(entry, spaces + 4);
 		}
 		System.out.println(dumpSpace(spaces) + "]");
 	}
 
-	private void dumpEntry(Entry<Object, Object> entry, int spaces) {
+	private void dumpEntry(Entry<Object, TrackerNode> entry, int spaces) {
 		System.out.println(dumpSpace(spaces) + entry.getKey() + "=" + entry.getValue());
 	}
 

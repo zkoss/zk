@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3922.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 22 12:34:41 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Fill "name" with an invalid value (ex: xo), it triggers a validation error message.
+		2. Fill "address" with a valid value (ex: 123), the "name" field and validation message shouldn't disappear.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_3922VM')" validationMessages="@id('vmsgs')">
+		<div form="@id('fx') @load(vm.record) @save(vm.record, before='save')">
+			<forEach items="@init(vm.fields)" var="field">
+				<div>
+					${field.id}
+					<textbox value="@bind(fx[field.id]) @validator(vm.validator, field=field)"/>
+					<label value="@load(vmsgs[field.id])" style="color: red"/>
+				</div>
+			</forEach>
+		</div>
+	</div>
+</zk>
