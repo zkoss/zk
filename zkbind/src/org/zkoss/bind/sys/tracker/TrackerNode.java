@@ -119,16 +119,16 @@ public interface TrackerNode {
 	public void addAssociate(TrackerNode srcnode);
 
 	/**
-	 * tie property with script of this node.
+	 * tie property with tracker node of this node.
 	 * @param propName
-	 * @param script
+	 * @param trackerNode
 	 * @since 6.5.5
 	 */
-	public void tieProperty(Object propName, Object script);
+	public void tieProperty(Object propName, TrackerNode trackerNode);
 
 	/**
-	 * get property, script mapping map
+	 * get property, tracker node mapping map
 	 * @since 6.5.5
 	 */
-	public Map<Object, Object> getPropNameMapping();
+	public Map<Object, TrackerNode> getPropNameMapping();
 }

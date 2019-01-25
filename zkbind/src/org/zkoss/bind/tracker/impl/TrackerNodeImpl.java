@@ -35,7 +35,7 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 	private static final long serialVersionUID = 1463169907348730644L;
 	private final Object _script; //script of this node (e.g. firstname or ['firstname'])
 	private final Map<Object, TrackerNode> _dependents; //kid script -> kid TrackerNode
-	private final Map<Object, Object> _brackets; //property -> bracket script
+	private final Map<Object, TrackerNode> _brackets; //property -> bracket script
 	private final Set<LoadBinding> _bindings; //associated bindings
 	private final Set<ReferenceBinding> _refBindings; //associated ReferenceBindings
 	private final Set<TrackerNode> _associates; //dependent nodes of this node (e.g. fullname node is dependent node of this firstname node) 
@@ -46,7 +46,7 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 		_dependents = new HashMap<Object, TrackerNode>(4);
 		_bindings = new HashSet<LoadBinding>(4);
 		_refBindings = new HashSet<ReferenceBinding>(2);
-		_brackets = new HashMap<Object, Object>(4);
+		_brackets = new HashMap<Object, TrackerNode>(4);
 		_associates = new HashSet<TrackerNode>(4);
 	}
 
@@ -57,10 +57,7 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 	public TrackerNode getDependent(Object property) {
 		TrackerNode kid = getDependent0(property);
 		if (kid == null) { //try bracket
-			final Object script = _brackets.get(property);
-			if (script != null) {
-				kid = getDependent0(script);
-			}
+			kid = _brackets.get(property);
 		}
 		return kid;
 	}
@@ -72,16 +69,14 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 			set.add(kid);
 		}
 
-		Object script = _brackets.get(property);
-		if (script == null && property instanceof String) {
+		TrackerNode node = _brackets.get(property);
+		if (node == null && property instanceof String) {
 			String prop = (String) property;
 			if (BindELContext.isBracket(prop))
-				script = _brackets.get(prop.substring(1, prop.length() - 1));
+				node = _brackets.get(prop.substring(1, prop.length() - 1));
 		}
-		if (script != null) {
-			kid = getDependent0(script);
-			if (kid != null)
-				set.add(kid);
+		if (node != null) {
+			set.add(node);
 		}
 		return set;
 	}
@@ -98,23 +93,23 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 		_dependents.put(script, dependent);
 	}
 
-	public void tieProperty(Object property, Object script) {
-		final Object oldscript = _brackets.get(property);
-		if (script.equals(oldscript)) {
+	public void tieProperty(Object property, TrackerNode trackerNode) {
+		final Object oldNode = _brackets.get(property);
+		if (trackerNode.equals(oldNode)) {
 			return;
 		}
-		if (oldscript != null) {
+		if (oldNode != null) {
 			_brackets.remove(property);
 		}
-		for (final Iterator<Object> it = _brackets.values().iterator(); it.hasNext();) {
+		for (final Iterator<TrackerNode> it = _brackets.values().iterator(); it.hasNext();) {
 			final Object bracket = it.next();
-			if (script.equals(bracket)) {
+			if (trackerNode.equals(bracket)) {
 				it.remove();
 				break;
 			}
 		}
 		if (property != null) {
-			_brackets.put(property, script);
+			_brackets.put(property, trackerNode);
 		}
 	}
 
@@ -190,7 +185,7 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 		return _script;
 	}
 
-	public Map<Object, Object> getPropNameMapping() {
+	public Map<Object, TrackerNode> getPropNameMapping() {
 		return _brackets;
 	}
 
