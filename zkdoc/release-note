@@ -111,6 +111,7 @@ ZK 8.6.1
   ZK-4153: additional slow hover styles in bigger listboxes (IE11)
   ZK-3764: Button renders a stacked font awesome icon incorrectly
   ZK-3922: binder reloads binded values due to wrong dependency detection
+  ZK-4164: 8.6 grid rod render performance impact
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
