@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4164.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 22 12:34:41 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Scroll down and see new rows added, you should not see syncSize in zk log.
+	</label>
+	<script>
+		zk.afterLoad('zul.grid', function () {
+			var _xGrid = {};
+			zk.override(zul.grid.Grid.prototype, _xGrid, {
+				syncSize: function () {
+					_xGrid.syncSize.apply(this, arguments);
+					zk.log('syncSize');
+				}
+			});
+		});
+	</script>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(400, "dummy"));
+		ListModelList chosenModel = new ListModelList(new String[] {"aaaaa", "bbbbb", "ccccc", "dddd", "eee"});
+		chosenModel.setMultiple(true);
+		chosenModel.addToSelection("aaaaa");
+		chosenModel.addToSelection("ccccc");
+		chosenModel.addToSelection("dddd");
+	]]></zscript>
+	<grid model="${model}" height="500px">
+		<custom-attributes org.zkoss.zul.grid.rod="false"/>
+		<columns>
+			<column label="col1"/>
+			<column label="col2"/>
+			<column label="col3"/>
+			<column label="col4"/>
+			<column label="col5"/>
+			<column label="col6"/>
+			<column label="col7"/>
+			<column label="col8"/>
+		</columns>
+		<template name="model">
+			<row>
+				<label value="row-${forEachStatus.index}"/>
+				<label value="row-${forEachStatus.index}"/>
+				<label value="row-${forEachStatus.index}"/>
+				<label value="row-${forEachStatus.index}"/>
+				<label value="row-${forEachStatus.index}"/>
+				<label value="row-${forEachStatus.index}"/>
+				<label value="row-${forEachStatus.index}"/>
+				<label value="row-${forEachStatus.index}" hflex="1"/>
+			</row>
+		</template>
+	</grid>
+</zk>
