@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.UiException;
  */
 public class ProxyHelper {
 	private static Map<Class<?>, Boolean> _ignoredClasses = new ConcurrentHashMap<Class<?>, Boolean>();
+	private static Map<Class<?>, Boolean> _ignoredSuperClasses = new ConcurrentHashMap<Class<?>, Boolean>();
 	private static List<ProxyTargetHandler> _proxyTargetHandlers;
 	private static ProxyDecorator _proxyDecorator;
 
@@ -54,6 +55,16 @@ public class ProxyHelper {
 			for (String className : classes) {
 				try {
 					addIgnoredProxyClass(Classes.forNameByThread(className.trim()));
+				} catch (ClassNotFoundException ex) {
+					throw new SystemException("Failed to load class " + className);
+				}
+			}
+		}
+		List<String> superClasses = Library.getProperties("org.zkoss.bind.proxy.IgnoredSuperProxyClasses");
+		if (superClasses != null && superClasses.size() != 0) {
+			for (String className : superClasses) {
+				try {
+					addIgnoredSuperProxyClass(Classes.forNameByThread(className.trim()));
 				} catch (ClassNotFoundException ex) {
 					throw new SystemException("Failed to load class " + className);
 				}
@@ -154,6 +165,19 @@ public class ProxyHelper {
 	}
 
 	/**
+	 * Adds an ignored super proxy class type. Once the data binder try to create a proxy
+	 * object for the form binding, it will check the super classes of the origin class type. If one of the super
+	 * classes is in the ignored super classes, the origin class type should be ignored.
+	 * <p>Default it will apply these classes from the library property
+	 * <code>org.zkoss.bind.proxy.IgnoredSuperProxyClasses</code>
+	 * </p>
+	 * @since 8.6.1
+	 */
+	public static void addIgnoredSuperProxyClass(Class<?> type) {
+		_ignoredSuperClasses.put(type, Boolean.TRUE);
+	}
+
+	/**
 	 * Returns whether the given origin object is immutable.
 	 */
 	public static boolean isImmutable(Object origin) {
@@ -191,7 +215,14 @@ public class ProxyHelper {
 			_ignoredClasses.put(type, Boolean.TRUE);
 			return true;
 		}
-
+		if (_ignoredSuperClasses.size() > 0) {
+			for (Class c = type; (c = c.getSuperclass()) != null;) {
+				if (_ignoredSuperClasses.containsKey(c)) {
+					_ignoredClasses.put(type, Boolean.TRUE); //cache
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 

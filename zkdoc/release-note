@@ -15,6 +15,7 @@ ZK 8.6.1
   ZK-4192: camera component: improve recording time accuracy
   ZK-4191: add possibility to handle camera unavailability
   ZK-3629: Indeterminate progressmeter
+  ZK-3540: FormProxy - ignore whole class hierarchies
 
 * Bugs
   ZK-4114: orgnode label missing font styles
