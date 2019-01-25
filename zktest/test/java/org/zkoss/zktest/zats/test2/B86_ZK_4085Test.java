@@ -28,7 +28,7 @@ public class B86_ZK_4085Test extends WebDriverTestCase {
 	}
 
 	private void testStrokeWidth(JQuery slider) {
-		Assert.assertTrue(Integer.valueOf(slider.find("circle").attr("stroke-width"))
+		Assert.assertTrue(Integer.valueOf(slider.find("path").attr("stroke-width"))
 				<= Math.min(slider.outerWidth(), slider.outerHeight()) / 2);
 	}
 }
