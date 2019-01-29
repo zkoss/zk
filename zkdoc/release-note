@@ -16,6 +16,7 @@ ZK 8.6.1
   ZK-4191: add possibility to handle camera unavailability
   ZK-3629: Indeterminate progressmeter
   ZK-3540: FormProxy - ignore whole class hierarchies
+  ZK-4200: Improve ZEL ImportHandler performance
 
 * Bugs
   ZK-4114: orgnode label missing font styles

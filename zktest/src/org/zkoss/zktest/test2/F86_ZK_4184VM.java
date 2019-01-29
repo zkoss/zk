@@ -42,7 +42,7 @@ public class F86_ZK_4184VM {
 			try {
 				Thread.sleep(1000);
 				while (running) {
-					Thread.sleep(10);
+					Thread.sleep(1);
 					if (Math.random() < 0.5) {
 						int size = contacts.size();
 						if (size > 0) {

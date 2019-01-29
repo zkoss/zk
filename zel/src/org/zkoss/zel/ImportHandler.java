@@ -169,24 +169,34 @@ public class ImportHandler {
 
         Class<?> result = clazzes.get(name);
 
-        if (result == null) {
-            // Search the package imports - note there may be multiple matches
-            // (which correctly triggers an error)
-            for (String p : packages) {
-                String className = p + '.' + name;
-                Class<?> clazz = findClass(className);
-                if (clazz != null) {
-                    if (result != null) {
-                        throw new ELException(Util.message(null,
-                                "importHandler.ambiguousImport", className,
-                                result.getName()));
-                    }
-                    result = clazz;
+        if (result != null) {
+            if (NotFound.class.equals(result)) {
+                return null;
+            } else {
+                return result;
+            }
+        }
+
+        // Search the package imports - note there may be multiple matches
+        // (which correctly triggers an error)
+        for (String p : packages) {
+            String className = p + '.' + name;
+            Class<?> clazz = findClass(className);
+            if (clazz != null) {
+                if (result != null) {
+                    throw new ELException(Util.message(null,
+                            "importHandler.ambiguousImport", className,
+                            result.getName()));
                 }
+                result = clazz;
             }
-            if (result != null) {
-                clazzes.put(name, result);
-            }
+        }
+        if (result == null) {
+            // Cache NotFound results to save repeated calls to findClass()
+            // which is relatively slow
+            clazzes.put(name, NotFound.class);
+        } else {
+            clazzes.put(name, result);
         }
 
         return result;
@@ -215,5 +225,12 @@ public class ImportHandler {
         }
 
         return clazz;
+    }
+
+    /*
+     * Marker class used because null values are not permitted in a
+     * ConcurrentHashMap.
+     */
+    private static class NotFound {
     }
 }
