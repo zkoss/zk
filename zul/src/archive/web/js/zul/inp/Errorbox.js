@@ -26,12 +26,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	_defaultPos: 'end_before',
 	$init: function (owner, msg) {
-		this.parent = owner; //fake
+		this.$supers('$init', [owner, msg, {ref: parent}]);
 		this.parent.__ebox = this;
 		this.msg = msg;
 		this.sclass = owner._errorboxSclass;
 		this.iconSclass = owner._errorboxIconSclass || 'z-icon-exclamation-triangle';
-		this.$supers('$init', [msg, {ref: parent}]);
 	},
 	domClass_: function (no) {
 		var sclass = this.sclass,
