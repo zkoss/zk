@@ -30,8 +30,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	_keepVisible: true,
-	$init: function (msg, opts) {
+	$init: function (owner, msg, opts) {
 		this.$supers(zul.wgt.Notification, '$init', arguments);
+		this.parent = owner; //fake
 		this._msg = msg;
 		this._type = opts.type;
 		this._ref = opts.ref;
@@ -236,11 +237,10 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	show: function (msg, pid, opts) {
 		if (!opts)
 			opts = {};
-		var parent = zk.Widget.$(pid),
-			ref = opts.ref,
+		var ref = opts.ref,
 			pos = opts.pos,
 			dur = opts.dur,
-			ntf = new zul.wgt.Notification(msg, opts),
+			ntf = new zul.wgt.Notification(ref, msg, opts),
 			off = opts.off,
 			n, isInView = true;
 
@@ -258,11 +258,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		if (!pos && !off)
 			pos = ref ? 'end_center' : 'middle_center';
 
-		if (!parent) {
-			// bug ZK-1136: If target page is detached, append to current active page
-			parent = zk.Desktop.$().firstChild;
-		}
-		parent.appendChild(ntf);
+		jq(document.body).append(ntf);
 		ntf._nftPos = pos;
 		ntf.open(ref, off, pos);
 
