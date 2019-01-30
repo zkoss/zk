@@ -1,17 +1,7 @@
 <zk>
 	<label multiline="true">
-	  1. click the button
-	  2. you should see zk.log shows "Yes" to indicate the grid body width is the same with grid body table width
+	  1. Columns and cells should be alignment
 	  </label>
-	  <script type="text/javascript">
-	  	function getWidth() {
-			var bdwidth = $('.z-grid-body').width();
-			var bdtblwidth = $('.z-grid-body>table').width();
-			zk.log(bdtblwidth + ' ' + bdwidth);
-			zk.log(bdtblwidth==bdwidth? 'Yes' : 'No');
-	  	}
-	  </script>
-	  <button label="button" onClick='Clients.evalJavaScript("getWidth()")' />
 	<window border="normal" title="hello" height="400px">
 
 		<grid vflex="true" span="true">
