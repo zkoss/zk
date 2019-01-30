@@ -1342,8 +1342,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		var totalCols = head.nChildren,
 			width0 = zul.mesh.MeshWidget.WIDTH0,
-			newTotalWidth = parseFloat(this.ebodytbl.style.width),
-			oldTotalWidth = 0;
+			newTotalWidth = this.ebodytbl.clientWidth,
+			oldTotalWidth = 0,
+			epsilon = 1;
 		for (var i = 0, header = head.firstChild, hdcol = this.ehdfaker.firstChild; i < totalCols;
 				header = header.nextSibling, hdcol = hdcol.nextSibling, i++) {
 			var fakerStyleWidth = hdcol.style.width;
@@ -1358,7 +1359,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				oldTotalWidth += width;
 		}
 
-		if (newTotalWidth == oldTotalWidth)
+		if (Math.abs(newTotalWidth - oldTotalWidth) < epsilon)
 			return;
 
 		for (var i = 0, header = head.firstChild, hdcol = this.ehdfaker.firstChild; i < totalCols;
