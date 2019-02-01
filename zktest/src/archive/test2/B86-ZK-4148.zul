@@ -15,7 +15,8 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 <zk>
 	<zscript><![CDATA[
 		ListModel model = new ListModelList();
-		model.add("some text");
+		model.add("short text");
+		model.add("a longer text here, at least longer than box is wide.");
 	]]></zscript>
 	<hlayout>
 		<a href="?zktheme=breeze" label="Breeze" />
@@ -28,6 +29,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 		click the down arrow button of the combobox and chosenbox to open the popup.
 		move your mouse on to popup content
 		the hover style(background color) should cover the whole width of the highlighted comboitem(or chosenbox option)
+		and the background color should fill the rest empty space.
 		check all themes work
 	</label>
 	<vlayout>
@@ -36,6 +38,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 			<comboitem label="short text" />
 			<comboitem label="a longer text here, at least longer than box is wide." />
 		</combobox>
-		<chosenbox model="${model}" />
+		<combobox width="500px">
+			<template name="model" />
+			<comboitem label="short text" />
+			<comboitem label="a longer text here, at least longer than box is wide." />
+		</combobox>
+		<chosenbox width="50px" model="${model}" />
+		<chosenbox width="500px" model="${model}" />
 	</vlayout>
 </zk>
