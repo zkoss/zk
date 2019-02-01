@@ -13,7 +13,7 @@ B50-3087421.zul
 Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
+<zk xmlns:w="client">
 	<html>
 		<![CDATA[
 			<ol>
@@ -21,6 +21,8 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 			</ol>
 		]]>
 	</html>
-	<button label="click" autodisable="self" onClick='org.zkoss.lang.Threads.sleep(3000);'/>
-	<toolbarbutton label="click" autodisable="self"  onClick='org.zkoss.lang.Threads.sleep(3000);'/>
+	<button id="btn" label="click" autodisable="self" onClick='org.zkoss.lang.Threads.sleep(3000);'
+			w:onClick="zk.log('disabled:' + this.isDisabled())"/>
+	<toolbarbutton id="btn1" label="click" autodisable="self"  onClick='org.zkoss.lang.Threads.sleep(3000);'
+				   w:onClick="zk.log('disabled:' + this.isDisabled())"/>
 </zk>
