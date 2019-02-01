@@ -215,12 +215,10 @@ public class ProxyHelper {
 			_ignoredClasses.put(type, Boolean.TRUE);
 			return true;
 		}
-		if (_ignoredSuperClasses.size() > 0) {
-			for (Class c = type; (c = c.getSuperclass()) != null;) {
-				if (_ignoredSuperClasses.containsKey(c)) {
-					_ignoredClasses.put(type, Boolean.TRUE); //cache
-					return true;
-				}
+		for (Map.Entry<Class<?>, Boolean> clzInfo : _ignoredSuperClasses.entrySet()) {
+			if (clzInfo.getKey().isAssignableFrom(type)) {
+				_ignoredClasses.put(type, Boolean.TRUE); //cache
+				return true;
 			}
 		}
 		return false;
