@@ -21,6 +21,12 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
                 <button iconSclass="z-icon-address-book" label="Contact" />
                 <button iconSclass="z-icon-microchip" label="Clean RAM" />
             </hlayout>
+            <vlayout>
+                <datebox />
+                <bandbox />
+                <combobox />
+                the icon of boxes should be overridden in iceblue-like only
+            </vlayout>
         </panelchildren>
         <toolbar>
             <hlayout>
