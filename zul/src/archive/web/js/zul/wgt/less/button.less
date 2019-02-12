@@ -12,6 +12,10 @@
 	cursor: pointer;
 	white-space: nowrap;
 
+	&-image {
+		vertical-align: text-bottom;
+	}
+
 	&:hover {
 		color: @buttonHoverColor;
 		border-color: @buttonHoverBorderColor;
@@ -32,5 +36,12 @@
 		border-color: @buttonDisableBorderColor;
 		background-color: @buttonDisableBackgroundColor;
 		cursor: default;
+	}
+}
+
+.ie, .edge {
+	// Icon height workaround
+	.z-button > i {
+		vertical-align: text-bottom;
 	}
 }

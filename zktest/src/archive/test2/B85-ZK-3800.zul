@@ -30,7 +30,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
         <attribute w:name="onClick"><![CDATA[
         var heights = [];
         jq('$test-area @button, $test-area @combobutton').each(function () {
-            var h = this.getBoundingClientRect().height;
+            var h = this.getBoundingClientRect().height.toFixed(1); // 0.1 precision
             heights.push(h);
             zk.log(h);
         });

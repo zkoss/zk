@@ -39,6 +39,9 @@
 			left: 10px;
 		}
 	}
+	&-image {
+		vertical-align: text-bottom;
+	}
 	&:hover {
 		.z-combobutton-content {
 			color: @buttonHoverColor;
@@ -101,5 +104,12 @@
 				background-color: @buttonBackgroundColor;
 			}
 		}
+	}
+}
+
+.ie, .edge {
+	// Icon height workaround
+	.z-combobutton-content > i {
+		vertical-align: text-bottom;
 	}
 }
