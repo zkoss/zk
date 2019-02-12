@@ -17,15 +17,13 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		<attribute w:name="onClick">
 			var menubarBodyRect = jq('.z-menubar-body')[0].getBoundingClientRect();
 			var menu8Rect = jq('.z-menu:eq(7)')[0].getBoundingClientRect();
-			zk.log(menubarBodyRect.left + menubarBodyRect.width + 2 >= menu8Rect.left + menu8Rect.width);
-
 			var tabsBodyRect = jq('.z-tabbox:eq(0) .z-tabs')[0].getBoundingClientRect();
 			var tab8Rect = jq('.z-tabbox:eq(0) .z-tab:eq(7)')[0].getBoundingClientRect();
-			zk.log(tabsBodyRect.left + tabsBodyRect.width + 2 >= tab8Rect.left + tab8Rect.width);
-
 			var tabsBodyRect1 = jq('.z-tabbox:eq(1) .z-tabs')[0].getBoundingClientRect();
 			var tab8Rect1 = jq('.z-tabbox:eq(1) .z-tab:eq(7)')[0].getBoundingClientRect();
-			zk.log(tabsBodyRect1.top + tabsBodyRect1.height + 2 >= tab8Rect1.top + tab8Rect1.height);
+			zk.log((menubarBodyRect.left + menubarBodyRect.width + 2 >= menu8Rect.left + menu8Rect.width) + ','
+			+ (tabsBodyRect.left + tabsBodyRect.width + 2 >= tab8Rect.left + tab8Rect.width) + ','
+			+ (tabsBodyRect1.top + tabsBodyRect1.height + 2 >= tab8Rect1.top + tab8Rect1.height));
 		</attribute>
 	</button>
 	<menubar width="300px" scrollable="true">
