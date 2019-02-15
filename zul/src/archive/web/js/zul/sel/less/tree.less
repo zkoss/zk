@@ -301,6 +301,10 @@ body:not(.gecko) {
 }
 
 .ie9 {
+	.z-tree-body {
+		margin-top: auto; // ZK-3985: Listbox size change when click the listitem https://stackoverflow.com/a/6425130
+	}
+
 	.z-treerow {
 		.z-treecell {
 			position: static;
