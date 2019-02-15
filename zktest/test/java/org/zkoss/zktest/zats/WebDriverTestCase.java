@@ -499,4 +499,8 @@ public abstract class WebDriverTestCase {
 	protected String stripJsessionid(String url) {
 		return url.replaceAll(";jsessionid=[^?]*", "");
 	}
+
+	public boolean hasError() {
+		return Boolean.valueOf(getEval("!!jq('.z-messagebox-error')[0] || !!jq('.z-errorbox')[0] || jq('.z-error')[0]"));
+	}
 }

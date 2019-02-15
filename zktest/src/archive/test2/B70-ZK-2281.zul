@@ -19,8 +19,8 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 Please scroll to right, and click the next page. (you should not see any JS error)
 	<grid id="gridSaldiGiornalieri" emptyMessage="empty" width="100%">
 		<custom-attributes org.zkoss.zul.nativebar="false"/>
+		<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
 		<frozen columns="1" />
-
 		<columns sizable="true" width="100%">
 			<column label="labels.stampings.employee" width="200px" />
 			<column style="text-align:right;" width="90px" forEach="${$composer.columns}"
