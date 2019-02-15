@@ -14,24 +14,53 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:w="client">
 	<script>
-		function sizeLog() {
-			var lbh = jq('.z-listbox').height()
-			zk.log('listbox height : ' + lbh)
+		function sizeLog(component) {
+			zk.log(component + ' height : ' + jq('.z-' + component).height())
 		}
 	</script>
 	<label multiline="true">
 		1.Test with ie9.
-		2.Click the listitem. You should NOT see the listbox height changing.
+		2.Click the listbox/grid/tree. You should NOT see the listbox/grid/tree height changing.
 	</label>
-	<listbox width="400px">
-		<listhead>
-			<listheader label="Column 1" width="250px" />
-			<listheader label="Column 2" width="250px" />
-			<listheader label="Column 3" hflex="2" />
-			<listheader label="Column 4" hflex="1" />
-		</listhead>
-		<listitem forEach="1,2,3" w:onClick="sizeLog();" >
-			<listcell forEach="1,2,3,4">Listcell</listcell>
-		</listitem>
-	</listbox>
+	<hlayout>
+		<listbox hflex="1">
+			<listhead>
+				<listheader label="Column 1" width="250px" />
+				<listheader label="Column 2" width="250px" />
+				<listheader label="Column 3" hflex="2" />
+				<listheader label="Column 4" hflex="1" />
+			</listhead>
+			<listitem forEach="1,2,3" w:onClick="sizeLog('listbox');" >
+				<listcell forEach="1,2,3,4">Listcell</listcell>
+			</listitem>
+		</listbox>
+		<grid hflex="1">
+			<columns>
+				<column label="Column 1" width="250px" />
+				<column label="Column 2" width="250px" />
+				<column label="Column 3" hflex="2" />
+				<column label="Column 4" hflex="1" />
+			</columns>
+			<rows>
+				<row forEach="1,2,3" w:onClick="sizeLog('grid');" >
+					<cell forEach="1,2,3,4">Cell</cell>
+				</row>
+			</rows>
+		</grid>
+		<tree hflex="1">
+			<treecols>
+				<treecol label="Column 1" width="250px" />
+				<treecol label="Column 2" width="250px" />
+				<treecol label="Column 3" hflex="2" />
+				<treecol label="Column 4" hflex="1" />
+			</treecols>
+			<treechildren>
+				<treeitem forEach="1,2,3" w:onClick="sizeLog('tree');" >
+					<treerow>
+						<treecell forEach="1,2,3,4">Treecell</treecell>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</hlayout>
 </zk>
