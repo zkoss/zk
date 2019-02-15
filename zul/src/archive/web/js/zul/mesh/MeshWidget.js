@@ -863,21 +863,32 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.ebodytbl.style.width = '';
 
 			//B70-ZK-2394: store total bdcol width
-			var tblWidth = 0;
+			var tblWidth = 0,
+				cachedOffsetWidths = {};
 
 			// ZK-2098: should skip if bdcol doesn't exist
-			for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
+			for (var w = head.firstChild; w && bdcol; w = w.nextSibling) {
 				// ZK-2130: should save the header width
 				// ZK-2071: use offsetWidth instead of style.width
-				var wwd = w.$n().offsetWidth;
+				cachedOffsetWidths[w.uuid] = w.$n().offsetWidth;
+				bdcol = bdcol.nextSibling;
+			}
+
+			bdcol = bdfaker.firstChild;
+			for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
+				var wwd = cachedOffsetWidths[w.uuid];
 				if (w.isVisible() && wwd > 0.1)
 					w._origWd = jq.px0(wwd);
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
 				if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
-					var revisedWidth = zk(bdcol).revisedWidth(Math.round(wd));
+					var revisedWidth = zk(bdcol).revisedWidth(Math.round(wd)),
+						revisedWidthPx = jq.px0(revisedWidth);
 					//B70-ZK-2509: w.$n().offsetWidth is small when there are many columns at beginning, so save revised width if any
-					w._origWd = revisedWidth + 'px';
-					this._syncWidth(bdcol, hdcol, ftcol, revisedWidth);
+					w._origWd = revisedWidthPx;
+					bdcol.style.width = revisedWidthPx;
+					hdcol.style.width = revisedWidthPx;
+					if (ftcol)
+						ftcol.style.width = revisedWidthPx;
 
 					//B70-ZK-2394: store total bdcol width
 					tblWidth += revisedWidth;
@@ -896,21 +907,18 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					fttbl = this.efoottbl;
 
 				if (hdtbl) {
-					this._syncWidth(hdtbl, bdtbl, fttbl, tblWidth);
+					var tblWidthPx = jq.px0(tblWidth);
+					hdtbl.style.width = tblWidthPx;
+					if (bdtbl)
+						bdtbl.style.width = tblWidthPx;
+					if (fttbl)
+						fttbl.style.width = tblWidthPx;
 				}
 			}
 
 			_adjMinWd(this);
 			this._afterCalcSize();
 		}
-	},
-	_syncWidth: function (body, head, foot, width) {
-		fastdom.mutate(function () {
-			var widthPx = jq.px0(width);
-			body.style.width = widthPx;
-			if (head) head.style.width = widthPx;
-			if (foot) foot.style.width = widthPx;
-		});
 	},
 	_bindDomNode: function () {
 		this.ehead = this.$n('head');
