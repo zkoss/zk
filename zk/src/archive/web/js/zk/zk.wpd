@@ -25,7 +25,6 @@ window.$eval=function(s){return eval(s);};
 		-->
 	<script src="crashmsg.js" />
 	<script src="ext/jquery.js"/>
-	<script src="ext/fastdom.js"/>
 	<script src="zk.js" jsdoc="true"/>
 	<function class="org.zkoss.zul.impl.Utils"
         signature="java.lang.String outFeature()"/>
