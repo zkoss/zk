@@ -27,6 +27,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         1. You can only see column 2, 3 and 5 at first.
         2. Click "switch 1 visible" button, column 1 will be visible.
         3. Click "switch 6 visible" button, column 6 will be visible and Aux 3 is visible.
+        4. Should test manually in IE.
     </label>
     <tree model="${stm}" height="300px">
         <auxhead>
