@@ -1964,7 +1964,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	}
 }, {
-	WIDTH0: zk.webkit ? '0.001px' : '0',
+	WIDTH0: zk.webkit ? '0.001px' : '0px',
 	_getWidth: function (wgt, width) {
 		if (wgt.isVisible())
 			return width;
