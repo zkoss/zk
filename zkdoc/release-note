@@ -115,6 +115,7 @@ ZK 8.6.1
   ZK-3922: binder reloads binded values due to wrong dependency detection
   ZK-4164: 8.6 grid rod render performance impact
   ZK-4156: listbox rod performance
+  ZK-4213: rod grid sizing problem with hflex=min & span
 
 * Upgrade Notes
   + Change return type of hasVScroll() and hasHScroll() to boolean in dom.js and Scrollbar.js,
