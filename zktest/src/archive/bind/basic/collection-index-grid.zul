@@ -6,7 +6,7 @@
 			<column label="index"/>
 			<column label="name"/>
 			<column label="options" width="200px"/>
-			<column label="action" width="300px"/>
+			<column label="action" width="500px"/>
 		</columns>
 		
 		<template name="model" var="item" status="s">

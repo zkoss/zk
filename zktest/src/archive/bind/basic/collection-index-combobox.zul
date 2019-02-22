@@ -2,12 +2,12 @@
 	<custom-attributes composerName="vm"/>
 	<label id="msg" value="@bind(vm.message1)"/>
 	
-	<grid id="outergrid" width="700px" model="@bind(vm.items)">
+	<grid id="outergrid" width="1000px" model="@bind(vm.items)">
 		<columns>
 			<column label="index"/>
 			<column label="name"/>
 			<column label="options" width="200px"/>
-			<column label="action" width="300px"/>
+			<column label="action" width="500px"/>
 		</columns>
 		
 		<template name="model" var="item" status="s">

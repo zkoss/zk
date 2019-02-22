@@ -168,7 +168,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<menu label="Help" id="mbHelp" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
 					<menupopup>
 						<menuitem label="Index" onClick="alert(self.label)" />
-						<menu label="About">
+						<menu label="About1">
 							<menupopup>
 								<menuitem label="About ZK"
 									onClick="alert(self.label)" />
