@@ -16,11 +16,11 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Iterator;
 
+import org.junit.Assert;
 import org.junit.Test;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
-
-import junit.framework.Assert;
 
 /**
  * 
@@ -54,6 +54,7 @@ public class B80_ZK_2969Test extends WebDriverTestCase {
 		click(jq(".z-listheader-checkable").eq(0));
 		click(jq(".z-listbox").eq(0).find(".z-listitem-checkable").eq(1));
 		// it jumped to the last page since item 12 was the last checked item. We need jump back to page 1 first.
+		waitResponse();
 		click(jq(".z-listbox").eq(1).find(".z-paging-first"));
 		waitResponse(true);
 		Iterator<JQuery> iterNonPaging = jq(".z-listbox").eq(0).find(".z-listitem-selected").iterator();
