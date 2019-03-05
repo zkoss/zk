@@ -1,5 +1,6 @@
    --------
 ZK 8.6.1
+Mar 5, 2019
 * Features
   ZK-4122: Organigram support client ROD
   ZK-4040: Add an export file name property for JasperReport
