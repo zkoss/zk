@@ -24,12 +24,12 @@
 		<gmapsz.version>3.0.1</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
-		<atlantic.version>8.6.1-SNAPSHOT</atlantic.version>
+		<atlantic.version>8.6.2-SNAPSHOT</atlantic.version>
 		<report.dir>debug/report/</report.dir>
 		<test.dir>debug/test-classes</test.dir>
 		<powermock.version>1.7.3</powermock.version>
 	</properties>
-	<version>8.6.1</version>
+	<version>8.6.2-SNAPSHOT</version>
 	<name>ZK Test</name>
 	<url>http://www.zkoss.org/</url>
 	<description>ZK Test</description>
