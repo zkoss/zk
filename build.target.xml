@@ -47,7 +47,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 		 if="${checkstyle.js}">
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/jscheck"/>
-		<arg value="${bin.dir}"/>
+		<arg value="${maindir}"/>
 		<arg value="${src.dir}"/>
 		<arg value="--config=${bin.dir}/.eslintrc.json"/>
 		<arg value="--ignore-path=${bin.dir}/.eslintignore"/>
@@ -171,7 +171,7 @@ if="deploy.tomcat.required">
 </target> -->
 <target name="lessc">
 	<exec executable="node">
-		<arg value="${maindir}/bin/node_modules/zkless-engine/lib/CpLess.js" />
+		<arg value="${maindir}/node_modules/zkless-engine/lib/CpLess.js" />
 		<arg value="${src.archive.dir}"/>
 		<arg value="${codegen.archive.dir}"/>
 		<arg path="${maindir}/zul/${src.archive.dir}"/>
@@ -220,6 +220,15 @@ if="deploy.tomcat.required">
 			<pathelement location="${dist.lib.ext.dir}/closure-compiler.jar"/>
 		</classpath>
 	</java>
+	<antcall target="tsmin"/>
+</target>
+<target name="tsmin">
+	<exec executable="bash" dir="." failonerror="true">
+		<arg value="${bin.dir}/tsmin"/>
+		<arg value="${maindir}"/>
+		<arg value="--src=${src.archive.dir}/${zipjs}"/>
+		<arg value="--dest=${codegen.archive.dir}/${zipjs}"/>
+	</exec>
 </target>
 <target name="build.jar" depends="lessc, zipjs, gentime, genmd5sign, compile" if="build.jar.required">
 	<available file="${srcpv.dir}" property="jar.srcpv.dir" value="${srcpv.dir}"/>
