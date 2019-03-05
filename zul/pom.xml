@@ -5,7 +5,7 @@
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zul</artifactId>
 	<packaging>jar</packaging>
-	<version>8.6.1-SNAPSHOT</version>
+	<version>8.6.2-SNAPSHOT</version>
 	<name>ZK XUL Components</name>
 	<url>http://www.zkoss.org/zul</url>
 	<description>ZK XUL components (XML user interface markup language)</description>
@@ -110,7 +110,7 @@
 			<plugin>
 				<groupId>org.zkoss.maven</groupId>
 				<artifactId>zkless-engine-maven-plugin</artifactId>
-				<version>1.1.0</version>
+				<version>1.1.1</version>
 				<executions>
 					<execution>
 						<id>compile-less</id>

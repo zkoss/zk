@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZK Web Fragment
-Specification-Version: 8.6.1
+Specification-Version: 8.6.2
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zkwebfragment
 Implementation-URL: http://www.zkoss.org/prj/zkwebfragment
-Implementation-Version: 8.6.1
+Implementation-Version: 8.6.2
 Implementation-Vendor: Potix Corporation
