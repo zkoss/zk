@@ -6,6 +6,7 @@ ZK 8.6.2
 * Bugs
   ZK-4230: Signature toolbarVisible not work
   ZK-4204: future chrome feature currently preventing "rmDesktop" (causing non cleaned up desktops)
+  ZK-4223: grid with vflex has unwanted margin
 
 * Upgrade Notes
 

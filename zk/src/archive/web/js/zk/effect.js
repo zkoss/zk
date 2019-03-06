@@ -100,17 +100,14 @@ zk.eff = {
 	//Position a mask to cover the whole browser window.
 	//it must be called as _syncMaskPos.call(this)
 	function _syncMaskPos() {
-		var n = this.mask,
-			st = n.style;
-		if (st.display != 'none') {
-			var ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY());
-			st.left = jq.px(ofs[0]);
-			st.top = jq.px(ofs[1]);
-			st.width = jq.px0(jq.innerWidth());
-			st.height = jq.px0(jq.innerHeight());
-
-			if (n = this.stackup)
-				zk.set(n.style, st, ['left', 'top', 'width', 'height']);
+		var mask = jq(this.mask),
+			stackup = this.stackup;
+		if (mask.css('display') != 'none' && stackup) {
+			var style = stackup.style;
+			style.left = mask.css('left');
+			style.top = mask.css('top');
+			style.width = mask.css('width');
+			style.height = mask.css('height');
 		}
 	}
 

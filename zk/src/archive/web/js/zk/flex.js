@@ -319,7 +319,8 @@ zFlex = { //static methods
 			hasVScroll = zkp.hasVScroll(),
 			hasHScroll = zkp.hasHScroll(),
 			scrollbarWidth = jq.scrollbarWidth(),
-			isMeshLoaded = zk.isLoaded('zul.mesh');
+			isMeshLoaded = zk.isLoaded('zul.mesh'),
+			viewportWidth = jq.innerWidth();
 
 		// B86-ZK-4123
 		if (isMeshLoaded && wgt.$instanceof(zul.mesh.HeaderWidget)) {
@@ -476,6 +477,10 @@ zFlex = { //static methods
 		//notify parent widget that all of its children with hflex/vflex is done.
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
+
+		// browser scrollbar might disappear after fixFlex
+		if (viewportWidth < jq.innerWidth())
+			zWatch.fire('onSize');
 	},
 	onFitSize: function () {
 		var wgt = this,
