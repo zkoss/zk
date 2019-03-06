@@ -475,19 +475,40 @@ zAu = {
 
 	//remove desktop (used in mount.js and wiget.js)
 	_rmDesktop: function (dt, dummy) {
-		jq.ajax(zk.$default({
-			url: zk.ajaxURI(null, {desktop: dt,au: true}),
-			data: {dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'},
-			beforeSend: function (xhr) {
-				if (zk.pfmeter) zAu._pfsend(dt, xhr, true, false);
-			},
-			//2011/04/22 feature 3291332
-			//Use sync request for chrome, safari and firefox (4 and later).
-			//Note: when pressing F5, the request's URL still arrives before this even async:false
-			async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome.
+		var url = zk.ajaxURI(null, {desktop: dt, au: true}),
+			data = jq.param({dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'});
+		// ZK-4204: Some browsers like Firefox don't support keepalive flag yet.
+		if (window.fetch && window.Request && new Request(url, {keepalive: true}).keepalive) {
+			var headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'});
+			if (zk.pfmeter) {
+				var fakeReq = {
+					setRequestHeader: function (name, value) {
+						headers.set(name, value);
+					}
+				};
+				zAu._pfsend(dt, fakeReq, true, false);
+			}
+			fetch(url, {
+				method: 'POST',
+				headers: headers,
+				body: data,
+				mode: 'same-origin',
+				keepalive: true
+			}).catch(function (e) { zk.debugLog(e); });
+		} else {
+			jq.ajax(zk.$default({
+				url: url,
+				data: data,
+				beforeSend: function (xhr) {
+					if (zk.pfmeter) zAu._pfsend(dt, xhr, true, false);
+				},
+				//2011/04/22 feature 3291332
+				//Use sync request for chrome, safari and firefox (4 and later).
+				//Note: when pressing F5, the request's URL still arrives before this even async:false
+				async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome.
 				// conservative, though it shall be (!zk.safari || zk.ff >= 4)
-		}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
-		
+			}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
+		}
 		// B65-ZK-2210: clean up portlet2 data when desktop removed.
 		if (!dummy && zk.portlet2Data && zk.portlet2Data[dt.id]) {
 			delete zk.portlet2Data[dt.id];
