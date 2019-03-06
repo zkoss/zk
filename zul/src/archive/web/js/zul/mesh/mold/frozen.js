@@ -19,6 +19,7 @@ function (out) {
 			this.$s('body'), '">');
 	for (var j = 0, w = this.firstChild; w; w = w.nextSibling, j++)
 		w.redraw(out);
-	out.push('</div><div id="', uuid, '-scrollX" class="', this.$s('inner'), 
-			'"><div></div></div><div class="z-clear"></div></div>');
+	out.push('</div><div id="', uuid, '-scrollX" class="', this.$s('inner'), '"><div></div></div>');
+	out.push('<div id="', uuid, '-right" class="', this.$s('right'), '"></div>');
+	out.push('<div class="z-clear"></div></div>');
 }

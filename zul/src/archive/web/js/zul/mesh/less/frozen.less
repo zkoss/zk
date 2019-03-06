@@ -12,16 +12,26 @@
 	&-inner {
 		overflow-x: scroll;
 		overflow-y: hidden;
-		float: right;
 
 		div {
 			height: 100%;
 		}
 	}
+	&-right {
+		overflow: hidden;
+		float: right;
+	}
 	//for new frozen
 	&-col {
 		border-left: none !important;
 		border-right: 1px solid @meshTitleBorderColor;
+	}
+	&-right-col {
+		position: sticky !important;
+
+		&:first-child {
+			left: 0;
+		}
 	}
 }
 

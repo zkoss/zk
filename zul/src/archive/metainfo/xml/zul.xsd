@@ -1731,7 +1731,8 @@
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="columns" type="intType" use="required" />
+		<xs:attribute name="columns" type="intType" use="optional" />
+		<xs:attribute name="rightColumns" type="intType" use="optional" />
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="start" type="intType" use="optional" />
 	</xs:complexType>
