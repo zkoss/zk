@@ -7,7 +7,7 @@
 	]]></html>
 	<hbox>
 	<vbox>
-	<tabbox width="150px">
+	<tabbox width="300px">
 		<tabs>
 			<tab label="tab1" />
 			<tab label="tab2" />
@@ -19,8 +19,8 @@
 			<tabpanel />
 		</tabpanels>
 	</tabbox>
-	<tabbox width="150px"  height="100px" orient="vertical">
-		<tabs>
+	<tabbox width="300px"  height="200px" orient="vertical">
+		<tabs width="100px">
 			<tab label="tab1" />
 			<tab label="tab2" />
 			<tab label="tab3" />
@@ -28,7 +28,7 @@
 			<tab label="tab5" />
 			<tab label="tab6" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton label="button"/>
 			<toolbarbutton image="/img/defender.gif"
 				onClick='alert("Defender")' />
@@ -42,8 +42,8 @@
 			<tabpanel />
 		</tabpanels>
 	</tabbox>
-	<tabbox width="150px"  height="200px" orient="vertical">
-		<tabs>
+	<tabbox width="300px"  height="400px" orient="vertical">
+		<tabs width="100px">
 			<tab label="tab1" />
 			<tab label="tab2" />
 			<tab label="tab3" />
@@ -51,7 +51,7 @@
 			<tab label="tab5" />
 			<tab label="tab6" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton label="button"/>
 			<toolbarbutton image="/img/defender.gif"
 				onClick='alert("Defender")' />
@@ -67,13 +67,13 @@
 	</tabbox>
 	</vbox>
 	<vbox>
-	<tabbox width="200px">
+	<tabbox width="400px">
 		<tabs>
 			<tab label="tab1" />
 			<tab label="tab2" />
 			<tab label="tab3" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton image="/img/live.gif"
 				onClick='alert("Live")' />
 			<toolbarbutton image="/img/defender.gif"
@@ -87,11 +87,11 @@
 			<tabpanel />
 		</tabpanels>
 	</tabbox>
-	<tabbox width="200px">
+	<tabbox width="400px">
 		<tabs>
 			<tab label="tab1" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton image="/img/live.gif"
 				onClick='alert("Live")' />
 			<toolbarbutton image="/img/defender.gif"
@@ -105,13 +105,13 @@
 	</tabbox>
 	</vbox>
 	<vbox>
-	<tabbox width="200px">
+	<tabbox width="400px">
 		<tabs>
 			<tab label="tab1" />
 			<tab label="tab2" />
 			<tab label="tab3" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton label="button"/>
 		</toolbar>
 		<tabpanels>
@@ -120,11 +120,11 @@
 			<tabpanel />
 		</tabpanels>
 	</tabbox>
-	<tabbox width="200px">
+	<tabbox width="400px">
 		<tabs>
 			<tab label="tab1" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton label="button"/>
 		</toolbar>
 		<tabpanels>
@@ -133,12 +133,12 @@
 	</tabbox>
 	</vbox>
 	<vbox>
-	<tabbox width="200px" sclass="a">
+	<tabbox width="400px" sclass="a">
 		<tabs>
 			<tab label="tab1" />
 			<tab label="tab2" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton label="button"/>
 			<toolbarbutton image="/img/defender.gif"
 				onClick='alert("Defender")' />
@@ -148,11 +148,11 @@
 			<tabpanel />
 		</tabpanels>
 	</tabbox>
-	<tabbox width="200px" sclass="a">
+	<tabbox width="400px" sclass="a">
 		<tabs>
 			<tab label="tab1" />
 		</tabs>
-		<toolbar width="90px">
+		<toolbar width="180px">
 			<toolbarbutton label="button"/>
 			<toolbarbutton image="/img/defender.gif"
 				onClick='alert("Defender")' />

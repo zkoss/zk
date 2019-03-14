@@ -13,36 +13,36 @@ B50-2949346.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<?page zscriptLanguage="Groovy"?>
-
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-    <zscript>
-        children = []
-        5.times{children.add(new DefaultTreeNode(it, []))}
-        model = new DefaultTreeModel(new DefaultTreeNode('ROOT',children))
+    <zscript><![CDATA[
+        List children = new ArrayList();
+        for (int i = 0; i < 5; i++) {
+            children.add(new DefaultTreeNode(i, new ArrayList()));
+        }
+        DefaultTreeModel model = new DefaultTreeModel(new DefaultTreeNode("ROOT", children));
 
-        removeItem = {
-            root = testTree.model.root
-            root.children.remove(root.children[0])
-            model.fireEvent(root, 0, 0, org.zkoss.zul.event.TreeDataEvent.INTERVAL_REMOVED)
+        void removeItem() {
+            DefaultTreeNode root = testTree.getModel().getRoot();
+            root.getChildren().remove(root.getChildAt(0));
         }
 
-        removeAllItems = {
-            root = testTree.model.root
-            while(root.children) {
-                removeItem()
+        void removeAllItems() {
+            DefaultTreeNode root = testTree.getModel().getRoot();
+            while (root.getChildCount() > 0) {
+                removeItem();
             }
         }
 
-        removeAllAtOnce = {
-            root = testTree.model.root
-            while(root.children) {root.children.remove(root.children[0])}
-            model.fireEvent(root, 0, 4, org.zkoss.zul.event.TreeDataEvent.INTERVAL_REMOVED)
+        void removeAllAtOnce() {
+            DefaultTreeNode root = testTree.getModel().getRoot();
+            while (root.getChildCount() > 0) {
+                root.getChildren().remove(root.getChildAt(0));
+            }
         }
-    </zscript>
+    ]]></zscript>
     <tree id="testTree" model="${model}"/>
     <button label="1.Click to remove one item" onClick="removeItem()"/>
     <button label="2.Click to remove all" onClick="removeAllItems()" />

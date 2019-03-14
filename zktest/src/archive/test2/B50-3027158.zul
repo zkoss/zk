@@ -1,14 +1,19 @@
-<zk>
+<zk xmlns:w="client">
+	<style><![CDATA[
+	.z-checkbox > input:focus {
+		border: 1px solid red;
+	}
+	]]></style>
 <html>
 <![CDATA[
 <ol>
 	<li>Click the focus button</li>
-	<li>Check the checkbox shall be focus</li>
+	<li>Check the checkbox shall be focused (styled with red border for better recognition)</li>
 </ol>
 ]]>
 </html>
 	<zk>
-		<checkbox id="cb"/>
+		<checkbox id="cb" w:onFocus="zk.log(this)"/>
 		<button label="focus" onClick="cb.focus();"/>
 	</zk>
 </zk>

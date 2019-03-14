@@ -14,7 +14,7 @@
 			<tabpanels>
 				<tabpanel>
 					<tabbox orient="vertical">
-						<tabs width="20px">
+						<tabs width="70px">
 							<tab label="A" />
 							<tab label="B" />
 						</tabs>
@@ -33,7 +33,7 @@
 			<custom-attributes org.zkoss.zul.client.rod="true"/>
 			<panelchildren>
 				<tabbox orient="vertical">
-					<tabs width="20px">
+					<tabs width="70px">
 						<tab label="A" />
 						<tab label="B" />
 					</tabs>
@@ -46,9 +46,10 @@
 		</panel>
 		<panel title="panel" collapsible="true" open="false" border="normal"
 			width="400px">
+			<custom-attributes org.zkoss.zul.client.rod="false"/>
 			<panelchildren>
 				<tabbox orient="vertical">
-					<tabs width="20px">
+					<tabs width="70px">
 						<tab label="A" />
 						<tab label="B" />
 					</tabs>
@@ -64,7 +65,7 @@
 			width="400px" height="300px">
 			<caption label="group" />
 			<tabbox orient="vertical" vflex="1">
-				<tabs width="20px">
+				<tabs width="70px">
 					<tab label="A" />
 					<tab label="B" />
 				</tabs>

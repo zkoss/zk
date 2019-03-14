@@ -19,40 +19,42 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 <p>When opening a tab in accordion/accordion-lite mold, the other tabs below it
            	bumps up and sometimes sticks on it during the animation.(If you can't understand, please contact Simon)</p>
 ]]></html>
-	<window border="normal" width="300px" height="300px" >
-		<tabbox height="100%" mold="accordion">
-			<tabs>
-				<tab label="Tab1" />
-				<tab label="Tab2" />
-				<tab label="Tab3" />
-				<tab label="Tab4" />
-				<tab label="Tab5" />
-			</tabs>
-			<tabpanels>
-				<tabpanel>Tabpanel Content 1</tabpanel>
-				<tabpanel>Tabpanel Content 2</tabpanel>
-				<tabpanel>Tabpanel Content 3</tabpanel>
-				<tabpanel>Tabpanel Content 4</tabpanel>
-				<tabpanel>Tabpanel Content 5</tabpanel>
-			</tabpanels>
-		</tabbox>
-	</window>
-	<window border="normal" width="300px" height="300px" >
-		<tabbox height="100%" mold="accordion-lite">
-			<tabs>
-				<tab label="Tab1" />
-				<tab label="Tab2" />
-				<tab label="Tab3" />
-				<tab label="Tab4" />
-				<tab label="Tab5" />
-			</tabs>
-			<tabpanels>
-				<tabpanel>Tabpanel Content 1</tabpanel>
-				<tabpanel>Tabpanel Content 2</tabpanel>
-				<tabpanel>Tabpanel Content 3</tabpanel>
-				<tabpanel>Tabpanel Content 4</tabpanel>
-				<tabpanel>Tabpanel Content 5</tabpanel>
-			</tabpanels>
-		</tabbox>
-	</window>
+	<hlayout>
+		<window border="normal" width="300px" height="800px" >
+			<tabbox height="100%" mold="accordion">
+				<tabs>
+					<tab label="Tab1" />
+					<tab label="Tab2" />
+					<tab label="Tab3" />
+					<tab label="Tab4" />
+					<tab label="Tab5" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>Tabpanel Content 1</tabpanel>
+					<tabpanel>Tabpanel Content 2</tabpanel>
+					<tabpanel>Tabpanel Content 3</tabpanel>
+					<tabpanel>Tabpanel Content 4</tabpanel>
+					<tabpanel>Tabpanel Content 5</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+		<window border="normal" width="300px" height="800px" >
+			<tabbox height="100%" mold="accordion-lite">
+				<tabs>
+					<tab label="Tab1" />
+					<tab label="Tab2" />
+					<tab label="Tab3" />
+					<tab label="Tab4" />
+					<tab label="Tab5" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>Tabpanel Content 1</tabpanel>
+					<tabpanel>Tabpanel Content 2</tabpanel>
+					<tabpanel>Tabpanel Content 3</tabpanel>
+					<tabpanel>Tabpanel Content 4</tabpanel>
+					<tabpanel>Tabpanel Content 5</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+	</hlayout>
 </zk>

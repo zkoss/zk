@@ -16,11 +16,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 <html><![CDATA[
 <ol>
-<li>Both of the editors will hidden at first, cilik visible button, it will show the both of the editors</li>
+<li>The editor will be hidden at first, click visible button, it will show the editor</li>
 </ol>
 ]]>
 </html>
-<button label="visible" onClick="ed.visible = !ed.visible;fed.visible = !fed.visible;"/>
+<button label="visible" onClick="ed.visible = !ed.visible"/>
 	<ckeditor id="ed" visible="false" />
-	<fckeditor id="fed" visible="false" />
 </zk>

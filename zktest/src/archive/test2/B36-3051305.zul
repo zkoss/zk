@@ -7,7 +7,7 @@
 ]]>
 	</html>
 	<hbox>
-		<listbox id="left" height="250px" width="250px" onDrop="move(event.dragged)" droppable="listbox"
+		<listbox id="left" height="500px" width="250px" onDrop="move(event.dragged)" droppable="listbox"
 			oddRowSclass="non-odd" mold="paging" pageSize="5">
 			<listitem draggable="listbox" >
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
@@ -34,7 +34,7 @@
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
 			</listitem>
 		</listbox>
-		<grid height="250px" width="250px" onDrop="move(event.dragged)" droppable="grid" 
+		<grid height="500px" width="250px" onDrop="move(event.dragged)" droppable="grid"
 			oddRowSclass="non-odd" mold="paging" pageSize="5">
 			<rows>
 			<row draggable="grid" >
@@ -63,7 +63,7 @@
 			</row>
 			</rows>
 		</grid>
-		<tree height="250px" width="250px" onDrop="move(event.dragged)" droppable="tree"
+		<tree height="500px" width="250px" onDrop="move(event.dragged)" droppable="tree"
 			mold="paging" pageSize="5">
 			<treechildren>
 			<treeitem>

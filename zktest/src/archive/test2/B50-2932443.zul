@@ -56,7 +56,10 @@ links.add(new Link(123456.789012345));
 </row>
 </rows>
 </grid>
-
+<label multiline="true">
+	1. Change your browser's preferred language to German
+	2. Every value should be "€ 39824,00"
+</label>
 <grid>
 <columns>
  	<column label="decimalbox: € 0.00 == € 39824,00"/> 
