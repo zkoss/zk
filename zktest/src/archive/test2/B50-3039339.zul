@@ -11,14 +11,14 @@
 </ol>
 ]]>
 </html>
-<grid id="grid1" width="300px" height="100px">
+<grid id="grid1" width="600px" height="100px">
 		<columns>
-			<column label="Column1" width="57px"/>
-			<column label="Column2" width="57px"/>
-			<column label="Column3" width="57px"/>
-			<column label="Column4" width="57px"/>
-			<column label="Column5" width="57px"/>
-			<column label="Column6" width="57px"/>
+			<column label="Column1" width="114px"/>
+			<column label="Column2" width="114px"/>
+			<column label="Column3" width="114px"/>
+			<column label="Column4" width="114px"/>
+			<column label="Column5" width="114px"/>
+			<column label="Column6" width="114px"/>
 		</columns>
 		<rows>
 			<row>
@@ -48,14 +48,14 @@
 		</rows>
 </grid>
 <separator/>
-<grid id="grid2" width="342px" height="80px">
+<grid id="grid2" width="684px" height="100px">
 		<columns>
-			<column label="Column1" width="57px"/>
-			<column label="Column2" width="57px"/>
-			<column label="Column3" width="57px"/>
-			<column label="Column4" width="57px"/>
-			<column label="Column5" width="57px"/>
-			<column label="Column6" width="57px"/>
+			<column label="Column1" width="114px"/>
+			<column label="Column2" width="114px"/>
+			<column label="Column3" width="114px"/>
+			<column label="Column4" width="114px"/>
+			<column label="Column5" width="114px"/>
+			<column label="Column6" width="114px"/>
 		</columns>
 		<rows>
 			<row>
@@ -85,14 +85,14 @@
 		</rows>
 </grid>
 <separator/>
-<grid id="grid3" width="359px" height="80px">
+<grid id="grid3" width="718px" height="100px">
 		<columns>
-			<column label="Column1" width="57px"/>
-			<column label="Column2" width="57px"/>
-			<column label="Column3" width="57px"/>
-			<column label="Column4" width="57px"/>
-			<column label="Column5" width="57px"/>
-			<column label="Column6" width="57px"/>
+			<column label="Column1" width="114px"/>
+			<column label="Column2" width="114px"/>
+			<column label="Column3" width="114px"/>
+			<column label="Column4" width="114px"/>
+			<column label="Column5" width="114px"/>
+			<column label="Column6" width="114px"/>
 		</columns>
 		<rows>
 			<row>

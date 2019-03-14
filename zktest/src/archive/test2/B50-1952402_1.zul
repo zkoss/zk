@@ -14,7 +14,6 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 
 -->
 <window
-width="300px" height="300px"
 id="test2">
 <zscript>
 		Integer count = (Integer)Sessions.getCurrent().getAttribute("B50-1952402");

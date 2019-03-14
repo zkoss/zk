@@ -36,7 +36,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
      </tabbox>
     </center>
     <south title="Calendar" size="50%" collapsible="true">
-     <calendar width="200px" vflex="1" hflex="1"/>
+     <calendar vflex="1" hflex="1"/>
     </south>
    </borderlayout>
 </window>

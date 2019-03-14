@@ -7,7 +7,7 @@ xmlns:z="http://www.zkoss.org/2005/zul">
  <li>Click the "Upload" button and a file dialog shall show up</li>
  </ol>
 
- <z:grid width="100px">
+ <z:grid width="200px">
   <z:columns menupopup="auto">
    <z:column label="Author" />
   </z:columns>

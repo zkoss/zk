@@ -11,15 +11,15 @@ B50-2945761.zhtml
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<html xmlns:zk="http://www.zkoss.org/2005/zk"
-	xmlns:x="http://www.zkoss.org/2005/zul">
+<html
+		xmlns:x="http://www.zkoss.org/2005/zul">
 	<head>
 		<title>ZK5 Bug</title>
 	</head>
 	<body style="height:1500px">
 		<x:label id="lb" value="click" popup="pp" />
 		<x:popup id="pp" width="200px">
-			<x:textbox multiline="true" rows="5"
+			<x:textbox multiline="true" rows="5" width="100%"
 				value="click outside the popup, it should be closed!" />
 		</x:popup>
 	</body>
