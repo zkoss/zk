@@ -18,7 +18,7 @@ function (out) {
 		w.redraw(out);
 	
 	var listbox = this.getListbox();
-	if (listbox._nativebar && !listbox.frozen)
+	if (listbox._nativebar)
 		out.push('<td class="', this.$s('bar'), '" />');
 	
 	out.push('</tr>');

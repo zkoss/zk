@@ -202,12 +202,14 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 							barstyle += s.width ? 'width:' + s.width + ';' : '';
 						}
 						$bar.remove();
+						this._subnodes['bar'] = null;
 
 						if (recoverFakerbar && hdfakerbar && (s = hdfakerbar.style)) {
 							hdfakerbarstyle = s.display ? 'display:' + s.display + ';' : '';
 							hdfakerbarstyle += s.width ? 'width:' + s.width + ';' : '';
 						}
 						$hdfakerbar.remove();
+						this._subnodes['hdfaker-bar'] = null;
 					}
 
 					if (!$faker.find(child.$n(faker)).length) {

@@ -136,7 +136,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 			var scroll = this.$n('scrollX'),
 				scrollbarWidth = jq.scrollbarWidth();
 			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
-			this.$n().style.height = this.$n('cave').style.height = scroll.style.height
+			this.$n().style.height = this.$n('cave').style.height = this.$n('right').style.height = scroll.style.height
 				 = scroll.firstChild.style.height = jq.px0(zk.ie ? scrollbarWidth + 1 : scrollbarWidth);
 			p._currentLeft = 0;
 			this.domListen_(scroll, 'onScroll');

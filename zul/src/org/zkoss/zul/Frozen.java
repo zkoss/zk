@@ -38,6 +38,7 @@ public class Frozen extends XulElement {
 	private int _start;
 	/** maintain the number of the visible item in Paging mold. Only in smooth mold [ZK EE] */
 	private int _currentLeft = 0;
+	private int _rightColumns;
 
 	/**
 	 * Sets the start position of the scrollbar.
@@ -101,6 +102,33 @@ public class Frozen extends XulElement {
 	}
 
 	/**
+	 * Returns the number of right columns to freeze.
+	 * Note: only useful when using smooth Frozen and browsers that supports CSS position: sticky.
+	 * <p>Default: 0
+	 * Only available in ZK EE.
+	 * @since 8.6.2
+	 */
+	public int getRightColumns() {
+		return _rightColumns;
+	}
+
+	/**
+	 * Sets the number of right columns to freeze. (from right to left)
+	 * Note: only useful when using smooth Frozen and browsers that supports CSS position: sticky.
+	 * Only available in ZK EE.
+	 * @param rightColumns number of right columns to freeze, positive only
+	 * @since 8.6.2
+	 */
+	public void setRightColumns(int rightColumns) {
+		if (rightColumns < 0)
+			throw new WrongValueException("Positive only");
+		if (_rightColumns != rightColumns) {
+			_rightColumns = rightColumns;
+			smartUpdate("rightColumns", _rightColumns);
+		}
+	}
+
+	/**
 	 * Returns frozen is smooth or not.
 	 * <p>Default: true
 	 * @since 8.5.0
@@ -133,6 +161,8 @@ public class Frozen extends XulElement {
 		} else {
 			renderer.render("currentLeft", _currentLeft);
 		}
+		if (_rightColumns > 0)
+			renderer.render("rightColumns", _rightColumns);
 	}
 
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
