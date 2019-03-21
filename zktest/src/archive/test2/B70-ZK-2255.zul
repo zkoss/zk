@@ -26,6 +26,7 @@ Test steps:
 	</label>
 		<listbox height="300px" emptyMessage="no items">
 			<custom-attributes org.zkoss.zul.listbox.rod="true" />
+			<custom-attributes org.zkoss.zul.nativebar="false" />
 			<listhead>
 				<listheader forEach="${col}" label="col ${forEachStatus.index + 1}" hflex="min" />
 			</listhead>
