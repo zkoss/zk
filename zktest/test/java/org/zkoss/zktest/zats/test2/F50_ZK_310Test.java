@@ -79,10 +79,10 @@ public class F50_ZK_310Test extends WebDriverTestCase {
 		Assert.assertEquals(listbox4WidthBefore, getListboxFirstColumnWidth("listbox4"));
 		Assert.assertEquals(listbox5WidthBefore, getListboxFirstColumnWidth("listbox5"));
 		Assert.assertEquals(treeWidthBefore, getTreeFirstColumnWidth("tree"));
-		Assert.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree2"));
-		Assert.assertEquals(tree4WidthBefore, getTreeFirstColumnWidth("tree3"));
-		Assert.assertEquals(tree3WidthBefore, getTreeFirstColumnWidth("tree4"));
-		Assert.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree5"));
+		Assert.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree2"), 1);
+		Assert.assertEquals(tree4WidthBefore, getTreeFirstColumnWidth("tree3"), 1);
+		Assert.assertEquals(tree3WidthBefore, getTreeFirstColumnWidth("tree4"), 1);
+		Assert.assertEquals(tree5WidthBefore, getTreeFirstColumnWidth("tree5"), 1);
 	}
 
 	private int getGridFirstColumnWidth(String id) {

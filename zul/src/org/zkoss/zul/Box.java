@@ -347,6 +347,11 @@ public class Box extends XulElement {
 		return _sizedByContent;
 	}
 
+	@Override
+	protected boolean evalCSSFlex() {
+		return false;
+	}
+
 	//-- super --//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);

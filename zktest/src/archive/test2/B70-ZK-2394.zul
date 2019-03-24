@@ -6,18 +6,12 @@
 	<script type="text/javascript"><![CDATA[
 
   	function getWidth() {
-  		var hdcolwidth = 0;
-  		var hdtblwidth = $('.z-grid-header>table').width();
-  		$('.z-grid-header>table>colgroup').children().each(function() {
-      		hdcolwidth = hdcolwidth + $(this).width();
-		});
+  		var hdcolwidth = jq('.z-grid-header>table tr').width();
+  		var hdtblwidth = jq('.z-grid-header>table').width();
 		zk.log(Math.abs(hdtblwidth-hdcolwidth) < 1? 'Yes' : 'No');
 
-		var bdcolwidth = 0;
-		var bdtblwidth = $('.z-grid-body>table').width();
-  		$('.z-grid-body>table>colgroup').children().each(function() {
-      		bdcolwidth = bdcolwidth + $(this).width();
-		});
+		var bdcolwidth = jq('.z-grid-body>table tr').width();
+		var bdtblwidth = jq('.z-grid-body>table').width();
 		zk.log(Math.abs(bdtblwidth-bdcolwidth) < 1? 'Yes' : 'No');
   	}
   ]]></script>

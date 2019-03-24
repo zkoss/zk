@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.event.SwipeEvent;
 import org.zkoss.zk.ui.event.ZIndexEvent;
 import org.zkoss.zk.ui.ext.DragControl;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
+import org.zkoss.zk.ui.impl.Utils;
 import org.zkoss.zk.ui.sys.IntPropertyAccess;
 import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
@@ -736,6 +737,10 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 
+	protected boolean evalCSSFlex() {
+		return Utils.testAttribute(this, "org.zkoss.zul.css.flex", true, true);
+	}
+
 	//-- rendering --//
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.
@@ -775,6 +780,8 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 
 		render(renderer, "zclass", _zclass);
 		render(renderer, "prolog", _prolog);
+		if (evalCSSFlex())
+			renderer.render("cssflex", true);
 	}
 
 	//--ComponentCtrl--//

@@ -731,7 +731,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 
 		this._bindDomNode();
-		if (this._hflex != 'min')
+		if (this.frozen)
+			this._cssflex = false; //force to use old flex
+		if (this._cssflex && this.isChildrenFlex()) {//css flex
+			this.ehdfaker.style.display = 'none';
+		} else if (this._hflex != 'min')
 			this._fixHeaders();
 		if (this.ehead) //sync scroll for input tab key scroll
 			this.domListen_(this.ehead, 'onScroll', '_doSyncScroll');
@@ -796,6 +800,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_fixHeaders: function (force) { //used in HeadWidget
 		if (this.head && this.ehead) {
+			if (this._cssflex && this.isChildrenFlex()) return;
 			var empty = true,
 				flex = false,
 				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
@@ -1141,7 +1146,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		return this.frozen && this._nativebar ?
 				hgh - this.efrozen.offsetHeight : hgh;
 	},
-	setFlexSize_: function (sz) {
+	setFlexSize_: function (sz, isFlexMin) {
+		if (this._cssflex && this.parent.getFlexContainer_() != null && !isFlexMin)
+			return;
 		var n = this.$n(),
 			head = this.$n('head');
 		if (sz.height !== undefined) {
@@ -1257,6 +1264,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._calcHgh();
 	},
 	_afterCalcSize: function () {
+		var isCSSFlex = this._cssflex && this.isChildrenFlex();
 		if (this._ebodyScrollPos) {
 			// ZK-2046: Restore ebody scroll position after calculated size.
 			this.ebody.scrollLeft = this._ebodyScrollPos.l;
@@ -1266,23 +1274,38 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
 		var allWidths = this._isAllWidths(),
-			hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
+			head = this.head,
+			hdfakerbar = head ? head.$n('hdfaker-bar') : null,
+			hdbar = head ? jq(this).find('.' + head.$s('bar'))[0] : null,
 			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null,
 			scrollbarWidth = jq.scrollbarWidth(),
 			hasVScroll = zk(this.ebody).hasVScroll();
 
 		if (hasVScroll) {
-			if (hdfakerbar)
-				hdfakerbar.style.width = scrollbarWidth + 'px';
+			if (hdfakerbar) {
+				if (isCSSFlex && hdbar)
+					hdbar.style.flex = '0 1 ' + scrollbarWidth + 'px';
+				else
+					hdfakerbar.style.width = scrollbarWidth + 'px';
+			}
 			if (ftfakerbar)
 				ftfakerbar.style.width = scrollbarWidth + 'px';
 		} else {
 			var zero = this.$class.WIDTH0;
 			//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
-			if (hdfakerbar)
-				hdfakerbar.style.width = zero;
+			if (hdfakerbar) {
+				if (isCSSFlex && hdbar)
+					hdbar.style.flex = '0 1 ' + zero + 'px';
+				else
+					hdfakerbar.style.width = zero;
+			}
 			if (ftfakerbar)
 				ftfakerbar.style.width = zero;
+		}
+		if (isCSSFlex) {
+			//update
+			head.afterChildrenFlex_();
+			return;
 		}
 		if (allWidths) {
 			var hdtbl = this.eheadtbl,
@@ -1977,6 +2000,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (o == 'h') {
 			n.style.height = jq.px0(Math.ceil(this._vflexsz));
 		}
+	},
+	//css flex
+	isChildrenFlex: function () {
+		if (this.head && this.ehead) {
+			for (var i = this.heads.length; i-- > 0;) {
+				var header = this.heads[i];
+				for (var w = header.firstChild; w; w = w.nextSibling) {
+					if (w._hflex && w._hflex != 'min') {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }, {
 	WIDTH0: zk.webkit ? '0.001px' : '0px',

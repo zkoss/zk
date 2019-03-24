@@ -484,7 +484,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this;
 	},
 	//@Override to apply the calculated value on xxx-real element
-	setFlexSize_: function (sz) {
+	setFlexSize_: function (sz, isFlexMin) {
+		if (this._cssflex && this.parent.getFlexContainer_() != null && !isFlexMin)
+			return;
 		var n = this.$n('real'),
 			ns = n.style;
 		if (sz.height !== undefined) {

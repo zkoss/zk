@@ -47,5 +47,8 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		else if (v == 'bottom')
 			clsnm += ' z-valign-bottom';
 		return clsnm;
+	},
+	getFlexDirection_: function () {
+		return 'row';
 	}
 });

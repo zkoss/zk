@@ -247,7 +247,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened) {
-			zWatch.listen({onSize: [wgt, zFlex.onSize], beforeSize: [wgt, zFlex.beforeSize]});
+			var parent = wgt.parent;
+			if (wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null))
+				zWatch.listen({onSize: [wgt, zFlex.fixCSSFlex]});
+			else
+				zWatch.listen({onSize: [wgt, zFlex.onSize]});
+			zWatch.listen({beforeSize: [wgt, zFlex.beforeSize]});
 			if (wgt._hflex == 'min' || wgt._vflex == 'min')
 				wgt.listenOnFitSize_();
 			else
@@ -257,12 +262,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			zWatch.unlisten({onSize: [wgt, zFlex.onSize], beforeSize: [wgt, zFlex.beforeSize]});
+			var parent = wgt.parent;
+			if (wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null))
+				zWatch.unlisten({onSize: [wgt, zFlex.fixCSSFlex]});
+			else
+				zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
+			zWatch.listen({beforeSize: [wgt, zFlex.beforeSize]});
 			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
 	}
-	
 	/** @class zk.DnD
 	 * Drag-and-drop utility.
 	 * It is the low-level utility reserved for overriding for advanced customization.
@@ -1068,6 +1077,19 @@ new zul.wnd.Window({
 				else
 					n.tabIndex = tabindex;
 			}
+		},
+		/** Returns whether using css flex in this component or not.
+		 * @return int
+		 * @since 9.0.0
+		 */
+		/** Sets whether to use css flex in this component or not.
+		 * @param boolean enable css flex or not
+		 * @since 9.0.0
+		 */
+		cssflex: function () {
+			if (this.desktop) {
+				this.rerender();
+			}
 		}
 	},
 	setHflex_: function (v) {
@@ -1079,13 +1101,18 @@ new zul.wnd.Window({
 							//nested inside native component. in this case the nested component
 							//is bound earlier, when the native component is reused (mount.js create())
 			if (!this._nhflex) {
-				this.setFlexSize_({width: 'auto'}); //clear the width
+				if (this._cssflex && this._hflex != 'min')
+					zFlex.clearCSSFlex(this, 'h');
+				else
+					this.setFlexSize_({width: 'auto'}); //clear the width
 				delete this._hflexsz;
 				this._hflex = undefined;
 				if (!this._nvflex)
 					_unlistenFlex(this);
-			} else
+			} else {
+				if (this._cssflex) delete this._flexFixed;
 				_listenFlex(this);
+			}
 		}
 	},
 	setVflex_: function (v) {
@@ -1094,13 +1121,18 @@ new zul.wnd.Window({
 			this._nvflex = 0;
 		if (this.desktop) {
 			if (!this._nvflex) {
-				this.setFlexSize_({height: 'auto'});
+				if (this._cssflex && this._vflex != 'min')
+					zFlex.clearCSSFlex(this, 'v');
+				else
+					this.setFlexSize_({height: 'auto'});
 				delete this._vflexsz;
 				this._vflex = undefined;
 				if (!this._nhflex)
 					_unlistenFlex(this);
-			} else
+			} else {
+				if (this._cssflex) delete this._flexFixed;
 				_listenFlex(this);
+			}
 		}
 	},
 	/** Invoked after an animation (e.g., {@link jqzk#slideDown}) has finished.
@@ -3213,6 +3245,8 @@ unbind_: function (skipper, after) {
 		else _binds[uuid] = this;
 	},
 	setFlexSize_: function (sz, isFlexMin) {
+		if (this._cssflex && this.parent.getFlexContainer_() != null && !isFlexMin)
+			return;
 		var n = this.$n(),
 			zkn = zk(n);
 		if (sz.height !== undefined) {
@@ -3371,6 +3405,16 @@ unbind_: function (skipper, after) {
 		if (scrollable && (n.scrollTop || n.scrollLeft)) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
 			return;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
+	},
+	getFlexContainer_: function () {
+		return this.getCaveNode();
+	},
+	getFlexDirection_: function () { // if it is null, by default it would check this display is block or not
+		//to be overridden
+		return null;
+	},
+	afterClearFlex_: function () {
+		//to be overridden
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).

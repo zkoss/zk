@@ -86,7 +86,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	setFlexSize_: function (sz) {
+	setFlexSize_: function (sz, isFlexMin) {
+		if (this._cssflex && this.parent.getFlexContainer_() != null && !isFlexMin)
+			return;
 		if ((sz.width !== undefined && sz.width != 'auto' && sz.width != '') || sz.width == 0) { //JavaScript deems 0 == ''
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
@@ -162,16 +164,28 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var $n = jq(this.$n()),
 				$faker = jq(this.$n('hdfaker')),
 				w = this.getWidth();
-			if (!this.isVisible()) {
-				$n.css('display', '');
-				$faker.css('display', '');
-				$faker.css('visibility', 'collapse');
-				$faker.css('width', width0);
+			if (mesh._cssflex && mesh.isChildrenFlex()) {
+				if (!this.isVisible()) {
+					$n.css('display', 'none');
+				} else {
+					$n.css('display', '');
+				}
 			} else {
-				$faker.css('visibility', '');
-				// B70-ZK-2036: Check if header has hflex width first.
-				if (!this._hflexWidth && w) {
-					$faker.css('width', w);
+				if (!this.isVisible()) {
+					$faker.css('display', '');
+					$faker.css('visibility', 'collapse');
+					$faker.css('width', width0);
+					if (mesh._cssflex && this._nhflex > 0) {
+						$n.css('display', 'none');
+					} else {
+						$n.css('display', '');
+					}
+				} else {
+					$faker.css('visibility', '');
+					// B70-ZK-2036: Check if header has hflex width first.
+					if (!this._hflexWidth && w) {
+						$faker.css('width', w);
+					}
 				}
 			}
 		}
@@ -402,6 +416,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<th', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></th>');
+	},
+	afterClearFlex_: function () {
+		this.parent.afterClearFlex_();
 	}
 }, { //static
 	_faker: ['hdfaker', 'bdfaker', 'ftfaker'],
@@ -483,7 +500,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 
 			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
 			var wdInt = zk.parseInt(wds[i]);
-			if (w._hflexWidth) {
+			if (mesh._cssflex && mesh.isChildrenFlex()) {
+				zFlex.clearCSSFlex(this, 'h', true);
+			} else if (w._hflexWidth) {
 				w.setHflex_(null);
 				w._hflexWidth = undefined;
 			}

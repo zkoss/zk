@@ -144,6 +144,9 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 
 		if (this.desktop)
 			_syncFrozen(this);
+
+		if (g && g._cssflex && g.isChildrenFlex())
+			g._syncSize();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);

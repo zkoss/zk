@@ -20,5 +20,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.box.Vlayout = zk.$extends(zul.box.Layout, {
 	isVertical_: function () {
 		return true;
+	},
+	getFlexDirection_: function () {
+		return 'column';
 	}
 });

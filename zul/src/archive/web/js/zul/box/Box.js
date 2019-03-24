@@ -866,7 +866,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 		}
 	},
-	onHide: _zkf
+	onHide: _zkf,
+	getFlexContainer_: function () {
+		return null;
+	}
 },{ //static
 	_toValign: function (v) {
 		return v ? 'start' == v ? 'top' : 'center' == v ? 'middle' :

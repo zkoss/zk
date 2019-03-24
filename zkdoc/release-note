@@ -1,6 +1,7 @@
 ZK 9.0.0
 * Features
   ZK-4328: Change Java compiler source/target to 8
+  ZK-317: Support CSS3 flex that allows developer to specify the flexibility easier and more flexible
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
