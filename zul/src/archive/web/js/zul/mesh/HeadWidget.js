@@ -281,25 +281,80 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 			efoot = wgt.efoot,
 			currentLeft = wgt._currentLeft;
 		if (wgt) {
-			wgt._adjFlexWd();
-			wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
+			if (wgt._cssflex) {
+				var minWd = wgt._calcMinWds(),
+					wds = minWd.wds;
+				for (var i = 0, hwgt = this.firstChild; hwgt; hwgt = hwgt.nextSibling, i++) {
+					if (hwgt._hflex == 'min')
+						hwgt.$n().style.flex = '0 1 ' + jq.px(wds[i]);
+				}
+				var bdfaker = wgt.ebdfaker,
+					bdcol = bdfaker.firstChild,
+					ftfaker = wgt.eftfaker,
+					ftcol,
+					tblWidth = 0;
+				if (ftfaker)
+					ftcol = ftfaker.firstChild;
+				wds = {};
+				for (var w = this.firstChild; w && bdcol; w = w.nextSibling) {
+					wds[w.uuid] = w.$n().getBoundingClientRect().width;
+					bdcol = bdcol.nextSibling;
+				}
+				bdcol = bdfaker.firstChild;
+				for (var w = this.firstChild, wd; w && bdcol; w = w.nextSibling) {
+					var wd = wds[w.uuid];
+					if (w.isVisible() && (wdpx = jq.px0(wd)) !== undefined) {
+						bdcol.style.width = wdpx;
+						if (ftcol)
+							ftcol.style.width = wdpx;
+						tblWidth += wd;
+					}
+					bdcol = bdcol.nextSibling;
+					if (ftcol)
+						ftcol = ftcol.nextSibling;
+				}
+				var hdtbl = wgt.eheadtbl,
+					bdtbl = wgt.ebodytbl,
+					fttbl = wgt.efoottbl,
+					scrollbarWidth = jq.scrollbarWidth(),
+					hasVScroll = zk(wgt.ebody).hasVScroll();
+				if (hdtbl) {
+					var tblWidthPx = jq.px0(tblWidth);
+						tblWidthWithScrollBarPx = jq.px0(hasVScroll ? tblWidth + scrollbarWidth : tblWidth);
+					hdtbl.style.width = tblWidthWithScrollBarPx;
+					if (bdtbl)
+						bdtbl.style.width = tblWidthPx;
+					if (fttbl)
+						fttbl.style.width = tblWidthWithScrollBarPx;
+				}
+			} else {
+				wgt._adjFlexWd();
+				wgt._adjSpanWd(); //if there is span and shall span the column width for extra space
 
-			// ZK-2772 Misaligned Grid columns
-			if (wgt.frozen && !wgt._isAllWidths()) {
-				wgt._calcSize(); // yes, we need to do it again.
-			}
-			// ZK-2551: need to restore scroll pos after flexs are fixed
-			if (zk(ebody).hasHScroll() && currentLeft != ebody.scrollLeft) {
-				ebody.scrollLeft = currentLeft;
-				if (ehead)
-					ehead.scrollLeft = currentLeft;
-				if (efoot)
-					efoot.scrollLeft = currentLeft;
+				// ZK-2772 Misaligned Grid columns
+				if (wgt.frozen && !wgt._isAllWidths()) {
+					wgt._calcSize(); // yes, we need to do it again.
+				}
+				// ZK-2551: need to restore scroll pos after flexs are fixed
+				if (zk(ebody).hasHScroll() && currentLeft != ebody.scrollLeft) {
+					ebody.scrollLeft = currentLeft;
+					if (ehead)
+						ehead.scrollLeft = currentLeft;
+					if (efoot)
+						efoot.scrollLeft = currentLeft;
+				}
 			}
 		}
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
+	},
+	getFlexDirection_: function () {
+		return 'row';
+	},
+	afterClearFlex_: function() {
+		if (this._cssflex)
+			this.parent.ehdfaker.style.display = '';
 	}
 },{ //static
 	redraw: function (out) {

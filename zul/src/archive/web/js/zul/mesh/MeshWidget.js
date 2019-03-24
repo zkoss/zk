@@ -21,416 +21,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 (function () {
 	var _shallFocusBack;
-	function _calcMinWd(wgt) {
-		var wgtn = wgt.$n(),
-			ws = wgtn ? wgtn.style.whiteSpace : ''; //bug#3106514: sizedByContent with not visible columns
-		if (wgtn) {
-			if (zk.ie8)
-				wgt._wsbak = ws; // B50-ZK-432
-			wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
-		}
-		var eheadtblw,
-			efoottblw,
-			ebodytblw,
-			eheadtblfix,
-			efoottblfix,
-			ebodytblfix,
-			hdfaker = wgt.ehdfaker,
-			bdfaker = wgt.ebdfaker,
-			ftfaker = wgt.eftfaker,
-			head = wgt.head,
-			headn = head ? head.$n() : null,
-			hdfakerws = [],
-			bdfakerws = [],
-			ftfakerws = [],
-			hdws = [],
-			hdcavews = [];
-
-		if (wgt.eheadtbl && headn) {//clear and backup headers widths
-			wgt.ehead.style.width = '';
-			eheadtblw = wgt.getInnerWidth() || '';
-			wgt.eheadtbl.width = '';
-			wgt.eheadtbl.style.width = '';
-			eheadtblfix = wgt.eheadtbl.style.tableLayout;
-			wgt.eheadtbl.style.tableLayout = '';
-			if (zk.chrome)
-				wgt.ebodytbl.style.display = 'block';
-			var headcol = hdfaker.firstChild,
-				headcell = headn.firstChild;
-			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
-				var headcave = headcell ? headcell.firstChild : null;
-				if (!headcave)
-					continue;
-				hdfakerws[i] = headcol.style.width;
-				headcol.style.width = '';
-				hdws[i] = headcell.style.width;
-				headcell.style.width = '';
-				hdcavews[i] = headcave.style.width;
-				headcave.style.width = '';
-
-				headcell = headcell.nextSibling;
-			}
-		}
-		if (headn)
-			headn.style.width = '';
-		if (wgt.efoottbl) {//clear and backup footers widths
-			wgt.efoot.style.width = '';
-			efoottblw = eheadtblw || wgt.efoottbl.width;
-			wgt.efoottbl.width = '';
-			wgt.efoottbl.style.width = '';
-			efoottblfix = wgt.efoottbl.style.tableLayout;
-			wgt.efoottbl.style.tableLayout = '';
-			if (zk.chrome)
-				wgt.ebodytbl.style.display = 'block';
-			if (ftfaker) {
-				var footcol = ftfaker.firstChild,
-					ftrows = wgt.efootrows,
-					ftcells = ftrows ? ftrows.rows[0].cells : null;
-				for (var i = 0; footcol; footcol = footcol.nextSibling) {
-					if (ftcells && ftcells[i])
-						ftcells[i].style.width = ''; // reset it
-
-					ftfakerws[i++] = footcol.style.width;
-					footcol.style.width = '';
-				}
-			}
-		}
-		if (wgt.ebodytbl) {//clear and backup body faker widths
-			wgt.ebody.style.width = '';
-			ebodytblw = eheadtblw || wgt.ebodytbl.width;
-			wgt.ebodytbl.width = '';
-			wgt.ebodytbl.style.width = '';
-			ebodytblfix = wgt.ebodytbl.style.tableLayout;
-			wgt.ebodytbl.style.tableLayout = '';
-			if (zk.chrome)
-				wgt.ebodytbl.style.display = 'block';
-			if (bdfaker) {
-				var bodycol = bdfaker.firstChild;
-				for (var i = 0; bodycol; bodycol = bodycol.nextSibling) {
-					bdfakerws[i++] = bodycol.style.width;
-					bodycol.style.width = '';
-				}
-			}
-		}
-
-		//calculate widths
-		var wds = [],
-			width = 0,
-			len = head ? head.nChildren : 0,
-			w = head ? head = head.firstChild : null,
-			headWgt = wgt.getHeadWidget(),
-			max = 0, maxj;
-		if (bdfaker && w) {
-			var bodycells = wgt._getFirstRowCells(wgt.ebodyrows),
-				footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : null;
-
-			for (var i = 0; i < len; i++) {
-				var wd = bodycells && bodycells[i] ? bodycells[i].offsetWidth : 0,
-					$cv = zk(w.$n('cave')),
-					hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
-					ftwd = footcells && footcells[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
-					header;
-
-				if ((header = headWgt.getChildAt(i)) && header.getWidth())
-					hdwd = Math.max(hdwd, ftwd);
-				if (hdwd > wd)
-					wd = hdwd;
-				if (ftwd > wd)
-					wd = ftwd;
-				wds[i] = wd;
-				// Bug ZK-2772 don't plus one when frozen exists.
-				if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
-					++wds[i];
-				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
-				if (w)
-					w = w.nextSibling;
-			}
-			wgt._deleteFakeRow(wgt.ebodyrows);
-			if (ftfaker)
-				wgt._deleteFakeRow(wgt.efootrows);
-		} else {
-			var tr;
-			if (tr = _getSigRow(wgt)) {
-				for (var cells = tr.cells, i = cells.length; i--;) {
-					var wd = cells[i].offsetWidth;
-					wds[i] = wd;
-
-					// Bug ZK-2772 don't plus one when frozen exists.
-					if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
-						++wds[i];
-					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
-				}
-			}
-		}
-
-		// ZK-3313: The width of empty message counts
-		var empty = wgt.$n('empty');
-		if (empty && empty.style.display != 'none') {
-			var emptyWidth = empty.offsetWidth;
-			if (emptyWidth > width)
-				width = emptyWidth;
-		}
-
-		if (wgt.eheadtbl && headn) {//restore headers widths
-			if (eheadtblw.indexOf('%') < 0) { // once sized and consider faker bar
-				var $hdfakerbar = jq(wgt.head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
-					hdfakerbar = $hdfakerbar[0];
-				if (hdfakerbar) eheadtblw = jq.px0(parseInt(eheadtblw) + parseInt(hdfakerbar.style.width));
-				wgt.eheadtbl.style.width = eheadtblw;
-			} else
-				wgt.eheadtbl.width = eheadtblw || '';
-
-			wgt.eheadtbl.style.tableLayout = eheadtblfix || '';
-			if (zk.chrome)
-				wgt.eheadtbl.style.display = '';
-			var headcol = hdfaker.firstChild,
-				headcell = headn.firstChild;
-			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
-				var headcave = headcell ? headcell.firstChild : null;
-				if (!headcave)
-					continue;
-				headcol.style.width = hdfakerws[i];
-				headcell.style.width = hdws[i];
-				headcave.style.width = hdcavews[i];
-
-				headcell = headcell.nextSibling;
-			}
-		}
-		if (wgt.efoottbl) {//restore footers widths
-			wgt.efoottbl.width = efoottblw || '';
-			wgt.efoottbl.style.tableLayout = efoottblfix || '';
-			if (zk.chrome)
-				wgt.efoottbl.style.display = '';
-			if (ftfaker) {
-				var footcol = ftfaker.firstChild;
-				for (var i = 0; footcol; footcol = footcol.nextSibling)
-					footcol.style.width = ftfakerws[i++];
-			}
-		}
-		if (wgt.ebodytbl) {//restore body fakers widths
-			wgt.ebodytbl.width = ebodytblw || '';
-			wgt.ebodytbl.style.tableLayout = ebodytblfix || '';
-			if (zk.chrome)
-				wgt.ebodytbl.style.display = '';
-			if (bdfaker) {
-				var bodycol = bdfaker.firstChild;
-				for (var i = 0; bodycol; bodycol = bodycol.nextSibling)
-					bodycol.style.width = bdfakerws[i++];
-			}
-		}
-
-		if (wgtn)
-			wgtn.style.whiteSpace = ws;
-		return {width: width, wds: wds};
-	}
-	function _fixBodyMinWd(wgt, fixMesh) {
-		// effective only when there is no header
-		var sbc = wgt.isSizedByContent(),
-			meshmin = wgt._hflex == 'min';
-		if (!wgt.head && (meshmin || sbc)) {
-			var bdw = zk(wgt.$n()).padBorderWidth(),
-				wd = _getMinWd(wgt) + (zk(wgt.ebody).hasVScroll() ? jq.scrollbarWidth() : 0) + bdw, // has to call _getMinWd first so wgt._minWd will be available
-				tr = wgt.ebodytbl,
-				wds = wgt._minWd.wds,
-				wlen = wds.length;
-			if (fixMesh && meshmin)
-				wgt.setFlexSize_({width: wd}, true);
-			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
-				return; // no first tr
-			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
-				c.style.width = jq.px(wds[i++]);
-			if (sbc && !meshmin) {
-				// add flex <td> if absent
-				var bdfx = tr.lastChild,
-					bdfxid = wgt.uuid + '-bdflex';
-				if (!bdfx || bdfx.id != bdfxid) {
-					jq(tr).append('<td id="' + bdfxid + '"></td>');
-					bdfx = tr.lastChild;
-				}
-			}
-		}
-	}
-	function _fixPageSize(wgt, rows) {
-		var ebody = wgt.ebody;
-		if (!ebody)
-			return; //not ready yet
-		var max = ebody.offsetHeight;
-		if (zk(ebody).hasHScroll()) //with horizontal scrollbar
-			max -= jq.scrollbarWidth();
-		if (max == wgt._prehgh) return false; //same height, avoid fixing page size
-		wgt._prehgh = max;
-		var ebodytbl = wgt.ebodytbl,
-			etbparent = ebodytbl.offsetParent,
-			etbtop = ebodytbl.offsetTop,
-			hgh = 0,
-			row,
-			j = 0;
-		for (var it = wgt.getBodyWidgetIterator({skipHidden: true}),
-				len = rows.length, w; (w = it.next()) && j < len; j++) {
-			row = rows[j];
-			var top = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
-			if (top > max) {
-				--j;
-				break;
-			}
-			hgh = top;
-		}
-		if (row) { //there is row
-			var pgib = wgt.$n('pgib'),
-				pgibHgh = 0;
-			if (pgib)
-				pgibHgh = pgib.offsetHeight;
-			var withPgibMax = max + pgibHgh;
-			if (top <= withPgibMax) { //row not exceeds the height, estimate
-				var paging = (wgt.paging) ? wgt.paging : wgt.getPaginal(),
-					totalsz = paging.getTotalSize(),
-					rowsHgh = hgh + row.offsetHeight,
-					j1 = Math.floor(j * max / rowsHgh),
-					j2 = Math.floor(j * withPgibMax / rowsHgh);
-				if (totalsz > j2)
-					j = j1;
-				else
-					j = j2;
-			}
-			//enforce pageSize change
-			if (j == 0) j = 1; //at least one per page
-			if (j != wgt.getPageSize()) {
-				wgt.fire('onPageSize', {size: j});
-				return true;
-			}
-		}
-	}
-	function _adjMinWd(wgt) {
-		if (wgt._hflex == 'min') {
-			var w = _getMinWd(wgt),
-				n = wgt.$n();
-			wgt._hflexsz = w + zk(n).padBorderWidth(); //override
-			n.style.width = jq.px0(wgt._hflexsz);
-		}
-	}
-	function _getMinWd(wgt) {
-		wgt._calcMinWds();
-		var bdfaker = wgt.ebdfaker,
-			wd,
-			wds = [],
-			width,
-			_minwds = wgt._minWd.wds;
-		if (wgt.head && bdfaker) {
-			width = 0;
-			var w = wgt.head.firstChild,
-				bdcol = bdfaker.firstChild;
-
-			for (var i = 0; w; w = w.nextSibling) {
-				if (w._hflex == 'min')
-					wd = wds[i] = _minwds[i] + zk(w.$n()).padBorderWidth();
-				else {
-					if (w._width && w._width.indexOf('px') > 0)
-						wd = wds[i] = zk.parseInt(w._width);
-					else
-						wd = wds[i] = zk.parseInt(bdcol.style.width);
-				}
-				// ZK-2130: should save the head width
-				w._origWd = jq.px0(wd);
-				width += wd;
-				++i;
-				bdcol = bdcol.nextSibling;
-			}
-		} else
-			width = wgt._minWd.width; // no header
-		return width;
-	}
-	function _getSigRow(wgt) {
-		// scan for tr with largest number of td children
-		var rw = wgt.getBodyWidgetIterator().next(),
-			tr = rw ? rw.$n() : null;
-		if (!tr)
-			return;
-		for (var maxtr = tr, len, max = maxtr.cells.length; tr; tr = tr.nextSibling)
-			if ((len = tr.cells.length) > max) {
-				maxtr = tr;
-				max = len;
-			}
-		return maxtr;
-	}
-	function _cpCellWd(wgt) {
-		var dst = wgt.efootrows.rows[0],
-			srcrows = wgt.ebodyrows.rows;
-		if (!dst || !srcrows || !srcrows.length || !dst.cells.length)
-			return;
-		var ncols = dst.cells.length,
-			src, maxnc = 0;
-		for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w; (w = it.next());) {
-			if (wgt._modal && !w._loaded)
-				continue;
-
-			var row = srcrows[j++], $row = zk(row),
-				cells = row.cells, nc = $row.ncols(),
-				valid = cells.length == nc && $row.isVisible();
-				//skip with colspan and invisible
-			if (valid && nc >= ncols) {
-				maxnc = ncols;
-				src = row;
-				break;
-			}
-			if (nc > maxnc) {
-				src = valid ? row : null;
-				maxnc = nc;
-			} else if (nc == maxnc && !src && valid) {
-				src = row;
-			}
-		}
-		if (!maxnc) return;
-
-		var fakeRow = !src;
-		if (fakeRow) { //the longest row containing colspan
-			src = document.createElement('TR');
-			src.style.height = '0px';
-				//Note: we cannot use display="none" (offsetWidth won't be right)
-			for (var j = 0; j < maxnc; ++j)
-				src.appendChild(document.createElement('TD'));
-			srcrows[0].parentNode.appendChild(src);
-		}
-		//we have to clean up first, since, in FF, if dst contains %
-		//the copy might not be correct
-		for (var j = maxnc; j--;)
-			dst.cells[j].style.width = '';
-
-		var sum = 0;
-		for (var j = maxnc; j--;) {
-			var d = dst.cells[j], s = src.cells[j];
-			if (zk.opera) {
-				sum += s.offsetWidth;
-				d.style.width = zk(s).contentWidth();
-			} else {
-				d.style.width = s.offsetWidth + 'px';
-				if (maxnc > 1) { //don't handle single cell case (bug 1729739)
-					var v = s.offsetWidth - d.offsetWidth;
-					if (v != 0) {
-						v += s.offsetWidth;
-						if (v < 0) v = 0;
-						d.style.width = v + 'px';
-					}
-				}
-			}
-		}
-		if (zk.opera && wgt.isSizedByContent())
-			dst.parentNode.parentNode.style.width = sum + 'px';
-		if (fakeRow)
-			src.parentNode.removeChild(src);
-	}
-	function listenOnFitSize(wgt) {
-		if (wgt._rows && !wgt._rowsOnFitSize) {
-			zWatch.listen({onFitSize: wgt});
-			wgt._rowsOnFitSize = true;
-		}
-	}
-	function unlistenOnFitSize(wgt) {
-		if (wgt._rowsOnFitSize) {
-			zWatch.unlisten({onFitSize: wgt});
-			delete wgt._rowsOnFitSize;
-		}
-	}
-
 /**
  *  A skeletal implementation for a mesh widget.
  *  @see zul.grid.Grid
@@ -466,7 +56,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 * @param int rows
 		 */
 		rows: function (rows) {
-			listenOnFitSize(this);
+			this.$class.listenOnFitSize(this);
 			var n = this.$n();
 			if (n) {
 				n._lastsz = null;
@@ -731,7 +321,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 
 		this._bindDomNode();
-		if (this._hflex != 'min')
+		if (this._hflex != 'min' && !this._cssflex)
 			this._fixHeaders();
 		if (this.ehead) //sync scroll for input tab key scroll
 			this.domListen_(this.ehead, 'onScroll', '_doSyncScroll');
@@ -747,9 +337,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
 		}
 		zWatch.listen({onSize: this, onResponse: this});
+
+		//css flex
+		if (this.frozen)
+			this._cssflex = false; //force to use old flex
+		else if (this._cssflex && this._isChildrenFlex()) {//css flex
+			this.ehdfaker.style.display = 'none';
+		}
 	},
 	unbind_: function () {
-		unlistenOnFitSize(this);
+		this.$class.unlistenOnFitSize(this);
 		zWatch.unlisten({onSize: this, onResponse: this});
 		if (this.ehead) //sync scroll for input tab key scroll
 			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
@@ -916,7 +513,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				}
 			}
 
-			_adjMinWd(this);
+			this.$class._adjMinWd(this);
 			this._afterCalcSize();
 		}
 	},
@@ -1055,7 +652,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 		var rows = this.ebodyrows ? this.ebodyrows.rows : null;
 		if (this.inPagingMold() && this._autopaging && rows && rows.length)
-			if (_fixPageSize(this, rows))
+			if (this.$class._fixPageSize(this, rows))
 				return; //need to reload with new page size
 
 		if (zk.ie8 && (this._wsbak !== undefined)) { // B50-ZK-432
@@ -1226,13 +823,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (tblwd)
 				efoot.style.width = tblwd + 'px';
 			if (efootrows && ebodyrows)
-				_cpCellWd(this);
+				this.$class._cpCellWd(this);
 		}
 
 		//check if need to span width
 		this._adjSpanWd();
 		// no header case
-		_fixBodyMinWd(this, true);
+		this.$class._fixBodyMinWd(this, true);
 
 		// B50-ZK-543, B50-ZK-773
 		// should re-calculate height because
@@ -1257,6 +854,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._calcHgh();
 	},
 	_afterCalcSize: function () {
+		var isCSSFlex = this._cssflex && this._isChildrenFlex();
 		if (this._ebodyScrollPos) {
 			// ZK-2046: Restore ebody scroll position after calculated size.
 			this.ebody.scrollLeft = this._ebodyScrollPos.l;
@@ -1266,24 +864,35 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// Set style width to table to avoid colgroup width not working
 		// because of width attribute (width="100%") on table
 		var allWidths = this._isAllWidths(),
-			hdfakerbar = this.head ? this.head.$n('hdfaker-bar') : null,
+			head = this.head,
+			hdfakerbar = head ? head.$n('hdfaker-bar') : null,
+			hdbar = head ? jq(this).find('.' + head.$s('bar'))[0] : null,
 			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null,
 			scrollbarWidth = jq.scrollbarWidth(),
 			hasVScroll = zk(this.ebody).hasVScroll();
 
 		if (hasVScroll) {
-			if (hdfakerbar)
-				hdfakerbar.style.width = scrollbarWidth + 'px';
+			if (hdfakerbar) {
+				if (isCSSFlex && hdbar)
+					hdbar.style.flex = '0 1 ' + scrollbarWidth + 'px';
+				else
+					hdfakerbar.style.width = scrollbarWidth + 'px';
+			}
 			if (ftfakerbar)
 				ftfakerbar.style.width = scrollbarWidth + 'px';
 		} else {
 			var zero = this.$class.WIDTH0;
 			//refix B70-ZK-2114: remove hdfakerbar when there is no native scrollbar
-			if (hdfakerbar)
-				hdfakerbar.style.width = zero;
+			if (hdfakerbar) {
+				if (isCSSFlex && hdbar)
+					hdbar.style.flex = '0 1 ' + zero + 'px';
+				else
+					hdfakerbar.style.width = zero;
+			}
 			if (ftfakerbar)
 				ftfakerbar.style.width = zero;
 		}
+		if (isCSSFlex) return;
 		if (allWidths) {
 			var hdtbl = this.eheadtbl,
 				bdtbl = this.ebodytbl,
@@ -1479,8 +1088,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (w._hflex == 'min' && w.hflexsz === undefined) //header hflex="min" not done yet!
 						return null;
 			}
-			_fixBodyMinWd(this); // sized by content without header
-			return _getMinWd(this); //grid.invalidate() with hflex="min" must maintain the width
+			this.$class._fixBodyMinWd(this); // sized by content without header
+			return this.$class._getMinWd(this); //grid.invalidate() with hflex="min" must maintain the width
 		}
 		return null;
 	},
@@ -1499,7 +1108,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._clearCachedSize();
 
 		var tr;
-		if (!this.ebdfaker && (tr = _getSigRow(this))) { //empty head case
+		if (!this.ebdfaker && (tr = this.$class._getSigRow(this))) { //empty head case
 			for (var cells = tr.cells, i = cells.length; i--;)
 				cells[i].style.width = '';
 		}
@@ -1516,7 +1125,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_calcMinWds: function () { //used in HeaderWidgets
 		if (!this._minWd)
-			this._minWd = _calcMinWd(this);
+			this._minWd = this.$class._calcMinWd(this);
 		return this._minWd;
 	},
 	_adjSpanWd: function () { //used in HeadWidgets
@@ -1739,8 +1348,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		bdtable.style.width = jq.px(width);
 		if (ftfaker)
 			this.efoottbl.style.width = jq.px(width);
-
-		_adjMinWd(this);
+		this.$class._adjMinWd(this);
 	},
 	_getFirstRowCells: function (tbody) {
 		var rowsLength, tbodyrows;
@@ -1962,6 +1570,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._bottomBoundary = this._bottomBoundary == undefined ? body.scrollHeight : this._bottomBoundary;
 			body.scrollTop += (this._bottomBoundary - body.scrollTop) / 2;
 		}
+	},
+	//css flex
+	_isChildrenFlex: function () {
+		if (this.head && this.ehead) {
+			var empty = true,
+				flex = false,
+				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
+			for (var i = this.heads.length; i-- > 0;) {
+				var header = this.heads[i],
+					emptyHeader = true,
+					column = 0;
+				for (var w = header.firstChild; w; w = w.nextSibling) {
+					if (w._hflex) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }, {
 	WIDTH0: zk.webkit ? '0.001px' : '0px',
@@ -1969,6 +1596,415 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (wgt.isVisible())
 			return width;
 		return this.WIDTH0;
+	},
+	_calcMinWd: function (wgt) {
+		var wgtn = wgt.$n(),
+			ws = wgtn ? wgtn.style.whiteSpace : ''; //bug#3106514: sizedByContent with not visible columns
+		if (wgtn) {
+			if (zk.ie8)
+				wgt._wsbak = ws; // B50-ZK-432
+			wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
+		}
+		var eheadtblw,
+			efoottblw,
+			ebodytblw,
+			eheadtblfix,
+			efoottblfix,
+			ebodytblfix,
+			hdfaker = wgt.ehdfaker,
+			bdfaker = wgt.ebdfaker,
+			ftfaker = wgt.eftfaker,
+			head = wgt.head,
+			headn = head ? head.$n() : null,
+			hdfakerws = [],
+			bdfakerws = [],
+			ftfakerws = [],
+			hdws = [],
+			hdcavews = [];
+
+		if (wgt.eheadtbl && headn) {//clear and backup headers widths
+			wgt.ehead.style.width = '';
+			eheadtblw = wgt.getInnerWidth() || '';
+			wgt.eheadtbl.width = '';
+			wgt.eheadtbl.style.width = '';
+			eheadtblfix = wgt.eheadtbl.style.tableLayout;
+			wgt.eheadtbl.style.tableLayout = '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = 'block';
+			var headcol = hdfaker.firstChild,
+				headcell = headn.firstChild;
+			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
+				var headcave = headcell ? headcell.firstChild : null;
+				if (!headcave)
+					continue;
+				hdfakerws[i] = headcol.style.width;
+				headcol.style.width = '';
+				hdws[i] = headcell.style.width;
+				headcell.style.width = '';
+				hdcavews[i] = headcave.style.width;
+				headcave.style.width = '';
+
+				headcell = headcell.nextSibling;
+			}
+		}
+		if (headn)
+			headn.style.width = '';
+		if (wgt.efoottbl) {//clear and backup footers widths
+			wgt.efoot.style.width = '';
+			efoottblw = eheadtblw || wgt.efoottbl.width;
+			wgt.efoottbl.width = '';
+			wgt.efoottbl.style.width = '';
+			efoottblfix = wgt.efoottbl.style.tableLayout;
+			wgt.efoottbl.style.tableLayout = '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = 'block';
+			if (ftfaker) {
+				var footcol = ftfaker.firstChild,
+					ftrows = wgt.efootrows,
+					ftcells = ftrows ? ftrows.rows[0].cells : null;
+				for (var i = 0; footcol; footcol = footcol.nextSibling) {
+					if (ftcells && ftcells[i])
+						ftcells[i].style.width = ''; // reset it
+
+					ftfakerws[i++] = footcol.style.width;
+					footcol.style.width = '';
+				}
+			}
+		}
+		if (wgt.ebodytbl) {//clear and backup body faker widths
+			wgt.ebody.style.width = '';
+			ebodytblw = eheadtblw || wgt.ebodytbl.width;
+			wgt.ebodytbl.width = '';
+			wgt.ebodytbl.style.width = '';
+			ebodytblfix = wgt.ebodytbl.style.tableLayout;
+			wgt.ebodytbl.style.tableLayout = '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = 'block';
+			if (bdfaker) {
+				var bodycol = bdfaker.firstChild;
+				for (var i = 0; bodycol; bodycol = bodycol.nextSibling) {
+					bdfakerws[i++] = bodycol.style.width;
+					bodycol.style.width = '';
+				}
+			}
+		}
+
+		//calculate widths
+		var wds = [],
+			width = 0,
+			len = head ? head.nChildren : 0,
+			w = head ? head = head.firstChild : null,
+			headWgt = wgt.getHeadWidget(),
+			max = 0, maxj;
+		if (bdfaker && w) {
+			var bodycells = wgt._getFirstRowCells(wgt.ebodyrows),
+				footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : null;
+
+			for (var i = 0; i < len; i++) {
+				var wd = bodycells && bodycells[i] ? bodycells[i].offsetWidth : 0,
+					$cv = zk(w.$n('cave')),
+					hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
+					ftwd = footcells && footcells[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
+					header;
+
+				if ((header = headWgt.getChildAt(i)) && header.getWidth())
+					hdwd = Math.max(hdwd, ftwd);
+				if (hdwd > wd)
+					wd = hdwd;
+				if (ftwd > wd)
+					wd = ftwd;
+				wds[i] = wd;
+				// Bug ZK-2772 don't plus one when frozen exists.
+				if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8 || zk.safari)) // firefox4 & IE9, 10, 11 & safari still cause break line in case B50-3147926 column 1
+					++wds[i];
+				width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
+				if (w)
+					w = w.nextSibling;
+			}
+			wgt._deleteFakeRow(wgt.ebodyrows);
+			if (ftfaker)
+				wgt._deleteFakeRow(wgt.efootrows);
+		} else {
+			var tr;
+			if (tr = this.$class._getSigRow(wgt)) {
+				for (var cells = tr.cells, i = cells.length; i--;) {
+					var wd = cells[i].offsetWidth;
+					wds[i] = wd;
+
+					// Bug ZK-2772 don't plus one when frozen exists.
+					if (!wgt.frozen && (zk.ff > 4 || zk.ie > 8)) // firefox4 & IE9, 10, 11 still cause break line in case B50-3147926 column 1
+						++wds[i];
+					width += wds[i]; // using wds[i] instead of wd for B50-3183172.zul
+				}
+			}
+		}
+
+		// ZK-3313: The width of empty message counts
+		var empty = wgt.$n('empty');
+		if (empty && empty.style.display != 'none') {
+			var emptyWidth = empty.offsetWidth;
+			if (emptyWidth > width)
+				width = emptyWidth;
+		}
+
+		if (wgt.eheadtbl && headn) {//restore headers widths
+			if (eheadtblw.indexOf('%') < 0) { // once sized and consider faker bar
+				var $hdfakerbar = jq(wgt.head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
+					hdfakerbar = $hdfakerbar[0];
+				if (hdfakerbar) eheadtblw = jq.px0(parseInt(eheadtblw) + parseInt(hdfakerbar.style.width));
+				wgt.eheadtbl.style.width = eheadtblw;
+			} else
+				wgt.eheadtbl.width = eheadtblw || '';
+
+			wgt.eheadtbl.style.tableLayout = eheadtblfix || '';
+			if (zk.chrome)
+				wgt.eheadtbl.style.display = '';
+			var headcol = hdfaker.firstChild,
+				headcell = headn.firstChild;
+			for (var i = 0; headcol; headcol = headcol.nextSibling, i++) {
+				var headcave = headcell ? headcell.firstChild : null;
+				if (!headcave)
+					continue;
+				headcol.style.width = hdfakerws[i];
+				headcell.style.width = hdws[i];
+				headcave.style.width = hdcavews[i];
+
+				headcell = headcell.nextSibling;
+			}
+		}
+		if (wgt.efoottbl) {//restore footers widths
+			wgt.efoottbl.width = efoottblw || '';
+			wgt.efoottbl.style.tableLayout = efoottblfix || '';
+			if (zk.chrome)
+				wgt.efoottbl.style.display = '';
+			if (ftfaker) {
+				var footcol = ftfaker.firstChild;
+				for (var i = 0; footcol; footcol = footcol.nextSibling)
+					footcol.style.width = ftfakerws[i++];
+			}
+		}
+		if (wgt.ebodytbl) {//restore body fakers widths
+			wgt.ebodytbl.width = ebodytblw || '';
+			wgt.ebodytbl.style.tableLayout = ebodytblfix || '';
+			if (zk.chrome)
+				wgt.ebodytbl.style.display = '';
+			if (bdfaker) {
+				var bodycol = bdfaker.firstChild;
+				for (var i = 0; bodycol; bodycol = bodycol.nextSibling)
+					bodycol.style.width = bdfakerws[i++];
+			}
+		}
+
+		if (wgtn)
+			wgtn.style.whiteSpace = ws;
+		return {width: width, wds: wds};
+	},
+	_fixBodyMinWd: function (wgt, fixMesh) {
+		// effective only when there is no header
+		var sbc = wgt.isSizedByContent(),
+			meshmin = wgt._hflex == 'min';
+		if (!wgt.head && (meshmin || sbc)) {
+			var bdw = zk(wgt.$n()).padBorderWidth(),
+				wd = this.$class._getMinWd(wgt) + (zk(wgt.ebody).hasVScroll() ? jq.scrollbarWidth() : 0) + bdw, // has to call _getMinWd first so wgt._minWd will be available
+				tr = wgt.ebodytbl,
+				wds = wgt._minWd.wds,
+				wlen = wds.length;
+			if (fixMesh && meshmin)
+				wgt.setFlexSize_({width: wd}, true);
+			if (!(tr = tr.firstChild) || !(tr = tr.firstChild))
+				return; // no first tr
+			for (var c = tr.firstChild, i = 0; c && (i < wlen); c = c.nextSibling)
+				c.style.width = jq.px(wds[i++]);
+			if (sbc && !meshmin) {
+				// add flex <td> if absent
+				var bdfx = tr.lastChild,
+					bdfxid = wgt.uuid + '-bdflex';
+				if (!bdfx || bdfx.id != bdfxid) {
+					jq(tr).append('<td id="' + bdfxid + '"></td>');
+					bdfx = tr.lastChild;
+				}
+			}
+		}
+	},
+	_fixPageSize: function (wgt, rows) {
+		var ebody = wgt.ebody;
+		if (!ebody)
+			return; //not ready yet
+		var max = ebody.offsetHeight;
+		if (zk(ebody).hasHScroll()) //with horizontal scrollbar
+			max -= jq.scrollbarWidth();
+		if (max == wgt._prehgh) return false; //same height, avoid fixing page size
+		wgt._prehgh = max;
+		var ebodytbl = wgt.ebodytbl,
+			etbparent = ebodytbl.offsetParent,
+			etbtop = ebodytbl.offsetTop,
+			hgh = 0,
+			row,
+			j = 0;
+		for (var it = wgt.getBodyWidgetIterator({skipHidden: true}),
+				len = rows.length, w; (w = it.next()) && j < len; j++) {
+			row = rows[j];
+			var top = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
+			if (top > max) {
+				--j;
+				break;
+			}
+			hgh = top;
+		}
+		if (row) { //there is row
+			var pgib = wgt.$n('pgib'),
+				pgibHgh = 0;
+			if (pgib)
+				pgibHgh = pgib.offsetHeight;
+			var withPgibMax = max + pgibHgh;
+			if (top <= withPgibMax) { //row not exceeds the height, estimate
+				var paging = (wgt.paging) ? wgt.paging : wgt.getPaginal(),
+					totalsz = paging.getTotalSize(),
+					rowsHgh = hgh + row.offsetHeight,
+					j1 = Math.floor(j * max / rowsHgh),
+					j2 = Math.floor(j * withPgibMax / rowsHgh);
+				if (totalsz > j2)
+					j = j1;
+				else
+					j = j2;
+			}
+			//enforce pageSize change
+			if (j == 0) j = 1; //at least one per page
+			if (j != wgt.getPageSize()) {
+				wgt.fire('onPageSize', {size: j});
+				return true;
+			}
+		}
+	},
+	_adjMinWd: function (wgt) {
+		if (wgt._hflex == 'min') {
+			var w = this.$class._getMinWd(wgt),
+				n = wgt.$n();
+			wgt._hflexsz = w + zk(n).padBorderWidth(); //override
+			n.style.width = jq.px0(wgt._hflexsz);
+		}
+	},
+	_getMinWd: function (wgt) {
+		wgt._calcMinWds();
+		var bdfaker = wgt.ebdfaker,
+			wd,
+			wds = [],
+			width,
+			_minwds = wgt._minWd.wds;
+		if (wgt.head && bdfaker) {
+			width = 0;
+			var w = wgt.head.firstChild,
+				bdcol = bdfaker.firstChild;
+
+			for (var i = 0; w; w = w.nextSibling) {
+				if (w._hflex == 'min')
+					wd = wds[i] = _minwds[i] + zk(w.$n()).padBorderWidth();
+				else {
+					if (w._width && w._width.indexOf('px') > 0)
+						wd = wds[i] = zk.parseInt(w._width);
+					else
+						wd = wds[i] = zk.parseInt(bdcol.style.width);
+				}
+				// ZK-2130: should save the head width
+				w._origWd = jq.px0(wd);
+				width += wd;
+				++i;
+				bdcol = bdcol.nextSibling;
+			}
+		} else
+			width = wgt._minWd.width; // no header
+		return width;
+	},
+	_getSigRow: function (wgt) {
+		// scan for tr with largest number of td children
+		var rw = wgt.getBodyWidgetIterator().next(),
+			tr = rw ? rw.$n() : null;
+		if (!tr)
+			return;
+		for (var maxtr = tr, len, max = maxtr.cells.length; tr; tr = tr.nextSibling)
+			if ((len = tr.cells.length) > max) {
+				maxtr = tr;
+				max = len;
+			}
+		return maxtr;
+	},
+	_cpCellWd: function (wgt) {
+		var dst = wgt.efootrows.rows[0],
+			srcrows = wgt.ebodyrows.rows;
+		if (!dst || !srcrows || !srcrows.length || !dst.cells.length)
+			return;
+		var ncols = dst.cells.length,
+			src, maxnc = 0;
+		for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w; (w = it.next());) {
+			if (wgt._modal && !w._loaded)
+				continue;
+
+			var row = srcrows[j++], $row = zk(row),
+				cells = row.cells, nc = $row.ncols(),
+				valid = cells.length == nc && $row.isVisible();
+				//skip with colspan and invisible
+			if (valid && nc >= ncols) {
+				maxnc = ncols;
+				src = row;
+				break;
+			}
+			if (nc > maxnc) {
+				src = valid ? row : null;
+				maxnc = nc;
+			} else if (nc == maxnc && !src && valid) {
+				src = row;
+			}
+		}
+		if (!maxnc) return;
+
+		var fakeRow = !src;
+		if (fakeRow) { //the longest row containing colspan
+			src = document.createElement('TR');
+			src.style.height = '0px';
+				//Note: we cannot use display="none" (offsetWidth won't be right)
+			for (var j = 0; j < maxnc; ++j)
+				src.appendChild(document.createElement('TD'));
+			srcrows[0].parentNode.appendChild(src);
+		}
+		//we have to clean up first, since, in FF, if dst contains %
+		//the copy might not be correct
+		for (var j = maxnc; j--;)
+			dst.cells[j].style.width = '';
+
+		var sum = 0;
+		for (var j = maxnc; j--;) {
+			var d = dst.cells[j], s = src.cells[j];
+			if (zk.opera) {
+				sum += s.offsetWidth;
+				d.style.width = zk(s).contentWidth();
+			} else {
+				d.style.width = s.offsetWidth + 'px';
+				if (maxnc > 1) { //don't handle single cell case (bug 1729739)
+					var v = s.offsetWidth - d.offsetWidth;
+					if (v != 0) {
+						v += s.offsetWidth;
+						if (v < 0) v = 0;
+						d.style.width = v + 'px';
+					}
+				}
+			}
+		}
+		if (zk.opera && wgt.isSizedByContent())
+			dst.parentNode.parentNode.style.width = sum + 'px';
+		if (fakeRow)
+			src.parentNode.removeChild(src);
+	},
+	listenOnFitSize: function (wgt) {
+		if (wgt._rows && !wgt._rowsOnFitSize) {
+			zWatch.listen({onFitSize: wgt});
+			wgt._rowsOnFitSize = true;
+		}
+	},
+	unlistenOnFitSize: function (wgt) {
+		if (wgt._rowsOnFitSize) {
+			zWatch.unlisten({onFitSize: wgt});
+			delete wgt._rowsOnFitSize;
+		}
 	}
 });
 /** @class zul.mesh.Scrollbar

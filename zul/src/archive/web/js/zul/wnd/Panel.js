@@ -682,6 +682,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var n = this.$n(),
 			body = pc.$n(),
 			hgh = n.style.height;
+		if (!hgh && this._cssflex && this._vflex) // due to css flex, need to use offsetHeight
+			hgh = n.offsetHeight;
 		if (hgh && hgh != 'auto')
 			body.style.height = jq.px0(this._offsetHeight(n));
 	},

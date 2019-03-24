@@ -262,7 +262,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			delete wgt._flexListened;
 		}
 	}
-	
+
 	/** @class zk.DnD
 	 * Drag-and-drop utility.
 	 * It is the low-level utility reserved for overriding for advanced customization.
@@ -1068,24 +1068,45 @@ new zul.wnd.Window({
 				else
 					n.tabIndex = tabindex;
 			}
+		},
+		/** Returns whether using css flex in this component or not.
+		 * @return int
+		 * @since 9.0.0
+		 */
+		/** Sets whether to use css flex in this component or not.
+		 * @param int tabindex
+		 * @since 9.0.0
+		 */
+		cssflex: function () {
+			if (this.desktop) {
+				this.rerender();
+			}
 		}
 	},
 	setHflex_: function (v) {
 		this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
 		if (this._nhflex < 0 && v != 'min')
 			this._nhflex = 0;
-		if (this.desktop) { //ZK-1784 only update the components style when it is attached to desktop
-							//checking on (_binds[this.uuid] === this) as before does not work when
-							//nested inside native component. in this case the nested component
-							//is bound earlier, when the native component is reused (mount.js create())
-			if (!this._nhflex) {
-				this.setFlexSize_({width: 'auto'}); //clear the width
-				delete this._hflexsz;
-				this._hflex = undefined;
-				if (!this._nvflex)
-					_unlistenFlex(this);
-			} else
-				_listenFlex(this);
+		if (this.desktop) {
+			if (this._cssflex && this.parent.getFlexContainer_() != null) {
+				if (!this._nhflex) {
+					zFlex.clearCSSFlex(this);
+				}
+				zFlex.fixCSSFlex(this, true);
+			} else {  //ZK-1784 only update the components style when it is attached to desktop
+					//checking on (_binds[this.uuid] === this) as before does not work when
+					//nested inside native component. in this case the nested component
+					//is bound earlier, when the native component is reused (mount.js create())
+				this._cssflex = false; // use old flex
+				if (!this._nhflex) {
+					this.setFlexSize_({width: 'auto'}); //clear the width
+					delete this._hflexsz;
+					this._hflex = undefined;
+					if (!this._nvflex)
+						_unlistenFlex(this);
+				} else
+					_listenFlex(this);
+			}
 		}
 	},
 	setVflex_: function (v) {
@@ -1093,14 +1114,23 @@ new zul.wnd.Window({
 		if (this._nvflex < 0 && v != 'min')
 			this._nvflex = 0;
 		if (this.desktop) {
-			if (!this._nvflex) {
-				this.setFlexSize_({height: 'auto'});
-				delete this._vflexsz;
-				this._vflex = undefined;
-				if (!this._nhflex)
-					_unlistenFlex(this);
-			} else
-				_listenFlex(this);
+			if (this._cssflex && this.parent.getFlexContainer_() != null) {
+				zFlex.fixCSSFlex(this);
+				if (!this._nhflex) {
+					zFlex.clearCSSFlex(this);
+				}
+				zFlex.fixCSSFlex(this);
+			} else {
+				this._cssflex = false; // use old flex
+				if (!this._nvflex) {
+					this.setFlexSize_({height: 'auto'});
+					delete this._vflexsz;
+					this._vflex = undefined;
+					if (!this._nhflex)
+						_unlistenFlex(this);
+				} else
+					_listenFlex(this);
+			}
 		}
 	},
 	/** Invoked after an animation (e.g., {@link jqzk#slideDown}) has finished.
@@ -3075,10 +3105,13 @@ bind_: function (desktop, skipper, after) {
 
 		if ((v = this._draggable) && v != 'false' && !_dragCtl(this))
 			this.initDrag_();
-		
-		if (this._nvflex || this._nhflex)
-			_listenFlex(this);
 
+		if (this._nvflex || this._nhflex) {
+			if (!this._cssflex || (this.parent.getFlexContainer_() == null && !(this._cssflex = false))) {
+				_listenFlex(this);
+			} else
+				zFlex.fixCSSFlex(this);
+		}
 		this.bindChildren_(desktop, skipper, after);
 		var self = this;
 		if (this.isListen('onBind')) {
@@ -3149,7 +3182,8 @@ unbind_: function (skipper, after) {
 	 */
 	unbind_: function (skipper, after, keepRod) {
 		this.$class._unbind0(this);
-		_unlistenFlex(this);
+		if (!this._cssflex)
+			_unlistenFlex(this);
 
 		this.unbindChildren_(skipper, after, keepRod);
 		this.cleanDrag_(); //ok to invoke even if not init
@@ -3213,6 +3247,8 @@ unbind_: function (skipper, after) {
 		else _binds[uuid] = this;
 	},
 	setFlexSize_: function (sz, isFlexMin) {
+		if (this._cssflex)
+			return;
 		var n = this.$n(),
 			zkn = zk(n);
 		if (sz.height !== undefined) {
@@ -3371,6 +3407,15 @@ unbind_: function (skipper, after) {
 		if (scrollable && (n.scrollTop || n.scrollLeft)) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
 			return;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
+	},
+	getFlexContainer_: function () {
+		return this.getCaveNode();
+	},
+	getFlexDirection_: function () {
+		return null;
+	},
+	afterClearFlex_: function () {
+		//to be overridden
 	},
 	/** Initializes the widget to make it draggable.
 	 * It is called if {@link #getDraggable} is set (and bound).

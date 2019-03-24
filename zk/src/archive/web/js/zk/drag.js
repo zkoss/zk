@@ -568,10 +568,12 @@ String scroll; //DOM Element's ID</code></pre>
 		if (this.orgZ != -1)
 			node.style.zIndex = this.orgZ;
 
-		if (this.opts.endeffect)
-			this.opts.endeffect(this, evt);
-
 		var wgt = this.control;
+		if (this.opts.endeffect) {
+			this.opts.endeffect(this, evt);
+			zFlex.clearCSSFlex(wgt, true);
+		}
+
 		if (this.opts.fireOnMove && zk.Widget.isInstance(wgt)) {
 			if (d[0] != d2[0] || d[1] != d2[1]) {
 				wgt.fire('onMove', zk.copy({

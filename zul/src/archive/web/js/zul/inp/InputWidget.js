@@ -40,7 +40,11 @@ zul.inp.RoundUtl = {
 	/** Synchronizes the input element's width of this component
 	*/
 	syncWidth: function (wgt, rightElem, isOnSize/*speed up*/) {
-		var node = wgt.$n();
+		var node = wgt.$n(),
+			isCSSFlex = wgt._cssflex && wgt.parent.getFlexContainer_() != null,
+			inputNode = wgt.getInputNode();
+		if (isCSSFlex)
+			inputNode.style.width = '1px'; //input should shrink to 1px to get correct node width
 		if ((!wgt._inplace && !node.style.width) || (!isOnSize && !zk(node).isRealVisible()))
 			return;
 
@@ -48,9 +52,9 @@ zul.inp.RoundUtl = {
 		// calculate only when the width has size
 		if (node.style.width) {
 			var width = node.offsetWidth,
-				// ignore left border, as it is countered by margin-left
-				rightElemWidth = rightElem ? rightElem.offsetWidth : 0;
-			wgt.getInputNode().style.width = jq.px0(width - rightElemWidth);
+			// ignore left border, as it is countered by margin-left
+			rightElemWidth = rightElem ? rightElem.offsetWidth : 0;
+			inputNode.style.width = jq.px0(width - rightElemWidth);
 		}
 	},
 	// @since 7.0.0

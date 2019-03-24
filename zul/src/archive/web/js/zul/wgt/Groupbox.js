@@ -128,7 +128,10 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 		if (this.desktop) this._fixHgh();
 	},
 	_fixHgh: function () {
-		var hgh = this.$n().style.height;
+		var n = this.$n(),
+			hgh = n.style.height;
+		if (!hgh && this._cssflex && this._vflex) // due to css flex, need to use offsetHeight
+			hgh = n.offsetHeight;
 		if (hgh && hgh != 'auto' && this.isOpen()) {
 			var n;
 			if (n = this.$n('cave')) {

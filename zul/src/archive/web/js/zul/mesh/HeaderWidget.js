@@ -402,6 +402,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<th', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></th>');
+	},
+	afterClearFlex_: function() {
+		this.parent.afterClearFlex_();
 	}
 }, { //static
 	_faker: ['hdfaker', 'bdfaker', 'ftfaker'],

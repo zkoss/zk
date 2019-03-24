@@ -147,6 +147,20 @@ public class Utils {
 		return result;
 	}
 
+	/** Tests if the given attribute is defined in a component or in library property.
+	 * @param name the name of the attribute
+	 * @param defValue the default value if neither component's attribute or library property is defined
+	 * for the given name
+	 * @param recurse whether to look up the ancestor's attribute
+	 * @since 5.0.7
+	 */
+	public static final boolean testAttribute(Component comp, String name, boolean defValue, boolean recurse) {
+		Object val = comp.getAttribute(name, recurse);
+		if (val == null)
+			val = Library.getProperty(name);
+		return val instanceof Boolean ? ((Boolean) val).booleanValue() : val != null ? "true".equals(val) : defValue;
+	}
+
 	/** Sets the component info for the given component.
 	 * <p>It is used only internally.
 	 * @since 8.0.0

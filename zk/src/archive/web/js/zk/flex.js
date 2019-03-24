@@ -285,7 +285,7 @@ zFlex = { //static methods
 		zFlex.fixFlex(this);
 	},
 	fixFlex: function (wgt) {
-		
+		if (wgt._cssflex) return;
 		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibliing has done it!
 			delete wgt._flexFixed;
 			return;
@@ -492,6 +492,133 @@ zFlex = { //static methods
 	fixMinFlex: function (wgt, wgtn, o) {
 		//find the max size of all children
 		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)(wgt, wgtn, o, wgt.beforeMinFlex_(o));
+	},
+	fixCSSFlex: function (wgt, forced) {
+		if (wgt._cssflex) {
+			zk.afterMount(function() {
+				if ((!forced && wgt._flexFixed) || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibling has done it!
+					return;
+				}
+				var pwgt = wgt.parent,
+					cwgt = pwgt.firstChild,
+					fContainer = pwgt.getFlexContainer_();
+				if (fContainer == null) { //using old flex
+					wgt._cssflex = false;
+					return;
+				}
+				var fcc = fContainer.firstChild,
+					flexD = pwgt.getFlexDirection_(),
+					isRow = 'row' == flexD;
+
+				// isRow, find block first
+				var fccs = [],
+					cwgts = [],
+					checkColumn = flexD == null,
+					toColumn = !isRow;
+
+				for (; fcc && cwgt;) {
+					if (fcc.nodeType === 3) { //a text node
+						fcc = fcc.nextSibling;
+						continue;
+					}
+					var c = cwgt.$n();
+					if (fcc.contains(c)) {
+						cwgt._flexFixed = true;
+						fccs.push(fcc);
+						cwgts.push(cwgt);
+						if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block')
+							toColumn = true;
+						cwgt = cwgt.nextSibling;
+					}
+					fcc = fcc.nextSibling;
+				}
+
+				if (toColumn) {
+					isRow = false;
+					flexD = 'column';
+				} else if (flexD == null) { //default and no block
+					flexD = 'row';
+				}
+
+				fContainer.style.display = 'flex';
+				fContainer.style['flex-direction'] = flexD;
+				var fdArr = [];
+
+				for (var i = 0, length = fccs.length; i < length; i++) {
+					var fcc = fccs[i],
+						cwgt = cwgts[i],
+						c = cwgt.$n(),
+						flexs = [cwgt._vflex, cwgt._hflex],
+						flex = flexs[isRow | 0],
+						dist = isRow ? cwgt._width : cwgt._height;
+
+					if (flex && flex != 'min') {
+						fcc.style.flex = flex + ' 1 0';
+					} else if (dist && !dist.endsWith('%')) {
+						fcc.style.flex = '0 1 ' + dist;
+					}
+
+					if (fcc != c)
+						c.style[isRow ? 'width' : 'height'] = '100%';
+
+					//check else flex
+					flex = flexs[!isRow | 0];
+					if (flex) {
+						var dist = -1;
+						if (flex == 'min') {
+							var	ccwgt = cwgt.firstChild;
+							//get max dist of children
+							for (; ccwgt;) {
+								var cc = ccwgt.$n();
+								var ccdist = ccwgt['_' + (isRow? 'height' : 'width')];
+								if (ccdist && !ccdist.endsWith('%')) {
+									ccdist = parseInt(ccdist);
+									dist = dist > ccdist? dist : ccdist;
+								}
+								ccwgt = ccwgt.nextSibling;
+							}
+						}
+						c.style[isRow? 'height' : 'width'] = dist == -1? '100%' : jq.px0(dist);
+					}
+				}
+				var p = wgt.parent;
+				p.afterChildrenFlex_(wgt);
+				zUtl.fireSized(p, -1);
+			});
+		}
+	},
+	clearCSSFlex: function (wgt, clearAllSiblings) {
+		if (!wgt._flexFixed) return;
+		var pwgt = wgt.parent,
+			cwgt = pwgt.firstChild,
+			fContainer = pwgt.getFlexContainer_();
+		if (fContainer == null) { //using old flex
+			return;
+		}
+		var fcc = fContainer.firstChild,
+			noSibFlex = true;
+		for (; fcc && cwgt;) {
+			if (fcc.nodeType === 3) { //a text node
+				fcc = fcc.nextSibling;
+				continue;
+			}
+			var c = cwgt.$n();
+			if (fcc.contains(c)) {
+				if (clearAllSiblings || wgt == cwgt) {
+					cwgt._flexFixed = false;
+					fcc.style['flex'] = ''; //clear
+					cwgt = cwgt.nextSibling;
+				} else {
+					noSibFlex = noSibFlex ? !fcc.style['flex'] : false;
+				}
+			}
+			fcc = fcc.nextSibling;
+		}
+		if (clearAllSiblings || noSibFlex) {
+			fContainer.style.display = '';
+			fContainer.style['flex-direction'] = '';
+		}
+		wgt.afterClearFlex_();
 	}
 };
 })();
