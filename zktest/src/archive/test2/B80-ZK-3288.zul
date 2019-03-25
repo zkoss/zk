@@ -29,7 +29,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 			mycenter.setAutoscroll(enabled);
 		}
 	]]></zscript>
-	<borderlayout width="400px" height="500px">
+	<borderlayout width="600px" height="500px">
 		<north height="50px" style="background-color: RosyBrown">
 			<div>
 				<button label="(A) add content" onClick="addContent();"/>

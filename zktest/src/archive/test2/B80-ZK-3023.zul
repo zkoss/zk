@@ -17,7 +17,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 	<label multiline="true">
 		1. click all the bandbox buttons
 		2. all the bandboxs shouldn't have any horizontal scrollbar
-		3. the third bandpopup's width should be 100%
+		3. the third bandpopup's width should be 80%
 		4. the forth bandbox's width should be auto
 
 	</label>
