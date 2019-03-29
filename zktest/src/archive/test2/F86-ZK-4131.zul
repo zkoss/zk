@@ -28,7 +28,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 	<hlayout>
 		<menubar>
 			<menu label="menu">
-				<menupopup>
+				<menupopup xmlns:w="client" w:onOpen="zk.log(zk(zk.$('@menupopup')).hasVScroll())">
 					<forEach begin="0" end="100">
 						<menuitem label="Item ${each}"/>
 					</forEach>

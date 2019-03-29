@@ -14,9 +14,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-Please click the button of "Change pageSize", and then you should see the horizontal scrollbar inside the grid should be avalible as well.
+Please click the button of "Change pageSize", and then you should see the vertical scrollbar inside the grid should be avalible as well.
 
 <button label="Change pageSize" onClick='d.height="100px"; grid.pageSize = 3;'/>
+<button xmlns:w="client" label="verify" w:onClick="zk.log(zk(zk.$('$d')).hasVScroll())"/>
 <div id="d" style="overflow:auto;">
 <grid id="grid" mold="paging" pageSize="1">
 <frozen columns="1"/>

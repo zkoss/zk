@@ -13,18 +13,21 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-    <label multiline="true">
-        1. Focus in textbox and press Enter
-        2. See the log "onOK" and cusor didn't move
-        3. Open Network and see the onOK event send
-        3. Focus in textbox and press Shift + Enter
-        4. Cusor move to the new line and no new log
-        5. Click button
-        6. Focus in textbox and press Enter
-        7. Cusor move to the new line and no new log
-    </label>
-    <separator/>
-    <button label="TurnOffSubmitByEnter" onClick="tb.setSubmitByEnter(false)"/>
-    <separator/>
-    <textbox id="tb" multiline="true" submitByEnter="true" rows="5" onOK='Clients.log("onOK")'/>
+	<label multiline="true">
+		1. Focus in textbox and press Enter
+		2. See the log "onOK" and cursor didn't move
+		3. Focus in textbox and press Shift + Enter
+		4. Cursor move to the new line
+		5. Click getSelectionStart, see "1" on log
+		6. Click TurnOffSubmitByEnter
+		7. Focus in textbox and press Enter
+		8. Cursor move to the new line
+		9. Click getSelectionStart, see "2" on log
+	</label>
+	<separator/>
+	<button label="TurnOffSubmitByEnter" onClick="tb.setSubmitByEnter(false)"/>
+	<button label="getSelectionStart" xmlns:w="client"
+			w:onClick='zk.log(jq("$tb")[0].selectionStart)'/>
+	<separator/>
+	<textbox id="tb" multiline="true" submitByEnter="true" rows="5" onOK='Clients.log("onOK")'/>
 </zk>
