@@ -11,6 +11,12 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]>
+	</script>
 	<borderlayout>
 		<west title="west" open="false" onOpen="self.parent.invalidate();" collapsible="true" />
 		<center>Open and Close West region 3 times. There should be NO javascript error.</center>
