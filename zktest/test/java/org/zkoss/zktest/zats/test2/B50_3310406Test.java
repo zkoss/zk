@@ -22,9 +22,8 @@ public class B50_3310406Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		closeZKLog();
 		click(jq(".z-button"));
 		waitResponse();
-		Assert.assertEquals("size:0", getZKLog());
+		Assert.assertEquals("size:0\nsize:0", getZKLog());
 	}
 }
