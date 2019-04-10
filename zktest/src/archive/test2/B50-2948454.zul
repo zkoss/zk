@@ -21,6 +21,6 @@
   <zscript>
   //nothing but force it to be evaluated
   </zscript>
-  <button label="click" onClick='alert("success:" + inf.value)' />
+  <button label="test" onClick='alert("success:" + inf.value)' />
  </window>
 </zk>

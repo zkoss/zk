@@ -24,7 +24,7 @@ Copyright (C)  2015 Potix Corporation. All Rights Reserved.
 
 			private ListModelList model;
 
-			public void LargeDataVM(){
+			public LargeDataVM(){
 				model = new ListModelList();
 				for (int i = 0 ; i <= 100 ; i ++){
 					model.add(i);

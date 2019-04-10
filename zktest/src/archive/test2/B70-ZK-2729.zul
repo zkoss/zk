@@ -14,7 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<div xmlns:h="native" width="100%" height="100%" style="overflow-y: auto">
+	<div width="100%" height="100%" style="overflow-y: auto">
 	    <style>
 	    .photo { 
 	        border: 1px dashed grey; 
@@ -37,8 +37,8 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	    <separator spacing="100px"/>
 	    <div>
 	        <image id="img" sclass="photo" />
-	        <dropupload maxsize="50" detection="browser" anchor="${img}" content="Drag your photo here (size &lt; 50KB)" />
+	        <dropupload maxsize="5000" detection="browser" anchor="${img}" content="Drag your photo here (size &lt; 5000KB)" />
 	    </div>
-	    <separator spacing="500px"/>
+	    <separator spacing="100%"/>
 	</div>
 </zk>

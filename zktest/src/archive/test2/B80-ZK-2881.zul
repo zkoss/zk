@@ -22,6 +22,12 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
   height: 10px!important;
 }
 </style>
+	<label multiline="true">
+		1. Select 3 items accordingly.
+		2. You can see a red square (the focus emphasized for debugging) on the left-top of an item.
+		3. Unselect the last item you checked.
+		4. The focus should have stayed on the previously unselected item in step 3.
+	</label>
 	<listbox multiple="true" checkmark="true">
 		<listhead sizable="true">
 			<listheader align="center" width="40px"

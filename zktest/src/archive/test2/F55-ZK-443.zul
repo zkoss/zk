@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-1. Please press ALT + K, you should see the first menu popup("Project") is shown.
+1. Please press ALT + K, you should see the first menu popup("Project") is shown. (since ZK8 it is disabled due to ZK-2644)
 <separator/>
 2. Press RIGHT key, the second menu popup("Help") is shown and the first one is closed.
 <separator/>

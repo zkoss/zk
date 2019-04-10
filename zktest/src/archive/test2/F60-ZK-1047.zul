@@ -92,7 +92,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			<label value="${n:formatDate(d1, null, null, tz1, 'short', 'short')}" />
 			<label value="${n:formatDate(d1, null, l4, tz2, 'long', 'long')}" />
 			<label value="${n:formatDate(d1, null, l1, null, 'full', 'full')}" />
-			<datebox value="${c:parseDate(ds1, df2)}" />
+			<datebox value="${c:parseDate(ds1, df2)}" format="MMM d, yyyy" />
 		</vbox>
 	</hbox>
 </zk>
