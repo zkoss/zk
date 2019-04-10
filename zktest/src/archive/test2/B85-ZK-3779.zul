@@ -14,6 +14,11 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+    <script><![CDATA[
+        window.onerror = function (message, source, lineno, colno, error) {
+            zk.log(message);
+        };
+    ]]></script>
     <label multiline="true">
         Click the button 'Zoom' twice, should not have js error in browser devtool
         

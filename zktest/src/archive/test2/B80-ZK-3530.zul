@@ -14,6 +14,11 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]></script>
 	Focus the textbox and press [ESC] -> should not have js error at dev tool console
 	<textbox onChanging="" onCancel="self.detach()"/>
 </zk>

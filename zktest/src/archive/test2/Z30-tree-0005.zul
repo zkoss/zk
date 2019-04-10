@@ -15,7 +15,7 @@
 		BinaryTreeModel btm = new BinaryTreeModel(al);
 		
 	</zscript>
-		<tree vflex="true" height="50%" model="${btm}" id="tree" >
+		<tree vflex="true" model="${btm}" id="tree" >
 		</tree>
 	</window>
 </zk>

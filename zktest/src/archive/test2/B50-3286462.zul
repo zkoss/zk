@@ -6,7 +6,7 @@
 	</n:head>
 	<n:body>
 		<n:ol>
-			<n:li>Click the hi button, and you shall see a moidal dialog.</n:li>
+			<n:li>Click the hi button, and you shall see a modal dialog.</n:li>
 			<n:li>Click the show button, and you shall see "1. I am... 10. I am..."</n:li>
 		</n:ol>
 
