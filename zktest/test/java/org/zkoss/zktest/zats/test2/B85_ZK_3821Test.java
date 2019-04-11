@@ -14,6 +14,8 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 
+import java.util.Collections;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -26,9 +28,9 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 public class B85_ZK_3821Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
-		ChromeOptions options = super.getWebDriverOptions();
-		options.addArguments("lang=de");
-		return options;
+		return super.getWebDriverOptions()
+				.addArguments("--lang=de-DE")
+				.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "de-DE"));
 	}
 
 	@Test
