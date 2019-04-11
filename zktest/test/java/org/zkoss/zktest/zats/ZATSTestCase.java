@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+
 import org.zkoss.zats.mimic.DefaultZatsEnvironment;
 import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.ZatsEnvironment;
@@ -57,6 +58,10 @@ public abstract class ZATSTestCase {
 	protected String getFileLocation() {
 		String className = this.getClass().getName().replace("org.zkoss.zktest.zats", "").replace(".","/");
 		int lastTest = className.lastIndexOf("Test");
-		return className.substring(0, lastTest) + ".zul";
+		return className.substring(0, lastTest) + getFileExtension();
+	}
+
+	protected String getFileExtension() {
+		return ".zul";
 	}
 }

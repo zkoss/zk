@@ -100,7 +100,10 @@ public abstract class WebDriverTestCase {
 	protected String getFileLocation() {
 		String className = this.getClass().getName().replace(PACKAGE, "").replace(".","/");
 		int lastTest = className.lastIndexOf("Test");
-		return className.substring(0, lastTest) + ".zul";
+		return className.substring(0, lastTest) + getFileExtension();
+	}
+	protected String getFileExtension() {
+		return ".zul";
 	}
 	public WebDriver connect(String location) {
 		WebDriver webDriver = getWebDriver();
