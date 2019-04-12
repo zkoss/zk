@@ -11,6 +11,12 @@
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]>
+	</script>
 	<html><![CDATA[
 		<ol>
 			<li>Click 'add Caption' Button. The caption should be added without javascript error.</li>
