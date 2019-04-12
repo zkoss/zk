@@ -34,9 +34,9 @@ public class B36_3002536Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		click(jq("@datebox > .z-datebox-button"));
+		click(widget("@datebox").$n("btn"));
 		waitResponse();
-		click(jq("@calendar .z-calendar-title"));
+		click(widget("@calendar").$n("tm"));
 		waitResponse(true);
 		click(jq(".z-calendar-cell:contains(avr.)"));
 		waitResponse(true);
