@@ -25,6 +25,8 @@ public class B80_ZK_2937Test extends WebDriverTestCase {
 		connect();
 
 		JQuery input = jq(".z-combobox-input");
+		click(input);
+		waitResponse();
 		sendKeys(input, "ar");
 		waitResponse();
 		click(jq(".z-comboitem"));

@@ -12,21 +12,16 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.Test;
-import org.zkoss.zktest.zats.ZATSTestCase;
 
-import static org.junit.Assert.fail;
+import org.zkoss.zats.ZatsException;
+import org.zkoss.zktest.zats.ZATSTestCase;
 
 /**
  * @author jameschu
  */
 public class B70_ZK_2879Test extends ZATSTestCase {
-	@Test
+	@Test(expected = ZatsException.class)
 	public void test() {
-		try {
-			connect();
-		} catch (Exception e) {
-			return;
-		}
-		fail();
+		connect();
 	}
 }

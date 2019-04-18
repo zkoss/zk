@@ -22,6 +22,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<div>The content of block one (green) and block two (brown) should the same.</div>
+	<div>Notice: Since Java 9 <a href="https://bugs.openjdk.java.net/browse/JDK-8206961" label="JDK-8206961" />, some datetime format might not be the same. Just ignore them.</div>
 	<zscript><![CDATA[
 		import java.math.BigDecimal;
 		int num1 = 12345;
@@ -33,7 +34,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		String f3 = "##,###.#####";
 		String f4 = "##,###.######";
 		String f5 = "%##,###.######";
-		String f6 = "¤##,###.##";
+		String f6 = "$##,###.##";
 
 		String df1 = "yyyy-MM-dd";
 		String df2 = "yyyy // MM -- dd";
@@ -49,13 +50,12 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 		Locale l1 = Locale.ITALIAN;
 		Locale l2 = Locale.JAPAN;
-		Locale l3 = Locale.GERMAN;
+		Locale l3 = Locale.US;
 		Locale l4 = Locale.FRANCE;
 
 		TimeZone tz1 = TimeZone.getTimeZone("GMT+2");
 		TimeZone tz2 = TimeZone.getTimeZone("GMT-2");
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-		Locale.setDefault(Locale.ENGLISH);
+		TimeZone tz3 = TimeZone.getTimeZone("GMT+8");
 		]]></zscript>
 	<hbox>
 		<vbox style="border: 1px solid green;">
@@ -77,22 +77,22 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			<textbox value="Feb 3, 2010" />
 		</vbox>
 		<vbox style="border: 1px solid brown;">
-			<label value="${c:formatNumber(num1, f1)}" />
-			<label value="${c:formatNumber(num2, f1)}" />
-			<label value="${c:formatNumber(num3, f1)}" />
-			<label value="${c:formatNumber(num3, f2)}" />
-			<label value="${c:formatNumber(num3, percentage)}" />
-			<label value="${c:formatNumber(num3, currency)}" />
-			<label value="${n:formatNumber(num3, currency, l2)}" />
-			<intbox value="${c:parseNumber(ns1, f1)}" />
-			<intbox value="${c:parseNumber(ns2, f6)}" />
-			<doublebox value="${c:parseNumber(ns3, f5)}" />
+			<label id="i1" value="${c:formatNumber(num1, f1)}" />
+			<label id="i2" value="${c:formatNumber(num2, f1)}" />
+			<label id="i3" value="${c:formatNumber(num3, f1)}" />
+			<label id="i4" value="${c:formatNumber(num3, f2)}" />
+			<label id="i5" value="${c:formatNumber(num3, percentage)}" />
+			<label id="i6" value="${n:formatNumber(num3, currency, l3)}" />
+			<label id="i7" value="${n:formatNumber(num3, currency, l2)}" />
+			<intbox id="i8" value="${c:parseNumber(ns1, f1)}" />
+			<intbox id="i9" value="${c:parseNumber(ns2, f6)}" />
+			<doublebox id="i10" value="${c:parseNumber(ns3, f5)}" />
 
-			<label value="${c:formatDate(d1, df1)}" />
-			<label value="${n:formatDate(d1, null, null, tz1, 'short', 'short')}" />
-			<label value="${n:formatDate(d1, null, l4, tz2, 'long', 'long')}" />
-			<label value="${n:formatDate(d1, null, l1, null, 'full', 'full')}" />
-			<datebox value="${c:parseDate(ds1, df2)}" format="MMM d, yyyy" />
+			<label id="i11" value="${c:formatDate(d1, df1)}" />
+			<label id="i12" value="${n:formatDate(d1, null, l3, tz1, 'short', 'short')}" />
+			<label id="i13" value="${n:formatDate(d1, null, l4, tz2, 'long', 'long')}" />
+			<label id="i14" value="${n:formatDate(d1, null, l1, tz3, 'full', 'full')}" />
+			<datebox id="i15" value="${c:parseDate(ds1, df2)}" format="MMM d, yyyy" />
 		</vbox>
 	</hbox>
 </zk>

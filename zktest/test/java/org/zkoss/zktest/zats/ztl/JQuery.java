@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
@@ -113,6 +114,16 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	}
 
 	/**
+	 * Filter the element from the given selector.
+	 *
+	 * @param selector
+	 *            the JQuery allowed.
+	 */
+	public JQuery filter(String selector) {
+		return new JQuery(_out, ".filter('" + selector + "')");
+	}
+
+	/**
 	 * Returns the first element in JQuery object.
 	 */
 	public JQuery first() {
@@ -152,6 +163,14 @@ public class JQuery extends ClientWidget implements Iterable<JQuery>{
 	 */
 	public JQuery children(String selector) {
 		return new JQuery(_out, ".children('" + selector + "')");
+	}
+
+	/**
+	 * Returns the children of each element in JQuery object.
+	 * The .contents() method can also be used to get the content document of an iframe, if the iframe is on the same domain as the main page.
+	 */
+	public JQuery contents() {
+		return new JQuery(_out, ".contents()");
 	}
 
 	/**

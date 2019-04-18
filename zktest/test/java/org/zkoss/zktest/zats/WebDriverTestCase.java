@@ -17,14 +17,18 @@ import static org.junit.Assert.fail;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.util.logging.Level;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -33,6 +37,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,7 +159,8 @@ public abstract class WebDriverTestCase {
 		final WebAppContext context = new WebAppContext();
 		context.setContextPath(getContextPath());
 		context.setBaseResource(Resource.newResource("./src/archive/"));
-		server.setHandler(context);
+		context.getSessionHandler().setSessionIdPathParameterName(null);
+		server.setHandler(new HandlerList(context, new DefaultHandler()));
 		server.start();
 
 		for (Connector c : server.getConnectors()) {
@@ -423,7 +429,7 @@ public abstract class WebDriverTestCase {
 	 * @param locator
 	 */
 	protected void rightClick(ClientWidget locator) {
-		Actions act = new Actions(driver);
+		Actions act = getActions();
 		act.contextClick(toElement(locator));
 		act.perform();
 	}
@@ -456,7 +462,7 @@ public abstract class WebDriverTestCase {
 	 * Use this method to simulate typing into an element, which may set its value.
 	 * @param keysToSend character sequence to send to the element
 	 */
-	protected void sendKeys(ClientWidget locator, CharSequence keysToSend) {
+	protected void sendKeys(ClientWidget locator, CharSequence... keysToSend) {
 		getWebDriver().findElement(locator).sendKeys(keysToSend);
 	}
 
@@ -505,5 +511,31 @@ public abstract class WebDriverTestCase {
 
 	public boolean hasError() {
 		return Boolean.valueOf(getEval("!!jq('.z-messagebox-error')[0] || !!jq('.z-errorbox')[0] || jq('.z-error')[0]"));
+	}
+
+	/**
+	 * Asserts no JavaScript errors occur.
+	 * If there is any error on browser console, an {@link Assert#fail(String)} would be raised.
+	 */
+	protected void assertNoJSError() {
+		driver.manage().logs().get(LogType.BROWSER).getAll()
+				.stream()
+				.filter(entry -> entry.getLevel().intValue() >= Level.SEVERE.intValue())
+				.findFirst()
+				.ifPresent(log -> Assert.fail(log.toString()));
+	}
+
+	/**
+	 * Returns the text content of zk messagebox from client side.
+	 */
+	protected String getMessageBoxContent() {
+		return jq(".z-messagebox").text().replaceAll("\u00A0"," ").trim();
+	}
+
+	/**
+	 * Returns the browser actions.
+	 */
+	protected Actions getActions() {
+		return new Actions(getWebDriver());
 	}
 }

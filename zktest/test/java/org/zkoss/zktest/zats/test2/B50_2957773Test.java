@@ -11,6 +11,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import net.jcip.annotations.NotThreadSafe;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 /**
  * @author rudyhuang
  */
+@NotThreadSafe
 public class B50_2957773Test extends WebDriverTestCase {
 	@Test
 	public void test() {
@@ -31,6 +33,7 @@ public class B50_2957773Test extends WebDriverTestCase {
 			Assert.assertFalse(jq(".z-datebox-popup .z-calendar-selected").hasClass("z-calendar-weekend"));
 		} finally {
 			click(jq("body"));
+			waitResponse();
 			click(jq("@button"));
 			waitResponse();
 		}

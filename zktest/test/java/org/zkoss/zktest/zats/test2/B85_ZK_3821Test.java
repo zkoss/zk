@@ -16,6 +16,7 @@ import static org.hamcrest.CoreMatchers.startsWith;
 
 import java.util.Collections;
 
+import net.jcip.annotations.NotThreadSafe;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,6 +26,7 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 /**
  * @author rudyhuang
  */
+@NotThreadSafe
 public class B85_ZK_3821Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
@@ -37,6 +39,8 @@ public class B85_ZK_3821Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		sleep(1500);
+
+		Assert.assertEquals("de_DE", jq("@label:last").text());
 
 		click(jq("@button"));
 		waitResponse();

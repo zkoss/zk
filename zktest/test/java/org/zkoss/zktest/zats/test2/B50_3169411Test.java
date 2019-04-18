@@ -14,8 +14,6 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.zkoss.lang.Library;
-import org.zkoss.web.Attributes;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 public class B50_3169411Test extends WebDriverTestCase {
@@ -23,7 +21,6 @@ public class B50_3169411Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		Library.setProperty(Attributes.PREFERRED_LOCALE, "en");
 
 		type(jq(".z-spinner-input:eq(0)"), "8");
 		waitResponse();
