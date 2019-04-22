@@ -477,7 +477,7 @@ zAu = {
 	_rmDesktop: function (dt, dummy) {
 		var url = zk.ajaxURI(null, {desktop: dt, au: true}),
 			data = jq.param({dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'}),
-			headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'};
+			headers = {};
 		if (zk.pfmeter) {
 			var fakeReq = {
 				setRequestHeader: function (name, value) {
@@ -486,19 +486,17 @@ zAu = {
 			};
 			zAu._pfsend(dt, fakeReq, true, false);
 		}
-		// ZK-4204: Some browsers like Firefox don't support keepalive flag yet.
-		if (window.fetch && window.Request && new Request(url, {keepalive: true}).keepalive) {
-			var self = this;
-			fetch(url, {
-				method: 'POST',
-				headers: new Headers(headers),
-				body: data,
-				mode: 'same-origin',
-				keepalive: true
-			}).catch(function (e) {
-				zk.debugLog(e);
-				self._rmDesktopAjax(url, data, headers);
-			});
+		// ZK-4204
+		if (navigator.sendBeacon && window.URLSearchParams) {
+			var params = new URLSearchParams(data);
+			for (var key in headers) {
+				if (headers.hasOwnProperty(key))
+					params.append(key, headers[key]);
+			}
+			navigator.sendBeacon(url, zk.chrome // https://crbug.com/747787
+				? new Blob([params.toString()], {type: 'application/x-www-form-urlencoded'})
+				: params
+			);
 		} else {
 			this._rmDesktopAjax(url, data, headers);
 		}
