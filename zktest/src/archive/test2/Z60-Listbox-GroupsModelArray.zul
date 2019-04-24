@@ -70,15 +70,12 @@ GroupsModel model2 = new GroupsModelArray(foods, new ArrayComparator(0, true));
 			</listitem>
 		</template>
     </listbox>
-    </hlayout>
-	<div height="10px"></div>
-	
-  <listbox id="grid3" hflex="1" model="${model2}">
-        <listhead>
-            <listheader label="Category" sort="auto(0)"/>
-            <listheader label="Name" sort="auto(1)"/>
-            <listheader label="Calories" sort="auto(2)"/>
-        </listhead>
+	<listbox id="grid3" hflex="1" model="${model2}">
+		<listhead>
+			<listheader label="Category" sort="auto(0)"/>
+			<listheader label="Name" sort="auto(1)"/>
+			<listheader label="Calories" sort="auto(2)"/>
+		</listhead>
 		<template name="model:group">
 			<listgroup open="${groupingInfo.open}" label="${each}"/>
 		</template>
@@ -89,7 +86,10 @@ GroupsModel model2 = new GroupsModelArray(foods, new ArrayComparator(0, true));
 				<listcell label="${each[2]}"/>
 			</listitem>
 		</template>
-    </listbox>
+	</listbox>
+    </hlayout>
+	<div height="10px"></div>
+
 	<button label="clone">
 		<attribute name="onClick">
 			Listbox sbx = grid3.clone();
@@ -108,5 +108,5 @@ GroupsModel model2 = new GroupsModelArray(foods, new ArrayComparator(0, true));
 			((Component)n).setParent(cloneThreeArea);
 		}]]></attribute>
 	</button>
-	<div id="cloneThreeArea" />
+	<hlayout id="cloneThreeArea" />
 </zk>

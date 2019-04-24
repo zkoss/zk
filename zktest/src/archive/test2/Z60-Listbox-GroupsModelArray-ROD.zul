@@ -33,8 +33,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		<div>6. Close the Last Group and the Itemset 1 of the third Grid and click the "clone" and "clone by serialization".</div>
 		<div>7. Open the Itemset 1 of the last two Grid, its content will open well (if it opens the Last Group's content, that is a bug).</div>
 	</div>
-	<hbox>
-		<listbox id="lbxOne" height="150px" width="240px" model="${model}" onSelect="" checkmark="true">
+	<hlayout>
+		<listbox id="lbxOne" hflex="1" height="300px" model="${model}" checkmark="true">
 			<listhead>
             	<listheader label="Category" sort="auto(0)"/>
             	<listheader label="Name" sort="auto(1)"/>
@@ -51,7 +51,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				</listitem>
 			</template>
 		</listbox>
-		<listbox id="lbxTwo" height="150px" width="240px" model="${model}" onSelect="" checkmark="true">
+		<listbox id="lbxTwo" hflex="1" height="300px" model="${model}" checkmark="true">
 			<listhead>
             	<listheader label="Category" sort="auto(0)"/>
             	<listheader label="Name" sort="auto(1)"/>
@@ -68,7 +68,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				</listitem>
 			</template>
 		</listbox>
-		<listbox id="lbxThree" height="150px" width="240px" model="${model2}" onSelect="" checkmark="true">
+		<listbox id="lbxThree" hflex="1" height="300px" model="${model2}" checkmark="true">
 			<listhead>
             	<listheader label="Category" sort="auto(0)"/>
             	<listheader label="Name" sort="auto(1)"/>
@@ -85,7 +85,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 				</listitem>
 			</template>
 		</listbox>
-	</hbox>
+	</hlayout>
 	<div height="10px"></div>
 	<button label="clone">
 		<attribute name="onClick">
@@ -105,5 +105,5 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			((Component)n).setParent(cloneThreeArea);
 		}]]></attribute>
 	</button>
-	<hbox id="cloneThreeArea" />
+	<hlayout id="cloneThreeArea" />
 </zk>
