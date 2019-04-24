@@ -13,6 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import java.util.Collections;
 
+import net.jcip.annotations.NotThreadSafe;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -22,6 +23,7 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 /**
  * @author rudyhuang
  */
+@NotThreadSafe
 public class B36_2940739Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
@@ -34,18 +36,25 @@ public class B36_2940739Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		String yearMonth1 = jq("@calendar .z-calendar-title").text();
+		try {
+			String yearMonth1 = jq("@calendar .z-calendar-title").text();
 
-		click(jq("@datebox:eq(0) > .z-datebox-button"));
-		waitResponse();
-		String yearMonth2 = jq(".z-datebox-popup.z-datebox-open .z-calendar-title").text();
+			click(jq("@datebox:eq(0) > .z-datebox-button"));
+			waitResponse();
+			String yearMonth2 = jq(".z-datebox-popup.z-datebox-open .z-calendar-title").text();
 
-		Assert.assertEquals(yearMonth1, yearMonth2);
+			Assert.assertEquals(yearMonth1, yearMonth2);
 
-		click(jq("@datebox:eq(1) > .z-datebox-button"));
-		waitResponse();
-		String yearMonth3 = jq(".z-datebox-popup.z-datebox-open .z-calendar-title").text();
+			click(jq("@datebox:eq(1) > .z-datebox-button"));
+			waitResponse();
+			String yearMonth3 = jq(".z-datebox-popup.z-datebox-open .z-calendar-title").text();
 
-		Assert.assertEquals(yearMonth1, yearMonth3);
+			Assert.assertEquals(yearMonth1, yearMonth3);
+		} finally {
+			click(jq("body"));
+			waitResponse();
+			click(jq("@button"));
+			waitResponse();
+		}
 	}
 }

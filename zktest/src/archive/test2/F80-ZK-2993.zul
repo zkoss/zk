@@ -17,12 +17,12 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 	<label multiline="true">
 		1. modify "test1" to "test1m"
 		2. focus on somewhere else
-		3. t1 should change to  "testm"
+		3. t1 should change to "test1m"
 		4. modify "test2" to "test2m"
 		5. focus on somewhere else
 		6. t2 should remain "test2"
-		7. click the buttom "click me"
-		5. t2 should change to "test2m"
+		7. click the button "click me"
+		8. t2 should change to "test2m"
 
 	</label>
 	<zscript><![CDATA[

@@ -20,7 +20,7 @@ ol,li {
 	</html></div>
 	<vlayout>
 	<radiogroup
-		onCheck="tree.pagingPosition = self.selectedItem.label;listbox.pagingPosition = self.selectedItem.label">
+		onCheck="listbox.pagingPosition = self.selectedItem.label">
 		<radio label="top" />
 		<radio label="bottom" checked="true" />
 		<radio label="both" />

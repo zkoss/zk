@@ -22,8 +22,14 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 	Locale locale = new Locale("zh", "ZH");
 	Sessions.getCurrent().setAttribute(Attributes.PREFERRED_LOCALE, locale);
 	Clients.reloadMessages(locale);
-	Locales.setThreadLocal(locale);
+	Locale old = Locales.setThreadLocal(locale);
 ]]></zscript>
     <label>Click the btn, and you should see the "ok" in Chinese.</label>
     <button id="btn" label="click" w:onClick="jq.alert('test');"/>
+    <button label="reset locale (please click after test)">
+        <attribute name="onClick"><![CDATA[
+            Sessions.getCurrent().removeAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE);
+            org.zkoss.util.Locales.setThreadLocal(old);
+            ]]></attribute>
+    </button>
 </zk>

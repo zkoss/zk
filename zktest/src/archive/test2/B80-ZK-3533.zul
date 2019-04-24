@@ -18,7 +18,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         Locale locale = org.zkoss.util.Locales.getLocale("ru");
         Sessions.getCurrent().setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, locale);
         Clients.reloadMessages(locale);
-        org.zkoss.util.Locales.setThreadLocal(locale);
+        Locale old = org.zkoss.util.Locales.setThreadLocal(locale);
     ]]></zscript>
 	<label multiline="true">
 		1. click on maximize, the icon should change to minimize, also its tooltip
@@ -35,5 +35,11 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
                 </vlayout>
             </panelchildren>
         </panel>
+        <button label="reset locale (please click after test)">
+            <attribute name="onClick"><![CDATA[
+            Sessions.getCurrent().removeAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE);
+            org.zkoss.util.Locales.setThreadLocal(old);
+            ]]></attribute>
+        </button>
 	</vlayout>
 </zk>
