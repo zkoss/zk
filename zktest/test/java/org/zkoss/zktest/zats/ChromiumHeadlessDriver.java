@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ChromiumHeadlessDriver extends ChromeDriver {
 	private static final Logger LOG = LoggerFactory.getLogger(ChromiumHeadlessDriver.class);
-	private static final String CHROME_DRIVER_VERSION = "2.45";
-	private static final int CHROMIUM_BINARY_REVISION = 609904; // from puppeteer v1.11.0
+	private static final String CHROME_DRIVER_VERSION = "74";
+	private static final int CHROMIUM_BINARY_REVISION = 637110; // from puppeteer v1.13.0 Chromium 74.0.3723.0 (r637110)
 
 	static {
 		WebDriverManager.chromedriver().version(CHROME_DRIVER_VERSION).setup();
