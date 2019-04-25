@@ -39,10 +39,10 @@
 	</div>
 	<vlayout>
 		Combobox
-		<combobox model="${model2}" text="0" onSelect='alert(event.selectedObjects)'/>
+		<combobox model="${model2}" text="0" onSelect='Clients.log(event.selectedObjects)'/>
 		Listbox
-		<listbox model="${model1}" checkmark="true" onSelect='alert(event.selectedObjects)' />
+		<listbox model="${model1}" checkmark="true" onSelect='Clients.log(event.selectedObjects)' />
 		Tree
-		<tree model="${model3}" checkmark="true" onSelect='alert(event.selectedObjects)' />
+		<tree model="${model3}" checkmark="true" onSelect='Clients.log(event.selectedObjects)' />
 	</vlayout>
 </zk>

@@ -19,6 +19,7 @@ package org.zkoss.zk.ui.util;
 import java.util.List;
 import java.util.Locale;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuAlert;
@@ -549,7 +550,7 @@ public class Clients {
 	 * @since 8.0.0
 	 */
 	public static final void log(Object msg) {
-		response(new AuLog((String) msg));
+		response(new AuLog(Objects.toString(msg)));
 	}
 
 	/**
