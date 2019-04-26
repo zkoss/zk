@@ -18,6 +18,12 @@
 		Open the Detail. You should see content in the inner Grid. 
 		If it looks empty (font color white) then it is a bug.
 	</div>
+	<button label="change to default">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "default"); // default
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
 	<button label="change to breeze">
 		<attribute name="onClick">
 			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
