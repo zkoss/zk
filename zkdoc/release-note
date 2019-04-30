@@ -11,6 +11,7 @@ ZK 8.6.2
   ZK-4232: tabbox tabs border missing in breeze
   ZK-4228: spinner button icon misaligned (iceblue_c)
   ZK-4275: Include in defer mode fail when composing in async (server push)
+  ZK-4269: cropper component ignores inital x,y=0
 
 * Upgrade Notes
 
