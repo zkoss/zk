@@ -11,12 +11,13 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
@@ -28,16 +29,15 @@ public class B50_2960720Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		String ckeditorId = jq("@ckeditor").attr("id");
+		String ckeditorId = widget("@ckeditor").uuid();
+		waitForCkEditorReady(ckeditorId, 3000);
 		click(jq("@button"));
 		waitResponse();
-		new WebDriverWait(driver, 5)
-				.until(ExpectedConditions.presenceOfElementLocated(jq("@ckeditor iframe")));
-		waitForCkEditorReady(ckeditorId, 5000);
+		waitForCkEditorReady(ckeditorId, 3000);
 
 		driver.switchTo().frame(toElement(jq("@ckeditor iframe")));
 		WebElement body = driver.findElement(By.tagName("body"));
-		Assert.assertNotEquals("", body.getText());
+		Assert.assertThat(body.getText(), allOf(containsString("Jone"), containsString("Mary")));
 	}
 
 	private void waitForCkEditorReady(String ckeditorId, long timeoutMs) {
@@ -45,7 +45,6 @@ public class B50_2960720Test extends WebDriverTestCase {
 		while (!isCkEditorReady(ckeditorId)) {
 			sleep(200);
 			if (System.currentTimeMillis() - s > timeoutMs) {
-				Assert.fail("Test case timeout!");
 				break;
 			}
 		}
