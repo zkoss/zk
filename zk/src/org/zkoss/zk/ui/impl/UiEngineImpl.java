@@ -2459,10 +2459,10 @@ public class UiEngineImpl implements UiEngine {
 	private static void meterAuClientComplete(PerformanceMeter pfmeter, Execution exec) {
 		//Format of ZK-Client-Complete and ZK-Client-Receive:
 		//	request-id1=time1,request-id2=time2
-		String hdr = exec.getHeader("ZK-Client-Receive");
+		String hdr = meterGetData(exec, "ZK-Client-Receive");
 		if (hdr != null)
 			meterAuClient(pfmeter, exec, hdr, false);
-		hdr = exec.getHeader("ZK-Client-Complete");
+		hdr = meterGetData(exec, "ZK-Client-Complete");
 		if (hdr != null)
 			meterAuClient(pfmeter, exec, hdr, true);
 	}
@@ -2513,7 +2513,7 @@ public class UiEngineImpl implements UiEngine {
 	private static String meterAuStart(PerformanceMeter pfmeter, Execution exec, long startTime) {
 		//Format of ZK-Client-Start:
 		//	request-id=time
-		String hdr = exec.getHeader("ZK-Client-Start");
+		String hdr = meterGetData(exec, "ZK-Client-Start");
 		if (hdr != null) {
 			final int j = hdr.lastIndexOf('=');
 			if (j > 0) {
@@ -2584,6 +2584,11 @@ public class UiEngineImpl implements UiEngine {
 		} catch (Throwable ex) {
 			log.warn("Ingored: failed to invoke " + pfmeter, ex);
 		}
+	}
+
+	private static String meterGetData(Execution exec, String key) {
+		String param = exec.getParameter(key); // ZK-4204: get pf data by parameters
+		return param != null ? param : exec.getHeader(key);
 	}
 
 	/** An interface used to extend the UI engine.
