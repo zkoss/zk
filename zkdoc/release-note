@@ -8,6 +8,7 @@ ZK 8.6.2
   ZK-4230: Signature toolbarVisible not work
   ZK-4204: future chrome feature currently preventing "rmDesktop" (causing non cleaned up desktops)
   ZK-4247: MeshWidget has unwanted margin when zoom in
+  ZK-4232: tabbox tabs border missing in breeze
 
 * Upgrade Notes
 
