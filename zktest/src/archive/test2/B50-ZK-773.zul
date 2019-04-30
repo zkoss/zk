@@ -26,4 +26,5 @@
 			</row>
 		</rows>
 	</grid>
+	<button xmlns:w="client" label="hasVScroll" w:onClick="zk.log(zk(jq('.z-grid-body')).hasVScroll())"/>
 </zk>
