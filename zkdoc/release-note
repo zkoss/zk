@@ -15,6 +15,7 @@ ZK 8.6.2
   ZK-4236: leaking variable resolvers when using programmatic templates
   ZK-4219: column width headers out of sync with cells (safari)
   ZK-4210: column resizing ghost doesn't check for scroll when calculating snap position
+  ZK-4234: updated sclass on combobox doesn't update popup
 
 * Upgrade Notes
 

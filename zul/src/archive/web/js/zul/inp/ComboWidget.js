@@ -195,6 +195,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.fire('onFloatUp', this); //notify all
 		var topZIndex = this.setTopmost();
 
+		var sclass = this.getSclass();
+		pp.className = this.$s('popup') + (sclass ? ' ' + sclass : ''); // ZK-4234: updated sclass on combobox doesn't update popup
+
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1; //on-top of everything
 		pp.style.position = 'absolute'; //just in case
 		pp.style.display = 'block';
