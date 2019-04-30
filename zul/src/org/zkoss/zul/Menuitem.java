@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.ext.Uploads;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -33,7 +34,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-menuitem. (since 3.5.0)
  * @author tomyeh
  */
-public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
+public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable,
+		org.zkoss.zk.ui.ext.Uploadable {
 	private AuxInfo _auxinf;
 
 	static {
@@ -243,52 +245,17 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		return !(getParent() instanceof Menupopup);
 	}
 
-	/** Returns non-null if this button is used for file upload, or null otherwise.
-	 * Refer to {@link #setUpload} for more details.
-	 * @since 5.0.0
-	 */
 	public String getUpload() {
 		return _auxinf != null ? _auxinf.upload : null;
 	}
 
-	/** Sets the JavaScript class at the client to handle the upload if this
-	 * button is used for file upload.
-	 * <p>Default: null.
-	 *
-	 * <p>For example, the following example declares a button for file upload:
-	 * <pre><code>&lt;button label="Upload" upload="true"
-	 * onUpload="handle(event.media)"/&gt;</code></pre>
-	 *
-	 * <p>As shown above, after the file is uploaded, an instance of
-	 * {@link UploadEvent} is sent this component.
-	 *
-	 * <p>If you want to customize the handling of the file upload at
-	 * the client, you can specify a JavaScript class when calling
-	 * this method:
-	 * <code>&lt;button upload="foo.Upload"/&gt;</code>
-	 *
-	 * <p> Another options for the upload can be specified as follows:
-	 *  <pre><code>&lt;button label="Upload" upload="true,maxsize=-1,native"</code></pre>
-	 *  <ul>
-	 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
-	 * a negative value if no limit.</li>
-	 *  <li>native: Sets whether to treat the uploaded file(s) as binary, i.e.,
-	 * not to convert it to image, audio or text files.</li>
-	 *  </ul>
-	 *  
-	 * @param upload a JavaScript class to handle the file upload
-	 * at the client, or "true" if the default class is used,
-	 * or null or "false" to disable the file download (and then
-	 * this button behaves like a normal button).
-	 * @since 5.0.0
-	 */
 	public void setUpload(String upload) {
 		if (upload != null && (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
-
 		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
 			initAuxInfo().upload = upload;
-			smartUpdate("upload", getUpload());
+			Uploads.parseUpload(this, upload);
+			smartUpdate("upload", Uploads.getRealUpload(this, getUpload()));
 		}
 	}
 
@@ -331,7 +298,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		final String href;
 		render(renderer, "href", href = getEncodedHref()); //Bug #2871082
 		render(renderer, "target", getTarget());
-		render(renderer, "upload", getUpload());
+		render(renderer, "upload", Uploads.getRealUpload(this, getUpload()));
 		render(renderer, "value", getValue());
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());

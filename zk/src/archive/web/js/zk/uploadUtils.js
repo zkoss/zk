@@ -17,8 +17,7 @@ zk.UploadUtils = {
 			tempUri = zk.ajaxURI('/dropupload', {desktop: dt,au: true}),
 			ajaxUri = tempUri + (tempUri.indexOf('?') == -1 ? '?' : '&')
 				+ 'uuid=' + wgt.uuid
-				+ '&dtid=' + dt.id
-				+ '&native=' + wgt._native;
+				+ '&dtid=' + dt.id;
 		xhr.open('POST', ajaxUri, true);
 		xhr.send(formData);
 	}

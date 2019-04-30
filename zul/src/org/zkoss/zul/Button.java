@@ -16,18 +16,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.ext.Uploads;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -35,7 +30,8 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-button.(since 3.5.0)
  * @author tomyeh
  */
-public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable {
+public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Disable,
+		org.zkoss.zk.ui.ext.Uploadable {
 	private AuxInfo _auxinf;
 
 	static {
@@ -224,80 +220,19 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		}
 	}
 
-	/** Returns non-null if this button is used for file upload, or null otherwise.
-	 * Refer to {@link #setUpload} for more details.
-	 * @since 5.0.0
-	 */
 	public String getUpload() {
 		return _auxinf != null ? _auxinf.upload : null;
 	}
 
-	/** Sets the JavaScript class at the client to handle the upload if this
-	 * button is used for file upload.
-	 * <p>Default: null.
-	 *
-	 * <p>For example, the following example declares a button for file upload:
-	 * <pre><code>&lt;button label="Upload" upload="true"
-	 * onUpload="handle(event.media)"/&gt;</code></pre>
-	 *
-	 * <p>As shown above, after the file is uploaded, an instance of
-	 * {@link org.zkoss.zk.ui.event.UploadEvent} is sent this component.
-	 *
-	 * <p>If you want to customize the handling of the file upload at
-	 * the client, you can specify a JavaScript class when calling
-	 * this method:
-	 * <code>&lt;button upload="foo.Upload"/&gt;</code>
-	 *
-	 * <p> Another options for the upload can be specified as follows:
-	 *  <pre><code>&lt;button label="Upload" upload="true,maxsize=-1,multiple=true,accept=audio/*|video/*|image/*,native"</code></pre>
-	 *  <ul>
-	 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
-	 * a negative value if no limit, if the maxsize is not specified, it will use {@link Configuration#getMaxUploadSize()}</li>
-	 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
-	 * image, audio or text files.</li>
-	 *  <li>multiple: treating the file chooser allows multiple files to upload,
-	 *  the setting only works with HTML5 supported browsers (since ZK 6.0.0).</li>
-	 *  <li>accept: specifies the types of files that the server accepts,
-	 *  the setting only works with HTML5 supported browsers (since ZK 7.0.0).</li>
-	 *  </ul>
-	 * 
-	 * <p> Note: if the options of the <code>false</code> or the customized handler
-	 * (like <code>foo.Upload</code>) are not specified, the option of <code>true</code>
-	 * is implicit by default.
-	 * 
-	 * @param upload a JavaScript class to handle the file upload
-	 * at the client, or "true" if the default class is used,
-	 * or null or "false" to disable the file download (and then
-	 * this button behaves like a normal button).
-	 * @since 5.0.0
-	 */
 	public void setUpload(String upload) {
 		if (upload != null && (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
 		if (!Objects.equals(upload, _auxinf != null ? _auxinf.upload : null)) {
 			onUploadChanged(upload);
 			initAuxInfo().upload = upload;
-			if (upload != null) { //for AuUploader
-				Matcher matcher = Pattern.compile("maxsize=([^,]+)").matcher(upload);
-				if (matcher.find()) {
-					try {
-						Integer maxsz = Integer.parseInt(matcher.group(1));
-						setAttribute(org.zkoss.zk.ui.impl.Attributes.UPLOAD_MAX_SIZE, maxsz);
-					} catch (NumberFormatException e) {
-						throw new UiException("The upload max size should be a positive integer.");
-					}
-				}
-			}
-			smartUpdate("upload", getRealUpload());
+			Uploads.parseUpload(this, upload);
+			smartUpdate("upload", Uploads.getRealUpload(this, getUpload()));
 		}
-	}
-
-	private String getRealUpload() {
-		Desktop desktop = getDesktop();
-		String upload = getUpload();
-		if (desktop != null && !Strings.isEmpty(upload) && !upload.contains("maxsize="))
-			upload = upload.concat(",maxsize=" + desktop.getWebApp().getConfiguration().getMaxUploadSize());
-		return upload;
 	}
 
 	/** Called when the upload attribute is modified. */
@@ -329,7 +264,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 		final String href;
 		render(renderer, "href", href = getEncodedHref());
 		render(renderer, "target", getTarget());
-		render(renderer, "upload", getRealUpload());
+		render(renderer, "upload", Uploads.getRealUpload(this, getUpload()));
 
 		org.zkoss.zul.impl.Utils.renderCrawlableA(href, getLabel());
 	}

@@ -39,9 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			upload = n._ctrl,
 			wgt = upload._wgt,
 			dt = wgt.desktop,
-
-			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid
-					+ (upload.isNative ? '&native=true' : ''), {desktop: dt,au: true}),
+			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid, {desktop: dt,au: true}),
 			form = n.form;
 		form.action = action;
 
