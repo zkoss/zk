@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4275-include.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 30 15:49:32 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div>
+        <button label="click to try desktop" onClick='Clients.log("did a click")'/>
+        inner desktop id:
+        <label value="${desktop.id}"/>
+    </div>
+</zk>
