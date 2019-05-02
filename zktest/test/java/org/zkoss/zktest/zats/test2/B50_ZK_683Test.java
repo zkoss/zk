@@ -21,8 +21,10 @@ public class B50_ZK_683Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());
-		act.sendKeys(Keys.TAB).sendKeys(Keys.TAB).sendKeys(Keys.TAB).sendKeys(Keys.TAB).perform();
-		waitResponse();
+		for (int i = 0; i < 4; i++) {
+			act.sendKeys(Keys.TAB).perform();
+			waitResponse();
+		}
 		Assert.assertEquals(4, jq(".z-errorbox").length());
 	}
 }
