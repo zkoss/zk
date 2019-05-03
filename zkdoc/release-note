@@ -13,6 +13,7 @@ ZK 8.6.2
   ZK-4275: Include in defer mode fail when composing in async (server push)
   ZK-4269: cropper component ignores inital x,y=0
   ZK-4236: leaking variable resolvers when using programmatic templates
+  ZK-4219: column width headers out of sync with cells (safari)
 
 * Upgrade Notes
 
