@@ -18,6 +18,7 @@ ZK 8.6.2
   ZK-4234: updated sclass on combobox doesn't update popup
   ZK-4284: Tabbox is not scrollable under safari 9
   ZK-4205: inconsistent parameter names (dead/obsolete code?)
+  ZK-4289: Fix recovering desktop (FailoverManager)
 
 * Upgrade Notes
 
