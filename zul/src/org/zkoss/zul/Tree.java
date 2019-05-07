@@ -1798,6 +1798,15 @@ public class Tree extends MeshElement {
 						((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 					}
 					resetPosition(false); //ZK-2712: set different model, reset scroll and anchor position
+
+					if (!isAutosort()) {
+						Treecols cols = getTreecols();
+						if (cols != null) {
+							for (Component treecol : cols.getChildren()) {
+								((Treecol) treecol).setSortDirection("natural");
+							}
+						}
+					}
 				} else {
 					if (_treechildren != null)
 						_treechildren.detach();
@@ -1867,14 +1876,8 @@ public class Tree extends MeshElement {
 
 	private static boolean doSort(Tree tree) {
 		Treecols cols = tree.getTreecols();
-		if (cols == null)
+		if (!tree.isAutosort() || cols == null)
 			return false;
-		if (!tree.isAutosort()) {
-			for (Component treecol : cols.getChildren()) {
-				((Treecol) treecol).setSortDirection("natural");
-			}
-			return false;
-		}
 		for (Component c : cols.getChildren()) {
 			final Treecol hd = (Treecol) c;
 			String dir = hd.getSortDirection();

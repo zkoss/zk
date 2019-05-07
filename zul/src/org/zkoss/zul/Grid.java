@@ -784,6 +784,15 @@ public class Grid extends MeshElement {
 						_rows.getChildren().clear();*/
 
 					resetDataLoader(); // Bug 3357641
+
+					if (!isAutosort()) {
+						Columns cols = getColumns();
+						if (cols != null) {
+							for (Component column : cols.getChildren()) {
+								((Column) column).setSortDirection("natural");
+							}
+						}
+					}
 				}
 				if (_rows != null)
 					_rows.getChildren().clear(); //Bug 1807414, ZK-1512
@@ -900,14 +909,8 @@ public class Grid extends MeshElement {
 	 */
 	private static boolean doSort(Grid grid) {
 		Columns cols = grid.getColumns();
-		if (cols == null)
+		if (!grid.isAutosort() || cols == null)
 			return false;
-		if (!grid.isAutosort()) {
-			for (Component column : cols.getChildren()) {
-				((Column) column).setSortDirection("natural");
-			}
-			return false;
-		}
 		for (Iterator it = cols.getChildren().iterator(); it.hasNext();) {
 			final Column hd = (Column) it.next();
 			String dir = hd.getSortDirection();

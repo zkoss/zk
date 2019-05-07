@@ -2327,6 +2327,15 @@ public class Listbox extends MeshElement {
 						getItems().clear();*/
 
 					resetDataLoader(); // Bug 3357641
+
+					if (!isAutosort()) {
+						Listhead hds = getListhead();
+						if (hds != null) {
+							for (Component listheader : hds.getChildren()) {
+								((Listheader) listheader).setSortDirection("natural");
+							}
+						}
+					}
 				}
 				getItems().clear(); // Bug 1807414, ZK-1512
 				_visibleItemCount = 0; //Bug ZK-3735: should clear _visibleItemCount before syncModel.
@@ -2419,14 +2428,8 @@ public class Listbox extends MeshElement {
 
 	private static boolean doSort(Listbox listbox) {
 		Listhead hds = listbox.getListhead();
-		if (hds == null)
+		if (!listbox.isAutosort() || hds == null)
 			return false;
-		if (!listbox.isAutosort()) {
-			for (Component listheader : hds.getChildren()) {
-				((Listheader) listheader).setSortDirection("natural");
-			}
-			return false;
-		}
 		for (Iterator<Component> it = hds.getChildren().iterator(); it.hasNext();) {
 			final Listheader hd = (Listheader) it.next();
 			String dir = hd.getSortDirection();
