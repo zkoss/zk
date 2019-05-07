@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4284.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 07 10:07:27 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.test this case on iPad2 or any device with Safari 9
+		2.the tabbox should be scrollable and it renders left/right arrow button for scrolling.
+		3.it should renders a label on a tab as a complete text.
+	</label>
+	<tabbox width="400px" height="300px">
+		<tabs>
+			<tab label="Tab 1" />
+			<tab label="Tab 2" />
+			<tab label="Tab 3" />
+			<tab label="Tab 4" />
+			<tab label="Tab 5" />
+			<tab label="Tab 6" />
+			<tab label="Tab 7" />
+			<tab label="Tab 8" />
+			<tab label="Tab 9" />
+			<tab label="Tab 10" />
+		</tabs>
+		<tabpanels>
+			<tabpanel style="color:#336699;">Panel 1</tabpanel>
+			<tabpanel style="color:#333399;">Panel 2</tabpanel>
+			<tabpanel style="color:#663366;">Panel 3</tabpanel>
+			<tabpanel style="color:#CC0033;">Panel 4</tabpanel>
+			<tabpanel style="color:#CC3300;">Panel 5</tabpanel>
+			<tabpanel style="color:#FF9900;">Panel 6</tabpanel>
+			<tabpanel style="color:#ABEA14;">Panel 7</tabpanel>
+			<tabpanel style="color:#008DB7;">Panel 8</tabpanel>
+			<tabpanel style="color:#CDCD3E;">Panel 9</tabpanel>
+			<tabpanel style="color:#C34576;">Panel 10</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
