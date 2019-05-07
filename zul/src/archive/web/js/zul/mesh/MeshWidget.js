@@ -1296,8 +1296,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						wd += zk.parseInt(w.style.width);
 				}
 				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
-					//ZK-3938: only adjust width in Chrome, but zk.chrome returns true in Edge, we need to check !zk.edge
-					hdtbl.style.width = (hdfakerbar && hasVScroll && zk.chrome && !zk.edge) ? wd + scrollbarWidth + 'px' : wd + 'px';
+					//ZK-4219: should add the scrollbarWidth in all browsers
+					hdtbl.style.width = (hdfakerbar && hasVScroll) ? wd + scrollbarWidth + 'px' : wd + 'px';
 					if (bdtbl)
 						bdtbl.style.width = wd + 'px';
 					if (fttbl)
