@@ -426,10 +426,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	_snapsizing: function (dg, pointer) {
 		var n = dg.control.$n(), $n = zk(n),
-			ofs = $n.revisedOffset();
+			ofs = $n.viewportOffset(),
+			sofs = $n.scrollOffset(),
+			min = ofs[0] + sofs[0] + dg._zmin;
 		pointer[0] += $n.offsetWidth();
-		if (ofs[0] + dg._zmin >= pointer[0])
-			pointer[0] = ofs[0] + dg._zmin;
+		if (pointer[0] < min)
+			pointer[0] = min;
 		return pointer;
 	},
 	_ignoresizing: function (dg, pointer, evt) {
