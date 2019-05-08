@@ -19,6 +19,7 @@ ZK 8.6.2
   ZK-4284: Tabbox is not scrollable under safari 9
   ZK-4205: inconsistent parameter names (dead/obsolete code?)
   ZK-4289: Fix recovering desktop (FailoverManager)
+  ZK-4287: resource caching broken when hiding zk version
 
 * Upgrade Notes
 

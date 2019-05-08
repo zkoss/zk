@@ -15,13 +15,17 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 <zk>
     <zscript>
         String enabled = org.zkoss.lang.Library.getProperty("org.zkoss.zk.ui.versionInfo.enabled", "true");
+        String build = WebApps.getCurrent().getBuild();
     </zscript>
     <label multiline="true">
         *org.zkoss.zk.ui.versionInfo.enabled = ${enabled}
-        If the textbox is still filled with ZK version and build, then the test is failed.
+        1. zk.version should be empty.
+        2. zk.build should be obfuscated.
     </label>
-    zk.version = <textbox id="zkver"/>
-    zk.build = <textbox id="zkbuild"/>
+    <vlayout>
+        <cell>zk.version = <textbox id="zkver"/> (empty)</cell>
+        <cell>zk.build = <textbox id="zkbuild"/> (obfuscated result. shouldn't be <label id="build" value="${build}"/>)</cell>
+    </vlayout>
 
     <label multiline="true">
         This is filled with hex code that need to be used as cache.
