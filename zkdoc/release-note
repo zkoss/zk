@@ -30,6 +30,7 @@ ZK 8.6.2
   ZK-4231: XSD contains incorrect option for tabbox orientation
   ZK-4251: menu arrow not centered in breeze
   ZK-4201: selecting an item of a Listbox scrolls back to the top
+  ZK-4208: Can't close a notification
 
 * Upgrade Notes
 
