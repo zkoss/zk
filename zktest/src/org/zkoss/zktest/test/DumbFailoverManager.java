@@ -18,22 +18,29 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.test;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
-import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.sys.PageConfig;
-import org.zkoss.zk.ui.sys.FailoverManager;
+import org.zkoss.zk.ui.impl.DesktopImpl;
 import org.zkoss.zk.ui.impl.PageImpl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.FailoverManager;
+import org.zkoss.zk.ui.sys.PageConfig;
+import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
  * A dumb failover manager useless but to test the failover mechanism.
@@ -48,6 +55,8 @@ import org.zkoss.zk.ui.impl.PageImpl;
  */
 public class DumbFailoverManager implements FailoverManager {
 	private Desktop _killed;
+	private List<Page> _killedPages;
+	private Map<Page, Collection<Component>> _killedRoots;
 
 	public void start(WebApp wapp) {
 	}
@@ -60,11 +69,17 @@ public class DumbFailoverManager implements FailoverManager {
 	 */
 	public void dropDesktop(boolean recoverable) {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
+		if (recoverable) {
+			_killed = desktop;
+			_killedPages = new ArrayList<>(desktop.getPages());
+			_killedRoots = new HashMap<>();
+			desktop.getPages()
+					.forEach(page -> _killedRoots.put(page, new ArrayList<>(page.getRoots())));
+		}
+
 		((WebAppCtrl)desktop.getWebApp())
 			.getDesktopCache(desktop.getSession())
 			.removeDesktop(desktop);
-		if (recoverable)
-			_killed = desktop;
 	}
 
 	//FailoverManager//
@@ -81,12 +96,16 @@ public class DumbFailoverManager implements FailoverManager {
 		desktop.setDeviceType(_killed.getDeviceType()); //optional
 		desktopCtrl.setResponseId(((DesktopCtrl)_killed).getResponseId(false));
 
+		// below are the dirty fixes
+		syncNextUuid(_killed, desktop);
+		((ExecutionCtrl) Executions.getCurrent()).setDesktop(desktop);
+
 		//recover pages
-		for (Iterator it = _killed.getPages().iterator(); it.hasNext();)
+		for (Iterator it = _killedPages.iterator(); it.hasNext();)
 			recover((Page)it.next());
 		_killed = null;
 	}
-	private static void recover(final Page killed) {
+	private void recover(final Page killed) {
 		//recover page
 		final Page page = new PageImpl(
 			killed.getLanguageDefinition(), //required; never null
@@ -96,6 +115,7 @@ public class DumbFailoverManager implements FailoverManager {
 
 		final PageCtrl pageCtrl = (PageCtrl)page;
 		final PageCtrl killedCtrl = (PageCtrl)killed;
+		pageCtrl.preInit();
 		pageCtrl.init(
 			new PageConfig() {
 				public String getId() {return killed.getId();} //required; never null
@@ -129,9 +149,18 @@ public class DumbFailoverManager implements FailoverManager {
 		page.setComplete(killed.isComplete());
 			//optional: copy killed's attrs to page
 
-		for (Iterator it = killed.getRoots().iterator(); it.hasNext();) {
+		for (Iterator it = _killedRoots.get(killed).iterator(); it.hasNext();) {
 			final Component comp = (Component)it.next();
 			((Component)comp.clone()).setPage(page);
+		}
+	}
+
+	private void syncNextUuid(Desktop oldDsk, Desktop newDsk) {
+		try {
+			Field nextUuid = DesktopImpl.class.getDeclaredField("_nextUuid");
+			nextUuid.setAccessible(true);
+			nextUuid.set(newDsk, nextUuid.get(oldDsk));
+		} catch (Exception ignored) {
 		}
 	}
 }
