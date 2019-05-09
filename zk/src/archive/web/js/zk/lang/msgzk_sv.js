@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Ej hittat: ';
 msgzk.UNSUPPORTED = 'Stödjes inte än: ';
 msgzk.FAILED_TO_SEND = 'Kunde inte sända begäran till servern.';
 msgzk.FAILED_TO_RESPONSE = 'Servern kunde inte hantera din begäran.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Försök igen?';
 msgzk.UNSUPPORTED_BROWSER = 'Icke-supportad webbläsare: ';
 msgzk.ILLEGAL_RESPONSE = 'Okänt svar från server. Var god uppdatera sidan och försök igen..\n';

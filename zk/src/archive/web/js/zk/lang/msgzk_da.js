@@ -17,6 +17,7 @@ msgzk = {
 	UNSUPPORTED: 'Endnu ikke understøttet: ',
 	FAILED_TO_SEND: 'Kunne ikke at sende anmodninger til serveren.',
 	FAILED_TO_RESPONSE: 'Serveren er midlertidigt ude af drift.',
+	FAILED_TO_PARSE_RESPONSE: 'The response could not be parsed: Expected JSON format (please check console for details).',
 	TRY_AGAIN: 'Vil du prøve igen?',
 	UNSUPPORTED_BROWSER: 'Ikke understøttet browser: ',
 	ILLEGAL_RESPONSE: 'Ukendt svar fra serveren. Genindlæs og prøv igen.\n',

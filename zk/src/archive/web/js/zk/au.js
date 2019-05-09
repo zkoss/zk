@@ -1055,7 +1055,16 @@ zAu.beforeSend = function (uri, req, dt) {
 			cmds.pfIds = zAu.pfGetIds(req);
 		}
 
-		rt = jq.evalJSON(rt);
+		try {
+			rt = jq.evalJSON(rt);
+		} catch (e) {
+			if (e.name == 'SyntaxError') { //ZK-4199: handle json parse error
+				zAu.showError('FAILED_TO_PARSE_RESPONSE', e.message);
+				zk.debugLog(e.message + ', response text:\n' + req.responseText);
+				return false;
+			}
+			throw e;
+		}
 		var	rid = rt.rid;
 		if (rid) {
 			rid = parseInt(rid); //response ID

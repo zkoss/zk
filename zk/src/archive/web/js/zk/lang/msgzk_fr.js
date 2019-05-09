@@ -18,6 +18,7 @@ msgzk = {
 	UNSUPPORTED: 'Pas encore supporté: ',
 	FAILED_TO_SEND: "Echec lors de l'envoi d'une requête vers le serveur.",
 	FAILED_TO_RESPONSE: 'Le serveur à échoué dans le traitement de votre requête.',
+	FAILED_TO_PARSE_RESPONSE: 'The response could not be parsed: Expected JSON format (please check console for details).',
 	TRY_AGAIN: 'Voulez-vous essayer à nouveau?',
 	UNSUPPORTED_BROWSER: 'Navigateur non supporté: ',
 	ILLEGAL_RESPONSE: 'Réponse inconnue envoyée depuis le serveur. Rechagez cette page et essayez de nouveau.\n',

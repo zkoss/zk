@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = '존재하지 않습니다.: ';
 msgzk.UNSUPPORTED = '아직 지원되지 않습니다.: ';
 msgzk.FAILED_TO_SEND = '서버로의 요청 전송에 실패하였습니다.';
 msgzk.FAILED_TO_RESPONSE = '서버는 일시적인 정지상태입니다.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = '재시도를 원하시나요?';
 msgzk.UNSUPPORTED_BROWSER = '지원되지 않는 브라우저입니다: ';
 msgzk.ILLEGAL_RESPONSE = '이해할 수 없는 응답이 수신되었습니다. 새로고침하시고 재시도하세요..\n';

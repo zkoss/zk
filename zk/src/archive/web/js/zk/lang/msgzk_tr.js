@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Bulunamadı : ';
 msgzk.UNSUPPORTED = 'Henüz Desteklenmiyor : ';
 msgzk.FAILED_TO_SEND = 'İstek sunucuya yollanamadı.';
 msgzk.FAILED_TO_RESPONSE = 'Sunucu isteği yerine getiremedi.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Try again?';
 msgzk.UNSUPPORTED_BROWSER = 'Desteklenmeyen tarayıcı: ';
 msgzk.ILLEGAL_RESPONSE = 'Sunucudan anlaşılmayan cevap döndü. Lütfen yeniden deneyiniz.\n';

@@ -17,6 +17,7 @@ msgzk = {
 	UNSUPPORTED: '尚未支援：',
 	FAILED_TO_SEND: '無法傳送資料到伺服器。',
 	FAILED_TO_RESPONSE: '伺服器暫時無法處理你的請求。',
+	FAILED_TO_PARSE_RESPONSE: 'The response could not be parsed: Expected JSON format (please check console for details).',
 	TRY_AGAIN: '再試一次?',
 	UNSUPPORTED_BROWSER: '尚未支援你使用的瀏覽器：',
 	ILLEGAL_RESPONSE: '無法辨識伺服器傳回的資料。請按重新載入，再試試。\n',

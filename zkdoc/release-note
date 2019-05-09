@@ -20,6 +20,7 @@ ZK 8.6.2
   ZK-4205: inconsistent parameter names (dead/obsolete code?)
   ZK-4289: Fix recovering desktop (FailoverManager)
   ZK-4287: resource caching broken when hiding zk version
+  ZK-4199: Improve AU response parse error message
 
 * Upgrade Notes
 

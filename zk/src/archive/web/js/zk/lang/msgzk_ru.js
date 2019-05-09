@@ -8,6 +8,7 @@ msgzk = {
 	UNSUPPORTED: 'Не поддерживается: ',
 	FAILED_TO_SEND: 'Не удалось послать запрос на сервер.',
 	FAILED_TO_RESPONSE: 'Сервер временно недоступен.',
+	FAILED_TO_PARSE_RESPONSE: 'The response could not be parsed: Expected JSON format (please check console for details).',
 	TRY_AGAIN: 'Попробуйте снова?',
 	UNSUPPORTED_BROWSER: 'Неподдерживаемый браузер: ',
 	ILLEGAL_RESPONSE: 'От сервера получен непонятный ответ. Пожалуйста, перезагрузите страницу и попробуйте снова.\n',

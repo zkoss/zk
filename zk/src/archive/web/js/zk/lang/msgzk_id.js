@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Tidak Diketemui: ';
 msgzk.UNSUPPORTED = 'Belum didukung: ';
 msgzk.FAILED_TO_SEND = 'Gagal untuk mengirim request ke server.';
 msgzk.FAILED_TO_RESPONSE = 'Server gagal memproses request Anda.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Try again?';
 msgzk.UNSUPPORTED_BROWSER = 'Browser tidak didukung: ';
 msgzk.ILLEGAL_RESPONSE = 'Response yang terkirim dari server tidak diketahui. Mohon diulangi lagi.\n';

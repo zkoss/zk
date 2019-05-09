@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = "No s'ha trobat: ";
 msgzk.UNSUPPORTED = 'Encara no és compatible: ';
 msgzk.FAILED_TO_SEND = "Ha fallat l'enviament de la petició al servidor.";
 msgzk.FAILED_TO_RESPONSE = 'El servidor ha fallat en processar la petició.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Voleu provar una altra vegada?';
 msgzk.UNSUPPORTED_BROWSER = 'El navegador no és compatible: ';
 msgzk.ILLEGAL_RESPONSE = 'Resposta desconeguda enviada des del servidor. Si us plau, recarregueu i proveu una altra vegada.\n';

@@ -18,6 +18,7 @@ msgzk = {
 	UNSUPPORTED: '今後サポートする予定です: ',
 	FAILED_TO_SEND: 'リクエストの送信に失敗しました。',
 	FAILED_TO_RESPONSE: 'サーバーが応答しませんでした。',
+	FAILED_TO_PARSE_RESPONSE: 'The response could not be parsed: Expected JSON format (please check console for details).',
 	TRY_AGAIN: 'もう一度試してみますか？',
 	UNSUPPORTED_BROWSER: 'ご使用中のブラウザは対応しておりません: ',
 	ILLEGAL_RESPONSE: '予期しない応答がありました。リロードしてから再度操作してください。\n',

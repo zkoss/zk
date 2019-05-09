@@ -7,6 +7,7 @@ msgzk.NOT_FOUND = 'Не знайдений: ';
 msgzk.UNSUPPORTED = 'Не підтримується: ';
 msgzk.FAILED_TO_SEND = 'Не вдалося відіслати запит на сервер.';
 msgzk.FAILED_TO_RESPONSE = 'Сервер тимчасово недоступний.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Try again?';
 msgzk.UNSUPPORTED_BROWSER = 'Браузер не підтримується: ';
 msgzk.ILLEGAL_RESPONSE = 'Невідома відповідь з серверу. Будьласка, перевантажте сторінку і спробуйте знову.\n';
