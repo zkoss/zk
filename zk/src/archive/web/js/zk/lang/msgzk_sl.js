@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Ni mogoče najti: ';
 msgzk.UNSUPPORTED = 'Še ni podporto: ';
 msgzk.FAILED_TO_SEND = 'Napaka pri pošiljanju zahteve strežniku.';
 msgzk.FAILED_TO_RESPONSE = 'Strežnik je sporočil napako pri obdelavi vaše zahteve.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Try again?';
 msgzk.UNSUPPORTED_BROWSER = 'Brskalnik ni prepoznan: ';
 msgzk.ILLEGAL_RESPONSE = 'Strežnik je poslal neznan odgovor. Prosim osvežite stran .\n';

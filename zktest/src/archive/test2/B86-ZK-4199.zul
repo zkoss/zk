@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4199.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 6 14:21:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Click the button, and you should see zk error.</label>
+	<button onClick='execution.nativeResponse.sendRedirect("test2/B86-ZK-4199-1.html");' label="click native"/>
+	<!--<button onClick='Executions.sendRedirect("B86-ZK-4199-1.html");' label="click"/>-->
+</zk>

@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Không tìm thấy: ';
 msgzk.UNSUPPORTED = 'Chưa được hỗ trợ: ';
 msgzk.FAILED_TO_SEND = 'Có lỗi khi gởi yêu cầu đến máy chủ.';
 msgzk.FAILED_TO_RESPONSE = 'Máy chủ tạm thời không phục vụ.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Bạn có muốn thử lại?';
 msgzk.UNSUPPORTED_BROWSER = 'Trình duyệt chưa được hỗ trợ: ';
 msgzk.ILLEGAL_RESPONSE = 'Không biết phản hồi từ máy chủ. Vui lòng tải lại trang để thử lại.\n';

@@ -7,6 +7,7 @@ msgzk.NOT_FOUND = 'لا يوجد';
 msgzk.UNSUPPORTED = 'لا يدعم ';
 msgzk.FAILED_TO_SEND = 'غير قادر على الأرسال';
 msgzk.FAILED_TO_RESPONSE = 'غير قادر على الأستجابة.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'هل تحب ان تحاول مرة أخرى';
 msgzk.UNSUPPORTED_BROWSER = 'المتصفح غير مدعوم';
 msgzk.ILLEGAL_RESPONSE = 'أستجابة خاطئة.\n';
