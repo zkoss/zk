@@ -25,7 +25,7 @@ public class F85_ZK_3689Test extends WebDriverTestCase {
 		connect();
 		sleep(2000);
 		Assert.assertEquals("", jq("$zkver").val());
-		Assert.assertEquals("", jq("$zkbuild").val());
+		Assert.assertNotEquals(jq("$build").text(), jq("$zkbuild").val());
 		Assert.assertTrue(
 			"The module version info exposed",
 			jq("$ckezver").val().matches("^[a-z0-9]+$")

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4287.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 08 17:28:43 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    String enabled = org.zkoss.lang.Library.getProperty("org.zkoss.zk.ui.versionInfo.enabled", "true");
+    ]]></zscript>
+    <label multiline="true">
+        1. org.zkoss.zk.ui.versionInfo.enabled = ${enabled} (ensure it's not true first, setting in zk.xml)
+        2. Check URL in zk log.
+        3. If the URL just ends with "zkau/web/js/zul.inp.wpd", the test failed.
+        4. If the URL is like "zkau/web/_zvXXXXX/js/zul.inp.wpd", the test is successful.
+    </label>
+    <textbox/>
+    <script><![CDATA[
+    zk.afterLoad(function() {
+        zk.log(jq("script[src$=\"zul.inp.wpd\"]").attr("src"));
+    });
+    ]]></script>
+</zk>
