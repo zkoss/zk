@@ -44,6 +44,7 @@ Mar 5, 2019
   ZK-3629: Indeterminate progressmeter
   ZK-3540: FormProxy - ignore whole class hierarchies
   ZK-4200: Improve ZEL ImportHandler performance
+  ZK-4223: grid with vflex has unwanted margin
 
 * Bugs
   ZK-4114: orgnode label missing font styles
