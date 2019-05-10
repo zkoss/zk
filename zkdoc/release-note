@@ -25,6 +25,7 @@ ZK 8.6.2
   ZK-4271: native fileupload flag ignored for button/menuitem
   ZK-4220: UploadEvent.getMedia().getByteData() throws an unexpected exception when uploading
   ZK-4224: listheader sortDirection not working when template is used
+  ZK-4240: Vertical tabbox in invisible comp has big height when onShow
 
 * Upgrade Notes
 
