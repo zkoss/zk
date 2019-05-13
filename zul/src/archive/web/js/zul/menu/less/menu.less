@@ -75,13 +75,6 @@
 			border-top: 1px solid @menuSeparatorBorderColor;
 			line-height: 0;
 		}
-		.z-menu {
-			&-icon {
-				right: 8px;
-				top: 8px;
-				position: absolute;
-			}
-		}
 	}
 }
 
@@ -93,7 +86,6 @@
 		font-size: @fontSizeLarge;
 		font-weight: normal;
 		display: inline-block;
-		line-height: @baseIconHeight;
 		
 		// align for img + text
 		img ~ & {
@@ -115,7 +107,7 @@
 		border: 1px solid transparent;
 		.borderRadius(@baseBorderRadius);
 		padding: 6px 12px;
-		line-height: @baseLineHeight - 2;
+		line-height: @fontSizeLarge; // menu-icon height
 		position: relative;
 		cursor: pointer;
 		text-decoration: none;
@@ -138,7 +130,7 @@
 
 	// icon sclass
 	&-content i {
-		vertical-align: text-bottom;
+		margin-right: 8px;
 	}
 }
 .z-menu {
@@ -172,13 +164,8 @@
 	&-icon {
 		font-size: @fontSizeLarge;
 		position: absolute;
-		top: 8px;
-		right: 8px;
-	}
-	&-icon,
-	&-icon:hover,
-	&-icon:active {
-		vertical-align: text-bottom;
+		right: 0;
+		top: 7px;
 	}
 	&-selected > &-content {
 		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
@@ -252,7 +239,7 @@
 		display: none;
 		position: absolute;
 		top: 8px;
-		left: 13px;
+		left: 14px;
 	}
 	.z-menuseparator {
 		font-size: 1px;
