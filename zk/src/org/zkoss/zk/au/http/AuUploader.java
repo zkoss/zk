@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,7 @@ import org.zkoss.video.AVideo;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
@@ -158,8 +160,6 @@ public class AuUploader implements AuExtension {
 						final Map<String, Object> params = parseRequest(request, desktop, uuid + '_' + sid);
 						nextURI = (String) params.get("nextURI");
 
-						// Bug 3054784
-						params.put("native", request.getParameter("native"));
 						processItems(desktop, params, attrs);
 					}
 				}
@@ -277,7 +277,7 @@ public class AuUploader implements AuExtension {
 	private static final void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
 			throws IOException {
 		final List<Media> meds = new LinkedList<Media>();
-		final boolean alwaysNative = "true".equals(params.get("native"));
+		final boolean alwaysNative = Boolean.TRUE.equals(params.get("native"));
 		final Object fis = params.get("file");
 		if (fis instanceof FileItem) {
 			meds.add(processItem(desktop, (FileItem) fis, alwaysNative,
@@ -425,13 +425,16 @@ public class AuUploader implements AuExtension {
 
 		sfu.setProgressListener(fty.new ProgressCallback());
 
+		Component comp = desktop.getComponentByUuid(request.getParameter("uuid"));
 		Integer maxsz = null;
 		try {
-			Integer compMaxsz = (Integer) desktop.getComponentByUuid(request.getParameter("uuid"))
-					.getAttribute(Attributes.UPLOAD_MAX_SIZE);
+			Integer compMaxsz = (Integer) comp.getAttribute(Attributes.UPLOAD_MAX_SIZE);
 			maxsz = compMaxsz != null ? compMaxsz : conf.getMaxUploadSize();
 		} catch (NumberFormatException e) {
 			throw new UiException("The upload max size must be a number");
+		}
+		if (Boolean.TRUE.equals(comp.getAttribute(Attributes.UPLOAD_NATIVE))) {
+			params.put("native", true);
 		}
 
 		sfu.setSizeMax(maxsz != null ? (maxsz >= 0 ? 1024L * maxsz : -1) : -1);

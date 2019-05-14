@@ -22,6 +22,8 @@ ZK 8.6.2
   ZK-4287: resource caching broken when hiding zk version
   ZK-4199: Improve AU response parse error message
   ZK-4239: Weird animation in Calendar
+  ZK-4271: native fileupload flag ignored for button/menuitem
+  ZK-4220: UploadEvent.getMedia().getByteData() throws an unexpected exception when uploading
 
 * Upgrade Notes
 
