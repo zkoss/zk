@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4240.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 09 11:25:38 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul" />
+    <label multiline="true">
+        1. You can navigate to Tab 99 and select it.
+    </label>
+    <zscript><![CDATA[
+        List items = Collections.nCopies(100, "");
+    ]]></zscript>
+    <tabbox orient="left" width="300px" height="300px">
+        <tabs width="100px">
+            <forEach items="${items}" varStatus="level1">
+                <tab label="${level1.index}"/>
+            </forEach>
+        </tabs>
+        <tabpanels>
+        </tabpanels>
+    </tabbox>
+    <label multiline="true">
+        2. Follow the instructions below and open the first panel to check.
+    </label>
+    <apply templateURI="/test2/B50-3022274.zul" />
+</zk>
