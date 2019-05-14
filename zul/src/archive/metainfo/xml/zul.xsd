@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.0.201811151240">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.2.201905131112">
 	<!--
 	SIMPLETYPE
 	-->
@@ -2789,7 +2789,7 @@
 					<xs:enumeration value="top" />
 					<xs:enumeration value="left" />
 					<xs:enumeration value="right" />
-					<xs:enumeration value="down" />
+					<xs:enumeration value="bottom" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
