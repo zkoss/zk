@@ -34,6 +34,7 @@ ZK 8.6.2
   ZK-4233: Messagebox show called inside include in defer mode doesn't show if include is refreshed
   ZK-4255: MVVM constraints output Expectable exceptions to log
   ZK-4292: Dates.newInstance() returns an incorrect year when the year is less than 100
+  ZK-4285: vflex min causes an unnecessary vertical scrollbar on a listbox
 
 * Upgrade Notes
 
