@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4224.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Tue May 07 15:12:05 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. You should see column "Code" has a sorting direction icon indicator.
+        2. If you can't see it, it is a bug.
+    </label>
+    <zscript><![CDATA[
+    class Product {
+        private String code;
+        private String description;
+
+        public Product(String code, String description) {
+            this.code = code;
+            this.description = description;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
+
+    Product[] products = new Product[] {
+        new Product("01", "ZZZ"),
+        new Product("02", "AAA")
+    };
+    ListModel model = new ListModelList(Arrays.asList(products));
+    TreeModel modelTree = new DefaultTreeModel(
+        new DefaultTreeNode(null,
+            new DefaultTreeNode[] {
+                new DefaultTreeNode(new Product("01", "ZZZ")),
+                new DefaultTreeNode(new Product("02", "AAA")),
+            }
+        )
+    );
+    ]]></zscript>
+    <hlayout>
+        <vlayout hflex="1">
+            <listbox model="${model}">
+                <listhead>
+                    <listheader label="Code" sort="auto(code)" sortDirection="ascending" />
+                    <listheader label="Description" sort="auto(description)" />
+                </listhead>
+                <template name="model">
+                    <listitem>
+                        <listcell label="${each.code}" />
+                        <listcell label="${each.description}" />
+                    </listitem>
+                </template>
+            </listbox>
+            <grid model="${model}">
+                <columns>
+                    <column label="Code" sort="auto(code)" sortDirection="ascending" />
+                    <column label="Description" sort="auto(description)" />
+                </columns>
+                <template name="model">
+                    <row>
+                        <label value="${each.code}" />
+                        <label value="${each.description}" />
+                    </row>
+                </template>
+            </grid>
+            <tree model="${modelTree}">
+                <treecols>
+                    <treecol label="Code" sort="auto(code)" sortDirection="ascending" />
+                    <treecol label="Description" sort="auto(description)" />
+                </treecols>
+                <template name="model">
+                    <treeitem>
+                        <treerow>
+                            <treecell label="${each.data.code}" />
+                            <treecell label="${each.data.description}" />
+                        </treerow>
+                    </treeitem>
+                </template>
+            </tree>
+        </vlayout>
+        <vlayout hflex="1">
+            <listbox model="${model}">
+                <custom-attributes org.zkoss.zul.listbox.rod="false" />
+                <listhead>
+                    <listheader label="Code" sort="auto(code)" sortDirection="ascending" />
+                    <listheader label="Description" sort="auto(description)" />
+                </listhead>
+                <template name="model">
+                    <listitem>
+                        <listcell label="${each.code}" />
+                        <listcell label="${each.description}" />
+                    </listitem>
+                </template>
+            </listbox>
+            <grid model="${model}">
+                <custom-attributes org.zkoss.zul.grid.rod="false"/>
+                <columns>
+                    <column label="Code" sort="auto(code)" sortDirection="ascending" />
+                    <column label="Description" sort="auto(description)" />
+                </columns>
+                <template name="model">
+                    <row>
+                        <label value="${each.code}" />
+                        <label value="${each.description}" />
+                    </row>
+                </template>
+            </grid>
+            <tree model="${modelTree}">
+                <custom-attributes org.zkoss.zul.tree.client.rod="false"/>
+                <treecols>
+                    <treecol label="Code" sort="auto(code)" sortDirection="ascending" />
+                    <treecol label="Description" sort="auto(description)" />
+                </treecols>
+                <template name="model">
+                    <treeitem>
+                        <treerow>
+                            <treecell label="${each.data.code}" />
+                            <treecell label="${each.data.description}" />
+                        </treerow>
+                    </treeitem>
+                </template>
+            </tree>
+        </vlayout>
+    </hlayout>
+</zk>
