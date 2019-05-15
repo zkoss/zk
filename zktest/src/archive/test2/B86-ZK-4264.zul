@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4264.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 15 16:32:41 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		resize the browser, the horizontal scrollbar (of the listbox) should not disappear.
+	</label>
+	<div width="700px" height="500px">
+		<listbox vflex="1" rows="20">
+			<listhead>
+				<listheader label="column" width="300px"/>
+				<listheader label="column" width="300px"/>
+				<listheader label="column" width="300px"/>
+			</listhead>
+			<listitem>
+				<listcell label="cell"/>
+				<listcell label="cell"/>
+				<listcell label="cell"/>
+			</listitem>
+		</listbox>
+	</div>
+</zk>

@@ -1093,10 +1093,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	onSize: function () {
 		var devicePixelRatio = zUtl.getDevicePixelRatio();
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
-			var n = this.$n();
+			var n = this.$n(),
+				ebody = this.ebody;
 			if (n._lastsz && n._lastsz.height == n.offsetHeight
 					&& n._lastsz.width == n.offsetWidth
-					&& this._lastDevicePixelRatio == devicePixelRatio) {
+					&& this._lastDevicePixelRatio == devicePixelRatio
+					&& n._lastsz.bodyHeight == ebody.offsetHeight) {
 				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
 			}
@@ -1244,7 +1246,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._calcHgh(); // recalculate height again ZK-796
 		}
 
-		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
+		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth, bodyHeight: ebody.offsetHeight}; // cache for the dirty resizing.
 
 		this._afterCalcSize();
 	},

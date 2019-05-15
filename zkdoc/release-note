@@ -28,6 +28,7 @@ ZK 8.6.2
   ZK-4240: Vertical tabbox in invisible comp has big height when onShow
   ZK-4231: XSD contains incorrect option for tabbox orientation
   ZK-4251: menu arrow not centered in breeze
+  ZK-4264: listbox size conflict when using both vflex and rows
 
 * Upgrade Notes
 
