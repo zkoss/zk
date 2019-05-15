@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4241.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 15 14:35:11 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    List list = new ArrayList();
+    for (int i = 0; i < 100; i++) {
+        list.add("item" + i);
+    }
+    ListModel listModel = new SimpleListModel(list);
+]]></zscript>
+    <window height="100%" width="100%">
+        <div vflex="1">
+            <label multiline="true">
+                1. Click button "Click to Popup".
+                2. Scroll the listbox in the popup to trigger a ROD loading.
+                3. The position of popup shouldn't be changed.
+            </label>
+        </div>
+        <div align="center">
+            <button label="Click to Popup" popup="mypopup"/>
+        </div>
+        <popup id="mypopup" width="380px">
+            <listbox rows="10" model="${listModel}">
+                <listhead>
+                    <listheader label="Header" sort="auto" />
+                </listhead>
+            </listbox>
+        </popup>
+    </window>
+</zk>

@@ -35,6 +35,7 @@ ZK 8.6.2
   ZK-4255: MVVM constraints output Expectable exceptions to log
   ZK-4292: Dates.newInstance() returns an incorrect year when the year is less than 100
   ZK-4285: vflex min causes an unnecessary vertical scrollbar on a listbox
+  ZK-4241: The position of popup is changed after a ROD loading
 
 * Upgrade Notes
 
