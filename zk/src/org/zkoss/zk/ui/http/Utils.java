@@ -123,6 +123,23 @@ public class Utils {
 		return firstDayOfWeek;
 	}
 
+	/**
+	 * Returns the start year only for the format using "yy" pattern, change the parse result in the 100 years span after that year.
+	 * 2DigitYearStart should not be negative.
+	 * for example, start year 1950 will parse [0-49] : 2000-2049 and [50-99] : 1950-1999
+	 * <p>Default: 1929
+	 * <p>Library property: {@link Attributes#PREFERRED_2DIGITYEARSTART}</p>
+	 * @since 8.6.2
+	 */
+	public static final int get2DigitYearStart() throws NumberFormatException {
+		String value = Library.getProperty(Attributes.PREFERRED_2DIGITYEARSTART, "1929");
+		int yearStart = Integer.parseInt(value);
+		if (yearStart < 0) {
+			throw new IllegalArgumentException("Library property: 2DigitYearStart should not be negative");
+		}
+		return yearStart;
+	}
+
 	/** Handles exception being thrown when rendering a page.
 	 * @param ex the exception being throw. If null, it means the page
 	 * is not found.

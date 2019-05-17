@@ -238,7 +238,13 @@ zk.fmt.Date = {
 
 					if (!isNaN(nv = _parseInt(token))) {
 						y = Math.min(nv, 200000); // Bug B50-3288904: js year limit
-						if (y < 100) y += y > 29 ? 1900 : 2000;
+						if (y < 100) {
+							// ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
+							var twoDigitYearStart = zk.TDYS,
+								lowerBoundary = (Math.floor(twoDigitYearStart / 100) * 100) + y,
+								upperBoundary = lowerBoundary + 100;
+							y = lowerBoundary > twoDigitYearStart ? lowerBoundary : upperBoundary;
+						}
 					}
 					break;
 				case 'M':

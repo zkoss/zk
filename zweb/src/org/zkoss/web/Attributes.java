@@ -52,6 +52,12 @@ public class Attributes {
 	 */
 	public static final String PREFERRED_FIRST_DAY_OF_WEEK = "org.zkoss.web.preferred.firstDayOfWeek";
 
+	/** The library property used to store the preferred 2DigitYearStart.
+	 * <p>Default: 1929
+	 * @since 8.6.2
+	 */
+	public static final String PREFERRED_2DIGITYEARSTART = "org.zkoss.web.preferred.2DigitYearStart";
+
 	/** The session attribute used to specify the class used to return
 	 * the formats of date, time or both for datebox and timebox.
 	 * The class must implement {@link org.zkoss.text.DateFormatInfo}.

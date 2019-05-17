@@ -779,4 +779,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<system-config>
 		<failover-manager-class>org.zkoss.zktest.test.DumbFailoverManager</failover-manager-class>
 	</system-config>
+
+	<!-- for F86-ZK-4235.zul -->
+	<!--<library-property>-->
+		<!--<name>org.zkoss.web.preferred.2DigitYearStart</name>-->
+		<!--<value>1950</value>-->
+	<!--</library-property>-->
 </zk>
