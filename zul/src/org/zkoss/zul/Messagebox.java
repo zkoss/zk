@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
@@ -152,8 +153,9 @@ public class Messagebox {
 	public static Button show(String message, String title, Button[] buttons, String[] btnLabels, String icon,
 			Button focus, EventListener<ClickEvent> listener, Map<String, String> params) {
 		final Map<String, Object> arg = new HashMap<String, Object>();
+		final Desktop desktop = Executions.getCurrent().getDesktop();
 		arg.put("message", message);
-		arg.put("title", title != null ? title : Executions.getCurrent().getDesktop().getWebApp().getAppName());
+		arg.put("title", title != null ? title : desktop.getWebApp().getAppName());
 		arg.put("icon", icon);
 
 		if (buttons == null)
@@ -172,8 +174,8 @@ public class Messagebox {
 
 		if (params != null)
 			arg.putAll(params);
-
-		final MessageboxDlg dlg = (MessageboxDlg) Executions.createComponents(_templ, null, arg);
+		
+		final MessageboxDlg dlg = (MessageboxDlg) Executions.createComponents(_templ, desktop.getFirstPage(), null, arg)[0];
 		dlg.setEventListener(listener);
 		dlg.setButtons(buttons, btnLabels);
 		if (focus != null)
