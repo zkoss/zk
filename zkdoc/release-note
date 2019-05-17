@@ -4,6 +4,7 @@ ZK 8.6.2
   ZK-4132: Add Manifest to OSGI source bundle
   ZK-4212: Frozen support right columns freeze
   ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
+  ZK-4296: Error indicating incorrect usage when using both vflex and rows
 
 * Bugs
   ZK-4230: Signature toolbarVisible not work

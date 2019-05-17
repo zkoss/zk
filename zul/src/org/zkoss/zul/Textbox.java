@@ -19,6 +19,7 @@ package org.zkoss.zul;
 import java.util.HashMap;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.IntPropertyAccess;
@@ -111,8 +112,12 @@ public class Textbox extends InputElement {
 	}
 
 	/** Sets the rows.
+	 * <p>
+	 * Note: Not allowed to set rows and height/vflex at the same time
 	 */
 	public void setRows(int rows) throws WrongValueException {
+		checkBeforeSetRows();
+
 		if (rows <= 0)
 			throw new WrongValueException("Illegal rows: " + rows);
 
@@ -122,6 +127,17 @@ public class Textbox extends InputElement {
 				setMultiline(true); //auto-enable
 			smartUpdate("rows", getRows());
 		}
+	}
+
+	/**
+	 * Internal check if there is any use of vflex and height before setRows
+	 */
+	protected void checkBeforeSetRows() throws UiException { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
+		if (this.getVflex() != null)
+			throw new UiException("Not allowed to set rows and vflex at the same time");
+		
+		if (this.getHeight() != null)
+			throw new UiException("Not allowed to set rows and height at the same time");
 	}
 
 	/** Returns whether it is multiline.
@@ -185,6 +201,22 @@ public class Textbox extends InputElement {
 			initAuxInfo().submitByEnter = submitByEnter;
 			smartUpdate("submitByEnter", isSubmitByEnter());
 		}
+	}
+
+	@Override
+	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
+		if (this.getRows() != 1)
+			throw new UiException("Not allowed to set vflex and rows at the same time");
+
+		super.setVflex(flex);
+	}
+
+	@Override
+	public void setHeight(String height) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
+		if (this.getRows() != 1)
+			throw new UiException("Not allowed to set height and rows at the same time");
+		
+		super.setHeight(height);
 	}
 
 	//Cloneable//

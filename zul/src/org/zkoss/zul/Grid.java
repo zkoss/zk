@@ -425,6 +425,14 @@ public class Grid extends MeshElement {
 		}
 	}
 
+	@Override
+	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
+		if (_visibleRows != 0)
+			throw new UiException("Not allowed to set vflex and visibleRows at the same time");
+		
+		super.setVflex(flex);
+	}
+
 	/**
 	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 * @param fixedLayout true to outline this grid by browser
@@ -512,11 +520,13 @@ public class Grid extends MeshElement {
 	}
 
 	/** Sets the visible rows.
-	 * <p>Note: if both {@link #setHeight} is specified with non-empty,
-	 * {@link #setVisibleRows(int)} is ignored
+	 * <p>
+	 * Note: Not allowed to set visibleRows and height/vflex at the same time
 	 * @since 8.5.0
 	 */
 	public void setVisibleRows(int visibleRows) throws WrongValueException {
+		checkBeforeSetRows();
+
 		if (visibleRows < 0)
 			throw new WrongValueException("Illegal rows: " + visibleRows);
 
@@ -524,6 +534,14 @@ public class Grid extends MeshElement {
 			_visibleRows = visibleRows;
 			smartUpdate("rows", _visibleRows);
 		}
+	}
+
+	@Override
+	public void setHeight(String height) {
+		if (_visibleRows != 0)
+			throw new UiException("Not allowed to set height and visibleRows at the same time");
+		
+		super.setHeight(height);
 	}
 
 	//--Paging--//

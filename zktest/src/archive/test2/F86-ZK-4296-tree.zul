@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4296-tree.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 21 12:25:14 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Not allowed to set rows and vflex or height at the same time in a Tree:
+		try the buttons below, rows/vflex/height should not use at the same time
+		only vflex="min" with height is not restricted
+		otherwise you should see an error message
+	</label>
+	<button label="setRows(20)" onClick="tr.setRows(20);" />
+	<button label="setRows(0)" onClick="tr.setRows(0);" />
+	<separator/>
+	<button label='setHeight(200px)' onClick='tr.setHeight("200px")' />
+	<button label='setHeight(null)' onClick='tr.setHeight(null)' />
+	<separator/>
+	<button label="setVflex(1)" onClick='tr.setVflex("1");' />
+	<button label="setVflex(min)" onClick='tr.setVflex("min");' />
+	<button label="setVflex(null)" onClick='tr.setVflex(null);' />
+	<div width="700px" height="500px">
+		<tree id="tr">
+			<auxhead>
+				<auxheader label="A+B" colspan="2"/>
+				<auxheader label="C"/>
+			</auxhead>
+			<treecols>
+				<treecol label="Align Left" align="left"/>
+				<treecol label="Align Center" align="center"/>
+				<treecol label="Align Right" align="right"/>
+			</treecols>
+			<auxhead>
+				<auxheader label="C"/>
+				<auxheader label="D + E" colspan="2"/>
+			</auxhead>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="AA01"/>
+						<treecell label="BB01"/>
+						<treecell label="CC01"/>
+					</treerow>
+					<treechildren>
+						<treeitem selected="true">
+							<treerow>
+								<treecell label="A-1"/>
+								<treecell label="B"/>
+								<treecell label="C"/>
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="A-2"/>
+								<treecell label="B"/>
+								<treecell label="C"/>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="AA02"/>
+						<treecell/>
+						<treecell/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+			<treefoot>
+				<treefooter label="footer 1"/>
+				<treefooter label="image" image="/img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+							hoverImage="/img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+				<treefooter label="image" image="/img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+							hoverImage="/img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+			</treefoot>
+		</tree>
+	</div>
+</zk>

@@ -662,6 +662,14 @@ public class Listbox extends MeshElement {
 		}
 	}
 
+	@Override
+	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
+		if (_rows != 0)
+			throw new UiException("Not allowed to set vflex and rows at the same time");
+
+		super.setVflex(flex);
+	}
+
 	/**
 	 * Returns whether it is disabled.
 	 * <p>
@@ -694,17 +702,26 @@ public class Listbox extends MeshElement {
 	/**
 	 * Sets the rows.
 	 * <p>
-	 * Note: if both {@link #setHeight} is specified with non-empty,
-	 * {@link #setRows} is ignored
+	 * Note: Not allowed to set rows and height/vflex at the same time
 	 */
 	public void setRows(int rows) throws WrongValueException {
-		if (rows < 0)
-			throw new WrongValueException("Illegal rows: " + rows);
+		checkBeforeSetRows();
 
+		if (rows < 0) {
+			throw new WrongValueException("Illegal rows: " + rows);
+		}
 		if (_rows != rows) {
 			_rows = rows;
 			smartUpdate("rows", _rows);
 		}
+	}
+
+	@Override
+	public void setHeight(String height) {
+		if (_rows != 0)
+			throw new UiException("Not allowed to set height and rows at the same time");
+
+		super.setHeight(height);
 	}
 
 	/**
