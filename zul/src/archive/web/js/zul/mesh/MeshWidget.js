@@ -1962,6 +1962,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._bottomBoundary = this._bottomBoundary == undefined ? body.scrollHeight : this._bottomBoundary;
 			body.scrollTop += (this._bottomBoundary - body.scrollTop) / 2;
 		}
+	},
+	getContentEdgeHeight_: function () {
+		var height = this.$supers('getContentEdgeHeight_', arguments),
+			efoot = this.efoot;
+		if (efoot) {
+			var zkefoot = zk(efoot);
+			height += zkefoot.padBorderHeight() + zkefoot.sumStyles('tb', jq.margins);
+		}
+		return height;
+	},
+	afterChildrenMinFlex_: function (o) {
+		var n = this.$n();
+		if (o == 'h') {
+			n.style.height = jq.px0(Math.ceil(this._vflexsz));
+		}
 	}
 }, {
 	WIDTH0: zk.webkit ? '0.001px' : '0px',
