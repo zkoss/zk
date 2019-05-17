@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4255.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 14 12:27:21 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		click the "test" button and check your server console, you should see no error from org.zkoss.bind.impl.ParamCall call.
+		(if there is an error from org.zkoss.bind.impl.BinderImpl$CommandEventListener onEvent that is expected)
+	</label>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B86_ZK_4255VM')">
+		<textbox id="tb"/>
+		<button label="test" onClick="@command('doDisplay', argValue=tb)"/>
+	</div>
+</zk>

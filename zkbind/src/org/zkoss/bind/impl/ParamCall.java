@@ -38,6 +38,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.OperationException;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.select.Selectors;
 
@@ -153,7 +154,11 @@ public class ParamCall {
 			Throwable c = invokEx.getCause();
 			if (c == null)
 				c = invokEx;
-			_log.error("", c);
+			if (c instanceof OperationException) { //ZK-4255: Expectable exceptions
+				_log.debug("", c);
+			} else {
+				_log.error("", c);
+			}
 			throw UiException.Aide.wrap(c);
 		} catch (Exception e) {
 			_log.error("", e);
