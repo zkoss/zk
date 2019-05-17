@@ -39,6 +39,7 @@ ZK 8.6.2
   ZK-4244: Dropupload: $img is undefined after ZK-2332
   ZK-4270: vertical tabbox, toolbar causing JS error
   ZK-4245: ZK-2804 regression since 8.6.1
+  ZK-4278: ZK animation uses "complete" callback. should use always instead
 
 * Upgrade Notes
 

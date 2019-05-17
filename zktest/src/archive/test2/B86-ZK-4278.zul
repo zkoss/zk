@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4278.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri May 17 09:59:35 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client" xmlns:ca="client/attribute">
+	<script>
+		zk.afterLoad('zul.wnd', function () {
+			var _xPanel = {};
+			zk.override(zul.wnd.Panel.prototype, _xPanel, {
+				afterAnima_: function (visible) {
+					this.$supers('afterAnima_', arguments);
+					zk.log('afterAnima_ is triggered');
+				}
+			});
+		});
+	</script>
+	<label multiline="true">
+		afterAnima should be triggered even if the animation ends without completing for any reason:
+		1. click the expand icon on the top right to start the panel slideUp animation
+		2. click the "stopAnima" button before the panel Completely collapsed to stop the animation
+		3. you should see "afterAnima_ is triggered" in log
+	</label>
+	<panel closable="false" border="normal" collapsible="true" ca:data-animationspeed="5000">
+		<caption>Panel</caption>
+		<panelchildren>
+			Panel
+		</panelchildren>
+	</panel>
+	<button label="stopAnima" w:onClick="$('.z-panel-body').stop();"/>
+</zk>
