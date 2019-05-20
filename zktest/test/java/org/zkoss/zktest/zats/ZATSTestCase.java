@@ -11,22 +11,28 @@ import org.zkoss.zats.mimic.DesktopAgent;
 import org.zkoss.zats.mimic.ZatsEnvironment;
 
 public abstract class ZATSTestCase {
-	protected static ZatsEnvironment env;
+	private static ThreadLocal<ZatsEnvironment> env = new ThreadLocal<>();
 	
 	@BeforeClass
 	public static void init() {
-		env = new DefaultZatsEnvironment("./src/archive/WEB-INF", "/zktest");
-		env.init("./src/archive/");
+		ZatsEnvironment zatsEnvironment = new DefaultZatsEnvironment("./src/archive/WEB-INF", "/zktest");
+		zatsEnvironment.init("./src/archive/");
+		env.set(zatsEnvironment);
 	}
 	
 	@AfterClass
 	public static void end() {
-		env.destroy();
+		ZatsEnvironment zatsEnvironment = env.get();
+		if (zatsEnvironment != null)
+			zatsEnvironment.destroy();
+		env.set(null);
 	}
 	
 	@After
 	public void after() {
-		env.cleanup();
+		ZatsEnvironment zatsEnvironment = env.get();
+		if (zatsEnvironment != null)
+			zatsEnvironment.cleanup();
 	}
 	
 	public DesktopAgent connect() {
@@ -34,25 +40,26 @@ public abstract class ZATSTestCase {
 	}
 	
 	public DesktopAgent connect(String location){
+		ZatsEnvironment zatsEnvironment = env.get();
 		if (location == null || location.length() <= 0) {
 			String filePath = getFileLocation();
 			try {
-				return env.newClient().connect(filePath);
+				return zatsEnvironment.newClient().connect(filePath);
 			} catch (RuntimeException e) {
 				try {
 					if (e.getCause() instanceof FileNotFoundException)
-						return env.newClient().connect(filePath.replace("_", "-"));
+						return zatsEnvironment.newClient().connect(filePath.replace("_", "-"));
 					else
 						throw e;
 				} catch (RuntimeException e2) {
 					if (e2.getCause() instanceof FileNotFoundException)
-						return env.newClient().connect(filePath.replace("-", "_"));
+						return zatsEnvironment.newClient().connect(filePath.replace("-", "_"));
 					else
 						throw e2;
 				}
 			}
 		} else
-			return env.newClient().connect(location);
+			return zatsEnvironment.newClient().connect(location);
 	}
 
 	protected String getFileLocation() {

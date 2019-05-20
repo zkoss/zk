@@ -13,8 +13,6 @@ package org.zkoss.zktest.zats.zuti;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.zkoss.zats.mimic.ComponentAgent;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
@@ -58,16 +56,7 @@ public class ZutiBasicTestCase extends ZATSTestCase {
 		}
 		return total;
 	}
-	@AfterClass
-	public static void end() {
-		env.destroy();
-	}
 
-	@After
-	public void after() {
-		env.cleanup();
-	}
-	
 	protected void checkVerifier(Component target, Class<? extends Verifier>... verifiers) {
 		if (target == null) return; // do nothing
 		AbstractComponent host = (AbstractComponent) target;
