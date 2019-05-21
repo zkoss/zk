@@ -57,6 +57,7 @@ ZK 8.6.2
   ZK-4211: listbox selection causes invalidate
   ZK-4303: Include in defer mode fails if src is modified while the page is still loading
   ZK-4300: Choosing Jan 1st, 1900 results in wrong year in format yy Datebox
+  ZK-4297: nonselectableTags doesn't prevent selection
 
 * Upgrade Notes
 

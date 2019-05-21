@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4297.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 21 11:41:33 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Browse with mobile devices or using mobile emulation.
+        2. Click the first textbox.
+        3. The listitem shouldn't be selected (The background is hovered style. you can distinguish it with a selected item).
+    </label>
+    <listbox checkmark="true" nonselectableTags="*">
+        <listitem>
+            <listcell>
+                <textbox/>
+            </listcell>
+        </listitem>
+        <listitem selected="true">
+            <listcell>
+                <button label="button"/>
+            </listcell>
+        </listitem>
+        <listitem>
+            <listcell>
+                <h:input xmlns:h="native"/>
+            </listcell>
+        </listitem>
+        <listitem>
+            <listcell>
+                you can copy the text with ctrl+c
+            </listcell>
+        </listitem>
+    </listbox>
+</zk>

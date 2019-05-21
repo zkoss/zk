@@ -86,7 +86,7 @@
 @meshTitleActiveBackgroundColor: @colorPrimaryDark;
 @meshTitleBorderColor:         @colorPrimaryDark;
 @meshContentBorderColor:       @colorGreyLighter;
-@meshContentFocusBackgroundColor: @colorPrimaryLighter;
+@meshContentFocusBackgroundColor: @selectedBackgroundColor;
 @meshFootBackgroundColor:      @colorGreyLighter;
 @meshGroupColor:               @textColorLight;
 @meshGroupBorderColor:         @colorGreyLight;
@@ -139,7 +139,7 @@
 // Selected (used on listbox, tree, comboitem)
 @selectedColor:                @baseTextColor;
 @selectedBorderColor:          transparent;
-@selectedBackgroundColor:      @colorPrimaryLighter;
+@selectedBackgroundColor:      lighten(@colorPrimaryLighter, 3%);
 
 // Selected Hover (used on listbox, tree, comboitem)
 @selectedHoverColor:           @baseTextColor;
@@ -149,7 +149,7 @@
 // Selected Focus (used on listbox, tree, comboitem)
 @selectedFocusColor:           @baseTextColor;
 @selectedFocusBorderColor:     transparent;
-@selectedFocusBackgroundColor: @colorPrimaryLighter;
+@selectedFocusBackgroundColor: @selectedBackgroundColor;
 
 // Checked (used on menuitem, listbox, tree, toolbarbutton)
 @checkedIconSize:              @fontSizeLarge;
