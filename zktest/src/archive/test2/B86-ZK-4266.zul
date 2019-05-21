@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4266.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 13 12:41:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Scroll very fast, sometimes the scroll position is not sync.
+	</label>
+	<grid id="grid" width="300px">
+		<columns>
+			<column label="col 1" width="150px"/>
+			<column label="col 2" width="150px"/>
+			<column label="col 3" align="center" width="150px"/>
+			<column label="col 4" align="right" width="150px"/>
+		</columns>
+		<frozen columns="1"/>
+		<rows>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+		</rows>
+	</grid>
+</zk>
