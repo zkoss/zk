@@ -687,19 +687,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			if (pp.offsetWidth > wd)
 				pp.style.width = wd;
 		}
-		var inp = db.getInputNode(),
-			dbEl = db.$n();
 		delete db._shortcut;
 
 		var fmt = db.getTimeFormat(),
 			tz = db.getTimeZone(),
-			unf = Datebox._unformater,
-			value = unf ? unf(inp.value) : null;
-		//we should use UTC date instead of Locale date to our value.
-		if (!value)
-			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value, this._localizedSymbols, tz), this._localizedSymbols).toUTCDate()
-				|| (inp.value ? db._value : zUtl.today(fmt, tz));
-
+			value = db._value;
 		if (value)
 			this.setValue(value);
 		if (fmt) {
