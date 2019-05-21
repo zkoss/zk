@@ -48,8 +48,8 @@
 
 @colorPrimary:                 #0093F9;
 @colorPrimaryDark:             #0064ED; //darken(@colorPrimary, 20%);
-@colorPrimaryLight:            #4FB7FF; //lighten(@colorPrimary, 20%);
-@colorPrimaryLighter:          #E8F5FF; // List hover Bg
+@colorPrimaryLight:            lighten(@colorPrimary, 25%);
+@colorPrimaryLighter:          lighten(@colorPrimary, 45%); // List hover Bg
 @colorAccent:                  #FFA516;
 @colorAccent2:                 #FF4051;
 @colorAccent3:                 #261429; // Tooltip Bg
@@ -82,11 +82,11 @@
 @meshStripeBackgroundColor:    @meshBackgroundColor;
 @meshTitleColor:               @textColorDefault3;
 @meshTitleBackgroundColor:     @colorPrimary;
-@meshTitleHoverBackgroundColor:@colorPrimaryLight;
+@meshTitleHoverBackgroundColor:@colorPrimaryLighter;
 @meshTitleActiveBackgroundColor: @colorPrimaryDark;
 @meshTitleBorderColor:         @colorPrimaryDark;
 @meshContentBorderColor:       @colorGreyLighter;
-@meshContentFocusBackgroundColor: @colorPrimaryLighter;
+@meshContentFocusBackgroundColor: @selectedBackgroundColor;
 @meshFootBackgroundColor:      @colorGreyLighter;
 @meshGroupColor:               @textColorLight;
 @meshGroupBorderColor:         @colorGreyLight;
@@ -139,17 +139,17 @@
 // Selected (used on listbox, tree, comboitem)
 @selectedColor:                @baseTextColor;
 @selectedBorderColor:          transparent;
-@selectedBackgroundColor:      @colorPrimaryLighter;
+@selectedBackgroundColor:      @colorPrimaryLight;
 
 // Selected Hover (used on listbox, tree, comboitem)
 @selectedHoverColor:           @baseTextColor;
 @selectedHoverBorderColor:     transparent;
-@selectedHoverBackgroundColor: @colorPrimaryLighter;
+@selectedHoverBackgroundColor: @selectedBackgroundColor;
 
 // Selected Focus (used on listbox, tree, comboitem)
 @selectedFocusColor:           @baseTextColor;
 @selectedFocusBorderColor:     transparent;
-@selectedFocusBackgroundColor: @colorPrimaryLighter;
+@selectedFocusBackgroundColor: @selectedBackgroundColor;
 
 // Checked (used on menuitem, listbox, tree, toolbarbutton)
 @checkedIconSize:              @fontSizeLarge;

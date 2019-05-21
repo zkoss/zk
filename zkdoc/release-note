@@ -24,6 +24,7 @@ ZK 8.6.3
   ZK-4360: Missing onRestore for CKEditor on tabbox accordion specifically
   ZK-4346: datebox constraint parsing errors
   ZK-4312: leaking request/response into wpd cache
+  ZK-4297: Listbox hover and selected style are the same, makes it hard to be distinguished in mobile
 
 * Upgrade Notes
 
