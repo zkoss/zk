@@ -42,6 +42,7 @@ ZK 8.6.2
   ZK-4278: ZK animation uses "complete" callback. should use always instead
   ZK-4266: smooth frozen scroll-click issues
   ZK-4295: a listbox doesn't update selectedItem for a specific item at the first time
+  ZK-4280: databinding EL3 expression with multiple members fails after detached
 
 * Upgrade Notes
 
