@@ -199,7 +199,7 @@ zk.copy(zjq.prototype, {
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
 			.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 250),
-			complete: opts.afterAnima
+			always: opts.afterAnima
 		});
 	},
 	/** Slides up (hide) of the matched DOM element(s).
@@ -254,7 +254,7 @@ zk.copy(zjq.prototype, {
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
 			.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 250),
-			complete: opts.afterAnima
+			always: opts.afterAnima
 		});
 	},
 	/** Slides out (hide) of the matched DOM element(s).
@@ -305,7 +305,7 @@ zk.copy(zjq.prototype, {
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop).jq)
 			.css(css).animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 350),
-			complete: opts.afterAnima
+			always: opts.afterAnima
 		});
 	},
 	/** Slides in (show) of the matched DOM element(s).
@@ -360,7 +360,7 @@ zk.copy(zjq.prototype, {
 		return this._createWrapper(this.defaultAnimaOpts(wgt, opts, prop, true).jq)
 			.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: this.getAnimationSpeed(opts.duration === 0 ? 0 : opts.duration || 350),
-			complete: opts.afterAnima
+			always: opts.afterAnima
 		});
 	},
 	_updateProp: function (prop) { //used by Bandpopup.js
