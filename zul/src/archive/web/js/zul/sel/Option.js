@@ -122,7 +122,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 		//B60-ZK-1303: force update parent's selected index.
 		if (this.isSelected())
-			this.parent._selectedIndex = this._index;
+			this.parent._selectedIndex = this.getOptionIndex_();
 	},
 	/**
 	 * The index for option widget only , not including the listhead.etc
