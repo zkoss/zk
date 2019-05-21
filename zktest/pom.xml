@@ -477,6 +477,13 @@
 			<version>2.2.7</version>
 		</dependency>
 
+		<!-- ZK-4288 -->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
+			<version>2.1.6.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
