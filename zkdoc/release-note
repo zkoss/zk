@@ -38,6 +38,7 @@ ZK 8.6.2
   ZK-4241: The position of popup is changed after a ROD loading
   ZK-4244: Dropupload: $img is undefined after ZK-2332
   ZK-4270: vertical tabbox, toolbar causing JS error
+  ZK-4245: ZK-2804 regression since 8.6.1
 
 * Upgrade Notes
 
