@@ -11,6 +11,11 @@
 	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]></script>
 	<div>
 	 	1. There should be no javascript error on loading
 	</div>

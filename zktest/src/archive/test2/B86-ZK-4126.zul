@@ -13,6 +13,12 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]>
+	</script>
 	Collapse groupbox and panel, you should not see any js error in console
 	<groupbox>
 		<attribute name="onOpen"><![CDATA[
