@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3527-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 29 14:48:38 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zk xmlns:w="client">
+		<label multiline="true">
+			testing for org.zkoss.zk.moment.timezone.path work or not
+			set the library property name:org.zkoss.zk.moment.timezone.path value:/test2/data/2017a.json
+			the daylight savings information should be missing after 2038:
+			1.click the "test1" button, you should not see "Thu Apr 01 2038 00:00:00 GMT-0600" in zk log.
+			2.click the "test2" button, you should not see "Thu Apr 01 2038 00:00:00 GMT+0200" in zk log.
+		</label>
+		<button label="test1" w:onClick="zk.log(zk.mm('2038-04-01T00:00:00-06:00').tz('America/Denver').toString())" />
+		<button label="test2" w:onClick="zk.log(zk.mm('2038-04-01T00:00:00+02:00').tz('Europe/Berlin').toString())" />
+	</zk>
+</zk>
