@@ -46,6 +46,7 @@ ZK 8.6.2
   ZK-4277: Negative values in NumberInputWidgets (JDK >=9)
   ZK-4288: infinite recursion during session deserialization with redis
   ZK-4242: Using short format in Datebox results in the wrong year
+  ZK-4248: Performance issue when ROD adds listcells to body
 
 * Upgrade Notes
 
