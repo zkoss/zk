@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4303.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 27 13:42:26 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Load this page
+        2. Should see "out content" and "in contents #2"
+    </label>
+    <div>
+        out content
+        <include id="inc" src="/test2/B86-ZK-4303-include.zul?val=1"/>
+        <button onClick="inc.invalidate()" label="Try invalidating include"/>
+    </div>
+</zk>

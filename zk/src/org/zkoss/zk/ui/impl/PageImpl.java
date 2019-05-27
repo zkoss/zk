@@ -864,6 +864,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public void redraw(Writer out) throws IOException {
+		if (!isAlive())
+			return;
+
 		String ctl;
 		final Execution exec = getExecution();
 		final boolean au = exec.isAsyncUpdate(null);
