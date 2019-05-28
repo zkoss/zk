@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4300.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 28 12:04:52 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <label multiline="true">
+        1. Open datebox to choose Jan 1st, 1900
+        2. Open datebox again
+        3. The chosen date should be Jan 1st, 1900
+    </label>
+    <div ca:data-animationspeed="0">
+        <datebox format="dd/MM/yyyy" onChange="Clients.log(self.value)"/>
+        <datebox format="dd/MM/yy" onChange="Clients.log(self.value)"/>
+    </div>
+</zk>
