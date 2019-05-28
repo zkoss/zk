@@ -238,13 +238,15 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 		// B65-ZK-1884: Avoid button's animation out of range
 		// B86-ZK-4125: Vertical slider area is not aligned with button
-		var n = this.$n(),
-			wgtDim = isVertical ? n.clientHeight : n.clientWidth,
-			stepDim = wgtDim / (this._maxpos - this._minpos),
-			stepOffset = Math.floor(Math.abs(offset / stepDim));
-		if (stepOffset < 1) stepOffset = 1;
-		var sign = offset >= 0 ? 1 : -1,
-			nextPos = this.$class._getNextPos(this, wgtDim ? stepOffset * stepDim * sign : 0),
+		if (offset != null) {
+			var n = this.$n(),
+				wgtDim = isVertical ? n.clientHeight : n.clientWidth,
+				stepDim = wgtDim / (this._maxpos - this._minpos),
+				stepOffset = Math.floor(Math.abs(offset / stepDim));
+			if (stepOffset < 1) stepOffset = 1;
+			offset = wgtDim ? stepOffset * stepDim * sign : 0;
+		}
+		var nextPos = this.$class._getNextPos(this, offset),
 			speed = $btn.zk.getAnimationSpeed('slow');
 		if (isVertical && zk.parseInt(nextPos.top) > height)
 			nextPos.top = jq.px0(height);
