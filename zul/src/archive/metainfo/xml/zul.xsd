@@ -1035,6 +1035,7 @@
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- bandpopup -->
 	<xs:element name="bandpopup" type="bandpopupType" />
@@ -1445,6 +1446,7 @@
 		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
 		<xs:attribute name="errorMessage" type="xs:string" use="optional" />
 		<xs:attribute name="instantSelect" type="booleanType" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- comboitem -->
 	<xs:element name="comboitem" type="comboitemType" />

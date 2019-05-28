@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -46,6 +47,7 @@ import org.zkoss.zk.ui.event.OpenEvent;
 public class Bandbox extends Textbox {
 	private boolean _autodrop, _btnVisible = true, _open;
 	private String _popupWidth;
+	private String _iconSclass = "z-icon-search";
 
 	static {
 		addClientEvent(Bandbox.class, Events.ON_OPEN, CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -159,6 +161,27 @@ public class Bandbox extends Textbox {
 			throw new UnsupportedOperationException("Bandbox doesn't support multiple rows, " + rows);
 	}
 
+	/**
+	 * Sets the iconSclass name of this Bandbox.
+	 * @param iconSclass String
+	 * @since 8.6.2
+	 */
+	public void setIconSclass(String iconSclass) {
+		if (!Objects.equals(_iconSclass, iconSclass)) {
+			_iconSclass = iconSclass;
+			smartUpdate("iconSclass", iconSclass);
+		}
+	}
+
+	/**
+	 * Returns the iconSclass name of this Bandbox.
+	 * @return the iconSclass name
+	 * @since 8.6.2
+	 */
+	public String getIconSclass() {
+		return _iconSclass;
+	}
+
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-bandbox" : _zclass;
@@ -172,6 +195,8 @@ public class Bandbox extends Textbox {
 			renderer.render("buttonVisible", false);
 		if (_popupWidth != null)
 			renderer.render("popupWidth", _popupWidth);
+		if (!"z-icon-search".equals(_iconSclass))
+			renderer.render("iconSclass", _iconSclass);
 	}
 
 	/** Processes an AU request.
