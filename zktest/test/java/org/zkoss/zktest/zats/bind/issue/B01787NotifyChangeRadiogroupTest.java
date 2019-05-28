@@ -30,9 +30,9 @@ public class B01787NotifyChangeRadiogroupTest extends ZATSTestCase {
 		btns.add(updateBName);
 		
 		String[] answer0 = { "Item A:0","Item B:0","Item A:0","Item B:0" };
-		String[] answer1 = { "Item A:1","Item B:1","Item A:1","Item B:1" };
-		String[] answer2 = { "Item A.*:x:0","Item B:2","Item A.*:0","Item B:1" };
-		String[] answer3 = { "Item A.name:x:0","Item B:2","Item A.name:0","Item B:1" };
+		String[] answer1 = { "Item A:0","Item B:0","Item A:1","Item B:1" };
+		String[] answer2 = { "Item A.*:x:0","Item B:1","Item A.*:0","Item B:1" };
+		String[] answer3 = { "Item A.name:x:0","Item B:1","Item A.name:0","Item B:1" };
 		String[] answer4 = { "Item A.name:x:1","Item B.*:x:0","Item A.name:0","Item B.*:0" };
 		String[] answer5 = { "Item A.name:x:1","Item B.name:x:0","Item A.name:0","Item B.name:0" };
 		List<String[]> answers = new ArrayList<String[]>();

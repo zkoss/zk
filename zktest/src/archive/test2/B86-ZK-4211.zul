@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4211.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Apr 30 12:33:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+    zk.afterLoad(function () {
+        zk.override(zAu.cmd1, "addChd", function (wgt) {
+            zAu.cmd1.$addChd.apply(this, arguments);
+            zk.log("addChd");
+        });
+    });
+    ]]></script>
+	<zscript><![CDATA[
+		public class TestVm {
+			List items = Arrays.asList(new String[] {"aaa", "bbb", "ccc"});
+			List selectedItems = Arrays.asList(new String[] {"aaa", "bbb"});
+			public List getItems() { return items; }
+			public List getSelectedItems() { return selectedItems; }
+			public void setSelectedItems(List selectedItems) { this.selectedItems = selectedItems; }
+		}
+	]]></zscript>
+	<label>
+		Select and deselect the 'ccc' listitem, and you should not see 'addChd' in ZK log.
+	</label>
+	<div viewModel="@id('vm') @init('TestVm')">
+		<listbox model="@load(vm.items)" checkmark="true" multiple="true" width="200px" selectedItems="@bind(vm.selectedItems)"/>
+	</div>
+</zk>
