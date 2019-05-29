@@ -746,10 +746,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	<!-- B85-ZK-3527 -->
-	<library-property>
-		<name>org.zkoss.zk.moment.timezone.path</name>
-		<value>/test2/data/2017a.json</value>
-	</library-property>
+	<!--<library-property>-->
+		<!--<name>org.zkoss.zk.moment.timezone.path</name>-->
+		<!--<value>/test2/data/2017a.json</value>-->
+	<!--</library-property>-->
 
 	<!--for ZK-3916 and ZK-3915-->
 	<!--<session-config>
