@@ -280,7 +280,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		strictDate: null
 	},
-	getIconClass_: function () {
+	/**
+	 * Returns the iconSclass name of this Datebox.
+	 * @return the iconSclass name
+	 * @since 8.6.2
+	 */
+	getIconSclass: function () {
 		return 'z-icon-calendar';
 	},
 	inRoundedMold: function () {
