@@ -55,6 +55,7 @@ ZK 8.6.2
   ZK-4279: popup in no-dom element initialize in the wrong place, doesn't clean up
   ZK-4290: update moment.js and moment-timezones-with-data.js
   ZK-4211: listbox selection causes invalidate
+  ZK-4303: Include in defer mode fails if src is modified while the page is still loading
 
 * Upgrade Notes
 

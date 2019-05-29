@@ -29,6 +29,7 @@ import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -207,6 +208,7 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 	private byte _progressStatus;
 	//F70-ZK-2455 change enclosing tag
 	private String _tag = "div";
+	private int _renderResultFlag;
 
 	public Include() {
 		setAttribute("z$is", Boolean.TRUE); //optional but optimized to mean no need to generate z$is since client handles it
@@ -623,22 +625,22 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 				_progressStatus = 2;
 			} else if (_src != null && _src.length() > 0) {
 				final StringBuffer incsb;
-				{
-					final StringWriter sw = new StringWriter();
-					include(sw);
-					incsb = sw.getBuffer();
-					// ZK-2642: Check if included html file will produce duplicated html, head and body tag
-					String str = incsb != null ? incsb.toString() : "";
-					if (!str.isEmpty() && (str.contains("<html") || str.contains("<!DOCTYPE")))
-						throw new UiException(
-								"Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
-				}
+				final StringWriter sw = new StringWriter();
+				_renderResultFlag++;
+				include(sw);
+				incsb = sw.getBuffer();
+				// ZK-2642: Check if included html file will produce duplicated html, head and body tag
+				String str = incsb != null ? incsb.toString() : "";
+				if (!Strings.isEmpty(str) && (str.contains("<html") || str.contains("<!DOCTYPE")))
+					throw new UiException(
+							"Root element <html> and DOCTYPE are not allowed in included file: [" + _src + "]");
 
 				//Don't output sw directly if getChildPage() is not null
 				//Otherwise, script of the included zul page will be evaluated
 				//first (since it is part of rc.temp)
 
-				if (getChildPage() == null //only able to handle non-ZUL page
+				Page childPage = getChildPage();
+				if (childPage == null //only able to handle non-ZUL page
 						&& !Utils.testAttribute(this, "org.zkoss.zul.include.html.defer", false, true)) {
 					final HtmlPageRenders.RenderContext rc = HtmlPageRenders.getRenderContext(null);
 					if (rc != null && !rc.included) { //Use zk().detachChildren() only if not included
@@ -657,8 +659,15 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 						return; //done
 					}
 				}
+				if (childPage != null) {
+					if (Strings.isEmpty(str)) {
+						str = (String) childPage.getAttribute("_xcnt");
+					} else {
+						childPage.setAttribute("_xcnt", str);
+					}
+				}
 
-				renderer.render("_xcnt", incsb.toString());
+				renderer.render("_xcnt", str);
 				if (_renderResult != null && _renderResult.length() > 0)
 					renderer.renderDirectly("_childjs",
 							"function(){"
@@ -666,7 +675,13 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 									+ _renderResult.replaceAll("</(?i)(?=script>)", "<\\\\/") + '}');
 			}
 		} finally {
-			_renderResult = null;
+			_renderResultFlag--;
+			if (_renderResultFlag == 0) {
+				if (_childpg != null) {
+					_childpg.removeAttribute("_xcnt");
+				}
+				_renderResult = null;
+			}
 			ueng.setOwner(old);
 		}
 	}
