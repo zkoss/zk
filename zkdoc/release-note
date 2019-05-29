@@ -56,6 +56,7 @@ ZK 8.6.2
   ZK-4290: update moment.js and moment-timezones-with-data.js
   ZK-4211: listbox selection causes invalidate
   ZK-4303: Include in defer mode fails if src is modified while the page is still loading
+  ZK-4300: Choosing Jan 1st, 1900 results in wrong year in format yy Datebox
 
 * Upgrade Notes
 
