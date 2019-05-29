@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4296-listbox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri May 17 16:33:45 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Not allowed to set rows and vflex or height at the same time in a Listbox:
+		try the buttons below, rows/vflex/height should not use at the same time
+		only vflex="min" with height is not restricted
+		otherwise you should see an error message
+	</label>
+	<button label="setRows(20)" onClick="lb.setRows(20);" />
+	<button label="setRows(0)" onClick="lb.setRows(0);" />
+	<separator/>
+	<button label='setHeight(200px)' onClick='lb.setHeight("200px")' />
+	<button label='setHeight(null)' onClick='lb.setHeight(null)' />
+	<separator/>
+	<button label="setVflex(1)" onClick='lb.setVflex("1");' />
+	<button label="setVflex(min)" onClick='lb.setVflex("min");' />
+	<button label="setVflex(null)" onClick='lb.setVflex(null);' />
+	<div width="700px" height="500px">
+		<listbox id="lb">
+			<listhead>
+				<listheader label="column" width="300px"/>
+				<listheader label="column" width="300px"/>
+				<listheader label="column" width="300px"/>
+			</listhead>
+			<listitem>
+				<listcell label="cell"/>
+				<listcell label="cell"/>
+				<listcell label="cell"/>
+			</listitem>
+		</listbox>
+	</div>
+</zk>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4296-textbox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 21 11:12:25 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Not allowed to set rows and vflex or height at the same time in a Textbox:
+		try the buttons below, rows/vflex/height should not use at the same time
+		only vflex="min" with height is not restricted
+		otherwise you should see an error message
+	</label>
+	<button label="setRows(20)" onClick="tb.setRows(20);" />
+	<button label="setRows(1)" onClick="tb.setRows(1);" />
+	<separator/>
+	<button label='setHeight(200px)' onClick='tb.setHeight("200px")' />
+	<button label='setHeight(null)' onClick='tb.setHeight(null)' />
+	<separator/>
+	<button label="setVflex(1)" onClick='tb.setVflex("1");' />
+	<button label="setVflex(min)" onClick='tb.setVflex("min");' />
+	<button label="setVflex(null)" onClick='tb.setVflex(null);' />
+	<div width="700px" height="500px">
+		<textbox id="tb"></textbox>
+	</div>
+</zk>
