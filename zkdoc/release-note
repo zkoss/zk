@@ -51,6 +51,7 @@ ZK 8.6.2
   ZK-4258: Broken Slider pageIncrement
   ZK-4221: load binding order/cleanup problem
   ZK-4252: Paste still broken on a Timebox component after ZK-1749
+  ZK-4279: popup in no-dom element initialize in the wrong place, doesn't clean up
 
 * Upgrade Notes
 

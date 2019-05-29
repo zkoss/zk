@@ -5741,11 +5741,16 @@ zk.NoDOM = {
 				var end = document.createComment(endDesc);
 				var parentNode = node.parentNode;
 				parentNode.insertBefore(start, node);
-				var lastChildNode = this.lastChild ? this.lastChild.$n() : null;
-				if (lastChildNode)
-					parentNode.insertBefore(end, lastChildNode.nextSibling);
-				else
-					parentNode.insertBefore(end, node.nextSibling);
+				var endNode = node.nextSibling,
+					lastChild = this.lastChild;
+				if (lastChild) {
+					var lastChildNode = lastChild.$n();
+					if (!lastChildNode)
+						lastChildNode = jq(lastChild.uuid, zk)[0];
+					if (lastChildNode)
+						endNode = lastChildNode;
+				}
+				parentNode.insertBefore(end, endNode.nextSibling);
 				this._startNode = start;
 				this._endNode = end;
 				var id = '_z_nodomfs0';
@@ -5763,7 +5768,7 @@ zk.NoDOM = {
 		}
 	},
 
-	removeHTML_: function () {
+	removeHTML_: function (n) {
 		if (this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$();
 			//clear the dom between start node and end node
@@ -5775,7 +5780,7 @@ zk.NoDOM = {
 			}
 			jq(this._startNode).remove();
 			jq(this._endNode).remove();
-			jq(this._node).remove();
+			jq(n).remove();
 			this.clearCache();
 			context.stop = true;
 		}
