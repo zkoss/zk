@@ -54,6 +54,7 @@ ZK 8.6.2
   ZK-4252: Paste still broken on a Timebox component after ZK-1749
   ZK-4279: popup in no-dom element initialize in the wrong place, doesn't clean up
   ZK-4290: update moment.js and moment-timezones-with-data.js
+  ZK-4211: listbox selection causes invalidate
 
 * Upgrade Notes
 
