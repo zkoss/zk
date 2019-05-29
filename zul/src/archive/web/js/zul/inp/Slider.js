@@ -240,6 +240,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		// B86-ZK-4125: Vertical slider area is not aligned with button
 		if (offset != null) {
 			var n = this.$n(),
+				sign = offset >= 0 ? 1 : -1,
 				wgtDim = isVertical ? n.clientHeight : n.clientWidth,
 				stepDim = wgtDim / (this._maxpos - this._minpos),
 				stepOffset = Math.floor(Math.abs(offset / stepDim));
