@@ -834,6 +834,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (evt.keyCode == 27) {
 			this.parent.escPressed_(evt);
 		}
+	},
+	animationSpeed_: function () {
+		return zk(this.parent).getAnimationSpeed('_default');
 	}
 }, {
 	_equalDate: function (d1, d2) {
