@@ -155,21 +155,25 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// F65-ZK-1825: use this._value instead of "today"
 		// We cannot use this._value in this case, which won't trigger onChange
 		// event. Using clone date instead.
-		var date = this._value ? Dates.newInstance(this._value.getTime(), tz) : zUtl.today(this._format, tz),
+		var date = this._value ? Dates.newInstance(this._value) : zUtl.today(this._format, tz),
 			hasAM, isAM, hasHour1,
-			fmt = [], emptyCount = 0;
+			fmt = [], fmtObeyCount = [], emptyCount = 0;
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
-			if (f[i].type == AM_PM_FIELD) {
+			var th = f[i];
+			if (th.type == AM_PM_FIELD) {
 				hasAM = true;
-				isAM = f[i].unformat(date, val);
-				if (!f[i].getText(val).trim().length)
+				isAM = th.unformat(date, val, {});
+				if (!th.getText(val).trim().length)
 					emptyCount++;
-			} else if (f[i].type) {
-				fmt.push(f[i]);
-				if (!f[i].getText(val).trim().length)
+			} else if (th.type) {
+				var shouldObeyCount = i + 1 < l && this.$class._shouldObeyCount(f[i + 1].type);
+				fmt.push(th);
+				fmtObeyCount.push(shouldObeyCount);
+				th.parse(val, {obeyCount: shouldObeyCount}); // in order to shift if necessary
+				if (!th.getText(val, shouldObeyCount).trim().length)
 					emptyCount++;
 			}
 		}
@@ -182,7 +186,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		for (var i = 0, l = fmt.length; i < l; i++) {
 			if (!hasAM && (fmt[i].type == HOUR2_FIELD || fmt[i].type == HOUR3_FIELD))
 				isAM = true;
-			date = fmt[i].unformat(date, val, isAM);
+			date = fmt[i].unformat(date, val, {am: isAM, obeyCount: fmtObeyCount[i]});
 		}
 		return date;
 	},
@@ -265,29 +269,39 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				break;
 			case 13: case 27://enter,esc,tab
 				break;
-			case 86: // ctrl + c
+			case 86: // ctrl + v
 				// Bug ZK-1749
-				if (evt.ctrlKey) {
-					var self = this,
-						curVal = inp.value;
-					setTimeout(function () {
-						var inpNode = self.getInputNode();
-						if (inpNode) {
-							if (curVal != inpNode.value) {
-								self._changed = true;
-							}
-						}
-					}, 0);
+				if (zk.ie <= 9 && evt.ctrlKey) { // IE9 onpaste not support
+					this._updateValue();
 					break;
 				}
 				// no need to break here, let it run with 'default' case
 			default:
 				if (!(code >= 112 && code <= 123) //F1-F12
-				&& !evt.ctrlKey && !evt.altKey)
+						&& !evt.ctrlKey && !evt.metaKey && !evt.altKey) {
+					if (evt.shiftKey && code == 45) break; // Allow macOS paste (shift + insert)
 					evt.stop();
+				}
 			}
 		}
 		this.$supers('doKeyDown_', arguments);
+	},
+	doPaste_: function (evt) {
+		this._updateValue();
+		this.$supers('doPaste_', arguments);
+	},
+	_updateValue: function () {
+		var inp = this.getInputNode(),
+			self = this,
+			curVal = inp.value;
+		setTimeout(function () {
+			var inpNode = self.getInputNode();
+			if (inpNode) {
+				if (curVal != inpNode.value) {
+					self._changed = true;
+				}
+			}
+		}, 0);
 	},
 	_ondropbtnup: function (evt) {
 		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
@@ -527,32 +541,32 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			case 'K':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'K' ? ++i : i;
-				index.push(new zul.inp.HourHandler2([start, end], HOUR3_FIELD));
+				index.push(new zul.inp.HourHandler2([start, end], HOUR3_FIELD, wgt));
 				break;
 			case 'h':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'h' ? ++i : i;
-				index.push(new zul.inp.HourHandler([start, end], HOUR2_FIELD));
+				index.push(new zul.inp.HourHandler([start, end], HOUR2_FIELD, wgt));
 				break;
 			case 'H':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'H' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD));
+				index.push(new zul.inp.HourInDayHandler([start, end], HOUR0_FIELD, wgt));
 				break;
 			case 'k':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'k' ? ++i : i;
-				index.push(new zul.inp.HourInDayHandler2([start, end], HOUR1_FIELD));
+				index.push(new zul.inp.HourInDayHandler2([start, end], HOUR1_FIELD, wgt));
 				break;
 			case 'm':
 				var start = i,
 					end = fmt.charAt(i + 1) == 'm' ? ++i : i;
-				index.push(new zul.inp.MinuteHandler([start, end], MINUTE_FIELD));
+				index.push(new zul.inp.MinuteHandler([start, end], MINUTE_FIELD, wgt));
 				break;
 			case 's':
 				var start = i,
 					end = fmt.charAt(i + 1) == 's' ? ++i : i;
-				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD));
+				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD, wgt));
 				break;
 			case 'z':
 				index.push({index: [i, i],format: (function (text) {
@@ -591,6 +605,19 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		wgt._fmthdler = index;
+	},
+	_shouldObeyCount: function (nextType) {
+		switch (nextType) {
+			case MINUTE_FIELD:
+			case SECOND_FIELD:
+			case HOUR0_FIELD:
+			case HOUR1_FIELD:
+			case HOUR2_FIELD:
+			case HOUR3_FIELD:
+				return true;
+			default:
+				return false;
+		}
 	}
 });
 zul.inp.TimeHandler = zk.$extends(zk.Object, {
@@ -607,7 +634,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 	format: function (date) {
 		return '00';
 	},
-	unformat: function (date, val) {
+	unformat: function (date, val, opt) {
 		return date;
 	},
 	increase: function (wgt, up) {
@@ -782,10 +809,10 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 		wgt.lastPos = pos;
 		zk(inp).setSelectionRange(pos, pos);
 	},
-	getText: function (val) {
+	getText: function (val, obeyCount) {
 		var start = this.index[0],
 			end = this.index[1] + 1;
-		return val.substring(start, end);
+		return obeyCount !== false ? val.substring(start, end) : val.substring(start);
 	},
 	_doShift: function (wgt, shift) {
 		var f = wgt._fmthdler,
@@ -799,6 +826,15 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 	},
 	isSingleLength: function () {
 		return this.digits == 1 && (this.index[0] - this.index[1]);
+	},
+	parse: function (val, opt) {
+		var text = this.getText(val, opt.obeyCount),
+			parsed = /^\s*\d*/.exec(text),
+			offset = parsed.length ? parsed[0].length - (this.index[1] - this.index[0] + 1) : 0;
+		if (offset) {
+			this._doShift(this.wgt, offset);
+		}
+		return zk.parseInt(text);
 	}
 }, {
 	_getMaxLen: function (wgt) {
@@ -873,8 +909,8 @@ zul.inp.HourInDayHandler = zk.$extends(zul.inp.TimeHandler, {
 			return h.toString();
 		}
 	},
-	unformat: function (date, val) {
-		date.setHours(zk.parseInt(this.getText(val)));
+	unformat: function (date, val, opt) {
+		date.setHours(this.parse(val, opt));
 		return date;
 	}
 });
@@ -892,9 +928,9 @@ zul.inp.HourInDayHandler2 = zk.$extends(zul.inp.TimeHandler, {
 			return h.toString();
 		}
 	},
-	unformat: function (date, val) {
-		var hours = zk.parseInt(this.getText(val));
-		if (hours == 24)
+	unformat: function (date, val, opt) {
+		var hours = this.parse(val, opt);
+		if (hours >= this.maxsize)
 			hours = 0;
 		date.setHours(hours);
 		return date;
@@ -915,11 +951,11 @@ zul.inp.HourHandler = zk.$extends(zul.inp.TimeHandler, {
 			return h.toString();
 		}
 	},
-	unformat: function (date, val, am) {
-		var hours = zk.parseInt(this.getText(val));
-		if (hours == 12)
+	unformat: function (date, val, opt) {
+		var hours = this.parse(val, opt);
+		if (hours >= this.maxsize)
 			hours = 0;
-		date.setHours(am ? hours : hours + 12);
+		date.setHours(opt.am ? hours : hours + 12);
 		return date;
 	}
 });
@@ -937,9 +973,9 @@ zul.inp.HourHandler2 = zk.$extends(zul.inp.TimeHandler, {
 			return h.toString();
 		}
 	},
-	unformat: function (date, val, am) {
-		var hours = zk.parseInt(this.getText(val));
-		date.setHours(am ? hours : hours + 12);
+	unformat: function (date, val, opt) {
+		var hours = this.parse(val, opt);
+		date.setHours(opt.am ? hours : hours + 12);
 		return date;
 	}
 });
@@ -954,8 +990,8 @@ zul.inp.MinuteHandler = zk.$extends(zul.inp.TimeHandler, {
 			return m.toString();
 		}
 	},
-	unformat: function (date, val) {
-		date.setMinutes(zk.parseInt(this.getText(val)));
+	unformat: function (date, val, opt) {
+		date.setMinutes(this.parse(val, opt));
 		return date;
 	}
 });
@@ -970,8 +1006,8 @@ zul.inp.SecondHandler = zk.$extends(zul.inp.TimeHandler, {
 			return s.toString();
 		}
 	},
-	unformat: function (date, val) {
-		date.setSeconds(zk.parseInt(this.getText(val)));
+	unformat: function (date, val, opt) {
+		date.setSeconds(this.parse(val, opt));
 		return date;
 	}
 });
@@ -983,7 +1019,7 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 		var h = date.getHours();
 		return APM[h < 12 ? 0 : 1];
 	},
-	unformat: function (date, val) {
+	unformat: function (date, val, opt) {
 		var text = this.getText(val).trim(),
 			APM = this.wgt._localizedSymbols ? this.wgt._localizedSymbols.APM : zk.APM;
 		return (text.length == APM[0].length) ?
@@ -1033,6 +1069,9 @@ zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
 		text = APM[0] == text ? APM[1] : APM[0];
 		inp.value = val.substring(0, start) + text + val.substring(end);
 		zk(inp).setSelectionRange(start, end);
+	},
+	parse: function (val, opt) {
+		return this.getText(val).trim();
 	}
 });
 

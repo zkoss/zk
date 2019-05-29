@@ -38,6 +38,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -590,5 +591,28 @@ public abstract class WebDriverTestCase {
 		String value = String.join("\n", paths);
 		WebElement input = (WebElement) ((JavascriptExecutor) driver).executeScript(JS_DROP_FILES, toElement(element), offsetX, offsetY);
 		input.sendKeys(value);
+	}
+
+	/**
+	 * Press hot key (e.g. Ctrl + C) to trigger a copy action.
+	 * It's caller's responsibility to focus/select text before calling this method.
+	 */
+	protected void copy() {
+		// Workaround for https://bugs.chromium.org/p/chromedriver/issues/detail?id=30
+		String copyKeys = System.getProperty("os.name").startsWith("Mac")
+				? Keys.chord(Keys.CONTROL, Keys.INSERT)
+				: Keys.chord(Keys.CONTROL, "c");
+		getActions().sendKeys(copyKeys).perform();
+	}
+
+	/**
+	 * Press hot key (e.g. Ctrl + V) to trigger a paste action.
+	 * It's caller's responsibility to click/focus on a DOM node before calling this method.
+	 */
+	protected void paste() {
+		String pasteKeys = System.getProperty("os.name").startsWith("Mac")
+				? Keys.chord(Keys.SHIFT, Keys.INSERT)
+				: Keys.chord(Keys.CONTROL, "v");
+		getActions().sendKeys(pasteKeys).perform();
 	}
 }

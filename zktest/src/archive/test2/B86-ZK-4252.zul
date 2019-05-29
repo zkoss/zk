@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4252.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 22 10:11:44 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Copy "1:01:01 PM", paste to timebox by either hotkey or context menu, then click page blank area.
+        2. The result should be "1:1:1 PM".
+        3. Copy "11:11:11 AM", paste to timebox by either hotkey or context menu, then click page blank area.
+        4. The result should be "11:11:11 AM".
+    </label>
+
+    <div xmlns:n="native">
+        <n:input id="ts1" value="1:01:01 PM"/>
+        <n:input id="ts2" value="11:11:11 AM"/>
+    </div>
+
+    <timebox format="h:m:s a" cols="20" onChange="tbval.value = self.value.toString()"/>
+    <label id="tbval" />
+</zk>
