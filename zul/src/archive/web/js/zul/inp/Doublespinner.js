@@ -156,9 +156,6 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			zk.fmt.Number.format(fmt, parseFloat(value), this._rounding, this._localizedSymbols) :
 				DECIMAL == '.' ? ('' + value) : ('' + value).replace('.', DECIMAL);
 	},
-	onSize: function () {
-		zul.inp.RoundUtl.onSize(this);
-	},
 
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Doublebox.validate,
@@ -288,11 +285,6 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		this.timerId = null;
 		jq('.' + this.$s('icon'), this.$n('btn')).removeClass(this.$s('active'));
-	},
-	/** Synchronizes the input element's width of this component
-	 */
-	syncWidth: function () {
-		zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
