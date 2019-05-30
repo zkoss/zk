@@ -201,7 +201,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				right.style.right = jq.px(rwdh);
 				var oldv = vbar.style.display;
 				vbar.style.display = 'block';
-				swdh += vbar.offsetWidth;
+				swdh += jq(vbar).outerWidth(true);
 				vbar.style.display = oldv;
 			} else {
 				ws.width = jq.px(hwdh);
@@ -256,7 +256,7 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 				down.style.bottom = jq.px(startY + dhgh);
 				var oldh = hbar.style.display;
 				hbar.style.display = 'block';
-				shgh += hbar.offsetHeight;
+				shgh += jq(hbar).outerHeight(true);
 				hbar.style.display = oldh;
 			} else {
 				ws.height = jq.px(vhgh);
