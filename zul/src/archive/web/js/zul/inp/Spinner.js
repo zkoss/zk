@@ -75,9 +75,6 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		return fmt ? zk.fmt.Number.format(fmt, value, this._rounding, this._localizedSymbols)
 				: value != null ? '' + value : '';
 	},
-	onSize: function () {
-		zul.inp.RoundUtl.onSize(this);
-	},
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
 	doKeyDown_: function (evt) {

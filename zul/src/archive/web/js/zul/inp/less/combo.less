@@ -10,11 +10,12 @@ each(@components, {
 		&-input {
 			.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
 			height: 34px;
+			width: 100%;
 			border: 1px solid @inputBorderColor;
-			border-right: 0;
-			.leftBorderRadius(@baseBorderRadius);
+			.borderRadius(@baseBorderRadius);
 			margin: 0;
 			padding: @inputPadding;
+			padding-right: @inputPaddingRight + @baseButtonWidth + 8px * 2;
 			line-height: @baseLineHeight;
 			background: @inputBackgroundColor;
 
@@ -48,13 +49,21 @@ each(@components, {
 		&-input:focus {
 			border-color: @inputFocusBorderColor;
 		}
+
 		&-input:focus + &-button {
 			border-left: 1px solid @inputFocusBorderColor;
+		}
+
+		&-input-full {
+			padding-right: @inputPaddingRight;
 		}
 
 		&-button {
 			.iconFontStyle(@comboButtonIconSize, @comboButtonIconColor);
 			display: inline-block;
+			position: relative;
+			top: 0;
+			right: @baseButtonWidth + 8px * 2;
 			min-width: @baseButtonWidth + 8px * 2;
 			height: 34px;
 			border: 1px solid @inputBorderColor;
@@ -107,11 +116,6 @@ each(@components, {
 		}
 		&-invalid + &-button {
 			border-left: 1px solid @invalidBorderColor !important;
-		}
-
-		&-rightedge {
-			border-right: 1px solid @inputBorderColor;
-			.borderRadius(@baseBorderRadius);
 		}
 
 		&-readonly {
@@ -168,7 +172,6 @@ each(@components, {
 .z-doublespinner-button {
 	width: 34px;
 	padding: 0;
-	position: relative;
 
 	&:hover,
 	&:active {

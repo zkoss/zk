@@ -20,8 +20,8 @@ function (out) {
 			'<input id="', uuid,'-real"', 'class="', this.$s('input'));
 
 	if (!isButtonVisible)
-		out.push(' ', this.$s('rightedge'));
-	
+		out.push(' ', this.$s('input-full'));
+
 	out.push('" autocomplete="off"',
 			this.textAttrs_(),'/>', '<span id="', uuid,'-btn"',
 			'class="', this.$s('button'));

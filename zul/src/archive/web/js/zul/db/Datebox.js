@@ -301,7 +301,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 	},
 	onSize: function () {
-		zul.inp.RoundUtl.onSize(this);
 		if (this.isOpen())
 			this.$class._reposition(this, true);
 	},
