@@ -24,6 +24,7 @@ public class B86_ZK_4254Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		waitResponse();
 
 		testListbox(jq("@listbox:eq(0)"));
 		testListbox(jq("@listbox:eq(2)"));
@@ -33,6 +34,7 @@ public class B86_ZK_4254Test extends WebDriverTestCase {
 		JQuery verScrollbar = listbox.find(".z-scrollbar-vertical-embed");
 		int oldLeft = verScrollbar.positionLeft();
 		listbox.find(".z-listbox-body").scrollLeft(100);
+		waitResponse();
 		Assert.assertEquals("Vertical scroll position changed!", oldLeft, verScrollbar.positionLeft());
 	}
 }
