@@ -21,6 +21,8 @@ import java.util.Map;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.Desktop;
 
 /**
  * Represents an event cause by user's dragging and dropping a component.
@@ -39,8 +41,15 @@ public class DropEvent extends MouseEvent {
 	public static DropEvent getDropEvent(AuRequest request) {
 		final Map<String, Object> data = request.getData();
 		final int keys = AuRequests.parseKeys(data);
+		Desktop desktop = request.getDesktop();
+		Component dragged = null;
+		try {
+			dragged = desktop.getComponentByUuid((String) data.get("dragged"));
+		} catch (ComponentNotFoundException e) {
+			dragged = (Component) desktop.getAttribute(DragStartEvent.DRAG_START_TARGET);
+		}
 		return new DropEvent(request.getCommand(), request.getComponent(),
-				request.getDesktop().getComponentByUuid((String) data.get("dragged")), AuRequests.getInt(data, "x", 0),
+				dragged, AuRequests.getInt(data, "x", 0),
 				AuRequests.getInt(data, "y", 0), AuRequests.getInt(data, "pageX", 0),
 				AuRequests.getInt(data, "pageY", 0), keys);
 	}

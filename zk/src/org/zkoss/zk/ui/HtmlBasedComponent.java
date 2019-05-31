@@ -23,6 +23,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
 import org.zkoss.zk.ui.event.AfterSizeEvent;
+import org.zkoss.zk.ui.event.DragStartEvent;
 import org.zkoss.zk.ui.event.DropEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
@@ -80,6 +81,8 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		addClientEvent(HtmlBasedComponent.class, Events.ON_MOUSE_OUT, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_SWIPE, CE_DUPLICATE_IGNORE);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_AFTER_SIZE, CE_DUPLICATE_IGNORE);
+		//@Since 8.6.2
+		addClientEvent(HtmlBasedComponent.class, Events.ON_DRAG_START, 0);
 	}
 
 	protected HtmlBasedComponent() {
@@ -968,9 +971,14 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_DROP)) {
 			DropEvent evt = DropEvent.getDropEvent(request);
+			request.getDesktop().removeAttribute(DragStartEvent.DRAG_START_TARGET);
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SWIPE)) {
 			SwipeEvent evt = SwipeEvent.getSwipeEvent(request);
+			Events.postEvent(evt);
+		} else if (cmd.equals(Events.ON_DRAG_START)) {
+			DragStartEvent evt = DragStartEvent.getDragStartEvent(request);
+			request.getDesktop().setAttribute(DragStartEvent.DRAG_START_TARGET, evt.getTarget());
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);

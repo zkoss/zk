@@ -527,6 +527,7 @@
 		<xs:attribute name="renderdefer" type="intType" use="optional" />
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onDrop" type="xs:string" use="optional" />
+		<xs:attribute name="onDragStart" type="xs:string" use="optional" />
 		<xs:attribute name="action" type="xs:string" use="optional" />
 		<xs:attribute name="hflex" type="xs:string" use="optional" />
 		<xs:attribute name="vflex" type="xs:string" use="optional" />

@@ -267,6 +267,12 @@ public class Events {
 	 */
 	public static final String ON_HISTORY_POP_STATE = "onHistoryPopState";
 
+	/**
+	 * The onDragStart event (used with {@link DragStartEvent}).
+	 * @since 8.6.2
+	 */
+	public static final String ON_DRAG_START = "onDragStart";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

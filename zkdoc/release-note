@@ -6,6 +6,7 @@ ZK 8.6.2
   ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
   ZK-4296: Error indicating incorrect usage when using both vflex and rows
   ZK-4304: Bandbox button's icon can be changed
+  ZK-4307: Drag and Drop (handle detached dragged element)
 
 * Bugs
   ZK-4230: Signature toolbarVisible not work

@@ -386,6 +386,7 @@ String scroll; //DOM Element's ID</code></pre>
 
 	_startDrag: function (evt) {
 		zWatch.fire('onStartDrag', this, evt);
+		this.control.onDragStart_(evt); //ZK-4307
 
 		//disable selection
 		zk(document.body).disableSelection(); // Bug #1820433
