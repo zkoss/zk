@@ -386,7 +386,9 @@ String scroll; //DOM Element's ID</code></pre>
 
 	_startDrag: function (evt) {
 		zWatch.fire('onStartDrag', this, evt);
-		this.control.onDragStart_(evt); //ZK-4307
+		var opt;
+		if (opt = this.control.onDragStart_)
+			opt(evt); //ZK-4307
 
 		//disable selection
 		zk(document.body).disableSelection(); // Bug #1820433
@@ -402,8 +404,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 		zk.dragging = this.dragging = true;
 
-		var node = this.node,
-			opt;
+		var node = this.node;
 		if (opt = this.opts.ghosting)
 			if (typeof opt == 'function') {
 				this.delta = this._currentDelta();
