@@ -60,6 +60,7 @@ ZK 8.6.2
   ZK-4308: Calendar should respect Data-AnimationSpeed
   ZK-4254: Wrong position of vertical custom scrollbar if horizontal scroll position was changed
   ZK-4253: Horizontal custom scrollbar of Listbox covers the last item in Iceblue
+  ZK-4306: SourceMapManager should be serializable
 
 * Upgrade Notes
 

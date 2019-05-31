@@ -11,10 +11,12 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
+import java.io.Serializable;
+
 /**
  * @author jameschu
  */
-public class SourceMapInfo {
+public class SourceMapInfo implements Serializable {
 	/** The content of source map. */
 	private String _content;
 	/** The line count of source map. */
