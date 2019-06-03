@@ -37,13 +37,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * @since 5.0.7
  */
 zul.inp.RoundUtl = {
+	/** Synchronizes the input element's width of this component
+	*/
+	syncWidth: function (wgt, rightElem, isOnSize/*speed up*/) {
+		var node = wgt.$n();
+		if ((!wgt._inplace && !node.style.width) || (!isOnSize && !zk(node).isRealVisible()))
+			return;
+
+		// fixed for ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
+		// calculate only when the width has size
+		if (node.style.width) {
+			var width = node.offsetWidth,
+				// ignore left border, as it is countered by margin-left
+				rightElemWidth = rightElem ? rightElem.offsetWidth : 0;
+			wgt.getInputNode().style.width = jq.px0(width - rightElemWidth);
+		}
+	},
 	// @since 7.0.0
 	buttonVisible: function (wgt, v) {
 		var n = wgt.$n('btn');
 		if (n) {
 			var fnm = v ? 'removeClass' : 'addClass';
 			jq(n)[fnm](wgt.$s('disabled'));
-			jq(wgt.getInputNode())[fnm](wgt.$s('input-full'));
+			jq(wgt.getInputNode())[fnm](wgt.$s('rightedge'));
+			wgt.onSize();
 		}
 	},
 	// @since 7.0.0
@@ -71,6 +88,14 @@ zul.inp.RoundUtl = {
 			if (!wgt.getHflex())
 				n.style.width = wgt.getWidth() || '';
 		}
+	},
+	// @since 7.0.0
+	onSize: function (wgt) {
+		var width = wgt.getWidth();
+		// should not clear input node width if hflex is true
+		if (!wgt.getHflex() && (!width || width.indexOf('%') != -1))
+			wgt.getInputNode().style.width = '';
+		this.syncWidth(wgt, wgt.$n('btn'), true);
 	}
 };
 var InputWidget =

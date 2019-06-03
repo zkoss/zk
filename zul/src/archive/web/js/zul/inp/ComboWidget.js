@@ -103,6 +103,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	onSize: function () {
+		zul.inp.RoundUtl.onSize(this);
 		if (this._open) {
 			var pp = this.getPopupNode_();
 			if (pp)
@@ -529,6 +530,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	 */
 	redrawpp_: function (out) {
 	},
+	beforeParentMinFlex_: function (attr) { //'w' for width or 'h' for height
+		if ('w' == attr)
+			zul.inp.RoundUtl.syncWidth(this, this.$n('btn'));
+	},
 	afterKeyDown_: function (evt, simulated) {
 		if (!simulated && this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(), evt.keyCode == 13 ? null : false);
@@ -662,7 +667,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			uuid, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)
-			out.push(' ', this.$s('input-full'));
+			out.push(' ', this.$s('rightedge'));
 
 		out.push('" autocomplete="off"',
 			this.textAttrs_(), '/><a id="', uuid, '-btn" class="',
