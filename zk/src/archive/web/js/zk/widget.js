@@ -3484,16 +3484,6 @@ unbind_: function (skipper, after) {
 		var data = zk.copy({dragged: drag.control}, evt.data);
 		this.fire('onDrop', data, null, Widget.auDelay);
 	},
-	/** Called to fire the onDragStart event.
-	 * You could override it to implement some effects to indicate start dragging.
-	 * <p>Default, it fires the onDragStart event (with {@link #fire}).
-	 * The subclass can override this method to pass more options.
-	 * @param zk.Event evt the event causes the drag start
-	 * @since 8.6.2
-	 */
-	onDragStart_: function (evt) {
-		this.fire('onDragStart', evt.data, null, Widget.auDelay);
-	},
 	/** Called to create the visual effect representing what is being dragged.
 	 * In other words, it creates the DOM element that will be moved with the mouse pointer when the user is dragging.
 	 * <p>This method is called if {@link #getDragMessage_} returns null.
