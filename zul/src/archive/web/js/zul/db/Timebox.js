@@ -194,6 +194,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var inp = this.getInputNode();
 		if (inp && this._value && !inp.value)
 			inp.value = this.coerceToString_(this._value);
+
+		zul.inp.RoundUtl.onSize(this, this.$n('btn'));
 	},
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
