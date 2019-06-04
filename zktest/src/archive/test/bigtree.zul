@@ -21,7 +21,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 width="100%"
 height="100%">
     <tree id="tree" width="100%"
-height="200%" rows="30">
+height="200%">
         <treecols>
             <treecol label="Name"/>
             <treecol label="Description"/>

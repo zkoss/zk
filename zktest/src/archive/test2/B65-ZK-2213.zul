@@ -5,7 +5,7 @@
 		<tabbox vflex="true" hflex="true">
 			<tabpanels>
 				<tabpanel>
-					<listbox mold="paging" id="gridPrincipal" rows="0"
+					<listbox mold="paging" id="gridPrincipal"
 						pagingPosition="bottom" sizedByContent="true" pageSize="10"
 						activePage="0" vflex="true" hflex="true">
 						<listhead menupopup="none" sizable="true">
@@ -18,7 +18,7 @@
 					<groupbox contentStyle="overflow:auto;"
 						title="title" vflex="1" hflex="1">
 						<tablelayout columns="2" style="padding:0px;"
-							width="716px" height="63px" left="2px" top="15px" hflex="true"
+							height="63px" left="2px" top="15px" hflex="true"
 							id="FGridPanel2">
 							<tablechildren rowspan="1">
 								<textbox></textbox>
