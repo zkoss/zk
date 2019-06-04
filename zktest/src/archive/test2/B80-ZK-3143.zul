@@ -19,7 +19,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         2.Do it again, press "Ctrl(windows)/Command(Mac)" instead.
     </label>
     <window apply="org.zkoss.zktest.test2.B80_ZK_3143">
-        <listbox checkmark="true" id="lb" hflex="min" vflex="true" multiple="true" rows="8">
+        <listbox checkmark="true" id="lb" hflex="min" vflex="true" multiple="true">
             <listhead>
                 <listheader label="First Name" width="80px" />
                 <listheader label="Last Name" width="80px" />
