@@ -6,7 +6,7 @@
 	<div style="height:200px" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2096_ViewModel')">
 		<tree model="@load(vm.treeModel)" id="tree" width="30%"
-			vflex="1" rows="8">
+			vflex="1">
 			<custom-attributes org.zkoss.zul.nativebar="true" />
 			<treecols sizable="false" children="@load(vm.cols)">
 				<template name="children" var="node">

@@ -17,13 +17,13 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	<div>
 		if those 4 empty messages don't appear with central alignment, it's a bug.
 	</div>
-	<listbox emptyMessage="No items to display." oddRowSclass="z-listbox-odd" rows="20" multiple="true" pagingPosition="bottom" sizedByContent="true" span="true" vflex="true">
+	<listbox emptyMessage="No items to display." oddRowSclass="z-listbox-odd" multiple="true" pagingPosition="bottom" sizedByContent="true" span="true" vflex="true">
         <listhead menupopup="none" sizable="true" visible="true" popup="auto">
             <listheader label="Scope" context="uuid(zb_pageHome_ZTableHeaderPopup_2)" style="text-align:center;" droppable="col" hflex="min" draggable="col"/>
         </listhead>
     </listbox>
 
-    <listbox emptyMessage="No items to display." oddRowSclass="z-listbox-odd" rows="20" multiple="true" pagingPosition="bottom" sizedByContent="true" span="true" vflex="true">
+    <listbox emptyMessage="No items to display." oddRowSclass="z-listbox-odd" multiple="true" pagingPosition="bottom" sizedByContent="true" span="true" vflex="true">
         <listhead menupopup="none" sizable="true" visible="true" popup="auto">
             <listheader label="Subject" context="uuid(zb_pageHome_ZTableHeaderPopup_2)" style="text-align:center;" droppable="col" hflex="min" draggable="col"/>
             <listheader label="Text" context="uuid(zb_pageHome_ZTableHeaderPopup_2)" style="text-align:center;" droppable="col" hflex="min" draggable="col"/>

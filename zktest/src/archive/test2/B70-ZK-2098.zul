@@ -5,7 +5,7 @@
     <div>
     	Click second button then should not see error message, the cell should align correct.
     </div>
-  <tree model="@load(vm.treeModel)" id="tree" width="30%" vflex="1" rows="8">
+  <tree model="@load(vm.treeModel)" id="tree" width="30%" vflex="1">
 <!--     <custom-attributes org.zkoss.zul.nativebar="true"/> -->
     <treecols sizable="false" children="@load(vm.cols) @template(each.template)" >
       <template name="col60">
