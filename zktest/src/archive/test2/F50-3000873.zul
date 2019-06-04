@@ -53,7 +53,7 @@
 								</row>
 								<row>
 									<label value="Options:"/>
-									<textbox rows="3" hflex="min" vflex="min"/>
+									<textbox hflex="min" vflex="min"/>
 								</row>
 								</rows>
 								</grid>
