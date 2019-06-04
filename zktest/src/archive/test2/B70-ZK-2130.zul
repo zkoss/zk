@@ -14,7 +14,7 @@
 				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
 				<vlayout>
 					<tree height="300px" model="@load(vm.treeModel)"
-						id="treeNativeScrollbar" hflex="1" rows="8">
+						id="treeNativeScrollbar" hflex="1">
 						<custom-attributes
 							org.zkoss.zul.nativebar="true" />
 						<frozen columns="1" />
@@ -83,7 +83,7 @@
 				viewModel="@id('vm') @init('org.zkoss.zktest.test.B70_ZK_2128VM')">
 				<vlayout>
 					<tree height="300px" model="@load(vm.treeModel)"
-						id="treeFakeScrollbar" hflex="1" rows="8">
+						id="treeFakeScrollbar" hflex="1">
 						<frozen columns="1" />
 						<treecols sizable="false"
 							children="@load(vm.cols)  @template(vm.colTemplate(forEachStatus.index))">

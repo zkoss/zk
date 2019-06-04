@@ -39,7 +39,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		mode="modal" width="30em" height="30ex"
 		visible="false" >
 		<vlayout vflex="1">
-			<textbox id="tb" instant="true" rows="2" hflex="1" vflex="1"
+			<textbox id="tb" instant="true" hflex="1" vflex="1"
 				value="If you can click the 'Save' Button, and then it will close this window, that's correct." />
 		</vlayout>
 		<hbox pack="end" width="100%">
