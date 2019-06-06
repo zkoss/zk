@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<listener>
+		<listener-class>org.zkoss.zktest.test2.DetachDesktopCleanup</listener-class>
+	</listener>
+</zk>
