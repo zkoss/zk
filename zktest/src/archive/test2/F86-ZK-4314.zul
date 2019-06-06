@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4314.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun 5 12:08:41 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<?script src="F86-ZK-4314.js"?>
+<zk xmlns:w="client">
+	<zscript>
+		import org.zkoss.lang.Library;
+		Library.setProperty("org.zkoss.zul.drop.allowNullDragged", "true");
+	</zscript>
+	<label>
+		Drag and drop to "target", and you should see "Start Dragging" and "onDrop - null ..." in zk log
+	</label>
+	<div w:_rodDndEnabled="true"><!-- enable for all children -->
+		<div id="dropTarget" droppable="true"
+			 width="100px" height="100px" style="border:1px solid red"
+			 onDrop='Clients.log(event.getName() + " - " + event.getDragged() + " dropped on " + self);'>
+			target
+		</div>
+		<div id="drag" draggable="true"
+			 onStartDrag='self.detach(); Clients.log("Start Dragging")'>
+			DRAG ME (will detach on drag)
+		</div>
+	</div>
+</zk>
