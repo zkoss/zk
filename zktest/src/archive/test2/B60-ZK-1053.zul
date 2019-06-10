@@ -40,4 +40,5 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			msg.setValue("msg: Chosenbox onBlur");
 		</attribute>
 	</chosenbox>
+	<button label="blur" />
 </zk>
