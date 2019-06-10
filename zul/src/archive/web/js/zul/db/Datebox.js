@@ -699,7 +699,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		var fmt = db.getTimeFormat(),
 			tz = db.getTimeZone(),
-			value = db._value;
+			value = db._value || zUtl.today(fmt, tz);
 		if (value)
 			this.setValue(value);
 		if (fmt) {
