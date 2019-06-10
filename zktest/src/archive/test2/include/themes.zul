@@ -14,10 +14,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <hlayout>
-        <a href="?zktheme=breeze" label="Breeze"/>
-        <a href="?zktheme=sapphire" label="Sapphire"/>
-        <a href="?zktheme=silvertail" label="Silvertail"/>
-        <a href="?zktheme=atlantic" label="Atlantic"/>
-        <a href="?zktheme=default" label="Default"/>
+        <custom-attributes path="${desktop.requestPath}"/>
+        <a href="${path}?zktheme=breeze" label="Breeze"/>
+        <a href="${path}?zktheme=sapphire" label="Sapphire"/>
+        <a href="${path}?zktheme=silvertail" label="Silvertail"/>
+        <a href="${path}?zktheme=atlantic" label="Atlantic"/>
+        <a href="${path}?zktheme=default" label="Default"/>
     </hlayout>
 </zk>
