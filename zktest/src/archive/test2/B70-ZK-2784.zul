@@ -30,13 +30,13 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 					<rows>
 						<row>
 							<cell>
-								<div onClick="inc1.setVisible(!inc1.isVisible())">div toggle tree on click</div>
+								<div id="click1" onClick="inc1.setVisible(!inc1.isVisible())">div toggle tree on click</div>
 								<div id="inc1" visible="false" height="300px" style="background-color: red"/>
 							</cell>
 						</row>
 						<row>
 							<cell>
-								<div onClick="inc2.setVisible(!inc2.isVisible())">div toggle tree on click</div>
+								<div id="click2" onClick="inc2.setVisible(!inc2.isVisible())">div toggle tree on click</div>
 								<div id="inc2" visible="false" height="300px" style="background-color: green"/>
 							</cell>
 						</row>
