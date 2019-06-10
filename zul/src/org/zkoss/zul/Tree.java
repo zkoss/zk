@@ -789,7 +789,7 @@ public class Tree extends MeshElement {
 	@Override
 	public void setHeight(String height) {
 		if (_rows != 0)
-			throw new UiException("Not allowed to set height and rows at the same time");
+			log.warn("Not allowed to set height and rows at the same time");
 		
 		super.setHeight(height);
 	}
@@ -897,7 +897,7 @@ public class Tree extends MeshElement {
 	@Override
 	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (_rows != 0)
-			throw new UiException("Not allowed to set vflex and rows at the same time");
+			log.warn("Not allowed to set vflex and rows at the same time");
 		
 		super.setVflex(flex);
 	}
