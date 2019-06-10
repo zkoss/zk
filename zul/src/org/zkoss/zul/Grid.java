@@ -428,7 +428,7 @@ public class Grid extends MeshElement {
 	@Override
 	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (_visibleRows != 0)
-			throw new UiException("Not allowed to set vflex and visibleRows at the same time");
+			log.warn("Not allowed to set vflex and visibleRows at the same time");
 		
 		super.setVflex(flex);
 	}
@@ -539,7 +539,7 @@ public class Grid extends MeshElement {
 	@Override
 	public void setHeight(String height) {
 		if (_visibleRows != 0)
-			throw new UiException("Not allowed to set height and visibleRows at the same time");
+			log.warn("Not allowed to set height and visibleRows at the same time");
 		
 		super.setHeight(height);
 	}

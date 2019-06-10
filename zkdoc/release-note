@@ -64,6 +64,7 @@ ZK 8.6.2
   ZK-4306: SourceMapManager should be serializable
 
 * Upgrade Notes
+  + Due to ZK-4296 the mixing usage of vflex/height/rows is deprecated since 8.6.2 and will throw an exception in next major version
 
    --------
 ZK 8.6.1

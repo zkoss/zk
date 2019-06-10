@@ -18,6 +18,9 @@ package org.zkoss.zul;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -36,6 +39,7 @@ import org.zkoss.zul.impl.InputElement;
  * @author tomyeh
  */
 public class Textbox extends InputElement {
+	private static final Logger log = LoggerFactory.getLogger(Textbox.class);
 	private AuxInfo _auxinf;
 
 	public Textbox() {
@@ -134,10 +138,10 @@ public class Textbox extends InputElement {
 	 */
 	protected void checkBeforeSetRows() throws UiException { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (this.getVflex() != null)
-			throw new UiException("Not allowed to set rows and vflex at the same time");
+			log.warn("Not allowed to set rows and vflex at the same time");
 		
 		if (this.getHeight() != null)
-			throw new UiException("Not allowed to set rows and height at the same time");
+			log.warn("Not allowed to set rows and height at the same time");
 	}
 
 	/** Returns whether it is multiline.
@@ -206,7 +210,7 @@ public class Textbox extends InputElement {
 	@Override
 	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (this.getRows() != 1)
-			throw new UiException("Not allowed to set vflex and rows at the same time");
+			log.warn("Not allowed to set vflex and rows at the same time");
 
 		super.setVflex(flex);
 	}
@@ -214,7 +218,7 @@ public class Textbox extends InputElement {
 	@Override
 	public void setHeight(String height) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (this.getRows() != 1)
-			throw new UiException("Not allowed to set height and rows at the same time");
+			log.warn("Not allowed to set height and rows at the same time");
 		
 		super.setHeight(height);
 	}
