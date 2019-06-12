@@ -272,7 +272,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			case 86: // ctrl + v
 				// Bug ZK-1749
 				if (zk.ie <= 9 && evt.ctrlKey) { // IE9 onpaste not support
-					this._updateValue();
+					this._updateChanged();
 					break;
 				}
 				// no need to break here, let it run with 'default' case
@@ -287,10 +287,10 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	doPaste_: function (evt) {
-		this._updateValue();
+		this._updateChanged();
 		this.$supers('doPaste_', arguments);
 	},
-	_updateValue: function () {
+	_updateChanged: function () {
 		var inp = this.getInputNode(),
 			self = this,
 			curVal = inp.value;
