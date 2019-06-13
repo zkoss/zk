@@ -49,4 +49,9 @@ public class B86_ZK_4252Test extends WebDriverTestCase {
 		blur(real);
 		waitResponse();
 	}
+
+	private void selectAll() {
+		eval("document.activeElement.select()");
+		sleep(100);
+	}
 }

@@ -16,7 +16,7 @@
 		list.add("entry "+i);
 	}
 ]]></zscript>
-	<listbox id="listbox" width="250px" rows="6">
+	<listbox width="250px" rows="6">
 		<listhead sizable="true">
 			<listheader label="name" sort="auto"/>
 		</listhead>
