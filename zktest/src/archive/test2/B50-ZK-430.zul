@@ -31,4 +31,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 6. Press the UP or Down arrow key on the keyboard to change it, and then it should be only changed in the number area (not AM or PM)
 <separator/>
 <timebox id="tb3" format="aHH:mm:ss" width="150px" />
+	<script>
+		function getNextAMPM () {
+			var next = 'AM';
+			if (zk.Widget.$(jq('$tb3')[0]).$n("real").value.indexOf('AM') != -1)
+				next = 'PM';
+			return next;
+		}
+	</script>
 </zk>

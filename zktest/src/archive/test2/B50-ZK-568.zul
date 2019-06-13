@@ -30,7 +30,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	</zscript>
 	<combobox id="box" width="150px" mold="rounded" model="${lm}" />
 
-	<button id="btn" label="select item15">
+	<button label="select item15">
 		<attribute name="onClick">
 			box.setSelectedIndex(14);
 		</attribute>
