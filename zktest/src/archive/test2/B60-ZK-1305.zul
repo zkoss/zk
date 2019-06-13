@@ -3,7 +3,7 @@
 		var oldGhost = zk.DnD.ghost;
 		zk.DnD.ghost = function(drag, ofs, msg) {
 			var g = oldGhost(drag, ofs, msg);
-			zk.log(jq('#zk_ddghost').html());
+			zk.Widget.$('$ghostInfo').setValue(jq('#zk_ddghost').html());
 			return g;
 		}
 	]]></script>
@@ -33,4 +33,6 @@
 		<listitem label="test" />
 	</listbox>
 	<label id="lbl" />
+	<separator />
+	<label id="ghostInfo" />
 </zk>
