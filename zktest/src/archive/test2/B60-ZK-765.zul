@@ -24,10 +24,10 @@
 	<listbox id="listbox" width="300px" model="${model}" rows="5" />
 	
 	<label id="msg" />
-	<button label="reset" onClick="listbox.setModel(model)"/>
+	<button id="btnOne" label="reset" onClick="listbox.setModel(model)"/>
 	</vbox>
-	<button label="show index" w:onClick="showindex()"/>
-	<button label="show selected" w:onClick="showselected()"/>
+	<button id="btnTwo" label="show index" w:onClick="showindex()"/>
+	<button id="btnThree" label="show selected" w:onClick="showselected()"/>
 	<script type="text/javascript"><![CDATA[
 	showindex = function(){
 		var msg = zk.Widget.$('$msg');

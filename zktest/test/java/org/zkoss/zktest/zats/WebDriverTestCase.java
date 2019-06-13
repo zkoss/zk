@@ -594,6 +594,17 @@ public abstract class WebDriverTestCase {
 	}
 
 	/**
+	 * Press hot key (e.g. Ctrl + X) to trigger a cut action.
+	 * It's caller's responsibility to focus/select text before calling this method.
+	 */
+	protected void cut() {
+		String cutKeys = System.getProperty("os.name").startsWith("Mac")
+				? Keys.chord(Keys.SHIFT, Keys.DELETE)
+				: Keys.chord(Keys.CONTROL, "x");
+		getActions().sendKeys(cutKeys).perform();
+	}
+
+	/**
 	 * Press hot key (e.g. Ctrl + C) to trigger a copy action.
 	 * It's caller's responsibility to focus/select text before calling this method.
 	 */
@@ -614,5 +625,34 @@ public abstract class WebDriverTestCase {
 				? Keys.chord(Keys.SHIFT, Keys.INSERT)
 				: Keys.chord(Keys.CONTROL, "v");
 		getActions().sendKeys(pasteKeys).perform();
+	}
+
+	/**
+	 * Trigger a select all action.
+	 * It's caller's responsibility to click/focus on a DOM node before calling this method.
+	 */
+	protected void selectAll() {
+		eval("document.activeElement.select && document.activeElement.select()");
+		sleep(100);
+	}
+
+	/**
+	 * Moves the text cursor to the specified position in the given input element or textarea.
+	 *
+	 * @param locator pointing to an input element or textarea
+	 * @param position position (starts from 0)
+	 */
+	protected void setCursorPosition(ClientWidget locator, int position) {
+		eval(zk(locator) + String.format(".setSelectionRange(%1$d, %1$d)", position));
+		sleep(100);
+	}
+
+	/**
+	 * Hover.
+	 *
+	 * @param locator element
+	 */
+	protected void mouseOver(ClientWidget locator) {
+		getActions().moveToElement(toElement(locator)).pause(100).perform();
 	}
 }
