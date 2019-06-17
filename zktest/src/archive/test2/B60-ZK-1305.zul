@@ -1,15 +1,7 @@
 <zk>
-	<script><![CDATA[
-		var oldGhost = zk.DnD.ghost;
-		zk.DnD.ghost = function(drag, ofs, msg) {
-			var g = oldGhost(drag, ofs, msg);
-			zk.log(jq('#zk_ddghost').html());
-			return g;
-		}
-	]]></script>
 	<div>
 	1. Click on the first listitem, should see "select index: 0" message showed. <separator />
-	2. Should be able to drag test0 item.
+	2. Should be able scroll the listbox.
 	</div>
 	<listbox height="200px" onSelect='lbl.value="select index: " + self.selectedIndex'>
 		<listitem label="test0" draggable="true" />

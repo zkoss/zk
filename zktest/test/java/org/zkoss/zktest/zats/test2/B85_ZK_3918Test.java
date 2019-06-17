@@ -13,7 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.Keys;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 public class B85_ZK_3918Test extends WebDriverTestCase {
@@ -49,17 +49,5 @@ public class B85_ZK_3918Test extends WebDriverTestCase {
 		Assert.assertEquals("", jq(".z-colorpalette-input").val());
 		paste();
 		Assert.assertEquals("#123ABC", jq(".z-colorpalette-input").val());
-	}
-	
-	private void selectAll() {
-		eval("document.activeElement.select()");
-		sleep(100);
-	}
-	
-	private void cut() {
-		String copyKeys = System.getProperty("os.name").startsWith("Mac")
-				? Keys.chord(Keys.SHIFT, Keys.DELETE)
-				: Keys.chord(Keys.CONTROL, "x");
-		getActions().sendKeys(copyKeys).perform();
 	}
 }
