@@ -21,6 +21,7 @@ public class B85_ZK_3924Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 		click(jq("@button"));
+		sleep(500);
 		click(jq(".z-icon-times"));
 		waitResponse();
 		Assert.assertFalse(isZKLogAvailable());
