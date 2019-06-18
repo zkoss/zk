@@ -56,7 +56,6 @@ ZK 8.6.2
   ZK-4279: popup in no-dom element initialize in the wrong place, doesn't clean up
   ZK-4290: update moment.js and moment-timezones-with-data.js
   ZK-4211: listbox selection causes invalidate
-  ZK-4303: Include in defer mode fails if src is modified while the page is still loading
   ZK-4300: Choosing Jan 1st, 1900 results in wrong year in format yy Datebox
   ZK-4308: Calendar should respect Data-AnimationSpeed
   ZK-4254: Wrong position of vertical custom scrollbar if horizontal scroll position was changed
