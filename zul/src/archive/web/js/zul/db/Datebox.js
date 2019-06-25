@@ -282,7 +282,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	/**
 	 * Returns the iconSclass name of this Datebox.
-	 * @return the iconSclass name
+	 * @return String the iconSclass name
 	 * @since 8.6.2
 	 */
 	getIconSclass: function () {

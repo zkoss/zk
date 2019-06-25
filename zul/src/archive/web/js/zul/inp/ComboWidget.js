@@ -83,11 +83,11 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		},
 		/**
 		 * Returns the iconSclass name of this ComboWidget.
-		 * @return the iconSclass name
+		 * @return String the iconSclass name
 		 */
 		/**
 		 * Sets the iconSclass name of this ComboWidget.
-		 * @param iconSclass String
+		 * @param String iconSclass
 		 * @since 8.6.2
 		 */
 		iconSclass: function (iconSclass) {
