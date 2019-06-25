@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4296-grid.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 23 11:36:31 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Not allowed to set visibleRows and vflex or height at the same time in a Grid:
+		try the buttons below, visibleRows/vflex/height should not use at the same time
+		only vflex="min" with height is not restricted
+		otherwise you should see an error message or a WARNING in server console
+	</label>
+	<button label="setVisibleRows(20)" onClick="gd.setVisibleRows(20);" />
+	<button label="setVisibleRows(0)" onClick="gd.setVisibleRows(0);" />
+	<separator/>
+	<button label='setHeight(200px)' onClick='gd.setHeight("200px")' />
+	<button label='setHeight(null)' onClick='gd.setHeight(null)' />
+	<separator/>
+	<button label="setVflex(1)" onClick='gd.setVflex("1");' />
+	<button label="setVflex(min)" onClick='gd.setVflex("min");' />
+	<button label="setVflex(null)" onClick='gd.setVflex(null);' />
+	<div width="700px" height="500px">
+		<grid id="gd">
+			<auxhead>
+				<auxheader colspan="2" label="Grid - Auxheader" />
+			</auxhead>
+			<columns>
+				<column label="Col ${each}" forEach="1,2" />
+			</columns>
+			<rows>
+				<group label="Group" />
+				<row>
+					<div forEach="1,2">Cell ${each}</div>
+				</row>
+				<groupfoot label="Groupfoot" spans="2" />
+			</rows>
+			<foot>
+				<footer span="2">Footer</footer>
+			</foot>
+		</grid>
+	</div>
+</zk>

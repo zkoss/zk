@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4233-include.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Apr 30 17:40:42 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window apply="org.zkoss.zktest.test2.B86_ZK_4233_Include_Composer">
+		<button id="inBtn" label="show and refresh"/>
+	</window>
+</zk>

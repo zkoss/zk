@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4248.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 7 10:21:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+    zk.afterLoad(function () {
+        zk.override(zAu.cmd1, "addChd", function (wgt) {
+            zAu.cmd1.$addChd.apply(this, arguments);
+            zk.log("addChd");
+        });
+    });
+    ]]>
+	</script>
+	<label>scroll down to see listbox rod loaded, and you should not see "addChd" in zk log</label>
+	<window title="Dynamic Listbox Columns" height="1200px" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4248VM')">
+		<listbox model="@load(vm.data)" vflex="true">
+			<listhead children="@load(vm.columns)">
+				<template name="children" var="item" >
+					<listheader align="center" hflex="min">
+						<label value="@load(item)" style="white-space: normal;" multiline="true" />
+					</listheader>
+				</template>
+			</listhead>
+
+			<template name="model" var="line">
+				<listitem children="@bind(line)" >
+					<template name="children" var="cell">
+						<listcell label="@load(cell)" style="text-align: center"/>
+					</template>
+				</listitem>
+			</template>
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		</listbox>
+	</window>
+</zk>

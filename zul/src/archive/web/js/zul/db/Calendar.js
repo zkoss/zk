@@ -853,7 +853,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				out = []; // reset
 				Renderer.titleHTML(this, out, localizedSymbols);
 				jq(this.$n('title')).html(out.join(''));
-				jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1});
+				jq(this.$n('mid')).transition({scale: 0}, 0).transition({scale: 1}, this.animationSpeed_());
 
 				_updateArrow(this);
 
@@ -905,7 +905,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					newMid = oldMid.nextSibling;
 				}
 
-				jq(animaInner).animate({left: x}, {done: function (/*callback*/) {
+				jq(animaInner).animate({left: x}, {
+					duration: this.animationSpeed_(),
+					always: function (/*callback*/) {
 						self.domUnlisten_(oldMid, 'onClick', '_clickDate');
 						jq(animaInner.parentNode).after(newMid).remove();
 						self.domListen_(newMid, 'onClick', '_clickDate');
@@ -1069,6 +1071,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		if (this._weekOfYear)
 			cls += this.$s('wk') + ' ';
 		return cls + this.$supers('domClass_', arguments);
+	},
+	animationSpeed_: function () {
+		return zk(this).getAnimationSpeed('_default');
 	}
 });
 })();

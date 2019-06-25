@@ -425,6 +425,14 @@ public class Grid extends MeshElement {
 		}
 	}
 
+	@Override
+	public void setVflex(String flex) { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
+		if (_visibleRows != 0)
+			log.warn("Not allowed to set vflex and visibleRows at the same time");
+		
+		super.setVflex(flex);
+	}
+
 	/**
 	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 * @param fixedLayout true to outline this grid by browser
@@ -512,11 +520,13 @@ public class Grid extends MeshElement {
 	}
 
 	/** Sets the visible rows.
-	 * <p>Note: if both {@link #setHeight} is specified with non-empty,
-	 * {@link #setVisibleRows(int)} is ignored
+	 * <p>
+	 * Note: Not allowed to set visibleRows and height/vflex at the same time
 	 * @since 8.5.0
 	 */
 	public void setVisibleRows(int visibleRows) throws WrongValueException {
+		checkBeforeSetRows();
+
 		if (visibleRows < 0)
 			throw new WrongValueException("Illegal rows: " + visibleRows);
 
@@ -524,6 +534,14 @@ public class Grid extends MeshElement {
 			_visibleRows = visibleRows;
 			smartUpdate("rows", _visibleRows);
 		}
+	}
+
+	@Override
+	public void setHeight(String height) {
+		if (_visibleRows != 0)
+			log.warn("Not allowed to set height and visibleRows at the same time");
+		
+		super.setHeight(height);
 	}
 
 	//--Paging--//
@@ -784,6 +802,15 @@ public class Grid extends MeshElement {
 						_rows.getChildren().clear();*/
 
 					resetDataLoader(); // Bug 3357641
+
+					if (!isAutosort()) {
+						Columns cols = getColumns();
+						if (cols != null) {
+							for (Component column : cols.getChildren()) {
+								((Column) column).setSortDirection("natural");
+							}
+						}
+					}
 				}
 				if (_rows != null)
 					_rows.getChildren().clear(); //Bug 1807414, ZK-1512
@@ -900,14 +927,8 @@ public class Grid extends MeshElement {
 	 */
 	private static boolean doSort(Grid grid) {
 		Columns cols = grid.getColumns();
-		if (cols == null)
+		if (!grid.isAutosort() || cols == null)
 			return false;
-		if (!grid.isAutosort()) {
-			for (Component column : cols.getChildren()) {
-				((Column) column).setSortDirection("natural");
-			}
-			return false;
-		}
 		for (Iterator it = cols.getChildren().iterator(); it.hasNext();) {
 			final Column hd = (Column) it.next();
 			String dir = hd.getSortDirection();

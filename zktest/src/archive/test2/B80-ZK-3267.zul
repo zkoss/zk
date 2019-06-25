@@ -15,7 +15,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		1.in IE, click the combobox
+		1.in IE11, click the combobox
 		2.type any letter, it should not open the drop down popup
 	</label>
 	<combobox disabled="true" autodrop="true">

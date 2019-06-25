@@ -21,14 +21,13 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 		</ul>
 	]]></html>
 	<script type="text/javascript"><![CDATA[
-		zk.load('zul.db');
-		setTimeout(function(){
+		zk.afterLoad('zul.db,zk.fmt', function() {
 			var d = new Date();
 			for(var i = 0; i < 7; i++) {
 				zk.log(zk.fmt.Date.formatDate(d,'EEE MM/d'));
 				d.setDate(d.getDate() + 1);
 			}
-		},300);
+		});
 	]]></script>
 	<calendar/>
 </zk>

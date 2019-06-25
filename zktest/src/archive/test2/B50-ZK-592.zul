@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-1. click on the 1th item
+1. click on the 1st item
 <separator/>
 2. go to the 200th item with the vertical scrollbar
 <separator/>
@@ -43,6 +43,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<listheader label="items" />
 	</listhead>
 </listbox>
+	<button label="getSelectedCount()" onClick="Clients.log(listbox.getSelectedCount().toString())"/>
+	<button xmlns:w="client" label="refresh" w:onClick="location.reload()" />
 </zk>
 
 

@@ -1296,8 +1296,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						wd += zk.parseInt(w.style.width);
 				}
 				if (wd > 0) { //ZK-2772, ZK-2903: only when hdfaker has width, set back to table
-					//ZK-3938: only adjust width in Chrome, but zk.chrome returns true in Edge, we need to check !zk.edge
-					hdtbl.style.width = (hdfakerbar && hasVScroll && zk.chrome && !zk.edge) ? wd + scrollbarWidth + 'px' : wd + 'px';
+					//ZK-3938: only adjust width in Chrome (ZK-4219: and safari), but zk.chrome returns true in Edge, we need to check !zk.edge
+					hdtbl.style.width = (hdfakerbar && hasVScroll && (zk.chrome || zk.safari) && !zk.edge) ? wd + scrollbarWidth + 'px' : wd + 'px';
 					if (bdtbl)
 						bdtbl.style.width = wd + 'px';
 					if (fttbl)
@@ -1961,6 +1961,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this._topBoundary = body.scrollTop;
 			this._bottomBoundary = this._bottomBoundary == undefined ? body.scrollHeight : this._bottomBoundary;
 			body.scrollTop += (this._bottomBoundary - body.scrollTop) / 2;
+		}
+	},
+	getContentEdgeHeight_: function () {
+		var height = this.$supers('getContentEdgeHeight_', arguments),
+			efoot = this.efoot;
+		if (efoot) {
+			var zkefoot = zk(efoot);
+			height += zkefoot.padBorderHeight() + zkefoot.sumStyles('tb', jq.margins);
+		}
+		return height;
+	},
+	afterChildrenMinFlex_: function (o) {
+		var n = this.$n();
+		if (o == 'h') {
+			n.style.height = jq.px0(Math.ceil(this._vflexsz));
 		}
 	}
 }, {

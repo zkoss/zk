@@ -280,7 +280,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		strictDate: null
 	},
-	getIconClass_: function () {
+	/**
+	 * Returns the iconSclass name of this Datebox.
+	 * @return String the iconSclass name
+	 * @since 8.6.2
+	 */
+	getIconSclass: function () {
 		return 'z-icon-calendar';
 	},
 	inRoundedMold: function () {
@@ -368,8 +373,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		if (val) {
-			var format = this.getFormat(),
-				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, this._value, this._localizedSymbols, tz, this._strictDate);
+			// We cannot use this._value in this case, which won't trigger onChange
+			// event. Using clone date instead.
+			var date = this._value ? Dates.newInstance(this._value) : null,
+				format = this.getFormat(),
+				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, date, this._localizedSymbols, tz, this._strictDate);
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!format.match(/[HkKh]/))
@@ -687,19 +695,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			if (pp.offsetWidth > wd)
 				pp.style.width = wd;
 		}
-		var inp = db.getInputNode(),
-			dbEl = db.$n();
 		delete db._shortcut;
 
 		var fmt = db.getTimeFormat(),
 			tz = db.getTimeZone(),
-			unf = Datebox._unformater,
-			value = unf ? unf(inp.value) : null;
-		//we should use UTC date instead of Locale date to our value.
-		if (!value)
-			value = new zk.fmt.Calendar(zk.fmt.Date.parseDate(inp.value, db._format, false, db._value, this._localizedSymbols, tz), this._localizedSymbols).toUTCDate()
-				|| (inp.value ? db._value : zUtl.today(fmt, tz));
-
+			value = db._value || zUtl.today(fmt, tz);
 		if (value)
 			this.setValue(value);
 		if (fmt) {
@@ -736,7 +736,14 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (fmt) {
 			var tm = db._tm,
 				time = tm.getValue();
-			date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+			if (fmt.match(/[HK]/i))
+				date.setHours(time.getHours());
+			if (fmt.match(/[m]/))
+				date.setMinutes(time.getMinutes());
+			if (fmt.match(/[s]/))
+				date.setSeconds(time.getSeconds());
+			if (fmt.match(/[S]/))
+				date.setMilliseconds(time.getMilliseconds());
 
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!fmt.match(/[HkKh]/))
@@ -762,8 +769,10 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 			// Bug 3122159 and 3301374
 			evt.data.value = date;
-			if (!this.$class._equalDate(date, oldDate))
+			if (!this.$class._equalDate(date, oldDate)) {
+				db._value = date;
 				db.updateChange_();
+			}
 		}
 		evt.stop();
 	},
@@ -825,6 +834,9 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (evt.keyCode == 27) {
 			this.parent.escPressed_(evt);
 		}
+	},
+	animationSpeed_: function () {
+		return zk(this.parent).getAnimationSpeed('_default');
 	}
 }, {
 	_equalDate: function (d1, d2) {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4233.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Apr 30 17:40:03 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.click the "show and refresh" button, you should see a messagebox popup.
+		2.you should see log: "B86-ZK-4233-include.zul?test=0".
+		3.close the messagebox by clicking the X icon on the top right.
+		4.click the "show and refresh" button again, you should see a messagebox popup.
+		5.you should see log: "B86-ZK-4233-include.zul?test=1".
+	</label>
+	<div apply="org.zkoss.zktest.test2.B86_ZK_4233_Composer">
+		<button label="change include" id="btnInc"/>
+		<include id="inc"></include>
+	</div>
+</zk>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4201.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 07 14:17:15 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.test this test case with a mobile device or use chrome developer tool to simulate iPad.
+		2.scroll down to select item 30
+		3.the listbox should not scrolls up to the first item(should keep the current scroll position)
+	</label>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 1; i <= 30; i++) {
+			list.add("item " + i);
+		}
+		ListModelList model = new ListModelList(list);
+	]]></zscript>
+	<listbox model="${model}" rows="10">
+		<listhead>
+			<listheader label="listbox header"/>
+		</listhead>
+		<template name="model">
+			<listitem label="${each}"/>
+		</template>
+	</listbox>
+</zk>

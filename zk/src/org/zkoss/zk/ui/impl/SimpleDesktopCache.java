@@ -166,7 +166,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		} finally {
 			// reset
 			//ZK-3214: Desktop session might not current session
-			ExecutionsCtrl.setCurrent((sess != Sessions.getCurrent()) ? currentExec : null);
+			ExecutionsCtrl.setCurrent((sess != Sessions.getCurrent() || (oldVi != null && oldVi.isRecovering())) ? currentExec : null);
 			desktopCtrl.setVisualizer(oldVi);
 			desktopCtrl.setExecution(oldExec);
 		}

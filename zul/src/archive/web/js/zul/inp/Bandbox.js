@@ -22,6 +22,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>Default {@link #getZclass}: z-bandbox.
  */
 zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
+	_iconSclass: 'z-icon-search',
 	//super
 	getPopupSize_: function (pp) {
 		var bp = this.firstChild, //bandpopup
@@ -43,10 +44,6 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 			w.redraw(out);
 
 		out.push('</div>');
-	},
-	//@Override
-	getIconClass_: function () {
-		return 'z-icon-search';
 	},
 	open: function (opts) {
 		if (!this.firstChild) {

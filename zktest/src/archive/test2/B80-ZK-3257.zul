@@ -15,7 +15,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		in IE, click first menu, it should not overlap each other menu
+		in IE11, click first menu, it should not overlap each other menu
 	</label>
 	<menubar>
 		<menu label="First Menu">

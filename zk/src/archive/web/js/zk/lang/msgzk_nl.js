@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Niet gevonden: ';
 msgzk.UNSUPPORTED = 'Nog niet ondersteund: ';
 msgzk.FAILED_TO_SEND = 'Verzoek kan niet aan de server gestuurd worden.';
 msgzk.FAILED_TO_RESPONSE = 'Server kan verzoek niet verwerken.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Try again?';
 msgzk.UNSUPPORTED_BROWSER = 'Niet ondersteunde Browser: ';
 msgzk.ILLEGAL_RESPONSE = 'Unbekend Antwoord van de Server, Aktualiseer aub de pagina en probeer opnieuw.\n';

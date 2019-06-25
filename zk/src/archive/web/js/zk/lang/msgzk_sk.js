@@ -18,6 +18,7 @@ msgzk.NOT_FOUND = 'Nenájdené: ';
 msgzk.UNSUPPORTED = 'Nepodporované: ';
 msgzk.FAILED_TO_SEND = 'Chyba pri komunikácii so serverom.';
 msgzk.FAILED_TO_RESPONSE = 'Server je dočasne nedostupný, prosím opakujte akciu neskôr.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Skúsiť znovu?';
 msgzk.UNSUPPORTED_BROWSER = 'Váš prehliadač nie je podporovaný: ';
 msgzk.ILLEGAL_RESPONSE = 'Neznáma odpoveď od servera, opakujte prosím akciu.\n';

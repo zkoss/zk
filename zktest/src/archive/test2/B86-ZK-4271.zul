@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4271.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 29 11:42:24 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void printDebugInfo(Label lbl, String msg) {
+        lbl.setValue(msg);
+    }
+    ]]></zscript>
+    <label multiline="true">
+        1. Upload a text file which the extension name is "txt".
+        2. The upload result should be "binary=true" since native=true.
+    </label>
+    <hlayout>
+        <button upload="native, true" label="upload"
+                onUpload='printDebugInfo(result1, event.media.name + ", binary=" + event.media.binary);'/>
+        <menubar>
+            <menuitem upload="true, native" label="upload"
+                      onUpload='printDebugInfo(result2, event.media.name + ", binary=" + event.media.binary);'/>
+        </menubar>
+        <cell>
+            DropUpload
+            <dropupload native="true" width="200px" height="100px" style="border: 1px solid red"
+                        onUpload='printDebugInfo(result3, event.media.name + ", binary=" + event.media.binary);'/>
+        </cell>
+    </hlayout>
+    <hlayout>
+        <label id="result1"/>
+        <label id="result2"/>
+        <label id="result3"/>
+    </hlayout>
+</zk>

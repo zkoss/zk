@@ -641,9 +641,11 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		final boolean exposeVer = "true".equals(verInfoEnabled);
 		final StringBuffer sb = new StringBuffer(256);
 		if (exposeVer)
-			sb.append("\nzkver('").append(wapp.getVersion()).append("','").append(wapp.getBuild());
+			sb.append("\nzkver('").append(wapp.getVersion()).append("','");
 		else
 			sb.append("\nzkver('','");
+
+		sb.append(obfuscateVer(exposeVer, wapp.getBuild(), verInfoEnabled));
 
 		final ServletContext ctx = getServletContext();
 		String s = Encodes.encodeURL(ctx, reqctx.request, reqctx.response, "/");

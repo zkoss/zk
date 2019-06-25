@@ -16,6 +16,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 <zk>
 	<label multiline="true">
 	1. Test each of the following component's selection that the previous selection will show after that component when you change the selection.
+	2. Since both Chosenbox and Selectbox don't have any child item, the previous SelectionItems should always be [].
 	</label>
 	<vlayout>
 		<zscript>
@@ -41,16 +42,40 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 
 
 		</zscript>
-		<hlayout>Chosen Box: <chosenbox id="chosenbox" width="100px" model="${Cmodel}" onSelect='self.nextSibling.setValue("Previous Selection: " + event.getPreviousSelectedItems())' /> <label/>
+		<hlayout>Chosen Box: <chosenbox id="chosenbox" width="100px" model="${Cmodel}">
+				<attribute name="onSelect"><![CDATA[
+					cb_psi.setValue("Previous SelectionItems: " + event.getPreviousSelectedItems());
+					cb_pso.setValue("Previous SelectionObjects: " + event.getPreviousSelectedObjects());
+				]]></attribute>
+			</chosenbox>
+			<label id="cb_psi"/><label id="cb_pso"/>
 		</hlayout>
 		<hlayout>
-			Select Box: <selectbox model="${Smodel}"  onSelect='self.nextSibling.setValue("Previous Selection: " + event.getPreviousSelectedItems())' /> <label/>
+			Select Box: <selectbox model="${Smodel}">
+				<attribute name="onSelect"><![CDATA[
+					sb_psi.setValue("Previous SelectionItems: " + event.getPreviousSelectedItems());
+					sb_pso.setValue("Previous SelectionObjects: " + event.getPreviousSelectedObjects());
+				]]></attribute>
+			</selectbox>
+			<label id="sb_psi"/><label id="sb_pso"/>
 		</hlayout>
 		<hlayout>
-			Listbox Box: <listbox width="300px" model="${Lmodel}"  onSelect='self.nextSibling.setValue("Previous Selection: " + event.getPreviousSelectedItems())' /> <label/>
+			Listbox Box: <listbox width="300px" model="${Lmodel}">
+				<attribute name="onSelect"><![CDATA[
+					lb_psi.setValue("Previous SelectionItems: " + event.getPreviousSelectedItems());
+					lb_pso.setValue("Previous SelectionObjects: " + event.getPreviousSelectedObjects());
+				]]></attribute>
+			</listbox>
+			<label id="lb_psi"/><label id="lb_pso"/>
 		</hlayout>
 		<hlayout>
-			Tree: <tree model="${stm2}"  width="300px" onSelect='self.nextSibling.setValue("Previous Selection: " + event.getPreviousSelectedItems())' /> <label/>
+			Tree: <tree model="${stm2}"  width="300px">
+				<attribute name="onSelect"><![CDATA[
+					tr_psi.setValue("Previous SelectionItems: " + event.getPreviousSelectedItems());
+					tr_pso.setValue("Previous SelectionObjects: " + event.getPreviousSelectedObjects());
+				]]></attribute>
+			</tree>
+			<label id="tr_psi"/><label id="tr_pso"/>
 		</hlayout>
 	</vlayout>
 </zk>

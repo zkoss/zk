@@ -58,7 +58,8 @@ links.add(new Link(123456.789012345));
 </grid>
 <label multiline="true">
 	1. Change your browser's preferred language to German
-	2. Every value should be "€ 39824,00"
+	2. The column1 and column2 value should be "€ 39824,00"
+	3. The column3 and column4 value should be "€ 39.824,00"
 </label>
 <grid>
 <columns>

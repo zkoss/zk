@@ -387,14 +387,32 @@
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic-ext7</artifactId>
-			<version>2.0.0</version>
-            <scope>test</scope>
+			<version>2.1.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
-            <scope>test</scope>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<version>2.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+			<version>1.0</version>
+			<scope>test</scope>
 		</dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -411,7 +429,7 @@
 		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>3.1.1</version>
+			<version>3.4.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -459,6 +477,13 @@
 			<version>2.2.7</version>
 		</dependency>
 
+		<!-- ZK-4288 -->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
+			<version>2.1.6.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<directory>${project.basedir}/debug</directory>
@@ -532,7 +557,7 @@
 						<include>**/*Test.java</include>
 					</includes>
 					<reportsDirectory>${report.dir}</reportsDirectory>
-					<argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
+					<argLine>-Xmx512m</argLine>
 				</configuration>
 			</plugin>
 		</plugins>

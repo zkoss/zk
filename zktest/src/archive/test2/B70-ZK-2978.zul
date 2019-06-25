@@ -16,10 +16,8 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 <zk>
     <label multiline="true">
         1. load this page
-        2. shrink the height less then 500px
-        3. open 2 groupbox
-        4. should appear vertical scrollbar
-
+        2. open 2 groupbox
+        3. should appear vertical scrollbar
     </label>
     <borderlayout vflex="1" class="mainCenterArea">
         <custom-attributes org.zkoss.zul.nativebar="false"/>
@@ -67,6 +65,7 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
                         <label value="Layer2 B"/>
                         <label value="Layer2 B"/>
                         <label value="Layer2 B"/>
+                        <div height="1000px"/>
                     </vbox>
                 </groupbox>
             </vbox>

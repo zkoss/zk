@@ -18,7 +18,7 @@ function (out) {
 		w.redraw(out);
 	
 	var tree = this.getTree();
-	if (tree._nativebar && !tree.frozen)
+	if (tree._nativebar)
 		out.push('<td class="', this.$s('bar'), '" />');
 	
 	out.push('</tr>');

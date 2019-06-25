@@ -19,8 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test2;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.ConventionWires;
-import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Window;
 
 /**
@@ -28,12 +27,11 @@ import org.zkoss.zul.Window;
  *
  * @author tomyeh
  */
-public class MyComposer implements Composer {
+public class MyComposer extends GenericForwardComposer {
 	public void doAfterCompose(Component comp) {
 		final Window w = (Window)comp;
 		w.setTitle("Composer: "+w.getTitle());
 		w.setBorder("normal");
-		ConventionWires.wireVariables(comp, this);
 	}
 	public String getHello() {
 		return "Hello! ZK.";

@@ -18,6 +18,7 @@ msgzk.NOT_FOUND = 'Не е открит: ';
 msgzk.UNSUPPORTED = 'Още не се поддържа: ';
 msgzk.FAILED_TO_SEND = 'Проблем при изпращане на заявките към сървъра.';
 msgzk.FAILED_TO_RESPONSE = 'Сървъра не може да обработи заявката.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Нов опит ?';
 msgzk.UNSUPPORTED_BROWSER = 'Този броузер не се поддържа: ';
 msgzk.ILLEGAL_RESPONSE = 'Проблем с отговора на сървъра. Презаредете страницата наново.\n';

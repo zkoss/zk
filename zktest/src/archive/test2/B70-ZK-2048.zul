@@ -5,7 +5,7 @@
 	</div>
 	<vlayout id="pnUpdate" width="1210px" visible="false">
 		<hlayout>
-			<tree id="treeEgipto" height="300px" width="700px" rows="8">
+			<tree id="treeEgipto" height="300px" width="700px">
 				<treecols sizable="false">
 					<treecol label="Componente" hflex="1" />
 					<treecol label="desc" hflex="2" />

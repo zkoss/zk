@@ -939,8 +939,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	public void setId(String id) {
 		if (!((ExecutionCtrl) _exec).isRecovering())
-			throw new IllegalStateException("Callable only in recovring");
-		if (id == null || id.length() <= 1 || id.charAt(0) != 'g')
+			throw new IllegalStateException("Callable only in recovering");
+		if (id == null || id.length() <= 1)
 			throw new IllegalArgumentException(
 					"Invalid desktop ID. You have to recover to the original value, not creating a new value: " + id);
 
@@ -949,6 +949,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (dc != null)
 			dc.removeDesktop(this);
 
+		init();
 		_id = id;
 		updateUuidPrefix();
 

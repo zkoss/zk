@@ -476,43 +476,51 @@ zAu = {
 	//remove desktop (used in mount.js and wiget.js)
 	_rmDesktop: function (dt, dummy) {
 		var url = zk.ajaxURI(null, {desktop: dt, au: true}),
-			data = jq.param({dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'});
-		// ZK-4204: Some browsers like Firefox don't support keepalive flag yet.
-		if (window.fetch && window.Request && new Request(url, {keepalive: true}).keepalive) {
-			var headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'});
-			if (zk.pfmeter) {
-				var fakeReq = {
-					setRequestHeader: function (name, value) {
-						headers.set(name, value);
-					}
-				};
-				zAu._pfsend(dt, fakeReq, true, false);
+			data = jq.param({dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'}),
+			headers = {};
+		if (zk.pfmeter) {
+			var fakeReq = {
+				setRequestHeader: function (name, value) {
+					headers[name] = value;
+				}
+			};
+			zAu._pfsend(dt, fakeReq, true, false);
+		}
+		// ZK-4204
+		if (navigator.sendBeacon && window.URLSearchParams) {
+			var params = new URLSearchParams(data);
+			for (var key in headers) {
+				if (headers.hasOwnProperty(key))
+					params.append(key, headers[key]);
 			}
-			fetch(url, {
-				method: 'POST',
-				headers: headers,
-				body: data,
-				mode: 'same-origin',
-				keepalive: true
-			}).catch(function (e) { zk.debugLog(e); });
+			navigator.sendBeacon(url, zk.chrome // https://crbug.com/747787
+				? new Blob([params.toString()], {type: 'application/x-www-form-urlencoded'})
+				: params
+			);
 		} else {
-			jq.ajax(zk.$default({
-				url: url,
-				data: data,
-				beforeSend: function (xhr) {
-					if (zk.pfmeter) zAu._pfsend(dt, xhr, true, false);
-				},
-				//2011/04/22 feature 3291332
-				//Use sync request for chrome, safari and firefox (4 and later).
-				//Note: when pressing F5, the request's URL still arrives before this even async:false
-				async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome.
-				// conservative, though it shall be (!zk.safari || zk.ff >= 4)
-			}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
+			this._rmDesktopAjax(url, data, headers);
 		}
 		// B65-ZK-2210: clean up portlet2 data when desktop removed.
 		if (!dummy && zk.portlet2Data && zk.portlet2Data[dt.id]) {
 			delete zk.portlet2Data[dt.id];
 		}
+	},
+	_rmDesktopAjax: function (url, data, headers) {
+		jq.ajax(zk.$default({
+			url: url,
+			data: data,
+			beforeSend: function (xhr) {
+				for (var key in headers) {
+					if (headers.hasOwnProperty(key))
+						xhr.setRequestHeader(key, headers[key]);
+				}
+			},
+			//2011/04/22 feature 3291332
+			//Use sync request for chrome, safari and firefox (4 and later).
+			//Note: when pressing F5, the request's URL still arrives before this even async:false
+			async: !!zk.ie // (!!) coerce to boolean, undefined will be wrong for safari and chrome.
+			// conservative, though it shall be (!zk.safari || zk.ff >= 4)
+		}, zAu.ajaxSettings), null, true/*fixed IE memory issue for jQuery 1.6.x*/);
 	},
 
 	////Ajax////
@@ -1047,7 +1055,16 @@ zAu.beforeSend = function (uri, req, dt) {
 			cmds.pfIds = zAu.pfGetIds(req);
 		}
 
-		rt = jq.evalJSON(rt);
+		try {
+			rt = jq.evalJSON(rt);
+		} catch (e) {
+			if (e.name == 'SyntaxError') { //ZK-4199: handle json parse error
+				zAu.showError('FAILED_TO_PARSE_RESPONSE', e.message);
+				zk.debugLog(e.message + ', response text:\n' + req.responseText);
+				return false;
+			}
+			throw e;
+		}
 		var	rid = rt.rid;
 		if (rid) {
 			rid = parseInt(rid); //response ID

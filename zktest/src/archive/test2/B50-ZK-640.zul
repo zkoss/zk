@@ -25,9 +25,9 @@ There should no extra "&amp;nbsp;" (see the dom element) after the image of tool
 		<toolbar id="tbar">
 			<toolbarbutton label="label" image="/img/defender.gif" />
 			<toolbarbutton label="label" image="/img/defender.gif" />
+			<toolbarbutton id="tbbOne" image="/img/live.gif" />
 			<toolbarbutton image="/img/live.gif" />
-			<toolbarbutton image="/img/live.gif" />
-			<toolbarbutton label="label" image="/img/defender.gif" />
+			<toolbarbutton id="tbbTwo" label="label" image="/img/defender.gif" />
 			<toolbarbutton image="/img/live.gif" />
 			<toolbarbutton label="label" image="/img/defender.gif" />
 		</toolbar>

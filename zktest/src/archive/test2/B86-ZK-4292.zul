@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4292.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 15 11:38:09 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script><![CDATA[
+		function test(year) {
+			zk.log(Dates.newInstance([year, 0, 1, 0, 0, 0, 0], 'Asia/Taipei').getFullYear());
+		}
+	]]></script>
+	<label multiline="true">
+		1. click the "test(100)" button, you should see "100" in zk log.
+		2. click the "test(99)" button, you should see "99" in zk log.
+	</label>
+	<button label="test(100)" w:onClick="test(100)"></button>
+	<button label="test(99)" w:onClick="test(99)"></button>
+</zk>

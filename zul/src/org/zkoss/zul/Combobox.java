@@ -119,6 +119,7 @@ public class Combobox extends Textbox {
 	private String _popupWidth;
 	private String _emptySearchMessage;
 	private boolean _instantSelect = true;
+	private String _iconSclass = "z-icon-caret-down";
 
 	private static final String ATTR_ON_INIT_RENDER = "org.zkoss.zul.Combobox.onInitRender";
 
@@ -925,6 +926,27 @@ public class Combobox extends Textbox {
 		}
 	}
 
+	/**
+	 * Sets the iconSclass name of this Combobox.
+	 * @param iconSclass String
+	 * @since 8.6.2
+	 */
+	public void setIconSclass(String iconSclass) {
+		if (!Objects.equals(_iconSclass, iconSclass)) {
+			_iconSclass = iconSclass;
+			smartUpdate("iconSclass", iconSclass);
+		}
+	}
+
+	/**
+	 * Returns the iconSclass name of this Combobox.
+	 * @return the iconSclass name
+	 * @since 8.6.2
+	 */
+	public String getIconSclass() {
+		return _iconSclass;
+	}
+
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-combobox" : _zclass;
@@ -946,6 +968,8 @@ public class Combobox extends Textbox {
 			renderer.render("emptySearchMessage", _emptySearchMessage);
 		if (!_instantSelect)
 			renderer.render("instantSelect", false);
+		if (!"z-icon-caret-down".equals(_iconSclass))
+			renderer.render("iconSclass", _iconSclass);
 	}
 
 	/** Processes an AU request.

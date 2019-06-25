@@ -12,6 +12,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,8 @@ import org.slf4j.LoggerFactory;
  * @author jameschu
  * @since 8.5.0
  */
-public class SourceMapManager {
+public class SourceMapManager implements Serializable {
 	static final Logger log = LoggerFactory.getLogger(SourceMapManager.class);
-	private final SourceMapGeneratorV3 _generator;
 	private final String _name;
 	private final String _sourceRoot;
 	private final String _sourceMappingURL;
@@ -34,7 +34,6 @@ public class SourceMapManager {
 	private String _generatedSourceMapContent;
 
 	public SourceMapManager(String name, String sourceRoot, String id) {
-		_generator = new SourceMapGeneratorV3();
 		_name = name;
 		_sourceRoot = sourceRoot;
 		_sourceMapInfoList = new ArrayList<SourceMapInfo>(16);
@@ -127,6 +126,7 @@ public class SourceMapManager {
 		if (mapContentStr != null && mapContentStr.length() != 0)
 			return mapContentStr;
 		try {
+			SourceMapGeneratorV3 generator = new SourceMapGeneratorV3();
 			int lineCount = 0;
 			List<String> sourcePathList = new ArrayList<String>(16);
 			for (int i = 0; i < _sourceMapInfoList.size(); i++) {
@@ -134,14 +134,14 @@ public class SourceMapManager {
 				String content = sourceMapInfo.getContent();
 				if (content == null || content.length() == 0) //skip empty map
 					continue;
-				_generator.mergeMapSection(lineCount, 0, content);
+				generator.mergeMapSection(lineCount, 0, content);
 				lineCount += sourceMapInfo.getLineCount();
 				String sourcePath = sourceMapInfo.getSourcePath();
 				if (sourcePath != null && sourcePath.length() != 0)
 					sourcePathList.add(sourcePath);
 			}
 			StringBuilder mapContents = new StringBuilder();
-			_generator.appendTo(mapContents, _name + ".wpd");
+			generator.appendTo(mapContents, _name + ".wpd");
 			mapContentStr = mapContents.toString();
 			StringBuilder sourcesBuilder = new StringBuilder();
 			sourcesBuilder.append("\"sources\":[");
@@ -157,6 +157,8 @@ public class SourceMapManager {
 			sourcesBuilder.append("\",");
 			mapContentStr = mapContentStr.replaceAll("\"sources\".*\\]\\,",  sourcesBuilder.toString());
 			_generatedSourceMapContent = mapContentStr;
+			//clear info
+			_sourceMapInfoList.clear();
 		} catch (Exception e) {
 			log.warn("Failed to parse source map file. " + e.getMessage());
 		}

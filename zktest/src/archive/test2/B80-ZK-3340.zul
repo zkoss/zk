@@ -13,7 +13,7 @@ B80-ZK-3340.zul
 Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:w="client">
+<zk>
 	<label multiline="true">
 		1. focus on the bandbox input -> should see 'bandbox focussed:onFocus' in zklog
 		2. type a few chars -> should see 'bandbox changing:onChanging' added in zklog

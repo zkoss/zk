@@ -743,7 +743,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		public String getFirstCommand(Object request) {
-			return ((HttpServletRequest) request).getParameter("cmd.0");
+			return ((HttpServletRequest) request).getParameter("cmd_0");
 		}
 
 		@SuppressWarnings("unchecked")

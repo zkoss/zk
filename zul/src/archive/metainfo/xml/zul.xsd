@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.0.201811151240">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.2.201905131112">
 	<!--
 	SIMPLETYPE
 	-->
@@ -1035,6 +1035,7 @@
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- bandpopup -->
 	<xs:element name="bandpopup" type="bandpopupType" />
@@ -1445,6 +1446,7 @@
 		<xs:attribute name="popupWidth" type="xs:string" use="optional" />
 		<xs:attribute name="errorMessage" type="xs:string" use="optional" />
 		<xs:attribute name="instantSelect" type="booleanType" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- comboitem -->
 	<xs:element name="comboitem" type="comboitemType" />
@@ -1731,7 +1733,8 @@
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="columns" type="intType" use="required" />
+		<xs:attribute name="columns" type="intType" use="optional" />
+		<xs:attribute name="rightColumns" type="intType" use="optional" />
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="start" type="intType" use="optional" />
 	</xs:complexType>
@@ -2788,7 +2791,7 @@
 					<xs:enumeration value="top" />
 					<xs:enumeration value="left" />
 					<xs:enumeration value="right" />
-					<xs:enumeration value="down" />
+					<xs:enumeration value="bottom" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>

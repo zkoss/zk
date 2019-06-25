@@ -7,14 +7,71 @@ ZK 9.0.0
 
    --------
 ZK 8.6.2
+June 25, 2019
 * Features
   ZK-4132: Add Manifest to OSGI source bundle
+  ZK-4212: Frozen support right columns freeze
+  ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
+  ZK-4296: Error indicating incorrect usage when using both vflex and rows
+  ZK-4304: Bandbox button's icon can be changed
+  ZK-4314: DnD: Provide an optional switch to handle detached dragged
 
 * Bugs
   ZK-4230: Signature toolbarVisible not work
   ZK-4204: future chrome feature currently preventing "rmDesktop" (causing non cleaned up desktops)
+  ZK-4247: MeshWidget has unwanted margin when zoom in
+  ZK-4232: tabbox tabs border missing in breeze
+  ZK-4228: spinner button icon misaligned (iceblue_c)
+  ZK-4275: Include in defer mode fail when composing in async (server push)
+  ZK-4269: cropper component ignores inital x,y=0
+  ZK-4236: leaking variable resolvers when using programmatic templates
+  ZK-4219: column width headers out of sync with cells (safari)
+  ZK-4210: column resizing ghost doesn't check for scroll when calculating snap position
+  ZK-4234: updated sclass on combobox doesn't update popup
+  ZK-4284: Tabbox is not scrollable under safari 9
+  ZK-4205: inconsistent parameter names (dead/obsolete code?)
+  ZK-4289: Fix recovering desktop (FailoverManager)
+  ZK-4287: resource caching broken when hiding zk version
+  ZK-4199: Improve AU response parse error message
+  ZK-4239: Weird animation in Calendar
+  ZK-4271: native fileupload flag ignored for button/menuitem
+  ZK-4220: UploadEvent.getMedia().getByteData() throws an unexpected exception when uploading
+  ZK-4224: listheader sortDirection not working when template is used
+  ZK-4240: Vertical tabbox in invisible comp has big height when onShow
+  ZK-4231: XSD contains incorrect option for tabbox orientation
+  ZK-4251: menu arrow not centered in breeze
+  ZK-4201: selecting an item of a Listbox scrolls back to the top
+  ZK-4208: Can't close a notification
+  ZK-4233: Messagebox show called inside include in defer mode doesn't show if include is refreshed
+  ZK-4255: MVVM constraints output Expectable exceptions to log
+  ZK-4292: Dates.newInstance() returns an incorrect year when the year is less than 100
+  ZK-4285: vflex min causes an unnecessary vertical scrollbar on a listbox
+  ZK-4241: The position of popup is changed after a ROD loading
+  ZK-4244: Dropupload: $img is undefined after ZK-2332
+  ZK-4270: vertical tabbox, toolbar causing JS error
+  ZK-4245: ZK-2804 regression since 8.6.1
+  ZK-4278: ZK animation uses "complete" callback. should use always instead
+  ZK-4266: smooth frozen scroll-click issues
+  ZK-4295: a listbox doesn't update selectedItem for a specific item at the first time
+  ZK-4280: databinding EL3 expression with multiple members fails after detached
+  ZK-4277: Negative values in NumberInputWidgets (JDK >=9)
+  ZK-4288: infinite recursion during session deserialization with redis
+  ZK-4242: Using short format in Datebox results in the wrong year
+  ZK-4248: Performance issue when ROD adds listcells to body
+  ZK-4258: Broken Slider pageIncrement
+  ZK-4221: load binding order/cleanup problem
+  ZK-4252: Paste still broken on a Timebox component after ZK-1749
+  ZK-4279: popup in no-dom element initialize in the wrong place, doesn't clean up
+  ZK-4290: update moment.js and moment-timezones-with-data.js
+  ZK-4211: listbox selection causes invalidate
+  ZK-4300: Choosing Jan 1st, 1900 results in wrong year in format yy Datebox
+  ZK-4308: Calendar should respect Data-AnimationSpeed
+  ZK-4254: Wrong position of vertical custom scrollbar if horizontal scroll position was changed
+  ZK-4253: Horizontal custom scrollbar of Listbox covers the last item in Iceblue
+  ZK-4306: SourceMapManager should be serializable
 
 * Upgrade Notes
+  + Due to ZK-4296 the mixing usage of vflex/height/rows is deprecated since 8.6.2 and will throw an exception in next major version
 
    --------
 ZK 8.6.1
@@ -36,6 +93,7 @@ Mar 5, 2019
   ZK-3629: Indeterminate progressmeter
   ZK-3540: FormProxy - ignore whole class hierarchies
   ZK-4200: Improve ZEL ImportHandler performance
+  ZK-4223: grid with vflex has unwanted margin
 
 * Bugs
   ZK-4114: orgnode label missing font styles

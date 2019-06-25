@@ -15,7 +15,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window>
+<window xmlns:w="client">
 H scroll only
 <listbox width="80px">
 	<listhead>
@@ -43,4 +43,11 @@ H scroll only
 		<listcell label="17%"/>
 	</listitem>
 </listbox>
+	<button label="hasHScroll" w:onClick="zk.log(getZKListbox().hasHScroll())"/>
+	<button label="hasVScroll" w:onClick="zk.log(getZKListbox().hasVScroll())"/>
+	<script>
+		function getZKListbox() {
+			return zk(jq('.z-listbox-body'));
+		}
+	</script>
 </window>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4251.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 13 11:46:53 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        The menu icon should be centered vertically.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <style>
+    .breeze .workaround .z-menu-icon,
+    .silvertail .workaround .z-menu-icon,
+    .sapphire .workaround .z-menu-icon {
+        top: 3px;
+    }
+    </style>
+    <menubar>
+        <menu label="File" iconSclass="z-icon-file">
+            <menupopup>
+                <menuitem iconSclass="z-icon-file"/>
+                <menuitem label="File"/>
+                <menuitem label="File" checkmark="true" checked="true"/>
+                <menuitem label="File" iconSclass="z-icon-file"/>
+                <menu label="File" iconSclass="z-icon-file">
+                    <menupopup>
+                        <menuitem/>
+                        <menuitem/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+        <menu label="(workaround) File" sclass="workaround" iconSclass="z-icon-file">
+            <menupopup>
+                <menuitem iconSclass="z-icon-file"/>
+                <menuitem label="File"/>
+                <menuitem label="File" checkmark="true" checked="true"/>
+                <menuitem label="File" iconSclass="z-icon-file"/>
+                <menu label="File" iconSclass="z-icon-file" sclass="workaround">
+                    <menupopup>
+                        <menuitem/>
+                        <menuitem/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+    </menubar>
+    <menubar orient="vertical">
+        <menu label="File" iconSclass="z-icon-file">
+            <menupopup>
+                <menuitem iconSclass="z-icon-file"/>
+                <menuitem label="File"/>
+                <menuitem label="File" checkmark="true" checked="true"/>
+                <menuitem label="File" iconSclass="z-icon-file"/>
+                <menu label="File" iconSclass="z-icon-file">
+                    <menupopup>
+                        <menuitem/>
+                        <menuitem/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+        <menu label="(workaround) File" sclass="workaround" iconSclass="z-icon-file">
+            <menupopup>
+                <menuitem iconSclass="z-icon-file"/>
+                <menuitem label="File"/>
+                <menuitem label="File" checkmark="true" checked="true"/>
+                <menuitem label="File" iconSclass="z-icon-file"/>
+                <menu label="File" iconSclass="z-icon-file" sclass="workaround">
+                    <menupopup>
+                        <menuitem/>
+                        <menuitem/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+    </menubar>
+</zk>

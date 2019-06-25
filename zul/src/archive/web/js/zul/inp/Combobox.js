@@ -31,6 +31,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_autocomplete: true,
 	_instantSelect: true,
+	_iconSclass: 'z-icon-caret-down',
 
 	$define: {
 		/** Returns whether to automatically complete this text box
@@ -258,9 +259,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 
 	//super
-	getIconClass_: function () {
-		return 'z-icon-caret-down';
-	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		this._shallCheckPopupPosition = true; // Bug ZK-2409

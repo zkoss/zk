@@ -38,6 +38,12 @@ public class Attributes extends org.zkoss.zk.ui.sys.Attributes {
 	 */
 	public static final String UPLOAD_MAX_SIZE = "org.zkoss.zk.upload.maxsize";
 
+	/** A component attribute used to indicate uploaded file(s) as binary.
+	 * It is a boolean.
+	 * @since 8.6.2
+	 */
+	public static final String UPLOAD_NATIVE = "org.zkoss.zk.upload.native";
+
 	//Component//
 	/** A desktop attribute used to store a map of data associated
 	 * with the echo event ({@link org.zkoss.zk.ui.event.Events#echoEvent}).

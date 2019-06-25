@@ -23,7 +23,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	</ol>
 	]]></html>
 	<listbox id="lb" height="400px" multiple="true">
-		<custom-attributes org.zkoss.zul.listbox.rod="true"	scope="page" />
+		<custom-attributes org.zkoss.zul.listbox.rod="true" scope="page" />
 		<zscript><![CDATA[
 	List list = new ArrayList();
 	for (int i = 0; i < 5000; i++)

@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Não encontrado: ';
 msgzk.UNSUPPORTED = 'Ainda não suportado: ';
 msgzk.FAILED_TO_SEND = 'Falhou ao enviar requisição para o servidor.';
 msgzk.FAILED_TO_RESPONSE = 'O servidor falhou ao processar sua requisição.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Tentar novamente?';
 msgzk.UNSUPPORTED_BROWSER = 'Navegador não suportado: ';
 msgzk.ILLEGAL_RESPONSE = 'Resposta desconhecida enviada pelo servidor. Por favor, recarregue e tente novamente.\n';

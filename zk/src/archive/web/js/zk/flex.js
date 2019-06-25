@@ -445,8 +445,12 @@ zFlex = { //static methods
 
 		//3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
 		//vertical scrollbar might disappear after height was set
-		if (!zkp.hasVScroll() && hasVScroll) //yes, the scrollbar gone!
+		var newpsz = wgt.getParentSize_(p);
+		if (newpsz.width > psz.width) {//yes, the scrollbar gone!
+			wdh += (newpsz.width - psz.width);
+		} else if (!zkp.hasVScroll() && hasVScroll) { // ZK-3858: Window inside a <center> with autoscroll true doesn't resize itself correctly
 			wdh += scrollbarWidth;
+		}
 
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
@@ -467,8 +471,14 @@ zFlex = { //static methods
 		}
 
 		// ZK-3411: height need to be reset if the horizontal scrollbar disappeared
-		if (!zkp.hasHScroll() && hasHScroll) {   //horizontal scrollbar disappeared
-			hgh += scrollbarWidth;
+		var fixForParentHeight = newpsz.height > psz.height,
+			fixForParentHScroll = !zkp.hasHScroll() && hasHScroll;
+		if (fixForParentHeight || fixForParentHScroll) {   //horizontal scrollbar disappeared
+			if (fixForParentHeight) {
+				hgh += (newpsz.height - psz.height);
+			} else if (fixForParentHScroll) { // ZK-3858: Window inside a <center> with autoscroll true doesn't resize itself correctly
+				hgh += scrollbarWidth;
+			}
 			lastsz = hgh = Math.max(hgh, 0);
 			setHghForVflexChild(vflexsRe, hgh, lastsz);
 		}

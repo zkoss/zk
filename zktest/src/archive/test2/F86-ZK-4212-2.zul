@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4212-2.zul
+
+		Purpose:
+                
+		Description:
+                
+		History:
+				Wed Mar 20 16:27:46 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Scroll grid, see "H2'07", "Q4", "Dec" freezed
+		2. Click rightColumns3 then scroll, see "Nov", "Oct" freezed
+		3. Click rightColumns4 then scroll, see "Q3", "Sep" freezed
+		4. Click rightColumns6 then scroll, see "Aug", "Jul" freezed
+		5. Click rightColumns7 then scroll, see "H1'07", "Q2", "Jun" freezed
+		6. Click rightColumns10 then scroll, see "Q1", "May", "Apr", "Mar" freezed
+	</label>
+	<button label="rightColumns3" onClick="frozen.setRightColumns(3)"/>
+	<button label="rightColumns4" onClick="frozen.setRightColumns(4)"/>
+	<button label="rightColumns6" onClick="frozen.setRightColumns(6)"/>
+	<button label="rightColumns7" onClick="frozen.setRightColumns(7)"/>
+	<button label="rightColumns10" onClick="frozen.setRightColumns(10)"/>
+	<grid width="800px" sizedByContent="true">
+		<auxhead>
+			<auxheader label="H1'07" colspan="6"/>
+			<auxheader label="H2'07" colspan="6"/>
+		</auxhead>
+		<auxhead>
+			<auxheader label="Q1" colspan="3"/>
+			<auxheader label="Q2" colspan="3"/>
+			<auxheader label="Q3" colspan="3"/>
+			<auxheader label="Q4" colspan="3"/>
+		</auxhead>
+		<frozen id="frozen" style="background: #DFDED8" rightColumns="1"/>
+		<columns>
+			<column label="Jan"/>
+			<column label="Feb"/>
+			<column label="Mar"/>
+			<column label="Apr"/>
+			<column label="May"/>
+			<column label="Jun"/>
+			<column label="Jul"/>
+			<column label="Aug"/>
+			<column label="Sep"/>
+			<column label="Oct"/>
+			<column label="Nov"/>
+			<column label="Dec"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="1,000"/><label value="1,100"/><label value="1,200"/>
+				<label value="1,300"/><label value="1,400"/><label value="1,500"/>
+				<label value="1,600"/><label value="1,700"/><label value="1,800"/>
+				<label value="1,900"/><label value="2,000"/><label value="2,100"/>
+			</row>
+			<row>
+				<label value="1,500"/><label value="2,100"/><label value="1,200"/>
+				<label value="1,100"/><label value="2,400"/><label value="1,700"/>
+				<label value="1,500"/><label value="3,700"/><label value="1,800"/>
+				<label value="1,300"/><label value="2,000"/><label value="2,500"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

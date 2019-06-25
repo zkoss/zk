@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_buttonVisible: true,
+	_iconSclass: null,
 
 	$define: {
 		/** Returns whether the button (on the right of the textbox) is visible.
@@ -79,6 +80,20 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.type = type;
+		},
+		/**
+		 * Returns the iconSclass name of this ComboWidget.
+		 * @return String the iconSclass name
+		 */
+		/**
+		 * Sets the iconSclass name of this ComboWidget.
+		 * @param String iconSclass
+		 * @since 8.6.2
+		 */
+		iconSclass: function (iconSclass) {
+			var icon = this.$n('icon');
+			if (this.desktop && icon)
+				icon.className = (this.$s('icon') + ' ' + iconSclass);
 		}
 	},
 	setWidth: function () {
@@ -194,6 +209,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.setFloating_(true, {node: pp});
 		zWatch.fire('onFloatUp', this); //notify all
 		var topZIndex = this.setTopmost();
+
+		var sclass = this.getSclass();
+		pp.className = this.$s('popup') + (sclass ? ' ' + sclass : ''); // ZK-4234: updated sclass on combobox doesn't update popup
 
 		pp.style.zIndex = topZIndex > 0 ? topZIndex : 1; //on-top of everything
 		pp.style.position = 'absolute'; //just in case
@@ -638,10 +656,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	onChildRemoved_: _zkf,
 	onChildVisible_: _zkf,
 	*/
-	/**
-	 * Returns the icon class for this combo widget. (override by subclass only)
-	 */
-	getIconClass_: zk.$void,
 	/** Utility to implement {@link #redraw}.
 	 *  @param Array out an array of HTML fragments.
 	 */
@@ -662,7 +676,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!isButtonVisible)
 			out.push(' ', this.$s('disabled'));
 
-		out.push('"><i class="', this.$s('icon'), ' ', this.getIconClass_(),'"></i></a>');
+		out.push('"><i id="', uuid, '-icon" class="', this.$s('icon'), ' ', this.getIconSclass(),'"></i></a>');
 
 		this.redrawpp_(out);
 

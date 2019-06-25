@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Nem található: ';
 msgzk.UNSUPPORTED = 'Még nem támogatott: ';
 msgzk.FAILED_TO_SEND = 'A szerver kérelem nem sikerült.';
 msgzk.FAILED_TO_RESPONSE = 'A webkiszolgáló ideiglenesen nem szolgál.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Try again?';
 msgzk.UNSUPPORTED_BROWSER = 'Nem támogatott böngésző: ';
 msgzk.ILLEGAL_RESPONSE = 'Ismeretlen szerver válasz. Legyen szíves az oldalt újra letölteni.\n';

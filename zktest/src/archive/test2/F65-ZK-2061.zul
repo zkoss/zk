@@ -1,0 +1,13 @@
+<window title="ZK Version Notice" border="normal" width="300px">
+	<label>
+		Below should not show any ZK version notice log.
+	</label>
+	<script><![CDATA[
+	zk.afterMount(function () {
+	    var head = document.getElementsByTagName("head")[0];
+	    for (var i = 0; i < head.childNodes.length;i ++)
+	    	if (head.childNodes[i] && head.childNodes[i].nodeType == 8 )
+	    		zk.log(head.childNodes[i].data);
+	});
+	 ]]></script>
+</window>

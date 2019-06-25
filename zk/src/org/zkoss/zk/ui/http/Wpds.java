@@ -191,6 +191,7 @@ public class Wpds {
 	private static final String getDateJavaScript(Locale locale, int firstDayOfWeek) {
 		final StringBuffer sb = new StringBuffer(512);
 		final Calendar cal = Calendar.getInstance(locale);
+		final int twoDigitYearStart = Utils.get2DigitYearStart();
 		cal.clear();
 
 		if (firstDayOfWeek < 0)
@@ -298,6 +299,9 @@ public class Wpds {
 		//since ZK 8.0.0 default is false
 		if ("true".equals(Library.getProperty("org.zkoss.zk.ui.invokeFirstRootForAfterKeyDown.enabled", "false")))
 			sb.append("if (zk.invokeFirstRootForAfterKeyDown == undefined)zk.invokeFirstRootForAfterKeyDown=true;\n");
+		
+		// since ZK 8.6.2 ZK-4235 for 2DigYearStart
+		sb.append("zk.TDYS=").append(twoDigitYearStart).append(";\n");
 
 		return sb.toString();
 	}

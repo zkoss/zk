@@ -14,7 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <?import org.zkoss.util.Locales ?>
-<zk xmlns:h="native">
+<zk xmlns:h="native" xmlns:w="client">
     <zscript>
     	public class TestVM {
 		    private double doubleValue;
@@ -37,12 +37,17 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
             </h:tr>
             <h:tr>
                 <h:td>Turkish</h:td>
-                <h:td><doublespinner value="@bind(vm.doubleValue)" locale="tr_TR" /></h:td>
+                <h:td><doublespinner id="tr" value="@bind(vm.doubleValue)" locale="tr_TR" /></h:td>
             </h:tr>
             <h:tr>
                 <h:td>${language}</h:td>
                 <h:td><doublespinner value="@bind(vm.doubleValue)" /></h:td>
             </h:tr>
         </h:table>
+        <button label="fill 1,1 in Turkish">
+            <attribute w:name="onClick"><![CDATA[
+            jq("$tr input").val('1,1').trigger('blur');
+            ]]></attribute>
+        </button>
     </window>
 </zk>

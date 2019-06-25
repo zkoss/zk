@@ -7,7 +7,6 @@
 		
 		.z-tabs-content {
 			display: block;
-			height: 4096px;
 		}
 		.z-tabs-space {
 			width: 0;
@@ -281,6 +280,10 @@
 		list-style: none outside none;
 		zoom: 1;
 		clear: both;
+
+		.z-tab {
+			flex: none; // ZK-4284: safari 9 flex items shrink bug
+		}
 	}
 }
 

@@ -539,6 +539,8 @@ public class Tabbox extends XulElement {
 			throw new WrongValueException("Unknow orient : " + orient);
 		if (inAccordionMold())
 			throw new WrongValueException("Unsupported vertical orient in mold : " + getMold());
+		if (_toolbar != null && ("vertical".equals(orient) || "right".equals(orient) || "left".equals(orient)))
+			throw new WrongValueException("Unsupported vertical orient when there is a toolbar");
 		if (!Objects.equals(_orient, orient)) {
 			if ("horizontal".equals(orient))
 				this._orient = "top";
@@ -619,6 +621,8 @@ public class Tabbox extends XulElement {
 		if (child instanceof Toolbar) {
 			if (_toolbar != null && _toolbar != child)
 				throw new UiException("Only one Toolbar is allowed: " + this);
+			if (this.isVertical()) //ZK-4270: meaningful message to the developer indicating incorrect usage
+				throw new UiException("Toolbar is allowed only when the tabbox is horizontal." + this);
 		} else if (child instanceof Tabs) {
 			if (_tabs != null && _tabs != child)
 				throw new UiException("Only one tabs is allowed: " + this);

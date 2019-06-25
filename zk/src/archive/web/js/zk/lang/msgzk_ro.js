@@ -17,6 +17,7 @@ msgzk.NOT_FOUND = 'Nu s-a găsit: ';
 msgzk.UNSUPPORTED = 'Nu este suportat încă: ';
 msgzk.FAILED_TO_SEND = 'Procesul de trimitere a cererii către server a eşuat';
 msgzk.FAILED_TO_RESPONSE = 'Server-ul nu a putut procesa cererea dumneavoastră.';
+msgzk.FAILED_TO_PARSE_RESPONSE = 'The response could not be parsed: Expected JSON format (please check console for details).';
 msgzk.TRY_AGAIN = 'Try again?';
 msgzk.UNSUPPORTED_BROWSER = 'Browser nu este suportat: ';
 msgzk.ILLEGAL_RESPONSE = 'Răspuns necunoscut trimis de server. Vă rugăm reîncărcaţi şi încercaţi din nou.\n';

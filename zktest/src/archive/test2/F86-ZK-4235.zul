@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4235.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 06 11:26:06 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		test the 2DigitYearStart library-property (default: 1929)
+		1.click the first datebox input and type "01-01-30", then click the second datebox input and type "01-01-29".
+		2.click the first datebox button to open the calender popup, you should see the year on top is 1930.
+		3.click the second datebox button to open the calender popup, you should see the year on top is 2029.
+		4.add library-property name=org.zkoss.web.preferred.2DigitYearStart value=1950 into zk.xml and restart server
+		5.click the first datebox input and type "01-01-30", then click the second datebox input and type "01-01-29".
+		6.click the first datebox button to open the calender popup, you should see the year on top is 2030.
+		7.click the second datebox button to open the calender popup, you should see the year on top is 2029.
+		8.click the buttons bellow, and change the input date before open the calender popup to check the parse year is correct.
+	</label>
+	<button label="setTDYS=29" w:onClick="zk.TDYS = 29;" />
+	<button label="setTDYS=476" w:onClick="zk.TDYS = 476;" />
+	<button label="setTDYS=1453" w:onClick="zk.TDYS = 1453;" />
+	<button label="setTDYS=1950" w:onClick="zk.TDYS = 1950;" />
+	<button label="setTDYS=200000" w:onClick="zk.TDYS = 200000;" />
+	<separator/>
+	<datebox sclass="db1" format="dd-MM-yy"/>
+	<datebox sclass="db2" format="dd-MM-yy"/>
+</zk>

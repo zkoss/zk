@@ -26,6 +26,12 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 		</label>
 
 		current theme: ${theme}
-
+		<hlayout>
+			<a href="?zktheme=breeze" label="Breeze" />
+			<a href="?zktheme=sapphire" label="Sapphire" />
+			<a href="?zktheme=silvertail" label="Silvertail" />
+			<a href="?zktheme=atlantic" label="Atlantic" />
+			<a href="?zktheme=default" label="Default" />
+		</hlayout>
 	</window>
 </zk>

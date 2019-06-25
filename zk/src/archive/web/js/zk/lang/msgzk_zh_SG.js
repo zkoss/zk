@@ -17,6 +17,7 @@ msgzk = {
 	UNSUPPORTED: '尚未支持：',
 	FAILED_TO_SEND: '无法传送资料到服务器。',
 	FAILED_TO_RESPONSE: '伺服器暂时无法处理你的请求。',
+	FAILED_TO_PARSE_RESPONSE: 'The response could not be parsed: Expected JSON format (please check console for details).',
 	TRY_AGAIN: '再试一次?',
 	UNSUPPORTED_BROWSER: '尚未支持你使用的浏览器：',
 	ILLEGAL_RESPONSE: '无法辨识服务器传回的资料。请按重新载入，再试试。\n',

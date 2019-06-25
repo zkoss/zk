@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4247.zul
+
+		Purpose:
+                
+		Description:
+                
+		History:
+				Thu Mar 21 10:59:39 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Zoom in to 125% in Chrome, 150% in Safari and 200% in Firefox
+		2. Refresh page
+		3. All MeshWidget should not have unwanted margin at right side
+	</label>
+	<window width="100%">
+		<grid>
+			<columns>
+				<column label="column"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="cell"/>
+				</row>
+			</rows>
+			<foot>
+				<footer label="footer"/>
+			</foot>
+		</grid>
+		<listbox>
+			<listhead>
+				<listheader label="column"/>
+			</listhead>
+			<listitem>
+				<listcell label="cell"/>
+			</listitem>
+		</listbox>
+		<tree>
+			<treecols>
+				<treecol label="column"/>
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="cell"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</window>
+</zk>

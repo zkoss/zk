@@ -22,7 +22,16 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 	    //model.setMultiple(true);
 	]]></zscript>
 
-	<button id="select" label="select" onClick="lb1.setSelectedIndex(index.getValue());lb2.setSelectedIndex(index.getValue());"/><intbox id="index"/>
+	<button id="select" label="select">
+		<attribute name="onClick"><![CDATA[
+			int idx = index.getValue();
+			lb1.setSelectedIndex(idx);
+			lb2.setSelectedIndex(idx);
+			lb3.setSelectedIndex(idx);
+			lb4.setSelectedIndex(idx);
+		]]></attribute>
+	</button>
+	<intbox id="index"/>
 
 	<label multiline="true">
 		there are two bugs to test

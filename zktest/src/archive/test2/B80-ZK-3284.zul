@@ -13,16 +13,15 @@ B80-ZK-3284.zul
 Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:w="client">
+<zk>
 	<div height="110px">
 		<label multiline="true">1. click on the bandbox button to open the bandbox
 			2. should see "bandbox focused" above the bandbox
 			3. click on a listitem
 			4. the label should remain "bandbox focused"
-
 		</label>
-		<label id="lb"/>
 	</div>
+	<label id="lb"/>
 	<separator/>
 	<bandbox value="aaa" id="withListbox" onFocus='lb.setValue(lb.getValue() + " bandbox focused")'>
 		<bandpopup width="200px">

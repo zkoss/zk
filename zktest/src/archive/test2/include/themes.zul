@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+themes.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 08 15:09:46 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <hlayout>
+        <custom-attributes path="${desktop.requestPath}"/>
+        <a href="${path}?zktheme=breeze" label="Breeze"/>
+        <a href="${path}?zktheme=sapphire" label="Sapphire"/>
+        <a href="${path}?zktheme=silvertail" label="Silvertail"/>
+        <a href="${path}?zktheme=atlantic" label="Atlantic"/>
+        <a href="${path}?zktheme=default" label="Default"/>
+    </hlayout>
+</zk>

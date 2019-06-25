@@ -21,7 +21,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <bandbox>
 <bandpopup>
 <textbox />
-<textbox />
+<textbox onFocus='Clients.log("focus on 2nd textbox")'/>
 </bandpopup>
 </bandbox>
 <separator/>

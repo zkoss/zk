@@ -14,6 +14,12 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]>
+	</script>
 	<label multiline="true">
 		1. click the "show message" button.
 		2. after 1, click the window close button when the desktop showing "processing";
@@ -21,7 +27,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 	</label>
 	<window id="wnd" title="View" closable="true" width="400px" height="300px">
 		<button label="show message" onClick='
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			Clients.showNotification("Hello", "info", self, "middle_center", 2000);' />
 	</window>
 </zk>
