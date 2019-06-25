@@ -20,14 +20,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			var h1 = jq('$div').height();
 			var h2 = jq('$div2').height();
 			var h3 = jq('$div3').height();
-			alert(h1 + ' + ' + h2 + ' + ' + h3 + ' = ' + hmain);
+			zk.log(h1 + ' + ' + h2 + ' + ' + h3 + ' = ' + hmain);
 		}
 		function showSize2 () {
 			var wmain = jq('$main2').width();
 			var w1 = jq('$btn1').outerWidth(true);
 			var w2 = jq('$btn2').outerWidth(true);
 			var w3 = jq('$btn3').outerWidth(true);
-			alert(w1 + ' + ' + w2 + ' + ' + w3 + ' = ' + wmain);
+			zk.log(w1 + ' + ' + w2 + ' + ' + w3 + ' = ' + wmain);
 		}
 	</script>
 	<div>1. Click 'test area one', you should see an equation.</div>

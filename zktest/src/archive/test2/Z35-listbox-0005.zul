@@ -21,17 +21,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<html><![CDATA[
 	1.Check the data generate correct (should be 0~50)
 	]]></html>
-	<zscript>		
+	<zscript>
 		boolean v = false;
 		String[] for1 = new String[51];
 		for (int i=0 ;i &lt; 51 ;i++){
 			for1[i] = "new item " + i;
 		}
 	</zscript>
-	<listbox id="list" width="200px" rows="20" model="&#36;{strset}">
+	<listbox id="list" width="200px" rows="10" model="&#36;{strset}">
 		<listhead>
 			<listheader label="EL foreach" sort="auto"/>
-		</listhead>		
-			<listitem label="${each}" forEach="${for1}"/>							
-	</listbox>	
+		</listhead>
+			<listitem label="${each}" forEach="${for1}"/>
+	</listbox>
 </window>
