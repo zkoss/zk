@@ -883,13 +883,13 @@ public class TrackerImpl implements Tracker, Serializable {
 		if (node.getPropNameMapping().size() == 0)
 			return; //don't dump if empty
 		System.out.println(dumpSpace(spaces) + "[propertys:");
-		for (Entry<Object, TrackerNode> entry : node.getPropNameMapping().entrySet()) {
+		for (Entry<Object, ?> entry : node.getPropNameMapping().entrySet()) {
 			dumpEntry(entry, spaces + 4);
 		}
 		System.out.println(dumpSpace(spaces) + "]");
 	}
 
-	private void dumpEntry(Entry<Object, TrackerNode> entry, int spaces) {
+	private void dumpEntry(Entry<Object, ?> entry, int spaces) {
 		System.out.println(dumpSpace(spaces) + entry.getKey() + "=" + entry.getValue());
 	}
 

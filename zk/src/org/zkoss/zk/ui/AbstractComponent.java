@@ -4118,7 +4118,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	@SuppressWarnings("unchecked")
 	public <T extends ShadowElement> List<T> getShadowRoots() {
-		return _auxinf != null && _auxinf.seRoots != null ? _auxinf.seRoots : Collections.EMPTY_LIST;
+		return _auxinf != null && _auxinf.seRoots != null ? (List<T>) _auxinf.seRoots : Collections.emptyList();
 	}
 
 	public boolean removeShadowRoot(ShadowElement shadow) {
