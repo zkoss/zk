@@ -1,5 +1,6 @@
    --------
 ZK 8.6.2
+June 25, 2019
 * Features
   ZK-4132: Add Manifest to OSGI source bundle
   ZK-4212: Frozen support right columns freeze
