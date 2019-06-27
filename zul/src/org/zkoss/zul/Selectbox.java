@@ -320,7 +320,7 @@ public class Selectbox extends HtmlBasedComponent {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> ItemRenderer<T> getRealRenderer() {
 		final ItemRenderer renderer = getItemRenderer();
-		return renderer != null ? renderer : _defRend;
+		return renderer != null ? renderer : (ItemRenderer<T>) _defRend;
 	}
 
 	private static final ItemRenderer<Object> _defRend = new ItemRenderer<Object>() {

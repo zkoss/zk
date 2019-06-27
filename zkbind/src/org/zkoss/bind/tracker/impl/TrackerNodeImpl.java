@@ -185,7 +185,7 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 		return _script;
 	}
 
-	public Map<Object, TrackerNode> getPropNameMapping() {
+	public Map<Object, ?> getPropNameMapping() {
 		return _brackets;
 	}
 

@@ -130,5 +130,5 @@ public interface TrackerNode {
 	 * get property, tracker node mapping map
 	 * @since 6.5.5
 	 */
-	public Map<Object, TrackerNode> getPropNameMapping();
+	public Map<Object, ?> getPropNameMapping();
 }

@@ -1,9 +1,11 @@
 ZK 9.0.0
 * Features
+  ZK-4328: Change Java compiler source/target to 8
 
 * Bugs
 
 * Upgrade Notes
+  + The Java binary-compatible level is Java 8 since ZK 9.
 
    --------
 ZK 8.6.2

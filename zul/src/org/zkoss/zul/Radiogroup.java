@@ -525,7 +525,7 @@ public class Radiogroup extends XulElement {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T> RadioRenderer<T> getRealRenderer() {
-		return _renderer != null ? _renderer : _defRend;
+		return _renderer != null ? (RadioRenderer<T>) _renderer : _defRend;
 	}
 
 	/** Returns the renderer to render each radio, or null if the default
