@@ -301,9 +301,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 		<!-- Comment it out if you prefer to show a message instead of redirecting
 			Note: an empty URL can cause the browser to reload the same URL
-		-->
 		<timeout-uri>/timeout.zul</timeout-uri>
-
+		-->
 		<!-- Uncomment it if you prefer to have a custom message.
 			Notice that, to make it work, timeout-uri shall be removed.
 			See http://books.zkoss.org/wiki/ZK_Configuration_Reference/zk.xml/The_session-config_Element
