@@ -1,5 +1,5 @@
 <zk>
-	<label>
+	<label sclass="test1">
 		<attribute name="onCreate">
 			self.setValue(org.zkoss.zktest.test2.SubmitTest.getCount() + "");
 		</attribute>

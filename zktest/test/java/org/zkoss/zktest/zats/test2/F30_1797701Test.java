@@ -1,0 +1,36 @@
+/* F30_1797701Test.java
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jun 19 12:24:05 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+*/
+package org.zkoss.zktest.zats.test2;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.interactions.Actions;
+import org.zkoss.zktest.zats.WebDriverTestCase;
+
+public class F30_1797701Test extends WebDriverTestCase {
+	@Test
+	public void test() {
+		Actions act = new Actions(connect());
+		waitResponse();
+		int sliderWidth = jq("@slider").width();
+		act.clickAndHold(toElement(jq(".z-slider-button"))).moveByOffset(sliderWidth, 0).perform();
+		waitResponse();
+		Assert.assertEquals("Here is a position : 100", jq(".z-slider-popup").text().trim());
+		act.release().perform();
+		waitResponse();
+		click(jq("@button:contains(change)"));
+		waitResponse();
+		act.clickAndHold(toElement(jq(".z-slider-button"))).moveByOffset(-sliderWidth, 0).perform();
+		waitResponse();
+		Assert.assertEquals("position 0 is here", jq(".z-slider-popup").text().trim());
+	}
+}
