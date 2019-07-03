@@ -28,6 +28,8 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
     	2. Click inside the Popup
     </popup>
 
+    <separator height="200px"/>
+
     <textbox id="testInput" multiline="true" rows="5" value="3. focus here and change value"/>
 
     <button label="4. submit" onClick="testLabel.setValue(testInput.getValue());"/>
