@@ -564,10 +564,14 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			String jsContent = IOUtils.toString(isCopy);
 			if (isSourceMap != null)
 				sourceMapContent = IOUtils.toString(isSourceMap);
-			String sourceMapSourcePath = path.substring(1); //skip first "/"
-			if (!sourceMapSourcePath.endsWith(".src.js"))
-				sourceMapSourcePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3) + ".src.js";
-			sourceMapManager.insertSourceMap(index, sourceMapContent, countLines(jsContent), sourceMapSourcePath);
+			String sourceMapSourcePath = path;
+			if (!sourceMapSourcePath.endsWith(".src.js")) {
+				String basePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3);
+				sourceMapSourcePath = reqctx.getResource(basePath + ".ts") != null // source might be .ts
+						? basePath + ".ts"
+						: basePath + ".src.js";
+			}
+			sourceMapManager.insertSourceMap(index, sourceMapContent, countLines(jsContent), sourceMapSourcePath.substring(1)); //skip first "/"
 			sourceMapManager.insertEmptySourceMap((index == -1) ? -1 : index + 1, 1); //for \n
 			if (index != -1) {
 				sourceMapManager.getSourceMapInfoList().remove(index + 2);

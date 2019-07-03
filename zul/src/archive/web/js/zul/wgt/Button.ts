@@ -13,13 +13,13 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _initUpld(wgt) {
+	function _initUpld(wgt: zk.Widget): void {
 		var v;
 		if (v = wgt._upload)
 			wgt._uplder = new zul.Upload(wgt, null, v);
 	}
 
-	function _cleanUpld(wgt) {
+	function _cleanUpld(wgt: zk.Widget): void {
 		var v;
 		if (v = wgt._uplder) {
 			wgt._uplder = null;
@@ -27,6 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
+let _zkf: () => void;
 var Button =
 /**
  * A button.
@@ -68,7 +69,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		/** Sets the direction.
 		 * @param String dir either "normal" or "reverse".
 		 */
-		dir: _zkf = function () {
+		dir: _zkf = function (this: zk.Widget) {
 			this.updateDomContent_();
 		},
 		/** Returns the orient.
@@ -95,9 +96,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 * @param boolean disabled
 		 */
 		disabled: [
-		    // B60-ZK-1176
-		    // Autodisable should not re-enable when setDisabled(true) is called during onClick
-		    function (v, opts) {
+			// B60-ZK-1176
+			// Autodisable should not re-enable when setDisabled(true) is called during onClick
+			function (this: zk.Widget, v: boolean, opts: Partial<{adbs: boolean}>) {
 				if (opts && opts.adbs)
 					// called from zul.wgt.ADBS.autodisable
 					this._adbs = true;	// Start autodisabling
@@ -114,14 +115,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				}
 				return v;
 			},
-			function (v) {
-				var self = this,
-					doDisable = function () {
-						if (self.desktop) {
-							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+			function (this: zk.Widget, v: boolean) {
+				var doDisable = (): void => {
+						if (this.desktop) {
+							jq(this.$n()).attr('disabled', v ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 							// B70-ZK-2059: Initialize or clear upload when disabled attribute changes.
-							if (self._upload)
-								v ? _cleanUpld(self) : _initUpld(self);
+							if (this._upload)
+								v ? _cleanUpld(this) : _initUpld(this);
 						}
 					};
 
@@ -214,7 +214,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		 * or null or "false" to disable the file download (and then
 		 * this button behaves like a normal button).
 		 */
-		upload: function (v) {
+		upload(v: string) {
 			var n = this.$n();
 			if (n && !this._disabled) {
 				_cleanUpld(this);
@@ -224,20 +224,19 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
-	focus_: function (timeout) {
+	focus_(timeout?: number): boolean {
 		// Bug ZK-1295 and ZK-2935: Disabled buttons cannot regain focus by re-enabling and then setting focus
-		var wgt = this,
-			btn = this.$n();
+		let btn = this.$n() as HTMLButtonElement;
 		if (btn && btn.disabled) {
-			if (!wgt._delayFocus) {
-				wgt._delayFocus = true;
-				setTimeout(function () {
-					if (wgt.desktop && !wgt.isDisabled()) {
-						if (!zk.focusBackFix || !wgt._upload) {
-							zk(wgt.$n()).focus(timeout);
+			if (!this._delayFocus) {
+				this._delayFocus = true;
+				setTimeout(() => {
+					if (this.desktop && !this.isDisabled()) {
+						if (!zk.focusBackFix || !this._upload) {
+							zk(this.$n()).focus(timeout);
 						}
 					}
-					wgt._delayFocus = null;
+					this._delayFocus = null;
 				}, 0);
 			}
 			return false;
@@ -250,7 +249,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return true;
 	},
 
-	domContent_: function () {
+	domContent_(): string {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
@@ -258,19 +257,18 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		if (!img) img = iconSclass;
 		else
-			img = '<img class="' + this.$s('image') + '" src="' + img + '" />'
-				+ (iconSclass ? ' ' + iconSclass : '');
+			img = `<img class="${this.$s('image')}" src="${img}" />${iconSclass ? ' ' + iconSclass : ''}`;
 		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img : img + space + label;
 	},
-	onShow: function () {
+	onShow() {
 		// ZK-2233: should sync upload position when button showed
 		if (this.$n() && !this._disabled && this._uplder) {
 			this._uplder.sync();
 		}
 	},
-	bind_: function () {
+	bind_() {
 		this.$supers(Button, 'bind_', arguments);
 
 		var n = this.$n();
@@ -280,7 +278,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		if (!this._disabled && this._upload) _initUpld(this);
 	},
-	unbind_: function () {
+	unbind_() {
 		_cleanUpld(this);
 
 		var n = this.$n();
@@ -290,7 +288,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers(Button, 'unbind_', arguments);
 	},
-	doClick_: function (evt) {
+	doClick_(evt: zk.Event) {
 		if (!evt.domEvent) // mobile will trigger doClick twice
 			return;
 
@@ -315,20 +313,19 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 						zUtl.go(href, {target: this._target || (evt.data.ctrlKey ? '_blank' : '')});
 					}
 				}
-
 				this.$super('doClick_', evt, true);
 			}
 		}
 		//Unlike DOM, we don't proprogate to parent (otherwise, onClick
 		//will fired)
 	},
-	setFlexSize_: function (sz) { //Bug #2870652
-		var n = this.$n();
+	setFlexSize_(sz: Partial<{height: string; width: string}>) { //Bug #2870652
+		var n = this.$n() as HTMLElement;
 		if (sz.height !== undefined) {
 			if (sz.height == 'auto')
 				n.style.height = '';
 			else if (sz.height != '')
-				n.style.height = jq.px0(sz.height);
+				n.style.height = jq.px0(parseInt(sz.height));
 			else
 				n.style.height = this._height ? this._height : '';
 		}
@@ -336,7 +333,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (sz.width == 'auto')
 				n.style.width = '';
 			else if (sz.width != '')
-				n.style.width = jq.px0(sz.width);
+				n.style.width = jq.px0(parseInt(sz.width));
 			else
 				n.style.width = this._width ? this._width : '';
 		}
@@ -344,11 +341,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 });
 //handle autodisabled buttons
 zul.wgt.ADBS = zk.$extends(zk.Object, {
-	$init: function (ads) {
+	$init(ads: zk.Widget[]) {
 		this._ads = ads;
 	},
-	onResponse: function () {
-		for (var ads = this._ads, ad; ad = ads.shift();) {
+	onResponse() {
+		for (var ads = this._ads, ad: zk.Widget; ad = ads.shift();) {
 			// B60-ZK-1176: distinguish from other usages
 			ad.setDisabled(false, {adbs: false, skip: true});
 			if (zk.chrome) ad.domListen_(ad.$n(), 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
@@ -359,16 +356,18 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 	/* Disable Targets and re-enable after response
 	 * @param zk.Widget wgt
 	 */
-	autodisable: function (wgt) {
-		var ads = wgt._autodisable, aded, uplder;
+	autodisable(wgt: zk.Widget) {
+		var ads = wgt._autodisable,
+			aded: zk.Widget[] | undefined,
+			uplder;
 		if (ads) {
 			if (zk.chrome) wgt.domUnlisten_(wgt.$n(), 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
 			ads = ads.split(',');
 			for (var j = ads.length; j--;) {
 				var ad = ads[j].trim();
 				if (ad) {
-					var perm;
-					if (perm = ad.charAt(0) == '+')
+					var perm = ad.charAt(0) == '+' ;
+					if (perm)
 						ad = ad.substring(1);
 					ad = 'self' == ad ? wgt : wgt.$f(ad);
 					//B50-3304877: autodisable and Upload
@@ -391,14 +390,14 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 			}
 		}
 		if (aded) {
-			aded = new zul.wgt.ADBS(aded);
+			let adbs = new zul.wgt.ADBS(aded);
 			if (uplder) {
-				uplder._aded = aded;
+				uplder._aded = adbs;
 				wgt._uplder = uplder;//zul.Upload.sendResult came on it.
 			} else if (wgt.isListen('onClick', {asapOnly: true}))
-				zWatch.listen({onResponse: aded});
+				zWatch.listen({onResponse: adbs});
 			else
-				setTimeout(function () {aded.onResponse();}, 800);
+				setTimeout(() => adbs.onResponse(), 800);
 		}
 	}
 });

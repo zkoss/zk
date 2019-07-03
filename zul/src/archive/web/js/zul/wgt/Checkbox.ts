@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	//Two onclick are fired if clicking on label, so ignore it if so
-	function _shallIgnore(evt) {
+	function _shallIgnore(evt: zk.Event): boolean {
 		var v = evt.domEvent;
 		return v && jq.nodeName(v.target, 'label');
 	}
@@ -43,7 +43,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 * @param boolean disabled
 		 */
 		disabled: [
-			function (v, opts) {
+			function (this: zul.Widget, v: boolean, opts) {
 				if (opts && opts.adbs)
 					// called from zul.wgt.ADBS.autodisable
 					this._adbs = true;	// Start autodisabling
@@ -60,8 +60,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				}
 				return v;
 			},
-			function (v) {
-				var n = this.$n('real');
+			function (this: zul.Widget, v: boolean) {
+				var n = this.$n('real') as HTMLInputElement;
 				if (n) {
 					n.disabled = v;
 					if (!this._isDefaultMold()) {
@@ -79,7 +79,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 * changing checked will set indeterminate to false.
 		 * @param boolean checked
 		 */
-		checked: function (v) {
+		checked(v: boolean) {
 			var n = this.$n('real');
 			if (n) {
 				//B70-ZK-2057: prop() method can access right property values;
@@ -112,8 +112,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 *
 		 * @param String name the name of this component.
 		 */
-		name: function (v) {
-			var n = this.$n('real');
+		name(v: string) {
+			var n = this.$n('real') as HTMLInputElement;
 			if (n) n.name = v || '';
 		},
 		/** Returns the tab order of this component.
@@ -123,10 +123,10 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		/** Sets the tab order of this component.
 		 * @param int tabindex
 		 */
-		tabindex: function (v) {
-			var n = this.$n('real');
+		tabindex(v: number) {
+			var n = this.$n('real') as HTMLInputElement;
 			if (n) {
-				if (tabindex == null)
+				if (v == null)
 					n.removeAttribute('tabindex');
 				else
 					n.tabIndex = v;
@@ -141,8 +141,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 * @param String value the value; If null, it is considered as empty.
 		 * @since 5.0.4
 		 */
-		value: function (v) {
-			var n = this.$n('real');
+		value(v: string) {
+			var n = this.$n('real') as HTMLInputElement;
 			if (n) n.value = v || '';
 		},
 		/** Returns a list of checkbox component IDs that shall be disabled when the user
@@ -200,7 +200,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		 * @param boolean indeterminate whether checkbox is indeterminate
 		 * @since 8.6.0
 		 */
-		indeterminate: function (v) {
+		indeterminate(v: boolean) {
 			var n = this.$n('real');
 			if (n) {
 				jq(n).prop('indeterminate', v);
@@ -209,29 +209,29 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
-	focus_: function (timeout) {
+	focus_(timeout?: number) {
 		zk(this.$n('real') || this.$n()).focus(timeout);
 		return true;
 	},
-	contentAttrs_: function () {
+	contentAttrs_() {
 		var html = '',
-			v; // cannot use this._name for radio
+			v: string; // cannot use this._name for radio
 		if (v = this.getName())
-			html += ' name="' + v + '"';
+			html += ` name="${v}"`;
 		if (this._disabled)
 			html += ' disabled="disabled"';
 		if (this._checked)
 			html += ' checked="checked"';
 		if (v = this._tabindex)
-			html += ' tabindex="' + v + '"';
+			html += ` tabindex="${v}"`;
 		if (v = this.getValue())
-			html += ' value="' + v + '"';
+			html += ` value="${v}"`;
 		return html;
 	},
-	bind_: function (desktop) {
+	bind_() {
 		this.$supers(Checkbox, 'bind_', arguments);
 
-		var n = this.$n('real'),
+		var n = this.$n('real') as HTMLInputElement,
 			mold = this.$n('mold'),
 			indeterminate = this.getIndeterminate();
 
@@ -247,7 +247,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 		this._setTabIndexForMold();
 	},
-	unbind_: function () {
+	unbind_() {
 		var n = this.$n('real'),
 			mold = this.$n('mold');
 
@@ -257,24 +257,24 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers(Checkbox, 'unbind_', arguments);
 	},
-	_setTabIndexForMold: function () {
-		var mold = this.$n('mold');
+	_setTabIndexForMold() {
+		var mold = this.$n('mold') as HTMLLabelElement;
 		if (mold)
 			mold.tabIndex = this._canTabOnMold() ? 0 : -1;
 	},
-	_canTabOnMold: function () {
+	_canTabOnMold(): boolean {
 		return !this._isDefaultMold() && !this.isDisabled();
 	},
-	doSelect_: function (evt) {
+	doSelect_(evt: zk.Event) {
 		if (!_shallIgnore(evt))
 			this.$supers('doSelect_', arguments);
 	},
-	doClick_: function (evt) {
+	doClick_(evt: zk.Event) {
 		if (!_shallIgnore(evt)) {
 			// F55-ZK-12: Checkbox automatically disable itself after clicked
 			// use the autodisable handler of button directly
 			zul.wgt.ADBS.autodisable(this);
-			var real = this.$n('real'),
+			var real = this.$n('real') as HTMLInputElement,
 				checked = real.checked;
 			if (checked != this._checked) { //changed
 				this.setChecked(checked); //so Radio has a chance to override it
@@ -297,24 +297,24 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	_doMoldMouseDown: function (evt) {
+	_doMoldMouseDown(evt: zk.Event) {
 		if (this.isDisabled())
 			evt.stop();
 	},
-	fireOnCheck_: function (checked) {
+	fireOnCheck_(checked: boolean) {
 		this.fire('onCheck', checked);
 	},
-	beforeSendAU_: function (wgt, evt) {
+	beforeSendAU_(wgt: zul.Widget, evt: zk.Event) {
 		if (evt.name != 'onClick') //don't stop event if onClick (otherwise, check won't work)
 			this.$supers('beforeSendAU_', arguments);
 	},
-	getTextNode: function () {
+	getTextNode() {
 		return this.$n('cnt');
 	},
-	shallIgnoreClick_: function (evt) {
+	shallIgnoreClick_() {
 		return this.isDisabled();
 	},
-	domClass_: function () {
+	domClass_() {
 		var cls = this.$supers('domClass_', arguments),
 			mold = this.getMold();
 
@@ -326,14 +326,14 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		}
 		return cls;
 	},
-	_isDefaultMold: function () {
+	_isDefaultMold(): boolean {
 		return this.getMold() == 'default';
 	},
-	doKeyDown_: function (evt) {
+	doKeyDown_(evt: zk.Event) {
 		this.$supers('doKeyDown_', arguments);
-		var spaceKeyCode = 32;
+		const spaceKeyCode = 32;
 		if (evt.domTarget == this.$n('mold') && evt.keyCode == spaceKeyCode) {
-			var checked = !this.isChecked();
+			let checked = !this.isChecked();
 			this.setChecked(checked);
 			this.fireOnCheck_(checked);
 		}

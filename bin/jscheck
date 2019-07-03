@@ -1,22 +1,21 @@
 #!/bin/bash
-nodeChecker=`node -v`
+nodeChecker=$(node -v)
 if [ -z "$nodeChecker" ] ; then
 	echo "please install node.js"
 	exit 1
 fi
 
 maindir="$(pwd)"
-cd $1
+cd "$1" || exit 1
 shift
 
 srcdir="$1"
 shift
 echo "check js code style : $maindir/$srcdir"
-OUT="$(node_modules/.bin/eslint $maindir/$srcdir $@)" || {
-	echo $OUT
+OUT=$(npx eslint --ext .js,.ts "$maindir/$srcdir" "$@") || {
+	echo "$OUT"
 	#Coding Style Error found.
 	exit 1
 }
 
-cd $maindir
 echo "passed"

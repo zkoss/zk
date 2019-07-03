@@ -1,0 +1,31 @@
+#!/bin/bash
+# tsmin
+#
+#{{IS_NOTE
+#	Purpose:
+#		Compile and compress TypeScript
+#	Description:
+#		
+#	History:
+#		Mon Feb 25 18:27:56 CST 2019, Created by rudyhuang
+#}}IS_NOTE
+#
+#Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+nodeChecker=$(node -v)
+if [ -z "$nodeChecker" ] ; then
+	echo "please install node.js"
+	exit 1
+fi
+
+maindir="$(pwd)"
+cd "$1" || exit 1
+shift
+
+echo "tsmin: Run Gulp on $maindir"
+npx gulp -f gulpfile.js --cwd "$maindir" build:single "$@"

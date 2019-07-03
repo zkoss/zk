@@ -14,10 +14,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 
-	var _shallFixPercent = zk.gecko ? function (wgt) {
-			var s;
-			return (s = wgt._spacing) && s.endsWith('%');
-		} : zk.$void;
+	let _shallFixPercent: (wgt: zk.Widget) => boolean =
+		zk.gecko
+			? (wgt) => {
+				let s: string = wgt._spacing;
+				return s != null && s.endsWith('%');
+			}
+			: zk.$void;
 
 /**
  * A separator.
@@ -34,7 +37,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		/** Sets the orient.
 		 * @param String orient either "horizontal" or "vertical".
 		 */
-		orient: function () {
+		orient() {
 			this.updateDomClass_();
 		},
 		/** Returns whether to display a visual bar as the separator.
@@ -44,7 +47,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		/** Sets  whether to display a visual bar as the separator.
 		 * @param boolean bar
 		 */
-		bar: function () {
+		bar() {
 			this.updateDomClass_();
 		},
 		/** Returns the spacing.
@@ -54,7 +57,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		/** Sets the spacing.
 		 * @param String spacing the spacing (such as "0", "5px", "3pt" or "1em")
 		 */
-		spacing: function () {
+		spacing() {
 			this.updateDomStyle_();
 		}
 	},
@@ -62,18 +65,18 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	/** Returns whether it is a vertical separator.
 	 * @return boolean
 	 */
-	isVertical: function () {
+	isVertical(): boolean {
 		return this._orient == 'vertical';
 	},
 
 	//super//
-	bind_: function () {
+	bind_() {
 		this.$supers(zul.wgt.Separator, 'bind_', arguments);
 	},
-	getZclass: function () {
+	getZclass() {
 		return 'z-separator';
 	},
-	domClass_: function (no) {
+	domClass_(no) {
 		var sc = this.$supers('domClass_', arguments),
 			bar = this.isBar();
 		if (!no || !no.zclass) {
@@ -82,7 +85,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		}
 		return sc;
 	},
-	domStyle_: function () {
+	domStyle_() {
 		var s = this.$supers('domStyle_', arguments);
 		if (!_shallFixPercent(this))
 			return s;
@@ -91,19 +94,19 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		var space = this._spacing,
 			v = zk.parseInt(space.substring(0, space.length - 1).trim());
 		if (v <= 0) return s;
-		v = v >= 2 ? (v / 2) + '%' : '1%';
+		let percent = v >= 2 ? (v / 2) + '%' : '1%';
 
-		return 'margin:' + (this.isVertical() ? '0 ' + v : v + ' 0')
+		return 'margin:' + (this.isVertical() ? '0 ' + percent : percent + ' 0')
 			+ ';' + s;
 	},
-	getWidth: function () {
-		var wd = this.$supers('getWidth', arguments);
+	getWidth() {
+		let wd = this.$supers('getWidth', arguments);
 		return !this.isVertical() || (wd != null && wd.length > 0)
 			|| _shallFixPercent(this) ? wd : this._spacing;
 
 	},
-	getHeight: function () {
-		var hgh = this.$supers('getHeight', arguments);
+	getHeight() {
+		let hgh = this.$supers('getHeight', arguments);
 		return this.isVertical() || (hgh != null && hgh.length > 0)
 			|| _shallFixPercent(this) ? hgh : this._spacing;
 	}

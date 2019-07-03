@@ -13,8 +13,6 @@ zml
 dist/lib/z*.jar
 dist/lib/z*.war
 dist/lib/osgi
-bin/node_modules
-bin/package-lock.json
 *.classpath
 */.settings/*.prefs
 */.settings/*.component
@@ -23,3 +21,6 @@ bin/package-lock.json
 */bin/*
 .idea
 */*.iml
+node_modules/
+package-lock.json
+node/

@@ -15,6 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** The basic widgets, such as button and div.
  */
 //zk.$package('zul.wgt');
+(() => {
+
+let _zkf: () => void;
 
 /**
  * The same as HTML A tag.
@@ -36,7 +39,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			// Refer from Button.js for the following changes
 			// B60-ZK-1176
 			// Autodisable should not re-enable when setDisabled(true) is called during onClick
-			function (v, opts) {
+			function (this: zk.Widget, v: boolean, opts: Partial<{adbs: boolean}>) {
 				if (opts && opts.adbs)
 					// called from zul.wgt.ADBS.autodisable
 					this._adbs = true;	// Start autodisabling
@@ -51,13 +54,12 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 						// ignore re-enable by autodisable mechanism
 						return this._disabled;
 				}
-			return v;
+				return v;
 			},
-			function (v) {
-				var self = this,
-					doDisable = function () {
-						if (self.desktop) {
-							jq(self.$n()).attr('disabled', v); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
+			function (this: zk.Widget, v: boolean) {
+				var doDisable = (): void => {
+						if (this.desktop) {
+							jq(this.$n()).attr('disabled', v ? 'disabled' : null); // use jQuery's attr() instead of dom.disabled for non-button element. Bug ZK-2146
 						}
 					};
 				doDisable();
@@ -70,7 +72,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		/** Sets the direction.
 		 * @param String dir either "normal" or "reverse".
 		 */
-		dir: _zkf = function () {
+		dir: _zkf = function (this: zk.Widget) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.domContent_();
 		},
@@ -84,8 +86,8 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		/** Sets the href.
 		 * @param String href
 		 */
-		href: function (v) {
-			var n = this.$n();
+		href(v: string) {
+			var n = this.$n() as HTMLAnchorElement;
 			if (n) n.href = v || '';
 		},
 		/** Returns the target frame or window.
@@ -99,8 +101,8 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		/** Sets the target frame or window.
 		 * @param String target the name of the frame or window to hyperlink.
 		 */
-		target: function (v) {
-			var n = this.$n();
+		target(v: string) {
+			var n = this.$n() as HTMLAnchorElement;
 			if (n) n.target = v || '';
 		},
 		/** Returns a list of component IDs that shall be disabled when the user
@@ -148,7 +150,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	// super//
-	bind_: function () {
+	bind_() {
 		this.$supers(zul.wgt.A, 'bind_', arguments);
 		if (!this._disabled) {
 			var n = this.$n();
@@ -156,14 +158,14 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 				.domListen_(n, 'onBlur', 'doBlur_');
 		}
 	},
-	unbind_: function () {
+	unbind_() {
 		var n = this.$n();
 		this.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 
 		this.$supers(zul.wgt.A, 'unbind_', arguments);
 	},
-	domContent_: function () {
+	domContent_() {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
@@ -173,36 +175,35 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		if (!img) {
 			img = iconSclass;
 		} else
-			img = '<img src="' + img + '" align="absmiddle" />'
-				+ (iconSclass ? ' ' + iconSclass : '');
+			img = `<img src="${img}" align="absmiddle" />${iconSclass ? ' ' + iconSclass : ''}`;
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	},
-	domAttrs_: function (no) {
+	domAttrs_() {
 		var attr = this.$supers('domAttrs_', arguments),
-			v;
+			v: string;
 		if (v = this.getTarget())
-			attr += ' target="' + v + '"';
+			attr += ` target="${v}"`;
 		if (v = this.getHref())
-			attr += ' href="' + v + '"';
+			attr += ` href="${v}"`;
 		else
 			attr += ' href="javascript:;"';
 		if (this._disabled)
 			attr += ' disabled="disabled"';
 		return attr;
 	},
-	doClick_: function (evt) {
-		var href = this.getHref();
+	doClick_(evt: zk.Event) {
+		var href: string = this.getHref();
 		// ZK-2506: use iframe to open a 'mailto' href
 		if (href && href.toLowerCase().startsWith('mailto:')) {
 			var ifrm = jq.newFrame('mailtoFrame', href, null);
 			if (zk.chrome) // ZK-3646: for chrome, it need to let iframe exist for a longer time.
-				setTimeout(function () {jq(ifrm).remove();}, 100);
+				setTimeout(() => { jq(ifrm).remove(); }, 100);
 			else
 				jq(ifrm).remove();
 			evt.stop();
 		}
 		// Bug ZK-2422
-		if (zk.ie < 11 && !href) {
+		if (zk.ie && zk.ie < 11 && !href) {
 			evt.stop({dom: true});
 		}
 		if (this._disabled)
@@ -217,4 +218,4 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 			// Unlike DOM, we don't propagate to parent (so do not call $supers)
 	}
 });
-
+})();
