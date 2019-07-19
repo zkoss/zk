@@ -86,9 +86,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				jq(n).prop('checked', v);
 				if (!this._isDefaultMold()) {
 					var mold = this.getMold();
-					jq(this.$n())
-						.toggleClass(this.$s(mold + '-on'), v)
-						.toggleClass(this.$s(mold + '-off'), !v);
+					this._clearStateClassName();
+					jq(this.$n()).addClass(this._getClassNameByState());
 				}
 			}
 		},
@@ -204,10 +203,24 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n('real');
 			if (n) {
 				jq(n).prop('indeterminate', v);
+				if (!this._isDefaultMold()) {
+					this._clearStateClassName();
+					jq(this.$n()).addClass(this._getClassNameByState());
+				}
 			}
 		}
 	},
-
+	/** Returns the current state according to isIndeterminate() and isChecked().
+	 *
+	 * @return Boolean
+	 * @since 9.0.0
+	 */
+	getState(): boolean | null {
+		if (this.isIndeterminate())
+			return null;
+		else
+			return this.isChecked();
+	},
 	//super//
 	focus_(timeout?: number) {
 		zk(this.$n('real') || this.$n()).focus(timeout);
@@ -274,25 +287,30 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			// F55-ZK-12: Checkbox automatically disable itself after clicked
 			// use the autodisable handler of button directly
 			zul.wgt.ADBS.autodisable(this);
-			var real = this.$n('real') as HTMLInputElement,
-				checked = real.checked;
-			if (checked != this._checked) { //changed
-				this.setChecked(checked); //so Radio has a chance to override it
-				this.setIndeterminate(false);
-				this.fireOnCheck_(checked);
-			}
-			if (zk.webkit && !zk.mobile)
-				zk(real).focus();
+			if (this._isTristateMold()) {
+				this.nextState_();
+				this.fireOnCheck_(this.getState());
+			} else {
+				var real = this.$n('real') as HTMLInputElement,
+					checked = real.checked;
+				if (checked != this._checked) { //changed
+					this.setChecked(checked); //so Radio has a chance to override it
+					this.setIndeterminate(false);
+					this.fireOnCheck_(checked);
+				}
+				if (zk.webkit && !zk.mobile)
+					zk(real).focus();
 
-			// B65-ZK-1837: should stop propagation
-			evt.stop({propagation: true});
-			this.$supers('doClick_', arguments);
+				// B65-ZK-1837: should stop propagation
+				evt.stop({propagation: true});
+				this.$supers('doClick_', arguments);
 
-			// B85-ZK-3866: do extra click, if it's a radio
-			if (this.$instanceof(zul.wgt.Radio)) {
-				var rg = this.getRadiogroup();
-				if (rg) {
-					rg.doClick_(evt);
+				// B85-ZK-3866: do extra click, if it's a radio
+				if (this.$instanceof(zul.wgt.Radio)) {
+					var rg = this.getRadiogroup();
+					if (rg) {
+						rg.doClick_(evt);
+					}
 				}
 			}
 		}
@@ -301,7 +319,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (this.isDisabled())
 			evt.stop();
 	},
-	fireOnCheck_(checked: boolean) {
+	fireOnCheck_(checked: boolean | null) {
 		this.fire('onCheck', checked);
 	},
 	beforeSendAU_(wgt: zul.Widget, evt: zk.Event) {
@@ -320,7 +338,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 		cls += ' ' + this.$s(mold);
 		if (!this._isDefaultMold()) {
-			cls += ' ' + this.$s(mold + (this.isChecked() ? '-on' : '-off'));
+			cls += ' ' + this._getClassNameByState();
 			if (this.isDisabled())
 				cls += ' ' + this.$s(mold + '-disabled');
 		}
@@ -329,10 +347,47 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	_isDefaultMold(): boolean {
 		return this.getMold() == 'default';
 	},
+	_isTristateMold(): boolean {
+		return this.getMold() == 'tristate';
+	},
+	nextState_() {
+		if (this._indeterminate) {
+			this.setIndeterminate(false);
+			this.setChecked(true);
+		} else {
+			if (this._checked) {
+				this.setChecked(false);
+			} else {
+				this.setIndeterminate(true);
+			}
+		}
+	},
+	_getClassNameByState(): string {
+		let mold = this.getMold();
+		if (this._indeterminate) {
+			return this.$s(mold + '-indeterminate');
+		} else {
+			return this.$s(mold + (this._checked ? '-on' : '-off'));
+		}
+	},
+	_clearStateClassName() {
+		let n = jq(this.$n()),
+			mold = this.getMold();
+		if (n) {
+			n.removeClass(this.$s(mold + '-off'))
+				.removeClass(this.$s(mold + '-indeterminate'))
+				.removeClass(this.$s(mold + '-on'));
+		}
+	},
 	doKeyDown_(evt: zk.Event) {
 		this.$supers('doKeyDown_', arguments);
 		const spaceKeyCode = 32;
 		if (evt.domTarget == this.$n('mold') && evt.keyCode == spaceKeyCode) {
+			if (this._isTristateMold()) {
+				this.nextState_();
+				this.fireOnCheck_(this.getState());
+				return;
+			}
 			let checked = !this.isChecked();
 			this.setChecked(checked);
 			this.fireOnCheck_(checked);
