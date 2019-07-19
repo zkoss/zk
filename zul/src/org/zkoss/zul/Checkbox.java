@@ -17,6 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.LabelImageElement;
@@ -78,6 +79,9 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 	 * @since 8.6.0
 	 */
 	public void setIndeterminate(boolean indeterminate) {
+		String mold = getMold();
+		if ("switch".equals(mold) || "toggle".equals(mold))
+			throw new UiException("Checkbox switch/toggle mold does not support indeterminate yet." + this);
 		if (_indeterminate != indeterminate) {
 			_indeterminate = indeterminate;
 			smartUpdate("indeterminate", _indeterminate);
@@ -163,6 +167,18 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 			}
 		}
 	}
+	
+	/** Returns the current state according to isIndeterminate() and isChecked().
+	 *
+	 * @return CHECKED, UNCHECKED or INDETERMINATE
+	 * @since 9.0.0
+	 */
+	public State getState() {
+		if (isIndeterminate())
+			return State.INDETERMINATE;
+		else
+			return isChecked() ? State.CHECKED : State.UNCHECKED;
+	}
 
 	/** Returns the value.
 	 * <p>Default: null. (since 6.5.0)
@@ -223,6 +239,12 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		return false;
 	}
 
+	public void setMold(String mold) {
+		if (this._indeterminate && ("switch".equals(mold) || "toggle".equals(mold)))
+			throw new UiException("Checkbox switch/toggle mold does not support indeterminate yet." + this);
+		super.setMold(mold);
+	}
+
 	/** Returns the Style of checkbox label
 	 *
 	 * <p>Default: "z-checkbox"
@@ -260,8 +282,14 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHECK)) {
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
-			_checked = evt.isChecked();
-			_indeterminate = false;
+			if ("tristate".equals(getMold())) {
+				Boolean state = evt.getState();
+				_checked = (state != null) && state;
+				_indeterminate = state == null;
+			} else {
+				_checked = evt.isChecked();
+				_indeterminate = false;
+			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
@@ -273,5 +301,15 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 					: "true".equals(Objects.toString(value)));
 		else
 			super.updateByClient(name, value);
+	}
+
+	/**
+	 * This class is the return state for getState()
+	 *
+	 * @see #getState()
+	 * @since 9.0.0
+	 */
+	public enum State {
+		CHECKED, UNCHECKED, INDETERMINATE
 	}
 }

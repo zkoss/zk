@@ -442,6 +442,11 @@ def alert(m):
 			<mold-uri>mold/checkbox.js</mold-uri>
 			<css-uri>css/checkbox.css.dsp</css-uri>
 		</mold>
+		<mold>
+			<mold-name>tristate</mold-name>
+			<mold-uri>mold/checkbox.js</mold-uri>
+			<css-uri>css/checkbox.css.dsp</css-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>column</component-name>
