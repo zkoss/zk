@@ -125,6 +125,8 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 		var tabbox = this.getTabbox(),
 			tbx = tabbox.$n(),
 			hgh = tbx.style.height;
+		if (!hgh && tabbox._vflex)
+			hgh = tbx.offsetHeight;
 
 		if (hgh && hgh != 'auto') {
 			if (!tabbox.inAccordionMold()) {

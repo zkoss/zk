@@ -348,10 +348,7 @@ public class Utils {
 	 * @since 5.0.7
 	 */
 	public static final boolean testAttribute(Component comp, String name, boolean defValue, boolean recurse) {
-		Object val = comp.getAttribute(name, recurse);
-		if (val == null)
-			val = Library.getProperty(name);
-		return val instanceof Boolean ? ((Boolean) val).booleanValue() : val != null ? "true".equals(val) : defValue;
+		return org.zkoss.zk.ui.impl.Utils.testAttribute(comp, name, defValue, recurse);
 	}
 
 	/** Returns the number if the given attribute is defined in a component or in library property.

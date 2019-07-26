@@ -960,7 +960,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				hgh = n.style.height,
 				cave = this.$n('cave'),
 				cvh = cave.style.height;
-
+			if (!hgh && this._cssflex && this._vflex) // due to css flex, need to use offsetHeight
+				hgh = n.offsetHeight;
 			if (hgh && hgh != 'auto') {
 				cave.style.height = jq.px0(this._offsetHeight(n));
 			} else if (cvh && cvh != 'auto') {

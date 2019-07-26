@@ -43,19 +43,19 @@ public class B80_ZK_3334Test extends WebDriverTestCase {
 		blur(com);
 		waitResponse();
 		JQuery pp = jq(".z-errorbox");
-		assertEquals(com.offsetLeft() + com.outerWidth(), pp.offsetLeft());
+		assertEquals(com.offsetLeft() + com.outerWidth(), pp.offsetLeft(), 1);
 
 		window.setSize(new Dimension(window.getSize().width - 100, window.getSize().height));
 		waitResponse();
-		assertEquals(com.offsetLeft() + com.outerWidth(), pp.offsetLeft());
+		assertEquals(com.offsetLeft() + com.outerWidth(), pp.offsetLeft(), 1);
 	}
 
 	public void verifyPopup(JQuery com, JQuery pp) {
 		Dimension size = window.getSize();
-		assertEquals(com.offsetLeft(), pp.offsetLeft());
+		assertEquals(com.offsetLeft(), pp.offsetLeft(), 1);
 		window.setSize(new Dimension(size.width - 100, size.height));
 		waitResponse();
-		assertEquals(com.offsetLeft(), pp.offsetLeft());
+		assertEquals(com.offsetLeft(), pp.offsetLeft(), 1);
 		window.setSize(new Dimension(size.width, size.height));
 		waitResponse();
 	}

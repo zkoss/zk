@@ -27,8 +27,8 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 	@Test
 	public void testMVVM() {
 		connect();
-
-		Assert.assertEquals(0, jq("@grid:eq(0) @column:last").width(), 1);
+		waitResponse(true);
+		Assert.assertTrue(jq("@grid:eq(0) @column:last").attr("style").contains("display: none"));
 		Assert.assertEquals(0, jq("@grid:eq(1) @column:last").width(), 1);
 		Assert.assertEquals(0, jq("@grid:eq(2) @column:last").width(), 1);
 
@@ -58,7 +58,7 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 	public void testMVC() {
 		connect();
 
-		Assert.assertEquals(0, jq("@grid:last @column:last").width(), 1);
+		Assert.assertEquals(false, jq("@grid:last @column:last").isVisible());
 
 		Actions actions = new Actions(driver);
 		resizeColumn(actions, jq("@grid:last @column:eq(0)"), 100);

@@ -69,5 +69,5 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	}
 	</zscript>
 
-  <window border="normal" title="hello" apply="TestComposer"/>
+  <window border="normal" title="hello" apply="TestComposer" height="200px"/>
 </zk>
