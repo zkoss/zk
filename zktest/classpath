@@ -5,7 +5,7 @@
 ../dist/lib/zhtml.jar
 ../dist/lib/zel.jar
 ../dist/lib/zkbind.jar
-../dist/lib/zkplus.jar
+../dist/lib/zkplus-legacy.jar
 ../dist/lib/zkmax.jar
 ../dist/lib/zuti.jar
 ../dist/lib/ext/hibernate3.jar

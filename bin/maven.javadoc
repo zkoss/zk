@@ -59,7 +59,7 @@ jvdoc zk
 jvdoc zul
 jvdoc zhtml
 jvdoc zkbind
-jvdoc zkplus
+jvdoc zkplus-legacy
 cd $ZKCML
 jvdoc zml
 jvdoc zkex

@@ -53,7 +53,7 @@ import org.zkoss.util.CollectionsX;
  */
 public class ClassLocator implements XMLResourcesLocator {
 	private static final Logger log = LoggerFactory.getLogger(ClassLocator.class);
-	private static final String[] ZK_MODULES = new String[]{"zkbind", "zkplus", "zk", "zul"};
+	private static final String[] ZK_MODULES = new String[]{"zkbind", "zkplus-legacy", "zk", "zul"};
 
 	public ClassLocator() {
 	}

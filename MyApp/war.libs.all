@@ -4,7 +4,7 @@ zk.jar
 zul.jar
 zhtml.jar
 zml.jar
-zkplus.jar
+zkplus-legacy.jar
 zkbind.jar
 ckez.jar
 gmapsz.jar

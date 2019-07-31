@@ -65,7 +65,7 @@ public class PackageData {
 														new DirectoryTreeNode(new PackageDataUnit("zcommon-el.jar", "ZK Core Jar File", "100KB")),
 														new DirectoryTreeNode(new PackageDataUnit("zhtml.jar", "ZK Core Jar File", "57KB")),
 														new DirectoryTreeNode(new PackageDataUnit("zk.jar", "ZK Core Jar File", "1056KB")),
-														new DirectoryTreeNode(new PackageDataUnit("zkplus.jar", "ZK Core Jar File", "122KB")),
+														new DirectoryTreeNode(new PackageDataUnit("zkplus-legacy.jar", "ZK Core Jar File", "122KB")),
 														new DirectoryTreeNode(new PackageDataUnit("zul.jar", "ZK Core Jar File", "1311KB")),
 														new DirectoryTreeNode(new PackageDataUnit("zweb.jar", "ZK Core Jar File", "196KB")) }), // lib
 														// closed

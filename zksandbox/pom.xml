@@ -195,7 +195,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zkplus</artifactId>
+			<artifactId>zkplus-legacy</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

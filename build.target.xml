@@ -540,7 +540,7 @@ if="deploy.tomcat.required">
 		<param name="check.zk.config.uid" value="true"/>
 	</antcall>
 	<antcall target="check.version.package">
-		<param name="package" value="zkplus"/>
+		<param name="package" value="zkplus-legacy"/>
 		<param name="dir" value="."/>
 		<param name="check.lang-addon.uid" value="true"/>
 		<param name="check.lang-addon.zk-version" value="true"/>

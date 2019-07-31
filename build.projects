@@ -9,7 +9,7 @@ zhtml
 $ZKCML/zml
 $ZKCML/zkmax
 $ZKCML/zuti
-zkplus
+zkplus-legacy
 zksandbox
 zktest
 deploy

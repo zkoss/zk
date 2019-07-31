@@ -7,7 +7,7 @@ script:
     - cd bin
     - npm ci
     - cd ..
-    - ./build zel zcommon zweb zk zul zkbind zhtml zkplus
+    - ./build zel zcommon zweb zk zul zkbind zhtml zkplus-legacy
 # keep the npm cache around to speed up installs
 cache:
   directories:

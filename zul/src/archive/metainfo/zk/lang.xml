@@ -1047,14 +1047,6 @@ def alert(m):
 		</mold>
 		<annotation>
 			<annotation-name>default-bind</annotation-name>
-			<property-name>model</property-name>
-			<attribute>
-				<attribute-name>converter</attribute-name>
-				<attribute-value>org.zkoss.zkplus.databind.SelectboxListModelConverter</attribute-value>
-			</attribute>
-		</annotation>
-		<annotation>
-			<annotation-name>default-bind</annotation-name>
 			<property-name>selectedIndex</property-name>
 			<attribute>
 				<attribute-name>save-when</attribute-name>
