@@ -2,6 +2,7 @@ ZK 8.6.3
 * Features
 
 * Bugs
+  ZK-4336: iframe not sizing correctly on ios
 
 * Upgrade Notes
 
