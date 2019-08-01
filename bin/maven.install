@@ -59,6 +59,7 @@ upVer zul
 upVer zhtml
 upVer zkbind
 upVer zkplus
+upVer zkplus-legacy
 cd $ZKCML
 upVer zkex
 upVer zml
