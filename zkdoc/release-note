@@ -4,6 +4,10 @@ ZK 8.6.3
 * Bugs
   ZK-4336: iframe not sizing correctly on ios
   ZK-4313: load moment js scripts statically
+  ZK-4345: XSD doesn't define hflex and vflex for charts
+  ZK-4348: zul XSD declares the attribute "badgeText" in wrong case
+  ZK-4350: zul XSD doesn't declare onCreate for charts
+  ZK-4356: missing "text" attribute on timebox in zul XSD
 
 * Upgrade Notes
 
