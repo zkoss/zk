@@ -3,6 +3,7 @@ ZK 8.6.3
 
 * Bugs
   ZK-4336: iframe not sizing correctly on ios
+  ZK-4313: load moment js scripts statically
 
 * Upgrade Notes
 
