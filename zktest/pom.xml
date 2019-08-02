@@ -148,6 +148,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkplus-legacy</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkbind</artifactId>
 			<version>${project.version}</version>
 		</dependency>
