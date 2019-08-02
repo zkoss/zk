@@ -116,19 +116,14 @@ public class Wpds {
 	}
 
 	/**
-	 * Generates moment.js and moment-timezone-with-data.js string.
-	 *
+	 * Load moment.js timezone data.
 	 * @since 8.5.1
 	 */
-	public static final String outMomentJavascript(ServletRequest request, ServletResponse response)
+	public static final String outMomentTimezoneJavascript(ServletRequest request, ServletResponse response)
 			throws IOException {
 		final StringBuffer result = new StringBuffer();
 		final WebApp webApp = WebApps.getCurrent();
 		final Execution exec = new FakeExecution(webApp.getServletContext(), request, response, null, null);
-		result.append("if (!zk.mm) { var temp; if (window.moment) { temp = window.moment; }");
-		result.append(Devices.loadJavaScript(exec, "~./js/zk/ext/moment.js"));
-		result.append(Devices.loadJavaScript(exec, "~./js/zk/ext/moment-timezone-with-data.js"));
-		result.append("zk.mm = window.moment; window.moment = temp; }");
 		String path = Library.getProperty("org.zkoss.zk.moment.timezone.path");
 		if (path != null) {
 			String json = null;
