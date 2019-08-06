@@ -58,12 +58,13 @@ legend {
 	}
 }
 
-<c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
+@browserDefault: "'org.zkoss.zul.theme.browserDefault'";
+e('<c:if test="${empty c:property(@{browserDefault})}">');
 body {
 	margin: 0;
 	padding: 0 5px;
 }
-</c:if>
+e('</c:if>');
 
 //mobile
 .mobile * {
@@ -320,19 +321,21 @@ input[type="checkbox"] {
 	.size(60px, 60px);
 	background: transparent no-repeat center;
 
-<c:if test="${z:isEditionValid()}">
-	background-image: url('//www.zkoss.org/zk/img/${z:encodeWithZK("zkpowered.png")}');
-</c:if>
+@zkpowered: '${z:encodeWithZK("zkpowered.png")}';
+e('<c:if test="${z:isEditionValid()}">');
+	background-image: url('//www.zkoss.org/zk/img/@{zkpowered}');
+e('</c:if>');
 	position: absolute;
 	right: 10px;
 	bottom: 10px;
 	z-index: 32000;
 }
-<c:if test="${z:isEditionValid()}">
+@zkuptime: '${z:encodeWithZK("zkuptime.png")}';
+e('<c:if test="${z:isEditionValid()}">');
 .z-uptime {
-	background-image: url('//www.zkoss.org/zk/img/${z:encodeWithZK("zkuptime.png")}');
+	background-image: url('//www.zkoss.org/zk/img/@{zkuptime}');
 }
-</c:if>
+e('</c:if>');
 
 .z-loading,
 .z-apply-loading {

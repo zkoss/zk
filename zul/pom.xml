@@ -108,25 +108,28 @@
 				</executions>
 			</plugin>-->
 			<plugin>
-				<groupId>org.zkoss.maven</groupId>
-				<artifactId>zkless-engine-maven-plugin</artifactId>
-				<version>2.0.3</version>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
 				<executions>
 					<execution>
 						<id>compile-less</id>
+						<phase>process-resources</phase>
 						<goals>
-							<goal>lessc</goal>
+							<goal>exec</goal>
 						</goals>
-						<configuration>
-							<sourceDirectory>${project.basedir}/src/archive</sourceDirectory>
-							<outputDirectory>${project.basedir}/debug/classes</outputDirectory>
-							<themeFolder>.</themeFolder>
-							<arguments>
-								<argument>--js</argument>
-							</arguments>
-						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<executable>${project.basedir}/../node_modules/.bin/zklessc</executable>
+					<arguments>
+						<argument>--source</argument>
+						<argument>${project.basedir}/src/archive/web</argument>
+						<argument>--output</argument>
+						<argument>${project.build.outputDirectory}/web</argument>
+						<argument>--compress</argument>
+					</arguments>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

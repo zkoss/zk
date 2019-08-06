@@ -3,6 +3,7 @@ ZK 9.0.0
   ZK-4328: Change Java compiler source/target to 8
   ZK-317: Support CSS3 flex that allows developer to specify the flexibility easier and more flexible
   ZK-4343: Separate deprecated data-binding classes in zkplus
+  ZK-4358: Use newer zkless-engine
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
