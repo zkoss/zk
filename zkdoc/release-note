@@ -9,6 +9,7 @@ ZK 8.6.3
   ZK-4350: zul XSD doesn't declare onCreate for charts
   ZK-4356: missing "text" attribute on timebox in zul XSD
   ZK-4321: avoid illegal reflective access WARNINGS/ERRORS for future JDK versions
+  ZK-4353: nav renders a too large image loaded by "imageContent"
 
 * Upgrade Notes
 
