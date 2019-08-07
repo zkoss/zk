@@ -1,5 +1,6 @@
 ZK 8.6.3
 * Features
+  ZK-4316: Improve component wiring performance (avoid NoSuchFieldException)
 
 * Bugs
   ZK-4336: iframe not sizing correctly on ios
