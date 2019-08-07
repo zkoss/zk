@@ -7,26 +7,26 @@
 // web/core.dsp.tld
 //---------------------------------------------
 .encodeURL(@property, @url, @rest...) when (@property = background) {
-	background: url(${c:encodeURL('@{url}')}) @rest;
+	e('background: url(${c:encodeURL("@{url}")}) @{rest};');
 }
 .encodeURL(@property, @url, @rest...) when (@property = background-image) {
-	background-image: url(${c:encodeURL('@{url}')});
+	e('background-image: url(${c:encodeURL("@{url}")});');
 }
 .encodeThemeURL(@property, @url, @rest...) when (@property = background) {
-	background: url(${c:encodeThemeURL('@{url}')}) @rest;
+	e('background: url(${c:encodeThemeURL("@{url}")}) @rest;');
 }
 .encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
-	background-image: url(${c:encodeThemeURL('@{url}')});
+	e('background-image: url(${c:encodeThemeURL("@{url}")});');
 }
 // only tablet.less uses this, no need render css for old IE
 .encodeURL-verGradient(@url, @start, @end) {
-	background:	url(${c:encodeURL('@{url}')});
-	background:	url(${c:encodeURL('@{url}')}), -moz-linear-gradient(top, @start 0%, @end 100%); /* FF3.6+ */
-	background:	url(${c:encodeURL('@{url}')}), -webkit-gradient(linear, left top, left bottom, color-stop(0%, @start),color-stop(100%, @end)); /* Chrome,Safari4+ */
-	background:	url(${c:encodeURL('@{url}')}), -webkit-linear-gradient(top, @start 0%, @end 100%); /* Chrome10+,Safari5.1+ */
-	background:	url(${c:encodeURL('@{url}')}), -o-linear-gradient(top, @start 0%, @end 100%); /* Opera 11.10+ */
-	background:	url(${c:encodeURL('@{url}')}), -ms-linear-gradient(top, @start 0%, @end 100%); /* IE10+ */
-	background:	url(${c:encodeURL('@{url}')}), linear-gradient(to bottom, @start 0%, @end 100%); /* W3C */
+	e('background:	url(${c:encodeURL("@{url}")});');
+	e('background:	url(${c:encodeURL("@{url}")}), -moz-linear-gradient(top, @{start} 0%, @{end} 100%);'); /* FF3.6+ */
+	e('background:	url(${c:encodeURL("@{url}")}), -webkit-gradient(linear, left top, left bottom, color-stop(0%, @{start}),color-stop(100%, @{end}));'); /* Chrome,Safari4+ */
+	e('background:	url(${c:encodeURL("@{url}")}), -webkit-linear-gradient(top, @{start} 0%, @{end} 100%);'); /* Chrome10+,Safari5.1+ */
+	e('background:	url(${c:encodeURL("@{url}")}), -o-linear-gradient(top, @{start} 0%, @{end} 100%);'); /* Opera 11.10+ */
+	e('background:	url(${c:encodeURL("@{url}")}), -ms-linear-gradient(top, @{start} 0%, @{end} 100%);'); /* IE10+ */
+	e('background:	url(${c:encodeURL("@{url}")}), linear-gradient(to bottom, @{start} 0%, @{end} 100%);'); /* W3C */
 }
 //---------------------------------------------
 // theme.dsp.tld
