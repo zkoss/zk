@@ -2634,6 +2634,8 @@
 			<xs:element ref="panel" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
+		<xs:attribute name="counterVisible" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- portallayout -->
 	<xs:element name="portallayout" type="portallayoutType" />
