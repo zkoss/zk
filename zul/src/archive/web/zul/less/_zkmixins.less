@@ -13,7 +13,7 @@
 	e('background-image: url(${c:encodeURL("@{url}")});');
 }
 .encodeThemeURL(@property, @url, @rest...) when (@property = background) {
-	e('background: url(${c:encodeThemeURL("@{url}")}) @rest;');
+	e('background: url(${c:encodeThemeURL("@{url}")}) @{rest};');
 }
 .encodeThemeURL(@property, @url, @rest...) when (@property = background-image) {
 	e('background-image: url(${c:encodeThemeURL("@{url}")});');
