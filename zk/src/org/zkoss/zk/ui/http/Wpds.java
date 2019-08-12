@@ -135,7 +135,7 @@ public class Wpds {
 				byte[] bytes = Files.readAll(is);
 				if (bytes.length > 0) {
 					result.append("var tzdata =");
-					result.append(new String(bytes));
+					result.append(new String(bytes, "UTF-8"));
 					result.append("; zk.mm.tz.load(tzdata);");
 				}
 			} finally {
