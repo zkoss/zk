@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4347-errors.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 08 10:34:57 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <hlayout>
+        <timepicker id="c1"/>
+        <timebox id="c2"/>
+        <calendar id="c3"/>
+    </hlayout>
+    <hlayout>
+        <button label="Timepicker valueInLocalDate" onClick="c1.setValueInLocalDate(java.time.LocalDate.now())"/>
+        <button label="Timebox valueInLocalDate" onClick="c2.setValueInLocalDate(java.time.LocalDate.now())"/>
+        <button label="Calendar valueInLocalTime" onClick="c3.setValueInLocalTime(java.time.LocalTime.now())"/>
+    </hlayout>
+    <label multiline="true">
+        1. Click any button
+        2. Should throw an exception or the test failed.
+    </label>
+</zk>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4347-const.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 14 10:35:08 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    import java.time.*;
+
+    SimpleLocalDateConstraint sldcNp = new SimpleLocalDateConstraint(SimpleConstraint.NO_PAST);
+    SimpleDateConstraint sdcNp = new SimpleDateConstraint(SimpleConstraint.NO_PAST);
+
+    SimpleLocalDateConstraint sldcPeriod = new SimpleLocalDateConstraint("between 19500101 and 19801231");
+    SimpleDateConstraint sdcPeriod = new SimpleDateConstraint("between 19500101 and 19801231");
+
+    SimpleLocalDateConstraint sldcPeriod2 = new SimpleLocalDateConstraint(
+        SimpleConstraint.SERVER,
+        LocalDate.of(1950, 1, 1), LocalDate.of(1980, 12, 31),
+        ""
+    );
+    SimpleDateConstraint sdcPeriod2 = new SimpleDateConstraint(
+        SimpleConstraint.SERVER,
+        new java.text.SimpleDateFormat("yyyy-MM-dd").parse("1950-01-01"),
+        new java.text.SimpleDateFormat("yyyy-MM-dd").parse("1980-12-31"),
+        ""
+    );
+
+    SimpleLocalTimeConstraint sltc = new SimpleLocalTimeConstraint("between 093000 and 183000");
+    SimpleLocalTimeConstraint sltcBefore = new SimpleLocalTimeConstraint("before 183000");
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. In "no past", an error occurs if a day before today is selected.
+        2. In "1950-01-01 ~ 1980-12-31 (String)", an error occurs if a day is not in the range is selected.
+        3. In "1950-01-01 ~ 1980-12-31 (Date)", an error occurs if "set today" is clicked.
+        4. In "09:30 ~ 18:30", an error occurs if a time not in the range is selected.
+        5. In "before 18:30", an error occurs if a time not in the range is selected.
+    </label>
+    <vlayout>
+        no past
+        <datebox constraint="${sldcNp}" />
+        <datebox constraint="${sdcNp}" />
+        <datebox constraint="no past" />
+    </vlayout>
+    <vlayout>
+        1950-01-01 ~ 1980-12-31 (String)
+        <datebox constraint="${sldcPeriod}" />
+        <datebox constraint="${sdcPeriod}" />
+        <datebox constraint="between 19500101 and 19801231" />
+    </vlayout>
+    <vlayout>
+        1950-01-01 ~ 1980-12-31 (Date)
+        <cell>
+            <datebox id="d1" constraint="${sldcPeriod2}" />
+            <button label="set today" onClick="d1.setValueInLocalDate(LocalDate.now())"/>
+        </cell>
+        <cell>
+            <datebox id="d2" constraint="${sdcPeriod2}" />
+            <button label="set today" onClick="d2.setValueInLocalDate(LocalDate.now())"/>
+        </cell>
+    </vlayout>
+    <vlayout>
+        09:30 ~ 18:30
+        <cell>
+            <timebox id="t1" format="HH:mm:ss" constraint="${sltc}" />
+            <timebox format="HH:mm:ss" constraint="between 093000 and 183000" />
+            <timepicker format="HH:mm:ss" constraint="between 093000 and 183000" />
+            <button label="set 00:00" onClick="t1.setValueInLocalTime(LocalTime.of(0, 0, 0))"/>
+            <button label="set 10:00" onClick="t1.setValueInLocalTime(LocalTime.of(10, 0, 0))"/>
+            <button label="set 20:00" onClick="t1.setValueInLocalTime(LocalTime.of(20, 0, 0))"/>
+        </cell>
+    </vlayout>
+    <vlayout>
+        before 18:30
+        <cell>
+            <timebox format="HH:mm:ss" constraint="before 183000" />
+            <timepicker format="HH:mm:ss" constraint="${sltcBefore}" />
+            <timepicker format="HH:mm:ss" constraint="before 183000" />
+        </cell>
+    </vlayout>
+</zk>

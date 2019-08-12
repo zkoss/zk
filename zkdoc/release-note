@@ -5,6 +5,7 @@ ZK 9.0.0
   ZK-4343: Separate deprecated data-binding classes in zkplus
   ZK-4358: Use newer zkless-engine
   ZK-3550: Externalize dsp servlet from zweb to separate dependency
+  ZK-4347: support jdk8 date/time API Datebox/Calendar/Timebox/Timepicker
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
@@ -13,6 +14,7 @@ ZK 9.0.0
   + The Java binary-compatible level is Java 8 since ZK 9.
   + ZK Databinding 1 is moved to a legacy module "zkplus-legacy".
   + ZK DSP Library is moved to a new module "zweb-dsp".
+  + SimpleLocalTimeConstraint is used by default instead of SimpleConstraint in Timebox and Timepicker.
 
    --------
 ZK 8.6.2

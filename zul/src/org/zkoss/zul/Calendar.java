@@ -18,6 +18,12 @@ package org.zkoss.zul;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
@@ -25,10 +31,10 @@ import java.util.TimeZone;
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Objects;
 import org.zkoss.mesg.Messages;
-import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zul.ext.Constrainted;
@@ -53,7 +59,7 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  */
 public class Calendar extends XulElement implements Constrainted {
-	private Date _value;
+	private ZonedDateTime _value;
 	private TimeZone _defaultTzone = TimeZones.getCurrent();
 	private boolean _weekOfYear;
 	private boolean _showTodayLink = false;
@@ -71,11 +77,23 @@ public class Calendar extends XulElement implements Constrainted {
 	}
 
 	public Calendar() {
-		this(null);
+		this((ZonedDateTime) null);
 	}
 
 	public Calendar(Date value) {
-		_value = value != null ? value : Dates.today();
+		this(value == null ? null : ZonedDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault()));
+	}
+
+	public Calendar(ZonedDateTime value) {
+		_value = value != null ? value : ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+	}
+
+	public Calendar(LocalDateTime value) {
+		this(value == null ? null : value.atZone(ZoneId.systemDefault()));
+	}
+
+	public Calendar(LocalDate value) {
+		this(value == null ? null : value.atStartOfDay(ZoneId.systemDefault()));
 	}
 
 	/**
@@ -114,19 +132,86 @@ public class Calendar extends XulElement implements Constrainted {
 	/** Returns the value that is assigned to this component, never null.
 	 */
 	public Date getValue() {
-		return _value;
+		return Date.from(_value.toInstant());
 	}
 
 	/** Assigns a value to this component.
 	 * @param value the date to assign. If null, today is assumed.
 	 */
 	public void setValue(Date value) {
+		setValueInZonedDateTime(value == null ? null : ZonedDateTime.ofInstant(value.toInstant(), _value.getZone()));
+	}
+
+	/**
+	 * Returns the value (in ZonedDateTime) that is assigned to this component, never null.
+	 * @since 9.0.0
+	 */
+	public ZonedDateTime getValueInZonedDateTime() {
+		return _value;
+	}
+
+	/**
+	 * Assigns a value (in ZonedDateTime) to this component.
+	 * @param value the date to assign. If null, today is assumed.
+	 * @since 9.0.0
+	 */
+	public void setValueInZonedDateTime(ZonedDateTime value) {
 		if (value == null)
-			value = Dates.today();
+			value = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
 		if (!value.equals(_value)) {
 			_value = value;
-			smartUpdate("value", _value);
+			smartUpdate("value", getValue());
 		}
+	}
+
+	/**
+	 * Returns the value (in LocalDateTime) that is assigned to this component, never null.
+	 * @since 9.0.0
+	 */
+	public LocalDateTime getValueInLocalDateTime() {
+		return getValueInZonedDateTime().toLocalDateTime();
+	}
+
+	/**
+	 * Assigns a value (in LocalDateTime) to this component.
+	 * @param value the date to assign. If null, today is assumed.
+	 * @since 9.0.0
+	 */
+	public void setValueInLocalDateTime(LocalDateTime value) {
+		setValueInZonedDateTime(value == null ? null : value.atZone(_value.getZone()));
+	}
+
+	/**
+	 * Returns the value (in LocalDate) that is assigned to this component, never null.
+	 * @since 9.0.0
+	 */
+	public LocalDate getValueInLocalDate() {
+		return getValueInZonedDateTime().toLocalDate();
+	}
+
+	/**
+	 * Assigns a value (in LocalDate) to this component.
+	 * @param value the date to assign. If null, today is assumed.
+	 * @since 9.0.0
+	 */
+	public void setValueInLocalDate(LocalDate value) {
+		setValueInZonedDateTime(value == null ? null : value.atStartOfDay(_value.getZone()));
+	}
+
+	/**
+	 * Returns the value (in LocalTime) that is assigned to this component, never null.
+	 * @since 9.0.0
+	 */
+	public LocalTime getValueInLocalTime() {
+		return getValueInZonedDateTime().toLocalTime();
+	}
+
+	/**
+	 * It is meaningless to set only LocalTime in calendar.
+	 * @since 9.0.0
+	 */
+	public void setValueInLocalTime(LocalTime value) throws WrongValueException {
+		throw new UnsupportedOperationException("need date");
 	}
 
 	private DateFormat getDateFormat() {
@@ -251,11 +336,12 @@ public class Calendar extends XulElement implements Constrainted {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
 			final Map<String, Object> data = request.getData();
-			final Object value = data.get("value");
-			if (Objects.equals(_value, value))
+			final Date value = (Date) data.get("value");
+			final ZonedDateTime zonedValue = ZonedDateTime.ofInstant(value.toInstant(), _value.getZone());
+			if (Objects.equals(_value, zonedValue))
 				return; //nothing happen
 
-			_value = (Date) value;
+			_value = zonedValue;
 			final InputEvent evt = new InputEvent(cmd, this, getDateFormat().format(value), value,
 					AuRequests.getBoolean(data, "bySelectBack"), AuRequests.getInt(data, "start", 0));
 			Events.postEvent(evt);
@@ -270,7 +356,7 @@ public class Calendar extends XulElement implements Constrainted {
 			render(renderer, "name", _name);
 		render(renderer, "defaultTzone", _defaultTzone.getID());
 		render(renderer, "weekOfYear", _weekOfYear);
-		render(renderer, "value", _value);
+		render(renderer, "value", getValue());
 		render(renderer, "showTodayLink", _showTodayLink);
 		render(renderer, "todayLinkLabel", _todayLinkLabel);
 		if (_constraint != null) {
