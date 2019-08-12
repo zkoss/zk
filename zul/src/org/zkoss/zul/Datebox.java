@@ -19,6 +19,10 @@ package org.zkoss.zul;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,6 +54,7 @@ import org.zkoss.zk.ui.ext.Blockable;
 import org.zkoss.zk.ui.http.Utils;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zul.impl.DateTimeFormatInputElement;
 import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -66,15 +71,12 @@ import org.zkoss.zul.mesg.MZul;
  * 
  * @author tomyeh
  */
-public class Datebox extends FormatInputElement {
+public class Datebox extends DateTimeFormatInputElement {
 
 	private static final Logger log = LoggerFactory.getLogger(Datebox.class);
 	private static final String DEFAULT_FORMAT = "yyyy/MM/dd";
 
-	private TimeZone _tzone = TimeZones.getCurrent();
 	private List<TimeZone> _dtzones;
-	/** The locale associated with this datebox. */
-	private Locale _locale;
 	private boolean _btnVisible = true, _lenient = true, _dtzonesReadonly = false;
 	private static Map<Locale, Object> _symbols = new HashMap<Locale, Object>(8);
 	private boolean _weekOfYear;
@@ -104,6 +106,66 @@ public class Datebox extends FormatInputElement {
 	public Datebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
+	}
+
+	/** Constructor with a given date.
+	 * @param value the date to be assigned to this datebox initially.<br/>
+	 * Notice that, if this datebox does not allow users to select the time
+	 * (i.e., the format limited to year, month and day), the date specified here
+	 * is better to set hour, minutes, seconds and milliseconds to zero
+	 * (for the current timezone, {@link TimeZones#getCurrent}), so it is easier
+	 * to work with other libraries, such as SQL.
+	 * {@link org.zkoss.util.Dates} has a set of utilities to simplify the task.
+	 * @since 9.0.0
+	 */
+	public Datebox(ZonedDateTime value) throws WrongValueException {
+		this();
+		setValueInZonedDateTime(value);
+	}
+
+	/** Constructor with a given date.
+	 * @param value the date to be assigned to this datebox initially.<br/>
+	 * Notice that, if this datebox does not allow users to select the time
+	 * (i.e., the format limited to year, month and day), the date specified here
+	 * is better to set hour, minutes, seconds and milliseconds to zero
+	 * (for the current timezone, {@link TimeZones#getCurrent}), so it is easier
+	 * to work with other libraries, such as SQL.
+	 * {@link org.zkoss.util.Dates} has a set of utilities to simplify the task.
+	 * @since 9.0.0
+	 */
+	public Datebox(LocalDateTime value) throws WrongValueException {
+		this();
+		setValueInLocalDateTime(value);
+	}
+
+	/** Constructor with a given date.
+	 * @param value the date to be assigned to this datebox initially.<br/>
+	 * Notice that, if this datebox does not allow users to select the time
+	 * (i.e., the format limited to year, month and day), the date specified here
+	 * is better to set hour, minutes, seconds and milliseconds to zero
+	 * (for the current timezone, {@link TimeZones#getCurrent}), so it is easier
+	 * to work with other libraries, such as SQL.
+	 * {@link org.zkoss.util.Dates} has a set of utilities to simplify the task.
+	 * @since 9.0.0
+	 */
+	public Datebox(LocalDate value) throws WrongValueException {
+		this();
+		setValueInLocalDate(value);
+	}
+
+	/** Constructor with a given date.
+	 * @param value the date to be assigned to this datebox initially.<br/>
+	 * Notice that, if this datebox does not allow users to select the time
+	 * (i.e., the format limited to year, month and day), the date specified here
+	 * is better to set hour, minutes, seconds and milliseconds to zero
+	 * (for the current timezone, {@link TimeZones#getCurrent}), so it is easier
+	 * to work with other libraries, such as SQL.
+	 * {@link org.zkoss.util.Dates} has a set of utilities to simplify the task.
+	 * @since 9.0.0
+	 */
+	public Datebox(LocalTime value) throws WrongValueException {
+		this();
+		setValueInLocalTime(value);
 	}
 
 	/**
@@ -287,34 +349,6 @@ public class Datebox extends FormatInputElement {
 		}
 	}
 
-	/**
-	 * Returns the value (in Date), might be null unless a constraint stops it.
-	 * 
-	 * @exception WrongValueException
-	 *                if user entered a wrong value
-	 */
-	public Date getValue() throws WrongValueException {
-		return (Date) getTargetValue();
-	}
-
-	/**
-	 * Sets the value (in Date).
-	 * 
-	 * @exception WrongValueException
-	 *                if value is wrong
-	 * @param value the date to be assigned to this datebox.<br/>
-	 * Notice that, if this datebox does not allow users to select the time
-	 * (i.e., the format limited to year, month and day), the date specified here
-	 * is better to set hour, minutes, seconds and milliseconds to zero
-	 * (for the current timezone, {@link TimeZones#getCurrent}), so it is easier
-	 * to work with other libraries, such as SQL.
-	 * {@link org.zkoss.util.Dates} has a set of utilities to simplify the task.
-	 */
-	public void setValue(Date value) throws WrongValueException {
-		validate(value);
-		setRawValue(value);
-	}
-
 	/** Sets the date format.
 	<p>If null or empty is specified, {@link #getDefaultFormat} is assumed.
 	Since 5.0.7, you could specify one of the following reserved words,
@@ -465,19 +499,9 @@ public class Datebox extends FormatInputElement {
 		return format;
 	}
 
-	/**
-	 * Returns the time zone that this date box belongs to, or null if the
-	 * default time zone is used.
-	 * <p>
-	 * The default time zone is determined by {@link TimeZones#getCurrent}.
-	 */
-	public TimeZone getTimeZone() {
-		return _tzone;
-	}
-
-	/** Sets the time zone that this date box belongs to, or null if
+	/** Sets the time zone that this component belongs to, or null if
 	 * the default time zone is used.
-	 
+
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
 	 *
 	 * <p>Notice that if {@link #getDisplayedTimeZones} was called with
@@ -488,27 +512,10 @@ public class Datebox extends FormatInputElement {
 	public void setTimeZone(TimeZone tzone) {
 		if (_tzone != tzone) {
 			if (_dtzones != null) {
-				_tzone = _dtzones.contains(tzone) ? tzone : _dtzones.get(0);
-			} else {
-				_tzone = tzone;
+				tzone = _dtzones.contains(tzone) ? tzone : _dtzones.get(0);
 			}
-			Constraint cst = getConstraint();
-			if (cst instanceof SimpleDateConstraint)
-				((SimpleDateConstraint) cst).setTimeZone(_tzone);
-			smartUpdate("timeZone", _tzone.getID());
-			smartUpdate("_value", marshall(_value));
+			super.setTimeZone(tzone);
 		}
-	}
-
-	/** Sets the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
-	 * @param id the time zone's ID, such as "America/Los_Angeles".
-	 * The time zone will be retrieved by calling TimeZone.getTimeZone(id).
-	 */
-	public void setTimeZone(String id) {
-		TimeZone tzone = TimeZone.getTimeZone(id);
-		setTimeZone(tzone);
 	}
 
 	/**
@@ -524,7 +531,7 @@ public class Datebox extends FormatInputElement {
 	/**
 	 * Sets a list of the time zones that will be displayed at the
 	 * client and allow user to select.
-	 * <p>If the {@link #getTimeZone()} is null, 
+	 * <p>If the {@link #getTimeZone()} is null,
 	 * the first time zone in the list is assumed.
 	 * @param dtzones a list of the time zones to display.
 	 * If empty, it assumed to be null.
@@ -594,35 +601,6 @@ public class Datebox extends FormatInputElement {
 			_dtzonesReadonly = readonly;
 			smartUpdate("timeZonesReadonly", _dtzonesReadonly);
 		}
-	}
-
-	/** Returns the locale associated with this datebox,
-	 * or null if {@link Locales#getCurrent} is preferred.
-	 * @since 5.0.7
-	 */
-	public Locale getLocale() {
-		return _locale;
-	}
-
-	/** Sets the locale used to identify the format of this datebox.
-	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
-	 * is assumed)
-	 * @since 5.0.7
-	 */
-	public void setLocale(Locale locale) {
-		if (!Objects.equals(_locale, locale)) {
-			_locale = locale;
-			invalidate();
-		}
-	}
-	
-	/** Sets the locale used to identify the format of this datebox.
-	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
-	 * is assumed)
-	 * @since 5.0.7
-	 */
-	public void setLocale(String locale) {
-		setLocale(locale != null && locale.length() > 0 ? Locales.getLocale(locale) : null);
 	}
 
 	private static Map loadSymbols(Locale locale) {
@@ -865,14 +843,6 @@ public class Datebox extends FormatInputElement {
 		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug 2564298
 	}
 
-	@Override
-	public void setConstraint(Constraint constr) {
-		if (constr instanceof SimpleDateConstraint) {
-			((SimpleDateConstraint) constr).setTimeZone(this.getTimeZone());
-		}
-		super.setConstraint(constr);
-	}
-
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
 			return null;
@@ -977,22 +947,9 @@ public class Datebox extends FormatInputElement {
 	}
 
 	//--ComponentCtrl--//
-	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(3);
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
 
 	static {
-		_properties.put("value", new PropertyAccess<Date>() {
-			public void setValue(Component cmp, Date value) {
-				((Datebox) cmp).setValue(value);
-			}
-
-			public Class<Date> getType() {
-				return Date.class;
-			}
-
-			public Date getValue(Component cmp) {
-				return ((Datebox) cmp).getValue();
-			}
-		});
 		_properties.put("buttonVisible", new BooleanPropertyAccess() {
 			public void setValue(Component cmp, Boolean value) {
 				((Datebox) cmp).setButtonVisible(value);
@@ -1041,7 +998,6 @@ public class Datebox extends FormatInputElement {
 
 		render(renderer, "weekOfYear", _weekOfYear);
 		render(renderer, "position", _position);
-		renderer.render("timeZone", _tzone.getID());
 		renderer.render("localizedFormat", getLocalizedFormat());
 
 		String unformater = getUnformater();
