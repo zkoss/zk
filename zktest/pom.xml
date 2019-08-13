@@ -198,6 +198,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
+			<artifactId>zweb-dsp</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.common</groupId>
 			<artifactId>zel</artifactId>
 			<version>${project.version}</version>
 		</dependency>
