@@ -15,6 +15,8 @@ package org.zkoss.zk.ui.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,6 +27,8 @@ import java.util.Set;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.util.Pair;
+import org.zkoss.zel.impl.util.ConcurrentCache;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -50,6 +54,23 @@ import org.zkoss.zk.ui.UiException;
 	private final char _separator;
 	private final boolean _ignoreZScript;
 	private final boolean _ignoreXel;
+
+	// ZK-4316: Improve component wiring performance (avoid NoSuchFieldException)
+	private static final int CACHE_SIZE;
+	private static final String CACHE_SIZE_PROP = "org.zkoss.zk.ui.util.ConventionWire.CACHE_SIZE";
+	static {
+		if (System.getSecurityManager() == null) {
+			CACHE_SIZE = Integer.parseInt(System.getProperty(CACHE_SIZE_PROP, "100"));
+		} else {
+			CACHE_SIZE = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
+
+				public Integer run() {
+					return Integer.valueOf(System.getProperty(CACHE_SIZE_PROP, "100"));
+				}
+			}).intValue();
+		}
+	}
+	private static final ConcurrentCache<Pair<Class, String>, Field> _injectedFieldCache = new ConcurrentCache<Pair<Class, String>, Field>(CACHE_SIZE);
 
 	public ConventionWire(Object controller) {
 		this(controller, '$', false, false);
@@ -278,7 +299,13 @@ import org.zkoss.zk.ui.UiException;
 
 	private void injectFieldByName(Object arg, Class tgtcls, Class parmcls, String fdname) {
 		try {
-			final Field fd = Classes.getAnyField(tgtcls, fdname);
+			// ZK-4316: Improve component wiring performance (avoid NoSuchFieldException)
+			Pair<Class, String> cachedKey = new Pair<Class, String>(tgtcls, fdname);
+			Field fd = _injectedFieldCache.get(cachedKey);
+			if (fd == null) {
+				fd = Classes.getAnyField(tgtcls, fdname);
+				_injectedFieldCache.put(cachedKey, fd);
+			}
 			injectField(arg, parmcls, fd);
 		} catch (NoSuchFieldException e) {
 			//ignore
