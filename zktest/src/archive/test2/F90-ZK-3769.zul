@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-3769.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 15 18:07:19 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    import java.time.*;
+
+    LocalDateTime today0001 = LocalDateTime.of(2017, 10, 13, 0, 1);
+
+    void changeDefaultDateTime() {
+        db1.setDefaultDateTime(LocalDateTime.of(2012, 12, 21, 23, 22, 33));
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Open the first datebox.
+        2. The default time should be 2017/10/13 AM 00:01:00.
+        3. Click the "defaultDateTime=2012/12/21 PM 11:22:33" button and open the datebox.
+        4. The default time should be 2012/12/21 PM 11:22:33.
+    </label>
+    <vlayout>
+        Experimental group
+        <datebox id="db1" width="300px" format="yyyy/MM/dd a KK:mm:ss" defaultDateTime="${today0001}"/>
+        <button label="defaultDateTime=2012/12/21 PM 11:22:33" onClick="changeDefaultDateTime()"/>
+        Control group
+        <datebox width="300px" format="yyyy/MM/dd a KK:mm:ss"/>
+    </vlayout>
+</zk>
