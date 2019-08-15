@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4256.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 15 16:09:50 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Click "Start" button.
+        2. Click "Abort" button.
+        3. The clock should keep updating as well.
+    </label>
+    <div apply="org.zkoss.zktest.test2.F86_ZK_4256Composer">
+        <hlayout>
+            <button id="start" label="Start" />
+            <button id="stop" label="Stop" />
+            <button label="Abort">
+                <attribute w:name="onClick"><![CDATA[
+                var desktop = zk.Desktop._dt;
+                if (desktop._cmsp && desktop._cmsp._req)
+                    desktop._cmsp._req.abort();
+                ]]>
+                </attribute>
+            </button>
+        </hlayout>
+        <label id="time"/>
+    </div>
+</zk>
