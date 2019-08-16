@@ -239,7 +239,11 @@ zk.fmt.Date = {
 					if (!isNaN(nv = _parseInt(token))) {
 						var newY = Math.min(nv, 200000); // Bug B50-3288904: js year limit
 						if (newY < 100) {
-							if (newY === y % 100) break; // assume yy is not modified
+							var fullYear = y + localizedSymbols.YDELTA;
+							if (newY === fullYear % 100) { // assume yy is not modified
+								y = fullYear;
+								break;
+							}
 							// ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
 							var twoDigitYearStart = zk.TDYS,
 								lowerBoundary = (Math.floor(twoDigitYearStart / 100) * 100) + newY,
@@ -588,19 +592,7 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 
 		if (this._offset && fmt) {
 			if (!LeapDay.isInstance(d)) {
-				var cnt = 0;
-				for (var i = fmt.length; i--;)
-					if (fmt.charAt(i) == 'y')
-						cnt++;
-				if (cnt > 3)
-					d.setFullYear(d.getFullYear() - this._offset);
-				else if (cnt) {
-					var year = d.getFullYear();
-					if (year < 2000)
-						d.setFullYear(year + (Math.ceil(this._offset / 100) * 100 - this._offset));
-					else
-						d.setFullYear(year - (this._offset % 100));
-				}
+				d.setFullYear(d.getFullYear() - this._offset);
 			} else {
 				return d.getRealDate();
 			}
