@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.3.201908010940">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.3.201908161212">
 	<!--
 	SIMPLETYPE
 	-->
@@ -526,7 +526,14 @@
 		<xs:attribute name="tooltiptext" type="xs:string" use="optional" />
 		<xs:attribute name="zindex" type="intType" use="optional" />
 		<xs:attribute name="renderdefer" type="intType" use="optional" />
+		<xs:attribute name="onAfterSize" type="xs:string" use="optional" />
+		<xs:attribute name="onCancel" type="xs:string" use="optional" />
+		<xs:attribute name="onCtrlKey" type="xs:string" use="optional" />
 		<xs:attribute name="onDrop" type="xs:string" use="optional" />
+		<xs:attribute name="onMouseOver" type="xs:string" use="optional" />
+		<xs:attribute name="onMouseOut" type="xs:string" use="optional" />
+		<xs:attribute name="onOK" type="xs:string" use="optional" />
+		<xs:attribute name="onSwipe" type="xs:string" use="optional" />
 		<xs:attribute name="action" type="xs:string" use="optional" />
 		<xs:attribute name="hflex" type="xs:string" use="optional" />
 		<xs:attribute name="vflex" type="xs:string" use="optional" />
@@ -537,7 +544,6 @@
 		<xs:attribute name="context" type="xs:string" use="optional" />
 		<xs:attribute name="popup" type="xs:string" use="optional" />
 		<xs:attribute name="tooltip" type="xs:string" use="optional" />
-		<xs:attribute name="onCtrlKey" type="xs:string" use="optional" />
 		<xs:attribute name="ctrlKeys" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="inputElementAttrGroup">
