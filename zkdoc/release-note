@@ -15,6 +15,7 @@ ZK 8.6.3
   ZK-4357: missing "onOK" and "onCancel" for HtmlBasedComponent in zul XSD
   ZK-4333: Combobox grows its width for opening its popup each time
   ZK-4342: timebox can't be cleared
+  ZK-4332: Using short format in Datebox results in the wrong year after ZK-4242 in Thai locale
 
 * Upgrade Notes
 
