@@ -4,6 +4,7 @@ ZK 9.0.0
   ZK-317: Support CSS3 flex that allows developer to specify the flexibility easier and more flexible
   ZK-4343: Separate deprecated data-binding classes in zkplus
   ZK-4358: Use newer zkless-engine
+  ZK-3550: Externalize dsp servlet from zweb to separate dependency
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
@@ -11,6 +12,7 @@ ZK 9.0.0
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.
   + ZK Databinding 1 is moved to a legacy module "zkplus-legacy".
+  + ZK DSP Library is moved to a new module "zweb-dsp".
 
    --------
 ZK 8.6.2

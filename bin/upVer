@@ -119,6 +119,7 @@ upVer zkplus-legacy
 upVer zkbind
 upVer zul
 upVer zweb
+upVer zweb-dsp
 cd $ZKCML
 upVer zkex
 upVer zkmax
