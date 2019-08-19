@@ -1,6 +1,7 @@
 ZK 8.6.3
 * Features
   ZK-4316: Improve component wiring performance (avoid NoSuchFieldException)
+  ZK-4203: improve renderChildren() by getChild() later and better way to calculate a path
 
 * Bugs
   ZK-4336: iframe not sizing correctly on ios
