@@ -7,6 +7,7 @@ ZK 9.0.0
   ZK-3550: Externalize dsp servlet from zweb to separate dependency
   ZK-4347: support jdk8 date/time API Datebox/Calendar/Timebox/Timepicker
   ZK-3769: Specify a default time for Datebox
+  ZK-4352: provide a built-in date format converter that accepts LocalDate
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
