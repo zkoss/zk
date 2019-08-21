@@ -11,6 +11,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.bind.impl;
 
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalQueries;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +27,7 @@ import org.zkoss.bind.converter.ObjectBooleanConverter;
 import org.zkoss.bind.converter.UriConverter;
 import org.zkoss.bind.converter.sys.ChildrenBindingConverter;
 import org.zkoss.bind.converter.sys.DefaultJSONBindingParamConverter;
+import org.zkoss.bind.converter.sys.FormattedTemporalConverter;
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.UiException;
 
@@ -61,6 +64,11 @@ public class SystemConverters {
 
 			//F80-ZK-2668: New Build-in Converter - FormattedTimeConverter
 			set0("formattedTime", new FormattedTimeConverter());
+
+			// F90-ZK-4352: Java 8 Date/Time Support
+			set0("formattedLocalDate", new FormattedTemporalConverter<>(TemporalQueries.localDate()));
+			set0("formattedLocalTime", new FormattedTemporalConverter<>(TemporalQueries.localTime()));
+			set0("formattedLocalDateTime", new FormattedTemporalConverter<>(LocalDateTime::from));
 			_init = true;
 		}
 	}
