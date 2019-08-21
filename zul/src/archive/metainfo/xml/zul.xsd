@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="8.6.2.201905131112">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.0.0.201908131516">
 	<!--
 	SIMPLETYPE
 	-->
@@ -77,6 +77,24 @@
 					<xs:enumeration value="between yyyymmdd and yyyymmdd" />
 					<xs:enumeration value="before yyyymmdd" />
 					<xs:enumeration value="after yyyymmdd" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="localTimeConstraintAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="no empty" />
+					<xs:enumeration value="no past" />
+					<xs:enumeration value="no future" />
+					<xs:enumeration value="no today" />
+					<xs:enumeration value="between HHmmss and HHmmss" />
+					<xs:enumeration value="before HHmmss" />
+					<xs:enumeration value="after HHmmss" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
@@ -567,6 +585,17 @@
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
 		<xs:attribute name="roundingMode" type="intType" use="optional" />
 		<xs:attribute name="locale" type="xs:string" use="optional" />
+	</xs:attributeGroup>
+	<xs:attributeGroup name="dateTimeInputElementAttrGroup">
+		<xs:attributeGroup ref="formatInputElementAttrGroup" />
+		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
+		<xs:attribute name="locale" type="xs:string" use="optional" />
+		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
+		<xs:attribute name="value" type="dateType" use="optional" />
+		<xs:attribute name="valueInLocalDate" type="dateType" use="optional" />
+		<xs:attribute name="valueInLocalDateTime" type="dateType" use="optional" />
+		<xs:attribute name="valueInLocalTime" type="dateType" use="optional" />
+		<xs:attribute name="valueInZonedDateTime" type="dateType" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="labelElementAttrGroup">
 		<xs:attributeGroup ref="xulElementAttrGroup" />
@@ -1151,6 +1180,10 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
+		<xs:attribute name="valueInLocalDate" type="dateType" use="optional" />
+		<xs:attribute name="valueInLocalDateTime" type="dateType" use="optional" />
+		<xs:attribute name="valueInLocalTime" type="dateType" use="optional" />
+		<xs:attribute name="valueInZonedDateTime" type="dateType" use="optional" />
 		<xs:attribute name="weekOfYear" type="booleanType" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attribute name="onWeekClick" type="xs:string" use="optional" />
@@ -1516,15 +1549,12 @@
 	<xs:element name="datebox" type="dateboxType" />
 	<xs:complexType name="dateboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
-		<xs:attribute name="value" type="dateType" use="optional" />
+		<xs:attributeGroup ref="dateTimeInputElementAttrGroup" />
 		<xs:attribute name="lenient" type="booleanType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="displayedTimeZones" type="xs:string" use="optional" />
 		<xs:attribute name="timeZonesReadonly" type="booleanType" use="optional" />
-		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attribute name="weekOfYear" type="booleanType" use="optional" />
 		<xs:attribute name="showTodayLink" type="booleanType" use="optional" />
 		<xs:attribute name="strictDate" type="booleanType" use="optional" />
@@ -2955,26 +2985,22 @@
 	<xs:element name="timebox" type="timeboxType" />
 	<xs:complexType name="timeboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
-		<xs:attribute name="value" type="dateType" use="optional" />
+		<xs:attributeGroup ref="dateTimeInputElementAttrGroup" />
+		<xs:attribute name="constraint" type="localTimeConstraintAttrType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
-		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
-		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- timepicker -->
 	<xs:element name="timepicker" type="timepickerType" />
 	<xs:complexType name="timepickerType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
-		<xs:attribute name="value" type="dateType" use="optional" />
+		<xs:attributeGroup ref="dateTimeInputElementAttrGroup" />
+		<xs:attribute name="constraint" type="localTimeConstraintAttrType" use="optional" />
 		<xs:attribute name="min" type="dateType" use="optional" />
+		<xs:attribute name="minInLocalTime" type="dateType" use="optional" />
 		<xs:attribute name="max" type="dateType" use="optional" />
+		<xs:attribute name="maxInLocalTime" type="dateType" use="optional" />
 		<xs:attribute name="interval" type="xs:integer" use="optional" />
-		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
-		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- toolbar -->

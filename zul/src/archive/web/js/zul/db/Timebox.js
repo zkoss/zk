@@ -62,7 +62,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_format: 'HH:mm',
 	_timezoneAbbr: '',
-	_timezone: '',
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.$class._updFormat(this, this._format);
@@ -73,12 +72,13 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		},
 		/** Sets the time zone ID that this time box belongs to.
 		 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+		 * @since 9.0.0
 		 */
 		/** Returns the time zone ID that this time box belongs to.
 		 * @return String the time zone's ID, such as "America/Los_Angeles".
-		 * @since 8.5.1
+		 * @since 9.0.0
 		 */
-		timezone: function (v) {
+		timeZone: function (v) {
 			this._value && this._value.tz(v);
 		},
 		/** Returns whether the button (on the right of the textbox) is visible.
@@ -109,7 +109,42 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				}
 				return val;
 			}
-		]
+		],
+		/** Sets the constraint.
+		 * <p>Default: null (means no constraint all all).
+		 * @param String cst
+		 */
+		/** Returns the constraint, or null if no constraint at all.
+		 * @return String
+		 */
+		constraint: function (cst) {
+			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
+				this._cst = new zul.inp.SimpleLocalTimeConstraint(cst, this);
+			else
+				this._cst = cst;
+			if (this._cst)
+				this._reVald = true; //revalidate required
+			if (this._pop) {
+				this._pop.setConstraint(this._constraint);
+				this._pop.rerender();
+			}
+		},
+	},
+	/**
+	 * Sets the time zone ID that this time box belongs to.
+	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
+	 * @deprecated Use {@link #setTimeZone(String)} instead.
+	 */
+	setTimezone: function (v) {
+		this.setTimeZone(v);
+	},
+	/** Returns the time zone ID that this time box belongs to.
+	 * @return String the time zone's ID, such as "America/Los_Angeles".
+	 * @since 8.5.1
+	 * @deprecated Use {@link #getTimeZone()} instead.
+	 */
+	getTimezone: function () {
+		return this._timeZone;
 	},
 	inRoundedMold: function () {
 		return true;
@@ -120,7 +155,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('setFormat', arguments);
 	},
 	setValue: function (value, fromServer) {
-		var tz = this.getTimezone();
+		var tz = this.getTimeZone();
 		if (tz && value) value.tz(tz);
 		if (fromServer && value === null) //Bug ZK-1322: if from server side, return empty string
 			this._changed = false;
@@ -142,7 +177,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceFromString_: function (val) {
 		var unf = Timebox._unformater,
-			tz = this.getTimezone();
+			tz = this.getTimeZone();
 		if (unf && jq.isFunction(unf)) {
 			var cusv = unf(val);
 			if (cusv) {

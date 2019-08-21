@@ -18,7 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="SimpleSpinnerConstraint.js" jsdoc="true"/>
 	<script src="SimpleDoubleSpinnerConstraint.js" jsdoc="true"/>
 	<script src="SimpleDateConstraint.js" jsdoc="true"/>
-	
+	<script src="SimpleLocalTimeConstraint.js" jsdoc="true"/>
+
 	<widget name="Textbox"/>
 	<script src="FormatWidget.js" jsdoc="true"/>
 	<script src="NumberInputWidget.js" jsdoc="true"/>

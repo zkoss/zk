@@ -21,10 +21,13 @@ package org.zkoss.zul;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -38,7 +41,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
-import org.zkoss.zul.impl.FormatInputElement;
+import org.zkoss.zul.impl.DateTimeFormatInputElement;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -62,11 +65,8 @@ import org.zkoss.zul.mesg.MZul;
  * @author Dennis Chen
  * @since 3.0.0
  */
-public class Timebox extends FormatInputElement {
+public class Timebox extends DateTimeFormatInputElement {
 	/*package*/ static final String DEFAULT_FORMAT = "HH:mm";
-	private TimeZone _tzone = TimeZones.getCurrent();
-	/** The locale associated with this timebox. */
-	private Locale _locale;
 	private boolean _btnVisible = true;
 	private static Date _dummyDate = new Date();
 
@@ -78,6 +78,21 @@ public class Timebox extends FormatInputElement {
 	public Timebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
+	}
+
+	public Timebox(ZonedDateTime value) throws WrongValueException {
+		this();
+		setValueInZonedDateTime(value);
+	}
+
+	public Timebox(LocalDateTime value) throws WrongValueException {
+		this();
+		setValueInLocalDateTime(value);
+	}
+
+	public Timebox(LocalTime value) throws WrongValueException {
+		this();
+		setValueInLocalTime(value);
 	}
 
 	/** Sets the date format.
@@ -179,23 +194,12 @@ public class Timebox extends FormatInputElement {
 		return ts != -111 ? DateFormats.getTimeFormat(ts, _locale, DEFAULT_FORMAT) : format;
 	}
 
-	/** Returns the value (in Date), might be null unless
-	 *  a constraint stops it. And, only Hour and Minute field is effective.
-	 * @exception WrongValueException if user entered a wrong value
+	/**
+	 * It is meaningless to set only LocalDate in timebox.
 	 */
-	public Date getValue() throws WrongValueException {
-		return (Date) getTargetValue();
-	}
-
-	/** Sets the value (in Date).
-	 * If value is null, then an empty will be sent(render) to client.
-	 * If else, only the Hour and Minute field will be sent(render) to client. 
-	 * 
-	 * @exception WrongValueException if value is wrong
-	 */
-	public void setValue(Date value) throws WrongValueException {
-		validate(value);
-		setRawValue(value);
+	@Override
+	public void setValueInLocalDate(LocalDate value) throws WrongValueException {
+		throw new UnsupportedOperationException("need time");
 	}
 
 	/** Returns whether the button (on the right of the textbox) is visible.
@@ -214,53 +218,13 @@ public class Timebox extends FormatInputElement {
 		}
 	}
 
-	/** Returns the time zone that this time box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/**
+	 * @param constr a list of constraints separated by comma.
+	 * Example: between 093000 and 183000, before 210000
 	 */
-	public TimeZone getTimeZone() {
-		return _tzone;
-	}
-
-	/** Sets the time zone that this time box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
-	 */
-	public void setTimeZone(TimeZone tzone) {
-		if (_tzone != tzone) {
-			_tzone = tzone;
-			smartUpdate("_value", marshall(_value));
-			smartUpdate("timezone", _tzone.getID());
-		}
-	}
-
-	/** Returns the locale associated with this timebox,
-	 * or null if {@link Locales#getCurrent} is preferred.
-	 * @since 5.0.7
-	 */
-	public Locale getLocale() {
-		return _locale;
-	}
-
-	/** Sets the locale used to identify the format of this timebox.
-	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
-	 * is assumed)
-	 * @since 5.0.7
-	 */
-	public void setLocale(Locale locale) {
-		if (!Objects.equals(_locale, locale)) {
-			_locale = locale;
-			invalidate();
-		}
-	}
-
-	/** Sets the locale used to identify the format of this timebox.
-	 * <p>Default: null (i.e., {@link Locales#getCurrent}, the current locale
-	 * is assumed)
-	 * @since 5.0.7
-	 */
-	public void setLocale(String locale) {
-		setLocale(locale != null && locale.length() > 0 ? Locales.getLocale(locale) : null);
+	@Override
+	public void setConstraint(String constr) {
+		setConstraint(constr != null ? new SimpleLocalTimeConstraint(constr) : null);
 	}
 
 	/**
@@ -353,9 +317,6 @@ public class Timebox extends FormatInputElement {
 			renderer.render("timezoneAbbr", timezone);
 		}
 
-		if (_tzone != null)
-			renderer.render("timezone", _tzone.getID());
-
 		if (!_btnVisible)
 			renderer.render("buttonVisible", _btnVisible);
 
@@ -372,22 +333,9 @@ public class Timebox extends FormatInputElement {
 	}
 
 	//--ComponentCtrl--//
-	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(1);
 
 	static {
-		_properties.put("value", new PropertyAccess<Date>() {
-			public void setValue(Component cmp, Date value) {
-				((Timebox) cmp).setValue(value);
-			}
-
-			public Class<Date> getType() {
-				return Date.class;
-			}
-
-			public Date getValue(Component cmp) {
-				return ((Timebox) cmp).getValue();
-			}
-		});
 		_properties.put("buttonVisible", new BooleanPropertyAccess() {
 			public void setValue(Component cmp, Boolean value) {
 				((Timebox) cmp).setButtonVisible(value);

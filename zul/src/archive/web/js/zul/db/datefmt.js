@@ -215,7 +215,7 @@ zk.fmt.Date = {
 				var nosep, nv; //no separator
 				if (k < fl) {
 					var c2 = fmt.charAt(k);
-					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
+					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E' || c2 == 'm' || c2 == 's' || c2 == 'S';
 				}
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
