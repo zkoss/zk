@@ -1560,6 +1560,7 @@
 		<xs:attribute name="strictDate" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="position" type="PopupPositionAttrType" use="optional" />
+		<xs:attribute name="defaultDateTime" type="dateType" use="optional" />
 	</xs:complexType>
 	<!-- decimalbox -->
 	<xs:element name="decimalbox" type="decimalboxType" />

@@ -84,6 +84,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	private boolean _strictDate = false;
 	private String _position = "after_start";
 	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
+	private LocalDateTime _defaultDateTime;
 
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -946,6 +947,28 @@ public class Datebox extends DateTimeFormatInputElement {
 		}
 	}
 
+	/**
+	 * Returns the default datetime if the value is empty.
+	 * <p>Default: null (means current datetime)
+	 * @since 9.0.0
+	 * @return String
+	 */
+	public LocalDateTime getDefaultDateTime() {
+		return _defaultDateTime;
+	}
+
+	/**
+	 * Sets the default datetime if the value is empty.
+	 * @param defaultDateTime Default datetime. null means current datetime.
+	 * @since 9.0.0
+	 */
+	public void setDefaultDateTime(LocalDateTime defaultDateTime) {
+		if (_defaultDateTime != defaultDateTime) {
+			_defaultDateTime = defaultDateTime;
+			smartUpdate("defaultDateTime", toDate(_defaultDateTime));
+		}
+	}
+
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
 
@@ -1012,5 +1035,8 @@ public class Datebox extends DateTimeFormatInputElement {
 
 		render(renderer, "showTodayLink", _showTodayLink);
 		render(renderer, "todayLinkLabel", _todayLinkLabel);
+
+		if (_defaultDateTime != null)
+			render(renderer, "defaultDateTime", toDate(_defaultDateTime));
 	}
 }

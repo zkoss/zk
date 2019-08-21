@@ -278,7 +278,19 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @since 8.6.0
 		 * @return boolean
 		 */
-		strictDate: null
+		strictDate: null,
+		/**
+		 * Sets the default datetime if the value is empty.
+		 * @since 9.0.0
+		 * @param Date defaultDateTime Default datetime. null means current datetime.
+		 */
+		/**
+		 * Returns the default datetime if the value is empty.
+		 * <p>Default: null (means current datetime).
+		 * @since 9.0.0
+		 * @return Date
+		 */
+		defaultDateTime: null
 	},
 	/**
 	 * Returns the iconSclass name of this Datebox.
@@ -698,7 +710,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 
 		var fmt = db.getTimeFormat(),
 			tz = db.getTimeZone(),
-			value = db._value || zUtl.today(fmt, tz);
+			value = db._value || db._defaultDateTime || zUtl.today(fmt, tz);
 		if (value)
 			this.setValue(value);
 		if (fmt) {
