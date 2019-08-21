@@ -529,7 +529,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 			// B70-ZK-2390
 			for (; c; c = c.nextSibling)
-				if (c.nodeType != 3) break; //until not a text node
+				if (c.nodeType == 1) break; //until a element node
 
 			zkc = zk(c),
 			fixedSize = false;

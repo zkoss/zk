@@ -273,6 +273,18 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 		for (; xc; xc = xc.nextSibling) {
 			//Bug ZK-2434: not considering the element with vparent (like popup)
 			var zkc;
+			if (xc.getMold() == 'nodom') { //ZK-4354: a nodom sibling causes hflex=1 calculate the wrong size
+				var fc = xc.firstChild;
+				if (fc) {
+					var xcp = fc.$n().parentNode,
+						zkxcp = zk(xcp);
+					if (vert)
+						hgh -= zkxcp.offsetHeightDoubleValue() + zkxcp.marginHeight();
+					else
+						wdh -= xcp.offsetWidth + zkxcp.marginWidth();
+				}
+				continue;
+			}
 			if (xc.isVisible() && !(zkc = zk(xc)).hasVParent()) {
 				var cwgt = xc,
 					c = cwgt.$n(),
