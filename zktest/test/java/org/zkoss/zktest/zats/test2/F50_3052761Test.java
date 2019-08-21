@@ -25,9 +25,9 @@ public class F50_3052761Test extends WebDriverTestCase {
 		connect();
 
 		String thisMonth = jq("@calendar .z-calendar-title").text();
-		jq("@calendar").eval("trigger('mousewheel', [1])");
+		eval(jq("@calendar") + ".trigger('mousewheel', [1])");
 		waitResponse();
-		jq("@calendar").eval("trigger('mousewheel', [-1])");
+		eval(jq("@calendar") + ".trigger('mousewheel', [-1])");
 		waitResponse();
 		Assert.assertEquals(thisMonth, jq("@calendar .z-calendar-title").text());
 
@@ -35,9 +35,9 @@ public class F50_3052761Test extends WebDriverTestCase {
 		waitResponse();
 
 		thisMonth = jq("@calendar:last .z-calendar-title").text();
-		jq("@calendar:last").eval("trigger('mousewheel', [-1])");
+		eval(jq("@calendar:last") + ".trigger('mousewheel', [-1])");
 		waitResponse();
-		jq("@calendar:last").eval("trigger('mousewheel', [1])");
+		eval(jq("@calendar:last") + ".trigger('mousewheel', [1])");
 		waitResponse();
 		Assert.assertEquals(thisMonth, jq("@calendar:last .z-calendar-title").text());
 	}

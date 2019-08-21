@@ -99,6 +99,7 @@ public abstract class WebDriverTestCase {
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("window-size=1920,1080");
+		options.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
 		return options;
 	}
 
@@ -587,7 +588,7 @@ public abstract class WebDriverTestCase {
 			paths.add(file.toAbsolutePath().toString());
 		}
 
-		element.eval("show()"); // needed to interact
+		eval(element + ".show()"); // needed to interact
 		String value = String.join("\n", paths);
 		WebElement input = (WebElement) ((JavascriptExecutor) driver).executeScript(JS_DROP_FILES, toElement(element), offsetX, offsetY);
 		input.sendKeys(value);

@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.interactions.Actions;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 public class F86_ZK_4059Test extends WebDriverTestCase {
@@ -25,13 +26,13 @@ public class F86_ZK_4059Test extends WebDriverTestCase {
 		act.moveToElement(toElement(jq("$lh1")), 240, 10).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 
-		act.moveToElement(toElement(jq(".z-menuitem-checkable")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 
 		act.moveToElement(toElement(jq("$lh2")), 240, 10).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 
-		act.moveToElement(toElement(jq(".z-menuitem-checkable")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
 		Assert.assertFalse(jq(".z-menupopup").isVisible());
 	}
 
@@ -43,13 +44,13 @@ public class F86_ZK_4059Test extends WebDriverTestCase {
 		act.moveToElement(toElement(jq("$col1")), 240, 10).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 		
-		act.moveToElement(toElement(jq(".z-menuitem-checkable")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 		
 		act.moveToElement(toElement(jq("$col2")), 240, 10).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 		
-		act.moveToElement(toElement(jq(".z-menuitem-checkable")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
 		Assert.assertFalse(jq(".z-menupopup").isVisible());
 	}
 }
