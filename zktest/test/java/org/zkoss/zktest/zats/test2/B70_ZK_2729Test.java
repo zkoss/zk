@@ -38,7 +38,7 @@ public class B70_ZK_2729Test extends WebDriverTestCase {
 		waitResponse();
 
 		int anchorOffsetTop = jq("@image").offsetTop();
-		jq("@dropupload").eval("show()"); // Visible element has offsetTop
+		eval(jq("@dropupload") + ".show()"); // Visible element has offsetTop
 		int dropUploadOffsetTop = jq("@dropupload").offsetTop();
 		Assert.assertEquals(anchorOffsetTop, dropUploadOffsetTop, 3);
 	}
