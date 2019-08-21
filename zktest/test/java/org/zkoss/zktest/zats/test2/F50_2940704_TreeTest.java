@@ -36,15 +36,15 @@ public class F50_2940704_TreeTest extends WebDriverTestCase {
 		waitResponse();
 		Assert.assertEquals(body.scrollHeight(), body.height());
 
-		click(jq("@radio:eq(0)"));
+		click(widget("@radio:eq(0)").$n("real"));
 		waitResponse();
 		Assert.assertTrue(jq("@paging").offsetTop() < body.offsetTop());
 
-		click(jq("@radio:eq(1)"));
+		click(widget("@radio:eq(1)").$n("real"));
 		waitResponse();
 		Assert.assertTrue(jq("@paging").offsetTop() > body.offsetTop());
 
-		click(jq("@radio:eq(2)"));
+		click(widget("@radio:eq(2)").$n("real"));
 		waitResponse();
 		Assert.assertEquals(body.scrollHeight(), body.height());
 		Assert.assertEquals(2, jq(".z-paging").length());
