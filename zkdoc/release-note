@@ -19,6 +19,7 @@ ZK 8.6.3
   ZK-4342: timebox can't be cleared
   ZK-4332: Using short format in Datebox results in the wrong year after ZK-4242 in Thai locale
   ZK-4354: a nodom sibling causes hflex=1 calculate the wrong size
+  ZK-4359: mesh header sorting style out of sync
 
 * Upgrade Notes
 

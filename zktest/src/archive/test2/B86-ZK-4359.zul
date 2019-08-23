@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4359.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Aug 20 12:13:11 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-column-sort > .z-column-content {
+			background-color: sandybrown;
+		}
+		.z-listheader-sort > .z-listheader-content {
+			background-color: sandybrown;
+		}
+		.z-treecol-sort > .z-treecol-content {
+			background-color: sandybrown;
+		}
+	</style>
+	<label multiline="true">
+		1. click 2nd btn, you should see color changed.
+		2. click 1st btn, you should see color changed and no icon-caret-up/icon-caret-down.
+		3. click 3rd btn, you should see color changed.
+		4. click 4th btn, you should see color changed.
+	</label>
+	<button label="col1 enable sort" onClick='c1.setSort("auto");l1.setSort("auto");t1.setSort("auto");'/>
+	<button label="col1 disable sort" onClick='c1.setSort("none");l1.setSort("none");t1.setSort("none");'/>
+	<button label="col2 enable sort" onClick='c2.setSort("auto");l2.setSort("auto");t2.setSort("auto");'/>
+	<button label="col2 disable sort" onClick='c2.setSort("none");l2.setSort("none");t2.setSort("none");'/>
+
+	<grid>
+		<columns>
+			<column id="c1" sort="auto" label="col1"/>
+			<column id="c2" sort="none" label="col2"/>
+			<column id="c3" sort="auto" label="col3"/>
+			<column id="c4" sort="auto" label="col4"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="aaa"/>
+				<label value="aaa"/>
+				<label value="caa"/>
+				<label value="daa"/>
+			</row>
+			<row>
+				<label value="baa"/>
+				<label value="baa"/>
+				<label value="daa"/>
+				<label value="caa"/>
+			</row>
+			<row>
+				<label value="caa"/>
+				<label value="baa"/>
+				<label value="aaa"/>
+				<label value="baa"/>
+			</row>
+			<row>
+				<label value="daa"/>
+				<label value="aaa"/>
+				<label value="baa"/>
+				<label value="aaa"/>
+			</row>
+		</rows>
+	</grid>
+	<listbox>
+		<listhead>
+			<listheader id="l1" sort="auto" label="listheader1"/>
+			<listheader id="l2" sort="none" label="listheader2"/>
+			<listheader id="l3" sort="auto" label="listheader3"/>
+			<listheader id="l4" sort="auto" label="listheader4"/>
+		</listhead>
+		<listitem>
+			<listcell>
+				<label value="aaa"/>
+			</listcell>
+			<listcell>
+				<label value="aaa"/>
+			</listcell>
+			<listcell>
+				<label value="caa"/>
+			</listcell>
+			<listcell>
+				<label value="daa"/>
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<label value="baa"/>
+			</listcell>
+			<listcell>
+				<label value="baa"/>
+			</listcell>
+			<listcell>
+				<label value="daa"/>
+			</listcell>
+			<listcell>
+				<label value="caa"/>
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<label value="caa"/>
+			</listcell>
+			<listcell>
+				<label value="baa"/>
+			</listcell>
+			<listcell>
+				<label value="aaa"/>
+			</listcell>
+			<listcell>
+				<label value="baa"/>
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<label value="daa"/>
+			</listcell>
+			<listcell>
+				<label value="aaa"/>
+			</listcell>
+			<listcell>
+				<label value="baa"/>
+			</listcell>
+			<listcell>
+				<label value="aaa"/>
+			</listcell>
+		</listitem>
+	</listbox>
+	<tree>
+		<treecols>
+			<treecol id="t1" sort="auto" label="treecol1"/>
+			<treecol id="t2" sort="none" label="treecol2"/>
+			<treecol id="t3" sort="auto" label="treecol3"/>
+			<treecol id="t4" sort="auto" label="treecol4"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>
+						<label value="aaa"/>
+					</treecell>
+					<treecell>
+						<label value="aaa"/>
+					</treecell>
+					<treecell>
+						<label value="caa"/>
+					</treecell>
+					<treecell>
+						<label value="daa"/>
+					</treecell>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell>
+						<label value="baa"/>
+					</treecell>
+					<treecell>
+						<label value="baa"/>
+					</treecell>
+					<treecell>
+						<label value="daa"/>
+					</treecell>
+					<treecell>
+						<label value="caa"/>
+					</treecell>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell>
+						<label value="caa"/>
+					</treecell>
+					<treecell>
+						<label value="baa"/>
+					</treecell>
+					<treecell>
+						<label value="aaa"/>
+					</treecell>
+					<treecell>
+						<label value="baa"/>
+					</treecell>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell>
+						<label value="daa"/>
+					</treecell>
+					<treecell>
+						<label value="aaa"/>
+					</treecell>
+					<treecell>
+						<label value="baa"/>
+					</treecell>
+					<treecell>
+						<label value="aaa"/>
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

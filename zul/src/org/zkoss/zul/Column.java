@@ -227,6 +227,7 @@ public class Column extends HeaderElement {
 		} else if ("none".equals(type)) {
 			setSortAscending((Comparator) null);
 			setSortDescending((Comparator) null);
+			setSortDirection("natural");
 		}
 	}
 
