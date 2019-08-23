@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4360.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Aug 23 15:25:16 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.click the "Content" Tab below
+		2.click the textarea in the ckeditor, you should see the caret(input mark).
+		3.type something in the ckeditor(if you can't type in the ckeditor, it's a bug), you should see "onChanging" on the zklog.
+	</label>
+		<tabbox height="600px"  mold="accordion">
+			<tabs>
+				<tab label="Properties"/>
+				<tab label="Content"/>
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+				</tabpanel>
+				<tabpanel>
+					<ckeditor onChanging='Clients.log("onChanging")'/>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+</zk>

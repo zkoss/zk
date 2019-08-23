@@ -398,11 +398,9 @@ zk.copy(zjq.prototype, {
 				 * refix for ZK-568: Open combobox then select last item. reopen combobox then you should see selected item without scroll
 				 */
 				var zkie = zk.ie;
-				if (zkie || zk.edge || zk.safari) {
-					// ZK_3789: refine ZK-3695, fire down onRestore after the wrapper was removed
-					zWatch.fireDown('onRestore', wgt);
-					if (zkie == 8 || zkie == 10) zk(self.jq[0]).redoCSS();
-				}
+				// ZK_3789: refine ZK-3695, fire down onRestore after the wrapper was removed
+				zWatch.fireDown('onRestore', wgt);
+				if (zkie == 8 || zkie == 10) zk(self.jq[0]).redoCSS();
 				zUtl.fireShown(wgt);
 			} else {
 				self.jq.hide();
