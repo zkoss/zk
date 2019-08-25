@@ -8,6 +8,7 @@ ZK 9.0.0
   ZK-4347: support jdk8 date/time API Datebox/Calendar/Timebox/Timepicker
   ZK-3769: Specify a default time for Datebox
   ZK-4352: provide a built-in date format converter that accepts LocalDate
+  ZK-3719: upgrade jquery version to 1.12.4
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
