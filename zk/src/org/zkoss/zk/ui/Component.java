@@ -966,7 +966,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 
 	/** Invalidates this component by setting the dirty flag
 	 * such that it will be redraw the whole content of this
-	 * component and its dependences later.
+	 * component and its dependencies later.
 	 * And, the widget associated with this component and all its
 	 * descendant at the client will be deleted and recreated, too.
 	 *

@@ -323,6 +323,12 @@ public class UiEngineImpl implements UiEngine {
 		getCurrentVisualizer().addInvalidate(comp);
 	}
 
+	public void addInvalidate(Component comp, String subId) {
+		if (comp == null)
+			throw new IllegalArgumentException();
+		getCurrentVisualizer().addInvalidate(comp, subId);
+	}
+
 	public void addSmartUpdate(Component comp, String attr, Object value, boolean append) {
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value, append);
 	}

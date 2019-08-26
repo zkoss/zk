@@ -626,4 +626,23 @@ public interface ComponentCtrl {
 	 * @since 8.0.1
 	 */
 	public ShadowElement getShadowFellowIfAny(String id);
+
+	/**
+	 * Invalidates this component by setting the dirty flag
+	 * such that it will be redraw the partial content of this
+	 * component and its dependencies later.
+	 * And, the widget associated with this component and all its
+	 * descendant at the client will be deleted and recreated, too.
+	 *
+	 * <p>If the application is totally controlled by the server side
+	 * (i.e., you don't write client codes), you rarely need to access
+	 * this method.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases. However, it is NOT allowed in the rendering phase.
+	 *
+	 * @param subId the redrawn node subid
+	 * @since 9.0.0
+	 */
+	public void invalidatePartial(String subId);
 }
