@@ -9,6 +9,7 @@ ZK 9.0.0
   ZK-3769: Specify a default time for Datebox
   ZK-4352: provide a built-in date format converter that accepts LocalDate
   ZK-3719: upgrade jquery version to 1.12.4
+  ZK-3658: Listbox invalidates the whole widget instead of the items
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing

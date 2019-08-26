@@ -1662,7 +1662,12 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		if (_page != null) {
 			getAttachedUiEngine().addInvalidate(this);
 		}
+	}
 
+	public void invalidatePartial(String subId) {
+		if (_page != null) {
+			getAttachedUiEngine().addInvalidate(this, subId);
+		}
 	}
 
 	/** Causes a response to be sent to the client.

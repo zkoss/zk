@@ -36,6 +36,7 @@ import org.zkoss.zk.au.out.AuAppendChild;
 import org.zkoss.zk.au.out.AuInsertAfter;
 import org.zkoss.zk.au.out.AuInsertBefore;
 import org.zkoss.zk.au.out.AuOuter;
+import org.zkoss.zk.au.out.AuOuterPartial;
 import org.zkoss.zk.au.out.AuRemove;
 import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.au.out.AuUuid;
@@ -73,8 +74,8 @@ import org.zkoss.zk.ui.sys.Visualizer;
 	private Set<Page> _pgInvalid;
 	/** A set of removed pages. */
 	private Set<Page> _pgRemoved;
-	/** A set of invalidated components  (Component). */
-	private final Set<Component> _invalidated = new LinkedHashSet<Component>(32);
+	/** A map of invalidated components (Component) and subids (String). */
+	private final Map<Component, String> _invalidated = new LinkedHashMap<Component, String>(32);
 	/** A map of smart updates (Component comp, Map(String name, TimedValue(comp,name,value))). */
 	private final Map<Component, Map<String, TimedValue>> _smartUpdated = new HashMap<Component, Map<String, TimedValue>>(
 			64); //we use TimedValue for better sequence control
@@ -137,7 +138,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 
 	/**
 	 * Creates the following execution.
-	 * The first execution must use {@link #UiVisualizer(Execution, boolean)}
+	 * The first execution must use {@link #UiVisualizer(Execution, boolean, boolean)}
 	 */
 	public UiVisualizer(UiVisualizer parent, Execution exec) {
 		_exec = exec;
@@ -189,13 +190,13 @@ import org.zkoss.zk.ui.sys.Visualizer;
 	 * <li>It always returns true if the current execution is not an
 	 * asynchronous update.</li>
 	 * <li>If its parent is invalidated, this component will be redrawn
-	 * too, but this method returns false since {@link #addInvalidate(Compnent)}
+	 * too, but this method returns false since {@link #addInvalidate(Component)}
 	 * was not called against this component.</li>
 	 * </ol>
 	 * @since 3.0.5
 	 */
 	public boolean isInvalidated(Component comp) {
-		return !_exec.isAsyncUpdate(comp.getPage()) || _invalidated.contains(comp) || _attached.contains(comp)
+		return !_exec.isAsyncUpdate(comp.getPage()) || _invalidated.containsKey(comp) || _attached.contains(comp)
 				|| _moved.contains(comp) || _detached.containsKey(comp);
 		//No need to check page, recovering... since it won't be
 		//part of _invalidated if so.
@@ -220,6 +221,13 @@ import org.zkoss.zk.ui.sys.Visualizer;
 	 * to {@link #addSmartUpdate} are ignored in this execution.
 	 */
 	public void addInvalidate(Component comp) {
+		addInvalidate(comp, "");
+	}
+
+	/** Adds an invalidated component. Once invalidated, all invocations
+	 * to {@link #addSmartUpdate} are ignored in this execution.
+	 */
+	public void addInvalidate(Component comp, String subId) {
 		final Page page = comp.getPage();
 		if (_recovering || _disabled || page == null || page instanceof VolatilePage || !_exec.isAsyncUpdate(page)
 				|| isCUDisabled(comp))
@@ -234,7 +242,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 
 		checkDesktop(comp);
 
-		if (_invalidated.add(comp))
+		if (_invalidated.put(comp, subId) == null)
 			_smartUpdated.remove(comp);
 	}
 
@@ -319,7 +327,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 	private Map<String, TimedValue> getAttrRespMap(Component comp) {
 		final Page page = comp.getPage();
 		if (_recovering || _disabled || page == null || page instanceof VolatilePage || !_exec.isAsyncUpdate(page)
-				|| _invalidated.contains(comp) || isCUDisabled(comp))
+				|| _invalidated.containsKey(comp) || isCUDisabled(comp))
 			return null; //nothing to do
 		if (_ending)
 			throw new IllegalStateException("UI can't be modified in the rendering phase");
@@ -465,7 +473,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 		crop(_smartUpdated.keySet(), croppingInfos, false);
 		if (_responses != null)
 			crop(_responses.keySet(), croppingInfos, true);
-		crop(_invalidated, croppingInfos, false);
+		crop(_invalidated.keySet(), croppingInfos, false);
 		return croppingInfos;
 	}
 
@@ -537,7 +545,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 				final Page ownerPage = owner.getPage();
 				if (ownerPage == null //detached
 						|| (_pgInvalid != null && _pgInvalid.contains(ownerPage))
-						|| isAncestor(_invalidated, owner, true) || isAncestor(_attached, owner, true)
+						|| isAncestor(_invalidated.keySet(), owner, true) || isAncestor(_attached, owner, true)
 						|| isAncestor(removed, owner, true)) {
 					addPageRemoved(page);
 				} else {
@@ -664,7 +672,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 		if (_pgRemoved != null && _pgRemoved.isEmpty())
 			_pgRemoved = null;
 		if (_pgInvalid != null || _pgRemoved != null) {
-			clearInInvalidPage(_invalidated);
+			clearInInvalidPage(_invalidated.keySet());
 			clearInInvalidPage(_attached);
 			clearInInvalidPage(_smartUpdated.keySet());
 		}
@@ -693,10 +701,15 @@ import org.zkoss.zk.ui.sys.Visualizer;
 		//4. process special interfaces
 
 		//5. generate replace for invalidated
-		for (Component comp : _invalidated) {
+		for (Map.Entry<Component, String> entry : _invalidated.entrySet()) {
+			final Component comp = entry.getKey();
+			final String subId = entry.getValue();
 			if (renderedComps != null)
 				renderedComps.add(comp);
-			responses.add(new AuOuter(comp, redraw(comp)));
+			if (subId.isEmpty())
+				responses.add(new AuOuter(comp, redraw(comp)));
+			else
+				responses.add(new AuOuterPartial(comp, redraw(comp), subId));
 		}
 
 		//6. add attached components (including setParent)
@@ -786,7 +799,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 		l_out: for (Map.Entry<Component, Component> me : _detached.entrySet()) {
 			Component p = me.getValue();
 			for (; p != null; p = p.getParent())
-				if (_moved.contains(p) || _detached.containsKey(p) || _invalidated.contains(p) || _attached.contains(p))
+				if (_moved.contains(p) || _detached.containsKey(p) || _invalidated.containsKey(p) || _attached.contains(p))
 					continue l_out; //don't merge (ignore it)
 
 			_moved.add(me.getKey()); //merge
@@ -926,7 +939,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 				outs = new HashSet<Component>(initsz); //none of ancestor in _invalidated nor _attached
 		final List<Component> ancs = new ArrayList<Component>(50);
 		//process _invalidated
-		for (Iterator<Component> it = _invalidated.iterator(); it.hasNext();) {
+		for (Iterator<Component> it = _invalidated.keySet().iterator(); it.hasNext();) {
 			Component p = it.next();
 			if (_attached.contains(p)) { //attached has higher priority
 				it.remove();
@@ -936,7 +949,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 			while ((p = p.getParent()) != null) { //don't check p in _invalidated
 				if (outs.contains(p)) //checked
 					break;
-				if (ins.contains(p) || _invalidated.contains(p) || _attached.contains(p)) {
+				if (ins.contains(p) || _invalidated.containsKey(p) || _attached.contains(p)) {
 					it.remove();
 					removed = true;
 					break;
@@ -957,7 +970,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 			while ((p = p.getParent()) != null) { //don't check p in _attached
 				if (outs.contains(p)) //checked
 					break;
-				if (ins.contains(p) || _invalidated.contains(p) || _attached.contains(p)) {
+				if (ins.contains(p) || _invalidated.containsKey(p) || _attached.contains(p)) {
 					it.remove();
 					removed = true;
 					break;
@@ -978,7 +991,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 			for (; p != null; p = p.getParent()) { //check p in _smartUpdated
 				if (outs.contains(p)) //checked
 					break;
-				if (ins.contains(p) || _invalidated.contains(p) || _attached.contains(p)) {
+				if (ins.contains(p) || _invalidated.containsKey(p) || _attached.contains(p)) {
 					it.remove();
 					removed = true;
 					break;
@@ -1118,7 +1131,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 	 * not null and the returned reason's {@link AbortingReason#isAborting}
 	 * is true.
 	 *
-	 * <p>Note: {@link Execution#isVoid} means the execution is voided
+	 * <p>Note: {@link Execution#isVoided} means the execution is voided
 	 * and no output shall be generated. The request is taken charged
 	 * by other servlet.
 	 * On the other hand, {@link #isAborting} means the execution
