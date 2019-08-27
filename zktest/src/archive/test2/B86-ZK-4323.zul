@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4323.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Aug 27 16:54:53 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		load this zul, you should see all listboxs scroll to the same selected item position(the smallest index selected item).
+	</label>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B86_ZK_4323VM')">
+		<label>nativebar: true</label>
+		<hlayout>
+			<listbox model="@load(vm.model)" height="300px" width="400px"
+					 selectedItems="@bind(vm.selectedItems)" checkmark="true">
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<listhead>
+					<listheader label="listbox enable rod"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem label="${each}"/>
+				</template>
+			</listbox>
+			<listbox model="@load(vm.model)" height="300px" width="400px"
+					 selectedItems="@bind(vm.selectedItems)" checkmark="true">
+				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+				<listhead>
+					<listheader label="listbox disable rod"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem label="${each}"/>
+				</template>
+			</listbox>
+		</hlayout>
+		<label>nativebar: false</label>
+		<hlayout>
+			<custom-attributes org.zkoss.zul.nativebar="false" />
+			<listbox model="@load(vm.model)" height="300px" width="400px"
+					 selectedItems="@bind(vm.selectedItems)" checkmark="true">
+				<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+				<listhead>
+					<listheader label="listbox enable rod"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem label="${each}"/>
+				</template>
+			</listbox>
+			<listbox model="@load(vm.model)" height="300px" width="400px"
+					 selectedItems="@bind(vm.selectedItems)" checkmark="true">
+				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+				<listhead>
+					<listheader label="listbox disable rod"></listheader>
+				</listhead>
+				<template name="model">
+					<listitem label="${each}"/>
+				</template>
+			</listbox>
+		</hlayout>
+	</div>
+</zk>
