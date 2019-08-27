@@ -6,6 +6,7 @@ ZK 8.6.3
   ZK-4256: retry a comet request when it's aborted
   ZK-4294: restore focus after showBusy/clearBusy
   ZK-4193: avoid synchronization blocks with ConcurrentLinkedQueue
+  ZK-4222: Replace deprecated CSS property clip:rect(...)
 
 * Bugs
   ZK-4336: iframe not sizing correctly on ios
