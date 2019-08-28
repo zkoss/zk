@@ -67,6 +67,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 			switch (devt.type) {
 			case 'focus':
+				if (zk._focusByClearBusy) return; // ZK-4294: don't trigger focus event while in restoring focus
 				if (wgt.canActivate()) {
 					zk.currentFocus = wgt;
 					//add triggerByFocus option for notification

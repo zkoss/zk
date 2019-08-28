@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4294.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 28 12:35:26 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        public void startBusiness(Component comp) {
+            Clients.showBusy("I am busy!");
+            Events.echoEvent("onBusy", comp, null);
+        }
+        public void doBusiness(Component comp) {
+            Thread.sleep(2000);
+            Clients.clearBusy();
+        }
+    ]]></zscript>
+    <label multiline="true">
+        1. Click the second textbox.
+        2. A modal busy pupup will appear.
+        3. After 2 seconds, the popup will disappear. And the second textbox will regain focus.
+    </label>
+    <textbox/>
+    <textbox placeholder="focus me"
+             onFocus="startBusiness(self);"
+             onBusy="doBusiness(self)" />
+    <textbox/>
+</zk>
