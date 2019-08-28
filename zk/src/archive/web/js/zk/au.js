@@ -1481,9 +1481,10 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		zAu.cmd0.clearBusy(uuid);
 
 		var w = uuid ? Widget.$(uuid) : null;
-		if (!uuid)
+		if (!uuid) {
+			zk._prevFocus = zk.currentFocus;
 			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy: true});
-		else if (w) {
+		} else if (w) {
 			zk.delayFunction(uuid, function () {
 				w.effects_.showBusy = new zk.eff.Mask({
 					id: w.uuid + '-shby',
@@ -1508,8 +1509,20 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 					delete efs.showBusy;
 				}
 			});
-		} else
+		} else {
 			zUtl.destroyProgressbox('zk_showBusy', {busy: true}); //since user might want to show diff msg
+			if (zk._prevFocus) {
+				zk.currentFocus = zk._prevFocus;
+				zk._prevFocus = null;
+				var wgt = zk.currentFocus;
+				try {
+					zk._focusByClearBusy = true;
+					wgt.focus();
+				} finally {
+					zk._focusByClearBusy = false;
+				}
+			}
+		}
 	},
 	/** Closes the all error messages related to the specified widgets.
 	 * It assumes {@link zk.Widget} has a method called <code>clearErrorMessage</code>

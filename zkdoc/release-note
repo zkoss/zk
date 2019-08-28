@@ -4,6 +4,7 @@ ZK 8.6.3
   ZK-4203: improve renderChildren() by getChild() later and better way to calculate a path
   ZK-4351: Update translation of messages in Catalan language
   ZK-4256: retry a comet request when it's aborted
+  ZK-4294: restore focus after showBusy/clearBusy
 
 * Bugs
   ZK-4336: iframe not sizing correctly on ios
