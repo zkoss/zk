@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.zkoss.util.Dates;
@@ -128,7 +129,20 @@ public class SimpleDateConstraint extends SimpleConstraint {
 	 */
 	public SimpleDateConstraint(String constraint) {
 		super(constraint);
+		if (!isValidConstraint(constraint))
+			throw new UiException("Invalid constraint: " + constraint + " (the constraint should be formatted in yyyyMMdd)");
 		fixConstraint();
+	}
+
+	private boolean isValidConstraint(String constraint) {
+		int constraintFormatLength = "yyyyMMdd".length(); // default constraint format is yyyyMMdd
+		Pattern numberOnly = Pattern.compile("\\d+");
+		Matcher matcher = numberOnly.matcher(constraint);
+		while (matcher.find()) {
+			if (matcher.group().length() != constraintFormatLength)
+				return false;
+		}
+		return true;
 	}
 
 	/**
