@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Arrays;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -142,6 +143,8 @@ import org.zkoss.zk.ui.WebApp;
 		} catch (Throwable ex) { //log and eat ex
 			log.error("Unable to invoke " + mi.method, ex);
 			return "";
+		} finally {
+			Arrays.fill(mi.arguments, null); // ZK-4312: leaking request/response into wpd cache
 		}
 	}
 

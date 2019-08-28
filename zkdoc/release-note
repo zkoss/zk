@@ -23,6 +23,7 @@ ZK 8.6.3
   ZK-4359: mesh header sorting style out of sync
   ZK-4360: Missing onRestore for CKEditor on tabbox accordion specifically
   ZK-4346: datebox constraint parsing errors
+  ZK-4312: leaking request/response into wpd cache
 
 * Upgrade Notes
 
