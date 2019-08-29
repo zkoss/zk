@@ -11,6 +11,7 @@ ZK 9.0.0
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
+  ZK-4297: Listbox hover and selected style are the same, makes it hard to be distinguished in mobile
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.
