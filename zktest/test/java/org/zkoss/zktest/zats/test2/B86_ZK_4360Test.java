@@ -20,8 +20,9 @@ public class B86_ZK_4360Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());
-		click(jq(".z-tab").eq(1));
 		waitResponse();
+		click(jq(".z-tab").eq(1));
+		waitResponse(true);
 		click(jq("iframe"));
 		waitResponse();
 		act.sendKeys("a").perform();
