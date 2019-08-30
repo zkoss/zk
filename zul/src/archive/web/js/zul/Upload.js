@@ -133,7 +133,7 @@ zul.Upload = zk.$extends(zk.Object, {
 			st.left = refof[0] - outerof[0] - diff + 'px';
 
 			inp.style.height = ref.offsetHeight + 'px';
-			inp.style.clip = 'rect(auto,auto,auto,' + diff + 'px)';
+			inp.style.width = ref.offsetWidth + 'px'; // ZK-4222: Replace deprecated CSS property clip:rect(...)
 		}
 	},
 	initContent: function () {
