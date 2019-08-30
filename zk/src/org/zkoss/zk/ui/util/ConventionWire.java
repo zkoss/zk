@@ -15,8 +15,6 @@ package org.zkoss.zk.ui.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,16 +57,7 @@ import org.zkoss.zk.ui.UiException;
 	private static final int CACHE_SIZE;
 	private static final String CACHE_SIZE_PROP = "org.zkoss.zk.ui.util.ConventionWire.CACHE_SIZE";
 	static {
-		if (System.getSecurityManager() == null) {
-			CACHE_SIZE = Integer.parseInt(System.getProperty(CACHE_SIZE_PROP, "100"));
-		} else {
-			CACHE_SIZE = AccessController.doPrivileged(new PrivilegedAction<Integer>() {
-
-				public Integer run() {
-					return Integer.valueOf(System.getProperty(CACHE_SIZE_PROP, "100"));
-				}
-			}).intValue();
-		}
+		CACHE_SIZE = Library.getIntProperty(CACHE_SIZE_PROP, 100);
 	}
 	private static final ConcurrentCache<Pair<Class, String>, Field> _injectedFieldCache = new ConcurrentCache<Pair<Class, String>, Field>(CACHE_SIZE);
 
