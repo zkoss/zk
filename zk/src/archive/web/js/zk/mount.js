@@ -465,23 +465,10 @@ function zkamn(pkg, fn) {
 
 			if (wi) {
 				if (wi[0] === 0) { //page
-					var props = wi[2],
-						dt = zkdt(zk.cut(props, 'dt'), zk.cut(props, 'cu'), zk.cut(props, 'uu'), zk.cut(props, 'ru'));
+					var props = wi[2];
+					zkdt(zk.cut(props, 'dt'), zk.cut(props, 'cu'), zk.cut(props, 'uu'), zk.cut(props, 'ru'));
 					if (owner = zk.cut(props, 'ow'))
 						owner = Widget.$(owner);
-					var zf;
-					if ((zf = zk.feature) && (zf.pe || zf.ee) && zk.clientinfo !== undefined) {
-						zAu.cmd0.clientInfo(dt.uuid);
-						if (extra) {
-							var newExtra = [];
-							for (var j = 0; j < extra.length; j += 2) {
-								if (extra[j] != 'clientInfo')
-									newExtra.push(extra[j], extra[j + 1]);
-							}
-							extra = newExtra;
-						}
-					} else
-						delete zk.clientinfo;
 				}
 
 				infs.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);

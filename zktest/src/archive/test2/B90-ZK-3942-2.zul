@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-3942-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 02 12:08:36 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void clientInfo(ClientInfoEvent event) {
+        div1.setWidth(event.getDesktopWidth() / 2 + "px");
+    }
+
+    ListModelList model = new ListModelList();
+    for (int i = 0; i < 10000; i++) {
+        model.add(i);
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. You can see the black square which the width is always 50% of browser window.
+        2. The width was changed before the processing bar was hidden.
+    </label>
+    <div onClientInfo="clientInfo(event)">
+        <div id="div1" style="background: black; height: 300px; width: 100%;"/>
+
+        <listbox width="300px" height="700px" model="${model}">
+            <custom-attributes org.zkoss.zul.listbox.rod="false"/>
+        </listbox>
+    </div>
+</zk>
