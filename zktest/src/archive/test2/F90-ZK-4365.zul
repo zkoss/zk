@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4365.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 30 11:57:31 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <label multiline="true">
+        1. Click each buttons to see Drawers.
+        2. Move the mouse pointer near the bottom boundary of viewport, and the drawer will be dropped automatically.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <hlayout>
+        <button label="no title" onClick="dnoTitle.open()"/>
+        <button label="no mask" onClick="dnoMask.open()"/>
+        <button label="no animation" onClick="dnoAnim.open()"/>
+        <button label="normal" onClick="dnormal.open()"/>
+    </hlayout>
+    <drawer id="dnoTitle">blahblah</drawer>
+    <drawer id="dnoMask" title="Drawer" mask="false">blahblah</drawer>
+    <drawer id="dnoAnim" ca:data-animationspeed="0">blahblah</drawer>
+    <drawer id="dnormal" title="Drawer" closable="true" height="330px" width="330px">
+        <radiogroup onCheck="dnormal.position = event.target.value">
+            <radio label="left" value="left"/>
+            <radio label="right" value="right" checked="true"/>
+            <radio label="top" value="top"/>
+            <radio label="bottom" value="bottom"/>
+        </radiogroup>
+        <button label="nested Drawer" onClick="dnormal2.position = dnormal.position; dnormal2.open()" />
+        <div width="200px" height="200vh" />
+        <drawer id="dnormal2" closable="true">blahblah</drawer>
+    </drawer>
+    <drawer autodrop="true" position="bottom" closable="true">Surprise!</drawer>
+</zk>
