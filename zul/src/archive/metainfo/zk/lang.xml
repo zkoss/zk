@@ -574,6 +574,16 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>drawer</component-name>
+		<component-class>org.zkoss.zul.Drawer</component-class>
+		<widget-class>zul.wgt.Drawer</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/drawer.js</mold-uri>
+			<css-uri>css/drawer.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>east</component-name>
 		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.East</component-class>
