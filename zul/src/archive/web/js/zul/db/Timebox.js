@@ -387,21 +387,6 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._changed = true;
 		delete this._shortcut;
 
-
-		var selrng = zk(inp).getSelectionRange();
-		if (zk.ie8_) {
-			var self = this;
-			setTimeout(function () {
-				if ((zk.currentFocus == self) && self.desktop) {
-					var newSelRng = zk(inp).getSelectionRange();
-					// IE8 change the selection range
-					if (selrng && newSelRng && selrng[0] != selrng[1] && (selrng[0] != newSelRng[0] || selrng[1] != newSelRng[1])) {
-						zk(inp).setSelectionRange(selrng[0], selrng[1]);
-					}
-				}
-			}, 150); // do it later for some timeout function happened.
-		}
-
 		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
 		zk(inp).focus(); //we have to set it here; otherwise, if it is in popup of
 			//datebox, datebox's onblur will find zk.currentFocus is null

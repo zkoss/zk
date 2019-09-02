@@ -401,7 +401,7 @@ zk.copy(zjq.prototype, {
 				if (zkie || zk.edge || zk.safari) {
 					// ZK_3789: refine ZK-3695, fire down onRestore after the wrapper was removed
 					zWatch.fireDown('onRestore', wgt);
-					if (zkie == 8 || zkie == 10) zk(self.jq[0]).redoCSS();
+					if (zkie == 10) zk(self.jq[0]).redoCSS();
 				}
 				zUtl.fireShown(wgt);
 			} else {

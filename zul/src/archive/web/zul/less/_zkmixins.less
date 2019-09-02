@@ -235,9 +235,6 @@
 	@b64DataUri: ~`(function(a,b,c){function e(a){a=a.replace(/\r\n/g,'\n');var b='';for(var c=0;c<a.length;c++){var d=a.charCodeAt(c);if(d<128){b+=String.fromCharCode(d)}else if(d>127&&d<2048){b+=String.fromCharCode(d>>6|192);b+=String.fromCharCode(d&63|128)}else{b+=String.fromCharCode(d>>12|224);b+=String.fromCharCode(d>>6&63|128);b+=String.fromCharCode(d&63|128)}}return b}function f(a){var b='';var c,f,g,h,i,j,l;var m=0;a=e(a);while(m<a.length){c=a.charCodeAt(m++);f=a.charCodeAt(m++);g=a.charCodeAt(m++);h=c>>2;i=(c&3)<<4|f>>4;j=(f&15)<<2|g>>6;l=g&63;if(isNaN(f)){j=l=64}else if(isNaN(g)){l=64}b=b+d.charAt(h)+d.charAt(i)+d.charAt(j)+d.charAt(l)}return b}var d='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';return a+f(b)+c})('@{dataUriPrefix}','@{svgToEncode}','@{dataUriSuffix}')`;
 	background: @b64DataUri;
 }
-.gradientFallback(@start, @end) {
-	background: average(@start, @end);
-}
 .resetGradient() {
 	background: none;
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);

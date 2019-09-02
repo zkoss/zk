@@ -98,8 +98,6 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 
 		if (n) {
 			jq(n)[selected ? 'addClass' : 'removeClass'](this.$s('selected'));
-			// B70-ZK-2050: Replace icon with image in IE8.
-            //zk(n).redoCSS(-1, {'fixFontIcon': true});
 			this._updHeaderCM();
 		}
 	},

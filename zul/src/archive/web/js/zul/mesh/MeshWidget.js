@@ -25,7 +25,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var wgtn = wgt.$n(),
 			ws = wgtn ? wgtn.style.whiteSpace : ''; //bug#3106514: sizedByContent with not visible columns
 		if (wgtn) {
-			if (zk.ie8)
+			if (zk.ie9)
 				wgt._wsbak = ws; // B50-ZK-432
 			wgtn.style.whiteSpace = 'nowrap'; // B50-3316030, B50-3346235: pre cause extra space
 		}
@@ -745,8 +745,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.domListen_(ebody, 'onScroll', '_doScroll');
 			ebody.style.overflow = 'auto';
 
-			// ZK-2238: the z-focus-a should be inside mesh widget
-			// ebody.style.position = 'static'; //IE8: avoid scrollbar missing
 			if (this.efrozen)
 				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
 		}
@@ -1066,7 +1064,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (_fixPageSize(this, rows))
 				return; //need to reload with new page size
 
-		if (zk.ie8 && (this._wsbak !== undefined)) { // B50-ZK-432
+		if (zk.ie9 && (this._wsbak !== undefined)) { // B50-ZK-432
 			this.$n().style.whiteSpace = this._wsbak;
 			delete this._wsbak;
 		}

@@ -180,12 +180,12 @@ zk.copy(Array.prototype, {
 	}
 });
 
-if (!(zk.ie == 8)) //ZK-2825: Looping javascript array should not include zk defined function
-	Object.defineProperties(Array.prototype, {
-		'$indexOf': {enumerable: false},
-		'$contains': {enumerable: false},
-		'$equals': {enumerable: false},
-		'$remove': {enumerable: false},
-		'$addAll': {enumerable: false},
-		'$clone': {enumerable: false}
-	});
+//ZK-2825: Looping javascript array should not include zk defined function
+Object.defineProperties(Array.prototype, {
+	'$indexOf': {enumerable: false},
+	'$contains': {enumerable: false},
+	'$equals': {enumerable: false},
+	'$remove': {enumerable: false},
+	'$addAll': {enumerable: false},
+	'$clone': {enumerable: false}
+});

@@ -435,11 +435,6 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-	public boolean isExplorer7() {
-		return Servlets.isExplorer7(_request);
-	}
-
-	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isGecko() {
 		return Servlets.isGecko(_request);
 	}

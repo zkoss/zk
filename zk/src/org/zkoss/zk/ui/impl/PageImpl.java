@@ -869,19 +869,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final boolean au = exec.isAsyncUpdate(null);
 		if (!au && !exec.isIncluded()
 				&& ((ctl = ExecutionsCtrl.getPageRedrawControl(exec)) == null || "desktop".equals(ctl))) {
-			boolean ie7compat;
-			if (!au && ((ie7compat = shallIE7Compatible()) || !shallDisableAutoCompatible()))
+			if (!shallDisableAutoCompatible())
 				try {
-					if (exec.getBrowser("ie") >= 8 && !exec.containsResponseHeader("X-UA-Compatible")) {
-						if (ie7compat) {
-							exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
-						} else {
-							double[] ieCompatibilityInfo = Servlets
-									.getIECompatibilityInfo((ServletRequest) exec.getNativeRequest());
-							if (ieCompatibilityInfo != null) {
-								if (ieCompatibilityInfo[0] != ieCompatibilityInfo[2]) {
-									exec.addResponseHeader("X-UA-Compatible", "IE=" + (int) ieCompatibilityInfo[2]);
-								}
+					if (exec.getBrowser("ie") >= 9 && !exec.containsResponseHeader("X-UA-Compatible")) {
+						double[] ieCompatibilityInfo = Servlets
+								.getIECompatibilityInfo((ServletRequest) exec.getNativeRequest());
+						if (ieCompatibilityInfo != null) {
+							if (ieCompatibilityInfo[0] != ieCompatibilityInfo[2]) {
+								exec.addResponseHeader("X-UA-Compatible", "IE=" + (int) ieCompatibilityInfo[2]);
 							}
 						}
 					}
@@ -942,14 +937,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 	}
 
-	private static Boolean _ie7compat;
 	private static Boolean _ieAutoCompat;
-
-	private static boolean shallIE7Compatible() {
-		if (_ie7compat == null)
-			_ie7compat = Boolean.valueOf("true".equals(Library.getProperty("org.zkoss.zk.ui.EmulateIE7")));
-		return _ie7compat.booleanValue();
-	}
 
 	private static boolean shallDisableAutoCompatible() {
 		if (_ieAutoCompat == null)

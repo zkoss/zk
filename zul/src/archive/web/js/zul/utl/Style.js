@@ -69,19 +69,5 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 			var n = this.$n('real');
 			if (n) n.media = v;
 		}
-	},
-	bind_: zk.ie8_ ? function () {
-		this.$supers(zul.utl.Style, 'bind_', arguments);
-
-		//test2/Z5-style.zul: we have to re-assign href (setOuter might work well)
-		if (this._src) {
-			var self = this;
-			setTimeout(function () {
-				var n = self.$n('real');
-				if (n) n.href = self._src;
-			});
-		}
-	} : function () {
-		this.$supers(zul.utl.Style, 'bind_', arguments);
 	}
 });

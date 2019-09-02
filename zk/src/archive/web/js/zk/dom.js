@@ -718,17 +718,16 @@ zjq.prototype = {
 			inView = true;
 
 		// ZK-2069: check whether the input is shown in parents' viewport.
-		if (!zk.ie8_) // fine tune for ie8
-			while (p && p != desktop) {
-				bar = p._scrollbar;
-				if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
-					inView = bar.isScrollIntoView(n);
-					if (!inView)
-						return inView;
-				}
-				bar = null;
-				p = p.parent;
+		while (p && p != desktop) {
+			bar = p._scrollbar;
+			if (bar && (bar.hasVScroll() || bar.hasHScroll())) {
+				inView = bar.isScrollIntoView(n);
+				if (!inView)
+					return inView;
 			}
+			bar = null;
+			p = p.parent;
+		}
 		// ZK-2069: should check native and fake scrollbar case
 		return inView && this.isScrollIntoView(true);
 	},
@@ -1084,7 +1083,7 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	toStyleOffset: function (x, y) {
 		var el = this.jq[0],
 			oldx = el.style.left, oldy = el.style.top,
-			resetFirst = zk.webkit || zk.opera || zk.air || zk.ie > 7; // don't use zk.ie8 which is not including ie 11
+			resetFirst = zk.webkit || zk.opera || zk.air || zk.ie >= 9; // don't use zk.ie9 which is not including ie 11
 		//Opera:
 		//1)we have to reset left/top. Or, the second call position wrong
 		//test case: Tooltips and Popups
@@ -1632,32 +1631,7 @@ jq(el).zk.center(); //same as 'center'
 	 */
 	redoCSS: function (timeout, opts) {
 		if (opts && opts['fixFontIcon']) {
-			if (zk.ie8_) {
-				var head = document.getElementsByTagName('head')[0],
-					style = document.createElement('style'),
-					n = this.jq[0],
-					s = opts['selector'],
-					cls = n ? n.className : '',
-					idOrCls = n ? (n.id ? '#' + n.id : '.' + cls) : '',
-					selector = s ? s : '*';
-				if (idOrCls == '' && selector == '*')
-					return this;
-				style.type = 'text/css';
-				
-				style.styleSheet.cssText = idOrCls + ' ' + selector + ':before{content:none !important';
-				var scrollTop = document.documentElement.scrollTop,
-					scrollLeft = document.documentElement.scrollLeft;
-				head.appendChild(style);
-				setTimeout(function () {
-					head.removeChild(style);
-					// bug in B70-ZK-2371.zul
-					document.documentElement.scrollTop = scrollTop;
-					document.documentElement.scrollLeft = scrollLeft;
-				}, 0);
-				return this;
-			} else {
-				return this;
-			}
+			return this;
 		}
 		if (timeout == -1) { //timeout -1 means immediately
 			for (var j = this.jq.length; j--;)

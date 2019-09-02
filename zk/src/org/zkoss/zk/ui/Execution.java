@@ -1192,15 +1192,9 @@ public interface Execution extends Scope {
 	public boolean isRobot();
 
 	/** Returns whether the client is Internet Explorer.
-	 * If true, it also implies {@link #isExplorer7} is true.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
 	 */
 	public boolean isExplorer();
-
-	/** Returns whether the client is Internet Explorer 7 or later.
-	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
-	 */
-	public boolean isExplorer7();
 
 	/** Returns whether the client is Gecko based, such as Mozilla, Firefox and Camino.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}.
