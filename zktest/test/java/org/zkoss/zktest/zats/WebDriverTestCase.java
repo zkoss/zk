@@ -656,4 +656,23 @@ public abstract class WebDriverTestCase {
 	protected void mouseOver(ClientWidget locator) {
 		getActions().moveToElement(toElement(locator)).pause(100).perform();
 	}
+
+	/**
+	 * Drag the element from (x, y) (start from element center point),
+	 * move the mouse by offset, and drop.
+	 *
+	 * @param locator element
+	 * @param fromX X (start from element center point)
+	 * @param fromY Y (start from element center point)
+	 * @param offsetX Offset X (negative means left)
+	 * @param offsetY Offset Y (negative means up)
+	 */
+	protected void dragdropTo(ClientWidget locator, int fromX, int fromY, int offsetX, int offsetY) {
+		getActions().moveToElement(toElement(locator))
+				.moveByOffset(fromX, fromY)
+				.clickAndHold()
+				.moveByOffset(offsetX, offsetY)
+				.release()
+				.perform();
+	}
 }
