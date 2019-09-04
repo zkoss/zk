@@ -758,8 +758,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ehead) //sync scroll for input tab key scroll
 			this.domUnlisten_(this.ehead, 'onScroll', '_doSyncScroll');
 		var ebody = this.ebody;
-		if (this._nativebar && ebody && this.efrozen)
-			jq(ebody).css('overflow-x', 'auto');
+		if (this._nativebar && ebody) {
+			this.domUnlisten_(ebody, 'onScroll', '_doScroll');
+			if (this.efrozen)
+				jq(ebody).css('overflow-x', 'auto');
+		}
 		this.$supers(zul.mesh.MeshWidget, 'unbind_', arguments);
 	},
 	clearCache: function () {
