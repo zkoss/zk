@@ -1508,14 +1508,14 @@ zk.$intercepts(zul.inp.Combobox, {
 		|| // ZK-2888, in iphone with chrome, it may not have version attribute.
 		(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', ''));
 
-	zk.android = zk.webkit && (agent.indexOf('android') >= 0);
+	zk.android = agent.indexOf('android') >= 0;
 	zk.mobile = zk.ios || zk.android;
 	zk.css3 = true;
 	var ie11 = browser.mozilla && (agent.indexOf('trident') >= 0) && _ver(browser.version);
 	
 	zk.vendor = zk.webkit ? 'webkit' : '';
 
-	var bodycls;
+	var bodycls = '';
 	if (zk.ff) {
 		if (zk.ff < 5 //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
 		&& (bodycls = agent.indexOf('firefox/')) > 0)
@@ -1556,17 +1556,17 @@ zk.$intercepts(zul.inp.Combobox, {
 			} else if (zk.webkit) {
 				bodycls = 'webkit';
 			}
-			if (zk.mobile) {
-				bodycls = (bodycls || '') + ' mobile';
-				if (zk.ios)
-					bodycls = (bodycls || '') + ' ios';
-				else
-					bodycls = (bodycls || '') + ' android';
-			}
 		}
 	}
+	if (zk.mobile) {
+		bodycls += ' mobile';
+		if (zk.ios)
+			bodycls += ' ios';
+		else
+			bodycls += ' android';
+	}
 	if ((zk.air = agent.indexOf('adobeair') >= 0) && zk.webkit)
-		bodycls = (bodycls || '') + ' air';
+		bodycls += ' air';
 
 	if (bodycls)
 		jq(function () {
