@@ -389,7 +389,13 @@ public class Servlets {
 					return;
 				}
 			}
-			Matcher m = _rwebkit.matcher(ua);
+			Matcher m = _randroid.matcher(ua);
+			if (m.matches()) {
+				double v = getVersion(m);
+				zk.put("android", v);
+				zk.put("mobile", v);
+			}
+			m = _rwebkit.matcher(ua);
 			if (m.matches()) {
 				double version;
 				browserInfo(zk, "webkit", version = getVersion(m));
@@ -409,13 +415,6 @@ public class Servlets {
 				m = _redge.matcher(ua);
 				if (m.matches()) {
 					zk.put("edge", getVersion(m));
-				}
-
-				m = _randroid.matcher(ua);
-				if (m.matches()) {
-					double v = getVersion(m);
-					zk.put("android", v);
-					zk.put("mobile", v);
 				}
 
 				for (int j = _ios.length; --j >= 0;)
