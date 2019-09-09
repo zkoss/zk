@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.util.Arrays;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -127,7 +126,7 @@ import org.zkoss.zk.ui.WebApp;
 	/** Invokes a static method.*/
 	/*package*/ String invoke(RequestContext reqctx, MethodInfo mi) {
 		final Class[] argTypes = mi.method.getParameterTypes();
-		final Object[] args = mi.arguments;
+		final Object[] args = mi.arguments.clone(); // ZK-4312: leaking request/response into wpd cache
 		if (reqctx != null) {
 			for (int j = 0; j < args.length; ++j)
 				if (ServletRequest.class.isAssignableFrom(argTypes[j]))
@@ -143,8 +142,6 @@ import org.zkoss.zk.ui.WebApp;
 		} catch (Throwable ex) { //log and eat ex
 			log.error("Unable to invoke " + mi.method, ex);
 			return "";
-		} finally {
-			Arrays.fill(mi.arguments, null); // ZK-4312: leaking request/response into wpd cache
 		}
 	}
 

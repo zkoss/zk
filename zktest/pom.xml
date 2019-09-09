@@ -488,6 +488,11 @@
 	<build>
 		<directory>${project.basedir}/debug</directory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/resources/</directory>
+			</resource>
+		</resources>
 		<sourceDirectory>${project.basedir}/src/</sourceDirectory>
         <testSourceDirectory>${project.basedir}/test/java</testSourceDirectory>
 		<plugins>
