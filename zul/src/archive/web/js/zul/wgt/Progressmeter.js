@@ -42,7 +42,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		 */
 		indeterminate: function (indeterminate) {
 			if (this.$n()) {
-				jq(this.$n()).toggleClass(this.$s('indeterminate'));
+				jq(this.$n()).toggleClass(this.$s('indeterminate'), indeterminate);
 				this._handleIndeterminateAnimation();
 			}
 		}
