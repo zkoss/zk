@@ -681,6 +681,7 @@
 			<xs:element ref="div" />
 			<xs:element ref="doublebox" />
 			<xs:element ref="doublespinner" />
+			<xs:element ref="drawer"/>
 			<xs:element ref="dropupload"/>
 			<xs:element ref="fckeditor" />
 			<xs:element ref="fisheyebar" />
@@ -784,6 +785,7 @@
 				<xs:element ref="div" />
 				<xs:element ref="doublebox" />
 				<xs:element ref="doublespinner" />
+				<xs:element ref="drawer"/>
 				<xs:element ref="dropupload"/>
 				<xs:element ref="fckeditor" />
 				<xs:element ref="fisheyebar" />
@@ -1611,6 +1613,34 @@
 		<xs:attribute name="step" type="doubleType" use="optional" />
 		<xs:attribute name="value" type="doubleType" use="optional" />
 	</xs:complexType>
+	<!-- drawer -->
+	<xs:element name="drawer" type="drawerType" />
+	<xs:complexType name="drawerType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="autodrop" type="booleanType" use="optional" />
+		<xs:attribute name="closable" type="booleanType" use="optional" />
+		<xs:attribute name="mask" type="booleanType" use="optional" />
+		<xs:attribute name="position" type="drawerPositionAttrType" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+	</xs:complexType>
+	<xs:simpleType name="drawerPositionAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="left" />
+					<xs:enumeration value="right" />
+					<xs:enumeration value="top" />
+					<xs:enumeration value="bottom" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<!-- dropupload -->
 	<xs:element name="dropupload" type="dropuploadType" />
 	<xs:complexType name="dropuploadType">
