@@ -14,14 +14,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zul.impl;
 
-import javax.servlet.ServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.web.servlet.Servlets;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.Paging;
@@ -252,13 +248,8 @@ public abstract class MeshElement extends XulElement implements Paginated {
 	}
 
 	/*package*/ boolean isNativeScrollbar() {
-		ServletRequest request = (ServletRequest) Executions.getCurrent().getNativeRequest();
-		// B70-ZK-2489: Set org.zkoss.zul.nativebar's default to false when using a mobile device
-		if (Servlets.isBrowser(request, "ie8-")) {
-			return true;
-		} else {
-			return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
-		}
+		// ZK-3311: Native scrollbar is not the default setting for mobile browsers
+		return Utils.testAttribute(this, "org.zkoss.zul.nativebar", true, true);
 	}
 
 	/**

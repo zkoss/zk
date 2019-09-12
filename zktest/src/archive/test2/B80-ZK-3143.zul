@@ -14,7 +14,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label multiline="true">
-        0.Test in different browsers (Chrome, Firefox, Safari, ie8 ~ 11, edge, Opera)
+        0.Test in different browsers (Chrome, Firefox, Safari, ie9 ~ 11, edge, Opera)
         1.Select one listitem, and press "shift" + right click on another item. You should see the range of items selected without text selection.
         2.Do it again, press "Ctrl(windows)/Command(Mac)" instead.
     </label>

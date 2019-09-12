@@ -419,9 +419,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 		mesh._restoreFocus();
 
 		// Bug ZK-601, Bug ZK-1572
-		if (zk.ie8_) {
-			zk(mesh).redoCSS();
-		} else if (zk.ie9_) {
+		if (zk.ie9_) {
 			var n = mesh.$n();
 			n.className += ' ';
 			if (n.offsetHeight);

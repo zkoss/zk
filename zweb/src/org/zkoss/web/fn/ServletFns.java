@@ -138,13 +138,6 @@ public class ServletFns {
 		return Servlets.isExplorer(getCurrentRequest());
 	}
 
-	/** Returns whether the browser of the current request is Explorer 7 or later.
-	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.
-	 */
-	public static boolean isExplorer7() {
-		return Servlets.isExplorer7(getCurrentRequest());
-	}
-
 	/** Returns whether the browser of the current request is Gecko based,
 	 * such as Mozilla, Firefox and Camino.
 	 * @deprecated As of release 6.0.0, replaced with {@link Servlets#getBrowser}.

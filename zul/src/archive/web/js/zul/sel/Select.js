@@ -308,11 +308,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 
 		this.fire('onSelect', {items: data, reference: reference});
 	},
-	//Bug 3304408: IE does not fire onchange
-	doBlur_: zk.ie8_ ? function (evt) { // only apply to IE 8
-		this._doChange(evt);
-		return this.$supers('doBlur_', arguments);
-	} : zk.$void,
+	doBlur_: zk.$void,
 	//Bug 1756559: ctrl key shall fore it to be sent first
 	beforeCtrlKeys_: function (evt) {
 		this._doChange(evt);

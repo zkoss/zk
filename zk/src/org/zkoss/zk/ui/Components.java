@@ -996,11 +996,6 @@ public class Components {
 		}
 
 		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
-		public boolean isExplorer7() {
-			return exec().isExplorer7();
-		}
-
-		/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 		public boolean isOpera() {
 			return exec().isOpera();
 		}

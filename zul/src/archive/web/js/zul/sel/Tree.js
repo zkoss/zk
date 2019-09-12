@@ -346,11 +346,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		if (this._selectOnHighlightDisabled) {
 			var selection = window.getSelection || document.selection;
 			if (selection) {
-				if (zk.ie && zk.ie < 9) {
-					return selection.type == 'Text' && selection.createRange().htmlText.length > 0;
-				} else {
-					return selection().toString().length > 0;
-				}
+				return selection().toString().length > 0;
 			}
 		}
 	}

@@ -16,6 +16,7 @@ ZK 9.0.0
   ZK-4297: Listbox hover and selected style are the same, makes it hard to be distinguished in mobile
   ZK-3942: AJAX commands execute before Initial page response
   ZK-4299: drag and drop doesn't work mobile FF on android
+  ZK-4180: Remove IE < 9 workarounds
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.

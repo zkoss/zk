@@ -68,11 +68,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		out.write("<html");
 		if (number == null || number.intValue() == 0) {
-			Double ie = exec.getBrowser("ie");
-			// let ie <= 8 support VML on javascript
-			if (ie != null && ie < 9)
-				out.write(" xmlns:v=\"urn:schemas-microsft.com:vml\"");
-
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
 					// B70-ZK-2065: Remove meta for validation.

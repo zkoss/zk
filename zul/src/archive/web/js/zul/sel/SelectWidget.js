@@ -44,8 +44,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			var zcls = zk.Widget.$(box._headercm).getZclass() + '-checked',
 				$headercm = jq(box._headercm);
 			$headercm[box._isAllSelected() ? 'addClass' : 'removeClass'](zcls);
-			// B70-ZK-2050: Replace icon with image in IE8.
-			//zk($headercm).redoCSS(-1, {'fixFontIcon': true});
 		}
 	}
 	function _isButton(evt) {
@@ -328,7 +326,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	_beforeCalcSize: function () {
 		// Bug 279925
-		if (zk.ie8) {
+		if (zk.ie9) {
 			var anchor = this.$n('a');
 			this._oldCSS = anchor.style.display;
 			anchor.style.display = 'none';
@@ -342,7 +340,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	_afterCalcSize: function () {
 		// Bug 279925
-		if (zk.ie8) {
+		if (zk.ie9) {
 			this.$n('a').style.display = this._oldCSS;
 			delete this._oldCSS;
 		}

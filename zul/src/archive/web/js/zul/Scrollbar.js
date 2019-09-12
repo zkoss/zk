@@ -20,8 +20,6 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 			style = bar.style;
 			style.display = isHide ? 'none' : 'block';
 			style.opacity = opacity;
-			if (zk.ie < 9)
-				style.filter = 'alpha(opacity=' + 100 * opacity + ')';
 		}
 		if (embed) {
 			style = embed.style;

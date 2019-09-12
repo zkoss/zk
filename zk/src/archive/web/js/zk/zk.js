@@ -353,27 +353,6 @@ zk.copy(zk, {
 	 * @since 5.0.7
 	 */
 	//iex: null,
-	/** Whether it is Internet Exploer 6 (excluding 7 or others).
-	 * @type Boolean
-	 */
-	//ie6_: false,
-	/** Whether it is Internet Exploer 7 or later.
-	 * @type Boolean
-	 */
-	//ie7: false,
-	/** Whether it is Internet Exploer 7 (excluding 8 or others).
-	 * @type Boolean
-	 */
-	//ie7_: false,
-	/** Whether it is Internet Exploer 8 or later.
-	 * @type Boolean
-	 */
-	//ie8: false,
-	/** Whether it is Internet Exploer 8 or later, and running in
-	 * Internet Explorer 7 compatible mode.
-	 * @type Boolean
-	 */
-	//ie8c: false,
 	/** Whether it is Internet Exploer 9 or later.
 	 * @type Boolean
 	 * @since 5.0.5
@@ -1533,12 +1512,8 @@ zk.$intercepts(zul.inp.Combobox, {
 			zk.iex = ie11;
 		
 		if (zk.iex) {
-			if ((zk.ie = document.documentMode || zk.iex) < 6) //IE7 has no documentMode
-				zk.ie = 6; //assume quirk mode
 			// zk.ien: the version n or later but less than 11
-			if (zk.ie < 11 && zk.ie > 6) {
-				zk.ie7 = zk.ie >= 7;
-				zk.ie8 = zk.ie >= 8;
+			if (zk.ie < 11 && zk.ie >= 9) {
 				zk.ie9 = zk.ie >= 9;
 				zk.ie10 = zk.ie >= 10;
 			}

@@ -57,10 +57,8 @@ public class ThemeFns {
 			return Browser.Firefox;
 		number = Servlets.getBrowser(ServletFns.getCurrentRequest(), "ie");
 		if (number != null) {
-			if (number < 10) {
-				if (number == 9)
-					return Browser.IE9;
-				return Browser.Old_IE;
+			if (number <= 9) {
+				return Browser.IE9;
 			} else
 				return Browser.IE;
 		}
@@ -115,8 +113,7 @@ public class ThemeFns {
 		else {
 			String[] cols = colors.split(";");
 			StringBuilder sb = new StringBuilder();
-			if (temp != Browser.Old_IE)
-				sb.append("\tbackground:");
+			sb.append("\tbackground:");
 			sb.append(grad(direction, temp, cols));
 			sb.append("\tbackground:").append(grad(direction, Browser.W3C, cols));
 			return sb.toString();
@@ -187,9 +184,6 @@ public class ThemeFns {
 				colorAll.append("<stop stop-color=\"").append(color).append("\" offset=\"").append(pos).append("\"/>");
 			}
 
-		} else if (template == Browser.Old_IE) {
-			color1 = toIEHex(colors[0]);
-			color2 = toIEHex(colors[1]);
 		} else {
 			for (String color : colors) {
 				colorAll.append(color).append(',');
@@ -229,8 +223,7 @@ public class ThemeFns {
 		StringBuilder sb = new StringBuilder();
 		String[] cols = colors.split(";");
 		for (Browser grad : Browser.values()) {
-			if (grad != Browser.Old_IE)
-				sb.append("\tbackground:");
+			sb.append("\tbackground:");
 			sb.append(grad(direction, grad, cols));
 		}
 		return sb.toString();
@@ -453,8 +446,7 @@ public class ThemeFns {
 
 	private enum Browser {
 		WebKit("-webkit-", "Chrome10+,Safari5.1+"), W3C("", "W3C"), Firefox("-moz-", "FF3.6+"), Opera("-o-",
-				"Opera 11.10+"), IE("-ms-", "IE10+"), IE9("-ms-", "IE9"), Old(null, null), Old_IE(null,
-						"IE6-8"), Old_WebKit("-webkit-", "Chrome,Safari4+");
+				"Opera 11.10+"), IE("-ms-", "IE10+"), IE9("-ms-", "IE9"), Old(null, null), Old_WebKit("-webkit-", "Chrome,Safari4+");
 
 		private final String _template;
 
@@ -464,11 +456,7 @@ public class ThemeFns {
 
 		Browser(String prefix, String browser) {
 			_prefix = prefix;
-			if ("IE6-8".equals(browser)) {
-				_template = new StringBuilder(
-						"\tbackground: #FFFFFF;\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='%1$s',")
-								.append(" endColorstr='%2$s',GradientType=%5$s ); /* IE6-8 */\n").toString();
-			} else if ("IE9".equals(browser)) {
+			if ("IE9".equals(browser)) {
 				_template = new StringBuilder(
 						"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%%\" height=\"100%%\" viewBox=\"0 0 1 1\" preserveAspectRatio=\"none\">\n")
 								.append("%3$s\n").append("%6$s\n").append("</linearGradient>\n")
