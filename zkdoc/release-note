@@ -27,6 +27,7 @@ ZK 8.6.3
   ZK-4346: datebox constraint parsing errors
   ZK-4312: leaking request/response into wpd cache
   ZK-4323: a listbox scrolls to the bottom when all item selected
+  ZK-4366: org.zkoss.zk.ui.UiException: view model of 'vm' is null
 
 * Upgrade Notes
 
