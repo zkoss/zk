@@ -12,6 +12,7 @@ ZK 9.0.0
   ZK-3658: Listbox invalidates the whole widget instead of the items
   ZK-4365: Provide a drawer component
   ZK-4371: Provide a Toast utility
+  ZK-4372: Extract Notification functionalities from Clients
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
@@ -25,6 +26,8 @@ ZK 9.0.0
   + ZK Databinding 1 is moved to a legacy module "zkplus-legacy".
   + ZK DSP Library is moved to a new module "zweb-dsp".
   + SimpleLocalTimeConstraint is used by default instead of SimpleConstraint in Timebox and Timepicker.
+  + It is advised to use Notification.show instead of Clients.showNotification,
+    as the former follows single responsibility principle.
 
    --------
 ZK 8.6.2
