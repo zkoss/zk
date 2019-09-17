@@ -153,8 +153,7 @@ if="deploy.tomcat.required">
 <!-- BUILD -->
 <!-- ===== -->
 <target name="lessc">
-	<exec executable="npx">
-		<arg value="zklessc" />
+	<exec executable="${maindir}/node_modules/.bin/zklessc">
 		<arg value="-s" />
 		<arg value="${src.archive.dir}/web"/>
 		<arg value="-o" />
