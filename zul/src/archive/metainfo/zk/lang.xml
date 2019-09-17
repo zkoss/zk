@@ -1049,6 +1049,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/selectbox.js</mold-uri>
+			<css-uri>css/selectbox.css.dsp</css-uri>
 		</mold>
 		<annotation>
 			<annotation-name>default-bind</annotation-name>
