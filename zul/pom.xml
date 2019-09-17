@@ -121,8 +121,9 @@
 					</execution>
 				</executions>
 				<configuration>
-					<executable>${project.basedir}/../node_modules/.bin/zklessc</executable>
+					<executable>npx</executable>
 					<arguments>
+						<argument>zklessc</argument>
 						<argument>--source</argument>
 						<argument>${project.basedir}/src/archive/web</argument>
 						<argument>--output</argument>
