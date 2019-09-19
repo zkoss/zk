@@ -32,7 +32,6 @@ import org.zkoss.zk.au.out.AuLoadScript;
 import org.zkoss.zk.au.out.AuLog;
 import org.zkoss.zk.au.out.AuMoveBy;
 import org.zkoss.zk.au.out.AuMoveTo;
-import org.zkoss.zk.au.out.AuNotification;
 import org.zkoss.zk.au.out.AuPrint;
 import org.zkoss.zk.au.out.AuResizeBy;
 import org.zkoss.zk.au.out.AuResizeTo;
@@ -46,10 +45,7 @@ import org.zkoss.zk.au.out.AuSubmitForm;
 import org.zkoss.zk.au.out.AuSyncErrorbox;
 import org.zkoss.zk.au.out.AuWrongValue;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
 
 /**
  * Utilities to send {@link AuResponse} to the client.
@@ -251,25 +247,26 @@ public class Clients {
 	/**
 	 * Notification type: information
 	 */
-	public static final String NOTIFICATION_TYPE_INFO = "info";
+	public static final String NOTIFICATION_TYPE_INFO = Notification.TYPE_INFO;
 
 	/**
 	 * Notification type: warning
 	 */
-	public static final String NOTIFICATION_TYPE_WARNING = "warning";
+	public static final String NOTIFICATION_TYPE_WARNING = Notification.TYPE_WARNING;
 
 	/**
 	 * Notification type: error
 	 */
-	public static final String NOTIFICATION_TYPE_ERROR = "error";
+	public static final String NOTIFICATION_TYPE_ERROR = Notification.TYPE_ERROR;
 
 	/**
 	 * Shows a message at the center of the browser window.
 	 * @param msg the message to show
 	 * @since 6.0.1
+	 * @see Notification#show(String)
 	 */
 	public static final void showNotification(String msg) {
-		showNotification(msg, null, null, null, -1, false);
+		Notification.show(msg, null, null, null, -1, false);
 	}
 
 	/**
@@ -279,9 +276,10 @@ public class Clients {
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
 	 * @since 6.5.0
+	 * @see Notification#show(String, boolean)
 	 */
 	public static final void showNotification(String msg, boolean closable) {
-		showNotification(msg, null, null, null, -1, closable);
+		Notification.show(msg, null, null, null, -1, closable);
 	}
 
 	/**
@@ -289,9 +287,10 @@ public class Clients {
 	 * @param msg the message to show
 	 * @param ref the referenced component, null to be based on browser window
 	 * @since 6.0.1
+	 * @see Notification#show(String, Component)
 	 */
 	public static final void showNotification(String msg, Component ref) {
-		showNotification(msg, null, ref, null, -1, false);
+		Notification.show(msg, null, ref, null, -1, false);
 	}
 
 	/**
@@ -302,9 +301,10 @@ public class Clients {
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
 	 * @since 6.5.0
+	 * @see Notification#show(String, Component, boolean)
 	 */
 	public static final void showNotification(String msg, Component ref, boolean closable) {
-		showNotification(msg, null, ref, null, -1, closable);
+		Notification.show(msg, null, ref, null, -1, closable);
 	}
 
 	/**
@@ -344,9 +344,10 @@ public class Clients {
 	 * negative the notification does not dismiss until user left-clicks outside 
 	 * of the notification box.
 	 * @since 6.0.1
+	 * @see Notification#show(String, String, Component, String, int)
 	 */
 	public static final void showNotification(String msg, String type, Component ref, String position, int duration) {
-		showNotification(msg, type, ref, position, duration, false);
+		Notification.show(msg, type, ref, position, duration, false);
 	}
 
 	/**
@@ -390,16 +391,11 @@ public class Clients {
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
 	 * @since 6.5.0
+	 * @see Notification#show(String, String, Component, String, int, boolean)
 	 */
 	public static final void showNotification(String msg, String type, Component ref, String position, int duration,
 			boolean closable) {
-		Execution exec = Executions.getCurrent();
-		Page page = ref != null ? ref.getPage() : null;
-		if (page == null && exec instanceof ExecutionCtrl)
-			page = ((ExecutionCtrl) exec).getCurrentPage();
-		if (type == null)
-			type = NOTIFICATION_TYPE_INFO;
-		response(new AuNotification(msg, type, page, ref, position, duration, closable));
+		Notification.show(msg, type, ref, position, duration, closable);
 	}
 
 	/**
@@ -413,9 +409,10 @@ public class Clients {
 	 * negative the notification does not dismiss until user left-clicks outside 
 	 * of the notification box.
 	 * @since 6.0.1
+	 * @see Notification#show(String, String, Component, int, int, int)
 	 */
 	public static final void showNotification(String msg, String type, Component ref, int x, int y, int duration) {
-		showNotification(msg, type, ref, x, y, duration, false);
+		Notification.show(msg, type, ref, x, y, duration);
 	}
 
 	/**
@@ -432,16 +429,11 @@ public class Clients {
 	 * close button on notification message and won't close until user click the button 
 	 * or duration time up, default false.
 	 * @since 6.5.0
+	 * @see Notification#show(String, String, Component, int, int, int, boolean)
 	 */
 	public static final void showNotification(String msg, String type, Component ref, int x, int y, int duration,
 			boolean closable) {
-		Execution exec = Executions.getCurrent();
-		Page page = ref != null ? ref.getPage() : null;
-		if (page == null && exec instanceof ExecutionCtrl)
-			page = ((ExecutionCtrl) exec).getCurrentPage();
-		if (type == null)
-			type = NOTIFICATION_TYPE_INFO;
-		response(new AuNotification(msg, type, page, ref, x, y, duration, closable));
+		Notification.show(msg, type, ref, x, y, duration, closable);
 	}
 
 	/** Shows the busy message at the browser such that
