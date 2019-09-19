@@ -11,6 +11,7 @@ ZK 9.0.0
   ZK-3719: upgrade jquery version to 1.12.4
   ZK-3658: Listbox invalidates the whole widget instead of the items
   ZK-4365: Provide a drawer component
+  ZK-4371: Provide a Toast utility
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing

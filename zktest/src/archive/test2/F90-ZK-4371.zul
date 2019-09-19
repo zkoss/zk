@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4371.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Mon Sep 16 14:23:27 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <zscript><![CDATA[
+        import org.zkoss.zk.ui.util.*;
+        import org.zkoss.zul.*;
+        ListModel posm = new SimpleListModel(new String[] {
+            "(default)", "top_left", "top_center", "top_right", "middle_center",
+            "middle_left", "middle_right", "bottom_left", "bottom_center", "bottom_right"
+        });
+        ListModel types = new SimpleListModel(new String[] {
+            Clients.NOTIFICATION_TYPE_INFO,
+            Clients.NOTIFICATION_TYPE_WARNING,
+            Clients.NOTIFICATION_TYPE_ERROR
+        });
+        String[] msgs = new String[] {
+            "En taro adun.",
+            "Use the force, Harry.",
+            "I don't always drink beer, but when I do, I code a lot.",
+            "Also possible to do <span style=\"font-weight: bold\">HTML</span>.",
+            "Deja vu! I've just been in this place before.",
+        };
+        org.zkoss.lang.Library.setProperty("org.zkoss.zk.ui.util.Toast.animationSpeed", "0");
+    ]]></zscript>
+    <div style="padding: 5px; border: 1px solid #339999">
+        <n:table>
+            <n:tr>
+                <n:td rowspan="2">
+                    <button label="Show">
+                        <attribute name="onClick"><![CDATA[
+                                int dur = adcb.checked ? adms.value : -1;
+                                ListModel model = posm;
+                                int i = Math.max(0, posbox.selectedIndex);
+                                String plb = (String) model.getElementAt(i);
+                                String pval = plb.charAt(0) == '(' ? null : plb;
+                                i = Math.max(0, typebox.selectedIndex);
+                                String type = (String) types.getElementAt(i);
+                                String msg = msgbox.selectedItem.value;
+                                if (msg == null)
+                                    msg = msgs[(int) (Math.random() * msgs.length)];
+                                Toast.show(msg, type, pval, dur, closable.checked);
+                            ]]></attribute>
+                    </button>
+                </n:td>
+                <n:td>
+                    <label>Position</label>
+                </n:td>
+                <n:td>
+                    <label>Type</label>
+                </n:td>
+                <n:td>
+                    <label>Duration (ms)</label>
+                </n:td>
+                <n:td>
+                    <label>Message</label>
+                </n:td>
+                <n:td>
+                    <label>Closable</label>
+                </n:td>
+            </n:tr>
+            <n:tr>
+                <n:td>
+                    <selectbox id="posbox" model="${posm}" />
+                </n:td>
+                <n:td>
+                    <selectbox id="typebox" model="${types}" />
+                </n:td>
+                <n:td>
+                    <checkbox id="adcb" checked="true" />
+                    <intbox id="adms" value="2000" />
+                </n:td>
+                <n:td>
+                    <listbox id="msgbox" mold="select">
+                        <listitem label="(random)" selected="true" />
+                        <listitem label="Protoss" value="${msgs[0]}" />
+                        <listitem label="Force" value="${msgs[1]}" />
+                        <listitem label="Beer" value="${msgs[2]}" />
+                        <listitem label="HTML" value="${msgs[3]}" />
+                        <listitem label="Deja vu" value="${msgs[4]}" />
+                    </listbox>
+                </n:td>
+                <n:td>
+                    <checkbox id="closable" checked="false" />
+                </n:td>
+            </n:tr>
+        </n:table>
+    </div>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <label multiline="true">
+        1. Try click "Show" directly.
+        2. Try modifying position / type / duration and closable and click "Show".
+    </label>
+</zk>
