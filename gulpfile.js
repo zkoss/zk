@@ -5,6 +5,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var browserSync = require('browser-sync').create();
+var print = require('gulp-print').default;
 
 var knownOptions = {
     string: ['src', 'dest'],
@@ -43,7 +44,9 @@ function typescript_build_single() {
 function typescript_build(src, dest) {
     return gulp.src(src + '/**/*.ts')
         .pipe(sourcemaps.init())
-        .pipe(babel())
+        .pipe(babel({
+            root: __dirname
+        }))
         .pipe(rename({suffix: '.src'}))
         .pipe(gulp.dest(dest))
         .pipe(uglify())
@@ -51,7 +54,8 @@ function typescript_build(src, dest) {
             path.basename = path.basename.replace(/\.src/, '');
         }))
         .pipe(sourcemaps.write('.', {addComment: false, includeContent: false}))
-        .pipe(gulp.dest(dest));
+        .pipe(gulp.dest(dest))
+        .pipe(print());
 }
 
 function typescript_build_zul() {
@@ -84,10 +88,13 @@ function browsersync_init(done) {
 
 function typescript_dev(src, dest, since) {
     return gulp.src(src + '/**/*.ts', {since: since})
-        .pipe(babel())
+        .pipe(babel({
+            root: __dirname
+        }))
         .pipe(gulp.dest(dest))
         .pipe(rename({suffix: '.src'}))
         .pipe(gulp.dest(dest))
+        .pipe(print())
         .pipe(browserSync.stream());
 }
 
