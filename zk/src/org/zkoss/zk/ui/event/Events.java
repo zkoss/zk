@@ -59,6 +59,10 @@ public class Events {
 	 * @since 5.0.3
 	 */
 	public static final String ON_MOUSE_OUT = "onMouseOut";
+	/** The onTargetClick event (used with {@link MouseEvent}).
+	 * @since 9.0.0
+	 */
+	public static final String ON_TARGET_CLICK = "onTargetClick";
 
 	/** The onOK event (used with {@link KeyEvent}).
 	 */
