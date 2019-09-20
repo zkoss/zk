@@ -14,9 +14,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zul.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -31,7 +28,6 @@ import org.zkoss.zul.ext.Paginated;
  * @since 5.0.6
  */
 public abstract class MeshElement extends XulElement implements Paginated {
-	private static final Logger log = LoggerFactory.getLogger(MeshElement.class);
 	private String _span;
 	private boolean _sizedByContent;
 	private boolean _autopaging;
@@ -274,10 +270,10 @@ public abstract class MeshElement extends XulElement implements Paginated {
 	 */
 	protected void checkBeforeSetRows() throws UiException { //ZK-4296: Error indicating incorrect usage when using both vflex and rows
 		if (this.getVflex() != null)
-			log.warn("Not allowed to set rows and vflex at the same time");
+			throw new UiException("Not allowed to set rows and vflex at the same time");
 		
 		if (this.getHeight() != null)
-			log.warn("Not allowed to set rows and height at the same time");
+			throw new UiException("Not allowed to set rows and height at the same time");
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
