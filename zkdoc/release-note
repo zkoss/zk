@@ -16,6 +16,8 @@ ZK 9.0.0
   ZK-4349: Throw an error indicating incorrect usage when using both vflex and rows
   ZK-4380: Provide a Searchbox component
   ZK-4363: beautify selectbox with CSS
+  ZK-4373: Provide a rangeslider component
+  ZK-4374: Provide a multislider component
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
