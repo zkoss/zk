@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zk.ui.http;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.text.DecimalFormatSymbols;
@@ -34,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.idom.Document;
+import org.zkoss.io.Files;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -45,6 +47,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.ext.ScopeListener;
@@ -116,31 +119,27 @@ public class Wpds {
 	}
 
 	/**
-	 * Generates moment.js and moment-timezone-with-data.js string.
-	 *
+	 * Load moment.js timezone data.
 	 * @since 8.5.1
 	 */
-	public static final String outMomentJavascript(ServletRequest request, ServletResponse response)
+	public static final String outMomentTimezoneJavascript(ServletRequest request, ServletResponse response)
 			throws IOException {
 		final StringBuffer result = new StringBuffer();
-		final WebApp webApp = WebApps.getCurrent();
-		final Execution exec = new FakeExecution(webApp.getServletContext(), request, response, null, null);
-		result.append("if (!zk.mm) { var temp; if (window.moment) { temp = window.moment; }");
-		result.append(Devices.loadJavaScript(exec, "~./js/zk/ext/moment.js"));
-		result.append(Devices.loadJavaScript(exec, "~./js/zk/ext/moment-timezone-with-data.js"));
-		result.append("zk.mm = window.moment; window.moment = temp; }");
 		String path = Library.getProperty("org.zkoss.zk.moment.timezone.path");
 		if (path != null) {
-			String json = null;
+				InputStream is = null;
 			try {
-				json = Devices.loadFileContentAsString(exec, path);
-			} catch (Exception e) {
-				log.warn(e.getMessage());
-			}
-			if (json != null) {
-				result.append("var tzdata =");
-				result.append(json);
-				result.append("; zk.mm.tz.load(tzdata);");
+				is = WebApps.getCurrent().getResourceAsStream(path);
+				if (is == null)
+					throw new UiException("Unable to load " + path);
+				byte[] bytes = Files.readAll(is);
+				if (bytes.length > 0) {
+					result.append("var tzdata =");
+					result.append(new String(bytes, "UTF-8"));
+					result.append("; zk.mm.tz.load(tzdata);");
+				}
+			} finally {
+				Files.close(is);
 			}
 		}
 		return result.toString();

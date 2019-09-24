@@ -208,7 +208,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				fmt.push(th);
 				fmtObeyCount.push(shouldObeyCount);
 				th.parse(val, {obeyCount: shouldObeyCount}); // in order to shift if necessary
-				if (!th.getText(val, shouldObeyCount).trim().length)
+				if (!th.getText(val).trim().length) // ZK-4342: no need to pass obeyCount to determine if part is empty
 					emptyCount++;
 			}
 		}

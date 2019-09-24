@@ -13,7 +13,7 @@
 	} else if (typeof define === 'function' && define.amd) {
 		define(['moment'], factory);                 // AMD
 	} else {
-		factory(root.moment);                        // Browser
+		factory(zk.mm); /* James Chu, Potix, 20190731 */
 	}
 }(this, function (moment) {
 	"use strict";

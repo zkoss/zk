@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -161,7 +162,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
 	/** A list of ScheduleInfo; must be thread safe */
-	private final List<ScheduleInfo<? extends Event>> _schedInfos = new LinkedList<ScheduleInfo<? extends Event>>();
+	private final ConcurrentLinkedQueue<ScheduleInfo<? extends Event>> _schedInfos = new ConcurrentLinkedQueue<ScheduleInfo<? extends Event>>();
 	/** For handling scheduled task in onSchedule. */
 	private Component _dummyTarget = null;
 	/** Next available key. */
@@ -1503,6 +1504,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		synchronized (enablers) {
 			boolean enablersEmptyBefore = enablers.isEmpty();
 			if (enable) {
+				//handle dummy target
+				if (_dummyTarget == null) {
+					_dummyTarget = new AbstractComponent();
+					_dummyTarget.addEventListener(ON_SCHEDULE, new ScheduleListener());
+				}
 				// B65-ZK-2105: Do not add if enabler is null.
 				if (enabler != null && !enablers.add(enabler)) {
 					log.debug("trying to enable already enabled serverpush by: " + enabler);
@@ -1605,14 +1611,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				if (log.isDebugEnabled()) {
 					log.debug("scheduleServerPush: [{}]", event);
 				}
-
-				synchronized (_schedInfos) { //must be thread safe
-					if (_dummyTarget == null) {
-						_dummyTarget = new AbstractComponent();
-						_dummyTarget.addEventListener(ON_SCHEDULE, new ScheduleListener());
-					}
-					_schedInfos.add(new ScheduleInfo<T>(listener, event));
-				}
+				_schedInfos.add(new ScheduleInfo<T>(listener, event));
 			}
 		});
 	}
@@ -1812,26 +1811,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				log.debug("Handling schedule server push, _schedInfos is empty: [{}]", _schedInfos.isEmpty());
 			}
 			while (!_schedInfos.isEmpty()) {
-				final List<ScheduleInfo<? extends Event>> schedInfos;
-				synchronized (_schedInfos) { //must be thread safe
-					schedInfos = new ArrayList<ScheduleInfo<? extends Event>>(_schedInfos);
-					_schedInfos.clear();
-				}
-				for (Iterator<ScheduleInfo<? extends Event>> it = schedInfos.iterator(); it.hasNext();) {
-					final ScheduleInfo<? extends Event> si = it.next();
-					try {
-						si.invoke();
-					} catch (Throwable t) {
-						synchronized (_schedInfos) { //add back not called
-							int j = 0;
-							while (it.hasNext())
-								_schedInfos.add(j++, it.next());
-						}
-						if (t instanceof Exception)
-							throw (Exception) t;
-						throw (Error) t;
-					}
-				}
+				_schedInfos.poll().invoke();
 				if (System.currentTimeMillis() > max)
 					break; //avoid if server push is coming too fast
 			}

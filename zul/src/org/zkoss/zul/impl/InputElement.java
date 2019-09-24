@@ -420,7 +420,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		return _cols;
 	}
 
-	/** Sets the cols.
+	/** Sets the cols which determines the visible width, in characters.
 	 */
 	public void setCols(int cols) throws WrongValueException {
 		if (cols <= 0)
