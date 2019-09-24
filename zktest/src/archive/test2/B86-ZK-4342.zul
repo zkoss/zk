@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4342.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 16 12:22:52 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Modify the timebox text and blur.
+        2. See the set time on the server side in zk log.
+        3. Empty the timebox and blur.
+        4. See `null` time on the server side in zk log and the timebox should be empty.
+    </label>
+    <timebox cols="13" onChange="Clients.log(String.valueOf(event.getValue()) + self.value)"/>
+    <button label="blur"/>
+</zk>

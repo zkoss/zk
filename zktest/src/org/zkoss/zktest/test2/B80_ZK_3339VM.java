@@ -24,12 +24,12 @@ import org.zkoss.zk.ui.util.Clients;
 public class B80_ZK_3339VM {
 
 	@MatchMedia("all and (max-width : 640px)")
-	private void m0(){
+	public void m0(){
 		Clients.log("invoked m0");
 	}
 
 	@MatchMedia("all and (max-width : 700px)")
-	private void m1(){
+	public void m1(){
 		Clients.log("invoked m1");
 	}
 

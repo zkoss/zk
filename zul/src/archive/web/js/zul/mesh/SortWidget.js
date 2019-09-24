@@ -60,11 +60,8 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 				this._sortAscending = v = 'none';
 
 			if (this.desktop) {
-				var $n = jq(this.$n('sort-icon'));
-				if (v == 'none') {
-					$n.removeClass();
-				} else
-					$n.addClass('z-icon-caret-up');
+				this.setSortDirection('natural');
+				jq(this.$n()).toggleClass(this.$s('sort'), this.isSortable_());
 			}
 		},
 		/** Returns the descending sorter, or null if not available.
@@ -79,11 +76,8 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 				this._sortDescending = v = 'none';
 
 			if (this.desktop) {
-				var $n = jq(this.$n('sort-icon'));
-				if (v == 'none') {
-					$n.removeClass();
-				} else
-					$n.addClass('z-icon-caret-down');
+				this.setSortDirection('natural');
+				jq(this.$n()).toggleClass(this.$s('sort'), this.isSortable_());
 			}
 		}
 	},

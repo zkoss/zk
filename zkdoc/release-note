@@ -30,6 +30,41 @@ ZK 9.0.0
     as the former follows single responsibility principle.
 
    --------
+ZK 8.6.3
+Sep 24, 2019
+* Features
+  ZK-4316: Improve component wiring performance (avoid NoSuchFieldException)
+  ZK-4203: improve renderChildren() by getChild() later and better way to calculate a path
+  ZK-4351: Update translation of messages in Catalan language
+  ZK-4256: retry a comet request when it's aborted
+  ZK-4294: restore focus after showBusy/clearBusy
+  ZK-4193: avoid synchronization blocks with ConcurrentLinkedQueue
+  ZK-4222: Replace deprecated CSS property clip:rect(...)
+
+* Bugs
+  ZK-4336: iframe not sizing correctly on ios
+  ZK-4313: load moment js scripts statically
+  ZK-4345: XSD doesn't define hflex and vflex for charts
+  ZK-4348: zul XSD declares the attribute "badgeText" in wrong case
+  ZK-4350: zul XSD doesn't declare onCreate for charts
+  ZK-4356: missing "text" attribute on timebox in zul XSD
+  ZK-4321: avoid illegal reflective access WARNINGS/ERRORS for future JDK versions
+  ZK-4353: nav renders a too large image loaded by "imageContent"
+  ZK-4357: missing "onOK" and "onCancel" for HtmlBasedComponent in zul XSD
+  ZK-4333: Combobox grows its width for opening its popup each time
+  ZK-4342: timebox can't be cleared
+  ZK-4332: Using short format in Datebox results in the wrong year after ZK-4242 in Thai locale
+  ZK-4354: a nodom sibling causes hflex=1 calculate the wrong size
+  ZK-4359: mesh header sorting style out of sync
+  ZK-4360: Missing onRestore for CKEditor on tabbox accordion specifically
+  ZK-4346: datebox constraint parsing errors
+  ZK-4312: leaking request/response into wpd cache
+  ZK-4323: a listbox scrolls to the bottom when all item selected
+  ZK-4366: org.zkoss.zk.ui.UiException: view model of 'vm' is null
+
+* Upgrade Notes
+
+   --------
 ZK 8.6.2
 June 25, 2019
 * Features

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4366.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 09 11:46:53 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div apply="org.zkoss.bind.BindComposer">
+		<label>You should not see exception</label>
+		<apply template="@init('test')" vmClass="@init('java.lang.Object')"/>
+		<template name="test">
+			<div viewModel="@id('vm') @init(vmClass)">
+				vm: ${vmClass}
+			</div>
+		</template>
+	</div>
+</zk>

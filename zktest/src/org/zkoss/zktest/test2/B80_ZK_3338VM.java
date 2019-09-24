@@ -23,7 +23,7 @@ import org.zkoss.bind.annotation.MatchMedia;
 public class B80_ZK_3338VM {
 
 	@MatchMedia("all and (max-width : 640px)")
-	private void switchMobileTemplate(){
+	public void switchMobileTemplate(){
 	}
 
 }

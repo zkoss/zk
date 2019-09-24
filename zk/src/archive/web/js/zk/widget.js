@@ -67,6 +67,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 			switch (devt.type) {
 			case 'focus':
+				if (zk._focusByClearBusy) return; // ZK-4294: don't trigger focus event while in restoring focus
 				if (wgt.canActivate()) {
 					zk.currentFocus = wgt;
 					//add triggerByFocus option for notification
@@ -3350,6 +3351,7 @@ unbind_: function (skipper, after) {
 	},
 	getContentEdgeHeight_: function (height/*current calculated height*/) {
 		var p = this.$n(),
+			body = document.body,
 			fc = this.firstChild,
 			// ZK-1524: Caption should be ignored
 			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc;
@@ -3364,7 +3366,7 @@ unbind_: function (skipper, after) {
 		
 		if (c) {
 			c = c.parentNode;
-			while (c && c.nodeType == 1 && p != c) {
+			while (c && c.nodeType == 1 && p != c && c != body) {
 				var zkc = zk(c);
 				h += zkc.padBorderHeight() + zkc.sumStyles('tb', jq.margins);
 				c = c.parentNode;
@@ -3375,6 +3377,7 @@ unbind_: function (skipper, after) {
 	},
 	getContentEdgeWidth_: function (width/*current calculated width*/) {
 		var p = this.$n(),
+			body = document.body,
 			fc = this.firstChild,
 			// ZK-1524: Caption should be ignored
 			fc = fc && zk.isLoaded('zul.wgt') && fc.$instanceof(zul.wgt.Caption) ? fc.nextSibling : fc;
@@ -3389,7 +3392,7 @@ unbind_: function (skipper, after) {
 		
 		if (c) {
 			c = c.parentNode;
-			while (c && c.nodeType == 1 && p != c) {
+			while (c && c.nodeType == 1 && p != c && c != body) {
 				var zkc = zk(c);
 				w += zkc.padBorderWidth() + zkc.sumStyles('lr', jq.margins);
 				c = c.parentNode;

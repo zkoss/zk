@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.0.0.201908131516">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.0.0.201908161212">
 	<!--
 	SIMPLETYPE
 	-->
@@ -519,6 +519,7 @@
 		<xs:attribute name="fulfill" type="xs:string" use="optional" />
 		<xs:attribute name="id" type="xs:string" use="optional" />
 		<xs:attribute name="mold" type="xs:string" use="optional" />
+		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onFulfill" type="xs:string" use="optional" />
 		<xs:attribute name="stubonly" type="xs:string" use="optional" />
 		<xs:attribute name="use" type="xs:string" use="optional" />
@@ -543,8 +544,14 @@
 		<xs:attribute name="tooltiptext" type="xs:string" use="optional" />
 		<xs:attribute name="zindex" type="intType" use="optional" />
 		<xs:attribute name="renderdefer" type="intType" use="optional" />
-		<xs:attribute name="onCreate" type="xs:string" use="optional" />
+		<xs:attribute name="onAfterSize" type="xs:string" use="optional" />
+		<xs:attribute name="onCancel" type="xs:string" use="optional" />
+		<xs:attribute name="onCtrlKey" type="xs:string" use="optional" />
 		<xs:attribute name="onDrop" type="xs:string" use="optional" />
+		<xs:attribute name="onMouseOver" type="xs:string" use="optional" />
+		<xs:attribute name="onMouseOut" type="xs:string" use="optional" />
+		<xs:attribute name="onOK" type="xs:string" use="optional" />
+		<xs:attribute name="onSwipe" type="xs:string" use="optional" />
 		<xs:attribute name="action" type="xs:string" use="optional" />
 		<xs:attribute name="hflex" type="xs:string" use="optional" />
 		<xs:attribute name="vflex" type="xs:string" use="optional" />
@@ -555,7 +562,6 @@
 		<xs:attribute name="context" type="xs:string" use="optional" />
 		<xs:attribute name="popup" type="xs:string" use="optional" />
 		<xs:attribute name="tooltip" type="xs:string" use="optional" />
-		<xs:attribute name="onCtrlKey" type="xs:string" use="optional" />
 		<xs:attribute name="ctrlKeys" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="inputElementAttrGroup">
@@ -569,6 +575,7 @@
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="cols" type="intType" use="optional" />
 		<xs:attribute name="insertedText" type="xs:string" use="optional" />
+		<xs:attribute name="text" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
@@ -1356,6 +1363,8 @@
 		<xs:attribute name="zclass" type="xs:string" use="optional" />
 		<xs:attribute name="zoomType" type="xs:string" use="optional" />
 		<xs:attribute name="onSelection" type="xs:string" use="optional" />
+		<xs:attribute name="hflex" type="xs:string" use="optional" />
+		<xs:attribute name="vflex" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="mouseAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attributeGroup ref="plotAttrGroup" />
@@ -2427,7 +2436,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="badgetext" type="xs:string" use="optional" />
+		<xs:attribute name="badgeText" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- navbar -->
 	<xs:element name="navbar" type="navbarType" />

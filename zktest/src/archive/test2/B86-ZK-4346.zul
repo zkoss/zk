@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4346.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Aug 22 14:50:27 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		jq(window).error(function (e, url, line) {
+			zk.log(e.originalEvent.error);
+		});
+	]]></script>
+	<label multiline="true">
+		try these buttons, if the constraint is not formatted in yyyyMMdd,
+		you should see an error.
+	</label>
+	<datebox id="db" format="yyyy-MM-dd" constraint="before 20190822"/>
+	<separator/>
+	<button label="setConstraint(before 100000110)" onClick='db.setConstraint("before 100000110")'></button>
+	<button label="setConstraint(before 100010110)" onClick='db.setConstraint("before 100010110")'></button>
+	<button label="setConstraint(before 100020110)" onClick='db.setConstraint("before 100020110")'></button>
+	<button label="setConstraint(between 20071012 and 20081223, before 200810103)" onClick='db.setConstraint("between 20071012 and 20081223, before 200810103")'></button>
+</zk>

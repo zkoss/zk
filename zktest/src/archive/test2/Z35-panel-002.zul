@@ -1,16 +1,16 @@
 <window>
-<panel id="p1" title="Panel Component" border="normal" width="500px" height="150px">
+<panel id="p1" title="Panel Component" border="normal" width="500px" height="300px">
 	<panelchildren>
 		1. Click "Change floatable" button and the panel should float.
 		<separator />
 		2. Click "Change movable" button and move the panel.(If the panel doesn't float, it shouldn't be able to move.)
 		<separator />
-		<button label="Change floatable">
+		<button id="btnFloat" label="Change floatable">
 			<attribute name="onClick">
 					p1.floatable=!p1.floatable;
 			</attribute>
 		</button>
-		<button label="Change movable">
+		<button id="btnMove" label="Change movable">
 			<attribute name="onClick">	
 					p1.movable=!p1.movable;
 			</attribute>
@@ -19,22 +19,22 @@
 		3. Click following buttons and it should work well.
 	</panelchildren>
 </panel>
-		<button label="Change collapsible">
+		<button id="btn1" label="Change collapsible">
 			<attribute name="onClick">
 					p1.collapsible=!p1.collapsible;
 			</attribute>
 		</button>
-		<button label="Change minimizable">
+		<button id="btn2" label="Change minimizable">
 			<attribute name="onClick">
 					p1.minimizable=!p1.minimizable;
 			</attribute>
 		</button>
-		<button label="Change maximizable">
+		<button id="btn3" label="Change maximizable">
 			<attribute name="onClick">
 					p1.maximizable=!p1.maximizable;
 			</attribute>
 		</button>
-		<button label="Change closable">
+		<button id="btn4" label="Change closable">
 			<attribute name="onClick">
 					p1.closable=!p1.closable;
 			</attribute>

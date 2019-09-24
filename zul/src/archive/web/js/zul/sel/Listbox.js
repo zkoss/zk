@@ -222,18 +222,32 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			// ZK-2971: should scroll when not in paging or in paging but operating with keyboard
 			// ZK-3103: if in paging mode, should also scroll when setting selected item/index
 			if (!this.paging || (this.$class.shallSyncSelInView && this.$class.shallSyncSelInView[this.uuid]) || this._listbox$shallSyncSelInView) {
-				if (this.$class.shallSyncSelInView) this.$class.shallSyncSelInView[this.uuid] = false;
-				if (this._listbox$shallSyncSelInView) this._listbox$shallSyncSelInView = false;
-				var selItem = this._selItems.length > 0 ? this._selItems[this._selItems.length - 1] : undefined;
+				var selItems = this._selItems,
+					selItemIndex = -1;
+				for (var i = 0; i < selItems.length; i++) { // ZK-4323: find item that has the smallest index
+					if (selItems[i]._index < selItemIndex || selItemIndex < 0)
+						selItemIndex = i;
+				}
+				var selItem = selItems[selItemIndex],
+					isSetSelectedItemIndexCalled = this._listbox$shallSyncSelInView;
 				if (selItem) {
-					var bar = this._scrollbar;
+					var bar = this._scrollbar,
+						selItemTop = selItem.$n().offsetTop;
 					if (bar) {
-						bar.scrollToElement(selItem.$n());
+						if (isSetSelectedItemIndexCalled)
+							bar.scrollToElement(selItem.$n());
+						else
+							bar.scrollTo(zul.mesh.Scrollbar.getScrollPosH(this), selItemTop);
 					} else {
-						zk(selItem).scrollIntoView(this.ebody);
+						if (isSetSelectedItemIndexCalled)
+							zk(selItem).scrollIntoView(this.ebody);
+						else
+							this.ebody.scrollTop = selItemTop;
 						this._tmpScrollTop = this.ebody.scrollTop;
 					}
 				}
+				if (this.$class.shallSyncSelInView) this.$class.shallSyncSelInView[this.uuid] = false;
+				if (isSetSelectedItemIndexCalled) this._listbox$shallSyncSelInView = false;
 			}
 			// do only once
 			this._shallScrollIntoView = false;
