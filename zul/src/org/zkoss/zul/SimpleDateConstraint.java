@@ -135,7 +135,7 @@ public class SimpleDateConstraint extends AbstractSimpleDateTimeConstraint<Date>
 	}
 
 	@Override
-	private void fixConstraint() {
+	protected void fixConstraint() {
 		if ((_flags & NO_FUTURE) != 0 && _end == null)
 			_end = Dates.today();
 		if ((_flags & NO_PAST) != 0 && _beg == null)
