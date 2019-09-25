@@ -15,6 +15,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="native">
     <zscript><![CDATA[
         import org.zkoss.zk.ui.util.*;
+        import org.zkoss.zkmax.ui.util.*;
         import org.zkoss.zul.*;
         ListModel posm = new SimpleListModel(new String[] {
             "(default)", "top_left", "top_center", "top_right", "middle_center",
@@ -32,7 +33,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
             "Also possible to do <span style=\"font-weight: bold\">HTML</span>.",
             "Deja vu! I've just been in this place before.",
         };
-        org.zkoss.lang.Library.setProperty("org.zkoss.zk.ui.util.Toast.animationSpeed", "0");
+        org.zkoss.lang.Library.setProperty("org.zkoss.zkmax.ui.util.Toast.animationSpeed", "0");
     ]]></zscript>
     <div style="padding: 5px; border: 1px solid #339999">
         <n:table>
