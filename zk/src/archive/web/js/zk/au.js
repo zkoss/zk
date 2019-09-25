@@ -1660,29 +1660,6 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			ebox.reposition();
 			ebox._fixarrow();
 		});
-	},
-	/**
-	 * Display a toast notification message.
-	 * @param String msg the message to show (HTML is accepted)
-	 * @param String type available types are "info", "warning", "error". default "info".
-	 * @param String pos predefined positions.
-	 * @param int dur the duration of notification in millisecond. If zero or
-	 * negative the notification does not dismiss until user left-clicks outside
-	 * of the notification box.
-	 * @param boolean closable whether to close notification manually or not. If true there will be a
-	 * close button on notification message and won't close until user click the button
-	 * or duration time up, default false.
-	 * @param int animationSpeed animation speed in milliseconds, default 500ms.
-	 * @since 9.0.0
-	 */
-	showToast: function (msg, type, pos, dur, closable, animationSpeed) {
-		let tst = (zul && zul.wgt) ? zul.wgt.Toast : null;
-		if (tst) {
-			var opts = {type: type, pos: pos, dur: dur, closable: closable, animationSpeed: animationSpeed};
-			tst.show(msg, opts);
-		} else {
-			jq.alert(msg); // fall back to alert when toast is not available
-		}
 	}
 };
 /** @class zk.AuCmd1
