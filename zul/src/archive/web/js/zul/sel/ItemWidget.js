@@ -313,6 +313,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	 */
 	compareItemPos_: function (item) {
 		return 0;
+	},
+	getFlexContainer_: function () { //use old flex inside tr/td
+		return null;
 	}
 });
 })();
