@@ -626,7 +626,7 @@ zFlex = { //static methods
 		var pwgt = wgt.parent,
 			cwgt = pwgt.firstChild,
 			fContainer = pwgt.getFlexContainer_(),
-			fcc = fContainer.firstChild,
+			fcc = fContainer.firstElementChild,
 			flexD = pwgt.getFlexDirection_(),
 			isRow = 'row' == flexD,
 			fccs = [],
@@ -634,24 +634,16 @@ zFlex = { //static methods
 			checkColumn = flexD == null,
 			toColumn = !isRow;
 
-		for (; fcc && cwgt;) {
-			if (fcc.nodeType !== 1) { //only check dom node
-				fcc = fcc.nextSibling;
-				continue;
+		for (var c; fcc && cwgt;) { // assume fcc <-> cwgt 1-1 mapping
+			c = cwgt.$n();
+			if (c && fcc.contains(c)) {
+				cwgt._flexFixed = true;
+				fccs.push(fcc);
+				cwgts.push(cwgt);
+				if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
+					toColumn = true;
 			}
-			var c = cwgt.$n();
-			if (c) {
-				if (c != fcc && (fContainer == c.parentNode))
-					fcc = cwgt.$n();
-				if (fcc.contains(c)) {
-					cwgt._flexFixed = true;
-					fccs.push(fcc);
-					cwgts.push(cwgt);
-					if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
-						toColumn = true;
-					fcc = fcc.nextSibling;
-				}
-			}
+			fcc = fcc.nextElementSibling;
 			cwgt = cwgt.nextSibling;
 		}
 		if (toColumn)

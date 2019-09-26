@@ -331,6 +331,9 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<tr', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></tr>');
+	},
+	getFlexContainer_: function () { //use old flex inside tr/td
+		return null;
 	}
 });
 })();
