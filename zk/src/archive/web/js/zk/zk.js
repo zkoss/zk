@@ -1512,6 +1512,7 @@ zk.$intercepts(zul.inp.Combobox, {
 			zk.iex = ie11;
 		
 		if (zk.iex) {
+			zk.ie = document.documentMode || zk.iex;
 			// zk.ien: the version n or later but less than 11
 			if (zk.ie < 11 && zk.ie >= 9) {
 				zk.ie9 = zk.ie >= 9;
