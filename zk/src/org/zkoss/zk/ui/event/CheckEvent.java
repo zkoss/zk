@@ -40,6 +40,15 @@ public class CheckEvent extends Event {
 	/** Constructs a check-relevant event.
 	 * @param checked whether it is checked.
 	 */
+	public CheckEvent(String name, Component target, boolean checked) {
+		super(name, target);
+		_checked = checked;
+	}
+
+	/** Constructs a check-relevant event.
+	 * @param checked whether it is checked.
+	 * @since 9.0.0
+	 */
 	public CheckEvent(String name, Component target, Boolean checked) {
 		super(name, target);
 		_checked = checked;
