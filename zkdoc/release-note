@@ -13,6 +13,7 @@ ZK 9.0.0
   ZK-4365: Provide a drawer component
   ZK-4371: Provide a Toast utility
   ZK-4372: Extract Notification functionalities from Clients
+  ZK-4349: Throw an error indicating incorrect usage when using both vflex and rows
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
