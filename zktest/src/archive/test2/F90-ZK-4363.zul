@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4363.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 17 09:41:31 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    ListModel model = new SimpleListModel(new String[] {
+        "small",
+        "medium",
+        "large",
+        "looooooooooooooog content"
+    });
+    ]]>
+    </zscript>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <grid>
+        <columns>
+            <column/>
+            <column label="normal"/>
+            <column label="disabled"/>
+        </columns>
+        <rows>
+            <row>
+                selectbox
+                <selectbox model="${model}"/>
+                <selectbox model="${model}" disabled="true"/>
+            </row>
+            <row>
+                listbox select mold
+                <listbox model="${model}" mold="select"/>
+                <listbox model="${model}" mold="select" disabled="true"/>
+            </row>
+            <row>
+                combobox
+                <combobox model="${model}"/>
+                <combobox model="${model}" disabled="true"/>
+            </row>
+        </rows>
+    </grid>
+</zk>

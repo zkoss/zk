@@ -1,0 +1,69 @@
+@import "~./zul/less/_header.less";
+
+@escapedIconColor: escape("@{iconColor}");
+@escapedActiveColor: escape("@{activeColor}");
+@escapedDisabledColor: escape("@{inputDisableColor}");
+
+.z-selectbox {
+	font-family: @baseContentFontFamily;
+	font-size: @inputTextSize;
+	color: @inputColor;
+
+	height: 34px;
+	min-width: 180px;
+	background-color: @inputBackgroundColor;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg%20fill%3D%27@{escapedIconColor}%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20width%3D%2724%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cpath%20d%3D%27M7%2010l5%205%205-5z%27%2F%3E%3C%2Fsvg%3E");
+	background-repeat: no-repeat;
+	background-position: top 50% right 0;
+	border: 1px solid @inputBorderColor;
+	border-radius: @inputBorderRadius;
+	padding: @inputPadding;
+	padding-right: 24px;
+
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+
+	&::-ms-expand {
+		display: none;
+	}
+
+	&:hover {
+		border-color: @colorPrimaryLight;
+	}
+
+	&:focus {
+		border-color: @inputFocusBorderColor;
+	}
+
+	&:active {
+		color: @activeColor;
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg%20fill%3D%27@{escapedActiveColor}%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20width%3D%2724%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cpath%20d%3D%27M7%2010l5%205%205-5z%27%2F%3E%3C%2Fsvg%3E");
+		background-color: @colorPrimary;
+		border-color: @colorPrimaryDark;
+	}
+
+	&[disabled] {
+		color: @inputDisableColor;
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg%20fill%3D%27@{escapedDisabledColor}%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20width%3D%2724%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cpath%20d%3D%27M7%2010l5%205%205-5z%27%2F%3E%3C%2Fsvg%3E");
+		background-color: @inputDisableBackgroundColor;
+		cursor: default;
+		border-color: @inputBorderColor;
+	}
+}
+
+// IE9 cannot hide the native icon, so don't show a custom icon
+.ie9 {
+	.z-selectbox {
+		background-image: none;
+		&:active {
+			background-image: none;
+			// popup close bug workaround
+			color: @inputColor;
+			background-color: @inputBackgroundColor;
+		}
+		&[disabled] {
+			background-image: none;
+		}
+	}
+}
