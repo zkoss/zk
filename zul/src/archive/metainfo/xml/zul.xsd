@@ -729,6 +729,7 @@
 			<xs:element ref="rowlayout" />
 			<xs:element ref="script" />
 			<xs:element ref="scrollview" />
+			<xs:element ref="searchbox" />
 			<xs:element ref="selectbox" />
 			<xs:element ref="separator" />
 			<xs:element ref="signature" />
@@ -833,6 +834,7 @@
 				<xs:element ref="rowlayout" />
 				<xs:element ref="script" />
 				<xs:element ref="scrollview" />
+				<xs:element ref="searchbox" />
 				<xs:element ref="selectbox" />
 				<xs:element ref="separator" />
 				<xs:element ref="signature" />
@@ -2712,6 +2714,28 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="onScrolling" type="xs:string" use="optional" />
 		<xs:attribute name="onScroll" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- searchbox -->
+	<xs:element name="searchbox" type="searchboxType" />
+	<xs:complexType name="searchboxType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="autoclose" type="booleanType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="itemConverter" type="xs:string" use="optional" />
+		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attribute name="multiple" type="booleanType" use="optional" />
+		<xs:attribute name="open" type="booleanType" use="optional" />
+		<xs:attribute name="placeholder" type="xs:string" use="optional" />
+		<xs:attribute name="searchMessage" type="xs:string" use="optional" />
+		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
+		<xs:attribute name="selectedItems" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="onAfterRender" type="xs:string" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="onSelect" type="xs:string" use="optional" />
+		<xs:attribute name="onSearching" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- selectbox -->
 	<xs:element name="selectbox" type="selectboxType" />

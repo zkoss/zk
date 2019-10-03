@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4380.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Sep 20 15:40:43 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		Test single selection
+		1. Open the searchbox, select the first item
+		2. The selectedItems will be only one item you chose. And the item will be highlighted.
+		3. Open the searchbox, select the first item again
+		4. The selectedItems will be empty. And the item won't be highlighted.
+
+		Test multiple selection
+		1. Click multiple and autoclose button.
+		2. Open the searchbox and select the first 4 items
+		3. The selectedItems will be 5 items. And these items will be highlighted and checked.
+		4. Open the searchbox and unselect the first item
+		5. The selectedItems will be 4 items. And these items will be highlighted and checked.
+
+		Test search
+		1. Open the searchbox
+		2. Input "9" in the textbox
+		3. You can see items containing "9" only.
+		4. Input "999". You can see no items.
+		5. Empty the textbox. You should see all items.
+
+		Test keyboard navigation
+		1. Focus the searchbox.
+		2. Pressing Up or Down key can open the searchbox.
+		3. Pressing Up/Down/PageUp/PageDown/Home/End keys can move the highlighted item.
+		4. Pressing Enter key can select/unselect the highlighted item.
+		5. Pressing Shift + Enter can select/unselect items in bulk (from last select/unselect item to the highlighted item)
+		3. Pressing Esc key can close the searchbox.
+
+		Properties
+		- Disabled
+		1. Click disabled button
+		2. The searchbox should be greyed. It shouldn't be focused and opened with a click.
+		3. Click disabled button again. It should be working again (focus, open).
+		- Open
+		1. Click open button. The popup should be opened regardless disabled or not.
+		- Autoclose
+		1. Click autoclose button.
+		2. Open the searchbox and click an item. The popup won't be closed after clicked an item.
+		3. Click autoclose button again.
+		4. Open the searchbox and click an item. The popup will be closed after clicked an item.
+	</label>
+	<div apply="org.zkoss.zktest.test2.F90_ZK_4380Composer">
+		<vlayout>
+			<textbox />
+			<searchbox id="myComp" hflex="1" multiple="false" autoclose="true"
+					   open="false" disabled="false" onAfterRender='Clients.log("loaded")'>
+				<template name="model">
+					<html><![CDATA[
+					<i class="z-icon-globe"></i>
+					<span class="name">${each}</span>
+					<span class="description">yoyoyo</span>
+					]]></html>
+				</template>
+			</searchbox>
+			<combobox hflex="1" />
+		</vlayout>
+		<vlayout>
+			<hlayout>
+				<button label="disabled" onClick="myComp.disabled = !myComp.disabled" />
+				<button label="open" onClick="myComp.open = !myComp.open" />
+				<button label="multiple" id="modelMultiple" />
+				<button label="autoclose" onClick="myComp.autoclose = !myComp.autoclose" />
+				<button label="invalidate" onClick="myComp.invalidate()" />
+				<button label="rerender" w:onClick="zk.$('@searchbox').rerender()" />
+				<button label="serialize/deserialize" id="serDeser" />
+			</hlayout>
+			<hlayout>
+				<button label="add item" id="addItem" />
+				<button label="remove item" id="removeItem" />
+				<button label="change item" id="changeItem" />
+				<button label="add selItem" id="addSelItem" />
+				<button label="selectedItems" onClick="alert(myComp.selectedItems)" />
+				<button label="selectedItem" onClick="alert(myComp.selectedItem)" />
+				<button label="setModel" id="setModel" />
+				<button label="setModel set" id="setModelSet" />
+				<button label="setModel null" id="setModelNull" />
+				<button label="setListSubModel" id="setListSubModel" />
+			</hlayout>
+		</vlayout>
+	</div>
+	<div height="1000px"/>
+</zk>
