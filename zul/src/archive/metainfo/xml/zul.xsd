@@ -716,6 +716,7 @@
 			<xs:element ref="longbox" />
 			<xs:element ref="menubar" />
 			<xs:element ref="menupopup" />
+			<xs:element ref="multislider" />
 			<xs:element ref="navbar" />
 			<xs:element ref="otherwise" />
 			<xs:element ref="paging" />
@@ -726,6 +727,7 @@
 			<xs:element ref="progressmeter" />
 			<xs:element ref="radio" />
 			<xs:element ref="radiogroup" />
+			<xs:element ref="rangeslider" />
 			<xs:element ref="rowlayout" />
 			<xs:element ref="script" />
 			<xs:element ref="scrollview" />
@@ -734,6 +736,7 @@
 			<xs:element ref="separator" />
 			<xs:element ref="signature" />
 			<xs:element ref="slider" />
+			<xs:element ref="sliderbuttons" />
 			<xs:element ref="space" />
 			<xs:element ref="spinner" />
 			<xs:element ref="splitlayout" />
@@ -821,6 +824,7 @@
 				<xs:element ref="longbox" />
 				<xs:element ref="menubar" />
 				<xs:element ref="menupopup" />
+				<xs:element ref="multislider" />
 				<xs:element ref="navbar" />
 				<xs:element ref="otherwise" />
 				<xs:element ref="paging" />
@@ -831,6 +835,7 @@
 				<xs:element ref="progressmeter" />
 				<xs:element ref="radio" />
 				<xs:element ref="radiogroup" />
+				<xs:element ref="rangeslider" />
 				<xs:element ref="rowlayout" />
 				<xs:element ref="script" />
 				<xs:element ref="scrollview" />
@@ -839,6 +844,7 @@
 				<xs:element ref="separator" />
 				<xs:element ref="signature" />
 				<xs:element ref="slider" />
+				<xs:element ref="sliderbuttons" />
 				<xs:element ref="space" />
 				<xs:element ref="spinner" />
 				<xs:element ref="splitlayout" />
@@ -2429,6 +2435,22 @@
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
+	<!-- multislider -->
+	<xs:element name="multislider" type="multisliderType" />
+	<xs:complexType name="multisliderType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="endValue" type="intType" use="optional" />
+		<xs:attribute name="marks" type="xs:string" use="optional" />
+		<xs:attribute name="max" type="intType" use="optional" />
+		<xs:attribute name="min" type="intType" use="optional" />
+		<xs:attribute name="orient" type="xs:string" use="optional" />
+		<xs:attribute name="startValue" type="intType" use="optional" />
+		<xs:attribute name="step" type="intType" use="optional" />
+		<xs:attribute name="tooltipVisible" type="booleanType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
 	<!-- nav -->
 	<xs:element name="nav" type="navType" />
 	<xs:complexType name="navType">
@@ -2619,7 +2641,23 @@
 		<xs:attribute name="radioRenderer" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
-
+	<!-- rangeslider -->
+	<xs:element name="rangeslider" type="rangesliderType" />
+	<xs:complexType name="rangesliderType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="endValue" type="intType" use="optional" />
+		<xs:attribute name="marks" type="xs:string" use="optional" />
+		<xs:attribute name="max" type="intType" use="optional" />
+		<xs:attribute name="min" type="intType" use="optional" />
+		<xs:attribute name="onRangeValueChange" type="xs:string" use="optional" />
+		<xs:attribute name="orient" type="xs:string" use="optional" />
+		<xs:attribute name="startValue" type="intType" use="optional" />
+		<xs:attribute name="step" type="intType" use="optional" />
+		<xs:attribute name="tooltipVisible" type="booleanType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
 	<!-- rating -->
 	<xs:element name="rating" type="ratingType"/>
 	<xs:complexType name="ratingType">
@@ -2796,6 +2834,16 @@
 		<xs:attribute name="angleArc" type="doubleType" use="optional" />
 		<xs:attribute name="strokeWidth" type="doubleType" use="optional" />
 		<xs:attribute name="scaleInput" type="doubleType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- sliderbuttons -->
+	<xs:element name="sliderbuttons" type="sliderbuttonsType" />
+	<xs:complexType name="sliderbuttonsType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="endValue" type="intType" use="optional" />
+		<xs:attribute name="onRangeValueChange" type="xs:string" use="optional" />
+		<xs:attribute name="startValue" type="intType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- south -->

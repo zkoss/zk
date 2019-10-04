@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4374.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 17 10:46:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label value="basic"/>
+    <multislider id="ms1">
+        <sliderbuttons startValue="10" endValue="30"/>
+    </multislider>
+    <label value="basic 2"/>
+    <multislider id="ms2">
+        <sliderbuttons startValue="10" endValue="70"/>
+        <sliderbuttons startValue="20" endValue="50"/>
+    </multislider>
+    <label value="basic 3"/>
+    <multislider id="ms3">
+        <sliderbuttons id="sb3_1" startValue="10" endValue="70"/>
+        <sliderbuttons id="sb3_2" startValue="20" endValue="50"/>
+        <sliderbuttons id="sb3_3" startValue="30" endValue="40"/>
+    </multislider>
+    <separator/>
+    <label value="basic 4"/>
+    <multislider id="ms4">
+        <sliderbuttons startValue="10" endValue="80"/>
+        <sliderbuttons startValue="20" endValue="70"/>
+        <sliderbuttons startValue="30" endValue="60"/>
+        <sliderbuttons startValue="40" endValue="50"/>
+    </multislider>
+    <separator/>
+    <label>Change #3 multislider</label>
+    <button label="toggle orient">
+        <attribute name="onClick"><![CDATA[
+            String orient = ms3.getOrient();
+            if ("horizontal".equals(orient))
+                ms3.setOrient("vertical");
+            else
+                ms3.setOrient("horizontal");
+        ]]></attribute>
+    </button>
+    <button label="toggle tooltipVisible">
+        <attribute name="onClick"><![CDATA[
+            ms3.setTooltipVisible(!ms3.isTooltipVisible());
+        ]]></attribute>
+    </button>
+    <button label="toggle disabled">
+        <attribute name="onClick"><![CDATA[
+            ms3.setDisabled(!ms3.isDisabled());
+        ]]></attribute>
+    </button>
+    <separator/>
+    <div>
+        <intbox id="ibmin" value="0"/>
+        <button label="change min" onClick="ms3.setMin(ibmin.getValue())"/>
+    </div>
+    <separator/>
+    <div>
+        <intbox id="ibmax" value="100"/>
+        <button label="change max" onClick="ms3.setMax(ibmax.getValue())"/>
+    </div>
+    <separator/>
+    <div>
+        <intbox id="v1_1" value="0"/>
+        <button label="change startValue" onClick="sb3_1.setStartValue(v1_1.getValue())" />
+        <intbox id="v1_2" value="0"/>
+        <button label="change endValue" onClick="sb3_1.setEndValue(v1_2.getValue())" />
+    </div>
+    <separator/>
+    <div>
+        <intbox id="v2_1" value="0"/>
+        <button label="change startValue" onClick="sb3_2.setStartValue(v2_1.getValue())" />
+        <intbox id="v2_2" value="0"/>
+        <button label="change endValue" onClick="sb3_2.setEndValue(v2_2.getValue())" />
+    </div>
+    <separator/>
+    <div>
+        <intbox id="v3_1" value="0"/>
+        <button label="change startValue" onClick="sb3_3.setStartValue(v3_1.getValue())" />
+        <intbox id="v3_2" value="0"/>
+        <button label="change endValue" onClick="sb3_3.setEndValue(v3_2.getValue())" />
+    </div>
+    <separator/>
+    <div>
+        <intbox id="ibs" value="1"/>
+        <button label="change step" onClick="ms3.setStep(ibs.getValue))"/>
+    </div>
+    <separator/>
+    <div>
+        <textbox id="tbm" value="0: 0%, 15: 15%, 60: 60%"/>
+        <button label="change marks" onClick="ms3.setMarks(tbm.getValue())"></button>
+    </div>
+    <apply templateURI="/test2/include/themes.zul"/>
+</zk>

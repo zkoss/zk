@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4373.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 17 10:46:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <rangeslider id="rs1" onRangeValueChange='Clients.log(rs1.getStartValue() + "," + rs1.getEndValue())'/>
+    <separator />
+    <div>
+        <intbox id="ib1" value="0"/>
+        <button label="change min" onClick="rs1.setMin(ib1.getValue())"/>
+    </div>
+    <separator />
+    <div>
+        <intbox id="ib2" value="100"/>
+        <button label="change max" onClick="rs1.setMax(ib2.getValue())"/>
+    </div>
+    <separator />
+    <div>
+        <intbox id="ib3" value="0"/>
+        <button label="change startValue" onClick="rs1.setStartValue(ib3.getValue());" />
+        <intbox id="ib4" value="0"/>
+        <button label="change endValue" onClick="rs1.setEndValue(ib4.getValue());" />
+    </div>
+    <separator />
+    <div>
+        <intbox id="ib5" value="1"/>
+        <button label="change step" onClick="rs1.setStep(ib5.getValue())"/>
+    </div>
+    <separator />
+    <div>
+        <textbox id="tb1" value="0: 0%, 15: 15%, 60:60%"/>
+        <button label="change marks" onClick="rs1.setMarks(tb1.getValue())"></button>
+    </div>
+    <separator />
+    <button label="toggle orient" >
+        <attribute name="onClick"><![CDATA[
+            String orient = rs1.getOrient();
+            if ("horizontal".equals(orient))
+                rs1.setOrient("vertical");
+            else
+                rs1.setOrient("horizontal");
+        ]]></attribute>
+    </button>
+    <button label="toggle tooltipVisible">
+        <attribute name="onClick"><![CDATA[
+            rs1.setTooltipVisible(!rs1.isTooltipVisible());
+        ]]></attribute>
+    </button>
+    <button label="toggle disabled">
+        <attribute name="onClick"><![CDATA[
+            rs1.setDisabled(!rs1.isDisabled());
+        ]]></attribute>
+    </button>
+    <apply templateURI="/test2/include/themes.zul"/>
+</zk>
