@@ -20,6 +20,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
         4. Select Java and Julia.
         5. Click "Submit".
         6. You should see "Asia / Java, Julia" in zk log.
+
+        ListSubModel selection issue
+        1. In the first searchbox, type A and select Asia.
+        2. Open it again, type B and no item is expected.
+        3. Remove B and type A again, Asia should be marked as selected.
     </label>
     <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F90_ZK_4380VM')">
         <searchbox model="@init(vm.continent)" placeholder="An unknown place"
