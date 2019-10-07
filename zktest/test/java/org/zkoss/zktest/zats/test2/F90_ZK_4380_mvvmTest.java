@@ -13,6 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
@@ -43,5 +44,26 @@ public class F90_ZK_4380_mvvmTest extends WebDriverTestCase {
 		waitResponse();
 
 		Assert.assertEquals("Asia / Java, Julia", getZKLog());
+	}
+
+	@Test
+	public void testSubModelSelection() {
+		connect();
+
+		click(jq("@searchbox:eq(0)"));
+		waitResponse(true);
+		getActions().sendKeys("A").perform();
+		waitResponse();
+		click(jq(".z-searchbox-item:contains(Asia)"));
+		waitResponse();
+
+		click(jq("@searchbox:eq(0)"));
+		waitResponse(true);
+		getActions().sendKeys(Keys.BACK_SPACE, "B").perform();
+		waitResponse();
+		getActions().sendKeys(Keys.BACK_SPACE, "A").perform();
+		waitResponse();
+
+		Assert.assertEquals("Asia", jq(".z-searchbox-selected").text());
 	}
 }
