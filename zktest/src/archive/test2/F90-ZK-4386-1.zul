@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4386-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 1 12:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <div>
+        <anchornav name="nav">
+            <vlayout>
+                <a ca:data-anchornav-target="$nestedWin1">1. click this, should scroll to testing Nested 1</a>
+                <a ca:data-anchornav-target="$nestedWin2">1. click this, should scroll to testing Nested 2</a>
+            </vlayout>
+        </anchornav>
+        <separator/>
+        <div height="500px"></div>
+        <window ca:data-anchornav-scroll="nav" title="1. ZK" height="600px" width="700px" border="normal"
+                ca:data-scrollable="true" contentStyle="overflow:auto">
+            testing ZK
+            <div height="600px"></div>
+            <window id="nestedWin1" title="Nested 1" height="600px" width="700px"></window>
+            <window id="nestedWin2" title="Nested 2" height="600px" width="700px"></window>
+        </window>
+    </div>
+</zk>
