@@ -110,12 +110,13 @@
 	display: inline-block;
 	position: relative;
 	cursor: pointer;
+	.borderRadius(@inputBorderRadius);
+	overflow: hidden;
 
 	&-content {
 		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @toolbarButtonColor);
 		background-color: @toolbarButtonBackgroundColor;
 		border: 2px solid transparent;
-		.borderRadius(@inputBorderRadius);
 		padding: @toolbarButtonPadding;
 		line-height: @fontSizeLarge;
 		display: inline-block;
