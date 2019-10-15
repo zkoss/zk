@@ -4,13 +4,14 @@
 	display: inline-block;
 	min-height: @baseButtonHeight;
 	cursor: pointer;
+	.borderRadius(@inputBorderRadius);
+	overflow: hidden;
 
 	&-content {
 		.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @buttonColor);
 		display: block;
 		min-height: @baseButtonHeight;
 		border: 2px solid @buttonBorderColor;
-		.borderRadius(@inputBorderRadius);
 		padding: @buttonPadding;
 		padding-right: 46px;
 		line-height: normal;

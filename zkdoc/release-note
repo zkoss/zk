@@ -18,6 +18,7 @@ ZK 9.0.0
   ZK-4363: beautify selectbox with CSS
   ZK-4373: Provide a rangeslider component
   ZK-4374: Provide a multislider component
+  ZK-4391: Provide an inputgroup component
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing

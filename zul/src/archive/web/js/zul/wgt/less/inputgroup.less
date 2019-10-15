@@ -1,0 +1,54 @@
+@import "~./zul/less/_header.less";
+
+.z-inputgroup {
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+
+	&-text {
+		display: -ms-flexbox;
+		display: flex;
+		background: @inputgroupTextBackgroundColor;
+		border: 1px solid @inputBorderColor;
+		padding: 0 12px;
+		min-height: 34px; // same as .z-textbox
+
+		> :nth-child(n) {
+			display: -ms-flexbox;
+			display: flex;
+			-ms-flex-align: center;
+			align-items: center;
+		}
+	}
+
+	> :nth-child(n) {
+		border-radius: 0;
+	}
+
+	&-vertical {
+		-ms-flex-direction: column;
+		flex-direction: column;
+
+		> :first-child {
+			border-top-left-radius: @inputBorderRadius;
+			border-top-right-radius: @inputBorderRadius;
+		}
+		> :last-child {
+			border-bottom-left-radius: @inputBorderRadius;
+			border-bottom-right-radius: @inputBorderRadius;
+		}
+	}
+
+	&:not(&-vertical) {
+		> :nth-child(n) {
+			height: auto;
+		}
+		> :first-child {
+			border-top-left-radius: @inputBorderRadius;
+			border-bottom-left-radius: @inputBorderRadius;
+		}
+		> :last-child {
+			border-top-right-radius: @inputBorderRadius;
+			border-bottom-right-radius: @inputBorderRadius;
+		}
+	}
+}

@@ -754,6 +754,16 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>inputgroup</component-name>
+		<component-class>org.zkoss.zul.Inputgroup</component-class>
+		<widget-class>zul.wgt.Inputgroup</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/inputgroup.js</mold-uri>
+			<css-uri>css/inputgroup.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>intbox</component-name>
 		<component-class>org.zkoss.zul.Intbox</component-class>
 		<widget-class>zul.inp.Intbox</widget-class>

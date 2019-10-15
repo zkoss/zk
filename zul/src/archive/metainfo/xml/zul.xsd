@@ -710,6 +710,7 @@
 			<xs:element ref="image" />
 			<xs:element ref="imagemap" />
 			<xs:element ref="include" />
+			<xs:element ref="inputgroup" />
 			<xs:element ref="intbox" />
 			<xs:element ref="label" />
 			<xs:element ref="listbox" />
@@ -818,6 +819,7 @@
 				<xs:element ref="image" />
 				<xs:element ref="imagemap" />
 				<xs:element ref="include" />
+				<xs:element ref="inputgroup" />
 				<xs:element ref="intbox" />
 				<xs:element ref="label" />
 				<xs:element ref="listbox" />
@@ -2138,6 +2140,14 @@
 		<xs:attribute name="progressing" type="booleanType" use="optional" />
 		<xs:attribute name="mode" type="xs:string" use="optional" />
 		<xs:attribute name="comment" type="booleanType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- inputgroup -->
+	<xs:element name="inputgroup" type="inputgroupType" />
+	<xs:complexType name="inputgroupType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- intbox -->
