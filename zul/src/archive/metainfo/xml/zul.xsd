@@ -657,6 +657,7 @@
 			<xs:element ref="a" />
 			<xs:element ref="absolutelayout"/>
 			<xs:element ref="anchorlayout"/>
+			<xs:element ref="anchornav"/>
 			<xs:element ref="apply"/>
 			<xs:element ref="audio" />
 			<xs:element ref="video" />
@@ -766,6 +767,7 @@
 				<xs:element ref="a" />
 				<xs:element ref="absolutelayout"/>
 				<xs:element ref="anchorlayout"/>
+				<xs:element ref="anchornav"/>
 				<xs:element ref="apply"/>
 				<xs:element ref="audio" />
 				<xs:element ref="video" />
@@ -917,6 +919,14 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="anchorchildren" />
 		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!-- anchornav -->
+	<xs:element name="anchornav" type="anchornavType" />
+	<xs:complexType name="anchornavType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="name" type="xs:string" use="optional" />
+		<xs:attribute name="positionFixed" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- applet -->
