@@ -4,7 +4,3 @@ if [ -z "$nodeChecker" ] ; then
 	echo please install node.js
 	exit 1
 fi
-
-# install npm dependencies
-echo "installing zkless-engine and npm dependencies"
-npm ci || exit 1

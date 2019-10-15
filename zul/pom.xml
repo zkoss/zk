@@ -175,7 +175,7 @@
 							<arguments>
 								run build:single --
 								--src="${project.basedir}/src/archive/web/js"
-								--dest="${project.build.outputDirectory}/web/${project.artifactId}/js"
+								--dest="${project.build.outputDirectory}/web/js"
 							</arguments>
 						</configuration>
 					</execution>
