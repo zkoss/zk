@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4395.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 15 10:03:55 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <panel apply="org.zkoss.bind.BindComposer"
+           title="ZK 6 Essentials" width="1366px" height="600px" border="normal" sizable="true">
+        <panelchildren>
+            <pdfviewer id="myComp" src="@init('ZK 6 Essentials.pdf')" hflex="1" vflex="1"
+                       activePage="@init(3)"
+                       onRender='Clients.showNotification("PDF loaded!")'
+                       onZoom='Clients.log("onZoom=" + event.zoom)'
+                       onRotate='Clients.log("onRotate=" + event.rotation)'
+                       onPaging='Clients.log("onPaging=" + event.activePage)'>
+                <toolbar id="tb">
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-fast-backward"
+                            onClick="myComp.firstPage()"/>
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-chevron-left"
+                            onClick="myComp.previousPage()"/>
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-chevron-right"
+                            onClick="myComp.nextPage()"/>
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-fast-forward"
+                            onClick="myComp.lastPage()"/>
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-search-plus"
+                            onClick="myComp.zoomIn()"/>
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-search-minus"
+                            onClick="myComp.zoomOut()"/>
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-rotate-right"
+                            onClick="myComp.rotateClockwise()"/>
+                    <toolbarbutton
+                            iconSclass="z-icon-2x z-icon-fw z-icon-rotate-left"
+                            onClick="myComp.rotateCounterclockwise()"/>
+                </toolbar>
+            </pdfviewer>
+        </panelchildren>
+    </panel>
+    <hlayout>
+        <button label="getPageCount" onClick="alert(myComp.getPageCount())"/>
+        <button label="getActivePage" onClick="alert(myComp.getActivePage())"/>
+        <button label="getZoom" onClick="alert(myComp.getZoom())"/>
+        <button label="getRotation" onClick="alert(myComp.getRotation())"/>
+        <button label="setSrc" onClick='myComp.setSrc("https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf")'/>
+        <button label="setContent" upload="true" onUpload='myComp.setContent(event.media)'/>
+        <button label="removeToolbar" onClick="removeToolbar()"/>
+        <button label="addToolbar" onClick="addToolbar()"/>
+    </hlayout>
+    <zscript><![CDATA[
+    Component old;
+    void removeToolbar() {
+        Component toolbar = myComp.getFirstChild();
+        if (toolbar != null) {
+            old = toolbar;
+            toolbar.detach();
+        }
+    }
+
+    void addToolbar() {
+        Component toolbar = myComp.getFirstChild();
+        if (toolbar == null && old != null) {
+            myComp.appendChild(old);
+        }
+    }
+    ]]></zscript>
+</zk>

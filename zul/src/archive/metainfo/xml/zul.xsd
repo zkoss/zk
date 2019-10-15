@@ -723,6 +723,7 @@
 			<xs:element ref="otherwise" />
 			<xs:element ref="paging" />
 			<xs:element ref="panel" />
+			<xs:element ref="pdfviewer" />
 			<xs:element ref="pivottable" />
 			<xs:element ref="popup" />
 			<xs:element ref="portallayout" />
@@ -833,6 +834,7 @@
 				<xs:element ref="otherwise" />
 				<xs:element ref="paging" />
 				<xs:element ref="panel" />
+				<xs:element ref="pdfviewer" />
 				<xs:element ref="pivottable" />
 				<xs:element ref="popup" />
 				<xs:element ref="portallayout" />
@@ -2575,6 +2577,20 @@
 		<xs:attribute name="detailed" type="booleanType" use="optional" />
 		<xs:attribute name="autohide" type="booleanType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
+	</xs:complexType>
+	<!-- pdfviewer -->
+	<xs:element name="pdfviewer" type="pdfviewerType" />
+	<xs:complexType name="pdfviewerType">
+		<xs:choice minOccurs="0" maxOccurs="1">
+			<xs:element ref="toolbar" minOccurs="0" maxOccurs="1" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="activePage" type="intType" use="optional" />
+		<xs:attribute name="content" type="mediaType" use="optional" />
+		<xs:attribute name="pageSize" type="intType" use="optional" />
+		<xs:attribute name="rotation" type="intType" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
+		<xs:attribute name="zoom" type="doubleType" use="optional" />
 	</xs:complexType>
 	<!-- pivottable -->
 	<xs:element name="pivottable" type="pivottableType" />
