@@ -743,6 +743,8 @@
 			<xs:element ref="space" />
 			<xs:element ref="spinner" />
 			<xs:element ref="splitlayout" />
+			<xs:element ref="step" />
+			<xs:element ref="stepbar" />
 			<xs:element ref="style" />
 			<xs:element ref="tabbox" />
 			<xs:element ref="tablelayout" />
@@ -854,6 +856,8 @@
 				<xs:element ref="space" />
 				<xs:element ref="spinner" />
 				<xs:element ref="splitlayout" />
+				<xs:element ref="step" />
+				<xs:element ref="stepbar" />
 				<xs:element ref="style" />
 				<xs:element ref="tabbox" />
 				<xs:element ref="tbeditor" />
@@ -2914,6 +2918,28 @@
 			use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- step -->
+	<xs:element name="step" type="stepType"/>
+	<xs:complexType name="stepType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="complete" type="booleanType" use="optional" />
+		<xs:attribute name="error" type="booleanType" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- stepbar -->
+	<xs:element name="stepbar" type="stepbarType"/>
+	<xs:complexType name="stepbarType">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="activeIndex" type="intType" use="optional" />
+		<xs:attribute name="wrappedLabels" type="booleanType" use="optional" />
+		<xs:attribute name="linear" type="booleanType" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- style -->
 	<xs:element name="style" type="styleType" />

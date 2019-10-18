@@ -23,6 +23,7 @@ ZK 9.0.0
   ZK-4379: Provide a Loadingbar utility
   ZK-4395: Provide a pdfviewer component
   ZK-4334: provide the localized timezone ID in the onClientInfo event
+  ZK-4375: Provide a stepbar component
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
