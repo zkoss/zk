@@ -35,3 +35,104 @@
 		}
 	}
 }
+
+// Loadingbar
+.z-loadingbar {
+	width: 100%;
+	height: @loadingbarHeight;
+	overflow: hidden;
+	position: relative;
+	pointer-events: none;
+	
+	&-colorbar {
+		background-color: @loadingbarColor;
+		height: 100%;
+	}
+	
+	&-image {
+		display: inline-block;
+		vertical-align: top;
+	}
+
+	&-effectbar {
+		display: none;
+	}
+
+	&-indeterminate {
+		opacity: 0.9;
+		width: 150%;
+
+		> .z-loadingbar-image {
+			position: absolute;
+			animation: ani1 3s ease-in infinite;
+		}
+		> .z-loadingbar-effectbar {
+			display: inline-block;
+			position: absolute;
+			vertical-align: top;
+			animation: ani2 3s ease infinite;
+		}
+
+		@keyframes ani1 {
+			from {
+				left: -10%;
+				width: 10%;
+			}
+			13.33% {
+				width: 10%;
+			}
+			60% {
+				left: 100%;
+				width: 100%;
+			}
+			to {
+				left: 100%;
+			}
+		}
+		@keyframes ani2 {
+			from {
+				left: -80%;
+				width: 80%;
+			}
+			30% {
+				width: 80%;
+			}
+			40% {
+				left: -80%;
+			}
+			96% {
+				left: 100%;
+			}
+			to {
+				left: 100%;
+				width: 5%;
+			}
+		}
+	}
+
+	&-position {
+		display: -ms-flexbox;
+		display: flex;
+		position: fixed;
+		width: 100%;
+		left: 0;
+		pointer-events: none;
+
+		> .z-loadingbar:nth-child(even) .z-loadingbar-colorbar {
+			background-color: @loadingbarSecondaryColor;
+		}
+
+		&-top {
+			-ms-flex-direction: column;
+			flex-direction: column;
+			bottom: unset;
+			top: 0;
+		}
+		&-bottom {
+			-ms-flex-direction: column-reverse;
+			flex-direction: column-reverse;
+			top: unset;
+			bottom: 0;
+		}
+	}
+}
