@@ -28,6 +28,7 @@ ZK 9.0.0
   ZK-3942: AJAX commands execute before Initial page response
   ZK-4299: drag and drop doesn't work mobile FF on android
   ZK-4180: Remove IE < 9 workarounds
+  ZK-4376: ZK evaluates an expression of ternary operator "?:" with @MatchMedia
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.
