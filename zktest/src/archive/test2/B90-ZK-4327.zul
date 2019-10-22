@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4327.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 22 15:37:05 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Accept the camera access.
+        2. Click "remove scanner" button.
+        3. Camera should be not used.
+    </label>
+    <div>
+        <barcodescanner id="bcs" enable="false" type="qr,code128" continuous="true" interval="1000" height="240px" width="320px"
+                        onDetect='Clients.log(event.getType() + " " + event.getResult())'/>
+        <hlayout>
+            <button onClick='bcs.setEnable(true);Clients.log(bcs.getEnable()?"enabled":"not enabled")' label="toggle on"/>
+            <button onClick='bcs.setEnable(false);Clients.log(bcs.getEnable()?"enabled":"not enabled")' label="toggle off"/>
+            <button onClick='bcs.getParent().removeChild(bcs)' label="remove scanner"/>
+        </hlayout>
+    </div>
+</zk>
