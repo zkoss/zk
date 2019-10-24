@@ -30,6 +30,7 @@ ZK 9.0.0
   ZK-4299: drag and drop doesn't work mobile FF on android
   ZK-4180: Remove IE < 9 workarounds
   ZK-4376: ZK evaluates an expression of ternary operator "?:" with @MatchMedia
+  ZK-4327: Barcodescanner doesn't close camera API or JS scanner object when unloading
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.
