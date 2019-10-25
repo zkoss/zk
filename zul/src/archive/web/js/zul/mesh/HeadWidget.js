@@ -176,6 +176,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 			// ZK-2098: recovery the header faker if not exists
 			var head = this,
+				recoverFakerbar = !frozen && !!mesh._nativebar,
 				fakers = ['hdfaker', 'bdfaker', 'ftfaker'];
 			// B30-1926480: ie8 does not support array.forEach
 			for (var i = 0; i < fakers.length; i++) {
@@ -189,8 +190,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 						bar = $bar[0],
 						$hdfakerbar = jq(head.$n('hdfaker')).find('[id*=hdfaker-bar]'),
 						hdfakerbar = $hdfakerbar[0],
-						barstyle = '', hdfakerbarstyle = '',
-						recoverFakerbar = !mesh.frozen ? zk(mesh.ebody).hasVScroll() : false;
+						barstyle = '', hdfakerbarstyle = '';
 
 					// ZK-2096, ZK-2124: should refresh this.$n('bar') if children change with databinding
 					// B30-1926480: the bar should be removed
