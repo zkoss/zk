@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4329.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 25 09:54:30 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    DefaultTreeNode root = new DefaultTreeNode("root", java.util.Arrays.asList(new DefaultTreeNode[] {
+            new DefaultTreeNode("1", java.util.Arrays.asList(new DefaultTreeNode[] {
+                    new DefaultTreeNode("1.1"),
+                    new DefaultTreeNode("1.2"),
+                    new DefaultTreeNode("1.3")
+            })),
+            new DefaultTreeNode("2"),
+            new DefaultTreeNode("3"),
+            new DefaultTreeNode("4")
+    }));
+    DefaultTreeModel treeModel = new DefaultTreeModel(root);
+    treeModel.setMultiple(true);
+
+    String[][] datas = new String[4][];
+    datas[0] = new String[15];
+    datas[1] = new String[14];
+    datas[2] = new String[27];
+    datas[3] = new String[33];
+    for(int j=0; j<datas[0].length; ++j) {
+        datas[0][j] = j+"A option "+j;
+    }
+    for(int j=0; j<datas[1].length; ++j) {
+        datas[1][j] = j+"B option "+j;
+    }
+    for(int j=0; j<datas[2].length; ++j) {
+        datas[2][j] = j+"C option "+j;
+    }
+    for(int j=0; j<datas[3].length; ++j) {
+        datas[3][j] = j+"D option "+j;
+    }
+    GroupsModel model3 = new SimpleGroupsModel(datas,
+        new String[]{"Group A","Group B","Group C","Group D"},
+        new String[]{"Foot A","Foot B","Foot C","Foot D"}
+    );
+    model3.setMultiple(true);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        TreeModel
+        1. Check the checkbox of "TreeModel selectAll".
+        2. You should see all checkboxes of Tree are checked.
+        3. Open the tree item "1". The children items are checked too.
+        ListModel
+        1. Check the checkbox of "ListModel selectAll".
+        2. You should see all checkboxes of first Listbox are checked.
+        GroupsModel
+        1. Check the checkbox of "GroupsModel selectAll".
+        2. You should see all checkboxes of second Listbox are checked.
+    </label>
+    <hlayout>
+        <checkbox onCheck="tr.getModel().getSelectionControl().setSelectAll(event.checked)" label="TreeModel selectAll"/>
+        <checkbox onCheck="lb.getModel().getSelectionControl().setSelectAll(event.checked)" label="ListModel selectAll"/>
+        <checkbox onCheck="lb2.getModel().getSelectionControl().setSelectAll(event.checked)" label="GroupsModel selectAll"/>
+        <button onClick="tr.selectAll()" label="Tree comp selectAll()"/>
+        <button onClick="lb.selectAll()" label="Listbox1 comp selectAll()"/>
+        <button onClick="lb2.selectAll()" label="Listbox2 comp selectAll()"/>
+    </hlayout>
+    <tree id="tr" model="${treeModel}" checkmark="true">
+        <treecols>
+            <treecol hflex="min"/>
+            <treecol label="TreeModel"/>
+        </treecols>
+        <template name="model">
+            <treeitem>
+                <treerow>
+                    <treecell />
+                    <treecell label="${each}" />
+                </treerow>
+            </treeitem>
+        </template>
+    </tree>
+    <listbox id="lb" apply="org.zkoss.zktest.test2.B70_ZK_2534" rows="5" checkmark="true">
+        <listhead>
+            <listheader hflex="min"/>
+            <listheader label="ListModel"/>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell />
+                <listcell label="${each}" />
+            </listitem>
+        </template>
+    </listbox>
+    <listbox id="lb2" model="${model3}" checkmark="true" rows="5">
+        <listhead>
+            <listheader hflex="min"/>
+            <listheader label="GroupsModel"/>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell />
+                <listcell label="${each}" />
+            </listitem>
+        </template>
+        <template name="model:group">
+            <listgroup label="${each}"/>
+        </template>
+        <template name="model:groupfoot">
+            <listgroupfoot>
+                <listcell />
+                <listcell label="${each}"/>
+            </listgroupfoot>
+        </template>
+    </listbox>
+</zk>

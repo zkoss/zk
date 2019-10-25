@@ -1630,12 +1630,6 @@ public class Tree extends MeshElement {
 		case TreeDataEvent.MULTIPLE_CHANGED:
 			setMultiple(((TreeSelectableModel) _model).isMultiple());
 			return;
-		case TreeDataEvent.DISABLE_CLIENT_UPDATE:
-			disableClientUpdate(true);
-			return;
-		case TreeDataEvent.ENABLE_CLIENT_UPDATE:
-			disableClientUpdate(false);
-			return;
 		}
 
 		/*

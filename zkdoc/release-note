@@ -33,6 +33,7 @@ ZK 9.0.0
   ZK-4327: Barcodescanner doesn't close camera API or JS scanner object when unloading
   ZK-4400: A disabled Barcodescanner keeps scanning
   ZK-4218: Grid columns onChildAdded removes the scrollbar faker column, cause desync with content
+  ZK-4329: TreeModel setAllSelected not updating the UI
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.
