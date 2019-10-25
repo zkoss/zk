@@ -351,6 +351,8 @@ public class Listbox extends MeshElement {
 	private boolean _shallSyncSelInView = false;
 	//ZK-3982: opened group scrolled out of view
 	private boolean _shallUpdateScrollPos = false;
+	//ZK-4329: avoid scroll into view when selectAll is performed
+	private transient boolean _ignoreSelectedItem;
 
 	static {
 		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
@@ -1021,12 +1023,14 @@ public class Listbox extends MeshElement {
 			} else {
 				if (item.getIndex() < _jsel || _jsel < 0) {
 					_jsel = item.getIndex();
-					// ZK-866
-					// update the change of selected index
-					if (inSelectMold()) {
-						smartUpdate("selectedIndex", _jsel);
-					} else if (item != null)
-						smartUpdate("selectedItem", item);
+					if (!_ignoreSelectedItem) {
+						// ZK-866
+						// update the change of selected index
+						if (inSelectMold()) {
+							smartUpdate("selectedIndex", _jsel);
+						} else if (item != null)
+							smartUpdate("selectedItem", item);
+					}
 				}
 				if (!item.isDisabled()) { // Bug ZK-1715: not select item if disabled.
 					item.setSelectedDirectly(true);
@@ -2684,9 +2688,9 @@ public class Listbox extends MeshElement {
 		} else if (type == ListDataEvent.MULTIPLE_CHANGED) {
 			setMultiple(((Selectable) _model).isMultiple());
 		} else if (type == ListDataEvent.DISABLE_CLIENT_UPDATE) {
-			disableClientUpdate(true);
+			_ignoreSelectedItem = true;
 		} else if (type == ListDataEvent.ENABLE_CLIENT_UPDATE) {
-			disableClientUpdate(false);
+			_ignoreSelectedItem = false;
 		} else {
 			if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
 					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))

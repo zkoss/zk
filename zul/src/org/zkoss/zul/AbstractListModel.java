@@ -227,9 +227,9 @@ public abstract class AbstractListModel<E>
 	 * @since 8.0.0
 	 */
 	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
-		private AbstractListModel model;
+		private AbstractListModel<E> model;
 
-		public DefaultSelectionControl(AbstractListModel model) {
+		public DefaultSelectionControl(AbstractListModel<E> model) {
 			this.model = model;
 		}
 
@@ -239,22 +239,20 @@ public abstract class AbstractListModel<E>
 
 		public void setSelectAll(boolean selectAll) {
 			if (selectAll) {
-				List all = new LinkedList();
+				List<E> all = new LinkedList<>();
 				for (int i = 0, j = model.getSize(); i < j; i++) {
-					E o = (E) model.getElementAt(i);
+					E o = model.getElementAt(i);
 					if (isSelectable(o)) // check whether it can be selectable or not
 						all.add(o);
 				}
 
 				// avoid scroll into view at client side.
 				model.fireEvent(ListDataEvent.DISABLE_CLIENT_UPDATE, -1, -1);
-
-				if (model instanceof AbstractListModel)
-					try {
-						((Selectable) model).setSelection(all);
-					} finally {
-						model.fireEvent(ListDataEvent.ENABLE_CLIENT_UPDATE, -1, -1);
-					}
+				try {
+					((Selectable<E>) model).setSelection(all);
+				} finally {
+					model.fireEvent(ListDataEvent.ENABLE_CLIENT_UPDATE, -1, -1);
+				}
 			} else {
 				((Selectable) model).clearSelection();
 			}
@@ -262,7 +260,7 @@ public abstract class AbstractListModel<E>
 
 		public boolean isSelectAll() {
 			for (int i = 0, j = model.getSize(); i < j; i++) {
-				E o = (E) model.getElementAt(i);
+				E o = model.getElementAt(i);
 				if (isSelectable(o) && !((Selectable) model).isSelected(o))
 					return false;
 			}

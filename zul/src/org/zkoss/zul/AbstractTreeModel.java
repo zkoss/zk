@@ -103,7 +103,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 				invalidatePageCount();
 			}
 		});
-		_ctrl = new DefaultSelectionControl(this);
+		_ctrl = new DefaultSelectionControl<>(this);
 	}
 
 	private void updatePath(TreeDataEvent event) {
@@ -901,9 +901,9 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 	 * @since 8.0.0
 	 */
 	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
-		private AbstractTreeModel model;
+		private AbstractTreeModel<E> model;
 
-		public DefaultSelectionControl(AbstractTreeModel model) {
+		public DefaultSelectionControl(AbstractTreeModel<E> model) {
 			this.model = model;
 		}
 
@@ -913,22 +913,19 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 
 		public void setSelectAll(boolean selectAll) {
 			if (selectAll) {
-				List all = new LinkedList();
+				List<E> all = new LinkedList<>();
 				List<E> allNodes = model.getAllNodes();
 				for (E o : allNodes) {
 					if (isSelectable(o)) // check whether it can be selectable or not
 						all.add(o);
 				}
-
 				// avoid scroll into view at client side.
 				model.fireEvent(TreeDataEvent.DISABLE_CLIENT_UPDATE, null, -1, -1);
-
-				if (model instanceof AbstractTreeModel)
-					try {
-						((Selectable) model).setSelection(all);
-					} finally {
-						model.fireEvent(TreeDataEvent.ENABLE_CLIENT_UPDATE, null, -1, -1);
-					}
+				try {
+					((Selectable<E>) model).setSelection(all);
+				} finally {
+					model.fireEvent(TreeDataEvent.ENABLE_CLIENT_UPDATE, null, -1, -1);
+				}
 			} else {
 				((Selectable) model).clearSelection();
 			}

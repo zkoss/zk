@@ -58,7 +58,7 @@ public abstract class AbstractGroupsModel<D, H, F, E>
 
 	protected AbstractGroupsModel() {
 		_selection = newEmptySelection();
-		_ctrl = new DefaultSelectionControl(this);
+		_ctrl = new DefaultSelectionControl<>(this);
 	}
 
 	/** Fires a {@link GroupsDataEvent} for all registered listener
@@ -237,9 +237,9 @@ public abstract class AbstractGroupsModel<D, H, F, E>
 	 * @since 8.0.0
 	 */
 	public static class DefaultSelectionControl<E> implements SelectionControl<E> {
-		private AbstractGroupsModel model;
+		private AbstractGroupsModel<?, ?, ?, E> model;
 
-		public DefaultSelectionControl(AbstractGroupsModel model) {
+		public DefaultSelectionControl(AbstractGroupsModel<?, ?, ?, E> model) {
 			this.model = model;
 		}
 
@@ -250,24 +250,24 @@ public abstract class AbstractGroupsModel<D, H, F, E>
 		public void setSelectAll(boolean selectAll) {
 			if (selectAll) {
 				boolean isGroupSelectable = model.isGroupSelectable();
-				List all = new LinkedList();
+				List<E> all = new LinkedList<>();
 				for (int i = 0, j = model.getGroupCount(); i < j; i++) {
 					if (isGroupSelectable) {
 						Object group = model.getGroup(i);
 						if (isSelectable((E) group)) {
-							all.add(group);
+							all.add((E) group);
 						}
 						for (int childIndex = 0, childSize = model
 								.getChildCount(i); childIndex < childSize; childIndex++) {
 							Object child = model.getChild(i, childIndex);
 							if (isSelectable((E) child)) {
-								all.add(child);
+								all.add((E) child);
 							}
 						}
 						if (model.hasGroupfoot(i)) {
 							group = model.getGroupfoot(i);
 							if (isSelectable((E) group)) {
-								all.add(group);
+								all.add((E) group);
 							}
 						}
 					} else {
@@ -275,7 +275,7 @@ public abstract class AbstractGroupsModel<D, H, F, E>
 								.getChildCount(i); childIndex < childSize; childIndex++) {
 							Object child = model.getChild(i, childIndex);
 							if (isSelectable((E) child)) {
-								all.add(child);
+								all.add((E) child);
 							}
 						}
 					}
@@ -283,13 +283,11 @@ public abstract class AbstractGroupsModel<D, H, F, E>
 
 				// avoid scroll into view at client side.
 				model.fireEvent(GroupsDataEvent.DISABLE_CLIENT_UPDATE, -1, -1, -1);
-
-				if (model instanceof AbstractGroupsModel)
-					try {
-						((Selectable) model).setSelection(all);
-					} finally {
-						model.fireEvent(GroupsDataEvent.ENABLE_CLIENT_UPDATE, -1, -1, -1);
-					}
+				try {
+					((Selectable<E>) model).setSelection(all);
+				} finally {
+					model.fireEvent(GroupsDataEvent.ENABLE_CLIENT_UPDATE, -1, -1, -1);
+				}
 			} else {
 				((Selectable) model).clearSelection();
 			}
