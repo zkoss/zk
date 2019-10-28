@@ -105,7 +105,7 @@ zkbind.$ = function (n, opts) {
 				dpr = window.devicePixelRatio;
 			// 16 is the length of string MATCHMEDIAVALUE_PREFIX in BinderCtrl.java
 			var ci = [new Date().getTimezoneOffset(), screen.width, screen.height, screen.colorDepth, jq.innerWidth(),
-					jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, event.matches, value.substring(16)];
+					jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient, zk.mm.tz.guess(), event.matches, value.substring(16)];
 			// $ZKCLIENTINFO$ refers to CLIENT_INFO string in BinderCtrl.java
 			binder.command(value, {'$ZKCLIENTINFO$': ci});
 			if (!cookies.$contains(value)) cookies.push(value);

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4334.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 28 11:18:55 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void printClientInfo(ClientInfoEvent event) {
+        tz.value = event.getTimeZone().toString();
+        zid.value = TimeZone.getTimeZone(event.getZoneId()).toString();
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        You can see timezone and zoneid, which timezone is GMT based info and zoneid is geographical based info.
+    </label>
+    <div onClientInfo="printClientInfo(event)">
+        timezone = <label id="tz"/>
+        <separator/>
+        zoneid = <label id="zid"/>
+    </div>
+</zk>

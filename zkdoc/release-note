@@ -2,6 +2,7 @@
 ZK 8.6.0.2.1-SAP
 Aug 20, 2020
 * Features
+  ZK-4334: provide the localized timezone ID in the onClientInfo event
 
 * Bugs
 
