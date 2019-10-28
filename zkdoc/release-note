@@ -22,6 +22,7 @@ ZK 9.0.0
   ZK-4386: Provide a anchronav component
   ZK-4379: Provide a Loadingbar utility
   ZK-4395: Provide a pdfviewer component
+  ZK-4334: provide the localized timezone ID in the onClientInfo event
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing
