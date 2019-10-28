@@ -1332,7 +1332,9 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 
 		var clientInfo = [new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient];
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
+			zk.mm.tz.guess()
+		];
 
 		// ZK-3181: only send when value changed
 		var oldClientInfo = zAu._clientInfo;

@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -43,6 +44,7 @@ public class ClientInfoEvent extends Event {
 	private final double _dpr;
 	private final String _orient, _media;
 	private final boolean _mediaMatched;
+	private final ZoneId _zoneId;
 
 	/** Converts an AU request to a client-info event.
 	 * @since 5.0.0
@@ -51,22 +53,25 @@ public class ClientInfoEvent extends Event {
 		final Map<String, Object> data = request.getData();
 		//Note: ClientInfoEvent is a broadcast event
 		List inf = (List) data.get("");
-		// ZK-3133 have to add inf 10, 11 if it's from the original onClientEvent not from match media command
-		if (inf.size() == 10) {
-			inf.add(false);
-			inf.add(null);
-		}
 		return new ClientInfoEvent(request.getCommand(), getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
-				getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7), getDouble(inf, 8), (String) inf.get(9),
-				(Boolean) inf.get(10), (String) inf.get(11));
+				getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7), getDouble(inf, 8), getString(inf, 9),
+				getString(inf, 10), getBoolean(inf, 11), getString(inf, 12));
 	}
 
 	private static final int getInt(List inf, int j) {
-		return ((Integer) inf.get(j)).intValue();
+		return j < inf.size() ? (Integer) inf.get(j) : 0;
 	}
 
 	private static final double getDouble(List inf, int j) {
-		return Double.parseDouble((String) inf.get(j));
+		return j < inf.size() ? Double.parseDouble((String) inf.get(j)) : 0;
+	}
+
+	private static final String getString(List inf, int j) {
+		return j < inf.size() ? String.valueOf(inf.get(j)) : "";
+	}
+
+	private static final boolean getBoolean(List inf, int j) {
+		return j < inf.size() && (Boolean) inf.get(j);
 	}
 
 	/** Constructs an event to hold the client-info.
@@ -82,9 +87,10 @@ public class ClientInfoEvent extends Event {
 	 * @param dty the desktop's the top offset
 	 * @param dpr the device's devicePixelRatio
 	 * @param orient the device's orientation
+	 * @param zoneId the client's zone id
 	 */
 	public ClientInfoEvent(String name, int timeZoneOfs, int scrnwd, int scrnhgh, int colorDepth, int dtwd, int dthgh,
-			int dtx, int dty, double dpr, String orient, boolean mediaMatched, String media) {
+			int dtx, int dty, double dpr, String orient, String zoneId, boolean mediaMatched, String media) {
 		super(name, null);
 
 		final StringBuffer sb = new StringBuffer(8).append("GMT");
@@ -104,13 +110,18 @@ public class ClientInfoEvent extends Event {
 		//devicePixelRatio and orientation on tablet device
 		_dpr = dpr;
 		_orient = orient;
+		_zoneId = ZoneId.of(zoneId);
 		//ZK-3133 for matchMedia
 		_mediaMatched = mediaMatched;
 		_media = media;
 	}
 
 	/** Returns the time zone of the client.
+	 * The result is a GMT based time zone without any geographical region info.
+	 * @see #getZoneId()
+	 * @deprecated getZoneId() is preferred since 9.0.0
 	 */
+	@Deprecated
 	public TimeZone getTimeZone() {
 		return _timeZone;
 	}
@@ -230,5 +241,15 @@ public class ClientInfoEvent extends Event {
 	 */
 	public boolean isMediaMatched() {
 		return _mediaMatched;
+	}
+
+	/**
+	 * Returns the time-zone ID of the client.
+	 * Compared with {@link #getTimeZone()}, the geographical region will be
+	 * used as a result.
+	 * @since 9.0.0
+	 */
+	public ZoneId getZoneId() {
+		return _zoneId;
 	}
 }
