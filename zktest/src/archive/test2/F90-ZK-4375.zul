@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4375.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 19 12:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <separator />
+    <stepbar id="sb1" linear="false" onChange="Clients.log(self.activeIndex)" activeIndex="2">
+        <step title="First Step" iconSclass="z-icon-home"/>
+        <step title="Second Step" complete="true" />
+        <step title="Third Step" error="true" />
+    </stepbar>
+    <separator />
+    <button label="changeWrappedLabels" onClick="sb1.setWrappedLabels(!sb1.wrappedLabels)"/>
+    <button label="changeLinear" onClick="sb1.setLinear(!sb1.linear)"/>
+    <button label="back" onClick="sb1.back()"/>
+    <button label="next" onClick="sb1.next()"/>
+    <button label="getActiveIndex" onClick="Clients.log(sb1.activeIndex)" />
+    <zscript><![CDATA[
+        import org.zkoss.zkmax.zul.*;
+		ListModelList myModel = new ListModelList();
+		myModel.add("Step1");
+		myModel.add("Step2");
+		myModel.add("Step3");
+		StepModel smodel = new DefaultStepModel(myModel);
+		]]>
+    </zscript>
+    <stepbar id="sb2" model="${smodel}" wrappedLabels="true" onChange="Clients.log(self.activeIndex)">
+        <template name="model">
+            <step title="${each}"></step>
+        </template>
+    </stepbar>
+    <button label="changeLabelWrapped" onClick="sb2.setWrappedLabels(!sb2.wrappedLabels)"/>
+    <button label="changeLinear" onClick="sb2.setLinear(!sb2.linear)"/>
+    <button label="back" onClick="smodel.back()"/>
+    <button label="next" onClick="smodel.next()"/>
+    <separator />
+    <div apply="org.zkoss.zktest.test2.F90_ZK_4375Composer">
+        <stepbar id="stepbar">
+            <template name="model">
+                <step title="Step ${each}" iconSclass="z-icon-edit">
+                </step>
+            </template>
+        </stepbar>
+        <button id="modelAdd" label="modelAdd"/>
+        <button id="modelRemove" label="modelRemove"/>
+        <button id="modelBack" label="modelBack"/>
+        <button id="modelNext" label="modelNext"/>
+        <button id="modelIndex2" label="modelIndex2"/>
+        <button id="modelGetIndex" label="modelGetIndex"/>
+        <separator/>
+        <button id="wrappedLabels" label="wrappedLabels"/>
+        <button id="linear" label="linear"/>
+        <separator/>
+        <button id="back" label="back"/>
+        <button id="next" label="next"/>
+        <button id="getActiveIndex" label="getActiveIndex"/>
+        <label value="setActiveIndex: "/>
+        <button id="setActiveIndex0" label="0"/>
+        <button id="setActiveIndex1" label="1"/>
+        <button id="setActiveIndex2" label="2"/>
+        <separator/>
+        <label value="setComplete: "/>
+        <button id="setComplete1" label="0"/>
+        <button id="setComplete2" label="1"/>
+        <button id="setComplete3" label="2"/>
+        <label value="setError: "/>
+        <button id="setError1" label="0"/>
+        <button id="setError2" label="1"/>
+        <button id="setError3" label="2"/>
+        <separator/>
+        <label value="isComplete: "/>
+        <button id="isComplete1" label="0"/>
+        <button id="isComplete2" label="1"/>
+        <button id="isComplete3" label="2"/>
+        <label value="Answer: "/>
+        <label id="answer"/>
+        <separator/>
+        <button id="addStep" label="addStep"/>
+        <button id="removeStep" label="removeStep"/>
+        <button id="detach" label="detach"/>
+    </div>
+</zk>

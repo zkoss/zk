@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4375.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 19 12:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F90_ZK_4375VM')">
+        <stepbar model="@load(vm.model)" wrappedLabels="@load(vm.wrappedLabels)">
+            <template name="model">
+                <step title="@load(each.title)" complete="@load(each.complete)" error="@load(each.error)" />
+            </template>
+        </stepbar>
+        <button label="back" onClick="@command('back')"/>
+        <button label="next" onClick="@command('next')"/>
+        <button label="changeWrappedLabels" onClick="@command('changeWrappedLabels')"/>
+        <button label="changeAllTitle" onClick="@command('changeAllTitle')"/>
+    </div>
+</zk>
