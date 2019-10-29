@@ -57,7 +57,9 @@ function (out, skipper) {
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div>');
-	} 
+	} else {
+		out.push('<div id="', uuid, '-drag-button" class="', this.$s('drag-button'), " z-icon-minus", '"></div>');
+	}
 	
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'), '"');
 	if (!this._open) 

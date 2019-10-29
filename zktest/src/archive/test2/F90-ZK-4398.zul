@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4398.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Aug 06 15:33:58 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label multiline="true">
+		1.Try these buttons, make sure portalchildren setTitle() work fine and the portalchildren frame display well when the title is set.
+		2.Try drag and drop the panels inside, it should work as a normal portallayout.
+		3.TogglecounterVisible then drag and drop the panels in/out, the counter number should be same as the number of panels inside.
+		4.Test in all themes.
+	</label>
+	<button label="setTitle(Portalchildren1)" onClick='pc1.setTitle("Portalchildren1")'></button>
+	<button label="setTitle encode" onClick='pc1.setTitle("&lt;b&gt;Portalchildren1&lt;/b&gt;")'></button>
+	<button label="clearTitle" onClick='pc1.setTitle("")'></button>
+	<button label="toggleCounterVisible" onClick='pc1.setCounterVisible(!pc1.isCounterVisible())'></button>
+	<button label="horizontal" onClick='pl.setOrient("horizontal")'></button>
+	<button label="vertical" onClick='pl.setOrient("vertical")'></button>
+	<portallayout id="pl">
+		<portalchildren id="pc1" title="Portalchildren1">
+			<panel title="Panel1" border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren id="pc2" title="Portalchildren2">
+			<panel title="Panel2" border="normal" width="300px" height="200px">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren id="pc3" title="Portalchildren3" >
+			<panel title="Panel3" border="normal" width="300px" height="200px">
+				<panelchildren>3</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren id="pc4" title="Portalchildren4" counterVisible="true">
+			<panel title="Panel4" width="300px" height="200px">
+				<panelchildren>4</panelchildren>
+			</panel>
+			<panel border="normal">
+				<panelchildren>5</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
