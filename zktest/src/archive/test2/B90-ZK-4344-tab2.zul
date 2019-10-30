@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4344-tab2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 30 12:49:33 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B90_ZK_4344Tab2VM')" >
+        <div>Tab2</div>
+        <label value="@load(('Selected: ' += vm.selectedTab.label))" />
+
+        <tabbox id="tbx" model="@load(vm.tabInfos)" selectedTab="@bind(vm.selectedTab)"
+                style="border-width:0;" height="300px" width="300px">
+            <tabs id="tabs">
+                <template name="model:tab">
+                    <tab label="@load(each.label)" closable="true" onClose="@command('closeTab', page=each)"/>
+                </template>
+            </tabs>
+            <tabpanels style="border:0">
+                <template name="model:tabpanel">
+                    <tabpanel vflex="1" hflex="1" style="overflow:auto;border-width:0" >
+                        <include src="@load(each.contentSrc)" vflex="1" />
+                    </tabpanel>
+                </template>
+            </tabpanels>
+        </tabbox>
+    </div>
+</zk>
