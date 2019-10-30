@@ -434,9 +434,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 
 		//Request 1537962: better responsive
-		if (bOpen && (keyCode == 13 || keyCode == 27)) { //ENTER or ESC
+		if (bOpen && (keyCode == 13 || keyCode == 27 || keyCode == 32)) { //ENTER or ESC or SPACE
 			if (keyCode == 13) this.enterPressed_(evt);
-			else this.escPressed_(evt);
+			else if (keyCode == 27) this.escPressed_(evt);
 			return;
 		}
 

@@ -38,6 +38,7 @@ ZK 9.0.0
   ZK-4218: Grid columns onChildAdded removes the scrollbar faker column, cause desync with content
   ZK-4329: TreeModel setAllSelected not updating the UI
   ZK-4340: background component creation resulting in NPE
+  ZK-4341: space key handed down to calendar while typing a date
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.
