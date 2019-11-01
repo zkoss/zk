@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4377-3.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Oct 31 19:07:27 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Try these buttons for simple mvvm test:
+	</label>
+	<div viewModel="@init('org.zkoss.zktest.test2.F90_ZK_4377_3VM') @id('vm')" width="100%" height="100%">
+		<button label="add item" onClick="@command('add')" />
+		<button label="remove item" onClick="@command('remove')"/>
+		<button label="change item" onClick="@command('change')"/>
+		<button label="clear" onClick="@command('clear')"/>
+		<linelayout id="lineLayout" model="@init(vm.data)">
+			<template name="model">
+				<lineitem>
+					<label value="@load(each)"></label>
+					<button label="@load(each)"></button>
+				</lineitem>
+			</template>
+		</linelayout>
+	</div>
+</zk>

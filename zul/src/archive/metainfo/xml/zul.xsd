@@ -714,6 +714,8 @@
 			<xs:element ref="inputgroup" />
 			<xs:element ref="intbox" />
 			<xs:element ref="label" />
+			<xs:element ref="linelayout" />
+			<xs:element ref="lineitem" />
 			<xs:element ref="listbox" />
 			<xs:element ref="longbox" />
 			<xs:element ref="menubar" />
@@ -827,6 +829,8 @@
 				<xs:element ref="inputgroup" />
 				<xs:element ref="intbox" />
 				<xs:element ref="label" />
+				<xs:element ref="linelayout" />
+				<xs:element ref="lineitem" />
 				<xs:element ref="listbox" />
 				<xs:element ref="longbox" />
 				<xs:element ref="menubar" />
@@ -2192,6 +2196,33 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="multiline" type="booleanType" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- linelayout -->
+	<xs:element name="linelayout" type="linelayoutType" />
+	<xs:complexType name="linelayoutType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="orient" type="xs:string" use="optional" />
+		<xs:attribute name="lineStyle" type="xs:string" use="optional" />
+		<xs:attribute name="firstScale" type="intType" use="optional" />
+		<xs:attribute name="lastScale" type="intType" use="optional" />
+		<xs:attribute name="model" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- lineitem -->
+	<xs:element name="lineitem" type="lineitemType" />
+	<xs:complexType name="lineitemType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="pointVisible" type="booleanType" use="optional" />
+		<xs:attribute name="pointStyle" type="xs:string" use="optional" />
+		<xs:attribute name="pointImageSrc" type="xs:string" use="optional" />
+		<xs:attribute name="pointImageContent" type="mediaType" use="optional" />
+		<xs:attribute name="pointIconSclass" type="xs:string" use="optional" />
+		<xs:attribute name="opposite" type="booleanType" use="optional" />
+		<xs:attribute name="frontSpace" type="xs:string" use="optional" />
+		<xs:attribute name="backSpace" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- listbox -->
