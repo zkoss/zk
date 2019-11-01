@@ -22,8 +22,10 @@ import java.util.List;
 
 import org.zkoss.util.UploadUtils;
 import org.zkoss.util.media.Media;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.UiException;
 
 /**
  * Represents that user has uploaded one or several files from
@@ -65,14 +67,18 @@ public class UploadEvent extends Event {
 	 *
 	 * @param name event name
 	 * @param component component that triggers the upload event
+	 * @param request An AuRequest object
 	 * @return upload event
 	 * @since 8.6.0
 	 */
-	public static UploadEvent getLatestUploadEvent(String name, Component component) {
+	public static UploadEvent getLatestUploadEvent(String name, Component component, AuRequest request) {
 		Desktop desktop = component.getDesktop();
 		String uuid = component.getUuid();
-		final List<Media> result = cast((List) desktop.getAttribute(uuid));
-		desktop.removeAttribute(uuid);
+		String sid = String.valueOf(request.getData().getOrDefault("sid", ""));
+		String uploadInfoKey = uuid + "." + sid;
+		final List<Media> result = cast((List) desktop.removeAttribute(uploadInfoKey));
+		if (result == null)
+			throw new UiException("Upload content not found: " + uploadInfoKey);
 		return new UploadEvent(name, desktop.getComponentByUuid(uuid), UploadUtils.parseResult(result));
 	}
 }

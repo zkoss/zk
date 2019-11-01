@@ -93,25 +93,20 @@ public class AuDropUploader implements AuExtension {
 		}
 
 		final Map<String, String> attrs = new HashMap<String, String>();
-		String alert = null, uuid = null, nextURI = null;
+		String alert = null, uuid = null, dtid = null, nextURI = null;
 		Desktop desktop = null;
 		try {
-			uuid = request.getParameter("uuid");
-
-			if (uuid == null || uuid.length() == 0) {
+			if (Strings.isEmpty(uuid = fetchParameter(request, "uuid", attrs)))
 				alert = "uuid is required!";
-			} else {
-				attrs.put("uuid", uuid);
+			if (Strings.isEmpty(dtid = fetchParameter(request, "dtid", attrs)))
+				alert = "dtid is required!";
+			fetchParameter(request, "sid", attrs);
 
-				final String dtid = request.getParameter("dtid");
-				if (dtid == null || dtid.length() == 0) {
-					alert = "dtid is required!";
-				} else {
-					desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
-					final Map<String, Object> params = parseRequest(request, desktop, "");
-					nextURI = (String) params.get("nextURI");
-					processItems(desktop, params, attrs);
-				}
+			if (alert == null) {
+				desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
+				final Map<String, Object> params = parseRequest(request, desktop, "");
+				nextURI = (String) params.get("nextURI");
+				processItems(desktop, params, attrs);
 			}
 		} catch (Throwable ex) {
 			//TODO how to handle exception occur by xhr.abort()?
@@ -146,6 +141,13 @@ public class AuDropUploader implements AuExtension {
 		}
 		if (log.isTraceEnabled())
 			log.trace(Objects.toString(attrs));
+	}
+
+	private String fetchParameter(HttpServletRequest request, String key, Map<String, String> attrs) {
+		String value = request.getParameter(key);
+		if (!Strings.isEmpty(value))
+			attrs.put(key, value);
+		return value;
 	}
 
 	/** Handles the exception that was thrown when uploading files,
@@ -184,10 +186,11 @@ public class AuDropUploader implements AuExtension {
 	private static final void processItems(Desktop desktop, Map<String, Object> params, Map<String, String> attrs)
 			throws IOException {
 		String uuid = attrs.get("uuid");
-		List<Media> meds = (List<Media>) desktop.getAttribute(uuid);
+		String uploadInfoKey = uuid + "." + attrs.getOrDefault("sid", "");
+		List<Media> meds = (List<Media>) desktop.getAttribute(uploadInfoKey);
 		if (meds == null) {
 			meds = new LinkedList<Media>();
-			desktop.setAttribute(uuid, meds);
+			desktop.setAttribute(uploadInfoKey, meds);
 		}
 
 		final boolean alwaysNative = Boolean.TRUE.equals(params.get("native"));
