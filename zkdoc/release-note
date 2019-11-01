@@ -28,6 +28,7 @@ ZK 9.0.0
   ZK-4377: Provide a Linelayout component
   ZK-4382: Provide a Coachmark component
   ZK-4392: Provide a cascader component
+  ZK-4390: Embed zul pages by script tag
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="btn">Click it, and you should see "Foo0 Bar0" messages twice in the zk log area.</button>
+<div id="aaa">
+    Loading...
+</div>
+<script defer src="http://localhost:8080/zktest/test2/F90-ZK-4390.zul?zk.domId=aaa"></script>
+<script defer>
+			window.addEventListener('load', function(){
+				var init = false;
+				jq('#btn').on('click', function() {
+					if (!init) {
+						zk.afterMount(function () {
+							zkbind.$('$win').after('toClient', function (msg) {
+								if (msg)
+									zk.log(msg);
+							});
+						});
+						init = true;
+					}
+					send(0);send(0);
+				});
+				function send(count) {
+					if (!count) {
+						zkbind.$('$win').command('toServer', {foo: {foo: 'Foo0'}, bar: {bar: 'Bar0'}});
+					} else {
+						for (var i = 0; i < count; i++) {
+							zkbind.$('$win').command('toServer', {foo: {foo: 'Foo' + i}, bar: {bar: 'Bar' + i}}, {duplicateIgnore: {'toServer': true}});
+						}
+					}
+				}
+			});
+</script>
+<div id="bbb">
+    Loading...
+</div>
+<script defer src="http://localhost:8080/zktest/test2/F90-ZK-4390-1.zul?zk.domId=bbb"></script>
+</body>
+</html>

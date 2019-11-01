@@ -788,4 +788,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<!--<name>org.zkoss.web.preferred.2DigitYearStart</name>-->
 		<!--<value>1950</value>-->
 	<!--</library-property>-->
+	<!-- for ZK-4390 -->
+<!--	<library-property>-->
+<!--		<name>org.zkoss.web.servlet.http.embedded.AllowOrigin</name>-->
+<!--		<value>http://localhost:9000</value> &lt;!&ndash; change to another testing container&ndash;&gt;-->
+<!--	</library-property>-->
+<!--	<library-property>-->
+<!--		<name>org.zkoss.web.servlet.http.embebed.TargetURL</name>-->
+<!--		<value>http://localhost:8080/zktest</value>-->
+<!--	</library-property>-->
 </zk>

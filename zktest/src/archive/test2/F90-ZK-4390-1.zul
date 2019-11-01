@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4390.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 24 12:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <button label="test ZK 2nd page AU" onClick='Clients.log("ZK AU @2nd ZUL")'/>
+</zk>
