@@ -677,6 +677,7 @@
 			<xs:element ref="chart" />
 			<xs:element ref="charts" />
 			<xs:element ref="checkbox" />
+			<xs:element ref="coachmark" />
 			<xs:element ref="choose" />
 			<xs:element ref="chosenbox" />
 			<xs:element ref="ckeditor" />
@@ -792,6 +793,7 @@
 				<xs:element ref="chart" />
 				<xs:element ref="charts" />
 				<xs:element ref="checkbox" />
+				<xs:element ref="coachmark" />
 				<xs:element ref="choose" />
 				<xs:element ref="chosenbox" />
 				<xs:element ref="ckeditor" />
@@ -1434,6 +1436,17 @@
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
 		<xs:attribute name="inplace" type="booleanType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
+	</xs:complexType>
+	<!-- coachmark -->
+	<xs:element name="coachmark" type="coachmarkType" />
+	<xs:complexType name="coachmarkType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="target" type="xs:string" use="optional" />
+		<xs:attribute name="position" type="coachmarkPositionAttrType" use="optional" />
+		<xs:attribute name="next" type="xs:string" use="optional" />
+		<xs:attribute name="onTargetClick" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- colorbox -->
 	<xs:element name="colorbox" type="colorboxType" />
@@ -3666,6 +3679,29 @@
 					<xs:enumeration value="bottom_right" />
 					<xs:enumeration value="at_pointer" />
 					<xs:enumeration value="after_pointer" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="coachmarkPositionAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="before_start" />
+					<xs:enumeration value="before_center" />
+					<xs:enumeration value="before_end" />
+					<xs:enumeration value="after_start" />
+					<xs:enumeration value="after_center" />
+					<xs:enumeration value="after_end" />
+					<xs:enumeration value="start_before" />
+					<xs:enumeration value="start_center" />
+					<xs:enumeration value="start_after" />
+					<xs:enumeration value="end_before" />
+					<xs:enumeration value="end_center" />
+					<xs:enumeration value="end_after" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
