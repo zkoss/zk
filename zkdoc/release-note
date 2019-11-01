@@ -27,6 +27,7 @@ ZK 9.0.0
   ZK-4398: Provide PortalChildren title and frame design
   ZK-4377: Provide a Linelayout component
   ZK-4382: Provide a Coachmark component
+  ZK-4392: Provide a cascader component
 
 * Bugs
   ZK-4227: Combobox is flickering when resizing

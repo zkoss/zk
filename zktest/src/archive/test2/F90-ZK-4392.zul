@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4392.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 7 12:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+	    import org.zkoss.zktest.test2.*;
+		TreeModel m1 = new F90_ZK_4392Model("A");
+		TreeModel m2 = new F90_ZK_4392BeanModel("bean");
+	]]></zscript>
+    <label>
+        Click and test cascader functions.
+    </label>
+    <separator />
+    <cascader id="c1" model="${m1}" width="300px">
+        <template name="model">
+            ${each}
+        </template>
+    </cascader>
+    <separator />
+    <button label="addSelection A-2-2" onClick="m1.addToSelection(m1.getChild(new int[]{1,1}));"/>
+    <button label="removeSelection" onClick="m1.clearSelection();"/>
+    <button label="toggleDisabled" onClick="c1.setDisabled(!c1.isDisabled());"/>
+    <button label="togglePlaceholder" onClick='if (c1.placeholder == null || c1.placeholder.length() == 0) c1.setPlaceholder("empty"); else c1.setPlaceholder("");'/>
+    <separator />
+    <cascader model="${m2}">
+        <template name="model">
+            ${each.data.name}
+        </template>
+    </cascader>
+    <apply templateURI="/test2/include/themes.zul" />
+</zk>
