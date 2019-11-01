@@ -324,7 +324,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zk.ui.ext.D
 				_auxinf.checkmark = true;
 			Events.postEvent(evt);
 		} else if (Events.ON_UPLOAD.equals(cmd)) {
-			Events.postEvent(UploadEvent.getLatestUploadEvent(cmd, this));
+			Events.postEvent(UploadEvent.getLatestUploadEvent(cmd, this, request));
 		} else
 			super.service(request, everError);
 	}

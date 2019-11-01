@@ -316,7 +316,7 @@ public class Button extends LabelImageElement implements org.zkoss.zk.ui.ext.Dis
 	public void service(AuRequest request, boolean everError) {
 		String cmd = request.getCommand();
 		if (Events.ON_UPLOAD.equals(cmd)) {
-			Events.postEvent(UploadEvent.getLatestUploadEvent(cmd, this));
+			Events.postEvent(UploadEvent.getLatestUploadEvent(cmd, this, request));
 		} else
 			super.service(request, everError);
 	}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4318.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 31 15:03:09 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Limit network upload rate (using DevTools to throttle)
+        2. Start several concurrent uploads quickly
+        3. See if "Uploaded: null" is appeared
+    </label>
+    <zscript><![CDATA[
+    void printMediaDebug(org.zkoss.util.media.Media[] medias) {
+        int size = medias != null ? medias.length : 0;
+        for (int i = 0; i < size; i++) {
+            Clients.log("Uploaded: " + medias[i]);
+        }
+        if (size == 0) {
+            Clients.log("Uploaded: null");
+        }
+    }
+    ]]>
+    </zscript>
+    <vlayout>
+        <button label="upload" upload="true" onUpload='printMediaDebug(event.getMedias());'/>
+
+        <dropupload detection="none" width="100px" height="100px" content="drag file here to upload"
+                    onUpload='printMediaDebug(event.getMedias());'/>
+
+        <menubar>
+            <menuitem label="upload" upload="true" onUpload='printMediaDebug(event.getMedias());'/>
+        </menubar>
+
+        <signature width="400px" height="200px" onSave='printMediaDebug(event.getMedias());'/>
+
+        <cropper src="/test2/img/sun.jpg" onCrop='printMediaDebug(event.getMedias());' />
+
+        <camera id="cam1" audio="false" width="200px" height="200px" onSnapshotUpload='printMediaDebug(event.getMedias());'/>
+        <button label="take snapshot" onClick="cam1.snapshot()"/>
+    </vlayout>
+</zk>

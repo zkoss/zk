@@ -42,6 +42,7 @@ ZK 9.0.0
   ZK-4340: background component creation resulting in NPE
   ZK-4341: space key handed down to calendar while typing a date
   ZK-4344: Nested tabbox doesn't select the expected tab under client render-on-demand
+  ZK-4318: simultaneious fileupload media lost
 
 * Upgrade Notes
   + The Java binary-compatible level is Java 8 since ZK 9.
