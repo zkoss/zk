@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4403.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Nov 4 19:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        click button, and the layout should not be broken.
+    </label>
+    <stepbar id="sb">
+        <template name="model">
+            <step title="${each}"/>
+        </template>
+    </stepbar>
+    <zscript><![CDATA[
+		StepModel model = new DefaultStepModel();
+		model.add("Step 1");
+		model.add("Step 2");
+		model.add("Step 3");
+		sb.setModel(model);
+	 ]]></zscript>
+    <button onClick='model.add(2, "Step 2.1")' label="insert new step"/>
+</zk>
