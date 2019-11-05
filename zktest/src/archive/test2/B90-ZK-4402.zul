@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4402.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Nov 4 19:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        The stepbar should render properly.
+    </label>
+    <stepbar id="sb"/>
+    <zscript><![CDATA[
+        StepModel model = new DefaultStepModel();
+        model.add("Step 1");
+        model.add("Step 2");
+        sb.setModel(model);
+     ]]></zscript>
+</zk>
