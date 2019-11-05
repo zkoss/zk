@@ -556,7 +556,10 @@ zFlex = { //static methods
 		}
 
 		if (!isAllMin) {
-			fContainer.style.display = 'flex';
+			var displayFlexStr = 'flex';
+			if (zk.ie11_)
+				displayFlexStr = '-ms-flexbox';
+			fContainer.style.display = displayFlexStr;
 			fContainer.style['flex-direction'] = flexD;
 		}
 
