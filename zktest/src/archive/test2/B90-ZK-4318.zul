@@ -16,7 +16,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
     <label multiline="true">
         1. Limit network upload rate (using DevTools to throttle)
         2. Start several concurrent uploads quickly
-        3. See if "Uploaded: null" is appeared
+        3. If "Uploaded: null" is appeared, the bug still exists.
     </label>
     <zscript><![CDATA[
     void printMediaDebug(org.zkoss.util.media.Media[] medias) {
