@@ -41,12 +41,15 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 			<panel title="Panel3" border="normal" width="300px" height="200px">
 				<panelchildren>3</panelchildren>
 			</panel>
+			<panel open="false" border="normal" width="300px" height="200px">
+				<panelchildren>6</panelchildren>
+			</panel>
 		</portalchildren>
 		<portalchildren id="pc4" title="Portalchildren4" counterVisible="true">
 			<panel title="Panel4" width="300px" height="200px">
 				<panelchildren>4</panelchildren>
 			</panel>
-			<panel border="normal">
+			<panel border="normal" width="300px" height="200px">
 				<panelchildren>5</panelchildren>
 			</panel>
 		</portalchildren>

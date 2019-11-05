@@ -38,6 +38,10 @@
 
 	&-drag-button {
 		display: none;
+
+		+ .z-panel-body {
+			height: 100%;
+		}
 	}
 	
 	&-body {
@@ -46,10 +50,6 @@
 		background: @baseBackgroundColor;
 		color: @containerBodyColor;
 		.defaultOverflowZoom();
-		
-		&:first-child {
-			height: 100%;
-		}
 	}
 
 	&-icon {
