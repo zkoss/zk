@@ -246,7 +246,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	setSelectedTab: function (tab) {
 		var selTab = this._selTab;
 		if (selTab != tab) {
-			this._selTab = tab;
+			this._selTab = null; // it will be set in Tab._selTab
 			if (selTab)
 				selTab.setSelected(false);
 			if (tab)
