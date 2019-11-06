@@ -248,7 +248,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened) {
-			if (zk.ie9) // not to use css flex in ie 9, ie 10
+			if (zk.ie) // not to use css flex in ie
 				wgt._cssflex = false;
 			var parent = wgt.parent;
 			if (wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null))

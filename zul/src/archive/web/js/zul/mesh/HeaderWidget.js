@@ -164,7 +164,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			var $n = jq(this.$n()),
 				$faker = jq(this.$n('hdfaker')),
 				w = this.getWidth();
-			if (mesh._cssflex && mesh.isChildrenFlex()) {
+			if (mesh._cssflex && mesh.isChildrenFlex && mesh.isChildrenFlex()) { //skip not MeshWidget
 				if (!this.isVisible()) {
 					$n.css('display', 'none');
 				} else {

@@ -546,7 +546,16 @@ zFlex = { //static methods
 			flex = flexs[!isRow | 0];
 			dim = isRow ? 'height' : 'width';
 			if (flex > 0) {
-				fcc.style[dim] = '100%';
+				var marginSize = 0,
+					jqFcc = jq(fcc);
+				if (isRow)
+					marginSize = jqFcc.outerHeight(true) - jqFcc.outerHeight();
+				else
+					marginSize = jqFcc.outerWidth(true) - jqFcc.outerWidth();
+				var fccDimValue = '100%';
+				if (marginSize > 0) //handle margin issue
+					fccDimValue = 'calc(100% - ' + jq.px0(marginSize) + ')';
+				fcc.style[dim] = fccDimValue;
 				sz[dim] = 'auto';
 				if (fcc != c)
 					c.style[dim] = '100%';
@@ -556,10 +565,7 @@ zFlex = { //static methods
 		}
 
 		if (!isAllMin) {
-			var displayFlexStr = 'flex';
-			if (zk.ie11_)
-				displayFlexStr = '-ms-flexbox';
-			fContainer.style.display = displayFlexStr;
+			fContainer.style.display = 'flex';
 			fContainer.style['flex-direction'] = flexD;
 		}
 
@@ -639,12 +645,19 @@ zFlex = { //static methods
 
 		for (var c; fcc && cwgt;) { // assume fcc <-> cwgt 1-1 mapping
 			c = cwgt.$n();
-			if (c && fcc.contains(c)) {
-				cwgt._flexFixed = true;
-				fccs.push(fcc);
-				cwgts.push(cwgt);
-				if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
-					toColumn = true;
+			if (c) {
+				if (!fContainer.contains(c)) { // skip moved dom (ex.caption)
+					cwgt = cwgt.nextSibling;
+					continue;
+				} else {
+					if (c && fcc.contains(c)) {
+						cwgt._flexFixed = true;
+						fccs.push(fcc);
+						cwgts.push(cwgt);
+						if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
+							toColumn = true;
+					}
+				}
 			}
 			fcc = fcc.nextElementSibling;
 			cwgt = cwgt.nextSibling;
