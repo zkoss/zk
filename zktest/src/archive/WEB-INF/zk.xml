@@ -794,7 +794,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--		<value>http://localhost:9000</value> &lt;!&ndash; change to another testing container&ndash;&gt;-->
 <!--	</library-property>-->
 <!--	<library-property>-->
-<!--		<name>org.zkoss.web.servlet.http.embebed.TargetURL</name>-->
-<!--		<value>http://localhost:8080/zktest</value>-->
+<!--		<name>org.zkoss.web.servlet.http.embedded.TargetURL</name>-->
+<!--		<value>http://localhost:8080/zktest</value> &lt;!&ndash; change to zk app url&ndash;&gt;-->
 <!--	</library-property>-->
 </zk>

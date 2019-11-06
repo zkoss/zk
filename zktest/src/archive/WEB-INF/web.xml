@@ -274,13 +274,4 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<exception-type>org.zkoss.zktest.test2.B86_ZK_3679Exception</exception-type>
 		<location>/test2/B86-ZK-3679-errhandler.zul</location>
 	</error-page>
-	<!-- ZK-4390 -->
-<!--	<filter>-->
-<!--		<filter-name>EmbedCorsFilter</filter-name>-->
-<!--		<filter-class>org.zkoss.zkmax.ui.http.EmbeddedCorsFilter</filter-class>-->
-<!--	</filter>-->
-<!--	<filter-mapping>-->
-<!--		<filter-name>EmbedCorsFilter</filter-name>-->
-<!--		<url-pattern>/*</url-pattern>-->
-<!--	</filter-mapping>-->
 </web-app>
