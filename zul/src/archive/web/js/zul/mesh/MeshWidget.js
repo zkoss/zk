@@ -731,7 +731,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers(zul.mesh.MeshWidget, 'bind_', arguments);
 
 		this._bindDomNode();
-		if (this.frozen)
+		if (this.frozen || zk.ie)
 			this._cssflex = false; //force to use old flex
 		if (this._cssflex && this.isChildrenFlex()) {//css flex
 			this.ehdfaker.style.display = 'none';
