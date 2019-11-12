@@ -498,11 +498,11 @@
 @rangesliderButtonSize: 20px;
 @rangesliderButtonBorderWidth: 2px;
 @rangesliderButtonColor: @colorPrimary;
-@rangesliderButtonHoverColor: #79c8ff;
+@rangesliderButtonHoverColor: @colorPrimaryLight;
 @rangesliderButtonActiveColor: @colorPrimaryDark;
 @rangesliderButtonFocusBorderColor: @colorAccent;
 @rangesliderDisabledTrackColor: @colorGreyLighter;
-@rangesliderDisabledButtonColor: #acddff;
+@rangesliderDisabledButtonColor: lighten(@rangesliderButtonColor, 30%);
 @rangesliderBorderRadius: @baseBorderRadius;
 @rangesliderTooltipBackgroundColor: rgba(0, 0, 0, 0.8);
 @rangesliderDisabledTooltipBackgroundColor: rgba(0, 0, 0, 0.5);
@@ -513,23 +513,22 @@
 // multislider
 @multisliderTrackColor: @colorGreyLight;
 @multisliderShadowColor: rgba(0, 0, 0, 0.2);
+@multisliderButtonSize: 20px;
+@multisliderButtonBorderWidth: 2px;
 @multisliderButtonColor: @colorPrimary;
-@multisliderButtonHoverColor: #79c8ff;
+@multisliderButtonHoverColor: @colorPrimaryLight;
 @multisliderButtonActiveColor: @colorPrimaryDark;
-@multisliderButtonColor2: @colorAccent;
-@multisliderButtonHoverColor2: lighten(@colorAccent, 20%);
-@multisliderButtonActiveColor2: darken(@colorAccent, 10%);
-@multisliderButtonColor3: @colorAccent2;
-@multisliderButtonHoverColor3: lighten(@colorAccent2, 10%);
-@multisliderButtonActiveColor3: darken(@colorAccent2, 20%);
+@multisliderButtonFocusBorderColor: @colorAccent;
+@multisliderButtonColor2: @colorPrimaryLight;
+@multisliderButtonHoverColor2: lighten(@multisliderButtonColor2, 15%);
+@multisliderButtonActiveColor2: darken(@multisliderButtonColor2, 20%);
 @multisliderBorderRadius: @baseBorderRadius;
 @multisliderTooltipBackgroundColor: rgba(0, 0, 0, 0.8);
 @multisliderDisabledTooltipBackgroundColor: rgba(0, 0, 0, 0.5);
 @multisliderInnerSize: 8px;
 @multisliderDisabledTrackColor: @colorGreyLighter;
-@multisliderDisabledButtonColor: #acddff;
-@multisliderDisabledButtonColor2: lighten(@colorAccent, 30%);
-@multisliderDisabledButtonColor3: lighten(@colorAccent2, 20%);
+@multisliderDisabledButtonColor: lighten(@multisliderButtonColor, 30%);
+@multisliderDisabledButtonColor2: lighten(@multisliderButtonColor2, 20%);
 
 // inputgroup
 @inputgroupTextBackgroundColor: #E9ECEF;
