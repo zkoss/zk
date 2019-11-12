@@ -289,10 +289,11 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 				// reset display
 				ehead.style.display = '';
-				var tblWidth = 0;
+				var tblWidth = 0,
+					sizedByContent = wgt.isSizedByContent();
 				for (var i = 0, wd = -1, hwgt = this.firstChild; hwgt; hwgt = hwgt.nextSibling, i++) {
 					var nhwgt = hwgt.$n();
-					if (hwgt._hflex == 'min')
+					if (hwgt._hflex == 'min' || (!hwgt._nhflex && sizedByContent))
 						wd = wds[i];
 					else if (hwgt._width)
 						wd = parseInt(hwgt._width);
