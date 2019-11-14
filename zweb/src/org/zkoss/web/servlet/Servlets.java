@@ -615,6 +615,7 @@ public class Servlets {
 	}
 
 	/** Returns whether the browser is Internet Explorer.
+	 * If true, it also implies {@link #isExplorer7} is true.
 	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
 	 */
 	public static final boolean isExplorer(ServletRequest req) {
@@ -622,6 +623,7 @@ public class Servlets {
 	}
 
 	/** Returns whether the browser is Internet Explorer.
+	 * If true, it also implies {@link #isExplorer7} is true.
 	 *
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
@@ -636,6 +638,24 @@ public class Servlets {
 		//Bug 3107026: in Turkish, "MSIE".toLowerCase(java.util.Locale.ENGLISH) is NOT "msie"
 		userAgent = userAgent.toLowerCase(java.util.Locale.ENGLISH);
 		return (ie || userAgent.indexOf("msie ") >= 0) && userAgent.indexOf("opera") < 0;
+	}
+
+	/** Returns whether the browser is Explorer 7 or later.
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
+	 */
+	public static final boolean isExplorer7(ServletRequest req) {
+		return (req instanceof HttpServletRequest) && isExplorer7(getUserAgent(req));
+	}
+
+	/** Returns whether the browser is Explorer 7 or later.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.1
+	 * @deprecated As of release 6.0.0, replaced with {@link #getBrowser}.
+	 */
+	public static final boolean isExplorer7(String userAgent) {
+		return isBrowser(userAgent, "ie7");
 	}
 
 	/** Returns whether the browser is Gecko based, such as Mozilla, Firefox and Camino

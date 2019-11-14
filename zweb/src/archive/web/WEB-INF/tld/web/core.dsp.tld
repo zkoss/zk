@@ -559,6 +559,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 	<function>
+		<name>isExplorer7</name>
+		<function-class>org.zkoss.web.fn.ServletFns</function-class>
+		<function-signature>
+			boolean isExplorer7()
+		</function-signature>
+		<description>
+			Whether the current request is coming from Internet Explorer 7 or later.
+		</description>
+	</function>
+	<function>
 		<name>isGecko</name>
 		<function-class>org.zkoss.web.fn.ServletFns</function-class>
 		<function-signature>

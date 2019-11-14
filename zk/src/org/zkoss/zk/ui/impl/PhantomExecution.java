@@ -170,6 +170,11 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	}
 
 	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
+	public boolean isExplorer7() {
+		return false;
+	}
+
+	/** @deprecated As of release 6.0.0, replaced with {@link #getBrowser(String)}. */
 	public boolean isOpera() {
 		return false;
 	}
