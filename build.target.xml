@@ -326,6 +326,10 @@ if="deploy.tomcat.required">
 	<bndwrap output="${dist.osgi.dir}" definitions="${dist.osgi.dir}">
 		<fileset dir="${out.dir}" includes="${jar.name}, ${jar2.name}"/>
 	</bndwrap>
+	<move overwrite="true" todir="${dist.osgi.dir}" >
+		<fileset dir="${dist.osgi.dir}" includes="${jar.name}, ${jar2.name}" />
+		<mapper type="glob" from="*.jar" to="*.osgi.jar" /> <!-- aligned with old spec .osgi.jar -->
+	</move>
 	<delete quiet="true">
 		<fileset dir="${dist.osgi.dir}" includes="${bnd.config.name}, ${bnd2.config.name}"/>
 	</delete>

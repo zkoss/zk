@@ -111,7 +111,7 @@ public interface UiEngine {
 	public void addInvalidate(Component comp);
 
 	/** Invalidates a component to cause redrawing partially.
-	 * Called when {@link Component#invalidatePartial(String)} is called.
+	 * Called when {@link ComponentCtrl#invalidatePartial(String)} is called.
 	 * @since 9.0.0
 	 */
 	public void addInvalidate(Component comp, String subId);
