@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4413.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Nov 13 16:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>Click those buttons, and the complete status should not be changed</label>
+    <separator />
+    <stepbar id="sb" linear="false"/>
+    <zscript><![CDATA[
+		StepModel model = new DefaultStepModel();
+		model.add("Step 1");
+		model.add("Step 2");
+		model.add("Step 3");
+		model.add("Step 4");
+		model.add("Step 5");
+		sb.setModel(model);
+	 ]]></zscript>
+    <button onClick="model.back()" label="back"/>
+    <button onClick="model.next()" label="next"/>
+    <button onClick="model.setActiveIndex(0)" label="jump to first"/>
+    <button onClick="model.setActiveIndex(4)" label="jump to last"/>
+</zk>
