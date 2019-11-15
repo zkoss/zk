@@ -95,8 +95,21 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
     </div>
     <separator/>
     <div>
-        <textbox id="tbm" value="0: 0%, 15: 15%, 60: 60%"/>
-        <button label="change marks" onClick="ms3.setMarks(tbm.getValue())"></button>
+        <intbox id="ibms" value="20"/>
+        <button label="change marks" onClick="ms3.setMarks(null);ms3.setMarkScale(ibms.getValue())"></button>
+        <separator />
+        <button label="change marks">
+            <attribute name="onClick"><![CDATA[
+                import java.util.Map;
+                import java.util.HashMap;
+                Map marksInfo = new HashMap();
+                marksInfo.put(20, "20%, low");
+                marksInfo.put(50, "50%, medium");
+                marksInfo.put(80, "80%, high");
+                ms3.setMarkScale(0);
+                ms3.setMarks(marksInfo);
+            ]]></attribute>
+        </button>
     </div>
     <apply templateURI="/test2/include/themes.zul"/>
 </zk>
