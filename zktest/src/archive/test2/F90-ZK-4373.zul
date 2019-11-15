@@ -38,8 +38,21 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
     </div>
     <separator />
     <div>
-        <textbox id="tb1" value="0: 0%, 15: 15%, 60:60%"/>
-        <button label="change marks" onClick="rs1.setMarks(tb1.getValue())"></button>
+        <intbox id="ib6" value="20"/>
+        <button label="change markScale" onClick="rs1.setMarks(null);rs1.setMarkScale(ib6.getValue())" />
+        <separator />
+        <button label="change marks">
+            <attribute name="onClick"><![CDATA[
+                import java.util.Map;
+                import java.util.HashMap;
+                Map marksInfo = new HashMap();
+                marksInfo.put(20, "20%, low");
+                marksInfo.put(50, "50%, medium");
+                marksInfo.put(80, "80%, high");
+                rs1.setMarkScale(0);
+                rs1.setMarks(marksInfo);
+            ]]></attribute>
+        </button>
     </div>
     <separator />
     <button label="toggle orient" >
