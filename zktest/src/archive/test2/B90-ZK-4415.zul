@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4415.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 18 16:39:17 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<div>
+    <zscript>
+        import org.zkoss.util.media.AMedia;
+        public AMedia loadPdf() {
+            return new AMedia(application.getResource(execution.toAbsoluteURI("B1896797.pdf", true)), null, null);
+        }
+        AMedia document = loadPdf();
+    </zscript>
+    <label multiline="true">
+        1. Open this page
+        2. PDFViewer should load a PDF initially.
+    </label>
+    <pdfviewer id="pdf" content="${document}" rotation="90"/>
+    <button label="dynamic content via zkau works" onClick="pdf.setContent(loadPdf());"/>
+</div>
