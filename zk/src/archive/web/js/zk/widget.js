@@ -5800,14 +5800,18 @@ zk.NoDOM = {
 				var end = document.createComment(endDesc);
 				var parentNode = node.parentNode;
 				parentNode.insertBefore(start, node);
-				var endNode = node.nextSibling,
+				var endNode = node,
 					lastChild = this.lastChild;
 				if (lastChild) {
-					var lastChildNode = lastChild.$n();
-					if (!lastChildNode)
-						lastChildNode = jq(lastChild.uuid, zk)[0];
-					if (lastChildNode)
-						endNode = lastChildNode;
+					if (lastChild.getMold() == 'nodom') {
+						endNode = lastChild._endNode;
+					} else {
+						var lastChildNode = lastChild.$n();
+						if (!lastChildNode)
+							lastChildNode = jq(lastChild.uuid, zk)[0];
+						if (lastChildNode)
+							endNode = lastChildNode;
+					}
 				}
 				parentNode.insertBefore(end, endNode.nextSibling);
 				this._startNode = start;

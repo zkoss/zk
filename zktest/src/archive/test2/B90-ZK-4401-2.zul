@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4401-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 15:39:38 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>No JS error exception</label>
+    <div>
+        aaaa
+        <nodom/>
+    </div>
+</zk>
