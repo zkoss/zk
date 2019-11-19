@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4401-3.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 15:39:38 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <div>
+        <nodom id="nodom1"/>
+        bbbb
+    </div>
+    <button label="Click to test" onClick='nodom1.appendChild(new Label("aaaa"))'/>
+</zk>

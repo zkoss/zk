@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4401-4.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 15:39:38 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>Click all buttons, the orders of the numbers should be correct</label>
+    <button label="insert 3" onClick='nodom1.insertBefore(new Label("3"), nodom2)'/>
+    <button label="insert 3.1" onClick='nodom2.insertBefore(new Label("3.1"), nodom3)'/>
+    <button label="insert 3.2" onClick='nodom2.appendChild(new Label("3.2"))'/>
+    <button label="insert 4" onClick='nodom1.appendChild(new Label("4"))'/>
+    <button label="insert 3.1.3" onClick='nodom3.appendChild(new Label("3.1.3"))'/>
+    <button label="insert 3.1.1.1" onClick='nodom4.appendChild(new Label("3.1.1.1"))'/>
+    <div style="display: flex; flex-direction: column;">
+        --- START ---
+        <nodom id="nodom1">
+            <label value="1"/>
+            <label value="2"/>
+            <nodom id="nodom2">
+                <nodom id="nodom3">
+                    <label value="3.1.1"/>
+                    <nodom id="nodom4">
+                    </nodom>
+                    <label value="3.1.2"/>
+                </nodom>
+            </nodom>
+        </nodom>
+        --- END ---
+    </div>
+</zk>
