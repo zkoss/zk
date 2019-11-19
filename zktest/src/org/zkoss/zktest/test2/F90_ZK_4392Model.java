@@ -45,7 +45,7 @@ public class F90_ZK_4392Model extends DefaultTreeModel<String> {
 								node(data + "-1-3-3")
 						)
 				),
-				node(data + "-2",
+				node(data + "-2loooooooooooooooooong",
 						node(data + "-2-1"),
 						node(data + "-2-2"),
 						node(data + "-2-3")
