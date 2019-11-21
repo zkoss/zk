@@ -501,9 +501,9 @@ zFlex = { //static methods
 		//find the max size of all children
 		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 	},
-	fixCSSFlex: function (forced) {
+	fixCSSFlex: function () {
 		var wgt = this;
-		if ((!forced && wgt._flexFixed) || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibling has done it!
+		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibling has done it!
 			return;
 		}
 		var pwgt = wgt.parent,
@@ -514,16 +514,17 @@ zFlex = { //static methods
 		}
 
 		var flexInfo = zFlex.getFlexInfo(wgt),
-			flexD = flexInfo.flexDirection,
-			isRow = 'row' == flexD,
+			isRow = flexInfo.isFlexRow,
 			fccs = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
 			isAllMin = true,
 			fdArr = [],
-			cwgtsz = [];
+			cwgtsz = [],
+			flexItemClass = 'z-flex-item';
 
 		for (var i = 0, length = fccs.length; i < length; i++) {
 			var fcc = fccs[i],
+				jqFcc = jq(fcc),
 				cwgt = cwgts[i],
 				c = cwgt.$n(),
 				flexs = [cwgt._nvflex, cwgt._nhflex],
@@ -533,12 +534,13 @@ zFlex = { //static methods
 			var flex = flexs[isRow | 0];
 			if (flex > 0) {
 				isAllMin = false;
-				fcc.style['flex'] = flex + ' 1 0';
-				fcc.style['min-height'] = '0';
-				fcc.style['min-width'] = '0';
-				sz[dim] = 'auto';
+				jqFcc.addClass(flexItemClass);
+				if (flex != 1)
+					fcc.style['flex-grow'] = flex; //update flex
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '100%';
+				else
+					sz[dim] = 'auto';
 			} else if (flex < 0) //min
 				zFlex.fixMinFlex(cwgt, c, dim.substring(0, 1));
 
@@ -546,28 +548,20 @@ zFlex = { //static methods
 			flex = flexs[!isRow | 0];
 			dim = isRow ? 'height' : 'width';
 			if (flex > 0) {
-				var marginSize = 0,
-					jqFcc = jq(fcc);
-				if (isRow)
-					marginSize = jqFcc.outerHeight(true) - jqFcc.outerHeight();
-				else
-					marginSize = jqFcc.outerWidth(true) - jqFcc.outerWidth();
-				var fccDimValue = '100%';
-				if (marginSize > 0) //handle margin issue
-					fccDimValue = 'calc(100% - ' + jq.px0(marginSize) + ')';
+				var marginSize = isRow ? jqFcc.outerHeight(true) - jqFcc.outerHeight() : jqFcc.outerWidth(true) - jqFcc.outerWidth(),
+					fccDimValue = marginSize > 0 ? 'calc(100% - ' + jq.px0(marginSize) + ')' : '100%'; //handle margin issue
 				fcc.style[dim] = fccDimValue;
-				sz[dim] = 'auto';
 				if (fcc != c)
 					c.style[dim] = '100%';
+				else
+					sz[dim] = 'auto';
 			} else if (flex < 0)//min
 				zFlex.fixMinFlex(cwgt, c, dim.substring(0, 1));
 			cwgtsz.push(sz);
 		}
 
-		if (!isAllMin) {
-			fContainer.style.display = 'flex';
-			fContainer.style['flex-direction'] = flexD;
-		}
+		if (!isAllMin)
+			jq(fContainer).addClass('z-flex').addClass(isRow ? 'z-flex-row' : 'z-flex-column');
 
 		for (var i = 0, length = cwgtsz.length; i < length; i++) {
 			var sz = cwgtsz[i];
@@ -584,15 +578,17 @@ zFlex = { //static methods
 			fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_(),
 			isHorizontal = o == 'h',
 			flexInfo = zFlex.getFlexInfo(wgt),
-			isRow = 'row' == flexInfo.flexDirection,
+			isRow = flexInfo.isFlexRow,
 			fccs = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
 			fdArr = [],
 			cwgtsz = [],
-			noSibFlex = true;
+			noSibFlex = true,
+			flexItemClass = 'z-flex-item';
 
 		for (var i = 0, length = fccs.length; i < length; i++) {
 			var fcc = fccs[i],
+				jqFcc = jq(fcc),
 				cwgt = cwgts[i],
 				isTargetWgt = cwgt == wgt,
 				c = cwgt.$n(),
@@ -602,9 +598,8 @@ zFlex = { //static methods
 			var flex = flexs[isRow | 0];
 			if ('min' != flex && (true === flex || 'true' == flex || zk.parseInt(flex) > 0)) {
 				if ((clearAllSiblings || isTargetWgt) && (isHorizontal && isRow) || (!isHorizontal && !isRow)) {
-					fcc.style['flex'] = '';
-					fcc.style['min-height'] = '';
-					fcc.style['min-width'] = '';
+					fcc.style['flex-grow'] = '';
+					jqFcc.removeClass(flexItemClass);
 					if (fcc != c && !c.style[dim])
 						c.style[dim] = '';
 				}
@@ -621,14 +616,12 @@ zFlex = { //static methods
 							c.style[dim] = '';
 					}
 				} else
-					noSibFlex = noSibFlex ? !fcc.style['flex'] : false;
+					noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
 			}
 		}
 
-		if (clearAllSiblings || noSibFlex) {
-			fContainer.style.display = '';
-			fContainer.style['flex-direction'] = '';
-		}
+		if (clearAllSiblings || noSibFlex)
+			jq(fContainer).removeClass('z-flex').removeClass(isRow ? 'z-flex-row' : 'z-flex-column');
 		wgt.afterClearFlex_();
 	},
 	getFlexInfo: function (wgt) {
@@ -663,10 +656,10 @@ zFlex = { //static methods
 			cwgt = cwgt.nextSibling;
 		}
 		if (toColumn)
-			flexD = 'column';
+			isRow = false;
 		else if (flexD == null) //default and no block
-			flexD = 'row';
-		return {flexDirection: flexD, flexContainerChildren: fccs, childrenWidgets: cwgts};
+			isRow = true;
+		return {isFlexRow: isRow, flexContainerChildren: fccs, childrenWidgets: cwgts};
 	}
 };
 })();

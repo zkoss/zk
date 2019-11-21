@@ -5,6 +5,18 @@
 }
 .z-hlayout {
 	white-space: nowrap;
+	//css flex
+	&.z-valign-bottom.z-flex {
+		align-items: flex-end;
+	}
+
+	&.z-valign-top.z-flex {
+		align-items: flex-start;
+	}
+
+	&.z-valign-middle.z-flex {
+		align-items: center;
+	}
 }
 .z-hlayout-inner {
 	display: inline-block;
