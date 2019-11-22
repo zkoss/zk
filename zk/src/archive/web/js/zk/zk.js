@@ -1271,6 +1271,20 @@ zk.log('value is", value);
 			prefix + uri.substring(0, l) + suffix + uri.substring(l) :
 			prefix + uri + suffix;
 	},
+	/**
+	 * Encodes and returns the resource URI from Class-Web Resources (CWR).
+	 * Example: <pre><code>var res = zk.resourceURI('/js/my/path/res.css');</code></pre>
+	 *
+	 * @param String uri the resource URI.
+	 * @param String version [optional] the version string to build the cache-friendly URI. If none is set, use zk.build by default.
+	 * @return String the encoded resource URI
+	 * @since 9.0.0
+	 */
+	resourceURI: function (uri, version) {
+		if (uri.charAt(0) != '/')
+			uri = '/' + uri;
+		return zk.ajaxURI('/web/_zv' + (version || zk.build) + uri, {au: true});
+	},
 	/** Declares the desktop is used for the stateless context.
 	 * By stateless we mean the server doesn't maintain any widget at all.
 	 * @param String dtid the ID of the desktop to create
