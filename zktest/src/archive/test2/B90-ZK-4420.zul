@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4420.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 26 09:43:04 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Shouldn't have zul.inp or InputWidget is undefined error.
+        2. The following text of checkboxes should be aligned vertically.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <inputgroup>
+        test
+        <checkbox label="check"/>
+        <checkbox label="check" mold="switch"/>
+        <checkbox label="check" mold="toggle"/>
+        <button label="test2"/>
+    </inputgroup>
+</zk>

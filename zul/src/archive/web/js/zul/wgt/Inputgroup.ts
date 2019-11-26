@@ -73,7 +73,7 @@ zul.wgt.Inputgroup = zk.$extends(zul.Widget, {
 		let out = opts.out || new zk.Buffer(),
 			w = opts.child;
 		if (!w.$instanceof(zul.wgt.Button) && !w.$instanceof(zul.wgt.Toolbarbutton)
-				&& !w.$instanceof(zul.inp.InputWidget)) {
+				&& (!zul.inp || !w.$instanceof(zul.inp.InputWidget))) {
 			out.push('<div id="', w.uuid, '-chdex" class="', this.$s('text'), '">');
 			w.redraw(out);
 			out.push('</div>');
