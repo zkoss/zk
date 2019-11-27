@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4426.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 27 15:53:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Drag rightmost buttons to leftmost, the sliderbuttons should display well.</label>
+	<multislider>
+		<sliderbuttons startValue="10" endValue="70"/>
+		<sliderbuttons startValue="20" endValue="50"/>
+		<sliderbuttons startValue="30" endValue="40"/>
+	</multislider>
+</zk>
