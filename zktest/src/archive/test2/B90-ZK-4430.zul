@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4431.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 27 15:53:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Drag two rangesliders, the id in zk log should be different</label>
+	<rangeslider onRangeValueChange='Clients.log(event.toString() + self + event.startValue + "~" + event.endValue)'/>
+	<rangeslider onRangeValueChange='Clients.log(event.toString() + self + event.startValue + "~" + event.endValue)'/>
+</zk>

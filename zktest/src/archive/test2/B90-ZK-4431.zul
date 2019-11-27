@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4431.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 27 15:53:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>drag/drop slider buttons, then you can see values in zk log.</label>
+	<multislider>
+		<sliderbuttons id="limits" startValue="10" endValue="90"
+					   onRangeValueChange='Clients.log(event.toString() + event.startValue + "~" + event.endValue)'/>
+		<sliderbuttons id="ideal" startValue="50" endValue="70"
+					   onRangeValueChange='Clients.log(event.toString() + event.startValue + "~" + event.endValue)'/>
+	</multislider>
+</zk>
