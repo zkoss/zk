@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4423-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Nov 03 15:54:55 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		drag the panel from Portalchildren1 to Portalchildren2, the zk log should be same as describe.
+	</label>
+	no onPortalMove, no onPortalDrop: nothing in zk log
+	<portallayout id="pl0">
+		<portalchildren title="Portalchildren1">
+			<panel title="Panel1" border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren title="Portalchildren2">
+			<panel title="Panel2" border="normal">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+	<separator/>
+	only onPortalMove, no onPortalDrop: "onPortalMove" only in zk log
+	<portallayout id="pl1" onPortalMove='Clients.log("onPortalMove")'>
+		<portalchildren title="Portalchildren1">
+			<panel title="Panel1" border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren title="Portalchildren2">
+			<panel title="Panel2" border="normal">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+	<separator/>
+	no onPortalMove, only onPortalDrop: "onPortalDrop" only in zk log
+	<portallayout id="pl2" onPortalDrop='Clients.log("onPortalDrop")'>
+		<portalchildren title="Portalchildren1">
+			<panel title="Panel1" border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren title="Portalchildren2">
+			<panel title="Panel2" border="normal">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+	<separator/>
+	both onPortalMove and onPortalDrop: "onPortalDrop" and "onPortalMove" both in zk log
+	<portallayout id="pl3" onPortalDrop='Clients.log("onPortalDrop")' onPortalMove='Clients.log("onPortalMove")'>
+		<portalchildren title="Portalchildren1">
+			<panel title="Panel1" border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren title="Portalchildren2">
+			<panel title="Panel2" border="normal">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+	<separator/>
+	both onPortalMove and onPortalDrop but stop default behavior: "onPortalDrop" and "onPortalMove" both in zk log, and panel shouldn't move
+	<portallayout id="pl4" onPortalDrop='Clients.log("onPortalDrop");event.preventDefault();' onPortalMove='Clients.log("onPortalMove")'>
+		<portalchildren title="Portalchildren1">
+			<panel title="Panel1" border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren title="Portalchildren2">
+			<panel title="Panel2" border="normal">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>

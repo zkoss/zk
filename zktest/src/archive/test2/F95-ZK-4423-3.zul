@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4423-3.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Nov 05 16:07:05 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		drag the panel from Portalchildren1 to Portalchildren2, the zk log should be same as describe.
+	</label>
+	<separator/>
+	<div apply="org.zkoss.zktest.test2.F95_ZK_4423Composer">
+		stop default portal move and check before portal move: "onPortalDrop" "moved!" "onPortalMove" in zk log, and panel shouldn't move if you drop cross over 2 columns
+		<portallayout id="pl">
+			<portalchildren title="Portalchildren1">
+				<panel title="Panel1" border="normal">
+					<panelchildren>1</panelchildren>
+				</panel>
+			</portalchildren>
+			<portalchildren title="Portalchildren2">
+				<panel title="Panel2" border="normal">
+					<panelchildren>2</panelchildren>
+				</panel>
+			</portalchildren>
+			<portalchildren title="Portalchildren3">
+				<panel title="Panel3" border="normal">
+					<panelchildren>3</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+		<separator/>
+		"onPortalDrop" and "onPortalMove" both in zk log
+		<portallayout id="pl2">
+			<portalchildren title="Portalchildren1">
+				<panel title="Panel1" border="normal">
+					<panelchildren>1</panelchildren>
+				</panel>
+			</portalchildren>
+			<portalchildren title="Portalchildren2">
+				<panel title="Panel2" border="normal">
+					<panelchildren>2</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+		<separator/>
+		"onPortalDrop" and "onPortalMove" in zk log, and the dragged panel will be invisible
+		<portallayout id="pl3">
+			<portalchildren title="Portalchildren1" counterVisible="false">
+				<panel title="Panel1" border="normal">
+					<panelchildren>1</panelchildren>
+				</panel>
+			</portalchildren>
+			<portalchildren title="Portalchildren2" counterVisible="false">
+				<panel title="Panel3" border="normal">
+					<panelchildren>2</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+	</div>
+</zk>

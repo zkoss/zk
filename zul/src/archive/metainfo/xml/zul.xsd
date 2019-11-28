@@ -2720,6 +2720,7 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="maximizedMode" type="portallayoutMaximizedModeTpye" use="optional" />
 		<xs:attribute name="onPortalMove" type="xs:string" use="optional" />
+		<xs:attribute name="onPortalDrop" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- progressmeter -->
 	<xs:element name="progressmeter" type="progressmeterType" />

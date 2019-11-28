@@ -6,6 +6,7 @@ ZK 9.5.1
   ZK-3289: Monthly / yearly options for datebox.
   ZK-4418: specify charset for filedownload
   ZK-555: allow to register "#tab" in setCtrlKeys() to allow implementation of own focus switching
+  ZK-4423: Kanban missing options to listen to portallayout onPortalMove without affecting the UI
 
 * Bugs
   ZK-4689: portal layout detach js error
@@ -44,6 +45,7 @@ ZK 9.5.1
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
+  + Now the "onPortalMove" event will no longer be fired from client side.
 
    --------
 ZK 9.5.0

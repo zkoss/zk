@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4423.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Nov 03 15:54:55 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		drag a panel then drop to some where inside the kanban(portallayout), you should not see anny error.
+		if you drag panel from Todo to Complete(or conversely), you should see "cross 2 column!" in ZK log, and the UI should not change.
+		And the UI should display correctly as the Data(see ZK log).
+	</label>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.F95_ZK_4423VM')">
+		<portallayout orient="vertical" onPortalDrop='@command("portalMove",from=event.from.attributes["name"],to=event.to.attributes["name"],evt=event)'>
+			<portalchildren title="Todo" counterVisible="true" hflex="1">
+				<custom-attributes name="todo"/>
+				<apply content="@load(vm.todoTasks)">
+					<forEach items="@load(content)">
+						<apply
+							templateURI="./F95-ZK-4423-kanban-panel.zul"
+							item="${each}" />
+					</forEach>
+				</apply>
+			</portalchildren>
+			<portalchildren title="Active" counterVisible="true"  hflex="1">
+				<custom-attributes name="active"/>
+				<forEach items="@load(vm.activeTasks)">
+					<apply templateURI="./F95-ZK-4423-kanban-panel.zul" item="${each}" />
+				</forEach>
+			</portalchildren>
+			<portalchildren title="Complete" counterVisible="true"  hflex="1">
+				<custom-attributes name="complete"/>
+				<forEach items="@load(vm.completeTasks)">
+					<apply templateURI="./F95-ZK-4423-kanban-panel.zul" item="${each}" />
+				</forEach>
+			</portalchildren>
+		</portallayout>
+	</div>
+</zk>

@@ -36,10 +36,12 @@ public class B65_ZK_1462Test extends WebDriverTestCase {
 		JQuery firstPortal = jq(".z-portalchildren:eq(0)");
 		Actions actions = getActions();
 		actions.dragAndDropBy(toElement(panel2), panel1.positionLeft() - panel2.positionLeft(), 0).perform();
+		waitResponse();
 		Assert.assertEquals("Panel 2 should be moved to first portalchildren",
 				toElement(firstPortal), toElement(panel2.parents(".z-portalchildren")));
 
 		actions.dragAndDropBy(toElement(panel1), 0, panel2.positionTop() - panel1.positionTop()).perform();
+		waitResponse();
 		Assert.assertEquals("Panel 1 should be the first child in the first portalchildren",
 				toElement(firstPortal.find("@panel:first").find(".z-panel-header")), toElement(panel1));
 	}
