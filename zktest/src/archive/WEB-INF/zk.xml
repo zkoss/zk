@@ -790,11 +790,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!--</library-property>-->
 	<!-- for ZK-4390 -->
 <!--	<library-property>-->
-<!--		<name>org.zkoss.web.servlet.http.embedded.AllowOrigin</name>-->
-<!--		<value>http://localhost:9000</value> &lt;!&ndash; change to another testing container&ndash;&gt;-->
-<!--	</library-property>-->
-<!--	<library-property>-->
-<!--		<name>org.zkoss.web.servlet.http.embedded.TargetURL</name>-->
-<!--		<value>http://localhost:8080/zktest</value> &lt;!&ndash; change to zk app url&ndash;&gt;-->
+<!--		<name>org.zkoss.web.servlet.http.embedded.enabled</name>-->
+<!--		<value>true</value>-->
 <!--	</library-property>-->
 </zk>
