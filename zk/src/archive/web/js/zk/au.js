@@ -154,9 +154,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		try {
 			zk.ausending = true;
 			req.onreadystatechange = zAu._onResponseReady;
-			var prefix = zk._ajaxUrlPrefix || '';
-			req.open('POST', prefix + reqInf.uri, true);
-			if (prefix) req.withCredentials = true;
+			req.open('POST', reqInf.uri, true);
 			req.setRequestHeader('Content-Type', setting.contentType);
 			req.setRequestHeader('ZK-SID', reqInf.sid);
 			if (zAu._errCode) {
