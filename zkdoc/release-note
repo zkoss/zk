@@ -2,6 +2,7 @@ ZK 8.6.4
 * Features
 
 * Bugs
+  ZK-4429: websockets not working on Glassfish (5)
 
 * Upgrade Notes
 
