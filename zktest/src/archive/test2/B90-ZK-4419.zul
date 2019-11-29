@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4419.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 28 14:53:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<splitlayout vflex="1" hflex="1" orient="horizontal" >
+<!--		<custom-attributes org.zkoss.zul.css.flex="false"/>-->
+		<div sclass="area" vflex="1" hflex="1">
+			<label value="Drag/Drop splitter, it should display well."/>
+		</div>
+		<div sclass="area" vflex="1" hflex="1">
+			<label value="Area 2"/>
+		</div>
+	</splitlayout>
+</zk>

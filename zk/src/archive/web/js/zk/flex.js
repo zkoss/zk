@@ -592,32 +592,27 @@ zFlex = { //static methods
 				cwgt = cwgts[i],
 				isTargetWgt = cwgt == wgt,
 				c = cwgt.$n(),
-				flexs = [cwgt._vflex, cwgt._nflex],
 				dim = isRow ? 'width' : 'height';
 
-			var flex = flexs[isRow | 0];
-			if ('min' != flex && (true === flex || 'true' == flex || zk.parseInt(flex) > 0)) {
-				if ((clearAllSiblings || isTargetWgt) && (isHorizontal && isRow) || (!isHorizontal && !isRow)) {
-					fcc.style['flex-grow'] = '';
-					jqFcc.removeClass(flexItemClass);
-					if (fcc != c && !c.style[dim])
-						c.style[dim] = '';
-				}
+			if ((clearAllSiblings || isTargetWgt) && (isHorizontal && isRow) || (!isHorizontal && !isRow)) {
+				fcc.style['flex-grow'] = '';
+				jqFcc.removeClass(flexItemClass);
+				if (fcc != c && !c.style[dim])
+					c.style[dim] = '';
+				cwgt._flexFixed = false;
 			}
 
 			//check else flex
-			flex = flexs[!isRow | 0];
 			dim = isRow ? 'height' : 'width';
-			if ('min' != flex && (true === flex || 'true' == flex || zk.parseInt(flex) > 0)) {
-				if (clearAllSiblings || isTargetWgt) {
-					if ((isHorizontal && !isRow) || (!isHorizontal && isRow)) {
-						fcc.style[dim] = '';
-						if (fcc != c)
-							c.style[dim] = '';
-					}
-				} else
-					noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
-			}
+			if (clearAllSiblings || isTargetWgt) {
+				if ((isHorizontal && !isRow) || (!isHorizontal && isRow)) {
+					fcc.style[dim] = '';
+					if (fcc != c)
+						c.style[dim] = '';
+					cwgt._flexFixed = false;
+				}
+			} else
+				noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
 		}
 
 		if (clearAllSiblings || noSibFlex)
@@ -636,19 +631,22 @@ zFlex = { //static methods
 			checkColumn = flexD == null,
 			toColumn = !isRow;
 
-		for (var c; fcc && cwgt;) { // assume fcc <-> cwgt 1-1 mapping
+		for (var c; fcc && cwgt;) { // assume cwgt -> fcc
 			c = cwgt.$n();
 			if (c) {
 				if (!fContainer.contains(c)) { // skip moved dom (ex.caption)
 					cwgt = cwgt.nextSibling;
 					continue;
 				} else {
-					if (c && fcc.contains(c)) {
+					if (fcc.contains(c)) {
 						cwgt._flexFixed = true;
 						fccs.push(fcc);
 						cwgts.push(cwgt);
 						if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
 							toColumn = true;
+					} else {
+						fcc = fcc.nextElementSibling; //skip c not in fcc (ex. splitter)
+						continue;
 					}
 				}
 			}
