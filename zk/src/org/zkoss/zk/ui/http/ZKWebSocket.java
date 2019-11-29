@@ -63,8 +63,9 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	 * This method is called during websocket endpoint onOpen.
 	 * E.g. {@link org.zkoss.zkmax.au.websocket.WebSocketEndPoint#onOpen(Session, EndpointConfig)}
 	 *
-	 * @param wsession
+	 * @param wsession Websocket session
 	 * @param config   Endpoint config
+	 * @since 8.6.4
 	 */
 	public static void initZkDesktop(Session wsession, EndpointConfig config) {
 		Map<String, List<String>> requestParameterMap = wsession.getRequestParameterMap();
@@ -85,6 +86,8 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 
 	/**
 	 * extract mandatory desktop id parameter
+	 *
+	 * @since 8.6.4
 	 */
 	private static String extractDesktopId(Map<String, List<String>> requestParameterMap) {
 		List<String> desktopIds = requestParameterMap.get(DESKTOP_ID_PARAM);
@@ -94,7 +97,9 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	}
 
 	/**
-	 * extract optional sessionid parameter
+	 * extract optional connection uuid parameter
+	 *
+	 * @since 8.6.4
 	 */
 	private static String extractConnectionUuid(Map<String, List<String>> requestParameterMap) {
 		List<String> connectionUuids = requestParameterMap.get(CONNECTION_UUID_PARAM);
@@ -105,6 +110,8 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	 * Unique key to temporarily store the zk session in the endpoint config userProperties.
 	 * In cases where the endpoint config is shared a uuid can be provided to non-unique desktop Ids collisions
 	 * across sessions, in highly concurrent usage scenarios.
+	 *
+	 * @since 8.6.4
 	 */
 	private static String tempSessionKey(String desktopId, String connectionUuid) {
 		return desktopId + '|' + connectionUuid;
