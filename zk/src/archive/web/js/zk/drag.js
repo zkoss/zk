@@ -608,11 +608,14 @@ String scroll; //DOM Element's ID</code></pre>
 
 		// Bug ZK-427
 		// and ZK-484 (get the pos variable after invoking ignoredrag function)
-		var pos = zk(node).cmOffset(),
-			ofs = [pt[0] - pos[0], pt[1] - pos[1]], v;
+		var zkn = zk(node),
+			pos = zkn.cmOffset(),
+			ofs = [pt[0] - pos[0], pt[1] - pos[1]],
+			jqBorders = jq.borders, v;
+
 		// ZK-488 node.clientWidth and node.clientHeight are 0 if no scrollbar on IE9
-		if ((v = node.clientWidth) && ofs[0] > v && node.offsetWidth > v + 3
-		|| (v = node.clientHeight) && ofs[1] > v && node.offsetHeight > v + 3) //scrollbar
+		if ((v = node.clientWidth) && ofs[0] > (v + zkn.sumStyles('l', jqBorders)) && ofs[0] < (node.offsetWidth - zkn.sumStyles('r', jqBorders))
+		|| (v = node.clientHeight) && ofs[1] > (v + zkn.sumStyles('t', jqBorders)) && ofs[1] < (node.offsetHeight - zkn.sumStyles('b', jqBorders))) //scrollbar
 			return;
 
 		this.offset = ofs;
