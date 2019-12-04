@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4441.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 04 15:53:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>You should only see Col-2, Col-3, Col-4, Col-5</label>
+	<grid width="600px">
+		<columns menupopup="auto">
+			<column id="c1" label="Col-1" width="100px" visible="false"/>
+			<column label="Col-2" hflex="1"/>
+			<column label="Col-3" hflex="1"/>
+			<column label="Col-4" hflex="1"/>
+			<column label="Col-5" width="100px"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="cell-1"/>
+				<label value="cell-2"/>
+				<label value="cell-3"/>
+				<label value="cell-4"/>
+				<label value="cell-5"/>
+			</row>
+		</rows>
+	</grid>
+	<separator />
+	<button label="toggle visible" onClick="c1.visible = !c1.visible" />
+</zk>
