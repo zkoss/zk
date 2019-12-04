@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4442.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Dec 04 16:08:17 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		function getComputedColor(className, prop) {
+			var colorString = window.getComputedStyle(document.querySelector(className)).getPropertyValue(prop);
+			var match = colorString.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
+			return match ? {
+				red: match[1],
+				green: match[2],
+				blue: match[3]
+			  } : {};
+		}
+		
+		function luminanace(r, g, b) {
+			var a = [r, g, b].map(function (v) {
+				v /= 255;
+				return v <= 0.03928
+				? v / 12.92
+				: Math.pow( (v + 0.055) / 1.055, 2.4 );
+			});
+			return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+		}
+		
+		function contrast(headerName) {
+			var textColor = getComputedColor('.z-' + headerName + '-content', 'color');
+			var hoverColor = getComputedColor('.z-' + headerName + '-hover', 'background-color');
+			var contrast = (luminanace(textColor['red'], textColor['green'], textColor['blue']) + 0.05) / (luminanace(hoverColor['red'], hoverColor['green'], hoverColor['blue']) + 0.05);
+			zk.log(contrast);
+		}
+	]]></script>
+	<label multiline="true">
+		Hover the listbox/grid header, make sure the hover background have enough contrast to the white text.
+		(click the button will log the number of text-color : hover-color Contrast radio)
+	</label>
+	<listbox>
+		<listhead>
+			<listheader sort="auto" label="listboxA" >
+				<button id="btn1" xmlns:w="client" label="checkColorContrast" w:onClick="contrast('listheader')"/>
+			</listheader>
+			<listheader sort="auto" label="listboxB" />
+			<listheader sort="auto" label="listboxC" />
+			<listheader sort="auto" label="listboxD" />
+		</listhead>
+		<listitem>
+			<listcell label="AAA" />
+			<listcell label="BBB" />
+			<listcell label="CCC" />
+			<listcell label="DDD" />
+		</listitem>
+	</listbox>
+	
+	<grid>
+		<columns>
+			<column sort="auto">
+				gridA<button id="btn2" xmlns:w="client" label="checkColorContrast" w:onClick="contrast('column')"/>
+			</column>
+			<column sort="auto">gridB</column>
+			<column sort="auto">gridC</column>
+		</columns>
+	</grid>
+</zk>
