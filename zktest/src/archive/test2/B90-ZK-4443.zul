@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4443.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 04 15:53:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>The columns should be aligned, even after clicking the buttons</label>
+	<grid id="g">
+<!--		<custom-attributes org.zkoss.zul.css.flex="false"/>-->
+		<auxhead id="a">
+			<auxheader label="aux1"/>
+			<auxheader label="aux2"/>
+			<auxheader label="aux3"/>
+		</auxhead>
+		<columns id="c">
+			<column label="col1" hflex="1"/>
+			<column label="col2" hflex="2"/>
+			<column label="col3" hflex="1"/>
+		</columns>
+	</grid>
+	<separator />
+	<button id="rmBtn" label="remove a" onClick="a.detach()" />
+	<button id="movBtn" label="move b" onClick="g.appendChild(b)" />
+	<grid>
+		<auxhead id="b">
+			<auxheader label="aux1"/>
+			<auxheader label="aux2"/>
+			<auxheader label="aux3"/>
+		</auxhead>
+		<columns>
+			<column label="col1" hflex="1"/>
+			<column label="col2" hflex="2"/>
+			<column label="col3" hflex="1"/>
+		</columns>
+	</grid>
+</zk>

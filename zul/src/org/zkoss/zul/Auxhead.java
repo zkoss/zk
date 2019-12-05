@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -42,5 +43,31 @@ public class Auxhead extends XulElement {
 		if (!(child instanceof Auxheader))
 			throw new UiException("Unsupported child: " + child);
 		super.beforeChildAdded(child, refChild);
+	}
+
+	public void beforeParentChanged(Component parent) {
+		super.beforeParentChanged(parent);
+		String cssFlexAutoDisabledCountAttr = MeshElement.CSS_FLEX_AUTO_DISABLED_COUNT;
+		//handle new parent
+		if (parent != null) {
+			Integer cssFlexAutoDisabledCount = (Integer) parent.getAttribute(cssFlexAutoDisabledCountAttr);
+			if (cssFlexAutoDisabledCount == null) {
+				parent.setAttribute(cssFlexAutoDisabledCountAttr, 1);
+				parent.invalidate();
+			} else {
+				parent.setAttribute(cssFlexAutoDisabledCountAttr, ++cssFlexAutoDisabledCount);
+			}
+		}
+		//handle old parent
+		Component oldParent = this.getParent();
+		if (oldParent != null) {
+			Integer oldParentCssFlexAutoDisabledCount = (Integer) oldParent.getAttribute(cssFlexAutoDisabledCountAttr);
+			if (oldParentCssFlexAutoDisabledCount == 1) {
+				oldParent.removeAttribute(cssFlexAutoDisabledCountAttr);
+				oldParent.invalidate();
+			} else {
+				oldParent.setAttribute(cssFlexAutoDisabledCountAttr, --oldParentCssFlexAutoDisabledCount);
+			}
+		}
 	}
 }

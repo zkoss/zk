@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.event.ColSizeEvent;
 import org.zkoss.zul.event.ZulEvents;
@@ -97,5 +98,13 @@ public abstract class HeadersElement extends XulElement {
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
+	}
+
+	@Override
+	public boolean evalCSSFlex() {
+		Component parent = this.getParent(); //mesh
+		if (parent != null)
+			return ((HtmlBasedComponent) parent).evalCSSFlex();
+		return super.evalCSSFlex();
 	}
 }

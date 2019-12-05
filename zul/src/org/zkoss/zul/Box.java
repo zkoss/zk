@@ -348,7 +348,7 @@ public class Box extends XulElement {
 	}
 
 	@Override
-	protected boolean evalCSSFlex() {
+	public boolean evalCSSFlex() {
 		return false;
 	}
 

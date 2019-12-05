@@ -737,7 +737,11 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 
-	protected boolean evalCSSFlex() {
+	/**
+	 * Get whether css flex is enabled or not
+	 * @return css flex is enabled
+	 */
+	public boolean evalCSSFlex() {
 		return Utils.testAttribute(this, "org.zkoss.zul.css.flex", true, true);
 	}
 
