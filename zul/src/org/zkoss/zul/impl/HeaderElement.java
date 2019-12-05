@@ -17,6 +17,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 
 /**
  * A skeletal implementation for a header.
@@ -89,5 +91,13 @@ public abstract class HeaderElement extends LabelImageElement {
 		super.renderProperties(renderer);
 		render(renderer, "valign", _valign);
 		render(renderer, "align", _align);
+	}
+
+	@Override
+	public boolean evalCSSFlex() {
+		Component parent = this.getParent(); //head
+		if (parent != null)
+			return ((HtmlBasedComponent) parent).evalCSSFlex();
+		return super.evalCSSFlex();
 	}
 }

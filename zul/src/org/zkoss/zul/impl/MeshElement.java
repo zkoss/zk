@@ -290,4 +290,14 @@ public abstract class MeshElement extends XulElement implements Paginated {
 		if (isNativeScrollbar())
 			renderer.render("_nativebar", true);
 	}
+
+	//internal use only
+	public static final String CSS_FLEX_AUTO_DISABLED_COUNT = "org.zkoss.zul.css.flex.autoDisabledCount";
+
+	@Override
+	public boolean evalCSSFlex() {
+		if (this.hasAttribute(CSS_FLEX_AUTO_DISABLED_COUNT))
+			return false;
+		return super.evalCSSFlex();
+	}
 }
