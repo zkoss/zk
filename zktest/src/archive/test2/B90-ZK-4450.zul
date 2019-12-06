@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4450.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 6 16:45:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	model.add("The listbox should fulfill the remaining height");
+	model.add("22");
+	model.add("33");
+
+	public void add(){
+		model.add("nnn");
+	}
+	]]></zscript>
+	<div vflex="1">
+		<hbox hflex="1" vflex="min">
+			<button label="add" onClick="add()"/>
+		</hbox>
+		<listbox model="${model}" vflex="1">
+			<listhead>
+				<listheader />
+				<listheader/>
+				<listheader hflex="min"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<label value="${each}"/>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>

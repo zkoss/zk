@@ -269,6 +269,7 @@ zFlex = { //static methods
 				wgt.resetSize_('w');
 				// Bug ZK-597
 				delete wgt._flexFixed;
+				delete wgt._cssFlexFixed;
 				if (p = wgt.parent)
 					p.afterResetChildSize_('w');
 			}
@@ -276,6 +277,7 @@ zFlex = { //static methods
 				wgt.resetSize_('h');
 				// Bug ZK-597
 				delete wgt._flexFixed;
+				delete wgt._cssFlexFixed;
 				if (p = wgt.parent)
 					p.afterResetChildSize_('h');
 			}
@@ -503,7 +505,7 @@ zFlex = { //static methods
 	},
 	fixCSSFlex: function () {
 		var wgt = this;
-		if (wgt._flexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibling has done it!
+		if (wgt._cssFlexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibling has done it!
 			return;
 		}
 		var pwgt = wgt.parent,
@@ -572,7 +574,7 @@ zFlex = { //static methods
 		pwgt.afterChildrenFlex_(wgt);
 	},
 	clearCSSFlex: function (wgt, o, clearAllSiblings) {
-		if (!wgt._flexFixed) return;
+		if (!wgt._cssFlexFixed) return;
 
 		var pwgt = wgt.parent,
 			fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_(),
@@ -599,7 +601,7 @@ zFlex = { //static methods
 				jqFcc.removeClass(flexItemClass);
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '';
-				cwgt._flexFixed = false;
+				cwgt._cssFlexFixed = false;
 			}
 
 			//check else flex
@@ -609,7 +611,7 @@ zFlex = { //static methods
 					fcc.style[dim] = '';
 					if (fcc != c)
 						c.style[dim] = '';
-					cwgt._flexFixed = false;
+					cwgt._cssFlexFixed = false;
 				}
 			} else
 				noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
@@ -639,7 +641,7 @@ zFlex = { //static methods
 					continue;
 				} else {
 					if (fcc.contains(c)) {
-						cwgt._flexFixed = true;
+						cwgt._cssFlexFixed = true;
 						fccs.push(fcc);
 						cwgts.push(cwgt);
 						if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
