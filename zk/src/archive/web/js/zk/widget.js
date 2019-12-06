@@ -1113,7 +1113,7 @@ new zul.wnd.Window({
 				if (!this._nvflex)
 					_unlistenFlex(this);
 			} else {
-				if (this._cssflex) delete this._flexFixed;
+				if (this._cssflex) delete this._cssFlexFixed;
 				_listenFlex(this);
 			}
 		}
@@ -1133,7 +1133,7 @@ new zul.wnd.Window({
 				if (!this._nhflex)
 					_unlistenFlex(this);
 			} else {
-				if (this._cssflex) delete this._flexFixed;
+				if (this._cssflex) delete this._cssFlexFixed;
 				_listenFlex(this);
 			}
 		}
