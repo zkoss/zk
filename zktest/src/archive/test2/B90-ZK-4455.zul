@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4455.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Dec 17 12:34:41 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Remove zweb-dsp dependency in pom.xml. If any excepion occurs, it is a bug.</label>
+	<include src="~./html/alert.dsp?px_alert_type=error&amp;px_alert=123" />
+</zk>
