@@ -2,6 +2,7 @@ ZK 9.0.1
 * Features
 
 * Bugs
+  ZK-4456: cascader icon (open/clear) not updated when setting selection in model
 
 * Upgrade Notes
 
