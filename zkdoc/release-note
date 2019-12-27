@@ -4,6 +4,7 @@ ZK 9.0.1
 * Bugs
   ZK-4456: cascader icon (open/clear) not updated when setting selection in model
   ZK-4462: Rangeslider and Multislider minor style issue
+  ZK-4463: Rangeslider and Multislider buttons position calculation
 
 * Upgrade Notes
 
