@@ -6,6 +6,7 @@ ZK 9.0.1
   ZK-4462: Rangeslider and Multislider minor style issue
   ZK-4463: Rangeslider and Multislider buttons position calculation
   ZK-4455: Failed to load the resource: /html/alert.dsp
+  ZK-4466: toast covered by borderlayout
 
 * Upgrade Notes
 
