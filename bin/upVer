@@ -53,34 +53,38 @@ function upVer {
 		echo "$1 pom.xml"
 		grep -n --color=auto $newVersion $1/pom.xml
 	fi
-	
-	sed -i "s/$oldVersion.*/$newVersion/g" $1/version
-	echo "$1 version"
-	grep -n --color=auto $newVersion $1/version
-	
-	echo "$1 MANIFEST.MF"
-	find $1/src -name MANIFEST.MF -exec sed -i "s/$oldVersion.*/$newVersion/g
-	" {} \; -exec grep -n --color=auto $newVersion {} \;
-	
-	echo "$1 config.xml"
-	find $1/src -name config.xml -exec sed -i "
-	/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
-	" {} \; -exec grep -n --color=auto $newVersion {} \;
-	
-	echo "$1 lang.xml"
-	find $1/src -name lang.xml -exec sed -i "
-	/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
-	" {} \; -exec grep -n --color=auto $newVersion {} \;
-	
-	echo "$1 lang-addon.xml"
-	find $1/src -name lang-addon.xml -exec sed -i "
-	/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
-	" {} \; -exec grep -n --color=auto $newVersion {} \;
-	
-	echo "$1 Version.java"
-	find $1/src -name Version.java -exec sed -i "
-	s/UID = \"$oldVersion.*\";/UID = \"$newVersion\";/g
-	" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+	if [[ -f "$1/version" ]]; then
+		sed -i "s/$oldVersion.*/$newVersion/g" $1/version
+		echo "$1 version"
+		grep -n --color=auto $newVersion $1/version
+	fi
+
+	if [[ -d "$1/src" ]]; then
+		echo "$1 MANIFEST.MF"
+		find $1/src -name MANIFEST.MF -exec sed -i "s/$oldVersion.*/$newVersion/g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 config.xml"
+		find $1/src -name config.xml -exec sed -i "
+		/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 lang.xml"
+		find $1/src -name lang.xml -exec sed -i "
+		/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 lang-addon.xml"
+		find $1/src -name lang-addon.xml -exec sed -i "
+		/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 Version.java"
+		find $1/src -name Version.java -exec sed -i "
+		s/UID = \"$oldVersion.*\";/UID = \"$newVersion\";/g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+	fi
 }
 
 if [ "$3" == "FL" ] ; then
@@ -120,6 +124,7 @@ upVer zkbind
 upVer zul
 upVer zweb
 upVer zweb-dsp
+upVer zk-bom
 cd $ZKCML
 upVer zkex
 upVer zkmax
