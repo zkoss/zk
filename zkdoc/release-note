@@ -1,5 +1,6 @@
 ZK 9.0.1
 * Features
+  ZK-4458: provide a maven BOM (bill of materials)
 
 * Bugs
   ZK-4456: cascader icon (open/clear) not updated when setting selection in model
