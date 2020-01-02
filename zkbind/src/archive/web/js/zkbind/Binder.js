@@ -249,6 +249,30 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		var ac = this._aftercmd[cmd];
 		for (var i = 0, j = ac ? ac.length : 0; i < j; i++)
 			ac[i].apply(this, [args]);
+	},
+	/**
+	 * Post a upload command to the binder
+	 * @param String cmd the name of the command
+	 * @param File file the file to upload. (the value should be a file type)
+	 * @since 9.0.1
+	 */
+	upload: function (cmd, file) {
+		var formData = new FormData(),
+			xhr = new XMLHttpRequest(),
+			wgt = this.$view,
+			sid = wgt._sid ? ++wgt._sid : (wgt._sid = 0);
+
+		formData.append('file', file);
+		xhr.onload = function () {
+			if (this.readyState === 4) {
+				if (this.status === 200) {
+					zAu.send(new zk.Event(wgt, 'onBindCommandUpload$' + cmd, {cmd: cmd, sid: sid}, {toServer: true}));
+				} else {
+					zk.error(xhr.statusText);
+				}
+			}
+		};
+		zk.UploadUtils.ajaxUpload(wgt, xhr, formData, sid);
 	}
 }, {
 	/**
