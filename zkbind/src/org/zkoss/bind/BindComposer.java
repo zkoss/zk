@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -35,6 +36,7 @@ import org.zkoss.bind.impl.BindEvaluatorXUtil;
 import org.zkoss.bind.impl.MiscUtil;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
+import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
 import org.zkoss.bind.sys.debugger.BindingAnnotationInfoChecker;
 import org.zkoss.bind.sys.debugger.DebuggerFactory;
@@ -55,6 +57,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.HistoryPopStateEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.Selectors;
@@ -612,7 +615,7 @@ public class BindComposer<T extends Component>
 
 	public boolean service(AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if (cmd.startsWith("onBindCommand$") || cmd.startsWith("onBindGlobalCommand$")) {
+		if (cmd.startsWith("onBindCommand$") || cmd.startsWith("onBindGlobalCommand$") || cmd.startsWith("onBindCommandUpload$")) {
 			final Map<String, Object> data = request.getData();
 			String vcmd = data.get("cmd").toString();
 
@@ -633,6 +636,8 @@ public class BindComposer<T extends Component>
 					} else if (cmd.startsWith("onBindGlobalCommand$")) {
 						BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd,
 								(Map<String, Object>) data.get("args"));
+					} else if (cmd.startsWith("onBindCommandUpload$")) { // ZK-4472
+						_binder.postCommand(vcmd, Collections.singletonMap(BinderCtrl.CLIENT_UPLOAD_INFO, UploadEvent.getLatestUploadEvent(vcmd, request.getComponent(), request)));
 					}
 				}
 			}

@@ -1698,10 +1698,16 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		final Set<Property> notifys = new HashSet<Property>();
 		Event evt = null;
 		//ZK-3133
-		if (args != null && args.containsKey(BinderCtrl.CLIENT_INFO)) {
-			Map<String, Object> inf = new HashMap<String, Object>();
-			inf.put("", args.get(BinderCtrl.CLIENT_INFO));
-			evt = ClientInfoEvent.getClientInfoEvent(new AuRequest(_rootComp.getDesktop(), command, inf));
+		if (args != null) {
+			if (args.containsKey(BinderCtrl.CLIENT_INFO)) {
+				Map<String, Object> inf = new HashMap<String, Object>();
+				inf.put("", args.get(BinderCtrl.CLIENT_INFO));
+				evt = ClientInfoEvent.getClientInfoEvent(new AuRequest(_rootComp.getDesktop(), command, inf));
+			} else {
+				Event uploadInfoEvt = (Event) args.get(BinderCtrl.CLIENT_UPLOAD_INFO); // ZK-4472
+				if (uploadInfoEvt != null)
+					evt = uploadInfoEvt;
+			}
 		}
 		//args come from user, we don't eval it.
 		int result = doCommand(_rootComp, null, command, evt, args, notifys);

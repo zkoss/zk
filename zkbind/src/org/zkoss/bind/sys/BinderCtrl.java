@@ -95,6 +95,9 @@ public interface BinderCtrl {
 	public static final String CLIENT_INFO = "$ZKCLIENTINFO$";
 	public static final String MATCHMEDIAVALUE_PREFIX = "$$ZKMATCHMEDIA$$";
 
+	// since ZK 9.0.1
+	public static final String CLIENT_UPLOAD_INFO = "$ZKCLIENTUPLOADINFO$";
+
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components
 	 * @param associatedComp associated component inside a form binding
