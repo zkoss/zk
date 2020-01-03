@@ -54,11 +54,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _domEvtProxy(wgt, f, evtnm, keyword) {
 		var fps = wgt._$evproxs, fp;
-		if (!fps) wgt._$evproxs = fps = {};
+		if (!fps) wgt._$evproxs = fps = new WeakMap();
 		if (keyword)
 			f.__keyword = keyword;
-		else if (fp = fps[f]) return fp;
-		return fps[f] = _domEvtProxy0(wgt, f, keyword);
+		else if (fp = fps.get(f)) return fp;
+		var fn = _domEvtProxy0(wgt, f, keyword);
+		fps.set(f, fn);
+		return fn;
 	}
 	function _domEvtProxy0(wgt, f, keyword) {
 		return function (evt) {
