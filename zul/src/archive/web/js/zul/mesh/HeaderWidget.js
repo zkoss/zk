@@ -317,7 +317,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 				ofs = $n.revisedOffset();
 			if (this._insizer(evt.pageX - ofs[0])) {
 				var mesh = this.getMeshWidget(),
-					max = zk(this.$n('cave')).textSize()[0],
 					cIndex = $n.cellIndex();
 				mesh.clearCachedSize_();
 				mesh._calcMinWds();
@@ -419,6 +418,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	afterClearFlex_: function () {
 		this.parent.afterClearFlex_();
+	},
+	getContentWidth_: function () {
+		var $cv = zk(this.$n('cave')),
+			isTextOnly = !this.nChildren && !this._iconSclass,
+			contentWidth = isTextOnly ? $cv.textWidth() : $cv.textSize()[0];
+		return Math.ceil(contentWidth + $cv.padBorderWidth() + zk(this.$n()).padBorderWidth());
 	}
 }, { //static
 	_faker: ['hdfaker', 'bdfaker', 'ftfaker'],

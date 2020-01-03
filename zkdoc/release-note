@@ -3,6 +3,7 @@ ZK 9.0.1
   ZK-4458: provide a maven BOM (bill of materials)
   ZK-4472: Using fileupload in MVVM Client-side binding
   ZK-4481: Configure repositories to use HTTPS
+  ZK-4470: Improve the performance of textSize()
 
 * Bugs
   ZK-4456: cascader icon (open/clear) not updated when setting selection in model

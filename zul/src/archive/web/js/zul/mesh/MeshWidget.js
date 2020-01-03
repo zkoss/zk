@@ -126,9 +126,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 			for (var i = 0; i < len; i++) {
 				var wd = bodycells && bodycells[i] ? bodycells[i].offsetWidth : 0,
-					$cv = zk(w.$n('cave')),
-					hdwd = w && w.isVisible() ? ($cv.textSize()[0] + $cv.padBorderWidth() + zk(w.$n()).padBorderWidth()) : 0,
 					ftwd = footcells && footcells[i] && zk(footcells[i]).isVisible() ? footcells[i].offsetWidth : 0,
+					hdwd = w && w.isVisible() ? w.getContentWidth_() : 0,
 					header;
 
 				if ((header = headWgt.getChildAt(i)) && header.getWidth())

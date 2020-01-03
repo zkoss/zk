@@ -278,17 +278,27 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	//@Override
 	domContent_: function () {
-		var s = this.$supers('domContent_', arguments),
-			box = this.getListbox();
-		if (box != null && this.parent.firstChild == this
-				&& box._checkmark && box._multiple && !box._listbox$noSelectAll) // B50-ZK-873
+		var s = this.$supers('domContent_', arguments);
+		if (this._hasCheckbox())
 			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (box.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
 				+ (s ? '&nbsp;' + s : '');
 		return s;
 	},
+	_hasCheckbox: function () {
+		var box = this.getListbox();
+		return box != null && this.parent.firstChild == this
+			&& box._checkmark && box._multiple && !box._listbox$noSelectAll;  // B50-ZK-873
+	},
 	//@Override
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
+	},
+	//@Override
+	getContentWidth_: function () {
+		var $cv = zk(this.$n('cave')),
+			isTextOnly = !this.nChildren && !this._iconSclass && !this._hasCheckbox(),
+			contentWidth = isTextOnly ? $cv.textWidth() : $cv.textSize()[0];
+		return Math.ceil(contentWidth + $cv.padBorderWidth() + zk(this.$n()).padBorderWidth());
 	}
 });

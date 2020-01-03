@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4470.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Fri Jan 03 18:26:59 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    List cols = Collections.nCopies(50, "col");
+    ListModel model = new ListModelList();
+    for (int j = 0; j < 50; ++j) {
+        model.add("item" + j);
+    }
+
+    TreeModel model2 = new DefaultTreeModel(
+        new DefaultTreeNode(null,
+            new DefaultTreeNode[] {
+                new DefaultTreeNode("11111"),
+                new DefaultTreeNode("22222",
+                    new DefaultTreeNode[] {
+                        new DefaultTreeNode("a"),
+                        new DefaultTreeNode("b")
+                    }
+                ),
+                new DefaultTreeNode("33333"),
+                new DefaultTreeNode("44444"),
+                new DefaultTreeNode("55555"),
+                new DefaultTreeNode("66666",
+                    new DefaultTreeNode[] {
+                        new DefaultTreeNode("c"),
+                        new DefaultTreeNode("d"),
+                        new DefaultTreeNode("e")
+                    }
+                )
+            }
+        )
+    );
+    ]]></zscript>
+    <label multiline="true">
+        1. The text of every column shouldn't be overflowed.
+        2. Click "col-0" to sort.
+        3. After sorting, the text of every column shouldn't be overflowed.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <listbox height="300px" model="${model}" multiple="true" checkmark="true" sizedByContent="true">
+        <listhead>
+            <listheader hflex="min" label="Trigger"/>
+            <listheader hflex="min" iconSclass="z-icon-home" label="col-aaa"/>
+            <listheader hflex="min" label="col-bbb"><checkbox label="Click"/></listheader>
+            <forEach items="${cols}">
+                <listheader hflex="min" label="col-${forEachStatus.index}" sort="auto" />
+            </forEach>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell>1</listcell>
+                <listcell>1</listcell>
+                <listcell>1</listcell>
+                <forEach items="${cols}">
+                    <listcell>
+                        cell
+                    </listcell>
+                </forEach>
+            </listitem>
+        </template>
+    </listbox>
+    <tree checkmark="true" model="${model2}" sizedByContent="true">
+        <treecols>
+            <treecol hflex="min" label="11111"/>
+            <treecol hflex="min" label="22222"/>
+        </treecols>
+        <template name="model">
+            <treeitem>
+                <treerow>
+                    <treecell label="${each}" />
+                    <treecell label="22222" />
+                </treerow>
+            </treeitem>
+        </template>
+    </tree>
+</zk>
