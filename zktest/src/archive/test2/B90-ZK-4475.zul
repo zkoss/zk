@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4475.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 06 12:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+    <label>There should be no scrollbar in div</label>
+    <div id="d" width="600px" height="100px" style="position: relative; overflow: auto; border: 1px solid red">
+        <div style="position: absolute; right: 0"><combobox/></div>
+    </div>
+    <button w:onClick="zk.log(zk(jq('$d')).hasHScroll())" label="checkScrollBar"></button>
+    <apply templateURI="/test2/include/themes.zul"/>
+</zk>

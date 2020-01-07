@@ -9,6 +9,7 @@ ZK 9.0.1
   ZK-4463: Rangeslider and Multislider buttons position calculation
   ZK-4455: Failed to load the resource: /html/alert.dsp
   ZK-4466: toast covered by borderlayout
+  ZK-4475: Combobox causes overflow after ZK-4227
 
 * Upgrade Notes
 
