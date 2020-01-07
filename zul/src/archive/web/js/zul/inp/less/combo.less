@@ -6,6 +6,7 @@ each(@components, {
 		display: inline-block;
 		height: 34px;
 		white-space: nowrap;
+		position: relative;
 
 		&-input {
 			.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
@@ -61,9 +62,9 @@ each(@components, {
 		&-button {
 			.iconFontStyle(@comboButtonIconSize, @comboButtonIconColor);
 			display: inline-block;
-			position: relative;
+			position: absolute;
 			top: 0;
-			right: @baseButtonWidth + 8px * 2;
+			right: 0;
 			min-width: @baseButtonWidth + 8px * 2;
 			height: 34px;
 			border: 1px solid @inputBorderColor;
