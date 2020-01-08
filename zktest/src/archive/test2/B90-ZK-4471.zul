@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4471.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 08 17:10:48 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void showMessage() {
+        Messagebox.show("This is a long and Honorificabilitudinitatibus califragilisticexpialidocious Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu グレートブリテンおよび北アイルランド連合王国という言葉は本当に長い言葉");
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Click button "Click me".
+        2. The line-break for the message of the dialog shouldn't break a word halfway.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <button label="Click me" onClick="showMessage()"/>
+</zk>
