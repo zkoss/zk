@@ -13,7 +13,7 @@ public class B85_ZK_3680Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		JQuery tabJq = jq(".z-tabpanel").eq(0);
-		tabJq.scrollTop((int) Math.round(tabJq.scrollHeight() * 0.8));
+		tabJq.scrollTop(jq("@bandbox").positionTop());
 		waitResponse();
 
 		click(jq(".z-bandbox-button"));
