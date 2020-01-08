@@ -58,9 +58,10 @@
         <zkckeditor.version>4.11.1.1</zkckeditor.version>
         <zkgmaps.version>3.0.5</zkgmaps.version>
         <zkcharts.version>3.0.2</zkcharts.version>
-        <zkpivotable.version>2.5.0</zkpivotable.version>
+        <zkpivotable.version>2.5.1</zkpivotable.version>
         <zkpoi.version>3.9.17</zkpoi.version>
         <zss.version>3.9.6</zss.version>
+        <keikai.version>5.0.0</keikai.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -435,11 +436,6 @@
                 <artifactId>zkspringboot-starter</artifactId>
                 <version>${zkspringboot.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.zkoss.zkspringboot</groupId>
-                <artifactId>zkspringboot-zats</artifactId>
-                <version>1.0.0</version>
-            </dependency>
             <!-- Addons -->
             <dependency>
                 <groupId>org.zkoss.zkforge</groupId>
@@ -492,6 +488,22 @@
                 <groupId>org.zkoss.zss</groupId>
                 <artifactId>zsspdf</artifactId>
                 <version>${zss.version}</version>
+            </dependency>
+            <!-- Keikai -->
+            <dependency>
+                <groupId>io.keikai</groupId>
+                <artifactId>keikai-oss</artifactId>
+                <version>${keikai.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.keikai</groupId>
+                <artifactId>keikai-ex</artifactId>
+                <version>${keikai.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.keikai</groupId>
+                <artifactId>keikai-jsp</artifactId>
+                <version>${keikai.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
