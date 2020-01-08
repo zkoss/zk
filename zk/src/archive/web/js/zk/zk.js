@@ -1812,9 +1812,11 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 	*/
 	proxy: function (f) {
 		var fps = this._$proxies, fp;
-		if (!fps) this._$proxies = fps = {};
-		else if (fp = fps[f]) return fp;
-		return fps[f] = getProxy(this, f);
+		if (!fps) this._$proxies = fps = new WeakMap();
+		else if (fp = fps.get(f)) return fp;
+		var fn = getProxy(this, f);
+		fps.set(f, fn);
+		return fn;
 	}
 };
 

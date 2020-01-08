@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4439.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 03 16:05:42 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script src="B90-ZK-4439.js"/>
+    <script><![CDATA[
+    zk.afterMount(function () {
+        zk.$('$content').appendChild(new MyComp4439());
+    });
+    ]]>
+    </script>
+    <label multiline="true">
+        1. Click button "A".
+        2. You should see "Click A, widget#...(omitted)".
+        3. Click button "B".
+        4. You should see "Click B, widget#...(omitted)".
+    </label>
+    <div id="content"/>
+</zk>
