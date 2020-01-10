@@ -43,7 +43,7 @@
 	</licenses>
 	<scm>
 		<connection>scm:git:https://github.com/zkoss/zk.git</connection>
-		<url>http://mavensync.zkoss.org/maven2</url>
+		<url>https://mavensync.zkoss.org/maven2</url>
 	</scm>
 	<repositories>
 		<repository>
@@ -52,15 +52,15 @@
 		</repository>
 		<repository>
 			<id>zk repository</id>
-			<url>http://mavensync.zkoss.org/maven2</url>
+			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 		<repository>
 			<id>ZK PE Evaluation</id>
-			<url>http://mavensync.zkoss.org/zk/pe-eval</url>
+			<url>https://mavensync.zkoss.org/zk/pe-eval</url>
 		</repository>
 		<repository>
 			<id>ZK EE Evaluation</id>
-			<url>http://mavensync.zkoss.org/zk/ee-eval</url>
+			<url>https://mavensync.zkoss.org/zk/ee-eval</url>
 		</repository>		
 	</repositories>
 	
@@ -68,15 +68,7 @@
 		<pluginRepository>
 			<id>zkmaven</id>
 			<name>ZK Maven Plugin Repository</name>
-			<url>http://mavensync.zkoss.org/maven2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<id>snapshots</id>
-			<name>Maven Central Plugins Development Repository</name>
-			<url>http://snapshots.maven.codehaus.org/maven2</url>
+			<url>https://mavensync.zkoss.org/maven2</url>
 		</pluginRepository>
 		<pluginRepository>
 			<snapshots>
@@ -84,7 +76,7 @@
 			</snapshots>
 			<id>central</id>
 			<name>Maven Plugin Repository</name>
-			<url>http://repo1.maven.org/maven2</url>
+			<url>https://repo1.maven.org/maven2</url>
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>

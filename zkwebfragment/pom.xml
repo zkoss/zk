@@ -36,7 +36,7 @@
 	</developers>
 	<scm>
 		<connection>scm:git:https://github.com/zkoss/zk.git</connection>
-		<url>http://mavensync.zkoss.org/maven2</url>
+		<url>https://mavensync.zkoss.org/maven2</url>
 	</scm>
 	<build>
 		<directory>${project.basedir}/debug</directory>
