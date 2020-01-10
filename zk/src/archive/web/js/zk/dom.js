@@ -23,6 +23,7 @@ zjq = function (jq) { //ZK extension
 			'letter-spacing', 'line-height', 'text-align', 'text-decoration',
 			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
 			'direction', 'word-spacing', 'white-space'],
+		_txtFontStyles = ['font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'],
 		_txtStylesCamel, _txtSizDiv, //inited in textSize
 		_txtStyles2 = ['color', 'background-color', 'background'],
 		_zsyncs = [],
@@ -1556,6 +1557,7 @@ jq(el).zk.center(); //same as 'center'
 	/** Returns the size of the text if it is placed inside the first matched element.
 	 * @param String text the content text
 	 * @return Size the size of the text
+	 * @deprecated Use {@link textWidth} instead for better performance.
 	 */
 	textSize: (function () {
 		// cache
@@ -1594,6 +1596,25 @@ jq(el).zk.center(); //same as 'center'
 			return result;
 		};
 	})(),
+	/** Returns the width of the text if it is placed inside the first matched element.
+	 * @param String text the content text. The text of the first matched element if omitted
+	 * @return double the width in px of the text
+	 * @since 9.0.1
+	 * @see https://stackoverflow.com/a/21015393
+	 */
+	textWidth: function (text) {
+		var $obj = this.jq;
+		text = text || $obj[0].textContent;
+		var canvas = this.textWidth.canvas || (this.textWidth.canvas = document.createElement('canvas')),
+			context = canvas.getContext('2d'),
+			fontStyles = $obj.css(_txtFontStyles),
+			newFont = '';
+		jq.each(fontStyles, function (prop, val) {
+			newFont += val + ' ';
+		});
+		context.font = newFont;
+		return context.measureText(text).width;
+	},
 	/** Returns the dimension of the specified element.
 	 * <p>If revised not specified (i.e., not to calibrate), the left and top are the offsetLeft and offsetTop of the element.
 	 * @param boolean revised if revised is true, {@link #revisedOffset} will be
