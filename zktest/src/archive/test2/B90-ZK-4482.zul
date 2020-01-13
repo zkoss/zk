@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4482.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Jan 13 18:10:38 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+		var doClick = function() {
+			reload();
+		};
+		var reload = function() {
+			var binder = zkbind.$('$data');
+			if (binder) {
+				var fnA = (data) => {
+					console.log('A');
+					binder.unAfter('update', fnA);
+				};
+				binder.after('update', fnA);
+				
+				var fnB = (data) => {
+					console.log('B');
+					binder.unAfter('update', fnB);
+				};
+				binder.after('update', fnB);
+				
+				var fnC = (data) => {
+					console.log('C');
+					binder.unAfter('update', fnC);
+				};
+				binder.after('update', fnC);
+				
+				binder.command('reload');
+			}
+		}
+	]]></script>
+	<label multiline="true">
+		Click the "Click me" button you should not see any JavaScript error.
+	</label>
+	<window id="data" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B90_ZK_4482VM')">
+		<button label="Click Me" w:onClick="doClick()" />
+	</window>
+</zk>

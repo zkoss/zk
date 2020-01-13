@@ -20,6 +20,7 @@ ZK 9.0.1
   ZK-4465: vflex inside drawer has no effect
   ZK-4408: notification cause parent/children issues after ZK-4130
   ZK-4293: The fake parent mechanism in Notification causes setVisible issue
+  ZK-4482: zkbinder $doAfterCommand get javascript error
 
 * Upgrade Notes
 
