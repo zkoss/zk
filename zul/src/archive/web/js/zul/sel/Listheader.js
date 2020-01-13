@@ -278,7 +278,8 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	//@Override
 	domContent_: function () {
-		var s = this.$supers('domContent_', arguments);
+		var s = this.$supers('domContent_', arguments),
+			box = this.getListbox();
 		if (this._hasCheckbox())
 			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
 				+ (box.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
