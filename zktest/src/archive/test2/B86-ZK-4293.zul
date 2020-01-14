@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4293.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jan 17 16:34:27 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click "show notification" or "show popup" button or textfield and wait a sec.
+		2. you should not see "onChildVisible_ in Layout.js is called" in zk log.
+	</label>
+	<script>
+		zk.afterLoad('zul.box', function () {
+			var _xLayout = {};
+			zk.override(zul.box.Layout.prototype, _xLayout, {
+				onChildVisible_: function (child) {
+					this.$supers('onChildVisible_', arguments);
+					zk.log('onChildVisible_ in Layout.js is called');
+				}
+			});
+		});
+	</script>
+	<hlayout id="hlt">
+		<button id="pp" label="show popup"
+				popup="test1"/>
+		<button id="btn" label="show notification"
+		onClick='Clients.showNotification("Not disappearing box", Clients.NOTIFICATION_TYPE_WARNING, hlt, "bottom_center", 3000, true);'/>
+		<textbox constraint="no empty" />
+	</hlayout>
+	<popup id="test1">
+		popup
+	</popup>
+</zk>

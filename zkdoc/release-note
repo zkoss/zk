@@ -4,6 +4,8 @@ ZK 8.6.4
 
 * Bugs
   ZK-4429: websockets not working on Glassfish (5)
+  ZK-4408: notification cause parent/children issues after ZK-4130
+  ZK-4293: The fake parent mechanism in Notification causes setVisible issue
 
 * Upgrade Notes
 

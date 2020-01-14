@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4408.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jan 14 17:12:06 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.Click the "show notification on hlayout" button and waiting for the notification disappears.
+		2.Click the bandbox button to open the bandbox popup, the size(width) of bandbox should not change.
+		3.Click the "show notification on bandbox" button and waiting for the notification disappears.
+		4.Click the bandbox button to open the bandbox popup, the bandbox popup should work as usual(opened normally).
+	</label>
+	<window width="1200px" height="600px">
+		<hlayout id="hlt" hflex="true">
+			<bandbox id="bbx" hflex="true" >
+				<bandpopup>
+					<listbox id="box">
+						<listhead >
+							<listheader label="name" sort="auto" />
+						</listhead>
+						<listitem>
+							<listcell label="Mary" />
+						</listitem>
+						<listitem>
+							<listcell label="John" />
+						</listitem>
+						<listitem>
+							<listcell label="Jane" />
+						</listitem>
+						<listitem>
+							<listcell label="Henry" />
+						</listitem>
+					</listbox>
+				</bandpopup>
+			</bandbox>
+			<button id="btn" label="show notification on hlayout" onClick='Clients.showNotification("after this notification disappears, a click on the bandbox will shrink it", Clients.NOTIFICATION_TYPE_WARNING, hlt, "end_center", 1000, true);'/>
+			<button id="btn2" label="show notification on bandbox" onClick='Clients.showNotification("after this notification disappears, the bandbox stops opening", Clients.NOTIFICATION_TYPE_WARNING, bbx, "end_center", 1000, true);'/>
+		</hlayout>
+	</window>
+</zk>
