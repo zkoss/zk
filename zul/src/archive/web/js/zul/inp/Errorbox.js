@@ -26,7 +26,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	_defaultPos: 'end_before',
 	$init: function (owner, msg) {
-		this.$supers('$init', [owner, msg, {ref: parent}]);
+		this.$supers('$init', [msg, {ref: owner}]);
+		this.parent = owner;
 		this.parent.__ebox = this;
 		this.msg = msg;
 		this.sclass = owner._errorboxSclass;
@@ -45,7 +46,6 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 	show: function () {
 		if (!this.$n())
 			jq(document.body).append(this);
-		var cstp = this.parent._cst && this.parent._cst._pos;
 
 		// Fixed IE6/7 issue in B50-2941554.zul
 		var self = this, cstp = this.parent._cst && this.parent._cst._pos;
