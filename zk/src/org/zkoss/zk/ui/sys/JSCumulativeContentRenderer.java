@@ -142,10 +142,10 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 			buf.append('}');
 			return buf.toString();
 		}
-		if (value instanceof List) {
+		if (value instanceof Iterable) {
 			buf.append('[');
 			int j = 0;
-			for (Iterator it = ((List) value).iterator(); it.hasNext(); j++) {
+			for (Iterator it = ((Iterable) value).iterator(); it.hasNext(); j++) {
 				if (j > 0)
 					buf.append(',');
 				renderValue(it.next());
@@ -395,6 +395,6 @@ public class JSCumulativeContentRenderer implements ContentRenderer {
 	private void renderName(StringBuilder sb, String name) {
 		if (sb.length() > 0)
 			sb.append(',');
-		sb.append(name).append(':');
+		sb.append('\'').append(name).append('\'').append(':');
 	}
 }

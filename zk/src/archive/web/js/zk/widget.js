@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_floatings = [], //[{widget:w,node:n}]
 		_nextUuid = 0,
 		_domevtfnm = {}, //{evtnm, funnm}
-		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
+		_domevtnm = {onDoubleClick: 'dblclick', onRightClick: 'contextmenu'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}, //{clsnm, cls}
 		_hidden = [], //_autohide
 		_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
@@ -6011,6 +6011,190 @@ zk.NoDOM = {
 		}
 	}
 };
+
+/**
+ * A web component widget.
+ * It is used mainly to represent the web component created at the server.
+ * @since 9.1.0
+ */
+zk.WebComp = zk.$extends(zk.Widget, {
+	/** The class name.
+	 * @type String
+	 */
+	className: 'zk.WebComp',
+	/** The widget name.
+	 * @type String
+	 */
+	widgetName: 'webcomp',
+
+	bind_: function () {
+		this.$supers(zk.WebComp, 'bind_', arguments);
+		var n = this.$n(),
+			self = this;
+		jq.each(this._asaps, function (eventName) {
+			self.domListen_(n, eventName, self.proxy(self._sendEvent));
+		});
+		for (var event in this._syncProps) {
+			this.domListen_(n, event, this.proxy(this._syncChange));
+		}
+		if ('MutationObserver' in window) {
+			var mo = new MutationObserver(this.proxy(this._observeAttributes));
+			mo.observe(n, {attributes: true});
+			this._mutationObserver = mo;
+		}
+	},
+	unbind_: function () {
+		var n = this.$n(),
+			self = this;
+		if (this._mutationObserver)
+			this._mutationObserver.disconnect();
+		for (var event in this._syncProps) {
+			this.domUnlisten_(n, event, this.proxy(this._syncChange));
+		}
+		jq.each(this._asaps, function (eventName) {
+			self.domUnlisten_(n, eventName, self.proxy(self._sendEvent));
+		});
+		this.$supers(zk.WebComp, 'unbind_', arguments);
+	},
+	setSyncProps: function (syncProps) {
+		this._syncProps = syncProps;
+	},
+	setEventParameters: function (eventParameters) {
+		this._eventParameters = eventParameters;
+	},
+	$n: function (subId) {
+		return !subId && this.id ? document.getElementById(this.id) :
+			this.$supers('$n', arguments); // Bug ZK-606/607
+	},
+	redraw: function (out) {
+		var s = this.prolog, p;
+		if (s) {
+			//Bug ZK-606/607: hflex/vflex and many components need to know
+			//child.$n(), so we have to generate id if the parent is not native
+			//(and no id is assigned) (otherwise, zk.WebComp.$n() failed)
+			if (this.$instanceof(zk.WebComp) //ZK-745
+				&& !this.id && (p = this.parent) && !p.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
+				var j = 0, len = s.length, cond, cc;
+				for (cond = {whitespace: 1}; j < len; ++j) {
+					if ((cc = s.charAt(j)) == '<')
+						break; //found
+					if (!zUtl.isChar(cc, cond)) {
+						j = len; //not recognized => don't handle
+						break;
+					}
+				}
+				if (j < len) {
+					cond = {upper: 1,lower: 1,digit: 1,'-': 1};
+					while (++j < len)
+						if (!zUtl.isChar(s.charAt(j), cond))
+							break;
+					s = s.substring(0, j) + ' id="' + this.uuid + '"' + s.substring(j);
+				}
+			}
+			// B80-ZK-2957
+			if (this.domExtraAttrs) {
+				var postTag = s.indexOf('/>') == -1 ? '>' : '/>';
+				s = s.replace(postTag, this.domExtraAttrs_() + postTag);
+			}
+			// B65-ZK-1836 and B70-ZK-2622
+			out.push(zk.Native.replaceScriptContent(s.replace(/ sclass=/ig, ' class=')));
+			if (this.value && s.startsWith('<textarea'))
+				out.push(this.value);
+		}
+
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+
+		s = this.epilog;
+		if (s) out.push(s);
+	},
+	set: function (name, value, fromServer) {
+		this.$supers(zk.WebComp, 'set', arguments);
+		var n = this.$n(),
+			onIndex = name.indexOf('on');
+		if (name.startsWith('$') && onIndex >= 0) {
+			var eventName = name.substring(onIndex);
+			if (value) {
+				this.domListen_(n, eventName, this.proxy(this._sendEvent));
+			} else {
+				this.domUnlisten_(n, eventName, this.proxy(this._sendEvent));
+			}
+			return;
+		}
+
+		// map setters to set the node itself, not this widget
+		if (this.desktop && typeof this[name] !== 'undefined') {
+			var mo = this._mutationObserver;
+			if (mo) mo.disconnect();
+			if (value == null)
+				n.removeAttribute(name);
+			else
+				n.setAttribute(name, value);
+			this[name] = undefined;
+			if (mo) mo.observe(n, {attributes: true});
+		}
+	},
+	invoke: function () {
+		var n = this.$n();
+		if (n && arguments.length >= 1) {
+			var fn = arguments[0],
+				func = n[fn];
+			if (!func) {
+				zk.error('Method not found: ' + fn);
+				return;
+			}
+			try {
+				var args = [];
+				for (var j = 1, len = arguments.length; j < len; j++)
+					args.push(arguments[j]);
+				func.apply(n, args);
+			} catch (e) {
+				zk.error('Failed to invoke method: ' + fn + '\n' + e.message);
+			}
+		}
+	},
+	_observeAttributes: function (mutations) {
+		var n = this.$n();
+		for (var i = 0, len = mutations.length; i < len; i++) {
+			var attrName = mutations[i].attributeName;
+			this.smartUpdate(attrName, n.getAttribute(attrName));
+		}
+	},
+	_sendEvent: function (e) {
+		var originalDomEvent = e.domEvent.originalEvent,
+			evtParams = this._eventParameters,
+			evtParam;
+		if (evtParams && (evtParam = evtParams[e.name])) {
+			e.data = e.data || {};
+			for (var i = 0, len = evtParam.length; i < len; i++) {
+				var p = evtParam[i];
+				if (!e.data[p]) { // Prevent overriding
+					try {
+						var result = this._func(p)(originalDomEvent);
+						if (typeof result === 'undefined')
+							throw new Error('undefined');
+						e.data[p] = result;
+					} catch (err) {
+						zk.error('Unresolved event parameter [' + p + ']: ' + (err.message || err));
+					}
+				}
+			}
+		}
+		this.fireX(e);
+	},
+	_func: function (expr) {
+		return Function('"use strict";return(function(e){return e.' + expr + '})')();
+	},
+	_syncChange: function (e) {
+		var n = this.$n(),
+			props = this._syncProps[e.name];
+		if (props) {
+			props.forEach(function (prop) {
+				this.smartUpdate(prop, n[prop]);
+			}, this);
+		}
+	}
+});
 //Extra//
 
 function zkopt(opts) {

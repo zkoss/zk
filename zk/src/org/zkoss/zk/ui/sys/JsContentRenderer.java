@@ -19,7 +19,6 @@ package org.zkoss.zk.ui.sys;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.zkoss.json.JSONAware;
@@ -145,7 +144,7 @@ public class JsContentRenderer implements ContentRenderer {
 	private void renderName(String name) {
 		if (_buf.length() > 0)
 			_buf.append(',');
-		_buf.append(name).append(':');
+		_buf.append('\'').append(name).append('\'').append(':');
 	}
 
 	private void renderValue(String value) {
@@ -237,10 +236,10 @@ public class JsContentRenderer implements ContentRenderer {
 			_buf.append('}');
 			return;
 		}
-		if (value instanceof List) {
+		if (value instanceof Iterable) {
 			_buf.append('[');
 			int j = 0;
-			for (Iterator it = ((List) value).iterator(); it.hasNext(); j++) {
+			for (Iterator it = ((Iterable) value).iterator(); it.hasNext(); j++) {
 				if (j > 0)
 					_buf.append(',');
 				renderValue(it.next());

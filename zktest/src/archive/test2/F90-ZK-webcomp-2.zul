@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"?>
+<?script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"?>
+<?component name="zero-md" class="org.zkoss.zktest.test2.F90_ZK_WC_ZeroMd"?>
+<!--
+F90-ZK-webcomp.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 10 14:28:24 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    EventListener el = new EventListener() {
+        void onEvent(Event event) {
+            Clients.log("You clicked: " + event);
+        }
+    };
+
+    void addListener(Component comp) {
+        comp.addEventListener("onClick", el);
+    }
+
+    void removeListener(Component comp) {
+        comp.removeEventListener("onClick", el);
+    }
+    ]]>
+    </zscript>
+    <panel id="win1" title="Test" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F90_ZK_WebcompVM')" vflex="1">
+        <toolbar>
+            <toolbarbutton label="Add listener" onClick="addListener(t1)"/>
+            <toolbarbutton label="Remove listener" onClick="removeListener(t1)"/>
+            <toolbarbutton label="Invalidate" onClick="t1.invalidate()"/>
+            <toolbarbutton label="set Src" onClick='t1.src="https://raw.githubusercontent.com/facebook/react/master/README.md";t1.render()'/>
+        </toolbar>
+        <panelchildren style="overflow: auto">
+            <zero-md id="t1" src="https://raw.githubusercontent.com/zerodevx/zero-md/master/README.md"
+                     onZero-md-rendered="@command('now')"/>
+        </panelchildren>
+    </panel>
+</zk>

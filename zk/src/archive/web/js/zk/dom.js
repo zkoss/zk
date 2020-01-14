@@ -2709,6 +2709,9 @@ zk.copy(jq.Event, {
 		} else if (type == 'dblclick') {
 			data = evt.mouseData();
 			type = 'DoubleClick';
+		} else if (type == 'contextmenu') {
+			data = evt.mouseData();
+			type = 'RightClick';
 		} else {
 			if (type == 'click')
 				data = evt.mouseData();
