@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4465.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 20 09:49:45 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "open drawer".
+        2. The block of red border should consume the whole available height inside the drawer.
+    </label>
+    <div>
+        <drawer id="dr" closable="true" title="test">
+<!--            <custom-attributes org.zkoss.zul.css.flex="false"/>-->
+            <div style="border: 1px solid red;" vflex="1">
+                surrounding div uses vflex="1"
+            </div>
+        </drawer>
+        <button onClick="dr.open()" label="open drawer"/>
+        <apply templateURI="/test2/include/themes.zul"/>
+    </div>
+</zk>
