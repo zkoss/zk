@@ -134,6 +134,17 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 				}
 			}
 
+			// @since 9.0.1 support footer.less
+			String footerUri = "~./zul/css/footer.css.dsp";
+			try {
+				if (tp != null)
+					footerUri = tp.beforeWidgetCSS(exec, footerUri);
+				if (footerUri != null && getWebApp().getResource(footerUri) != null)
+					_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), footerUri, null);
+			} catch (Throwable ex) {
+				log.error("Unable to load " + footerUri, ex);
+			}
+
 			// @since 8.6.0 for supporting narrow theme patch
 			String uri = "~./zul/css/patch.css.dsp";
 			try {

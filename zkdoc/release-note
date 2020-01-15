@@ -15,6 +15,7 @@ ZK 9.0.1
   ZK-4471: The line-break of message in Messagebox is wrong in IE
   ZK-4439: Widget.domListen_ binds proxied functions wrongly
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
+  ZK-4467: vflex inside closed groupbox has no effect
 
 * Upgrade Notes
 
