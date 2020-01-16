@@ -4,6 +4,7 @@ ZK 9.0.1
   ZK-4472: Using fileupload in MVVM Client-side binding
   ZK-4481: Configure repositories to use HTTPS
   ZK-4470: Improve the performance of textSize()
+  ZK-4414: scrolling can change pages in a pdfviewer at any zoom level
 
 * Bugs
   ZK-4456: cascader icon (open/clear) not updated when setting selection in model
