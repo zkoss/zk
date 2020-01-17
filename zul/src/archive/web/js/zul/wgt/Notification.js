@@ -30,9 +30,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	_keepVisible: true,
-	$init: function (owner, msg, opts) {
+	$init: function (msg, opts) {
 		this.$supers(zul.wgt.Notification, '$init', arguments);
-		this.parent = owner; //fake
 		this._msg = msg;
 		this._type = opts.type;
 		this._ref = opts.ref;
@@ -240,7 +239,7 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 		var ref = opts.ref,
 			pos = opts.pos,
 			dur = opts.dur,
-			ntf = new zul.wgt.Notification(ref, msg, opts),
+			ntf = new zul.wgt.Notification(msg, opts),
 			off = opts.off,
 			n, isInView = true;
 

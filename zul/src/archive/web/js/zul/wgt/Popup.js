@@ -211,10 +211,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			zk(this.$n()).position(posInfo.dim, posInfo.pos, opts);
 	},
 	/** Reset the position on scroll
-	 * @param zk.Widget wgt
+	 * @param zk.Event evt
 	 */
-	onScroll: function (wgt) {
-		if (wgt) {
+	_onSyncScroll: function (evt) {
+		if (evt && zUtl.isAncestor(evt.origin, this._fakeParent)) { // ZK-4408
 			if (this.isInView_()) {
 				var args = this.getPositionArgs_();
 				if (!this.isOpen() && this._keepVisible) {
@@ -385,7 +385,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.wgt.Popup, 'bind_', arguments);
-		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this, afterSize: this, onScroll: this});
+		zWatch.listen({onFloatUp: this, onShow: this, onVParent: this, afterSize: this, _onSyncScroll: this});
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -397,7 +397,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (this._openInfo)
 			this._openInfo = null;
 		this._shallToggle = null;
-		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this, afterSize: this, onScroll: this});
+		zWatch.unlisten({onFloatUp: this, onShow: this, onVParent: this, afterSize: this, _onSyncScroll: this});
 		this.setFloating_(false);
 		this.$supers(zul.wgt.Popup, 'unbind_', arguments);
 	},
