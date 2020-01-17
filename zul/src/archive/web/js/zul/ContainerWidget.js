@@ -39,8 +39,10 @@ zul.ContainerWidget = zk.$extends(zul.Widget, {
 	},
 
 	_doScroll: function () {
-		if (jq(this).data('scrollable'))
+		if (jq(this).data('scrollable')) {
 			zWatch.fireDown('onScroll', this);
+			zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
+		}
 	},
 
 	unbind_: function () {
