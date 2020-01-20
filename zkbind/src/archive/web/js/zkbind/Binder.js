@@ -134,6 +134,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		this.$view = widget;
 		this.$currentTarget = currentTarget;
 		this._aftercmd = {};
+		this._toDoUnAftercmd = {};
 		//ZK-3133
 		if (widget['$ZKMATCHMEDIA$']) {
 			var cookies = [];
@@ -186,8 +187,16 @@ zkbind.Binder = zk.$extends(zk.Object, {
 	unAfter: function (cmd, fn) {
 		var ac = this._aftercmd[cmd];
 		for (var j = ac ? ac.length : 0; j--;) {
-			if (ac[j] == fn)
-				ac.splice(j, 1);
+			if (ac[j] == fn) {
+				if (!this._processingAfterCommand)
+					ac.splice(j, 1);
+				else { // ZK-4482: queue unAfter if $doAfterCommand still processing
+					var tduac = this._toDoUnAftercmd[cmd];
+					if (!tduac) this._toDoUnAftercmd[cmd] = [fn];
+					else
+						tduac.push(fn);
+				}
+			}
 		}
 		return this;
 	},
@@ -246,9 +255,16 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		return this;
 	},
 	$doAfterCommand: function (cmd, args) {
-		var ac = this._aftercmd[cmd];
+		var ac = this._aftercmd[cmd],
+			tduac = this._toDoUnAftercmd[cmd];
+		this._processingAfterCommand = true; // ZK-4482
 		for (var i = 0, j = ac ? ac.length : 0; i < j; i++)
 			ac[i].apply(this, [args]);
+		this._processingAfterCommand = false;
+		for (var i = 0, j = tduac ? tduac.length : 0; i < j; i++) { // ZK-4482: do unAfter
+			this.unAfter(cmd, tduac[i]);
+		}
+		this._toDoUnAftercmd[cmd] = [];
 	},
 	/**
 	 * Post a upload command to the binder
