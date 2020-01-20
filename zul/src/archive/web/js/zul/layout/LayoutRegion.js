@@ -892,6 +892,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_doScroll: function () {
 		zWatch.fireDown('onScroll', this);
+		zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
 	},
 	_fixSplit: function () {
 		var split = this.$n('split');
