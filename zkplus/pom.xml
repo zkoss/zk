@@ -6,7 +6,7 @@
 	<artifactId>zkplus</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<org.springframework.version>5.2.2.RELEASE</org.springframework.version>
+		<org.springframework.version>5.2.3.RELEASE</org.springframework.version>
 	</properties>
 	<version>9.0.1-SNAPSHOT</version>
 	<name>ZK Plus Utilities</name>
