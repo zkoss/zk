@@ -21,6 +21,7 @@ ZK 9.0.1
   ZK-4408: notification cause parent/children issues after ZK-4130
   ZK-4293: The fake parent mechanism in Notification causes setVisible issue
   ZK-4482: zkbinder $doAfterCommand get javascript error
+  ZK-4493: hflex doesn't work as design in columnlayout
 
 * Upgrade Notes
 
