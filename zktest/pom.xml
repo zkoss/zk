@@ -554,7 +554,7 @@
 						<include>**/*Test.java</include>
 					</includes>
 					<reportsDirectory>${report.dir}</reportsDirectory>
-					<argLine>-Xmx512m</argLine>
+					<argLine>-Xmx512m -Djava.util.logging.config.file=src/archive/WEB-INF/logging.properties</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
