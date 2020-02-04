@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.zkoss.zk</groupId>
 	<artifactId>zkwebfragment</artifactId>
-	<version>8.6.4-SNAPSHOT</version>
+	<version>8.6.4</version>
 	<packaging>jar</packaging>
 	<name>ZK Web Fragment</name>
 	<url>http://www.zkoss.org/zkwebfragment</url>
