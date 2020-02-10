@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormLegacy;
+import org.zkoss.bind.FormLegacyExt;
 import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
@@ -61,6 +63,9 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 		_validator = validatorExpr == null ? null : parseValidator(eval, validatorExpr);
 		_validatorArgs = validatorArgs;
 
+		Form form = getFormBean();
+		if (form instanceof FormLegacy)
+			return;
 		// force to init Form for validation
 		getFormBean(BindContextUtil.newBindContext(binder, this, false, null, getComponent(), null));
 
@@ -121,17 +126,33 @@ public class SaveFormBindingImpl extends FormBindingImpl implements SaveFormBind
 		final Form form = getFormBean(ctx);
 
 		BindingExecutionInfoCollector collector = ((BinderCtrl) getBinder()).getBindingExecutionInfoCollector();
+		
+		//update form field into backing bean
+		if (form instanceof FormLegacy) {
+			if (form instanceof FormLegacyExt) {
+				final BindEvaluatorX eval = binder.getEvaluatorX();
+				for (String field : ((FormLegacyExt) form).getSaveFieldNames()) {
+					final ExpressionX expr = getFieldExpression(eval, field);
+					if (expr != null) {
+						//ZK-911. Load from Form bean via expression(so will use form's AccessFieldName)
+						final ExpressionX formExpr = getFormExpression(eval, field);
+						final Object value = eval.getValue(null, comp, formExpr); //form.getField(field);
+						eval.setValue(ctx, comp, expr, value);
+					}
+					//TODO should we clear form dirty and notify formStatus?
+				}
+			}
+		} else {
+			FormStatus formStatus = form.getFormStatus();
+			if (formStatus.isDirty())
+				formStatus.submit(ctx);
+			
+			binder.notifyChange(formStatus, "."); //notify change of fxStatus and fxStatus.*
+		}
 		if (collector != null) {
 			collector.addInfo(new SaveInfo(SaveInfo.FORM_SAVE, comp, getConditionString(ctx), getFormId(),
 					getPropertyString(), form, getArgs(), null));
 		}
-
-		//update form field into backing bean
-		FormStatus formStatus = form.getFormStatus();
-		if (formStatus.isDirty())
-			formStatus.submit(ctx);
-
-		binder.notifyChange(formStatus, "."); //notify change of fxStatus and fxStatus.*
 	}
 
 	private String getConditionString(BindContext ctx) {

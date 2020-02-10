@@ -18,6 +18,7 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormLegacyExt;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.Path;
@@ -66,6 +67,7 @@ public class BindELResolver extends XelELResolver {
 		else
 			_resolver.add(_pathResolver);
 
+		_resolver.add(new FormELResolver());
 		_resolver.add(new ListModelELResolver());
 		_resolver.add(new TreeModelELResolver());
 		_resolver.add(new ValidationMessagesELResolver());
@@ -318,7 +320,9 @@ public class BindELResolver extends XelELResolver {
 								if (!script.equals(formFieldName)) {
 									BindELContext.addNotifys(base, (String) formFieldName, value, bctx);
 								}
-								if (base instanceof Form)
+								if (base instanceof FormLegacyExt) // ZK-4501: add SimpleForm back for compatibility
+									BindELContext.addNotifys(((FormLegacyExt) base).getStatus(), ".", null, bctx);
+								else if (base instanceof Form)
 									BindELContext.addNotifys(((Form) base).getFormStatus(), ".", null, bctx);
 							} else {
 								final Method m = (Method) ctx.getContext(Method.class);

@@ -12,6 +12,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.bind.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +22,8 @@ import java.util.Set;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormLegacy;
+import org.zkoss.bind.FormLegacyExt;
 import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -27,6 +32,7 @@ import org.zkoss.bind.sys.LoadFormBinding;
 import org.zkoss.bind.sys.debugger.BindingExecutionInfoCollector;
 import org.zkoss.bind.sys.debugger.impl.info.LoadInfo;
 import org.zkoss.bind.xel.zel.BindELContext;
+import org.zkoss.xel.ExpressionX;
 import org.zkoss.xel.ValueReference;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -62,27 +68,71 @@ public class LoadFormBindingImpl extends FormBindingImpl implements LoadFormBind
 					.formatLocationMessage("doesn't support to load a nested form , formId " + getFormId(), comp));
 		}
 
-		final Form form = initFormBean(bean,
-				(Class<Object>) (bean != null ? bean.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())),
-				ctx);
+		Form form = getFormBean();
 		final boolean activating = ((BinderCtrl) getBinder()).isActivating();
 
 		//ZK-1005 ZK 6.0.1 validation fails on nested bean
 		//sets the last loaded bean express of the form
 		comp.setAttribute(BinderCtrl.LOAD_FORM_EXPRESSION, getPropertyString());
 
+		if (form instanceof FormLegacy) { // ZK-4501: add SimpleForm back for compatibility
+			if (form instanceof FormLegacyExt) {
+				FormLegacyExt fex = (FormLegacyExt) form;
+				
+				//ZK-1259, for the case of nested form expression in same loading, e.g. @load(fx.hash[fx.key]),
+				//it will produce 2 loadField name, 'hash[fx.key]' & 'key',
+				//and fx + 'hash[fx.key]' will get null if fx + 'key' is not loaded yet and throw exception
+				//i sort the field name to let inner value be loaded into form first.
+				final String formId = getFormId();
+				List<String> fields = new LinkedList<String>(fex.getLoadFieldNames());
+				Collections.sort(fields, new Comparator<String>() {
+					
+					public int compare(String o1, String o2) {
+						o1 = BindELContext.appendFields(formId, o1);
+						o2 = BindELContext.appendFields(formId, o2);
+						if (o1.indexOf(o2) > 0) return 1;
+						if (o2.indexOf(o1) > 0) return -1;
+						return 0;
+					}
+				});
+				
+				for (String field : fields) {
+					final ExpressionX expr = getFieldExpression(eval, field);
+					if (expr != null) {
+						final Object value = eval.getValue(ctx, comp, expr);
+						if (!activating) { //don't load to form if activating
+							//ZK-911. Save into Form bean via expression(so will use form's AccessFieldName)
+							final ExpressionX formExpr = getFormExpression(eval, field);
+							eval.setValue(null, comp, formExpr, value); //formExprform.setField(field, value);
+						}
+					}
+				}
+				if (activating) return;
+				
+				fex.resetDirty(); //initial loading, mark form as clean
+			}
+		} else {
+			form = initFormBean(bean,
+					(Class<Object>) (bean != null ? bean.getClass() : eval.getType(ctx, comp, _accessInfo.getProperty())),
+					ctx);
+		}
+		
 		if (activating)
 			return; // don't notify change if activating
 
-		// don't do resetDirty when in activating. Test case is in bind/form/FormWith*
-		FormStatus formStatus = form.getFormStatus();
-		formStatus.reset(); //initial loading, mark form as clean
-
-		binder.notifyChange(form, "."); // notify change of fx and fx.*
-
-		// notify change of fxStatus and fxStatus.*
-		binder.notifyChange(formStatus, ".");
-
+		binder.notifyChange(form, "."); //notify change of fx and fx.*
+		
+		if (form instanceof FormLegacyExt) {
+			binder.notifyChange(((FormLegacyExt) form).getStatus(), "."); //notify change of fxStatus and fxStatus.*
+		} else {
+			// don't do resetDirty when in activating. Test case is in bind/form/FormWith*
+			FormStatus formStatus = form.getFormStatus();
+			formStatus.reset(); //initial loading, mark form as clean
+			
+			// notify change of fxStatus and fxStatus.*
+			binder.notifyChange(formStatus, ".");
+		}
+		
 		if (collector != null) {
 			collector.addInfo(new LoadInfo(LoadInfo.FORM_LOAD, comp, getConditionString(ctx), getPropertyString(),
 					getFormId(), bean, getArgs(), null));

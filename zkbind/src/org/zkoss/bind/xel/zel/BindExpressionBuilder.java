@@ -22,10 +22,15 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormLegacy;
+import org.zkoss.bind.FormLegacyExt;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.LoadChildrenBinding;
+import org.zkoss.bind.sys.LoadPropertyBinding;
+import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.bind.sys.tracker.Tracker;
 import org.zkoss.zel.ELContext;
@@ -96,11 +101,32 @@ public class BindExpressionBuilder extends ExpressionBuilder {
 			//check if a PropertyBinding inside a Form
 			final Component comp = bctx != null ? bctx.getComponent() : binding.getComponent();
 			final Object base = comp.getAttribute(prop, true);
-			if (base instanceof Form) {
-				final Form formBean = (Form) base;
-				final String fieldName = fieldName(it);
-
-				if (fieldName != null) {
+			final String fieldName = fieldName(it);
+			
+			if (fieldName != null) {
+				if (base instanceof FormLegacy) { // ZK-4501: add SimpleForm back for compatibility
+					final FormLegacy formLegacyBean = (FormLegacy) base;
+					
+					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
+						if (_log.isDebugEnabled()) {
+							_log.debug("add save-field '%s' to form '%s'", fieldName, formLegacyBean);
+						}
+						if (formLegacyBean instanceof FormLegacyExt) {
+							((FormLegacyExt) formLegacyBean).addSaveFieldName(fieldName);
+						}
+						((BinderCtrl) binder).addFormAssociatedSaveBinding(comp, prop, (SavePropertyBinding) binding, fieldName);
+					} else if (binding instanceof LoadPropertyBinding
+							|| binding instanceof LoadChildrenBinding || binding instanceof ReferenceBinding) {
+						if (_log.isDebugEnabled()) {
+							_log.debug("add load-field '%s' to form '%s'", fieldName, formLegacyBean);
+						}
+						if (formLegacyBean instanceof FormLegacyExt) {
+							((FormLegacyExt) formLegacyBean).addLoadFieldName(fieldName);
+						}
+					}
+				} else if (base instanceof Form) {
+					final Form formBean = (Form) base;
+					
 					if (binding instanceof SavePropertyBinding && !Boolean.TRUE.equals(isVisted)) {
 						if (_log.isDebugEnabled()) {
 							_log.debug("add save-field '{}' to form '{}'", fieldName, formBean);
