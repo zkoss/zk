@@ -131,6 +131,17 @@ public class LanguageDefinition {
 	 */
 	public static final String SHADOW_NAME = "shadow";
 
+	/** The namespace for the prefix of ZK client attributes. It is used to specify
+	 * DOM attributes including the prefix.
+	 * @since 9.0.1
+	 */
+	public static final String CLIENT_ATTRIBUTE_PREFIX_NAMESPACE = "http://www.zkoss.org/2020/zk/client/attribute-prefix";
+
+	/** The name for the prefix of ZK client attributes.
+	 * @since 9.0.1
+	 */
+	public static final String CLIENT_ATTRIBUTE_PREFIX_NAME = "client/attribute-prefix";
+
 	/** the device type that this definition belongs to. */
 	private final String _deviceType;
 	/** name */

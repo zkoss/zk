@@ -972,6 +972,9 @@ public class Parser {
 						} else if (isClientNamespace(attURI) || isClientAttrNamespace(attURI)) {
 							compInfo.addProperty(attnm, attval, null);
 							continue;
+						} else if (isClientAttrPrefixNamespace(attURI)) { // ZK-4474
+							compInfo.addProperty(attPref + ":" + attnm, attval, null);
+							continue;
 						}
 					}
 
@@ -1648,6 +1651,15 @@ public class Parser {
 				return;
 			}
 		}
+
+		// ZK-4474
+		if (attrns != null) {
+			if (isClientAttrPrefixNamespace(attrns.getURI())) {
+				compInfo.addWidgetAttribute(attrns.getPrefix() + ":" + name, value, cond);
+				return;
+			}
+		}
+		
 		compInfo.addProperty(name, value, cond);
 	}
 
@@ -1768,7 +1780,7 @@ public class Parser {
 				|| LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri) || "xhtml".equals(uri)
 				|| "http://www.w3.org/1999/xhtml/".equals(uri) || "zul".equals(uri)
 				|| "http://www.zkoss.org/2005/zul/".equals(uri) || "xml".equals(uri)
-				|| "http://www.zkoss.org/2007/xml".equals(uri) || langdefLookup(uri) != null;
+				|| "http://www.zkoss.org/2007/xml".equals(uri) || isClientAttrPrefixNamespace(uri) || langdefLookup(uri) != null;
 	}
 
 	/** Returns whether the given uri is in native namespace or not
@@ -1793,6 +1805,12 @@ public class Parser {
 	 */
 	private static boolean isClientAttrNamespace(String uri) {
 		return "client/attribute".equals(uri) || LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri);
+	}
+
+	/** Returns whether the given uri is in client raw attribute namespace or not
+	 */
+	private static boolean isClientAttrPrefixNamespace(String uri) {
+		return LanguageDefinition.CLIENT_ATTRIBUTE_PREFIX_NAME.equals(uri) || LanguageDefinition.CLIENT_ATTRIBUTE_PREFIX_NAMESPACE.equals(uri);
 	}
 
 	//ZK-2632: Parser support disorder template tag

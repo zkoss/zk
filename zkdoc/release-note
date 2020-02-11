@@ -5,6 +5,7 @@ ZK 9.0.1
   ZK-4481: Configure repositories to use HTTPS
   ZK-4470: Improve the performance of textSize()
   ZK-4414: scrolling can change pages in a pdfviewer at any zoom level
+  ZK-4474: Support client attributes including prefix
 
 * Bugs
   ZK-4456: cascader icon (open/clear) not updated when setting selection in model
