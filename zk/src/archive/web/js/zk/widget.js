@@ -2744,7 +2744,8 @@ function () {
 	 * @since 8.6.0
 	 */
 	rerenderLater_: function () {
-		if (zAu.processPhase == 'setAttr')
+		var processPhase = zAu.processPhase;
+		if (processPhase == 'setAttr' || processPhase == 'setAttrs')
 			this.doAfterProcessRerenderArgs = arguments;
 		else
 			this.rerender.apply(this, arguments);

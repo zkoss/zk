@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -49,6 +50,8 @@ import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.RequestOutOfSequenceException;
 import org.zkoss.zk.au.out.AuAlert;
+import org.zkoss.zk.au.out.AuSetAttribute;
+import org.zkoss.zk.au.out.AuSetAttributes;
 import org.zkoss.zk.au.out.AuWrongValue;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.ActivationTimeoutException;
@@ -1348,7 +1351,7 @@ public class UiEngineImpl implements UiEngine {
 				responses.addAll(0, prs);
 
 			out.writeResponseId(desktopCtrl.getResponseId(true));
-			out.write(responses);
+			out.write(mergeResponses(responses));
 
 			//			if (log.isDebugEnabled())
 			//				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);
@@ -1394,6 +1397,42 @@ public class UiEngineImpl implements UiEngine {
 			if (pfmeter != null && doneReqIds != null)
 				meterAuServerComplete(pfmeter, doneReqIds, exec);
 		}
+	}
+
+	private List<AuResponse> mergeResponses(List<AuResponse> responses) {
+		if (responses.size() >= 2) { // worth merging
+			List<AuSetAttribute> bulk = new LinkedList<>();
+			ListIterator<AuResponse> iterator = responses.listIterator();
+			Object previousDepends = null, currentDepends = null;
+			while (iterator.hasNext()) {
+				AuResponse resp = iterator.next();
+				boolean isSetAttr = resp instanceof AuSetAttribute;
+				currentDepends = isSetAttr ? resp.getDepends() : null;
+				if (previousDepends != currentDepends) {
+					if (!bulk.isEmpty()) {
+						iterator.previous();
+						iterator.add(bulk.size() == 1
+								? bulk.get(0)
+								: new AuSetAttributes((Component) previousDepends,
+										bulk.toArray(new AuSetAttribute[0])));
+						iterator.next();
+						bulk.clear();
+					}
+				}
+				if (isSetAttr) {
+					bulk.add((AuSetAttribute) resp);
+					iterator.remove();
+				}
+				previousDepends = currentDepends;
+			}
+			if (!bulk.isEmpty()) {
+				responses.add(bulk.size() == 1
+						? bulk.get(0)
+						: new AuSetAttributes((Component) currentDepends, bulk.toArray(new AuSetAttribute[0])));
+				bulk.clear();
+			}
+		}
+		return responses;
 	}
 
 	public Object startUpdate(Execution exec) throws IOException {
