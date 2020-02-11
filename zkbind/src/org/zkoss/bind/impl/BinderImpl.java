@@ -244,7 +244,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private static final String REF_HANDLER_CLASS_PROP = "org.zkoss.bind.ReferenceBindingHandler.class";
 
 	//ZK-3133 to cache MatchMedia annotation values
-	private Map<String, Method> _matchMediaValues;
+	private transient Map<String, Method> _matchMediaValues;
 
 	public BinderImpl() {
 		this(null, null);
@@ -334,21 +334,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		if (comp instanceof ComponentCtrl)
 			((ComponentCtrl) comp).enableBindingAnnotation();
 		//ZK-3133
-		for (Method m : BindUtils.getViewModelClass(getViewModel()).getMethods()) {
-			MatchMedia annomm = m.getAnnotation(MatchMedia.class);
-			if (annomm != null) {
-				if (_matchMediaValues == null)
-					_matchMediaValues = new HashMap<String, Method>(6);
-				for (String s : annomm.value()) {
-					s = BinderCtrl.MATCHMEDIAVALUE_PREFIX + s.trim();
-					if (_matchMediaValues.containsKey(s))
-						throw new UiException("there are more then one MatchMedia method \"" + s.substring(16)
-								+ "\" in class " + viewModel);
-					_matchMediaValues.put(s, m);
-				}
-			}
-		}
-		if (_matchMediaValues != null) {
+		_matchMediaValues = initMatchMediaValues(viewModel);
+		if (!_matchMediaValues.isEmpty()) {
 			Clients.response(new AuInvoke(_rootComp, "$binder"));
 			final Execution exec = Executions.getCurrent();
 			if (exec != null) {
@@ -386,6 +373,23 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				}
 			}
 		}
+	}
+
+	private Map<String, Method> initMatchMediaValues(Object viewModel) {
+		Map<String, Method> values = new HashMap<>(6);
+		for (Method m : BindUtils.getViewModelClass(viewModel).getMethods()) {
+			MatchMedia annomm = m.getAnnotation(MatchMedia.class);
+			if (annomm != null) {
+				for (String s : annomm.value()) {
+					s = BinderCtrl.MATCHMEDIAVALUE_PREFIX + s.trim();
+					if (values.containsKey(s))
+						throw new UiException("there are more then one MatchMedia method \"" + s.substring(16)
+								+ "\" in class " + viewModel);
+					values.put(s, m);
+				}
+			}
+		}
+		return values.isEmpty() ? Collections.emptyMap() : values;
 	}
 
 	public void destroy(Component comp, Object viewModel) {
@@ -2127,8 +2131,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 			//ZK-3133 for matchMedia methods cache
 			if (_matchMediaValues != null) {
-				for (String s : _matchMediaValues.keySet()) {
-					methods.put(s, new CachedItem<Method>(_matchMediaValues.get(s)));
+				for (Map.Entry<String, Method> entry : _matchMediaValues.entrySet()) {
+					methods.put(entry.getKey(), new CachedItem<Method>(entry.getValue()));
 				}
 			}
 			methods.put(COMMAND_METHOD_MAP_INIT, NULL_METHOD); //mark this map has been initialized.
@@ -2753,7 +2757,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 
 	public Map<String, Method> getMatchMediaValue() {
-		return _matchMediaValues != null ? Collections.unmodifiableMap(_matchMediaValues) : Collections.EMPTY_MAP;
+		if (_matchMediaValues == null) {
+			_matchMediaValues = initMatchMediaValues(getViewModel());
+		}
+		return Collections.unmodifiableMap(_matchMediaValues);
 	}
 
 	private Map<Object, Set<String>> initSaveFormMap() {
