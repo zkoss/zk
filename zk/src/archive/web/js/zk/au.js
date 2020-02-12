@@ -153,6 +153,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
 		try {
 			zk.ausending = true;
+			if (reqInf.dt.xhrWithCredentials)
+				req.withCredentials = true;
 			req.onreadystatechange = zAu._onResponseReady;
 			req.open('POST', reqInf.uri, true);
 			req.setRequestHeader('Content-Type', setting.contentType);
