@@ -25,6 +25,7 @@ ZK 9.0.1
   ZK-4493: hflex doesn't work as design in columnlayout
   ZK-4381: BinderImpl with MatchMedia not Serializable
   ZK-4389: Groupbox ROD fails to initialize desktop on visible=false children
+  ZK-4495: Embedded ZK should support queryparam
 
 * Upgrade Notes
 
