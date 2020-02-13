@@ -11,21 +11,41 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
+import java.net.InetSocketAddress;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.zkoss.zktest.zats.WebDriverTestCase;
-import org.zkoss.zktest.zats.ztl.JQuery;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.zkoss.lang.Library;
+import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author jameschu
  */
 public class B90_ZK_4495Test extends WebDriverTestCase {
+	@BeforeClass
+	public static void init() throws Exception {
+		Library.setProperty("org.zkoss.zk.config.path", "/test2/B90-ZK-4495.xml");
+		Server server = new Server(new InetSocketAddress(getHost(), 0));
+
+		final WebAppContext context = new WebAppContext();
+		context.setContextPath(getContextPath());
+		context.setBaseResource(Resource.newResource("./src/archive/"));
+		context.getSessionHandler().setSessionIdPathParameterName(null);
+		server.setHandler(new HandlerList(context, new DefaultHandler()));
+		initServer(server);
+	}
+
 	@Override
 	protected String getFileExtension() {
 		return ".html";
@@ -36,5 +56,10 @@ public class B90_ZK_4495Test extends WebDriverTestCase {
 		wd.findElement(By.id("btn")).click();
 		sleep(3000);
 		assertEquals("aaa", wd.findElement(By.className("z-label")).getText());
+	}
+
+	@AfterClass
+	public static void afterClass() {
+		Library.setProperty("org.zkoss.zk.config.path", null);
 	}
 }
