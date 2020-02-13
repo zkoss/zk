@@ -26,16 +26,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * A local running Chromium ChromeDriver. By default it runs in headless mode.
+ *
  * @author rudyhuang
  */
 public class ChromiumHeadlessDriver extends ChromeDriver {
 	private static final Logger LOG = LoggerFactory.getLogger(ChromiumHeadlessDriver.class);
-	private static final String CHROME_DRIVER_VERSION = "77.0.3865.40";
-	private static final int CHROMIUM_BINARY_REVISION = 672088; // from puppeteer v1.18.1 Chromium 77.0.3835.0
+	private static final String CHROME_DRIVER_VERSION = "80.0.3987.106";
+	private static final int CHROMIUM_BINARY_REVISION = 722234; // from puppeteer v2.1.1 Chromium 80.0.3987.0 (r722234)
 
 	static {
 		WebDriverManager.chromedriver().version(CHROME_DRIVER_VERSION).setup();
-		System.setProperty("webdriver.chrome.logfile", "/tmp/chromedriver.log");
+		System.setProperty("webdriver.chrome.logfile", String.format("%s/chromedriver.log", System.getProperty("java.io.tmpdir")));
 		System.setProperty("webdriver.chrome.verboseLogging", "true");
 	}
 
