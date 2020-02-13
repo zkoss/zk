@@ -25,6 +25,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.zkoss.lang.Library;
 import org.zkoss.zktest.zats.WebDriverTestCase;
@@ -54,7 +56,7 @@ public class B90_ZK_4495Test extends WebDriverTestCase {
 	public void test() {
 		WebDriver wd = connect();
 		wd.findElement(By.id("btn")).click();
-		sleep(3000);
+		new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.className("z-page")));
 		assertEquals("aaa", wd.findElement(By.className("z-label")).getText());
 	}
 
