@@ -250,10 +250,10 @@ public class AuResponse {
 		return s.length() <= 36 ? s : s.substring(0, 36) + "...";
 	}
 
-	private static class JSONDate implements JSONAware {
+	protected static class JSONDate implements JSONAware {
 		private final Date _d;
 
-		private JSONDate(Date d) {
+		public JSONDate(Date d) {
 			_d = d;
 		}
 
@@ -262,10 +262,10 @@ public class AuResponse {
 		}
 	}
 
-	private static class JSONComponent implements JSONAware {
+	protected static class JSONComponent implements JSONAware {
 		private final Component _comp;
 
-		private JSONComponent(Component comp) {
+		public JSONComponent(Component comp) {
 			_comp = comp;
 		}
 

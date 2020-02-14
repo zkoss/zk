@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4504.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 11 15:03:20 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void changeAttrs1(Window win) {
+        l1.setMultiline(true);
+        l1.setValue("" + System.currentTimeMillis());
+        l1.setStyle("border: 1px dotted green");
+        win.setTitle("Set 1");
+        win.setWidth("500px");
+        win.setHeight("400px");
+        win.setStyle("border: 1px solid red");
+    }
+
+    void changeAttrs2(Window win) {
+        win.setTitle("Set 2");
+        l1.setMultiline(false);
+        win.setWidth("800px");
+        l1.setValue("" + System.currentTimeMillis());
+        win.setHeight("300px");
+        l1.setStyle("border: 1px solid red");
+        win.setStyle("border: 1px dotted green");
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Click "ChangeAttrs 1"
+        2. The window should be 500x400, titled "Set 1" and has a solid red border.
+        3. Click "ChangeAttrs 2"
+        4. The window should be 800x300, titled "Set 2" and has a dotted green border.
+    </label>
+    <window title="Hello">
+        <button label="ChangeAttrs 1" onClick="changeAttrs1(self.parent)"/>
+        <button label="ChangeAttrs 2" onClick="changeAttrs2(self.parent)"/>
+    </window>
+    <label id="l1"/>
+</zk>
