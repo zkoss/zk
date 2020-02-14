@@ -1,0 +1,26 @@
+<!--
+B90-ZK-4502.html
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Feb 13 10:32:40 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="/zktest/zkau/web/js/zkmax/embedded/embedded.js"></script>
+    </head>
+    <body>
+        <button id="trigger">load zk</button>
+        <div id="zkapp"></div>
+        <script>
+            trigger.addEventListener('click', () => {
+                zEmbedded.load('zkapp', '/zktest/test2/B90-ZK-4502-1.zul');
+            });
+        </script>
+    </body>
+</html>
