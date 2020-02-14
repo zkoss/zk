@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4502-1.zul
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Feb 13 10:32:40 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		String desktopCleanupKey = "MyDesktopCleanup";
+		if (!session.hasAttribute(desktopCleanupKey))
+			session.setAttribute(desktopCleanupKey, 0);
+	</zscript>
+	<div>
+		<button label="Click me and you will see a number. then click 'load ZK' and click me again. You should see number increased in zk log."
+				onClick='Clients.log(session.getAttribute("MyDesktopCleanup"))'/>
+	</div>
+</zk>
