@@ -873,9 +873,8 @@ public class Grid extends MeshElement {
 			if (_rows != null)
 				_rows.getChildren().clear();
 			smartUpdate("model", false);
+			getDataLoader().updateModelInfo();
 		}
-
-		getDataLoader().updateModelInfo();
 	}
 
 	/** Sets the groups model associated with this grid.
