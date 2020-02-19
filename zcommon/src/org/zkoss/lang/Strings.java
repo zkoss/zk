@@ -759,6 +759,17 @@ public class Strings {
 		}
 	}
 
+	/**
+	 * Returns the passed value, or the default value if it is empty.
+	 * @param value the value
+	 * @param defaultValue the default value
+	 * @return {@code value} if not empty. {@code defaultValue} if empty.
+	 * @since 9.0.1
+	 */
+	public static final String defaultIfEmpty(String value, String defaultValue) {
+		return isEmpty(value) ? defaultValue : value;
+	}
+
 	/** Returns the ending parenthesis (such as }),
 	 * or (char)0 if cc is not the beginning parenthesis (such as {).
 	 */

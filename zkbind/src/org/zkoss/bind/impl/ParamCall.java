@@ -31,10 +31,14 @@ import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.bind.annotation.Scope;
 import org.zkoss.bind.annotation.ScopeParam;
 import org.zkoss.bind.annotation.SelectorParam;
+import org.zkoss.bind.paranamer.AdaptiveParanamer;
+import org.zkoss.bind.paranamer.CachingParanamer;
+import org.zkoss.bind.paranamer.Paranamer;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.json.JSONAware;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -50,6 +54,7 @@ import org.zkoss.zk.ui.select.Selectors;
 public class ParamCall {
 
 	private static final Logger _log = LoggerFactory.getLogger(ParamCall.class);
+	private static final Paranamer _PARANAMER = new CachingParanamer(new AdaptiveParanamer());
 
 	protected Map<Class<? extends Annotation>, ParamResolver<Annotation>> _paramResolvers;
 	private List<Type> _types; //to map class type directly, regardless the annotation
@@ -76,7 +81,7 @@ public class ParamCall {
 		_mappingType = mappingType;
 		_paramResolvers.put(ContextParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
 				Object val = _contextObjects.get(((ContextParam) anno).value());
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
@@ -104,9 +109,8 @@ public class ParamCall {
 
 	public void setBindingArgs(final Map<String, Object> bindingArgs) {
 		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
-
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				Object val = bindingArgs.get(((BindingParam) anno).value());
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				Object val = bindingArgs.get(Strings.defaultIfEmpty(((BindingParam) anno).value(), parameterName));
 				if (val != null && returnType.isAssignableFrom(val.getClass())) { //escape
 					return val;
 				} else if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
@@ -140,10 +144,11 @@ public class ParamCall {
 		Class<?>[] paramTypes = method.getParameterTypes();
 		java.lang.annotation.Annotation[][] parmAnnos = method.getParameterAnnotations();
 		Object[] params = new Object[paramTypes.length];
+		String[] parameterNames = _PARANAMER.lookupParameterNames(method);
 
 		try {
 			for (int i = 0; i < paramTypes.length; i++) {
-				params[i] = resolveParameter(parmAnnos[i], paramTypes[i]);
+				params[i] = resolveParameter(parmAnnos[i], paramTypes[i], parameterNames[i]);
 			}
 
 			method.setAccessible(true); // Bug ZK-2428
@@ -166,7 +171,7 @@ public class ParamCall {
 		}
 	}
 
-	private Object resolveParameter(java.lang.annotation.Annotation[] parmAnnos, Class<?> paramType) {
+	private Object resolveParameter(Annotation[] parmAnnos, Class<?> paramType, String parameterName) {
 		Object val = null;
 		boolean hitResolver = false;
 		Default defAnno = null;
@@ -181,7 +186,7 @@ public class ParamCall {
 			if (resolver == null)
 				continue;
 			hitResolver = true;
-			val = resolver.resolveParameter(anno, paramType);
+			val = resolver.resolveParameter(anno, paramType, parameterName);
 			if (val != null) {
 				break;
 			}
@@ -215,7 +220,20 @@ public class ParamCall {
 	}
 
 	public interface ParamResolver<T> {
-		public Object resolveParameter(T anno, Class<?> returnType);
+		/**
+		 * @deprecated since 9.0.1
+		 * @see #resolveParameter(Object, Class, String)
+		 */
+		@Deprecated
+		default Object resolveParameter(T anno, Class<?> returnType) {
+			return null;
+		}
+		/**
+		 * @since 9.0.1
+		 */
+		default Object resolveParameter(T anno, Class<?> returnType, String parameterName) {
+			return resolveParameter(anno, returnType);
+		}
 	}
 
 	public void setComponent(Component comp) {
@@ -223,8 +241,8 @@ public class ParamCall {
 		//scope param
 		_paramResolvers.put(ScopeParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				final String name = ((ScopeParam) anno).value();
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				final String name = Strings.defaultIfEmpty(((ScopeParam) anno).value(), parameterName);
 				final Scope[] ss = ((ScopeParam) anno).scopes();
 
 				Object val = null;
@@ -265,8 +283,8 @@ public class ParamCall {
 		//component
 		_paramResolvers.put(SelectorParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				final String selector = ((SelectorParam) anno).value();
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				final String selector = Strings.defaultIfEmpty(((SelectorParam) anno).value(), parameterName);
 				final List<Component> result = Selectors.find(_root, selector);
 				Object val;
 				if (!Collection.class.isAssignableFrom(returnType)) {
@@ -294,22 +312,22 @@ public class ParamCall {
 		//http param
 		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				Object val = _execution.getParameter(((QueryParam) anno).value());
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				Object val = _execution.getParameter(Strings.defaultIfEmpty(((QueryParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(HeaderParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				Object val = _execution.getHeader(((HeaderParam) anno).value());
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				Object val = _execution.getHeader(Strings.defaultIfEmpty(((HeaderParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(CookieParam.class, new ParamResolver<Annotation>() {
 
 			@SuppressWarnings("unchecked")
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
 				Map<String, Object> m = (Map<String, Object>) _execution.getAttribute(COOKIE_CACHE);
 				if (m == null) {
 					final Object req = _execution.getNativeRequest();
@@ -328,7 +346,7 @@ public class ParamCall {
 					}
 				}
 				Object val = m == null ? null
-						: m.get(((CookieParam) anno).value().toLowerCase(java.util.Locale.ENGLISH));
+						: m.get(Strings.defaultIfEmpty(((CookieParam) anno).value(), parameterName).toLowerCase(java.util.Locale.ENGLISH));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
@@ -336,16 +354,16 @@ public class ParamCall {
 		//execution
 		_paramResolvers.put(ExecutionParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				Object val = _execution.getAttribute(((ExecutionParam) anno).value());
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				Object val = _execution.getAttribute(Strings.defaultIfEmpty(((ExecutionParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
 
 		_paramResolvers.put(ExecutionArgParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				Object val = _execution.getArg().get(((ExecutionArgParam) anno).value());
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				Object val = _execution.getArg().get(Strings.defaultIfEmpty(((ExecutionArgParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
