@@ -31,6 +31,7 @@ ZK 9.0.1
   ZK-4495: Embedded ZK should support queryparam
   ZK-4502: zk reload embedded element missing rmDesktop
   ZK-4447: grid skips interval added / interval removed in onListDataChange, cause consistency exception
+  ZK-4507: Widget not found in Embedded ZK
 
 * Upgrade Notes
 
