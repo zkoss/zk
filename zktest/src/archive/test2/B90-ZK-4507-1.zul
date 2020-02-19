@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4507-1.zul
+        Purpose:
+
+        Description:
+
+        History:
+               Thu Feb 13 11:33:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+        <button label="click me, and you should see 'gogo' in zk log." onClick='Clients.log("gogo")' />
+		<include id="inc" src="" />
+		<button label="click me, and you can control chosenbox." onClick='inc.src="./B90-ZK-4507-2.zul"' />
+	</div>
+</zk>
