@@ -36,9 +36,8 @@ import org.zkoss.zk.ui.select.Selectors;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SelectorParam {
 	/**
-	 * component selector of the parameter.
-	 * Since 9.0.1, it can be omitted if selector is the same as the name of annotated parameter.
+	 * component selector of the parameter
 	 * @return component selector of the parameter
 	 */
-	String value() default "";
+	String value();
 }
