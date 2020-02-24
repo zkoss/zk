@@ -29,9 +29,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface QueryParam {
 	/**
-	 * name of the parameter.
-	 * Since 9.0.1, it can be omitted if name is the same as the annotated parameter.
+	 * name of the parameter
 	 * @return name of the parameter
 	 */
-	String value() default "";
+	String value();
 }
