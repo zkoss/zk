@@ -34,6 +34,8 @@ ZK 9.0.1
   ZK-4506: evaluation version doesn't show expiration warning after 48 hours
 
 * Upgrade Notes
+  + The zcommon module dropped the transitive dependency of slf4j-jdk14.
+    The end-user can choose a desired logger implementation if needed.
 
    --------
 ZK 8.6.4
