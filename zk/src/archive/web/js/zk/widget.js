@@ -1663,10 +1663,11 @@ wgt.$f().main.setTitle("foo");
 	 * And, {@link #replaceWidget} is used to replace the widget, and
 	 * it maintains both the widget tree and the DOM tree.
 	 * @param zk.Widget newwgt the new widget that will replace this widget.
+	 * @param zk.Skipper skipper [optional] the skipper used to skip a portion of DOM nodes.
 	 * @see #replaceHTML
 	 * @since 5.0.1
 	 */
-	replaceWidget: function (newwgt) {
+	replaceWidget: function (newwgt, skipper) {
 		_replaceLink(this, newwgt);
 
 		_rmIdSpaceDown(this);
@@ -1692,7 +1693,7 @@ wgt.$f().main.setTitle("foo");
 
 		var callback = [];
 		if (shallReplace) {
-			if (node) newwgt.replaceHTML(node, dt, null, true, callback);
+			if (node) newwgt.replaceHTML(node, dt, skipper, true, callback);
 			else {
 				this.unbind();
 				newwgt.bind(dt);
@@ -2762,19 +2763,16 @@ function () {
 	 */
 	replaceChildHTML_: function (child, n, desktop, skipper, _trim_) {
 		var oldwgt = child.getOldWidget_(n),
-			subId, subNode;
+			skipInfo;
 		if (oldwgt) {
-			subId = oldwgt._outerPartialSubId;
-			subNode = subId ? oldwgt.$n(subId) : null;
 			oldwgt.unbind(skipper); //unbind first (w/o removal)
+			skipInfo = skipper ? skipper.skip(oldwgt) : null;
 		} else if (this.shallChildROD_(child))
 			this.$class._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 
-		var newHtml = child.redrawHTML_(skipper, _trim_);
-		if (subNode) {
-			jq(subNode).replaceWith(jq(newHtml).find('#' + oldwgt.uuid + '-' + subId));
-		} else {
-			jq(n).replaceWith(newHtml);
+		jq(n).replaceWith(child.redrawHTML_(skipper, _trim_));
+		if (skipInfo) {
+			skipper.restore(child, skipInfo);
 		}
 		child.bind(desktop, skipper);
 	},
@@ -4696,6 +4694,16 @@ _doFooSelect: function (evt) {
 	 */
 	shallFireSizedLaterWhenAddChd_: function () {
 		return false;
+	},
+	/**
+	 * Returns the {@link zk.Skipper} used in outerPartial.
+	 * Default: null (No skipper).
+	 * It is intended to implement by widget classes.
+	 * @return zk.Skipper the skipper used in outerPartial.
+	 * @since 9.0.1
+	 */
+	getOuterPartialSkipper_: function () {
+		return null;
 	}
 
 }, {

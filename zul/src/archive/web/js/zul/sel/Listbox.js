@@ -500,6 +500,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	_getLastItemIndex: function () {
 		return this.lastItem._index;
+	},
+	getOuterPartialSkipper_: function () {
+		return zul.sel.ListboxHeadSkipper;
 	}
 });
 /**
@@ -547,5 +550,16 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 		return p;
 	}
 });
+/**
+ * The listbox head skipper used in outerPartial.
+ * @since 9.0.1
+ */
+zul.sel.ListboxHeadSkipper = new (zk.$extends(zk.Skipper, {
+	skipped: zk.$void,
+	skip: function (wgt, skipId) {
+		var skip = jq(skipId || (wgt.uuid + '-headrows'), zk)[0];
+		return skip && skip.parentNode.removeChild(skip);
+	}
+}));
 
 })();

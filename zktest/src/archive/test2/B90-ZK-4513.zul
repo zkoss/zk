@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4513.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 25 16:45:33 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        ListModelList model = new ListModelList(Arrays.asList(new String[] {"A", "B", "C"}));
+    </zscript>
+    <label multiline="true">
+        1. Click hide button.
+        2. Either click "show + replace model", "show + clear model" or "show + invalidatePartial" button.
+        3. The listbox should be visible.
+    </label>
+    <listbox id="lb" model="${model}" >
+        <listhead>
+            <listheader label="col1"/>
+        </listhead>
+    </listbox>
+    <button label="hide" onClick="lb.setVisible(false);"/>
+    <button label="show" onClick="lb.setVisible(true);"/>
+    <separator/>
+    <button label="show + replace model"
+            onClick='lb.setVisible(true); model.clear(); model.add("replaced");'/>
+    <button label="show + clear model"
+            onClick='lb.setVisible(true); model.clear();'/>
+    <button label="show + invalidatePartial"
+            onClick='lb.setVisible(true); lb.invalidatePartial("rows");'/>
+    <separator/>
+    <button label="workaround (call invalidate)" onClick='lb.setVisible(true); lb.invalidate();'/>
+</zk>

@@ -628,6 +628,15 @@ public interface ComponentCtrl {
 	public ShadowElement getShadowFellowIfAny(String id);
 
 	/**
+	 * @since 9.0.0
+	 * @deprecated since 9.0.1. Use {@link #invalidatePartial()} instead.
+	 */
+	@Deprecated
+	public default void invalidatePartial(String subId) {
+		invalidatePartial();
+	}
+
+	/**
 	 * Invalidates this component by setting the dirty flag
 	 * such that it will be redraw the partial content of this
 	 * component and its dependencies later.
@@ -640,9 +649,7 @@ public interface ComponentCtrl {
 	 *
 	 * <p>It can be called only in the request-processing and event-processing
 	 * phases. However, it is NOT allowed in the rendering phase.
-	 *
-	 * @param subId the redrawn node subid
-	 * @since 9.0.0
+	 * @since 9.0.1
 	 */
-	public void invalidatePartial(String subId);
+	public void invalidatePartial();
 }
