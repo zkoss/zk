@@ -1,0 +1,51 @@
+<!--
+F90-ZK-4499.html
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Feb 25 14:33:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="aaa">
+    Enabled Embedded ZK in zk.xml (ZK-4390)
+</div>
+<button id="btn">Click it, see 'ZK is ready!'</button>
+<button id="btn1">Click it, see error message</button>
+<button id="btn2">Click it to destroy embedded ZK</button>
+<script src="http://localhost:8080/zktest/zkau/web/js/zkmax/embedded/embedded.js"></script>
+<script>
+    var btn = document.getElementById('btn');
+    btn.addEventListener('click', embedZK, false);
+    function embedZK() {
+        var p = zEmbedded.load('aaa', 'http://localhost:8080/zktest/test2/F90-ZK-4499.zul').then(function() {
+            zk.log('ZK is ready!');
+        });
+    }
+    var btn1 = document.getElementById('btn1');
+    btn1.addEventListener('click', embedZKError, false);
+    function embedZKError() {
+        var p = zEmbedded.load('bbb', 'http://localhost:8080/zktest/test2/F90-ZK-4499.zul').then(function() {
+            zk.log('ZK is ready!');
+        }).catch(reason => {
+            alert('ZK mounting error: ' + reason);
+        });
+    }
+
+    var btn2 = document.getElementById('btn2');
+    btn2.addEventListener('click', destroyEmbeddedZK, false);
+    function destroyEmbeddedZK() {
+        zEmbedded.destroy('aaa');
+    }
+</script>
+</body>
+</html>
