@@ -14,11 +14,9 @@ package org.zkoss.bind.proxy;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javassist.util.proxy.Proxy;
@@ -120,36 +118,24 @@ public class ProxyHelper {
 
 		ProxyFactory factory = new ProxyFactory();
 		factory.setUseWriteReplace(false);
-		if (origin instanceof List) {
-			return (T) new ListProxy((List) origin, annotations);
-		} else if (origin instanceof Set) {
-			return (T) new SetProxy((Set) origin, annotations);
-		} else if (origin instanceof Map) {
-			return (T) new MapProxy((Map) origin, annotations);
-		} else if (origin instanceof Collection) {
-			return (T) new ListProxy((Collection) origin, annotations);
-		} else if (origin.getClass().isArray()) {
-			throw new UnsupportedOperationException("Array cannot be a proxy object!");
+		factory.setFilter(BeanProxyHandler.BEAN_METHOD_FILTER);
+		factory.setSuperclass(getTargetClassIfProxied(origin.getClass()));
+		if (hasImmutableFields) {
+			factory.setInterfaces(new Class[] { FormProxyObject.class, ImmutableFields.class });
 		} else {
-			factory.setFilter(BeanProxyHandler.BEAN_METHOD_FILTER);
-			factory.setSuperclass(getTargetClassIfProxied(origin.getClass()));
-			if (hasImmutableFields) {
-				factory.setInterfaces(new Class[] { FormProxyObject.class, ImmutableFields.class });
-			} else {
-				factory.setInterfaces(new Class[] { FormProxyObject.class });
-			}
-			Class<?> proxyClass = factory.createClass();
-			Object p1 = null;
-			try {
-				p1 = proxyClass.newInstance();
-			} catch (Exception e) {
-				throw UiException.Aide.wrap(e,
-						"Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
-			}
-
-			((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));
-			return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) : (T) p1;
+			factory.setInterfaces(new Class[] { FormProxyObject.class });
 		}
+		Class<?> proxyClass = factory.createClass();
+		Object p1 = null;
+		try {
+			p1 = proxyClass.newInstance();
+		} catch (Exception e) {
+			throw UiException.Aide.wrap(e,
+					"Cannot create a proxy object:[" + origin.getClass() + "], an empty constructor is needed.");
+		}
+
+		((Proxy) p1).setHandler(new BeanProxyHandler<T>(origin));
+		return _proxyDecorator != null ? (T) _proxyDecorator.decorate((ProxyObject) p1) : (T) p1;
 	}
 
 	/**
