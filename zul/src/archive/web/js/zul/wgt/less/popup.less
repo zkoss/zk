@@ -182,10 +182,26 @@
 	will-change: opacity;
 
 	&-content {
-		.z-notification-content();
+		font-family: @baseContentFontFamily;
+		font-size: @fontSizeMedium;
+		font-weight: normal;
+		width: 320px;
+		min-height: 46px;
+		padding: 16px 42px 16px 56px;
+		position: relative;
+		overflow: hidden;
+		.borderRadius(@baseBorderRadius);
+		.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
 	}
 	&-close {
-		.z-notification-close();
+		font-size: 18px;
+		.size(20px, 20px);
+		padding: 0 2px;
+		position: absolute;
+		top: 50%;
+		right: 12px;
+		cursor: pointer;
+		margin-top: -10px;
 	}
 	&-icon {
 		.z-notification-icon();
