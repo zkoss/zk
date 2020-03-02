@@ -38,15 +38,15 @@ public class B86_ZK_4332Test extends WebDriverTestCase {
 		waitResponse();
 
 		Widget cal = widget("@calendar:visible");
-		click(cal.$n("title"));
+		click(cal.$n("ty"));
 		waitResponse(true);
-		click(cal.$n("title"));
+		click(cal.$n("tyd"));
 		waitResponse(true);
 		click(cal.$n("left"));
 		waitResponse(true);
 		click(cal.$n("de1")); // 2443-2452
 		waitResponse(true);
-		click(cal.$n("y1")); // 2442
+		click(cal.$n("y1")); // 2443
 		waitResponse(true);
 		click(cal.$n("m0")); // ม.ค.
 		waitResponse(true);
