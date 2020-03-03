@@ -1664,9 +1664,9 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		}
 	}
 
-	public void invalidatePartial(String subId) {
+	public void invalidatePartial() {
 		if (_page != null) {
-			getAttachedUiEngine().addInvalidate(this, subId);
+			getAttachedUiEngine().addInvalidate(this, "partial");
 		}
 	}
 

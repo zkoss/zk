@@ -709,7 +709,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 			if (subId.isEmpty())
 				responses.add(new AuOuter(comp, redraw(comp)));
 			else
-				responses.add(new AuOuterPartial(comp, redraw(comp), subId));
+				responses.add(new AuOuterPartial(comp, redraw(comp)));
 		}
 
 		//6. add attached components (including setParent)

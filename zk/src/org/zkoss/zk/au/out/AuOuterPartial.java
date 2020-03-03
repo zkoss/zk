@@ -26,13 +26,25 @@ import org.zkoss.zk.ui.Component;
  *
  * <p>data[0]: the component or UUID
  * data[1]: the new content
- * data[2]: the redrawn node subid
  *
  * @author rudyhuang
  * @since 9.0.0
  */
 public class AuOuterPartial extends AuResponse {
+	/**
+	 * The subId is not used anymore.
+	 * @see #AuOuterPartial(Component, String)
+	 * @deprecated since 9.0.1
+	 */
+	@Deprecated
 	public AuOuterPartial(Component comp, String content, String subId) {
-		super("outerPartial", comp, new Object[] { comp, new JavaScriptValue(content), subId });
+		this(comp, content);
+	}
+
+	/**
+	 * @since 9.0.1
+	 */
+	public AuOuterPartial(Component comp, String content) {
+		super("outerPartial", comp, new Object[] { comp, new JavaScriptValue(content) });
 	}
 }

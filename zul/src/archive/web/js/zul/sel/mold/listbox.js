@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (out) {
+function (out, skipper) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
 		innerWidth = this.getInnerWidth(),
@@ -39,9 +39,11 @@ function (out) {
 		this.domFaker_(out, '-hdfaker');
 		
 		out.push('<tbody id="', uuid, '-headrows">');
-		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
-			hds[j++].redraw(out);
-	
+		if (!skipper) {
+			for (var hds = this.heads, j = 0, len = hds.length; j < len;)
+				hds[j++].redraw(out);
+		}
+
 		out.push('</tbody></table></div><div class="', this.$s('header-border'), '"></div>');
 	}
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'));
