@@ -34,6 +34,7 @@ ZK 9.0.1
   ZK-4460: websocket failing when desktop recycle is enabled
   ZK-4513: listbox issues with invalidatePartial
   ZK-4409: combobutton misaligned vertically
+  ZK-4383: Combobox losing input characters
 
 * Upgrade Notes
 
