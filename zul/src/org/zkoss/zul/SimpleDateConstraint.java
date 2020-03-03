@@ -119,19 +119,21 @@ public class SimpleDateConstraint extends AbstractSimpleDateTimeConstraint<Date>
 	 */
 	public SimpleDateConstraint(String constraint) {
 		super(constraint);
-		if (!isValidConstraint(constraint))
-			throw new UiException("Invalid constraint: " + constraint + " (the constraint should be formatted in yyyyMMdd)");
+		checkValidConstraint(constraint);
 	}
 
-	private boolean isValidConstraint(String constraint) {
+	private void checkValidConstraint(String constraint) {
 		int constraintFormatLength = "yyyyMMdd".length(); // default constraint format is yyyyMMdd
-		Pattern numberOnly = Pattern.compile("\\d+");
-		Matcher matcher = numberOnly.matcher(constraint);
-		while (matcher.find()) {
-			if (matcher.group().length() != constraintFormatLength)
-				return false;
+		String[] constraintParts = constraint.split(",");
+		Pattern numberStartWithKeyword = Pattern.compile("((?<=before |after |between |and )(\\d+))");
+		for (String part: constraintParts) {
+			String partWithoutMessage = part.split(":")[0];
+			Matcher matcher = numberStartWithKeyword.matcher(partWithoutMessage);
+			while (matcher.find()) {
+				if (matcher.group().length() != constraintFormatLength)
+					throw new UiException("Invalid constraint: " + part + " (the constraint should be formatted in yyyyMMdd)");
+			}
 		}
-		return true;
 	}
 
 	@Override

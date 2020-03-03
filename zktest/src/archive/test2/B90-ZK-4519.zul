@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4519.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Mar 03 12:04:31 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		load this page, you should not see the "Invalid constraint: ... (the constraint should be formatted in yyyyMMdd)" error message.
+	</label>
+	<separator/>
+	<datebox constraint="before 20200308:should before 0020200308"/>
+	<datebox constraint="after 20200308:should after 0020200308"/>
+	<datebox constraint="between 20200302 and 20200308:should between 0020200302 and 0020200308, before 20200305:should before 0020200305"/>
+	<datebox constraint="no today,between 20200302 and 20200308:should between 0020200302 and 0020200308, before 20200305:should before 0020200305"/>
+</zk>
