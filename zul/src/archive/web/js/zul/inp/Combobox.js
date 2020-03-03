@@ -72,7 +72,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (this.desktop) {
 				var n = this.getInputNode(),
 					ofs;
-				n.value = this.valueEnter_ != null ? this.valueEnter_ : this._value || '';
 
 				// Fixed bug 2944355 and for IE11 Bug ZK-2283
 				if (zk.ie <= 11 && n.value) {
