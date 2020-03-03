@@ -123,7 +123,7 @@ public class ImportHandler {
         String simpleName = clazz.getSimpleName();
         Class<?> conflict = clazzes.get(simpleName);
 
-        if (conflict == null) {
+        if (conflict == null || NotFound.class.equals(conflict)) {
             // No conflict - add it
             clazzes.put(simpleName, clazz);
         } else {
