@@ -44,7 +44,9 @@ public interface EventInterceptor {
 	 * the returned value of an interceptor will be used for
 	 * the following interceptor.
 	 */
-	public Event beforeSendEvent(Event event);
+	default Event beforeSendEvent(Event event) {
+		return event;
+	}
 
 	/** Called before posting an event
 	 * (with {@link org.zkoss.zk.ui.event.Events#postEvent}).
@@ -60,7 +62,9 @@ public interface EventInterceptor {
 	 * the returned value of an interceptor will be used for
 	 * the following interceptor.
 	 */
-	public Event beforePostEvent(Event event);
+	default Event beforePostEvent(Event event) {
+		return event;
+	}
 
 	/** Called before processing an event.
 	 * By processing, we mean handing over the event to the event listeners
@@ -82,7 +86,9 @@ public interface EventInterceptor {
 	 * the returned value of an interceptor will be used for
 	 * the following interceptor.
 	 */
-	public Event beforeProcessEvent(Event event);
+	default Event beforeProcessEvent(Event event) {
+		return event;
+	}
 
 	/** Called after processing an event.
 	 * By processing, we mean handing over the event to the event listeners
@@ -94,5 +100,6 @@ public interface EventInterceptor {
 	 *
 	 * @param event the event being processed
 	 */
-	public void afterProcessEvent(Event event);
+	default void afterProcessEvent(Event event) {
+	}
 }
