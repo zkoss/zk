@@ -14,7 +14,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <label multiline="true">
-        (Server push enabled)
+        (Server push disabled)
         1. Enable WebSocket and desktop recycling in zk.xml
         &lt;listener>
           &lt;listener-class>org.zkoss.zkmax.ui.util.DesktopRecycle&lt;/listener-class>
@@ -23,10 +23,21 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
           &lt;listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class>
         &lt;/listener>
         2. Refresh the page few times until you see the same desktop id appears.
-        3. The time should be updated by WebSocket Server Push, or the bug exists.
+        3. Click "test event" button.
+        4. Shouldn't see "[Au] success. SID = " in zklog. If you saw it, this bug still exists.
     </label>
-    <div apply="org.zkoss.zktest.test2.B90_ZK_4460Composer">
-        <label id="currentDesktop"/>
-        <label id="currentTime"/>
-    </div>
+    <label value="${desktop.id}"/>
+    <button onClick="Clients.log(event.toString())" label="test event"/>
+    <script><![CDATA[
+    zk.afterLoad(function() {
+        var _zAu = {};
+        zk.override(zAu, _zAu, {
+            _respSuccess: function (req, reqInf, sid) {
+                zk.log('[Au] success. SID = ' + sid);
+                return _zAu._respSuccess.apply(this, arguments);
+            },
+        });
+    });
+    ]]>
+    </script>
 </zk>
