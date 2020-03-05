@@ -138,7 +138,7 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 		String dtid = (String) wsession.getUserProperties().get(DESKTOP_ID);
 		SessionCtrl sessionCtrl = (SessionCtrl) wsession.getUserProperties().get(ZK_SESSION);
 		if (dtid == null || sessionCtrl == null) {
-			throw new IllegalStateException("Destkop not initialized for Websocket session, "
+			throw new IllegalStateException("Desktop not initialized for Websocket session, "
 					+ "call ZKWebSocket.initZkDesktop(Session, EndpointConfig) first: e.g. during onOpen");
 		}
 		DesktopCache desktopCache = sessionCtrl.getDesktopCache();
