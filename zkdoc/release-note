@@ -41,6 +41,7 @@ ZK 9.0.1
   ZK-4434: websockets causing console error with wildfly
   ZK-4521: coachmark setWidth/Height CSS issue
   ZK-4444: toolbarbutton vertical alignment
+  ZK-4522: websockets not working on WildFly after ZK-4429
 
 * Upgrade Notes
 
