@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4521.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Mar 05 15:46:26 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.test {
+			margin-left: 500px;
+		}
+	</style>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		1. test the case in all themes.
+		2. click "openCoachmark" button to open the coachmark.
+		3. the coachmark should displayed as the init size width="600px" height="100px".
+		4. try the buttons inside the coachmark, the coachmark(white background area) size should change.
+	</label>
+	<button id="target" sclass="test" label="openCoachmark" onClick="coachmark.open();"/>
+	<coachmark id="coachmark" target="target" width="600px" height="100px" visible="false" position="after_center">
+		<button label="clearWidth" onClick='coachmark.setWidth("")' />
+		<button label="width:800" onClick='coachmark.setWidth("800px")' />
+		<button label="clearHeight" onClick='coachmark.setHeight("")' />
+		<button label="height:300" onClick='coachmark.setHeight("300px")' />
+	</coachmark>
+</zk>
