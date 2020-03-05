@@ -40,6 +40,7 @@ ZK 9.0.1
   ZK-4519: datebox constraint parsing errors if there are numbers in message
   ZK-4434: websockets causing console error with wildfly
   ZK-4521: coachmark setWidth/Height CSS issue
+  ZK-4444: toolbarbutton vertical alignment
 
 * Upgrade Notes
 

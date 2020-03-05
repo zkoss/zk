@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4444.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Mar 05 10:16:32 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-toolbarbutton {
+			background-color: lightblue;
+		}
+	</style>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		1. test the case in all themes.
+		2. the toolbarbutton should align with button, and you should not see a gap at bottom.
+	</label>
+	<div id="div1" style="background-color: lightcoral;">
+		<toolbarbutton label="toolbarbutton1" />
+		you should not see a gap at bottom
+	</div>
+	<separator/>
+	<div style="background-color: lightcoral;">
+		buttons should align
+		<toolbarbutton label="toolbarbutton2" />
+		<button label="button"/>
+	</div>
+	<separator/>
+</zk>
