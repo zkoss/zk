@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4434.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 04 12:09:25 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Enable WebSocket in zk.xml.
+        &lt;listener>
+        &lt;listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class>
+        &lt;/listener>
+        2. Should not have any exception while establishing a WebSocket connection.
+    </label>
+    <button onClick="Clients.log(event.toString())" label="test event"/>
+</zk>
