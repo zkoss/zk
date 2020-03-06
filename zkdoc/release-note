@@ -45,6 +45,7 @@ ZK 9.0.1
   ZK-4522: websockets not working on WildFly after ZK-4429
   ZK-4309: CSS Performance when adding multiple components
   ZK-4473: nodom issues at root level
+  ZK-4452: ZK9 input-based components error style border is wrong
 
 * Upgrade Notes
 
