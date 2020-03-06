@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4473-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 05 12:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <nodom>
+        <div xmlns="native">before</div>
+    </nodom>
+    <button label="click me, and see true" w:onClick="zk.log(jq('.z-page').html().match(/start.*before.*end.*start.*after.*end/) != null)"/>
+    <nodom>
+        <div xmlns="native">after</div>
+    </nodom>
+</zk>
