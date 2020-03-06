@@ -5420,7 +5420,7 @@ zk.Native = zk.$extends(zk.Widget, {
 	//rawId: true, (Bug 3358505: it cannot be rawId)
 
 	$n: function (subId) {
-		return !subId && this.id ? jq('#' + this.id) :
+		return !subId && this.id ? document.getElementById(this.id) :
 			this.$supers('$n', arguments); // Bug ZK-606/607
 	},
 	redraw: _zkf = function (out) {
@@ -5430,7 +5430,7 @@ zk.Native = zk.$extends(zk.Widget, {
 			//child.$n(), so we have to generate id if the parent is not native
 			//(and no id is assigned) (otherwise, zk.Native.$n() failed)
 			if (this.$instanceof(zk.Native) //ZK-745
-			&& !this.id && (p = this.parent) && !p.z_virnd) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
+			&& !this.id && (p = this.parent) && (!p.z_virnd || p.getMold() == 'nodom')) { //z_virnd implies zk.Native, zk.Page and zk.Desktop
 				var j = 0, len = s.length, cond, cc;
 				for (cond = {whitespace: 1}; j < len; ++j) {
 					if ((cc = s.charAt(j)) == '<')

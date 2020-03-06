@@ -44,6 +44,7 @@ ZK 9.0.1
   ZK-4444: toolbarbutton vertical alignment
   ZK-4522: websockets not working on WildFly after ZK-4429
   ZK-4309: CSS Performance when adding multiple components
+  ZK-4473: nodom issues at root level
 
 * Upgrade Notes
 
