@@ -2,6 +2,7 @@ ZK 9.1.0
 * Features
   ZK-4508: The value of @BindingParam can be omitted
   ZK-4501: Add SimpleForm back for compatibility
+  ZK-4523: Support a Bean creation from @BindingParams
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
