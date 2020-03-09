@@ -1276,8 +1276,9 @@ jq(el).zk.center(); //same as 'center'
 			break;
 		case 'at_pointer':
 			var offset = zk.currentPointer;
-			x = offset[0];
-			y = offset[1];
+			// ZK-4339: shift a bit to avoid the pointer on the element
+			x = offset[0] + 1;
+			y = offset[1] + 1;
 			break;
 		case 'after_pointer':
 			var offset = zk.currentPointer;

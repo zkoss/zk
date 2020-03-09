@@ -48,6 +48,7 @@ ZK 9.0.1
   ZK-4452: ZK9 input-based components error style border is wrong
   ZK-4438: After ZK-3179, toolbar expects popup nodes, cause NPE if not rendered
   ZK-4479: chosenbox incorrect input width calculation
+  ZK-4339: browser inconsistent popup/tooltip behavior
 
 * Upgrade Notes
 
