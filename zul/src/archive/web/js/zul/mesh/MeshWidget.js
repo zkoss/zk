@@ -47,7 +47,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hdcavews = [];
 
 		if (wgt.eheadtbl && headn) {//clear and backup headers widths
-			wgt.ehead.style.width = '';
 			eheadtblw = wgt.getInnerWidth() || '';
 			wgt.eheadtbl.width = '';
 			wgt.eheadtbl.style.width = '';
@@ -74,7 +73,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (headn)
 			headn.style.width = '';
 		if (wgt.efoottbl) {//clear and backup footers widths
-			wgt.efoot.style.width = '';
 			efoottblw = eheadtblw || wgt.efoottbl.width;
 			wgt.efoottbl.width = '';
 			wgt.efoottbl.style.width = '';
@@ -96,7 +94,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 		if (wgt.ebodytbl) {//clear and backup body faker widths
-			wgt.ebody.style.width = '';
 			ebodytblw = eheadtblw || wgt.ebodytbl.width;
 			wgt.ebodytbl.width = '';
 			wgt.ebodytbl.style.width = '';
@@ -1204,36 +1201,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//IE: element's width will be extended to fit body
 		//note: we don't solve this bug for paging yet
 		var n = this.$n(),
-			//Bug 1659601: we cannot do it in init(); or, IE failed!
-			tblwd = zk(n).contentWidth(),
 			sizedByContent = this.isSizedByContent(),
 			ehead = this.ehead,
-			ebody = this.ebody,
 			ebodyrows = this.ebodyrows,
 			efoot = this.efoot,
 			efootrows = this.efootrows;
 
-		// ZK-2041: will lost width in ie9 if the mesh is inside a modal window
-		if (zk.ie9_ && ebody && tblwd)
-			ebody.style.width = tblwd + 'px';
-
 		if (ehead) {
-			// Bug ZK-2772: Misaligned Grid columns
-			// don't assign width for ehead and ebody if sizedByContent is true
-			if (tblwd) {
-				ehead.style.width = tblwd + 'px';
-				if (ebody)
-					ebody.style.width = tblwd + 'px';
-				if (efoot)
-					efoot.style.width = tblwd + 'px';
-			}
 			if (sizedByContent && ebodyrows)
 				this._adjHeadWd();
-			else if (tblwd && efoot)
-				efoot.style.width = tblwd + 'px';
 		} else if (efoot) {
-			if (tblwd)
-				efoot.style.width = tblwd + 'px';
 			if (efootrows && ebodyrows)
 				_cpCellWd(this);
 		}
@@ -1353,16 +1330,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				efoot = this.efoot,
 				fttbl = this.efoottbl;
 			if (ehead && hdtbl)
-				hdtbl.style.width = ehead.style.width;
-			if (ebody && bdtbl) {
-				var ebodyWidth = ebody.style.width;
-				if (hasVScroll)
-					bdtbl.style.width = jq.px0(parseInt(ebodyWidth) - scrollbarWidth);
-				else
-					bdtbl.style.width = ebodyWidth;
-			}
+				hdtbl.style.width = jq.px0(ehead.clientWidth);
+			if (ebody && bdtbl)
+				bdtbl.style.width = jq.px0(ebody.clientWidth);
 			if (efoot && fttbl)
-				fttbl.style.width = efoot.style.width;
+				fttbl.style.width = jq.px0(efoot.clientWidth);
 
 			if (!this.frozen._smooth)
 				this._syncFaker();
@@ -1480,18 +1452,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.heads.$remove(child);
 		else if (child.$instanceof(zul.mesh.Frozen))
 			this.efrozen = null;
-	},
-	// Bug ZK-2243
-	resetSize_: function (orient) {
-		this.$supers('resetSize_', arguments);
-		if (orient == 'w') {
-			if (this.ehead)
-				this.ehead.style.width = '';
-			if (this.ebody)
-				this.ebody.style.width = '';
-			if (this.efoot)
-				this.efoot.style.width = '';
-		}
 	},
 	//bug# 3022669: listbox hflex="min" sizedByContent="true" not work
 	beforeMinFlex_: function (orient) {
