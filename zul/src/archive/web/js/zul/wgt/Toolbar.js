@@ -219,10 +219,13 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 			popup.appendChild(child.$n());
 	},
 	removeChild: function (child) {
-		var popup = this.$n('pp');
-			childOnPopup = child.$n().parentNode == popup;
-		if (childOnPopup && popup.children.length == 1)
-			jq(this.$n()).removeClass(this.$s('overflowpopup-on')).addClass(this.$s('overflowpopup-off'));
+		var popupNode = this.$n('pp'),
+			childNode = child.$n();
+		if (popupNode && childNode) {
+			var childOnPopup = childNode.parentNode == popupNode;
+			if (childOnPopup && popupNode.children.length == 1)
+				jq(this.$n()).removeClass(this.$s('overflowpopup-on')).addClass(this.$s('overflowpopup-off'));
+		}
 		this.$supers('removeChild', arguments);
 	},
 	// protected
