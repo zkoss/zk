@@ -813,7 +813,8 @@ zAu.beforeSend = function (uri, req, dt) {
 	 * @since 7.0.3
 	 */
 	addAuRequest: function (dt, aureq) {
-		dt._aureqs.push(aureq);
+		if (!dt.obsolete)
+			dt._aureqs.push(aureq);
 	},
 	/** Returns all pending AU requests.
 	 * @param Desktop dt
@@ -1198,19 +1199,21 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String msg the error message
 	 */
 	obsolete: function (dtid, msg) {
+		var v = zk.Desktop.$(dtid);
+		if (v) v.obsolete = true;
+
 		if (msg.startsWith('script:'))
 			return $eval(msg.substring(7));
 
 		// ZK-2397: prevent from showing reload dialog again while browser is reloading
 		if (zk._isReloadingInObsolete)
 			return;
-		
-		var v = zk.Desktop.$(dtid);
+
 		if (v && (v = v.requestPath))
 			msg = msg.replace(dtid, v + ' (' + dtid + ')');
 
 		zAu.disabledRequest = true;
-		
+
 		jq.alert(msg, {
 			icon: 'ERROR',
 			button: {
