@@ -108,4 +108,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			</attribute>
 		</annotation>
 	</component>
+
+	<!-- ZK-4500 -->
+	<javascript>
+		if (window.ZK4500) {
+			zk.afterLoad('zkmax.nav', function() {
+				zk.log('4500');
+			});
+			zk.load('zkmax.nav');
+		}
+	</javascript>
 </language-addon>

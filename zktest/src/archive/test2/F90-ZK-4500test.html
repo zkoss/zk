@@ -18,7 +18,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 <body>
 <div id="aaa">
 </div>
-<button id="btn" onClick="zEmbedded.load('aaa', 'http://localhost:8080/zktest/test2/F90-ZK-4500.zul');">Click it</button>
+<button id="btn" onClick="zEmbedded.load('aaa', 'http://localhost:8080/zktest/test2/F90-ZK-4500.zul');">Click it, and see '4500' in ZK log</button>
+<script>
+    window.ZK4500 = true;
+</script>
 <script src="http://localhost:8080/zktest/zkau/web/js/zkmax/embedded/embedded.js"></script>
 </body>
 </html>
