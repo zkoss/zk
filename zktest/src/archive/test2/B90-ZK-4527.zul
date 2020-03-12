@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4527.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Mar 12 12:20:38 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		import java.text.SimpleDateFormat;
+	</zscript>
+	<label>
+		click the button, you should not see any JavaScript error.
+	</label>
+	<separator/>
+	<datebox id="db" locale="th_TH" format="yyyy/MM/dd HH:mm:ss"/>
+	<button label="setLeapDay" onClick='db.setValue(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse("2020/02/29 09:43:04"))'/>
+</zk>
