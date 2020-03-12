@@ -10,6 +10,7 @@ ZK 9.0.1
   ZK-4500: Support absolute url loading in embedded ZK
   ZK-4421: toast style improvement
   ZK-4499: Support callback function after loading embedded ZK
+  ZK-4529: Provide root widget embedded ZK callback
 
 * Bugs
   ZK-4456: cascader icon (open/clear) not updated when setting selection in model
