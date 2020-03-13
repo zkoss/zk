@@ -145,6 +145,12 @@ var LeapDay = zk.$extends(zk.Object, {
 	setHours: function (h) {
 		this._date.setHours(h);
 	},
+	getMinutes: function () {
+		return this._date.getMinutes();
+	},
+	setMinutes: function (min) {
+		this._date.setMinutes(min);
+	},
 	getSeconds: function () {
 		return this._date.getSeconds();
 	},
