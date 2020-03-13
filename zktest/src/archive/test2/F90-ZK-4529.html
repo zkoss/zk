@@ -1,0 +1,34 @@
+<!--
+F90-ZK-4529.html
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Mar 11 18:33:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="aaa">
+    Enabled Embedded ZK in zk.xml (ZK-4390)
+</div>
+<button id="btn">Click it, see 'ZK is ready!' + uuid</button>
+<script src="http://localhost:8080/zktest/zkau/web/js/zkmax/embedded/embedded.js"></script>
+<script>
+    var btn = document.getElementById('btn');
+    btn.addEventListener('click', embedZK, false);
+    function embedZK() {
+        var p = zEmbedded.load('aaa', 'http://localhost:8080/zktest/test2/F90-ZK-4529.zul').then(function(res) {
+            zk.log('ZK is ready! ' + res.widget.uuid);
+        });
+    }
+</script>
+</body>
+</html>
