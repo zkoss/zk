@@ -33,6 +33,8 @@ public class B70_ZK_1750Test extends WebDriverTestCase {
 		Elements runOnces = document.select("script.z-runonce");
 		for (Element runonce : runOnces) {
 			String script = runonce.html();
+			if (!script.contains("zkmx("))
+				continue;
 			Assert.assertThat(script, containsString(",cu:'\\x2F"));
 			Assert.assertThat(script, containsString(",uu:'\\x2F"));
 			Assert.assertThat(script, containsString(",ru:'\\x2F"));
