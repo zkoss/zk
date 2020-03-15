@@ -146,7 +146,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					SourceMapManager sourceMapManager = (SourceMapManager) session.getAttribute(SOURCE_MAP_PREFIX + name);
 					if (sourceMapManager == null) {
 						log.warn("Failed to load the source map resource: " + path);
-						return "".getBytes();
+						response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+						return null;
 					}
 					String sourceMapContent = sourceMapManager.getSourceMapContent();
 					return sourceMapContent.getBytes();

@@ -59,6 +59,7 @@ ZK 9.0.1
   ZK-4483: modal mask not covering whole scrollable area
   ZK-4445: toolbarbutton with fixed width cut off
   ZK-4503: barcode-scanner: quagga reduced scan resolution
+  ZK-4485: Should return 404 when the sourceMappingURL is not found
 
 * Upgrade Notes
 
