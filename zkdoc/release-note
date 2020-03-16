@@ -57,6 +57,7 @@ ZK 9.0.1
   ZK-4469: zul xsd doesn't define the attribute "open" for nav
   ZK-4520: errorbox incorrect overlap(detection/avoidance)
   ZK-4483: modal mask not covering whole scrollable area
+  ZK-4445: toolbarbutton with fixed width cut off
 
 * Upgrade Notes
 
