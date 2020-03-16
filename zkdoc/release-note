@@ -52,7 +52,6 @@ ZK 9.0.1
   ZK-4339: browser inconsistent popup/tooltip behavior
   ZK-4362: a grid can't fit into a page when printing a page
   ZK-4385: avoid sending an AU request after a session timeout
-  ZK-4526: VM init multiple times with Choose/When
   ZK-4527: LeapDay missing getter/setter for Minutes cause JS error
   ZK-4464: comet implementations inconsistent configuration/behavior
   ZK-4469: zul xsd doesn't define the attribute "open" for nav
