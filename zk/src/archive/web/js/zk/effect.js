@@ -97,20 +97,6 @@ zk.eff = {
 	}
 });
 
-	//Position a mask to cover the whole browser window.
-	//it must be called as _syncMaskPos.call(this)
-	function _syncMaskPos() {
-		var mask = jq(this.mask),
-			stackup = this.stackup;
-		if (stackup && mask.is(':visible')) {
-			var style = stackup.style;
-			style.left = mask.css('left');
-			style.top = mask.css('top');
-			style.width = mask.css('width');
-			style.height = mask.css('height');
-		}
-	}
-
 /** A mask covers the browser window fully.
  * @disable(zkgwt)
  */
@@ -152,14 +138,16 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 				jq(document.body).append(html);
 			mask = this.mask = jq(maskId, zk)[0];
 		}
-		if (opts.stackup)
+		if (opts.stackup) {
 			this.stackup = jq.newStackup(mask, mask.id + '-mkstk');
+			jq(this.stackup).css({width: '100%', height: '100%'});
+		}
 
-		_syncMaskPos.call(this);
+		this._syncMaskPos();
 
 		var f;
 		jq(mask).click(jq.Event.stop); //don't eat mousemove (drag depends on it)
-		jq(window).resize(f = this.proxy(_syncMaskPos))
+		jq(window).resize(f = this.proxy(this._syncMaskPos))
 			.scroll(f);
 	},
 	/** Removes the full mask. You can not access this object any more.
@@ -168,7 +156,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		var mask = this.mask, f;
 		jq(mask).unbind('click', jq.Event.stop)
 			.remove();
-		jq(window).unbind('resize', f = this.proxy(_syncMaskPos))
+		jq(window).unbind('resize', f = this.proxy(this._syncMaskPos))
 			.unbind('scroll', f);
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
@@ -200,12 +188,25 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		st.display = 'block';
 		st.zIndex = el.style.zIndex;
 
-		_syncMaskPos.call(this, true);
+		this._syncMaskPos();
 
 		if (this.stackup) {
 			st = this.stackup.style;
 			st.display = 'block';
 			st.zIndex = el.style.zIndex;
+		}
+	},
+	//Position a mask to cover the whole browser window.
+	_syncMaskPos: function () {
+		var n = this.mask,
+			st = n.style;
+		if (st.display != 'none') {
+			var ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY());
+			st.left = jq.px(ofs[0]);
+			st.top = jq.px(ofs[1]);
+
+			if (n = this.stackup)
+				zk.set(n.style, st, ['left', 'top']);
 		}
 	}
 });

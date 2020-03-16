@@ -56,6 +56,7 @@ ZK 9.0.1
   ZK-4464: comet implementations inconsistent configuration/behavior
   ZK-4469: zul xsd doesn't define the attribute "open" for nav
   ZK-4520: errorbox incorrect overlap(detection/avoidance)
+  ZK-4483: modal mask not covering whole scrollable area
 
 * Upgrade Notes
 
