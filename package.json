@@ -30,7 +30,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.1",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.2",
     "typescript": "^3.7.3",
     "zk-types": "github:scribetw/zk-types#master",
     "zkless-engine": "^1.1.2"
