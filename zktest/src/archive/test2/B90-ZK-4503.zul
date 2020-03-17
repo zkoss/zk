@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4503.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 17 17:37:48 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Grant a camera access.
+        2. Scan some EAN bar codes.
+        3. It should be easy to recognize since the size of preview area doesn't affect the actual video stream.
+    </label>
+    <barcodescanner type="ean" continuous="true" interval="500"
+                    width="80px" height="60px"
+                    onDetect='Clients.log(event.getType() + " " + event.getResult());'/>
+</zk>
