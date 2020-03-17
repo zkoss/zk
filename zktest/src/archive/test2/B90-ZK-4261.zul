@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4261.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 16 15:03:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label>Copy the value in textbox (including line break), and paste on the decimalbox. You should see "12.3"</label>
+    <textbox multiline="true" rows="2">
+        <attribute name="value"><![CDATA[12.3
+]]></attribute>
+    </textbox>
+    <decimalbox />
+</zk>
