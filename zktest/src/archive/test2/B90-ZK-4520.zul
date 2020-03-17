@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4520.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Mar 17 11:16:39 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="scrollbox" height="500px" width="400px" style="border:1px solid red; overflow-y: scroll">
+		<div height="200px">0px
+			<separator/>
+			<label multiline="true">
+				1. scroll down a bit (less than 200px, the red box should still be fully visible)
+				2. focus - blur the textbox (the errorbox popup)
+				3. click the red box, the errorbox should not move.
+			</label>
+		</div>
+		<div id="redbox" height="200px" width="300px" style="background-color: lightcoral">200px</div>
+		<div height="200px">
+			<separator height="5px"/>
+			405px <textbox width="150px" constraint="no empty"/>
+		</div>
+		<div height="200px">600px</div>
+	</div>
+</zk>
