@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4485.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 13 10:03:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label>You should see 404 below.</label>
+    <separator />
+    <button label="click it" w:onClick="zk.log(jq('$f').contents().find('body').html().indexOf('404') != -1)" />
+    <iframe id="f" src="/zkau/web/something.js.map"/>
+</zk>
