@@ -58,6 +58,7 @@ ZK 9.0.1
   ZK-4520: errorbox incorrect overlap(detection/avoidance)
   ZK-4483: modal mask not covering whole scrollable area
   ZK-4445: toolbarbutton with fixed width cut off
+  ZK-4503: barcode-scanner: quagga reduced scan resolution
 
 * Upgrade Notes
 
