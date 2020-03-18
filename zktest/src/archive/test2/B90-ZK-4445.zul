@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4445.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 16 16:27:46 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Hover to the buttons.
+        2. The effect should fill in all available space.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <toolbarbutton label="button" iconSclass="z-icon-home" image="/test2/img/home.gif"
+                   orient="vertical" mode="toggle" checked="true"
+                   width="200px" height="200px"/>
+    <toolbarbutton label="button" iconSclass="z-icon-home" image="/test2/img/home.gif"
+                   orient="vertical" dir="reverse"
+                   width="200px" height="200px"/>
+    <toolbarbutton label="button" iconSclass="z-icon-home" image="/test2/img/home.gif"
+                   width="200px" height="200px"/>
+    <toolbarbutton label="button" iconSclass="z-icon-home" image="/test2/img/home.gif"
+                   dir="reverse"
+                   width="200px" height="200px" disabled="true"/>
+    <separator/>
+    <toolbar>
+        <toolbarbutton iconSclass="z-icon-home" label="button" mode="toggle" checked="true"/>
+        <toolbarbutton iconSclass="z-icon-home" label="button" dir="reverse"/>
+        <toolbarbutton iconSclass="z-icon-home" label="button" disabled="true"/>
+    </toolbar>
+</zk>

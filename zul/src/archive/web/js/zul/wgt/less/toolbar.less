@@ -113,17 +113,24 @@
 	cursor: pointer;
 	.borderRadius(@inputBorderRadius);
 	overflow: hidden;
+	.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @toolbarButtonColor);
+	border: 2px solid transparent;
+	background-color: @toolbarButtonBackgroundColor;
+	padding: @toolbarButtonPadding;
 
-	&-content {
-		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @toolbarButtonColor);
-		background-color: @toolbarButtonBackgroundColor;
-		border: 2px solid transparent;
-		padding: @toolbarButtonPadding;
-		line-height: @fontSizeLarge;
+	&:before {
+		content: '';
+		height: 100%;
 		display: inline-block;
 		vertical-align: middle;
+	}
+	&-content {
+		display: inline-block;
+		vertical-align: middle;
+		text-align: center;
 		position: relative;
 		white-space: nowrap;
+		width: 100%;
 		> img {
 			margin-right: 4px;
 			vertical-align: middle;
@@ -133,32 +140,31 @@
 			font-size: 20px;
 			vertical-align: middle;
 		}
-
-		.z-toolbarbutton:hover & {
-			color: @buttonHoverColor;
-			border-color: @buttonHoverBorderColor;
-			background-color: @buttonHoverBackgroundColor;
-		}
-		.z-toolbarbutton:active & {
-			color: @buttonActiveColor;
-			border-color: @buttonActiveBorderColor;
-			background-color: @buttonActiveBackgroundColor;
-		}
-		.z-toolbarbutton:focus & {
-			color: @buttonFocusColor;
-			border-color: @buttonFocusBorderColor;
-			background-color: @buttonFocusBackgroundColor;
-		}
-		.z-toolbarbutton[disabled] & {
-			color: @buttonDisableColor !important;
-			border-color: @buttonDisableBorderColor;
-			background-color: @buttonDisableBackgroundColor;
-			cursor: default !important;
-		}
-		.z-toolbarbutton-checked & {
-			color: @toolbarButtonCheckedColor;
-			background-color: @toolbarButtonCheckedBackgroundColor;
-		}
+	}
+	&:hover {
+		color: @buttonHoverColor;
+		border-color: @buttonHoverBorderColor;
+		background-color: @buttonHoverBackgroundColor;
+	}
+	&:active {
+		color: @buttonActiveColor;
+		border-color: @buttonActiveBorderColor;
+		background-color: @buttonActiveBackgroundColor;
+	}
+	&:focus {
+		color: @buttonFocusColor;
+		border-color: @buttonFocusBorderColor;
+		background-color: @buttonFocusBackgroundColor;
+	}
+	&[disabled] {
+		color: @buttonDisableColor !important;
+		border-color: @buttonDisableBorderColor;
+		background-color: @buttonDisableBackgroundColor;
+		cursor: default !important;
+	}
+	&-checked {
+		color: @toolbarButtonCheckedColor;
+		background-color: @toolbarButtonCheckedBackgroundColor;
 	}
 }
 
