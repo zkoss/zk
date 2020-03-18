@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4478.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Mar 18 16:53:28 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+		paste/type the text: <img src=img onError=zk.log('hello')>
+		to the chosenbox, you should not see any "hello" in zklog
+	]]></label>
+	<chosenbox creatable="true" width="200px"/>
+</zk>
