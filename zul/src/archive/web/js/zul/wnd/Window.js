@@ -172,7 +172,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				visible: realVisible
 			});
 			var tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
-			jq('#' + wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0 onclick="return false;" href="javascript:;" class="z-focus-a"></' + tag + '>');
+			jq('#' + wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0" onclick="return false;" href="javascript:;" class="z-focus-a"></' + tag + '>');
 			wgt._anchor = jq('#' + wgt.uuid + '-mask-a')[0];
 		}
 		if (realVisible)
