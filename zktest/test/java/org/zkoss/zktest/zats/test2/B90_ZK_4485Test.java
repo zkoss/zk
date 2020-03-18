@@ -22,6 +22,9 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 public class B90_ZK_4485Test extends WebDriverTestCase {
 	@Test
 	public void test() {
-		Assert.assertEquals(404, getStatusCode(getAddress() + "/zkau/web/something.js.map"));
+		connect();
+		click(jq("@button"));
+		waitResponse();
+		Assert.assertEquals("true", getZKLog());
 	}
 }
