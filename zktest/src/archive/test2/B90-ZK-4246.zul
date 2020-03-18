@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4246.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 18 12:25:53 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        Should see "Code Option 1 article 1", "Name Option 1 article 1"...
+    </label>
+    <grid emptyMessage="No options">
+        <columns/>
+        <rows>
+            <row>
+                <label value="Code Option 1 article 1"/>
+                <label value="Name Option 1 article 1"/>
+            </row>
+            <row>
+                <label value="Code Option 2 article 1"/>
+                <label value="Code Option 2 article 1"/>
+            </row>
+        </rows>
+    </grid>
+</zk>

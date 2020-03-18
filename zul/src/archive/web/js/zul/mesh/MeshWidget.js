@@ -1305,12 +1305,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (fttbl)
 						fttbl.style.width = wd + 'px';
 				} else {
-					var hideTable = true;
+					var hideTable = false;
 					for (var header = this.head.firstChild; header; header = header.nextSibling) {
 						if (header.isVisible()) {
 							hideTable = false;
 							break;
 						}
+						hideTable = true;
 					}
 					if (hideTable) {
 						hdtbl.style.visibility = 'hidden';
