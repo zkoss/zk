@@ -68,6 +68,7 @@ ZK 9.0.1
   ZK-4478: chosenbox unintended code execution
   ZK-4486: invisible listheader with no width still show if another header have flex
   ZK-4489: Listbox columns slightly out of line when using breeze theme
+  ZK-4491: css-flex: inconsistent browser behavior for hflex="min" (chrome vs ie)
 
 * Upgrade Notes
 

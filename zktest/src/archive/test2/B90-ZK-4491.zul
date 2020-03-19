@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4491.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 18 14:30:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window border="normal" title="popup from button" vflex="1" apply="org.zkoss.zktest.test2.B90_ZK_4491Composer">
+		<button label="Click to show popup. Scroll to the bottom, you should see grid resized" onClick='mypopup.open(self)'/>
+		<popup id="mypopup">
+			<grid id="inboxGrid" height="350px"
+				  rowRenderer="org.zkoss.zktest.test2.B90_ZK_4491RowRenderer"
+				  emptyMessage="Nothing in Inbox.">
+				<columns>
+					<column hflex="min" label="Test"/>
+				</columns>
+			</grid>
+		</popup>
+	</window>
+</zk>
