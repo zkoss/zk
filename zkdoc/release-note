@@ -65,6 +65,7 @@ ZK 9.0.1
   ZK-4397: Goldenlayout child triggers "UI can't be modified in the rendering phase"
   ZK-4498: BarcodeReader accepts type codebar, internal use codabar, fails to init
   ZK-4246: Grid detail is invisible with ZK 8.6.1
+  ZK-4478: chosenbox unintended code execution
 
 * Upgrade Notes
 
