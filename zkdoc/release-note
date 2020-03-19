@@ -63,6 +63,7 @@ ZK 9.0.1
   ZK-4261: Decimalbox can paste content copy from excel cell
   ZK-4526: VM init multiple times with Choose/When
   ZK-4397: Goldenlayout child triggers "UI can't be modified in the rendering phase"
+  ZK-4498: BarcodeReader accepts type codebar, internal use codabar, fails to init
 
 * Upgrade Notes
 

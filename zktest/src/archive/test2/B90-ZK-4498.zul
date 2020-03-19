@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4498.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Mar 17 09:57:53 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		load the zul with camera, then open the Devtool
+		you should not see a Javascript error(Uncaught TypeError: y[e] is not a constructor...)
+		Then scan a codabar, you should see the result on zklog without JavaScript error
+	</label>
+	<barcodescanner type="codabar" continuous="true" interval="500" width="400px" height="300px"
+					onDetect='Clients.log(event.getType());Clients.log(event.getResult());'/>
+</zk>
