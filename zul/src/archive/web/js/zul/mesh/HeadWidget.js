@@ -300,10 +300,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 					else if (hwgt._nhflex > 0)
 						isFlex = true;
 
+					if (!hwgt.isVisible())
+						nhwgt.style.display = 'none';
 					if (wd >= 0) {
 						nhwgt.style.flex = '0 1 ' + jq.px(wd);
-						if (!hwgt.isVisible())
-							nhwgt.style.display = 'none';
 						if (!isFlex)
 							tblWidth += wd;
 						wd = -1; //reset

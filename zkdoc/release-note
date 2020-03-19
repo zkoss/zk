@@ -66,6 +66,7 @@ ZK 9.0.1
   ZK-4498: BarcodeReader accepts type codebar, internal use codabar, fails to init
   ZK-4246: Grid detail is invisible with ZK 8.6.1
   ZK-4478: chosenbox unintended code execution
+  ZK-4486: invisible listheader with no width still show if another header have flex
 
 * Upgrade Notes
 
