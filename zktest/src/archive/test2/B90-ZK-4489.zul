@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4489.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Mar 19 10:27:34 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		test with all Classic themes(breeze, sapphire, silvertail)
+		the columns should line up correctly, and the header border should not display wired
+	</label>
+	<listbox>
+		<listhead>
+			<listheader label="Column 1"/>
+			<listheader label="Column 2"/>
+		</listhead>
+		<auxhead>
+			<auxheader/>
+			<auxheader>
+				<textbox/>
+			</auxheader>
+		</auxhead>
+	</listbox>
+</zk>
