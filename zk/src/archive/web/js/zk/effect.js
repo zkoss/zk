@@ -140,24 +140,17 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		}
 		if (opts.stackup) {
 			this.stackup = jq.newStackup(mask, mask.id + '-mkstk');
-			jq(this.stackup).css({width: '100%', height: '100%'});
+			jq(this.stackup).css({width: '100%', height: '100%', position: 'fixed'});
 		}
 
-		this._syncMaskPos();
-
-		var f;
 		jq(mask).click(jq.Event.stop); //don't eat mousemove (drag depends on it)
-		jq(window).resize(f = this.proxy(this._syncMaskPos))
-			.scroll(f);
 	},
 	/** Removes the full mask. You can not access this object any more.
 	 */
 	destroy: function () {
-		var mask = this.mask, f;
+		var mask = this.mask;
 		jq(mask).unbind('click', jq.Event.stop)
 			.remove();
-		jq(window).unbind('resize', f = this.proxy(this._syncMaskPos))
-			.unbind('scroll', f);
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
 	},
@@ -188,25 +181,10 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		st.display = 'block';
 		st.zIndex = el.style.zIndex;
 
-		this._syncMaskPos();
-
 		if (this.stackup) {
 			st = this.stackup.style;
 			st.display = 'block';
 			st.zIndex = el.style.zIndex;
-		}
-	},
-	//Position a mask to cover the whole browser window.
-	_syncMaskPos: function () {
-		var n = this.mask,
-			st = n.style;
-		if (st.display != 'none') {
-			var ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY());
-			st.left = jq.px(ofs[0]);
-			st.top = jq.px(ofs[1]);
-
-			if (n = this.stackup)
-				zk.set(n.style, st, ['left', 'top']);
 		}
 	}
 });
