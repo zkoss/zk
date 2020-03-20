@@ -2338,6 +2338,8 @@ public class Listbox extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
+					if (_model instanceof PageableModel && _pgListener != null)
+						((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 					GroupsModel groupsModel = getGroupsModel();
 					if (groupsModel != null) {
 						((GroupsListModel) _model).cleanInternalListener();
@@ -2370,6 +2372,8 @@ public class Listbox extends MeshElement {
 				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
 				//ZK-3173: move the block here to avoid modifying pgi "again" before PagingEvent is handled
 				if (inPagingMold()) {
+					if (_model instanceof PageableModel)
+						((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 					//B30-2129667, B36-2782751, (ROD) exception when zul applyProperties
 					//must update paginal totalSize or exception in setActivePage
 					final Paginal pgi = getPaginal();
@@ -2414,6 +2418,8 @@ public class Listbox extends MeshElement {
 			// (to save a roundtrip)
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
+			if (_model instanceof PageableModel && _pgListener != null)
+				((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 			_model = null;
 			getItems().clear();
 			if (!inSelectMold())
@@ -3125,6 +3131,10 @@ public class Listbox extends MeshElement {
 			_model.removeListDataListener(_dataListener);
 			_model.addListDataListener(_dataListener);
 		}
+		if (_model instanceof PageableModel && _pgListener != null) {
+			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
+			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
+		}
 		if (groupsModel != null && _groupsDataListener != null) {
 			groupsModel.removeGroupsDataListener(_groupsDataListener);
 			groupsModel.addGroupsDataListener(_groupsDataListener);
@@ -3135,6 +3145,8 @@ public class Listbox extends MeshElement {
 		super.onPageDetached(page);
 		if (_model != null && _dataListener != null)
 			_model.removeListDataListener(_dataListener);
+		if (_model instanceof PageableModel && _pgListener != null)
+			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 		GroupsModel groupsModel = getGroupsModel();
 		if (groupsModel != null && _groupsDataListener != null)
 			groupsModel.removeGroupsDataListener(_groupsDataListener);

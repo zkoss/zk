@@ -42,14 +42,12 @@ public class B85_ZK_3861VM {
 	}
 
 	@Command
-	@NotifyChange("listModel")
 	public void nextList() {
 		int activePage = listModel.getActivePage();
 		listModel.setActivePage(activePage + 1);
 	}
 
 	@Command
-	@NotifyChange("listModel")
 	public void previousList() {
 		int activePage = listModel.getActivePage();
 		if (--activePage < 0)
@@ -58,14 +56,12 @@ public class B85_ZK_3861VM {
 	}
 
 	@Command
-	@NotifyChange("treeModel")
 	public void nextTree() {
 		int activePage = treeModel.getActivePage();
 		treeModel.setActivePage(activePage + 1);
 	}
 
 	@Command
-	@NotifyChange("treeModel")
 	public void previousTree() {
 		int activePage = treeModel.getActivePage();
 		if (--activePage < 0)

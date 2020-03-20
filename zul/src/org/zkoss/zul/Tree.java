@@ -281,7 +281,10 @@ public class Tree extends MeshElement {
 				_model.removeTreeDataListener(_dataListener);
 				_model.addTreeDataListener(_dataListener);
 			}
-
+		}
+		if (_model instanceof PageableModel && _pgListener != null) {
+			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
+			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 		}
 	}
 
@@ -289,6 +292,8 @@ public class Tree extends MeshElement {
 		super.onPageDetached(page);
 		if (_model != null && _dataListener != null)
 			_model.removeTreeDataListener(_dataListener);
+		if (_model instanceof PageableModel && _pgListener != null)
+			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 	}
 
 	private class ModelInitListener implements SerializableEventListener<Event>, CloneableEventListener<Event> {
@@ -1806,9 +1811,8 @@ public class Tree extends MeshElement {
 			if (_model != model) {
 				if (_model != null) {
 					_model.removeTreeDataListener(_dataListener);
-					if (_model instanceof PageableModel && _pgListener != null) {
+					if (_model instanceof PageableModel && _pgListener != null)
 						((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
-					}
 					resetPosition(false); //ZK-2712: set different model, reset scroll and anchor position
 
 					if (!isAutosort()) {
@@ -1838,12 +1842,16 @@ public class Tree extends MeshElement {
 							m.setActivePage(_pgi.getActivePage());
 						}
 					}
+					if (_model instanceof PageableModel)
+						((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 				}
 			}
 			doSort(this);
 			postOnInitRender();
 		} else if (_model != null) {
 			_model.removeTreeDataListener(_dataListener);
+			if (_model instanceof PageableModel && _pgListener != null)
+				((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 			_model = null;
 			if (_treechildren != null)
 				_treechildren.detach();
