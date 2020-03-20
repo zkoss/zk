@@ -505,24 +505,38 @@ zFlex = { //static methods
 	},
 	fixCSSFlex: function () {
 		var wgt = this;
-		if (wgt._cssFlexFixed || (!wgt._nvflex && !wgt._nhflex)) { //other vflex/hflex sibling has done it!
+		if (!wgt._nvflex && !wgt._nhflex)
+			return;
+
+		var cssFlexFixedInfo = wgt._cssFlexFixed,
+			minFlexInfoListKeyStr = 'minFlexInfoList',
+			pwgt = wgt.parent;
+		if ((cssFlexFixedInfo && cssFlexFixedInfo['flexFixed'])) { //other vflex/hflex sibling has done it!
+			var minFlexInfoList = cssFlexFixedInfo[minFlexInfoListKeyStr];
+			if (minFlexInfoList) { //still need to call fixMinFlex
+				for (var i = 0, l = minFlexInfoList.length; i < l; i++) {
+					var info = minFlexInfoList[i];
+					zFlex.fixMinFlex(info.wgt, info.wgtn, info.orient);
+				}
+				pwgt.afterChildrenFlex_(wgt);
+			}
 			return;
 		}
-		var pwgt = wgt.parent,
-			fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_();
+		var fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_();
 		if (fContainer == null) { //using old flex
 			wgt._cssflex = false;
 			return;
 		}
-
 		var flexInfo = zFlex.getFlexInfo(wgt),
+			cssFlexFixedInfo = wgt._cssFlexFixed,
 			isRow = flexInfo.isFlexRow,
 			fccs = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
 			isAllMin = true,
 			fdArr = [],
 			cwgtsz = [],
-			flexItemClass = 'z-flex-item';
+			flexItemClass = 'z-flex-item',
+			minFlexInfoList = [];
 
 		for (var i = 0, length = fccs.length; i < length; i++) {
 			var fcc = fccs[i],
@@ -543,8 +557,11 @@ zFlex = { //static methods
 					c.style[dim] = '100%';
 				else
 					sz[dim] = 'auto';
-			} else if (flex < 0) //min
-				zFlex.fixMinFlex(cwgt, c, dim.substring(0, 1));
+			} else if (flex < 0) {//min
+				var orient = dim.substring(0, 1);
+				zFlex.fixMinFlex(cwgt, c, orient);
+				minFlexInfoList.push({wgt: cwgt, wgtn: c, orient: orient});
+			}
 
 			//check else flex
 			flex = flexs[!isRow | 0];
@@ -557,10 +574,16 @@ zFlex = { //static methods
 					c.style[dim] = '100%';
 				else
 					sz[dim] = 'auto';
-			} else if (flex < 0)//min
+			} else if (flex < 0) {//min
+				var orient = dim.substring(0, 1);
 				zFlex.fixMinFlex(cwgt, c, dim.substring(0, 1));
+				minFlexInfoList.push({wgt: cwgt, wgtn: c, orient: orient});
+			}
 			cwgtsz.push(sz);
 		}
+
+		if (minFlexInfoList.length > 0)
+			cssFlexFixedInfo[minFlexInfoListKeyStr] = minFlexInfoList;
 
 		if (!isAllMin)
 			jq(fContainer).addClass('z-flex').addClass(isRow ? 'z-flex-row' : 'z-flex-column');
@@ -601,7 +624,7 @@ zFlex = { //static methods
 				jqFcc.removeClass(flexItemClass);
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '';
-				cwgt._cssFlexFixed = false;
+				delete cwgt._cssFlexFixed;
 			}
 
 			//check else flex
@@ -611,7 +634,7 @@ zFlex = { //static methods
 					fcc.style[dim] = '';
 					if (fcc != c)
 						c.style[dim] = '';
-					cwgt._cssFlexFixed = false;
+					delete cwgt._cssFlexFixed;
 				}
 			} else
 				noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
@@ -641,7 +664,7 @@ zFlex = { //static methods
 					continue;
 				} else {
 					if (fcc.contains(c)) {
-						cwgt._cssFlexFixed = true;
+						cwgt._cssFlexFixed = {flexFixed: true};
 						fccs.push(fcc);
 						cwgts.push(cwgt);
 						if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
