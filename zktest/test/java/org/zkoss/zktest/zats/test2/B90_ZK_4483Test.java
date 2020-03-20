@@ -38,7 +38,7 @@ public class B90_ZK_4483Test extends WebDriverTestCase {
 		waitResponse();
 
 		JQuery mask = jq(".z-modal-mask");
-		Assert.assertNotEquals(0, mask.positionTop());
+		Assert.assertEquals("fixed", mask.css("position"));
 
 		Assert.assertEquals("Busy mask not is covered",
 				jq("@window:last").positionTop(),
