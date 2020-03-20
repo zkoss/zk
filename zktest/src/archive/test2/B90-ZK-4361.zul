@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4361.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 12 10:03:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <borderlayout height="600px">
+        <center>
+            <div>
+                <label><![CDATA[
+                    <case 1>
+                    1. Click the collapse arrow on the right corner of the borderregion to collapse the south borderregion
+                    2. Click "hide"
+                    3. Click the arrow on the bottom right corner to expand the region, you should not see popup shown.
+                    <case 2>
+                    1. Click "hide" button to hide the popup
+                    2. Click the collapse arrow on the right corner of the borderregion to collapse the south borderregion.
+                    3. Click the "show" button to set popup visible to true
+                    4. Click the arrow on the bottom right corner to expand the region, you should see popup shown.
+                ]]></label>
+                <button id="sBtn" label="show" onClick="wnd.setVisible(true);" />
+                <button id="hBtn" label="hide" onClick="wnd.setVisible(false);" />
+            </div>
+        </center>
+        <south height="400px" collapsible="true" title="south">
+            <tabbox height="100%">
+                <tabs id="tabs">
+                    <tab label="Tab A" />
+                </tabs>
+                <tabpanels>
+                    <tabpanel>
+                        <window id="wnd" border="normal" title="Dialog" mode="overlapped">
+                            content86
+                        </window>
+                    </tabpanel>
+                </tabpanels>
+            </tabbox>
+        </south>
+    </borderlayout>
+</zk>

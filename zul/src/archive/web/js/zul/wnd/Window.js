@@ -995,10 +995,11 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 				this.setMinimized(false);
 			}
 
-			var modal = _isModal(this._mode);
+			var modal = _isModal(this._mode),
+				p = this.parent;
 			if (visible) {
 				_updDomPos(this, modal, true, modal);
-				if (modal && (!this.parent || this.parent.isRealVisible())) {
+				if (modal && (!p || p.isRealVisible())) {
 					this.setTopmost();
 					_markModal(this);
 				}
@@ -1009,6 +1010,16 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 
 			if (!visible)
 				this.zsync();
+
+			var n = this.$n();
+			if (this.isFloating_() && p && !p.isRealVisible()) {
+				if (this._visible && n.style.display == 'none') {
+					this.setDomVisible_(n, false, {visibility: 1});
+					this.setDomVisible_(n, true, {display: 1});
+				} else if (!this._visible && n.style.display != 'none') {
+					this.setDomVisible_(n, false, {display: 1});
+				}
+			}
 		}
 	},
 	setHeight: function (height) {
