@@ -13,6 +13,7 @@ ZK 9.0.1
   ZK-4529: Provide root widget embedded ZK callback
 
 * Bugs
+  ZK-4420: vertical align of checkbox molds in inputgroup
   ZK-4456: cascader icon (open/clear) not updated when setting selection in model
   ZK-4462: Rangeslider and Multislider minor style issue
   ZK-4463: Rangeslider and Multislider buttons position calculation
