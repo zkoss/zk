@@ -651,9 +651,6 @@ public class Tree extends MeshElement {
 		if (_pgListener == null)
 			_pgListener = new PGListener();
 		pgi.addEventListener(ZulEvents.ON_PAGING, _pgListener);
-		if (_model instanceof PageableModel) {
-			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
-		}
 		if (_pgImpListener == null)
 			_pgImpListener = new PGImpListener();
 
@@ -1842,8 +1839,6 @@ public class Tree extends MeshElement {
 							m.setActivePage(_pgi.getActivePage());
 						}
 					}
-					if (_model instanceof PageableModel)
-						((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 				}
 			}
 			doSort(this);
@@ -1989,6 +1984,8 @@ public class Tree extends MeshElement {
 		}
 		if (_model instanceof TreeSelectableModel)
 			this.setMultiple(((TreeSelectableModel) _model).isMultiple());
+		if (_model instanceof PageableModel && _pgListener != null)
+			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 
 		Object node = _model.getRoot();
 		final Renderer renderer = new Renderer();
