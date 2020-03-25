@@ -16,6 +16,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     <label multiline="true">
         1. Hover to the buttons.
         2. The effect should fill in all available space.
+        3. The height of buttons in toolbar should be the same.
     </label>
     <apply templateURI="/test2/include/themes.zul"/>
     <toolbarbutton label="button" iconSclass="z-icon-home" image="/test2/img/home.gif"
@@ -34,5 +35,6 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <toolbarbutton iconSclass="z-icon-home" label="button" mode="toggle" checked="true"/>
         <toolbarbutton iconSclass="z-icon-home" label="button" dir="reverse"/>
         <toolbarbutton iconSclass="z-icon-home" label="button" disabled="true"/>
+        <combobutton iconSclass="z-icon-home" label="button" mold="toolbar"/>
     </toolbar>
 </zk>
