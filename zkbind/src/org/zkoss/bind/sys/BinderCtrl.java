@@ -50,6 +50,11 @@ public interface BinderCtrl {
 	 */
 	public static final String PHASE_LISTENER_CLASS_KEY = "org.zkoss.bind.PhaseListener.class";
 
+	/**
+	 * Key of the relation from viewModel to component
+	 */
+	public static final String VIEWMODEL_COMPONENT_MAP_KEY = "org.zkoss.bind.vm_component";
+
 	//control keys
 	public static final String BINDING = "$BINDING$"; //a binding
 	public static final String BINDER = "$BINDER$"; //the binder
@@ -97,6 +102,9 @@ public interface BinderCtrl {
 
 	// since ZK 9.0.1
 	public static final String CLIENT_UPLOAD_INFO = "$ZKCLIENTUPLOADINFO$";
+
+	// sinze ZK 9.1.0
+	public static final String ON_BIND_PROPERITIES_READY = "onBindPropertiesReady"; //do after component binder loading children components
 
 	/**
 	 * Add a association between formId and a associated save binding(save binding inside a form), the form has to exist in the parent components

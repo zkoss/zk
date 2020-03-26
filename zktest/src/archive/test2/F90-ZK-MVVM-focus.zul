@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-3191.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Feb 24 14:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Focus to target</label>
+	<div viewModel="@init('org.zkoss.zktest.test2.F90_ZK_MVVM', type='focus')">
+		<div>
+			<button onClick="@('doFocus')" label="focus the textbox"/>
+			<button onClick="@('doFocusInList')" label="focus the textbox in a List"/>
+			<textbox value="@(text)" />
+		</div>
+		<!-- scroll to 'each' component -->
+		<forEach items="@(list)">
+			<div>
+				<textbox value="@(each)"/>
+			</div>
+		</forEach>
+	</div>
+</zk>

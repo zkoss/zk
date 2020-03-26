@@ -103,35 +103,12 @@ public class ParamCall {
 	}
 
 	public void setBindingArgs(final Map<String, Object> bindingArgs) {
+		this._bindingArgs = bindingArgs;
 		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
 
 			public Object resolveParameter(Annotation anno, Class<?> returnType) {
-				Object val = bindingArgs.get(((BindingParam) anno).value());
-				if (val != null && returnType.isAssignableFrom(val.getClass())) { //escape
-					return val;
-				} else if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
-					return _root.getDesktop().getComponentByUuidIfAny((String) val);
-				} else if (val instanceof JSONAware) {
-					BindContext bindContext = getBindContext();
-					Binder binder = getBinder();
-					@SuppressWarnings("rawtypes")
-					Converter converter = binder.getConverter("jsonBindingParam");
-					if (converter != null) {
-						try {
-							bindContext.setAttribute(BINDING_PARAM_CALL_TYPE, returnType);
-							@SuppressWarnings("unchecked")
-							Object result = converter.coerceToBean(val, binder.getView(), bindContext);
-							return result;
-						} catch (Exception ex) {
-							return Classes.coerce(returnType, val);
-						} finally {
-							bindContext.setAttribute(BINDING_PARAM_CALL_TYPE, null);
-						}
-					} else
-						return Classes.coerce(returnType, val);
-				} else {
-					return val == null ? null : Classes.coerce(returnType, val);
-				}
+				Object val = _bindingArgs.get(((BindingParam) anno).value());
+				return resolveParameter0(val, returnType);
 			}
 		});
 	}
@@ -143,7 +120,7 @@ public class ParamCall {
 
 		try {
 			for (int i = 0; i < paramTypes.length; i++) {
-				params[i] = resolveParameter(parmAnnos[i], paramTypes[i]);
+				params[i] = resolveParameter(parmAnnos[i], paramTypes[i], i);
 			}
 
 			method.setAccessible(true); // Bug ZK-2428
@@ -166,7 +143,7 @@ public class ParamCall {
 		}
 	}
 
-	private Object resolveParameter(java.lang.annotation.Annotation[] parmAnnos, Class<?> paramType) {
+	private Object resolveParameter(java.lang.annotation.Annotation[] parmAnnos, Class<?> paramType, int index) {
 		Object val = null;
 		boolean hitResolver = false;
 		Default defAnno = null;
@@ -200,7 +177,53 @@ public class ParamCall {
 				}
 			}
 		}
+		if (val == null)
+			val = resolvePositionalParameter(paramType, index);
 		return val;
+	}
+
+	private Map<String, Object> _bindingArgs;
+
+	private Object resolvePositionalParameter(Class<?> returnType, int index) {
+		Collection<Object> values = _bindingArgs.values();
+		int i = 0;
+		Object val = null;
+		for (Object v : values) {
+			if (index == i) {
+				val = v;
+				break;
+			}
+			i++;
+		}
+		return resolveParameter0(val, returnType);
+	}
+
+	private Object resolveParameter0(Object val, Class<?> returnType) {
+		if (val != null && returnType.isAssignableFrom(val.getClass())) { //escape
+			return val;
+		} else if (Component.class.isAssignableFrom(returnType) && val instanceof String) {
+			return _root.getDesktop().getComponentByUuidIfAny((String) val);
+		} else if (val instanceof JSONAware) {
+			BindContext bindContext = getBindContext();
+			Binder binder = getBinder();
+			@SuppressWarnings("rawtypes")
+			Converter converter = binder.getConverter("jsonBindingParam");
+			if (converter != null) {
+				try {
+					bindContext.setAttribute(BINDING_PARAM_CALL_TYPE, returnType);
+					@SuppressWarnings("unchecked")
+					Object result = converter.coerceToBean(val, binder.getView(), bindContext);
+					return result;
+				} catch (Exception ex) {
+					return Classes.coerce(returnType, val);
+				} finally {
+					bindContext.setAttribute(BINDING_PARAM_CALL_TYPE, null);
+				}
+			} else
+				return Classes.coerce(returnType, val);
+		} else {
+			return val == null ? null : Classes.coerce(returnType, val);
+		}
 	}
 
 	//utility to hold implicit class and runtime value

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-3191.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Feb 24 14:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Simplified Syntax</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F90_ZK_MVVM', type='syntax')" style="overflow:auto" width="500px" height="500px">
+		<div>
+			<label value="@(selItem)"/>
+			<!-- mix use exception -->
+			<!-- <button onClick="@('doClick', 123, bb='aas,sa2')"/> -->
+			<button onClick="@('doTest', 'aa', 12, 2)"/>
+		</div>
+		<separator />
+		<label value="@(text)"/>
+		<separator />
+		<div height="60px" style="overflow: auto">
+			<vlayout>
+				<forEach items="@(list)">
+					<div>
+						<label value="@(each)"></label>
+					</div>
+				</forEach>
+			</vlayout>
+		</div>
+	</div>
+</zk>

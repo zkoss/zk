@@ -36,6 +36,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.event.Event;
@@ -251,6 +252,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		for (Entry<Binder, Set<Component>> entry : batchRemove.entrySet()) {
 			entry.getKey().removeBindings(entry.getValue());
 		}
+		((Map<Object, Component>) Executions.getCurrent().getDesktop().getAttribute(BinderCtrl.VIEWMODEL_COMPONENT_MAP_KEY))
+				.remove(comp.getAttribute((String) comp.getAttribute(BindComposer.VM_ID)));
 	}
 
 	private void removeBindingsRecursively(Component comp, Map<Binder, Set<Component>> batchRemove) {
@@ -320,6 +323,14 @@ public class BindUiLifeCycle implements UiLifeCycle {
 	 */
 	public static void markLifeCycleHandling(Component comp) {
 		getExtension().markLifeCycleHandling(comp);
+	}
+
+	/**
+	 * Internal use only.
+	 * Return true if a component and it's children are handling already in current execution.
+	 */
+	public static boolean isLifeCycleHandling(Component comp) {
+		return getExtension().isLifeCycleHandling(comp);
 	}
 
 	/** An interface used to extend the {@code BindUiLifeCycle}.

@@ -86,6 +86,8 @@ public class Parser {
 	private final WebApp _wapp;
 	private final Locator _locator;
 	private final List<NamespaceParser> _nsParsers;
+	//used for non-repeating number of auto-applied id of view model
+	private int _vmUuid = 0;
 
 	/** Constructor.
 	 *
@@ -1002,10 +1004,21 @@ public class Parser {
 							attrAnnHelper = new AnnotationHelper();
 						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval.trim(), true, location(attr));
 					} else if (!"use".equals(attnm) || !isZkAttr(langdef, attrns, bNativeContent)) {
-						final String attvaltrim;
 						if (!"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 								&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-							if (!bNativeContent && !bNative && (shouldIgnoreAnnotNamespace || (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))) && AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) {
+							String attvaltrim = attval.trim();
+							if ("viewModel".equals(attnm)) {
+								if (attval.indexOf("@id") == -1) {
+									String vmId = "_zkvm_id" + _vmUuid++;
+									attvaltrim = "@id('" + vmId + "') " + attvaltrim;
+									attvaltrim = attvaltrim.replace("@(", "@init(");
+								}
+							} else {
+								attvaltrim = modifyAttrValueIfSimplified(attnm, attval.trim(), parent);
+							}
+							if (!bNativeContent && !bNative && (shouldIgnoreAnnotNamespace
+									|| (attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI)))
+									&& AnnotationHelper.isAnnotation(attvaltrim)) {
 								if (attrAnnHelper == null)
 									attrAnnHelper = new AnnotationHelper();
 								applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));
@@ -1090,6 +1103,83 @@ public class Parser {
 			} //end-of-else//
 		}
 		return null;
+	}
+
+	private static String modifyAttrValueIfSimplified(String attrName, String attrValue, NodeInfo parent) {
+		if (attrValue.matches("@\\(.*\\)")) {
+			if (Events.isValid(attrName)) {
+                String commandProperty = attrValue.substring(2, attrValue.length() - 1);
+				boolean isNamedParam = false;
+				int len = commandProperty.length();
+				final StringBuilder modifiedCommandPropertySb = new StringBuilder(len);
+				final StringBuilder sb = new StringBuilder(len);
+				String nm = null;
+				char quot = (char) 0;
+				int paramIndex = -1;
+				for (int j = 0;; ++j) {
+					if (j >= len) {
+						modifyAttrValueIfSimplified0(modifiedCommandPropertySb, nm, sb.toString().trim(), paramIndex, isNamedParam);
+						break; //done
+					}
+					char cc = commandProperty.charAt(j);
+					if (quot == (char) 0) {
+						if (cc == ',') {
+							sb.append(cc);
+							modifyAttrValueIfSimplified0(modifiedCommandPropertySb, nm, sb.toString().trim(), paramIndex, isNamedParam);
+							isNamedParam = nm != null;
+							nm = null; //cleanup
+							sb.setLength(0); //cleanup
+							paramIndex++;
+							continue; //next name=value
+						} else if (cc == '=') {
+							nm = sb.toString().trim(); //name found
+							sb.setLength(0); //cleanup
+							continue; //parse value
+						} else if (cc == '\'' || cc == '"') {
+							quot = cc;
+						}
+					} else if (cc == quot) {
+						quot = (char) 0;
+					}
+					sb.append(cc);
+					if (cc == '\\' && j < len - 1)
+						sb.append(commandProperty.charAt(++j));
+					//Note: we don't decode \x. Rather, we preserve it such
+					//that the data binder can use them
+				}
+				attrValue = "@command(" + modifiedCommandPropertySb.toString() + ")";
+			} else {
+				String vmId = null;
+				while (parent != null) {
+					if (!(parent instanceof ComponentInfo)) break;
+					AnnotationMap pAnnoMap = ((ComponentInfo) parent).getAnnotationMap();
+					if (pAnnoMap != null && !pAnnoMap.isEmpty()) {
+						Annotation idAnno = pAnnoMap.getAnnotation("viewModel", "id");
+						if (idAnno != null) {
+							vmId = idAnno.getAttribute("value").replaceAll("'", "");
+							break;
+						}
+					}
+					parent = parent.getParent();
+				}
+				if (vmId != null && !attrValue.contains(vmId))
+					attrValue = attrValue.replaceAll("@\\((.*)\\)", "@(" + vmId + ".$1)");
+				attrValue = "@bind" + attrValue.substring(1);
+			}
+		}
+		return attrValue;
+	}
+
+	private static void modifyAttrValueIfSimplified0(StringBuilder modifiedCommandPropertySb, String nm, String val, int paramIndex, boolean isNamedParam) {
+		if (nm == null) {
+			if (isNamedParam)
+				throw new UiException("Not allowed to use named parameters before un-named parameters.");
+			if (paramIndex != -1) //skip command method name
+				val = "zk_Param_" + paramIndex + "=" + val;
+		} else {
+			val = nm + "=" + val;
+		}
+		modifiedCommandPropertySb.append(val);
 	}
 
 	private boolean textAsAllowed(LanguageDefinition langdef, Collection<Item> items, boolean bNativeContent) {
@@ -1327,18 +1417,6 @@ public class Parser {
 			new VariablesInfo(parent, vars, local, composite, ConditionImpl.getInstance(ifc, unless));
 	}
 
-	private static void parseAnnotation(Element el, AnnotationHelper annHelper) throws Exception {
-		if (!el.getElements().isEmpty())
-			throw new UiException(message("Child elements are not allowed for the annotations", el));
-
-		final Map<String, String[]> attrs = new LinkedHashMap<String, String[]>();
-		for (final Attribute attr : el.getAttributeItems()) {
-			attrs.put(attr.getLocalName(),
-					AnnotationHelper.parseAttributeValue(attr.getValue().trim(), location(attr)));
-		}
-		annHelper.add(el.getLocalName(), attrs, location(el));
-	}
-
 	private static NodeInfo parseShadowElement(PageDefinition pgdef, NodeInfo parent, Element el,
 			AnnotationHelper annHelper) throws Exception {
 		String ifc = null, unless = null, name = el.getLocalName();
@@ -1370,8 +1448,9 @@ public class Parser {
 				String attvaltrim;
 				if (!"xmlns".equals(attPref) && !("xmlns".equals(attnm) && "".equals(attPref))
 						&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
+					attvaltrim = modifyAttrValueIfSimplified(attnm, attval.trim(), parent);
 					if ((attURI.length() == 0 || LanguageDefinition.ZK_NAMESPACE.endsWith(attURI))
-							&& AnnotationHelper.isAnnotation(attvaltrim = attval.trim())) { // annotation
+							&& AnnotationHelper.isAnnotation(attvaltrim)) { // annotation
 						if (attrAnnHelper == null)
 							attrAnnHelper = new AnnotationHelper();
 						applyAttrAnnot(attrAnnHelper, compInfo, attnm, attvaltrim, true, location(attr));

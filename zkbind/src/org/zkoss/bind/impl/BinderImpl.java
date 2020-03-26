@@ -428,6 +428,15 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		return _bindings.get(comp);
 	}
 
+	//internal used only
+	public Component getBindingComponent(Object base) {
+		final Set<LoadBinding> bindings = getTracker().getLoadBindings(base, ".");
+		Iterator<LoadBinding> iter = bindings.iterator();
+		if (iter.hasNext())
+			return iter.next().getComponent();
+		return null;
+	}
+
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void doPropertyChange(Object base, String prop) {
 		if (_log.isDebugEnabled()) {
@@ -1829,7 +1838,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			final Object viewModel = getViewModelInView();
 
 			Method method = getCommandMethod(BindUtils.getViewModelClass(viewModel), command, _globalCommandMethodInfoProvider,
-					_globalCommandMethodCache);
+					_globalCommandMethodCache, -1);
 
 			if (method != null) {
 
@@ -2034,9 +2043,10 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			doPrePhase(Phase.EXECUTE, ctx);
 
 			final Object viewModel = getViewModelInView();
+			Class<?> viewModelClass = BindUtils.getViewModelClass(viewModel);
 
-			Method method = getCommandMethod(BindUtils.getViewModelClass(viewModel), command, _commandMethodInfoProvider,
-					_commandMethodCache);
+			Method method = getCommandMethod(viewModelClass, command, _commandMethodInfoProvider,
+					_commandMethodCache, commandArgs != null ? commandArgs.values().size() : 0);
 
 			if (method != null) {
 
@@ -2079,7 +2089,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 
 	private Method getCommandMethod(Class<?> clz, String command, CommandMethodInfoProvider cmdInfo,
-			Map<Class<?>, Map<String, CachedItem<Method>>> cache) {
+			Map<Class<?>, Map<String, CachedItem<Method>>> cache, int commandParamCount) {
 		Map<String, CachedItem<Method>> methods;
 		synchronized (cache) {
 			methods = cache.get(clz);
@@ -2088,6 +2098,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				cache.put(clz, methods);
 			}
 		}
+		Method matchedMethodWithoutAnno = null;
 		CachedItem<Method> method = null;
 		synchronized (methods) {
 			method = methods.get(command);
@@ -2103,6 +2114,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			}
 			methods.clear();
 			//scan
+
 			for (Method m : clz.getMethods()) {
 				if (m.isBridge()) continue;
 				if (cmdInfo.isDefaultMethod(m)) {
@@ -2113,11 +2125,16 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 					methods.put(COMMAND_METHOD_DEFAULT, new CachedItem<Method>(m));
 				}
 
+				String mName = m.getName();
+				if (commandParamCount != -1 && mName.equals(command)
+						&& m.getParameterTypes().length == commandParamCount)
+					matchedMethodWithoutAnno = m;
+
 				String[] vals = cmdInfo.getCommandName(m);
 				if (vals == null)
 					continue;
 				if (vals.length == 0) {
-					vals = new String[] { m.getName() }; //command name from method.
+					vals = new String[] {mName}; //command name from method.
 				}
 				for (String val : vals) {
 					val = val.trim();
@@ -2127,6 +2144,11 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 					}
 					methods.put(val, new CachedItem<Method>(m));
 				}
+			}
+
+			// F91-MVVM
+			if (methods.get(command) == null) {
+				methods.put(command, new CachedItem<Method>(matchedMethodWithoutAnno));
 			}
 
 			//ZK-3133 for matchMedia methods cache
