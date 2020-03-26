@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F91-ZK-4552-syntax.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Feb 24 14:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Simplified Syntax, you should see no exceptions and buttons works fine.</label>
+	<separator />
+	<div viewModel="@('org.zkoss.zktest.test2.F91_ZK_4452SyntaxVM')" style="overflow:auto" width="500px"
+		 height="500px">
+		<div>
+			<label id="l1" value="@(label)"/>
+			<separator />
+			<button onClick="@('doClick', 123, ss=1, bb='asssas,sa2')" label="Click"/>
+			<button onClick="@('doTest', 'aa', 12, 2)" label="Click"/>
+		</div>
+		<separator/>
+		<label id="l2" value="@(text)"/>
+		<separator/>
+		<div id="list">
+			<forEach items="@(list)">
+				<div>
+					<label value="@(each)"/>
+				</div>
+			</forEach>
+		</div>
+	</div>
+</zk>

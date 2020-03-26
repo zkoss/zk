@@ -394,4 +394,5 @@ public interface Binder {
 	 */
 	public Component getView();
 
+	public Component getBindingComponent(Object base);
 }
