@@ -17,20 +17,20 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         1. Hover the button.
         2. Click the button before the tooltip delay of 1sec to open the popup.
         3. Don't move the mouse after the click.
-        4. The tooltip should be shown.
+        4. The tooltip shouldn't be shown.
     </label>
     <button label="popup"
             popup="pp"
-            tooltip="tt, position=before_start, delay=1000"/>
+            tooltip="tt, delay=1000"/>
     <button label="popup toggle"
             popup="pp, type=toggle"
-            tooltip="tt, position=before_start, delay=1000"/>
+            tooltip="tt, delay=1000"/>
     <button label="context"
             context="pp"
-            tooltip="tt, position=before_start, delay=1000"/>
+            tooltip="tt, delay=1000"/>
     <button label="context toggle"
             context="pp, type=toggle"
-            tooltip="tt, position=before_start, delay=1000"/>
+            tooltip="tt, delay=1000"/>
     <popup id="pp">popup content</popup>
     <popup id="tt">tooltip</popup>
 </zk>

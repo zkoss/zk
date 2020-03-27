@@ -29,21 +29,21 @@ public class B90_ZK_4339Test extends WebDriverTestCase {
 		actions.moveToElement(toElement(jq("@button:eq(0)")))
 				.pause(500).click()
 				.pause(600).perform();
-		Assert.assertTrue(jq("$tt").isVisible());
+		Assert.assertFalse(jq("$tt").isVisible());
 
 		actions.moveToElement(toElement(jq("@button:eq(1)")))
 				.pause(500).click()
 				.pause(600).perform();
-		Assert.assertTrue(jq("$tt").isVisible());
+		Assert.assertFalse(jq("$tt").isVisible());
 
 		actions.moveToElement(toElement(jq("@button:eq(2)")))
 				.pause(500).contextClick()
 				.pause(600).perform();
-		Assert.assertTrue(jq("$tt").isVisible());
+		Assert.assertFalse(jq("$tt").isVisible());
 
 		actions.moveToElement(toElement(jq("@button:eq(3)")))
 				.pause(500).contextClick()
 				.pause(600).perform();
-		Assert.assertTrue(jq("$tt").isVisible());
+		Assert.assertFalse(jq("$tt").isVisible());
 	}
 }
