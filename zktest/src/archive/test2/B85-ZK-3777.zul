@@ -24,7 +24,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 		});
 	});
 	</script>
-	<div>
+	<div height="300px">
 		<slider vflex="1" maxpos="4" orient="vertical" slidingtext="Test {0}" w:use="zul.inp.MySlider"/>
 	</div>
 	<label multiline="true">

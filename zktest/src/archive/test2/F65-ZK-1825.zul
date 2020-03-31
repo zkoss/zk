@@ -20,6 +20,6 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 	<separator/>
 	3. Click the "show timebox value", the result should be the value of datebox + timebox.	It shouldn't be reset to today.
 	<datebox onChange="tb.value = self.value;"/>
-	<timebox id="tb"/>
+	<timebox id="tb" width="300px"/>
 	<button label="show timebox value" onClick="alert(tb.value);"/>
 </zk>
