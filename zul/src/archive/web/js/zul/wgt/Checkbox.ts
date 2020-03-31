@@ -64,8 +64,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 				var n = this.$n('real') as HTMLInputElement;
 				if (n) {
 					n.disabled = v;
+					jq(this.$n()).toggleClass(this.$s(this.getMoldPrefix_() + 'disabled'), v);
 					if (!this._isDefaultMold()) {
-						jq(this.$n()).toggleClass(this.$s(this.getMold() + '-disabled'), v);
 						this._setTabIndexForMold();
 					}
 				}
@@ -84,11 +84,9 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			if (n) {
 				//B70-ZK-2057: prop() method can access right property values;
 				jq(n).prop('checked', v);
-				if (!this._isDefaultMold()) {
-					var mold = this.getMold();
-					this._clearStateClassName();
-					jq(this.$n()).addClass(this._getClassNameByState());
-				}
+
+				this.clearStateClassName_();
+				jq(this.$n()).addClass(this.getClassNameByState_());
 			}
 		},
 		/** Returns the name of this component.
@@ -204,8 +202,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			if (n) {
 				jq(n).prop('indeterminate', v);
 				if (!this._isDefaultMold()) {
-					this._clearStateClassName();
-					jq(this.$n()).addClass(this._getClassNameByState());
+					this.clearStateClassName_();
+					jq(this.$n()).addClass(this.getClassNameByState_());
 				}
 			}
 		}
@@ -337,11 +335,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			mold = this.getMold();
 
 		cls += ' ' + this.$s(mold);
-		if (!this._isDefaultMold()) {
-			cls += ' ' + this._getClassNameByState();
-			if (this.isDisabled())
-				cls += ' ' + this.$s(mold + '-disabled');
-		}
+
+		cls += ' ' + this.getClassNameByState_();
+		if (this.isDisabled())
+			cls += ' ' + this.$s(this.getMoldPrefix_() + 'disabled');
+
 		return cls;
 	},
 	_isDefaultMold(): boolean {
@@ -362,21 +360,24 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	_getClassNameByState(): string {
-		let mold = this.getMold();
+	getMoldPrefix_(): string {
+		return this._isDefaultMold() ? '' : (this.getMold() + '-');
+	},
+	getClassNameByState_(): string {
+		let moldPrefix = this.getMoldPrefix_();
 		if (this._indeterminate) {
-			return this.$s(mold + '-indeterminate');
+			return this.$s(moldPrefix + 'indeterminate');
 		} else {
-			return this.$s(mold + (this._checked ? '-on' : '-off'));
+			return this.$s(moldPrefix + (this._checked ? 'on' : 'off'));
 		}
 	},
-	_clearStateClassName() {
+	clearStateClassName_() {
 		let n = jq(this.$n()),
-			mold = this.getMold();
+			moldPrefix = this.getMoldPrefix_();
 		if (n) {
-			n.removeClass(this.$s(mold + '-off'))
-				.removeClass(this.$s(mold + '-indeterminate'))
-				.removeClass(this.$s(mold + '-on'));
+			n.removeClass(this.$s(moldPrefix + 'off'))
+				.removeClass(this.$s(moldPrefix + 'indeterminate'))
+				.removeClass(this.$s(moldPrefix + 'on'));
 		}
 	},
 	doKeyDown_(evt: zk.Event) {

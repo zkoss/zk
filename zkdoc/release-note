@@ -10,6 +10,7 @@ ZK 9.1.0
   ZK-4562: Introduce OWASP Dependency-Check
   ZK-4569: MVVM support calling commands in other view model
   ZK-4175: replace XHR with the fetch() API to allow SSO redirect handling
+  ZK-4544: Radio/Checkbox provide a status class name for more easier theme customization
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects

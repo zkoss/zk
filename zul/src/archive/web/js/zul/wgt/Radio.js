@@ -90,6 +90,8 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			if (n) {
 				n.checked = checked || false;
 				checked ? jq(n).attr('checked','checked') : jq(n).removeAttr('checked');
+				this.clearStateClassName_();
+				jq(this.$n()).addClass(this.getClassNameByState_());
 				// Bug ZK-622
 				if (!n.checked)
 					jq(n).removeAttr('checked');
@@ -105,6 +107,8 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 									item.checked = false;
 									jq(item).removeAttr('checked');
 								}
+								items[i].clearStateClassName_();
+								jq(items[i].$n()).addClass(this.$s(this.getMoldPrefix_() + 'off'));
 								items[i]._checked = false;
 							}
 						}
