@@ -13,6 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
@@ -28,26 +29,38 @@ public class F70_ZK_2007Test extends WebDriverTestCase {
 		JQuery item = jq(".z-treerow:contains(Item)");
 		JQuery item1 = jq(".z-treerow:contains(Item1)");
 		JQuery item2 = jq(".z-treerow:contains(Item2)");
-		rightClick(item);
+		Actions actions = getActions();
+
+		actions.moveToElement(toElement(item))
+				.contextClick()
+				.perform();
 		waitResponse();
 		Assert.assertTrue("open the popup", jq(".z-popup").exists());
-
-		rightClick(item);
+		actions.moveByOffset(-2, -2) // avoid clicking on the popup
+				.contextClick()
+				.perform();
 		waitResponse();
 		Assert.assertFalse("it will close", jq(".z-popup").isVisible());
 
-		click(item1);
+		actions.moveToElement(toElement(item1))
+				.click()
+				.perform();
 		waitResponse();
 		Assert.assertTrue("open the context menu", jq(".z-menupopup").exists());
-		click(item1);
+		actions.moveByOffset(-2, -2)
+				.click()
+				.perform();
 		waitResponse();
 		Assert.assertFalse("it will close", jq(".z-menupopup").isVisible());
 
-		rightClick(item2);
+		actions.moveToElement(toElement(item2))
+				.contextClick()
+				.perform();
 		waitResponse();
 		Assert.assertTrue("open the context menu", jq(".z-menupopup").exists());
-
-		rightClick(item2);
+		actions.moveByOffset(-2, -2)
+				.contextClick()
+				.perform();
 		waitResponse();
 		Assert.assertFalse("it will close", jq(".z-menupopup").isVisible());
 	}
