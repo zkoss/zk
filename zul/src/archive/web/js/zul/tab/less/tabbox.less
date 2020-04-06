@@ -17,22 +17,7 @@
 		.z-tab {
 			float: none;
 			border-bottom: 0;
-			padding: 12px 8px;
-
-			.z-tab-content {
-				> .z-tab-text {
-					padding-left: 8px;
-					padding-right: 8px;
-					> .z-tab-image {
-						margin-left: -8px;
-						margin-right: 8px;
-					}
-				}
-
-				.z-tab-icon {
-					margin-right: 8px;
-				}
-			}
+			padding: @tabboxTabVerticalPadding;
 
 			&.z-tab-disabled .z-tab-text {
 				color: @disabledColor;
@@ -44,11 +29,11 @@
 
 	&.z-tabbox-scroll {
 		> .z-tabbox-icon {
-			padding: 8px 0;
+			padding: @tabboxIconVerticalPadding;
 		}
 
 		> .z-tabs {
-			margin: @baseBarHeight 0;
+			margin: @tabboxIconSize 0;
 		}
 	}
 
@@ -71,7 +56,7 @@
 	&-icon {
 		.iconFontStyle(@fontSizeXLarge, @tabboxScrollIconColor);
 		display: none;
-		padding: 12px 8px;
+		padding: @tabboxIconPadding;
 		line-height: @fontSizeXLarge;
 		text-align: center;
 		position: absolute;
@@ -93,15 +78,15 @@
 	}
 	&-left-scroll,
 	&-right-scroll {
-		width: @baseBarWidth;
-		min-height: 48px;
+		width: @tabboxIconSize;
+		min-height: @tabboxTabMinHeight;
 	}
 	&-right-scroll {
 		right: 0;
 	}
 	&-up-scroll,
 	&-down-scroll {
-		height: @baseBarHeight;
+		height: @tabboxIconSize;
 	}
 	&-down-scroll {
 		top: auto;
@@ -158,10 +143,6 @@
 	&-left {
 		.verticalStyle();
 
-		> .z-tab-icon {
-			left: 10px;
-			right: auto;
-		}
 		> .z-tabs {
 			.z-tab {
 				border-right: 2px solid transparent;
@@ -175,7 +156,7 @@
 				top: 0;
 				left: 0;
 				& + .z-tab-text {
-					margin-left: 22px;
+					margin-left: @tabboxTabButtonTextSpacing;
 					margin-right: 0;
 				}
 			}
@@ -226,7 +207,7 @@
 			}
 		}
 		.z-tabpanel > .z-tabpanel-content {
-			padding: 16px;
+			padding: @containerPadding;
 			zoom: 1;
 		}
 		.z-tabpanel > .z-tab {
@@ -239,9 +220,9 @@
 			}
 		}
 		.z-tab-button {
-			right: 16px;
+			right: @tabboxTabAccordionButtonRight;
 			& + .z-tab-text {
-				margin-right: 24px;
+				margin-right: @tabboxTabButtonTextSpacing;
 			}
 		}
 	}
@@ -250,7 +231,7 @@
 	&-scroll {
 		> .z-tabs {
 			border: 0;
-			margin: 0 @baseBarWidth;
+			margin: 0 @tabboxIconSize;
 			zoom: 1;
 		}
 		> .z-tabbox-icon {
@@ -267,11 +248,11 @@
 	overflow: hidden;
 	position: relative;
 	background: @tabboxTabsBackgroundColor;
-	min-height: 48px;
+	min-height: @tabboxTabMinHeight;
 
 	&-content {
 		display: flex;
-		min-height: 48px;
+		min-height: @tabboxTabMinHeight;
 		border-collapse: separate;
 		border-spacing: 0;
 		margin: 0;
@@ -289,7 +270,7 @@
 
 .z-tab {
 	font-family: @baseTitleFontFamily;
-	font-size: @fontSizeLarge;
+	font-size: @tabboxTabFontSize;
 	display: block;
 	border-bottom: 2px solid transparent;
 	margin: 0;
@@ -299,7 +280,7 @@
 	position: relative;
 	cursor: pointer;
 	float: left;
-	padding: 10px 16px;
+	padding: @tabboxTabPadding;
 
 	&-content {
 		display: block;
@@ -311,7 +292,7 @@
 
 	&-icon {
 		display: block;
-		margin-top: -9px;
+		.transform('translateY(-50%)');
 		line-height: normal;
 		position: absolute;
 		top: 50%;
@@ -341,7 +322,7 @@
 	}
 
 	&-button {
-		.iconFontStyle(@fontSizeLarge, @tabboxTabButtonColor);
+		.iconFontStyle(@tabboxTabButtonFontSize, @tabboxTabButtonColor);
 		.displaySize(block, @baseButtonHeight, 100%);
 		line-height: normal;
 		text-align: center;
@@ -417,7 +398,7 @@
 
 .z-tabpanel {
 	border-top: 1px solid @tabboxTabSeparatorColor;
-	padding: 16px;
+	padding: @containerPadding;
 	zoom: 1;
 	color: @baseTextColor;
 }
@@ -457,13 +438,13 @@
 	.z-tabbox {
 		&-top, &-left, &-right, &-bottom {
 			.z-tab {
-				height: 48px;
+				height: @tabboxTabMinHeight;
 			}
 		}
 		&-left-scroll,
 		&-right-scroll {
 			min-height: 0;
-			height: 48px;
+			height: @tabboxTabMinHeight;
 		}
 	}
 }
@@ -472,7 +453,7 @@
 	.z-tabbox {
 		&-top, &-left, &-right, &-bottom {
 			.z-tab {
-				min-height: 48px;
+				min-height: @tabboxTabMinHeight;
 			}
 		}
 	}

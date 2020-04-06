@@ -1,10 +1,10 @@
 @import "~./zul/less/_header.less";
 
 .z-calendar {
-	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal);
+	.fontStyle(@baseContentFontFamily, @calendarFontSize, normal);
 	background-color: @calendarBackgroundColor;
 	min-width: 230px;
-	padding: 8px 12px;
+	padding: @calendarPadding;
 
 	a {
 		text-decoration: none;
@@ -13,7 +13,7 @@
 		.size(32px, 36px);
 		min-width: 32px;
 		.borderRadius(@baseBorderRadius);
-		.fontStyle(@baseTitleFontFamily, @fontSizeXSmall, 700, @calendarWeekTitleColor);
+		.fontStyle(@baseTitleFontFamily, @calendarFontSizeSmall, 700, @calendarWeekTitleColor);
 		text-align: center;
 		padding: 8px 0;
 	}
@@ -24,7 +24,7 @@
 
 	&-title {
 		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeSmall;
+		font-size: @calendarTitleFontSize;
 		color: @calendarTitleColor;
 		width: 100%;
 		line-height: @baseLineHeight;
@@ -44,7 +44,7 @@
 		}
 
 		&:first-child { // calendar title
-			line-height: 34px;
+			line-height: @calendarTitleLineHeight;
 		}
 	}
 
@@ -67,9 +67,9 @@
 		}
 	}
 	&-cell {
-		font-size: @fontSizeXSmall;
+		font-size: @calendarFontSizeSmall;
 		color: @calendarCellColor;
-		.size(32px, 28px);
+		.size(@calendarCellWidth, @calendarCellHeight);
 		line-height: normal;
 		text-align: center;
 		cursor: pointer;
@@ -133,7 +133,7 @@
 		text-shadow: none;
 	}
 	&-icon {
-		.iconFontStyle(@fontSizeMedium, @iconColor);
+		.iconFontStyle(@calendarIconFontSize, @iconColor);
 		.size(@baseButtonWidth, @baseButtonHeight);
 		padding: 0 4px;
 		position: absolute;
@@ -143,10 +143,10 @@
 		}
 	}
 	&-right {
-		right: 8px;
+		right: @calendarLeftRightPosition;
 	}
 	&-left {
-		left: 8px;
+		left: @calendarLeftRightPosition;
 	}
 
 	&-left[disabled],
@@ -165,11 +165,11 @@
 		border: 1px solid @baseBorderColor;
 		.borderRadius(@baseBorderRadius);
 		background-color: @calendarBackgroundColor;
-		margin-top: 8px;
+		margin-top: @calendarTodayMarginTop;
 
 		.z-calendar-title {
 			display: block;
-			padding: 8px 0;
+			padding: @calendarTodayTitlePadding;
 			color: @calendarTodayColor;
 		}
 

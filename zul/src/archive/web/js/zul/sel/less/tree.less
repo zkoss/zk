@@ -153,7 +153,7 @@
 	}
 	//check mark
 	&-checkable {
-		.displaySize(inline-block, 20px, 20px);
+		.displaySize(inline-block, @checkboxSize, @checkboxSize);
     	.iconFontStyle(@checkedIconSize, @checkedColor);
     	border: 1px solid @checkedBorderColor;
     	background: @checkedBackgroundColor;
@@ -269,8 +269,8 @@ body:not(.gecko) {
 .z-treecell-content,
 .z-treefooter-content {
 	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
-	padding: 12px 16px;
-	line-height: 1.3em;
+	padding: @meshBodyPadding;
+	line-height: @meshContentLineHeight;
 	overflow: hidden;
 }
 .z-treecol-content {
@@ -278,7 +278,7 @@ body:not(.gecko) {
 	position: relative;
 }
 .z-treecell-content {
-	line-height: @baseLineHeight;
+	line-height: @treecellContentLineHeight;
 }
 .z-treefooter-content {
 	color: @textColorLight;

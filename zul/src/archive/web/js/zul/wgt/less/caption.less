@@ -2,10 +2,10 @@
 
 .z-caption {
 	background-color: transparent;
-	font-size: @fontSizeLarge;
+	font-size: @captionFontSize;
 	.size(100%, auto);
 	min-height: @baseButtonHeight;
-	line-height: @baseLineHeight;
+	line-height: normal;
 
 	&-content,
 	.z-label {
@@ -14,9 +14,8 @@
 	}
 
 	&-content {
-		padding: 4px 0;
 		& > * {
-			margin-left: 16px;
+			margin-left: @captionElementsMargin;
 
 			&:first-child {
 				margin-left: 0;
@@ -35,8 +34,8 @@
 
 	&-image {
 		vertical-align: middle;
-		height: 20px;
-		width: 20px;
+		height: @captionImageMaxSize;
+		width: @captionImageMaxSize;
 	}
 
 	input {
@@ -55,9 +54,8 @@
 
 	.z-button {
 		.boxShadow('none');
-		padding: 6px 12px;
-		line-height: @baseLineHeight - 2;
-		font-size: @fontSizeLarge;
+		padding: @captionButtonPadding;
+		font-size: @captionButtonFontSize;
 	}
 
 	.z-a,

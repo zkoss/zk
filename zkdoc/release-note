@@ -6,6 +6,7 @@ ZK 9.1.0
   ZK-4551: Support ref override for position of Popup/Tooltip/Context
   ZK-4451: iOS 13 cause iPad to set "request desktop mode" for all website by default
   ZK-4552: Simplify MVVM syntax
+  ZK-4560: Theme customization improvement - avoid patch.less
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects

@@ -16,13 +16,15 @@
 
 // checkbox style
 .checkable() {
-	.displaySize(inline-block, 20px, 20px);
+	.displaySize(inline-block, @checkboxSize, @checkboxSize);
 	.iconFontStyle(@checkedIconSize, @checkedColor);
 	border: 1px solid @checkedBorderColor;
 	background: @checkedBackgroundColor;
 	vertical-align: text-top;
 	margin-right: 8px;
 	.borderRadius(@baseBorderRadius);
+	position: relative;
+	left: @listheaderCheckedPositionLeft;
 }
 
 //listbox
@@ -59,7 +61,7 @@
 	}
 	&-body &-emptybody &-emptybody-content {
 		background: @meshBackgroundColor;
-		padding: 12px 16px;
+		padding: @meshEmptyBodyPadding;
 	}
 	//listbox footer
 	&-footer {
@@ -125,7 +127,7 @@
 		.z-listheader-sorticon {
 			.iconFontStyle(@fontSizeLarge, @meshTitleColor);
 			position: absolute;
-			top: -3px;
+			top: @meshColumnSortIconTop;
 			left: 50%;
 			.transform('translateX(-50%)');
 
@@ -287,7 +289,7 @@
 			
 			&.z-icon-check {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
-				.size(10px, 10px);
+				.size(@listboxRadioIconSize, @listboxRadioIconSize);
 				.borderRadius(50%);
 				background: @checkedColor;
 				position: relative;
@@ -336,7 +338,7 @@ body:not(.gecko) {
 		
 		.z-listcell-content,
 		.z-listgroup-content {
-			padding: 12px 16px;
+			padding: @meshBodyPadding;
 		}
 	}
 	&&-open &-inner {
@@ -389,9 +391,9 @@ body:not(.gecko) {
 .z-listgroupfoot-content,
 .z-listfooter-content {
 	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
-	line-height: 1.3em;
+	line-height: @meshContentLineHeight;
 	overflow: hidden;
-	padding: 12px 16px;
+	padding: @meshBodyPadding;
 }
 .z-listheader-content {
 	color: @meshTitleColor;
@@ -413,7 +415,7 @@ body:not(.gecko) {
 	}
 	& .z-listcell-content {
 		color: @meshGroupFooterColor;
-		padding: 12px 16px;
+		padding: @meshBodyPadding;
 		.z-listgroup-open& {
 			color: @meshGroupFooterOpenColor;
 		}

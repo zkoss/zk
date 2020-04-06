@@ -6,7 +6,7 @@
 .z-longbox,
 .z-doublebox {
 	.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
-	height: 34px;
+	height: @inputHeight;
 	border: 1px solid @inputBorderColor;
 	.borderRadius(@baseBorderRadius);
 	padding: @inputPadding;
@@ -89,7 +89,7 @@ textarea.z-textbox {
 	& > .z-errorbox-icon {
 		.iconFontStyle(@fontSizeLarge, @errorboxColor);
 		position: absolute;
-		top: 8px;
+		top: @errorboxInsideIconPositionTop;
 		left: 7px;
 		z-index: 2;
 	}
@@ -98,14 +98,14 @@ textarea.z-textbox {
 	left: 15px;
 }
 .z-errorbox-up + .z-errorbox-icon {
-	top: 16px;
+	top: @errorboxUpIconPositionTop;
 }
 .z-errorbox-content {
 	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @errorboxColor);
 	width: 100%;
 	border: 1px solid @errorboxBorderColor;
 	.borderRadius(@baseBorderRadius);
-	padding: 8px 20px 8px 34px;
+	padding: @errorboxContentPadding;
 	background: @errorboxBackgroundColor;
 	vertical-align: middle;
 	position: relative;
@@ -149,7 +149,7 @@ textarea.z-textbox {
 }
 .z-errorbox-icon {
 	position: absolute;
-	top: -1px;
+	top: @errorboxIconPositionTop;
 }
 .z-errorbox-right ~ .z-errorbox-close {
 	right: 16px;
