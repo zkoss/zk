@@ -19,5 +19,14 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <combobox id="cb"/>
         <datebox id="db"/>
     </vlayout>
+    <div id="alignDiv" style="line-height:24px;">
+        <label value="You should see the inputs and buttons are aligned." />
+        <bandbox />
+        <combobox />
+        <datebox />
+        <doublespinner />
+        <spinner />
+        <timebox />
+    </div>
     <apply templateURI="/test2/include/themes.zul"/>
 </zk>
