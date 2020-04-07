@@ -16,6 +16,15 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     <div id="d" width="600px" height="100px" style="position: relative; overflow: auto; border: 1px solid red">
         <div style="position: absolute; right: 0"><combobox/></div>
     </div>
+    <div id="alignDiv" style="line-height: 60px;">
+        <label value="You should see the inputs and buttons are aligned." />
+        <bandbox />
+        <combobox />
+        <datebox />
+        <doublespinner />
+        <spinner />
+        <timebox />
+    </div>
     <button w:onClick="zk.log(zk(jq('$d')).hasHScroll())" label="checkScrollBar"></button>
     <apply templateURI="/test2/include/themes.zul"/>
 </zk>
