@@ -6,7 +6,7 @@ addons:
 branches:
   except:
     - /.*-Stable$/
-install: nvm install stable
+install: nvm install --lts
 jdk: openjdk11
 script:
     - cd bin
