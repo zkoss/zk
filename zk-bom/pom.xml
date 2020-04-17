@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.zkoss.zk</groupId>
     <artifactId>zk-bom</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <version>9.0.1-SNAPSHOT</version>
     <name>ZK Bill of Materials</name>
     <url>https://www.zkoss.org/product/zk</url>
@@ -511,8 +511,21 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>bundle</id>
