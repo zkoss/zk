@@ -1477,6 +1477,8 @@ zk.$intercepts(zul.inp.Combobox, {
 	}
 	var browser = jq.browser,
 		agent = zk.agent = navigator.userAgent.toLowerCase(),
+		// ZK-4451: iOS 13 safari ipad pretend itself as MacOS
+		isTouchableMacIntel = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 0,
 		iosver;
 	zk.opera = browser.opera && _ver(browser.version);
 	zk.ff = zk.gecko = browser.mozilla
@@ -1489,17 +1491,21 @@ zk.$intercepts(zul.inp.Combobox, {
 
 	// support W$'s Edge
 	zk.edge = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edge')) >= 0) && _ver(agent.substring(iosver + 5));
-	zk.ios = zk.webkit && /iphone|ipad|ipod/.test(agent) && (
+	zk.ios = (zk.webkit && /iphone|ipad|ipod/.test(agent) && (
 		//ZK-2245: add version info to zk.ios
 		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '')
 		|| // ZK-2888, in iphone with chrome, it may not have version attribute.
-		(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', ''));
+		(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', '')))
+		|| // ZK-4451: iOS 13 safari ipad pretend itself as MacOS
+		(zk.safari && isTouchableMacIntel);
 
-	zk.ipad = zk.webkit && /ipad/.test(agent) && (
+	zk.ipad = (zk.webkit && /ipad/.test(agent) && (
 		//ZK-2245: add version info to zk.ios
 		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '')
 		|| // ZK-2888, in iphone with chrome, it may not have version attribute.
-		(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', ''));
+		(iosver = agent.match(/ os \d/)) && iosver[0].replace(' os ', '')))
+		|| // ZK-4451: iOS 13 safari ipad pretend itself as MacOS
+		(zk.safari && isTouchableMacIntel);
 
 	zk.android = agent.indexOf('android') >= 0;
 	zk.mobile = zk.ios || zk.android;

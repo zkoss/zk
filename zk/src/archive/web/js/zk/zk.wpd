@@ -48,8 +48,16 @@ window.$eval=function(s){return eval(s);};
 	<script src="historystate.js"/>
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
-	<script src="zswipe.js" jsdoc="true" browser="ios,android"/>
-	<script src="domtouch.js" browser="ios,android"/>
+	<script>if (zk.mobile) {</script>
+		<script src="zswipe.js" jsdoc="true"/>
+		<script src="domtouch.js"/>
+	<script>} else {
+		zk.afterMount(function() {
+			var jqTabletStylesheet = jq('link[href$="zkmax/css/tablet.css.dsp"]').eq(0);
+			if (jqTabletStylesheet)
+				jqTabletStylesheet.remove(); // ZK-4451: disable tablet css
+		});}
+	</script>
 	<script src="dateImpl.js"/>
 	<script src="uploadUtils.js"/>
 
