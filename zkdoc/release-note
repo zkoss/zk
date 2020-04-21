@@ -1,4 +1,5 @@
 ZK 9.0.1
+Apr 21, 2020
 * Features
   ZK-4458: provide a maven BOM (bill of materials)
   ZK-4472: Using fileupload in MVVM Client-side binding

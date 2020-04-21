@@ -126,6 +126,7 @@ zkbind.$ = function (n, opts) {
 	}
 /**
  * A data binder utile widget.
+ * @import _global_.File
  * @since 8.0.0
  */
 zkbind.Binder = zk.$extends(zk.Object, {
