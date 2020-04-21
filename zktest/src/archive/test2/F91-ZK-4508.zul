@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F91-ZK-4508.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 18 10:05:55 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "BindingParam". You should see "BindingParam, Tom (Tom)!" in zk log.
+        2. Click "HeaderParam". You should see "HeaderParam, keep-alive (keep-alive)!" in zk log.
+        3. Click "SelectorParam". You should see "SelectorParam, main (btnSelector)!" in zk log.
+        4. Click "ScopeParam". You should see "ScopeParam, Tim (Tim)!" in zk log.
+        5. Click "CookieParam". You should see "CookieParam, [hash] ([hash])!" in zk log.
+        6. Click "QueryParam". You should see "QueryParam, Tony (Tony)!" in zk log.
+        7. Click "ExecutionParam". You should see "ExecutionParam, foo (foo)!" in zk log.
+        8. Click "ExecutionArgParam". You should see "ExecutionArgParam, bar (bar)!" in zk log.
+    </label>
+    <div id="main" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F91_ZK_4508VM')">
+        <button label="BindingParam" onClick="@command('bindingParam', name1='Tom')"/>
+        <button label="HeaderParam" onClick="@command('headerParam')"/>
+        <button id="btnSelector" label="SelectorParam" onClick="@command('selectorParam')"/>
+        <button id="btnScope" label="ScopeParam" onClick="@command('scopeParam')"/>
+        <button label="CookieParam" onClick="@command('cookieParam')"/>
+        <include src="F91-ZK-4508-inner-query.zul?name1=Tony"/>
+    </div>
+    <zscript><![CDATA[
+    org.zkoss.zk.ui.Execution ex = org.zkoss.zk.ui.Executions.getCurrent();
+    btnScope.setAttribute("name1", "Tim"); // ScopeParam
+    ex.setAttribute("param1", "foo"); // ExecutionParam
+    java.util.Map args = new java.util.HashMap();
+    args.put("arg1", "bar"); // ExecutionArgParam
+    ex.createComponents("F91-ZK-4508-inner-exec.zul", main, args);
+    ]]>
+    </zscript>
+</zk>

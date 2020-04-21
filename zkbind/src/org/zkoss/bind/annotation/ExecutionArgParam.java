@@ -29,8 +29,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExecutionArgParam {
 	/**
-	 * name of the parameter
+	 * name of the parameter.
+	 * Since 9.1.0, it can be omitted if name is the same as the annotated parameter.
 	 * @return name of the parameter
 	 */
-	String value();
+	String value() default "";
 }
