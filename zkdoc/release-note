@@ -2,6 +2,7 @@ ZK 9.1.0
 * Features
 
 * Bugs
+  ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
 
 * Upgrade Notes
 
