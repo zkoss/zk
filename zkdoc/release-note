@@ -1,5 +1,6 @@
 ZK 9.1.0
 * Features
+  ZK-4508: The value of @BindingParam can be omitted
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
