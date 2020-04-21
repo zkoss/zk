@@ -1557,7 +1557,7 @@ jq(el).zk.center(); //same as 'center'
 	/** Returns the size of the text if it is placed inside the first matched element.
 	 * @param String text the content text
 	 * @return Size the size of the text
-	 * @deprecated Use {@link textWidth} instead for better performance.
+	 * @deprecated Use {@link #textWidth} instead for better performance.
 	 */
 	textSize: (function () {
 		// cache
@@ -1600,7 +1600,7 @@ jq(el).zk.center(); //same as 'center'
 	 * @param String text the content text. The text of the first matched element if omitted
 	 * @return double the width in px of the text
 	 * @since 9.0.1
-	 * @see https://stackoverflow.com/a/21015393
+	 * @see <a href="https://stackoverflow.com/a/21015393">Stack Overflow</a>
 	 */
 	textWidth: function (text) {
 		var $obj = this.jq;
