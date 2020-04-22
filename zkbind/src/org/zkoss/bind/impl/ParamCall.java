@@ -1,5 +1,8 @@
 package org.zkoss.bind.impl;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,6 +23,7 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.BindingParams;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.CookieParam;
@@ -135,6 +139,28 @@ public class ParamCall {
 						return Classes.coerce(returnType, val);
 				} else {
 					return val == null ? null : Classes.coerce(returnType, val);
+				}
+			}
+		});
+		_paramResolvers.put(BindingParams.class, new ParamResolver<Annotation>() {
+			@Override
+			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+				try {
+					Object bean = Classes.newInstance(returnType, null);
+					BeanInfo beanInfo = Introspector.getBeanInfo(returnType);
+					for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
+						String propertyName = pd.getName();
+						Object propertyValue = bindingArgs.get(propertyName);
+						if (propertyValue != null || bindingArgs.containsKey(propertyName)) {
+							pd.getWriteMethod().invoke(
+								bean, Classes.coerce(pd.getPropertyType(), propertyValue)
+							);
+						}
+					}
+					return bean;
+				} catch (Exception e) {
+					_log.error("", e);
+					throw UiException.Aide.wrap(e);
 				}
 			}
 		});
