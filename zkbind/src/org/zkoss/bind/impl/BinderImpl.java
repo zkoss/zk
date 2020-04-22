@@ -43,11 +43,14 @@ import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.Binder;
 import org.zkoss.bind.Converter;
 import org.zkoss.bind.Form;
+import org.zkoss.bind.FormLegacy;
+import org.zkoss.bind.FormLegacyExt;
 import org.zkoss.bind.GlobalCommandEvent;
 import org.zkoss.bind.Phase;
 import org.zkoss.bind.PhaseListener;
 import org.zkoss.bind.Property;
 import org.zkoss.bind.PropertyChangeEvent;
+import org.zkoss.bind.SimpleForm;
 import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.DefaultCommand;
@@ -669,6 +672,20 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		comp.setAttribute(FORM_ID, id); //mark it is a form component with the form id;
 		comp.setAttribute(id, form); //after setAttribute, we can access fx in el.
 
+		if (form instanceof FormLegacyExt) {
+			final FormLegacyExt fex = (FormLegacyExt) form;
+			comp.setAttribute(id + "Status", fex.getStatus()); //by convention fxStatus
+			
+			if (oldForm instanceof FormLegacyExt) { //copy the filed information, this is for a form-init that assign a user form
+				for (String fn : ((FormLegacyExt) oldForm).getLoadFieldNames()) {
+					fex.addLoadFieldName(fn);
+				}
+				for (String fn : ((FormLegacyExt) oldForm).getSaveFieldNames()) {
+					fex.addSaveFieldName(fn);
+				}
+			}
+			return;
+		}
 		if (form instanceof Form) {
 			final Form fex = form;
 			comp.setAttribute(id + "Status", fex.getFormStatus()); //by convention fxStatus
@@ -705,6 +722,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		}
 	}
 
+	private void initFormLegacyBean(Component comp, String id, Object bean) {
+		Form form = getForm(comp, id);
+		if (form == null && bean instanceof FormLegacy)
+			storeForm(comp, id, new SimpleForm());
+	}
+
 	public void addFormInitBinding(Component comp, String id, String initExpr, Map<String, Object> initArgs) {
 		checkInit();
 		if (Strings.isBlank(id)) {
@@ -737,6 +760,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			collector.addInfo(new AddBindingInfo(AddBindingInfo.FORM_INIT, comp, null, binding.getPropertyString(),
 					formId, bindingArgs, null));
 		}
+		BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
+		final Object bean = getEvaluatorX().getValue(ctx, comp, ((InitFormBindingImpl) binding)._accessInfo.getProperty());
+		initFormLegacyBean(comp, formId, bean);
 	}
 
 	public void addFormLoadBindings(Component comp, String id, String loadExpr, String[] beforeCmds, String[] afterCmds,
