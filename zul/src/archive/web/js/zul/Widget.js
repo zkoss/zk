@@ -82,7 +82,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				params.y = _parseParamFunc(event, y);
 
 			var xy = params.x !== undefined ? [params.x, params.y] : zk.currentPointer;
-			_tt_tip.open(_tt_ref, xy, zul.Widget._getPopupPosition(params), {sendOnOpen: true});
+			_tt_tip.open(params.ref || _tt_ref, xy, zul.Widget._getPopupPosition(params), {sendOnOpen: true});
 		}
 	}
 	function _tt_close_() {
@@ -508,6 +508,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 		}
 		if (params.delay)
 			params.delay = zk.parseInt(params.delay);
+		if (params.ref)
+			params.ref = this._smartFellow(params.ref);
 		return params;
 	},
 	//super//
@@ -528,7 +530,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				} else {
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						if (self.desktop)
-							popup.open(self, xy, zul.Widget._getPopupPosition(params), {sendOnOpen: true, type: params.type, which: 1});
+							popup.open(params.ref || self, xy, zul.Widget._getPopupPosition(params), {sendOnOpen: true, type: params.type, which: 1});
 					}, 0);
 				}
 				evt.stop({dom: true});
@@ -554,7 +556,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				} else {
 					setTimeout(function () { // F70-ZK-2007: Add the type and button number information
 						if (self.desktop)
-							ctx.open(self, xy, zul.Widget._getPopupPosition(params), {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
+							ctx.open(params.ref || self, xy, zul.Widget._getPopupPosition(params), {sendOnOpen: true, type: params.type, which: 3}); //Bug #2870620
 					}, 0);
 				}
 				evt.stop({dom: true}); //prevent default context menu to appear
