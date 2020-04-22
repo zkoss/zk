@@ -4,6 +4,7 @@ ZK 9.1.0
   ZK-4501: Add SimpleForm back for compatibility
   ZK-4523: Support a Bean creation from @BindingParams
   ZK-4551: Support ref override for position of Popup/Tooltip/Context
+  ZK-4451: iOS 13 cause iPad to set "request desktop mode" for all website by default
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
