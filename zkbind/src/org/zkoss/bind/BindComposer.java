@@ -49,6 +49,7 @@ import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -244,6 +245,7 @@ public class BindComposer<T extends Component>
 			keeper.loadComponentForAllBinders();
 		}
 
+		comp.setAttribute(BinderCtrl.ON_BIND_PROPERITIES_READY, true);
 		comp.setAuService(this);
 
 		// ZK-3711 Listen to HistoryPopStateEvent if @HistoryPopState exists.
@@ -267,6 +269,12 @@ public class BindComposer<T extends Component>
 					}
 				});
 			}
+		}
+
+		Collection<Callback> callbacks = ((ComponentCtrl) comp).getCallback(BinderCtrl.ON_BIND_PROPERITIES_READY);
+		for (Callback callback : new ArrayList<Callback>(callbacks)) {
+			callback.call(_binder);
+			((ComponentCtrl) comp).removeCallback(BinderCtrl.ON_BIND_PROPERITIES_READY, callback);
 		}
 	}
 
@@ -352,6 +360,13 @@ public class BindComposer<T extends Component>
 		comp.setAttribute(vmname, vm);
 		comp.setAttribute(VM_ID, vmname);
 
+		Desktop desktop = comp.getDesktop();
+		Map<Object, Component> relationMap = (Map<Object, Component>) desktop.getAttribute(BinderCtrl.VIEWMODEL_COMPONENT_MAP_KEY);
+		if (relationMap == null) {
+			relationMap = new HashMap<>();
+			desktop.setAttribute(BinderCtrl.VIEWMODEL_COMPONENT_MAP_KEY, relationMap);
+		}
+		relationMap.put(vm, comp);
 		return vm;
 	}
 

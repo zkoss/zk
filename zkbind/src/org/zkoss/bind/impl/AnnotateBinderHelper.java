@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -165,7 +166,7 @@ public class AnnotateBinderHelper {
 				cmdExprs.add(AnnotationUtil.testString(tagExpr, ann));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, String[]>();
+					args = new LinkedHashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}
