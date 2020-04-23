@@ -7,6 +7,7 @@
 	<packaging>jar</packaging>
 	<properties>
 		<org.springframework.version>5.2.3.RELEASE</org.springframework.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<version>9.1.0-SNAPSHOT</version>
 	<name>ZK Plus Utilities</name>
@@ -48,7 +49,7 @@
 		</repository>
 		<repository>
 			<id>maven seasar org</id>
-			<url>http://maven.seasar.org/maven2</url>
+			<url>https://maven.seasar.org/maven2</url>
 		</repository>
 		<repository>
 			<id>jboss-repo</id>
@@ -56,24 +57,9 @@
 		</repository>
 		<repository>
 			<id>nuxeo</id>
-			<url>https://maven.nuxeo.org/nexus/content/groups/public</url>
+			<url>https://maven.nuxeo.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>zkmaven</id>
-			<name>ZK Maven Plugin Repository</name>
-			<url>https://mavensync.zkoss.org/maven2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Plugin Repository</name>
-			<url>https://repo1.maven.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
@@ -232,18 +218,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.zkoss.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin-zk</artifactId>
-				<version>1.1.4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compress</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

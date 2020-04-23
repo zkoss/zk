@@ -7,12 +7,15 @@
 	<version>9.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>ZK Kernel</name>
-	<url>http://www.zkoss.org/zk</url>
+	<url>https://www.zkoss.org/zk</url>
 	<description>ZK Kernel</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
-			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<url>https://www.gnu.org/licenses/lgpl.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -21,16 +24,16 @@
 			<id>zkteam</id>
 			<name>ZK Team</name>
 			<email>info@zkoss.org</email>
-			<url>http://www.zkoss.org</url>
+			<url>https://www.zkoss.org</url>
 			<organization>Potix</organization>
-			<organizationUrl>http://www.zkoss.org</organizationUrl>
+			<organizationUrl>https://www.zkoss.org</organizationUrl>
 			<roles>
 				<role>architect</role>
 				<role>developer</role>
 			</roles>
 			<timezone>8</timezone>
 			<properties>
-				<picUrl>http://www.zkoss.org</picUrl>
+				<picUrl>https://www.zkoss.org</picUrl>
 			</properties>
 		</developer>
 	</developers>
@@ -44,21 +47,6 @@
 			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>zkmaven</id>
-			<name>ZK Maven Plugin Repository</name>
-			<url>https://mavensync.zkoss.org/maven2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Plugin Repository</name>
-			<url>https://repo1.maven.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
@@ -153,18 +141,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.zkoss.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin-zk</artifactId>
-				<version>1.1.4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compress</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
