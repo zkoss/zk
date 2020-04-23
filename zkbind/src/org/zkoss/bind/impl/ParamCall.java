@@ -216,17 +216,20 @@ public class ParamCall {
 	private Map<String, Object> _bindingArgs;
 
 	private Object resolvePositionalParameter(Class<?> returnType, int index) {
-		Collection<Object> values = _bindingArgs.values();
-		int i = 0;
 		Object val = null;
-		for (Object v : values) {
-			if (index == i) {
-				val = v;
-				break;
+		if (_bindingArgs != null) {
+			Collection<Object> values = _bindingArgs.values();
+			int i = 0;
+			for (Object v : values) {
+				if (index == i) {
+					val = v;
+					break;
+				}
+				i++;
 			}
-			i++;
+			return resolveParameter0(val, returnType);
 		}
-		return resolveParameter0(val, returnType);
+		return null;
 	}
 
 	private Object resolveParameter0(Object val, Class<?> returnType) {

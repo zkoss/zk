@@ -158,6 +158,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			200, CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 
 	//command and default command method parsing and caching 
+	private static final CachedItem<Method> NULL_METHOD = new CachedItem<Method>(null);
+	private static final String COMMAND_METHOD_MAP_INIT = "$INIT_FLAG$";
 	private static final String COMMAND_METHOD_DEFAULT = "$DEFAULT_FLAG$";
 	private static final CommandMethodInfoProvider _commandMethodInfoProvider = new CommandMethodInfoProvider() {
 		public String getAnnotationName() {
@@ -2126,13 +2128,20 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		CachedItem<Method> method = null;
 		synchronized (methods) {
 			method = methods.get(command);
+			boolean inited = false;
 			if (method != null) { //quick check and return
 				return method.value;
+			} else if (methods.get(COMMAND_METHOD_MAP_INIT) != null) {
+				//map is already initialized
+				inited = true;
 			}
 			//scan
-
 			for (Method m : clz.getMethods()) {
 				if (m.isBridge()) continue;
+				String mName = m.getName();
+				if (mName.equals(command) && m.getParameterTypes().length == commandParamCount)
+					matchedMethodWithoutAnno = m;
+				if (inited) continue; //already scanned @Default and @Command
 				if (cmdInfo.isDefaultMethod(m)) {
 					if (methods.get(COMMAND_METHOD_DEFAULT) != null) {
 						throw new UiException("there are more than one " + cmdInfo.getDefaultAnnotationName()
@@ -2140,12 +2149,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 					}
 					methods.put(COMMAND_METHOD_DEFAULT, new CachedItem<Method>(m));
 				}
-
-				String mName = m.getName();
-				if (commandParamCount != -1 && mName.equals(command)
-						&& m.getParameterTypes().length == commandParamCount)
-					matchedMethodWithoutAnno = m;
-
 				String[] vals = cmdInfo.getCommandName(m);
 				if (vals == null)
 					continue;
@@ -2162,23 +2165,29 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 				}
 			}
 
-			// ZK-4552
-			if (methods.get(command) == null)
-				methods.put(command, new CachedItem<Method>(matchedMethodWithoutAnno));
+			if (!inited) {
+				//ZK-3133 for matchMedia methods cache
+				if (_matchMediaValues != null) {
+					for (Map.Entry<String, Method> entry : _matchMediaValues.entrySet()) {
+						methods.put(entry.getKey(), new CachedItem<Method>(entry.getValue()));
+					}
+				}
+				methods.put(COMMAND_METHOD_MAP_INIT, NULL_METHOD); //mark this map has been initialized.
+			}
 
-			//ZK-3133 for matchMedia methods cache
-			if (_matchMediaValues != null) {
-				for (Map.Entry<String, Method> entry : _matchMediaValues.entrySet()) {
-					methods.put(entry.getKey(), new CachedItem<Method>(entry.getValue()));
+			// ZK-4552
+			method = methods.get(command);
+			if (method == null) {
+				if (matchedMethodWithoutAnno != null) {
+					method = new CachedItem<Method>(matchedMethodWithoutAnno);
+					methods.put(command, method);
+				} else {
+					method = methods.get(COMMAND_METHOD_DEFAULT); //get default
+					if (method != null)
+						methods.put(command, method);
 				}
 			}
 		}
-
-		method = methods.get(command);
-		if (method != null) {
-			return method.value;
-		}
-		method = methods.get(COMMAND_METHOD_DEFAULT); //get default
 		return method == null ? null : method.value;
 	}
 
