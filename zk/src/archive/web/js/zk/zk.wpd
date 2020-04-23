@@ -52,7 +52,7 @@ window.$eval=function(s){return eval(s);};
 		<script src="zswipe.js" jsdoc="true"/>
 		<script src="domtouch.js"/>
 	<script>} else {
-		zk.afterMount(function() {
+		document.addEventListener('DOMContentLoaded', function() {
 			var jqTabletStylesheet = jq('link[href$="zkmax/css/tablet.css.dsp"]').eq(0);
 			if (jqTabletStylesheet)
 				jqTabletStylesheet.remove(); // ZK-4451: disable tablet css
