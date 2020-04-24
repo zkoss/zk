@@ -21,11 +21,11 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 				var newValue = pm.getValue() + (100 / steps);
 				if(newValue > 100) {
 					clearInterval(id);
-					alert('100% and the bar width is: ' + $('.z-progressmeter-image').width());
+					alert('100% and the bar width is: ' + jq('.z-progressmeter-image').width());
 					return;
 				}
 				console.log('progress: ' + newValue + '%');
-				$('$lb')[0].innerHTML = newValue;
+				jq('$lb')[0].innerHTML = newValue;
 				pm.setValue(Math.min(newValue, 100));
 			}, delay);
 		}
@@ -46,5 +46,5 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			w:onClick="simulateProgress(50, 100);"/>
 	<button id="veryhigh" label="progress animation very high rate"
 			w:onClick="simulateProgress(200, 25);"/>
-	<button id="reset" label="reset" w:onClick="zk.$('$prog').setValue(0); $('$lb')[0].innerHTML = 0;" />
+	<button id="reset" label="reset" w:onClick="zk.$('$prog').setValue(0); jq('$lb')[0].innerHTML = 0;" />
 </zk>

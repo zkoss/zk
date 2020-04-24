@@ -15,7 +15,7 @@
         module.exports = factory;
     } else {
         // Browser globals
-        factory(jQuery);
+        factory(window.jq); // Potix: ZK-4531
     }
 }(function ($) {
 

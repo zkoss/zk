@@ -11073,25 +11073,23 @@ if ( typeof define === "function" && define.amd ) {
 }
 
 
-// Potix: no need to restore since we don't override old copy
-//var
+
+var
 
 	// Map over jQuery in case of overwrite
-//	_jQuery = window.jQuery,
+	_jQuery = window.jQuery,
 
 	// Map over the $ in case of overwrite
-//	_$ = window.$;
+	_$ = window.$;
 
 jQuery.noConflict = function( deep ) {
-	/* Potix: no need to restore since we don't override old copy
-			if ( window.$ === jQuery ) {
-				window.$ = _$;
-			}
+	if ( window.$ === jQuery ) {
+		window.$ = _$;
+	}
 
-			if ( deep && window.jQuery === jQuery ) {
-				window.jQuery = _jQuery;
-			}
-	*/
+	if ( deep && window.jQuery === jQuery ) {
+		window.jQuery = _jQuery;
+	}
 
 	return jQuery;
 };
@@ -11103,7 +11101,7 @@ if ( !noGlobal ) {
 	window.jQuery = window.$ = jQuery;
 }
 
-window.jq = jQuery; //used by zk
+window.jq = (_$ || _jQuery) ? jQuery.noConflict(true) : jQuery; // Potix: used by zk
 
 return jQuery;
 }));
