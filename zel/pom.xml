@@ -8,12 +8,15 @@
 	<packaging>jar</packaging>
 	<version>9.1.0-SNAPSHOT</version>
 	<name>The ZK EL Library</name>
-	<url>http://www.zkoss.org/common</url>
+	<url>https://www.zkoss.org/common</url>
 	<description>The ZK EL library</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -45,21 +48,6 @@
 			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>zkmaven</id>
-			<name>ZK Maven Plugin Repository</name>
-			<url>https://mavensync.zkoss.org/maven2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Plugin Repository</name>
-			<url>https://repo1.maven.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>

@@ -9,6 +9,9 @@
 	<name>ZK Web Fragment</name>
 	<url>http://www.zkoss.org/zkwebfragment</url>
 	<description>ZK Web Fragment</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>

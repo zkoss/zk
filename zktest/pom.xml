@@ -16,7 +16,7 @@
 		<jython.version>2.2.1</jython.version>
 		<js.version>1.7R4</js.version>
 		<poi.version>3.17</poi.version>
-		<jxl.version>2.6.12</jxl.version>		
+		<jxl.version>2.6.12</jxl.version>
 		<jasperreports.version>6.6.0</jasperreports.version>
 		<jfreechart.version>1.0.14</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
@@ -24,10 +24,10 @@
 		<gmapsz.version>3.0.5</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
-		<atlantic.version>9.1.0-SNAPSHOT</atlantic.version>
 		<report.dir>debug/report/</report.dir>
 		<test.dir>debug/test-classes</test.dir>
 		<powermock.version>1.7.3</powermock.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<version>9.1.0-SNAPSHOT</version>
 	<name>ZK Test</name>
@@ -48,45 +48,18 @@
 	<repositories>
 		<repository>
 			<id>Java Net Repo</id>
-			<url>http://download.java.net/maven/2</url>
+			<url>https://maven.java.net/content/groups/public/</url>
 		</repository>
 		<repository>
 			<id>zk repository</id>
 			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 		<repository>
-			<id>ZK PE Evaluation</id>
-			<url>https://mavensync.zkoss.org/zk/pe-eval</url>
-		</repository>
-		<repository>
 			<id>ZK EE Evaluation</id>
-			<url>https://mavensync.zkoss.org/zk/ee-eval</url>
-		</repository>		
+			<url>https://mavensync.zkoss.org/eval</url>
+		</repository>
 	</repositories>
-	
-	<pluginRepositories>
-		<pluginRepository>
-			<id>zkmaven</id>
-			<name>ZK Maven Plugin Repository</name>
-			<url>https://mavensync.zkoss.org/maven2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Plugin Repository</name>
-			<url>https://repo1.maven.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<dependencies>
-		<!--  
-		<dependency>
-			<groupId>org.zkoss.theme</groupId>
-			<artifactId>classicblue</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>org.zkoss.theme</groupId>
 			<artifactId>breeze</artifactId>
@@ -105,7 +78,7 @@
 		<dependency>
 			<groupId>org.zkoss.theme</groupId>
 			<artifactId>atlantic</artifactId>
-			<version>${atlantic.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -343,38 +316,6 @@
 			<version>1.0</version>
 			<optional>true</optional>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet</artifactId>
-			<version>1.0.1-Final</version>
-			<optional>true</optional>
-		</dependency> 
-		-->
-		 <!-- 
-		<dependency>
-			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet</artifactId>
-			<version>1.1.8.Final</version>
-			<optional>true</optional>
-		</dependency>
- 		-->
-		
-		<!-- for JNDI service support in Jetty  -->
-		<!-- 
-		<dependency>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>jetty-naming</artifactId>
-			<version>6.1.26</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>jetty-plus</artifactId>
-			<version>6.1.26</version>
-		</dependency>
-		-->
-		
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
@@ -509,7 +450,7 @@
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.4.27.v20200227</version>
+                <version>9.4.28.v20200408</version>
                 <configuration>
                     <stopKey>foo</stopKey>
                     <stopPort>9999</stopPort>
@@ -520,25 +461,6 @@
 						<containerIncludeJarPattern>^$</containerIncludeJarPattern>
 					</webApp>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>start-jetty</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <scanIntervalSeconds>0</scanIntervalSeconds>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop-jetty</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

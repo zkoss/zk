@@ -9,6 +9,9 @@
 	<name>The ZKoss Common Library</name>
 	<url>http://www.zkoss.org/common</url>
 	<description>The ZKoss common library</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<licenses>
 		<license>
 			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
@@ -44,21 +47,6 @@
 			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>zkmaven</id>
-			<name>ZK Maven Plugin Repository</name>
-			<url>https://mavensync.zkoss.org/maven2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Plugin Repository</name>
-			<url>https://repo1.maven.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -108,18 +96,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.zkoss.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin-zk</artifactId>
-				<version>1.1.4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compress</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
