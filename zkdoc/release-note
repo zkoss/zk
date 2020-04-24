@@ -11,6 +11,7 @@ ZK 9.1.0
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
 
 * Upgrade Notes
+  + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
 
    --------
 ZK 9.0.1
@@ -90,7 +91,6 @@ Apr 21, 2020
   ZK-4446: chosenbox problems with initially empty model
 
 * Upgrade Notes
-  + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
 
    --------
 ZK 8.6.4
