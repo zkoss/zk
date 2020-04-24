@@ -42,7 +42,7 @@ function upVer {
 	# add for zuti
 	sed -i "1,/zk.version>.*<\/zk.version/s/zk.version>.*<\/zk.version/zk.version>$version<\/zk.version/" $1/pom.xml
 	cd $1
-	mvn install
+	mvn install -pl . # prevent the parent POM to install children
 	mv -f pom.xml.bak pom.xml
 	#Remove local files and folders
 	rm -f debug/*.jar
@@ -50,6 +50,7 @@ function upVer {
 }
 
 cd $maindir
+upVer zk-parent
 upVer zel
 upVer zcommon
 upVer zweb
@@ -62,6 +63,7 @@ upVer zkbind
 upVer zkplus
 upVer zkplus-legacy
 cd $ZKCML
+upVer zkcml-parent
 upVer zkex
 upVer zml
 upVer zkmax

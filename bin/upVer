@@ -111,6 +111,7 @@ sed -i "s/$oldVersion.*/$newVersion/g" $maindir/jsdoc/version
 sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/version
 sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/src/archive/META-INF/MANIFEST.MF
 cd $maindir
+upVer zk-parent
 upVer zel
 upVer zcommon
 upVer zhtml
@@ -126,6 +127,7 @@ upVer zweb
 upVer zweb-dsp
 upVer zk-bom
 cd $ZKCML
+upVer zkcml-parent
 upVer zkex
 upVer zkmax
 upVer zml
