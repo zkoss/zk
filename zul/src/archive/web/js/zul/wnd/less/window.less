@@ -20,7 +20,7 @@
 	&-header {
 		.fontStyle(@baseTitleFontFamily, @containerHeaderTextSize, normal, @containerHeaderColor);
 		line-height: @baseButtonWidth;
-		padding-bottom: @containerPadding;
+		padding: @windowHeaderPadding;
 		.defaultOverflowZoom();
 		cursor: default;
 
@@ -41,7 +41,7 @@
 		color: extract(@containerButtonColors, 1);
 		.displaySize(block, @baseButtonWidth + 4, @baseButtonHeight);
 		margin: auto 1px;
-		padding: 4px;
+		padding: @containerButtonPadding;
 		line-height: @baseButtonHeight;
 		text-align: center;
 		overflow: hidden;
@@ -76,7 +76,7 @@
 		cursor: move !important;
 
 		.z-window-header-move {
-			padding: 16px;
+			padding: @containerPadding;
 		}
 
 		dl {
@@ -108,31 +108,26 @@
 }
 
 .z-messagebox {
-	margin-left: 16px;
-
 	&-window {
-		padding: 0;
+		padding: @messageboxWindowPadding;
 	}
 
-	&-window .z-window-header, &-window.z-window-modal .z-window-content, 
-	&-window.z-window-highlighted .z-window-content {
-		padding: 16px;
+	&-window .z-window-header {
+		padding: @messageboxHeaderPadding;
+	}
+
+	&-window .z-window-content {
+		padding: @messageboxInnerPadding;
 	}
 
 	&-window .z-separator {
 		height: 32px !important;
 	}
 
-	.z-label {
-		font-family: @baseContentFontFamily;
-		font-size: @baseFontSize;
-		color: @baseTextColor;
-	}
-
 	&-buttons {
 		text-align: right;
 		& > * {
-			margin-left: 8px;
+			margin-left: @messageboxButtonsMarginLeft;
 		}
 	}
 
@@ -149,6 +144,7 @@
 		text-align: center;
 		vertical-align: top;
 		cursor: pointer;
+		margin-right: 16px;
 	}
 
 	&-question {

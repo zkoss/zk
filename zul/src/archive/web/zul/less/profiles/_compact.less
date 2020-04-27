@@ -1,0 +1,411 @@
+// Profile: compact
+@baseFontSize:                 12px;
+@baseLineHeight:               @baseFontSize;
+
+@fontSizeXLarge:               18px;
+@fontSizeLarge:                16px;
+@fontSizeMedium:               12px;
+@fontSizeSmall:                11px;
+@fontSizeXSmall:               10px;
+
+@buttonPadding:                2px 11px;
+@toolbarButtonFontSize:        @fontSizeMedium;
+@toolbarButtonPadding:         @buttonPadding;
+
+@inputHeight:                  24px;
+@inputPadding:                 0 5px;
+
+// container
+@containerHeaderTextSize: @fontSizeMedium;
+@containerPadding: 5px;
+@containerButtonPadding: 0;
+@panelHeaderPadding: 7px 5px 5px;
+@windowHeaderPadding: 3px 0 5px;
+@messageboxWindowPadding: @containerPadding;
+@messageboxInnerPadding: 16px;
+@messageboxButtonsMarginLeft: 4px;
+@pagingInputPadding: 0 8px;
+@pagingOsButtonPadding 4px 3px;
+
+// caption
+@captionFontSize:         @fontSizeMedium;
+@captionElementsMargin:   4px;
+@captionImageMaxSize:     16px;
+@captionButtonPadding:    @buttonPadding;
+@captionButtonFontSize:   @inputTextSize;
+
+// groupbox
+@groupboxHeaderFontSize:  @fontSizeMedium;
+@groupboxContentPadding:  @containerPadding;
+@groupbox3DHeaderPadding: 6px 8px;
+
+// toolbar
+@toolbarPadding:               4px 13px;
+@toolbarButtonsSpacing:        6px;
+@toolbarInTabboxMinHeight:     30px;
+
+// checkbox
+@checkboxSize:                 18px;
+@checkedIconSize:              @checkboxSize;
+@checkboxMargin:               0 4px 2px 4px;
+@checkboxSwitchMargin:         6px;
+@checkboxSwitchWidth:          38px;
+@checkboxSwitchHeight:         14px;
+@checkboxSwitchSize:           18px;
+@checkboxSwitchStep:           26px;
+@checkboxSwitchOffsetLeft:     -2px;
+@checkboxSwitchOffsetBottom:   -2px;
+@checkboxToggleSize:           20px;
+
+// combobutton
+@combobuttonButtonWidth:       26px;
+@combobuttonPadding:           3px (6px + @combobuttonButtonWidth) 3px 6px;
+@combobuttonButtonIconLeft:    5px;
+@combobuttonToolbarFontSize:   @fontSizeMedium;
+@combobuttonToolbarPadding:    @combobuttonPadding;
+
+// popup
+@popupPadding:                 4px 10px;
+
+// notification
+@notificationContentPadding: 32px 16px 32px 56px;
+@notificationPointerContentHeight: 50px;
+@notificationPointerContentPadding: 8px 34px 8px 48px;
+@notificationCloseFontSize: 14px;
+@notificationCloseIconSize: 14px;
+
+// tabbox
+@tabboxIconPadding:            5px 0;
+@tabboxIconVerticalPadding:    4px 0;
+@tabboxIconSize:               24px;
+@tabboxTabMinHeight:           32px;
+@tabboxTabPadding:             3px 13px;
+@tabboxTabVerticalPadding:     3px 13px;
+@tabboxTabFontSize:            @fontSizeMedium;
+@tabboxTabAccordionButtonRight:0;
+@tabboxTabButtonFontSize:      @fontSizeMedium;
+@tabboxTabButtonTextSpacing:   8px;
+
+// pdfviewer
+@pdfviewerToolbarPadding: 3px 8px;
+@pdfviewerToolbarButtonSize: 24px;
+@pdfviewerToolbarMargins: 6px;
+@pdfviewerToolbarSeparatorHeight: 18px;
+@pdfviewerToolbarPageActiveWidth: 37px;
+
+// searchbox
+@searchboxHeight: 24px;
+@searchboxPadding: 0 5px;
+@searchboxIconSize: 18px;
+@searchboxIconRight: 0;
+@searchboxPopupItemPadding: 4px 5px;
+@searchboxPopupItemCheckSize: 16px;
+@searchboxPopupItemCheckMarginRight: 5px;
+
+// portalchildren
+@portalchildrenFrameMargin: 10px;
+@portalchildrenFramePadding: 8px;
+@portalchildrenCounterRadius: 10px;
+@portalchildrenCounterPadding: 4px;
+@portalchildrenFramePanelHeaderPadding: 6px 10px 0 10px;
+@portalchildrenFramePanelChildrenPadding: 6px 10px;
+@portalchildrenFramePanelPadding: 8px;
+
+// linelayout
+@linelayoutLineWidth: 4px;
+@linelayoutCavePadding: 20px;
+@linelayoutPointSize: 24px;
+@linelayoutPointIconSize: 16px;
+
+// coachmark
+@coachmarkPadding: 8px;
+@coachmarkPaddingLeft: 10px;
+@coachmarkPaddingRight: 22px;
+@coachmarkIconSize: 14px;
+
+//cascader
+@cascaderHeight: 24px;
+@cascaderPadding: 0 5px;
+@cascaderPopupCavePadding: 3px;
+@cascaderItemHeight: 24px;
+
+//stepbar
+@stepbarPadding: 8px;
+@stepbarSeparatorSize: 4px;
+@stepSize: 24px;
+@stepFontSize: 14px;
+@stepIconErrorSize: 16px;
+@stepIconCompleteSize: 16px;
+@stepIconEmptyBorderWidth: 3px;
+
+// slider
+@sliderPopupFontSize: @fontSizeMedium;
+
+//rangeslider
+@rangesliderButtonSize: 16px;
+@rangesliderInnerSize: 6px;
+@rangesliderBorderRadius: 3px;
+@rangesliderTooltipBorderRadius: 2px;
+@rangesliderDotSize: 12px;
+@rangesliderDotBorderWidth: 3px;
+@rangesliderLabelFontSize: @fontSizeMedium;
+@rangesliderHorizontalButtonMarginTop: -5px;
+@rangesliderHorizontalButtonMarginLeft: -8px;
+@rangesliderHorizontalTooltipPositionTop: -8px;
+@rangesliderHorizontalTooltipPadding: 2px 4px;
+@rangesliderHorizontalMarkDotPositionTop: -3px;
+@rangesliderHorizontalMarkLabelPositionTop: 19px;
+@rangesliderVerticalTooltipPositionLeft: 24px;
+@rangesliderVerticalTooltipPadding: 4px 2px;
+
+//multislider
+@multisliderButtonSize: 16px;
+@multisliderInnerSize: 6px;
+@multisliderBorderRadius: 2px;
+
+// rating
+@ratingIconSize: 20px;
+@ratingIconFontSize: 14px;
+@ratingIconPadding: 3px 2px;
+
+// cropper
+@cropperToolbarButtonFontSize: @fontSizeMedium;
+@cropperToolbarButtonPadding: 5px 11px;
+@drawerCloseButtonSize: 12px;
+@drawerCloseButtonRight: 8px;
+@drawerCloseButtonTop: 9px;
+@drawerContainerPadding: 8px;
+
+// drawer
+@drawerTitlePadding: 9px 8px;
+@drawerTitleFontSize: @fontSizeMedium;
+
+// signature
+@signatureToolbarRight: 10px;
+@signatureToolbarBottom: 6px;
+@signatureToolbarButtonSpacing: 5px;
+@signatureToolbarButtonIconFontSize: 16px;
+
+// organigram
+@orgnodePadding: 4px 10px;
+
+// borderlayout
+@borderlayoutHeaderFontSize: @fontSizeMedium;
+@borderlayoutHeaderPadding: 8px 4px 9px;
+@borderlayoutBodyLineHeight: 14px;
+@borderlayoutBodyPadding: 2px;
+@borderlayoutCollapsedSize: 32px;
+@borderlayoutCollapsedPadding: 4px;
+@borderlayoutIconFontSize: @fontSizeMedium;
+@borderlayoutIconSize: 24px;
+@borderlayoutIconPositionTop: 4px;
+@borderlayoutIconPositionRight: 3px;
+
+// menu
+@menubarPadding: 0;
+@menubarHorizontalMargin: 2px;
+@menubarHorizontalSeparatorLineHeight: 26px;
+@menubarHorizontalSeparatorMargin: 2px 4px;
+@menuTextFontSize: @fontSizeMedium;
+@menuContentPadding: 2px 6px;
+@menuIconSize: 18px;
+@menuIconPositionTop: 2px;
+@menuIconMarginRight: 5px;
+@menuContentPaddingRight: 26px;
+@menuImageSize: @menuIconSize;
+@menuPopupItemIconSize: 14px;
+@menuPopupItemIconPositionTop: 3px;
+@menuPopupItemIconPositionLeft: 8px;
+
+// paging
+@pagingHeight: 32px;
+@pagingButtonFontSize: @fontSizeMedium;
+@pagingButtonMinWidth: 24px;
+@pagingButtonHeight: 24px;
+@pagingButtonPadding: 4px 3px;
+@pagingButtonMargin: 0;
+@pagingIconSize: 18px;
+@pagingIconLineHeight: 18px;
+@pagingInputHeight: 24px;
+
+// error (ZK JavaScript debug box)
+@errorPadding: 12px 8px;
+@errorMessageContentPadding: 6px 0;
+@errorButtonFontSize: 14px;
+@errorCloseButtonFontSize: 14px;
+@errorNumberFontSize: @fontSizeMedium;
+@errorButtonSize: 14px;
+@errorButtonMarginLeft: 5px;
+
+// errorbox (input constraint)
+@errorboxInsideIconPositionTop: 5px;
+@errorboxIconPositionTop: -6px;
+@errorboxUpIconPositionTop: 13px;
+@errorboxContentPadding: 5px 20px 5px 34px;
+
+// loading
+@loadingIndicatorPadding: 10px 16px 4px;
+@applyLoadingIndicatorPadding: 3px 4px 3px 28px;
+@applyLoadingIconSize: 20px;
+@applyLoadingIconPositionLeft: 2px;
+@loadingIconSize: 20px;
+@loadingIconMarginBottom: 0;
+
+// drag and drop
+@dropContentPadding: 5px 36px 5px 12px;
+@dropContentLineHeight: 22px;
+@dropIconSize: 16px;
+@dropIconVerticalAlign: middle;
+
+// navbar
+@navbarPadding: 0;
+@navbarHorizontalPadding: 0 2px;
+@navbarHorizontalLineHeight: 36px;
+@navImageSize: 16px;
+@navIconMarginRight: 8px;
+@navTextFontSize: @fontSizeMedium;
+@navInfoPositionTop: 8px;
+@navInfoPositionRight: 16px;
+@navTextPopupHeight: 38px;
+@navTextPopupPadding: 10px 18px 4px;
+@navTextPopupLineHeight: 20px;
+@navTextPopupPadding: 0 4px 6px;
+@navbarCollapsedInfoPositionTop: 0;
+
+// comboInput
+@comboInputHeight: 24px;
+@comboInputPaddingRight: 29px;
+@comboButtonPadding: 2px;
+@comboButtonIconSizeLarge: 18px;
+@comboButtonMinWidth: 24px;
+@spinnerButtonWidth: @comboButtonMinWidth;
+@spinnerButtonIconHeight: @comboInputHeight / 2;
+@spinnerButtonIconTransform: 'translateY(-4px);';
+@spinnerButtonIconPositionTop: 50%;
+@spinnerButtonPadding: 0;
+@comboitemPadding: 3px;
+@comboitemEmptyHeight: 20px;
+@comboitemInnerFontSize: @fontSizeMedium;
+@timepickerButtonWidth: @comboButtonMinWidth;
+@timepickerHeight: @comboInputHeight;
+@timepickerLineHeight: @fontSizeMedium;
+@timepickerButtonPadding: 3px 0 0;
+@timepickerPopupPadding: 3px;
+
+// colorbox
+@colorboxButtonFontSize: @fontSizeLarge;
+@colorboxWidth: 48px;
+@colorboxHeight: 32px;
+@colorboxMenuImageSize: 12px;
+@colorboxMenuImageMarginRight: 14px;
+@colorboxPadding: 3px;
+@colorboxPopupPadding: 0;
+@colorpickerWidth: 306px;
+@colorpickerHeight: 420px;
+@colorpickerPadding: 4px;
+@colorpickerMainPositionTop: 30px;
+@colorpickerInfoHeight: 114px;
+@colorpickerInfoMarginTop: 12px;
+@colorpickerColorWidth: 56px;
+@colorpickerColorHeight: 72px;
+@colorpickerColorPositionRight: 8px;
+@colorpickerColorItemWidth: 50px;
+@colorpickerColorItemHeight: 33px;
+@colorpickerInputWidth: 40px;
+@colorpickerRGBPositionTop: 5px;
+@colorpickerHSVPositionTop: 40px;
+@colorpickerInputHeight: 24px;
+@colorpickerHEXPositionTop: 76px;
+@colorpickerHEXInputWidth: 72px;
+@colorpickerHEXInputHeight: 32px;
+@colorpickerButtonWidth: 42px;
+@colorpickerButtonPositionTop: 82px;
+@colorpickerButtonPositionRight: 8px;
+@colorpaletteWidth: 260px;
+@colorpaletteHeight: 226px;
+@colorpaletteHeadHeight: 35px;
+@colorpaletteNewColorWidth: 48px;
+@colorpaletteNewColorHeight: 30px;
+@colorpaletteNewColorPositionRight: 77px;
+@colorpaletteInputWidth: 72px;
+@colorpaletteInputHeight: 30px;
+@colorpaletteColorSize: 12px;
+@colorboxIconFontSize: @fontSizeLarge;
+@colorboxIconPadding: 3px;
+@colorboxIconButtonWidth: 22px;
+@colorboxIconButtonHeight: 22px;
+@colorboxIconButtonPositionTop: 5px;
+@paletteiconPositionLeft: 5px;
+@pickericonPositionTopLeft: 30px;
+
+// mesh
+@meshBodyPadding: 4px 5px;
+@meshEmptyBodyPadding: 9px 5px;
+@meshContentLineHeight: 24px;
+@meshColumnSortIconTop: -7px;
+@meshColumnSortButtonHeight: 32px;
+@meshRowDetailOuterPadding: 3px 6px;
+@auxheadContentPadding: @meshBodyPadding;
+@treerowCheckableIconSize: 18px;
+@treecellContentLineHeight: @meshContentLineHeight;
+@listheaderCheckedPositionLeft: 2px;
+@listboxRadioIconSize: 12px;
+
+// biglistbox
+@biglistboxSize: 15px;
+@biglistboxOuterPadding: 0 15px 15px 0;
+@biglistboxLineHeight: 19px;
+@biglistboxVerticalTickWidth: 7px;
+@biglistboxVerticalTickPositionBottom: 0;
+@biglistboxVerticalTickBeforePositionLeft: -5px;
+@biglistboxWscrollVerticalPositionRight: -16px;
+@biglistboxWscrollDragSize: 119px;
+@biglistboxWscrollButtonSize: 16px;
+@biglistboxWscrollButtonBeforePositionRight: 2px;
+@biglistboxWscrollButtonBodySize: 55px;
+@biglistboxWscrollButtonBodyPositionTop: 32px;
+@biglistboxWscrollButtonBodyBeforePositionTop: 19px;
+@biglistboxWscrollButtonBodyBeforePositionRight: -1px;
+@biglistboxWscrollButtonBodyHoverPositionTop: 31px;
+@biglistboxWscrollButtonUpHoverPositionTop: 15px;
+@biglistboxWscrollHorizontalPosWidth: 119px;
+
+// calendar
+@calendarFontSize: 14px;
+@calendarIconFontSize: 16px;
+@calendarTitleFontSize: @calendarFontSize;
+@calendarFontSizeSmall: @fontSizeMedium;
+@calendarPadding: 8px 4px;
+@calendarTitleLineHeight: 26px;
+@calendarTodayTitlePadding: 4px 0;
+@calendarCellHeight: 24px;
+@calendarLeftRightPosition: 0;
+@calendarTodayMarginTop: 5px;
+
+// chosenbox
+@chosenboxPadding: 0 0 2px 0;
+@chosenboxMinHeight: 25px;
+@chosenboxItemMargin: 1px 0 0 2px;
+@chosenboxItemPadding: 0;
+@chosenboxItemContentPadding: 0 2px;
+@chosenboxItemContentMarginRight: 16px;
+@chosenboxIconSize: 16px;
+@chosenboxButtonPositionTop: -1px;
+@chosenboxButtonPositionRight: 2px;
+@chosenboxInputWidth: 17px;
+@chosenboxInputHeight: 17px;
+@chosenboxInputPadding: 1px 2px 2px;
+@chosenboxPopupPadding: 3px;
+@chosenboxOptionPadding: 1px 8px;
+@chosenboxOptionMinHeight: 16px;
+
+// goldenlayout
+@goldenLayoutLineHeight: 24px;
+@goldenLayoutMinHeight: 30px;
+@goldenLayoutFontSize: @fontSizeMedium;
+@goldenLayoutTabPadding: 4px 12px 3px;
+@goldenLayoutCloseTabTop: 0;
+@goldenLayoutActiveTabMargin: -1px -13px;
+@goldenLayoutControlPadding: 0;
+@goldenLayoutControlLiPadding: 9px 11px 2px 5px;
+@goldenLayoutDropTabAfterMargin: -10px -12px;

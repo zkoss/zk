@@ -3,7 +3,7 @@
 .z-toolbar {
 	display: block;
 	border: 0;
-	padding: 6px 16px;
+	padding: @toolbarPadding;
 	background: @baseBackgroundColor;
 	position: relative;
 
@@ -67,7 +67,7 @@
 	top: 0;
 	overflow: hidden;
 	z-index: 1;
-	min-height: 48px;
+	min-height: @toolbarInTabboxMinHeight;
 }
 
 .z-caption .z-toolbar {
@@ -99,10 +99,10 @@
 	padding: 0;
 }
 .z-toolbar-panel .z-toolbar-horizontal {
-	padding-left: 8px;
+	padding-left: @toolbarButtonsSpacing;
 }
 .z-toolbar-panel .z-toolbar-vertical {
-	padding-bottom: 8px;
+	padding-bottom: @toolbarButtonsSpacing;
 }
 
 // Toolbarbutton
@@ -113,10 +113,11 @@
 	cursor: pointer;
 	.borderRadius(@inputBorderRadius);
 	overflow: hidden;
-	.fontStyle(@baseTitleFontFamily, @fontSizeLarge, normal, @toolbarButtonColor);
+	.fontStyle(@baseTitleFontFamily, @toolbarButtonFontSize, normal, @toolbarButtonColor);
 	border: 2px solid transparent;
 	background-color: @toolbarButtonBackgroundColor;
 	padding: @toolbarButtonPadding;
+	min-height: @inputHeight;
 
 	// A hack to make the content vertical centering, see ZK-4532
 	&:before {
@@ -132,13 +133,7 @@
 		white-space: nowrap;
 		width: 100%;
 		> img {
-			margin-right: 4px;
-			vertical-align: middle;
-		}
-		> i {
-			margin-right: 4px;
-			font-size: 20px;
-			vertical-align: middle;
+			vertical-align: text-bottom;
 		}
 	}
 	&:hover {
@@ -169,7 +164,7 @@
 }
 
 .z-toolbar-content > * {
-	margin-left: 8px;
+	margin-left: @toolbarButtonsSpacing;
 	&:first-child {
 		margin-left: 0;
 	}

@@ -78,7 +78,7 @@ e('</c:if>');
 	color: @errorboxColor;
 	border: 1px solid @errorboxBorderColor;
 	.borderRadius(@baseBorderRadius);
-	padding: 16px;
+	padding: @errorPadding;
 	background: @errorboxBackgroundColor;
 	position: absolute;
 	top: 0;
@@ -88,7 +88,7 @@ e('</c:if>');
 
 	.messagecontent {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal);
-		padding-top: 24px;
+		padding: @errorMessageContentPadding;
 	}
 	.messages {
 		word-wrap: break-word;
@@ -102,14 +102,14 @@ e('</c:if>');
 		display: none;
 	}
 	.button {
-		font-size: @fontSizeLarge;
-		.size(@baseIconWidth, @baseIconHeight);
-		margin-left: 8px;
+		font-size: @errorButtonFontSize;
+		.size(@errorButtonSize, @errorButtonSize);
+		margin-left: @errorButtonMarginLeft;
 		cursor: pointer;
 		float: right;
 		
 		> .z-icon-times {
-			font-size: @fontSizeXLarge;
+			font-size: @errorCloseButtonFontSize;
 		}
 	}
 	#zk_err-p {
@@ -117,7 +117,7 @@ e('</c:if>');
 		cursor: move;
 	}
 	.errornumbers {
-		.fontStyle(@baseTitleFontFamily, @fontSizeLarge, 700);
+		.fontStyle(@baseTitleFontFamily, @errorNumberFontSize, 700);
 		float: left;
 	}
 }
@@ -167,11 +167,11 @@ div.z-log {
 
 //radio, radiogroup
 input[type="radio"] {
-	margin: 0 4px 2px 8px;
+	margin: @checkboxMargin;
 	background: @inputBackgroundColor;
 	border: 1px solid @inputBorderColor;
 	.borderRadius(50%);
-	.size(20px, 20px);
+	.size(@checkboxSize, @checkboxSize);
 	&:hover {
 		border-color: @checkboxHoverBorderColor;
 	}
@@ -235,12 +235,12 @@ input[type="radio"] {
 //checkbox
 input[type="checkbox"] {
 	.baseIconFont();
-	font-size: 18px;
-	margin: 0 4px 2px 8px;
+	font-size: @fontSizeLarge;
+	margin: @checkboxMargin;
 	background: @inputBackgroundColor;
 	border: 1px solid @inputBorderColor;
 	.borderRadius(@inputBorderRadius);
-	.size(20px, 20px);
+	.size(@checkboxSize, @checkboxSize);
 	&:hover {
 		border-color: @checkboxHoverBorderColor;
 	}
@@ -360,41 +360,43 @@ e('</c:if>');
 	white-space: nowrap;
 }
 .z-loading-indicator {
-	padding: 24px 16px;
+	padding: @loadingIndicatorPadding;
 	text-align: center;
 }
 .z-apply-loading-indicator {
 	font-family: @baseTitleFontFamily;
 	font-size: @fontSizeMedium;
 	font-weight: normal;
-	padding: 12px 32px 12px 56px;
+	padding: @applyLoadingIndicatorPadding;
 	position: relative;
 	overflow: hidden;
 }
 .z-apply-loading-icon,
 .z-renderdefer {
-	.size(32px, 32px);
+	.size(@applyLoadingIconSize, @applyLoadingIconSize);
 	background: transparent no-repeat center;
 	.encodeThemeURL(background-image, @loadingAnimationDefer);
+	background-size: contain;
 }
 .z-loading-icon {
-	.size(72px, 72px);
+	.size(@loadingIconSize, @loadingIconSize);
 	background: transparent no-repeat center;
 	.encodeThemeURL(background-image, @loadingAnimationLoad);
+	background-size: contain;
 	display: block;
 	vertical-align: top;
 	position: relative;
 	left: 50%;
-	margin-left: -36px;
-	margin-bottom: 8px;
+	margin-left: -(@loadingIconSize / 2);
+	margin-bottom: @loadingIconMarginBottom;
 }
 .z-apply-loading-icon {
 	display: inline-block;
 	vertical-align: top;
 	position: absolute;
-	left: 16px;
+	left: @applyLoadingIconPositionLeft;
 	top: 50%;
-	margin-top: -16px;
+	margin-top: -(@applyLoadingIconSize / 2);
 }
 .z-apply-mask {
 	.size(100%, 100%);
@@ -504,16 +506,17 @@ e('</c:if>');
 	}
 	&-content {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @dragColor);
-		padding: 12px;
-		line-height: @baseHeight - 12;
+		padding: @dropContentPadding;
+		line-height: @dropContentLineHeight;
 		position: relative;
 	}
 	&-icon {
-		font-size: @fontSizeXLarge;
-		.size(@fontSizeXLarge, @fontSizeXLarge);
-		line-height: @fontSizeXLarge;
+		font-size: @dropIconSize;
+		.size(@dropIconSize, @dropIconSize);
+		line-height: @dropIconSize;
 		background: transparent;
 		text-align: center;
+		vertical-align: @dropIconVerticalAlign;
 	}
 	&-text {
 		padding-left: 8px;

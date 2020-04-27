@@ -8,7 +8,7 @@
 	&-content {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
 		height: 100%;
-		padding: 8px 16px;
+		padding: @popupPadding;
 		line-height: @baseLineHeight;
 		border: 1px solid @popupBorderColor;
 		.borderRadius(@baseBorderRadius);
@@ -62,7 +62,7 @@
 	font-weight: normal;
 	width: 288px;
 	min-height: 80px;
-	padding: 24px 16px 24px 56px;
+	padding: @notificationContentPadding;
 	position: relative;
 	overflow: hidden;
 	.borderRadius(@baseBorderRadius);
@@ -70,9 +70,9 @@
 }
 
 .z-notification-pointer ~ .z-notification-content {
-	.displaySize(table-cell, 260px, 60px);
-	min-height: 60px; // fix for IE9
-	padding: 8px 34px 8px 48px;
+	.displaySize(table-cell, 260px, @notificationPointerContentHeight);
+	min-height: @notificationPointerContentHeight; // fix for IE9
+	padding: @notificationPointerContentPadding;
 	vertical-align: middle;
 }
 
@@ -158,10 +158,10 @@
 }
 
 .z-notification-close {
-	font-size: 18px;
-	.size(20px, 20px);
+	font-size: @notificationCloseFontSize;
+	.size(@notificationCloseIconSize, @notificationCloseIconSize);
 	padding: 0 2px;
-	line-height: 18px;
+	line-height: @notificationCloseFontSize;
 	position: absolute;
 	top: 8px;
 	right: 8px;

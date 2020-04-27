@@ -20,13 +20,13 @@
 		}
 	}
 	&-button {
-		.fontStyle(@baseContentFontFamily, @fontSizeLarge, normal, @pagingColor);
+		.fontStyle(@baseContentFontFamily, @pagingButtonFontSize, normal, @pagingColor);
 		display: inline-block;
 		min-width: @pagingButtonMinWidth;
 		height: @pagingButtonHeight;
 		.borderRadius(@borderRadiusSmall);
-		padding: 4px;
-		margin: 5px 0;
+		padding: @pagingButtonPadding;
+		margin: @pagingButtonMargin;
 		line-height: normal;
 		background-color: transparent;
 		text-align: center;
@@ -52,8 +52,8 @@
 		}
 	}
 	.z-paging-icon {
-		font-size: @fontSizeLarge;
-		line-height: @baseLineHeight;
+		font-size: @pagingIconSize;
+		line-height: @pagingIconLineHeight;
 	}
 	&-noborder {
 		border-color: transparent;
@@ -67,7 +67,7 @@
 	}
 	&-input {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @pagingColor);
-		.size(42px, 36px);
+		.size(42px, @pagingInputHeight);
 		border: 1px solid @pagingBorderColor;
 		.borderRadius(@baseBorderRadius);
 		background: @inputBackgroundColor;
@@ -126,6 +126,6 @@
 
 	.z-paging-button {
 		font-size: @fontSizeMedium;
-		padding: 4px 8px;
+		padding: @pagingOsButtonPadding;
 	}
 }

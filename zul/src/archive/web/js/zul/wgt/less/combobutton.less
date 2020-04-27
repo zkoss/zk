@@ -14,8 +14,7 @@
 		display: block;
 		min-height: @baseButtonHeight;
 		border: 2px solid @buttonBorderColor;
-		padding: @buttonPadding;
-		padding-right: 46px;
+		padding: @combobuttonPadding;
 		line-height: normal;
 		background-color: @buttonBackgroundColor;
 		vertical-align: middle;
@@ -24,7 +23,7 @@
 	}
 	&-button {
 		font-weight: normal;
-		.displaySize(block, 38px, 100%);
+		.displaySize(block, @combobuttonButtonWidth, 100%);
 		border-left: 1px solid @buttonSeparatorBorderColor;
 		line-height: normal;
 		position: absolute;
@@ -39,7 +38,7 @@
 			margin-top: -8px;
 			position: absolute;
 			top: 50%;
-			left: 10px;
+			left: @combobuttonButtonIconLeft;
 		}
 	}
 	&-image {
@@ -82,8 +81,8 @@
 	//toolbar mold
 	&-toolbar {
 		.z-combobutton-content {
-			font-size: @fontSizeLarge;
-			padding: 6px 46px 6px 12px;
+			font-size: @combobuttonToolbarFontSize;
+			padding: @combobuttonToolbarPadding;
 			color: @toolbarButtonColor;
 			background-color: @toolbarButtonBackgroundColor;
 			.z-combobutton-button {

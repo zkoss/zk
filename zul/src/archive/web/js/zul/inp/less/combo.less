@@ -4,7 +4,7 @@
 each(@components, {
 	.@{value} {
 		display: inline-block;
-		height: 34px;
+		height: @comboInputHeight;
 		line-height: normal; //reset for inside other component
 		white-space: nowrap;
 		position: relative;
@@ -12,12 +12,12 @@ each(@components, {
 		&-input {
 			.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
 			width: 100%;
-			height: 34px;
+			height: @comboInputHeight;
 			border: 1px solid @inputBorderColor;
 			.borderRadius(@baseBorderRadius);
 			margin: 0;
 			padding: @inputPadding;
-			padding-right: @inputPaddingRight + @baseButtonWidth + 8px * 2;
+			padding-right: @comboInputPaddingRight;
 			line-height: @baseLineHeight;
 			background: @inputBackgroundColor;
 
@@ -66,11 +66,11 @@ each(@components, {
 			position: absolute;
 			top: 0;
 			right: 0;
-			min-width: @baseButtonWidth + 8px * 2;
-			height: 34px;
+			min-width: @comboButtonMinWidth;
+			height: @comboInputHeight;
 			border: 1px solid @inputBorderColor;
 			.rightBorderRadius(@baseBorderRadius);
-			padding: 6px 8px 0;
+			padding: @comboButtonPadding;
 			line-height: @baseLineHeight;
 			background: @inputBackgroundColor;
 			text-align: center;
@@ -160,7 +160,7 @@ each(@components, {
 .z-datebox-button,
 .z-bandbox-button,
 .z-combobox-button {
-	font-size: 22px;
+	font-size: @comboButtonIconSizeLarge;
 	min-height: @baseButtonHeight;
 }
 
@@ -172,7 +172,7 @@ each(@components, {
 .z-timebox-button,
 .z-spinner-button,
 .z-doublespinner-button {
-	width: 34px;
+	width: @spinnerButtonWidth;
 	padding: 0;
 
 	&:hover,
@@ -183,10 +183,14 @@ each(@components, {
 	& > a {
 		display: block;
 		color: @textColorDefault;
-		height: @baseBarHeight / 2;
-		padding: 0 8px;
+		height: @spinnerButtonIconHeight;
+		padding: @spinnerButtonPadding;
 		overflow: hidden;
 		text-decoration: none;
+
+		> i {
+			.transform(@spinnerButtonIconTransform)
+		}
 
 		&:hover {
 			background: @comboButtonHoverBackgroundColor;
@@ -200,7 +204,7 @@ each(@components, {
 		.size(100%, 1px);
 		border-top: 1px solid @comboButtonHoverBorderColor;
 		position: absolute;
-		top: 15px;
+		top: @spinnerButtonIconPositionTop;
 		left: 0;
 	}
 }
@@ -259,14 +263,14 @@ each(@components, {
 }
 .z-comboitem {
 	display: block;
-	padding: 4px 8px;
+	padding: @comboitemPadding;
 	position: relative;
-	min-height: @comboPopupItemSize + 2px + 4px * 2; //ZK-2783: give default height to empty item
+	min-height: @comboitemEmptyHeight; //ZK-2783: give default height to empty item
 	.borderRadius(@baseBorderRadius);
 }
 .z-comboitem-inner,
 .z-comboitem-content {//description
-	.iconFontStyle(@comboPopupDescSize, @comboPopupDescColor);
+	.iconFontStyle(@comboitemInnerFontSize, @comboPopupDescColor);
 }
 .z-comboitem,
 .z-comboitem a,
@@ -309,7 +313,7 @@ each(@components, {
 	display: block;
 	border: 1px solid @comboPopupBorderColor;
 	.borderRadius(@baseBorderRadius);
-	padding: 4px 8px;
+	padding: @comboitemPadding;
 	background: @popupBackgroundColor;
 	position: absolute;
 	overflow: hidden;

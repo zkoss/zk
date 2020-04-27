@@ -30,7 +30,7 @@
 	display: block;
 	border-top: 1px solid @baseBorderColor;
 	border-bottom: 1px solid @baseBorderColor;
-	padding: 4px;
+	padding: @menubarPadding;
 	position: relative;
 	background: @menuBackground;
 
@@ -46,15 +46,15 @@
 
 	&-horizontal {
 		li {
-			margin: 2px 0;
+			margin: @menubarHorizontalMargin;
 			float: left;
 		}
 		.z-menuseparator {
 			display: block;
 			width: 1px;
 			border-left: 1px solid @menuSeparatorBorderColor;
-			line-height: @baseBarHeight;
-			margin: 0 4px;
+			line-height: @menubarHorizontalSeparatorLineHeight;
+			margin: @menubarHorizontalSeparatorMargin;
 		}
 	}
 	&-vertical {
@@ -83,7 +83,7 @@
 	.restUl(); //avoid using none default zclass
 	&-text {
 		font-family: @baseTitleFontFamily;
-		font-size: @fontSizeLarge;
+		font-size: @menuTextFontSize;
 		font-weight: normal;
 		display: inline-block;
 		
@@ -106,8 +106,8 @@
 		display: block;
 		border: 1px solid transparent;
 		.borderRadius(@baseBorderRadius);
-		padding: 6px 12px;
-		line-height: @fontSizeLarge; // menu-icon height
+		padding: @menuContentPadding;
+		line-height: @menuIconSize; // menu-icon height
 		position: relative;
 		cursor: pointer;
 		text-decoration: none;
@@ -130,7 +130,7 @@
 
 	// icon sclass
 	&-content i {
-		margin-right: 8px;
+		margin-right: @menuIconMarginRight;
 	}
 }
 .z-menu {
@@ -158,14 +158,14 @@
 		}
 	}
 	&-content {
-		padding-right: 32px;
+		padding-right: @menuContentPaddingRight;
 	}
 
 	&-icon {
-		font-size: @fontSizeLarge;
+		font-size: @menuIconSize;
 		position: absolute;
 		right: 0;
-		top: 7px;
+		top: @menuIconPositionTop;
 	}
 	&-selected > &-content {
 		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
@@ -235,11 +235,11 @@
 		margin-right: 8px;
 	}
 	.z-menuitem-icon {
-		.iconFontStyle(16px, @menuCheckedColor);
+		.iconFontStyle(@menuPopupItemIconSize, @menuCheckedColor);
 		display: none;
 		position: absolute;
-		top: 8px;
-		left: 14px;
+		top: @menuPopupItemIconPositionTop;
+		left: @menuPopupItemIconPositionLeft;
 	}
 	.z-menuseparator {
 		font-size: 1px;

@@ -27,7 +27,7 @@
 	&-header {
 		.fontStyle(@baseTitleFontFamily, @containerHeaderTextSize, normal, @containerHeaderColor);
 		border: 0;
-		padding: @containerPadding;
+		padding: @panelHeaderPadding;
 		line-height: 24px;
 		.defaultOverflowZoom();
 		
@@ -56,7 +56,7 @@
 		background: transparent;
 		color: extract(@containerButtonColors, 1);
 		margin: auto 1px;
-		padding: 4px;
+		padding: @containerButtonPadding;
 		text-align: center;
 		overflow: hidden;
 		cursor: pointer;
@@ -73,7 +73,6 @@
 	&-close {
 		border: 0;
 		font-size: @fontSizeXLarge;
-		line-height: 24px;
 	}
 	
 	&-resize-faker {
