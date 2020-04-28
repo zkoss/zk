@@ -11,6 +11,7 @@ ZK 9.1.0
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
   ZK-4531: overridden jquery causes prime faces components to work incorrectly
+  ZK-4556: modal window with border layout doesn't resize correctly
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
