@@ -13,7 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <zk>
 	<script>
 		setTimeout(function() {
-			zk.log($('.z-vlayout')[0].scrollWidth > $('.z-vlayout')[0].clientWidth);
+			zk.log(jq('.z-vlayout')[0].scrollWidth > jq('.z-vlayout')[0].clientWidth);
 		}, 500);
 	</script>
 	<vlayout height="700px" width="500px" style="overflow:auto;">
