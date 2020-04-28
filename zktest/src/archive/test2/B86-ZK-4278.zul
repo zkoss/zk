@@ -36,5 +36,5 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 			Panel
 		</panelchildren>
 	</panel>
-	<button label="stopAnima" w:onClick="$('.z-panel-body').stop();"/>
+	<button label="stopAnima" w:onClick="jq('.z-panel-body').stop();"/>
 </zk>

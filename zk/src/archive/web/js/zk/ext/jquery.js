@@ -11097,7 +11097,7 @@ if ( !noGlobal ) {
 	window.jQuery = window.$ = jQuery;
 }
 
-window.jq = jQuery.noConflict(true); //used by zk
+window.jq = (_$ || _jQuery) ? jQuery.noConflict(true) : jQuery; // Potix: used by zk
 
 return jQuery;
 }));

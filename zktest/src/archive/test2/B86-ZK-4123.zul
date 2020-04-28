@@ -15,9 +15,9 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 <zk>
 	<script><![CDATA[
 		function withoutHScrollbar() {
-			var gridHasHScrollbar = $('.z-grid-body')[0].scrollWidth > $('.z-grid-body')[0].clientWidth;
-			var listboxHasHscrollbar = $('.z-listbox-body')[0].scrollWidth > $('.z-listbox-body')[0].clientWidth;
-			var treeHasHscrollbar = $('.z-tree-body')[0].scrollWidth > $('.z-tree-body')[0].clientWidth;
+			var gridHasHScrollbar = jq('.z-grid-body')[0].scrollWidth > jq('.z-grid-body')[0].clientWidth;
+			var listboxHasHscrollbar = jq('.z-listbox-body')[0].scrollWidth > jq('.z-listbox-body')[0].clientWidth;
+			var treeHasHscrollbar = jq('.z-tree-body')[0].scrollWidth > jq('.z-tree-body')[0].clientWidth;
 			return !gridHasHScrollbar && !listboxHasHscrollbar && !treeHasHscrollbar;
 		}
 		]]>

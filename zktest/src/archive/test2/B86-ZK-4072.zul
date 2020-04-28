@@ -15,10 +15,10 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 <zk>
 	<script><![CDATA[
 		function isSelectedTabScrollIntoView() {
-			if (!$('.z-tab-selected')[0])
+			if (!jq('.z-tab-selected')[0])
 				return;
-			var rightEdge = $('.z-tab-selected').position().left < $('.z-tabs')[0].offsetLeft + $('.z-tabs')[0].clientWidth;
-			var leftEdge = $('.z-tab-selected').position().left >= $('.z-tabs')[0].offsetLeft;
+			var rightEdge = jq('.z-tab-selected').position().left < jq('.z-tabs')[0].offsetLeft + jq('.z-tabs')[0].clientWidth;
+			var leftEdge = jq('.z-tab-selected').position().left >= jq('.z-tabs')[0].offsetLeft;
 			zk.log(rightEdge && leftEdge);
 		}
 	]]></script>
