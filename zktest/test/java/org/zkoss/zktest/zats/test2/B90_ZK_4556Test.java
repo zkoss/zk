@@ -48,4 +48,13 @@ public class B90_ZK_4556Test extends WebDriverTestCase {
 		assertEquals(jqCell1.innerWidth() - parseInt(jqCell1.css(PADDING_LEFT)) - parseInt(jqCell1.css(PADDING_RIGHT)),
 				jqCell1.children().width(), 1);
 	}
+
+	@Test
+	public void testNodom() {
+		connect("/test2/B90-ZK-4556-1.zul");
+		click(jq("@button"));
+		waitResponse();
+		JQuery jqBtn = jq("@button");
+		assertEquals(jqBtn.eq(1).outerWidth() * 2, jqBtn.eq(2).outerWidth(), 2);
+	}
 }
