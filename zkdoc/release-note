@@ -2,6 +2,7 @@ ZK 9.0.1.1
 * Features
 
 * Bugs
+  ZK-4557: re-add fix for ZK-3724
 
 * Upgrade Notes
 
