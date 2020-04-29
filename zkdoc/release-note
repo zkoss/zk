@@ -16,6 +16,8 @@ ZK 9.1.0
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
+  + Since 9.1.0, the transitive dependency of slf4j-jdk14 was removed.
+    Please choose the desired SLF4J binding instead.
 
    --------
 ZK 9.0.1
