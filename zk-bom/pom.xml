@@ -2,56 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.zkoss.zk</groupId>
+    <parent>
+        <groupId>org.zkoss.zk</groupId>
+        <artifactId>zk-parent</artifactId>
+        <relativePath>../zk-parent/pom.xml</relativePath>
+        <version>9.1.0-SNAPSHOT</version>
+    </parent>
     <artifactId>zk-bom</artifactId>
     <packaging>pom</packaging>
-    <version>9.1.0-SNAPSHOT</version>
     <name>ZK Bill of Materials</name>
     <url>https://www.zkoss.org/product/zk</url>
     <description>ZK Bill of Materials</description>
-    <licenses>
-        <license>
-            <name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
-            <url>https://www.gnu.org/licenses/lgpl-3.0.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <id>zkteam</id>
-            <name>ZK Team</name>
-            <email>info@zkoss.org</email>
-            <url>https://www.zkoss.org</url>
-            <organization>Potix</organization>
-            <organizationUrl>https://www.zkoss.org</organizationUrl>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-            <timezone>8</timezone>
-            <properties>
-                <picUrl>https://www.zkoss.org</picUrl>
-            </properties>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:https://github.com/zkoss/zk.git</connection>
-        <url>https://mavensync.zkoss.org/maven2</url>
-    </scm>
-    <repositories>
-        <repository>
-            <id>zk repository</id>
-            <url>https://mavensync.zkoss.org/maven2</url>
-        </repository>
-        <repository>
-            <id>ZK EE Evaluation</id>
-            <url>https://mavensync.zkoss.org/eval</url>
-        </repository>
-        <repository>
-            <id>ZK EE</id>
-            <url>https://maven.zkoss.org/repo/zk/ee</url>
-        </repository>
-    </repositories>
     <properties>
         <zats.version>2.1.1</zats.version>
         <zkspringboot.version>1.0.4</zkspringboot.version>
@@ -511,21 +472,7 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>bundle</id>
