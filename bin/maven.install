@@ -37,16 +37,16 @@ if [ "$ZKCML" = "" ] ; then
 fi
 
 function upVer {
-	cp $1/pom.xml $1/pom.xml.bak
-	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $1/pom.xml
-	# add for zuti
-	sed -i "1,/zk.version>.*<\/zk.version/s/zk.version>.*<\/zk.version/zk.version>$version<\/zk.version/" $1/pom.xml
+	(
 	cd $1
-	mvn install -pl . # prevent the parent POM to install children
+	cp pom.xml pom.xml.bak
+	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" pom.xml
+
+	mvn install -N
 	mv -f pom.xml.bak pom.xml
 	#Remove local files and folders
 	rm -f debug/*.jar
-	cd ..
+	)
 }
 
 cd $maindir

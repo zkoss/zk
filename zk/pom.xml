@@ -32,20 +32,8 @@
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant-launcher</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jline</groupId>
-					<artifactId>jline</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -54,6 +42,12 @@
 			<artifactId>jruby</artifactId>
 			<version>1.1.2</version>
 			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.python</groupId>
@@ -83,7 +77,7 @@
 		<dependency>
 			<groupId>com.google.javascript</groupId>
 			<artifactId>closure-compiler-unshaded</artifactId>
-			<version>v20170626</version>
+			<version>v20200426</version>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>

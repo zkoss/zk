@@ -21,12 +21,10 @@ jfreechart.jar
 jcommon.jar
 Filters.jar
 jasperreports.jar
-commons-collections.jar
+commons-collections4.jar
 commons-digester.jar
 commons-logging.jar
 itext.jar
-jxl.jar
-poi.jar
 bsh.jar
 mvel.jar
 ognl.jar
