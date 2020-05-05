@@ -14,7 +14,7 @@
 	You should see the "Tab Last" is selected and scrolled to the right-most closed to the "->" icon.
 	<script>
 		setTimeout(function() {
-			zk.log($('.z-tab-selected').zk.isScrollIntoView());
+			zk.log(jq('.z-tab-selected').zk.isScrollIntoView());
 		}, 500);
 	</script>
 	<n:div>

@@ -25,7 +25,7 @@ public class B70_ZK_2754Test extends WebDriverTestCase {
 		waitResponse();
 		assertEquals(msg_q2, label2.text().trim());
 
-		String jqScript = "var btns = $(\"iframe\").contents().find('button');";
+		String jqScript = "var btns = jq(\"iframe\").contents().find('button');";
 		((JavascriptExecutor) getWebDriver()).executeScript(jqScript);
 		waitResponse();
 		((JavascriptExecutor) getWebDriver()).executeScript(jqScript + "btns[0].click();");
