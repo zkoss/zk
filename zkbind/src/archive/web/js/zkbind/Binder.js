@@ -13,7 +13,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	var _WidgetX = {},
 		_zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
 		_portrait = {'0': true, '180': true}, //default portrait definition
-		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
+		_initLandscape = zk.mobile ? jq.innerWidth() > jq.innerHeight() : false, // initial orientation is landscape or not
 		_initDefault = _portrait[window.orientation]; //default orientation
 
 zk.override(zk.Widget.prototype, _WidgetX, {

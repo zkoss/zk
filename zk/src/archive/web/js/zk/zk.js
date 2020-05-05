@@ -1864,7 +1864,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 	$init: function (msg) {
 		var id = 'zk_err',
 			$id = '#' + id,
-			click = zk.mobild ? ' ontouchstart' : ' onclick',
+			click = zk.mobile ? ' ontouchstart' : ' onclick',
 			// Use zUtl.encodeXML -- Bug 1463668: security
 			html = '<div class="z-error" id="' + id + '">'
 			+ '<div id="' + id + '-p">'

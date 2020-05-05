@@ -1098,12 +1098,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var devicePixelRatio = zUtl.getDevicePixelRatio();
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.$n();
-			if (n._lastsz && n._lastsz.height == n.offsetHeight
-					&& n._lastsz.width == n.offsetWidth
-					&& this._lastDevicePixelRatio == devicePixelRatio) {
-				this.fireOnRender(155); // force to render while using live grouping
-				return; // unchanged
-			}
+//			if (n._lastsz && n._lastsz.height == n.offsetHeight
+//					&& n._lastsz.width == n.offsetWidth
+//					&& this._lastDevicePixelRatio == devicePixelRatio) {
+//				this.fireOnRender(155); // force to render while using live grouping
+//				return; // unchanged
+//			}
 			this._lastDevicePixelRatio = devicePixelRatio;
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);

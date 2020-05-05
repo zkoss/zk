@@ -23,7 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		_detached = [], //used for resolving #stub/#stubs in mount.js (it stores detached widgets in this AU)
 		Widget = zk.Widget,
 		_portrait = {'0': true, '180': true}, //default portrait definition
-		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
+		_initLandscape = zk.mobile ? jq.innerWidth() > jq.innerHeight() : false, // initial orientation is landscape or not
 		_initDefault = _portrait[window.orientation], //default orientation
 		_aftAuResp = []; //store callbacks to be triggered when au is back
 	
