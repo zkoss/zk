@@ -21,6 +21,17 @@ ZK 9.1.0
     Please choose the desired SLF4J binding instead.
 
    --------
+ZK 9.0.1.2
+May 5, 2020
+* Features
+
+* Bugs
+  ZK-4531: overridden jquery causes prime faces components to work incorrectly
+
+* Upgrade Notes
+
+   --------
+
 ZK 9.0.1.1
 May 5, 2020
 * Features
