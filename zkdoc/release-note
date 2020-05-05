@@ -21,6 +21,17 @@ ZK 9.1.0
     Please choose the desired SLF4J binding instead.
 
    --------
+ZK 9.0.1.1
+May 5, 2020
+* Features
+
+* Bugs
+  ZK-4557: re-add fix for ZK-3724
+  ZK-4556: modal window with border layout doesn't resize correctly
+
+* Upgrade Notes
+
+   --------
 ZK 9.0.1
 Apr 21, 2020
 * Features
