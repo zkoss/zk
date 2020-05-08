@@ -9,6 +9,7 @@ ZK 9.1.0
   ZK-4560: Theme customization improvement - avoid patch.less
   ZK-4562: Introduce OWASP Dependency-Check
   ZK-4569: MVVM support calling commands in other view model
+  ZK-4175: replace XHR with the fetch() API to allow SSO redirect handling
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
@@ -26,6 +27,7 @@ ZK 9.1.0
     If you want to enable source maps, please add it manually.
   + Due to ZK-4569, there is syntax sugar for calling commands in other viewmodel. 
     E.g. @command('$pvm.doClick') would trigger the 'doClick' command in the viewModel whose id is 'pvm'.
+  + zAu.onError API was changed since we are using fetch() API instead XHR.
 
    --------
 ZK 9.0.1.2

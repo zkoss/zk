@@ -46,6 +46,8 @@ window.$eval=function(s){return eval(s);};
 	<script src="mount.js" jsdoc="true"/>
 	<script src="bookmark.js"/>
 	<script src="historystate.js"/>
+	<script src="ext/promise-polyfill.js"/>
+	<script src="ext/fetch.js"/>
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
 	<script>if (zk.mobile) {</script>
