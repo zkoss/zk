@@ -363,7 +363,7 @@ public class BindComposer<T extends Component>
 		Desktop desktop = comp.getDesktop();
 		Map<Object, Component> relationMap = (Map<Object, Component>) desktop.getAttribute(BinderCtrl.VIEWMODEL_COMPONENT_MAP_KEY);
 		if (relationMap == null) {
-			relationMap = new HashMap<>();
+			relationMap = new HashMap<>(4);
 			desktop.setAttribute(BinderCtrl.VIEWMODEL_COMPONENT_MAP_KEY, relationMap);
 		}
 		relationMap.put(vm, comp);
@@ -441,6 +441,15 @@ public class BindComposer<T extends Component>
 		//put to attribute, so binder could be referred by the name
 		comp.setAttribute(bname, binder);
 		comp.setAttribute(BINDER_ID, bname);
+
+		//ZK-4569
+		Desktop desktop = comp.getDesktop();
+		Map<String, Binder> relationMap = (Map<String, Binder>) desktop.getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
+		if (relationMap == null) {
+			relationMap = new HashMap<>(4);
+			desktop.setAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY, relationMap);
+		}
+		relationMap.put((String) comp.getAttribute(BindComposer.VM_ID), (Binder) binder);
 
 		return (AnnotateBinder) binder;
 	}
