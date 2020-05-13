@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B91-ZK-4578.zul
+        Purpose:
+
+        Description:
+
+        History:
+              Tue May 12 11:32:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div hflex="1" vflex="1">
+		<window hflex="1" vflex="1">
+			There is no zk log, otherwise is bug.
+		</window>
+	</div>
+</zk>

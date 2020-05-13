@@ -16,6 +16,7 @@ ZK 9.1.0
   ZK-4556: modal window with border layout doesn't resize correctly
   ZK-4557: re-add fix for ZK-3724
   ZK-4561: upgrade google.* dependencies
+  ZK-4578: Performance issue since ZK 9 using css flex
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.

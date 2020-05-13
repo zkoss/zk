@@ -784,8 +784,8 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 
 		render(renderer, "zclass", _zclass);
 		render(renderer, "prolog", _prolog);
-		if (evalCSSFlex())
-			renderer.render("cssflex", true);
+		if (!evalCSSFlex())
+			renderer.render("cssflex", false);
 	}
 
 	//--ComponentCtrl--//
