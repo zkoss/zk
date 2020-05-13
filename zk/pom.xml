@@ -78,6 +78,7 @@
 			<groupId>com.google.javascript</groupId>
 			<artifactId>closure-compiler-unshaded</artifactId>
 			<version>v20200426</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>

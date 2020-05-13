@@ -14,11 +14,14 @@ ZK 9.1.0
   ZK-4531: overridden jquery causes prime faces components to work incorrectly
   ZK-4556: modal window with border layout doesn't resize correctly
   ZK-4557: re-add fix for ZK-3724
+  ZK-4561: upgrade google.* dependencies
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
   + Since 9.1.0, the transitive dependency of slf4j-jdk14 was removed.
     Please choose the desired SLF4J binding instead.
+  + Since 9.1.0, the transitive dependency of closure-compiler-unshaded was removed.
+    If you want to enable source maps, please add it manually.
 
    --------
 ZK 9.0.1.2
