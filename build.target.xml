@@ -168,28 +168,21 @@ if="deploy.tomcat.required">
 <target name="zipjs">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
-	<java classname="ZipJS" fork="true">
+	<java jar="${dist.lib.ext.dir}/zkjszips.jar" fork="true">
 		<arg value="${src.archive.dir}/${zipjs}"/>
 		<arg value="${codegen.archive.dir}/${zipjs}"/>
-		<arg value="true"/>
 		<jvmarg value="-Xss1024k"/>
 		<classpath>
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
-			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
-			<pathelement location="${dist.lib.ext.dir}/closure-compiler.jar"/>
 		</classpath>
 	</java>
 
-	<java classname="ZipJS" fork="true">
+	<java jar="${dist.lib.ext.dir}/zkjszips.jar" fork="true">
 		<arg value="${src.archive.dir}/${zipcss}"/>
 		<arg value="${codegen.archive.dir}/${zipcss}"/>
 		<jvmarg value="-Xss1024k"/>
 		<classpath>
 			<pathelement location="${dist.lib.ext.dir}/zkjszips.jar"/>
-			<pathelement location="${dist.lib.ext.dir}/yuicompressor.jar"/>
-			<pathelement location="${dist.lib.ext.dir}/commons-io.jar"/>
-			<pathelement location="${dist.lib.ext.dir}/closure-compiler.jar"/>
 		</classpath>
 	</java>
 	<antcall target="tsmin"/>

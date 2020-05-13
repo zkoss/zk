@@ -13,12 +13,4 @@
 ../dist/lib/ext/javaee-api.jar
 ../dist/lib/ext/commons-codec.jar
 ../dist/lib/ext/commons-io.jar
-../dist/lib/ext/closure-compiler-unshaded.jar
-../dist/lib/ext/args4j.jar
-../dist/lib/ext/closure-compiler-externs.jar
-../dist/lib/ext/error_prone_annotations.jar
-../dist/lib/ext/gson.jar
-../dist/lib/ext/guava.jar
-../dist/lib/ext/jsinterop-annotations.jar
-../dist/lib/ext/jsr305.jar
-../dist/lib/ext/protobuf-java.jar
+../dist/lib/ext/closure-compiler.jar

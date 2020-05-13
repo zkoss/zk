@@ -17,13 +17,11 @@
 		<jruby.version>1.1.2</jruby.version>
 		<jython.version>2.2.1</jython.version>
 		<js.version>1.7R4</js.version>
-		<poi.version>3.17</poi.version>
-		<jxl.version>2.6.12</jxl.version>
-		<jasperreports.version>6.6.0</jasperreports.version>
-		<jfreechart.version>1.0.14</jfreechart.version>
+		<jasperreports.version>6.12.2</jasperreports.version>
+		<jfreechart.version>1.0.19</jfreechart.version>
 		<filters.version>2.0.235</filters.version>
-		<ckez.version>4.11.1.1</ckez.version>
-		<gmapsz.version>3.0.5</gmapsz.version>
+		<ckez.version>4.14.0.0</ckez.version>
+		<gmapsz.version>3.1.0</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
 		<report.dir>debug/report/</report.dir>
@@ -166,9 +164,14 @@
 			<artifactId>commons-lang</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.javascript</groupId>
 			<artifactId>closure-compiler-unshaded</artifactId>
-			<version>v20181125</version>
+			<version>v20200426</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache-extras.beanshell</groupId>
@@ -201,35 +204,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>${poi.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.jexcelapi</groupId>
-			<artifactId>jxl</artifactId>
-			<version>${jxl.version}</version>
-		</dependency>		
-		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>${jasperreports.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>jcommon</artifactId>
-					<groupId>jfree</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jfreechart</artifactId>
-					<groupId>jfree</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
