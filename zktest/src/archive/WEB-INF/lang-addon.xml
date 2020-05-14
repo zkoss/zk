@@ -118,4 +118,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			zk.load('zkmax.nav');
 		}
 	</javascript>
+
+	<!-- ZK-4578 -->
+	<javascript>
+		if (window.location.href.indexOf('4578.zul') != 0) {
+			var _xWidget = {};
+			zk.override(zk.Widget.prototype, _xWidget, {
+				setCssflex: function () {
+					zk.log('update css flex');
+					_xWidget.setCssflex.apply(this, arguments);
+				}
+			});
+		}
+	</javascript>
 </language-addon>

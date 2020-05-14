@@ -718,6 +718,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	//$weave: null,
 
+	_cssflex: true,
+
 	/** The constructor.
 	 * For example,
 <pre><code>
