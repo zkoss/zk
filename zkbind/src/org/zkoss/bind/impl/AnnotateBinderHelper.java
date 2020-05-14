@@ -20,6 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
@@ -158,12 +160,25 @@ public class AnnotateBinderHelper {
 		final Map<String, String[]> attrs = ann.getAttributes(); //(tag, tagExpr)
 		Map<String, String[]> args = null;
 		final List<String> cmdExprs = new ArrayList<String>();
+		Binder commandBinder = _binder;
 		for (final Iterator<Entry<String, String[]>> it = attrs.entrySet().iterator(); it.hasNext();) {
 			final Entry<String, String[]> entry = it.next();
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				cmdExprs.add(AnnotationUtil.testString(tagExpr, ann));
+				String cmdValue = AnnotationUtil.testString(tagExpr, ann);
+				Matcher matcher = Pattern.compile("^['\"]\\$([^.]*)\\..*$").matcher(cmdValue);
+				if (matcher.find()) {
+					String vmId = matcher.group(1);
+					Map<String, Binder> vmIdBinderMap = (Map<String, Binder>) comp.getDesktop()
+							.getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
+					Binder targetBinder = vmIdBinderMap.get(vmId);
+					if (targetBinder != null) {
+						commandBinder = targetBinder;
+						cmdValue = cmdValue.replace("$" + vmId + ".", ""); //remove "$xxxx."
+					}
+				}
+				cmdExprs.add(cmdValue);
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new LinkedHashMap<String, String[]>();
@@ -177,7 +192,7 @@ public class AnnotateBinderHelper {
 		try {
 			BinderUtil.pushContext().setCurrentLocation(ann.getLocation());
 			for (String cmd : cmdExprs) {
-				_binder.addCommandBinding(comp, propName, cmd, parsedArgs);
+				commandBinder.addCommandBinding(comp, propName, cmd, parsedArgs);
 			}
 		} finally {
 			BinderUtil.popContext();

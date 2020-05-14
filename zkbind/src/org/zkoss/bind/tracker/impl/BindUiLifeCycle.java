@@ -253,8 +253,13 @@ public class BindUiLifeCycle implements UiLifeCycle {
 			entry.getKey().removeBindings(entry.getValue());
 		}
 		Object vmCompMap = Executions.getCurrent().getDesktop().getAttribute(BinderCtrl.VIEWMODEL_COMPONENT_MAP_KEY);
+		String vmId = (String) comp.getAttribute(BindComposer.VM_ID);
 		if (vmCompMap != null)
-			((Map<Object, Component>) vmCompMap).remove(comp.getAttribute((String) comp.getAttribute(BindComposer.VM_ID)));
+			((Map<Object, Component>) vmCompMap).remove(comp.getAttribute(vmId));
+		//ZK-4569
+		Object vmIdBinderMap = Executions.getCurrent().getDesktop().getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
+		if (vmIdBinderMap != null)
+			((Map<String, Binder>) vmIdBinderMap).remove(vmId);
 	}
 
 	private void removeBindingsRecursively(Component comp, Map<Binder, Set<Component>> batchRemove) {

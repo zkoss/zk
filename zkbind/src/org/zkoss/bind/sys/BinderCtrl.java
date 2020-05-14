@@ -55,6 +55,11 @@ public interface BinderCtrl {
 	 */
 	public static final String VIEWMODEL_COMPONENT_MAP_KEY = "org.zkoss.bind.vm_component";
 
+	/**
+	 * Key of the relation from viewmodel id to binder
+	 */
+	public static final String VIEWMODELID_BINDER_MAP_KEY = "org.zkoss.bind.vmId_binder";
+
 	//control keys
 	public static final String BINDING = "$BINDING$"; //a binding
 	public static final String BINDER = "$BINDER$"; //the binder
