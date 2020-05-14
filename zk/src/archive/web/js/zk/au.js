@@ -148,54 +148,49 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			setTimeout(function () {zAu.sendNow(dt);}, timeout);
 	}
 	function ajaxSendNow(reqInf) {
-		var setting = zAu.ajaxSettings,
-			req = setting.xhr();
+		var fetchOpts = {};
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
-		try {
-			zk.ausending = true;
-			if (zk.xhrWithCredentials)
-				req.withCredentials = true;
-			req.onreadystatechange = zAu._onResponseReady;
-			req.open('POST', reqInf.uri, true);
-			req.setRequestHeader('Content-Type', setting.contentType);
-			req.setRequestHeader('ZK-SID', reqInf.sid);
-			if (zAu._errCode) {
-				req.setRequestHeader('ZK-Error-Report', zAu._errCode);
-				zAu._errCode = null;
-			}
+		zk.ausending = true;
+		if (zk.xhrWithCredentials)
+			fetchOpts.credentials = 'include';
+		fetchOpts.method = 'POST';
+		fetchOpts.headers = {'Content-Type': zAu.ajaxSettings.contentType, 'ZK-SID': reqInf.sid};
+		if (zAu._errCode) {
+			fetchOpts.headers['ZK-Error-Report'] = zAu._errCode;
+			zAu._errCode = null;
+		}
+		fetchOpts.body = reqInf.content;
 
-			var forceAjax = reqInf.forceAjax;
-			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req, false, forceAjax);
+		var forceAjax = reqInf.forceAjax;
+		if (zk.pfmeter) zAu._pfsend(reqInf.dt, fetchOpts, false, forceAjax);
 
-			zAu.ajaxReq = req;
-			zAu.ajaxReqInf = reqInf;
-			
-			if (!forceAjax && typeof zWs != 'undefined' && zWs.ready) {
-				zWs.send(req, reqInf);
-				return;
-			}
+		zAu.ajaxReq = true; // processing flag
+		zAu.ajaxReqInf = reqInf;
 
-			req.send(reqInf.content);
+		if (!forceAjax && typeof zWs != 'undefined' && zWs.ready) {
+			zWs.send(reqInf);
+			return;
+		}
 
-			if (!reqInf.implicit)
-				zk.startProcessing(zk.procDelay, reqInf.sid); //wait a moment to avoid annoying
-		} catch (e) {
-			//handle error
-			try {
-				if (typeof req.abort == 'function') req.abort();
-			} catch (e2) {
-				zk.debugLog(e2.message || e2);
-			}
-
+		fetch(reqInf.uri, fetchOpts)
+		.then(function (response) {
+			response.text().then(function (responseText) {
+				response.responseText = responseText;
+				zAu._onResponseReady(response);
+			});
+			return response;
+		}).catch(function (e) {
 			if (!reqInf.ignorable && !zk.unloading) {
 				var msg = _exmsg(e);
 				zAu._errCode = '[Send] ' + msg;
 				if (zAu.confirmRetry('FAILED_TO_SEND', msg)) {
 					ajaxReqResend(reqInf);
-					return;
 				}
 			}
-		}
+		});
+
+		if (!reqInf.implicit)
+			zk.startProcessing(zk.procDelay, reqInf.sid); //wait a moment to avoid annoying
 	}
 	function doCmdsNow(cmds) {
 		var rtags = cmds.rtags || {}, ex;
@@ -321,14 +316,14 @@ zAu = {
 	//Error Handling//
 	/** Register a listener that will be called when the Ajax request failed.
 	 * The listener shall be
-	 * <pre><code>function (req, errCode)</code></pre>
+	 * <pre><code>function (response, errCode)</code></pre>
 	 *
-	 * where req is an instance of {@link  _global_.XMLHttpRequest},
+	 * where response is an instance of response from Fetch API,
 	 * and errCode is the error code.
 	 * Furthermore, the listener could return true to ignore the error.
 	 * In other words, if true is returned, the error is ignored (the
 	 * listeners registered after won't be called either).
-	 * <p>Notice that req.status might be 200, since ZK might send the error
+	 * <p>Notice that response.status might be 200, since ZK might send the error
 	 * back with the ZK-Error header.
 	 *
 	 * <p>To remove the listener, use {@link #unError}.
@@ -481,12 +476,8 @@ zAu = {
 			data = jq.param({dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'}),
 			headers = {};
 		if (zk.pfmeter) {
-			var fakeReq = {
-				setRequestHeader: function (name, value) {
-					headers[name] = value;
-				}
-			};
-			zAu._pfsend(dt, fakeReq, true, false);
+			var fakeFetachOpts = {};
+			zAu._pfsend(dt, fakeFetachOpts, true, false);
 		}
 		// ZK-4204
 		if (navigator.sendBeacon && window.URLSearchParams) {
@@ -845,11 +836,11 @@ zAu.beforeSend = function (uri, req, dt) {
 	},
 	// Sets performance rquest IDs to the request's header
 	// Called by moun.js, too
-	_pfsend: function (dt, req, completeOnly, forceAjax) {
+	_pfsend: function (dt, fetchOpts, completeOnly, forceAjax) {
 		var ws = !forceAjax && typeof zWs != 'undefined' && zWs.ready;
 		if (!completeOnly) {
 			var dtt = dt.id + '-' + pfIndex++ + '=' + Math.round(jq.now());
-			req.setRequestHeader('ZK-Client-Start', dtt);
+			fetchOpts.headers['ZK-Client-Start'] = dtt;
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Start', dtt);
 			}
@@ -857,14 +848,14 @@ zAu.beforeSend = function (uri, req, dt) {
 
 		var ids;
 		if (ids = dt._pfRecvIds) {
-			req.setRequestHeader('ZK-Client-Receive', ids);
+			fetchOpts.headers['ZK-Client-Receive'] = ids;
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Receive', ids);
 			}
 			dt._pfRecvIds = null;
 		}
 		if (ids = dt._pfDoneIds) {
-			req.setRequestHeader('ZK-Client-Complete', ids);
+			fetchOpts.headers['ZK-Client-Receive'] = ids;
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Complete', ids);
 			}
@@ -912,31 +903,31 @@ zAu.beforeSend = function (uri, req, dt) {
 		if (msg !== false)
 			jq.alert(msg);
 	},
-	// Called when the response is received from zAu.ajaxReq.
-	_onResponseReady: function () {
-		var req = zAu.ajaxReq, reqInf = zAu.ajaxReqInf, sid;
+	// Called when the response is received from fetch.
+	_onResponseReady: function (response) {
+		var reqInf = zAu.ajaxReqInf, sid;
 		try {
-			if (req && req.readyState == 4) {
+			if (response && response.ok) {
 				zAu.ajaxReq = zAu.ajaxReqInf = null;
 				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, zAu.pfGetIds(req));
 
-				sid = req.getResponseHeader('ZK-SID');
+				sid = response.headers.get('ZK-SID');
 
 				var rstatus;
-				if ((rstatus = req.status) == 200) { //correct
-					if (zAu._respSuccess(req, reqInf, sid)) return;
+				if ((rstatus = response.status) == 200) { //correct
+					if (zAu._respSuccess(response, reqInf, sid)) return;
 				} else if ((!sid || sid == zAu.seqId) //ignore only if out-of-seq (note: 467 w/o sid)
-				&& !zAu.onResponseError(req, zAu._errCode = rstatus)) {
-					if (zAu._respFailure(req, reqInf, rstatus)) return;
+				&& !zAu.onResponseError(response, zAu._errCode = rstatus)) {
+					if (zAu._respFailure(response, reqInf, rstatus)) return;
 				}
 			}
 		} catch (e) {
-			if (zAu._respException(req, reqInf, e)) return;
+			if (zAu._respException(response, reqInf, e)) return;
 		}
 
 		zAu.afterResponse(sid);
 	},
-	_respSuccess: function (req, reqInf, sid) {
+	_respSuccess: function (response, reqInf, sid) {
 		if (sid && sid != zAu.seqId) {
 			zAu._errCode = 'ZK-SID ' + (sid ? 'mismatch' : 'required');
 			zAu.afterResponse(); //continue the pending request if any
@@ -944,8 +935,8 @@ zAu.beforeSend = function (uri, req, dt) {
 		} //if sid null, always process (usually for error msg)
 
 		var v;
-		if ((v = req.getResponseHeader('ZK-Error'))
-		&& !zAu.onResponseError(req, v = zk.parseInt(v) || v)
+		if ((v = response.headers.get('ZK-Error'))
+		&& !zAu.onResponseError(response, v = zk.parseInt(v) || v)
 		&& (v == 5501 || v == 5502) //Handle only ZK's SC_OUT_OF_SEQUENCE or SC_ACTIVATION_TIMEOUT
 		&& zAu.confirmRetry('FAILED_TO_RESPONSE',
 				v == 5501 ? 'Request out of sequence' : 'Activation timeout')) {
@@ -957,14 +948,14 @@ zAu.beforeSend = function (uri, req, dt) {
 		&& (!reqInf.rtags || !reqInf.rtags.onTimer || zk.timerAlive)) // Bug ZK-2720 only timer-keep-alive should reset the timeout
 			zAu._resetTimeout();
 
-		if (zAu.pushReqCmds(reqInf, req)) { //valid response
+		if (zAu.pushReqCmds(reqInf, response)) { //valid response
 			//advance SID to avoid receive the same response twice
 			if (sid && ++zAu.seqId > 9999) zAu.seqId = 1;
 			zAu.ajaxReqTries = 0;
 			zAu.pendingReqInf = null;
 		}
 	},
-	_respFailure: function (req, reqInf, rstatus) {
+	_respFailure: function (response, reqInf, rstatus) {
 		var eru = zAu._errURIs['' + rstatus];
 		if (typeof eru == 'string') {
 			zUtl.go(eru);
@@ -972,7 +963,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 
 		if (typeof zAu.ajaxErrorHandler == 'function') {
-			zAu.ajaxReqTries = zAu.ajaxErrorHandler(req, rstatus, req.statusText, zAu.ajaxReqTries);
+			zAu.ajaxReqTries = zAu.ajaxErrorHandler(response, rstatus, response.statusText, zAu.ajaxReqTries);
 			if (zAu.ajaxReqTries > 0) {
 				zAu.ajaxReqTries--;
 				zAu.ajaxReqResend(reqInf, zk.resendTimeout);
@@ -1042,11 +1033,11 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	//cmd1: null, //jsdoc
 
-	pushReqCmds: function (reqInf, req) {
+	pushReqCmds: function (reqInf, response) {
 		var dt = reqInf.dt,
-			rt = req.responseText;
+			rt = response.responseText;
 		if (!rt) {
-			if (zk.pfmeter) zAu._pfdone(dt, zAu.pfGetIds(req));
+			if (zk.pfmeter) zAu._pfdone(dt, zAu.pfGetIds(response));
 			return false; //invalid
 		}
 
@@ -1054,7 +1045,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		cmds.rtags = reqInf.rtags;
 		if (zk.pfmeter) {
 			cmds.dt = dt;
-			cmds.pfIds = zAu.pfGetIds(req);
+			cmds.pfIds = zAu.pfGetIds(response);
 		}
 
 		try {
@@ -1062,7 +1053,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		} catch (e) {
 			if (e.name == 'SyntaxError') { //ZK-4199: handle json parse error
 				zAu.showError('FAILED_TO_PARSE_RESPONSE', e.message);
-				zk.debugLog(e.message + ', response text:\n' + req.responseText);
+				zk.debugLog(e.message + ', response text:\n' + rt);
 				return false;
 			}
 			throw e;
@@ -1122,8 +1113,8 @@ zAu.beforeSend = function (uri, req, dt) {
 	_errURIs: {},
 	//Perfomance Meter//
 	// Returns request IDs sent from the server separated by space.
-	pfGetIds: function (req) {
-		return req.getResponseHeader('ZK-Client-Complete');
+	pfGetIds: function (response) {
+		return response.headers.get('ZK-Client-Complete');
 	},
 	pfAddIds: function (dt, prop, pfIds) {
 		if (pfIds && (pfIds = pfIds.trim())) {
@@ -1138,10 +1129,10 @@ zAu.beforeSend = function (uri, req, dt) {
 			setTimeout(ajaxReqResend2, timeout ? timeout : 0);
 		}
 	},
-	onResponseError: function (req, errCode) {
+	onResponseError: function (response, errCode) {
 		//$clone first since it might add or remove onError
 		for (var errs = _onErrs.$clone(), fn; fn = errs.shift();)
-			if (fn(req, errCode))
+			if (fn(response, errCode))
 				return true; //ignored
 	}
 };
