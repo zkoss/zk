@@ -18,6 +18,7 @@ ZK 9.1.0
   ZK-4557: re-add fix for ZK-3724
   ZK-4561: upgrade google.* dependencies
   ZK-4578: Performance issue since ZK 9 using css flex
+  ZK-4581: Unexpected exception in Embedded ZK callback function
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
