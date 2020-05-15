@@ -12,6 +12,15 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<div hflex="1" vflex="1">
+		<script>
+			var _xWidget = {};
+			zk.override(zk.Widget.prototype, _xWidget, {
+				setCssflex: function () {
+					zk.log('update css flex');
+					_xWidget.setCssflex.apply(this, arguments);
+				}
+			});
+		</script>
 		<window hflex="1" vflex="1">
 			There is no zk log, otherwise is bug.
 		</window>
