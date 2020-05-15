@@ -156,12 +156,12 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
 		img = this.getImage(),
 		icon = '<i class="' + this.$s('icon') + ' z-icon-caret-'
-				+ (this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '"></i>',
-		separator = '<div class="' + this.$s('separator') + '"></div>',
+				+ (this.isTopmost() && !this.isVertical_() ? 'down' : 'right') + '" aria-hidden="true"></i>',
+		separator = '<div class="' + this.$s('separator') + '" aria-hidden="true"></div>',
 		iconSclass = this.domIcon_();
 
 		if (img)
-			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />'
+			img = '<img id="' + this.uuid + '-img" src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
 		else {
 			if (iconSclass) {
@@ -169,7 +169,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			} else {
 				img = '<img id="' + this.uuid + '-img" ' + (this.isTopmost() ? 'style="display:none"' : '')
 					+ ' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="'
-					+ this.$s('image') + '" align="absmiddle" />';
+					+ this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />';
 			}
 		}
 		return img + label + separator + icon;

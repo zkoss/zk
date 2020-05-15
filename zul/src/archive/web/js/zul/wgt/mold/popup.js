@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid;
 		
-	out.push('<div', this.domAttrs_(), '>');
+	out.push('<div', this.domAttrs_(), ' role="tooltip">');
 	
 	if(this._fixarrow)	// Merge breeze: a div for pointer in Errorbox
 		out.push('<div id=', uuid, '-p class="z-pointer"></div>');

@@ -304,7 +304,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 
 		out.push('<li', navCls,'><a name="', this.uuid ,'-button" class="', cls,
 				'" href="javascript:;" onclick="if (!zk.Widget.$(this)._disabled) zul.mesh.Paging.go(this,', val,
-				')">', label, '</a></li>');
+				')"', seld ? ' aria-current="page"' : '', '>', label, '</a></li>');
 	},
 	domClass_: function () {
 		var cls = this.$supers(zul.mesh.Paging, 'domClass_', arguments),

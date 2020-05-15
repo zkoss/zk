@@ -659,14 +659,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var uuid = this.uuid,
 			isButtonVisible = this._buttonVisible;
 
-		out.push('<span', this.domAttrs_({text: true, tabindex: true}), '><input id="',
+		out.push('<span', this.domAttrs_({text: true, tabindex: true}), ' role="combobox" aria-expanded="false" aria-owns="', uuid, '-pp" aria-haspopup="dialog"><input id="',
 			uuid, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)
 			out.push(' ', this.$s('input-full'));
 
-		out.push('" autocomplete="off"',
-			this.textAttrs_(), '/><a id="', uuid, '-btn" class="',
+		out.push('" autocomplete="off" aria-autocomplete="none" aria-controls="', uuid, '-pp" aria-labelledby="', uuid, '"',
+			this.textAttrs_(), '/><a id="', uuid, '-btn" tabindex="-1" role="button" aria-label="', msgzul.PANEL_EXPAND, '" class="',
 			this.$s('button'));
 
 		if (!isButtonVisible)

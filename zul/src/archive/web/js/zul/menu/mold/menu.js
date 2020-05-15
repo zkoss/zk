@@ -17,7 +17,7 @@ function (out) {
 		zcls = this.getZclass(),
 		contentHandler = this._contentHandler;
 	
-	out.push('<li', this.domAttrs_(), '><a href="javascript:;" id="', uuid,
+	out.push('<li', this.domAttrs_(), ' role="none"><a role="menuitem" aria-haspopup="true" href="javascript:;" id="', uuid,
 			'-a" class="', this.$s('content'), '"', this._disabled ? ' disabled="disabled" tabindex="-1"' : '', '>', this.domContent_(), '</a>');
 	if (this.menupopup)
 		this.menupopup.redraw(out);

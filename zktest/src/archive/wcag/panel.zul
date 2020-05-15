@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Panel"?>
+<?root-attributes lang="en"?>
+<!--
+panel.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 18 12:25:14 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+    /* FIXME: For demonstration only, should apply to theme itself. */
+    .z-panel-icon:focus {
+        outline: 1px dotted red;
+    }
+    ]]>
+    </style>
+    <n:header>
+        <n:h1>Panel</n:h1>
+    </n:header>
+    <n:main>
+        <panel title="Panel: buttons" closable="true" collapsible="true" minimizable="true" maximizable="true">
+            <panelchildren>
+                Hello world
+            </panelchildren>
+        </panel>
+
+        <panel closable="true" collapsible="true" minimizable="true" maximizable="true">
+            <caption>Panel: buttons with Caption</caption>
+            <panelchildren>
+                Hello world
+            </panelchildren>
+        </panel>
+    </n:main>
+</zk>

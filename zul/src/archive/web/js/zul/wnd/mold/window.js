@@ -18,7 +18,8 @@ function (out, skipper) {
 		caption = this.caption,
 		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
-		tabi = this._tabindex;
+		tabi = this._tabindex,
+		btnRenderer = zul.wgt.ButtonRenderer;
 
 	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the child elements
 	
@@ -29,27 +30,14 @@ function (out, skipper) {
 		
 		if (caption) caption.redraw(out);
 		else {
-			var icon = this.$s('icon');
-			if (this._closable) {
-				out.push('<div id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '"');
-				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
-				out.push(' title="', msgzul.PANEL_CLOSE, '"><i class="', this.getClosableIconClass_(), '"></i></div>');
-			}
-			if (this._maximizable) {
-				var maxd = this._maximized;
-				out.push('<div id="', uuid , '-max" class="', icon, ' ',
-						this.$s('maximize'));
-				if (maxd)
-					out.push(' ', this.$s('maximized'));
-				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
-				if (tabi != undefined) out.push('" tabindex="', tabi);
-				out.push('" title="', msgzul.PANEL_MAXIMIZE, '"><i class="', maxIcon, '"></i></div>');
-			}
-			if (this._minimizable) {
-				out.push('<div id="', uuid , '-min" class="', icon, ' ', this.$s('minimize'), '"');
-				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
-				out.push(' title="', msgzul.PANEL_MINIMIZE, '"><i class="', this.getMinimizableIconClass_(), '"></i></div>');
-			}
+			out.push('<div id="', uuid, '-icons" class="', this.$s('icons'), '">');
+			if (this._minimizable)
+				btnRenderer.redrawMinimizeButton(this, out, tabi);
+			if (this._maximizable)
+				btnRenderer.redrawMaximizeButton(this, out, tabi);
+			if (this._closable)
+				btnRenderer.redrawCloseButton(this, out, tabi);
+			out.push('</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div>');

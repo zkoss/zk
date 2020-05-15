@@ -226,19 +226,19 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = '<span class="' + this.$s('text') + '">'
 					+ (zUtl.encodeXML(this.getLabel())) + '</span>',
-			icon = '<i class="' + this.$s('icon') + ' z-icon-check"></i>',
+			icon = '<i class="' + this.$s('icon') + ' z-icon-check" aria-hidden="true"></i>',
 			img = this.getImage(),
 			iconSclass = this.domIcon_();
 
 		if (img)
-			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" />'
+			img = '<img src="' + img + '" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />'
 				+ (iconSclass ? ' ' + iconSclass : '');
 		else {
 			if (iconSclass) {
 				img = iconSclass;
 			} else {
 				img = '<img ' + (this.isTopmost() ? 'style="display:none"' : '')
-					+ ' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' + this.$s('image') + '" align="absmiddle" />';
+					+ ' src="data:image/png;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" class="' + this.$s('image') + '" align="absmiddle" alt="" aria-hidden="true" />';
 			}
 		}
 		return img + (this.isAutocheck() || this.isCheckmark() ? icon : '') + label;

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Fisheyebar"?>
+<?root-attributes lang="en"?>
+<!--
+fisheyebar.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 27 17:32:52 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+    /* FIXME: fisheye no relative was a bug */
+    .myFisheye {
+        position: relative;
+    }
+
+    :focus {
+        outline: 1px dotted red !important;
+    }
+    ]]>
+    </style>
+    <n:header>
+        <n:h1>Fisheyebar</n:h1>
+    </n:header>
+    <n:main>
+        <fisheyebar sclass="myFisheye">
+            <fisheye image="/img/item1.jpg" label="Screen" onClick='Clients.showNotification(self.label)' />
+            <fisheye image="/img/item2.jpg" label="Cellphone" onClick='Clients.showNotification(self.label)'/>
+            <fisheye image="/img/live.gif" label="Live" visible="false" />
+            <fisheye image="/img/item3.jpg" label="Xbox 360" onClick='Clients.showNotification(self.label)'/>
+            <fisheye image="/img/item4.jpg" label="iPhone" onClick='Clients.showNotification(self.label)'/>
+        </fisheyebar>
+        <fisheyebar sclass="myFisheye" orient="vertical">
+            <fisheye image="/img/live.gif" label="Live" />
+            <fisheye image="/img/live.gif" label="Live"/>
+            <fisheye image="/img/live.gif" label="Live"/>
+        </fisheyebar>
+    </n:main>
+</zk>

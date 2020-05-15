@@ -14,11 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	var uuid = this.uuid,
-	target = this.getTarget();
+		target = this.getTarget(),
+		chechmark = this._checkmark;
 	
-	out.push('<li', this.domAttrs_(), '>');
+	out.push('<li', this.domAttrs_(), ' role="none">');
 	
-	out.push('<a href="', this.getHref() ? this.getHref() : 'javascript:;', '"');
+	out.push('<a role="' + (chechmark ? 'menuitemcheckbox' : 'menuitem') + '" href="', this.getHref() ? this.getHref() : 'javascript:;', '"');
 	if (target)
 		out.push(' target="', target, '"');
 	out.push(' id="', uuid, '-a" class="', this.$s('content'), '"',

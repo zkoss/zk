@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Paging"?>
+<?root-attributes lang="en"?>
+<!--
+paging.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 26 10:42:38 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <style>
+        :focus {
+            outline: 1px dotted red !important;
+        }
+    </style>
+
+    <n:header>
+        <n:h1>Paging</n:h1>
+    </n:header>
+    <n:main>
+        <paging totalSize="100" pageSize="10" activePage="3" detailed="true" ca:aria-label="Test Paging 1"/>
+        <paging totalSize="100" pageSize="10" activePage="3"/>
+
+        <paging mold="os" totalSize="100" pageSize="10" activePage="3" detailed="true" ca:aria-label="Test Paging 2"/>
+        <paging mold="os" totalSize="100" pageSize="10" activePage="3"/>
+    </n:main>
+</zk>

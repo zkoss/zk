@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Image"?>
+<?root-attributes lang="en"?>
+<!--
+image.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 22 12:18:04 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Image</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <image src="/img/live.gif" ca:alt="A icon of Windows Live Messenger"/>
+            Windows Live Messenger was replaced by Skype.
+        </n:section>
+        <n:section>
+            <vlayout>
+                ZK comics
+                <image src="/img/castle.png" ca:alt="Ajax is really simple, but they insist on making it complicated!"/>
+                <image src="/img/earth.png" ca:alt="Give me ZK and I will move the world!"/>
+            </vlayout>
+        </n:section>
+    </n:main>
+</zk>

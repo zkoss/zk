@@ -257,7 +257,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		if (!img) img = iconSclass;
 		else
-			img = `<img class="${this.$s('image')}" src="${img}" />${iconSclass ? ' ' + iconSclass : ''}`;
+			img = `<img class="${this.$s('image')}" src="${img}" alt="" aria-hidden="true" />${iconSclass ? ' ' + iconSclass : ''}`;
 		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img : img + space + label;

@@ -63,6 +63,23 @@ zul.db.Renderer = {
 	cellHTML: function (cal, y, m, day, monthofs) {
 		return day;
 	},
+	/**
+	 * Returns the label of a date cell.
+	 * By overriding this method, you could customize the aria-label of a day cell.
+	 * <p>Default: dddd, dd MMMM yyyy
+	 * @param zul.db.Calendar cal the calendar
+	 * @param int y the year
+	 * @param int m the month (between 0 to 11)
+	 * @param int day the day (between 1 to 31)
+	 * @param int monthofs the month offset. If the day is in the same month
+	 * @param int dayofweek the day of the week (between 0 to 6)
+	 * @return String the label of a date
+	 * @since 9.2.0
+	 */
+	cellAriaLabel: function (cal, y, m, day, monthofs, dayofweek) {
+		var localizedSymbols = cal.getLocalizedSymbols();
+		return localizedSymbols.FDOW[dayofweek] + ', ' + day + ' ' + localizedSymbols.FMON[m] + ' ' + y;
+	},
 	/** Called before {@link zul.db.Calendar#redraw} is invoked.
 	 * <p>Default: does nothing
 	 * @param zul.db.Calendar cal the calendar
@@ -188,16 +205,16 @@ zul.db.Renderer = {
 			wkday = wgt.$s('weekday'),
 			cell = wgt.$s('cell');
 
-		out.push('<table class="', wgt.$s('body'), '" id="', uuid, '-mid"',
-				zUtl.cellps0, '>', '<thead><tr>');
+		out.push('<table role="none" class="', wgt.$s('body'), '" id="', uuid, '-mid"',
+				zUtl.cellps0, '>', '<thead role="group"><tr>');
 		for (var j = 0; j < 7; ++j)
 			out.push('<th class="', (j == sun || j == sat) ? wkend : wkday,
-					'">' + localizedSymbols.S2DOW[j] + '</th>');
-		out.push('</tr></thead><tbody>');
+					'" aria-label="', localizedSymbols.FDOW[j], '">', localizedSymbols.S2DOW[j], '</th>');
+		out.push('</tr></thead><tbody role="group">');
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
 			out.push('<tr id="', uuid, '-w', j, '">');
 			for (var k = 0; k < 7; ++k)
-				out.push('<td class="', cell, ' ', (k == sun || k == sat) ? wkend : wkday,
+				out.push('<td id="', uuid, '-w', j, '-p', k, '" class="', cell, ' ', (k == sun || k == sat) ? wkend : wkday,
 						'"></td>');
 			out.push('</tr>');
 		}
@@ -213,12 +230,12 @@ zul.db.Renderer = {
 	monthView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
 			cell = wgt.$s('cell');
-		out.push('<table class="', wgt.$s('body'), ' ', wgt.$s('month'),
-				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
+		out.push('<table role="none" class="', wgt.$s('body'), ' ', wgt.$s('month'),
+				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody role="group">');
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'">',
-					localizedSymbols.SMON[j] + '</td>');
+			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'" aria-label="', localizedSymbols.FMON[j], '">',
+					localizedSymbols.SMON[j], '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
@@ -240,8 +257,8 @@ zul.db.Renderer = {
 			yofs = y - (y % 10 + 1),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear;
-		out.push('<table class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
-				zUtl.cellps0, '><tbody>');
+		out.push('<table role="none" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
+				zUtl.cellps0, '><tbody role="group">');
 
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
@@ -280,9 +297,9 @@ zul.db.Renderer = {
 			maxdec = zk.parseInt(maxyear / 10) * 10;
 
 
-		out.push('<table class="', wgt.$s('body'), ' ', wgt.$s('decade'),
+		out.push('<table role="none" class="', wgt.$s('body'), ' ', wgt.$s('decade'),
 				'" id="', uuid, '-mid"',
-				zUtl.cellps0, '><tbody>');
+				zUtl.cellps0, '><tbody role="group">');
 		var temp = ydec * 100 - 10,
 			selected = wgt.$s('selected');
 		for (var j = 0; j < 12; ++j, temp += 10) {
@@ -296,7 +313,7 @@ zul.db.Renderer = {
 
 			out.push('<td data-value="', temp ,'" id="', uuid, '-de', j, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '" >',
-							(temp < minyear ? minyear : temp) + ydelta + '-<br />'
+							(temp < minyear ? minyear : temp) + ydelta + '-<br aria-hidden="true" />'
 							+ ((temp + 9 > maxyear ? maxyear : temp + 9) + ydelta) + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
@@ -1047,6 +1064,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 									$cell.addClass(disdClass);
 								}
 								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs);
+								$cell[0].setAttribute('aria-label', Renderer.cellAriaLabel(this, y, m + monofs, v, monofs, k));
 								$cell.data('value', v);
 							}
 						}

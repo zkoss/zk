@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Coachmark"?>
+<?root-attributes lang="en"?>
+<!--
+coachmark.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 29 15:41:06 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+    :focus {
+        outline: 1px dotted red !important;
+    }
+    ]]></style>
+    <n:header>
+        <n:h1>Coachmark</n:h1>
+    </n:header>
+    <n:main>
+        <button label="Start tutorial" onClick="c1.open()"/>
+        <button id="install" label="1) Install"/>
+        <button id="find" label="2) Find..."/>
+        <button id="send" label="3) Send"/>
+
+        <coachmark id="c1" visible="false" target="install" next="c2" onTargetClick="self.next()">
+            Please click "Install" to install this addon.
+            <button label="Next" onClick="self.parent.next()"/>
+        </coachmark>
+        <coachmark id="c2" visible="false" target="find" next="c3" onTargetClick="self.next()" position="before_center">
+            Please click "Find" to find the file you want to process.
+            <button label="Next" onClick="self.parent.next()"/>
+        </coachmark>
+        <coachmark id="c3" visible="false" target="send" position="end_center" onTargetClick="self.close()">
+            Please click "Send" to upload the selected file.
+            <button label="Got it" onClick="self.parent.close()"/>
+        </coachmark>
+    </n:main>
+</zk>

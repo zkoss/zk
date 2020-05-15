@@ -959,36 +959,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 		evt.stop();
 	},
-	doKeyDown_: function (evt) {
-		var n = evt.domTarget,
-			keyCode = evt.keyCode;
-		if (keyCode == '9' || keyCode == '16') { //TAB and SHIFT, skip them so tab/shift-tab will work as expected
-			this.$supers('doKeyDown_', arguments);
-			return;
-		}
-		if (!n.id) n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			this.fire('onClose');
-			break;
-		case this.$n('max'):
-			this.setMaximized(!this._maximized);
-			break;
-		case this.$n('min'):
-			this.setMinimized(!this._minimized);
-			break;
-		case this.$n('exp'):
-			var body = this.$n('body'),
-			open = body ? zk(body).isVisible() : this._open;
-			// force to open
-			if (!open == this._open)
-				this._open = open;
-			this.setOpen(!open);
-			break;
-		default:
-			this.$supers('doKeyDown_', arguments);
-		}
-	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {

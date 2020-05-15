@@ -200,7 +200,10 @@ if="deploy.tomcat.required">
 	<property name="jar.srcpv.dir" value="${codegen.archive.dir}"/><!-- could be any existent directory -->
 
 	 <condition property="ignoreZKMaxCodegenFolder" value="NAN" else="zkmax">
-		<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+		<or>
+			<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+			<equals arg1="${jar.name}" arg2="za11y.jar" trim="true"/>
+		</or>
 	</condition>
 	 <condition property="ignoreZulCodegenFolder" value="zul" else="NAN">
 	 	<or>
@@ -221,7 +224,10 @@ if="deploy.tomcat.required">
 </target>
 <target name="build.jar2" depends="build.jar" if="build.jar2.required">
 	<condition property="ignoreZKMaxCodegenFolder" value="NAN" else="zkmax">
-		<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+		<or>
+			<equals arg1="${jar.name}" arg2="zkmax.jar" trim="true"/>
+			<equals arg1="${jar.name}" arg2="za11y.jar" trim="true"/>
+		</or>
 	</condition>
 	<condition property="ignoreZutiCodegenFolder" value="NAN" else="zuti">
 		<equals arg1="${jar.name}" arg2="zuti.jar" trim="true"/>
