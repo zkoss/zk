@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<tr', this.domAttrs_(), ' style="text-align:left;">');
+	out.push('<tr', this.domAttrs_(), ' style="text-align:left;" role="row">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	var mesh = this.getMeshWidget();

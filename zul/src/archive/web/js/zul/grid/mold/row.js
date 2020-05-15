@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<tr', this.domAttrs_(), '>');
+	out.push('<tr', this.domAttrs_(), ' role="row">');
 	var zcls = this.getZclass(),
 		grid = this.getGrid(),
 		head = grid.getHeadWidget();

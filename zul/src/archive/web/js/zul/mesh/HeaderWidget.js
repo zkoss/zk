@@ -560,7 +560,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var uuid = this.uuid,
 			zcls = this.getZclass(),
 			label = this.domContent_();
-		out.push('<th', this.domAttrs_({width: true}), '><div id="',
+		out.push('<th', this.domAttrs_({width: true}), ' role="columnheader"><div id="',
 			uuid, '-cave" class="', this.$s('content'), '"',
 			this.domTextStyleAttr_(), '><div class="', this.$s('sorticon'),
 			'"><i id="', uuid, '-sort-icon"></i></div>',

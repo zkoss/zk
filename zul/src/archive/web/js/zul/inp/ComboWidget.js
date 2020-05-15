@@ -672,7 +672,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!isButtonVisible)
 			out.push(' ', this.$s('disabled'));
 
-		out.push('"><i id="', uuid, '-icon" class="', this.$s('icon'), ' ', this.getIconSclass(),'"></i></a>');
+		out.push('" aria-hidden="true"><i id="', uuid, '-icon" class="', this.$s('icon'), ' ', this.getIconSclass(),'"></i></a>');
 
 		this.redrawpp_(out);
 

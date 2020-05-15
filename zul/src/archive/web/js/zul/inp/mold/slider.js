@@ -16,8 +16,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var isVer = this.isVertical(),
 		uuid = this.uuid;
-	out.push('<div', this.domAttrs_(), '>' +
-		'<div id="', uuid, '-inner" class="', this.$s('center'), '">' +
+	out.push('<div', this.domAttrs_(), ' role="slider">' +
+		'<div id="', uuid, '-inner" class="', this.$s('center'), '" aria-hidden="true">' +
 		'<div id="', uuid, '-area" class="', this.$s('area'), '" style="position: absolute"></div>' +
 		'<div id="', uuid, '-btn" class="', this.$s('button'), '"></div></div></div>');
 }

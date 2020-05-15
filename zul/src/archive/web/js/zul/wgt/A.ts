@@ -167,7 +167,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	},
 	domContent_() {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this.getImage(),
+			img = this.domImage_(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass)
 			return label;
@@ -175,7 +175,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		if (!img) {
 			img = iconSclass;
 		} else
-			img = `<img src="${img}" align="absmiddle" />${iconSclass ? ' ' + iconSclass : ''}`;
+			img += `${iconSclass ? ' ' + iconSclass : ''}`;
 		return this.getDir() == 'reverse' ? label + img : img + label;
 	},
 	domAttrs_() {

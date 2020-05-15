@@ -37,10 +37,12 @@ zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
 		return this.$n('pp') || this.$n();
 	},
 	redrawpp_: function (out) {
+		var fc = this.firstChild;
 		out.push('<div id="', this.uuid, '-pp" class="', this.$s('popup'),
-		'" style="display:none">');
+		// tabindex=0 to prevent a11y scrollable popup issue, see https://dequeuniversity.com/rules/axe/3.5/scrollable-region-focusable?application=AxeChrome
+		'" style="display:none" role="dialog" aria-labelledby="' + (fc ? fc.uuid : '') + '" tabindex="0">');
 
-		for (var w = this.firstChild; w; w = w.nextSibling)
+		for (var w = fc; w; w = w.nextSibling)
 			w.redraw(out);
 
 		out.push('</div>');

@@ -18,14 +18,14 @@ function (out) {
 		BL = zul.layout.Borderlayout,
 		noCenter = pos != BL.CENTER,
 		parent = this.parent;
-	out.push('<div id="', uuid,  '"><div id="', uuid, '-real"',
-			this.domAttrs_({id: 1}), '>');
+	out.push('<div id="', uuid,  '" role="none"><div id="', uuid, '-real"',
+			this.domAttrs_({id: 1}), ' role="none">');
 	
 	this.titleRenderer_(out);
 	out.push('<div id="', uuid, '-cave" class="', this.$s('body'), '"');
 	if (zk.ios && this._nativebar)
 		out.push(' style="-webkit-overflow-scrolling:touch;"');
-	out.push('>');
+	out.push(' role="none">');
 	
 	var firstChild = this.getFirstChild();
 	if (firstChild)
@@ -54,17 +54,18 @@ function (out) {
 				break;
 		}
 		out.push('<div id="', uuid, '-split" class="', this.$s('splitter'),
-			'"><span id="', uuid, '-splitbtn" class="', this.$s('splitter-button'));
+			'" role="separator" tabindex="0" aria-orientation="', (!this._isVertical() ? 'vertical"' : 'horizontal"'),
+			' aria-valuemin="0" aria-valuemax="100"><span id="', uuid, '-splitbtn" class="', this.$s('splitter-button'));
 		if (!this._collapsible || !this._closable)
 			out.push(' ', this.$s('splitter-button-disabled'));
-		out.push('">',
+		out.push('" aria-hidden="true">',
 			'<i class="', icon, doticon, '"></i>',
 			'<i class="', icon, ' ', splitIcon, '"></i>',
 			'<i class="', icon, doticon, '"></i>',
 			'</span></div>', '<div id="', uuid, '-colled" class="',
 				this.$s('collapsed'), '" style="display:none"');
 		if (title = this._title) out.push(' title="', title, '"');
-		out.push('><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
+		out.push(' role="button" tabindex="0" aria-expanded="false"><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
 		if (!this._collapsible || !this._closable)
 			out.push(' style="display:none;"');
 		out.push('></i><div id="', this.uuid, '-title" class="', this.$s('title'), '">', this._title, '</div></div>');

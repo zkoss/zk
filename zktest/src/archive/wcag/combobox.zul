@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Combobox"?>
+<?root-attributes lang="en"?>
+<!--
+combobox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jun 11 10:28:31 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Combobox</n:h1>
+	</n:header>
+	<n:main>
+		<combobox readonly="true" ca:aria-label="combobox 1">
+			<comboitem label="Simple and Rich"/>
+			<comboitem label="Cool!"/>
+			<comboitem label="Ajax and RIA"/>
+		</combobox>
+		<combobox disabled="true" ca:aria-label="combobox 2">
+			<comboitem label="Simple and Rich"/>
+			<comboitem label="Cool!"/>
+			<comboitem label="Ajax and RIA"/>
+		</combobox>
+		<combobox ca:aria-label="combobox 3">
+			<comboitem label="Simple and Rich"
+					   image="/img/live.gif"
+					   description="The simplest way to make Web applications rich" />
+			<comboitem label="Cool!"
+					   iconSclass="z-icon-home"
+					   description="The coolest technology" />
+			<comboitem label="Ajax and RIA"
+					   image="/img/live.gif"
+					   iconSclass="z-icon-home"
+					   description="Rich Internet Application by Ajax" />
+		</combobox>
+	</n:main>
+</zk>

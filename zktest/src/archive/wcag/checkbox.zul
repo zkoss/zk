@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Checkbox"?>
+<?root-attributes lang="en"?>
+<!--
+checkbox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 25 14:18:15 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Checkbox</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-checkbox>input:focus {
+				border: 1px solid red;
+			}
+		</style>
+		<checkbox label="Home"/>
+		<checkbox iconSclass="z-icon-home" ca:aria-label="Home"/>
+		
+		<separator/>
+		<checkbox label="Home" checked="true"/>
+		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" checked="true"/>
+		
+		<separator/>
+		<checkbox label="Home" disabled="true"/>
+		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" disabled="true"/>
+		
+<!--		<separator/>-->
+<!--		<checkbox label="Home" mold="toggle"/>-->
+<!--		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="toggle"/>-->
+<!--		-->
+<!--		<separator/>-->
+<!--		<checkbox label="Home" mold="toggle" checked="true"/>-->
+<!--		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="toggle" checked="true"/>-->
+<!--		-->
+<!--		<separator/>-->
+<!--		<checkbox label="Home" mold="toggle" disabled="true"/>-->
+<!--		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="toggle" disabled="true"/>-->
+<!--		-->
+<!--		<separator/>-->
+<!--		<checkbox label="Home" mold="switch"/>-->
+<!--		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="switch"/>-->
+<!--		-->
+<!--		<separator/>-->
+<!--		<checkbox label="Home" mold="switch" checked="true"/>-->
+<!--		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="switch" checked="true"/>-->
+<!--		-->
+<!--		<separator/>-->
+<!--		<checkbox label="Home" mold="switch" disabled="true"/>-->
+<!--		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="switch" disabled="true"/>-->
+		
+		<separator/>
+		<checkbox label="Home" mold="tristate"/>
+		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="tristate"/>
+		
+		<separator/>
+		<checkbox label="Home" mold="tristate" checked="true"/>
+		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="tristate" checked="true"/>
+		
+		<separator/>
+		<checkbox label="Home" mold="tristate" indeterminate="true"/>
+		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="tristate" indeterminate="true"/>
+		
+		<separator/>
+		<checkbox label="Home" mold="tristate" disabled="true"/>
+		<checkbox iconSclass="z-icon-home" ca:aria-label="Home" mold="tristate" disabled="true"/>
+		
+		<separator/>
+		<n:span id="lb1">Sandwich Condiments</n:span>
+		<separator/>
+		<checkbox ca:aria-label="organic romaine lettuce" ca:aria-describedby="lb1 lb2"/>
+		<checkbox label="organic romaine lettuce" ca:aria-describedby="lb1 lb2"/>
+		<separator/>
+		<n:span id="lb2">The best available organic romaine lettuce grown locally.</n:span>
+	</n:main>
+</zk>

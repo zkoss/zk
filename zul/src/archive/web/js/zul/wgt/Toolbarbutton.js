@@ -259,14 +259,13 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		this.$supers(zul.wgt.Toolbarbutton, 'unbind_', arguments);
 	},
 	domContent_: function () {
-		var label = zUtl.encodeXML(this.getLabel()), img = this.getImage(),
+		var label = zUtl.encodeXML(this.getLabel()), img = this.domImage_(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass)
 			return label;
 
 		if (!img) img = iconSclass;
-		else img = '<img src="' + img + '" align="absmiddle" />'
-					+ (iconSclass ? ' ' + iconSclass : '');
+		else img += (iconSclass ? ' ' + iconSclass : '');
 		// B50-ZK-640: toolbarbutton with no label will display larger width blur box
 		var space = label ? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;

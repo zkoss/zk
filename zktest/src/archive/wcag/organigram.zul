@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Organigram"?>
+<?root-attributes lang="en"?>
+<!--
+organigram.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 16 11:38:03 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Organigram</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-orgitem:focus >.z-orgnode {
+				border: 1px solid red;
+			}
+		</style>
+		<label multiline="true">
+			test keyboard navigation inside organigram, each visible orgitem is focusable, disabled=true/selectable=false items should not able to select.
+				tab to focus on the visible selected item, otherwise focus on the first visible item(root).
+				arrow key to move focus or open/close current item.
+				enter/space to select or open/close current item.
+		</label>
+		<organigram id="organigram1" ca:aria-label="org">
+			<orgchildren>
+				<orgitem label="item1">
+					<orgchildren>
+						<orgitem label="item2" disabled="true"/>
+						<orgitem label="item3">
+							<orgchildren>
+								<orgitem label="item5(not selectable)" selectable="false"/>
+								<orgitem>
+									<orgnode label="item6" image="/img/live.gif" iconSclass="z-icon-home"/>
+								</orgitem>
+								<orgitem label="item7" selected="true">
+									<orgchildren>
+										<orgitem>
+											<orgnode label="item10"/>
+										</orgitem>
+										<orgitem label="item11"/>
+									</orgchildren>
+								</orgitem>
+							</orgchildren>
+						</orgitem>
+						<orgitem label="item4(not selectable)" selectable="false" open="false">
+							<orgchildren>
+								<orgitem label="item8"/>
+								<orgitem label="item9" disabled="true" open="false">
+									<orgchildren>
+										<orgitem label="item12"/>
+									</orgchildren>
+								</orgitem>
+							</orgchildren>
+						</orgitem>
+					</orgchildren>
+				</orgitem>
+			</orgchildren>
+		</organigram>
+		<separator bar="true"/>
+		<organigram id="organigram2">
+			<orgchildren>
+				<orgitem label="item0" disabled="true"/>
+				<orgitem label="item1">
+					<orgchildren>
+						<orgitem label="item3">
+							<orgchildren>
+								<orgitem label="item5(not selectable)" selectable="false"/>
+								<orgitem>
+									<orgnode label="item6" image="/img/live.gif" iconSclass="z-icon-home"/>
+								</orgitem>
+								<orgitem label="item7" disabled="true">
+									<orgchildren>
+										<orgitem label="item10"/>
+										<orgitem label="item11"/>
+									</orgchildren>
+								</orgitem>
+							</orgchildren>
+						</orgitem>
+						<orgitem label="item4(not selectable)" selectable="false" open="false">
+							<orgchildren>
+								<orgitem label="item8"/>
+								<orgitem label="item9" open="false">
+									<orgchildren>
+										<orgitem label="item12"/>
+									</orgchildren>
+								</orgitem>
+							</orgchildren>
+						</orgitem>
+					</orgchildren>
+				</orgitem>
+				<orgitem label="item2"/>
+			</orgchildren>
+		</organigram>
+	</n:main>
+</zk>

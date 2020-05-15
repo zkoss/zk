@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Bandbox"?>
+<?root-attributes lang="en"?>
+<!--
+bandbox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jun 11 10:27:50 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Bandbox</n:h1>
+	</n:header>
+	<n:main>
+		<bandbox ca:aria-label="bandbox 1">
+			<bandpopup ca:aria-label="bandpopup 1">
+				<textbox ca:aria-label="textbox"/>
+				<separator/>
+				<button label="btn"/>
+			</bandpopup>
+		</bandbox>
+		<bandbox disabled="true" ca:aria-label="bandbox 2">
+			<bandpopup ca:aria-label="bandpopup 2">
+				hello!
+			</bandpopup>
+		</bandbox>
+		<bandbox readonly="true" ca:aria-label="bandbox 3" value="hi">
+			<bandpopup ca:aria-label="bandpopup 3">
+				hello!
+			</bandpopup>
+		</bandbox>
+	</n:main>
+</zk>
