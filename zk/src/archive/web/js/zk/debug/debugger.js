@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 
-zk.loadCSS(zk.ajaxURI('web/js/zk/debug/debugger.css.dsp', {au: true}));
+zk.loadCSS(zk.ajaxURI('web/js/zk/debug/debugger.css.dsp', {resource: true}));
 
 function _space(deep) {
 	var out = [];

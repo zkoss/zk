@@ -98,15 +98,29 @@ public class WebManager {
 	private final ServletContext _ctx;
 	private final WebApp _wapp;
 	private String _updateURI;
+	private String _resourceURI;
 	private final ClassWebResource _cwr;
 
-	/** Creates the Web manager. It is singleton in a Web application
+	/**
+	 * Creates the Web manager. It is singleton in a Web application
 	 * and it is created automatically by {@link DHtmlLayoutServlet},
 	 * so you rarely need to create it manually.
 	 * @since 3.6.0
 	 */
-	@SuppressWarnings("deprecation")
 	public WebManager(ServletContext ctx, String updateURI) {
+		this(ctx, updateURI, updateURI);
+	}
+	/**
+	 * Creates the Web manager. It is singleton in a Web application
+	 * and it is created automatically by {@link DHtmlLayoutServlet},
+	 * so you rarely need to create it manually.
+	 * @param ctx the servlet context
+	 * @param updateURI the URI for asynchronous update
+	 * @param resourceURI the URI for ZK resource.
+	 * @since 9.1.0
+	 */
+	@SuppressWarnings("deprecation")
+	public WebManager(ServletContext ctx, String updateURI, String resourceURI) {
 		if (log.isDebugEnabled())
 			log.debug("Starting WebManager at " + ctx);
 
@@ -120,6 +134,7 @@ public class WebManager {
 
 		_ctx = ctx;
 		_updateURI = updateURI;
+		_resourceURI = resourceURI;
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		Servlets.setClientIdentifier(new ClientIdentifier());
@@ -194,7 +209,7 @@ public class WebManager {
 
 		//after zk.xml is loaded since it depends on the configuration
 		Classes.configureContextClassLoader();
-		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
+		_cwr = ClassWebResource.getInstance(_ctx, _resourceURI);
 		_cwr.setCompress(new String[] { "js", "css", "html", "xml" });
 		String s = Library.getProperty("org.zkoss.web.util.resource.dir");
 		if (s != null && s.length() > 0) {
@@ -324,6 +339,17 @@ public class WebManager {
 		return _updateURI;
 	}
 
+	/** Returns the URI for ZK resource
+	 * <p>Notice that the returned URI is not encoded, i.e., it doesn't
+	 * proceed with the servlet context prefix.
+	 * @see Desktop#getResourceURI
+	 * @see WebApp#getResourceURI
+	 * @since 9.1.0
+	 */
+	public String getResourceURI() {
+		return _resourceURI;
+	}
+
 	/** Returns the Web application.
 	 * Notice: a Web application is allocated for each servlet.
 	 */
@@ -352,7 +378,16 @@ public class WebManager {
 	 */
 	/*package*/ void setUpdateUri(String updateURI) {
 		_updateURI = updateURI;
-		_cwr.setMappingURI(updateURI);
+	}
+
+	/** Called by DHtmlLayoutServlet#init when WebManager is created
+	 * by HttpSessionListener#contextInitialized
+	 *
+	 * @param resourceURI the URI for ZK resource.
+	 */
+	/*package*/ void setResourceUri(String resourceURI) {
+		_resourceURI = resourceURI;
+		_cwr.setMappingURI(resourceURI);
 	}
 
 	//-- static --//
@@ -494,7 +529,7 @@ public class WebManager {
 		ExecutionsCtrl.setCurrent(de);
 		try {
 			Desktop desktop = ((WebAppCtrl) _wapp).getUiFactory()
-					.newDesktop(new RequestInfoImpl(_wapp, sess, null, request, loc), _updateURI, path);
+					.newDesktop(new RequestInfoImpl(_wapp, sess, null, request, loc), _updateURI, _resourceURI, path);
 			return !de.isVoided() ? desktop : null;
 		} finally {
 			ExecutionsCtrl.setCurrent(exec);

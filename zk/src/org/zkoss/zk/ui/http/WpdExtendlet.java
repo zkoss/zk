@@ -713,8 +713,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			sb.append("},");
 		}
 
-		removeLast(sb, ',');
-
+		//ZK-4564
+		sb.append("resURI:'").append(WebManager.getWebManager(ctx).getResourceURI()).append("'");
 		sb.append("});");
 		write(out, sb.toString());
 		if (sourceMapManager != null)
@@ -781,7 +781,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			sb.append(uri);
 			removeLast(sb, '/');
 		}
-		return sb.append("','").append(wapp.getUpdateURI(false)).append("',").append(clientPackages).append(");")
+		return sb.append("','").append(wapp.getResourceURI(false)).append("',").append(clientPackages).append(");")
 				.toString();
 	}
 

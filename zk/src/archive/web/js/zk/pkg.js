@@ -148,8 +148,7 @@ zk.load('zul.utl', function () {
 
 		markLoading(pkg);
 
-		var modver = zk.getVersion(pkg) || zk.build,
-			e = document.createElement('script'),
+		var e = document.createElement('script'),
 			uri = pkg + '.wpd',
 			host = zk.getHost(pkg, true);
 		e.type = 'text/javascript';
@@ -158,12 +157,8 @@ zk.load('zul.utl', function () {
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 
 		if (host) uri = host + '/web/js' + uri;
-		else {
-			if (modver) uri = '/web/_zv' + modver + '/js' + uri;
-			else uri = '/web/js' + uri;
-			uri = zk.ajaxURI(uri, {desktop: dt,au: true});
-		}
-
+		else
+			uri = zk.ajaxResourceURI('/js' + uri, zk.getVersion(pkg));
 		e.src = uri;
 		jq.head().appendChild(e);
 		return false;
@@ -327,26 +322,26 @@ zk.afterLoad(function() {});
 	},
 	/** Defines the URL of the host for serving the specified packages.
 	 * @param String host the host, such as http://www.zkoss.org.
-	 * @param String updURI the update URI, such as /zkdemo/zkau,
+	 * @param String resURI the resource URI, such as /zkdemo/zkau,
 	 * that is used to load the JavaScript files
 	 * @param Array pkgs an array of pckage names (String)
 	 * @see #getHost
 	 */
-	setHost: function (host, updURI, pkgs) {
-		var hostUpd = host + updURI;
+	setHost: function (host, resURI, pkgs) {
+		var hostRes = host + resURI;
 		if (!_defhost.length)
 			for (var scs = document.getElementsByTagName('script'), j = 0, len = scs.length;
 			j < len; ++j) {
 				var src = scs[j].src;
 				if (src)
 					if (src.startsWith(host)) {
-						_defhost = [host, hostUpd];
+						_defhost = [host, hostRes];
 						break;
 					} else if (src.indexOf('/zk.wpd') >= 0)
 						break;
 			}
 		for (var j = 0; j < pkgs.length; ++j)
-			_pkghosts[pkgs[j]] = [host, hostUpd];
+			_pkghosts[pkgs[j]] = [host, hostRes];
 	}
   };
 })());

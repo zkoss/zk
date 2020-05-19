@@ -340,4 +340,11 @@ public interface Desktop extends Scope {
 	 * @since 8.5.0
 	 */
 	public void replaceHistoryState(Object state, String title, String url);
+
+	/**
+	 * Returns the URI for ZK resource.
+	 * @param pathInfo the path to append to the returned URI, or null to ignore
+	 * @since 9.1.0
+	 */
+	public String getResourceURI(String pathInfo);
 }

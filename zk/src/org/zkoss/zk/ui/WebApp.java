@@ -221,4 +221,23 @@ public interface WebApp extends Scope, Locator {
 	 * @since 6.0.0
 	 */
 	public void log(String msg, Throwable ex);
+
+	/**
+	 * Returns the URI for ZK resource.
+	 * <p>Both {@link #getResourceURI} and {@link Desktop#getResourceURI} are encoded with {@link Execution#encodeURL}
+	 * @see Desktop#getResourceURI
+	 * @exception NullPointerException if the current execution is not available
+	 * @since 9.1.0
+	 */
+	public String getResourceURI();
+
+	/**
+	 * Returns the URI for ZK resource that can be encoded or not.
+	 * @param encode whether to encode with {@link Execution#encodeURL}.
+	 * It is the same as {@link #getResourceURI()} if <code>encode</code> is true.
+	 * @since 9.1.0
+	 * @exception NullPointerException if the current execution is not available
+	 * and encode is true.
+	 */
+	public String getResourceURI(boolean encode);
 }

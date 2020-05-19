@@ -49,7 +49,7 @@
 		$init: function (uplder,  file) {
 			this._uplder = uplder;
 			var id = uplder.id,
-				uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au:true}),
+				uri = zk.ajaxURI('/web/zk/img/progress2.gif', {resource: true}),
 				html = '<div id="' + id + '" class="viewer"><image class="float-left" src="' + uri + '"/>'
 				+ '<div class="float-left">FileName: ' + file.name
 				+ ' <a id="' + id + '-cancel">Cancel</a></div><div class="float-right">'

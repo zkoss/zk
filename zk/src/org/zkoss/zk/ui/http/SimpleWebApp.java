@@ -126,6 +126,15 @@ public class SimpleWebApp extends AbstractWebApp {
 		return encode ? Executions.getCurrent().encodeURL(uri) : uri;
 	}
 
+	public String getResourceURI() {
+		return getResourceURI(true);
+	}
+
+	public String getResourceURI(boolean encode) {
+		final String uri = getWebManager().getResourceURI();
+		return encode ? Executions.getCurrent().encodeURL(uri) : uri;
+	}
+
 	private WebManager getWebManager() {
 		return WebManager.getWebManager(this);
 	}

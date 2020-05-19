@@ -153,6 +153,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private final String _qs;
 	/** The URI to access the update engine. */
 	private final String _updateURI;
+	/** The URI to access the resource engine. */
+	private final String _resourceURI;
 	/** List<Page>. */
 	private final List<Page> _pages = new LinkedList<Page>();
 	/** Map (String uuid, Component comp). */
@@ -232,7 +234,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * If null or empty is specified, "ajax" is assumed.
 	 * @since 3.0.1
 	 */
-	public DesktopImpl(WebApp wapp, String updateURI, String path, String deviceType, Object request) {
+	public DesktopImpl(WebApp wapp, String updateURI, String resourceURI, String path, String deviceType, Object request) {
 		if (updateURI == null || wapp == null)
 			throw new IllegalArgumentException("null");
 
@@ -244,6 +246,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		_wapp = wapp;
 		_updateURI = updateURI;
+		_resourceURI = resourceURI;
 		init();
 		_sess = Sessions.getCurrent(); //must be the current session
 
@@ -439,6 +442,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			if (pathInfo.charAt(0) != '/')
 				pathInfo = '/' + pathInfo;
 			uri = _updateURI + pathInfo;
+		}
+		return _exec.encodeURL(uri);
+	}
+
+	public String getResourceURI(String pathInfo) {
+		final String uri;
+		if (pathInfo == null || pathInfo.length() == 0) {
+			uri = _resourceURI;
+		} else {
+			if (pathInfo.charAt(0) != '/')
+				pathInfo = '/' + pathInfo;
+			uri = _resourceURI + pathInfo;
 		}
 		return _exec.encodeURL(uri);
 	}

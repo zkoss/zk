@@ -96,10 +96,11 @@ public interface UiFactory {
 	 * @param updateURI the URI that is used as the base to generate
 	 * URI for asynchronous updates. In other words, it is used to
 	 * implement {@link Desktop#getUpdateURI}
+	 * @param resourceURI the URI that is used to get ZK resource
 	 * @param path the path to request this desktop, such as "/test/test.zul",
 	 * or null if it is caused by a filter.
 	 */
-	public Desktop newDesktop(RequestInfo ri, String updateURI, String path);
+	public Desktop newDesktop(RequestInfo ri, String updateURI, String resourceURI, String path);
 
 	/** Creates an instance of {@link Page} for the specified page definition.
 	 *

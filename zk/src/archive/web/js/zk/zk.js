@@ -1232,9 +1232,10 @@ zk.log('value is", value);
 	 * Example:
 <pre><code>document.createElement("script").src = zk.ajaxURI('/web/js/com/foo/mine.js',{au:true});</code></pre>
 	 * @param String uri - the URI related to the AU engine. If null, the base URI is returned.
-	 * @param Map opts [optinal] the options. Allowed values:<br/>
+	 * @param Map opts [optional] the options. Allowed values:<br/>
 	 * <ul>
 	 * <li>au - whether to generate an URI for accessing the ZK update engine. If not specified, it is used to generate an URL to access any servlet</li>
+	 * <li>resource - whether to generate an URI for accessing the ZK resource engine. If not specified, it is used to generate an URL to access any servlet</li>
 	 * <li>desktop - the desktop or its ID. If null, the first desktop is used.</li>
 	 * <li>ignoreSession - whether to handle the session ID in the base URI.</li>
 	 * </ul>
@@ -1242,8 +1243,18 @@ zk.log('value is", value);
 	 */
 	ajaxURI: function (uri, opts) {
 		var ctx = zk.Desktop.$(opts ? opts.desktop : null),
-			au = opts && opts.au;
-		ctx = (ctx ? ctx : zk)[au ? 'updateURI' : 'contextURI'];
+			au = opts && opts.au,
+			res = opts && opts.resource;
+
+		if (!ctx) ctx = zk;
+
+		if (au) {
+			ctx = ctx['updateURI'];
+		} else if (res) {
+			ctx = ctx['resourceURI'];
+		} else
+			ctx = ctx['contextURI'];
+
 		uri = uri || '';
 
 		var abs = uri.charAt(0) == '/';
@@ -1277,13 +1288,24 @@ zk.log('value is", value);
 	 *
 	 * @param String uri the resource URI.
 	 * @param String version [optional] the version string to build the cache-friendly URI. If none is set, use zk.build by default.
+	 * @param Map opts [optional] the options. Allowed values:<br/>
+	 * <ul>
+	 * <li>au - whether to generate an URI for accessing the ZK update engine. If not specified, it is used to generate an URL to access any servlet</li>
+	 * <li>desktop - the desktop or its ID. If null, the first desktop is used.</li>
+	 * <li>ignoreSession - whether to handle the session ID in the base URI.</li>
+	 * </ul>
 	 * @return String the encoded resource URI
 	 * @since 9.0.0
 	 */
-	resourceURI: function (uri, version) {
+	ajaxResourceURI: function (uri, version, opts) {
 		if (uri.charAt(0) != '/')
 			uri = '/' + uri;
-		return zk.ajaxURI('/web/_zv' + (version || zk.build) + uri, {au: true});
+		opts = opts || {};
+		opts['resource'] = true;
+		version = version || zk.build
+		if (version) uri = '/web/_zv' + version + uri;
+		else uri = '/web' + uri;
+		return zk.ajaxURI(uri, opts);
 	},
 	/** Declares the desktop is used for the stateless context.
 	 * By stateless we mean the server doesn't maintain any widget at all.
@@ -1293,13 +1315,15 @@ zk.log('value is", value);
 	 * @param String reqURI the URI of the request path.
 	 * @return Desktop the stateless desktop being created
 	 */
-	stateless: function (dtid, contextURI, updateURI, reqURI) {
+	stateless: function (dtid, contextURI, updateURI, resourceURI, reqURI) {
 		var Desktop = zk.Desktop, dt;
 		dtid = dtid || ('z_auto' + _statelesscnt++);
 		dt = Desktop.all[dtid];
 		if (dt && !dt.stateless) throw 'Desktop conflict';
 		if (zk.updateURI == null)
 			zk.updateURI = updateURI;
+		if (zk.resourceURI == null)
+			zk.resourceURI = resourceURI;
 		if (zk.contextURI == null) //it might be ""
 			zk.contextURI = contextURI;
 		return dt || new Desktop(dtid, contextURI, updateURI, reqURI, true);
