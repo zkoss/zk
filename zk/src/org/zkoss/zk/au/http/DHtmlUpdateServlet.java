@@ -32,7 +32,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -396,45 +395,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
-		//		if (log.finerable()) log.finer("Path info: "+pi);
-
 		final ServletContext ctx = getServletContext();
-		final boolean withpi = pi != null && pi.length() != 0 && !(pi.startsWith("/_/") || "/_".equals(pi));
-		if (withpi && pi.startsWith(ClassWebResource.PATH_PREFIX)) {
-			//use HttpSession to avoid loading SerializableSession in GAE
-			//and don't retrieve session if possible
-			final ClassWebResource cwr = getClassWebResource();
-			final HttpSession hsess = shallSession(cwr, pi) ? request.getSession(false) : null;
-			Object oldsess = null;
-			if (hsess == null) {
-				oldsess = SessionsCtrl.getRawCurrent();
-				SessionsCtrl.setCurrent(new SessionResolverImpl(ctx, request));
-				//it might be created later
-			}
-
-			WebApp wapp;
-			Session sess;
-			final Object old = hsess != null
-					? (wapp = WebManager.getWebAppIfAny(ctx)) != null
-							&& (sess = SessionsCtrl.getSession(wapp, hsess)) != null
-									? I18Ns.setup(sess, request, response, "UTF-8")
-									: I18Ns.setup(hsess, request, response, "UTF-8")
-					: Charsets.setup(null, request, response, "UTF-8");
-			try {
-				cwr.service(request, response, pi.substring(ClassWebResource.PATH_PREFIX.length()));
-			} finally {
-				if (hsess != null)
-					I18Ns.cleanup(request, old);
-				else {
-					Charsets.cleanup(request, old);
-					SessionsCtrl.setRawCurrent(oldsess);
-				}
-			}
-			return; //done
-		}
-
+		if (DHtmlResourceServlet.doGet0(request, response, ctx, getClassWebResource()))
+			return;
 		final Session sess = WebManager.getSession(ctx, request, false);
-		if (withpi) {
+		if (pi != null && pi.length() != 0 && !(pi.startsWith("/_/") || "/_".equals(pi))) {
 			final AuExtension aue = getAuExtensionByPath(pi);
 			if (aue == null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -493,11 +458,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
-	}
-
-	private static boolean shallSession(ClassWebResource cwr, String pi) {
-		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null || (pi != null && pi.indexOf('*') >= 0);
-		//Optimize the access of static resources (for GAE)
 	}
 
 	/**

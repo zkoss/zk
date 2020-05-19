@@ -5145,7 +5145,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	 * @param boolean stateless whether this desktop is used for a stateless page.
 	 * Specify true if you want to use <a href="http://books.zkoss.org/wiki/Small_Talks/2009/July/ZK_5.0_and_Client-centric_Approach">the client-centric approach</a>.
 	 */
-	$init: function (dtid, contextURI, updateURI, reqURI, stateless) {
+	$init: function (dtid, contextURI, updateURI, resourceURI, reqURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
 		var Desktop = zk.Desktop, dts = Desktop.all, dt;
@@ -5159,6 +5159,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		} else {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI != null ? updateURI : zk.updateURI;
+			this.resourceURI = resourceURI != null ? resourceURI : zk.resourceURI;
 			this.contextURI = contextURI != null ? contextURI : zk.contextURI;
 			this.requestPath = reqURI || '';
 			this.stateless = stateless;
@@ -6051,6 +6052,7 @@ function zkopt(opts) {
 		case 'ppos': zk.progPos = val; break;
 		case 'hs': zk.historystate.enabled = val; break;
 		case 'eup': zAu.setPushErrorURI(val);
+		case 'resURI': zk.resourceURI = val;
 		}
 	}
 }

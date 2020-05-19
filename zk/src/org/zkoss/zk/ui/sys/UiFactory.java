@@ -101,6 +101,23 @@ public interface UiFactory {
 	 */
 	public Desktop newDesktop(RequestInfo ri, String updateURI, String path);
 
+	/** Creates an instance of {@link Desktop}.
+	 *
+	 * <p>Note: the returned instance must also implement {@link DesktopCtrl}.
+	 *
+	 * @param ri the additional request information.
+	 * @param updateURI the URI that is used as the base to generate
+	 * URI for asynchronous updates. In other words, it is used to
+	 * implement {@link Desktop#getUpdateURI}
+	 * @param resourceURI the URI that is used to get ZK resource
+	 * @param path the path to request this desktop, such as "/test/test.zul",
+	 * or null if it is caused by a filter.
+	 * @since 9.2.0
+	 */
+	public default Desktop newDesktop(RequestInfo ri, String updateURI, String resourceURI, String path) {
+		return newDesktop(ri, updateURI, path);
+	}
+
 	/** Creates an instance of {@link Page} for the specified page definition.
 	 *
 	 * <p>Note: the returned instance must also implement {@link PageCtrl}.

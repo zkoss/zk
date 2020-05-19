@@ -32,8 +32,10 @@ import org.zkoss.zk.ui.impl.DesktopImpl;
 
 	/*package*/ static CCExecution newInstance(WebApp wapp) {
 		final ServletContext ctx = wapp.getServletContext();
-		final String updateURI = WebManager.getWebManager(ctx).getUpdateURI();
-		return new CCExecution(ctx, new DesktopImpl(wapp, updateURI, "/", null, null));
+		WebManager webm = WebManager.getWebManager(ctx);
+		final String updateURI = webm.getUpdateURI();
+		final String resourceURI = webm.getResourceURI();
+		return new CCExecution(ctx, new DesktopImpl(wapp, updateURI, resourceURI, "/", null, null));
 	}
 
 	private CCExecution(ServletContext ctx, Desktop desktop) {

@@ -47,7 +47,7 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 			wgt = uplder.getWidget(),
 			uploaded = wgt.$f('uploaded'),
 			max = wgt.$o().max || 0, //max is stored in FileuploadDlg (i.e., $o())
-			uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au: true}),
+			uri = zk.ajaxURI('/web/zk/img/progress2.gif', {resource: true}),
 			html = '<div id="' + id + '" style="min-height:16px;background:#F4F8FF;border: 1px solid #99AABD;font-family:'
 			+ 'arial,sans-serif;font-size: 11px;padding: 2px;'
 			+ 'color: #0F3B82;"><img style="float: left;" src="' + uri + '"/>'
@@ -91,7 +91,7 @@ zul.fud.ModalFileViewer = zk.$extends(zk.Object, {
 		if (!finish) jq(this.viewer).remove();
 		else {
 			jq('#' + this._uplder.id + '-sent').parent().remove();
-			jq('#' + this._uplder.id)[0].firstChild.src = zk.ajaxURI('/web/zk/img/attachment.gif', {au: true});
+			jq('#' + this._uplder.id)[0].firstChild.src = zk.ajaxURI('/web/zk/img/attachment.gif', {resource: true});
 		}
 	}
 });
