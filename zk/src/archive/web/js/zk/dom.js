@@ -453,6 +453,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		}
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
+		if (sel == '#') sel = ''; //ZK-4565, '#' is not allowed in jquery 3.5.0
 		var ret = _jq.init.apply(this, arguments);
 		ret.zk = new zjq(ret);
 		return ret;

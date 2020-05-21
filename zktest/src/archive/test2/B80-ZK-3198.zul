@@ -21,7 +21,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
     </div>
     <button label="click me">
         <attribute w:name="onClick"><![CDATA[
-			var t = jq('.z-treecell-text:contains("test99")').size();
+			var t = jq('.z-treecell-text:contains("test99")').length;
 			zk.log(t);
 		]]></attribute>
     </button>

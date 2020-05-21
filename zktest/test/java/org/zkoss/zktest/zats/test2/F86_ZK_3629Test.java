@@ -50,7 +50,7 @@ public class F86_ZK_3629Test extends WebDriverTestCase {
 		click(jq("$setFalse"));
 		waitResponse();
 		Assert.assertFalse(pm2.hasClass(indeterminateClass));
-		Assert.assertEquals(50, pm2.children(".z-progressmeter-image").width());
+		Assert.assertEquals(50, pm2.children(".z-progressmeter-image").width(), 1);
 		
 		click(isbtn);
 		waitResponse();

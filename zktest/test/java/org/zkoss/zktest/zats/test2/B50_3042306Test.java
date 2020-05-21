@@ -37,6 +37,6 @@ public class B50_3042306Test extends WebDriverTestCase {
 		waitResponse();
 
 		Assert.assertEquals(jq("body").width(), jq("@div").width(), 2);
-		Assert.assertEquals(jq("body").height(), jq("@div").height() + jq("@div").positionTop(), 2);
+		Assert.assertEquals(jq("body").height(), jq("@div").height() + jq("@div").offsetTop(), 2);
 	}
 }

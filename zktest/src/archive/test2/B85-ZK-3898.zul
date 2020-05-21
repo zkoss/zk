@@ -33,7 +33,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
     <script><![CDATA[
     function checkPopupParent() {
         var popup = jq('@menupopup:contains("Option 2")');
-        if (popup.size()) {
+        if (popup.length) {
             var parentClass = popup.parent()[0].className;
             zk.log('The parent of Popup(Option 2) is "' + parentClass + '."');
         } else {

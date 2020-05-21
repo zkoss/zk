@@ -11,6 +11,7 @@ ZK 9.1.0
   ZK-4569: MVVM support calling commands in other view model
   ZK-4175: replace XHR with the fetch() API to allow SSO redirect handling
   ZK-4544: Radio/Checkbox provide a status class name for more easier theme customization
+  ZK-4565: Upgrade jQuery version to 3.5.1
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
@@ -34,6 +35,7 @@ ZK 9.1.0
   + Due to ZK-4569, there is syntax sugar for calling commands in other viewmodel. 
     E.g. @command('$pvm.doClick') would trigger the 'doClick' command in the viewModel whose id is 'pvm'.
   + zAu.onError API was changed since we are using fetch() API instead XHR.
+  + jQuery is upgraded from 1.12.4 to 3.5.1, please refer to the upgrade guides https://jquery.com/upgrade-guide/3.0/ and https://jquery.com/upgrade-guide/3.5/ .
 
    --------
 ZK 9.0.1.2

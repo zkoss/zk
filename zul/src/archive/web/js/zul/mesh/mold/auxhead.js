@@ -18,6 +18,6 @@ function (out) {
 		w.redraw(out);
 	var mesh = this.getMeshWidget();
 	if (mesh && mesh._nativebar)
-		out.push('<th class="', this.$s('bar'), '" />');
+		out.push('<th class="', this.$s('bar'), '" ></th>');
 	out.push('</tr>');
 }

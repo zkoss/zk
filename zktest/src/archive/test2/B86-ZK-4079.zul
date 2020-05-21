@@ -19,10 +19,13 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 			pm.setValue(0);
 			var id = setInterval(function() {
 				var newValue = pm.getValue() + (100 / steps);
-				if(newValue > 100) {
+				if (newValue > 100) {
 					clearInterval(id);
-					alert('100% and the bar width is: ' + jq('.z-progressmeter-image').width());
-					return;
+					zk.afterAnimate(function () {
+						alert('100% and the bar width is: ' + jq('.z-progressmeter-image').width());
+						return;
+					});
+					newValue = 100;
 				}
 				console.log('progress: ' + newValue + '%');
 				jq('$lb')[0].innerHTML = newValue;
