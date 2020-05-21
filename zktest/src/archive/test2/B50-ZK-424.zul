@@ -32,7 +32,7 @@ You should see "111" at the bottom of the inputbox, rather than "333"
 </n:div>
 <label id="msg"/>
 <script>
-zk.afterMount(function(){ jq("$msg").html("" +jq("#hi $textbox1").size() + jq("#hi2 $textbox1").size() + jq("#hi3 $textbox1").size()); });
+zk.afterMount(function(){ jq("$msg").html("" +jq("#hi $textbox1").length + jq("#hi2 $textbox1").length + jq("#hi3 $textbox1").length); });
 </script>
 
 </zk>

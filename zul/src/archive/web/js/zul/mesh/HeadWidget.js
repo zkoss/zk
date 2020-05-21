@@ -215,7 +215,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 					if (!$faker.find(child.$n(faker)).length) {
 						var wd = _getWidth(child, child._hflexWidth ? child._hflexWidth + 'px' : child.getWidth());
 						wd = wd ? 'width:' + wd + ';' : '';
-						var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + '"/>',
+						var html = '<col id="' + child.uuid + '-' + faker + '" style="' + wd + '"></col>',
 							index = child.getChildIndex();
 						// B30-1926480: child can be added after any brother node
 						if (index > 0)
@@ -232,8 +232,8 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 					if ((faker == 'hdfaker') && !bar && recoverFakerbar) {
 						if (!hdfakerbar)
-							jq(head.$n('hdfaker')).append('<col id="' + head.uuid + '-hdfaker-bar" style="' + hdfakerbarstyle + '" />');
-						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" />');
+							jq(head.$n('hdfaker')).append('<col id="' + head.uuid + '-hdfaker-bar" style="' + hdfakerbarstyle + '" ></col>');
+						jq(head).append('<th id="' + head.uuid + '-bar" class="' + head.$s('bar') + '" style="' + barstyle + '" ></th>');
 					}
 				}
 			}
@@ -394,7 +394,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 		var mesh = this.getMeshWidget();
 		if (mesh && mesh._nativebar)
-			out.push('<th id="', this.uuid, '-bar" class="', this.$s('bar'), '" />');
+			out.push('<th id="', this.uuid, '-bar" class="', this.$s('bar'), '" ></th>');
 		out.push('</tr>');
 	}
 });

@@ -31,7 +31,7 @@ function _createJQEvent (target, type, button, changedTouch, ofs) {
 		target = target.parentNode;
 	
 	var originalEvent = _createMouseEvent(type, button, changedTouch, ofs),
-		props = jq.event.props,
+		props = [], // ZK-4565, jq.event.props is removed in jquery 3.5.0
 		event = jq.Event(originalEvent);
 
 	//Add missing props removed by jQuery

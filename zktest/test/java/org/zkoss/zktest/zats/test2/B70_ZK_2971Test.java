@@ -81,7 +81,9 @@ public class B70_ZK_2971Test extends WebDriverTestCase {
 	}
 
 	private void testItemInViewport(JQuery lb, JQuery item) {
-		Assert.assertTrue(item.positionTop() >= 0);
-		Assert.assertTrue(item.positionTop() < lb.find(".z-listbox-body").height());
+		JQuery jqBody = lb.find(".z-listbox-body");
+		int itemTop = item.positionTop();
+		Assert.assertTrue(itemTop - jqBody.scrollTop() >= 0);
+		Assert.assertTrue(itemTop - jqBody.scrollTop() < jqBody.height());
 	}
 }

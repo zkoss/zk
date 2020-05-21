@@ -1417,10 +1417,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				visibility = w.isVisible() ? '' : 'visibility: collapse;';
 			// B70-ZK-2036: Style width should end with 'px'.
 			wd = wd != null ? 'width: ' + wd + ';' : '';
-			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visibility, '"/>');
+			out.push('<col id="', w.uuid, fakeId, '" style="', wd, visibility, '"></col>');
 		}
 		if (fakeId.indexOf('hd') > 0 || fakeId.indexOf('ft') > 0)
-			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" />');
+			out.push('<col id="', head.uuid, fakeId, '-bar" style="width: 0px" ></col>');
 		out.push('</colgroup>');
 	},
 

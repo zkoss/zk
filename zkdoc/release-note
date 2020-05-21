@@ -1,9 +1,11 @@
 ZK 9.1.0
 * Features
+  ZK-4565: Upgrade jQuery version to 3.5.1
 
 * Bugs
 
 * Upgrade Notes
+  + jQuery is upgraded from 1.12.4 to 3.5.1, please refer to the upgrade guides https://jquery.com/upgrade-guide/3.0/ and https://jquery.com/upgrade-guide/3.5/ .
 
 --------
 ZK 9.0.0.1

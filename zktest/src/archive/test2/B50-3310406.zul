@@ -15,7 +15,7 @@ var ss = {};
 zk.override(zul.wnd.Panel.prototype,ss,{
 onChildAdded_ : function(){
 ss.onChildAdded_.apply(this,arguments);
-zk.log("size:"+jq("@div").size());
+zk.log("size:"+jq("@div").length);
 }
 });
 });

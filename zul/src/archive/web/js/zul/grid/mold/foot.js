@@ -19,7 +19,7 @@ function (out) {
 	
 	var grid = this.getGrid();
 	if (grid._nativebar)
-		out.push('<td class="', this.$s('bar'), '" />');
+		out.push('<td class="', this.$s('bar'), '" ></td>');
 	
 	out.push('</tr>');
 }

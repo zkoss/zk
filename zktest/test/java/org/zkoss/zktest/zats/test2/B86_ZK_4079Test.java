@@ -24,7 +24,7 @@ public class B86_ZK_4079Test extends WebDriverTestCase {
 		connect();
 		click(jq("$low"));
 		waitResponse();
-		Assert.assertTrue(getBarWidth() == jq("$prog").width());
+		Assert.assertEquals(getBarWidth(), jq("$prog").width(), 1);
 		
 		click(jq("$reset"));
 		waitResponse();
@@ -41,11 +41,11 @@ public class B86_ZK_4079Test extends WebDriverTestCase {
 		Assert.assertTrue(getBarWidth() >= 800);
 	}
 	
-	private Integer getBarWidth() {
+	private Double getBarWidth() {
 		WebDriverWait wait = new WebDriverWait(driver, 7);
 		wait.until(ExpectedConditions.alertIsPresent());
 		Alert alert = driver.switchTo().alert();
-		Integer barWidth = Integer.valueOf(alert.getText().split(": ")[1]);
+		Double barWidth = Double.valueOf(alert.getText().split(": ")[1]);
 		System.out.println(barWidth);
 		alert.accept();
 		return barWidth;

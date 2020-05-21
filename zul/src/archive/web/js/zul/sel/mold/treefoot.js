@@ -19,7 +19,7 @@ function (out) {
 	
 	var tree = this.getTree();
 	if (tree._nativebar)
-		out.push('<td class="', this.$s('bar'), '" />');
+		out.push('<td class="', this.$s('bar'), '" ></td>');
 	
 	out.push('</tr>');
 }

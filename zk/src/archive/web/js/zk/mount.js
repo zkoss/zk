@@ -840,8 +840,7 @@ jq(function () {
 
 	jq(window).scroll(function () {
 		zWatch.fire('onScroll'); //notify all
-	})
-	.unload(function () {
+	}).on('unload', function () {
 		zk.unloading = true; //to disable error message
 
 		// B65-ZK-2051: Remove desktop if is IE.
