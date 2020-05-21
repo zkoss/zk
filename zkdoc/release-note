@@ -21,6 +21,7 @@ ZK 9.1.0
   ZK-4578: Performance issue since ZK 9 using css flex
   ZK-4581: Unexpected exception in Embedded ZK callback function
   ZK-4550: an inner tab disappears when using nested tabbox with different orients
+  ZK-4554: classloading issues with multiple war files (using shared zkbind-api.jar)
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
