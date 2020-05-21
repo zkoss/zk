@@ -22,6 +22,7 @@ ZK 9.1.0
   ZK-4581: Unexpected exception in Embedded ZK callback function
   ZK-4550: an inner tab disappears when using nested tabbox with different orients
   ZK-4554: classloading issues with multiple war files (using shared zkbind-api.jar)
+  ZK-4537: Chosenbox clear and add selected items cause js error
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.

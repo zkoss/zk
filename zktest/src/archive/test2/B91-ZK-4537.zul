@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B91-ZK-4537.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 19 09:44:48 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Click the C1 button, then click C2 button. You should not see any javaScript error.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B91_ZK_4537VM')" width="100%" height="100%">
+		<chosenbox model="@load(vm.testChoose)" width="500px"/>
+		<separator/>
+		<button onClick="@command('addC1')" label="C1"/>
+		<button onClick="@command('addC2')" label="C2"/>
+	</div>
+</zk>
