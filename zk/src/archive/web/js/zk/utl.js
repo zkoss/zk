@@ -318,7 +318,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
 	 * @type String
 	 */
-	i0: '<i style="height:0;width:0"/>',
+	i0: '<i style="height:0;width:0"></i>',
 
 	/** Returns a long value representing the current time (unit: miliseconds).
 	 * @return long

@@ -24,7 +24,7 @@ function (out) {
 	out.push(this.domAttrs_({id:true}));
 
 	if (src)
-		out.push('/>');
+		out.push('></style>');
 	else {
 		out.push('>');
 		if (v = this._content)

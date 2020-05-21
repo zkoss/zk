@@ -405,7 +405,7 @@ zk.copy(zjq.prototype, {
 			} else {
 				self.jq.hide();
 			}
-			if (aftfn) aftfn.call(wgt, self.jq.context);
+			if (aftfn) aftfn.call(wgt, self.jq[0]);
 			wgt.afterAnima_(visible);
 			setTimeout(function () {
 				_doAnique(wgt.uuid);

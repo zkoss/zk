@@ -70,7 +70,7 @@ function (out) {
 	if (this.treechildren)
 		this.treechildren.redraw(out);
 	else
-		out.push('<tbody id="', this.uuid, '-rows"/>');
+		out.push('<tbody id="', this.uuid, '-rows"></tbody>');
 	
 	out.push('</table>');
 
