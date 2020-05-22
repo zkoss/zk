@@ -12,6 +12,7 @@ ZK 9.1.0
   ZK-4175: replace XHR with the fetch() API to allow SSO redirect handling
   ZK-4544: Radio/Checkbox provide a status class name for more easier theme customization
   ZK-4565: Upgrade jQuery version to 3.5.1
+  ZK-4582: Simplify BindUtils.postNotifyChange API
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
