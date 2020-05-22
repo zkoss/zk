@@ -170,8 +170,8 @@ public abstract class WebDriverTestCase {
 				if (errCode == 404) {
 					fail("Error Code: " + errCode + ", from URL[" + loc + "]");
 				}
-				webDriver.get(loc);
 			}
+			webDriver.get(loc);
 		} else {
 			String loc = getAddress() + location;
 			int errCode = getStatusCode(loc);
