@@ -47,6 +47,18 @@ public class BindUtils {
 	}
 
 	/**
+	 * Post a notify change to default event queue to notify a bean's property changing
+	 * Omitting the queue name and scope for convenience
+	 * @param bean the bean instance
+	 * @param property the property name of bean
+	 * @see #postNotifyChange(String, String, Object, String)
+	 * @since 9.1.0
+	 */
+	public static void postNotifyChange(Object bean, String property) {
+		postNotifyChange(null, null, bean, property);
+	}
+
+	/**
 	 * Post a notify change to corresponding event queue to notify a bean's property changing
 	 * @param queueName the queue name, null for default queue name
 	 * @param queueScope the queue scope, null for default queue scope (i.e. {@link EventQueues#DESKTOP})
@@ -62,7 +74,19 @@ public class BindUtils {
 			que.publish(new PropertyChangeEvent(null, bean, property));
 		}
 	}
-	
+
+	/**
+	 * Post a notify change to default event queue to notify a bean's properties changing
+	 * Omitting the queue name and scope for convenience
+	 * @param bean the bean instance
+	 * @param properties the properties name of bean
+	 * @see #postNotifyChange(String, String, Object, String...)
+	 * @since 9.1.0
+	 */
+	public static void postNotifyChange(Object bean, String... properties) {
+		postNotifyChange(null, null, bean, properties);
+	}
+
 	/**
 	 * Post a notify change to corresponding event queue to notify a bean's properties changing
 	 * Accept multiple properties for convenience
