@@ -273,7 +273,7 @@ public class ParamCall {
 
 	public interface ParamResolver<T> {
 		/**
-		 * @deprecated since 9.1.0
+		 * @deprecated since 9.2.0
 		 * @see #resolveParameter(Object, Class, String)
 		 */
 		@Deprecated
@@ -281,7 +281,7 @@ public class ParamCall {
 			return null;
 		}
 		/**
-		 * @since 9.1.0
+		 * @since 9.2.0
 		 */
 		default Object resolveParameter(T anno, Class<?> returnType, String parameterName) {
 			return resolveParameter(anno, returnType);

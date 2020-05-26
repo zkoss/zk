@@ -1,4 +1,4 @@
-ZK 9.1.0
+ZK 9.2.0
 * Features
   ZK-4508: The value of @BindingParam can be omitted
   ZK-4501: Add SimpleForm back for compatibility
@@ -29,14 +29,25 @@ ZK 9.1.0
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
-  + Since 9.1.0, the transitive dependency of slf4j-jdk14 was removed.
+  + Since 9.2.0, the transitive dependency of slf4j-jdk14 was removed.
     Please choose the desired SLF4J binding instead.
-  + Since 9.1.0, the transitive dependency of closure-compiler-unshaded was removed.
+  + Since 9.2.0, the transitive dependency of closure-compiler-unshaded was removed.
     If you want to enable source maps, please add it manually.
   + Due to ZK-4569, there is syntax sugar for calling commands in other viewmodel. 
     E.g. @command('$pvm.doClick') would trigger the 'doClick' command in the viewModel whose id is 'pvm'.
   + zAu.onError API was changed since we are using fetch() API instead XHR.
   + jQuery is upgraded from 1.12.4 to 3.5.1, please refer to the upgrade guides https://jquery.com/upgrade-guide/3.0/ and https://jquery.com/upgrade-guide/3.5/ .
+
+   --------
+ZK 9.0.0.1
+May 19, 2020
+* Features
+
+* Bugs
+  ZK-4557: re-add fix for ZK-3724
+  ZK-4531: overridden jquery causes prime faces components to work incorrectly
+
+* Upgrade Notes
 
    --------
 ZK 9.0.1.2

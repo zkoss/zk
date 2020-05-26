@@ -17,9 +17,9 @@ import java.util.Set;
 
 /**
  * For compatibility only.
- * @deprecated As of release 9.1.0, please use {@link org.zkoss.bind.Form}
+ * @deprecated As of release 9.2.0, please use {@link org.zkoss.bind.Form}
  * @author Leon
- * @since 9.1.0
+ * @since 9.2.0
  */
 @Deprecated
 public interface FormLegacyExt {

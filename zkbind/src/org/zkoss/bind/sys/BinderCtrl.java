@@ -108,7 +108,7 @@ public interface BinderCtrl {
 	// since ZK 9.0.1
 	public static final String CLIENT_UPLOAD_INFO = "$ZKCLIENTUPLOADINFO$";
 
-	// sinze ZK 9.1.0
+	// sinze ZK 9.2.0
 	public static final String ON_BIND_PROPERITIES_READY = "onBindPropertiesReady"; //do after component binder loading children components
 
 	/**
