@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.select.Selectors;
 public @interface SelectorParam {
 	/**
 	 * component selector of the parameter.
-	 * Since 9.1.0, it can be omitted if selector is the same as the name of annotated parameter.
+	 * Since 9.2.0, it can be omitted if selector is the same as the name of annotated parameter.
 	 * @return component selector of the parameter
 	 */
 	String value() default "";

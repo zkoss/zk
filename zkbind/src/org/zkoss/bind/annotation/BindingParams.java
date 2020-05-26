@@ -45,7 +45,7 @@ import java.lang.annotation.Target;
  * @see Command
  * @see BindingParam
  * @author rudyhuang
- * @since 9.1.0
+ * @since 9.2.0
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

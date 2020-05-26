@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.util.Clients;
 /**
  * The UIManager used to control focus and scroll in MVVM
  * @author jameschu
- * @since 9.1.0
+ * @since 9.2.0
  */
 public class UIManager {
 	private final Component _rootComponent;
