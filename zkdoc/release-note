@@ -1,3 +1,22 @@
+ZK 9.1.0
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+--------
+ZK 9.0.0.1
+May 19, 2020
+* Features
+
+* Bugs
+  ZK-4557: re-add fix for ZK-3724
+  ZK-4531: overridden jquery causes prime faces components to work incorrectly
+
+* Upgrade Notes
+
+   --------
 ZK 9.0.1.2
 May 5, 2020
 * Features

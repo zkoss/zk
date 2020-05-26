@@ -5,7 +5,7 @@
     <groupId>org.zkoss.zk</groupId>
     <artifactId>zk-bom</artifactId>
     <packaging>pom</packaging>
-    <version>9.0.1.2</version>
+    <version>9.1.0-SNAPSHOT</version>
     <name>ZK Bill of Materials</name>
     <url>https://www.zkoss.org/product/zk</url>
     <description>ZK Bill of Materials</description>
