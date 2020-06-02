@@ -73,6 +73,10 @@ public abstract class AbstractUiFactory implements UiFactory {
 	}
 
 	public Desktop newDesktop(RequestInfo ri, String updateURI, String path) {
+		return newDesktop(ri, updateURI, updateURI, path);
+	}
+
+	public Desktop newDesktop(RequestInfo ri, String updateURI, String resourceURI, String path) {
 		String deviceType = null;
 		if (path != null) { //convert to directory
 			//though UiEngine.execNewPage will set the device type later,
@@ -87,7 +91,7 @@ public abstract class AbstractUiFactory implements UiFactory {
 				}
 			}
 		}
-		return new DesktopImpl(ri.getWebApp(), updateURI, path, deviceType, ri.getNativeRequest());
+		return new DesktopImpl(ri.getWebApp(), updateURI, resourceURI, path, deviceType, ri.getNativeRequest());
 	}
 
 	public Page newPage(RequestInfo ri, PageDefinition pagedef, String path) {

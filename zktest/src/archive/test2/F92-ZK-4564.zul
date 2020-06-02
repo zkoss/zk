@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F92-ZK-4564.zul
+        Purpose:
+
+        Description:
+
+        History:
+              Thu May 7 11:32:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>click the button and the operate with the following components, there should be no js error/exceptions</label>
+	<button label="click" onClick='Clients.log("Clicked!")' />
+	<fileupload />
+	<pdfviewer />
+	<tbeditor />
+	<imagemap id="img1" src="/test2/img/sun.jpg"/>
+	<script>
+		jq.getScript(zk.ajaxURI('/web/js/zk.wpd', {au: true}))
+		.done(function( script, textStatus ) {
+			zk.log('loaded!');
+		}).fail(function( jqxhr, settings, exception ) {
+			zk.log('error!');
+		});
+	</script>
+</zk>

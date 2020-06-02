@@ -19,9 +19,9 @@ function zkpi(nm, wv) {
 }
 
 //ZK JSP: page creation (backward compatible)
-function zkpb(pguid, dtid, contextURI, updateURI, reqURI, props) {
+function zkpb(pguid, dtid, contextURI, updateURI, resourceURI, reqURI, props) {
 	zkx([0, pguid,
-		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, ru: reqURI}),{},[]]);
+		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, rsu: resourceURI, ru: reqURI}),{},[]]);
 }
 //ZK JSP (useless; backward compatible)
 zkpe = zk.$void;
@@ -424,13 +424,14 @@ function zkamn(pkg, fn) {
 
   zk.copy(window, {
 	//define a desktop
-	zkdt: function (dtid, contextURI, updateURI, reqURI) {
+	zkdt: function (dtid, contextURI, updateURI, resourceURI, reqURI) {
 		var dt = zk.Desktop.$(dtid);
 		if (dt == null) {
-			dt = new zk.Desktop(dtid, contextURI, updateURI, reqURI);
+			dt = new zk.Desktop(dtid, contextURI, updateURI, resourceURI, reqURI);
 			if (zk.pfmeter) zAu._pfrecv(dt, dtid);
 		} else {
 			if (updateURI != null) dt.updateURI = updateURI;
+			if (resourceURI != null) dt.resourceURI = resourceURI;
 			if (contextURI != null) dt.contextURI = contextURI;
 			if (reqURI != null) dt.requestPath = reqURI;
 		}
@@ -466,7 +467,8 @@ function zkamn(pkg, fn) {
 			if (wi) {
 				if (wi[0] === 0) { //page
 					var props = wi[2];
-					zkdt(zk.cut(props, 'dt'), zk.cut(props, 'cu'), zk.cut(props, 'uu'), zk.cut(props, 'ru'));
+					zkdt(zk.cut(props, 'dt'), zk.cut(props, 'cu'), zk.cut(props, 'uu')
+						, zk.cut(props, 'rsu'), zk.cut(props, 'ru'));
 					if (owner = zk.cut(props, 'ow'))
 						owner = Widget.$(owner);
 				}

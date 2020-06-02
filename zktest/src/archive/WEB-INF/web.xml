@@ -37,6 +37,13 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 			<param-name>update-uri</param-name>
 			<param-value>/zkau</param-value>
 		</init-param>
+		<!-- [Optional] Specifies URI of the resource engine (DHtmlResourceServlet).
+		It must be the same as <url-pattern> for the resource engine.
+		-->
+		<init-param>
+			<param-name>resource-uri</param-name>
+			<param-value>/zkres</param-value>
+		</init-param>
 
 		<!-- [Optional] Specifies whether to compress the output
 		of the ZK loader. It speeds up the transmission over slow Internet.
@@ -109,6 +116,16 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 	<servlet-mapping>
 		<servlet-name>auEngine</servlet-name>
 		<url-pattern>/zkau/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>The resource engine for ZK</description>
+		<servlet-name>resourceEngine</servlet-name>
+		<servlet-class>org.zkoss.zk.au.http.DHtmlResourceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>resourceEngine</servlet-name>
+		<url-pattern>/zkres/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- Used to test test/booksuggest.html

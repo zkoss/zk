@@ -13,6 +13,7 @@ ZK 9.2.0
   ZK-4544: Radio/Checkbox provide a status class name for more easier theme customization
   ZK-4565: Upgrade jQuery version to 3.5.1
   ZK-4582: Simplify BindUtils.postNotifyChange API
+  ZK-4564: split zkau servlet into dedicated au and resource servlets
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects

@@ -655,6 +655,7 @@ public class HtmlPageRenders {
 				if (desktopUpdateHost != null)
 					updateURI = desktopUpdateHost + updateURI;
 				appendProp(props, "uu", updateURI);
+				appendProp(props, "rsu", desktop.getResourceURI(null));
 				appendProp(props, "ru", desktop.getRequestPath());
 			}
 			final String pageWgtCls = pageCtrl.getWidgetClass();
@@ -1074,6 +1075,7 @@ public class HtmlPageRenders {
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
 			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkdt('").append(desktop.getId())
 					.append("','").append(getContextURI(exec)).append("','").append(desktop.getUpdateURI(null))
+					.append("','").append(desktop.getResourceURI(null))
 					.append("','").append(desktop.getRequestPath()).append("');").append(outSpecialJS(desktop))
 					.append("\n</script>\n");
 		}
