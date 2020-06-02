@@ -26,6 +26,7 @@ ZK 9.2.0
   ZK-4554: classloading issues with multiple war files (using shared zkbind-api.jar)
   ZK-4537: Chosenbox clear and add selected items cause js error
   ZK-4555: remove zkbind-api -> zul dependency
+  ZK-4593: Calling Navseparator method getNavbar throws an error
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
