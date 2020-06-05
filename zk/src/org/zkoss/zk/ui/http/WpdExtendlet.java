@@ -714,8 +714,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 
 		//ZK-4564
-		sb.append("resURI:'").append(WebManager.getWebManager(ctx).getResourceURI()).append("'");
-		sb.append("});");
+		sb.append("resURI:'")
+			.append(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getResourceURI(false)))
+			.append("'").append("});");
 		write(out, sb.toString());
 		if (sourceMapManager != null)
 			sourceMapManager.appendEmptySourceMap(1);
