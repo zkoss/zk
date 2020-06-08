@@ -15,6 +15,6 @@ public class F80_ZK_2613Test extends WebDriverTestCase {
 		connect();
 		waitResponse(1000);
 		String log = getZKLog(); //first line in resourceURI
-		assertEquals(true, log.contains("/zktest" + log.split("\n")[0] + "/web/") && log.contains("/img/spacer.gif"));
+		assertEquals(true, log.contains(log.split("\n")[0] + "/web/") && log.contains("/img/spacer.gif"));
 	}
 }
