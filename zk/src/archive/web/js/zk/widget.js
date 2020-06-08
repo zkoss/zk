@@ -5155,6 +5155,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 
 		if (dt = dts[dtid]) {
 			if (updateURI != null) dt.updateURI = updateURI;
+			if (resourceURI != null) dt.resourceURI = resourceURI;
 			if (contextURI != null) dt.contextURI = contextURI;
 		} else {
 			this.uuid = this.id = dtid;
