@@ -651,11 +651,14 @@ public class HtmlPageRenders {
 				appendProp(props, "dt", desktop.getId());
 				appendProp(props, "cu", getContextURI(exec));
 				String updateURI = desktop.getUpdateURI(null);
-				String desktopUpdateHost = (String) desktop.getAttribute("org.zkoss.desktop.updateHost");
-				if (desktopUpdateHost != null)
-					updateURI = desktopUpdateHost + updateURI;
+				String resourceURI = desktop.getResourceURI(null);
+				String desktopAuHost = (String) desktop.getAttribute("org.zkoss.desktop.auHost");
+				if (desktopAuHost != null) {
+					updateURI = desktopAuHost + updateURI;
+					resourceURI = desktopAuHost + resourceURI;
+				}
 				appendProp(props, "uu", updateURI);
-				appendProp(props, "rsu", desktop.getResourceURI(null));
+				appendProp(props, "rsu", resourceURI);
 				appendProp(props, "ru", desktop.getRequestPath());
 			}
 			final String pageWgtCls = pageCtrl.getWidgetClass();
