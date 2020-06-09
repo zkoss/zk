@@ -4,6 +4,7 @@ Jun 10, 2020
 * Features
 
 * Bugs
+  ZK-4599: Apply a patch for CVE-2019-11358 which affects jQuery
 
 * Upgrade Notes
 
