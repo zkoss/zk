@@ -1722,10 +1722,16 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param String subId the redrawn node subid (deprecated since 9.0.1)
 	 * @since 9.0.0
 	 */
-	outerPartial: function (wgt, code, subId) {
+	outerPartial: function (wgt, code) {
 		zkx_(code, function (newwgt) {
-			var act = _beforeAction(newwgt, 'invalidate');
-			wgt.replaceWidget(newwgt, wgt.getOuterPartialSkipper_());
+			var act = _beforeAction(newwgt, 'invalidate'),
+				skipper = wgt.getOuterPartialSkipper_();
+			wgt.replaceWidget(newwgt, skipper);
+			if (skipper) {
+				//to notify it is restored from rerender with skipper
+				zWatch.fireDown('onRestore', newwgt);
+				zUtl.fireSized(newwgt);
+			}
 			_afterAction(newwgt, act);
 		}, function (wx) {
 			for (var w = wx; w; w = w.parent)

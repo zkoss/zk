@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B92-ZK-4583.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 11 16:58:06 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window title="Search" width="600px" border="normal">
+        <zscript><![CDATA[
+        ListModelList model = new ListModelList();
+        void search(int count) {
+            List data = new ArrayList();
+            for (int i = 0; i < count; i++)
+                data.add("Data " + i);
+            model.clear();
+            model.addAll(data);
+            l1.invalidatePartial(""); // Force to invalidatePartial
+        }
+        ]]>
+        </zscript>
+        <div>
+            <button label="Show 2 items" iconSclass="z-icon-search" onClick="search(2)" />
+            <button label="Show 10 items" iconSclass="z-icon-search" onClick="search(10)" />
+        </div>
+        <listbox id="l1" model="${model}" emptyMessage="No car found in the result" rows="3">
+            <custom-attributes org.zkoss.zul.invalidateThreshold="1"/>
+            <listhead>
+                <listheader label="Model" />
+                <listheader label="Price" width="20%"/>
+            </listhead>
+            <template name="model">
+                <listitem>
+                    <listcell label="${each}"/>
+                    <listcell label="$999"/>
+                </listitem>
+            </template>
+        </listbox>
+        <grid model="${model}" emptyMessage="No car found in the result" visibleRows="3">
+            <columns>
+                <column label="Model"/>
+                <column label="Price" width="20%"/>
+            </columns>
+            <template name="model">
+                <row>
+                    <cell>${each}</cell>
+                    <cell>$999</cell>
+                </row>
+            </template>
+        </grid>
+    </window>
+</zk>
