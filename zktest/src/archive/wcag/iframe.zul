@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Iframe"?>
+<?root-attributes lang="en"?>
+<!--
+iframe.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 26 9:25:01 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Iframe</n:h1>
+	</n:header>
+	<n:main style="height:500px" aria-label="outer">
+		<iframe hflex="1" vflex="1" src="./iframe-1.zul" ca:aria-label="Test Website"/>
+	</n:main>
+</zk>

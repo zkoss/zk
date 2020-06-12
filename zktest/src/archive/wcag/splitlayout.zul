@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Splitlayout"?>
+<?root-attributes lang="en"?>
+<!--
+splitlayout.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 26 16:18:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		.z-splitlayout-splitter:focus {
+			outline: solid;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Splitlayout</n:h1>
+	</n:header>
+	<n:main>
+		<splitlayout orient="horizontal" width="600px" height="500px" collapse="after">
+			<div>
+				Hello Left
+				<button label="Left"/>
+			</div>
+			<div>
+				<button label="Right"/>
+				Hello Right
+			</div>
+		</splitlayout>
+		<splitlayout width="600px" height="500px" collapse="before">
+			<div>
+				Hello Top
+				<button label="Top"/>
+			</div>
+			<div>
+				Hello Bottom
+				<button label="Bottom"/>
+			</div>
+		</splitlayout>
+	</n:main>
+</zk>

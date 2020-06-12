@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Colorbox"?>
+<?root-attributes lang="en"?>
+<!--
+colorbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 26 10:44:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		.z-colorbox:focus, .z-colorpalette-popup .z-colorbox-paletteicon:focus,
+			.z-colorpalette-popup .z-colorbox-pickericon:focus,
+			.z-colorbox-paletteicon:focus, .z-colorbox-pickericon:focus,
+			.z-colorpicker-overlay:focus, .z-colorpicker-bar:focus {
+			outline: solid;
+			outline-color: red;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Colorbox</n:h1>
+	</n:header>
+	<n:main>
+		<colorbox ca:aria-label="Click to choose color"/>
+	</n:main>
+</zk>

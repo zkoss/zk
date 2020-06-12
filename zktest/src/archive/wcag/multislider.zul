@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Multislider"?>
+<?root-attributes lang="en"?>
+<!--
+multislider.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 11 12:12:23 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		.z-sliderbuttons-button:focus{
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Multislider</n:h1>
+	</n:header>
+	<n:main>
+		<multislider ca:aria-label="range value">
+			<sliderbuttons startValue="0" endValue="100" />
+			<sliderbuttons startValue="10" endValue="50" />
+		</multislider>
+	</n:main>
+</zk>

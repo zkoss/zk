@@ -77,4 +77,18 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	static final int PDFVIEWER_ZOOM_FIT_WIDTH = 0x2906 + MESSAGE_ID;
 	static final int PDFVIEWER_ZOOM_FIT_HEIGHT = 0x2907 + MESSAGE_ID;
 	static final int PDFVIEWER_TOGGLE_FULLSCREEN = 0x2908 + MESSAGE_ID;
+	static final int COLORBOX_PALETTE_BUTTON_LABEL = 0x3001 + MESSAGE_ID;
+	static final int COLORBOX_PICKER_BUTTON_LABEL = 0x3002 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_PALETTE = 0x3003 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_PICKER = 0x3004 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_R = 0x3005 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_G = 0x3006 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_B = 0x3007 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_H = 0x3008 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_S = 0x3009 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_V = 0x3010 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_HEX = 0x3011 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_FIELD = 0x3012 + MESSAGE_ID;
+	static final int COLORBOX_COLOR_SPECTRUM_BAR = 0x3013 + MESSAGE_ID;
+	static final int COLORBOX_SELECT_COLOR_BUTTON = 0x3014 + MESSAGE_ID;
 }

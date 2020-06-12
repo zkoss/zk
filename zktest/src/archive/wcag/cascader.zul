@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Cascader"?>
+<?root-attributes lang="en"?>
+<!--
+cascader.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 17 11:25:01 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: 1px dotted red !important;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Cascader</n:h1>
+	</n:header>
+	<n:main>
+		<zscript><![CDATA[
+			import org.zkoss.zktest.test2.*;
+			TreeModel m1 = new F90_ZK_4392Model("A");
+			TreeModel m2 = new F90_ZK_4392BeanModel("bean");
+		]]></zscript>
+		<cascader model="${m1}" width="300px" placeholder="empty" >
+			<template name="model">
+				${each}
+			</template>
+		</cascader>
+	</n:main>
+</zk>

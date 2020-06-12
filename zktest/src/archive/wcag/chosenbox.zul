@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Chosenbox"?>
+<?root-attributes lang="en"?>
+<!--
+chosenbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 17 11:25:01 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: 1px dotted red !important;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Chosenbox</n:h1>
+	</n:header>
+	<n:main>
+		<zscript><![CDATA[
+			import org.zkoss.zul.*;
+			import org.zkoss.zkmax.zul.Chosenbox;
+			import java.util.*;
+
+			ListModel model = new ListModelList(new String[] {
+				"Apple", "Banana", "Super Apple", "Super Banana"
+			});
+			model.multiple = true;
+			model.addToSelection("Apple");
+			model.addToSelection("Banana");
+		]]></zscript>
+		<div hflex="1" vflex="1">
+			<chosenbox model="${model}" width="200px" creatable="true" onSelect="" />
+		</div>
+	</n:main>
+</zk>

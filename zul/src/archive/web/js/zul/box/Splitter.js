@@ -357,64 +357,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (!diff) return; //nothing to do
 
-		var wgts = [runNextWgt, runPrevWgt],
-			hflexReset = [],
-			vflexReset = [];
+
 		//B70-ZK-2514: assign fd to each block separately and count on clientFd in the end
-		if (runNext && runPrev) {
-			var upperFdArr = [];
-			for (var i = 0; i < 2; i++) {
-				upperFdArr[i] = fdArr[i].charAt(0).toUpperCase() + fdArr[i].slice(1);
-			}
-			var upperFd = vert ? upperFdArr[1] : upperFdArr[0];
-				s = runNext['client' + upperFd],
-				s2 = runPrev['client' + upperFd],
-				totalFd = s + s2;
-
-			//F70-ZK-112: clear flex once splitter is moved, that is, make splitter resizeable
-			for (var i = 0, w; i < 2; i++) {
-				if (w = wgts[i]) {
-					if (w.getHflex()) {
-						w.setHflex('false');
-						hflexReset[i] = true;
-					}
-					if (w.getVflex()) {
-						w.setVflex('false');
-						vflexReset[i] = true;
-					}
-					zWatch.fireDown('beforeSize', w);
-				}
-			}
-
-			s -= diff;
-			if (s < 0) s = 0;
-			var minusS = totalFd - s;
-			runNext.style[fd] = s + 'px';
-			runPrev.style[fd] = minusS + 'px';
-
-			if (!bfcolps)
-				runNext.style.overflow = 'hidden';
-			else
-				runPrev.style.overflow = 'hidden';
-
-			for (var i = 0, w; i < 2; i++) {
-				w = wgts[i];
-				if (w && hflexReset[i]) {
-					w['set' + upperFdArr[0]]('100%');
-				}
-				if (w && vflexReset[i]) {
-					w['set' + upperFdArr[1]]('100%');
-				}
-				zUtl.fireSized(w, -1); //no beforeSize
-			}
-
-			var nextClientFd = runNext['client' + upperFd];
-			var prevClientFd = totalFd - nextClientFd;
-			if (nextClientFd != s)
-				runNext.style[fd] = nextClientFd + 'px'; //count on clientFd
-			if (prevClientFd != minusS)
-				runPrev.style[fd] = prevClientFd + 'px'; //count on clientFd
-		}
+		if (runNext && runPrev)
+			Splitter._doDragEndResize(vert, [runNextWgt, runPrevWgt], runPrev, runNext, diff, bfcolps);
 
 		Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it
@@ -423,6 +369,66 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		wgt._fixszAll();
 			//fix all splitter's size because table might be with %
 		draggable.run = null;//free memory
+	},
+
+	_doDragEndResize: function (vert, wgts, runPrev, runNext, diff, bfcolps) {
+		var upperFdArr = [],
+			hflexReset = [],
+			vflexReset = [],
+			fdArr = ['width', 'height'];
+
+		for (var i = 0; i < 2; i++) {
+			upperFdArr[i] = fdArr[i].charAt(0).toUpperCase() + fdArr[i].slice(1);
+		}
+		var upperFd = vert ? upperFdArr[1] : upperFdArr[0],
+			s = runNext['client' + upperFd],
+			s2 = runPrev['client' + upperFd],
+			totalFd = s + s2;
+
+		//F70-ZK-112: clear flex once splitter is moved, that is, make splitter resizeable
+		for (var i = 0, w; i < 2; i++) {
+			if (w = wgts[i]) {
+				if (w.getHflex()) {
+					w.setHflex('false');
+					hflexReset[i] = true;
+				}
+				if (w.getVflex()) {
+					w.setVflex('false');
+					vflexReset[i] = true;
+				}
+				zWatch.fireDown('beforeSize', w);
+			}
+		}
+
+		s -= diff;
+		if (s < 0) s = 0;
+		var minusS = totalFd - s,
+			fd = vert ? fdArr[1] : fdArr[0];
+		runNext.style[fd] = s + 'px';
+		runPrev.style[fd] = minusS + 'px';
+
+		if (!bfcolps)
+			runNext.style.overflow = 'hidden';
+		else
+			runPrev.style.overflow = 'hidden';
+
+		for (var i = 0, w; i < 2; i++) {
+			w = wgts[i];
+			if (w && hflexReset[i]) {
+				w['set' + upperFdArr[0]]('100%');
+			}
+			if (w && vflexReset[i]) {
+				w['set' + upperFdArr[1]]('100%');
+			}
+			zUtl.fireSized(w, -1); //no beforeSize
+		}
+
+		var nextClientFd = runNext['client' + upperFd];
+		var prevClientFd = totalFd - nextClientFd;
+		if (nextClientFd != s)
+			runNext.style[fd] = nextClientFd + 'px'; //count on clientFd
+		if (prevClientFd != minusS)
+			runPrev.style[fd] = prevClientFd + 'px'; //count on clientFd
 	},
 	_snap: function (draggable, pos) {
 		var run = draggable.run,

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Biglistbox"?>
+<?root-attributes lang="en"?>
+<!--
+biglistbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 25 11:25:01 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		.z-biglistbox:focus, .z-biglistbox-row td:focus, .z-biglistbox-header:focus {
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Biglistbox</n:h1>
+	</n:header>
+	<n:main>
+		<zscript><![CDATA[
+			import org.zkoss.zktest.test2.big.*;
+			import org.zkoss.util.*;
+			FakerMatrixModel BigData = new FakerMatrixModel(100, 300);
+		]]></zscript>
+		<div hflex="1" height="500px">
+			<biglistbox id="biglist" frozenCols="2" hflex="1" vflex="1" colWidth="130px" model="${BigData}" ca:aria-label="big data">
+			</biglistbox>
+		</div>
+	</n:main>
+</zk>
