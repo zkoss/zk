@@ -13,6 +13,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+    <label multiline="true">
+    1. Click "Show 2 items".
+    2. Both the Listbox and the Grid remain the height that can fit 3 rows.
+    3. Click "Show 10 items".
+    4. Both the Listbox and the Grid remain the height that can fit 3 rows.
+    </label>
     <window title="Search" width="600px" border="normal">
         <zscript><![CDATA[
         ListModelList model = new ListModelList();
