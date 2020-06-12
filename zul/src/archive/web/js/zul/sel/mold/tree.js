@@ -18,7 +18,7 @@ function (out) {
 		width = innerWidth == '100%' ? ' width="100%"' : '',
 		wdStyle =  innerWidth != '100%' ? 'width:' + innerWidth : '',
 		inPaging = this.inPagingMold(), pgpos,
-		tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
+		tag = zk.ie < 11 ? 'a' : 'button';
 		
 	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the button
 	//top paging

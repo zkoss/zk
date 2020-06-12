@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Stepbar"?>
+<?root-attributes lang="en"?>
+<!--
+stepbar.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 04 15:44:07 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+    /* FIXME */
+    :focus {
+        outline: 1px dotted red !important;
+    }
+    ]]>
+    </style>
+    <n:header>
+        <n:h1>Stepbar</n:h1>
+    </n:header>
+    <n:main>
+        <n:h2>Linear (non-interactive)</n:h2>
+        <stepbar activeIndex="2" linear="true" tooltiptext="Checkout steps">
+            <step title="Shipping address"/>
+            <step title="Payment method"/>
+            <step title="Confirmation"/>
+        </stepbar>
+        <n:h2>Non-linear (interactive)</n:h2>
+        <stepbar linear="false" wrappedLabels="true" tooltiptext="Test steps">
+            <step title="Step 1" iconSclass="z-icon-home"/>
+            <step title="Step 2" error="true"/>
+            <step title="Step 3" complete="true"/>
+            <step title="Step 4"/>
+            <step title="Step 5"/>
+        </stepbar>
+    </n:main>
+</zk>

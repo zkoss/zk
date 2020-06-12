@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Navbar"?>
+<?root-attributes lang="en"?>
+<!--
+navbar.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 02 09:35:23 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <style><![CDATA[
+    /* FIXME */
+    :focus {
+        outline: 1px dotted red !important;
+    }
+    ]]>
+    </style>
+    <n:header>
+        <n:h1>Navbar</n:h1>
+    </n:header>
+    <n:main>
+        <n:h2>Normal</n:h2>
+        <navbar orient="horizontal" ca:aria-label="Nav Menu 1">
+            <nav image="/img/live.gif" label="Item 1" badgeText="9">
+                <navitem iconSclass="z-icon-home" label="Item 1-1" />
+                <nav label="Item 1-2">
+                    <navitem iconSclass="z-icon-home" label="Item 1-2-1" />
+                </nav>
+            </nav>
+            <nav image="/img/live.gif" iconSclass="z-icon-home" label="Item 2">
+                <navitem iconSclass="z-icon-home" label="Item 2-1" />
+            </nav>
+            <navseparator/>
+            <navitem iconSclass="z-icon-home" label="Item 2.5" visible="false" />
+            <navitem label="Item 3" />
+            <navitem label="Item 4" disabled="true" />
+        </navbar>
+        <navbar orient="vertical" width="300px" ca:aria-label="Nav Menu 2">
+            <nav image="/img/live.gif" label="Item 1" badgeText="9">
+                <navitem iconSclass="z-icon-home" label="Item 1-1" />
+                <nav label="Item 1-2">
+                    <navitem iconSclass="z-icon-home" label="Item 1-2-1" />
+                </nav>
+            </nav>
+            <nav image="/img/live.gif" iconSclass="z-icon-home" label="Item 2">
+                <navitem iconSclass="z-icon-home" label="Item 2-1" />
+            </nav>
+            <navseparator/>
+            <navitem iconSclass="z-icon-home" label="Item 2.5" visible="false" />
+            <navitem label="Item 3" />
+            <navitem label="Item 4" disabled="true" />
+        </navbar>
+        <n:h2>Collapsed</n:h2>
+        <navbar orient="horizontal" collapsed="true" ca:aria-label="Nav Menu 3">
+            <nav image="/img/live.gif" label="Item 1" badgeText="9">
+                <navitem iconSclass="z-icon-home" label="Item 1-1" />
+                <nav label="Item 1-2">
+                    <navitem iconSclass="z-icon-home" label="Item 1-2-1" />
+                </nav>
+            </nav>
+            <nav image="/img/live.gif" iconSclass="z-icon-home" label="Item 2">
+                <navitem iconSclass="z-icon-home" label="Item 2-1" />
+            </nav>
+            <navseparator/>
+            <navitem iconSclass="z-icon-home" label="Item 2.5" visible="false" />
+            <navitem label="Item 3" />
+            <navitem label="Item 4" disabled="true" />
+        </navbar>
+        <navbar orient="vertical" collapsed="true" width="300px" tooltiptext="Nav Menu 4">
+            <nav image="/img/live.gif" label="Item 1" badgeText="9">
+                <navitem iconSclass="z-icon-home" label="Item 1-1" />
+                <nav label="Item 1-2">
+                    <navitem iconSclass="z-icon-home" label="Item 1-2-1" />
+                </nav>
+            </nav>
+            <nav image="/img/live.gif" iconSclass="z-icon-home" label="Item 2">
+                <navitem iconSclass="z-icon-home" label="Item 2-1" />
+            </nav>
+            <navseparator/>
+            <navitem iconSclass="z-icon-home" label="Item 2.5" visible="false" />
+            <navitem label="Item 3" />
+            <navitem label="Item 4" disabled="true" />
+        </navbar>
+    </n:main>
+</zk>

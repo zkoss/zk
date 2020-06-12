@@ -16,6 +16,7 @@ function (out, skipper) {
 	var uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
+		btnRenderer = zul.wgt.ButtonRenderer,
 		tabi = this._tabindex;
 
 	out.push('<div', this.domAttrs_({tabindex: 1}), '>');//tabindex attribute will be set in the child elements
@@ -24,36 +25,16 @@ function (out, skipper) {
 				'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 		if (caption) caption.redraw(out);
 		else {
-			var	icon = this.$s('icon');
-			if (this._closable) {
-				out.push('<button id="', uuid , '-close" class="', icon, ' ', this.$s('close'), '"');
-				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
-				out.push(' title="', msgzul.PANEL_CLOSE, '"><i class="', this.getClosableIconClass_(), '"></i></button>');
-			}
-			if (this._maximizable) {
-				var maxd = this._maximized;
-				out.push('<div id="', uuid, '-max" class="', icon, ' ', this.$s('maximize'));
-				if (maxd)
-					out.push(' ', this.$s('maximized'));
-				var maxIcon = maxd ? this.getMaximizedIconClass_() : this.getMaximizableIconClass_();
-				if (tabi != undefined) out.push('" tabindex="', tabi);
-				out.push('" title="', msgzul.PANEL_MAXIMIZE, '"><i class="', maxIcon, '"></i></div>');
-			}
-			if (this._minimizable) {
-				out.push('<div id="', uuid , '-min" class="', icon, ' ', this.$s('minimize'), '"')
-				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
-				out.push(' title="', msgzul.PANEL_MINIMIZE, '"><i class="', this.getMinimizableIconClass_(), '"></i></div>');
-			}
-			if (this._collapsible) {
-				var openIcon = this._open ? this.getCollapseOpenIconClass_() : this.getCollapseCloseIconClass_();
-				out.push('<div id="', uuid , '-exp" class="', icon, ' ', this.$s('expand'), '"')
-				if (tabi != undefined) out.push(' tabindex="', tabi, '"');
-				if (openIcon)
-					out.push(' title="', msgzul.PANEL_COLLAPSE, '"')
-				else
-					out.push(' title="', msgzul.PANEL_EXPAND, '"')
-				out.push('><i class="', openIcon, '"></i></div>');
-			}
+			out.push('<div id="', uuid, '-icons" class="', this.$s('icons'), '">');
+			if (this._collapsible)
+				btnRenderer.redrawCollapseButton(this, out, tabi);
+			if (this._minimizable)
+				btnRenderer.redrawMinimizeButton(this, out, tabi);
+			if (this._maximizable)
+				btnRenderer.redrawMaximizeButton(this, out, tabi);
+			if (this._closable)
+				btnRenderer.redrawCloseButton(this, out, tabi);
+			out.push('</div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div>');

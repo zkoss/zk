@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Tabbox"?>
+<?root-attributes lang="en"?>
+<!--
+tabbox.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon May 18 12:51:49 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <style><![CDATA[
+    /* FIXME: For demonstration only, should apply to theme itself. */
+    .z-tab-content:focus {
+        outline: 1px dotted red;
+    }
+    ]]>
+    </style>
+    <n:header>
+        <n:h1>Tabbox</n:h1>
+    </n:header>
+    <n:main>
+        <label multiline="true">
+            1. Use Tab to focus to current active Tab.
+            2. Press arrow keys to move the focus. It should skip disabled and invisible Tabs.
+            3. Press spacebar or enter key to navigate to the Tabpanel.
+            4. On closable Tabs, press delete to close it.
+        </label>
+        <tabbox>
+            <tabs ca:aria-label="Simple Tabs" >
+                <tab label="Tab A" />
+                <tab disabled="true"><caption>Tab B</caption></tab>
+                <tab label="Tab C" visible="false"/>
+                <tab label="Tab D" image="/img/live.gif"/>
+                <tab image="/img/live.gif" ca:aria-label="Tab E"/>
+                <tab label="Tab F" iconSclass="z-icon-home"/>
+                <tab iconSclass="z-icon-home" ca:aria-label="Tab G"/>
+                <tab label="Tab H" closable="true"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel>Content A</tabpanel>
+                <tabpanel>Content B</tabpanel>
+                <tabpanel>Content C</tabpanel>
+                <tabpanel>Content D</tabpanel>
+                <tabpanel>Content E</tabpanel>
+                <tabpanel>Content F</tabpanel>
+                <tabpanel>Content G</tabpanel>
+                <tabpanel>Content H</tabpanel>
+            </tabpanels>
+        </tabbox>
+        <tabbox orient="left">
+            <tabs ca:aria-label="Simple Tabs" width="100px">
+                <tab label="Tab A" />
+                <tab disabled="true"><caption>Tab B</caption></tab>
+                <tab label="Tab C" visible="false"/>
+                <tab label="Tab D" image="/img/live.gif"/>
+                <tab image="/img/live.gif" ca:aria-label="Tab E"/>
+                <tab label="Tab F" iconSclass="z-icon-home"/>
+                <tab iconSclass="z-icon-home" ca:aria-label="Tab G"/>
+                <tab label="Tab H" closable="true"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel>Content A</tabpanel>
+                <tabpanel>Content B</tabpanel>
+                <tabpanel>Content C</tabpanel>
+                <tabpanel>Content D</tabpanel>
+                <tabpanel>Content E</tabpanel>
+                <tabpanel>Content F</tabpanel>
+                <tabpanel>Content G</tabpanel>
+                <tabpanel>Content H</tabpanel>
+            </tabpanels>
+        </tabbox>
+
+        <tabbox mold="accordion">
+            <tabs>
+                <tab label="Tab A"/>
+                <tab disabled="true"><caption>Tab B</caption></tab>
+                <tab label="Tab C" visible="false"/>
+                <tab label="Tab D" image="/img/live.gif"/>
+                <tab image="/img/live.gif" ca:aria-label="Tab E"/>
+                <tab label="Tab F" iconSclass="z-icon-home"/>
+                <tab iconSclass="z-icon-home" ca:aria-label="Tab G"/>
+                <tab label="Tab H" closable="true"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel>Content A</tabpanel>
+                <tabpanel>Content B</tabpanel>
+                <tabpanel>Content C</tabpanel>
+                <tabpanel>Content D</tabpanel>
+                <tabpanel>Content E</tabpanel>
+                <tabpanel>Content F</tabpanel>
+                <tabpanel>Content G</tabpanel>
+                <tabpanel>Content H</tabpanel>
+            </tabpanels>
+        </tabbox>
+    </n:main>
+</zk>

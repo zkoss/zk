@@ -24,21 +24,21 @@ public class B86_ZK_4160Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		click(jq("@tab:last > a"));
+		click(jq("@tab:last > .z-tab-content"));
 		waitResponse();
 		click(jq("@button:last"));
 		click(jq("@button:last"));
 		click(jq("@button:last"));
 		waitResponse();
 
-		click(jq("@tab:first > a"));
+		click(jq("@tab:first > .z-tab-content"));
 		waitResponse();
 		click(jq("@button:first"));
 		click(jq("@button:first"));
 		click(jq("@button:first"));
 		waitResponse();
 
-		click(jq("@tab:last > a"));
+		click(jq("@tab:last > .z-tab-content"));
 		waitResponse();
 		Assert.assertEquals(1 + jq("$treeitems > @label").length(), jq("@treerow").length());
 	}

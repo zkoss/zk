@@ -18,7 +18,7 @@ function (out) {
 	var tbx = this.getTabbox(),
 		uuid = this.uuid,
 		icon = this.$s('icon'),
-		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-times ' + icon + '"></i>',
+		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-times ' + icon + '" aria-label="' + msgzul.PANEL_CLOSE + '"></i>',
 		isAccordion = tbx.inAccordionMold(),
 		tag = isAccordion ? 'div' : 'li', 
 		panel = isAccordion ? this.getLinkedPanel() : null,
@@ -41,18 +41,14 @@ function (out) {
 	}
 
 	out.push('<', tag, ' ', this.domAttrs_(), '>');
-	var c = this.firstChild,
-		hasCaption = c ? c.$instanceof(zul.wgt.Caption) : false;
-	if (!hasCaption) 
-		out.push('<a id="', uuid, '-cave" class="', this.$s('content'), '" >');
+	out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '" role="tab" aria-labelledby="', uuid, '">');
 
 	if (this.isClosable())
 		out.push('<div id="', uuid , '-btn" class="', this.$s('button'), '">', removeIcon, '</div>');
 
 	this.contentRenderer_(out);
 		
-	if (!hasCaption)
-		out.push('</a>');
+	out.push('</div>');
 	out.push('</', tag, '>');
 
 	if (isAccordion && n) // panel already rendered, do insert

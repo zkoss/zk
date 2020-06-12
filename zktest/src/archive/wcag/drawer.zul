@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Drawer"?>
+<?root-attributes lang="en"?>
+<!--
+drawer.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 04 09:39:34 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+    /* FIXME */
+    :focus {
+        outline: 1px dotted red !important;
+    }
+    ]]>
+    </style>
+    <n:header>
+        <n:h1>Drawer</n:h1>
+    </n:header>
+    <n:main>
+        <button onClick="d1.open()" label="Open the drawer"/>
+        <drawer id="d1" title="Drawer" closable="true">
+            some content here
+            some content here
+            some content here
+        </drawer>
+    </n:main>
+</zk>

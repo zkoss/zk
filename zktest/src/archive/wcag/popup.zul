@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Popup"?>
+<?root-attributes lang="en"?>
+<!--
+popup.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 20 15:25:34 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Popup</n:h1>
+    </n:header>
+    <n:main>
+        <button popup="myPopup" label="Show popup" />
+        <button tooltip="myPopup" label="Show tooltip (should avoid in a11y)" />
+        <button context="myPopup" label="Show context (should avoid in a11y)" />
+        <popup id="myPopup">
+            Hello world
+        </popup>
+    </n:main>
+</zk>

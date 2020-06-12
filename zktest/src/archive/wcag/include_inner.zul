@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+include_inner.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 22 12:52:10 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    Hello world from included content!
+</zk>

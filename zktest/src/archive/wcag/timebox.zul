@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Timebox"?>
+<?root-attributes lang="en"?>
+<!--
+timebox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 26 18:49:42 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Timebox</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <n:label>Departure time: <timebox cols="12" /></n:label>
+        </n:section>
+        <n:section>
+            Arrival time: <timebox cols="12" ca:aria-label="Arrival Time" />
+        </n:section>
+    </n:main>
+</zk>

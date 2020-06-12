@@ -52,6 +52,11 @@
 		.defaultOverflowZoom();
 	}
 
+	&-icons {
+		display: inline-block;
+		float: right;
+	}
+
 	&-icon {
 		background: transparent;
 		color: extract(@containerButtonColors, 1);
@@ -60,10 +65,10 @@
 		text-align: center;
 		overflow: hidden;
 		cursor: pointer;
-		float: right;
 		font-size: @containerButtonSize;
-		.displaySize(block, @baseButtonWidth + 4, @baseButtonHeight);
+		.displaySize(inline-block, @baseButtonWidth + 4, @baseButtonHeight);
 		line-height: @baseButtonHeight;
+		border: none;
 
 		&:hover {
 			color: extract(@containerButtonColors, 2);
@@ -71,7 +76,6 @@
 	}
 
 	&-close {
-		border: 0;
 		font-size: @fontSizeXLarge;
 	}
 	

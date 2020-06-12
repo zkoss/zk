@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Datebox"?>
+<?root-attributes lang="en"?>
+<!--
+datebox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 05 17:01:53 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Datebox</n:h1>
+    </n:header>
+    <n:main>
+        <vlayout>
+            <hlayout>
+                Choose a start date:
+                <datebox ca:aria-label="Choose a start date"/>
+            </hlayout>
+            <hlayout>
+                Choose an end date &amp; time:
+                <datebox ca:aria-label="Choose an end date &amp; time" format="long+medium"/>
+            </hlayout>
+        </vlayout>
+    </n:main>
+</zk>

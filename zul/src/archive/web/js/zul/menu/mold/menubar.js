@@ -15,27 +15,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid;
 	if ('vertical' == this.getOrient()) {
-		out.push('<div', this.domAttrs_(), '><ul id="', uuid, '-cave">');
+		out.push('<div', this.domAttrs_(), ' role="menubar" aria-orientation="vertical"><ul id="', uuid, '-cave" role="none">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			this.encloseChildHTML_({out: out, child: w, vertical: true});
 		out.push('</ul></div>');
 	} else {
 		var scrollable;
-		out.push('<div', this.domAttrs_(), '>')
+		out.push('<div', this.domAttrs_(), ' role="menubar">')
 		if (scrollable = this.checkScrollable()) {
 			var scrollableCls = this.$s('scrollable'),
 				scrollIcon = this.$s('icon');
 				
 			out.push('<div id="', uuid, '-left" class="', this.$s('left'), ' ',
-						scrollableCls, '"><i class="', scrollIcon,
+						scrollableCls, '" aria-hidden="true"><i class="', scrollIcon,
 						' z-icon-chevron-left"></i></div>',
 					'<div id="', uuid, '-right" class="', this.$s('right'), ' ',
-						scrollableCls, '"><i class="', scrollIcon,
+						scrollableCls, '" aria-hidden="true"><i class="', scrollIcon,
 						' z-icon-chevron-right"></i></div>',
-					'<div id="', uuid, '-body" class="', this.$s('body'), '">',
-					'<div id="', uuid, '-cnt" class="', this.$s('content'), '">');
+					'<div id="', uuid, '-body" class="', this.$s('body'), '" role="none">',
+					'<div id="', uuid, '-cnt" class="', this.$s('content'), '" role="none">');
 		}
-		out.push('<ul id="', uuid, '-cave">');
+		out.push('<ul id="', uuid, '-cave" role="none">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</ul>');

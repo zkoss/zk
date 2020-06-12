@@ -171,7 +171,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				zIndex: wgt._zIndex,
 				visible: realVisible
 			});
-			var tag = zk.ie < 11 || zk.gecko ? 'a' : 'button';
+			var tag = zk.ie < 11 ? 'a' : 'button';
 			jq('#' + wgt.uuid + '-mask').append('<' + tag + ' id="' + wgt.uuid + '-mask-a" style="top:0;left:0" onclick="return false;" href="javascript:;" class="z-focus-a"></' + tag + '>');
 			wgt._anchor = jq('#' + wgt.uuid + '-mask-a')[0];
 		}
@@ -1066,28 +1066,6 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 			return true;
 		}
 		return false;
-	},
-	doKeyDown_: function (evt) {
-		var n = evt.domTarget,
-			keyCode = evt.keyCode;
-		if (keyCode == '9' || keyCode == '16') { //TAB and SHIFT, skip them so tab/shift-tab will work as expected
-			this.$supers('doKeyDown_', arguments);
-			return;
-		}
-		if (!n.id) n = n.parentNode;
-		switch (n) {
-		case this.$n('close'):
-			this.fire('onClose');
-			break;
-		case this.$n('max'):
-			this.setMaximized(!this._maximized);
-			break;
-		case this.$n('min'):
-			this.setMinimized(!this._minimized);
-			break;
-		default:
-			this.$supers('doKeyDown_', arguments);
-		}
 	},
 	domClass_: function (no) {
 		var cls = this.$supers(zul.wnd.Window, 'domClass_', arguments),

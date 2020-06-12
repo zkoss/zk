@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Calendar"?>
+<?root-attributes lang="en"?>
+<!--
+calendar.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 25 15:15:45 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <style><![CDATA[
+    :focus {
+        outline: 1px dotted red !important;
+    }
+    ]]></style>
+    <n:header>
+        <n:h1>Calendar</n:h1>
+    </n:header>
+    <n:main>
+        <hlayout>
+            <vlayout width="300px">
+                Selected date: <label id="d1"/>
+                <calendar tooltiptext="Start date"
+                          weekOfYear="true" showTodayLink="true"
+                          todayLinkLabel=""
+                          onChange="d1.value=self.valueInLocalDate.toString()" />
+            </vlayout>
+            <vlayout width="300px">
+                Selected date: <label id="d2"/>
+                <calendar ca:aria-label="End date"
+                          showTodayLink="true"
+                          onChange="d2.value=self.valueInLocalDate.toString()" />
+            </vlayout>
+        </hlayout>
+    </n:main>
+</zk>

@@ -18,23 +18,23 @@ function (out) {
 	var renderer = zul.db.Renderer,
 		uuid = this.uuid,
 		view = this._view, 
-		tagnm = zk.ie < 11 || zk.gecko ? 'a' : 'button',
+		tagnm = zk.ie < 11 ? 'a' : 'button',
 		localizedSymbols = this.getLocalizedSymbols(),
 		icon = this.$s('icon'),
-		outRangeL = this.isOutOfRange(true) ? ' disabled="disabled"' : '',
-		outRangeR = this.isOutOfRange() ? ' disabled="disabled"' : '',
+		outRangeL = this.isOutOfRange(true) ? ' disabled="disabled" aria-disabled="true"' : '',
+		outRangeR = this.isOutOfRange() ? ' disabled="disabled" aria-disabled="true"' : '',
 		showTodayLink = this._showTodayLink;
 	
 	// header
 	out.push('<div id="', uuid, '"', this.domAttrs_(), '><div class="',
 			this.$s('header'), '"><a id="', uuid, '-left" href="javascript:;" class="', icon, ' ',
-			this.$s('left'), '"', outRangeL,	'><i class="z-icon-angle-left"></i></a>',
+			this.$s('left'), '"', outRangeL, '><i class="z-icon-angle-left" aria-label="', msgzul.PREV, '"></i></a>',
 			'<a id="', uuid, '-title" href="javascript:;" class="', this.$s('title'), '">');
 
 	renderer.titleHTML(this, out, localizedSymbols);
 
 	out.push('</a><a id="', uuid, '-right" href="javascript:;" class="', icon, ' ',
-			this.$s('right'), '"', outRangeR, '><i class="z-icon-angle-right"></i></a></div>');
+			this.$s('right'), '"', outRangeR, '><i class="z-icon-angle-right" aria-label="', msgzul.NEXT, '"></i></a></div>');
 	
 	switch(view) {
 	case "day" :
@@ -59,6 +59,6 @@ function (out) {
 	}
 	
 	out.push('<', tagnm, ' id="', uuid,
-		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
+		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true"></',
 		tagnm, '></div>');
 }

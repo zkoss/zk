@@ -130,6 +130,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>za11y</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.zkoss.common</groupId>
 			<artifactId>zcommon</artifactId>
 			<version>${project.version}</version>
@@ -335,6 +340,12 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.deque</groupId>
+			<artifactId>axe-selenium</artifactId>
+			<version>3.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.easymock/easymock -->

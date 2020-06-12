@@ -20,7 +20,7 @@ function (out) {
 	if (tabbox.inAccordionMold()) {//Accordion
 		var tab = this.getLinkedTab();
 		
-		out.push('<div class="', this.getZclass() , '" id="', uuid, '">');
+		out.push('<div class="', this.getZclass() , '" id="', uuid, '" role="tabpanel">');
 		// only draw tab if it is not rendered
 		if (tab && !tab.$n())
 			tab.redraw(out);
