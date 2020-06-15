@@ -83,7 +83,7 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 				/* ZK-1441
 				 * When a tabpanel is animating, set tabbox.animating
 				 * to block other tabpanels enter _sel().
-				 * Reference: _sel() in Tab.js
+				 * Reference: doClick_() in Tab.js
 				 */
 				tabbox._animating = true;
 				zkp.slideDown(

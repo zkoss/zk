@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4601.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 15 16:32:11 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Select Tab C".
+        2. The content of tab C should be expanded.
+        3. Click "Select Tab B".
+        4. The content of tab B should be expanded.
+        5. Click Tab "C" to expand the content.
+        6. The content of tab C should be expanded.
+    </label>
+    <button onClick="tabA.setSelected(true)" label="Select Tab A"/>
+    <button onClick="tabB.setSelected(true)" label="Select Tab B"/>
+    <button onClick="tabC.setSelected(true)" label="Select Tab C"/>
+    <tabbox id="tabbox" mold="accordion" height="400px">
+        <tabs>
+            <tab label="A" id="tabA"/>
+            <tab label="B" id="tabB"/>
+            <tab label="C" id="tabC"/>
+        </tabs>
+        <tabpanels>
+            <tabpanel>A</tabpanel>
+            <tabpanel>B</tabpanel>
+            <tabpanel>C</tabpanel>
+        </tabpanels>
+    </tabbox>
+</zk>
