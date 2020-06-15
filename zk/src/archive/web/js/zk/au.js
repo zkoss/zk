@@ -1727,6 +1727,8 @@ zAu.cmd1 = /*prototype*/ {
 			var act = _beforeAction(newwgt, 'invalidate'),
 				skipper = wgt.getOuterPartialSkipper_();
 			wgt.replaceWidget(newwgt, skipper);
+			// In replaceHTML it skips calling fireSized if a skipper is provided.
+			// We need to call them manually (see Widget#rerender(skipper))
 			if (skipper) {
 				//to notify it is restored from rerender with skipper
 				zWatch.fireDown('onRestore', newwgt);
