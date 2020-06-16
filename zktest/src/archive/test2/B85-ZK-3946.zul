@@ -21,7 +21,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
     </label>
 
     <script><![CDATA[
-    jq(window).error(function (e, url, line) {
+    jq(window).on('error', function (e, url, line) {
         zk.log(e.originalEvent.error);
     });
     ]]>
