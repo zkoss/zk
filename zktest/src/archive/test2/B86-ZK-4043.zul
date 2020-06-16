@@ -30,7 +30,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
         </template>
     </div>
     <script><![CDATA[
-    jq(window).error(function (error) {
+    jq(window).on('error', function (error) {
         zk.log(error.originalEvent.error);
     });
     ]]>
