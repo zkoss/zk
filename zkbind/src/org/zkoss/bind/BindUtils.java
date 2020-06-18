@@ -52,7 +52,7 @@ public class BindUtils {
 	 * @param bean the bean instance
 	 * @param property the property name of bean
 	 * @see #postNotifyChange(String, String, Object, String)
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public static void postNotifyChange(Object bean, String property) {
 		postNotifyChange(null, null, bean, property);
@@ -81,7 +81,7 @@ public class BindUtils {
 	 * @param bean the bean instance
 	 * @param properties the properties name of bean
 	 * @see #postNotifyChange(String, String, Object, String...)
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public static void postNotifyChange(Object bean, String... properties) {
 		postNotifyChange(null, null, bean, properties);
@@ -112,7 +112,7 @@ public class BindUtils {
 	/**
 	 * Return an UIManager from specific viewModel object.
 	 * @param viewModel the view model object
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public static UIManager getUIManager(Object viewModel) {
 		return new UIManager(viewModel);

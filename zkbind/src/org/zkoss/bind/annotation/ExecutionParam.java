@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 public @interface ExecutionParam {
 	/**
 	 * name of the parameter.
-	 * Since 9.2.0, it can be omitted if name is the same as the annotated parameter.
+	 * Since 9.5.0, it can be omitted if name is the same as the annotated parameter.
 	 * @return name of the parameter
 	 */
 	String value() default "";

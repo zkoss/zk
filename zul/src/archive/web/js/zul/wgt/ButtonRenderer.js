@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** @class zul.wgt.ButtonRenderer
  * The renderer used to render buttons of a window.
  * It is designed to be overridden
- * @since 9.2.0
+ * @since 9.5.0
  */
 zul.wgt.ButtonRenderer = {
 	/** Redraws the collapse button HTML.

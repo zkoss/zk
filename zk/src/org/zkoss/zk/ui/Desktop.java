@@ -344,7 +344,7 @@ public interface Desktop extends Scope {
 	/**
 	 * Returns the URI for ZK resource.
 	 * @param pathInfo the path to append to the returned URI, or null to ignore
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public default String getResourceURI(String pathInfo) {
 		return getUpdateURI(pathInfo);

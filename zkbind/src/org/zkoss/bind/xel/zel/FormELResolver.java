@@ -28,7 +28,7 @@ import org.zkoss.zel.PropertyNotWritableException;
 /**
  * ELResolver for {@link FormLegacy}.
  * @author Leon
- * @since 9.2.0
+ * @since 9.5.0
  */
 public class FormELResolver extends ELResolver {
 	

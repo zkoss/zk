@@ -112,7 +112,7 @@ public interface UiFactory {
 	 * @param resourceURI the URI that is used to get ZK resource
 	 * @param path the path to request this desktop, such as "/test/test.zul",
 	 * or null if it is caused by a filter.
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public default Desktop newDesktop(RequestInfo ri, String updateURI, String resourceURI, String path) {
 		return newDesktop(ri, updateURI, path);

@@ -764,7 +764,7 @@ public class Strings {
 	 * @param value the value
 	 * @param defaultValue the default value
 	 * @return {@code value} if not empty. {@code defaultValue} if empty.
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public static final String defaultIfEmpty(String value, String defaultValue) {
 		return isEmpty(value) ? defaultValue : value;

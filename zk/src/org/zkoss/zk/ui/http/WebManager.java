@@ -117,7 +117,7 @@ public class WebManager {
 	 * @param ctx the servlet context
 	 * @param updateURI the URI for asynchronous update
 	 * @param resourceURI the URI for ZK resource.
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	@SuppressWarnings("deprecation")
 	public WebManager(ServletContext ctx, String updateURI, String resourceURI) {
@@ -344,7 +344,7 @@ public class WebManager {
 	 * proceed with the servlet context prefix.
 	 * @see Desktop#getResourceURI
 	 * @see WebApp#getResourceURI
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public String getResourceURI() {
 		return _resourceURI;
