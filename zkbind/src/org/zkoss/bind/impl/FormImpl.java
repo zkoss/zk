@@ -27,9 +27,9 @@ import org.zkoss.lang.Objects;
 
 /**
  * For compatibility only.
- * @deprecated As of release 9.2.0, please use {@link org.zkoss.bind.Form}
+ * @deprecated As of release 9.5.0, please use {@link org.zkoss.bind.Form}
  * @author Leon
- * @since 9.2.0
+ * @since 9.5.0
  */
 @Deprecated
 public class FormImpl implements FormLegacy, FormLegacyExt, Serializable {

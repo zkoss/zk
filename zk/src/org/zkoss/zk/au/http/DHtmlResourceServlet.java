@@ -50,7 +50,7 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
  * </dl>
  * @author tomyeh
  * @author jameschu
- * @since 9.2.0
+ * @since 9.5.0
  */
 public class DHtmlResourceServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DHtmlResourceServlet.class);

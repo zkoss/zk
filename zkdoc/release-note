@@ -1,4 +1,4 @@
-ZK 9.2.0
+ZK 9.5.0
 * Features
   ZK-4508: The value of @BindingParam can be omitted
   ZK-4501: Add SimpleForm back for compatibility
@@ -32,9 +32,9 @@ ZK 9.2.0
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
-  + Since 9.2.0, the transitive dependency of slf4j-jdk14 was removed.
+  + Since 9.5.0, the transitive dependency of slf4j-jdk14 was removed.
     Please choose the desired SLF4J binding instead.
-  + Since 9.2.0, the transitive dependency of closure-compiler-unshaded was removed.
+  + Since 9.5.0, the transitive dependency of closure-compiler-unshaded was removed.
     If you want to enable source maps, please add it manually.
   + Due to ZK-4569, there is syntax sugar for calling commands in other viewmodel. 
     E.g. @command('$pvm.doClick') would trigger the 'doClick' command in the viewModel whose id is 'pvm'.

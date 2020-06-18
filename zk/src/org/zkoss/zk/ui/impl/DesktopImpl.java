@@ -251,7 +251,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * @param deviceType the device type.
 	 * If null or empty is specified, "ajax" is assumed.
 	 * @param request the request (HttpServletRequest if HTTP)
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	public DesktopImpl(WebApp wapp, String updateURI, String resourceURI, String path, String deviceType, Object request) {
 		if (updateURI == null || wapp == null)

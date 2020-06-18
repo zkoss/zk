@@ -74,7 +74,7 @@ zul.db.Renderer = {
 	 * @param int monthofs the month offset. If the day is in the same month
 	 * @param int dayofweek the day of the week (between 0 to 6)
 	 * @return String the label of a date
-	 * @since 9.2.0
+	 * @since 9.5.0
 	 */
 	cellAriaLabel: function (cal, y, m, day, monthofs, dayofweek) {
 		var localizedSymbols = cal.getLocalizedSymbols();
