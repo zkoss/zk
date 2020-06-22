@@ -10,14 +10,14 @@
 	
 	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
-<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native" xmlns:w="client">
 	You should see the "Tab Last" is selected and scrolled to the right-most closed to the "->" icon.
-	<script>
-		setTimeout(function() {
-			zk.log(jq('.z-tab-selected').zk.isScrollIntoView());
-		}, 500);
-	</script>
 	<n:div>
+		<button label="Is Tab Last in view?">
+			<attribute w:name="onClick"><![CDATA[
+			zk.log(jq('.z-tab-selected').zk.isScrollIntoView());
+			]]></attribute>
+		</button>
 		<tabbox width="100%">
 			<tabs>
 				<tab label="Tab Long Long Long Long Label" closable="true"

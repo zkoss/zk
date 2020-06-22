@@ -13,6 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 public class B50_ZK_258Test extends WebDriverTestCase {
@@ -20,7 +21,10 @@ public class B50_ZK_258Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		Assert.assertTrue(jq(".z-tab").eq(16).hasClass("z-tab-selected"));
+		Assert.assertTrue(jq(".z-tab:contains(Tab Last)").hasClass("z-tab-selected"));
+
+		click(jq("@button"));
+		waitResponse();
 		Assert.assertEquals("true", getZKLog());
 	}
 }

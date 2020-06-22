@@ -75,17 +75,24 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		 * side program.
 		 * @param boolean disabled
 		 */
-		disabled: _zkf,
-		/**
-		 * Returns whether this tab is selected.
-		 * @return boolean
-		 */
-		/**
-		 * Sets whether this tab is selected.
-		 * @param boolean selected
-		 */
-		selected: function (selected) {
-			this._sel();
+		disabled: _zkf
+	},
+	/**
+	 * Returns whether this tab is selected.
+	 * @return boolean
+	 */
+	isSelected: function () {
+		var tabbox = this.getTabbox();
+		return tabbox && tabbox.getSelectedTab() == this;
+	},
+	/**
+	 * Sets whether this tab is selected.
+	 * @param boolean selected
+	 */
+	setSelected: function (selected, fromServer) {
+		var tabbox = this.getTabbox();
+		if (tabbox && selected) {
+			tabbox.setSelectedTab(this, fromServer);
 		}
 	},
 	/**
@@ -117,58 +124,36 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			evt.stop();
 		}
 	},
-	_sel: function (notify, init) {
-		var tabbox = this.getTabbox();
-
-		/* ZK-1441
-		 * If tabbox is animating (end-user click different tabs quickly), ignore this action.
-		 */
-		if (!tabbox || tabbox._animating) return;
-
-		var	tabs = this.parent,
-			oldtab = tabbox._selTab;
-		if (oldtab != this || init) {
-			if (oldtab && tabbox.inAccordionMold()) {
-				var p = this.getLinkedPanel();
-				if (p) p._changeSel(oldtab.getLinkedPanel());
-			}
-			if (oldtab && oldtab != this)
-				this._setSel(oldtab, false, false, init);
-			this._setSel(this, true, notify, init);
-		}
-	},
-	_setSel: function (tab, toSel, notify, init) {
+	_sel: function (toSel, notify) {
 		var tabbox = this.getTabbox(),
-			panel = tab.getLinkedPanel();
-		if (tab.isSelected() == toSel && notify)
-			return;
+			panel = this.getLinkedPanel(),
+			inAccordion = tabbox.inAccordionMold();
 
 		if (toSel) {
-			tabbox._selTab = tab; //avoid loopback
 			var ps;
 			if (ps = tabbox.tabpanels) {
-				if (ps._selPnl && ps._selPnl != panel) ps._selPnl._sel(false, tabbox.inAccordionMold());
+				if (ps._selPnl && ps._selPnl != panel) ps._selPnl._sel(false, inAccordion);
 				ps._selPnl = panel; //stored in tabpanels
 			}
+			tabbox._selTab = this;
 		}
-		tab._selected = toSel;
 
 		if (!this.desktop) return;
 
 		if (toSel)
-			jq(tab).addClass(this.$s('selected'));
+			jq(this).addClass(this.$s('selected'));
 		else
-			jq(tab).removeClass(this.$s('selected'));
+			jq(this).removeClass(this.$s('selected'));
 
 		if (panel && panel.isVisible()) //Bug ZK-1618: not show tabpanel if visible is false
-			panel._sel(toSel, !init);
+			panel._sel(toSel, true);
 
-		if (!tabbox.inAccordionMold()) {
+		if (!inAccordion) {
 			var tabs = this.parent;
 			if (tabs) tabs._fixWidth(toSel); //ZK-2810: don't set height to tabbox when deselect
 		}
 
-		if (tab == this) {
+		if (toSel) {
 			if (tabbox.isVertical())
 				tabs._scrollcheck('vsel', this);
 			else if (!tabbox.inAccordionMold())
@@ -212,7 +197,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	//protected
 	doClick_: function (evt) {
 		if (this._disabled) return;
-		this._sel(true);
+		/* ZK-1441
+		 * If tabbox is animating (end-user click different tabs quickly), ignore this action.
+		 */
+		var tabbox = this.getTabbox();
+		if (tabbox && tabbox._animating) return;
+		this.setSelected(true);
 		this.$supers('doClick_', arguments);
 	},
 	domClass_: function (no) {
@@ -249,24 +239,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers(zul.tab.Tab, 'bind_', arguments);
-		var closebtn = this.isClosable() ? this.$n('cls') : null,
-			tab = this;
+		var closebtn = this.isClosable() ? this.$n('cls') : null;
 		if (closebtn) {
 			this.domListen_(closebtn, 'onClick', '_doCloseClick');
 		}
-		if (tab.isSelected()) {
-			zk.afterMount(function () {
-				if (tab.desktop && tab.getTabbox().inAccordionMold()) {
-					var panel = tab.getLinkedPanel(),
-						cave = panel ? panel.$n('cave') : null;
-					// slide down if the cave node of panel is not visible before select
-					if (cave && cave.style.display == 'none')
-						panel._sel(true, true);
-				}
-				if (tab.isSelected()) tab._sel(false, true);
-			});
-		}
-
 		if (this.getHeight())
 			this._calcHgh();
 

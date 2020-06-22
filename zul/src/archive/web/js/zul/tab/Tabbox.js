@@ -46,7 +46,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	_tabscroll: true,
 	_maximalHeight: false,
 	/* ZK-1441
-	 * Reference: _sel() in Tab.js, Tabpanel.js
+	 * Reference: doClick_() in Tab.js, _sel() in Tabpanel.js
 	 */
 	_animating: false,
 
@@ -243,14 +243,10 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	 * Sets the selected tab.
 	 * @param Tab tab
 	 */
-	setSelectedTab: function (tab) {
-		var selTab = this._selTab;
-		if (selTab != tab) {
-			this._selTab = null; // it will be set in Tab._selTab
-			if (selTab)
-				selTab.setSelected(false);
-			if (tab)
-				tab.setSelected(true);
+	setSelectedTab: function (tab, fromServer) {
+		if (this._selTab != tab) {
+			this._setSel(tab, !fromServer);
+			this._selTab = tab;
 		}
 	},
 	bind_: function (desktop, skipper, after) {
@@ -271,6 +267,17 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			if (btn = this.$n(key[le]))
 				this.domListen_(btn, 'onClick', '_doClick', key[le]);
 		this._fixMaxHeight();
+
+		zk.afterMount(this.proxy(function () {
+			var tabs = this.tabs,
+				seltab = this._selTab;
+			if (seltab && tabs) {
+				if (this.isVertical())
+					tabs._scrollcheck('vsel', seltab);
+				else if (!this.inAccordionMold())
+					tabs._scrollcheck('sel', seltab);
+			}
+		}));
 	},
 	unbind_: function () {
 		zWatch.unlisten({onResponse: this});
@@ -432,6 +439,20 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 				var panel = c.getCaveNode();
 				if (panel)
 					panel.style.height = jq.px0(max);
+			}
+		}
+	},
+	_setSel: function (newtab, notify) {
+		if (newtab) {
+			var oldtab = this._selTab;
+			if (oldtab != newtab) {
+				if (oldtab && this.inAccordionMold()) {
+					var p = newtab.getLinkedPanel();
+					if (p) p._changeSel(oldtab.getLinkedPanel());
+				}
+				if (oldtab && oldtab != newtab)
+					oldtab._sel(false, false);
+				newtab._sel(true, notify);
 			}
 		}
 	}
