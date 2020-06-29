@@ -17,7 +17,6 @@ import java.io.OutputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,7 +51,11 @@ public class B85_ZK_3347Test {
 	}
 
 	private String bytesToHexString(byte[] bytes) {
-		return DatatypeConverter.printHexBinary(bytes).toLowerCase();
+		StringBuilder sb = new StringBuilder();
+		for (byte b : bytes) {
+			sb.append(String.format("%02x", b));
+		}
+		return sb.toString();
 	}
 
 	private class NullOutputStream extends OutputStream {
