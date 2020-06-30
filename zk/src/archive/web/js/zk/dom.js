@@ -2625,17 +2625,53 @@ zk.copy(jq.Event.prototype, {
 			pageX: this.pageX, pageY: this.pageY
 		}, this.metaData());
 	},
-	/** Retrieve the mouse information of a DOM event. The properties of the returned object include pageX, pageY and the meta information ({@link #metaData}).
+	/** Retrieve the key information of a DOM event. The properties of the returned object include keyCode, charCode, key and the meta information ({@link #metaData}).
 	 * @return Map a map of data.
 	 * @see zk.Event#data
 	 */
 	keyData: function () {
 		return zk.copy({
 			keyCode: this.keyCode,
-			charCode: this.charCode
+			charCode: this.charCode,
+			key: this._keyDataKey()
 			}, this.metaData());
 	},
-	/** Retrieve the meta-information of a DOM event. The properties of the returned object include altKey, shiftKey, ctrlKey, leftClick, rightClick and which.
+	_keyDataKey: function () {
+		// Ref: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+		var key = this.originalEvent.key;
+		switch (key) {
+			case 'Scroll': return 'ScrollLock';
+			case 'Spacebar': return ' ';
+			case 'Left': return 'ArrowLeft';
+			case 'Right': return 'ArrowRight';
+			case 'Up': return 'ArrowUp';
+			case 'Down': return 'ArrowDown';
+			case 'Del': return 'Delete';
+			case 'Crsel': return 'CrSel';
+			case 'Exsel': return 'ExSel';
+			case 'Esc': return 'Escape';
+			case 'App': return 'ContextMenu';
+			case 'Nonconvert': return 'NonConvert';
+			case 'MediaNextTrack': return 'MediaTrackNext';
+			case 'MediaPreviousTrack': return 'MediaTrackPrevious';
+			case 'FastFwd': return 'MediaFastForward';
+			case 'VolumeUp': return 'AudioVolumeUp';
+			case 'VolumeDown': return 'AudioVolumeDown';
+			case 'VolumeMute': return 'AudioVolumeMute';
+			case 'Live': return 'TV';
+			case 'Zoom': return 'ZoomToggle';
+			case 'SelectMedia':
+			case 'MediaSelect':
+				return 'LaunchMediaPlayer';
+			case 'Decimal': return '.';
+			case 'Multiply': return '*';
+			case 'Add': return '+';
+			case 'Divide': return '/';
+			case 'Subtract': return '-';
+			default: return key;
+		}
+	},
+	/** Retrieve the meta-information of a DOM event. The properties of the returned object include altKey, ctrlKey, shiftKey, metaKey and which.
 	 * @return Map a map of data.
 	 * @see zk.Event#data
 	 */
@@ -2672,7 +2708,7 @@ zk.copy(jq.Event, {
 	stop: function (evt) {
 		evt.stop();
 	},
-	/** Returns only the properties that are meta data, such as ctrlKey, altKey, ctrlKey and which.
+	/** Returns only the properties that are meta data, such as altKey, ctrlKey, shiftKey, metaKey and which.
 	 * <p>For example, the following returns <code>{ctrlKey:true}</code>.
 	* <pre><code>jq.event.filterMetaData({some:1,ctrlKey:true});</code></pre>
 	* @param Map data a map of data. It is usually the value returned
