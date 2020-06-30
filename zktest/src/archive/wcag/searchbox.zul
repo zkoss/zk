@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Searchbox"?>
+<?root-attributes lang="en"?>
+<!--
+searchbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 17 17:25:01 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: 1px dotted red !important;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Searchbox</n:h1>
+	</n:header>
+	<n:main>
+		<zscript><![CDATA[
+			import org.zkoss.zktest.test2.big.*;
+			import org.zkoss.util.*;
+			FakerMatrixModel BigData = new FakerMatrixModel(100, 300);
+		]]></zscript>
+		<div apply="org.zkoss.zktest.test2.F90_ZK_4380Composer">
+			<searchbox id="myComp" hflex="1" multiple="false" autoclose="true">
+				<template name="model">
+					<html><![CDATA[
+					<i class="z-icon-globe"></i>
+					<span class="name">${each}</span>
+					<span class="description">yoyoyo</span>
+					]]></html>
+				</template>
+			</searchbox>
+		</div>
+	</n:main>
+</zk>

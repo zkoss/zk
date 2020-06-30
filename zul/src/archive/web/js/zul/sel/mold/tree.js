@@ -78,7 +78,7 @@ function (out) {
 		this.domPad_(out, '-bpad');
 
 	out.push('<', tag, ' style="top:',jq.px0(this._anchorTop),';left:',jq.px0(this._anchorLeft),'" id="', uuid,
-			 '-a"  onclick="return false;" href="javascript:;" class="z-focus-a"');
+			 '-a"  onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true"');
 	var tabindex = this._tabindex; // Feature ZK-2531
 	if (tabindex != undefined)
 		out.push(' tabindex="' + tabindex + '"');

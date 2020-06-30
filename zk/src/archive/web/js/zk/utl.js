@@ -314,7 +314,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	/** A shortcut of <code>'&lt;img style="height:0;width:0"/&gt;'</code>.
 	 * @type String
 	 */
-	img0: '<img style="height:0;width:0"/>',
+	img0: '<img style="height:0;width:0" aria-hidden="true"/>',
 	/** A shortcut of <code>'&lt;i style="height:0;width:0"/&gt;'</code>.
 	 * @type String
 	 */

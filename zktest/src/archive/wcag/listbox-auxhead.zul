@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Listbox"?>
+<?root-attributes lang="en"?>
+<!--
+listbox-auxhead.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 28 16:00:23 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		.z-listcell-content:focus, .z-listheader-content:focus, .z-auxheader-content:focus {
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+		.z-listbox:focus {
+			outline: solid;
+			outline-color: red;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Listbox - Auxhead</n:h1>
+	</n:header>
+	<n:main>
+		<button label="test focus" />
+		<listbox>
+			<auxhead>
+				<auxheader label="column 1" colspan="1"/>
+				<auxheader label="column 2" colspan="1"/>
+				<auxheader label="column 3,4" colspan="2"/>
+				<auxheader label="column 5,6,7" colspan="3"/>
+			</auxhead>
+			<listhead>
+				<listheader label="column ${each}" forEach="1,2,3,4,5,6,7" hflex="min"/>
+			</listhead>
+<!--			<frozen columns="1"/>-->
+			<listitem>
+				<listcell forEach="1,2,3,4,5,6,7"><textbox/></listcell>
+			</listitem>
+		</listbox>
+	</n:main>
+</zk>

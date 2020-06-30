@@ -17,8 +17,8 @@ function (out) {
 		zicon = ' z-icon-ellipsis-' + ('vertical' == this.getOrient() ? 'h' : 'v');
 	out.push('<div', this.domAttrs_(), '><span id="',
 			this.uuid, '-btn" class="', this.$s('button'),'">',
-			'<i class="', icon, zicon, '"></i>',
-			'<i id="', this.uuid ,'-icon" class="', icon, '"></i>',
-			'<i class="', icon, zicon, '"></i>',
+			'<i class="', icon, zicon, '" aria-hidden="true"></i>',
+			'<i id="', this.uuid ,'-icon" class="', icon, '" aria-hidden="true"></i>',
+			'<i class="', icon, zicon, '" aria-hidden="true"></i>',
 			'</span></div>');
 }
