@@ -14,7 +14,7 @@ cascader.zul
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:n="native">
+<zk xmlns:n="native" xmlns:ca="client/attribute">
     <style><![CDATA[
 		/* FIXME: For demonstration only, should apply to theme itself. */
 		:focus {
@@ -30,7 +30,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			TreeModel m1 = new F90_ZK_4392Model("A");
 			TreeModel m2 = new F90_ZK_4392BeanModel("bean");
 		]]></zscript>
-		<cascader model="${m1}" width="300px" placeholder="empty" >
+		<cascader model="${m1}" width="300px" placeholder="empty" ca:aria-label="Choose something">
 			<template name="model">
 				${each}
 			</template>

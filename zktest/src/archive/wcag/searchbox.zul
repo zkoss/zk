@@ -14,7 +14,7 @@ searchbox.zul
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:n="native">
+<zk xmlns:n="native" xmlns:ca="client/attribute">
     <style><![CDATA[
 		/* FIXME: For demonstration only, should apply to theme itself. */
 		:focus {
@@ -31,7 +31,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			FakerMatrixModel BigData = new FakerMatrixModel(100, 300);
 		]]></zscript>
 		<div apply="org.zkoss.zktest.test2.F90_ZK_4380Composer">
-			<searchbox id="myComp" hflex="1" multiple="false" autoclose="true">
+			<searchbox id="myComp" hflex="1" multiple="false" autoclose="true" ca:aria-label="Choose something">
 				<template name="model">
 					<html><![CDATA[
 					<i class="z-icon-globe"></i>

@@ -27,6 +27,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<n:h1>Rangeslider</n:h1>
 	</n:header>
 	<n:main>
-		<rangeslider startValue="10" endValue="50" ca:aria-label="range value"/>
+		<rangeslider startValue="10" endValue="50" ca:aria-label="range value" ca:data-ariaStartLabel="minimal range value"
+					 ca:data-ariaEndLabel="maximal range value">
+		</rangeslider>
 	</n:main>
 </zk>

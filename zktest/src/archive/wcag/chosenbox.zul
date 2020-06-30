@@ -14,7 +14,7 @@ chosenbox.zul
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:n="native">
+<zk xmlns:n="native" xmlns:ca="client/attribute">
     <style><![CDATA[
 		/* FIXME: For demonstration only, should apply to theme itself. */
 		:focus {
@@ -38,7 +38,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			model.addToSelection("Banana");
 		]]></zscript>
 		<div hflex="1" vflex="1">
-			<chosenbox model="${model}" width="200px" creatable="true" onSelect="" />
+			<chosenbox model="${model}" width="200px" creatable="true" onSelect="" ca:aria-label="Choose fruit"/>
 		</div>
 	</n:main>
 </zk>
