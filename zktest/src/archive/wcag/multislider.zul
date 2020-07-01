@@ -28,8 +28,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	</n:header>
 	<n:main>
 		<multislider ca:aria-label="range value">
-			<sliderbuttons startValue="0" endValue="100" />
-			<sliderbuttons startValue="10" endValue="50" />
+			<sliderbuttons startValue="0" endValue="100" ca:data-ariaStartLabel="minimal range value"
+						   ca:data-ariaEndLabel="maximal range value"/>
+			<sliderbuttons startValue="10" endValue="50" ca:data-ariaStartLabel="minimal range value"
+						   ca:data-ariaEndLabel="maximal range value"/>
 		</multislider>
 	</n:main>
 </zk>

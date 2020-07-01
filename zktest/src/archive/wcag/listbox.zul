@@ -32,15 +32,15 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	</n:header>
 	<n:main>
 		<button label="test focus" />
-		<listbox mold="select">
+		<listbox mold="select" ca:aria-label="select box">
 			<listitem forEach="${items}">
 				<listcell label="${each}-1" />
 			</listitem>
 		</listbox>
-		<listbox model="${model}" width="250px" height="300px">
+		<listbox model="${model}" width="250px" height="300px" ca:aria-label="a listbox">
 		</listbox>
 		<hlayout>
-			<listbox width="350px">
+			<listbox width="350px" ca:aria-label="a listbox">
 				<listhead>
 					<listheader label="name" sort="auto" />
 					<listheader label="gender" />
@@ -60,7 +60,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<listcell label="FEMALE" />
 					<listcell label="000000000" />
 				</listitem>
-				<listgroup>
+				<listgroup ca:aria-label="Some group">
 					<listcell label="Assignee" />
 				</listgroup>
 				<listitem>
@@ -84,7 +84,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				</listitem>
 			</listbox>
 
-			<listbox width="250px" multiple="true" checkmark="true">
+			<listbox width="250px" multiple="true" checkmark="true" ca:aria-label="a listbox">
 				<listitem>
 					<listcell label="Mary0" />
 					<listcell label="FEMALE" />
@@ -93,7 +93,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<listheader label="name" sort="auto" />
 					<listheader label="gender" />
 				</listhead>
-				<listgroup>
+				<listgroup ca:aria-label="Some group">
 					<listcell label="Assignee" />
 				</listgroup>
 				<listitem>
