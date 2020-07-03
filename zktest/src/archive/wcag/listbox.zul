@@ -17,7 +17,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="native" xmlns:ca="client/attribute">
 	<style><![CDATA[
 		/* FIXME: For demonstration only, should apply to theme itself. */
-		.z-listcell-content:focus, .z-listheader-content:focus, z-listgroup-inner:focus, .z-listbox:focus {
+		:focus {
 			outline: solid;
 			outline-color: red;
 			outline-offset: -1px;
@@ -67,6 +67,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<listcell label="Mary4" />
 					<listcell label="FEMALE" />
 				</listitem>
+				<listgroupfoot>
+					<listcell label="Foot1" />
+					<listcell label="Foot2" />
+				</listgroupfoot>
 				<listitem>
 					<listcell label="Mary5" />
 					<listcell label="FEMALE" />

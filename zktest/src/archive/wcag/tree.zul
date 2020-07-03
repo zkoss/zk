@@ -76,5 +76,53 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				</treeitem>
 			</treechildren>
 		</tree>
+		<tree checkmark="true" multiple="true">
+			<treecols>
+				<treecol width="100px" label="A" />
+				<treecol label="B" />
+				<treecol label="C" />
+				<treecol label="D" />
+				<treecol label="E" />
+				<treecol label="F" />
+				<treecol label="G" />
+			</treecols>
+			<treechildren>
+				<treeitem selected="true">
+					<treerow>
+						<treecell label="A" />
+						<treecell label="B" />
+						<treecell label="C" />
+						<treecell label="D" />
+						<treecell label="E" />
+						<treecell label="F" />
+						<treecell label="G" />
+					</treerow>
+					<treechildren>
+						<treeitem selected="true">
+							<treerow>
+								<treecell label="A-1" />
+								<treecell label="B" />
+								<treecell label="C" />
+								<treecell label="D" />
+								<treecell label="E" />
+								<treecell label="F" />
+								<treecell label="G" />
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="A-2" />
+								<treecell label="B" />
+								<treecell label="C" />
+								<treecell label="D" />
+								<treecell label="E" />
+								<treecell label="F" />
+								<treecell label="G" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</tree>
 	</n:main>
 </zk>
