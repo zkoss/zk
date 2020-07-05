@@ -15,6 +15,7 @@ ZK 9.5.0
   ZK-4564: split zkau servlet into dedicated au and resource servlets
   ZK-4598: Enhance the accessibility of components by following WCAG 2.0
   ZK-4566: Tablelayout chidrens with v/hflex set don't render when flex css activate
+  ZK-4368: Listbox header border z-index incorect with frozen
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects

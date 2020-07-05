@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4368.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jul 3, 2020 02:48:18 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Scroll and you should see the bottom border of the frozen header.
+	</label>
+	<listbox id="box" width="300px">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto" width="100px" style="border-bottom: 0"/>
+			<listheader label="gender" sort="auto" width="200px" style="border-bottom: 0"/>
+			<listheader label="gender" sort="auto" width="200px" style="border-bottom: 0"/>
+		</listhead>
+		<frozen columns="1" />
+		<listitem>
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="John" />
+			<listcell label="MALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+	</listbox>
+</zk>
