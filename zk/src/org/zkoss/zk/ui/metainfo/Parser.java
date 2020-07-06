@@ -57,7 +57,6 @@ import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
 import org.zkoss.xel.util.MethodFunction;
 import org.zkoss.xml.Locators;
-import org.zkoss.zel.ThreadLocalsManager;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
@@ -215,7 +214,6 @@ public class Parser {
 				? LanguageDefinition.getByExtension(extension) : LanguageDefinition.lookup(lang);
 		final PageDefinition pgdef = new PageDefinition(langdef, getLocator());
 
-		ThreadLocalsManager.setCurrentPageDef(pgdef);
 		//3a. resolve imports
 		if (!imports.isEmpty()) {
 			final RequestInfo ri = new RequestInfoImpl(_wapp, null, null, null, getLocator());

@@ -27,6 +27,7 @@ import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.DualFunctionMapper;
 import org.zkoss.xel.util.SimpleXelContext;
+import org.zkoss.zel.ImportHandler;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -89,7 +90,15 @@ public class SimpleEvaluator implements Evaluator {
 	protected XelContext newXelContext(Object ref) {
 		final FunctionMapper mapper = getFunctionMapper(ref);
 		final VariableResolver resolver = getVariableResolver(ref);
-		return new SimpleXelContext(resolver, mapper);
+		SimpleXelContext context = new SimpleXelContext(resolver, mapper);
+		final Page page = ref instanceof Component
+				? ((Component) ref).getPage()
+				: (ref instanceof Page ? (Page) ref : null);
+		if (page != null) {
+			context.setAttribute(ImportHandler.PageClassResolver.class.getName(),
+					(ImportHandler.PageClassResolver) page::resolveClass);
+		}
+		return context;
 		//Bug 1814838: don't cache the instance
 	}
 

@@ -34,7 +34,7 @@ public class F86_ZK_4200Test {
 	}
 
 	private static void testResolveVar(String var, int count) {
-		ImportHandler handler = ImportHandler.getImportHandler();
+		ImportHandler handler = new ImportHandler();
 		long start = System.nanoTime();
 		for (int i = 0; i < count; i++) {
 			handler.resolveClass(var);

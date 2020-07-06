@@ -22,7 +22,10 @@ import org.zkoss.xel.ValueReference;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
+import org.zkoss.zel.ImportHandler;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.xel.impl.SimpleEvaluator;
 
 /**
@@ -132,6 +135,13 @@ public class BindEvaluatorXImpl extends SimpleEvaluator implements BindEvaluator
 			//Dennis, a special control flag to ignore adding tracker when doing el,
 			//see BindELContext#ignoreTracker
 			xelc.setAttribute(BinderImpl.IGNORE_TRACKER, ctx.getAttribute(BinderImpl.IGNORE_TRACKER));
+		}
+		if (comp != null) {
+			final Page page = Components.getCurrentPage(comp);
+			if (page != null) {
+				xelc.setAttribute(ImportHandler.PageClassResolver.class.getName(),
+						(ImportHandler.PageClassResolver) page::resolveClass);
+			}
 		}
 		return xelc;
 	}

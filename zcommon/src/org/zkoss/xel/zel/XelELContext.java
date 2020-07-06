@@ -14,12 +14,12 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.zel;
 
+import org.zkoss.xel.XelContext;
 import org.zkoss.zel.ELContext;
 import org.zkoss.zel.ELResolver;
-import org.zkoss.zel.VariableMapper;
+import org.zkoss.zel.ImportHandler;
 import org.zkoss.zel.ValueExpression;
-
-import org.zkoss.xel.XelContext;
+import org.zkoss.zel.VariableMapper;
 
 /**
  * An ZEL context that is based on XEL context.
@@ -45,6 +45,9 @@ public class XelELContext extends ELContext {
 	public XelELContext(XelContext xelc) {
 		_xelc = xelc;
 		_resolver = newELResolver(xelc);
+		Object classResolver = xelc.getAttribute(ImportHandler.PageClassResolver.class.getName());
+		if (classResolver != null)
+			putContext(ImportHandler.PageClassResolver.class, classResolver);
 	}
 
 	protected ELResolver newELResolver(XelContext xelc) {
