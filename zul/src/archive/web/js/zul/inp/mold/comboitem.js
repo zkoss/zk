@@ -18,23 +18,23 @@ function (out) {
 	var icon = this.domIcon_(), img = this.domImage_();
 	if (img) {
 		if (icon) {
-			out.push('<span class="', this.$s('image'), '">', img, '</span><span class="',
-                    this.$s('icon'), '">', icon, '</span><span class="',
+			out.push('<span class="', this.$s('image'), '" aria-hidden="true">', img, '</span><span class="',
+                    this.$s('icon'), '" aria-hidden="true">', icon, '</span><span class="',
 					this.$s('text'), '">', this.domLabel_());
 		} else {
 			out.push('<span class="',
-					this.$s('image'), '">', img, '</span><span class="',
+					this.$s('image'), '" aria-hidden="true">', img, '</span><span class="',
 					this.$s('text'), '">', this.domLabel_());
 		}
 	} else {
 		if (icon) {
 			out.push('<span class="',
-					this.$s('icon'), '">', icon, '</span><span class="',
+					this.$s('icon'), '" aria-hidden="true">', icon, '</span><span class="',
 					this.$s('text'), '">', this.domLabel_());
 		} else {
 			// if no image specified, we still output the image for backward compatibility.
 			out.push('<span class="',
-            		this.$s('image'), '">', img, '</span><span class="',
+            		this.$s('image'), '" aria-hidden="true">', img, '</span><span class="',
             		this.$s('text'), '">', this.domLabel_());
 		}
 	}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Imagemap"?>
+<?root-attributes lang="en"?>
+<!--
+imagemap.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jun 04 16:02:43 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Imagemap</n:h1>
+	</n:header>
+	<n:main>
+		<imagemap id="img2" src="/test2/img/sun.jpg" ca:alt="image" onClick="what(event)">
+			<area id="First" coords="0,0,50,50" tooltiptext="First" />
+			<area id="Second" coords="50,0,100,50" tooltiptext="Second" />
+		</imagemap>
+	</n:main>
+</zk>

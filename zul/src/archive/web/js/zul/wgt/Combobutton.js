@@ -97,14 +97,13 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 	domContent_: function () {
 		var label = '<span id="' + this.uuid + '-txt" class="' + this.$s('text') + '">'
 			+ zUtl.encodeXML(this.getLabel()) + '</span>',
-			img = this.getImage(),
+			img = this.domImage_(),
 			iconSclass = this.domIcon_();
 		if (!img && !iconSclass) return label;
 
 		if (!img) img = iconSclass;
 		else
-			img = '<img class="' + this.$s('image') + '" src="' + img + '" />'
-				+ (iconSclass ? ' ' + iconSclass : '');
+			img += (iconSclass ? ' ' + iconSclass : '');
 		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img : img + space + label;

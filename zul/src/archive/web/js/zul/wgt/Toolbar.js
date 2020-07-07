@@ -163,6 +163,7 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 			overflowpopupOff = this.$s('overflowpopup-off');
 		if (newPopupChildrenAmount) {
 			jqToolbar.removeClass(overflowpopupOff).addClass(overflowpopupOn);
+			this._afterToggleOverflowpopup(true);
 			if (popupChildrenDiff > 0) {
 				for (var i = 0; i < popupChildrenDiff; i++)
 					popup.insertBefore(oldToolbarChildren.pop(), popup.children[0]);
@@ -223,10 +224,16 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 			childNode = child.$n();
 		if (popupNode && childNode) {
 			var childOnPopup = childNode.parentNode == popupNode;
-			if (childOnPopup && popupNode.children.length == 1)
+			if (childOnPopup && popupNode.children.length == 1) {
 				jq(this.$n()).removeClass(this.$s('overflowpopup-on')).addClass(this.$s('overflowpopup-off'));
+				this._closePopup(); // should close popup if overflowpopup turns off
+				this._afterToggleOverflowpopup(false);
+			}
 		}
 		this.$supers('removeChild', arguments);
+	},
+	_afterToggleOverflowpopup: function (toggle) {
+		return; // for a11y override
 	},
 	// protected
 	onChildAdded_: function () {

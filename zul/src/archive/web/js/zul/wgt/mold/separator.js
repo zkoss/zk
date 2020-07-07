@@ -13,5 +13,5 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<div', this.domAttrs_(), '>&nbsp;</div>');
+	out.push('<div', this.domAttrs_(), 'role="separator">&nbsp;</div>');
 }

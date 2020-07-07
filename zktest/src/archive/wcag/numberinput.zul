@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Number input"?>
+<?root-attributes lang="en"?>
+<!--
+numberinput.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 09 10:05:30 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Number input</n:h1>
+	</n:header>
+	<n:main>
+		<intbox ca:aria-label="intbox1" value="1" />
+		<n:label>
+			intbox2:
+			<intbox value="2" readonly="true"/>
+		</n:label>
+		<intbox ca:aria-label="intbox3" format="#,##0.##"/>
+		<intbox ca:aria-label="intbox4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
+		<intbox ca:aria-label="intbox5" constraint="no empty" placeholder="no empty" />
+		
+		<separator/>
+		
+		<longbox ca:aria-label="longbox1" value="1" />
+		<n:label>
+			longbox2:
+			<longbox value="2" readonly="true"/>
+		</n:label>
+		<longbox ca:aria-label="longbox3" format="#,##0.##"/>
+		<longbox ca:aria-label="longbox4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
+		<longbox ca:aria-label="longbox5" constraint="no empty" placeholder="no empty" />
+		
+		<separator/>
+		
+		<doublebox ca:aria-label="doublebox1" value="0.99999" />
+		<n:label>
+			doublebox2:
+			<doublebox value="1.2345" readonly="true"/>
+		</n:label>
+		<doublebox ca:aria-label="doublebox3" format="#,##0.##"/>
+		<doublebox ca:aria-label="doublebox4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
+		<doublebox ca:aria-label="doublebox5" constraint="no empty" placeholder="no empty"/>
+		
+		<separator/>
+		
+		<decimalbox ca:aria-label="decimalbox1" width="200px" value="99999999999999.99" />
+		<n:label>
+			decimalbox2:
+			<decimalbox value="1.2345" readonly="true"/>
+		</n:label>
+		<decimalbox ca:aria-label="decimalbox3" format="#,##0.##"/>
+		<decimalbox ca:aria-label="decimalbox4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
+		<decimalbox ca:aria-label="decimalbox5" constraint="no empty" placeholder="no empty"/>
+	</n:main>
+</zk>

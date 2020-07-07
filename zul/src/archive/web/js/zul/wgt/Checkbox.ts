@@ -239,6 +239,9 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			html += ` value="${v}"`;
 		return html;
 	},
+	_moldA11yAttrs() {
+		return '';
+	},
 	bind_() {
 		this.$supers(Checkbox, 'bind_', arguments);
 

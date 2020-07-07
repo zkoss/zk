@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Grid"?>
+<?root-attributes lang="en"?>
+<!--
+grid.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 30 15:25:09 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Grid</n:h1>
+	</n:header>
+	<n:main>
+		<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		.z-row-inner:focus, .z-column-content:focus, .z-auxheader-content:focus, .z-detail:focus, .z-cell:focus,
+		.z-detail-outer:focus, .z-detail-inner:focus, .z-group-inner:focus, .z-footer:focus, .z-groupfoot-inner:focus {
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+		.z-grid:focus {
+			outline: solid;
+			outline-color: red;
+		}
+    ]]></style>
+		<button label="Simple Grid" />
+		<grid>
+			<auxhead>
+				<auxheader label="column 1" colspan="1"/>
+				<auxheader label="column 2" colspan="1"/>
+				<auxheader label="column 3,4" colspan="2"/>
+			</auxhead>
+			<columns>
+				<column hflex="5">Language</column>
+				<column hflex="6">Contributor</column>
+				<column hflex="3" sort="auto">Charset</column>
+				<column hflex="4">Comment</column>
+			</columns>
+			<rows>
+				<row>
+					<label value="Arabic (ar)" visible="false" />
+					<label value="Ayman Elgharabawy" />
+					<label value="iso-8859-6" />
+					<textbox ca:aria-label="textbox" tabindex="-1"/>
+				</row>
+				<row>
+					<label value="Hungarian (hu)" />
+					<label value="Andreas Klein" />
+					<label value="iso-8859-2" />
+					<textbox ca:aria-label="textbox" tabindex="-1"/>
+				</row>
+				<row>
+					<cell>Italian (it)</cell>
+					<cell>Matteo Barbieri</cell>
+					<cell>iso-8859-1</cell>
+					<cell><textbox ca:aria-label="textbox" tabindex="-1"/></cell>
+				</row>
+			</rows>
+			<foot>
+				<footer label="footer 1"/>
+				<footer label="footer 2"/>
+				<footer label="footer 3"/>
+				<footer label="footer 4"/>
+			</foot>
+		</grid>
+		<label value="Detail" />
+		<grid fixedLayout="true" width="600px">
+			<columns>
+				<column width="40px" />
+				<column>Product Name</column>
+				<column>Price</column>
+				<column>Item location</column>
+			</columns>
+			<rows>
+				<row id="row" draggable="my message">
+					<detail id="detail" open="true">
+						<window>
+							<label value="hello!"/>
+						</window>
+					</detail>
+					<label value="label 1" />
+					<label style="color:green;float:right;" value="label 2" />
+					<label value="label 3" />
+				</row>
+				<row id="row2" draggable="my message">
+					<detail id="detail2">
+						<window>
+							<label value="hello!"/>
+						</window>
+					</detail>
+					<label value="label 1" />
+					<label style="color:green;float:right;" value="label 2" />
+					<label value="label 3" />
+				</row>
+			</rows>
+		</grid>
+		
+		<label value="Group/Groupfoot" />
+		<grid>
+			<columns sizable="true">
+				<column label="Brand" sort="auto" />
+				<column label="Processor Type" width="250px" sort="auto" />
+				<column label="Memory (RAM)" width="220px" sort="auto" />
+				<column label="Price"  width="200px" sort="auto" />
+				<column label="Hard Drive Capacity" width="250px" sort="auto" />
+			</columns>
+			<rows>
+				<group open="false">
+					<label value="Dell"/>
+					<label value="group1"/>
+					<cell>cell</cell>
+					<label value="group1"/>
+					<label value="group1"/>
+				</group>
+				<row>
+					<label value="Dell E4500 2.2GHz" style="padding-left:15px"/>
+					<label value="Intel Core 2 Duo" />
+					<label value="4GB RAM" />
+					<label value="$261.00" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<row>
+					<label value="XP-Pro Slim Dell-Inspiron-530-s" style="padding-left:15px" />
+					<label value="Intel Core 2 Duo" />
+					<label value="4GB RAM" />
+					<label value="$498.93" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<row>
+					<label value="Dell P4 3.2 GHz" style="padding-left:15px" />
+					<label value="Intel Pentium 4" />
+					<label value="8GB RAM" />
+					<label value="$377.99" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<group label="Compaq" />
+				<row>
+					<label value="Compaq SR5113WM" style="padding-left:15px" />
+					<label value="Intel Core Duo" />
+					<label value="2GB RAM" />
+					<label value="$279.00" style="color:green" />
+					<label value="160GB" />
+				</row>
+				<row>
+					<label value="Compaq HP XW4200" style="padding-left:15px" />
+					<label value="Intel Pentium 4" />
+					<label value="8GB RAM" />
+					<label value="$980.00" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<groupfoot spans="5">
+					<label value="This a summary about Compaq Desktop PCs" />
+				</groupfoot>
+			</rows>
+		</grid>
+	</n:main>
+</zk>

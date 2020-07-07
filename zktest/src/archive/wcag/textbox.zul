@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Textbox"?>
+<?root-attributes lang="en"?>
+<!--
+textbox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 09 10:05:30 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Textbox</n:h1>
+	</n:header>
+	<n:main>
+		<textbox ca:aria-label="textbox1" readonly="true" value="text..." />
+		<textbox ca:aria-label="textbox1" placeholder="text..." />
+		<n:label>
+			textbox2:
+			<textbox id="readonly" value="text..." />
+		</n:label>
+		<button label="readonly" onClick="readonly.setReadonly(!readonly.isReadonly())"/>
+		<textbox id="disabled" ca:aria-label="disabled" value="2" disabled="true"/>
+		<button label="disabled" onClick="disabled.setDisabled(!disabled.isDisabled())"/>
+		<textbox ca:aria-label="textbox3" value="secret" type="password" />
+		<textbox ca:aria-label="textbox4" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address" />
+		<textbox ca:aria-label="textbox5" rows="5" cols="40">
+			<attribute name="value">
+				text line1...
+				text line2...
+			</attribute>
+		</textbox>
+	</n:main>
+</zk>

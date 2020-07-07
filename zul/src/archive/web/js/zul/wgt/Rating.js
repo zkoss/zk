@@ -109,12 +109,8 @@ zul.wgt.Rating = zk.$extends(zul.Widget, {
 	_changeRating: function (evt) {
 		var rating = jq(evt.domTarget).data('rate'),
 			isCanceling = this._cancelable && this._rating == rating;
-		if (isCanceling)
-			jq(this).children().removeClass(this.$s('selected'));
-		else
-			this._toggleClass('selected', rating);
 		jq(this).children().removeClass(this.$s('hover'));
-		this._rating = isCanceling ? 0 : rating;
+		this.setRating(isCanceling ? 0 : rating);
 		this.fire('onChange', {rating: this._rating});
 	},
 	_doMouseOver: function (evt) {

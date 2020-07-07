@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Groupbox"?>
+<?root-attributes lang="en"?>
+<!--
+groupbox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 05 12:17:09 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<n:header>
+		<n:h1>Groupbox</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-groupbox-header:focus > .z-groupbox-title {
+				border: 1px solid red;
+			}
+			
+			.z-groupbox-header:focus > .z-caption {
+				border: 1px solid red;
+			}
+		</style>
+		<groupbox title="Groupbox closable" closable="true" >
+			Hello world
+		</groupbox>
+		
+		<groupbox closable="true" >
+			<caption>Groupbox: Caption closable</caption>
+			Hello world
+		</groupbox>
+		
+		<groupbox title="Groupbox" closable="false" >
+			Hello world
+		</groupbox>
+		
+		<groupbox closable="false" >
+			<caption>Groupbox: Caption</caption>
+			Hello world
+		</groupbox>
+		
+		3D:
+		<groupbox title="Groupbox closable" mold="3d" closable="true" >
+			Hello world
+		</groupbox>
+		
+		<groupbox closable="true" mold="3d">
+			<caption>Groupbox: Caption closable</caption>
+			Hello world
+		</groupbox>
+		
+		<groupbox title="Groupbox" closable="false" mold="3d">
+			Hello world
+		</groupbox>
+		
+		<groupbox closable="false" mold="3d">
+			<caption>Groupbox: Caption</caption>
+			Hello world
+		</groupbox>
+	</n:main>
+</zk>

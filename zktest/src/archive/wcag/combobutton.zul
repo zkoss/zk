@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Combobutton"?>
+<?root-attributes lang="en"?>
+<!--
+combobutton.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 05 15:54:44 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<n:header>
+		<n:h1>Combobutton</n:h1>
+	</n:header>
+	<n:main>
+		<combobutton label="popup" image="/img/network.gif" iconSclass="z-icon-home" onClick='Clients.log("onClick!")'>
+			<popup>
+				hello world
+			</popup>
+		</combobutton>
+		<combobutton label="popup" orient="vertical" image="/img/network.gif" onClick='Clients.log("onClick!")'>
+			<popup>
+				hello world
+			</popup>
+		</combobutton>
+		<combobutton id="disabled" label="popup" iconSclass="z-icon-home" disabled="true" onClick='Clients.log("should not trigger if isDisabled")'>
+			<popup>
+				should not popup if isDisabled
+			</popup>
+		</combobutton>
+		<button label="disabled" onClick="disabled.setDisabled(!disabled.isDisabled())"/>
+		<combobutton label="menu popup" image="/img/network.gif">
+			<menupopup>
+				<menuitem label="Index"/>
+				<menu label="Menu">
+					<menupopup>
+						<menuitem label="menuitem" />
+					</menupopup>
+				</menu>
+			</menupopup>
+		</combobutton>
+	</n:main>
+</zk>

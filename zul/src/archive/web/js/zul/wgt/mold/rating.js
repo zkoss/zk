@@ -14,7 +14,7 @@ function (out) {
 	var sclass = this.getIconSclass(),
 		isVert = 'vertical' == this._orient;
 
-	out.push('<div', this.domAttrs_(), '>');
+	out.push('<div', this.domAttrs_(), ' role="slider">');
 	for (var i = 0; i < this._max; i++) {
 		out.push('<a href="javascript:;" class="', this.$s('icon'), ' ', sclass ? sclass : 'z-icon-star');
 		if (isVert) {
@@ -28,7 +28,7 @@ function (out) {
 			out.push(' ', this.$s('disabled'));
 		if (this._readonly)
 			out.push(' ', this.$s('readonly'));
-		out.push('"></a>');
+		out.push('" aria-hidden="true" tabindex="-1"></a>');
 	}
 	out.push('</div>');
 

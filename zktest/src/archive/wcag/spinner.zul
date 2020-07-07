@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Spinner"?>
+<?root-attributes lang="en"?>
+<!--
+spinner.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 09 12:11:13 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Spinner</n:h1>
+	</n:header>
+	<n:main>
+		<spinner ca:aria-label="spinner1" value="1"  />
+		<n:label>
+			spinner2(readonly):
+			<spinner id="readonly" value="2" readonly="true"/>
+		</n:label>
+		<button label="readonly" onClick="readonly.setReadonly(!readonly.isReadonly())"/>
+		<spinner id="disabled" ca:aria-label="disabled" value="2" disabled="true"/>
+		<button label="disabled" onClick="disabled.setDisabled(!disabled.isDisabled())"/>
+		<spinner ca:aria-label="spinner3" format="#,##0.##"/>
+		<spinner ca:aria-label="spinner4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
+		<spinner ca:aria-label="spinner5" constraint="no empty" placeholder="no empty" />
+		
+		<separator/>
+		
+		<doublespinner ca:aria-label="doublespinner1" value="0.99999" />
+		<n:label>
+			doublespinner2(readonly):
+			<doublespinner value="1.2345" readonly="true"/>
+		</n:label>
+		<doublespinner ca:aria-label="disabled" value="2" disabled="true"/>
+		<doublespinner ca:aria-label="doublespinner3" format="#,##0.##"/>
+		<doublespinner ca:aria-label="doublespinner4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
+		<doublespinner ca:aria-label="doublebox5" constraint="no empty" placeholder="no empty"/>
+	</n:main>
+</zk>

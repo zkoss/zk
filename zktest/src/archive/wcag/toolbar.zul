@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Toolbar"?>
+<?root-attributes lang="en"?>
+<!--
+toolbar.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri May 29 09:37:02 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Toolbar</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-toolbar:focus-within {
+				background-color: grey;
+			}
+		</style>
+		<label multiline="true">
+			Tab and Shift + Tab: Move focus into and out of the toolbar. When focus moves into a toolbar:
+			If focus is moving into the toolbar for the first time, focus is set on the first control that is not disabled.
+			
+			make sure the focus behavior is correct after
+				1.append/remove child inside the toolbar
+				2.try arrow keys to move focus inside the toolbar
+				3.toggle item diabled in the toolbar
+		</label>
+		<toolbar ca:aria-label="horizontal toolbar">
+			<button label="btn1" width="125px" />
+			<button label="btn2" disabled="true" width="125px" />
+			<button label="btn2" width="125px" />
+		</toolbar>
+		<toolbar id="tbar2" orient="vertical" ca:aria-label="normal toolbar">
+			<button label="horizontal" width="125px" onClick='tbar2.setOrient("horizontal")' />
+			<button label="vertical" onClick='tbar2.setOrient("vertical")'/>
+		</toolbar>
+		
+		<label multiline="true">
+			make sure aria-haspopup and aria-expanded attr is correct after 1.remove/add item inside overflowPopup 2.click the overflowPopupButton("..." button).
+			if popup is opened aria-expanded should be true/menu.
+			if popup is closed aria-expanded should be false.
+			if the overflowPopup does have any item, the overflowPopupButton should be visible and aria-haspopup = true.
+			if the overflowPopup does not have any item, the overflowPopupButton should not be visible and aria-haspopup = false.
+		</label>
+		<toolbarbutton id="newItem" label="newItem" iconSclass="z-icon-home" onClick="self.detach()"/>
+		<toolbarbutton id="disabled" label="disabled" disabled="true" iconSclass="z-icon-home"/>
+		<toolbarbutton label="toggleDisabled" onClick="disabled.setDisabled(!disabled.isDisabled())"/>
+		<toolbar id="tbar" overflowPopup="true" width="450px" style="border: 1px black solid;" ca:aria-label="overflowPopup toolbar1">
+			<toolbarbutton id="tb2" label="addNewItem" iconSclass="z-icon-home" onClick="tbar.appendChild(newItem)"/>
+			<toolbarbutton label="two" disabled="true" iconSclass="z-icon-home"/>
+			<toolbarbutton label="disable" iconSclass="z-icon-home" onClick="tb2.setDisabled(!tb2.isDisabled())"/>
+			<toolbarbutton label="removeSelf1" iconSclass="z-icon-home" onClick="self.detach()"/>
+			<toolbarbutton label="removeSelf2" iconSclass="z-icon-home" onClick="self.detach()"/>
+		</toolbar>
+		<toolbar overflowPopup="true" width="350px" style="border: 1px black solid;" ca:aria-label="disabled toolbar">
+			<toolbarbutton id="distb" disabled="true" label="disabled" iconSclass="z-icon-home"/>
+		</toolbar>
+		<toolbar overflowPopup="true" width="350px" style="border: 1px black solid;" ca:aria-label="overflowPopup toolbar2">
+			<toolbarbutton disabled="true" label="disabled" iconSclass="z-icon-home"/>
+			<toolbarbutton label="two" iconSclass="z-icon-home" onClick="distb.setDisabled(!distb.isDisabled())"/>
+			<toolbarbutton label="removeSelf1" iconSclass="z-icon-home" onClick="self.detach()"/>
+		</toolbar>
+		
+		<toolbarbutton label="Home"/>
+		<toolbarbutton iconSclass="z-icon-home" label="Home"/>
+		<toolbarbutton image="/img/live.gif" label="Live Messenger"/>
+		<toolbarbutton iconSclass="z-icon-home" image="/img/live.gif" label="Live Messenger Home"/>
+		<toolbarbutton iconSclass="z-icon-home" ca:aria-label="Home"/>
+		<toolbarbutton image="/img/live.gif" ca:aria-label="Live Messenger"/>
+		<toolbarbutton iconSclass="z-icon-home" image="/img/live.gif" ca:aria-label="Live Messenger Home"/>
+	</n:main>
+</zk>

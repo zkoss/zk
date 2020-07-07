@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Radio"?>
+<?root-attributes lang="en"?>
+<!--
+radio.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 02 16:15:52 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Radio and Radiogroup</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-radio>input:focus {
+				border: 1px solid red;
+			}
+		</style>
+		Radio:
+		<radio label="radio1"/>
+		<radio ca:aria-label="radio2"/>
+		<radio label="radio3" disabled="true"/>
+		<radio label="radio4" checked="true"/>
+		
+		<separator/>
+		Radiogroup:
+		<radiogroup id="rg">
+			<radio label="radio1"/>
+			<radio ca:aria-label="radio2"/>
+			<radio label="radio3" disabled="true"/>
+			<radio label="radio4" checked="true"/>
+		</radiogroup>
+		<radio id="radio" label="outside radio"/>
+		<button label="change radiogroup to rg" onClick="radio.setRadiogroup(rg)"/>
+		<button label="change radiogroup to rg2" onClick="radio.setRadiogroup(rg2)"/>
+		
+		<separator/>
+		<radiogroup id="rg2">
+		</radiogroup>
+		<radio radiogroup="rg2" label="radio1"/>
+		<radio radiogroup="rg2" ca:aria-label="radio2"/>
+		<radio radiogroup="rg2" label="radio3" disabled="true"/>
+		<radio radiogroup="rg2" label="radio4" checked="true"/>
+	</n:main>
+</zk>
