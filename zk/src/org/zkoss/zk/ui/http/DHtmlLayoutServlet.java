@@ -37,7 +37,6 @@ import org.zkoss.lang.Expectable;
 import org.zkoss.mesg.Messages;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
-import org.zkoss.zel.ThreadLocalsManager;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
@@ -213,7 +212,6 @@ public class DHtmlLayoutServlet extends HttpServlet {
 					//no need to set device type here, since UiEngine will do it later
 				} else {
 					final PageDefinition pagedef = uf.getPageDefinition(ri, path);
-					ThreadLocalsManager.setCurrentPageDef(pagedef);
 					if (pagedef == null)
 						return false; //not found
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.zktest.test2.B95_ZK_4613?>
+<!--
+B95-ZK-4613.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 07 14:44:59 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        This issue re-fixed ZK-2596 and ZK-3972.
+        The following EL and Binding should be evaluated successfully.
+    </label>
+
+    <div apply="org.zkoss.bind.BindComposer">
+        EL:
+        <label id="el1" value="${B95_ZK_4613.STATIC_FIELD}"/>
+        <label id="el2" value="${B95_ZK_4613.staticMethod()}"/>
+        Binding:
+        <label id="bind1" value="@init(B95_ZK_4613.STATIC_FIELD)"/>
+        <label id="bind2" value="@init(B95_ZK_4613.staticMethod())"/>
+    </div>
+</zk>

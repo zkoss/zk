@@ -22,7 +22,7 @@ import org.zkoss.zel.ImportHandler;
 public class B90_ZK_4468Test {
 	@Test
 	public void testReImportAfterFailedResolve() {
-		ImportHandler importHandler = ImportHandler.getImportHandler();
+		ImportHandler importHandler = new ImportHandler();
 		String simpleName = B90_ZK_4468Test.class.getSimpleName();
 		Assert.assertNull(
 				"initially not imported class should resolved to null",
