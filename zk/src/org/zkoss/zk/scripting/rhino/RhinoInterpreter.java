@@ -22,6 +22,7 @@ import org.mozilla.javascript.Function;
 import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
 
 import org.zkoss.zk.scripting.util.GenericInterpreter;
@@ -65,7 +66,7 @@ public class RhinoInterpreter extends GenericInterpreter {
 
 	protected Object get(String name) {
 		final Object val = _global.get(name, _global);
-		if (val == Scriptable.NOT_FOUND || val == Undefined.instance || val == null)
+		if (val == Scriptable.NOT_FOUND || val == Undefined.instance || val instanceof ScriptableObject || val == null)
 			return null;
 
 		return Context.getCurrentContext().jsToJava(val, ScriptRuntime.ObjectClass);

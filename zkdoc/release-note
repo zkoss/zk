@@ -32,6 +32,7 @@ ZK 9.5.0
   ZK-4583: Listbox renders unexpected blank listitems when specifying "rows" attribute
   ZK-4601: tabbox accordion mold -> inaccessible tabs
   ZK-4613: ThreadLocalsManager not cleaned up after pageDefinition transactions
+  ZK-4410: cannot use array of Class as listbox or grid model
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
