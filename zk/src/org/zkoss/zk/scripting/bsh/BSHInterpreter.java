@@ -164,7 +164,11 @@ public class BSHInterpreter extends GenericInterpreter implements SerializableAw
 
 	protected Object get(String name) {
 		try {
-			return unwrap(_ip.get(name));
+			Object result = Primitive.unwrap(_ip.get(name));
+			if (result instanceof ClassIdentifier) {
+				return null; // Class is not a variable
+			}
+			return result;
 		} catch (EvalError ex) {
 			throw UiException.Aide.wrap(ex);
 		}
@@ -177,18 +181,17 @@ public class BSHInterpreter extends GenericInterpreter implements SerializableAw
 			//to have the correct chain
 			if (bshns != _bshns) {
 				try {
-					return unwrap(bshns.getVariable(name));
+					Object result = Primitive.unwrap(bshns.getVariable(name));
+					if (result instanceof ClassIdentifier) {
+						return null; // Class is not a variable
+					}
+					return result;
 				} catch (UtilEvalError ex) {
 					throw UiException.Aide.wrap(ex);
 				}
 			}
 		}
 		return get(name);
-	}
-
-	private static Object unwrap(Object val) {
-		return val instanceof ClassIdentifier
-				? NameSpace.identifierToClass((ClassIdentifier) val) : Primitive.unwrap(val);
 	}
 	
 	protected void set(String name, Object val) {
