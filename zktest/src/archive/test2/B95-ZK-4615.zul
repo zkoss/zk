@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4615.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jul 6 14:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<zscript><![CDATA[
+			import org.zkoss.zktest.test2.big.*;
+			import org.zkoss.util.*;
+			FakerMatrixModel BigData = new FakerMatrixModel(100, 300);
+		]]></zscript>
+	<div hflex="1" height="500px">
+		Change to tablet mode and press button, you should see 'xxx-headshim'. (There should not be 2 same ids 'xxx-bodyshim')
+		<biglistbox id="biglist" frozenCols="2" hflex="1" vflex="1" colWidth="130px" model="${BigData}" />
+	</div>
+	<label id="result" />
+	<button label="click" w:onClick="zk.$('$result').setValue(jq('.z-biglistbox-head-shim')[0].id);" />
+</zk>
