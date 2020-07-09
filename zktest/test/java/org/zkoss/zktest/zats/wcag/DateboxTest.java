@@ -11,6 +11,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
@@ -20,6 +21,7 @@ import org.zkoss.zktest.zats.ztl.JQuery;
 /**
  * @author rudyhuang
  */
+@Ignore("Needs aXe >= 3.5.6, https://github.com/dequelabs/axe-core/pull/2304")
 public class DateboxTest extends WcagTestCase {
 	@Test
 	public void testDate() {

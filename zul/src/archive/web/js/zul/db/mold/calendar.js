@@ -26,7 +26,9 @@ function (out) {
 		showTodayLink = this._showTodayLink;
 	
 	// header
-	out.push('<div id="', uuid, '"', this.domAttrs_(), '><div class="',
+	out.push('<div id="', uuid, '"', this.domAttrs_(), '><', tagnm, ' id="', uuid,
+			'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true"></',
+			tagnm, '><div class="',
 			this.$s('header'), '"><a id="', uuid, '-left" href="javascript:;" class="', icon, ' ',
 			this.$s('left'), '"', outRangeL, '><i class="z-icon-angle-left" aria-label="', msgzul.PREV, '"></i></a>',
 			'<a id="', uuid, '-title" href="javascript:;" class="', this.$s('title'), '">');
@@ -58,7 +60,5 @@ function (out) {
 		out.push('</a></div>');
 	}
 	
-	out.push('<', tagnm, ' id="', uuid,
-		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true"></',
-		tagnm, '></div>');
+	out.push('</div>');
 }
