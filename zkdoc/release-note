@@ -14,7 +14,6 @@ ZK 9.5.0
   ZK-4582: Simplify BindUtils.postNotifyChange API
   ZK-4564: split zkau servlet into dedicated au and resource servlets
   ZK-4598: Enhance the accessibility of components by following WCAG 2.0
-  ZK-4566: Tablelayout chidrens with v/hflex set don't render when flex css activate
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
@@ -33,6 +32,7 @@ ZK 9.5.0
   ZK-4601: tabbox accordion mold -> inaccessible tabs
   ZK-4613: ThreadLocalsManager not cleaned up after pageDefinition transactions
   ZK-4410: cannot use array of Class as listbox or grid model
+  ZK-4566: Tablelayout chidrens with v/hflex set don't render when flex css activate
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
