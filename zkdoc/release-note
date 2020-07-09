@@ -34,6 +34,7 @@ ZK 9.5.0
   ZK-4410: cannot use array of Class as listbox or grid model
   ZK-4566: Tablelayout chidrens with v/hflex set don't render when flex css activate
   ZK-4615: Duplicated DOM id in biglistbox
+  ZK-4621: Invalid dom autocomplete value in searchbox
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
