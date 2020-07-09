@@ -21,9 +21,14 @@ public class DrawerTest extends WcagTestCase {
 	public void test() {
 		connect();
 
-		click(jq("@button"));
-		waitResponse();
+		click(jq("@button:eq(0)"));
+		waitResponse(true);
+		verifyA11y();
+		click(widget("$d1").$n("close"));
+		waitResponse(true);
 
+		click(jq("@button:eq(1)"));
+		waitResponse(true);
 		verifyA11y();
 	}
 }

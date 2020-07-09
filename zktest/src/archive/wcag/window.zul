@@ -15,6 +15,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
 <zk xmlns:n="native">
+    <style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: 1px solid red;
+		}
+    ]]></style>
     <n:header>
         <n:h1>Window</n:h1>
     </n:header>
@@ -26,6 +32,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <window closable="true" minimizable="true" maximizable="true">
             <caption>Window: buttons Caption</caption>
             Hello world
+        </window>
+
+        <window title="Scrollable content" height="200px" contentStyle="overflow:auto" sizable="true">
+            <div height="300px">long long content</div>
         </window>
     </n:main>
 </zk>

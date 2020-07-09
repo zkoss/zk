@@ -17,7 +17,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="native">
     <style><![CDATA[
     /* FIXME: For demonstration only, should apply to theme itself. */
-    .z-panel-icon:focus {
+    :focus {
         outline: 1px dotted red;
     }
     ]]>
@@ -36,6 +36,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
             <caption>Panel: buttons with Caption</caption>
             <panelchildren>
                 Hello world
+            </panelchildren>
+        </panel>
+
+        <panel title="Scrollable content" height="200px">
+            <panelchildren style="overflow: auto" tabindex="0">
+                <div height="300px">long long content</div>
             </panelchildren>
         </panel>
     </n:main>
