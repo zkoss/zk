@@ -291,6 +291,8 @@ public class Utils {
 		addLocaleJS(sb, "COLORBOX_COLOR_SPECTRUM_BAR", MZul.COLORBOX_COLOR_SPECTRUM_BAR);
 		addLocaleJS(sb, "COLORBOX_SELECT_COLOR_BUTTON", MZul.COLORBOX_SELECT_COLOR_BUTTON);
 
+		addLocaleJS(sb, "LISTBOX_SELECT_ALL", MZul.LISTBOX_SELECT_ALL);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);
