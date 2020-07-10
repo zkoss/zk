@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4624-focus.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Feb 24 14:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Focus to target</label>
+	<div viewModel="@('org.zkoss.zktest.test2.F95_ZK_4624FocusVM')">
+		<div>
+			<button onClick="@('doFocus')" label="focus the textbox"/>
+			<button id="fIntoList" onClick="@('doFocusInList')" label="focus the textbox in a List"/>
+			<button onClick="@('doFocusInner')" label="focus the textbox inner"/>
+			<textbox id="tb" value="@(text)" />
+		</div>
+		<div id="list">
+			<forEach items="@(list)">
+				<textbox value="@(each)"/>
+			</forEach>
+			<window id="win2">
+				<textbox id="tb_inner" />
+			</window>
+			<window id="win3">
+				<textbox id="tb_inner" />
+			</window>
+		</div>
+	</div>
+</zk>
