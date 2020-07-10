@@ -45,6 +45,9 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 				scls += (scls ? ' ' : '') + this.$s('disabled');
 			if (p.isSelected())
 				scls += (scls ? ' ' : '') + this.$s('selected');
+			// ZK-4494: Tree's DOM structure shall provide enough information to decorate lines with CSS
+			if (this.getLevel() > 0)
+				scls += (scls ? ' ' : '') + (p.parent.lastChild == p ? this.$s('last-child') : this.$s('child'));
 		}
 		return scls;
 	},
