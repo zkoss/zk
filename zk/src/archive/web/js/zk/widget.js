@@ -6052,7 +6052,7 @@ function zkopt(opts) {
 		case 'eu': zAu.setErrorURI(val); break;
 		case 'ppos': zk.progPos = val; break;
 		case 'hs': zk.historystate.enabled = val; break;
-		case 'eup': zAu.setPushErrorURI(val);
+		case 'eup': zAu.setPushErrorURI(val); break;
 		case 'resURI': zk.resourceURI = val;
 		}
 	}
