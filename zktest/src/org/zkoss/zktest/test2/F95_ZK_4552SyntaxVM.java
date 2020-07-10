@@ -1,4 +1,4 @@
-/* F91_ZK_4452FocusVM.java
+/* F91_ZK_4452SyntaxVM.java
 
 	Purpose:
 		
@@ -14,17 +14,17 @@ package org.zkoss.zktest.test2;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.zkoss.bind.BindUtils;
-import org.zkoss.bind.UIManager;
-import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.util.Clients;
 
 /**
  * @author jameschu
  */
-public class F91_ZK_4452FocusVM {
+public class F95_ZK_4552SyntaxVM {
 	private List<String> data = new ArrayList<>();
+	private Object label = "a";
 	private String text = "bbb";
 	private List<String> list;
 
@@ -37,22 +37,24 @@ public class F91_ZK_4452FocusVM {
 		list.add("d");
 		list.add("e");
 		list.add("f");
-		manager = BindUtils.getUIManager(this);
-		manager.focus(text);
 	}
 
-	private UIManager manager;
-
-	@Command
-	public void doFocus() {
-		Clients.log("doFocus!");
-		manager.focus(text);
+	public void doClick(int s, @BindingParam("bb") String bb, @BindingParam("ss") long ss) {
+		Clients.log("do click!!" + s + "," + bb + "," + ss);
 	}
 
-	@Command
-	public void doFocusInList() {
-		Clients.log("doFocusInList!");
-		manager.focus(list.get(list.size() - 1));
+	@NotifyChange("selItem")
+	public void doTest(String bb, int sa, long tt) {
+		label += "1";
+		Clients.log("do test!!" + bb + "," + sa + "," + tt);
+	}
+
+	public Object getLabel() {
+		return label;
+	}
+
+	public void setLabel(Object label) {
+		this.label = label;
 	}
 
 	public List<String> getData() {

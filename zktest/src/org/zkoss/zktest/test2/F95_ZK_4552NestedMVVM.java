@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.util.Clients;
 /**
  * @author jameschu
  */
-public class F91_ZK_4452NestedMVVM {
+public class F95_ZK_4552NestedMVVM {
 
 	private List<String> data = new ArrayList<>();
 
