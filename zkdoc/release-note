@@ -14,6 +14,7 @@ ZK 9.5.0
   ZK-4582: Simplify BindUtils.postNotifyChange API
   ZK-4564: split zkau servlet into dedicated au and resource servlets
   ZK-4598: Enhance the accessibility of components by following WCAG 2.0
+  ZK-4494: Tree's DOM structure shall provide enough information to decorate lines with CSS
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects

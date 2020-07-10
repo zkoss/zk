@@ -181,7 +181,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			var iconScls = tree ? tree.getZclass() : '',
 				pitems = this._getTreeitems(item, tree);
 			for (var j = 0, k = pitems.length; j < k; ++j)
-				this._appendIcon(sb, iconScls, 'spacer', false);
+				this._appendIcon(sb, iconScls, 'spacer', false, j == k - 1); // ZK-4494: provide line anchor information to draw tree lines
 
 			if (item.isContainer()) {
 				var name = item.isOpen() ? 'open' : 'close';
@@ -209,11 +209,11 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		}
 		return pitems;
 	},
-	_appendIcon: function (sb, iconScls, name, button) {
+	_appendIcon: function (sb, iconScls, name, button, lineAnchor) {
 		var openCloseIcon = '';
 		sb.push('<span class="');
 		if (name == 'spacer') {
-			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
+			sb.push(iconScls, '-line ', iconScls, '-', name, lineAnchor ? (' ' + iconScls + '-line-anchor') : '', '"');
 			openCloseIcon += '&nbsp;';
 		} else {
 			var id = '';
