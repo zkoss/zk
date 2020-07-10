@@ -36,6 +36,7 @@ ZK 9.5.0
   ZK-4566: Tablelayout chidrens with v/hflex set don't render when flex css activate
   ZK-4615: Duplicated DOM id in biglistbox
   ZK-4621: Invalid dom autocomplete value in searchbox
+  ZK-4476: Height calculation error when using vFlex = "min" in hlayout and borderlayout
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.

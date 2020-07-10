@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4476.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jul 2, 2020  02:48:18 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<hlayout hflex="1" vflex="1">
+		<borderlayout hflex="1" vflex="min">
+			<north>
+				<div id="div1" vflex="min" style="background:yellow;">
+					<span>Only one line here.</span>
+					<span>11234567890</span>
+					<span>21234567890</span>
+					<span>01234567890</span>
+					<span>11234567890</span>
+					<button label="click it" w:onClick="zk.log(jq('$div1').height() &lt; 50)" />
+				</div>
+			</north>
+		</borderlayout>
+	</hlayout>
+</zk>

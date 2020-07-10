@@ -33,6 +33,14 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 			this.updateDomClass_();
 		}
 	},
+	bind_: function () {
+		this.$supers(zul.box.Hlayout, 'bind_', arguments);
+		zWatch.listen({beforeSize: this, onFitSize: this}); //ZK-4476
+	},
+	unbind_: function () {
+		zWatch.unlisten({beforeSize: this, onFitSize: this});
+		this.$supers(zul.box.Hlayout, 'unbind_', arguments);
+	},
 	isVertical_: function () {
 		return false;
 	},
@@ -50,5 +58,38 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	},
 	getFlexDirection_: function () {
 		return 'row';
+	},
+	//ZK-4476
+	beforeSize: function () {
+		var xc = this.firstChild,
+			totalWd = this.$n().offsetWidth,
+			flexCnt = 0,
+			flexWgts = [];
+		for (; xc; xc = xc.nextSibling) {
+			if (xc.isVisible() && !(zkc = zk(xc)).hasVParent()) {
+				var nhflex = xc._nhflex,
+					nXc = xc.$n();
+				if (nhflex) {
+					flexWgts.push({wgt: xc, flex: nhflex});
+					flexCnt += nhflex;
+				} else if (nXc) {
+					var xcOffsetWidth = nXc.offsetWidth;
+					totalWd -= xcOffsetWidth;
+					xc.$n('chdex').style.width = jq.px0(xcOffsetWidth);
+				}
+			}
+		}
+		if (flexCnt > 0) {
+			var perWd = totalWd / flexCnt;
+			for (var i = 0, l = flexWgts.length; i < l; i++)
+				flexWgts[i].wgt.$n('chdex').style.width = jq.px0(perWd * flexWgts[i].flex);
+		}
+	},
+	onFitSize: function () {
+		var xc = this.firstChild;
+		for (; xc; xc = xc.nextSibling) {
+			if (xc.isVisible() && !(zkc = zk(xc)).hasVParent())
+				xc.$n('chdex').style.width = '';
+		}
 	}
 });
