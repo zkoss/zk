@@ -28,7 +28,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
                     <menuitem image="/img/live.gif" label="Menu BB"/>
                     <menu label="Menu BC">
                         <menupopup>
-                            <menuitem checkmark="true" checked="true" autocheck="true" label="Menu C"/>
+                            <menuitem checkmark="true" checked="true" autocheck="true" label="Menu C (autocheck)"/>
                             <menuitem checkmark="true" checked="false" label="Menu D"/>
                         </menupopup>
                     </menu>
