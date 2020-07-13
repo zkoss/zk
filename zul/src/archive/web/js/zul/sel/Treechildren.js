@@ -261,6 +261,13 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			jq(n).replaceWith(content);
 		}
 		child.bind(desktop, skipper);
+	},
+	getLastVisibleItem_: function () { // ZK-4494: provide line anchor information to draw tree lines
+		for (var w = this.lastChild; w; w = w.previousSibling) {
+			if (w._isVisibleInTree())
+				return w;
+		}
+		return null;
 	}
 });
 
