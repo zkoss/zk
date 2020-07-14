@@ -182,10 +182,13 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 				pitems = this._getTreeitems(item, tree);
 			for (var j = 0, k = pitems.length; j < k; ++j) {
 				var lineClass = '';
-				if (j == k - 1) // last meaningful line in structure
+				if (j == k - 1) { // last meaningful line in structure
 					lineClass = '-line-anchor';
-				else if (pitems[j + 1].treerow.isLastVisibleChild_()) // information for unnecessary line
-					lineClass = '-line-omit';
+				} else {
+					var nextItemRow = pitems[j + 1].treerow;
+					if (nextItemRow && nextItemRow.isLastVisibleChild_()) // information for unnecessary line
+						lineClass = '-line-omit';
+				}
 				this._appendIcon(sb, iconScls, 'spacer', false, lineClass); // ZK-4494: provide line anchor information to draw tree lines
 			}
 
