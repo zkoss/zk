@@ -31,6 +31,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			border-left: none;
 		}
 		
+		/* remove unnecessary vertical line before the line anchor */
+		.z-treerow-child .z-tree-line-omit:after,
+		.z-treerow-last-child .z-tree-line-omit:after {
+			border-left: none;
+		}
+		
 		/* half vertical line before each treerow for the last child */
 		.z-treerow-last-child .z-tree-line-anchor:after {
 			height: 50%;
@@ -51,8 +57,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	</style>
 	<label multiline="true">
 		Make sure we provide enough information to decorate tree lines with CSS
-		(.z-treerow-child, .z-treerow-last-child, .z-tree-line-anchor)
-		If the tree line looks weird, or broken after click "move out"/"move back" buttons, its a bug.
+		(.z-treerow-child, .z-treerow-last-child, .z-tree-line-omit, .z-tree-line-anchor)
+		If the tree line looks weird, or broken after click "toggle xxx Visible/move out"/"move back" buttons, its a bug.
 	</label>
 	<tree>
 		<treecols>
@@ -61,17 +67,21 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<treechildren>
 			<treeitem id="ti0" selected="true">
 				<treerow>
-					<treecell label="A" />
+					<treecell label="A"/>
 				</treerow>
 				<treechildren>
 					<treeitem selected="true">
 						<treerow>
-							<treecell label="A-1" />
+							<treecell label="A-1">
+								<button label="toggle A-1-2 Visible" onClick="a12.setVisible(!a12.isVisible())"></button>
+							</treecell>
 						</treerow>
 						<treechildren>
 							<treeitem selected="true">
 								<treerow>
-									<treecell label="A-1-1" />
+									<treecell label="A-1-1">
+										<button label="toggle A-1-1-2 Visible" onClick="a112.setVisible(!a112.isVisible())"></button>
+									</treecell>
 								</treerow>
 								<treechildren>
 									<treeitem selected="true">
@@ -79,17 +89,50 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 											<treecell label="A-1-1-1"/>
 										</treerow>
 									</treeitem>
-									<treeitem>
+									<treeitem id="a112">
 										<treerow>
 											<treecell label="A-1-1-2" />
 										</treerow>
 									</treeitem>
 								</treechildren>
 							</treeitem>
-							<treeitem>
+							<treeitem id="a12">
 								<treerow>
-									<treecell label="A-1-2" />
+									<treecell label="A-1-2">
+										<button label="toggle A-1-2-2 Visible" onClick="a122.setVisible(!a122.isVisible())"></button>
+									</treecell>
 								</treerow>
+								<treechildren>
+									<treeitem selected="true">
+										<treerow>
+											<treecell label="A-1-2-1"/>
+										</treerow>
+									</treeitem>
+									<treeitem id="a122">
+										<treerow>
+											<treecell label="A-1-2-2" />
+										</treerow>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="A-1-2-3">
+												<button label="toggle treerow A-1-2-3-1 Visible" onClick="a1231.setVisible(!a1231.isVisible())"></button>
+											</treecell>
+										</treerow>
+										<treechildren>
+											<treeitem selected="true">
+												<treerow id="a1231">
+													<treecell label="A-1-2-3-1"/>
+												</treerow>
+											</treeitem>
+											<treeitem>
+												<treerow>
+													<treecell label="A-1-2-3-2" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</treeitem>
+								</treechildren>
 							</treeitem>
 						</treechildren>
 					</treeitem>
@@ -143,6 +186,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 						</treerow>
 					</treeitem>
 				</treechildren>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="C" />
+				</treerow>
 			</treeitem>
 		</treechildren>
 	</tree>
