@@ -1,4 +1,4 @@
-/* F91_ZK_4552Test.java
+/* F95_ZK_4552Test.java
 
 	Purpose:
 		
@@ -26,10 +26,10 @@ import static org.junit.Assert.fail;
 /**
  * @author jameschu
  */
-public class F91_ZK_4552Test extends ZATSTestCase {
+public class F95_ZK_4552Test extends ZATSTestCase {
 	@Test
 	public void test() {
-		DesktopAgent desktop = connect("/test2/F91-ZK-4552-syntax.zul");
+		DesktopAgent desktop = connect("/test2/F95-ZK-4552-syntax.zul");
 		List<ComponentAgent> btns = desktop.queryAll("button");
 		btns.forEach(ComponentAgent::click);
 		List<String> zkLog = desktop.getZkLog();
@@ -46,7 +46,7 @@ public class F91_ZK_4552Test extends ZATSTestCase {
 
 	@Test
 	public void testNested() {
-		DesktopAgent desktop = connect("/test2/F91-ZK-4552-nested.zul");
+		DesktopAgent desktop = connect("/test2/F95-ZK-4552-nested.zul");
 		List<ComponentAgent> btns = desktop.queryAll("button");
 		btns.forEach(ComponentAgent::click);
 		List<String> zkLog = desktop.getZkLog();
@@ -69,7 +69,7 @@ public class F91_ZK_4552Test extends ZATSTestCase {
 	@Test
 	public void testException() {
 		try {
-			connect("/test2/F91-ZK-4552-syntax-exception.zul");
+			connect("/test2/F95-ZK-4552-syntax-exception.zul");
 		} catch (Exception e) {
 			return;
 		}

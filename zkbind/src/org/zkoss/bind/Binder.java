@@ -393,6 +393,4 @@ public interface Binder {
 	 * @return associated root component of this binder.
 	 */
 	public Component getView();
-
-	public Component getBindingComponent(Object base);
 }

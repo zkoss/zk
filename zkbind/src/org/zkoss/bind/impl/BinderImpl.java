@@ -431,15 +431,6 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		return _bindings.get(comp);
 	}
 
-	//internal used only
-	public Component getBindingComponent(Object base) {
-		final Set<LoadBinding> bindings = getTracker().getLoadBindings(base, ".");
-		Iterator<LoadBinding> iter = bindings.iterator();
-		if (iter.hasNext())
-			return iter.next().getComponent();
-		return null;
-	}
-
 	//called when onPropertyChange is fired to the subscribed event queue
 	private void doPropertyChange(Object base, String prop) {
 		if (_log.isDebugEnabled()) {

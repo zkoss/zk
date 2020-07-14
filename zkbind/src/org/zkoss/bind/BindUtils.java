@@ -108,13 +108,4 @@ public class BindUtils {
 			return ((ViewModelProxyObject) viewModel).getOriginClass();
 		return viewModel.getClass();
 	}
-
-	/**
-	 * Return an UIManager from specific viewModel object.
-	 * @param viewModel the view model object
-	 * @since 9.5.0
-	 */
-	public static UIManager getUIManager(Object viewModel) {
-		return new UIManager(viewModel);
-	}
 }

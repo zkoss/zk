@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-F91-ZK-4552-syntax-exception.zul
+F95-ZK-4552-syntax.zul
 
 	Purpose:
 
@@ -13,15 +13,14 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<label>Simplified Syntax, wrong usage</label>
+	<label>Simplified Syntax, you should see no exceptions and buttons works fine.</label>
 	<separator />
-	<div viewModel="@('org.zkoss.zktest.test2.F91_ZK_4452SyntaxVM')" style="overflow:auto" width="500px"
+	<div viewModel="@('org.zkoss.zktest.test2.F95_ZK_4552SyntaxVM')" style="overflow:auto" width="500px"
 		 height="500px">
 		<div>
 			<label id="l1" value="@(label)"/>
 			<separator />
-			<!-- Not allowed to use named parameters before un-named parameters. -->
-			<button onClick="@('doClick', ss=1, 123, bb='asssas,sa2')" label="Click"/>
+			<button onClick="@('doClick', 123, ss=1, bb='asssas,sa2')" label="Click"/>
 			<button onClick="@('doTest', 'aa', 12, 2)" label="Click"/>
 		</div>
 		<separator/>
