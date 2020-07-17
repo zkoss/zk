@@ -25,6 +25,7 @@ function (out, skipper) {
 				'<div id="', uuid, '-cap" class="', this.$s('header'), '">');
 		if (caption) caption.redraw(out);
 		else {
+			out.push(zUtl.encodeXML(title));
 			out.push('<div id="', uuid, '-icons" class="', this.$s('icons'), '">');
 			if (this._collapsible)
 				btnRenderer.redrawCollapseButton(this, out, tabi);
@@ -35,7 +36,6 @@ function (out, skipper) {
 			if (this._closable)
 				btnRenderer.redrawCloseButton(this, out, tabi);
 			out.push('</div>');
-			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div>');
 	} else {

@@ -20,17 +20,17 @@ function (out) {
 	if (tabbox.inAccordionMold()) {//Accordion
 		var tab = this.getLinkedTab();
 		
-		out.push('<div class="', this.getZclass() , '" id="', uuid, '" role="tabpanel">');
+		out.push('<div class="', this.getZclass() , '" id="', uuid, '" role="none">');
 		// only draw tab if it is not rendered
 		if (tab && !tab.$n())
 			tab.redraw(out);
-		out.push('<div id="', uuid, '-cave"', this.domAttrs_({id:1, zclass:1}), '>');
+		out.push('<div id="', uuid, '-cave"', this.domAttrs_({id:1, zclass:1}), ' role="region">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div></div>');
 
 	} else {//Default Mold
-		out.push('<div ', this.domAttrs_(), '>');
+		out.push('<div ', this.domAttrs_(), ' role="tabpanel">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div>');
