@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Notification"?>
+<?root-attributes lang="en"?>
+<!--
+notification.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 20 16:33:01 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Notification</n:h1>
+    </n:header>
+    <n:main>
+         <button label="info" onClick='Clients.showNotification("The operation is successful.", "info", null, null, -1, true)' />
+         <button label="warning" onClick='Clients.showNotification("The system is busy. A slow response is expected.", "warning", null, "top_center", -1, true)' />
+         <button label="error" onClick='Clients.showNotification("HTTP/1.1 404 Not Found. Please try again later.", "error", null, "end_before", -1, true)' />
+    </n:main>
+</zk>
