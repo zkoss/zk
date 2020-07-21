@@ -293,6 +293,10 @@ public class Utils {
 
 		addLocaleJS(sb, "LISTBOX_SELECT_ALL", MZul.LISTBOX_SELECT_ALL);
 
+		addLocaleJS(sb, "NOTIFICATION_INFO", MZul.NOTIFICATION_INFO);
+		addLocaleJS(sb, "NOTIFICATION_WARNING", MZul.NOTIFICATION_WARNING);
+		addLocaleJS(sb, "NOTIFICATION_ERROR", MZul.NOTIFICATION_ERROR);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);
