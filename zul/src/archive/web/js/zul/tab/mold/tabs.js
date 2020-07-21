@@ -17,8 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 function (out) {
 	var tbx = this.getTabbox(),
 		uuid = this.uuid;
-	out.push('<div ', this.domAttrs_(), ' role="tablist">',
-			   '<ul id="', uuid, '-cave" class="', this.$s('content'), '">');
+	out.push('<div ', this.domAttrs_(), ' role="none">',
+			   '<ul id="', uuid, '-cave" class="', this.$s('content'), '" role="tablist">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	out.push(  '</ul>',

@@ -41,7 +41,7 @@ function (out) {
 	}
 
 	out.push('<', tag, ' ', this.domAttrs_(), '>');
-	out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '" role="tab" aria-labelledby="', uuid, '">');
+	out.push('<div id="', uuid, '-cave" class="', this.$s('content'), '">');
 
 	if (this.isClosable())
 		out.push('<div id="', uuid , '-btn" class="', this.$s('button'), '">', removeIcon, '</div>');

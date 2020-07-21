@@ -30,6 +30,7 @@ function (out, skipper) {
 		
 		if (caption) caption.redraw(out);
 		else {
+			out.push(zUtl.encodeXML(title));
 			out.push('<div id="', uuid, '-icons" class="', this.$s('icons'), '">');
 			if (this._minimizable)
 				btnRenderer.redrawMinimizeButton(this, out, tabi);
@@ -38,7 +39,6 @@ function (out, skipper) {
 			if (this._closable)
 				btnRenderer.redrawCloseButton(this, out, tabi);
 			out.push('</div>');
-			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div>');
 	} 
