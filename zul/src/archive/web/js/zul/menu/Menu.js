@@ -306,16 +306,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				}
 				evt.stop();
 				break;
-			case 37: //LEFT
-			case 39: //RIGHT
-				// LEFT: 1. jump to the previous menu if any, otherwise, jump to the last one
-				// RIGHT: 1. jump to the next menu if any, otherwise, jump to the first one
-				var target = keyCode == 37 ? this._getPrevVisibleMenu() : this._getNextVisibleMenu();
-				if (target)
-					target.focus();
-				evt.stop();
-				break;
 			case 13: //ENTER
+			case 32: //SPACE
 				// 1. toggle the open/close status for the menupopup, if any.
 				if (this.menupopup)
 					_doClick(this, evt);
@@ -481,7 +473,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this.isTopmost()) {
 			var bar = this.getMenubar();
 			if (bar)
-				return 'vertical' == bar.getOrient();
+				return bar.isVertical();
 		}
 		return false;
 	}

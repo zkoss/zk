@@ -20,11 +20,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     </n:header>
     <n:main>
         <menubar width="500px" scrollable="true">
-            <menuitem label="Menu A"/>
+            <menuitem label="Menu A" onClick='Clients.log(self.label)'/>
             <menuseparator />
             <menu label="Menu B">
                 <menupopup>
-                    <menuitem iconSclass="z-icon-home" label="Menu BA"/>
+                    <menuitem iconSclass="z-icon-home" label="Menu BA" onClick='Clients.log(self.label)'/>
                     <menuitem image="/img/live.gif" label="Menu BB"/>
                     <menu label="Menu BC">
                         <menupopup>
@@ -36,19 +36,24 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
             </menu>
             <menuitem disabled="true" label="Menu E"/>
             <menuitem label="Menu Foooooooooooooooooooooooooooooo"/>
-            <menuitem label="Menu Goooooooooooooooooooooooooooooo"/>
+            <menu label="Menu G">
+                <menupopup>
+                    <menuitem label="Menu G1"/>
+                </menupopup>
+            </menu>
+            <menuitem label="Menu Hoooooooooooooooooooooooooooooo"/>
         </menubar>
 
         <menubar orient="vertical" hflex="min">
-            <menuitem label="Menu A"/>
+            <menuitem label="Menu A" onClick='Clients.log(self.label)'/>
             <menuseparator />
             <menu label="Menu B">
                 <menupopup>
-                    <menuitem iconSclass="z-icon-home" label="Menu BA"/>
+                    <menuitem iconSclass="z-icon-home" label="Menu BA" onClick='Clients.log(self.label)'/>
                     <menuitem image="/img/live.gif" label="Menu BB"/>
                     <menu label="Menu BC">
                         <menupopup>
-                            <menuitem checkmark="true" checked="true" autocheck="true" label="Menu C"/>
+                            <menuitem checkmark="true" checked="true" autocheck="true" label="Menu C (autocheck)"/>
                             <menuitem checkmark="true" checked="false" label="Menu D"/>
                         </menupopup>
                     </menu>
