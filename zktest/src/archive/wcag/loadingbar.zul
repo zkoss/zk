@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Loadingbar"?>
+<?root-attributes lang="en"?>
+<?import org.zkoss.zkmax.ui.util.Loadingbar?>
+<?import org.zkoss.zkmax.ui.util.LoadingbarControl?>
+<!--
+loadingbar.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jul 21 15:34:00 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<n:header>
+		<n:h1>Loadingbar</n:h1>
+	</n:header>
+	<n:main>
+		<zscript>
+			LoadingbarControl lc = Loadingbar.createLoadingbar();
+			lc.start(0, "top");
+			int i = 0;
+		</zscript>
+		<label>control bar: </label>
+		<button label="restart" onClick='lc.start(0, "top"); i = 0; timer1.start();' />
+		<button label="indeterminate" onClick='lc.update(true); timer1.stop();' />
+		<button label="stop indeterminate" onClick='lc.update(false); timer1.start();' />
+		<timer id="timer1" repeats="true" delay="1000">
+			<attribute name="onTimer"><![CDATA[
+				if (i <= 95)
+					lc.update(i+=5);
+				else
+					timer1.stop();
+			]]></attribute>
+		</timer>
+	</n:main>
+</zk>
