@@ -35,5 +35,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				${each}
 			</template>
 		</cascader>
+		<separator />
+		<button label="toggle disabled" onClick="cas.setDisabled(!cas.disabled)" />
+		<cascader id="cas" model="${m1}" width="300px" placeholder="empty" ca:aria-label="Choose something" disabled="true">
+			<template name="model">
+				${each}
+			</template>
+		</cascader>
 	</n:main>
 </zk>
