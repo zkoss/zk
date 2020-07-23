@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: showBusy"?>
+<?root-attributes lang="en"?>
+<!--
+showbusy.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jul 22 12:52:16 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>showBusy</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			:focus {
+				outline: 1px dotted red !important;
+			}
+		</style>
+		<zscript><![CDATA[
+			public void startBusiness(Component comp) {
+				Clients.showBusy("I am busy!");
+				Events.echoEvent("onBusy", comp, null);
+			}
+			public void doBusiness(Component comp) {
+				Thread.sleep(2000);
+				Clients.clearBusy();
+			}
+		]]></zscript>
+		<div>
+			<button label="test focus"></button>
+		</div>
+		<button label="startBusy(2 seconds)" onClick='startBusiness(self);' onBusy="doBusiness(self)"/>
+	</n:main>
+</zk>

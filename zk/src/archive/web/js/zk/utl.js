@@ -407,7 +407,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			style = ' style="left:' + x + 'px;top:' + y + 'px"',
 			idtxt = id + '-t',
 			idmsk = id + '-m',
-			html = '<div id="' + id + '"';
+			html = '<div id="' + id + '" role="alert"';
 		if (mask)
 			html += '><div id="' + idmsk + '" class="z-modal-mask"' + style + '></div';
 		html += '><div id="' + idtxt + '" class="z-loading"' + style
