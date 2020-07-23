@@ -242,10 +242,10 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_infoTags: function (out) {
 		if (this._totalSize == 0)
 			return;
-		out.push('<div class="', this.$s('info'), '"><span ',
-				_rerenderIfBothPaging(this) ? 'name' : 'id', // Bug ZK-2280
-				'="', this.uuid,
-				'-info">', this.infoText_(), '</span></div>');
+		var uuid = this.uuid,
+			nameOrId = _rerenderIfBothPaging(this) ? 'name' : 'id'; // Bug ZK-2280
+		out.push('<div ', nameOrId, '="', uuid, '-detail" class="', this.$s('info'), '"><span ',
+				nameOrId, '="', uuid, '-info" aria-hidden="true">', this.infoText_(), '</span></div>');
 	},
 	_innerTags: function () {
 		var out = new zk.Buffer(),

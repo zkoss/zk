@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid;
 
-	out.push('<nav name="', uuid, '"', this.domAttrs_(), ' aria-label="paging of ', uuid, '">');
+	out.push('<nav name="', uuid, '"', this.domAttrs_(), '>');
 	if (this.getMold() == "os") {
 		out.push(this._innerTags(), '</nav>');
 		return;
@@ -26,17 +26,17 @@ function (out) {
 	
 	out.push('<ul role="none">',
 			'<li style="' , showFirstLast, '" role="none"><button name="', uuid, '-first" class="', btn, ' ', this.$s('first'),
-				'"><i class="z-paging-icon z-icon-angle-double-left" aria-label="', msgzul.FIRST, '"></i></button></li>',
+				'" aria-label="', msgzul.FIRST, '"><i class="z-paging-icon z-icon-angle-double-left" aria-hidden="true"></i></button></li>',
 			'<li role="none"><button name="', uuid, '-prev" class="', btn, ' ', this.$s('previous'),
-				'"><i class="z-paging-icon z-icon-angle-left" aria-label="', msgzul.PREV, '"></i></button></li>',
+				'" aria-label="', msgzul.PREV, '"><i class="z-paging-icon z-icon-angle-left" aria-hidden="true"></i></button></li>',
 			'<li role="none"><input name="',
 				uuid, '-real" class="', this.$s('input'), '" type="text" value="',
 				this.getActivePage() + 1, '" size="3" aria-label="', msgzul.CURRENT, '"></input><span class="',
-				this.$s('text'), '"> / ', this.getPageCount(), '</span></li>',
+				this.$s('text'), '" aria-hidden="true"> / ', this.getPageCount(), '</span></li>',
 			'<li role="none"><button name="', uuid, '-next" class="', btn, ' ', this.$s('next'),
-				'"><i class="z-paging-icon z-icon-angle-right" aria-label="', msgzul.NEXT, '"></i></button></li>',
+				'" aria-label="', msgzul.NEXT, '"><i class="z-paging-icon z-icon-angle-right" aria-hidden="true"></i></button></li>',
 			'<li role="none" style="' , showFirstLast, '"><button name="', uuid, '-last" class="', btn, ' ', this.$s('last'),
-				'"><i class="z-paging-icon z-icon-angle-double-right" aria-label="', msgzul.LAST, '"></i></button></li></ul>');
+				'" aria-label="', msgzul.LAST, '"><i class="z-paging-icon z-icon-angle-double-right" aria-hidden="true"></i></button></li></ul>');
 	
 	if (this.isDetailed())
 		this._infoTags(out);

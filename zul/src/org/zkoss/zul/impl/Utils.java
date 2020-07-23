@@ -233,6 +233,8 @@ public class Utils {
 		addLocaleJS(sb, "PREV", MZul.PREV);
 		addLocaleJS(sb, "NEXT", MZul.NEXT);
 		addLocaleJS(sb, "CURRENT", MZul.CURRENT);
+		addLocaleJS(sb, "CURRENT_DESCRIPTION", MZul.CURRENT_DESCRIPTION);
+		addLocaleJS(sb, "DETAILED_DESCRIPTION", MZul.DETAILED_DESCRIPTION);
 
 		addLocaleJS(sb, "GRID_GROUP", MZul.GRID_GROUP);
 		addLocaleJS(sb, "GRID_OTHER", MZul.GRID_OTHER);
