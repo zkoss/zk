@@ -29,7 +29,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			<comboitem label="Cool!"/>
 			<comboitem label="Ajax and RIA"/>
 		</combobox>
-		<combobox ca:aria-label="combobox 3">
+		<button label="toggle autocomplete (combobox 3)" onClick="cb3.setAutocomplete(!cb3.isAutocomplete());"/>
+		<combobox id="cb3" ca:aria-label="combobox 3" autocomplete="true">
 			<comboitem label="Simple and Rich"
 					   image="/img/live.gif"
 					   description="The simplest way to make Web applications rich" />
