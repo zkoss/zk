@@ -252,6 +252,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				return p;
 		return null;
 	},
+	_getRootMenu: function () {
+		for (var p = this.parent; p; p = p.parent)
+			if (p.$instanceof(zul.menu.Menu) && p.isTopmost())
+				return p;
+		return null;
+	},
 	bind_: function () {
 		this.$supers(zul.menu.Menuitem, 'bind_', arguments);
 
@@ -332,6 +338,11 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					else
 						p._updateHoverImage(); // remove parent Menu hover image
 				}
+				// regain the focus on the root menu
+				if (!this.isRealVisible()) {
+					var rootMenu = this._getRootMenu();
+					if (rootMenu) rootMenu.focus();
+				}
 			}
 
 			var menubar;
@@ -340,6 +351,16 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				//_noFloatUp used in Menu.js to fix Bug 1852304
 			this.$super('doClick_', evt, true);
 		}
+	},
+	doKeyDown_: function (evt) {
+		if (this.isTopmost() && !this._disabled) {
+			var key = evt.key;
+			if (key == ' ' || key == 'Enter') {
+				evt.stop();
+				this.doClick_(new zk.Event(this, 'onClick', {}));
+			}
+		}
+		this.$super('doKeyDown_', evt);
 	},
 	_canActivate: function (evt) {
 		return !this.isDisabled() && (!zk.ie < 11 || !this.isTopmost() || this._uplder
@@ -364,6 +385,16 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				this._eimg = this.$n('a').firstChild;
 		}
 		return this._eimg;
+	},
+	// internal use only.
+	getAnchor_: function () {
+		return this.$n('a');
+	},
+	focus_: function (timeout) {
+		if (zk(this.getAnchor_()).focus(timeout)) {
+			return true;
+		}
+		return this.$supers('focus_', arguments);
 	}
 }, {
 	_isActive: function (wgt) {

@@ -75,7 +75,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var sc = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			sc += ' ' + this.$s('vertical' == this.getOrient() ? 'vertical' : 'horizontal');
+			sc += ' ' + this.$s(this.isVertical() ? 'vertical' : 'horizontal');
 		}
 		return sc;
 	},
@@ -113,7 +113,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	 * @return boolean
 	 */
 	checkScrollable: function () {
-		return this._scrollable && ('horizontal' == this.getOrient());
+		return this._scrollable && !this.isVertical();
 	},
 	onSize: function () {
 		this._checkScrolling();
@@ -269,7 +269,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		this._runId = null;
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var vert = 'vertical' == this.getOrient();
+		var vert = this.isVertical();
 		if (before)
 			jq(before.$n('chdextr') || before.$n()).before(
 				this.encloseChildHTML_({child: child, vertical: vert}));
@@ -295,6 +295,80 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		var self = this;
 		if (self._autodrop && !zul.Widget.getOpenTooltip()) //dirty fix: don't auto close if tooltip shown
 			setTimeout(function () {_closeOnOut(self);}, 200);
+	},
+	/**
+	 * Returns whether it is a vertical menubar.
+	 * @return boolean
+	 * @since 9.5.0
+	 */
+	isVertical: function () {
+		return 'vertical' == this.getOrient();
+	},
+	doKeyDown_: function (evt) {
+		var direction = 0,
+			isVertical = this.isVertical(),
+			currentTarget = evt.target;
+		switch (evt.key) {
+			case 'ArrowLeft':
+				if (!isVertical) direction = -1;
+				break;
+			case 'ArrowUp':
+				if (isVertical) direction = -1;
+				break;
+			case 'ArrowRight':
+				if (!isVertical) direction = 1;
+				break;
+			case 'ArrowDown':
+				if (isVertical) direction = 1;
+				break;
+		}
+		if (direction && currentTarget) {
+			var target = direction < 0
+				? this._getPrevVisibleMenuTarget(currentTarget)
+				: this._getNextVisibleMenuTarget(currentTarget);
+			if (target)
+				target.focus();
+			evt.stop();
+		}
+		this.$supers('doKeyDown_', arguments);
+	},
+	_getPrevVisibleMenuTarget: function (currentTarget) {
+		var prev = currentTarget.previousSibling;
+		if (!prev) {
+			prev = this.lastChild;
+		}
+		return prev ? this._prevVisibleMenu(prev) : null;
+	},
+	_getNextVisibleMenuTarget: function (currentTarget) {
+		var next = currentTarget.nextSibling;
+		if (!next) {
+			next = this.firstChild;
+		}
+		return next ? this._nextVisibleMenu(next) : null;
+	},
+	_nextVisibleMenu: function (menu) {
+		for (var m = menu; m; m = m.nextSibling) {
+			if (this.$class._isActiveItem(m))
+				return m;
+		}
+		if (this.firstChild == menu)
+			return menu;
+		return this._nextVisibleMenu(this.firstChild);
+	},
+	_prevVisibleMenu: function (menu) {
+		for (var m = menu; m; m = m.previousSibling) {
+			if (this.$class._isActiveItem(m))
+				return m;
+		}
+		if (this.lastChild == menu)
+			return menu;
+		return this._prevVisibleMenu(this.lastChild);
+	}
+}, {
+	_isActiveItem: function (wgt) {
+		return wgt.isVisible()
+			&& (wgt.$instanceof(zul.menu.Menu) || wgt.$instanceof(zul.menu.Menuitem))
+			&& !wgt.isDisabled();
 	}
 });
 

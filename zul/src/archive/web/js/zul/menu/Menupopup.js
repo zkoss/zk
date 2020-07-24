@@ -84,7 +84,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var pp = menu.menupopup;
 		if (pp) {
 			pp._shallClose = false;
-			if (!pp.isOpen()) pp.open();
+			if (!pp.isOpen()) {
+				menu.focus();
+				pp.open();
+			}
 		}
 		menu.$class._addActive(menu);
 		zWatch.fire('onFloatUp', menu); //notify all
@@ -276,7 +279,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	onShow: function () {
 		this.zsync();
-		var anc = this.$n('a');
+		var anc = this.getAnchor_();
 		if (anc) {
 			if (zk(anc).isRealVisible()) {
 				anc.focus();
@@ -348,8 +351,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				menu.$class._addActive(menu);
 				var pp = menu.parent;
 				if (pp) {
-					var anc = pp.$n('a');
-					if (anc) anc.focus();
+					pp.focus();
 					pp._curIndex = _indexOfVisibleMenu(pp, menu);
 				}
 			} else {
@@ -392,8 +394,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 						menu.$class._addActive(menu);
 						var pp = menu.parent;
 						if (pp) {
-							var anc = pp.$n('a');
-							if (anc) anc.focus();
+							pp.focus();
 						}
 					}
 				}
@@ -414,8 +415,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 						menu.$class._addActive(menu);
 						var pp = menu.parent;
 						if (pp) {
-							var anc = pp.$n('a');
-							if (anc) anc.focus();
+							pp.focus();
 						}
 					}
 				}
@@ -435,6 +435,13 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if (keyCode != 9 && keyCode != 27) // TAB && ESC
 			evt.stop(); // Bug ZK-442
 		this.$supers('doKeyDown_', arguments);
+	},
+	doClick_: function (evt) {
+		// Prevent from closing the popup if being triggered by space key.
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=1220143
+		if (evt.domTarget == this.getAnchor_())
+			evt.stop();
+		this.$supers('doClick_', arguments);
 	},
 	/** Returns the {@link Menubar} that contains this menuitem, or null if not available.
 	 * @return zul.menu.Menubar
@@ -488,6 +495,16 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				if (target) target.$class._addActive(target);
 			}
 		}
+	},
+	// internal use only.
+	getAnchor_: function () {
+		return this.$n('a');
+	},
+	focus_: function (timeout) {
+		if (zk(this.getAnchor_()).focus(timeout)) {
+			return true;
+		}
+		return this.$supers('focus_', arguments);
 	}
 }, {
 	_rmActive: function (wgt) {
