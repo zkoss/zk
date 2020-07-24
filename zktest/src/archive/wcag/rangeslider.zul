@@ -31,7 +31,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					 ca:data-ariaEndLabel="maximal range value">
 		</rangeslider>
 		<rangeslider startValue="10" endValue="50" ca:aria-label="range value" ca:data-ariaStartLabel="minimal range value"
-					 ca:data-ariaEndLabel="maximal range value" ca:data-largeStep="10">
+					 ca:data-ariaEndLabel="maximal range value" ca:data-largeStep-multiplier="10">
 		</rangeslider>
 	</n:main>
 </zk>

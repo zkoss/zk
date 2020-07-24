@@ -84,13 +84,14 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	static final int COLORBOX_COLOR_R = 0x3005 + MESSAGE_ID;
 	static final int COLORBOX_COLOR_G = 0x3006 + MESSAGE_ID;
 	static final int COLORBOX_COLOR_B = 0x3007 + MESSAGE_ID;
-	static final int COLORBOX_COLOR_H = 0x3008 + MESSAGE_ID;
-	static final int COLORBOX_COLOR_S = 0x3009 + MESSAGE_ID;
-	static final int COLORBOX_COLOR_V = 0x3010 + MESSAGE_ID;
+	static final int COLORBOX_HUE = 0x3008 + MESSAGE_ID;
+	static final int COLORBOX_SATURATION = 0x3009 + MESSAGE_ID;
+	static final int COLORBOX_VALUE = 0x3010 + MESSAGE_ID;
 	static final int COLORBOX_COLOR_HEX = 0x3011 + MESSAGE_ID;
 	static final int COLORBOX_COLOR_FIELD = 0x3012 + MESSAGE_ID;
 	static final int COLORBOX_COLOR_SPECTRUM_BAR = 0x3013 + MESSAGE_ID;
 	static final int COLORBOX_SELECT_COLOR_BUTTON = 0x3014 + MESSAGE_ID;
+	static final int COLORBOX_CURRENT_COLOR = 0x3015 + MESSAGE_ID;
 	static final int LISTBOX_SELECT_ALL = 0x3101 + MESSAGE_ID;
 	static final int NOTIFICATION_INFO = 0x3201 + MESSAGE_ID;
 	static final int NOTIFICATION_WARNING = 0x3202 + MESSAGE_ID;
