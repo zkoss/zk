@@ -33,7 +33,7 @@ public class F55_ZK_443Test extends WebDriverTestCase {
 		waitResponse();
 		Assert.assertTrue(jq("@menu:eq(1)").hasClass("z-menu-selected"));
 
-		actions.sendKeys(Keys.DOWN, Keys.DOWN, Keys.ENTER).perform();
+		actions.sendKeys(Keys.DOWN, Keys.ENTER).perform();
 		waitResponse();
 		Assert.assertEquals(2, jq(".z-menupopup.z-menupopup-open").length());
 
@@ -52,7 +52,7 @@ public class F55_ZK_443Test extends WebDriverTestCase {
 		Assert.assertTrue(jq("@checkbox input").is(":checked"));
 
 		actions.sendKeys(Keys.chord(Keys.SHIFT, Keys.TAB), Keys.UP, Keys.RIGHT)
-				.sendKeys(Keys.DOWN, Keys.DOWN, Keys.RIGHT)
+				.sendKeys(Keys.DOWN, Keys.RIGHT)
 				.perform();
 		waitResponse();
 		Assert.assertTrue(jq(".z-menu-popup.z-colorpalette-popup").isVisible());

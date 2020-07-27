@@ -267,7 +267,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				this.domListen_(anc, 'onFocus', 'doFocus_')
 					.domListen_(anc, 'onBlur', 'doBlur_');
 			}
-			this.domListen_(anc, 'onMouseEnter');
+			this.domListen_(anc, 'onMouseEnter')
+				.domListen_(anc, 'onMouseLeave');
 			if (this._upload) _initUpld(this);
 		}
 	},
@@ -279,7 +280,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				this.domUnlisten_(anc, 'onFocus', 'doFocus_')
 					.domUnlisten_(anc, 'onBlur', 'doBlur_');
 			}
-			this.domUnlisten_(anc, 'onMouseEnter');
+			this.domUnlisten_(anc, 'onMouseEnter')
+				.domUnlisten_(anc, 'onMouseLeave');
 		}
 
 		this.$supers(zul.menu.Menuitem, 'unbind_', arguments);
@@ -326,12 +328,14 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 			}
 			if (!topmost) {
+				var ref = null;
 				for (var p = this.parent; p; p = p.parent) {
 					if (p.$instanceof(zul.menu.Menupopup)) {
 						// if close the popup before choosing a file, the file chooser can't be triggered.
 						if (!p.isOpen() || this._uplder || p._keepOpen /*Bug #2911385 && !this._popup*/)
 							break;
 						this._updateHoverImage(); // remove hover image
+						ref = p._fakeParent;
 						p.close({sendOnOpen: true});
 					} else if (!p.$instanceof(zul.menu.Menu)) //either menubar or non-menu*
 						break;
@@ -342,6 +346,13 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				if (!this.isRealVisible()) {
 					var rootMenu = this._getRootMenu();
 					if (rootMenu) rootMenu.focus();
+					else if (ref) {
+						// https://bugzilla.mozilla.org/show_bug.cgi?id=1220143
+						if (zk.ff)
+							setTimeout(function () { ref.focus(); }, 200);
+						else
+							ref.focus();
+					}
 				}
 			}
 
@@ -370,8 +381,20 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		return this.$n('a');
 	},
 	_doMouseEnter: function (evt) {
-		if (zul.menu._nOpen || this.isTopmost())
+		var isTopmost = this.isTopmost();
+		if (zul.menu._nOpen || isTopmost)
 			zWatch.fire('onFloatUp', this); //notify all
+		if (!isTopmost && !this._disabled) {
+			if (this.parent)
+				this.parent.removeActive_();
+			this.$class._addActive(this);
+		}
+	},
+	_doMouseLeave: function (evt) {
+		var isTopmost = this.isTopmost();
+		if (!isTopmost && !this._disabled) {
+			this.$class._rmActive(this);
+		}
 	},
 	deferRedrawHTML_: function (out) {
 		var tag = this.isTopmost() ? 'td' : 'li';
@@ -403,8 +426,13 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost();
 		jq(wgt.$n()).addClass(wgt.$s('hover'));
-		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
-			this._addActive(wgt.parent.parent);
+		if (!top) {
+			var parentMenupopup = wgt.parent;
+			if (parentMenupopup)
+				parentMenupopup.addActive_(wgt);
+			if (parentMenupopup.parent.$instanceof(zul.menu.Menu))
+				this._addActive(parentMenupopup.parent);
+		}
 	},
 	_rmActive: function (wgt) {
 		return jq(wgt.$n()).removeClass(wgt.$s('hover'));
