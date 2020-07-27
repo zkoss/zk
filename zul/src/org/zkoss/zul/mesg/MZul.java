@@ -51,6 +51,8 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	static final int PREV = 0x2302 + MESSAGE_ID;
 	static final int NEXT = 0x2303 + MESSAGE_ID;
 	static final int CURRENT = 0x2304 + MESSAGE_ID;
+	static final int CURRENT_DESCRIPTION = 0x2305 + MESSAGE_ID;
+	static final int DETAILED_DESCRIPTION = 0x2306 + MESSAGE_ID;
 	static final int PLEASE_WAIT = 0x2400 + MESSAGE_ID;
 	static final int GRID_GROUP = 0x2500 + MESSAGE_ID;
 	static final int GRID_OTHER = 0x2501 + MESSAGE_ID;
