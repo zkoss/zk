@@ -60,5 +60,13 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<decimalbox ca:aria-label="decimalbox3" format="#,##0.##"/>
 		<decimalbox ca:aria-label="decimalbox4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
 		<decimalbox ca:aria-label="decimalbox5" constraint="no empty" placeholder="no empty"/>
+		
+		<separator/>
+		
+		<label value="Recursice labelledby test" id="target"/>
+		<intbox ca:aria-labelledby="${target.uuid}"/>
+		<longbox ca:aria-labelledby="${target.uuid}"/>
+		<doublebox ca:aria-labelledby="${target.uuid}"/>
+		<decimalbox ca:aria-labelledby="${target.uuid}"/>
 	</n:main>
 </zk>

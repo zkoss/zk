@@ -28,6 +28,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
                 Choose an end date &amp; time:
                 <datebox ca:aria-label="Choose an end date &amp; time" format="long+medium"/>
             </hlayout>
+            <hlayout>
+                <label value="test ca:aria-labelledby:"/>
+                <label value="Target Date" id="target"/>
+                <datebox ca:aria-labelledby="${target.uuid}"/>
+            </hlayout>
         </vlayout>
     </n:main>
 </zk>

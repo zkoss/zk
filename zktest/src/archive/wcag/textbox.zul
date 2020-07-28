@@ -36,5 +36,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				text line2...
 			</attribute>
 		</textbox>
+		<separator/>
+		<label value="Recursice labelledby test" id="target"/>
+		<textbox ca:aria-labelledby="${target.uuid}"/>
 	</n:main>
 </zk>

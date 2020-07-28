@@ -42,5 +42,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<doublespinner ca:aria-label="doublespinner3" format="#,##0.##"/>
 		<doublespinner ca:aria-label="doublespinner4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
 		<doublespinner ca:aria-label="doublebox5" constraint="no empty" placeholder="no empty"/>
+		
+		<separator/>
+		
+		<label value="Recursice labelledby test" id="target"/>
+		<spinner ca:aria-labelledby="${target.uuid}"/>
+		<doublespinner ca:aria-labelledby="${target.uuid}"/>
 	</n:main>
 </zk>
