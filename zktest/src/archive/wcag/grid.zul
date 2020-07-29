@@ -21,15 +21,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<n:main>
 		<style><![CDATA[
 		/* FIXME: For demonstration only, should apply to theme itself. */
-		.z-row-inner:focus, .z-column-content:focus, .z-auxheader-content:focus, .z-detail:focus, .z-cell:focus,
-		.z-detail-outer:focus, .z-detail-inner:focus, .z-group-inner:focus, .z-footer:focus, .z-groupfoot-inner:focus {
+		:focus {
 			outline: solid;
 			outline-color: red;
 			outline-offset: -1px;
-		}
-		.z-grid:focus {
-			outline: solid;
-			outline-color: red;
 		}
     ]]></style>
 		<button label="Simple Grid" />
@@ -50,19 +45,19 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<label value="Arabic (ar)" visible="false" />
 					<label value="Ayman Elgharabawy" />
 					<label value="iso-8859-6" />
-					<textbox ca:aria-label="textbox" tabindex="-1"/>
+					<textbox ca:aria-label="textbox"/>
 				</row>
 				<row>
 					<label value="Hungarian (hu)" />
 					<label value="Andreas Klein" />
 					<label value="iso-8859-2" />
-					<textbox ca:aria-label="textbox" tabindex="-1"/>
+					<textbox ca:aria-label="textbox"/>
 				</row>
 				<row>
 					<cell>Italian (it)</cell>
 					<cell>Matteo Barbieri</cell>
 					<cell>iso-8859-1</cell>
-					<cell><textbox ca:aria-label="textbox" tabindex="-1"/></cell>
+					<cell><textbox ca:aria-label="textbox"/></cell>
 				</row>
 			</rows>
 			<foot>
@@ -160,6 +155,35 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				<groupfoot spans="5">
 					<label value="This a summary about Compaq Desktop PCs" />
 				</groupfoot>
+			</rows>
+		</grid>
+		
+		<label value="test key event (combo with radio)" />
+		<radiogroup id="popular"/>
+		<radiogroup id="fun"/>
+		<grid>
+			<columns>
+				<column label="Question"/>
+				<column label="Option 1"/>
+				<column label="Option 2"/>
+				<column label="Option 3"/>
+				<column label="Comment"/>
+			</columns>
+			<rows>
+				<row>
+					Most popular
+					<radio label="Java" radiogroup="popular"/>
+					<radio label="Groovy" radiogroup="popular"/>
+					<radio label="C#" radiogroup="popular"/>
+					<textbox/>
+				</row>
+				<row>
+					Most fun
+					<radio label="Open Source" radiogroup="fun"/>
+					<radio label="Social Networking" radiogroup="fun"/>
+					<radio label="Searching" radiogroup="fun"/>
+					<textbox/>
+				</row>
 			</rows>
 		</grid>
 	</n:main>
