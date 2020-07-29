@@ -300,6 +300,9 @@ public class Utils {
 		addLocaleJS(sb, "NOTIFICATION_WARNING", MZul.NOTIFICATION_WARNING);
 		addLocaleJS(sb, "NOTIFICATION_ERROR", MZul.NOTIFICATION_ERROR);
 
+		addLocaleJS(sb, "CHOSENBOX_SELECTION", MZul.CHOSENBOX_SELECTION);
+		addLocaleJS(sb, "CHOSENBOX_CREATE_MESSAGE", MZul.CHOSENBOX_CREATE_MESSAGE);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);
