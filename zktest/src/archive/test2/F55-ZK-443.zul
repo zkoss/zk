@@ -18,7 +18,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <separator/>
 2. Press RIGHT key, the second menu popup("Help") is shown and the first one is closed.
 <separator/>
-3. Press DOWN key, the focus will jump to the "Index".
+3. Press DOWN key, the focus will jump to the "Index". (since 9.5 this step is not needed)
 <separator/>
 4. Press DOWN key, the focus will jump to the "About".
 <separator/>
@@ -40,7 +40,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <separator/>
 13. Press RIGHT key, the menupopup belongs to the menu is opened.
 <separator/>
-14. Press DOWN key and DOWN key, the focus jumps to the "Color Picker".
+14. Press DOWN key and DOWN key, the focus jumps to the "Color Picker". (since 9.5 only one DOWN key is needed)
 <separator/>
 15. Press RIGHT key, the colorpicker is opened and press LEFT key, the colorpicker is closed.
 <separator/>

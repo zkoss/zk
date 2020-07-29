@@ -19,6 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _doClick(wgt, evt) {
+		var byKeyboard = evt.name == 'onKeyDown';
 		if (wgt.isListen('onClick')) {
 			var clk = jq(wgt.$n()).find('.' + wgt.$s('separator')),
 				zclk = zk(clk),
@@ -27,7 +28,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (evt.pageX > offsetX) { //Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
 				jq(wgt.$n()).addClass(wgt.$s('selected'));
 				wgt.menupopup._shallClose = false;
-				wgt._togglePopup();
+				wgt._togglePopup(byKeyboard);
 				evt.stop();
 			} else
 				wgt.fireX(new zk.Event(wgt, 'onClick', evt.data));
@@ -35,7 +36,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		} else {
 			jq(wgt.$n()).addClass(wgt.isTopmost() ? wgt.$s('selected') : wgt.$s('hover'));
 			wgt.menupopup._shallClose = false;
-			wgt._togglePopup();
+			wgt._togglePopup(byKeyboard);
 		}
 	}
 
@@ -302,7 +303,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				if (this.menupopup && !this._disabled) {
 					jq(this.$n()).addClass(this.$s('selected')).removeClass(this.$s('hover'));
 					this.menupopup._shallClose = false;
-					this.menupopup.open();
+					this.menupopup.open(null, null, null, {focusFirst: true, sendOnOpen: true, disableMask: true});
 				}
 				evt.stop();
 				break;
@@ -394,7 +395,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	_togglePopup: function () {
+	_togglePopup: function (byKeyboard) {
 		// show the content handler
 		if (!this.menupopup && this._contentHandler) {
 			this._showContentHandler();
@@ -402,7 +403,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (!this.menupopup.isOpen()) {
 				if (this.isTopmost())
 					_toggleClickableCSS(this);
-				this.menupopup.open();
+				this.menupopup.open(null, null, null, {focusFirst: byKeyboard, sendOnOpen: true, disableMask: true});
 			} else if (this.isTopmost())
 				this.menupopup.close({sendOnOpen: true});
 			else
@@ -426,6 +427,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (!topmost) {
 			zWatch.fire('onFloatUp', this); //notify all
 			if (this.menupopup && !this.menupopup.isOpen()) this.menupopup.open();
+			this.parent.removeActive_();
 		} else {
 			if (this.menupopup && menubar._autodrop) {
 				zWatch.fire('onFloatUp', this); //notify all
@@ -496,8 +498,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			if (mb)
 				mb._lastTarget = wgt;
 		}
-		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
-			this._addActive(wgt.parent.parent);
+		if (!top) {
+			var parentMenupopup = wgt.parent;
+			if (parentMenupopup)
+				parentMenupopup.addActive_(wgt);
+			if (parentMenupopup.parent.$instanceof(zul.menu.Menu))
+				this._addActive(parentMenupopup.parent);
+		}
 	},
 	_rmActive: function (wgt, ignoreSeld/* used for mouseout when topmost*/) {
 		var top = wgt.isTopmost(),

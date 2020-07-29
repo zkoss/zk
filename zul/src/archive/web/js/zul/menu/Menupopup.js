@@ -24,14 +24,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return null;
 	}
-	function _isActiveItem(wgt) {
-		return wgt.isVisible() && (wgt.$instanceof(zul.menu.Menu) || wgt.$instanceof(zul.menu.Menuitem)) && !wgt.isDisabled();
-	}
 	//child must be _currentChild()
 	function _prevChild(popup, child) {
+		var $menubar = zul.menu.Menubar;
 		if (child)
 			while (child = child.previousSibling)
-				if (_isActiveItem(child)) {
+				if ($menubar._isActiveItem(child)) {
 					popup._curIndex--;
 					return child;
 				}
@@ -39,7 +37,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//return the last
 		popup._curIndex = -1;
 		for (var w = popup.firstChild; w; w = w.nextSibling)
-			if (_isActiveItem(w)) { //return the first one
+			if ($menubar._isActiveItem(w)) { //return the first one
 				child = w;
 				popup._curIndex++;
 			}
@@ -47,25 +45,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	//child must be _currentChild()
 	function _nextChild(popup, child) {
+		var $menubar = zul.menu.Menubar;
 		if (child)
 			while (child = child.nextSibling)
-				if (_isActiveItem(child)) {
+				if ($menubar._isActiveItem(child)) {
 					popup._curIndex++;
 					return child;
 				}
 
 		//return the first
 		for (var w = popup.firstChild; w; w = w.nextSibling)
-			if (_isActiveItem(w)) { //return the first one
+			if ($menubar._isActiveItem(w)) { //return the first one
 				popup._curIndex = 0;
 				return w;
 			}
 	}
 	function _indexOfVisibleMenu(popup, child) {
-		var i = -1;
+		var i = -1,
+			$menubar = zul.menu.Menubar;
 		for (var c = popup.firstChild; c; c = c.nextSibling) {
 			// check active first (child may be inactive)
-			if (_isActiveItem(c)) {
+			if ($menubar._isActiveItem(c)) {
 				i++;
 			}
 			if (c == child)
@@ -73,20 +73,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return i;
 	}
-	function _currentChild(popup) {
-		var index = popup._curIndex;
-		if (index >= 0)
-			for (var w = popup.firstChild, k = 0; w; w = w.nextSibling)
-				if (_isActiveItem(w) && k++ == index)
-					return w;
-	}
 	function _activateNextMenu(menu) {
 		var pp = menu.menupopup;
 		if (pp) {
 			pp._shallClose = false;
 			if (!pp.isOpen()) {
 				menu.focus();
-				pp.open();
+				pp.open(null, null, null, {focusFirst: true, sendOnOpen: true, disableMask: true});
 			}
 		}
 		menu.$class._addActive(menu);
@@ -193,9 +186,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		if ((menu = _getMenu(this)) && menu.isTopmost())
 			jq(menu.$n()).removeClass(menu.$s('selected'));
 
-		var item = _currentChild(this);
-		if (item) item.$class._rmActive(item);
-		this._curIndex = -1;
+		this.removeActive_();
 		this.$class._rmActive(this);
 	},
 	open: function (ref, offset, position, opts) {
@@ -217,6 +208,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			//open will fire onShow which invoke this.zsync()
 
 		this._syncPos(); //ZK-1248: re-sync position if sub-menu is overlapped on parent menu
+		// focus on the first menuitem
+		if (opts && opts.focusFirst) {
+			this.doKeyDown_(new zk.Event(this, 'onKeyDown', {keyCode: 40, key: 'ArrowDown'}));
+		}
 	},
 	shallStackup_: function () {
 		return false;
@@ -327,7 +322,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this._syncPos(); // For Bug ZK-2160, resync position again after invoking supers.
 	},
 	doKeyDown_: function (evt) {
-		var w = _currentChild(this),
+		var w = this._currentChild(),
 			menu,
 			keyCode = evt.keyCode;
 		switch (keyCode) {
@@ -358,16 +353,18 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				var root = _getRootMenu(this);
 				if (root && (root = root._getPrevVisibleMenu()))
 					_activateNextMenu(root);
-				else // the parent is not menu widget
+				else { // the parent is not menu widget
+					var ref = this._fakeParent;
 					this.close();
-
+					if (ref) ref.focus();
+				}
 			}
 			break;
 		case 39: //RIGHT
 			// 1. Open the descendant menupopup if any
 			// 2. jump to the next topmost menu
 			if (w && w.$instanceof(zul.menu.Menu) && !w.isDisabled()) {
-				w._togglePopup();
+				w._togglePopup(true);
 			} else {
 				var root = _getRootMenu(this);
 				if (root && (root = root._getNextVisibleMenu()))
@@ -384,7 +381,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				zWatch.fire('onFloatUp', w); //notify all
 				this.close({sendOnOpen: true});
 			} else if (w && w.$instanceof(zul.menu.Menu)) {
-				w._togglePopup();
+				w._togglePopup(true);
 			} else {
 				if ((menu = _getMenu(this))) {
 					this.close();
@@ -419,6 +416,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 						}
 					}
 				}
+			} else { // the parent is not menu widget
+				var ref = this._fakeParent;
+				this.close();
+				if (ref) ref.focus();
 			}
 			break;
 		case 9: // TAB
@@ -469,6 +470,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			if (menubar._autodrop)
 				menubar._closeOnOut();
 		}
+		// Don't remove if current active is menu (with a menupopup)
+		if (!zul.menu.Menu.isInstance(this._currentChild()))
+			this.removeActive_();
 	},
 	/**
 	 * Sets the current active item in this menupopup.
@@ -477,9 +481,10 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	 */
 	setActive: function (childIndex) {
 		if (childIndex >= 0 && childIndex < this.nChildren) {
-			var newCurrIndex = -1;
+			var newCurrIndex = -1,
+				$menubar = zul.menu.Menubar;
 			for (var w = this.firstChild, i = 0, visibleIndex = 0; w; w = w.nextSibling, i++) {
-				var isActive = _isActiveItem(w);
+				var isActive = $menubar._isActiveItem(w);
 				if (childIndex === i && isActive) {
 					newCurrIndex = visibleIndex;
 					break;
@@ -487,8 +492,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				if (isActive) visibleIndex++;
 			}
 			if (newCurrIndex >= 0) { // The item is eligible to be active
-				var item = _currentChild(this);
-				if (item) item.$class._rmActive(item);
+				this.removeActive_();
 
 				this._curIndex = newCurrIndex;
 				var target = this.getChildAt(childIndex);
@@ -505,7 +509,27 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			return true;
 		}
 		return this.$supers('focus_', arguments);
-	}
+	},
+	addActive_: function (wgt) {
+		this._curIndex = _indexOfVisibleMenu(this, wgt);
+	},
+	removeActive_: function () {
+		var currentActive = this._currentChild();
+		if (currentActive) {
+			currentActive.$class._rmActive(currentActive);
+			this._curIndex = -1;
+		}
+	},
+	_currentChild: function () {
+		var index = this._curIndex,
+			$menubar = zul.menu.Menubar;
+		if (index >= 0) {
+			for (var w = this.firstChild, k = 0; w; w = w.nextSibling)
+				if ($menubar._isActiveItem(w) && k++ == index)
+					return w;
+		}
+		return null;
+	},
 }, {
 	_rmActive: function (wgt) {
 		if (wgt.parent.$instanceof(zul.menu.Menu)) {
