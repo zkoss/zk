@@ -64,5 +64,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			<caption>Groupbox: Caption</caption>
 			Hello world
 		</groupbox>
+		
+		<groupbox title="groupbox (focus textbox and press ENTER)">
+			<textbox />
+		</groupbox>
 	</n:main>
 </zk>
