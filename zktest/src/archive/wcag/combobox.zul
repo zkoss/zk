@@ -42,5 +42,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					   iconSclass="z-icon-home"
 					   description="Rich Internet Application by Ajax" />
 		</combobox>
+		<separator/>
+		<label value="Recursice labelledby test" id="target"/>
+		<combobox ca:aria-labelledby="${target.uuid}"/>
 	</n:main>
 </zk>

@@ -25,5 +25,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <n:section>
             Arrival time: <timebox cols="12" ca:aria-label="Arrival Time" />
         </n:section>
+        <n:section>
+            <label value="Recursice labelledby test" id="target"/>
+            <timebox ca:aria-labelledby="${target.uuid}"/>
+        </n:section>
     </n:main>
 </zk>

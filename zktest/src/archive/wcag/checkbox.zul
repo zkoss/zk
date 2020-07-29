@@ -82,5 +82,15 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<checkbox label="organic romaine lettuce" ca:aria-describedby="lb1 lb2"/>
 		<separator/>
 		<n:span id="lb2">The best available organic romaine lettuce grown locally.</n:span>
+		
+		<separator/>
+		<label value="Recursice labelledby test" id="target"/>
+		<separator/>
+		<label value="Recursice labelledby test2" id="target2"/>
+		<separator/>
+		<checkbox ca:aria-labelledby="${target.uuid}"
+				  onCheck='self.setClientAttribute("aria-labelledby", self.isChecked() ? target.uuid : target2.uuid);
+				  Clients.log(self.getClientAttribute("aria-labelledby"));
+				  self.invalidate();'/>
 	</n:main>
 </zk>

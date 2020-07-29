@@ -36,5 +36,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				hello!
 			</bandpopup>
 		</bandbox>
+		<separator/>
+		<label value="Recursice labelledby test" id="target"/>
+		<bandbox ca:aria-labelledby="${target.uuid}"/>
 	</n:main>
 </zk>

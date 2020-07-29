@@ -20,9 +20,14 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<n:h1>Imagemap</n:h1>
 	</n:header>
 	<n:main>
-		<imagemap id="img2" src="/test2/img/sun.jpg" ca:alt="image" onClick="what(event)">
+		<imagemap id="img2" src="/test2/img/sun.jpg" ca:alt="image" onClick='Clients.log("onClick!")'>
 			<area id="First" coords="0,0,50,50" tooltiptext="First" />
 			<area id="Second" coords="50,0,100,50" tooltiptext="Second" />
+		</imagemap>
+		<separator/>
+		<label value="Recursice labelledby test" id="target"/>
+		<imagemap src="/test2/img/sun.jpg" ca:aria-labelledby="${target.uuid}">
+			<area coords="0,0,50,50" tooltiptext="First" />
 		</imagemap>
 	</n:main>
 </zk>
