@@ -25,13 +25,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<n:h1>Searchbox</n:h1>
 	</n:header>
 	<n:main>
-		<zscript><![CDATA[
-			import org.zkoss.zktest.test2.big.*;
-			import org.zkoss.util.*;
-			FakerMatrixModel BigData = new FakerMatrixModel(100, 300);
-		]]></zscript>
 		<div apply="org.zkoss.zktest.test2.F90_ZK_4380Composer">
-			<searchbox id="myComp" hflex="1" multiple="false" autoclose="true" ca:aria-label="Choose something">
+			<searchbox id="myComp" hflex="1" multiple="false" autoclose="false" ca:aria-label="Choose something">
 				<template name="model">
 					<html><![CDATA[
 					<i class="z-icon-globe"></i>
@@ -40,6 +35,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					]]></html>
 				</template>
 			</searchbox>
+			<button label="toggle autoclose" onClick="myComp.autoclose = !myComp.autoclose" />
+			<button label="toggle multiple" onClick="myComp.multiple = !myComp.multiple" />
 		</div>
 	</n:main>
 </zk>
