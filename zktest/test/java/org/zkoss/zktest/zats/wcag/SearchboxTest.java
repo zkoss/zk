@@ -19,7 +19,6 @@ import org.junit.Test;
 public class SearchboxTest extends WcagTestCase {
 	@Test
 	public void test() {
-		//TODO: focusable region issue
 		connect();
 		verifyA11y();
 		click(jq("@searchbox"));
