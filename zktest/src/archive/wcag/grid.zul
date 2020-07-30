@@ -175,14 +175,14 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<radio label="Java" radiogroup="popular"/>
 					<radio label="Groovy" radiogroup="popular"/>
 					<radio label="C#" radiogroup="popular"/>
-					<textbox/>
+					<textbox ca:aria-label="Most popular textbox"/>
 				</row>
 				<row>
 					Most fun
 					<radio label="Open Source" radiogroup="fun"/>
 					<radio label="Social Networking" radiogroup="fun"/>
 					<radio label="Searching" radiogroup="fun"/>
-					<textbox/>
+					<textbox ca:aria-label="Most fun textbox"/>
 				</row>
 			</rows>
 		</grid>
