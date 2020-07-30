@@ -402,6 +402,72 @@ zk.eff.Actions = {
 	}
 };
 
+/**
+ * Applies a keyboard trap that only allows focus moving within an area.
+ * @since 9.5.0
+ */
+zk.eff.KeyboardTrap = zk.$extends(zk.Object, {
+	/**
+	 * The constructor.
+	 * <p>To remove the trap, invoke {@link #destroy}.
+	 * @param DOMElement area which area should the focus be restricted.
+	 */
+	$init: function (area) {
+		this._area = area;
+		this._boundaryTop = this._createBoundary('top');
+		this._boundaryBottom = this._createBoundary('bottom');
+		area.insertAdjacentElement('beforebegin', this._boundaryTop);
+		area.insertAdjacentElement('afterend', this._boundaryBottom);
+	},
+	_createBoundary: function (id) {
+		var boundary = document.createElement('div'),
+			self = this;
+		boundary.tabIndex = 0;
+		boundary.setAttribute('aria-hidden', 'true');
+		boundary.addEventListener('focus', function () {
+			self._handleFocus(id);
+		});
+		return boundary;
+	},
+	_handleFocus: function (id) {
+		var focusableElements = this._area.querySelectorAll(
+			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
+			focusableElementsCount = focusableElements.length,
+			isTop = id == 'top';
+		if (focusableElementsCount > 0) {
+			(isTop
+				? this._getLastFocusableElement(focusableElements)
+				: this._getFirstFocusableElement(focusableElements)).focus();
+		}
+	},
+	_getFirstFocusableElement: function (elems) {
+		var len = elems.length;
+		for (var i = 0; i < len; i++) {
+			if (this._isFocusable(elems[i])) return elems[i];
+		}
+	},
+	_getLastFocusableElement: function (elems) {
+		var len = elems.length;
+		for (var i = len - 1; i >= 0; i--) {
+			if (this._isFocusable(elems[i])) return elems[i];
+		}
+	},
+	_isFocusable: function (elem) {
+		return !(elem.disabled || elem.getAttribute('disabled')) // not disabled
+			&& (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length); // visible
+	},
+	/**
+	 * Removes the keyboard trap.
+	 * You can not access this object any more.
+	 */
+	destroy: function () {
+		var areaParent = this._area.parentNode;
+		areaParent.removeChild(this._boundaryTop);
+		areaParent.removeChild(this._boundaryBottom);
+		this._area = this._boundaryTop = this._boundaryBottom = null;
+	}
+});
+
 jq(function () {
 	//Handle zk.useStackup
 	var _lastFloat, _autohideCnt = 0, _callback;
