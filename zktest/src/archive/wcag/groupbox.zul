@@ -20,15 +20,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	</n:header>
 	<n:main>
 		<style>
-			.z-groupbox-header:focus > .z-groupbox-title {
-				border: 1px solid red;
-			}
-			
-			.z-groupbox-header:focus > .z-caption {
+			:focus {
 				border: 1px solid red;
 			}
 		</style>
-		<groupbox title="Groupbox closable" closable="true" >
+		<groupbox title="Groupbox closable" closable="true" onClick='Clients.log("onClick")'>
 			Hello world
 		</groupbox>
 		

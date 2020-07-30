@@ -18,7 +18,7 @@ function (out, skipper) {
 		title = this.getTitle();
 		title = title && !cap ? zUtl.encodeXML(title) : null;
 	
-	out.push('<div ', this.domAttrs_(), ' role="group">');
+	out.push('<div ', this.domAttrs_(), '>');
 	
 	if (title || cap) {
 		out.push('<div id="', uuid, '-header" class="', this.$s('header'),
