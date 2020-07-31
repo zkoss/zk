@@ -19,18 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 //zk.$package('zul.db');
 
 (function () {
-	// Bug 2936994, fixed unnecessary setting scrollTop
-	var _doFocus = zk.gecko ? function (n, timeout) {
-			if (timeout)
-				setTimeout(function () {
-					zk(n).focus();
-				});
-			else
-				zk(n).focus();
-		} : function (n) {
-			zk(n).focus();
-		};
-
 	function _newDate(year, month, day, bFix, tz) {
 		var v = Dates.newInstance([year, month, day], tz);
 		return bFix && v.getMonth() != month && v.getDate() != day ? //Bug ZK-1213: also need to check date
@@ -66,7 +54,7 @@ zul.db.Renderer = {
 	/**
 	 * Returns the label of a date cell.
 	 * By overriding this method, you could customize the aria-label of a day cell.
-	 * <p>Default: dddd, dd MMMM yyyy
+	 * <p>Default: dd MMMM, yyyy
 	 * @param zul.db.Calendar cal the calendar
 	 * @param int y the year
 	 * @param int m the month (between 0 to 11)
@@ -78,7 +66,7 @@ zul.db.Renderer = {
 	 */
 	cellAriaLabel: function (cal, y, m, day, monthofs, dayofweek) {
 		var localizedSymbols = cal.getLocalizedSymbols();
-		return localizedSymbols.FDOW[dayofweek] + ', ' + day + ' ' + localizedSymbols.FMON[m] + ' ' + y;
+		return day + ' ' + localizedSymbols.FMON[m] + ', ' + y;
 	},
 	/** Called before {@link zul.db.Calendar#redraw} is invoked.
 	 * <p>Default: does nothing
@@ -205,12 +193,12 @@ zul.db.Renderer = {
 			wkday = wgt.$s('weekday'),
 			cell = wgt.$s('cell');
 
-		out.push('<table role="none" class="', wgt.$s('body'), '" id="', uuid, '-mid"',
-				zUtl.cellps0, '>', '<thead role="group"><tr>');
+		out.push('<table role="grid" class="', wgt.$s('body'), '" id="', uuid, '-mid"',
+				zUtl.cellps0, '>', '<thead><tr>');
 		for (var j = 0; j < 7; ++j)
 			out.push('<th class="', (j == sun || j == sat) ? wkend : wkday,
 					'" aria-label="', localizedSymbols.FDOW[j], '">', localizedSymbols.S2DOW[j], '</th>');
-		out.push('</tr></thead><tbody role="group">');
+		out.push('</tr></thead><tbody>');
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
 			out.push('<tr id="', uuid, '-w', j, '">');
 			for (var k = 0; k < 7; ++k)
@@ -230,8 +218,8 @@ zul.db.Renderer = {
 	monthView: function (wgt, out, localizedSymbols) {
 		var uuid = wgt.uuid,
 			cell = wgt.$s('cell');
-		out.push('<table role="none" class="', wgt.$s('body'), ' ', wgt.$s('month'),
-				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody role="group">');
+		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('month'),
+				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
 			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'" aria-label="', localizedSymbols.FMON[j], '">',
@@ -257,8 +245,8 @@ zul.db.Renderer = {
 			yofs = y - (y % 10 + 1),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear;
-		out.push('<table role="none" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
-				zUtl.cellps0, '><tbody role="group">');
+		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
+				zUtl.cellps0, '><tbody>');
 
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
@@ -297,9 +285,9 @@ zul.db.Renderer = {
 			maxdec = zk.parseInt(maxyear / 10) * 10;
 
 
-		out.push('<table role="none" class="', wgt.$s('body'), ' ', wgt.$s('decade'),
+		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('decade'),
 				'" id="', uuid, '-mid"',
-				zUtl.cellps0, '><tbody role="group">');
+				zUtl.cellps0, '><tbody>');
 		var temp = ydec * 100 - 10,
 			selected = wgt.$s('selected');
 		for (var j = 0; j < 12; ++j, temp += 10) {
@@ -547,17 +535,22 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				opts = opts || {};
 				opts.sameMonth = true; //optimize
 				this._markCal(opts);
-			} else
-				this.rerender();
+			} else {
+				this.rerender(-1);
+				this.focus();
+			}
 			break;
 		case 'month':
 			if (oldTime.getYear() == newTime.getYear())
 				this._markCal(opts);
-			else
-				this.rerender();
+			else {
+				this.rerender(-1);
+				this.focus();
+			}
 			break;
 		default:
-			this.rerender();
+			this.rerender(-1);
+			this.focus();
 		}
 	},
 	_fixConstraint: function () {
@@ -616,8 +609,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this._markCal({timeout: timeout});
 		else {
 			var anc;
-			if (anc = this.$n('a'))
-				_doFocus(anc, true);
+			if (anc = this.getAnchor_())
+				this._doFocus(anc, true);
 		}
 		return true;
 	},
@@ -700,8 +693,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		}
 		if (!disableAnima)
 			this._setView(this._view, ofs);
-		else
-			this.rerender();
+		else {
+			this.rerender(-1);
+			this.focus();
+		}
 	},
 	_doMousewheel: function (evt, intDelta) {
 		if (jq(this.$n(-intDelta > 0 ? 'right' : 'left')).attr('disabled'))
@@ -742,8 +737,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 		this._chooseDate(target, val);
 		var anc;
-		if (anc = this.$n('a'))
-			_doFocus(anc, true);
+		if (anc = this.getAnchor_())
+			this._doFocus(anc, true);
 
 		evt.stop();
 	},
@@ -760,8 +755,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				if (oldTime.getYear() == newTime.getYear()
 					&& oldTime.getMonth() == newTime.getMonth()) {
 						this._markCal({sameMonth: true}); // optimize
-				} else
-					this.rerender();
+				} else {
+					this.rerender(-1);
+					this.focus();
+				}
 				break;
 			case 'month' :
 				this._setTime(null, val);
@@ -851,7 +848,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 
 				// ie9 and early won't support css3 transition
 				if (zk.ie < 10) {
-					this.rerender();
+					this.rerender(-1);
+					this.focus();
 					return;
 				}
 				var out = new zk.Buffer(),
@@ -875,8 +873,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				_updateArrow(this);
 
 				var anc;
-				if (anc = this.$n('a'))
-					_doFocus(anc, true);
+				if (anc = this.getAnchor_())
+					this._doFocus(anc, true);
 
 			} else if (force) {
 				var out = [],
@@ -995,8 +993,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_markCal: function (opts) {
 		this._markCal0(opts);
 		var anc;
-		if ((anc = this.$n('a')) && (!opts || !opts.silent))
-			_doFocus(anc, opts && opts.timeout);
+		if ((anc = this.getAnchor_()) && (!opts || !opts.silent))
+			this._doFocus(anc, opts && opts.timeout);
 	},
 	// calendar-ctrl.js will override this function
 	_markCal0: function (opts) {
@@ -1092,6 +1090,20 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	animationSpeed_: function () {
 		return zk(this).getAnimationSpeed('_default');
-	}
+	},
+	getAnchor_: function () {
+		return this.$n('a');
+	},
+	// Bug 2936994, fixed unnecessary setting scrollTop
+	_doFocus: (zk.gecko ? function (n, timeout) {
+		if (timeout)
+			setTimeout(function () {
+				zk(n).focus();
+			});
+		else
+			zk(n).focus();
+	} : function (n) {
+		zk(n).focus();
+	})
 });
 })();
