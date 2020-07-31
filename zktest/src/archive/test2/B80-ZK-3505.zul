@@ -42,7 +42,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 			</panel>
 		</hlayout>
 		<hlayout>
-			<groupbox closable="true">
+			<groupbox closable="false">
 				<caption label="Groupbox with caption" />
 				<label value="some content here"></label>
 			</groupbox>
