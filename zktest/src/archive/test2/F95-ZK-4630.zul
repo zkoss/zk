@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4630.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 30 15:07:41 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Information" button.
+        2. Focus into the Drawer.
+        3. Try pressing Tab and/or Shift+Tab multiple times
+        4. You shouldn't focus a background button.
+    </label>
+    <style>
+        :focus {
+            box-shadow: 0 0 0 3px red;
+        }
+    </style>
+    <button iconSclass="z-icon-info-circle" label="Information" onClick="info.open()" />
+    <drawer id="info" title="Information" closable="true">
+        <vlayout>
+            <textbox placeholder="focus me first" />
+            <spinner />
+            <textbox />
+            <button disabled="true" />
+        </vlayout>
+    </drawer>
+</zk>
