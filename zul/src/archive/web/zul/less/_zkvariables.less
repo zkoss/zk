@@ -89,7 +89,7 @@
 @meshContentFocusBackgroundColor: @selectedBackgroundColor;
 @meshFootBackgroundColor:      @colorGreyLighter;
 @meshGroupColor:               @textColorLight;
-@meshGroupBorderColor:         @colorGreyLight;
+@meshGroupBorderColor:         @baseBorderColor;
 @meshGroupBackgroundColor:     @colorBackground3;
 @meshGroupFooterColor:         @textColorLighter;
 @meshGroupFooterBackgroundColor: @colorBackground3;
@@ -144,7 +144,7 @@
 @invalidBorderColor:           @colorAccent2;
 
 // Read-only
-@readonlyBorderColor:          @colorGreyLight;
+@readonlyBorderColor:          @baseBorderColor;
 @readonlyBackgroundColor:      @colorGreyLighter;
 
 // Selected (used on listbox, tree, comboitem)
@@ -165,7 +165,7 @@
 // Checked (used on menuitem, listbox, tree, toolbarbutton)
 @checkedIconSize:              @fontSizeLarge;
 @checkedColor:                 @colorPrimary;
-@checkedBorderColor:           @colorGreyLight;
+@checkedBorderColor:           @baseBorderColor;
 @checkedBackgroundColor:       @textColorDefault3;
 
 // -------------------------------------
@@ -231,7 +231,7 @@
 
 // Input (used for textbox, intbox, spinner, ...)
 @inputTextSize:                @fontSizeMedium;
-@inputBorderColor:             @colorGreyLight;
+@inputBorderColor:             @baseBorderColor;
 @inputBorderRadius:            @baseBorderRadius;
 @inputBackgroundColor:         @colorBackground3;
 @inputHeight:                  34px;
@@ -263,6 +263,7 @@
 @buttonPadding:                8px 16px;
 @buttonColor:                  @textColorDefault3;
 @buttonBackgroundColor:        @colorPrimary;
+@buttonBorderWidth:            2px;
 @buttonBorderColor:            transparent;
 @buttonHoverColor:             @textColorDefault3;
 @buttonHoverBackgroundColor:   @colorPrimaryLight;
@@ -277,7 +278,7 @@
 @buttonDisableBackgroundColor: @colorGreyLight;
 @buttonDisableBorderColor:     transparent;
 @buttonSeparatorBorderColor:   @colorPrimaryDark;
-@buttonDisableSeparatorBorderColor:   @colorGreyLight;
+@buttonDisableSeparatorBorderColor:   @baseBorderColor;
 // Toolbar button
 @toolbarButtonFontSize:        @fontSizeLarge;
 @toolbarButtonPadding:         6px 12px;
@@ -424,7 +425,7 @@
 
 // splitter (hbox, vbox, borderlayout)
 @splitterSize:                 8px;
-@splitterBorderColor:          @colorGreyLight;
+@splitterBorderColor:          @baseBorderColor;
 @splitterBackgroundColor:      @colorBackground1;
 @splitterHoverBackgroundColor: @colorPrimaryLighter;
 @splitterButtonTextSize:       12px;
@@ -464,13 +465,13 @@
 // popup
 @basePopupZIndex:              88000;
 @popupPadding:                 8px 16px;
-@popupBorderColor:             @colorGreyLight;
+@popupBorderColor:             @baseBorderColor;
 @popupBackgroundColor:         @colorBackground3;
 
 // paging
 @pagingColor:                  @textColorDefault;
 @pagingHeight:                 44px;
-@pagingBorderColor:            @colorGreyLight;
+@pagingBorderColor:            @baseBorderColor;
 @pagingBackgroundColor:        @colorGreyLighter;
 @pagingItemHoverBackgroundColor:   @colorPrimaryLighter;
 @pagingItemActiveColor:            @textColorDefault3;
@@ -519,12 +520,15 @@
 @errorButtonMarginLeft:        8px;
 
 // notification
-@notificationInfoColor:        #78C129;
-@notificationWarningColor:     #FF8501;
-@notificationErrorColor:       #FF4051;
-@notificationInfoBackgroundColor:        #F0F7E8;
-@notificationWarningBackgroundColor:     #FFF3E7;
-@notificationErrorBackgroundColor:       #FFEAEC;
+@notificationInfoColor:        #4AA81B;
+@notificationWarningColor:     #E37601;
+@notificationErrorColor:       #F53142;
+@notificationInfoTextColor:        @baseTextColor;
+@notificationWarningTextColor:     @baseTextColor;
+@notificationErrorTextColor:       @baseTextColor;
+@notificationInfoBackgroundColor:        #FFF;
+@notificationWarningBackgroundColor:     #FFF;
+@notificationErrorBackgroundColor:       #FFF;
 @notificationContentPadding:   24px 16px 24px 56px;
 @notificationPointerContentHeight:       60px;
 @notificationPointerContentPadding:      8px 34px 8px 48px;
@@ -532,7 +536,7 @@
 @notificationCloseIconSize:    20px;
 
 // progressmeter
-@progressmeterBorderColor:     @colorGreyLight;
+@progressmeterBorderColor:     @baseBorderColor;
 @progressmeterBackgroundColor: @colorPrimary;
 
 // loadingbar
@@ -578,7 +582,7 @@
 @menuItemHoverBackground:      @hoverBackgroundColor;
 @menuItemActiveColor:          @activeColor;
 @menuItemActiveBackground:     @colorPrimary;
-@menuSeparatorBorderColor:     @colorGreyLight;
+@menuSeparatorBorderColor:     @baseBorderColor;
 @menuSeparatorBackgroundColor: @colorGreyLight;
 @menuPopupBackground:          @popupBackgroundColor;
 @menuPopupItemColor:           @textColorLight;
@@ -610,7 +614,7 @@
 @navImageSize:                 20px;
 @navColor:                     @textColorLight;
 @navHoverColor:                @textColorDefault;
-@navBorderColor:               @colorGreyLight;
+@navBorderColor:               @baseBorderColor;
 @navBackgroundColor:           @colorBackground3;
 @navHoverBackgroundColor:      @navBackgroundColor;
 @navSelectedColor:             @colorPrimary;
@@ -647,7 +651,7 @@
 @chosenboxItemBackgroundColor: @colorPrimary;
 @chosenboxItemFocusBackgroundColor: @colorPrimaryDark;
 @chosenboxItemDisabledColor:   @textColorLighter;
-@chosenboxItemDisabledBorderColor: @colorGreyLight;
+@chosenboxItemDisabledBorderColor: @baseBorderColor;
 @chosenboxItemDisabledBackgroundColor: @colorGreyLight;
 @chosenboxPopupHoverBackgroundColor: @colorPrimaryLighter;
 @chosenboxCreateIconSize:      @fontSizeLarge;
@@ -670,12 +674,12 @@
 // biglistbox
 @biglistboxFrozenBackgroundColor:   @colorGreyLight;
 @biglistboxFrozenGhostBackgroundColor: @colorPrimary;
-@biglistboxScrollBarBorderColor: @colorGreyLight;
+@biglistboxScrollBarBorderColor: @baseBorderColor;
 @biglistboxScrollBarTextColor: @textColorLight;
 @biglistboxScrollBarEndBarBackgroundColor: @colorGreyLighter;
 @biglistboxScrollBarHoverBackgroundColor: @colorPrimaryLighter;
 @biglistboxScrollBarActiveBackgroundColor: @colorPrimary;
-@biglistboxScrollBarActiveBorderColor: @colorGreyLight;
+@biglistboxScrollBarActiveBorderColor: @baseBorderColor;
 @biglistboxScrollBarHoverBorderColor: @colorGreyDark;
 @biglistboxOuterPadding: 0 18px 18px 0;
 @biglistboxLineHeight: 1.3em;
@@ -745,7 +749,7 @@
 @orgnodeBorderRadius: 4px;
 
 // signature
-@signatureBorderColor: @colorGreyLight;
+@signatureBorderColor: @baseBorderColor;
 @signatureBorderRadius: @baseBorderRadius;
 @signatureToolbarRight: 8px;
 @signatureToolbarBottom: 16px;

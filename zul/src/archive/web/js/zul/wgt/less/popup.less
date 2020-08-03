@@ -41,11 +41,11 @@
 }
 
 .z-notification-pointer + .z-notification-icon {
-	left: 8px;
+	left: 12px;
 }
 
 .z-notification-left + .z-notification-icon {
-	left: 20px;
+	left: 24px;
 }
 
 .z-notification-up + .z-notification-icon {
@@ -66,7 +66,17 @@
 	position: relative;
 	overflow: hidden;
 	.borderRadius(@baseBorderRadius);
-	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
+	.boxShadow('0 0 16px rgba(0,0,0,0.16)');
+
+	&::before {
+		content: "";
+		display: block;
+		width: 6px;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+	}
 }
 
 .z-notification-pointer ~ .z-notification-content {
@@ -93,14 +103,21 @@
 
 // notification arrow: info
 .z-notification-info {
-	.z-notification-icon,
-	.z-notification-close,
-	.z-notification-content {
+	.z-notification-icon {
 		color: @notificationInfoColor;
+	}
+	.z-notification-close > .z-notification-icon {
+		color: @notificationInfoTextColor;
+	}
+	.z-notification-content {
+		color: @notificationInfoTextColor;
 		background-color: @notificationInfoBackgroundColor;
+		&::before {
+			background-color: @notificationInfoColor;
+		}
 	}
 	.z-notification-left {
-		border-right-color: @notificationInfoBackgroundColor;
+		border-right-color: @notificationInfoColor;
 	}
 	.z-notification-right {
 		border-left-color: @notificationInfoBackgroundColor;
@@ -115,14 +132,21 @@
 
 // notification arrow: warning
 .z-notification-warning {
-	.z-notification-icon,
-	.z-notification-close,
-	.z-notification-content {
+	.z-notification-icon {
 		color: @notificationWarningColor;
+	}
+	.z-notification-close > .z-notification-icon {
+		color: @notificationWarningTextColor;
+	}
+	.z-notification-content {
+		color: @notificationWarningTextColor;
 		background-color: @notificationWarningBackgroundColor;
+		&::before {
+			background-color: @notificationWarningColor;
+		}
 	}
 	.z-notification-left {
-		border-right-color: @notificationWarningBackgroundColor;
+		border-right-color: @notificationWarningColor;
 	}
 	.z-notification-right {
 		border-left-color: @notificationWarningBackgroundColor;
@@ -137,14 +161,21 @@
 
 // notification arrow: error
 .z-notification-error {
-	.z-notification-icon,
-	.z-notification-close,
-	.z-notification-content {
+	.z-notification-icon {
 		color: @notificationErrorColor;
+	}
+	.z-notification-close > .z-notification-icon {
+		color: @notificationErrorTextColor;
+	}
+	.z-notification-content {
+		color: @notificationErrorTextColor;
 		background-color: @notificationErrorBackgroundColor;
+		&::before {
+			background-color: @notificationErrorColor;
+		}
 	}
 	.z-notification-left {
-		border-right-color: @notificationErrorBackgroundColor;
+		border-right-color: @notificationErrorColor;
 	}
 	.z-notification-right {
 		border-left-color: @notificationErrorBackgroundColor;
@@ -190,7 +221,17 @@
 		position: relative;
 		overflow: hidden;
 		.borderRadius(@baseBorderRadius);
-		.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
+		.boxShadow('0 0 16px rgba(0,0,0,0.16)');
+
+		&::before {
+			content: "";
+			display: block;
+			width: 6px;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+		}
 	}
 	&-close {
 		font-size: 18px;
@@ -206,33 +247,48 @@
 		.z-notification-icon();
 	}
 	&-error {
-		.z-toast-icon,
-		.z-toast-close,
-		.z-toast-content {
+		.z-toast-icon {
 			color: @notificationErrorColor;
+		}
+		.z-toast-close > .z-toast-icon,
+		.z-toast-content {
+			color: @notificationErrorTextColor;
 		}
 		.z-toast-content {
 			background-color: @notificationErrorBackgroundColor;
+			&::before {
+				background-color: @notificationErrorColor;
+			}
 		}
 	}
 	&-info {
-		.z-toast-icon,
-		.z-toast-close,
-		.z-toast-content {
+		.z-toast-icon {
 			color: @notificationInfoColor;
+		}
+		.z-toast-close > .z-toast-icon,
+		.z-toast-content {
+			color: @notificationInfoTextColor;
 		}
 		.z-toast-content {
 			background-color: @notificationInfoBackgroundColor;
+			&::before {
+				background-color: @notificationInfoColor;
+			}
 		}
 	}
 	&-warning {
-		.z-toast-icon,
-		.z-toast-close,
-		.z-toast-content {
+		.z-toast-icon {
 			color: @notificationWarningColor;
+		}
+		.z-toast-close > .z-toast-icon,
+		.z-toast-content {
+			color: @notificationWarningTextColor;
 		}
 		.z-toast-content {
 			background-color: @notificationWarningBackgroundColor;
+			&::before {
+				background-color: @notificationWarningColor;
+			}
 		}
 	}
 
