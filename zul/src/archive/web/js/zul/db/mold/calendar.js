@@ -27,7 +27,7 @@ function (out) {
 	
 	// header
 	out.push('<div id="', uuid, '"', this.domAttrs_(), '><', tagnm, ' id="', uuid,
-			'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a" aria-hidden="true"></',
+			'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 			tagnm, '><div class="',
 			this.$s('header'), '"><a id="', uuid, '-left" href="javascript:;" class="', icon, ' ',
 			this.$s('left'), '"', outRangeL, '><i class="z-icon-angle-left" aria-label="', msgzul.PREV, '"></i></a>',
