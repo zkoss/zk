@@ -303,6 +303,8 @@ public class Utils {
 		addLocaleJS(sb, "CHOSENBOX_SELECTION", MZul.CHOSENBOX_SELECTION);
 		addLocaleJS(sb, "CHOSENBOX_CREATE_MESSAGE", MZul.CHOSENBOX_CREATE_MESSAGE);
 
+		addLocaleJS(sb, "ITEMWIDGET_SELECTED", MZul.ITEMWIDGET_SELECTED);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);
