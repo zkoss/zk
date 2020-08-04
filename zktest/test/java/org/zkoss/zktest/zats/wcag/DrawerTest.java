@@ -11,7 +11,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 
 /**
  * @author rudyhuang
@@ -30,5 +32,19 @@ public class DrawerTest extends WcagTestCase {
 		click(jq("@button:eq(1)"));
 		waitResponse(true);
 		verifyA11y();
+	}
+
+	@Test
+	public void testKeyDownPropagation() {
+		connect();
+
+		click(jq("@button:eq(0)"));
+		waitResponse(true);
+
+		click(jq("@textbox"));
+		waitResponse();
+		sendKeys(jq("@textbox"), Keys.ESCAPE);
+		waitResponse();
+		Assert.assertTrue(jq("@drawer").isVisible());
 	}
 }

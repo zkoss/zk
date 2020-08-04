@@ -14,7 +14,7 @@ drawer.zul
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:n="native">
+<zk xmlns:n="native" xmlns:ca="client/attribute">
     <style><![CDATA[
     /* FIXME */
     :focus {
@@ -29,9 +29,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <button onClick="d1.open()" label="Open the drawer"/>
         <button onClick="d2.open()" label="Open the drawer (scrollable content)"/>
         <drawer id="d1" title="Drawer" closable="true">
+            <textbox ca:aria-label="focus me" />
+            <label multiline="true">
             some content here
             some content here
             some content here
+            </label>
         </drawer>
         <drawer id="d2" title="Drawer" closable="true" position="bottom" height="200px">
             <div height="300px">long long content</div>
