@@ -22,7 +22,7 @@
     "@babel/preset-typescript": "^7.10.1",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
-    "browser-sync": "^2.26.7",
+    "browser-sync": "^2.26.12",
     "eslint": "^6.8.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
@@ -33,6 +33,6 @@
     "minimist": "^1.2.5",
     "typescript": "^3.8.3",
     "zk-types": "github:scribetw/zk-types#master",
-    "zkless-engine": "^1.1.4"
+    "zkless-engine": "^1.1.5"
   }
 }
