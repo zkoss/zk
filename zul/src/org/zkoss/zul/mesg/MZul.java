@@ -100,4 +100,5 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	static final int NOTIFICATION_ERROR = 0x3203 + MESSAGE_ID;
 	static final int CHOSENBOX_SELECTION = 0x3301 + MESSAGE_ID;
 	static final int CHOSENBOX_CREATE_MESSAGE = 0x3302 + MESSAGE_ID;
+	static final int ITEMWIDGET_SELECTED = 0x3401 + MESSAGE_ID;
 }

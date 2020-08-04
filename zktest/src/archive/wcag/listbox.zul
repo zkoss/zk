@@ -86,6 +86,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					<listcell label="FEMALE" />
 					<listcell label="000000000" />
 				</listitem>
+				<listfoot>
+					<listfooter label="footer 1"/>
+					<listfooter label="footer 2"/>
+					<listfooter label="footer 3"/>
+				</listfoot>
 			</listbox>
 
 			<listbox width="250px" multiple="true" checkmark="true" ca:aria-label="a listbox">
