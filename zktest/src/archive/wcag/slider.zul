@@ -21,7 +21,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<n:main>
 		<style>
 			.z-slider:focus {
-				border: 1px solid red;
+				outline: 1px solid red;
 			}
 		</style>
 		<label multiline="true">
