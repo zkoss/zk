@@ -12,6 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.30</slf4j.version>
+        <skipNpmInstall>false</skipNpmInstall>
+        <skipZklessc>false</skipZklessc>
     </properties>
     <licenses>
         <license>
@@ -180,6 +182,7 @@
                         </execution>
                     </executions>
                     <configuration>
+                        <skip>${skipZklessc}</skip><!-- optional command line param to speed up local builds -->
                         <executable>npx</executable>
                         <arguments>
                             <argument>zklessc</argument>
@@ -212,6 +215,7 @@
                                 <goal>npm</goal>
                             </goals>
                             <configuration>
+                                <skip>${skipNpmInstall}</skip><!-- optional command line param to speed up local builds -->
                                 <arguments>install</arguments>
                             </configuration>
                         </execution>
