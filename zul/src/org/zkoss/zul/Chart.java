@@ -146,7 +146,7 @@ public class Chart extends Imagemap {
 
 	//control variable
 	private boolean _smartDrawChart; //whether post the smartDraw event already?
-	private EventListener<Event> _smartDrawChartListener; //the smartDrawListner
+	private EventListener<Event> _smartDrawChartListener; //the smartDrawListener
 	private ChartDataListener _dataListener;
 
 	private String _type = PIE; //chart type (pie, ring, bar, line, xy, etc)

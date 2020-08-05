@@ -25,7 +25,7 @@ import org.zkoss.zk.xel.EvaluatorRef;
  * @since 6.0.0
  */
 /*package*/ abstract class ConditionValue implements Condition, java.io.Serializable {
-	/*pacakge*/ EvaluatorRef _evalr;
+	/*package*/ EvaluatorRef _evalr;
 	/*package*/ ConditionImpl _cond;
 
 	/**

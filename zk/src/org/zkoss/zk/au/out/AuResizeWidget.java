@@ -21,7 +21,7 @@ import org.zkoss.zk.ui.Component;
  * @since 5.0.8
  */
 public class AuResizeWidget extends AuResponse {
-	/** Constructs a command to to force ZK Client re-calculate the size of
+	/** Constructs a command to force ZK Client re-calculate the size of
 	 * the given widget.
 	 * @param comp the component to resize
 	 */

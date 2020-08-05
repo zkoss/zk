@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.Function;
+import org.zkoss.zk.scripting.HierarchicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -126,7 +127,7 @@ public abstract class GenericInterpreter implements Interpreter {
 	 * in the interpreter to Java codes.
 	 *
 	 * <p>This method is implemented only if the interpreter that supports
-	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 * hierarchical scopes ({@link HierarchicalAware}).
 	 *
 	 * <p>Default: the same as {@link #get(String)}.
 	 *
@@ -155,7 +156,7 @@ public abstract class GenericInterpreter implements Interpreter {
 	 * a variable in the interpreter.
 	 *
 	 * <p>This method is implemented only if the interpreter that supports
-	 * hierarchical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 * hierarchical scopes ({@link HierarchicalAware}).
 	 *
 	 * <p>Default: the same as {@link #set(String, Object)}.
 	 *
@@ -180,7 +181,7 @@ public abstract class GenericInterpreter implements Interpreter {
 	 * a variable from the interpreter.
 	 *
 	 * <p>This method is implemented only if the interpreter that supports
-	 * hierarchical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 * hierarchical scopes ({@link HierarchicalAware}).
 	 *
 	 * <p>Default: the same as {@link #unset(String)}.
 	 *
@@ -280,7 +281,7 @@ public abstract class GenericInterpreter implements Interpreter {
 	 * when the real interpreter failed to find a variable in its own scope.
 	 *
 	 * <p>This method is used with the interpreter that supports
-	 * hierarchical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
+	 * hierarchical scopes ({@link HierarchicalAware}).
 	 *
 	 * @param scope the scope to search from (never null).
 	 * Note: if {@link #getCurrent} returns null, this method simply returns
@@ -423,7 +424,7 @@ public abstract class GenericInterpreter implements Interpreter {
 	 * <p>Deriving class shall override {@link #get(Scope,String)},
 	 * instead of this method.
 	 *
-	 * <p>This method is part of {@link org.zkoss.zk.scripting.HierachicalAware}.
+	 * <p>This method is part of {@link HierarchicalAware}.
 	 * It is defined here to simplify the implementation of the
 	 * deriving classes, if they support the hierarchical scopes.
 	 * @since 5.0.0

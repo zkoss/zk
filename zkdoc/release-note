@@ -3010,7 +3010,7 @@ Feb 14, 2012
     are removed.
   + Component's setVariable is removed (deprecated in 5.0). Please use
     Component.setAttribute(name, value, SPACE_SCOPE)
-  + The addEventListner method of org.zkoss.zk.ui.Component won't check whether
+  + The addEventListener method of org.zkoss.zk.ui.Component won't check whether
     the same event listener is registered twice. In other words,
     it will be invoked multiple times if a listener is registered multiple times.
     If you want to ignore the second registration of the same listener
@@ -3586,7 +3586,7 @@ May 11, 2011
 * Features
   3263584: Support drag and drop with ipad
   3256604: Support double click event with ipad
-  3202692: Support more EL utilties: toUpperCase, toLowerCase...
+  3202692: Support more EL utilities: toUpperCase, toLowerCase...
   3243015: Easier way to access I18N labels in EL
   3252169: Easier way to specify multiple properties files for i18n labels
   3287163: Allow user to pick up format regardless the locale
@@ -5055,7 +5055,7 @@ April 28, 2009
   2782400: Correct XSD definition for panel usage
   2784107: Datebox onchange problem
   2782751: listbox fails to restore activepage if re-set the model
-  2783767: BSHInterperter does not respect HierachicalAware spec.
+  2783767: BSHInterperter does not respect HierarchicalAware spec.
   2786500: Menupopup fails when invoking open() method
   2807824: Applet and setField
 
@@ -5911,7 +5911,7 @@ December 17, 2007
   1836417: HibernateSessionFactoryListener use different config name 
   1642242: Display certain treeitem on screen (Autoscroll)
   1601002: Added onSelect event to the Combobox component
-  1841480: HibernateSessionFactoryListner for web.xml  
+  1841480: HibernateSessionFactoryListener for web.xml
   1842533: Add default-bind to Radio.selected
   1796049: Like Timebox, Intbox must support only integer
   1780792: Disable checkmarks on some node of a tree
@@ -6489,7 +6489,7 @@ May 2, 2007
 * Features:
   1698249: A way to customize the error box withouot writing JavaScript
   1690498: A way to download a file from server with save as dialog
-  1663482: BeanShell shall support hierachical scopes like 2.2 does
+  1663482: BeanShell shall support hierarchical scopes like 2.2 does
   1688892: A way to abandom Milieu
   1699729: Adds the deferred option to zscript
   1686198: A way to specify custom attributes in lang addon
