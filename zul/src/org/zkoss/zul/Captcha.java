@@ -44,7 +44,7 @@ import org.zkoss.zul.impl.CaptchaEngine;
 public class Captcha extends org.zkoss.zul.Image {
 	//control variable
 	private boolean _smartDrawCaptcha; //whether post the smartDraw event already?
-	private EventListener<Event> _smartDrawCaptchaListener; //the smartDrawListner
+	private EventListener<Event> _smartDrawCaptchaListener; //the smartDrawListener
 
 	private static Random _random = new Random(); //random used for various operation
 	private static final String EXCLUDE = "0123456789IOilo"; //default exclude list

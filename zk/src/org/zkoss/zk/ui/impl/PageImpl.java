@@ -54,7 +54,7 @@ import org.zkoss.xel.XelException;
 import org.zkoss.xel.util.Evaluators;
 import org.zkoss.zk.au.out.AuSetTitle;
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.scripting.HierarchicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.scripting.Interpreters;
@@ -601,7 +601,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 	public Function getZScriptFunction(Component comp, String name, Class[] argTypes) {
 		for (Interpreter ip : getLoadedInterpreters()) {
-			Function mtd = ip instanceof HierachicalAware ? ((HierachicalAware) ip).getFunction(comp, name, argTypes)
+			Function mtd = ip instanceof HierarchicalAware ? ((HierarchicalAware) ip).getFunction(comp, name, argTypes)
 					: ip.getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
@@ -620,7 +620,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 	public Object getZScriptVariable(Component comp, String name) {
 		for (Interpreter ip : getLoadedInterpreters()) {
-			final Object val = ip instanceof HierachicalAware ? ((HierachicalAware) ip).getVariable(comp, name)
+			final Object val = ip instanceof HierarchicalAware ? ((HierarchicalAware) ip).getVariable(comp, name)
 					: ip.getVariable(name);
 			if (val != null)
 				return val;

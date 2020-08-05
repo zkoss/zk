@@ -138,7 +138,7 @@ public class SimpleScope implements Scope {
 		initListeners().notifyIdSpaceChanged(newIdSpace);
 	}
 
-	/** Returns a ist of all scope listners (never null).
+	/** Returns a list of all scope listeners (never null).
 	 */
 	public List<ScopeListener> getListeners() {
 		return initListeners().getListeners();

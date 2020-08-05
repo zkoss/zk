@@ -63,7 +63,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** @class zUtl
  * @import zk.Widget
  * @import zk.xml.Utl
- * The basic utilties.
+ * The basic utilities.
  * <p>For more utilities, refer to {@link Utl}.
  */
 zUtl = { //static methods

@@ -14,7 +14,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-Please mouse in and out the header, you should see the log infomation.
+Please mouse in and out the header, you should see the log information.
 <listbox>
 <listhead>
 <listheader id="lh" label="header"/>

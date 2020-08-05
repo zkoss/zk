@@ -35,7 +35,7 @@ import java.util.Set;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Primitives;
 import org.zkoss.lang.reflect.Fields;
-import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.scripting.HierarchicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
@@ -1215,8 +1215,8 @@ public class DataBinder implements java.io.Serializable {
 		boolean found = false;
 		for (final Iterator it = comp.getPage().getLoadedInterpreters().iterator(); it.hasNext();) {
 			final Interpreter ip = (Interpreter) it.next();
-			if (ip instanceof HierachicalAware) {
-				final HierachicalAware ha = (HierachicalAware) ip;
+			if (ip instanceof HierarchicalAware) {
+				final HierarchicalAware ha = (HierarchicalAware) ip;
 				if (ha.containsVariable(comp, beanid)) {
 					ha.setVariable(comp, beanid, val);
 					found = true;

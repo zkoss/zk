@@ -41,7 +41,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
-import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.scripting.HierarchicalAware;
 import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.ui.Component;
@@ -58,7 +58,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  * The interpreter that uses BeanShell to interpret zscript codes.
  *
  * <p>Unlike many other implementations, it supports the hierarchical
- * scopes ({@link HierachicalAware}).
+ * scopes ({@link HierarchicalAware}).
  * That is, it uses an independent BeanShell NameSpace
  * (a.k.a. interpreter's scope) to store the variables/classes/methods
  * defined in BeanShell script for each ZK scope ({@link Scope}).
@@ -84,7 +84,7 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
  *
  * @author tomyeh
  */
-public class BSHInterpreter extends GenericInterpreter implements SerializableAware, HierachicalAware {
+public class BSHInterpreter extends GenericInterpreter implements SerializableAware, HierarchicalAware {
 	/*package*/ static final Logger log = LoggerFactory.getLogger(BSHInterpreter.class);
 
 	/** A variable in {@link Scope}. The value is an instance of

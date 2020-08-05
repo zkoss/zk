@@ -734,7 +734,7 @@ new zul.wnd.Window({
 	$init: function (props) {
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
-		this._bklsns = {}; //backup for listners by setListeners
+		this._bklsns = {}; //backup for listeners by setListeners
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 		this.effects_ = {};
 		this._subzcls = {}; // cache the zclass + subclass name, like zclass + '-hover'
@@ -2830,7 +2830,7 @@ function () {
 			jq(ben).append(html);
 		child.bind(desktop);
 	},
-	/** Called by {@link #insertChildHTML_} to to find the location to place the DOM element of the child.
+	/** Called by {@link #insertChildHTML_} to find the location to place the DOM element of the child.
 	 * More precisely, the node returned by {@link #getCaveNode} is the parent DOM element of the child's DOM element.
 	 * <p>Default: <code>this.$n('cave') || this.$n()</code>
 	 * You can override it to return whatever DOM element you want.
@@ -5278,7 +5278,7 @@ zk._wgtutl = { //internal utilities
 			wgt.uuid = uuid;
 		}
 	},
-	//kids: whehter to move children of from to to
+	//kids: whehter to move children of from to
 	replace: function (from, to, kids) { //called by mount.js
 		_replaceLink(from, to);
 		from.parent = from.nextSibling = from.previousSibling = null;

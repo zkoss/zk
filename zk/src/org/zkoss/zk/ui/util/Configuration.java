@@ -2732,7 +2732,7 @@ public class Configuration {
 				: null;
 	}
 
-	/** Destroyes all richlets.
+	/** Destroys all richlets.
 	 */
 	public void detroyRichlets() {
 		synchronized (_richlets) {
@@ -2875,7 +2875,7 @@ public class Configuration {
 	}
 
 	/** Returns the implementation of the expression factory that
-	 * is used by the whole system, or null if the sytem default is used.
+	 * is used by the whole system, or null if the system default is used.
 	 *
 	 * @see #setExpressionFactoryClass
 	 * @since 3.0.0
@@ -2957,7 +2957,7 @@ public class Configuration {
 		return _attrs.remove(name);
 	}
 
-	/** Adds a client (JavaScript) pacakge that is provided by this server.
+	/** Adds a client (JavaScript) package that is provided by this server.
 	 * <p>Default: none.
 	 * <p>If no package is defined (default), ZK Client Engine assumes
 	 * all packages coming from the server generating the HTML page.

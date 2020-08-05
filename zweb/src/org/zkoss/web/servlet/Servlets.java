@@ -1384,7 +1384,7 @@ public class Servlets {
 		return dot >= 0 ? path.substring(dot + 1).toLowerCase(java.util.Locale.ENGLISH) : "";
 	}
 
-	/** Returns the request detail infomation.
+	/** Returns the request detail information.
 	 * It is used to log the debug info.
 	 * @since 3.0.5
 	 */
