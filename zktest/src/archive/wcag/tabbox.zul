@@ -18,7 +18,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     <style><![CDATA[
     /* FIXME: For demonstration only, should apply to theme itself. */
     :focus {
-        outline: 1px dotted red;
+        box-shadow: inset 0 0 0 2px red;
     }
     ]]>
     </style>
@@ -87,6 +87,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
                 <tab label="Tab F" iconSclass="z-icon-home"/>
                 <tab iconSclass="z-icon-home" ca:aria-label="Tab G"/>
                 <tab label="Tab H" closable="true"/>
+                <tab label="Tab I" closable="true" ca:aria-label="closable Tab I"/>
             </tabs>
             <tabpanels>
                 <tabpanel>Content A</tabpanel>
@@ -97,6 +98,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
                 <tabpanel>Content F</tabpanel>
                 <tabpanel>Content G</tabpanel>
                 <tabpanel>Content H</tabpanel>
+                <tabpanel>Content I</tabpanel>
             </tabpanels>
         </tabbox>
     </n:main>
