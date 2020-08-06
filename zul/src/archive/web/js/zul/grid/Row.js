@@ -179,7 +179,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			child._headerVisible = opts.visible;
 		else {
 			out.push('<td id="', child.uuid, '-chdextr"',
-				this._childAttrs(child, opts.index), ' tabindex="-1"><div id="', child.uuid,
+				this._childAttrs(child, opts.index), ' tabindex="-1" role="gridcell"><div id="', child.uuid,
 				'-cell" class="', opts.zclass, '-content">');
 		}
 		child.redraw(out);
