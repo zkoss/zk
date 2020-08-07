@@ -16,6 +16,7 @@ ZK 9.5.0
   ZK-4598: Enhance the accessibility of components by following WCAG 2.0
   ZK-4494: Tree's DOM structure shall provide enough information to decorate lines with CSS
   ZK_4630: Implement a keyboard trap util for components in modal
+  ZK-4497: searchbox: improve clearing selection, key shortcut / clear icon
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
