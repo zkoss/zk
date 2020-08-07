@@ -186,5 +186,19 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				</row>
 			</rows>
 		</grid>
+		<grid id="grid" width="300px">
+			<columns menupopup="auto">
+				<column width="150px" label="col 1"/>
+				<column label="col 2" width="150px" sort="auto"/>
+				<column label="col 3" align="center" width="150px"/>
+				<column label="col 4" align="right" width="150px"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+			</rows>
+		</grid>
 	</n:main>
 </zk>

@@ -563,12 +563,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		out.push('<th', this.domAttrs_({width: true}), ' role="columnheader"><div id="',
 			uuid, '-cave" class="', this.$s('content'), '"',
 			this.domTextStyleAttr_(), '><div class="', this.$s('sorticon'),
-			'"><i id="', uuid, '-sort-icon"></i></div>',
+			'"><i id="', uuid, '-sort-icon" aria-hidden="true"></i></div>',
 			((!this.firstChild && label == '') ? '&nbsp;' : label)); //ZK-805 MenuPopup without columns issue
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
 			out.push('<a id="', uuid, '-btn" href="javascript:;" class="',
-				this.$s('button'), '"><i class="z-icon-caret-down"></i></a>');
+				this.$s('button'), '" tabindex="-1" aria-hidden="true"><i class="z-icon-caret-down"></i></a>');
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

@@ -418,7 +418,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				}
 			} else { // the parent is not menu widget
 				var ref = this._fakeParent;
-				this.close();
+				this.close({sendOnOpen: true});
 				if (ref) ref.focus();
 			}
 			break;
