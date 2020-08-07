@@ -150,7 +150,7 @@ public class FakerMatrixModel<Head extends List, Row extends List, Cell, Header>
 			_headerData.add(new FakerKeyList<String>(colSize, 0, new Fun() {
 				
 				public Object apply(int index) {
-					return "Header x = " + index + ", y = " + rowIndex;
+					return "Header x = " + index + ", y = (" + index + "," + rowIndex + ")";
 				}
 			}));
 		}
@@ -174,9 +174,8 @@ public class FakerMatrixModel<Head extends List, Row extends List, Cell, Header>
 		List<String> value = _rowCache.get(key);
 		if (value == null) {
 			value = new FakerKeyList<String>(_colSize, rowIndex, new Fun() {
-				
 				public Object apply(int index) {
-					return "y = " + rowIndex;
+					return "y = (" + index + "," + rowIndex + ")";
 				}});
 			_rowCache.put(key, value);
 		}
