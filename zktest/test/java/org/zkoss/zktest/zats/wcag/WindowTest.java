@@ -21,5 +21,8 @@ public class WindowTest extends WcagTestCase {
 	public void test() {
 		connect();
 		verifyA11y();
+		click(jq("@button").eq(0));
+		waitResponse();
+		verifyA11y();
 	}
 }
