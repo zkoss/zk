@@ -47,6 +47,7 @@ zk.eff = {
 		this.wgt = zk.Widget.$(element.id);
 		this.opts = zk.eff._skuOpts(opts);
 		this.node = element;
+		element.setAttribute('aria-hidden', true);
 		// ZK-1904: listen onVParent
 		zWatch.listen({ onVParent: [this.node, zk.eff._onVParent] });
 	},

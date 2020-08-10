@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Messagebox"?>
+<?root-attributes lang="en"?>
+<!--
+messagebox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu July 30 12:12:23 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus{
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Messagebox</n:h1>
+	</n:header>
+	<n:main>
+		<button label="Info" width="100px">
+			<attribute name="onClick"><![CDATA[
+				Messagebox.show("Hello", "Hi", Messagebox.OK | Messagebox.CANCEL, Messagebox.INFORMATION);
+			]]></attribute>
+		</button>
+		<button label="Question" width="100px">
+			<attribute name="onClick"><![CDATA[
+				Messagebox.show("Question is pressed. Are you sure?", "Question", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
+			]]></attribute>
+		</button>
+		<button label="Exclamation" width="100px">
+			<attribute name="onClick"><![CDATA[
+				Messagebox.show("Exclamation?", "Exclamation", Messagebox.IGNORE, Messagebox.EXCLAMATION);
+			]]></attribute>
+		</button>
+		<button label="Error" width="100px">
+			<attribute name="onClick"><![CDATA[
+				Messagebox.show("Error!", "Error", Messagebox.RETRY | Messagebox.ABORT, Messagebox.ERROR);
+			]]></attribute>
+		</button>
+	</n:main>
+</zk>

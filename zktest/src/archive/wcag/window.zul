@@ -25,7 +25,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <n:h1>Window</n:h1>
     </n:header>
     <n:main>
-        <window title="Window: buttons" closable="true" minimizable="true" maximizable="true">
+        <window id="win" title="Window: buttons" closable="true" minimizable="true" maximizable="true">
             Hello world
         </window>
 
@@ -37,5 +37,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <window title="Scrollable content" height="200px" contentStyle="overflow:auto" sizable="true">
             <div height="300px">long long content</div>
         </window>
+        <separator />
+        <button label="Do Modal" onClick="win.doModal();" />
+        <button label="Toggle Visible" onClick="win.visible = !win.visible" />
     </n:main>
 </zk>
