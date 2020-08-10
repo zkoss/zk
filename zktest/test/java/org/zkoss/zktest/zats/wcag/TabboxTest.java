@@ -11,7 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
+
+import org.zkoss.zktest.zats.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -29,5 +33,26 @@ public class TabboxTest extends WcagTestCase {
 		click(jq("@tab:contains(Tab D):eq(2)"));
 		waitResponse(true);
 		verifyA11y();
+	}
+
+	@Test
+	public void testClickCloseFocus() {
+		connect();
+
+		click(widget("@tab:contains(Tab H):eq(0)").$n("cls"));
+		waitResponse();
+		Assert.assertTrue(jq(".z-tab-selected:eq(0)").is(":focus"));
+	}
+
+	@Test
+	public void testKeyboardCloseFocus() {
+		connect();
+
+		JQuery tabH = jq("@tab:contains(Tab H):eq(0)");
+		click(tabH);
+		waitResponse(true);
+		sendKeys(tabH, Keys.DELETE);
+		waitResponse();
+		Assert.assertTrue(jq(".z-tab-selected:eq(0)").is(":focus"));
 	}
 }
