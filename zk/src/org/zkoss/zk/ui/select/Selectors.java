@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
@@ -95,31 +96,16 @@ public class Selectors {
 		return toList(iterable(root, selector));
 	}
 
-	/*
-	 * Returns the ith component that matches the selector
-	 * @param page the reference page for selector
+	/**
+	 * Returns a list of Components that match the selector (from the first page of current Desktop).
 	 * @param selector the selector string
-	 * @param index 1-based index (1 means the first component found)
-	 * @return Component, null if not found
+	 * @return a List of Component
+	 * @since 9.5.0
 	 */
-	/*
-	public static Component find(Page page, String selector, int index) {
-		return getIthItem(new ComponentIterator(page, selector), index);
+	public static List<Component> find(String selector) {
+		return toList(iterable(Executions.getCurrent().getDesktop().getFirstPage(), selector));
 	}
-	*/
 
-	/*
-	 * Returns the ith component that matches the selector
-	 * @param root root the reference component for selector
-	 * @param selector selector the selector string
-	 * @param index 1-based index (1 means the first component found)
-	 * @return Component, null if not found
-	 */
-	/*
-	public static Component find(Component root, String selector, int index) {
-		return getIthItem(new ComponentIterator(root, selector), index);
-	}
-	*/
 
 	/**
 	 * Wire variables to controller, including XEL variables, implicit variables.

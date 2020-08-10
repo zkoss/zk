@@ -17,6 +17,7 @@ ZK 9.5.0
   ZK-4494: Tree's DOM structure shall provide enough information to decorate lines with CSS
   ZK_4630: Implement a keyboard trap util for components in modal
   ZK-4497: searchbox: improve clearing selection, key shortcut / clear icon
+  ZK-4624: Clients API support scrollIntoView and focus by using selector string
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects

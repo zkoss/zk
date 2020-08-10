@@ -45,7 +45,10 @@ import org.zkoss.zk.au.out.AuSubmitForm;
 import org.zkoss.zk.au.out.AuSyncErrorbox;
 import org.zkoss.zk.au.out.AuWrongValue;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.select.Selectors;
 
 /**
  * Utilities to send {@link AuResponse} to the client.
@@ -181,6 +184,18 @@ public class Clients {
 	 */
 	public static final void scrollIntoView(Component cmp) {
 		response(new AuScrollIntoView(cmp));
+	}
+
+	/**
+	 * Scrolls the ancestor elements to make the selector matched element visible
+	 * Note: The Selector will locate the components in the first page of current Desktop.
+	 * @see Selectors#find(org.zkoss.zk.ui.Page, String)
+	 * @see Selectors#find(Component, String)
+	 * @param selector the selector string
+	 * @since 9.5.0
+	 */
+	public static final void scrollIntoView(String selector) {
+		scrollIntoView(getComponentsBySelector(selector).get(0));
 	}
 
 	/** Scrolls the current desktop (a.k.a., browser window) by the specified number of pixels.
@@ -612,5 +627,35 @@ public class Clients {
 	 */
 	public static final void syncErrorbox(Component component) {
 		response(new AuSyncErrorbox(component));
+	}
+
+	/**
+	 * Focus the component (HtmlBasedComponent)
+	 * @param component target component
+	 * @since 9.5.0
+	 */
+	public static final void focus(Component component) {
+		if (component instanceof HtmlBasedComponent)
+			((HtmlBasedComponent) component).focus();
+	}
+
+	/**
+	 * Focus the first matching component (HtmlBasedComponent) by using selector
+	 * Note: The Selector will locate the components in the first page of current Desktop.
+	 * @see Selectors#find(org.zkoss.zk.ui.Page, String)
+	 * @see Selectors#find(Component, String)
+	 * @param selector the selector string
+	 * @since 9.5.0
+	 */
+	public static final void focus(String selector) {
+		focus(getComponentsBySelector(selector).get(0));
+	}
+
+	private static final List<Component> getComponentsBySelector(String selector) {
+		List<Component> comps = Selectors.find(selector);
+		if (!comps.isEmpty())
+			return comps;
+		else
+			throw new ComponentNotFoundException("Component not found, selector: " + selector);
 	}
 }
