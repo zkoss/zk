@@ -33,6 +33,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
                 <label value="Target Date" id="target"/>
                 <datebox ca:aria-labelledby="${target.uuid}"/>
             </hlayout>
+            <hlayout>
+                <label value="Choose a suitable date &amp; time" id="lbl2"/>
+                <datebox ca:aria-labelledby="${lbl2.uuid}" displayedTimeZones="GMT+8,GMT+9"/>
+                <datebox ca:aria-labelledby="${lbl2.uuid}" format="long+medium" displayedTimeZones="GMT+8,GMT+9"/>
+            </hlayout>
         </vlayout>
     </n:main>
 </zk>

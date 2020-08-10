@@ -11,6 +11,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -21,9 +22,9 @@ import org.zkoss.zktest.zats.ztl.JQuery;
 /**
  * @author rudyhuang
  */
-@Ignore("Needs aXe >= 3.5.6, https://github.com/dequelabs/axe-core/pull/2304")
 public class DateboxTest extends WcagTestCase {
 	@Test
+	@Ignore("Needs aXe >= 3.5.6, https://github.com/dequelabs/axe-core/pull/2304")
 	public void testDate() {
 		connect();
 
@@ -45,6 +46,7 @@ public class DateboxTest extends WcagTestCase {
 	}
 
 	@Test
+	@Ignore("Needs aXe >= 3.5.6, https://github.com/dequelabs/axe-core/pull/2304")
 	public void testDateTime() {
 		connect();
 
@@ -63,5 +65,20 @@ public class DateboxTest extends WcagTestCase {
 		actions.sendKeys(Keys.SPACE).perform();
 		waitResponse();
 		verifyA11y();
+	}
+
+	@Test
+	public void testFocus() {
+		connect();
+
+		click(jq("@datebox:eq(4)"));
+		waitResponse();
+		Actions actions = getActions();
+		actions.sendKeys(Keys.chord(Keys.ALT, Keys.ARROW_DOWN))
+				.pause(200)
+				.sendKeys(Keys.TAB, Keys.TAB)
+				.perform();
+		waitResponse();
+		Assert.assertTrue(jq(widget("@datebox:eq(4)").$n("pp")).isVisible());
 	}
 }
