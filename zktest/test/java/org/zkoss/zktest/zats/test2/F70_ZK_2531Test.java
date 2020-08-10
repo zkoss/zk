@@ -24,25 +24,9 @@ public class F70_ZK_2531Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-
-		getActions().sendKeys(Keys.TAB).perform();
-		Assert.assertEquals(
-				toElement(jq("@checkbox input")),
-				driver.switchTo().activeElement());
-
-		getActions().sendKeys(Keys.TAB).perform();
-		Assert.assertEquals(
-				toElement(jq("@tree .z-focus-a")),
-				driver.switchTo().activeElement());
-
-		getActions().sendKeys(Keys.TAB).perform();
-		Assert.assertEquals(
-				toElement(jq("@button")),
-				driver.switchTo().activeElement());
-
-		getActions().sendKeys(Keys.TAB).perform();
-		Assert.assertEquals(
-				toElement(jq("@listbox .z-focus-a")),
-				driver.switchTo().activeElement());
+		Assert.assertEquals("1", jq("@checkbox input").attr("tabindex"));
+		Assert.assertEquals("2", jq("@tree .z-focus-a").attr("tabindex"));
+		Assert.assertEquals("3", jq("@button").attr("tabindex"));
+		Assert.assertEquals("4", jq("@listbox .z-focus-a").attr("tabindex"));
 	}
 }
