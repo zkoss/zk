@@ -14,7 +14,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-Wnen you scoll the horizontal scrollbar, the head and body should be scolled correctly.
+When you scroll the horizontal scrollbar, the head and body should be scrolled correctly.
 <listbox>
 <listhead sizable="true">
 <listheader label="Subject" width="20em" sort="auto" />
