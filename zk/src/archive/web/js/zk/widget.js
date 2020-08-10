@@ -668,7 +668,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * It is set when it is bound to the DOM tree.
 	 * <p>Notice it is always non-null if bound to the DOM tree, while
 	 * {@link #$n()} is always non-null if bound. For example, {@link zul.utl.Timer}.
-	 * <p>It is readonly, and set automcatically when {@link #bind_} is called.
+	 * <p>It is readonly, and set automatically when {@link #bind_} is called.
 	 * @type zk.Desktop
 	 */
 	//desktop: null,
@@ -812,7 +812,7 @@ new zul.wnd.Window({
 		 * If you want to perform small adjustments, use {@link #setSclass} instead.
 		 * <p>The real CSS class is a concatenation of {@link #getZclass} and
 		 * {@link #getSclass}.
-		 * @param String zclass the style class used to apply the whote widget.
+		 * @param String zclass the style class used to apply the whole widget.
 		 * @return zk.Widget this widget
 		 * @see #getZclass
 		 * @see #setSclass
@@ -904,7 +904,7 @@ new zul.wnd.Window({
 		 * <p>Default: null
 		 * <p>The simplest way to make a component droppable is to set this attribute to "true". To disable it, set this to "false" (or null).
 		 * <p>If there are several types of draggable objects and this widget accepts only some of them, you could assign a list of identifiers that this widget accepts, separated by comma.
-		 * <p>For example, if this component accpets dg1 and dg2, then assign "dg1, dg2" to this attribute.
+		 * <p>For example, if this component accepts dg1 and dg2, then assign "dg1, dg2" to this attribute.
 		 * @param String droppable "false", null or "" to denote not-droppable; "true" for accepting any draggable types; a list of identifiers, separated by comma for identifiers of draggables this widget accept (to be dropped in).
 		 * @return zk.Widget this widget
 		 */
@@ -1010,7 +1010,7 @@ new zul.wnd.Window({
 		 * at the client.
 		 * <p>Default: -1 (don't wait).
 		 *
-		 * <p>This method is useful if you have a sophiscated page that takes
+		 * <p>This method is useful if you have a sophisticated page that takes
 		 * long to render at a slow client. You can specify a non-negative value
 		 * as the render-defer delay such that the other part of the UI can appear
 		 * earlier. The styling of the render-deferred widget is controlled by
@@ -1020,7 +1020,7 @@ new zul.wnd.Window({
 		 * at the client.
 		 * @param int ms time to wait in milliseconds before rendering.
 		 * Notice: 0 also implies deferring the rendering (just right after
-		 * all others are renderred).
+		 * all others are rendered).
 		 * @since 5.0.2
 		 */
 		renderdefer: null,
@@ -1039,7 +1039,7 @@ new zul.wnd.Window({
 		 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.eff.Actions</a>,
 		 * such as
 		 * <code>show: slideDown; hide: slideUp</code>
-		 * @param String action the cient-side action
+		 * @param String action the client-side action
 		 * @since 5.0.6
 		 */
 		action: function (v) {
@@ -1728,12 +1728,12 @@ wgt.$f().main.setTitle("foo");
 		}
 	},
 	/** Replaced the child widgets with the specified widgets.
-	 * It is usefull if you want to replace a part of children whose
+	 * It is useful if you want to replace a part of children whose
 	 * DOM element is a child element of <code>subId</code> (this.$n(subId)).
 	 * <p>Note: it assumes this.$n(subId) exists.
 	 * @param String subId the ID of the cave that contains the child widgets
 	 * to replace with.
-	 * @param Array wgts an arrray of widgets that will become children of this widget
+	 * @param Array wgts an array of widgets that will become children of this widget
 	 * @param String tagBeg the beginning of HTML tag, such as &tl;tbody&gt;.
 	 * Ignored if null.
 	 * @param String tagEnd the ending of HTML tag, such as &lt;/tbody&gt;
@@ -2146,9 +2146,9 @@ wgt.$f().main.setTitle("foo");
 	},
 	/** Sets a status to indicate if this widget is floating.
 	 * <p>Notice that it doesn't change the DOM tree. It is caller's job.
-	 * In the other words, the caller have to adjust the style by assiging
+	 * In the other words, the caller have to adjust the style by assigning
 	 * <code>position</code> with <code>absolute</code> or <code>relative</code>.
-	 * @param boolean floating whther to make it floating
+	 * @param boolean floating whether to make it floating
 	 * @param Map opts [optional] The options. Allowed options:
 	 * <ul>
 	 * <li>node: the DOM element. If omitted, {@link #$n} is assumed.</li>
@@ -2214,7 +2214,7 @@ wgt.$f().main.setTitle("foo");
 	},
 	setZindex: _zkf,
 
-	/** Returns the scoll top of the associated DOM element of this widget.
+	/** Returns the scroll top of the associated DOM element of this widget.
 	 * <p>0 is always returned if this widget is not bound to a DOM element yet.
 	 * @return int
 	 */
@@ -2222,7 +2222,7 @@ wgt.$f().main.setTitle("foo");
 		var n = this.$n();
 		return n ? n.scrollTop : 0;
 	},
-	/** Returns the scoll left of the associated DOM element of this widget.
+	/** Returns the scroll left of the associated DOM element of this widget.
 	 * <p>0 is always returned if this widget is not bound to a DOM element yet.
 	 * @return int
 	 */
@@ -2230,7 +2230,7 @@ wgt.$f().main.setTitle("foo");
 		var n = this.$n();
 		return n ? n.scrollLeft : 0;
 	},
-	/** Sets the scoll top of the associated DOM element of this widget.
+	/** Sets the scroll top of the associated DOM element of this widget.
 	 * <p>This method does nothing if this widget is not bound to a DOM element yet.
 	 * @param int the scroll top.
 	 * @return zk.Widget this widget.
@@ -2240,7 +2240,7 @@ wgt.$f().main.setTitle("foo");
 		if (n) n.scrollTop = val;
 		return this;
 	},
-	/** Sets the scoll left of the associated DOM element of this widget.
+	/** Sets the scroll left of the associated DOM element of this widget.
 	 * <p>This method does nothing if this widget is not bound to a DOM element yet.
 	 * @param int the scroll top.
 	 * @return zk.Widget this widget.
@@ -2673,8 +2673,8 @@ function () {
 	 * For example, if a setter (such as <code>setBorder</code>) has to
 	 * modify the visual appearance, it can update the DOM tree directly,
 	 * or it can call this method to re-render all DOM elements associated
-	 * with is widget and its desendants.
-	 * <p>It is coonvenient to synchronize the widget's state with
+	 * with is widget and its descendants.
+	 * <p>It is convenient to synchronize the widget's state with
 	 * the DOM tree with this method. However, it shall be avoided
 	 * if the HTML code snippet is complex (otherwise, the performance won't be good).
 	 * <p>If re-rendering is required, you can improve the performance
@@ -2888,7 +2888,7 @@ function () {
 	 * @param Array n an array of {@link DOMElement} to remove.
 	 * If this widget is associated with a DOM element ({@link #$n} returns non-null),
 	 * n is a single element array.
-	 * If this widget is not assoicated with any DOM element, an array of
+	 * If this widget is not associated with any DOM element, an array of
 	 * child widget's DOM elements are returned.
 	 */
 	removeHTML_: function (n) {
@@ -3022,7 +3022,7 @@ function () {
 		_rerenderNow(this, skipper);
 	},
 	/** Binds this widget.
-	 * It is called to assoicate (aka., attach) the widget with
+	 * It is called to associate (aka., attach) the widget with
 	 * the DOM tree.
 	 * <p>Notice that you rarely need to invoke this method, since
 	 * it is called automatically (such as {@link #replaceHTML}
@@ -3054,7 +3054,7 @@ function () {
 		return this;
 	},
 	/** Unbinds this widget.
-	 * It is called to remove the assoication (aka., detach) the widget from
+	 * It is called to remove the association (aka., detach) the widget from
 	 * the DOM tree.
 	 * <p>Notice that you rarely need to invoke this method, since
 	 * it is called automatically (such as {@link #replaceHTML}).
@@ -3247,7 +3247,7 @@ unbind_: function (skipper, after) {
 	},
 
 	/** Associates UUID with this widget.
-	 * <p>Notice that {@link #uuid} is automically associated (aka., bound) to this widget.
+	 * <p>Notice that {@link #uuid} is automatically associated (aka., bound) to this widget.
 	 * Thus, you rarely need to invoke this method unless you want to associate with other identifiers.
 	 * <p>For example, ZK Google Maps uses this method since it has to
 	 * bind the anchors manually.
@@ -3734,7 +3734,7 @@ focus_: function (timeout) {
 
 	//server comm//
 	/** Smart-updates a property of the peer component associated with this widget, running at the server, with the specified value.
-	 * <p>It is actually fired an AU requst named <code>setAttr</code>, and
+	 * <p>It is actually fired an AU request named <code>setAttr</code>, and
 	 * it is handled by the <code>updateByClient</code> method in <code>org.zkoss.zk.ui.AbstractComponent</code> (at the server).
 	 * <p>By default, it is controlled by a component attribute called <code>org.zkoss.zk.ui.updateByClient</code>.
 	 * And, it is default to false.
@@ -3946,7 +3946,7 @@ wgt.listen({
 		}
 		return this;
 	},
-	/** Removes a listener from the sepcified event.
+	/** Removes a listener from the specified event.
 <pre><code>
 wgt.unlisten({
   onClick: wgt,

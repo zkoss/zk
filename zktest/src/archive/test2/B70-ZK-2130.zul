@@ -1,10 +1,10 @@
 <?page title="Frozen Tree Columns" contentType="text/html;charset=UTF-8"?>
 <zk>
 	<label multiline="true">
-		1. Scroll to the right bound, then scoll renturn to col_1. 
-		2. Resize the broswer width. 
+		1. Scroll to the right bound, then scroll return to col_1.
+		2. Resize the browser width.
 		3. Scroll to the col_2. 
-		4. Resize the broswer width. 
+		4. Resize the browser width.
 		5. The column should not flickering on step 2,4.
 	</label>
 	<hlayout>

@@ -1064,7 +1064,7 @@ public interface Execution extends Scope {
 	 *
 	 * @param uri the URI to redirect to, or null to reload the same page
 	 * @param target the name of the browser window that send-redirect will
-	 * load the sepcified URI, or null if the current browser window
+	 * load the specified URI, or null if the current browser window
 	 * is used.
 	 */
 	public void sendRedirect(String uri, String target);
