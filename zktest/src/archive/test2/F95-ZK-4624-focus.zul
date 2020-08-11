@@ -17,8 +17,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<div viewModel="@('org.zkoss.zktest.test2.F95_ZK_4624FocusVM')">
 		<div>
 			<button onClick="@('doFocus')" label="focus the textbox"/>
-			<button id="fIntoList" onClick="@('doFocusInList')" label="focus the textbox in a List"/>
-			<button onClick="@('doFocusInner')" label="focus the textbox inner"/>
+			<button id="fcIntoListLastBtn" onClick="@('doFocusListLastBtn')" label="focus the last button in a List"/>
+			<button id="fcIntoInnerTb" onClick="@('doFocusInnerTb')" label="focus the textbox inner"/>
 			<textbox id="tb" value="@(text)" />
 		</div>
 		<div id="list">
@@ -30,6 +30,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			</window>
 			<window id="win3">
 				<textbox id="tb_inner" />
+				<button label="focus button" />
 			</window>
 		</div>
 	</div>

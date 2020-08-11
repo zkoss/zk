@@ -44,8 +44,12 @@ public class F95_ZK_4624Test extends WebDriverTestCase {
 		waitResponse();
 		Assert.assertTrue(jq("$tb").is(":focus"));
 
-		click(jq("$fIntoList"));
+		click(jq("$fcIntoListLastBtn"));
 		waitResponse();
-		Assert.assertTrue(jq("@textbox").last().is(":focus"));
+		Assert.assertTrue(jq("@button").last().is(":focus"));
+
+		click(jq("$fcIntoInnerTb"));
+		waitResponse();
+		Assert.assertTrue(jq("$win3 $tb_inner").is(":focus"));
 	}
 }

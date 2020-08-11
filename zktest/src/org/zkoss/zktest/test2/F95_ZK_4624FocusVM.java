@@ -50,15 +50,15 @@ public class F95_ZK_4624FocusVM {
 	}
 
 	@Command
-	public void doFocusInList() {
-		Clients.log("doFocusInList!");
-		Clients.focus("#list textbox:last-child");
+	public void doFocusListLastBtn() {
+		Clients.log("doFocusListLastBtn");
+		Clients.focus("#list button:last-child");
 	}
 
 	@Command
-	public void doFocusInner() {
-		Clients.log("doFocusInner");
-		Clients.focus("#win2 #tb_inner");
+	public void doFocusInnerTb() {
+		Clients.log("doFocusInnerTb");
+		Clients.focus("#win3 #tb_inner");
 	}
 
 	public List<String> getData() {
