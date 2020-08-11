@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4453.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 11 12:23:16 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Input -1 to trigger an error.
+        2. Correct by entering 1.
+        3. No onError event should be triggered again. (Since a patch is applied)
+    </label>
+    <script><![CDATA[
+    zk.afterLoad("zul.inp", function () {
+        var _xInputWidget = {};
+        zk.override(zul.inp.InputWidget.prototype, _xInputWidget, {
+            _sendClearingErrorEvent: function (val) {
+                // leave it blank for not sending a clearing ErrorEvent
+            }
+        });
+    });
+    ]]>
+    </script>
+    <intbox constraint="no negative"
+            onError='Clients.log("error: " + event + ", message: " + event.message)'/>
+</zk>

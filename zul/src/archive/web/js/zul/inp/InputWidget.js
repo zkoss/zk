@@ -690,12 +690,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				}
 				this._reVald = false;
 				if (em)
-					this.fire('onError', {value: val});
+					this._sendClearingErrorEvent(val);
 			}
 			return {value: val};
 		} finally {
 			zul.inp.validating = false;
 		}
+	},
+	_sendClearingErrorEvent: function (val) {
+		// ZK-4453 for easier overriding this behavior
+		this.fire('onError', {value: val});
 	},
 	_shallIgnore: function (evt, keys) {
 		// ZK-1736 add metakey on mac
