@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.openqa.selenium.Keys;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.zktest.zats.ztl.JQuery;
 
 /**
  * @author rudyhuang
@@ -75,5 +76,24 @@ public class F95_ZK_4497Test extends WebDriverTestCase {
 		waitResponse();
 
 		sendKeyAndExpected(Keys.DELETE, "false");
+	}
+
+	@Test
+	public void testShouldNotAppearCloseIfOpened() {
+		connect();
+
+		JQuery closeBtn = jq(widget("@searchbox").$n("clear"));
+		click(closeBtn);
+		waitResponse();
+
+		click(jq("@searchbox"));
+		waitResponse();
+		click(jq(".z-searchbox-item:eq(0)"));
+		waitResponse();
+		Assert.assertFalse(closeBtn.isVisible());
+
+		click(jq("@searchbox"));
+		waitResponse();
+		Assert.assertTrue(closeBtn.isVisible());
 	}
 }
