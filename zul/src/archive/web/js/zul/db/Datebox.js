@@ -418,8 +418,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var keyCode = evt.keyCode,
 			bOpen = this._pop.isOpen();
 		if (keyCode == 9 || (zk.webkit && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
-			if (bOpen) this._pop.close();
-			return;
+			if (evt.target != this._tm) { // avoid closing the popup if moving focus to the timezone dropdown
+				if (bOpen) this._pop.close();
+				return;
+			}
 		}
 
 		if (evt.altKey && (keyCode == 38 || keyCode == 40)) {//UP/DN
