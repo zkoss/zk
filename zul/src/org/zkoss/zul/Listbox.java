@@ -2673,8 +2673,12 @@ public class Listbox extends MeshElement {
 	 */
 	@SuppressWarnings("rawtypes")
 	private void onListDataChange(ListDataEvent event) {
-		//sort when add
 		int type = event.getType();
+		// ZK-4549: should ignore before handling sorting
+		if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
+				&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))
+			return;
+		//sort when add
 		if ((type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.CONTENTS_CHANGED)
 				&& !isIgnoreSortWhenChanged()) {
 			if (doSort(this)) {
@@ -2698,9 +2702,6 @@ public class Listbox extends MeshElement {
 		} else if (type == ListDataEvent.ENABLE_CLIENT_UPDATE) {
 			_ignoreSelectedItem = false;
 		} else {
-			if (getAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED) != null
-					&& (type == ListDataEvent.INTERVAL_ADDED || type == ListDataEvent.INTERVAL_REMOVED))
-				return;
 			getDataLoader().doListDataChange(event);
 			postOnInitRender(); // to improve performance
 
