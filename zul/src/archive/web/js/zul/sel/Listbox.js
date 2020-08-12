@@ -559,6 +559,19 @@ zul.sel.ListboxHeadSkipper = new (zk.$extends(zk.Skipper, {
 	skip: function (wgt, skipId) {
 		var skip = jq(skipId || (wgt.uuid + '-headrows'), zk)[0];
 		return skip && skip.parentNode.removeChild(skip);
+	},
+	restore: function (wgt, skip) {
+		if (skip) {
+			var loc = document.getElementById(skip.id);
+			// remove new DOM children
+			while (loc.firstChild)
+				loc.removeChild(loc.firstChild);
+			for (var el; el = skip.firstChild;) {
+				skip.removeChild(el);
+				loc.appendChild(el);
+				zjq._fixIframe(el); //in domie.js, Bug 2900274
+			}
+		}
 	}
 }));
 
