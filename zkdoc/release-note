@@ -44,6 +44,8 @@ ZK 9.5.0
   ZK-4637: Initially disabled Searchbox has a wrong style
   ZK-4549: Adding items then clear() a ListModel linked to a Grid during afterCompose cause IndexOutOfBoundsException
   ZK-4514: AuUploader and AuDropUploader exceptions are suppressed, need logging
+  ZK-4632: Re-rendering a listbox produces a javascript error
+  ZK-4610: Listbox Partial invalidate breaks popup ROD
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
