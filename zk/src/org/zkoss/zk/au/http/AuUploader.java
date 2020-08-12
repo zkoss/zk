@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadBase.IOFileUploadException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItem;
@@ -175,8 +174,6 @@ public class AuUploader implements AuExtension {
 
 			if (ex instanceof ComponentNotFoundException) {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
-			} else if (ex instanceof IOFileUploadException) {
-				log.debug("File upload cancelled!");
 			} else {
 				alert = handleError(ex);
 			}
