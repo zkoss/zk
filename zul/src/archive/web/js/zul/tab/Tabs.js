@@ -259,7 +259,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			self._fixTabsScrollTop(tabsScrollTop <= 0 ? 0 : tabsScrollTop);
 		};
 		var run = setInterval(function () {
-			if (!move) {
+			if (!move || !self.desktop) {
 				delete self._doingScroll[to];
 				clearInterval(run);
 				return;
