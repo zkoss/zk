@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4589.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Aug 12 14:54:20 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		span.z-upload input {
+			opacity: 0.3;
+		}
+	</style>
+	<label multiline="true">
+		1. you should see the file input(opacity:0.3 for test easily) correctly overlapping the menuitem button.
+		2. click around the menuitem button, the file upload should not trigger if you did not click inside the menuitem button.
+		3. hover around the menuitem button, the hover style should not appear if you did not hover on the menuitem button.
+		4. upload a file, you should not see "SCRIPT5 Access is denied" in console after submit.(check IE9).
+	</label>
+	<window border="normal" title="hello" width="1500px" sizable="true">
+		<menubar>
+			<menuitem label="Bug! When hovering somewhere over this menuitem the upload menuitem will be selected and respond to click" />
+			<menuitem label="This is the uploading menuitem" upload="native,true" />
+		</menubar>
+		
+		<div style="padding: 20px">Upload menuitem seems to create span with too little negative offset so that it places itself over other menuitem</div>
+	</window>
+</zk>
