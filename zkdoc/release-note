@@ -48,6 +48,7 @@ ZK 9.5.0
   ZK-4610: Listbox Partial invalidate breaks popup ROD
   ZK-4589: hidden file upload input obstructing other widgets
   ZK-4591: invalidate a tabbox produces infinite javascript errors
+  ZK-4640: Nested dynamic Drawers - DOM not cleaned up
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
