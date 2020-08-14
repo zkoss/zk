@@ -169,6 +169,8 @@ ZK 9.6.0
   + For Jakarta EE 9 support, please use 9.6.0-jakarta version instead.
   + Since 9.6.0, the transitive dependency of jasperreports was removed in zkex.
     If you want to use the jasperreport component, please add it manually.
+  + In order to be more in line with WCAG specifications,
+    the icon element in the Rating component has changed from the Anchor element to the Idiomatic Text element.
 
    --------
 ZK 9.5.1

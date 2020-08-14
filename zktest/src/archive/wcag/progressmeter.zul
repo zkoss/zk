@@ -24,12 +24,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			in which case the author SHOULD omit the aria-valuenow attribute.
 			Progressmeter SHOULD update these values when the visual progress indicator is updated.
 		</label>
-		<progressmeter id="p1" value="33" />
+		<progressmeter id="p1" value="33" ca:aria-label="test1 process"/>
 		<div id="loader" ca:role="alert">
 			<label>Please wait...</label>
-			<progressmeter id="p2" value="66" indeterminate="true" tabindex="0"/>
+			<progressmeter id="p2" value="66" indeterminate="true" tabindex="0" ca:aria-label="test2 process"/>
 		</div>
-		<progressmeter value="100"/>
+		<progressmeter value="100" ca:aria-label="test3 process"/>
 		<button label="change value" onClick="p1.setValue(99)"/>
 		<button label="change indeterminate" onClick="p2.setIndeterminate(!p2.isIndeterminate())"/>
 	</n:main>
