@@ -665,7 +665,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!isButtonVisible)
 			out.push(' ', this.$s('input-full'));
 
-		out.push('" autocomplete="off" aria-autocomplete="none" aria-controls="', uuid, '-pp" aria-labelledby="', uuid, '"',
+		out.push('" autocomplete="off" aria-autocomplete="none" aria-controls="', uuid, '-pp"',
 			this.textAttrs_(), '/><a id="', uuid, '-btn" tabindex="-1" role="button" aria-label="', msgzul.PANEL_EXPAND, '" class="',
 			this.$s('button'));
 
