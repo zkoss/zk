@@ -14,7 +14,7 @@ window.zul
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:n="native">
+<zk xmlns:n="native" xmlns:ca="client/attribute">
     <style><![CDATA[
 		/* FIXME: For demonstration only, should apply to theme itself. */
 		:focus {
@@ -27,6 +27,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     <n:main>
         <window id="win" title="Window: buttons" closable="true" minimizable="true" maximizable="true">
             Hello world
+            <button label="Do Modal" onClick="win.doModal();" />
+            <button label="Do Highlighted" onClick="win.doHighlighted();" />
+            <button label="Do Embedded" onClick='win.setMode("embedded");' />
         </window>
 
         <window closable="true" minimizable="true" maximizable="true">
@@ -37,8 +40,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <window title="Scrollable content" height="200px" contentStyle="overflow:auto" sizable="true">
             <div height="300px">long long content</div>
         </window>
+
+        <label id="desc" value="No title window"/>
+        <window height="200px" ca:aria-labelledby="${desc.uuid}">
+            Hello world
+        </window>
         <separator />
-        <button label="Do Modal" onClick="win.doModal();" />
         <button label="Toggle Visible" onClick="win.visible = !win.visible" />
     </n:main>
 </zk>

@@ -21,7 +21,12 @@ public class WindowTest extends WcagTestCase {
 	public void test() {
 		connect();
 		verifyA11y();
-		click(jq("@button").eq(0));
+
+		click(jq("@button:contains(Do Modal)"));
+		waitResponse();
+		verifyA11y();
+
+		click(jq("@button:contains(Do Highlighted)"));
 		waitResponse();
 		verifyA11y();
 	}
