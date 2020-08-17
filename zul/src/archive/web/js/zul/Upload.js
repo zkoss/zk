@@ -127,12 +127,13 @@ zul.Upload = zk.$extends(zk.Object, {
 				inp = outer.firstChild.firstChild,
 				refof = zk(ref).revisedOffset(),
 				outerof = jq(outer).css({top: '0', left: '0'}).zk.revisedOffset(),
-				st = outer.style;
+				st = outer.style,
+				shouldHack = zk.ie < 11; // ZK-4589: hidden file upload input obstructing other widgets
 			st.top = (refof[1] - outerof[1]) + 'px';
 			st.left = (refof[0] - outerof[0]) + 'px';
 
-			inp.style.height = ref.offsetHeight + 'px';
-			inp.style.width = ref.offsetWidth + 'px'; // ZK-4222: Replace deprecated CSS property clip:rect(...)
+			inp.style.height = (shouldHack ? ref.offsetHeight : '0') + 'px';
+			inp.style.width = (shouldHack ? ref.offsetWidth : '0') + 'px'; // ZK-4222: Replace deprecated CSS property clip:rect(...)
 		}
 	},
 	initContent: function () {

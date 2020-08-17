@@ -32,4 +32,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		
 		<div style="padding: 20px">Upload menuitem seems to create span with too little negative offset so that it places itself over other menuitem</div>
 	</window>
+	<label multiline="true">
+		resize the browser until a horizontal scrollbar appears and cut the "upload" button
+		click the upper half of the "click me" button should not trigger the file upload 2 times on chrome
+	</label>
+	<div style="margin-left: 150px; position: relative; z-index: 10;">
+		<button style="margin-left: 150px" width="150px" upload="true" label="upload"/>
+	</div>
+	<button label="click me" onClick="Clients.log(event.getName())"/>
 </zk>
