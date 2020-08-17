@@ -380,11 +380,11 @@ zul.WScroll = zk.$extends(zk.Object, {
 
 		var $drag = jq(self.edrag);
 		$drag.children('div')
-			.mouseover(self.proxy(self._mouseOver))
-			.mouseout(self.proxy(self._mouseOut))
-			.bind('mouseup', self.proxy(self._mouseUp))
-			.bind('mousedown', self.proxy(self._mouseDown));
-		$drag.click(zk.$void);
+			.on('mouseover', self.proxy(self._mouseOver))
+			.on('mouseout', self.proxy(self._mouseOut))
+			.on('mouseup', self.proxy(self._mouseUp))
+			.on('mousedown', self.proxy(self._mouseDown));
+		$drag.on('click', zk.$void);
 	},
 	_unlistenMouseEvent: function () {
 		var self = this;
@@ -395,11 +395,11 @@ zul.WScroll = zk.$extends(zk.Object, {
 
 		var $drag = jq(self.edrag);
 		$drag.children('div')
-			.unbind('mouseover', self.proxy(self._mouseOver))
-			.unbind('mouseout', self.proxy(self._mouseOut))
-			.unbind('mouseup', self.proxy(self._mouseUp))
-			.unbind('mousedown', self.proxy(self._mouseDown));
-		$drag.unbind('click', zk.$void);
+			.off('mouseover', self.proxy(self._mouseOver))
+			.off('mouseout', self.proxy(self._mouseOut))
+			.off('mouseup', self.proxy(self._mouseUp))
+			.off('mousedown', self.proxy(self._mouseDown));
+		$drag.off('click', zk.$void);
 	},
 	_mouseOver: function (evt) {
 		var cls = evt.target.className,

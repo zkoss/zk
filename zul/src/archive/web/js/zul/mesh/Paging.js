@@ -328,13 +328,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 
 		if (!this.$weave)
 			for (var i = input.length; i--;)
-				jq(input[i]).keydown(Paging._domKeyDown).blur(Paging._domBlur);
+				jq(input[i]).on('keydown', Paging._domKeyDown).on('blur', Paging._domBlur);
 
 		for (var k = postfix.length; k--;) {
 			var btn = jq.$$(uuid, postfix[k]);
 			for (var j = btn.length; j--;) {
 				if (!this.$weave)
-					jq(btn[j]).click(Paging['_dom' + postfix[k] + 'Click']);
+					jq(btn[j]).on('click', Paging['_dom' + postfix[k] + 'Click']);
 
 				if (pcount == 1) {
 					jq(btn[j]).attr('disabled', true);
@@ -366,13 +366,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 
 			for (var i = input.length; i--;)
 				jq(input[i])
-					.unbind('keydown', Paging._domKeyDown)
-					.unbind('blur', Paging._domBlur);
+					.off('keydown', Paging._domKeyDown)
+					.off('blur', Paging._domBlur);
 
 			for (var k = postfix.length; k--;) {
 				var btn = jq.$$(uuid, postfix[k]);
 				for (j = btn.length; j--;)
-					jq(btn[j]).unbind('click', Paging['_dom' + postfix[k] + 'Click']);
+					jq(btn[j]).off('click', Paging['_dom' + postfix[k] + 'Click']);
 			}
 		}
 		zWatch.unlisten({onSize: this});

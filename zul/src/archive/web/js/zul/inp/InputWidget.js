@@ -849,7 +849,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.domListen_(n, 'onTouchStart', '_doTouch');
 
 		if (n = n.form)
-			jq(n).bind('reset', this.proxy(this._resetForm));
+			jq(n).on('reset', this.proxy(this._resetForm));
 		zWatch.listen({onShow: this});
 	},
 	unbind_: function () {
@@ -869,7 +869,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.domUnlisten_(n, 'onTouchStart', '_doTouch');
 
 		if (n = n.form)
-			jq(n).unbind('reset', this.proxy(this._resetForm));
+			jq(n).off('reset', this.proxy(this._resetForm));
 
 		this.$supers(InputWidget, 'unbind_', arguments);
 	},

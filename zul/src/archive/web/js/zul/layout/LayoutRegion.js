@@ -1056,7 +1056,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	// a callback function after the collapsed region slides down
 	afterSlideDown: function (n) {
-		jq(document).click(this.proxy(this._docClick));
+		jq(document).on('click', this.proxy(this._docClick));
 		this._fixFontIcon();
 	},
 	// a callback function after the collapsed region slides up
@@ -1069,7 +1069,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.$n('btn'))
 			this.$n('btn').style.display = this._closable ? '' : 'none';
 		jq(this.$n()).removeClass(this.$s('slide'));
-		jq(document).unbind('click', this.proxy(this._docClick));
+		jq(document).off('click', this.proxy(this._docClick));
 		this._isSlide = false;
 		this._fixFontIcon();
 	},

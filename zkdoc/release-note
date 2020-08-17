@@ -18,6 +18,7 @@ ZK 9.5.0
   ZK_4630: Implement a keyboard trap util for components in modal
   ZK-4497: searchbox: improve clearing selection, key shortcut / clear icon
   ZK-4624: Clients API support scrollIntoView and focus by using selector string
+  ZK-4618: replace deprecated jquery functions (bind/unbind -> on/off)
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects

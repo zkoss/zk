@@ -149,7 +149,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	 */
 	destroy: function () {
 		var mask = this.mask;
-		jq(mask).unbind('click', jq.Event.stop)
+		jq(mask).off('click', jq.Event.stop)
 			.remove();
 		jq(this.stackup).remove();
 		this.mask = this.stackup = null;

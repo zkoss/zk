@@ -301,8 +301,8 @@ zk.copy(zjq, {
 		zcontextmenu: 'contextmenu'
 	}
 });
-jq.fn.zbind = jq.fn.bind;
-jq.fn.zunbind = jq.fn.unbind;
+jq.fn.zon = jq.fn.on;
+jq.fn.zoff = jq.fn.off;
 /** @class jq
  * @import jq.Event
  * @import zk.Widget
@@ -474,13 +474,13 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	},
-	bind: function (type, data, fn) {
+	on: function (type, selector, data, fn) {
 		type = zjq.eventTypes[type] || type;
-		return this.zbind.apply(this, arguments);
+		return this.zon.apply(this, arguments);
 	},
-	unbind: function (type, fn) {
+	off: function (type, selector, fn) {
 		type = zjq.eventTypes[type] || type;
-		return this.zunbind.apply(this, arguments);
+		return this.zoff.apply(this, arguments);
 	}
 	/** Removes all matched elements from the DOM.
 	 * <p>Unlike <a href="http://docs.jquery.com/Manipulation/remove">jQuery</a>,

@@ -59,14 +59,14 @@ zk.Swipe = zk.$extends(zk.Object, {
 			maxDisplacement: 75
 		});
 		
-		jq(this.node).bind(startEvt, this.proxy(this._swipeStart));
+		jq(this.node).on(startEvt, this.proxy(this._swipeStart));
 	},
 	/**
 	 * Destroys this swipe-able object.
 	 * This method must be called to clean up, if you don't want to associate the swipe-able feature to a DOM element.
 	 */
 	destroy: function (node) {
-		jq(node).unbind(startEvt, this.proxy(this._swipeStart));
+		jq(node).off(startEvt, this.proxy(this._swipeStart));
 		this.widget = this.node = this.opts = null;
 	},
 	
@@ -78,7 +78,7 @@ zk.Swipe = zk.$extends(zk.Object, {
 			time: evt.timeStamp || Date.now(),
 			coords: [data.pageX, data.pageY]
 		};
-		jq(this.node).bind(moveEvt, this.proxy(this._swipeMove)).one(endEvt, this.proxy(this._swipeEnd));
+		jq(this.node).on(moveEvt, this.proxy(this._swipeMove)).one(endEvt, this.proxy(this._swipeEnd));
 	},
 	
 	_swipeMove: function (devt) {
@@ -101,7 +101,7 @@ zk.Swipe = zk.$extends(zk.Object, {
 	},
 	
 	_swipeEnd: function (devt) {
-		jq(this.node).unbind(moveEvt, this.proxy(this._swipeMove));
+		jq(this.node).off(moveEvt, this.proxy(this._swipeMove));
 		if (start && stop) {
 			var dispX, dispY, dispT = stop.time - start.time, dir;
 			
