@@ -51,6 +51,7 @@ ZK 9.5.0
   ZK-4591: invalidate a tabbox produces infinite javascript errors
   ZK-4640: Nested dynamic Drawers - DOM not cleaned up
   ZK-4558: hide resize show listheader remains invisible
+  ZK-4606: clicking select-all checkbox in a Listbox doesn't select all items
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
