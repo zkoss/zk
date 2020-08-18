@@ -23,7 +23,7 @@
 	</combobox>
 	  <script>
 	  	zk.afterMount(function(){
-	  		jq("#test").bind("click",function(){
+	  		jq("#test").on("click",function(){
 		  		zk.log("test click");
 	  		});
 	  	});

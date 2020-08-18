@@ -144,15 +144,15 @@ zk.override(zk.Widget.prototype, _xWidget, {
 					wgt._tapValid = false;
 				}, doubleClickTime);
 			};
-			jq(this.$n()).bind('touchstart', this.proxy(this._dblTapStart))
-				.bind('touchend', this.proxy(this._dblTapEnd));
+			jq(this.$n()).on('touchstart', this.proxy(this._dblTapStart))
+				.on('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
 	unbindDoubleTap_: function () {
 		if (this.isListen('onDoubleClick')) {
 			this._startTap = null;
-			jq(this.$n()).unbind('touchstart', this.proxy(this._dblTapStart))
-				.unbind('touchend', this.proxy(this._dblTapEnd));
+			jq(this.$n()).off('touchstart', this.proxy(this._dblTapStart))
+				.off('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
 	_dblTapStart: function (evt) {
@@ -226,19 +226,19 @@ zk.override(zk.Widget.prototype, _xWidget, {
 					this._holdTimeout = null;
 				}
 			};
-			jq(this.$n()).bind('touchstart', this.proxy(this._tapHoldStart))
-				.bind('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
-				.bind('click', this.proxy(this._tapHoldClick))    //prevent click during hold
-				.bind('touchend', this.proxy(this._tapHoldEnd));
+			jq(this.$n()).on('touchstart', this.proxy(this._tapHoldStart))
+				.on('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
+				.on('click', this.proxy(this._tapHoldClick))    //prevent click during hold
+				.on('touchend', this.proxy(this._tapHoldEnd));
 		}
 	},
 	unbindTapHold_: function () {
 		if (this.isListen('onRightClick') || (this.getContext && this.getContext())) { //also register context menu to tapHold event
 			this._startHold = this._cancelHold = null;
-			jq(this.$n()).unbind('touchstart', this.proxy(this._tapHoldStart))
-				.unbind('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
-				.unbind('click', this.proxy(this._tapHoldClick))    //prevent click during hold
-				.unbind('touchend', this.proxy(this._tapHoldEnd));
+			jq(this.$n()).off('touchstart', this.proxy(this._tapHoldStart))
+				.off('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
+				.off('click', this.proxy(this._tapHoldClick))    //prevent click during hold
+				.off('touchend', this.proxy(this._tapHoldEnd));
 		}
 	},
 	_tapHoldStart: function (evt) {
@@ -294,28 +294,46 @@ zk.override(zk.Widget.prototype, _xWidget, {
 var _jq = {},
 	_jqEvent = {};
 zk.override(jq.fn, _jq, {
-	bind: function (type, data, fn) {
+	on: function (type, selector, data, fn) {
 		var evtType;
 		if (evtType = zjq.eventTypes[type]) {
-			// refer to jquery bind function for reassign args
-			if (jq.isFunction(data) || data === false) {
-				fn = data;
-				data = undefined;
+			// refer to jquery on function for reassign args
+			if (data == null && fn == null) {
+				// ( type, fn )
+				fn = selector;
+				data = selector = undefined;
+			} else if (fn == null) {
+				if (typeof selector === 'string') {
+					// ( type, selector, fn )
+					fn = data;
+					data = undefined;
+				} else {
+					// ( type, data, fn )
+					fn = data;
+					data = selector;
+					selector = undefined;
+				}
 			}
 			if (_storeEventFunction(this[0], evtType, data, fn))
-				this.zbind(evtType, data, delegateEventFunc);
+				this.zon(evtType, selector, data, delegateEventFunc);
 		} else
-			this.zbind.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
+			this.zon.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
 			
 		return this;
 	},
-	unbind: function (type, fn) {
+	off: function (type, selector, fn) {
 		var evtType;
 		if (evtType = zjq.eventTypes[type]) {
+			// refer to jquery on function for reassign args
+			if (selector === false || typeof selector === 'function') {
+				// ( type [, fn] )
+				fn = selector;
+				selector = undefined;
+			}
 			if (_removeEventFunction(this[0], evtType, fn))
-				this.zunbind(evtType, delegateEventFunc);
+				this.zoff(evtType, selector, delegateEventFunc);
 		} else
-			this.zunbind.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
+			this.zoff.apply(this, arguments); // Bug ZK-1142: recover back to latest domios.js
 		return this;
 	}
 });

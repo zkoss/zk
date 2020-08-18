@@ -696,12 +696,12 @@ jq(function () {
 		if (!wgt) wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
-	.bind('paste', function (evt) {
+	.on('paste', function (evt) {
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onPaste', evt.keyData(), null, evt));
 	})
-	.bind('zcontextmenu', function (evt) {
+	.on('zcontextmenu', function (evt) {
 		//ios: zcontextmenu shall be listened first,
 		//due to need stop other event (ex: click, mouseup)
 
@@ -719,7 +719,7 @@ jq(function () {
 		}
 		return !(zk.ie < 11) || evt.returnValue;
 	})
-	.bind('zmousedown', function (evt) {
+	.on('zmousedown', function (evt) {
 		if (zk.mobile) {
 			zk.currentPointer[0] = evt.pageX;
 			zk.currentPointer[1] = evt.pageY;
@@ -729,7 +729,7 @@ jq(function () {
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
 	})
-	.bind('zmouseup', function (evt) {
+	.on('zmouseup', function (evt) {
 		var e = zk.Draggable.ignoreMouseUp(), wgt;
 		if (e === true)
 			return; //ignore
@@ -743,7 +743,7 @@ jq(function () {
 		else wgt = Widget.$(evt, {child: true});
 		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
-	.bind('zmousemove', function (evt) {
+	.on('zmousemove', function (evt) {
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
@@ -780,7 +780,7 @@ jq(function () {
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}
 	})
-	.bind('zdblclick', function (evt) {
+	.on('zdblclick', function (evt) {
 		if (zk.Draggable.ignoreClick()) return;
 
 		var wgt = Widget.$(evt, {child: true});
@@ -791,7 +791,7 @@ jq(function () {
 				return false;
 		}
 	})
-	.bind((document.hidden !== undefined ? '' : zk.vendor_) + 'visibilitychange', function (evt) {
+	.on((document.hidden !== undefined ? '' : zk.vendor_) + 'visibilitychange', function (evt) {
 		zAu._onVisibilityChange();
 	});
 	
@@ -824,11 +824,11 @@ jq(function () {
 	};
 	
 	if (zk.mobile) {
-		jq(window).bind('orientationchange', _sizeHandler);
+		jq(window).on('orientationchange', _sizeHandler);
 		
 		// Bug ZK-2697
 		if (zk.ios) {
-			jq(window).bind('pagehide', function () {
+			jq(window).on('pagehide', function () {
 				zk.unloading = true; //to disable error message
 
 				if (!zk.rmDesktoping) {

@@ -197,14 +197,14 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 
 		zul.inp.Slider.down_btn = null;
 		if (widget)
-			jq(document).unbind('zmouseup', widget.onup_);
+			jq(document).off('zmouseup', widget.onup_);
 	},
 	doMouseDown_: function (evt) {
 		if (this._mold == 'knob') {
 			this.$supers('doMouseDown_', arguments);
 			return;
 		}
-		jq(document).bind('zmouseup', this.onup_);
+		jq(document).on('zmouseup', this.onup_);
 		zul.inp.Slider.down_btn = this.$n('btn');
 		this.$supers('doMouseDown_', arguments);
 	},

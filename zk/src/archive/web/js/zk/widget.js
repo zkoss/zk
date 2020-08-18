@@ -3447,7 +3447,7 @@ unbind_: function (skipper, after) {
 			this._drag = new zk.Draggable(this, n, this.getDragOptions_(_dragoptions));
 			// B50-3306835.zul
 			if (zk.ie9 && jq.nodeName(n, 'img'))
-				jq(n).bind('mousedown', zk.$void);
+				jq(n).on('mousedown', zk.$void);
 		}
 	},
 	/** Cleans up the widget to make it un-draggable. It is called if {@link #getDraggable}
@@ -3460,7 +3460,7 @@ unbind_: function (skipper, after) {
 		if (drag) {
 			var n;
 			if (zk.ie9 && (n = this.getDragNode()) && jq.nodeName(n, 'img'))
-				jq(n).unbind('mousedown', zk.$void);
+				jq(n).off('mousedown', zk.$void);
 
 			this._drag = null;
 			drag.destroy();
@@ -4579,7 +4579,7 @@ _doFooSelect: function (evt) {
 	domListen_: function (n, evtnm, fn, keyword) {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
-			jq(n, zk).bind(inf[0], inf[1]);
+			jq(n, zk).on(inf[0], inf[1]);
 		}
 		return this;
 	},
@@ -4602,7 +4602,7 @@ _doFooSelect: function (evt) {
 	domUnlisten_: function (n, evtnm, fn, keyword) {
 		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn, keyword);
-			jq(n, zk).unbind(inf[0], inf[1]);
+			jq(n, zk).off(inf[0], inf[1]);
 		}
 		return this;
 	},

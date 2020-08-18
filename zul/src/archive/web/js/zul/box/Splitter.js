@@ -173,7 +173,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (!this.$weave) {
 			var $btn = jq(this.$n('btn'));
-			$btn.click(Splitter.onclick);
+			$btn.on('click', Splitter.onclick);
 		}
 
 		this._fixbtn();
@@ -199,7 +199,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			btn;
 		if (btn = this.$n('btn')) {
 			var $btn = jq(btn);
-			$btn.unbind('click', Splitter.onclick);
+			$btn.off('click', Splitter.onclick);
 		}
 
 		this._drag.destroy();

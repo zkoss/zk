@@ -342,14 +342,14 @@ String scroll; //DOM Element's ID</code></pre>
 		this.opts = opts;
 		this.dragging = false;
 
-		jq(this.handle).bind('zmousedown', this.proxy(this._mousedown))
+		jq(this.handle).on('zmousedown', this.proxy(this._mousedown))
 				// issue in test/dragdrop.zul for dragging image file
-				.bind('dragstart', _disableDragStart);
+				.on('dragstart', _disableDragStart);
 
 		//register
 		if (_drags.length == 0)
-			jq(document).bind('zmouseup', _docmouseup)
-				.bind('zmousemove', _docmousemove)
+			jq(document).on('zmouseup', _docmouseup)
+				.on('zmousemove', _docmousemove)
 				.keypress(_dockeypress);
 		_drags.push(this);
 	},
@@ -362,15 +362,15 @@ String scroll; //DOM Element's ID</code></pre>
 			this._suicide = true;
 			return;
 		}
-		jq(this.handle).unbind('zmousedown', this.proxy(this._mousedown))
-				.unbind('dragstart', _disableDragStart);
+		jq(this.handle).off('zmousedown', this.proxy(this._mousedown))
+				.off('dragstart', _disableDragStart);
 
 		//unregister
 		_drags.$remove(this);
 		if (_drags.length == 0)
-			jq(document).unbind('zmouseup', _docmouseup)
-				.unbind('zmousemove', _docmousemove)
-				.unbind('keypress', _dockeypress);
+			jq(document).off('zmouseup', _docmouseup)
+				.off('zmousemove', _docmousemove)
+				.off('keypress', _dockeypress);
 		if (_activedg == this) //just in case
 			_activedg = null;
 

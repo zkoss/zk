@@ -114,19 +114,19 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 
 		jq(cave)
 			//bind scroll event for input tab key scroll
-			.bind('scroll', this.proxy(this._fixScroll))
+			.on('scroll', this.proxy(this._fixScroll))
 			//bind mouse enter / mouse leave
-			.bind('mouseenter', this.proxy(this._mouseEnter))
-			.bind('mouseleave', this.proxy(this._mouseLeave));
+			.on('mouseenter', this.proxy(this._mouseEnter))
+			.on('mouseleave', this.proxy(this._mouseLeave));
 	},
 	destroy: function () {
 		var cave = this.cave;
 		jq(cave)
 			//unbind scroll event for input tab scroll
-			.unbind('scroll', this.proxy(this._fixScroll))
+			.off('scroll', this.proxy(this._fixScroll))
 			//unbind mouse enter / mouse leave
-			.unbind('mouseenter', this.proxy(this._mouseEnter))
-			.unbind('mouseleave', this.proxy(this._mouseLeave));
+			.off('mouseenter', this.proxy(this._mouseEnter))
+			.off('mouseleave', this.proxy(this._mouseLeave));
 		this._unbindMouseEvent('hor');
 		this._unbindMouseEvent('ver');
 		var hbar = this.$n('hor'),
@@ -459,16 +459,16 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			jq(cave).mousewheel(self.proxy(self._mousewheelY));
 
 		jq(bar).click(zk.$void);
-		jq(ind).bind('mousedown', self.proxy(self._dragStart));
+		jq(ind).on('mousedown', self.proxy(self._dragStart));
 		jq(rail)
-			.bind('mousedown', self.proxy(self._mouseDown))
-			.bind('mouseup', self.proxy(self._mouseUp));
+			.on('mousedown', self.proxy(self._mouseDown))
+			.on('mouseup', self.proxy(self._mouseUp));
 		jq(arrow1)
-			.bind('mousedown', self.proxy(self._mouseDown))
-			.bind('mouseup', self.proxy(self._mouseUp));
+			.on('mousedown', self.proxy(self._mouseDown))
+			.on('mouseup', self.proxy(self._mouseUp));
 		jq(arrow2)
-			.bind('mousedown', self.proxy(self._mouseDown))
-			.bind('mouseup', self.proxy(self._mouseUp));
+			.on('mousedown', self.proxy(self._mouseDown))
+			.on('mouseup', self.proxy(self._mouseUp));
 	},
 	_unbindMouseEvent: function (orient) {
 		var self = this,
@@ -485,17 +485,17 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 		else
 			jq(cave).unmousewheel(self.proxy(self._mousewheelY));
 
-		jq(bar).unbind('click', zk.$void);
-		jq(ind).unbind('mousedown', self.proxy(self._dragStart));
+		jq(bar).off('click', zk.$void);
+		jq(ind).off('mousedown', self.proxy(self._dragStart));
 		jq(rail)
-			.unbind('mousedown', self.proxy(self._mouseDown))
-			.unbind('mouseup', self.proxy(self._mouseUp));
+			.off('mousedown', self.proxy(self._mouseDown))
+			.off('mouseup', self.proxy(self._mouseUp));
 		jq(arrow1)
-			.unbind('mousedown', self.proxy(self._mouseDown))
-			.unbind('mouseup', self.proxy(self._mouseUp));
+			.off('mousedown', self.proxy(self._mouseDown))
+			.off('mouseup', self.proxy(self._mouseUp));
 		jq(arrow2)
-			.unbind('mousedown', self.proxy(self._mouseDown))
-			.unbind('mouseup', self.proxy(self._mouseUp));
+			.off('mousedown', self.proxy(self._mouseDown))
+			.off('mouseup', self.proxy(self._mouseUp));
 	},
 	_fixScroll: function (evt) {
 		var cave = this.cave;
@@ -531,8 +531,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			};
 
 		jq(document)
-			.bind('mousemove', data, self.proxy(self._dragMove))
-			.bind('mouseup', self.proxy(self._dragEnd));
+			.on('mousemove', data, self.proxy(self._dragMove))
+			.on('mouseup', self.proxy(self._dragEnd));
 	},
 	_dragEnd: function (evt) {
 		var self = this,
@@ -543,8 +543,8 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 			top = jq(cave).offset().top;
 
 		jq(document)
-			.unbind('mousemove', self.proxy(self._dragMove))
-			.unbind('mouseup', self.proxy(self._dragEnd));
+			.off('mousemove', self.proxy(self._dragMove))
+			.off('mouseup', self.proxy(self._dragEnd));
 
 		self.dragging = false;
 
