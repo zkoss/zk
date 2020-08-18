@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4538.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Aug 17 14:36:18 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Click the "render tabbox" button, you should not see any error.
+	</label>
+	<button id="btn" label="render tabbox"/>
+	<div fulfill="btn.onClick">
+		<tabbox>
+			<tabs>
+				<tab label="tab1"/>
+				<tab label="tab2"/>
+			</tabs>
+			<tabpanels>
+				<tabpanel>panel1</tabpanel>
+				<tabpanel>
+					<textbox value="my value" onCreate="self.setSelectionRange(0, 2);"/>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</div>
+</zk>
