@@ -68,13 +68,24 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	 */
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
-			var wgt = this.getMeshWidget();
-			if (wgt) {
-				if (nm == 'visible' && !val && !this._width) // set _origWd before rerender
-					this._origWd = jq.px0(this.$n().offsetWidth);
+			var mesh = this.getMeshWidget();
+			if (mesh) {
+				var minWds = null;
+				if (nm == 'visible' && val && this._width == '-1') //sizable + visible false -> true
+					minWds = mesh._calcMinWds();
 				// B70-ZK-2036: Clear min width cache before rerender.
-				wgt._minWd = null;
-				wgt.rerender();
+				mesh._minWd = null;
+				mesh.rerender();
+				if (minWds) {
+					var parent = this.parent;
+					for (var w = parent.firstChild, i = 0; w; w = w.nextSibling, i++) {
+						if (w == this) {
+							this._width = jq.px0(minWds.wds[i]);
+							break;
+						}
+					}
+					zUtl.fireSized(mesh, -1);
+				}
 			}
 		}
 	},
@@ -498,6 +509,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			} else {
 				wds[i] = isFixedWidth ? stylew : jq.px0(w.$n().offsetWidth);
 				if (w.isVisible()) w._width = wds[i];
+				else if (!w._width && !w._hflex) //invisible and no width
+					w._width = '-1';
 			}
 			if (!isFixedWidth) {
 				hdcols[i].style.width = bdcols[i].style.width = wds[i];
