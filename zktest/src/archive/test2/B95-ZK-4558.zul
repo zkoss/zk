@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4558.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Aug 14, 2020  02:48:18 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Press button and drag/drop to change the column width, then click the button.
+		The Column "Name" should be visible.
+	</label>
+	<button label="Hide-Show" onClick="header1.visible = !header1.visible"/>
+	<listbox id="box" >
+		<listhead sizable="true">
+			<listheader id="header1" label="Name"/>
+			<listheader id="header2" label="Gender"/>
+			<listheader label="Age"/>
+			<listheader label="Description"/>
+		</listhead>
+		<listitem>
+			<listcell label="Mary"/>
+			<listcell label="FEMALE"/>
+			<listcell label="18"/>
+			<listcell label="A young lady."/>
+		</listitem>
+		<listitem>
+			<listcell label="John"/>
+			<listcell label="MALE"/>
+			<listcell label="20"/>
+			<listcell label="A college student."/>
+		</listitem>
+		<listitem>
+			<listcell label="Jane"/>
+			<listcell label="FEMALE"/>
+			<listcell label="32"/>
+			<listcell label="A remarkable artist."/>
+		</listitem>
+		<listitem>
+			<listcell label="Henry"/>
+			<listcell label="MALE"/>
+			<listcell label="29"/>
+			<listcell label="A graduate."/>
+		</listitem>
+	</listbox>
+</zk>

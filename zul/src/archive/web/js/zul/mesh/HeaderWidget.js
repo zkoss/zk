@@ -70,6 +70,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
 			if (wgt) {
+				if (nm == 'visible' && !val && !this._width) // set _origWd before rerender
+					this._origWd = jq.px0(this.$n().offsetWidth);
 				// B70-ZK-2036: Clear min width cache before rerender.
 				wgt._minWd = null;
 				wgt.rerender();
