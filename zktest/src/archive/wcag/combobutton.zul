@@ -24,6 +24,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				hello world
 			</popup>
 		</combobutton>
+		<combobutton label="no popup"/>
 		<combobutton label="popup" orient="vertical" image="/img/network.gif" onClick='Clients.log("onClick!")'>
 			<popup>
 				hello world
