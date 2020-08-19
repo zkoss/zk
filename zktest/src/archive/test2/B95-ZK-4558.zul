@@ -15,14 +15,49 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		Press button and drag/drop to change the column width, then click the button.
-		The Column "Name" should be visible.
+		1. Press "Hide-Show 1st listbox" button and drag/drop the 1st listbox to change the column width, then click the button.
+		2. The Column "Name" should be visible.
+		3. Drag/drop the 2nd listbox to change the column width, then click the button
+		4. The Column "Name" should be visible.
 	</label>
-	<button label="Hide-Show" onClick="header1.visible = !header1.visible"/>
-	<listbox id="box" >
+	<button id="btn1" label="Hide-Show 1st listbox" onClick="l1_header1.visible = !l1_header1.visible"/>
+	<button id="btn2" label="Hide-Show 2nd listbox" onClick="l2_header1.visible = !l2_header1.visible"/>
+	<listbox>
 		<listhead sizable="true">
-			<listheader id="header1" label="Name"/>
-			<listheader id="header2" label="Gender"/>
+			<listheader id="l1_header1" label="Name"/>
+			<listheader id="l1_header2" label="Gender"/>
+			<listheader label="Age"/>
+			<listheader label="Description"/>
+		</listhead>
+		<listitem>
+			<listcell label="Mary"/>
+			<listcell label="FEMALE"/>
+			<listcell label="18"/>
+			<listcell label="A young lady."/>
+		</listitem>
+		<listitem>
+			<listcell label="John"/>
+			<listcell label="MALE"/>
+			<listcell label="20"/>
+			<listcell label="A college student."/>
+		</listitem>
+		<listitem>
+			<listcell label="Jane"/>
+			<listcell label="FEMALE"/>
+			<listcell label="32"/>
+			<listcell label="A remarkable artist."/>
+		</listitem>
+		<listitem>
+			<listcell label="Henry"/>
+			<listcell label="MALE"/>
+			<listcell label="29"/>
+			<listcell label="A graduate."/>
+		</listitem>
+	</listbox>
+	<listbox>
+		<listhead sizable="true">
+			<listheader id="l2_header1" label="Name" visible="false"/>
+			<listheader id="l2_header2" label="Gender"/>
 			<listheader label="Age"/>
 			<listheader label="Description"/>
 		</listhead>

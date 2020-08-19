@@ -24,9 +24,9 @@ public class B95_ZK_4558Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		click(jq("@button"));
+		click(jq("$btn1"));
 		waitResponse();
-		JQuery h2 = jq("$header2");
+		JQuery h2 = jq("$l1_header2");
 		int h2Width = h2.outerWidth();
 		getActions().moveToElement(toElement(h2), h2Width - DRAG_THRESHOLD, 15)
 				.clickAndHold()
@@ -34,8 +34,20 @@ public class B95_ZK_4558Test extends WebDriverTestCase {
 				.release()
 				.perform();
 		waitResponse();
-		click(jq("@button"));
+		click(jq("$btn1"));
 		waitResponse();
-		Assert.assertTrue(jq("$header1").width() >= 1);
+		Assert.assertTrue(jq("$l1_header1").width() >= 1);
+		// second listbox
+		h2 = jq("$l2_header2");
+		h2Width = h2.outerWidth();
+		getActions().moveToElement(toElement(h2), h2Width - DRAG_THRESHOLD, 15)
+				.clickAndHold()
+				.moveByOffset(-20, 0)
+				.release()
+				.perform();
+		waitResponse();
+		click(jq("$btn2"));
+		waitResponse();
+		Assert.assertTrue(jq("$l2_header1").width() >= 1);
 	}
 }
