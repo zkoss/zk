@@ -356,7 +356,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		var ncols = dst.cells.length,
 			src, maxnc = 0;
 		for (var j = 0, it = wgt.getBodyWidgetIterator({skipHidden: true}), w; (w = it.next());) {
-			if (wgt._modal && !w._loaded)
+			if (!w._loaded)
 				continue;
 
 			var row = srcrows[j++], $row = zk(row),
