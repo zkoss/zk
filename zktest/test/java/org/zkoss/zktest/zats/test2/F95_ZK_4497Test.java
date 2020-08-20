@@ -36,7 +36,7 @@ public class F95_ZK_4497Test extends WebDriverTestCase {
 	}
 
 	private void sendKeyAndExpected(Keys key, String expectedLog) {
-		sendKeys(jq("@searchbox"), key);
+		getActions().sendKeys(key).perform();
 		waitResponse();
 
 		click(jq("@button:eq(0)"));
