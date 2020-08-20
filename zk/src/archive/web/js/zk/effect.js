@@ -435,9 +435,10 @@ zk.eff.KeyboardTrap = zk.$extends(zk.Object, {
 			focusableElementsCount = focusableElements.length,
 			isTop = id == 'top';
 		if (focusableElementsCount > 0) {
-			(isTop
+			var elem = isTop
 				? this._getLastFocusableElement(focusableElements)
-				: this._getFirstFocusableElement(focusableElements)).focus();
+				: this._getFirstFocusableElement(focusableElements);
+			if (elem) elem.focus();
 		}
 	},
 	_getFirstFocusableElement: function (elems) {
@@ -445,12 +446,14 @@ zk.eff.KeyboardTrap = zk.$extends(zk.Object, {
 		for (var i = 0; i < len; i++) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
+		return null;
 	},
 	_getLastFocusableElement: function (elems) {
 		var len = elems.length;
 		for (var i = len - 1; i >= 0; i--) {
 			if (this._isFocusable(elems[i])) return elems[i];
 		}
+		return null;
 	},
 	_isFocusable: function (elem) {
 		return !(elem.disabled || elem.getAttribute('disabled')) // not disabled
