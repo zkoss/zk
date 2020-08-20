@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.json.JSONValue;
 import org.zkoss.lang.Classes;
-import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.web.servlet.Charsets;
@@ -53,7 +52,6 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.RequestOutOfSequenceException;
-import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuConfirmClose;
 import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuSendRedirect;
@@ -524,6 +522,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				Integer.parseInt(sid);
 			} catch (NumberFormatException e) {
+				log.warn("", e);
 				responseError(request, response, "Illegal request");
 				return;
 			}
@@ -546,7 +545,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 		} catch (Throwable ex) {
 			log.warn("", ex);
-			responseError(request, response, Exceptions.getMessage(ex));
+			responseError(request, response, "Invalid Request (see: Server logs for details)");
 			return;
 		}
 
@@ -602,6 +601,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			try {
 				Integer.parseInt(sid);
 			} catch (NumberFormatException e) {
+				log.warn("", e);
 				responseError(request, response, "Illegal request");
 				return;
 			}
@@ -686,10 +686,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	private static void responseError(HttpServletRequest request, HttpServletResponse response, String errmsg)
 			throws IOException {
-		//Don't use sendError because Browser cannot handle UTF-8
-		AuWriter out = AuWriters.newInstance().open(request, response);
-		out.write(new AuAlert(errmsg, true));
-		out.close(request, response);
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST, errmsg);
 	}
 
 	private static final AuDecoder getAuDecoder(WebApp wapp) {
