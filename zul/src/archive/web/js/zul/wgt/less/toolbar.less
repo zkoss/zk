@@ -12,19 +12,29 @@
 		font-size: 0;
 
 		&-button {
-			font-size: @fontSizeLarge;
+			font-size: @toolbarOverflowpopupButtonSize;
 		}
 
-		&-on > .z-toolbar-overflowpopup-button {
-			cursor: pointer;
-			float: right;
-			position: absolute;
-			top: 50%;
-			.transform('translateY(-50%)');
-			right: 16px;
+		&-on {
+			> .z-toolbar-overflowpopup-button {
+				cursor: pointer;
+				position: absolute;
+				top: 50%;
+				.transform('translateY(-50%)');
+				right: @toolbarHorizontalPadding;
 
-			&:hover {
-				color: @colorPrimaryLighter;
+				&:hover {
+					color: @colorPrimaryLighter;
+				}
+			}
+			> .z-toolbar {
+				&-end {
+					position: relative;
+					right: @toolbarOverflowpopupButtonSize + @toolbarHorizontalPadding;
+				}
+				&-center {
+					padding-right: @toolbarOverflowpopupButtonSize;
+				}
 			}
 		}
 

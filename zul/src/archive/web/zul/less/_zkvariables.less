@@ -225,9 +225,11 @@
 @groupbox3DContentPadding:     @containerPadding;
 
 // Toolbar
-@toolbarPadding:               6px 16px;
+@toolbarHorizontalPadding:     16px;
+@toolbarPadding:               6px @toolbarHorizontalPadding;
 @toolbarButtonsSpacing:        8px;
 @toolbarInTabboxMinHeight:     48px;
+@toolbarOverflowpopupButtonSize: @fontSizeLarge;
 
 // Input (used for textbox, intbox, spinner, ...)
 @inputTextSize:                @fontSizeMedium;
