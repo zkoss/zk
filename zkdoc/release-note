@@ -55,6 +55,7 @@ ZK 9.5.0
   ZK-4538: InputWidget.select() error with client-rod
   ZK-4394: atlantic theme - cursor style for sortable/sizable columns
   ZK-4563: JS errors : frozen with auxheaders (+ rowspan)
+  ZK-4614: MeshWidget _cpCellWd tries to access unloaded rows if tree has footer but no treecol
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
