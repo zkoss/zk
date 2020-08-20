@@ -54,6 +54,7 @@ ZK 9.5.0
   ZK-4606: clicking select-all checkbox in a Listbox doesn't select all items
   ZK-4538: InputWidget.select() error with client-rod
   ZK-4394: atlantic theme - cursor style for sortable/sizable columns
+  ZK-4563: JS errors : frozen with auxheaders (+ rowspan)
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.

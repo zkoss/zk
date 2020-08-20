@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4563.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Aug 18, 2020 02:48:18 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="new page title" border="normal">
+		<label>No JS error</label>
+		<listbox width="600px">
+			<frozen columns="3">
+				<div style="padding: 0 10px;" />
+			</frozen>
+			<auxhead>
+				<auxheader label="aux 1.1" rowspan="2" />
+				<auxheader label="aux 1.2" rowspan="2" />
+				<auxheader label="aux 1.3"/>
+				<auxheader label="aux 1.4" rowspan="2" />
+				<auxheader label="aux 1.5" rowspan="2" />
+			</auxhead>
+			<auxhead>
+				<auxheader label="aux 2.3"/>
+			</auxhead>
+			<listhead visible="false">
+				<listheader label="lh 1" width="150px"/>
+				<listheader label="lh 2" width="150px"/>
+				<listheader label="lh 3" width="150px"/>
+				<listheader label="lh 4" width="150px"/>
+				<listheader label="lh 5" width="150px"/>
+			</listhead>
+			<listitem>
+				<listcell label="cell content 1"/>
+				<listcell label="cell content 2"/>
+				<listcell label="cell content 3"/>
+				<listcell label="cell content 4"/>
+				<listcell label="cell content 5"/>
+			</listitem>
+		</listbox>
+		<separator />
+		<listbox width="600px">
+			<frozen columns="4" >
+				<div style="padding: 0 10px;" />
+			</frozen>
+			<auxhead>
+				<auxheader label="aux 0.0" rowspan="2" />
+				<auxheader label="aux 0.1" />
+				<auxheader label="aux 0.2" />
+				<auxheader label="aux 0.3" rowspan="2" />
+				<auxheader label="aux 0.4" rowspan="2" />
+				<auxheader label="aux 0.5" rowspan="3" />
+			</auxhead>
+			<auxhead>
+				<auxheader label="aux 1.1" />
+				<auxheader label="aux 1.2" rowspan="2" />
+			</auxhead>
+			<auxhead>
+				<auxheader label="aux 2.0" colspan="2" />
+				<auxheader label="aux 2.3" />
+				<auxheader label="aux 2.4" />
+			</auxhead>
+			<listhead>
+				<listheader label="lh 3.0" width="100px"/>
+				<listheader label="lh 3.1" width="100px"/>
+				<listheader label="lh 3.2" width="100px"/>
+				<listheader label="lh 3.3" width="130px"/>
+				<listheader label="lh 3.4" width="130px"/>
+				<listheader label="lh 3.5" width="130px"/>
+			</listhead>
+			<listitem>
+				<listcell label="cell content 1"/>
+				<listcell label="cell content 2"/>
+				<listcell label="cell content 3"/>
+				<listcell label="cell content 4"/>
+				<listcell label="cell content 5"/>
+				<listcell label="cell content 6"/>
+			</listitem>
+		</listbox>
+	</window>
+</zk>
