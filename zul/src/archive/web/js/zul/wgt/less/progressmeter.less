@@ -1,11 +1,17 @@
 @import "~./zul/less/_header.less";
 
+.setBackgroundImage('') {
+}
+.setBackgroundImage(@background) when (default()) {
+	.encodeThemeURL(background-image, @background);
+}
+
 .z-progressmeter {
 	height: @baseIconHeight;
 	border: 1px solid @progressmeterBorderColor;
 	.borderRadius(@baseBorderRadius);
 	background: @baseBackgroundColor 0 0 repeat-x;
-	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter-anim.gif');
+	.setBackgroundImage(@progressmeterBackgroundImage);
 	text-align: left;
 	overflow: hidden;
 
