@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4614.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Aug 19, 2020 03:42:38 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		String desktopId = Executions.getCurrent().getDesktop().getId();
+	</zscript>
+	<label>You should see error code 400</label>
+	<separator />
+	<iframe width="100%" src="/zkau?dtid=${desktopId}&amp;cmd_0=onClick&amp;uuid_0=jVAP1&amp;data_0=9" />
+</zk>
