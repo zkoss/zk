@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4643.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Aug 21 09:51:38 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Browse the ZUL page, then stop the server.
+		2. Click the button that sends the data to the server.
+		3. In a confirmation dialog, choose yes(ok) to resend.
+		You should not see the "ajaxReqResend is not defined" JavaScript error in console.
+	</label>
+	<button label="click me" onClick="" />
+</zk>
