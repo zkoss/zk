@@ -184,7 +184,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				var msg = _exmsg(e);
 				zAu._errCode = '[Send] ' + msg;
 				if (zAu.confirmRetry('FAILED_TO_SEND', msg)) {
-					ajaxReqResend(reqInf);
+					zAu.ajaxReqResend(reqInf);
 				}
 			}
 		});
