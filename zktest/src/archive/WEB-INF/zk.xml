@@ -19,6 +19,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<library-property>
 		<name>org.zkoss.zkmax.au.websocket.WebSocketEndPoint.urlPattern</name>
 		<value>/myappws/</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zkmax.au.websocket.WebSocketEndPoint.pingIntervalSecond</name>
+		<value>20</value>
 	</library-property>-->
 
 	<library-property>
