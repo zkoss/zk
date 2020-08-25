@@ -19,6 +19,7 @@ ZK 9.5.0
   ZK-4497: searchbox: improve clearing selection, key shortcut / clear icon
   ZK-4624: Clients API support scrollIntoView and focus by using selector string
   ZK-4618: replace deprecated jquery functions (bind/unbind -> on/off)
+  ZK-4530: Provide a "heart beat"/"ping pong" mechanism for websocket connections
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
