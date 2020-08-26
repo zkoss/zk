@@ -18,7 +18,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     <style><![CDATA[
     /* FIXME: For demonstration only, should apply to theme itself. */
     :focus {
-        outline: 1px dotted red;
+        box-shadow: inset 0 0 0 1px red;
     }
     ]]>
     </style>
@@ -40,7 +40,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         </panel>
 
         <panel title="Scrollable content" height="200px">
-            <panelchildren style="overflow: auto" tabindex="0">
+            <panelchildren style="overflow: auto">
                 <div height="300px">long long content</div>
             </panelchildren>
         </panel>
