@@ -464,9 +464,12 @@ zk.eff.KeyboardTrap = zk.$extends(zk.Object, {
 	 * You can not access this object any more.
 	 */
 	destroy: function () {
-		var areaParent = this._area.parentNode;
-		areaParent.removeChild(this._boundaryTop);
-		areaParent.removeChild(this._boundaryBottom);
+		var area = this._area;
+		if (area != null) {
+			var areaParent = area.parentNode;
+			areaParent.removeChild(this._boundaryTop);
+			areaParent.removeChild(this._boundaryBottom);
+		}
 		this._area = this._boundaryTop = this._boundaryBottom = null;
 	}
 });
