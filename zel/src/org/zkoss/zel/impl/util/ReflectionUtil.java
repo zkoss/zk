@@ -19,6 +19,8 @@ package org.zkoss.zel.impl.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,8 +51,17 @@ public class ReflectionUtil {
             long.class, short.class, Void.TYPE };
 
 	//for reflection cache
+	private static final int CACHE_SIZE;
+	private static final String CACHE_SIZE_PROP = "org.zkoss.zel.impl.util.ReflectionUtil.CACHE_SIZE";
+
+	static {
+		if (System.getSecurityManager() == null)
+			CACHE_SIZE = Integer.parseInt(System.getProperty(CACHE_SIZE_PROP, "1000"));
+		else
+			CACHE_SIZE = AccessController.doPrivileged((PrivilegedAction<Integer>) () -> Integer.valueOf(System.getProperty(CACHE_SIZE_PROP, "1000"))).intValue();
+	}
 	private static final Method[] EMPTY_METHOD_ARRAY = new Method[0];
-	private static final Map<Class<?>, Map<String, Method[]>> SETTERS_METHODS_CACHE = new ConcurrentHashMap<Class<?>, Map<String, Method[]>>();
+	private static final ConcurrentCache<Class<?>, Map<String, Method[]>> SETTERS_METHODS_CACHE = new ConcurrentCache<>(CACHE_SIZE);
 
     private ReflectionUtil() {
         super();
@@ -560,12 +571,7 @@ public class ReflectionUtil {
 		if (resultList != null && !resultList.isEmpty())
 			result = resultList.toArray(new Method[resultList.size()]);
 
-		Map<String, Method[]> classMap = SETTERS_METHODS_CACHE.get(cls);
-		if (classMap == null) {
-			classMap = new ConcurrentHashMap<String, Method[]>();
-			SETTERS_METHODS_CACHE.put(cls, classMap);
-		}
-		classMap.put(propertyName, result);
+		SETTERS_METHODS_CACHE.computeIfAbsent(cls, k -> new ConcurrentHashMap<>()).put(propertyName, result);
 		return result;
 	}
 

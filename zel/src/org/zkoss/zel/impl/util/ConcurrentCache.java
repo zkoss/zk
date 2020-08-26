@@ -17,8 +17,10 @@
 package org.zkoss.zel.impl.util;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public final class ConcurrentCache<K,V> {
 
@@ -56,4 +58,22 @@ public final class ConcurrentCache<K,V> {
         }
         this.eden.put(k, v);
     }
+
+	// copied from ConcurrentMap
+	public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+		Objects.requireNonNull(mappingFunction);
+		V oldValue, newValue;
+		return ((oldValue = get(key)) == null && (newValue = mappingFunction.apply(key)) != null
+			&& (oldValue = putIfAbsent(key, newValue)) == null) ? newValue : oldValue;
+	}
+
+	public V putIfAbsent(K key, V value) {
+		if (this.eden.size() >= size) {
+			synchronized (longterm) {
+				this.longterm.putAll(this.eden);
+			}
+			this.eden.clear();
+		}
+		return this.eden.putIfAbsent(key, value);
+	}
 }

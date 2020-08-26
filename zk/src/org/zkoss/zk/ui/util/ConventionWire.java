@@ -273,6 +273,12 @@ import org.zkoss.zk.ui.UiException;
 			final Class parmcls = arg.getClass();
 			final Class tgtcls = _controller.getClass();
 			try {
+				final Field fd = _injectedFieldCache.get(new Pair<>(tgtcls, fdname));
+				if (fd != null) {
+					if (!fd.equals(EMPTY_FIELD))
+						injectField(arg, parmcls, fd);
+					return;
+				}
 				final Method md = fieldOnly ? null : Classes.getCloseMethod(tgtcls, mdname, new Class[] { parmcls });
 				if (fieldOnly || !injectByMethod(md, parmcls, parmcls, arg, fdname)) {
 					injectFieldByName(arg, tgtcls, parmcls, fdname);
@@ -286,18 +292,30 @@ import org.zkoss.zk.ui.UiException;
 		}
 	}
 
+	/*
+	 * Marker class used because null values are not permitted in a
+	 * ConcurrentHashMap.
+	 */
+	private static class NotFound {
+		public boolean empty;
+	}
+
+	private static final Field EMPTY_FIELD = NotFound.class.getFields()[0];
+
 	private void injectFieldByName(Object arg, Class tgtcls, Class parmcls, String fdname) {
 		try {
 			// ZK-4316: Improve component wiring performance (avoid NoSuchFieldException)
 			Pair<Class, String> cachedKey = new Pair<Class, String>(tgtcls, fdname);
-			Field fd = _injectedFieldCache.get(cachedKey);
-			if (fd == null) {
-				fd = Classes.getAnyField(tgtcls, fdname);
-				_injectedFieldCache.put(cachedKey, fd);
-			}
-			injectField(arg, parmcls, fd);
-		} catch (NoSuchFieldException e) {
-			//ignore
+			Field fd = _injectedFieldCache.computeIfAbsent(cachedKey, k -> {
+				try {
+					return Classes.getAnyField(tgtcls, fdname);
+				} catch (NoSuchFieldException e) {
+					//ignore
+				}
+				return EMPTY_FIELD;
+			});
+			if (fd != null && !fd.equals(EMPTY_FIELD))
+				injectField(arg, parmcls, fd);
 		} catch (Exception ex2) {
 			throw UiException.Aide.wrap(ex2);
 		}

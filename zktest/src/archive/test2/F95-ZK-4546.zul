@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F95-ZK-4546.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Aug 21, 2020 10:02:18 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Open Java debug mode, and reload multiple times.
+		A matching method should be cached (BeanELResolver#invoke), avoiding the exception and the loop.
+	</label>
+	<separator />
+	<label value="${'asdf'.concat(1234)}"/>
+</zk>
