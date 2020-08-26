@@ -14,6 +14,7 @@
 
 @inputHeight:                  24px;
 @inputPadding:                 0 5px;
+@inputPaddingRight:            5px;
 
 // container
 @containerHeaderTextSize: @fontSizeMedium;
@@ -275,7 +276,7 @@
 
 // comboInput
 @comboInputHeight: 24px;
-@comboInputPaddingRight: 29px;
+@comboInputPaddingRight: @inputPaddingRight + @comboButtonMinWidth;
 @comboButtonPadding: 2px;
 @comboButtonIconSizeLarge: 18px;
 @comboButtonMinWidth: 24px;
