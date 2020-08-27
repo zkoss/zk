@@ -60,7 +60,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 						<label value="Here is a border"
 							   style="color:gray;font-size:30px" />
 					</center>
-					<east size="30%" collapsible="true" open="false">
+					<east size="30%" collapsible="true" open="false" ca:aria-label="east">
 						<div style="background:#B8D335"  vflex="1">
 							<label value="30%"
 								   style="color:white;font-size:50px" />
