@@ -15,16 +15,16 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		1. focus should be on "btn1" button
+		1. focus should be on "tbtn" toolbarbutton
 		2. press tab key
-		3. focus should be on "btn2" button
+		3. focus should be on "btn1" button
 
 	</label>
 	<button/>
 	<button/>
 	<window mode="modal">
 		<toolbar>
-			<toolbarbutton label="toolbarbutton"/>
+			<toolbarbutton id="tbtn" label="toolbarbutton" onClick="Clients.log(tbtn.getTabindex())"/>
 		</toolbar>
 		<button id="btn1"/>
 		<button id="btn2"/>
