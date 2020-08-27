@@ -42,14 +42,6 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			<button label="horizontal" width="125px" onClick='tbar2.setOrient("horizontal")' />
 			<button label="vertical" onClick='tbar2.setOrient("vertical")'/>
 		</toolbar>
-		
-		<label multiline="true">
-			make sure aria-haspopup and aria-expanded attr is correct after 1.remove/add item inside overflowPopup 2.click the overflowPopupButton("..." button).
-			if popup is opened aria-expanded should be true/menu.
-			if popup is closed aria-expanded should be false.
-			if the overflowPopup does have any item, the overflowPopupButton should be visible and aria-haspopup = true.
-			if the overflowPopup does not have any item, the overflowPopupButton should not be visible and aria-haspopup = false.
-		</label>
 		<toolbarbutton id="newItem" label="newItem" iconSclass="z-icon-home" onClick="self.detach()"/>
 		<toolbarbutton id="disabled" label="disabled" disabled="true" iconSclass="z-icon-home"/>
 		<toolbarbutton label="toggleDisabled" onClick="disabled.setDisabled(!disabled.isDisabled())"/>
