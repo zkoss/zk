@@ -324,9 +324,9 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	focus_: function (timeout) {
-		if (this._tabindex != undefined || this._href || this._upload) {
-			var self = this,
-				n = this.$n();
+		var n = this.$n();
+		if (n.hasAttribute('tabindex') || this._href || this._upload) {
+			var self = this;
 			zk.afterAnimate(function () {
 				try {
 					n.focus();
