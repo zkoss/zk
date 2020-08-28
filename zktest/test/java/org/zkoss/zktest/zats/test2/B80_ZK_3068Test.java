@@ -13,11 +13,11 @@ public class B80_ZK_3068Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		sleep(3000);
-		JQuery btn1 = jq("$btn1");
+		JQuery tbtn = jq("$tbtn");
 		String zcf = "zk.currentFocus.uuid";
-		assertEquals(getEval(zcf), btn1.attr("id"));
-		sendKeys(btn1, Keys.TAB);
+		assertEquals(getEval(zcf), tbtn.attr("id"));
+		sendKeys(tbtn, Keys.TAB);
 		waitResponse();
-		assertEquals(getEval(zcf), jq("$btn2").attr("id"));
+		assertEquals(getEval(zcf), jq("$btn1").attr("id"));
 	}
 }
