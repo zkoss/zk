@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4518.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 28 16:24:08 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Type "-3%" in the decimalbox.
+        2. Click "Trigger onChange" button to trigger an onChange event.
+        3. It shouldn't trigger a message that ".-3" is invalid.
+    </label>
+    <decimalbox format="#%" onChange="Clients.log(self.getValue().toString())"/>
+    <button label="Trigger onChange"/>
+</zk>

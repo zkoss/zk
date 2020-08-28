@@ -35,6 +35,11 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		var jdot = -1;
 		for (var j = 0, len = value.length; j < len; ++j) {
 			var cc = value.charAt(j);
+			if (j == 0 && cc == '-') {
+				this._negative = true;
+				value = value.substring(1);
+				continue;
+			}
 			if (((cc < '0' || cc > '9') && cc != '-' && cc != '+')
 				|| (j && (cc == '-' || cc == '+')))
 				if (jdot < 0 && cc == '.') {
@@ -53,6 +58,8 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	},
 	$toNumber: function () {
 		var v = parseFloat(this._value), p;
+		if (this._negative)
+			v *= -1;
 		if (p = this._precision)
 			v /= Math.pow(10, p);
 		return v;
@@ -69,7 +76,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		if (j < 0)
 			for (var len = -j; len-- > 0;)
 				valFixed += '0';
-		return this._value.substring(0, j) + (this._dot || this._precision ? '.' + valFixed + this._value.substring(j) : '');
+		return (this._negative ? '-' : '') + this._value.substring(0, j) + (this._dot || this._precision ? '.' + valFixed + this._value.substring(j) : '');
 	},
 	/** Returns a Locale-dependent string for this big decimal(for human's eye).
 	 * @return String
@@ -81,9 +88,9 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 			var valFixed = '';
 			for (var len = -j; len-- > 0;)
 				valFixed += '0';
-			return '0' + (this._precision ? zk.DECIMAL + valFixed + this._value : '');
+			return (this._negative ? zk.MINUS : '') + '0' + (this._precision ? zk.DECIMAL + valFixed + this._value : '');
 		}
-		return this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
+		return (this._negative ? zk.MINUS : '') + this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
 	}
 });
 
