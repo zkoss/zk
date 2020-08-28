@@ -61,6 +61,7 @@ ZK 9.5.0
   ZK-4643: Resending request is broken after ZK-3709
   ZK-4634: Classic themes don't handle toolbar overflowPopup and align="end"
   ZK-4623: iceblue_c combobox/datebox... right-padding without button
+  ZK-4646: make a treeitem invisible causes a javascript error
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
