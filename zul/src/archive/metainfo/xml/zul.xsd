@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.0.1.202003131012">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.5.0.202009011234">
 	<!--
 	SIMPLETYPE
 	-->
@@ -981,7 +981,10 @@
 	<!-- audio -->
 	<xs:element name="audio" type="audioType" />
 	<xs:complexType name="audioType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="track" minOccurs="0"/>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="align" type="alignAttrType" use="optional" />
 		<xs:attribute name="border" type="xs:string" use="optional" />
@@ -1010,7 +1013,10 @@
 	<!-- video -->
 	<xs:element name="video" type="videoType" />
 	<xs:complexType name="videoType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="track" minOccurs="0"/>
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="dimBackground" type="booleanType" use="optional" />
 		<xs:attribute name="muted" type="booleanType" use="optional" />
@@ -3279,6 +3285,34 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
+	<!-- track -->
+	<xs:element name="track" type="trackType" />
+	<xs:complexType name="trackType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="default" type="booleanType" default="false" use="optional" />
+		<xs:attribute name="kind" type="trackKindAttrType" use="optional" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="required" />
+		<xs:attribute name="srclang" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<xs:simpleType name="trackKindAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="subtitles" />
+					<xs:enumeration value="captions" />
+					<xs:enumeration value="descriptions" />
+					<xs:enumeration value="chapters" />
+					<xs:enumeration value="metadata" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<!-- tree -->
 	<xs:element name="tree" type="treeType" />
 	<xs:complexType name="treeType">

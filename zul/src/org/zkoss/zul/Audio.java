@@ -22,8 +22,11 @@ import java.util.List;
 
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.out.AuInvoke;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
+import org.zkoss.zul.ext.MediaElement;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
@@ -35,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Audio extends XulElement {
+public class Audio extends XulElement implements MediaElement {
 	protected List<String> _src = new ArrayList<String>();
 	/** The audio. _src and _audio cannot be nonnull at the same time. */
 	private org.zkoss.sound.Audio _audio;
@@ -293,10 +296,11 @@ public class Audio extends XulElement {
 		render(renderer, "muted", _muted);
 	}
 
-	/** Default: not childable.
-	 */
-	protected boolean isChildable() {
-		return false;
+	@Override
+	public void beforeChildAdded(Component child, Component insertBefore) {
+		if (!(child instanceof Track))
+			throw new UiException("Unsupported child for audio: " + child);
+		super.beforeChildAdded(child, insertBefore);
 	}
 
 	// ComponentCtrl

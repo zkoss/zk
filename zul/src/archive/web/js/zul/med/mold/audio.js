@@ -13,5 +13,8 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<audio', this.domAttrs_(), '>', this.domContent_(), '</audio>');
+	out.push('<audio', this.domAttrs_(), '>', this.domContent_());
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		w.redraw(out);
+	out.push('</audio>')
 }
