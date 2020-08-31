@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4585.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Aug 31 14:28:11 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label>
+		Test in all themes(include iceblue_c), the label of switch/toggle mold checkbox should be aligned correctly as default mold.
+	</label>
+	<separator/>
+	<checkbox label="Label of Checkbox"></checkbox>
+	<checkbox mold="tristate" label="Label of Checkbox"></checkbox>
+	<checkbox mold="switch" label="Label of Checkbox"></checkbox>
+	<checkbox mold="toggle" label="Label of Checkbox"></checkbox>
+</zk>
