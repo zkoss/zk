@@ -20,7 +20,7 @@
 		transition: .4s;
 		border-radius: @checkboxSwitchHeight / 2;
 		display: inline-block;
-		float: left;
+		vertical-align: middle;
 
 		&:before {
 			content: "";
@@ -41,7 +41,6 @@
 	}
 	&-switch > &-content {
 		display: inline-block;
-		.transform('translateY(50%)');
 	}
 	&-switch-off > &-mold {
 		background-color: @disabledColor;
@@ -64,16 +63,15 @@
 		display: none;
 	}
 	&-toggle > &-mold {
-		margin: 4px;
+		margin: 0 4px 4px;
 		.size(@checkboxToggleSize, @checkboxToggleSize);
 		border-radius: 4px;
 		transition: .1s;
 		display: inline-block;
-		float: left;
+		vertical-align: middle;
 	}
 	&-toggle > &-content {
 		display: inline-block;
-		.transform('translateY(50%)');
 	}
 	&-toggle-off > &-mold {
 		background-color: @disabledColor;
