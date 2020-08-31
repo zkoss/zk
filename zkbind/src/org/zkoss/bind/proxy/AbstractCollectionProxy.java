@@ -236,6 +236,7 @@ public abstract class AbstractCollectionProxy<E>
 				origin.add(e);
 			}
 		}
+		setDirty(false);
 	}
 
 	protected static boolean testEquals(Object e, Object o) {
