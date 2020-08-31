@@ -62,6 +62,7 @@ ZK 9.5.0
   ZK-4634: Classic themes don't handle toolbar overflowPopup and align="end"
   ZK-4623: iceblue_c combobox/datebox... right-padding without button
   ZK-4646: make a treeitem invisible causes a javascript error
+  ZK-4518: Negative percent parsing in decimalbox
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
