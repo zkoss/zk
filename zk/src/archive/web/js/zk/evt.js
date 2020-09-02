@@ -208,6 +208,35 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 		if (!opts || opts.propagation) this.stopped = b;
 		if (!opts || opts.dom) this.domStopped = b;
 		if (opts && opts.au) this.auStopped = b;
+	},
+	/** Indicates whether a key is currently pressed.
+	 * You can also pass more then one key into this method as a key combination, but combination only works with modifier keys(ALT/CONTROL/SHIFT/META).
+	 * If you combine two(or more) keys that are not modifier keys, you will always get an exception since it is invalid.
+	 * For example:
+	 * isPressed(zKeys.CONTROL, zKeys.ALT, zKeys.ARROWDOWN) is valid.
+	 * isPressed(zKeys.ARROWDOWN, zKeys.ARROWUP) is invalid.
+	 * @param String... The target key and the modifier keys
+	 * @return boolean
+	 * @since 9.5.0
+	 * @see zKeys
+	 */
+	isPressed: function () {
+		var keyCount = 0,
+			result = true;
+		for (var i = 0, len = arguments.length; i < len; i++) {
+			var arg = arguments[i];
+			if (arg != zKeys.META && arg != zKeys.ALT && arg != zKeys.CONTROL && arg != zKeys.SHIFT) {
+				keyCount++;
+				if (keyCount > 1)
+					throw 'Invalid key combination';
+				else if (arg != this.key)
+					result = false;
+			} else if ((arg == zKeys.META && !this.metaKey) || (arg == zKeys.ALT && !this.altKey)
+					|| (arg == zKeys.CONTROL && !this.ctrlKey) || (arg == zKeys.SHIFT && !this.shiftKey)) {
+				return false;
+			}
+		}
+		return result;
 	}
 });
 
