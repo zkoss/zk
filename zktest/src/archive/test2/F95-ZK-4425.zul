@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4425.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 28 10:46:06 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>Mouse down in the sliders except the buttons. The nearest button would be move the point and able to drag/drop</label>
+    <rangeslider id="rs1" onRangeValueChange='Clients.log(rs1.getStartValue() + "," + rs1.getEndValue())'/>
+    <multislider>
+        <sliderbuttons startValue="70" endValue="70"/>
+        <sliderbuttons startValue="70" endValue="100"/>
+    </multislider>
+</zk>
