@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4569.zul
+        Purpose:
+
+        Description:
+
+        History:
+              Fri May 8 11:32:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div viewModel="@id('pvm') @init('org.zkoss.zktest.test2.F95_ZK_4569VM')" width="500px"
+		 height="500px">
+		<div hflex="1" vflex="1">
+			<label multiline="true"><![CDATA[
+				Click buttons (01 ~ 04), and see
+					Clicked
+					Clicked
+					Clickedb
+					ClickedG
+			]]></label>
+			<button label="click01" onClick="@command('doClick')" />
+		</div>
+		<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F95_ZK_4569_1VM')" hflex="1" vflex="1">
+			<button label="click02" onClick="@command('$pvm.doClick')" />
+			<button label="click03" onClick="@command('$pvm.doClickA', text=vm.label)" />
+			<button label="click04" onClick="@global-command('doClickG')" />
+		</div>
+	</div>
+</zk>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4544.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Mar 30 17:08:17 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-inputgroup-text {
+			padding: 0;
+		}
+		
+		.z-inputgroup-text > .z-radio-default {
+			background: #E9ECEF;
+			line-height: 32px;
+			width: 100%;
+		}
+		
+		.z-inputgroup-text .z-radio-content {
+			display: block;
+			padding: 0 12px;
+		}
+		
+		.z-inputgroup-text > .z-radio-default > input {
+			display: none;
+		}
+		
+		.z-inputgroup-text > .z-radio-on {
+			background: #0093F9;
+			color: white;
+		}
+	</style>
+	<label multiline="true">
+		Open devtool to observe the class name:
+		1. click on the First radio, it should have a class name "z-radio-on".
+		2. click on the Second radio, the First radio should remove "z-radio-on" and add "z-radio-off" class name.
+		3. toggle disabled for the radio, you should see "z-radio-disabled" if it is disabled.
+		4. test the checkbox default mold, and make sure the class name present the state(on, off, disabled) of component.
+	</label>
+	<separator/>
+	radiogroup:
+	<radiogroup onCheck="choice1.value = self.selectedItem.label">
+		<radio id="radio1" label="First"/>
+		<radio label="Second" checked="true"/>
+		<radio label="Third" disabled="true"/>
+	</radiogroup>
+	<button label="toggleDisabled" onClick="radio1.setDisabled(!radio1.isDisabled());" />
+	
+	<separator/>
+	<checkbox id="cb" label="checkbox" />
+	<checkbox label="checkbox2" checked="true" />
+	<checkbox label="checkbox2" disabled="true" />
+	<button label="toggleDisabled" onClick="cb.setDisabled(!cb.isDisabled());" />
+	
+	<separator/>
+	customized radio in inputgroup:
+	<radiogroup id="fruits" onCheck="choice2.value = self.selectedItem.label"/>
+	<inputgroup id="inputgroup">
+		<radio label="Apple" radiogroup="fruits"/>
+		<radio label="Orange" radiogroup="fruits"/>
+		<radio label="Lemon" radiogroup="fruits"/>
+	</inputgroup>
+	
+	<hlayout>
+		Order :
+		<label id="choice1"/>
+	</hlayout>
+	<hlayout>
+		Fruit :
+		<label id="choice2"/>
+	</hlayout>
+	<button label="vertical" onClick='inputgroup.setOrient("vertical")'/>
+	<button label="horizontal" onClick='inputgroup.setOrient("horizontal")'/>
+</zk>
