@@ -39,7 +39,7 @@ function (out) {
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 		
-		out.push('</tbody></table></div><div class="', this.$s('header-border'), '" aria-hidden="true"></div>');
+		out.push('</tbody></table></div>');
 	}
 	out.push('<div id="', uuid, '-body" class="', this.$s('body'));
 	
