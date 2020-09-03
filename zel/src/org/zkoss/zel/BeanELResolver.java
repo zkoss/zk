@@ -30,10 +30,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.zkoss.zel.impl.util.ClassUtil;
+import org.zkoss.zel.impl.util.ConcurrentCache;
 import org.zkoss.zel.impl.util.ReflectionUtil;
 
 public class BeanELResolver extends ELResolver {
@@ -63,6 +64,9 @@ public class BeanELResolver extends ELResolver {
 
 	//This cache can be static - it allows reusing cache across multiple instances.
     private static final ConcurrentCache<String, BeanProperties> cache = new ConcurrentCache<String, BeanProperties>(CACHE_SIZE);
+
+	// ZK-4546
+	private static final ConcurrentCache<Class<?>, Map<CachedMethodInfo, Method>> METHODS_CACHE = new ConcurrentCache<Class<?>, Map<CachedMethodInfo, Method>>(CACHE_SIZE);
 
     public BeanELResolver() {
         this.readOnly = false;
@@ -199,63 +203,8 @@ public class BeanELResolver extends ELResolver {
 
         ExpressionFactory factory = ExpressionFactory.newInstance();
         
-        String methodName = (String) factory.coerceToType(method, String.class);
-
 		// Find the matching method
-		Method matchingMethod = null;
-		Class<?> clazz = base.getClass();
-		if (paramTypes != null) {
-			try {
-				matchingMethod = Util.getMethod(clazz, clazz.getMethod(methodName, paramTypes));
-			} catch (NoSuchMethodException e) {
-				//throw new MethodNotFoundException(e);
-				int paramCount = 0;
-				if (params != null) {
-					paramCount = params.length;
-				}
-				Method[] methods = clazz.getMethods();
-				for (Method m : methods) {
-					if (methodName.equals(m.getName())) {
-						if (m.getParameterTypes().length == paramCount) {
-							// Same number of parameters - use the first match
-							matchingMethod = Util.getMethod(clazz, m);
-							break;
-						}
-						if (m.isVarArgs()
-								&& paramCount > m.getParameterTypes().length - 2) {
-							matchingMethod = Util.getMethod(clazz, m);
-						}
-					}
-				}
-				if (matchingMethod == null) {
-					throw new MethodNotFoundException("Unable to find method ["
-							+ methodName + "] with [" + paramCount + "] parameters");
-				}
-			}
-		} else {
-			int paramCount = 0;
-			if (params != null) {
-				paramCount = params.length;
-			}
-			Method[] methods = clazz.getMethods();
-			for (Method m : methods) {
-				if (methodName.equals(m.getName())) {
-					if (m.getParameterTypes().length == paramCount) {
-						// Same number of parameters - use the first match
-						matchingMethod = Util.getMethod(clazz, m);
-						break;
-					}
-					if (m.isVarArgs()
-							&& paramCount > m.getParameterTypes().length - 2) {
-						matchingMethod = Util.getMethod(clazz, m);
-					}
-				}
-			}
-			if (matchingMethod == null) {
-				throw new MethodNotFoundException("Unable to find method ["
-						+ methodName + "] with [" + paramCount + "] parameters");
-			}
-		}
+		Method matchingMethod = getMethod(base.getClass(), (String) factory.coerceToType(method, String.class), paramTypes, params);
 
         Class<?>[] parameterTypes = matchingMethod.getParameterTypes();
         Object[] parameters = null;
@@ -547,40 +496,118 @@ public class BeanELResolver extends ELResolver {
         return props.get(ctx, prop);
     }
 
-    private static final class ConcurrentCache<K,V> {
+	// ZK-4546
+	private static final class CachedMethodInfo {
+		private final String _methodName;
+		private final Class<?>[] _paramTypes;
 
-        private final int size;
-        private final Map<K,V> eden;
-        private final Map<K,V> longterm;
+		public CachedMethodInfo(String methodName, Class<?>[] paramTypes) {
+			this._methodName = methodName;
+			this._paramTypes = paramTypes;
+		}
 
-        public ConcurrentCache(int size) {
-            this.size = size;
-            this.eden = new ConcurrentHashMap<K, V>(size);
-            this.longterm = new WeakHashMap<K, V>(size);
-        }
+		public String getMethodName() {
+			return _methodName;
+		}
 
-        public V get(K key) {
-            V value = this.eden.get(key);
-            if (value == null) {
-                synchronized (longterm) {
-                    value = this.longterm.get(key);
-                }
-                if (value != null) {
-                    this.eden.put(key, value);
-                }
-            }
-            return value;
-        }
+		public Class<?>[] getParamTypes() {
+			return _paramTypes;
+		}
 
-        public void put(K key, V value) {
-            if (this.eden.size() >= this.size) {
-                synchronized (longterm) {
-                    this.longterm.putAll(this.eden);
-                }
-                this.eden.clear();
-            }
-            this.eden.put(key, value);
-        }
+		@Override
+		public int hashCode() {
+			int result = 17;
+			result = 31 * result + this._methodName.hashCode();
+			result = 31 * result + (_paramTypes != null ? _paramTypes.length : 0);
+			return result;
+		}
 
-    }
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof CachedMethodInfo))
+				return false;
+			if (!((CachedMethodInfo) obj).getMethodName().equals(this._methodName))
+				return false;
+			Class<?>[] targetParamTypes = ((CachedMethodInfo) obj).getParamTypes();
+			int len =  _paramTypes != null ? _paramTypes.length : 0;
+			int len2 = targetParamTypes != null ? targetParamTypes.length : 0;
+			if (len != len2)
+				return false;
+			for (int j = 0; j < len; ++j) {
+				if (!Objects.equals(_paramTypes[j], targetParamTypes[j]))
+					return false;
+			}
+			return true;
+		}
+	}
+
+	private static Method getMethod(Class<?> clazz, String methodName, Class<?>[] paramTypes, Object[] params) {
+		Map<CachedMethodInfo, Method> clzMap = METHODS_CACHE.get(clazz);
+		if (clzMap != null) {
+			Method method = clzMap.get(new CachedMethodInfo(methodName, paramTypes));
+			if (method != null)
+				return method;
+		}
+		return getMethod0(clazz, methodName, paramTypes, params);
+	}
+
+	private static Method getMethod0(Class<?> clazz, String methodName, Class<?>[] paramTypes, Object[] params) {
+		Method matchingMethod = null;
+		if (paramTypes != null) {
+			try {
+				matchingMethod = Util.getMethod(clazz, clazz.getMethod(methodName, paramTypes));
+			} catch (NoSuchMethodException e) {
+				//throw new MethodNotFoundException(e);
+				int paramCount = 0;
+				if (params != null) {
+					paramCount = params.length;
+				}
+				Method[] methods = clazz.getMethods();
+				for (Method m : methods) {
+					if (methodName.equals(m.getName())) {
+						if (m.getParameterTypes().length == paramCount) {
+							// Same number of parameters - use the first match
+							matchingMethod = Util.getMethod(clazz, m);
+							break;
+						}
+						if (m.isVarArgs()
+								&& paramCount > m.getParameterTypes().length - 2) {
+							matchingMethod = Util.getMethod(clazz, m);
+						}
+					}
+				}
+				if (matchingMethod == null) {
+					throw new MethodNotFoundException("Unable to find method ["
+							+ methodName + "] with [" + paramCount + "] parameters");
+				}
+			}
+		} else {
+			int paramCount = 0;
+			if (params != null) {
+				paramCount = params.length;
+			}
+			Method[] methods = clazz.getMethods();
+			for (Method m : methods) {
+				if (methodName.equals(m.getName())) {
+					if (m.getParameterTypes().length == paramCount) {
+						// Same number of parameters - use the first match
+						matchingMethod = Util.getMethod(clazz, m);
+						break;
+					}
+					if (m.isVarArgs()
+							&& paramCount > m.getParameterTypes().length - 2) {
+						matchingMethod = Util.getMethod(clazz, m);
+					}
+				}
+			}
+			if (matchingMethod == null) {
+				throw new MethodNotFoundException("Unable to find method ["
+						+ methodName + "] with [" + paramCount + "] parameters");
+			}
+		}
+		if (matchingMethod != null)
+			METHODS_CACHE.computeIfAbsent(clazz, k -> new ConcurrentHashMap<>())
+					.put(new CachedMethodInfo(methodName, paramTypes), matchingMethod);
+		return matchingMethod;
+	}
 }
