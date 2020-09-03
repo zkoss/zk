@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4648.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 02 10:37:47 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Play the audio clip.
+        2. You can see captions.
+        (Notice: As of 2020, no browser supports tracks in audio yet. Though according to the spec it is supported.)
+    </label>
+    <audio src="/media/guitar.wav" controls="true">
+        <track src="F95-ZK-4648.vtt" kind="captions" default="true"/>
+        <track src="F95-ZK-4648-ch.vtt" kind="subtitles" srclang="zh"/>
+    </audio>
+</zk>

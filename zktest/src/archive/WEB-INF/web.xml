@@ -278,6 +278,10 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<extension>zul</extension>
 		<mime-type>text/html</mime-type>
 	</mime-mapping>
+	<mime-mapping>
+		<extension>vtt</extension>
+		<mime-type>text/vtt</mime-type>
+	</mime-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.zul</welcome-file>

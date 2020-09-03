@@ -1309,6 +1309,15 @@ def alert(m):
         <widget-class>zul.wgt.Nodom</widget-class>
     </component>
 	<component>
+		<component-name>track</component-name>
+		<component-class>org.zkoss.zul.Track</component-class>
+		<widget-class>zul.med.Track</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/track.js</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>tree</component-name>
 		<component-class>org.zkoss.zul.Tree</component-class>
 		<widget-class>zul.sel.Tree</widget-class>
