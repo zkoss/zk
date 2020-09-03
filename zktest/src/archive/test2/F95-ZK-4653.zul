@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4653.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Sep 01 15:21:41 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label>Test these cases for isPressed(), you should see success message if you pressed the correct keys.</label>
+	<separator/>
+	<label>no combination test:</label>
+	<button width="500px" label="focus then press alt key">
+		<attribute w:name="doKeyDown_">
+			function (evt) {
+				if (evt.isPressed(zKeys.ALT))
+					zk.log('alt key is pressed');
+				else
+					zk.log(evt.key);
+			}
+		</attribute>
+	</button>
+	<separator/>
+	<label>no combination with string test:</label>
+	<button width="500px" label="focus then press a key">
+		<attribute w:name="doKeyDown_">
+			function (evt) {
+				if (evt.isPressed('a'))
+					zk.log('a key is pressed');
+				else
+					zk.log(evt.key);
+			}
+		</attribute>
+	</button>
+	<separator/>
+	<label>2 keys combination test:</label>
+	<button width="500px" label="focus then press alt + ArrowDown keys">
+		<attribute w:name="doKeyDown_">
+			function (evt) {
+				if (evt.isPressed(zKeys.ALT, zKeys.ARROWDOWN))
+					zk.log('alt + ArrowDown keys is pressed');
+				else
+					zk.log(evt.key);
+			}
+		</attribute>
+	</button>
+	<separator/>
+	<label>3 keys combination test:</label>
+	<button width="500px" label="focus then press ctrl + alt + ArrowDown keys">
+		<attribute w:name="doKeyDown_">
+			function (evt) {
+				if (evt.isPressed(zKeys.ARROWDOWN, zKeys.CONTROL, zKeys.ALT))
+					zk.log('ctrl + alt + ArrowDown is pressed');
+				else
+					zk.log(evt.key);
+			}
+		</attribute>
+	</button>
+	<separator/>
+	<label>3 keys combination and string test:</label>
+	<button width="500px" label="focus then press ctrl + meta(command/windows) + a keys">
+		<attribute w:name="doKeyDown_">
+			function (evt) {
+				if (evt.isPressed('a', zKeys.CONTROL, zKeys.META))
+					zk.log('ctrl + meta + a keys is pressed');
+				else
+					zk.log(evt.key);
+			}
+		</attribute>
+	</button>
+	<separator/>
+	<label>invalid keys combination test(should see an exception in browser console):</label>
+	<separator/>
+	<button width="500px" label="focus then press ArrowUp + ArrowDown keys">
+		<attribute w:name="doKeyDown_">
+			function (evt) {
+				zk.log(evt.isPressed(zKeys.ARROWDOWN, zKeys.ARROWUP));
+			}
+		</attribute>
+	</button>
+</zk>

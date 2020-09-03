@@ -41,6 +41,7 @@ window.$eval=function(s){return eval(s);};
 	<script src="effect.js" jsdoc="true"/>
 	<script src="math.js" jsdoc="true"/>
 	<script src="utl.js" jsdoc="true"/>
+	<script src="keys.js" jsdoc="true"/>
 	<script src="widget.js" jsdoc="true"/>
 	<script src="pkg.js" jsdoc="true"/>
 	<script src="mount.js" jsdoc="true"/>
