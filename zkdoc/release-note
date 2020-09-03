@@ -25,6 +25,7 @@ ZK 9.5.0
   ZK-4649: Video supports to add tracks
   ZK-4653: Provide a collection of constants for Keys and provide isPressed API
   ZK-4546: Caching of EL method invocations
+  ZK-4622: Remove header border div in listbox/grid/tree
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
@@ -81,6 +82,7 @@ ZK 9.5.0
   + Due to ZK-4569, there is syntax sugar for calling commands in other viewmodel. 
     E.g. @command('$pvm.doClick') would trigger the 'doClick' command in the viewModel whose id is 'pvm'.
   + zAu.onError API was changed since we are using fetch() API instead XHR.
+  + Due to ZK-4622, the DIV of grid/listbox/tree header border is removed.
 
    --------
 ZK 9.1.0
