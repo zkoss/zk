@@ -186,6 +186,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				</row>
 			</rows>
 		</grid>
+		<label multiline="true">
+			try using alt + arrowDown to open the menupopup in column
+		</label>
 		<grid id="grid" width="300px">
 			<columns menupopup="auto">
 				<column width="150px" label="col 1"/>
@@ -198,6 +201,24 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
 				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
 				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+			</rows>
+		</grid>
+		<label multiline="true">
+			should not announce any gridcell in hidden column or hidden row, and should not able to focus on the hidden gridcell by arrow keys.
+		</label>
+		<grid width="300px">
+			<columns menupopup="auto">
+				<column width="150px" label="col 1" visible="false"/>
+				<column label="col 2" width="150px" sort="auto"/>
+				<column label="col 3" align="center" width="150px" visible="false"/>
+				<column label="col 4" align="right" width="150px"/>
+				<column label="col 5" align="right" width="150px" visible="false"/>
+			</columns>
+			<rows>
+				<row visible="false"><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/></row>
+				<row><cell>1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell></row>
 			</rows>
 		</grid>
 	</n:main>
