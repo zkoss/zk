@@ -296,19 +296,19 @@ if="deploy.tomcat.required">
 
 <target name="build.osgi1" depends="build.jar" if="build.jar.required">
 	<mkdir dir="${dist.osgi.dir}"/>
-	<echo file="${dist.osgi.dir}/${bnd.config.name}" message="Bundle-Version:${project.version}"/>
+	<echo file="${dist.osgi.dir}/${bnd.config.name}" message="Bundle-Version:${project.version}${line.separator}Import-Package: *;resolution:=optional${line.separator}Export-Package: *;version=${project.version}${line.separator}Bundle-Name:${project.name}${line.separator}Bundle-SymbolicName:${project.name}"/>
 </target>
 
 <target name="build.osgi2" depends="build.jar2" if="build.jar2.required">
-	<echo file="${dist.osgi.dir}/${bnd2.config.name}" message="Bundle-Version:${project.version}"/>
+	<echo file="${dist.osgi.dir}/${bnd2.config.name}" message="Bundle-Version:${project.version}${line.separator}Import-Package: *;resolution:=optional${line.separator}Export-Package: *;version=${project.version}${line.separator}Bundle-Name:${project.name}${line.separator}Bundle-SymbolicName:${project.name}"/>
 </target>
 
 <target name="build.osgi3" depends="build.jar" if="build.zweb">
-	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="true" message="${line.separator}Import-Package:javax.servlet.annotation;resolution:=optional,*;resolution:=optional"/>
+	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="false" message="Bundle-Version:${project.version}${line.separator}Import-Package: javax.servlet.annotation;resolution:=optional,*;resolution:=optional${line.separator}Export-Package: *;version=${project.version}${line.separator}Bundle-Name:${project.name}${line.separator}Bundle-SymbolicName:${project.name}"/>
 </target>
 
 <target name="build.osgi4" depends="build.jar" if="build.zkbind">
-	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="true" message="${line.separator}Import-Package:javassist.util.proxy;resolution:=optional,*;resolution:=optional"/>
+	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="false" message="Bundle-Version:${project.version}${line.separator}Import-Package:javassist.util.proxy;resolution:=optional,*;resolution:=optional${line.separator}Export-Package: *;version=${project.version}${line.separator}Bundle-Name:${project.name}${line.separator}Bundle-SymbolicName:${project.name}"/>
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/zjavassist"/>
 		<arg value="${project.version}"/>
@@ -317,7 +317,7 @@ if="deploy.tomcat.required">
 </target>
 
 <target name="build.osgi5" depends="build.jar" if="build.zkex">
-	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="true" message="${line.separator}Import-Package:org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional${line.separator}Export-Package:!org.zkoss.zk.ui.sys,*"/>
+	<echo file="${dist.osgi.dir}/${bnd.config.name}" append="false" message="Bundle-Version:${project.version}${line.separator}Import-Package:org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional${line.separator}Export-Package: !org.zkoss.zk.ui.sys,*;version=${project.version}${line.separator}Bundle-Name:${project.name}${line.separator}Bundle-SymbolicName:${project.name}"/>
 </target>
 
 <target name="build.osgi" depends="build.osgi1, build.osgi2, build.osgi3, build.osgi4, build.osgi5" if="build.jar.required">
