@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <suppress>
+        <notes><![CDATA[jruby-1.1.2.jar: optional dependency]]></notes>
+        <packageUrl>pkg:maven/org.jruby/jruby@1.1.2</packageUrl>
+        <cve>CVE-2011-4838</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[jasperreports-6.14.jar: false positive https://github.com/TIBCOSoftware/jasperreports/issues/132]]></notes>
+        <packageUrl regex="true">^pkg:maven/net\.sf\.jasperreports/jasperreports@.*$</packageUrl>
+        <cve>CVE-2020-9410</cve>
+    </suppress>
+</suppressions>

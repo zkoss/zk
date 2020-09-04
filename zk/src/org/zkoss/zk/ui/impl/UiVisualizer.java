@@ -1087,7 +1087,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 		private AuResponse getResponse() {
 			return _response;
 		}
-	};
+	}
 
 	/** Sets the reason to abort the current execution.
 	 * if not null, it means the current execution is aborting
