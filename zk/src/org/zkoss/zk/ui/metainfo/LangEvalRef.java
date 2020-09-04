@@ -52,4 +52,4 @@ import org.zkoss.zk.xel.Evaluator;
 		if (langnm != null)
 			_langdef = LanguageDefinition.lookup(langnm);
 	}
-};
+}

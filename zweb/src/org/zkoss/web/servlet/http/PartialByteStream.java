@@ -13,6 +13,7 @@ package org.zkoss.web.servlet.http;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
 
 /*package*/ class PartialByteStream extends ByteArrayOutputStream {

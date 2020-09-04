@@ -28,7 +28,8 @@ import org.zkoss.zk.ui.impl.Attributes;
  * @since 8.6.2
  */
 public class Uploads {
-	private Uploads() { }
+	private Uploads() {
+	}
 
 	/**
 	 * Parse the setting and update the upload-related attributes with the component.
