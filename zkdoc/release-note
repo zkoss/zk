@@ -73,6 +73,7 @@ ZK 9.5.0
   ZK-4515: ListProxy dirty status not cleaned after save
   ZK-4585: iceblue_c misaligned switch/toggle labels
   ZK-4584: iceblue tablet spinner styles
+  ZK-4545: Zk9 osgi jar is not usable
 
 * Upgrade Notes
   + The classes of org.zkoss.bind.SimpleForm, org.zkoss.bind.impl.FormImpl is back for compatibility.
