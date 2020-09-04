@@ -30,7 +30,7 @@ zul.med.Track = zk.$extends(zul.Widget, {
 		 * @param boolean isDefault if this track should be enabled by default.
 		 */
 		default(isDefault: boolean) {
-			const n: HTMLTrackElement = this.$n();
+			const n = this.$n() as HTMLTrackElement;
 			if (n) n.default = isDefault;
 		},
 		/**
@@ -50,7 +50,7 @@ zul.med.Track = zk.$extends(zul.Widget, {
 		 * @param String kind what kind of track it is.
 		 */
 		kind(kind: string) {
-			const n: HTMLTrackElement = this.$n();
+			const n = this.$n() as HTMLTrackElement;
 			if (n) n.kind = kind;
 		},
 		/**
@@ -63,7 +63,7 @@ zul.med.Track = zk.$extends(zul.Widget, {
 		 * @param String label a readable description of this track.
 		 */
 		label(label: string) {
-			const n: HTMLTrackElement = this.$n();
+			const n = this.$n() as HTMLTrackElement;
 			if (n) n.label = label;
 		},
 		/**
@@ -80,7 +80,7 @@ zul.med.Track = zk.$extends(zul.Widget, {
 		 * @param String src the source address of this track.
 		 */
 		src(src: string) {
-			const n: HTMLTrackElement = this.$n();
+			const n = this.$n() as HTMLTrackElement;
 			if (n) n.src = src;
 		},
 		/**
@@ -95,7 +95,7 @@ zul.med.Track = zk.$extends(zul.Widget, {
 		 * @param String srclang the language of the source.
 		 */
 		srclang(srclang: string) {
-			const n: HTMLTrackElement = this.$n();
+			const n = this.$n() as HTMLTrackElement;
 			if (n) n.srclang = srclang;
 		}
 	},
