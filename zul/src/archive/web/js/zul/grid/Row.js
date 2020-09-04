@@ -236,8 +236,10 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			attrs += ' nowrap="nowrap"';
 		if (style)
 			attrs += ' style="' + style + '"';
-		if (visible === false)
+		if (visible === false) {
+			attrs += ' aria-hidden="true"';
 			clx += ' ' + this.$s('hidden-column');
+		}
 		return attrs + ' class="' + clx + '"';
 	},
 	/**
