@@ -130,7 +130,7 @@
                     <configuration>
                         <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                         <failBuildOnCVSS>7</failBuildOnCVSS>
-                        <suppressionFile>../owasp-suppressions.xml</suppressionFile>
+                        <suppressionFile>${project.basedir}/../owasp-suppressions.xml</suppressionFile>
                     </configuration>
                 </plugin>
                 <plugin>
