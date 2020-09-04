@@ -15,15 +15,15 @@
     <description>ZK Bill of Materials</description>
     <properties>
         <zats.version>2.1.1</zats.version>
-        <zkspringboot.version>1.0.4</zkspringboot.version>
-        <zkckeditor.version>4.11.1.1</zkckeditor.version>
-        <zkgmaps.version>3.0.5</zkgmaps.version>
-        <zkcharts.version>7.2.1.0</zkcharts.version>
+        <zkspringboot.version>2.3.1</zkspringboot.version>
+        <zkckeditor.version>4.14.0.0</zkckeditor.version>
+        <zkgmaps.version>3.2.0</zkgmaps.version>
+        <zkcharts.version>7.2.1.1</zkcharts.version>
         <zkpivotable.version>2.5.2</zkpivotable.version>
         <zkpoi.version>3.9.17</zkpoi.version>
         <zss.version>3.9.6</zss.version>
-        <keikai.oss.version>5.0.0</keikai.oss.version>
-        <keikai.ex.version>5.2.0</keikai.ex.version>
+        <keikai.oss.version>5.0.0.1</keikai.oss.version>
+        <keikai.ex.version>5.3.0</keikai.ex.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -102,6 +102,11 @@
             <dependency>
                 <groupId>org.zkoss.zk</groupId>
                 <artifactId>zuti</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.zk</groupId>
+                <artifactId>za11y</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- Themes -->
@@ -364,6 +369,36 @@
             <dependency>
                 <groupId>org.zkoss.themepack</groupId>
                 <artifactId>zen_c</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.themepack</groupId>
+                <artifactId>wcag</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.themepack</groupId>
+                <artifactId>wcag_c</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.themepack</groupId>
+                <artifactId>wcag_navy</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.themepack</groupId>
+                <artifactId>wcag_navy_c</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.themepack</groupId>
+                <artifactId>wcag_purple</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.themepack</groupId>
+                <artifactId>wcag_purple_c</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- ZATS -->
