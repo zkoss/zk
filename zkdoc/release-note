@@ -26,6 +26,7 @@ ZK 9.5.0
   ZK-4653: Provide a collection of constants for Keys and provide isPressed API
   ZK-4546: Caching of EL method invocations
   ZK-4622: Remove header border div in listbox/grid/tree
+  ZK-4656: Update moment-timezones-with-data.js (tzdata 2020a)
 
 * Bugs
   ZK-4480: Remove JUL implementation of SLF4J to avoid leaking into consumer projects
