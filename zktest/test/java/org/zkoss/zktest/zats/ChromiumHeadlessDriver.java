@@ -32,11 +32,11 @@ import org.slf4j.LoggerFactory;
  */
 public class ChromiumHeadlessDriver extends ChromeDriver {
 	private static final Logger LOG = LoggerFactory.getLogger(ChromiumHeadlessDriver.class);
-	private static final String CHROME_DRIVER_VERSION = "80.0.3987.106";
-	private static final int CHROMIUM_BINARY_REVISION = 722234; // from puppeteer v2.1.1 Chromium 80.0.3987.0 (r722234)
+	private static final String CHROME_DRIVER_VERSION = "85.0.4183.87";
+	private static final int CHROMIUM_BINARY_REVISION = 782078; // from puppeteer v5.2.1 Chromium 85.0.4182.0 (r782078)
 
 	static {
-		WebDriverManager.chromedriver().version(CHROME_DRIVER_VERSION).setup();
+		WebDriverManager.chromiumdriver().driverVersion(CHROME_DRIVER_VERSION).setup();
 		System.setProperty("webdriver.chrome.logfile", String.format("%s/chromedriver.log", System.getProperty("java.io.tmpdir")));
 		System.setProperty("webdriver.chrome.verboseLogging", "true");
 	}
