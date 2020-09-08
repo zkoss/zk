@@ -117,6 +117,7 @@
 			cursor: pointer;
 			&:active {
 				background: @meshTitleActiveBackgroundColor;
+				color: @meshTitleColor;
 			}
 		}
 		.z-listheader-sorticon {
@@ -136,11 +137,17 @@
 		.z-listheader-button {
 			display: block;
 		}
+		.z-listheader-content {
+			color: @hoverColor;
+		}
 	}
 	&-visited {
 		background: @meshTitleBackgroundColor;
 		.z-listheader-button {
 			background: @meshTitleActiveBackgroundColor;
+		}
+		.z-listheader-content {
+			color: @meshTitleColor;
 		}
 	}
 	&-checkable {

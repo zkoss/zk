@@ -105,11 +105,17 @@
 		.z-column-button {
 			display: block;
 		}
+		.z-column-content {
+			color: @hoverColor;
+		}
 	}
 	&-visited {
 		background: @meshTitleBackgroundColor;
 		.z-column-button {
 			background: @meshTitleActiveBackgroundColor;
+		}
+		.z-column-content {
+			color: @meshTitleColor;
 		}
 	}
 	&-sort {
@@ -117,6 +123,7 @@
 			cursor: pointer;
 			&:active {
 				background: @meshTitleActiveBackgroundColor;
+				color: @meshTitleColor;
 			}
 		}
 		.z-column-sorticon {
