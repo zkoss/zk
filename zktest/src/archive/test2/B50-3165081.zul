@@ -18,13 +18,13 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		</ol>
 	]]></html>
 	<hbox width="200px" height="200px">
-		<splitter />
+		<splitter id="s1"/>
 		Content
-		<splitter />
+		<splitter id="s2"/>
 	</hbox>
 	<vbox width="200px" height="200px">
-		<splitter />
+		<splitter id="s3"/>
 		Content
-		<splitter />
+		<splitter id="s4"/>
 	</vbox>
 </zk>

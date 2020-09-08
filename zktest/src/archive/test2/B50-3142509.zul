@@ -21,6 +21,6 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 		<listitem label="item3"/>
 		<listitem label="item4"/>
 	</listbox>
-	<button label="Please click to select item 4, if item 3 that's bug" onClick="list.selectedIndex=3"/>
+	<button id="btn" label="Please click to select item 4, if item 3 that's bug" onClick="list.selectedIndex=3"/>
 </zk>
 
