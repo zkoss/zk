@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuAlert;
@@ -195,7 +196,8 @@ public class Clients {
 	 * @since 9.5.0
 	 */
 	public static final void scrollIntoView(String selector) {
-		scrollIntoView(getComponentsBySelector(selector).get(0));
+		if (!Strings.isEmpty(selector))
+			scrollIntoView(getComponentsBySelector(selector).get(0));
 	}
 
 	/** Scrolls the current desktop (a.k.a., browser window) by the specified number of pixels.
