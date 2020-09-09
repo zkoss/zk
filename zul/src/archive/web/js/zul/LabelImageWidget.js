@@ -90,7 +90,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	 */
 	domImage_: function () {
 		var img = this._image;
-		return img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true" />' : '';
+		return img ? '<img src="' + img + '" align="absmiddle" alt="" aria-hidden="true">' : '';
 	},
 	/**
 	 * Returns the icon font class name with HTML content.
