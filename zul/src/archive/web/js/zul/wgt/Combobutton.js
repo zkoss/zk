@@ -108,6 +108,10 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		return this.getDir() == 'reverse' ?
 			label + space + img : img + space + label;
 	},
+	domImage_: function () {
+		var img = this._image;
+		return img ? '<img class="' + this.$s('image') + '" src="' + img + '" alt="" aria-hidden="true">' : '';
+	},
 	domClass_: function (no) {
 		var cls = this.$supers(zul.wgt.Combobutton, 'domClass_', arguments);
 		if (!this._isDefault())
