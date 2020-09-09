@@ -148,18 +148,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			setTimeout(function () {zAu.sendNow(dt);}, timeout);
 	}
 	function ajaxSendNow(reqInf) {
-		var fetchOpts = {};
+		var fetchOpts = {
+			credentials: 'same-origin',
+			method: 'POST',
+			headers: {'Content-Type': zAu.ajaxSettings.contentType, 'ZK-SID': reqInf.sid},
+			body: reqInf.content
+		};
 		zAu.sentTime = jq.now(); //used by server-push (cpsp)
 		zk.ausending = true;
 		if (zk.xhrWithCredentials)
 			fetchOpts.credentials = 'include';
-		fetchOpts.method = 'POST';
-		fetchOpts.headers = {'Content-Type': zAu.ajaxSettings.contentType, 'ZK-SID': reqInf.sid};
 		if (zAu._errCode) {
 			fetchOpts.headers['ZK-Error-Report'] = zAu._errCode;
 			zAu._errCode = null;
 		}
-		fetchOpts.body = reqInf.content;
 
 		var forceAjax = reqInf.forceAjax;
 		if (zk.pfmeter) zAu._pfsend(reqInf.dt, fetchOpts, false, forceAjax);
