@@ -417,6 +417,11 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 
 		var keyCode = evt.keyCode,
 			bOpen = this._pop.isOpen();
+		if (!evt.shiftKey && keyCode == 9 && evt.domTarget == this.$n('real') && bOpen) { // Tab focus to popup
+			this._pop.focus();
+			evt.stop();
+			return;
+		}
 		if (keyCode == 9 || (zk.webkit && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
 			if (evt.target != this._tm) { // avoid closing the popup if moving focus to the timezone dropdown
 				if (bOpen) this._pop.close();
