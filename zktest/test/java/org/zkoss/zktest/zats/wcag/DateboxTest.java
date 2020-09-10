@@ -76,7 +76,7 @@ public class DateboxTest extends WcagTestCase {
 		Actions actions = getActions();
 		actions.sendKeys(Keys.chord(Keys.ALT, Keys.ARROW_DOWN))
 				.pause(200)
-				.sendKeys(Keys.TAB, Keys.TAB)
+				.sendKeys(Keys.TAB, Keys.TAB, Keys.TAB)
 				.perform();
 		waitResponse();
 		Assert.assertTrue(jq(widget("@datebox:eq(4)").$n("pp")).isVisible());
