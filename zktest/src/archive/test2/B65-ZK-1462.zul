@@ -4,7 +4,7 @@
 	</label>
 	<portallayout id="myptl" maximizedMode="whole">
 		<portalchildren renderdefer="1000">
-			<panel id="paneltables" border="normal" title="test" height="352px"
+			<panel id="paneltables" border="normal" title="test" width="200px" height="352px"
 				collapsible="true" maximizable="true" style="margin-bottom:10px">
 				<panelchildren>
 					<hlayout height="100%">
@@ -14,7 +14,7 @@
 			</panel>
 		</portalchildren>
 		<portalchildren>
-			<panel border="normal" title="test" height="352px"
+			<panel border="normal" title="test" width="200px" height="352px"
 				collapsible="true" maximizable="true" style="margin-bottom:10px" renderdefer="1000">
 				<panelchildren>
 					<hlayout height="100%">
