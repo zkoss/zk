@@ -22,6 +22,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			outline-color: red;
 			outline-offset: -1px;
 		}
+		.z-paging :focus {
+			outline: 1px dotted red !important;
+		}
     ]]></style>
 	<zscript>
 		List items = new org.zkoss.zktest.test2.BigList(100);
@@ -139,5 +142,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				</listitem>
 			</listbox>
 		</hlayout>
+		<listbox model="${model}" width="250px" height="300px" ca:aria-label="a listbox" mold="paging" pageSize="5" pagingPosition="both"/>
+		<paging id="pg" mold="os" pageSize="10" detailed="true" ca:aria-label="Test Paging 2"/>
+		<listbox model="${model}" width="250px" height="300px" ca:aria-label="a listbox" mold="paging" paginal="${pg}"/>
 	</n:main>
 </zk>
