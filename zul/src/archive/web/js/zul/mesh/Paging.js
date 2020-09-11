@@ -394,7 +394,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 					this.$class._fixControl(nodes[i], this, wideChanged);
 			}
 		}
-	}
+	},
+	_doAfterGo: zk.$void //to be overridden
 }, { //static
 	/**
 	 * Goes to the active page according to the page number.
@@ -415,7 +416,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 						return false;
 					}
 				});
-			}
+			} else if (wgt.getMold() == 'os')
+				wgt._doAfterGo(anc.text);
 			wgt.fire('onPaging', pgno);
 		}
 	},
@@ -513,6 +515,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
 					jq(btn[i]).attr('disabled', true);
 		}
+		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'first');
 	},
 	_domprevClick: function (evt) {
 		var wgt = zk.Widget.$(evt);
@@ -529,6 +532,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 						jq(btn[i]).attr('disabled', true);
 			}
 		}
+		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'prev');
 	},
 	_domnextClick: function (evt) {
 		var wgt = zk.Widget.$(evt);
@@ -546,6 +550,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 						jq(btn[i]).attr('disabled', true);
 			}
 		}
+		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'next');
 	},
 	_domlastClick: function (evt) {
 		var wgt = zk.Widget.$(evt);
@@ -560,6 +565,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
 					jq(btn[i]).attr('disabled', true);
 		}
+		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'last');
 	},
 	_fixControl: function (node, wgt, wideChanged) {
 		var control = jq('> ul', node),
@@ -589,6 +595,16 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		});
 		wgt._navWidth = navWidth;
 		return navWidth;
+	},
+	_callWgtDoAfterGo: function (wgt, btn, postfix) {
+		var btnIdx = 0;
+		jq(jq.$$(wgt.uuid, postfix)).each(function (idx) {
+			if (this == btn) {
+				btnIdx = idx;
+				return false;
+			}
+		});
+		wgt._doAfterGo(postfix, btnIdx);
 	}
 });
 
