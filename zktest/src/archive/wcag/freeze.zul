@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Freeze"?>
+<?root-attributes lang="en"?>
+<!--
+freeze.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Sep 16 17:39:34 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Freeze</n:h1>
+	</n:header>
+	<n:main>
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+	]]></style>
+	<label multiline="true">
+		Try navigate focus with keyboard, make sure the focused cell is scrollIntoView.
+	</label>
+	<label>grid: smooth scroll on</label>
+	<grid id="grid" width="450px">
+		<custom-attributes org.zkoss.zul.frozen.smooth="true"/>
+<!--		<custom-attributes org.zkoss.zul.nativebar="false"/>-->
+		<columns>
+			<column width="150px" label="col 1"/>
+			<column label="col 2" width="150px"/>
+			<column label="col 3" width="150px"/>
+			<column label="col 4" width="150px"/>
+			<column label="col 5" width="150px"/>
+			<column label="col 6" width="150px"/>
+		</columns>
+		<frozen columns="1" rightColumns="1"/>
+		<rows>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/><label value="6"/></row>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/><label value="6"/></row>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/><label value="6"/></row>
+		</rows>
+	</grid>
+	<label>grid: smooth scroll off</label>
+	<grid id="grid2" width="450px">
+		<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+<!--		<custom-attributes org.zkoss.zul.nativebar="false"/>-->
+		<columns>
+			<column width="150px" label="col 1"/>
+			<column label="col 2" width="150px"/>
+			<column label="col 3" width="150px"/>
+			<column label="col 4" width="150px"/>
+			<column label="col 5" width="150px"/>
+			<column label="col 6" width="150px"/>
+		</columns>
+		<frozen columns="1"/>
+		<rows>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/><label value="6"/></row>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/><label value="6"/></row>
+			<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/><label value="6"/></row>
+		</rows>
+	</grid>
+	<label>listbox: smooth scroll on</label>
+	<listbox id="list" ca:aria-label="a listbox" width="450px">
+		<custom-attributes org.zkoss.zul.frozen.smooth="true"/>
+		<!--		<custom-attributes org.zkoss.zul.nativebar="false"/>-->
+		<listhead>
+			<listheader width="150px" label="col 1"/>
+			<listheader label="col 2" width="150px"/>
+			<listheader label="col 3" width="150px"/>
+			<listheader label="col 4" width="150px"/>
+			<listheader label="col 5" width="150px"/>
+			<listheader label="col 6" width="150px"/>
+		</listhead>
+		<frozen columns="1" rightColumns="1"/>
+			<listitem><listcell label="1"/><listcell label="2"/><listcell label="3"/><listcell label="4"/><listcell label="5"/><listcell label="6"/></listitem>
+			<listitem><listcell label="1"/><listcell label="2"/><listcell label="3"/><listcell label="4"/><listcell label="5"/><listcell label="6"/></listitem>
+			<listitem><listcell label="1"/><listcell label="2"/><listcell label="3"/><listcell label="4"/><listcell label="5"/><listcell label="6"/></listitem>
+	</listbox>
+	<label>listbox: smooth scroll off</label>
+	<listbox id="list2" ca:aria-label="a listbox" width="450px">
+		<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+		<!--		<custom-attributes org.zkoss.zul.nativebar="false"/>-->
+		<listhead>
+			<listheader width="150px" label="col 1"/>
+			<listheader label="col 2" width="150px"/>
+			<listheader label="col 3" width="150px"/>
+			<listheader label="col 4" width="150px"/>
+			<listheader label="col 5" width="150px"/>
+			<listheader label="col 6" width="150px"/>
+		</listhead>
+		<frozen columns="1"/>
+		<listitem><listcell label="1"/><listcell label="2"/><listcell label="3"/><listcell label="4"/><listcell label="5"/><listcell label="6"/></listitem>
+		<listitem><listcell label="1"/><listcell label="2"/><listcell label="3"/><listcell label="4"/><listcell label="5"/><listcell label="6"/></listitem>
+		<listitem><listcell label="1"/><listcell label="2"/><listcell label="3"/><listcell label="4"/><listcell label="5"/><listcell label="6"/></listitem>
+	</listbox>
+	<label>tree: smooth scroll on</label>
+	<tree id="tree" ca:aria-label="a tree" width="450px">
+		<custom-attributes org.zkoss.zul.frozen.smooth="true"/>
+		<!--		<custom-attributes org.zkoss.zul.nativebar="false"/>-->
+		<treecols>
+			<treecol width="150px" label="col 1"/>
+			<treecol label="col 2" width="150px"/>
+			<treecol label="col 3" width="150px"/>
+			<treecol label="col 4" width="150px"/>
+			<treecol label="col 5" width="150px"/>
+			<treecol label="col 6" width="150px"/>
+		</treecols>
+		<frozen columns="1" rightColumns="1"/>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="1"/><treecell label="2"/><treecell label="3"/><treecell label="4"/><treecell label="5"/><treecell label="6"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="1"/><treecell label="2"/><treecell label="3"/><treecell label="4"/><treecell label="5"/><treecell label="6"/>
+				</treerow>
+			</treeitem><treeitem>
+			<treerow>
+				<treecell label="1"/><treecell label="2"/><treecell label="3"/><treecell label="4"/><treecell label="5"/><treecell label="6"/>
+			</treerow>
+		</treeitem>
+		</treechildren>
+	</tree>
+	<label>tree: smooth scroll off</label>
+		<tree id="tree2" ca:aria-label="a tree" width="450px">
+			<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+			<!--		<custom-attributes org.zkoss.zul.nativebar="false"/>-->
+			<treecols>
+				<treecol width="150px" label="col 1"/>
+				<treecol label="col 2" width="150px"/>
+				<treecol label="col 3" width="150px"/>
+				<treecol label="col 4" width="150px"/>
+				<treecol label="col 5" width="150px"/>
+				<treecol label="col 6" width="150px"/>
+			</treecols>
+			<frozen columns="1"/>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="1"/><treecell label="2"/><treecell label="3"/><treecell label="4"/><treecell label="5"/><treecell label="6"/>
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="1"/><treecell label="2"/><treecell label="3"/><treecell label="4"/><treecell label="5"/><treecell label="6"/>
+					</treerow>
+				</treeitem><treeitem>
+				<treerow>
+					<treecell label="1"/><treecell label="2"/><treecell label="3"/><treecell label="4"/><treecell label="5"/><treecell label="6"/>
+				</treerow>
+			</treeitem>
+			</treechildren>
+		</tree>
+	</n:main>
+</zk>
