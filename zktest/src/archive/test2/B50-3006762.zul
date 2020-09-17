@@ -1,4 +1,9 @@
 <zk>
+	<label multiline="true">
+		Open the tree and select the treeitem "1.1.1"
+		then close the tree
+		The tree should not increase the height of the content
+	</label>
 	<tree id="tree" multiple="true">
 		<treechildren>
 			<treeitem>
