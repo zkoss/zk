@@ -3,6 +3,7 @@
 		1. Resize the window
 		2. If you see green background bar expand to window size, it is a bug.
 	</label>
+	<custom-attributes org.zkoss.zul.css.flex="false"/>
 	<window sizable="true" mode="overlapped" title="win-div" border="normal" closable="true">
 		<vlayout>
 			<hlayout vflex="1" hflex="min" style="background:green">
@@ -15,4 +16,11 @@
 			</hlayout>
 		</vlayout>
 	</window>
+	<script>
+		zk.afterMount(function () {
+			jq('@window').on('click', function (evt) {
+				console.log(evt);
+			});
+		});
+	</script>
 </zk>
