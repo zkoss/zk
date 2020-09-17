@@ -11,6 +11,7 @@ ZK 9.5.1
   ZK-4660: Panel toggle maximize button cause line break
   ZK-4580: CSS Flex calculation is affected by <script>
   ZK-4592: Coachmark mask should not remain after detach
+  ZK-4588: Combobox losing focus after performing autocomplete in IE
 
 * Upgrade Notes
 
