@@ -1162,7 +1162,7 @@ public class Parser {
 				}
 				if (vmId != null && !attrValue.contains(vmId))
 					attrValue = attrValue.replaceAll("@\\((.*)\\)", "@(" + vmId + ".$1)");
-				attrValue = "@bind" + attrValue.substring(1);
+				attrValue = "@init" + attrValue.substring(1);
 			}
 		}
 		return attrValue;
