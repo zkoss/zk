@@ -694,12 +694,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		});
 		return td;
 	},
-	_moveToHidingFocusCell: function (index) { //used in Row/Listcell
+	_moveToHidingFocusCell: function (index, ignoreWidth, notFocusBack) { //used in Row/Listcell and a11y frozen
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] : null,
 			frozen = this.frozen,
 			bar;
-		if (td && frozen && zk.parseInt(td.style.width) == 0
+		if (td && frozen && (ignoreWidth || zk.parseInt(td.style.width) == 0)
 			&& (index = index - frozen.getColumns()) >= 0) {
 			if (this._nativebar) {
 				frozen.setStart(index);
@@ -707,7 +707,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				frozen._doScrollNow(index);
 				bar.setBarPosition(index);
 			}
-			_shallFocusBack = true;
+			_shallFocusBack = !notFocusBack;
 		}
 	},
 	_restoreFocus: function () { //used in Frozen
