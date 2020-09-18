@@ -42,7 +42,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 								   style="color:white;font-size:50px" />
 						</div>
 					</center>
-					<east size="50%" border="none" splittable="false" collapsible="true" title="East">
+					<east size="50%" border="none" splittable="true" collapsible="true" title="East">
 						<label value="Here is a non-border"
 							   style="color:gray;font-size:30px" />
 					</east>
@@ -68,6 +68,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					</east>
 				</borderlayout>
 			</center>
+			<south splittable="true">
+				south
+			</south>
 		</borderlayout>
 	</n:main>
 </zk>
