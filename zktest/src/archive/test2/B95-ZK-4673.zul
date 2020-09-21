@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4673.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 21 14:31:55 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <label multiline="true">
+        1. Open with mobile emulation.
+        2. The buttons should be on the right side of the window/panel header.
+        3. Try scrolling "long long content", it should be scrollable.
+    </label>
+
+    <custom-attributes org.zkoss.zul.nativebar="false" />
+    <vlayout>
+        <window title="Window with title"
+                minimizable="true" maximizable="true" closable="true"/>
+        <window minimizable="true" maximizable="true" closable="true" height="200px" contentStyle="overflow: auto">
+            <caption label="Window with caption"/>
+            <label value="long long content"/>
+            <div style="height: 600px"/>
+            <label value="long long content"/>
+        </window>
+        <panel title="Panel with title"
+               minimizable="true" maximizable="true" closable="true"/>
+        <panel minimizable="true" maximizable="true" closable="true">
+            <caption label="Panel with caption"/>
+        </panel>
+    </vlayout>
+</zk>
