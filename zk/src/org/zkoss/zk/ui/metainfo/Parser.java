@@ -85,8 +85,6 @@ public class Parser {
 	private final WebApp _wapp;
 	private final Locator _locator;
 	private final List<NamespaceParser> _nsParsers;
-	//used for non-repeating number of auto-applied id of view model
-	private int _vmUuid = 0;
 
 	/** Constructor.
 	 *
@@ -1007,8 +1005,7 @@ public class Parser {
 							String attvaltrim = attval.trim();
 							if ("viewModel".equals(attnm)) {
 								if (attval.indexOf("@id") == -1) {
-									String vmId = "_zkvm_id" + _vmUuid++;
-									attvaltrim = "@id('" + vmId + "') " + attvaltrim;
+									attvaltrim = "@id('vm') " + attvaltrim;
 									attvaltrim = attvaltrim.replace("@(", "@init(");
 								}
 							} else {
@@ -1146,24 +1143,8 @@ public class Parser {
 					//that the data binder can use them
 				}
 				attrValue = "@command(" + modifiedCommandPropertySb.toString() + ")";
-			} else {
-				String vmId = null;
-				while (parent != null) {
-					if (!(parent instanceof ComponentInfo)) break;
-					AnnotationMap pAnnoMap = ((ComponentInfo) parent).getAnnotationMap();
-					if (pAnnoMap != null && !pAnnoMap.isEmpty()) {
-						Annotation idAnno = pAnnoMap.getAnnotation("viewModel", "id");
-						if (idAnno != null) {
-							vmId = idAnno.getAttribute("value").replaceAll("'", "");
-							break;
-						}
-					}
-					parent = parent.getParent();
-				}
-				if (vmId != null && !attrValue.contains(vmId))
-					attrValue = attrValue.replaceAll("@\\((.*)\\)", "@(" + vmId + ".$1)");
+			} else
 				attrValue = "@init" + attrValue.substring(1);
-			}
 		}
 		return attrValue;
 	}

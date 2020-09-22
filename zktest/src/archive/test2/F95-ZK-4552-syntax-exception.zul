@@ -18,17 +18,17 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<div viewModel="@('org.zkoss.zktest.test2.F95_ZK_4552SyntaxVM')" style="overflow:auto" width="500px"
 		 height="500px">
 		<div>
-			<label id="l1" value="@(label)"/>
+			<label id="l1" value="@(vm.label)"/>
 			<separator />
 			<!-- Not allowed to use named parameters before un-named parameters. -->
 			<button onClick="@('doClick', ss=1, 123, bb='asssas,sa2')" label="Click"/>
 			<button onClick="@('doTest', 'aa', 12, 2)" label="Click"/>
 		</div>
 		<separator/>
-		<label id="l2" value="@(text)"/>
+		<label id="l2" value="@(vm.text)"/>
 		<separator/>
 		<div id="list">
-			<forEach items="@(list)">
+			<forEach items="@(vm.list)">
 				<div>
 					<label value="@(each)"/>
 				</div>
