@@ -17,23 +17,23 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<div viewModel="@('org.zkoss.zktest.test2.F95_ZK_4552SyntaxVM')" style="overflow:auto" width="500px"
 		 height="500px">
 		<div>
-			<label id="l1" value="@(label)"/>
+			<label id="l1" value="@(vm.label)"/>
 			<button onClick="@('doClick', 123, ss=1, bb='asssas,sa2')" label="Click"/>
 			<button onClick="@('doTest', 'aa', 12, 2)" label="Click"/>
 		</div>
 		<separator/>
-		<label id="l2" value="@(text)"/>
+		<label id="l2" value="@(vm.text)"/>
 		<separator/>
 		<div id="list">
-			<forEach items="@(list)">
+			<forEach items="@(vm.list)">
 				<label value="@(each)"/>
 			</forEach>
 		</div>
 		<div width="400px">
 			<div id="nested" viewModel="@('org.zkoss.zktest.test2.F95_ZK_4552NestedMVVM')">
-				<label id="l3" value="@(label)"/>
+				<label id="l3" value="@(vm.label)"/>
 				<button onClick="@('doClick')" label="Click"/>
-				<forEach items="@(list)">
+				<forEach items="@(vm.list)">
 					<label value="@(each)"/>
 				</forEach>
 			</div>
