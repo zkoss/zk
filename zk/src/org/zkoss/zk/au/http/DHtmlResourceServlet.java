@@ -19,7 +19,6 @@ package org.zkoss.zk.au.http;
 import java.io.IOException;
 import java.util.Date;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -55,32 +54,6 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
 public class DHtmlResourceServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DHtmlResourceServlet.class);
 	private long _lastModified;
-	private boolean _compress = true;
-
-	//Servlet//
-	public void init() throws ServletException {
-		final ServletConfig config = getServletConfig();
-		final ServletContext ctx = getServletContext();
-		final WebManager webman = WebManager.getWebManager(ctx);
-		String param = config.getInitParameter("compress");
-		_compress = param == null || param.length() == 0 || "true".equals(param);
-		if (!_compress)
-			webman.getClassWebResource().setCompress(null); //disable all
-	}
-
-	/*
-	 * Returns whether to compress the output.
-	 */
-	public boolean isCompress() {
-		return _compress;
-	}
-
-	/*
-	 * Set whether to compress the output or not.
-	 */
-	public void setCompress(boolean compress) {
-		_compress = compress;
-	}
 
 	//-- super --//
 	protected long getLastModified(HttpServletRequest request) {
