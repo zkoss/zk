@@ -23,7 +23,7 @@
         <zkpoi.version>3.9.17</zkpoi.version>
         <zss.version>3.9.6</zss.version>
         <keikai.oss.version>5.0.0.1</keikai.oss.version>
-        <keikai.ex.version>5.3.0</keikai.ex.version>
+        <keikai.ex.version>5.4.0</keikai.ex.version>
     </properties>
     <dependencyManagement>
         <dependencies>
