@@ -363,10 +363,10 @@ body:not(.gecko) {
 	//selected check mark
 	&-selected &-checkable {
 		.z-listgroup-icon {
-			.iconFontStyle(@fontSizeMedium, @checkedColor);
+			.iconFontStyle(@listGroupCheckedIconSize, @checkedColor);
 			display: block;
 			padding-right: 2px;
-			line-height: @baseLineHeight;
+			line-height: @listGroupCheckedIconSize;
 			cursor: pointer;
 			
 			&:hover {
