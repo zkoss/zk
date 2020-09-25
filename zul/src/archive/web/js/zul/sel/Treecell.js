@@ -180,17 +180,8 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			}
 			var iconScls = tree ? tree.getZclass() : '',
 				pitems = this._getTreeitems(item, tree);
-			for (var j = 0, k = pitems.length; j < k; ++j) {
-				var lineClass = '';
-				if (j == k - 1) { // last meaningful line in structure
-					lineClass = '-line-anchor';
-				} else {
-					var nextItemRow = pitems[j + 1].treerow;
-					if (nextItemRow && nextItemRow.isLastVisibleChild_()) // information for unnecessary line
-						lineClass = '-line-omit';
-				}
-				this._appendIcon(sb, iconScls, 'spacer', false, lineClass); // ZK-4494: provide line anchor information to draw tree lines
-			}
+			for (var j = 0, k = pitems.length; j < k; ++j)
+				this._appendIcon(sb, iconScls, 'spacer', false);
 
 			if (item.isContainer()) {
 				var name = item.isOpen() ? 'open' : 'close';
@@ -218,11 +209,11 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		}
 		return pitems;
 	},
-	_appendIcon: function (sb, iconScls, name, button, lineClass) {
+	_appendIcon: function (sb, iconScls, name, button) {
 		var openCloseIcon = '';
 		sb.push('<span class="');
 		if (name == 'spacer') {
-			sb.push(iconScls, '-line ', iconScls, '-', name, lineClass ? (' ' + iconScls + lineClass) : '', '"');
+			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
 			openCloseIcon += '&nbsp;';
 		} else {
 			var id = '';
