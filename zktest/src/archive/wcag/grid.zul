@@ -221,5 +221,18 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				<row><cell>1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell></row>
 			</rows>
 		</grid>
+		<label>hide the first column should not happen infinite loop</label>
+		<grid height="300px">
+			<columns columnsgroup="false" menupopup="auto">
+				<column label="col 1 (hide me)"/>
+				<column label="col 2"/>
+				<column label="col 3"/>
+			</columns>
+			<rows>
+				<group label="group 1"/>
+				<row><label value="cell 1"/><label value="cell 2"/><label value="cell 3"/></row>
+				<row><label value="cell 1"/><label value="cell 2"/><label value="cell 3"/></row>
+			</rows>
+		</grid>
 	</n:main>
 </zk>
