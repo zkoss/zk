@@ -28,13 +28,15 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20100514L;
 
 	private final String _href, _type, _content, _media;
+	private final boolean _disabled;
+
 	/** Creates by specifying the file to contain the style sheets.
 	 *
 	 * @param href URI of the file containing the style sheets.
 	 * @param type the type. If null, "text/css" is assumed.
 	 */
 	public StyleSheet(String href, String type) {
-		this(href, type, null, false);
+		this(href, type, null, false, false);
 	}
 	/** Creates by assigning the content (style sheets).
 	 *
@@ -44,7 +46,7 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	 * an URI to an external content
 	 */
 	public StyleSheet(String content, String type, boolean byContent) {
-		this(content, type, null, byContent);
+		this(content, type, null, byContent, false);
 	}
 	/** Creates by assigning the content (style sheets).
 	 *
@@ -55,6 +57,19 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	 * an URI to an external content
 	 */
 	public StyleSheet(String content, String type, String media, boolean byContent) {
+		this(content, type, null, byContent, false);
+	}
+	/** Creates by assigning the content (style sheets).
+	 *
+	 * @param content the style content or an URI to an external file.
+	 * @param type the type. If null, "text/css" is assumed.
+	 * @param media the media. If null, it is omitted.
+	 * @param byContent the content argument is the style content, or
+	 * an URI to an external content
+	 * @param disabled whether the style sheet is disabled.
+	 * @since 9.5.0
+	 */
+	public StyleSheet(String content, String type, String media, boolean byContent, boolean disabled) {
 		if (content == null)
 			throw new IllegalArgumentException("null content");
 
@@ -67,6 +82,7 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 		}
 		_type = type != null && type.length() != 0 ? type: "text/css";
 		_media = media != null && media.length() != 0 ? media: null;
+		_disabled = disabled;
 	}
 
 	/** Returns the href that contains the style sheets, or null if
@@ -89,6 +105,14 @@ public class StyleSheet implements java.io.Serializable, Cloneable {
 	 */
 	public String getContent() {
 		return _content;
+	}
+	/** Returns whether the style sheet is disabled.
+	 * <p>Default: false.
+	 * @since 9.5.0
+	 * @return boolean
+	 */
+	public boolean isDisabled() {
+		return _disabled;
 	}
 
 	//-- cloneable --//

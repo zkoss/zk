@@ -485,7 +485,10 @@ public class HtmlPageRenders {
 							.append(ServletFns.encodeURL(href));
 					if (media != null)
 						sb.append("\" media=\"").append(media);
-					sb.append("\"/>");
+					sb.append("\"");
+					if (ss.isDisabled())
+						sb.append(" disabled");
+					sb.append("/>");
 				}
 			} catch (javax.servlet.ServletException ex) {
 				throw new UiException(ex);
