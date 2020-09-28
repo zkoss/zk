@@ -80,5 +80,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			<south height="200px" splittable="true" collapsible="true"></south>
 			<center></center>
 		</borderlayout>
+		<borderlayout height="400px" width="500px">
+			<west width="200px" splittable="true" collapsible="true"></west>
+			<center></center>
+			<east width="200px" splittable="true" collapsible="true"></east>
+		</borderlayout>
 	</n:main>
 </zk>
