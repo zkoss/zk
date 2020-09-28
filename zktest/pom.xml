@@ -24,7 +24,6 @@
 		<gmapsz.version>3.0.5</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
-		<atlantic.version>8.6.4.1-SNAPSHOT</atlantic.version>
 		<report.dir>debug/report/</report.dir>
 		<test.dir>debug/test-classes</test.dir>
 		<powermock.version>1.7.3</powermock.version>
@@ -105,7 +104,7 @@
 		<dependency>
 			<groupId>org.zkoss.theme</groupId>
 			<artifactId>atlantic</artifactId>
-			<version>${atlantic.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
