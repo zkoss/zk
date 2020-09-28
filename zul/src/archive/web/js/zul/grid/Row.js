@@ -237,7 +237,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (style)
 			attrs += ' style="' + style + '"';
 		if (visible === false) {
-			attrs += ' aria-hidden="true"';
+			if (!(zk.isLoaded('zkex.grid') && this.$instanceof(zkex.grid.Group)))
+				attrs += ' aria-hidden="true"';
 			clx += ' ' + this.$s('hidden-column');
 		}
 		return attrs + ' class="' + clx + '"';
