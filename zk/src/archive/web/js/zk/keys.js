@@ -13,7 +13,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 /** @class zKeys
  * A collection of constants for KeyboardEvent.key values.
  * @since 9.5.0
- * Ref: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+ * @see <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values">Key Values</a>
  */
 zKeys = Object.freeze({
 	// Special values

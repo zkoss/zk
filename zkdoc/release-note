@@ -1,4 +1,13 @@
+ZK 9.5.1
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+   --------
 ZK 9.5.0
+Sep 29, 2020
 * Features
   ZK-4508: The value of @BindingParam can be omitted
   ZK-4501: Add SimpleForm back for compatibility

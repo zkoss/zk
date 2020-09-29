@@ -218,7 +218,7 @@ evt.stop({progagation:true,revoke:true}); //revoke the event propagation
 	 * @param String... The target key and the modifier keys
 	 * @return boolean
 	 * @since 9.5.0
-	 * @see zKeys
+	 * @see _global_.zKeys
 	 */
 	isPressed: function () {
 		var keyCount = 0,
