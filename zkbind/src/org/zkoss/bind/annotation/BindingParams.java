@@ -23,7 +23,6 @@ import java.lang.annotation.Target;
  *
  * Example:
  * <pre><code>
- * {@code
  * POJO:
  * public class Product {
  *     private int id;
@@ -32,14 +31,15 @@ import java.lang.annotation.Target;
  * }
  *
  * ZUL:
- * <button onClick="@command('addProduct', id=1, label='Water')"/>
+ * &lt;button onClick="&#064;command('addProduct', id=1, label='Water')"/>
  *
  * VM:
  * public class MyVM {
- *   @Command
- *   public void addProduct(@BindingParams Product product) {
+ *   &#064;Command
+ *   public void addProduct(&#064;BindingParams Product product) {
  *   }
- * }}</code></pre>
+ * }
+ * </code></pre>
  * 
  * @see Init
  * @see Command
