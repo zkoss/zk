@@ -2,6 +2,7 @@ ZK 9.5.1
 * Features
 
 * Bugs
+  ZK-4689: portal layout detach js error
 
 * Upgrade Notes
 
