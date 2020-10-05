@@ -221,7 +221,7 @@ public class AnnotateBinderHelper {
 				cmdExprs.add(AnnotationUtil.testString(tagExpr, ann));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
-					args = new HashMap<String, String[]>();
+					args = new LinkedHashMap<String, String[]>();
 				}
 				args.put(tag, tagExpr);
 			}

@@ -4,6 +4,7 @@ ZK 9.5.0.1
 * Bugs
   ZK-4689: portal layout detach js error
   ZK-4690: za11y portallayout popup styles missing for classic themes
+  ZK-4688: A null parameter passed to a global command causes ClassCastException
 
 * Upgrade Notes
 
