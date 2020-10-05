@@ -48,6 +48,7 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.OperationException;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.metainfo.Parser;
 import org.zkoss.zk.ui.select.Selectors;
 
 /**
@@ -218,14 +219,15 @@ public class ParamCall {
 	private Object resolvePositionalParameter(Class<?> returnType, int index) {
 		Object val = null;
 		if (_bindingArgs != null) {
-			Collection<Object> values = _bindingArgs.values();
-			int i = 0;
-			for (Object v : values) {
-				if (index == i) {
-					val = v;
+			int argIndex = 0;
+			for (Map.Entry<String, Object> entry : _bindingArgs.entrySet()) {
+				// skip using positional if the param key is not auto-generated
+				if (argIndex == index) {
+					if (entry.getKey().startsWith(Parser.SIMPLIFIED_COMMAND_PARAM_PREFIX))
+						val = entry.getValue();
 					break;
 				}
-				i++;
+				argIndex++;
 			}
 			return resolveParameter0(val, returnType);
 		}

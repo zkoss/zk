@@ -1149,12 +1149,14 @@ public class Parser {
 		return attrValue;
 	}
 
+	public static final String SIMPLIFIED_COMMAND_PARAM_PREFIX = "zk_Param_";
+
 	private static String modifyAttrValueIfSimplified0(String nm, String val, int paramIndex, boolean isNamedParam) {
 		if (nm == null) {
 			if (isNamedParam)
 				throw new UiException("Not allowed to use named parameters before un-named parameters.");
 			if (paramIndex != -1) //skip command method name
-				val = "zk_Param_" + paramIndex + "=" + val;
+				val = SIMPLIFIED_COMMAND_PARAM_PREFIX + paramIndex + "=" + val;
 		} else {
 			val = nm + "=" + val;
 		}
