@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4690.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Oct 06 12:34:44 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label multiline="true">
+		enabled a11y and open the portallayout popup by focus the panel and press space key.
+		make sure no styles are missing in each theme.
+	</label>
+	<portallayout id="pl">
+		<portalchildren>
+			<panel height="200px" width="200px" title="panel 1" border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren>
+			<panel height="200px" width="200px" title="panel 2" border="normal">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren>
+			<panel height="200px" width="200px" title="panel 3" border="normal">
+				<panelchildren>3</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>
