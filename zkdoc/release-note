@@ -3,6 +3,7 @@ ZK 9.5.1
 
 * Bugs
   ZK-4689: portal layout detach js error
+  ZK-4690: za11y portallayout popup styles missing for classic themes
 
 * Upgrade Notes
 
