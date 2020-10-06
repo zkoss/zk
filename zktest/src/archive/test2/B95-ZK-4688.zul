@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4688.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Oct 5 11:18:11 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<nodom viewModel="@id('vm')@init('org.zkoss.zktest.test2.B95_ZK_4688VM')">
+		Result: <label id="result" value="@load(vm.result)" />
+		<separator />
+		<vlayout>
+			<button onClick="@command('triggerGlobalCmd')" label="triggerGlobalCmd, Click it and see '(Time),1,null)'"/>
+			<button onClick="@('cmd', 0, null)" label="command, Click it and see '0,null'"/>
+		</vlayout>
+	</nodom>
+</zk>
