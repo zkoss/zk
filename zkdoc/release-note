@@ -7,6 +7,7 @@ ZK 9.5.1
   ZK-4688: A null parameter passed to a global command causes ClassCastException
   ZK-4661: Portallayout dragging position miscalculated sometimes
   ZK-4695: Tabbox could be undefined on tab setSelected
+  ZK-4694: ClientInfo trigger an infinite fireSized loop with tabbox
 
 * Upgrade Notes
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4694.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 07 15:09:56 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void doTheThing(){
+        Include include = new Include("./B95-ZK-4694-inc.zul");
+        include.setMode("defer");
+        Tab tab = new Tab("foo");
+        Tabpanel target = new Tabpanel();
+        target.appendChild(include);
+        tbs.appendChild(tab);
+        tps.appendChild(target);
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Click the button to create a tabpanel.
+        2. You should see "onClientInfonull" in zk log.
+    </label>
+    <button label="Create a tabpanel" onClick='doTheThing()' />
+    <tabbox>
+        <tabs id="tbs"/>
+        <tabpanels id="tps"/>
+    </tabbox>
+</zk>
