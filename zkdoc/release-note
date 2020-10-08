@@ -5,6 +5,7 @@ ZK 9.5.1
   ZK-4689: portal layout detach js error
   ZK-4690: za11y portallayout popup styles missing for classic themes
   ZK-4688: A null parameter passed to a global command causes ClassCastException
+  ZK-4118: zk.chrome and zk.edge return wrong value in Microsoft Edge
 
 * Upgrade Notes
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4118.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Oct 8 10:22:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		open in Edge 17 or 18 and new Edge (chromium based, ver 85+), you should see "zk.chrome: false, zk.edge: {ver}"
+	</label>
+	<script>
+		zk.afterMount(function () {
+			zk.log('zk.chrome: ' + zk.chrome + ', zk.edge: ' + zk.edge);
+		});
+	</script>
+</zk>
