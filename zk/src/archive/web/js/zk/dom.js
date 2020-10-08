@@ -81,13 +81,13 @@ zjq = function (jq) { //ZK extension
 	function _dissel() {
 		var $this = jq(this);
 		$this.css('user-select', 'none');
-		if (zk.ie11_ || zk.edge)
+		if (zk.ie11_ || zk.edge_legacy)
 			$this.on('selectstart', zk.$void);
 	}
 	function _ensel() {
 		var $this = jq(this);
 		$this.css('user-select', '');
-		if (zk.ie11_ || zk.edge)
+		if (zk.ie11_ || zk.edge_legacy)
 			$this.off('selectstart', zk.$void);
 	}
 

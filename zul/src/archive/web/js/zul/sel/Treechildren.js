@@ -242,7 +242,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		else if (this.shallChildROD_(child))
 			this.$class._unbindrod(child); //possible (e.g., Errorbox: jq().replaceWith)
 		var content = child.redrawHTML_(skipper, _trim_);
-		if (zk.ie11_ || zk.edge) { // Zk-3371: IE/Edge performance workaround (domie not apply to ie 11)
+		if (zk.ie11_ || zk.edge_legacy) { // Zk-3371: IE/Edge performance workaround (domie not apply to ie 11)
 			var jqelem = jq(n),
 				len = content.length,
 				elem = jqelem[0];

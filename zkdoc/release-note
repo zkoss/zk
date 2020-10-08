@@ -1,5 +1,6 @@
 ZK 9.5.1
 * Features
+  ZK-4118: Add zk.edge_legacy for old version Microsoft Edge
 
 * Bugs
   ZK-4689: portal layout detach js error
@@ -15,6 +16,7 @@ ZK 9.5.1
   ZK-4320: Grid columns shrink after sorting
 
 * Upgrade Notes
+  + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
 
    --------
 ZK 9.5.0
