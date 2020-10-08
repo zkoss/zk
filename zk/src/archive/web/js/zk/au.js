@@ -174,7 +174,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			return;
 		}
 
-		fetch(reqInf.uri, fetchOpts)
+		zAu._fetch(reqInf.uri, fetchOpts)
 		.then(function (response) {
 			response.text().then(function (responseText) {
 				response.responseText = responseText;
@@ -286,6 +286,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * the AU responses.
  */
 zAu = {
+	_fetch: window.fetch.bind(window),
 	_resetTimeout: function () { //called by mount.js
 		if (idTimeout) {
 			clearTimeout(idTimeout);
