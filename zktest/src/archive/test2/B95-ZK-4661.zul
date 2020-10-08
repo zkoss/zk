@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4661.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Sep 30 11:18:02 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Drag Panel1 and drop it to the first portalchildren (where you drag it from).
+		1. Panel1 should be drop into the first portalchildren properly.
+		2. The Panel3(and the third portalchildren) shouldn't line break.
+	</label>
+	<portallayout id="pl">
+		<portalchildren id="pc1" width="30%">
+			<panel title="Panel1" border="normal" height="200px">
+				<panelchildren>
+					<div width="100%" height="100%">
+						1
+					</div>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+
+		<portalchildren id="pc2" width="40%">
+			<panel title="Panel2" border="normal" height="600px">
+				<panelchildren>2
+					<iframe style="background-color:transparent" src="/test2/B1896797.pdf" width="100%" height="100%"/>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+
+		<portalchildren id="pc3" width="30%">
+			<panel title="Panel3" border="normal" height="400px">
+				<panelchildren>3</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>

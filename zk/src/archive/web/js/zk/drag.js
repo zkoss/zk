@@ -304,7 +304,7 @@ String scroll; //DOM Element's ID</code></pre>
 	$init: function (control, node, opts) {
 		if (!_stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
-			jq(_stackup = jq.newStackup(null, 'z_ddstkup')).hide();
+			_stackup = jq.newStackup(null, 'z_ddstkup');
 			document.body.appendChild(_stackup);
 		}
 
