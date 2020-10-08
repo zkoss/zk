@@ -25,10 +25,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			zkn = zk(node),
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
+			opRect = $op[0].getBoundingClientRect(),
 			s = node.style;
 
-		s.width = jq.px0($op[0].clientWidth - $op.zk.paddingWidth());
-		s.height = jq.px0($op[0].clientHeight - $op.zk.paddingHeight());
+		s.width = jq.px0(opRect.width - $op.zk.paddingWidth());
+		s.height = jq.px0(opRect.height - $op.zk.paddingHeight());
 	}
 
 	//drag move
@@ -562,7 +563,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 						.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
-						$op = floated ? jq(node).offsetParent() : jq(node).parent();
+						$op = floated ? jq(node).offsetParent() : jq(node).parent(),
+						opRect = $op[0].getBoundingClientRect();
 					l = s.left;
 					t = s.top;
 					w = s.width;
@@ -572,8 +574,8 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 					s.top = '-10000px';
 					s.left = '-10000px';
 
-					s.width = jq.px0($op[0].clientWidth - (!floated ? $op.zk.paddingWidth() : 0));
-					s.height = jq.px0($op[0].clientHeight - (!floated ? $op.zk.paddingHeight() : 0));
+					s.width = jq.px0(opRect.width - (!floated ? $op.zk.paddingWidth() : 0));
+					s.height = jq.px0(opRect.height - (!floated ? $op.zk.paddingHeight() : 0));
 					this._lastSize = {l: l, t: t, w: w, h: h};
 
 					// restore.
