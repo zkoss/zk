@@ -125,8 +125,14 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	_sel: function (toSel, notify) {
-		var tabbox = this.getTabbox(),
-			panel = this.getLinkedPanel(),
+		var tabbox = this.getTabbox();
+
+		/* ZK-1441
+		 * If tabbox is animating (end-user click different tabs quickly), ignore this action.
+		 */
+		if (!tabbox || tabbox._animating) return;
+
+		var panel = this.getLinkedPanel(),
 			inAccordion = tabbox.inAccordionMold();
 
 		if (toSel) {
