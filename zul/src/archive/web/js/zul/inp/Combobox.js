@@ -70,15 +70,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 */
 		repos: function () {
 			if (this.desktop) {
-				var n = this.getInputNode(),
-					ofs;
+				var n = this.getInputNode();
 
-				// Fixed bug 2944355 and for IE11 Bug ZK-2283
-				if (zk.ie <= 11 && n.value) {
-					ofs = n.value.length;
-					ofs = [ofs, ofs];
-				}
-				this._typeahead(this._bDel, ofs);
+				this._typeahead(this._bDel);
 				this._bDel = null;
 
 				//Fixed bug 3290858: combobox with autodrop and setModel in onChanging
@@ -219,8 +213,14 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (opts.sendOnSelect && this._lastsel != sel) {
 			if (sel) { //set back since _findItem ignores cases
 				var inp = this.getInputNode(),
-					val = sel.getLabel();
+					val = sel.getLabel(),
+					selectionRange = null;
+
+				if (zk.ie < 11) // ZK-4588: caret missing after edit input value in IE9/IE10
+					selectionRange = zk(inp).getSelectionRange();
 				this.valueEnter_ = inp.value = val;
+				if (selectionRange)
+					inp.setSelectionRange(selectionRange[0], selectionRange[1]);
 				//Bug 3058028
 				// ZK-518
 				if (!opts.noSelectRange) {
@@ -412,11 +412,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this.$supers('doKeyUp_', arguments);
 		}
 	},
-	_typeahead: function (bDel, ofs) {
+	_typeahead: function (bDel) {
 		if (zk.currentFocus != this) return;
 		var inp = this.getInputNode(),
 			val = inp.value,
-			ofs = ofs || zk(inp).getSelectionRange(),
+			ofs = zk(inp).getSelectionRange(),
 			fchild = this.firstChild;
 		this.valueEnter_ = val;
 		if (!val || !fchild
