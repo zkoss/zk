@@ -269,6 +269,8 @@ function zkamn(pkg, fn) {
 		_paci && ++_paci.s;
 		if (!zk.clientinfo) {// if existed, the endProcessing() will be invoked after onResponse()
 			zk.endProcessing();
+		} else {
+			mtAU(); // resume last not done yet (=zk.mounting) clientinfo ZKAU
 		}
 
 		zk.bmk.onURLChange();
