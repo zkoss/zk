@@ -877,28 +877,32 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 
 			bdcol = bdfaker.firstChild;
-			for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
-				var wwd = cachedOffsetWidths[w.uuid];
-				if (w.isVisible() && wwd > 0.1)
-					w._origWd = jq.px0(wwd);
-				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
-				if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
-					var revisedWidth = zk(bdcol).revisedWidth(Math.round(wd)),
-						revisedWidthPx = jq.px0(revisedWidth);
-					//B70-ZK-2509: w.$n().offsetWidth is small when there are many columns at beginning, so save revised width if any
-					w._origWd = revisedWidthPx;
-					bdcol.style.width = revisedWidthPx;
-					hdcol.style.width = revisedWidthPx;
-					if (ftcol)
-						ftcol.style.width = revisedWidthPx;
+			// ZK-4320: Do not adjust widget's width if smooth is false and frozen is scrolled and isSpan.
+			var frozen = this.frozen;
+			if (!(frozen && !frozen._smooth && frozen.getStart()) && !this.isSpan()) {
+				for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
+					var wwd = cachedOffsetWidths[w.uuid];
+					if (w.isVisible() && wwd > 0.1)
+						w._origWd = jq.px0(wwd);
+					// B70-ZK-2036: Do not adjust widget's width if it is not visible.
+					if (w.isVisible() && (wd = w._hflexWidth) !== undefined) {
+						var revisedWidth = zk(bdcol).revisedWidth(Math.round(wd)),
+							revisedWidthPx = jq.px0(revisedWidth);
+						//B70-ZK-2509: w.$n().offsetWidth is small when there are many columns at beginning, so save revised width if any
+						w._origWd = revisedWidthPx;
+						bdcol.style.width = revisedWidthPx;
+						hdcol.style.width = revisedWidthPx;
+						if (ftcol)
+							ftcol.style.width = revisedWidthPx;
 
-					//B70-ZK-2394: store total bdcol width
-					tblWidth += revisedWidth;
+						//B70-ZK-2394: store total bdcol width
+						tblWidth += revisedWidth;
+					}
+					bdcol = bdcol.nextSibling;
+					hdcol = hdcol.nextSibling;
+					if (ftcol)
+						ftcol = ftcol.nextSibling;
 				}
-				bdcol = bdcol.nextSibling;
-				hdcol = hdcol.nextSibling;
-				if (ftcol)
-					ftcol = ftcol.nextSibling;
 			}
 
 			//B70-ZK-2394: sync width from colgroup to hdtbl, bdtbl, fttbl
