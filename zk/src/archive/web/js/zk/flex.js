@@ -658,21 +658,20 @@ zFlex = { //static methods
 
 		for (var c; fcc && cwgt;) { // assume cwgt -> fcc
 			c = cwgt.$n();
-			if (c) {
-				if (!fContainer.contains(c)) { // skip moved dom (ex.caption)
-					cwgt = cwgt.nextSibling;
-					continue;
+			if (cwgt.ignoreFlexSize_(isRow ? 'w' : 'h') || (c && !fContainer.contains(c))) { // skip ignored or moved dom (ex.caption)
+				cwgt = cwgt.nextSibling;
+				continue;
+			}
+			if (c && fContainer.contains(c)) {
+				if (fcc.contains(c)) {
+					cwgt._cssFlexFixed = {flexFixed: true};
+					fccs.push(fcc);
+					cwgts.push(cwgt);
+					if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
+						toColumn = true;
 				} else {
-					if (fcc.contains(c)) {
-						cwgt._cssFlexFixed = {flexFixed: true};
-						fccs.push(fcc);
-						cwgts.push(cwgt);
-						if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
-							toColumn = true;
-					} else {
-						fcc = fcc.nextElementSibling; //skip c not in fcc (ex. splitter)
-						continue;
-					}
+					fcc = fcc.nextElementSibling; //skip c not in fcc (ex. splitter)
+					continue;
 				}
 			}
 			fcc = fcc.nextElementSibling;

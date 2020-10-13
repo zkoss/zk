@@ -9,6 +9,7 @@ ZK 9.5.1
   ZK-4695: Tabbox could be undefined on tab setSelected
   ZK-4694: ClientInfo trigger an infinite fireSized loop with tabbox
   ZK-4660: Panel toggle maximize button cause line break
+  ZK-4580: CSS Flex calculation is affected by <script>
 
 * Upgrade Notes
 
