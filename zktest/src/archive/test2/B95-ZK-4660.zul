@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4660.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Oct 08 11:23:27 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		Test: size shouldn't change before/after clicking the maximize/restore button of Panel/Window in this case
+		you shouldn't see the icons(buttons) move or line break
+		try these step for each Panel/Window below
+		1. Click the logSize in the Panel/Window
+		2. Click the maximize button of the Panel/Window
+		3. Click the logSize in the Panel/Window again
+		4. Click the restore(compress) button of the Panel/Window
+		5. Click the logSize in the Panel/Window again
+		6. Three line in the zk log should be same (size didn't change), clear the zk log(click the X button of log)
+	</label>
+	<script><![CDATA[
+		function logSize(wgt) {
+			var nRect = wgt.$n().getBoundingClientRect();
+			zk.log([nRect.width, nRect.height]);
+		}
+	]]></script>
+	<hlayout>
+		<panel id="p1" border="normal" closable="true" maximizable="true">
+			<caption label="Panel with caption" />
+			<panelchildren>
+				<vlayout>
+					<button label="logSize">
+						<attribute w:name="onClick"><![CDATA[
+							logSize(zk.Widget.$('$p1'));
+						]]></attribute>
+					</button>
+					<label value="some content here"></label>
+					<label value="some content here"></label>
+					<label value="some content here"></label>
+				</vlayout>
+			</panelchildren>
+		</panel>
+		<panel id="p2" title="Panel with title" border="normal" closable="true" maximizable="true">
+			<panelchildren>
+				<vlayout>
+					<button label="logSize">
+						<attribute w:name="onClick"><![CDATA[
+							logSize(zk.Widget.$('$p2'));
+						]]></attribute>
+					</button>
+					<label value="some content here"></label>
+					<label value="some content here"></label>
+					<label value="some content here"></label>
+				</vlayout>
+			</panelchildren>
+		</panel>
+	</hlayout>
+	<hlayout>
+		<window id="w1" border="normal" closable="true" maximizable="true">
+			<caption label="Window with caption" />
+			<vlayout>
+				<button label="logSize">
+					<attribute w:name="onClick"><![CDATA[
+						logSize(zk.Widget.$('$w1'));
+					]]></attribute>
+				</button>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</vlayout>
+		</window>
+		<window id="w2" title="Window with title" border="normal" closable="true" maximizable="true">
+			<vlayout>
+				<button label="logSize">
+					<attribute w:name="onClick"><![CDATA[
+						logSize(zk.Widget.$('$w2'));
+					]]></attribute>
+				</button>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+				<label value="some content here"></label>
+			</vlayout>
+		</window>
+	</hlayout>
+</zk>

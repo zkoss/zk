@@ -312,7 +312,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					}
 					var floated = this.isFloatable(),
 						$op = floated ? jq(node).offsetParent() : jq(node).parent(),
-						sh = $op[0].clientHeight;
+						sh = $op[0].getBoundingClientRect().height;
 
 					if (zk.isLoaded('zkmax.layout') && this.parent.$instanceof(zkmax.layout.Portalchildren)) {
 						var layout = this.parent.parent;
@@ -351,7 +351,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					s.top = '-10000px';
 					s.left = '-10000px';
 
-					var sw = $op[0].clientWidth;
+					var sw = $op[0].getBoundingClientRect().width;
 
 					if (!floated) {
 						sw -= $op.zk.paddingWidth();
@@ -640,16 +640,17 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				$n = zk(node),
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
+				opRect = $op[0].getBoundingClientRect(),
 				s = node.style;
 
-			var sw = $op[0].clientWidth;
+			var sw = opRect.width;
 			if (!floated) {
 				sw -= $op.zk.paddingWidth();
 				sw = $n.revisedWidth(sw);
 			}
 			s.width = jq.px0(sw);
 			if (wgt._open) {
-				var sh = $op[0].clientHeight;
+				var sh = opRect.height;
 				if (!floated) {
 					sh -= $op.zk.paddingHeight();
 					sh = $n.revisedHeight(sh);
