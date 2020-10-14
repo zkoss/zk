@@ -1520,6 +1520,20 @@ jq(el).zk.center(); //same as 'center'
 	offsetHeightDoubleValue: function () {
 		return this.jq[0].getBoundingClientRect().height;
 	},
+	/** Returns the client width. The value will not be rounded.
+	 * @return double the client width
+	 * @since 9.5.1
+	 */
+	clientWidthDoubleValue: function () {
+		return this.offsetWidthDoubleValue() - this.borderWidth();
+	},
+	/** Returns the client height. The value will not be rounded.
+	 * @return double the client height
+	 * @since 9.5.1
+	 */
+	clientHeightDoubleValue: function () {
+		return this.offsetHeightDoubleValue() - this.borderHeight();
+	},
 	/** Returns the offset top. The value will not be rounded.
 	 * @return double the offset top
 	 * @since 8.5.1
