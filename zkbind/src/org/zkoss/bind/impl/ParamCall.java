@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -86,7 +87,7 @@ public class ParamCall {
 		_mappingType = mappingType;
 		_paramResolvers.put(ContextParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
 				Object val = _contextObjects.get(((ContextParam) anno).value());
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
@@ -115,14 +116,14 @@ public class ParamCall {
 	public void setBindingArgs(final Map<String, Object> bindingArgs) {
 		this._bindingArgs = bindingArgs;
 		_paramResolvers.put(BindingParam.class, new ParamResolver<Annotation>() {
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
-				Object val = bindingArgs.get(Strings.defaultIfEmpty(((BindingParam) anno).value(), parameterName));
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
+				Object val = bindingArgs.get(getAnnotatedParameterName(BindingParam.class, ((BindingParam) anno).value(), parameterName));
 				return resolveParameter0(val, returnType);
 			}
 		});
 		_paramResolvers.put(BindingParams.class, new ParamResolver<Annotation>() {
 			@Override
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
 				try {
 					Object bean = Classes.newInstance(returnType, null);
 					BeanInfo beanInfo = Introspector.getBeanInfo(returnType);
@@ -144,15 +145,27 @@ public class ParamCall {
 		});
 	}
 
+	private String getAnnotatedParameterName(Class<? extends Annotation> annoClass,
+	                                         String annoValue,
+	                                         Supplier<String> parameterName) {
+		if (!Strings.isEmpty(annoValue))
+			return annoValue;
+
+		String value = parameterName.get();
+		if (!Strings.isEmpty(value))
+			return value;
+
+		throw new UiException("The parameter name can't be inferred. Please specify @" + annoClass.getSimpleName() + "(value) instead.");
+	}
+
 	public void call(Object base, Method method) {
 		Class<?>[] paramTypes = method.getParameterTypes();
 		java.lang.annotation.Annotation[][] parmAnnos = method.getParameterAnnotations();
 		Object[] params = new Object[paramTypes.length];
-		String[] parameterNames = _PARANAMER.lookupParameterNames(method);
 
 		try {
 			for (int i = 0; i < paramTypes.length; i++) {
-				params[i] = resolveParameter(parmAnnos[i], paramTypes[i], parameterNames[i], i);
+				params[i] = resolveParameter(parmAnnos[i], paramTypes[i], method, i);
 			}
 
 			method.setAccessible(true); // Bug ZK-2428
@@ -175,7 +188,7 @@ public class ParamCall {
 		}
 	}
 
-	private Object resolveParameter(Annotation[] parmAnnos, Class<?> paramType, String parameterName, int index) {
+	private Object resolveParameter(Annotation[] parmAnnos, Class<?> paramType, Method method, int index) {
 		Object val = null;
 		boolean hitResolver = false;
 		Default defAnno = null;
@@ -190,7 +203,10 @@ public class ParamCall {
 			if (resolver == null)
 				continue;
 			hitResolver = true;
-			val = resolver.resolveParameter(anno, paramType, parameterName);
+			val = resolver.resolveParameter(anno, paramType, () -> {
+				String[] parameterNames = _PARANAMER.lookupParameterNames(method, false);
+				return index < parameterNames.length ? parameterNames[index] : "";
+			});
 			if (val != null) {
 				break;
 			}
@@ -276,7 +292,7 @@ public class ParamCall {
 	public interface ParamResolver<T> {
 		/**
 		 * @deprecated since 9.5.0
-		 * @see #resolveParameter(Object, Class, String)
+		 * @see #resolveParameter(Object, Class, Supplier<String>)
 		 */
 		@Deprecated
 		default Object resolveParameter(T anno, Class<?> returnType) {
@@ -285,7 +301,7 @@ public class ParamCall {
 		/**
 		 * @since 9.5.0
 		 */
-		default Object resolveParameter(T anno, Class<?> returnType, String parameterName) {
+		default Object resolveParameter(T anno, Class<?> returnType, Supplier<String> parameterName) {
 			return resolveParameter(anno, returnType);
 		}
 	}
@@ -295,8 +311,8 @@ public class ParamCall {
 		//scope param
 		_paramResolvers.put(ScopeParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
-				final String name = Strings.defaultIfEmpty(((ScopeParam) anno).value(), parameterName);
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
+				final String name = getAnnotatedParameterName(ScopeParam.class, ((ScopeParam) anno).value(), parameterName);
 				final Scope[] ss = ((ScopeParam) anno).scopes();
 
 				Object val = null;
@@ -337,8 +353,8 @@ public class ParamCall {
 		//component
 		_paramResolvers.put(SelectorParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
-				final String selector = Strings.defaultIfEmpty(((SelectorParam) anno).value(), parameterName);
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
+				final String selector = getAnnotatedParameterName(SelectorParam.class, ((SelectorParam) anno).value(), parameterName);
 				final List<Component> result = Selectors.find(_root, selector);
 				Object val;
 				if (!Collection.class.isAssignableFrom(returnType)) {
@@ -366,22 +382,22 @@ public class ParamCall {
 		//http param
 		_paramResolvers.put(QueryParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
-				Object val = _execution.getParameter(Strings.defaultIfEmpty(((QueryParam) anno).value(), parameterName));
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
+				Object val = _execution.getParameter(getAnnotatedParameterName(QueryParam.class, ((QueryParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(HeaderParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
-				Object val = _execution.getHeader(Strings.defaultIfEmpty(((HeaderParam) anno).value(), parameterName));
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
+				Object val = _execution.getHeader(getAnnotatedParameterName(HeaderParam.class, ((HeaderParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
 		_paramResolvers.put(CookieParam.class, new ParamResolver<Annotation>() {
 
 			@SuppressWarnings("unchecked")
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
 				Map<String, Object> m = (Map<String, Object>) _execution.getAttribute(COOKIE_CACHE);
 				if (m == null) {
 					final Object req = _execution.getNativeRequest();
@@ -400,7 +416,7 @@ public class ParamCall {
 					}
 				}
 				Object val = m == null ? null
-						: m.get(Strings.defaultIfEmpty(((CookieParam) anno).value(), parameterName).toLowerCase(java.util.Locale.ENGLISH));
+						: m.get(getAnnotatedParameterName(CookieParam.class, ((CookieParam) anno).value(), parameterName).toLowerCase(java.util.Locale.ENGLISH));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
@@ -408,16 +424,16 @@ public class ParamCall {
 		//execution
 		_paramResolvers.put(ExecutionParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
-				Object val = _execution.getAttribute(Strings.defaultIfEmpty(((ExecutionParam) anno).value(), parameterName));
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
+				Object val = _execution.getAttribute(getAnnotatedParameterName(ExecutionParam.class, ((ExecutionParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});
 
 		_paramResolvers.put(ExecutionArgParam.class, new ParamResolver<Annotation>() {
 
-			public Object resolveParameter(Annotation anno, Class<?> returnType, String parameterName) {
-				Object val = _execution.getArg().get(Strings.defaultIfEmpty(((ExecutionArgParam) anno).value(), parameterName));
+			public Object resolveParameter(Annotation anno, Class<?> returnType, Supplier<String> parameterName) {
+				Object val = _execution.getArg().get(getAnnotatedParameterName(ExecutionArgParam.class, ((ExecutionArgParam) anno).value(), parameterName));
 				return val == null ? null : Classes.coerce(returnType, val);
 			}
 		});

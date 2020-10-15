@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4698VM')">
+        created!!
+    </div>
+</zk>
