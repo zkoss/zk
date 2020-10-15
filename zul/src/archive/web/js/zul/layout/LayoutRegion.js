@@ -937,7 +937,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						Math.floor(pn.offsetHeight * zk.parseInt(h.substring(0, pert)) / 100),
 						0) : this.$n('real').offsetHeight
 			};
-			if ((zk.chrome || zk.safari || zk.edge) && (region == 'west' || region == 'east') && !this._width && !this._hflex)
+			if ((zk.chrome || zk.safari || zk.edge_legacy) && (region == 'west' || region == 'east') && !this._width && !this._hflex)
 				ambit.w++; // ZK-641: text wrap in Chrome Safari Edge
 		}
 		var split = ignoreSplit ? {offsetHeight: 0, offsetWidth: 0} : this.$n('split') || {offsetHeight: 0, offsetWidth: 0};

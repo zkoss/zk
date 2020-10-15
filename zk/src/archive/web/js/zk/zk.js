@@ -1514,7 +1514,9 @@ zk.$intercepts(zul.inp.Combobox, {
 	zk.safari = browser.webkit && !zk.chrome; // safari only
 
 	// support W$'s Edge
-	zk.edge = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edge')) >= 0) && _ver(agent.substring(iosver + 5));
+	zk.edge_legacy = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edge')) >= 0 && _ver(agent.substring(iosver + 5)));
+	zk.edge = zk.webkit && zk.chrome && ((iosver = agent.indexOf('edg/')) >= 0 && agent.substring(iosver + 4));
+
 	zk.ios = (zk.webkit && /iphone|ipad|ipod/.test(agent) && (
 		//ZK-2245: add version info to zk.ios
 		(iosver = agent.match(/version\/\d/)) && iosver[0].replace('version/', '')
@@ -1566,7 +1568,7 @@ zk.$intercepts(zul.inp.Combobox, {
 			zk.css3 = zk.ie >= 9;
 			bodycls = 'ie ie' + Math.floor(zk.ie);
 			zk.vendor = 'ms';
-		} else if (zk.edge) {
+		} else if (zk.edge || zk.edge_legacy) {
 			bodycls = 'edge';
 		} else {
 			if (zk.chrome) {
@@ -1596,7 +1598,7 @@ zk.$intercepts(zul.inp.Combobox, {
 	zk.vendor_ = zk.vendor.toLowerCase();
 })();
 
-if (!zk.ie && !zk.edge) {
+if (!zk.ie && !zk.edge_legacy) {
 	/** @class zk.Buffer
 	 * A string concatenation implementation to speed up the rendering performance
 	 * in the modern browsers, except IE or MS's Edge. The implementation is to

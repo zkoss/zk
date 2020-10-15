@@ -77,7 +77,8 @@ public class Servlets {
 			_rmozilla = Pattern.compile(".*(mozilla)(?:.*? rv:([\\w.]+))?.*"),
 			_rchrome = Pattern.compile(".*(chrome)[ /]([\\w.]+).*"),
 			_randroid = Pattern.compile(".*(android)[ /]([\\w.]+).*"),
-			_redge = Pattern.compile(".*(edge)[ /]([\\w.]+).*"),
+			_redge = Pattern.compile(".*(edg)[ /]([\\w.]+).*"),
+			_redgeLegacy = Pattern.compile(".*(edge)[ /]([\\w.]+).*"),
 			_rsafari = Pattern.compile(".*(safari)[ /]([\\w.]+).*"), _rtrident = Pattern.compile("trident/([0-9\\.]+)");
 
 	private static final boolean _svl24, _svl23, _svl3;
@@ -415,6 +416,11 @@ public class Servlets {
 				m = _redge.matcher(ua);
 				if (m.matches()) {
 					zk.put("edge", getVersion(m));
+				}
+
+				m = _redgeLegacy.matcher(ua);
+				if (m.matches()) {
+					zk.put("edge_legacy", getVersion(m));
 				}
 
 				for (int j = _ios.length; --j >= 0;)
