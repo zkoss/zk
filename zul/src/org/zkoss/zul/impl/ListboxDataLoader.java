@@ -90,10 +90,10 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	 */
 	public void doGroupsDataChange(GroupsDataEvent event) {
 		if (event.getType() == GroupsDataEvent.GROUPS_OPENED) {
-			Listbox listbox = (Listbox) getOwner();
-			GroupsListModel groupsListModel = ((GroupsListModel) listbox.getModel());
-			int offset = groupsListModel.getGroupOffset(event.getGroupIndex());
-			((Listgroup) listbox.getItems().get(offset)).setOpen(groupsListModel.getDataInfo(offset).isOpen());
+			GroupsListModel groupsListModel = ((GroupsListModel) _listbox.getModel());
+			int groupIndex = event.getGroupIndex();
+			int offset = groupsListModel.getGroupOffset(groupIndex);
+			((Listgroup) _listbox.getItems().get(offset)).setOpen(event.getModel().isGroupOpened(groupIndex));
 		}
 	}
 

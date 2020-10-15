@@ -84,10 +84,10 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 	public void doGroupsDataChange(GroupsDataEvent event) {
 		if (event.getType() == GroupsDataEvent.GROUPS_OPENED) {
-			Grid grid = (Grid) getOwner();
-			GroupsListModel groupsListModel = ((GroupsListModel) grid.getModel());
-			int offset = groupsListModel.getGroupOffset(event.getGroupIndex());
-			((Group) grid.getRows().getChildren().get(offset)).setOpen(groupsListModel.getDataInfo(offset).isOpen());
+			GroupsListModel groupsListModel = ((GroupsListModel) _grid.getModel());
+			int groupIndex = event.getGroupIndex();
+			int offset = groupsListModel.getGroupOffset(groupIndex);
+			((Group) _grid.getRows().getChildren().get(offset)).setOpen(event.getModel().isGroupOpened(groupIndex));
 		}
 	}
 
