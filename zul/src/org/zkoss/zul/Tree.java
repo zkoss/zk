@@ -1984,8 +1984,10 @@ public class Tree extends MeshElement {
 		}
 		if (_model instanceof TreeSelectableModel)
 			this.setMultiple(((TreeSelectableModel) _model).isMultiple());
-		if (_model instanceof PageableModel && _pgListener != null)
+		if (_model instanceof PageableModel && _pgListener != null) {
+			((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
 			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
+		}
 
 		Object node = _model.getRoot();
 		final Renderer renderer = new Renderer();
