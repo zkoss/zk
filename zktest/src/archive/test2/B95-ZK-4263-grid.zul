@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4263.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 15 15:26:19 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	int cnt = 0;
+	Object[][] foods = new Object[][] {
+		new Object[] { "Seafood", "Scallops", 151 },
+		new Object[] { "Seafood", "Cod", 119 }
+	};
+	GroupsModel model = new GroupsModelArray(foods, new ArrayComparator(0, true));
+	]]></zscript>
+	<label multiline="true">
+		1. Click "Clone by Serialization".
+		2. Close group "Seafood". The icon should be like ">" not "V".
+		3. Open group "Seafood". The icon should be like "V" and child items are shown.
+	</label>
+	<hlayout>
+		<grid id="gr" model="${model}">
+			<columns>
+				<column label="Category"/>
+				<column label="Name"/>
+				<column label="Calories"/>
+			</columns>
+			<template name="model:group">
+				<group open="${groupingInfo.open}" label="${each}"/>
+			</template>
+			<template name="model">
+				<row>
+					<label value="${each[0]}"/>
+					<label value="${each[1]}"/>
+					<label value="${each[2]}"/>
+				</row>
+			</template>
+		</grid>
+	</hlayout>
+	<button label="Clone by Serialization">
+		<attribute name="onClick"><![CDATA[
+		import java.io.*;
+		ByteArrayOutputStream boa = new ByteArrayOutputStream();
+		new ObjectOutputStream(boa).writeObject(gr);
+		byte[] bs = boa.toByteArray();
+		Object n = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+		n.setId("sbxThree_serialize" + cnt++);
+		((Component) n).setParent(cloneThreeArea);
+		]]></attribute>
+	</button>
+	<div id="cloneThreeArea" style="display: none" />
+</zk>
