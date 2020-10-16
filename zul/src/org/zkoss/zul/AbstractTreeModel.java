@@ -628,13 +628,16 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		s.defaultWriteObject();
 
 		Serializables.smartWrite(s, _listeners);
+		Serializables.smartWrite(s, _pagingListeners);
 	}
 
 	private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
 		s.defaultReadObject();
 
 		_listeners = new LinkedList<TreeDataListener>();
+		_pagingListeners = new ArrayList<PagingListener>();
 		Serializables.smartRead(s, _listeners);
+		Serializables.smartRead(s, _pagingListeners);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -648,6 +651,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		}
 
 		clone._listeners = new LinkedList<TreeDataListener>();
+		clone._pagingListeners = new ArrayList<PagingListener>();
 		clone._opens = new LinkedHashSet<Path>(_opens);
 		clone._selection = new LinkedHashSet<Path>(_selection);
 		return clone;

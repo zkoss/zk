@@ -20,6 +20,7 @@ ZK 9.5.1
   ZK-4263: The listgroup is abnormal after component being cloned by serialization
   ZK-4696: An unchanged ClientInfo makes the infinite processing loop
   ZK-4681: inconsistent listgroup checkmark size
+  ZK-4281: Cloning a paging mold Tree by serialization throws NPE
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
