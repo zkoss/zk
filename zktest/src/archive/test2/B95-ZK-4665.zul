@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4665.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Oct 15 14:25:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label value="The following blocks should be one-line" />
+	<separator />
+	<columnlayout id="cLay">
+		<columnchildren id="cMid" width="30%" style="padding: 5px">
+			<panel id="p1" height="400px">
+				<panelchildren>
+					2-1
+				</panelchildren>
+			</panel>
+		</columnchildren>
+		<columnchildren id="cRig" width="70%" style="padding: 10px">
+			<panel id="p2" title="Data" framable="true" border="normal"
+				   style="margin-bottom:10px">
+				<panelchildren>
+					<grid>
+						<columns>
+							<column label="category" />
+							<column label="value" />
+						</columns>
+						<rows>
+							<row>
+								<label id="c0" value="C/C++" />
+								<decimalbox id="v0" value="21.2"
+											constraint="no empty" onChange="update(0)" />
+							</row>
+							<row>
+								<label id="c1" value="VB" />
+								<decimalbox id="v1" value="10.2"
+											constraint="no empty" onChange="update(1)" />
+							</row>
+							<row>
+								<label id="c2" value="Java" />
+								<decimalbox id="v2" value="40.4"
+											constraint="no empty" onChange="update(2)" />
+							</row>
+							<row>
+								<label id="c3" value="PHP" />
+								<decimalbox id="v3" value="28.2"
+											constraint="no empty" onChange="update(3)" />
+							</row>
+						</rows>
+					</grid>
+				</panelchildren>
+			</panel>
+			<panel border="normal">
+				<panelchildren>
+					<chart id="mychart" title="Pie Chart Demo" type="pie" threeD="true" fgAlpha="128">
+					</chart>
+				</panelchildren>
+			</panel>
+		</columnchildren>
+	</columnlayout>
+</zk>
