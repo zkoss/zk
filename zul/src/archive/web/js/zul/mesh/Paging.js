@@ -303,8 +303,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			cls += ' ' + this.$s('selected');
 
 		out.push('<li', navCls,'><a name="', this.uuid ,'-button" class="', cls,
-				'" href="javascript:;" onclick="if (!zk.Widget.$(this)._disabled) zul.mesh.Paging.go(this,', val,
-				')"', seld ? ' aria-current="page"' : '', '>', label, '</a></li>');
+			'" href="javascript:;" data-paging="', val, '"', seld ? ' aria-current="page"' : '', '>', label, '</a></li>');
 	},
 	domClass_: function () {
 		var cls = this.$supers(zul.mesh.Paging, 'domClass_', arguments),
@@ -328,13 +327,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 
 		if (!this.$weave)
 			for (var i = input.length; i--;)
-				jq(input[i]).on('keydown', Paging._domKeyDown).on('blur', Paging._domBlur);
+				jq(input[i]).on('keydown', this.proxy(this._domKeyDown)).on('blur', this.proxy(this._domBlur));
 
 		for (var k = postfix.length; k--;) {
 			var btn = jq.$$(uuid, postfix[k]);
 			for (var j = btn.length; j--;) {
 				if (!this.$weave)
-					jq(btn[j]).on('click', Paging['_dom' + postfix[k] + 'Click']);
+					jq(btn[j]).on('click', this.proxy(this['_dom' + postfix[k] + 'Click']));
 
 				if (pcount == 1) {
 					jq(btn[j]).attr('disabled', true);
@@ -347,6 +346,17 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			}
 		}
 
+		if (this.getMold() == 'os') {
+			var btns = jq.$$(uuid, 'button');
+			for (var j = btns.length; j--;) {
+				var self = this;
+				jq(btns[j]).on('click', function () {
+					if (self._disabled) return;
+					Paging.go(self, parseInt(jq(this).attr('data-paging')));
+				});
+			}
+		}
+
 		if (this._disabled) this._drawDisabled(true);
 
 		if (focusInfo && focusInfo.uuid === this.uuid) {
@@ -356,74 +366,39 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			zinp.setSelectionRange(pos[0], pos[1]);
 			zul.mesh.Paging._autoFocusInfo = null;
 		}
+
+		//remove second id
+		if (this.isBothPaging())
+			jq(this.parent.$n('pgib')).find('.' + this.$s())[0].id = '';
 	},
 	unbind_: function () {
-		if (this.getMold() != 'os') {
-			var uuid = this.uuid,
-				input = jq.$$(uuid, 'real'),
+		var uuid = this.uuid;
+		if (this.getMold() == 'os') {
+			var btns = jq.$$(uuid, 'button');
+			for (var j = btns.length; j--;)
+				jq(btns[j]).off('click');
+		} else {
+			var input = jq.$$(uuid, 'real'),
 				Paging = this.$class,
 				postfix = ['first', 'prev', 'last', 'next'];
 
 			for (var i = input.length; i--;)
 				jq(input[i])
-					.off('keydown', Paging._domKeyDown)
-					.off('blur', Paging._domBlur);
+					.off('keydown', this.proxy(this._domKeyDown))
+					.off('blur', this.proxy(this._domBlur));
 
 			for (var k = postfix.length; k--;) {
 				var btn = jq.$$(uuid, postfix[k]);
 				for (j = btn.length; j--;)
-					jq(btn[j]).off('click', Paging['_dom' + postfix[k] + 'Click']);
+					jq(btn[j]).off('click', this.proxy(this['_dom' + postfix[k] + 'Click']));
 			}
 		}
 		zWatch.unlisten({onSize: this});
 		this.$supers(zul.mesh.Paging, 'unbind_', arguments);
 	},
-	onSize: function () {
-		if (this.desktop) {
-			// There are two nodes if using pagingPosition="both"
-			var nodes = jq.$$(this.uuid);
-			if (nodes.length > 0) {
-				var node = nodes[0],
-					navWidth = this.$class._getNavWidth(node, this),
-					tolerant = 50,
-					isWide = jq(node).width() > navWidth + tolerant,
-					wideChanged = this._lastIsWide != isWide;
-				if (wideChanged)
-					this._lastIsWide = this._showFirstLast = isWide;
-				for (var i = 0; i < nodes.length; i++)
-					this.$class._fixControl(nodes[i], this, wideChanged);
-			}
-		}
-	},
-	_doAfterGo: zk.$void //to be overridden
-}, { //static
-	/**
-	 * Goes to the active page according to the page number.
-	 * @param DOMElement anc the anchor of the page number
-	 * @param int pagenumber the page number
-	 */
-	go: function (anc, pgno, inp) {
-		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$(anc);
-		if (wgt && wgt.getActivePage() != pgno) {
-			if (inp) {
-				var uuid = wgt.uuid,
-					focusInfo = zul.mesh.Paging._autoFocusInfo = {uuid: uuid};
-				focusInfo.lastPos = zk(inp).getSelectionRange();
-				// concern about _pagingPosition equals "both"
-				jq(jq.$$(uuid, 'real')).each(function (idx) {
-					if (this == inp) {
-						focusInfo.inpIdx = idx;
-						return false;
-					}
-				});
-			} else if (wgt.getMold() == 'os')
-				wgt._doAfterGo(anc.text);
-			wgt.fire('onPaging', pgno);
-		}
-	},
 	_domKeyDown: function (evt) {
 		var inp = evt.target,
-			wgt = zk.Widget.$(inp),
+			wgt = this,
 			lastPos = zk(inp).getSelectionRange();
 		if (inp.disabled || inp.readOnly)
 			return;
@@ -486,7 +461,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_domBlur: function (evt) {
 		var inp = evt.target,
-			wgt = zk.Widget.$(inp);
+			wgt = this;
 		if (inp.disabled || inp.readOnly)
 			return;
 
@@ -494,17 +469,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		wgt.$class.go(wgt, inp.value - 1);
 		evt.stop();
 	},
-	_increase: function (inp, wgt, add) {
-		var value = zk.parseInt(inp.value);
-		value += add;
-		if (value < 1)
-			value = 1;
-		else if (value > wgt._pageCount)
-			value = wgt._pageCount;
-		inp.value = value;
-	},
 	_domfirstClick: function (evt) {
-		var wgt = zk.Widget.$(evt);
+		var wgt = this;
 		if (wgt._disabled) return;
 		var uuid = wgt.uuid,
 			postfix = ['first', 'prev'];
@@ -518,7 +484,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'first');
 	},
 	_domprevClick: function (evt) {
-		var wgt = zk.Widget.$(evt);
+		var wgt = this;
 		if (wgt._disabled) return;
 		var uuid = wgt.uuid,
 			ap = wgt.getActivePage(),
@@ -535,7 +501,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'prev');
 	},
 	_domnextClick: function (evt) {
-		var wgt = zk.Widget.$(evt);
+		var wgt = this;
 		if (wgt._disabled) return;
 		var uuid = wgt.uuid,
 			ap = wgt.getActivePage(),
@@ -553,7 +519,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'next');
 	},
 	_domlastClick: function (evt) {
-		var wgt = zk.Widget.$(evt);
+		var wgt = this;
 		if (wgt._disabled) return;
 		var uuid = wgt.uuid,
 			pc = wgt.getPageCount(),
@@ -566,6 +532,58 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 					jq(btn[i]).attr('disabled', true);
 		}
 		wgt.$class._callWgtDoAfterGo(wgt, evt.currentTarget, 'last');
+	},
+	onSize: function () {
+		if (this.desktop) {
+			// There are two nodes if using pagingPosition="both"
+			var nodes = jq.$$(this.uuid);
+			if (nodes.length > 0) {
+				var node = nodes[0],
+					navWidth = this.$class._getNavWidth(node, this),
+					tolerant = 50,
+					isWide = jq(node).width() > navWidth + tolerant,
+					wideChanged = this._lastIsWide != isWide;
+				if (wideChanged)
+					this._lastIsWide = this._showFirstLast = isWide;
+				for (var i = 0; i < nodes.length; i++)
+					this.$class._fixControl(nodes[i], this, wideChanged);
+			}
+		}
+	},
+	_doAfterGo: zk.$void //to be overridden
+}, { //static
+	/**
+	 * Goes to the active page according to the page number.
+	 * @param DOMElement anc the anchor of the page number
+	 * @param int pagenumber the page number
+	 */
+	go: function (anc, pgno, inp) {
+		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$(anc);
+		if (wgt && wgt.getActivePage() != pgno) {
+			if (inp) {
+				var uuid = wgt.uuid,
+					focusInfo = zul.mesh.Paging._autoFocusInfo = {uuid: uuid};
+				focusInfo.lastPos = zk(inp).getSelectionRange();
+				// concern about _pagingPosition equals "both"
+				jq(jq.$$(uuid, 'real')).each(function (idx) {
+					if (this == inp) {
+						focusInfo.inpIdx = idx;
+						return false;
+					}
+				});
+			} else if (wgt.getMold() == 'os')
+				wgt._doAfterGo(anc.text);
+			wgt.fire('onPaging', pgno);
+		}
+	},
+	_increase: function (inp, wgt, add) {
+		var value = zk.parseInt(inp.value);
+		value += add;
+		if (value < 1)
+			value = 1;
+		else if (value > wgt._pageCount)
+			value = wgt._pageCount;
+		inp.value = value;
 	},
 	_fixControl: function (node, wgt, wideChanged) {
 		var control = jq('> ul', node),
