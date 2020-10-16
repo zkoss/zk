@@ -159,7 +159,6 @@
 		}
 		&.z-listheader-checked .z-listheader-icon {
 			display: block;
-			line-height: @checkedIconSize;
 		}
 	}
 	&-button {
@@ -286,7 +285,6 @@
 		> .z-listcell > .z-listcell-content 
 			> .z-listitem-checkable .z-listitem-icon {
 			display: block;
-			line-height: @checkedIconSize;
 			cursor: pointer;
 			
 			&.z-icon-check {} //for checkbox, use font-awesome
@@ -363,10 +361,7 @@ body:not(.gecko) {
 	//selected check mark
 	&-selected &-checkable {
 		.z-listgroup-icon {
-			.iconFontStyle(@listGroupCheckedIconSize, @checkedColor);
 			display: block;
-			padding-right: 2px;
-			line-height: @listGroupCheckedIconSize;
 			cursor: pointer;
 			
 			&:hover {
@@ -375,9 +370,9 @@ body:not(.gecko) {
 		}
 	}
 	&-icon {
-		.iconFontStyle(@fontSizeLarge, @meshGroupColor);
+		.iconFontStyle(@checkedIconSize, @meshGroupColor);
 		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
-		line-height: @baseIconHeight;
+		line-height: @checkedIconSize;
 		text-align: center;
 		vertical-align: text-top;
 		position: relative;
