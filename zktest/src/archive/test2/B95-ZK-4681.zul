@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4681.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Oct 16 11:02:52 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Test for iceblue and iceblue_c:
+		Click the checkmark on the head(listheader), all the checkmark(include tree's) size should be same and similar to the Checkbox.
+	</label>
+	<listbox checkmark="true" multiple="true">
+		<custom-attributes org.zkoss.zul.listbox.groupSelect="true" />
+		<listhead>
+			<listheader label="head"/>
+		</listhead>
+		<listgroup checkable="true" label="group 1"/>
+		<listitem label="item 1"/>
+		<listitem label="item 2"/>
+		<listitem label="item 3"/>
+		<listgroup checkable="true" label="group 2"/>
+		<listitem label="item 1"/>
+		<listitem label="item 2"/>
+		<listitem label="item 3"/>
+	</listbox>
+	<tree checkmark="true" multiple="true">
+		<treecols>
+			<treecol label="A" />
+		</treecols>
+		<treechildren>
+			<treeitem selected="true">
+				<treerow>
+					<treecell label="A" />
+				</treerow>
+				<treechildren>
+					<treeitem selected="true">
+						<treerow>
+							<treecell label="A-1" />
+						</treerow>
+					</treeitem>
+					<treeitem selected="true">
+						<treerow>
+							<treecell label="A-2" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<checkbox checked="true"/>
+</zk>
