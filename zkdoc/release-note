@@ -15,6 +15,7 @@ ZK 9.5.1
   ZK-4588: Combobox losing focus after performing autocomplete in IE
   ZK-4320: Grid columns shrink after sorting
   ZK-4698: It detects the parameter name too early in MVVM Params
+  ZK-4635: rangeslider/multislider jumping drag position
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
