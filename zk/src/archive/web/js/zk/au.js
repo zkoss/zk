@@ -1340,7 +1340,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var same = oldClientInfo.every(function (el, index) {
 				return el === clientInfo[index];
 			});
-			if (same) return;
+			if (same) {
+				// ZK-4696: should endprocessing manually since no event is fired
+				zk.endProcessing();
+				delete zk.clientinfo;
+				return;
+			}
 		}
 
 		zAu._clientInfo = clientInfo;
