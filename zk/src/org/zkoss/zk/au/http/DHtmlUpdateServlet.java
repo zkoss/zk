@@ -410,10 +410,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				oldsess = SessionsCtrl.getRawCurrent();
 				SessionsCtrl.setCurrent(new SessionResolverImpl(ctx, request));
 				//it might be created later
+			} else {
+				SessionsCtrl.setCurrent(sess);
 			}
 
-			final Object old = sess != null ? I18Ns.setup(sess, request, response, "UTF-8")
-					: Charsets.setup(null, request, response, "UTF-8");
+			final Object old = aue.charsetSetup(sess, request, response);
 			try {
 				aue.service(request, response, pi);
 			} finally {

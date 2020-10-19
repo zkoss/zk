@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4418.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 18:28:13 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <zscript><![CDATA[
+    void newDownloadText() {
+        byte[] data = "Price 500,00 €".getBytes("ISO-8859-15");
+        Filedownload.save(data, "text/plain;charset=ISO-8859-15", "mytext.txt");
+    }
+    void newDownloadBinary() {
+        Filedownload.save("/test2/img/sun.jpg", "image/jpeg");
+    }
+    ]]></zscript>
+    <script><![CDATA[
+    function printDownloadContentType() {
+        zk.override(zAu.cmd0, "download", function (url) {
+            fetch(url).then(function (resp) {
+                zk.log(resp.headers.get("Content-Type"));
+            });
+        });
+    };
+    ]]></script>
+    <label multiline="true">
+        1. For easy observation, you can click "Click me to test without opening dialog" first.
+           It will print out Content-Type instead without the need to observe in network panel.
+        2. Click "Download (Text)" button.
+        3. From the header, it must contain "charset=ISO-8859-15".
+        4. Click "Download (Binary)" button.
+        5. From the header, it must not contain "charset=utf-8".
+    </label>
+    <button onClick="newDownloadText()" label="Download (Text)"/>
+    <button onClick="newDownloadBinary()" label="Download (Binary)"/>
+    <button id="forTest" label="Click me to test without opening dialog" w:onClick="printDownloadContentType()"/>
+</zk>

@@ -2,6 +2,7 @@ ZK 9.5.1
 * Features
   ZK-4118: Add zk.edge_legacy for old version Microsoft Edge
   ZK-4679: tree remove non breaking spaces (&nbsp;) from dom structure
+  ZK-4418: specify charset for filedownload
 
 * Bugs
   ZK-4689: portal layout detach js error
@@ -29,6 +30,8 @@ ZK 9.5.1
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
+  + Due to ZK-4418, Filedownload.save() won't append ";charset=UTF-8" in the Content-Type automatically.
+    You must specify it in the content type if a charset is needed.
 
    --------
 ZK 9.5.0
