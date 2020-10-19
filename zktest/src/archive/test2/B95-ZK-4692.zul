@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4692.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 14:15:09 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. (Compact themes only and breeze themes) Look at the button of a combo widget.
+        2. It should be aligned with its input.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <vlayout>
+        <combobox />
+        <bandbox />
+        <datebox />
+        <timebox />
+        <spinner />
+        <doublespinner />
+    </vlayout>
+</zk>
