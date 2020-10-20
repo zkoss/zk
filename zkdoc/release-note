@@ -21,6 +21,7 @@ ZK 9.5.1
   ZK-4696: An unchanged ClientInfo makes the infinite processing loop
   ZK-4681: inconsistent listgroup checkmark size
   ZK-4281: Cloning a paging mold Tree by serialization throws NPE
+  ZK-4692: a combobox' button is mis-aligned with its input element
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
