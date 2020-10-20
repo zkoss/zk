@@ -1,6 +1,7 @@
 ZK 9.5.1
 * Features
   ZK-4118: Add zk.edge_legacy for old version Microsoft Edge
+  ZK-4679: tree remove non breaking spaces (&nbsp;) from dom structure
 
 * Bugs
   ZK-4689: portal layout detach js error

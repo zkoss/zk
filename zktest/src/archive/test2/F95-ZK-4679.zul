@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4679.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Oct 20 11:52:38 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Test in all supported browsers with all themes
+		The Tree should display well
+		And make sure the row with empty treecells display height correctly
+	</label>
+	<tree width="600px">
+		<treecols>
+			<treecol label="Subject"/>
+			<treecol label="From"/>
+			<treecol label="Received"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Intel Snares XML"/>
+					<treecell label="David Needle"/>
+					<treecell label="7-12-2005"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Intel Snares XML"/>
+							<treecell/>
+							<treecell label="7-12-2005"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell/>
+							<treecell/>
+							<treecell/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Unknown chaos" selected="true"/>
+		</treechildren>
+	</tree>
+</zk>

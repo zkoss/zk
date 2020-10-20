@@ -26,7 +26,7 @@ public class B70_ZK_2764Test extends WebDriverTestCase {
 			cellsString += cell.text();
 		}
 		assertEquals(
-				" node 1 (3) node 1.1 (2) node 1.1.1 (0) node 1.1.2 (1) node 2 (5) node 3 (7) node 4 (9) node 5 (11)",
+				"node 1 (3)node 1.1 (2)node 1.1.1 (0)node 1.1.2 (1)node 2 (5)node 3 (7)node 4 (9)node 5 (11)",
 				cellsString);
 
 		click(jq("@button"));
@@ -37,7 +37,7 @@ public class B70_ZK_2764Test extends WebDriverTestCase {
 			cellsString += cell.text();
 		}
 		assertEquals(
-				" node 1 (3). node 1.1 (2). node 1.1.1 (0). node 1.1.2 (1). node 2 (5). node 3 (7). node 4 (9). node 5 (11).",
+				"node 1 (3).node 1.1 (2).node 1.1.1 (0).node 1.1.2 (1).node 2 (5).node 3 (7).node 4 (9).node 5 (11).",
 				cellsString);
 
 		click(jq("@button").eq(1));
@@ -48,7 +48,7 @@ public class B70_ZK_2764Test extends WebDriverTestCase {
 			cellsString += cell.text();
 		}
 		assertEquals(
-				" node 1 (16) node 1.1 (15) node 1.1.1 (13) node 1.1.2 (14) node 2 (18) node 3 (20) node 4 (22) node 5 (24)",
+				"node 1 (16)node 1.1 (15)node 1.1.1 (13)node 1.1.2 (14)node 2 (18)node 3 (20)node 4 (22)node 5 (24)",
 				cellsString);
 	}
 }
