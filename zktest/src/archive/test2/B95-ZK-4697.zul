@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4697.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Oct 19 12:27:53 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.util.*;
+		public class TestComposer extends GenericForwardComposer{
+			public void onClick$btn(Event e) throws InterruptedException{
+				Window window = (Window)Executions.createComponents(
+						"B95-ZK-4697-1.zul", null, null);
+				window.doModal();
+			}
+		}
+	]]></zscript>
+	<window border="normal" title="hello" apply="TestComposer">
+		<button id="btn" label="Click Me, and the modal window would enlarge to the browser window width then shrink, the shrinking should not be so obvious." />
+	</window>
+</zk>
+
