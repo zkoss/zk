@@ -97,7 +97,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),
 			s2 = this._colHtmlPre();
-		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">&nbsp;' + s1 + '</span>' : s1 : s2;
+		return s1 ? s2 ? s2 + '<span class="' + this.$s('text') + '">' + s1 + '</span>' : s1 : s2;
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -191,9 +191,8 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 			}
 			return sb.join('');
 		} else {
-			//To make the tree's height more correct, we have to generate &nbsp;
-			//for empty cell. Otherwise, IE will make the height too small
-			return !this.getImage() && !this.getLabel()	&& !this.nChildren ? '&nbsp;' : null;
+			// ZK-4679: We don't have to generate &nbsp; for empty cell to correct the tree's height in IE anymore
+			return '';
 		}
 	},
 	_getTreeitems: function (item, tree) {
@@ -214,7 +213,6 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		sb.push('<span class="');
 		if (name == 'spacer') {
 			sb.push(iconScls, '-line ', iconScls, '-', name, '"');
-			openCloseIcon += '&nbsp;';
 		} else {
 			var id = '';
 			if (button) {
