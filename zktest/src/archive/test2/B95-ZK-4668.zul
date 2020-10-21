@@ -1,0 +1,29 @@
+<!--
+B95-ZK-4668.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Oct 20 17:50:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<vlayout>
+	<label>(Mobile only) The padding of input should be correct </label>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<combobox buttonVisible="false"/>
+	<combobox />
+	<bandbox buttonVisible="false"/>
+	<bandbox />
+	<datebox buttonVisible="false"/>
+	<datebox />
+	<timebox buttonVisible="false"/>
+	<timebox />
+	<spinner buttonVisible="false"/>
+	<spinner />
+	<doublespinner buttonVisible="false"/>
+	<doublespinner />
+</vlayout>
