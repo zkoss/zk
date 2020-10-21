@@ -71,6 +71,12 @@ public class AuDynaMediar implements AuExtension {
 	public void destroy() {
 	}
 
+	@Override
+	public Object charsetSetup(Session session, HttpServletRequest request,
+	                           HttpServletResponse response) {
+		return null;
+	}
+
 	/** Retrieves the media from {@link DynamicMedia#getMedia}.
 	 */
 	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
