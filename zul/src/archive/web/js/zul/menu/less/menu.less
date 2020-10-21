@@ -86,6 +86,7 @@
 		font-size: @menuTextFontSize;
 		font-weight: normal;
 		display: inline-block;
+		vertical-align: middle;
 		
 		// align for img + text
 		img ~ & {
@@ -107,11 +108,12 @@
 		border: 1px solid transparent;
 		.borderRadius(@baseBorderRadius);
 		padding: @menuContentPadding;
-		line-height: @menuIconSize; // menu-icon height
+		line-height: @menuContentLineHeight;
 		position: relative;
 		cursor: pointer;
 		text-decoration: none;
 		white-space: nowrap;
+		min-height: @menuContentMinHeight;
 		z-index: 20; // the 20 is greater than menupopup-separator's z-index
 
 		&:hover {
@@ -131,6 +133,7 @@
 	// icon sclass
 	&-content i {
 		margin-right: @menuIconMarginRight;
+		vertical-align: middle;
 	}
 }
 .z-menu {
@@ -255,8 +258,7 @@
 	[class^="z-icon"] {
 		text-align: center;
 		display: inline-block;
-		min-width: @menuImageSize;
-		min-height: @menuImageSize;
+		min-width: @menuImageSize; // for text alignment
 		margin-right: 8px;
 		line-height: normal;
 	}

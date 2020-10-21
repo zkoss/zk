@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4684.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Oct 21 14:46:28 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		test in iceblue and iceblue_c (and tablet styles)
+		click " File" to open menu
+		all the images icons and text in the menuitems should be vertical align
+	</label>
+	<menubar width="100%">
+		<menuitem label="Menu"/>
+		<menu label="File">
+			<menupopup>
+				<menuitem label="View"/>
+				<menuitem iconSclass="z-icon-save" label="Save"/>
+				<menuitem iconSclass="z-icon-home"/>
+				<menuitem image="img/m1.gif" />
+				<menuitem image="img/m1.gif" label="Home"/>
+				<menuitem image="img/m1.gif" iconSclass="z-icon-home" label="Home"/>
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>
