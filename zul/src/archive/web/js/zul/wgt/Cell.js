@@ -159,5 +159,8 @@ zul.wgt.Cell = zk.$extends(zul.Widget, {
 	},
 	deferRedrawHTML_: function (out) {
 		out.push('<td', this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></td>');
+	},
+	getFlexContainer_: function () {
+		return null;
 	}
 });
