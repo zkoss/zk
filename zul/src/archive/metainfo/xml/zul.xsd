@@ -1640,6 +1640,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="position" type="PopupPositionAttrType" use="optional" />
 		<xs:attribute name="defaultDateTime" type="dateType" use="optional" />
+		<xs:attribute name="selectLevel" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- decimalbox -->
 	<xs:element name="decimalbox" type="decimalboxType" />
