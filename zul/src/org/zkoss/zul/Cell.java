@@ -134,6 +134,11 @@ public class Cell extends XulElement {
 		return _auxinf;
 	}
 
+	@Override
+	public boolean evalCSSFlex() {
+		return false;
+	}
+
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		private String align = null;
 		private String valign = null;
