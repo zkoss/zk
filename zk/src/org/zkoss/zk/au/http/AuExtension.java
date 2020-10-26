@@ -22,10 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.web.servlet.Charsets;
-import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.http.I18Ns;
-
 /**
  * An AU service is a small Java program that can be plugged
  * into {@link DHtmlUpdateServlet} to extend its functionality.
@@ -64,20 +60,4 @@ public interface AuExtension {
 	 */
 	public void service(HttpServletRequest request, HttpServletResponse response, String pi)
 			throws ServletException, IOException;
-
-	/**
-	 * Sets the charset of the response.
-	 *
-	 * @param session ZK session (might be null).
-	 * @param request the request (never null).
-	 * @param response the response (never null).
-	 * @return an object that must be passed to {@link I18Ns#cleanup} or {@link Charsets#cleanup} (can be null).
-	 * @since 9.5.1
-	 */
-	default Object charsetSetup(Session session, HttpServletRequest request,
-	                            HttpServletResponse response) {
-		return session != null
-				? I18Ns.setup(session, request, response, "UTF-8")
-				: Charsets.setup(null, request, response, "UTF-8");
-	}
 }

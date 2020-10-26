@@ -16,19 +16,19 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.media;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.Reader;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.io.ByteArrayInputStream;
 import java.net.URL;
 
+import org.zkoss.lang.SystemException;
 import org.zkoss.io.Files;
 import org.zkoss.io.NullInputStream;
 import org.zkoss.io.NullReader;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
-import org.zkoss.lang.SystemException;
 
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
@@ -254,6 +254,11 @@ public class AMedia implements Media, java.io.Serializable {
 	 * It assumes one of them is not null.
 	 */
 	private void setup(String name, String format, String ctype) {
+		if (ctype != null) {
+			int j = ctype.indexOf(';');
+			if (j >= 0) ctype = ctype.substring(0, j);
+		}
+
 		if (ctype != null && format == null) {
 			format = ContentTypes.getFormat(ctype);
 		} else if (ctype == null && format != null) {
