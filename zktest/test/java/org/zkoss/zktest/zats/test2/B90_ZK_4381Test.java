@@ -30,9 +30,9 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -43,17 +43,18 @@ import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 
-import org.zkoss.lang.Library;
+import org.zkoss.zktest.zats.ExternalZkXml;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 public class B90_ZK_4381Test extends WebDriverTestCase {
+	@ClassRule
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/B86-ZK-4288-zk.xml");
+
 	@BeforeClass
 	public static void init() throws Exception {
-		Library.setProperty("org.zkoss.zk.config.path", "/test2/B86-ZK-4288-zk.xml");
-
 		Server server = new Server(new InetSocketAddress(getHost(), 0));
 
 		final WebAppContext context = new WebAppContext();
@@ -64,11 +65,6 @@ public class B90_ZK_4381Test extends WebDriverTestCase {
 		context.addFilter(new FilterHolder(sessionRepositoryFilter), "/*",  EnumSet.of(DispatcherType.REQUEST));
 		server.setHandler(new HandlerList(context, new DefaultHandler()));
 		initServer(server);
-	}
-
-	@AfterClass
-	public static void cleanUp() {
-		Library.setProperty("org.zkoss.zk.config.path", null);
 	}
 
 	@Test
