@@ -16,19 +16,20 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util.media;
 
-import java.io.File;
-import java.io.Reader;
-import java.io.InputStream;
-import java.io.StringReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 
-import org.zkoss.lang.SystemException;
 import org.zkoss.io.Files;
 import org.zkoss.io.NullInputStream;
 import org.zkoss.io.NullReader;
 import org.zkoss.io.RepeatableInputStream;
 import org.zkoss.io.RepeatableReader;
+import org.zkoss.lang.Library;
+import org.zkoss.lang.SystemException;
 
 /**
  * A media object holding content such PDF, HTML, DOC or XLS content.
@@ -40,6 +41,8 @@ import org.zkoss.io.RepeatableReader;
  * @author tomyeh
  */
 public class AMedia implements Media, java.io.Serializable {
+	private static final boolean CONTENT_TYPE_AS_IS = Boolean.parseBoolean(Library.getProperty("org.zkoss.zul.Filedownload.contentTypeAsIs"));
+
 	/** Used if you want to implement a media whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
 	 * @see #AMedia(String,String,String,InputStream)
@@ -254,7 +257,7 @@ public class AMedia implements Media, java.io.Serializable {
 	 * It assumes one of them is not null.
 	 */
 	private void setup(String name, String format, String ctype) {
-		if (ctype != null) {
+		if (ctype != null && !CONTENT_TYPE_AS_IS) {
 			int j = ctype.indexOf(';');
 			if (j >= 0) ctype = ctype.substring(0, j);
 		}
