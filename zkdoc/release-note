@@ -29,6 +29,7 @@ ZK 9.5.1
   ZK-4668: combo inputs paddings are incorrect in tablet
   ZK-4669: Incorrect size in horizontal splitter when resizing window by using css flex
   ZK-4684: menuitem icon alignment
+  ZK-4705: Missing insertChildHTML_ in nested Borderlayout
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,

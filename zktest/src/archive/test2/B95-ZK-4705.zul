@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4705.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Oct 27 11:10:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script type="text/javascript">
+		zk.afterMount(function () {
+			MyWest = zk.$extends(zul.layout.West, {
+				bind_: function () {
+					this.$supers(zul.layout.West, 'bind_', arguments);
+					zk.log('MyWest bind_');
+			}});
+
+			MyNorth = zk.$extends(zul.layout.North, {
+				afterParentChanged_: function () {
+					zk.log('afterParentChanged_ is called');
+					const child = new zul.layout.Borderlayout({_zclass: 'nested-borderlayout'});
+					let west = new MyWest();
+					west.setFlex(true);
+					child.appendChild(west);
+					this.setFlex(true);
+					this.appendChild(child);
+			}});
+			zk.$("$borderlayout").appendChild(new MyNorth());
+		});
+	</script>
+	<label>You should see 'MyWest bind_' in ZK log</label>
+	<borderlayout id="borderlayout" height="200px" width="300px"/>
+</zk>
