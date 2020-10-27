@@ -17,6 +17,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.http;
 
 import static org.zkoss.lang.Generics.cast;
+import static org.zkoss.zk.ui.ext.Uploadable.Error.ILLEGAL_UPLOAD;
+import static org.zkoss.zk.ui.ext.Uploadable.Error.MISSING_REQUIRED_COMPONENT;
+import static org.zkoss.zk.ui.ext.Uploadable.Error.SERVER_EXCEPTION;
+import static org.zkoss.zk.ui.ext.Uploadable.Error.SIZE_LIMIT_EXCEEDED;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -65,6 +69,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Uploadable;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -138,14 +143,14 @@ public class AuUploader implements AuExtension {
 							.write((p != null ? p.intValue() : -1) + "," + (cb != null ? cb.longValue() : -1));
 					return;
 				} else
-					alert = "enctype must be multipart/form-data";
+					alert = generateAlertMessage(ILLEGAL_UPLOAD, "enctype must be multipart/form-data");
 			} else {
 				// refix ZK-2056: should escape both XML and Javascript
 				uuid = escapeParam(request.getParameter("uuid"));
 				sid = escapeParam(request.getParameter("sid"));
 
 				if (uuid == null || uuid.length() == 0) {
-					alert = "uuid is required!";
+					alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, "uuid is required!");
 				} else {
 					attrs.put("uuid", uuid);
 					attrs.put("sid", sid);
@@ -153,7 +158,7 @@ public class AuUploader implements AuExtension {
 					// refix ZK-2056: should escape both XML and Javascript
 					final String dtid = escapeParam(request.getParameter("dtid"));
 					if (dtid == null || dtid.length() == 0) {
-						alert = "dtid is required!";
+						alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, "dtid is required!");
 					} else {
 						desktop = ((WebAppCtrl) sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
 						final Map<String, Object> params = parseRequest(request, desktop, uuid + '_' + sid);
@@ -173,7 +178,7 @@ public class AuUploader implements AuExtension {
 				nextURI = request.getParameter("nextURI");
 
 			if (ex instanceof ComponentNotFoundException) {
-				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
+				alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid));
 			} else {
 				alert = handleError(ex);
 			}
@@ -190,7 +195,7 @@ public class AuUploader implements AuExtension {
 		}
 		if (attrs.get("contentId") == null && alert == null)
 			//B65-ZK-1724: display more meaningful errormessage
-			alert = "Upload Aborted : (contentId is required)";
+			alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, "Upload Aborted : (contentId is required)");
 
 		if (alert != null) {
 			if (desktop == null) {
@@ -261,12 +266,16 @@ public class AuUploader implements AuExtension {
 						String.valueOf((Long) (size / divisor2)) + units[2],
 						String.valueOf((Long) (limit / divisor2)) + units[2] };
 
-				return Messages.get(msgField.getInt(null), args);
+				return generateAlertMessage(SIZE_LIMIT_EXCEEDED, Messages.get(msgField.getInt(null), args));
 			} catch (Throwable e) {
 				log.error("Failed to parse upload error message..", e);
 			}
 		}
-		return Exceptions.getMessage(ex);
+		return generateAlertMessage(SERVER_EXCEPTION, Exceptions.getMessage(ex));
+	}
+
+	private String generateAlertMessage(Uploadable.Error type, String message) {
+		return type.toString() + ":" + message;
 	}
 
 	/** Process fileitems named file0, file1 and so on.

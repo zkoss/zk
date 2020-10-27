@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.5.0.202009011234">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.5.1.202010230949">
 	<!--
 	SIMPLETYPE
 	-->
@@ -1731,6 +1731,7 @@
 		<xs:attribute name="onUpload" type="xs:string" use="optional" />
 		<xs:attribute name="anchor" type="xs:string" use="optional" />
 		<xs:attribute name="maxFileCount" type="intType" use="optional" />
+		<xs:attribute name="suppressedErrors" type="xs:string" use="optional" />
 		<xs:attribute name="onMaxFileCountExceed" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- east -->

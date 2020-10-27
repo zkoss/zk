@@ -45,6 +45,7 @@ public interface Uploadable {
 	 *  the setting only works with HTML5 supported browsers (since ZK 6.0.0).</li>
 	 *  <li>accept: specifies the types of files that the server accepts,
 	 *  the setting only works with HTML5 supported browsers (since ZK 7.0.0).</li>
+	 *  <li>suppressedErrors: specifies the suppressed uploading errors, separated by <code>|</code> (e.g. missing-required-component|illegal-upload) (since ZK 9.5.1).
 	 *  </ul>
 	 *
 	 * <p> Note: if the options of the <code>false</code> or the customized handler
@@ -56,6 +57,39 @@ public interface Uploadable {
 	 * or null or "false" to disable the file download (and then
 	 * this button behaves like a normal button).
 	 * @since 5.0.0
+	 * @see Error
 	 */
 	void setUpload(String upload);
+
+	/**
+	 * Uploading error constants.
+	 * @since 9.5.1
+	 */
+	enum Error {
+		/**
+		 * (missing-required-component) Missing required component or data.
+		 */
+		MISSING_REQUIRED_COMPONENT,
+		/**
+		 * (illegal-upload) Illegal upload method.
+		 */
+		ILLEGAL_UPLOAD,
+		/**
+		 * (server-out-of-service) Server temporarily out of service.
+		 */
+		SERVER_OUT_OF_SERVICE,
+		/**
+		 * (size-limit-exceeded) Upload file size exceeds max-size.
+		 */
+		SIZE_LIMIT_EXCEEDED,
+		/**
+		 * (server-exception) Other server exceptions handled by <code>handleError(ex)</code>.
+		 */
+		SERVER_EXCEPTION;
+
+		@Override
+		public String toString() {
+			return this.name().toLowerCase().replace('_', '-');
+		}
+	}
 }

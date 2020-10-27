@@ -84,14 +84,17 @@ zul.Upload = zk.$extends(zk.Object, {
 	 * @param zk.Widget wgt the widget belongs to the file upload
 	 * @param DOMElement parent the element representing where the upload element
 	 * 		is appended
-	 * @param String clsnm the CSS class name of the fileupload
+	 * @param String option the upload option.
+	 *      It contains upload options like maxsize, multiple, and so on.
+	 *      It specifies the widget class name of the fileupload.
 	 */
-	$init: function (wgt, parent, clsnm) {
+	$init: function (wgt, parent, option) {
 		this.uploaders = {};
+		this.suppressedErrors = [];
 
 		var cls;
 
-		for (var attrs = clsnm.split(','), i = 0, len = attrs.length; i < len; i++) {
+		for (var attrs = option.split(','), i = 0, len = attrs.length; i < len; i++) {
 			var attr = attrs[i].trim();
 			if (attr.startsWith('maxsize='))
 				this.maxsize = attr.match(new RegExp(/maxsize=([^,]*)/))[1];
@@ -99,6 +102,8 @@ zul.Upload = zk.$extends(zk.Object, {
 				this.multiple = attr.match(new RegExp(/multiple=([^,]*)/))[1];
 			else if (attr.startsWith('accept='))
 				this.accept = attr.match(new RegExp(/accept=([^,]*)/))[1];
+			else if (attr.startsWith('suppressedErrors='))
+				this.suppressedErrors = attr.match(new RegExp(/suppressedErrors=([^,]*)/))[1].split('|');
 			else if (attr == 'native')
 				this.isNative = true;
 			else if (attr != 'true')
@@ -244,7 +249,17 @@ zul.Upload = zk.$extends(zk.Object, {
 	error: function (msg, uuid, sid) {
 		var wgt = zk.Widget.$(uuid);
 		if (wgt) {
-			jq.alert(msg, {desktop: wgt.desktop, icon: 'ERROR'});
+			var errorType,
+				matched = msg.match('^([\\w-]+?):'),
+				uploader = wgt._uplder,
+				suppressedErrors = uploader ? uploader.suppressedErrors : [];
+			if (matched) {
+				msg = msg.replace(matched[0], '');
+				errorType = matched[1];
+			}
+			if (!errorType || suppressedErrors.indexOf(errorType) === -1) {
+				jq.alert(msg, {desktop: wgt.desktop, icon: 'ERROR'});
+			}
 			zul.Upload.close(uuid, sid);
 		}
 	},
@@ -413,7 +428,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 						var wgt = self.getWidget();
 						if (wgt) {
 							self.cancel();
-							zul.Upload.error(msgzk.FAILED_TO_RESPONSE, wgt.uuid, self._sid);
+							zul.Upload.error('server-out-of-service:' + msgzk.FAILED_TO_RESPONSE, wgt.uuid, self._sid);
 						}
 						return;
 					}

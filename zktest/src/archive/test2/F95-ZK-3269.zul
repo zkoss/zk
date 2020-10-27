@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-3269.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 21 16:40:54 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Prepare a file size > 1 KB.
+        2. Click the both buttons (suppressed and normal) to upload a file.
+        3. You should find no error message in a suppressed button.
+        4. Drop a file to the dropzones to upload.
+        5. You should find no error message in a suppressed dropupload.
+    </label>
+    <button label="Upload (Suppressed)" upload="true,maxsize=1,suppressedErrors=missing-required-component|size-limit-exceeded" onUpload=""/>
+    <button label="Upload" upload="true,maxsize=1" onUpload=""/>
+    <dropupload id="du" content="Upload (Suppressed)" detection="none" maxsize="1" onUpload=""/>
+    <dropupload content="Upload" detection="none" maxsize="1" onUpload=""/>
+    <!-- test ZK can get the correct setter method -->
+    <dropupload visible="false" suppressedErrors="missing-required-component|size-limit-exceeded"/>
+    <zscript><![CDATA[
+    import org.zkoss.zk.ui.ext.Uploadable.Error;
+
+    du.setSuppressedErrors(Arrays.asList(new Error[] {
+        Error.MISSING_REQUIRED_COMPONENT,
+        Error.SIZE_LIMIT_EXCEEDED
+    }));
+    ]]></zscript>
+</zk>

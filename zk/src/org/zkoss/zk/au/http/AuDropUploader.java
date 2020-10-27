@@ -17,11 +17,15 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.http;
 
 import static org.zkoss.lang.Generics.cast;
+import static org.zkoss.zk.ui.ext.Uploadable.Error.MISSING_REQUIRED_COMPONENT;
+import static org.zkoss.zk.ui.ext.Uploadable.Error.SERVER_EXCEPTION;
+import static org.zkoss.zk.ui.ext.Uploadable.Error.SIZE_LIMIT_EXCEEDED;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -43,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.image.AImage;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
@@ -59,6 +64,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.ext.Uploadable;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.CharsetFinder;
@@ -96,9 +102,9 @@ public class AuDropUploader implements AuExtension {
 		Desktop desktop = null;
 		try {
 			if (Strings.isEmpty(uuid = fetchParameter(request, "uuid", attrs)))
-				alert = "uuid is required!";
+				alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, "uuid is required!");
 			if (Strings.isEmpty(dtid = fetchParameter(request, "dtid", attrs)))
-				alert = "dtid is required!";
+				alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, "dtid is required!");
 			fetchParameter(request, "sid", attrs);
 
 			if (alert == null) {
@@ -118,11 +124,7 @@ public class AuDropUploader implements AuExtension {
 				nextURI = request.getParameter("nextURI");
 
 			if (ex instanceof ComponentNotFoundException) {
-				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
-			} else if (ex instanceof FileUploadBase.SizeLimitExceededException) {
-				alert = Exceptions.getMessage(ex);
-				log.error(alert);
-				response.getWriter().write("error:" + alert);
+				alert = generateAlertMessage(MISSING_REQUIRED_COMPONENT, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid));
 			} else {
 				alert = handleError(ex);
 			}
@@ -133,6 +135,7 @@ public class AuDropUploader implements AuExtension {
 				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 				return;
 			}
+			response.getWriter().write("error:" + alert);
 		} else {
 			response.setContentType("text/plain;charset=UTF-8");
 		}
@@ -174,7 +177,37 @@ public class AuDropUploader implements AuExtension {
 	 */
 	protected String handleError(Throwable ex) {
 		log.error("Failed to upload", ex);
-		return Exceptions.getMessage(ex);
+		if (ex instanceof FileUploadBase.SizeLimitExceededException) {
+			try {
+				FileUploadBase.SizeLimitExceededException fex = (FileUploadBase.SizeLimitExceededException) ex;
+				long size = fex.getActualSize();
+				long limit = fex.getPermittedSize();
+				final Class<?> msgClass = Classes.forNameByThread("org.zkoss.zul.mesg.MZul");
+				Field msgField = msgClass.getField("UPLOAD_ERROR_EXCEED_MAXSIZE");
+				int divisor1 = 1024;
+				int divisor2 = 1024 * 1024;
+				String[] units = new String[] { " Bytes", " KB", " MB" };
+				int i1 = (int) (Math.log(size) / Math.log(1024));
+				int i2 = (int) (Math.log(limit) / Math.log(1024));
+				String sizeAuto = Math.round(size / Math.pow(1024, i1)) + units[i1];
+				String limitAuto = Math.round(limit / Math.pow(1024, i2)) + units[i2];
+
+				Object[] args = new Object[] { sizeAuto, limitAuto, size, limit,
+						(Long) (size / divisor1) + units[1],
+						(Long) (limit / divisor1) + units[1],
+						(Long) (size / divisor2) + units[2],
+						(Long) (limit / divisor2) + units[2] };
+
+				return generateAlertMessage(SIZE_LIMIT_EXCEEDED, Messages.get(msgField.getInt(null), args));
+			} catch (Throwable e) {
+				log.error("Failed to parse upload error message..", e);
+			}
+		}
+		return generateAlertMessage(SERVER_EXCEPTION, Exceptions.getMessage(ex));
+	}
+
+	private String generateAlertMessage(Uploadable.Error type, String message) {
+		return type.toString() + ":" + message;
 	}
 
 	/** Process fileitems named file0, file1 and so on.
