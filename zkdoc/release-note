@@ -5,6 +5,7 @@ ZK 9.5.1
   ZK-3269: uploader / dropupload feature to disabled specific error message
   ZK-4418: specify charset for filedownload
   ZK-3289: Monthly / yearly options for datebox.
+  ZK-4418: specify charset for filedownload
 
 * Bugs
   ZK-4689: portal layout detach js error

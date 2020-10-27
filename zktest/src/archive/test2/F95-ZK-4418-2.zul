@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4418-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 27 14:14:57 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        In this test, "org.zkoss.zul.Filedownload.contentTypeAsIs" is not set.
+        The behavior should remain the same as previous ZK versions.
+        1. Click any "Download" button.
+        2. From the header, it must contain "charset=utf-8".
+    </label>
+    <include src="./F95-ZK-4418.zul"/>
+</zk>

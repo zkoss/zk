@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Exceptions;
+import org.zkoss.lang.Library;
 import org.zkoss.mesg.Messages;
 import org.zkoss.util.media.Media;
 import org.zkoss.web.servlet.http.Https;
@@ -59,6 +60,8 @@ import org.zkoss.zk.ui.util.Configuration;
 public class AuDynaMediar implements AuExtension {
 	private static final Logger log = LoggerFactory.getLogger(AuDynaMediar.class);
 
+	private static final boolean CONTENT_TYPE_AS_IS = Boolean.parseBoolean(Library.getProperty("org.zkoss.zul.Filedownload.contentTypeAsIs"));
+
 	private ServletContext _ctx;
 
 	public AuDynaMediar() {
@@ -69,6 +72,15 @@ public class AuDynaMediar implements AuExtension {
 	}
 
 	public void destroy() {
+	}
+
+	@Override
+	public Object charsetSetup(Session session, HttpServletRequest request,
+	                           HttpServletResponse response) {
+		if (CONTENT_TYPE_AS_IS) {
+			return null;
+		}
+		return AuExtension.super.charsetSetup(session, request, response);
 	}
 
 	/** Retrieves the media from {@link DynamicMedia#getMedia}.
