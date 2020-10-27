@@ -68,9 +68,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		 * @return boolean
 		 */
 		flex: function (v) {
-			var skipper = -1;
 			_setFirstChildFlex(this, v);
-			this.rerender(skipper);
+			this.rerender();
 		},
 		/**
 		 * Sets the border (either none or normal).
@@ -533,15 +532,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	insertChildHTML_: function (child, before, desktop) {
-		if (child.$instanceof(zul.layout.Borderlayout)) return;
-		//it will setFlex later and do replaceHTML so return;
-		else this.$super('insertChildHTML_', child, before, desktop);
-	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
-			this.setFlex(true);
+			this._flex = true;
 			jq(this.$n()).addClass(this.$s('nested'));
 		}
 
@@ -565,7 +559,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			_setFirstChildFlex(this, false);
 
 		if (child.$instanceof(zul.layout.Borderlayout)) {
-			this.setFlex(false);
+			this._flex = false;
 			jq(this.$n()).removeClass(this.$s('nested'));
 		}
 
