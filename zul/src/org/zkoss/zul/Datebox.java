@@ -85,6 +85,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	private String _position = "after_start";
 	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
 	private LocalDateTime _defaultDateTime;
+	private String _selectLevel = "day";
 
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -969,6 +970,34 @@ public class Datebox extends DateTimeFormatInputElement {
 		}
 	}
 
+
+	/**
+	 * Returns the level that a user can select.
+	 * <p>
+	 * Default: "day"
+	 * @return the level that a user can select
+	 * @since 9.5.1
+	 */
+	public String getSelectLevel() {
+		return _selectLevel;
+	}
+
+	/**
+	 * Sets the level that a user can select.
+	 * The valid options are "day", "month", and "year".
+	 *
+	 * @param selectLevel the level that a user can select
+	 * @since 9.5.1
+	 */
+	public void setSelectLevel(String selectLevel) {
+		if (!"day".equals(selectLevel) && !"month".equals(selectLevel) && !"year".equals(selectLevel))
+			throw new WrongValueException("Only allowed day, month, and year, not " + selectLevel);
+		if (!Objects.equals(_selectLevel, selectLevel)) {
+			_selectLevel = selectLevel;
+			smartUpdate("selectLevel", selectLevel);
+		}
+	}
+
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
 
@@ -1038,5 +1067,7 @@ public class Datebox extends DateTimeFormatInputElement {
 
 		if (_defaultDateTime != null)
 			render(renderer, "defaultDateTime", toDate(_defaultDateTime));
+		if (!"day".equals(_selectLevel))
+			render(renderer, "selectLevel", _selectLevel);
 	}
 }

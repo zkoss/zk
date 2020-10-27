@@ -27,6 +27,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_buttonVisible: true,
 	_lenient: true,
 	_strictDate: false,
+	_selectLevel: 'day',
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.afterInit(this.$class._initPopup);
@@ -290,7 +291,22 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @since 9.0.0
 		 * @return Date
 		 */
-		defaultDateTime: null
+		defaultDateTime: null,
+		/**
+		 * Sets the level that a user can select.
+		 * The valid options are "day", "month", and "year".
+		 *
+		 * @param String selectLevel the level that a user can select
+		 * @since 9.5.1
+		 */
+		/**
+		 * Returns the level that a user can select.
+		 * <p>
+		 * Default: "day"
+		 * @return String
+		 * @since 9.5.1
+		 */
+		selectLevel: null
 	},
 	/**
 	 * Returns the iconSclass name of this Datebox.
@@ -689,7 +705,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		db.setFloating_(true, {node: pp});
 		zWatch.fire('onFloatUp', db); //notify all
 		var topZIndex = this.setTopmost();
-		this._setView('day');
+		this._setView(db._selectLevel);
 		var zcls = db.getZclass();
 
 		pp.className = dbn.className + ' ' + pp.className;
@@ -782,7 +798,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		if (!evt.data.shiftView)
 			db.getInputNode().value = db.coerceToString_(date);
 
-		if (this._view == 'day' && evt.data.shallClose !== false) {
+		if (this._view == db._selectLevel && evt.data.shallClose !== false) {
 			this.close();
 
 			// Bug 3122159 and 3301374
@@ -855,6 +871,50 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	},
 	animationSpeed_: function () {
 		return zk(this.parent).getAnimationSpeed('_default');
+	},
+	_chooseDate: function (target, val) {
+		var db = this.parent,
+			selectLevel = db._selectLevel;
+		if (target && !jq(target).hasClass(this.$s('disabled'))) {
+			var cell = target,
+				dateobj = this.getTime();
+			switch (this._view) {
+				case 'day' :
+					var oldTime = this.getTime();
+					this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
+						dateobj.getMonth() + cell._monofs : null, val, true /*fire onChange */);
+					var newTime = this.getTime();
+					if (oldTime.getYear() == newTime.getYear()
+						&& oldTime.getMonth() == newTime.getMonth()) {
+						this._markCal({sameMonth: true}); // optimize
+					} else {
+						this.rerender(-1);
+						this.focus();
+					}
+					break;
+				case 'month' :
+					if (selectLevel == 'month') {
+						this._setTime(null, val, 1, true);
+						break;
+					}
+					this._setTime(null, val);
+					this._setView('day');
+					break;
+				case 'year' :
+					if (selectLevel == 'year') {
+						this._setTime(val, 0, 1, true);
+						break;
+					}
+					this._setTime(val);
+					this._setView('month');
+					break;
+				case 'decade' :
+					//Decade mode Set Year Also
+					this._setTime(val);
+					this._setView('year');
+					break;
+			}
+		}
 	}
 }, {
 	_equalDate: function (d1, d2) {
@@ -887,7 +947,7 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 			db.fire(evt.name, evt.data); //onChanging
 		}
 
-		if (this._view == 'day' && evt.data.shallClose !== false) {
+		if (this._view == db._selectLevel && evt.data.shallClose !== false) {
 			this.close();
 		}
 		evt.stop();
