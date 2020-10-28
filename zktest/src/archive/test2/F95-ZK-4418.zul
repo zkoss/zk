@@ -14,6 +14,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:w="client">
     <zscript><![CDATA[
+    org.zkoss.lang.Library.setProperty("org.zkoss.zul.Filedownload.contentTypeAsIs", "true");
+
     void newDownloadText() {
         byte[] data = "Price 500,00 €".getBytes("ISO-8859-15");
         Filedownload.save(data, "text/plain;charset=ISO-8859-15", "mytext.txt");
@@ -32,17 +34,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
     };
     ]]></script>
     <label multiline="true">
-        1. Add these setting in zk.xml to enable this feature.
-        &lt;library-property>
-        &lt;name>org.zkoss.zul.Filedownload.contentTypeAsIs&lt;/name>
-        &lt;value>true&lt;/value>
-        &lt;/library-property>
-        2. For easy observation, you can click "Click me to test without opening dialog" first.
+        1. For easy observation, you can click "Click me to test without opening dialog" first.
            It will print out Content-Type instead without the need to observe in network panel.
-        3. Click "Download (Text)" button.
-        4. From the header, it must contain "charset=ISO-8859-15".
-        5. Click "Download (Binary)" button.
-        6. From the header, it must not contain "charset=utf-8".
+        2. Click "Download (Text)" button.
+        3. From the header, it must contain "charset=ISO-8859-15".
+        4. Click "Download (Binary)" button.
+        5. From the header, it must not contain "charset=utf-8".
     </label>
     <button onClick="newDownloadText()" label="Download (Text)"/>
     <button onClick="newDownloadBinary()" label="Download (Binary)"/>
