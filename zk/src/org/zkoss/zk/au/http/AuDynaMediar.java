@@ -60,8 +60,6 @@ import org.zkoss.zk.ui.util.Configuration;
 public class AuDynaMediar implements AuExtension {
 	private static final Logger log = LoggerFactory.getLogger(AuDynaMediar.class);
 
-	private static final boolean CONTENT_TYPE_AS_IS = Boolean.parseBoolean(Library.getProperty("org.zkoss.zul.Filedownload.contentTypeAsIs"));
-
 	private ServletContext _ctx;
 
 	public AuDynaMediar() {
@@ -77,7 +75,7 @@ public class AuDynaMediar implements AuExtension {
 	@Override
 	public Object charsetSetup(Session session, HttpServletRequest request,
 	                           HttpServletResponse response) {
-		if (CONTENT_TYPE_AS_IS) {
+		if (Boolean.parseBoolean(Library.getProperty("org.zkoss.zul.Filedownload.contentTypeAsIs"))) {
 			return null;
 		}
 		return AuExtension.super.charsetSetup(session, request, response);

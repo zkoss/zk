@@ -41,7 +41,6 @@ import org.zkoss.lang.SystemException;
  * @author tomyeh
  */
 public class AMedia implements Media, java.io.Serializable {
-	private static final boolean CONTENT_TYPE_AS_IS = Boolean.parseBoolean(Library.getProperty("org.zkoss.zul.Filedownload.contentTypeAsIs"));
 
 	/** Used if you want to implement a media whose input stream is created
 	 * dynamically each time {@link #getStreamData} is called.
@@ -257,7 +256,7 @@ public class AMedia implements Media, java.io.Serializable {
 	 * It assumes one of them is not null.
 	 */
 	private void setup(String name, String format, String ctype) {
-		if (ctype != null && !CONTENT_TYPE_AS_IS) {
+		if (ctype != null && !Boolean.parseBoolean(Library.getProperty("org.zkoss.zul.Filedownload.contentTypeAsIs"))) {
 			int j = ctype.indexOf(';');
 			if (j >= 0) ctype = ctype.substring(0, j);
 		}

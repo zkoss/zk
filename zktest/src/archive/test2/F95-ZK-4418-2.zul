@@ -20,4 +20,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         2. From the header, it must contain "charset=utf-8".
     </label>
     <include src="./F95-ZK-4418.zul"/>
+    <zscript><![CDATA[
+    // To ensure the property is correct while in test
+    org.zkoss.lang.Library.setProperty("org.zkoss.zul.Filedownload.contentTypeAsIs", null);
+    ]]>
+    </zscript>
 </zk>

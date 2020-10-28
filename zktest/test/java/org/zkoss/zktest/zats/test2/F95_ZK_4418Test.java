@@ -14,19 +14,14 @@ package org.zkoss.zktest.zats.test2;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.ClassRule;
 import org.junit.Test;
 
-import org.zkoss.zktest.zats.ExternalZkXml;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 public class F95_ZK_4418Test extends WebDriverTestCase {
-	@ClassRule
-	public static final ExternalZkXml CONFIG = new ExternalZkXml(F95_ZK_4418Test.class);
-
 	@Test
 	public void test() {
 		connect();
