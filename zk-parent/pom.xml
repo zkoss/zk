@@ -170,37 +170,11 @@
                     <version>2.22.2</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.6.0</version>
-                    <executions>
-                        <execution>
-                            <id>compile-less</id>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>exec</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <skip>${skipZklessc}</skip><!-- optional command line param to speed up local builds -->
-                        <executable>npx</executable>
-                        <arguments>
-                            <argument>zklessc</argument>
-                            <argument>--source</argument>
-                            <argument>${project.basedir}/src/archive/web</argument>
-                            <argument>--output</argument>
-                            <argument>${project.build.outputDirectory}/web</argument>
-                            <argument>--compress</argument>
-                        </arguments>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
-                    <version>1.9.1</version>
+                    <version>1.10.3</version>
                     <configuration>
-                        <nodeVersion>v12.16.2</nodeVersion>
+                        <nodeVersion>v14.15.0</nodeVersion>
                         <workingDirectory>../</workingDirectory> <!-- zk folder -->
                     </configuration>
                     <executions>
@@ -231,6 +205,22 @@
                                     run build:single --
                                     --src="${project.basedir}/src/archive/web/js"
                                     --dest="${project.build.outputDirectory}/web/js"
+                                </arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>compile-less</id>
+                            <goals>
+                                <goal>npx</goal>
+                            </goals>
+                            <phase>process-resources</phase>
+                            <configuration>
+                                <skip>${skipZklessc}</skip><!-- optional command line param to speed up local builds -->
+                                <arguments>
+                                    zklessc
+                                    --source ${project.basedir}/src/archive/web
+                                    --output ${project.build.outputDirectory}/web
+                                    --compress
                                 </arguments>
                             </configuration>
                         </execution>
