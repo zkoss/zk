@@ -46,10 +46,6 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 	getCaveNode: function () {
 		return this.$n('map');
 	},
-	doClick_: function (evt) {
-		//does nothing (so zk.Widget won't fire onClick)
-		//don't call evt.stop => it causes browsers not to handle A
-	},
 	onChildAdded_: function () {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop && this.firstChild == this.lastChild) //first child

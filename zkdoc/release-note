@@ -36,6 +36,7 @@ ZK 9.5.1
   ZK-4644: Rendering Stepbar dynamically causes error
   ZK-4645: Stepbar Error - render dynamically with model
   ZK-4068: datebox failing date format
+  ZK-4650: click on an imagemap doesn't send an onclick event
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
