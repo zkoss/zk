@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4650.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Oct 30 15:22:02 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		click on the image, you should see an zk log x and y.
+	</label>
+	<imagemap src="/test2/img/sun.jpg" onClick='Clients.log(event.x + ", " +event.y)'/>
+</zk>
