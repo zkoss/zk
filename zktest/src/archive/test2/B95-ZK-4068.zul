@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4068.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jan 04 10:42:48 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script>
+		function log(index) {
+			zk.log($('.z-datebox')[index].children[0].value)
+		}
+	</script>
+	<label id="lb" multiline="true">
+		click the button of the datebox
+		change the time in the popup and click some where else to close the popup
+		the date and time in the datebox should be correct when selecting at certain times of the day
+	</label>
+	<separator/>
+	format="yyyy-MM-dd ahh:mm"
+	<separator/>
+	<datebox id="db1" format="yyyy-MM-dd ahh:mm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(0)" locale="en_US"/>
+	<separator/>
+	format="yyyyMMddahhmm"
+	<separator/>
+	<datebox format="yyyyMMddahhmm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(1)" locale="en_US"/>
+	<separator/>
+	format="yyyy-MMdd hha:mm"
+	<separator/>
+	<datebox format="yyyy-MMdd hha:mm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(2)" locale="en_US"/>
+	<separator/>
+	format="yyyy-MM-dd ahhmm"
+	<separator/>
+	<datebox format="yyyy-MM-dd ahhmm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(3)" locale="en_US"/>
+	<separator/>
+	format="yyyy/MM/dd hhahh:mm"
+	<separator/>
+	<datebox format="yyyy/MM/dd hhahh:mm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(4)" locale="en_US"/>
+	<separator/>
+	format="MMyyyydd hamm"
+	<separator/>
+	<datebox format="MMyyyydd hamm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(5)" locale="en_US"/>
+	<separator/>
+	format="yyyyMMdd ahhmm"
+	<separator/>
+	<datebox format="yyyyMMdd ahhmm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(6)" locale="en_US"/>
+	<separator/>
+	format="yyyy/MM/dd hmma"
+	<separator/>
+	<datebox format="yyyy/MMM/dd hmma" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(7)" locale="zh_TW"/>
+	<separator/>
+	format="yyyy-MM-dd a hh:mm"
+	<separator/>
+	<datebox format="yyyy-MM-dd a hh:mm" onCreate="self.value = new Date(0)" width="250px" showTodayLink="true" w:onChange="log(8)" locale="en_US"/>
+
+	<separator/>
+	test strictDate with parse(format="MMMddyyyy"): key Jan002018 in the datebox below, it should turn into Dec312017.
+	<separator/>
+	<datebox format="MMMddyyyy" id="ovd1" lenient="true" strictDate="false" w:onChange="log(9)"/>
+	<separator/>
+	test strictDate with parse(format="MMMddyyyy"): key Jan002018 in the datebox below, you should see an error.
+	<separator/>
+	<datebox format="MMMddyyyy" id="ovd2" lenient="true" strictDate="true" w:onChange="log(10)"/>
+</zk>

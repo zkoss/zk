@@ -71,8 +71,9 @@ window.$eval=function(s){return eval(s);};
 	<script src="ext/jquery.transit.js"/>
 
 	<!-- Moment.js -->
-	<script src="ext/moment.js"/>
+	<script src="ext/moment-with-locales.js"/>
 	<script src="ext/moment-timezone-with-data.js"/>
+	<script src="ext/moment-jdateformatparser.js"/>
 	<function class="org.zkoss.zk.ui.http.Wpds"
 		signature="java.lang.String outMomentTimezoneJavascript(javax.servlet.ServletRequest, javax.servlet.ServletResponse)"/>
 </package>

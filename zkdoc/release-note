@@ -35,6 +35,7 @@ ZK 9.5.1
   ZK-4705: Missing insertChildHTML_ in nested Borderlayout
   ZK-4644: Rendering Stepbar dynamically causes error
   ZK-4645: Stepbar Error - render dynamically with model
+  ZK-4068: datebox failing date format
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,

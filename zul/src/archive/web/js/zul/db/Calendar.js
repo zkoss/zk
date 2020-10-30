@@ -940,6 +940,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	})(),
 	getLocalizedSymbols: function () {
 		return this._localizedSymbols || {
+			LANGUAGE_TAG: zk.LANGUAGE_TAG,
 			DOW_1ST: zk.DOW_1ST,
 			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
