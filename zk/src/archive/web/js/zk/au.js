@@ -706,6 +706,8 @@ zAu.beforeSend = function (uri, req, dt) {
 	 */
 	sendNow: function (dt) {
 		if (zAu.disabledRequest) {
+			if (zk.processing)
+				zk.endProcessing();
 			return false;
 		}
 		var es = zAu.getAuRequests(dt);

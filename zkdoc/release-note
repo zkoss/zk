@@ -38,6 +38,7 @@ ZK 9.5.1
   ZK-4068: datebox failing date format
   ZK-4650: click on an imagemap doesn't send an onclick event
   ZK-4677: Unexpected scrollTop when loading the page in edge/safari
+  ZK-4568: alert during onClientInfo cause disabled request and UI stuck
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
