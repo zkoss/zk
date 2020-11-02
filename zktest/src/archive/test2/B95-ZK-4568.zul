@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4568.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 02 11:41:52 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Load this page.
+        2. You shouldn't see the loading forever or the crash screen.
+    </label>
+    <div onClientInfo="" onCreate='throw new UiException("error")'/>
+</zk>
