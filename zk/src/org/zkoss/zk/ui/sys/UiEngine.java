@@ -110,12 +110,6 @@ public interface UiEngine {
 	 */
 	public void addInvalidate(Component comp);
 
-	/** Invalidates a component to cause redrawing partially.
-	 * Called when {@link ComponentCtrl#invalidatePartial()} is called.
-	 * @since 9.0.0
-	 */
-	public void addInvalidate(Component comp, String subId);
-
 	/** Smart-updates a property of the peer widget.
 	 *
 	 * @param append whether to append the updates of properties with the same
