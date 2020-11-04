@@ -9,20 +9,24 @@
 //css flex
 .z-flex {
 	display: flex;
-}
 
-.z-flex-row {
-	flex-direction: row;
-}
+	& > :not(&-item) {
+		flex-shrink: 0;
+	}
 
-.z-flex-column {
-	flex-direction: column;
-}
+	&-row {
+		flex-direction: row;
+	}
 
-.z-flex-item {
-	flex: 1 1 0;
-	min-height: 0;
-	min-width: 0;
+	&-column {
+		flex-direction: column;
+	}
+
+	&-item {
+		flex: 1 1 0;
+		min-height: 0;
+		min-width: 0;
+	}
 }
 
 #footer.append-style();
