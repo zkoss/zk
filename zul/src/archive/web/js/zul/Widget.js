@@ -449,6 +449,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				else if ('ins' == s) cc = 45;
 				else if ('del' == s) cc = 46;
 				else if ('bak' == s) cc = 8;
+				else if ('tab' == s) cc = 9;
 				else if (s.length > 1 && s.charAt(0) == 'f') {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
@@ -629,6 +630,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		case 45: //Ins
 		case 46: //Del
 		case 8: //Backspace
+		case 9: //Tab
 			break;
 		default:
 			if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D
