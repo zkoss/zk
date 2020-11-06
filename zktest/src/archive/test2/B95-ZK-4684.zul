@@ -15,13 +15,14 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 <zk>
 	<apply templateURI="/test2/include/themes.zul"/>
 	<label multiline="true">
-		test in iceblue and iceblue_c (and tablet styles)
+		test in iceblue, iceblue_c, classic themes and atlantic (and their tablet styles)
 		click " File" to open menu
 		all the images icons and text in the menuitems should be vertical align
 	</label>
 	<menubar width="100%">
 		<menuitem label="Menu"/>
-		<menu label="File">
+		<menuitem label="Menu" iconSclass="z-icon-user"/>
+		<menu label="File" iconSclass="z-icon-file">
 			<menupopup>
 				<menuitem label="View"/>
 				<menuitem iconSclass="z-icon-save" label="Save"/>
