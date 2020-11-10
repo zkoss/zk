@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4423-kanban-panel.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Nov 03 15:54:55 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<panel border="normal" title="@load(item.taskName)">
+		<panelchildren>
+			<label value="@load(item.taskDescription)" />
+		</panelchildren>
+	</panel>
+</zk>
