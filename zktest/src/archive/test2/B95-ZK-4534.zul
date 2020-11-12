@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4534.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Nov 12 09:53:18 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window mode="modal" title="modal window" border="normal" >
+		<apply templateURI="/test2/include/themes.zul"/>
+		<label multiline="true">
+			Test with iceblue_c:
+			1. Drag the modal window.
+			2. The ghost(dragging) window header style should be same as normal window header style.
+		</label>
+	</window>
+</zk>
