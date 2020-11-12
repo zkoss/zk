@@ -52,6 +52,9 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 
 	protected static String ON_REBUILD_SHADOW_TREE_LATER = "onRebuildShadowTreeLater";
 
+	//internal used only
+	public static String SKIP_DISTRIBUTED_CHILDREN_PROPERTY_CHANGE = "skipDistributedChildrenPropertyChange";
+
 	public Object resolveVariable(Component child, String name, boolean recurse) {
 		if (_firstInsertion == null) // out of our range;
 			return null;

@@ -43,6 +43,7 @@ ZK 9.5.1
   ZK-4568: alert during onClientInfo cause disabled request and UI stuck
   ZK-4575: Browser zoom cause mesh header / body column borders mismatch
   ZK-4534: wrong modal window drag styles in compact theme
+  ZK-4691: zk recreates injected page unexpectedly
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
