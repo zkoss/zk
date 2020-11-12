@@ -914,7 +914,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		try {
 			if (response && response.ok) {
 				zAu.ajaxReq = zAu.ajaxReqInf = null;
-				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, zAu.pfGetIds(req));
+				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, zAu.pfGetIds(response));
 
 				sid = response.headers.get('ZK-SID');
 
