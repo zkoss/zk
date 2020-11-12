@@ -21,9 +21,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URL;
 
 import org.junit.Test;
+
 import org.zkoss.io.RepeatableInputStream;
 
 /**
@@ -34,7 +34,7 @@ public class B70_ZK_2936Test {
 	public void test2() {
 		try {
 			InputStream instance = RepeatableInputStream.getInstance(
-					new URL("http://www.zkoss.org/jsp/zul").openStream());
+					this.getClass().getResourceAsStream("/WEB-INF/zk.xml"));
 			BufferedReader in = new BufferedReader(new InputStreamReader(instance));
 			String line;
 
