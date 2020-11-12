@@ -108,9 +108,11 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.HtmlShadowElement;
 import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -460,10 +462,22 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 
 	private void doPropertyChange0(Object base, String prop, Set<LoadBinding> bindings) {
+		Execution exec = Executions.getCurrent();
+		Set<Component> skipCheckChildren = (Set<Component>) exec.getAttribute(HtmlShadowElement.SKIP_DISTRIBUTED_CHILDREN_PROPERTY_CHANGE);
 		for (LoadBinding binding : bindings) {
 			//BUG 828, the sub-sequence binding might be removed after the previous loading.
 			final Component comp = binding.getComponent();
 			if (!(comp instanceof ShadowElement) && (comp == null || comp.getPage() == null))
+				continue;
+
+			boolean skip = false;
+			if (skipCheckChildren != null)
+				for (Component skipComp : skipCheckChildren)
+					if (Components.isAncestor(skipComp, comp)) {
+						skip = true;
+						break;
+					}
+			if (skip)
 				continue;
 
 			final BindContext ctx = BindContextUtil.newBindContext(this, binding, false, null, comp, null);
