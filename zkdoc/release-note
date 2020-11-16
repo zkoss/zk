@@ -3,6 +3,7 @@ ZK 9.5.0.2
 
 * Bugs
   ZK-4698: It detects the parameter name too early in MVVM Params
+  ZK-4718: PerformanceMeter breaks zkau requests communication
 
 * Upgrade Notes
 
