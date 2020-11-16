@@ -145,6 +145,18 @@ public class Wpds {
 		return result.toString();
 	}
 
+	/**
+	 * Internal use only.
+	 * Generates some Library-properties strings in JavaScript syntax
+	 * @since 9.5.1
+	 */
+	public static final String outLibraryPropertyJavaScript() {
+		StringBuilder sb = new StringBuilder();
+		if ("true".equals(Library.getProperty("org.zkoss.zkmax.tablet.ui.disabled")))
+			sb.append("zk.tabletUIDisabled=true;\n");
+		return sb.toString();
+	}
+
 	/** Output number relevant texts.
 	 */
 	private static final String outNumberJavaScript(Locale locale) {

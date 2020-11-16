@@ -426,6 +426,17 @@ zk.copy(zk, {
 	 */
 	//spaceless: null,
 
+	/** Indicates whether to disable the tablet UI.
+	 * @type boolean
+	 * @since 9.5.1
+	 */
+	//tabletUIDisabled: false,
+	/** Indicates whether to apply touch mode.
+	 * @type boolean
+	 * @since 9.5.1
+	 */
+	//touchEnabled: false,
+
 	/** The widget that captures the keystrokes.
 	 * Used to specify a widget that shall receive the following the onKeyPress and onKeyUp events, no matter what widget the event occurs on.
 <pre><code>
