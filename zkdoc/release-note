@@ -46,6 +46,7 @@ ZK 9.5.1
   ZK-4691: zk recreates injected page unexpectedly
   ZK-4718: PerformanceMeter breaks zkau requests communication
   ZK-4517: Listheader update issues with invalidatePartial
+  ZK-4719: tablet-ui disabled applies only partially
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,

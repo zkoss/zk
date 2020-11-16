@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4719.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Nov 16 12:52:35 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<?import org.zkoss.lang.Library?>
+<zk>
+	<zscript>
+		Library.setProperty("org.zkoss.zkmax.tablet.ui.disabled", "true");
+	</zscript>
+	<label multiline="true">
+		1. Open this zul with tablet device (or in chrome touch emulationand) and reload the page.
+		2. Click the datebox icon, it will show calendar instead of time wheel.
+	</label>
+	<datebox/>
+	<button label="reset library property" onClick='Library.setProperty("org.zkoss.zkmax.tablet.ui.disabled", "false");'/>
+</zk>
