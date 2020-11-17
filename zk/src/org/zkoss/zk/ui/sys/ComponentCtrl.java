@@ -650,6 +650,8 @@ public interface ComponentCtrl {
 	 * <p>It can be called only in the request-processing and event-processing
 	 * phases. However, it is NOT allowed in the rendering phase.
 	 * @since 9.0.1
+	 * @deprecated since 9.5.1 it acts just the same as {@link Component#invalidate}
 	 */
+	@Deprecated
 	public void invalidatePartial();
 }

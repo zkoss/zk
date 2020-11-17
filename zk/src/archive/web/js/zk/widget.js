@@ -4696,16 +4696,6 @@ _doFooSelect: function (evt) {
 	 */
 	shallFireSizedLaterWhenAddChd_: function () {
 		return false;
-	},
-	/**
-	 * Returns the {@link zk.Skipper} used in outerPartial.
-	 * Default: null (No skipper).
-	 * It is intended to implement by widget classes.
-	 * @return zk.Skipper the skipper used in outerPartial.
-	 * @since 9.0.1
-	 */
-	getOuterPartialSkipper_: function () {
-		return null;
 	}
 
 }, {

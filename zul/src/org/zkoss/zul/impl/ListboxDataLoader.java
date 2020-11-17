@@ -17,15 +17,23 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.zk.au.DeferredValue;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
+import org.zkoss.zk.ui.sys.UiEngine;
+import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
 import org.zkoss.zul.Attributes;
@@ -115,9 +123,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (cnt == 0) //no change, nothing to do here
 				return;
 			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
-				_listbox.invalidatePartial();
-			//Bug 3147518: avoid memory leak
-			//Also better performance (outer better than remove a lot)
+				invalidateListitems();
 			if (min < 0)
 				if (max < 0)
 					min = 0;
@@ -150,10 +156,8 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold()) {
 				_listbox.shallUpdateScrollPos(true);
-				_listbox.invalidatePartial();
+				invalidateListitems();
 			}
-			//Bug 3147518: avoid memory leak
-			//Also better performance (outer better than remove a lot)
 
 			//detach from end (due to groupfoot issue)
 			Component comp = _listbox.getItemAtIndex(max);
@@ -168,6 +172,22 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			syncModel(min, max < 0 ? -1 : (max - min + 1));
 			//TonyQ: B50-ZK-897 , listfoot disappear after clicking run button , 
 			// 		   		sync logic with GridDataLoader 
+		}
+	}
+
+	private void invalidateListitems() {
+		//Bug 3147518: avoid memory leak
+		//Also better performance (outer better than remove a lot)
+		final Execution execution = Executions.getCurrent();
+		final Page page = _listbox.getPage();
+		if (execution != null && execution.isAsyncUpdate(page)) {
+			final UiEngine engine = page != null
+				? ((WebAppCtrl) page.getDesktop().getWebApp()).getUiEngine()
+				: null;
+			if (engine != null) {
+				engine.addSmartUpdate(_listbox, "itemsInvalid_", new DeferredRedraw(_listbox.getItems()), 10000);
+				execution.setAttribute("zkoss.Listbox.invalidateListitems" + _listbox.getUuid(), Boolean.TRUE);
+			}
 		}
 	}
 
@@ -394,9 +414,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				//must be detached before group
 				newcnt += cnt; //add affected later
 				if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD) && !inPaging)
-					_listbox.invalidatePartial();
-				//Bug 3147518: avoid memory leak
-				//Also better performance (outer better than remove a lot)
+					invalidateListitems();
 
 				Component comp = _listbox.getItemAtIndex(max);
 				next = comp.getNextSibling();
@@ -436,9 +454,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 				if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
 						&& !inPagingMold())
-					_listbox.invalidatePartial();
-				//Bug 3147518: avoid memory leak
-				//Also better performance (outer better than remove a lot)
+					invalidateListitems();
 			}
 		} else {
 			min = 0;
@@ -495,6 +511,10 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	 * @since 5.0.10
 	 */
 	protected Set<? extends Component> getAvailableAtClient(boolean itemOnly) {
+		final boolean invalidateListitems = Executions.getCurrent()
+				.removeAttribute("zkoss.Listbox.invalidateListitems" + _listbox.getUuid()) != null;
+		if (invalidateListitems && !_listbox.isInvalidated())
+			return getAvailableAtClient(0, 0, itemOnly);
 		if (!isCropper())
 			return null;
 
@@ -509,9 +529,6 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	 * @since 5.0.10
 	 */
 	protected Set<? extends Component> getAvailableAtClient(int offset, int limit, boolean itemOnly) {
-		if (!isCropper())
-			return null;
-
 		final Set<Component> avail = new LinkedHashSet<Component>(32);
 		if (!itemOnly) {
 			avail.addAll(_listbox.getHeads());
@@ -555,5 +572,17 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 
 	public Component getCropOwner() {
 		return _listbox;
+	}
+
+	protected static class DeferredRedraw implements DeferredValue {
+		private final Collection<? extends Component> _items;
+
+		public DeferredRedraw(Collection<? extends Component> items) {
+			_items = items;
+		}
+
+		public Object getValue() {
+			return ComponentsCtrl.redraw(_items);
+		}
 	}
 }

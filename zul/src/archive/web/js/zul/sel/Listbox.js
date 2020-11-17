@@ -501,8 +501,33 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_getLastItemIndex: function () {
 		return this.lastItem._index;
 	},
-	getOuterPartialSkipper_: function () {
-		return zul.sel.ListboxHeadSkipper;
+	setItemsInvalid_: function (wgts) {
+		var wgt = this;
+		zAu.createWidgets(wgts, function (ws) {
+			if (wgt.$n('rows')) {
+				wgt.replaceCavedChildren_('rows', ws);
+			} else {
+				//remove all listitems
+				var fc;
+				for (var item = wgt.firstItem; item;) {
+					// B60-ZK-1230: Only removes the first list item
+					var n = wgt.nextItem(item);
+					if (!n)
+						fc = item.nextSibling;
+					wgt.removeChild(item, true);
+					item = n;
+				}
+
+				//add new items
+				for (var j = 0, len = ws.length; j < len; ++j)
+					wgt.insertBefore(ws[j], fc, true); //no dom
+			}
+		}, function (wx) {
+			for (var w = wx, p = wx; w; p = w, w = w.parent)
+				if (w == wgt && p.$instanceof(zul.sel.Listitem))
+					return null; //ignore it since it is going to be removed
+			return wx;
+		});
 	}
 });
 /**
@@ -550,29 +575,5 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 		return p;
 	}
 });
-/**
- * The listbox head skipper used in outerPartial.
- * @since 9.0.1
- */
-zul.sel.ListboxHeadSkipper = new (zk.$extends(zk.Skipper, {
-	skipped: zk.$void,
-	skip: function (wgt, skipId) {
-		var skip = jq(skipId || (wgt.uuid + '-headrows'), zk)[0];
-		return skip && skip.parentNode.removeChild(skip);
-	},
-	restore: function (wgt, skip) {
-		if (skip) {
-			var loc = document.getElementById(skip.id);
-			// remove new DOM children
-			while (loc.firstChild)
-				loc.removeChild(loc.firstChild);
-			for (var el; el = skip.firstChild;) {
-				skip.removeChild(el);
-				loc.appendChild(el);
-				zjq._fixIframe(el); //in domie.js, Bug 2900274
-			}
-		}
-	}
-}));
 
 })();
