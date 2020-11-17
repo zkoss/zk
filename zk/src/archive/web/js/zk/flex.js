@@ -551,7 +551,7 @@ zFlex = { //static methods
 			if (flex > 0) {
 				isAllMin = false;
 				jqFcc.addClass(flexItemClass);
-				if (flex != 1)
+				if (flex != 1 || fcc.style['flex-grow'])
 					fcc.style['flex-grow'] = flex; //update flex
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '100%';

@@ -1107,10 +1107,11 @@ new zul.wnd.Window({
 							//checking on (_binds[this.uuid] === this) as before does not work when
 							//nested inside native component. in this case the nested component
 							//is bound earlier, when the native component is reused (mount.js create())
+			if (this._cssflex && this._nhflex <= 0) // min or no flex
+				zFlex.clearCSSFlex(this, 'h');
+
 			if (!this._nhflex) {
-				if (this._cssflex && this._hflex != 'min')
-					zFlex.clearCSSFlex(this, 'h');
-				else
+				if (!this._cssflex)
 					this.setFlexSize_({width: 'auto'}); //clear the width
 				delete this._hflexsz;
 				this._hflex = undefined;
@@ -1127,10 +1128,11 @@ new zul.wnd.Window({
 		if (this._nvflex < 0 && v != 'min')
 			this._nvflex = 0;
 		if (this.desktop) {
+			if (this._cssflex && this._nvflex <= 0) // min or no flex
+				zFlex.clearCSSFlex(this, 'v');
+
 			if (!this._nvflex) {
-				if (this._cssflex && this._vflex != 'min')
-					zFlex.clearCSSFlex(this, 'v');
-				else
+				if (!this._cssflex)
 					this.setFlexSize_({height: 'auto'});
 				delete this._vflexsz;
 				this._vflex = undefined;
