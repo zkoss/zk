@@ -28,6 +28,8 @@ window.$eval=function(s){return eval(s);};
 	<script src="zk.js" jsdoc="true"/>
 	<function class="org.zkoss.zul.impl.Utils"
         signature="java.lang.String outFeature()"/>
+	<function class="org.zkoss.zk.ui.http.Wpds"
+			  signature="java.lang.String outLibraryPropertyJavaScript()"/>
 	<script src="js.js"/>
 	<script src="dom.js" jsdoc="true"/>
 	<script src="domie.js" browser="ie9-,ie10-"/>
@@ -51,7 +53,10 @@ window.$eval=function(s){return eval(s);};
 	<script src="ext/fetch.js"/>
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
-	<script>if (zk.mobile) {</script>
+	<script><![CDATA[
+		zk.touchEnabled = zk.mobile && !zk.tabletUIDisabled;
+	]]></script>
+	<script>if (zk.touchEnabled) {</script>
 		<script src="zswipe.js" jsdoc="true"/>
 		<script src="domtouch.js"/>
 	<script>
