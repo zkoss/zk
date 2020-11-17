@@ -48,6 +48,7 @@ ZK 9.5.1
   ZK-4517: Listheader update issues with invalidatePartial
   ZK-4719: tablet-ui disabled applies only partially
   ZK-4574: Clients.resize() doesn't work for hflex="min"
+  ZK-4712: closure-compiler.jar in binary download package conflicts with gson.jar
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
