@@ -266,7 +266,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var openInfo = this._openInfo;
 		if (openInfo) {
 			this.position.apply(this, openInfo);
-			this._openInfo = null;
 		}
 		zWatch.unlisten({onResponse: this});
 		this.mask = null;
