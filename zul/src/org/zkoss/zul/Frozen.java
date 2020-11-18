@@ -142,9 +142,12 @@ public class Frozen extends XulElement {
 	}
 
 	protected void updateByClient(String name, Object value) {
-		if ("start".equals(name))
-			setStart(value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(Objects.toString(value)));
-		else
+		if ("start".equals(name)) {
+			int start = value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(Objects.toString(value));
+			if (start < 0)
+				throw new WrongValueException("Positive only");
+			_start = start;
+		} else
 			super.updateByClient(name, value);
 	}
 

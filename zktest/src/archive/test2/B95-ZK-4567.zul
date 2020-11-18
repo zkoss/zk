@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4567.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Nov 18 14:47:07 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. scroll the horizontal scroll bar of the tree to the middle(at least 1 column)
+		then click the orange space, you should not see the scroll position jumping.
+		2. scroll the horizontal scroll bar of the tree to another column(at least 1 column)
+		then click the orange space, you should not see the scroll position jumping.
+		3. the server side Frozen start value should sync as scroll position. (see zk log)
+		4. click the "setStart" button, the scroll(tree and bar) position should be updated.
+	</label>
+	<div>
+		<button label="setStart5" onClick='fz.setStart(5);fz2.setStart(5)'/>
+		<button label="setStart0" onClick='fz.setStart(0);fz2.setStart(0)'/>
+		<button label="setColumns2" onClick='fz.setColumns(2);fz2.setColumns(2)'/>
+	</div>
+	<hlayout>
+		<div id="buttonDiv" height="200px" width="200px" style="background:orange"
+			 onClick='buttonV.setVisible(!buttonV.isVisible()); Clients.log("fz start: " + fz.getStart())'>
+			<button id="buttonV" label="test" visible="false"/>
+		</div>
+		<tree id="loadingTree" height="350px" width="400px">
+			<custom-attributes org.zkoss.zul.frozen.smooth="true"/>
+			<frozen id="fz" columns="1" />
+			<treecols>
+				<treecol label="1" width="100px" />
+				<treecol label="2" width="100px" />
+				<treecol label="3" width="100px" />
+				<treecol label="4" width="100px" />
+				<treecol label="5" width="100px" />
+				<treecol label="6" width="100px" />
+				<treecol label="7" width="100px" />
+				<treecol label="8" width="100px" />
+				<treecol label="9" width="100px" />
+				<treecol label="10" width="100px" />
+				<treecol label="11" width="100px" />
+				<treecol label="12" width="100px" />
+				<treecol label="13" width="100px" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="test1" />
+						<treecell label="test2" />
+						<treecell label="test3" />
+						<treecell label="test4" />
+						<treecell label="test5" />
+						<treecell label="test6" />
+						<treecell label="test7" />
+						<treecell label="test8" />
+						<treecell label="test9" />
+						<treecell label="test10" />
+						<treecell label="test11" />
+						<treecell label="test12" />
+						<treecell label="test13" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+		<tree id="loadingTree2" height="350px" width="400px">
+			<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+			<frozen id="fz2" columns="1" />
+			<treecols>
+				<treecol label="1" width="100px" />
+				<treecol label="2" width="100px" />
+				<treecol label="3" width="100px" />
+				<treecol label="4" width="100px" />
+				<treecol label="5" width="100px" />
+				<treecol label="6" width="100px" />
+				<treecol label="7" width="100px" />
+				<treecol label="8" width="100px" />
+				<treecol label="9" width="100px" />
+				<treecol label="10" width="100px" />
+				<treecol label="11" width="100px" />
+				<treecol label="12" width="100px" />
+				<treecol label="13" width="100px" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="test1" />
+						<treecell label="test2" />
+						<treecell label="test3" />
+						<treecell label="test4" />
+						<treecell label="test5" />
+						<treecell label="test6" />
+						<treecell label="test7" />
+						<treecell label="test8" />
+						<treecell label="test9" />
+						<treecell label="test10" />
+						<treecell label="test11" />
+						<treecell label="test12" />
+						<treecell label="test13" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+						<treecell label="test" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</hlayout>
+</zk>
