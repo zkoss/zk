@@ -1869,7 +1869,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			final Object viewModel = getViewModelInView();
 
 			Method method = getCommandMethod(BindUtils.getViewModelClass(viewModel), command, _globalCommandMethodInfoProvider,
-					_globalCommandMethodCache, commandArgs != null ? commandArgs.size() : 0);
+					_globalCommandMethodCache, commandArgs != null ? commandArgs.size() : 0, true);
 
 			if (method != null) {
 
@@ -2077,7 +2077,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			Class<?> viewModelClass = BindUtils.getViewModelClass(viewModel);
 
 			Method method = getCommandMethod(viewModelClass, command, _commandMethodInfoProvider,
-					_commandMethodCache, commandArgs != null ? commandArgs.values().size() : 0);
+					_commandMethodCache, commandArgs != null ? commandArgs.values().size() : 0, false);
 
 			if (method != null) {
 
@@ -2120,7 +2120,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	}
 
 	private Method getCommandMethod(Class<?> clz, String command, CommandMethodInfoProvider cmdInfo,
-			Map<Class<?>, Map<String, CachedItem<Method>>> cache, int commandParamCount) {
+			Map<Class<?>, Map<String, CachedItem<Method>>> cache, int commandParamCount, boolean isGlobal) {
 		Map<String, CachedItem<Method>> methods;
 		synchronized (cache) {
 			methods = cache.get(clz);
@@ -2144,7 +2144,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			for (Method m : clz.getMethods()) {
 				if (m.isBridge()) continue;
 				String mName = m.getName();
-				if (mName.equals(command) && m.getParameterTypes().length == commandParamCount)
+				if (!isGlobal && mName.equals(command) && m.getParameterTypes().length == commandParamCount)
 					matchedMethodWithoutAnno = m;
 				if (inited) continue; //already scanned @Default and @Command
 				if (cmdInfo.isDefaultMethod(m)) {
