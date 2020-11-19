@@ -226,20 +226,20 @@ public class ParamCall {
 			}
 		}
 		if (val == null)
-			val = resolvePositionalParameter(paramType, index);
+			val = resolvePositionalParameter(paramType, index, parmAnnos.length == 0);
 		return val;
 	}
 
 	private Map<String, Object> _bindingArgs;
 
-	private Object resolvePositionalParameter(Class<?> returnType, int index) {
+	private Object resolvePositionalParameter(Class<?> returnType, int index, boolean noBindingParam) {
 		Object val = null;
 		if (_bindingArgs != null) {
 			int argIndex = 0;
 			for (Map.Entry<String, Object> entry : _bindingArgs.entrySet()) {
-				// skip using positional if the param key is not auto-generated
+				// use positional when: 1. the param key is auto-generated. 2. method param has no @BindingParam
 				if (argIndex == index) {
-					if (entry.getKey().startsWith(Parser.SIMPLIFIED_COMMAND_PARAM_PREFIX))
+					if (entry.getKey().startsWith(Parser.SIMPLIFIED_COMMAND_PARAM_PREFIX) || noBindingParam)
 						val = entry.getValue();
 					break;
 				}
