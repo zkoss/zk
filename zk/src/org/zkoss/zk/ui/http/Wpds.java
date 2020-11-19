@@ -152,8 +152,8 @@ public class Wpds {
 	 */
 	public static final String outLibraryPropertyJavaScript() {
 		StringBuilder sb = new StringBuilder();
-		if ("true".equals(Library.getProperty("org.zkoss.zkmax.tablet.ui.disabled")))
-			sb.append("zk.tabletUIDisabled=true;\n");
+		if (Boolean.parseBoolean(Library.getProperty("org.zkoss.zkmax.tablet.ui.disabled", "false")))
+			sb.append("zk.tabletUIEnabled=false;\n");
 		return sb.toString();
 	}
 
