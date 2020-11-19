@@ -19,6 +19,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			Test with iceblue_c:
 			1. Drag the modal window.
 			2. The ghost(dragging) window header style should be same as normal window header style.
+			3. click the button to show messagebox then drag the messagebox.
+			4. The ghost(dragging) window(messagebox) header style should be same as normal window(messagebox) header style.
 		</label>
+		<button label="show messagebox" onClick='Messagebox.show("Drag me -> title margins/paddings should not change!");'/>
 	</window>
 </zk>
