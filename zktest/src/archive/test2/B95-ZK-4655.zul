@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4655.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 20 11:58:57 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <script><![CDATA[
+    var ws;
+    zk.afterMount(function () {
+        ws = new WebSocket(
+            location.protocol === "https:" ? "wss" : "ws" +
+            "://" + location.host + zk.contextURI + "/4655echo/?dtid=" + zk.$('$win').desktop.uuid);
+        ws.onerror = function (event) {
+            zk.log("WebSocket error: " + event);
+        };
+        ws.onmessage = function (event) {
+            zkbind.$('$win').command('update');
+        };
+    });
+
+    function sendWsRandom() {
+        ws.send(Math.ceil(Math.random() * 1000));
+    }
+    function sendWsReceive() {
+        ws.send("receive");
+    }
+    ]]>
+    </script>
+    <label multiline="true">
+        1. Open this page.
+        2. The WebSocket should be established successfully.
+        (If error, a zk log will be shown)
+    </label>
+    <window id="win" viewModel="@('org.zkoss.zktest.test2.B95_ZK_4655VM')">
+        <groupbox title="ZK">
+            <hlayout>
+                count: <label value="@load(vm.count)"/>
+            </hlayout>
+            <button label="add (by ZK)" onClick="@('cmd')"/>
+            <button label="roll (by ws)" w:onClick="sendWsRandom()"/>
+            <button label="receive (by ws)" w:onClick="sendWsReceive()"/>
+        </groupbox>
+    </window>
+</zk>

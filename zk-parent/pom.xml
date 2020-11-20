@@ -12,6 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.30</slf4j.version>
+        <jetty.version>9.4.34.v20201102</jetty.version>
         <skipNpmInstall>false</skipNpmInstall>
         <skipZklessc>false</skipZklessc>
     </properties>
@@ -105,6 +106,13 @@
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-bom</artifactId>
+                <version>${jetty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -155,7 +163,7 @@
                 <plugin>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.4.31.v20200723</version>
+                    <version>${jetty.version}</version>
                     <configuration>
                         <webAppSourceDirectory>${project.basedir}/src/archive</webAppSourceDirectory>
                         <webApp>

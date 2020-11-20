@@ -103,7 +103,7 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	 */
 	private static String extractConnectionUuid(Map<String, List<String>> requestParameterMap) {
 		List<String> connectionUuids = requestParameterMap.get(CONNECTION_UUID_PARAM);
-		return connectionUuids.isEmpty() ? "" : connectionUuids.get(0);
+		return connectionUuids == null || connectionUuids.isEmpty() ? "" : connectionUuids.get(0);
 	}
 
 	/**
