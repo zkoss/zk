@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4642.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 18 10:57:22 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div onRightClick="Messagebox.show(event.getName());" >
+		<label value="right click prevents browser context menu - OK" />
+		<separator/>
+		<html content="right click prevents browser context menu - OK" />
+	</div>
+</zk>
