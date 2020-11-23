@@ -5,6 +5,7 @@ ZK 9.5.0.2
   ZK-4698: It detects the parameter name too early in MVVM Params
   ZK-4718: PerformanceMeter breaks zkau requests communication
   ZK-4719: tablet-ui disabled applies only partially
+  ZK-4723: simplified MVVM binding cause non-command method with same name in different VM to trigger on @global-command
 
 * Upgrade Notes
 
