@@ -28,3 +28,4 @@
 ../dist/lib/ext/gson.jar
 ../dist/lib/ext/jackson-databind.jar
 ../dist/lib/ext/jackson-core.jar
+../dist/lib/ext/javaee-api.jar
