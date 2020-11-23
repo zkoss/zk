@@ -51,6 +51,7 @@ ZK 9.5.1
   ZK-4712: closure-compiler.jar in binary download package conflicts with gson.jar
   ZK-4628: Toggle Popup with onOpen doesn't close
   ZK-4642: onRightClick on <html> doesn't stop context menu
+  ZK-4723: simplified MVVM binding cause non-command method with same name in different VM to trigger on @global-command
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
