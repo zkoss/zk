@@ -3835,14 +3835,8 @@ focus_: function (timeout) {
 	 */
 	beforeSendAU_: function (wgt, evt) {
 		var en = evt.name;
-		if (en == 'onClick' || en == 'onRightClick' || en == 'onDoubleClick') {
-			var target = evt.domTarget,
-				targetWgt = target ? zk.Widget.$(target) : null;
-			if (!target || (!targetWgt.$instanceof(zk.Native)
-				&& (!zk.isLoaded('zhtml') || !targetWgt.$instanceof(zhtml.Widget))
-				&& (!zk.isLoaded('zul.wgt') || !targetWgt.$instanceof(zul.wgt.Html))))
-				evt.shallStop = true;//Bug: 2975748: popup won't work when component with onClick handler
-		}
+		if (en == 'onClick' || en == 'onRightClick' || en == 'onDoubleClick')
+			evt.shallStop = true;//Bug: 2975748: popup won't work when component with onClick handler
 	},
 	/** Sends an AU request to the server.
 	 * It is invoked when {@link #fire} will send an AU request to the server.
