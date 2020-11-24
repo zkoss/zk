@@ -56,6 +56,7 @@ ZK 9.5.1
   ZK-4658: decimalbox with "locale:"-format and constraint causes WrongValueException
   ZK-4670: groupbox incorrect vflex height in vlayout
   ZK-4301: ZK doesn't listen for touch events on desktop browsers
+  ZK-4715: multiple parallel embeds failing (without error)
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
