@@ -53,6 +53,7 @@ ZK 9.5.1
   ZK-4642: onRightClick on <html> doesn't stop context menu
   ZK-4723: simplified MVVM binding cause non-command method with same name in different VM to trigger on @global-command
   ZK-4731: Fix the warning [JSC_CONSTANT_REASSIGNED_VALUE_ERROR] constant self assigned a value more than once in domtouch.js
+  ZK-4658: decimalbox with "locale:"-format and constraint causes WrongValueException
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
