@@ -197,7 +197,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 			this._holdTime = 800;
 			this._startHold = function (evt) {
 				if (!this._rightClickPending) {
-					self = this;
+					var self = this;
 					self._rightClickPending = true; // We could be performing a right click
 					self._rightClickEvent = evt;
 					self._holdTimeout = setTimeout(function () {
