@@ -58,6 +58,32 @@ ZK 9.5.1
   + Now the "onPortalMove" event will no longer be fired from client side.
 
    --------
+ZK 9.5.0.2
+Nov 24, 2020
+* Features
+
+* Bugs
+  ZK-4698: It detects the parameter name too early in MVVM Params
+  ZK-4718: PerformanceMeter breaks zkau requests communication
+  ZK-4719: tablet-ui disabled applies only partially
+  ZK-4723: simplified MVVM binding cause non-command method with same name in different VM to trigger on @global-command
+
+* Upgrade Notes
+
+   --------
+ZK 9.5.0.1
+Oct 13, 2020
+* Features
+
+* Bugs
+  ZK-4689: portal layout detach js error
+  ZK-4690: za11y portallayout popup styles missing for classic themes
+  ZK-4688: A null parameter passed to a global command causes ClassCastException
+  ZK-4695: Tabbox could be undefined on tab setSelected
+
+* Upgrade Notes
+
+   --------
 ZK 9.5.0
 Sep 29, 2020
 * Features
