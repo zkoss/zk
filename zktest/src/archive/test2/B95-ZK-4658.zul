@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4658.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 12:51:37 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the button.
+        2. Shouldn't trigger an error: it shall not be negative.
+    </label>
+    <decimalbox id="decimalbox"
+                value="300000"
+                format="locale:en-US"
+                constraint="no negative: it shall not be negative"/>
+    <separator/>
+    <button label="getValue() triggers WrongValueException"
+            onClick="Clients.log(decimalbox.getValue());"/>
+</zk>

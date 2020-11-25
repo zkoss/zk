@@ -142,12 +142,8 @@ public abstract class NumberInputElement extends FormatInputElement {
 	 * @since 5.0.8
 	 */
 	private String getRealSymbols() {
-		String format = getFormat();
-		boolean useLocaleFormat = (format != null && format.startsWith("locale:"));
-		if (_locale != null || useLocaleFormat) {
-			Locale usedLocale = useLocaleFormat
-					? Locales.getLocale(format.substring(format.indexOf(":") + 1), '-')
-					: _locale;
+		if (_locale != null || isLocaleFormat()) {
+			Locale usedLocale = getDefaultLocale();
 			String localeName = usedLocale.toString();
 			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(getDesktop(),
 					"org.zkoss.zul.impl.NumberInputElement" + localeName)) {
@@ -165,12 +161,23 @@ public abstract class NumberInputElement extends FormatInputElement {
 		return null;
 	}
 
+	/**
+	 * Returns if the "locale:" in {@link #getFormat()} is presented.
+	 * @since 9.5.1
+	 */
+	protected boolean isLocaleFormat() {
+		String format = getFormat();
+		return format != null && format.startsWith("locale:");
+	}
+
 	/** Returns the default locale, either {@link #getLocale} or
 	 * {@link Locales#getCurrent} (never null).
 	 * It is useful when you wan to get a locale for this input.
 	 * @since 5.0.10
 	 */
 	protected Locale getDefaultLocale() {
+		if (isLocaleFormat())
+			return Locales.getLocale(getFormat().substring(7), '-');
 		return _locale != null ? _locale : Locales.getCurrent();
 	}
 
@@ -223,7 +230,7 @@ public abstract class NumberInputElement extends FormatInputElement {
 		String fmt = getFormat();
 		if (fmt == null)
 			fmt = defaultFormat;
-		if (fmt != null) {
+		if (fmt != null && !isLocaleFormat()) {
 			try {
 				df.applyPattern(fmt); //Bug ZK-1518: should try apply pattern first
 			} catch (IllegalArgumentException e) {
