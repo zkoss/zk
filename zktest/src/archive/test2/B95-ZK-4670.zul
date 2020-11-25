@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4670.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 25 11:18:07 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label>
+        All bottom-borders of group 2 should be visible.
+    </label>
+    <script><![CDATA[
+    function getChildrenHeight(elem) {
+        var result = 0;
+        for (var c = elem.firstChild; c; c = c.nextSibling) {
+            result += zk(c).offsetHeightDoubleValue();
+        }
+        return result;
+    }
+    ]]></script>
+    <button label="Check (true means cut off detected)">
+        <attribute w:name="onClick"><![CDATA[
+        var groupboxs = jq("@groupbox"),
+            groupbox;
+        for (var i = 0, len = groupboxs.length; i < len; i++) {
+            groupbox = groupboxs.eq(i);
+            zk.log(getChildrenHeight(groupbox.get(0)) > groupbox.height());
+        }
+        ]]></attribute>
+    </button>
+    <hlayout width="100%">
+        <vlayout height="300px">
+            <div vflex="1" style="border: 1px solid red">CSSFlex: div 1</div>
+            <groupbox vflex="1">group 2 (cut off bottom border)</groupbox>
+        </vlayout>
+        <vlayout height="300px">
+            <div vflex="1" style="border: 1px solid red">CSSFlex: div 1</div>
+            <groupbox vflex="1" title="Have a title">group 2 (cut off bottom border)</groupbox>
+        </vlayout>
+        <vlayout height="300px">
+            <div vflex="1" style="border: 1px solid red">CSSFlex: div 1</div>
+            <groupbox vflex="1">
+                <caption>Have a caption</caption>
+                group 2 (cut off bottom border)
+            </groupbox>
+        </vlayout>
+    </hlayout>
+    <separator />
+    <hlayout>
+        <custom-attributes org.zkoss.zul.css.flex="false"/>
+        <vlayout height="300px">
+            <div vflex="1" style="border: 1px solid red">JSFlex: div 1</div>
+            <groupbox vflex="1">group 2 (no cut off bottom border)</groupbox>
+        </vlayout>
+        <vlayout height="300px">
+            <div vflex="1" style="border: 1px solid red">JSFlex: div 1</div>
+            <groupbox vflex="1" title="Have a title">group 2 (cut off bottom border)</groupbox>
+        </vlayout>
+        <vlayout height="300px">
+            <div vflex="1" style="border: 1px solid red">JSFlex: div 1</div>
+            <groupbox vflex="1">
+                <caption>Have a caption</caption>
+                group 2 (cut off bottom border)
+            </groupbox>
+        </vlayout>
+    </hlayout>
+</zk>
