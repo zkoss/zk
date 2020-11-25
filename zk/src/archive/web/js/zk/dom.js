@@ -1042,17 +1042,22 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	},
 	/** Returns the maximal allowed height of the first matched element.
 	 * In other words, it is the client height of the parent minus all sibling's.
-	 * @return int the maximal allowed height
+	 * @return double the maximal allowed height
 	 */
 	vflexHeight: function () {
 		var el = this.jq[0],
-			hgh = el.parentNode.clientHeight;
-		for (var p = el; p = p.previousSibling;)
-			if (p.offsetHeight && zk(p).isVisible())
-				hgh -= p.offsetHeight; //may undefined
-		for (var p = el; p = p.nextSibling;)
-			if (p.offsetHeight && zk(p).isVisible())
-				hgh -= p.offsetHeight; //may undefined
+			hgh = zk(el.parentNode).clientHeightDoubleValue(),
+			zkp;
+		for (var p = el; p = p.previousSibling;) {
+			zkp = zk(p);
+			if (zkp.isVisible())
+				hgh -= zkp.offsetHeightDoubleValue();
+		}
+		for (var p = el; p = p.nextSibling;) {
+			zkp = zk(p);
+			if (zkp.isVisible())
+				hgh -= zkp.offsetHeightDoubleValue();
+		}
 		return hgh;
 	},
 	/** Retrieves the index of the first selected (table) cell in the cells collection of a (table) row.
