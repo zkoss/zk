@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Embedded ZK Minimal</title>
+    <script id="embeddedScript"
+            src="http://localhost:8080/zktest/zkau/web/js/zkmax/embedded/embedded.js"></script>
+</head>
+<body>
+<h1>Multiple-Embeds</h1>
+<div id="zkapp0">Loading ZK ...</div>
+<div id="zkapp1">Loading ZK ...</div>
+<div id="zkapp2">Loading ZK ...</div>
+<div id="zkapp3">Loading ZK ...</div>
+<div id="zkapp4">Loading ZK ...</div>
+<div id="zkapp5">Loading ZK ...</div>
+<script>
+        zEmbedded.load('zkapp0', 'http://localhost:8080/zktest/test2/B95-ZK-4715.zul')
+            .then(function(result) { zk.log('zkapp0: ' + result.widget.uuid); })
+            .catch(function(error) { console.error(error); });
+        zEmbedded.load('zkapp1', 'http://localhost:8080/zktest/test2/B95-ZK-4715-1.zul')
+            .then(function(result) { zk.log('zkapp1: ' + result.widget.uuid); })
+            .catch(function(error) { console.error(error); });
+        zEmbedded.load('zkapp2', 'http://localhost:8080/zktest/test2/B95-ZK-4715-1.zul')
+            .then(function(result) { zk.log('zkapp2: ' + result.widget.uuid); })
+            .catch(function(error) { console.error(error); });
+        zEmbedded.load('zkapp3', 'http://localhost:8080/zktest/test2/B95-ZK-4715-1.zul')
+            .then(function(result) { zk.log('zkapp3: ' + result.widget.uuid); })
+            .catch(function(error) { console.error(error); });
+        zEmbedded.load('zkapp4', 'http://localhost:8080/zktest/test2/B95-ZK-4715-2.zul')
+            .then(function(result) { zk.log('zkapp4: ' + result.widget.uuid); })
+            .catch(function(error) { console.error(error); });
+        zEmbedded.load('zkapp5', 'http://localhost:8080/zktest/test2/B95-ZK-4715-2.zul')
+            .then(function(result) { zk.log('zkapp5: ' + result.widget.uuid); })
+            .catch(function(error) { console.error(error); });
+    </script>
+<button onclick="console.log('try to reload');zEmbedded.load('zkapp5', 'http://localhost:8080/zktest/test2/B95-ZK-4715-1.zul')
+            .then(function(result) { zk.log('zkapp5 reload: ' + result.widget.uuid); })
+            .catch(function(error) { console.error(error); });">Click to load</button>
+</body>
+</html>
