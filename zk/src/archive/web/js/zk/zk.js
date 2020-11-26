@@ -426,11 +426,11 @@ zk.copy(zk, {
 	 */
 	//spaceless: null,
 
-	/** Indicates whether to disable the tablet UI.
+	/** Indicates whether to enable the tablet UI.
 	 * @type boolean
 	 * @since 9.5.1
 	 */
-	//tabletUIDisabled: false,
+	//tabletUIEnabled: false,
 	/** Indicates whether to apply touch mode.
 	 * @type boolean
 	 * @since 9.5.1

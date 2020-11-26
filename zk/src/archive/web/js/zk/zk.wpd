@@ -54,18 +54,22 @@ window.$eval=function(s){return eval(s);};
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
 	<script><![CDATA[
-		zk.touchEnabled = zk.mobile && !zk.tabletUIDisabled;
+	zk.touchEnabled = !!zk.mobile || navigator.maxTouchPoints > 0;
+	zk.tabletUIEnabled = !!zk.mobile && zk.tabletUIEnabled !== false;
+	if (zk.touchEnabled) {
 	]]></script>
-	<script>if (zk.touchEnabled) {</script>
 		<script src="zswipe.js" jsdoc="true"/>
 		<script src="domtouch.js"/>
-	<script>
+	<script><![CDATA[
+	}
+	if (zk.tabletUIEnabled) {
 		document.addEventListener('DOMContentLoaded', function() {
 			var jqTabletStylesheet = jq('link[href*="zkmax/css/tablet.css.dsp"]').eq(0);
 			if (jqTabletStylesheet)
 				jqTabletStylesheet.attr('disabled', false); // ZK-4451: disable tablet css
 		});
-	}</script>
+	}
+	]]></script>
 	<script src="dateImpl.js"/>
 	<script src="uploadUtils.js"/>
 
