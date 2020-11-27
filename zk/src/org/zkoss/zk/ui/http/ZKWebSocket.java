@@ -91,7 +91,7 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	 */
 	private static String extractDesktopId(Map<String, List<String>> requestParameterMap) {
 		List<String> desktopIds = requestParameterMap.get(DESKTOP_ID_PARAM);
-		if (desktopIds.isEmpty())
+		if (desktopIds == null || desktopIds.isEmpty())
 			throw new IllegalStateException("the value of the key with 'dtid' cannot be null!");
 		return desktopIds.get(0);
 	}
