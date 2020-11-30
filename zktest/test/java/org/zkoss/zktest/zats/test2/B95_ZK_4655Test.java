@@ -11,46 +11,61 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import java.net.InetSocketAddress;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.DefaultHandler;
-import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
-import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
-import org.junit.Assert;
-import org.junit.BeforeClass;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.websocket.EndpointConfig;
+import javax.websocket.Session;
+
 import org.junit.Test;
 
-import org.zkoss.zktest.test2.B95_ZK_4655Endpoint;
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.zk.ui.http.ZKWebSocket;
 
 /**
  * @author rudyhuang
  */
-public class B95_ZK_4655Test extends WebDriverTestCase {
-	@BeforeClass
-	public static void init() throws Exception {
-		Server server = new Server(new InetSocketAddress(getHost(), 0));
+public class B95_ZK_4655Test {
+	private final Session sessionMock = mock(Session.class);
+	private final EndpointConfig endpointConfigMock = mock(EndpointConfig.class);
 
-		final WebAppContext context = new WebAppContext();
-		context.setContextPath(getContextPath());
-		context.setBaseResource(Resource.newResource("./src/archive/"));
-		context.getSessionHandler().setSessionIdPathParameterName(null);
-		server.setHandler(new HandlerList(context, new DefaultHandler()));
-		// Add javax.websocket support
-		final ServerContainer container = WebSocketServerContainerInitializer.initialize(context);
-		container.addEndpoint(B95_ZK_4655Endpoint.class);
-		initServer(server);
+	@Test
+	public void testFullArgs() {
+		List<String> dtid = Collections.singletonList("abcd");
+		List<String> uuid = Collections.singletonList("1234");
+		Map<String, List<String>> reqMap = new HashMap<>(2);
+		reqMap.put(ZKWebSocket.DESKTOP_ID_PARAM, dtid);
+		reqMap.put(ZKWebSocket.CONNECTION_UUID_PARAM, uuid);
+		when(sessionMock.getRequestParameterMap()).thenReturn(reqMap);
+
+		Map<String, Object> userParameters = new HashMap<>(1);
+		userParameters.put(dtid.get(0) + '|' + uuid.get(0), mock(org.zkoss.zk.ui.Session.class));
+		when(endpointConfigMock.getUserProperties()).thenReturn(userParameters);
+
+		ZKWebSocket.initZkDesktop(sessionMock, endpointConfigMock);
 	}
 
 	@Test
-	public void test() {
-		connect();
-		sleep(1000); // wait for WebSocket
-		Assert.assertFalse(isZKLogAvailable());
-		assertNoJSError();
+	public void testArgOnlyDtid() {
+		List<String> dtid = Collections.singletonList("abcd");
+		when(sessionMock.getRequestParameterMap())
+			.thenReturn(Collections.singletonMap(ZKWebSocket.DESKTOP_ID_PARAM, dtid));
+
+		Map<String, Object> userParameters = new HashMap<>(1);
+		userParameters.put(dtid.get(0) + '|', mock(org.zkoss.zk.ui.Session.class));
+		when(endpointConfigMock.getUserProperties()).thenReturn(userParameters);
+
+		ZKWebSocket.initZkDesktop(sessionMock, endpointConfigMock);
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testNoArg() {
+		when(sessionMock.getRequestParameterMap()).thenReturn(Collections.emptyMap());
+
+		ZKWebSocket.initZkDesktop(sessionMock, endpointConfigMock);
 	}
 }
