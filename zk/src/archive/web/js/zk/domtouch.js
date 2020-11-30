@@ -292,7 +292,8 @@ zk.override(zk.Widget.prototype, _xWidget, {
 	}
 });
 var _jq = {},
-	_jqEvent = {};
+	_jqEvent = {},
+	_jqEventSpecial = {};
 zk.override(jq.fn, _jq, {
 	on: function (type, selector, data, fn) {
 		var evtType;
@@ -342,8 +343,20 @@ zk.override(jq.Event.prototype, _jqEvent, {
 		_jqEvent.stop.apply(this);
 		var tEvt;
 		if (tEvt = this.touchEvent) {
-			tEvt.preventDefault();
+			if (tEvt.cancelable) tEvt.preventDefault();
 			tEvt.stopPropagation();
+		}
+	}
+});
+zk.override(jq.event.special, _jqEventSpecial, {
+	touchstart: {
+		setup: function (data, namespaces, eventHandle) {
+			this.addEventListener('touchstart', eventHandle, {passive: false}); // ZK-4678
+		}
+	},
+	touchmove: {
+		setup: function (data, namespaces, eventHandle) {
+			this.addEventListener('touchmove', eventHandle, {passive: false}); // ZK-4678
 		}
 	}
 });
