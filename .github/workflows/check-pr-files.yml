@@ -1,0 +1,12 @@
+name: Check-PR-Files
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  check-pr-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: zkoss/check-pr-files-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
