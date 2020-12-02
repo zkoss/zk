@@ -118,4 +118,25 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			zk.load('zkmax.nav');
 		}
 	</javascript>
+	<!-- ZK-4714 -->
+	<component>
+		<component-name>test01</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test01.Test01</widget-class>
+	</component>
+	<component>
+		<component-name>test02</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test02.Test02</widget-class>
+	</component>
+	<component>
+		<component-name>test03</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test03.Test03</widget-class>
+	</component>
+	<component>
+		<component-name>test04</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test04.Test04</widget-class>
+	</component>
 </language-addon>

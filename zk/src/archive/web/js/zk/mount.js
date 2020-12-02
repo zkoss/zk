@@ -288,6 +288,7 @@ function zkamn(pkg, fn) {
 				return zk.afterLoad(mtAU);
 
 			var inf = _crInfAU0.shift(), filter, wgt;
+			zk._crWgtUuids.shift(); //sync to _crInfAU0
 			if (!inf)
 				break; //done
 
@@ -476,6 +477,8 @@ function zkamn(pkg, fn) {
 				}
 
 				infs.push([_curdt(), wi, _mntctx.bindOnly, owner, extra]);
+				if (!zk._crWgtUuids) zk._crWgtUuids = [];
+				zk._crWgtUuids.push(wi[1]);
 					//extra is [stub-fn, filter] if AU,  aucmds if BL
 				mountpkg(infs);
 			}

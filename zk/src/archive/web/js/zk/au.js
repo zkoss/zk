@@ -60,13 +60,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		for (var j = data.length, id, w; j--;)
 			if (id = data[j] && data[j].$u) {
 				if (!(w = Widget.$(id))) { //not ready
-					zk.afterMount(function () {
-						do {
-							if (id = data[j] && data[j].$u)
-								data[j] = Widget.$(id);
-						} while (j--);
-						doProcess(cmd, data);
-					}, -1);
+					var processFn = function () {
+						if (zk._crWgtUuids.indexOf(id) != -1 && !Widget.$(id)) {
+							zk.afterMount(processFn, 0);
+						} else {
+							do {
+								if (id = data[j] && data[j].$u)
+									data[j] = Widget.$(id);
+							} while (j--);
+							doProcess(cmd, data);
+						}
+					};
+					zk.afterMount(processFn, -1);
 					return true; //not ready
 				}
 				data[j] = w;
