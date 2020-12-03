@@ -42,38 +42,6 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	getTabbox: function () {
 		return this.parent;
 	},
-	setWidth: function (val) {
-		var n = this.$n(),
-			tabbox = this.getTabbox(),
-			isVer = n && tabbox ? tabbox.isVertical() : false;
-		if (isVer && !this.__width)
-			n.style.width = '';
-
-		this.$supers('setWidth', arguments);
-
-		if (isVer) {
-			if (n.style.width)
-				this.__width = n.style.width;
-
-			zUtl.fireSized(this);
-		}
-	},
-	setStyle: function (val) {
-		var n = this.$n(),
-			tabbox = this.getTabbox(),
-			isVer = n && tabbox ? tabbox.isVertical() : false;
-		if (isVer && !this.__width) {
-			n.style.width = '';
-		}
-		this.$supers('setStyle', arguments);
-
-		if (isVer) {
-			if (n.style.width)
-				this.__width = n.style.width;
-
-			zUtl.fireSized(this);
-		}
-	},
 	//bug #3014664
 	setVflex: function (v) { //vflex ignored for Tabpanels
 		if (v != 'min') v = false;
@@ -86,41 +54,11 @@ zul.tab.Tabpanels = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers(zul.tab.Tabpanels, 'bind_', arguments);
-		if (this.getTabbox().isVertical()) {
-			this._zwatched = true;
-			zWatch.listen({onSize: this, beforeSize: this});
-			var n = this.$n();
-			if (n.style.width)
-				this.__width = n.style.width;
-		}
 		zWatch.listen({onResponse: this});
 	},
 	unbind_: function () {
-		if (this._zwatched) {
-			zWatch.unlisten({onSize: this, beforeSize: this});
-			this._zwatched = false;
-		}
 		zWatch.unlisten({onResponse: this});
 		this.$supers(zul.tab.Tabpanels, 'unbind_', arguments);
-	},
-	onSize: function () {
-		this._fixWidth();
-	},
-	_fixWidth: function () {
-		var parent = this.parent.$n(),
-			$parent = jq(parent);
-		if (this.__width || !zk(parent).isRealVisible())
-			return;
-
-		var width = $parent.width(),
-			n = this.$n();
-
-		width -= $parent.find('>div:first')[0].offsetWidth;
-
-		n.style.width = jq.px0(width);
-	},
-	beforeSize: function () {
-		this.$n().style.width = this.__width || '';
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
