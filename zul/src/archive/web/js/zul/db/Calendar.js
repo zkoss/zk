@@ -555,7 +555,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	_fixConstraint: function () {
 		var constraint = this._constraint || '';
-		if (typeof this._constraint != 'string') return;
+		// ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
+		this._beg = null;
+		this._end = null;
+		if (typeof constraint != 'string' || constraint == '') return;
 		// B50-ZK-591: Datebox constraint combination yyyymmdd and
 		// no empty cause javascript error in zksandbox
 		var constraints = constraint.split(','),

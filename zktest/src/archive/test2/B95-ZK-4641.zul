@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4641.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Dec 03 10:53:37 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script><![CDATA[
+		function test() {
+			var dbCalpop = zk.$('$db')._pop;
+			if (dbCalpop) {
+				var beg = dbCalpop._beg,
+					end = dbCalpop._end;
+				if (beg && end)
+					zk.log('between begin and end');
+				else if (beg && !end)
+					zk.log('after begin');
+				else if (!beg && end)
+					zk.log('before end');
+				else if (!beg && !end)
+					zk.log('begin and end is clear');
+			}
+		}
+	]]></script>
+	<vlayout height="400px">
+		<div vflex="2">
+			<label multiline="true">
+				Test step: to make sure client side calendar begin and end is updated/removed
+				1. Click any one button from group A, then click the test button, you should see the correspond zklog.
+				1-A. Click another button from group A, then click the test button, you should see the correspond zklog.
+				1-B. Click one button from group B, then click the test button, you should see "begin and end is clear" in zklog.
+				1-C. Click one button from group C, then click the test button, you should see "begin and end is clear" in zklog.
+			</label>
+		</div>
+		<div vflex="1">
+			<datebox id="db"/>
+		</div>
+		<div vflex="1">
+			<div>
+				Constraint between before or after(group A):
+			</div>
+			<inputgroup id="groupA">
+				<button label="set Constraint before" onClick='db.setConstraint("before 20201203")' />
+				<button label="set Constraint between" onClick='db.setConstraint("between 20201201 and 20201205")' />
+				<button label="set Constraint after " onClick='db.setConstraint("after 20201203")' />
+				<button label="set Multiple Constraint(between) " onClick='db.setConstraint("between 20201201 and 20201205, no past")' />
+			</inputgroup>
+		</div>
+		<div vflex="1">
+			<div>
+				Constraint not between before or after(group B):
+			</div>
+			<inputgroup id="groupB">
+				<button label="set Constraint no future" onClick='db.setConstraint("no future")' />
+				<button label="set Constraint no past" onClick='db.setConstraint("no past")' />
+				<button label="set Constraint no today" onClick='db.setConstraint("no today")' />
+				<button label="set Constraint no empty" onClick='db.setConstraint("no empty")' />
+			</inputgroup>
+		</div>
+		<div vflex="1">
+			<div>
+				remove Constraint(group C):
+			</div>
+			<inputgroup id="groupC">
+				<button label="set empty Constraint" onClick='db.setConstraint("")' />
+				<button label="set null Constraint" onClick='db.setConstraint(null)' />
+			</inputgroup>
+		</div>
+	</vlayout>
+	<button id="test" label="test" w:onClick="test();"/>
+</zk>
