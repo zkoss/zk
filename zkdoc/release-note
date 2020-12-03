@@ -60,6 +60,7 @@ ZK 9.5.1
   ZK-4715: multiple parallel embeds failing (without error)
   ZK-4678: mobile touch-drag window causing console errors
   ZK-4703: tabpanel resize flicker (and disappear)
+  ZK-4685: Form property not removed from _saveFormFields when template is updated
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,

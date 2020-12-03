@@ -133,14 +133,9 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 					addCallbacks();
 					if (_binding != null) {
 						BinderCtrl binder = (BinderCtrl) _binding.getBinder();
-						Set<String> saveFormFieldNames = binder.removeSaveFormFieldNames((Form) self);
-
+						binder.removeSaveFormFieldNames((Form) self);
 						_origin = ProxyHelper.getOriginObject((T) args[0]);
 						_binding = (FormBinding) args[1];
-
-						if (!saveFormFieldNames.isEmpty())
-							binder.addSaveFormFieldName((Form) self, saveFormFieldNames);
-
 					} else {
 						_origin = ProxyHelper.getOriginObject((T) args[0]);
 						_binding = (FormBinding) args[1];
