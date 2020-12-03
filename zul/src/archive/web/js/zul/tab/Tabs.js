@@ -307,9 +307,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			btnsize = tabbox._scrolling ? this._getArrowSize() : 0;
 		this._fixHgh(toSel); //ZK-2810: don't set height to tabbox when deselect
 		if (tabbox.isVertical()) {
-			var panels = tabbox.getTabpanels();
-			if (panels)
-				panels._fixWidth();
 			//LI in IE doesn't have width...
 			if (tabs.style.width) {
 				tabs._width = tabs.style.width;

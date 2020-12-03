@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4703.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 03 11:10:23 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Resize (decrease) the browser width slowly.
+        2. You shouldn't see the tabpanel flickering.
+    </label>
+    <vlayout>
+        <tabbox orient="top" height="150px">
+            <tabs width="150px">
+                <tab label="tab-1"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel style="background-color: #eeeeee;">
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+        <tabbox orient="left" height="150px">
+            <tabs width="150px">
+                <tab label="tab-1"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel style="background-color: #eeeeee;">
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+        <tabbox orient="bottom" height="150px">
+            <tabs width="150px">
+                <tab label="tab-1"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel style="background-color: #eeeeee;">
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+        <tabbox orient="right" height="150px">
+            <tabs width="150px">
+                <tab label="tab-1"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel style="background-color: #eeeeee;">
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </vlayout>
+</zk>

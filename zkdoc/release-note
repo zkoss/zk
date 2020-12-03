@@ -59,6 +59,7 @@ ZK 9.5.1
   ZK-4301: ZK doesn't listen for touch events on desktop browsers
   ZK-4715: multiple parallel embeds failing (without error)
   ZK-4678: mobile touch-drag window causing console errors
+  ZK-4703: tabpanel resize flicker (and disappear)
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
