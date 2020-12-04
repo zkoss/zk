@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4699.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Dec 04 11:05:28 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		click "Mary" in the first listItem then click "m3" in the 4th textbox,
+		you should not see the first listItem have focus style, and you should see a caret in the 4th textbox.
+	</label>
+	<listbox id="box" multiple="false"
+			 nonselectableTags="" >
+		<listhead sizable="true">
+			<listheader label="name" sort="auto"/>
+			<listheader label="gender" sort="auto"/>
+		</listhead>
+		<listitem>
+			<listcell label="Mary"/>
+			<listcell>
+				<textbox value="m0"/>
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell label="John"/>
+			<listcell>
+				<textbox value="m1"/>
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell label="Jane"/>
+			<listcell>
+				<textbox value="m2"/>
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell label="Henry"/>
+			<listcell>
+				<textbox value="m3"/>
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>
