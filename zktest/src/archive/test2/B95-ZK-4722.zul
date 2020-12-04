@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4722.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Dec 2 12:25:22 AM CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="outerDiv" viewModel="@id('outerVM') @init('org.zkoss.zktest.test2.B95_ZK_4722VM')">
+		<label>Click button several times, the result should be 1</label>
+		<div id="formDiv" form="@id('fx') @load(outerVM.mybean) @save(outerVM.mybean, before='save')">
+			<apply counter="@load(outerVM.counter)">
+				<div id="innerDiv" viewModel="@id('innerVM') @init('org.zkoss.zktest.test2.B95_ZK_4722VM$InnerVM')">
+					Template A
+					<separator/>
+					Prop 1: <textbox value="@bind(fx.prop1) "/>
+				</div>
+			</apply>
+		</div>
+		<button label="save" onClick="@command('save')"/>
+		<separator />
+		Result: <label id="result" value="@load(outerVM.result)" />
+	</div>
+</zk>
