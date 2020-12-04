@@ -2668,7 +2668,16 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		if (formComp == null) {
 			throw new UiException("cannot find any form " + formId + " with " + associatedComp);
 		}
-		Set<SaveBinding> bindings = _assocFormSaveBindings.get(formComp);
+		Binder saveCompBinder = saveBinding.getBinder();
+		boolean isSameBinder = this.equals(saveCompBinder);
+		Set<SaveBinding> bindings = null;
+		if (!isSameBinder) {
+			bindings = ((BinderImpl) saveCompBinder)._assocFormSaveBindings.get(formComp);
+			if (bindings != null)
+				_assocFormSaveBindings.put(formComp, bindings);
+		}
+		if (bindings == null)
+			bindings = _assocFormSaveBindings.get(formComp);
 		if (bindings == null) {
 			bindings = new LinkedHashSet<SaveBinding>(); //keep the order
 			_assocFormSaveBindings.put(formComp, bindings);
@@ -2676,7 +2685,14 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		bindings.add(saveBinding);
 
 		//keep the reverse association , so we can remove it if the associated component is detached (and the form component is not).
-		Map<SaveBinding, Set<SaveBinding>> reverseMap = _reversedAssocFormSaveBindings.get(associatedComp);
+		Map<SaveBinding, Set<SaveBinding>> reverseMap = null;
+		if (!isSameBinder) {
+			reverseMap = ((BinderImpl) saveCompBinder)._reversedAssocFormSaveBindings.get(associatedComp);
+			if (reverseMap != null)
+				_reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
+		}
+		if (reverseMap == null)
+			reverseMap = _reversedAssocFormSaveBindings.get(associatedComp);
 		if (reverseMap == null) {
 			reverseMap = new HashMap<SaveBinding, Set<SaveBinding>>();
 			_reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
