@@ -63,6 +63,7 @@ ZK 9.5.1
   ZK-4685: Form property not removed from _saveFormFields when template is updated
   ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
   ZK-4722: _assocFormSaveBindings not always cleaned (causing memory leak + NPEs)
+  ZK-4699: single selection listbox has multiple selected items
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,

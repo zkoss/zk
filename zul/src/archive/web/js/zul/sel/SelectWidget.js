@@ -946,7 +946,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_selectOne: function (row, skipFocus) {
 		var selItem = this.getSelectedItem();
 		if (this._multiple) {
-			if (row && !skipFocus) this._unsetFocusExcept(row);
+			if (row) this._unsetFocusExcept(row);
 			var changed = this._unsetSelectAllExcept(row);
 			if (!changed && row && selItem == row) {
 				if (!skipFocus) this._setFocus(row, true);
@@ -962,11 +962,12 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (row)
 					if (!skipFocus) this._setFocus(selItem, false);
 			}
-			if (row && !skipFocus) this._unsetFocusExcept(row);
+			if (row) this._unsetFocusExcept(row);
 		}
 		//we always invoke _changeSelect to change focus
 		if (row) {
 			this._changeSelect(row, true);
+			this._lastSelectedItem = row;
 			if (!skipFocus) this._setFocus(row, true);
 		}
 		return true;
@@ -1076,14 +1077,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		return changed;
 	},
-	/* Cleans selected except the specified one, and returns any selected status
-	 * is changed.
+	/* Cleans focus except the specified one.
 	 */
 	_unsetFocusExcept: function (row) {
-		if (this._focusItem && this._focusItem != row)
+		if (this._focusItem && this._focusItem != row) {
 			this._setFocus(this._focusItem, false);
-		else
 			this._focusItem = null;
+		}
 	},
 	_updHeaderCM: function () { //update header's checkmark
 		if (this._headercm && this._multiple) {
