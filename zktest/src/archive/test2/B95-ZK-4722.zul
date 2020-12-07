@@ -14,18 +14,32 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<div id="outerDiv" viewModel="@id('outerVM') @init('org.zkoss.zktest.test2.B95_ZK_4722VM')">
-		<label>Click button several times, the result should be 1</label>
+		<label>Click button several times, the result should be 4</label>
 		<div id="formDiv" form="@id('fx') @load(outerVM.mybean) @save(outerVM.mybean, before='save')">
 			<apply counter="@load(outerVM.counter)">
 				<div id="innerDiv" viewModel="@id('innerVM') @init('org.zkoss.zktest.test2.B95_ZK_4722VM$InnerVM')">
 					Template A
 					<separator/>
 					Prop 1: <textbox value="@bind(fx.prop1) "/>
+					<separator/>
+					Prop 2: <textbox value="@bind(fx.prop2) "/>
+					<separator/>
+					<button label="show" onClick="@command('show')"/>
+					<hlayout sub="@ref(fx.subBean)">
+						<label value="Main Sub Bean date (@Reference)" style="color: blue"/>
+						<datebox value="@bind(sub.prop2)"/>
+					</hlayout>
 				</div>
 			</apply>
+			<separator />
+			Outside:
+			<textbox value="@bind(fx.prop2) "/>
+			<button id="save" label="save" onClick="@command('save')"/>
+			<button label="show" onClick="@command('show')"/>
+			<button id="detach" label="detach" onClick="innerDiv.detach()"/>
+			<separator />
+			Result: <label id="result" value="@load(outerVM.result)" />
 		</div>
-		<button label="save" onClick="@command('save')"/>
-		<separator />
-		Result: <label id="result" value="@load(outerVM.result)" />
+
 	</div>
 </zk>

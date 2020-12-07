@@ -28,11 +28,15 @@ public class B95_ZK_4722Test extends ZATSTestCase {
 	@Test
 	public void test() throws Exception {
 		DesktopAgent desktop = connect();
-		desktop.query("button").click();
-		Assert.assertEquals("1", desktop.query("#result").as(Label.class).getValue());
-		desktop.query("button").click();
-		Assert.assertEquals("1", desktop.query("#result").as(Label.class).getValue());
-		desktop.query("button").click();
+		ComponentAgent saveBtn = desktop.query("#save");
+		saveBtn.click();
+		Assert.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
+		saveBtn.click();
+		Assert.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
+		saveBtn.click();
+		Assert.assertEquals("4", desktop.query("#result").as(Label.class).getValue());
+		desktop.query("#detach").click();
+		saveBtn.click();
 		Assert.assertEquals("1", desktop.query("#result").as(Label.class).getValue());
 	}
 }
