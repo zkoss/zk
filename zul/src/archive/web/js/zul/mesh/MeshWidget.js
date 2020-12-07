@@ -283,7 +283,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					rowsHgh = hgh + row.offsetHeight,
 					j1 = Math.floor(j * max / rowsHgh),
 					j2 = Math.floor(j * withPgibMax / rowsHgh);
-				if (totalsz > j2)
+				if (totalsz > j2 || !paging.isAutohide())
 					j = j1;
 				else
 					j = j2;
