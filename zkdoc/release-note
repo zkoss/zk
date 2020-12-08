@@ -64,6 +64,7 @@ ZK 9.5.1
   ZK-4641: Datebox doesn't clean beginning and end at client when removing constraint
   ZK-4722: _assocFormSaveBindings not always cleaned (causing memory leak + NPEs)
   ZK-4699: single selection listbox has multiple selected items
+  ZK-4659: tree rod loading animation doesn't show
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
