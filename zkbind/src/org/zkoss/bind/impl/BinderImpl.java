@@ -2664,39 +2664,43 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 			String fieldName) {
 		checkInit();
 		//find the form component by form id and a associated/nested component
-		Component formComp = lookupAossicatedFormComponent(formId, associatedComp);
+		Component formComp = lookupAssociatedFormComponent(formId, associatedComp);
 		if (formComp == null) {
 			throw new UiException("cannot find any form " + formId + " with " + associatedComp);
 		}
 		Binder saveCompBinder = saveBinding.getBinder();
 		boolean isSameBinder = this.equals(saveCompBinder);
 		Set<SaveBinding> bindings = null;
+		Set<SaveBinding> originalBindings = _assocFormSaveBindings.get(formComp);
 		if (!isSameBinder) {
 			bindings = ((BinderImpl) saveCompBinder)._assocFormSaveBindings.get(formComp);
-			if (bindings != null)
-				_assocFormSaveBindings.put(formComp, bindings);
+			if (bindings == null) {
+				bindings = new LinkedHashSet<SaveBinding>();
+				((BinderImpl) saveCompBinder)._assocFormSaveBindings.put(formComp, bindings);
+			}
+			if (originalBindings != null)
+				bindings.addAll(originalBindings);
+		} else if (bindings == null) {
+			bindings = originalBindings != null ? originalBindings : new LinkedHashSet<SaveBinding>(); //keep the order
 		}
-		if (bindings == null)
-			bindings = _assocFormSaveBindings.get(formComp);
-		if (bindings == null) {
-			bindings = new LinkedHashSet<SaveBinding>(); //keep the order
-			_assocFormSaveBindings.put(formComp, bindings);
-		}
+		_assocFormSaveBindings.put(formComp, bindings);
 		bindings.add(saveBinding);
 
 		//keep the reverse association , so we can remove it if the associated component is detached (and the form component is not).
 		Map<SaveBinding, Set<SaveBinding>> reverseMap = null;
+		Map<SaveBinding, Set<SaveBinding>> originalReverseMap = _reversedAssocFormSaveBindings.get(associatedComp);
 		if (!isSameBinder) {
 			reverseMap = ((BinderImpl) saveCompBinder)._reversedAssocFormSaveBindings.get(associatedComp);
-			if (reverseMap != null)
-				_reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
+			if (reverseMap == null) {
+				reverseMap = new HashMap<SaveBinding, Set<SaveBinding>>();
+				((BinderImpl) saveCompBinder)._reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
+			}
+			if (originalReverseMap != null)
+				reverseMap.get(saveBinding).addAll(originalReverseMap.get(saveBinding));
+		} else if (reverseMap == null) {
+			reverseMap = originalReverseMap != null ? originalReverseMap : new HashMap<SaveBinding, Set<SaveBinding>>();
 		}
-		if (reverseMap == null)
-			reverseMap = _reversedAssocFormSaveBindings.get(associatedComp);
-		if (reverseMap == null) {
-			reverseMap = new HashMap<SaveBinding, Set<SaveBinding>>();
-			_reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
-		}
+		_reversedAssocFormSaveBindings.put(associatedComp, reverseMap);
 		reverseMap.put(saveBinding, bindings);
 
 		//ZK-1017 Property of a form is not correct when validation
@@ -2704,7 +2708,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		((SavePropertyBindingImpl) saveBinding).setFormFieldInfo(formComp, formId, fieldName);
 	}
 
-	private Component lookupAossicatedFormComponent(String formId, Component associatedComp) {
+	private Component lookupAssociatedFormComponent(String formId, Component associatedComp) {
 		String fid = null;
 		Component p = associatedComp;
 		while (p != null) {
