@@ -21,10 +21,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	</label>
 	<div vflex="1">
 		<listbox mold="paging" pagingPosition="bottom"
-			autopaging="true" height="880px" onPageSize='Clients.log("onPageSize")'>
-	<div vflex="1">
-		<listbox mold="paging" pagingPosition="bottom"
-			autopaging="true" height="880px" >
+			autopaging="true" height="880px" onPageSize='Clients.log("onPageSize")' >
 			<custom-attributes
 				org.zkoss.zul.listbox.autohidePaging="false"/>
 			<listhead>

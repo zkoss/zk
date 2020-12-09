@@ -1,4 +1,4 @@
-/* B95_ZK_4645Test.java
+/* B95_ZK_4713Test.java
 
 	Purpose:
 
@@ -26,6 +26,6 @@ public class B95_ZK_4713Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 		sleep(1000);
-		Assert.assertEquals("au working", getZKLog());
+		Assert.assertEquals("onPageSize", getZKLog());
 	}
 }
