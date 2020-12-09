@@ -1,10 +1,11 @@
-/* B95_ZK_4713Test.java
+/* B95_ZK_4645Test.java
 
 	Purpose:
 
 	Description:
 
 	History:
+
 		Tue Dec 08 16:19:32 CST 2020, Created by katherinelin
 
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
@@ -25,6 +26,6 @@ public class B95_ZK_4713Test extends WebDriverTestCase {
 	public void test() throws Exception {
 		connect();
 		sleep(1000);
-		Assert.assertEquals("onPageSize", getZKLog());
+		Assert.assertEquals("au working", getZKLog());
 	}
 }

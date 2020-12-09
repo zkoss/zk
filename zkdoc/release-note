@@ -87,6 +87,7 @@ Oct 13, 2020
   ZK-4690: za11y portallayout popup styles missing for classic themes
   ZK-4688: A null parameter passed to a global command causes ClassCastException
   ZK-4695: Tabbox could be undefined on tab setSelected
+  ZK-4713: listbox flickers with autopaging in a specific height
 
 * Upgrade Notes
 

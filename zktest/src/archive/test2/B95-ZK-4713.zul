@@ -6,7 +6,9 @@ B95-ZK-4713.zul
 		Description:
 
 		History:
+
 				Tue Dec 08 16:15:28 CST 2020, Created by katherinelin
+
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 -->
 
@@ -20,6 +22,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<div vflex="1">
 		<listbox mold="paging" pagingPosition="bottom"
 			autopaging="true" height="880px" onPageSize='Clients.log("onPageSize")'>
+	<div vflex="1">
+		<listbox mold="paging" pagingPosition="bottom"
+			autopaging="true" height="880px" >
 			<custom-attributes
 				org.zkoss.zul.listbox.autohidePaging="false"/>
 			<listhead>
