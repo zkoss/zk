@@ -2706,6 +2706,14 @@ function () {
 		}
 		return n;
 	},
+	/**
+	 * Returns whether the widget has its own element bound to HTML DOM tree.
+	 * @return boolean
+	 * @since 7.0.0
+	 */
+	isRealElement: function () {
+		return true;
+	},
 	/** Clears the cached nodes (by {@link #$n}). */
 	clearCache: function () {
 		this._node = null;
