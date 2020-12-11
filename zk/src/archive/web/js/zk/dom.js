@@ -1028,13 +1028,13 @@ jq(el).zk.sumStyles("lr", jq.paddings);
 	paddingHeight: function () {
 		return this.sumStyles('tb', jq.paddings);
 	},
-	/** Returns the summation of the padding height and the border width of the first matched element.
+	/** Returns the summation of the padding width and the border width of the first matched element.
 	 * @return int the summation
 	 */
 	padBorderWidth: function () {
 		return this.borderWidth() + this.paddingWidth();
 	},
-	/** Returns the summation of the padding width and the border height of the first matched element.
+	/** Returns the summation of the padding height and the border height of the first matched element.
 	 * @return int the summation
 	 */
 	padBorderHeight: function () {
@@ -2101,14 +2101,14 @@ zk.copy(jq, {
 		return Math.round(window.pageYOffset
 			|| DocRoot().scrollTop || 0); //ZK-2633: browser might return decimal number
 	},
-	/** Returns the height of the viewport (visible part) of the browser window.
+	/** Returns the width of the viewport (visible part) of the browser window.
 	 * It is the same as jq(window).width().
 	 * @return int
 	 */
 	innerWidth: function () {
 		return jq(window).width();
 	},
-	/** Returns the width of the viewport (visible part) of the browser window.
+	/** Returns the height of the viewport (visible part) of the browser window.
 	 * It is the same as jq(window).height().
 	 * @return int
 	 */
