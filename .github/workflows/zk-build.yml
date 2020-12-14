@@ -1,0 +1,31 @@
+name: zk-build
+
+on:
+  push:
+    branches-ignore:
+      - '*-Stable'
+  pull_request:
+    branches-ignore:
+      - '*-Stable'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Java 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: Use Node.js 14 LTS
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Build Latest ZK
+      run: |
+        npm ci
+        ./build clean
+        ./build zel zcommon zweb zk zul zkbind zhtml zkplus
+
