@@ -14,6 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+	<custom-attributes org.zkoss.zul.css.flex="false"/>
 	<style>
 	.blue {
 		border: solid 1px blue;
@@ -28,7 +29,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 		border: solid 1px black;
 	}
 	</style>
-	Please click the button "add newChild" and the size fo black area inside blue area should be up to date
+	Please click the button "add newChild" and the size of black area inside blue area should be up to date
 	<hlayout id="container1" width="1800px">
 		<div hflex="1">
 			<div hflex="1" class="blue">
