@@ -353,8 +353,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function DD_pointer(evt, height) {
-		if (zk.ios)
-			return [evt.pageX - 50, evt.pageY - height - 30];
 		return [evt.pageX + 7, evt.pageY + 5];
 	}
 	function DD_enddrag(drag, evt) {

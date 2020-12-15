@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.zkmax.ui.util.Toast?>
+<!--
+B95-ZK-4738.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Dec 15 12:30:44 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.box {
+			min-width: 100px;
+			min-height: 100px;
+			padding: 20px;
+			border: 1px solid black;
+			display: inline-block;
+			border-radius: 20px;
+		}
+	</style>
+	<zscript><![CDATA[
+        public void handleDrop(DropEvent event) {
+            Component dragged = event.getDragged();
+            Component target = event.getTarget();
+            dragged.detach();
+            dragged.setParent(target);
+            Toast.show(event.getName(), null, null, -1, false);
+        }
+    ]]></zscript>
+	<label>
+		Test with an ios device or browser ios emulation, drag a box to another one, you should see a toast with "onDrop" message.
+	</label>
+	<div width="100%" height="100%"
+		 droppable="true"
+		 onDrop="handleDrop(event)">
+		<forEach items="${{'green', 'red', 'blue', 'yellow', 'orange', 'pink', 'magenta'}}">
+			<div sclass="box" style="background-color: ${each}"
+				 draggable="true" droppable="true"
+				 onDrop="handleDrop(event)"/>
+		</forEach>
+	</div>
+</zk>
