@@ -156,8 +156,6 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 	// B60-ZK-562: Groupbox vflex=min is wrong
 	setFlexSizeH_: function (n, zkn, height, isFlexMin) {
 		if (isFlexMin && (this.caption || this._title)) {
-			// B95-ZK-4505: vflex = 'min' doesn't resetSize
-			this.$n('cave').style.height = '';
 			// B60-ZK-562
 			var node = this.$n(),
 				c;
