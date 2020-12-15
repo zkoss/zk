@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4729.zul
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Dec 07 14:15:00 CST 2020, Created by katherinelin
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+			1. focus in the textbox and move out to trigger an error rbox appearing
+			2. scroll down to make the textbox out of visible view port
+			3. click the pink area
+			4. the error box is still visible
+	</label>
+	<window border="normal" title="hello" height="600px" >
+		<div id="scrollbox" vflex="1" style="overflow: auto;">
+			<textbox constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address" />
+			<div id="pinkbox" height="2000px" style="background-color: pink"/>
+		</div>
+	</window>
+</zk>
