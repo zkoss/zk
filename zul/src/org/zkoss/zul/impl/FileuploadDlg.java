@@ -51,24 +51,27 @@ public class FileuploadDlg extends Window {
 	}
 
 	public void onClose(Event evt) {
-		if (evt.getData() == null)
-			_result.clear();
-		else {
-			final Desktop desktop = Executions.getCurrent().getDesktop();
-			final Configuration config = desktop.getWebApp().getConfiguration();
-			if (!config.isEventThreadEnabled()) {
-				if (_listener != null)
-					try {
-						_listener.onEvent(new UploadEvent(Events.ON_UPLOAD, null, getResult()));
-					} catch (Exception e) {
-						throw new UiException(e);
-					}
-				else
-					Events.postEvent(new UploadEvent(Events.ON_UPLOAD,
-							(Component) desktop.getAttribute(ATTR_FILEUPLOAD_TARGET), getResult()));
+		try {
+			if (evt.getData() == null)
+				_result.clear();
+			else {
+				final Desktop desktop = Executions.getCurrent().getDesktop();
+				final Configuration config = desktop.getWebApp().getConfiguration();
+				if (!config.isEventThreadEnabled()) {
+					if (_listener != null)
+						try {
+							_listener.onEvent(new UploadEvent(Events.ON_UPLOAD, null, getResult()));
+						} catch (Exception e) {
+							throw new UiException(e);
+						}
+					else
+						Events.postEvent(new UploadEvent(Events.ON_UPLOAD,
+								(Component) desktop.getAttribute(ATTR_FILEUPLOAD_TARGET), getResult()));
+				}
 			}
+		} finally {
+			detach();
 		}
-		detach();
 	}
 
 	/**

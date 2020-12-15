@@ -69,6 +69,7 @@ ZK 9.5.1
   ZK-4713: listbox flickers with autopaging in a specific height
   ZK-4743: Frozen scroll position is incorrect after redrawing
   ZK-4724: combowidget button icon alignment
+  ZK-4717: Interrupted Fileupload cause further createComponents without parent to fail
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

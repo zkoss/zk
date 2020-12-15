@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4717.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Mon Dec 14 15:49:23 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div>
+        <label multiline="true">
+            1. Click "create components".
+            2. You should see a modal window. Close the modal window.
+            3. Click "fileupload".
+            4. Just click "Upload". You'll see an exception. Close it.
+            5. Click "create components".
+            6. You should see a modal window.
+        </label>
+        <button label="fileupload">
+            <attribute name="onClick"><![CDATA[
+            Fileupload.get(new HashMap(),
+                String.format("Please specify a file (Maximum Size %.1f MB)", new Object[] { ((float) 1000000 /1024) }),
+                "test",
+                null,
+                1,
+                1000000,
+                true,
+                new EventListener() {
+                    public void onEvent(Event event) throws Exception {
+                        throw new RuntimeException("mimic unhandled exception");
+                    }
+                });
+            ]]></attribute>
+        </button>
+        <button label="create components">
+            <attribute name="onClick"><![CDATA[
+            Window win = (Window) Executions.getCurrent().createComponents("B95-ZK-4717-inc.zul", null, null);
+            win.doModal();
+            ]]></attribute>
+        </button>
+    </div>
+</zk>
