@@ -60,6 +60,7 @@ ZK 9.5.1
   ZK-4678: mobile touch-drag window causing console errors
   ZK-4713: listbox flickers with autopaging in a specific height
   ZK-4729: z-errorbox disappears after clicking
+  ZK-4505: resize() doesn't reduce a groupbox height with title
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility,
