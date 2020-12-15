@@ -596,8 +596,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				isz = vsz,// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
-				minus = $chdex.padBorderHeight(),
-				isInit = !cwgt.$n().style.height;
+				minus = $chdex.padBorderHeight();
 
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height: isz - minus});
@@ -609,9 +608,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 
 			if (vert) lastsz -= vsz;
-			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit && vert && cwgt !== child)
-				zUtl.fireSized(cwgt);
 		}
 		//last one with vflex
 		if (vflexs.length) {
@@ -620,8 +616,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				isz = lastsz,// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
-				minus = $chdex.padBorderHeight(),
-				isInit = !cwgt.$n().style.height;
+				minus = $chdex.padBorderHeight();
 
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({height: isz - minus});
@@ -631,9 +626,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.height = jq.px0(lastsz - $chdex.marginHeight());
 			}
-			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit && vert && cwgt !== child)
-				zUtl.fireSized(cwgt);
 		}
 
 		//setup the width for the hflex child
@@ -644,8 +636,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				hsz = (cwgt._nhflex * wdh / hflexsz) | 0, //cast to integer
 				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
-				minus = $chdex.padBorderWidth(),
-				isInit = !cwgt.$n().style.width;
+				minus = $chdex.padBorderWidth();
 
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width: hsz - minus});
@@ -656,17 +647,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				chdex.style.width = jq.px0(hsz - $chdex.marginWidth());
 			}
 			if (!vert) lastsz -= hsz;
-			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit && !vert && cwgt !== child)
-				zUtl.fireSized(cwgt);
 		}
 		//last one with hflex
 		if (hflexs.length) {
 			var cwgt = hflexs.shift(),
 				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
-				minus = $chdex.padBorderWidth(),
-				isInit = !cwgt.$n().style.width;
+				minus = $chdex.padBorderWidth();
 
 			// we need to remove the chdex padding and border for border-box mode
 			cwgt.setFlexSize_({width: lastsz - minus});
@@ -676,9 +663,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				// no need to subtract padding and border for border-box mode
 				chdex.style.width = jq.px0(lastsz - $chdex.marginWidth());
 			}
-			// ZK-2595: need to update children flex sizes when sibling's flex size updates
-			if (!isInit && !vert && cwgt !== child)
-				zUtl.fireSized(cwgt);
 		}
 
 		//notify all of children with xflex is done.

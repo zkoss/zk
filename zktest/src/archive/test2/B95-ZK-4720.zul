@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4720.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 14 16:48:02 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <custom-attributes org.zkoss.zul.css.flex="false"/>
+    <label multiline="true">
+        1. Scroll all scrollbars a bit.
+        2. Uncheck and check the checkbox to hide/show.
+        3. You shouldn't see a JS error.
+    </label>
+    <checkbox label="Toggle hide" checked="true" onCheck="p1.visible=!p1.visible" />
+    <div id="p1" width="100%" height="300px">
+        <hlayout vflex="1" hflex="1">
+            <div id="d1" hflex="1" vflex="1" style="overflow-x:hidden;overflow-y:auto;">
+                <div height="2000px"/>
+            </div>
+            <div id="d2" hflex="1" vflex="1" style="overflow-x:hidden;overflow-y:auto;">
+                <div height="2000px"/>
+            </div>
+            <div id="d3" hflex="1" vflex="1" style="overflow-x:hidden;overflow-y:auto;" >
+                <div height="2000px"/>
+            </div>
+        </hlayout>
+    </div>
+    <checkbox label="Toggle hide" checked="true" onCheck="p2.visible=!p2.visible" />
+    <div id="p2" width="100%" height="300px">
+        <hbox vflex="1" hflex="1">
+            <div id="d4" hflex="1" vflex="1" style="overflow-x:hidden;overflow-y:auto;">
+                <div height="2000px"/>
+            </div>
+            <div id="d5" hflex="1" vflex="1" style="overflow-x:hidden;overflow-y:auto;">
+                <div height="2000px"/>
+            </div>
+            <div id="d6" hflex="1" vflex="1" style="overflow-x:hidden;overflow-y:auto;" >
+                <div height="2000px"/>
+            </div>
+        </hbox>
+    </div>
+</zk>
