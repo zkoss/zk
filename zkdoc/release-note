@@ -66,6 +66,7 @@ ZK 9.5.1
   ZK-4659: tree rod loading animation doesn't show
   ZK-4567: Treechildren with frozen onResponse trigger unexpected resize
   ZK-4714: race condition with dynamic widget loading/mounting
+  ZK-4505: resize() doesn't reduce a groupbox height with title
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.
