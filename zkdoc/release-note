@@ -73,6 +73,7 @@ ZK 9.5.1
   ZK-4720: show a hidden panel causes Uncaught RangeError: Maximum call stack size exceeded
   ZK-4738: cannot drop draggable div ios
   ZK-4686: MVVM loadBinding component detached will cause sub bean binding stop working
+  ZK-4721: Timebox with tablet-ui disabled discard virtual keyboard value on mobile
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

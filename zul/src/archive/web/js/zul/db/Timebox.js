@@ -244,6 +244,20 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		this.$supers('doKeyPress_', arguments);
 	},
+	_doBeforeInput: function (evt) {
+		var inp = this.getInputNode();
+		if (inp.disabled || inp.readOnly)
+			return;
+
+		// control input keys only when no custom unformater is given
+		if (!Timebox._unformater) {
+			var char = evt.domEvent.originalEvent.data;
+			if (/\d/.test(char)) {
+				this._doType(parseInt(char));
+				evt.stop();
+			}
+		}
+	},
 	doKeyDown_: function (evt) {
 		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
@@ -520,6 +534,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers(zul.db.Timebox, 'bind_', arguments);
 		var btn;
 
+		if (zk.android && zk.chrome)
+			this.domListen_(this.getInputNode(), 'onBeforeInput', '_doBeforeInput');
 		if (btn = this.$n('btn'))
 			this.domListen_(btn, 'onZMouseDown', '_btnDown')
 				.domListen_(btn, 'onZMouseUp', '_btnUp');
@@ -536,6 +552,8 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')
 				.domUnlisten_(btn, 'onZMouseUp', '_btnUp');
 		}
+		if (zk.android && zk.chrome)
+			this.domUnlisten_(this.getInputNode(), 'onBeforeInput', '_doBeforeInput');
 		this._changed = false;
 		this.$supers(zul.db.Timebox, 'unbind_', arguments);
 	},
