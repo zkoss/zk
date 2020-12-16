@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-3317.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Dec 16 11:14:48 CST 2020, Created by katherinelin
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model1 = new ListModelList();
+		ListModelList model2 = new ListModelList();
+		for (int i=1 ; i<=200 ; i++){
+			model1.add("item "+i);
+		}
+		for (int i=1 ; i<=2 ; i++){
+			model2.add("item "+i);
+		}
+	]]></zscript>
+	<label>
+		1. no horizontal scrollbar
+	</label>
+	<listbox id="box" height="200px" model="${model1}" hflex="min">
+		<listhead>
+			<listheader label="name" ></listheader>
+		</listhead>
+	</listbox>
+	<listbox id="box2" height="200px" model="${model2}" hflex="min">
+		<listhead>
+			<listheader label="name" ></listheader>
+		</listhead>
+	</listbox>
+</zk>
