@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4732-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 16 15:59:24 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <script><![CDATA[
+    function showTreerows(sclass, label) {
+        zk.log(jq(sclass + ' .z-treerow').length);
+    }
+    ]]></script>
+    <zscript><![CDATA[
+    List childnodes = new LinkedList();
+    for (int i = 0; i < 500; ++i) {
+        childnodes.add(new DefaultTreeNode("" + i));
+    }
+    DefaultTreeNode root = new DefaultTreeNode("", childnodes);
+    DefaultTreeModel model = new DefaultTreeModel(root);
+    ]]></zscript>
+    <custom-attributes org.zkoss.zul.tree.initRodSize="-1"/>
+    <label multiline="true">
+        1. Click "click me".
+        2. The value in zk log should be 500.
+    </label>
+    <tree sclass="tree1" width="200px" height="200px" model="${model}"/>
+    <button label="click me" w:onClick="showTreerows('.tree1');"/>
+</zk>
