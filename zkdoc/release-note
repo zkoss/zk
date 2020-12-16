@@ -81,6 +81,7 @@ ZK 9.5.1
   ZK-3316: Grid with hflex="min" produces a horizontal scrollbar
   ZK-3317: Listbox with hflex="min" produces a horizontal scrollbar
   ZK-3318: Tree with hflex="min" produces a horizontal scrollbar
+  ZK-4744: Modal window cause scroll position changed
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

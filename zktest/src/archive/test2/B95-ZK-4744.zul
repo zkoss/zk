@@ -1,0 +1,47 @@
+<!--
+B95-ZK-4744.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Dec 14 14:50:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.child-view {
+			overflow: hidden;
+		}
+	</style>
+	<zscript><![CDATA[
+		public void addModal() {
+		//create a window programmatically and use it as a modal dialog.
+			Window window = (Window) Executions.createComponents(
+					"B95-ZK-4744-1.zul", null, null);
+			window.doModal();
+		}
+	]]></zscript>
+	<window vflex="1" hflex="1">
+		<div vflex="1" hflex="1">
+			<button id="openWindowBtn" label="open window" onClick="addModal()"/>
+			<button id="scrollBtn" label="change scroll" xmlns:w="client" w:onClick="jq('.child-view').scrollLeft(1200)"/>
+			<vlayout hflex="1" vflex="1">
+				<div hflex="1" vflex="1" sclass="child-view">
+					<div vflex="1" width="800%" style="background:yellow">
+						<borderlayout hflex="1" vflex="1">
+							<west width="100%" style="background:yellow">
+								<div vflex="1">
+									Click "change scroll" and "open window", the view should not go back.
+								</div>
+							</west>
+						</borderlayout>
+					</div>
+				</div>
+			</vlayout>
+		</div>
+	</window>
+</zk>
