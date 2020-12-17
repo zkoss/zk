@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4733.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 17 15:27:22 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    List childnodes = new LinkedList();
+    for (int i = 0; i < 500; ++i) {
+        childnodes.add(new DefaultTreeNode("" + i));
+    }
+
+    DefaultTreeNode root = new DefaultTreeNode("", childnodes);
+    DefaultTreeModel model = new DefaultTreeModel(root);
+    ]]></zscript>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <!-- smaller preload size makes scroll thumb jump easier   -->
+    <custom-attributes org.zkoss.zul.tree.preloadSize="10"/>
+    <label multiline="true">
+        1. Open with Chrome in Windows.
+        2. Drag the scroll thumb with a mouse and move down slowly.
+        3. Move to item 20 and stop, keep pressing the mouse without releasing.
+        4. The scroll thumb shouldn't be moved.
+    </label>
+    <tree model="${model}" width="200px" height="500px" />
+</zk>

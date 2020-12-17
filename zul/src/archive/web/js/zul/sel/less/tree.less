@@ -33,6 +33,8 @@
 		position: relative;
 		overflow: hidden;
 		.resetTable();
+		//ZK-3263, ZK-4733: scroll issue (chrome scroll anchor bug)
+		overflow-anchor: none;
 	}
 	&-body &-emptybody td {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
