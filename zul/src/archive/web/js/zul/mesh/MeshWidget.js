@@ -300,7 +300,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt._hflex == 'min') {
 			var w = _getMinWd(wgt),
 				n = wgt.$n();
-			wgt._hflexsz = w + zk(n).padBorderWidth(); //override
+			wgt._hflexsz = w + zk(n).padBorderWidth() + (zk(wgt.ebody).hasVScroll() ? jq.scrollbarWidth() : 0); //override
 			n.style.width = jq.px0(wgt._hflexsz);
 		}
 	}
