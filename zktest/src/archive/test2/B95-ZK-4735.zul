@@ -1,0 +1,31 @@
+<!--
+B95-ZK-4735.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Dec 15 10:50:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	    application.getConfiguration().setPreference("CometServerPush.ajax.timeout", "4000");
+	    application.getConfiguration().setPreference("CometServerPush.retry.delay", "1000");
+	    desktop.enableServerPush(true);
+    ]]></zscript>
+	<label multiline="true"><![CDATA[
+	To test this case, you have to add the zk.xml with the following setting.
+	**** Start This Line ****
+	<session-config>
+		<session-timeout>10</session-timeout>
+		<timeout-message>Session Timeout: "reload" the page or "cancel" to copy your unsaved data first.</timeout-message>
+	</session-config>
+	**** End This Line ****
+	Wait 20 seconds, and click the button. You will see session timeout alert.
+	]]></label>
+	<button onClick='Clients.log("not timeout")' />
+</zk>

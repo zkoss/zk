@@ -797,4 +797,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--		<name>org.zkoss.web.servlet.http.embedded.enabled</name>-->
 <!--		<value>true</value>-->
 <!--	</library-property>-->
+
+	<!--for ZK-4735-->
+<!--	<session-config>-->
+<!--		<device-type>ajax</device-type>-->
+<!--		<session-timeout>10</session-timeout>-->
+<!--	</session-config>-->
 </zk>
