@@ -110,6 +110,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	private static final Logger log = LoggerFactory.getLogger(DHtmlUpdateServlet.class);
 	private static final String ATTR_UPDATE_SERVLET = "org.zkoss.zk.au.http.updateServlet";
 	private static final String ATTR_AU_PROCESSORS = "org.zkoss.zk.au.http.auProcessors";
+	private static final String ATTR_SESSION_LAST_ACCESSED_TIME = "org.zkoss.zk.ui.Session.lastAccessedTime";
 
 	private long _lastModified;
 	/** (String name, AuExtension). */
@@ -430,15 +431,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		//AU
 		if (sess == null) {
-			final Object old = Charsets.setup(null, request, response, "UTF-8");
-			try {
-				final WebApp wapp = WebManager.getWebAppIfAny(ctx);
-				denoteSessionTimeout(wapp, request, response, _compress);
-				return;
-			} finally {
-				Charsets.cleanup(request, old);
-			}
+			doDenoteSessionTimeout(ctx, request, response);
+			return;
 		}
+		if (checkSessionTimeout(ctx, request, response, sess))
+			return;
 
 		// Feature 3285074 add no-cache for security risk.
 		response.setHeader("Pragma", "no-cache");
@@ -459,6 +456,30 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	public boolean checkSessionTimeout(ServletContext ctx, HttpServletRequest request, HttpServletResponse response, Session sess) throws ServletException, IOException {
+		Long lastAccessedTime = (Long) sess.getAttribute(ATTR_SESSION_LAST_ACCESSED_TIME);
+		if (lastAccessedTime == null)
+			lastAccessedTime = request.getSession().getCreationTime();
+		long now = new Date().getTime();
+		if ((now - lastAccessedTime) > sess.getMaxInactiveInterval() * 1000) {
+			doDenoteSessionTimeout(ctx, request, response);
+			sess.removeAttribute(ATTR_SESSION_LAST_ACCESSED_TIME);
+			sess.invalidate();
+			return true;
+		} else
+			sess.setAttribute(ATTR_SESSION_LAST_ACCESSED_TIME, now);
+		return false;
+	}
+
+	private void doDenoteSessionTimeout(ServletContext ctx, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		final WebApp wapp = WebManager.getWebAppIfAny(ctx);
+		final Object old = Charsets.setup(null, request, response, "UTF-8");
+		try {
+			denoteSessionTimeout(wapp, request, response, _compress);
+		} finally {
+			Charsets.cleanup(request, old);
+		}
+	}
 	/**
 	 * Denote HTTP 410 Session timeout response
 	 * @since 6.5.2
