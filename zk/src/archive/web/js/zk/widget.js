@@ -3417,10 +3417,8 @@ unbind_: function (skipper, after) {
 		delete this._vflexsz;
 	},
 	resetSize_: function (orient) {
-		var n = this.$n(),
-			jqn = jq(n),
-			scrollable = jq.inArray(jqn.css('overflow-y'), ['auto', 'scroll']) != -1 || jq.inArray(jqn.css('overflow-x'), ['auto', 'scroll']) != -1;
-		if (scrollable && (n.scrollTop || n.scrollLeft)) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
+		var n = this.$n();
+		if (n.scrollTop || n.scrollLeft) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
 			return;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
 	},
