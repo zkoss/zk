@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4741.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 18 12:15:38 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    public class FakeTreeModel extends AbstractTreeModel {
+        private int size = 500;
+
+        public FakeTreeModel(Object root, int size) {
+            super(root);
+            this.size = size;
+        }
+
+        public boolean isLeaf(Object node) {
+            return ((String) node).contains(".");
+        }
+
+        public Object getChild(Object parent, int nth) {
+            return ((String) parent) + "." + nth;
+        }
+
+        public int getChildCount(Object parent) {
+            return isLeaf(parent) ? 0 : size;
+        }
+    }
+
+    void replaceModel() {
+        tr.setModel(model2);
+    }
+
+    TreeModel model = new FakeTreeModel("root", 500);
+    TreeModel model2 = new FakeTreeModel("root", 100);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. (Firefox only) Scroll the Tree and select any item below "root.200".
+        2. Click Fewer model.
+        3. You shouldn't see a blank Tree.
+    </label>
+    <tree id="tr" model="${model}" rows="10" />
+    <button label="Fewer model" onClick="replaceModel()"/>
+</zk>

@@ -1162,7 +1162,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 			// Bug ZK-2901
 			if (child && child === true) { // called by Tree.js
-				jq(this.$n('a')).offset({top: 0, left: 0});
+				jq(this.$n('a')).css({top: 0, left: 0});
 			} else {
 
 				// 1. Bug ZK-1473: when using template to render listbox,
