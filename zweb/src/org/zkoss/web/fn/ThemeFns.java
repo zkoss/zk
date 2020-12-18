@@ -16,7 +16,8 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.web.fn;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -199,12 +199,8 @@ public class ThemeFns {
 		String result = String.format(template.getGradient(dir), color1, color2, "", gradType, ieGradType,
 				colorAll.toString());
 		if (template == Browser.IE9) {
-			try {
-				result = Base64.encodeBase64String(result.getBytes("UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				result = Base64.encodeBase64String(result.getBytes());
-			}
-			result = "url(data:image/svg+xml;base64," + result + ");";
+			result = "url(data:image/svg+xml;base64," + Base64.getEncoder()
+					.encodeToString(result.getBytes(StandardCharsets.UTF_8)) + ");";
 		}
 
 		return result;

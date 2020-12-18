@@ -32,9 +32,5 @@
 			<artifactId>zcommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-		</dependency>
 	</dependencies>
 </project> 
