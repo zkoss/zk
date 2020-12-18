@@ -7,6 +7,7 @@ ZK 9.5.1
   ZK-4418: specify charset for filedownload
   ZK-555: allow to register "#tab" in setCtrlKeys() to allow implementation of own focus switching
   ZK-4423: Kanban missing options to listen to portallayout onPortalMove without affecting the UI
+  ZK-4727: Drop the dependency commons-codec for Base64
 
 * Bugs
   ZK-4689: portal layout detach js error
