@@ -76,6 +76,7 @@ ZK 9.5.1
   ZK-4721: Timebox with tablet-ui disabled discard virtual keyboard value on mobile
   ZK-4733: a scroll thumb keeps moving itself during scrolling
   ZK-4729: z-errorbox disappears after clicking
+  ZK-4505: resize() doesn't reduce a groupbox height with title
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.
