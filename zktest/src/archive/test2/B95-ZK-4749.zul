@@ -1,0 +1,49 @@
+<!--
+B95-ZK-4749.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Dec 18 10:50:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="outerDiv" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4749VM')">
+		<label>Click the 'prefill' button, all labels should not be empty</label>
+		<separator />
+		<div id="formDiv" form="@id('fx') @load(vm.mybean) @save(vm.mybean, before='save')">
+			@load bindings using @ref
+			<separator/>
+			<apply value1="@ref(fx.prop1)">
+				Prop 1: <label id="l1" value="@load(value1) "/>
+			</apply>
+			<separator/>
+			<apply value2="@ref(fx.prop2)">
+				Prop 2: <label id="l2" value="@load(value2)"/>
+				<separator/>
+				<apply inner="@load(value2)">
+					Prop inner: <label id="l2_1" value="@load(inner)"/>
+				</apply>
+			</apply>
+			<separator/>
+			<apply value3="@ref(fx.prop3)">
+				Prop 3: <label id="l3" value="@load(value3) "/>
+			</apply>
+			<separator/>
+			@load bindings without @ref
+			<separator/>
+			Prop 1: <label value="@load(fx.prop1) "/>
+			<separator/>
+			Prop 2: <label value="@load(fx.prop2) "/>
+			<separator/>
+			Prop 3: <label value="@load(fx.prop3) "/>
+			<separator/>
+			<button id="prefillBtn" label="prefill" onClick="@command('prefill', mybeanForm=fx)"/>
+		</div>
+		<button label="save" onClick="@command('save')"/>
+	</div>
+</zk>
