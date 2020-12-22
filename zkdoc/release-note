@@ -9,6 +9,7 @@ ZK 9.5.1
   ZK-4423: Kanban missing options to listen to portallayout onPortalMove without affecting the UI
   ZK-4727: Drop the dependency commons-codec for Base64
   ZK-4739: Improve pdfviewer component by making each promise level override-accessible
+  ZK-4740: Provide an "auto rotate" feature to support landscapes PDF files
 
 * Bugs
   ZK-4689: portal layout detach js error
