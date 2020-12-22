@@ -86,6 +86,7 @@ ZK 9.5.1
   ZK-3318: Tree with hflex="min" produces a horizontal scrollbar
   ZK-4744: Modal window cause scroll position changed
   ZK-4741: The selection focus of Tree is not updated in Firefox
+  ZK-4754: JavaScript error when PDF Viewer is closed while it's loading a huge page
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

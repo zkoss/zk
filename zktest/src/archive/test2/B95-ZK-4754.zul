@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4754.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 22 12:03:59 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "next page".
+        2. While the page is still loading, click "detach".
+        3. Shouldn't see any error.
+    </label>
+    <pdfviewer id="viewer" src="B95-ZK-4754.pdf" activePage="1" width="100%" height="400px"/>
+    <button label="next page" onClick="viewer.nextPage()"/>
+    <button label="detach" onClick="viewer.detach()"/>
+</zk>
