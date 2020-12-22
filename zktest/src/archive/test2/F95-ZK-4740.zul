@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4740.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 22 10:25:40 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Wait for the PDF to be loaded.
+        2. The landscape PDF should be rotated automatically.
+           It means you don't have to rotate manually.
+    </label>
+    <pdfviewer src="F95-ZK-4740-landscape.pdf" width="800px" height="600px" />
+</zk>
