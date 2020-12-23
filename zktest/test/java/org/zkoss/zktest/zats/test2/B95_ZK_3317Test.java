@@ -22,10 +22,15 @@ public class B95_ZK_3317Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		JQuery listbox = jq(".z-listbox");
+		JQuery listbox1 = jq("$box");
+		JQuery listbox2 = jq("$box2");
 		JQuery jqBar = jq(".z-listhead-bar");
-		assertEquals(listbox.eq(0).find(".z-listcell-content").eq(0).outerWidth() + jqBar.eq(0).outerWidth(),
-			listbox.eq(0).width());
-		assertEquals(listbox.eq(1).find(".z-listcell-content").eq(0).outerWidth(), listbox.eq(1).width());
+		assertEquals(listbox1.find(".z-listcell-content:eq(0)").outerWidth() + jqBar.eq(0).outerWidth(),
+				listbox1.width());
+		listbox1.scrollTop(100);
+		waitResponse();
+		assertEquals(listbox1.find(".z-listcell-content:eq(0)").outerWidth() + jqBar.eq(0).outerWidth(),
+			listbox1.width());
+		assertEquals(listbox2.find(".z-listcell-content:eq(0)").outerWidth(), listbox2.width());
 	}
 }

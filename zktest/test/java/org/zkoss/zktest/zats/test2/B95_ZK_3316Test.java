@@ -23,8 +23,12 @@ public class B95_ZK_3316Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 		JQuery jqBar = jq(".z-columns-bar");
-		JQuery grid = jq(".z-grid");
-		assertEquals(grid.eq(0).find(".z-row-content").eq(0).outerWidth() + jqBar.eq(0).outerWidth(), grid.eq(0).width());
-		assertEquals(grid.eq(1).find(".z-row-content").eq(0).outerWidth(), jq(".z-grid").eq(1).width());
+		JQuery grid1 = jq("$grid1");
+		JQuery grid2 = jq("$grid2");
+		assertEquals(grid1.find(".z-row-content:eq(0)").outerWidth() + jqBar.outerWidth(), grid1.width());
+		grid1.scrollTop(100);
+		waitResponse();
+		assertEquals(grid1.find(".z-row-content:eq(0)").outerWidth() + jqBar.outerWidth(), grid1.width());
+		assertEquals(grid2.find(".z-row-content:eq(0)").outerWidth(), grid2.width());
 	}
 }
