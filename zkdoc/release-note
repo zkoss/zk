@@ -88,6 +88,7 @@ ZK 9.5.1
   ZK-4741: The selection focus of Tree is not updated in Firefox
   ZK-4754: JavaScript error when PDF Viewer is closed while it's loading a huge page
   ZK-4749: @ref bindings on form objects only update partially
+  ZK-4753: navbar doesn't get focussed
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

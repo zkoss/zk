@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4753.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 23 09:51:23 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style>
+    :focus {
+        border: 2px solid red !important;
+    }
+    </style>
+    <label multiline="true">
+        1. Click "focus navbar"
+        2. The nav-1 should have focus style
+        3. Click "focus nav"
+        4. The nav-2 should have focus style
+        5. Click "focus navitem"
+        6. The nav-1 should have focus style
+    </label>
+    <vlayout>
+        <textbox id="tb" placeholder="a textbox"/>
+        <navbar id="nb">
+            <navitem id="ni1" label="nav-1"/>
+            <nav id="ni2" label="nav-2">
+                <navitem label="nav-2-1"/>
+            </nav>
+            <navitem id="ni3" label="nav-3"/>
+        </navbar>
+        <button id="btn" label="a button"/>
+    </vlayout>
+    <separator />
+    <button id="btnF1" label="focus textbox" onClick="tb.setFocus(true);"/>
+    <button id="btnF2" label="focus navbar" onClick="nb.setFocus(true);"/>
+    <button id="btnF3" label="focus nav" onClick="ni2.setFocus(true);"/>
+    <button id="btnF4" label="focus navitem" onClick="ni1.setFocus(true);"/>
+    <button id="btnF5" label="focus button" onClick="btn.setFocus(true);"/>
+</zk>
