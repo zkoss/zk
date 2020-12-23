@@ -225,7 +225,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			meshmin = wgt._hflex == 'min';
 		if (!wgt.head && (meshmin || sbc)) {
 			var bdw = zk(wgt.$n()).padBorderWidth(),
-				wd = _getMinWd(wgt) + (zk(wgt.ebody).hasVScroll() ? jq.scrollbarWidth() : 0) + bdw, // has to call _getMinWd first so wgt._minWd will be available
+				wd = _getMinWd(wgt) + bdw, // has to call _getMinWd first so wgt._minWd will be available
 				tr = wgt.ebodytbl,
 				wds = wgt._minWd.wds,
 				wlen = wds.length;
@@ -300,7 +300,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt._hflex == 'min') {
 			var w = _getMinWd(wgt),
 				n = wgt.$n();
-			wgt._hflexsz = w + zk(n).padBorderWidth() + (zk(wgt.ebody).hasVScroll() ? jq.scrollbarWidth() : 0); //override
+			wgt._hflexsz = w + zk(n).padBorderWidth(); //override
 			n.style.width = jq.px0(wgt._hflexsz);
 		}
 	}
@@ -333,7 +333,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		} else
 			width = wgt._minWd.width; // no header
-		return width;
+		return width + (zk(wgt.ebody).hasVScroll() ? jq.scrollbarWidth() : 0);
 	}
 	function _getSigRow(wgt) {
 		// scan for tr with largest number of td children

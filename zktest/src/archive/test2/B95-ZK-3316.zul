@@ -27,12 +27,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<label>
 		1. no horizontal scrollbar
 	</label>
-	<grid model="${model1}" hflex="min" height="200px">
+	<grid id="grid1" model="${model1}" hflex="min" height="200px">
 		<columns>
 			<column>name</column>
 		</columns>
 	</grid>
-	<grid model="${model2}" hflex="min" height="200px">
+	<grid id="grid2" model="${model2}" hflex="min" height="200px">
 		<columns>
 			<column>name</column>
 		</columns>
