@@ -50,8 +50,6 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 
 	private int _max = 5;
 
-	private boolean _init = true;
-
 	private boolean _disabled = false;
 
 	private boolean _readonly = false;
@@ -111,7 +109,7 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 	 * @param rating
 	 */
 	public void setRating(int rating) {
-		if (!_init && (rating > _max || rating < 0)) {
+		if (isInitialized() && (rating > _max || rating < 0)) {
 			throw new UiException("Out of bound: " + rating + " while max is " + _max);
 		}
 		if (_rating != rating) {
@@ -160,7 +158,7 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 	public void setMax(int max) {
 		if (max <= 0)
 			throw new UiException("max should be > 0");
-		if (!_init && max < _rating) {
+		if (isInitialized() && max < _rating) {
 			throw new UiException("max should be larger than rating");
 		}
 		if (_max != max) {
@@ -210,8 +208,6 @@ public class Rating extends HtmlBasedComponent implements Disable, Readonly {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_init)
-			_init = false;
 
 		if (_max <= 0)
 			throw new UiException("max should be > 0");
