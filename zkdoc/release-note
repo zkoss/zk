@@ -91,6 +91,7 @@ ZK 9.5.1
   ZK-4753: navbar doesn't get focussed
   ZK-4732: disable org.zkoss.zul.client.rod in the page scope doesn't work
   ZK-4756: Property activePage is reset by src or content in PDFViewer while in initializing
+  ZK-4084: New added header is invisible when all headers have fixed width
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

@@ -800,6 +800,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this._cssflex && this.isChildrenFlex()) return;
 			var empty = true,
 				flex = false,
+				shouldFix = false,
+				shouldCheckEmptyWidth = !this.frozen && this.eheadtbl && this.eheadtbl.style.width;
 				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
 			for (var i = this.heads.length; i-- > 0;) {
 				var header = this.heads[i],
@@ -820,6 +822,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					if (w.getLabel() || w.getImage() || w.nChildren) {
 						emptyHeader = false;
 						empty = false;
+					}
+					if (shouldCheckEmptyWidth && w.getWidth()) {
+						shouldFix = true;
 					}
 				}
 
@@ -843,7 +848,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 					delete w._nhflexbak;
 				}
 			}
-			return old != this.ehead.style.display;
+			return shouldFix || old != this.ehead.style.display;
 		}
 	},
 	_adjFlexWd: function () { //used by HeadWidget
@@ -1343,6 +1348,19 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 			if (!this.frozen._smooth)
 				this._syncFaker();
+		} else {
+			var hdtbl = this.eheadtbl,
+				bdtbl = this.ebodytbl,
+				fttbl = this.efoottbl;
+			if (bdtbl) {
+				bdtbl.style.width = '';
+			}
+			if (hdtbl) {
+				hdtbl.style.width = '';
+			}
+			if (fttbl) {
+				fttbl.style.width = '';
+			}
 		}
 	},
 	_syncFaker: function () {
