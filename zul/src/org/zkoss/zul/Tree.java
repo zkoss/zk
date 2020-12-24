@@ -2629,7 +2629,7 @@ public class Tree extends MeshElement {
 			renderer.render("preloadSize", preloadSz);
 		// ZK-3835: because of ZK-3198, -1 will disable client ROD too
 		if (initRodSize() == -1)
-			renderer.render("z$rod", false);
+			renderer.render("z$rod0", false);
 	}
 
 	/** Returns whether to toggle a list item selection on right click
