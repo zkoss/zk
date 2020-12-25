@@ -90,6 +90,7 @@ ZK 9.5.1
   ZK-4749: @ref bindings on form objects only update partially
   ZK-4753: navbar doesn't get focussed
   ZK-4732: disable org.zkoss.zul.client.rod in the page scope doesn't work
+  ZK-4756: Property activePage is reset by src or content in PDFViewer while in initializing
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

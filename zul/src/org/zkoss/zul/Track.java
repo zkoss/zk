@@ -39,7 +39,6 @@ public class Track extends XulElement {
 	private String _label;
 	private String _src;
 	private String _srclang;
-	private boolean _init = true;
 
 	public Track() {
 	}
@@ -98,7 +97,7 @@ public class Track extends XulElement {
 		if (!"subtitles".equals(kind) && !"captions".equals(kind)
 				&& !"descriptions".equals(kind) && !"chapters".equals(kind) && !"metadata".equals(kind))
 			throw new WrongValueException("kind cannot be " + kind);
-		if (!_init && "subtitles".equals(kind) && Strings.isEmpty(_srclang))
+		if (isInitialized() && "subtitles".equals(kind) && Strings.isEmpty(_srclang))
 			throw new UiException("srclang cannot be null or empty while kind is subtitles");
 		if (!Objects.equals(_kind, kind)) {
 			_kind = kind;
@@ -197,7 +196,6 @@ public class Track extends XulElement {
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 
-		_init = false;
 		if (Strings.isEmpty(_src))
 			throw new UiException("src must be specified.");
 		if ("subtitles".equals(_kind) && Strings.isEmpty(_srclang))

@@ -140,6 +140,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	private AuxInfo _auxinf;
 
 	private Map<String, ShadowElement> _shadowIdMap; //to speed up id only shadow selector
+	/** Whether this component is initialized. */
+	private boolean _initialized;
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -2278,6 +2280,7 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 	 * @since 5.0.0
 	 */
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
+		_initialized = true;
 		render(renderer, "id", _id);
 		if (_auxinf != null && !_auxinf.visible) //don't call isVisible since it might be overriden (backward compatible)
 			renderer.render("visible", false);
@@ -4229,6 +4232,15 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 	public ShadowElement getShadowFellowIfAny(String id) {
 		return _shadowIdMap == null ? null : _shadowIdMap.get(id);
+	}
+
+	/**
+	 * Returns if it's finished layout phase (initializing).
+	 * @return true if it's initialized.
+	 * @since 9.5.1
+	 */
+	public boolean isInitialized() {
+		return _initialized;
 	}
 
 	private static void removeFromShadowIdMap(Component comp) {
