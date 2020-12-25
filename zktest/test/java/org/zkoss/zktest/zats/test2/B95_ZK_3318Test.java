@@ -22,17 +22,13 @@ public class B95_ZK_3318Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
-		JQuery content = jq(".z-focus-a");
 		JQuery jqBar = jq(".z-treecols-bar");
 		JQuery tree1 = jq("$tree1");
 		JQuery tree2 = jq("$tree2");
-		assertEquals(tree1.find(".z-treerow:eq(0)").outerWidth() + content.eq(0).outerWidth()
-			+ jqBar.eq(0).outerWidth(), tree1.width());
+		assertEquals(tree1.find(".z-treerow:eq(0)").outerWidth() + jqBar.eq(0).outerWidth(), tree1.width(), 1);
 		tree1.scrollTop(100);
 		waitResponse();
-		assertEquals(tree1.find(".z-treerow:eq(0)").outerWidth() + content.eq(0).outerWidth()
-			+ jqBar.eq(0).outerWidth(), tree1.width());
-		assertEquals(tree2.find(".z-treerow:eq(0)").outerWidth() + content.eq(1).outerWidth(),
-			tree2.width());
+		assertEquals(tree1.find(".z-treerow:eq(0)").outerWidth() + jqBar.eq(0).outerWidth(), tree1.width(), 1);
+		assertEquals(tree2.find(".z-treerow:eq(0)").outerWidth(), tree2.width(), 1);
 	}
 }
