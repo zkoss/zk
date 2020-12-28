@@ -917,7 +917,7 @@ zAu.beforeSend = function (uri, req, dt) {
 	_onResponseReady: function (response) {
 		var reqInf = zAu.ajaxReqInf, sid;
 		try {
-			if (response && response.ok) {
+			if (response) {
 				zAu.ajaxReq = zAu.ajaxReqInf = null;
 				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, zAu.pfGetIds(response));
 
@@ -1000,7 +1000,7 @@ zAu.beforeSend = function (uri, req, dt) {
 				}
 			}
 			if (!reqInf.ignorable && !zk.unloading) {
-				var msg = req.statusText;
+				var msg = response.statusText;
 				if (zAu.confirmRetry('FAILED_TO_RESPONSE', rstatus + (msg ? ': ' + msg : ''))) {
 					zAu.ajaxReqTries = 2; //one more try
 					zAu.ajaxReqResend(reqInf);

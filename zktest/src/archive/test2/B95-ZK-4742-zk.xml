@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<client-config>
+		<error-reload>
+			<device-type>ajax</device-type>
+			<error-code>403</error-code>
+			<reload-uri>/test2/B95-ZK-4742-login.zul</reload-uri>
+		</error-reload>
+	</client-config>
+</zk>
