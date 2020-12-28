@@ -257,7 +257,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				zWatch.listen({onSize: [wgt, zFlex.fixCSSFlex]});
 			else
 				zWatch.listen({onSize: [wgt, zFlex.onSize]});
-			zWatch.listen({beforeSize: [wgt, zFlex.beforeSize]});
+			zWatch.listen({
+				_preBeforeSize: [wgt, zFlex.preBeforeSize],
+				beforeSize: [wgt, zFlex.beforeSize]
+			});
 			if (wgt._hflex == 'min' || wgt._vflex == 'min')
 				wgt.listenOnFitSize_();
 			else
@@ -272,7 +275,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				zWatch.unlisten({onSize: [wgt, zFlex.fixCSSFlex]});
 			else
 				zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
-			zWatch.listen({beforeSize: [wgt, zFlex.beforeSize]});
+			zWatch.unlisten({
+				_preBeforeSize: [wgt, zFlex.preBeforeSize],
+				beforeSize: [wgt, zFlex.beforeSize]
+			});
 			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
@@ -3417,8 +3423,9 @@ unbind_: function (skipper, after) {
 		delete this._vflexsz;
 	},
 	resetSize_: function (orient) {
-		var n = this.$n();
-		if (n.scrollTop || n.scrollLeft) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
+		var n = this.$n(),
+			hasScroll = this._beforeSizeHasScroll;
+		if (hasScroll || (hasScroll == null && (n.scrollTop || n.scrollLeft))) // keep the scroll status, the issue also happens (not only IE8) if trigger by resize browser window.
 			return;// do nothing Bug ZK-1885: scrollable div (with vflex) and tooltip
 		n.style[orient == 'w' ? 'width' : 'height'] = '';
 	},
