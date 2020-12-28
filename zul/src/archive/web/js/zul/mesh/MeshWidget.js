@@ -823,7 +823,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 						emptyHeader = false;
 						empty = false;
 					}
-					if (shouldCheckEmptyWidth && w.getWidth()) {
+					if (shouldCheckEmptyWidth && !w.getWidth()) {
 						shouldFix = true;
 					}
 				}
