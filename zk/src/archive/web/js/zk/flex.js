@@ -258,6 +258,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 zFlex = { //static methods
+	preBeforeSize: function () {
+		var wgt = this,
+			n = wgt.$n();
+		// ZK-4154 prevent from forced reflow
+		wgt._beforeSizeHasScroll = n && (n.scrollTop || n.scrollLeft);
+	},
 	beforeSize: function (ctl, opts, cleanup) {
 		var wgt = this, p;
 		if (cleanup)
@@ -281,6 +287,7 @@ zFlex = { //static methods
 				if (p = wgt.parent)
 					p.afterResetChildSize_('h');
 			}
+			delete wgt._beforeSizeHasScroll;
 		}
 	},
 	onSize: function () {
