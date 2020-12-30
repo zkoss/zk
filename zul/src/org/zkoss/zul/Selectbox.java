@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.ext.Blockable;
+import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
@@ -51,7 +52,7 @@ import org.zkoss.zul.ext.Selectable;
  * @since 6.0.0
  */
 @SuppressWarnings("serial")
-public class Selectbox extends HtmlBasedComponent {
+public class Selectbox extends HtmlBasedComponent implements Disable {
 
 	private String _name;
 	private boolean _disabled;

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4746.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Dec 28 13:07:16 CST 2020, Created by katherinelin
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		<![CDATA[
+		String[] userName = { "Tony", "Ryan", "Wing", "Sam" };
+		ListModelList model = new ListModelList(userName);
+	]]></zscript>
+
+	<label>SetDisabled and isDisabled methods should be effective in selectbox.</label>
+	<separator spacing="10px"/>
+	<selectbox model="${model}" id="selectbox">
+		<template name="model" >
+			Name is ${each}
+		</template>
+	</selectbox>
+	<div>
+		isDisabled :
+		<label id="label" value="false"/>
+	</div>
+	<button label="Disabled">
+		<attribute name="onClick">
+			selectbox.setDisabled(true);
+			label.value = (Boolean.toString(selectbox.isDisabled()));
+		</attribute>
+	</button>
+</zk>
