@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4758.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 30 11:52:00 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style><![CDATA[
+    /* To test margin case in flex.js fixCSSFlex() */
+    .z-vlayout-inner {
+      margin: 1px;
+    }
+    ]]>
+    </style>
+    <label multiline="true">
+        1. Open DevTools > Performance (Chrome)
+        2. Record.
+        3. Resize the browser width once.
+        4. Stop Record.
+        5. Manually counting the "forced reflow" warnings. It should be fewer than 100.
+    </label>
+    <borderlayout height="450px">
+        <north title="North" maxsize="300" size="50%" splittable="true" collapsible="true">
+            north
+        </north>
+        <center border="0">
+            <vlayout>
+                <forEach begin="0" end="200">
+                    <hlayout height="100%" hflex="1" style="border: 1px solid #D9D9D9; overflow: auto;">
+                    </hlayout>
+                </forEach>
+            </vlayout>
+        </center>
+        <south>
+            south
+        </south>
+    </borderlayout>
+</zk>
