@@ -35,10 +35,10 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	},
 	bind_: function () {
 		this.$supers(zul.box.Hlayout, 'bind_', arguments);
-		zWatch.listen({beforeSize: this, onFitSize: this}); //ZK-4476
+		zWatch.listen({_preBeforeSize: this, beforeSize: this, onFitSize: this}); //ZK-4476
 	},
 	unbind_: function () {
-		zWatch.unlisten({beforeSize: this, onFitSize: this});
+		zWatch.unlisten({_preBeforeSize: this, beforeSize: this, onFitSize: this});
 		this.$supers(zul.box.Hlayout, 'unbind_', arguments);
 	},
 	isVertical_: function () {
@@ -60,9 +60,18 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		return 'row';
 	},
 	//ZK-4476
+	_preBeforeSize: function () {
+		var n = this.$n();
+		this._beforeSizeWidth = n ? n.offsetWidth : 0;
+		for (var xc = this.firstChild; xc; xc = xc.nextSibling) {
+			n = xc.$n();
+			xc._beforeSizeWidth = n ? n.offsetWidth : 0;
+		}
+	},
 	beforeSize: function () {
 		var xc = this.firstChild,
-			totalWd = this.$n().offsetWidth,
+			totalWdCached = this._beforeSizeWidth,
+			totalWd = totalWdCached != null ? totalWdCached : this.$n().offsetWidth,
 			flexCnt = 0,
 			flexWgts = [];
 		for (; xc; xc = xc.nextSibling) {
@@ -73,17 +82,20 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 					flexWgts.push({wgt: xc, flex: nhflex});
 					flexCnt += nhflex;
 				} else if (nXc) {
-					var xcOffsetWidth = nXc.offsetWidth;
+					var xcOffsetWidthCached = xc._beforeSizeWidth,
+						xcOffsetWidth = xcOffsetWidthCached != null ? xcOffsetWidthCached : nXc.offsetWidth;
 					totalWd -= xcOffsetWidth;
 					xc.$n('chdex').style.width = jq.px0(xcOffsetWidth);
 				}
 			}
+			delete xc._beforeSizeWidth;
 		}
 		if (flexCnt > 0) {
 			var perWd = totalWd / flexCnt;
 			for (var i = 0, l = flexWgts.length; i < l; i++)
 				flexWgts[i].wgt.$n('chdex').style.width = jq.px0(perWd * flexWgts[i].flex);
 		}
+		delete this._beforeSizeWidth;
 	},
 	onFitSize: function () {
 		var xc = this.firstChild;

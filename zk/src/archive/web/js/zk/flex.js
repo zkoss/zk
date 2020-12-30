@@ -574,7 +574,7 @@ zFlex = { //static methods
 			flex = flexs[!isRow | 0];
 			dim = isRow ? 'height' : 'width';
 			if (flex > 0) {
-				var marginSize = isRow ? jqFcc.outerHeight(true) - jqFcc.outerHeight() : jqFcc.outerWidth(true) - jqFcc.outerWidth(),
+				var marginSize = isRow ? zk(jqFcc).marginHeight() : zk(jqFcc).marginWidth(),
 					fccDimValue = marginSize > 0 ? 'calc(100% - ' + jq.px0(marginSize) + ')' : '100%'; //handle margin issue
 				fcc.style[dim] = fccDimValue;
 				if (fcc != c)
