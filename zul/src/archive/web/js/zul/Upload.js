@@ -152,7 +152,7 @@ zul.Upload = zk.$extends(zk.Object, {
 				// multiple="" for Firefox, multiple for Chrome
 				 + (this.multiple == 'true' ? ' multiple="" multiple' : '')
 				 + (this.accept ? ' accept="' + this.accept.replace(new RegExp('\\|', 'g'), ',') + '"' : '')
-				 + ' hidefocus="true" style="height:'
+				 + ' hidefocus="true" tabindex="-1" style="height:'
 				 + ref.offsetHeight + 'px"/></form></span>';
 
 		if (parent)
