@@ -803,4 +803,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--		<device-type>ajax</device-type>-->
 <!--		<session-timeout>10</session-timeout>-->
 <!--	</session-config>-->
+
+	<!--for ZK-4742-->
+<!--	<client-config>-->
+<!--		<error-reload>-->
+<!--			<device-type>ajax</device-type>-->
+<!--			<error-code>403</error-code>-->
+<!--			<reload-uri>/test2/B95-ZK-4742-login.zul</reload-uri>-->
+<!--		</error-reload>-->
+<!--	</client-config>-->
 </zk>
