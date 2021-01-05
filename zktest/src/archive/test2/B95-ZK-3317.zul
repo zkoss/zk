@@ -16,15 +16,20 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<zscript><![CDATA[
 		ListModelList model1 = new ListModelList();
 		ListModelList model2 = new ListModelList();
+		ListModelList model3 = new ListModelList();
 		for (int i=1 ; i<=200 ; i++){
 			model1.add("item "+i);
 		}
 		for (int i=1 ; i<=2 ; i++){
 			model2.add("item "+i);
 		}
+		for (int i=1 ; i<=2 ; i++){
+			model3.add("item "+i);
+		}
 	]]></zscript>
-	<label>
-		1. no horizontal scrollbar
+	<label multiline="true">
+		1. listbox1 and listbox2 no horizontal scrollbar.
+		2. listbox3 no vertical scrollbar.
 	</label>
 	<listbox id="box" height="200px" model="${model1}" hflex="min">
 		<listhead>
@@ -36,4 +41,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			<listheader label="name" ></listheader>
 		</listhead>
 	</listbox>
+	<listbox id="box3" model="${model3}" vflex="min" width="75px">
+		<listhead>
+			<listheader hflex="min">name</listheader>
+		</listhead>
+	</listbox>
+
 </zk>

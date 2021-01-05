@@ -13,8 +13,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<label>
-		1. no horizontal scrollbar
+	<label multiline="true">
+		1. tree1 and tree2 no horizontal scrollbar.
+		2. tree3 no vertical scrollbar.
 	</label>
 	<tree id="tree1" rows="5" hflex="min" >
 		<treecols>
@@ -61,10 +62,43 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			</treeitem>
 		</treechildren>
 	</tree>
-<tree id="tree2" rows="5" hflex="min" >
+	<tree id="tree2" rows="5" hflex="min" >
 		<treecols>
 			<treecol>name</treecol>
 			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem  checkable="false" open="true">
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<tree id="tree3" vflex="min" width="300px">
+		<treecols>
+			<treecol hflex="min" >name</treecol>
+			<treecol hflex="min" label="Description"/>
 		</treecols>
 		<treechildren>
 			<treeitem>
