@@ -801,6 +801,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--	<session-config>-->
 <!--		<device-type>ajax</device-type>-->
 <!--		<session-timeout>10</session-timeout>-->
+<!--		<timer-keep-alive>true</timer-keep-alive>-->
 <!--	</session-config>-->
 
 	<!--for ZK-4742-->
