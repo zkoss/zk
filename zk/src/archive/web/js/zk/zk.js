@@ -1205,10 +1205,7 @@ zk.log('value is", value);
 			, (detailed === zk)
 		);
 		_logmsg = (_logmsg ? _logmsg + msg : msg) + '\n';
-		if (zk.mobile) {
-			console.log(_logmsg); // eslint-disable-line no-console
-			_logmsg = null;
-		} else setTimeout(function () {jq(doLog);}, 300);
+		setTimeout(function () {jq(doLog);}, 300);
 	},
 	/** Make a time stamp for this momemt; used for performance tuning.
 	 * A time stamp is represented by a name. It is an easy way to measure
