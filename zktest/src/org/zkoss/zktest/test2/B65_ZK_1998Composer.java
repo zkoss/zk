@@ -191,8 +191,6 @@ public class B65_ZK_1998Composer extends SelectorComposer<Window> {
 	@Override
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
-		org.zkoss.lang.Library
-				.setProperty("org.zkoss.zul.listbox.rod", "false");
 
 		Food[] foods = new FoodData().getAllFoods().toArray(new Food[] {});
 		groupModel = new FoodGroupModel(foods, new FoodGroupComparator());
