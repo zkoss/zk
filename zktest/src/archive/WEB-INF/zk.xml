@@ -671,12 +671,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>false</value>
 	</library-property>
 	 
-	<!-- Turn on if you want to disable tablet UI by default
+	<!-- Turn on if you want to disable tablet UI by default -->
 	<library-property>
 		<name>org.zkoss.zkmax.tablet.ui.disabled</name>
 		<value>true</value>
 	</library-property>
-	-->
 	
 	<!-- zkmax.jar will define this automatically 
 	<library-property>

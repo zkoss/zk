@@ -28,7 +28,8 @@ public class B60_ZK_1305Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"))
+				.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
 	}
 
 	@Test

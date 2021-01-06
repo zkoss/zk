@@ -13,22 +13,27 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.Assert;
+import java.util.Collections;
+
+import org.hamcrest.MatcherAssert;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import org.zkoss.zktest.zats.ExternalZkXml;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 public class B70_ZK_2773_1Test extends WebDriverTestCase {
+	@ClassRule
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
+
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
-		ChromeOptions options = super.getWebDriverOptions();
-		// iPad
-		options.addArguments("user-agent=Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1");
-		return options;
+		return super.getWebDriverOptions()
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
 	}
 
 	@Test
@@ -41,16 +46,16 @@ public class B70_ZK_2773_1Test extends WebDriverTestCase {
 
 		click(widget("@datebox").$n("btn"));
 		waitResponse(true);
-		Assert.assertThat(jq(".z-datebox-popup:visible").offsetTop(), greaterThan(jq("@datebox").offsetTop()));
+		MatcherAssert.assertThat(jq(".z-datebox-popup:visible").offsetTop(), greaterThan(jq("@datebox").offsetTop()));
 		click(widget("@datebox").$n("btn"));
 
 		click(widget("@timebox:visible").$n("btn")); // there is a hidden one in datebox
 		waitResponse(true);
-		Assert.assertThat(jq(".z-timebox-popup:visible").offsetTop(), greaterThan(jq("@timebox:visible").offsetTop()));
+		MatcherAssert.assertThat(jq(".z-timebox-popup:visible").offsetTop(), greaterThan(jq("@timebox:visible").offsetTop()));
 		click(widget("@timebox:visible").$n("btn"));
 
 		click(widget("@combobox").$n("btn"));
 		waitResponse(true);
-		Assert.assertThat(jq(".z-combobox-popup:visible").offsetTop(), greaterThan(jq("@combobox").offsetTop()));
+		MatcherAssert.assertThat(jq(".z-combobox-popup:visible").offsetTop(), greaterThan(jq("@combobox").offsetTop()));
 	}
 }

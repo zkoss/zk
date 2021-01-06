@@ -11,11 +11,15 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.util.Collections;
+
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
+import org.zkoss.zktest.zats.ExternalZkXml;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.Element;
 
@@ -23,12 +27,14 @@ import org.zkoss.zktest.zats.ztl.Element;
  * @author rudyhuang
  */
 public class B70_ZK_2351Test extends WebDriverTestCase {
+	@ClassRule
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
+
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
-		ChromeOptions options = super.getWebDriverOptions();
-		// iPad
-		options.addArguments("user-agent=Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1");
-		return options;
+		return super.getWebDriverOptions()
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"))
+				.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
 	}
 
 	@Test

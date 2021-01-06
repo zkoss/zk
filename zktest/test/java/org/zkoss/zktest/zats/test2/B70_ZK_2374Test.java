@@ -26,7 +26,8 @@ public class B70_ZK_2374Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPhone 6"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPhone 6"))
+				.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
 	}
 
 	@Test

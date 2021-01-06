@@ -133,7 +133,6 @@ public abstract class WebDriverTestCase {
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("window-size=1920,1080");
-		options.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
 		return options;
 	}
 
