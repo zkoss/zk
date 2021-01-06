@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.interactions.Actions;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
 
@@ -28,7 +29,7 @@ public class B30_1822585Test extends WebDriverTestCase {
 
 	private void columnSizeChangeTest(Actions act, int index) {
 		JQuery target = jq(".z-column").eq(index);
-		act.moveToElement(toElement(target), target.width() - 1, 1).doubleClick().perform();
+		act.moveToElement(toElement(target), target.width() / 2 - 1, 0).doubleClick().perform();
 		waitResponse();
 		Assert.assertTrue(jq(".z-label").eq(1).text().contains("colindex:" + index));
 	}

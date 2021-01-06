@@ -30,7 +30,8 @@ public class F85_ZK_3683Test extends WebDriverTestCase {
 		int win1H = win.eq(1).height();
 		int win2H = win.eq(2).height();
 
-		getActions().moveToElement(toElement(splitter), 2, 2)
+		// offset 20px right since the center is the button which can't be dragged
+		getActions().moveToElement(toElement(splitter), 20, 0)
 				.clickAndHold()
 				.moveByOffset(0, -50)
 				.release()

@@ -30,7 +30,7 @@ public class B80_ZK_2938Test extends WebDriverTestCase {
 		JQuery w1 = jq("$w1");
 		int w1width = w1.outerWidth();
 		int w1height = w1.outerHeight();
-		getActions().moveToElement(toElement(w1), w1width - DRAG_THRESHOLD, 30)
+		getActions().moveToElement(toElement(w1), w1width / 2 - DRAG_THRESHOLD, 0)
 				.clickAndHold()
 				.moveByOffset(-100, 0)
 				.release()
@@ -38,7 +38,7 @@ public class B80_ZK_2938Test extends WebDriverTestCase {
 		waitResponse();
 		Assert.assertEquals(w1width - 100, w1.outerWidth(), 2);
 
-		getActions().moveToElement(toElement(w1), 30, w1height - DRAG_THRESHOLD)
+		getActions().moveToElement(toElement(w1), 0, w1height / 2 - DRAG_THRESHOLD)
 				.clickAndHold()
 				.moveByOffset(0, -100)
 				.release()

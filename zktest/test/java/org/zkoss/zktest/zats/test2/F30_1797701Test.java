@@ -11,9 +11,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.interactions.Actions;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 public class F30_1797701Test extends WebDriverTestCase {
@@ -29,8 +32,8 @@ public class F30_1797701Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq("@button:contains(change)"));
 		waitResponse();
-		act.clickAndHold(toElement(jq(".z-slider-button"))).moveByOffset(-sliderWidth, 0).perform();
+		act.clickAndHold(toElement(jq(".z-slider-button"))).moveByOffset(-sliderWidth / 2, 0).perform();
 		waitResponse();
-		Assert.assertEquals("position 0 is here", jq(".z-slider-popup").text().trim());
+		MatcherAssert.assertThat(jq(".z-slider-popup").text().trim(), Matchers.matchesRegex("position \\d+ is here"));
 	}
 }

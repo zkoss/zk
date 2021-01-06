@@ -13,7 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.hamcrest.Matchers.greaterThan;
 
-import org.junit.Assert;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
@@ -37,7 +37,7 @@ public class B86_ZK_4210Test extends WebDriverTestCase {
 		waitResponse();
 
 		resizeColumn(column5);
-		Assert.assertThat(jq("#zk_hdghost").offsetLeft(), greaterThan(column5.offsetLeft()));
+		MatcherAssert.assertThat(jq("#zk_hdghost").offsetLeft(), greaterThan(column5.offsetLeft()));
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class B86_ZK_4210Test extends WebDriverTestCase {
 		waitResponse();
 
 		resizeColumn(column5);
-		Assert.assertThat(jq("#zk_hdghost").offsetLeft(), greaterThan(column5.offsetLeft()));
+		MatcherAssert.assertThat(jq("#zk_hdghost").offsetLeft(), greaterThan(column5.offsetLeft()));
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class B86_ZK_4210Test extends WebDriverTestCase {
 		waitResponse();
 
 		resizeColumn(column5);
-		Assert.assertThat(jq("#zk_hdghost").offsetLeft(), greaterThan(column5.offsetLeft()));
+		MatcherAssert.assertThat(jq("#zk_hdghost").offsetLeft(), greaterThan(column5.offsetLeft()));
 	}
 
 	private void resizeColumn(JQuery column) {
@@ -75,7 +75,7 @@ public class B86_ZK_4210Test extends WebDriverTestCase {
 		getActions().moveToElement(toElement(column))
 				.moveByOffset(columnWidth / 2 - DRAGGING_THRESHOLD, 0)
 				.clickAndHold()
-				.moveByOffset(-(columnWidth + 100), 0)
+				.moveByOffset(-100, 0)
 				.perform();
 	}
 }

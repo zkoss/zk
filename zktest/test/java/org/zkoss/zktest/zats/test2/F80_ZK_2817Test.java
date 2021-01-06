@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
@@ -28,15 +29,28 @@ public class F80_ZK_2817Test extends WebDriverTestCase {
 		click(jq("@textbox"));
 		waitResponse();
 
-		testKeyHandler(Keys.chord(Keys.CONTROL, "y"), "Key Pressed: Ctrl + Y");
-		testKeyHandler(Keys.chord(Keys.CONTROL, Keys.ALT, "t"), "Key Pressed: Ctrl + Alt + T");
-		testKeyHandler(Keys.chord(Keys.CONTROL, Keys.SHIFT, "o"), "Key Pressed: Ctrl + Shift + O");
-		testKeyHandler(Keys.chord(Keys.ALT, Keys.SHIFT, "k"), "Key Pressed: Alt + Shift + K");
-		testKeyHandler(Keys.chord(Keys.CONTROL, Keys.ALT, Keys.SHIFT, "p"), "Key Pressed: Ctrl + Alt + Shift + P");
+		final Keys[] ctrl = { Keys.CONTROL };
+		final Keys[] ctrlAlt = { Keys.CONTROL, Keys.ALT };
+		final Keys[] ctrlShift = { Keys.CONTROL, Keys.SHIFT };
+		final Keys[] altShift = { Keys.ALT, Keys.SHIFT };
+		final Keys[] ctrlAltShift = { Keys.CONTROL, Keys.ALT, Keys.SHIFT };
+		testKeyHandler(ctrl, "y", "Key Pressed: Ctrl + Y");
+		testKeyHandler(ctrlAlt, "t", "Key Pressed: Ctrl + Alt + T");
+		testKeyHandler(ctrlShift, "o", "Key Pressed: Ctrl + Shift + O");
+		testKeyHandler(altShift, "k", "Key Pressed: Alt + Shift + K");
+		testKeyHandler(ctrlAltShift, "p", "Key Pressed: Ctrl + Alt + Shift + P");
 	}
 
-	private void testKeyHandler(String keys, String message) {
-		getActions().sendKeys(keys).perform();
+	private void testKeyHandler(Keys[] modifiers, String keys, String message) {
+		Actions actions = getActions();
+		for (Keys modifier : modifiers) {
+			actions = actions.keyDown(modifier);
+		}
+		actions = actions.sendKeys(keys);
+		for (Keys modifier : modifiers) {
+			actions = actions.keyUp(modifier);
+		}
+		actions.perform();
 		waitResponse();
 		Assert.assertEquals(message, getZKLog());
 		closeZKLog();

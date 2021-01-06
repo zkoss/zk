@@ -29,7 +29,7 @@ public class B70_ZK_3006Test extends WebDriverTestCase {
 		waitResponse();
 		getActions().sendKeys(Keys.DOWN).perform();
 		waitResponse();
-		getActions().sendKeys(Keys.chord(Keys.SHIFT, ";")).perform();
+		getActions().keyDown(Keys.SHIFT).sendKeys(";").keyUp(Keys.SHIFT).perform();
 		Assert.assertNotEquals(":", jq("@chosenbox input").val());
 		Assert.assertEquals(1, jq(".z-chosenbox-item").length());
 	}

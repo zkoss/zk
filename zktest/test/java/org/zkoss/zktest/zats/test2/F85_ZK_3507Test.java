@@ -47,7 +47,7 @@ public class F85_ZK_3507Test extends WebDriverTestCase {
 	}
 
 	private void sendCombinedKey(Keys key) {
-		new Actions(driver).keyDown(Keys.SHIFT).sendKeys(key).build().perform();
+		new Actions(driver).keyDown(Keys.SHIFT).sendKeys(key).keyUp(Keys.SHIFT).build().perform();
 		waitResponse();
 	}
 }

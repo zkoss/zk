@@ -23,16 +23,16 @@ public class F86_ZK_4059Test extends WebDriverTestCase {
 		connect();
 		Actions act = new Actions(driver);
 		
-		act.moveToElement(toElement(jq("$lh1")), 240, 10).click().build().perform();
+		act.moveToElement(toElement(jq("$lh1"))).click(toElement(widget("$lh1").$n("btn"))).build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 
-		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)"))).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 
-		act.moveToElement(toElement(jq("$lh2")), 240, 10).click().build().perform();
+		act.moveToElement(toElement(jq("$lh2"))).click(toElement(widget("$lh2").$n("btn"))).build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 
-		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)"))).click().build().perform();
 		Assert.assertFalse(jq(".z-menupopup").isVisible());
 	}
 
@@ -41,16 +41,16 @@ public class F86_ZK_4059Test extends WebDriverTestCase {
 		connect();
 		Actions act = new Actions(driver);
 		
-		act.moveToElement(toElement(jq("$col1")), 240, 10).click().build().perform();
+		act.moveToElement(toElement(jq("$col1"))).click(toElement(widget("$col1").$n("btn"))).build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 		
-		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)"))).click().build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 		
-		act.moveToElement(toElement(jq("$col2")), 240, 10).click().build().perform();
+		act.moveToElement(toElement(jq("$col2"))).click(toElement(widget("$col2").$n("btn"))).build().perform();
 		Assert.assertTrue(jq(".z-menupopup").isVisible());
 		
-		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)")), 15, 10).click().build().perform();
+		act.moveToElement(toElement(jq(".z-menuitem-checkable:visible:eq(0)"))).click().build().perform();
 		Assert.assertFalse(jq(".z-menupopup").isVisible());
 	}
 }

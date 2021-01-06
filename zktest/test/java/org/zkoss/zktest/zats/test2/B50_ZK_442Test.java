@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 public class B50_ZK_442Test extends WebDriverTestCase {
@@ -23,8 +24,7 @@ public class B50_ZK_442Test extends WebDriverTestCase {
 		Actions act = new Actions(connect());
 		click(jq("@menu"));
 		waitResponse();
-		String shiftTab = Keys.chord(Keys.SHIFT, Keys.TAB);
-		act.sendKeys(shiftTab).build().perform();
+		act.keyDown(Keys.SHIFT).sendKeys(Keys.TAB).keyUp(Keys.SHIFT).build().perform();
 		waitResponse();
 		Assert.assertTrue(isZKLogAvailable());
 	}

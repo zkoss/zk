@@ -51,8 +51,8 @@ public class F55_ZK_443Test extends WebDriverTestCase {
 		waitResponse();
 		Assert.assertTrue(jq("@checkbox input").is(":checked"));
 
-		actions.sendKeys(Keys.chord(Keys.SHIFT, Keys.TAB), Keys.UP, Keys.RIGHT)
-				.sendKeys(Keys.DOWN, Keys.RIGHT)
+		actions.keyDown(Keys.SHIFT).sendKeys(Keys.TAB).keyUp(Keys.SHIFT)
+				.sendKeys(Keys.UP, Keys.RIGHT, Keys.DOWN, Keys.RIGHT)
 				.perform();
 		waitResponse();
 		Assert.assertTrue(jq(".z-menu-popup.z-colorpalette-popup").isVisible());

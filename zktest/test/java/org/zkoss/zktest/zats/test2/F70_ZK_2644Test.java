@@ -29,7 +29,7 @@ public class F70_ZK_2644Test extends WebDriverTestCase {
 		waitResponse();
 		getActions().sendKeys(Keys.ESCAPE).perform();
 		waitResponse();
-		getActions().sendKeys(Keys.chord(Keys.CONTROL, "k")).perform();
+		getActions().keyDown(Keys.CONTROL).sendKeys("k").keyUp(Keys.CONTROL).perform();
 		waitResponse();
 		Assert.assertEquals("keydown", getZKLog());
 	}
