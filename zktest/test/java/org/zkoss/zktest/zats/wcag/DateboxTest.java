@@ -33,7 +33,7 @@ public class DateboxTest extends WcagTestCase {
 		waitResponse();
 
 		Actions actions = getActions();
-		actions.sendKeys(Keys.chord(Keys.ALT, Keys.ARROW_DOWN))
+		actions.keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.ALT)
 				.pause(200)
 				.sendKeys(Keys.ARROW_UP, Keys.ARROW_UP, Keys.ARROW_UP, Keys.ARROW_UP, Keys.ARROW_UP)
 				.perform();
@@ -55,7 +55,7 @@ public class DateboxTest extends WcagTestCase {
 		waitResponse();
 
 		Actions actions = getActions();
-		actions.sendKeys(Keys.chord(Keys.ALT, Keys.ARROW_DOWN))
+		actions.keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.ALT)
 				.pause(200)
 				.sendKeys(Keys.ARROW_UP, Keys.ARROW_UP, Keys.ARROW_UP, Keys.ARROW_UP, Keys.ARROW_UP)
 				.perform();
@@ -74,7 +74,7 @@ public class DateboxTest extends WcagTestCase {
 		click(jq("@datebox:eq(4)"));
 		waitResponse();
 		Actions actions = getActions();
-		actions.sendKeys(Keys.chord(Keys.ALT, Keys.ARROW_DOWN))
+		actions.keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.ALT)
 				.pause(200)
 				.sendKeys(Keys.TAB, Keys.TAB, Keys.TAB)
 				.perform();

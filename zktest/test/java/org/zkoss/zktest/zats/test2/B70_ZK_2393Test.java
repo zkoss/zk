@@ -11,9 +11,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.hamcrest.Matchers.greaterThan;
+
 import java.util.Collections;
 
-import org.junit.Assert;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -33,6 +35,6 @@ public class B70_ZK_2393Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Assert.assertTrue(jq("body").scrollHeight() > jq("body").height());
+		MatcherAssert.assertThat(jq("body").scrollHeight(), greaterThan(jq("body").height()));
 	}
 }

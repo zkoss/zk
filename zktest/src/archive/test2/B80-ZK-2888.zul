@@ -14,8 +14,8 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-    You should see a number below. (iphone with chrome only)
+    You should see true below. (iphone with chrome only)
     <separator/>
     <label id="t"/>
-    <script defer="true">jq('$t').html("" +zk.mobile);</script>
+    <script defer="true">jq('$t').html("" +!!zk.mobile);</script>
 </zk>

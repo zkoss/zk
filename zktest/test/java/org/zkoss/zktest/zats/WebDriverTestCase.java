@@ -133,7 +133,6 @@ public abstract class WebDriverTestCase {
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("window-size=1920,1080");
-		options.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
 		return options;
 	}
 
@@ -633,10 +632,11 @@ public abstract class WebDriverTestCase {
 	 * It's caller's responsibility to focus/select text before calling this method.
 	 */
 	protected void cut() {
-		String cutKeys = System.getProperty("os.name").startsWith("Mac")
-				? Keys.chord(Keys.SHIFT, Keys.DELETE)
-				: Keys.chord(Keys.CONTROL, "x");
-		getActions().sendKeys(cutKeys).perform();
+		final Actions actions = getActions();
+		if (System.getProperty("os.name").startsWith("Mac"))
+			actions.keyDown(Keys.SHIFT).sendKeys(Keys.DELETE).keyUp(Keys.SHIFT).perform();
+		else
+			actions.keyDown(Keys.CONTROL).sendKeys("x").keyUp(Keys.CONTROL).perform();
 	}
 
 	/**
@@ -645,10 +645,11 @@ public abstract class WebDriverTestCase {
 	 */
 	protected void copy() {
 		// Workaround for https://bugs.chromium.org/p/chromedriver/issues/detail?id=30
-		String copyKeys = System.getProperty("os.name").startsWith("Mac")
-				? Keys.chord(Keys.CONTROL, Keys.INSERT)
-				: Keys.chord(Keys.CONTROL, "c");
-		getActions().sendKeys(copyKeys).perform();
+		final Actions actions = getActions();
+		if (System.getProperty("os.name").startsWith("Mac"))
+			actions.keyDown(Keys.CONTROL).sendKeys(Keys.INSERT).keyUp(Keys.CONTROL).perform();
+		else
+			actions.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).perform();
 	}
 
 	/**
@@ -656,10 +657,11 @@ public abstract class WebDriverTestCase {
 	 * It's caller's responsibility to click/focus on a DOM node before calling this method.
 	 */
 	protected void paste() {
-		String pasteKeys = System.getProperty("os.name").startsWith("Mac")
-				? Keys.chord(Keys.SHIFT, Keys.INSERT)
-				: Keys.chord(Keys.CONTROL, "v");
-		getActions().sendKeys(pasteKeys).perform();
+		final Actions actions = getActions();
+		if (System.getProperty("os.name").startsWith("Mac"))
+			actions.keyDown(Keys.SHIFT).sendKeys(Keys.INSERT).keyUp(Keys.SHIFT).perform();
+		else
+			actions.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).perform();
 	}
 
 	/**

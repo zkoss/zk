@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
@@ -42,7 +43,9 @@ public class B80_ZK_3340Test extends WebDriverTestCase {
 		}, "bandbox focussed:onFocus");
 
 		verify(() -> {
-			new Actions(driver).moveToElement(toElement(jq(".z-bandpopup")), 190, 90).click().build().perform();
+			final WebElement popup = toElement(jq(".z-bandpopup"));
+			// To click the pink area inside the bandpopup
+			new Actions(driver).moveToElement(popup, popup.getSize().width / 2 - 1, 0).click().build().perform();
 			waitResponse();
 		}, "bandbox focussed:onFocus");
 

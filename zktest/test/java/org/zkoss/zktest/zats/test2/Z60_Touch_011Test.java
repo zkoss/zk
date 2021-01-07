@@ -14,20 +14,26 @@ package org.zkoss.zktest.zats.test2;
 import java.util.Collections;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
+import org.zkoss.zktest.zats.ExternalZkXml;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
  * @author rudyhuang
  */
 public class Z60_Touch_011Test extends WebDriverTestCase {
+	@ClassRule
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
+
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"))
+				.setExperimentalOption("w3c", false); // Temporary workaround for TouchAction
 	}
 
 	@Test

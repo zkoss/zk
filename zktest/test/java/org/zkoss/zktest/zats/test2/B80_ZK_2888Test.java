@@ -13,6 +13,8 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collections;
+
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -24,9 +26,8 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 public class B80_ZK_2888Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
-		ChromeOptions options = super.getWebDriverOptions();
-		options.addArguments("user-agent=Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53");
-		return options;
+		return super.getWebDriverOptions()
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
 	}
 
 	@Test
@@ -34,7 +35,7 @@ public class B80_ZK_2888Test extends WebDriverTestCase {
 			connect();
 			waitResponse();
 			assertEquals(
-					"You should see a number below. (iphone with chrome only)7",
+					"You should see true below. (iphone with chrome only)true",
 					trim(jq("@label").text()));
 	}
 }

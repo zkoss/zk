@@ -11,13 +11,15 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.junit.Test;
-import org.openqa.selenium.chrome.ChromeOptions;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.openqa.selenium.chrome.ChromeOptions;
 
+import org.zkoss.zktest.zats.ExternalZkXml;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
 
@@ -25,6 +27,9 @@ import org.zkoss.zktest.zats.ztl.JQuery;
  * @author jameschu
  */
 public class B95_ZK_4676Test extends WebDriverTestCase {
+	@ClassRule
+	public static final ExternalZkXml CONFIG = new ExternalZkXml("/test2/enable-tablet-ui-zk.xml");
+
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
