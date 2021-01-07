@@ -160,7 +160,7 @@ public class BindChildRenderer extends AbstractRenderer {
 			}
 			
 			//to force init and load
-			Events.sendEvent(new Event(BinderCtrl.ON_BIND_INIT, comp));
+			Events.postEvent(new Event(BinderCtrl.ON_BIND_INIT, comp));
 		}
 	}
 

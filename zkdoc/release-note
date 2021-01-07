@@ -98,6 +98,7 @@ ZK 9.5.1
   ZK-4747: upload button (hidden input should not be focussable)
   ZK-4619: The radiogroup of cloned radio is not updated
   ZK-4759: CSS Flex should not reset when resizing
+  ZK-3563: Children binding causes load binding to stop firing
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.

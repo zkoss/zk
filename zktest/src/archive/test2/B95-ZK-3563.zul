@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-3563.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Apr 27 12:46:50 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<div>
+		<vbox id="main" viewModel="@id('model')@init('org.zkoss.zktest.test2.B95_ZK_3563VM')">
+			<div children="@load(model.items) @template(model.template ? 'textbox' : 'button')">
+				<template name="textbox">
+					<label id="l1" value="@load(model.paramObject.counter2)" />
+				</template>
+				<template name="button">
+					<label id="l1" value="@load(model.paramObject.counter2)" />
+				</template>
+			</div>
+<!--			<grid model="@bind(model.items) @template(model.template ? 'textbox' : 'button')" width="500px" mold="paging" id="innerGrid">-->
+<!--				<rows id="innerRows"/>-->
+<!--				<template name="textbox">-->
+<!--					<row id="innerRow">-->
+<!--						<label value="@load(model.paramObject.counter2)" />-->
+<!--					</row>-->
+<!--				</template>-->
+<!--				<template name="button">-->
+<!--					<row id="innerRow">-->
+<!--						<label value="@load(model.paramObject.counter2)" />-->
+<!--					</row>-->
+<!--				</template>-->
+<!--			</grid>-->
+			<label id="l2" value="@load(model.paramObject.counter3)" />
+			<button id="saveBtn" label="Bind again, and again, and again..., and you should see number increased." onClick="@command('save')" />
+			<button id="serializeBtn" label="Test serialize/deserialize" onClick="@command('doSerialize', comp=main)" />
+		</vbox>
+	</div>
+</zk>
