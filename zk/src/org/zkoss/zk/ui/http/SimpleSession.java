@@ -374,14 +374,15 @@ public class SimpleSession implements Session, SessionCtrl {
 
 	public boolean notifyClientRequest(boolean keepAlive) {
 		final long now = System.currentTimeMillis();
-		if (keepAlive) {
-			_tmLastReq = now;
-		} else {
+		if (!getWebApp().getConfiguration().isTimerKeepAlive() || !keepAlive) {
 			final int tmout = getMaxInactiveInterval();
 			if (tmout >= 0 && (now - _tmLastReq) / 1000 > tmout) {
 				invalidate();
 				return true;
 			}
+		}
+		if (keepAlive) {
+			_tmLastReq = now;
 		}
 		return false;
 	}

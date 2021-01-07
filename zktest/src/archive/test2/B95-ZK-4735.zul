@@ -26,6 +26,25 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	</session-config>
 	**** End This Line ****
 	Wait 20 seconds, and click the button. You will see session timeout alert.
+
+	Test another scenario:
+	check your zk.xml have the following preference entries in them
+	-<session-config>
+		-<timer-keep-alive>true</timer-keep-alive>
+	-</session-config>
+	After 20 second, the page should not timeout
 	]]></label>
-	<button onClick='Clients.log("not timeout")' />
+	<button label="do cmd" onClick='Clients.log("not timeout")'/>
+	<label id="time" />
+	<script>
+		zk.afterMount(function () {
+			var count = 0;
+			var tID = setInterval(timer, 1000);
+			var timeLabel = jq('$time');
+			function timer() {
+				count += 1;
+				timeLabel.html(count);
+			}
+		});
+	</script>
 </zk>
