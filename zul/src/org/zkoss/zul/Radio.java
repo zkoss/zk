@@ -312,4 +312,12 @@ public class Radio extends Checkbox {
 			});
 		}
 	}
+
+	public Object clone() {
+		final Radio clone = (Radio) super.clone();
+		if (!_explictGroup) {
+			clone._group = null;
+		}
+		return clone;
+	}
 }

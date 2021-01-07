@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4619.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Dec 28 17:17:34 CST 2020, Created by katherinelin
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		<radiogroup id='rgLineType'>
+			<radio label='application'/>
+			<radio label='comment'/>
+			<radio label='include'/>
+			<radio label='#include'/>
+		</radiogroup>
+		<separator/>
+		<label id='info'/>
+		<separator/>
+		<button label='Clone radiogroup' onClick='CloneRadiogroup(event)'/>
+		<separator/>
+	</div>
+
+	<zscript>
+		void CloneRadiogroup (Event event) {
+			Radiogroup rgNew = rgLineType.clone();
+			rgNew.setId(null);
+			info.setValue ("name of source radiogroup is [" + rgLineType.name + "], name of clone is [" + rgNew.name + "]. seems different, but it is rendered as same name as the source: Click radio in the one radiogroup will clear selection in another radiogroup");
+			event.getTarget().getParent().appendChild (rgNew);
+		}
+	</zscript>
+</zk>
