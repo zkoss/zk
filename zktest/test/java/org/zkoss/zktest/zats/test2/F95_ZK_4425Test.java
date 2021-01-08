@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.zktest.zats.ztl.JQuery;
 
 /**
  * @author jameschu
@@ -23,22 +24,21 @@ public class F95_ZK_4425Test extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect();
-		waitResponse();
-		getActions().moveToElement(driver.findElement(jq(".z-rangeslider-track")))
-				.moveByOffset(15, 0)
-				.clickAndHold()
-				.moveByOffset(150, 0)
+
+		getActions().clickAndHold(driver.findElement(jq(".z-rangeslider-track")))
+				.moveByOffset(100, 0)
 				.release()
 				.perform();
 		waitResponse();
-		Assert.assertEquals(jq(".z-rangeslider-track").width(), jq("@rangeslider .z-sliderbuttons-button").last().positionLeft(), 1);
-		getActions().moveToElement(driver.findElement(jq(".z-multislider-track")))
-				.moveByOffset(15, 0)
-				.clickAndHold()
-				.moveByOffset(-150, 0)
+		Assert.assertNotEquals(0, jq("@rangeslider .z-sliderbuttons-button").last().positionLeft());
+
+		final JQuery sliderFirstBtn = jq("@multislider .z-sliderbuttons-button").first();
+		final int origPositionLeft = sliderFirstBtn.positionLeft();
+		getActions().clickAndHold(driver.findElement(jq(".z-multislider-track")))
+				.moveByOffset(-100, 0)
 				.release()
 				.perform();
 		waitResponse();
-		Assert.assertEquals(0, jq("@multislider .z-sliderbuttons-button").first().positionLeft());
+		Assert.assertNotEquals(origPositionLeft, sliderFirstBtn.positionLeft());
 	}
 }
