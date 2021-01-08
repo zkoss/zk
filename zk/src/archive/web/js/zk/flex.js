@@ -510,7 +510,7 @@ zFlex = { //static methods
 		//find the max size of all children
 		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 	},
-	fixCSSFlex: function () {
+	applyCSSFlex: function () {
 		var wgt = this;
 		if (!wgt._nvflex && !wgt._nhflex)
 			return;

@@ -254,13 +254,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt._cssflex = false;
 			var parent = wgt.parent;
 			if (wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null))
-				zWatch.listen({onSize: [wgt, zFlex.fixCSSFlex]});
-			else
+				zWatch.listen({onSize: [wgt, zFlex.applyCSSFlex]});
+			else {
 				zWatch.listen({onSize: [wgt, zFlex.onSize]});
-			zWatch.listen({
-				_preBeforeSize: [wgt, zFlex.preBeforeSize],
-				beforeSize: [wgt, zFlex.beforeSize]
-			});
+				zWatch.listen({
+					_preBeforeSize: [wgt, zFlex.preBeforeSize],
+					beforeSize: [wgt, zFlex.beforeSize]
+				});
+			}
 			if (wgt._hflex == 'min' || wgt._vflex == 'min')
 				wgt.listenOnFitSize_();
 			else
@@ -272,13 +273,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (wgt._flexListened) {
 			var parent = wgt.parent;
 			if (wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null))
-				zWatch.unlisten({onSize: [wgt, zFlex.fixCSSFlex]});
-			else
+				zWatch.unlisten({onSize: [wgt, zFlex.applyCSSFlex]});
+			else {
 				zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
-			zWatch.unlisten({
-				_preBeforeSize: [wgt, zFlex.preBeforeSize],
-				beforeSize: [wgt, zFlex.beforeSize]
-			});
+				zWatch.unlisten({
+					_preBeforeSize: [wgt, zFlex.preBeforeSize],
+					beforeSize: [wgt, zFlex.beforeSize]
+				});
+			}
 			wgt.unlistenOnFitSize_();
 			delete wgt._flexListened;
 		}
