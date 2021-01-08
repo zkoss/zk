@@ -179,6 +179,10 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		//Bug 3147518: avoid memory leak
 		//Also better performance (outer better than remove a lot)
 		final Execution execution = Executions.getCurrent();
+		final String uuid = _listbox.getUuid();
+		final boolean isDeferInitModel = execution != null && execution.getAttribute("zkoss.Listbox.deferInitModel_" + uuid) != null;
+		if (isDeferInitModel) return; // skip while defer loading a model
+
 		final Page page = _listbox.getPage();
 		if (execution != null && execution.isAsyncUpdate(page)) {
 			final UiEngine engine = page != null
@@ -186,7 +190,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				: null;
 			if (engine != null) {
 				engine.addSmartUpdate(_listbox, "itemsInvalid_", new DeferredRedraw(_listbox.getItems()), 10000);
-				execution.setAttribute("zkoss.Listbox.invalidateListitems" + _listbox.getUuid(), Boolean.TRUE);
+				execution.setAttribute("zkoss.Listbox.invalidateListitems" + uuid, Boolean.TRUE);
 			}
 		}
 	}
