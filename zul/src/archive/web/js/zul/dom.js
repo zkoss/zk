@@ -73,7 +73,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var wnd = new zul.wnd.Window({
 					id: 'aualert',
 					closable: true,
-					width: '250pt',
 					sclass: 'z-messagebox-window',
 					title: opts.title || zk.appName,
 					border: 'normal',
@@ -86,14 +85,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 					}},
 					children: [
-						new zul.box.Box({
-							mold: 'horizontal',
+						new zul.wgt.Div({
+							sclass: 'z-messagebox-viewport',
 							children: [
 								new zul.wgt.Div({sclass: icons[(opts.icon || '').toUpperCase()] || opts.icon || icons.INFORMATION}),
 								new zul.wgt.Div({
 									id: 'content',
 									sclass: 'z-messagebox',
-									style: 'overflow:auto',
 									children: [
 										new zul.wgt.Label({
 											id: 'msg',
@@ -104,7 +102,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 								})
 							]
 						}),
-						new zul.wgt.Separator(),
 						new zul.box.Hlayout({
 							sclass: 'z-messagebox-buttons',
 							children: getButtons(opts.button)
