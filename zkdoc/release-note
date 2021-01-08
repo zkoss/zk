@@ -97,6 +97,7 @@ ZK 9.5.1
   ZK-4742: client side http error handling not reachable
   ZK-4747: upload button (hidden input should not be focussable)
   ZK-4619: The radiogroup of cloned radio is not updated
+  ZK-4759: CSS Flex should not reset when resizing
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.
