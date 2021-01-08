@@ -396,6 +396,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 					w.setVflex('false');
 					vflexReset[i] = true;
 				}
+				zWatch.fireDown('_preBeforeSizeReadOnly', w);
 				zWatch.fireDown('beforeSize', w);
 			}
 		}

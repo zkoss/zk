@@ -254,7 +254,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 zFlex = { //static methods
-	preBeforeSize: function () {
+	preBeforeSizeReadOnly: function () {
 		var wgt = this,
 			n = wgt.$n();
 		// ZK-4154 prevent from forced reflow

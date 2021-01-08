@@ -643,7 +643,7 @@ jq(function () {
 
 		_reszInf.inResize = true;
 		try {
-			zWatch.fire('_preBeforeSize'); //notify all
+			zWatch.fire('_preBeforeSizeReadOnly'); //notify all
 			zWatch.fire('beforeSize'); //notify all
 			zWatch.fire('onFitSize', null, {reverse: true}); //notify all
 			zWatch.fire('onSize'); //notify all
