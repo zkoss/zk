@@ -645,8 +645,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				return;
 			}
 			wgt = _onSizeTarget(wgt);
-			if (!(bfsz < 0)) //don't use >= (because bfsz might be undefined)
+			if (!(bfsz < 0)) { //don't use >= (because bfsz might be undefined)
+				zWatch.fireDown('_preBeforeSizeReadOnly', wgt);
 				zWatch.fireDown('beforeSize', wgt, null, bfsz > 0);
+			}
 			zWatch.fireDown('onFitSize', wgt, {reverse: true});
 			zWatch.fireDown('onSize', wgt);
 			zWatch.fireDown('afterSize', wgt);

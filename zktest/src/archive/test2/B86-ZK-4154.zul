@@ -12,19 +12,27 @@ B86-ZK-4154.zul
 Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
+<zk xmlns:w="client">
     <label multiline="true">
+        Case 1:
         1. Open DevTools > Performance (Chrome)
         2. Record.
         3. Resize the browser width once.
         4. Stop Record.
         5. Manually counting the "forced reflow" warnings. It should be fewer than 100.
+        Case 2:
+        1. Open DevTools > Performance (Chrome)
+        2. Record.
+        3. Click "Force resize" button.
+        4. Stop Record when you see zk.log "done".
+        5. Manually counting the "forced reflow" warnings. It should be fewer than 100.
     </label>
+    <button w:onClick="zUtl.fireSized(zk.$('@div:first'));zk.log('done')" label="Force resize"/>
     <div vflex="1" width="100%" style="border: 1px solid red;">
         <vlayout vflex="1" hflex="1">
-            <forEach begin="1" end="5" varStatus="outer">
+            <forEach begin="1" end="50" varStatus="outer">
                 <hlayout vflex="1" hflex="1">
-                    <forEach begin="1" end="10" varStatus="inner">
+                    <forEach begin="1" end="20" varStatus="inner">
                         <div hflex="1">
                             ${outer.index}-${inner.index}
                         </div>
