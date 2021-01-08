@@ -16,6 +16,7 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class B95_ZK_3317Test extends WebDriverTestCase {
 	@Test
@@ -24,6 +25,7 @@ public class B95_ZK_3317Test extends WebDriverTestCase {
 		waitResponse();
 		JQuery listbox1 = jq("$box");
 		JQuery listbox2 = jq("$box2");
+		JQuery listbox3 = jq("$box3");
 		JQuery jqBar = jq(".z-listhead-bar");
 		assertEquals(listbox1.find(".z-listcell-content:eq(0)").outerWidth() + jqBar.eq(0).outerWidth(),
 				listbox1.width(), 1);
@@ -32,5 +34,6 @@ public class B95_ZK_3317Test extends WebDriverTestCase {
 		assertEquals(listbox1.find(".z-listcell-content:eq(0)").outerWidth() + jqBar.eq(0).outerWidth(),
 			listbox1.width(), 1);
 		assertEquals(listbox2.find(".z-listcell-content:eq(0)").outerWidth(), listbox2.width(), 1);
+		assertNotEquals(listbox3.find(".z-rows").height(), listbox3.find(".z-listbox-body").height(), 1);
 	}
 }

@@ -1263,11 +1263,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// because of width attribute (width="100%") on table
 		var allWidths = this._isAllWidths(),
 			head = this.head,
+			ebody = this.ebody,
+			ebodyrows = this.ebodyrows,
 			hdfakerbar = head ? head.$n('hdfaker-bar') : null,
 			hdbar = head ? jq(this).find('.' + head.$s('bar'))[0] : null,
 			ftfakerbar = this.eftfaker ? this.head.$n('ftfaker-bar') : null,
 			scrollbarWidth = jq.scrollbarWidth(),
-			hasVScroll = zk(this.ebody).hasVScroll();
+			hasVScroll = zk(ebody).hasVScroll(),
+			hasHScroll = zk(ebody).hasHScroll();
 
 		if (hasVScroll) {
 			if (hdfakerbar) {
@@ -1289,6 +1292,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 			if (ftfakerbar)
 				ftfakerbar.style.width = zero;
+		}
+		if (hasHScroll && ebodyrows && this._vflex == 'min') {
+			var ehead = this.ehead,
+				efoot = this.efoot,
+				hgh = jq(ebodyrows).height();
+			hgh += scrollbarWidth;
+			ebody.style.height = jq.px0(hgh);
+			if (ehead) {
+				hgh += ehead.offsetHeight;
+			}
+			if (efoot) {
+				hgh += efoot.offsetHeight;
+			}
+			this.$n().style.height = jq.px0(hgh);
 		}
 		if (isCSSFlex) {
 			//update
