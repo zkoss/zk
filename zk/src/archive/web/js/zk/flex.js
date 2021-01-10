@@ -276,7 +276,6 @@ zFlex = { //static methods
 				wgt.resetSize_('w');
 				// Bug ZK-597
 				delete wgt._flexFixed;
-				delete wgt._cssFlexFixed;
 				if (p = wgt.parent)
 					p.afterResetChildSize_('w');
 			}
@@ -284,13 +283,19 @@ zFlex = { //static methods
 				wgt.resetSize_('h');
 				// Bug ZK-597
 				delete wgt._flexFixed;
-				delete wgt._cssFlexFixed;
 				if (p = wgt.parent)
 					p.afterResetChildSize_('h');
 			}
 			delete wgt._beforeSizeHasScroll;
 		}
 	},
+
+	beforeSizeClearCachedSize: function (ctl, opts, cleanup) {
+		var wgt = this;
+		if (cleanup)
+			wgt.clearCachedSize_();
+	},
+
 	onSize: function () {
 		zFlex.fixFlex(this);
 	},
@@ -516,11 +521,11 @@ zFlex = { //static methods
 		if (!wgt._nvflex && !wgt._nhflex)
 			return;
 
-		var cssFlexFixedInfo = wgt._cssFlexFixed,
+		var cssFlexAppliedInfo = wgt._cssFlexApplied,
 			minFlexInfoListKeyStr = 'minFlexInfoList',
 			pwgt = wgt.parent;
-		if ((cssFlexFixedInfo && cssFlexFixedInfo['flexFixed'])) { //other vflex/hflex sibling has done it!
-			var minFlexInfoList = cssFlexFixedInfo[minFlexInfoListKeyStr];
+		if ((cssFlexAppliedInfo && cssFlexAppliedInfo['flexApplied'])) { //other vflex/hflex sibling has done it!
+			var minFlexInfoList = cssFlexAppliedInfo[minFlexInfoListKeyStr];
 			if (minFlexInfoList) { //still need to call fixMinFlex
 				for (var i = 0, l = minFlexInfoList.length; i < l; i++) {
 					var info = minFlexInfoList[i];
@@ -536,7 +541,7 @@ zFlex = { //static methods
 			return;
 		}
 		var flexInfo = zFlex.getFlexInfo(wgt),
-			cssFlexFixedInfo = wgt._cssFlexFixed,
+			cssFlexAppliedInfo = wgt._cssFlexApplied,
 			isRow = flexInfo.isFlexRow,
 			fccs = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
@@ -591,7 +596,7 @@ zFlex = { //static methods
 		}
 
 		if (minFlexInfoList.length > 0)
-			cssFlexFixedInfo[minFlexInfoListKeyStr] = minFlexInfoList;
+			cssFlexAppliedInfo[minFlexInfoListKeyStr] = minFlexInfoList;
 
 		if (!isAllMin)
 			jq(fContainer).addClass('z-flex').addClass(isRow ? 'z-flex-row' : 'z-flex-column');
@@ -605,7 +610,7 @@ zFlex = { //static methods
 		pwgt.afterChildrenFlex_(wgt);
 	},
 	clearCSSFlex: function (wgt, o, clearAllSiblings) {
-		if (!wgt._cssFlexFixed) return;
+		if (!wgt._cssFlexApplied) return;
 
 		var pwgt = wgt.parent,
 			fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_(),
@@ -632,7 +637,7 @@ zFlex = { //static methods
 				jqFcc.removeClass(flexItemClass);
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '';
-				delete cwgt._cssFlexFixed;
+				delete cwgt._cssFlexApplied;
 			}
 
 			//check else flex
@@ -642,7 +647,7 @@ zFlex = { //static methods
 					fcc.style[dim] = '';
 					if (fcc != c)
 						c.style[dim] = '';
-					delete cwgt._cssFlexFixed;
+					delete cwgt._cssFlexApplied;
 				}
 			} else
 				noSibFlex = noSibFlex ? !jqFcc.hasClass(flexItemClass) : false;
@@ -672,7 +677,7 @@ zFlex = { //static methods
 			}
 			if (c && fContainer.contains(c)) {
 				if (fcc.contains(c)) {
-					cwgt._cssFlexFixed = {flexFixed: true};
+					cwgt._cssFlexApplied = {flexApplied: true};
 					fccs.push(fcc);
 					cwgts.push(cwgt);
 					if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
