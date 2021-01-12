@@ -35,10 +35,10 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	},
 	bind_: function () {
 		this.$supers(zul.box.Hlayout, 'bind_', arguments);
-		zWatch.listen({_preBeforeSizeReadOnly: this, beforeSize: this, onFitSize: this}); //ZK-4476
+		zWatch.listen({_beforeSizeForRead: this, beforeSize: this, onFitSize: this}); //ZK-4476
 	},
 	unbind_: function () {
-		zWatch.unlisten({_preBeforeSizeReadOnly: this, beforeSize: this, onFitSize: this});
+		zWatch.unlisten({_beforeSizeForRead: this, beforeSize: this, onFitSize: this});
 		this.$supers(zul.box.Hlayout, 'unbind_', arguments);
 	},
 	isVertical_: function () {
@@ -60,7 +60,7 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		return 'row';
 	},
 	//ZK-4476
-	_preBeforeSizeReadOnly: function () {
+	_beforeSizeForRead: function () {
 		var n = this.$n();
 		this._beforeSizeWidth = n ? n.offsetWidth : 0;
 		for (var xc = this.firstChild; xc; xc = xc.nextSibling) {

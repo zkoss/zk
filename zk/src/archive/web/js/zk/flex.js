@@ -254,7 +254,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 zFlex = { //static methods
-	preBeforeSizeReadOnly: function () {
+	/**
+	 * beforeSize for read was created to prevent tremendous forced reflows
+	 * as a result of doing both read and write in beforeSize.
+	 * @since 9.5.1
+	 */
+	beforeSizeForRead: function () {
 		var wgt = this,
 			n = wgt.$n();
 		// ZK-4154 prevent from forced reflow

@@ -258,7 +258,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			else {
 				zWatch.listen({onSize: [wgt, zFlex.onSize]});
 				zWatch.listen({
-					_preBeforeSizeReadOnly: [wgt, zFlex.preBeforeSizeReadOnly],
+					_beforeSizeForRead: [wgt, zFlex.beforeSizeForRead],
 					beforeSize: [wgt, zFlex.beforeSize]
 				});
 			}
@@ -277,7 +277,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			else {
 				zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
 				zWatch.unlisten({
-					_preBeforeSizeReadOnly: [wgt, zFlex.preBeforeSizeReadOnly],
+					_beforeSizeForRead: [wgt, zFlex.beforeSizeForRead],
 					beforeSize: [wgt, zFlex.beforeSize]
 				});
 			}
