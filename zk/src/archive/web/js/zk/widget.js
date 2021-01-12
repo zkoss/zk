@@ -252,8 +252,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!wgt._flexListened) {
 			if (zk.ie) // not to use css flex in ie
 				wgt._cssflex = false;
-			var parent = wgt.parent;
-			if (wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null))
+			var parent = wgt.parent,
+				cssFlexEnabled = wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null);
+			if (cssFlexEnabled)
 				zWatch.listen({onSize: [wgt, zFlex.applyCSSFlex]});
 			else {
 				zWatch.listen({onSize: [wgt, zFlex.onSize]});
@@ -262,19 +263,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					beforeSize: [wgt, zFlex.beforeSize]
 				});
 			}
-			if (wgt._hflex == 'min' || wgt._vflex == 'min')
+			if (wgt._hflex == 'min' || wgt._vflex == 'min') {
 				wgt.listenOnFitSize_();
-			else
+				if (cssFlexEnabled)
+					zWatch.listen({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
+			} else {
 				wgt.unlistenOnFitSize_();
+				if (cssFlexEnabled)
+					zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
+			}
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			var parent = wgt.parent;
-			if (wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null))
+			var parent = wgt.parent,
+				cssFlexEnabled = wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null);
+			if (cssFlexEnabled) {
 				zWatch.unlisten({onSize: [wgt, zFlex.applyCSSFlex]});
-			else {
+				if (wgt._cssFlexApplied) //remove css flex flag
+					delete wgt._cssFlexApplied;
+			} else {
 				zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
 				zWatch.unlisten({
 					_beforeSizeForRead: [wgt, zFlex.beforeSizeForRead],
@@ -282,6 +291,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				});
 			}
 			wgt.unlistenOnFitSize_();
+			if (cssFlexEnabled)
+				zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
 			delete wgt._flexListened;
 		}
 	}
@@ -1124,7 +1135,7 @@ new zul.wnd.Window({
 				if (!this._nvflex)
 					_unlistenFlex(this);
 			} else {
-				if (this._cssflex) delete this._cssFlexFixed;
+				if (this._cssflex) delete this._cssFlexApplied;
 				_listenFlex(this);
 			}
 		}
@@ -1145,7 +1156,7 @@ new zul.wnd.Window({
 				if (!this._nhflex)
 					_unlistenFlex(this);
 			} else {
-				if (this._cssflex) delete this._cssFlexFixed;
+				if (this._cssflex) delete this._cssFlexApplied;
 				_listenFlex(this);
 			}
 		}
