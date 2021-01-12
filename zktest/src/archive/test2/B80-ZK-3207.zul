@@ -14,6 +14,7 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
+<custom-attributes org.zkoss.zul.css.flex="false"/>
 <style>
 .z-groupbox.padding > .z-groupbox-header {
 padding: 15px;
