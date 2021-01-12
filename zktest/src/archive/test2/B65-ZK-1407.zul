@@ -1,10 +1,10 @@
 <zk>
 	<style>
-	.buggy .z-combobox-inp {
+	.buggy .z-combobox-input {
 		background-color: yellow;
 	}
-	
-	.buggy.z-combobox.z-combobox-focus .z-combobox-inp {
+
+	.buggy .z-combobox-input:focus {
 		background-color: green;
 	}
 	</style>

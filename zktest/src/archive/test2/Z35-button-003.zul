@@ -17,19 +17,19 @@
 ]]></zscript>
     <vbox>
       <hbox>
-        <button label="ClickMe" onClick='setMyLabel("OnClick OK")'/>Single Click test</hbox>
+        <button id="btn1" label="ClickMe" onClick='setMyLabel("OnClick OK")'/>Single Click test</hbox>
       <hbox>
-        <button label="ClickMe" onClick="setDisableMe()"/> Disable Test </hbox>
+        <button id="btn2" label="ClickMe" onClick="setDisableMe()"/> Disable Test </hbox>
       <hbox>
-        <button label="RightClickMe" onRightClick='setMyLabel("RightClick OK")'/> Right Click Test </hbox>
+        <button id="btn3" label="RightClickMe" onRightClick='setMyLabel("RightClick OK")'/> Right Click Test </hbox>
       <hbox>
-        <button label="DoubleClickMe" onDoubleClick='setMyLabel("DoubleClick OK")'/> Double Click Test</hbox>
+        <button id="btn4" label="DoubleClickMe" onDoubleClick='setMyLabel("DoubleClick OK")'/> Double Click Test</hbox>
       <hbox>
-        <button label="FocusOnMe" onFocus='setMyLabel("Focused OK")' tabindex="1"/>Focus gained Test </hbox>
+        <button id="btn5" label="FocusOnMe" onFocus='setMyLabel("Focused OK")' tabindex="1"/>Focus gained Test </hbox>
       <hbox>
-        <button label="BlurMe" onBlur='setMyLabel("Blurred OK")' tabindex="2"/>Focus lost Test </hbox>
+        <button id="btn6" label="BlurMe" onBlur='setMyLabel("Blurred OK")' tabindex="2"/>Focus lost Test </hbox>
       <hbox>
-        <button label="http://www.google.com" href="http://www.google.com"/> Hyperlink Test </hbox>
+        <button id="btn7" label="http://www.google.com" href="http://www.google.com"/> Hyperlink Test </hbox>
     </vbox>
   </window>
 </zk>

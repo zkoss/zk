@@ -23,9 +23,14 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         5. 1 should change to 2
 
     </label>
-    <hbox xmlns:w="client" width="300px">
+    <style><![CDATA[
+    .green .z-groupbox-content {
+        background: green;
+    }
+    ]]></style>
+    <hbox width="300px">
         <vbox droppable="yes" onDrop='lb.setValue((Integer.parseInt(lb.getValue()) + 1).toString())' height="300px">
-            <groupbox mold="3d" draggable="yes" width="150px" height="150px" style="background: green;">
+            <groupbox mold="3d" draggable="yes" width="150px" height="150px" sclass="green">
                 <caption label="A" />
                 <div width="100px" style="background: orange;" height="50px">
                 </div>
