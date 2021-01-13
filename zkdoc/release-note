@@ -40,7 +40,6 @@ ZK 9.5.1
   ZK-4705: Missing insertChildHTML_ in nested Borderlayout
   ZK-4644: Rendering Stepbar dynamically causes error
   ZK-4645: Stepbar Error - render dynamically with model
-  ZK-4068: datebox failing date format
   ZK-4650: click on an imagemap doesn't send an onclick event
   ZK-4677: Unexpected scrollTop when loading the page in edge/safari
   ZK-4568: alert during onClientInfo cause disabled request and UI stuck
