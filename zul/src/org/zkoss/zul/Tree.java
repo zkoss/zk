@@ -1829,6 +1829,7 @@ public class Tree extends MeshElement {
 				}
 				setModelDirectly(model);
 				initDataListener();
+				setMultiple(((Selectable) _model).isMultiple());
 				if (inPagingMold()) {
 					if (_model instanceof Pageable) {
 						Pageable m = (Pageable) _model;

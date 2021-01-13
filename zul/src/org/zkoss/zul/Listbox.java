@@ -2370,6 +2370,7 @@ public class Listbox extends MeshElement {
 				_model = model;
 				initDataListener();
 				setAttribute(Attributes.BEFORE_MODEL_ITEMS_RENDERED, Boolean.TRUE);
+				setMultiple(((Selectable) _model).isMultiple());
 				//ZK-3173: move the block here to avoid modifying pgi "again" before PagingEvent is handled
 				if (inPagingMold()) {
 					if (_model instanceof PageableModel)

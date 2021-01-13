@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4311.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 12 14:48:14 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label value="both listboxes should render with multiple selection" />
+	<listbox id="lb1" multiple="true"/>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add("aaa"); model.add("bbb"); model.add("ccc");
+
+		lb1.setModel(model);
+		lb1.setCheckmark(true);
+		lb1.setMultiple(true);
+	]]></zscript>
+
+	<listbox id="lb2"/>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add("aaa"); model.add("bbb"); model.add("ccc");
+
+		lb2.setModel(model);
+		lb2.setCheckmark(true);
+		lb2.setMultiple(true);
+	]]></zscript>
+
+	<tree id="tree1" multiple="true" checkmark="true" />
+	<zscript><![CDATA[
+		DefaultTreeModel tm = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+			Arrays.asList (new DefaultTreeNode[] {
+			new DefaultTreeNode("item1", Arrays.asList(new TreeNode[]{new DefaultTreeNode("item1-1"),
+			new DefaultTreeNode("item1-2")})),
+			new DefaultTreeNode("item2",new ArrayList()),
+			new DefaultTreeNode("item3",new ArrayList())})));
+		tree1.setModel(tm);
+		tree1.setMultiple(true);
+	]]></zscript>
+	<tree id="tree2" checkmark="true" />
+	<zscript><![CDATA[
+		DefaultTreeModel tm = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+			Arrays.asList (new DefaultTreeNode[] {
+			new DefaultTreeNode("item1", Arrays.asList(new TreeNode[]{new DefaultTreeNode("item1-1"),
+			new DefaultTreeNode("item1-2")})),
+			new DefaultTreeNode("item2",new ArrayList()),
+			new DefaultTreeNode("item3",new ArrayList())})));
+		tree2.setModel(tm);
+		tree2.setMultiple(true);
+	]]></zscript>
+</zk>
