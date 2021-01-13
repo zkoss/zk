@@ -207,7 +207,6 @@ public class Wpds {
 
 		if (firstDayOfWeek < 0)
 			firstDayOfWeek = cal.getFirstDayOfWeek();
-		sb.append("zk.LANGUAGE_TAG=\"").append(locale.toLanguageTag()).append("\";\n");
 		sb.append("zk.DOW_1ST=").append(firstDayOfWeek - Calendar.SUNDAY).append(";\n");
 		sb.append("zk.MINDAYS=").append(cal.getMinimalDaysInFirstWeek()).append(";\n");
 

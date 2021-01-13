@@ -637,7 +637,6 @@ public class Datebox extends DateTimeFormatInputElement {
 
 			if (firstDayOfWeek < 0)
 				firstDayOfWeek = cal.getFirstDayOfWeek();
-			map.put("LANGUAGE_TAG", locale.toLanguageTag());
 			map.put("DOW_1ST", Integer.valueOf(firstDayOfWeek - Calendar.SUNDAY));
 			map.put("MINDAYS", cal.getMinimalDaysInFirstWeek());
 

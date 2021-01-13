@@ -13,118 +13,56 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _momentToFormatedTextArray(moment, mmfmt) {
-		return moment.format(_convertFormatSeparator(mmfmt).trim()).split(' ');
-	}
-	function _convertFormatSeparator(formatString) { // ZK-4068: handling (non) separator format for split to array
-		var mapping = [ // https://momentjs.com/docs/#/displaying/format/
-				'M',
-				'Mo',
-				'MM',
-				'MMM',
-				'MMMM',
-				'Q',
-				'Qo',
-				'D',
-				'Do',
-				'DD',
-				'DDD',
-				'DDDo',
-				'DDDD',
-				'd',
-				'do',
-				'dd',
-				'ddd',
-				'dddd',
-				'e',
-				'E',
-				'w',
-				'wo',
-				'ww',
-				'W',
-				'WO',
-				'WW',
-				'YY',
-				'YYYY',
-				'YYYYYY',
-				'Y',
-				'y',
-				'N',
-				'NN',
-				'NNN',
-				'NNNN',
-				'NNNNN',
-				'gg',
-				'gggg',
-				'GG',
-				'GGGG',
-				'A',
-				'a',
-				'H',
-				'HH',
-				'h',
-				'hh',
-				'k',
-				'kk',
-				'm',
-				'mm',
-				's',
-				'ss',
-				'S',
-				'SS',
-				'SSS',
-				'SSSS',
-				'SSSSS',
-				'SSSSSS',
-				'SSSSSSS',
-				'SSSSSSSS',
-				'SSSSSSSSS',
-				'Z',
-				'ZZ',
-				'X',
-				'x',
-				'LT',
-				'LTS',
-				'L',
-				'l',
-				'LL',
-				'll',
-				'LLL',
-				'lll',
-				'LLLL',
-				'llll',
-			],
-			len = formatString.length,
-			startIndex = -1,
-			lastChar = null,
-			currentChar = '',
-			resultString = '';
+	function _parseTextToArray(txt, fmt) {
+		if (fmt.indexOf('\'') > -1) //Bug ZK-1341: 'long+medium' format with single quote in zh_TW locale failed to parse AM/PM
+			fmt = fmt.replace(/'/g, '');
+		var ts = [], mindex = fmt.indexOf('MMM'), eindex = fmt.indexOf('E'),
+			fmtlen = fmt.length, ary = [],
+			//mmindex = mindex + 3,
+			aa = fmt.indexOf('a'),
+			tlen = txt.replace(/[^.]/g, '').length,
+			flen = fmt.replace(/[^.]/g, '').length;
 
-		for (i = 0; i < len; i++) {
-			currentChar = formatString.charAt(i);
 
-			if (lastChar === null || lastChar !== currentChar) {
-				resultString = _appendMappedString(formatString, mapping, startIndex, i, resultString);
-
-				startIndex = i;
-			}
-
-			lastChar = currentChar;
+		for (var i = 0, k = 0, j = txt.length; k < j; i++, k++) {
+			var c = txt.charAt(k),
+				f = fmtlen > i ? fmt.charAt(i) : '';
+			if (c.match(/\d/)) {
+				ary.push(c);
+			} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
+			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i)) {
+				if (c.match(/\w/)) {
+					ary.push(c);
+				} else {
+					if (c.charCodeAt(0) < 128 && (c.charCodeAt(0) != 46
+						|| tlen == flen || f.charCodeAt(0) == 46)) {
+						if (ary.length) {
+							ts.push(ary.join(''));
+							ary = [];
+						}
+					} else
+						ary.push(c);
+				}
+			} else if (ary.length) {
+				if (txt.charAt(k - 1).match(/\d/))
+					while (f == fmt.charAt(i - 1) && f) {
+						f = fmt.charAt(++i);
+					}
+				ts.push(ary.join(''));
+				ary = [];
+			} else if (c.match(/\w/))
+				return; //failed
 		}
-
-		return _appendMappedString(formatString, mapping, startIndex, i, resultString);
+		if (ary.length) ts.push(ary.join(''));
+		return ts;
 	}
-	function _appendMappedString(formatString, mapping, startIndex, currentIndex, resultString) {
-		if (startIndex !== -1) {
-			var tempString = formatString.substring(startIndex, currentIndex);
-
-			// check if the temporary string has a known mapping
-			if (mapping.indexOf(tempString) >= 0)
-				resultString += tempString + ' '; // add a space for split later
-			// do nothing if not mapping
+	function _parseToken(token, ts, i, len) {
+		if (len < 2) len = 2;
+		if (token && token.length > len) {
+			ts[i] = token.substring(len);
+			return token.substring(0, len);
 		}
-
-		return resultString;
+		return token;
 	}
 	function _parseInt(v) {
 		return parseInt(v, 10);
@@ -243,7 +181,6 @@ zk.fmt.Date = {
 		refval = refval || zUtl.today(fmt, tz);
 
 		localizedSymbols = localizedSymbols || {
-			LANGUAGE_TAG: zk.LANGUAGE_TAG,
 			DOW_1ST: zk.DOW_1ST,
 			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
@@ -267,18 +204,10 @@ zk.fmt.Date = {
 			hasAM = aa > -1,
 			hasHour1 = hasAM && (fmt.indexOf('h') > -1 || fmt.indexOf('K') > -1),
 			isAM,
-			mmfmt = zk.mm().toMomentFormatString(fmt), // java format to moment format
-			moment = zk.mm(txt, mmfmt, localizedSymbols.LANGUAGE_TAG, nonLenient),
-			regexp = /.*\D.*/;
-
-		if (!moment.isValid()) {
-			if (!nonLenient && !strictDate) // ZK-4068: try to parse with parsedDateParts
-				moment = Dates.newInstance(moment.parsingFlags().parsedDateParts, tz)._moment;
-			else
-				return;
-		}
-
-		var ts = _momentToFormatedTextArray(moment, mmfmt);
+			ts = _parseTextToArray(txt, fmt),
+			regexp = /.*\D.*/,
+			// ZK-2026: Don't use isNaN(), it will treat float as number.
+			isNumber = !regexp.test(txt);
 
 		if (!ts || !ts.length) return;
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
@@ -289,13 +218,25 @@ zk.fmt.Date = {
 					if (fmt.charAt(k) != cc)
 						break;
 
-				var nv,
-					token = ts[i++];
+				var nosep, nv; //no separator
+				if (k < fl) {
+					var c2 = fmt.charAt(k);
+					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E' || c2 == 'm' || c2 == 's' || c2 == 'S';
+				}
+				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
 				case 'y':
 					// ZK-1985: Determine if token's length is less than the expected when nonLenient is true.
 					if (nonLenient && token && (token.length < len))
 						return;
+
+					if (nosep) {
+						if (len <= 3) len = 2;
+						if (token && token.length > len) {
+							ts[--i] = token.substring(len);
+							token = token.substring(0, len);
+						}
+					}
 
 					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
 					if (nonLenient && token && regexp.test(token))
@@ -351,10 +292,16 @@ zk.fmt.Date = {
 							break;
 					}
 					if (len == 3 && token) {
+						if (nosep)
+							token = _parseToken(token, ts, --i, token.length);//token.length: the length of French month is 4
 						if (isNaN(nv = _parseInt(token)))
 							return; // failed, B50-3314513
 						m = nv - 1;
 					} else if (len <= 2) {
+						if (nosep && token && token.length > 2) {//Bug 2560497 : if no separator, token must be assigned.
+							ts[--i] = token.substring(2);
+							token = token.substring(0, 2);
+						}
 						if (isNaN(nv = _parseInt(token)))
 							return; // failed, B50-3314513
 						m = nv - 1;
@@ -378,11 +325,16 @@ zk.fmt.Date = {
 						return;//failed
 					break;
 				case 'E':
+					if (nosep)
+						_parseToken(token, ts, --i, len);
 					break;
 				case 'd':
 					// ZK-1985:	Determine if token's length is less than expected when nonLenient is true.
 					if (nonLenient && token && (token.length < len))
 						return;
+
+					if (nosep)
+						token = _parseToken(token, ts, --i, len);
 
 					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
 					if (nonLenient && token && regexp.test(token))
@@ -405,6 +357,8 @@ zk.fmt.Date = {
 
 					if (hasHour1 ? (cc == 'H' || cc == 'k') : (cc == 'h' || cc == 'K'))
 						break;
+					if (nosep)
+						token = _parseToken(token, ts, --i, len);
 
 					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
 					if (nonLenient && token && regexp.test(token))
@@ -421,6 +375,9 @@ zk.fmt.Date = {
 					if (nonLenient && token && (token.length < len))
 						return;
 
+					if (nosep)
+						token = _parseToken(token, ts, --i, len);
+
 					// ZK-1985:	Determine if token contains non-digital word when nonLenient is true.
 					if (nonLenient && token && regexp.test(token))
 						return;
@@ -435,7 +392,7 @@ zk.fmt.Date = {
 					if (!hasHour1)
 						break;
 					if (!token) return; //failed
-					isAM = moment.hours() < 12; // ZK-4680: moment.hours() < 12 simplify the AM/PM for some locale
+					isAM = token.toUpperCase().startsWith(localizedSymbols.APM[0].toUpperCase());
 					break;
 				//default: ignored
 				}
@@ -475,7 +432,6 @@ zk.fmt.Date = {
 		if (!fmt) fmt = 'yyyy/MM/dd';
 
 		localizedSymbols = localizedSymbols || {
-			LANGUAGE_TAG: zk.LANGUAGE_TAG,
 			DOW_1ST: zk.DOW_1ST,
 			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
