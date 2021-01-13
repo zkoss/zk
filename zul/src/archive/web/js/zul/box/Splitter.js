@@ -295,7 +295,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	}
 },{
 	onclick: function (evt) {
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.Widget.$(evt),
+			colps = wgt.getCollapse();
+		if (!colps || 'none' == colps) return; //nothing to do
 		wgt.setOpen(!wgt._open);
 	},
 
