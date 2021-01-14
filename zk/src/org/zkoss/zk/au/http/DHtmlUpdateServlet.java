@@ -557,8 +557,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		if (((SessionCtrl) sess).notifyClientRequest(keepAlive))
-			denoteSessionTimeout(wapp, request, response, compress);
+		((SessionCtrl) sess).notifyClientRequest(keepAlive);
 
 		//		if (log.isDebugEnabled()) log.debug("AU request: "+aureqs);
 		final Execution exec = new ExecutionImpl(getServletContext(), request, response, desktop, null);
