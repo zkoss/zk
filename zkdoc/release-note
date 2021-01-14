@@ -104,6 +104,7 @@ ZK 9.5.1
   ZK-4769: splitter aria-valuenow reversed for collapse="after"
   ZK-4770: splitlayout aria-valuenow reversed collapse="after"
   ZK-4764: Hflex calcutation error when using CSS Flex
+  ZK-4322: Listbox position is wrong after calling setSelectied in Safari
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.
