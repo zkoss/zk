@@ -13,18 +13,19 @@ package org.zkoss.zktest.zats.test2;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.zktest.zats.wcag.WcagTestOnly;
 
 /**
  * @author rudyhuang
  */
+@Category(WcagTestOnly.class)
 public class B95_ZK_4753Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-
-		if (!Boolean.parseBoolean(getEval("!!window.za11y"))) return;
 
 		click(jq("$btnF1"));
 		waitResponse();
