@@ -458,6 +458,7 @@
 					<plugin>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
+							<excludedGroups>org.zkoss.zktest.zats.wcag.WcagTestOnly</excludedGroups>
 							<excludes>
 								<exclude>**/wcag/*Test.java</exclude>
 							</excludes>
