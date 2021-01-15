@@ -48,14 +48,14 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	</div>
 	<div id="main2" height="300px" width="300px">
 		<button id="btn1" onClick='Clients.evalJavaScript("showSize2()");'
-			height="100%" width="100px" style="background: #FF3BC5; float: left;">
+			height="100%" width="100px" style="background: #FF3BC5">
 			test area two
 		</button>
-		<button id="btn2" hflex="true" height="100%" style="background: #FFB7E9; float: left;">
+		<button id="btn2" hflex="true" height="100%" style="background: #FFB7E9">
 		</button>
 		<button id="toolbarMask2" visible="false">
 		</button>
-		<button id="btn3" hflex="true" height="100%" style="background: #FFB7E9; float: left;">
+		<button id="btn3" hflex="true" height="100%" style="background: #FFB7E9">
 		</button>
 	</div>
 </zk>

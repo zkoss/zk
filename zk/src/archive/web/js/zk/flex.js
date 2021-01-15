@@ -667,7 +667,7 @@ zFlex = { //static methods
 			fccs = [],
 			cwgts = [],
 			checkColumn = flexD == null,
-			toColumn = !isRow;
+			toColumn = false;
 
 		for (var c; fcc && cwgt;) { // assume cwgt -> fcc
 			c = cwgt.$n();
@@ -680,8 +680,10 @@ zFlex = { //static methods
 					cwgt._cssFlexApplied = {flexApplied: true};
 					fccs.push(fcc);
 					cwgts.push(cwgt);
-					if (checkColumn && !toColumn && isRow && jq(fcc).css('display') === 'block') // isRow, find block first
+					if (checkColumn && jq(fcc).css('display') === 'block') { // no default direction, check first block
 						toColumn = true;
+						checkColumn = false;
+					}
 				} else {
 					fcc = fcc.nextElementSibling; //skip c not in fcc (ex. splitter)
 					continue;
@@ -690,10 +692,9 @@ zFlex = { //static methods
 			fcc = fcc.nextElementSibling;
 			cwgt = cwgt.nextSibling;
 		}
-		if (toColumn)
-			isRow = false;
-		else if (flexD == null) //default and no block
-			isRow = true;
+
+		if (flexD == null) //should alter flex-direction
+			isRow = !toColumn;
 		return {isFlexRow: isRow, flexContainerChildren: fccs, childrenWidgets: cwgts};
 	}
 };
