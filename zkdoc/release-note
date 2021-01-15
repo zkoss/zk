@@ -98,6 +98,11 @@ ZK 9.5.1
   ZK-4619: The radiogroup of cloned radio is not updated
   ZK-4759: CSS Flex should not reset when resizing
   ZK-4765: splitter/splitlayout freezes after click on disabled collapse button
+  ZK-4766: splitter aria-valuenow /-valuetext don't update on collapse
+  ZK-4767: splitter aria-controls wrong for collapse="after"
+  ZK-4768: splitlayout aria-controls wrong for collapse="after"
+  ZK-4769: splitter aria-valuenow reversed for collapse="after"
+  ZK-4770: splitlayout aria-valuenow reversed collapse="after"
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.
