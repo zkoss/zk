@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4766.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 13 15:29:38 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-4766: click the splitter middle buttons, the aria-valuenow/aria-valuetext should be changed
+		ZK-4767: The aria-controls value of 'collapse="after"' should be the "next" container
+		ZK-4769: Click the second middle of splitter button, the aria-valuenow/aria-valuetext of 'collapse="after"' should be reversed (0)
+	</label>
+	<separator />
+	<hbox height="100px" width="100%">
+		<div>
+			left side <textbox/>
+		</div>
+		<splitter collapse="before"/>
+		<div>
+			right side <textbox/>
+		</div>
+	</hbox>
+	<hbox height="100px" width="100%">
+		<div>
+			left side <textbox/>
+		</div>
+		<splitter id="after1" collapse="after"/>
+		<div id="right1">
+			right side <textbox/>
+		</div>
+	</hbox>
+	<separator />
+	<label multiline="true">
+		ZK-4768: The aria-controls value of 'collapse="after"' should be the "next" container
+		ZK-4770: Click the second middle of splitter button, the aria-valuenow/aria-valuetext of 'collapse="after"' should be reversed (0)
+	</label>
+	<separator />
+	<splitlayout height="200px" orient="horizontal" widths="200,200">
+		<div />
+		<div />
+	</splitlayout>
+	<splitlayout id="after2" height="200px" orient="horizontal" collapse="after" widths="200,200">
+		<div />
+		<div id="right2"/>
+	</splitlayout>
+</zk>
