@@ -31,11 +31,10 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
                               itemRenderer="${renderer}" onSelect="">
                     </combobox>
                     <hbox>
-                        Selected ID: <label value="@{main$composer.selectedElement, load-after=combo.onSelect}"/>
+                        Selected ID: <label id="result" value="@{main$composer.selectedElement, load-after=combo.onSelect}"/>
                     </hbox>
                 </vbox>
             </panelchildren>
         </panel>
     </window>
-    <iframe src="/test2/B80-ZK-1987-1.zul" />
 </zk>
