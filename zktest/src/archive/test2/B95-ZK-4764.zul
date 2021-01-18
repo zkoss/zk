@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4764.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 14 10:29:11 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div id="main2" height="300px" width="300px">
+		<button id="btn1" onClick='Clients.evalJavaScript("showSize2()");'
+				height="100%" width="100px" style="background: #FF3BC5;">
+			These three buttons should be the same width.
+		</button>
+		<button id="btn2" hflex="true" vflex="1" style="background: #FFB7E9;">
+		</button>
+		<button id="toolbarMask2" visible="false">
+		</button>
+		<button id="btn3" hflex="true" vflex="1" style="background: #FFB7E9;">
+		</button>
+	</div>
+</zk>
