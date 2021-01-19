@@ -277,7 +277,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			if (wgt._cssFlexApplied) {
+			var cssFlexApplied = wgt._cssFlexApplied;
+			if (cssFlexApplied) {
 				//remove css flex flag
 				zWatch.unlisten({onSize: [wgt, zFlex.applyCSSFlex]});
 				delete wgt._cssFlexApplied;
@@ -289,7 +290,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				});
 			}
 			wgt.unlistenOnFitSize_();
-			if (cssFlexEnabled)
+			if (cssFlexApplied)
 				zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
 			delete wgt._flexListened;
 		}
