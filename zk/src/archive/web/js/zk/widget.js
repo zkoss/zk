@@ -277,12 +277,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _unlistenFlex(wgt) {
 		if (wgt._flexListened) {
-			var parent = wgt.parent,
-				cssFlexEnabled = wgt._cssflex && (parent.$instanceof(zk.Page) || parent.getFlexContainer_() != null);
-			if (cssFlexEnabled) {
+			if (wgt._cssFlexApplied) {
+				//remove css flex flag
 				zWatch.unlisten({onSize: [wgt, zFlex.applyCSSFlex]});
-				if (wgt._cssFlexApplied) //remove css flex flag
-					delete wgt._cssFlexApplied;
+				delete wgt._cssFlexApplied;
 			} else {
 				zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
 				zWatch.unlisten({
