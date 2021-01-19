@@ -221,7 +221,7 @@ zk.fmt.Date = {
 				var nosep, nv; //no separator
 				if (k < fl) {
 					var c2 = fmt.charAt(k);
-					nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E' || c2 == 'm' || c2 == 's' || c2 == 'S';
+					nosep = 'yMdEmsShHkKaA'.indexOf(c2) != -1;
 				}
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
@@ -262,7 +262,7 @@ zk.fmt.Date = {
 					break;
 				case 'M':
 					var mon = token ? token.toLowerCase() : '',
-						isNumber0 = !isNaN(token);
+						isNumber0 = !isNaN(token) || len <= 2; // could be MM with nosep token
 					if (!mon) break;
 					if (!isNumber0 && token) {
 						// MMM or MMMM
@@ -391,6 +391,8 @@ zk.fmt.Date = {
 				case 'a':
 					if (!hasHour1)
 						break;
+					if (nosep)
+						token = _parseToken(token, ts, --i, len);
 					if (!token) return; //failed
 					isAM = token.toUpperCase().startsWith(localizedSymbols.APM[0].toUpperCase());
 					break;
