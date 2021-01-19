@@ -72,20 +72,20 @@ function _doEvt(type, evt, jqevt) {
 	}
 }
 function delegateEventFunc (event) {
-	var touchEvt = event.originalEvent;
-	if (touchEvt.touches.length > 1) return;
-	
-	var evt;
-	
-	if (evt = _toMouseEvent(event, touchEvt.changedTouches[0]))
+	var touchEvt = event.originalEvent,
+		touches = touchEvt.touches;
+	if (touches && touches.length > 1) return;
+
+	var evt,
+		changedTouches = touchEvt.changedTouches ? touchEvt.changedTouches[0] : null;
+
+	if (evt = _toMouseEvent(event, changedTouches))
 		_doEvt(event.type, event, evt);
 }
-zk.copy(zjq, {
-	eventTypes: {
-		zmousedown: 'touchstart',
-		zmouseup: 'touchend',
-		zmousemove: 'touchmove'
-	}
+zk.copy(zjq.eventTypes, {
+	zmousedown: 'touchstart',
+	zmouseup: 'touchend',
+	zmousemove: 'touchmove'
 });
 function _storeEventFunction(elem, type, data, fn) {
 	var eventFuncs = jq.data(elem, 'zk_eventFuncs'),
