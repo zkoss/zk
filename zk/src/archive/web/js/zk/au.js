@@ -187,6 +187,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			});
 			return response;
 		}).catch(function (e) {
+			zAu.ajaxReq = zAu.ajaxReqInf = null; // ZK-4775: should clear processing flag
 			if (!reqInf.ignorable && !zk.unloading) {
 				var msg = _exmsg(e);
 				zAu._errCode = '[Send] ' + msg;
