@@ -107,6 +107,7 @@ ZK 9.5.1
   ZK-4322: Listbox position is wrong after calling setSelectied in Safari
   ZK-4068: datebox failing date format
   ZK-4774: ZK-4754 follow-up javascript error if pdfviewer detach before content loaded
+  ZK-4775: ZK client engine stops, after single connection failure
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.
