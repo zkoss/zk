@@ -405,7 +405,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 					this.close();
 					menu.focus();
 				} else {
-					if (menu._contentHandler && menu._contentHandler.isOpen()) {
+					var content = menu._contentHandler;
+					if (content && content.isOpen()) {
 						content.onHide();
 					} else {
 						this.close();

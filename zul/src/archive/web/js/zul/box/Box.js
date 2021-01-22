@@ -531,8 +531,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			for (; c; c = c.nextSibling)
 				if (c.nodeType == 1) break; //until a element node
 
-			zkc = zk(c),
-			fixedSize = false;
+			var zkc = zk(c),
+				fixedSize = false;
 			if (zkc.isVisible()) {
 				var j = c.id ? c.id.indexOf('-') : 1,
 					cwgt = j < 0 ? zk.Widget.$(c.id) : null,

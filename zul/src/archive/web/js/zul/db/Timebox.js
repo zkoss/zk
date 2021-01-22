@@ -411,7 +411,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_btnUp: function (evt) {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
-		if (zk.opera) zk(inp).focus();
+		if (zk.opera) zk(this.getInputNode()).focus();
 			//unfortunately, in opera, it won't gain focus if we set in _btnDown
 
 		this._onChanging();

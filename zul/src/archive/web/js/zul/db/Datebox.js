@@ -554,8 +554,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	onScroll: function (wgt) {
 		if (this.isOpen()) {
+			var pp = this._pop;
 			// ZK-1552: fix the position of popup when scroll
-			if (wgt && (pp = this._pop)) {
+			if (wgt && pp) {
 				// ZK-2211: should close when the input is out of view
 				if (this.getInputNode() && zul.inp.InputWidget._isInView(this))
 					this.$class._reposition(this, true);

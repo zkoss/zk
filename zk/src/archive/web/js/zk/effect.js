@@ -32,6 +32,7 @@ zk.eff = {
 	},
 	// ZK-1904: stackup should be moved from wgt to document.body
 	_onVParent: function (evt, opts) {
+		var sdw, stackup;
 		if (opts && (sdw = opts.shadow) && (stackup = sdw.stackup)) {
 			var $stk = jq(stackup);
 			if ($stk.parent()[0] != document.body)

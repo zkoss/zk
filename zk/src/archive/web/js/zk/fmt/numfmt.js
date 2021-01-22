@@ -217,7 +217,7 @@ zk.fmt.Number = {
 			var nind = (indVal < 0 ? valStr.length : indVal) + shift;
 			if (nind > 0) {
 				valStr = valStr.substring(0, nind) + '.'
-					+ (indVal < 0 ? valStr.substring(nind) : valStr.substring(nind, indVar) + valStr.substring(indVar + 1));
+					+ (indVal < 0 ? valStr.substring(nind) : valStr.substring(nind, indVal) + valStr.substring(indVal + 1));
 				valFixed -= shift;
 				indVal = nind;
 			} else {

@@ -145,11 +145,11 @@ zk.Long = zk.$extends(zk.Object, {
 	 * instead.
 	 * @return String
 	 */
-	$toString: zkf = function () { //toString is reserved keyword for IE
+	$toString: _zkf = function () { //toString is reserved keyword for IE
 		return this._value;
 	},
 	/** Returns a Locale-dependent string for this long integer.
 	 * @return String
 	 */
-	$toLocaleString: zkf
+	$toLocaleString: _zkf
 });

@@ -138,8 +138,9 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		this._toDoUnAftercmd = {};
 		//ZK-3133
 		if (widget['$ZKMATCHMEDIA$']) {
-			var cookies = [];
-			if (matched = _zkMatchMediaRegexPattern.exec(document.cookie)) {
+			var cookies = [],
+				matched = _zkMatchMediaRegexPattern.exec(document.cookie);
+			if (matched) {
 				var m = matched[1];
 				if (m) {
 					cookies = decodeURIComponent(m).trim().split(',');

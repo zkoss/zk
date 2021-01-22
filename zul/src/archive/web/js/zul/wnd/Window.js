@@ -241,7 +241,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt._lastSize = last;
 
 				// ZK-1826: should resotre width and height
-				if (n = wgt.$n()) {
+				var n = wgt.$n();
+				if (n) {
 					var s = n.style;
 
 					// ZK-2041: should skip undefined value, or throws exception in ie8

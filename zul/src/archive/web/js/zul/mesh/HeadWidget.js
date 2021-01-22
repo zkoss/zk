@@ -167,8 +167,8 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				fakers = ['hdfaker', 'bdfaker', 'ftfaker'];
 			// B30-1926480: ie8 does not support array.forEach
 			for (var i = 0; i < fakers.length; i++) {
-				faker = fakers[i];
-				var $faker = jq(mesh['e' + faker]);
+				var faker = fakers[i],
+					$faker = jq(mesh['e' + faker]);
 				// ZK-3643: Handle fakerbar/bar even if the faker exists
 				if ($faker[0] != null) {
 					//B70-ZK-2130: virtual bar doesn't have to add fakerbar
@@ -328,8 +328,9 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				}
 				bdcol = bdfaker.firstChild;
 				for (var hwgt = this.firstChild, wd; hwgt && bdcol; hwgt = hwgt.nextSibling) {
-					var wd = wds[hwgt.uuid];
-					if (hwgt.isVisible() && (wdpx = jq.px0(wd)) !== undefined) {
+					var wd = wds[hwgt.uuid],
+						wdpx = jq.px0(wd);
+					if (hwgt.isVisible() && wdpx !== undefined) {
 						bdcol.style.width = wdpx;
 						if (ftcol)
 							ftcol.style.width = wdpx;

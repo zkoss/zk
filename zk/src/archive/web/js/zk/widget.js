@@ -1,3 +1,4 @@
+/*global zkreg*/
 /* widget.js
 
 	Purpose:
@@ -2556,7 +2557,8 @@ function () {
 	domExtraAttrs_: function () {
 		var dh = {},
 			has = false,
-			out = '';
+			out = '',
+			attrs;
 
 		for (var nm in (attrs = this.domExtraAttrs)) {
 			if (zk.hasDataHandler(nm)) {
@@ -5069,7 +5071,7 @@ zk.Widget.getClass('combobox');
 zk.$ = function (n, opts) {
 	return zk.Widget.$(n, opts);
 };
-zkreg = Widget.register; //a shortcut for WPD loader
+window.zkreg = Widget.register; //a shortcut for WPD loader
 
 /** A reference widget. It is used as a temporary widget that will be
  * replaced with a real widget when {@link #bind_} is called.
@@ -5578,7 +5580,7 @@ zk.Macro = zk.$extends(zk.Widget, {
  * @return zk.Service
  * @since 8.0.0
  */
-zkservice = {
+window.zkservice = {
 	$: function (n, opts) {
 		var widget = zk.Widget.$(n, opts);
 		if (widget)
@@ -5851,7 +5853,8 @@ zk.NoDOM = {
 		if (this.getMold() == 'nodom') {
 			var context = this.$getInterceptorContext$();
 			//clear the dom between start node and end node
-			var node = this._startNode ? this._startNode.nextSibling : null;
+			var node = this._startNode ? this._startNode.nextSibling : null,
+				next;
 			while (node && node != this._endNode) {
 				next = node.nextSibling;
 				jq(node).remove();

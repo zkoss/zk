@@ -1,3 +1,4 @@
+/*global zkopt*/
 /* mount.js
 
 	Purpose:
@@ -24,7 +25,7 @@ function zkpb(pguid, dtid, contextURI, updateURI, resourceURI, reqURI, props) {
 		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, rsu: resourceURI, ru: reqURI}),{},[]]);
 }
 //ZK JSP (useless; backward compatible)
-zkpe = zk.$void;
+window.zkpe = zk.$void;
 
 //Initializes with version and options
 function zkver(ver, build, ctxURI, updURI, modVers, opts) {

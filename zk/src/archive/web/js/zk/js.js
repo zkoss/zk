@@ -332,5 +332,6 @@ Object.defineProperties(Array.prototype, {
 })(
 	typeof self !== 'undefined' ? self :
 	typeof window !== 'undefined' ? window :
+	// eslint-disable-next-line no-undef
 	typeof global !== 'undefined' ? global : this
 );

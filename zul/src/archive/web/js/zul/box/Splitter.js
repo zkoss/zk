@@ -45,8 +45,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		var sib2 = before ? Splitter._next(nd) : Splitter._prev(nd);
 		if (sib2) {
-			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
-			sz = c.style[fd];
+			var c = vert && sib2.cells.length ? sib2.cells[0] : sib2,
+				sz = c.style[fd];
 			//ZK-1879: set width only if it has width originally
 			if (sz && sz.indexOf('px') > -1) {
 				diff = zk.parseInt(c.style[fd]) + (open ? -diff : diff);

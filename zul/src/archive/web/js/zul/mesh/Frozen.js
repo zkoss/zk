@@ -251,6 +251,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				var cf = zk.currentFocus;
 				if (cf) {
 					td = p.getFocusCell(cf.$n());
+					var index;
 					if (td && (index = td.cellIndex - frozen._columns) >= 0) {
 						frozen.setStart(index);
 						p.ebody.scrollLeft = 0;
