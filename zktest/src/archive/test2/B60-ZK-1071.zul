@@ -25,10 +25,10 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 	model.add("B");
 	model.add("C");
 	</zscript>
-	<vbox hflex="1" pack="stretch" >
-		<bandbox id="bd" hflex="1" readonly="true" constraint="no empty"
+	<vlayout>
+		<bandbox id="bd" width="200px" readonly="true" constraint="no empty"
 			onChange="val=bd.value">
-			<bandpopup id="bp">
+			<bandpopup id="bp" width="400px">
 				<vbox align="stretch" hflex="1">
 					<listbox model="${model}" 
 						onSelect='bd.close();bd.setValue(self.getSelectedItem().getValue())' height="200px" hflex="1">
@@ -45,6 +45,6 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 			</bandpopup>
 		</bandbox>
 		<button label="Save" onClick='alert("value:"+bd.getValue())' />
-	</vbox>
+	</vlayout>
 </window>
 
