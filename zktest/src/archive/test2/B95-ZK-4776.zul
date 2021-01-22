@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4776.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 22 09:50:20 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div hflex="1" vflex="1" apply="org.zkoss.zktest.test2.B95_ZK_4776Composer">
+		<button id="btn" label="click to add GL to page, and no exception"/>
+	</div>
+	<separator/>
+	<div vflex="1">
+		<goldenlayout areas="A">
+			<goldenpanel area="A">
+				<label>foo</label>
+			</goldenpanel>
+		</goldenlayout>
+	</div>
+</zk>
