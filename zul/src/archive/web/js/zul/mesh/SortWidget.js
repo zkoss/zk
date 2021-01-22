@@ -145,7 +145,6 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		if (sorter == 'fromServer')
 			return false;
 		else if (sorter == 'none') {
-			evt.stop();
 			return false;
 		}
 

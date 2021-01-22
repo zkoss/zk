@@ -158,9 +158,9 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 		if (jsel < 0) jsel = -1;
 		if (this._jsel != jsel) {
 			if (jsel < 0) {
-				getSelectedItem().setSelected(false);
+				this.getSelectedItem().setSelected(false);
 			} else {
-				getItemAtIndex(jsel).setSelected(true);
+				this.getItemAtIndex(jsel).setSelected(true);
 			}
 		}
 	},

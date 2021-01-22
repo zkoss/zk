@@ -145,7 +145,8 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 
 		// ZK-2084: fix display for different step
 		if (typeof value === 'number' && value % 1 == 0) { // is integer
-			var precision = 1;
+			var precision = 1,
+				decimal;
 			if (this._step && (decimal = (this._step + '').split('.')[1])) {
 				precision = decimal.length;
 			}

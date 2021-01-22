@@ -54,7 +54,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			if (this._regex) {
 				this._errmsg['regex'] = c;
 			}
-			for (flag in this._flags) {
+			for (var flag in this._flags) {
 				this._errmsg[flag] = c;
 			}
 
@@ -253,7 +253,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			msg = this._errmsg;
 		if (f.NO_FUTURE)
 			return msg['NO_FUTURE'] || (f.NO_TODAY ?
-				f.NO_PAST ? NO_FUTURE_PAST_TODAY : msgzul.NO_FUTURE_TODAY :
+				f.NO_PAST ? msgzul.NO_FUTURE_PAST_TODAY : msgzul.NO_FUTURE_TODAY :
 				f.NO_PAST ? msgzul.NO_FUTURE_PAST : msgzul.NO_FUTURE);
 		else if (f.NO_PAST)
 			return msg['NO_PAST'] || (f.NO_TODAY ? msgzul.NO_PAST_TODAY : msgzul.NO_PAST);

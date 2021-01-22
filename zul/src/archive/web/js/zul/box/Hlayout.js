@@ -70,6 +70,7 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 	},
 	beforeSize: function () {
 		var xc = this.firstChild,
+			zkc,
 			totalWdCached = this._beforeSizeWidth,
 			totalWd = totalWdCached != null ? totalWdCached : this.$n().offsetWidth,
 			flexCnt = 0,
@@ -98,7 +99,8 @@ zul.box.Hlayout = zk.$extends(zul.box.Layout, {
 		delete this._beforeSizeWidth;
 	},
 	onFitSize: function () {
-		var xc = this.firstChild;
+		var xc = this.firstChild,
+			zkc;
 		for (; xc; xc = xc.nextSibling) {
 			if (xc.isVisible() && !(zkc = zk(xc)).hasVParent())
 				xc.$n('chdex').style.width = '';

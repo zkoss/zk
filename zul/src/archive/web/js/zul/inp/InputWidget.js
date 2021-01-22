@@ -30,7 +30,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					zjq.fixInput(wgt.getInputNode());
 			}, 0);
 		} : zk.$void;
-	var windowX = windowY = 0;
+	var windowX = 0,
+		windowY = 0;
 
 /** @class zul.inp.RoundUtl
  * The RoundUtl used to adjust the display of the rounded input.

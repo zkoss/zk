@@ -56,7 +56,7 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 		 */
 		wmode: function (wmode) {
 			var n = this._embedNode();
-			if (n) n.wmode = v || '';
+			if (n) n.wmode = wmode || '';
 		},
 		/** Gets the background color of Flash movie.
 		 * <p>Default: null (the system default)
@@ -89,7 +89,7 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 		 */
 		autoplay: function (autoplay) {
 			var n = this._embedNode();
-			if (n) n.autoplay = v || '';
+			if (n) n.autoplay = autoplay || '';
 		},
 		/** Returns true if the Flash movie plays repeatly.
 		 * <p>Default: false

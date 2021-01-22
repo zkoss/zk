@@ -1385,7 +1385,7 @@ zk.log('value is", value);
 					}
 				}
 				if (w && dataHandlerService) {
-					$.extend(this, dataHandlerService);
+					jq.extend(this, dataHandlerService);
 					var oldCommand = this.command,
 						subName = name.indexOf('data-') == 0 ? name.substring(5) : name;
 					this.command = function () {
@@ -1490,7 +1490,7 @@ zk.$intercepts(zul.inp.Combobox, {
 
 	// Don't clobber any existing jq.browser in case it's different
 	if (!jq.browser) {
-		matched = jq.uaMatch(navigator.userAgent);
+		var matched = jq.uaMatch(navigator.userAgent);
 		browser = {};
 
 		if (matched.browser) {
@@ -1862,7 +1862,7 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 
 /** @partial zk.Object
  */
-_zkf = {
+var _zkf = {
 	/** Determines if the specified Object is assignment-compatible with this Class. This method is equivalent to [[zk.Object#$instanceof].
 	 * Example:
 <pre><code>

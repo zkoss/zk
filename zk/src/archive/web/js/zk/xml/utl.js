@@ -1,3 +1,4 @@
+/*global ActiveXObject*/
 /* utl.js
 
 	Purpose:

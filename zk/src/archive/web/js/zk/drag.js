@@ -401,7 +401,8 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 		zk.dragging = this.dragging = true;
 
-		var node = this.node;
+		var node = this.node,
+			opt;
 		if (opt = this.opts.ghosting)
 			if (typeof opt == 'function') {
 				this.delta = this._currentDelta();

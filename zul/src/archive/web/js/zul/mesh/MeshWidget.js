@@ -801,7 +801,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var empty = true,
 				flex = false,
 				shouldFix = false,
-				shouldCheckEmptyWidth = !this.frozen && this.eheadtbl && this.eheadtbl.style.width;
+				shouldCheckEmptyWidth = !this.frozen && this.eheadtbl && this.eheadtbl.style.width,
 				hdsmin = (this._hflex == 'min') || this.isSizedByContent();
 			for (var i = this.heads.length; i-- > 0;) {
 				var header = this.heads[i],

@@ -161,7 +161,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						if (!isMultiSelected) {
 							var bar = this._scrollbar;
 							if (bar)
-								bar.scrollToElement(item.$n());
+								bar.scrollToElement(w.$n());
 							else
 								zk(w).scrollIntoView(this.ebody);
 						}

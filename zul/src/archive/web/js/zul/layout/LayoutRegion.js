@@ -691,13 +691,12 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var wgt = this,
 			embed = jq(wgt.$n('real')).data('embedscrollbar') !== false, // change default value to true since 7.0.2
 			cave = wgt.$n('cave');
-		scrollbar = new zul.Scrollbar(cave, cave.firstChild, {
-				embed: embed,
-				onScrollEnd: function () {
-					wgt._doScroll();
-				}
-			});
-		return scrollbar;
+		return new zul.Scrollbar(cave, cave.firstChild, {
+			embed: embed,
+			onScrollEnd: function () {
+				wgt._doScroll();
+			}
+		});
 	},
 	refreshBar_: function (showBar, scrollToTop) {
 		var bar = this._scrollbar;

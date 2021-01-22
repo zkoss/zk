@@ -297,8 +297,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		var widget = dg.control,
 			sclass = widget.getSclass();
 		widget.$n('btn').title = ''; //to avoid annoying effect
-		widget.slidepos = widget._curpos,
-		vert = widget.isVertical();
+		widget.slidepos = widget._curpos;
 
 		jq(document.body)
 			.append('<div id="zul_slidetip" class="'

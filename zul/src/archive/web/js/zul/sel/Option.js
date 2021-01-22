@@ -131,7 +131,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	getOptionIndex_: function () {
 		var parent = this.parent, ret = -1;
 		if (parent) {
-			for (w = parent.firstChild; w; w = w.nextSibling) {
+			for (var w = parent.firstChild; w; w = w.nextSibling) {
 				if (w.$instanceof(zul.sel.Option)) {
 					ret++;
 					if (w == this) break;

@@ -1,3 +1,4 @@
+/*global G_vmlCanvasManager*/
 /* canvas.js
 
 	Purpose:

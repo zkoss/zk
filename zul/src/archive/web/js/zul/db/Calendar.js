@@ -719,7 +719,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			year = y != null ? y : dateobj.getFullYear(),
 			month = m != null ? m : dateobj.getMonth(),
 			day = d != null ? d : dateobj.getDate(),
-			tz = _getTimeZone(this);
+			tz = _getTimeZone(this),
 			val = new zk.fmt.Calendar().escapeDSTConflict(_newDate(year, month, day, d == null, tz), tz); // B70-ZK-2382
 
 		this._value = val;
