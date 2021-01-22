@@ -61,10 +61,12 @@ function _toMouseEvent(event, changedTouch) {
 	case 'pointerdown':
 		return _createJQEvent(event.target, 'mousedown', event.button, event.originalEvent);
 	case 'pointerup':
-		return _createJQEvent(event.target, 'mouseup', event.button, event.originalEvent);
-	case 'pointermove':
-		var target = event.target;
-		return (target && _createJQEvent(target, 'mousemove', event.button, event.originalEvent)) || null;
+		var origEvt = event.originalEvent;
+		return _createJQEvent(
+			document.elementFromPoint(
+				origEvt.clientX,
+				origEvt.clientY),
+				'mouseup', event.button, origEvt);
 	}
 	return event;
 }
@@ -93,7 +95,7 @@ var pointerEventAvailable = !!window.PointerEvent; // Introduced since iOS 13.1
 zk.copy(zjq.eventTypes, {
 	zmousedown: pointerEventAvailable ? 'pointerdown' : 'touchstart',
 	zmouseup: pointerEventAvailable ? 'pointerup' : 'touchend',
-	zmousemove: pointerEventAvailable ? 'pointermove' : 'touchmove'
+	zmousemove: 'touchmove' // no pointermove because `touch-action: none` CSS is needed.
 });
 function _storeEventFunction(elem, type, data, fn) {
 	var eventFuncs = jq.data(elem, 'zk_eventFuncs'),
