@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4762.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jan 18 17:28:04 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. zoom to 75%
+		2. scroll to the right-most column
+		3. scroll to the left-most column
+		4. the 3rd and 4th columns should be visible
+	</label>
+	<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+	<listbox id="listbox" height="300px" width="500px">
+
+		<frozen columns="2"/>
+		<listhead sizable="true">
+			<listheader label="Id" width="150px"   />
+			<listheader label="Item Id" width="150px"   />
+			<listheader label="Item Code" width="70px"  />
+			<listheader label="Item Description" width="300px"   />
+			<listheader label="Created Date" width="150px" />
+			<listheader label="Created By" width="150px"  />
+			<listheader label="Terminated Date" width="150px" />
+			<listheader label="Terminated By" width="150px" />
+			<listheader label="UOM" width="150px"   />
+			<listheader label="Composition" width="150px" />
+			<listheader label="Default" width="150px"  />
+			<listheader label="Composition" width="150px" />
+			<listheader label="Composition" width="150px" />
+			<listheader label="Composition" width="150px" />
+			<listheader label="Composition" width="150px" />
+			<listheader label="Composition" width="150px" />
+			<listheader label="Composition" width="150px" />
+		</listhead>
+		<listitem>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="aaaaaaaaa"/>
+		</listitem>
+		<listitem>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+			<listcell label="cell"/>
+		</listitem>
+	</listbox>
+</zk>
