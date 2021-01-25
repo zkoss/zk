@@ -129,6 +129,9 @@
 
 	&-window .z-window-content {
 		padding: @messageboxWindowContentPadding;
+		> .z-separator {
+			height: @messageboxSeparator !important;
+		}
 	}
 
 	&-buttons {
@@ -174,6 +177,6 @@
 	&-viewport {
 		overflow: auto;
 		white-space: nowrap;
-		margin-bottom: @messageboxViewportMarginBottom;
+		width: @messageboxViewportWidth;
 	}
 }

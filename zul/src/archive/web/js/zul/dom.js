@@ -85,23 +85,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						}
 					}},
 					children: [
-						new zul.wgt.Div({
-							sclass: 'z-messagebox-viewport',
+						new zul.box.Box({
+							mold: 'horizontal',
 							children: [
-								new zul.wgt.Div({sclass: icons[(opts.icon || '').toUpperCase()] || opts.icon || icons.INFORMATION}),
 								new zul.wgt.Div({
-									id: 'content',
-									sclass: 'z-messagebox',
+									sclass: 'z-messagebox-viewport',
 									children: [
-										new zul.wgt.Label({
-											id: 'msg',
-											value: msg,
-											multiline: true
+										new zul.wgt.Div({sclass: icons[(opts.icon || '').toUpperCase()] || opts.icon || icons.INFORMATION}),
+										new zul.wgt.Div({
+											id: 'content',
+											sclass: 'z-messagebox',
+											children: [
+												new zul.wgt.Label({
+													id: 'msg',
+													value: msg,
+													multiline: true
+												})
+											]
 										})
 									]
 								})
 							]
 						}),
+						new zul.wgt.Separator(),
 						new zul.box.Hlayout({
 							sclass: 'z-messagebox-buttons',
 							children: getButtons(opts.button)
