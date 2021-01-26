@@ -1,10 +1,17 @@
 zul.wnd.Messagebox = {
 	onBind: function (label, minWidth) {
-		var win = label.$o(),
+		var node = label.$n(),
+			tr = node.parentNode.parentNode.parentNode,
+			width = node.offsetWidth + tr.cells[0].offsetWidth,
+			win = label.$o(),
+			cave = win.$n('cave'),
 			outer = win.$n();
-		if (minWidth) {
-			outer.style.width = jq.px0(Math.min(zk.parseInt(minWidth), jq.innerWidth() - 20));
-		}
+		width += zk(cave).padBorderWidth()
+			+ zk((cave = cave.parentNode)).padBorderWidth()
+			+ zk((cave = cave.parentNode)).padBorderWidth()
+			+ zk((cave = cave.parentNode)).padBorderWidth();
+
+		outer.style.width = jq.px0(Math.min(Math.max(width, zk.parseInt(minWidth)), jq.innerWidth() - 20));
 		zk(outer).center();
 		var top = zk.parseInt(outer.style.top), y = jq.innerY();
 		if (y) {

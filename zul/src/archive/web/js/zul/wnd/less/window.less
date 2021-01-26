@@ -114,13 +114,8 @@
 }
 
 .z-messagebox {
-	display: inline-block;
-	white-space: normal;
-	padding: @messageboxPadding;
-
 	&-window {
 		padding: @messageboxWindowPadding;
-		width: @messageboxWindowWidth;
 	}
 
 	&-window .z-window-header {
@@ -128,12 +123,15 @@
 	}
 
 	&-window .z-window-content {
-		padding: @messageboxWindowContentPadding;
+		padding: @messageboxInnerPadding;
+	}
+
+	&-window .z-separator {
+		height: 32px !important;
 	}
 
 	&-buttons {
 		text-align: right;
-		margin-right: 16px;
 		& > * {
 			margin-left: @messageboxButtonsMarginLeft;
 		}
@@ -152,7 +150,7 @@
 		text-align: center;
 		vertical-align: top;
 		cursor: pointer;
-		margin-left: @messageboxIconMarginLeft;
+		margin-right: 16px;
 	}
 
 	&-question {
@@ -169,11 +167,5 @@
 
 	&-error {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
-	}
-
-	&-viewport {
-		overflow: auto;
-		white-space: nowrap;
-		margin-bottom: @messageboxViewportMarginBottom;
 	}
 }
