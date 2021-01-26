@@ -2319,6 +2319,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + '-ifrstk' : 'z_ifrstk');
 		ifr.style.cssText = 'position:absolute;overflow:hidden;opacity:0;width:0;height:0;border:none;filter:alpha(opacity=0)';
+		ifr.setAttribute('aria-hidden', true);
 		ifr.tabIndex = -1;
 		ifr.src = zjq.src0;
 		if (el) {
