@@ -1162,6 +1162,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 			// Bug ZK-2901
 			if (child && child === true) { // called by Tree.js
+				this._anchorTop = this._anchorLeft = 0;
 				jq(this.$n('a')).css({top: 0, left: 0});
 			} else {
 
