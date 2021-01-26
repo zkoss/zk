@@ -109,7 +109,6 @@ ZK 9.5.1
   ZK-4774: ZK-4754 follow-up javascript error if pdfviewer detach before content loaded
   ZK-4775: ZK client engine stops, after single connection failure
   ZK-4776: "UI can't be modified in the rendering phase" happens when initializing a new goldenlayout
-  ZK-4760: default error message box hard coded width (too small)
 
 * Upgrade Notes
   + Now the "zk.edge" is true only in the new Edge (Chromium-based), and we provide zk.edge_legacy for compatibility.
