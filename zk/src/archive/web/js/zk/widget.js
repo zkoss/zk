@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function (undefined) {
+(function (undefined) { // eslint-disable-line no-shadow-restricted-names
 	var _binds = {}, //{uuid, wgt}: bind but no node
 		_globals = {}, //global ID space {id, [wgt...]}
 		_floatings = [], //[{widget:w,node:n}]

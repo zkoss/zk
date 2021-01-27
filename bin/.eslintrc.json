@@ -95,6 +95,7 @@
     "no-useless-escape": "error",
     "no-with": "error",
     "no-delete-var": "error",
+    "no-shadow-restricted-names": "error",
     "no-undef": ["error", { "typeof": false }],
     "no-eval": "error",
     "no-implied-eval": "error",
