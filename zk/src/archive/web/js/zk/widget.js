@@ -27,7 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_syncdt, //timer ID to sync destkops
 		_rdque = [], _rdtid, //async rerender's queue and timeout ID
 		_ignCanActivate, //whether canActivate always returns true
-		REGEX_DQUOT = /\"/g; //jsdoc can't handle it correctly, so we have to put here
+		REGEX_DQUOT = /"/g; //jsdoc can't handle it correctly, so we have to put here
 
 	//Check if el is a prolog
 	function _isProlog(el) {

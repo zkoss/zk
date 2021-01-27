@@ -50,7 +50,7 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 	_checkContentRequired: function (val) {
 		if (val) {
 			val = val.trim();
-			if (val && !(val.startsWith('<\!--') && val.endsWith('-->')))
+			if (val && !(val.startsWith('<!--') && val.endsWith('-->')))
 				return true;
 		}
 		return false;

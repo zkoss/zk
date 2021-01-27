@@ -335,7 +335,7 @@ zk.fmt.Number = {
 	_escapeQuote: function (fmt, localizedSymbols) {
 		//note we do NOT support mixing of quoted and unquoted percent
 		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej = -1,
-			validPercent = fmt ? !new RegExp('\(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\'\)', 'g').test(fmt) : true;
+			validPercent = fmt ? !new RegExp('(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\')', 'g').test(fmt) : true;
 			//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = fmt.length; j < len; ++j) {
 			cc = fmt.charAt(j);
@@ -411,7 +411,7 @@ zk.fmt.Number = {
 			permill = String.fromCharCode(0x2030),
 			zkPermill = ignoreLocale ? permill : localizedSymbols.PER_MILL,
 			zkGrouping = ignoreLocale ? ',' : localizedSymbols.GROUPING,
-			validPercent = !new RegExp('\(\'[%|' + permill + ']+\'\)', 'g').test(fmt);
+			validPercent = !new RegExp('(\'[%|' + permill + ']+\')', 'g').test(fmt);
 				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);

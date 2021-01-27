@@ -92,6 +92,7 @@
     "no-self-assign": "error",
     "no-unused-labels": "error",
     "no-useless-catch": "error",
+    "no-useless-escape": "error",
     "no-with": "error",
     "no-delete-var": "error",
     "no-undef": ["error", { "typeof": false }],

@@ -150,7 +150,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		return true;
 	},
 	setFormat: function (fmt) {
-		fmt = fmt ? fmt.replace(/\'/g, '') : fmt;
+		fmt = fmt ? fmt.replace(/'/g, '') : fmt;
 		this.$class._updFormat(this, fmt);
 		this.$supers('setFormat', arguments);
 	},

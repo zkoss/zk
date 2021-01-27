@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 (function () {
 var globallocalizedSymbols = {},
-	_quotePattern = /\'/g, // move pattern string here to avoid jsdoc failure
+	_quotePattern = /'/g, // move pattern string here to avoid jsdoc failure
 	_innerDateFormat = 'yyyy/MM/dd ',
 	Datebox =
 /**
@@ -368,7 +368,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	 * @return String
 	 */
 	getDateFormat: function () {
-		return this._format.replace(/[(s\.S{1,3})ahKHksm]*:?/g, '').trim();
+		return this._format.replace(/[(s.S{1,3})ahKHksm]*:?/g, '').trim();
 	},
 	/** Drops down or closes the calendar to select a date.
 	 */
