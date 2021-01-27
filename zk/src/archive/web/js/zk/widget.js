@@ -6049,6 +6049,7 @@ function zkopt(opts) {
 			switch (val) {
 			case 'e':
 				zk.feature.ee = true;
+				//fallthrough
 			case 'p':
 				zk.feature.pe = true;
 			}

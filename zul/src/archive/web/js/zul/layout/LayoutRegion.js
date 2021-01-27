@@ -764,6 +764,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.setSlide(!this._isSlide);
 				break;
 			}
+			// fall through if not sildable
 		case this.$n('btn'):
 		case this.$n('btned'):
 		case this.$n('splitbtn'):

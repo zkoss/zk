@@ -986,7 +986,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			switch (rstatus) { //auto-retry for certain case
 			default:
 				if (!zAu.ajaxReqTries) break;
-				//fall thru
+				//fall through
 			case 12002: //server timeout
 			case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
 			case 12031:

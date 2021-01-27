@@ -86,6 +86,7 @@
     "no-alert": "error",
     "no-case-declarations": "error",
     "no-empty-pattern": "error",
+    "no-fallthrough": "error",
     "no-global-assign": "error",
     "no-octal": "error",
     "no-unused-labels": "error",

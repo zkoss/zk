@@ -374,7 +374,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			case 36://Home
 				this._hilite2();
 				this.getInputNode().value = '';
-				//fall thru
+				//fall through
 			case 37://Left
 			case 39://Right
 				this._updnSel(evt, keyCode == 37 || keyCode == 35);

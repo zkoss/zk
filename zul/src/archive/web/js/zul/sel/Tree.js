@@ -232,6 +232,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		switch (this._selItems.length) {
 		case 1:
 			sel = this._selItems[0];
+			// fallthrough
 		case 0:
 			break;
 		default:

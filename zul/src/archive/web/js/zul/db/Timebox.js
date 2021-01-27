@@ -322,7 +322,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					this._updateChanged();
 					break;
 				}
-				// no need to break here, let it run with 'default' case
+				// fallthrough and no need to break here, let it run with 'default' case
 			default:
 				if (!(code >= 112 && code <= 123) //F1-F12
 						&& !evt.ctrlKey && !evt.metaKey && !evt.altKey) {

@@ -155,7 +155,7 @@ zk.fmt.Number = {
 				valStr = r > 0 ? up(valStr, ri) : down(valStr, ri);
 				break;
 			case 6: //HALF_EVEN
-				//falling down
+				//fallthrough
 			default:
 				var r = compareHalf(valStr, ri);
 				if (r == 0) { //half
