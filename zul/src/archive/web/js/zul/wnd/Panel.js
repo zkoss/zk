@@ -636,9 +636,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				zkop = $op.zk,
-				s = node.style;
-
-			var sw = zkop.clientWidthDoubleValue();
+				s = node.style,
+				sw = zkop.clientWidthDoubleValue();
 			if (!floated) {
 				sw -= zkop.paddingWidth();
 				sw = $n.revisedWidth(sw);

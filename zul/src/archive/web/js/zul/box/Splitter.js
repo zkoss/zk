@@ -421,8 +421,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			zUtl.fireSized(w, -1); //no beforeSize
 		}
 
-		var nextClientFd = runNext['client' + upperFd];
-		var prevClientFd = totalFd - nextClientFd;
+		var nextClientFd = runNext['client' + upperFd],
+			prevClientFd = totalFd - nextClientFd;
 		if (nextClientFd != s)
 			runNext.style[fd] = nextClientFd + 'px'; //count on clientFd
 		if (prevClientFd != minusS)

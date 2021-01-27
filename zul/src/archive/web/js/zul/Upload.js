@@ -57,23 +57,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	if (zk.opera) { //opera only
-		var _syncQue = [], _syncId;
-		var _syncNow = function () {
-			for (var j = _syncQue.length; j--;)
-				_syncQue[j].sync();
-		};
-		var _addSyncQue = function (upld) {
-			if (!_syncQue.length)
-				_syncId = setInterval(_syncNow, 1500);
-			_syncQue.push(upld);
-		};
-		var _rmSyncQue = function (upld) {
-			_syncQue.$remove(upld);
-			if (_syncId && !_syncQue.length) {
-				clearInterval(_syncId);
-				_syncId = null;
-			}
-		};
+		var _syncQue = [], _syncId,
+			_syncNow = function () {
+				for (var j = _syncQue.length; j--;)
+					_syncQue[j].sync();
+			},
+			_addSyncQue = function (upld) {
+				if (!_syncQue.length)
+					_syncId = setInterval(_syncNow, 1500);
+				_syncQue.push(upld);
+			},
+			_rmSyncQue = function (upld) {
+				_syncQue.$remove(upld);
+				if (_syncId && !_syncQue.length) {
+					clearInterval(_syncId);
+					_syncId = null;
+				}
+			};
 	}
 
 /** Helper class for implementing the fileupload.

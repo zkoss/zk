@@ -544,8 +544,8 @@ try {
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
 		for (var j = 0, ref = window; ;) {
 			var k = name.indexOf('.', j),
-				nm = k >= 0 ? name.substring(j, k) : name.substring(j);
-			var nxt = ref[nm], newpkg;
+				nm = k >= 0 ? name.substring(j, k) : name.substring(j),
+				nxt = ref[nm], newpkg;
 			if (newpkg = !nxt) nxt = ref[nm] = {};
 			if (k < 0) {
 				if (newpkg && end !== false) zk.setLoaded(name);
@@ -604,8 +604,8 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 			}
 			for (var j = 0, ref = window; ;) {
 				var k = name.indexOf('.', j),
-					nm = k >= 0 ? name.substring(j, k) : name.substring(j);
-				var nxt = ref[nm];
+					nm = k >= 0 ? name.substring(j, k) : name.substring(j),
+					nxt = ref[nm];
 				if (k < 0 || !nxt) {
 					if (fn) {
 						if (nxt) fn(nxt);
@@ -1451,8 +1451,8 @@ zk.$intercepts(zul.inp.Combobox, {
 				}
 				(function (nm, oldFunc) {
 					targetpt[nm] = function () {
-						var context = {stop: false, result: null, args: arguments};
-						var arr = this._$$interceptorContext;
+						var context = {stop: false, result: null, args: arguments},
+							arr = this._$$interceptorContext;
 						arr.push(context);
 						interceptor[nm].apply(this, arguments);
 						var result = context.stop ? context.result : oldFunc.apply(this, context.args);

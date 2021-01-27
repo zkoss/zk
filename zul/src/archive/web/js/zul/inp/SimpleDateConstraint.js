@@ -64,8 +64,8 @@ zul.inp.SimpleDateConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	validate: function (wgt, val) {
 		var result = this.$supers('validate', arguments);
 		if (val instanceof DateImpl) {
-			var msg = this._errmsg;
-			var v = Dates.newInstance([val.getFullYear(), val.getMonth(), val.getDate()], val.getTimeZone());
+			var msg = this._errmsg,
+				v = Dates.newInstance([val.getFullYear(), val.getMonth(), val.getDate()], val.getTimeZone());
 			if (this._beg != null && this._beg.getTime() > v.getTime())
 				return msg['between'] || msg['after'] || this.outOfRangeValue();
 			if (this._end != null && this._end.getTime() < v.getTime())

@@ -72,8 +72,8 @@ zk.xml.Utl.renType("/zkdemo/img/whatever-off.gif", "on");
 	 * @return String the new URL after replacing the type
 	 */
 	renType: function (url, type) {
-		var j = url.lastIndexOf(';');
-		var suffix;
+		var j = url.lastIndexOf(';'),
+			suffix;
 		if (j >= 0) {
 			suffix = url.substring(j);
 			url = url.substring(0, j);

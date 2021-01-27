@@ -551,8 +551,8 @@ String scroll; //DOM Element's ID</code></pre>
 				this._clone = null;
 			}
 
-		var pt = [evt.pageX, evt.pageY];
-		var revert = this.opts.revert;
+		var pt = [evt.pageX, evt.pageY],
+			revert = this.opts.revert;
 		if (revert && typeof revert == 'function')
 			revert = revert(this, pt, evt);
 

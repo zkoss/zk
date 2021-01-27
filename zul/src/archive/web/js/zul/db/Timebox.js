@@ -41,11 +41,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		/*constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
 		 * @type int
 		 */
-		HOUR3_FIELD = 7;
+		HOUR3_FIELD = 7,
 
-	var globallocalizedSymbols = {};
+	globallocalizedSymbols = {},
 
-var Timebox =
+	Timebox =
 /**
  * An input box for holding a time (a Date Object, but only Hour & Minute are used.
  *
@@ -451,12 +451,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	getTimeHandler: function () {
 		var sr = zk(this.getInputNode()).getSelectionRange(),
 			start = sr[0],
-			end = sr[1];
+			end = sr[1],
 			//don't use [0] as the end variable, it may have a bug when the format is aHH:mm:ss
 			//when use UP/Down key to change the time
+			hdler;
 
 		// Bug ZK-434
-		var hdler;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			if (!f[i].type) continue;
 			if (f[i].index[0] <= start) {

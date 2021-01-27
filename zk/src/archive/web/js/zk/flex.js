@@ -435,25 +435,25 @@ zFlex = { //static methods
 
 		// ZK-3411: use local function for setting up height
 		var setHghForVflexChild = function (vfxs, h, lsz) {
-			for (var j = vfxs.length - 1; j > 0; --j) {
-				var cwgt = vfxs.shift(),
-					vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0; //cast to integer
-				cwgt.setFlexSize_({height: vsz});
-				cwgt._vflexsz = vsz;
-				if (!cwgt.isExcludedVflex_())
-					lsz -= vsz;
-			}
-			//last one with vflex
-			if (vfxs.length) {
-				var cwgt = vfxs.shift();
-				cwgt.setFlexSize_({height: lsz});
-				cwgt._vflexsz = lsz;
-			}
-		};
+				for (var j = vfxs.length - 1; j > 0; --j) {
+					var cwgt = vfxs.shift(),
+						vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0; //cast to integer
+					cwgt.setFlexSize_({height: vsz});
+					cwgt._vflexsz = vsz;
+					if (!cwgt.isExcludedVflex_())
+						lsz -= vsz;
+				}
+				//last one with vflex
+				if (vfxs.length) {
+					var cwgt = vfxs.shift();
+					cwgt.setFlexSize_({height: lsz});
+					cwgt._vflexsz = lsz;
+				}
+			},
+			lastsz = hgh = Math.max(hgh, 0);
 
 		//setup the height for the vflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
-		var lastsz = hgh = Math.max(hgh, 0);
 		setHghForVflexChild(vflexs, hgh, lastsz);
 
 		//3042306: H/Vflex in IE6 can't shrink; others cause scrollbar space
@@ -557,9 +557,9 @@ zFlex = { //static methods
 				c = cwgt.$n(),
 				flexs = [cwgt._nvflex, cwgt._nhflex],
 				sz = {},
-				dim = isRow ? 'width' : 'height';
+				dim = isRow ? 'width' : 'height',
+				flex = flexs[isRow | 0];
 
-			var flex = flexs[isRow | 0];
 			if (flex > 0) {
 				isAllMin = false;
 				jqFcc.addClass(flexItemClass);

@@ -229,11 +229,11 @@ zjq = function (jq) { //ZK extension
 			if (html5 === undefined) {
 				if (document.doctype === null) return false;
 		
-				var node = document.doctype;
-				var doctype_string = '<!DOCTYPE ' + node.name
-					+ (node.publicId ? ' PUBLIC"' + node.publicId + '"' : '')
-					+ (!node.publicId && node.systemId ? ' SYSTEM' : '')
-					+ (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
+				var node = document.doctype,
+					doctype_string = '<!DOCTYPE ' + node.name
+						+ (node.publicId ? ' PUBLIC"' + node.publicId + '"' : '')
+						+ (!node.publicId && node.systemId ? ' SYSTEM' : '')
+						+ (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
 		
 				html5 = doctype_string === '<!DOCTYPE html>';
 			}
@@ -242,6 +242,7 @@ zjq = function (jq) { //ZK extension
 	})();
 	
 	// refix ZK-2371
+	// eslint-disable-next-line one-var
 	var DocRoot = (function () {
 		var docRoot,
 			// document.body may not be initiated.
@@ -1136,8 +1137,8 @@ jq(el).zk.center(); //same as 'center'
 			el.style.display = 'none'; //avoid Firefox to display it too early
 		}
 
-		var left = jq.innerX(), top = jq.innerY();
-		var x, y, skipx, skipy;
+		var left = jq.innerX(), top = jq.innerY(),
+			x, y, skipx, skipy;
 
 		wdgap = jq.innerWidth() - wdgap;
 		if (!flags) x = left + wdgap / 2;
@@ -1865,9 +1866,9 @@ jq(el).zk.center(); //same as 'center'
 		var inp = this.jq[0];
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
-				var range = document.selection.createRange();
-				var rangetwo = inp.createTextRange();
-				var stored_range = '';
+				var range = document.selection.createRange(),
+					rangetwo = inp.createTextRange(),
+					stored_range = '';
 				if (inp.type.toLowerCase() == 'text') {
 					stored_range = rangetwo.duplicate();
 				} else {
@@ -2174,8 +2175,8 @@ zk.copy(jq, {
 	 */
 	isOverlapped: function (ofs1, dim1, ofs2, dim2, tolerant) {
 		var o1x1 = ofs1[0], o1x2 = dim1[0] + o1x1,
-			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1;
-		var o2x1 = ofs2[0], o2x2 = dim2[0] + o2x1,
+			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1,
+			o2x1 = ofs2[0], o2x2 = dim2[0] + o2x1,
 			o2y1 = ofs2[1], o2y2 = dim2[1] + o2y1;
 		if (tolerant) {
 			return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1

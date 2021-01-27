@@ -526,8 +526,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		span: function (v) {
 			//ZK-2776: if span="false", !isSpan() will return false, because "false" is string not boolean
-			var isTrue = true === v || 'true' == v;
-			var isFalse = false === v || 'false' == v;
+			var isTrue = true === v || 'true' == v,
+				isFalse = false === v || 'false' == v;
 			this._span = isTrue ? true : isFalse ? false : v;
 
 			var x = isTrue ? -65500 : isFalse ? 0 : (zk.parseInt(v) + 1);

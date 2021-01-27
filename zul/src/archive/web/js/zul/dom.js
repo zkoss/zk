@@ -111,8 +111,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						})
 					],
 					mode: opts.mode || 'modal'
-				});
-				var p = opts.desktop || zk.Desktop.$();
+				}),
+				p = opts.desktop || zk.Desktop.$();
 				if (p && (p = p.firstChild) && p.desktop)
 					p.appendChild(wnd);
 				else

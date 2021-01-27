@@ -323,6 +323,7 @@ zul.db.Renderer = {
 		out.push(val);
 	}
 };
+// eslint-disable-next-line one-var
 var Calendar =
 /**
  * A calendar.

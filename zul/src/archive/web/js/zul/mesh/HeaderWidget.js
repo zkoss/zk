@@ -487,15 +487,14 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			hdfaker = mesh.ehdfaker,
 			bdfaker = mesh.ebdfaker,
 			ftfaker = mesh.eftfaker,
-			cidx = zk(wgt.$n()).cellIndex();
-
-		var hdcols = hdfaker.childNodes,
+			cidx = zk(wgt.$n()).cellIndex(),
+			hdcols = hdfaker.childNodes,
 			bdcols = bdfaker.childNodes,
-			ftcols = ftfaker ? ftfaker.childNodes : null;
+			ftcols = ftfaker ? ftfaker.childNodes : null,
+			wds = [];
 
 		//1. store resized width
 		// B70-ZK-2199: convert percent width to fixed width
-		var wds = [];
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			var stylew = hdcols[i].style.width,
 				origWd = w._origWd, // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow

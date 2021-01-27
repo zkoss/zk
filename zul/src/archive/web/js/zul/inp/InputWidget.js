@@ -29,8 +29,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (wgt == zk.currentFocus)
 					zjq.fixInput(wgt.getInputNode());
 			}, 0);
-		} : zk.$void;
-	var windowX = 0,
+		} : zk.$void,
+		windowX = 0,
 		windowY = 0;
 
 /** @class zul.inp.RoundUtl

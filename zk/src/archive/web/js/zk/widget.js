@@ -590,9 +590,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		constraint: DD_constraint, //s.t. cursor won't be overlapped with ghosting
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
-	};
+	},
 
-var Widget =
+	Widget =
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -2628,9 +2628,8 @@ function () {
 			if (!zk.Desktop._ndt) zk.stateless();
 		}
 
-		var cfi = skipper ? null : _bkFocus(this);
-
-		var p = this.parent;
+		var cfi = skipper ? null : _bkFocus(this),
+			p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper, _trim_);
 		else {
 			var oldwgt = this.getOldWidget_(n);
@@ -5474,8 +5473,8 @@ zk.Native = zk.$extends(zk.Widget, {
 }, {
 	$redraw: _zkf,
 	replaceScriptContent: (function () {
-		var Script_RE = new RegExp(/<script[^>]*>([\s\S]*?)<\/script>/g);
-		var Replace_RE = new RegExp(/<\/(?=script>)/ig);
+		var Script_RE = new RegExp(/<script[^>]*>([\s\S]*?)<\/script>/g),
+			Replace_RE = new RegExp(/<\/(?=script>)/ig);
 		return function (str) {
 			try {
 				var result = str.match(Script_RE);
@@ -5487,8 +5486,8 @@ zk.Native = zk.$extends(zk.Widget, {
 						
 						// enclose with <script></script>
 						if (substr.length >= 17) {
-							var cnt = substr.substring(8, substr.length - 9);
-							var cnt2 = zk.Native.replaceScriptContent(cnt);
+							var cnt = substr.substring(8, substr.length - 9),
+								cnt2 = zk.Native.replaceScriptContent(cnt);
 							if (cnt != cnt2)
 								str = str.replace(cnt, cnt2);
 						}
@@ -5813,9 +5812,9 @@ zk.NoDOM = {
 				startDesc = desc + ' start',
 				endDesc = desc + ' end';
 			if (node) {
-				var start = document.createComment(startDesc);
-				var end = document.createComment(endDesc);
-				var parentNode = node.parentNode;
+				var start = document.createComment(startDesc),
+					end = document.createComment(endDesc),
+					parentNode = node.parentNode;
 				parentNode.insertBefore(start, node);
 				var endNode = node,
 					lastChild = this.lastChild;
@@ -5833,8 +5832,8 @@ zk.NoDOM = {
 				parentNode.insertBefore(end, endNode.nextSibling);
 				this._startNode = start;
 				this._endNode = end;
-				var id = '_z_nodomfs0';
-				var f = jq('#' + id);
+				var id = '_z_nodomfs0',
+					f = jq('#' + id);
 				if (f.length == 0) {
 					var fd = document.createElement('div');
 					fd.id = id;
@@ -5850,9 +5849,9 @@ zk.NoDOM = {
 
 	removeHTML_: function (n) {
 		if (this.getMold() == 'nodom') {
-			var context = this.$getInterceptorContext$();
-			//clear the dom between start node and end node
-			var node = this._startNode ? this._startNode.nextSibling : null,
+			var context = this.$getInterceptorContext$(),
+				//clear the dom between start node and end node
+				node = this._startNode ? this._startNode.nextSibling : null,
 				next;
 			while (node && node != this._endNode) {
 				next = node.nextSibling;
@@ -5974,8 +5973,8 @@ zk.NoDOM = {
 	},
 	$n: function (subId) {
 		if (!subId && this.getMold() == 'nodom') {
-			var context = this.$getInterceptorContext$();
-			var n = this._node;
+			var context = this.$getInterceptorContext$(),
+				n = this._node;
 			if (!n && this.desktop && !this._nodeSolved) {
 				this._node = n = jq(this.uuid + '-fake', zk)[0];
 				this._nodeSolved = true;

@@ -149,10 +149,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 * @param String cst
 	 */
 	parseConstraint_: function (cst) {
-		var f = this._flags;
-		var arr = this._cstArr;
-
-		var bsCst = _baseConstraints[cst];
+		var f = this._flags,
+			arr = this._cstArr,
+			bsCst = _baseConstraints[cst];
 		if (cst && bsCst) {
 			if (cst == 'server') this.serverValidate = true;
 			f[bsCst] = true;

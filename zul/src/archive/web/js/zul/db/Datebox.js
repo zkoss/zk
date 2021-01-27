@@ -630,7 +630,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		return o.join(':');
 	}
 });
-
+// eslint-disable-next-line one-var
 var CalendarPop =
 zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	$init: function () {
@@ -833,8 +833,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers(CalendarPop, 'unbind_', arguments);
 	},
 	_bindTimezoneEvt: function () {
-		var db = this.parent;
-		var select = db.$n('dtzones');
+		var db = this.parent,
+			select = db.$n('dtzones');
 		if (select) {
 			select.disabled = db.isTimeZonesReadonly() ? 'disable' : '';
 			db.domListen_(select, 'onChange', '_doTimeZoneChange');

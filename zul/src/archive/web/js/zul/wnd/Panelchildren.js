@@ -36,8 +36,8 @@ zul.wnd.Panelchildren = zk.$extends(zul.ContainerWidget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass();
-			var added = !this.parent.getTitle() && !this.parent.caption ?
+			var zcls = this.getZclass(),
+				added = !this.parent.getTitle() && !this.parent.caption ?
 				zcls + '-noheader' : '';
 			if (added) scls += (scls ? ' ' : '') + added;
 			added = this.parent._bordered() ? '' : zcls + '-noborder';

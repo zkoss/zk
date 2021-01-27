@@ -377,9 +377,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 			var update;
 			while (update = updateBatch.shift()) {
-				var n = update.node;
-				var cellWidth = update.width;
-				var i = update.index;
+				var n = update.node,
+					cellWidth = update.width,
+					i = update.index;
 
 				if ((faker = jq('#' + n.id + '-hdfaker')[0]))
 					faker.style.width = cellWidth;

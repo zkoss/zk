@@ -189,8 +189,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		if (jq.isOverlapped(
 		elofs, [el.offsetWidth, el.offsetHeight],
 		nodeofs, [node.offsetWidth, node.offsetHeight])) {
-			var parent = this.parent.$n(), y;
-			var ptofs = zk(parent).cmOffset(),
+			var parent = this.parent.$n(), y,
+				ptofs = zk(parent).cmOffset(),
 				pthgh = parent.offsetHeight,
 				ptbtm = ptofs[1] + pthgh;
 			y = elofs[1] + el.offsetHeight <= ptbtm ? ptbtm : ptofs[1] - node.offsetHeight;

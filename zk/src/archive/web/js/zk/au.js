@@ -1336,13 +1336,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			dpr = window.devicePixelRatio;
 
 		var clientInfo = [new Date().getTimezoneOffset(),
-			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
-			zk.mm.tz.guess()
-		];
+				screen.width, screen.height, screen.colorDepth,
+				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
+				zk.mm.tz.guess()],
+			oldClientInfo = zAu._clientInfo;
 
 		// ZK-3181: only send when value changed
-		var oldClientInfo = zAu._clientInfo;
 		if (oldClientInfo) {
 			var same = oldClientInfo.every(function (el, index) {
 				return el === clientInfo[index];
@@ -1742,8 +1741,8 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param String... codes the JavaScript code snippet to generate new widget(s).
 	 */
 	addAft: function (wgt) {
-		var p = wgt.parent;
-		var fn = function (child) {
+		var p = wgt.parent,
+			fn = function (child) {
 				var act = _beforeAction(child, 'show');
 				if (p) {
 					p.insertBefore(child, wgt.nextSibling);
@@ -1774,12 +1773,12 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param String... codes the JavaScript code snippet to generate new widget(s).
 	 */
 	addBfr: function (wgt) {
-		var p = wgt.parent;
-		var fn = function (child) {
-			var act = _beforeAction(child, 'show');
-			p.insertBefore(child, wgt);
-			_afterAction(child, act);
-		};
+		var p = wgt.parent,
+			fn = function (child) {
+				var act = _beforeAction(child, 'show');
+				p.insertBefore(child, wgt);
+				_afterAction(child, act);
+			};
 		for (var args = arguments, j = 1; j < args.length; ++j)
 			zkx_(args[j], fn);
 

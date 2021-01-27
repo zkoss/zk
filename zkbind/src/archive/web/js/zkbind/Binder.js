@@ -147,16 +147,16 @@ zkbind.Binder = zk.$extends(zk.Object, {
 				}
 			}
 			this._cookies = cookies;
-			var binder = this;
-			var mqls = [];
+			var binder = this,
+				mqls = [];
 			for (var i = 0; i < widget['$ZKMATCHMEDIA$'].length; i++) {
-				var media = widget['$ZKMATCHMEDIA$'][i];
-				var mql = window.matchMedia(media.substring(16));
-				var handler = (function (s) {
-					return function (event) {
-						_matchMedia(event, binder, s);
-					};
-				})(media);
+				var media = widget['$ZKMATCHMEDIA$'][i],
+					mql = window.matchMedia(media.substring(16)),
+					handler = (function (s) {
+						return function (event) {
+							_matchMedia(event, binder, s);
+						};
+					})(media);
 				mql.addListener(handler);
 				handler(mql);
 				mqls.push({mql: mql, handler: handler});

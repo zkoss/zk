@@ -14,16 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _iconMap = {
-		'warning': 'z-icon-exclamation-circle',
-		'info': 'z-icon-info-circle',
-		'error': 'z-icon-times-circle'
-	};
-	var _dirMap = {
-		'u': 'up',
-		'd': 'down',
-		'l': 'left',
-		'r': 'right'
-	};
+			'warning': 'z-icon-exclamation-circle',
+			'info': 'z-icon-info-circle',
+			'error': 'z-icon-times-circle'
+		},
+		_dirMap = {
+			'u': 'up',
+			'd': 'down',
+			'l': 'left',
+			'r': 'right'
+		};
 /**
  * A notification widget.
  * @since 6.0.1

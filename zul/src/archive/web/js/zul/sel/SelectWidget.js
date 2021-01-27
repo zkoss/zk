@@ -1002,8 +1002,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (it[j].isSelected())
 				data.push(it[j]);
 
-		var edata, keep = true;
-		var checkSelectAll = false;
+		var edata, keep = true,
+			checkSelectAll = false;
 		if (this._multiple && this._headercm) {
 			checkSelectAll = jq(this._headercm).hasClass(zk.Widget.$(this._headercm).$s('checked'));
 		}
