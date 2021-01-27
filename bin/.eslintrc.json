@@ -106,7 +106,7 @@
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "dot-location": ["error", "property"],
     //"operator-linebreak": ["error", "after", { "overrides": {"+": "before", "-": "before", "*": "before", "/": "before", ".": "before"} }],
-    //"semi-spacing": "error", // for (xxx;;) will fail
+    "semi-spacing": "error",
     "space-unary-ops": "error",
     "key-spacing": "error",
     "func-call-spacing": "error",

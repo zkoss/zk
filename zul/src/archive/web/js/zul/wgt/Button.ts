@@ -366,7 +366,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 			for (var j = ads.length; j--;) {
 				var ad = ads[j].trim();
 				if (ad) {
-					var perm = ad.charAt(0) == '+' ;
+					var perm = ad.charAt(0) == '+';
 					if (perm)
 						ad = ad.substring(1);
 					ad = 'self' == ad ? wgt : wgt.$f(ad);

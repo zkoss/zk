@@ -146,7 +146,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	// ZK-2133: should sync all items
 	setChgSel: function (val) { //called from the server
 		var sels = {};
-		for (var j = 0;;) {
+		for (var j = 0; ;) {
 			var k = val.indexOf(',', j),
 			s = (k >= 0 ? val.substring(j, k) : val.substring(j)).trim();
 			if (s) sels[s] = true;

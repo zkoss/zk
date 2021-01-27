@@ -542,7 +542,7 @@ try {
 	 * @see #load
 	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
-		for (var j = 0, ref = window;;) {
+		for (var j = 0, ref = window; ;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k) : name.substring(j);
 			var nxt = ref[nm], newpkg;
@@ -602,7 +602,7 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 				if (fn) fn(last);
 				return last;
 			}
-			for (var j = 0, ref = window;;) {
+			for (var j = 0, ref = window; ;) {
 				var k = name.indexOf('.', j),
 					nm = k >= 0 ? name.substring(j, k) : name.substring(j);
 				var nxt = ref[nm];
@@ -1628,7 +1628,7 @@ zk.Buffer = Array;
 	zk.Buffer.prototype = new Array;
 	zk.copy(zk.Buffer.prototype, {
 		push: function () {
-			for (var i = 0, j = arguments.length; i < j;i++)
+			for (var i = 0, j = arguments.length; i < j; i++)
 				if (arguments[i] != null || arguments[i] != undefined)
 					this.out += arguments[i];
 		},

@@ -202,7 +202,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	setChgSel: function (val) { //called from the server
 		var sels = {};
-		for (var j = 0;;) {
+		for (var j = 0; ;) {
 			var k = val.indexOf(',', j),
 				s = (k >= 0 ? val.substring(j, k) : val.substring(j)).trim();
 			if (s) sels[s] = true;
@@ -406,7 +406,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	clearSelection: function () {
 		if (this._selItems.length) {
-			for (var item;(item = this._selItems.pop());)
+			for (var item; (item = this._selItems.pop());)
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 			this._updHeaderCM();

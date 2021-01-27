@@ -2181,7 +2181,7 @@ wgt.$f().main.setTitle("foo");
 				//parent first
 				var inf = {widget: this, node: opts && opts.node ? opts.node : this.$n()},
 					bindLevel = this.bindLevel;
-				for (var j = _floatings.length;;) {
+				for (var j = _floatings.length; ;) {
 					if (--j < 0) {
 						_floatings.unshift(inf);
 						break;
@@ -2828,7 +2828,7 @@ function () {
 			before = before.getFirstNode_();
 		}
 		if (!before)
-			for (var w = this;;) {
+			for (var w = this; ;) {
 				ben = w.getCaveNode();
 				if (ben) break;
 
@@ -3951,7 +3951,7 @@ wgt.listen({
 			var lsns = this._lsns[evt];
 			if (!lsns) this._lsns[evt] = [inf];
 			else
-				for (var j = lsns.length;;)
+				for (var j = lsns.length; ;)
 					if (--j < 0 || lsns[j].priority >= priority) {
 						lsns.splice(j + 1, 0, inf);
 						break;
@@ -4672,7 +4672,7 @@ _doFooSelect: function (evt) {
 		if (p)
 			return this.isRealVisible({dom: true, strict: strict, until: p, cache: cache});
 
-		for (wgt = this;;) {
+		for (wgt = this; ;) {
 			if (!wgt.$instanceof(zk.Native)) //if native, $n() might be null or wrong (if two with same ID)
 				break;
 

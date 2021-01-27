@@ -484,7 +484,7 @@ zWatch.listen({
 			if (wts) {
 				var bindLevel = o.bindLevel;
 				if (bindLevel != null) {
-					for (var j = wts.length;;) {
+					for (var j = wts.length; ;) {
 						if (--j < 0) {
 							wts.unshift(xinf);
 							break;
@@ -500,7 +500,7 @@ zWatch.listen({
 						}
 					}
 				} else
-					for (var j = wts.length;;) {
+					for (var j = wts.length; ;) {
 						if (--j < 0) {
 							wts.push(xinf);
 							break;

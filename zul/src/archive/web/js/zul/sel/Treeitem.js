@@ -252,7 +252,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 */
 	getLevel: function () {
 		var level = 0;
-		for (var item = this;; ++level) {
+		for (var item = this; ; ++level) {
 			if (!item.parent)
 				break;
 

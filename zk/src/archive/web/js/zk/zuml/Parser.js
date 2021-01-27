@@ -142,7 +142,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	}
 	function _eval(wgt, s, args) {
 		if (s)
-			for (var j = 0, k, l, t, last = s.length - 1, s2;;) {
+			for (var j = 0, k, l, t, last = s.length - 1, s2; ;) {
 				k = s.indexOf('#{', j);
 				if (k < 0) {
 					k = s.indexOf('${', j); //backward compatible

@@ -572,7 +572,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return null;
 
 		var list = [];
-		for (var j = 0;;) {
+		for (var j = 0; ;) {
 			var k = text.indexOf(',', j),
 				s = (k >= 0 ? text.substring(j, k) : text.substring(j)).trim();
 			if (s.length == 0) {
