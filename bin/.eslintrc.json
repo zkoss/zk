@@ -89,6 +89,7 @@
     "no-fallthrough": "error",
     "no-global-assign": "error",
     "no-octal": "error",
+    "no-self-assign": "error",
     "no-unused-labels": "error",
     "no-useless-catch": "error",
     "no-with": "error",

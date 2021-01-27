@@ -588,7 +588,6 @@ zul.WScroll = zk.$extends(zk.Object, {
 		this._syncButtonStatus();
 	},
 	_mousewheelY: function (evt, delta, deltaX, deltaY) {
-		deltaY = deltaY;
 		if (deltaY) {
 			evt.stop();
 			var opts = this.opts,
@@ -623,7 +622,6 @@ zul.WScroll = zk.$extends(zk.Object, {
 		}
 	},
 	_mousewheelX: function (evt, delta, deltaX, deltaY) {
-		deltaX = deltaX;
 		if (deltaX) {
 			evt.stop();
 			var opts = this.opts,
