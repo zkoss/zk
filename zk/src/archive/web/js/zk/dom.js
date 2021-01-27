@@ -2364,7 +2364,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	confirm: function (msg) {
 		zk.alerting = true;
 		try {
-			return confirm(msg);
+			return confirm(msg); // eslint-disable-line no-alert
 		} finally {
 			try {
 				zk.alerting = false;
@@ -2440,7 +2440,7 @@ You can add your own labels by puttingit to <code>msgzul</code>.
 	alert: function (msg) {
 		zk.alerting = true;
 		try {
-			alert(msg);
+			alert(msg); // eslint-disable-line no-alert
 		} finally {
 			try {
 				zk.alerting = false;

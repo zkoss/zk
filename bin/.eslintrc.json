@@ -83,6 +83,7 @@
     "use-isnan": "error",
     "valid-typeof": "error",
 
+    "no-alert": "error",
     "no-case-declarations": "error",
     "no-empty-pattern": "error",
     "no-global-assign": "error",
