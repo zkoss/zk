@@ -16,9 +16,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 //zk.$package('zul.wgt');
 (() => {
-
-let _zkf: () => void;
-
 /**
  * The same as HTML A tag.
  * <p>Default {@link #getZclass}: z-a.
@@ -72,7 +69,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 		/** Sets the direction.
 		 * @param String dir either "normal" or "reverse".
 		 */
-		dir: _zkf = function (this: zk.Widget) {
+		dir: function (this: zk.Widget) {
 			var n = this.$n();
 			if (n) n.innerHTML = this.domContent_();
 		},

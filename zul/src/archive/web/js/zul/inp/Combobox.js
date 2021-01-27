@@ -70,8 +70,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 */
 		repos: function () {
 			if (this.desktop) {
-				var n = this.getInputNode();
-
 				this._typeahead(this._bDel);
 				this._bDel = null;
 
@@ -282,8 +280,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// ZK-2200: the empty combo item should work
 		if (val || this._sel) {
 			val = val.toLowerCase();
-			var beg = this._sel,
-				last = this._next(null, bUp);
+			var beg = this._sel;
 			if (!beg || beg.parent != this) {
 				beg = this._next(null, !bUp);
 			}

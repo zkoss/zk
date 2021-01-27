@@ -359,7 +359,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				u = tabbox.$n('up'),
 				d = tabbox.$n('down'),
 				cave = this.$n('cave'),
-				child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
 
 			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1

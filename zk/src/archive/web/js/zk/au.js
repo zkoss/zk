@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	var _perrURIs = {}, //server-push error URI
 		_onErrs = [], //onError functions
 		cmdsQue = [], //response commands in XML
-		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
+		sendPending, responseId,
 		doCmdFns = [],
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
@@ -1249,7 +1249,6 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var idx;
 			if (url && !url.startsWith('/') && (idx = url.indexOf('#')) >= 0) {
 				var uri = url.substring(0, idx),
-					hash = url.substring(idx + 1),
 					locHash = window.location.hash,
 					locUrl = window.location.href;
 				if (locHash) {

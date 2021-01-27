@@ -182,8 +182,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			zUtl.fireSized(this.parent);
 	},
 	_calcHgh: function () {
-		var n = this.$n(),
-			tabbox = this.getTabbox();
+		var tabbox = this.getTabbox();
 
 		if (!tabbox.isVertical()) {
 			var r = tabbox.$n('right'),

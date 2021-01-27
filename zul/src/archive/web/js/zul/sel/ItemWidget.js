@@ -148,7 +148,6 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass();
 			if (this.isDisabled())
 				scls += (scls ? ' ' : '') + this.$s('disabled');
 			//Bug ZK-1998: only apply selected style if groupSelect is true

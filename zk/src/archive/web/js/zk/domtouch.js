@@ -168,7 +168,6 @@ zk.override(zk.Widget.prototype, _xWidget, {
 	_dblTapStart: function (evt) {
 		var tevt = evt.originalEvent;
 		if (tevt.touches.length > 1) return;
-		var	changedTouch = tevt.changedTouches[0];
 		if (!this._tapValid) {
 			this._startTap(this);
 		} else {

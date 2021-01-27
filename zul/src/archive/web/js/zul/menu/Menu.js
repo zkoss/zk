@@ -529,8 +529,7 @@ zul.menu.ContentHandler = zk.$extends(zk.Object, {
 		}
 	},
 	redraw: function (out) {
-		var wgt = this._wgt,
-				zcls = wgt.getZclass();
+		var wgt = this._wgt;
 
 		out.push('<div id="', wgt.uuid, '-cnt-pp" class="', wgt.$s('content-popup'),
 			'" style=""><div class="', wgt.$s('content-body'), '">', this._content, '</div></div>');

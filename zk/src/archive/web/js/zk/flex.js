@@ -546,7 +546,6 @@ zFlex = { //static methods
 			fccs = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
 			isAllMin = true,
-			fdArr = [],
 			cwgtsz = [],
 			flexItemClass = 'z-flex-item',
 			minFlexInfoList = [];
@@ -619,8 +618,6 @@ zFlex = { //static methods
 			isRow = flexInfo.isFlexRow,
 			fccs = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
-			fdArr = [],
-			cwgtsz = [],
 			noSibFlex = true,
 			flexItemClass = 'z-flex-item';
 

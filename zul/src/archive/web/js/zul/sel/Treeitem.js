@@ -49,42 +49,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (w._visible && w._open) // optimized, need to recurse only if open and visible
 					_showDOM(w, visible);
 	}
-	//Bug ZK-1766
-	function _searchPrevRenderedItem(wgt) {
-		var target;
-		if (wgt) {
-			if (wgt.treerow) {
-				return wgt;
-			}
-			if (wgt.isContainer()) {
-				for (var c = wgt.treechildren.lastChild; c; c = c.previousSibling) {
-					target = _searchPrevRenderedItem(c);
-					if (target)
-						return target;
-				}
-			}
-			target = _searchPrevRenderedItem(wgt.previousSibling);
-		}
-		return target;
-	}
-	//Bug ZK-1766
-	function _searchNextRenderedItem(wgt) {
-		var target;
-		if (wgt) {
-			if (wgt.treerow) {
-				return wgt;
-			}
-			if (wgt.isContainer()) {
-				for (var c = wgt.treechildren.firstChild; c; c = c.nextSibling) {
-					target = _searchNextRenderedItem(c);
-					if (target)
-						return target;
-				}
-			}
-			target = _searchNextRenderedItem(wgt.nextSibling);
-		}
-		return target;
-	}
 
 	function _getTreePath(tree, node) {
 		var p = node,

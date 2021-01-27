@@ -784,7 +784,6 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			year = dateobj.getFullYear(),
 			month = dateobj.getMonth(),
 			day = dateobj.getDate(),
-			parent = this.parent,
 			tz = _getTimeZone(this),
 			nofix;
 		switch (opt) {
@@ -973,9 +972,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			minyear = this._minyear,
 			maxyear = this._maxyear,
 			mincen = zk.parseInt(minyear / 100) * 100,
-			maxcen = zk.parseInt(maxyear / 100) * 100,
-			mindec = zk.parseInt(minyear / 10) * 10,
-			maxdec = zk.parseInt(maxyear / 10) * 10;
+			maxcen = zk.parseInt(maxyear / 100) * 100;
 
 		if (view == 'decade') {
 			var value = ydec * 100;

@@ -144,7 +144,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	initContent: function () {
 		var wgt = this._wgt,
 			parent = this._parent,
-			ref = wgt.$n(), dt = wgt.desktop,
+			ref = wgt.$n(),
 			html = '<span class="z-upload"'
 				 + (this._tooltiptext ? ' title="' + zUtl.encodeXML(this._tooltiptext) + '"' : '') // ZK-751
 				 + '><form enctype="multipart/form-data" method="POST">'
@@ -536,7 +536,6 @@ zul.Uploader = zk.$extends(zk.Object, {
 					this.setSclass('z-fileupload-manager');
 				},
 				onFloatUp: function (ctl) {
-					var wgt = ctl.origin;
 					if (!this.isVisible())
 						return;
 					this.setTopmost();

@@ -54,10 +54,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doFocus_', arguments);
 
 		//sync frozen
-		var box, frozen, tbody, td, tds, node;
+		var box, node;
 		if ((box = this.getMeshWidget()) && box.efrozen
-			&& (frozen = zk.Widget.$(box.efrozen.firstChild)
-			&& (node = this.$n()))) {
+			&& zk.Widget.$(box.efrozen.firstChild)
+			&& (node = this.$n())) {
 			box._moveToHidingFocusCell(node.cellIndex);
 		}
 	},
@@ -573,7 +573,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 
 	redraw: function (out) {
 		var uuid = this.uuid,
-			zcls = this.getZclass(),
 			label = this.domContent_();
 		out.push('<th', this.domAttrs_({width: true}), ' role="columnheader"><div id="',
 			uuid, '-cave" class="', this.$s('content'), '"',

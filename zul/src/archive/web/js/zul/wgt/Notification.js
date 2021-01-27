@@ -54,7 +54,6 @@ zul.wgt.Notification = zk.$extends(zul.wgt.Popup, {
 	},
 	domClass_: function (no) {
 		var type = this._type,
-			ref = this._ref,
 			s = this.$supers(zul.wgt.Notification, 'domClass_', arguments);
 		if (type)
 			s += ' ' + this.$s(zUtl.encodeXML(type));

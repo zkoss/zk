@@ -193,7 +193,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			center.h = height = parent.offsetHeight;
 		}
 
-		for (var region, ambit, margin,	j = 0; j < k; ++j) {
+		for (var region, ambit, j = 0; j < k; ++j) {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()) {
 				ambit = region._ambit();
@@ -228,7 +228,6 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			wgt.$n('split').style.display = 'none';
 			var colled = wgt.$n('colled');
 			if (colled) {
-				var $colled = zk(colled);
 				zk.copy(colled.style, {
 					left: jq.px(ambit.x),
 					top: jq.px(ambit.y),

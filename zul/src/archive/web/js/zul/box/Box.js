@@ -812,7 +812,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	//watch//
 	onSize: _zkf = function () {
 		if (!this._splitterKid) return; //only when there are splitter kids
-		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
+		var vert = this.isVertical(), real = this.$n('real');
 		real.style.height = real.style.width = '100%'; //there are splitter kids
 
 		//Note: we have to assign width/height first

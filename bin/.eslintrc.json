@@ -97,6 +97,7 @@
     "no-delete-var": "error",
     "no-shadow-restricted-names": "error",
     "no-undef": ["error", { "typeof": false }],
+    "no-unused-vars": ["error", { "vars": "local", "args": "none" }],
     "no-eval": "error",
     "no-implied-eval": "error",
     "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],

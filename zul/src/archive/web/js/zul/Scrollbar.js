@@ -727,7 +727,6 @@ zul.Scrollbar = zk.$extends(zk.Object, {
 					self._syncEmbedBarPosition(orient, barPos);
 					frozen._doScroll(barPos / step);
 				} else {
-					var bpos;
 					//horizontal scroll
 					if (isHor) //left: -step, right: step
 						pos += (target == left ? -step : step);

@@ -379,7 +379,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				jq(btns[j]).off('click');
 		} else {
 			var input = jq.$$(uuid, 'real'),
-				Paging = this.$class,
 				postfix = ['first', 'prev', 'last', 'next'];
 
 			for (var i = input.length; i--;)
@@ -398,8 +397,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_domKeyDown: function (evt) {
 		var inp = evt.target,
-			wgt = this,
-			lastPos = zk(inp).getSelectionRange();
+			wgt = this;
 		if (inp.disabled || inp.readOnly)
 			return;
 

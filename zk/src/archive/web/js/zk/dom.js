@@ -24,17 +24,12 @@ zjq = function (jq) { //ZK extension
 			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
 			'direction', 'word-spacing', 'white-space'],
 		_txtFontStyles = ['font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'],
-		_txtStylesCamel, _txtSizDiv, //inited in textSize
 		_txtStyles2 = ['color', 'background-color', 'background'],
 		_zsyncs = [],
 		_pendzsync = 0,
 		_vpId = 0, //id for virtual parent's reference node
 		_sbwDiv; //scrollbarWidth
 
-	function _elmOfWgt(id, ctx) {
-		var w = ctx && ctx !== zk ? zk.Widget.$(ctx) : null, w2;
-		return (w2 = w || zk.Desktop.sync()) && (w2 = w2.$f(id, !w)) ? w2.$n() : null;
-	}
 	function _ofsParent(el) {
 		if (el.offsetParent) return el.offsetParent;
 		if (el == document.body) return el;

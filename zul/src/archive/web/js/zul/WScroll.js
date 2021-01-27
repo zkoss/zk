@@ -15,12 +15,10 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		return -c * ((t = t / d - 1) * t * t * t - 1) + b; // easeOutQuart
 	}
 	function snap(dg, pointer) {
-		var ctrl = dg.control,
-			x = pointer[0],
+		var x = pointer[0],
 			y = pointer[1];
 		if (dg._isVer) {
-			var move = pointer[1],
-				down = move >= dg._lastPos;
+			var move = y;
 
 			if (move - dg._start < 0) {
 				move = pointer[1] = dg._start;
@@ -35,8 +33,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 
 			dg._lastPos = move;
 		} else {
-			var move = pointer[0],
-				right = move >= dg._lastPos;
+			var move = x;
 
 			if (move - dg._start < 0) {
 				move = pointer[0] = dg._start;
@@ -152,8 +149,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		dg._timer = setTimeout(function () {running((dg._isVer ? 'top' : 'left'));}, 50);
 	}
 	function endeffect(dg, evt) {
-		var ctrl = dg.control,
-			target = evt.domTarget;
+		var ctrl = dg.control;
 		if (dg._timer) {
 			clearTimeout(dg._timer);
 		}

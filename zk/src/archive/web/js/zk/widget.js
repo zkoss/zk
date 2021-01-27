@@ -2524,7 +2524,7 @@ function () {
 	 * @return String
 	 */
 	domAttrs_: function (no) {
-		var out = '', attrs, s;
+		var out = '', s;
 		if (!no) {
 			if ((s = this.uuid))
 				out += ' id="' + s + '"';
@@ -4107,7 +4107,6 @@ wgt.setListeners({
 		}
 
 		var bklsns = this._bklsns,
-			oldfn = bklsns[evt],
 			inf = {};
 		if (fn) {
 			inf[evt] = bklsns[evt]
@@ -5968,7 +5967,6 @@ zk.NoDOM = {
 	},
 	replaceWidget: function (newwgt) {
 		if (this.getMold() == 'nodom') {
-			var context = this.$getInterceptorContext$();
 			newwgt._startNode = this._startNode;
 			newwgt._endNode = this._endNode;
 			newwgt._oldWgt = this;

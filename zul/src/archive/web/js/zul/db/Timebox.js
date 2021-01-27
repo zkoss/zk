@@ -191,7 +191,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// We cannot use this._value in this case, which won't trigger onChange
 		// event. Using clone date instead.
 		var date = this._value ? Dates.newInstance(this._value) : zUtl.today(this._format, tz),
-			hasAM, isAM, hasHour1,
+			hasAM, isAM,
 			fmt = [], fmtObeyCount = [], emptyCount = 0;
 		date.setSeconds(0);
 		date.setMilliseconds(0);
@@ -498,8 +498,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
-		var n = this.$n(),
-			inp = this.getInputNode(),
+		var inp = this.getInputNode(),
 			selrng = zk(inp).getSelectionRange();
 
 		if (!inp.value)

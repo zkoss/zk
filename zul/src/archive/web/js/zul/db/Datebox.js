@@ -348,7 +348,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			hasAM = aa > -1,
 			//bug 3284144: The databox format parse a wrong result with hh:mm:ss
 			hasHour1 = (hasAM || hh) ? hh > -1 || KK > -1 : false,
-			hv,
 			mv = mm > -1 ? 'mm' : '',
 			sv = ss > -1 ? 'ss' : '';
 
@@ -500,7 +499,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	bind_: function () {
 		this.$supers(Datebox, 'bind_', arguments);
-		var btn, inp = this.getInputNode();
+		var btn;
 
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
@@ -764,7 +763,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			db = this.parent,
 			fmt = db.getTimeFormat(),
 			oldDate = db.getValue(),
-			readonly = db.isReadonly(),
 			tz = db.getTimeZone(),
 			cal = new zk.fmt.Calendar();
 
@@ -930,7 +928,6 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 	onChanging: function (evt) {
 		var db = this.parent,
 			oldDate = db.getValue() || db._pop.getValue(),
-			cal = new zk.fmt.Calendar(),
 			// ZK-2382 we must do the conversion with date and time in the same time
 			// otherwise the result may be affcted by DST adjustment
 			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value, //onChanging's data is string

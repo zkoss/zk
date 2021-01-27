@@ -88,7 +88,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this._fakeParent = zk.$(ref);
 		var posInfo = this._posInfo(ref, offset, position),
 			node = this.$n(),
-			top = node.style.top,
 			$n = jq(node);
 
 		// the top is depend on children's height, if child will re-size after onSize/onShow,
@@ -343,8 +342,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this._keepVisible = false;
 		if (!this.isVisible())
 			return;
-		var openInfo = this._openInfo,
-			length = ctl.args.length;
+		var openInfo = this._openInfo;
 
 		// F70-ZK-2007: If popup belongs to widget's ascendant then return.
 		if (this._shallToggle && openInfo && opts && (

@@ -151,8 +151,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			n.name = this.getName();
 	},
 	beforeParentChanged_: function (newParent) {
-		var oldParent = this.parentNode,
-			oldGroup = this.getRadiogroup(),
+		var oldGroup = this.getRadiogroup(),
 			newGroup = newParent ? this.getRadiogroup(newParent) : null;
 		if (oldGroup != newGroup || !newParent) {
 			if (oldGroup && oldGroup.$instanceof(zul.wgt.Radiogroup)) {

@@ -112,7 +112,6 @@ zul.box.Layout = zk.$extends(zk.Widget, {
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		jq(child.uuid + '-chdex', zk).remove();
-		var rmsp = this.lastChild == child;
 		if (this._spacing != 'auto' && this.lastChild == child)
 			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	},

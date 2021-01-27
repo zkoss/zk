@@ -42,8 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return k ? '1' + val : val;
 	}
 	function compareHalf(valStr, ri) {
-		var ch,
-			result,
+		var result,
 			base = '5';
 		for (var j = ri, len = valStr.length; j < len; ++j) {
 			result = valStr.charAt(j) - base;

@@ -253,7 +253,7 @@ zWatch = (function () {
 				this.fns = fns;
 			},
 			fire: function (ref) {
-				var infs, inf, xinf,
+				var infs, xinf,
 					name = this.name,
 					xinfs = this.xinfs,
 					args = this.args,

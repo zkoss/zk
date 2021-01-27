@@ -45,7 +45,6 @@ zk.bmk = (function () { //used internally
 	}
 	function _bookmark(nm, replace) {
 		if (_curbk != nm) {
-			var oldnm = _curbk;
 			_curbk = nm; //to avoid loop back the server
 
 			if (replace)

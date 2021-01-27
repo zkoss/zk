@@ -22,6 +22,7 @@ zk.copy(zjq, {
 			top = el.scrollTop,
 			lft = el.scrollLeft;
 		el.style.display = 'none'; //force redraw
+		// eslint-disable-next-line no-unused-vars
 		var dummy = el.offsetWidth; //force recalc
 		el.style.display = old;
 		el.scrollTop = top;

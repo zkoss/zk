@@ -172,8 +172,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixButtonPos: function (node) {
-		var zcls = this.getZclass(),
-			body = this.$n('body'),
+		var body = this.$n('body'),
 			left = this.$n('left'),
 			right = this.$n('right'),
 			css = this._scrolling ? 'addClass' : 'removeClass';

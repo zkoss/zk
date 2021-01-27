@@ -1049,7 +1049,7 @@ zk.set(dst, src, ["foo", "mike"]);
 		if (typeof name == 'string') {
 			zk._set(o, name, value, extra);
 		} else //o: dst, name: src, value: props
-			for (var j = 0, len = value.length, m, n, v; j < len;) {
+			for (var j = 0, len = value.length, m, n; j < len;) {
 				n = value[j++];
 				m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)];
 				if (!extra || m || name[n] !== undefined) //extra: ignoreUndefined in this case

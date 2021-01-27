@@ -261,7 +261,6 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			// B85-ZK-3516: remove width of parent node
 			pn.style.width = '';
 
-			var bfcolps = 'before' == this.getCollapse();
 			if (this.isVertical()) {
 				node.style.width = '100%'; // Sandbox-Splitter: the width should be same as parent
 				this.setBtnPos_(true);
@@ -330,23 +329,19 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	_endDrag: function (draggable) {
 		var wgt = draggable.control,
 			vert = wgt.isVertical(),
-			node = wgt.$n(),
 			Splitter = zul.box.Splitter,
 			flInfo = Splitter._fixLayout(wgt),
 			bfcolps = 'before' == wgt.getCollapse(),
-			run = draggable.run, diff, fd, w,
-			fdArr = ['width', 'height'];
+			run = draggable.run, diff;
 
 		if (vert) {
 			diff = run.z_point[1];
-			fd = fdArr[1];
 
 			//We adjust height of TD if vert
 			if (run.next && run.next.cells.length) run.next = run.next.cells[0];
 			if (run.prev && run.prev.cells.length) run.prev = run.prev.cells[0];
 		} else {
 			diff = run.z_point[0];
-			fd = fdArr[0];
 		}
 		//B70-ZK-2514: make runNext always the same block with the dragging direction, ex. drag to up, up is runNext
 		var runNext = run.next, runPrev = run.prev, runNextWgt = run.nextwgt, runPrevWgt = run.prevwgt;
