@@ -117,6 +117,7 @@
     "keyword-spacing": "error",
     "space-before-blocks": "error",
     "comma-spacing": "error",
+    "comma-style": "error",
     "quotes": ["error", "single", { "avoidEscape": true }],
     "unicode-bom": "error",
 

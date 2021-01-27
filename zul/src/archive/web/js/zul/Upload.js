@@ -568,8 +568,8 @@ zul.Uploader = zk.$extends(zk.Object, {
 								children: [new zul.wgt.Progressmeter({
 									id: id,
 									sclass: 'z-fileupload-progress'
-								})
-								, new zul.wgt.Div({
+								}),
+								new zul.wgt.Div({
 									sclass: 'z-fileupload-remove z-icon-times',
 									listeners: {
 										onClick: function () {
