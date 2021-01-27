@@ -492,7 +492,7 @@ zAu = {
 		if (navigator.sendBeacon && window.URLSearchParams) {
 			var params = new URLSearchParams(data);
 			for (var key in headers) {
-				if (headers.hasOwnProperty(key))
+				if (Object.prototype.hasOwnProperty.call(headers, key))
 					params.append(key, headers[key]);
 			}
 			navigator.sendBeacon(url, zk.chrome // https://crbug.com/747787
@@ -513,7 +513,7 @@ zAu = {
 			data: data,
 			beforeSend: function (xhr) {
 				for (var key in headers) {
-					if (headers.hasOwnProperty(key))
+					if (Object.prototype.hasOwnProperty.call(headers, key))
 						xhr.setRequestHeader(key, headers[key]);
 				}
 			},
