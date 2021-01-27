@@ -1111,7 +1111,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			wgt._hideShadow();
 			dg.z_dir = v;
 			dg.z_box = {
-				top: offs[1], left: offs[0] ,height: el.offsetHeight,
+				top: offs[1], left: offs[0], height: el.offsetHeight,
 				width: el.offsetWidth, minHeight: zk.parseInt(wgt.getMinheight()),
 				minWidth: zk.parseInt(wgt.getMinwidth())
 			};

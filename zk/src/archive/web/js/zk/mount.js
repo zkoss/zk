@@ -22,7 +22,7 @@ function zkpi(nm, wv) {
 //ZK JSP: page creation (backward compatible)
 function zkpb(pguid, dtid, contextURI, updateURI, resourceURI, reqURI, props) {
 	zkx([0, pguid,
-		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, rsu: resourceURI, ru: reqURI}),{},[]]);
+		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, rsu: resourceURI, ru: reqURI}), {}, []]);
 }
 //ZK JSP (useless; backward compatible)
 window.zkpe = zk.$void;
@@ -495,7 +495,7 @@ function zkamn(pkg, fn) {
 			zk.error('Failed to mount: ' + (e.message || e));
 			setTimeout(function () {
 				throw e;
-			},0);
+			}, 0);
 		}
 	},
 	//widget creation called by au.js
@@ -670,7 +670,7 @@ jq(function () {
 		if (!wgt.afterKeyDown_)
 			return; //handled
 		wevt.target = wgt; //mimic as keydown directly sent to wgt
-		return wgt.afterKeyDown_(wevt,true);
+		return wgt.afterKeyDown_(wevt, true);
 	}
 
 	var lastTimestamp, lastTarget;

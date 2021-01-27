@@ -698,7 +698,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 */
 	beforeCtrlKeys_: function (evt) {
 	}
-},{
+}, {
 	/** Returns the tooltip that is opened, or null if no tooltip is opened.
 	 * @return zk.Widget
 	 * @since 5.0.5

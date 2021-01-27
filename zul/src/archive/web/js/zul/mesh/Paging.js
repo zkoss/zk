@@ -302,7 +302,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		if (seld)
 			cls += ' ' + this.$s('selected');
 
-		out.push('<li', navCls,'><a name="', this.uuid ,'-button" class="', cls,
+		out.push('<li', navCls, '><a name="', this.uuid, '-button" class="', cls,
 			'" href="javascript:;" data-paging="', val, '"', seld ? ' aria-current="page"' : '', '>', label, '</a></li>');
 	},
 	domClass_: function () {
@@ -439,7 +439,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			evt.stop();
 			break;
 		case 36://home
-			wgt.$class.go(wgt,0, inp);
+			wgt.$class.go(wgt, 0, inp);
 			evt.stop();
 			break;
 		case 35://end

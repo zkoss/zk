@@ -273,7 +273,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	deferRedrawHTML_: function (out) {
 		var tbx = this.getTabbox(),
 			tag = tbx.inAccordionMold() ? 'div' : 'li';
-		out.push('<', tag, this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></', tag,'>');
+		out.push('<', tag, this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></', tag, '>');
 	},
 	rerender: function (skipper) {
 		// ZK-886

@@ -503,7 +503,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		// F85-ZK-3827: Combobox empty search message
 		if (msg) {
-			out.push('<div id="', uuid,'-emptySearchMessage" class="',
+			out.push('<div id="', uuid, '-emptySearchMessage" class="',
 			this.$s('emptySearchMessage'), ' ', this.$s('emptySearchMessage-hidden'),
 			'">', msg, '</div>');
 		}

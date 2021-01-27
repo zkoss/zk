@@ -628,7 +628,7 @@ onX: function (ctl) {
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
 	*/
 	fireDown: function (name, org, opts) {
-		_fire(name, org, zk.copy(opts,{down: true}), arguments);
+		_fire(name, org, zk.copy(opts, {down: true}), arguments);
 	},
 	onBindLevelMove: function () { //internal
 		_dirty = true;

@@ -222,7 +222,7 @@ zul.db.Renderer = {
 				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'" aria-label="', localizedSymbols.FMON[j], '">',
+			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j, '" aria-label="', localizedSymbols.FMON[j], '">',
 					localizedSymbols.SMON[j], '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
@@ -257,7 +257,7 @@ zul.db.Renderer = {
 				yofs++;
 				continue;
 			}
-			out.push('<td class="', cell, '" data-value="', yofs ,'" id="', uuid, '-y', j, '" >',
+			out.push('<td class="', cell, '" data-value="', yofs, '" id="', uuid, '-y', j, '" >',
 					yofs + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
@@ -299,7 +299,7 @@ zul.db.Renderer = {
 				continue;
 			}
 
-			out.push('<td data-value="', temp ,'" id="', uuid, '-de', j, '" class="',
+			out.push('<td data-value="', temp, '" id="', uuid, '-de', j, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '" >',
 							(temp < minyear ? minyear : temp) + ydelta + '-<br aria-hidden="true" />'
 							+ ((temp + 9 > maxyear ? maxyear : temp + 9) + ydelta) + '</td>');

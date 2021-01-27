@@ -179,10 +179,10 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		}
 
 		// control overflow
-		if (result > Math.pow(2,31) - 1)
-			result = Math.pow(2,31) - 1;
-		else if (result < -Math.pow(2,31))
-			result = -Math.pow(2,31);
+		if (result > Math.pow(2, 31) - 1)
+			result = Math.pow(2, 31) - 1;
+		else if (result < -Math.pow(2, 31))
+			result = -Math.pow(2, 31);
 
 		//over bound shall restore value
 		if (this._max != null && result > this._max) result = value;

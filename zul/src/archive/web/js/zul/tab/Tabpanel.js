@@ -119,7 +119,7 @@ zul.tab.Tabpanel = zk.$extends(zul.ContainerWidget, {
 			panelContentHeight = tabpanelsNode
 				&& (tabpanelsNode.scrollHeight + zk(tabpanelsNode).padBorderHeight());
 
-		return Math.max(node && node.offsetHeight,panelContentHeight); // B50-ZK-298: concern panel height
+		return Math.max(node && node.offsetHeight, panelContentHeight); // B50-ZK-298: concern panel height
 	},
 	_fixPanelHgh: function () {
 		var tabbox = this.getTabbox(),

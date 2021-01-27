@@ -1337,7 +1337,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	getMinimizableIconClass_: function () {
 		return 'z-icon-minus';
 	}
-},{ //static
+}, { //static
 	// drag sizing (also referenced by Panel.js)
 	_startsizing: function (dg) {
 		_hideShadow(dg.control); //ZK-3877: startsizing is the better event to hideShadow
@@ -1412,7 +1412,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (v) {
 			dg.z_dir = v;
 			dg.z_box = {
-				top: offs[1], left: offs[0] ,height: el.offsetHeight,
+				top: offs[1], left: offs[0], height: el.offsetHeight,
 				width: el.offsetWidth, minHeight: zk.parseInt(wgt.getMinheight()),
 				minWidth: zk.parseInt(wgt.getMinwidth())
 			};

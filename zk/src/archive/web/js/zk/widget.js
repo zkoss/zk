@@ -428,7 +428,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function DD_ignoredrag(drag, pt, evt) {
 		//ZK 824:Textbox dragging issue with Listitem
 		//since 5.0.11,6.0.0 introduce evt,drag to the wgt.ignoreDrag_() to provide more information.
-		return drag.control.ignoreDrag_(pt,evt,drag);
+		return drag.control.ignoreDrag_(pt, evt, drag);
 	}
 
 	function _topnode(n) {
@@ -2459,7 +2459,7 @@ redraw: function (out) {
 			out += 'display:none;';
 
 		if ((!no || !no.style) && (s = this.getStyle())) {
-			s = s.replace(REGEX_DQUOT,'\'');  // B50-ZK-647
+			s = s.replace(REGEX_DQUOT, '\'');  // B50-ZK-647
 			out += s;
 			if (s.charAt(s.length - 1) != ';')
 				out += ';';
@@ -5187,7 +5187,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	isRealVisible: function () {
 		return true;
 	}
-},{
+}, {
 	/** Returns the desktop of the specified desktop ID, widget, widget UUID, or DOM element.
 	 * <p>Notice that the desktop's ID and UUID are the same.
 	 * @param Object o a desktop's ID, a widget, a widget's UUID, or a DOM element.
@@ -5385,7 +5385,7 @@ zk.Page = zk.$extends(zk.Widget, {
 			w.redraw(out);
 		out.push('</div>');
 	}
-},{
+}, {
 	$redraw: _zkf,
 	/** An array of contained pages (i.e., a standalone ZK page but included by other technology).
 	 * For example, a ZUL age that is included by a JSP page.
@@ -5448,7 +5448,7 @@ zk.Native = zk.$extends(zk.Widget, {
 					}
 				}
 				if (j < len) {
-					cond = {upper: 1,lower: 1,digit: 1,'-': 1};
+					cond = {upper: 1, lower: 1, digit: 1, '-': 1};
 					while (++j < len)
 						if (!zUtl.isChar(s.charAt(j), cond))
 							break;

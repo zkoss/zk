@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 function _createMouseEvent (type, button, changedTouch, ofs) {
 	if (!ofs)
-		ofs = {sx: 0,sy: 0,cx: 0,cy: 0};
+		ofs = {sx: 0, sy: 0, cx: 0, cy: 0};
 	
 	var simulatedEvent = document.createEvent('MouseEvent');
 	simulatedEvent.initMouseEvent(type, true, true, window, 1,
@@ -56,7 +56,7 @@ function _toMouseEvent(event, changedTouch) {
 				changedTouch.clientY),
 				'mouseup', 0, changedTouch);
 	case 'touchmove':
-		var ele = document.elementFromPoint(changedTouch.clientX,changedTouch.clientY);
+		var ele = document.elementFromPoint(changedTouch.clientX, changedTouch.clientY);
 		return (ele && _createJQEvent(ele, 'mousemove', 0, changedTouch)) || null;
 	case 'pointerdown':
 		return _createJQEvent(event.target, 'mousedown', event.button, event.originalEvent);

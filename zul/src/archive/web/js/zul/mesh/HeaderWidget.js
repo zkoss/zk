@@ -553,7 +553,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
-			width: wd ,
+			width: wd,
 			widths: wds
 		}, evt.data), null, 0);
 

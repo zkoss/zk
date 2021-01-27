@@ -605,7 +605,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD, wgt));
 				break;
 			case 'z':
-				index.push({index: [i, i],format: (function (text) {
+				index.push({index: [i, i], format: (function (text) {
 					return function () {
 						return text;
 					};

@@ -830,7 +830,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
 			this._anchorTop = offs[1];
 			this._anchorLeft = offs[0];
-			this.fire('onAnchorPos',{top: this._anchorTop,left: this._anchorLeft});
+			this.fire('onAnchorPos', {top: this._anchorTop, left: this._anchorLeft});
 		}
 
 		focusElStyle.top = this._anchorTop + 'px';

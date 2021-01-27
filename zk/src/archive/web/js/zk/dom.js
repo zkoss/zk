@@ -438,7 +438,7 @@ zk.override(jq.fn, _jq, /*prototype*/ {
 	init: function (sel, ctx) {
 		if (ctx === zk) {
 			if (typeof sel == 'string'
-			&& zUtl.isChar(sel.charAt(0), {digit: 1,upper: 1,lower: 1,'_': 1})) {
+			&& zUtl.isChar(sel.charAt(0), {digit: 1, upper: 1, lower: 1, '_': 1})) {
 				var el = document.getElementById(sel);
 				if (!el || el.id == sel) {
 					var ret = jq(el || []);
@@ -562,7 +562,7 @@ jq.each(['remove', 'empty', 'show', 'hide'], function (i, nm) {
 		return !this.selector && this[0] === document ? this : _jq[nm].apply(this, arguments);
 	};
 });
-jq.each(['before','after','append','prepend'], function (i, nm) {
+jq.each(['before', 'after', 'append', 'prepend'], function (i, nm) {
 	_jq[nm] = jq.fn[nm];
 	jq.fn[nm] = function (w, desktop) {
 		if (!zk.Widget.isInstance(w))

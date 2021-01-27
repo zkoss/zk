@@ -352,7 +352,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 		}
 		zWatch.unlisten({onResponse: this});
 	}
-},{ //static
+}, { //static
 	/* Disable Targets and re-enable after response
 	 * @param zk.Widget wgt
 	 */

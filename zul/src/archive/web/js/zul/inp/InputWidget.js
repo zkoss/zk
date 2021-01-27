@@ -992,7 +992,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		}
 	}
-},{
+}, {
 	/** The delay for sending the onChanging event (unit: milliseconds).
 	 * The onChanging event will be sent after the specified delay once
 	 * the user pressed a keystroke (and changed the value).

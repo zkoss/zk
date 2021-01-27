@@ -368,7 +368,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				} else {
 					var tabsHgh = allTab.length * allTab[0].offsetHeight, // default height
 						seldPanel = tabbox.getSelectedPanel(),
-						panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0 ,  //B60-ZK-965
+						panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0,  //B60-ZK-965
 					realHgh = Math.max(tabsHgh, panelsHgh);
 					tbx.style.height = jq.px0(realHgh + zk(tbx).padBorderHeight());
 				}

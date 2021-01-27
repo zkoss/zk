@@ -377,7 +377,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			// 3. fire onClick event if target is Menu and clickable
 			if (w && w.$instanceof(zul.menu.Menuitem)) {
 				//{} for emulate as onClick, escape the checking data == null at serverside
-				w.doClick_(new zk.Event(w, 'onClick',{}));
+				w.doClick_(new zk.Event(w, 'onClick', {}));
 				zWatch.fire('onFloatUp', w); //notify all
 				this.close({sendOnOpen: true});
 			} else if (w && w.$instanceof(zul.menu.Menu)) {

@@ -374,7 +374,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		if (mesh._cssflex)
 			mesh.ehdfaker.style.display = '';
 	}
-},{ //static
+}, { //static
 	redraw: function (out) {
 		out.push('<tr', this.domAttrs_(), ' style="text-align: left;">');
 		for (var w = this.firstChild; w; w = w.nextSibling)

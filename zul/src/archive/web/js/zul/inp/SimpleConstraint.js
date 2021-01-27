@@ -108,7 +108,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 							cst.substring(j, k).trim() : cst.substring(j).trim();
 					continue l_out;
 				}
-				if (!zUtl.isChar(cc,{whitespace: 1}))
+				if (!zUtl.isChar(cc, {whitespace: 1}))
 					break;
 			}
 

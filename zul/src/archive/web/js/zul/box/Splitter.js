@@ -293,7 +293,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (box) this.$class._fixKidSplts(box);
 		else this._fixsz();
 	}
-},{
+}, {
 	onclick: function (evt) {
 		var wgt = zk.Widget.$(evt),
 			colps = wgt.getCollapse();

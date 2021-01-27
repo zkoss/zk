@@ -593,7 +593,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var cwgt = vflexs.shift(),
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0, //cast to integer
 				//B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = vsz,// B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				isz = vsz, // B50-3014664.zul vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderHeight();
@@ -613,7 +613,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (vflexs.length) {
 			var cwgt = vflexs.shift(),
 				// B50-3014664.zul offtop = cwgt.$n().offsetTop,
-				isz = lastsz,// B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+				isz = lastsz, // B50-3014664.zul - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
 				chdex = cwgt.$n('chdex'),
 				$chdex = zk(chdex),
 				minus = $chdex.padBorderHeight();
@@ -854,7 +854,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	getFlexContainer_: function () {
 		return null;
 	}
-},{ //static
+}, { //static
 	_toValign: function (v) {
 		return v ? 'start' == v ? 'top' : 'center' == v ? 'middle' :
 			'end' == v ? 'bottom' : v : null;

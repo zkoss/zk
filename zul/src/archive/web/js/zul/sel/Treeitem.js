@@ -499,7 +499,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		var tree = this.getTree();
 		return _compareTreePath(_getTreePath(tree, item), _getTreePath(tree, this));
 	}
-},{
+}, {
 	//package utiltiy: sync selected items for replaceWidget
 	_syncSelItems: function (oldwgt, newwgt) {
 		var items;

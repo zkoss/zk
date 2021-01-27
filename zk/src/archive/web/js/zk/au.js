@@ -772,7 +772,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content, rtags = {},
-			requri = uri || zk.ajaxURI(null, {desktop: dt,au: true}),
+			requri = uri || zk.ajaxURI(null, {desktop: dt, au: true}),
 			ws = typeof zWs != 'undefined' && zWs.ready;
 		if (!forceAjax && ws) {
 			content = {};

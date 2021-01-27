@@ -39,7 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			upload = n._ctrl,
 			wgt = upload._wgt,
 			dt = wgt.desktop,
-			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid, {desktop: dt,au: true}),
+			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid, {desktop: dt, au: true}),
 			form = n.form;
 		form.action = action;
 
@@ -239,7 +239,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	finish: function (sid) {
 		_cancel(this, sid, true);
 	}
-},{
+}, {
 	/**
 	 * Shows the error message of the fileupload
 	 * @param String msg the error message

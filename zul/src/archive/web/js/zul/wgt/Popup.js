@@ -445,6 +445,6 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	getPositionArgs_: function () {
 		var p = this._fakeParent, dim = zk(p).dimension(true);
-		return [p, [dim.left + this._adjustLeft, dim.top + this._adjustTop] , null, {dodgeRef: false}];
+		return [p, [dim.left + this._adjustLeft, dim.top + this._adjustTop], null, {dodgeRef: false}];
 	}
 });

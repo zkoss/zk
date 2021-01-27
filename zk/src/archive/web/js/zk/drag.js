@@ -499,7 +499,7 @@ String scroll; //DOM Element's ID</code></pre>
 				p.push(p[1] + this.opts.scroll.offsetHeight);
 			}
 
-			var speed = [0,0],
+			var speed = [0, 0],
 				v = this.opts.scrollSensitivity;
 			if (pt[0] < (p[0] + v)) speed[0] = pt[0] - (p[0] + v);
 			if (pt[1] < (p[1] + v)) speed[1] = pt[1] - (p[1] + v);
@@ -509,7 +509,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		// fix AppleWebKit rendering
-		if (navigator.appVersion.indexOf('AppleWebKit') > 0) window.scrollBy(0,0);
+		if (navigator.appVersion.indexOf('AppleWebKit') > 0) window.scrollBy(0, 0);
 
 		evt.stop();
 	},
@@ -713,7 +713,7 @@ String scroll; //DOM Element's ID</code></pre>
 	},
 	_startScrolling: function (speed) {
 		if (speed[0] || speed[1]) {
-			this.scrollSpeed = [speed[0] * this.opts.scrollSpeed,speed[1] * this.opts.scrollSpeed];
+			this.scrollSpeed = [speed[0] * this.opts.scrollSpeed, speed[1] * this.opts.scrollSpeed];
 			this.lastScrolled = new Date();
 			this.scrollInterval = setInterval(this.proxy(this._scroll), 10);
 		}
@@ -797,7 +797,7 @@ String scroll; //DOM Element's ID</code></pre>
 		return pos;
 	}
 
-	},{//static
+	}, {//static
 	ignoreMouseUp: function () { //called by mount
 		return zk.dragging ? true : _dnEvt;
 	},

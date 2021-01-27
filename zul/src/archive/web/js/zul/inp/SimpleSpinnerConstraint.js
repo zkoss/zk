@@ -20,7 +20,7 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		max: _zkf
 	},
 	parseConstraint_: function (cst) {
-		var cstList = cst.replace(/ +/g,' ').split(/[, ]/),
+		var cstList = cst.replace(/ +/g, ' ').split(/[, ]/),
 			len = cstList.length,
 			isSpinner,
 			arr = this._cstArr;
@@ -44,7 +44,7 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 			return this.$supers('parseConstraint_', arguments);
 	},
 	validate: function (wgt, val) {
-		var result = this.$supers('validate',arguments);
+		var result = this.$supers('validate', arguments);
 		switch (typeof val) {
 			case 'number':
 				var maxErr = this._max && val > this._max,

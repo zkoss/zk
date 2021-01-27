@@ -116,7 +116,7 @@
     "space-infix-ops": "error",
     "keyword-spacing": "error",
     "space-before-blocks": "error",
-    //"comma-spacing": "error", // b,// will fall
+    "comma-spacing": "error",
     "quotes": ["error", "single", { "avoidEscape": true }],
     "unicode-bom": "error",
 

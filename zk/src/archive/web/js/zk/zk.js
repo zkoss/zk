@@ -1931,7 +1931,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 		if (this.dg) this.dg.destroy();
 		jq('#' + this.id).remove();
 	}
-},{
+}, {
 	redraw: function () {
 		zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));

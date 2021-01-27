@@ -152,7 +152,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		out.push('<div', this.domAttrs_(), '><div id="', uuid, '-p" class="',
 				this.$s('pointer'), '"></div><i id="', uuid, '-icon" class="',
 				//ZK-2677 use either default or self-defined icon, do not rely on CSS overwrite
-				icon, ' ', iconSclass,'"></i><div id="', uuid,
+				icon, ' ', iconSclass, '"></i><div id="', uuid,
 				'-cave" class="', this.$s('content'), '" title="',
 				(zUtl.encodeXML(msgzk.GOTO_ERROR_FIELD)), '">',
 				zUtl.encodeXML(this.msg, {multiline: true}),
@@ -288,7 +288,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Notification, {
 		var p = this.parent, cstp = p ? p._cst && p._cst._pos : false;
 		return [p, null, cstp || 'end_before', {dodgeRef: !cstp}];
 	}
-},{
+}, {
 
 	_enddrag: function (dg) {
 		var errbox = dg.control;

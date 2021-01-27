@@ -578,8 +578,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!this._buttonVisible) return;
 		// ZK-2192: Only need to determine if popup is animating
 		if (!this._disabled && !jq(this.getPopupNode_()).is(':animated')) {
-			if (this._open) this.close({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen: true});
-			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this),sendOnOpen: true});
+			if (this._open) this.close({focus: zul.inp.InputCtrl.isPreservedFocus(this), sendOnOpen: true});
+			else this.open({focus: zul.inp.InputCtrl.isPreservedFocus(this), sendOnOpen: true});
 		}
 		if (zk.ios) { //Bug ZK-1313: keep window offset information before virtual keyboard opened on ipad
 			this._windowX = window.pageXOffset;
@@ -672,7 +672,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!isButtonVisible)
 			out.push(' ', this.$s('disabled'));
 
-		out.push('" aria-hidden="true"><i id="', uuid, '-icon" class="', this.$s('icon'), ' ', this.getIconSclass(),'"></i></a>');
+		out.push('" aria-hidden="true"><i id="', uuid, '-icon" class="', this.$s('icon'), ' ', this.getIconSclass(), '"></i></a>');
 
 		this.redrawpp_(out);
 
