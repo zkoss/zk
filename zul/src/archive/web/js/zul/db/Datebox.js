@@ -878,7 +878,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			var cell = target,
 				dateobj = this.getTime();
 			switch (this._view) {
-				case 'day' :
+				case 'day':
 					var oldTime = this.getTime();
 					this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
 						dateobj.getMonth() + cell._monofs : null, val, true /*fire onChange */);
@@ -891,7 +891,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 						this.focus();
 					}
 					break;
-				case 'month' :
+				case 'month':
 					if (selectLevel == 'month') {
 						this._setTime(null, val, 1, true);
 						break;
@@ -899,7 +899,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 					this._setTime(null, val);
 					this._setView('day');
 					break;
-				case 'year' :
+				case 'year':
 					if (selectLevel == 'year') {
 						this._setTime(val, 0, 1, true);
 						break;
@@ -907,7 +907,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 					this._setTime(val);
 					this._setView('month');
 					break;
-				case 'decade' :
+				case 'decade':
 					//Decade mode Set Year Also
 					this._setTime(val);
 					this._setView('year');

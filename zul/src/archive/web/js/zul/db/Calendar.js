@@ -682,16 +682,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	_shiftView: function (ofs, disableAnima) {
 		switch (this._view) {
-		case 'day' :
+		case 'day':
 			this._shiftDate('month', ofs);
 			break;
-		case 'month' :
+		case 'month':
 			this._shiftDate('year', ofs);
 			break;
-		case 'year' :
+		case 'year':
 			this._shiftDate('year', ofs * 10);
 			break;
-		case 'decade' :
+		case 'decade':
 			this._shiftDate('year', ofs * 100);
 			break;
 		}
@@ -751,7 +751,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var cell = target,
 				dateobj = this.getTime();
 			switch (this._view) {
-			case 'day' :
+			case 'day':
 				var oldTime = this.getTime();
 				this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
 						dateobj.getMonth() + cell._monofs : null, val, true /*fire onChange */);
@@ -764,15 +764,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this.focus();
 				}
 				break;
-			case 'month' :
+			case 'month':
 				this._setTime(null, val);
 				this._setView('day');
 				break;
-			case 'year' :
+			case 'year':
 				this._setTime(val);
 				this._setView('month');
 				break;
-			case 'decade' :
+			case 'decade':
 				//Decade mode Set Year Also
 				this._setTime(val);
 				this._setView('year');
@@ -788,17 +788,17 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			tz = _getTimeZone(this),
 			nofix;
 		switch (opt) {
-		case 'day' :
+		case 'day':
 			day += ofs;
 			nofix = true;
 			break;
-		case 'month' :
+		case 'month':
 			month += ofs;
 			break;
-		case 'year' :
+		case 'year':
 			year += ofs;
 			break;
-		case 'decade' :
+		case 'decade':
 			year += ofs;
 			break;
 		}

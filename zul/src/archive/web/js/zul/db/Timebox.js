@@ -267,16 +267,16 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!Timebox._unformater) {
 			var code = evt.keyCode;
 			switch (code) {
-			case 48:case 96://0
-			case 49:case 97://1
-			case 50:case 98://2
-			case 51:case 99://3
-			case 52:case 100://4
-			case 53:case 101://5
-			case 54:case 102://6
-			case 55:case 103://7
-			case 56:case 104://8
-			case 57:case 105://9
+			case 48: case 96://0
+			case 49: case 97://1
+			case 50: case 98://2
+			case 51: case 99://3
+			case 52: case 100://4
+			case 53: case 101://5
+			case 54: case 102://6
+			case 55: case 103://7
+			case 56: case 104://8
+			case 57: case 105://9
 				code = code - (code >= 96 ? 96 : 48);
 				this._doType(code);
 				evt.stop();
