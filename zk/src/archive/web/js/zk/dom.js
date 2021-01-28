@@ -251,7 +251,7 @@ zjq = function (jq) { //ZK extension
 		var docRoot,
 			// document.body may not be initiated.
 			initDocRoot = function () {
-				return docRoot = (zk.safari || zk.opera) ? document.body : document.documentElement;
+				return docRoot = document.documentElement;
 			};
 		return function () {
 			return docRoot || initDocRoot();
@@ -1564,10 +1564,6 @@ jq(el).zk.center(); //same as 'center'
 		do {
 			t += p.offsetTop || 0;
 			l += p.offsetLeft || 0;
-
-			// Safari fix
-			if (p.offsetParent == document.body)
-			if (jq(p).css('position') == 'absolute') break;
 
 		} while (p = p.offsetParent);
 		
