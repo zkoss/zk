@@ -20,6 +20,9 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.10.1",
     "@babel/preset-env": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
+    "@types/jquery": "^3.5.1",
+    "@types/jquery-mousewheel": "^3.1.8",
+    "@types/jquery.transit": "^0.9.30",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.14.0",
     "browser-sync": "^2.26.14",
@@ -32,7 +35,7 @@
     "gulp-uglify": "^3.0.2",
     "minimist": "^1.2.5",
     "typescript": "^3.9.7",
-    "zk-types": "github:scribetw/zk-types#master",
     "zkless-engine": "^1.1.7"
-  }
+  },
+  "dependencies": {}
 }

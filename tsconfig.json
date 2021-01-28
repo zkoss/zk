@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["es5", "dom"],
+    "lib": [
+      "es5",
+      "dom",
+      "es2015.collection"
+    ],
     "module": "none",
     "allowJs": true,
     "noEmit": true, // type checking only
     "strict": true,
     "noImplicitAny": false, // leave this for js compatible
-    "types": ["zk-types"]
+    "typeRoots": ["./@types/"],
+    "types": ["zk"]
   }
 }
