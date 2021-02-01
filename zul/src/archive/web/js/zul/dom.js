@@ -73,6 +73,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				var wnd = new zul.wnd.Window({
 					id: 'aualert',
 					closable: true,
+					width: '250pt',
 					sclass: 'z-messagebox-window',
 					title: opts.title || zk.appName,
 					border: 'normal',
