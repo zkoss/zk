@@ -8,6 +8,7 @@ ZK 9.6.0
   ZK-4771: Provide a way to add theme-uri without extends any existing ThemeProvider
   ZK-4795: Grid/Listbox/Tree supports sticky column headers
   ZK-4783: Modify error message box CSS design (provide scrollbar while word-break fail)
+  ZK-4745: Datebox supports to display with custom calendar system (e.g. Minguo) year
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)

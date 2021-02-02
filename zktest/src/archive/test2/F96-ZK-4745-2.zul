@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4745-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Feb 18 14:56:56 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		import java.util.Date;
+		import java.text.SimpleDateFormat;
+		Date d1 = new SimpleDateFormat("yyyy/MM/dd").parse("2019/04/30");
+		Date d2 = new SimpleDateFormat("yyyy/MM/dd").parse("2019/05/01");
+	</zscript>
+	<vlayout>
+		ja-JP-u-ca-japanese:
+		<label multiline="true">
+			1. parse test:
+			1-1. type or copy "大正14/07/31" into db1 then blur, you should not see any error.
+			1-2. open the calendar by click the db1 button, the current date display in calendar should be 大正 14/07/31.
+			1-3. type or copy "大正 14/07/31" into db2 then blur, you should not see any error.
+			1-4. open the calendar by click the db2 button, the current date display in calendar should be 大正 14/07/31.
+			1-5. type or copy "2022/01/01" into db3 then blur, you should not see any error.
+			1-6. open the calendar by click the db3 button, the current date display in calendar should be 令和 04/01/01.
+
+			2. format test:
+			2-1: click the setValue 1 button, the datebox should format correctly.(db1: "平成31/04/30", db2: "平成 31-04-30", db3: "2019/04/30")
+			2-2: click the setValue 2 button, the datebox should format correctly.(db1: "令和01/05/01", db2: "令和 01-05-01", db3: "2019/05/01")
+		</label>
+		<hlayout>
+			<button label="setValue 1" onClick="db1.setValue(d1);db2.setValue(d1);db3.setValue(d1);"/>
+			<button label="setValue 2" onClick="db1.setValue(d2);db2.setValue(d2);db3.setValue(d2);"/>
+		</hlayout>
+		db1(Gyy/MM/dd): <datebox id="db1" locale="ja-JP-u-ca-japanese" format="Gyy/MM/dd" width="200px"/>
+		db2(G yy-MM-dd): <datebox id="db2" locale="ja-JP-u-ca-japanese" format="G yy-MM-dd" width="200px"/>
+		db3(uuuu/MM/dd): <datebox id="db3" locale="ja-JP-u-ca-japanese" format="uuuu/MM/dd" width="200px"/>
+		<separator bar="true"/>
+		ja-JP (iso):
+		<label multiline="true">
+			1. parse test:
+			1-1. type or copy "西暦 2021-02-03" into db4 then blur, you should not see any error.
+			1-2. open the calendar by click the db4 button, the current date display in calendar should be 西暦 2021-02-03.
+
+			2. format test:
+			2-1: click the setValue 1 button, the datebox should format correctly.(db4: "西暦 2019-04-30")
+			2-2: click the setValue 2 button, the datebox should format correctly.(db4: "西暦 2019-05-01")
+		</label>
+		<hlayout>
+			<button label="setValue 1" onClick="db4.setValue(d1);"/>
+			<button label="setValue 2" onClick="db4.setValue(d2);"/>
+		</hlayout>
+		db4(G yyyy-MM-dd): <datebox id="db4" locale="ja-JP" format="G yyyy-MM-dd" width="200px"/>
+		<separator bar="true"/>
+		en-US-u-ca-japanese:
+		<label multiline="true">
+			1. parse test:
+			1-1. type or copy "Reiwa 03-03-27" into d5 then blur, you should not see any error.
+			1-2. open the calendar by click the db5 button, the current date display in calendar should be Reiwa 03-03-27.
+
+			2. format test:
+			2-1: click the setValue 1 button, the datebox should format correctly.(db5: "Heisei 31-04-30")
+			2-2: click the setValue 2 button, the datebox should format correctly.(db5: "Reiwa 01-05-01")
+		</label>
+		<hlayout>
+			<button label="setValue 1" onClick="db5.setValue(d1);"/>
+			<button label="setValue 2" onClick="db5.setValue(d2);"/>
+		</hlayout>
+		db5(G yy-MM-dd): <datebox id="db5" locale="en-US-u-ca-japanese" format="G yy-MM-dd" width="200px"/>
+	</vlayout>
+</zk>

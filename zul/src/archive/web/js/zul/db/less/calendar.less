@@ -55,8 +55,17 @@
 	&-decade,
 	&-month,
 	&-year {
+		padding-top: 8px;
+
 		.z-calendar-cell {
-			.size(56px, 44px);
+			min-width: 56px;
+			height: 40px;
+			padding: 0 8px;
+		}
+	}
+	&-decade {
+		.z-calendar-cell {
+			text-align: left;
 		}
 	}
 	&-wk& {
@@ -69,7 +78,8 @@
 	&-cell {
 		font-size: @calendarFontSizeSmall;
 		color: @calendarCellColor;
-		.size(@calendarCellWidth, @calendarCellHeight);
+		min-width: @calendarCellWidth;
+		height: @calendarCellHeight;
 		line-height: normal;
 		text-align: center;
 		cursor: pointer;

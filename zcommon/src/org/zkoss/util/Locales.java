@@ -100,37 +100,24 @@ public class Locales {
 	 *
 	 * @param localeString the locale in string; null is OK
 	 * @param separator the separator; ((char)0) means to decide automatically
-	 * (either ',' or '_')
+	 * (either ',', '-' or '_')
 	 * @return the locale or null if locale is null or empty
 	 */
 	public static final Locale getLocale(String localeString, char separator) {
 		if (localeString == null)
 			return null;
 
-		if (separator == (char)0)
-			separator = localeString.indexOf('_') >= 0 ? '_' : ',';
-		LinkedList<String> list = new LinkedList<String>();
-		CollectionsX.parse(list, localeString, separator);
-
-		String lang = "", cnt = "", var = "";
-		switch (list.size()) {
-		case 0:
-			return null;
-		default:
-			assert(list.size() <= 3);
-			var = list.get(2);
-		case 2:
-			cnt = list.get(1);
-			if (cnt.length() != 2)
-				throw new IllegalArgumentException("Not a valid country: "+localeString);
-		case 1:
-			lang = list.get(0);
-			if (lang.length() != 2)
-				throw new IllegalArgumentException("Not a valid language: "+localeString);
+		if (separator == (char)0) {
+			if (localeString.indexOf('_') >= 0) {
+				separator = '_';
+			} else if (localeString.indexOf('-') >= 0) {
+				separator = '-';
+			} else {
+				separator = ',';
+			}
 		}
-
-		return getLocale(new Locale(lang, cnt, var));
-
+		localeString = localeString.replace(separator, '-');
+		return getLocale(Locale.forLanguageTag(localeString));
 	}
 	/** Converts a string that consists of language, country and variant
 	 * to a locale.

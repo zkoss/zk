@@ -23,6 +23,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.time.chrono.Chronology;
+import java.time.chrono.Era;
+import java.time.chrono.IsoEra;
+import java.time.chrono.JapaneseEra;
+import java.time.chrono.MinguoDate;
+import java.time.chrono.MinguoEra;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -657,12 +666,56 @@ public class Datebox extends DateTimeFormatInputElement {
 					s2dow[k] = cc == '.' || cc == ',' ? sdow[k].substring(0, len - 1) : sdow[k];
 				}
 			}
-			df = new SimpleDateFormat("G", locale);
-			map.put("ERA", df.format(new java.util.Date()));
 
-			Calendar ec = Calendar.getInstance(Locale.ENGLISH);
-			Calendar lc = Calendar.getInstance(locale);
-			map.put("YDELTA", Integer.valueOf(lc.get(Calendar.YEAR) - ec.get(Calendar.YEAR)));
+			map.put("LAN_TAG", locale.toLanguageTag());
+
+			Map<String, Map<String, Integer>> eras = new HashMap<String, Map<String, Integer>>();
+			Chronology chronology = Chronology.ofLocale(locale);
+			String format = "G-yyyy/MM/dd";
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format, locale);
+			String ce = IsoEra.CE.getDisplayName(TextStyle.SHORT, locale);
+			String bce = IsoEra.BCE.getDisplayName(TextStyle.SHORT, locale);
+			List<Era> eraList = chronology.eras();
+			for (Era era : eraList) {
+				try {
+					String eraName = era.getDisplayName(TextStyle.SHORT, locale);
+					// MinguoEra displayName might be wrong with old version JDK (e.g. openJDK8)
+					if (era instanceof MinguoEra) {
+						if (eraName.equalsIgnoreCase(ce))
+							eraName = dtf.format(MinguoDate.of(1, 1, 1)).split("-")[0];
+						else if (eraName.equalsIgnoreCase(bce))
+							eraName = dtf.format(MinguoDate.of(-1, 1, 1)).split("-")[0];
+					}
+					Map<String, Integer> eraData = new HashMap<String, Integer>(2);
+					int firstYear;
+					if (era instanceof JapaneseEra) {
+						// In JapaneseDate, Only Meiji and later eras are supported; dates before Meiji 6, January 1 are not supported.
+						firstYear = LocalDate.parse(eraName + "-0006/01/01", dtf.withChronology(chronology)).minusYears(5).getYear();
+						eraData.put("firstYear", firstYear);
+						eraData.put("direction", 1); // JP era year counting direction never be negative
+					} else {
+						firstYear = LocalDate.parse(eraName + "-0001/01/01", dtf.withChronology(chronology)).getYear();
+						eraData.put("firstYear", firstYear);
+						eraData.put("direction", era.getValue() <= 0 ? -1 : 1); // era year counting direction
+					}
+					eras.put(eraName, eraData);
+				} catch (DateTimeParseException e) {
+					log.warn("LocalizedSymbols ERAS parsing failed with Locale: " + locale + "and Era: " + era);
+				}
+			}
+			map.put("ERAS", eras);
+
+			if (locale.getCountry().equals("TH")) { // keep ThaiBuddhist works in ZK CE
+				df = new SimpleDateFormat("G", locale);
+				map.put("ERA", df.format(new java.util.Date()));
+
+				Calendar ec = Calendar.getInstance(Locale.ENGLISH);
+				Calendar lc = Calendar.getInstance(locale);
+				map.put("YDELTA", Integer.valueOf(lc.get(Calendar.YEAR) - ec.get(Calendar.YEAR)));
+			} else {
+				map.put("ERA", "");
+				map.put("YDELTA", 0);
+			}
 
 			df = new SimpleDateFormat("EEEE", locale);
 			final String[] fdow = new String[7];
