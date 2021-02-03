@@ -11,13 +11,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Test;
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
 
 public class B95_ZK_4760Test extends WebDriverTestCase {
 	@Test
@@ -25,22 +22,22 @@ public class B95_ZK_4760Test extends WebDriverTestCase {
 		connect();
 		click(jq("@button:eq(0)"));
 		waitResponse();
-		MatcherAssert.assertThat(jq(".z-messagebox-window").outerWidth(), greaterThan(600));
+		Assert.assertTrue(Boolean.valueOf(zk(jq(".z-window-content")).eval("hasHScroll()")));
 		click(jq("@button:eq(6)"));
 
 		click(jq("@button:eq(1)"));
 		waitResponse();
-		MatcherAssert.assertThat(jq(".z-messagebox-window").outerWidth(), lessThan(600));
+		Assert.assertFalse(Boolean.valueOf(zk(jq(".z-window-content")).eval("hasHScroll()")));
 		click(jq("@button:eq(6)"));
 
 		click(jq("@button:eq(2)"));
 		waitResponse();
-		MatcherAssert.assertThat(jq(".z-messagebox-window").outerWidth(), lessThan(600));
+		Assert.assertFalse(Boolean.valueOf(zk(jq(".z-window-content")).eval("hasHScroll()")));
 		click(jq(".z-messagebox-button"));
 
 		click(jq("@button:eq(3)"));
 		waitResponse();
-		MatcherAssert.assertThat(jq(".z-messagebox-window").outerWidth(), greaterThan(600));
+		Assert.assertFalse(Boolean.valueOf(zk(jq(".z-window-content")).eval("hasHScroll()")));
 		click(jq(".z-messagebox-button"));
 
 		click(jq("@button:eq(4)"));
@@ -50,7 +47,7 @@ public class B95_ZK_4760Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(5)"));
 		waitResponse();
-		MatcherAssert.assertThat(jq(".z-messagebox-window").outerWidth(), greaterThan(100));
+		Assert.assertFalse(Boolean.valueOf(zk(jq(".z-window-content")).eval("hasHScroll()")));
 		click(jq(".z-messagebox-button"));
 	}
 }
