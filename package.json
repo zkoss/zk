@@ -33,6 +33,6 @@
     "minimist": "^1.2.5",
     "typescript": "^3.9.7",
     "zk-types": "github:scribetw/zk-types#master",
-    "zkless-engine": "^1.1.5"
+    "zkless-engine": "^1.1.7"
   }
 }
