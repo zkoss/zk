@@ -106,4 +106,5 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<button type="submit" label="Login" mold="os" />
 		<button type="reset" label="Reset" mold="os" />
 	</n:form>
+	<button id="resetBtn" label="resetCount" onClick="org.zkoss.zktest.test2.SubmitTest.resetCount()" />
 </zk>
