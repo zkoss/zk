@@ -33,6 +33,7 @@ import org.zkoss.bind.annotation.ToServerCommand;
 import org.zkoss.bind.impl.AbstractAnnotatedMethodInvoker;
 import org.zkoss.bind.impl.AnnotationUtil;
 import org.zkoss.bind.impl.BindEvaluatorXUtil;
+import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.MiscUtil;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -45,6 +46,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.CacheMap;
+import org.zkoss.util.EmptyCacheMap;
 import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
@@ -105,9 +107,9 @@ public class BindComposer<T extends Component>
 	protected static final String QUEUE_NAME_ANNO_ATTR = "queueName";
 	protected static final String QUEUE_SCOPE_ANNO_ATTR = "queueScope";
 
-	private static final Map<Class<?>, List<Method>> _afterComposeMethodCache = new CacheMap<Class<?>, List<Method>>(
+	private static final Map<Class<?>, List<Method>> _afterComposeMethodCache = BinderImpl.DISABLE_METHOD_CACHE ? new EmptyCacheMap() : new CacheMap<Class<?>, List<Method>>(
 			600, CacheMap.DEFAULT_LIFETIME);
-	private static final Map<Class<?>, List<Method>> _historyPopStateMethodCache = new CacheMap<Class<?>, List<Method>>(
+	private static final Map<Class<?>, List<Method>> _historyPopStateMethodCache = BinderImpl.DISABLE_METHOD_CACHE ? new EmptyCacheMap() : new CacheMap<Class<?>, List<Method>>(
 			600, CacheMap.DEFAULT_LIFETIME);
 
 	public BindComposer() {

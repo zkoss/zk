@@ -812,4 +812,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--			<reload-uri>/test2/B95-ZK-4742-login.zul</reload-uri>-->
 <!--		</error-reload>-->
 <!--	</client-config>-->
+
+	<!-- ZK-4761 -->
+<!--	<library-property>-->
+<!--		<name>org.zkoss.bind.disableMethodCache</name>-->
+<!--		<value>true</value>-->
+<!--	</library-property>-->
 </zk>

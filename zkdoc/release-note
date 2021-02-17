@@ -1,5 +1,6 @@
 ZK 9.6.0
 * Features
+  ZK-4761: MVVM provide option to disable viewmodel annotation caches
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)

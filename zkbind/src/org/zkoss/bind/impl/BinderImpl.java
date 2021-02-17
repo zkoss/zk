@@ -104,6 +104,7 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
+import org.zkoss.util.EmptyCacheMap;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -147,16 +148,23 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private static final String ON_POST_COMMAND = "onPostCommand";
 	private static final String ON_VMSGS_CHANGED = "onVMsgsChanged";
 
-	//TODO make it configurable
-	private static final Map<Class<?>, List<Method>> _initMethodCache = new CacheMap<Class<?>, List<Method>>(600,
+	//ZK-4761: for debug mode only
+	public static final boolean DISABLE_METHOD_CACHE;
+	private static final String DISABLE_METHOD_CACHE_PROP = "org.zkoss.bind.disableMethodCache";
+
+	static {
+		DISABLE_METHOD_CACHE = Boolean.parseBoolean(Library.getProperty(DISABLE_METHOD_CACHE_PROP, "false"));
+	}
+
+	private static final Map<Class<?>, List<Method>> _initMethodCache = DISABLE_METHOD_CACHE ? new EmptyCacheMap() : new CacheMap<Class<?>, List<Method>>(600,
 			CacheMap.DEFAULT_LIFETIME); //class,list<init method>
-	private static final Map<Class<?>, List<Method>> _destroyMethodCache = new CacheMap<Class<?>, List<Method>>(600,
+	private static final Map<Class<?>, List<Method>> _destroyMethodCache = DISABLE_METHOD_CACHE ? new EmptyCacheMap() : new CacheMap<Class<?>, List<Method>>(600,
 			CacheMap.DEFAULT_LIFETIME); //class,list<destroy method>
 
-	private static final Map<Class<?>, Map<String, CachedItem<Method>>> _commandMethodCache = new CacheMap<Class<?>, Map<String, CachedItem<Method>>>(
+	private static final Map<Class<?>, Map<String, CachedItem<Method>>> _commandMethodCache = DISABLE_METHOD_CACHE ? new EmptyCacheMap() : new CacheMap<Class<?>, Map<String, CachedItem<Method>>>(
 			200, CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 
-	private static final Map<Class<?>, Map<String, CachedItem<Method>>> _globalCommandMethodCache = new CacheMap<Class<?>, Map<String, CachedItem<Method>>>(
+	private static final Map<Class<?>, Map<String, CachedItem<Method>>> _globalCommandMethodCache = DISABLE_METHOD_CACHE ? new EmptyCacheMap() : new CacheMap<Class<?>, Map<String, CachedItem<Method>>>(
 			200, CacheMap.DEFAULT_LIFETIME); //class,map<command, null-able command method>
 
 	//command and default command method parsing and caching 
