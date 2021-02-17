@@ -1140,10 +1140,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (this.$$selectAll != undefined) {
 				return this.$$selectAll;
 			}
+			if (this.isAllRowSelected != undefined) {
+				return this.isAllRowSelected;
+			}
 		}
 
-		var isGroupSelect = this.groupSelect;
-		for (var it = this.getBodyWidgetIterator({skipHidden: true}), w; (w = it.next());) {
+		var isGroupSelect = this.groupSelect,
+			skipHidden = this instanceof Tree && !this._model ? false : true;
+		for (var it = this.getBodyWidgetIterator({skipHidden: skipHidden}), w; (w = it.next());) {
 			//Bug ZK-1998: skip listgroup and listgroupfoot widget if groupSelect is false
 			if ((_isListgroup(w) || _isListgroupfoot(w)) && !isGroupSelect)
 				continue;

@@ -53,6 +53,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.CloneableEventListener;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -240,6 +241,7 @@ public class Tree extends MeshElement {
 		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 		addClientEvent(Tree.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.11 / 6.0.0
+		addClientEvent(Tree.class, "onCheckSelectAll", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Tree() {
@@ -2045,7 +2047,6 @@ public class Tree extends MeshElement {
 			SelectionControl control = smodel.getSelectionControl();
 			if (control != null)
 				ti.setSelectable(control.isSelectable(childNode));
-
 		}
 		if (_model instanceof TreeOpenableModel) {
 			TreeOpenableModel model = (TreeOpenableModel) _model;
@@ -2612,8 +2613,13 @@ public class Tree extends MeshElement {
 			renderer.render("rightSelect", false);
 		if (isSelectOnHighlightDisabled()) // F70-ZK-2433
 			renderer.render("selectOnHighlightDisabled", true);
-		if (_pgi != null && _pgi instanceof Component)
+		if (_pgi != null && _pgi instanceof Component) {
 			renderer.render("paginal", _pgi);
+			// ZK 8, if no model used in paging mold, we don't support select all in this case
+			if (_model == null) {
+				renderer.render("_tree$noSelectAll", true);
+			}
+		}
 
 		if (_currentTop != 0)
 			renderer.render("_currentTop", _currentTop);
@@ -2852,6 +2858,19 @@ public class Tree extends MeshElement {
 			final Map<String, Object> data = request.getData();
 			_anchorTop = AuRequests.getInt(data, "top", 0);
 			_anchorLeft = AuRequests.getInt(data, "left", 0);
+		} else if (cmd.equals("onCheckSelectAll")) {
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			if (_model instanceof Selectable) {
+				final Selectable<Object> smodel = (Selectable) _model;
+				SelectionControl control = smodel.getSelectionControl();
+				if (control != null) {
+					control.setSelectAll(evt.isChecked());
+				}
+			}
+		} else if (_model!=null && cmd.equals("onCheckSelectRow")){ //open shoud trigger onCheckSelectRow
+			final Selectable<Object> smodel = (Selectable) _model;
+			SelectionControl control = smodel.getSelectionControl();
+			smartUpdate("isAllRowSelected", control != null && control.isSelectAll());
 		} else if (cmd.equals(Events.ON_RENDER)) {
 			final RenderEvent<Treeitem> event = RenderEvent.getRenderEvent(request);
 			final Set<Treeitem> items = event.getItems();

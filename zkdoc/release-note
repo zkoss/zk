@@ -1,3 +1,7 @@
+ZK 9.6.0
+* Features
+  ZK-4330: provide select-all checkbox in tree component
+
 ZK 9.5.1
 * Features
   ZK-4118: Add zk.edge_legacy for old version Microsoft Edge

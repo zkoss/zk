@@ -69,13 +69,16 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 	//@Override
 	doClick_: function (evt) {
 		var ti = this.parent,
-			tg = evt.domTarget;
+			tg = evt.domTarget,
+			tree = this.getTree();
 		if (tg == this.$n('open') || tg == this.$n('icon')) {
 			ti.setOpen(!ti._open);
 			evt.stop();
-			this.getTree().focus();
+			tree.focus();
 		} else if (!ti.isDisabled())
 			this.$supers('doClick_', arguments);
+			tree.fire('onCheckSelectRow', this.parent.isSelected(), {toServer: true});
+
 	},
 	//@Override
 	scrollIntoView: function () {
