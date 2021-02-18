@@ -252,10 +252,6 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		for (Entry<Binder, Set<Component>> entry : batchRemove.entrySet()) {
 			entry.getKey().removeBindings(entry.getValue());
 		}
-		//ZK-4569
-		Object vmIdBinderMap = Executions.getCurrent().getDesktop().getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
-		if (vmIdBinderMap != null)
-			((Map<String, Binder>) vmIdBinderMap).remove(comp.getAttribute(BindComposer.VM_ID));
 	}
 
 	private void removeBindingsRecursively(Component comp, Map<Binder, Set<Component>> batchRemove) {
@@ -295,6 +291,11 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		}
 
 		getExtension().removeLifeCycleHandling(comp);
+
+		//ZK-4569
+		Object vmIdBinderMap = Executions.getCurrent().getDesktop().getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
+		if (vmIdBinderMap != null)
+			((Map<String, Binder>) vmIdBinderMap).remove(comp.getAttribute(BindComposer.VM_ID));
 	}
 
 	private static Extension getExtension() {
