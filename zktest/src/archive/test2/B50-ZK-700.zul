@@ -46,7 +46,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<div id="div3" vflex="true" width="100%" style="background: #9E7BFF;">
 		</div>
 	</div>
-	<div id="main2" height="300px" width="300px">
+	<div id="main2" height="300px" width="300px" style="font-size: 0"> <!-- for ie 9/10, there are text nodes between buttons (non-flexbox)-->
 		<button id="btn1" onClick='Clients.evalJavaScript("showSize2()");'
 			height="100%" width="100px" style="background: #FF3BC5">
 			test area two
