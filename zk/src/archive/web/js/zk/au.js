@@ -1495,6 +1495,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		if (!uuid) {
 			zk._prevFocus = zk.currentFocus;
 			zUtl.progressbox('zk_showBusy', msg || msgzk.PLEASE_WAIT, true, null, {busy: true});
+			jq('html').on('keydown', zk.$void);
 		} else if (w) {
 			zk.delayFunction(uuid, function () {
 				w.effects_.showBusy = new zk.eff.Mask({
@@ -1533,6 +1534,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 					zk._focusByClearBusy = false;
 				}
 			}
+			jq('html').off('keydown', zk.$void);
 		}
 	},
 	/** Closes the all error messages related to the specified widgets.
