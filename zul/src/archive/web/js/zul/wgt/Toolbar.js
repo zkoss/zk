@@ -26,6 +26,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 	_align: 'start',
+	_overflowPopupIconSclass: 'z-icon-ellipsis-h',
 
 	$define: {
 		/**
@@ -70,6 +71,23 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		 */
 		overflowPopup: function () {
 			this.rerender();
+		},
+		/**
+		 * Returns the overflowPopupIconSclass.
+		 * Default: z-icon-ellipsis-h.
+		 * @since 9.6.0
+		 */
+		 /**
+		 * Sets the overflowPopupIconSclass.
+		 * When overflowPopup is true, toolbar has a button that shows a popup
+		 * users can customize the overflow popup icon.
+		 * Default: z-icon-ellipsis-h.
+		 * @since 9.6.0
+		 */
+		overflowPopupIconSclass: function () {
+			var icon = this.$n('overflowpopup-button');
+			if (this.desktop && icon)
+				icon.className = this._getOverflowPopupBtnClass();
 		}
 	},
 	bind_: function () {
@@ -86,6 +104,9 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 			zWatch.unlisten({onFloatUp: this, onCommandReady: this, onSize: this});
 		}
 		this.$supers('unbind_', arguments);
+	},
+	_getOverflowPopupBtnClass: function () {
+		return this.$s('overflowpopup-button') + ' ' + this.getOverflowPopupIconSclass() + ' z-icon-fw';
 	},
 	_openPopup: function (evt) {
 		if (this._open)

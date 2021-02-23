@@ -29,7 +29,7 @@ function (out) {
 
 	if (this.isOverflowPopup()) {
 		out.push('<i id="', uuid, '-overflowpopup-button"',
-				' class="', this.$s('overflowpopup-button'), ' z-icon-ellipsis-h z-icon-fw" aria-hidden="true"></i>');
+				' class="', this._getOverflowPopupBtnClass(), '" aria-hidden="true"></i>');
 		out.push('<div id="', uuid, '-pp" class="', this.$s('popup'), ' ', this.$s('popup-close'), '"></div>');
 	}
 	out.push('<div class="z-clear" aria-hidden="true"></div></div>');
