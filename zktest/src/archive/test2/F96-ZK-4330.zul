@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4330.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jan 10:17:53 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label multiline="true">
+		1. click selectAll button.
+		2. click selectionCount button, the count should be 4, 60, 4.
+		3. click removeChild button and selectionCount button, the count should be 2, 58, 1.
+		4. click addChild button, the selectAll check icon should be canceled.
+		5. click selectAll button and selectionCount button, the count should be 4, 60, 2.
+		6. click deSelectAll button, paging button, selectAll button and selectionCount button, the count should be 4, 60, 2.
+		7. click listhead checkbox, all listitem should be selected.
+		8. select all listitem, listhead checkbox should be checked.
+	</label>
+	<button label="selectAll" onClick='treeModel1.getSelectionControl().setSelectAll(true);treeModel2.getSelectionControl().setSelectAll(true);tree3.selectAll();'/>
+	<button label="deSelectAll" onClick='tree1.clearSelection();tree2.clearSelection();tree3.clearSelection();'/>
+	<button label="selectionCount" onClick='Clients.log(treeModel1.getSelectionCount() + ", " + treeModel2.getSelectionCount() + ", " + tree3.getSelectedCount())'/>
+	<button label="removeChild">
+		<attribute name="onClick">
+			Treechildren tc1 = tree1.getTreechildren();
+			Treechildren tc2 = tree2.getTreechildren();
+			root1.remove(1);
+			root2.remove(29);
+			tc3.removeChild(tc3.getLastChild());
+		</attribute>
+	</button>
+	<button label="addChild">
+		<attribute name="onClick">
+			Treeitem ti = new Treeitem();
+			Treerow tr = new Treerow();
+			tr.appendChild(new Treecell("2"));
+			ti.appendChild(tr);
+			tc3.appendChild(ti);
+			root1.add(new DefaultTreeNode(2, new DefaultTreeNode[]{new DefaultTreeNode("3-1")}));
+			root2.add(new DefaultTreeNode(30, new DefaultTreeNode[]{new DefaultTreeNode("30-1")}));
+		</attribute>
+	</button>
+	<button label="paging">
+		<attribute name="onClick">
+			tree1.setMold("paging");
+			tree2.setMold("paging");
+			tree3.setMold("paging");
+			tree1.setPageSize(1);
+			tree2.setPageSize(1);
+			tree3.setPageSize(1);
+		</attribute>
+	</button>
+	<button label="open all" >
+		<attribute name="onClick">
+			<![CDATA[
+				List children1 = root1.getChildren();
+				List children2 = root2.getChildren();
+				treeModel1.setOpenObjects(children1);
+				treeModel2.setOpenObjects(children2);
+				ti3.setOpen(true);
+			]]>
+		</attribute>
+	</button>
+
+	<hlayout>
+		<tree id="tree1" multiple="true" checkmark="true" height="300px" width="200px">
+			<treecols>
+				<treecol label="tree1"/>
+			</treecols>
+		</tree>
+		<tree id="tree2" multiple="true" checkmark="true" height="300px" width="200px">
+			<treecols>
+				<treecol label="tree2"/>
+			</treecols>
+		</tree>
+		<tree id="tree3" multiple="true" checkmark="true" height="300px" width="200px">
+			<custom-attributes org.zkoss.zul.tree.initRodSize="-1"/>
+			<treecols>
+				<treecol label = "tree3"/>
+			</treecols>
+			<treechildren id="tc3">
+				<treeitem>
+					<treerow>
+						<treecell label="1"/>
+					</treerow>
+				</treeitem>
+				<treeitem open="false" id="ti3">
+					<treerow>
+						<treecell label="2"/>
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="2.1"/>
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="2.1.1"/>
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</hlayout>
+	<hlayout>
+		<listbox id="box" multiple="true" checkmark="true" height="300px" width="200px">
+			<listhead>
+				<listheader>listbox 1</listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<custom-attributes item="${each}"/>
+					<listcell label="${each}"/>
+				</listitem>
+			</template>
+		</listbox>
+	</hlayout>
+
+	<zscript><![CDATA[
+		List treeNodes1 = new LinkedList();
+		List treeNodes2 = new LinkedList();
+		for (int i = 1; i < 3; ++i) {
+			treeNodes1.add(new DefaultTreeNode(i, new DefaultTreeNode[]{new DefaultTreeNode(i + "-1")}));
+		}
+		for (int i = 1; i <= 30; i++) {
+			treeNodes2.add(new DefaultTreeNode(i, new DefaultTreeNode[]{new DefaultTreeNode(i + "-1")}));
+		}
+		DefaultTreeNode root1 = new DefaultTreeNode("", treeNodes1);
+		DefaultTreeNode root2 = new DefaultTreeNode("", treeNodes2);
+		DefaultTreeModel treeModel1 = new DefaultTreeModel(root1);
+		DefaultTreeModel treeModel2 = new DefaultTreeModel(root2);
+		tree1.setModel(treeModel1);
+		tree2.setModel(treeModel2);
+		treeModel1.setMultiple(true);
+		treeModel2.setMultiple(true);
+		ListModelList liModel = new ListModelList();
+		for (int i = 1; i <= 3; i++) {
+			liModel.add(i);
+		}
+		box.setModel(liModel);
+		liModel.setMultiple(true);
+	]]></zscript>
+</zk>

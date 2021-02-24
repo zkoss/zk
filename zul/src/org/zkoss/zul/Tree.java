@@ -41,18 +41,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.io.Serializables;
+import org.zkoss.json.JSONAware;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.CheckEvent;
 import org.zkoss.zk.ui.event.CloneableEventListener;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -60,6 +63,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
 import org.zkoss.zk.ui.util.Template;
@@ -240,6 +244,7 @@ public class Tree extends MeshElement {
 		addClientEvent(Tree.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
 		addClientEvent(Tree.class, "onScrollPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.4
 		addClientEvent(Tree.class, "onAnchorPos", CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 5.0.11 / 6.0.0
+		addClientEvent(Tree.class, "onCheckSelectAll", CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Tree() {
@@ -2601,8 +2606,16 @@ public class Tree extends MeshElement {
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "vflex", isVflex());
 
-		if (_model != null)
+		if (_model != null) {
 			render(renderer, "model", true);
+			if (_model instanceof Selectable) {
+				Selectable smodel = (Selectable) _model;
+				SelectionControl control = smodel.getSelectionControl();
+				if (control != null) {
+					renderer.render("$$selectAll", control.isSelectAll());
+				}
+			}
+		}
 
 		if (_nonselTags != null)
 			renderer.render("nonselectableTags", _nonselTags);
@@ -2612,8 +2625,13 @@ public class Tree extends MeshElement {
 			renderer.render("rightSelect", false);
 		if (isSelectOnHighlightDisabled()) // F70-ZK-2433
 			renderer.render("selectOnHighlightDisabled", true);
-		if (_pgi != null && _pgi instanceof Component)
+		if (_pgi != null && _pgi instanceof Component) {
 			renderer.render("paginal", _pgi);
+			// ZK 8, if no model used in paging mold, we don't support select all in this case
+			if (_model == null) {
+				renderer.render("_tree$noSelectAll", true);
+			}
+		}
 
 		if (_currentTop != 0)
 			renderer.render("_currentTop", _currentTop);
@@ -2720,8 +2738,8 @@ public class Tree extends MeshElement {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
+		boolean isSelModel = _model instanceof Selectable;
 		if (cmd.equals(Events.ON_SELECT)) {
-
 			Desktop desktop = request.getDesktop();
 			Map data = request.getData();
 			List<String> sitems = cast((List) request.getData().get("items"));
@@ -2852,6 +2870,24 @@ public class Tree extends MeshElement {
 			final Map<String, Object> data = request.getData();
 			_anchorTop = AuRequests.getInt(data, "top", 0);
 			_anchorLeft = AuRequests.getInt(data, "left", 0);
+		} else if (cmd.equals("onCheckSelectAll") && isSelModel) {
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			final Selectable<Object> selectableModel = (Selectable<Object>) _model;
+			SelectionControl control = selectableModel.getSelectionControl();
+			if (control == null)
+				throw new IllegalStateException(
+						"SelectionControl cannot be null, please implement SelectionControl interface for SelectablModel");
+			control.setSelectAll(evt.isChecked());
+		} else if (cmd.equals("onUpdateSelectAll") && isSelModel) {
+			final Selectable<Object> selectableModel = (Selectable<Object>) _model;
+			SelectionControl control = selectableModel.getSelectionControl();
+			if (control != null) {
+				Clients.response(new AuInvoke(this, "$doService", new Object[] { cmd, new JSONAware() {
+					public String toJSONString() {
+						return String.valueOf(control.isSelectAll());
+					}
+				} }));
+			}
 		} else if (cmd.equals(Events.ON_RENDER)) {
 			final RenderEvent<Treeitem> event = RenderEvent.getRenderEvent(request);
 			final Set<Treeitem> items = event.getItems();

@@ -139,8 +139,10 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (!open)
 				zWatch.fireDown('onHide', this);
 			this._showKids(open);
-			if (open)
+			if (open) {
 				zUtl.fireShown(this);
+				tree._updHeaderCM();
+			}
 			if (tree) {
 				tree._sizeOnOpen();
 

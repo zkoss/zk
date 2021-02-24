@@ -125,16 +125,27 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 	},
 	bind_: function () {
 		this.$supers(zul.sel.Treecol, 'bind_', arguments);
-		var n;
+		var n, cm;
 		if (n = this.$n())
 			this.domListen_(n, 'onMouseOver', '_doSortMouseEvt')
 				.domListen_(n, 'onMouseOut', '_doSortMouseEvt');
+		if (cm = this.$n('cm')) {
+			var tree = this.getTree();
+			if (tree) tree._headercm = cm;
+			this.domListen_(cm, 'onClick', '_doCheckmarkClick');
+		}
 	},
 	unbind_: function () {
-		var n;
+		var n, cm;
 		if (n = this.$n())
 			this.domUnlisten_(n, 'onMouseOver', '_doSortMouseEvt')
 				.domUnlisten_(n, 'onMouseOut', '_doSortMouseEvt');
+		if (cm = this.$n('cm')) {
+			var tree = this.getTree();
+			if (tree) tree._headercm = null;
+			this._checked = null;
+			this.domUnlisten_(cm, 'onClick', '_doCheckmarkClick');
+		}
 		this.$supers(zul.sel.Treecol, 'unbind_', arguments);
 	},
 	_doSortMouseEvt: function (evt) {
@@ -143,8 +154,48 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			jq(this.$n())[evt.name == 'onMouseOver' ? 'addClass' : 'removeClass'](this.getZclass() + '-sort-over');
 	},
 	//@Override
+	domContent_: function () {
+		var s = this.$supers('domContent_', arguments),
+			tree = this.getTree();
+		if (this._hasCheckbox())
+			s = '<span id="' + this.uuid + '-cm" class="' + this.$s('checkable')
+				+ (tree.$$selectAll ? ' ' + this.$s('checked') : '') + '"><i class="' + this.$s('icon') + ' z-icon-check"></i></span>'
+				+ (s ? '&nbsp;' + s : '');
+		return s;
+	},
+	_hasCheckbox: function () {
+		var tree = this.getTree();
+		return tree != null && this.parent.firstChild == this
+			&& tree._checkmark && tree._multiple && !tree._tree$noSelectAll;
+	},
+	//@Override
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this._maxlength});
+	},
+	_doCheckmarkClick: function (evt) {
+		this._checked = !this._checked;
+		var tree = this.getTree(),
+			cm = this.$n('cm'),
+			$n = jq(cm);
+		if (this._checked) {
+			$n.addClass(this.$s('checked'));
+			tree.selectAll(true, evt);
+		} else {
+			$n.removeClass(this.$s('checked'));
+			tree._select(null, evt);
+		}
+		tree.fire('onCheckSelectAll', this._checked);
+	},
+	doClick_: function (evt) {
+		var tree = this.getTree(),
+			cm = this.$n('cm');
+		if (tree && tree._checkmark) {
+			var n = evt.domTarget;
+			if (n == cm || n.parentNode == cm) {
+				return;
+			}
+			this.$supers('doClick_', arguments);
+		}
 	}
 });
 

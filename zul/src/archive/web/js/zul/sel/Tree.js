@@ -286,6 +286,13 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 	 * @disable(zkgwt)
 	 */
 	getBodyWidgetIterator: _zkf,
+	_updHeaderCM: function () {
+		var tc;
+		if (this._headercm && this._multiple
+			&& (tc = this.treecols) && (tc = tc.firstChild))
+			tc._checked = this._isAllSelected();
+		this.$supers(Tree, '_updHeaderCM', arguments);
+	},
 
 	/** Returns a readonly list of all descending {@link Treeitem}
 	 * (children's children and so on).
