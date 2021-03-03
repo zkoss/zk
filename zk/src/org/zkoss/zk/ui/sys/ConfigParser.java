@@ -66,6 +66,7 @@ import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DataHandlerInfo;
 import org.zkoss.zk.ui.util.ThemeProvider;
+import org.zkoss.zk.ui.util.ThemeURIHandler;
 import org.zkoss.zk.ui.util.URIInfo;
 
 /**
@@ -373,6 +374,7 @@ public class ConfigParser {
 				//	theme-registry-class	/// since 6.5.2
 				//	theme-resolver-class	/// since 6.5.2
 				//	theme-uri
+				//	theme-uri-handler-class	/// since 9.6.0
 				//	repeat-uuid
 				parseDesktopConfig(config, el);
 				parseClientConfig(config, el); //backward compatible with 2.4
@@ -635,6 +637,15 @@ public class ConfigParser {
 					log.debug("ThemeResolver: " + cls.getName());
 				ThemeFns.setThemeResolver((ThemeResolver) cls.newInstance());
 			}
+		}
+
+		//theme-uri-handler-class
+		//since 9.6.0
+		cls = parseClass(conf, "theme-uri-handler-class", ThemeURIHandler.class);
+		if (cls != null) {
+			if (log.isDebugEnabled())
+				log.debug("ThemeURIHandler: " + cls.getName());
+			config.addThemeURIHandler((ThemeURIHandler) cls.newInstance());
 		}
 
 		//desktop-timeout

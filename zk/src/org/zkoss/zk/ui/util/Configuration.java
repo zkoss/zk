@@ -139,6 +139,7 @@ public class Configuration {
 	private DesktopRecycle _dtRecycle;
 	private final FastReadArray<String> _themeURIs = new FastReadArray<String>(String.class);
 	private ThemeProvider _themeProvider;
+	private List<ThemeURIHandler> _themeURIHandlers = new LinkedList<ThemeURIHandler>();
 	/** A set of disabled theme URIs. */
 	private Set<String> _disThemeURIs;
 	/** A list of client packages. */
@@ -1323,6 +1324,29 @@ public class Configuration {
 		if (_disThemeURIs != null)
 			return _disThemeURIs;
 		return Collections.emptySet();
+	}
+
+	/**
+	 * Add a {@link ThemeURIHandler}.
+	 *
+	 * <p>Note: if {@link ThemeProvider} is specified ({@link #setThemeProvider}),
+	 * the final generated theme URIs depend on {@link ThemeProvider#getThemeURIs}.
+	 *
+	 * @since 9.6.0
+	 */
+	public void addThemeURIHandler(ThemeURIHandler themeURIHandler) {
+		if (themeURIHandler == null)
+			throw new IllegalArgumentException("empty");
+		_themeURIHandlers.add(themeURIHandler);
+	}
+
+	/**
+	 * Returns a list of {@link ThemeURIHandler}.
+	 *
+	 * @since 9.6.0
+	 */
+	public List<ThemeURIHandler> getThemeURIHandlers() {
+		return _themeURIHandlers;
 	}
 
 	/** Returns the theme provider for the current execution,

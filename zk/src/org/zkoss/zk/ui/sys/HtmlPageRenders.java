@@ -61,7 +61,10 @@ import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DataHandlerInfo;
+import org.zkoss.zk.ui.util.SimpleThemeURIModifier;
 import org.zkoss.zk.ui.util.ThemeProvider;
+import org.zkoss.zk.ui.util.ThemeURIHandler;
+import org.zkoss.zk.ui.util.ThemeURIModifier;
 
 /**
  * Utilities for implementing HTML-based {@link PageRenderer}.
@@ -441,6 +444,13 @@ public class HtmlPageRenders {
 				if (!disabled.contains(ss.getHref()))
 					sses.add(ss);
 			}
+		}
+
+		// ZK-4771: Provide a way to add theme-uri without extends any existing ThemeProvider
+		final ThemeURIModifier modifier = new SimpleThemeURIModifier(sses);
+		final List<ThemeURIHandler> themeURIHandlers = config.getThemeURIHandlers();
+		for (ThemeURIHandler themeURIHandler : themeURIHandlers) {
+			themeURIHandler.modifyThemeURIs(exec, modifier);
 		}
 
 		//Process configuration

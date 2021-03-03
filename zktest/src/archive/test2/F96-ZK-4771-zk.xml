@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<!--for ZK-4771-->
+	<desktop-config>
+		<theme-uri-handler-class>org.zkoss.zktest.test2.F96_ZK_4771ThemeURIHandler</theme-uri-handler-class>
+	</desktop-config>
+
+	<library-property>
+		<name>org.zkoss.zkmax.tablet.ui.disabled</name>
+		<value>false</value>
+	</library-property>
+</zk>
