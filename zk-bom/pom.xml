@@ -16,14 +16,14 @@
     <properties>
         <zats.version>2.1.1</zats.version>
         <zkspringboot.version>2.3.1</zkspringboot.version>
-        <zkckeditor.version>4.14.0.0</zkckeditor.version>
+        <zkckeditor.version>4.14.0.1</zkckeditor.version>
         <zkgmaps.version>3.2.0</zkgmaps.version>
-        <zkcharts.version>7.2.1.1</zkcharts.version>
+        <zkcharts.version>7.2.1.2</zkcharts.version>
         <zkpivotable.version>2.5.2</zkpivotable.version>
         <zkpoi.version>3.9.17</zkpoi.version>
         <zss.version>3.9.6</zss.version>
         <keikai.oss.version>5.0.0.1</keikai.oss.version>
-        <keikai.ex.version>5.4.0</keikai.ex.version>
+        <keikai.ex.version>5.6.0</keikai.ex.version>
     </properties>
     <dependencyManagement>
         <dependencies>
