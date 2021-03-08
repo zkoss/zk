@@ -12,6 +12,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.Test;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 
 /**
@@ -21,7 +22,11 @@ public class B95_ZK_4614Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		click(jq("@button"));
+		click(jq("@button:eq(0)"));
+		waitResponse();
+		assertNoJSError();
+
+		click(jq("@button:eq(1)"));
 		waitResponse();
 		assertNoJSError();
 	}
