@@ -1860,9 +1860,10 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 	}
 };
 
+var _zkf;
 /** @partial zk.Object
  */
-var _zkf = {
+_zkf = {
 	/** Determines if the specified Object is assignment-compatible with this Class. This method is equivalent to [[zk.Object#$instanceof].
 	 * Example:
 <pre><code>

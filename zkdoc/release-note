@@ -1,4 +1,13 @@
+ZK 9.6.0
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+   --------
 ZK 9.5.1
+Mar 9, 2021
 * Features
   ZK-4118: Add zk.edge_legacy for old version Microsoft Edge
   ZK-4679: tree remove non breaking spaces (&nbsp;) from dom structure
