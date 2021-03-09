@@ -2,6 +2,7 @@ ZK 9.6.0
 * Features
 
 * Bugs
+  ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
 
 * Upgrade Notes
 

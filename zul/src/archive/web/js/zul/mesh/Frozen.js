@@ -347,7 +347,8 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 							: 0,
 						nativebar = mesh._nativebar;
 					// ZK-2071: nativebar behavior should be same as fakebar
-					if (force || (wd < 1)) {
+					// ZK-4762: cellWidth should update while scroll into view
+					if (force || (wd < 2)) {
 						cellWidth = hdWgt._origWd || jq.px(wd);
 						// ZK-2772: consider faker's width first for layout consistent
 						// if the column is visible.
