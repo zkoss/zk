@@ -3,6 +3,7 @@ ZK 9.6.0
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
+  ZK-4813: WCAG splitter/splitlayout (collapse="after")
 
 * Upgrade Notes
 
