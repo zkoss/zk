@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4813.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 09 12:50:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click the two splitter, the "value-now" should be "0" (not "0.00")
+	</label>
+	<hbox height="100px" width="100%">
+		<div>
+			left side
+			<textbox/>
+		</div>
+		<splitter collapse="before"/>
+		<div>
+			right side
+			<textbox/>
+		</div>
+	</hbox>
+	<separator />
+	<splitlayout height="200px" orient="horizontal" widths="200,200" collapse="before">
+		<div />
+		<div />
+	</splitlayout>
+</zk>
