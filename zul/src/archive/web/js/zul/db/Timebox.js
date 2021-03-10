@@ -42,10 +42,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		 * @type int
 		 */
 		HOUR3_FIELD = 7,
-
-	globallocalizedSymbols = {},
-
-	Timebox =
+		globallocalizedSymbols = {},
+		Timebox =
 /**
  * An input box for holding a time (a Date Object, but only Hour & Minute are used.
  *
