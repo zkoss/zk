@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?meta http-equiv="refresh" content="5"?>
+<!--
+F96-ZK-4751.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 10 11:12:35 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Reload this page many times.
+        2. Each desktop ID should be long enough (~128bits) and not sequential.
+    </label>
+    Current Desktop ID: <label value="${desktop.id}"/>
+</zk>

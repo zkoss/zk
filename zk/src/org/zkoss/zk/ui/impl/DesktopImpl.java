@@ -19,7 +19,9 @@ package org.zkoss.zk.ui.impl;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -335,18 +337,27 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private static final String DESKTOP_ID_PREFIX = "z_";
 
-	private static String nextDesktopId(DesktopCache dc) {
-		if (dc != null)
-			return ComponentsCtrl.encodeId(new StringBuffer(12).append(DESKTOP_ID_PREFIX), dc.getNextKey()).toString();
-
-		final int v;
-		synchronized (DesktopImpl.class) {
-			v = _keyWithoutDC++;
-		}
-		return ComponentsCtrl.encodeId(new StringBuffer(12).append("_g"), v).toString();
+	private static class Holder {
+		static final SecureRandom PRNG = new SecureRandom();
+		static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
 	}
 
-	private static int _keyWithoutDC;
+	private static String nextDesktopId(DesktopCache dc) {
+		String dtid;
+		do {
+			dtid = generateDesktopId();
+		} while (dc != null && dc.getDesktopIfAny(dtid) != null);
+		return dtid;
+	}
+
+	private static String generateDesktopId() {
+		final byte[] randomBytesValue = new byte[16];
+		Holder.PRNG.nextBytes(randomBytesValue);
+		return new StringBuilder(32)
+				.append(DESKTOP_ID_PREFIX)
+				.append(Holder.ENCODER.encodeToString(randomBytesValue))
+				.toString();
+	}
 
 	/** Initialization for constructor and de-serialized. */
 	private void init() {

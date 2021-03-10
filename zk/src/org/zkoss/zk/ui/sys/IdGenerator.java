@@ -57,7 +57,9 @@ public interface IdGenerator {
 	 * @return the next component UUID, or null to generate the
 	 * @since 6.0.1
 	 */
-	public String nextComponentUuid(Desktop desktop, Component comp, ComponentInfo compInfo);
+	default String nextComponentUuid(Desktop desktop, Component comp, ComponentInfo compInfo) {
+		return null;
+	}
 
 	/** Returns the next page UUID for the specified page,
 	 * or null to generate the default UUID.
@@ -75,7 +77,9 @@ public interface IdGenerator {
 	 * @return the next page UUID, or null to generate the
 	 * default UUID.
 	 */
-	public String nextPageUuid(Page page);
+	default String nextPageUuid(Page page) {
+		return null;
+	}
 
 	/** Returns the next desktop ID for the specified desktop,
 	 * or null to generate the default ID.
@@ -92,5 +96,7 @@ public interface IdGenerator {
 	 *
 	 * @return the next desktop ID, or null to generate the default ID.
 	 */
-	public String nextDesktopId(Desktop desktop);
+	default String nextDesktopId(Desktop desktop) {
+		return null;
+	}
 }
