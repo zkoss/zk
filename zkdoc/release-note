@@ -4,6 +4,7 @@ ZK 9.6.0
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
   ZK-4813: WCAG splitter/splitlayout (collapse="after")
+  ZK-3563: Children binding causes load binding to stop firing
 
 * Upgrade Notes
 
