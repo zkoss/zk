@@ -18,11 +18,12 @@ function (out) {
 	
 	out.push('<span ', this.domAttrs_({tabindex: 1}));//we have a default 0 for tabindex of this element
 	
-	if (this._disabled)
+	if (this._disabled) {
 		out.push(' disabled="disabled" aria-disabled="true"');
-	
-	out.push(' tabindex="', tabi, '"');
-    out.push(' ><span id="', uuid, '-real" class="', this.$s('content') ,'" role="none"');
+	} else {
+		out.push(' tabindex="', tabi, '"');
+	}
+	out.push(' ><span id="', uuid, '-real" class="', this.$s('content') ,'" role="none"');
 	
 	out.push('>', this.domContent_(), 
 			 '<span id="', uuid, '-btn" class="', this.$s('button'), '" role="none">',
