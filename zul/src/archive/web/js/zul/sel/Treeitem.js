@@ -49,42 +49,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (w._visible && w._open) // optimized, need to recurse only if open and visible
 					_showDOM(w, visible);
 	}
-	//Bug ZK-1766
-	function _searchPrevRenderedItem(wgt) {
-		var target;
-		if (wgt) {
-			if (wgt.treerow) {
-				return wgt;
-			}
-			if (wgt.isContainer()) {
-				for (var c = wgt.treechildren.lastChild; c; c = c.previousSibling) {
-					target = _searchPrevRenderedItem(c);
-					if (target)
-						return target;
-				}
-			}
-			target = _searchPrevRenderedItem(wgt.previousSibling);
-		}
-		return target;
-	}
-	//Bug ZK-1766
-	function _searchNextRenderedItem(wgt) {
-		var target;
-		if (wgt) {
-			if (wgt.treerow) {
-				return wgt;
-			}
-			if (wgt.isContainer()) {
-				for (var c = wgt.treechildren.firstChild; c; c = c.nextSibling) {
-					target = _searchNextRenderedItem(c);
-					if (target)
-						return target;
-				}
-			}
-			target = _searchNextRenderedItem(wgt.nextSibling);
-		}
-		return target;
-	}
 
 	function _getTreePath(tree, node) {
 		var p = node,
@@ -252,7 +216,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	 */
 	getLevel: function () {
 		var level = 0;
-		for (var item = this;; ++level) {
+		for (var item = this; ; ++level) {
 			if (!item.parent)
 				break;
 
@@ -499,7 +463,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		var tree = this.getTree();
 		return _compareTreePath(_getTreePath(tree, item), _getTreePath(tree, this));
 	}
-},{
+}, {
 	//package utiltiy: sync selected items for replaceWidget
 	_syncSelItems: function (oldwgt, newwgt) {
 		var items;

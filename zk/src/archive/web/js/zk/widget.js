@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-(function (undefined) {
+(function (undefined) { // eslint-disable-line no-shadow-restricted-names
 	var _binds = {}, //{uuid, wgt}: bind but no node
 		_globals = {}, //global ID space {id, [wgt...]}
 		_floatings = [], //[{widget:w,node:n}]
@@ -27,7 +27,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_syncdt, //timer ID to sync destkops
 		_rdque = [], _rdtid, //async rerender's queue and timeout ID
 		_ignCanActivate, //whether canActivate always returns true
-		REGEX_DQUOT = /\"/g; //jsdoc can't handle it correctly, so we have to put here
+		REGEX_DQUOT = /"/g; //jsdoc can't handle it correctly, so we have to put here
 
 	//Check if el is a prolog
 	function _isProlog(el) {
@@ -428,7 +428,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function DD_ignoredrag(drag, pt, evt) {
 		//ZK 824:Textbox dragging issue with Listitem
 		//since 5.0.11,6.0.0 introduce evt,drag to the wgt.ignoreDrag_() to provide more information.
-		return drag.control.ignoreDrag_(pt,evt,drag);
+		return drag.control.ignoreDrag_(pt, evt, drag);
 	}
 
 	function _topnode(n) {
@@ -590,9 +590,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		constraint: DD_constraint, //s.t. cursor won't be overlapped with ghosting
 		ignoredrag: DD_ignoredrag,
 		zIndex: 88800
-	};
+	},
 
-var Widget =
+	Widget =
 /** A widget, i.e., an UI object.
  * Each component running at the server is associated with a widget
  * running at the client.
@@ -2181,7 +2181,7 @@ wgt.$f().main.setTitle("foo");
 				//parent first
 				var inf = {widget: this, node: opts && opts.node ? opts.node : this.$n()},
 					bindLevel = this.bindLevel;
-				for (var j = _floatings.length;;) {
+				for (var j = _floatings.length; ;) {
 					if (--j < 0) {
 						_floatings.unshift(inf);
 						break;
@@ -2459,7 +2459,7 @@ redraw: function (out) {
 			out += 'display:none;';
 
 		if ((!no || !no.style) && (s = this.getStyle())) {
-			s = s.replace(REGEX_DQUOT,'\'');  // B50-ZK-647
+			s = s.replace(REGEX_DQUOT, '\'');  // B50-ZK-647
 			out += s;
 			if (s.charAt(s.length - 1) != ';')
 				out += ';';
@@ -2524,7 +2524,7 @@ function () {
 	 * @return String
 	 */
 	domAttrs_: function (no) {
-		var out = '', attrs, s;
+		var out = '', s;
 		if (!no) {
 			if ((s = this.uuid))
 				out += ' id="' + s + '"';
@@ -2628,9 +2628,8 @@ function () {
 			if (!zk.Desktop._ndt) zk.stateless();
 		}
 
-		var cfi = skipper ? null : _bkFocus(this);
-
-		var p = this.parent;
+		var cfi = skipper ? null : _bkFocus(this),
+			p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper, _trim_);
 		else {
 			var oldwgt = this.getOldWidget_(n);
@@ -2828,7 +2827,7 @@ function () {
 			before = before.getFirstNode_();
 		}
 		if (!before)
-			for (var w = this;;) {
+			for (var w = this; ;) {
 				ben = w.getCaveNode();
 				if (ben) break;
 
@@ -3951,7 +3950,7 @@ wgt.listen({
 			var lsns = this._lsns[evt];
 			if (!lsns) this._lsns[evt] = [inf];
 			else
-				for (var j = lsns.length;;)
+				for (var j = lsns.length; ;)
 					if (--j < 0 || lsns[j].priority >= priority) {
 						lsns.splice(j + 1, 0, inf);
 						break;
@@ -4107,7 +4106,6 @@ wgt.setListeners({
 		}
 
 		var bklsns = this._bklsns,
-			oldfn = bklsns[evt],
 			inf = {};
 		if (fn) {
 			inf[evt] = bklsns[evt]
@@ -4672,7 +4670,7 @@ _doFooSelect: function (evt) {
 		if (p)
 			return this.isRealVisible({dom: true, strict: strict, until: p, cache: cache});
 
-		for (wgt = this;;) {
+		for (wgt = this; ;) {
 			if (!wgt.$instanceof(zk.Native)) //if native, $n() might be null or wrong (if two with same ID)
 				break;
 
@@ -5187,7 +5185,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	isRealVisible: function () {
 		return true;
 	}
-},{
+}, {
 	/** Returns the desktop of the specified desktop ID, widget, widget UUID, or DOM element.
 	 * <p>Notice that the desktop's ID and UUID are the same.
 	 * @param Object o a desktop's ID, a widget, a widget's UUID, or a DOM element.
@@ -5385,7 +5383,7 @@ zk.Page = zk.$extends(zk.Widget, {
 			w.redraw(out);
 		out.push('</div>');
 	}
-},{
+}, {
 	$redraw: _zkf,
 	/** An array of contained pages (i.e., a standalone ZK page but included by other technology).
 	 * For example, a ZUL age that is included by a JSP page.
@@ -5448,7 +5446,7 @@ zk.Native = zk.$extends(zk.Widget, {
 					}
 				}
 				if (j < len) {
-					cond = {upper: 1,lower: 1,digit: 1,'-': 1};
+					cond = {upper: 1, lower: 1, digit: 1, '-': 1};
 					while (++j < len)
 						if (!zUtl.isChar(s.charAt(j), cond))
 							break;
@@ -5475,8 +5473,8 @@ zk.Native = zk.$extends(zk.Widget, {
 }, {
 	$redraw: _zkf,
 	replaceScriptContent: (function () {
-		var Script_RE = new RegExp(/<script[^>]*>([\s\S]*?)<\/script>/g);
-		var Replace_RE = new RegExp(/<\/(?=script>)/ig);
+		var Script_RE = new RegExp(/<script[^>]*>([\s\S]*?)<\/script>/g),
+			Replace_RE = new RegExp(/<\/(?=script>)/ig);
 		return function (str) {
 			try {
 				var result = str.match(Script_RE);
@@ -5488,8 +5486,8 @@ zk.Native = zk.$extends(zk.Widget, {
 						
 						// enclose with <script></script>
 						if (substr.length >= 17) {
-							var cnt = substr.substring(8, substr.length - 9);
-							var cnt2 = zk.Native.replaceScriptContent(cnt);
+							var cnt = substr.substring(8, substr.length - 9),
+								cnt2 = zk.Native.replaceScriptContent(cnt);
 							if (cnt != cnt2)
 								str = str.replace(cnt, cnt2);
 						}
@@ -5814,9 +5812,9 @@ zk.NoDOM = {
 				startDesc = desc + ' start',
 				endDesc = desc + ' end';
 			if (node) {
-				var start = document.createComment(startDesc);
-				var end = document.createComment(endDesc);
-				var parentNode = node.parentNode;
+				var start = document.createComment(startDesc),
+					end = document.createComment(endDesc),
+					parentNode = node.parentNode;
 				parentNode.insertBefore(start, node);
 				var endNode = node,
 					lastChild = this.lastChild;
@@ -5834,8 +5832,8 @@ zk.NoDOM = {
 				parentNode.insertBefore(end, endNode.nextSibling);
 				this._startNode = start;
 				this._endNode = end;
-				var id = '_z_nodomfs0';
-				var f = jq('#' + id);
+				var id = '_z_nodomfs0',
+					f = jq('#' + id);
 				if (f.length == 0) {
 					var fd = document.createElement('div');
 					fd.id = id;
@@ -5851,9 +5849,9 @@ zk.NoDOM = {
 
 	removeHTML_: function (n) {
 		if (this.getMold() == 'nodom') {
-			var context = this.$getInterceptorContext$();
-			//clear the dom between start node and end node
-			var node = this._startNode ? this._startNode.nextSibling : null,
+			var context = this.$getInterceptorContext$(),
+				//clear the dom between start node and end node
+				node = this._startNode ? this._startNode.nextSibling : null,
 				next;
 			while (node && node != this._endNode) {
 				next = node.nextSibling;
@@ -5968,7 +5966,6 @@ zk.NoDOM = {
 	},
 	replaceWidget: function (newwgt) {
 		if (this.getMold() == 'nodom') {
-			var context = this.$getInterceptorContext$();
 			newwgt._startNode = this._startNode;
 			newwgt._endNode = this._endNode;
 			newwgt._oldWgt = this;
@@ -5976,8 +5973,8 @@ zk.NoDOM = {
 	},
 	$n: function (subId) {
 		if (!subId && this.getMold() == 'nodom') {
-			var context = this.$getInterceptorContext$();
-			var n = this._node;
+			var context = this.$getInterceptorContext$(),
+				n = this._node;
 			if (!n && this.desktop && !this._nodeSolved) {
 				this._node = n = jq(this.uuid + '-fake', zk)[0];
 				this._nodeSolved = true;
@@ -6049,6 +6046,7 @@ function zkopt(opts) {
 			switch (val) {
 			case 'e':
 				zk.feature.ee = true;
+				//fallthrough
 			case 'p':
 				zk.feature.pe = true;
 			}

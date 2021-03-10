@@ -157,10 +157,8 @@ zul.wgt.Groupbox = zk.$extends(zul.ContainerWidget, {
 	setFlexSizeH_: function (n, zkn, height, isFlexMin) {
 		if (isFlexMin && (this.caption || this._title)) {
 			// B60-ZK-562
-			var node = this.$n(),
-				c;
 			height = this._isDefault() ? parseInt(jq(this).css('padding-top')) : 0;
-			for (c = n.firstChild; c; c = c.nextSibling)
+			for (var c = n.firstChild; c; c = c.nextSibling)
 				height += jq(c).outerHeight();
 		}
 

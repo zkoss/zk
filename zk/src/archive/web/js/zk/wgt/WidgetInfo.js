@@ -58,7 +58,7 @@ zk.wgt.WidgetInfo = {
 			var clsnm = infs[i],
 				j = clsnm.lastIndexOf('.'),
 				wgtnm = j >= 0 ? clsnm.substring(j + 1) : clsnm;
-			_wgtInfs[wgtnm.substring(0,1).toLowerCase() + wgtnm.substring(1)] = clsnm;
+			_wgtInfs[wgtnm.substring(0, 1).toLowerCase() + wgtnm.substring(1)] = clsnm;
 		}
 	},
 	/** Loads all packages requires by all widgets.

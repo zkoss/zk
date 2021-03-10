@@ -149,8 +149,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	},
 	_syncIcon: function (isRemoved) {
 		this.rerender(isRemoved ? -1 : false);
-		var p;
-		if (p = this.parent) {
+		if (this.parent) {
 			this._clearCache = true;
 		}
 	},

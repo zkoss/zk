@@ -54,10 +54,10 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doFocus_', arguments);
 
 		//sync frozen
-		var box, frozen, tbody, td, tds, node;
+		var box, node;
 		if ((box = this.getMeshWidget()) && box.efrozen
-			&& (frozen = zk.Widget.$(box.efrozen.firstChild)
-			&& (node = this.$n()))) {
+			&& zk.Widget.$(box.efrozen.firstChild)
+			&& (node = this.$n())) {
 			box._moveToHidingFocusCell(node.cellIndex);
 		}
 	},
@@ -487,15 +487,14 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			hdfaker = mesh.ehdfaker,
 			bdfaker = mesh.ebdfaker,
 			ftfaker = mesh.eftfaker,
-			cidx = zk(wgt.$n()).cellIndex();
-
-		var hdcols = hdfaker.childNodes,
+			cidx = zk(wgt.$n()).cellIndex(),
+			hdcols = hdfaker.childNodes,
 			bdcols = bdfaker.childNodes,
-			ftcols = ftfaker ? ftfaker.childNodes : null;
+			ftcols = ftfaker ? ftfaker.childNodes : null,
+			wds = [];
 
 		//1. store resized width
 		// B70-ZK-2199: convert percent width to fixed width
-		var wds = [];
 		for (var w = mesh.head.firstChild, i = 0; w; w = w.nextSibling, i++) {
 			var stylew = hdcols[i].style.width,
 				origWd = w._origWd, // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
@@ -553,7 +552,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
-			width: wd ,
+			width: wd,
 			widths: wds
 		}, evt.data), null, 0);
 
@@ -573,7 +572,6 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 
 	redraw: function (out) {
 		var uuid = this.uuid,
-			zcls = this.getZclass(),
 			label = this.domContent_();
 		out.push('<th', this.domAttrs_({width: true}), ' role="columnheader"><div id="',
 			uuid, '-cave" class="', this.$s('content'), '"',

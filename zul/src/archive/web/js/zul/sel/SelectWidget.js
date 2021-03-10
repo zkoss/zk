@@ -202,7 +202,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	setChgSel: function (val) { //called from the server
 		var sels = {};
-		for (var j = 0;;) {
+		for (var j = 0; ;) {
 			var k = val.indexOf(',', j),
 				s = (k >= 0 ? val.substring(j, k) : val.substring(j)).trim();
 			if (s) sels[s] = true;
@@ -406,7 +406,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	 */
 	clearSelection: function () {
 		if (this._selItems.length) {
-			for (var item;(item = this._selItems.pop());)
+			for (var item; (item = this._selItems.pop());)
 				item._setSelectedDirectly(false);
 			this._selectedIndex = -1;
 			this._updHeaderCM();
@@ -830,7 +830,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			//if _anchorTop/_anchorLeft is the same , just ignore the event.
 			this._anchorTop = offs[1];
 			this._anchorLeft = offs[0];
-			this.fire('onAnchorPos',{top: this._anchorTop,left: this._anchorLeft});
+			this.fire('onAnchorPos', {top: this._anchorTop, left: this._anchorLeft});
 		}
 
 		focusElStyle.top = this._anchorTop + 'px';
@@ -1002,8 +1002,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (it[j].isSelected())
 				data.push(it[j]);
 
-		var edata, keep = true;
-		var checkSelectAll = false;
+		var edata, keep = true,
+			checkSelectAll = false;
 		if (this._multiple && this._headercm) {
 			checkSelectAll = jq(this._headercm).hasClass(zk.Widget.$(this._headercm).$s('checked'));
 		}

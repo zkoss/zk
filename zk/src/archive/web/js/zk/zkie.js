@@ -68,7 +68,7 @@ if (!zk.css3) {
 				return false;
 			}
 
-			for (var c = shadow;;) {
+			for (var c = shadow; ;) {
 				if (!(c = c.nextSibling) || c.tagName) {
 					if (c != node)
 						node.parentNode.insertBefore(shadow, node);

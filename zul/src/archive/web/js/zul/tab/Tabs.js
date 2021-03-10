@@ -257,8 +257,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				tabsScrollTop = self._tabsScrollTop;
 			self._fixTabsScrollLeft(tabsScrollLeft <= 0 ? 0 : tabsScrollLeft);
 			self._fixTabsScrollTop(tabsScrollTop <= 0 ? 0 : tabsScrollTop);
-		};
-		var run = setInterval(function () {
+		},
+		run = setInterval(function () {
 			if (!move || !self.desktop) {
 				delete self._doingScroll[to];
 				clearInterval(run);
@@ -359,7 +359,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				u = tabbox.$n('up'),
 				d = tabbox.$n('down'),
 				cave = this.$n('cave'),
-				child = jq(tbx).children('div'),
 				allTab = jq(cave).children();
 
 			if (!tabbox.getHeight() && (!tabbox._vflex || tabbox._vflex == 'min')) { // B50-ZK-473: vflex 1
@@ -368,7 +367,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				} else {
 					var tabsHgh = allTab.length * allTab[0].offsetHeight, // default height
 						seldPanel = tabbox.getSelectedPanel(),
-						panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0 ,  //B60-ZK-965
+						panelsHgh = seldPanel && seldPanel.getPanelContentHeight_() || 0,  //B60-ZK-965
 					realHgh = Math.max(tabsHgh, panelsHgh);
 					tbx.style.height = jq.px0(realHgh + zk(tbx).padBorderHeight());
 				}

@@ -253,7 +253,7 @@ zWatch = (function () {
 				this.fns = fns;
 			},
 			fire: function (ref) {
-				var infs, inf, xinf,
+				var infs, xinf,
 					name = this.name,
 					xinfs = this.xinfs,
 					args = this.args,
@@ -484,7 +484,7 @@ zWatch.listen({
 			if (wts) {
 				var bindLevel = o.bindLevel;
 				if (bindLevel != null) {
-					for (var j = wts.length;;) {
+					for (var j = wts.length; ;) {
 						if (--j < 0) {
 							wts.unshift(xinf);
 							break;
@@ -500,7 +500,7 @@ zWatch.listen({
 						}
 					}
 				} else
-					for (var j = wts.length;;) {
+					for (var j = wts.length; ;) {
 						if (--j < 0) {
 							wts.push(xinf);
 							break;
@@ -628,7 +628,7 @@ onX: function (ctl) {
 	* @param Object... vararg any number of arguments to pass to the listener. They will become the third, forth, and following arguments when the listener is called.
 	*/
 	fireDown: function (name, org, opts) {
-		_fire(name, org, zk.copy(opts,{down: true}), arguments);
+		_fire(name, org, zk.copy(opts, {down: true}), arguments);
 	},
 	onBindLevelMove: function () { //internal
 		_dirty = true;

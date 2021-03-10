@@ -256,8 +256,8 @@ zul.inp.Doublespinner = zk.$extends(zul.inp.NumberInputWidget, {
 			result = _shiftedSum(value, this._step, shiftLen, asc); // B50-3301517
 
 		// control overflow
-		if (result > Math.pow(2,63) - 1)	result = Math.pow(2,63) - 1;
-		else if (result < -Math.pow(2,63)) result = -Math.pow(2,63);
+		if (result > Math.pow(2, 63) - 1)	result = Math.pow(2, 63) - 1;
+		else if (result < -Math.pow(2, 63)) result = -Math.pow(2, 63);
 
 		//over bound shall restore value
 		if (this._max != null && result > this._max) result = value;

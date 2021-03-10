@@ -398,7 +398,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	deferRedrawHTML_: function (out) {
 		var tag = this.isTopmost() ? 'td' : 'li';
-		out.push('<', tag, this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></', tag,'>');
+		out.push('<', tag, this.domAttrs_({domClass: 1}), ' class="z-renderdefer"></', tag, '>');
 	},
 	//@Override
 	getImageNode: function () {

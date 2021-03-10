@@ -344,8 +344,7 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 				if (cnt-- <= 0) { //show
 					var wd = isVisible ?
 							(zk.ie ? Math.max(jq(n).width(), 0) : n.offsetWidth) // Bug ZK-2690
-							: 0,
-						nativebar = mesh._nativebar;
+							: 0;
 					// ZK-2071: nativebar behavior should be same as fakebar
 					// ZK-4762: cellWidth should update while scroll into view
 					if (force || (wd < 2)) {
@@ -378,9 +377,9 @@ zul.mesh.Frozen = zk.$extends(zul.Widget, {
 
 			var update;
 			while (update = updateBatch.shift()) {
-				var n = update.node;
-				var cellWidth = update.width;
-				var i = update.index;
+				var n = update.node,
+					cellWidth = update.width,
+					i = update.index;
 
 				if ((faker = jq('#' + n.id + '-hdfaker')[0]))
 					faker.style.width = cellWidth;

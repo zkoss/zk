@@ -39,7 +39,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			upload = n._ctrl,
 			wgt = upload._wgt,
 			dt = wgt.desktop,
-			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid, {desktop: dt,au: true}),
+			action = zk.ajaxURI('/upload' + '?uuid=' + wgt.uuid + '&dtid=' + dt.id + '&sid=' + upload.sid, {desktop: dt, au: true}),
 			form = n.form;
 		form.action = action;
 
@@ -57,23 +57,23 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	if (zk.opera) { //opera only
-		var _syncQue = [], _syncId;
-		var _syncNow = function () {
-			for (var j = _syncQue.length; j--;)
-				_syncQue[j].sync();
-		};
-		var _addSyncQue = function (upld) {
-			if (!_syncQue.length)
-				_syncId = setInterval(_syncNow, 1500);
-			_syncQue.push(upld);
-		};
-		var _rmSyncQue = function (upld) {
-			_syncQue.$remove(upld);
-			if (_syncId && !_syncQue.length) {
-				clearInterval(_syncId);
-				_syncId = null;
-			}
-		};
+		var _syncQue = [], _syncId,
+			_syncNow = function () {
+				for (var j = _syncQue.length; j--;)
+					_syncQue[j].sync();
+			},
+			_addSyncQue = function (upld) {
+				if (!_syncQue.length)
+					_syncId = setInterval(_syncNow, 1500);
+				_syncQue.push(upld);
+			},
+			_rmSyncQue = function (upld) {
+				_syncQue.$remove(upld);
+				if (_syncId && !_syncQue.length) {
+					clearInterval(_syncId);
+					_syncId = null;
+				}
+			};
 	}
 
 /** Helper class for implementing the fileupload.
@@ -144,7 +144,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	initContent: function () {
 		var wgt = this._wgt,
 			parent = this._parent,
-			ref = wgt.$n(), dt = wgt.desktop,
+			ref = wgt.$n(),
 			html = '<span class="z-upload"'
 				 + (this._tooltiptext ? ' title="' + zUtl.encodeXML(this._tooltiptext) + '"' : '') // ZK-751
 				 + '><form enctype="multipart/form-data" method="POST">'
@@ -239,7 +239,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	finish: function (sid) {
 		_cancel(this, sid, true);
 	}
-},{
+}, {
 	/**
 	 * Shows the error message of the fileupload
 	 * @param String msg the error message
@@ -536,7 +536,6 @@ zul.Uploader = zk.$extends(zk.Object, {
 					this.setSclass('z-fileupload-manager');
 				},
 				onFloatUp: function (ctl) {
-					var wgt = ctl.origin;
 					if (!this.isVisible())
 						return;
 					this.setTopmost();
@@ -568,8 +567,8 @@ zul.Uploader = zk.$extends(zk.Object, {
 								children: [new zul.wgt.Progressmeter({
 									id: id,
 									sclass: 'z-fileupload-progress'
-								})
-								, new zul.wgt.Div({
+								}),
+								new zul.wgt.Div({
 									sclass: 'z-fileupload-remove z-icon-times',
 									listeners: {
 										onClick: function () {

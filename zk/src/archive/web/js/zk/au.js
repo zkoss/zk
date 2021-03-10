@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	var _perrURIs = {}, //server-push error URI
 		_onErrs = [], //onError functions
 		cmdsQue = [], //response commands in XML
-		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
+		sendPending, responseId,
 		doCmdFns = [],
 		idTimeout, //timer ID for automatica timeout
 		pfIndex = 0, //performance meter index
@@ -492,7 +492,7 @@ zAu = {
 		if (navigator.sendBeacon && window.URLSearchParams) {
 			var params = new URLSearchParams(data);
 			for (var key in headers) {
-				if (headers.hasOwnProperty(key))
+				if (Object.prototype.hasOwnProperty.call(headers, key))
 					params.append(key, headers[key]);
 			}
 			navigator.sendBeacon(url, zk.chrome // https://crbug.com/747787
@@ -513,7 +513,7 @@ zAu = {
 			data: data,
 			beforeSend: function (xhr) {
 				for (var key in headers) {
-					if (headers.hasOwnProperty(key))
+					if (Object.prototype.hasOwnProperty.call(headers, key))
 						xhr.setRequestHeader(key, headers[key]);
 				}
 			},
@@ -772,7 +772,7 @@ zAu.beforeSend = function (uri, req, dt) {
 		}
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content, rtags = {},
-			requri = uri || zk.ajaxURI(null, {desktop: dt,au: true}),
+			requri = uri || zk.ajaxURI(null, {desktop: dt, au: true}),
 			ws = typeof zWs != 'undefined' && zWs.ready;
 		if (!forceAjax && ws) {
 			content = {};
@@ -986,7 +986,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			switch (rstatus) { //auto-retry for certain case
 			default:
 				if (!zAu.ajaxReqTries) break;
-				//fall thru
+				//fall through
 			case 12002: //server timeout
 			case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
 			case 12031:
@@ -1249,7 +1249,6 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			var idx;
 			if (url && !url.startsWith('/') && (idx = url.indexOf('#')) >= 0) {
 				var uri = url.substring(0, idx),
-					hash = url.substring(idx + 1),
 					locHash = window.location.hash,
 					locUrl = window.location.href;
 				if (locHash) {
@@ -1337,13 +1336,12 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 			dpr = window.devicePixelRatio;
 
 		var clientInfo = [new Date().getTimezoneOffset(),
-			screen.width, screen.height, screen.colorDepth,
-			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
-			zk.mm.tz.guess()
-		];
+				screen.width, screen.height, screen.colorDepth,
+				jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY(), dpr.toFixed(1), orient,
+				zk.mm.tz.guess()],
+			oldClientInfo = zAu._clientInfo;
 
 		// ZK-3181: only send when value changed
-		var oldClientInfo = zAu._clientInfo;
 		if (oldClientInfo) {
 			var same = oldClientInfo.every(function (el, index) {
 				return el === clientInfo[index];
@@ -1743,8 +1741,8 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param String... codes the JavaScript code snippet to generate new widget(s).
 	 */
 	addAft: function (wgt) {
-		var p = wgt.parent;
-		var fn = function (child) {
+		var p = wgt.parent,
+			fn = function (child) {
 				var act = _beforeAction(child, 'show');
 				if (p) {
 					p.insertBefore(child, wgt.nextSibling);
@@ -1775,12 +1773,12 @@ zAu.cmd1 = /*prototype*/ {
 	 * @param String... codes the JavaScript code snippet to generate new widget(s).
 	 */
 	addBfr: function (wgt) {
-		var p = wgt.parent;
-		var fn = function (child) {
-			var act = _beforeAction(child, 'show');
-			p.insertBefore(child, wgt);
-			_afterAction(child, act);
-		};
+		var p = wgt.parent,
+			fn = function (child) {
+				var act = _beforeAction(child, 'show');
+				p.insertBefore(child, wgt);
+				_afterAction(child, act);
+			};
 		for (var args = arguments, j = 1; j < args.length; ++j)
 			zkx_(args[j], fn);
 

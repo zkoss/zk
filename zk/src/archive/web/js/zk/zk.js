@@ -542,10 +542,10 @@ try {
 	 * @see #load
 	 */
 	$package: function (name, end, wv) { //end used only by WpdExtendlet
-		for (var j = 0, ref = window;;) {
+		for (var j = 0, ref = window; ;) {
 			var k = name.indexOf('.', j),
-				nm = k >= 0 ? name.substring(j, k) : name.substring(j);
-			var nxt = ref[nm], newpkg;
+				nm = k >= 0 ? name.substring(j, k) : name.substring(j),
+				nxt = ref[nm], newpkg;
 			if (newpkg = !nxt) nxt = ref[nm] = {};
 			if (k < 0) {
 				if (newpkg && end !== false) zk.setLoaded(name);
@@ -602,10 +602,10 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 				if (fn) fn(last);
 				return last;
 			}
-			for (var j = 0, ref = window;;) {
+			for (var j = 0, ref = window; ;) {
 				var k = name.indexOf('.', j),
-					nm = k >= 0 ? name.substring(j, k) : name.substring(j);
-				var nxt = ref[nm];
+					nm = k >= 0 ? name.substring(j, k) : name.substring(j),
+					nxt = ref[nm];
 				if (k < 0 || !nxt) {
 					if (fn) {
 						if (nxt) fn(nxt);
@@ -1049,7 +1049,7 @@ zk.set(dst, src, ["foo", "mike"]);
 		if (typeof name == 'string') {
 			zk._set(o, name, value, extra);
 		} else //o: dst, name: src, value: props
-			for (var j = 0, len = value.length, m, n, v; j < len;) {
+			for (var j = 0, len = value.length, m, n; j < len;) {
 				n = value[j++];
 				m = name['get' + n.charAt(0).toUpperCase() + n.substring(1)];
 				if (!extra || m || name[n] !== undefined) //extra: ignoreUndefined in this case
@@ -1451,8 +1451,8 @@ zk.$intercepts(zul.inp.Combobox, {
 				}
 				(function (nm, oldFunc) {
 					targetpt[nm] = function () {
-						var context = {stop: false, result: null, args: arguments};
-						var arr = this._$$interceptorContext;
+						var context = {stop: false, result: null, args: arguments},
+							arr = this._$$interceptorContext;
 						arr.push(context);
 						interceptor[nm].apply(this, arguments);
 						var result = context.stop ? context.result : oldFunc.apply(this, context.args);
@@ -1475,9 +1475,9 @@ zk.$intercepts(zul.inp.Combobox, {
 	jq.uaMatch = function (ua) {
 		ua = ua.toLowerCase();
 
-		var match = /(chrome)[ \/]([\w.]+)/.exec(ua)
-			|| /(webkit)[ \/]([\w.]+)/.exec(ua)
-			|| /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua)
+		var match = /(chrome)[ /]([\w.]+)/.exec(ua)
+			|| /(webkit)[ /]([\w.]+)/.exec(ua)
+			|| /(opera)(?:.*version|)[ /]([\w.]+)/.exec(ua)
 			|| /(msie) ([\w.]+)/.exec(ua)
 			|| ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua)
 			|| [];
@@ -1628,7 +1628,7 @@ zk.Buffer = Array;
 	zk.Buffer.prototype = new Array;
 	zk.copy(zk.Buffer.prototype, {
 		push: function () {
-			for (var i = 0, j = arguments.length; i < j;i++)
+			for (var i = 0, j = arguments.length; i < j; i++)
 				if (arguments[i] != null || arguments[i] != undefined)
 					this.out += arguments[i];
 		},
@@ -1931,7 +1931,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 		if (this.dg) this.dg.destroy();
 		jq('#' + this.id).remove();
 	}
-},{
+}, {
 	redraw: function () {
 		zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));

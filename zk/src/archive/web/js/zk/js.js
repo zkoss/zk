@@ -1,3 +1,4 @@
+/* eslint-disable one-var */
 /* js.js
 
 	Purpose:

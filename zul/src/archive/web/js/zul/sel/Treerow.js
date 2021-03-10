@@ -40,7 +40,6 @@ zul.sel.Treerow = zk.$extends(zul.Widget, {
 		var scls = this.$supers('domClass_', arguments),
 			p = this.parent;
 		if (p && (!no || !no.zclass)) {
-			var zcls = this.getZclass();
 			if (p.isDisabled())
 				scls += (scls ? ' ' : '') + this.$s('disabled');
 			if (p.isSelected())

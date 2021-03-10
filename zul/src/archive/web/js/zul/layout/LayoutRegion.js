@@ -705,8 +705,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				fc = this.firstChild,
 				fch = fc ? fc.getHeight() : 0,
 				c = p.firstChild,
-				ph = p.offsetHeight,
-				pw = p.offsetWidth;
+				ph = p.offsetHeight;
 
 			while (c && c.nodeType == 3)
 				c = c.nextSibling;
@@ -764,6 +763,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.setSlide(!this._isSlide);
 				break;
 			}
+			// fall through if not sildable
 		case this.$n('btn'):
 		case this.$n('btned'):
 		case this.$n('splitbtn'):
@@ -809,7 +809,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 
 		this._open = true;
 
-		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
+		for (var region, rs = ['north', 'south', 'west', 'east'],
 				j = 0, k = rs.length; j < k; ++j) {
 			region = layout[rs[j]];
 			if (region && (zk(region.$n()).isVisible()
@@ -997,7 +997,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	getFirstChild: function () {
 		return this.firstChild;
 	}
-},{
+}, {
 	_aryToObject: function (array) {
 		return {top: array[0], left: array[1], right: array[2], bottom: array[3]};
 	},
@@ -1083,16 +1083,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				pbw = zk(real).padBorderWidth(),
 				lr = pbw + (pos == BL.WEST ? mars.left : mars.right),
 				tb = pbw + (pos == BL.NORTH ? mars.top : mars.bottom),
-				min = 0,
-				uuid = wgt.uuid;
+				min = 0;
 			switch (pos) {
 			case BL.NORTH:
 			case BL.SOUTH:
 				var r = ol.center || (pos == BL.NORTH ? ol.south : ol.north);
 				if (r) {
 					if (BL.CENTER == r.getPosition()) {
-						var east = ol.east,
-							west = ol.west;
 						maxs = Math.min(maxs, (real.offsetHeight + r.$n('real').offsetHeight) - min);
 					} else {
 						maxs = Math.min(maxs, ol.$n().offsetHeight
@@ -1134,8 +1131,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return true;
 	},
 	_endeffect: function (dg, evt) {
-		var wgt = dg.control,
-			keys = '';
+		var wgt = dg.control;
 		if (wgt._isVertical())
 			wgt.setHeight(dg._point[1] + 'px');
 		else

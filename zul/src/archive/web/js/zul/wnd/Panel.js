@@ -13,12 +13,6 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	// bug fixed for B50-3166478.zul
-	function _getOuter(cap, root) {
-		while (cap && cap.parentNode != root)
-			cap = cap.parentNode;
-		return cap;
-	}
 /**
  * Panel is a container that has specific functionality and structural components
  * that make it the perfect building block for application-oriented user interfaces.
@@ -451,7 +445,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 			var node = this.$n();
 			if (node) {
-				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
+				var s = node.style;
 				if (minimized) {
 					zWatch.fireDown('onHide', this);
 					jq(node).hide();
@@ -642,9 +636,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				floated = wgt.isFloatable(),
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				zkop = $op.zk,
-				s = node.style;
-
-			var sw = zkop.clientWidthDoubleValue();
+				s = node.style,
+				sw = zkop.clientWidthDoubleValue();
 			if (!floated) {
 				sw -= zkop.paddingWidth();
 				sw = $n.revisedWidth(sw);
@@ -841,9 +834,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$supers(zul.wnd.Panel, 'bind_', arguments);
 
 		zWatch.listen({onSize: this, onHide: this});
-
-		var uuid = this.uuid,
-			$Panel = this.$class;
 
 		if (this._sizable)
 			this._makeSizer();
@@ -1111,7 +1101,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			wgt._hideShadow();
 			dg.z_dir = v;
 			dg.z_box = {
-				top: offs[1], left: offs[0] ,height: el.offsetHeight,
+				top: offs[1], left: offs[0], height: el.offsetHeight,
 				width: el.offsetWidth, minHeight: zk.parseInt(wgt.getMinheight()),
 				minWidth: zk.parseInt(wgt.getMinwidth())
 			};

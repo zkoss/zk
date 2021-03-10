@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 (function () {
 var globallocalizedSymbols = {},
-	_quotePattern = /\'/g, // move pattern string here to avoid jsdoc failure
+	_quotePattern = /'/g, // move pattern string here to avoid jsdoc failure
 	_innerDateFormat = 'yyyy/MM/dd ',
 	Datebox =
 /**
@@ -348,7 +348,6 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			hasAM = aa > -1,
 			//bug 3284144: The databox format parse a wrong result with hh:mm:ss
 			hasHour1 = (hasAM || hh) ? hh > -1 || KK > -1 : false,
-			hv,
 			mv = mm > -1 ? 'mm' : '',
 			sv = ss > -1 ? 'ss' : '';
 
@@ -368,7 +367,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	 * @return String
 	 */
 	getDateFormat: function () {
-		return this._format.replace(/[(s\.S{1,3})ahKHksm]*:?/g, '').trim();
+		return this._format.replace(/[(s.S{1,3})ahKHksm]*:?/g, '').trim();
 	},
 	/** Drops down or closes the calendar to select a date.
 	 */
@@ -500,7 +499,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	bind_: function () {
 		this.$supers(Datebox, 'bind_', arguments);
-		var btn, inp = this.getInputNode();
+		var btn;
 
 		if (btn = this.$n('btn')) {
 			this.domListen_(btn, zk.android ? 'onTouchstart' : 'onClick', '_doBtnClick');
@@ -631,7 +630,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		return o.join(':');
 	}
 });
-
+// eslint-disable-next-line one-var
 var CalendarPop =
 zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	$init: function () {
@@ -764,7 +763,6 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			db = this.parent,
 			fmt = db.getTimeFormat(),
 			oldDate = db.getValue(),
-			readonly = db.isReadonly(),
 			tz = db.getTimeZone(),
 			cal = new zk.fmt.Calendar();
 
@@ -835,8 +833,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		this.$supers(CalendarPop, 'unbind_', arguments);
 	},
 	_bindTimezoneEvt: function () {
-		var db = this.parent;
-		var select = db.$n('dtzones');
+		var db = this.parent,
+			select = db.$n('dtzones');
 		if (select) {
 			select.disabled = db.isTimeZonesReadonly() ? 'disable' : '';
 			db.domListen_(select, 'onChange', '_doTimeZoneChange');
@@ -880,7 +878,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			var cell = target,
 				dateobj = this.getTime();
 			switch (this._view) {
-				case 'day' :
+				case 'day':
 					var oldTime = this.getTime();
 					this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
 						dateobj.getMonth() + cell._monofs : null, val, true /*fire onChange */);
@@ -893,7 +891,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 						this.focus();
 					}
 					break;
-				case 'month' :
+				case 'month':
 					if (selectLevel == 'month') {
 						this._setTime(null, val, 1, true);
 						break;
@@ -901,7 +899,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 					this._setTime(null, val);
 					this._setView('day');
 					break;
-				case 'year' :
+				case 'year':
 					if (selectLevel == 'year') {
 						this._setTime(val, 0, 1, true);
 						break;
@@ -909,7 +907,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 					this._setTime(val);
 					this._setView('month');
 					break;
-				case 'decade' :
+				case 'decade':
 					//Decade mode Set Year Also
 					this._setTime(val);
 					this._setView('year');
@@ -930,7 +928,6 @@ zul.db.CalendarTime = zk.$extends(zul.db.Timebox, {
 	onChanging: function (evt) {
 		var db = this.parent,
 			oldDate = db.getValue() || db._pop.getValue(),
-			cal = new zk.fmt.Calendar(),
 			// ZK-2382 we must do the conversion with date and time in the same time
 			// otherwise the result may be affcted by DST adjustment
 			dateTime = db.coerceToString_(oldDate, _innerDateFormat) + evt.data.value, //onChanging's data is string

@@ -57,7 +57,7 @@ zul.layout.Anchorchildren = zk.$extends(zul.Widget, {
 			parentn = this.parent.$n(),
 			parentwidth = jq(parentn).width(),
 			parentheight = jq(parentn).height(),
-			arr = this._anchor ? this._anchor.split(' ',2) : [],
+			arr = this._anchor ? this._anchor.split(' ', 2) : [],
 			anchorWidth = arr[0],
 			anchorHeight = arr[1];
 

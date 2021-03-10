@@ -222,7 +222,7 @@ zul.db.Renderer = {
 				'" id="', uuid, '-mid"', zUtl.cellps0, '><tbody>');
 		for (var j = 0; j < 12; ++j) {
 			if (!(j % 4)) out.push('<tr>');
-			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j ,'" aria-label="', localizedSymbols.FMON[j], '">',
+			out.push('<td class="', cell, '" id="', uuid, '-m', j, '" data-value="', j, '" aria-label="', localizedSymbols.FMON[j], '">',
 					localizedSymbols.SMON[j], '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
@@ -257,7 +257,7 @@ zul.db.Renderer = {
 				yofs++;
 				continue;
 			}
-			out.push('<td class="', cell, '" data-value="', yofs ,'" id="', uuid, '-y', j, '" >',
+			out.push('<td class="', cell, '" data-value="', yofs, '" id="', uuid, '-y', j, '" >',
 					yofs + ydelta, '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
@@ -299,7 +299,7 @@ zul.db.Renderer = {
 				continue;
 			}
 
-			out.push('<td data-value="', temp ,'" id="', uuid, '-de', j, '" class="',
+			out.push('<td data-value="', temp, '" id="', uuid, '-de', j, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '" >',
 							(temp < minyear ? minyear : temp) + ydelta + '-<br aria-hidden="true" />'
 							+ ((temp + 9 > maxyear ? maxyear : temp + 9) + ydelta) + '</td>');
@@ -323,6 +323,7 @@ zul.db.Renderer = {
 		out.push(val);
 	}
 };
+// eslint-disable-next-line one-var
 var Calendar =
 /**
  * A calendar.
@@ -681,16 +682,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	_shiftView: function (ofs, disableAnima) {
 		switch (this._view) {
-		case 'day' :
+		case 'day':
 			this._shiftDate('month', ofs);
 			break;
-		case 'month' :
+		case 'month':
 			this._shiftDate('year', ofs);
 			break;
-		case 'year' :
+		case 'year':
 			this._shiftDate('year', ofs * 10);
 			break;
-		case 'decade' :
+		case 'decade':
 			this._shiftDate('year', ofs * 100);
 			break;
 		}
@@ -750,7 +751,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			var cell = target,
 				dateobj = this.getTime();
 			switch (this._view) {
-			case 'day' :
+			case 'day':
 				var oldTime = this.getTime();
 				this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
 						dateobj.getMonth() + cell._monofs : null, val, true /*fire onChange */);
@@ -763,15 +764,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this.focus();
 				}
 				break;
-			case 'month' :
+			case 'month':
 				this._setTime(null, val);
 				this._setView('day');
 				break;
-			case 'year' :
+			case 'year':
 				this._setTime(val);
 				this._setView('month');
 				break;
-			case 'decade' :
+			case 'decade':
 				//Decade mode Set Year Also
 				this._setTime(val);
 				this._setView('year');
@@ -784,21 +785,20 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			year = dateobj.getFullYear(),
 			month = dateobj.getMonth(),
 			day = dateobj.getDate(),
-			parent = this.parent,
 			tz = _getTimeZone(this),
 			nofix;
 		switch (opt) {
-		case 'day' :
+		case 'day':
 			day += ofs;
 			nofix = true;
 			break;
-		case 'month' :
+		case 'month':
 			month += ofs;
 			break;
-		case 'year' :
+		case 'year':
 			year += ofs;
 			break;
-		case 'decade' :
+		case 'decade':
 			year += ofs;
 			break;
 		}
@@ -973,9 +973,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			minyear = this._minyear,
 			maxyear = this._maxyear,
 			mincen = zk.parseInt(minyear / 100) * 100,
-			maxcen = zk.parseInt(maxyear / 100) * 100,
-			mindec = zk.parseInt(minyear / 10) * 10,
-			maxdec = zk.parseInt(maxyear / 10) * 10;
+			maxcen = zk.parseInt(maxyear / 100) * 100;
 
 		if (view == 'decade') {
 			var value = ydec * 100;

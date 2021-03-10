@@ -115,8 +115,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			width = 0,
 			len = head ? head.nChildren : 0,
 			w = head ? head = head.firstChild : null,
-			headWgt = wgt.getHeadWidget(),
-			max = 0, maxj;
+			headWgt = wgt.getHeadWidget();
 		if (bdfaker && w) {
 			var bodycells = wgt._getFirstRowCells(wgt.ebodyrows),
 				footcells = ftfaker ? wgt._getFirstRowCells(wgt.efootrows) : null;
@@ -262,7 +261,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			row,
 			j = 0;
 		for (var it = wgt.getBodyWidgetIterator({skipHidden: true}),
-				len = rows.length, w; (w = it.next()) && j < len; j++) {
+				len = rows.length; it.next() && j < len; j++) {
 			row = rows[j];
 			var top = row.offsetTop - (row.offsetParent == etbparent ? etbtop : 0);
 			if (top > max) {
@@ -527,8 +526,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		 */
 		span: function (v) {
 			//ZK-2776: if span="false", !isSpan() will return false, because "false" is string not boolean
-			var isTrue = true === v || 'true' == v;
-			var isFalse = false === v || 'false' == v;
+			var isTrue = true === v || 'true' == v,
+				isFalse = false === v || 'false' == v;
 			this._span = isTrue ? true : isFalse ? false : v;
 
 			var x = isTrue ? -65500 : isFalse ? 0 : (zk.parseInt(v) + 1);
@@ -1530,7 +1529,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		var head = this.getHeadWidget();
 		if (head) {
-			for (var w = head.firstChild, wn; w; w = w.nextSibling)
+			for (var w = head.firstChild; w; w = w.nextSibling)
 				delete w._hflexsz;
 		}
 	},

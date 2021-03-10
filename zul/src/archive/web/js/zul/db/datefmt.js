@@ -306,7 +306,7 @@ zk.fmt.Date = {
 							return; // failed, B50-3314513
 						m = nv - 1;
 					} else {
-						for (var l = 0;; ++l) {
+						for (var l = 0; ; ++l) {
 							if (l == 12) return; //failed
 							if (len == 3) {
 								if (localizedSymbols.SMON[l] == token) {

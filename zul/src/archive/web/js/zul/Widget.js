@@ -666,7 +666,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		//Bug 3304408: SELECT fixes the selected index later than mousedown
 		//so we have to defer the firing of ctrl keys
 		setTimeout(function () {
-			for (var w = target;; w = w.parent) {
+			for (var w = target; ; w = w.parent) {
 				if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
 					return;
 				if (w == wgt) break;
@@ -698,7 +698,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	 */
 	beforeCtrlKeys_: function (evt) {
 	}
-},{
+}, {
 	/** Returns the tooltip that is opened, or null if no tooltip is opened.
 	 * @return zk.Widget
 	 * @since 5.0.5

@@ -477,7 +477,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			&& (lh = this.listhead) && (lh = lh.firstChild))
 			lh._checked = this._isAllSelected();
 		this.$supers(Listbox, '_updHeaderCM', arguments);
-	},// @Override F70-ZK-2433
+	}, // @Override F70-ZK-2433
 	checkOnHighlightDisabled_: function () {
 		if (this._selectOnHighlightDisabled) {
 			var selection = window.getSelection || document.selection;

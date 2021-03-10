@@ -70,8 +70,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 */
 		repos: function () {
 			if (this.desktop) {
-				var n = this.getInputNode();
-
 				this._typeahead(this._bDel);
 				this._bDel = null;
 
@@ -188,7 +186,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			var sel = this._sel;
 			if (!sel || sel.parent != this) sel = fchild;
 
-			for (var item = excluding ? sel.nextSibling ? sel.nextSibling : fchild : sel;;) {
+			for (var item = excluding ? sel.nextSibling ? sel.nextSibling : fchild : sel; ;) {
 				if ((!strict || !item.isDisabled()) && item.isVisible()
 				&& (startswith ? item.getLabel().toLowerCase().startsWith(val) : val == item.getLabel().toLowerCase()))
 					return item;
@@ -282,8 +280,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		// ZK-2200: the empty combo item should work
 		if (val || this._sel) {
 			val = val.toLowerCase();
-			var beg = this._sel,
-				last = this._next(null, bUp);
+			var beg = this._sel;
 			if (!beg || beg.parent != this) {
 				beg = this._next(null, !bUp);
 			}
@@ -293,7 +290,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			}
 
 			//Note: we always assume strict when handling up/dn
-			for (var item = beg;;) {
+			for (var item = beg; ;) {
 				if (!item.isDisabled() && item.isVisible()) {
 					var label = item.getLabel().toLowerCase();
 					if (val == label) {
@@ -367,14 +364,14 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	otherPressed_: function (evt) {
 		var keyCode = evt.keyCode;
-		this._bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/; //jscs:ignore
+		this._bDel = keyCode == 8 /*BS*/ || keyCode == 46; /*DEL*/
 		if (this._readonly)
 			switch (keyCode) {
 			case 35://End
 			case 36://Home
 				this._hilite2();
 				this.getInputNode().value = '';
-				//fall thru
+				//fall through
 			case 37://Left
 			case 39://Right
 				this._updnSel(evt, keyCode == 37 || keyCode == 35);
@@ -405,7 +402,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (!this._disabled) {
 			if (!this._readonly && !this._autoCompleteSuppressed) {
 				var keyCode = evt.keyCode,
-					bDel = keyCode == 8 /*BS*/ || keyCode == 46 /*DEL*/; //jscs:ignore
+					bDel = keyCode == 8 /*BS*/ || keyCode == 46; /*DEL*/
 				// ZK-3607: The value is not ready in onKeyDown, but is ready in onKeyUp
 				this._typeahead(bDel);
 			}
@@ -436,7 +433,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		sel = this._sel;
 		if (!sel || sel.parent != this) sel = fchild;
 
-		for (var item = sel;;) {
+		for (var item = sel; ;) {
 			if (!item.isDisabled() && item.isVisible()
 			&& item.getLabel().toLowerCase().startsWith(val)) {
 				inp.value = item.getLabel();
@@ -503,7 +500,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		// F85-ZK-3827: Combobox empty search message
 		if (msg) {
-			out.push('<div id="', uuid,'-emptySearchMessage" class="',
+			out.push('<div id="', uuid, '-emptySearchMessage" class="',
 			this.$s('emptySearchMessage'), ' ', this.$s('emptySearchMessage-hidden'),
 			'">', msg, '</div>');
 		}

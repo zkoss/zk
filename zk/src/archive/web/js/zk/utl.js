@@ -168,19 +168,18 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		// which is under MIT license
 		// List of HTML entities for escaping.
 		var escapeMap = {
-			'"': '&quot;',
-			"'": '&#x27;',
-			'`': '&#x60;'
-		};
-		// Functions for escaping and unescaping strings to/from HTML interpolation.
-
-		var escaper = function (match) {
-			return escapeMap[match];
-		};
-		// Regexes for identifying a key that needs to be escaped
-		var source = '(?:"|\'|`)';
-		var testRegexp = RegExp(source);
-		var replaceRegexp = RegExp(source, 'g');
+				'"': '&quot;',
+				"'": '&#x27;',
+				'`': '&#x60;'
+			},
+			// Functions for escaping and unescaping strings to/from HTML interpolation.
+			escaper = function (match) {
+				return escapeMap[match];
+			},
+			// Regexes for identifying a key that needs to be escaped
+			source = '(?:"|\'|`)',
+			testRegexp = RegExp(source),
+			replaceRegexp = RegExp(source, 'g');
 
 		function _encodeXML0(string) {
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
@@ -208,22 +207,21 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		// which is under MIT license
 		// List of HTML entities for escaping.
 		var escapeMap = {
-			'&': '&amp;',
-			'<': '&lt;',
-			'>': '&gt;',
-			'"': '&quot;',
-			"'": '&#x27;',
-			'`': '&#x60;'
-		};
-		// Functions for escaping and unescaping strings to/from HTML interpolation.
-
-		var escaper = function (match) {
-			return escapeMap[match];
-		};
-		// Regexes for identifying a key that needs to be escaped
-		var source = '(?:&|<|>|"|\'|`)';
-		var testRegexp = RegExp(source);
-		var replaceRegexp = RegExp(source, 'g');
+				'&': '&amp;',
+				'<': '&lt;',
+				'>': '&gt;',
+				'"': '&quot;',
+				"'": '&#x27;',
+				'`': '&#x60;'
+			},
+			// Functions for escaping and unescaping strings to/from HTML interpolation.
+			escaper = function (match) {
+				return escapeMap[match];
+			},
+			// Regexes for identifying a key that needs to be escaped
+			source = '(?:&|<|>|"|\'|`)',
+			testRegexp = RegExp(source),
+			replaceRegexp = RegExp(source, 'g');
 
 		function _encodeXML0(string) {
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
@@ -572,7 +570,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			return null;
 
 		var list = [];
-		for (var j = 0;;) {
+		for (var j = 0; ;) {
 			var k = text.indexOf(',', j),
 				s = (k >= 0 ? text.substring(j, k) : text.substring(j)).trim();
 			if (s.length == 0) {

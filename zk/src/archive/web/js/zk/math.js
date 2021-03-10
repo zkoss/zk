@@ -115,7 +115,7 @@ zk.Long = zk.$extends(zk.Object, {
 			}
 		}
 		if (len == 1) {
-			var c = value.charAt(0);
+			var cc = value.charAt(0);
 			if (cc < '0' || cc > '9')
 				value = 'NaN';
 		}

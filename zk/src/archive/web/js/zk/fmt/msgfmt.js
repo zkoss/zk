@@ -54,8 +54,8 @@ zk.fmt.Text = {
 			return bytes + msgzk.BYTES;
 		}
 
-		var units = [msgzk.KBYTES, msgzk.MBYTES, msgzk.GBYTES, msgzk.TBYTES];
-		var unit = -1;
+		var units = [msgzk.KBYTES, msgzk.MBYTES, msgzk.GBYTES, msgzk.TBYTES],
+			unit = -1;
 
 		do {
 			bytes /= divider;

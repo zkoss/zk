@@ -148,7 +148,6 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var zcls = this.getZclass();
 			if (this.isDisabled())
 				scls += (scls ? ' ' : '') + this.$s('disabled');
 			//Bug ZK-1998: only apply selected style if groupSelect is true
@@ -213,9 +212,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	getDragMessage_: function () {
-		var iterator = this.getMeshWidget().itemIterator();
-		var cnt = 2;
-		var msg;
+		var iterator = this.getMeshWidget().itemIterator(),
+			cnt = 2,
+			msg;
 		if (!this.isSelected())	return zUtl.encodeXML(this.getLabel());
 		while (iterator.hasNext()) {
 			var item = iterator.next();
@@ -238,8 +237,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	// do not want cut again here, and change _dragImg to array
 	cloneDrag_: function (drag, ofs) {
 		//See also bug 1783363 and 1766244
-		var msg = this.getDragMessage_();
-		var dgelm = zk.DnD.ghost(drag, ofs, msg);
+		var msg = this.getDragMessage_(),
+			dgelm = zk.DnD.ghost(drag, ofs, msg);
 
 		drag._orgcursor = document.body.style.cursor;
 		document.body.style.cursor = 'pointer';

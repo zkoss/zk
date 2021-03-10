@@ -22,7 +22,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _syncMaximized(wgt) {
 		if (!wgt._lastSize) return;
 		var node = wgt.$n(),
-			zkn = zk(node),
 			floated = wgt._mode != 'embedded',
 			$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 			zkop = $op.zk,
@@ -550,8 +549,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		maximized: function (maximized, fromServer) {
 			var node = this.$n();
 			if (node) {
-				var $n = zk(node),
-					isRealVisible = this.isRealVisible();
+				var isRealVisible = this.isRealVisible();
 				if (!isRealVisible && maximized) return;
 
 				var l, t, w, h,
@@ -1337,7 +1335,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 	getMinimizableIconClass_: function () {
 		return 'z-icon-minus';
 	}
-},{ //static
+}, { //static
 	// drag sizing (also referenced by Panel.js)
 	_startsizing: function (dg) {
 		_hideShadow(dg.control); //ZK-3877: startsizing is the better event to hideShadow
@@ -1412,7 +1410,7 @@ zul.wnd.Window = zk.$extends(zul.ContainerWidget, {
 		if (v) {
 			dg.z_dir = v;
 			dg.z_box = {
-				top: offs[1], left: offs[0] ,height: el.offsetHeight,
+				top: offs[1], left: offs[0], height: el.offsetHeight,
 				width: el.offsetWidth, minHeight: zk.parseInt(wgt.getMinheight()),
 				minWidth: zk.parseInt(wgt.getMinwidth())
 			};

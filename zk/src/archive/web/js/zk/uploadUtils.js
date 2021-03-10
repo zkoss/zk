@@ -14,7 +14,7 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 zk.UploadUtils = {
 	ajaxUpload: function (wgt, xhr, formData, sid) {
 		var dt = wgt.desktop,
-			tempUri = zk.ajaxURI('/dropupload', {desktop: dt,au: true}),
+			tempUri = zk.ajaxURI('/dropupload', {desktop: dt, au: true}),
 			ajaxUri = tempUri + (tempUri.indexOf('?') == -1 ? '?' : '&')
 				+ 'uuid=' + wgt.uuid
 				+ '&dtid=' + dt.id

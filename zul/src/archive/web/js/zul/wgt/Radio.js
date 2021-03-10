@@ -89,7 +89,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			var n = this.$n('real');
 			if (n) {
 				n.checked = checked || false;
-				checked ? jq(n).attr('checked','checked') : jq(n).removeAttr('checked');
+				checked ? jq(n).attr('checked', 'checked') : jq(n).removeAttr('checked');
 				this.clearStateClassName_();
 				jq(this.$n()).addClass(this.getClassNameByState_());
 				// Bug ZK-622
@@ -151,8 +151,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			n.name = this.getName();
 	},
 	beforeParentChanged_: function (newParent) {
-		var oldParent = this.parentNode,
-			oldGroup = this.getRadiogroup(),
+		var oldGroup = this.getRadiogroup(),
 			newGroup = newParent ? this.getRadiogroup(newParent) : null;
 		if (oldGroup != newGroup || !newParent) {
 			if (oldGroup && oldGroup.$instanceof(zul.wgt.Radiogroup)) {

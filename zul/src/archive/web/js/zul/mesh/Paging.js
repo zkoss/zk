@@ -302,7 +302,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		if (seld)
 			cls += ' ' + this.$s('selected');
 
-		out.push('<li', navCls,'><a name="', this.uuid ,'-button" class="', cls,
+		out.push('<li', navCls, '><a name="', this.uuid, '-button" class="', cls,
 			'" href="javascript:;" data-paging="', val, '"', seld ? ' aria-current="page"' : '', '>', label, '</a></li>');
 	},
 	domClass_: function () {
@@ -379,7 +379,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				jq(btns[j]).off('click');
 		} else {
 			var input = jq.$$(uuid, 'real'),
-				Paging = this.$class,
 				postfix = ['first', 'prev', 'last', 'next'];
 
 			for (var i = input.length; i--;)
@@ -398,23 +397,22 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	_domKeyDown: function (evt) {
 		var inp = evt.target,
-			wgt = this,
-			lastPos = zk(inp).getSelectionRange();
+			wgt = this;
 		if (inp.disabled || inp.readOnly)
 			return;
 
 		var code = evt.keyCode;
 		switch (code) {
-		case 48:case 96://0
-		case 49:case 97://1
-		case 50:case 98://2
-		case 51:case 99://3
-		case 52:case 100://4
-		case 53:case 101://5
-		case 54:case 102://6
-		case 55:case 103://7
-		case 56:case 104://8
-		case 57:case 105://9
+		case 48: case 96://0
+		case 49: case 97://1
+		case 50: case 98://2
+		case 51: case 99://3
+		case 52: case 100://4
+		case 53: case 101://5
+		case 54: case 102://6
+		case 55: case 103://7
+		case 56: case 104://8
+		case 57: case 105://9
 			break;
 		case 37://left
 			break;
@@ -439,7 +437,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			evt.stop();
 			break;
 		case 36://home
-			wgt.$class.go(wgt,0, inp);
+			wgt.$class.go(wgt, 0, inp);
 			evt.stop();
 			break;
 		case 35://end

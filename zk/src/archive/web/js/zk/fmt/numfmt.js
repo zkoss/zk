@@ -42,8 +42,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return k ? '1' + val : val;
 	}
 	function compareHalf(valStr, ri) {
-		var ch,
-			result,
+		var result,
 			base = '5';
 		for (var j = ri, len = valStr.length; j < len; ++j) {
 			result = valStr.charAt(j) - base;
@@ -155,7 +154,7 @@ zk.fmt.Number = {
 				valStr = r > 0 ? up(valStr, ri) : down(valStr, ri);
 				break;
 			case 6: //HALF_EVEN
-				//falling down
+				//fallthrough
 			default:
 				var r = compareHalf(valStr, ri);
 				if (r == 0) { //half
@@ -335,7 +334,7 @@ zk.fmt.Number = {
 	_escapeQuote: function (fmt, localizedSymbols) {
 		//note we do NOT support mixing of quoted and unquoted percent
 		var cc, q = -2, shift = 0, ret = '', jdot = -1, purejdot = -1, pure = '', prej = -1,
-			validPercent = fmt ? !new RegExp('\(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\'\)', 'g').test(fmt) : true;
+			validPercent = fmt ? !new RegExp('(\'[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']+\')', 'g').test(fmt) : true;
 			//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = fmt.length; j < len; ++j) {
 			cc = fmt.charAt(j);
@@ -411,7 +410,7 @@ zk.fmt.Number = {
 			permill = String.fromCharCode(0x2030),
 			zkPermill = ignoreLocale ? permill : localizedSymbols.PER_MILL,
 			zkGrouping = ignoreLocale ? ',' : localizedSymbols.GROUPING,
-			validPercent = !new RegExp('\(\'[%|' + permill + ']+\'\)', 'g').test(fmt);
+			validPercent = !new RegExp('(\'[%|' + permill + ']+\')', 'g').test(fmt);
 				//note we do NOT support mixing of quoted and unquoted percent|permill
 		for (var j = 0, len = val.length; j < len; ++j) {
 			cc = val.charAt(j);
@@ -427,7 +426,7 @@ zk.fmt.Number = {
 			if (!ignore)
 				ignore = (cc < '0' || cc > '9')
 				&& cc != zkDecimal && cc != zkMinus && cc != '+'
-				&& (zUtl.isChar(cc,{whitespace: 1}) || cc == zkGrouping
+				&& (zUtl.isChar(cc, {whitespace: 1}) || cc == zkGrouping
 					|| cc == ')' || (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (sb == null) sb = val.substring(0, j);

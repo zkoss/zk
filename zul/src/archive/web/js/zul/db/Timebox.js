@@ -41,11 +41,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		/*constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))
 		 * @type int
 		 */
-		HOUR3_FIELD = 7;
-
-	var globallocalizedSymbols = {};
-
-var Timebox =
+		HOUR3_FIELD = 7,
+		globallocalizedSymbols = {},
+		Timebox =
 /**
  * An input box for holding a time (a Date Object, but only Hour & Minute are used.
  *
@@ -150,7 +148,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		return true;
 	},
 	setFormat: function (fmt) {
-		fmt = fmt ? fmt.replace(/\'/g, '') : fmt;
+		fmt = fmt ? fmt.replace(/'/g, '') : fmt;
 		this.$class._updFormat(this, fmt);
 		this.$supers('setFormat', arguments);
 	},
@@ -191,7 +189,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		// We cannot use this._value in this case, which won't trigger onChange
 		// event. Using clone date instead.
 		var date = this._value ? Dates.newInstance(this._value) : zUtl.today(this._format, tz),
-			hasAM, isAM, hasHour1,
+			hasAM, isAM,
 			fmt = [], fmtObeyCount = [], emptyCount = 0;
 		date.setSeconds(0);
 		date.setMilliseconds(0);
@@ -267,16 +265,16 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!Timebox._unformater) {
 			var code = evt.keyCode;
 			switch (code) {
-			case 48:case 96://0
-			case 49:case 97://1
-			case 50:case 98://2
-			case 51:case 99://3
-			case 52:case 100://4
-			case 53:case 101://5
-			case 54:case 102://6
-			case 55:case 103://7
-			case 56:case 104://8
-			case 57:case 105://9
+			case 48: case 96://0
+			case 49: case 97://1
+			case 50: case 98://2
+			case 51: case 99://3
+			case 52: case 100://4
+			case 53: case 101://5
+			case 54: case 102://6
+			case 55: case 103://7
+			case 56: case 104://8
+			case 57: case 105://9
 				code = code - (code >= 96 ? 96 : 48);
 				this._doType(code);
 				evt.stop();
@@ -322,7 +320,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					this._updateChanged();
 					break;
 				}
-				// no need to break here, let it run with 'default' case
+				// fallthrough and no need to break here, let it run with 'default' case
 			default:
 				if (!(code >= 112 && code <= 123) //F1-F12
 						&& !evt.ctrlKey && !evt.metaKey && !evt.altKey) {
@@ -451,12 +449,12 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	getTimeHandler: function () {
 		var sr = zk(this.getInputNode()).getSelectionRange(),
 			start = sr[0],
-			end = sr[1];
+			end = sr[1],
 			//don't use [0] as the end variable, it may have a bug when the format is aHH:mm:ss
 			//when use UP/Down key to change the time
+			hdler;
 
 		// Bug ZK-434
-		var hdler;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			if (!f[i].type) continue;
 			if (f[i].index[0] <= start) {
@@ -498,8 +496,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
-		var n = this.$n(),
-			inp = this.getInputNode(),
+		var inp = this.getInputNode(),
 			selrng = zk(inp).getSelectionRange();
 
 		if (!inp.value)
@@ -605,7 +602,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				index.push(new zul.inp.SecondHandler([start, end], SECOND_FIELD, wgt));
 				break;
 			case 'z':
-				index.push({index: [i, i],format: (function (text) {
+				index.push({index: [i, i], format: (function (text) {
 					return function () {
 						return text;
 					};

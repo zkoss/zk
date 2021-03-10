@@ -83,7 +83,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	removeChildHTML_: function (child) {
 		this.$supers('removeChildHTML_', arguments);
 		if (!this.$instanceof(zul.mesh.Auxhead))
-			for (var faker, fs = child.$class._faker, i = fs.length; i--;)
+			for (var fs = child.$class._faker, i = fs.length; i--;)
 				jq(child.uuid + '-' + fs[i], zk).remove();
 	},
 
@@ -246,12 +246,10 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				hdfaker = wgt.ehdfaker,
 				bdfaker = wgt.ebdfaker,
 				hdf = hdfaker ? hdfaker.firstChild : null,
-				bdf = bdfaker ? bdfaker.firstChild : null,
-				everFlex = false;
+				bdf = bdfaker ? bdfaker.firstChild : null;
 			for (var h = this.firstChild; h; h = h.nextSibling) {
 				// B70-ZK-2036: Do not adjust widget's width if it is not visible.
 				if (h.isVisible() && h._nhflex > 0) { //not min or undefined
-					everFlex = true;
 					if (hdf) hdf.style.width = '';
 					if (bdf) bdf.style.width = '';
 				}
@@ -374,7 +372,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		if (mesh._cssflex)
 			mesh.ehdfaker.style.display = '';
 	}
-},{ //static
+}, { //static
 	redraw: function (out) {
 		out.push('<tr', this.domAttrs_(), ' style="text-align: left;">');
 		for (var w = this.firstChild; w; w = w.nextSibling)

@@ -158,8 +158,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		//sync frozen
 		var box = this.getListbox(),
 			frozen = box ? box.frozen : null,
-			node = this.$n(),
-			td, tds;
+			node = this.$n();
 		if (frozen && node)
 			box._moveToHidingFocusCell(node.cellIndex);
 	},

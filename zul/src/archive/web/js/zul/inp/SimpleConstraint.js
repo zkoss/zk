@@ -70,7 +70,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 
 				var cc = cst.charAt(j);
 				if (cc == '/') {
-					for (k = ++j;; ++k) { //look for ending /
+					for (k = ++j; ; ++k) { //look for ending /
 						if (k >= len) { //no ending /
 							k = -1;
 							break;
@@ -86,7 +86,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 				}
 				if (cc == ':') {
 					var leftBraceIdx = 0, rightBraceIdx = len;
-					for (k = ++j;; ++k) { //look for ending
+					for (k = ++j; ; ++k) { //look for ending
 						if (k >= len) { //no ending
 							k = -1;
 							break;
@@ -95,7 +95,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						cc = cst.charAt(k);
 						if (cc == '{') { // ZK-2641: in order to support comma, enclose with curly braces
 							leftBraceIdx = k + 1;
-							for (++k;; ++k) {
+							for (++k; ; ++k) {
 								if (cst.charAt(k) == '}') { //find enclosing '}'
 									rightBraceIdx = k;
 									break;
@@ -108,12 +108,12 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 							cst.substring(j, k).trim() : cst.substring(j).trim();
 					continue l_out;
 				}
-				if (!zUtl.isChar(cc,{whitespace: 1}))
+				if (!zUtl.isChar(cc, {whitespace: 1}))
 					break;
 			}
 
 			var s;
-			for (k = j;; ++k) {
+			for (k = j; ; ++k) {
 				if (k >= len) {
 					s = cst.substring(j);
 					k = -1;
@@ -149,10 +149,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	 * @param String cst
 	 */
 	parseConstraint_: function (cst) {
-		var f = this._flags;
-		var arr = this._cstArr;
-
-		var bsCst = _baseConstraints[cst];
+		var f = this._flags,
+			arr = this._cstArr,
+			bsCst = _baseConstraints[cst];
 		if (cst && bsCst) {
 			if (cst == 'server') this.serverValidate = true;
 			f[bsCst] = true;

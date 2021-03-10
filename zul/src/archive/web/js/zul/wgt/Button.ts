@@ -352,7 +352,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 		}
 		zWatch.unlisten({onResponse: this});
 	}
-},{ //static
+}, { //static
 	/* Disable Targets and re-enable after response
 	 * @param zk.Widget wgt
 	 */
@@ -366,7 +366,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 			for (var j = ads.length; j--;) {
 				var ad = ads[j].trim();
 				if (ad) {
-					var perm = ad.charAt(0) == '+' ;
+					var perm = ad.charAt(0) == '+';
 					if (perm)
 						ad = ad.substring(1);
 					ad = 'self' == ad ? wgt : wgt.$f(ad);

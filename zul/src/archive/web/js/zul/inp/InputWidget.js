@@ -29,8 +29,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if (wgt == zk.currentFocus)
 					zjq.fixInput(wgt.getInputNode());
 			}, 0);
-		} : zk.$void;
-	var windowX = 0,
+		} : zk.$void,
+		windowX = 0,
 		windowY = 0;
 
 /** @class zul.inp.RoundUtl
@@ -992,7 +992,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		}
 	}
-},{
+}, {
 	/** The delay for sending the onChanging event (unit: milliseconds).
 	 * The onChanging event will be sent after the specified delay once
 	 * the user pressed a keystroke (and changed the value).
