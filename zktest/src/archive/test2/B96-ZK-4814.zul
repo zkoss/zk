@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4813.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 09 12:50:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Drag/Drop the splitter, the valuenow should change
+	</label>
+	<hbox height="100px" width="100%">
+		<div>
+			left side
+		</div>
+		<splitter/>
+		<div>
+			right side
+		</div>
+	</hbox>
+</zk>
