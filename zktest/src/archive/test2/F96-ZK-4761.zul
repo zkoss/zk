@@ -1,0 +1,28 @@
+<!--
+F96-ZK-4761.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Feb 05 11:50:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label><![CDATA[
+		Add Library property: "org.zkoss.bind.disableMethodCache" = true
+		The _commandMethodCache in BinderImpl should be empty (Click button to see the result)
+	]]>
+	</label>
+	<vlayout viewModel="@id('vm')@init('org.zkoss.zktest.test2.F96_ZK_4761VM')">
+		<button label="test" onClick="@command('test')" />
+		<div>
+			Cache size:
+			<label id="resultNum" value="@load(vm.resultNum)" />
+		</div>
+		<label value="@load(vm.result)" />
+	</vlayout>
+</zk>
