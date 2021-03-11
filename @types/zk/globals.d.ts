@@ -31,6 +31,7 @@ interface Array<T> {
 
 interface Window {
     zkservice: zk.ZKServiceStatic;
+    onIframeURLChange(uuid: string, url: string): void;
 }
 
 // mount.js

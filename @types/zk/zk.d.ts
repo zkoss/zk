@@ -490,7 +490,7 @@ declare namespace zk {
         Class: zk.Class;
         classes: Record<number, unknown>;
         clickPointer: zk.Offset;
-        clientinfo: Record<string, unknown>;
+        clientinfo?: Record<string, unknown>;
         confirmClose?: string;
         contextURI: string;
         css3?: boolean;

@@ -1,4 +1,4 @@
-/* zk.js
+/* zk.ts
 
 	Purpose:
 
@@ -12,8 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 (zk = function (sel) {
 	return jq(sel, zk).zk;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 }).copy = function (dst, src, bu) {
 	dst = dst || {};
 	for (var p in src) {
@@ -24,22 +28,28 @@ it will be useful, but WITHOUT ANY WARRANTY.
 };
 
 (function () {
+	type Getter = Function; // eslint-disable-line @typescript-eslint/ban-types
+	type Setter = Function; // eslint-disable-line @typescript-eslint/ban-types
+	type GeneratedSetter = (this: zk.Widget, v: unknown, opts: Partial<{ force: boolean }>) => zk.Widget;
+
 	var _oid = 0,
 		_statelesscnt = 0,
 		_logmsg,
-		_stamps = [],
+		_stamps: {n: string; t: number}[] = [],
 		_t0 = jq.now(),
 		_procq = {}; // Bug ZK-3053
 
-	function newClass(copy) {
-		var init = function () {
-			if (!init.$copied) {
-				init.$copied = true;
-				var cf = init.$copyf;
-				init.$copyf = null;
+	function newClass(copy?): zk.Object {
+		var init = function (this: zk.Widget): void {
+			if (!init['$copied']) {
+				init['$copied'] = true;
+				var cf = init['$copyf'];
+				init['$copyf'] = null;
 				cf();
 			}
 			this.$oid = ++_oid;
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			this.$init.apply(this, arguments);
 
 			var ais = this._$ais;
@@ -49,11 +59,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					ais[j].call(this);
 			}
 		};
-		init.$copyf = copy;
-		init.$copied = !init.$copyf;
+		init['$copyf'] = copy;
+		init['$copied'] = !init['$copyf'];
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		return init;
 	}
-	function regClass(jclass, superclass) {
+	function regClass(jclass: zk.Class, superclass?: zk.Class): zk.Class {
 		var oid = jclass.$oid = ++_oid;
 		zk.classes[oid] = jclass;
 		jclass.prototype.$class = jclass;
@@ -64,16 +76,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		return jclass;
 	}
 
-	function defGet(nm) {
+	function defGet(nm: string): Getter {
 		return new Function('return this.' + nm + ';');
 	}
-	function defSet00(nm) {
+	function defSet00(nm: string): GeneratedSetter {
 		return function (v) {
 			this[nm] = v;
 			return this;
 		};
 	}
-	function defSet01(nm, after) {
+	function defSet01(nm: string, after: Setter): GeneratedSetter {
 		return function (v, opts) {
 			var o = this[nm];
 			this[nm] = v;
@@ -85,7 +97,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return this;
 		};
 	}
-	function defSet10(nm, before) {
+	function defSet10(nm: string, before: Setter): GeneratedSetter {
 		return function (/*v, opts*/) {
 			this.__fname__ = nm.substring(1);
 			this[nm] = before.apply(this, arguments);
@@ -93,7 +105,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return this;
 		};
 	}
-	function defSet11(nm, before, after) {
+	function defSet11(nm: string, before: Setter, after: Setter): GeneratedSetter {
 		return function (v, opts) {
 			var o = this[nm];
 			this.__fname__ = nm.substring(1);
@@ -105,17 +117,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		};
 	}
 
-	function showprgbInit() {
+	function showprgbInit(): void {
 		//don't use jq() since it will be queued after others
 		if (jq.isReady || zk.Page.contained.length)
 			_showprgb(true, zk.pi ? 'z-initing' : null);
 		else
 			setTimeout(showprgbInit, 10);
 	}
-	function showprgb() { //When passed to FF's setTimeout, 1st argument is not null
+	function showprgb(): void { //When passed to FF's setTimeout, 1st argument is not null
 		_showprgb(zk.processMask);
 	}
-	function _showprgb(mask, icon) {
+	function _showprgb(mask: boolean | undefined, icon?: string | null): void {
 		var $jq;
 		if (zk.processing
 		&& !($jq = jq('#zk_proc')).length && !jq('#zk_showBusy').length) {
@@ -127,12 +139,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 	}
-	function wgt2s(w) {
+	function wgt2s(w: zk.Widget): string {
 		var s = w.widgetName;
 		return s + (w.id ? '$' + w.id : '') + '#' + w.uuid + '$' + w.$oid;
 	}
-	function toLogMsg(ars, detailed) {
-		var msg = [], Widget = zk.Widget;
+	function toLogMsg(ars: Array<Element | zk.Widget> | IArguments, detailed): string {
+		var msg: string[] = [], Widget = zk.Widget;
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg.length) msg.push(', ');
 			var ar = ars[j];
@@ -153,41 +165,42 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				s.push('\n}');
 				msg.push(s.join(''));
 			} else if (typeof ar == 'function') {
-				var s = '' + ar,
-					m = s.indexOf('{'),
-					k = m < 0 ? s.indexOf('\n') : -1;
-				msg.push(s.substring(0, m > 0 ? m : k > 0 ? k : s.length));
+				var str = '' + ar,
+					m = str.indexOf('{'),
+					k = m < 0 ? str.indexOf('\n') : -1;
+				msg.push(str.substring(0, m > 0 ? m : k > 0 ? k : str.length));
 			} else
 				msg.push('' + ar);
 		}
 		return msg.join('');
 	}
-	function doLog() {
+	function doLog(): void {
 		if (_logmsg) {
-			var console = jq('#zk_log');
-			if (!console.length) {
+			var console = document.getElementById('zk_log') as HTMLTextAreaElement;
+			if (!console) {
 				jq(document.body).append(
 	'<div id="zk_logbox" class="z-log">'
 	+ '<button class="z-button" onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
 	+ '<textarea id="zk_log" rows="10"></textarea></div>');
-				console = jq('#zk_log');
+				console = document.getElementById('zk_log') as HTMLTextAreaElement;
 			}
-			console = console[0];
 			console.value += _logmsg;
 			console.scrollTop = console.scrollHeight;
 			_logmsg = null;
 		}
 	}
 
-	function _stampout() {
-		if (zk.mounting)
-			return zk.afterMount(_stampout);
+	function _stampout(): void {
+		if (zk.mounting) {
+			zk.afterMount(_stampout);
+			return;
+		}
 		zk.stamp('ending');
 		zk.stamp();
 	}
 
 	/* Overrides all subclasses. */
-	function _overrideSub(dstpt, nm, oldfn, newfn, tobak) {
+	function _overrideSub(dstpt, nm: string, oldfn, newfn, tobak?: boolean): void {
 		for (var sub = dstpt._$subs, j = sub ? sub.length : 0; --j >= 0;) {
 			var subpt = sub[j];
 			if (subpt[nm] === oldfn) {
@@ -541,17 +554,17 @@ try {
 	 * @see #$import(String)
 	 * @see #load
 	 */
-	$package: function (name, end, wv) { //end used only by WpdExtendlet
-		for (var j = 0, ref = window; ;) {
+	$package: function (name: string, end?: boolean, wv?: boolean) { //end used only by WpdExtendlet
+		for (var j = 0, ref: unknown = window; ;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k) : name.substring(j),
-				nxt = ref[nm], newpkg;
-			if (newpkg = !nxt) nxt = ref[nm] = {};
+				nxt = (ref as Record<string, unknown>)[nm], newpkg;
+			if (newpkg = !nxt) nxt = (ref as Record<string, unknown>)[nm] = {};
 			if (k < 0) {
 				if (newpkg && end !== false) zk.setLoaded(name);
 					//if $package(x, false) was called, zk.setLoaded won't be called
 					//i.e., zk.setLoaded has to be called explicitly
-				if (wv) nxt.$wv = true; //the wv (weeve) package is available
+				if (wv) (nxt as Record<string, unknown>).$wv = true; //the wv (weeve) package is available
 				return nxt;
 			}
 			ref = nxt;
@@ -602,10 +615,10 @@ zk.$import('zul.sel.Listbox', function (cls) {new cls();});
 				if (fn) fn(last);
 				return last;
 			}
-			for (var j = 0, ref = window; ;) {
+			for (var j = 0, ref: unknown = window; ;) {
 				var k = name.indexOf('.', j),
 					nm = k >= 0 ? name.substring(j, k) : name.substring(j),
-					nxt = ref[nm];
+					nxt = (ref as Record<string, unknown>)[nm];
 				if (k < 0 || !nxt) {
 					if (fn) {
 						if (nxt) fn(nxt);
@@ -732,7 +745,8 @@ foo.Widget = zk.$extends(zk.Widget, {
 			jclass.$copyf();
 			jclass.$copied = true;
 		} else {
-			var _init = function () { this.constructor = jclass; };
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			var _init = function (this: any): void { this.constructor = jclass; };
 			_init.prototype = superclass.prototype;
 			jclass.prototype = new _init();
 			thispt = jclass.prototype;
@@ -1122,9 +1136,10 @@ zk.endProcessing();
 	 */
 	endProcessing: function (pid /* internal use only */) {
 		//F70-ZK-2495: delete init crash timer once endProcessing is called
-		if (window.zkInitCrashTimer) {
-			clearTimeout(window.zkInitCrashTimer);
-			window.zkInitCrashTimer = false;
+		let crashTimer = window['zkInitCrashTimer'];
+		if (crashTimer) {
+			clearTimeout(crashTimer);
+			window['zkInitCrashTimer'] = false;
 		}
 		zk.processing = false;
 		if (pid) {
@@ -1197,7 +1212,7 @@ zk.log('value is", value);
 		var msg = toLogMsg(
 			(detailed !== zk) ? arguments :
 				(function (args) {
-					var a = [];
+					var a: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 					for (var j = args.length; --j > 0;)
 						a.unshift(args[j]);
 					return a;
@@ -1252,16 +1267,16 @@ zk.log('value is", value);
 	ajaxURI: function (uri, opts) {
 		var ctx = zk.Desktop.$(opts ? opts.desktop : null),
 			au = opts && opts.au,
-			res = opts && opts.resource;
-
-		if (!ctx) ctx = zk;
+			res = opts && opts.resource,
+			uriPrefix,
+			base = ctx || zk;
 
 		if (au) {
-			ctx = ctx['updateURI'];
+			uriPrefix = base.updateURI;
 		} else if (res) {
-			ctx = ctx['resourceURI'];
+			uriPrefix = base.resourceURI;
 		} else
-			ctx = ctx['contextURI'];
+			uriPrefix = base.contextURI;
 
 		uri = uri || '';
 
@@ -1272,17 +1287,17 @@ zk.log('value is", value);
 				uri = '/' + uri; //non-au supports relative path
 		}
 
-		var j = ctx.indexOf(';'), //ZK-1668: may have multiple semicolon in the URL
-			k = ctx.lastIndexOf('?');
-		if (j < 0 && k < 0) return abs ? ctx + uri : uri;
+		var j = uriPrefix.indexOf(';'), //ZK-1668: may have multiple semicolon in the URL
+			k = uriPrefix.lastIndexOf('?');
+		if (j < 0 && k < 0) return abs ? uriPrefix + uri : uri;
 
 		if (k >= 0 && (j < 0 || k < j)) j = k;
-		var prefix = abs ? ctx.substring(0, j) : '';
+		var prefix = abs ? uriPrefix.substring(0, j) : '';
 
 		if (opts && opts.ignoreSession)
 			return prefix + uri;
 
-		var suffix = ctx.substring(j),
+		var suffix = uriPrefix.substring(j),
 			l = uri.indexOf('?');
 		return l >= 0 ?
 			k >= 0 ?
@@ -1363,9 +1378,9 @@ zk.log('value is", value);
 	getDataHandler: function (name) {
 		if (zk.hasDataHandler(name)) {
 			return {run: function (wgt, dataValue) {
-				var fun = zk.dataHandlers[name];
-				if (!jq.isFunction(fun))
-					fun = jq.evalJSON(fun);
+				var fun = zk.dataHandlers![name];
+				if (typeof fun !== 'function')
+					fun = jq.evalJSON(fun) as zk.DataHandler;
 				try {
 					dataValue = jq.parseJSON(dataValue);
 				} catch (e) {
@@ -1386,13 +1401,13 @@ zk.log('value is", value);
 				}
 				if (w && dataHandlerService) {
 					jq.extend(this, dataHandlerService);
-					var oldCommand = this.command,
+					var oldCommand = this['command'],
 						subName = name.indexOf('data-') == 0 ? name.substring(5) : name;
-					this.command = function () {
+					this['command'] = function () {
 						oldCommand.call(this, subName + arguments[0], arguments[1]);
 					};
-					var oldAfter = this.after;
-					this.after = function () {
+					var oldAfter = this['after'];
+					this['after'] = function () {
 						oldAfter.call(this, subName + arguments[0], arguments[1]);
 					};
 				}
@@ -1467,7 +1482,7 @@ zk.$intercepts(zul.inp.Combobox, {
 
 //zk.agent//
 (function () {
-	function _ver(ver) {
+	function _ver(ver: string): number | string {
 		return parseFloat(ver) || ver;
 	}
 
@@ -1491,7 +1506,7 @@ zk.$intercepts(zul.inp.Combobox, {
 	// Don't clobber any existing jq.browser in case it's different
 	if (!jq.browser) {
 		var matched = jq.uaMatch(navigator.userAgent);
-		browser = {};
+		browser = {version: ''};
 
 		if (matched.browser) {
 			browser[ matched.browser ] = true;
@@ -1550,10 +1565,7 @@ zk.$intercepts(zul.inp.Combobox, {
 
 	var bodycls = '';
 	if (zk.ff) {
-		if (zk.ff < 5 //http://www.useragentstring.com/_uas_Firefox_version_5.0.php
-		&& (bodycls = agent.indexOf('firefox/')) > 0)
-			zk.ff = zk.gecko = _ver(agent.substring(bodycls + 8));
-		bodycls = 'gecko gecko' + Math.floor(zk.ff);
+		bodycls = 'gecko gecko' + Math.floor(Number(zk.ff));
 		zk.vendor = 'Moz';
 	} else if (zk.opera) { //no longer to worry 10.5 or earlier
 		bodycls = 'opera';
@@ -1566,15 +1578,17 @@ zk.$intercepts(zul.inp.Combobox, {
 			zk.iex = ie11;
 		
 		if (zk.iex) {
-			zk.ie = document.documentMode || zk.iex;
-			// zk.ien: the version n or later but less than 11
-			if (zk.ie < 11 && zk.ie >= 9) {
-				zk.ie9 = zk.ie >= 9;
-				zk.ie10 = zk.ie >= 10;
+			zk.ie = document['documentMode'] || zk.iex;
+			if (zk.ie) {
+				// zk.ien: the version n or later but less than 11
+				if (zk.ie < 11 && zk.ie >= 9) {
+					zk.ie9 = zk.ie >= 9;
+					zk.ie10 = zk.ie >= 10;
+				}
+				zk['ie' + zk.ie + '_'] = true;
+				zk.css3 = zk.ie >= 9;
+				bodycls = 'ie ie' + Math.floor(zk.ie);
 			}
-			zk['ie' + zk.ie + '_'] = true;
-			zk.css3 = zk.ie >= 9;
-			bodycls = 'ie ie' + Math.floor(zk.ie);
 			zk.vendor = 'ms';
 		} else if (zk.edge || zk.edge_legacy) {
 			bodycls = 'edge';
@@ -1621,8 +1635,10 @@ zk.Buffer = Array;
 	 * </p>
 	 * @since 8.0.0
 	 */
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 	zk.Buffer = function () {
-		this.out = '';
+		this['out'] = '';
 	};
 
 	zk.Buffer.prototype = new Array;
@@ -1630,12 +1646,12 @@ zk.Buffer = Array;
 		push: function () {
 			for (var i = 0, j = arguments.length; i < j; i++)
 				if (arguments[i] != null || arguments[i] != undefined)
-					this.out += arguments[i];
+					this['out'] += arguments[i];
 		},
 		join: function (str) {
 			if (str)
 				throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';
-			return this.out;
+			return this['out'];
 		},
 		shift: _zkf = function () {throw 'Wrong usage here! Please run the script `zk.Buffer = Array;` instead.';},
 		unshift: _zkf,
@@ -1644,6 +1660,8 @@ zk.Buffer = Array;
 		sort: _zkf
 	});
 } else {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 	zk.Buffer = Array;
 }
 
@@ -1654,6 +1672,8 @@ zk.Buffer = Array;
 			};
 	}
 zk.Class = function () {}; //regClass() requires zk.Class
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 regClass(zk.Object = newClass());
 /** @class zk.Object
  * The root of the class hierarchy.
@@ -1787,7 +1807,9 @@ foo.MyClass = zk.$extends(foo.MySuper, {
 	 * @see #$super
 	 * @since 5.0.2
 	 */
-	$supers: function (nm, args, argx) {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	$supers: function (nm: zk.Class | string, args, argx) {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
@@ -1860,7 +1882,8 @@ setInterval(wgt.doIt, 1000); //WRONG! doIt will not be called with wgt
 	}
 };
 
-var _zkf;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+var _zkf: any;
 /** @partial zk.Object
  */
 _zkf = {
@@ -1873,7 +1896,7 @@ if (klass.isInstance(obj)) {
 	 * @param Object o the object to check
 	 * @return boolean true if the object is an instance
 	 */
-	isInstance: function (o) {
+	isInstance(o) {
 		return o && o.$instanceof && o.$instanceof(this);
 	},
 	/** Determines if the class by this Class object is either the same as, or is a superclass of, the class represented by the specified Class parameter.
@@ -1885,7 +1908,7 @@ if (klass1.isAssignableFrom(klass2)) {
 	 * @param zk.Class cls the Class object to be checked, such as zk.Widget.
 	 * @return boolean true if assignable
 	 */
-	isAssignableFrom: function (cls) {
+	isAssignableFrom(this: zk.Object, cls: zk.Class) {
 		return cls && (cls = cls._$extds) && cls[this.$oid] != null;
 	}
 };
@@ -1899,7 +1922,7 @@ zk._Erbx = zk.$extends(zk.Object, { //used in HTML tags
 	$init: function (msg) {
 		var id = 'zk_err',
 			$id = '#' + id,
-			click = zk.mobild ? ' ontouchstart' : ' onclick',
+			click = zk.mobile ? ' ontouchstart' : ' onclick',
 			// Use zUtl.encodeXML -- Bug 1463668: security
 			html = '<div class="z-error" id="' + id + '">'
 			+ '<div id="' + id + '-p">'
