@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4783.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Mar 12 10:03:11 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		1. Test with all themes.
+		2. While word-break fail(alert 1 and messagebox 1), should provide scrollbar.
+		3. messagebox 2 width shoud be 600px.
+	</label>
+	<button id="btn1" label="alert 1" onClick='throw new Exception("cannot find any method that is annotated for
+	 the command showHello with @Command in j21eol4p$v0.HelloViewModel@fff330ce at
+	[file:/tmp/resource463596934025823ffdsfafdasf0562tmp/21eol4p/0/index.zul, line:4]");'/>
+	<button label="messagebox1">
+		<attribute name="onClick"><![CDATA[
+			Messagebox.show("[file:/tmp/resource463596934025823ffdsfafdasf0562tmp/21eol4p/0/index.zul, line:4]", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
+		]]></attribute>
+	</button>
+	<button label="messagebox2">
+		<attribute name="onClick"><![CDATA[
+			Map params = new HashMap();
+			params.put("width", "600px");
+			Messagebox.show("Information is pressed.",null, null, null, Messagebox.INFORMATION, null,null, params);
+		]]></attribute>
+	</button>
+</zk>
