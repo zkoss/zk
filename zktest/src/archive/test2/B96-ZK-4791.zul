@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4791.zul
+        Purpose:
+
+        Description:
+
+        History:
+              Thu Feb 18 11:32:33 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>Click remove vm then parent or just remove parent/vm, and click "show vm cache". The cache should be clear.</label>
+	<div id="parent">
+		<div id="vm" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4791VM')" width="500px" height="500px">
+			<button label="click" onClick="@command('doClick')" />
+		</div>
+	</div>
+	<button id="rmParent" label="remove parent" onClick="parent.detach()" />
+	<button id="rmVm" label="remove vm" onClick="vm.detach()" />
+	<hlayout>
+		<button id="show" label="show vm cache">
+			<attribute name="onClick"><![CDATA[
+				import org.zkoss.bind.sys.BinderCtrl;
+				result.setValue(desktop.getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY).containsKey("vm") + "");
+		]]></attribute>
+		</button>
+		cache vm: <label id="result" />
+	</hlayout>
+</zk>
