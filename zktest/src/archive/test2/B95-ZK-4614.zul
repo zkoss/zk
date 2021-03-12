@@ -43,6 +43,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 	<vlayout height="500px" width="500px">
 		<div>Click button, and no JS error</div>
 		<button id="btn" label="Click me to populate the tree" onClick="tree.setModel(new FooModel())"/>
+		<button id="btn2" label="Click me to populate the tree (+invalidate)" onClick="tree.setModel(new FooModel()); tree.invalidate()"/>
 		<tree id="tree" width="100%" vflex="1">
 			<treechildren/>
 			<treefoot>

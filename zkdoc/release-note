@@ -10,6 +10,7 @@ ZK 9.6.0
   ZK-4791: VM ID map not cleared when parent of VM is detached
   ZK-4330: provide select-all checkbox in tree component
   ZK-4524: blocking all user keyboard input during processing message showing
+  ZK-4803: tree update model performance
 
 * Upgrade Notes
 
