@@ -429,6 +429,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				mask: jq(idmsk, zk)[0],
 				zIndex: zIndex - 1
 			});
+			jq('html').on('keydown', zk.$void);
 		}
 
 		if (mask && $txt.length) { //center
@@ -479,6 +480,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if ($n.length) {
 			if (n = $n[0].z_mask) n.destroy();
 			$n.remove();
+			jq('html').off('keydown', zk.$void);
 		}
 
 		for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c])
