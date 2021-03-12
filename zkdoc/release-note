@@ -11,6 +11,7 @@ ZK 9.6.0
   ZK-4330: provide select-all checkbox in tree component
   ZK-4524: blocking all user keyboard input during processing message showing
   ZK-4803: tree update model performance
+  ZK-4800: Tree NPE when adding/removing model
 
 * Upgrade Notes
 
