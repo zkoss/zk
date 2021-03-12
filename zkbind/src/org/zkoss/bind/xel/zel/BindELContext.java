@@ -33,6 +33,7 @@ import org.zkoss.bind.impl.LoadChildrenBindingImpl;
 import org.zkoss.bind.impl.LoadFormBindingImpl;
 import org.zkoss.bind.impl.LoadPropertyBindingImpl;
 import org.zkoss.bind.impl.PropertyImpl;
+import org.zkoss.bind.init.ViewModelAnnotationResolvers;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.Binding;
 import org.zkoss.lang.Primitives;
@@ -127,11 +128,11 @@ public class BindELContext extends XelELContext {
 		if (m == null)
 			return notifys;
 
-		final NotifyChange annt = m.getAnnotation(NotifyChange.class);
+		final NotifyChange annt = ViewModelAnnotationResolvers.getAnnotation(m, NotifyChange.class);
 		//ZK-687 @NotifyChange should be doing automatically. 
-		final NotifyChangeDisabled anntdis = m.getAnnotation(NotifyChangeDisabled.class);
+		final NotifyChangeDisabled anntdis = ViewModelAnnotationResolvers.getAnnotation(m, NotifyChangeDisabled.class);
 
-		final SmartNotifyChange sannt = m.getAnnotation(SmartNotifyChange.class);
+		final SmartNotifyChange sannt = ViewModelAnnotationResolvers.getAnnotation(m, SmartNotifyChange.class);
 
 		if (annt != null && anntdis != null) {
 			throw new UiException(
@@ -293,7 +294,7 @@ public class BindELContext extends XelELContext {
 	//check method annotation and collect NotifyChange annotation
 	public static void addDependsOnTrackings(Method m, String basepath, List<String> srcpath, Binding binding,
 			BindContext ctx) {
-		final DependsOn annt = m.getAnnotation(DependsOn.class);
+		final DependsOn annt = ViewModelAnnotationResolvers.getAnnotation(m, DependsOn.class);
 		if (annt != null) {
 			String[] props = annt.value();
 			if (props.length > 0) {

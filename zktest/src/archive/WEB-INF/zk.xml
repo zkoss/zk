@@ -833,4 +833,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--	<desktop-config>-->
 <!--		<theme-uri-handler-class>org.zkoss.zktest.test2.F96_ZK_4771ThemeURIHandler</theme-uri-handler-class>-->
 <!--	</desktop-config>-->
+	<!-- for ZK-1209 -->
+<!--	<listener>-->
+<!--		<listener-class>org.zkoss.zktest.test2.F96_ZK_1209ViewModelAnnotationHandler</listener-class>-->
+<!--	</listener>-->
 </zk>
