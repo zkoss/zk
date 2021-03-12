@@ -21,6 +21,7 @@ import static org.zkoss.lang.Generics.cast;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -1105,7 +1106,8 @@ public class Grid extends MeshElement {
 				//we don't know # of visible rows, so a 'smart' guess
 				//It is OK since client will send back request if not enough
 			}
-			final int cnt = _rows.getChildren().size() + getDataLoader().getOffset();
+			final List<Component> rowChildren = _rows != null ? _rows.getChildren() : Collections.emptyList();
+			final int cnt = rowChildren.size() + getDataLoader().getOffset();
 			if (ofs >= cnt) { //not possible; just in case
 				ofs = cnt - pgsz;
 				if (ofs < 0)
@@ -1118,8 +1120,8 @@ public class Grid extends MeshElement {
 			if (realOfs < 0)
 				realOfs = 0;
 			boolean open = true;
-			for (Row row = _rows.getChildren().size() <= realOfs ? null
-					: (Row) _rows.getChildren().get(realOfs), nxt; j < pgsz && row != null; row = nxt) {
+			for (Row row = rowChildren.size() <= realOfs ? null
+					: (Row) rowChildren.get(realOfs), nxt; j < pgsz && row != null; row = nxt) {
 				nxt = (Row) row.getNextSibling();
 
 				if (row.isVisible() && (open || row instanceof Groupfoot || row instanceof Group)) {

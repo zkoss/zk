@@ -1995,10 +1995,10 @@ public class Tree extends MeshElement {
 			((PageableModel) _model).addPagingEventListener((PagingListener) _pgListener);
 		}
 
-		Object node = _model.getRoot();
 		final Renderer renderer = new Renderer();
 		try {
-			renderChildren(renderer, _treechildren, node);
+			if (_model != null)
+				renderChildren(renderer, _treechildren, _model.getRoot());
 		} catch (Throwable ex) {
 			renderer.doCatch(ex);
 		} finally {
