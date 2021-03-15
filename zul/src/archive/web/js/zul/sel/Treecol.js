@@ -194,8 +194,8 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			if (n == cm || n.parentNode == cm) {
 				return;
 			}
-			this.$supers('doClick_', arguments);
 		}
+		this.$supers('doClick_', arguments);
 	}
 });
 

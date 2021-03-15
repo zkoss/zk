@@ -2609,7 +2609,7 @@ public class Tree extends MeshElement {
 
 		if (_model != null) {
 			render(renderer, "model", true);
-			if (_model instanceof Selectable) {
+			if (_model instanceof Selectable && isMultiple()) {
 				Selectable smodel = (Selectable) _model;
 				SelectionControl control = smodel.getSelectionControl();
 				if (control != null) {
