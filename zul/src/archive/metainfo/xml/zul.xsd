@@ -3263,6 +3263,7 @@
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional"/>
 		<xs:attribute name="overflowPopup" type="booleanType" use="optional"/>
+		<xs:attribute name="overflowPopupIconSclass" type="xs:string" use="optional"/>
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- toolbarbutton -->
