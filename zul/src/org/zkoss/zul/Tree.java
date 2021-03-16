@@ -1815,7 +1815,6 @@ public class Tree extends MeshElement {
 					_model.removeTreeDataListener(_dataListener);
 					if (_model instanceof PageableModel && _pgListener != null)
 						((PageableModel) _model).removePagingEventListener((PagingListener) _pgListener);
-					resetPosition(false); //ZK-2712: set different model, reset scroll and anchor position
 
 					if (!isAutosort()) {
 						Treecols cols = getTreecols();
@@ -1834,7 +1833,7 @@ public class Tree extends MeshElement {
 				}
 				setModelDirectly(model);
 				initDataListener();
-				invalidate();
+				resetPosition(true); //ZK-2712: set different model, reset scroll and anchor position
 				if (inPagingMold()) {
 					if (_model instanceof Pageable) {
 						Pageable m = (Pageable) _model;
@@ -1859,6 +1858,7 @@ public class Tree extends MeshElement {
 			//don't call getItems().clear(), since it readonly
 			//bug# 3095453: tree can't expand if model is set in button onClick
 			smartUpdate("model", false);
+			resetPosition(false);
 		}
 	}
 
