@@ -29,7 +29,9 @@ public interface DesktopCache {
 	/** Returns the next available key which is unique in the whole cache.
 	 *
 	 * <p>{@link Desktop} uses this method to generate ID automatically.
+	 * @deprecated since 9.6.0 due to the predictable result.
 	 */
+	@Deprecated
 	public int getNextKey();
 
 	/** Returns the desktop for the specified desktop ID.

@@ -59,6 +59,7 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
 import org.zkoss.zk.ui.impl.EventInterceptors;
+import org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator;
 import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
 import org.zkoss.zk.ui.metainfo.NamespaceParser;
@@ -2839,9 +2840,11 @@ public class Configuration {
 	 * rebooting.
 	 * <p>Default: false.
 	 * <p>Note: if the custom ID generator (org.zkoss.zk.ui.util.IdGenerator)
-	 * is used, this option is meaningless.
+	 * is used, this option is meaningless. Except {@link LegacyDesktopIdGenerator}.
 	 * @since 5.0.0
+	 * @deprecated since 9.6.0
 	 */
+	@Deprecated
 	public boolean isRepeatUuid() {
 		return _repeatUuid;
 	}

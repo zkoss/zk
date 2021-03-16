@@ -824,4 +824,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--			<name>org.zkoss.zk.ui.processMask.enabled</name>-->
 <!--			<value>true</value>-->
 <!--		</library-property>-->
+	<!-- ZK-4751 -->
+<!--	<system-config>-->
+<!--		<id-generator-class>org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator</id-generator-class>-->
+<!--	</system-config>-->
 </zk>

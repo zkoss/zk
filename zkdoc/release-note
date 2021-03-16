@@ -3,6 +3,7 @@ ZK 9.6.0
   ZK-4761: MVVM provide option to disable viewmodel annotation caches
   ZK-4330: provide select-all checkbox in tree component
   ZK-4524: blocking all user keyboard input during processing message showing
+  ZK-4751: provide a built-in cryptographically random (desktop) id generator
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
@@ -14,6 +15,8 @@ ZK 9.6.0
   ZK-4800: Tree NPE when adding/removing model
 
 * Upgrade Notes
+  + The default desktop ID generator was replaced by a more secured one.
+    If you prefer to use the previous generator, use org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator.
 
    --------
 ZK 9.5.1
