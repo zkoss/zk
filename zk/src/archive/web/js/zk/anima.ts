@@ -1,4 +1,4 @@
-/* anima.js
+/* anima.ts
 
 	Purpose:
 
@@ -13,7 +13,7 @@ This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _aftAnims = [], //used zk.afterAnimate
+	var _aftAnims: (() => void)[] = [], //used zk.afterAnimate
 		_jqstop = jq.fx.stop;
 
 	jq.fx.stop = function () {
@@ -22,18 +22,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			fn();
 	};
 
-	function _addAnique(id, data) {
+	function _addAnique(id: string, data: zk.Anima): void {
 		var ary = zk._anique[id];
 		if (!ary)
 			ary = zk._anique[id] = [];
 		ary.push(data);
 	}
-	function _doAnique(id) {
+	function _doAnique(id: string): void {
 		var ary = zk._anique[id];
 		if (ary) {
-			var al = ary.length;
-			while (al) {
-				var data = ary.shift();
+			var al = ary.length, data;
+			while (data = ary.shift()) {
 				if (jq(data.el).is(':animated')) {
 					ary.unshift(data);
 					break;
@@ -47,26 +46,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	function _saveProp(self, set) {
+	function _saveProp(self: zk.JQZK, set: string[]): zk.JQZK {
 		var ele = self.jq;
 		for (var i = set.length; i--;)
 			if (set[i] !== null) ele.data('zk.cache.' + set[i], ele[0].style[set[i]]);
 		return self;
 	}
-	function _restoreProp(self, set) {
+	function _restoreProp(self: zk.JQZK, set: string[]): zk.JQZK {
 		var ele = self.jq;
 		for (var i = set.length; i--;)
 			if (set[i] !== null) ele.css(set[i], ele.data('zk.cache.' + set[i]));
 		return self;
 	}
-	function _checkAnimated(self, wgt, opts, anima) {
+	function _checkAnimated(self: zk.JQZK, wgt: zk.Widget, opts, anima): boolean {
 		if (self.jq.is(':animated')) {
 			_addAnique(wgt.uuid, {el: self.jq[0], wgt: wgt, opts: opts, anima: anima});
 			return true;
 		}
 		return false;
 	}
-	function _checkPosition(self, css) {
+	function _checkPosition(self: zk.JQZK, css: Record<string, string>): zk.JQZK {
 		var pos = self.jq.css('position');
 		if (!pos || pos == 'static')
 			css.position = 'relative';
@@ -130,9 +129,9 @@ zk.copy(zjq.prototype, {
 	 * @return Object this value will be Integer or String.
 	 * @since 7.0.3
 	 */
-	getAnimationSpeed: function (defaultValue) {
+	getAnimationSpeed: function (this: zk.JQZK, defaultValue) {
 		var animationSpeed = jq(this.$().$n()).closest('[data-animationspeed]').data('animationspeed'),
-			jqSpeed = jq.fx.speeds;
+			jqSpeed = jq.fx['speeds'];
 		
 		if (typeof animationSpeed === 'string') {
 			if (jqSpeed[animationSpeed])
@@ -160,14 +159,14 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideDown: function (wgt, opts) {
+	slideDown: function (this: zk.JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideDown'))
 			return this;
 
 		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position', 'border', 'margin', 'padding'],
-			anima = {},
-			css = {overflow: 'hidden'},
+			anima: Record<string, string> = {},
+			css: Record<string, string> = {overflow: 'hidden'},
 			dims = this.dimension();
 
 		opts = opts || {};
@@ -219,14 +218,14 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideUp: function (wgt, opts) {
+	slideUp: function (this: zk.JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideUp'))
 			return this;
 		
 		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'height', 'width', 'overflow', 'position', 'border', 'margin', 'padding'],
-			anima = {},
-			css = {overflow: 'hidden'},
+			anima: Record<string, string> = {},
+			css: Record<string, string> = {overflow: 'hidden'},
 			dims = this.dimension();
 
 		opts = opts || {};
@@ -274,14 +273,14 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideOut: function (wgt, opts) {
+	slideOut: function (this: zk.JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideOut'))
 			return this;
 		
 		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'position', 'border', 'margin', 'padding'],
-			anima = {},
-			css = {},
+			anima: Record<string, string> = {},
+			css: Record<string, string> = {},
 			dims = this.dimension();
 
 		opts = opts || {};
@@ -325,14 +324,14 @@ zk.copy(zjq.prototype, {
 	 * <dd>The function to invoke after the animation.</dd>
 	 * </dl>
 	 */
-	slideIn: function (wgt, opts) {
+	slideIn: function (this: zk.JQZK, wgt, opts) {
 		if (_checkAnimated(this, wgt, opts, 'slideIn'))
 			return this;
 		
 		var anchor = opts ? opts.anchor || 't' : 't',
 			prop = ['top', 'left', 'position', 'border', 'margin', 'padding'],
-			anima = {},
-			css = {},
+			anima: Record<string, string> = {},
+			css: Record<string, string> = {},
 			dims = this.dimension();
 
 		opts = opts || {};
@@ -363,7 +362,7 @@ zk.copy(zjq.prototype, {
 			always: opts.afterAnima
 		});
 	},
-	_updateProp: function (prop) { //used by Bandpopup.js
+	_updateProp: function (this: zk.JQZK, prop) { //used by Bandpopup.js
 		_saveProp(this, prop);
 	},
 	/** Initializes the animation with the default effect, such as
@@ -379,8 +378,10 @@ zk.copy(zjq.prototype, {
 	 * @return jqzk
 	 * @since 5.0.6
 	 */
-	defaultAnimaOpts: function (wgt, opts, prop, visible) {
+	defaultAnimaOpts: function (this: zk.JQZK, wgt, opts, prop, visible) {
 		var self = this;
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		jq.timers.push(function () {
 			if (!visible)
 				zWatch.fireDown('onHide', wgt);
@@ -442,13 +443,15 @@ zk.copy(zjq.prototype, {
 				'borderLeftWidth', 'borderRightWidth', 'borderTopWidth', 'borderBottomWidth',
 				'borderLeftColor', 'borderRightColor', 'borderTopColor', 'borderBottomColor',
 				'borderLeftStyle', 'borderRightStyle', 'borderTopStyle', 'borderBottomStyle'
-			])),
+			])) as Record<string, string>,
 			wrapper = jq('<div></div>')
 				.addClass('ui-effects-wrapper')
 				.css(props),
 			active = document.activeElement;
 
 		try {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
 			active.id;
 		} catch (e) {
 			active = document.body;
@@ -456,7 +459,7 @@ zk.copy(zjq.prototype, {
 
 		element.wrapInner(wrapper);
 
-		if (element[0] === active || jq.contains(element[0], active)) {
+		if (active && (element[0] === active || jq.contains(element[0], active))) {
 			jq(active).trigger('focus');
 		}
 
@@ -472,7 +475,7 @@ zk.copy(zjq.prototype, {
 		if (wrapped.length) {
 			var children = wrapped.contents();
 			children.length ? children.unwrap() : wrapped.remove();
-			if (element[0] === active || jq.contains(element[0], active)) {
+			if (active && (element[0] === active || jq.contains(element[0], active))) {
 				jq(active).trigger('focus');
 			}
 		}

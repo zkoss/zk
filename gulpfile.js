@@ -58,27 +58,6 @@ function typescript_build(src, dest) {
         .pipe(print());
 }
 
-function typescript_build_zul() {
-    return typescript_build(
-        'zul/src/archive/web/js',
-        'zul/codegen/archive/web/js'
-    );
-}
-
-function typescript_build_zkex() {
-    return typescript_build(
-        '../zkcml/zkex/src/archive/web/js',
-        '../zkcml/zkex/codegen/archive/web/js'
-    );
-}
-
-function typescript_build_zkmax() {
-    return typescript_build(
-        '../zkcml/zkmax/src/archive/web/js',
-        '../zkcml/zkmax/codegen/archive/web/js'
-    );
-}
-
 function browsersync_init(done) {
     browserSync.init({
         proxy: `localhost:${options.port}`
@@ -96,6 +75,14 @@ function typescript_dev(src, dest, since) {
         .pipe(gulp.dest(dest))
         .pipe(print())
         .pipe(browserSync.stream());
+}
+
+function typescript_dev_zk() {
+    return typescript_dev(
+        'zk/src/archive',
+        'zk/debug/classes',
+        gulp.lastRun(typescript_dev_zk)
+    );
 }
 
 function typescript_dev_zul() {
@@ -122,30 +109,36 @@ function typescript_dev_zkmax() {
     );
 }
 
-function watch_typescript_zul() {
-    return watch_job('zul/src/**/*.ts', typescript_dev_zul);
-}
-
-function watch_typescript_zkex() {
-    return watch_job('../zkcml/zkex/src/**/*.ts', typescript_dev_zkex);
-}
-
-function watch_typescript_zkmax() {
-    return watch_job('../zkcml/zkmax/src/**/*.ts', typescript_dev_zkmax);
-}
-
 exports['build:single'] = typescript_build_single;
 exports.watch = gulp.series(
     browsersync_init,
     gulp.parallel(
-        watch_typescript_zul,
-        watch_typescript_zkex,
-        watch_typescript_zkmax,
+        () => watch_job('zk/src/**/*.ts', typescript_dev_zk),
+        () => watch_job('zul/src/**/*.ts', typescript_dev_zul),
+        () => watch_job('../zkcml/zkex/src/**/*.ts', typescript_dev_zkex),
+        () => watch_job('../zkcml/zkmax/src/**/*.ts', typescript_dev_zkmax),
     )
 );
 exports.build = gulp.parallel(
-    typescript_build_zul,
-    typescript_build_zkex,
-    typescript_build_zkmax,
+    function build_zk() {
+        return typescript_build(
+            'zk/src/archive/web/js',
+            'zk/codegen/archive/web/js');
+    },
+    function build_zul() {
+        return typescript_build(
+            'zul/src/archive/web/js',
+            'zul/codegen/archive/web/js');
+    },
+    function build_zkex() {
+        return typescript_build(
+            '../zkcml/zkex/src/archive/web/js',
+            '../zkcml/zkex/codegen/archive/web/js');
+    },
+    function build_zkmax() {
+        return typescript_build(
+            '../zkcml/zkmax/src/archive/web/js',
+            '../zkcml/zkmax/codegen/archive/web/js');
+    }
 );
 exports.default = exports.build;
