@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4778.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 16 17:12:23 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "create".
+        2. Click "destroy (method1: leak)".
+        3. Click "check queue listeners".
+        4. "eq.isIdle(): true" should be appeared in zk log.
+    </label>
+    <div id="root">
+        <button label="create" id="btnCreate">
+            <attribute name="onClick"><![CDATA[
+                root.getTemplate("mvvm").create(root, null, null, null);
+            ]]></attribute>
+        </button>
+        <button label="destroy (method1: leak)" id="btnDestroyLeak">
+            <attribute name="onClick"><![CDATA[
+                Div container = root.getFellow("container");
+                Div mvvm = root.getFellow("mvvm");
+                container.detach();
+                mvvm.detach();
+            ]]></attribute>
+        </button>
+        <button label="destroy (method2)" id="btnDestroy2">
+            <attribute name="onClick"><![CDATA[
+                Div container = root.getFellow("container");
+                Div mvvm = root.getFellow("mvvm");
+                mvvm.detach();
+                container.detach();
+            ]]></attribute>
+        </button>
+        <button label="destroy (method3: no leak)" id="btnDestroyNoLeak">
+            <attribute name="onClick"><![CDATA[
+                Div container = root.getFellow("container");
+                Div mvvm = root.getFellow("mvvm");
+                container.detach();
+            ]]></attribute>
+        </button>
+        <button label="check queue listeners" id="btnCheck">
+            <attribute name="onClick"><![CDATA[
+                EventQueue eq = EventQueues.lookup("testQueue", false);
+                Clients.log("eq: " + eq);
+                if (eq instanceof org.zkoss.zk.ui.event.impl.DesktopEventQueue) {
+                    Clients.log("eq.isIdle(): " + eq.isIdle());
+                }
+            ]]></attribute>
+        </button>
+        <template name="mvvm">
+            <div id="container">
+                <div id="mvvm" viewModel="@id('vm') @init(1)" binder="@init(queueName='testQueue')">
+                    TEST
+                </div>
+            </div>
+        </template>
+    </div>
+</zk>
