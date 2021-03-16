@@ -89,7 +89,22 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 		 * this text box.
 		 * @param boolean autodrop
 		 */
-		autodrop: null
+		autodrop: null,
+		/** Returns whether it is disabled.
+		 * <p>Default: false.
+		 * @return boolean
+		 */
+		/** Sets whether it is disabled.
+		 * If disabled is true, user cannot tab into the element.
+		 * @param boolean disabled
+		 */
+		disabled: function (v) {
+			var n = this.$n();
+			if (n) {
+				jq(n).attr('disabled', v ? 'disabled' : null);
+				jq(n).attr('tabindex', v ? null : this._tabindex | 0);
+			}
+		}
 	},
 	getZclass: function () {
 		return 'z-combobutton';
@@ -233,6 +248,9 @@ zul.wgt.Combobutton = zk.$extends(zul.wgt.Button, {
 			this.$supers('doKeyDown_', arguments);
 	},
 	_doKeyDown: function (evt) { //support enter,space, arrow down, and escape
+		if (this.isDisabled()) {
+			return false;
+		}
 		var keyCode = evt.keyCode,
 			bOpen = this.isOpen();
 		if (keyCode == 40 && !bOpen)

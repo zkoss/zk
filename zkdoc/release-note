@@ -14,6 +14,7 @@ ZK 9.6.0
   ZK-4791: VM ID map not cleared when parent of VM is detached
   ZK-4803: tree update model performance
   ZK-4800: Tree NPE when adding/removing model
+  ZK-4597: Disabled Combobutton should not be able to focus or controlled by keyboard
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

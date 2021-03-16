@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4597.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Mar 10 10:30:21 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click textbox1 and press tab, the focus should on the combobutton2.
+		2. click setDisabled button.
+		3. click textbox1 and press tab, the focus should on the textbox2.
+	</label>
+	<button label="setDisabled" onClick="cb2.setDisabled(true)" />
+	<separator/>
+	<textbox/>
+	<combobutton id="cb1" label="combobutton1" tabindex="0" iconSclass="z-icon-home" disabled="true" onClick='Clients.log("should not trigger if isDisabled")'>
+		<popup>
+			should not popup if isDisabled
+		</popup>
+	</combobutton>
+	<combobutton id="cb2" label="combobutton2" tabindex="0" iconSclass="z-icon-home" onClick='Clients.log("should not trigger if isDisabled")'>
+		<popup>
+			should not popup if isDisabled
+		</popup>
+	</combobutton>
+	<textbox/>
+</zk>
