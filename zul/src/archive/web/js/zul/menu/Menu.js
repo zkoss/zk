@@ -21,12 +21,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function _doClick(wgt, evt) {
 		var byKeyboard = evt.name == 'onKeyDown';
 		if (wgt.isListen('onClick')) {
-			var clk = jq(wgt.$n()).find('.' + wgt.$s('separator')),
+			var n = wgt.$n(),
+				clk = jq(n).find('.' + wgt.$s('separator')),
 				zclk = zk(clk),
 				offsetX = zclk.revisedOffset()[0];
 
-			if (evt.pageX > offsetX) { //Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
-				jq(wgt.$n()).addClass(wgt.$s('selected'));
+			//Bug ZK-1357: minus 10px for easily open menupopup when click near arrow icon
+			if (jq(n).hasClass('z-menu-clickable') && evt.pageX > offsetX) {
+				jq(n).addClass(wgt.$s('selected'));
 				wgt.menupopup._shallClose = false;
 				wgt._togglePopup(byKeyboard);
 				evt.stop();
@@ -34,7 +36,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				wgt.fireX(new zk.Event(wgt, 'onClick', evt.data));
 
 		} else {
-			jq(wgt.$n()).addClass(wgt.isTopmost() ? wgt.$s('selected') : wgt.$s('hover'));
+			jq(n).addClass(wgt.isTopmost() ? wgt.$s('selected') : wgt.$s('hover'));
 			wgt.menupopup._shallClose = false;
 			wgt._togglePopup(byKeyboard);
 		}
