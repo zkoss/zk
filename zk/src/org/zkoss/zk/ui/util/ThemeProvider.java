@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.sys.Attributes;
 
 /**
  * Used to replace the theme defined in the language definitions
- * (lang.xml and lang-addon.xml) and the configuration
+ * (lang.xml and lang-addon.xml), {@link ThemeURIHandler} and the configuration
  * (the <code>theme-uri</code> elements in web.xml).
  *
  * <p>When a desktop is about to be rendered, {@link #getThemeURIs} will

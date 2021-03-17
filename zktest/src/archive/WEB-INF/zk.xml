@@ -828,4 +828,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--	<system-config>-->
 <!--		<id-generator-class>org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator</id-generator-class>-->
 <!--	</system-config>-->
+
+	<!--for ZK-4771-->
+<!--	<desktop-config>-->
+<!--		<theme-uri-handler-class>org.zkoss.zktest.test2.F96_ZK_4771ThemeURIHandler</theme-uri-handler-class>-->
+<!--	</desktop-config>-->
 </zk>
