@@ -320,7 +320,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			isDecimal = widget.isDecimal(),
 			pos = widget._realpos();
 		if (pos != widget.slidepos) {
-			widget.slidepos = pos = widget._constraintPos(pos);
+			widget.slidepos = widget._curpos = pos = widget._constraintPos(pos);
 			var text = isDecimal ? pos.toFixed(widget.$class._digitsAfterDecimal(widget.$class._getStep(widget))) : pos;
 			if (widget.slidetip) // B70-ZK-2081: Replace "{0}" with the position.
 				widget.slidetip.innerHTML = widget._slidingtext.replace(/\{0\}/g, text);
