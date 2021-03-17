@@ -18,6 +18,7 @@ ZK 9.6.0
   ZK-4808: menu click listener ignored (unexpectedly)
   ZK-4804: tree: incorrect scroll position, after model replace (renders incomplete)
   ZK-4636: Slider curpos might be larger then maxpos while dragging
+  ZK-4784: detached Radio(Group) memory leak
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

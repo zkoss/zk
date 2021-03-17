@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4784.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Mar 17 12:34:45 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. load the page with visualVM(or other profiling tool)
+		2. click the "detach container" button
+		3. perform GC / take a heap dump
+		4. check the live objects:
+		4-1. The radio component should not remains in memory (all detached components should be eligible for garbage collection)
+	</label>
+	<div id="root">
+		<div id="container">
+			<radiogroup>
+				<radio label="YES"/>
+				<radio label="NO"/>
+			</radiogroup>
+		</div>
+	</div>
+	<button label="detach container" onClick="container.detach();"/>
+</zk>
