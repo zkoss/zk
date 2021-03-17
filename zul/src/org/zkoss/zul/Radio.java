@@ -277,20 +277,8 @@ public class Radio extends Checkbox {
 		final Radiogroup rg = getRadiogroup();
 		if (rg != null) {
 			rg.removeExternal(this);
-		}
-
-		// ZK-3818: update selected index in the callback
-		if (!_explictGroup) {
-			_group = null;
-		}
-		Component rootParent = ComponentsCtrl.getRootParent();
-		if (rg != null && rootParent instanceof ComponentCtrl
-				&& (!Components.isAncestor(rootParent, rg) || rootParent == rg)) {
-			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_REMOVED, new Callback<Component>() {
-				public void call(Component rootParent) {
-					rg.fixOnRemove(Radio.this);
-				}
-			});
+			// B96-ZK-4784: should fix selectedIndex without adding callback to prevent memory leak
+			rg.fixOnRemove(Radio.this);
 		}
 	}
 
