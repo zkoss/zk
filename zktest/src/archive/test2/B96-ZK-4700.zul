@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4700.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Mar 18 17:39:32 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the red area on the second(empty) chosenbox.
+		2. second chosenbox should open, but first chosenbox should not open.
+	</label>
+	<zscript><![CDATA[
+			import org.zkoss.zul.*;
+			import org.zkoss.zkmax.zul.Chosenbox;
+			import java.util.*;
+
+			ListModel model = new ListModelList(new String[] {
+				"Apple", "Banana", "Super Apple", "Super Banana"
+			});
+			model.multiple = true;
+			model.addToSelection("Apple");
+			model.addToSelection("Banana");
+	]]></zscript>
+	<style>
+	.z-chosenbox-inplace {background-color: red;}
+	</style>
+
+	<chosenbox inplace="true" model="${model}" width="200px" creatable="true"/>
+	<chosenbox width="100px" inplace="true" />
+</zk>
