@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -258,6 +260,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	//ZK-3133 to cache MatchMedia annotation values
 	private transient Map<String, Method> _matchMediaValues;
+
+	//ZK-4791
+	private static final Pattern CALL_OTHER_VM_COMMAND_PATTERN = Pattern.compile("\\$([^.]*)\\..*$");
 
 	public BinderImpl() {
 		this(null, null);
@@ -2076,6 +2081,16 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	protected void doExecute(Component comp, String command, Map<String, Object> commandArgs, BindContext ctx,
 			Set<Property> notifys) {
 		try {
+			Matcher matcher = CALL_OTHER_VM_COMMAND_PATTERN.matcher(command);
+			if (matcher.find()) {
+				String vmId = matcher.group(1);
+				Map<String, Binder> vmIdBinderMap = (Map<String, Binder>) comp.getDesktop().getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
+				Binder targetBinder = vmIdBinderMap.get(vmId);
+				if (targetBinder != null) {
+					((BinderImpl) targetBinder).doExecute(comp, command.replace("$" + vmId + ".", ""), commandArgs, ctx, notifys);
+					return;
+				}
+			}
 			if (_log.isDebugEnabled()) {
 				_log.debug("before doExecute comp=[{}],command=[{}],notifys=[{}]", comp, command, notifys);
 			}
