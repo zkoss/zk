@@ -7,6 +7,7 @@ ZK 9.6.0
   ZK-4631: Add option to choose toolbar overflow icon
   ZK-4771: Provide a way to add theme-uri without extends any existing ThemeProvider
   ZK-4795: Grid/Listbox/Tree supports sticky column headers
+  ZK-4783: Modify error message box CSS design (provide scrollbar while word-break fail)
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
@@ -26,6 +27,7 @@ ZK 9.6.0
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
     If you prefer to use the previous generator, use org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator.
+  + Due to ZK-4783, the hbox of message box is substituted by DIV.
 
    --------
 ZK 9.5.1
