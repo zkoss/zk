@@ -23,6 +23,7 @@ ZK 9.6.0
   ZK-4636: Slider curpos might be larger then maxpos while dragging
   ZK-4784: detached Radio(Group) memory leak
   ZK-4778: Memory Leak: DesktopEventQueue$ListenerInfo
+  ZK-4809: race condition with comet server push (servlet 3) on Tomcat
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
