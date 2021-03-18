@@ -28,6 +28,7 @@ ZK 9.6.0
   ZK-4827: Fail to load JSP with ZK Components
   ZK-4819: Chosenbox performance (with za11y.jar)
   ZK-4820: Chosenbox aria-activedescendant out of sync (za11y.jar)
+  ZK-4763: Radiogroup selectedIndex error after radio moved
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
