@@ -1283,8 +1283,13 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 			WebApps.getCurrent().getConfiguration().invokeCallback("destroy", this);
 	}
 	private void afterComponentPageChanged(Page newpg, Page oldpg) {
-		if (newpg == oldpg)
+		if (newpg == oldpg) {
+			// Orphan case: detached again after the parent was detached
+			if (getParent() == null && oldpg == null) {
+				WebApps.getCurrent().getConfiguration().afterComponentDetached(this, null);
+			}
 			return;
+		}
 
 		final Desktop desktop = (oldpg != null ? oldpg : newpg).getDesktop();
 		if (desktop == null)
