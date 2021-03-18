@@ -6,6 +6,7 @@ ZK 9.6.0
   ZK-4751: provide a built-in cryptographically random (desktop) id generator
   ZK-4631: Add option to choose toolbar overflow icon
   ZK-4771: Provide a way to add theme-uri without extends any existing ThemeProvider
+  ZK-4795: Grid/Listbox/Tree supports sticky column headers
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
