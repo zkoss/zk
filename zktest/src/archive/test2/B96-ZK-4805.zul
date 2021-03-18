@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4805.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 17 12:00:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+        import org.zkoss.zk.ui.util.Clients;
+        import org.zkoss.json.JavaScriptValue;
+        import java.io.ByteArrayInputStream;
+        import java.io.ByteArrayOutputStream;
+        import java.io.ObjectInputStream;
+        import java.io.ObjectOutputStream;
+
+        byte[] _bytes;
+
+        public void doSerialize() {
+            try {
+                JavaScriptValue jsv = new JavaScriptValue("{what: 123, another: 'a'}");
+                doSerialize0(jsv);
+                doDeserialize0(jsv);
+            } catch(Exception x) {
+                x.printStackTrace();
+                Clients.log("error :" + x.getClass() + "," + x.getMessage());
+            }
+        }
+
+        public void doSerialize0(JavaScriptValue jsv) throws Exception {
+            ByteArrayOutputStream oaos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(oaos);
+            oos.writeObject(jsv);
+            oos.close();
+            oaos.close();
+            _bytes = oaos.toByteArray();
+        }
+
+        public void doDeserialize0(JavaScriptValue jsv) throws Exception {
+            ByteArrayInputStream oaos = new ByteArrayInputStream(_bytes);
+            ObjectInputStream oos = new ObjectInputStream(oaos);
+
+            JavaScriptValue newJsv = (JavaScriptValue) oos.readObject();
+            oos.close();
+            oaos.close();
+            Clients.log("done deserialize: " + _bytes.length + ", JSONString: " + newJsv.toJSONString());
+        }
+    ]]>
+	</zscript>
+	<label>Click button and you should not see exception in ZK log</label>
+	<button label="Test serialize/deserialize" onClick='doSerialize()'/>
+</zk>
