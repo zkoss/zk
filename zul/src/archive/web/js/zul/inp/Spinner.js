@@ -102,7 +102,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.NumberInputWidget, {
 		this._currentbtn = null;
 	},
 	_btnDown: function (evt) {
-		if (!this._buttonVisible || this._disabled) return;
+		if (!this._buttonVisible || this._disabled || this._readonly) return;
 
 		var btn = this.$n('btn');
 

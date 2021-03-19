@@ -91,11 +91,10 @@ each(@components, {
 			}
 		}
 
-		&-disabled {
+		&-disabled, &-readonly {
 			.opacity(@disabledOpacity);
 
 			& > input {
-				color: @inputDisableColor !important;
 				background: @inputDisableBackgroundColor !important;
 				cursor: default !important;
 			}
@@ -106,11 +105,14 @@ each(@components, {
 				cursor: default !important;
 			}
 		}
-		&-disabled &-button:hover {
+		&-disabled > input {
+			color: @inputDisableColor;
+		}
+		&-disabled &-button:hover, &-readonly &-button:hover {
 			border-color: @inputBorderColor;
 		}
 
-		&-button&-disabled { // buttonVisible="false"
+		&-button&-disabled, &-button&-readonly { // buttonVisible="false"
 			display: none;
 		}
 
@@ -125,11 +127,20 @@ each(@components, {
 			& > input {
 				color: @inputReadonlyColor;
 				background: @inputReadonlyBackgroundColor;
+				&:focus {
+					border-color: @inputBorderColor;
+				}
+				&:hover {
+					border-color: @inputBorderColor;
+					cursor: default;
+				}
 			}
 		}
-		&-readonly &-button {
-			color: @inputReadonlyColor;
-			background-color: @inputBackgroundColor;
+		&-readonly > &-hover + &-button {
+			border-color: @inputBorderColor;
+		}
+		&-readonly > &-input&-focus, &-readonly > &-focus + &-button {
+			border-color: @inputBorderColor;
 		}
 
 		// Inplace editing
@@ -227,16 +238,23 @@ each(@components, {
 
 .z-timebox-disabled a,
 .z-spinner-disabled a,
-.z-doublespinner-disabled a {
+.z-doublespinner-disabled a,
+.z-timebox-readonly a,
+.z-spinner-readonly a,
+.z-doublespinner-readonly a {
 	color: @disabledColor;
 	&:hover {
 		background: 0;
 	}
 }
+
 // separator
 .z-timebox-disabled span,
 .z-spinner-disabled span,
-.z-doublespinner-disabled span {
+.z-doublespinner-disabled span,
+.z-timebox-readonly span,
+.z-spinner-readonly span,
+.z-doublespinner-readonly span {
 	& > i {
 		display: none;
 	}

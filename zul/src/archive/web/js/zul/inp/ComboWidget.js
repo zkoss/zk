@@ -591,11 +591,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._inplaceIgnore = true;
 	},
 	doKeyDown_: function (evt) {
-		if (!this._disabled) {
-			this._doKeyDown(evt);
-			if (!evt.stopped)
-				this.$supers('doKeyDown_', arguments);
-		}
+		if (this._disabled || this._readonly) return;
+		this._doKeyDown(evt);
+		if (!evt.stopped)
+			this.$supers('doKeyDown_', arguments);
 	},
 	doClick_: function (evt) {
 		if (!this._disabled) {

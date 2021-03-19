@@ -12,6 +12,7 @@ ZK 9.6.0
   ZK-4524: blocking all user keyboard input during processing message showing
   ZK-4803: tree update model performance
   ZK-4800: Tree NPE when adding/removing model
+  ZK-4600: readonly spinner buttons should not be clickable
 
 * Upgrade Notes
 

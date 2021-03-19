@@ -78,19 +78,18 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		return zUtl.encodeXML(this.getLabel(), {pre: 1});
 	},
 	doClick_: function (evt) {
-		if (!this._disabled) {
+		var cb = this.parent;
+		if (this._disabled || cb._readonly) return;
 
-			var cb = this.parent;
-			cb._select(this, {sendOnSelect: true, sendOnChange: true});
-			this._updateHoverImage();
-			cb.close({sendOnOpen: true, focus: true});
+		cb._select(this, {sendOnSelect: true, sendOnChange: true});
+		this._updateHoverImage();
+		cb.close({sendOnOpen: true, focus: true});
 
-			// Fixed the onFocus event is triggered too late in IE.
-			cb._shallClose = true;
-			if (zul.inp.InputCtrl.isPreservedFocus(this))
-				zk(cb.getInputNode()).focus();
-			evt.stop();
-		}
+		// Fixed the onFocus event is triggered too late in IE.
+		cb._shallClose = true;
+		if (zul.inp.InputCtrl.isPreservedFocus(this))
+			zk(cb.getInputNode()).focus();
+		evt.stop();
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);

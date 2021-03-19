@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4600.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 16 09:51:56 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		String[] data = new String[5];
+		for (int i = 1; i < data.length; i++)
+			data[i] = "option " + i;
+		ListModelList model = new ListModelList(data);
+	]]></zscript>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label>Click the buttons of readonly spinner, spinner value will not be changed.</label>
+	<div>spinner</div>
+	<spinner readonly="true" value="0" />
+	<doublespinner readonly="true" value="0" />
+	<div>doublebox</div>
+	<doublebox readonly="true" value="0"/>
+	<div>datebox</div>
+	<datebox format="MM/dd/yyyy" text="12/31/2000" readonly="true"/>
+	<div>timebox</div>
+	<timebox format="HH:mm:ss" width="150px" readonly="true" onCreate="self.value = new Date()" />
+	<div>bandbox</div>
+	<bandbox readonly="true" value="0"/>
+	<div>combobox</div>
+	<combobox model="${model}" value="0" readonly="true">
+		<template name="model">
+			<comboitem label="${each}">
+			</comboitem>
+		</template>
+	</combobox>
+</zk>

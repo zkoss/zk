@@ -354,7 +354,7 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._currentbtn = null;
 	},
 	_btnDown: function (evt) { // TODO: format the value first
-		if (!this._buttonVisible || this._disabled) return;
+		if (!this._buttonVisible || this._disabled || this._readonly) return;
 
 		// cache it for IE and others to keep the same position at the first time being clicked.
 		this._lastPos = this._getPos();

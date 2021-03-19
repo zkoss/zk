@@ -480,6 +480,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 								{dodgeRef: !cstp}); // Bug 3251564
 				});
 			}
+			jq(inp).addClass(this.$s('focus'));
 		}
 	},
 	doBlur_: function (evt) {
@@ -507,6 +508,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				window.scrollTo(windowX, windowY);
 		}
 		this._lastKeyDown = null;
+		jq(this.getInputNode()).removeClass(this.$s('focus'));
 	},
 	_doTouch: zk.ios ? function (evt) {
 		//B65-ZK-1285: get window offset information before virtual keyboard opened on ipad

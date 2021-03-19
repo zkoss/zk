@@ -525,7 +525,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_doBtnClick: function (evt) {
 		this._inplaceIgnore = false;
 		if (!this._buttonVisible) return;
-		if (!this._disabled)
+		if (!this._disabled || !this._readonly)
 			this.setOpen(!jq(this.$n('pp')).zk.isVisible(), zul.db.DateboxCtrl.isPreservedFocus(this));
 		// Bug ZK-2544, B70-ZK-2849
 		evt.stop((this._pop && this._pop._open ? {propagation: 1} : null));
@@ -874,6 +874,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	_chooseDate: function (target, val) {
 		var db = this.parent,
 			selectLevel = db._selectLevel;
+		if (db._disabled || db._readonly) return;
 		if (target && !jq(target).hasClass(this.$s('disabled'))) {
 			var cell = target,
 				dateobj = this.getTime();
