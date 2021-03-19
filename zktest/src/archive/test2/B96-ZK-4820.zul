@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4820.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 16 12:50:33 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(new String[] {"aaa1", "aaa2", "aaa3", "bbb4", "bbb5", "bbb6", "ccc7", "ccc8", "ccc9"});
+	]]></zscript>
+	<label>
+		type "b" to filter only the items starting with "b" and "aria-activedescendant" should be correct
+	</label>
+	<chosenbox width="500px" model="${model}"/>
+</zk>
