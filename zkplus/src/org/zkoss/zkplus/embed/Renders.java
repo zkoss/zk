@@ -203,6 +203,8 @@ public class Renders {
 			out.write("','");
 			out.write(desktop.getUpdateURI(null));
 			out.write("','");
+			out.write(desktop.getResourceURI(null));
+			out.write("','");
 			out.write(desktop.getRequestPath());
 			out.write('\'');
 

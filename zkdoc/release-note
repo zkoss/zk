@@ -3,6 +3,7 @@ Mar 23, 2021
 * Features
 
 * Bugs
+  ZK-4827: Fail to load JSP with ZK Components
 
 * Upgrade Notes
 

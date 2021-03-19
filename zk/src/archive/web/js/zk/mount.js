@@ -20,6 +20,11 @@ function zkpi(nm, wv) {
 
 //ZK JSP: page creation (backward compatible)
 function zkpb(pguid, dtid, contextURI, updateURI, resourceURI, reqURI, props) {
+	if (props === undefined && typeof reqURI !== 'string') { //ZK-4827: for backward compatible (other addons, ex. zuljsp)
+		props = reqURI;
+		reqURI = resourceURI;
+		resourceURI = updateURI;
+	}
 	zkx([0, pguid,
 		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, rsu: resourceURI, ru: reqURI}),{},[]]);
 }
