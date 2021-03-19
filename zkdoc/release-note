@@ -25,6 +25,7 @@ ZK 9.6.0
   ZK-4778: Memory Leak: DesktopEventQueue$ListenerInfo
   ZK-4805: org.zkoss.json.JavaScriptValue not serializable
   ZK-4700: chosenbox inplace influence other chosenbox
+  ZK-4827: Fail to load JSP with ZK Components
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
