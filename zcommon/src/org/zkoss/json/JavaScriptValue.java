@@ -18,7 +18,8 @@ package org.zkoss.json;
  * @author tomyeh
  * @since 6.0.0
  */
-public class JavaScriptValue implements org.zkoss.json.JSONAware {
+public class JavaScriptValue implements org.zkoss.json.JSONAware, java.io.Serializable {
+	private static final long serialVersionUID = 20100319143828L;
 	private final String _js;
 
 	/** Constructor
