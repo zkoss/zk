@@ -26,6 +26,8 @@ ZK 9.6.0
   ZK-4805: org.zkoss.json.JavaScriptValue not serializable
   ZK-4700: chosenbox inplace influence other chosenbox
   ZK-4827: Fail to load JSP with ZK Components
+  ZK-4819: Chosenbox performance (with za11y.jar)
+  ZK-4820: Chosenbox aria-activedescendant out of sync (za11y.jar)
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
