@@ -50,7 +50,7 @@ public class B96_ZK_4827Test extends WebDriverTestCase {
 
 	@Test
 	public void test() throws Exception {
-		connect("/test2/B95-ZK-4827.jsp");
+		connect("/test2/B96-ZK-4827.jsp");
 		sleep(3000);
 		assertNoJSError();
 	}
