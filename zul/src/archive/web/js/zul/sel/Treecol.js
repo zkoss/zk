@@ -184,7 +184,7 @@ zul.sel.Treecol = zk.$extends(zul.mesh.SortWidget, {
 			$n.removeClass(this.$s('checked'));
 			tree._select(null, evt);
 		}
-		tree.fire('onCheckSelectAll', this._checked);
+		tree.fire('onCheckSelectAll', this._checked, {toServer: true});
 	},
 	doClick_: function (evt) {
 		var tree = this.getTree(),
