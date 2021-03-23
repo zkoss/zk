@@ -31,6 +31,7 @@ ZK 9.6.0
   ZK-4820: Chosenbox aria-activedescendant out of sync (za11y.jar)
   ZK-4763: Radiogroup selectedIndex error after radio moved
   ZK-4825: Websockets NPE during encodeURL
+  ZK-4701: chosenbox initial width too short to display emptyMessage
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
