@@ -225,8 +225,11 @@ public class Radio extends Checkbox {
 
 		Radiogroup newgp = null;
 
-		if (parent != null)
+		if (parent != null) {
+			if (!_explictGroup)
+				_group = null; // ZK-4763: clear previous group to get new group correctly
 			newgp = getRadiogroup();
+		}
 
 		if (oldgp != newgp) {
 			if (oldgp != null) { //removed from the component tree  
@@ -234,12 +237,14 @@ public class Radio extends Checkbox {
 					_group.removeExternal(this);
 					_attachExternal = false;
 				}
+				oldgp.fixOnRemove(this);
 			}
 			if (newgp != null) {
 				if (_explictGroup && !_attachExternal && newgp == _group) {
 					_group.addExternal(this);
 					_attachExternal = true;
 				}
+				newgp.fixOnAdd(this, _explictGroup);
 			}
 		}
 	}
