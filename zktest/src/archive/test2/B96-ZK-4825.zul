@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4825.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 22 12:15:30 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        desktop.enableServerPush(true);
+    ]]></zscript>
+    <label multiline="true">
+        1. Ensure WebSocket server push is used (see zk.xml).
+        2. Click "create image".
+        3. No error appeared.
+    </label>
+    <div id="parent">
+        <button label="create image">
+            <attribute name="onClick"><![CDATA[
+                Desktop dt = desktop;
+                new Thread() {
+                    public void run() {
+                        Thread.sleep(200);
+                        try {
+                            Executions.activate(dt);
+                            parent.appendChild(new Image());
+                            //more isolated way to reproduce without <image>
+                            //System.out.println(Executions.getCurrent().encodeURL("~./img/spacer.gif"));
+                        } finally {
+                            Executions.deactivate(dt);
+                        }
+                    }
+                }.start();
+            ]]></attribute>
+        </button>
+    </div>
+</zk>
