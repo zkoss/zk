@@ -460,7 +460,7 @@ public class HtmlPageRenders {
 			for (StyleSheet ss : sses) {
 				final String href = ss.getHref();
 				if (href != null && href.length() > 0)
-					orgss.add(ss.getMedia() != null ? ss : href); //we don't support getContent
+					orgss.add((ss.getMedia() != null || ss.isDisabled()) ? ss : href); //we don't support getContent
 			}
 
 			final String[] hrefs = config.getThemeURIs();
