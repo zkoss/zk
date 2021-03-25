@@ -140,31 +140,39 @@ zul.db.Renderer = {
 			val = wgt.getTime(),
 			m = val.getMonth(),
 			y = val.getFullYear(),
-			ydelta = new zk.fmt.Calendar(val, wgt._localizedSymbols).getYear() - y,
+			// to avoid moment using the last day(according to local timezone) of the previous year in ie.
+			date = zk.ie ? new Date(y, m) : val._moment.toDate(),
+			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			displayYear = this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat),
 			yofs = y - (y % 10 + 1),
 			ydec = zk.parseInt(y / 100),
 			text = wgt.$s('text'),
 			minyear = wgt._minyear,
-			maxyear = wgt._maxyear;
+			maxyear = wgt._maxyear,
+			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
 
 
 		switch (view) {
 		case 'day':
 			out.push('<span id="', uuid, '-tm" class="', text, '">',
 					localizedSymbols.SMON[m], '</span> <span id="', uuid,
-					'-ty" class="', text, '">', y + ydelta, '</span>');
+					'-ty" class="', text, '">', displayYear, '</span>');
 			break;
 		case 'month':
 			out.push('<span id="', uuid,
-					'-ty" class="', text, '">', y + ydelta, '</span>');
+					'-ty" class="', text, '">', displayYear, '</span>');
 			break;
 		case 'year':
 			var yearGap = 11,
 				startYear = yofs < minyear ? minyear : yofs,
+				startDate = new Date(startYear, m),
+				displayStartYear = this._getDisplayYear(startDate, localizedSymbols, localeDateTimeFormat, endYearLength),
 				expectedEndYear = yofs + yearGap;
-				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear;
+				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear,
+				endDate = new Date(endYear, m),
+				displayEndYear = this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength);
 			out.push('<span id="', uuid, '-tyd" class="', text, '">',
-					startYear + ydelta, '-', endYear + ydelta, '</span>');
+					displayStartYear, ' - ', displayEndYear, '</span>');
 			break;
 		case 'decade':
 			// each start year of cell is ten more than previous one,
@@ -172,10 +180,14 @@ zul.db.Renderer = {
 			var yearGap = 10 * 11 + 9,
 				expectedStartYear = ydec * 100 - 10,
 				startYear = expectedStartYear < minyear ? minyear : expectedStartYear,
+				startDate = new Date(startYear, m),
+				displayStartYear = this._getDisplayYear(startDate, localizedSymbols, localeDateTimeFormat, endYearLength),
 				expectedEndYear = expectedStartYear + yearGap,
-				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear;
+				endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear,
+				endDate = new Date(endYear, m),
+				displayEndYear = this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength);
 			out.push('<span id="', uuid, '-tyd" class="', text, '">',
-					startYear + ydelta, '-', endYear + ydelta, '</span>');
+					displayStartYear, ' - ', displayEndYear, '</span>');
 			break;
 		}
 	},
@@ -241,10 +253,11 @@ zul.db.Renderer = {
 			disd = wgt.$s('disabled'),
 			val = wgt.getTime(),
 			y = val.getFullYear(),
-			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y,
 			yofs = y - (y % 10 + 1),
 			minyear = wgt._minyear,
-			maxyear = wgt._maxyear;
+			maxyear = wgt._maxyear,
+			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
 		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('year'), '" id="', uuid, '-mid"',
 				zUtl.cellps0, '><tbody>');
 
@@ -257,8 +270,9 @@ zul.db.Renderer = {
 				yofs++;
 				continue;
 			}
+			var date = new Date(yofs, 0);
 			out.push('<td class="', cell, '" data-value="', yofs, '" id="', uuid, '-y', j, '" >',
-					yofs + ydelta, '</td>');
+					this._getDisplayYear(date, localizedSymbols, localeDateTimeFormat, endYearLength), '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 			yofs++;
 		}
@@ -277,12 +291,13 @@ zul.db.Renderer = {
 			disd = wgt.$s('disabled'),
 			val = wgt.getTime(),
 			y = val.getFullYear(),
-			ydelta = new zk.fmt.Calendar(val, localizedSymbols).getYear() - y,
 			ydec = zk.parseInt(y / 100),
 			minyear = wgt._minyear,
 			maxyear = wgt._maxyear,
 			mindec = zk.parseInt(minyear / 10) * 10,
-			maxdec = zk.parseInt(maxyear / 10) * 10;
+			maxdec = zk.parseInt(maxyear / 10) * 10,
+			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			endYearLength = this._getPadYearLength(wgt, localizedSymbols, localeDateTimeFormat);
 
 
 		out.push('<table role="grid" class="', wgt.$s('body'), ' ', wgt.$s('decade'),
@@ -299,10 +314,12 @@ zul.db.Renderer = {
 				continue;
 			}
 
+			var startDate = new Date(temp < minyear ? minyear : temp, 0),
+				endDate = new Date(temp + 9 > maxyear ? maxyear : temp + 9, 11);
 			out.push('<td data-value="', temp, '" id="', uuid, '-de', j, '" class="',
 					cell, (y >= temp && y <= (temp + 9)) ? ' ' + selected : '', '" >',
-							(temp < minyear ? minyear : temp) + ydelta + '-<br aria-hidden="true" />'
-							+ ((temp + 9 > maxyear ? maxyear : temp + 9) + ydelta) + '</td>');
+							this._getDisplayYear(startDate, localizedSymbols, localeDateTimeFormat, endYearLength) + ' -<br aria-hidden="true" />'
+							+ this._getDisplayYear(endDate, localizedSymbols, localeDateTimeFormat, endYearLength) + '</td>');
 			if (!((j + 1) % 4)) out.push('</tr>');
 		}
 		out.push('</tbody></table>');
@@ -321,6 +338,20 @@ zul.db.Renderer = {
 			val = new zk.fmt.Calendar().formatDate(zUtl.today(parent, tz), wgt.getFormat(), localizedSymbols);
 		}
 		out.push(val);
+	},
+	_getDisplayYear: function (date, localizedSymbols, localeDateTimeFormat, padLength) { // override
+		return date.getFullYear() + localizedSymbols.YDELTA + '';
+	},
+	_getPadYearLength: function (wgt, localizedSymbols, localeDateTimeFormat) {
+		var y = wgt.getTime().getFullYear(),
+			yearGap = 10 * 11 + 9,
+			maxyear = wgt._maxyear,
+			ydec = zk.parseInt(y / 100),
+			expectedStartYear = ydec * 100 - 10,
+			expectedEndYear = expectedStartYear + yearGap,
+			endYear = expectedEndYear > maxyear ? maxyear : expectedEndYear,
+			endYearLength = this._getDisplayYear(new Date(endYear, 0), localizedSymbols, localeDateTimeFormat).replace(/^\D+/g, '').length;
+		return endYearLength;
 	}
 };
 // eslint-disable-next-line one-var
@@ -947,6 +978,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
+			LAN_TAG: zk.LAN_TAG,
 			   SDOW: zk.SDOW,
 			  S2DOW: zk.S2DOW,
 			   FDOW: zk.FDOW,

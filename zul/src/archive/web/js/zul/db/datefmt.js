@@ -20,6 +20,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			fmtlen = fmt.length, ary = [],
 			//mmindex = mindex + 3,
 			aa = fmt.indexOf('a'),
+			gg = fmt.indexOf('G'),
 			tlen = txt.replace(/[^.]/g, '').length,
 			flen = fmt.replace(/[^.]/g, '').length;
 
@@ -30,7 +31,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			if (c.match(/\d/)) {
 				ary.push(c);
 			} else if ((mindex >= 0 && mindex <= i /*&& mmindex >= i location French will lose last char */)
-			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i)) {
+			|| (eindex >= 0 && eindex <= i) || (aa > -1 && aa <= i) || (gg > -1 && gg <= i)) {
 				if (c.match(/\w/)) {
 					ary.push(c);
 				} else {
@@ -174,6 +175,7 @@ var LeapDay = zk.$extends(zk.Object, {
 	}
 });
 zk.fmt.Date = {
+	_isoDateTimeFormat: zk.ie < 11 ? null : new Intl.DateTimeFormat('en-US', {year: 'numeric'}),
 	// strictDate: No invalid date allowed (e.g., Jan 0 or Nov 31)
 	// nonLenient: strictDate + inputs must match this object's format (no additional character allowed)
 	parseDate: function (txt, fmt, nonLenient, refval, localizedSymbols, tz, strictDate) {
@@ -185,6 +187,7 @@ zk.fmt.Date = {
 			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
+			LAN_TAG: zk.LAN_TAG,
 			   SDOW: zk.SDOW,
 			  S2DOW: zk.S2DOW,
 			   FDOW: zk.FDOW,
@@ -202,12 +205,27 @@ zk.fmt.Date = {
 			msec = refval.getMilliseconds(),
 			aa = fmt.indexOf('a'),
 			hasAM = aa > -1,
+			hasG = fmt.indexOf('G') != -1,
 			hasHour1 = hasAM && (fmt.indexOf('h') > -1 || fmt.indexOf('K') > -1),
 			isAM,
 			ts = _parseTextToArray(txt, fmt),
 			regexp = /.*\D.*/,
 			// ZK-2026: Don't use isNaN(), it will treat float as number.
-			isNumber = !regexp.test(txt);
+			isNumber = !regexp.test(txt),
+			eras = localizedSymbols.ERAS,
+			era,
+			eraKey;
+
+		if (hasG && txt && eras) { // ZK-4745: parsing era for specific calendar system
+			eraKey = this._findEraKey(txt, eras);
+			if (eraKey)
+				era = eras[eraKey];
+		}
+
+		var refDate = refval._moment.toDate(),
+			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
+			eraName = localizedSymbols.ERA || eraKey ? eraKey : this.getEraName(refDate, localizedSymbols, localeDateTimeFormat),
+			ydelta = localizedSymbols.YDELTA || era ? (0 - era.firstYear + era.direction * 1) : this.getYDelta(refDate, localeDateTimeFormat);
 
 		if (!ts || !ts.length) return;
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
@@ -221,17 +239,18 @@ zk.fmt.Date = {
 				var nosep, nv; //no separator
 				if (k < fl) {
 					var c2 = fmt.charAt(k);
-					nosep = 'yMdEmsShHkKaA'.indexOf(c2) != -1;
+					nosep = 'yuMdEmsShHkKaAG'.indexOf(c2) != -1;
 				}
 				var token = isNumber ? ts[0].substring(j - offs, k - offs) : ts[i++];
 				switch (cc) {
+				case 'u':
 				case 'y':
 					// ZK-1985: Determine if token's length is less than the expected when nonLenient is true.
 					if (nonLenient && token && (token.length < len))
 						return;
 
 					if (nosep) {
-						if (len <= 3) len = 2;
+						if (len < 3) len = 2;
 						if (token && token.length > len) {
 							ts[--i] = token.substring(len);
 							token = token.substring(0, len);
@@ -244,18 +263,20 @@ zk.fmt.Date = {
 
 					if (!isNaN(nv = _parseInt(token))) {
 						var newY = Math.min(nv, 200000); // Bug B50-3288904: js year limit
-						if (newY < 100) {
-							var fullYear = y + localizedSymbols.YDELTA;
-							if (newY === fullYear % 100) { // assume yy is not modified
-								y = fullYear;
-								break;
-							}
+						if (ydelta === 0 && newY < 100) { // only handle twoDigitYearStart with ISO calendar for now
+							if (newY === y % 100) break; // assume yy is not modified
 							// ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
 							var twoDigitYearStart = zk.TDYS,
 								lowerBoundary = (Math.floor(twoDigitYearStart / 100) * 100) + newY,
 								upperBoundary = lowerBoundary + 100;
 							y = lowerBoundary > twoDigitYearStart ? lowerBoundary : upperBoundary;
 						} else {
+							if (cc == 'y') {
+								if (era)
+									newY = era.firstYear + era.direction * (newY - 1);
+								else
+									newY = (y + ydelta > 0) ? newY - ydelta : 1 - newY - ydelta;
+							}
 							y = newY;
 						}
 					}
@@ -396,6 +417,16 @@ zk.fmt.Date = {
 					if (!token) return; //failed
 					isAM = token.toUpperCase().startsWith(localizedSymbols.APM[0].toUpperCase());
 					break;
+				case 'G':
+					if (nosep && eras) {
+						if (!eraName) return; // no era match
+						token = _parseToken(token, ts, --i, eraName.length);
+					}
+					if (eraName && token != eraName && eraName.length > token.length) { // there is space in eraName
+						token = eraName;
+						i += eraName.match(/([\s]+)/g).length;
+					}
+					break;
 				//default: ignored
 				}
 				j = k - 1;
@@ -405,9 +436,9 @@ zk.fmt.Date = {
 		if (hasHour1 && isAM === false)
 			hr += 12;
 		var dt;
-		if (m == 1 && d == 29 && localizedSymbols.YDELTA) {
-			dt = new LeapDay(y - localizedSymbols.YDELTA, m, d, hr, min, sec, msec, tz);
-			dt.setOffset(localizedSymbols.YDELTA);
+		if (m == 1 && d == 29 && ydelta) {
+			dt = new LeapDay(y, m, d, hr, min, sec, msec, tz);
+			dt.setOffset(ydelta);
 		} else {
 			dt = Dates.newInstance([y, m, d, hr, min, sec, msec], tz);
 		}
@@ -438,6 +469,7 @@ zk.fmt.Date = {
 			MINDAYS: zk.MINDAYS,
 			    ERA: zk.ERA,
 			 YDELTA: zk.YDELTA,
+			LAN_TAG: zk.LAN_TAG,
 			   SDOW: zk.SDOW,
 			  S2DOW: zk.S2DOW,
 			   FDOW: zk.FDOW,
@@ -446,7 +478,8 @@ zk.fmt.Date = {
 			   FMON: zk.FMON,
 			    APM: zk.APM
 		};
-		var txt = '';
+		var txt = '',
+			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
 		for (var j = 0, fl = fmt.length; j < fl; ++j) {
 			var cc = fmt.charAt(j);
 			if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
@@ -459,8 +492,12 @@ zk.fmt.Date = {
 
 				switch (cc) {
 				case 'y':
-					if (len <= 3) txt += _digitFixed(val.getFullYear() % 100, 2);
-					else txt += _digitFixed(val.getFullYear(), len);
+				case 'u':
+					var ydelta = 0;
+					if (cc == 'y') ydelta = localizedSymbols.YDELTA || this.getYDelta(val._moment.toDate(), localeDateTimeFormat);
+					var y = val.getFullYear() + ydelta;
+					if (len <= 3) txt += _digitFixed(y % Math.pow(10, len), len);
+					else txt += _digitFixed(y, len);
 					break;
 				case 'M':
 					if (len <= 2) txt += _digitFixed(val.getMonth() + 1, len);
@@ -484,7 +521,7 @@ zk.fmt.Date = {
 					txt += weekInMonth(val, localizedSymbols.DOW_1ST);
 					break;
 				case 'G':
-					txt += localizedSymbols.ERA;
+					txt += localizedSymbols.ERA || this.getEraName(val._moment.toDate(), localizedSymbols, localeDateTimeFormat);
 					break;
 				case 'F':
 					txt += dayOfWeekInMonth(val);
@@ -526,9 +563,6 @@ zk.fmt.Date = {
 				case 'a':
 					txt += localizedSymbols.APM[val.getHours() > 11 ? 1 : 0];
 					break;
-				case 'u': // ZK-2964: for nl local uur
-					txt += 'uur';
-					break;
 				default:
 					txt += '1';
 					//fake; SimpleDateFormat.parse might ignore it
@@ -540,6 +574,18 @@ zk.fmt.Date = {
 			}
 		}
 		return txt;
+	},
+	getYDelta: function (date, localeDateTimeFormat) { // override
+		return 0;
+	},
+	getEraName: function (date, localizedSymbols, localeDateTimeFormat) { // override
+		if (zk.ie < 11) return ''; // not support ie
+		var langTag = localizedSymbols.LAN_TAG.split('-').slice(0, 2).join('-'),
+			localeDateString = date.toLocaleDateString(langTag, {era: 'short', day: 'numeric'});
+		return localeDateString.split(' ')[0];
+	},
+	_findEraKey: function (txt, eras) { // override
+		return null;
 	}
 };
 /**
@@ -553,8 +599,10 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	_offset: zk.YDELTA,
 	$init: function (date, localizedSymbols) {
 		this._date = date;
-		if (localizedSymbols)
-			this._offset = localizedSymbols.YDELTA;
+		if (localizedSymbols) {
+			var localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date._moment.toDate(), localeDateTimeFormat);
+		}
 	},
 	getTime: function () {
 		return this._date;
@@ -570,16 +618,15 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 	},
 	formatDate: function (val, fmt, localizedSymbols) {
 		var d;
-		if (localizedSymbols)
-			this._offset = localizedSymbols.YDELTA;
+		if (localizedSymbols) {
+			var localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(val._moment.toDate(), localeDateTimeFormat);
+		}
 
 		if (this._offset) {
 			if (val.getMonth() == 1 && val.getDate() == 29) {
 				d = new LeapDay(val); // a proxy of Date
 				d.setOffset(this._offset);
-			} else {
-				d = Dates.newInstance(val);
-				d.setFullYear(d.getFullYear() + this._offset);
 			}
 		}
 		return zk.fmt.Date.formatDate(d || val, fmt, localizedSymbols);
@@ -589,27 +636,25 @@ zk.fmt.Calendar = zk.$extends(zk.Object, {
 		return this._date.getRealDate();
 		var d;
 		if ((d = this._date) && this._offset)
-		(d = Dates.newInstance(d))
-		.setFullYear(d.getFullYear() - this._offset);
+			d = Dates.newInstance(d);
 		return d;
 	},
 	parseDate: function (txt, fmt, strict, refval, localizedSymbols, tz, strictDate) {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols, tz, strictDate);
-		if (localizedSymbols)
-			this._offset = localizedSymbols.YDELTA;
+		if (localizedSymbols) {
+			var localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
+			this._offset = localizedSymbols.YDELTA || d ? zk.fmt.Date.getYDelta(d._moment.toDate(), localeDateTimeFormat) : 0;
+		}
 
 		if (this._offset && fmt) {
-			if (!LeapDay.isInstance(d)) {
-				d.setFullYear(d.getFullYear() - this._offset);
-			} else {
+			if (LeapDay.isInstance(d)) {
 				return d.getRealDate();
 			}
 		}
 		return d;
 	},
 	getYear: function () {
-		return LeapDay.isInstance(this._date) ? this._date.getFullYear() :
-			this._date.getFullYear() + this._offset;
+		return this._date.getFullYear();
 	},
 	// B70-ZK-2382: in Daylight Saving Time (DST), choose the last time at the end of this mechanism, it will display previous day.
 	// e.g. 2014/10/19 at Brasilia (UTC-03:00), it will show 2014/10/18 23:00:00

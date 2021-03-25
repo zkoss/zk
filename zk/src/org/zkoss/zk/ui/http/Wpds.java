@@ -230,16 +230,9 @@ public class Wpds {
 				s2dow[k] = cc == '.' || cc == ',' ? sdow[k].substring(0, len - 1) : sdow[k];
 			}
 		}
-		df = new SimpleDateFormat("G", locale);
-		final boolean helang = locale.getLanguage().equals("iw");
-		if (helang) //Bug ZK-1353: Era designator contains double quote in Hebrew language
-			sb.append("zk.ERA='").append(df.format(new java.util.Date())).append("';\n");
-		else
-			sb.append("zk.ERA=\"").append(df.format(new java.util.Date())).append("\";\n");
 
-		Calendar ec = Calendar.getInstance(Locale.ENGLISH);
-		Calendar lc = Calendar.getInstance(locale);
-		sb.append("zk.YDELTA=").append(lc.get(Calendar.YEAR) - ec.get(Calendar.YEAR)).append(";\n");
+		sb.append("zk.YDELTA=").append(0).append(";\n")
+			.append("zk.LAN_TAG=\"").append(locale.toLanguageTag()).append("\";\n");
 
 		df = new SimpleDateFormat("EEEE", locale);
 		final String[] fdow = new String[7];
