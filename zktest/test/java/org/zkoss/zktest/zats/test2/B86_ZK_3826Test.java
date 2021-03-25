@@ -43,8 +43,8 @@ public class B86_ZK_3826Test extends WebDriverTestCase {
 	private void testDecadeView() {
 		click(calenderTitle);
 		waitResponse();
-		Assert.assertEquals(getFirstCellText().split("-")[0], getStartYearInTitle());
-		Assert.assertEquals(getLastCellText().split("-")[1], getEndYearInTitle());
+		Assert.assertEquals(getFirstCellText().split("-")[0].trim(), getStartYearInTitle());
+		Assert.assertEquals(getLastCellText().split("-")[1].trim(), getEndYearInTitle());
 	}
 
 	private String getFirstCellText() {
@@ -56,10 +56,10 @@ public class B86_ZK_3826Test extends WebDriverTestCase {
 	}
 
 	private String getStartYearInTitle() {
-		return calenderText.text().split("-")[0];
+		return calenderText.text().split("-")[0].trim();
 	}
 
 	private String getEndYearInTitle() {
-		return calenderText.text().split("-")[1];
+		return calenderText.text().split("-")[1].trim();
 	}
 }
