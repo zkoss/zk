@@ -112,6 +112,7 @@ public class Menubar extends XulElement {
 
 	/** Sets whether to automatically drop down menus if user moves mouse
 	 * over it.
+	 * Only effect on the topmost menu.
 	 */
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {

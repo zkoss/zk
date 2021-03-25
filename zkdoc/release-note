@@ -32,6 +32,7 @@ ZK 9.6.0
   ZK-4763: Radiogroup selectedIndex error after radio moved
   ZK-4825: Websockets NPE during encodeURL
   ZK-4701: chosenbox initial width too short to display emptyMessage
+  ZK-4811: menubar autodrop="false" has no effect on nested submenus
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
