@@ -51,7 +51,6 @@ import org.zkoss.util.IllegalSyntaxException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -428,15 +427,6 @@ public class BindComposer<T extends Component>
 		//put to attribute, so binder could be referred by the name
 		comp.setAttribute(bname, binder);
 		comp.setAttribute(BINDER_ID, bname);
-
-		//ZK-4569
-		Desktop desktop = comp.getDesktop();
-		Map<String, Binder> relationMap = (Map<String, Binder>) desktop.getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
-		if (relationMap == null) {
-			relationMap = new HashMap<>(4);
-			desktop.setAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY, relationMap);
-		}
-		relationMap.put((String) comp.getAttribute(BindComposer.VM_ID), (Binder) binder);
 
 		return (AnnotateBinder) binder;
 	}

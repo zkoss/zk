@@ -20,8 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.BindContext;
@@ -166,19 +164,7 @@ public class AnnotateBinderHelper {
 			final String tag = entry.getKey();
 			final String[] tagExpr = entry.getValue();
 			if ("value".equals(tag)) {
-				String cmdValue = AnnotationUtil.testString(tagExpr, ann);
-				Matcher matcher = Pattern.compile("^['\"]\\$([^.]*)\\..*$").matcher(cmdValue);
-				if (matcher.find()) {
-					String vmId = matcher.group(1);
-					Map<String, Binder> vmIdBinderMap = (Map<String, Binder>) comp.getDesktop()
-							.getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
-					Binder targetBinder = vmIdBinderMap.get(vmId);
-					if (targetBinder != null) {
-						commandBinder = targetBinder;
-						cmdValue = cmdValue.replace("$" + vmId + ".", ""); //remove "$xxxx."
-					}
-				}
-				cmdExprs.add(cmdValue);
+				cmdExprs.add(AnnotationUtil.testString(tagExpr, ann));
 			} else { //other unknown tag, keep as arguments
 				if (args == null) {
 					args = new LinkedHashMap<String, String[]>();

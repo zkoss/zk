@@ -13,6 +13,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.tracker.impl;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -34,6 +35,7 @@ import org.zkoss.bind.sys.ReferenceBinding;
 import org.zkoss.bind.xel.zel.BindELContext;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
@@ -125,6 +127,20 @@ public class BindUiLifeCycle implements UiLifeCycle {
 		//if it was detached, ignore it
 		if (comp.getPage() == null && !(comp instanceof ShadowElement)) {
 			return false;
+		}
+
+		//ZK-4791
+		Desktop desktop = comp.getDesktop();
+		if (desktop != null) {
+			String vmId = (String) comp.getAttribute(BindComposer.VM_ID);
+			if (!Strings.isEmpty(vmId)) {
+				Map<String, Binder> relationMap = (Map<String, Binder>) desktop.getAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY);
+				if (relationMap == null) {
+					relationMap = new HashMap<>(4);
+					desktop.setAttribute(BinderCtrl.VIEWMODELID_BINDER_MAP_KEY, relationMap);
+				}
+				relationMap.put(vmId, (Binder) comp.getAttribute((String) comp.getAttribute(BindComposer.BINDER_ID)));
+			}
 		}
 
 		final Binder innerBinder = BinderUtil.getBinder(comp);
