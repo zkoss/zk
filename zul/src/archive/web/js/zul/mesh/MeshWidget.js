@@ -740,7 +740,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.domListen_(ebody, 'onScroll', '_doScroll');
 			ebody.style.overflow = 'auto';
 
-			if (this.efrozen)
+			if (this.efrozen && !zk.mobile)
 				jq(ebody).css('overflow-x', 'hidden'); // keep non line break
 		}
 		zWatch.listen({onSize: this, onResponse: this});

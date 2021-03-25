@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-2299.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 10 11:50:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label>
+		In tablet, the frozen should work as expected.
+	</label>
+	<grid width="800px">
+		<rows>
+			<row>
+				<label value="person 1" />
+				<label value="abc" />
+				<label value="123" />
+				<label value="1" />
+				<label value="2" />
+				<label value="3" />
+				<label value="4" />
+				<label value="5" />
+				<label value="6" />
+			</row>
+			<group>
+				<cell>group 1 - col1</cell>
+				<cell>group 1 - col2</cell>
+			</group>
+			<row>
+				<label value="person 1" />
+				<label value="abc" />
+				<label value="123" />
+				<label value="1" />
+				<label value="2" />
+				<label value="3" />
+				<label value="" />
+				<label value="" />
+				<label value="" />
+			</row>
+			<groupfoot label="groupfoot 1" />
+			<group label="group 2"></group>
+			<groupfoot>
+				<cell>groupfoot 2 - col1</cell>
+				<cell>groupfoot 2 - col2</cell>
+			</groupfoot>
+		</rows>
+		<foot>
+			<footer label="Footer 1"/>
+			<footer label="Footer 2"/>
+			<footer label="Footer 3"/>
+			<footer label="Footer 4"/>
+			<footer label="Footer 5"/>
+			<footer label="Footer 6"/>
+			<footer label="Footer 7"/>
+			<footer label="Footer 8"/>
+			<footer label="Footer 9"/>
+		</foot>
+		<auxhead>
+			<auxheader colspan="2" />
+			<auxheader label="2015" colspan="2" />
+			<auxheader label="2016" colspan="2" />
+			<auxheader label="2015" />
+			<auxheader label="2017" />
+		</auxhead>
+		<auxhead>
+			<auxheader colspan="2" />
+			<auxheader label="Task 1" />
+			<auxheader label="Task 2" />
+			<auxheader label="Task 3" />
+			<auxheader label="Task 4" />
+			<auxheader label="Task 5" />
+			<auxheader label="Task 6" />
+		</auxhead>
+		<frozen columns="2" />
+		<columns sizable="true">
+			<column width="300px" label="Name" />
+			<column width="200px" label="Anfangsbuchstabe" />
+			<column width="200px" label="Abteilung" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+		</columns>
+	</grid>
+	<separator />
+	<hlayout>
+		<listbox width="500px" checkmark="true">
+			<listhead menupopup="auto">
+				<listheader width="220px" label="header 1" sort="auto"/>
+				<listheader width="220px" label="header 2" />
+				<listheader width="220px" label="header 3" />
+				<listheader width="220px" label="header 4" />
+			</listhead>
+			<frozen columns="2" />
+			<listgroup id="g1">
+				<listcell label="Date:Today [From]" />
+				<listcell label="[Subject]" />
+				<listcell label="[Received]" />
+				<listcell label="[Size]" />
+			</listgroup>
+			<listitem>
+				<listcell label="cell 1" />
+				<listcell label="cell 2" />
+				<listcell label="cell 3" />
+				<listcell label="cell 4" />
+			</listitem>
+			<listitem>
+				<listcell label="cell 1" />
+				<listcell label="cell 2" />
+				<listcell label="cell 3" />
+				<listcell label="cell 4" />
+			</listitem>
+			<listgroupfoot label="group foot" />
+			<listgroup id="g2" label="Group 2"/>
+			<listitem>
+				<listcell label="cell 1" />
+				<listcell label="cell 2" />
+				<listcell label="cell 3" />
+				<listcell label="cell 4" />
+			</listitem>
+			<listitem>
+				<listcell label="cell 1" />
+				<listcell label="cell 2" />
+				<listcell label="cell 3" />
+				<listcell label="cell 4" />
+			</listitem>
+			<listfoot>
+				<listfooter label="Footer 1"/>
+				<listfooter label="Footer 2"/>
+				<listfooter label="Footer 3"/>
+				<listfooter label="Footer 4"/>
+			</listfoot>
+		</listbox>
+		<tree width="600px">
+			<frozen columns="1" />
+			<auxhead>
+				<auxheader />
+				<auxheader colspan="4">2013</auxheader>
+				<auxheader colspan="16">2014</auxheader>
+			</auxhead>
+			<auxhead>
+				<auxheader>Time Series</auxheader>
+				<auxheader align="center" colspan="4">
+					Q4
+				</auxheader>
+				<auxheader align="center" colspan="4">
+					Q1
+				</auxheader>
+				<auxheader align="center" colspan="4">
+					Q2
+				</auxheader>
+				<auxheader align="center" colspan="4">
+					Q3
+				</auxheader>
+				<auxheader align="center" colspan="4">
+					Q4
+				</auxheader>
+			</auxhead>
+			<treecols>
+				<treecol label="hierarchy below" width="300px" />
+				<treecol id="col2013_10" label="Oct 2013" width="60px" />
+				<treecol id="col2013_11" label="Nov 2013" width="60px" />
+				<treecol id="col2013_12" label="Dec 2013" width="60px" />
+				<treecol label="Quarter" width="60px" />
+				<treecol id="col2014_01" label="Jan 2014" width="60px" />
+				<treecol id="col2014_02" label="Feb 2014" width="60px" />
+				<treecol id="col2014_03" label="Mar 2014" width="60px" />
+				<treecol label="Quarter" width="60px" />
+				<treecol id="col2014_04" label="Apr 2014" width="60px" />
+				<treecol id="col2014_05" label="May 2014" width="60px" />
+				<treecol id="col2014_06" label="Jun 2014" width="60px" />
+				<treecol label="Quarter" width="60px" />
+				<treecol id="col2014_07" label="Jul 2014" width="60px" />
+				<treecol id="col2014_08" label="Aug 2014" width="60px" />
+				<treecol id="col2014_09" label="Sep 2014" width="60px" />
+				<treecol label="Quarter" width="60px" />
+				<treecol id="col2014_10" label="Oct 2014" width="60px" />
+				<treecol id="col2014_11" label="Nov 2014" width="60px" />
+				<treecol id="col2014_12" label="Dec 2014" width="60px" />
+				<treecol label="Quarter" width="60px" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="1.2.2 AAAAA_bbbbb_details 2" />
+						<treecell label="80" />
+						<treecell label="90" />
+						<treecell label="100" />
+						<treecell label="270" />
+						<treecell label="120" />
+						<treecell label="130" />
+						<treecell label="140" />
+						<treecell label="390" />
+						<treecell label="160" />
+						<treecell label="170" />
+						<treecell label="180" />
+						<treecell label="510" />
+						<treecell label="200" />
+						<treecell label="210" />
+						<treecell label="220" />
+						<treecell label="630" />
+						<treecell label="240" />
+						<treecell label="250" />
+						<treecell label="260" />
+						<treecell label="750" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+			<treefoot>
+				<treefooter label="footer 1" />
+				<treefooter label="footer 2" />
+				<treefooter label="footer 3" />
+				<treefooter label="footer 4" />
+				<treefooter label="footer 5" />
+				<treefooter label="footer 6" />
+				<treefooter label="footer 7" />
+				<treefooter label="footer 8" />
+				<treefooter label="footer 9" />
+				<treefooter label="footer 10" />
+			</treefoot>
+		</tree>
+	</hlayout>
+</zk>
+

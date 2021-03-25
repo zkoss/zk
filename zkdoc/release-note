@@ -11,6 +11,7 @@ ZK 9.6.0
   ZK-4745: Datebox supports to display with custom calendar system (e.g. Minguo) year
   ZK-1209: Proxying ViewModel breaks binder annotations
   ZK-4595: support a way to re-sort a ListModel under MVVM pattern
+  ZK-2299: Frozen column support on tablet device
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
