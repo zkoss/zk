@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-1209.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 03 12:50:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true"><![CDATA[
+		1. Add the following setting in zk.xml
+		<listener>
+			<listener-class>org.zkoss.zktest.test2.F96_ZK_1209ViewModelAnnotationHandler</listener-class>
+		</listener>
+		2. Click buttons, It should work fine and see method calling log
+	]]></label>
+	<div id="data" viewModel="@id('cvm') @init('org.zkoss.zktest.test2.F96_ZK_1209VM')">
+		<label value="@load(cvm.prop)"/>
+		<button label="call cmd update" onClick="@command('update')"/>
+		<button label="Push History State" onClick="@command('pushHistoryState')"/>
+		<separator/>
+		<textbox instant="true" value="@bind(cvm.word)"/>
+		&lt;-&gt;
+		<textbox instant="true" value="@bind(cvm.reverse)"/>
+		<separator/>
+		<script><![CDATA[
+				window.onerror = function (message, source, lineno, colno, error) {
+					zk.log(message);
+				};
+				var doClick = function() {
+					reload();
+				};
+				var reload = function() {
+					var binder = zkbind.$('$data');
+					if (binder) {
+						var fnA = (data) => {
+							zk.log('A');
+							binder.unAfter('update', fnA);
+						};
+						binder.after('update', fnA);
+
+						var fnB = (data) => {
+							zk.log('B');
+							binder.unAfter('update', fnB);
+						};
+						binder.after('update', fnB);
+
+						var fnC = (data) => {
+							zk.log('C');
+							binder.unAfter('update', fnC);
+						};
+						binder.after('update', fnC);
+
+						binder.command('reload');
+					}
+				}
+			]]></script>
+		<button label="Click Me" w:onClick="doClick()"/>
+	</div>
+</zk>

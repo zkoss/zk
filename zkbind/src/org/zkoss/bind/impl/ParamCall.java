@@ -36,6 +36,7 @@ import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.bind.annotation.Scope;
 import org.zkoss.bind.annotation.ScopeParam;
 import org.zkoss.bind.annotation.SelectorParam;
+import org.zkoss.bind.init.ViewModelAnnotationResolvers;
 import org.zkoss.bind.paranamer.AdaptiveParanamer;
 import org.zkoss.bind.paranamer.CachingParanamer;
 import org.zkoss.bind.paranamer.Paranamer;
@@ -159,13 +160,14 @@ public class ParamCall {
 	}
 
 	public void call(Object base, Method method) {
-		Class<?>[] paramTypes = method.getParameterTypes();
-		java.lang.annotation.Annotation[][] parmAnnos = method.getParameterAnnotations();
+		Method originalMethod = ViewModelAnnotationResolvers.getOriginalMethod(base, method);
+		Class<?>[] paramTypes = originalMethod.getParameterTypes();
+		java.lang.annotation.Annotation[][] parmAnnos = originalMethod.getParameterAnnotations();
 		Object[] params = new Object[paramTypes.length];
 
 		try {
 			for (int i = 0; i < paramTypes.length; i++) {
-				params[i] = resolveParameter(parmAnnos[i], paramTypes[i], method, i);
+				params[i] = resolveParameter(parmAnnos[i], paramTypes[i], originalMethod, i);
 			}
 
 			method.setAccessible(true); // Bug ZK-2428

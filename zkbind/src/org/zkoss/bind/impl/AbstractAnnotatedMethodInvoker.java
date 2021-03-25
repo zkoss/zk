@@ -37,6 +37,7 @@ import org.zkoss.bind.Property;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.Destroy;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.init.ViewModelAnnotationResolvers;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -70,7 +71,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		Object viewModel = rootComp.getAttribute(VM);
 
 		final Class<?> vmClz = BindUtils.getViewModelClass(viewModel);
-		List<Method> methods = getAnnotateMethods(annoClass, vmClz);
+		List<Method> methods = getAnnotateMethods(binder, annoClass, vmClz);
 		return (!methods.isEmpty());
 	}
 
@@ -84,7 +85,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		Object viewModel = rootComp.getAttribute(VM);
 
 		final Class<?> vmClz = BindUtils.getViewModelClass(viewModel);
-		List<Method> methods = getAnnotateMethods(annoClass, vmClz);
+		List<Method> methods = getAnnotateMethods(binder, annoClass, vmClz);
 		if (methods.size() == 0)
 			return; //no annotated method
 
@@ -107,7 +108,8 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 				}
 
 				if (notifyChange) {
-					BinderImpl.handleNotifyChange(ctx, viewModel, m, parCall, changes);
+					if (binder instanceof BinderImpl)
+						((BinderImpl) binder).handleNotifyChange(ctx, viewModel, m, parCall, changes);
 				} else {
 					parCall.call(viewModel, m);
 				}
@@ -123,7 +125,7 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 		}
 	}
 
-	private List<Method> getAnnotateMethods(Class<T> annotationClass, Class<?> vmClass) {
+	private List<Method> getAnnotateMethods(Binder binder, Class<T> annotationClass, Class<?> vmClass) {
 		List<Method> methods = null;
 		synchronized (annoMethodCache) {
 			//have to synchronized cache, because it calls expunge when get.
@@ -141,10 +143,10 @@ public abstract class AbstractAnnotatedMethodInvoker<T extends Annotation> {
 			while (curr != null && !curr.equals(Object.class)) {
 				Method currm = null;
 				//Annotation should supports to annotate on Type
-				T annotation = curr.getAnnotation(annotationClass);
+				T annotation = ViewModelAnnotationResolvers.getAnnotation(curr, annotationClass);
 				//Allow only one annotated method in a class.
 				for (Method m : curr.getDeclaredMethods()) {
-					final T i = m.getAnnotation(annotationClass);
+					final T i = ViewModelAnnotationResolvers.getAnnotation(m, annotationClass);
 					if (i == null)
 						continue;
 					if (annotation != null) {

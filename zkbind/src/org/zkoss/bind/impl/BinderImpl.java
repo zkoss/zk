@@ -64,6 +64,7 @@ import org.zkoss.bind.annotation.MatchMedia;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.SmartNotifyChange;
+import org.zkoss.bind.init.ViewModelAnnotationResolvers;
 import org.zkoss.bind.init.ZKBinderPhaseListeners;
 import org.zkoss.bind.proxy.ViewModelProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
@@ -183,12 +184,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		}
 
 		public String[] getCommandName(Method method) {
-			final Command cmd = method.getAnnotation(Command.class);
+			final Command cmd = ViewModelAnnotationResolvers.getAnnotation(method, Command.class);
 			return cmd == null ? null : cmd.value();
 		}
 
 		public boolean isDefaultMethod(Method method) {
-			return method.getAnnotation(DefaultCommand.class) != null;
+			return ViewModelAnnotationResolvers.getAnnotation(method, DefaultCommand.class) != null;
 		}
 	};
 	private static final CommandMethodInfoProvider _globalCommandMethodInfoProvider = new CommandMethodInfoProvider() {
@@ -201,12 +202,12 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		}
 
 		public String[] getCommandName(Method method) {
-			final GlobalCommand cmd = method.getAnnotation(GlobalCommand.class);
+			final GlobalCommand cmd = ViewModelAnnotationResolvers.getAnnotation(method, GlobalCommand.class);
 			return cmd == null ? null : cmd.value();
 		}
 
 		public boolean isDefaultMethod(Method method) {
-			return method.getAnnotation(DefaultGlobalCommand.class) != null;
+			return ViewModelAnnotationResolvers.getAnnotation(method, DefaultGlobalCommand.class) != null;
 		}
 	};
 
@@ -396,7 +397,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	private Map<String, Method> initMatchMediaValues(Object viewModel) {
 		Map<String, Method> values = new HashMap<>(6);
 		for (Method m : BindUtils.getViewModelClass(viewModel).getMethods()) {
-			MatchMedia annomm = m.getAnnotation(MatchMedia.class);
+			MatchMedia annomm = ViewModelAnnotationResolvers.getAnnotation(m, MatchMedia.class);
 			if (annomm != null) {
 				for (String s : annomm.value()) {
 					s = BinderCtrl.MATCHMEDIAVALUE_PREFIX + s.trim();
@@ -542,8 +543,8 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	private void collectNotifyCommands(Object vm) {
 		Class<?> viewModelClz = BindUtils.getViewModelClass(vm);
-		NotifyCommands commands = viewModelClz.getAnnotation(NotifyCommands.class);
-		NotifyCommand command = viewModelClz.getAnnotation(NotifyCommand.class);
+		NotifyCommands commands = ViewModelAnnotationResolvers.getAnnotation(viewModelClz, NotifyCommands.class);
+		NotifyCommand command = ViewModelAnnotationResolvers.getAnnotation(viewModelClz, NotifyCommand.class);
 		if (_notifyCommands != null)
 			_notifyCommands.clear();
 
@@ -1914,7 +1915,7 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 	static void handleNotifyChange(BindContext ctx, Object viewModel,
 	                                         Method method, ParamCall parCall,
 	                                         Set<Property> notifys) {
-		final SmartNotifyChange sannt = method.getAnnotation(SmartNotifyChange.class);
+		final SmartNotifyChange sannt = ViewModelAnnotationResolvers.getAnnotation(method, SmartNotifyChange.class);
 		Object originViewModel = getOriginViewModel(viewModel);
 		if (sannt != null) {
 			Set<Property> properties = new LinkedHashSet<Property>(5);

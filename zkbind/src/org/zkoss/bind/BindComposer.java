@@ -36,6 +36,7 @@ import org.zkoss.bind.impl.BindEvaluatorXUtil;
 import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.impl.MiscUtil;
 import org.zkoss.bind.impl.ValidationMessagesImpl;
+import org.zkoss.bind.init.ViewModelAnnotationResolvers;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.ValidationMessages;
@@ -620,7 +621,7 @@ public class BindComposer<T extends Component>
 			final Map<String, Object> data = request.getData();
 			String vcmd = data.get("cmd").toString();
 
-			final ToServerCommand ccmd = BindUtils.getViewModelClass(_viewModel).getAnnotation(ToServerCommand.class);
+			final ToServerCommand ccmd = ViewModelAnnotationResolvers.getAnnotation(BindUtils.getViewModelClass(_viewModel), ToServerCommand.class);
 			List<String> asList = new ArrayList<String>();
 			if (ccmd != null) {
 				asList.addAll(Arrays.asList(ccmd.value()));
