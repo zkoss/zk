@@ -35,6 +35,7 @@ ZK 9.6.0
   ZK-4701: chosenbox initial width too short to display emptyMessage
   ZK-4801: Atlantic: adds google-font for all themes
   ZK-4824: radiogroup inappropriate aria-owns (confuses screen-reader)
+  ZK-4839: za11y: hover navitem without children (JS Error)
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
