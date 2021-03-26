@@ -55,6 +55,19 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		Assert.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 		Assert.assertEquals("4, 60, 4\n4, 60, 4", getZKLog());
 	}
+	@Test
+	public void testNestedItem() {
+		connect();
+		JQuery tree1 = jq("@tree:eq(0)");
+		click(tree1.find(".z-tree-icon"));
+		waitResponse();
+		click(tree1.find(".z-treerow-checkbox:eq(1)"));
+		click(tree1.find(".z-treecol-checkable"));
+		click(tree1.find(".z-treecol-checkable"));
+		click(tree1.find(".z-treerow-checkbox:eq(1)"));
+		waitResponse();
+		Assert.assertTrue(tree1.find(".z-treerow:eq(1)").hasClass("z-treerow-selected"));
+	}
 
 	private void checkVisibleUncheckedTreeItems(JQuery tree) {
 		final JQuery treeitems = tree.find(".z-treerow:not(.z-treerow-selected):visible");
