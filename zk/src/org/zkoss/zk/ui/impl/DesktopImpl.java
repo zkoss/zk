@@ -324,8 +324,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	private static String getQueryString(Object request) {
 		try {
-			if (request instanceof javax.servlet.http.HttpServletRequest)
-				return ((javax.servlet.http.HttpServletRequest) request).getQueryString();
+			if (request instanceof jakarta.servlet.http.HttpServletRequest)
+				return ((jakarta.servlet.http.HttpServletRequest) request).getQueryString();
 		} catch (Throwable ex) { //ignore any error (such as no servlet at all)
 		}
 		return null;

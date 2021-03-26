@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.resource.Locator;

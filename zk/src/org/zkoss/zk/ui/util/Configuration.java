@@ -818,7 +818,7 @@ public class Configuration {
 	 *
 	 * @param sess the session that is created
 	 * @param request the original request. If HTTP, it is
-	 * javax.servlet.http.HttlServletRequest.
+	 * jakarta.servlet.http.HttlServletRequest.
 	 * @exception UiException to prevent a session from being created
 	 * @since 3.0.1
 	 */
@@ -870,7 +870,7 @@ public class Configuration {
 	 *
 	 * @param desktop the desktop that is created
 	 * @param request the original request. If HTTP, it is
-	 * javax.servlet.http.HttlServletRequest.
+	 * jakarta.servlet.http.HttlServletRequest.
 	 * @exception UiException to prevent a desktop from being created
 	 * @since 3.0.1
 	 */

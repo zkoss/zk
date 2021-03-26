@@ -18,20 +18,20 @@ package org.zkoss.web.servlet;
 import java.util.Enumeration;
 import java.util.Map;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.zkoss.web.servlet.http.Https;
 
 /**
  * A generic class to help implementing servlet filter.
- * Its role is like javax.servlet.GenericServlet to javax.servlet.Servlet.
+ * Its role is like jakarta.servlet.GenericServlet to jakarta.servlet.Servlet.
  *
  * @author tomyeh
  */

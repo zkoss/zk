@@ -17,10 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window title="Error ${requestScope['javax.servlet.error.status_code']}"
+<window title="Error ${requestScope['jakarta.servlet.error.status_code']}"
 width="400px" border="normal" mode="modal">
 	<vbox>
-KillerApp encounters an error: ${requestScope['javax.servlet.error.message']}
+KillerApp encounters an error: ${requestScope['jakarta.servlet.error.message']}
 		<hbox style="margin-left:auto; margin-right:auto">
 			<button label="Continue" onClick="spaceOwner.detach()"/>
 			<button label="Reload" onClick="Executions.sendRedirect(null)"/>
@@ -30,6 +30,6 @@ KillerApp encounters an error: ${requestScope['javax.servlet.error.message']}
 	<!-- optional: record the error for improving the app -->
 	<zscript>
 	org.zkoss.util.logging.Log.lookup("Fatal").error(
-		requestScope.get("javax.servlet.error.exception"));
+		requestScope.get("jakarta.servlet.error.exception"));
 	</zscript>
 </window>

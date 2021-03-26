@@ -17,11 +17,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-
 import org.zkoss.bind.Property;
 import org.zkoss.bind.ValidationContext;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 
 /**
  * A <a href="http://jcp.org/en/jsr/detail?id=303"/>JSR 303</a> compatible validator for a property-binding.<p/>  
@@ -78,7 +78,8 @@ public class BeanValidator extends AbstractValidator {
 		return getValidator().validateValue(clz, property, value);
 	}
 	
-	public void validate(ValidationContext ctx) {
+	@Override
+    public void validate(ValidationContext ctx) {
 		final Property p = ctx.getProperty();
 		final Object base = p.getBase();
 		String property = p.getProperty();
@@ -102,7 +103,8 @@ public class BeanValidator extends AbstractValidator {
 	protected void sort(List<ConstraintViolation<?>> viloations) {
 		Collections.sort(viloations, new Comparator<ConstraintViolation<?>>() {
 
-			public int compare(ConstraintViolation<?> o1, ConstraintViolation<?> o2) {
+			@Override
+            public int compare(ConstraintViolation<?> o1, ConstraintViolation<?> o2) {
 				String s1 = o1.getConstraintDescriptor().getAnnotation().toString();
 				String s2 = o2.getConstraintDescriptor().getAnnotation().toString();
 				return s1.compareTo(s2);

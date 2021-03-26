@@ -65,9 +65,9 @@ public interface UiFactory {
 	 *
 	 * @param wapp the web application
 	 * @param nativeSess the native session depending on the Web server.
-	 * If HTTP is used, it is javax.servlet.http.HttpSession.
+	 * If HTTP is used, it is jakarta.servlet.http.HttpSession.
 	 * @param request the original request. If HTTP, it is
-	 * javax.servlet.http.HttlServletRequest.
+	 * jakarta.servlet.http.HttlServletRequest.
 	 * @since 3.0.1
 	 */
 	public Session newSession(WebApp wapp, Object nativeSess, Object request);

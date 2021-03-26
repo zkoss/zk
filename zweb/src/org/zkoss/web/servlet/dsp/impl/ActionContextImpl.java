@@ -99,7 +99,7 @@ class ActionContextImpl implements ActionContext {
 	public void include(String uri, Map params) throws DspException, IOException {
 		try {
 			_ic.dc.include(uri, params);
-		} catch (javax.servlet.ServletException ex) {
+		} catch (jakarta.servlet.ServletException ex) {
 			throw new DspException(ex);
 		}
 	}
@@ -111,7 +111,7 @@ class ActionContextImpl implements ActionContext {
 	public String encodeURL(String uri) throws DspException, IOException {
 		try {
 			return _ic.dc.encodeURL(uri);
-		} catch (javax.servlet.ServletException ex) {
+		} catch (jakarta.servlet.ServletException ex) {
 			throw new DspException(ex);
 		}
 	}

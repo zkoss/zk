@@ -22,10 +22,10 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -185,10 +185,10 @@ public class ZumlExtendlet implements Extendlet {
 			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
 			if (errpg != null) {
 				try {
-					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
-					request.setAttribute("javax.servlet.error.exception", err);
-					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					request.setAttribute("jakarta.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("jakarta.servlet.error.exception", err);
+					request.setAttribute("jakarta.servlet.error.exception_type", err.getClass());
+					request.setAttribute("jakarta.servlet.error.status_code", new Integer(500));
 					Servlets.forward(getServletContext(), request, response, errpg, null, 0);
 					return; //done
 				} catch (IOException ex) { //eat it (connection off)

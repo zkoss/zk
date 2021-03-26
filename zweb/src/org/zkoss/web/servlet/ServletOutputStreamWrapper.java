@@ -20,9 +20,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import javax.servlet.ServletOutputStream;
-
 import org.zkoss.io.WriterOutputStream;
+
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
 
 /**
  * A facade of OutputStream for implementing ServletOutputStream.
@@ -31,6 +32,7 @@ import org.zkoss.io.WriterOutputStream;
  */
 public class ServletOutputStreamWrapper extends ServletOutputStream {
 	private final OutputStream _stream;
+    private WriteListener _listener;
 
 	/** Returns a facade of the specified stream. */
 	public static ServletOutputStream getInstance(OutputStream stream) {
@@ -63,17 +65,30 @@ public class ServletOutputStreamWrapper extends ServletOutputStream {
 		_stream = new WriterOutputStream(writer, charset);
 	}
 
-	public void write(int b) throws IOException {
+	@Override
+    public void write(int b) throws IOException {
 		_stream.write(b);
 	}
 
-	public void flush() throws IOException {
+	@Override
+    public void flush() throws IOException {
 		_stream.flush();
 		super.flush();
 	}
 
-	public void close() throws IOException {
+	@Override
+    public void close() throws IOException {
 		_stream.close();
 		super.close();
 	}
+
+    @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+        _listener = writeListener;
+    }
 }

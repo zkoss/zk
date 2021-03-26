@@ -258,7 +258,7 @@ public class PageDefinition implements NodeInfo {
 	/** Returns the request path of this page definition, or ""
 	 * if not available.
 	 * <p>It is the same as the servlet path
-	 * (javax.servlet.http.HttpServletRequest's getServletPath), if ZK is running
+	 * (jakarta.servlet.http.HttpServletRequest's getServletPath), if ZK is running
 	 * at a servlet container.
 	 */
 	public String getRequestPath() {

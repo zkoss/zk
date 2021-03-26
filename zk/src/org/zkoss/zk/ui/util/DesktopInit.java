@@ -41,7 +41,7 @@ public interface DesktopInit {
 	 *
 	 * @param desktop the desktop being created and initialized
 	 * @param request the request caused the desktop being created.
-	 * If HTTP and servlet, it is javax.servlet.http.HttpServletRequest.
+	 * If HTTP and servlet, it is jakarta.servlet.http.HttpServletRequest.
 	 * If portlet, it is javax.portlet.RenderRequest.
 	 * @since 3.0.1
 	 */

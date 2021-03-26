@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletException;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.web.servlet.xel.RequestContext;

@@ -24,7 +24,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -94,7 +93,8 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 	 * security authentication and spring web flow variables depending upon ZK
 	 * Spring libraries in the classpath
 	 */
-	public Object resolveVariable(String name) {
+	@Override
+    public Object resolveVariable(String name) {
 		Object o = null;
 		for (VariableResolver resolver : _variableResolvers) {
 			o = resolver.resolveVariable(name);
@@ -105,11 +105,13 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 		return o;
 	}
 
-	public int hashCode() {
+	@Override
+    public int hashCode() {
 		return Objects.hashCode(_variableResolvers);
 	}
 
-	public boolean equals(Object obj) {
+	@Override
+    public boolean equals(Object obj) {
 		return this == obj || (obj instanceof DelegatingVariableResolver
 				&& Objects.equals(_variableResolvers, ((DelegatingVariableResolver) obj)._variableResolvers));
 	}
@@ -155,11 +157,12 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 			if (_ctx != null)
 				return _ctx;
 
-			_ctx = SpringUtil.getApplicationContext();
+            _ctx = SpringUtil.getApplicationContext();
 			return _ctx;
 		}
 
-		public Object resolveVariable(String name) throws XelException {
+		@Override
+        public Object resolveVariable(String name) throws XelException {
 
 			if ("springContext".equals(name)) {
 				return getApplicationContext();
@@ -168,11 +171,13 @@ public class DelegatingVariableResolver implements VariableResolver, java.io.Ser
 			return SpringUtil.getBean(name);
 		}
 
-		public int hashCode() {
+		@Override
+        public int hashCode() {
 			return Objects.hashCode(getClass());
 		}
 
-		public boolean equals(Object obj) {
+		@Override
+        public boolean equals(Object obj) {
 			return this == obj || (obj instanceof DefaultDelegatingVariableResolver && getClass() == obj.getClass());
 		}
 	}

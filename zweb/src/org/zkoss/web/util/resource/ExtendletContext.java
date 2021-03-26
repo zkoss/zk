@@ -21,13 +21,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.zkoss.util.resource.Locator;
 
@@ -52,7 +52,7 @@ public interface ExtendletContext {
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
-	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(javax.servlet.ServletContext, ServletRequest, String, org.zkoss.util.resource.Locator)}
+	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(jakarta.servlet.ServletContext, ServletRequest, String, org.zkoss.util.resource.Locator)}
 	 * for details. 
 	 *
 	 * @param uri it must be empty or starts with "/". It might contain

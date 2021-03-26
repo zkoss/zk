@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.hibernate;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.util.WebAppCleanup;
@@ -46,7 +46,7 @@ import org.zkoss.zk.ui.util.WebAppInit;
  * </p>
  * <p>Sometimes, when using ZK with other backend framework, the Hibernate's SessionFactory 
  * might has to be created earlier. Therefore, since ZK 3.0.1, we have implemented this 
- * listener to be also a {@link javax.servlet.ServletContextListener} that you can 
+ * listener to be also a {@link jakarta.servlet.ServletContextListener} that you can 
  * choose to specify it in web.xml instead and make it initialized right when your applcation 
  * is deployed.</p>
  * <p>In WEB-INF/web.xml, add following lines:

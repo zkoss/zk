@@ -568,7 +568,7 @@ public class Clients {
 	 * enable it by invoking {@link #loadScript(String, String, boolean)}.
 	 * @param url
 	 *            the JavasScript file path, it will be encoded with
-	 *            {@link Encodes#encodeURL(javax.servlet.ServletContext, javax.servlet.ServletRequest, javax.servlet.ServletResponse, String)}
+	 *            {@link Encodes#encodeURL(jakarta.servlet.ServletContext, jakarta.servlet.ServletRequest, jakarta.servlet.ServletResponse, String)}
 	 *            if any.
 	 * @since 8.0.0
 	 * @see Encodes#encodeURL
@@ -583,7 +583,7 @@ public class Clients {
 	 * 
 	 * @param url
 	 *            the JavasScript file path, it will be encoded with
-	 *            {@link Encodes#encodeURL(javax.servlet.ServletContext, javax.servlet.ServletRequest, javax.servlet.ServletResponse, String)}
+	 *            {@link Encodes#encodeURL(jakarta.servlet.ServletContext, jakarta.servlet.ServletRequest, jakarta.servlet.ServletResponse, String)}
 	 *            if any.
 	 * @param callback a callback script to execute when the JavaScript file has loaded.
 	 * @param cache true means the url will be cached and executed only once.

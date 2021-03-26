@@ -20,7 +20,6 @@ import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
@@ -41,7 +40,7 @@ public class SpringUtil {
 		}
 
 		return WebApplicationContextUtils
-				.getRequiredWebApplicationContext(exec.getDesktop().getWebApp().getServletContext());
+                .getRequiredWebApplicationContext(new LegacyContext(exec.getDesktop().getWebApp().getServletContext()));
 	}
 
 	/**

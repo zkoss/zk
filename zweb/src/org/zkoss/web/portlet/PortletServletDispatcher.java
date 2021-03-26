@@ -17,10 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.portlet;
 
 import javax.portlet.PortletRequestDispatcher;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 
 /**
  * A facade of a PortletRequestDispatch for implementing RequestDispatcher.

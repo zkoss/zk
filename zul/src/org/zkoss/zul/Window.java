@@ -606,7 +606,7 @@ public class Window extends XulElement implements Framable, IdSpace {
 
 	private void handleFailedModal(int oldmode, boolean oldvisi) {
 		try {
-			if (Executions.getCurrent().getAttribute("javax.servlet.error.exception") != null) {
+			if (Executions.getCurrent().getAttribute("jakarta.servlet.error.exception") != null) {
 				//handle it specially if it is used for displaying err
 				setMode(HIGHLIGHTED);
 			} else {

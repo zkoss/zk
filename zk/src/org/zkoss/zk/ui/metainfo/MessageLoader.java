@@ -37,7 +37,7 @@ public interface MessageLoader {
 	 * <p>ZK will scan the <code>MessageLoader</code> setting and invoke this
 	 * method to load the system messages in the following two circumstances.
 	 * <ol>
-	 * <li>{@link Wpds#outLocaleJavaScript(javax.servlet.ServletRequest, javax.servlet.ServletResponse)} (defined in zul/lang/zk.wpd)</li>
+	 * <li>{@link Wpds#outLocaleJavaScript(jakarta.servlet.ServletRequest, jakarta.servlet.ServletResponse)} (defined in zul/lang/zk.wpd)</li>
 	 * <li>{@link Clients#reloadMessages(java.util.Locale)}</li>
 	 * </ol>
 	 * For the first circumstances, current Execution does not have access to

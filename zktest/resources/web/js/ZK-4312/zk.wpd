@@ -2,6 +2,6 @@
 
 <package name="ZK-4312" cacheable="false">
 	<function class="org.zkoss.zktest.test2.B86_ZK_4312wpd"
-		  signature="java.lang.String testFunction(java.lang.String, javax.servlet.ServletRequest)"
+		  signature="java.lang.String testFunction(java.lang.String, jakarta.servlet.ServletRequest)"
 		  arg0="My Test Value"/>
 </package>

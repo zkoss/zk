@@ -63,8 +63,8 @@ public class Exceptions {
 					return ((java.rmi.RemoteException)ex).detail;
 				} else if (ex instanceof org.xml.sax.SAXException) {
 					return ((org.xml.sax.SAXException)ex).getException();
-				} else if (ex instanceof javax.servlet.ServletException) {
-					return ((javax.servlet.ServletException)ex).getRootCause();
+				} else if (ex instanceof jakarta.servlet.ServletException) {
+					return ((jakarta.servlet.ServletException)ex).getRootCause();
 				} else if (ex instanceof bsh.TargetError) {
 					return ((bsh.TargetError)ex).getTarget();
 				} else if (ex instanceof bsh.UtilTargetError) {
@@ -73,11 +73,11 @@ public class Exceptions {
 //				} else if (ex instanceof javax.ejb.EJBException) {
 //					return ((javax.ejb.EJBException)ex).getCausedByException();
 //Remove the dependence on JSP
-//				} else if (ex instanceof javax.servlet.jsp.JspException) {
-//					return ((javax.servlet.jsp.JspException)ex).getRootCause();
+//				} else if (ex instanceof jakarta.servlet.jsp.JspException) {
+//					return ((jakarta.servlet.jsp.JspException)ex).getRootCause();
 //Remove the dependence on EL
-//				} else if (ex instanceof javax.servlet.jsp.el.ELException) {
-//					return ((javax.servlet.jsp.el.ELException)ex).getRootCause();
+//				} else if (ex instanceof jakarta.servlet.jsp.el.ELException) {
+//					return ((jakarta.servlet.jsp.el.ELException)ex).getRootCause();
 				}
 			} catch (Throwable e2) {
 				if (log.isDebugEnabled()) log.debug("Ignored: unable to resolve " + ex.getClass());
@@ -305,9 +305,9 @@ public class Exceptions {
 				}
 //Remove the dependence on EL
 /*				try {
-					if (ex instanceof javax.servlet.jsp.el.ELException) {
+					if (ex instanceof jakarta.servlet.jsp.el.ELException) {
 						final Throwable t =
-							((javax.servlet.jsp.el.ELException)ex).getRootCause();
+							((jakarta.servlet.jsp.el.ELException)ex).getRootCause();
 						if (t != null) ex = t;
 					}
 				} catch (Throwable e2) {

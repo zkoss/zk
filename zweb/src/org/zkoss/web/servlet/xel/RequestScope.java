@@ -16,7 +16,7 @@ package org.zkoss.web.servlet.xel;
 
 import java.util.Enumeration;
 
-import javax.servlet.ServletRequest;
+import jakarta.servlet.ServletRequest;
 
 /**
  * Represents the request scope.

@@ -23,12 +23,12 @@ import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.LoggerFactory;
 
@@ -271,10 +271,10 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
 			if (errpg != null) {
 				try {
-					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
-					request.setAttribute("javax.servlet.error.exception", err);
-					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					request.setAttribute("jakarta.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("jakarta.servlet.error.exception", err);
+					request.setAttribute("jakarta.servlet.error.exception_type", err.getClass());
+					request.setAttribute("jakarta.servlet.error.status_code", new Integer(500));
 					if (process(sess, request, response, errpg, false))
 						return; //done
 

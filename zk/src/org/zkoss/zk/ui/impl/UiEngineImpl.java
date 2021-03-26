@@ -30,7 +30,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletRequest;
+import jakarta.servlet.ServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1596,11 +1596,11 @@ public class UiEngineImpl implements UiEngine {
 		final String location = config.getErrorPage(desktop.getDeviceType(), err);
 		if (location != null) {
 			try {
-				exec.setAttribute("javax.servlet.error.message", msg);
-				exec.setAttribute("javax.servlet.error.exception", err);
-				exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
-				exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
-				exec.setAttribute("javax.servlet.error.error_page", location);
+				exec.setAttribute("jakarta.servlet.error.message", msg);
+				exec.setAttribute("jakarta.servlet.error.exception", err);
+				exec.setAttribute("jakarta.servlet.error.exception_type", err.getClass());
+				exec.setAttribute("jakarta.servlet.error.status_code", new Integer(500));
+				exec.setAttribute("jakarta.servlet.error.error_page", location);
 
 				//Future: consider to go thru UiFactory for the richlet
 				//for the error page.
@@ -1629,11 +1629,11 @@ public class UiEngineImpl implements UiEngine {
 				log.error("Unable to generate custom error page, " + location, ex);
 			} finally {
 				// Bug ZK-1144 in JBoss
-				exec.removeAttribute("javax.servlet.error.message");
-				exec.removeAttribute("javax.servlet.error.exception");
-				exec.removeAttribute("javax.servlet.error.exception_type");
-				exec.removeAttribute("javax.servlet.error.status_code");
-				exec.removeAttribute("javax.servlet.error.error_page");
+				exec.removeAttribute("jakarta.servlet.error.message");
+				exec.removeAttribute("jakarta.servlet.error.exception");
+				exec.removeAttribute("jakarta.servlet.error.exception_type");
+				exec.removeAttribute("jakarta.servlet.error.status_code");
+				exec.removeAttribute("jakarta.servlet.error.error_page");
 			}
 		}
 

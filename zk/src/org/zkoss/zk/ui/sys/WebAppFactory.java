@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.util.Configuration;
 public interface WebAppFactory {
 	/** Instantiates the instance of {@link WebApp}.
 	 * @param ctx the application context.
-	 * For Servlet, it is javax.servlet.ServletContext.
+	 * For Servlet, it is jakarta.servlet.ServletContext.
 	 */
 	public WebApp newWebApp(Object ctx, Configuration config);
 }

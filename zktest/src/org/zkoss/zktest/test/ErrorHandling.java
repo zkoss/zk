@@ -31,6 +31,6 @@ public class ErrorHandling extends GenericRichlet {
 				.getConfiguration().getErrorPage(
 						page.getDesktop().getDeviceType(),
 						(Throwable) Executions.getCurrent().getAttribute(
-								"javax.servlet.error.exception")), null, null);
+								"jakarta.servlet.error.exception")), null, null);
 	}
 }

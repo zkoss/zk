@@ -26,7 +26,7 @@ public class AuLoadScript extends AuResponse {
 	 * 
 	 * @param url
 	 *            the URL of the JavasScript file, it will be encoded with
-	 *            {@link Encodes#encodeURL(javax.servlet.ServletContext, javax.servlet.ServletRequest, javax.servlet.ServletResponse, String)}.
+	 *            {@link Encodes#encodeURL(jakarta.servlet.ServletContext, jakarta.servlet.ServletRequest, jakarta.servlet.ServletResponse, String)}.
 	 * @param callback a callback script to execute when the JavaScript file has loaded.
 	 * @param once true means the url will be cached and executed only once.
 	 */

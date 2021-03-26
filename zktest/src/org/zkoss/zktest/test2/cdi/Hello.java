@@ -25,7 +25,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * @author Ian Y.T Tsai(zanyking)

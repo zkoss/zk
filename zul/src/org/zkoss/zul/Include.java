@@ -94,7 +94,7 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>In the defer mode (the only mode supported by ZK prior to 3.6.2),
  * the page is included by servlet container (the <code>include</code> method
- * of <code>javax.servlet.RequestDispatcher</code>) in the render phase
+ * of <code>jakarta.servlet.RequestDispatcher</code>) in the render phase
  * (i.e., after all components are created). The page can be any
  * servlet; not limited to a ZUML page.
  *
@@ -143,14 +143,14 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>With the query string, you can pass only the String values.
  * and the parameter can be accessed by {@link Execution#getParameter}
- * or javax.servlet.ServletRequest's getParameter.
+ * or jakarta.servlet.ServletRequest's getParameter.
  * Or, you can access it with the param variable in EL expressions.
  *
  * <p>On the other hand, the dynamic properties ({@link #setDynamicProperty})
  * are passed to the included page thru the request's attributes
  * You can pass any type of objects you want.
  * In the included page, you can access them by use of
- * {@link Execution#getAttribute} or javax.servlet.ServletRequest's
+ * {@link Execution#getAttribute} or jakarta.servlet.ServletRequest's
  * getAttribute. Or, you can access with the requestScope variable
  * in EL expressions.
  *
@@ -279,7 +279,7 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 	 * @param src the source URI. If null or empty, nothing is included.
 	 * You can specify the source URI with the query string and they
 	 * will become a parameter that can be accessed by use
-	 * of {@link Execution#getParameter} or javax.servlet.ServletRequest's getParameter.
+	 * of {@link Execution#getParameter} or jakarta.servlet.ServletRequest's getParameter.
 	 * For example, if "/a.zul?b=c" is specified, you can access
 	 * the parameter with ${param.b} in a.zul.
 	 * @see #setDynamicProperty
@@ -686,10 +686,10 @@ public class Include extends XulElement implements Includer, DynamicPropertied, 
 			final String errpg = desktop.getWebApp().getConfiguration().getErrorPage(desktop.getDeviceType(), err);
 			if (errpg != null) {
 				try {
-					exec.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
-					exec.setAttribute("javax.servlet.error.exception", err);
-					exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
-					exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					exec.setAttribute("jakarta.servlet.error.message", Exceptions.getMessage(err));
+					exec.setAttribute("jakarta.servlet.error.exception", err);
+					exec.setAttribute("jakarta.servlet.error.exception_type", err.getClass());
+					exec.setAttribute("jakarta.servlet.error.status_code", new Integer(500));
 					exec.include(out, errpg, null, 0);
 					return; //done
 				} catch (IOException ex) { //eat it (connection off)

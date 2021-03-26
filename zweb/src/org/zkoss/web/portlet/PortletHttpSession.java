@@ -17,7 +17,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.web.portlet;
 
 import javax.portlet.PortletSession;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * A facade of PortletSession for implementing HttpSession.
@@ -74,14 +74,14 @@ public class PortletHttpSession implements HttpSession {
 		return _sess.getMaxInactiveInterval();
 	}
 
-	public javax.servlet.ServletContext getServletContext() {
+	public jakarta.servlet.ServletContext getServletContext() {
 		return PortletServletContext.getInstance(_sess.getPortletContext());
 	}
 
 	/**
 	 * @deprecated
 	 */
-	public javax.servlet.http.HttpSessionContext getSessionContext() {
+	public jakarta.servlet.http.HttpSessionContext getSessionContext() {
 		return null;
 	}
 

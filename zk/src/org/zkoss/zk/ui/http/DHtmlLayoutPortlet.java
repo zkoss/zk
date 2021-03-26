@@ -30,10 +30,10 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.ResourceURL;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -397,10 +397,10 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			final String errpg = sess.getWebApp().getConfiguration().getErrorPage(sess.getDeviceType(), err);
 			if (errpg != null) {
 				try {
-					request.setAttribute("javax.servlet.error.message", Exceptions.getMessage(err));
-					request.setAttribute("javax.servlet.error.exception", err);
-					request.setAttribute("javax.servlet.error.exception_type", err.getClass());
-					request.setAttribute("javax.servlet.error.status_code", new Integer(500));
+					request.setAttribute("jakarta.servlet.error.message", Exceptions.getMessage(err));
+					request.setAttribute("jakarta.servlet.error.exception", err);
+					request.setAttribute("jakarta.servlet.error.exception_type", err.getClass());
+					request.setAttribute("jakarta.servlet.error.status_code", new Integer(500));
 					if (process(sess, request, response, errpg, false))
 						return; //done
 					log.warn("The error page not found: " + errpg);

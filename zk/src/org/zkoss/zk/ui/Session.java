@@ -152,7 +152,7 @@ public interface Session extends Scope {
 
 	/** Returns the native session, or null if not available.
 	 * The returned object depends on the type of clients.
-	 * If HTTP, the object is an instance of javax.servlet.http.HttpSession.
+	 * If HTTP, the object is an instance of jakarta.servlet.http.HttpSession.
 	 * If portlet, the object is an instance of javax.portlet.PortletSession.
 	 */
 	public Object getNativeSession();

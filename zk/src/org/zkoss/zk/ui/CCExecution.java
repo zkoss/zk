@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.impl.DesktopImpl;

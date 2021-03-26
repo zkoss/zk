@@ -33,11 +33,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
@@ -48,7 +43,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.zkoss.image.AImage;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
@@ -76,6 +70,11 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
 
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 /**
  * The AU extension to upload files.
  * It is based on Apache Commons File Upload.
@@ -91,16 +90,19 @@ public class AuUploader implements AuExtension {
 	public AuUploader() {
 	}
 
-	public void init(DHtmlUpdateServlet servlet) {
+	@Override
+    public void init(DHtmlUpdateServlet servlet) {
 		_ctx = servlet.getServletContext();
 	}
 
-	public void destroy() {
+	@Override
+    public void destroy() {
 	}
 
 	/** Processes a file uploaded from the client.
 	 */
-	public void service(HttpServletRequest request, HttpServletResponse response, String pathInfo)
+	@Override
+    public void service(HttpServletRequest request, HttpServletResponse response, String pathInfo)
 			throws ServletException, IOException {
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
@@ -508,7 +510,8 @@ public class AuUploader implements AuExtension {
 			_fi = fi;
 		}
 
-		public java.io.InputStream getStreamData() {
+		@Override
+        public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
 			} catch (IOException ex) {
@@ -516,11 +519,13 @@ public class AuUploader implements AuExtension {
 			}
 		}
 
-		public boolean isBinary() {
+		@Override
+        public boolean isBinary() {
 			return true;
 		}
 
-		public boolean inMemory() {
+		@Override
+        public boolean inMemory() {
 			return false;
 		}
 	}
@@ -535,7 +540,8 @@ public class AuUploader implements AuExtension {
 			_charset = charset;
 		}
 
-		public java.io.Reader getReaderData() {
+		@Override
+        public java.io.Reader getReaderData() {
 			try {
 				return new java.io.InputStreamReader(_fi.getInputStream(), _charset);
 			} catch (IOException ex) {
@@ -543,11 +549,13 @@ public class AuUploader implements AuExtension {
 			}
 		}
 
-		public boolean isBinary() {
+		@Override
+        public boolean isBinary() {
 			return false;
 		}
 
-		public boolean inMemory() {
+		@Override
+        public boolean inMemory() {
 			return false;
 		}
 	}
@@ -563,7 +571,8 @@ public class AuUploader implements AuExtension {
 			_ctype = ctype;
 		}
 
-		public java.io.InputStream getStreamData() {
+		@Override
+        public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
 			} catch (IOException ex) {
@@ -571,14 +580,16 @@ public class AuUploader implements AuExtension {
 			}
 		}
 
-		public String getFormat() {
+		@Override
+        public String getFormat() {
 			if (_format == null) {
 				_format = ContentTypes.getFormat(getContentType());
 			}
 			return _format;
 		}
 
-		public String getContentType() {
+		@Override
+        public String getContentType() {
 			return _ctype != null ? _ctype : _fi.getContentType();
 		}
 	}
@@ -594,7 +605,8 @@ public class AuUploader implements AuExtension {
 			_ctype = ctype;
 		}
 
-		public java.io.InputStream getStreamData() {
+		@Override
+        public java.io.InputStream getStreamData() {
 			try {
 				return _fi.getInputStream();
 			} catch (IOException ex) {
@@ -602,14 +614,16 @@ public class AuUploader implements AuExtension {
 			}
 		}
 
-		public String getFormat() {
+		@Override
+        public String getFormat() {
 			if (_format == null) {
 				_format = ContentTypes.getFormat(getContentType());
 			}
 			return _format;
 		}
 
-		public String getContentType() {
+		@Override
+        public String getContentType() {
 			return _ctype != null ? _ctype : _fi.getContentType();
 		}
 	}
@@ -664,7 +678,8 @@ public class AuUploader implements AuExtension {
 		}
 
 		//-- FileItemFactory --//
-		public FileItem createItem(String fieldName, String contentType, boolean isFormField, String fileName) {
+		@Override
+        public FileItem createItem(String fieldName, String contentType, boolean isFormField, String fileName) {
 			if (_factory != null)
 				return _factory.createItem(fieldName, contentType, isFormField, fileName, getSizeThreshold(),
 						getRepository());
@@ -683,14 +698,16 @@ public class AuUploader implements AuExtension {
 			/** Returns the charset by parsing the content type.
 			 * If none is defined, UTF-8 is assumed.
 			 */
-			public String getCharSet() {
+			@Override
+            public String getCharSet() {
 				final String charset = super.getCharSet();
 				return charset != null ? charset : "UTF-8";
 			}
 		}
 
 		/*package*/ class ProgressCallback implements ProgressListener {
-			public void update(long pBytesRead, long pContentLength, int pItems) {
+			@Override
+            public void update(long pBytesRead, long pContentLength, int pItems) {
 				onProgress(pBytesRead);
 				if (pContentLength >= 0)
 					_cbtotal = pContentLength;

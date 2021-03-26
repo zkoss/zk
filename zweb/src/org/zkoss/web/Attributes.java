@@ -89,52 +89,52 @@ public class Attributes {
 	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
 	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
-	public static final String INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
+	public static final String INCLUDE_CONTEXT_PATH = "jakarta.servlet.include.context_path";
 	/** The included servlet path; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
 	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
-	public static final String INCLUDE_SERVLET_PATH = "javax.servlet.include.servlet_path";
+	public static final String INCLUDE_SERVLET_PATH = "jakarta.servlet.include.servlet_path";
 	/** The included request URI; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisRequestURI
 	 */
-	public static final String INCLUDE_REQUEST_URI = "javax.servlet.include.request_uri";
+	public static final String INCLUDE_REQUEST_URI = "jakarta.servlet.include.request_uri";
 	/** The included servlet path; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisPathInfo
 	 * @see org.zkoss.web.servlet.http.Https#getOriginPathInfo
 	 */
-	public static final String INCLUDE_PATH_INFO = "javax.servlet.include.path_info";
+	public static final String INCLUDE_PATH_INFO = "jakarta.servlet.include.path_info";
 	/** The included servlet path; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisQueryString
 	 * @see org.zkoss.web.servlet.http.Https#getOriginQueryString
 	 */
-	public static final String INCLUDE_QUERY_STRING = "javax.servlet.include.query_string";
+	public static final String INCLUDE_QUERY_STRING = "jakarta.servlet.include.query_string";
 
 	/** The original context path that forwards this page; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
 	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
-	public static final String FORWARD_CONTEXT_PATH = "javax.servlet.forward.context_path";
+	public static final String FORWARD_CONTEXT_PATH = "jakarta.servlet.forward.context_path";
 	/** The original servlet path that forwards this page; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
 	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
 	 */
-	public static final String FORWARD_SERVLET_PATH = "javax.servlet.forward.servlet_path";
+	public static final String FORWARD_SERVLET_PATH = "jakarta.servlet.forward.servlet_path";
 	/** The original request URI that forwards this page; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisRequestURI
 	 */
-	public static final String FORWARD_REQUEST_URI = "javax.servlet.forward.request_uri";
+	public static final String FORWARD_REQUEST_URI = "jakarta.servlet.forward.request_uri";
 	/** The original servlet path that forwards this page; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisPathInfo
 	 * @see org.zkoss.web.servlet.http.Https#getOriginPathInfo
 	 */
-	public static final String FORWARD_PATH_INFO = "javax.servlet.forward.path_info";
+	public static final String FORWARD_PATH_INFO = "jakarta.servlet.forward.path_info";
 	/** The original servlet path that forwards this page; set by the servlet container.
 	 * @see org.zkoss.web.servlet.http.Https#getThisQueryString
 	 * @see org.zkoss.web.servlet.http.Https#getOriginQueryString
 	 */
-	public static final String FORWARD_QUERY_STRING = "javax.servlet.forward.query_string";
+	public static final String FORWARD_QUERY_STRING = "jakarta.servlet.forward.query_string";
 	/** The attribute to hold the exception, if any.
 	 */
-	public static final String ERROR_EXCEPTION = "javax.servlet.error.exception";
+	public static final String ERROR_EXCEPTION = "jakarta.servlet.error.exception";
 }

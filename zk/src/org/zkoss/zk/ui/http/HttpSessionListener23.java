@@ -12,15 +12,15 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextAttributeListener;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionEvent;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextAttributeEvent;
+import jakarta.servlet.ServletContextAttributeListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSessionAttributeListener;
+import jakarta.servlet.http.HttpSessionBindingEvent;
+import jakarta.servlet.http.HttpSessionEvent;
 
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.sys.Attributes;
  * @author tomyeh
  * @since 5.0.0
  */
-public class HttpSessionListener23 implements javax.servlet.http.HttpSessionListener, HttpSessionAttributeListener,
+public class HttpSessionListener23 implements jakarta.servlet.http.HttpSessionListener, HttpSessionAttributeListener,
 		ServletContextAttributeListener, ServletContextListener {
 	private WebManager _webman;
 	private boolean _webmanCreated;

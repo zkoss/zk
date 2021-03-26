@@ -20,13 +20,24 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.EventListener;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequestDispatcher;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterRegistration;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRegistration;
+import jakarta.servlet.ServletRegistration.Dynamic;
+import jakarta.servlet.SessionCookieConfig;
+import jakarta.servlet.SessionTrackingMode;
+import jakarta.servlet.descriptor.JspConfigDescriptor;
 
 /**
  * A facade servlet context based on a given portlet context.
@@ -51,117 +62,316 @@ public class PortletServletContext implements ServletContext {
 	}
 
 	//-- ServletContext --//
-	public Object getAttribute(String name) {
+	@Override
+    public Object getAttribute(String name) {
 		return _ctx.getAttribute(name);
 	}
 
-	public Enumeration getAttributeNames() {
+	@Override
+    public Enumeration getAttributeNames() {
 		return _ctx.getAttributeNames();
 	}
 
-	public ServletContext getContext(String path) {
+	@Override
+    public ServletContext getContext(String path) {
 		return null;
 	}
 
-	public String getInitParameter(String name) {
+	@Override
+    public String getInitParameter(String name) {
 		return _ctx.getInitParameter(name);
 	}
 
-	public Enumeration getInitParameterNames() {
+	@Override
+    public Enumeration getInitParameterNames() {
 		return _ctx.getInitParameterNames();
 	}
 
-	public int getMajorVersion() {
+	@Override
+    public int getMajorVersion() {
 		return _ctx.getMajorVersion();
 	}
 
-	public String getMimeType(String file) {
+	@Override
+    public String getMimeType(String file) {
 		return _ctx.getMimeType(file);
 	}
 
-	public int getMinorVersion() {
+	@Override
+    public int getMinorVersion() {
 		return _ctx.getMinorVersion();
 	}
 
-	public RequestDispatcher getNamedDispatcher(String name) {
+	@Override
+    public RequestDispatcher getNamedDispatcher(String name) {
 		final PortletRequestDispatcher prd = _ctx.getNamedDispatcher(name);
 		return prd != null ? PortletServletDispatcher.getInstance(prd) : null;
 	}
 
-	public String getRealPath(String path) {
+	@Override
+    public String getRealPath(String path) {
 		return _ctx.getRealPath(path);
 	}
 
-	public RequestDispatcher getRequestDispatcher(String path) {
+	@Override
+    public RequestDispatcher getRequestDispatcher(String path) {
 		final PortletRequestDispatcher prd = _ctx.getRequestDispatcher(path);
 		return prd != null ? PortletServletDispatcher.getInstance(prd) : null;
 	}
 
-	public URL getResource(String path) throws MalformedURLException {
+	@Override
+    public URL getResource(String path) throws MalformedURLException {
 		return _ctx.getResource(path);
 	}
 
-	public InputStream getResourceAsStream(String path) {
+	@Override
+    public InputStream getResourceAsStream(String path) {
 		return _ctx.getResourceAsStream(path);
 	}
 
-	public Set getResourcePaths(String path) {
+	@Override
+    public Set getResourcePaths(String path) {
 		return _ctx.getResourcePaths(path);
 	}
 
-	public String getServerInfo() {
+	@Override
+    public String getServerInfo() {
 		return _ctx.getServerInfo();
 	}
 
 	/**
 	 * @deprecated
 	 */
-	public Servlet getServlet(String name) {
+	@Deprecated
+    @Override
+    public Servlet getServlet(String name) {
 		return null;
 	}
 
 	/**
 	 * @deprecated
 	 */
-	public Enumeration getServletNames() {
+	@Deprecated
+    @Override
+    public Enumeration getServletNames() {
 		return null;
 	}
 
 	/**
 	 * @deprecated
 	 */
-	public Enumeration getServlets() {
+	@Deprecated
+    @Override
+    public Enumeration getServlets() {
 		return null;
 	}
 
-	public String getServletContextName() {
+	@Override
+    public String getServletContextName() {
 		return _ctx.getPortletContextName();
 	}
 
 	/**
 	 * @deprecated
 	 */
-	public void log(Exception exception, String msg) {
+	@Deprecated
+    @Override
+    public void log(Exception exception, String msg) {
 	}
 
-	public void log(String msg) {
+	@Override
+    public void log(String msg) {
 		_ctx.log(msg);
 	}
 
-	public void log(String message, Throwable throwable) {
+	@Override
+    public void log(String message, Throwable throwable) {
 		_ctx.log(message, throwable);
 	}
 
-	public void removeAttribute(String name) {
+	@Override
+    public void removeAttribute(String name) {
 		_ctx.removeAttribute(name);
 	}
 
-	public void setAttribute(String name, Object object) {
+	@Override
+    public void setAttribute(String name, Object object) {
 		_ctx.setAttribute(name, object);
 	}
 
-	public String getContextPath() {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+    public String getContextPath() {
+        return _ctx.getContextPath();
 	}
+
+    @Override
+    public int getEffectiveMajorVersion() {
+        return _ctx.getEffectiveMajorVersion();
+    }
+
+    @Override
+    public int getEffectiveMinorVersion() {
+        return _ctx.getEffectiveMinorVersion();
+    }
+
+    @Override
+    public boolean setInitParameter(String name, String value) {
+        return false;
+    }
+
+    @Override
+    public Dynamic addServlet(String servletName, String className) {
+        return null;
+    }
+
+    @Override
+    public Dynamic addServlet(String servletName, Servlet servlet) {
+        return null;
+    }
+
+    @Override
+    public Dynamic addServlet(String servletName, Class<? extends Servlet> servletClass) {
+        return null;
+    }
+
+    @Override
+    public Dynamic addJspFile(String servletName, String jspFile) {
+        return null;
+    }
+
+    @Override
+    public <T extends Servlet> T createServlet(Class<T> clazz) throws ServletException {
+        return null;
+    }
+
+    @Override
+    public ServletRegistration getServletRegistration(String servletName) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+        return null;
+    }
+
+    @Override
+    public jakarta.servlet.FilterRegistration.Dynamic addFilter(String filterName, String className) {
+        return null;
+    }
+
+    @Override
+    public jakarta.servlet.FilterRegistration.Dynamic addFilter(String filterName, Filter filter) {
+        return null;
+    }
+
+    @Override
+    public jakarta.servlet.FilterRegistration.Dynamic addFilter(String filterName,
+            Class<? extends Filter> filterClass) {
+        return null;
+    }
+
+    @Override
+    public <T extends Filter> T createFilter(Class<T> clazz) throws ServletException {
+        return null;
+    }
+
+    @Override
+    public FilterRegistration getFilterRegistration(String filterName) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+        return null;
+    }
+
+    @Override
+    public SessionCookieConfig getSessionCookieConfig() {
+        return null;
+    }
+
+    @Override
+    public void setSessionTrackingModes(Set<SessionTrackingMode> sessionTrackingModes) {
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+        return null;
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+        return null;
+    }
+
+    @Override
+    public void addListener(String className) {
+
+    }
+
+    @Override
+    public <T extends EventListener> void addListener(T t) {
+
+    }
+
+    @Override
+    public void addListener(Class<? extends EventListener> listenerClass) {
+
+    }
+
+    @Override
+    public <T extends EventListener> T createListener(Class<T> clazz) throws ServletException {
+        return null;
+    }
+
+    @Override
+    public JspConfigDescriptor getJspConfigDescriptor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return _ctx.getClassLoader();
+    }
+
+    @Override
+    public void declareRoles(String... roleNames) {
+
+    }
+
+    @Override
+    public String getVirtualServerName() {
+        return null;
+    }
+
+    @Override
+    public int getSessionTimeout() {
+        return -1;
+    }
+
+    @Override
+    public void setSessionTimeout(int sessionTimeout) {
+
+    }
+
+    @Override
+    public String getRequestCharacterEncoding() {
+        return null;
+    }
+
+    @Override
+    public void setRequestCharacterEncoding(String encoding) {
+
+    }
+
+    @Override
+    public String getResponseCharacterEncoding() {
+        return null;
+    }
+
+    @Override
+    public void setResponseCharacterEncoding(String encoding) {
+
+    }
 }

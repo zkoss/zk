@@ -33,7 +33,7 @@ public class AuLoadCSS extends AuResponse {
 	/**
 	 * Loads a CSS file.
 	 * @param href the URL of the CSS file, it will be encoded with
-	 *            {@link Encodes#encodeURL(javax.servlet.ServletContext, javax.servlet.ServletRequest, javax.servlet.ServletResponse, String)}.
+	 *            {@link Encodes#encodeURL(jakarta.servlet.ServletContext, jakarta.servlet.ServletRequest, jakarta.servlet.ServletResponse, String)}.
 	 * @param id the identifier. Ignored if not specified
 	 * @param media the media attribute. Ignored if not specified.
 	 */

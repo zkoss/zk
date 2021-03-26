@@ -11,10 +11,10 @@
 Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 -->
 
-<web-fragment xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
-	version="3.0">
+<web-fragment xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xmlns:web="https://jakarta.ee/xml/ns/jakartaee" xmlns:webfragment="https://jakarta.ee/xml/ns/jakartaee/web-fragment_5_0.xsd"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-fragment_5_0.xsd" 
+	version="5.0">
 	<name>zk</name>
 	
 	<distributable/><!-- Bug ZK-1896: Enable cluster setting by default -->

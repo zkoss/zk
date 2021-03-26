@@ -23,8 +23,8 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletRequest;
 
 import org.zkoss.idom.Document;
 import org.zkoss.web.servlet.Servlets;
@@ -372,7 +372,7 @@ public interface Execution extends Scope {
 	 *
 	 * <p>If you invoke {@link #forward}, this method is called automatically
 	 * with true. Thus, you rarely need to invoke this method, unless
-	 * you forward to other servlet by use javax.servlet.RequestDispatcher
+	 * you forward to other servlet by use jakarta.servlet.RequestDispatcher
 	 * directly.
 	 *
 	 * <p>The other case to invoke this method is if you'd like to redirect
@@ -1246,7 +1246,7 @@ public interface Execution extends Scope {
 	 *
 	 * <p>The returned object depends on the Web container.
 	 * If it is based Java servlet container, an instance of
-	 * javax.servlet.ServletRequest is returned.
+	 * jakarta.servlet.ServletRequest is returned.
 	 */
 	public Object getNativeRequest();
 
@@ -1254,7 +1254,7 @@ public interface Execution extends Scope {
 	 *
 	 * <p>The returned object depends on the Web container.
 	 * If it is based Java servlet container, an instance of
-	 * javax.servlet.ServletResponse is returned.
+	 * jakarta.servlet.ServletResponse is returned.
 	 */
 	public Object getNativeResponse();
 

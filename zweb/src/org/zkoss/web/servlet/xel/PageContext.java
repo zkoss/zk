@@ -16,11 +16,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.xel;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.zkoss.xel.VariableResolver;
 
@@ -29,7 +29,7 @@ import org.zkoss.xel.VariableResolver;
  * The pageContext variable in EL expressions references to an instance
  * of this interface.
  *
- * <p>It is a replacement of javax.servlet.jsp.PageContext, since
+ * <p>It is a replacement of jakarta.servlet.jsp.PageContext, since
  * ZK doesn't depend on JSP.
  *
  * @author tomyeh

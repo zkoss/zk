@@ -8,7 +8,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import javax.portlet.PortletSession;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.zk.ui.Session;

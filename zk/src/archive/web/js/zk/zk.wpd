@@ -83,5 +83,5 @@ window.$eval=function(s){return eval(s);};
 	<script src="ext/moment.js"/>
 	<script src="ext/moment-timezone-with-data.js"/>
 	<function class="org.zkoss.zk.ui.http.Wpds"
-		signature="java.lang.String outMomentTimezoneJavascript(javax.servlet.ServletRequest, javax.servlet.ServletResponse)"/>
+		signature="java.lang.String outMomentTimezoneJavascript(jakarta.servlet.ServletRequest, jakarta.servlet.ServletResponse)"/>
 </package>

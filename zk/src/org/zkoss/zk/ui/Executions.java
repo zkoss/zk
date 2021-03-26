@@ -22,7 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import javax.servlet.ServletRequest;
+import jakarta.servlet.ServletRequest;
 
 import org.zkoss.idom.Document;
 import org.zkoss.xel.ExpressionFactory;
@@ -121,7 +121,7 @@ public class Executions {
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
-	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(javax.servlet.ServletContext, ServletRequest, String, Locator)}
+	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(jakarta.servlet.ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
 	 *
 	 * @exception NullPointerException if the current execution is not

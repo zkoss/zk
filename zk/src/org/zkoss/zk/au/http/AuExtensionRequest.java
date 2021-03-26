@@ -14,8 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.au.http;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.zkoss.zk.ui.Session;
 

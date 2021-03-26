@@ -42,7 +42,7 @@ public interface RequestInfo {
 	public Desktop getDesktop();
 
 	/** Returns the native request. For HTTP, it is
-	 * javax.servlet.http.HttpServletRequest.
+	 * jakarta.servlet.http.HttpServletRequest.
 	 */
 	public Object getNativeRequest();
 

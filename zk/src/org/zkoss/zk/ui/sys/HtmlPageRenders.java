@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.zkoss.html.HTMLs;
 import org.zkoss.html.JavaScript;
@@ -500,7 +500,7 @@ public class HtmlPageRenders {
 						sb.append(" disabled");
 					sb.append("/>");
 				}
-			} catch (javax.servlet.ServletException ex) {
+			} catch (jakarta.servlet.ServletException ex) {
 				throw new UiException(ex);
 			}
 		} else {
@@ -517,7 +517,7 @@ public class HtmlPageRenders {
 			String url;
 			try {
 				url = ServletFns.encodeURL(js.getSrc());
-			} catch (javax.servlet.ServletException ex) {
+			} catch (jakarta.servlet.ServletException ex) {
 				throw new UiException(ex);
 			}
 

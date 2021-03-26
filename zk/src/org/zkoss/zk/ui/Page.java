@@ -158,7 +158,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 
 	/** Returns the request path of this page, or "" if not available.
 	 * <p>It is the same as the servlet path
-	 * (javax.servlet.http.HttpServletRequest's getServletPath), if ZK is running
+	 * (jakarta.servlet.http.HttpServletRequest's getServletPath), if ZK is running
 	 * at a servlet container.
 	 *
 	 * <p>Note: {@link Desktop#getRequestPath} returns the request path

@@ -16,9 +16,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionActivationListener;
-import javax.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSessionActivationListener;
+import jakarta.servlet.http.HttpSessionEvent;
 
 import org.zkoss.zk.ui.WebApp;
 
@@ -33,7 +33,7 @@ public class SerializableSession extends SimpleSession implements HttpSessionAct
 	/** Constructor.
 	 *
 	 * @param request the original request causing this session to be created.
-	 * If HTTP and servlet, it is javax.servlet.http.HttpServletRequest.
+	 * If HTTP and servlet, it is jakarta.servlet.http.HttpServletRequest.
 	 * If portlet, it is javax.portlet.RenderRequest.
 	 * @since 3.0.1
 	 */

@@ -15,7 +15,7 @@ import static org.zkoss.web.servlet.Charsets.getPreferredLocale;
 
 import java.util.Locale;
 
-import javax.servlet.ServletRequest;
+import jakarta.servlet.ServletRequest;
 
 import net.jcip.annotations.NotThreadSafe;
 import org.junit.Assert;

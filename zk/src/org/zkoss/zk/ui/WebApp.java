@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.zk.ui.ext.Scope;
