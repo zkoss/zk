@@ -34,6 +34,7 @@ ZK 9.6.0
   ZK-4825: Websockets NPE during encodeURL
   ZK-4701: chosenbox initial width too short to display emptyMessage
   ZK-4801: Atlantic: adds google-font for all themes
+  ZK-4824: radiogroup inappropriate aria-owns (confuses screen-reader)
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
