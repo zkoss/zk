@@ -188,6 +188,9 @@ public class Radiogroup extends XulElement {
 	}
 
 	/** Returns the index of the selected radio button (-1 if no one is selected).
+	 *
+	 * Note: The index of the external radio button could be unintuitive
+	 * since radio group always count descendant radio before external radio.
 	 */
 	public int getSelectedIndex() {
 		return _jsel;
