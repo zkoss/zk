@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4833.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 29 12:50:19 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open the detail.
+        2. Click any tool button of CKEditor (ex: Source)
+        3. No exception on browser dev console.
+    </label>
+    <grid fixedLayout="true" width="600px">
+        <columns>
+            <column width="40px" />
+            <column>Product Name</column>
+            <column>Price</column>
+            <column>Item location</column>
+        </columns>
+        <rows>
+            <row>
+                <detail open="false">
+                    <ckeditor value="foo"/>
+                </detail>
+                <label value="Apple 20-inch Aluminum Cinema Display M9177/A" />
+                <label style="color:green;float:right;" value="US $202.50" />
+                <label value="tulsa, ok, United States" />
+            </row>
+        </rows>
+    </grid>
+</zk>
