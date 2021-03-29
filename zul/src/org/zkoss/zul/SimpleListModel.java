@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.Sortable;
 
@@ -117,6 +118,12 @@ public class SimpleListModel<E> extends AbstractListModel<E>
 		_sortDir = ascending;
 		Arrays.sort(_data, (Comparator) cmpr);
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
+	}
+
+	public void sort() {
+		if (_sorting == null)
+			throw new UiException("The sorting comparator is not assigned, please use sort(Comparator cmpr, final boolean ascending)");
+		sort(_sorting, _sortDir);
 	}
 
 	public String getSortDirection(Comparator<E> cmpr) {

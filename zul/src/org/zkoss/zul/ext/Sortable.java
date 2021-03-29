@@ -55,6 +55,16 @@ public interface Sortable<T> {
 	 */
 	public void sort(Comparator<T> cmpr, boolean ascending);
 
+	/**
+	 * Sort the data model by default or assigned comparator.
+	 * Notice that the default implementation does nothing,
+	 * the model which implements Sortable need to implement this method.
+	 * @see #sort(Comparator, boolean)
+	 * @since 9.6.0
+	 */
+	default void sort() {
+	}
+
 	/** Returns the sort direction of this model for the given comparator.
 	 * It must be one of "ascending", "descending" and "natural".
 	 * <p>Default: "natural".

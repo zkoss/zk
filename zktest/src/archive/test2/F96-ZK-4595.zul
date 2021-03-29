@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4595.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Mar 26 16:46:50 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Click header to sort (each listbox/grid/tree), and click "add + sort" button, the items should be sorted
+	</label>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.F96_ZK_4595VM')">
+		<button label="add + sort" onClick="@command('addAndSort')"/>
+		<hlayout>
+			<listbox id="lb1" model="@init(vm.listModelList)" height="300px" hflex="1">
+				<listhead>
+					<listheader id="header1" label="ListModelList" sort="auto(type)"/>
+					<listheader label="name" sort="auto(name)"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell>
+							${each.type}
+						</listcell>
+						<listcell>
+							${each.name}
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<grid id="g1" model="@init(vm.listModelArray)" height="300px" hflex="1">
+				<columns>
+					<column id="header2" label="ListModelArray" sort="auto"/>
+				</columns>
+			</grid>
+			<listbox id="lb2" model="@init(vm.listModelSet)" height="300px" hflex="1">
+				<listhead>
+					<listheader id="header3" label="ListModelSet" sort="auto"/>
+				</listhead>
+			</listbox>
+			<!-- can't sort with listModelMap -> bug, issue opened ZK-4848 -->
+			<!--			<grid id="g2" model="@init(vm.listModelMap)" height="300px" hflex="1">-->
+			<!--				<columns>-->
+			<!--					<column id="header4" label="ListModelMap" sort="auto"/>-->
+			<!--					<column label="value" sort="auto"/>-->
+			<!--				</columns>-->
+			<!--				<rows>-->
+			<!--					<template name="model">-->
+			<!--						<row>-->
+			<!--							<cell>${each.key}</cell>-->
+			<!--							<cell>${each.value}</cell>-->
+			<!--						</row>-->
+			<!--					</template>-->
+			<!--				</rows>-->
+			<!--			</grid>-->
+			<listbox id="lb3" model="@init(vm.simpleListModel)" height="300px" hflex="1">
+				<listhead>
+					<listheader id="header5" label="ListModelList" sort="auto(type)"/>
+					<listheader label="name" sort="auto(name)"/>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell>
+							${each.type}
+						</listcell>
+						<listcell>
+							${each.name}
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<tree id="tree" model="@init(vm.dTreeModel)" height="300px" hflex="1">
+				<treecols>
+					<treecol id="header6" label="DefaultTreeModel" sort="auto"></treecol>
+				</treecols>
+			</tree>
+		</hlayout>
+	</div>
+</zk>
