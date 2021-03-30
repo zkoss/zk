@@ -2,6 +2,7 @@ ZK 9.5.1.2
 * Features
 
 * Bugs
+  ZK-4845: notified @load binding not updating inside shadow element
 
 * Upgrade Notes
 
