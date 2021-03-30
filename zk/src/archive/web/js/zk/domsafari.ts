@@ -1,4 +1,4 @@
-/* domsafari.js
+/* domsafari.ts
 
 	Purpose:
 		Enhance/fix jQuery for Safari

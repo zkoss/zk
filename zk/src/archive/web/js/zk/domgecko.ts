@@ -1,4 +1,4 @@
-/* domgecko.js
+/* domgecko.ts
 
 	Purpose:
 		

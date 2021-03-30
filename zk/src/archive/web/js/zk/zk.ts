@@ -554,7 +554,7 @@ try {
 	 * @see #$import(String)
 	 * @see #load
 	 */
-	$package: function (name: string, end?: boolean, wv?: boolean) { //end used only by WpdExtendlet
+	$package: function (name, end, wv) { //end used only by WpdExtendlet
 		for (var j = 0, ref: unknown = window; ;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k) : name.substring(j),

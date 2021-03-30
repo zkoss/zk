@@ -1,4 +1,4 @@
-/* WidgetInfo.js
+/* WidgetInfo.ts
 
 	Purpose:
 		
@@ -15,11 +15,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _wgtInfs = {page: 'zk.Page'};
 
-	function _load(pkgs, f, weave) {
+	function _load(pkgs: string[], f: (() => void), weave: boolean): void {
 		zk.load(pkgs.join(','), weave ? function () {
-			for (var j = pkgs.length, nm; --j >= 0;)
+			for (var j = pkgs.length, nm: string; --j >= 0;) {
 				if (zk.$package(nm = pkgs[j]).$wv)
 					zk.load(nm + '.wv');
+			}
 			zk.afterLoad(f);
 		} : f);
 	}
@@ -70,7 +71,7 @@ zk.wgt.WidgetInfo = {
 	 * for widgets defined in zul.wnd to communicate with ZK Weaver.
 	 */
 	loadAll: function (f, weave) {
-		var pkgmap = {}, pkgs = [];
+		var pkgmap = {}, pkgs: string[] = [];
 		for (var w in _wgtInfs) {
 			var clsnm = _wgtInfs[w];
 			pkgmap[clsnm.substring(0, clsnm.lastIndexOf('.'))] = true;

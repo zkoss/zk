@@ -1,4 +1,4 @@
-/* bookmark.js
+/* bookmark.ts
 
 	Purpose:
 		
@@ -15,14 +15,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zk.bmk = (function () { //used internally
 	var _curbk = '', _initbk = '';
 
-	function getBookmark() {
+	function getBookmark(): string {
 		var nm = location.hash,
 			j = nm.indexOf('#');
 		nm = j >= 0 ? decodeURIComponent(nm.substring(j + 1)) : '';
 		return nm || _initbk;
 	}
 	/** Checks whether the bookmark is changed. */
-	function checkBookmark() {
+	function checkBookmark(): void {
 		var nm = getBookmark();
 		if (nm != _curbk) {
 			_curbk = nm;
@@ -30,7 +30,7 @@ zk.bmk = (function () { //used internally
 			zk.bmk.onURLChange();
 		}
 	}
-	function _simplifyURL(url) {
+	function _simplifyURL(url): string {
 		var j = url.lastIndexOf(';');
 		if (j >= 0) url = url.substring(0, j);
 		j = url.lastIndexOf('#');
@@ -39,11 +39,11 @@ zk.bmk = (function () { //used internally
 		if (j >= 0) url = url.substring(0, j);
 		return url;
 	}
-	function _toHash(nm, hashRequired) {
+	function _toHash(nm: string, hashRequired?: boolean): string {
 		nm = encodeURI(nm); //ZK-4141: Desktop.setBookmark escapes slash symbols wrongly
 		return (!hashRequired && zk.webkit) || !nm ? nm : '#' + nm;
 	}
-	function _bookmark(nm, replace) {
+	function _bookmark(nm, replace): void {
 		if (_curbk != nm) {
 			_curbk = nm; //to avoid loop back the server
 
@@ -55,7 +55,7 @@ zk.bmk = (function () { //used internally
 		}
 	}
 
-	var _startCheck = function () {
+	var _startCheck: (() => void) | null = function () {
 		_startCheck = null;
 		checkBookmark();
 		jq(window).on('hashchange', checkBookmark);
@@ -76,7 +76,7 @@ zk.bmk = (function () { //used internally
 				(zk.bmk.bookmark = _bookmark)(nm, replace);
 		},
 		/** called when bookmark.html is loaded*/
-		onIframeLoaded: zk.ie < 11 ? function (src) {
+		onIframeLoaded: zk.ie && zk.ie < 11 ? function (src) {
 			var j = src.indexOf('?'),
 				nm = j >= 0 ? src.substring(j + 1) : '';
 			location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm : '';
@@ -86,7 +86,7 @@ zk.bmk = (function () { //used internally
 		/** check if URL is changed */
 		onURLChange: function () { //called by mount.js
 			try {
-				var ifr = window.frameElement;
+				var ifr = window.frameElement as HTMLIFrameElement;
 				if (!parent || parent == window || !ifr) //not iframe
 					return;
 

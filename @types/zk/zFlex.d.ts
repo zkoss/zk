@@ -10,11 +10,11 @@
 Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 declare namespace zk {
-	type FlexOrient = 'v' | 'h';
+	type FlexOrient = 'w' | 'h';
 
 	interface FlexInfo {
 		isFlexRow: boolean;
-		flexContainerChildren: Element[];
+		flexContainerChildren: HTMLElement[];
 		childrenWidgets: zk.Widget[];
 	}
 
@@ -25,7 +25,7 @@ declare namespace zk {
 		beforeSizeForRead(): void;
 		clearCSSFlex(wgt: zk.Widget, o: FlexOrient, clearAllSiblings?: boolean): void;
 		fixFlex(wgt: zk.Widget): void;
-		fixMinFlex(wgt: zk.Widget, wgtn: HTMLElement, o: FlexOrient): number;
+		fixMinFlex(wgt: zk.Widget, wgtn: HTMLElement, o: string): number;
 		getFlexInfo(wgt: zk.Widget): FlexInfo;
 		onFitSize(): void;
 		onSize(): void;

@@ -1,4 +1,4 @@
-/* serverpush.js
+/* serverpush.ts
 
 	Purpose:
 		
@@ -30,12 +30,13 @@ zk.cpsp.SPush = zk.$extends(zk.Object, {
 		if (!zAu.processing()) {
 			var doNow = !zAu.doneTime;
 			if (!doNow) {
-				var delay = (zAu.doneTime - zAu.sentTime) * this.factor,
+				var doneTime = zAu.doneTime || 0,
+					delay = (doneTime - (zAu.sentTime || 0)) * this.factor,
 					max = this.max,
 					min = this.min;
 				if (delay > max) delay = max;
 				else if (isNaN(delay) || delay < min) delay = min;
-				doNow = jq.now() > zAu.doneTime + delay;
+				doNow = jq.now() > doneTime + delay;
 			}
 
 			if (doNow)
@@ -46,8 +47,8 @@ zk.cpsp.SPush = zk.$extends(zk.Object, {
 
 zk.cpsp.start = function (dtid, min, max, factor) {
 	var dt = zk.Desktop.$(dtid);
-	if (dt._cpsp) dt._cpsp.stop();
-	(dt._cpsp = new zk.cpsp.SPush()).start(dt, min, max, factor);
+	if (dt!._cpsp) dt!._cpsp.stop();
+	(dt!._cpsp = new zk.cpsp.SPush()).start(dt!, min, max, factor);
 };
 zk.cpsp.stop = function (dtid) {
 	var dt = zk.Desktop.$(dtid);

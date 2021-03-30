@@ -1,4 +1,4 @@
-/* zkie.js
+/* zkie.ts
 
 	Purpose:
 		Patch for IE

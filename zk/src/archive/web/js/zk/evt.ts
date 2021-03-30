@@ -1,4 +1,4 @@
-/* evt.js
+/* evt.ts
 
 	Purpose:
 		ZK Event and ZK Watch
@@ -279,7 +279,7 @@ zWatch = (function () {
 			}
 		});
 
-	function _invoke(name, infs, o, args, fns) {
+	function _invoke(name, infs, o, args, fns): void {
 		for (var j = 0, l = infs.length; j < l;) {
 			var f = _fn(infs[j++], o, name);
 			if (fns)
@@ -294,19 +294,19 @@ zWatch = (function () {
 		}
 	}
 	//Returns if c is visible
-	function _visible(name, c) {
+	function _visible(name, c): boolean {
 		return c.isWatchable_ && c.isWatchable_(name); //in future, c might not be a widget
 	}
 	//Returns if c is a visible child of p (assuming p is visible)
-	function _visibleChild(name, p, c, cache) {
+	function _visibleChild(name, p, c, cache): boolean {
 		for (var w = c; w; w = w.parent)
 			if (p == w) //yes, c is a child of p
 				return !cache || c.isWatchable_(name, p, cache);
 		return false;
 	}
 	//Returns subset of xinfs that are visible and childrens of p
-	function _visiChildSubset(name, xinfs, p, remove) {
-		var found = [], bindLevel = p.bindLevel,
+	function _visiChildSubset(name, xinfs, p, remove?): Node[] {
+		var found: Node[] = [], bindLevel = p.bindLevel,
 			cache = _visiEvts[name] && {}, pvisible;
 		if (p.isWatchable_) //in future, w might not be a widget
 			for (var j = xinfs.length; j--;) {
@@ -330,7 +330,7 @@ zWatch = (function () {
 			}
 		return found;
 	}
-	function _visiSubset(name, xinfs) {
+	function _visiSubset(name, xinfs): Node[] {
 		xinfs = xinfs.$clone(); //make a copy since unlisten might happen
 		if (_visiEvts[name])
 			for (var j = xinfs.length; j--;)
@@ -338,16 +338,16 @@ zWatch = (function () {
 					xinfs.splice(j, 1);
 		return xinfs;
 	}
-	function _target(inf) {
+	function _target(inf): zk.Widget {
 		return jq.isArray(inf) ? inf[0] : inf;
 	}
-	function _fn(inf, o, name) {
+	function _fn(inf, o, name): (() => void) {
 		var fn = jq.isArray(inf) ? inf[1] : o[name];
 		if (!fn)
 			throw (o.className || o) + ':' + name + ' not found';
 		return fn;
 	}
-	function _sync() {
+	function _sync(): void {
 		if (!_dirty) return;
 
 		_dirty = false;
@@ -357,10 +357,10 @@ zWatch = (function () {
 				wts.sort(_cmpLevel);
 		}
 	}
-	function _bindLevel(a) {
+	function _bindLevel(a): number {
 		return (a = a.bindLevel) == null || isNaN(a) ? -1 : a;
 	}
-	function _cmpLevel(a, b) {
+	function _cmpLevel(a, b): number {
 		return _bindLevel(a[0]) - _bindLevel(b[0]);
 	}
 	zk._zsyncFns = function (name, org) {
@@ -373,7 +373,7 @@ zWatch = (function () {
 			jq.doSyncScroll();
 	};
 	//invoke fns in the reverse order
-	function _reversefns(fns, args) {
+	function _reversefns(fns, args): void {
 		if (fns)
 			//we group methods together if their parents are the same
 			//then we invoke them in the normal order (not reverse), s.t.,
@@ -389,13 +389,13 @@ zWatch = (function () {
 				oldp = newp;
 			}
 	}
-	function _fire(name, org, opts, vararg) {
+	function _fire(name, org, opts, vararg): void {
 		var wts = _watches[name];
 		if (wts && wts.length) {
 			var down = opts && opts.down && org.bindLevel != null;
 			if (down) _sync();
 
-			var args = [],
+			var args: Record<string, unknown>[] = [],
 				fns = opts && opts.reverse ? [] : null,
 				gun = new _Gun(name,
 					down ? _visiChildSubset(name, wts, org) : _visiSubset(name, wts),
@@ -419,7 +419,7 @@ zWatch = (function () {
 			zk._zsyncFns(name, org);
 	}
 	//Feature ZK-1672: check if already listen to the same listener
-	function _isListened(wts, inf) {
+	function _isListened(wts, inf): boolean {
 		if (wts) {
 			if (jq.isArray(inf)) {
 				var isListen = false;

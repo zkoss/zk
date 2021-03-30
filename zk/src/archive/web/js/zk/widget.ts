@@ -1155,7 +1155,7 @@ new zul.wnd.Window({
 			this._nvflex = 0;
 		if (this.desktop) {
 			if (this._cssflex && this._nvflex <= 0) // min or no flex
-				zFlex.clearCSSFlex(this, 'v');
+				zFlex.clearCSSFlex(this, 'w');
 
 			if (!this._nvflex) {
 				if (!this._cssflex)
