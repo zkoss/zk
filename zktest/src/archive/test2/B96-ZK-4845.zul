@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4845.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Mar 30 11:00:50 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Click the button and see both labels are "Second"</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4845VM')">
+		outside IF:
+		<label id="l1" value="@load(vm.pageElement.name)" style="color: green;"/>
+		(load binding updates)
+		<separator/>
+		<if test="@load(vm.showSection)">
+			inside IF:
+			<label id="l2" value="@load(vm.pageElement.name)" style="color: red;"/>
+			(load binding doesn't update)
+		</if>
+		<separator/>
+		<button label="next" onClick="@command('nextPage')"/>
+	</div>
+</zk>
