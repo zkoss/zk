@@ -37,6 +37,7 @@ ZK 9.6.0
   ZK-4824: radiogroup inappropriate aria-owns (confuses screen-reader)
   ZK-4839: za11y: hover navitem without children (JS Error)
   ZK-4833: CKEditor fails to initialized if added to a closed detail component
+  ZK-4845: notified @load binding not updating inside shadow element
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
