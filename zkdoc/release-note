@@ -39,6 +39,7 @@ ZK 9.6.0
   ZK-4833: CKEditor fails to initialized if added to a closed detail component
   ZK-4845: notified @load binding not updating inside shadow element
   ZK-4809: NPE with comet server push (servlet 3) reconnect on Tomcat
+  ZK-4817: listgroup open/close triggers selection (mobile)
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
