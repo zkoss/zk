@@ -58,24 +58,16 @@ function _toMouseEvent(event, changedTouch) {
 	case 'touchmove':
 		var ele = document.elementFromPoint(changedTouch.clientX,changedTouch.clientY);
 		return (ele && _createJQEvent(ele, 'mousemove', 0, changedTouch)) || null;
-	case 'pointerdown':
-		return _createJQEvent(event.target, 'mousedown', event.button, event.originalEvent);
-	case 'pointerup':
-		var origEvt = event.originalEvent;
-		return _createJQEvent(
-			document.elementFromPoint(
-				origEvt.clientX,
-				origEvt.clientY),
-				'mouseup', event.button, origEvt);
 	}
 	return event;
 }
 function _doEvt(type, evt, jqevt) {
 	var eventFuncs = jq.data(evt.currentTarget, 'zk_eventFuncs'),
+		typeLabel = _findEventTypeLabel(type, eventFuncs),
 		funcs;
 	//store original event for invoke stop
 	jqevt.touchEvent = evt.originalEvent;
-	if (eventFuncs && (funcs = eventFuncs[type])) {
+	if (eventFuncs && (funcs = eventFuncs[typeLabel])) {
 		for (var i = 0, l = funcs.length; i < l; i++)
 			funcs[i](jqevt);
 	}
@@ -84,6 +76,8 @@ function delegateEventFunc (event) {
 	var touchEvt = event.originalEvent,
 		touches = touchEvt.touches;
 	if (touches && touches.length > 1) return;
+	if (touchEvt instanceof MouseEvent
+		&& touchEvt.sourceCapabilities.firesTouchEvents) return; // handled by touch handler
 
 	var evt,
 		changedTouches = touchEvt.changedTouches ? touchEvt.changedTouches[0] : null;
@@ -91,12 +85,24 @@ function delegateEventFunc (event) {
 	if (evt = _toMouseEvent(event, changedTouches))
 		_doEvt(event.type, event, evt);
 }
-var pointerEventAvailable = !!window.PointerEvent; // Introduced since iOS 13.1
 zk.copy(zjq.eventTypes, {
-	zmousedown: pointerEventAvailable ? 'pointerdown' : 'touchstart',
-	zmouseup: pointerEventAvailable ? 'pointerup' : 'touchend',
-	zmousemove: 'touchmove' // no pointermove because `touch-action: none` CSS is needed.
+	zmousedown: 'touchstart mousedown',
+	zmouseup: 'touchend mouseup',
+	zmousemove: 'touchmove mousemove'
 });
+function _findEventTypeLabel(type, eventFuncs) {
+	var exactType = eventFuncs[type];
+	if (exactType)
+		return exactType;
+
+	var evtTypes = Object.keys(eventFuncs);
+	for (var i = 0, length = evtTypes.length; i < length; i++) {
+		var val = evtTypes[i];
+		if (val.indexOf(type) !== -1)
+			return val;
+	}
+	return null;
+}
 function _storeEventFunction(elem, type, data, fn) {
 	var eventFuncs = jq.data(elem, 'zk_eventFuncs'),
 		funcs;

@@ -3,6 +3,8 @@ ZK 9.5.1.2
 
 * Bugs
   ZK-4845: notified @load binding not updating inside shadow element
+  ZK-4835: Browsers supporting both touch and mouse fails to register mouse events following ZK-4301
+  ZK-4817: listgroup open/close triggers selection (mobile)
 
 * Upgrade Notes
 
