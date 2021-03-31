@@ -2563,7 +2563,7 @@ public class Tree extends MeshElement {
 		 * Go through each stop in path and render corresponding treeitem
 		 */
 		for (int i = 0; i < path.length; i++) {
-			if (path[i] < 0 || path[i] > children.size())
+			if (path[i] < 0 || path[i] >= children.size())
 				return null;
 			ti = (Treeitem) children.get(path[i]);
 
