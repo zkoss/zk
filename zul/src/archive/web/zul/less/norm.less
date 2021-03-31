@@ -320,22 +320,11 @@ input[type="checkbox"] {
 .z-initing {
 	.size(60px, 60px);
 	background: transparent no-repeat center;
-
-@zkpowered: '${z:encodeWithZK("zkpowered.png")}';
-e('<c:if test="${z:isEditionValid()}">');
-	background-image: url('//www.zkoss.org/zk/img/@{zkpowered}');
-e('</c:if>');
 	position: absolute;
 	right: 10px;
 	bottom: 10px;
 	z-index: 32000;
 }
-@zkuptime: '${z:encodeWithZK("zkuptime.png")}';
-e('<c:if test="${z:isEditionValid()}">');
-.z-uptime {
-	background-image: url('//www.zkoss.org/zk/img/@{zkuptime}');
-}
-e('</c:if>');
 
 .z-loading,
 .z-apply-loading {
