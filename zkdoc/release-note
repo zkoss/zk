@@ -40,6 +40,7 @@ ZK 9.6.0
   ZK-4845: notified @load binding not updating inside shadow element
   ZK-4809: NPE with comet server push (servlet 3) reconnect on Tomcat
   ZK-4793: IndexOutOfBoundsException Tree.renderItemByPath
+  ZK-4792: Chosenbox getSelectedIndex() return wrong index with ListModelList
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
