@@ -42,6 +42,7 @@ ZK 9.6.0
   ZK-4793: IndexOutOfBoundsException Tree.renderItemByPath
   ZK-4792: Chosenbox getSelectedIndex() return wrong index with ListModelList
   ZK-4828: remove externally loaded resources with internal refs.
+  ZK-4829: Unnecessary multiple _hliteOpt function callings in Chosenbox when filtering item
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
