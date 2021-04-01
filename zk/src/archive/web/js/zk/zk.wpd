@@ -58,6 +58,7 @@ window.$eval=function(s){return eval(s);};
 	zk.tabletUIEnabled = !!zk.mobile && zk.tabletUIEnabled !== false;
 	if (zk.touchEnabled) {
 	]]></script>
+		<script src="ext/inputdevicecapabilities-polyfill.js"/>
 		<script src="zswipe.js" jsdoc="true"/>
 		<script src="domtouch.js"/>
 	<script><![CDATA[

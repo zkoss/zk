@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4835-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 01 12:53:21 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Use a device that supports both mouse and touch.
+        2. Drag the splitter, resize the column.
+        3. It should be movable using regardless of mouse or touch.
+    </label>
+    draggable splitter
+    <borderlayout height="200px">
+        <west width="200px" splittable="true"/>
+        <center/>
+    </borderlayout>
+    resizable columns
+    <listbox>
+        <listhead sizable="true">
+            <listheader label="col 1"/>
+            <listheader label="col 2"/>
+            <listheader label="col 3"/>
+            <listheader label="col 4"/>
+        </listhead>
+    </listbox>
+</zk>
