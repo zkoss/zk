@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.Sortable;
 
@@ -417,6 +418,12 @@ public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
 			_map.put(me.getKey(), me.getValue());
 		}
 		fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
+	}
+
+	public void sort() {
+		if (_sorting == null)
+			throw new UiException("The sorting comparator is not assigned, please use sort(Comparator cmpr, final boolean ascending)");
+		sort(_sorting, _sortDir);
 	}
 
 	public String getSortDirection(Comparator<Map.Entry<K, V>> cmpr) {

@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.DefaultTreeNode.TreeNodeChildrenList;
 import org.zkoss.zul.event.TreeDataEvent;
 import org.zkoss.zul.ext.Sortable;
@@ -163,6 +164,12 @@ public class DefaultTreeModel<E> extends AbstractTreeModel<TreeNode<E>>
 			afterSort(ctx); //before firing event
 			fireEvent(TreeDataEvent.STRUCTURE_CHANGED, null, 0, 0);
 		}
+	}
+
+	public void sort() {
+		if (_sorting == null)
+			throw new UiException("The sorting comparator is not assigned, please use sort(Comparator cmpr, final boolean ascending)");
+		sort(_sorting, _sortDir);
 	}
 
 	@SuppressWarnings("rawtypes")
