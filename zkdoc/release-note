@@ -41,11 +41,13 @@ ZK 9.6.0
   ZK-4809: NPE with comet server push (servlet 3) reconnect on Tomcat
   ZK-4793: IndexOutOfBoundsException Tree.renderItemByPath
   ZK-4792: Chosenbox getSelectedIndex() return wrong index with ListModelList
+  ZK-4828: remove externally loaded resources with internal refs.
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
     If you prefer to use the previous generator, use org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator.
   + Due to ZK-4783, the hbox of message box is substituted by DIV.
+  + Deprecated the method of isEditionValid() and encodeWithZK() of org.zkoss.zk.fn.ZkFns and core.dsp.tld.
 
    --------
 ZK 9.5.1

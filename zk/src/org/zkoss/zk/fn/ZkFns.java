@@ -81,7 +81,9 @@ public class ZkFns {
 	/**
 	 * Returns the edition whether valid or invalid.
 	 * @since 6.5.5
+	 * @deprecated since 9.6.0
 	 */
+	@Deprecated
 	public static boolean isEditionValid() {
 		WebApp current = WebApps.getCurrent();
 		return !("CE".equals(getEdition()) || current == null
@@ -90,7 +92,9 @@ public class ZkFns {
 
 	/** Returns the string encoded with ZK.
 	 * @since 6.0.3
+	 * @deprecated since 9.6.0
 	 */
+	@Deprecated
 	public static String encodeWithZK(String name) {
 		if (name.startsWith("zk"))
 			return "zk" + (WebApps.getEdition().toLowerCase(java.util.Locale.ENGLISH)) + name.substring(2);
