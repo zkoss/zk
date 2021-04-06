@@ -187,7 +187,6 @@
 	&.z-treerow-selected {
 		> .z-treecell {
 			background: @selectedBackgroundColor;
-			position: relative;
 
 			> .z-treecell-content {
 				color: @selectedColor;
@@ -206,7 +205,6 @@
 	&.z-treerow-selected.z-treerow-focus {
 		> .z-treecell {
 			background: @selectedFocusBackgroundColor;
-			position: relative;
 
 			> .z-treecell-content {
 				color: @selectedFocusColor;
@@ -224,7 +222,6 @@
 	&-focus {
 		> .z-treecell {
 			background: @meshContentFocusBackgroundColor;
-			position: relative;
 			> .z-treecell-content {
 				color: @hoverColor;
 			}
@@ -255,9 +252,6 @@
 			color: @disabledColor !important;
 			cursor: default !important;
 		}
-		&:hover > .z-treecell {
-			position: relative;
-		}
 	}
 }
 // hidden col
@@ -265,17 +259,6 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
-
-body:not(.gecko) {
-	.z-treerow {
-		&:hover {
-			> .z-treecell {
-				position: relative;
-			}
-		}
-	}
-}
-
 //content
 .z-treecol-content,
 .z-treecell-content,
