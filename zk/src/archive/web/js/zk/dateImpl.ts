@@ -1,4 +1,4 @@
-/* dateImpl.js
+/* dateImpl.ts
 
 	Purpose:
 		date with timezone information
@@ -15,7 +15,7 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 var Dates = {
-	newInstance: function (param, tz) {
+	newInstance: function (param: number | DateImpl | [number, number, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined], tz) {
 		var m;
 		if (tz)
 			tz = parseTzId(tz);
@@ -38,12 +38,12 @@ var Dates = {
 	}
 };
 
-function DateImpl(m, tz) {
+function DateImpl(this: DateImpl, m, tz): void {
 	this._moment = m;
 	this._timezone = tz;
 }
 
-function parseTzId(id) {
+function parseTzId(id: string): string {
 	if (/^GMT\+([0]\d|[1][0-2]):[0]{2}$/i.test(id)) {
 		return 'Etc/GMT-' + parseInt(id.substring(4, 6));
 	} else if (/^GMT-([0]\d|[1][0-4]):[0]{2}$/i.test(id)) {
@@ -193,5 +193,26 @@ DateImpl.prototype = {
 	},
 	valueOf: function () {
 		return this._moment.valueOf();
+	},
+	toDateString: function () {
+		return '';
+	},
+	toTimeString: function () {
+		return '';
+	},
+	toLocaleDateString: function () {
+		return '';
+	},
+	toLocaleTimeString: function () {
+		return '';
+	},
+	toUTCString: function () {
+		return '';
+	},
+	toISOString: function () {
+		return '';
+	},
+	toJSON: function (key) {
+		return '';
 	}
 };

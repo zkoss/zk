@@ -116,6 +116,15 @@ declare namespace zk {
         serverAlive: boolean;
         forceAjax: boolean;
         rtags: {[key: string]: any};
+        start: {
+            time: number | Date;
+            coords: [number, number];
+        };
+        stop: {
+            time: number | Date;
+            coords: [number, number];
+        };
+        dir: string;
     }
 
     interface EventStopOptions {
@@ -391,7 +400,7 @@ declare namespace zk {
         getElementsByName(name: string): any[];
         /** @deprecated */ isAutoId(uuid: string): boolean;
         mimicMouseDown_(wgt: Widget, noFocusChange: boolean, which: number): void;
-        newInstance(wgtnm: string, props: any): Widget;
+        newInstance(wgtnm: string, props?: any): Widget;
         nextUuid(): string;
         register(clsnm: string, blankPreserved: boolean): void;
         uuid(subId: string): string;
@@ -444,11 +453,25 @@ declare namespace zk {
     }
 
     interface Draggable extends Object {
+        control: any;
+        handle?: HTMLElement | null;
+        node?: HTMLElement | null;
+        _isScrollChild: boolean;
+        delta: zk.Offset;
+        opts: any;
+        dragging?: boolean;
+        _suicide: boolean;
+        dead: boolean;
+        offset: number[];
+        lastScrolled: Date;
+        scrollSpeed: number[];
+        
+        $init(control?: any, node?: HTMLElement, opts?: any): void;
         _currentDelta(): zk.Offset;
-        _draw(point, evt: zk.Event): void;
+        _draw(point, evt?: zk.Event): void;
         _endDrag(evt: zk.Event): void;
         _finishDrag(evt: zk.Event, success): void;
-        _getWndScroll(w): void;
+        _getWndScroll(w): zk.Dimension;
         _keypress(devt: jQuery.Event): void;
         _mousedown(devt: jQuery.Event): void;
         _scroll(): void;
@@ -460,6 +483,75 @@ declare namespace zk {
         _updateInnerOfs(): void;
         destroy(): void;
         snap_(pos: zk.Offset, opts): zk.Offset;
+    }
+
+    interface Canvas {
+        create(width?: number, height?: number): HTMLCanvasElement;
+    }
+
+    interface UploadUtils {
+        ajaxUpload(wgt: zk.Widget, xhr: XMLHttpRequest, formData: FormData, sid?: number): void;
+    }
+
+    interface XMLUtils {
+        loadXML(url: string, callback: Function): any;
+        parseXML(text: string): any;
+        renType(url: string, type: string): string;
+        getElementValue(el: HTMLElement): string;
+    }
+
+    interface BigDecimal extends zk.Object {
+        $init(value: number | string): void;
+        $toNumber(): number;
+        $toString(): string;
+        $toLocaleString(): string;
+    }
+
+    interface Long extends zk.Object {
+        _value: string;
+        $init(value: number | string): void;
+        scale(digits: number): void;
+        $toNumber(): number;
+        $toString(): string;
+        $toLocaleString(): string;
+    }
+
+    interface Swipe extends zk.Object {
+        widget: zk.Widget | null;
+        node: HTMLElement | null;
+        opts: any;
+
+        $init(widget: zk.Widget, node?: HTMLElement | null, opts?): void;
+        destroy(node: HTMLElement): void;
+        _swipeStart(devt: JQuery.Event): void;
+        _swipeMove(devt: JQuery.Event): void;
+        _swipeEnd(devt: JQuery.Event): void;
+    }
+
+    interface Parser {
+        create(parent: zk.Widget | null, doc: string, args, fn: Function): any;
+        createAt(node: string, opts, args, fn: Function): any;
+    }
+
+    interface Eff {
+        shallStackup(): boolean;
+        _skuOpts(opts): any;
+        _onVParent(evt, opts?): void;
+
+        Shadow: zk.Effect;
+        FullMask: zk.Effect;
+        Mask: zk.Effect;
+        Actions: zk.EffectActions;
+        KeyboardTrap: zk.Effect;
+        Opacity?: any;
+        Move?: any;
+    }
+
+    interface EffectActions {
+        slideDown(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+        slideUp(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+        slideIn(n: HTMLElement, opts?: Partial<SlideOptions>): void;
+        slideOut(n: HTMLElement, opts?: Partial<SlideOptions>): void;
     }
 
     interface ZKCoreUtilityStatic {
@@ -479,12 +571,16 @@ declare namespace zk {
         android: boolean;
         appName: string;
         ausending: boolean;
+        BigDecimal: zk.BigDecimal;
         bmk: Record<string, any>;
         Buffer: Buffer;
         Body: Page;
         booted: boolean;
         build: string;
         busy: number;
+        canvas: {
+            Canvas: zk.Canvas;
+        };
         cfrg?: [number, number];
         chrome?: boolean;
         Class: zk.Class;
@@ -498,16 +594,21 @@ declare namespace zk {
         currentModal?: zk.Widget | null;
         currentPointer: zk.Offset;
         dataHandlers?: Record<string, string | DataHandler>;
+        debug: {
+            Debugger: zk.Object;
+            DefaultHandler: zk.Object;
+        };
         debugJS: boolean;
         Desktop: zk.DesktopStatic;
         delayQue: Record<string, Function[]>;
         DECIMAL: string;
         DnD: DragDrop;
         Draggable: DraggableStatic;
+        dragging?: boolean;
         Event: zk.Event;
         edge?: string | false;
         edge_legacy?: number | string | false;
-        eff: Record<string, zk.Object>;
+        eff: zk.Eff;
         feature: {
             standard: true;
             pe?: boolean;
@@ -515,6 +616,12 @@ declare namespace zk {
         };
         ff?: number | string | false;
         focusBackFix: boolean;
+        fmt: {
+            Text: {
+                format(msg: string): string;
+                formatFileSize(bytes: number): string;
+            };
+        };
         gecko?: number | string | false;
         GROUPING: string;
         groupingDenied?: boolean;
@@ -541,6 +648,7 @@ declare namespace zk {
         keyCapture?: zk.Widget;
         linux: boolean;
         loading: number;
+        Long: zk.Long;
         Macro: Macro;
         MINUS: string;
         mac: boolean;
@@ -568,6 +676,7 @@ declare namespace zk {
         safari?: boolean;
         Service: zk.Object;
         Skipper: zk.Skipper;
+        Swipe: zk.Swipe;
         rmDesktoping: boolean;
         skipBfUnload: boolean;
         spaceless: boolean;
@@ -576,13 +685,22 @@ declare namespace zk {
         tipDelay: number;
         unloading: boolean;
         updateURI: string;
+        UploadUtils: zk.UploadUtils;
+        useStackup?: string | boolean;
         vendor: string;
         vendor_: string;
         version: string;
         visibilitychange: boolean;
         webkit?: boolean;
         Widget: WidgetStatic;
+        wgt: any;
         xhrWithCredentials: boolean;
+        xml: {
+            Utl: zk.XMLUtils;
+        };
+        zuml: {
+            Parser: zk.Parser;
+        };
 
         (selector: string): JQZK;
         (element: Element): JQZK;
@@ -603,7 +721,7 @@ declare namespace zk {
         afterAnimate(fn: () => void, delay?: number): boolean;
         afterAuResponse(fn: () => void): void;
         afterLoad(func: () => void): boolean;
-        afterLoad(pkgs: string, func: () => void): void;
+        afterLoad(pkgs: string, func: () => void, front?: boolean): void;
         afterMount(fn: () => void, delay?: number): boolean;
         afterResize(fn: () => void): void;
         ajaxResourceURI(uri: string, version?: string, opts?: any): string;
@@ -632,7 +750,9 @@ declare namespace zk {
         isObject(o: any): boolean;
         load(pkg: string, dt: any, func: Function): boolean;
         load(pkg: string, func: Function): boolean;
-        loadCSS(href: string, id: string, media: string): ZKCoreUtilityStatic;
+        load(pkg: string): boolean;
+        _load(pkg: string, dt: any): boolean;
+        loadCSS(href: string, id?: string, media?: string): ZKCoreUtilityStatic;
         loadScript(src: string, name: string, charset: string, force: boolean): ZKCoreUtilityStatic;
         log(...detailed: any[]): void;
         override<T>(oldfunc: T, newfunc: Function & ThisType<T>): T;

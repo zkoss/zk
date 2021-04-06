@@ -56,15 +56,14 @@ declare namespace zk {
         go(url: string, opts?: Partial<GoOptions>): void;
         intsToString(ary: number[]): string;
         isAncestor(p: zk.Widget, c: zk.Widget): boolean;
-        isChar(cc: string, opts?: Partial<IsCharOptions>): boolean;
+        isChar(cc: string, opts: Partial<IsCharOptions>): boolean;
         isImageLoading(): boolean;
         loadImage(url: string): void;
-        mapToString(map: Record<string, unknown>, assign?: string, separator?: string): string;
+        mapToString(map: Record<string, string>, assign?: string, separator?: string): string;
         /** @deprecated */ now(): number;
         parseMap(text: string, separator?: string, quote?: string): {[key: string]: string};
         progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void;
-        stringToInts(text: null, defaultValue: number): null;
-        stringToInts(text: string, defaultValue: number): number[];
+        stringToInts(text: string | null, defaultValue: number): number[] | null;
         today(full: boolean, tz: string): Date;
         today(fmt: string, tz: string): Date;
     }

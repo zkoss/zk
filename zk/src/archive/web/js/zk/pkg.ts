@@ -1,4 +1,4 @@
-/* pkg.js
+/* pkg.ts
 
 	Purpose:
 		The package utilities (part of zk)
@@ -14,19 +14,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.copy(zk, (function () {
 	var _loaded = {'zk': true}, //loaded
-		_xloadings = [], //loading (exclude loaded)
-		_loadedsemis = [], //loaded but not inited
-		_afterLoadFronts = [],
-		_afterLoads = [],
+		_xloadings: string[] = [], //loading (exclude loaded)
+		_loadedsemis: string[] = [], //loaded but not inited
+		_afterLoadFronts: (() => void)[] = [],
+		_afterLoads: (() => void)[] = [],
 		_afterPkgLoad = {}, //after pkg loaded
 		_pkgdepend = {},
 		_pkgver = {},
-		_pkghosts = {}/*package host*/, _defhost = []/*default host*/,
+		_pkghosts = {}/*package host*/, _defhost: string[] = []/*default host*/,
 		_loading = zk.copy({'zul.lang': true}, _loaded); //loading (include loaded)
 
 	//We don't use e.onload since Safari doesn't support t
 	//See also Bug 1815074
-	function markLoading(nm) {
+	function markLoading(nm: string): void {
 		//loading
 		_loading[nm] = true;
 
@@ -35,7 +35,7 @@ zk.copy(zk, (function () {
 			zk.disableESC();
 		}
 	}
-	function doEnd(afs, wait) {
+	function doEnd(afs, wait?): void {
 		for (var fn; fn = afs.shift();) {
 			if (updCnt() || (wait && _loadedsemis.length)) {
 				afs.unshift(fn);
@@ -44,7 +44,7 @@ zk.copy(zk, (function () {
 			fn();
 		}
 	}
-	function updCnt() {
+	function updCnt(): number {
 		return (zk.loading = _xloadings.length);
 	}
 /** @partial zk
@@ -160,7 +160,7 @@ zk.load('zul.utl', function () {
 		else
 			uri = zk.ajaxResourceURI('/js' + uri, zk.getVersion(pkg), {desktop: dt});
 		e.src = uri;
-		jq.head().appendChild(e);
+		jq.head()?.appendChild(e);
 		return false;
 	},
 
@@ -187,7 +187,7 @@ zk.load('zul.utl', function () {
 		e.type = 'text/javascript';
 		e.charset = charset || 'UTF-8';
 		e.src = src;
-		jq.head().appendChild(e);
+		jq.head()?.appendChild(e);
 		return this;
 	},
 	/** Loads a CSS file.
@@ -204,7 +204,7 @@ zk.load('zul.utl', function () {
 		ln.type = 'text/css';
 		ln.href = href;
 		if (media) ln.media = media;
-		jq.head().appendChild(ln);
+		jq.head()?.appendChild(ln);
 		return this;
 	},
 

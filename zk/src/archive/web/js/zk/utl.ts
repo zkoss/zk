@@ -1,4 +1,4 @@
-/* util.js
+/* util.ts
 
 	Purpose:
 		
@@ -18,15 +18,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	for (var v in _decs)
 		_encs[_decs[v]] = v;
 
-	function _pathname(url) {
+	function _pathname(url): string {
 		var j = url.indexOf('//');
 		if (j > 0) {
 			j = url.indexOf('/', j + 2);
 			if (j > 0) return url.substring(j);
 		}
+		return '';
 	}
 
-	function _frames(ary, w) {
+	function _frames(ary, w): void {
 		//Note: the access of frames is allowed for any window (even if it connects other website)
 		ary.push(w);
 		for (var fs = w.frames, j = 0, l = fs.length; j < l; ++j)
@@ -37,7 +38,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	 * FUTRE: consider to have zk.Widget.beforeSize to clean up _hflexsz and
 	 * this method considers only if _hflex is min
 	 */
-	function _onSizeTarget(wgt) {
+	function _onSizeTarget(wgt): zk.Widget {
 		var r1 = wgt, p1 = r1,
 			j1 = -1;
 		for (; p1 && p1._hflex == 'min'; p1 = p1.parent) {
@@ -109,11 +110,11 @@ zUtl = { //static methods
      * @return boolean
      */
 	isChar: function (cc, opts) {
-		return (opts.digit && cc >= '0' && cc <= '9')
+		return !!((opts.digit && cc >= '0' && cc <= '9')
 			|| (opts.upper && cc >= 'A' && cc <= 'Z')
 			|| (opts.lower && cc >= 'a' && cc <= 'z')
 			|| (opts.whitespace && (cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r'))
-			|| opts[cc];
+			|| opts[cc]);
 	},
 
 	//HTML/XML
@@ -134,7 +135,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if (text) {
 			var ps = text.split(separator || ',');
 			if (quote) {
-				var tmp = [],
+				var tmp: string[] = [],
 					re = new RegExp(quote, 'g'),
 					key = '', t, pair;
 				while ((t = ps.shift()) !== undefined) {
@@ -173,7 +174,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				'`': '&#x60;'
 			},
 			// Functions for escaping and unescaping strings to/from HTML interpolation.
-			escaper = function (match) {
+			escaper = function (match): string {
 				return escapeMap[match];
 			},
 			// Regexes for identifying a key that needs to be escaped
@@ -181,7 +182,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			testRegexp = RegExp(source),
 			replaceRegexp = RegExp(source, 'g');
 
-		function _encodeXML0(string) {
+		function _encodeXML0(string): string {
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
@@ -215,7 +216,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				'`': '&#x60;'
 			},
 			// Functions for escaping and unescaping strings to/from HTML interpolation.
-			escaper = function (match) {
+			escaper = function (match): string {
 				return escapeMap[match];
 			},
 			// Regexes for identifying a key that needs to be escaped
@@ -223,7 +224,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			testRegexp = RegExp(source),
 			replaceRegexp = RegExp(source, 'g');
 
-		function _encodeXML0(string) {
+		function _encodeXML0(string): string {
 			return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
 		}
 
@@ -248,7 +249,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 
 			var out = '', k = 0, enc;
 			if (multiline || pre) {
-				for (var j = 0; j < tl; ++j) {
+				for (let j = 0; j < tl; ++j) {
 					var cc = txt.charAt(j);
 					if (enc = _encs[cc]) {
 						out += txt.substring(k, j) + '&' + enc + ';';
@@ -422,10 +423,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			st = txt.style;
 		if (mask) {
 			// old IE will get the auto value by default.
-			var zIndex = $txt.css('z-index');
-			if (zIndex == 'auto')
+			var zIndex: string | number = $txt.css('z-index');
+			if (zIndex == 'auto' || typeof zIndex === 'string')
 				zIndex = 1;
-			n.z_mask = new zk.eff.FullMask({
+			n['z_mask'] = new zk.eff.FullMask({
 				mask: jq(idmsk, zk)[0],
 				zIndex: zIndex - 1
 			});
@@ -478,7 +479,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			zk.busy = 0;
 		var $n = jq(id, zk), n;
 		if ($n.length) {
-			if (n = $n[0].z_mask) n.destroy();
+			if (n = $n[0]['z_mask']) n.destroy();
 			$n.remove();
 			jq('html').off('keydown', zk.$void);
 		}
@@ -554,7 +555,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	intsToString: function (ary) {
 		if (!ary) return '';
 
-		var sb = [];
+		var sb: number[] = [];
 		for (var j = 0, k = ary.length; j < k; ++j)
 			sb.push(ary[j]);
 		return sb.join();
@@ -571,7 +572,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if (text == null)
 			return null;
 
-		var list = [];
+		var list: number[] = [];
 		for (var j = 0; ;) {
 			var k = text.indexOf(',', j),
 				s = (k >= 0 ? text.substring(j, k) : text.substring(j)).trim();
@@ -596,7 +597,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	mapToString: function (map, assign, separator) {
 		assign = assign || '=';
 		separator = separator || ' ';
-		var out = [];
+		var out: string[] = [];
 		for (var v in map)
 			out.push(separator, v, assign, map[v]);
 		out[0] = '';
@@ -645,9 +646,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 				return;
 			}
 			wgt = _onSizeTarget(wgt);
-			if (!(bfsz < 0)) { //don't use >= (because bfsz might be undefined)
+			if (!(bfsz && bfsz < 0)) { //don't use >= (because bfsz might be undefined)
 				zWatch.fireDown('_beforeSizeForRead', wgt);
-				zWatch.fireDown('beforeSize', wgt, null, bfsz > 0);
+				zWatch.fireDown('beforeSize', wgt, null, bfsz && bfsz > 0);
 			}
 			zWatch.fireDown('onFitSize', wgt, {reverse: true});
 			zWatch.fireDown('onSize', wgt);
@@ -699,7 +700,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			day = d.getDay();
 		d.setDate(date - minimalDaysInFirstWeek + firstDayOfWeek - (firstDayOfWeek > day ? day : day - 7));
 		var yearStart = Dates.newInstance([d.getFullYear(), 0, 1], 'UTC');
-		return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+		return Math.ceil(((d.valueOf() - yearStart.valueOf()) / 86400000 + 1) / 7);
 	},
 	/**
 	 * Converts the dataURL to Blob object.
@@ -725,7 +726,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 8.6.0
 	 */
 	getDevicePixelRatio: function () {
-		return window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI;
+		return window.devicePixelRatio || window.screen['deviceXDPI'] / window.screen['logicalXDPI'];
 	},
 	/**
 	 * Returns the Promise whose fulfillment handler receives a MediaStream object when the requested media has successfully been obtained.
@@ -737,10 +738,10 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @since 8.6.1
 	 */
 	getUserMedia: function (constraints) {
-		var polyfillGUM = function (constraints, success, error) {
-			var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-				navigator.mozGetUserMedia || navigator.msGetUserMedia ||
-				navigator.oGetUserMedia;
+		var polyfillGUM = function (constraints?, success?, error?): Promise<MediaStream> {
+			var getUserMedia = navigator.getUserMedia || navigator['webkitGetUserMedia'] ||
+				navigator['mozGetUserMedia'] || navigator['msGetUserMedia'] ||
+				navigator['oGetUserMedia'];
 			if (!getUserMedia)
 				return Promise.reject(new Error('Cannot polyfill getUserMedia'));
 			return new Promise(function (constraints, success, error) {
@@ -748,6 +749,8 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			});
 		};
 
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore: assign to read only property(mediaDevices) for polyfill
 		if (navigator.mediaDevices === undefined) navigator.mediaDevices = {};
 		if (navigator.mediaDevices.getUserMedia === undefined) navigator.mediaDevices.getUserMedia = polyfillGUM;
 		return navigator.mediaDevices.getUserMedia(constraints);
@@ -755,9 +758,9 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 };
 
 var _imgMap = {};
-function _loadImage(url) {
+function _loadImage(url): void {
 	var img = new Image(),
-		f = function () {
+		f = function (): void {
 			delete _imgMap[url];
 		};
 	img.onerror = img.onload = f;

@@ -1,5 +1,5 @@
 /*global ActiveXObject*/
-/* utl.js
+/* utl.ts
 
 	Purpose:
 		
@@ -29,7 +29,7 @@ zk.xml.Utl = {
 	 * @return DOMElement
 	 */
 	loadXML: function (url, callback) {
-		var doc = document.implementation;
+		var doc: DOMImplementation | XMLDocument = document.implementation;
 		if (doc && doc.createDocument) {
 			doc = doc.createDocument('', '', null); //FF, Safari, Opera
 			if (callback)
@@ -37,12 +37,12 @@ zk.xml.Utl = {
 		} else {
 			doc = new ActiveXObject('Microsoft.XMLDOM');
 			if (callback)
-				doc.onreadystatechange = function () {
-					if (doc.readyState == 4) callback(doc);
+				doc['onreadystatechange'] = function () {
+					if (doc['readyState'] == 4) callback(doc);
 				};
 		}
-		if (!callback) doc.async = false;
-		doc.load(url);
+		if (!callback) doc['async'] = false;
+		doc['load'].apply(doc, url);
 		return doc;
 	},
 	/**
@@ -98,8 +98,8 @@ zk.xml.Utl.renType("/zkdemo/img/whatever-off.gif", "on");
 	 */
 	getElementValue: function (el) {
 		var txt = '';
-		for (el = el.firstChild; el; el = el.nextSibling)
-			if (el.data) txt += el.data;
+		for (let target: Element | null = el.firstElementChild; target; target = target.nextElementSibling)
+			if (target['data']) txt += target['data'];
 		return txt;
 	}
 };

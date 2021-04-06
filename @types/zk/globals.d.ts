@@ -51,4 +51,17 @@ declare function zkreg(pkg: string, load: boolean): void;
 declare var _zkf: any; // temp object holder
 
 declare class DateImpl extends Date {
+    _moment?: any;
+    _timezone?: any;
+    tz(v): any;
+    _getTzMoment(): any;
+    _getUTCMoment(): any;
+    getTimeZone(): any;
+    getYear(): number;
+    setYear(v: number): number;
 }
+
+declare var zDebug: zk.Object;
+
+// Workaround for ActiveXObject
+declare var ActiveXObject: (type: string) => void;

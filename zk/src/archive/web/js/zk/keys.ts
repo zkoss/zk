@@ -1,4 +1,4 @@
-/* keys.js
+/* keys.ts
 
 		Purpose:
 		

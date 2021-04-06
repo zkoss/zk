@@ -1,4 +1,4 @@
-/* zswipe.js
+/* zswipe.ts
 
 	Purpose:
 		Support swipe event for tablet
@@ -16,7 +16,7 @@ Copyright (C) 2012 Potix Corporation. All Rights Reserved.
 		endEvt = hastouch ? 'touchend' : 'mouseup',
 		start, stop;
 	
-	function _doEvt(wevt) {
+	function _doEvt(wevt: zk.Event): void {
 		var wgt = wevt.target;
 		if (wgt && !wgt.$weave) {
 			var en = wevt.name;

@@ -1,4 +1,4 @@
-/* Parser.js
+/* Parser.ts
 
 	Purpose:
 		
@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 //zk.$package('zk.zuml');
 
 (function () {
-	function _innerText(node) {
+	function _innerText(node: HTMLElement): string | null {
 		var txt = node.innerHTML,
 			j = txt.indexOf('<!--');
 		if (j >= 0)
@@ -23,10 +23,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		txt = txt.trim();
 		return txt ? '<div>' + txt.trim() + '</div>' : null;
 	}
-	function _aftCreate(wgt, cwgts, node, opts) {
+	function _aftCreate(wgt, cwgts, node, opts): null | zk.Widget | zk.Widget[] {
 		var c;
 		if (!wgt || !(c = wgt.firstChild))
-			return;
+			return null;
 
 		do {
 			var sib = c.nextSibling;
@@ -46,20 +46,20 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 					p.insertBefore(n, sib);
 				}
 			}
-			for (var j = 0; j < l; ++j)
+			for (let j = 0; j < l; ++j)
 				cwgts[j].replaceHTML(ns[j]);
 		}
 
 		return cwgts.length <= 1 ? cwgts[0] : cwgts;
 	}
-	function _getPkgs(e) {
-		var pkgmap = {}, pkgs = []; //use {} to remove duplicate packages
+	function _getPkgs(e): string {
+		var pkgmap = {}, pkgs: string[] = []; //use {} to remove duplicate packages
 		_getPkgs0(e, pkgmap);
 		for (var p in pkgmap)
 			pkgs.push(p);
 		return pkgs.join(',');
 	}
-	function _getPkgs0(e, pkgmap) {
+	function _getPkgs0(e, pkgmap): void {
 		var tn = e.tagName;
 		if ('zk' != tn && 'attribute' != tn) {
 			if (!zk.Widget.getClass(tn)) { //not register?
@@ -78,21 +78,21 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			}
 		}
 	}
-	function _create(parent, e, args, cwgts) {
-		if (!e) return null;
+	function _create(parent, e, args, cwgts): void {
+		if (!e) return;
 
 		var forEach = _eval(parent, e.getAttribute('forEach'), args);
 		if (forEach != null) {
-			var oldEach = window.each;
+			var oldEach = window['each'];
 			for (var l = forEach.length, j = 0; j < l; j++) {
-				window.each = forEach[j];
+				window['each'] = forEach[j];
 				_create0(parent, e, args, cwgts);
 			}
-			window.each = oldEach;
+			window['each'] = oldEach;
 		} else
 			_create0(parent, e, args, cwgts);
 	}
-	function _create0(parent, e, args, cwgts) {
+	function _create0(parent, e, args, cwgts): void {
 		var ifc = _eval(parent, e.getAttribute('if'), args),
 			unless = _eval(parent, e.getAttribute('unless'), args);
 		if ((ifc == null || ifc) && (unless == null || !unless)) {
@@ -125,7 +125,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 					var ws = [];
 					_create(wgt, e, args, ws);
 					if (prolog && (ws = ws[0])) {
-						ws.prolog = prolog;
+						ws['prolog'] = prolog;
 						prolog = null;
 					}
 				} else if (nt == 3) {
@@ -140,7 +140,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			}
 		}
 	}
-	function _eval(wgt, s, args) {
+	function _eval(wgt, s, args): string {
 		if (s)
 			for (var j = 0, k, l, t, last = s.length - 1, s2; ;) {
 				k = s.indexOf('#{', j);
@@ -204,19 +204,19 @@ zk.zuml.Parser = {
 		return cwgts.length <= 1 ? cwgts[0] : cwgts;
 	},
 	/** Parse the iZUML into widgets
-	 * @param String node the id of the root component
+	 * @param String nodeId the id of the root component
 	 * @param Map opts a map of options
 	 * @param Map args a map of arguments
 	 * @param Function fn the function to register for execution later
 	 * @return zk.Widget
 	 */
-	createAt: function (node, opts, args, fn) {
+	createAt: function (nodeId, opts, args, fn) {
 		if (typeof args == 'function' && !fn) {
 			fn = args;
 			args = null;
 		}
 
-		node = jq(node)[0];
+		let node = jq(nodeId)[0];
 		var txt = _innerText(node);
 		if (!txt) return;
 
