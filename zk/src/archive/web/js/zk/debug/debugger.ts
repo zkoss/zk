@@ -1,4 +1,4 @@
-/* debugger.js
+/* debugger.ts
 
 	Purpose:
 		
@@ -17,7 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.loadCSS(zk.ajaxURI('web/js/zk/debug/debugger.css.dsp', {resource: true}));
 
 function _space(deep) {
-	var out = [];
+	var out: string[] = [];
 	for (; deep-- > 0;)
 		out.push('&nbsp;&nbsp;&nbsp;&nbsp;');
 	return out.join('');
@@ -117,7 +117,7 @@ function _dumpAttrs0(out, nm, wgt) {
 }
 function _dumpAttrs(wgt) {
 	var out = [],
-		later = [];
+		later: string[] = [];
 		
 	for (var nm in wgt) {
 		if (attrsLater[nm]) {
@@ -343,7 +343,7 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 		this.out.push(_space(deep), this._parseAttribute(content, isSingle), isEmpty ? '' : '<br/>');
 	},
 	_parseAttribute: function (content, isSingle) {
-		var out = [];
+		var out: string[] = [];
 		for (var odd, start, c, i = 0, j = content.length; i < j; i++) {
 			c = content.charAt(i);
 			switch (c) {

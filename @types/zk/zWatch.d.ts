@@ -41,7 +41,7 @@ declare namespace zk {
 
     interface ZWatch {
         fire(name: string, origin: any, opts?: Partial<FireOptions>, ...vararg: any[]): void;
-        fireDown(name: string, origin: any, opts?: Partial<FireOptions>, ...vararg: any[]): void;
+        fireDown(name: string, origin: any, opts?: Partial<FireOptions> | null, ...vararg: any[]): void;
         listen(infs: Partial<ClientActivity>): void;
         unlisten(infs: Partial<ClientActivity>): void;
         unlistenAll(name: string): void;

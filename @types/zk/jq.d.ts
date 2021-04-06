@@ -59,14 +59,14 @@ declare namespace zk {
         j2d(s: string): Date;
         newFrame(id: string, src?: string, style?: string | null): HTMLIFrameElement;
         newHidden(nm: string, val: string, parent?: Node): HTMLInputElement;
-        newStackup(el: Node, id: string, anchor?: Node): HTMLIFrameElement;
+        newStackup(el: Node | null, id: string, anchor?: Node): HTMLIFrameElement;
         nodeName(el: Node): string;
         nodeName(el: Node, ...tag: string[]): boolean;
         onSyncScroll(wgt: any): void;
         onzsync(obj: any): void;
         parseStyle(style: string): {[key: string]: string};
         px(v: number): string;
-        px0(v: number): string;
+        px0(v: number | null | undefined): string;
         scrollbarWidth(): number;
         toJSON(obj: any, replace?: (key: any, value: any) => any): string;
         uaMatch(ua: string): { browser: string; version: string };
@@ -112,6 +112,7 @@ interface JQuery {
     append(widget: zk.Widget, dt?: zk.Desktop): this;
     before(widget: zk.Widget, dt?: zk.Desktop): this;
     prepend(widget: zk.Widget, dt?: zk.Desktop): this;
+    absolutize(): this;
 }
 
 declare namespace JQuery {
@@ -126,7 +127,7 @@ declare namespace JQuery {
         filterMetaData(data: Record<string, unknown>): zk.EventMetaData;
         fire(el: Element, evtnm: string): void;
         stop(evt: Event): void;
-        zk(evt: Event, wgt: zk.Widget): zk.Event;
+        zk(evt: Event, wgt?: zk.Widget): zk.Event;
     }
 }
 

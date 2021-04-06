@@ -1,4 +1,4 @@
-/* domopera.js
+/* domopera.ts
 
 	Purpose:
 		
@@ -17,16 +17,17 @@ zk.copy(zjq.prototype, {
 		//Fix opera bug (see the page function)
 		// If tag is "img" or "tr", the "div" element's scrollTop should be ignored.
 		// Because the offsetTop of element "img" or "tr" is excluded its scrollTop.
-		var el = this.jq[0],
-			normaltag = !jq.nodeName(el, 'tr', 'img'),
-			t = 0, l = 0;
+		var node = this.jq[0],
+			normaltag = !jq.nodeName(node, 'tr', 'img'),
+			t = 0, l = 0,
+			el: HTMLElement | null = node;
 		do {
 			var tag = jq.nodeName(el);
 			if (tag == 'body' || (normaltag && tag == 'div')) {
 				t += el.scrollTop || 0;
 				l += el.scrollLeft || 0;
 			}
-			el = el.parentNode;
+			el = el.parentElement;
 		} while (el);
 		return [l, t];
 	}

@@ -1,4 +1,4 @@
-/* drag.js
+/* drag.ts
 
 	Purpose:
 		
@@ -17,27 +17,29 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _drags = [],
+	var _drags: zk.Draggable[] = [],
 		_dragging = {},
 		_actTmout, //if not null, it means _activate() is called but not really activated
 		_stackup, _activedg, _initPt, _dnEvt,
 		_lastPt, _lastScrlPt;
 
-	function _activate(dg, devt, pt) {
+	// eslint-disable-next-line no-undef
+	function _activate(dg: zk.Draggable, devt: jQuery.Event, pt: number[]): void {
 		_actTmout = setTimeout(function () {
 			_actTmout = null;
 			//bug: 3027322 & 2924049: Wrong target when dragging a sub div in IE browsers
-			if (!(zk.ie < 11) || !_activedg || _activedg.node == dg.node)
+			if (!(zk.ie && zk.ie < 11) || !_activedg || _activedg.node == dg.node)
 				_activedg = dg;
 		}, dg.opts.delay);
 		_initPt = pt;
 	}
-	function _deactivate() {
+	function _deactivate(): void {
 		_activedg = null;
 		if (_dnEvt) setTimeout(function () {_dnEvt = null;}, 0);
 	}
 
-	function _docmousemove(devt) {
+	// eslint-disable-next-line no-undef
+	function _docmousemove(devt: jQuery.Event): void {
 		if (!_activedg || _activedg.dead) return;
 
 		var evt = jq.Event.zk(devt),
@@ -55,7 +57,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			//test/dragdrop.zul: it seems less stall-dragging when dragging
 			//IMG (but still happens if dragging fast)
 	}
-	function _docmouseup(devt) {
+	// eslint-disable-next-line no-undef
+	function _docmouseup(devt: jQuery.Event): void {
 		if (_actTmout) {
 			clearTimeout(_actTmout);
 			_actTmout = null;
@@ -78,39 +81,43 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			adg.destroy();
 		}
 	}
-	function _dockeypress(devt) {
+	// eslint-disable-next-line no-undef
+	function _dockeypress(devt: jQuery.Event): void {
 		if (_activedg) _activedg._keypress(devt);
 	}
 
 	//default effect//
-	function _defStartEffect(dg) {
+	function _defStartEffect(dg: zk.Draggable): void {
 		var node = dg.node;
-		node._$opacity = jq(node).css('opacity');
-		_dragging[node] = true;
-		new zk.eff.Opacity(node, {duration: 0.2, from: node._$opacity, to: 0.7});
+		if (node) {
+			node['_$opacity'] = jq(node).css('opacity');
+			_dragging[node.toString()] = true;
+		}
+		new zk.eff.Opacity(node, {duration: 0.2, from: node ? node['_$opacity'] : null, to: 0.7});
 	}
-	function _defEndEffect(dg) {
+	function _defEndEffect(dg: zk.Draggable): void {
 		var node = dg.node,
-			toOpacity = typeof node._$opacity == 'number' ? node._$opacity : 1.0;
+			toOpacity = typeof node!['_$opacity'] == 'number' ? node!['_$opacity'] : 1.0;
 		new zk.eff.Opacity(node, {duration: 0.2, from: 0.7,
 			to: toOpacity, queue: {scope: '_draggable', position: 'end'},
 			afterFinish: function () {
-				delete _dragging[node];
+				delete _dragging[node!.toString()];
 			}
 		});
 	}
-	function _defRevertEffect(dg, offset) {
+	function _defRevertEffect(dg: zk.Draggable, offset: [number, number]): void {
 		var dx, dy;
 		if ((dx = offset[0]) || (dy = offset[1])) {
 			var node = dg.node,
-				orgpos = node.style.position,
+				orgpos = node?.style.position,
 				dur = Math.sqrt(Math.abs(dy ^ 2) + Math.abs(dx ^ 2)) * 0.02;
 			new zk.eff.Move(node, { x: -dx, y: -dy,
 				duration: dur, queue: {scope: '_draggable', position: 'end'},
-				afterFinish: function () {node.style.position = orgpos;}});
+				afterFinish: function () {node!.style.position = orgpos || '';}});
 		}
 	}
-	function _disableDragStart(evt) {
+	// eslint-disable-next-line no-undef
+	function _disableDragStart(evt: jQuery.Event): boolean {
 		return jq.nodeName(evt.target, 'input', 'textarea');
 	}
 /** A draggable object used to make a DOM element draggable.
@@ -301,7 +308,7 @@ String scroll; //DOM Element's ID</code></pre>
 	 * If omitted and control is a widget, {@link zk.Widget#$n} is assumed.
 	 * @param Map opts [optional] options. Refer to {@link #opts} for allowed options.
 	 */
-	$init: function (control, node, opts) {
+	$init: function (this: zk.Draggable, control, node, opts) {
 		if (!_stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
 			_stackup = jq.newStackup(null, 'z_ddstkup');
@@ -342,7 +349,7 @@ String scroll; //DOM Element's ID</code></pre>
 		this.opts = opts;
 		this.dragging = false;
 
-		jq(this.handle).on('zmousedown', this.proxy(this._mousedown))
+		jq(this.handle!).on('zmousedown', this.proxy(this._mousedown))
 				// issue in test/dragdrop.zul for dragging image file
 				.on('dragstart', _disableDragStart);
 
@@ -355,14 +362,14 @@ String scroll; //DOM Element's ID</code></pre>
 	},
 	/** Destroys this draggable object. This method must be called to clean up, if you don't want to associate the draggable feature to a DOM element.
 	 */
-	destroy: function () {
+	destroy: function (this: zk.Draggable) {
 		if (this.dragging) {
 			// Bug B50-3285142: Drag fails to clear up ghost when widget is detached
 			// destroy later
 			this._suicide = true;
 			return;
 		}
-		jq(this.handle).off('zmousedown', this.proxy(this._mousedown))
+		jq(this.handle!).off('zmousedown', this.proxy(this._mousedown))
 				.off('dragstart', _disableDragStart);
 
 		//unregister
@@ -401,7 +408,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 		zk.dragging = this.dragging = true;
 
-		var node = this.node,
+		var node = this.node as HTMLElement,
 			opt;
 		if (opt = this.opts.ghosting)
 			if (typeof opt == 'function') {
@@ -421,7 +428,7 @@ String scroll; //DOM Element's ID</code></pre>
 				this.z_orgpos = node.style.position; //Bug 1514789
 				if (this.z_orgpos != 'absolute')
 					jq(node).absolutize();
-				node.parentNode.insertBefore(this._clone, node);
+				node.parentNode?.insertBefore(this._clone, node);
 			}
 
 		if (this.opts.stackup) {
@@ -430,7 +437,7 @@ String scroll; //DOM Element's ID</code></pre>
 			else {
 				this._stackup = _stackup;
 				this._syncStackup();
-				node.parentNode.insertBefore(_stackup, node);
+				node.parentNode?.insertBefore(_stackup, node);
 			}
 		}
 
@@ -580,7 +587,7 @@ String scroll; //DOM Element's ID</code></pre>
 				}, evt.data), {ignorable: true});
 			}
 		}
-		_deactivate(this);
+		_deactivate();
 		var self = this;
 		setTimeout(function () {
 			zk.dragging = false;
@@ -589,11 +596,11 @@ String scroll; //DOM Element's ID</code></pre>
 			//we have to reset it later since event is fired later (after onmouseup)
 	},
 
-	_mousedown: function (devt) {
+	_mousedown: function (this: zk.Draggable, devt) {
 		var node = this.node,
 			evt = jq.Event.zk(devt),
 			target = devt.target;
-		if (_actTmout || _dragging[node] || evt.which != 1
+		if (_actTmout || (node && _dragging[node.toString()]) || evt.which != 1
 			|| (zk.webkit && jq.nodeName(target, 'select'))
 			|| (zk(target).isInput() && this.control != zk.Widget.$(target)))
 			return;
@@ -609,14 +616,14 @@ String scroll; //DOM Element's ID</code></pre>
 
 		// Bug ZK-427
 		// and ZK-484 (get the pos variable after invoking ignoredrag function)
-		var zkn = zk(node),
+		var zkn = zk(node!),
 			pos = zkn.cmOffset(),
 			ofs = [pt[0] - pos[0], pt[1] - pos[1]],
 			jqBorders = jq.borders, v;
 
 		// ZK-488 node.clientWidth and node.clientHeight are 0 if no scrollbar on IE9
-		if ((v = node.clientWidth) && ofs[0] > (v + zkn.sumStyles('l', jqBorders)) && ofs[0] < (node.offsetWidth - zkn.sumStyles('r', jqBorders))
-		|| (v = node.clientHeight) && ofs[1] > (v + zkn.sumStyles('t', jqBorders)) && ofs[1] < (node.offsetHeight - zkn.sumStyles('b', jqBorders))) //scrollbar
+		if ((v = node?.clientWidth) && ofs[0] > (v + zkn.sumStyles('l', jqBorders)) && ofs[0] < (node.offsetWidth - zkn.sumStyles('r', jqBorders))
+		|| (v = node?.clientHeight) && ofs[1] > (v + zkn.sumStyles('t', jqBorders)) && ofs[1] < (node.offsetHeight - zkn.sumStyles('b', jqBorders))) //scrollbar
 			return;
 
 		this.offset = ofs;
@@ -640,7 +647,7 @@ String scroll; //DOM Element's ID</code></pre>
 			this._finishDrag(evt, true);
 			evt.stop();
 		} else
-			_deactivate(this);
+			_deactivate();
 	},
 
 	_draw: function (point, evt) {
@@ -719,9 +726,9 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 	},
 
-	_scroll: function () {
+	_scroll: function (this: zk.Draggable) {
 		var current = new Date(),
-			delta = current - this.lastScrolled;
+			delta = current.valueOf() - this.lastScrolled.valueOf();
 		this.lastScrolled = current;
 		if (this.opts.scroll == window) {
 			if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
@@ -748,7 +755,7 @@ String scroll; //DOM Element's ID</code></pre>
 		}
 
 		if (this.opts.change) {
-			var devt = window.event ? jq.event.fix(window.event) : null,
+			var devt = window.event ? jq.event['fix'].apply(jq.event, window.event) : null,
 				evt = devt ? jq.Event.zk(devt) : null;
 			this.opts.change(this,
 				evt ? [evt.pageX, evt.pageY] : _lastPt, evt);

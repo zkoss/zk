@@ -1,4 +1,4 @@
-/* math.js
+/* math.ts
 
 	Purpose:
 		
@@ -145,7 +145,7 @@ zk.Long = zk.$extends(zk.Object, {
 	 * instead.
 	 * @return String
 	 */
-	$toString: _zkf = function () { //toString is reserved keyword for IE
+	$toString: _zkf = function (this: zk.Long) { //toString is reserved keyword for IE
 		return this._value;
 	},
 	/** Returns a Locale-dependent string for this long integer.

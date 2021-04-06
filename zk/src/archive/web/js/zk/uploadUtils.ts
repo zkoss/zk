@@ -1,4 +1,4 @@
-/* uploadUtils.js
+/* uploadUtils.ts
 
         Purpose:
                 

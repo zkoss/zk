@@ -1,4 +1,4 @@
-/* msgfmt.js
+/* msgfmt.ts
 
 	Purpose:
 		
