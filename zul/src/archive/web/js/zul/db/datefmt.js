@@ -496,7 +496,8 @@ zk.fmt.Date = {
 					var ydelta = 0;
 					if (cc == 'y') ydelta = localizedSymbols.YDELTA || this.getYDelta(val._moment.toDate(), localeDateTimeFormat);
 					var y = val.getFullYear() + ydelta;
-					if (len <= 3) txt += _digitFixed(y % Math.pow(10, len), len);
+					// ZK-4851: the year is truncated to 2 digits only if the number of pattern letters is 2
+					if (len == 2) txt += _digitFixed(y % Math.pow(10, len), len);
 					else txt += _digitFixed(y, len);
 					break;
 				case 'M':
