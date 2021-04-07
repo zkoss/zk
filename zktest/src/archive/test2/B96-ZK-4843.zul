@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4843.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Apr 07 15:18:11 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		click the button, you should not see the number after "onResponse performance time:" larger then 1000.
+
+		or open the browser devtool and record the performance to check detail.
+	</label>
+	<button label="any event" onClick="">
+		<attribute w:name="onClick"><![CDATA[
+			performance.mark('start');
+		]]></attribute>
+	</button>
+<!--	    13.2 sec   <div forEach="${[0,1,2,3,4,5,6,7,8,9, 0,1,2,3,4,5,6,7,8,9]}">-->
+	    3.7 sec  <div forEach="${[0,1,2,3,4,5,6,7,8,9]}">
+<!--	1.0 sec <div forEach="${[0,1,2,3,4]}">-->
+		<div forEach="${[0,1,2,3,4,5,6,7,8,9]}">
+			<combobox width="50px" forEach="${[0,1,2,3,4,5,6,7,8,9]}">
+				<comboitem label="yes"/>
+				<comboitem label="no"/>
+			</combobox>
+		</div>
+	</div>
+
+	<script><![CDATA[
+		var pmeter = {
+			onResponse: function () {
+				performance.mark('done');
+				var hasStart = performance.getEntriesByName('start').length > 0;
+				if (hasStart) {
+					performance.measure('result', 'start', 'done');
+					zk.log('onResponse performance time: ' + this.getDuration());
+				}
+				performance.clearMarks();
+			},
+			getDuration: function () {
+				try {
+					var result = performance.getEntriesByName('result');
+					return result.length > 0 ? result[0].duration : 0;
+				} finally {
+					performance.clearMeasures();
+				}
+			}
+		};
+		zWatch.listen({
+			onResponse: pmeter
+		});
+	]]></script>
+</zk>
