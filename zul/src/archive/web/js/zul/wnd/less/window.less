@@ -116,7 +116,7 @@
 .z-messagebox {
 	display: inline-block;
 	white-space: normal;
-	padding: @messageboxPadding;
+	width: @messageboxWindowWidth - @messageboxIconMarginLeft - @messageboxIconSize - @messageboxPaddingHorizontal;
 
 	&-window {
 		padding: @messageboxWindowPadding;
@@ -148,7 +148,7 @@
 
 	&-icon {
 		font-size: 30px;
-		.displaySize(inline-block, @baseBarWidth, @baseBarHeight);
+		.displaySize(inline-block, @messageboxIconSize, @messageboxIconSize);
 		border: 0;
 		background-repeat: no-repeat;
 		text-align: center;
@@ -177,5 +177,10 @@
 
 	&-error {
 		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
+	}
+
+	.z-label {
+		display: inline-block;
+		padding: @messageboxPadding;
 	}
 }
