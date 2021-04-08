@@ -114,9 +114,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this._shallRedoCss = null;
 		}
 		//ZK-3204 check popup position after onChanging
-		if (this._shallCheckPopupPosition || (args[1] && args[1].rtags && args[1].rtags.onChanging && this.isOpen())) {
+		if (args[1] && args[1].rtags && args[1].rtags.onChanging && this.isOpen()) {
 			this._checkPopupPosition();
-			this._shallCheckPopupPosition = false;
 			// F85-ZK-3827: Combobox empty search message
 			this._fixEmptySearchMessage();
 		}
@@ -256,14 +255,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 
 	//super
-	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments);
-		this._shallCheckPopupPosition = true; // Bug ZK-2409
-	},
-	onChildRemoved_: function (child) {
-		this.$supers('onChildRemoved_', arguments);
-		this._shallCheckPopupPosition = true; // Bug ZK-2409
-	},
 	open: function (opts) {
 		this.$supers('open', arguments);
 		this._hilite(); //after _open is set
