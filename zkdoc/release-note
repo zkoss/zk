@@ -48,6 +48,7 @@ ZK 9.6.0
   ZK-4835: Browsers supporting both touch and mouse fails to register mouse events following ZK-4301
   ZK-4817: listgroup open/close triggers selection (mobile)
   ZK-4843: combobox checkPopupPosition performance
+  ZK-4840: navbar navitem icon/text alignment
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
