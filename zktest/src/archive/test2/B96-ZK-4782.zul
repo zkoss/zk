@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4782.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 7 11:50:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<goldenlayout id="gl" vflex="1" hflex="1">
+		<attribute name="areas">
+			A B
+		</attribute>
+		<goldenpanel area="A" title="Panel Blue">
+			<div id="d1" vflex="1" hflex="1" style="background-color:yellow !important">
+				<label value="The height of these two blocks should be the same"/>
+			</div>
+		</goldenpanel>
+		<goldenpanel area="B" title="Panel Red">
+			<div id="d2" vflex="1" hflex="1" style="background-color:red !important">
+				<label value="The height of these two blocks should be the same"/>
+			</div>
+		</goldenpanel>
+	</goldenlayout>
+</zk>
+
