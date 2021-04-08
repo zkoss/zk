@@ -49,6 +49,7 @@ ZK 9.6.0
   ZK-4817: listgroup open/close triggers selection (mobile)
   ZK-4843: combobox checkPopupPosition performance
   ZK-4840: navbar navitem icon/text alignment
+  ZK-4782: vflex on goldenpanel doesn't work as expected
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
