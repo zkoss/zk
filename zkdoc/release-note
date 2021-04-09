@@ -51,6 +51,7 @@ ZK 9.6.0
   ZK-4840: navbar navitem icon/text alignment
   ZK-4782: vflex on goldenpanel doesn't work as expected
   ZK-4851: Datebox fails with default DateFormat from Java 11.0.2+
+  ZK-4831: parseStyle splits css string incorrectly
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

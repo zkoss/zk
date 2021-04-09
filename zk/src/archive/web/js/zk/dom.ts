@@ -2280,7 +2280,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 		if (style) {
 			var pairs = style.split(';');
 			for (var j = 0, len = pairs.length; j < len;) {
-				var v = pairs[j++].split(':'),
+				var v = pairs[j++].split(/:(.+)/),
 					nm = v.length > 0 ? v[0].trim() : '';
 				if (nm)
 					map[nm] = v.length > 1 ? v[1].trim() : '';
