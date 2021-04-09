@@ -15,15 +15,14 @@
 	<description>ZK XUL components (XML user interface markup language)</description>
 	<dependencies>
 		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zk</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>servlet-api</artifactId>
-		    <version>2.5</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>

@@ -33,8 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.IOUtils;
-
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -562,9 +560,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		if (sourceMapManager != null) {
 			String sourceMapContent = "";
 			final InputStream isCopy = reqctx.getResourceAsStream(path, locate);
-			String jsContent = IOUtils.toString(isCopy);
+			String jsContent = new String(Files.readAll(isCopy));
 			if (isSourceMap != null)
-				sourceMapContent = IOUtils.toString(isSourceMap);
+				sourceMapContent = new String(Files.readAll(isSourceMap));
 			String sourceMapSourcePath = path;
 			if (!sourceMapSourcePath.endsWith(".src.js")) {
 				String basePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3);

@@ -122,7 +122,7 @@ public class Wpds {
 	 * Load moment.js timezone data.
 	 * @since 8.5.1
 	 */
-	public static final String outMomentTimezoneJavascript(ServletRequest request, ServletResponse response)
+	public static final String outMomentTimezoneJavascript()
 			throws IOException {
 		final StringBuffer result = new StringBuffer();
 		String path = Library.getProperty("org.zkoss.zk.moment.timezone.path");

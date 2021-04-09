@@ -15,15 +15,24 @@
 	<description>ZK Kernel</description>
 	<dependencies>
 		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zweb</artifactId>
-			<version>${project.version}</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.portlet</groupId>
 			<artifactId>portlet-api</artifactId>
-			<version>2.0</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.common</groupId>
+			<artifactId>zweb</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
@@ -62,19 +71,6 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.google.javascript</groupId>
 			<artifactId>closure-compiler-unshaded</artifactId>
 			<version>v20200426</version>
@@ -84,6 +80,10 @@
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkwebfragment</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
