@@ -16,8 +16,10 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<label multiline="true">
 		1. Test with all themes.
 		2. While word-break fail(alert 1 and messagebox 1), should provide scrollbar.
-		3. messagebox 2 width shoud be 600px.
+		3. While word-break not fail(alert 2 and messagebox 2), should not provide scrollbar.
+		4. messagebox 2 width shoud be 600px.
 	</label>
+	<div>word-break fail</div>
 	<button id="btn1" label="alert 1" onClick='throw new Exception("cannot find any method that is annotated for
 	 the command showHello with @Command in j21eol4p$v0.HelloViewModel@fff330ce at
 	[file:/tmp/resource463596934025823ffdsfafdasf0562tmp/21eol4p/0/index.zul, line:4]");'/>
@@ -26,11 +28,13 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 			Messagebox.show("[file:/tmp/resource463596934025823ffdsfafdasf0562tmp/21eol4p/0/index.zul, line:4]", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
 		]]></attribute>
 	</button>
+	<div>word-break not fail</div>
+	<button id="btn2" label="alert 2" onClick='throw new Exception("this is a text which should line break without causing any scrollbars.");'/>
 	<button label="messagebox2">
 		<attribute name="onClick"><![CDATA[
 			Map params = new HashMap();
 			params.put("width", "600px");
-			Messagebox.show("Information is pressed.",null, null, null, Messagebox.INFORMATION, null,null, params);
+			Messagebox.show("this is a text which should line break without causing any scrollbars.",null, null, null, Messagebox.INFORMATION, null,null, params);
 		]]></attribute>
 	</button>
 </zk>
