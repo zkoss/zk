@@ -74,10 +74,11 @@ function _doEvt(type, evt, jqevt) {
 }
 function delegateEventFunc (event) {
 	var touchEvt = event.originalEvent,
-		touches = touchEvt.touches;
+		touches = touchEvt.touches,
+		sourceCapabilities = touchEvt.sourceCapabilities;
 	if (touches && touches.length > 1) return;
 	if (touchEvt instanceof MouseEvent
-		&& touchEvt.sourceCapabilities.firesTouchEvents) return; // handled by touch handler
+		&& sourceCapabilities && sourceCapabilities.firesTouchEvents) return; // handled by touch handler
 
 	var evt,
 		changedTouches = touchEvt.changedTouches ? touchEvt.changedTouches[0] : null;
