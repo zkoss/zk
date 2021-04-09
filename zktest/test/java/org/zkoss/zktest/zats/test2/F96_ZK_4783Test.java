@@ -22,13 +22,6 @@ public class F96_ZK_4783Test extends WebDriverTestCase {
 		connect();
 		click(jq("@a:contains(Default)"));
 		testMessagebox(480);
-
-		JQuery msgBox = jq(".z-messagebox-window");
-		click(msgBox.find("@button"));
-		waitResponse();
-		click(jq("@button:contains(messagebox2)"));
-		waitResponse();
-		Assert.assertEquals(600, msgBox.outerWidth());
 	}
 	@Test
 	public void testBreeze() {
@@ -71,5 +64,18 @@ public class F96_ZK_4783Test extends WebDriverTestCase {
 		waitResponse();
 		Assert.assertTrue(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
 		Assert.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
+		click(msgBox.find("@button"));
+
+		click(jq("@button:contains(alert 2)"));
+		waitResponse();
+		Assert.assertFalse(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
+		Assert.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
+		click(msgBox.find("@button"));
+
+		click(jq("@button:contains(messagebox2)"));
+		waitResponse();
+		Assert.assertFalse(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
+		Assert.assertEquals(600, msgBox.outerWidth());
+		click(msgBox.find("@button"));
 	}
 }

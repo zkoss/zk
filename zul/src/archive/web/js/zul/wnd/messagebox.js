@@ -1,9 +1,13 @@
 zul.wnd.Messagebox = {
 	onBind: function (label, minWidth) {
 		var win = label.$o(),
-			outer = win.$n();
+			outer = win.$n(),
+			msgbox = label.$n().parentElement,
+			outerOrigWd = outer.offsetWidth;
+
 		if (minWidth) {
 			outer.style.width = jq.px0(Math.min(zk.parseInt(minWidth), jq.innerWidth() - 20));
+			msgbox.style.width = jq.px0(zk.parseInt(minWidth) - (outerOrigWd - msgbox.offsetWidth));
 		}
 		zk(outer).center();
 		var top = zk.parseInt(outer.style.top), y = jq.innerY();
