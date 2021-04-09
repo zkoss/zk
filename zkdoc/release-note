@@ -50,12 +50,14 @@ ZK 9.6.0
   ZK-4843: combobox checkPopupPosition performance
   ZK-4840: navbar navitem icon/text alignment
   ZK-4782: vflex on goldenpanel doesn't work as expected
+  ZK-4851: Datebox fails with default DateFormat from Java 11.0.2+
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
     If you prefer to use the previous generator, use org.zkoss.zk.ui.impl.LegacyDesktopIdGenerator.
   + Due to ZK-4783, the hbox of message box is substituted by DIV.
   + Deprecated the method of isEditionValid() and encodeWithZK() of org.zkoss.zk.fn.ZkFns and core.dsp.tld.
+  + Datebox format with a single y pattern letter will not be truncated to 2 digits year according to the Unicode specification.
 
    --------
 ZK 9.5.1
