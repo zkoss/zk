@@ -62,7 +62,7 @@ public class F96_ZK_4783Test extends WebDriverTestCase {
 
 		click(jq("@button:contains(messagebox1)"));
 		waitResponse();
-		Assert.assertFalse(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
+		Assert.assertTrue(Boolean.valueOf(zk(msgBoxViewport).eval("hasHScroll()")));
 		Assert.assertEquals(width, Integer.valueOf(msgBox.outerWidth()));
 		click(msgBox.find("@button"));
 
