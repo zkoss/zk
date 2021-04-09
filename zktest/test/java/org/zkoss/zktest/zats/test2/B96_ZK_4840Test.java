@@ -32,7 +32,7 @@ public class B96_ZK_4840Test extends WebDriverTestCase {
 			if (textOffsetLeft == -1)
 				textOffsetLeft = target;
 			else
-				Assert.assertEquals("you should see all the " + targetName + " with consistent text alignment", textOffsetLeft, target);
+				Assert.assertEquals("you should see all the " + targetName + " with consistent text alignment", textOffsetLeft, target, 1);
 		}
 	}
 }
