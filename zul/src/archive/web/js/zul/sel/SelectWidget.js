@@ -41,9 +41,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return; // update by server's state
 
 		if (--box._nUpdHeaderCM <= 0 && box.desktop && box._headercm && box._multiple) {
-			var zcls = zk.Widget.$(box._headercm).getZclass() + '-checked',
-				$headercm = jq(box._headercm);
-			$headercm[box._isAllSelected() ? 'addClass' : 'removeClass'](zcls);
+			var headerWgt = zk.Widget.$(box._headercm),
+				zcls = headerWgt.getZclass() + '-checked',
+				$headercm = jq(box._headercm),
+				isAllSelected = box._isAllSelected();
+			$headercm[isAllSelected ? 'addClass' : 'removeClass'](zcls);
+			headerWgt._checked = isAllSelected;
 		}
 	}
 	function _isButton(evt) {
@@ -1118,9 +1121,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//B70-ZK-1953: if selectedItems is empty return false.
 		if (!this._selItems.length) {
 			if (this._headercm && this._model && !this.$hasService('onUpdateSelectAll')) {
-				var zcls = zk.Widget.$(this._headercm).getZclass() + '-checked',
+				var headerWgt = zk.Widget.$(this._headercm),
+					zcls = headerWgt.getZclass() + '-checked',
 					$headercm = jq(this._headercm);
 				$headercm.removeClass(zcls);
+				headerWgt._checked = false;
 			}
 			return false;
 		}
@@ -1128,9 +1133,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!this.$hasService('onUpdateSelectAll')) {
 				this.$fireService('onUpdateSelectAll', null, function (v) {
 					if (this.desktop && this._headercm && this._multiple) {
-						var zcls = zk.Widget.$(this._headercm).getZclass() + '-checked',
+						var headerWgt = zk.Widget.$(this._headercm),
+							zcls = headerWgt.getZclass() + '-checked',
 							$headercm = jq(this._headercm);
 						$headercm[v ? 'addClass' : 'removeClass'](zcls);
+						headerWgt._checked = v;
 						this.$$selectAll = v;
 					}
 				});
