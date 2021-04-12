@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4806.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Apr 12 14:58:56 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Test with iceblue/iceblue_c:
+			borderlayout region with whitespace title(left borderlayout) should have same header height to the borderlayout region with normal title(right borderlayout).
+	</label>
+	<hlayout height="500px">
+		<borderlayout width="500px" height="500px">
+			<north title=" " height="150px" collapsible="true"></north>
+			<west title=" " width="200px" collapsible="true"></west>
+			<east title=" " width="200px" collapsible="true"></east>
+			<south title=" " height="150px" collapsible="true"></south>
+		</borderlayout>
+		<borderlayout width="500px" height="500px">
+			<north title="north" height="150px" collapsible="true"></north>
+			<west title="west" width="200px" collapsible="true"></west>
+			<east title="east" width="200px" collapsible="true"></east>
+			<south title="south" height="150px" collapsible="true"></south>
+		</borderlayout>
+	</hlayout>
+</zk>
