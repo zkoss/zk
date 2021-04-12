@@ -53,6 +53,7 @@ ZK 9.6.0
   ZK-4851: Datebox fails with default DateFormat from Java 11.0.2+
   ZK-4831: parseStyle splits css string incorrectly
   ZK-4806: borderlayout region with whitespace title
+  ZK-4846: Select all checkbox ignores click (tree/listbox)
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

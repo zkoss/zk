@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4846.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 9 11:50:11 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label><![CDATA[
+		1. click each item once to trigger the "select-all" checkbox checked.
+		2. click the "select-all" checkbox, it should be unchecked.
+	]]></label>
+	<listbox id="lb" checkmark="true">
+		<listhead>
+			<listheader label="Listbox"/>
+		</listhead>
+	</listbox>
+	<tree id="tr" checkmark="true">
+		<treecols>
+			<treecol label="Tree"/>
+		</treecols>
+	</tree>
+	<zscript><![CDATA[
+        DefaultTreeNode root = new DefaultTreeNode("root", Arrays.asList(new DefaultTreeNode[] {
+            new DefaultTreeNode("111"),
+            new DefaultTreeNode("222"),
+            new DefaultTreeNode("333"),
+        }));
+        DefaultTreeModel treeModel = new DefaultTreeModel(root);
+        treeModel.setMultiple(true);
+        tr.setModel(treeModel);
+
+        ListModelList listModel = new ListModelList(Arrays.asList(new String[]{"aaa", "bbb", "ccc"}));
+        listModel.setMultiple(true);
+        lb.setModel(listModel);
+    ]]></zscript>
+</zk>
