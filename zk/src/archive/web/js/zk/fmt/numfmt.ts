@@ -43,11 +43,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function compareHalf(valStr, ri): number {
 		var result,
-			base = '5';
+			base = 5;
 		for (var j = ri, len = valStr.length; j < len; ++j) {
-			result = valStr.charAt(j) - base.charCodeAt(0);
+			result = parseInt(valStr.charAt(j)) - base;
 			if (j == ri) { //first digit
-				base = '0';
+				base = 0;
 			}
 			if (result != 0)
 				return result;
