@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 declare namespace zk {
     interface ZJQ {
+        _sfKeys: Record<string, number>;
+        _evt: Event;
         eventTypes: {[key: string]: string};
         src0: string;
         prototype: zk.JQZK;
@@ -22,7 +24,7 @@ declare namespace zk {
         _afterOuter(o: Element): void;
         _beforeOuter(el: Element): Node;
         _cleanVisi(n: Element): void;
-        _fixClick(el: Event): void;
+        _fixClick(el: Event | JQuery.ClickEvent): void;
         _fixCSS(el: Element): void;
         _fixedVParent(el: Element, option?: boolean): void;
         _fixIframe(el: Element): void;

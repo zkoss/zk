@@ -1,4 +1,4 @@
-/* domie.js
+/* domie.ts
 
 	Purpose:
 		Enhance/fix jQuery for Safari
@@ -14,13 +14,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	//detect </script>
-	function containsScript(html) {
+	function containsScript(html: string): boolean {
 		if (html)
 			for (var j = 0, len = html.length; (j = html.indexOf('</', j)) >= 0 && j + 8 < len;)
 				if (html.substring(j += 2, j + 6).toLowerCase() == 'script')
 					return true;
+		return false;
 	}
-	function noSkipBfUnload() {
+	function noSkipBfUnload(): void {
 		zk.skipBfUnload = false;
 	}
 
@@ -40,7 +41,7 @@ zk.override(jq.fn, _jq, {
 			&& !jq.nodeName(el, 'td', 'th', 'table', 'tr',
 			'caption', 'tbody', 'thead', 'tfoot', 'colgroup', 'col')
 			&& !containsScript(html)) {
-				var o = zjq._beforeOuter(el);
+				var o = zjq._beforeOuter(el) as Element;
 
 				jq.cleanData(el.getElementsByTagName('*'));
 				jq.cleanData([el]);
@@ -53,7 +54,7 @@ zk.override(jq.fn, _jq, {
 		} catch (e) {
 			zk.debugLog(e.message || e);
 		}
-		return done ? this : _jq.replaceWith.apply(this, arguments);
+		return done ? this : _jq['replaceWith'].apply(this, arguments);
 	}
 });
 zk.override(zjq, _zjq, {
@@ -62,13 +63,15 @@ zk.override(zjq, _zjq, {
 			oldDisplay = el.style.display;
 		el.className = '';
 		el.style.display = 'none';
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore: force reflow
 		if (el.offsetHeight);
 		el.className = old;
 		el.style.display = oldDisplay;
 	} : function (el) {
 		var zoom = el.style.zoom;
 		el.style.zoom = 1;
-		_zjq._fixCSS(el);
+		_zjq['_fixCSS'](el);
 		setTimeout(function () {
 			try {
 				el.style.zoom = zoom;
@@ -126,14 +129,14 @@ zk.copy(zjq, {
 	_afterOuter: zk.$void
 });
 
-	function _dissel() {
+	function _dissel(this: HTMLElement): void {
 		this.onselectstart = _dissel0;
 	}
-	function _dissel0(evt) {
+	function _dissel0(evt): boolean {
 		evt = evt || window.event;
 		return zk(evt.srcElement).isInput();
 	}
-	function _ensel() {
+	function _ensel(this: HTMLElement): void {
 		this.onselectstart = null;
 	}
 zk.copy(zjq.prototype, {
@@ -147,7 +150,7 @@ zk.copy(zjq.prototype, {
 	cellIndex: function () {
 		var cell = this.jq[0];
 		if (cell) {
-			var cells = cell.parentNode.cells;
+			var cells = cell.parentNode ? cell.parentNode.cells : [];
 			for (var j = 0, cl = cells.length; j < cl; j++)
 				if (cells[j] == cell)
 					return j;

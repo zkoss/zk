@@ -1,4 +1,4 @@
-/* flex.js
+/* flex.ts
 
 	Purpose:
 		
@@ -13,10 +13,10 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	function _getTextSize(zkc, zkp, zkpOffset) {
+	function _getTextSize(zkc, zkp, zkpOffset): [number, number] {
 		var $zkc = zkc.jq,
 			$prev = $zkc.prev(),
-			pos = [0, 0],
+			pos: [number, number] = [0, 0],
 			coldVal,
 			poldVal,
 			zs, ps;
@@ -62,7 +62,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	
 	// check whether the two elements are the same baseline, if so, we need to
 	// sum them together.
-	function _isSameBaseline(ref, cur, vertical) {
+	function _isSameBaseline(ref, cur, vertical): boolean {
 		if (vertical) {
 			var hgh = ref._hgh || (ref._hgh = ref.top + ref.height),
 				wdh = ref._wdh || (ref._wdh = ref.left + ref.width);
@@ -76,7 +76,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 
-	function _fixMinFlex(isVflex) {
+	function _fixMinFlex(isVflex?): ((wgt, wgtn, o, min) => number) {
 		var flexsz, sizePos, flex, offsetPos, marginPos, maxFlexPos, sumFlexPos,
 			index, contentPos;
 		if (isVflex) {
@@ -232,10 +232,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					size = hasChildren ? zk(wgt.$n('cave'))[offsetPos]() : max;
 
 				map[sizePos] = size + wgt[contentPos](size);
-				var s = wgt.setFlexSize_(map, true);
-				sz = {height: n.offsetHeight, width: (s && s.width) || n.offsetWidth};
-				if (sz && sz[sizePos] >= 0)
-					wgt[flexsz] = sz[sizePos] + margin;
+				var s = wgt.setFlexSize_(map, true),
+					szInfo = {height: n.offsetHeight, width: (s && s.width) || n.offsetWidth};
+				if (szInfo[sizePos] >= 0)
+					wgt[flexsz] = szInfo[sizePos] + margin;
 
 				wgt.afterChildrenMinFlex_(o);
 				
@@ -249,8 +249,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	var _fixMinVflex = _fixMinFlex(true),
 		_fixMinHflex = _fixMinFlex();
-	function _zero() {
+	function _zero(): 0 {
 		return 0;
+	}
+
+	interface MinFlexInfo {
+		wgt: zk.Widget;
+		wgtn: HTMLElement;
+		orient: string;
 	}
 
 zFlex = { //static methods
@@ -259,13 +265,13 @@ zFlex = { //static methods
 	 * as a result of doing both read and write in beforeSize.
 	 * @since 9.5.1
 	 */
-	beforeSizeForRead: function () {
+	beforeSizeForRead: function (this: zk.Widget) {
 		var wgt = this,
 			n = wgt.$n();
 		// ZK-4154 prevent from forced reflow
 		wgt._beforeSizeHasScroll = n && (n.scrollTop || n.scrollLeft);
 	},
-	beforeSize: function (ctl, opts, cleanup) {
+	beforeSize: function (this: zk.Widget, ctl, opts, cleanup) {
 		var wgt = this, p;
 		if (cleanup)
 			wgt.clearCachedSize_();
@@ -290,13 +296,13 @@ zFlex = { //static methods
 		}
 	},
 
-	beforeSizeClearCachedSize: function (ctl, opts, cleanup) {
+	beforeSizeClearCachedSize: function (this: zk.Widget, ctl, opts, cleanup) {
 		var wgt = this;
 		if (cleanup)
 			wgt.clearCachedSize_();
 	},
 
-	onSize: function () {
+	onSize: function (this: zk.Widget) {
 		zFlex.fixFlex(this);
 	},
 	fixFlex: function (wgt) {
@@ -312,32 +318,34 @@ zFlex = { //static methods
 		if (wgt.ignoreFlexSize_('w') && wgt.ignoreFlexSize_('h'))
 			return;
 
-		if (!wgt.parent.beforeChildrenFlex_(wgt)) { //don't do fixflex if return false
+		if (!wgt.parent?.beforeChildrenFlex_(wgt)) { //don't do fixflex if return false
 			return;
 		}
 		wgt._flexFixed = true;
 		
 		var pretxt = false, //pre node is a text node
-			vflexs = [],
+			vflexs: zk.Widget[] = [],
 			vflexsz = 0,
-			hflexs = [],
+			hflexs: zk.Widget[] = [],
 			hflexsz = 0,
 			p = wgt.$n().parentNode,
 			zkp = zk(p),
 			psz = wgt.getParentSize_(p),
 			hgh = psz.height,
 			wdh = psz.width,
-			c = p.firstChild,
-			vflexsRe = [],
+			c = p?.firstElementChild as HTMLElement,
+			vflexsRe: zk.Widget[] = [],
 			hasVScroll = zkp.hasVScroll(),
 			hasHScroll = zkp.hasHScroll(),
+			meshBodyHasVScroll = false,
+			meshBodyHasHScroll = false,
 			scrollbarWidth = jq.scrollbarWidth(),
 			isMeshLoaded = zk.isLoaded('zul.mesh');
 
 		// B86-ZK-4123
 		if (isMeshLoaded && wgt.$instanceof(zul.mesh.HeaderWidget)) {
 			var mesh = wgt.parent.parent;
-			if (mesh._nativebar) {
+			if (mesh && mesh._nativebar) {
 				var body = mesh.ebody,
 					meshBodyHasVScroll = zk(body).hasVScroll(),
 					meshBodyHasHScroll = zk(body).hasHScroll();
@@ -351,11 +359,8 @@ zFlex = { //static methods
 		// B50-3312936.zul
 		if (hasHScroll || meshBodyHasHScroll) //with horizontal scrollbar
 			hgh -= scrollbarWidth;
-			
-		for (; c; c = c.nextSibling)
-			if (c.nodeType != 3) break; //until not a text node
 
-		for (var zkpOffset; c; c = c.nextSibling) {
+		for (var zkpOffset; c; c = c.nextElementSibling as HTMLElement) {
 			//In ZK, we assume all text node is space (otherwise, it will be span enclosed)
 			if (c.nodeType === 3) { //a text node
 				pretxt = true;
@@ -434,7 +439,7 @@ zFlex = { //static methods
 		}
 
 		// ZK-3411: use local function for setting up height
-		var setHghForVflexChild = function (vfxs, h, lsz) {
+		var setHghForVflexChild = function (vfxs, h, lsz): void {
 				for (var j = vfxs.length - 1; j > 0; --j) {
 					var cwgt = vfxs.shift(),
 						vsz = cwgt.isExcludedVflex_() ? h : (cwgt._nvflex * h / vflexsz) | 0; //cast to integer
@@ -469,7 +474,9 @@ zFlex = { //static methods
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
 		lastsz = wdh = Math.max(wdh, 0);
 		for (var j = hflexs.length - 1; j > 0; --j) {
-			var cwgt = hflexs.shift(), //{n: node, f: hflex}
+			var hflexWgt = hflexs.shift();
+			if (!hflexWgt) break;
+			var cwgt = hflexWgt, //{n: node, f: hflex}
 				hsz = cwgt.isExcludedHflex_() ? wdh : (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
 			cwgt.setFlexSize_({width: hsz});
 			cwgt._hflexsz = hsz;
@@ -477,8 +484,9 @@ zFlex = { //static methods
 				lastsz -= hsz;
 		}
 		//last one with hflex
-		if (hflexs.length) {
-			var cwgt = hflexs.shift();
+		var hflexWgt = hflexs.shift();
+		if (hflexWgt) {
+			var cwgt = hflexWgt;
 			cwgt.setFlexSize_({width: lastsz});
 			cwgt._hflexsz = lastsz;
 		}
@@ -500,7 +508,7 @@ zFlex = { //static methods
 		wgt.parent.afterChildrenFlex_(wgt);
 		wgt._flexFixed = false;
 	},
-	onFitSize: function () {
+	onFitSize: function (this: zk.Widget) {
 		var wgt = this,
 			c = wgt.$n();
 		if (c && zk(c).isVisible()) {
@@ -516,7 +524,7 @@ zFlex = { //static methods
 		//find the max size of all children
 		return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 	},
-	applyCSSFlex: function () {
+	applyCSSFlex: function (this: zk.Widget) {
 		var wgt = this;
 		if (!wgt._nvflex && !wgt._nhflex)
 			return;
@@ -524,8 +532,10 @@ zFlex = { //static methods
 		var cssFlexAppliedInfo = wgt._cssFlexApplied,
 			minFlexInfoListKeyStr = 'minFlexInfoList',
 			pwgt = wgt.parent;
+		if (!pwgt) return;
+		var minFlexInfoList: MinFlexInfo[] = [];
 		if ((cssFlexAppliedInfo && cssFlexAppliedInfo['flexApplied'])) { //other vflex/hflex sibling has done it!
-			var minFlexInfoList = cssFlexAppliedInfo[minFlexInfoListKeyStr];
+			minFlexInfoList = cssFlexAppliedInfo[minFlexInfoListKeyStr];
 			if (minFlexInfoList) { //still need to call fixMinFlex
 				for (var i = 0, l = minFlexInfoList.length; i < l; i++) {
 					var info = minFlexInfoList[i];
@@ -543,12 +553,11 @@ zFlex = { //static methods
 		var flexInfo = zFlex.getFlexInfo(wgt),
 			cssFlexAppliedInfo = wgt._cssFlexApplied,
 			isRow = flexInfo.isFlexRow,
-			fccs = flexInfo.flexContainerChildren,
+			fccs: HTMLElement[] = flexInfo.flexContainerChildren,
 			cwgts = flexInfo.childrenWidgets,
 			isAllMin = true,
-			cwgtsz = [],
-			flexItemClass = 'z-flex-item',
-			minFlexInfoList = [];
+			cwgtsz: Record<string, string>[] = [],
+			flexItemClass = 'z-flex-item';
 
 		for (var i = 0, length = fccs.length; i < length; i++) {
 			var fcc = fccs[i],
@@ -556,15 +565,15 @@ zFlex = { //static methods
 				cwgt = cwgts[i],
 				c = cwgt.$n(),
 				flexs = [cwgt._nvflex, cwgt._nhflex],
-				sz = {},
+				sz: Record<string, string> = {},
 				dim = isRow ? 'width' : 'height',
-				flex = flexs[isRow | 0];
+				flex = flexs[isRow ? 1 : 0];
 
 			if (flex > 0) {
 				isAllMin = false;
 				jqFcc.addClass(flexItemClass);
-				if (flex != 1 || fcc.style['flex-grow'])
-					fcc.style['flex-grow'] = flex; //update flex
+				if (flex != 1 || fcc.style.flexGrow)
+					fcc.style.flexGrow = flex; //update flex
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '100%';
 				else
@@ -576,7 +585,7 @@ zFlex = { //static methods
 			}
 
 			//check else flex
-			flex = flexs[!isRow | 0];
+			flex = flexs[isRow ? 0 : 1];
 			dim = isRow ? 'height' : 'width';
 			if (flex > 0) {
 				var marginSize = isRow ? zk(jqFcc).marginHeight() : zk(jqFcc).marginWidth(),
@@ -601,9 +610,9 @@ zFlex = { //static methods
 			jq(fContainer).addClass('z-flex').addClass(isRow ? 'z-flex-row' : 'z-flex-column');
 
 		for (var i = 0, length = cwgtsz.length; i < length; i++) {
-			var sz = cwgtsz[i];
-			if (Object.keys(sz).length > 0) //es5
-				cwgts[i].setFlexSize_(sz);
+			var szInfo = cwgtsz[i];
+			if (Object.keys(szInfo).length > 0) //es5
+				cwgts[i].setFlexSize_(szInfo);
 		}
 
 		pwgt.afterChildrenFlex_(wgt);
@@ -611,8 +620,9 @@ zFlex = { //static methods
 	clearCSSFlex: function (wgt, o, clearAllSiblings) {
 		if (!wgt._cssFlexApplied) return;
 
-		var pwgt = wgt.parent,
-			fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_(),
+		var pwgt = wgt.parent;
+		if (!pwgt) return;
+		var fContainer = pwgt.$instanceof(zk.Page) ? pwgt.$n() : pwgt.getFlexContainer_(),
 			isHorizontal = o == 'h',
 			flexInfo = zFlex.getFlexInfo(wgt),
 			isRow = flexInfo.isFlexRow,
@@ -630,7 +640,7 @@ zFlex = { //static methods
 				dim = isRow ? 'width' : 'height';
 
 			if ((clearAllSiblings || isTargetWgt) && (isHorizontal && isRow) || (!isHorizontal && !isRow)) {
-				fcc.style['flex-grow'] = '';
+				fcc.style.flexGrow = '';
 				jqFcc.removeClass(flexItemClass);
 				if (fcc != c && !c.style[dim])
 					c.style[dim] = '';
@@ -656,13 +666,13 @@ zFlex = { //static methods
 	},
 	getFlexInfo: function (wgt) {
 		var pwgt = wgt.parent,
-			cwgt = pwgt.firstChild,
-			fContainer = pwgt.getFlexContainer_(),
-			fcc = fContainer.firstElementChild,
-			flexD = pwgt.getFlexDirection_(),
+			cwgt = pwgt!.firstChild,
+			fContainer: HTMLElement = pwgt!.getFlexContainer_(),
+			fcc = fContainer.firstElementChild as HTMLElement,
+			flexD = pwgt!.getFlexDirection_(),
 			isRow = 'row' == flexD,
-			fccs = [],
-			cwgts = [],
+			fccs: HTMLElement[] = [],
+			cwgts: zk.Widget[] = [],
 			checkColumn = flexD == null,
 			toColumn = false;
 
@@ -682,11 +692,11 @@ zFlex = { //static methods
 						checkColumn = false;
 					}
 				} else {
-					fcc = fcc.nextElementSibling; //skip c not in fcc (ex. splitter)
+					fcc = fcc.nextElementSibling as HTMLElement; //skip c not in fcc (ex. splitter)
 					continue;
 				}
 			}
-			fcc = fcc.nextElementSibling;
+			fcc = fcc.nextElementSibling as HTMLElement;
 			cwgt = cwgt.nextSibling;
 		}
 

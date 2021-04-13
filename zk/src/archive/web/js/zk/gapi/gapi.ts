@@ -1,4 +1,4 @@
-/* gapi.js
+/* gapi.ts
 
 	Purpose:
 		Google's AJAX APIs
@@ -30,15 +30,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.gapi.GOOGLE_API_LOADING_TIMEOUT = 10000; //default to ten seconds
 zk.gapi.loadAPIs = function (wgt, callback, msg, timeout) {
 	var opts = {};
-	opts['condition'] = function () {return window.google && window.google.load;};
-	opts['callback'] = function () {callback(); delete zk.gapi.LOADING;};
+	opts['condition'] = function () {return window['google'] && window['google'].load;};
+	opts['callback'] = function () {callback(); delete zk.gapi['LOADING'];};
 	opts['message'] = msg;
-	if (!opts.condition()) {
+	if (!opts['condition']()) {
 		zk.gapi.waitUntil(wgt, opts);
-		if (!zk.gapi.LOADING) { //avoid double loading Google Ajax APIs
-			zk.gapi.LOADING = true;
-			if (!opts.condition())
-				zk.loadScript('http://www.google.com/jsapi?key=' + zk.googleAPIkey);
+		if (!zk.gapi['LOADING']) { //avoid double loading Google Ajax APIs
+			zk.gapi['LOADING'] = true;
+			if (!opts['condition'])
+				zk.loadScript('http://www.google.com/jsapi?key=' + zk['googleAPIkey']);
 		}
 	} else
 		callback();
@@ -49,7 +49,7 @@ zk.gapi.waitUntil = function (wgt, opts) {
 	initMask(wgt, opts);
 	waitUntil(wgt, opts);
 };
-function waitUntil(wgt, opts) {
+function waitUntil(wgt, opts): void {
 	if (!opts.condition()) {
 		var timestamp0 = new Date().getTime();
 		if ((timestamp0 - opts.inittime) < opts.timeout) {
@@ -60,13 +60,13 @@ function waitUntil(wgt, opts) {
 	opts.callback();
 	clearMask(wgt, opts);
 }
-function initMask(wgt, opts) {
+function initMask(wgt, opts): void {
 	var opt = {};
 	opt['anchor'] = wgt;
 	if (opts.message) opt['message'] = opts.message;
 	opts['_mask'] = new zk.eff.Mask(opt);
 }
-function clearMask(wgt, opts) {
+function clearMask(wgt, opts): void {
 	if (opts._mask)
 		opts._mask.destroy();
 }

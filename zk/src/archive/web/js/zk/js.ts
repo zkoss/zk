@@ -1,5 +1,5 @@
 /* eslint-disable one-var */
-/* js.js
+/* js.ts
 
 	Purpose:
 		Enhancement to JavaScript

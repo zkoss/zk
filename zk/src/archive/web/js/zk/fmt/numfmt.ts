@@ -1,4 +1,4 @@
-/* numfmt.js
+/* numfmt.ts
 
 	Purpose:
 		
@@ -21,10 +21,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		MINUS: zk.MINUS
 	};
 
-	function down(valStr, ri) {
+	function down(valStr, ri): string {
 		return valStr.substring(0, ri);
 	}
-	function up(valStr, ri) {
+	function up(valStr, ri): string {
 		var k = 1, val = '';
 		for (var j = ri; k && --j >= 0;) {
 			var ch = valStr.charAt(j);
@@ -41,11 +41,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			val = valStr.substring(0, j) + val;
 		return k ? '1' + val : val;
 	}
-	function compareHalf(valStr, ri) {
+	function compareHalf(valStr, ri): number {
 		var result,
 			base = '5';
 		for (var j = ri, len = valStr.length; j < len; ++j) {
-			result = valStr.charAt(j) - base;
+			result = valStr.charAt(j) - base.charCodeAt(0);
 			if (j == ri) { //first digit
 				base = '0';
 			}
@@ -54,7 +54,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 		return result;
 	}
-	function preDigit(valStr, ri) {
+	function preDigit(valStr, ri): string | null {
 		for (var j = ri; --j >= 0;) {
 			var ch = valStr.charAt(j);
 			if (ch >= '0' && ch <= '9')
@@ -74,7 +74,7 @@ zk.fmt.Number = {
 			return val;
 		else {
 			var ri = indVal + scale + 1;
-			valStr = this.rounding(valStr, ri, rounding, valStr < 0);
+			valStr = this.rounding(valStr, ri, rounding, valStr != '' && parseInt(valStr) < 0);
 			return new zk.BigDecimal(valStr);
 		}
 	},
@@ -85,9 +85,9 @@ zk.fmt.Number = {
 		
 		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {
-			fmt = fmt.split(';');
+			var fmtArr = fmt.split(';');
 			useMinsuFmt = val < 0;
-			fmt = fmt[useMinsuFmt ? 1 : 0];
+			fmt = fmtArr[useMinsuFmt ? 1 : 0];
 		}
 		
 		// localized symbols
@@ -159,7 +159,7 @@ zk.fmt.Number = {
 				var r = compareHalf(valStr, ri);
 				if (r == 0) { //half
 					var evenChar = preDigit(valStr, ri);
-					valStr = (evenChar & 1) ? up(valStr, ri) : down(valStr, ri);
+					valStr = evenChar && (parseInt(evenChar) & 1) ? up(valStr, ri) : down(valStr, ri);
 				} else
 					valStr = r < 0 ? down(valStr, ri) : up(valStr, ri);
 		}
@@ -174,9 +174,9 @@ zk.fmt.Number = {
 		}
 		var useMinsuFmt;
 		if (fmt.indexOf(';') != -1) {
-			fmt = fmt.split(';');
-			useMinsuFmt = val < 0;
-			fmt = fmt[useMinsuFmt ? 1 : 0];
+			var fmtArr = fmt.split(';');
+			useMinsuFmt = val && parseFloat(val) < 0;
+			fmt = fmtArr[useMinsuFmt ? 1 : 0];
 		}
 		
 		// localized symbols
@@ -187,11 +187,11 @@ zk.fmt.Number = {
 		var pureFmtStr = efmt.pureFmtStr,
 			ind = efmt.purejdot,
 			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
-			valStr = (val + '').replace(/[^e\-0123456789.]/g, '').substring(val < 0 ? 1 : 0),
+			valStr = (val + '').replace(/[^e\-0123456789.]/g, '').substring(val && parseFloat(val) < 0 ? 1 : 0),
 			ei = valStr.lastIndexOf('e'),
 			indVal = valStr.indexOf('.'),
 			valFixed = indVal >= 0 ? (ei < 0 ? valStr.length : ei) - indVal - 1 : 0,
-			shift = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei + 1), 10));
+			shift: number = efmt.shift + (ei < 0 ? 0 : parseInt(valStr.substring(ei + 1), 10));
 			
 		if (ei > 0) valStr = valStr.substring(0, ei);
 		if (shift > 0) {
@@ -238,7 +238,7 @@ zk.fmt.Number = {
 				valStr = valStr + '0';
 		} else { //preprocess for rounding
 			var ri = indVal + fixed + 1;
-			valStr = this.rounding(valStr, ri, rounding, val < 0);
+			valStr = this.rounding(valStr, ri, rounding, (val != '' && parseFloat(val) < 0));
 		}
 		var indFmt = efmt.jdot,
 			pre = '', suf = '';
@@ -294,7 +294,7 @@ zk.fmt.Number = {
 			pre = valStr.substr(0, j + 1) + pre;
 
 		//sufpart
-		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl; i++) {
+		for (var i: number = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valStr.length; i < fl; i++) {
 			var fmtcc = fmt.charAt(i);
 			if (fmtcc == '#' || fmtcc == '0') {
 				if (j < vl) {
@@ -329,7 +329,7 @@ zk.fmt.Number = {
 			pre = '0' + pre;
 		var rexp = new RegExp('^0*[' + localizedSymbols.PERCENT + '|' + localizedSymbols.PER_MILL + ']?$'),
 			shownZero = suf ? rexp.test(suf) && /^0*$/.test(pre) : rexp.test(pre);
-		return (val < 0 && !shownZero && !useMinsuFmt ? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
+		return (val != '' && parseFloat(val) < 0 && !shownZero && !useMinsuFmt ? localizedSymbols.MINUS : '') + (suf ? pre + (/[\d]/.test(suf.charAt(0)) ? localizedSymbols.DECIMAL : '') + suf : pre);
 	},
 	_escapeQuote: function (fmt, localizedSymbols) {
 		//note we do NOT support mixing of quoted and unquoted percent
@@ -453,7 +453,7 @@ zk.fmt.Number = {
 
 		//remove leading 0
 		//keep the zero after the decimal point (to preserve precision)
-		for (var j = 0, k, len = sb.length; j < len; ++j) {
+		for (var j = 0, k, len: number = sb.length; j < len; ++j) {
 			cc = sb.charAt(j);
 			if (cc > '0' && cc <= '9') {
 				if (k !== undefined)

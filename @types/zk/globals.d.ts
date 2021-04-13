@@ -32,17 +32,19 @@ interface Array<T> {
 interface Window {
     zkservice: zk.ZKServiceStatic;
     onIframeURLChange(uuid: string, url: string): void;
+    zkpe: zk.$void;
 }
 
-// mount.js
-declare function zkdt(dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string): zk.Desktop;
-declare function zkx(wi, extra, aucmds, js?: string): void;
+// mount.ts
+declare function zkdt(dtid: string | undefined, contextURI: string | undefined, updateURI: string | undefined, resourceURI: string | undefined, reqURI: string | undefined): zk.Desktop;
+declare function zkx(wi: any[], extra?: number, aucmds?, js?: string): void;
 declare function zkx_(args: any, stub: (child: zk.Widget) => void, filter?): void;
 declare function zkac(): void;
 declare function zkmx(): void;
-declare function zkmb(bindOnly: boolean): void;
+declare function zkmb(bindOnly?: boolean): void;
 declare function zkme(): void;
 declare function zkdh(name: string, script: string): void;
+
 // zk.wpd
 declare function $eval(x: string): any;
 // widget.ts

@@ -1,4 +1,4 @@
-/* historystate.js
+/* historystate.ts
 
 	Purpose:
 

@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 declare namespace zk {
     type Class = any;
+    type $void = () => false;
 
     interface ObjectStatic {
         isAssignableFrom(cls: Class): boolean;
@@ -32,7 +33,7 @@ declare namespace zk {
         $oid: number;
 
         new (...args: unknown[]): this;
-        $init(): void;
+        $init(value?: number | string): void;
         $instanceof(klass: Class): boolean;
         $super(klass: Class, mtd: string, ...vararg: any[]): any;
         $super(mtd: string, ...vararg: any[]): any;
@@ -62,7 +63,7 @@ declare namespace zk {
         _ndt: number;
         all: Record<string, zk.Desktop>;
 
-        $(dtid: DesktopAccessor): zk.Desktop | null;
+        $(dtid?: DesktopAccessor): zk.Desktop | null;
         isInstance(dtid: DesktopAccessor): boolean;
         sync(timeout?: number): zk.Desktop | null;
         new (dtid: string, contextURI?: string, updateURI?: string, reqURI?: string, stateless?: boolean): zk.Desktop;
@@ -101,7 +102,7 @@ declare namespace zk {
         [dataKey: string]: any; // If data is an instance of Map, its content is copied to the event instance.
 
         new(target: zk.Widget | null, name: string, data?: any,
-            opts?: Partial<EventOptions>,
+            opts?: Partial<EventOptions> | null,
             domEvent?: JQuery.Event): Event;
         addOptions(opts: Partial<EventOptions>): void;
         stop(opts?: Partial<EventStopOptions>): void;
@@ -153,7 +154,7 @@ declare namespace zk {
         previousSibling: Widget | null;
         uuid: string;
         widgetName: string;
-        z_rod: boolean | number;
+        z_rod?: boolean | number;
 
         $binder(): zk.Binder | null;
         $f(): {[id: string]: Widget};
@@ -282,7 +283,7 @@ declare namespace zk {
         removeHTML_(n?: any[]): void;
         replaceCavedChildren_(subId: string, wgts: Widget[], tagBeg: string, tagEnd: string): void;
         replaceChildHTML_(child: Widget, n: Element, dt: Desktop | null, skipper: Skipper | null, _trim_?: boolean): void;
-        replaceHTML(n: Element | string, desktop: Desktop | null, skipper: Skipper | null, _trim_?: boolean, _callback_?: (() => void)[]): Widget;
+        replaceHTML(n: Element | string, desktop: Desktop | null, skipper?: Skipper | null, _trim_?: boolean, _callback_?: (() => void)[]): Widget;
         replaceWidget(newwgt: Widget): void;
         rerender(timeout?: number): Widget;
         rerender(skipper?: Skipper | null): Widget;
@@ -392,6 +393,7 @@ declare namespace zk {
     }
 
     interface WidgetStatic extends ObjectStatic {
+        new (): Widget;
         auDelay: number;
 
         $(n: any, opts?: any): Widget;
@@ -589,6 +591,7 @@ declare namespace zk {
         clientinfo?: Record<string, unknown>;
         confirmClose?: string;
         contextURI: string;
+        cpsp: CPSP;
         css3?: boolean;
         currentFocus?: zk.Widget | null;
         currentModal?: zk.Widget | null;
@@ -615,13 +618,24 @@ declare namespace zk {
             ee?: boolean;
         };
         ff?: number | string | false;
-        focusBackFix: boolean;
+        focusBackFix?: boolean;
         fmt: {
             Text: {
                 format(msg: string): string;
                 formatFileSize(bytes: number): string;
-            };
+            },
+            Number: {
+                _escapeQuote(fmt: string, localizedSymbols: any): Record<string, any>;
+                _extraFmtIndex(fmt: string): number;
+                _removePrefixSharps(pre: string, localizedSymbols: any): string;
+                format(fmt: string, val: string, rounding: number, localizedSymbols: any): string;
+                isRoundingRequired(val: string | number, fmt: string, localizedSymbols: any): boolean;
+                rounding(valStr: string, ri: number, rounding: number, minus: boolean): string;
+                setScale(val: BigDecimal, scale: number, rounding: number): string | BigDecimal;
+                unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols: any);
+            }
         };
+        gapi: GApi;
         gecko?: number | string | false;
         GROUPING: string;
         groupingDenied?: boolean;
@@ -645,7 +659,7 @@ declare namespace zk {
         ipad: string | boolean;
         isTimeout: boolean;
         keepDesktop?: boolean;
-        keyCapture?: zk.Widget;
+        keyCapture?: zk.Widget | null;
         linux: boolean;
         loading: number;
         Long: zk.Long;
@@ -654,7 +668,7 @@ declare namespace zk {
         mac: boolean;
         mobile: string | boolean;
         mounting: boolean;
-        mouseCapture?: zk.Widget;
+        mouseCapture?: zk.Widget | null;
         mm: any;
         Native: NativeStatic;
         NoDOM: NoDOM;
@@ -693,7 +707,14 @@ declare namespace zk {
         visibilitychange: boolean;
         webkit?: boolean;
         Widget: WidgetStatic;
-        wgt: any;
+        wgt: {
+            WidgetInfo: {
+                all: any;
+                getClassName(wgtnm: string): string;
+                register(infs: string[]): void;
+                loadAll(f: (() => void), weave: boolean): void;
+            }
+        };
         xhrWithCredentials: boolean;
         xml: {
             Utl: zk.XMLUtils;
@@ -703,11 +724,12 @@ declare namespace zk {
         };
 
         (selector: string): JQZK;
-        (element: Element): JQZK;
+        (element: Element | Node | null): JQZK;
         (elementArray: Element[]): JQZK;
-        (object: JQuery): JQZK;
+        (object: JQuery | JQuery<Element>): JQZK;
         (wgt: Widget): JQZK;
 
+        _apac(fn: () => void, _which_?: string): void;
         _set(o, name: string, value, extra?): void;
         _set2(o, mtd: CallableFunction | null, name: string | null, value, extra?): void;
         $(n: any, opts?: Partial<{exact: boolean; strict: boolean; child: boolean}>): zk.Widget | null;
@@ -715,8 +737,8 @@ declare namespace zk {
         $extends<S extends Class, D, D2>(superclass: S, members: D & ThisType<D & (S extends zul.WidgetStatic ? zul.Widget : Widget)>, staticMembers?: D2): any;
         $import(name: string, fn?: any): any;
         $intercepts(targetClass: Class, interceptor: any): void;
-        $package(name: string): any;
-        $void: () => false;
+        $package(name: string, end?: boolean, wv?: boolean): any;
+        $void: $void;
         addDataHandler(name: string, script: string): void;
         afterAnimate(fn: () => void, delay?: number): boolean;
         afterAuResponse(fn: () => void): void;
@@ -729,13 +751,14 @@ declare namespace zk {
         animating(): boolean;
         beforeUnload(fn: () => string | null, opts?: {remove: boolean}): void;
         copy<T>(dst: T, src: ThisType<T>, backup?: object): object;
-        cut(props: any, nm: string): object;
+        cut(props: any, nm: string): object | undefined;
         debugLog(msg: string): void;
         define(klass: any, props: any): any;
         delayFunction(uuid: string, func: () => void, opts?: Partial<{ timeout: number; urgent: boolean }>): void;
         depends(a: string, b: string): void;
         disableESC(): void;
         doAfterAuResponse(): void;
+        doAfterResize(): void;
         enableESC(): void;
         endProcessing(sid?: number): void;
         error(msg: string): void;
@@ -753,7 +776,7 @@ declare namespace zk {
         load(pkg: string): boolean;
         _load(pkg: string, dt: any): boolean;
         loadCSS(href: string, id?: string, media?: string): ZKCoreUtilityStatic;
-        loadScript(src: string, name: string, charset: string, force: boolean): ZKCoreUtilityStatic;
+        loadScript(src: string, name?: string, charset?: string, force?: boolean): ZKCoreUtilityStatic;
         log(...detailed: any[]): void;
         override<T>(oldfunc: T, newfunc: Function & ThisType<T>): T;
         override<T>(dst: T, backup: any, src: ThisType<T>): T;
@@ -769,6 +792,7 @@ declare namespace zk {
         stamp(name?: string, noAutoLog?: boolean): void;
         startProcessing(timeout: number, sid?: number): void;
         stateless(dtid?: string, contextURI?: string, updateURI?: string, reqURI?: string): any;
+        _zsyncFns(name: string, org: any): void;
     }
 
     interface Anima {
@@ -890,6 +914,24 @@ declare namespace zk {
         vflexHeight(): number;
         viewportOffset(): zk.Offset;
         vparentNode(real?: boolean): HTMLElement;
+    }
+
+    interface CPSP {
+        SPush: SPush;
+        start(dtid: string, min: number, max: number, factor: number): void;
+        stop(dtid: string): void;
+    }
+
+    interface SPush extends Object {
+        _do(): void;
+        start(dt: Desktop, min: number, max: number, factor: number): void;
+        stop(): void;
+    }
+
+    interface GApi {
+        GOOGLE_API_LOADING_TIMEOUT: number;
+        loadAPIs(wgt: Widget, callback: (() => void), msg: string, timeout: number): void;
+        waitUntil(wgt: Widget, opts: any): void;
     }
 }
 
