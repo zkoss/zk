@@ -242,8 +242,11 @@ public class Image extends XulElement {
 			return Utils.getDynamicMediaURI( //already encoded
 					this, _imgver, "c/" + _image.getName(), _image.getFormat());
 
+		if (_src == null)
+			return Images.BASE64SPACERIMAGE;
+
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null ? dt.getExecution().encodeURL(_src != null ? _src : "~./img/spacer.gif") : "";
+		return dt != null ? dt.getExecution().encodeURL(_src) : "";
 	}
 
 	/** Returns the encoded URL of the hover image, or null if no hover image.

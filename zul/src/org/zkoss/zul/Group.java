@@ -20,6 +20,7 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.zkoss.image.Images;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
@@ -193,7 +194,7 @@ public class Group extends Row {
 	 */
 	public String getImgTag() {
 		final StringBuffer sb = new StringBuffer(64).append("<img src=\"")
-				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif")).append("\" class=\"")
+				.append(Images.BASE64SPACERIMAGE).append("\" class=\"")
 				.append(getZclass()).append("-img ").append(getZclass()).append(isOpen() ? "-img-open" : "-img-close")
 				.append("\" align=\"absmiddle\"/>");
 
