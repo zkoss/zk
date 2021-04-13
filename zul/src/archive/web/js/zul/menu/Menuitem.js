@@ -349,7 +349,11 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					else if (ref) {
 						// https://bugzilla.mozilla.org/show_bug.cgi?id=1220143
 						if (zk.ff)
-							setTimeout(function () { ref.focus(); }, 200);
+							setTimeout(function () {
+								var currentFocus = zk.currentFocus;
+								if (!currentFocus || !currentFocus.isRealVisible())
+									ref.focus();
+							}, 200);
 						else
 							ref.focus();
 					}
