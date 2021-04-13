@@ -2921,6 +2921,8 @@
 		<xs:attribute name="penSize" type="xs:string" use="optional" />
 		<xs:attribute name="penColor" type="xs:string" use="optional" />
 		<xs:attribute name="backgroundColor" type="xs:string" use="optional" />
+		<xs:attribute name="backgroundImage" type="xs:string" use="optional" />
+		<xs:attribute name="backgroundIncluded" type="xs:boolean" use="optional" />
 		<xs:attribute name="saveType" type="xs:string" use="optional" />
 		<xs:attribute name="undoLabel" type="xs:string" use="optional" />
 		<xs:attribute name="saveLabel" type="xs:string" use="optional" />
