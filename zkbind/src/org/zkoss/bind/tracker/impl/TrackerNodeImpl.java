@@ -195,4 +195,8 @@ public class TrackerNodeImpl implements TrackerNode, Serializable {
 				.append(System.identityHashCode(this));
 		return sb.toString();
 	}
+
+	public boolean isPropNameNodeMapped(TrackerNode trackerNode) {
+		return _brackets == null ? false : _brackets.values().contains(trackerNode);
+	}
 }

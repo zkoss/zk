@@ -331,15 +331,13 @@ public class TrackerImpl implements Tracker, Serializable {
 						if (ignore)
 							continue;
 
-						propNodes.add(node);
 						if (BindELContext.isBracket((String) script)) {
-							for (Iterator<Binding> it = node.getBindings().iterator(); it.hasNext();) {
-								Binding binding = it.next();
-								if (comp.equals(binding.getComponent())) {
-									baseNode.tieProperty(propName, node);
-									break;
-								}
+							if (!baseNode.isPropNameNodeMapped(node)) {
+								baseNode.tieProperty(propName, node);
+								propNodes.add(node);
 							}
+						} else {
+							propNodes.add(node);
 						}
 					}
 				}
