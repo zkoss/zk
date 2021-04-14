@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4707.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 13 10:50:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout>
+		<label>(Firefox only) Follow the instruction to open two popups, the 2nd popup should not be immediately closed</label>
+		<toolbarbutton id="tb" label="click me to show main popup" onClick="showMainPopup()"
+					   image="https://www.zkoss.org/zksandbox/img/Centigrade-Widget-Icons/ArrowDown-16x16.png"/>
+		<button id="showHere" label="Below"
+				image="https://www.zkoss.org/zksandbox/img/Centigrade-Widget-Icons/ArrowDown-16x16.png" width="125px"/>
+		<menupopup id="ppMain" width="300px">
+			<menuitem label="just test"/>
+			<menuitem label="just test"/>
+			<menuitem label="just test"/>
+			<menuitem label="just test"/>
+			<menuitem id="item" label="click me to show other popup" onClick="showNewPopup()"
+					  image="https://www.zkoss.org/zksandbox/img/Centigrade-Widget-Icons/ArrowDown-16x16.png"/>
+		</menupopup>
+		<menupopup id="ppNew" width="300px">
+			<menuitem label="just test"
+					  image="https://www.zkoss.org/zksandbox/img/Centigrade-Widget-Icons/ArrowDown-16x16.png"/>
+		</menupopup>
+		<zscript>
+			<![CDATA[
+		public void showMainPopup(){
+			ppMain.open (showHere, "after_start");
+		}
+		public void showNewPopup(){
+			ppNew.open (showHere, "after_start");
+		}
+	]]>
+		</zscript>
+	</vlayout>
+</zk>
