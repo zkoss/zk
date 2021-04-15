@@ -30,7 +30,9 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
                         Thread.sleep(200);
                         try {
                             Executions.activate(dt);
-                            parent.appendChild(new Image());
+                            Image image = new Image();
+                            image.setSrc("~./img/spacer.gif");
+                            parent.appendChild(image);
                             //more isolated way to reproduce without <image>
                             //System.out.println(Executions.getCurrent().encodeURL("~./img/spacer.gif"));
                         } finally {

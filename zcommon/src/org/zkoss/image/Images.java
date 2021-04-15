@@ -29,6 +29,11 @@ import org.zkoss.image.encoder.ImageEncoder;
  * @since 3.0.7
  */
 public class Images {
+	/**
+	 * A base64 string to display a spacer image.
+	 * @since 9.6.0
+	 */
+	public static final String BASE64SPACERIMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAUUAAEALAAAAAABAAEAAAICTAEAOw==";
 	/** Encodes an AWT image into a ZK image (in PNG, JPEG or other format).
 	 *
 	 * @param name The name of the image. The extension of the name must

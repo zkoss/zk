@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.zkoss.html.HTMLs;
+import org.zkoss.image.Images;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.DeferredValue;
@@ -341,9 +342,11 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 	}
 
 	private String getEncodedURL(String src) {
+		if (src == null)
+			return Images.BASE64SPACERIMAGE;
+
 		final Desktop dt = getDesktop(); // it might not belong to any desktop
-		return dt != null ? dt.getExecution().encodeURL(src != null ? src : "~./img/spacer.gif")
-				: "";
+		return dt != null ? dt.getExecution().encodeURL(src) : "";
 	}
 
 	/** Processes the style. */

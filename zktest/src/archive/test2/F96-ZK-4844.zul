@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4844.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Apr 13 17:25:40 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script>
+		function getBase64Image(img) {
+			var canvas = document.createElement("canvas");
+			canvas.width = img.width;
+			canvas.height = img.height;
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(img, 0, 0);
+			return canvas.toDataURL("image/gif");
+		}
+		var test = function () {
+			// compare two image
+			zk.log(getBase64Image(jq('.z-image')[0]) == getBase64Image(jq('.z-image')[1]));
+		}
+	</script>
+	<label multiline="true">
+		Load this page without any js error, and you should not see any observable image bellow.
+		Click test button, you should see 'true' in zk log.
+	</label>
+	<button label="test" w:onClick="test()"/>
+	<image/>
+	<image src="~./img/spacer.gif"/>
+</zk>
