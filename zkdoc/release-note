@@ -13,6 +13,7 @@ ZK 9.6.0
   ZK-4595: support a way to re-sort a ListModel under MVVM pattern
   ZK-2299: Frozen column support on tablet device
   ZK-4844: Replace spacer.gif by a base64 encoded string
+  ZK-4672: borderlayout keyboard resizing movement speed
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
