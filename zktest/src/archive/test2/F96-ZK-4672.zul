@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4672.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Apr 15 11:45:33 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-borderlayout div:focus {
+			border: 1px solid black;
+		}
+	</style>
+	<script><![CDATA[
+		zk.afterLoad(function () {
+			var _xLayoutRegion = {};
+			zk.override(zul.layout.LayoutRegion.prototype, _xLayoutRegion, {
+				setWidth: function (v) {
+					var temp = this._width;
+					_xLayoutRegion.setWidth.apply(this, arguments);
+					if (this.desktop && (this._width != temp))
+						zk.log(parseInt(this._width) - parseInt(temp));
+				}
+			});
+		});
+	]]></script>
+	<label multiline="true">
+		click the splitter of the LayoutRegin (west), then press and hold left/right arrow key.
+		you should see the movement speed of the splitter accelerate until it match max speed.
+		once keyUp, the the movement speed of the splitter should be reset.
+	</label>
+	<borderlayout height="400px" width="500px">
+		<west width="150px" splittable="true" collapsible="true"></west>
+		<center></center>
+	</borderlayout>
+</zk>
