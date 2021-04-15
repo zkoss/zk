@@ -131,4 +131,14 @@ public interface TrackerNode {
 	 * @since 6.5.5
 	 */
 	public Map<Object, ?> getPropNameMapping();
+
+	/**
+	 * Internal used only
+	 * @param trackerNode
+	 * @return boolean is the tracker node with specific propName in bracket mapped or not
+	 * @since 9.6.0
+	 */
+	default boolean isPropNameNodeMapped(TrackerNode trackerNode) {
+		return false;
+	}
 }

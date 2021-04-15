@@ -56,6 +56,7 @@ ZK 9.6.0
   ZK-4806: borderlayout region with whitespace title
   ZK-4846: Select all checkbox ignores click (tree/listbox)
   ZK-4707: 2nd popup open by click menu item on 1st popup will close immediiate (on fast bandwidth)
+  ZK-4832: map property bindings loading inconsistently
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
