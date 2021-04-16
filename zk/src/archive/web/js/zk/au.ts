@@ -493,7 +493,10 @@ zAu = {
 			data = jq.param({dtid: dt.id, cmd_0: dummy ? 'dummy' : 'rmDesktop', opt_0: 'i'}),
 			headers = {};
 		if (zk.pfmeter) {
-			var fakeFetachOpts = {};
+			var fakeFetachOpts = {
+				headers: {}
+			};
+			headers = fakeFetachOpts.headers;
 			zAu._pfsend(dt, fakeFetachOpts, true, false);
 		}
 		// ZK-4204
@@ -874,7 +877,7 @@ zAu.beforeSend = function (uri, req, dt) {
 			dt._pfRecvIds = null;
 		}
 		if (ids = dt._pfDoneIds) {
-			if (fetchHeaders) fetchHeaders['ZK-Client-Receive'] = ids;
+			if (fetchHeaders) fetchHeaders['ZK-Client-Complete'] = ids;
 			if (ws) {
 				zWs.setRequestHeaders('ZK-Client-Complete', ids);
 			}
