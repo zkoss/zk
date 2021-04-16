@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4789.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Apr 16 10:18:28 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Register the listener (org.zkoss.zktest.test.PerformanceMeter) in zk.xml
+		Load the page, then refresh or leave the page to trigger rmDesktop.
+		You should see "Client recev: ..." and "Client cmplt: ..." message in server console.
+	</label>
+</zk>
