@@ -59,6 +59,7 @@ ZK 9.6.0
   ZK-4707: 2nd popup open by click menu item on 1st popup will close immediiate (on fast bandwidth)
   ZK-4832: map property bindings loading inconsistently
   ZK-4789: The header of PerformanceMeter is missing in rmDesktop
+  ZK-4858: slider knob styles contain invalid css property
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
