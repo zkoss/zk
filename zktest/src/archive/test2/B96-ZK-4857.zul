@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4857.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 19 11:31:16 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Use a hybrid (touch+mouse) desktop browser (or desktop emulating a mobile)
+        2. Right click on the target.
+        3. A menupopup should appear.
+        4. Double click on the target.
+        5. You should see a [MouseEvent onDoubleClick] in a zk log.
+    </label>
+    <div style="padding: 40px; border: 1px solid red;" context="editPopup" onDoubleClick="Clients.log(event)">
+        target
+    </div>
+    <menupopup id="editPopup">
+        <menuitem iconSclass="z-icon-commenting-o" label="Message" />
+    </menupopup>
+</zk>

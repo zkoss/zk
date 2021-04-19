@@ -93,10 +93,10 @@ zk.copy(zjq.eventTypes, {
 	zmouseup: 'touchend mouseup',
 	zmousemove: 'touchmove mousemove'
 });
-function _findEventTypeLabel(type, eventFuncs): string | null {
+function _findEventTypeLabel(type: string, eventFuncs: Record<string, unknown>): string | null {
 	var exactType = eventFuncs[type];
 	if (exactType)
-		return exactType;
+		return type;
 
 	var evtTypes = Object.keys(eventFuncs);
 	for (var i = 0, length = evtTypes.length; i < length; i++) {

@@ -61,6 +61,7 @@ ZK 9.6.0
   ZK-4832: map property bindings loading inconsistently
   ZK-4789: The header of PerformanceMeter is missing in rmDesktop
   ZK-4858: slider knob styles contain invalid css property
+  ZK-4857: Missing right click and double click in hybrid touch mouse mode
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
