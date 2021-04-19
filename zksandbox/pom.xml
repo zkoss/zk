@@ -12,7 +12,6 @@
 		<zkel.version>1.1.0</zkel.version>
 		<bsh.version>2.0b6</bsh.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
-		<servlet.version>2.4</servlet.version>
 		<ckez.version>4.14.0.0</ckez.version>
 		<gmapsz.version>3.1.0</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
@@ -24,7 +23,6 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>${servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

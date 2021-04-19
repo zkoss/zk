@@ -45,7 +45,6 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -445,7 +444,7 @@ public class AuUploader implements AuExtension {
 
 		sfu.setSizeMax(maxsz != null ? (maxsz >= 0 ? 1024L * maxsz : -1) : -1);
 
-		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {
+		for (Iterator it = sfu.parseRequest(new ServletRequestContext(request)).iterator(); it.hasNext();) {
 			final FileItem fi = (FileItem) it.next();
 			final String nm = fi.getFieldName();
 			final Object val;

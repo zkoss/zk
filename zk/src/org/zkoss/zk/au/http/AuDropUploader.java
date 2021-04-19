@@ -42,7 +42,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -380,7 +379,7 @@ public class AuDropUploader implements AuExtension {
 		sfu.setSizeMax(maxsz != null ? (maxsz >= 0 ? 1024L * maxsz : -1) : -1);
 
 		//XXX need handle maxsize limit at server side?
-		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {
+		for (Iterator it = sfu.parseRequest(new ServletRequestContext(request)).iterator(); it.hasNext();) {
 			final FileItem fi = (FileItem) it.next();
 			final String nm = fi.getFieldName();
 			final Object val;

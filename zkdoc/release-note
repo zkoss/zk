@@ -14,6 +14,7 @@ ZK 9.6.0
   ZK-2299: Frozen column support on tablet device
   ZK-4844: Replace spacer.gif by a base64 encoded string
   ZK-4672: borderlayout keyboard resizing movement speed
+  ZK-4797: Supporting Jakarta EE namespace
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
@@ -67,6 +68,7 @@ ZK 9.6.0
   + Due to ZK-4783, the hbox of message box is substituted by DIV.
   + Deprecated the method of isEditionValid() and encodeWithZK() of org.zkoss.zk.fn.ZkFns and core.dsp.tld.
   + Datebox format with a single y pattern letter will not be truncated to 2 digits year according to the Unicode specification.
+  + For Jakarta EE 9 support, please use 9.6.0-jakarta version instead.
 
    --------
 ZK 9.5.1

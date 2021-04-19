@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.idom.Element;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.lang.ClassResolver;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.web.servlet.Servlets;
@@ -49,6 +50,19 @@ import org.zkoss.zk.ui.WebApp;
  */
 /*package*/ abstract class AbstractExtendlet<V> implements Extendlet {
 	static final Logger log = LoggerFactory.getLogger(AbstractExtendlet.class);
+	static final ClassResolver CLASS_RESOLVER = clsnm -> {
+		switch (clsnm) {
+			// A special treatment of arguments of ServletRequest/ServletResponse/ServletContext
+			case "ServletRequest":
+				return ServletRequest.class;
+			case "ServletResponse":
+				return ServletResponse.class;
+			case "ServletContext":
+				return ServletContext.class;
+			default:
+				return Classes.forNameByThread(clsnm);
+		}
+	};
 
 	ExtendletContext _webctx;
 	/** DSP interpretation cache. */
@@ -104,7 +118,7 @@ import org.zkoss.zk.ui.WebApp;
 		}
 
 		try {
-			final Method mtd = Classes.getMethodBySignature(cls, sig, null);
+			final Method mtd = Classes.getMethodBySignature(cls, sig, null, CLASS_RESOLVER);
 			if ((mtd.getModifiers() & Modifier.STATIC) == 0) {
 				log.error("Not a static method: " + mtd);
 				return null;
