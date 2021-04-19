@@ -487,6 +487,16 @@ public abstract class WebDriverTestCase {
 	}
 
 	/**
+	 * Double clicks upon the given locator.
+	 * @param locator
+	 */
+	protected void dblClick(ClientWidget locator) {
+		Actions act = getActions();
+		act.doubleClick(toElement(locator));
+		act.perform();
+	}
+
+	/**
 	 * Checks the given locator. It's the same as {@link #click(ClientWidget)} internally.
 	 * @param locator
 	 */

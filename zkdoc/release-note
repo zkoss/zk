@@ -2,6 +2,7 @@ ZK 9.5.1.3
 * Features
 
 * Bugs
+  ZK-4857: Missing right click and double click in hybrid touch mouse mode
 
 * Upgrade Notes
 
