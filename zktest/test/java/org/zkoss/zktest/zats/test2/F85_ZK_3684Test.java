@@ -14,13 +14,16 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.zkoss.zktest.zats.WebDriverTestCase;
+import org.zkoss.zats.mimic.DesktopAgent;
+import org.zkoss.zktest.zats.ZATSTestCase;
+import org.zkoss.zul.Label;
 
-public class F85_ZK_3684Test extends WebDriverTestCase {
+public class F85_ZK_3684Test extends ZATSTestCase {
+	private DesktopAgent desktop;
 
 	@Test
 	public void test() {
-		connect();
+		desktop = connect();
 
 		verify("", "[FirstName should be capitalized and only letters are accepted., FirstName cannot be empty.]");
 		verify("123", "[FirstName should be capitalized and only letters are accepted.]");
@@ -28,8 +31,7 @@ public class F85_ZK_3684Test extends WebDriverTestCase {
 	}
 
 	private void verify(String input, String text) {
-		type(jq(".z-textbox"), input);
-		waitResponse();
-		Assert.assertEquals(text, jq(".z-label:eq(0)").text());
+		desktop.query("textbox").type(input);
+		Assert.assertEquals(text, desktop.query("label").as(Label.class).getValue());
 	}
 }
