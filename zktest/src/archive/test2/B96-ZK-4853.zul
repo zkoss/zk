@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4853.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 20 12:17:22 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the button to open 2 treeitems simultaneously.
+        2. Shouldn't throw an exception.
+        3. Scroll to the bottom and you should see the checkbox.
+        4. Click the checkbox and an event should be triggered in zk log.
+    </label>
+    <div height="500px">
+        <button id="openBtn" width="300px" label="open item offscreen"
+                onClick="first.setOpen(true);target.setOpen(true)" />
+        <tree id="tree" vflex="1">
+            <custom-attributes org.zkoss.zul.client.rod="true" />
+            <custom-attributes org.zkoss.zul.tree.initRodSize="40" />
+            <treechildren>
+                <treeitem id="first" open="false" label="first block">
+                    <treechildren>
+                        <forEach begin="0" end="100" step="1" var="x">
+                            <treeitem label="${x}" />
+                        </forEach>
+                    </treechildren>
+                </treeitem>
+                <treeitem id="target" open="false" label="target">
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell>
+                                    <checkbox onCheck="Clients.log(event)" />
+                                </treecell>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                </treeitem>
+            </treechildren>
+        </tree>
+    </div>
+</zk>
