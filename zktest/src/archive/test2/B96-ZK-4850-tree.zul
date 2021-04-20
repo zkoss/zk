@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4850-tree.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Apr 20 15:32:16 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	DefaultTreeNode root = new DefaultTreeNode("ROOT", new ArrayList());
+	DefaultTreeModel treeModel = new DefaultTreeModel(root);
+	for (int i = 1; i <= 18; i++) {
+		root.add(new DefaultTreeNode("item_" + i));
+	}
+]]></zscript>
+	<label multiline="true">
+		load this page and you should see 8 rows are displayed (container height should be the tree with 9 rows - 1px).
+		you should see [ 1 - 8 / 18 ] on the bottom right of paging.
+		If the fixed container height in this test case is not correct anymore, see the info in ZK-4850 tracker and modify it.
+		1. navigate to page 3 using the paging component, you should be able to stay on page 3, if it return to page 2 it's a bug.
+	</label>
+	<div height="495px">
+		<tree model="${treeModel}" vflex="1" mold="paging" autopaging="true">
+			<treecols>
+				<treecol label="Items" width="165px" />
+			</treecols>
+			<template name="model">
+				<treeitem label="${each}" />
+			</template>
+		</tree>
+	</div>
+</zk>
