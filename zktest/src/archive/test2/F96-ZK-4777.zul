@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4777.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 12 11:35:54 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label multiline="true">
+		1. both signatures have background image.
+		2. signature1 background color is blue, signature2 is white.
+		3. draw and click clear button in the tool bar, background color and image should not be cleared.
+		4. draw and click save button in the toolbar.
+		5. for signature1, both the drawing and background should be saved.
+		6. for signature2, only the drawing should be saved(background image should not be saved).
+		7. click set backgroundColor null button, signature2 background color should be black.
+	</label>
+	<zscript><![CDATA[
+		void setBackgroundColorNull() {
+			signature2.setBackgroundColor(null);
+		}
+	]]></zscript>
+	<signature id="signature1" width="600px" height="250px" onSave="image.setContent(event.media)"
+		backgroundImage="/zktest/test2/img/F96-ZK-4777-frame.png" backgroundColor="#b3e0ff"/>
+	<button label="set backgroundColor null" onClick="setBackgroundColorNull()"/>
+	<signature id="signature2" width="600px" height="250px" onSave="image.setContent(event.media)"
+		backgroundImage="/zktest/test2/img/F96-ZK-4777-frame.png" backgroundIncluded="false"/>
+	<image id="image" />
+	<label multiline="true">
+		1. click form button and blue button to set background, draw on the signature.
+		2. background color is white.
+		3. click the save button in the toolbar, both the drawing and background should be saved.
+		4. click the clear image button.
+		5. click frame button to set background image, draw on the signature.
+		6. click the false button and save button in the toolbar, only the drawing should be saved(background image should not be saved).
+		7. click the clear color button, the background color should be black.
+	</label>
+	<div>set background image:</div>
+	<button label="blue" onClick='signature3.setBackgroundColor("#b3e0ff")'/>
+	<button label="form" onClick='signature3.setBackgroundImage("/zktest/test2/img/F96-ZK-4777-form.jpg")'/>
+	<button label="frame" onClick='signature3.setBackgroundImage("/zktest/test2/img/F96-ZK-4777-frame.png")'/>
+	<button label="clear image" onClick='signature3.setBackgroundImage("")'/>
+	<button label="clear color" onClick='signature3.setBackgroundColor(null)'/>
+	<div>save background image:</div>
+	<button label="true" onClick="signature3.setBackgroundIncluded(true)"/>
+	<button label="false" onClick="signature3.setBackgroundIncluded(false)"/>
+	<signature id="signature3" width="800px" height="400px" onSave="image2.setContent(event.media)"/>
+	<image id="image2" />
+	<style>
+		body {
+			background-color: #F0F0F0;
+		}
+	</style>
+</zk>
