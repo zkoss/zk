@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4821.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Apr 19 14:33:35 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div style="padding:20px;">
+		<label>
+			1. when you click between the border and checkbox, all the checkbox (no matter it's disabled or not)
+			you should not see the status of checkbox been changed. see example where to click
+		</label>
+		<image src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAyCAIAAAC77e5JAAAAFXRFWHRDcmVhdGlvbiBUaW1lAAflAwsJMhbZiOSfAAAAB3RJTUUH5QMLCTMRi/ajDQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAYFJREFUeNpj/P//PwO9ABPdbBrWlrGgCzAy0sQecMpgwSVBTQDzwPCNs1HLRi3DC1iIVHf27FlilBkbG1PBMoIGEeOgQRmM+J1P0NMD4LNRy0YtwwtITvpEpvIh5TMii0c8gBG9RQxsnNCiwQM2E18wSkqqnjxFqW+QAYE4q6pqpKZ9/9EAkoiEhAqQdHL2PXHyzH9KAMxMwpZRwT6SLKPUPnyWwZAEAw+yjBMj9wlGFmQFJCDsliEBZJ9RJTxJs4xC+0i27MfP32TbR7JlQPDhw2fy7CPHMiB48eIVGfaRaRkQPHz4GGgfSZYRW+p//fqDm5sDyHB28aNecYXNZ1++fOfmlti8ZQ+QDbRs0+YdJHmIhGCE2ASMHh0dC0joQRhkAAKlPjD0xMUV9+7bYm5mLK8gf/jwKTk5GSBj85adVA5GYPxD/AThAhkaGiZAxrVrN/T0rKgcjJjA2yccaBOQYWxsT3PLnj59DvRcYlLOuXOXyLAMow1CSzB8W8R0tQwAZJXl6ANdXtwAAAAASUVORK5CYII="/>
+		<label multiline="true">
+			2. when you click the label(disabled/normal) of checkbox,
+			2-1. disabled checkbox: you should not see the status of checkbox been changed.
+			2-2. normal checkbox: you should see the status of checkbox been changed.
+			3. when you click the real checkbox(input),
+			3-1. disabled checkbox: you should not see the status of checkbox been changed.
+			3-2. normal checkbox: you should see the status of checkbox been changed.
+		</label>
+	</div>
+	<div style="padding:20px;">
+		<checkbox mold="tristate" label="disabled" indeterminate="true" disabled="true" style="border:solid 1px red; padding:20px;"/>
+		<checkbox mold="tristate" label="disabled" disabled="true" style="border:solid 1px red; padding:20px;"/>
+		<checkbox disabled="true" label="disabled" style="border:solid 1px red; padding:20px;"/>
+		<checkbox mold="switch" label="disabled" disabled="true" style="border:solid 1px red; padding:20px;"/>
+		<checkbox mold="toggle" label="disabled" disabled="true" style="border:solid 1px red; padding:20px;"/>
+	</div>
+	<div style="padding:20px;">
+		<checkbox mold="tristate" label="normal" indeterminate="true" style="border:solid 1px red; padding:20px;"/>
+		<checkbox mold="tristate" label="normal" style="border:solid 1px red; padding:20px;"/>
+		<checkbox label="normal" style="border:solid 1px red; padding:20px;"/>
+		<checkbox mold="switch" label="normal" style="border:solid 1px red; padding:20px;"/>
+		<checkbox mold="toggle" label="normal" style="border:solid 1px red; padding:20px;"/>
+	</div>
+</zk>
