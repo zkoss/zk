@@ -16,7 +16,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//Two onclick are fired if clicking on label, so ignore it if so
 	function _shallIgnore(evt: zk.Event): boolean {
 		var v = evt.domEvent;
-		return v && jq.nodeName(v.target, 'label');
+		// B96-ZK-4821: shall ignore if target is not the real input checkbox (label or span)
+		return v && !jq.nodeName(v.target, 'input');
 	}
 
 var Checkbox =
@@ -284,7 +285,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			this.$supers('doSelect_', arguments);
 	},
 	doClick_(evt: zk.Event) {
-		if (!_shallIgnore(evt)) {
+		// B96-ZK-4821: shall not doClick if the checkbox is disabled
+		if (!_shallIgnore(evt) && !this.isDisabled()) {
 			// F55-ZK-12: Checkbox automatically disable itself after clicked
 			// use the autodisable handler of button directly
 			zul.wgt.ADBS.autodisable(this);
