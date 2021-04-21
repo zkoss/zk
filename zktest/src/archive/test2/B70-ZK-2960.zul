@@ -40,6 +40,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 							<comboitem label="dddd"/>
 							<comboitem label="eeee"/>
 							<comboitem label="ffff"/>
+							<comboitem label="gggg"/>
+							<comboitem label="hhhh"/>
+							<comboitem label="iiii"/>
 						</combobox>
 					</listcell>
 					<listcell>
@@ -50,6 +53,9 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 							<comboitem label="dddd"/>
 							<comboitem label="eeee"/>
 							<comboitem label="ffff"/>
+							<comboitem label="gggg"/>
+							<comboitem label="hhhh"/>
+							<comboitem label="iiii"/>
 						</combobox>
 					</listcell>
 					<listcell>
