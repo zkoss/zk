@@ -3,6 +3,7 @@ ZK 9.5.1.3
 
 * Bugs
   ZK-4857: Missing right click and double click in hybrid touch mouse mode
+  ZK-4860: zkmax/zkex project build failing under maven 3.8.1
 
 * Upgrade Notes
 
