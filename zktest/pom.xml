@@ -38,6 +38,10 @@
 			<id>Java Net Repo</id>
 			<url>https://maven.java.net/content/groups/public/</url>
 		</repository>
+		<repository>
+			<id>jaspersoft-third-party</id>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>

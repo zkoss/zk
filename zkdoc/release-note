@@ -65,6 +65,7 @@ ZK 9.6.0
   ZK-4857: Missing right click and double click in hybrid touch mouse mode
   ZK-4821: tri-state checkmark still checks while disable when clicking in the border
   ZK-4850: Autopaging row height calculation incorrect by 1px
+  ZK-4860: zkmax/zkex project build failing under maven 3.8.1
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
