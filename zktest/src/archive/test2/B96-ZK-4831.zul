@@ -14,13 +14,16 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 <zk>
 	<label multiline="true">
 		1. click button to set background-image.
-		2. the div background image should fill with an icon_browser picture.
+		2. the background image of 1st div should fill with an icon_browser picture.
+		3. the background image of 2nd div should fill with white dot and red layer.
 	</label>
 	<button label="set background-image" onClick="setStyle()"/>
-	<div id="div" width="200px" height="200px" style="border: 1px solid black">div</div>
-	<zscript>
+	<div id="div1" width="200px" height="200px" style="border: 1px solid black">div</div>
+	<div id="div2" width="200px" height="200px" style="border: 1px solid black">div</div>
+	<zscript><![CDATA[
 		void setStyle() {
-		div.setStyle("background-image:url('http://localhost:8080/zktest/test2/img/icon_browser.png')");
+			div1.setStyle("width: 200px; height:200px;background-image:url('http://localhost:8080/zktest/test2/img/icon_browser.png')");
+			div2.setStyle("width: 200px; height: 200px;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==);");
 		}
-	</zscript>
+	]]></zscript>
 </zk>
