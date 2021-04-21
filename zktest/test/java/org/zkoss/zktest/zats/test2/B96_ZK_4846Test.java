@@ -44,5 +44,21 @@ public class B96_ZK_4846Test extends WebDriverTestCase {
 		waitResponse();
 		assertEquals(0, jq(".z-listheader-checked").length());
 		assertEquals(0, jq(".z-treecol-checked").length());
+
+		click(jq(".z-listheader-checkable"));
+		waitResponse();
+		click(jqListitem.eq(1));
+		waitResponse();
+		click(jq(".z-listheader-checkable"));
+		waitResponse();
+		assertEquals(1, jq(".z-listheader-checked").length());
+
+		click(jq(".z-treecol-checkable"));
+		waitResponse();
+		click(jqTreerow.eq(1));
+		waitResponse();
+		click(jq(".z-treecol-checkable"));
+		waitResponse();
+		assertEquals(1, jq(".z-treecol-checked").length());
 	}
 }
