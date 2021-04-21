@@ -2278,12 +2278,12 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	parseStyle: function (style) {
 		var map = {};
 		if (style) {
-			var pairs = style.split(';');
-			for (var j = 0, len = pairs.length; j < len;) {
-				var v = pairs[j++].split(/:(.+)/),
-					nm = v.length > 0 ? v[0].trim() : '';
-				if (nm)
-					map[nm] = v.length > 1 ? v[1].trim() : '';
+			var dummy = document.createElement('div');
+			dummy.setAttribute('style', style);
+			var dummyStyle = dummy.style;
+			for (let i = 0, length = dummyStyle.length; i < length; i++) {
+				var nm = dummyStyle[i];
+				map[nm] = dummyStyle.getPropertyValue(nm);
 			}
 		}
 		return map;
