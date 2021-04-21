@@ -783,7 +783,7 @@ public class ClassWebResource {
 
 			//prefix context path
 			if (request instanceof HttpServletRequest) {
-				String ctxpath = ((HttpServletRequest) request).getContextPath();
+				String ctxpath = getContextPath((HttpServletRequest) request);
 				if (ctxpath == null)
 					throw new NullPointerException(
 							"HttpServletRequest#getContentPath() returns a null value from [ " + request + " ]");
@@ -810,6 +810,14 @@ public class ClassWebResource {
 			if (response instanceof HttpServletResponse)
 				uri = ((HttpServletResponse) response).encodeURL(uri);
 			return uri;
+		}
+
+		private String getContextPath(HttpServletRequest request) {
+			// javax.servlet.AsyncContext.ASYNC_CONTEXT_PATH
+			String asyncContextPath = (String) request.getAttribute("javax.servlet.async.context_path");
+			if (asyncContextPath != null)
+				return asyncContextPath;
+			return request.getContextPath();
 		}
 
 		public String encodeRedirectURL(HttpServletRequest request, HttpServletResponse response, String uri,
