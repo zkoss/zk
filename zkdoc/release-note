@@ -67,6 +67,7 @@ ZK 9.6.0
   ZK-4860: zkmax/zkex project build failing under maven 3.8.1
   ZK-4842: Comet NPE during encodeURL (Jetty)
   ZK-4854: navbar opening animation needs fine tuning
+  ZK-4859: a specific text "$z!t#d:" makes ZK AU failed
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
