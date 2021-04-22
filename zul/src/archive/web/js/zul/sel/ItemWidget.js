@@ -201,13 +201,15 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 				return;
 			}
 
-			var zcls = zk.Widget.$(box._headercm).$s('checked'),
+			var headerWgt = zk.Widget.$(box._headercm),
+				zcls = headerWgt.$s('checked'),
 				$headercm = jq(box._headercm);
 
 			// only update for user's selection or sharable model case (ZK-2969 test case)
-			if (!this.isSelected() && (box.$$selectAll == undefined || this._userSelection))
+			if (!this.isSelected() && (box.$$selectAll == undefined || this._userSelection)) {
 				$headercm.removeClass(zcls);
-			else if (!$headercm.hasClass(zcls))
+				headerWgt._checked = false;
+			} else if (!$headercm.hasClass(zcls))
 				box._updHeaderCM(); //update in batch since we have to examine one-by-one
 		}
 	},

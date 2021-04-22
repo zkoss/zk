@@ -13,9 +13,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 
 -->
 <zk>
-	<label><![CDATA[
+	<label multiline="true"><![CDATA[
 		1. click each item once to trigger the "select-all" checkbox checked.
 		2. click the "select-all" checkbox, it should be unchecked.
+		3. click the "select-all" checkbox, and click any checkbox of the items (the "select-all" would be unchecked)
+		4. click the "select-all" checkbox, the checkboxes should be all checked.
 	]]></label>
 	<listbox id="lb" checkmark="true">
 		<listhead>
