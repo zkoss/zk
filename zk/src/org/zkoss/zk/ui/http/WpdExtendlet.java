@@ -452,7 +452,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		} else {
 			if (sourceMapManager != null)
 				sourceMapManager.appendEmptySourceMap(1);
-			write(out, "\n}finally{zk.setLoaded(zk._p.n);}");
+			write(out, "\n}catch(error){console.error(error);}finally{zk.setLoaded(zk._p.n);}");
 			if (depends != null) {
 				write(out, "});zk.setLoaded('");
 				write(out, name);

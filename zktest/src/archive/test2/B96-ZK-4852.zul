@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4852.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 21 12:50:33 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>Should see "myFunc is not defined" js error</label>
+	<test4852 />
+</zk>
