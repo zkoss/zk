@@ -48,7 +48,6 @@ ZK 9.6.0
   ZK-4793: IndexOutOfBoundsException Tree.renderItemByPath
   ZK-4792: Chosenbox getSelectedIndex() return wrong index with ListModelList
   ZK-4828: remove externally loaded resources with internal refs.
-  ZK-4829: Unnecessary multiple _hliteOpt function callings in Chosenbox when filtering item
   ZK-4835: Browsers supporting both touch and mouse fails to register mouse events following ZK-4301
   ZK-4817: listgroup open/close triggers selection (mobile)
   ZK-4843: combobox checkPopupPosition performance
