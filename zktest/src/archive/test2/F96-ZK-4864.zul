@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4864.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Apr 23 10:08:25 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Step 1: click the first datebox button to open the datebox popup, then change the timezone in the datebox popup.
+		The popup should close after the Timezone been changed.
+
+		Step 2: click the second datebox button to open the datebox popup, then change the timezone in the datebox popup.
+		The popup should not close after the Timezone been changed.
+
+		Step 3: click the "set closePopupOnTimezoneChange to false" button, then do Step 1 again.
+		The popup should not close after the Timezone been changed.
+
+		Step 4: click the "set closePopupOnTimezoneChange to true" button, then do Step 1 again.
+		The popup should close after the Timezone been changed.
+	</label>
+	<button label="set closePopupOnTimezoneChange to false" onClick="db1.setClosePopupOnTimezoneChange(false)"/>
+	<button label="set closePopupOnTimezoneChange to true" onClick="db1.setClosePopupOnTimezoneChange(true)"/>
+	<datebox id="db1" displayedTimeZones="GMT+12,GMT+8" timeZone="GMT+8" timeZonesReadonly="false"/>
+	<datebox id="db2" displayedTimeZones="GMT+12,GMT+8" timeZone="GMT+8" timeZonesReadonly="false" closePopupOnTimezoneChange="false"/>
+</zk>

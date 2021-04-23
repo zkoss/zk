@@ -16,6 +16,7 @@ ZK 9.6.0
   ZK-4672: borderlayout keyboard resizing movement speed
   ZK-4797: Supporting Jakarta EE namespace
   ZK-4777: signature can have a background image
+  ZK-4864: Add datebox attribute to enable or disable close on timeZone change
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
