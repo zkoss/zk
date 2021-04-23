@@ -95,6 +95,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	private String _todayLinkLabel = Messages.get(MZul.CALENDAR_TODAY);
 	private LocalDateTime _defaultDateTime;
 	private String _selectLevel = "day";
+	private boolean _closePopupOnTimezoneChange = true;
 
 	static {
 		addClientEvent(Datebox.class, "onTimeZoneChange", CE_IMPORTANT | CE_DUPLICATE_IGNORE);
@@ -1051,6 +1052,29 @@ public class Datebox extends DateTimeFormatInputElement {
 		}
 	}
 
+	/**
+	 * Returns whether to auto close the datebox popup after changing the the timezone.
+	 * <p>
+	 * Default: true
+	 * @since 9.6.0
+	 * @return boolean
+	 */
+	public boolean getClosePopupOnTimezoneChange() {
+		return _closePopupOnTimezoneChange;
+	}
+
+	/**
+	 * Sets whether to auto close the datebox popup after changing the the timezone.
+	 * @param closePopupOnTimezoneChange shall close the datebox popup or not
+	 * @since 9.6.0
+	 */
+	public void setClosePopupOnTimezoneChange(boolean closePopupOnTimezoneChange) {
+		if (_closePopupOnTimezoneChange != closePopupOnTimezoneChange) {
+			_closePopupOnTimezoneChange = closePopupOnTimezoneChange;
+			smartUpdate("closePopupOnTimezoneChange", _closePopupOnTimezoneChange);
+		}
+	}
+
 	//--ComponentCtrl--//
 	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
 
@@ -1122,5 +1146,8 @@ public class Datebox extends DateTimeFormatInputElement {
 			render(renderer, "defaultDateTime", toDate(_defaultDateTime));
 		if (!"day".equals(_selectLevel))
 			render(renderer, "selectLevel", _selectLevel);
+
+		if (!_closePopupOnTimezoneChange)
+			renderer.render("closePopupOnTimezoneChange", false);
 	}
 }

@@ -28,6 +28,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_lenient: true,
 	_strictDate: false,
 	_selectLevel: 'day',
+	_closePopupOnTimezoneChange: true,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.afterInit(this.$class._initPopup);
@@ -306,7 +307,21 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 * @return String
 		 * @since 9.5.1
 		 */
-		selectLevel: null
+		selectLevel: null,
+		/**
+		 * Sets whether to auto close the datebox popup after changing the the timezone.
+		 *
+		 * @param boolean closePopupOnTimezoneChange shall close the datebox popup or not
+		 * @since 9.6.0
+		 */
+		/**
+		 * Returns whether to auto close the datebox popup after changing the the timezone.
+		 * <p>
+		 * Default: true
+		 * @return boolean
+		 * @since 9.6.0
+		 */
+		closePopupOnTimezoneChange: null
 	},
 	/**
 	 * Returns the iconSclass name of this Datebox.
@@ -538,7 +553,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			timezone = select.value;
 		this.updateChange_();
 		this.fire('onTimeZoneChange', {timezone: timezone}, {toServer: true}, 150);
-		if (this._pop) this._pop.close();
+		if (this._pop && this._closePopupOnTimezoneChange) this._pop.close();
 	},
 	onChange: function (evt) {
 		var data = evt.data,
