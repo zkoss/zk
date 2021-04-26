@@ -1053,7 +1053,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	}
 
 	/**
-	 * Returns whether to auto close the datebox popup after changing the the timezone.
+	 * Returns whether to auto close the datebox popup after changing the timezone.
 	 * <p>
 	 * Default: true
 	 * @since 9.6.0
@@ -1064,7 +1064,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	}
 
 	/**
-	 * Sets whether to auto close the datebox popup after changing the the timezone.
+	 * Sets whether to auto close the datebox popup after changing the timezone.
 	 * @param closePopupOnTimezoneChange shall close the datebox popup or not
 	 * @since 9.6.0
 	 */

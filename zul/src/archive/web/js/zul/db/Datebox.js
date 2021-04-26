@@ -309,13 +309,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		 */
 		selectLevel: null,
 		/**
-		 * Sets whether to auto close the datebox popup after changing the the timezone.
+		 * Sets whether to auto close the datebox popup after changing the timezone.
 		 *
 		 * @param boolean closePopupOnTimezoneChange shall close the datebox popup or not
 		 * @since 9.6.0
 		 */
 		/**
-		 * Returns whether to auto close the datebox popup after changing the the timezone.
+		 * Returns whether to auto close the datebox popup after changing the timezone.
 		 * <p>
 		 * Default: true
 		 * @return boolean
