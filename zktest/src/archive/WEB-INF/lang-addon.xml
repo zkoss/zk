@@ -139,4 +139,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
 		<widget-class>wgt4714.test04.Test04</widget-class>
 	</component>
+	<!-- ZK-4852 -->
+	<component>
+		<component-name>test4852</component-name>
+		<component-class>org.zkoss.zktest.test2.B96_ZK_4852Comp</component-class>
+		<widget-class>wgt4852.TestWidget</widget-class>
+	</component>
 </language-addon>
