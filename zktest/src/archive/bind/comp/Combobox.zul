@@ -1,12 +1,14 @@
 <zk>
+	<label multiline="true">
+		The label will be updated while the combobox is opened/closed.
+	</label>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Combobutton')">
+		<label id="open" value="@load(vm.open)" />
 		<combobox open="@bind(vm.open)" >
 			<comboitem>AAAAA</comboitem>
 			<comboitem>BBBBB</comboitem>
 			<comboitem>CCCCC</comboitem>
 		</combobox>
-		<separator height="50px"></separator>
-		<label id="open" value="@load(vm.open)" />
 	</vlayout>
 </zk>

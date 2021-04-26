@@ -1,7 +1,8 @@
 package org.zkoss.zktest.bind.comp;
 
 
-
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.NotifyChange;
 
 public class Panel{
 	private boolean open = false;
@@ -47,5 +48,15 @@ public class Panel{
 		this.maximized = maximized;
 	}
 
+	@Command
+	@NotifyChange("index1")
+	public void index1Add() {
+		this.index1++;
+	}
 
+	@Command
+	@NotifyChange("index2")
+	public void index2Add() {
+		this.index2++;
+	}
 }

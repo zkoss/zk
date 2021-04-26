@@ -1,4 +1,8 @@
 <zk>
+	<label multiline="true">
+		1. Open the menu and check/uncheck the menuitem
+		2. The label should be updated.
+	</label>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Menuitem')"
 		border="normal" width="200px">

@@ -1,8 +1,12 @@
 <zk>
-	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.TabboxSelectedVM')" border="none"> 
-		Single way
-		<vbox>
+	<label multiline="true">
+		1. The selection in left side is unidirectional. (Listitem -> Tabbox)
+		2. The selection in right side is bidirectional.
+	</label>
+	<hlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.TabboxSelectedVM')">
+		<vlayout hflex="1">
+			Single way
 			<listbox id="listbox1" selectedItem="@bind(vm.selectedTab1)">
 				<listitem id="item1a" label="Tab A" value="tabA"/>
 				<listitem id="item1b" label="Tab B" value="tabB"/>
@@ -11,9 +15,9 @@
 			==================================
 			<tabbox id="tabbox1" >
 				<tabs>
-					<tab id="tab1a" label="A" selected="@bind(vm.selectedTab1 eq 'tabA' ? true:false)" />
-					<tab id="tab1b" label="B" selected="@bind(vm.selectedTab1 eq 'tabB' ? true:false)" />
-					<tab id="tab1c" label="C" selected="@bind(vm.selectedTab1 eq 'tabC' ? true:false)" />
+					<tab id="tab1a" label="A" selected="@load(vm.selectedTab1 eq 'tabA')" />
+					<tab id="tab1b" label="B" selected="@load(vm.selectedTab1 eq 'tabB')" />
+					<tab id="tab1c" label="C" selected="@load(vm.selectedTab1 eq 'tabC')" />
 				</tabs>
 				<tabpanels>
 					<tabpanel>Panel A</tabpanel>
@@ -21,10 +25,9 @@
 					<tabpanel>Panel C</tabpanel>
 				</tabpanels>
 			</tabbox>
-
-		</vbox>
-		Two way (have to bind to tab's label)
-		<vbox>
+		</vlayout>
+		<vlayout hflex="1">
+			Two way (have to bind to tab's label)
 			<listbox id="listbox2" selectedItem="@bind(vm.selectedTab2)">
 				<listitem id="item2a" label="Tab A" value="tabA"/>
 				<listitem id="item2b" label="Tab B" value="tabB"/>
@@ -43,7 +46,7 @@
 					<tabpanel>Panel C</tabpanel>
 				</tabpanels>
 			</tabbox>
-		</vbox>
-		<button label="Dump" onClick="binder.getTracker().dump()"/>
-	</window>
+		</vlayout>
+	</hlayout>
+	<button label="Dump" onClick="binder.getTracker().dump()"/>
 </zk>

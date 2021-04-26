@@ -1,4 +1,10 @@
 <zk>
+	<label multiline="true">
+		1. Select any treeitem.
+		2. The label should be updated.
+		3. Open/close any treeitem.
+		4. Other treeitems should be opened/closed accordingly. And the label should be updated.
+	</label>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Tree')">
 		<tree id="tree" model="@load(vm.model)"  selectedItem="@save(vm.selected)">
@@ -10,8 +16,8 @@
 				</treeitem>
 			</template>
 		</tree>
-		<label id="selectedLabel" value="@load(vm.selected.data)"/>
-		<label id="open" value="@load(vm.open)"/>
+		selectedLabel: <label id="selectedLabel" value="@load(vm.selected.data)"/>
+		open: <label id="open" value="@load(vm.open)"/>
 		<label id="debug" value=""/>
 	</vlayout>
 </zk>

@@ -1,4 +1,7 @@
 <zk>
+	<label multiline="true">
+		The value of both Timebox and Datebox should be synchronized.
+	</label>
 	<window viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.DateTimeboxVM')">
 		Timebox: <timebox id="tb" cols="14" format="a hh:mm:ss" value="@bind(vm.date)"/>
 		<separator/>
