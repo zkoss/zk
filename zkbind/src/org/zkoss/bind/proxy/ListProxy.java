@@ -14,6 +14,7 @@ package org.zkoss.bind.proxy;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -38,8 +39,15 @@ public class ListProxy<E> extends AbstractCollectionProxy<E> implements List<E> 
 	}
 
 	public boolean addAll(int index, Collection<? extends E> c) {
-		_dirty = true;
-		return ((List<E>) getCache()).addAll(index, c);
+		boolean result = false;
+		if (c.size() > 0) {
+			List<E> proxyList = new LinkedList<>();
+			for (E e : c)
+				proxyList.add(createProxyObject(e));
+			result = ((List<E>) getCache()).addAll(index, proxyList);
+			setDirty(true);
+		}
+		return result;
 	}
 
 	public E get(int index) {
@@ -47,18 +55,20 @@ public class ListProxy<E> extends AbstractCollectionProxy<E> implements List<E> 
 	}
 
 	public E set(int index, E element) {
-		_dirty = true;
-		return ((List<E>) getCache()).set(index, element);
+		E prevElement = ((List<E>) getCache()).set(index, createProxyObject(element));
+		setDirty(true);
+		return prevElement;
 	}
 
 	public void add(int index, E element) {
-		_dirty = true;
-		((List<E>) getCache()).add(index, element);
+		((List<E>) getCache()).add(index, createProxyObject(element));
+		setDirty(true);
 	}
 
 	public E remove(int index) {
-		_dirty = true;
-		return ((List<E>) getCache()).remove(index);
+		E removed = ((List<E>) getCache()).remove(index);
+		setDirty(true);
+		return removed;
 	}
 
 	public int indexOf(Object o) {

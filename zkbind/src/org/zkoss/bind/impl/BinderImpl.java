@@ -66,6 +66,7 @@ import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.SmartNotifyChange;
 import org.zkoss.bind.init.ViewModelAnnotationResolvers;
 import org.zkoss.bind.init.ZKBinderPhaseListeners;
+import org.zkoss.bind.proxy.FormProxyObject;
 import org.zkoss.bind.proxy.ViewModelProxyObject;
 import org.zkoss.bind.sys.BindEvaluatorX;
 import org.zkoss.bind.sys.BinderCtrl;
@@ -108,6 +109,7 @@ import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.EmptyCacheMap;
+import org.zkoss.util.Pair;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -264,6 +266,9 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 
 	//ZK-4791
 	private static final Pattern CALL_OTHER_VM_COMMAND_PATTERN = Pattern.compile("\\$([^.]*)\\..*$");
+
+	// ZK-4855, internal used only
+	public static final String ZKFORMPROXYNOTIFIEDKEY = "$$zkFormProxyNotified$$";
 
 	public BinderImpl() {
 		this(null, null);
@@ -457,6 +462,14 @@ public class BinderImpl implements Binder, BinderCtrl, Serializable {
 		//ignore a coming ref-binding if the binder is the same since it was loaded already.
 		if (base instanceof ReferenceBinding && ((ReferenceBinding) base).getBinder() == this) {
 			return;
+		}
+
+		//ZK-4855
+		if (base instanceof FormProxyObject) {
+			Execution execution = Executions.getCurrent();
+			Set<Pair<Object, String>> zkProxyNotified = execution != null ? (Set<Pair<Object, String>>) execution.getAttribute(ZKFORMPROXYNOTIFIEDKEY) : null;
+			if (zkProxyNotified != null)
+				zkProxyNotified.remove(new Pair<>(base, prop)); //try to remove flag
 		}
 
 		final Tracker tracker = getTracker();

@@ -24,11 +24,14 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Form;
 import org.zkoss.bind.FormStatus;
 import org.zkoss.bind.annotation.Transient;
+import org.zkoss.bind.impl.BinderImpl;
 import org.zkoss.bind.sys.BinderCtrl;
 import org.zkoss.bind.sys.FormBinding;
 import org.zkoss.bind.sys.SavePropertyBinding;
 import org.zkoss.lang.Strings;
 import org.zkoss.util.Pair;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Callback;
 
@@ -165,7 +168,19 @@ public class FormProxyHandler<T> extends BeanProxyHandler<T> {
 	private void addCallbacks() {
 		_node.setOnDataChangeCallback(new Callback<Object[]>() {
 			public void call(Object[] data) {
-				_binding.getBinder().notifyChange(data[0], (String) data[1]);
+				Execution execution = Executions.getCurrent();
+				Set<Pair<Object, String>> zkProxyNotified = execution != null ? (Set<Pair<Object, String>>) execution.getAttribute(BinderImpl.ZKFORMPROXYNOTIFIEDKEY) : null;
+				String property = (String) data[1];
+				Pair<Object, String> zkFormProxyNotifiedVal = new Pair<>(data[0], property);
+				if (zkProxyNotified == null || !zkProxyNotified.contains(zkFormProxyNotifiedVal)) {
+					_binding.getBinder().notifyChange(data[0], property);
+					if (execution != null) {
+						if (zkProxyNotified == null)
+							zkProxyNotified = new HashSet<>();
+						zkProxyNotified.add(new Pair<>(data[0], property));
+						execution.setAttribute(BinderImpl.ZKFORMPROXYNOTIFIEDKEY, zkProxyNotified);
+					}
+				}
 			}
 		});
 		_node.setOnDirtyChangeCallback(new Callback() {

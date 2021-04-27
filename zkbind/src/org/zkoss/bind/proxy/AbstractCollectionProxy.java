@@ -265,7 +265,7 @@ public abstract class AbstractCollectionProxy<E>
 		throw new IllegalAccessError("Not supported");
 	}
 
-	private <T extends Object> T createProxyObject(T t) {
+	protected <T extends Object> T createProxyObject(T t) {
 		T p = isImmutableElements ? t : ProxyHelper.createProxyIfAny(t);
 		if (p instanceof FormProxyObject)
 			((FormProxyObject) p).setPath("[$INDEX$]", _node);
