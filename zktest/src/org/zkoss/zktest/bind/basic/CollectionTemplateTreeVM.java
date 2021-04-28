@@ -12,9 +12,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zktest.bind.basic;
 
-import java.util.Map;
-
-import org.zkoss.bind.BindComposer;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.BindingParam;
@@ -99,7 +96,7 @@ public class CollectionTemplateTreeVM{
 
 	static public class MyTreeNode extends DefaultTreeNode<String> {
 
-		boolean open;
+		boolean open = true;
 
 		public MyTreeNode(String data, MyTreeNode[] children) {
 			super(data,children);

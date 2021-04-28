@@ -1,11 +1,11 @@
 <window apply="org.zkoss.zktest.bind.basic.CollectionIndexTreeComposer">
 	<custom-attributes composerName="vm"/>
 	<label id="msg" value="@bind(vm.message1)"/>
-	<tree id="tree" model="@bind(vm.model)" width="500px">
+	<tree id="tree" model="@bind(vm.model)" width="600px">
 		<treecols>
 			<treecol label="index"/>
 			<treecol label="name"/>
-			<treecol label="action" width="300px"/>
+			<treecol label="action" width="400px"/>
 		</treecols>
 		<template name="model" var="node" status="s">
 			<treeitem open="@bind(node.open)">
@@ -26,5 +26,8 @@
 	</tree>
 	<hbox>
 		<button label="Dump" onClick="binder.getTracker().dump()" />
-	</hbox>		
+	</hbox>
+	<label>
+		try add or delete these treeitems and check the index, the index should be correct.
+	</label>
 </window>

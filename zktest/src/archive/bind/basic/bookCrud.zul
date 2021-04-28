@@ -22,7 +22,7 @@
 					</listitem>
 				</template>
 			</listbox>
-			<div height="100px">
+			<div height="200px">
 				<grid visible="@bind(not empty vm.selectedBook)"
 					form="@id('fx') @load(vm.selectedBook) @save(vm.selectedBook,before='save')">
 					<columns>
@@ -54,10 +54,10 @@
 				<button label="Delete" onClick="@command('delete')" visible="@bind(not empty vm.selectedBook)" />
 			</hlayout>
 			<hlayout>
-				<label value="@bind(vm.message)"/>
+				<label sclass="msg-label" value="@bind(vm.message)"/>
 			</hlayout>
 		</vlayout>
-		<window title="Confirm" border="normal" visible="@load(vm.confirmWindowVisible)" width="300px" height="150px" mode="modal">
+		<window title="Confirm" border="normal" visible="@load(vm.confirmWindowVisible)" width="300px" height="250px" mode="modal">
 			<vlayout vflex="1" style="padding:5px">
 				<label multiline="true" value="@load(vm.confirmMessage)"/>
 			</vlayout>

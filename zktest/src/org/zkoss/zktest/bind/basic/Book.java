@@ -6,6 +6,10 @@ public class Book {
 	String author;
 	String isbn;
 
+	// An empty constructor is needed for FormProxy
+	public Book() {
+	}
+
 	public Book(String name, String author, String isbn) {
 		super();
 		this.name = name;

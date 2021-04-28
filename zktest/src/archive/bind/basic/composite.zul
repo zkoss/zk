@@ -3,15 +3,31 @@
 <?component name="editor3" macroURI="/bind/basic/composite3.zul" class="org.zkoss.zktest.bind.basic.Composite3"?>
 <window  apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.CompositeVM')" >
 	<vbox>
-		<hbox>Name:<editor1 value="@bind(vm.name)"/></hbox>
-		<hbox>Value:<editor2 value="@bind(vm.value)"/>Not work currently</hbox>
-		<hbox>Title:<editor3 value="@bind(vm.title)"/></hbox>
+		<hbox>Name:<editor1 id="e1" value="@bind(vm.name)"/></hbox>
+		<hbox>Value:<editor2 id="e2" value="@bind(vm.value)"/>Not work currently</hbox>
+		<hbox>Title:<editor3 id="e3" value="@bind(vm.title)"/></hbox>
 	</vbox>
 	<vbox>
-		<hbox>Name:<label value="@bind(vm.name)"/></hbox>
-		<hbox>Value:<label value="@bind(vm.value)"/></hbox>
-		<hbox>Title::<label value="@bind(vm.title)"/></hbox>
+		<hbox>Name:<label id="l1" value="@bind(vm.name)"/></hbox>
+		<hbox>Value:<label id="l2" value="@bind(vm.value)"/></hbox>
+		<hbox>Title::<label id="l3" value="@bind(vm.title)"/></hbox>
 	</vbox>		
 	<button label="reset" onClick="@command('reset')"/>
 	<button label="dump" onClick="binder.tracker.dump()"/>
+	<label multiline="true">
+		1. Load the page, you should see:
+		Name: Dennis
+		Value: Not work currently
+		Title: RD
+		Name: Dennis
+		Value: 100
+		Title:: RD
+		2. click reset button, you should see:
+		Name: Lin
+		Value: Not work currently
+		Title: MVP
+		Name: Lin
+		Value: 34
+		Title:: MVP
+	</label>
 </window>
