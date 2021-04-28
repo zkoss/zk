@@ -1,4 +1,8 @@
 <zk>
+<label multiline="true">
+	1. Open/close the detail, the label will be updated.
+	2. Open/close the group, the label will be updated.
+</label>
 <vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Grid')">
 	<grid id="detailGrid" fixedLayout="true">

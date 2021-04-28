@@ -1,4 +1,7 @@
 <zk>
+	<label multiline="true">
+		Select any item, then the label should be updated to the selected index.
+	</label>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Selectbox')">
 		<zscript>

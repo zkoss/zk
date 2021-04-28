@@ -1,4 +1,7 @@
 <zk>
+	<label multiline="true">
+		The label will be updated while the combobutton is opened/closed.
+	</label>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Combobutton')">
 		<label id="open" value="@load(vm.open)" />

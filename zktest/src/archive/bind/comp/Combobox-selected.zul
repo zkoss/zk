@@ -1,4 +1,7 @@
 <zk>
+	<label multiline="true">
+		The selected item in both listbox and combobox will be synchronized.
+	</label>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.ComboboxSelectedVM')" border="none"> 
 		<vbox>

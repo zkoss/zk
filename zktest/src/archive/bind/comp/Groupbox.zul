@@ -1,9 +1,11 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	click to open it.
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Groupbox')">
-		Click "toogle" button to switch between open and closed.
+		<label multiline="true">
+			Click the groupbox header to switch between open and closed.
+			And the label should be updated.
+		</label>
 		<groupbox id="groupbox" open="@bind(vm.open)" mold="3d"
 			width="200px">
 			<caption label="open test"></caption>

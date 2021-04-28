@@ -1,8 +1,8 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-
-	<vlayout apply="org.zkoss.bind.BindComposer"
+	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Window')">
+		Toggle the maximization of a window. And the label should be updated.
 		<window id="window" title="maximize test" border="normal"
 			maximizable="true" maximized="@bind(vm.maximized)" mode="embedded"
 			width="200px">
@@ -19,13 +19,15 @@
 		</hlayout>
 
 
-		click 2 windows to make zindex change.
-		<window id="window2" title="Window2" border="normal" width="200px" style="position:absolute;left:100px" maximizable="true"
+		click 2 buttons in windows to make zindex change.
+		<window id="window2" title="Window2" border="normal" width="200px" style="position:absolute;left:150px" maximizable="true"
 			mode="overlapped" zindex="@bind(vm.index2)">
+			<button id="window2ZIndexAdd" onClick="@command('index2Add')" label="zIndex++"/>
 			Hello, World! 2
 		</window>
-		<window id="window1" title="Window1" border="normal" width="200px" style="position:absolute;"
+		<window id="window1" title="Window1" border="normal" width="200px" style="position:absolute;left:340px"
 			mode="overlapped" zindex="@bind(vm.index1)">
+			<button id="window1ZIndexAdd" onClick="@command('index1Add')" label="zIndex++"/>
 			Hello, World! 1
 		</window>
 		<space height="100px"/>
@@ -37,6 +39,6 @@
 			window2 zindex:
 			<label id="window2Zindex" value="@load(vm.index2)" />
 		</hlayout>
-	</vlayout>
+	</div>
 
 </zk>

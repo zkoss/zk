@@ -1,6 +1,10 @@
 <zk>
 	<vlayout apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Listbox')">
+		<label multiline="true">
+			1. Select an item.
+			2. The Selected item and index should be updated.
+		</label>
 		<listbox id="listbox" model="@load(vm.items)"
 			selectedItem="@bind(vm.selected)" selectedIndex="@bind(vm.index)">
 			<template name="model" var="i">
@@ -17,6 +21,10 @@
 			Selected Index:
 			<label id="indexLabel" value="@load(vm.index)"></label>
 		</hlayout>
+		<label multiline="true">
+			1. Open/close the listgroup.
+			2. The label should be updated.
+		</label>
 		<listbox id="groupListbox" width="250px">
 			<listhead sizable="true" id="h">
 				<listheader id="h1" label="name" sort="auto" />

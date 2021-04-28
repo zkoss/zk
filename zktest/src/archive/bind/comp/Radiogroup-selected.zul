@@ -1,4 +1,7 @@
 <zk>
+	<label multiline="true">
+		Choose any item from Listbox or Radiogroup, the other one should be synchronized.
+	</label>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.RadiogroupSelectedVM')" border="none"> 
 		<vbox>

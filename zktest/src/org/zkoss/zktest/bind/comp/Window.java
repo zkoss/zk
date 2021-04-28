@@ -51,4 +51,15 @@ public class Window{
 		maximized = false;
 	}
 
+	@Command
+	@NotifyChange("index1")
+	public void index1Add() {
+		this.index1++;
+	}
+
+	@Command
+	@NotifyChange("index2")
+	public void index2Add() {
+		this.index2++;
+	}
 }
