@@ -74,5 +74,10 @@
 		<button label="change2" onClick="@command('change2')" />		
 		<button label="invalidate" onClick="outerbox.invalidate()" />
 		<button label="Dump" onClick="binder.getTracker().dump()" />
-	</hbox>	
+	</hbox>
+	<label multiline="true">
+		1.the tab named from "0AModel1", "1BModel1", "2CModel1", "3DModel2"
+		2.after click change1, the 1st tab("0AModel2") becomes to "0XModel2", the 2nd item("1BModel1") becomes to "1AModel1"
+		3.then after click change2, the 1st item("0XModel2") becomes to "0AModel2", the 2nd item("1AModel1") becomes to "1BModel1"
+	</label>
 </window>

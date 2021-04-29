@@ -9,7 +9,7 @@
 		<button label="collection" onClick='Executions.sendRedirect("allfunction.zul?case=col")'/>
 	</hbox>
 	<div if="${'warn' eq param['case']}">
-			Warn
+			Warn: load the page and click the save1 button, you shall not see any error message and nothing happened.
 			<window title="Warn" border="normal" 
 			apply="org.zkoss.bind.BindComposer"
 			viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.AllFunctionVM') @aaa()" binder="@id('binder') @bbb(b)" validationMessages="@id('vmsgs') @ccc(c)">
@@ -21,65 +21,77 @@
 			</window>
 		</div>
 	<div if="${'basic' eq param['case']}">
-		Basic
+		Basic:
+		<label multiline="true">
+			the init binding shall not change in the test (the top left label "item 1" and the bottom label '")
+			1. type "B" in the second textbox then click "Save 1" or "Save 2", you shall see message "value must be 'A'", and no value change.
+			2. type "A" in the second textbox then click "Save 1", the value of first textbox and the top right label should be "A-GCMD1", the lable next to the second textbox should change to "A".
+			3. click "Save 2", the value of first textbox and the top right label should be "A-GCMD2".
+		</label>
 		<window title="Basic" border="normal">
 			<hbox>
-				<label value="@init(vm.element.name)" />
+				<label sclass="init-label" value="@init(vm.element.name)" />
 				/
 				<textbox value="@bind(vm.element.name)" />
 				/
-				<label value="@bind(vm.element.name)" />
+				<label sclass="bind-label" value="@bind(vm.element.name)" />
 			</hbox>
 			<hbox>
 				<textbox
 					value="@save(vm.element.name, before={'cmd1','cmd2'}) @validator(vm.validator1)" />
 				/
-				<label value="@load(vm.element.name, after='cmd1')" />
+				<label sclass="load-label" value="@load(vm.element.name, after='cmd1')" />
 				/
 				<button label="save1"
 					onClick="@command('cmd1') @global-command('gcmd1')" />
 				<button label="save2" onClick="@command('cmd2')" />
 			</hbox>
-			<label value="@bind(vm.escValue1)"/>
-			<label value="@bind(vm.escValue2)"/>
+			<label sclass="esc1" value="@bind(vm.escValue1)"/>
+			<label sclass="esc2" value="@bind(vm.escValue2)"/>
 		</window>
 	</div>
 	<div if="${'form' eq param['case']}">
-		Form
+		Form:
+		<label multiline="true">
+			1. type "A" in textbox then blur, the first label shall change to "A", the second shall not change.
+			2. click save 3 button, you shall see message "value must be 'B'", and no value change.
+			3. type "B" in textbox then blur, the first label shall change to "B", the second shall not change.
+			4. click save 3 button, you shall see the second label change to "B".
+		</label>
 		<window title="Form" border="normal">
 			<hbox form="@id('fx') @load(vm.element) @save(vm.element,before={'cmd3'}) @validator(vm.validator2)">
 				<textbox
 					value="@bind(fx.name)" />
 				/
-				<label value="@load(fx.name)" />
+				<label sclass="load-label1" value="@load(fx.name)" />
 				/
-				<label value="@load(vm.element.name)" />
+				<label sclass="load-label2" value="@load(vm.element.name)" />
 				/
 				<button label="save3" onClick="@command('cmd3')" />
 			</hbox>
 		</window>
 	</div>
 	<div if="${'ref' eq param['case']}">
-		Reference
+		Reference: change the value in the textbox, the label on the most left shall not change, others shall sync.
 		<window title="Basic" border="normal" element="@ref(vm.element)" elementNm="@ref(vm.element.name)">
 			<hbox>
-				<label value="@init(element.name)" />
+				<label sclass="init-label1" value="@init(element.name)" />
 				/
 				<textbox value="@bind(element.name)" />
 				/
-				<label value="@bind(element.name)" />
+				<label sclass="bind-label1" value="@bind(element.name)" />
 			</hbox>
 			<hbox>
-				<label value="@init(elementNm)" />
+				<label sclass="init-label2" value="@init(elementNm)" />
 				/
 				<textbox value="@bind(elementNm)" />
 				/
-				<label value="@bind(elementNm)" />
+				<label sclass="bind-label2" value="@bind(elementNm)" />
 			</hbox>
 		</window>
 	</div>
 	<div if="${'col' eq param['case']}">
-		Collection
+		Collection: select these items, the label on the right side should sync as the selected item.
 		<window title="Basic" border="normal" element="@ref(vm.element)" elementNm="@ref(vm.element.name)">
 			<hbox>
 				<listbox model="@load(vm.elements)" selectedItem="@bind(vm.selected)" width="400px">
@@ -87,7 +99,7 @@
 						<listitem label="@load(each.name)"/>
 					</template>
 				</listbox>
-				<label value="@bind(vm.selected.name)" />
+				<label sclass="bind-label" value="@bind(vm.selected.name)" />
 			</hbox>
 		</window>
 	</div>

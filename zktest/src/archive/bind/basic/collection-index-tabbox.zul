@@ -42,5 +42,8 @@
 		<button label="reload" onClick="@command('reload')" />
 		<button label="invalidate" onClick="outerbox.invalidate()" />
 		<button label="Dump" onClick="binder.getTracker().dump()" />
-	</hbox>	
+	</hbox>
+	<label>
+		try add or delete these tabs and check the index, the index should be correct.
+	</label>
 </window>

@@ -1,5 +1,15 @@
 <window apply="org.zkoss.zktest.bind.basic.ArgsComposer">
 	<custom-attributes composerName="vm"/>
+	<label multiline="true">
+		1. click cmd 1 button:
+		you should see ADennis-Arg1 on the top left textbox and the top left label.
+		you should see BChen-myarg1 on the top right textbox and the top right label.
+		2. click cmd 2 button, should see "value have to equals V2" and nothing change.
+		3. type "V2" in the bottom left textbox, then click cmd 2 button.
+		you should see "execute cmd2" and V2-Arg1 on the top left textbox and the top left label.
+		you should see V2 on the bottom left textbox and the middle left textbox.
+		you should see BChen-myarg1 on the top right textbox and the top right label (not change).
+	</label>
 	<hbox>
 		<label id="l1" value="@bind(vm.value1) @converter(vm.converter1, arg1 = 'Arg1', arg2 = 'Arg2')" />
 		<label id="l2" value="@bind(vm.value2) @converter(vm.converter1, arg1 = vm.myArg1, arg2 = vm.myArg2)" />

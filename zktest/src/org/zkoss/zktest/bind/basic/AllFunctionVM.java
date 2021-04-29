@@ -75,6 +75,10 @@ public class AllFunctionVM {
 	static public class Element {
 		String name;
 
+		// An empty constructor is needed for FormProxy
+		public Element() {
+		}
+
 		public Element(String name) {
 			this.name = name;
 		}

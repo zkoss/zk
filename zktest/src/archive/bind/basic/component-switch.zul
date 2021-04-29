@@ -16,29 +16,38 @@
 </zscript>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ComponentSwitch')"
-		width="500px">
+		width="600px">
+		<label multiline="true">
+			Test the top part:
+			1. type A in Name 1 textbox then blur, the green label should change to A.
+			2. type B in Name 2 textbox then blur, the red label should change to B.
+			3. drag the red label to orange box, the red label should change to A.
+			4. drag the green label to yellow box, the green label should change to B.
+			5. type C in Name 1 textbox then blur, the red label should change to C.
+			6. type D in Name 2 textbox then blur, the green label should change to D.
+		</label>
 		<hlayout>
 			Name 1:
-			<textbox value="@bind(vm.item1.name)" />
+			<textbox id="t1" value="@bind(vm.item1.name)" />
 			, Name 2:
-			<textbox value="@bind(vm.item2.name)" />
+			<textbox id="t2" value="@bind(vm.item2.name)" />
 		</hlayout>
 		<hlayout>
-			<vlayout item="@ref(vm.item1)" width="200px" height="200px"
+			<vlayout id="v1" item="@ref(vm.item1)" width="200px" height="200px"
 				style="background:orange" droppable="true" onDrop="doDrop1(event)">
-				<label value="@bind(item.name)" style="color:green"
+				<label id="l1" value="@bind(item.name)" style="color:green"
 					draggable="true" />
 			</vlayout>
-			<vlayout item="@ref(vm.item2)" width="200px" height="200px"
+			<vlayout id="v2" item="@ref(vm.item2)" width="200px" height="200px"
 				style="background:yellow" droppable="true" onDrop="doDrop1(event)">
-				<label value="@bind(item.name)" style="color:red"
+				<label id="l2" value="@bind(item.name)" style="color:red"
 					draggable="true" />
 			</vlayout>
 		</hlayout>
 	</window>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ComponentSwitch')"
-		width="500px">
+		width="600px">
 		<hlayout>
 			Name 1:
 			<textbox value="@bind(vm.item1.name)" />
