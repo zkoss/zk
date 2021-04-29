@@ -1,5 +1,8 @@
 <zk>
-
+	<label multiline="true">
+		Click "toggle outside 1", "toggle outside 2" and "toggle inside" buttons,
+		and the disable state of the textbox will be toggled.
+	</label>
 	<window title="Test" apply="org.zkoss.zktest.bind.basic.MVP2MVVMComposer" border="normal">
 
 		<button id="outerToggle1" label="toggle outside 1" />
