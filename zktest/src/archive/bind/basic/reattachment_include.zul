@@ -1,7 +1,10 @@
 
 
 <window id="myWin" width="100%" border="normal" title="reattaching">
-
+	<label multiline="true">
+		1. Click "Detach" button, then click "Attach" button.
+		2. All binding and command should be working.
+	</label>
 	<include id="inc" src="/bind/basic/args.zul"/>
 
 	<button label="Detach" >

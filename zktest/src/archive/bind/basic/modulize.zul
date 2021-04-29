@@ -1,22 +1,28 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk>
+	<label multiline="true">
+		1. Try click "add Module 1" or "add Module 2" several times.
+		2. The submodule number increases.
+		3. Close any Tab.
+		4. The submodule number decreases.
+	</label>
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.Modulize')"
 		width="500px">
 		<vlayout>
 			<hlayout>
 				Total sub modules :
-				<label value="@load(vm.modules.size())" />
+				<label id="moduleCount" value="@load(vm.modules.size())" />
 			</hlayout>
 			<hlayout>
 				Total sub module value amount :
-				<label value="@load(vm.modulesAmount)" />
+				<label id="moduleAmount" value="@load(vm.modulesAmount)" />
 			</hlayout>
 		</vlayout>
 		<hlayout>
-			<button label="add Module 1"
+			<button id="addModule1" label="add Module 1"
 				onClick="@command('addModule',type=1)" />
-			<button label="add Module 2"
+			<button id="addModule2" label="add Module 2"
 				onClick="@command('addModule',type=2)" />
 		</hlayout>
 		---sub module--
