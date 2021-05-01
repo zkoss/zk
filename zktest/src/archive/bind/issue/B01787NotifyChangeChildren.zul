@@ -3,6 +3,15 @@
 		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01787NotifyChangeCase')">
 		<label multiline="true"><![CDATA[
 		[Analysis]
+		1.when <vm>.path change. it also notify it's kidbase, which is <path-instance>.*
+		2.pnode is tracking as <path-instance>[index], which match <path-instance>.*, so it will be notify change.
+		3.according 1,2, <pnode-instance>.* will be notified.
+		4.each in @template is the same instance of pnode. so it triggers template reload.
+		  Currently, we just reload binding of @template directly, we don't support to reload just a item in children-binding
+		  (And listbox/grid will reload all, but it is possible to enchance to reload just a item in listbox/grid for who support ListModel
+			single Item notify change)
+		========================
+		[Steps]
 		1.click update path, label of comp1 : ['Item A:2','Item B:2'], box1 :['Item A:2','Item B:2']
 				[[path -> node change, teamplate doesn't chagne -> just reload node A and B (both load 2nd time)]]
 		2.reload, click updateA, label of comp1 : ['Item A.*:x:0','Item B:2'], box1 :['Item A.*:0','Item B:1']
@@ -11,7 +20,6 @@
 				[[node A.name -> tempatel not notified -> just reload node a]]
 		4.reload, click updateB, label of comp1 : ['Item A:2','Item B.*:x:0'], box1 :['Item A:1','Item B.*:0']
 		5.reload, click updateBName, label of comp1 : ['Item A:1','Item B.name:0'], box1 :['Item A:1','Item B.name:0']
-				
 		========================
 		]]></label>
 		<hbox id="comp1" children="@load(vm.collection) @template(each.type)">

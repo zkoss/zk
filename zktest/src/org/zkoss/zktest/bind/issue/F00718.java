@@ -53,7 +53,7 @@ public class F00718 {
 	    
 	    @NotEmpty(message = "email can not be null")
 	    @Email
-	    @Length(min=8,message="email lenght must large than 8")
+	    @Length(min=8,message="email length must large than 8")
 	    public String getEmail(){
 	    	return _email;
 	    }
