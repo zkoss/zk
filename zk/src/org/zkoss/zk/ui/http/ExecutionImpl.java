@@ -19,7 +19,6 @@ package org.zkoss.zk.ui.http;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Proxy;
 import java.security.Principal;
 import java.util.Date;
 import java.util.Enumeration;
@@ -94,14 +93,14 @@ public class ExecutionImpl extends AbstractExecution {
 			Page creating) {
 		super(desktop, creating);
 		_ctx = ctx;
-		_request = SafeRequestWrapper.wrap(request);
+		_request = request;
 		_response = response;
 		_xelctx = new ReqContext();
 
 		// the execution may be fake if request is null.
 		// Fixed for ZK-1890: Can't subscribe eventqueue in desktop cleanup
-		if (_request != null)
-			Servlets.getBrowser(_request); //update request info
+		if (request != null)
+			Servlets.getBrowser(request); //update request info
 
 		_attrs = new AttributesMap() {
 			@SuppressWarnings("unchecked")
@@ -478,11 +477,7 @@ public class ExecutionImpl extends AbstractExecution {
 	}
 
 	public Object getNativeRequest() {
-		if (_request != null) {
-			final SafeRequestWrapper wrapper = (SafeRequestWrapper) Proxy.getInvocationHandler(_request);
-			return wrapper.getOriginObject();
-		}
-		return null;
+		return _request;
 	}
 
 	public Object getNativeResponse() {
