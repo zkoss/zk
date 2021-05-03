@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+basic.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 03 16:38:31 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. You should see a filled form (all shouldn't be empty.)
+        2. Modify all values.
+        3. Click the "Show Properties" button.
+        4. You should see the modified values in zk log.
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.data.BasicVM')">
+        <grid width="600px">
+            <columns>
+                <column hflex="1"/>
+                <column hflex="1"/>
+            </columns>
+            <rows>
+                <row>
+                    ID <intbox id="id" value="@bind(vm.index)"/>
+                </row>
+                <row>
+                    Price <doublebox id="price" value="@bind(vm.price)" format="#.##"/>
+                </row>
+                <row>
+                    Name <textbox id="name" value="@bind(vm.name)"/>
+                </row>
+                <row>
+                    City <textbox id="city" value="@bind(vm.address.city)"/>
+                </row>
+                <row>
+                    Street <textbox id="street" value="@bind(vm.address.street)"/>
+                </row>
+                <row>
+                    <cell colspan="2">
+                        <button id="show" label="Show Properties" onClick="@command('showProperties')"/>
+                    </cell>
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

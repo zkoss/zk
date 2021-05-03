@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+init-child-with-super-notexist.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 03 10:54:40 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.init.ChildInitSuperNotExistVM')">
+        <label multiline="true">
+            1. Click the button.
+            2. Should see "ChildInitSuperNotExistVM.childInit was called".
+        </label>
+        <button label="see result" onClick="@command('printMessage')"/>
+    </div>
+</zk>

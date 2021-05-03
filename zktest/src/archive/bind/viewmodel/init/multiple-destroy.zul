@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+multiple-destroy.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 10 18:03:17 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.init.MultipleDestroyVM')">
+        <label multiline="true">
+            1. Reload the browser.
+            2. You should see:
+            org.zkoss.zk.ui.UiException: more than one [@Destroy] in the class
+        </label>
+    </div>
+</zk>

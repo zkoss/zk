@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+foreach-numbers-step-minus.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 06 15:40:02 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        HTTP 500 java.lang.IllegalArgumentException: 'step' &lt;= 0 [-2]
+    </label>
+    <hlayout id="multiplicationTable">
+        <forEach begin="10" end="1" step="-2" var="x">
+            <vlayout>
+                <forEach begin="1" end="10" var="y">
+                    <label value="${x} x ${y} = ${x * y}"/>
+                </forEach>
+            </vlayout>
+        </forEach>
+    </hlayout>
+</zk>
