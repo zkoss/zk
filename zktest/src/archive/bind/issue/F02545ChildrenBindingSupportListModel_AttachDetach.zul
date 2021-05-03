@@ -24,17 +24,17 @@
 				</vlayout>
 			</div>
 		</hlayout>
-		<button label="detach">
+		<button id="detachBtn" label="detach">
 			<attribute name="onClick">
 				Component list2 = list2;
 				list2.detach();
 			</attribute>
 		</button>
-		<button label="attach">
+		<button id="attachBtn" label="attach">
 			<attribute name="onClick">
 				list2.setParent(d2);
 			</attribute>
 		</button>
-		<button id="add" label="add" onClick="@command('add')" />
+		<button id="addBtn" label="add" onClick="@command('add')" />
 	</window>
 </zk>
