@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Communication-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri May 07 12:38:22 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the cmd2 button:
+		shall see "init" label changed to "onGlobalCommand: cmd2"
+		shall see "received the global command in a composer" in zk log.
+	</label>
+	Composer:
+	<div apply="org.zkoss.zktest.bind.advance.CommunicationComposer">
+		<label id="l1" value="init"/>
+	</div>
+	<separator bar="true"/>
+	VM:
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.CommunicationVM')" binder="@init(queueName='myqueue')">
+		<button id="btn2" label="cmd2" onClick="@global-command('cmd2')"/>
+	</div>
+</zk>

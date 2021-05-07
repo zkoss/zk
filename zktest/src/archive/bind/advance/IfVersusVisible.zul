@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+IfVersusVisible.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 05 15:12:40 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.Load the page, you should see 3 buttons:
+		Delete (EL)
+		Delete (visible)
+		Delete (disabled)
+		2.If you see "not expected to see this" button, it's not expected.
+		3.Click the "show" checkbox to switch value, you should see:
+		Delete (EL) button still visible
+		Delete (visible) button is not visible
+		Delete (disabled) button is disabled
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.IfVersusVisibleVM')">
+		<!-- wrong usage, no effect -->
+		<button id="wrong" label="not expected to see this" if="@load(vm.showButton)"/>
+		<!-- determined at the beginning -->
+		<button id="el" label="Delete (EL)" if="${vm.showButton}"/>
+		<!-- can change during user interaction -->
+		<button id="visible" label="Delete (visible)" visible="@load(vm.showButton)"/>
+		<button id="disabled" label="Delete (disabled)" disabled="@load(not vm.showButton)"/>
+		<checkbox id="checkbox" label="show" checked="@bind(vm.showButton)"/>
+	</div>
+</zk>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+DefaultParam.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 04 12:25:23 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click "test" button, you should see "test param: -1".
+		2. Click "test2" button, you should see "test param: 2".
+		3. Click "omit" button, you should see "test param: -1".
+		4. Click "omit2" button, you should see "test param: 2".
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.DefaultParamVM')">
+		<button label="test" onClick="@command('test')"/>
+		<button label="test2" onClick="@command('test', number=2)"/>
+		<button label="omit" onClick="@('test')"/>
+		<button label="omit2" onClick="@('test', 2)"/>
+	</div>
+</zk>

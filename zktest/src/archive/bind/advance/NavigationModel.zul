@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+NavigationModel.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 10 16:51:43 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. load the page,
+		1-1. shall see "AAA", "BBB", "CCC" 3 links on top.
+		1-2. shall see "level1 current: AAA".
+		1-3. shall see "AAA1" link on bottom.
+		1-4. shall see "level2 current: none".
+
+		2. click "BBB" link,
+		2-1. shall see "level1 current: BBB".
+		2-2. shall see "BBB1" link on bottom.
+
+		3. click "BBB1" link,
+		3-1. shall see "level2 current: BBB1".
+
+		4. click "CCC" link,
+		4-1. shall see "level1 current: CCC".
+		4-2. shall see no link on bottom.
+		4-2. shall see "level2 current: none".
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.MyVM')">
+		<apply level="@load(vm.navModel.root)">
+			<forEach items="@load(level.items)">
+				<a label="@init(each.x)"
+				   onClick="@command('navTo', level=level, key=self.label)" />
+			</forEach>
+			<separator/>
+			<!--// do some level 1 thing...-->
+			level1 current: <label id="l1" value="@load(level.current.name)" />
+			<separator bar="true"/>
+			<div id="lv2">
+				<apply level2="@load(level.child)">
+					<forEach items="@load(level2.items)">
+						<a label="@init(each.x)"
+						   onClick="@command('navTo', level=level2, key=self.label)" />
+					</forEach>
+					<separator/>
+					<!--// do some level 2 thing...-->
+					level2 current: <label id="l2" value="@load(level2.current eq null ? 'none' : level2.current.name)" />
+				</apply>
+			</div>
+		</apply>
+	</div>
+</zk>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ForEachVersusChildrenBinding.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 05 16:20:24 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Load the page:
+		1-1.you should see the "wrong usage, no effect" part only create 1 checkbox.
+		1-2.you should see the "determined at the beginning" part create 4 checkboxs.
+		1-3.you should see the "children binding" part create 4 checkboxs.
+		2. Click the "addNewPerson" button, only "children binding" part checkboxs increase.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.ForEachVersusChildrenBindingVM')">
+		<!-- "forEach" versus children binding  -->
+		wrong usage, no effect:
+		<div id="wrong">
+			<checkbox label="@load(each.firstName)" forEach="@load(vm.personList)"/>
+		</div>
+		<separator bar="true"/>
+		determined at the beginning:
+		<div id="el">
+			<checkbox label="${each.firstName}" forEach="${vm.personList}"/>
+		</div>
+		<separator bar="true"/>
+		children binding:
+		<div id="children" children="@load(vm.personList)">
+			<template name="children">
+				<checkbox label="@load(each.firstName)"/>
+			</template>
+		</div>
+		<button id="btn" label="addNewPerson" onClick="@('addNewPerson')"/>
+	</div>
+</zk>

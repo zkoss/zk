@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ZKContextObjectParam.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 04 16:16:52 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. load the page, you should not see any error message.
+		2. eventName, cmdName should be "null", others shall not be empty.
+		3. click the cmd button, eventName should be "onClick", cmdName should be "show", others shall not be empty.
+	</label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.ZKContextObjectParamVM')">
+		bindContext:
+		<label id="bindContextString" value="@load(vm.bindContextString)" />
+		binder:
+		<label id="binderString" value="@load(vm.binderString)" />
+		eventName:
+		<label id="eventName" value="@load(vm.eventName)" />
+		cmdName:
+		<label id="cmdName" value="@load(vm.cmdName)" />
+		execution:
+		<label id="executionString" value="@load(vm.executionString)" />
+		idSpace:
+		<label id="idSpaceString" value="@load(vm.idSpaceString)" />
+		bindView:
+		<label id="bindViewString" value="@load(vm.bindViewString)" />
+		bindComponent:
+		<label id="bindComponentString" value="@load(vm.bindComponentString)" />
+		page:
+		<label id="pageString" value="@load(vm.pageString)" />
+		desktop:
+		<label id="desktopString" value="@load(vm.desktopString)" />
+		session:
+		<label id="sessionString" value="@load(vm.sessionString)" />
+		webApp:
+		<label id="webAppName" value="@load(vm.webAppName)" />
+		<button id="cmd" label="cmd" onClick="@command('show')" />
+	</vlayout>
+</zk>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+WireFromImplicitObject.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 05 17:10:01 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.WireFromImplicitObjectVM')">
+		<vlayout>
+			page:
+			<label id="page1" value="@load(vm.page)" />
+			desktop:
+			<label id="desktop1" value="@load(vm.desktop)" />
+			session:
+			<label id="sess" value="@load(vm.sess)" />
+			webApp:
+			<label id="wapp" value="@load(vm.wapp)" />
+			desktopScope:
+			<label id="desktopScope" value="@load(vm.desktopScope)" />
+		</vlayout>
+	</div>
+</zk>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SavePerformance.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 11 12:30:27 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Test binding time(see org.zkoss.zktest.zats.bind.advance.PerformanceTest):
+		@init &lt; @load or @save &lt; @bind
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.PerformanceVM')">
+		<forEach begin="0" end="10000" step="1">
+			<textbox value="@save(vm.message)"/>
+		</forEach>
+	</div>
+</zk>
