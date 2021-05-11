@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+flowctrl-if.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 07 10:43:03 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        You should see 4 navitems and 2 navs (hard to check by eyes, better to use DevTools to inspect).
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.shadow.NavbarVM')">
+        <navbar id="navbar" orient="horizontal" collapsed="false">
+            <forEach items="@load(vm.menuItems)" var="menu">
+                <if test="@load(empty menu.subMenus)">
+                    <navitem label="@load(menu.label)" iconSclass="@load(menu.iconSclass)"/>
+                </if>
+                <if test="@load(not empty menu.subMenus)">
+                    <nav label="@load(menu.label)" iconSclass="@load(menu.iconSclass)"/>
+                </if>
+            </forEach>
+        </navbar>
+    </div>
+</zk>

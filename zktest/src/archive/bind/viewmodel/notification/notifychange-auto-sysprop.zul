@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+notifychange-auto-sysprop.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 06 11:29:05 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        org.zkoss.lang.Library.setProperty("org.zkoss.bind.viewModel.autoNotifyChange.enabled", "true");
+
+        void restore() {
+            org.zkoss.lang.Library.setProperty("org.zkoss.bind.viewModel.autoNotifyChange.enabled", null);
+        }
+    </zscript>
+    <label multiline="true">
+        1. Click "Randomize"
+        2. You see "I will call you (new first name) (new lastname) . (new first name) (new lastname) ."
+        3. After the test, remember to click "Restore".
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.notification.NotifyChangeAutoSysPropVM')">
+        <vlayout>
+            <hlayout>
+                First Name <textbox id="fn" value="@bind(vm.firstname)" />
+            </hlayout>
+            <hlayout>
+                Last Name <textbox id="ln" value="@bind(vm.lastname)" />
+            </hlayout>
+            <hlayout>
+                I will call you <label id="fullname" value="@load(vm.fullname)"/>.
+                <label id="firstname" value="@load(vm.firstname)"/> <label id="lastname" value="@load(vm.lastname)"/>.
+            </hlayout>
+            <button id="rnd" label="Randomize" onClick="@command('randomize')"/>
+            <button id="restore" label="Restore" onClick="restore()"/>
+        </vlayout>
+    </div>
+</zk>

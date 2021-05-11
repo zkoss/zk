@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+template-external.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 07 15:55:31 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Finally you can see a complete navbar.
+        1. In Products, there are 4 sub navitems.
+        2. In Demos, there are 3 sub navitems.
+        3. Others are no child.
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.shadow.NavbarVM')">
+        <navbar id="navbar" orient="horizontal" collapsed="false">
+            <apply templateURI="template-external-iterate.zul" menuItems="@ref(vm.menuItems)"/>
+        </navbar>
+    </div>
+</zk>

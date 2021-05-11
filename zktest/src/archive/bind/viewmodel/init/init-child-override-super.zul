@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+init-child-override-super.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 03 10:54:40 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.init.ChildInitOverrideVM')">
+        <label multiline="true">
+            1. Click the button.
+            2. Should see
+            ChildInitOverrideVM.init was called twice
+            ChildInitOverrideVM.init was called twice
+        </label>
+        <button label="see result" onClick="@command('printMessage')"/>
+    </div>
+</zk>

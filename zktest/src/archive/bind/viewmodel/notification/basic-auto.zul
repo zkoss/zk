@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+basic-auto.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 06 09:43:33 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. You should see three inputbox with data.
+        2. Click "Randomize".
+        3. The data should be updated.
+        4. Click "Reset".
+        5. The second and third inputbox should be empty.
+    </label>
+    <vlayout viewModel="@('org.zkoss.zktest.bind.viewmodel.notification.BasicAutoVM')">
+        <intbox id="id" value="@load(vm.id)" readonly="true"/>
+        <textbox id="name" value="@load(vm.name)" readonly="true"/>
+        <textbox id="city" value="@load(vm.city)" readonly="true"/>
+        <button id="rnd" label="Randomize" onClick="@command('randomize')"/>
+        <button id="reset" label="Reset" onClick="@command('reset')"/>
+    </vlayout>
+</zk>

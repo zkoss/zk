@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+local-command.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 04 15:41:26 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click command 1, and it prints "command1".
+        2. Click command 2, and it prints "commandTwo".
+        3. Click command 3 or command 4, and it prints "command3And4".
+        4. Click command 5, and it prints "command5: [MouseEvent onClick &lt;Button XXXX&gt;]"
+        5. Click command 999, and it prints "Command [command999] unknown!"
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.command.LocalCommandVM')">
+        <button label="command 1" onClick="@command('command1')"/>
+        <button label="command 2" onClick="@command('command2')"/>
+        <button label="command 3" onClick="@command('command3')"/>
+        <button label="command 4" onClick="@command('command4')"/>
+        <button label="command 5" onClick="@command('command5')"/>
+        <button label="command 999" onClick="@command('command999')"/>
+    </div>
+</zk>

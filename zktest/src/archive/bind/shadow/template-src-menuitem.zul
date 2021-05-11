@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+template-src-menuitem.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 07 16:51:31 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <navitem label="@load(menuItem.label)" iconSclass="@load(menuItem.iconSclass)" />
+</zk>

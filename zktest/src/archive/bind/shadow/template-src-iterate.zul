@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+template-src-iterate.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 07 16:50:01 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <forEach items="@load(menuItems)">
+        <apply template="@load(empty each.subMenus ? 'menuitem' : 'menu')" menuItem="@ref(each)"/>
+    </forEach>
+</zk>
