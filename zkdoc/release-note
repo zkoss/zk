@@ -74,6 +74,7 @@ ZK 9.6.0
   ZK-4855: some ListProxy methods set _dirty directly instead of calling setDirty, missing updates
   ZK-4872: Listbox selects a wrong item with listgroup
   ZK-4893: The last item of ForEachStatus.last is false if end can't be reached by step
+  ZK-4896: A misleading error message in <when>
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
