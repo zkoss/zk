@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+PassArgumentsInner.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 10 15:29:44 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<div apply="org.zkoss.bind.BindComposer"
+	 viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.PassArgumentsInnerVM')">
+	<groupbox width="400px">
+		Argument passed from outer page:
+		<separator/>
+		<label id="innerLabel" value="@load(vm.typeFromOuter)"/>
+		<separator/>
+		<label id="innerLabel2" value="@load(vm.abcFromOuter)"/>
+	</groupbox>
+</div>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+PassArgumentsOuter-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 10 16:35:46 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		load the page, shall see "myArgument" and "myArgument" bellow.
+		click the cmd button, "myArgument" labels shall not change.
+	</label>
+	<div id="outerVM" viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.PassArgumentsOuterVM')">
+		<include type="@load(vm.myArgument)" abc="@load(vm.myArgument)" src="@load('PassArgumentsInner.zul')"/>
+		<button label="cmd" onClick="@command('cmd')"/>
+	</div>
+</zk>

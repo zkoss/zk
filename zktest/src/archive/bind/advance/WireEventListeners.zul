@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+WireEventListeners.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 06 15:24:27 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Click the mybutton button, you should see "onClick" in zk log. without any Exception.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.WireEventListenersVM')">
+		<button id="mybutton" label="mybutton"/>
+	</div>
+</zk>

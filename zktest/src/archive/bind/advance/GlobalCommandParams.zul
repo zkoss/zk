@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+GlobalCommandParams.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 04 11:23:12 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click "Global1" button, you should see "GlobalCommand global1 executed: global1"
+		2. Click "Global2" button, you should see "Local Command local2 executed: local2" and "GlobalCommand global2 executed: global2"
+		3. Click "Omit" button, you should see "Local Command local2 executed: omit" and "GlobalCommand global2 executed: omit"
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.GlobalCommandParamsVM')"/>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.GlobalCommandParamsVM2')">
+		<button label="Global1" onClick="@global-command('global1', name='global1')"/>
+		<button label="Global2" onClick="@command('local2', name='local2') @global-command('global2', name='global2')"/>
+		<button label="Omit" onClick="@('local2', 'omit') @global-command('global2', 'omit')"/>
+	</div>
+</zk>

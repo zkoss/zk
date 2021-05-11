@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ComponentParam.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 04 14:41:02 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the button, you should see "zul.wgt.Button" in zk log.
+		2. click the div with green background, you should see "zul.wgt.Div" in zk log.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.ComponentParamVM')">
+		<button label="btn" onClick="@command('componentCommand', target=self)"/>
+		<div id="div" style="background-color: green;color: white;" onClick="@('componentCommand', self)">divOmit</div>
+	</div>
+</zk>

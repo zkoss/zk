@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+WireComponents.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 06 14:47:35 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Click the log button, you should see "zul.wgt.Popup", "zul.wgt.Label", "zul.wgt.Button" in zk log. without any Exception.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.WireComponentsVM')">
+		<vlayout>
+			<label id="msg" value="label" tooltip="msgPopup"/>
+			<popup id="msgPopup">
+				<div>popup</div>
+			</popup>
+		</vlayout>
+		<button label="log" onClick="@('log', self)"/>
+	</div>
+</zk>

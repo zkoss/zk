@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+EventParam.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 04 17:31:25 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. type "abc" in the textbox, you shall see "abc" bellow message1 and message2.
+		2. type "def" in the textbox, you shall see "def" bellow message1 and message2.
+	</label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.EventParamVM')">
+		message1:
+		<label id="msg" value="@load(vm.message)"/>
+		message2:
+		<label id="msg2" value="@load(vm.message2)"/>
+		<textbox onChanging="@('showTyping', event.value)"/>
+	</vlayout>
+</zk>

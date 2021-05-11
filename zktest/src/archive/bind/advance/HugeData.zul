@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+HugeData.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 10 11:56:17 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Load the page, you shall not see any error,
+		and the list box shall not be empty.(make sure the demo in mvvm book work)
+	</label>
+	<window width="400px" apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.HugeDataVM')">
+		selected Person id:
+		<label value="@load(vm.selectedPerson.id)"/>
+		<separator/>
+		Use custom ListModel:
+		<listbox model="@bind(vm.personListModel)" selectedItem="@bind(vm.selectedPerson)" rows="10">
+			<listhead>
+				<listheader label="ID"/>
+				<listheader label="First Name"/>
+				<listheader label="Last Name"/>
+				<listheader label="Age"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@bind(each.id)"/>
+					<listcell label="@bind(each.firstName)"/>
+					<listcell label="@bind(each.lastName)"/>
+					<listcell label="@bind(each.age)"/>
+				</listitem>
+			</template>
+		</listbox>
+	</window>
+</zk>
