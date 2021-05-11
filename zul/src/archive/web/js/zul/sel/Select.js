@@ -70,7 +70,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				if (w.$instanceof(zul.sel.Option)) {
 					if (!w.isVisible())
 						j++;
-				} else i--;
+				} else if (w.$instanceof(zul.sel.Optgroup))
+					j++;
+				else i--;
 			}
 
 			selectedIndex -= j;
@@ -293,11 +295,12 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			// B50-ZK-989: this._selectedIndex does not concern Option visibility
 			var rv = v < 0 ? v : -1;
 			for (var w = this.firstChild, j = v; w && j > -1; w = w.nextSibling) {
-				if (!w.$instanceof(zul.sel.Option)) // ignore non-option widget
-					continue;
-				if (w.isVisible())
-					j--;
-				rv++;
+				if (w.$instanceof(zul.sel.Option)) {
+					if (w.isVisible())
+						j--;
+					rv++;
+				} else if (w.$instanceof(zul.sel.Optgroup))
+					rv++;
 			}
 			if (this._selectedIndex == rv)
 				return;

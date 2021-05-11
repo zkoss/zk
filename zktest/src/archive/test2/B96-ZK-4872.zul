@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4872.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 11 11:21:20 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Check the initial selected item.
+        2. It should be item 1-1.
+        2. Open the selectbox and select "item 2-2".
+        4. "item 2-2" should be selected now.
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4872VM')">
+        <listbox mold="select" selectedItem="@bind(vm.selectedItem)" onAfterSize="@command('init')">
+            <custom-attributes org.zkoss.zul.listbox.groupSelect="false"/>
+            <forEach items="@init(vm.model)">
+                <choose>
+                    <when test="@init(vm.isGroup(each))">
+                        <listgroup label="@init(each)" value="@init(each)"/>
+                    </when>
+                    <otherwise>
+                        <listitem label="@init(each)" value="@init(each)"/>
+                    </otherwise>
+                </choose>
+            </forEach>
+        </listbox>
+        <button onClick="@command('refresh')" label="refresh"/>
+        <button onClick="@command('update')" label="update"/>
+    </div>
+</zk>

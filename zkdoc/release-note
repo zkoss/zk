@@ -72,6 +72,7 @@ ZK 9.6.0
   ZK-4853: Treeitems removed by ROD after receiving onOpen still try to render, cause issues if accessing DOM
   ZK-4852: JS errors swallowed during widget class initialization
   ZK-4855: some ListProxy methods set _dirty directly instead of calling setDirty, missing updates
+  ZK-4872: Listbox selects a wrong item with listgroup
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
