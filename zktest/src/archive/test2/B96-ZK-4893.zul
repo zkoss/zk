@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4893.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 11 15:50:10 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        You should see:
+        - 0 true false
+        - 3 false true
+    </label>
+    <separator />
+    <forEach begin="0" end="5" step="3" varStatus="status">
+        <hlayout>
+            ${status.current}
+            <label id="first${status.index}" value="${status.first}"/>
+            <label id="last${status.index}" value="${status.last}"/>
+        </hlayout>
+    </forEach>
+</zk>
