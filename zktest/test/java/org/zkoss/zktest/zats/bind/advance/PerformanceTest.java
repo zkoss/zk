@@ -43,7 +43,5 @@ public class PerformanceTest extends ZATSTestCase {
 		MatcherAssert.assertThat(bindTime, greaterThan(saveTime));
 		MatcherAssert.assertThat(bindTime, greaterThan(loadTime));
 		MatcherAssert.assertThat(bindTime, greaterThan(initTime));
-		MatcherAssert.assertThat(saveTime, greaterThan(initTime));
-		MatcherAssert.assertThat(loadTime, greaterThan(initTime));
 	}
 }
