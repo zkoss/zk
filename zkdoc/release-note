@@ -77,6 +77,7 @@ ZK 9.6.0
   ZK-4896: A misleading error message in <when>
   ZK-4897: <forEach> doesn't support a primitive array
   ZK-4888: listheader width shrinks to minimal size unexpectedly after reloading a model
+  ZK-4834: tree scroll pos + latency errors
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
