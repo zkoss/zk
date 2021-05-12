@@ -18,6 +18,7 @@ package org.zkoss.util;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -402,6 +403,20 @@ public class ArraysX {
 	 */
 	public static final Object clone(Object ary) {
 		return duplicate(ary);
+	}
+
+	/**
+	 * Returns a fixed-size boxed list backed by the specified primitive array.
+	 *
+	 * @param primitiveArray A primitive array object
+	 * @return A List object
+	 * @since 9.6.0
+	 */
+	public static List<Object> asBoxedList(final Object primitiveArray) {
+		final int length = Array.getLength(primitiveArray);
+		final Object[] boxed = new Object[length];
+		Arrays.parallelSetAll(boxed, i -> Array.get(primitiveArray, i));
+		return Arrays.asList(boxed);
 	}
 
 //meaningless to provide this method since the caller's casting to Class<T> causes
