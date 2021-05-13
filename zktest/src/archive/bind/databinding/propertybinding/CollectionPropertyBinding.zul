@@ -1,0 +1,72 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] Click "sel0Btn", you should see the first listitem selected and the values are shown in textboxes (Quantity, Price)
+		[Step 2] Click another item and see corresponding values changed
+		[Step 3] Modify Quantity and value then click "Save", the corresponding values are changed
+		[Step 4] Click 'Delete' then see the item removed
+		[Step 5] Click 'New' then see one new item added
+	]]></label>
+	<vlayout
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.propertybinding.CollectionPropertyBindingVM')">
+		<listbox id="lb" model="@load(vm.orders)" selectedItem="@bind(vm.selected)" hflex="true" height="200px">
+			<listhead>
+				<listheader label="Row Index"/>
+				<listheader label="Id"/>
+				<listheader label="Quantity" align="center"/>
+				<listheader label="Price" align="center"/>
+				<listheader label="Creation Date" align="center"/>
+				<listheader label="Shipping Date" align="center"/>
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell label="@load(itemStatus.index)"/>
+					<listcell label="@load(item.id)"/>
+					<listcell label="@load(item.quantity)" style="@load(item.quantity lt 3 ? 'color:red' : '')"/>
+					<listcell label="@load(item.price)"/>
+					<listcell label="@load(item.creationDate)"/>
+					<listcell label="@load(item.shippingDate)"/>
+				</listitem>
+			</template>
+		</listbox>
+		<grid id="gd" model="@load(vm.orders)">
+			<columns>
+				<column label="Index"/>
+				<column label="Id"/>
+				<column label="Quantity"/>
+				<column label="Price"/>
+			</columns>
+			<template name="model" var="item">
+				<row>
+					<label value="@load(itemStatus.index)"/>
+					<label value="@load(item.id)"/>
+					<label value="@load(item.quantity)"/>
+					<label value="@load(item.price)"/>
+				</row>
+			</template>
+		</grid>
+		<grid hflex="true">
+			<columns>
+				<column width="120px"/>
+				<column/>
+			</columns>
+			<rows>
+				<row>
+					Quantity
+					<intbox id="ib_quantity" value="@load(vm.selected.quantity) @save(vm.selected.quantity, before='saveOrder')"/>
+				</row>
+				<row>
+					Price
+					<doublebox id="db_price" value="@load(vm.selected.price) @save(vm.selected.price, before='saveOrder')"
+							   format="###,##0.00"/>
+				</row>
+			</rows>
+		</grid>
+		<toolbar>
+			<button id="newBtn" label="New" onClick="@command('newOrder')"/>
+			<button id="saveBtn" label="Save" onClick="@command('saveOrder')" disabled="@load(empty vm.selected)"/>
+			<button id="delBtn" label="Delete" onClick="@command('deleteOrder')" disabled="@load(empty vm.selected)"/>
+			<button id="sel0Btn" label="Change selection to 0" onClick="@command('selOrder0')"/>
+			<button id="sel2Btn" label="Change selection to 2" onClick="@command('selOrder2')"/>
+		</toolbar>
+	</vlayout>
+</zk>

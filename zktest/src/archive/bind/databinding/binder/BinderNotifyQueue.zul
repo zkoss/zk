@@ -1,0 +1,60 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] You should see "Outer XYZ" in binder 2, "Inner XYZ" in binder 3, 4
+		[Step 2] Click "Add And Notify", you should see binder in queue "default" updated
+		[Step 3] Click "Notify 'myQueue'", you should see binder in queue "myQueue" updated
+		[Step 4] Click "Add Without Notify" and click Notify 'default queue'" in queue "myQueue", you should see binder in queue "myQueue" updated
+		[Step 5] Click Notify 'myQueue'" in queue "default", you should see binder in queue "default" updated
+	]]></label>
+	<separator />
+	>>> Outer Binder 1 (default):
+	<div viewModel="@id('outer_vm') @init('org.zkoss.zktest.bind.databinding.binder.OuterBinderNotifyModel')">
+		Outer msg: <label id="msg_o1" value="@load(outer_vm.msgMap['msg'])" />
+		<separator />
+		<button id="outerBtn1" label="Add And Notify" onClick="@command('addAndNotify') "/>
+		<button id="outerBtn2" label="Add Without Notify" onClick="@command('addWithoutNotify') "/>
+		<button label="Refresh" onClick="@command('refresh') "/>
+		<separator />
+		>>> Inner Binder 1 (myQueue):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderNotifyModel', arg1=outer_vm.msgMap)"
+				binder="@init(queueName='myQueue')">
+			<label id="msg_i1" value="@load(vm.msgMap['msg'])" />
+			<button id="innerBtn1_1" label="Notify 'myQueue'" onClick="@command('updateInMyQueue') "/>
+			<button id="innerBtn1_2" label="Notify 'default queue'" onClick="@command('updateInDefaultQueue') "/>
+		</vlayout>
+		>>> Inner Binder 2 (myQueue, MyBinder):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderNotifyModel', arg1=outer_vm.msgMap)"
+				binder="@id('myBinder') @init(value='org.zkoss.zktest.bind.databinding.binder.MyBinder', queueName='myQueue')">
+			<div>
+				Binder: <label id="msg_binder2" value="@init(myBinder.name)" />
+			</div>
+			<label id="msg_i2" value="@load(vm.msgMap['msg'])"/>
+			<button id="innerBtn2_1" label="Notify 'myQueue'" onClick="@command('updateInMyQueue') "/>
+			<button id="innerBtn2_2" label="Notify 'default queue'" onClick="@command('updateInDefaultQueue') "/>
+		</vlayout>
+		>>> Inner Binder 3 (default, MyBinder):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderNotifyModel', arg1=outer_vm.msgMap)"
+				 binder="@id('myBinder') @init(value=vm.binder)">
+			<div>
+				Binder: <label id="msg_binder3" value="@init(myBinder.name)" />
+			</div>
+			<label id="msg_i3" value="@load(vm.msgMap['msg'])" />
+			<button id="innerBtn3_1" label="Notify 'myQueue'" onClick="@command('updateInMyQueue') "/>
+			<button id="innerBtn3_2" label="Notify 'default queue'" onClick="@command('updateInDefaultQueue') "/>
+		</vlayout>
+		>>> Inner Binder 4 (default, MyBinder, scope=session):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderNotifyModel', arg1=outer_vm.msgMap)"
+				 binder="@id('myBinder') @init(value=vm.binder, queueScope='session')">
+			<div>
+				Binder: <label id="msg_binder4" value="@init(myBinder.name)" />
+			</div>
+			<label id="msg_i4" value="@load(vm.msgMap['msg'])" />
+			<button id="innerBtn4_1" label="Notify 'myQueue'" onClick="@command('updateInMyQueue') "/>
+			<button id="innerBtn4_2" label="Notify 'default queue'" onClick="@command('updateInDefaultQueue') "/>
+		</vlayout>
+	</div>
+</zk>

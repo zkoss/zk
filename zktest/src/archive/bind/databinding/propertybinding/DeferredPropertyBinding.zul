@@ -1,0 +1,24 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] Type "123" in the 1st textbox then blur, the value of Text 1 will be changed immediately
+		[Step 2] Type "321" in the 2nd textbox then blur, the value of Text 2 will not be changed immediately
+		[Step 3] Click the button, the value of Text 2 will be changed to "321"
+	]]></label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.propertybinding.DeferredPropertyBindingVM')">
+		<div>
+			<textbox id="tb1" value="@bind(vm.text1)">
+				<custom-attributes org.zkoss.bind.event.deferPost="false"/>
+			</textbox>
+			Text 1 :
+			<label id="text1" value="@load(vm.text1)"/>
+		</div>
+		<div>
+			<textbox id="tb2" value="@bind(vm.text2)">
+				<custom-attributes org.zkoss.bind.event.deferPost="true"/>
+			</textbox>
+			Text 2 :
+			<label id="text2" value="@load(vm.text2)"/>
+		</div>
+		<button onClick="@command('doCmd')">click me</button>
+	</vlayout>
+</zk>

@@ -1,0 +1,31 @@
+<zk>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.propertybinding.BasicPropertyBindingVM')">
+		[Step 1] Should see "welcome!"
+		<label id="msg1" value="@load(vm.welcomeMessage)"/>
+		[Step 2] Click the maximized button on the window multiple times, and see "Maximized" value changed
+		<div>
+			Maximized: <label id="msg2" value="@load(vm.maximized)" />
+		</div>
+		<window id="window" title="maximize test" border="normal" maximizable="true" maximized="@bind(vm.maximized)" />
+		[Step 3] The following three input boxes are empty initially, after changing the value, the labels will be changed correspondingly.
+		<div>
+			First Name: ( <label id="msg3_1" value="@bind(vm.person.firstName)" /> ) <textbox id="tb3_1" value="@save(vm.person.firstName)"/>
+		</div>
+		<div>
+			Last Name: ( <label id="msg3_2" value="@bind(vm.person.lastName)" /> ) <textbox id="tb3_2" value="@save(vm.person.lastName)"/>
+		</div>
+		<div>
+			Age: ( <label id="msg3_3" value="@bind(vm.person.age)" /> ) <intbox id="ib3" value="@save(vm.person.age)"/>
+		</div>
+		Test Map:
+		<separator />
+		[Step 4] The default value is "123", should be change after type something in the textbox
+		<div>
+			(<label id="msg4" value="@load(vm.myMapping['myKey'])"/>)<textbox id="tb4" value="@bind(vm.myMapping['myKey'])"/>
+		</div>
+		[Step 5] The default value is empty, should be change after type something in the textbox
+		<div>
+			(<label id="msg5" value="@load(vm.myMapping['myKey1'])"/>)<textbox id="tb5" value="@bind(vm.myMapping['myKey1'])"/>
+		</div>
+	</vlayout>
+</zk>

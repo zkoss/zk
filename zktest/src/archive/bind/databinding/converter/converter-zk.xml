@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<library-property>
+		<name>org.zkoss.bind.appConverters</name>
+		<value>foo=org.zkoss.zktest.bind.databinding.converter.FooConverter,bar=org.zkoss.zktest.bind.databinding.converter.BarConverter</value>
+	</library-property>
+</zk>

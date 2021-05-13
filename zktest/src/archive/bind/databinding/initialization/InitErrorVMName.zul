@@ -1,0 +1,4 @@
+<zk>
+	<label>Open and see class not found exception</label>
+	<div viewModel="@id('vm') @init('InitVM')" />
+</zk>

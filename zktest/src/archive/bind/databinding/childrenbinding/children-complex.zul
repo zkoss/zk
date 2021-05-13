@@ -1,0 +1,56 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.childrenbinding.ChildrenComplexVM')">
+
+	Nested.
+	<vlayout id="vlayout" children="@load(vm.nodes) @template('children1')">
+		<template name="children1" var="node">
+			<vlayout style="padding-left:10px; border:2px solid green;" sclass="children1">
+				<label value="@bind(node.name)" />
+				<vlayout children="@load(node.children) @template('children2')"/>
+			</vlayout>
+		</template>
+		<template name="children2" var="node">
+			<vlayout style="padding-left:10px; border:2px solid blue;" sclass="children2">
+				<label value="@bind(node.name)" />
+				<vlayout children="@load(node.children) @template('children1')"/>
+			</vlayout>
+		</template>
+	</vlayout>
+	
+	
+	<button label="cmd1" id="cmd1" onClick="@command('cmd1')"/>
+	
+	<button label="clear " id="clear" onClick="@command('clear')"/> 
+	<label multiline="true">
+		1.load the page, you should see the nested structure display well (as the data in VM).
+		Item A
+		Item B: menu
+		--Item B_0: menuitem
+		Item C: menu
+		--Item C_0: menu
+		----Item C_0_0: menuitem
+		----Item C_0_1: menuitem
+		--Item C_1: menuitem
+		Item D: menu
+		--Item D_0: menu
+		----Item D_0_0: menu
+		------Item D_0_0_0: menuitem
+		------Item D_0_0_1: menuitem
+		------Item D_0_0_2: menuitem
+		----Item D_0_1: menu
+		------Item D_0_1_0: menuitem
+		------Item D_0_1_1: menuitem
+		------Item D_0_1_2: menuitem
+		----Item D_0_2: menuitem
+		--Item D_1: menu
+		----Item D_1_0: menu
+		------Item D_1_0_0: menuitem
+		------Item D_1_0_1: menuitem
+		------Item D_1_0_2: menuitem
+		----Item D_1_1: menu
+		------Item D_1_1_0: menuitem
+		------Item D_1_1_1: menuitem
+		------Item D_1_1_2: menuitem
+		----Item D_1_2: menuitem
+		--Item D_2: menuitem
+	</label>
+</window>

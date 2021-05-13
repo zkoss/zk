@@ -1,0 +1,42 @@
+<zk>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.el.RuntimeEvalVM', arg1='myValue')">
+		<div>
+			Result: <label id="result1" value="@load(vm.result)"/>
+		</div>
+		<label>
+			[Step 1] Click multiple times and see two different commands called (2 -> 1 -> 2 -> 1 -> ...)
+		</label>
+		<button id="btn1" label="Do command1 or command2" onClick="@command(vm.checked ? 'command1' : 'command2')"/>
+		<label multiline="true">
+			[Step 2] The following "empty" blocks should be empty.
+			[Step 3] Click "update to empty (not null)", only the "Test Bean empty" groupbox shown.
+			[Step 4] Click "update to not empty", all groupboxes shown.
+		</label>
+		<div>
+			Test String empty: <groupbox id="gb1" visible="@load(not empty vm.selectedStr)"/>
+		</div>
+		<div>
+			Test List empty: <groupbox id="gb2" visible="@load(not empty vm.selectedList)"/>
+		</div>
+		<div>
+			Test Set empty: <groupbox id="gb3" visible="@load(not empty vm.selectedSet)"/>
+		</div>
+		<div>
+			Test Map empty: <groupbox id="gb4" visible="@load(not empty vm.selectedMap)"/>
+		</div>
+		<div>
+			Test Array empty: <groupbox id="gb5" visible="@load(not empty vm.selectedArray)"/>
+		</div>
+		<div>
+			Test Bean empty: <groupbox id="gb6" visible="@load(not empty vm.selectedBean)"/>
+		</div>
+		<div>
+			<button id="btn3" label="update to empty (not null)" onClick="@command('updateToEmpty')" />
+			<button id="btn4" label="update to not empty" onClick="@command('updateToNotEmpty')" />
+		</div>
+		[Step 5] The following two labels should be the same (Dennis) (First name of Person = First name of Person Map)
+		<div>
+			<label id="result5_1" value="@bind(vm.person[vm.currentField])"/> = <label id="result5_2" value="@bind(vm.personMap[vm.currentField])"/>
+		</div>
+	</vlayout>
+</zk>

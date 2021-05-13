@@ -1,0 +1,27 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] Change Number by intbox, the labels should be changed
+		[Step 2] Change the First Name/Last Name by textbox, the labels should be changed
+		[Step 3] Click "Append number to firstName" multiple times, the First Name should be changed.
+		[Step 4] Click "Update to another person", the First Name/Last Name should be changed.
+		[Step 5] Click "Append number to firstName" multiple times, the First Name should be changed.
+	]]></label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.referencebinding.BasicReferenceBindingVM')">
+		<vlayout p="@ref(vm.person)" n="@ref(vm.num)">
+			<hlayout>
+				Number: <label id="l1" value="@bind(n)"/>
+				<intbox id="ib1" value="@bind(n)"/>
+			</hlayout>
+			<hlayout>
+				First Name: <label id="l2" value="@bind(p.firstName)"/>
+				<textbox id="tb2" value="@bind(p.firstName)"/>
+			</hlayout>
+			<hlayout>
+				Last Name: <label id="l3" value="@bind(p.lastName)"/>
+				<textbox id="tb3" value="@bind(p.lastName)"/>
+			</hlayout>
+			<button id="appendBtn" label="Append number to firstName" onClick="@command('append')" />
+			<button id="updateBtn" label="Update to another person" onClick="@command('update')" />
+		</vlayout>
+	</vlayout>
+</zk>
