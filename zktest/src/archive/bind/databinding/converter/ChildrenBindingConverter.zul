@@ -1,0 +1,21 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] Should see 7 items
+		[Step 2] Click "Add 1 item", and see 1 item added in <Simple - load> container
+	]]></label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.converter.ChildrenBindingConverterVM')">
+		Simple - init
+		<vlayout id="container1" children="@init(vm.data) @converter(vm.itemConverter)">
+			<template name="children">
+				<label value="@load(each)"/>
+			</template>
+		</vlayout>
+		Simple - load
+		<vlayout id="container2" children="@load(vm.data) @converter(vm.itemConverter)">
+			<template name="children">
+				<label value="@load(each)"/>
+			</template>
+		</vlayout>
+		<button label="Add 1 item" onClick="@command('add')" />
+	</div>
+</zk>

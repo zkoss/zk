@@ -1,0 +1,45 @@
+<zk>
+	<label multiline="true">
+		[Step 1] Click "test default global command" and see "default action" in zk log
+		[Step 2] Click "Show"/"Hide" and see the two area show/hide.
+		[Step 3] Type "aaa" and Click "Add" button and see one item "aaa" added in "Items" listbox
+		[Step 4] Type "bbb" and Click "Add" button and see one item "bbb" added in "Items" listbox
+	</label>
+	<separator/>
+	<vlayout viewModel="@id('mainVm') @init('org.zkoss.zktest.bind.databinding.globalcommand.MainViewModel')">
+		<menubar width="600px" apply="org.zkoss.bind.BindComposer">
+			<menuitem id="show" label="Show" onClick="@global-command('show')"/>
+			<menuitem id="hide" label="Hide" onClick="@global-command('hide')"/>
+		</menubar>
+		<hlayout>
+			<vlayout id="mainArea" width="200px" height="300px" style="border:dashed 2px"
+					 visible="@load(mainVm.visible)"
+					 viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.globalcommand.AddViewModel')"
+					 validationMessages="@id('vmsgs')">
+				<label value="Main Panel" style="font-size:30px"/>
+				Enter a Item (at least 3 characters):
+				<textbox id="iBox"
+						 value="@load(vm.item) @save(vm.item, before='add') @validator(vm.itemValidator)"/>
+				<label value="@load(vmsgs[iBox])" style="color:red"/>
+				<button id="addBtn" label="Add" onClick="@command('add') @global-command('refresh')"/>
+				<separator height="20px"/>
+				<label value="@load(vm.msg)"/>
+			</vlayout>
+			<vlayout id="listArea" width="400px" height="300px" visible="@load(mainVm.visible)" style="border:solid 2px"
+					 viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.globalcommand.ListViewModel')">
+				<listbox model="@load(vm.items)">
+					<listhead>
+						<listheader label="Items"/>
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="@load(each)"/>
+						</listitem>
+					</template>
+				</listbox>
+				<label value="@load(vm.lastUpdate)"/>
+				<button id="defaulGCmdBtn" label="test default global command" onClick="@global-command('aaa')"/>
+			</vlayout>
+		</hlayout>
+	</vlayout>
+</zk>

@@ -1,0 +1,20 @@
+<zk>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.el.EL3VM')">
+		[Step 1] Should see "Hi, Dennis Watson"
+		<label id="result1" value="@load(('Hi, ' += vm.person.firstName += ' ' += vm.person.lastName))" />
+		[Step 2] Should see "6"
+		<label id="result2"  value="@load((increase = x -> x + 1; increase(5)))"/>
+		[Step 3] Should see "10000.0", press enter to see "254.0"
+		<div>
+			<textbox id="tb3" value="@load((x -> (x * 100) / 2.54)(vm.number))" submitByEnter="true"
+				 onOK="@command('convertBack', key=((x -> (x * 2.54) / 100)(self.value)))"/>
+			Converted back value: <label id="result3"  value="@load(vm.convertedBackValue)" />
+		</div>
+		[Step 4] Should see three names which contains "John".
+		<listbox id="lb4"  model="@load((vm.names.stream().filter(x -> x.contains(vm.filter)).toList()))"/>
+		[Step 5] Should see 10
+		<label id="result5"  value="@load(([1, 2, 3, 4].stream().sum()))"/>
+		[Step 6] Should see 4.0
+		<label id="result6"  value="@load((Math.sqrt(16)))"/>
+	</vlayout>
+</zk>

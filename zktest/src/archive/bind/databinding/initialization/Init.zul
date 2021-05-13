@@ -1,0 +1,15 @@
+<zk>
+	<label>Should see "test 123 [checked checkbox] test" in the following two blocks </label>
+	<div id="d1" viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.initialization.InitVM')">
+		<label value="@init(vm.label)" />
+		<label value="@init(123)"/>
+		<checkbox checked="@init(true)"/>
+		<label value="@(vm.label)"/>
+	</div>
+	<div id="d2" viewModel="@('org.zkoss.zktest.bind.databinding.initialization.InitVM')">
+		<label value="@init(vm.label)" />
+		<label value="@init(123)"/>
+		<checkbox checked="@init(true)"/>
+		<label value="@(vm.label)"/>
+	</div>
+</zk>

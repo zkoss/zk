@@ -1,0 +1,19 @@
+<zk xmlns:ca="client/attribute" xmlns:n="native" xmlns:x="http://www.w3.org/1999/xhtml">
+	<label multiline="true">
+		[Step 1] Click "hello from client" and "server say hello", you should see zk log
+		[Step 2] Click "Count ++ (pure add)", the count remains the same
+		[Step 3] Click "Count ++", the count should be changed to '2' and see 'after command "notifyClient" (1)'
+	</label>
+	<div id="root" viewModel="@id('vm')@init('org.zkoss.zktest.bind.databinding.clientbinding.ClientBindingVM')">
+		<div>count:
+			<label id="cnt" value="@load(vm.count)" />
+		</div>
+		<button id="clientBtn" label="hello from client" ca:onclick="hello()"/>
+		<x:button n:onClick="@command('sayHello')">native</x:button>
+		<button id="serverBtn" label="server say hello" onClick="@command('sayHello')"/>
+		<button id="pureAddBtn" label="Count ++ (pure add)" onClick="@command('pureAdd')"/>
+		<button id="addBtn" label="Count ++" onClick="@command('add')"/>
+		<n:span id="span" />
+	</div>
+	<script defer="true" src="clientBinding.js"/>
+</zk>

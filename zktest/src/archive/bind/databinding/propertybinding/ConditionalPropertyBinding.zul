@@ -1,0 +1,118 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] Should see the second listitem selected and the values are shown in textboxes (Quantity, Price)
+				also these two labels ->
+
+				Selected Price (init): (2nd price) -> these should not be changed after all test steps
+				Selected Price (load): (2nd price) ( -1.0 )
+
+		[Step 2] Click another item and see corresponding values changed
+		[Step 3] Modify Quantity and value then click "Save", the corresponding values are changed
+				also these labels -> (others remain the same)
+
+				Selected Price (load, after 'saveOrder'): (new price)
+				Selected Price (load, before 'saveOrder', 'deleteOrder'): (new price)
+				Selected Price (load, before 'saveOrder' [selected] and after 'deleted' [tmpOrder]): (new price)
+
+		[Step 4] Modify "Update price [tmpOrder] (selected -> after 'deleteOrder'): " to 222
+				and modify "Update price [tmpOrder] (selected -> before 'deleteOrder'):" to 111
+				Click 'Delete' then see the item removed
+				also these labels -> (others remain the same)
+
+				Selected Price (load): ( 222.0 )
+				Selected Price (load, before 'deleteOrder'): (deleted price)
+				Selected Price (load, before 'saveOrder', 'deleteOrder'): (empty)
+				Selected Price (load, before 'saveOrder' [selected] and after 'deleted' [tmpOrder]): 222.0
+
+		[Step 5] Click any item and modify "Update price [tmpOrder] (selected -> before 'saveOrder', 'newOrder'):" to 333
+				Click 'New' then see one new item added
+				also the label -> (others remain the same)
+
+				Selected Price (load): 0.0 ( 111.0 )
+
+	]]></label>
+	<vlayout
+			viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.propertybinding.ConditionalPropertyBindingVM')">
+		<listbox model="@load(vm.orders)" selectedItem="@bind(vm.selected)" hflex="true" height="200px">
+			<listhead>
+				<listheader label="Id"/>
+				<listheader label="Quantity" align="center"/>
+				<listheader label="Price" align="center"/>
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell label="@load(item.id)"/>
+					<listcell label="@load(item.quantity)"/>
+					<listcell label="@load(item.price)"/>
+				</listitem>
+			</template>
+		</listbox>
+		<toolbar>
+			<button id="newBtn" label="New" onClick="@command('newOrder')"/>
+			<button id="saveBtn" label="Save" onClick="@command('saveOrder')" disabled="@load(empty vm.selected)"/>
+			<button id="delBtn" label="Delete" onClick="@command('deleteOrder')" disabled="@load(empty vm.selected)"/>
+			<button id="sel0Btn" label="Change selection to 0" onClick="@command('selOrder0')"/>
+			<button id="sel2Btn" label="Change selection to 2" onClick="@command('selOrder2')"/>
+		</toolbar>
+		<grid hflex="true">
+			<columns>
+				<column width="120px"/>
+				<column/>
+			</columns>
+			<rows>
+				<row>
+					Quantity
+					<intbox id="ib_quantity" value="@load(vm.selected.quantity) @save(vm.selected.quantity, before='saveOrder')"/>
+				</row>
+				<row>
+					Price
+					<doublebox id="db_price" value="@load(vm.selected.price) @save(vm.selected.price, before='saveOrder')"
+							   format="###,##0.00"/>
+				</row>
+			</rows>
+		</grid>
+		<div>
+			Selected Price (init):
+			<label id="p1" value="@init(vm.selected.price)"/>
+		</div>
+		<div>
+			Selected Price (load):
+			<label id="p2_1" value="@load(vm.selected.price)"/>
+			(
+			<label id="p2_2" value="@load(vm.tmpOrder.price)"/>
+			)
+		</div>
+		<div>
+			Selected Price (load, after 'saveOrder'):
+			<label id="p3" value="@load(vm.selected.price, after='saveOrder')"/>
+		</div>
+		<div>
+			Selected Price (load, before 'deleteOrder'):
+			<label id="p4" value="@load(vm.selected.price, before='deleteOrder')"/>
+		</div>
+		<div>
+			Selected Price (load, before 'saveOrder', 'deleteOrder'):
+			<label id="p5" value="@load(vm.selected.price, after={'saveOrder','deleteOrder'})"/>
+		</div>
+		<div>
+			Selected Price (load, before 'saveOrder' [selected] and after 'deleted' [tmpOrder]):
+			<label id="p6" value="@load(vm.selected.price, after='saveOrder') @load(vm.tmpOrder.price, after='deleteOrder')"/>
+		</div>
+		<div>
+			Update price [tmpOrder] (selected -> after 'deleteOrder'):
+			<textbox id="tb1" value="@load(vm.selected.price) @save(vm.tmpOrder.price, after='deleteOrder')" disabled="@load(empty vm.selected)"/>
+		</div>
+		<div>
+			Update price [tmpOrder] (always):
+			<textbox id="tb2" value="@bind(vm.tmpOrder.price)"/>
+		</div>
+		<div>
+			Update price [tmpOrder] (selected -> before 'saveOrder', 'newOrder'):
+			<textbox id="tb3" value="@load(vm.selected.price) @save(vm.tmpOrder.price, before={'saveOrder', 'newOrder'})" disabled="@load(empty vm.selected)"/>
+		</div>
+		<div>
+			Update price [tmpOrder] (selected -> before 'deleteOrder'):
+			<textbox id="tb4" value="@load(vm.selected.price) @save(vm.tmpOrder.price, before='deleteOrder')"/>
+		</div>
+	</vlayout>
+</zk>
