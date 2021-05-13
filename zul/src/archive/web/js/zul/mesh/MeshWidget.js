@@ -1364,19 +1364,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 
 			if (!this.frozen._smooth)
 				this._syncFaker();
-		} else {
-			var hdtbl = this.eheadtbl,
-				bdtbl = this.ebodytbl,
-				fttbl = this.efoottbl;
-			if (bdtbl) {
-				bdtbl.style.width = '';
-			}
-			if (hdtbl) {
-				hdtbl.style.width = '';
-			}
-			if (fttbl) {
-				fttbl.style.width = '';
-			}
 		}
 	},
 	_syncFaker: function () {

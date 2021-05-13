@@ -145,15 +145,25 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (this.desktop) {
-			var _getWidth = zul.mesh.MeshWidget._getWidth;
-			if (!_fixOnChildChanged(this) && this.parent._fixHeaders()) {
+			var _getWidth = zul.mesh.MeshWidget._getWidth,
+				mesh = this.getMeshWidget();
+			if (!_fixOnChildChanged(this) && mesh && mesh._fixHeaders()) {
+				// clear table width
+				var hdtbl = mesh.eheadtbl,
+					bdtbl = mesh.ebodytbl,
+					fttbl = mesh.efoottbl;
+				if (hdtbl)
+					hdtbl.style.width = '';
+				if (bdtbl)
+					bdtbl.style.width = '';
+				if (fttbl)
+					fttbl.style.width = '';
 				// refix-ZK-2466 : grid dynamic add childern should 'syncSize' at the end (instead of 'add one and trigger one's onSize')
-				this.parent._syncSize();
+				mesh._syncSize();
 			}
 			_syncFrozen(this);
-			this.parent._minWd = null;
-			var mesh = this.getMeshWidget(),
-				frozen = mesh ? mesh.frozen : null;
+			mesh._minWd = null;
+			var frozen = mesh ? mesh.frozen : null;
 			if (frozen)
 				frozen.onSize();
 

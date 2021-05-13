@@ -76,6 +76,7 @@ ZK 9.6.0
   ZK-4893: The last item of ForEachStatus.last is false if end can't be reached by step
   ZK-4896: A misleading error message in <when>
   ZK-4897: <forEach> doesn't support a primitive array
+  ZK-4888: listheader width shrinks to minimal size unexpectedly after reloading a model
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
