@@ -31,7 +31,7 @@ public class NotifyChangeAutoTest extends ZATSTestCase {
 		desktop.query("button").click();
 		Assert.assertNotEquals("John", fn.getValue());
 		Assert.assertNotEquals("Smith", ln.getValue());
-		// FIXME ZK-4891 Assert.assertNotEquals("John Smith", fullname.getValue());
+		Assert.assertEquals("John Smith", fullname.getValue()); // spec see ZK-4891
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class NotifyChangeAutoTest extends ZATSTestCase {
 			desktop.query("#rnd").click();
 			Assert.assertNotEquals("John", fn.getValue());
 			Assert.assertNotEquals("Smith", ln.getValue());
-			// FIXME ZK-4891 Assert.assertNotEquals("John Smith", fullname.getValue());
+			Assert.assertEquals("John Smith", fullname.getValue()); // spec see ZK-4891
 		} finally {
 			desktop.query("#restore").click();
 		}

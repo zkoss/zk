@@ -33,7 +33,7 @@ public class ForEachStatusTest extends ZATSTestCase {
 		checkData(rows, 1, new String[]{"4", "7", "10", "13", "16", "19"});
 		checkData(rows, 2, new String[]{"5", "8", "11", "14", "17", "20"});
 		checkData(rows, 3, new String[]{"true", "false", "false", "false", "false", "false"});
-		// FIXME ZK-4893 checkData(rows, 4, new String[]{"false", "false", "false", "false", "false", "true"});
+		checkData(rows, 4, new String[]{"false", "false", "false", "false", "false", "true"});
 		checkData(rows, 5, new String[]{"4", "4", "4", "4", "4", "4"});
 		checkData(rows, 6, new String[]{"20", "20", "20", "20", "20", "20"});
 		checkData(rows, 7, new String[]{"3", "3", "3", "3", "3", "3"});
