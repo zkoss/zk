@@ -59,6 +59,6 @@ public class FlowCtrlTest extends ZATSTestCase {
 		Throwable t = Assert.assertThrows(ZatsException.class, () -> {
 			connect("/bind/shadow/flowctrl-when-wrong.zul");
 		});
-		// FIXME ZK-4896 MatcherAssert.assertThat(t.getMessage(), startsWith("Unsupported parent for when"));
+		MatcherAssert.assertThat(t.getMessage(), startsWith("Unsupported parent for when"));
 	}
 }

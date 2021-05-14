@@ -20,22 +20,21 @@ import org.zkoss.bind.annotation.NotifyChange;
  * @author rudyhuang
  */
 public class FizzBuzzVM {
-	// FIXME ZK-4897 prevent from using int[]
-	private Integer[] numbers;
+	private int[] numbers;
 
-	public Integer[] getNumbers() {
+	public int[] getNumbers() {
 		return numbers;
 	}
 
 	@Command
 	@NotifyChange("numbers")
 	public void useSmall() {
-		numbers = IntStream.rangeClosed(1, 20).boxed().toArray(Integer[]::new);
+		numbers = IntStream.rangeClosed(1, 20).toArray();
 	}
 
 	@Command
 	@NotifyChange("numbers")
 	public void useLarge() {
-		numbers = IntStream.rangeClosed(50, 100).boxed().toArray(Integer[]::new);
+		numbers = IntStream.rangeClosed(50, 100).toArray();
 	}
 }
