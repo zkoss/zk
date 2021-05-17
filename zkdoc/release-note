@@ -78,6 +78,7 @@ ZK 9.6.0
   ZK-4897: <forEach> doesn't support a primitive array
   ZK-4888: listheader width shrinks to minimal size unexpectedly after reloading a model
   ZK-4834: tree scroll pos + latency errors
+  ZK-4787: Loading combobox model from serverpush cause popup to fail to resize
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
