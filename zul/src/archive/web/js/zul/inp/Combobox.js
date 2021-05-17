@@ -66,23 +66,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		 * @since 8.5.1
 		 */
 		emptySearchMessage: null,
-		/** Update the value of the input element in this component
-		 */
-		repos: function () {
-			if (this.desktop) {
-				this._typeahead(this._bDel);
-				this._bDel = null;
-
-				//Fixed bug 3290858: combobox with autodrop and setModel in onChanging
-				var pp = this.getPopupNode_();
-				//will update it later in onResponse with _fixsz
-				if (pp) {
-					pp.style.width = 'auto';
-					if (zk.webkit) this._shallRedoCss = true;
-				}
-			}
-			this._repos = false;
-		},
 		/**
 		 * Returns true if onSelect event is sent as soon as user selects using keyboard navigation.
 		 * <p>Default: true
@@ -143,6 +126,27 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			}
 		} else
 			this._initSelUuid = v;
+	},
+	/**
+	 * For internal use only.
+	 * Update the value of the input element in this component
+	 */
+	setRepos: function (v) {
+		if (!this._repos && v) {
+			this.$supers('setRepos', arguments);
+			if (this.desktop) {
+				this._typeahead(this._bDel);
+				this._bDel = null;
+
+				//Fixed bug 3290858: combobox with autodrop and setModel in onChanging
+				var pp = this.getPopupNode_();
+				//will update it later in onResponse with _fixsz
+				if (pp) {
+					pp.style.width = 'auto';
+					if (zk.webkit) this._shallRedoCss = true;
+				}
+			}
+		}
 	},
 
 	setValue: function (val) {

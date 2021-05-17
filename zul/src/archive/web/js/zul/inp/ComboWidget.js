@@ -102,6 +102,18 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.onSize();
 		}
 	},
+	/**
+	 * For internal use only.
+	 * Update the value of the input element in this component
+	 */
+	setRepos: function (v) {
+		if (!this._repos && v) {
+			if (this.desktop) {
+				this._shallFixPopupDimension = true;
+			}
+			this._repos = false;
+		}
+	},
 	onSize: function () {
 		if (this._open) {
 			var pp = this.getPopupNode_();
@@ -132,13 +144,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 	onResponse: function (ctl, opts) {
-		if ((opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
+		if ((this._shallFixPopupDimension || opts.rtags.onOpen || opts.rtags.onChanging) && this.isOpen()) {
 			// ZK-2192: Only need to determine if popup is animating
 			if (jq(this.getPopupNode_()).is(':animated')) {
 				var self = this;
 				setTimeout(function () {if (self.desktop) self.onResponse(ctl, opts);}, 50);
 				return;
 			}
+			this._shallFixPopupDimension = false;
 			var pp = this.getPopupNode_(),
 				pz = this.getPopupSize_(pp),
 				scrollPos = {}; // Bug ZK-2294
