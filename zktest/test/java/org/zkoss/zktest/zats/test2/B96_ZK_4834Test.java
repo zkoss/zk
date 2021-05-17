@@ -54,6 +54,7 @@ public class B96_ZK_4834Test extends WebDriverTestCase {
 		connect();
 
 		click(jq("@button:eq(1)"));
+		sleep(2000L);
 		waitResponse();
 
 		final Widget tree = widget("@tree");
