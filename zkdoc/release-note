@@ -80,6 +80,7 @@ ZK 9.6.0
   ZK-4834: tree scroll pos + latency errors
   ZK-4787: Loading combobox model from serverpush cause popup to fail to resize
   ZK-4877: ZKBind still use illegal reflective access which is not allowed anymore with JDK 16
+  ZK-4884: Menuitem addActive adds hover style to ancestor menu, doesn't clean it
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
