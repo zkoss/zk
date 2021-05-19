@@ -754,6 +754,93 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if (navigator.mediaDevices === undefined) navigator.mediaDevices = {};
 		if (navigator.mediaDevices.getUserMedia === undefined) navigator.mediaDevices.getUserMedia = polyfillGUM;
 		return navigator.mediaDevices.getUserMedia(constraints);
+	},
+	/**
+	 * Creates and returns a new, throttled version of the passed function, that,
+	 * when invoked repeatedly, will only actually call the original function at most once per every wait milliseconds.
+	 * Useful for rate-limiting events that occur faster than you can keep up with.
+	 *
+	 * Copied from underscore.js, MIT license.
+	 *
+	 * @param Function func the passed function
+	 * @param int wait wait milliseconds
+	 * @since 9.6.0
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	throttle<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number): (this: T, ...args: A) => R {
+		var timeout: number | null, context, args, result: R,
+			previous = 0,
+			later = function (): void {
+				previous = Date.now();
+				timeout = null;
+				result = func.apply(context, args);
+				if (!timeout) context = args = null;
+			};
+
+		return function () {
+			var now = Date.now(),
+				remaining = wait - (now - previous);
+			context = this;
+			args = arguments;
+			if (remaining <= 0 || remaining > wait) {
+				if (timeout) {
+					clearTimeout(timeout);
+					timeout = null;
+				}
+				previous = now;
+				result = func.apply(context, args);
+				if (!timeout) context = args = null;
+			} else if (!timeout) {
+				timeout = setTimeout(later, remaining);
+			}
+			return result;
+		};
+	},
+	/**
+	 * Creates and returns a new debounced version of the passed function
+	 * which will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked.
+	 * Useful for implementing behavior that should only happen after the input has stopped arriving.
+	 *
+	 * Copied from debounce, MIT license.
+	 *
+	 * @param Function func the passed function
+	 * @param int wait wait milliseconds
+	 * @param boolean immediate trigger the function on the leading instead of the trailing edge of the wait interval
+	 * @since 9.6.0
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	debounce<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number, immediate?: boolean): (this: T, ...args: A) => R {
+		var timeout, args, context, timestamp, result;
+		if (null == wait) wait = 100;
+
+		function later (): void {
+			var last = Date.now() - timestamp;
+
+			if (last < wait && last >= 0) {
+				timeout = setTimeout(later, wait - last);
+			} else {
+				timeout = null;
+				if (!immediate) {
+					result = func.apply(context, args);
+					context = args = null;
+				}
+			}
+		}
+
+		var debounced = function (this: T): R {
+			context = this;
+			args = arguments;
+			timestamp = Date.now();
+			var callNow = immediate && !timeout;
+			if (!timeout) timeout = setTimeout(later, wait);
+			if (callNow) {
+				result = func.apply(context, args);
+				context = args = null;
+			}
+			return result;
+		};
+
+		return debounced;
 	}
 };
 

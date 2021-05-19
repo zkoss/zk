@@ -194,6 +194,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Tree extends MeshElement {
 	private static final Logger log = LoggerFactory.getLogger(Tree.class);
 	private static final String ATTR_ON_INIT_RENDER_POSTED = "org.zkoss.zul.Tree.onInitLaterPosted";
+	private static final int DEFAULT_THROTTLE_MILLIS = 300;
 
 	private transient Treecols _treecols;
 	private transient Treefoot _treefoot;
@@ -2156,6 +2157,17 @@ public class Tree extends MeshElement {
 		return -1;
 	}
 
+	/**
+	 * Returns the millisecond of scrolling throttling in Tree render on-demand (ROD).
+	 * <p>Default: 300. (Since 9.6.0)
+	 */
+	private int throttleMillis() {
+		if (WebApps.getFeature("ee")) {
+			return Utils.getIntAttribute(this, "org.zkoss.zul.tree.throttleMillis", DEFAULT_THROTTLE_MILLIS, true);
+		}
+		return DEFAULT_THROTTLE_MILLIS;
+	}
+
 	private Treeitem newUnloadedItem() {
 		Treeitem ti = new Treeitem();
 		ti.setOpen(false);
@@ -2649,6 +2661,9 @@ public class Tree extends MeshElement {
 		// ZK-3835: because of ZK-3198, -1 will disable client ROD too
 		if (initRodSize() == -1)
 			renderer.render("z$rod0", false);
+		int throttleMillis = throttleMillis();
+		if (throttleMillis != DEFAULT_THROTTLE_MILLIS)
+			render(renderer, "throttleMillis", throttleMillis);
 	}
 
 	/** Returns whether to toggle a list item selection on right click
