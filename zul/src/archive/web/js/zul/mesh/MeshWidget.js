@@ -785,14 +785,34 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	onResponse: function () {
 		if (this._shallSize) {
+			if (this._shallClearTableWidth) {
+				this._clearTableWidth();
+				this._shallClearTableWidt = false;
+			}
 			this.syncSize();
 			this._shallSize = false; // just in case
 		}
 	},
-	_syncSize: function () {
+	_syncSize: function (shallClearTableWidth) {
 		// fixed for F50-3025422.zul on ZTL
-		if (this.desktop)
+		if (this.desktop) {
 			this._shallSize = true;
+			this._shallClearTableWidth = !!shallClearTableWidth;
+		}
+	},
+	_clearTableWidth: function () {
+		if (this.desktop) {
+			// clear table width
+			var hdtbl = this.eheadtbl,
+				bdtbl = this.ebodytbl,
+				fttbl = this.efoottbl;
+			if (hdtbl)
+				hdtbl.style.width = '';
+			if (bdtbl)
+				bdtbl.style.width = '';
+			if (fttbl)
+				fttbl.style.width = '';
+		}
 	},
 	_fixHeaders: function (force) { //used in HeadWidget
 		if (this.head && this.ehead) {
