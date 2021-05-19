@@ -436,11 +436,12 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				if (!this.menupopup.isOpen()) this.menupopup.open();
 			} else {
 				var target = menubar._lastTarget;
-				if (target && target != this && target.menupopup
-						&& target.menupopup.isVisible()) {
-					target.menupopup.close({sendOnOpen: true});
+				if (target && target != this) {
 					this.$class._rmActive(target);
-					if (this.menupopup) this.menupopup.open();
+					if (target.menupopup && target.menupopup.isVisible()) {
+						target.menupopup.close({sendOnOpen: true});
+						if (this.menupopup) this.menupopup.open();
+					}
 				}
 			}
 		}
