@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4879.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 20 10:59:14 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		/* debugging style */
+		*:focus {
+			box-shadow: inset 0 0 6px 1px red;
+		}
+	</style>
+	<label multiline="true">
+		1. Click nav1 and nav2, the focus(red border) shall stay at the nav you clicked.
+		2. Click nav3, the focus(red border) shall move to the navitem(item3) inside.
+		3. Click nav4, the focus(red border) shall move to nav4.
+	</label>
+	<navbar>
+		<nav label="nav1"></nav>
+		<nav label="nav2"></nav>
+		<nav label="nav3">
+			<navitem label="item3"></navitem>
+		</nav>
+		<nav label="nav4"></nav>
+	</navbar>
+</zk>

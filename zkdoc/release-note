@@ -83,6 +83,7 @@ ZK 9.6.0
   ZK-4877: ZKBind still use illegal reflective access which is not allowed anymore with JDK 16
   ZK-4884: Menuitem addActive adds hover style to ancestor menu, doesn't clean it
   ZK-4898: za11y navigation in listbox intercept events in input-based components, cause lost focus
+  ZK-4879: navbar jumping focus
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
