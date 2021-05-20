@@ -120,9 +120,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 /** The base class for ZUL widget.
-* <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
+ * <p>The corresponding Java class is org.zkoss.zul.impl.XulElement.
+ * <p>If a widget has a client attribute 'scrollable', it will listen <code>onScroll</code> event.
  */
 zul.Widget = zk.$extends(zk.Widget, {
+	bind_: function () {
+		this.$supers(zul.Widget, 'bind_', arguments);
+		// B70-ZK-2069: some widget need fire onScroll event, which has
+		// characteristic of container
+		if (jq(this.uuid, zk).data('scrollable')) { // Avoid caching $n() too early
+			this._doScrollableSyncScroll = zUtl.throttle(function () {
+				if (jq(this).data('scrollable')) {
+					zWatch.fireDown('onScroll', this);
+					zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
+				}
+			}, 1000 / 60); // 60fps
+			this.domListen_(this.getCaveNode(), 'onScroll', '_doScrollableSyncScroll');
+		}
+	},
+	unbind_: function () {
+		if (this._doScrollableSyncScroll) {
+			this.domUnlisten_(this.getCaveNode(), 'onScroll', '_doScrollableSyncScroll');
+		}
+		this.$supers(zul.Widget, 'unbind_', arguments);
+	},
 	/** Returns the ID of the popup ({@link zul.wgt.Popup}) that should appear
 	 * when the user right-clicks on the element (aka., context menu).
 	 *
