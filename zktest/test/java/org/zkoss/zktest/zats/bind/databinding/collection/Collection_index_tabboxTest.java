@@ -32,7 +32,7 @@ public class Collection_index_tabboxTest extends WebDriverTestCase {
 		click(outerTabpanels.eq(1).find("@button:contains(Delete)"));
 		waitResponse();
 
-		String[] testString1 = {"0A", "2C", "3D"};
+		String[] testString1 = {"0A", "1C", "2D"};
 		structureAndIndexCheck(outerTabs, outerTabpanels, testString1);
 
 		// add after 2nd tab
@@ -41,7 +41,7 @@ public class Collection_index_tabboxTest extends WebDriverTestCase {
 		click(outerTabpanels.eq(1).find("@button:contains(Add After)"));
 		waitResponse();
 
-		String[] testString2 = {"0A", "2C", "2C1", "3D"};
+		String[] testString2 = {"0A", "1C", "2C1", "3D"};
 		structureAndIndexCheck(outerTabs, outerTabpanels, testString2);
 
 		// add before 3rd tab
@@ -50,7 +50,7 @@ public class Collection_index_tabboxTest extends WebDriverTestCase {
 		click(outerTabpanels.eq(2).find("@button:contains(Add Before)"));
 		waitResponse();
 
-		String[] testString3 = {"0A", "2C", "2C12", "2C1", "3D"};
+		String[] testString3 = {"0A", "1C", "2C12", "3C1", "4D"};
 		structureAndIndexCheck(outerTabs, outerTabpanels, testString3);
 	}
 
@@ -68,8 +68,7 @@ public class Collection_index_tabboxTest extends WebDriverTestCase {
 
 			click(targetTabpanel.find("@button:contains(Index)"));
 			waitResponse();
-			// TODO: wait for ZK-4882 fixed
-			// Assert.assertEquals("item index " + i, msg.text());
+			Assert.assertEquals("item index " + i, msg.text());
 		}
 	}
 }
