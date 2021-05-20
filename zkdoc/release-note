@@ -85,6 +85,7 @@ ZK 9.6.0
   ZK-4898: za11y navigation in listbox intercept events in input-based components, cause lost focus
   ZK-4879: navbar jumping focus
   ZK-4882: Wrong index in forEachStatus with Tabbox model add/remove item
+  ZK-4890: EE ROD on listbox override scrollToIndex
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
