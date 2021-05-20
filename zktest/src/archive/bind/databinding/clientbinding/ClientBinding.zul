@@ -1,19 +1,30 @@
-<zk xmlns:ca="client/attribute" xmlns:n="native" xmlns:x="http://www.w3.org/1999/xhtml">
+<zk xmlns:ca="client/attribute" xmlns:n="native" xmlns:w="client" xmlns:x="http://www.w3.org/1999/xhtml">
 	<label multiline="true">
 		[Step 1] Click "hello from client" and "server say hello", you should see zk log
-		[Step 2] Click "Count ++ (pure add)", the count remains the same
-		[Step 3] Click "Count ++", the count should be changed to '2' and see 'after command "notifyClient" (1)'
+		[Step 2] Click "Client namespace" and "Native Component", you should see zk log
+		[Step 3] Click "zhtml server say hello", "zhtml client attr say hello" and "zhtml client button say hello", you should see zk log
+		[Step 4] Click "Count ++ (pure add)", the count remains the same
+		[Step 5] Click "Count ++", the count should be changed to '2' and see 'after command "notifyClient" (1)'
 	</label>
 	<div id="root" viewModel="@id('vm')@init('org.zkoss.zktest.bind.databinding.clientbinding.ClientBindingVM')">
 		<div>count:
-			<label id="cnt" value="@load(vm.count)" />
+			<label id="cnt" value="@load(vm.count)"/>
 		</div>
-		<button id="clientBtn" label="hello from client" ca:onclick="hello()"/>
-		<x:button n:onClick="@command('sayHello')">native</x:button>
 		<button id="serverBtn" label="server say hello" onClick="@command('sayHello')"/>
+		<button id="clientBtn" label="hello from client" ca:onclick="hello()"/>
+		<button id="clientOnClickBtn" label="Client namespace"
+				w:onClick='@command("hello", {data: zk.Widget.$(this).getLabel()})'/>
+		<x:button id="zhtmlServerBtn" onClick="@command('sayHello')">zhtml server say hello</x:button>
+		<x:button id="zhtmlClientAttrBtn" ca:onClick='hello()'>zhtml client attr say hello</x:button>
+		<x:button id="zhtmlClientBtn" w:onClick='@command("hello", {data: "zhtml button client"})'>
+			zhtml client button say hello
+		</x:button>
+		<x:input id="zhtmlInput" type="button" w:onClick='@command("hello", {data: "zhtml input client"})'
+				 value="zhtml client input say hello"/>
+		<n:button id="nativeBtn" onClick='@command("hello", {data: this.innerHTML})'>Native Component</n:button>
 		<button id="pureAddBtn" label="Count ++ (pure add)" onClick="@command('pureAdd')"/>
 		<button id="addBtn" label="Count ++" onClick="@command('add')"/>
-		<n:span id="span" />
+		<n:span id="span"/>
 	</div>
 	<script defer="true" src="clientBinding.js"/>
 </zk>
