@@ -35,11 +35,33 @@ public class ClientBindingTest extends WebDriverTestCase {
 		closeZKLog();
 
 		//[Step 2]
+		click(jq("$clientOnClickBtn"));
+		waitResponse();
+		assertTrue(getZKLog().contains("Client namespace"));
+		closeZKLog();
+		click(jq("#nativeBtn"));
+		waitResponse();
+		assertTrue(getZKLog().contains("Native Component"));
+		closeZKLog();
+		//[Step 3]
+		click(jq("#zhtmlServerBtn"));
+		waitResponse();
+		assertTrue(isZKLogAvailable());
+		closeZKLog();
+		click(jq("#zhtmlClientAttrBtn"));
+		waitResponse();
+		assertTrue(isZKLogAvailable());
+		closeZKLog();
+		click(jq("#zhtmlClientBtn"));
+		waitResponse();
+		assertTrue(getZKLog().contains("zhtml button client"));
+		closeZKLog();
+		//[Step 4]
 		assertEquals("0", jq("$cnt").text());
 		click(jq("$pureAddBtn"));
 		waitResponse();
 		assertEquals("0", jq("$cnt").text());
-		//[Step 3]
+		//[Step 5]
 		click(jq("$addBtn"));
 		waitResponse();
 		assertEquals("2", jq("$cnt").text());
