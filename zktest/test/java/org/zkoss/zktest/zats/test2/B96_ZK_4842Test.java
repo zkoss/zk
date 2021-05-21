@@ -24,9 +24,16 @@ public class B96_ZK_4842Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		click(jq("@button"));
+		click(jq("@button:eq(0)"));
 		waitResponse();
+		Assert.assertFalse(hasError());
 
+		click(jq("@button:eq(1)"));
+		waitResponse();
+		Assert.assertFalse(hasError());
+
+		click(jq("@button:eq(2)"));
+		waitResponse();
 		Assert.assertFalse(hasError());
 	}
 }

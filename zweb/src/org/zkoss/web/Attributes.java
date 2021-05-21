@@ -86,8 +86,8 @@ public class Attributes {
 
 	//-- Standard constants --//
 	/** The included context path; set by the servlet container.
-	 * @see org.zkoss.web.servlet.http.Https#getThisServletPath
-	 * @see org.zkoss.web.servlet.http.Https#getOriginServletPath
+	 * @see org.zkoss.web.servlet.http.Https#getThisContextPath
+	 * @see org.zkoss.web.servlet.http.Https#getOriginContextPath
 	 */
 	public static final String INCLUDE_CONTEXT_PATH = "javax.servlet.include.context_path";
 	/** The included servlet path; set by the servlet container.
@@ -134,6 +134,10 @@ public class Attributes {
 	 * @see org.zkoss.web.servlet.http.Https#getOriginQueryString
 	 */
 	public static final String FORWARD_QUERY_STRING = "javax.servlet.forward.query_string";
+	/** The async context path; set by the servlet container.
+	 * @see org.zkoss.web.servlet.http.Https#getThisContextPath
+	 */
+	public static final String ASYNC_CONTEXT_PATH = "javax.servlet.async.context_path";
 	/** The attribute to hold the exception, if any.
 	 */
 	public static final String ERROR_EXCEPTION = "javax.servlet.error.exception";

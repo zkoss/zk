@@ -18,11 +18,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
     ]]></zscript>
     <label multiline="true">
         1. (Jetty only) Use Comet server push. (by default)
-        2. Click "create image".
+        2. Click all "create image" buttons.
         3. No error appeared.
     </label>
     <div id="parent">
-        <button label="create image">
+        <button label="create image (~./ path)">
             <attribute name="onClick"><![CDATA[
                 Desktop dt = desktop;
                 new Thread() {
@@ -35,6 +35,40 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
                             parent.appendChild(image);
                             //more isolated way to reproduce without <image>
                             //System.out.println(Executions.getCurrent().encodeURL("~./img/spacer.gif"));
+                        } finally {
+                            Executions.deactivate(dt);
+                        }
+                    }
+                }.start();
+            ]]></attribute>
+        </button>
+
+        <button label="create image (absolute path)">
+            <attribute name="onClick"><![CDATA[
+                Desktop dt = desktop;
+                new Thread() {
+                    public void run() {
+                        Thread.sleep(200);
+                        try {
+                            Executions.activate(dt);
+                            parent.appendChild(new Image("/myimages/myimage.png"));
+                        } finally {
+                            Executions.deactivate(dt);
+                        }
+                    }
+                }.start();
+            ]]></attribute>
+        </button>
+
+        <button label="create image (relative path)">
+            <attribute name="onClick"><![CDATA[
+                Desktop dt = desktop;
+                new Thread() {
+                    public void run() {
+                        Thread.sleep(200);
+                        try {
+                            Executions.activate(dt);
+                            parent.appendChild(new Image("../myimage.png"));
                         } finally {
                             Executions.deactivate(dt);
                         }
