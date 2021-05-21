@@ -901,9 +901,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 
 			bdcol = bdfaker.firstChild;
-			// ZK-4320: Do not adjust widget's width if smooth is false and frozen is scrolled and isSpan.
+			// ZK-4320: Do not adjust widget's width if smooth is false and frozen is scrolled
 			var frozen = this.frozen;
-			if (!(frozen && !frozen._smooth && frozen.getStart()) && !this.isSpan()) {
+			if (!(frozen && !frozen._smooth && frozen.getStart())) {
 				for (var w = head.firstChild, wd; w && bdcol; w = w.nextSibling) {
 					var wwd = cachedOffsetWidths[w.uuid];
 					if (w.isVisible() && wwd > 0.1)

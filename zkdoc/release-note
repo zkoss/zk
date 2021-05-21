@@ -86,6 +86,7 @@ ZK 9.6.0
   ZK-4879: navbar jumping focus
   ZK-4882: Wrong index in forEachStatus with Tabbox model add/remove item
   ZK-4890: EE ROD on listbox override scrollToIndex
+  ZK-4867: listbox with auxhead (hflex vs span conflict)
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
