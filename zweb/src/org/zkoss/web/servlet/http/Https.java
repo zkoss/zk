@@ -148,9 +148,12 @@ public class Https extends Servlets {
 	 * Gets the context path of this page.
 	 * Unlike getContextPath, it detects whether the current page is included.
 	 *
-	 * @return "/" if request is not a http request
+	 * @return "" if request is not a http request
 	 */
 	public static final String getThisContextPath(ServletRequest request) {
+		String asyncPath = (String) request.getAttribute(Attributes.ASYNC_CONTEXT_PATH);
+		if (asyncPath != null)
+			return asyncPath;
 		String path = (String) request.getAttribute(Attributes.INCLUDE_CONTEXT_PATH);
 		return path != null ? path
 				: request instanceof HttpServletRequest ? ((HttpServletRequest) request).getContextPath() : "";
