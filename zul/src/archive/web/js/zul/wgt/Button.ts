@@ -231,7 +231,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (!this._delayFocus) {
 				this._delayFocus = true;
 				setTimeout(() => {
-					if (this.desktop && !this.isDisabled()) {
+					// // ZK-4865: do not focus if currentFocus has been changed
+					if (this.desktop && !this.isDisabled() && zk.currentFocus == this) {
 						if (!zk.focusBackFix || !this._upload) {
 							zk(this.$n()).focus(timeout);
 						}
