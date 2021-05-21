@@ -360,5 +360,13 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	 */
 	getGroups: function () {
 		return this._groupsInfo.$clone();
+	},
+	setItemsInvalid_: function (wgts) {
+		var wgt = this;
+		zAu.createWidgets(wgts, function (ws) {
+			wgt.replaceCavedChildren_('', ws);
+		}, function (wx) {
+			return wx;
+		});
 	}
 });
