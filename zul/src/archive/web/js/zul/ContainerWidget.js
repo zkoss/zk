@@ -19,8 +19,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /**
  * 	A ContainerWidget.
  *
- * <p>If container widget has client attribute 'scrollable', it will listen <code>onScroll</code> event.
- *
  *  @see zul.wnd.Window
  *  @see zul.wnd.Panelchildren
  *  @see zul.wgt.Groupbox
@@ -28,27 +26,4 @@ it will be useful, but WITHOUT ANY WARRANTY.
  *
  */
 zul.ContainerWidget = zk.$extends(zul.Widget, {
-	bind_: function () {
-		this.$supers(zul.ContainerWidget, 'bind_', arguments);
-
-		// B70-ZK-2069: some widget need fire onScroll event, which has
-		// characteristic of container
-		if (jq(this).data('scrollable')) {
-			this.domListen_(this.getCaveNode(), 'onScroll');
-		}
-	},
-
-	_doScroll: function () {
-		if (jq(this).data('scrollable')) {
-			zWatch.fireDown('onScroll', this);
-			zWatch.fire('_onSyncScroll', this); // ZK-4408: for Popup only
-		}
-	},
-
-	unbind_: function () {
-		if (jq(this).data('scrollable')) {
-			this.domUnlisten_(this.getCaveNode(), 'onScroll');
-		}
-		this.$supers(zul.ContainerWidget, 'unbind_', arguments);
-	}
 });
