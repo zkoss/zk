@@ -6045,7 +6045,7 @@ zk.NoDOM = {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-function zkopt(opts: Record<string, any>): void { // eslint-disable-line @typescript-eslint/no-explicit-any
+window.zkopt = function (opts: Record<string, any>): void { // eslint-disable-line @typescript-eslint/no-explicit-any
 	for (var nm in opts) {
 		var val = opts[nm];
 		switch (nm) {
@@ -6077,4 +6077,4 @@ function zkopt(opts: Record<string, any>): void { // eslint-disable-line @typesc
 		case 'resURI': zk.resourceURI = val;
 		}
 	}
-}
+};

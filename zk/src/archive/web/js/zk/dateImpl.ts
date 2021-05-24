@@ -14,7 +14,7 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-var Dates = {
+window.Dates = {
 	newInstance: function (param: number | DateImpl | [number, number, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined], tz) {
 		var m;
 		if (tz)
@@ -38,10 +38,10 @@ var Dates = {
 	}
 };
 
-function DateImpl(this: DateImpl, m, tz): void {
+window.DateImpl = function (this: DateImpl, m, tz): void {
 	this._moment = m;
 	this._timezone = tz;
-}
+};
 
 function parseTzId(id: string): string {
 	if (/^GMT\+([0]\d|[1][0-2]):[0]{2}$/i.test(id)) {

@@ -12,7 +12,6 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.test2;
 
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.zk.ui.http.SourceMapInfo;
 import org.zkoss.zk.ui.http.SourceMapManager;
 
 import java.io.ByteArrayInputStream;
@@ -34,7 +33,6 @@ public class B86_ZK_4306VM {
 		ByteArrayOutputStream oaos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(oaos);
 		oos.writeObject(new SourceMapManager(null, null, null));
-		oos.writeObject(new SourceMapInfo(null, 0, null));
 		oos.close();
 		oaos.close();
 		_bytes = oaos.toByteArray();

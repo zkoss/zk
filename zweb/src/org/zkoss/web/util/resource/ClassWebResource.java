@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -34,6 +36,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +115,13 @@ public class ClassWebResource {
 	 * @since 3.5.1
 	 */
 	public static final int FILTER_INCLUDE = 0x2;
+
+	/**
+	 * Internal used only.
+	 *
+	 * @since 9.6.0
+	 */
+	private ConcurrentMap<String, String> _sourceFromSourceMap; //js path -> js content
 
 	/** Returns the URL of the resource of the specified URI by searching
 	 * only the class path (with {@link #PATH_PREFIX}).
@@ -632,43 +642,56 @@ public class ClassWebResource {
 
 		InputStream is = null;
 
-		if (_debugJS && "js".equals(ext)) {
-			final String orgpi = Servlets.locate(_ctx, request, pi.substring(0, pi.length() - 3) + ".src.js",
-					_cwc.getLocator());
-			is = getResourceAsStream(orgpi);
-			if (is != null)
-				pi = orgpi;
-		}
-
-		if (is == null) {
-			final String p = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
-			is = getResourceAsStream(p);
-		}
-
+		HttpSession session = request.getSession();
+		byte[] data = new byte[0];
+		boolean resolved = false;
 		boolean compressed = false;
-		byte[] data;
-		if (is == null) {
+		if (_debugJS) {
 			if ("js".equals(ext)) {
-				//Don't sendError. Reason: 1) IE waits and no onerror fired
-				//2) better to debug (user will tell us what went wrong)
-				// B65-ZK-1897 Sanitizing pi to prevent possible cross-site scripting vulnerability 
-				data = ("(window.zk&&zk.error?zk.error:alert)('" + XMLs.encodeText(pi) + " not found');")
-						.getBytes("UTF-8");
-				//FUTURE: zweb shall not depend on zk
-			} else {
-				if (Servlets.isIncluded(request))
-					log.error("Resource not found: " + Encodes.encodeURI(pi));
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(pi));
-				return;
+				final String orgpi = Servlets.locate(_ctx, request, pi.substring(0, pi.length() - 3) + ".src.js",
+						_cwc.getLocator());
+				is = getResourceAsStream(orgpi);
+				if (is != null)
+					pi = orgpi;
+			} else if (ext != null && ext.endsWith("src.js") && session.getAttribute("zk$sourcemapsupported") != null) {
+				String cachedSource = _sourceFromSourceMap.get(pi);
+				if (cachedSource != null) {
+					data = cachedSource.getBytes();
+					resolved = true;
+				} else
+					log.debug("No cached source loaded. (" + pi + ")");
 			}
-		} else {
-			//Note: don't compress images
-			data = shallCompress(request, ext) ? Https.gzip(request, response, is, null) : null;
-			if (!(compressed = (data != null)))
-				data = Files.readAll(is);
-			//since what is embedded in the jar is not big, so load completely
+		}
 
-			Files.close(is);
+		if (!resolved) {
+			if (is == null) {
+				final String p = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
+				is = getResourceAsStream(p);
+			}
+
+			if (is == null) {
+				if ("js".equals(ext)) {
+					//Don't sendError. Reason: 1) IE waits and no onerror fired
+					//2) better to debug (user will tell us what went wrong)
+					// B65-ZK-1897 Sanitizing pi to prevent possible cross-site scripting vulnerability
+					data = ("(window.zk&&zk.error?zk.error:alert)('" + XMLs.encodeText(pi) + " not found');")
+							.getBytes("UTF-8");
+					//FUTURE: zweb shall not depend on zk
+				} else {
+					if (Servlets.isIncluded(request))
+						log.error("Resource not found: " + Encodes.encodeURI(pi));
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, XMLs.escapeXML(pi));
+					return;
+				}
+			} else {
+				//Note: don't compress images
+				data = shallCompress(request, ext) ? Https.gzip(request, response, is, null) : null;
+				if (!(compressed = (data != null)))
+					data = Files.readAll(is);
+				//since what is embedded in the jar is not big, so load completely
+
+				Files.close(is);
+			}
 		}
 
 		int len = data.length;
@@ -893,5 +916,15 @@ public class ClassWebResource {
 				_filters[j].doFilter(request, response, _pi, this);
 			}
 		}
+	}
+
+	/**
+	 * Internal used only.
+	 *
+	 * @since 9.6.0
+	 */
+	public ConcurrentMap<String, String> initSourceCache(int size) {
+		_sourceFromSourceMap = new ConcurrentHashMap<>(size);
+		return _sourceFromSourceMap;
 	}
 }
