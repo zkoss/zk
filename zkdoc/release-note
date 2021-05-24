@@ -20,6 +20,7 @@ ZK 9.6.0
   ZK-4838: searchbox and cascader support onFocus and onBlur
   ZK-4836: tree - avoid scroll timeout/delay to improve user experience
   ZK-4894: A popup can move upon scrolling inside any element
+  ZK-4875: Implement media onEnded event
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
