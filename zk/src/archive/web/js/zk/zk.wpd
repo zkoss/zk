@@ -80,6 +80,8 @@ window.$eval=function(s){return eval(s);};
 	<script src="ext/jquery.mousewheel.js"/>
 	<script src="ext/jquery.transit.js"/>
 
+	<script src="ext/focus-options-polyfill.js"/>
+
 	<!-- Moment.js -->
 	<script src="ext/moment.js"/>
 	<script src="ext/moment-timezone-with-data.js"/>
