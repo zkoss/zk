@@ -71,8 +71,12 @@ zjq = function (this: zk.JQZK, jq) { //ZK extension
 
 	function _submit(this: HTMLElement): void {
 		if (this instanceof HTMLFormElement) {
-			jq.Event.fire(this, 'submit');
-			this.submit();
+			if (this.requestSubmit) {
+				this.requestSubmit();
+			} else {
+				jq.Event.fire(this, 'submit');
+				this.submit();
+			}
 		}
 	}
 
