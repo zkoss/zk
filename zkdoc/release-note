@@ -91,6 +91,7 @@ ZK 9.6.0
   ZK-4867: listbox with auxhead (hflex vs span conflict)
   ZK-4903: Goldenlayout sets incorect vflex following ZK-4776
   ZK-4905: ListModelList clear cause listbox to not add new listitems
+  ZK-4873: Theme build process fails in windows due to escaping
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
