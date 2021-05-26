@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4883-redirect.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 26 15:06:11 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    Redirects here.
+    <label id="result" multiline="true">
+        xmlContent: ${param.xmlContent}
+        encoding: ${param.encoding}
+    </label>
+</zk>
