@@ -92,6 +92,7 @@ ZK 9.6.0
   ZK-4903: Goldenlayout sets incorect vflex following ZK-4776
   ZK-4905: ListModelList clear cause listbox to not add new listitems
   ZK-4873: Theme build process fails in windows due to escaping
+  ZK-4906: menubar autodrop=true closing when still hovering other menu items
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

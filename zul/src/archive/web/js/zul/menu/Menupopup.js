@@ -295,7 +295,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		zWatch.listen({onHide: this, onResponse: this});
 
 		var n = this.$n();
-		this.domListen_(n, 'onMouseEnter').domListen_(n, 'onMouseLeave');
+		n.addEventListener('mouseenter', this.proxy(this._doMouseEnter));
+		n.addEventListener('mouseleave', this.proxy(this._doMouseLeave));
 		if (!zk.css3) jq.onzsync(this);
 	},
 	unbind_: function () {
@@ -308,7 +309,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		zWatch.unlisten({onHide: this, onResponse: this});
 
 		var n = this.$n();
-		this.domUnlisten_(n, 'onMouseEnter').domUnlisten_(n, 'onMouseLeave');
+		n.removeEventListener('mouseleave', this.proxy(this._doMouseLeave));
+		n.removeEventListener('mouseenter', this.proxy(this._doMouseEnter));
 
 		this.$supers(zul.menu.Menupopup, 'unbind_', arguments);
 	},

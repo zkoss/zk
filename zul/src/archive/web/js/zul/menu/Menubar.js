@@ -90,7 +90,8 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 			zWatch.unlisten({onSize: this});
 		}
 		var n = this.$n();
-		this.domUnlisten_(n, 'onMouseEnter').domUnlisten_(n, 'onMouseLeave');
+		n.removeEventListener('mouseleave', this.proxy(this._doMouseLeave));
+		n.removeEventListener('mouseenter', this.proxy(this._doMouseEnter));
 
 		this._lastTarget = null;
 		this.$supers(zul.menu.Menubar, 'unbind_', arguments);
@@ -98,7 +99,8 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers(zul.menu.Menubar, 'bind_', arguments);
 		var n = this.$n();
-		this.domListen_(n, 'onMouseEnter').domListen_(n, 'onMouseLeave');
+		n.addEventListener('mouseenter', this.proxy(this._doMouseEnter));
+		n.addEventListener('mouseleave', this.proxy(this._doMouseLeave));
 		if (this.checkScrollable()) {
 			var left = this.$n('left'),
 				right = this.$n('right');
