@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4909.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 27 10:24:20 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Test 1
+        1. Select "item 2" and don't move the mouse.
+        2. The popup closes when switching to collapsed=false
+        Test 2 (reload to test)
+        1. Select "nav 2" -> "item 4" and don't move the mouse.
+        2. The popup closes when switching to collapsed=false
+    </label>
+    <navbar id="nb" orient="vertical" collapsed="true"
+            onSelect="self.collapsed = !self.collapsed">
+        <nav id="nav1" label="nav 1"  iconSclass="z-icon-home">
+            <navitem label="item 1" selected="true"/>
+            <navitem id="navitem2" label="item 2"/>
+            <navitem label="item 3"/>
+            <nav id="nav2" label="nav 2">
+                <navitem id="navitem4" label="item 4"/>
+                <navitem label="item 5"/>
+            </nav>
+        </nav>
+    </navbar>
+</zk>
