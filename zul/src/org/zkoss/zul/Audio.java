@@ -21,10 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.zkoss.util.media.Media;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.StateChangeEvent;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zul.ext.MediaElement;
 import org.zkoss.zul.impl.Utils;
@@ -39,6 +42,27 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Audio extends XulElement implements MediaElement {
+	/**
+	 * Represent the stop state
+	 * @since 9.6.0
+	 */
+	public static final int STOP = 0;
+	/**
+	 * Represent the play state
+	 * @since 9.6.0
+	 */
+	public static final int PLAY = 1;
+	/**
+	 * Represent the pause state
+	 * @since 9.6.0
+	 */
+	public static final int PAUSE = 2;
+	/**
+	 * Represent the end state
+	 * @since 9.6.0
+	 */
+	public static final int END = 3;
+
 	protected List<String> _src = new ArrayList<String>();
 	/** The audio. _src and _audio cannot be nonnull at the same time. */
 	private org.zkoss.sound.Audio _audio;
@@ -46,12 +70,28 @@ public class Audio extends XulElement implements MediaElement {
 	private byte _audver;
 	private boolean _autoplay, _controls, _loop, _muted;
 	private String _preload;
+	private int _currentState;
+
+	static {
+		addClientEvent(Audio.class, Events.ON_STATE_CHANGE, CE_IMPORTANT);
+	}
 
 	public Audio() {
 	}
 
 	public Audio(String src) {
 		setSrc(src);
+	}
+
+	@Override
+	public void service(AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (Events.ON_STATE_CHANGE.equals(cmd)) {
+			_currentState = (Integer) request.getData().get("state");
+			Events.postEvent(new StateChangeEvent(cmd, this, _currentState));
+		} else {
+			super.service(request, everError);
+		}
 	}
 
 	/** Plays the audio at the client.
@@ -64,6 +104,8 @@ public class Audio extends XulElement implements MediaElement {
 	 */
 	public void stop() {
 		response("ctrl", new AuInvoke(this, "stop"));
+		_currentState = STOP;
+		Events.postEvent(new StateChangeEvent(Events.ON_STATE_CHANGE, this, _currentState));
 	}
 
 	/** Pauses the audio at the client.
@@ -233,6 +275,47 @@ public class Audio extends XulElement implements MediaElement {
 			_muted = muted;
 			smartUpdate("muted", _muted);
 		}
+	}
+
+	/**
+	 * Return whether the audio is playing.
+	 *
+	 * @return true if audio is playing;
+	 * @since 9.6.0
+	 */
+	public boolean isPlaying() {
+		return _currentState == PLAY;
+	}
+
+	/**
+	 * Return whether the audio is paused.
+	 *
+	 * @return true if audio is paused;
+	 * @since 9.6.0
+	 */
+	public boolean isPaused() {
+		return _currentState == PAUSE;
+	}
+
+	/**
+	 * Return whether the audio is stopped.
+	 * While the audio is ended, also means it is stopped.
+	 *
+	 * @return true if audio is stopped or ended;
+	 * @since 9.6.0
+	 */
+	public boolean isStopped() {
+		return _currentState == STOP || _currentState == END;
+	}
+
+	/**
+	 * Return whether the audio is ended.
+	 *
+	 * @return true if audio is ended;
+	 * @since 9.6.0
+	 */
+	public boolean isEnded() {
+		return _currentState == END;
 	}
 
 	/** Sets the content directly.

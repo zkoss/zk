@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4779.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 27 12:29:39 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<audio id="audio" src="../media/guitar.wav" onStateChange='Clients.log(event.getState().toString())' controls="true"></audio>
+	<vlayout>
+		<label multiline="true">
+			play and end test:
+			1. click the play button, you should see 1 in ZK log.
+			2. click the isPlaying button before the music end, you should see true in ZK log.
+			3. wait until the music end, you should see 2, 3 in ZK log.
+			4. click the isEnded button, you should see true in ZK log.
+			
+			pause and stop test:
+			1. click the play button, you should see 1 in ZK log.
+			2. click the pause button before music end, you should see 2 in ZK log.
+			3. click the isPaused button, you should see true in ZK log.
+			4. click the stop, you should see 0 in ZK log.
+			5. click the isStopped button, you should see true in ZK log.
+		</label>
+		<hlayout>
+			<button id="play" label="play" onClick="audio.play()" />
+			<button id="pause" label="pause" onClick="audio.pause()" />
+			<button id="stop" label="stop" onClick="audio.stop()" />
+		</hlayout>
+		<hlayout>
+			<button id="isPlaying" label="isPlaying" onClick="Clients.log(audio.isPlaying())" />
+			<button id="isPaused" label="isPaused" onClick="Clients.log(audio.isPaused())" />
+			<button id="isStopped" label="isStopped" onClick="Clients.log(audio.isStopped())" />
+			<button id="isEnded" label="isEnded" onClick="Clients.log(audio.isEnded())" />
+		</hlayout>
+		<html>
+			<div xmlns:cc="http://creativecommons.org/ns#" about="urn:sha1:LJTEPSYNUVZNTPWFJO2OSXZ7SOGM54JB">
+				The playing audio is from
+				<a rel="cc:attributionURL" property="cc:attributionName" href="http://ccmixter.org/files/samplepacks/6892"> ccMixStar Sample Packs</a> /
+				<a rel="license" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>
+			</div>
+		</html>
+	</vlayout>
+</zk>

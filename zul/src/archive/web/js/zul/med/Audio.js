@@ -13,6 +13,9 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
+	var _PLAY = 1,
+	_PAUSE = 2,
+	_ENDED = 3;
 
 	function _invoke(wgt, fn) {
 		// Note: setSrc will rerender, so we need to delay the invocation of play
@@ -141,9 +144,20 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	pause: function () {
 		_invoke(this, 'pause');
 	},
+	bind_: function () {
+		this.$supers(Audio, 'bind_', arguments);
+		var n = this.$n();
+		n.addEventListener('play', this.proxy(this._audioOnPlay));
+		n.addEventListener('pause', this.proxy(this._audioOnPause));
+		n.addEventListener('ended', this.proxy(this._audioOnEnded));
+	},
 	unbind_: function () {
 		this._isUnbinded = true;
 		this.stop();
+		var n = this.$n();
+		n.removeEventListener('ended', this.proxy(this._audioOnEnded));
+		n.removeEventListener('pause', this.proxy(this._audioOnPause));
+		n.removeEventListener('play', this.proxy(this._audioOnPlay));
 		this.$supers(Audio, 'unbind_', arguments);
 	},
 	domAttrs_: function (no) {
@@ -168,6 +182,20 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			result += '<source src="' + src[i] + '" type="' + this._MIMEtype(src[i]) + '">';
 		}
 		return result;
+	},
+	_audioOnPlay: function () {
+		this._fireOnStateChange(_PLAY);
+	},
+	_audioOnPause: function () {
+		if (this.$n().currentTime) {
+			this._fireOnStateChange(_PAUSE);
+		}
+	},
+	_audioOnEnded: function () {
+		this._fireOnStateChange(_ENDED);
+	},
+	_fireOnStateChange: function (state) {
+		this.fire('onStateChange', {state: state});
 	},
 	_MIMEtype: function (name) {
 		var start = name.lastIndexOf('.'),
