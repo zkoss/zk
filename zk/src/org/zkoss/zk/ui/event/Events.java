@@ -277,6 +277,13 @@ public class Events {
 	 */
 	public static final String ON_SEARCHING = "onSearching";
 
+	/**
+	 * The onStateChange event used with {@link StateChangeEvent}.
+	 *
+	 * @since 9.6.0
+	 */
+	public static final String ON_STATE_CHANGE = "onStateChange";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character
