@@ -96,6 +96,7 @@ ZK 9.6.0
   ZK-4906: menubar autodrop=true closing when still hovering other menu items
   ZK-4883: Clients.submitForm does not submit form
   ZK-4870: borderlayout region caption misaligned
+  ZK-4909: navbar popup not closing popup when switching to collapsed false
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
