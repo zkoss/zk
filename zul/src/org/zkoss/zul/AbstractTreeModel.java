@@ -936,12 +936,26 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		}
 
 		public boolean isSelectAll() {
-			List<E> allNodes = model.getAllNodes();
-			for (E o : allNodes) {
-				if (isSelectable(o) && !((Selectable) model).isSelected(o))
-					return false;
+			E root = model.getRoot();
+			boolean result = false;
+			if (root != null)
+				result = !hasUnSelectedNode(root);
+			return result;
+		}
+		
+		private boolean hasUnSelectedNode(E node) {
+			if (node != model.getRoot() && isSelectable(node) && !((Selectable) model).isSelected(node))
+				return true;
+			int nChildren = model.getChildCount(node);
+			for (int i = 0, j = nChildren; i < j; i++) {
+				E child = model.getChild(node, i);
+				if (child != null) {
+					boolean result = hasUnSelectedNode(child);
+					if (result)
+						return true;
+				}
 			}
-			return true;
+			return false;
 		}
 	}
 
