@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4866.zul
+
+		Purpose:
+				
+		Description:
+				
+		History:
+				Fri May 28 10:46:50 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<style>
+		:focus {
+		outline: solid;
+		outline-color: red;
+		outline-offset: -1px;
+		}
+	</style>
+	<label id="headline" tabindex="-1" value="focus me"/>
+	<button id="btn1" onClick="headline.focus()" label="Click and should focus the label 'focus me'"/>
+</zk>

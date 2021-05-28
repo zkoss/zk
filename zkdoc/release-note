@@ -22,6 +22,7 @@ ZK 9.6.0
   ZK-4894: A popup can move upon scrolling inside any element
   ZK-4875: Implement media onEnded event
   ZK-4779: audio supports to fire an event upon its playing state
+  ZK-4866: Allow focussing arbitrary components/elements
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
