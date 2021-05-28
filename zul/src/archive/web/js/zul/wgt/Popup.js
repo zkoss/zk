@@ -213,7 +213,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	 * @param zk.Event evt
 	 */
 	_onSyncScroll: function (evt) {
-		if (evt && zUtl.isAncestor(evt.origin, this._fakeParent)) { // ZK-4408
+		if (evt && (!this._fakeParent || zUtl.isAncestor(evt.origin, this._fakeParent))) {
 			if (this.isInView_()) {
 				var args = this.getPositionArgs_();
 				if (!this.isOpen() && this._keepVisible) {
