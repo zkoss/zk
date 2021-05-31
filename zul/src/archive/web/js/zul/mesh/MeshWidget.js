@@ -2022,6 +2022,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		return false;
+	},
+	waitForRendered_: function () {
+		var self = this;
+		return new Promise(function (resolve) {
+			(function callback () {
+				if (!self._pendOnRender) return resolve();
+				setTimeout(callback);
+			})();
+		});
 	}
 }, {
 	WIDTH0: zk.webkit ? '0.001px' : '0px',

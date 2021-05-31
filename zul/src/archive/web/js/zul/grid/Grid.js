@@ -289,14 +289,10 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	 * @since 8.5.2
 	 */
 	scrollToIndex: function (index, scrollRatio) {
-		var self = this,
-			callback = function () {
-				if (self._pendOnRender)
-					setTimeout(callback);
-				else
-					self._scrollToIndex(index, scrollRatio);
-			};
-		callback();
+		var self = this;
+		this.waitForRendered_().then(function () {
+			self._scrollToIndex(index, scrollRatio);
+		});
 	},
 	_getFirstItemIndex: function () {
 		return this.rows.firstChild._index;
