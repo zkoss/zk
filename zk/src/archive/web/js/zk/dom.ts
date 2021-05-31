@@ -1856,7 +1856,7 @@ jq(el).zk.center(); //same as 'center'
 		if (!n || !n.focus) return false;
 			//ie: INPUT's focus not function
 
-		if (!jq.nodeName(n, 'button', 'input', 'textarea', 'a', 'select', 'iframe'))
+		if (!jq.nodeName(n, 'button', 'input', 'textarea', 'a', 'select', 'iframe') && n.getAttribute('tabindex') == null)
 			return false;
 
 		if (timeout && timeout >= 0) setTimeout(function () {_focus(n);}, timeout);
