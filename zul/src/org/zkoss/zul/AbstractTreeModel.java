@@ -28,7 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.io.Serializables;
+import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.PagingListener;
@@ -103,7 +106,20 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 				invalidatePageCount();
 			}
 		});
-		_ctrl = new DefaultSelectionControl<>(this);
+		_ctrl = createDefaultSelectionControl();
+	}
+
+	private SelectionControl<E> createDefaultSelectionControl() {
+		String clznm = Library.getProperty("org.zkoss.zul.AbstractTreeModel.DefaultSelectionControl.class");
+		if (clznm != null) {
+			try {
+				return (SelectionControl<E>) Classes.newInstanceByThread(clznm, new Class[] { AbstractTreeModel.class },
+						new Object[] { this });
+			} catch (Exception e) {
+				UiException.Aide.wrap(e, "Can't initialize SelectionControl");
+			}
+		}
+		return new DefaultSelectionControl<>(this);
 	}
 
 	private void updatePath(TreeDataEvent event) {
@@ -936,26 +952,12 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E>, TreeSelectab
 		}
 
 		public boolean isSelectAll() {
-			E root = model.getRoot();
-			boolean result = false;
-			if (root != null)
-				result = !hasUnSelectedNode(root);
-			return result;
-		}
-		
-		private boolean hasUnSelectedNode(E node) {
-			if (node != model.getRoot() && isSelectable(node) && !((Selectable) model).isSelected(node))
-				return true;
-			int nChildren = model.getChildCount(node);
-			for (int i = 0, j = nChildren; i < j; i++) {
-				E child = model.getChild(node, i);
-				if (child != null) {
-					boolean result = hasUnSelectedNode(child);
-					if (result)
-						return true;
-				}
+			List<E> allNodes = model.getAllNodes();
+			for (E o : allNodes) {
+				if (isSelectable(o) && !((Selectable) model).isSelected(o))
+					return false;
 			}
-			return false;
+			return true;
 		}
 	}
 
