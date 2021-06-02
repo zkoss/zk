@@ -26,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -91,15 +93,32 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 	private static final String SOURCE_MAP_SUPPORTED = "zk$sourcemapsupported";
 	//check closure compiler existence
 	private Boolean CLOSURE_COMPILER_AVAILABLE;
+	private static final int SOURCE_CACHE_SIZE = 100;
+	/**
+	 * Internal used only.
+	 * @since 9.6.0
+	 */
+	private ConcurrentMap _sourceFromSourceMap; //js path -> js content
+	/**
+	 * Internal used only.
+	 * @since 9.6.0
+	 */
+	private ConcurrentMap<String, String> _sourceMapContentMap; // browser$source-map-name -> source map content
 
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
 		if (!isDebugJS()) {
 			config.addCompressExtension("wpd");
 		} else if (isSourceMapEnabled() && CLOSURE_COMPILER_AVAILABLE == null) {
-			CLOSURE_COMPILER_AVAILABLE = Classes.existsByThread("com.google.debugging.sourcemap.SourceMapGeneratorV3");
+			CLOSURE_COMPILER_AVAILABLE = Classes.existsByThread("com.google.javascript.jscomp.Compiler");
 			if (!CLOSURE_COMPILER_AVAILABLE)
 				log.warn("Closure compiler is not available.");
+			else {
+				ServletContext servletContext = config.getExtendletContext().getServletContext();
+				_sourceFromSourceMap = WebManager.getWebManager(servletContext)
+					.getClassWebResource().initSourceCache(SOURCE_CACHE_SIZE);
+				_sourceMapContentMap = new ConcurrentHashMap<>();
+			}
 		}
 	}
 
@@ -107,7 +126,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			throws ServletException, IOException {
 		// handle sourcemapping URL
 		if (isDebugJS() && path.endsWith("wpd"))
-			request.getSession().setAttribute(HANDLE_SOURCE_MAPPING_URL, true);
+			request.setAttribute(HANDLE_SOURCE_MAPPING_URL, true);
 		byte[] data = retrieve(request, response, path);
 		if (data == null)
 			return;
@@ -132,27 +151,30 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		String pkg = null;
 		boolean isSourceMapSupported = false;
 		Boolean shouldHandleSourceMappingURL = null;
+		String userAgent = null;
 		if (isDebugJS()) {
-			String userAgent = request.getHeader("user-agent");
+			userAgent = request.getHeader("user-agent");
 			isSourceMapSupported = Objects.equals(CLOSURE_COMPILER_AVAILABLE, true)
 					&& (Servlets.isBrowser(userAgent, "chrome") || Servlets.isBrowser(userAgent, "ff")
 					|| Servlets.isBrowser(userAgent, "ie11") || Servlets.isBrowser(userAgent, "safari"));
 			if (isSourceMapSupported) {
 				HttpSession session = request.getSession();
-				if (path.endsWith("map")) {
+				if (path.endsWith(".map")) { // try to get *.js.map
 					String name = path.substring(path.lastIndexOf("/") + 1).replaceAll(".map", "");
-					SourceMapManager sourceMapManager = (SourceMapManager) session.getAttribute(SOURCE_MAP_PREFIX + name);
-					if (sourceMapManager == null) {
+					String sourceMapContent = _sourceMapContentMap.get(Servlets.getBrowser(userAgent) + "$" + name);
+					if (sourceMapContent == null) {
 						log.warn("Failed to load the source map resource: " + path);
 						response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
 						return null;
 					}
-					String sourceMapContent = sourceMapManager.getSourceMapContent();
+					session.setAttribute(SOURCE_MAP_SUPPORTED, true); //for ClassWebResource to get *.src.js
 					return sourceMapContent.getBytes();
 				}
-				shouldHandleSourceMappingURL = (Boolean) session.getAttribute(HANDLE_SOURCE_MAPPING_URL);
+
+				// start to generate source map
+				shouldHandleSourceMappingURL = (Boolean) request.getAttribute(HANDLE_SOURCE_MAPPING_URL);
 				if (shouldHandleSourceMappingURL != null)
-					session.removeAttribute(HANDLE_SOURCE_MAPPING_URL);
+					request.removeAttribute(HANDLE_SOURCE_MAPPING_URL);
 				request.setAttribute(SOURCE_MAP_SUPPORTED, true);
 			}
 		}
@@ -208,14 +230,13 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		if (isSourceMapSupported && shouldHandleSourceMappingURL != null) {
 			if (pkg == null)
 				pkg = path.substring(path.lastIndexOf("/") + 1).replaceAll(".wpd", "");
-			pkg = SOURCE_MAP_PREFIX + pkg; //key
-			SourceMapManager sourceMapManager = (SourceMapManager) request.getAttribute(pkg);
+			String sourceMapManagerKey = SOURCE_MAP_PREFIX + pkg; //key
+			SourceMapManager sourceMapManager = (SourceMapManager) request.getAttribute(sourceMapManagerKey);
 			if (sourceMapManager != null) {
-				ByteArrayOutputStream out = new ByteArrayOutputStream(1024 * 100);
-				out.write(data);
-				out.write(("//# sourceMappingURL=" + sourceMapManager.getSourceMappingURL() + "\n").getBytes());
-				data = out.toByteArray();
-				request.getSession().setAttribute(pkg, sourceMapManager);
+				request.removeAttribute(sourceMapManagerKey); //clear
+
+				data = sourceMapManager.generateFinalWpd(_sourceMapContentMap,
+						Servlets.getBrowser(userAgent) + "$" + pkg, _sourceFromSourceMap, data).getBytes();
 			}
 		}
 		return data;
@@ -252,16 +273,10 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				final String path = device.packageToPath(pkg);
 				data = retrieve(request, response, path);
 				if (data != null) {
-					out.write(data);
-					if (request.getAttribute(SOURCE_MAP_SUPPORTED) != null) {
-						//merge source map
-						SourceMapManager sourceMapManager = (SourceMapManager) request
-								.getAttribute(SOURCE_MAP_PREFIX + pkg);
-						if (sourceMapManager == null)
-							log.warn("Failed to merge the source map: " + path);
-						else
-							sourceMapManagerPkgTo.appendSourceMap(sourceMapManager);
-					}
+					if (request.getAttribute(SOURCE_MAP_SUPPORTED) != null)
+						sourceMapManagerPkgTo.mergeWpd((SourceMapManager) request.getAttribute(SOURCE_MAP_PREFIX + pkg), data);
+					else
+						out.write(data);
 				} else
 					log.error("Failed to load the resource: " + path);
 			}
@@ -292,55 +307,59 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			String sourceRoot = requestURI.substring(0, requestURI.indexOf("js/"));
 			sourceMapManager = new SourceMapManager(name, sourceRoot, reqctx.request.getSession().getId());
 		}
+		StringBuilder preScriptBuilder = new StringBuilder();
 		if (zk) {
-			write(out, "if(!window.zk){\n");
-			if (sourceMapManager != null)
-				sourceMapManager.appendEmptySourceMap(1);
+			preScriptBuilder.append("if(!window.zk){\n");
 			//may be loaded multiple times because specified in lang.xml
 		} else if (!aaas) {
 			depends = root.getAttributeValue("depends");
 			if (depends != null && depends.length() == 0)
 				depends = null;
 			if (depends != null) {
-				write(out, "zk.load('");
-				write(out, depends);
-				write(out, "',");
-			} else
-				write(out, '(');
-			write(out, "function(){if(zk._p=zkpi('");
-			write(out, name);
-			write(out, '\'');
-			if (reqctx.getResource(dir + "wv/zk.wpd") != null)
-				write(out, ",true");
-			write(out, "))try{\n");
-			if (sourceMapManager != null)
-				sourceMapManager.appendEmptySourceMap(1);
+				preScriptBuilder.append("zk.load('").append(depends).append("',");
+			} else {
+				preScriptBuilder.append("(");
+			}
+			preScriptBuilder.append("function(){if(zk._p=zkpi('").append(name).append('\'');
+			if (reqctx.getResource(dir + "wv/zk.wpd") != null) {
+				preScriptBuilder.append(",true");
+			}
+			preScriptBuilder.append("))try{\n");
 		}
+		String preStr = preScriptBuilder.toString();
+		if (sourceMapManager == null)
+			write(out, preStr);
+		else
+			sourceMapManager.setPreScript(preStr);
 
-		final Map<String, String[]> moldInfos = new HashMap<String, String[]>();
+		final Map<String, String[]> moldInfos = new HashMap<>();
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element) it.next();
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
+				if (sourceMapManager != null)
+					sourceMapManager.startJsCursor(jspath);
 				if (!writeResource(reqctx, out, jspath, dir, false, sourceMapManager)) {
 					log.error("Widget " + wgtnm + ": " + jspath + " not found, " + el.getLocator() + ", " + path);
+					if (sourceMapManager != null)
+						sourceMapManager.closeJsCursor(out);
 					continue;
 				}
 
 				final String wgtflnm = name + "." + wgtnm;
-				write(out, "zkreg('");
-				write(out, wgtflnm);
-				write(out, '\'');
+				appendJsContent(out, sourceMapManager, "zkreg('", wgtflnm, "'");
 				WidgetDefinition wgtdef = langdef != null ? langdef.getWidgetDefinitionIfAny(wgtflnm) : null;
-				if (wgtdef != null && wgtdef.isBlankPreserved())
-					write(out, ",true");
-				write(out, ");\n");
-				if (sourceMapManager != null)
-					sourceMapManager.appendEmptySourceMap(1);
-				if (wgtdef == null)
+				if (wgtdef != null && wgtdef.isBlankPreserved()) {
+					appendJsContent(out, sourceMapManager, ",true");
+				}
+				appendJsContent(out, sourceMapManager, ");\n");
+				if (wgtdef == null) {
+					if (sourceMapManager != null)
+						sourceMapManager.closeJsCursor(out);
 					continue;
+				}
 
 				try {
 					boolean first = true;
@@ -352,72 +371,62 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 						if (first) {
 							first = false;
-							write(out, "zk._m={};\n");
-							if (sourceMapManager != null)
-								sourceMapManager.appendEmptySourceMap(1);
+							appendJsContent(out, sourceMapManager, "zk._m={};\n");
 						}
 
-						write(out, "zk._m['");
-						write(out, mold);
-						write(out, "']=");
+						appendJsContent(out, sourceMapManager, "zk._m['", mold, "']=");
 
 						String[] info = (String[]) moldInfos.get(uri);
 						if (info != null) { //reuse
-							write(out, "[zk._p.p.");
-							write(out, info[0]);
-							write(out, ",'");
-							write(out, info[1]);
-							write(out, "'];\n");
-							if (sourceMapManager != null)
-								sourceMapManager.appendEmptySourceMap(1);
+							appendJsContent(out, sourceMapManager, "[zk._p.p.", info[0], ",'", info[1], "'];\n");
 						} else {
 							moldInfos.put(uri, new String[] { wgtnm, mold });
 							if (!writeResource(reqctx, out, uri, dir, true, sourceMapManager)) {
-								write(out, "zk.$void;zk.error('");
-								write(out, uri);
-								write(out, " not found')");
+								appendJsContent(out, sourceMapManager, "zk.$void;zk.error('", uri, " not found')");
+								if (sourceMapManager != null)
+									sourceMapManager.closeJsCursor(out);
 								log.error("Failed to load mold " + mold + " for widget " + wgtflnm + ": " + uri
 										+ " not found");
 							}
-							write(out, ';');
+							appendJsContent(out, sourceMapManager, ";");
 						}
 					}
-					if (!first) {
-						write(out, "zkmld(");
-						write(out, zk ? "zk." : "zk._p.p.");
-						write(out, wgtnm);
-						write(out, ",zk._m);\n");
-						if (sourceMapManager != null)
-							sourceMapManager.appendEmptySourceMap(1);
-					}
+					if (!first)
+						appendJsContent(out, sourceMapManager, "zkmld(", zk ? "zk." : "zk._p.p.", wgtnm, ",zk._m);\n");
 				} catch (Throwable ex) {
 					log.error("Failed to load molds for widget " + wgtflnm + ".\nCause: " + Exceptions.getMessage(ex));
 				}
+				if (sourceMapManager != null)
+					sourceMapManager.closeJsCursor(out);
 			} else if ("script".equals(elnm)) {
 				String browser = el.getAttributeValue("browser");
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
+					if (sourceMapManager != null)
+						sourceMapManager.startJsCursor(jspath);
 					if (wc != null && (browser != null || jspath.indexOf('*') >= 0)) {
 						move(wc, out);
 						wc.add(jspath, browser);
-						if (sourceMapManager != null)
-							sourceMapManager.addNonResolvedSourceMap();
 					} else {
 						if (browser != null && (!Servlets.isBrowser(reqctx.request, browser)
 								// F70-ZK-1956: Check whether the script should be loaded or ignored.
-								|| getScriptManager().isScriptIgnored(reqctx.request, jspath)))
+								|| getScriptManager().isScriptIgnored(reqctx.request, jspath))) {
+							if (sourceMapManager != null)
+								sourceMapManager.clearJsCursor();
 							continue;
-						if (!writeResource(reqctx, out, jspath, dir, true, sourceMapManager))
+						}
+						if (!writeResource(reqctx, out, jspath, dir, true, sourceMapManager)) {
 							log.error(jspath + " not found, " + el.getLocator() + ", " + path);
+						}
 					}
+					if (sourceMapManager != null)
+						sourceMapManager.closeJsCursor(out);
 				}
 
 				String s = el.getText(true);
 				if (s != null && s.length() > 0) {
 					write(out, s);
 					write(out, '\n'); //might terminate with //
-					if (sourceMapManager != null)
-						sourceMapManager.appendEmptySourceMap(countLines(s) + 1);
 				}
 			} else if ("function".equals(elnm)) {
 				final MethodInfo mtd = getMethodInfo(el);
@@ -425,12 +434,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					if (wc != null) {
 						move(wc, out);
 						wc.add(mtd);
-						if (sourceMapManager != null)
-							sourceMapManager.addNonResolvedSourceMap();
 					} else {
 						String js = write(reqctx, out, mtd);
-						if (sourceMapManager != null)
-							sourceMapManager.appendEmptySourceMap(countLines(js));
 					}
 			} else {
 				log.warn("Unknown element " + elnm + ", " + el.getLocator() + ", " + path);
@@ -440,27 +445,16 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			final WebApp wapp = getWebApp();
 			if (wapp != null)
 				writeAppInfo(reqctx, out, wapp, sourceMapManager);
-			write(out, '}'); //end of if(window.zk)
-
-			writeHost(wc, out, wapp);
-			if (sourceMapManager != null)
-				sourceMapManager.addNonResolvedSourceMap();
+			appendPostJsScript(out, sourceMapManager, "}"); //end of if(window.zk)
+			writeHost(wc, out, wapp, reqctx, sourceMapManager);
 		} else if (aaas) {
-			writeHost(wc, out, getWebApp());
-			if (sourceMapManager != null)
-				sourceMapManager.addNonResolvedSourceMap();
+			writeHost(wc, out, getWebApp(), reqctx, sourceMapManager);
 		} else {
-			if (sourceMapManager != null)
-				sourceMapManager.appendEmptySourceMap(1);
-			write(out, "\n}catch(error){console.error(error);}finally{zk.setLoaded(zk._p.n);}");
-			if (depends != null) {
-				write(out, "});zk.setLoaded('");
-				write(out, name);
-				write(out, "',1);");
-			} else
-				write(out, "})();");
-			if (sourceMapManager != null)
-				sourceMapManager.appendEmptySourceMap(1);
+			appendPostJsScript(out, sourceMapManager, "\n}catch(error){console.error(error);}finally{zk.setLoaded(zk._p.n);}");
+			if (depends != null)
+				appendPostJsScript(out, sourceMapManager, "});zk.setLoaded('", name, "',1);");
+			else
+				appendPostJsScript(out, sourceMapManager, "})();");
 		}
 
 		if (sourceMapManager != null) {
@@ -508,11 +502,14 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		return false;
 	}
 
-	private void writeHost(WpdContent wc, ByteArrayOutputStream out, WebApp wapp) {
+	private void writeHost(WpdContent wc, ByteArrayOutputStream out, WebApp wapp, RequestContext reqctx, SourceMapManager sourceMapManager) throws ServletException, IOException {
 		if (wapp != null) {
 			final String[] pkgs = wapp.getConfiguration().getClientPackages();
 			if (pkgs.length > 0) {
-				move(wc, out);
+				if (sourceMapManager == null)
+					move(wc, out);
+				else
+					sourceMapManager.appendPostScript(new String(wc.toByteArray(reqctx)));
 				wc.addHost(wapp, JSONArray.toJSONString(pkgs));
 			}
 		}
@@ -531,13 +528,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			path = Files.normalize(dir, path);
 
 		//source map browser issue and check source map file is available or not
-		InputStream isSourceMap = null;
 		String originalPath = "";
 		if (isDebugJS()) {
-			if (sourceMapManager != null)
-				isSourceMap = reqctx.getResourceAsStream(path + ".map", locate);
-			if ("js".equals(Servlets.getExtension(path)) && !path.endsWith(".src.js")
-					&& (isSourceMap == null || sourceMapManager == null)) {
+			if ("js".equals(Servlets.getExtension(path)) && !path.endsWith(".src.js")) {
 				originalPath = path; //if .src.js not exist -> roll back
 				path = path.substring(0, path.length() - 3) + ".src.js";
 			}
@@ -558,29 +551,16 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 		}
 
 		if (sourceMapManager != null) {
-			String sourceMapContent = "";
-			final InputStream isCopy = reqctx.getResourceAsStream(path, locate);
-			String jsContent = new String(Files.readAll(isCopy));
-			if (isSourceMap != null)
-				sourceMapContent = new String(Files.readAll(isSourceMap));
-			String sourceMapSourcePath = path;
-			if (!sourceMapSourcePath.endsWith(".src.js")) {
-				String basePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3);
-				sourceMapSourcePath = reqctx.getResource(basePath + ".ts") != null // source might be .ts
-						? basePath + ".ts"
-						: basePath + ".src.js";
-			}
-			sourceMapManager.insertSourceMap(index, sourceMapContent, countLines(jsContent), sourceMapSourcePath.substring(1)); //skip first "/"
-			sourceMapManager.insertEmptySourceMap((index == -1) ? -1 : index + 1, 1); //for \n
-			if (index != -1) {
-				sourceMapManager.getSourceMapInfoList().remove(index + 2);
-				sourceMapManager.getSourceMapInfoList().remove(index + 2);
-			}
-			Files.close(isCopy);
-			Files.close(isSourceMap);
+			String jsContent = new String(Files.readAll(is));
+			String sourceMapSourcePath = path.substring(1); //skip first "/"
+			if (!sourceMapSourcePath.endsWith(".src.js"))
+				sourceMapSourcePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3) + ".src.js";
+			sourceMapManager.updateCursorRealPath(path);
+			sourceMapManager.appendJsContent(jsContent);
 		}
 
-		Files.copy(out, is);
+		if (sourceMapManager == null)
+			Files.copy(out, is);
 		Files.close(is);
 		write(out, '\n'); //might terminate with //
 		return true;
@@ -713,11 +693,9 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 		//ZK-4564
 		sb.append("resURI:'")
-			.append(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getResourceURI(false)))
-			.append("'").append("});");
-		write(out, sb.toString());
-		if (sourceMapManager != null)
-			sourceMapManager.appendEmptySourceMap(1);
+				.append(Encodes.encodeURL(ctx, reqctx.request, reqctx.response, wapp.getResourceURI(false)))
+				.append("'").append("});");
+		appendPostJsScript((ByteArrayOutputStream) out, sourceMapManager, sb.toString());
 	}
 
 	private Object obfuscateVer(boolean exposeVersion, Object ver, String salt) {
@@ -890,11 +868,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			SourceMapManager sourceMapManager = null;
 			List<String> resultList = new ArrayList<String>(16);
 			List<Integer> unresolvedList = null;
-			if (isDebugJS()) {
+			if (isDebugJS())
 				sourceMapManager = (SourceMapManager) reqctx.request.getAttribute(SOURCE_MAP_PREFIX + name);
-				if (sourceMapManager != null)
-					unresolvedList = sourceMapManager.getUnresolvedSourceMapInfoIndexList();
-			}
 			for (Object o : _cnt) {
 				String result = "";
 				if (o instanceof byte[]) {
@@ -911,9 +886,14 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 								|| getScriptManager().isScriptIgnored(reqctx.request, inf[0]))
 							continue;
 					}
+					//handle browser issue
 					int sourceMapInfoIndex = unresolvedList != null ? unresolvedList.get(resultList.size() - 1) : -1;
-					if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager, sourceMapInfoIndex))
+					sourceMapManager.startJsCursor(inf[0]);
+					if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager, sourceMapInfoIndex)) {
 						log.error(inf[0] + " not found");
+						sourceMapManager.clearJsCursor();
+					} else
+						sourceMapManager.closeJsCursor(out);
 				} else if (o instanceof Object[]) { //host
 					if (main != null) {
 						final Object[] inf = (Object[]) o;
@@ -924,22 +904,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				}
 			}
 
-			if (sourceMapManager != null && resultList.size() != 0) {
-				for (int i = 0; i < resultList.size(); i++) {
-					String result = resultList.get(i);
-					if ("$skipped$".equals(result)) {
-						continue;
-					} else
-						sourceMapManager.resolveSourceMapByIndex(unresolvedList.get(i), countLines(result));
-				}
-			}
-
-			if (main != null && main.length() > 0) {
-				String result = outMain(main, request.getParameterMap());
-				if (sourceMapManager != null && result.length() != 0)
-					sourceMapManager.appendEmptySourceMap(countLines(result));
-				write(out, result);
-			}
+			if (main != null && main.length() > 0)
+				write(out, outMain(main, request.getParameterMap()));
 			return out.toByteArray();
 		}
 	}
@@ -953,5 +919,21 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 			_sourceMapEnabled = Boolean.valueOf(wapp.getConfiguration().isSourceMapEnabled());
 		}
 		return _sourceMapEnabled.booleanValue();
+	}
+
+	private void appendJsContent(ByteArrayOutputStream out, SourceMapManager sourceMapManager, String... scripts) throws IOException {
+		if (sourceMapManager == null)
+			for (String script : scripts)
+				write(out, script);
+		else
+			sourceMapManager.appendJsContent(scripts);
+	}
+
+	private void appendPostJsScript(ByteArrayOutputStream out, SourceMapManager sourceMapManager, String... scripts) throws IOException {
+		if (sourceMapManager == null)
+			for (String script : scripts)
+				write(out, script);
+		else
+			sourceMapManager.appendPostScript(scripts);
 	}
 }

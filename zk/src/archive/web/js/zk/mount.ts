@@ -15,12 +15,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 
 //define a package and returns the package info (used in WpdExtendlet)
-function zkpi(nm: string, wv: boolean): Record<string, unknown> | null {
+window.zkpi = function (nm: string, wv: boolean): Record<string, unknown> | null {
 	return zk.isLoaded(nm) ? null : {n: nm, p: zk.$package(nm, false, wv)};
-}
+};
 
 //ZK JSP: page creation (backward compatible)
-function zkpb(pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void {
+window.zkpb = function (pguid: string, dtid: string, contextURI: string, updateURI: string, resourceURI: string, reqURI: string, props: Record<string, string>): void {
 	if (props === undefined && typeof reqURI !== 'string') { //ZK-4827: for backward compatible (other addons, ex. zuljsp)
 		props = reqURI;
 		reqURI = resourceURI;
@@ -28,12 +28,12 @@ function zkpb(pguid: string, dtid: string, contextURI: string, updateURI: string
 	}
 	zkx([0, pguid,
 		zk.copy(props, {dt: dtid, cu: contextURI, uu: updateURI, rsu: resourceURI, ru: reqURI}), {}, []]);
-}
+};
 //ZK JSP (useless; backward compatible)
 window.zkpe = zk.$void;
 
 //Initializes with version and options
-function zkver(ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void {
+window.zkver = function (ver: string, build: string, ctxURI: string, updURI: string, modVers: Record<string, string>, opts: Record<string, unknown>): void {
 	zk.version = ver;
 	zk.build = build;
 	zk.contextURI = ctxURI;
@@ -45,12 +45,12 @@ function zkver(ver: string, build: string, ctxURI: string, updURI: string, modVe
 	if (!zk.feature)
 		zk.feature = {standard: true};
 	zkopt(opts);
-}
+};
 
 //Define a mold
-function zkmld(wgtcls: Record<string, zk.Class>, molds: Record<string, (() => void)>): void {
+window.zkmld = function (wgtcls: Record<string, zk.Class>, molds: Record<string, (() => void)>): void {
 	if (!wgtcls.superclass) {
-		zk.afterLoad(function () {zkmld(wgtcls, molds);});
+		zk.afterLoad(function () {window['zkmld'](wgtcls, molds);});
 		return;
 	}
 
@@ -59,16 +59,16 @@ function zkmld(wgtcls: Record<string, zk.Class>, molds: Record<string, (() => vo
 		var fn = molds[nm];
 		ms[nm] = typeof fn == 'function' ? fn : fn[0]['molds'][fn[1]];
 	}
-}
+};
 
 //Run Ajax-as-a-service's main
-function zkamn(pkg: string, fn: (() => void)): void {
+window.zkamn = function (pkg: string, fn: (() => void)): void {
 	zk.load(pkg, function () {
 		setTimeout(function () {
 			zk.afterMount(fn);
 		}, 20);
 	});
-}
+};
 
 interface Pcai {
 	s: number;

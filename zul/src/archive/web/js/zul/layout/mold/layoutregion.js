@@ -64,7 +64,8 @@ function (out) {
 			'<i class="', icon, doticon, '"></i>',
 			'</span></div>', '<div id="', uuid, '-colled" class="',
 				this.$s('collapsed'), '" style="display:none"');
-		if (title = this._title) out.push(' title="', title, '"');
+		var title = this._title;
+		if (title) out.push(' title="', title, '"');
 		out.push(' role="button" tabindex="0" aria-expanded="false"><i id="', uuid, '-btned" class="', parent.$s('icon'), ' ', this.getIconClass_(true), '"');
 		if (!this._collapsible || !this._closable)
 			out.push(' style="display:none;"');
