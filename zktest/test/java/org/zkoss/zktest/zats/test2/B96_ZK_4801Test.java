@@ -28,15 +28,17 @@ public class B96_ZK_4801Test extends WebDriverTestCase {
 		closeZKLog();
 
 
-		click(jq(".z-a:contains(Atlantic)"));
-		waitResponse();
-		click(button);
-		waitResponse();
-		Assert.assertTrue("google font should be added if atlantic theme is active",
-			getZKLog().contains("fonts.googleapis.com/css?family=Open+Sans"));
-
-		click(jq(".z-a:contains(Default)"));
-		waitResponse();
+		try {
+			click(jq(".z-a:contains(Atlantic)"));
+			waitResponse();
+			click(button);
+			waitResponse();
+			Assert.assertTrue("google font should be added if atlantic theme is active",
+					getZKLog().contains("fonts.googleapis.com/css?family=Open+Sans"));
+		} finally {
+			click(jq(".z-a:contains(Default)"));
+			waitResponse();
+		}
 	}
 }
 
