@@ -67,13 +67,13 @@ function browsersync_init(done) {
 
 function typescript_dev(src, dest, since) {
     return gulp.src(src + '/**/*.ts', {since: since})
+        .pipe(print())
         .pipe(babel({
             root: __dirname
         }))
         .pipe(gulp.dest(dest))
         .pipe(rename({suffix: '.src'}))
         .pipe(gulp.dest(dest))
-        .pipe(print())
         .pipe(browserSync.stream());
 }
 
@@ -121,22 +121,22 @@ exports.watch = gulp.series(
 );
 exports.build = gulp.parallel(
     function build_zk() {
-        return typescript_build(
+        return typescript_dev(
             'zk/src/archive/web/js',
             'zk/codegen/archive/web/js');
     },
     function build_zul() {
-        return typescript_build(
+        return typescript_dev(
             'zul/src/archive/web/js',
             'zul/codegen/archive/web/js');
     },
     function build_zkex() {
-        return typescript_build(
+        return typescript_dev(
             '../zkcml/zkex/src/archive/web/js',
             '../zkcml/zkex/codegen/archive/web/js');
     },
     function build_zkmax() {
-        return typescript_build(
+        return typescript_dev(
             '../zkcml/zkmax/src/archive/web/js',
             '../zkcml/zkmax/codegen/archive/web/js');
     }
