@@ -124,6 +124,9 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		if (this.isSelected())
 			this.parent._selectedIndex = this.getOptionIndex_();
 	},
+	doClick_: function (evt) {
+		evt.stop(); // Eats the non-standard onclick event
+	},
 	/**
 	 * The index for option widget only , not including the listhead.etc
 	 * @since 6.0.1
