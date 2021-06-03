@@ -76,7 +76,8 @@ public class F96_ZK_4595VM {
 		listModelSet.add("data 1000");
 		listModelSet.add("data 00");
 		listModelSet.sort();
-//		listModelMap.put("item 00", "data 00"); //bug, issue opened ZK-4848
+		listModelMap.put("item 00", "data 00");
+		listModelMap.sort();
 		((DefaultTreeNode) dTreeModel.getRoot()).add(new DefaultTreeNode("item 2-2"));
 		dTreeModel.sort();
 		simpleListModel.getElementAt(0).setType("type 100"); //can't add

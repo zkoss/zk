@@ -32,7 +32,7 @@ public class F96_ZK_4595Test extends WebDriverTestCase {
 		click(jq("$header1"));
 		click(jq("$header2"));
 		click(jq("$header3"));
-//		click(jq("$header4")); //can't sort with listModelMap -> bug, issue opened ZK-4848
+		click(jq("$header4"));
 		click(jq("$header5"));
 		click(jq("$header6"));
 		waitResponse();
@@ -48,6 +48,11 @@ public class F96_ZK_4595Test extends WebDriverTestCase {
 		for (int i = 0; i < 3; i++)
 			resultList.add(jqCellLabel.eq(i).html().trim());
 		assertEquals("data&nbsp;1,data&nbsp;10,data&nbsp;100", Strings.join(resultList.toArray(new String[0])));
+		resultList.clear();
+		jqCellLabel = jq("$g2 .z-row").find("@label");
+		for (int i = 0; i < 6; i++)
+			resultList.add(jqCellLabel.eq(i).html().trim());
+		assertEquals("item 0,data 0,item 00,data 00,item 1,data 1", Strings.join(resultList.toArray(new String[0])));
 		resultList.clear();
 		jqCellLabel = jq("$lb2 .z-listcell-content");
 		for (int i = 0; i < 3; i++)

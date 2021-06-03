@@ -44,21 +44,20 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 					<listheader id="header3" label="ListModelSet" sort="auto"/>
 				</listhead>
 			</listbox>
-			<!-- can't sort with listModelMap -> bug, issue opened ZK-4848 -->
-			<!--			<grid id="g2" model="@init(vm.listModelMap)" height="300px" hflex="1">-->
-			<!--				<columns>-->
-			<!--					<column id="header4" label="ListModelMap" sort="auto"/>-->
-			<!--					<column label="value" sort="auto"/>-->
-			<!--				</columns>-->
-			<!--				<rows>-->
-			<!--					<template name="model">-->
-			<!--						<row>-->
-			<!--							<cell>${each.key}</cell>-->
-			<!--							<cell>${each.value}</cell>-->
-			<!--						</row>-->
-			<!--					</template>-->
-			<!--				</rows>-->
-			<!--			</grid>-->
+			<grid id="g2" model="@init(vm.listModelMap)" height="300px" hflex="1">
+				<columns>
+					<column id="header4" label="ListModelMap" sort="auto(key)"/>
+					<column label="value" sort="auto(value)"/>
+				</columns>
+				<rows>
+					<template name="model">
+						<row>
+							<cell>${each.key}</cell>
+							<cell>${each.value}</cell>
+						</row>
+					</template>
+				</rows>
+			</grid>
 			<listbox id="lb3" model="@init(vm.simpleListModel)" height="300px" hflex="1">
 				<listhead>
 					<listheader id="header5" label="ListModelList" sort="auto(type)"/>
