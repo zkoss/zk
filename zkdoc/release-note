@@ -103,6 +103,7 @@ ZK 9.6.0
   ZK-4862: open an error message box when its input component is not in viewport
   ZK-4876: Column layout causes white-space no-wrap on every descendant
   ZK-3770: source map produces a wrong line number
+  ZK-4912: listbox sends onClick event for listitem with mold="select" in firefox
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
