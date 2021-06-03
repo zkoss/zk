@@ -886,14 +886,16 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 								|| getScriptManager().isScriptIgnored(reqctx.request, inf[0]))
 							continue;
 					}
-					//handle browser issue
-					int sourceMapInfoIndex = unresolvedList != null ? unresolvedList.get(resultList.size() - 1) : -1;
-					sourceMapManager.startJsCursor(inf[0]);
-					if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager, sourceMapInfoIndex)) {
-						log.error(inf[0] + " not found");
-						sourceMapManager.clearJsCursor();
-					} else
-						sourceMapManager.closeJsCursor(out);
+					if (sourceMapManager != null) {
+						//handle browser issue
+						int sourceMapInfoIndex = unresolvedList != null ? unresolvedList.get(resultList.size() - 1) : -1;
+						sourceMapManager.startJsCursor(inf[0]);
+						if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager, sourceMapInfoIndex)) {
+							log.error(inf[0] + " not found");
+							sourceMapManager.clearJsCursor();
+						} else
+							sourceMapManager.closeJsCursor(out);
+					}
 				} else if (o instanceof Object[]) { //host
 					if (main != null) {
 						final Object[] inf = (Object[]) o;
