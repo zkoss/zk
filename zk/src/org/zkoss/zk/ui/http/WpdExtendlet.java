@@ -552,9 +552,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 		if (sourceMapManager != null) {
 			String jsContent = new String(Files.readAll(is));
-			String sourceMapSourcePath = path.substring(1); //skip first "/"
-			if (!sourceMapSourcePath.endsWith(".src.js"))
-				sourceMapSourcePath = sourceMapSourcePath.substring(0, sourceMapSourcePath.length() - 3) + ".src.js";
+			if (!path.endsWith(".src.js"))
+				path = path.substring(0, path.length() - 3) + ".src.js";
 			sourceMapManager.updateCursorRealPath(path);
 			sourceMapManager.appendJsContent(jsContent);
 		}
