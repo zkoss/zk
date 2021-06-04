@@ -24,6 +24,7 @@ ZK 9.6.0
   ZK-4779: audio supports to fire an event upon its playing state
   ZK-4866: Allow focussing arbitrary components/elements
   ZK-4674: Atlantic: always use HTTPS scheme for fonts.googleapis.com
+  ZK-4874: navitem supports badgeText
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)

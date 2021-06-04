@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4874.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 04 10:01:46 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label multiline="true">
+		1. load the page, you shall see badgeText "badge" on the Navitems.
+		2. click the change badge button, you shall see all badgeText "badge" on the Navitems becomes "changed".
+		3. click the clear badge button, you shall see all badgeText on the Navitems disappear.
+		4. click the br badge button, you shall see all badgeText on the Navitems becomes "&lt;br/&gt;".
+	</label>
+	<button label="change badge"
+			onClick='item1.setBadgeText("changed");item2.setBadgeText("changed");item3.setBadgeText("changed");item4.setBadgeText("changed");'/>
+	<button label="clear badge"
+			onClick='item1.setBadgeText("");item2.setBadgeText("");item3.setBadgeText("");item4.setBadgeText("");'/>
+	<button label="br badge"
+			onClick='item1.setBadgeText("&lt;br/&gt;");item2.setBadgeText("&lt;br/&gt;");item3.setBadgeText("&lt;br/&gt;");item4.setBadgeText("&lt;br/&gt;");'/>
+	<navbar collapsed="false" orient="vertical" >
+		<nav iconSclass="z-icon-user" label="Nav" badgeText="badge" open="true">
+			<nav label="Nav" iconSclass="z-icon-gears" badgeText="badge"/>
+			<navitem id="item1" label="Navitem" iconSclass="z-icon-ban" badgeText="badge"/>
+		</nav>
+		<navitem id="item2" label="Navitem" iconSclass="z-icon-gears" badgeText="badge"/>
+	</navbar>
+	<separator/>
+	<navbar>
+		<nav iconSclass="z-icon-user" label="Nav" badgeText="badge" open="true">
+			<nav label="Nav" iconSclass="z-icon-gears" badgeText="badge"/>
+			<navitem id="item3" label="Navitem" iconSclass="z-icon-ban" badgeText="badge"/>
+		</nav>
+		<navitem id="item4" label="Navitem" iconSclass="z-icon-gears" badgeText="badge"/>
+	</navbar>
+</zk>
