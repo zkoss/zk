@@ -103,6 +103,12 @@ if [ "$ZKCML" = "" ] ; then
 	fi
 fi
 
+if [ "$1" = "nozipjs" ]; then
+	echo "build without zipjs"
+	shift #remove this argument
+	skipZipjs=true
+fi
+
 #check if node.js, zkless-engine and npm dependencies are installed
 if [ "$1" = "" ] || [ "$1" = "lessc" ] || [ "$1" = "checkstyle" ] ; then
 	chmod +x $maindir/bin/zklessChecker
@@ -398,8 +404,12 @@ function invoke_ant
 			fi
 		fi
 
-		zipjslist=$(grep '^zipjs=' deploy)
-		zipjslist=${zipjslist#zipjs=}
+		if [ -z "$skipZipjs" ] ; then
+			zipjslist=$(grep '^zipjs=' deploy)
+			zipjslist=${zipjslist#zipjs=}
+		else
+			echo "skip to zip js"
+		fi
 		zipcsslist=$(grep '^zipcss=' deploy)
 		zipcsslist=${zipcsslist#zipcss=}
 		lesslist=$(grep '^less=' deploy)
