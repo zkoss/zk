@@ -38,7 +38,7 @@ public class F50_3028270Test extends WebDriverTestCase {
 				.perform();
 		waitResponse(true);
 		JQuery btn = slider.find(".z-slider-button");
-		Assert.assertEquals(slider.width() / 2 + 50, btn.positionLeft() + btn.width() / 2);
+		Assert.assertEquals(slider.width() / 2 + 50, btn.positionLeft() + btn.width() / 2, 2);
 	}
 
 	private void testHorSlider(JQuery horSlider) {
@@ -48,6 +48,6 @@ public class F50_3028270Test extends WebDriverTestCase {
 				.perform();
 		waitResponse(true);
 		JQuery btn = horSlider.find(".z-slider-button");
-		Assert.assertEquals(horSlider.height() / 2 - 50, btn.positionTop() + btn.height() / 2);
+		Assert.assertEquals(horSlider.height() / 2 - 50, btn.positionTop() + btn.height() / 2, 2);
 	}
 }

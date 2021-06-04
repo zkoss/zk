@@ -427,7 +427,7 @@ public abstract class WebDriverTestCase {
 	 * Returns the text of zk.log from client side.
 	 */
 	protected String getZKLog() {
-		return getWebDriver().findElement(By.id("zk_log")).getAttribute("value").trim();
+		return jq("#zk_log").val().trim();
 	}
 
 	/**
