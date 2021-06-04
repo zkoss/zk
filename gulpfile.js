@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var minimist = require('minimist');
 var babel = require('gulp-babel');
-var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var browserSync = require('browser-sync').create();
@@ -43,7 +42,6 @@ function typescript_build_single() {
 
 function typescript_build(src, dest) {
     return gulp.src(src + '/**/*.ts')
-        .pipe(sourcemaps.init())
         .pipe(babel({
             root: __dirname
         }))
@@ -53,7 +51,6 @@ function typescript_build(src, dest) {
         .pipe(rename(function (path) {
             path.basename = path.basename.replace(/\.src/, '');
         }))
-        .pipe(sourcemaps.write('.', {addComment: false, includeContent: false}))
         .pipe(gulp.dest(dest))
         .pipe(print());
 }
