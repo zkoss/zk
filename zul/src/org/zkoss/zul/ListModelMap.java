@@ -412,7 +412,11 @@ public class ListModelMap<K, V> extends AbstractListModel<Map.Entry<K, V>>
 		final List<Map.Entry<K, V>> copy = new ArrayList<Map.Entry<K, V>>(_map.entrySet());
 		_sorting = cmpr;
 		_sortDir = ascending;
-		Collections.sort(copy, cmpr);
+		try {
+			Collections.sort(copy, cmpr);
+		} catch (ClassCastException e) {
+			throw new UiException("Unable to sort, maybe you should use FieldComparator, sort=\"auto(key)\" or sort=\"auto(value)\"", e);
+		}
 		_map.clear();
 		for (Map.Entry<K, V> me : copy) {
 			_map.put(me.getKey(), me.getValue());

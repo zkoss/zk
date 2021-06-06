@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4848.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 01 12:50:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		Map items = new LinkedHashMap();
+		for (int i = 0; i < 30; i++) {
+			items.put(new String("item " +i), new String("data "+i));
+		}
+		ListModelMap listModelMap = new ListModelMap(items);
+	]]></zscript>
+	<label>Click the first column and see sorting worked, click the second one and see clear exception</label>
+	<grid id="g1" model="${listModelMap}" height="300px">
+		<columns>
+			<column id="col1" label="ListModelMap" sort="auto(key)"/>
+			<column id="col2" label="value" sort="auto"/>
+		</columns>
+		<rows>
+			<template name="model">
+				<row>
+					<cell>${each.key}</cell>
+					<cell>${each.value}</cell>
+				</row>
+			</template>
+		</rows>
+	</grid>
+	<label>Click the second listheader and see sorting worked, click the first one and see clear exception</label>
+	<listbox id="l1" model="${listModelMap}" height="300px">
+		<listhead>
+			<listheader id="lh1" label="ListModelMap" sort="auto"/>
+			<listheader id="lh2" label="value" sort="auto(value)"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell>${each.key}</listcell>
+				<listcell>${each.value}</listcell>
+			</listitem>
+		</template>
+	</listbox>
+</zk>
