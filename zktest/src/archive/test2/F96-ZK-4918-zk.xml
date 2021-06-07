@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zk>
+    <library-property>
+        <name>org.zkoss.zkmax.touch.disabled</name>
+        <value>true</value>
+    </library-property>
+</zk>
