@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.Map;
 
+import org.zkoss.json.JSONArray;
 import org.zkoss.json.JSONs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
@@ -96,20 +97,17 @@ public class AuRequest {
 	}
 
 	private static Map<String, Object> parseType(Map<String, Object> data) {
-		for (Map.Entry<String, Object> me : data.entrySet()) {
-			final Object val = me.getValue();
-			final String sval;
-			//Format: $z!t#d:xxx
-			if (val instanceof String && (sval = (String) val).startsWith("$z!t#") && sval.length() >= 7
-					&& sval.charAt(6) == ':') {
-				switch (sval.charAt(5)) {
-				case 'd':
+		JSONArray dateKeys = (JSONArray) data.get("z$dateKeys");
+		if (dateKeys != null) {
+			for (Object key : dateKeys) {
+				String strKey = (String) key;
+				Object val = data.get(strKey);
+				if (val instanceof String) {
 					try {
-						me.setValue(JSONs.j2d(sval.substring(7)));
+						data.put(strKey, JSONs.j2d((String) val));
 					} catch (ParseException ex) {
-						throw new UiException("Failed to convert the value of " + me.getKey() + ": " + val);
+						throw new UiException("Failed to convert the value of " + strKey + ": " + val);
 					}
-					//default: ignore since it could be user's value
 				}
 			}
 		}

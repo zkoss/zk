@@ -298,8 +298,8 @@
 		<!-- For Zats -->
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
-			<artifactId>zats-mimic-ext7</artifactId>
-			<version>2.1.1</version>
+			<artifactId>zats-mimic-ext96</artifactId>
+			<version>2.2.0-FL-2021060419</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

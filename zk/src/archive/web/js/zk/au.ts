@@ -1118,10 +1118,16 @@ zAu.beforeSend = function (uri, req, dt) {
 				data.y = ofs[1];
 			}
 
-			var v;
-			for (var n in data)
-				if ((v = data[n]) instanceof DateImpl)
-					data[n] = '$z!t#d:' + jq.d2j(v);
+			var v,
+				dateKeys = [];
+			for (var n in data) {
+				if ((v = data[n]) instanceof DateImpl) {
+					data[n] = jq.d2j(v);
+					dateKeys.push(n);
+				}
+			}
+			if (dateKeys.length != 0)
+				data['z$dateKeys'] = dateKeys;
 		}
 		return jq.toJSON(data);
 	},
