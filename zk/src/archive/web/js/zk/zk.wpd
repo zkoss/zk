@@ -54,8 +54,8 @@ window.$eval=function(s){return eval(s);};
 	<script src="au.js" jsdoc="true"/>
 	<script src="flex.js"/>
 	<script><![CDATA[
-	zk.touchEnabled = !!zk.mobile || navigator.maxTouchPoints > 0;
-	zk.tabletUIEnabled = !!zk.mobile && zk.tabletUIEnabled !== false;
+	zk.touchEnabled = zk.touchEnabled !== false && (!!zk.mobile || navigator.maxTouchPoints > 0);
+	zk.tabletUIEnabled = zk.tabletUIEnabled !== false && !!zk.mobile;
 	if (zk.touchEnabled) {
 	]]></script>
 		<script src="ext/inputdevicecapabilities-polyfill.js"/>
