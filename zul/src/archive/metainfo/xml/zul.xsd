@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.5.1.202010230949">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="9.6.0.202106091843">
 	<!--
 	SIMPLETYPE
 	-->
@@ -2670,8 +2670,24 @@
 		<xs:attribute name="pageSize" type="intType" use="optional" />
 		<xs:attribute name="rotation" type="intType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
-		<xs:attribute name="zoom" type="doubleType" use="optional" />
+		<xs:attribute name="zoom" type="pdfviewerZoomAttrType" use="optional" />
 	</xs:complexType>
+	<xs:simpleType name="pdfviewerZoomAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="fit-page-height" />
+					<xs:enumeration value="fit-page-width" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="xs:double" />
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<!-- pivottable -->
 	<xs:element name="pivottable" type="pivottableType" />
 	<xs:complexType name="pivottableType">

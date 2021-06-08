@@ -26,6 +26,7 @@ ZK 9.6.0
   ZK-4674: Atlantic: always use HTTPS scheme for fonts.googleapis.com
   ZK-4874: navitem supports badgeText
   ZK-4918: support a configuration to disable touch behavior
+  ZK-4917: set zoom level with fit-page-width or fit-page-height in Java
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
