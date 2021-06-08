@@ -41,6 +41,7 @@ public class B95_ZK_4655Test {
 		reqMap.put(ZKWebSocket.DESKTOP_ID_PARAM, dtid);
 		reqMap.put(ZKWebSocket.CONNECTION_UUID_PARAM, uuid);
 		when(sessionMock.getRequestParameterMap()).thenReturn(reqMap);
+		when(sessionMock.getUserPrincipal()).thenReturn(new ZKWebSocket.ZKPrinciple(null, uuid.get(0)));
 
 		Map<String, Object> userParameters = new HashMap<>(1);
 		userParameters.put(dtid.get(0) + '|' + uuid.get(0), mock(org.zkoss.zk.ui.Session.class));
