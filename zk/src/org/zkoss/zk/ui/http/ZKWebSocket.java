@@ -11,9 +11,11 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.Subject;
 import javax.websocket.EndpointConfig;
 import javax.websocket.HandshakeResponse;
 import javax.websocket.Session;
@@ -53,7 +55,7 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
 		org.zkoss.zk.ui.Session zkSession = SessionsCtrl.getSession(WebApps.getCurrent(), request.getHttpSession());
 		Map<String, List<String>> parameterMap = request.getParameterMap();
-		String tempSessionKey = tempSessionKey(extractDesktopId(parameterMap), extractConnectionUuid(parameterMap));
+		String tempSessionKey = tempSessionKey(extractDesktopId(parameterMap), extractConnectionUuid(request.getUserPrincipal()));
 		config.getUserProperties().put(tempSessionKey, zkSession);
 	}
 
@@ -70,7 +72,7 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	public static void initZkDesktop(Session wsession, EndpointConfig config) {
 		Map<String, List<String>> requestParameterMap = wsession.getRequestParameterMap();
 		String desktopId = extractDesktopId(requestParameterMap);
-		String connectionUuid = extractConnectionUuid(requestParameterMap);
+		String connectionUuid = extractConnectionUuid(wsession.getUserPrincipal());
 
 		//remove key from config userProperties,
 		//to avoid memory leaks in containers where endpoint config is a shared instance (e.g. in glassfish)
@@ -100,10 +102,10 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 	 * extract optional connection uuid parameter
 	 *
 	 * @since 8.6.4
+	 * @param principle A Principle object
 	 */
-	private static String extractConnectionUuid(Map<String, List<String>> requestParameterMap) {
-		List<String> connectionUuids = requestParameterMap.get(CONNECTION_UUID_PARAM);
-		return connectionUuids == null || connectionUuids.isEmpty() ? "" : connectionUuids.get(0);
+	private static String extractConnectionUuid(Principal principle) {
+		return principle instanceof ZKPrinciple ? ((ZKPrinciple) principle).getConnectionUuid() : "";
 	}
 
 	/**
@@ -143,5 +145,29 @@ public final class ZKWebSocket extends ServerEndpointConfig.Configurator {
 		}
 		DesktopCache desktopCache = sessionCtrl.getDesktopCache();
 		return desktopCache != null ? desktopCache.getDesktopIfAny(dtid) : null;
+	}
+
+	public static class ZKPrinciple implements Principal {
+		private final Principal _original;
+		private final String _connectionUuid;
+
+		public ZKPrinciple(Principal original, String connectionUuid) {
+			_original = original;
+			_connectionUuid = connectionUuid;
+		}
+
+		@Override
+		public boolean implies(Subject subject) {
+			return _original != null && _original.implies(subject);
+		}
+
+		@Override
+		public String getName() {
+			return _original != null ? _original.getName() : "";
+		}
+
+		public String getConnectionUuid() {
+			return _connectionUuid;
+		}
 	}
 }
