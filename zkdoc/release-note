@@ -117,6 +117,8 @@ ZK 9.6.0
   + Deprecated the method of isEditionValid() and encodeWithZK() of org.zkoss.zk.fn.ZkFns and core.dsp.tld.
   + Datebox format with a single y pattern letter will not be truncated to 2 digits year according to the Unicode specification.
   + For Jakarta EE 9 support, please use 9.6.0-jakarta version instead.
+  + Since 9.6.0, the transitive dependency of jasperreports was removed in zkex.
+    If you want to use the jasperreport component, please add it manually.
 
    --------
 ZK 9.5.1
