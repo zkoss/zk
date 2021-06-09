@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4921.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+
+		Mon Jun 08 11:30:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('tabvm') @init('org.zkoss.zktest.test2.B96_ZK_4921VM')">
+		<label>Select group 1-option 2 then select group 1-option 1, it should work fine (see correct select event fired).</label>
+		<listbox id="lb" mold="select" model="@init(tabvm.groupsModel)"
+				 onSelect="Clients.log(event.selectedItems.iterator().next().value)">
+		</listbox>
+	</div>
+</zk>
