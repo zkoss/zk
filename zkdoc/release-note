@@ -110,6 +110,7 @@ ZK 9.6.0
   ZK-4848: Sorting failed message is not clear when using ListModelMap in Listbox/Grid
   ZK-4865: button stealing focus
   ZK-4837: Searchbox doesn't render items for a ListModelList change in an onOpen listener
+  ZK-4921: listbox with a SimpleGroupsModel doesn't fire an expected onSelect event
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

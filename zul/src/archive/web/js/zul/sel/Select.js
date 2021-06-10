@@ -197,16 +197,14 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	_addItemToSelection: function (item) {
 		if (!item.isSelected()) {
-			if (!this._multiple) {
-				this.selectItem(item);
-			} else {
-				var index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
-				if (index < this._selectedIndex || this._selectedIndex < 0) {
-					this._selectedIndex = index;
-				}
-				item._setSelectedDirectly(true);
-				this._selItems.push(item);
-			}
+			var multiple = this._multiple;
+			if (!multiple)
+				this.clearSelection();
+			var index = item.getOptionIndex_ ? item.getOptionIndex_() : item.getChildIndex();
+			if (!multiple || (index < this._selectedIndex || this._selectedIndex < 0))
+				this._selectedIndex = index;
+			item._setSelectedDirectly(true);
+			this._selItems.push(item);
 		}
 	},
 	_removeItemFromSelection: function (item) {
@@ -271,43 +269,35 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			this.$n().selectedIndex = -1;
 	},
 	_doChange: function (evt) {
-		var data = [], reference, n = this.$n();
-		if (this._multiple) {
-			var opts = n.options, changed;
-			for (var j = 0, ol = opts.length; j < ol; ++j) {
-				var opt = opts[j],
-					o = zk.Widget.$(opt.id),
-					v = opt.selected;
+		var n = this.$n(),
+			opts = n.options,
+			multiple = this._multiple,
+			data = [], changed = false, reference;
+		for (var j = 0, ol = opts.length; j < ol; ++j) {
+			var opt = opts[j],
+				o = zk.Widget.$(opt.id),
+				v = opt.selected;
+			if (multiple) {
 				if (o && o._selected != v) {
-					o.setSelected(v);
+					this.toggleItemSelection(o);
 					changed = true;
 				}
 				if (v) {
 					data.push(opt.id);
 					if (!reference) reference = opt.id;
 				}
+			} else {
+				if (o && o._selected != v && v) { // found the newly selected one
+					this._addItemToSelection(o); //will clear other selection first
+					changed = true;
+					data.push(opt.id);
+					reference = opt.id;
+					break;
+				}
 			}
-			if (!changed)
-				return;
-		} else {
-			var v = n.selectedIndex;
-			if (zk.opera) n.selectedIndex = v; //ZK-396: opera displays it wrong (while it is actually -1)
-			// B50-ZK-989: this._selectedIndex does not concern Option visibility
-			var rv = v < 0 ? v : -1;
-			for (var w = this.firstChild, j = v; w && j > -1; w = w.nextSibling) {
-				if (w.$instanceof(zul.sel.Option)) {
-					if (w.isVisible())
-						j--;
-					rv++;
-				} else if (w.$instanceof(zul.sel.Optgroup))
-					rv++;
-			}
-			if (this._selectedIndex == rv)
-				return;
-
-			this.setSelectedIndex(rv);
-			data.push(reference = n.options[v].id);
 		}
+		if (!changed)
+			return;
 
 		this.fire('onSelect', {items: data, reference: reference});
 	},
