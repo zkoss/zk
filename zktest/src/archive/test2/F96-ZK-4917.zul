@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4917.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 08 15:49:59 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        The following tests should refresh the page first!
+        Test invalidate:
+        1. The "Fit Width" should be the default zoom level.
+        2. Click "Invalidate".
+        3. The "Fit Width" should be still the default zoom level.
+        Test zoom in/out (server):
+        1. Click "Zoom in" or "Zoom out", then click "Invalidate".
+        2. The default zoom level is not "Fit Width" anymore.
+        3. Click "Zoom: Fit Height", then click  click "Invalidate".
+        4. The default zoom level is "Fit Height".
+        Test zoom in/out (client):
+        1. Click "+" or "-" in the pdfviewer toolbar, then click "Invalidate".
+        2. The default zoom level is not "Fit Width" anymore.
+        3. Select "Fit Height" form the zoom level select box, then click "Invalidate".
+        4. The default zoom level is "Fit Height".
+    </label>
+    <window hflex="1" height="600px" title="Doc View">
+        <pdfviewer id="pv" hflex="1" vflex="1" src="/test2/ZK 6 Essentials.pdf" zoom="fit-page-width" onRender='Clients.log("pdf loaded")'/>
+        <toolbar>
+            <toolbarbutton label="Zoom In" onClick="pv.zoomIn()"/>
+            <toolbarbutton label="Zoom Out" onClick="pv.zoomOut()"/>
+            <toolbarbutton label="Zoom: 100%" onClick="pv.setZoom(1.0)"/>
+            <toolbarbutton label="Zoom: 120%" onClick="pv.setZoom(1.2)"/>
+            <toolbarbutton label="Zoom: Fit Width" onClick='pv.setZoom("fit-page-width")'/>
+            <toolbarbutton label="Zoom: Fit Height" onClick='pv.setZoom("fit-page-height")'/>
+            <toolbarbutton label="Invalidate" onClick='pv.invalidate()'/>
+        </toolbar>
+    </window>
+</zk>
