@@ -91,7 +91,6 @@ ZK 9.6.0
   ZK-4884: Menuitem addActive adds hover style to ancestor menu, doesn't clean it
   ZK-4898: za11y navigation in listbox/tree intercept events in input-based components, cause lost focus
   ZK-4879: navbar jumping focus
-  ZK-4882: Wrong index in forEachStatus with Tabbox model add/remove item
   ZK-4890: EE ROD on listbox override scrollToIndex
   ZK-4867: listbox with auxhead (hflex vs span conflict)
   ZK-4903: Goldenlayout sets incorect vflex following ZK-4776
