@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4728.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 10 15:49:56 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+    window.onerror = function (message) {
+        zk.log(message);
+    };
+    ]]>
+    </script>
+    <label multiline="true">
+    1. Try to collapse and expand treeitem 'Item 2'.
+    2. No error in the browser dev console and 'Item 2' was collapses/expanded normally.
+    </label>
+    <div>
+        <tree id="tree" rows="5" mold="paging">
+            <treecols sizable="true">
+                <treecol label="Name" />
+                <treecol label="Description" />
+            </treecols>
+            <treechildren>
+                <treeitem>
+                    <treerow>
+                        <treecell label="Item 1" />
+                        <treecell label="Item 1 description" />
+                    </treerow>
+                </treeitem>
+                <treeitem id="parent">
+                    <treerow>
+                        <treecell label="Item 2" />
+                        <treecell label="Item 2 description" />
+                    </treerow>
+                    <treechildren>
+                        <treeitem id="child" visible="false">
+                            <treerow>
+                                <treecell label="Item 2.1" />
+                            </treerow>
+                            <treechildren>
+                                <treeitem visible="false">
+                                    <treerow>
+                                        <treecell label="Item 2.1.1" />
+                                    </treerow>
+                                </treeitem>
+                            </treechildren>
+                        </treeitem>
+                        <treeitem id="child2">
+                            <treerow>
+                                <treecell label="Item 2.2" />
+                                <treecell label="Item 2.2 is something" />
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                </treeitem>
+                <treeitem label="Item 3" />
+            </treechildren>
+            <treefoot>
+                <treefooter label="Count" />
+                <treefooter label="Summary" />
+            </treefoot>
+        </tree>
+    </div>
+</zk>

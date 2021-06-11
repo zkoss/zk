@@ -170,7 +170,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		var tc = this.treechildren;
 		if (tc)
 			for (var w = tc.firstChild, vi = tc._isRealVisible(); w; w = w.nextSibling) {
-				w.$n().style.display = vi && w.isVisible() && open ? '' : 'none';
+				var n = w.$n();
+				if (n)
+					n.style.display = vi && w.isVisible() && open ? '' : 'none';
 				if (w.isOpen())
 					w._showKids(open);
 			}
