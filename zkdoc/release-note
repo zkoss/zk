@@ -111,6 +111,7 @@ ZK 9.6.0
   ZK-4865: button stealing focus
   ZK-4837: Searchbox doesn't render items for a ListModelList change in an onOpen listener
   ZK-4921: listbox with a SimpleGroupsModel doesn't fire an expected onSelect event
+  ZK-4916: tbeditor setValue only sets source, doesn't affect display without rerender
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
