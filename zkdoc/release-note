@@ -113,6 +113,7 @@ ZK 9.6.0
   ZK-4921: listbox with a SimpleGroupsModel doesn't fire an expected onSelect event
   ZK-4916: tbeditor setValue only sets source, doesn't affect display without rerender
   ZK-4728: Treeitem with visible="false" is not rendered, cause null on treeItem.$n() when toggling parent open status
+  ZK-4929: keyboardevent with keyCode 0 (invalid key) closes popups
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
