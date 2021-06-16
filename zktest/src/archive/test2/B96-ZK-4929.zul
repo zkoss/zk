@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4929.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jun 16 12:21:07 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client" xmlns:ca="client/attribute">
+	<script defer="true"><![CDATA[
+		function spoofKeyEvent(){
+			var keyboardEvent = document.createEvent('KeyboardEvent');
+			var initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? 'initKeyboardEvent' : 'initKeyEvent';
+			
+			keyboardEvent[initMethod](
+			  'keydown', // event type: keydown, keyup, keypress
+			  true, // bubbles
+			  true, // cancelable
+			  window, // view: should be window
+			  false, // ctrlKey
+			  false, // altKey
+			  false, // shiftKey
+			  false, // metaKey
+			  0, // keyCode: unsigned long - the virtual key code, else 0
+			  0, // charCode: unsigned long - the Unicode character associated with the depressed key, else 0
+			);
+			zk.$("$bb").$n("real").dispatchEvent(keyboardEvent);
+		}
+		setInterval(function(){
+			spoofKeyEvent();
+			console.log("event spoofed");
+			zk.log("event spoofed");
+		},1000);
+		]]></script>
+	<div>
+		<label multiline="true">
+			Open bandbox (click on bandbox button, or alt+down in input)
+			
+			wait for the interval to send a keyboardevent with a keycode of 0
+			
+			the popup shall not closed
+		</label>
+		<bandbox id="bb">
+			<bandpopup>
+				<label value="popupcontent"/>
+			</bandpopup>
+		</bandbox>
+		<textbox ca:onKeyDown="zk.log(event.keyCode)"></textbox>
+		<textbox ca:onKeyDown="zk.log(event.keyCode)"></textbox>
+		<textbox ca:onKeyDown="zk.log(event.keyCode)"></textbox>
+		<textbox ca:onKeyDown="zk.log(event.keyCode)"></textbox>
+	</div>
+</zk>

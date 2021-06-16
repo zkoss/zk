@@ -629,7 +629,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var keyCode = evt.keyCode,
 			bOpen = this._open;
 			// Bug ZK-475, ZK-3635
-		if (evt.target == this && (keyCode == 9 || (zk.webkit && keyCode == 0))) { //TAB or SHIFT-TAB (safari)
+		if (evt.target == this && keyCode == 9) { //TAB or SHIFT-TAB
 			if (bOpen)
 				this.close({sendOnOpen: true});
 			return;
