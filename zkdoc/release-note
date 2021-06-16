@@ -118,6 +118,7 @@ ZK 9.6.0
   ZK-4920: listbox (autopaging) listitem height incorrect between iceblue/iceblue_c
   ZK-4932: Datebox with constraint sending unnecessary onChange Event
   ZK-4933: Video using RepeatableInputStream loads very long, Byte[] is instant
+  ZK-4432: Server error if the message in an AU request was too large
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
