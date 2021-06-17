@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4935.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 17 12:31:45 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Prepare a file (size > 2GB).
+        # dd if=/dev/zero of=filename bs=1024 count=2050000
+        2. Click the button and select the big file.
+        3. The file can be uploaded successfully.
+    </label>
+    <zscript><![CDATA[
+    void handleUpload(UploadEvent e) {
+        org.zkoss.util.media.Media m = e.getMedia();
+        if (m == null)
+            Clients.log("upload failed");
+        else
+            Clients.log("upload success: " + m.toString());
+    }
+    ]]></zscript>
+    <button upload="true,maxsize=-1" label="Upload &gt; 2GB file" onUpload="handleUpload(event)"/>
+</zk>
