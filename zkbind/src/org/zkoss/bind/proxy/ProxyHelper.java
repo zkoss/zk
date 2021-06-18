@@ -36,6 +36,10 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Pair;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.ListModelArray;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.ListModelMap;
+import org.zkoss.zul.ListModelSet;
 
 /**
  * A proxy helper class to create a proxy cache mechanism for Set, List, Collection,
@@ -120,7 +124,15 @@ public class ProxyHelper {
 
 		ProxyFactory factory = new ProxyFactory();
 		factory.setUseWriteReplace(false);
-		if (origin instanceof List) {
+		if (origin instanceof ListModelList) // detect ZK ListModel First
+			return (T) new ListModelListProxy((ListModelList) origin, annotations);
+		else if (origin instanceof ListModelSet)
+			return (T) new ListModelSetProxy((ListModelSet) origin, annotations);
+		else if (origin instanceof ListModelMap)
+			return (T) new ListModelMapProxy((ListModelMap) origin, annotations);
+		else if (origin instanceof ListModelArray)
+			return (T) new ListModelArrayProxy((ListModelArray) origin, annotations);
+		else if (origin instanceof List) {
 			return (T) new ListProxy((List) origin, annotations);
 		} else if (origin instanceof Set) {
 			return (T) new SetProxy((Set) origin, annotations);

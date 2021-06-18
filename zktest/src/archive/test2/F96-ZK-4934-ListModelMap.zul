@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4934-ListModelMap.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+
+		Mon Jun 08 11:30:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<label multiline="true"><![CDATA[
+			1. Test form binding with ListModelMap
+			2. Edit tags and cancel, should reset
+			3. Edit tags and save, should update
+			4. Test Serializable
+		]]></label>
+		<window id="win" width="500px" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F96_ZK_4394_ListModelMapVM')">
+			<style>
+				.icon-red {
+				color: red;
+				}
+				.icon-green {
+				color: green;
+				}
+			</style>
+
+			in "DB"
+			<button label="reload from DB" onClick="@command('reload')"/>
+			<grid id="view">
+				<rows>
+					<row>
+						Name:
+						<label value="@load(vm.currentItem.name)"/>
+					</row>
+					<row>
+						MainTag:
+						<label value="@load(vm.currentItem.mainTag.value)"/>
+					</row>
+					<row>
+						Tags:
+						<label value="@load(vm.currentItem.tags)"/>
+					</row>
+				</rows>
+			</grid>
+
+			editable
+			<grid id="form" form="@id('fx') @load(vm.currentItem) @save(vm.currentItem, before='save')">
+				<rows>
+					<row>
+						Name:
+						<textbox value="@bind(fx.name)"/>
+					</row>
+					<row>
+						MainTag:
+						<textbox value="@bind(fx.mainTag.value)"/>
+					</row>
+					<row>
+						Tags:
+						<cell>
+							<listbox model="@load(fx.tags)">
+								<template name="model">
+									<listitem>
+										<listcell>
+											<hlayout>
+												<textbox value="@bind(each.value.value)"/>
+												<a iconSclass="z-icon-minus-circle icon-red"
+												   onClick="@command('removeTag', form=fx, tag=each.value)"/>
+											</hlayout>
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+							<hlayout>
+								new tag
+								<textbox id="newTagValue" value="@load(fx.resetEmptyStringValue, after='*')"
+										 onOK="@command('addTag', form=fx, tagValue=self.value)"/>
+								<a iconSclass="z-icon-plus-circle icon-green" forward="onClick=newTagValue.onOK"/>
+							</hlayout>
+						</cell>
+					</row>
+					<row>
+						<cell>
+							<button id="addAll" onClick="@command('addAll', form=fx)">addAll</button>
+							<button id="removeAll" onClick="@command('removeAll', form=fx)">removeAll</button>
+						</cell>
+					</row>
+				</rows>
+			</grid>
+
+			<hlayout>message:
+				<label id="msg"/>
+			</hlayout>
+			<button id="serialize" label="serialize/deserialize"
+					onClick='win.getAttribute("vm").doSerialize(win, msg)'/>
+			<button id="save" label="save to DB" onClick="@command('save')"/>
+			<button id="cancel" label="cancel" onClick="@command('cancel')"/>
+		</window>
+	</div>
+</zk>
