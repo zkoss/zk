@@ -116,6 +116,7 @@ ZK 9.6.0
   ZK-4929: keyboardevent with keyCode 0 (invalid key) closes popups
   ZK-4915: The badgeText misaligned in Nav
   ZK-4920: listbox (autopaging) listitem height incorrect between iceblue/iceblue_c
+  ZK-4932: Datebox with constraint sending unnecessary onChange Event
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

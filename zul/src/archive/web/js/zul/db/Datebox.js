@@ -414,11 +414,10 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		if (val) {
-			// We cannot use this._value in this case, which won't trigger onChange
-			// event. Using clone date instead.
-			var date = this._value ? Dates.newInstance(this._value) : null,
+			var refDate = this._refDate || this._value,
 				format = this.getFormat(),
-				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, date, this._localizedSymbols, tz, this._strictDate);
+				d = new zk.fmt.Calendar().parseDate(val, pattern || format, !this._lenient, refDate, this._localizedSymbols, tz, this._strictDate);
+			this._refDate = null;
 			if (!d) return {error: zk.fmt.Text.format(msgzul.DATE_REQUIRED + (this.localizedFormat.replace(_quotePattern, '')))};
 			// B70-ZK-2382 escape shouldn't be used in format including hour
 			if (!format.match(/[HkKh]/))
@@ -818,7 +817,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			// Bug 3122159 and 3301374
 			evt.data.value = date;
 			if (!this.$class._equalDate(date, oldDate)) {
-				db._value = date;
+				db._refDate = date; // for coerceFromString_
 				db.updateChange_();
 			}
 		}
