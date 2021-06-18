@@ -119,7 +119,7 @@ public class Servlets {
 	}
 
 	/** Returns whether a URL starts with xxx://, mailto:, about:,
-	 * javascript:, data:
+	 * javascript:, data:, //
 	 */
 	public static final boolean isUniversalURL(String uri) {
 		if (uri == null || uri.length() == 0)
@@ -127,7 +127,7 @@ public class Servlets {
 
 		final char cc = uri.charAt(0);
 		return cc >= 'a' && cc <= 'z' && (uri.indexOf("://") > 0 || uri.startsWith("mailto:")
-				|| uri.startsWith("javascript:") || uri.startsWith("about:") || uri.startsWith("data:"));
+				|| uri.startsWith("javascript:") || uri.startsWith("about:") || uri.startsWith("data:")) || uri.startsWith("//");
 	}
 
 	/** Returns whether the current Web server supports Servlet 3.0 or above.

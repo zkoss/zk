@@ -28,6 +28,8 @@ ZK 9.6.0
   ZK-4918: support a configuration to disable touch behavior
   ZK-4917: set zoom level with fit-page-width or fit-page-height in Java
   ZK-4934: ListModelList (Map/Set/Array) supports Form binding
+  ZK-4925: zEmbedded support for zul-declared stylesheet and script components
+  ZK-4926: zEmbedded support for images
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
@@ -120,6 +122,8 @@ ZK 9.6.0
   ZK-4932: Datebox with constraint sending unnecessary onChange Event
   ZK-4933: Video using RepeatableInputStream loads very long, Byte[] is instant
   ZK-4432: Server error if the message in an AU request was too large
+  ZK-4922: zEmbedded upload fails
+  ZK-4923: zEmbedded download fails
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

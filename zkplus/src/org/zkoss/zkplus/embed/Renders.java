@@ -20,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -224,7 +225,7 @@ public class Renders {
 
 		private String getContextURI() {
 			if (_exec != null) {
-				String s = _exec.encodeURL("/");
+				String s = Encodes.getContextPath((HttpServletRequest) _exec.getNativeRequest());
 				int j = s.lastIndexOf('/'); //might have jsessionid=...
 				return j >= 0 ? s.substring(0, j) + s.substring(j + 1) : s;
 			}
