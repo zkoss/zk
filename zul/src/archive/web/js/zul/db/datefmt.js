@@ -224,8 +224,8 @@ zk.fmt.Date = {
 
 		var refDate = refval._moment.toDate(),
 			localeDateTimeFormat = zk.ie < 11 ? null : new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'}),
-			eraName = localizedSymbols.ERA || eraKey ? eraKey : this.getEraName(refDate, localizedSymbols, localeDateTimeFormat),
-			ydelta = localizedSymbols.YDELTA || era ? (0 - era.firstYear + era.direction * 1) : this.getYDelta(refDate, localeDateTimeFormat);
+			eraName = localizedSymbols.ERA || (eraKey ? eraKey : this.getEraName(refDate, localizedSymbols, localeDateTimeFormat)),
+			ydelta = localizedSymbols.YDELTA || (era ? (0 - era.firstYear + era.direction * 1) : this.getYDelta(refDate, localeDateTimeFormat));
 
 		if (!ts || !ts.length) return;
 		for (var i = 0, j = 0, offs = 0, fl = fmt.length; j < fl; ++j) {
@@ -263,8 +263,8 @@ zk.fmt.Date = {
 
 					if (!isNaN(nv = _parseInt(token))) {
 						var newY = Math.min(nv, 200000); // Bug B50-3288904: js year limit
+						if (newY < 100 && newY === (y + ydelta) % 100) break; // assume yy is not modified
 						if (ydelta === 0 && newY < 100) { // only handle twoDigitYearStart with ISO calendar for now
-							if (newY === y % 100) break; // assume yy is not modified
 							// ZK-4235: Datefmt parseDate always return date between 1930-2029 when using yy format
 							var twoDigitYearStart = zk.TDYS,
 								lowerBoundary = (Math.floor(twoDigitYearStart / 100) * 100) + newY,
