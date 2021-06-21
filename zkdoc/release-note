@@ -115,6 +115,7 @@ ZK 9.6.0
   ZK-4728: Treeitem with visible="false" is not rendered, cause null on treeItem.$n() when toggling parent open status
   ZK-4929: keyboardevent with keyCode 0 (invalid key) closes popups
   ZK-4915: The badgeText misaligned in Nav
+  ZK-4920: listbox (autopaging) listitem height incorrect between iceblue/iceblue_c
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
