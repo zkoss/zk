@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4933.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 22 15:14:45 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (Ensure the autoplay is not blocked in your browser)
+        1. Wait for the video to be played.
+        2. The loading time should be short (&lt; 1s) since it's a local file.
+    </label>
+    <zscript><![CDATA[
+    import java.io.*;
+    import org.zkoss.io.RepeatableInputStream;
+    import org.zkoss.video.AVideo;
+
+    File file = new File("src/archive/test2/F86-ZK-3845.mp4");
+    AVideo content1 = new AVideo("video.mp4", RepeatableInputStream.getInstance(new FileInputStream(file))); // slow
+    AVideo content2 = new AVideo("video.mp4", RepeatableInputStream.getInstance(file)); // fast
+    AVideo content3 = new AVideo("video.mp4", new FileInputStream(file)); // fast
+    ]]></zscript>
+    <hlayout>
+        <vlayout>
+            <video width="400px" height="300px" controls="true" autoplay="true" content="${content1}"/>
+            RepeatableInputStream with InputStream (slow?)
+        </vlayout>
+        <vlayout>
+            <video width="400px" height="300px" controls="true" autoplay="true" content="${content2}"/>
+            RepeatableInputStream with File
+        </vlayout>
+        <vlayout>
+            <video width="400px" height="300px" controls="true" autoplay="true" content="${content3}"/>
+            InputStream
+        </vlayout>
+    </hlayout>
+</zk>

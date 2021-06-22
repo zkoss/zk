@@ -117,6 +117,7 @@ ZK 9.6.0
   ZK-4915: The badgeText misaligned in Nav
   ZK-4920: listbox (autopaging) listitem height incorrect between iceblue/iceblue_c
   ZK-4932: Datebox with constraint sending unnecessary onChange Event
+  ZK-4933: Video using RepeatableInputStream loads very long, Byte[] is instant
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

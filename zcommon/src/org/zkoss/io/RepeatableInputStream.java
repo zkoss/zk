@@ -233,6 +233,24 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		}
 	}
 
+	public int read(byte[] b, int off, int len) throws IOException {
+		if (_org != null) {
+			final int realLen = _org.read(b, off, len);
+			if (!_nobuf)
+				if (realLen >= 0) {
+					final OutputStream out = getOutputStream();
+					if (out != null) out.write(b, off, len);
+					_cntsz += realLen;
+				}
+			return realLen;
+		} else {
+			if (_in == null)
+				_in = new BufferedInputStream(new FileInputStream(_f)); //_f must be non-null
+
+			return _in.read(b, off, len);
+		}
+	}
+
 	/** Closes the current access, and the next call of {@link #close}
 	 * re-opens the buffered input stream.
 	 */
@@ -327,6 +345,11 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 		public int read() throws IOException {
 			return _org.read();
 		}
+
+		public int read(byte[] b, int off, int len) throws IOException {
+			return _org.read(b, off, len);
+		}
+
 		/** Closes the current access, and the next call of {@link #read}
 		 * re-opens the buffered input stream.
 		 */
@@ -354,6 +377,13 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 				_in = new BufferedInputStream(new FileInputStream(_file));
 			return _in.read();
 		}
+
+		public int read(byte[] b, int off, int len) throws IOException {
+			if (_in == null)
+				_in = new BufferedInputStream(new FileInputStream(_file));
+			return _in.read(b, off, len);
+		}
+
 		/** Closes the current access, and the next call of {@link #read}
 		 * re-opens the buffered input stream.
 		 */
@@ -387,6 +417,16 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 			}
 			return _in.read();
 		}
+
+		public int read(byte[] b, int off, int len) throws IOException {
+			if (_in == null) {
+				_in = _url.openStream();
+				if (_in == null) throw new FileNotFoundException(_url.toExternalForm());
+				_in = new BufferedInputStream(_in);
+			}
+			return _in.read(b, off, len);
+		}
+
 		/** Closes the current access, and the next call of {@link #read}
 		 * re-opens the buffered input stream.
 		 */
