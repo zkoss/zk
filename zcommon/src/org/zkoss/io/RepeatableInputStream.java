@@ -239,7 +239,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable,
 			if (!_nobuf)
 				if (realLen >= 0) {
 					final OutputStream out = getOutputStream();
-					if (out != null) out.write(b, off, len);
+					if (out != null) out.write(b, off, realLen);
 					_cntsz += realLen;
 				}
 			return realLen;
