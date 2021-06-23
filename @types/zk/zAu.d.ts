@@ -44,6 +44,7 @@ declare namespace zk {
         ajaxReq: boolean | null;
         ajaxReqInf: zk.AuRequestInfo | null;
         ajaxReqTries: number | null;
+        ajaxReqMaxCount: number;
         ajaxSettings: JQuery.AjaxSettings;
         ajaxErrorHandler?: AjaxErrorHandler;
         cmd0: Record<string, Function>;

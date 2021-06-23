@@ -741,6 +741,13 @@ zAu.beforeSend = function (uri, req, dt) {
 			return true;
 		}
 
+		var ajaxReqMaxCount = zAu.ajaxReqMaxCount;
+		if (es.length > ajaxReqMaxCount) {
+			console.warn('The count of au requests is unexpectedly huge: ' + es.length); // eslint-disable-line no-console
+			es = es.splice(0, ajaxReqMaxCount);
+			sendPending = true;
+		}
+
 		//decide implicit (and uri)
 		var implicit, uri;
 		for (var j = 0, el = es.length; j < el; ++j) {
@@ -1137,6 +1144,8 @@ zAu.beforeSend = function (uri, req, dt) {
 	ajaxReqInf: null,
 	/* internal use only */
 	ajaxReqTries: null,
+	/* internal use only */
+	ajaxReqMaxCount: 300,
 	/* internal use only */
 	seqId: (jq.now() % 9999) + 1,
 	/* internal use only */
