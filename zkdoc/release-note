@@ -27,6 +27,7 @@ ZK 9.6.0
   ZK-4874: navitem supports badgeText
   ZK-4918: support a configuration to disable touch behavior
   ZK-4917: set zoom level with fit-page-width or fit-page-height in Java
+  ZK-4934: ListModelList (Map/Set/Array) supports Form binding
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
