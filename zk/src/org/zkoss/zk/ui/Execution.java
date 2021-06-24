@@ -1351,4 +1351,12 @@ public interface Execution extends Scope {
 	 * @since 6.0.0
 	 */
 	public void log(String msg, Throwable ex);
+
+	/**
+	 * Returns the context uri from the current execution.
+	 * @since 9.6.0
+	 */
+	public default String getContextURI() {
+		return encodeURL("/");
+	}
 }

@@ -42,7 +42,6 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.util.Pair;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.fn.ThemeFns;
-import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.device.Device;
@@ -1126,7 +1125,7 @@ public class HtmlPageRenders {
 
 	private static String getContextURI(Execution exec) {
 		if (exec != null) {
-			String s = Encodes.getContextPath((HttpServletRequest) exec.getNativeRequest());
+			String s = exec.getContextURI();
 			int j = s.lastIndexOf('/'); //might have jsessionid=...
 			return j >= 0 ? s.substring(0, j) + s.substring(j + 1) : s;
 		}
