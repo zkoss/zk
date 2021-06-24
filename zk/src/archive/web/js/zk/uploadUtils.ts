@@ -20,6 +20,8 @@ zk.UploadUtils = {
 				+ '&dtid=' + dt.id
 				+ (sid != undefined ? '&sid=' + sid : '');
 		xhr.open('POST', ajaxUri, true);
+		if (zk.xhrWithCredentials)
+			xhr.withCredentials = true;
 		xhr.send(formData);
 	}
 };

@@ -318,7 +318,16 @@ public class ExecutionImpl extends AbstractExecution {
 
 	public String encodeURL(String uri) {
 		try {
-			return Encodes.encodeURL(_ctx, _request, _response, uri);
+			String encodedURL = Encodes.encodeURL(_ctx, _request, _response, uri);
+			String zkHostURL = (String) getDesktop().getAttribute("org.zkoss.desktop.auHost");
+			if (zkHostURL != null && !Servlets.isUniversalURL(uri)) { //if embedded
+				String contextPath = getContextPath();
+				encodedURL = Servlets.getNormalPath(toAbsoluteURI(encodedURL, false));
+				if (!encodedURL.startsWith(contextPath))
+					encodedURL = contextPath + encodedURL;
+				encodedURL = zkHostURL + encodedURL;
+			}
+			return encodedURL;
 		} catch (ServletException ex) {
 			throw new UiException(ex);
 		}

@@ -42,6 +42,7 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.util.Pair;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.fn.ThemeFns;
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.xml.XMLs;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.device.Device;
@@ -663,15 +664,8 @@ public class HtmlPageRenders {
 			} else {
 				appendProp(props, "dt", desktop.getId());
 				appendProp(props, "cu", getContextURI(exec));
-				String updateURI = desktop.getUpdateURI(null);
-				String resourceURI = desktop.getResourceURI(null);
-				String desktopAuHost = (String) desktop.getAttribute("org.zkoss.desktop.auHost");
-				if (desktopAuHost != null) {
-					updateURI = desktopAuHost + updateURI;
-					resourceURI = desktopAuHost + resourceURI;
-				}
-				appendProp(props, "uu", updateURI);
-				appendProp(props, "rsu", resourceURI);
+				appendProp(props, "uu",  desktop.getUpdateURI(null));
+				appendProp(props, "rsu", desktop.getResourceURI(null));
 				appendProp(props, "ru", desktop.getRequestPath());
 			}
 			final String pageWgtCls = pageCtrl.getWidgetClass();
@@ -1132,7 +1126,7 @@ public class HtmlPageRenders {
 
 	private static String getContextURI(Execution exec) {
 		if (exec != null) {
-			String s = exec.encodeURL("/");
+			String s = Encodes.getContextPath((HttpServletRequest) exec.getNativeRequest());
 			int j = s.lastIndexOf('/'); //might have jsessionid=...
 			return j >= 0 ? s.substring(0, j) + s.substring(j + 1) : s;
 		}
