@@ -124,6 +124,7 @@ ZK 9.6.0
   ZK-4432: Server error if the message in an AU request was too large
   ZK-4922: zEmbedded upload fails
   ZK-4923: zEmbedded download fails
+  ZK-4937: incorrect content-type response header of a request to fontawesome-webfont.eot
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
