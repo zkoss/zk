@@ -569,6 +569,14 @@ public class ExecutionImpl extends AbstractExecution {
 		return _response.containsHeader(name);
 	}
 
+	public String getContextURI() {
+		try {
+			return Encodes.encodeURL(_ctx, _request, _response, "/");
+		} catch (ServletException ex) {
+			throw new UiException(ex);
+		}
+	}
+
 	private class Headers implements Iterable<String> {
 		private final String _name;
 		private Enumeration<String> _cache;

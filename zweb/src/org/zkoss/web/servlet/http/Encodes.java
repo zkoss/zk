@@ -485,7 +485,17 @@ public class Encodes {
 		if (!ctxpathSpecified && uri.charAt(0) == '/'
 		//ZK-3131: do not prefix context path to relative protocol urls that starts with //
 				&& !(uri.length() > 1 && uri.charAt(1) == '/') && (request instanceof HttpServletRequest)) {
-			uri = getContextPath(request) + uri;
+			//Work around with a bug when we wrap Pluto's RenderRequest (1.0.1)
+			String ctxpath = Https.getThisContextPath(request);
+			if (ctxpath.length() > 0 && ctxpath.charAt(0) != '/')
+				ctxpath = '/' + ctxpath;
+
+			//Some Web server's ctxpath is "/"
+			final int last = ctxpath.length() - 1;
+			if (last >= 0 && ctxpath.charAt(last) == '/')
+				ctxpath = ctxpath.substring(0, last);
+
+			uri = ctxpath + uri;
 		}
 
 		int j = uri.indexOf('?');
@@ -534,26 +544,5 @@ public class Encodes {
 		 */
 		public String encodeURL(ServletContext ctx, ServletRequest request, ServletResponse response, String url,
 				URLEncoder defaultEncoder) throws Exception;
-	}
-
-	/**
-	 * Get the context path from servlet request
-	 * @param request
-	 * @return the context path
-	 * @since 9.6.0
-	 */
-	public static String getContextPath(ServletRequest request) {
-		if (request == null) return "/";
-		//Work around with a bug when we wrap Pluto's RenderRequest (1.0.1)
-		String ctxpath = Https.getThisContextPath(request);
-		if (ctxpath.length() > 0 && ctxpath.charAt(0) != '/')
-			ctxpath = '/' + ctxpath;
-
-		//Some Web server's ctxpath is "/"
-		final int last = ctxpath.length() - 1;
-		if (last >= 0 && ctxpath.charAt(last) == '/')
-			ctxpath = ctxpath.substring(0, last);
-
-		return ctxpath;
 	}
 }
