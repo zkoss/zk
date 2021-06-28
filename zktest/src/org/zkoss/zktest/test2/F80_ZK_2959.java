@@ -16,6 +16,7 @@ package org.zkoss.zktest.test2;
 
 import org.zkoss.util.media.MediaTypeResolver;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -33,8 +34,9 @@ public class F80_ZK_2959 extends SelectorComposer<Component> implements MediaTyp
 	Image img1;
 
 	public String resolve(String format) {
-		if ("svg".equals(format)) {
-			WebApps.getCurrent().setAttribute("ZK2959", "ZK2959");
+		WebApp webApp = WebApps.getCurrent();
+		if (webApp != null && "svg".equals(format)) {
+			webApp.setAttribute("ZK2959", "ZK2959");
 			return "image/svg+xml;";
 		} else return null;
 	}
