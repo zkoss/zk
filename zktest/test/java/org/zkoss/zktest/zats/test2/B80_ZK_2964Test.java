@@ -13,11 +13,13 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.Assert.assertTrue;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 import org.junit.Test;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.JQuery;
 import org.zkoss.zktest.zats.ztl.Widget;
@@ -26,24 +28,26 @@ import org.zkoss.zktest.zats.ztl.Widget;
  * @author jumperchen
  */
 public class B80_ZK_2964Test extends WebDriverTestCase {
-	private static SimpleDateFormat sdf0 = new SimpleDateFormat("h:mm:ss a",
-			Locale.ENGLISH);
-	private static SimpleDateFormat sdf1 = new SimpleDateFormat("h:mm a",
-			Locale.ENGLISH);
-	@Test public void testZK2964() throws ParseException {
+	private static final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+			.appendPattern("[h:mm:ss a]")
+			.appendPattern("[a h:mm:ss]")
+			.appendPattern("[h:mm a]")
+			.appendPattern("[a h:mm]")
+			.toFormatter(Locale.ENGLISH);
+
+	@Test public void testZK2964() throws DateTimeParseException {
 		connect();
 		JQuery dateboxes = jq("@datebox");
-		testTimeformat(widget(dateboxes.get(0)), sdf0);
-		testTimeformat(widget(dateboxes.get(1)), sdf0);
-		testTimeformat(widget(dateboxes.get(2)), sdf0);
-		testTimeformat(widget(dateboxes.get(3)), sdf1);
-
+		testTimeformat(widget(dateboxes.get(0)));
+		testTimeformat(widget(dateboxes.get(1)));
+		testTimeformat(widget(dateboxes.get(2)));
+		testTimeformat(widget(dateboxes.get(3)));
 	}
 
-	private void testTimeformat(Widget widget, SimpleDateFormat sdf)
-			throws ParseException {
+	private void testTimeformat(Widget widget)
+			throws DateTimeParseException {
 		click(widget.$n("btn"));
 		assertTrue(jq(widget.$n("pp")).find(".z-timebox-input").exists());
-		sdf.parse(jq(widget.$n("pp")).find(".z-timebox-input").val());
+		formatter.parse(jq(widget.$n("pp")).find(".z-timebox-input").val());
 	}
 }

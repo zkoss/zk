@@ -11,8 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.Element;
 
@@ -30,15 +33,15 @@ public class F96_ZK_4745_2Test  extends WebDriverTestCase {
 
 		type(db1real, "大正14/07/31");
 		Assert.assertFalse(hasError());
-		checkDateboxCalendar(db1btn, "7 大正14", "31");
+		checkDateboxCalendar(db1btn, "7(月)? 大正14", "31");
 
 		type(db2real, "大正 14/07/31");
 		Assert.assertFalse(hasError());
-		checkDateboxCalendar(db2btn, "7 大正14", "31");
+		checkDateboxCalendar(db2btn, "7(月)? 大正14", "31");
 
 		type(db3real, "2022/01/01");
 		Assert.assertFalse(hasError());
-		checkDateboxCalendar(db3btn, "1 令和4", "1");
+		checkDateboxCalendar(db3btn, "1(月)? 令和4", "1");
 	}
 
 	@Test
@@ -69,7 +72,7 @@ public class F96_ZK_4745_2Test  extends WebDriverTestCase {
 
 		type(db4real, "西暦 2021-02-03");
 		Assert.assertFalse(hasError());
-		checkDateboxCalendar(db4btn, "2 2021", "3");
+		checkDateboxCalendar(db4btn, "2(月)? 2021", "3");
 	}
 
 	@Test
@@ -116,7 +119,7 @@ public class F96_ZK_4745_2Test  extends WebDriverTestCase {
 		waitResponse();
 		String calendarTitle = jq(".z-calendar-title").last().text();
 		String currentDay = jq(".z-calendar-selected").last().text();
-		Assert.assertEquals(expectedTitle, calendarTitle);
+		MatcherAssert.assertThat(calendarTitle, Matchers.matchesRegex(expectedTitle));
 		Assert.assertEquals(expectedDay, currentDay);
 		click(jq("@label"));
 		waitResponse();
