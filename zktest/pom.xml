@@ -299,7 +299,7 @@
 		<dependency>
 			<groupId>org.zkoss.zats</groupId>
 			<artifactId>zats-mimic-ext96</artifactId>
-			<version>2.2.0-FL-2021060419</version>
+			<version>3.0.0-FL-2021062415</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -413,7 +413,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty.websocket</groupId>
-			<artifactId>javax-websocket-server-impl</artifactId>
+			<artifactId>websocket-javax-server</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
