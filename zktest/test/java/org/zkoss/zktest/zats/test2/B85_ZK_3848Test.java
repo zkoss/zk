@@ -33,6 +33,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
@@ -42,6 +43,7 @@ import org.zkoss.util.resource.ClassLocator;
 
 @RunWith (PowerMockRunner.class)
 @PrepareForTest ({LoggerFactory.class})
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class B85_ZK_3848Test {
 	private static Logger logger;
 	private static ClassLocator clToTest;

@@ -1,10 +1,4 @@
-<html>
-<head>
-<title>Insert title here</title>
-</head>
-<body>
 <div>
-JSPPPPPPPPP
+<%= "JSPPPPPPPPP" %>
+<%= java.util.Calendar.getInstance().getTime() %>
 </div>
-</body>
-</html>

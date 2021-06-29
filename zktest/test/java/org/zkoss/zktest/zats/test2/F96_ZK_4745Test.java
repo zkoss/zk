@@ -11,8 +11,11 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.zkoss.zktest.zats.WebDriverTestCase;
 import org.zkoss.zktest.zats.ztl.Element;
 
@@ -108,7 +111,7 @@ public class F96_ZK_4745Test extends WebDriverTestCase {
 
 		click(jq("@button:eq(5)"));
 		waitResponse();
-		Assert.assertEquals("R.O.C. 104-01-01", db5real.get("value"));
+		MatcherAssert.assertThat(db5real.get("value"), Matchers.matchesRegex("(R\\.O\\.C\\.|Minguo) 104-01-01"));
 	}
 
 	private void checkDateboxCalendar(Element btn, String expectedTitle, String expectedDay) {
