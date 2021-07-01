@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4748.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jun 30 16:53:33 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Please click upon the magnifier icon, and then focus to the first textbox.
+	<separator/>
+	2. Press the TAB key, you should see the focus jump to the second textbox and the popup is still opened.
+	<separator/>
+	3. Press the TAB key again, you should see the popup is closed.
+	<separator/>
+	<bandbox>
+		<bandpopup>
+			<textbox />
+			<textbox onFocus='Clients.log("focus on 2nd textbox")'/>
+		</bandpopup>
+	</bandbox>
+	<separator/>
+	4. Please click upon the magnifier icon, and then click the first listitem.
+	<separator/>
+	5. Press the TAB key, you should see the popup is closed.
+	<bandbox>
+		<bandpopup>
+			<listbox width="300px">
+				<listitem label="1"/>
+				<listitem label="2"/>
+				<listitem label="3"/>
+			</listbox>
+		</bandpopup>
+	</bandbox>
+</zk>
