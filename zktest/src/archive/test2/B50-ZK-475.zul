@@ -27,7 +27,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <separator/>
 3. Please click upon the magnifier icon, and then click the first listitem.
 <separator/>
-2. Press the TAB key, you should see the popup is closed.
+4. Press the TAB key, you should see the popup is closed.
 <bandbox>
 <bandpopup>
 <listbox width="300px">

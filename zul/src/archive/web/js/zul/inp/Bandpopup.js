@@ -22,6 +22,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
  * <p>z-class: z-bandpopup
  */
 zul.inp.Bandpopup = zk.$extends(zul.Widget, {
+	bind_: function () {
+		this.$supers(zul.inp.Bandpopup, 'bind_', arguments);
+		jq(this.$n()).on('focusout', this.proxy(this._focusout));
+	},
+	unbind_: function () {
+		jq(this.$n()).off('focusout', this.proxy(this._focusout));
+		this.$supers(zul.inp.Bandpopup, 'unbind_', arguments);
+	},
+	_focusout: function (e) {
+		var bandbox = this.parent;
+		if (bandbox && bandbox.isOpen() && !jq.isAncestor(this.$n(), e.relatedTarget))
+			bandbox.close();
+	},
 	//super
 	afterChildrenMinFlex_: function (orient) {
 		if (orient == 'w') {
