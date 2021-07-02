@@ -267,8 +267,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			el.style.width = jq.px0(ambit.w);
 			var contentWidth = $el.contentWidth();
 			//ZK-2750, prevent parent region grows up infinitely
-			if (zk.ie > 8 && (wgt.$instanceof(zul.layout.West)
-				|| wgt.$instanceof(zul.layout.East)) && !wgt._width && !wgt._hflex)
+			if ((wgt.$instanceof(zul.layout.West) || wgt.$instanceof(zul.layout.East)) && !wgt._width && !wgt._hflex)
 				contentWidth++; // B50-ZK-641: text wrap in IE
 			bs.width = jq.px0(contentWidth);
 

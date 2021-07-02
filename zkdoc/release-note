@@ -126,6 +126,7 @@ ZK 9.6.0
   ZK-4923: zEmbedded download fails
   ZK-4937: incorrect content-type response header of a request to fontawesome-webfont.eot
   ZK-4748: Bandpopup should close while bandbox lost focus with TAB key
+  ZK-4869: borderlayout keeps resizing
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

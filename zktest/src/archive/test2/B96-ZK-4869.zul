@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4869.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun 30 11:23:33 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label>Click the button several times, and you should not see the widths of borderlayout "West" and "East" increasing</label>
+	<borderlayout height="400px" width="800px">
+		<north>North</north>
+		<west>West</west>
+		<center></center>
+		<east>East</east>
+		<south>South</south>
+	</borderlayout>
+	<button label="fireSized on borderlayout" w:onClick="zUtl.fireSized(zk.$('@borderlayout'));"/>
+</zk>
