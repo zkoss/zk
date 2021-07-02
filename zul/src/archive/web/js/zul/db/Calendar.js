@@ -524,7 +524,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			tz = _getTimeZone(this),
 			shiftTime = Dates.newInstance(oldTime.getTime(), tz),
 			minTime = Dates.newInstance([this._minyear, 0, 1, 0, 0, 0, 0], tz),
-			maxTime = Dates.newInstance([this._maxyear, 11, 31, 23, 59, 59, 999], tz);
+			maxTime = Dates.newInstance([this._maxyear, 11, 31, 23, 59, 59, 999], tz),
+			today = zUtl.today(null, tz);
 
 		switch (this._view) {
 		case 'day':
@@ -553,8 +554,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			shiftTime.setYear(oldTime.getFullYear() + ofs);
 			break;
 		}
+		this._isSelectDisabled = Renderer.disabled(this, shiftTime.getFullYear(), shiftTime.getMonth(), shiftTime.getDate(), today);
 		//Bug B65-ZK-1804: Constraint the shifted time should not be out of range between _minyear and _maxyear
-		if (shiftTime.getTime() < minTime.getTime() || shiftTime.getTime() > maxTime.getTime())
+		//Bug B96-ZK-4543: Calendar should respect the constraint while Month changing
+		if (shiftTime.getTime() < minTime.getTime() || shiftTime.getTime() > maxTime.getTime() || this._isSelectDisabled)
 			return; // out of range
 
 		this._shiftDate(this._view, ofs);
@@ -712,6 +715,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this._setView('day');
 	},
 	_shiftView: function (ofs, disableAnima) {
+		var selDate = this.getTime(),
+			today = zUtl.today(null, this._defaultTzone);
+
+		this._isSelectDisabled = Renderer.disabled(this, selDate.getFullYear(), selDate.getMonth() + ofs, selDate.getDate(), today);
 		switch (this._view) {
 		case 'day':
 			this._shiftDate('month', ofs);
@@ -744,7 +751,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	 * @return Date
 	 */
 	getTime: function () {
-		return this._value || zUtl.today(this.getFormat(), _getTimeZone(this));
+		var today = zUtl.today(this.getFormat(), _getTimeZone(this));
+		if(this._selectedValue == null) this._selectedValue = today;
+		return this._value || today;
 	},
 	_setTime: function (y, m, d, fireOnChange) {
 		var dateobj = this.getTime(),
@@ -755,6 +764,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			val = new zk.fmt.Calendar().escapeDSTConflict(_newDate(year, month, day, d == null, tz), tz); // B70-ZK-2382
 
 		this._value = val;
+		this._selectedValue = val;
 		if (fireOnChange)
 			this.fire('onChange', {value: val});
 	},
@@ -836,7 +846,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var newTime = _newDate(year, month, day, !nofix, tz);
 		if (!ignoreUpdate) {
 			this._value = newTime;
-			this.fire('onChange', {value: this._value, shallClose: false, shiftView: true});
+			if (!this._isSelectDisabled) {
+				this._selectedValue = newTime;
+				this.fire('onChange', {value: this._selectedValue, shallClose: false, shiftView: true});
+			}
 		}
 		return newTime;
 	},
@@ -1053,7 +1066,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 				prev = Dates.newInstance([y, m, 0], 'UTC').getDate(), //last date of previous month
 				today = zUtl.today(null, tz), //no time part
 				outsideClass = this.$s('outside'),
-				disdClass = this.$s('disabled');
+				disdClass = this.$s('disabled'),
+				selCell;
 
 			$mid.find('.' + seldClass).removeClass(seldClass);
 			if (!opts || !opts.sameMonth) {
@@ -1082,8 +1096,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							var $cell = jq(week.cells[k]);
 
 							$cell[0]._monofs = monofs;
-							if (bSel)
+							if (bSel) {
 								$cell.addClass(seldClass);
+								selCell = $cell;
+							}
 
 
 							//not same month
@@ -1093,6 +1109,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 								}
 								if (Renderer.disabled(this, y, m + monofs, v, today)) {
 									$cell.addClass(disdClass);
+								}
+								if (selCell && selCell.hasClass(disdClass)) {
+									selCell.removeClass(seldClass);
+									selCell = '';
 								}
 								$cell[0].innerHTML = Renderer.cellHTML(this, y, m + monofs, v, monofs);
 								$cell[0].setAttribute('aria-label', Renderer.cellAriaLabel(this, y, m + monofs, v, monofs, k));
