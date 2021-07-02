@@ -833,4 +833,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--	<listener>-->
 <!--		<listener-class>org.zkoss.zktest.test2.F96_ZK_1209ViewModelAnnotationHandler</listener-class>-->
 <!--	</listener>-->
+	<!-- for ZK-4914 -->
+<!--	<library-property>-->
+<!--		<name>org.zkoss.ui.script.ScriptErrorListener.class</name>-->
+<!--		<value>org.zkoss.zktest.test2.F96_ZK_4914_ScriptErrorListener</value>-->
+<!--	</library-property>-->
 </zk>

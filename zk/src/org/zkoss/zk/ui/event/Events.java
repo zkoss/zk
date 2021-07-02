@@ -284,6 +284,13 @@ public class Events {
 	 */
 	public static final String ON_STATE_CHANGE = "onStateChange";
 
+	/**
+	 * The onScriptError event used with {@link ScriptErrorEvent}.
+	 *
+	 * @since 9.6.0
+	 */
+	public static final String ON_SCRIPT_ERROR = "onScriptError";
+
 	/** Returns whether an event name is valid.
 	 *
 	 * <p>The event name must start with on and the third character

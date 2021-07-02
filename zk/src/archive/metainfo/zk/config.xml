@@ -67,4 +67,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
         <name>org.zkoss.zk.ui.ShadowDefaultHost.class</name>
         <value>org.zkoss.zul.NoDOM</value>
     </library-property>
+
+	<!-- ZK-4914 -->
+	<library-property>
+		<name>org.zkoss.ui.script.ScriptErrorListener.class</name>
+		<value>org.zkoss.zk.ui.script.DefaultScriptErrorListener</value>
+	</library-property>
 </config>

@@ -1312,6 +1312,11 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 	 * @param String script the JavaScript code snippet to execute
 	 */
 	script: function (script) {
+		let scriptErrorHandler = zk.scriptErrorHandler;
+		if (scriptErrorHandler && !zk.scriptErrorHandlerRegistered) {
+			zk.scriptErrorHandlerRegistered = true;
+			jq(window).one('error', scriptErrorHandler);
+		}
 		jq.globalEval(script);
 	},
 	/** Asks the client to echo back an AU request, such that

@@ -204,4 +204,10 @@ public class Attributes {
 	 * @since 5.0.8
 	 */
 	public static final String ZK_SESSION = "javax.zkoss.zk.ui.Session";
+
+	/**
+	 * A library property to specify the class used to handle client script error
+	 * @since 9.6.0
+	 */
+	public static final String CLIENT_SCRIPT_ERROR_LISTENER_CLASS = "org.zkoss.ui.script.ScriptErrorListener.class";
 }

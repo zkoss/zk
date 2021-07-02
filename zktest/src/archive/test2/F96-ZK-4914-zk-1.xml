@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zk>
+    <library-property>
+        <name>org.zkoss.ui.script.ScriptErrorListener.class</name>
+        <value></value>
+    </library-property>
+</zk>

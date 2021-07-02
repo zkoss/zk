@@ -688,6 +688,9 @@ declare namespace zk {
         resendTimeout: number;
         resourceURI: string;
         safari?: boolean;
+        scriptErrorHandler?: (evt) => void;
+        scriptErrorHandlerEnabled?: boolean;
+        scriptErrorHandlerRegistered?: boolean;
         Service: zk.Object;
         Skipper: zk.Skipper;
         Swipe: zk.Swipe;

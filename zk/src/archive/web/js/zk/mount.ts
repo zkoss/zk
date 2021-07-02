@@ -837,6 +837,23 @@ jq(function () {
 	.on((document.hidden !== undefined ? '' : zk.vendor_) + 'visibilitychange', function (evt) {
 		zAu._onVisibilityChange();
 	});
+
+	if (zk.scriptErrorHandlerEnabled && !zk.ie9_) {
+		zk.scriptErrorHandler = function (evt) {
+			let errorMsg = evt.originalEvent.message,
+				stack = evt.originalEvent.error.stack,
+				checkFunctionList = ['globalEval', 'script', '_doCmds', 'afterResponse', '_onResponseReady'];
+
+			for (let i = 0, l = checkFunctionList.length, lastCheckPos = -1; i < l; i++) {
+				let checkPos = stack.indexOf(checkFunctionList[i]);
+				if (checkPos == -1 || checkPos < lastCheckPos)
+					return; //not from Clients.evalJavascript
+				lastCheckPos = checkPos;
+			}
+			zAu.send(new zk.Event(null, 'onScriptError', {message: errorMsg, stack: stack}));
+			zk.scriptErrorHandlerRegistered = false;
+		};
+	}
 	
 	var _sizeHandler = function (evt): void {
 		if (zk.mounting)
