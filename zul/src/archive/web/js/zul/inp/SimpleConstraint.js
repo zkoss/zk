@@ -70,6 +70,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 
 				var cc = cst.charAt(j);
 				if (cc == '/') {
+					var hasEndingSlash = false;
 					for (k = ++j; ; ++k) { //look for ending /
 						if (k >= len) { //no ending /
 							k = -1;
@@ -77,10 +78,31 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						}
 
 						cc = cst.charAt(k);
-						if (cc == '/') break; //ending / found
+						if (cc == '/') {
+							hasEndingSlash = true;
+							break; //ending / found
+						}
 						if (cc == '\\') ++k; //skip one
 					}
-					this._regex = new RegExp(k >= 0 ? cst.substring(j, k) : cst.substring(j), 'g');
+
+					if (hasEndingSlash) {
+						var restCst = cst.substring(k + 1),
+							// match zero-or-more character, until reaching a comma or a semicolon or end of string.
+							regexFlags = restCst.match(/.*?(?=,|:|$)/)[0].trim();
+						if (regexFlags) {
+							if (regexFlags.indexOf('d') != -1 || regexFlags.indexOf('y') != -1)
+								zk.error('unsupported regex flags in constraint: ' + cst);
+							if (regexFlags.indexOf('g') == -1)
+								regexFlags += 'g'; // always use global match
+						}
+					}
+
+					try {
+						this._regex = new RegExp(k >= 0 ? cst.substring(j, k) : cst.substring(j), regexFlags || 'g');
+					} catch (e) {
+						zk.error(e.message || e);
+					}
+					
 					this._cstArr[this._cstArr.length] = 'regex';
 					continue l_out;
 				}
