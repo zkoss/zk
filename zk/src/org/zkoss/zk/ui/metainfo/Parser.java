@@ -857,7 +857,7 @@ public class Parser {
 		}
 
 		if (parsingState != ParsingState.FIRST) {
-			if ("attribute".equals(nm) || "template".equals(nm))
+			if (("attribute".equals(nm) || "template".equals(nm)) && isZkElement(langdef, nm, pref, uri))
 				return null;
 			if ("zscript".equals(nm) && isZkElement(langdef, nm, pref, uri)) {
 				checkZScriptEnabled(el);
