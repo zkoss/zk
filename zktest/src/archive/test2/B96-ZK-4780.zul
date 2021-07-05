@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4780.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 05 12:11:25 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        Sessions.getCurrent().setAttribute("px_preferred_locale", new Locale("de","DE"));
+
+        void resetLocale() {
+            Sessions.getCurrent().removeAttribute("px_preferred_locale");
+        }
+    </zscript>
+    <label multiline="true">
+        1. (Mobile only) Change browser locale to Germany for this test case.
+        2. You should see the values in each input element "0,5", not empty.
+        3. After the test, ensure to click the "Click me after the test" button to reset the locale.
+    </label>
+    <div>
+        <doublebox id="db1" value="0.5"/>
+        <doublespinner id="db2" value="0.5"/>
+        <decimalbox id="db3" value="0.5"/>
+    </div>
+    <button label="Click me after the test" onClick="resetLocale()" />
+</zk>
