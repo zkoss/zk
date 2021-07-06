@@ -29,7 +29,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 	<calendar id="c1" constraint="no past" width="400px" onChange='Clients.log(self.value)'/>
 	between (20210703 - 20210901)
 	<label multiline="true">
-		1. click button to  2021/08/02.
+		1. click button to 2021/08/02.
 		2. select 20210901.
 		3. click left arrow by keyboard, the date should not shift.
 		4. click the selected date button, the date should be 20210901.

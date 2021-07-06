@@ -112,7 +112,7 @@ public class B96_ZK_4543Test extends WebDriverTestCase {
 	@Test
 	public void testNoToday() {
 		connect();
-		JQuery c5 = jq("@calendar:eq(4)");
-		Assert.assertFalse(c5.find(".z-calendar-selected").exists());
+		JQuery c4 = jq("@calendar:eq(4)");
+		Assert.assertFalse(c4.find(".z-calendar-selected").exists());
 	}
 }
