@@ -96,14 +96,12 @@ zul.inp.NumberInputWidget = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('doPaste_', arguments);
 	},
 	getType: function () {
-		return zk.mobile && !this._format && !this._locale ? 'number' : this._type;
+		return this._type;
 	},
 	domAttrs_: function (no) {
 		var attr = this.$supers('domAttrs_', arguments);
-		if ((!no || !no.text) && zk.ios && zk.ipad)
-			attr += ' pattern="[0-9]*"';
-		else if ((!no || !no.text) && zk.android)
-			attr += ' inputmode="numeric"';
+		if ((!no || !no.text) && zk.mobile)
+			attr += ' inputmode="decimal"';
 		return attr;
 	}
 });
