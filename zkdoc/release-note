@@ -129,6 +129,7 @@ ZK 9.6.0
   ZK-4869: borderlayout keeps resizing
   ZK-4496: The result of a native HTML5 template tag is missing
   ZK-4780: Decimalbox has no value in Germany-locale in mobile
+  ZK-4781: No error message appreared in invalid Longbox in mobile
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
