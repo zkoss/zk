@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.util.ArraysX;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -69,9 +70,19 @@ public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object
 	protected List<F> _foots;
 
 	/**
-	 * meMber field to store group close status
+	 * member field to store group close status
 	 */
 	protected boolean[] _opens;
+
+	/**
+	 * the sorting comparator
+	 */
+	protected Comparator<D> _sorting;
+
+	/**
+	 * is the sort ascending?
+	 */
+	protected boolean _sortDir;
 
 	/**
 	 * Constructs a groups data model with a two-dimensional array of data.
@@ -313,6 +324,8 @@ public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object
 	 * to customize.
 	 */
 	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex) {
+		_sorting = cmpr;
+		_sortDir = ascending;
 		for (int i = 0, j = _data.size(); i < j; i++) {
 			List<D> d = _data.get(i);
 			sortGroupData(_heads == null ? d : _heads.get(i), d, cmpr, ascending, colIndex);
@@ -348,6 +361,10 @@ public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object
 			clone._foots = new ArrayList(_foots);
 		if (_opens != null)
 			clone._opens = (boolean[]) ArraysX.duplicate(_opens);
+		if (_sorting != null)
+			clone._sorting = _sorting;
+		if (_sortDir)
+			clone._sortDir = true;
 		return clone;
 	}
 
@@ -357,5 +374,12 @@ public class SimpleGroupsModel<D, H, F, E> extends AbstractGroupsModel<D, Object
 	 */
 	public Object willClone(Component comp) {
 		return clone();
+	}
+
+	@Override
+	public String getSortDirection(Comparator<D> cmpr) {
+		if (Objects.equals(_sorting, cmpr))
+			return _sortDir ? "ascending" : "descending";
+		return "natural";
 	}
 }

@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.reflect.Fields;
@@ -230,6 +231,19 @@ public class FieldComparator implements Comparator, Serializable {
 			results.add(new FieldInfo(fieldname, asc, func));
 		}
 		return results;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		FieldComparator that = (FieldComparator) o;
+		return _maxnull == that._maxnull && _ascending == that._ascending && _rawOrderBy.equals(that._rawOrderBy);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(_rawOrderBy, _maxnull, _ascending);
 	}
 
 	private static class FieldInfo implements Serializable {

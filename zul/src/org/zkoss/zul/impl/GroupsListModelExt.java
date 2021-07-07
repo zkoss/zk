@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.ext.GroupsSortableModel;
+import org.zkoss.zul.ext.Sortable;
 
 /*package*/ class GroupsListModelExt<D, G, F> extends GroupsListModel<D, G, F>
 		implements GroupsSortableModel<D>, ComponentCloneListener, Cloneable {
@@ -57,5 +58,12 @@ import org.zkoss.zul.ext.GroupsSortableModel;
 			return clone;
 		}
 		return null; // no need to clone
+	}
+
+	@Override
+	public String getSortDirection(Comparator<D> cmpr) {
+		if (_model instanceof Sortable)
+			return ((Sortable<D>) _model).getSortDirection(cmpr);
+		return "natural";
 	}
 }
