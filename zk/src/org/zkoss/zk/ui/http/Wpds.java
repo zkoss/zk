@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.MessageLoader;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.Attributes;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
@@ -156,6 +157,9 @@ public class Wpds {
 			sb.append("zk.touchEnabled=false;\n");
 		if (Boolean.parseBoolean(Library.getProperty("org.zkoss.zkmax.tablet.ui.disabled", "false")))
 			sb.append("zk.tabletUIEnabled=false;\n");
+		String scriptErrorServiceClass = Library.getProperty(Attributes.CLIENT_SCRIPT_ERROR_LISTENER_CLASS);
+		if (!Strings.isEmpty(scriptErrorServiceClass))
+			sb.append("zk.scriptErrorHandlerEnabled=true;\n");
 		return sb.toString();
 	}
 

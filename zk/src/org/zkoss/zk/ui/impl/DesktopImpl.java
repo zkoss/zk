@@ -78,6 +78,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.HistoryPopStateEvent;
+import org.zkoss.zk.ui.event.ScriptErrorEvent;
 import org.zkoss.zk.ui.event.VisibilityChangeEvent;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.ScopeListener;
@@ -849,6 +850,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			Events.postEvent(VisibilityChangeEvent.getVisibilityChangeEvent(request));
 		} else if (Events.ON_HISTORY_POP_STATE.equals(cmd)) {
 			Events.postEvent(HistoryPopStateEvent.getHistoryPopStateEvent(request));
+		} else if (Events.ON_SCRIPT_ERROR.equals(cmd)) {
+			Events.postEvent(ScriptErrorEvent.getScriptErrorEvent(request));
 		} else if ("rmDesktop".equals(cmd)) {
 			((WebAppCtrl) request.getDesktop().getWebApp()).getUiEngine()
 					.setAbortingReason(new org.zkoss.zk.ui.impl.AbortByRemoveDesktop());

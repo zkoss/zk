@@ -30,6 +30,7 @@ ZK 9.6.0
   ZK-4934: ListModelList (Map/Set/Array) supports Form binding
   ZK-4925: zEmbedded support for zul-declared stylesheet and script components
   ZK-4926: zEmbedded support for images
+  ZK-4914: Add toggleable debug / error trace for Clients EvalJavascript
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)

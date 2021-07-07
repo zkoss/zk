@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.io.Serializables;
 import org.zkoss.lang.ClassResolver;
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.ImportedClassResolver;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
@@ -297,6 +298,18 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_hdres = config.getResponseHeaders();
 		if (_hdres.isEmpty())
 			_hdres = null;
+
+		//ZK-4914
+		EventListener scriptErrorListener = null;
+		try {
+			String scriptErrorListenerClass = Library.getProperty(Attributes.CLIENT_SCRIPT_ERROR_LISTENER_CLASS);
+			if (!Strings.isEmpty(scriptErrorListenerClass))
+				scriptErrorListener = (EventListener) Classes.newInstanceByThread(scriptErrorListenerClass);
+		} catch (Exception e) {
+			log.warn("", e);
+		}
+		if (scriptErrorListener != null)
+			addEventListener(Events.ON_SCRIPT_ERROR, scriptErrorListener);
 	}
 
 	/** Returns the UI engine.
