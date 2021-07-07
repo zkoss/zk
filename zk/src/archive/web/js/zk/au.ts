@@ -499,6 +499,8 @@ zAu = {
 			headers = fakeFetachOpts.headers;
 			zAu._pfsend(dt, fakeFetachOpts, true, false);
 		}
+		// ZK-4943
+		if (dt) dt.fire('onBeforeDestroy');
 		// ZK-4204
 		if (navigator.sendBeacon && window.URLSearchParams) {
 			var params = new URLSearchParams(data);
