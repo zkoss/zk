@@ -57,11 +57,11 @@ public class F90_ZK_4347_constTest extends WebDriverTestCase {
 
 		click(jq(db.$n("pp")).find(".z-calendar-left"));
 		waitResponse(true);
-		click(jq(db.$n("pp")).find(".z-calendar-selected"));
+		click(jq(db.$n("pp")).find(".z-calendar-cell:contains(11)"));
 
 		// Both a disabled button or an error are okay
 		final boolean btnDisabled = jq(db.$n("pp"))
-				.find(".z-calendar-selected")
+				.find(".z-calendar-cell:contains(11)")
 				.hasClass("z-calendar-disabled");
 		if (!btnDisabled)
 			Assert.assertTrue(hasError());
@@ -77,10 +77,10 @@ public class F90_ZK_4347_constTest extends WebDriverTestCase {
 		click(db.$n("btn"));
 		waitResponse();
 
-		click(jq(db.$n("pp")).find(".z-calendar-selected"));
+		click(jq(db.$n("pp")).find(".z-calendar-cell:contains(11)"));
 
 		final boolean btnDisabled = jq(db.$n("pp"))
-				.find(".z-calendar-selected")
+				.find(".z-calendar-cell:contains(11)")
 				.hasClass("z-calendar-disabled");
 		Assert.assertTrue(btnDisabled);
 
