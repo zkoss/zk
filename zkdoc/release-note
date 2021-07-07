@@ -134,6 +134,7 @@ ZK 9.6.0
   ZK-4525: A tooltip makes toggle type Popups closed
   ZK-4889: @Default not working correctly with simplified command
   ZK-4543: Calendar should respect the constraint while Month changing
+  ZK-4387: The popup of Chosenbox not updated after ZK-3986
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
