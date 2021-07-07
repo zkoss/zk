@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4387.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 07 11:25:24 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click append than open the chosenbox.
+        2. "Moon" should be the last item.
+        3. Click prepend than open the chosenbox.
+        4. "Mars" should be the first item.
+    </label>
+    <zscript>
+    ListModel model = new ListModelList(new String[] {
+        "North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+    });
+    </zscript>
+    <chosenbox id="cb" model="${model}" width="200px"/>
+    <button label="append" onClick='model.add("Moon")'/>
+    <button label="prepend" onClick='model.add(0, "Mars")'/>
+    <button label="invalidate" onClick='cb.invalidate()'/>
+</zk>
