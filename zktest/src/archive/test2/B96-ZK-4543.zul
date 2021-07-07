@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4543.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jul 01 11:19:04 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		import java.text.SimpleDateFormat;
+	</zscript>
+	no past
+	<label multiline="true">
+		1. go to next month and select a date.
+		2. click the button on the top left twice to go to previous Month.
+		3. should not see any date be selected.
+		4. click the selected date button, the month should not be display month.
+		5. click the button on the top right twice to go back to next Month.
+		6. the selected date in step 1 should be selected.
+	</label>
+	<button label="c1 selected date" onClick='lb1.setValue("" + c1.getValue())'/>
+	<label id="lb1" />
+	<calendar id="c1" constraint="no past" width="400px" onChange='Clients.log(self.value)'/>
+	between (20210703 - 20210901)
+	<label multiline="true">
+		1. click button to 2021/08/02.
+		2. select 20210901.
+		3. click left arrow by keyboard, the date should not shift.
+		4. click the selected date button, the date should be 20210901.
+		5. go to 2021/10, should not see any date be selected.
+	</label>
+	<button label="to 2021/08/02" onClick='c2.setValue(new SimpleDateFormat("yyyy/MM/dd").parse("2021/08/02"));'/>
+	<separator/>
+	<button label="c2 selected date" onClick='lb2.setValue("" + c2.getValue())'/>
+	<label id="lb2" />
+	<calendar id="c2" constraint="between 20210703 and 20210901" width="400px" onChange="Clients.log(self.value)"/>
+	no future
+	<label multiline="true">
+		1. go to previous month and select a date.
+		2. click the button on the top right twice to go to next Month.
+		3. should not see any date be selected.
+		4. click the selected date button, the month should not be display month.
+		5. click the button on the top left twice to go back to previous Month.
+		6. you should see clients log and the selected date in step 1 should be selected.
+	</label>
+	<button label="c3 selected date" onClick='lb3.setValue("" + c3.getValue())'/>
+	<label id="lb3" />
+	<calendar id="c3" constraint="no future" width="400px" onChange='Clients.log(self.value)'/>
+	no today
+	<label class="c4" multiline="true">
+		1. today should not be selected.
+	</label>
+	<calendar constraint="no today" width="400px" onChange='Clients.log(self.value)'/>
+</zk>
