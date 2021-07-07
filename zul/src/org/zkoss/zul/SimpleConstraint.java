@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Classes;
@@ -202,7 +203,7 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 	}
 
 	private void parseCst(String constraint) {
-		String regex = null, errmsg = null;
+		String regex = null, errmsg = null, regexFlags = "";
 		l_out:
 		for (int j = 0, k = 0, len = constraint.length(); k >= 0; j = k + 1) {
 			for (; ; ++j) {
@@ -212,6 +213,7 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 				char cc = constraint.charAt(j);
 				switch (cc) {
 					case '/':
+						boolean hasEndingSlash = false;
 						for (k = ++j; ; ++k) { //look for ending /
 							if (k >= len) { //no ending /
 								k = -1;
@@ -219,12 +221,24 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 							}
 
 							cc = constraint.charAt(k);
-							if (cc == '/')
+							if (cc == '/') {
+								hasEndingSlash = true;
 								break; //ending / found
+							}
 							if (cc == '\\')
 								++k; //skip one
 						}
+						if (hasEndingSlash) {
+							String restCst = constraint.substring(k + 1);
+							Pattern pattern = Pattern.compile(".*?(?=,|:|$)");
+							final Matcher matcher = pattern.matcher(restCst);
+							if (matcher.find()) {
+								regexFlags = matcher.group(0).trim();
+							}
+						}
 						regex = k >= 0 ? constraint.substring(j, k) : constraint.substring(j);
+						if (regexFlags.length() > 0)
+							k += regexFlags.length(); // skip regex flags
 						continue l_out;
 					case ':':
 						errmsg = constraint.substring(j + 1).trim();
@@ -252,8 +266,28 @@ public class SimpleConstraint implements Constraint, ClientConstraint, java.io.S
 
 			_flags |= parseConstraint(s.trim().toLowerCase(java.util.Locale.ENGLISH));
 		}
-		_regex = regex == null || regex.length() == 0 ? null : Pattern.compile(regex);
+		_regex = getRegex(regex, regexFlags);
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null : errmsg;
+	}
+
+	private Pattern getRegex(String regex, String regexFlags) {
+		if (regex == null || regex.length() == 0)
+			return null;
+		if (regexFlags.length() == 0) {
+			return Pattern.compile(regex);
+		} else { // ZK-4863: add pattern flags
+			int regexFlag = 0;
+			if (regexFlags.contains("i"))
+				regexFlag |= Pattern.CASE_INSENSITIVE;
+			if (regexFlags.contains("m"))
+				regexFlag |= Pattern.MULTILINE;
+			if (regexFlags.contains("s"))
+				regexFlag |= Pattern.DOTALL;
+			if (regexFlags.contains("u"))
+				regexFlag |= Pattern.UNICODE_CASE;
+
+			return Pattern.compile(regex, regexFlag);
+		}
 	}
 
 	/** Parses a list of constraints from a string to an integer
