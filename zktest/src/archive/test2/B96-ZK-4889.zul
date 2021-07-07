@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4889.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jul 6 18:44:32 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Click Each button and see the result after "=>"
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4889VM')">
+		<button label="test1 => -1" onClick="@command('test1')"/>
+		<button label="test1 With Number => 2" onClick="@command('test1', number=2)"/>
+		<button label="test1 With Number But Wrong key => -1" onClick="@command('test1', aaa=2)"/>
+		<separator />
+		<button label="omit1 => -1" onClick="@('test1')"/>
+		<button label="omit1 With Number => 2" onClick="@('test1', 2)"/>
+		<separator />
+		<button label="omit2 No BindingAnno => -1" onClick="@('test2')"/>
+		<button label="omit2 No BindingAnno With 1 Param => 2" onClick="@('test2', 2)"/>
+		<separator />
+		<button label="omit3 Two Param Only Send One => 1, -1" onClick="@('test3', 1)"/>
+		<button label="omit3 Two Param => 1, 1" onClick="@('test3', 1, 1)"/>
+	</div>
+</zk>

@@ -214,7 +214,9 @@ public class ParamCall {
 			}
 			//don't break until get a value
 		}
+		boolean isDefaultVal = false;
 		if (val == null && defAnno != null) {
+			isDefaultVal = true;
 			val = Classes.coerce(paramType, defAnno.value());
 		}
 
@@ -223,12 +225,20 @@ public class ParamCall {
 			for (Type type : _types) {
 				if (type != null && paramType.isAssignableFrom(type.clz)) {
 					val = type.value;
+					isDefaultVal = false;
 					break;
 				}
 			}
 		}
-		if (val == null)
+
+		if (val == null) {
 			val = resolvePositionalParameter(paramType, index);
+		} else if (isDefaultVal) { // from default
+			Object positionalVal = resolvePositionalParameter(paramType, index);
+			if (positionalVal != null)
+				val = positionalVal;
+		}
+
 		return val;
 	}
 
