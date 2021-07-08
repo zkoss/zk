@@ -141,6 +141,7 @@ ZK 9.6.0
   ZK-4282: SimpleGroupsModel selection synchronizing is working only in multiple mode
   ZK-4798: setMold("paging") causes exception while checkbox is selected
   ZK-4948: URL forwarding/redirection in zEmbedded
+  ZK-4788: setCols(0) causes exception for InputElement
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
