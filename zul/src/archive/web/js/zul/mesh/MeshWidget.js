@@ -603,14 +603,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageSize
 	 */
 	getPageSize: function () {
-		return (this.paging || this._paginal).getPageSize();
+		var pgnl = this.paging || this._paginal;
+		return pgnl ? pgnl.getPageSize() : 0;
 	},
 	/** Sets the page size, aka., the number rows per page.
 	 * @param int pageSize
 	 * @see Paging#setPageSize
 	 */
 	setPageSize: function (pgsz) {
-		(this.paging || this._paginal).setPageSize(pgsz);
+		var pgnl = this.paging || this._paginal;
+		if (pgnl)
+			pgnl.setPageSize(pgsz);
 	},
 	/** Returns the number of pages.
 	 * Note: there is at least one page even no item at all.
@@ -618,21 +621,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	 * @see Paging#getPageCount
 	 */
 	getPageCount: function () {
-		return (this.paging || this._paginal).getPageCount();
+		var pgnl = this.paging || this._paginal;
+		return pgnl ? pgnl.getPageCount() : 1;
 	},
 	/** Returns the active page (starting from 0).
 	 * @return int
 	 * @see Paging#getActivePage
 	 */
 	getActivePage: function () {
-		return (this.paging || this._paginal).getActivePage();
+		var pgnl = this.paging || this._paginal;
+		return pgnl ? pgnl.getActivePage() : 0;
 	},
 	/** Sets the active page (starting from 0).
 	 * @param int activePage
 	 * @see Paging#setActivePage
 	 */
 	setActivePage: function (pg) {
-		(this.paging || this._paginal).setActivePage(pg);
+		var pgnl = this.paging || this._paginal;
+		if (pgnl)
+			pgnl.setActivePage(pg);
 	},
 	/**
 	 * Returns whether the widget is in paging mold.
