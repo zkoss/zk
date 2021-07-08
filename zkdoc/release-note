@@ -140,6 +140,7 @@ ZK 9.6.0
   ZK-4283: The sort icon direction is not synchronized in model
   ZK-4282: SimpleGroupsModel selection synchronizing is working only in multiple mode
   ZK-4798: setMold("paging") causes exception while checkbox is selected
+  ZK-4948: URL forwarding/redirection in zEmbedded
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
