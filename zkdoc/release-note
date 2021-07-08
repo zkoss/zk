@@ -138,6 +138,7 @@ ZK 9.6.0
   ZK-4543: Calendar should respect the constraint while Month changing
   ZK-4387: The popup of Chosenbox not updated after ZK-3986
   ZK-4283: The sort icon direction is not synchronized in model
+  ZK-4282: SimpleGroupsModel selection synchronizing is working only in multiple mode
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

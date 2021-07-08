@@ -1028,7 +1028,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		this.fire('onSelect',
 			zk.copy({items: data, reference: ref, clearFirst: !keep, selectAll: checkSelectAll}, edata),
-			{rtags: {selectAll: checkSelectAll}});
+			{rtags: {selectAll: checkSelectAll}, toServer: !!this._model});
 	},
 	/* Changes the specified row as focused. */
 	_focus: function (row) {
