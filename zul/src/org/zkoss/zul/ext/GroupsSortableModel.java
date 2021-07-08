@@ -33,7 +33,7 @@ import org.zkoss.zul.Listheader;
  * @author tomyeh
  * @since 6.0.0
  */
-public interface GroupsSortableModel<D> {
+public interface GroupsSortableModel<D> extends Sortable<D> {
 	/** It called when {@link Listbox} or {@link Grid} has to sort
 	 * the content.
 	 *
@@ -64,6 +64,16 @@ public interface GroupsSortableModel<D> {
 	 * @param colIndex the index of the column
 	 */
 	public void sort(Comparator<D> cmpr, boolean ascending, int colIndex);
+
+	@Override
+	default void sort(Comparator<D> cmpr, boolean ascending) {
+		sort(cmpr, ascending, -1);
+	}
+
+	@Override
+	default String getSortDirection(Comparator<D> cmpr) {
+		return "natural";
+	}
 
 	/**
 	 * Groups and sorts the data by the specified column.

@@ -88,6 +88,16 @@ public class GroupsModelArray<D, H, F, E> extends AbstractGroupsModel<D, H, F, E
 	protected boolean[] _opens;
 
 	/**
+	 * the sorting comparator
+	 */
+	protected Comparator<D> _sorting;
+
+	/**
+	 * is the sort ascending?
+	 */
+	protected boolean _sortDir;
+
+	/**
 	 * Constructor with an array of data.
 	 * @param data an array data to be grouping.
 	 * @param cmpr a comparator implementation help group the data. you could implements {@link GroupComparator} to do more grouping control.<br/>
@@ -180,6 +190,8 @@ public class GroupsModelArray<D, H, F, E> extends AbstractGroupsModel<D, H, F, E
 	}
 
 	public void sort(Comparator<D> cmpr, boolean ascending, int col) {
+		_sorting = cmpr;
+		_sortDir = ascending;
 		sortAllGroupData(cmpr, ascending, col);
 
 		fireEvent(GroupsDataEvent.STRUCTURE_CHANGED, -1, -1, -1);
@@ -393,6 +405,10 @@ public class GroupsModelArray<D, H, F, E> extends AbstractGroupsModel<D, H, F, E
 			clone._foots = ArraysX.duplicate(_foots);
 		if (_opens != null)
 			clone._opens = (boolean[]) ArraysX.duplicate(_opens);
+		if (_sorting != null)
+			clone._sorting = _sorting;
+		if (_sortDir)
+			clone._sortDir = true;
 		return clone;
 	}
 
@@ -420,5 +436,12 @@ public class GroupsModelArray<D, H, F, E> extends AbstractGroupsModel<D, H, F, E
 
 	public String toString() {
 		return Objects.toString(_nativedata);
+	}
+
+	@Override
+	public String getSortDirection(Comparator<D> cmpr) {
+		if (Objects.equals(_sorting, cmpr))
+			return _sortDir ? "ascending" : "descending";
+		return "natural";
 	}
 }

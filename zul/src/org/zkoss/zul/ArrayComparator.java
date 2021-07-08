@@ -14,6 +14,7 @@ package org.zkoss.zul;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Compares the specified element of the array.
@@ -61,5 +62,18 @@ public class ArrayComparator<E> implements Comparator<E>, java.io.Serializable {
 	 */
 	public boolean isAscending() {
 		return _ascending;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ArrayComparator<?> that = (ArrayComparator<?>) o;
+		return _index == that._index && _ascending == that._ascending;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(_index, _ascending);
 	}
 }
