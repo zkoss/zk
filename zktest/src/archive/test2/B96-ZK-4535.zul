@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4535.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 08 14:17:59 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <label multiline="true">
+        1. Look at toolbar buttons (including hover, active and disabled styles).
+        2. They should look similar. (The bug is the second button has a border)
+    </label>
+    <toolbar>
+        <toolbarbutton iconSclass="z-icon-home" label="button"/>
+        <combobutton iconSclass="z-icon-home" label="button" mold="toolbar"/>
+    </toolbar>
+    <toolbar>
+        <toolbarbutton iconSclass="z-icon-home" label="button" disabled="true"/>
+        <combobutton iconSclass="z-icon-home" label="button" mold="toolbar" disabled="true"/>
+    </toolbar>
+</zk>
