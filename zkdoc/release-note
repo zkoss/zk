@@ -145,6 +145,7 @@ ZK 9.6.0
   ZK-4788: setCols(0) causes exception for InputElement
   ZK-4945: FormIdCache in AnnotateBinderEx causing memory leak with shadow elements
   ZK-4535: Combobutton toolbar mold has a border
+  ZK-4944: zEmbedded doesn't clean client-side object and references on destroy
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
