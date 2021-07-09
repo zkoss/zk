@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4788.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jul 08 10:31:57 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the setCols(0) button.
+		2. click the hasSizeAttribute button.
+		3. you should see zk.log shows twelve "false" to indicate setCols(0) width is same with browser default.
+	</label>
+	textbox
+	<textbox id="textbox" cols="0"/>
+	<textbox id="textbox1" cols="5"/>
+	multiline="true"
+	<textbox id="textbox2" cols="0" multiline="true"/>
+	<textbox id="textbox3" cols="5" multiline="true"/>
+	<separator/>
+	intbox
+	<intbox id="intbox" cols="0"/>
+	<intbox id="intbox1" cols="5"/>
+	<separator/>
+	doublebox
+	<doublebox id="doublebox" cols="0"/>
+	<doublebox id="doublebox1" cols="5"/>
+	<separator/>
+	decimalbox
+	<decimalbox id="decimalbox" cols="0"/>
+	<decimalbox id="decimalbox1" cols="5"/>
+	<separator/>
+	longbox
+	<longbox id="longbox" cols="0"/>
+	<longbox id="longbox1" cols="5"/>
+	<separator/>
+	<script type="text/javascript"><![CDATA[
+		function hasSizeAttribute() {
+			zk.log(jq('$textbox')[0].hasAttribute("size"));
+			zk.log(jq('$intbox')[0].hasAttribute("size"));
+			zk.log(jq('$doublebox')[0].hasAttribute("size"));
+			zk.log(jq('$decimalbox')[0].hasAttribute("size"));
+			zk.log(jq('$longbox')[0].hasAttribute("size"));
+			zk.log(jq('$textbox1')[0].hasAttribute("size"));
+			zk.log(jq('$intbox1')[0].hasAttribute("size"));
+			zk.log(jq('$doublebox1')[0].hasAttribute("size"));
+			zk.log(jq('$decimalbox1')[0].hasAttribute("size"));
+			zk.log(jq('$longbox1')[0].hasAttribute("size"));
+			zk.log(jq('$textbox2')[0].hasAttribute("cols"));
+			zk.log(jq('$textbox3')[0].hasAttribute("cols"));
+		}
+	]]></script>
+	<button onClick="textbox1.setCols(0);textbox3.setCols(0);intbox1.setCols(0);doublebox1.setCols(0);decimalbox1.setCols(0);
+		longbox1.setCols(0);">setCols(0)</button>
+	<button onClick='Clients.evalJavaScript("hasSizeAttribute()")'>hasSizeAttribute</button>
+</zk>

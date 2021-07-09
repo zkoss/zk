@@ -423,7 +423,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	/** Sets the cols which determines the visible width, in characters.
 	 */
 	public void setCols(int cols) throws WrongValueException {
-		if (cols <= 0)
+		if (cols < 0)
 			throw new WrongValueException("Illegal cols: " + cols);
 
 		if (_cols != cols) {
