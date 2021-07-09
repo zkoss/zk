@@ -378,6 +378,16 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (content && !content.isOpen())
 			content.onShow();
 	},
+	_hideContentHandler: function () {
+		var content = this._contentHandler;
+		if (content && content.isOpen()) {
+			content.onHide();
+			if (this.isTopmost())
+				this.focus();
+			else
+				this.parent.focus();
+		}
+	},
 	doClick_: function (evt) {
 		if (!this._disabled) {
 			if (this.menupopup) {

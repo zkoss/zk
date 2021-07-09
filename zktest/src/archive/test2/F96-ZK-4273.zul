@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4273.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 09 10:37:00 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (za11y feature)
+        [Colorbox]
+        1. Click the first colorbox.
+        2. Use arrow keys to navigate colors.
+        3. You can press Esc key to close the popup.
+        [Colorbox menu - 1]
+        1. Click the "Option" menu.
+        2. Use arrow keys down to choose "Color", then arrow key right to open the color popup.
+        3. You can press Esc key to close the popup.
+        [Colorbox menu - 2]
+        1. Click the "Color" menu.
+        2. Use arrow keys to navigate colors.
+        3. You can press Esc key to close the popup.
+    </label>
+    <colorbox />
+    <menubar>
+        <menu label="Option">
+            <menupopup>
+                <menu label="Color" content="#color=#184dc6"/>
+                <menu label="Style">
+                    <menupopup>
+                        <menuitem label="Bold"/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+        <menu label="Color" content="#color=#000000"/>
+    </menubar>
+</zk>

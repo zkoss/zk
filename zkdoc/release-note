@@ -33,6 +33,7 @@ ZK 9.6.0
   ZK-4914: Add toggleable debug / error trace for Clients EvalJavascript
   ZK-4863: constraint supports user-defined flags
   ZK-4943: Provide a before destroy callback / event when replacing an embedded instance for cleanup
+  ZK-4273: Colorbox add keyboard support for cancelling
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)
