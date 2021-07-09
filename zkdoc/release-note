@@ -142,6 +142,7 @@ ZK 9.6.0
   ZK-4798: setMold("paging") causes exception while checkbox is selected
   ZK-4948: URL forwarding/redirection in zEmbedded
   ZK-4788: setCols(0) causes exception for InputElement
+  ZK-4945: FormIdCache in AnnotateBinderEx causing memory leak with shadow elements
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

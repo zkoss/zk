@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4945.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jul 09 10:49:02 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Switch the type from A to B and back to A ... repeat
+		There should be no NULL values in the lookupComponentFormIdCache
+		There should be no detached components(Choose) in the lookupComponentFormIdCache
+	</label>
+	<div id="root" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4945VM')">
+		<div form="@id('fx') @load(vm.pojo)">
+			Type
+			<combobox value="@bind(fx.type)">
+				<comboitem value="A" label="A"/>
+				<comboitem value="B" label="B"/>
+			</combobox>
+			<separator/>
+			<apply type="@load(fx.type)">
+				<div>
+					DEBUG: binder.lookupComponentFormIdCache = <label value="@load(binder.lookupComponentFormIdCache)"/>
+					<separator/>
+					<choose>
+						<when test="@init(type eq 'A')">
+							<label id="nameA" value="Name A"/>
+						</when>
+						<otherwise>
+							<label id="nameB" value="Name B"/>
+						</otherwise>
+					</choose>
+					<textbox value="@bind(fx.name)"/>
+				</div>
+			</apply>
+		</div>
+	</div>
+</zk>
