@@ -43,12 +43,15 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		checkVisibleUncheckedTreeItems(tree2);
 		checkVisibleUncheckedTreeItems(tree3);
 		click(selCountBtn);
+		waitResponse();
 		Assert.assertTrue(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 		Assert.assertTrue(tree2.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 		Assert.assertTrue(tree3.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
 
 		click(deSelectAll);
+		waitResponse();
 		click(selAllBtn);
+		waitResponse();
 		click(selCountBtn);
 		waitResponse();
 		Assert.assertTrue(tree1.find(".z-treecol-checkable").hasClass("z-treecol-checked"));
@@ -62,8 +65,11 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		click(tree1.find(".z-tree-icon"));
 		waitResponse();
 		click(tree1.find(".z-treerow-checkbox:eq(1)"));
+		waitResponse();
 		click(tree1.find(".z-treecol-checkable"));
+		waitResponse();
 		click(tree1.find(".z-treecol-checkable"));
+		waitResponse();
 		click(tree1.find(".z-treerow-checkbox:eq(1)"));
 		waitResponse();
 		Assert.assertTrue(tree1.find(".z-treerow:eq(1)").hasClass("z-treerow-selected"));
@@ -74,6 +80,7 @@ public class F96_ZK_4330Test extends WebDriverTestCase {
 		// Reverse click since the treeitems is dynamic
 		for (int i = treeitems.length() - 1; i >= 0; i--) {
 			click(treeitems.get(i));
+			waitResponse();
 		}
 		waitResponse();
 	}
