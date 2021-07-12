@@ -16,10 +16,10 @@
 		<jruby.version>1.1.2</jruby.version>
 		<jython.version>2.2.1</jython.version>
 		<js.version>1.7R4</js.version>
-		<jasperreports.version>6.14.0</jasperreports.version>
+		<jasperreports.version>6.17.0</jasperreports.version>
 		<jfreechart.version>1.0.19</jfreechart.version>
-		<filters.version>2.0.235</filters.version>
-		<ckez.version>4.14.0.0</ckez.version>
+		<filters.version>2.0.235-1</filters.version>
+		<ckez.version>4.16.1.0</ckez.version>
 		<gmapsz.version>3.1.0</gmapsz.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>

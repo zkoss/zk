@@ -11,7 +11,7 @@
 	<artifactId>zkplus</artifactId>
 	<packaging>jar</packaging>
 	<properties>
-		<org.springframework.version>5.2.3.RELEASE</org.springframework.version>
+		<org.springframework.version>5.2.15.RELEASE</org.springframework.version>
 	</properties>
 	<name>ZK Plus Utilities</name>
 	<url>http://www.zkoss.org/zkplus</url>
@@ -107,8 +107,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate</artifactId>
-			<version>3.2.0.ga</version>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.5.3.Final</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -116,18 +116,6 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<version>3.2.0.ga</version>
-			<exclusions>
-				<exclusion>
-					<groupId>*</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>javax.transaction</groupId>

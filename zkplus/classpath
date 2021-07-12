@@ -4,12 +4,11 @@
 ../dist/lib/zul.jar
 ../dist/lib/ext/bsh.jar
 ../dist/lib/ext/servlet-api.jar
-../dist/lib/ext/spring-core-5.2.3.RELEASE.jar
-../dist/lib/ext/spring-beans-5.2.3.RELEASE.jar
-../dist/lib/ext/spring-context-5.2.3.RELEASE.jar
-../dist/lib/ext/spring-web-5.2.3.RELEASE.jar
-../dist/lib/ext/hibernate3.jar
-../dist/lib/ext/hibernate-annotations.jar
+../dist/lib/ext/spring-core-5.2.15.RELEASE.jar
+../dist/lib/ext/spring-beans-5.2.15.RELEASE.jar
+../dist/lib/ext/spring-context-5.2.15.RELEASE.jar
+../dist/lib/ext/spring-web-5.2.15.RELEASE.jar
+../dist/lib/ext/hibernate-core.jar
 ../dist/lib/ext/ejb3-persistence.jar
 ../dist/lib/ext/jta.jar
 ../dist/lib/ext/acegi-security.jar
