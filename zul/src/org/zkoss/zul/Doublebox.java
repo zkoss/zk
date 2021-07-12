@@ -106,8 +106,8 @@ public class Doublebox extends NumberInputElement {
 	}
 
 	public Object unmarshall(Object value) {
-		return value instanceof Number ? //sometimes JSON might interpret value to Integer
-				new Double(((Number) value).doubleValue()) : value;
+		return value instanceof Number //sometimes JSON might interpret value to Integer
+				? new Double(((Number) value).doubleValue()) : value;
 	}
 
 	protected Object coerceFromString(String value) throws WrongValueException {
