@@ -734,9 +734,8 @@ public class Datebox extends DateTimeFormatInputElement {
 				smon[j] = df.format(cal.getTime());
 
 				if (zhlang) {
-					s2mon[j] = smon[0].length() >= 2 ? // remove the last
-														// char
-					smon[j].substring(0, smon[j].length() - 1) : smon[j];
+					s2mon[j] = smon[0].length() >= 2 // remove the last char
+					? smon[j].substring(0, smon[j].length() - 1) : smon[j];
 				} else {
 					final int len = smon[j].length();
 					final char cc = smon[j].charAt(len - 1);

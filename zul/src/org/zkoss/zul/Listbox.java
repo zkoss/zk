@@ -1148,8 +1148,8 @@ public class Listbox extends MeshElement {
 	 * {@link #renderItem}.
 	 */
 	public Listitem getSelectedItem() {
-		return _jsel >= 0 ? _jsel > 0 && _selItems.size() == 1 ? // optimize for performance
-				_selItems.iterator().next() : getItemAtIndex(_jsel) : null;
+		return _jsel >= 0 ? _jsel > 0 && _selItems.size() == 1 // optimize for performance
+				? _selItems.iterator().next() : getItemAtIndex(_jsel) : null;
 	}
 
 	/**

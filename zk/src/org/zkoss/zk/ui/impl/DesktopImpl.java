@@ -1031,8 +1031,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public void destroy() {
-		final ExecutionMonitor execmon = _wapp != null ? //just in case
-				_wapp.getConfiguration().getExecutionMonitor() : null;
+		final ExecutionMonitor execmon = _wapp != null //just in case
+				? _wapp.getConfiguration().getExecutionMonitor() : null;
 
 		_rque = null; //denote it is destroyed
 
