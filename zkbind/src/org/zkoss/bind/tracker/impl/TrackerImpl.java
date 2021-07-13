@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.zkoss.bind.annotation.Immutable;
 import org.zkoss.bind.impl.AllocUtil;
 import org.zkoss.bind.impl.IndirectBinding;
 import org.zkoss.bind.impl.WeakIdentityMap;
@@ -363,25 +364,19 @@ public class TrackerImpl implements Tracker, Serializable {
 			removeBeanMap(node);
 
 			//add into _beanMap
-
-			// comment out the if condition is to support the method expression with parameter for tracker nodes
-			// For example, MODEL$uuid[self.getAttribute("something").getCurrentIndex(self)]
-			// If the returned value of self.getAttribute("something") is an immutable object,
-			// we still need it to be trackable so that the tracker node with getCurrentIndex(self) will be found
-			// when the given seeking object is that retuned by getAttribute("something")
-			//if (!BindELContext.isImmutable(value)) {
-			Set<TrackerNode> nodes = _beanMap.get(value);
-			//ZK-2289
-			final Set<TrackerNode> nodes0 = AllocUtil.inst.addLinkedHashSet(nodes, node);
-			if (nodes == null) {
-				_equalBeansMap.put(value);
+			if (value.getClass().getAnnotation(Immutable.class) == null) {
+				Set<TrackerNode> nodes = _beanMap.get(value);
+				//ZK-2289
+				final Set<TrackerNode> nodes0 = AllocUtil.inst.addLinkedHashSet(nodes, node);
+				if (nodes == null) {
+					_equalBeansMap.put(value);
+				}
+				if (nodes != nodes0) { // yes, !=; not !equals
+					_beanMap.put(value, nodes0);
+				}
+				//only when value is not a primitive that we shall store it
+				node.setBean(value);
 			}
-			if (nodes != nodes0) { // yes, !=; not !equals
-				_beanMap.put(value, nodes0);
-			}
-			//only when value is not a primitive that we shall store it
-			node.setBean(value);
-			//}
 		}
 
 		//maybe a head node, try remove it from the nullMap
