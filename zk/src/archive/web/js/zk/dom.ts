@@ -1784,9 +1784,9 @@ jq(el).zk.center(); //same as 'center'
 	 * @return jqzk this object
 	 */
 	undoVParent: function () {
-		var el = this.jq[0];
-		if (el['z_vp'] || el['z_vpagt']) {
-			var p = el['z_vp'],
+		if (this.hasVParent()) {
+			var el = this.jq[0],
+				p = el['z_vp'],
 				agt = el['z_vpagt'],
 				$agt = jq('#' + agt);
 			el['z_vp'] = el['z_vpagt'] = null;
