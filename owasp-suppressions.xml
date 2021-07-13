@@ -6,8 +6,13 @@
         <cve>CVE-2011-4838</cve>
     </suppress>
     <suppress>
-        <notes><![CDATA[jasperreports-6.14.jar: false positive https://github.com/TIBCOSoftware/jasperreports/issues/132]]></notes>
+        <notes><![CDATA[jasperreports.jar: false positive https://github.com/TIBCOSoftware/jasperreports/issues/132]]></notes>
         <packageUrl regex="true">^pkg:maven/net\.sf\.jasperreports/jasperreports@.*$</packageUrl>
         <cve>CVE-2020-9410</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[itext 2.1.7 modified version by JasperReports: https://github.com/TIBCOSoftware/jasperreports/issues/5]]></notes>
+        <packageUrl>pkg:maven/com.lowagie/itext@2.1.7.js8</packageUrl>
+        <cve>CVE-2017-9096</cve>
     </suppress>
 </suppressions>

@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>com.google.javascript</groupId>
 			<artifactId>closure-compiler-unshaded</artifactId>
-			<version>v20200426</version>
+			<version>v20210601</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
