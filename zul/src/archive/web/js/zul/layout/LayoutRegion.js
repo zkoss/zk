@@ -987,7 +987,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						' ', this.getIconClass_(), '"');
 				if (!this._collapsible || !this._closable)
 					out.push(' style="display:none;"');
-				out.push(' aria-hidden="true"></i>');
+				out.push('></i>');
 			}
 			out.push(zUtl.encodeXML(this._title), '</div>');
 		}

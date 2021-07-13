@@ -64,5 +64,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<groupbox title="groupbox (focus textbox and press ENTER)">
 			<textbox ca:aria-label="textbox"/>
 		</groupbox>
+
+		<groupbox closable="true">
+			<caption>Groupbox: Caption Nested Interactive (ZK-4950)<button label="b1"/></caption>
+			Hello world
+		</groupbox>
 	</n:main>
 </zk>
