@@ -14,13 +14,13 @@ borderlayout.zul
 Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 
 -->
-<zk xmlns:n="native" xmlns:ca="client/attribute">
+<zk xmlns:n="native">
 	<n:header>
 		<n:h1>Borderlayout</n:h1>
 	</n:header>
 	<n:main>
 		<style>
-			.z-borderlayout div:focus {
+			.z-borderlayout :focus {
 				border: 1px solid red;
 			}
 		</style>
@@ -84,6 +84,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			<west width="200px" splittable="true" collapsible="true"></west>
 			<center></center>
 			<east width="200px" splittable="true" collapsible="true"></east>
+		</borderlayout>
+		<borderlayout height="400px" width="500px">
+			<west width="200px" splittable="true" collapsible="true">
+				<caption>ZK-4950<button label="b1"/></caption>
+			</west>
+			<center/>
 		</borderlayout>
 	</n:main>
 </zk>
