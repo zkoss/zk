@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4938.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Jul 12 16:28:00 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Test on a real ios device:
+		1. enable Auto-Correction and predictive text, see https://support.apple.com/en-us/HT207525
+		2. type "A" on the first textbox, then select a predictive text(e.g. "And")
+		3. after step 2, the value of second textbox shall be same as the first textbox.
+	</label>
+	<grid width="100%">
+		<rows>
+			<row>onChanging textbox: <textbox id="t1" onChanging="copy.value = event.value" /></row>
+			<row>Instant copy: <textbox id="copy" readonly="true"/></row>
+		</rows>
+	</grid>
+</zk>

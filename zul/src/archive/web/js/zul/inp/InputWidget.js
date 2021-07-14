@@ -889,6 +889,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (wgt && !zk.chrome && !wgt._lastKeyDown && zk.currentFocus != wgt)
 				wgt.doBlur_(evt); //fire onBlur again
 		}, 10);
+		// ZK-4938: fire an onChanging event when users enter a predictive text
+		this._updateValue();
 	},
 	resetSize_: function (orient) {
 		var n;
@@ -920,30 +922,19 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return;
 		}
 
-		this.$class._stopOnChanging(this); //wait for key up
+		this.$class._stopOnChanging(this); // wait for onInput
 
 		this.$supers('doKeyDown_', arguments);
 	},
-	doKeyUp_: function () {
-		this._updateValue();
-		this.$supers('doKeyUp_', arguments);
-	},
-	doPaste_: function (event) {
-		this._updateValue(event);
-		this.$supers('doPaste_', arguments);
-	},
-	_updateValue: function (pasteEvent) {
+	_updateValue: function () {
 		//Support maxlength for Textarea
 		if (this.isMultiline()) {
 			var maxlen = this._maxlength;
 			if (maxlen > 0) {
 				var inp = this.getInputNode(),
-					clipboardEvent = pasteEvent ? pasteEvent.domEvent.originalEvent : null,
-					val = clipboardEvent ? clipboardEvent.clipboardData.getData('text') : inp.value;
+					val = inp.value;
 				if (val != this._defRawVal && val.length > maxlen) {
 					inp.value = val.substring(0, maxlen);
-					if (pasteEvent)
-						pasteEvent.stop();
 				}
 			}
 		}
