@@ -20,7 +20,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		4. draw and click save button in the toolbar.
 		5. for signature1, both the drawing and background should be saved.
 		6. for signature2, only the drawing should be saved(background image should not be saved).
-		7. click set backgroundColor null button, signature2 background color should be black.
+		7. click set backgroundColor null button, signature2 background color should be white.
 	</label>
 	<zscript><![CDATA[
 		void setBackgroundColorNull() {
@@ -40,7 +40,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		4. click the clear image button.
 		5. click frame button to set background image, draw on the signature.
 		6. click the false button and save button in the toolbar, only the drawing should be saved(background image should not be saved).
-		7. click the clear color button, the background color should be black.
+		7. click the clear color button, the background color should be white.
 	</label>
 	<div>set background image:</div>
 	<button label="blue" onClick='signature3.setBackgroundColor("#b3e0ff")'/>
