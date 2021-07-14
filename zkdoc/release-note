@@ -147,6 +147,7 @@ ZK 9.6.0
   ZK-4535: Combobutton toolbar mold has a border
   ZK-4944: zEmbedded doesn't clean client-side object and references on destroy
   ZK-4953: zEmbedded unable load <include> correctly in defer mode
+  ZK-4949: zjq undoVparent may cause error if detached / missing element
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
