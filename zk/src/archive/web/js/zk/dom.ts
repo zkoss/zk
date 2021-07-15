@@ -1973,16 +1973,9 @@ jq(el).css(jq.parseStyle(jq.filterTextStle('width:100px;font-size:10pt')));
 	 * @return jqzk this object
 	 */
 	clearStyles: function () {
-		var n = this.jq[0], st;
-		if (n && (st = n.style))
-			for (var nm in st)
-				if ((!(zk.ie && zk.ie < 11) || nm != 'accelerator')
-				&& st[nm] && typeof st[nm] == 'string')
-					try {
-						st[nm] = '';
-					} catch (e) {
-						zk.debugLog(e.message || e);
-					}
+		var n = this.jq[0];
+		if (n && n.hasAttribute('style'))
+			n.removeAttribute('style');
 		return this;
 	},
 	/** Detaches all child elements and return them as an array.
