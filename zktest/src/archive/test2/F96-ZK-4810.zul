@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4810.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jul 15 10:21:46 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. you shall see the radios in radiogroup(1~4) are not disabled.
+		2. select the "radio2", and click the "toggle radiogroup disabled" button.
+		3. you shall see the radios in radiogroup (1~4) are all disabled.
+		4. click the "add an external radio5" button.
+		5. click the "move radio6 in" button.
+		6. click the "move div in" button.
+		7. you shall see all the radios are disabled.
+		8. click the "toggle disabled radio5" button.
+		9. click the "toggle disabled radio6" button.
+		10. click the "toggle disabled radio7" button.
+		11. you shall see radios5~7 are not disabled.
+		12. click the "remove the external radio5" button.
+		13. click the "move radio6 out" button.
+		14. click the "move div out" button.
+		15. you shall see the radios1~4 are disabled.
+		16. click the "toggle radiogroup disabled" button, you shall see all the radios (1~7) are not disabled.
+	</label>
+	<separator bar="true"/>
+	<label value="without model" />
+	<div id="div1">
+		<radiogroup id="rg">
+			<radio id="radio1" label="radio1" />
+			<radio id="radio2" label="radio2" />
+			<div>
+				<radio id="radio3" label="nested radio3" />
+			</div>
+		</radiogroup>
+		<radio id="radio4" radiogroup="rg" label="external radio4" />
+		<radio id="radio5" label="outside radio5" />
+		<radio id="radio6" label="outside radio6" />
+		<div id="div">
+			<radio id="radio7" label="outside nested radio7" />
+		</div>
+	</div>
+	external moving test:
+	<button id="btn1" label="add an external radio5" onClick="radio5.setRadiogroup(rg)" />
+	<button id="btn2" label="remove the external radio5" onClick="radio5.setRadiogroup(null)" />
+	<button id="btn3" label="toggle disabled radio5" onClick="radio5.setDisabled(!radio5.isDisabled())" />
+	<separator/>
+	child moving test:
+	<button id="btn4" label="move radio6 in" onClick="radio6.setParent(rg)" />
+	<button id="btn5" label="move radio6 out" onClick="radio6.setParent(div1)" />
+	<button id="btn6" label="toggle disabled radio6" onClick="radio6.setDisabled(!radio6.isDisabled())" />
+	<separator/>
+	nested moving test:
+	<button id="btn7" label="move div in" onClick="div.setParent(rg)" />
+	<button id="btn8" label="move div out" onClick="div.setParent(div1)" />
+	<button id="btn9" label="toggle disabled radio7" onClick="radio7.setDisabled(!radio7.isDisabled())" />
+	<separator/>
+	<button id="btn10" label="toggle radiogroup disabled" onClick="rg.setDisabled(!rg.isDisabled())" />
+</zk>

@@ -36,6 +36,7 @@ ZK 9.6.0
   ZK-4273: Colorbox add keyboard support for cancelling
   ZK-4938: Textbox can fire an onChanging event when users enter a predictive text on iPhone
   ZK-4950: Improve accessibility of the buttons in a caption
+  ZK-4810: Radiogroup should offer setDisabled(..)/isDisabled(..), esp. when used with model & renderer
 
 * Bugs
   ZK-4762: listbox with frozen columns cannot show all headers under non-100% zoom level(non-smooth)

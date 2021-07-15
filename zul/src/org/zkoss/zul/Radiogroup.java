@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.sys.ShadowElementsCtrl;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.ForEachStatus;
@@ -55,7 +56,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Radiogroup extends XulElement {
+public class Radiogroup extends XulElement implements Disable {
 	private static final Logger log = LoggerFactory.getLogger(Radiogroup.class);
 
 	private static final String ZUL_RADIOGROUP_ON_INITRENDER = "zul.Radiogroup.ON_INITRENDER";
@@ -68,6 +69,7 @@ public class Radiogroup extends XulElement {
 	private ListModel<?> _model;
 	private RadioRenderer<?> _renderer;
 	private transient ListDataListener _dataListener;
+	private boolean _disabled;
 
 	static {
 		addClientEvent(Radiogroup.class, Events.ON_CHECK, CE_IMPORTANT | CE_REPEAT_IGNORE);
@@ -342,6 +344,8 @@ public class Radiogroup extends XulElement {
 		if (_externs == null)
 			_externs = new LinkedList<Radio>();
 		_externs.add(radio);
+		if (_disabled)
+			radio.setDisabled(true);
 		if (!isRedudant(radio))
 			fixOnAdd(radio, true);
 	}
@@ -361,6 +365,31 @@ public class Radiogroup extends XulElement {
 	 */
 	private String genGroupName() {
 		return Strings.encode(new StringBuffer(16).append("_pg"), System.identityHashCode(this)).toString();
+	}
+	
+	/** Returns whether it is disabled.
+	 * <p>Default: false.
+	 * @since 9.6.0
+	 */
+	public boolean isDisabled() {
+		return _disabled;
+	}
+	
+	/** Sets whether the radiogroup is disabled.
+	 * All the radios belong to this radiogroup will be set to disabled or not disabled as well.
+	 * Notice: Once a radio is added to a disabled radiogroup (including external radio),
+	 * the radio will be set to disabled too.
+	 * @param disabled whether the radiogroup is disabled
+	 * @since 9.6.0
+	 */
+	public void setDisabled(boolean disabled) {
+		if (this._disabled != disabled) {
+			this._disabled = disabled;
+			List<Radio> items = getItems();
+			for (Radio radio : items) {
+				radio.setDisabled(disabled);
+			}
+		}
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
@@ -736,5 +765,22 @@ public class Radiogroup extends XulElement {
 		super.onPageDetached(page);
 		if (_model != null && _dataListener != null)
 			_model.removeListDataListener(_dataListener);
+	}
+
+	@Override
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		if (_disabled) {
+			if (child instanceof Radio) {
+				((Radio) child).setDisabled(true);
+			} else {
+				// ZK-4810: find all nested radio
+				List<Radio> items = new ArrayList<Radio>();
+				getItems0(child, items);
+				for (Radio radio : items) {
+					radio.setDisabled(true);
+				}
+			}
+		}
 	}
 }
