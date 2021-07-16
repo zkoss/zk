@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Menuju field yang error';
 msgzk.PLEASE_WAIT = 'Diproses...';
 
 msgzk.FILE_SIZE = 'Ukuran File: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Failed to load ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'It may be caused by bad traffic. You could reload this page and try again.';

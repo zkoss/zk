@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Menyen a hibás bejegyzéshez';
 msgzk.PLEASE_WAIT = 'Feldolgozás...';
 
 msgzk.FILE_SIZE = 'Fajl mérete: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Betöltés nem sikerült ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Rosz kapcsolat okozhatta. Próbáljan újra letölteni az oldalt.';

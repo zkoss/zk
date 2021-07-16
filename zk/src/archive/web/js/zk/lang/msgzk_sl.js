@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Pojdite na napačno polje';
 msgzk.PLEASE_WAIT = 'Procesiram...';
 
 msgzk.FILE_SIZE = 'Velikost datoteke: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Failed to load ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'It may be caused by bad traffic. You could reload this page and try again.';

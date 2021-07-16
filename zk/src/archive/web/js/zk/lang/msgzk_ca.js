@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Aneu al camp erroni';
 msgzk.PLEASE_WAIT = "S'està processant...";
 
 msgzk.FILE_SIZE = "Mida de l'arxiu: ";
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Ha fallat la càrrega ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Pot haver estat provocat pel mal trànsit de les comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.';

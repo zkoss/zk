@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Jdi na pole s chybou';
 msgzk.PLEASE_WAIT = 'Pracuji...';
 
 msgzk.FILE_SIZE = 'Velikost souboru: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Chyba při nahrávání ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Chyba může být způsobena špatným připojením, zkuste obnovit stránku';

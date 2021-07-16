@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Yanlış alana gidildi';
 msgzk.PLEASE_WAIT = 'Bekleyiniz...';
 
 msgzk.FILE_SIZE = 'Dosya boyu: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Yükleme başarısız: ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Yoğunluktan kaynaklı problem oluşştu.Lütfen yeniden deneyiniz.';

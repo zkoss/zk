@@ -156,6 +156,7 @@ ZK 9.6.0
   ZK-4892: Binding annotation @Immutable not working properly
   ZK-4908: Navbar autoclose not working if the navitem is already selected
   ZK-4939: zk built-in icons have inconsistent size by default
+  ZK-4856: undefined msgzk properties is used
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.

@@ -27,8 +27,11 @@ msgzk.PLEASE_WAIT = 'Đang xử lý...';
 
 
 msgzk.FILE_SIZE = 'Kích thước tập tin: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Không thể tải ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Nguyên nhân có thể do thiếu băng thông. Bạn hãy thử lại bằng cách tải lại trang này.';

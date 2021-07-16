@@ -26,8 +26,11 @@ msgzk = {
 	PLEASE_WAIT: '处理中，请稍候…',
 
 	FILE_SIZE: '文件大小：',
+	BYTES: 'B',
 	KBYTES: 'KB',
 	MBYTES: 'MB',
+	GBYTES: 'GB',
+	TBYTES: 'TB',
 
 	FAILED_TO_LOAD: '无法载入：',
 	FAILED_TO_LOAD_DETAIL: '可能是连线问题，请按重载再试一次。',

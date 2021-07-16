@@ -26,9 +26,12 @@ msgzk = {
 	PLEASE_WAIT: 'Arbejder...',
  
 	FILE_SIZE: 'Filstørrelse: ',
+	BYTES: 'B',
 	KBYTES: 'KB',
 	MBYTES: 'MB',
- 
+	GBYTES: 'GB',
+	TBYTES: 'TB',
+
 	FAILED_TO_LOAD: 'Kunne ikke indlæse ',
 	FAILED_TO_LOAD_DETAIL: 'Det kan være forårsaget af trafik. Genindlæs denne side og prøv igen.',
 	CAUSE: 'Årsag: ',

@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Selectaţi câmpul greşit';
 msgzk.PLEASE_WAIT = 'Se procesează...';
 
 msgzk.FILE_SIZE = 'Dimensiune fişier: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Eşuare la încărcare ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Poate fi cauzat de traficul anevoios. Puteţi reîncărca această pagină şi încerca din nou.';
