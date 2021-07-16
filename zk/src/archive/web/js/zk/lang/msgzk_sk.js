@@ -27,8 +27,11 @@ msgzk.GOTO_ERROR_FIELD = 'Choď na pole s chybou';
 msgzk.PLEASE_WAIT = 'Pracujem...';
 
 msgzk.FILE_SIZE = 'Veľkosť súboru: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Chyba pri nahrávaní ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Chyba môže byť spôsobená zlým pripojením, skúste obnoviť stránku';

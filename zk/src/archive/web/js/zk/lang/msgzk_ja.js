@@ -27,8 +27,11 @@ msgzk = {
 	PLEASE_WAIT: 'ただいま処理しています',
 
 	FILE_SIZE: 'ファイルサイズ: ',
+	BYTES: 'B',
 	KBYTES: 'KB',
 	MBYTES: 'MB',
+	GBYTES: 'GB',
+	TBYTES: 'TB',
 
 	FAILED_TO_LOAD: '読み込みに失敗しました: ',
 	FAILED_TO_LOAD_DETAIL: '接続に問題がある可能性があります。リロードしてから再度操作してください。',

@@ -16,8 +16,11 @@ msgzk.GOTO_ERROR_FIELD = 'اذهب الى مكان الخطأ';
 msgzk.PLEASE_WAIT = 'من فضلك الأنتظار ...';
 
 msgzk.FILE_SIZE = 'حجم الملف : ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'كيلو بايت ';
 msgzk.MBYTES = 'ميغا بايت ';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'فشل فى التحميل  ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'فشل فى تحميل تفاصيل البيانات.';

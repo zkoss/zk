@@ -26,8 +26,11 @@ msgzk = {
 	PLEASE_WAIT: 'Verarbeitung...',
 
 	FILE_SIZE: 'Dateigröße: ',
+	BYTES: 'B',
 	KBYTES: 'KB',
 	MBYTES: 'MB',
+	GBYTES: 'GB',
+	TBYTES: 'TB',
 
 	FAILED_TO_LOAD: 'Fehler beim Laden ',
 	FAILED_TO_LOAD_DETAIL: 'Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.',

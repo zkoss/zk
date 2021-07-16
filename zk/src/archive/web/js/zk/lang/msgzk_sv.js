@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Gå till felaktigt fält';
 msgzk.PLEASE_WAIT = 'Arbetar...';
 
 msgzk.FILE_SIZE = 'Filstorlek: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Uppladdning misslyckades ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Kan ha orsakats av trafikstörning. Ladda om denna sida och försök igen.';

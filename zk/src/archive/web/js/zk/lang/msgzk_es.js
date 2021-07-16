@@ -26,8 +26,11 @@ msgzk.GOTO_ERROR_FIELD = 'Ir al campo que contiene el error ';
 msgzk.PLEASE_WAIT = 'Procesando...';
 
 msgzk.FILE_SIZE = 'Tamaño del archivo: ';
+msgzk.BYTES = 'B';
 msgzk.KBYTES = 'KB';
 msgzk.MBYTES = 'MB';
+msgzk.GBYTES = 'GB';
+msgzk.TBYTES = 'TB';
 
 msgzk.FAILED_TO_LOAD = 'Fallo al cargar ';
 msgzk.FAILED_TO_LOAD_DETAIL = 'Puede ser a causa de un tráfico erroneo. Podria refrescar de nuevo la página.';

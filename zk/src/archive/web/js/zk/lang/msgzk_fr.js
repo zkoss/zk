@@ -27,8 +27,11 @@ msgzk = {
 	PLEASE_WAIT: 'Chargement...',
 
 	FILE_SIZE: 'Taille du fichier: ',
+	BYTES: 'B',
 	KBYTES: 'KB',
 	MBYTES: 'MB',
+	GBYTES: 'GB',
+	TBYTES: 'TB',
 
 	FAILED_TO_LOAD: 'Erreur de chargement ',
 	FAILED_TO_LOAD_DETAIL: 'Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.',
