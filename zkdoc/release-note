@@ -154,6 +154,7 @@ ZK 9.6.0
   ZK-4868: signature background color should be white while setBackgroundColor(null)
   ZK-4880: zjq.clearStyles performance
   ZK-4892: Binding annotation @Immutable not working properly
+  ZK-4908: Navbar autoclose not working if the navitem is already selected
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
