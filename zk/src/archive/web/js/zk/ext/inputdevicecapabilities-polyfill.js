@@ -161,7 +161,7 @@
         value: null,
         writable: false
       });
-      return evt;
     }
+    return evt; // Potix: fix iOS document.createEvent("Event") returns undefined
   };
 })(this);
