@@ -18,6 +18,80 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 		In tablet, the frozen should work as expected.
 	</label>
 	<grid width="800px">
+		<frozen columns="2" />
+		<columns sizable="true">
+			<column width="300px" label="Name" />
+			<column width="200px" label="Anfangsbuchstabe" />
+			<column width="200px" label="Abteilung" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+			<column width="190px" />
+		</columns>
+		<rows>
+			<row>
+				<cell>
+					<label value="person 1" />
+				</cell>
+				<cell>
+					<label value="abc" />
+				</cell>
+				<cell>
+					<label value="123" />
+				</cell>
+				<cell>
+					<label value="1" />
+				</cell>
+				<cell>
+					<label value="2" />
+				</cell>
+				<cell>
+					<label value="3" />
+				</cell>
+				<cell>
+					<label value="4" />
+				</cell>
+				<cell>
+					<label value="5" />
+				</cell>
+				<cell>
+					<label value="6" />
+				</cell>
+			</row>
+			<row>
+				<cell>
+					<label value="person 1" />
+				</cell>
+				<cell>
+					<label value="abc" />
+				</cell>
+				<cell>
+					<label value="123" />
+				</cell>
+				<cell>
+					<label value="1" />
+				</cell>
+				<cell>
+					<label value="2" />
+				</cell>
+				<cell>
+					<label value="3" />
+				</cell>
+				<cell>
+					<label value="" />
+				</cell>
+				<cell>
+					<label value="" />
+				</cell>
+				<cell>
+					<label value="" />
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	<grid width="800px">
 		<rows>
 			<row>
 				<label value="person 1" />
