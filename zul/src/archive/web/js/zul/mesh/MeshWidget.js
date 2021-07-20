@@ -1395,7 +1395,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	_syncFaker: function () {
 		var head = this.head;
-		if (!head)
+		if (!head || !this.desktop)
 			return;
 
 		var totalCols = head.nChildren,
