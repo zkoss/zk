@@ -610,6 +610,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				this.$supers('doKeyDown_', arguments);
 		}
 	},
+	doKeyUp_: function () {
+		this._updateValue();
+		this.$supers('doKeyUp_', arguments);
+	},
 	doClick_: function (evt) {
 		if (!this._disabled) {
 			if (evt.domTarget == this.getPopupNode_())

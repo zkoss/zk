@@ -847,7 +847,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (zk.ie10_ || zk.ie11_) {
 			var self = this;
 			setTimeout(function () {
-				self.domListen_(n, 'onInput', 'doInput_');
+				self.domListen_(self.getInputNode(), 'onInput', 'doInput_');
 			}, 100);
 		} else {
 			this.domListen_(n, 'onInput', 'doInput_');
