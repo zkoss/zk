@@ -42,5 +42,18 @@ public class B96_ZK_4748Test extends WebDriverTestCase {
 		act.sendKeys(Keys.TAB).perform();
 		waitResponse();
 		Assert.assertFalse(jq(".z-bandbox-open").exists());
+
+		click(jq(".z-bandbox-button:eq(2)"));
+		waitResponse();
+		click(jq("@treecell:contains(level 1)"));
+		waitResponse();
+		click(jq(".z-tree-icon"));
+		waitResponse();
+		Assert.assertTrue(jq("@treecell:contains(level 2)").isVisible());
+		Assert.assertTrue(jq(".z-bandbox-open").exists());
+
+		act.sendKeys(Keys.TAB).perform();
+		waitResponse();
+		Assert.assertFalse(jq(".z-bandbox-open").exists());
 	}
 }

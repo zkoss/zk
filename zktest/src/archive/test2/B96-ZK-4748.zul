@@ -38,4 +38,29 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 			</listbox>
 		</bandpopup>
 	</bandbox>
+	<separator/>
+	6. Please click upon the magnifier icon and the icon before "level 1", you should see "level 2" item are shown.
+	<separator/>
+	7. Press the TAB key, you should see the popup is closed.
+	<separator/>
+	<bandbox>
+		<bandpopup>
+			<tree width="100%" style="border:0px;" height="100%">
+				<treechildren>
+					<treeitem open="false">
+						<treerow>
+							<treecell label="level 1" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="level 2" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</tree>
+		</bandpopup>
+	</bandbox>
 </zk>
