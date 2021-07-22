@@ -19,9 +19,13 @@ import java.util.Optional;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.HasTouchScreen;
+import org.openqa.selenium.interactions.TouchScreen;
+import org.openqa.selenium.remote.HttpCommandExecutor;
+import org.openqa.selenium.remote.RemoteTouchScreen;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +34,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author rudyhuang
  */
-public class ChromiumHeadlessDriver extends ChromeDriver {
+public class ChromiumHeadlessDriver extends RemoteWebDriver implements HasTouchScreen {
 	private static final Logger LOG = LoggerFactory.getLogger(ChromiumHeadlessDriver.class);
 	private static final String CHROME_DRIVER_VERSION = "91.0.4472.19";
 	private static final int CHROMIUM_BINARY_REVISION = 869685; // from puppeteer v9.0.0 Chromium 91.0.4469.0 (r869685)
@@ -40,6 +44,8 @@ public class ChromiumHeadlessDriver extends ChromeDriver {
 		System.setProperty("webdriver.chrome.logfile", String.format("%s/chromedriver.log", System.getProperty("java.io.tmpdir")));
 		System.setProperty("webdriver.chrome.verboseLogging", "true");
 	}
+
+	private final TouchScreen touchScreen;
 
 	public ChromiumHeadlessDriver() {
 		this(true);
@@ -54,32 +60,16 @@ public class ChromiumHeadlessDriver extends ChromeDriver {
 	}
 
 	public ChromiumHeadlessDriver(ChromeOptions options, boolean headless) {
-		super(headlessSettings(options, headless));
-	}
-
-	public ChromiumHeadlessDriver(ChromeDriverService service) {
-		this(service, new ChromeOptions());
-	}
-
-	public ChromiumHeadlessDriver(ChromeDriverService service, ChromeOptions options) {
-		this(service, options, true);
-	}
-
-	public ChromiumHeadlessDriver(ChromeDriverService service, ChromeOptions options, boolean headless) {
-		super(service, headlessSettings(options, headless));
+		this(headlessSettings(options, headless));
 	}
 
 	@Deprecated
 	public ChromiumHeadlessDriver(Capabilities capabilities) {
-		super(capabilities);
+		super(new HttpCommandExecutor(ChromiumHeadlessDriver.getChromeDriverServiceInstance().getUrl()), capabilities);
+		touchScreen = new RemoteTouchScreen(getExecuteMethod());
 	}
 
-	@Deprecated
-	public ChromiumHeadlessDriver(ChromeDriverService service, Capabilities capabilities) {
-		super(service, capabilities);
-	}
-
-	private static ChromeOptions headlessSettings(ChromeOptions options, boolean headless) {
+	private static Capabilities headlessSettings(ChromeOptions options, boolean headless) {
 		ChromiumFetcher fetcher = new ChromiumFetcher();
 		Optional<String> binaryPath = getBinaryPathIfReady(fetcher);
 		if (!binaryPath.isPresent()) {
@@ -117,5 +107,29 @@ public class ChromiumHeadlessDriver extends ChromeDriver {
 
 		LOG.info("Try downloading Chromium binary zip (revision {}).", CHROMIUM_BINARY_REVISION);
 		fetcher.download(CHROMIUM_BINARY_REVISION);
+	}
+
+	@Override
+	public TouchScreen getTouch() {
+		return touchScreen;
+	}
+
+	public static ChromeDriverService getChromeDriverServiceInstance() {
+		final ChromeDriverService service = Holder.SERVICE;
+		if (!service.isRunning()) {
+			try {
+				service.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return service;
+	}
+
+	private static class Holder {
+		static final ChromeDriverService SERVICE = ChromeDriverService.createDefaultService();
+		static {
+			Runtime.getRuntime().addShutdownHook(new Thread(SERVICE::stop));
+		}
 	}
 }
