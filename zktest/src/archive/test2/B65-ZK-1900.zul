@@ -16,8 +16,8 @@
 		ListModel model = ListModels.toListSubModel(
 				new ListModelList(list), new ItemComparator(), 10);
 	]]></zscript>
-	When scroll combobox to the bottom and type "01", the dropdown should apears above it and have no blank. 
-	<div height="900px"></div>
+	When scroll combobox to the bottom and type "01", the dropdown should appear above it and have no blank.
+	<div height="150vh"/>
 	<combobox model="${model}" 
 		autodrop="true" autocomplete="false">
 	</combobox>
