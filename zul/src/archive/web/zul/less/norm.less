@@ -309,12 +309,18 @@ input[type="checkbox"] {
 
 .z-temp,
 .z-modal-mask {
-	.size(100%, 100vh);
+	.size(100%, 100%);
 	background: @maskBackgroundColor;
 	.opacity(0.6);
 	position: fixed;
 	top: 0;
 	left: 0;
+}
+.mobile {
+	.z-temp,
+	.z-modal-mask {
+		min-height: 100vh; // ZK-4483
+	}
 }
 
 .z-initing {
