@@ -14,11 +14,18 @@
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<ckez.version>4.14.0.0</ckez.version>
 		<gmapsz.version>3.1.0</gmapsz.version>
+		<jasperreports.version>6.17.0</jasperreports.version>
 		<timelinez.version>2.3.1_50</timelinez.version>
 		<timeplotz.version>1.1_50</timeplotz.version>
 		<zuljsp.version>1.4.1</zuljsp.version>
 	</properties>
 	<packaging>war</packaging>
+	<repositories>
+		<repository>
+			<id>jaspersoft-third-party</id>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -143,6 +150,11 @@
 			<artifactId>bsh</artifactId>
 			<version>${bsh.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>${jasperreports.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
