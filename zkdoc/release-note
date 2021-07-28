@@ -158,6 +158,7 @@ ZK 9.6.0
   ZK-4939: zk built-in icons have inconsistent size by default
   ZK-4856: undefined msgzk properties is used
   ZK-4979: The onRightClick event was triggered on a disabled Button since Chrome 92
+  ZK-4977: Triggering @MatchMedia by immediate resizing is not working in Desktop since Chrome 92
 
 * Upgrade Notes
   + The default desktop ID generator was replaced by a more secured one.
