@@ -37,8 +37,9 @@ zul.inp.Bandpopup = zk.$extends(zul.Widget, {
 	},
 	_focusout: function (e) {
 		var bandbox = this.parent,
-			self = this;
-		self._shallClosePopup = true;
+			self = this,
+			pp = bandbox && bandbox.$n('pp');
+		self._shallClosePopup = pp != null && e.relatedTarget != pp;
 		setTimeout(function () {
 			if (bandbox && bandbox.isOpen() && self._shallClosePopup) {
 				bandbox.close();
