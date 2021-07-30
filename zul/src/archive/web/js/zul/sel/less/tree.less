@@ -64,9 +64,7 @@
 		background: transparent no-repeat center;
 		.encodeThemeURL(background-image, @loadingAnimationLoad);
 	}
-}
-//tree open icon and indent space
-.z-tree {
+	//tree open icon and indent space
 	&-icon,
 	&-line {
 		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
@@ -78,6 +76,29 @@
 		text-align: center;
 		cursor: pointer;
 	}
+}
+//content
+.z-treecol-content,
+.z-treecell-content,
+.z-treefooter-content {
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
+	padding: @meshBodyPadding;
+	line-height: @meshContentLineHeight;
+	overflow: hidden;
+}
+.z-treecol-content {
+	color: @meshTitleColor;
+	position: relative;
+}
+.z-treecell-content {
+	line-height: @treecellContentLineHeight;
+}
+.z-treefooter-content {
+	color: @textColorLight;
+}
+.z-treecell-text {
+	vertical-align: middle;
+	margin-left: 8px;
 }
 //treecols
 .z-treecols {
@@ -139,6 +160,25 @@
 		}
 	}
 }
+//paging
+.z-tree-paging {
+	&-top {
+		border-bottom: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+}
+.z-tree-autopaging .z-treecell-content {
+	height: @meshAutoPagingRowHeight;
+	padding: @meshAutoPagingRowPadding;
+	line-height: @meshAutoPagingRowLineHeight;
+	overflow: hidden;
+}
 // ZK-2151: use strict selector to prevent nest problem
 //tree row and cell
 .z-treerow {
@@ -150,6 +190,15 @@
 		background: @meshBackgroundColor;
 		position: relative;
 		z-index: 0;
+	}
+
+	&-focus {
+		> .z-treecell {
+			background: @meshContentFocusBackgroundColor;
+			> .z-treecell-content {
+				color: @hoverColor;
+			}
+		}
 	}
 
 	&:hover {
@@ -214,14 +263,6 @@
 			}
 		}
 	}
-	&-focus {
-		> .z-treecell {
-			background: @meshContentFocusBackgroundColor;
-			> .z-treecell-content {
-				color: @hoverColor;
-			}
-		}
-	}
 	//selected check mark
 	&-selected {
 		> .z-treecell > .z-treecell-content 
@@ -254,48 +295,6 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
-//content
-.z-treecol-content,
-.z-treecell-content,
-.z-treefooter-content {
-	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
-	padding: @meshBodyPadding;
-	line-height: @meshContentLineHeight;
-	overflow: hidden;
-}
-.z-treecol-content {
-	color: @meshTitleColor;
-	position: relative;
-}
-.z-treecell-content {
-	line-height: @treecellContentLineHeight;
-}
-.z-treefooter-content {
-	color: @textColorLight;
-}
-.z-treecell-text {
-	vertical-align: middle;
-	margin-left: 8px;
-}
-//paging
-.z-tree-paging {
-	&-top {
-		border-bottom: 1px solid @pagingBorderColor;
-		overflow: hidden;
-		width: 100%;
-	}
-	&-bottom {
-		border-top: 1px solid @pagingBorderColor;
-		overflow: hidden;
-		width: 100%;
-	}
-}
-.z-tree-autopaging .z-treecell-content {
-	height: @meshAutoPagingRowHeight;
-	padding: @meshAutoPagingRowPadding;
-	line-height: @meshAutoPagingRowLineHeight;
-	overflow: hidden;
-}
 
 .ie9 {
 	.z-tree-body {
@@ -303,6 +302,7 @@
 	}
 
 	.z-treerow {
+		/* stylelint-disable-next-line no-descending-specificity */
 		.z-treecell {
 			position: static;
 			z-index: auto;
