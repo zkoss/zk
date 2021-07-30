@@ -37,6 +37,27 @@
 	}
 }
 
+.z-west,
+.z-west-collapsed,
+.z-west-splitter {
+	z-index: 12;
+}
+.z-east,
+.z-east-collapsed,
+.z-east-splitter {
+	z-index: 10;
+}
+.z-north,
+.z-north-collapsed,
+.z-north-splitter  {
+	z-index: 16;
+}
+.z-south,
+.z-south-collapsed,
+.z-south-splitter {
+	z-index: 14;
+}
+
 .z-north,
 .z-south,
 .z-west,
@@ -75,15 +96,14 @@
 		position: absolute;
 		overflow: hidden;
 	 	cursor: pointer; // ios issue
+		 .z-borderlayout-icon {
+			color: extract(@borderlayoutCollapsedIconColors, 1);
+		}
 		&:hover {
 			background: @hoverBackgroundColor;
 			.z-borderlayout-icon {
 				color: extract(@borderlayoutCollapsedIconColors, 2);
 			}
-		}
-
-		.z-borderlayout-icon {
-			color: extract(@borderlayoutCollapsedIconColors, 1);
 		}
 	}
 
@@ -120,30 +140,32 @@
 .z-west,
 .z-east {
 	height: 100%; // Fixed for B30-1902533.zul
+	&-title {
+		.transform('rotate(90deg)');
+		.applyCSS3('transform-origin', 'left bottom');
+	}
 }
 
-.z-west,
-.z-west-collapsed,
-.z-west-splitter {
-	z-index: 12;
-}
 .z-center {
 	z-index: 8;
 }
-.z-east,
-.z-east-collapsed,
-.z-east-splitter {
-	z-index: 10;
-}
-.z-north,
-.z-north-collapsed,
-.z-north-splitter  {
-	z-index: 16;
-}
-.z-south,
-.z-south-collapsed,
+
+.z-north-splitter,
 .z-south-splitter {
-	z-index: 14;
+	border-left: 1px solid @splitterBorderColor;
+	border-right: 1px solid @splitterBorderColor;
+	cursor: ns-resize;
+}
+
+.z-west-splitter-button,
+.z-east-splitter-button {
+	.size(@splitterSize, 30px);
+	border-width: 1px 0;
+}
+.z-north-splitter-button,
+.z-south-splitter-button {
+	.size(30px, @splitterSize);
+	border-width: 0 1px;
 }
 
 .z-east,
@@ -157,6 +179,15 @@
 		overflow: hidden;
 		cursor: ew-resize;
 
+		// splitter-button
+		&-button {
+			color: extract(@splitterButtonTextColors, 1);
+			display: inline-block;
+			vertical-align: top;// vertical-align: make it looks same in diff browsers
+			position: relative;
+			cursor: pointer;
+		}
+
 		&:hover {
 			background-color: @splitterHoverBackgroundColor;
 			.z-east-splitter-button,
@@ -166,15 +197,6 @@
 				color: extract(@splitterButtonTextColors, 2);
 			}
 		}
-
-		// splitter-button
-		&-button {
-			color: extract(@splitterButtonTextColors, 1);
-			display: inline-block;
-			vertical-align: top;// vertical-align: make it looks same in diff browsers
-			position: relative;
-			cursor: pointer;
-		}
 	}
 
 	&-icon {
@@ -182,12 +204,14 @@
 		line-height: @baseLineHeight;
 		position: absolute;
 	}
-}
-.z-north-splitter,
-.z-south-splitter {
-	border-left: 1px solid @splitterBorderColor;
-	border-right: 1px solid @splitterBorderColor;
-	cursor: ns-resize;
+
+	&-title {
+		.fontStyle(@baseTitleFontFamily, @borderlayoutHeaderFontSize, normal, @borderlayoutHeaderColor);
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		line-height: @baseButtonHeight;
+	}
 }
 
 .z-north-splitter-button-disabled .z-icon-caret-up,
@@ -237,43 +261,6 @@
 	visibility: hidden;
 }
 
-.z-north-icon.z-icon-ellipsis-h ~ .z-north-icon.z-icon-ellipsis-h,
-.z-south-icon.z-icon-ellipsis-h ~ .z-south-icon.z-icon-ellipsis-h {
-	left: 40px;
-}
-
-.z-west-splitter-button,
-.z-east-splitter-button {
-	.size(@splitterSize, 30px);
-	border-width: 1px 0;
-}
-.z-north-splitter-button,
-.z-south-splitter-button {
-	.size(30px, @splitterSize);
-	border-width: 0 1px;
-}
-
-.z-north,
-.z-south,
-.z-west,
-.z-east {
-	&-title {
-		.fontStyle(@baseTitleFontFamily, @borderlayoutHeaderFontSize, normal, @borderlayoutHeaderColor);
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		overflow: hidden;
-		line-height: @baseButtonHeight;
-	}
-}
-
-.z-west,
-.z-east {
-	&-title {
-		.transform('rotate(90deg)');
-		.applyCSS3('transform-origin', 'left bottom');
-	}
-}
-
 .ie9 {
 	.z-north-splitter,
 	.z-south-splitter {
@@ -299,4 +286,9 @@
 	.z-east-splitter-button-disabled {
 		cursor: col-resize;
 	}
+}
+
+.z-north-icon.z-icon-ellipsis-h ~ .z-north-icon.z-icon-ellipsis-h,
+.z-south-icon.z-icon-ellipsis-h ~ .z-south-icon.z-icon-ellipsis-h {
+	left: 40px;
 }

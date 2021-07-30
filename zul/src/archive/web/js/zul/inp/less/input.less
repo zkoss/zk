@@ -13,6 +13,25 @@
 	line-height: @inputLineHeight;
 	background: @inputBackgroundColor;
 
+	// Placeholder
+	&::-webkit-input-placeholder {
+		color: @inputPlaceholderColor;
+	}
+	&::-moz-placeholder {
+		/* FF 19+ */
+		color: @inputPlaceholderColor;
+		opacity: 1;
+	}
+	&:-moz-placeholder {
+		/* FF 4-18 */
+		color: @inputPlaceholderColor;
+		opacity: 1;
+	}
+	&:-ms-input-placeholder {
+		/* IE 10+ */
+		color: @inputPlaceholderColor;
+	}
+	
 	&:hover {
 		border-color: @inputHoverBorderColor;
 	}
@@ -52,25 +71,6 @@
 		&:hover {
 			border-color: transparent;
 		}
-	}
-
-	// Placeholder
-	&::-webkit-input-placeholder {
-		color: @inputPlaceholderColor;
-	}
-	&:-moz-placeholder {
-		/* FF 4-18 */
-		color: @inputPlaceholderColor;
-		opacity: 1;
-	}
-	&::-moz-placeholder {
-		/* FF 19+ */
-		color: @inputPlaceholderColor;
-		opacity: 1;
-	}
-	&:-ms-input-placeholder {
-		/* IE 10+ */
-		color: @inputPlaceholderColor;
 	}
 }
 // multi-line
@@ -146,7 +146,12 @@ textarea.z-textbox {
 	top: 10px;
 	right: 8px;
 	cursor: pointer;
+	.opacity(0.6);
+	&:hover {
+		.opacity(1);
+	}
 }
+/* stylelint-disable-next-line no-descending-specificity */
 .z-errorbox-icon {
 	position: absolute;
 	top: @errorboxIconPositionTop;
@@ -156,11 +161,4 @@ textarea.z-textbox {
 }
 .z-errorbox-up ~ .z-errorbox-close {
 	top: 17px;
-}
-
-.z-errorbox-close {
-	.opacity(0.6);
-	&:hover {
-		.opacity(1);
-	}
 }
