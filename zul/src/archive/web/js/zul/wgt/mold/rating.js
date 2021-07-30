@@ -16,7 +16,7 @@ function (out) {
 
 	out.push('<div', this.domAttrs_(), ' role="slider">');
 	for (var i = 0; i < this._max; i++) {
-		out.push('<a href="javascript:;" class="', this.$s('icon'), ' ', sclass ? sclass : 'z-icon-star');
+		out.push('<i class="', this.$s('icon'), ' ', sclass ? sclass : 'z-icon-star');
 		if (isVert) {
 			if (this._max - 1 - i < this._rating)
 				out.push(' ', this.$s('selected'));
@@ -28,7 +28,7 @@ function (out) {
 			out.push(' ', this.$s('disabled'));
 		if (this._readonly)
 			out.push(' ', this.$s('readonly'));
-		out.push('" aria-hidden="true" tabindex="-1"></a>');
+		out.push('" aria-hidden="true"></i>');
 	}
 	out.push('</div>');
 

@@ -27,7 +27,7 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
         <hlayout>
             <vlayout width="300px">
                 Selected date: <label id="d1"/>
-                <calendar tooltiptext="Start date"
+                <calendar ca:aria-label="Start date"
                           weekOfYear="true" showTodayLink="true"
                           todayLinkLabel=""
                           onChange="d1.value=self.valueInLocalDate.toString()" />

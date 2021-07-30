@@ -356,9 +356,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.deque</groupId>
-			<artifactId>axe-selenium</artifactId>
-			<version>3.0</version>
+			<groupId>com.deque.html.axe-core</groupId>
+			<artifactId>selenium</artifactId>
+			<version>4.2.2</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.easymock/easymock -->

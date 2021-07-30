@@ -11,14 +11,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+import java.util.Arrays;
 
-import com.deque.axe.AXE;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.deque.html.axecore.results.Results;
+import com.deque.html.axecore.selenium.AxeBuilder;
+import com.deque.html.axecore.selenium.AxeReporter;
 import org.junit.Assert;
 
 import org.zkoss.zktest.zats.WebDriverTestCase;
@@ -28,17 +25,6 @@ import org.zkoss.zktest.zats.WebDriverTestCase;
  * @author rudyhuang
  */
 public abstract class WcagTestCase extends WebDriverTestCase {
-	private static final URL AXE_SCRIPT_URL = getAxeScriptUrl();
-
-	private static URL getAxeScriptUrl() {
-		URI uri = new File("src/archive/wcag/axe.min.js").toURI();
-		try {
-			return uri.toURL();
-		} catch (MalformedURLException e) {
-			return null;
-		}
-	}
-
 	@Override
 	protected String getFileLocation() {
 		String simple = getClass().getSimpleName();
@@ -53,13 +39,14 @@ public abstract class WcagTestCase extends WebDriverTestCase {
 	 */
 	protected void verifyA11y() {
 		// FIXME: Temporary disabled color-contrast
-		AXE.Builder builder = new AXE.Builder(driver, AXE_SCRIPT_URL)
-				.options("{ runOnly: ['wcag2a', 'wcag2aa'], rules: { 'color-contrast': { enabled: false } } }");
-		JSONObject responseJSON = builder.analyze();
-		JSONArray violations = responseJSON.getJSONArray("violations");
-
-		if (violations.length() != 0) {
-			Assert.fail(AXE.report(violations));
+		AxeBuilder builder = new AxeBuilder()
+				.withTags(Arrays.asList("wcag2a", "wcag2aa"))
+				.disableRules(Arrays.asList("color-contrast"));
+		Results results = builder.analyze(driver);
+		if (!results.violationFree()) {
+			Assert.fail(AxeReporter.getReadableAxeResults("WCAG", driver, results.getViolations())
+					? AxeReporter.getAxeResultString()
+					: null);
 		}
 	}
 }

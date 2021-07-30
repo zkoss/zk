@@ -18,7 +18,7 @@ function (out) {
 	var tbx = this.getTabbox(),
 		uuid = this.uuid,
 		icon = this.$s('icon'),
-		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-times ' + icon + '" aria-label="' + msgzul.PANEL_CLOSE + '"></i>',
+		removeIcon = '<i id="' + uuid + '-cls" class="z-icon-times ' + icon + '" role="button" aria-label="' + msgzul.PANEL_CLOSE + '"></i>',
 		isAccordion = tbx.inAccordionMold(),
 		tag = isAccordion ? 'div' : 'li', 
 		panel = isAccordion ? this.getLinkedPanel() : null,
