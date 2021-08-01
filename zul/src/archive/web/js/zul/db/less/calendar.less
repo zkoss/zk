@@ -51,7 +51,21 @@
 	&-body {
 		height: 100%;
 	}
+	&-cell {
+		font-size: @calendarFontSizeSmall;
+		color: @calendarCellColor;
+		min-width: @calendarCellWidth;
+		height: @calendarCellHeight;
+		line-height: normal;
+		text-align: center;
+		cursor: pointer;
+		.borderRadius(@baseBorderRadius);
 
+		&:hover {
+			color: @calendarCellColor;
+			background: @calendarCellHoverBackgroundColor;
+		}
+	}
 	&-decade,
 	&-month,
 	&-year {
@@ -73,21 +87,6 @@
 			.z-calendar-cell {
 				.size(64px, 44px);
 			}
-		}
-	}
-	&-cell {
-		font-size: @calendarFontSizeSmall;
-		color: @calendarCellColor;
-		min-width: @calendarCellWidth;
-		height: @calendarCellHeight;
-		line-height: normal;
-		text-align: center;
-		cursor: pointer;
-		.borderRadius(@baseBorderRadius);
-
-		&:hover {
-			color: @calendarCellColor;
-			background: @calendarCellHoverBackgroundColor;
 		}
 	}
 	&-weekend {
@@ -203,6 +202,13 @@
 	}
 }
 
+// Calendar and Datebox
+.z-datebox-timezone {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+}
+
 .z-datebox-popup {
 	position: absolute;
 
@@ -217,11 +223,4 @@
 		}
 	}
 
-}
-
-// Calendar and Datebox
-.z-datebox-timezone {
-	font-family: @baseContentFontFamily;
-	font-size: @fontSizeMedium;
-	font-weight: normal;
 }

@@ -91,6 +91,38 @@
 		border-bottom: 1px solid @meshTitleBorderColor;
 	}
 }
+//content
+.z-column-content,
+.z-row-content,
+.z-group-content,
+.z-groupfoot-content,
+.z-footer-content {
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
+	line-height: @meshContentLineHeight;
+	overflow: hidden;
+	padding: @meshBodyPadding;
+}
+.z-column-content {
+	color: @meshTitleColor;
+}
+.z-footer-content {
+	color: @textColorLight;
+}
+.z-group-content {
+	color: @meshGroupColor;
+}
+.z-groupfoot-content {
+	color: @meshGroupFooterColor;
+	padding: @meshBodyPadding;
+	.z-group-open & {
+		color: @meshGroupFooterOpenColor;
+	}
+}
+.z-columns-menupopup .z-column-content {
+	padding-right: 34px;
+	text-overflow: ellipsis;
+}
+
 .z-column {
 	background: @meshTitleBackgroundColor;
 	border-left: 1px solid @meshTitleBorderColor;
@@ -100,6 +132,20 @@
 	overflow: hidden;
 	white-space: nowrap;
 
+	&-button {
+		.iconFontStyle(@fontSizeLarge, @meshTitleColor);
+		display: none;
+		.size(@meshColumnSortButtonWidth, @meshColumnSortButtonHeight);
+		line-height: @meshColumnSortButtonHeight;
+		text-align: center;
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 15;
+		cursor: pointer;
+		text-decoration: none;
+		.boxShadow('inset 1px 0 @{meshTitleBorderColor}');
+	}
 	&-hover {
 		background: @meshTitleHoverBackgroundColor;
 		.z-column-button {
@@ -138,33 +184,74 @@
 			}
 		}
 	}
-	&-button {
-		.iconFontStyle(@fontSizeLarge, @meshTitleColor);
-		display: none;
-		.size(@meshColumnSortButtonWidth, @meshColumnSortButtonHeight);
-		line-height: @meshColumnSortButtonHeight;
-		text-align: center;
-		position: absolute;
-		top: 0;
-		right: 0;
-		z-index: 15;
-		cursor: pointer;
-		text-decoration: none;
-		.boxShadow('inset 1px 0 @{meshTitleBorderColor}');
-	}
 	&-sizing,
 	&-sizing .z-column-button,
 	&-sizing.z-column-sort .z-column-content {
 		cursor: col-resize;
 	}
 }
-
-.z-columns-menupopup .z-column-content {
-	padding-right: 34px;
-	text-overflow: ellipsis;
+.z-grid-autopaging {
+	.z-row-content,
+	.z-groupfoot-content {
+		height: @meshAutoPagingRowHeight;
+		padding: @meshAutoPagingRowPadding;
+		line-height: @meshAutoPagingRowLineHeight;
+		overflow: hidden;
+	}
+	.z-group-content {
+		height: @meshAutoPagingRowHeight;
+		padding: @meshAutoPagingRowPadding;
+		line-height: @meshAutoPagingRowLineHeight;
+		overflow: hidden;
+	}
 }
-
+//Group
+.z-group {
+	&-inner {
+		border-top: 1px solid @meshContentBorderColor;
+		border-bottom: 1px solid @meshGroupBorderColor;
+		background: @meshGroupBackgroundColor;
+		position: relative;
+		overflow: hidden;
+		
+		.z-group-content,
+		.z-cell {
+			padding: @meshBodyPadding;
+		}
+	}
+	&-icon {
+		.iconFontStyle(@fontSizeMedium, @meshGroupColor);
+		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
+		line-height: @baseIconHeight;
+		text-align: center;
+		position: relative;
+		cursor: pointer;
+		margin-right: 8px;
+	}
+	&&-open &-inner {
+		background: @meshGroupOpenBackgroundColor;
+		border-bottom: @meshGroupOpenBorder;
+		& .z-group-icon,
+		& .z-group-content {
+			color: @meshGroupOpenColor;
+		}
+	}
+}
+.z-groupfoot-inner {
+	border-top: 1px solid @meshContentBorderColor;
+	background: @meshGroupFooterBackgroundColor;
+	overflow: hidden;
+}
 //row and cell
+//Cell Content
+.z-grid-body .z-cell {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	color: @baseTextColor;
+	padding: @meshBodyPadding;
+	line-height: @baseButtonHeight;
+	overflow: hidden;
+}
 .z-row {
 	.z-row-inner,
 	.z-cell {
@@ -183,80 +270,6 @@
 		}
 	}
 }
-//Group
-.z-group {
-	&-inner {
-		border-top: 1px solid @meshContentBorderColor;
-		border-bottom: 1px solid @meshGroupBorderColor;
-		background: @meshGroupBackgroundColor;
-		position: relative;
-		overflow: hidden;
-		
-		.z-group-content,
-		.z-cell {
-			padding: @meshBodyPadding;
-		}
-	}
-	&&-open &-inner {
-		background: @meshGroupOpenBackgroundColor;
-		border-bottom: @meshGroupOpenBorder;
-		& .z-group-icon,
-		& .z-group-content {
-			color: @meshGroupOpenColor;
-		}
-	}
-	&-icon {
-		.iconFontStyle(@fontSizeMedium, @meshGroupColor);
-		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
-		line-height: @baseIconHeight;
-		text-align: center;
-		position: relative;
-		cursor: pointer;
-		margin-right: 8px;
-	}
-}
-.z-groupfoot-inner {
-	border-top: 1px solid @meshContentBorderColor;
-	background: @meshGroupFooterBackgroundColor;
-	overflow: hidden;
-}
-//content
-.z-column-content,
-.z-row-content,
-.z-group-content,
-.z-groupfoot-content,
-.z-footer-content {
-	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
-	line-height: @meshContentLineHeight;
-	overflow: hidden;
-	padding: @meshBodyPadding;
-}
-.z-column-content {
-	color: @meshTitleColor;
-}
-.z-footer-content {
-	color: @textColorLight;
-}
-.z-group-content {
-	color: @meshGroupColor;
-}
-.z-groupfoot-content {
-	color: @meshGroupFooterColor;
-	padding: @meshBodyPadding;
-	.z-group-open & {
-		color: @meshGroupFooterOpenColor;
-	}
-}
-
-//Cell Content
-.z-grid-body .z-cell {
-	font-family: @baseContentFontFamily;
-	font-size: @fontSizeMedium;
-	color: @baseTextColor;
-	padding: @meshBodyPadding;
-	line-height: @baseButtonHeight;
-	overflow: hidden;
-}
 //paging
 .z-grid-paging {
 	&-top {
@@ -267,21 +280,6 @@
 	&-bottom {
 		width: 100%;
 		border-top: 1px solid @pagingBorderColor;
-		overflow: hidden;
-	}
-}
-.z-grid-autopaging {
-	.z-row-content,
-	.z-groupfoot-content {
-		height: @meshAutoPagingRowHeight;
-		padding: @meshAutoPagingRowPadding;
-		line-height: @meshAutoPagingRowLineHeight;
-		overflow: hidden;
-	}
-	.z-group-content {
-		height: @meshAutoPagingRowHeight;
-		padding: @meshAutoPagingRowPadding;
-		line-height: @meshAutoPagingRowLineHeight;
 		overflow: hidden;
 	}
 }

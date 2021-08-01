@@ -45,10 +45,22 @@ td.z-splitter-outer {
 	border: 1px solid @splitterBorderColor;
 	background-color: @splitterBackgroundColor;
 
-	&:hover {
-		background-color: @splitterHoverBackgroundColor;
-		.z-splitter-button {
-			color: extract(@splitterButtonTextColors, 2);
+	&-button {
+		color: extract(@splitterButtonTextColors, 1);
+		display: inline-block;
+		position: relative;
+		vertical-align: top; //vertical-align: make it looks same in diff browsers
+		cursor: pointer;
+
+		&-disabled {
+			border: 0;
+
+			.z-splitter-vertical & {
+				cursor: row-resize;
+			}
+			.z-splitter-horizontal & {
+				cursor: col-resize;
+			}
 		}
 	}
 
@@ -107,22 +119,11 @@ td.z-splitter-outer {
 			}
 		}
 	}
-	&-button {
-		color: extract(@splitterButtonTextColors, 1);
-		display: inline-block;
-		position: relative;
-		vertical-align: top; //vertical-align: make it looks same in diff browsers
-		cursor: pointer;
-		
-		&-disabled {
-			border: 0;
-			
-			.z-splitter-vertical & {
-				cursor: row-resize;
-			}
-			.z-splitter-horizontal & {
-				cursor: col-resize;
-			}
+
+	&:hover {
+		background-color: @splitterHoverBackgroundColor;
+		.z-splitter-button {
+			color: extract(@splitterButtonTextColors, 2);
 		}
 	}
 	&-nosplitter {
