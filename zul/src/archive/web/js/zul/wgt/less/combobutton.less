@@ -44,6 +44,36 @@
 	&-image {
 		vertical-align: text-bottom;
 	}
+	//toolbar mold
+	&-toolbar {
+		.boxShadow('none');
+
+		.z-combobutton-content {
+			font-size: @combobuttonToolbarFontSize;
+			padding: @combobuttonToolbarPadding;
+			color: @toolbarButtonColor;
+			background-color: @toolbarButtonBackgroundColor;
+			.z-combobutton-button {
+				border-color: transparent;
+			}
+		}
+		&:hover, &:focus, &:active {
+			.z-combobutton-button {
+				border-color: @buttonSeparatorBorderColor;
+			}
+		}
+		&[disabled] {
+			.z-combobutton-button {
+				border-color: @buttonDisableSeparatorBorderColor;
+			}
+		}
+		&.z-combobutton-open {
+			.z-combobutton-content {
+				color: @buttonColor;
+				background-color: @buttonBackgroundColor;
+			}
+		}
+	}
 	&:hover {
 		.z-combobutton-content {
 			color: @buttonHoverColor;
@@ -75,37 +105,6 @@
 		}
 		.z-combobutton-button {
 			border-color: @buttonDisableSeparatorBorderColor;
-		}
-	}
-
-	//toolbar mold
-	&-toolbar {
-		.boxShadow('none');
-
-		.z-combobutton-content {
-			font-size: @combobuttonToolbarFontSize;
-			padding: @combobuttonToolbarPadding;
-			color: @toolbarButtonColor;
-			background-color: @toolbarButtonBackgroundColor;
-			.z-combobutton-button {
-				border-color: transparent;
-			}
-		}
-		&:hover, &:focus, &:active {
-			.z-combobutton-button {
-				border-color: @buttonSeparatorBorderColor;
-			}
-		}
-		&[disabled] {
-			.z-combobutton-button {
-				border-color: @buttonDisableSeparatorBorderColor;
-			}
-		}
-		&.z-combobutton-open {
-			.z-combobutton-content {
-				color: @buttonColor;
-				background-color: @buttonBackgroundColor;
-			}
 		}
 	}
 }

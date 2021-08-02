@@ -144,12 +144,6 @@ each(@components, {
 	}
 });
 
-.z-combobox-open .z-combobox-button,
-.z-bandbox-open .z-bandbox-button,
-.z-datebox-open .z-datebox-button {
-	border-color: @inputFocusBorderColor;
-}
-
 .z-combobox-readonly,
 .z-bandbox-readonly,
 .z-datebox-readonly {
@@ -170,6 +164,30 @@ each(@components, {
 	text-align: center;
 }
 
+.z-combobox-open .z-combobox-button,
+.z-bandbox-open .z-bandbox-button,
+.z-datebox-open .z-datebox-button {
+	border-color: @inputFocusBorderColor;
+}
+
+.z-timebox-disabled a,
+.z-spinner-disabled a,
+.z-doublespinner-disabled a {
+	color: @disabledColor;
+	&:hover {
+		background: 0;
+	}
+}
+
+// separator
+.z-timebox-disabled span,
+.z-spinner-disabled span,
+.z-doublespinner-disabled span {
+	& > i {
+		display: none;
+	}
+}
+
 .z-timebox-button,
 .z-spinner-button,
 .z-doublespinner-button {
@@ -180,7 +198,10 @@ each(@components, {
 	&:active {
 		background: @inputBackgroundColor;
 	}
-
+	// separator
+	& > i {
+		z-index: 2; // greater than arrow icon
+	}
 	& > a {
 		display: block;
 		color: @textColorDefault;
@@ -196,10 +217,6 @@ each(@components, {
 		&:hover {
 			background: @comboButtonHoverBackgroundColor;
 		}
-	}
-	// separator
-	& > i {
-		z-index: 2; // greater than arrow icon
 	}
 	&:hover > i {
 		.size(100%, 1px);
@@ -224,23 +241,6 @@ each(@components, {
 .btnActive('.z-timebox');
 .btnActive('.z-spinner');
 .btnActive('.z-doublespinner');
-
-.z-timebox-disabled a,
-.z-spinner-disabled a,
-.z-doublespinner-disabled a {
-	color: @disabledColor;
-	&:hover {
-		background: 0;
-	}
-}
-// separator
-.z-timebox-disabled span,
-.z-spinner-disabled span,
-.z-doublespinner-disabled span {
-	& > i {
-		display: none;
-	}
-}
 
 // combobox emptySearchMessage
 .z-combobox-emptySearchMessage {

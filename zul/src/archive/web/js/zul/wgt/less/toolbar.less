@@ -7,12 +7,32 @@
 	background: @baseBackgroundColor;
 	position: relative;
 
+	// toolbar horizontal alignment
+	&-start {
+		float: left;
+		clear: none;
+	}
+
+	&-end {
+		float: right;
+		clear: none;
+	}
+
+	&-center {
+		text-align: center;
+		margin: 0 auto;
+	}
+
 	&-overflowpopup {
 		white-space: nowrap;
 		font-size: 0;
 
 		&-button {
 			font-size: @toolbarOverflowpopupButtonSize;
+		}
+
+		&-off > .z-toolbar-overflowpopup-button {
+			display: none;
 		}
 
 		&-on {
@@ -36,10 +56,6 @@
 					padding-right: @toolbarOverflowpopupButtonSize;
 				}
 			}
-		}
-
-		&-off > .z-toolbar-overflowpopup-button {
-			display: none;
 		}
 	}
 
@@ -85,19 +101,20 @@
 	border: 0;
 }
 
-// toolbar horizontal alignment
-.z-toolbar-start {
-	float: left;
-	clear: none;
+.z-toolbar-content > * {
+	margin-left: @toolbarButtonsSpacing;
+	&:first-child {
+		margin-left: 0;
+	}
 }
-.z-toolbar-center {
-	text-align: center;
-	margin: 0 auto;
+
+.z-toolbar-vertical {
+	.z-toolbar-content > * {
+		margin-left: 0;
+		display: block;
+	}
 }
-.z-toolbar-end {
-	float: right;
-	clear: none;
-}
+
 // Toolbar Panel Mold
 .z-toolbar-panel {
 	background-color: transparent;
@@ -169,20 +186,6 @@
 	&-checked {
 		color: @toolbarButtonCheckedColor;
 		background-color: @toolbarButtonCheckedBackgroundColor;
-	}
-}
-
-.z-toolbar-content > * {
-	margin-left: @toolbarButtonsSpacing;
-	&:first-child {
-		margin-left: 0;
-	}
-}
-
-.z-toolbar-vertical {
-	.z-toolbar-content > * {
-		margin-left: 0;
-		display: block;
 	}
 }
 
