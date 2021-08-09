@@ -388,7 +388,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
-					e._applyMask = new zk.eff.Mask({
+					e._applyMask = new zk.eff.Mask!({
 						id: e.uuid + '-mask',
 						message: msg,
 						anchor: e.$n()
@@ -426,7 +426,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			var zIndex: string | number = $txt.css('z-index');
 			if (zIndex == 'auto' || typeof zIndex === 'string')
 				zIndex = 1;
-			n['z_mask'] = new zk.eff.FullMask({
+			n['z_mask'] = new zk.eff.FullMask!({
 				mask: jq(idmsk, zk)[0],
 				zIndex: zIndex - 1
 			});
@@ -764,11 +764,12 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 *
 	 * @param Function func the passed function
 	 * @param int wait wait milliseconds
+	 * @return Function a new, throttled version of the passed function
 	 * @since 9.6.0
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	throttle<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number): (this: T, ...args: A) => R {
-		var timeout: number | null, context, args, result: R,
+	throttle: function (func, wait) {
+		var timeout: number | null, context, args, result,
 			previous = 0,
 			later = function (): void {
 				previous = Date.now();
@@ -806,10 +807,11 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 	 * @param Function func the passed function
 	 * @param int wait wait milliseconds
 	 * @param boolean immediate trigger the function on the leading instead of the trailing edge of the wait interval
+	 * @return Function a new debounced version of the passed function
 	 * @since 9.6.0
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	debounce<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number, immediate?: boolean): (this: T, ...args: A) => R {
+	debounce: function (func, wait, immediate) {
 		var timeout, args, context, timestamp, result;
 		if (null == wait) wait = 100;
 
@@ -827,7 +829,7 @@ zUtl.parseMap("a='b c',c=de", ',', "'\"");
 			}
 		}
 
-		var debounced = function (this: T): R {
+		var debounced = function (this): any { // eslint-disable-line @typescript-eslint/no-explicit-any
 			context = this;
 			args = arguments;
 			timestamp = Date.now();

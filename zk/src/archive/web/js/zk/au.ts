@@ -1538,7 +1538,7 @@ zAu.cmd0 = /*prototype*/ { //no uuid at all
 		} else if (w) {
 			zk.delayFunction(uuid, function () {
 				if (w) {
-					w.effects_.showBusy = new zk.eff.Mask({
+					w.effects_.showBusy = new zk.eff.Mask!({
 						id: w.uuid + '-shby',
 						anchor: w.$n(),
 						message: msg
