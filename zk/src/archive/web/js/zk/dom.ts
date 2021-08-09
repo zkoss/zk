@@ -2312,7 +2312,7 @@ jq.filterTextStyle({width:"100px", fontSize: "10pt"});
 	 *
 	 * <p>Notice that you usually have to call {@link jqzk#makeVParent} before calling this, since DIV with relative or absolute position will crop the child element. In other words, you have to make the element as the top-level element before creating a stackup for it.
 	 * <p>To remove the stackup, call {@link #remove}.
-	 * <p>If you want to create a shadow, you don't need to access this method since {@link Shadow} has an option to create and maintain the stackup automatically.
+	 * <p>If you want to create a shadow, you don't need to access this method since {@link zk.eff.Shadow} has an option to create and maintain the stackup automatically.
 	 * @param DOMElement el the element to retrieve the dimensions. If omitted, the stackup is not appended to the DOM tree.
 	 * @param String id ID of the stackup (iframe). If omitted and el is specified, it is el.id + '$ifrstk'. If both el and id are omitted, 'z_ifrstk' is assumed.
 	 * @param DOMElement anchor where to insert the DOM element before

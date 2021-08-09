@@ -540,11 +540,11 @@ declare namespace zk {
         _skuOpts(opts): any;
         _onVParent(evt, opts?): void;
 
-        Shadow: zk.Effect;
-        FullMask: zk.Effect;
-        Mask: zk.Effect;
-        Actions: zk.EffectActions;
-        KeyboardTrap: zk.Effect;
+        Shadow?: zk.Effect;
+        FullMask?: zk.Effect;
+        Mask?: zk.Effect;
+        Actions?: zk.EffectActions;
+        KeyboardTrap?: zk.Effect;
         Opacity?: any;
         Move?: any;
     }

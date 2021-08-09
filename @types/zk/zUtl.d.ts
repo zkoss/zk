@@ -52,6 +52,8 @@ declare namespace zk {
         frames(w: Window): Window[];
         getDevicePixelRatio(): number;
         getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
+        throttle<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number): (this: T, ...args: A) => R;
+        debounce<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number, immediate?: boolean): (this: T, ...args: A) => R;
         getWeekOfYear(year: number, month: number, date: number, firstDayOfWeek: number, minimalDaysInFirstWeek: number): number;
         go(url: string, opts?: Partial<GoOptions>): void;
         intsToString(ary: number[]): string;

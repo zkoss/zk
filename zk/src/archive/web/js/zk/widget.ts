@@ -1084,7 +1084,7 @@ new zul.wnd.Window({
 									opts = jq.evalJSON(val.substring(k + 1, l));
 								val = val.substring(0, k);
 							}
-							if (fn = zk.eff.Actions[val])
+							if (fn = zk.eff.Actions![val])
 								this.actions_[nm] = [fn, opts];
 							else
 								zk.error('Unknown action: ' + val);

@@ -152,8 +152,9 @@ public class Toolbar extends XulElement {
 	}
 
 	/**
-	 * @return the overflow popup icon sclass name of this toolbar.
+	 * Returns the overflow sclass name of overflow popup icon of this toolbar.
 	 * Default: z-icon-ellipsis-h.
+	 * @return the overflow popup icon sclass name of this toolbar.
 	 * @since 9.6.0
 	 */
 	public String getOverflowPopupIconSclass() {
@@ -161,7 +162,7 @@ public class Toolbar extends XulElement {
 	}
 
 	/**
-	 * When {@link #setOverflowPopup} is true, toolbar has a button that shows a popup
+	 * When {@link #getOverflowPopup} is true, toolbar has a button that shows a popup
 	 * users can customize the overflow popup icon.
 	 * Default: z-icon-ellipsis-h.
 	 * @param overflowPopupIconSclass refer to FontAwesome Cheatsheet.

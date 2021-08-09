@@ -64,7 +64,7 @@ function initMask(wgt, opts): void {
 	var opt = {};
 	opt['anchor'] = wgt;
 	if (opts.message) opt['message'] = opts.message;
-	opts['_mask'] = new zk.eff.Mask(opt);
+	opts['_mask'] = new zk.eff.Mask!(opt);
 }
 function clearMask(wgt, opts): void {
 	if (opts._mask)

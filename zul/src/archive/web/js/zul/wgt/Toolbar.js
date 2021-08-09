@@ -73,15 +73,16 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		/**
-		 * Returns the overflowPopupIconSclass.
-		 * Default: z-icon-ellipsis-h.
+		 * Returns the overflow sclass name of overflow popup icon of this toolbar.
+		 * <p>Default: "z-icon-ellipsis-h".
+		 * @return String
 		 * @since 9.6.0
 		 */
 		 /**
-		 * Sets the overflowPopupIconSclass.
+		 * Sets the overflow sclass name of overflow popup icon of this toolbar.
 		 * When overflowPopup is true, toolbar has a button that shows a popup
 		 * users can customize the overflow popup icon.
-		 * Default: z-icon-ellipsis-h.
+		 * @param String the overflow sclass name of overflow popup icon of this toolbar
 		 * @since 9.6.0
 		 */
 		overflowPopupIconSclass: function () {
