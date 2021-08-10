@@ -1,4 +1,5 @@
 ZK 9.6.0
+Aug 10, 2021
 * Features
   ZK-4761: MVVM provide option to disable viewmodel annotation caches
   ZK-4330: provide select-all checkbox in tree component
