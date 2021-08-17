@@ -2,6 +2,7 @@ ZK 9.6.1
 * Features
 
 * Bugs
+  ZK-4995: signature component on tablet/mobile cutting off image
 
 * Upgrade Notes
 
