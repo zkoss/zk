@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4995.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Aug 16 12:17:34 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. open this page with tablet/mobile devices.
+		2. write some text and click save.
+		3. the image is saved as same size.
+	</label>
+	<signature height="200px" width="100%" onSave="output.setContent(event.getMedia())"/>
+	<image id="output" width="100%"/>
+</zk>
