@@ -341,7 +341,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	shallIgnoreClick_: function (evt) {
-		return this.isDisabled();
+		if (zk.chrome)
+			return this.isDisabled();
 	}
 });
 //handle autodisabled buttons
@@ -369,7 +370,7 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 			if (zk.chrome) wgt.domUnlisten_(wgt.$n(), 'onBlur', 'doBlur_'); //ZK-2739: prevent chrome fire onBlur event after autodisabled
 			ads = ads.split(',');
 			for (var j = ads.length; j--;) {
-				var ad = ads[j].trim();
+				let ad = ads[j].trim();
 				if (ad) {
 					var perm = ad.charAt(0) == '+';
 					if (perm)
@@ -383,7 +384,8 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 					}
 					if (ad && !ad._disabled) {
 						// B60-ZK-1176: distinguish from other usages
-						ad.setDisabled(true, {adbs: true, skip: true});
+						let adSetDisabled = function() { ad.setDisabled(true, {adbs: true, skip: true}) };
+						zk.chrome ? (queueMicrotask(() => adSetDisabled())) : adSetDisabled();
 						if (wgt.inServer) {
 							if (perm)
 								ad.smartUpdate('disabled', true);

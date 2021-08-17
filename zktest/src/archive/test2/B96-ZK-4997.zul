@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4997.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Aug 16 12:18:14 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the button "with autodisable".
+		2. popup should open.
+	</label>
+	<button popup="pop" label="with autodisable" autodisable="self"/>
+	<button popup="pop" label="normal button"/>
+	<popup id="pop">
+		Content
+	</popup>
+</zk>

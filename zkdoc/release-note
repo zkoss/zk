@@ -2,6 +2,7 @@ ZK 9.6.1
 * Features
 
 * Bugs
+  ZK-4997: button with autodisable doesn't trigger popup
 
 * Upgrade Notes
 
