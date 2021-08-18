@@ -339,9 +339,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			else
 				n.style.width = this._width ? this._width : '';
 		}
-	},
-	shallIgnoreClick_: function (evt) {
-		return this.isDisabled();
 	}
 });
 //handle autodisabled buttons
