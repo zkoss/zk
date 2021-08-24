@@ -19,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -517,11 +516,6 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 	private boolean writeResource(RequestContext reqctx, OutputStream out, String path, String dir, boolean locate,
 			SourceMapManager sourceMapManager) throws IOException, ServletException {
-		return writeResource(reqctx, out, path, dir, locate, sourceMapManager, -1);
-	}
-
-	private boolean writeResource(RequestContext reqctx, OutputStream out, String path, String dir, boolean locate,
-			SourceMapManager sourceMapManager, int index) throws IOException, ServletException {
 		if (path.startsWith("~./"))
 			path = path.substring(2);
 		else if (path.charAt(0) != '/')
@@ -865,8 +859,6 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 
 			//for source map
 			SourceMapManager sourceMapManager = null;
-			List<String> resultList = new ArrayList<String>(16);
-			List<Integer> unresolvedList = null;
 			if (isDebugJS())
 				sourceMapManager = (SourceMapManager) reqctx.request.getAttribute(SOURCE_MAP_PREFIX + name);
 			for (Object o : _cnt) {
@@ -875,9 +867,7 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 					out.write((byte[]) o);
 				} else if (o instanceof MethodInfo) {
 					result = write(reqctx, out, (MethodInfo) o);
-					resultList.add(result);
 				} else if (o instanceof String[]) {
-					resultList.add("$skipped$");
 					final String[] inf = (String[]) o;
 					if (inf[1] != null && request != null) {
 						if (!Servlets.isBrowser(request, inf[1])
@@ -885,21 +875,19 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 								|| getScriptManager().isScriptIgnored(reqctx.request, inf[0]))
 							continue;
 					}
-					if (sourceMapManager != null) {
-						//handle browser issue
-						int sourceMapInfoIndex = unresolvedList != null ? unresolvedList.get(resultList.size() - 1) : -1;
+					//handle browser issue
+					if (sourceMapManager != null)
 						sourceMapManager.startJsCursor(inf[0]);
-						if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager, sourceMapInfoIndex)) {
-							log.error(inf[0] + " not found");
+					if (!writeResource(reqctx, out, inf[0], _dir, true, sourceMapManager)) {
+						log.error(inf[0] + " not found");
+						if (sourceMapManager != null)
 							sourceMapManager.clearJsCursor();
-						} else
-							sourceMapManager.closeJsCursor(out);
-					}
+					} else if (sourceMapManager != null)
+						sourceMapManager.closeJsCursor(out);
 				} else if (o instanceof Object[]) { //host
 					if (main != null) {
 						final Object[] inf = (Object[]) o;
 						result = outHost(request, (WebApp) inf[0], (String) inf[1]);
-						resultList.add(result);
 						write(out, result);
 					}
 				}
