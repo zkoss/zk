@@ -4,8 +4,10 @@ ZK 9.6.0.1
 * Bugs
   ZK-4995: signature component on tablet/mobile cutting off image
   ZK-5003: External resources with browser attribute are not loaded
+  ZK-4997: button with autodisable doesn't trigger popup
 
 * Upgrade Notes
+  + Reverted and Reopened ZK-4979 (to fix ZK-4997).
 
    --------
 ZK 9.6.0
