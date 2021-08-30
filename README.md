@@ -67,5 +67,5 @@ and mobile applications.
 > ZUML also allows developers to automate CRUD between UI components and the data
 > source with annotations, data binding and MVVM.
 
-[Discord instructions]: https://discord.gg/UT9g9gYa
+[Discord instructions]: https://discord.gg/Qv95wYgSKp
 [Discord badge]: https://img.shields.io/discord/879939886843584533
