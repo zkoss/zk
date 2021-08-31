@@ -15,6 +15,7 @@
         <jetty.version>10.0.5</jetty.version>
         <skipNpmInstall>false</skipNpmInstall>
         <skipZklessc>false</skipZklessc>
+        <maven.frontend.skip>false</maven.frontend.skip>
     </properties>
     <licenses>
         <license>
@@ -229,6 +230,7 @@
                             </goals>
                             <configuration>
                                 <skip>${skipNpmInstall}</skip><!-- optional command line param to speed up local builds -->
+                                <skip>${maven.frontend.skip}</skip>
                                 <arguments>install</arguments>
                             </configuration>
                         </execution>
@@ -239,6 +241,7 @@
                             </goals>
                             <phase>process-resources</phase>
                             <configuration>
+                                <skip>${maven.frontend.skip}</skip>
                                 <arguments>
                                     run build:single --
                                     --src="${project.basedir}/src/archive/web/js"
@@ -254,6 +257,7 @@
                             <phase>process-resources</phase>
                             <configuration>
                                 <skip>${skipZklessc}</skip><!-- optional command line param to speed up local builds -->
+                                <skip>${maven.frontend.skip}</skip>
                                 <arguments>
                                     zklessc
                                     --source ${project.basedir}/src/archive/web
