@@ -172,9 +172,11 @@ public class DefinitionLoaders {
 		final ConfigParser parser = new ConfigParser();
 		parser.parseConfigXml(null); //only system default configs
 
-		//2. process lang.xml (no particular dependency)
-		for (Enumeration en = locator.getResources("metainfo/zk/lang.xml"); en.hasMoreElements();) {
-			final URL url = (URL) en.nextElement();
+		//2. process lang.xml (including dependency)
+		final List<XMLResourcesLocator.Resource> langXmls = locator.getDependentXMLResources("metainfo/zk/lang.xml",
+				"language-name", "depends");
+		for (XMLResourcesLocator.Resource res : langXmls) {
+			final URL url = res.url;
 			if (log.isDebugEnabled())
 				log.debug("Loading " + url);
 			try {
