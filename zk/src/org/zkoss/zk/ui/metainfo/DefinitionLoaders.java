@@ -17,7 +17,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.metainfo;
 
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -395,6 +394,19 @@ public class DefinitionLoaders {
 				langdef.addInitScript(zslang, s);
 		}
 
+		//the extends in component will try to check all language definitions
+		List<LanguageDefinition> compExtendsOtherLangDefs = new LinkedList<>();
+		List<LanguageDefinition> allLangDefs = LanguageDefinition.getAll();
+		for (Iterator it = root.getElements("component-extends-language").iterator(); it.hasNext();) {
+			String langName = ((Element) it.next()).getText(true);
+			for (LanguageDefinition langDef : allLangDefs) {
+				if (langName.equals(langDef.getName())) {
+					compExtendsOtherLangDefs.add(langDef);
+					break;
+				}
+			}
+		}
+
 		for (Iterator it = root.getElements("component").iterator(); it.hasNext();) {
 			final Element el = (Element) it.next();
 			final String name = IDOMs.getRequiredElementValue(el, "component-name");
@@ -466,7 +478,13 @@ public class DefinitionLoaders {
 				if (tmpRef == null) //search Shadow
 					tmpRef = langdef.getShadowDefinitionIfAny(extnm);
 
-				final ComponentDefinition ref = tmpRef;
+				ComponentDefinition ref = tmpRef;
+
+				if (ref == null && compExtendsOtherLangDefs.size() > 0) //extends from other language definition
+					for (LanguageDefinition tmpLangDef : compExtendsOtherLangDefs) {
+						ref = tmpLangDef.getComponentDefinitionIfAny(extnm);
+						if (ref != null) break;
+					}
 
 				if (ref == null) {
 					log.warn("Component " + name + " ignored. Reason: extends a non-existent component " + extnm + ".\n"

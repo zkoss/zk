@@ -1840,7 +1840,8 @@ public class Parser {
 				|| LanguageDefinition.CLIENT_ATTRIBUTE_NAMESPACE.equals(uri) || "xhtml".equals(uri)
 				|| "http://www.w3.org/1999/xhtml/".equals(uri) || "zul".equals(uri)
 				|| "http://www.zkoss.org/2005/zul/".equals(uri) || "xml".equals(uri)
-				|| "http://www.zkoss.org/2007/xml".equals(uri) || isClientAttrPrefixNamespace(uri) || langdefLookup(uri) != null;
+				|| "http://www.zkoss.org/2007/xml".equals(uri) || isClientAttrPrefixNamespace(uri)
+				|| "zpr".equals(uri) || langdefLookup(uri) != null;
 	}
 
 	/** Returns whether the given uri is in native namespace or not
