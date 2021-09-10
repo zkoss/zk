@@ -120,6 +120,7 @@ import org.zkoss.zk.ui.util.FullComposer;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.PerformanceMeter;
 import org.zkoss.zk.ui.util.Template;
+import org.zkoss.zk.ui.util.TemplateCtrl;
 import org.zkoss.zk.xel.Evaluators;
 
 /**
@@ -2325,7 +2326,7 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//Supporting Classes//
-	private static class TemplateImpl implements Template, java.io.Serializable {
+	private static class TemplateImpl implements Template, TemplateCtrl, java.io.Serializable {
 		private final TemplateInfo _tempInfo;
 		private final Map<String, Object> _params;
 		private final String _src;
@@ -2386,6 +2387,13 @@ public class UiEngineImpl implements UiEngine {
 
 		public Map<String, Object> getParameters() {
 			return _params;
+		}
+		public String getSrc() {
+			return _src;
+		}
+
+		public TemplateInfo getMeta() {
+			return _tempInfo;
 		}
 	}
 
