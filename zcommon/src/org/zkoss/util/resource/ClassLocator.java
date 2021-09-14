@@ -99,22 +99,22 @@ public class ClassLocator implements XMLResourcesLocator {
 			final Iterator<XMLResource> it = rcmap.values().iterator();
 			final XMLResource xr = it.next();
 			it.remove();
-			resolveDependency(xr, rcs, rcmap, resolving);
+			resolveDependency(xr, rcs, rcmap, resolving, elName);
 			assert resolving.isEmpty();
 		}
 		return rcs;
 	}
 	private static void resolveDependency(XMLResource xr,
-	List<Resource> rcs, Map<String, XMLResource> rcmap, Set<String> resolving) {
+	List<Resource> rcs, Map<String, XMLResource> rcmap, Set<String> resolving, String elName) {
 		if (!resolving.add(xr.name))
 			throw new IllegalStateException("Recusrive reference among "+resolving);
 		
-		checkCompDenpendency(xr, rcmap);
+		checkCompDenpendency(xr, rcmap, elName);
 
 		for (String nm: xr.depends) {
 			final XMLResource dep = rcmap.remove(nm);
 			if (dep != null) //not resolved yet
-				resolveDependency(dep, rcs, rcmap, resolving); //recursively
+				resolveDependency(dep, rcs, rcmap, resolving, elName); //recursively
 		}
 
 		rcs.add(new Resource(xr.url, xr.document));
@@ -123,7 +123,7 @@ public class ClassLocator implements XMLResourcesLocator {
 		if (log.isDebugEnabled()) log.debug("Adding resolved resource: "+xr.name);
 	}
 
-	private static void checkCompDenpendency(XMLResource xr, Map<String, XMLResource> rcmap) {
+	private static void checkCompDenpendency(XMLResource xr, Map<String, XMLResource> rcmap, String elName) {
 		if (xr.depends.size() > 0) {
 			return;
 		}
@@ -141,10 +141,9 @@ public class ClassLocator implements XMLResourcesLocator {
 			List<Element> ambigComps = findAmbiguousComps(rcmap, el);
 			if (!ambigComps.isEmpty()) {
 				StringBuilder addonNameBuilder = new StringBuilder();
-				String addonName = "";
 				for (Element ambigComp : ambigComps) {
 					Element ambigRoot = ambigComp.getDocument().getRootElement();
-					addonNameBuilder.append("'").append(ambigRoot.getElement("addon-name").getFirstChild().getNodeValue()).append("', ");
+					addonNameBuilder.append("'").append(ambigRoot.getElement(elName).getFirstChild().getNodeValue()).append("', ");
 				}
 				String message = "In {}, you are extending component {} which is defined in {}please define <depends> element";
 				String[] messageArgs = new String[]{xr.url.toString(), el.getElementValue("extends", true), addonNameBuilder.toString()};
