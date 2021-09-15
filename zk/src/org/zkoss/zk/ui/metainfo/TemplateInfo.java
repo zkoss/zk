@@ -66,6 +66,15 @@ public class TemplateInfo extends BranchInfo {
 		return _src != null ? (String) _src.getValue(_evalr, comp) : null;
 	}
 
+	/**
+	 * Returns a readonly map of the parameters that are assigned
+ 	 * to the template.
+	 * @since 10.0.0
+	 */
+	public Map<String, ExValue> getParameters() {
+		return Collections.unmodifiableMap(_params);
+	}
+
 	/** Evaluates and returns a readonly map of parameters assigned
 	 * to this template (never null).
 	 */

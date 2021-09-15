@@ -4737,7 +4737,13 @@ _doFooSelect: function (evt) {
 	 */
 	shallFireSizedLaterWhenAddChd_: function () {
 		return false;
-	}
+	},
+
+    /** A callback called after a widget is composed but not yet be bound to DOM tree.
+     * @since 10.0.0
+     */
+    afterCompose_: function () {
+    }
 
 }, {
 	// internal use, since zk 8.0.0

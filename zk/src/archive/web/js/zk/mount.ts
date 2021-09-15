@@ -437,6 +437,15 @@ interface Pcai {
 		for (var j = 0, childs = wi[4], len = childs.length;
 		j < len; ++j)
 			create(wgt, childs[j]);
+
+        // call afterCompose_() after zk.loaded, because some packages may not
+        // be loaded yet or call afterCompose_() directly if every required
+        // packages are loaded.
+        if (zk.loading) {
+            zk.afterLoad(() => wgt.afterCompose_());
+        } else {
+            wgt.afterCompose_();
+        }
 		return wgt;
 	}
 
