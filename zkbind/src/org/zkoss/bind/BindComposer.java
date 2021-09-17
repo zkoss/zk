@@ -88,6 +88,10 @@ public class BindComposer<T extends Component>
 	public static final String VM_ID = "$VM_ID$";
 	public static final String BINDER_ID = "$BINDER_ID$";
 
+	public static final String ON_BIND_COMMAND = "onBindCommand$";
+	public static final String ON_BIND_GLOBAL_COMMAND = "onBindGlobalCommand$";
+	public static final String ON_BIND_COMMAND_UPLOAD = "onBindCommandUpload$";
+
 	private Object _viewModel;
 	private AnnotateBinder _binder;
 
@@ -617,7 +621,7 @@ public class BindComposer<T extends Component>
 
 	public boolean service(AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
-		if (cmd.startsWith("onBindCommand$") || cmd.startsWith("onBindGlobalCommand$") || cmd.startsWith("onBindCommandUpload$")) {
+		if (cmd.startsWith(ON_BIND_COMMAND) || cmd.startsWith(ON_BIND_GLOBAL_COMMAND) || cmd.startsWith(ON_BIND_COMMAND_UPLOAD)) {
 			final Map<String, Object> data = request.getData();
 			String vcmd = data.get("cmd").toString();
 
@@ -633,12 +637,12 @@ public class BindComposer<T extends Component>
 			}
 			if (asList != null) {
 				if (asList.contains("*") || asList.contains(vcmd)) {
-					if (cmd.startsWith("onBindCommand$")) {
+					if (cmd.startsWith(ON_BIND_COMMAND)) {
 						_binder.postCommand(vcmd, (Map<String, Object>) data.get("args"));
-					} else if (cmd.startsWith("onBindGlobalCommand$")) {
+					} else if (cmd.startsWith(ON_BIND_GLOBAL_COMMAND)) {
 						BindUtils.postGlobalCommand(_binder.getQueueName(), _binder.getQueueScope(), vcmd,
 								(Map<String, Object>) data.get("args"));
-					} else if (cmd.startsWith("onBindCommandUpload$")) { // ZK-4472
+					} else if (cmd.startsWith(ON_BIND_COMMAND_UPLOAD)) { // ZK-4472
 						_binder.postCommand(vcmd, Collections.singletonMap(BinderCtrl.CLIENT_UPLOAD_INFO, UploadEvent.getLatestUploadEvent(vcmd, request.getComponent(), request)));
 					}
 				}

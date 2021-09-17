@@ -186,8 +186,8 @@ public class BindUiLifeCycle implements UiLifeCycle {
 
 		binder.loadComponent(comp, true);
 
-		((BinderImpl) binder).initQueue();
-		((BinderImpl) binder).initActivator();
+		((BinderCtrl) binder).initQueue();
+		((BinderCtrl) binder).initActivator();
 
 		//[Dennis,20120925], this code was added when fixing issue zk-739,
 		//but , inside binder.initComponentBindings, it shall do this already, I am not sure why.

@@ -213,6 +213,20 @@ public interface BinderCtrl {
 	 */
 	public boolean isActivating();
 
+	/**
+	 * Internal use only.
+	 * Check and init queue
+	 * @since 10.0.0
+	 */
+	public void initQueue();
+
+	/**
+	 * Internal use only.
+	 * Check and init Activator
+	 * @since 10.0.0
+	 */
+	public void initActivator();
+
 	/** 
 	 * get binding execution info collector
 	 * @return the collector instance or null if no collector is existed
