@@ -14,6 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 declare namespace zk {
     type ZKEX = Record<string, any>;
+	interface Widget extends Object {
+		listen(infos: string, Widget?): Widget;
+		unlisten(infos: string, Widget?): Widget;
+	}
 }
 
 declare var zkex: zk.ZKEX;
+declare var msgzul: any;

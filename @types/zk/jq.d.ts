@@ -115,12 +115,15 @@ interface JQuery {
     absolutize(): this;
 }
 
-declare namespace JQuery {
-    interface Event {
+declare namespace JQ {
+    interface Event extends JQuery.Event {
         stop(): void;
         mouseData(): zk.EventMouseData;
         keyData(): zk.EventKeyData;
         metaData(): zk.EventMetaData;
+        delegateTarget: Element;
+        target: Element;
+        currentTarget: Element;
     }
 
     interface EventStatic {

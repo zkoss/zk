@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 declare namespace zk {
     type Class = any;
     type $void = () => false;
+    type exception = any;
 
     interface ObjectStatic {
         isAssignableFrom(cls: Class): boolean;
@@ -92,7 +93,7 @@ declare namespace zk {
         auStopped: boolean;
         currentTarget: zk.Widget;
         data: any;
-        domEvent: JQuery.Event;
+        domEvent: JQ.Event;
         domStopped: boolean;
         domTarget: HTMLElement;
         name: string;
@@ -192,7 +193,7 @@ declare namespace zk {
         doKeyDown_(evt: Event): void;
         doKeyPress_(evt: Event): void;
         doKeyUp_(evt: Event): void;
-        domAttrs_(no?: {[noAttr: string]: boolean}): string;
+        domAttrs_(no?: {[noAttr: string]: boolean | number}): string;
         domClass_(no?: {[noAttr: string]: boolean}): string;
         domListen_(node: Element, evtnm: string, fn?: any, keyword?: string): Widget;
         doMouseDown_(evt: Event): void;
@@ -333,7 +334,7 @@ declare namespace zk {
         unbindSwipe_(): void;
         unbindTapHold_(): void;
         uncloneDrag_(drag: any): void;
-        unlisten(infos: {[event: string]: any}): Widget;
+        unlisten(infos: {[event: string]: any}, Widget?): Widget;
         unlistenOnFitSize_(): void;
         updateDomClass_(): void;
         updateDomStyle_(): void;
@@ -474,8 +475,8 @@ declare namespace zk {
         _endDrag(evt: zk.Event): void;
         _finishDrag(evt: zk.Event, success): void;
         _getWndScroll(w): zk.Dimension;
-        _keypress(devt: jQuery.Event): void;
-        _mousedown(devt: jQuery.Event): void;
+        _keypress(devt: JQ.Event): void;
+        _mousedown(devt: JQ.Event): void;
         _scroll(): void;
         _startDrag(evt: zk.Event): void;
         _startScrolling(speed): void;
