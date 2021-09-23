@@ -479,11 +479,14 @@ public class DefinitionLoaders {
 					tmpRef = langdef.getShadowDefinitionIfAny(extnm);
 
 				ComponentDefinition ref = tmpRef;
-
+				boolean isFromOtherLanguage = false;
 				if (ref == null && compExtendsOtherLangDefs.size() > 0) //extends from other language definition
 					for (LanguageDefinition tmpLangDef : compExtendsOtherLangDefs) {
 						ref = tmpLangDef.getComponentDefinitionIfAny(extnm);
-						if (ref != null) break;
+						if (ref != null) {
+							isFromOtherLanguage = true;
+							break;
+						}
 					}
 
 				if (ref == null) {
@@ -497,7 +500,7 @@ public class DefinitionLoaders {
 				if (ref.isMacro())
 					throw new UiException(message("Unable to extend from a macro component", el));
 
-				if (extnm.equals(name)) {
+				if (extnm.equals(name) && !isFromOtherLanguage) {
 					compdef = (ComponentDefinitionImpl) ref;
 				} else {
 					compdef = (ComponentDefinitionImpl) ref.clone(ref.getLanguageDefinition(), name);
