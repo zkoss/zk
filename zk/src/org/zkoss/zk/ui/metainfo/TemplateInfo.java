@@ -72,7 +72,9 @@ public class TemplateInfo extends BranchInfo {
 	 * @since 10.0.0
 	 */
 	public Map<String, ExValue> getParameters() {
-		return Collections.unmodifiableMap(_params);
+		return _params != null
+				? Collections.unmodifiableMap(_params) :
+					Collections.emptyMap();
 	}
 
 	/** Evaluates and returns a readonly map of parameters assigned
