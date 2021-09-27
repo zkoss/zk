@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 declare namespace zk {
 	interface ZKBind {
-		$(n: string | HTMLElement | zk.Event | JQuery.Event, opts?: Partial<BinderOptions>): Binder | null;
+		$(n: string | HTMLElement | zk.Event | JQuery.Event, opts?: Partial<BinderOptions> | any): Binder | null | undefined;
 		Binder: BinderStatic;
 	}
 
@@ -34,6 +34,7 @@ declare namespace zk {
 	}
 
 	interface Binder extends zk.Object {
+		$doAfterCommand(command: any, args: any);
 		after(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
 		unAfter(cmd: string, fn: (args?: Record<string, unknown>) => void): this;
 		destroy(): void;

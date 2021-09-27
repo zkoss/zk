@@ -106,6 +106,14 @@ function typescript_dev_zkmax() {
     );
 }
 
+function typescript_dev_zkbind() {
+    return typescript_dev(
+        'zkbind/src/archive',
+        'zkbind/debug/classes',
+        gulp.lastRun(typescript_dev_zkbind)
+    );
+}
+
 exports['build:single'] = typescript_build_single;
 exports.watch = gulp.series(
     browsersync_init,
@@ -114,6 +122,7 @@ exports.watch = gulp.series(
         () => watch_job('zul/src/**/*.ts', typescript_dev_zul),
         () => watch_job('../zkcml/zkex/src/**/*.ts', typescript_dev_zkex),
         () => watch_job('../zkcml/zkmax/src/**/*.ts', typescript_dev_zkmax),
+        () => watch_job('zkbind/src/**/*.ts', typescript_dev_zkbind),
     )
 );
 exports.build = gulp.parallel(
@@ -136,6 +145,11 @@ exports.build = gulp.parallel(
         return typescript_dev(
             '../zkcml/zkmax/src/archive/web/js',
             '../zkcml/zkmax/codegen/archive/web/js');
+    },
+    function build_zkbind() {
+        return typescript_dev(
+            'zkbind/src/archive/web/js',
+            'zkbind/codegen/archive/web/js');
     }
 );
 exports.default = exports.build;

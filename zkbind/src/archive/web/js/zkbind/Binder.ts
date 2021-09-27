@@ -1,4 +1,4 @@
-/* Binder.js
+/* Binder.ts
 
 	Purpose:
 		
@@ -10,15 +10,16 @@
 Copyright (C)  Potix Corporation. All Rights Reserved.
 */
 (function () {
-	var _WidgetX = {},
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	var _WidgetX = {} as any,
 		_zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
-		_portrait = {'0': true, '180': true}, //default portrait definition
+		_portrait: Record<string, boolean> = { '0': true, '180': true }, //default portrait definition
 		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 		_initDefault = _portrait[window.orientation]; //default orientation
 
 zk.override(zk.Widget.prototype, _WidgetX, {
 	$binder: function () {
-		var w = this;
+		var w = this as zk.Widget | null;
 		for (; w; w = w.parent) {
 			if (w['$ZKBINDER$'])
 				break;
@@ -30,12 +31,12 @@ zk.override(zk.Widget.prototype, _WidgetX, {
 		}
 		return null;
 	},
-	$afterCommand: function (command, args) {
+	$afterCommand: function (this: zk.Widget, command, args) {
 		var binder = this.$binder();
 		if (binder)
 			binder.$doAfterCommand(command, args);
 	},
-	unbind_: function () {
+	unbind_: function (this: zk.Widget) {
 		if (this._$binder) {
 			this._$binder.destroy();
 			this._$binder = null;
@@ -85,7 +86,7 @@ zkbind.$ = function (n, opts) {
 		return widget.$binder();
 	zk.error('Not found ZK Binder with [' + n + ']');
 };
-	function _fixCommandName(prefix, cmd, opts, prop) {
+	function _fixCommandName(prefix, cmd, opts, prop): void {
 		if (opts[prop]) {
 			var ignores = {};
 			ignores[prefix + cmd] = true;
@@ -93,10 +94,10 @@ zkbind.$ = function (n, opts) {
 		}
 	}
 	//ZK-3133
-	function _matchMedia(event, binder, value) {
+	function _matchMedia(event, binder, value): void {
 		var cookies = binder._cookies,
 			// see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
-			encodeRFC5987ValueChars = function (str) {
+			encodeRFC5987ValueChars = function (str): string {
 				return encodeURIComponent(str).replace(/['()]/g, escape).replace(/\*/g, '%2A').replace(/%(?:7C|60|5E)/g, unescape);
 			};
 		if (event.matches) {
@@ -138,7 +139,7 @@ zkbind.Binder = zk.$extends(zk.Object, {
 		this._toDoUnAftercmd = {};
 		//ZK-3133
 		if (widget['$ZKMATCHMEDIA$']) {
-			var cookies = [],
+			var cookies: string[] = [],
 				matched = _zkMatchMediaRegexPattern.exec(document.cookie);
 			if (matched) {
 				var m = matched[1];
@@ -148,7 +149,8 @@ zkbind.Binder = zk.$extends(zk.Object, {
 			}
 			this._cookies = cookies;
 			var binder = this,
-				mqls = [];
+				// eslint-disable-next-line no-undef
+				mqls: { mql: MediaQueryList; handler: (event: JQuery.Event) => void }[] = [];
 			for (var i = 0; i < widget['$ZKMATCHMEDIA$'].length; i++) {
 				var media = widget['$ZKMATCHMEDIA$'][i],
 					mql = window.matchMedia(media.substring(16)),
