@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 declare namespace zk {
     type Class = any;
     type $void = () => false;
+    type exception = any;
 
     interface ObjectStatic {
         isAssignableFrom(cls: Class): boolean;
@@ -192,7 +193,7 @@ declare namespace zk {
         doKeyDown_(evt: Event): void;
         doKeyPress_(evt: Event): void;
         doKeyUp_(evt: Event): void;
-        domAttrs_(no?: {[noAttr: string]: boolean}): string;
+        domAttrs_(no?: {[noAttr: string]: boolean | number}): string;
         domClass_(no?: {[noAttr: string]: boolean}): string;
         domListen_(node: Element, evtnm: string, fn?: any, keyword?: string): Widget;
         doMouseDown_(evt: Event): void;
@@ -333,7 +334,7 @@ declare namespace zk {
         unbindSwipe_(): void;
         unbindTapHold_(): void;
         uncloneDrag_(drag: any): void;
-        unlisten(infos: {[event: string]: any}): Widget;
+        unlisten(infos: {[event: string]: any}, Widget?): Widget;
         unlistenOnFitSize_(): void;
         updateDomClass_(): void;
         updateDomStyle_(): void;
@@ -557,6 +558,8 @@ declare namespace zk {
     }
 
     interface ZKCoreUtilityStatic {
+        MINDAYS: any;
+        DOW_1ST: any;
         _avoidRod?: boolean;
         _anique: Record<string, Anima[]>;
         _cfByMD?: boolean;
@@ -633,6 +636,11 @@ declare namespace zk {
                 rounding(valStr: string, ri: number, rounding: number, minus: boolean): string;
                 setScale(val: BigDecimal, scale: number, rounding: number): string | BigDecimal;
                 unformat(fmt: string, val: string, ignoreLocale: boolean, localizedSymbols: any);
+            }
+            Date: {
+                getYDelta(date: Date, localeDateTimeFormat: any)
+                getEraName(date: Date, localizedSymbols: any, localeDateTimeFormat: any);
+                _isoDateTimeFormat: any;
             }
         };
         gapi: GApi;
@@ -936,6 +944,16 @@ declare namespace zk {
         loadAPIs(wgt: Widget, callback: (() => void), msg: string, timeout: number): void;
         waitUntil(wgt: Widget, opts: any): void;
     }
+
+    interface Msgzul {
+        _do(): void;
+        start(dt: Desktop, min: number, max: number, factor: number): void;
+        stop(): void;
+    }
+}
+
+interface HTMLElement {
+    setAttribute(qualifiedName: string, value: string | boolean): void;
 }
 
 declare var zk: zk.ZKCoreUtilityStatic;

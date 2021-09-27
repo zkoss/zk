@@ -66,7 +66,7 @@ declare namespace zk {
         parseMap(text: string, separator?: string, quote?: string): {[key: string]: string};
         progressbox(id: string, msg: string, mask?: boolean, icon?: string | null, opts?: Partial<ProgressboxOptions>): void;
         stringToInts(text: string | null, defaultValue: number): number[] | null;
-        today(full: boolean, tz: string): Date;
+        today(full: boolean | null, tz: string): Date;
         today(fmt: string, tz: string): Date;
         throttle<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number): (this: T, ...args: A) => R;
         debounce<T, A extends any[], R>(func: (this: T, ...args: A) => R, wait: number, immediate?: boolean): (this: T, ...args: A) => R;

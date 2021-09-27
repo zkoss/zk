@@ -33,6 +33,7 @@ interface Window {
     zkservice: zk.ZKServiceStatic;
     onIframeURLChange(uuid: string, url: string): void;
     zkpe: zk.$void;
+    zEmbedded;
 }
 
 // mount.ts
