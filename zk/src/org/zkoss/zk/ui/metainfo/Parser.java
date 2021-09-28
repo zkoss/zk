@@ -1052,7 +1052,7 @@ public class Parser {
 				//ZK 8: If the attribute of viewModel being used, auto apply "BindComposer"
 				if (isMVVM) {
 					String apply = compInfo.getApply();
-					String bindComposerStr = "org.zkoss.bind.BindComposer";
+					String bindComposerStr = Library.getProperty("org.zkoss.bind.defaultComposer.class", "org.zkoss.bind.BindComposer");
 					if (apply != null && apply.contains(bindComposerStr) && !apply.contains(",")) {
 						log.warn(message("If the attribute of viewModel is being used, then \"" + bindComposerStr
 								+ "\" will be applied automatically. "
