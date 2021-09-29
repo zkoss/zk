@@ -803,4 +803,16 @@ public class Maps {
 	        return o1 == null ? o2 == null : o1.equals(o2);
 	    }
 	}
+
+	/**
+	 * Returns a map containing the given mappings.
+	 * @since 10.0.0
+	 */
+	public static Map of(Object... args) {
+		Map<Object, Object> map = new HashMap<>(args.length / 2);
+		for (int i = 0; i < args.length; i += 2) {
+			map.put(args[i], args[i + 1]);
+		}
+		return map;
+	}
 }
