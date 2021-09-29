@@ -16,7 +16,7 @@
     <properties>
         <zats.version>2.1.1</zats.version>
         <zkspringboot.version>2.3.1</zkspringboot.version>
-        <zkckeditor.version>4.16.1.1</zkckeditor.version>
+        <zkckeditor.version>4.16.2.0</zkckeditor.version>
         <zkgmaps.version>3.2.0</zkgmaps.version>
         <zkcharts.version>7.2.2.0</zkcharts.version>
         <zkpivotable.version>2.5.2</zkpivotable.version>

@@ -13,14 +13,14 @@ Copyright (C)  Potix Corporation. All Rights Reserved.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	var _WidgetX = {} as any,
 		_zkMatchMediaRegexPattern = /ZKMatchMedia=([^;]*)/,
-		_portrait: Record<string, boolean> = { '0': true, '180': true }, //default portrait definition
+		_portrait: Record<string, boolean> = {'0': true, '180': true}, //default portrait definition
 		_initLandscape = jq.innerWidth() > jq.innerHeight(), // initial orientation is landscape or not
 		_initDefault = _portrait[window.orientation]; //default orientation
 
 zk.override(zk.Widget.prototype, _WidgetX, {
 	$binder: function () {
-		var w = this as zk.Widget | null;
-		for (; w; w = w.parent) {
+		var w = this as zk.Widget;
+		for (; w; w = w.parent!) {
 			if (w['$ZKBINDER$'])
 				break;
 		}
