@@ -670,8 +670,16 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	/** Returns the client-side action (CSA).
 	 * <p>Default: null (no CSA at all)
 	 * @since 5.0.6
+	 * @deprecated As of release 10.0.0, using {@link #setClientAction(String)} instead.
 	 */
 	public String getAction() {
+		return getClientAction();
+	}
+	/** Returns the client-side action (CSA).
+	 * <p>Default: null (no CSA at all)
+	 * @since 10.0.0
+	 */
+	public String getClientAction() {
 		return _auxinf != null ? _auxinf.action : null;
 	}
 
@@ -694,8 +702,33 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 	 * CSA's format is different and limited.
 	 * In additions, it is part of {@link HtmlBasedComponent}.
 	 * @since 5.0.6
+	 * @deprecated As of release 10.0.0, using {@link #setClientAction(String)} instead.
 	 */
 	public void setAction(String action) {
+		setClientAction(action);
+	}
+
+	/** Sets the client-side action (CSA).
+	 * <p>Default: null (no CSA at all)
+	 * <p>The format: <br>
+	 * <code>action1: action-effect1; action2: action-effect2</code><br/>
+	 *
+	 * <p>Currently, only two actions are <code>show</code> and <code>hide</code>.
+	 * They are called when the widget is becoming visible (show) and invisible (hide).
+	 * <p>The action effect (<code>action-effect1</code>) is the name of a method
+	 * defined in <a href="http://www.zkoss.org/javadoc/latest/jsdoc/zk/eff/Actions.html">zk.eff.Actions</a>,
+	 * such as
+	 * <code>show: slideDown; hide: slideUp</code>
+	 * <p>You could specify the effects as follows:<br/>
+	 * <code>show: slideDown({duration:1000})</code>
+	 * <p>Security Tips: the action is not encoded and it is OK to embed JavaScript,
+	 * so, if you want to allow users to specify the action, you have to encode it.
+	 * <p>Note for developers upgraded from ZK 3:
+	 * CSA's format is different and limited.
+	 * In additions, it is part of {@link HtmlBasedComponent}.
+	 * @since 10.0.0
+	 */
+	public void setClientAction(String action) {
 		if (action != null && action.length() == 0)
 			action = null;
 		if (!Objects.equals(_auxinf != null ? _auxinf.action : null, action)) {
