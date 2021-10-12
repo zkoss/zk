@@ -1,0 +1,240 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+dependencies {
+	api project(':zul')
+	api project.properties['javassist']
+	compileOnly project.properties['servlet.api']
+	compileOnly 'javax.validation:validation-api:1.0.0.GA'
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.bind"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+// generate pom for zkbind-api & zkbind-impl
+publishing {
+	publications {
+		"${project.name}API"(MavenPublication) {
+			groupId = "${group}"
+			artifactId = project.name  + '-api'
+			// pom configuration
+			pom {
+				name = 'ZK Bind API'
+				url = "https://www.zkoss.org/zkbind-api"
+				description = 'ZK Bind API'
+				licenses {
+					license {
+						name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
+						url = 'https://www.gnu.org/licenses/lgpl.html'
+						distribution = 'repo'
+					}
+				}
+				developers {
+					developer {
+						id = 'zkteam'
+						name = 'ZK Team'
+						email = 'info@zkoss.org'
+						url = 'https://www.zkoss.org'
+						organization = 'Potix'
+						organizationUrl = 'https://www.zkoss.org'
+						roles = ['architect', 'developer']
+						timezone = '8'
+						properties = [
+								picUrl: 'https://www.zkoss.org'
+						]
+					}
+				}
+				scm {
+					connection = 'scm:git:https://github.com/zkoss/zk.git'
+					url = 'https://mavensync.zkoss.org/maven2'
+				}
+				withXml {
+					// add repositories in generated pom
+					def repositoriesNode = asNode().appendNode('repositories')
+					project.repositories.each {repository ->
+						if (repository instanceof MavenArtifactRepository && repository.name != 'MavenRepo') {
+							def repositoryNode = repositoriesNode.appendNode('repository')
+							repositoryNode.appendNode('id', repository.name)
+							repositoryNode.appendNode('url', repository.url)
+						}
+					}
+					// add provided dependency in generated pom
+					project.configurations.compileOnly.allDependencies.each { dependency ->
+						asNode().dependencies[0].appendNode("dependency").with {
+							it.appendNode("groupId", dependency.group)
+							it.appendNode("artifactId", dependency.name)
+							it.appendNode("version", dependency.version)
+							it.appendNode("scope", "provided")
+						}
+					}
+					// remove zul dependency
+					def nodeToDel = asNode().dependencies[0].dependency.find { dep ->
+						dep.text().contains('zul')
+					}
+					nodeToDel.parent().remove(nodeToDel)
+				}
+				// add dependencies to pom
+				from(components.java)
+				suppressAllPomMetadataWarnings()
+			}
+		}
+
+		"${project.name}IMPL"(MavenPublication) {
+			groupId = "${group}"
+			artifactId = project.name + '-impl'
+			// pom configuration
+			pom {
+				name = 'ZK Bind Implementation'
+				url = "https://www.zkoss.org/zkbind-impl"
+				description = 'ZK Bind Implementation'
+				licenses {
+					license {
+						name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
+						url = 'https://www.gnu.org/licenses/lgpl.html'
+						distribution = 'repo'
+					}
+				}
+				developers {
+					developer {
+						id = 'zkteam'
+						name = 'ZK Team'
+						email = 'info@zkoss.org'
+						url = 'https://www.zkoss.org'
+						organization = 'Potix'
+						organizationUrl = 'https://www.zkoss.org'
+						roles = ['architect', 'developer']
+						timezone = '8'
+						properties = [
+								picUrl: 'https://www.zkoss.org'
+						]
+					}
+				}
+				scm {
+					connection = 'scm:git:https://github.com/zkoss/zk.git'
+					url = 'https://mavensync.zkoss.org/maven2'
+				}
+				// add dependencies to pom
+				from(components.java)
+				withXml {
+					// add repositories in generated pom
+					def repositoriesNode = asNode().appendNode('repositories')
+					project.repositories.each {repository ->
+						if (repository instanceof MavenArtifactRepository && repository.name != 'MavenRepo') {
+							def repositoryNode = repositoriesNode.appendNode('repository')
+							repositoryNode.appendNode('id', repository.name)
+							repositoryNode.appendNode('url', repository.url)
+						}
+					}
+					// add provided dependency in generated pom
+					project.configurations.compileOnly.allDependencies.each { dependency ->
+						asNode().dependencies[0].appendNode("dependency").with {
+							it.appendNode("groupId", dependency.group)
+							it.appendNode("artifactId", dependency.name)
+							it.appendNode("version", dependency.version)
+							it.appendNode("scope", "provided")
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+task zkbindAPIJar(type: Jar) {
+	dependsOn(compileJava)
+	dependsOn 'preparePomFile'
+	archiveAppendix = "api"
+	destinationDirectory = file("$buildDir/libs/api")
+	from("$buildDir/classes/java/main") {
+		includeEmptyDirs = false
+		include "**/annotation/**.class"
+		include "**/BindContext.class", "**/Binder.class", "**/Converter.class", "**/Form.class", "**/FormStatus.class", "**/PhaseListener.class", "**/Property.class", "**/ValidationContext.class", "**/Validator.class", "**/Property.class"
+		include "**/proxy/FormFieldCleaner.class", "**/proxy/FormProxyObject.class", "**/proxy/ProxyNode.class"
+		include "**/sys/BindEvaluatorX.class", "**/sys/Binding.class", "**/sys/FormBinding.class", "**/sys/PropertyBinding.class", "**/sys/SaveBinding.class", "**/sys/SavePropertyBinding.class"
+	}
+}
+
+task zkbindIMPLJar(type: Jar) {
+	dependsOn(processResources)
+	dependsOn(compileJava)
+	dependsOn 'preparePomFile'
+	archiveAppendix = "impl"
+	destinationDirectory = file("$buildDir/libs/impl")
+	from "$buildDir/resources/main"
+	from("$buildDir/classes/java/main") {
+		includeEmptyDirs = false
+		exclude "**/BindContext.class", "**/Binder.class", "**/Converter.class", "**/Form.class", "**/FormStatus.class", "**/PhaseListener.class", "**/Property.class", "**/ValidationContext.class", "**/Validator.class", "**/Property.class"
+		exclude "**/proxy/FormFieldCleaner.class", "**/proxy/FormProxyObject.class", "**/proxy/ProxyNode.class"
+		exclude "**/sys/BindEvaluatorX.class", "**/sys/Binding.class", "**/sys/FormBinding.class", "**/sys/PropertyBinding.class", "**/sys/SaveBinding.class", "**/sys/SavePropertyBinding.class"
+	}
+	manifest {
+		attributes(
+				"Specification-Version": project.properties['version'],
+				"Implementation-Version": project.properties['version']
+		)
+		// Merge specify MANIFEST.MF file.
+		from "$buildDir/resources/main/META-INF/MANIFEST.MF"
+	}
+}
+
+task bundleAPIJar(type: Jar) {
+	dependsOn(zkbindAPIJar)
+	dependsOn(rootProject.tasks.withType(GenerateMavenPom))
+	doFirst {
+		// move & rename default-pom.xml
+		copy {
+			into file("$projectDir/build/pom/api")
+			from file("$rootDir/build/publications/${project.name}API")
+			include '**/pom-default.xml'
+			rename 'pom-default.xml', 'pom.xml'
+			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+		}
+	}
+	archiveAppendix = "api"
+	archiveClassifier = "bundle"
+	destinationDirectory = file("$buildDir/libs")
+	from "$buildDir/pom/api"
+	from("$buildDir/libs/api") {
+		include "**/zkbind-api-${project.version}.jar"
+		setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+	}
+}
+
+task bundleIMPLJar(type: Jar) {
+	dependsOn(zkbindIMPLJar)
+	dependsOn(rootProject.tasks.withType(GenerateMavenPom))
+	doFirst {
+		// move & rename default-pom.xml
+		copy {
+			into file("$projectDir/build/pom/impl")
+			from file("$rootDir/build/publications/${project.name}IMPL")
+			include '**/pom-default.xml'
+			rename 'pom-default.xml', 'pom.xml'
+			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+		}
+	}
+	archiveAppendix = "impl"
+	archiveClassifier = "bundle"
+	destinationDirectory = file("$buildDir/libs")
+	from "$buildDir/pom/impl"
+	from("$buildDir/libs/impl") {
+		include "**/zkbind-impl-${project.version}.jar"
+		setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+	}
+}
+
+description = 'ZK Bind'

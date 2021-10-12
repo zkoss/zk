@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: ZK Bind
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.bind
+Implementation-URL: http://www.zkoss.org/prj/zkbind
+Implementation-Vendor: Potix Corporation

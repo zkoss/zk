@@ -1,0 +1,67 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+java {
+	// Declaring feature variants for optionalImplementation, to generate dependency optional in pom
+	registerFeature('optional') {
+		usingSourceSet(sourceSets.main)
+	}
+}
+
+repositories {
+	maven {
+		name = 'maven seasar org'
+		url = uri('https://maven.seasar.org/maven2')
+	}
+
+	maven {
+		name = 'jboss-repo'
+		url = uri('https://repository.jboss.org/nexus/content/groups/public-jboss/')
+	}
+
+	maven {
+		name = 'nuxeo'
+		url = uri('https://maven.nuxeo.org/nexus/content/groups/public/')
+	}
+}
+
+dependencies {
+	api project(':zul')
+	optionalImplementation 'javax.enterprise:cdi-api:2.0.SP1'
+	optionalImplementation "org.springframework:spring-beans:${project.properties['org.springframework.version']}"
+	optionalImplementation "org.springframework:spring-context:${project.properties['org.springframework.version']}"
+	optionalImplementation "org.springframework:spring-web:${project.properties['org.springframework.version']}"
+	optionalImplementation('org.seasar.container:s2-framework:2.4.43') {
+		exclude group: '*', module: '*'
+	}
+	optionalImplementation('org.acegisecurity:acegi-security:1.0.7') {
+		exclude group: '*', module: '*'
+	}
+	optionalImplementation 'javax.persistence:persistence-api:1.0'
+	optionalImplementation('org.hibernate:hibernate-core:5.5.3.Final') {
+		exclude group: '*', module: '*'
+	}
+	optionalImplementation 'javax.transaction:jta:1.1'
+	compileOnly project.properties['servlet.api']
+	compileOnly 'javax.el:javax.el-api:2.2.5'
+	compileOnly project.properties['portlet.api']
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.${project.name}"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+description = 'ZK Plus Utilities'

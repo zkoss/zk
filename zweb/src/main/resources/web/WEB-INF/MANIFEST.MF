@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: Potix Web Library
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.web
+Implementation-URL: http://www.zkoss.org/prj/zweb
+Implementation-Vendor: Potix Corporation

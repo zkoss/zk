@@ -1,0 +1,26 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+dependencies {
+	api project(':zk')
+	compileOnly project.properties['servlet.api']
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.${project.name}"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+description = 'ZK XUL Components'

@@ -1,0 +1,24 @@
+plugins {
+	id 'java-library'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+dependencies {
+	api project(':zul')
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.zkplus.legacy"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+description = 'ZK Plus Utilities (Legacy)'

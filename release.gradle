@@ -1,0 +1,759 @@
+// Script for release
+
+subprojects {
+	afterEvaluate {
+		// generate Publishing tasks each project, you can check these tasks with 'gradle task' command
+		publishing {
+			publications {
+				"$project.name"(MavenPublication) {
+					groupId = "${group}"
+					artifactId = project.name
+					// pom configuration
+					pom {
+						name = project.description
+						url = "https://www.zkoss.org/$project.name"
+						description = project.description
+						licenses {
+							license {
+								name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
+								url = 'https://www.gnu.org/licenses/lgpl.html'
+								distribution = 'repo'
+							}
+						}
+						developers {
+							developer {
+								id = 'zkteam'
+								name = 'ZK Team'
+								email = 'info@zkoss.org'
+								url = 'https://www.zkoss.org'
+								organization = 'Potix'
+								organizationUrl = 'https://www.zkoss.org'
+								roles = ['architect', 'developer']
+								timezone = '8'
+								properties = [
+									picUrl: 'https://www.zkoss.org'
+								]
+							}
+						}
+						scm {
+							connection = 'scm:git:https://github.com/zkoss/zk.git'
+							url = 'https://mavensync.zkoss.org/maven2'
+						}
+						withXml {
+							// add repositories in generated pom
+							def repositoriesNode = asNode().appendNode('repositories')
+							project.repositories.each {repository ->
+								if (repository instanceof MavenArtifactRepository && repository.name != 'MavenRepo') {
+									def repositoryNode = repositoriesNode.appendNode('repository')
+									repositoryNode.appendNode('id', repository.name)
+									repositoryNode.appendNode('url', repository.url)
+								}
+							}
+							// add provided dependency in generated pom
+							project.configurations.compileOnly.allDependencies.each { dependency ->
+								asNode().dependencies[0].appendNode("dependency").with {
+									it.appendNode("groupId", dependency.group)
+									it.appendNode("artifactId", dependency.name)
+									it.appendNode("version", dependency.version)
+									it.appendNode("scope", "provided")
+								}
+							}
+						}
+					}
+					// add dependencies to pom
+					afterEvaluate {
+						from(components.java)
+					}
+					suppressAllPomMetadataWarnings()
+				}
+			}
+		}
+
+		// move & rename default-pom.xml
+		task preparePomFile(type: Copy) {
+			dependsOn(rootProject.tasks.withType(GenerateMavenPom))
+			into file("$projectDir/build/pom")
+			from file("$rootDir/build/publications/$project.name")
+			include '**/pom-default.xml'
+			rename 'pom-default.xml', 'pom.xml'
+			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+		}
+
+		// combine jar, source.jar, javadoc.jar & pom.xml into one bundle.jar
+		task bundleJar(type: Jar) {
+			dependsOn 'jar'
+			dependsOn 'sourcesJar'
+			dependsOn 'javadocJar'
+			dependsOn 'preparePomFile'
+			dependsOn(project.getTasksByName('bundleAPIJar', false))
+			dependsOn(project.getTasksByName('bundleIMPLJar', false))
+			archiveClassifier = "bundle"
+			def elementName = "${project.name}-${project.version}"
+			from("$buildDir/pom") {
+				exclude "**/api", "**/impl"
+			}
+			from("$buildDir/libs") {
+				include "**/${elementName}.jar"
+				include "**/${elementName}-sources.jar"
+				include "**/${elementName}-javadoc.jar"
+				// to prevent zkbind-api zkbind-impl been included
+				exclude "**/api", "**/impl"
+				setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+			}
+		}
+	}
+}
+
+// bin part
+
+task prepareBin() {
+	subprojects.each {
+		dependsOn ":$it.name:jar"
+		dependsOn ":$it.name:sourcesJar"
+	}
+	zkcmlprojects.each { prjName, dir ->
+		dependsOn gradle.includedBuild('zkcml').task(":$prjName:jar")
+		dependsOn gradle.includedBuild('zkcml').task(":$prjName:sourcesJar")
+		dependsOn gradle.includedBuild('zkcml').task(":$prjName:evalJar")
+	}
+	dependsOn gradle.includedBuild('zksandbox').task(":war")
+	doLast {
+		// ext lib jars
+		copy {
+			into "$buildDir/tmp/eebin/dist/lib/ext"
+			from("$rootDir/dist/lib/ext") {
+				include "**/bsh.jar"
+				include "**/closure-compiler.jar"
+				include "**/commons-collections4.jar"
+				include "**/commons-fileupload.jar"
+				include "**/commons-io.jar"
+				include "**/commons-logging.jar"
+				include "**/Filters.jar"
+				include "**/gson.jar"
+				include "**/itext.jar"
+				include "**/jasperreports.jar"
+				include "**/javassist.jar"
+				include "**/jcommon.jar"
+				include "**/jfreechart.jar"
+				include "**/slf4j-api.jar"
+				include "**/zsoup.jar"
+			}
+		}
+		// theme jars
+		// TODO: update classic jars from zkthemes task?
+		copy {
+			includeEmptyDirs false
+			into "$buildDir/tmp/eebin/dist/lib/theme"
+			from("$rootDir/dist/lib") {
+				include "**/breeze.jar"
+				include "**/iceblue_c.jar"
+				include "**/sapphire.jar"
+				include "**/silvertail.jar"
+			}
+		}
+		// zkforge jars
+		copy {
+			includeEmptyDirs false
+			into "$buildDir/tmp/eebin/dist/lib/zkforge"
+			from("$rootDir/dist/lib") {
+				include "**/flashchart.jar"
+				include "**/gmapsz.jar"
+				include "**/timelinez.jar"
+				include "**/timeplotz.jar"
+				include "**/zuljsp.jar"
+			}
+		}
+		zkprojects.each { prjName, dir ->
+			// subprojects jars
+			copy {
+				into "$buildDir/tmp/eebin/dist/lib"
+				from("$dir/build/libs/${prjName}-${project.version}.jar") {
+					rename "${prjName}-${project.version}.jar", "${prjName}.jar"
+				}
+			}
+			// subprojects sources jars
+			copy {
+				into "$buildDir/tmp/eebin/dist/src"
+				from("$dir/build/libs/${prjName}-${project.version}-sources.jar") {
+					rename "${prjName}-${project.version}-sources.jar", "${prjName}-sources.jar"
+				}
+			}
+		}
+		// doc
+		copy {
+			into "$buildDir/tmp/eebin/doc"
+			from("$rootDir/zkdoc") {
+				include "**/release-note"
+			}
+			from("$rootDir/../zkcml/cmldoc/CML_LICENSE") {
+				rename "CML_LICENSE", "LICENSE"
+			}
+		}
+
+		// prepare ce
+		copy {
+			into "$buildDir/tmp/cebin"
+			from("$buildDir/tmp/eebin") {
+				// lib/ext
+				exclude "**/commons-collections4.jar"
+				exclude "**/commons-logging.jar"
+				exclude "**/Filters.jar"
+				exclude "**/gson.jar"
+				exclude "**/itext.jar"
+				exclude "**/jasperreports.jar"
+				exclude "**/jfreechart.jar"
+				exclude "**/jcommon.jar"
+				// lib/zkforge
+				exclude "**/gmapsz.jar"
+				exclude "**/timelinez.jar"
+				exclude "**/timeplotz.jar"
+				exclude "**/zuljsp.jar"
+				// cml
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar"
+				// doc
+				exclude "**/doc"
+			}
+		}
+		copy {
+			into "$buildDir/tmp/cebin/doc"
+			from "$rootDir/zkdoc"
+		}
+
+		// prepare ee eval
+		// copy from eebin exclude cml jar & sources jar
+		copy {
+			into "$buildDir/tmp/eebin-eval"
+			from("$buildDir/tmp/eebin") {
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar"
+				exclude "**/LICENSE"
+			}
+		}
+		copy {
+			into "$buildDir/tmp/eebin-eval/doc"
+			from "$rootDir/../zkcml/cmldoc/LICENSE"
+		}
+		// copy eval jar
+		zkcmlprojects.each { prjName, dir ->
+			copy {
+				into "$buildDir/tmp/eebin-eval/dist/lib"
+				from "$dir/build/libs/eval/$prjName-${project.version}.jar"
+				rename "$prjName-${project.version}.jar", "${prjName}.jar"
+			}
+		}
+
+		// zk sandbox
+		copy {
+			into "$buildDir/tmp/sandbox/doc"
+			from "$buildDir/tmp/eebin-eval/doc"
+		}
+		copy {
+			into "$buildDir/tmp/sandbox/zksandbox/src"
+			from "$rootDir/zksandbox/src/main/java"
+		}
+		copy {
+			into "$buildDir/tmp/sandbox/zksandbox/WebContent"
+			from "$rootDir/zksandbox/src/main/webapp"
+		}
+		copy {
+			into "$buildDir/tmp/sandbox"
+			from "$rootDir/zksandbox/build/libs/zksandbox.war"
+		}
+	}
+}
+
+task prepareBinOSGi() {
+	subprojects.each {
+		dependsOn ":$it.name:buildOSGi"
+	}
+	zkcmlprojects.each { prjName, dir ->
+		dependsOn gradle.includedBuild('zkcml').task(":$prjName:buildOSGi")
+	}
+	doLast {
+		// osgi jars
+		copy {
+			into "$buildDir/tmp/eebin-osgi/dist/lib"
+			from "$buildDir/dist/lib/osgi"
+		}
+		// osgi sources jars
+		copy {
+			into "$buildDir/tmp/eebin-osgi/dist/src"
+			from "$buildDir/dist/lib/osgi-src"
+		}
+		// doc
+		copy {
+			into "$buildDir/tmp/eebin-osgi/doc"
+			from("$rootDir/zkdoc") {
+				include "**/release-note"
+			}
+			from("$rootDir/../zkcml/cmldoc/CML_LICENSE") {
+				rename "CML_LICENSE", "LICENSE"
+			}
+		}
+
+		// prepare ce
+		copy {
+			into "$buildDir/tmp/cebin-osgi"
+			from("$buildDir/tmp/eebin-osgi") {
+				// cml
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar"
+				// doc
+				exclude "**/doc"
+			}
+		}
+		copy {
+			into "$buildDir/tmp/cebin-osgi/doc"
+			from "$rootDir/zkdoc"
+		}
+
+		// prepare ee eval
+		// copy from eebin exclude cml jar & sources jar
+		copy {
+			into "$buildDir/tmp/eebin-osgi-eval"
+			from("$buildDir/tmp/eebin-osgi") {
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar"
+				exclude "**/LICENSE"
+			}
+		}
+		copy {
+			into "$buildDir/tmp/eebin-osgi-eval/doc"
+			from "$rootDir/../zkcml/cmldoc/LICENSE"
+		}
+		// copy eval jar
+		zkcmlprojects.each { prjName, dir ->
+			copy {
+				into "$buildDir/tmp/eebin-osgi-eval/dist/lib"
+				from "$dir/build/libs/eval/${prjName}.osgi.jar"
+			}
+		}
+	}
+}
+
+task prepareSrc() {
+	dependsOn(prepareBin)
+	doLast {
+		// copy dist/src from eebin
+		copy {
+			into "$buildDir/tmp/src/dist/src"
+			from "$buildDir/tmp/eebin/dist/src"
+		}
+		// doc
+		copy {
+			into "$buildDir/tmp/src/doc"
+			from("$rootDir/zkdoc") {
+				include "**/release-note"
+			}
+			from("$rootDir/../zkcml/cmldoc/CML_LICENSE") {
+				rename "CML_LICENSE", "LICENSE"
+			}
+		}
+		zkprojects.each { prjName, dir ->
+			// copy src
+			copy {
+				into "$buildDir/tmp/src/$prjName/src"
+				from "$dir/src"
+			}
+			// copy codegen
+			copy {
+				into "$buildDir/tmp/src/$prjName/codegen"
+				from "$dir/codegen"
+			}
+		}
+
+		// ce src
+		copy {
+			into "$buildDir/tmp/cesrc"
+			from("$buildDir/tmp/src") {
+				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar"
+				exclude "**/za11y", "**/zkmax", "**/zuti", "**/zkex", "**/zml"
+				exclude "**/LICENSE"
+			}
+		}
+		copy {
+			into "$buildDir/tmp/cesrc/doc"
+			from "$rootDir/zkdoc"
+		}
+	}
+}
+
+task zkeeBinTar(type: Tar) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkee-bin-${project.version}.tar.gz"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	compression = Compression.GZIP
+	from "$buildDir/tmp/eebin"
+	into "zkee-bin-${project.version}"
+}
+
+task zkeeBinZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkee-bin-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	from "$buildDir/tmp/eebin"
+	into "zkee-bin-${project.version}"
+}
+
+task zkeeBinOSGiTar(type: Tar) {
+	dependsOn(prepareBinOSGi)
+	archiveFileName = "zkee-bin-osgi-${project.version}.tar.gz"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	compression = Compression.GZIP
+	from "$buildDir/tmp/eebin-osgi"
+	into "zkee-bin-osgi-${project.version}"
+}
+
+task zkeeBinOSGiZip(type: Zip) {
+	dependsOn(prepareBinOSGi)
+	archiveFileName = "zkee-bin-osgi-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	from "$buildDir/tmp/eebin-osgi"
+	into "zkee-bin-osgi-${project.version}"
+}
+
+task zkeeSrcZip(type: Zip) {
+	dependsOn(prepareSrc)
+	archiveFileName = "zkee-src-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	from "$buildDir/tmp/src"
+	into "zkee-src-${project.version}"
+}
+
+task zkpeBinTar(type: Tar) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkpe-bin-${project.version}.tar.gz"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	compression = Compression.GZIP
+	from "$buildDir/tmp/eebin"
+	into "zkpe-bin-${project.version}"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar"
+	exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
+}
+
+task zkpeBinZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkpe-bin-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	from "$buildDir/tmp/eebin"
+	into "zkpe-bin-${project.version}"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar"
+	exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
+}
+
+task zkpeBinOSGiTar(type: Tar) {
+	dependsOn(prepareBinOSGi)
+	archiveFileName = "zkpe-bin-osgi-${project.version}.tar.gz"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	compression = Compression.GZIP
+	from "$buildDir/tmp/eebin-osgi"
+	into "zkpe-bin-osgi-${project.version}"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar"
+}
+
+task zkpeBinOSGiZip(type: Zip) {
+	dependsOn(prepareBinOSGi)
+	archiveFileName = "zkpe-bin-osgi-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	from "$buildDir/tmp/eebin-osgi"
+	into "zkpe-bin-osgi-${project.version}"
+	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar"
+}
+
+task zkpeSrcZip(type: Zip) {
+	dependsOn(prepareSrc)
+	archiveFileName = "zkpe-src-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin/proprietary")
+	from("$buildDir/tmp/src") {
+		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar"
+		exclude "**/za11y", "**/zkmax", "**/zuti"
+	}
+	into "zkpe-src-${project.version}"
+}
+
+task zkBinZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zk-bin-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/tmp/cebin"
+	into "zk-bin-${project.version}"
+}
+
+task zkBinTar(type: Tar) {
+	dependsOn(prepareBin)
+	archiveFileName = "zk-bin-${project.version}.tar.gz"
+	destinationDirectory = file("$buildDir/bin")
+	compression = Compression.GZIP
+	from "$buildDir/tmp/cebin"
+	into "zk-bin-${project.version}"
+}
+
+task zkBinOSGiTar(type: Tar) {
+	dependsOn(prepareBinOSGi)
+	archiveFileName = "zk-bin-osgi-${project.version}.tar.gz"
+	destinationDirectory = file("$buildDir/bin")
+	compression = Compression.GZIP
+	from "$buildDir/tmp/cebin-osgi"
+	into "zk-bin-osgi-${project.version}"
+}
+
+task zkBinOSGiZip(type: Zip) {
+	dependsOn(prepareBinOSGi)
+	archiveFileName = "zk-bin-osgi-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/tmp/cebin-osgi"
+	into "zk-bin-osgi-${project.version}"
+}
+
+task zkSrcZip(type: Zip) {
+	dependsOn(prepareSrc)
+	archiveFileName = "zk-src-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/tmp/cesrc"
+	into "zk-src-${project.version}"
+}
+
+task zkpeBinEvalZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkpe-bin-eval-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from("$buildDir/tmp/eebin-eval") {
+		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar"
+		exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
+	}
+	into "zkpe-bin-eval-${project.version}"
+}
+
+task zkeeBinEvalZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkee-bin-eval-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/tmp/eebin-eval"
+	into "zkee-bin-eval-${project.version}"
+}
+
+task zkeeBinOSGiEvalZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkee-bin-osgi-eval-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/tmp/eebin-osgi-eval"
+	into "zkee-bin-osgi-eval-${project.version}"
+}
+
+task zkpeBinOSGiEvalZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zkpe-bin-osgi-eval-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from("$buildDir/tmp/eebin-osgi-eval") {
+		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar"
+	}
+	into "zkpe-bin-osgi-eval-${project.version}"
+}
+
+task zksandboxZip(type: Zip) {
+	dependsOn(prepareBin)
+	archiveFileName = "zk-sandbox-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/tmp/sandbox"
+	into "zk-sandbox-${project.version}"
+}
+
+task zkjsdocZip(type: Zip) {
+	dependsOn 'alljsdoc'
+	archiveFileName = "zk-jsdoc-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/docs/javadoc/jsdoc"
+	into "zk-jsdoc-${project.version}"
+}
+
+task zkjavadocZip(type: Zip) {
+	dependsOn 'alljavadoc'
+	archiveFileName = "zk-javadoc-${project.version}.zip"
+	destinationDirectory = file("$buildDir/bin")
+	from "$buildDir/docs/javadoc/zk"
+	into "zk-javadoc-${project.version}"
+}
+
+task bins() {
+	// ee
+	dependsOn(zkeeBinZip)
+	dependsOn(zkeeBinTar)
+	dependsOn(zkeeBinOSGiTar)
+	dependsOn(zkeeBinOSGiZip)
+	dependsOn(zkeeSrcZip)
+	// pe
+	dependsOn(zkpeBinZip)
+	dependsOn(zkpeBinTar)
+	dependsOn(zkpeBinOSGiTar)
+	dependsOn(zkpeBinOSGiZip)
+	dependsOn(zkpeSrcZip)
+	// eval
+	dependsOn(zkeeBinEvalZip)
+	dependsOn(zkpeBinEvalZip)
+	dependsOn(zkeeBinOSGiEvalZip)
+	dependsOn(zkpeBinOSGiEvalZip)
+	// ce
+	dependsOn(zkBinZip)
+	dependsOn(zkBinTar)
+	dependsOn(zkBinOSGiTar)
+	dependsOn(zkBinOSGiZip)
+	dependsOn(zkSrcZip)
+	// zksandbox
+	dependsOn(zksandboxZip)
+	// javadoc & jsdoc
+	dependsOn(zkjavadocZip)
+	dependsOn(zkjsdocZip)
+}
+
+// maven part
+
+task eeBundles() {
+	subprojects.each {
+		dependsOn it.getTasksByName('bundleJar', false)
+	}
+	dependsOn gradle.includedBuild('zkcml').task(':bundleJar')
+	doLast {
+		zkprojects.each { prjName, dir ->
+			copy {
+				includeEmptyDirs false
+				into "$buildDir/maven/proprietary/EE"
+				from("$dir/build/libs") {
+					include "**/*-bundle.jar"
+					exclude "eval/**"
+				}
+			}
+		}
+	}
+}
+
+task peBundles() {
+	subprojects.each {
+		dependsOn it.getTasksByName('bundleJar', false)
+	}
+	dependsOn gradle.includedBuild('zkcml').task(':bundleJar')
+	doLast {
+		zkprojects.each { prjName, dir ->
+			if (prjName != 'za11y' && prjName != 'zkmax' && prjName != 'zuti') {
+				copy {
+					includeEmptyDirs false
+					into "$buildDir/maven/proprietary/PE"
+					from("$dir/build/libs") {
+						include "**/*-bundle.jar"
+						exclude "eval/**"
+					}
+				}
+			}
+		}
+	}
+}
+
+task ceBundles() {
+	subprojects.each {
+		dependsOn it.getTasksByName('bundleJar', false)
+	}
+	doLast {
+		subprojects.each {prj ->
+			copy {
+				includeEmptyDirs false
+				into "$buildDir/maven/CE"
+				from("$prj.projectDir/build/libs") {
+					include "**/*-bundle.jar"
+					exclude "eval/**"
+				}
+			}
+		}
+	}
+}
+
+task eeEvalBundles() {
+	subprojects.each {
+		dependsOn it.getTasksByName('bundleJar', false)
+	}
+	dependsOn gradle.includedBuild('zkcml').task(':bundleEvalJar')
+	doLast {
+		subprojects.each {prj ->
+			copy {
+				includeEmptyDirs false
+				into "$buildDir/maven/EE-eval"
+				from("$prj.projectDir/build/libs") {
+					include "**/*-bundle.jar"
+				}
+			}
+		}
+		zkcmlprojects.each { prjName, dir ->
+			copy {
+				includeEmptyDirs false
+				into "$buildDir/maven/EE-eval"
+				from("$dir/build/libs/eval") {
+					include "**/*-bundle.jar"
+				}
+			}
+		}
+	}
+}
+
+task peEvalBundles() {
+	subprojects.each {
+		dependsOn it.getTasksByName('bundleJar', false)
+	}
+	dependsOn gradle.includedBuild('zkcml').task(':bundleEvalJar')
+	doLast {
+		subprojects.each {prj ->
+			copy {
+				includeEmptyDirs false
+				into "$buildDir/maven/PE-eval"
+				from("$prj.projectDir/build/libs") {
+					include "**/*-bundle.jar"
+				}
+			}
+		}
+		zkcmlprojects.each { prjName, dir ->
+			if (prjName == 'zkex' || prjName == 'zml') {
+				copy {
+					includeEmptyDirs false
+					into "$buildDir/maven/PE-eval"
+					from("$dir/build/libs/eval") {
+						include "**/*-bundle.jar"
+					}
+				}
+			}
+		}
+	}
+}
+
+task release() {
+	// check before release
+	dependsOn 'check'
+	dependsOn gradle.includedBuild('zkcml').task(':check')
+	// bin
+	dependsOn 'bins'
+	// maven bundles
+	dependsOn 'ceBundles'
+	dependsOn 'peBundles'
+	dependsOn 'eeBundles'
+	dependsOn 'peEvalBundles'
+	dependsOn 'eeEvalBundles'
+	// javadoc & jsdoc
+	dependsOn 'alljavadoc'
+	dependsOn 'alljsdoc'
+}
+
+publishToMavenLocal {
+	dependsOn gradle.includedBuild('zkcml').task(':publishToMavenLocal')
+}
+
+// change all the version in gradle.properties under zk, zkcml, atlantic, zkthemes folders
+// e.g. ./gradlew upVer -PchangeVersionTo=10.0.1-SNAPSHOT
+task upVer() {
+	doLast {
+		if (project.hasProperty("changeVersionTo")) {
+			fileTree("../").matching {
+				include "**/gradle.properties"
+			}.each { file ->
+				println "upVer: ${file.path} from ${project.version} to ${project.changeVersionTo}"
+				ant.replaceregexp(
+					file: file,
+					match: "version=$project.version",
+					replace: "version=$project.changeVersionTo",
+				)
+			}
+		}
+	}
+}

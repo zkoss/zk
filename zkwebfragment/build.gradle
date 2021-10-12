@@ -1,0 +1,13 @@
+plugins {
+	id 'java-library'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+description = 'ZK Web Fragment'

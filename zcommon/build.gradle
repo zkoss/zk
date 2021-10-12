@@ -1,0 +1,36 @@
+plugins {
+	id 'java-library'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+java {
+	// Declaring feature variants for optionalImplementation, to generate dependency optional in pom
+	registerFeature('optional') {
+		usingSourceSet(sourceSets.main)
+	}
+}
+
+dependencies {
+	api project(':zel')
+	api project.properties['slf4j.api']
+	api project.properties['bsh']
+	optionalImplementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
+	compileOnly project.properties['servlet.api']
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+group = 'org.zkoss.common'
+description = 'The ZKoss Common Library'

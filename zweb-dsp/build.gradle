@@ -1,0 +1,28 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+dependencies {
+	implementation project(':zcommon')
+	implementation project(':zweb')
+	compileOnly project.properties['servlet.api']
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.web.dsp"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+group = 'org.zkoss.common'
+description = 'The ZKoss Web Library (DSP)'

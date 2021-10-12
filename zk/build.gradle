@@ -1,0 +1,59 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+java {
+	// Declaring feature variants for optionalImplementation, to generate dependency optional in pom
+	registerFeature('optional') {
+		usingSourceSet(sourceSets.main)
+	}
+}
+
+dependencies {
+	api project(':zweb')
+	api project(':zkwebfragment')
+	api 'commons-fileupload:commons-fileupload:1.4'
+	compileOnly project.properties['servlet.api']
+	compileOnly project.properties['portlet.api']
+	compileOnly 'javax.websocket:javax.websocket-api:1.1'
+	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20210601'
+	optionalImplementation('org.codehaus.groovy:groovy-all:1.5.6') {
+		exclude group: '*', module: '*'
+	}
+	optionalImplementation('org.jruby:jruby:1.1.2') {
+		exclude group: '*', module: '*'
+	}
+	optionalImplementation 'org.python:jython:2.2.1'
+	optionalImplementation 'org.mozilla:rhino:1.7R4'
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.${project.name}"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+	buildConfigField("String", "RELEASE", provider { "\"${project.version}\"" })
+}
+
+task gentime(type: Exec) {
+	workingDir "$rootDir/bin"
+	commandLine './gentime', "$projectDir/codegen/resources/metainfo/zk/build"
+}
+
+task genmd5sign(type: Exec) {
+	workingDir "$rootDir/bin"
+	commandLine './genmd5sign', "$projectDir/codegen/resources/metainfo/zk/buildsign", "org.zkoss.zk.ui.sys.WebAppFactoryImpl,org.zkoss.zk.ui.http.WebManager,org.zkoss.zk.ui.sys.Registry", "\"$projectDir/build/classes/java/main", "$projectDir/codegen/resources/metainfo/zk/build", "$rootDir"
+}
+genmd5sign.dependsOn(gentime)
+processResources.dependsOn(genmd5sign)
+
+description = 'ZK Kernel'

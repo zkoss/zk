@@ -18,8 +18,8 @@ var knownOptions = {
     number: ['port'],
 	boolean: ['force'],
     default: {
-        src: 'zul/src/archive/web/js',
-        dest: 'zul/codegen/archive/web/js',
+        src: 'zul/src/main/resources/web/js',
+        dest: 'zul/codegen/resources/web/js',
 	    force: false,
         port: 8080
     }
@@ -129,32 +129,32 @@ function typescript_dev(src, dest, since) {
 
 function typescript_dev_zk() {
     return typescript_dev(
-        'zk/src/archive',
-        'zk/debug/classes',
+        'zk/src/main/resources',
+        'zk/codegen/resources',
         gulp.lastRun(typescript_dev_zk)
     );
 }
 
 function typescript_dev_zul() {
     return typescript_dev(
-        'zul/src/archive',
-        'zul/debug/classes',
+        'zul/src/main/resources',
+        'zul/codegen/resources',
         gulp.lastRun(typescript_dev_zul)
     );
 }
 
 function typescript_dev_zkex() {
     return typescript_dev(
-        '../zkcml/zkex/src/archive',
-        '../zkcml/zkex/debug/classes',
+        '../zkcml/zkex/src/main/resources',
+        '../zkcml/zkex/codegen/resources',
         gulp.lastRun(typescript_dev_zkex)
     );
 }
 
 function typescript_dev_zkmax() {
     return typescript_dev(
-        '../zkcml/zkmax/src/archive',
-        '../zkcml/zkmax/debug/classes',
+        '../zkcml/zkmax/src/main/resources',
+        '../zkcml/zkmax/codegen/resources',
         gulp.lastRun(typescript_dev_zkmax)
     );
 }
@@ -217,23 +217,49 @@ exports.watch = gulp.series(
 exports.build = gulp.parallel(
     function build_zk() {
         return typescript_dev(
-            'zk/src/archive/web/js',
-            'zk/codegen/archive/web/js');
+            'zk/src/main/resources/web/js',
+            'zk/codegen/resources/web/js');
     },
     function build_zul() {
         return typescript_dev(
-            'zul/src/archive/web/js',
-            'zul/codegen/archive/web/js');
+            'zul/src/main/resources/web/js',
+            'zul/codegen/resources/web/js');
     },
     function build_zkex() {
         return typescript_dev(
-            '../zkcml/zkex/src/archive/web/js',
-            '../zkcml/zkex/codegen/archive/web/js');
+            '../zkcml/zkex/src/main/resources/web/js',
+            '../zkcml/zkex/codegen/resources/web/js');
     },
     function build_zkmax() {
         return typescript_dev(
-            '../zkcml/zkmax/src/archive/web/js',
-            '../zkcml/zkmax/codegen/archive/web/js');
+            '../zkcml/zkmax/src/main/resources/web/js',
+            '../zkcml/zkmax/codegen/resources/web/js');
     }
 );
 exports.default = exports.build;
+exports.build_uglify = gulp.parallel(
+    function build_zk_ts() {
+        return typescript_build(
+            'zk/src/main/resources/web/js',
+            'zk/codegen/resources/web/js');
+    },
+    function build_zul_ts() {
+        return typescript_build(
+            'zul/src/main/resources/web/js',
+            'zul/codegen/resources/web/js');
+    },
+);
+exports['build:uglify'] = exports.build_uglify;
+exports.build_zkcml_uglify = gulp.parallel(
+    function build_zkex_ts() {
+        return typescript_build(
+            '../zkcml/zkex/src/main/resources/web/js',
+            '../zkcml/zkex/codegen/resources/web/js');
+    },
+    function build_zkmax_ts() {
+        return typescript_build(
+            '../zkcml/zkmax/src/main/resources/web/js',
+            '../zkcml/zkmax/codegen/resources/web/js');
+    }
+);
+exports['build-cml:uglify'] = exports.build_zkcml_uglify;

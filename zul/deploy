@@ -1,5 +1,0 @@
-lib
-zipjs=web/js
-zipcss=web/zul/css
-less=web/zul/less
-checkstyle=java,js

@@ -1,0 +1,28 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+dependencies {
+	api project(':zcommon')
+	compileOnly project.properties['servlet.api']
+	compileOnly project.properties['portlet.api']
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.web"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+group = 'org.zkoss.common'
+description = 'The ZKoss Web Library'

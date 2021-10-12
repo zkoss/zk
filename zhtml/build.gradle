@@ -1,0 +1,27 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+dependencies {
+	api project(':zul')
+	api 'commons-io:commons-io:2.8.0'
+	api 'org.zkoss:zsoup:1.8.2.5'
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.${project.name}"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+description = 'ZK XHTML Components'

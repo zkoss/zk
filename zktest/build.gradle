@@ -1,0 +1,131 @@
+plugins {
+	id 'war'
+	id "org.gretty" version "3.0.6"
+	id 'idea'
+}
+
+idea {
+	module {
+		outputDir file("$buildDir/classes/main")
+		testOutputDir file("$buildDir/classes/test")
+	}
+}
+
+// TODO: don't use gretty since gretty not supporting jetty 10.0.5 and gretty 4.0.0 only support jetty11+
+
+java.sourceCompatibility = JavaVersion.VERSION_11
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+	mavenLocal()
+
+	maven {
+		url = uri('https://mavensync.zkoss.org/maven2')
+	}
+
+	maven {
+		url = uri('https://mavensync.zkoss.org/eval')
+	}
+
+	maven {
+		url = uri('https://maven.zkoss.org/repo/zk/ee')
+	}
+
+	maven {
+		url = uri('https://repo.maven.apache.org/maven2/')
+	}
+
+	maven {
+		url = uri('https://maven.seasar.org/maven2')
+	}
+
+	maven {
+		url = uri('https://repository.jboss.org/nexus/content/groups/public-jboss/')
+	}
+
+	maven {
+		url = uri('https://maven.nuxeo.org/nexus/content/groups/public/')
+	}
+
+	maven {
+		url = uri('https://maven.java.net/content/groups/public/')
+	}
+
+	maven {
+		url = uri('https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/')
+	}
+}
+
+dependencies {
+	implementation "org.zkoss.theme:breeze:${version}"
+	implementation "org.zkoss.theme:silvertail:${version}"
+	implementation "org.zkoss.theme:sapphire:${version}"
+	implementation "org.zkoss.theme:atlantic:${version}"
+	implementation 'commons-logging:commons-logging:1.1.1'
+	implementation 'commons-fileupload:commons-fileupload:1.4'
+	implementation 'commons-io:commons-io:2.8.0'
+	implementation "org.zkoss.zk:zk:${version}"
+	implementation "org.zkoss.zk:zkplus:${version}"
+	implementation "org.zkoss.zk:zkplus-legacy:${version}"
+	implementation "org.zkoss.zk:zkbind:${version}"
+	implementation "org.zkoss.zk:zul:${version}"
+	implementation "org.zkoss.zk:zhtml:${version}"
+	implementation "org.zkoss.zk:zkwebfragment:${version}"
+	implementation "org.zkoss.common:zcommon:${version}"
+	implementation "org.zkoss.common:zweb:${version}"
+	implementation "org.zkoss.common:zweb-dsp:${version}"
+	implementation "org.zkoss.common:zel:${version}"
+	implementation "org.zkoss.zk:zkex:${version}"
+	implementation "org.zkoss.zk:zkmax:${version}"
+	implementation "org.zkoss.zk:zuti:${version}"
+	implementation "org.zkoss.zk:za11y:${version}"
+	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
+	implementation 'org.zkoss.addon:flashchart:1.0'
+	implementation 'commons-lang:commons-lang:2.6'
+	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+	implementation 'com.google.javascript:closure-compiler-unshaded:v20200426'
+	implementation 'net.sf.jasperreports:jasperreports:6.17.0'
+	implementation 'org.jfree:jfreechart:1.0.19'
+	implementation 'com.jhlabs:filters:2.0.235-1'
+	implementation 'org.zkoss.zkforge:ckez:4.16.1.0'
+	implementation 'org.zkoss.zkforge:timelinez:2.3.1_50'
+	implementation 'org.zkoss.zkforge:timeplotz:1.1_50'
+	implementation 'org.zkoss.zkforge:gmapsz:3.1.0'
+	implementation 'org.hibernate:hibernate-validator:5.3.6.Final'
+	implementation 'javax.validation:validation-api:1.1.0.Final'
+	implementation 'org.slf4j:slf4j-jdk14:1.7.30'
+	implementation 'javax.inject:javax.inject:1'
+	implementation 'javax.enterprise:cdi-api:1.0'
+	implementation 'org.javassist:javassist:3.28.0-GA'
+	implementation 'org.easymock:easymock:3.4'
+	implementation 'de.odysseus.juel:juel-spi:2.2.7'
+	implementation 'de.odysseus.juel:juel-impl:2.2.7'
+	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
+	runtimeOnly 'org.codehaus.groovy:groovy-all:1.5.6'
+	runtimeOnly 'org.mozilla:rhino:1.7R4'
+	testImplementation 'org.jruby:jruby:1.1.2'
+	testImplementation 'org.python:jython:2.2.1'
+	testImplementation 'org.zkoss.zats:zats-mimic-ext96:3.0.0-FL-2021062415'
+	testImplementation 'junit:junit:4.13.2'
+	testImplementation 'org.hamcrest:hamcrest:2.1'
+	testImplementation 'net.jcip:jcip-annotations:1.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+	testImplementation 'xml-apis:xml-apis:1.4.01'
+	testImplementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
+	testImplementation 'org.apache.commons:commons-compress:1.19'
+	testImplementation 'org.apache.commons:commons-lang3:3.8.1'
+	testImplementation 'com.deque.html.axe-core:selenium:4.2.2'
+	testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
+	testImplementation 'org.powermock:powermock-api-mockito:1.7.3'
+	testImplementation 'org.springframework.session:spring-session-core:2.1.6.RELEASE'
+	testImplementation 'org.eclipse.jetty:jetty-webapp:10.0.5'
+	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.5'
+	testImplementation 'org.eclipse.jetty.websocket:websocket-javax-server:10.0.5'
+	providedCompile 'javax.el:javax.el-api:2.2.5'
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+	providedCompile 'javax.websocket:javax.websocket-api:1.1'
+}
+
+description = 'ZK Test'

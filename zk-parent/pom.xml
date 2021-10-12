@@ -47,19 +47,7 @@
         <url>https://mavensync.zkoss.org/maven2</url>
     </scm>
     <modules>
-        <module>../zcommon</module>
-        <module>../zel</module>
-        <module>../zhtml</module>
         <module>../zk-bom</module>
-        <module>../zk</module>
-        <module>../zkbind</module>
-        <module>../zkplus-legacy</module>
-        <module>../zkplus</module>
-        <module>../zktest</module>
-        <module>../zkwebfragment</module>
-        <module>../zul</module>
-        <module>../zweb-dsp</module>
-        <module>../zweb</module>
     </modules>
     <repositories>
         <repository>

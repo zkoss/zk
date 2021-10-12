@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: Potix Web Library (DSP)
-Specification-Version: 10.0.0
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.web
-Implementation-URL: http://www.zkoss.org/prj/zweb-dsp
-Implementation-Version: 10.0.0
-Implementation-Vendor: Potix Corporation

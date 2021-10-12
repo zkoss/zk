@@ -1,5 +1,7 @@
+build
 out
 !/zk/src/org/zkoss/zk/au/out
+!/zk/src/main/java/org/zkoss/zk/au/out
 debug
 codegen
 *.local
@@ -25,3 +27,4 @@ dist/lib/osgi
 node_modules/
 package-lock.json
 node/
+.gradle
