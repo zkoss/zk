@@ -29,11 +29,11 @@ import org.zkoss.zk.ui.ext.Scope;
  * @since 6.0.0
  */
 public class StubsComponent extends StubComponent {
-	private String[] _uuids;
+	protected String[] _uuids;
 	/** [0]: uuid, [1]: id */
-	private String[][] _idmap;
+	protected String[][] _idmap;
 	/** [0]: uuid, [1]: EventListenerMap. */
-	private Object[][] _evtmap;
+	protected Object[][] _evtmap;
 
 	/** Called when this component replaced the given component,
 	 * and the children of the given component shall be 'merged' to this component.
@@ -57,7 +57,7 @@ public class StubsComponent extends StubComponent {
 		_evtmap = evtmap != null && !evtmap.isEmpty() ? evtmap.toArray(new Object[evtmap.size()][]) : null;
 	}
 
-	private void mapChildren(DesktopCtrl desktopCtrl, List<String> uuids, List<String[]> idmap, List<Object[]> evtmap,
+	protected void mapChildren(DesktopCtrl desktopCtrl, List<String> uuids, List<String[]> idmap, List<Object[]> evtmap,
 			Component comp) {
 		for (Component p = comp.getFirstChild(); p != null; p = p.getNextSibling()) {
 			if (p instanceof StubsComponent) {
