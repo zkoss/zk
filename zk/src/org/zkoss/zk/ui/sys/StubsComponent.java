@@ -15,9 +15,7 @@ package org.zkoss.zk.ui.sys;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.StubEvent;
@@ -143,32 +141,6 @@ public class StubsComponent extends StubComponent {
 			}
 			postToNonStubAncestor(stubevt);
 		}
-	}
-
-	public Component getFellowIfAny(String compId) {
-		Component result = super.getFellowIfAny(compId);
-		if (result != null) {
-			return result;
-		} else if (_idmap != null) {
-			for (String[] ids : _idmap) {
-				if (Objects.equals(ids[1], compId)) {
-					return this;
-				}
-			}
-		}
-		return null;
-	}
-
-	public Component getFellow(String compId)
-			throws ComponentNotFoundException {
-		if (_idmap != null) {
-			for (String[] ids : _idmap) {
-				if (Objects.equals(ids[1], compId)) {
-					return this;
-				}
-			}
-		}
-		return super.getFellow(compId);
 	}
 
 	/** Returns the widget class, "#stubs".
