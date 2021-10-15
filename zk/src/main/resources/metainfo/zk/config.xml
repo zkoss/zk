@@ -73,4 +73,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.ui.script.ScriptErrorListener.class</name>
 		<value>org.zkoss.zk.ui.script.DefaultScriptErrorListener</value>
 	</library-property>
+
+    <!-- as Developer guide mentioned, the stubonly feature is available in CE since 6.0.0
+    -->
+    <library-property>
+        <name>org.zkoss.zk.ui.impl.UiEngineImpl.extension</name>
+        <value>org.zkoss.zk.ui.impl.UiEngineExtension</value>
+    </library-property>
 </config>
