@@ -228,6 +228,15 @@ public class Combobox extends Textbox {
 		}
 	}
 
+	/**
+	 * Returns the empty search message if any.
+	 * Default: null
+	 * @since 10.0.0
+	 */
+	public String getEmptySearchMessage() {
+		return _emptySearchMessage;
+	}
+
 	private int INVALIDATE_THRESHOLD = -1;
 
 	private void initDataListener() {

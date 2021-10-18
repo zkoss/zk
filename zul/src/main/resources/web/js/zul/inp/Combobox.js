@@ -127,6 +127,17 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		} else
 			this._initSelUuid = v;
 	},
+    // since 10.0.0 for Zephyr to use
+    setSelectedIndex_: function (selectedIndex) {
+        if (selectedIndex >= 0) {
+            if (this.desktop) {
+                let selectedItem = this.getChildAt(selectedIndex);
+                this.setSelectedItemUuid_(selectedItem);
+            } else {
+                this._initSelIndex = selectedIndex;
+            }
+        }
+    },
 	/**
 	 * For internal use only.
 	 * Update the value of the input element in this component
@@ -461,7 +472,10 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		if (this._initSelUuid) {
 			this.setSelectedItemUuid_(this._initSelUuid);
 			this._initSelUuid = null;
-		}
+		} else if (this._initSelIndex >= 0) { // for zephyr to use
+            this.setSelectedIndex_(this._initSelIndex);
+            this._initSelIndex = null;
+        }
 		var input = this.getInputNode();
 		this.domListen_(input, 'onCompositionstart', '_doCompositionstart')
 			.domListen_(input, 'onCompositionend', '_doCompositionend');
