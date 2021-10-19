@@ -738,22 +738,3 @@ task release() {
 publishToMavenLocal {
 	dependsOn gradle.includedBuild('zkcml').task(':publishToMavenLocal')
 }
-
-// change all the version in gradle.properties under zk, zkcml, atlantic, zkthemes folders
-// e.g. ./gradlew upVer -PchangeVersionTo=10.0.1-SNAPSHOT
-task upVer() {
-	doLast {
-		if (project.hasProperty("changeVersionTo")) {
-			fileTree("../").matching {
-				include "**/gradle.properties"
-			}.each { file ->
-				println "upVer: ${file.path} from ${project.version} to ${project.changeVersionTo}"
-				ant.replaceregexp(
-					file: file,
-					match: "version=$project.version",
-					replace: "version=$project.changeVersionTo",
-				)
-			}
-		}
-	}
-}

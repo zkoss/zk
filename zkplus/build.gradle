@@ -39,9 +39,9 @@ repositories {
 dependencies {
 	api project(':zul')
 	optionalImplementation 'javax.enterprise:cdi-api:2.0.SP1'
-	optionalImplementation "org.springframework:spring-beans:${project.properties['org.springframework.version']}"
-	optionalImplementation "org.springframework:spring-context:${project.properties['org.springframework.version']}"
-	optionalImplementation "org.springframework:spring-web:${project.properties['org.springframework.version']}"
+	optionalImplementation "org.springframework:spring-beans:${springVersion}"
+	optionalImplementation "org.springframework:spring-context:${springVersion}"
+	optionalImplementation "org.springframework:spring-web:${springVersion}"
 	optionalImplementation('org.seasar.container:s2-framework:2.4.43') {
 		exclude group: '*', module: '*'
 	}
@@ -53,9 +53,9 @@ dependencies {
 		exclude group: '*', module: '*'
 	}
 	optionalImplementation 'javax.transaction:jta:1.1'
-	compileOnly project.properties['servlet.api']
+	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 	compileOnly 'javax.el:javax.el-api:2.2.5'
-	compileOnly project.properties['portlet.api']
+	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 }
 
 buildConfig {

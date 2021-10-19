@@ -19,8 +19,8 @@ java {
 }
 
 dependencies {
-	api project.properties['javassist']
-	optionalImplementation project.properties['slf4j.api']
+	api "org.javassist:javassist:${javassistVersion}"
+	optionalImplementation "org.slf4j:slf4j-api:${slf4jVersion}"
 }
 
 buildConfig {

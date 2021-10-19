@@ -14,8 +14,8 @@ idea {
 
 dependencies {
 	api project(':zcommon')
-	compileOnly project.properties['servlet.api']
-	compileOnly project.properties['portlet.api']
+	compileOnly "javax.servlet:servlet-api:${servletVersion}"
+	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 }
 
 buildConfig {

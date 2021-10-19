@@ -14,7 +14,7 @@ idea {
 
 dependencies {
 	api project(':zk')
-	compileOnly project.properties['servlet.api']
+	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 }
 
 buildConfig {

@@ -23,8 +23,8 @@ dependencies {
 	api project(':zweb')
 	api project(':zkwebfragment')
 	api 'commons-fileupload:commons-fileupload:1.4'
-	compileOnly project.properties['servlet.api']
-	compileOnly project.properties['portlet.api']
+	compileOnly "javax.servlet:servlet-api:${servletVersion}"
+	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'
 	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20210601'
 	optionalImplementation('org.codehaus.groovy:groovy-all:1.5.6') {

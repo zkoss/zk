@@ -60,7 +60,7 @@ repositories {
 // Prepare the result of TypeScript before gradle assemble
 task compileTypeScript(type: NpmTask) {
 	dependsOn(npmInstall)
-	setOnlyIf {!project.hasProperty("skip.frontend")}
+	setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
 	args = ['run', 'build:uglify']
 }
 assemble.dependsOn(compileTypeScript)
@@ -94,7 +94,7 @@ subprojects {
 
 	// Compile LESS
 	task compileLess() {
-		setOnlyIf {!project.hasProperty("skip.frontend")}
+		setOnlyIf {project.ext['gradleFrontendSkip'] == 'false'}
 		doLast {
 			exec {
 				commandLine "$rootDir/node_modules/.bin/zklessc", '-s', "$projectDir/$resources/web/", '-o', "$projectDir/$codegen/web/", '-i', "$rootDir/zul/$resources/web/", '-i', "$zkcmlDir/zkmax/$resources/web/", '-c'
@@ -108,8 +108,8 @@ subprojects {
 		dependsOn(compileLess)
 		doFirst {
 			// run zkjszips.jar to compress js and generate src.js
-			// adding -Pskip.frontend=true into your task will skip this step
-			if (project.hasProperty("skip.frontend") != true) {
+			// adding -PgradleFrontendSkip=true into your task will skip this step
+			if (project.ext['gradleFrontendSkip'] == 'false') {
 				javaexec {
 					main = "-jar"
 					args = [
@@ -272,4 +272,21 @@ clean {
 	dependsOn(gradle.includedBuild('zksandbox').task(':clean'))
 }
 
-// TODO: upVer update zk cml themes atlantic version
+// change all the version in gradle.properties under zk
+// e.g. ./gradlew upVer -PchangeVersionTo=10.0.1-SNAPSHOT
+task upVer() {
+	doLast {
+		if (project.hasProperty("changeVersionTo")) {
+			fileTree("$rootDir/").matching {
+				include "**/gradle.properties"
+			}.each { file ->
+				println "upVer: ${file.path} from ${project.version} to ${project.changeVersionTo}"
+				ant.replaceregexp(
+						file: file,
+						match: "version=$project.version",
+						replace: "version=$project.changeVersionTo",
+				)
+			}
+		}
+	}
+}

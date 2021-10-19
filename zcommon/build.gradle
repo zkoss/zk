@@ -20,10 +20,10 @@ java {
 
 dependencies {
 	api project(':zel')
-	api project.properties['slf4j.api']
-	api project.properties['bsh']
+	api "org.slf4j:slf4j-api:${slf4jVersion}"
+	api 'org.apache-extras.beanshell:bsh:2.0b6'
 	optionalImplementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
-	compileOnly project.properties['servlet.api']
+	compileOnly "javax.servlet:servlet-api:${servletVersion}"
 }
 
 buildConfig {
