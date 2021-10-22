@@ -20,6 +20,8 @@ java {
 }
 
 repositories {
+	mavenCentral() // workaround for sometimes zkplus:compileJava FAILED
+
 	maven {
 		name = 'maven seasar org'
 		url = uri('https://maven.seasar.org/maven2')
