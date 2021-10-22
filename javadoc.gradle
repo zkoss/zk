@@ -94,26 +94,8 @@ task alljavadoc(type: Javadoc) {
 				setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
 			}
 		}
-
-		// build jakarta javadoc
-		copy {
-			into "$buildDir/docs/javadoc/zk-jakarta"
-			from "$buildDir/docs/javadoc/zk"
-		}
-		fileTree("$buildDir/docs/javadoc/zk-jakarta").matching {
-			include "**/*.html"
-		}.each { htmlFile ->
-			ant.replaceregexp(
-				file: htmlFile,
-				match: 'javax',
-				replace: 'jakarta',
-				flags: 'g'
-			)
-		}
 	}
 }
-
-// TODO: javadoc jakarta version
 
 // generate jsdoc
 task alljsdoc(type: Javadoc) {

@@ -251,6 +251,7 @@ task versionCheck() {
 	if (project.hasProperty("check.version")) {
 		fileTree("../").matching {
 			include "**/gradle.properties"
+			exclude "**/zephyr/gradle.properties" // don't check zephyr version for now
 		}.each {
 			fileCheck(it, /version=${project.getProperty("check.version")}/)
 		}

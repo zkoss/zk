@@ -117,6 +117,7 @@ task prepareBin() {
 		dependsOn gradle.includedBuild('zkcml').task(":$prjName:evalJar")
 	}
 	dependsOn gradle.includedBuild('zksandbox').task(":war")
+	dependsOn gradle.includedBuild('zkthemes').task(':release')
 	doLast {
 		// ext lib jars
 		copy {
@@ -140,13 +141,18 @@ task prepareBin() {
 			}
 		}
 		// theme jars
-		// TODO: update classic jars from zkthemes task?
 		copy {
 			includeEmptyDirs false
 			into "$buildDir/tmp/eebin/dist/lib/theme"
 			from("$rootDir/dist/lib") {
-				include "**/breeze.jar"
 				include "**/iceblue_c.jar"
+			}
+		}
+		copy {
+			includeEmptyDirs false
+			into "$buildDir/tmp/eebin/dist/lib/theme"
+			from("../zkthemes/dist/lib") {
+				include "**/breeze.jar"
 				include "**/sapphire.jar"
 				include "**/silvertail.jar"
 			}
