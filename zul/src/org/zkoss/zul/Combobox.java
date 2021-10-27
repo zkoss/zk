@@ -986,11 +986,12 @@ public class Combobox extends Textbox {
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECT)) {
 			final Set<Comboitem> prevSelectedItems = new LinkedHashSet<Comboitem>();
-			Comboitem prevSeld = (Comboitem) request.getDesktop()
+			Component component = request.getDesktop()
 					.getComponentByUuidIfAny((String) request.getData().get("prevSeld"));
-			// ZK-2089: should skip when selected item is null 
-			if (prevSeld != null)
-				prevSelectedItems.add(prevSeld);
+			// ZK-2089: should skip when selected item is null
+			// ZK-4509/ZK-4847: also skip when component is not Comboitem
+			if (component != null && component instanceof Comboitem)
+				prevSelectedItems.add((Comboitem) component);
 			SelectEvent<Comboitem, Object> evt = SelectEvent.getSelectEvent(request,
 					new SelectEvent.SelectedObjectHandler<Comboitem>() {
 						public Set<Object> getObjects(Set<Comboitem> items) {
