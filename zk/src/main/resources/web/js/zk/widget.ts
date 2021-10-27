@@ -4929,8 +4929,11 @@ _doFooSelect: function (evt) {
 				return 0;
 			});
 			var tmp: HTMLElement[] = [];
-			for (var i = els.length; i--;)
-				tmp.unshift(els[i].n);
+			for (let i = els.length; i--;) {
+				let ele = els[i];
+				ele.n['__target__'] = ele.w;
+				tmp.unshift(ele.n);
+			}
 			return tmp;
 		}
 		return els;

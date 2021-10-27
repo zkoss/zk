@@ -1443,7 +1443,15 @@ jq(el).zk.center(); //same as 'center'
 	 * <pre><code> zk.Widget.$(jq("@listbox"))</code></pre> could be replaced with <code><pre> zk("@listbox").$() </code></pre>
 	 */
 	$: function () {
-		return zk.Widget.$(this.jq[0]);
+		let e = this.jq[0];
+		if (e) {
+			let target = e['__target__'];
+			if (target) {
+				delete e['__target__']; // reset
+				return target;
+			}
+		}
+		return zk.Widget.$(e);
 	},
 	/** Makes the position of the first selected element as absolute.
 	 * In addition to changing the style's position to absolute, it
