@@ -235,7 +235,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (opts.sendOnChange)
 				this.$supers('updateChange_', []);
 
-			this.fire('onSelect', {items: sel ? [sel] : [], reference: sel, prevSeld: this._lastsel});
+			this.fire('onSelect', {items: sel ? [sel] : [], reference: sel, prevSeld: oldsel});
 			this._lastsel = sel;
 			//spec change (diff from zk 3): onSelect fired after onChange
 			//purpose: onSelect can retrieve the value correctly
