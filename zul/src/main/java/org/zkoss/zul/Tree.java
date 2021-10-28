@@ -2162,7 +2162,7 @@ public class Tree extends MeshElement {
 	 * Returns the millisecond of scrolling throttling in Tree render on-demand (ROD).
 	 * <p>Default: 300. (Since 9.6.0)
 	 */
-	private int throttleMillis() {
+	private int getThrottleMillis() {
 		if (WebApps.getFeature("ee")) {
 			return Utils.getIntAttribute(this, "org.zkoss.zul.tree.throttleMillis", DEFAULT_THROTTLE_MILLIS, true);
 		}
@@ -2662,7 +2662,7 @@ public class Tree extends MeshElement {
 		// ZK-3835: because of ZK-3198, -1 will disable client ROD too
 		if (initRodSize() == -1)
 			renderer.render("z$rod0", false);
-		int throttleMillis = throttleMillis();
+		int throttleMillis = getThrottleMillis();
 		if (throttleMillis != DEFAULT_THROTTLE_MILLIS)
 			render(renderer, "throttleMillis", throttleMillis);
 	}
