@@ -1445,9 +1445,13 @@ jq(el).zk.center(); //same as 'center'
 	$: function () {
 		let e = this.jq[0];
 		if (e) {
-			let target = e['__target__'];
+			let target = e[zk.Widget._TARGET];
 			if (target) {
-				delete e['__target__']; // reset
+				// reset all query targets, if any
+				let len = this.jq.length;
+				while (--len) {
+					delete this.jq[len][zk.Widget._TARGET];
+				}
 				return target;
 			}
 		}

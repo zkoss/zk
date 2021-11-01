@@ -1217,6 +1217,18 @@ setDocument = Sizzle.setDocument = function( node ) {
 		Expr.find[ "ID" ] = function( id, context ) {
 			if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
 				var elem = context.getElementById( id );
+				/* Jumper Chen, Potix, 20211029*/
+				if (!elem) {
+				    let wgt = zk.Widget.getWidgetByUuid(id);
+				    if (wgt) {
+						elem = wgt.$n();
+						if (!elem) {
+						    // treechildren may not have the value from $n()
+						    elem = wgt.parent.$n();
+						}
+						elem[zk.Widget._TARGET] = wgt;
+				    }
+				}
 				return elem ? [ elem ] : [];
 			}
 		};
@@ -1254,6 +1266,18 @@ setDocument = Sizzle.setDocument = function( node ) {
 							return [ elem ];
 						}
 					}
+				} else {
+				    /* Jumper Chen, Potix, 20211029*/
+				    let wgt = zk.Widget.getWidgetByUuid(id);
+				    if (wgt) {
+						elem = wgt.$n();
+						if (!elem) {
+						    // treechildren may not have the value from $n()
+						    elem = wgt.parent.$n();
+						}
+						elem[zk.Widget._TARGET] = wgt;
+						return [ elem ];
+				    }
 				}
 
 				return [];
@@ -1309,14 +1333,46 @@ setDocument = Sizzle.setDocument = function( node ) {
 				return jq.isAncestor(context, n);
 			});
 	};
-	/* Jumper Chen, Potix, 20100326*/
-	Expr.find['ZTAG'] = function (selector, context) {
+    /* Jumper Chen, Potix, 20100326*/
+    Expr.find['ZTAG'] = function (selector, context) {
 		return context == window || context == document ?
-			zk.Widget.getElementsByName(selector.substring(1)) :
-			jq.grep(zk.Widget.getElementsByName(selector.substring(1)), function (n) {
+		    zk.Widget.getElementsByName(selector.substring(1)) :
+		    jq.grep(zk.Widget.getElementsByName(selector.substring(1)), function (n) {
 				return jq.isAncestor(context, n);
-			});
-	};
+		    });
+    };
+    /* Jumper Chen, Potix, 20211029*/
+    Expr.find['ZCHILD'] = function (selector, context) {
+		let wgt = context[zk.Widget._TARGET] || zk.Widget.$(context, {exact: true});
+		if (wgt) {
+		    let tmp = [];
+		    if ('*' === selector) {
+				for (var w = wgt.firstChild; w ; w = w.nextSibling) {
+				    let elem = w.$n();
+				    if (!elem) {
+						// treechildren may not have the value from $n()
+						elem = w.parent.$n();
+				    }
+				    elem[zk.Widget._TARGET] = w;
+				    tmp.push(elem);
+				}
+		    } else {
+				for (var w = wgt.firstChild; w ; w = w.nextSibling) {
+				    if (w.widgetName == selector) {
+						let elem = w.$n();
+						if (!elem) {
+						    // treechildren may not have the value from $n()
+						    elem = w.parent.$n();
+						}
+						elem[zk.Widget._TARGET] = w;
+						tmp.push(elem);
+				    }
+				}
+		    }
+		    return tmp;
+		}
+		return [];
+    };
 
 	/* QSA/matchesSelector
 	---------------------------------------------------------------------- */
@@ -1890,8 +1946,24 @@ Expr = Sizzle.selectors = {
 		'ZTAG': function (selector) {
 			var tag = selector.substring(1);
 			return function (elem, context, xml, wgt) {
-				wgt = wgt ? wgt : zk.Widget.$(elem, {exact: true}) || false;
-				return wgt && wgt.className.toLowerCase().endsWith(tag);
+				wgt = wgt || zk.Widget.$(elem, {exact: true});
+
+				// do some special for treeitem and treechildren
+				if (wgt) {
+				    let wgtName = wgt.widgetName;
+				    if (wgtName == tag) {
+						return  true;
+				    } else if (wgtName == 'treerow') {
+						return wgt.parent?.widgetName == tag;
+				    }
+				} else if (tag == 'treechildren') {
+				    // return tree case
+				    let wgt = zk.Widget.$(elem, {exact: false});
+				    if (wgt) {
+						return wgt[tag];
+				    }
+				}
+				return false;
 			};
 		},
 
@@ -1899,7 +1971,7 @@ Expr = Sizzle.selectors = {
 		'ZID': function (selector) {
 			var id = selector.startsWith('$') ? selector.substring(1) : selector;
 			return function (elem, context, xml, wgt) {
-				wgt = wgt ? wgt : zk.Widget.$(elem);
+				wgt = wgt || zk.Widget.$(elem);
 				return wgt ? wgt.id === id : false;
 			};
 		},
@@ -1926,7 +1998,7 @@ Expr = Sizzle.selectors = {
 
 				/* Jumper Chen, Potix, 20100326*/
 				if (!result) {
-					var wgt = zk.Widget.$(elem, {exact: 1});
+					var wgt = elem[zk.Widget._TARGET] || zk.Widget.$(elem, {exact: 1});
 					if (wgt)
 						result = wgt.get(name) || result;
 				}
@@ -2451,7 +2523,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 		function( elem, context, xml ) {
 			//Jumper Chen, Potix 20130509
 			if (hasZTag || hasZID) {
-				var wgt = zk.Widget.$(elem, {exact: 1}),
+				var wgt = elem[zk.Widget._TARGET] || zk.Widget.$(elem, {exact: 1}),
 				getParent = function (wgt) {
 					if (dir === 'parentNode')
 						return wgt.parent;
@@ -2491,7 +2563,7 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 
 			//Jumper Chen, Potix 20131009
 			if (hasZTag || hasZID) {
-				var wgt = zk.Widget.$(elem, {exact: 1}),
+				var wgt = elem[zk.Widget._TARGET] || zk.Widget.$(elem, {exact: 1}),
 					getParent = function (wgt) {
 						if (dir === 'parentNode')
 							return wgt.parent;
@@ -2771,12 +2843,18 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 				unmatched = seed && [],
 				setMatched = [],
 				contextBackup = outermostContext,
-
-				// We must always have either seed elements or outermost context
-				elems = seed || byElement && Expr.find[ "TAG" ]( "*", outermost ),
+				elems;
+				/* Jumper Chen, Potix, 20211029*/
+				if (context[zk.Widget._TARGET]) {
+				    // Treechildren and Treeitem has not DOM element.
+				    elems = seed || byElement && Expr.find["ZCHILD"]("*", outermost);
+				} else {
+				    // We must always have either seed elements or outermost context
+				    elems = seed || byElement && Expr.find["TAG"]("*", outermost);
+				}
 
 				// Use integer dirruns iff this is the outermost matcher
-				dirrunsUnique = ( dirruns += contextBackup == null ? 1 : Math.random() || 0.1 ),
+		    var dirrunsUnique = ( dirruns += contextBackup == null ? 1 : Math.random() || 0.1 ),
 				len = elems.length;
 
 			if ( outermost ) {
@@ -2804,7 +2882,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 						xml = !documentIsHTML;
 					}
 					while ( ( matcher = elementMatchers[ j++ ] ) ) {
-						if ( matcher( elem, context || document, xml ) ) {
+						if ( matcher( elem, context || document, xml, elem[zk.Widget._TARGET] /*added Potix 2021/11/02*/) ) {
 							results.push( elem );
 							break;
 						}
@@ -2843,7 +2921,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			if ( bySet && i !== matchedCount ) {
 				j = 0;
 				while ( ( matcher = setMatchers[ j++ ] ) ) {
-					matcher( unmatched, setMatched, context, xml );
+					matcher( unmatched, setMatched, context, xml, elem[zk.Widget._TARGET] /*added Potix 2021/11/02*/ );
 				}
 
 				if ( seed ) {

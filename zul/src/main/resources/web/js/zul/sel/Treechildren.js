@@ -210,9 +210,14 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 	$n: function (nm) {
 		if (this.isTopmost())
 			return this.getTree().$n('rows');
-		if (this.firstChild)
-			return nm ? this.firstChild.$n(nm) : this.firstChild.$n();
-		return null;
+
+        // to support @treechildren selector on zk.Widget.$(),
+        // the original implementation may not work properly, because
+        // its firstChild.$n() may not exists (in ROD case) but itself does, so
+        // we use parent.$n() instead here to prevent this issue, and from the
+        // other part of the implementation in Treechildren.js seems not to
+        // depend on this.$n() if isTopmost() is returned with false
+		return this.parent.$n();
 	},
 	replaceWidget: function (newwgt) {
 		while (this.firstChild != this.lastChild)

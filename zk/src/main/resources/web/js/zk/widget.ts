@@ -4790,7 +4790,8 @@ _doFooSelect: function (evt) {
 
 		var wgt, id;
 		if (typeof n == 'string') {
-		//Don't look for DOM (there might be some non-ZK node with same ID)
+			//Don't look for DOM (there might be some non-ZK node with same ID)
+			let query = n;
 			if ((id = n.charAt(0)) == '#') n = n.substring(1);
 			else if (id == '$') {
 				id = _globals[n.substring(1)];
@@ -4801,7 +4802,7 @@ _doFooSelect: function (evt) {
 				wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)] : null;
 
 			if (!wgt)
-				return jq(n).zk.$();
+				return jq(query).zk.$();
 			return wgt;
 		}
 
@@ -4952,6 +4953,15 @@ _doFooSelect: function (evt) {
 		}
 		return els;
 	},
+	/**
+	 * Returns the {@link zk.Widget} with the given Uuid.
+	 * @param String uuid the uuid of a widget.
+	 * @return DOMElement an elemnt of {@link DOMElement}
+	 * @since 10.0.0
+	 */
+	getWidgetByUuid: function (uuid) {
+		return _binds[uuid];
+	},
 
 	//uuid//
 	/** Converts an ID of a DOM element to UUID.
@@ -5090,7 +5100,8 @@ zk.Widget.getClass('combobox');
 			gs.$remove(wgt);
 			if (!gs.length) delete _globals[wgt.id];
 		}
-	}
+	},
+	_TARGET: '__target__', // used for storing the query widget target
 });
 /**	@partial zk
  */
