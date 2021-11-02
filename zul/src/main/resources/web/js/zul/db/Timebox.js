@@ -129,6 +129,34 @@ zul.db.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		},
 	},
 	/**
+	 * A method for component setter symmetry, it will call setValue
+	 * @since 10.0.0
+	 */
+	setValueInZonedDateTime: function () {
+		this.setValue.apply(this, arguments);
+	},
+	/**
+	 * A method for component setter symmetry, it will call setValue
+	 * @since 10.0.0
+	 */
+	setValueInLocalDateTime: function () {
+		this.setValue.apply(this, arguments);
+	},
+	/**
+	 * A method for component setter symmetry, it will call setValue
+	 * @since 10.0.0
+	 */
+	setValueInLocalDate: function () {
+		this.setValue.apply(this, arguments);
+	},
+	/**
+	 * A method for component setter symmetry, it will call setValue
+	 * @since 10.0.0
+	 */
+	setValueInLocalTime: function () {
+		this.setValue.apply(this, arguments);
+	},
+	/**
 	 * Sets the time zone ID that this time box belongs to.
 	 * @param String timezone the time zone's ID, such as "America/Los_Angeles".
 	 * @deprecated Use {@link #setTimeZone(String)} instead.

@@ -150,6 +150,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.ZonedDateTime</attribute-value>
+			</attribute>
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -161,6 +165,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalDateTime</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -174,6 +182,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalDate</attribute-value>
+			</attribute>
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -185,6 +197,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalTime</attribute-value>
 			</attribute>
 		</annotation>
 	</component>
@@ -391,6 +407,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.ZonedDateTime</attribute-value>
+			</attribute>
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -402,6 +422,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalDateTime</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -415,6 +439,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalDate</attribute-value>
+			</attribute>
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -426,6 +454,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalTime</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -1412,6 +1444,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.ZonedDateTime</attribute-value>
+			</attribute>
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -1423,6 +1459,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalDateTime</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
@@ -1436,6 +1476,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
 			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalDate</attribute-value>
+			</attribute>
 		</annotation>
 		<annotation>
 			<annotation-name>ZKBIND</annotation-name>
@@ -1447,6 +1491,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 			<attribute>
 				<attribute-name>SAVE_EVENT</attribute-name>
 				<attribute-value>onChange</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>LOAD_TYPE</attribute-name>
+				<attribute-value>java.time.LocalTime</attribute-value>
 			</attribute>
 		</annotation>
 		<annotation>
