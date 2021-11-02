@@ -18,7 +18,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 		function testcase() {
 			var t1 = jq('@tree $ti1 @treecell:first-child'),
 				failure = false;
-			if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == '&nbsp;Item 1'))
+			if (!(t1.length == 1 && t1.find('.z-treecell-text').html() == 'Item 1'))
 				failure = true;
 			
 			t1 = jq('@tree $ti1 @treecell');
@@ -27,7 +27,7 @@ Copyright (C) 2013 Potix Corporation. All Rights Reserved.
 
 			var uuid = jq('@tree $ti1')[0].id;
 			t1 = jq('@tree #' + uuid + ' @treecell');
-			if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == '&nbsp;Item 1'))
+			if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == 'Item 1'))
 				failure = true;
 
 			jq('$msg').html(failure ? 'Failure' : 'OK');
