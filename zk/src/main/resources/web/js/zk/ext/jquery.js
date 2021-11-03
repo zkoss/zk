@@ -1219,15 +1219,15 @@ setDocument = Sizzle.setDocument = function( node ) {
 				var elem = context.getElementById( id );
 				/* Jumper Chen, Potix, 20211029*/
 				if (!elem) {
-				    let wgt = zk.Widget.getWidgetByUuid(id);
-				    if (wgt) {
+					let wgt = zk.Widget.getWidgetByUuid(id);
+					if (wgt) {
 						elem = wgt.$n();
 						if (!elem) {
-						    // treechildren may not have the value from $n()
-						    elem = wgt.parent.$n();
+							// treechildren may not have the value from $n()
+							elem = wgt.parent.$n();
 						}
 						elem[zk.Widget._TARGET] = wgt;
-				    }
+					}
 				}
 				return elem ? [ elem ] : [];
 			}
@@ -1267,17 +1267,17 @@ setDocument = Sizzle.setDocument = function( node ) {
 						}
 					}
 				} else {
-				    /* Jumper Chen, Potix, 20211029*/
-				    let wgt = zk.Widget.getWidgetByUuid(id);
-				    if (wgt) {
+					/* Jumper Chen, Potix, 20211029*/
+					let wgt = zk.Widget.getWidgetByUuid(id);
+					if (wgt) {
 						elem = wgt.$n();
 						if (!elem) {
-						    // treechildren may not have the value from $n()
-						    elem = wgt.parent.$n();
+							// treechildren may not have the value from $n()
+							elem = wgt.parent.$n();
 						}
 						elem[zk.Widget._TARGET] = wgt;
-						return [ elem ];
-				    }
+						return [elem];
+					}
 				}
 
 				return [];
@@ -1333,46 +1333,46 @@ setDocument = Sizzle.setDocument = function( node ) {
 				return jq.isAncestor(context, n);
 			});
 	};
-    /* Jumper Chen, Potix, 20100326*/
-    Expr.find['ZTAG'] = function (selector, context) {
+	/* Jumper Chen, Potix, 20100326*/
+	Expr.find['ZTAG'] = function (selector, context) {
 		return context == window || context == document ?
-		    zk.Widget.getElementsByName(selector.substring(1)) :
-		    jq.grep(zk.Widget.getElementsByName(selector.substring(1)), function (n) {
+			zk.Widget.getElementsByName(selector.substring(1)) :
+			jq.grep(zk.Widget.getElementsByName(selector.substring(1)), function (n) {
 				return jq.isAncestor(context, n);
-		    });
-    };
-    /* Jumper Chen, Potix, 20211029*/
-    Expr.find['ZCHILD'] = function (selector, context) {
+			});
+	};
+	/* Jumper Chen, Potix, 20211029*/
+	Expr.find['ZCHILD'] = function (selector, context) {
 		let wgt = context[zk.Widget._TARGET] || zk.Widget.$(context, {exact: true});
 		if (wgt) {
-		    let tmp = [];
-		    if ('*' === selector) {
-				for (var w = wgt.firstChild; w ; w = w.nextSibling) {
-				    let elem = w.$n();
-				    if (!elem) {
+			let tmp = [];
+			if ('*' === selector) {
+				for (var w = wgt.firstChild; w; w = w.nextSibling) {
+					let elem = w.$n();
+					if (!elem) {
 						// treechildren may not have the value from $n()
 						elem = w.parent.$n();
-				    }
-				    elem[zk.Widget._TARGET] = w;
-				    tmp.push(elem);
+					}
+					elem[zk.Widget._TARGET] = w;
+					tmp.push(elem);
 				}
-		    } else {
-				for (var w = wgt.firstChild; w ; w = w.nextSibling) {
-				    if (w.widgetName == selector) {
+			} else {
+				for (var w = wgt.firstChild; w; w = w.nextSibling) {
+					if (w.widgetName == selector) {
 						let elem = w.$n();
 						if (!elem) {
-						    // treechildren may not have the value from $n()
-						    elem = w.parent.$n();
+							// treechildren may not have the value from $n()
+							elem = w.parent.$n();
 						}
 						elem[zk.Widget._TARGET] = w;
 						tmp.push(elem);
-				    }
+					}
 				}
-		    }
-		    return tmp;
+			}
+			return tmp;
 		}
 		return [];
-    };
+	};
 
 	/* QSA/matchesSelector
 	---------------------------------------------------------------------- */
@@ -1950,29 +1950,29 @@ Expr = Sizzle.selectors = {
 
 				// do some special for treeitem and treechildren
 				if (wgt) {
-				    let wgtName = wgt.widgetName;
-				    if (wgtName == tag) {
-                        elem[zk.Widget._CURRENT_TARGET] = wgt;
-						return  true;
-				    } else if (wgtName == 'treerow') {
+					let wgtName = wgt.widgetName;
+					if (wgtName == tag) {
+						elem[zk.Widget._CURRENT_TARGET] = wgt;
+						return true;
+					} else if (wgtName == 'treerow') {
 						if (wgt.parent?.widgetName == tag) {
-                            elem[zk.Widget._CURRENT_TARGET] = wgt.parent;
-                            return true;
-                        }
-                        return false;
-				    }
+							elem[zk.Widget._CURRENT_TARGET] = wgt.parent;
+							return true;
+						}
+						return false;
+					}
 				} else if (tag == 'treechildren') {
-				    // return tree case
-				    let wgt = zk.Widget.$(elem, {exact: false});
-				    if (wgt) {
+					// return tree case
+					let wgt = zk.Widget.$(elem, {exact: false});
+					if (wgt) {
 						let w = wgt[tag];
-                        if (w) {
-                            elem[zk.Widget._CURRENT_TARGET] = w;
-                            return true;
-                        } else {
-                            return false;
-                        }
-				    }
+						if (w) {
+							elem[zk.Widget._CURRENT_TARGET] = w;
+							return true;
+						} else {
+							return false;
+						}
+					}
 				}
 				return false;
 			};
@@ -2050,7 +2050,7 @@ Expr = Sizzle.selectors = {
 					return !!elem.parentNode;
 				} :
 
-				function( elem, _context, xml, wgt/*added by Potix 2021/11/02*/ ) {
+				function (elem, _context, xml, wgt/*added by Potix 2021/11/02*/) {
 					var cache, uniqueCache, outerCache, node, nodeIndex, start,
 						dir = simple !== forward ? "nextSibling" : "previousSibling",
 						parent = elem.parentNode,
@@ -2058,176 +2058,176 @@ Expr = Sizzle.selectors = {
 						useCache = !xml && !ofType,
 						diff = false;
 
-                    /*added by Potix 2021/11/02*/
-                    if (wgt) {
-                        // go thought widget tree
-                        node = wgt;
+					/*added by Potix 2021/11/02*/
+					if (wgt) {
+						// go thought widget tree
+						node = wgt;
 
-                        parent = wgt.parent;
-                        name = ofType && wgt.widgetName;
-                        if (parent) {
-                            // :(first|last|only)-(child|of-type)
-                            if (simple) {
-                                while (dir) {
-                                    node = wgt;
-                                    while ((node = node[dir])) {
-                                        if (ofType ?
-                                            node.widgetName === name :
-                                            true) {
+						parent = wgt.parent;
+						name = ofType && wgt.widgetName;
+						if (parent) {
+							// :(first|last|only)-(child|of-type)
+							if (simple) {
+								while (dir) {
+									node = wgt;
+									while ((node = node[dir])) {
+										if (ofType ?
+											node.widgetName === name :
+											true) {
 
-                                            return false;
-                                        }
-                                    }
+											return false;
+										}
+									}
 
-                                    // Reverse direction for :only-* (if we haven't yet done so)
-                                    start = dir = type === "only" && !start && "nextSibling";
-                                }
-                                return true;
-                            }
-                            start = [forward ? parent.firstChild : parent.lastChild];
+									// Reverse direction for :only-* (if we haven't yet done so)
+									start = dir = type === "only" && !start && "nextSibling";
+								}
+								return true;
+							}
+							start = [forward ? parent.firstChild : parent.lastChild];
 
 
-                            // xml :nth-child(...)
-                            // or :nth-last-child(...) or :nth(-last)?-of-type(...)
-                            if (diff === false) {
+							// xml :nth-child(...)
+							// or :nth-last-child(...) or :nth(-last)?-of-type(...)
+							if (diff === false) {
 
-                                // Use the same loop as above to seek `elem` from the start
-                                while ((node = ++nodeIndex && node && node[dir] ||
-                                    (diff = nodeIndex = 0) || start.pop())) {
+								// Use the same loop as above to seek `elem` from the start
+								while ((node = ++nodeIndex && node && node[dir] ||
+									(diff = nodeIndex = 0) || start.pop())) {
 
-                                    if ((ofType ?
-                                            node.widgetName === name :
-                                            true) &&
-                                        ++diff) {
+									if ((ofType ?
+											node.widgetName === name :
+											true) &&
+										++diff) {
 
-                                        if (node.$n() === elem) {
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+										if (node.$n() === elem) {
+											break;
+										}
+									}
+								}
+							}
 
-                            // Incorporate the offset, then check against cycle size
-                            diff -= last;
-                            if (diff === first || (diff % first === 0 && diff / first >= 0)) {
-                                elem[zk.Widget._CURRENT_TARGET] = node;
-                                return true;
-                            }
-                            return false;
-                        }
-                    } else {
-                        if (parent) {
+							// Incorporate the offset, then check against cycle size
+							diff -= last;
+							if (diff === first || (diff % first === 0 && diff / first >= 0)) {
+								elem[zk.Widget._CURRENT_TARGET] = node;
+								return true;
+							}
+							return false;
+						}
+					} else {
+						if (parent) {
 
-                            // :(first|last|only)-(child|of-type)
-                            if (simple) {
-                                while (dir) {
-                                    node = elem;
-                                    while ((node = node[dir])) {
-                                        if (ofType ?
-                                            node.nodeName.toLowerCase() === name :
-                                            node.nodeType === 1) {
+							// :(first|last|only)-(child|of-type)
+							if (simple) {
+								while (dir) {
+									node = elem;
+									while ((node = node[dir])) {
+										if (ofType ?
+											node.nodeName.toLowerCase() === name :
+											node.nodeType === 1) {
 
-                                            return false;
-                                        }
-                                    }
+											return false;
+										}
+									}
 
-                                    // Reverse direction for :only-* (if we haven't yet done so)
-                                    start = dir = type === "only" && !start && "nextSibling";
-                                }
-                                return true;
-                            }
+									// Reverse direction for :only-* (if we haven't yet done so)
+									start = dir = type === "only" && !start && "nextSibling";
+								}
+								return true;
+							}
 
-                            start = [forward ? parent.firstChild : parent.lastChild];
+							start = [forward ? parent.firstChild : parent.lastChild];
 
-                            // non-xml :nth-child(...) stores cache data on `parent`
-                            if (forward && useCache) {
+							// non-xml :nth-child(...) stores cache data on `parent`
+							if (forward && useCache) {
 
-                                // Seek `elem` from a previously-cached index
+								// Seek `elem` from a previously-cached index
 
-                                // ...in a gzip-friendly way
-                                node = parent;
-                                outerCache = node[expando] || (node[expando] = {});
+								// ...in a gzip-friendly way
+								node = parent;
+								outerCache = node[expando] || (node[expando] = {});
 
-                                // Support: IE <9 only
-                                // Defend against cloned attroperties (jQuery gh-1709)
-                                uniqueCache = outerCache[node.uniqueID] ||
-                                    (outerCache[node.uniqueID] = {});
+								// Support: IE <9 only
+								// Defend against cloned attroperties (jQuery gh-1709)
+								uniqueCache = outerCache[node.uniqueID] ||
+									(outerCache[node.uniqueID] = {});
 
-                                cache = uniqueCache[type] || [];
-                                nodeIndex = cache[0] === dirruns && cache[1];
-                                diff = nodeIndex && cache[2];
-                                node = nodeIndex && parent.childNodes[nodeIndex];
+								cache = uniqueCache[type] || [];
+								nodeIndex = cache[0] === dirruns && cache[1];
+								diff = nodeIndex && cache[2];
+								node = nodeIndex && parent.childNodes[nodeIndex];
 
-                                while ((node = ++nodeIndex && node && node[dir] ||
+								while ((node = ++nodeIndex && node && node[dir] ||
 
-                                    // Fallback to seeking `elem` from the start
-                                    (diff = nodeIndex = 0) || start.pop())) {
+									// Fallback to seeking `elem` from the start
+									(diff = nodeIndex = 0) || start.pop())) {
 
-                                    // When found, cache indexes on `parent` and break
-                                    if (node.nodeType === 1 && ++diff && node === elem) {
-                                        uniqueCache[type] = [dirruns, nodeIndex, diff];
-                                        break;
-                                    }
-                                }
+									// When found, cache indexes on `parent` and break
+									if (node.nodeType === 1 && ++diff && node === elem) {
+										uniqueCache[type] = [dirruns, nodeIndex, diff];
+										break;
+									}
+								}
 
-                            } else {
+							} else {
 
-                                // Use previously-cached element index if available
-                                if (useCache) {
+								// Use previously-cached element index if available
+								if (useCache) {
 
-                                    // ...in a gzip-friendly way
-                                    node = elem;
-                                    outerCache = node[expando] || (node[expando] = {});
+									// ...in a gzip-friendly way
+									node = elem;
+									outerCache = node[expando] || (node[expando] = {});
 
-                                    // Support: IE <9 only
-                                    // Defend against cloned attroperties (jQuery gh-1709)
-                                    uniqueCache = outerCache[node.uniqueID] ||
-                                        (outerCache[node.uniqueID] = {});
+									// Support: IE <9 only
+									// Defend against cloned attroperties (jQuery gh-1709)
+									uniqueCache = outerCache[node.uniqueID] ||
+										(outerCache[node.uniqueID] = {});
 
-                                    cache = uniqueCache[type] || [];
-                                    nodeIndex = cache[0] === dirruns && cache[1];
-                                    diff = nodeIndex;
-                                }
+									cache = uniqueCache[type] || [];
+									nodeIndex = cache[0] === dirruns && cache[1];
+									diff = nodeIndex;
+								}
 
-                                // xml :nth-child(...)
-                                // or :nth-last-child(...) or :nth(-last)?-of-type(...)
-                                if (diff === false) {
+								// xml :nth-child(...)
+								// or :nth-last-child(...) or :nth(-last)?-of-type(...)
+								if (diff === false) {
 
-                                    // Use the same loop as above to seek `elem` from the start
-                                    while ((node = ++nodeIndex && node && node[dir] ||
-                                        (diff = nodeIndex = 0) || start.pop())) {
+									// Use the same loop as above to seek `elem` from the start
+									while ((node = ++nodeIndex && node && node[dir] ||
+										(diff = nodeIndex = 0) || start.pop())) {
 
-                                        if ((ofType ?
-                                                node.nodeName.toLowerCase() === name :
-                                                node.nodeType === 1) &&
-                                            ++diff) {
+										if ((ofType ?
+												node.nodeName.toLowerCase() === name :
+												node.nodeType === 1) &&
+											++diff) {
 
-                                            // Cache the index of each encountered element
-                                            if (useCache) {
-                                                outerCache = node[expando] ||
-                                                    (node[expando] = {});
+											// Cache the index of each encountered element
+											if (useCache) {
+												outerCache = node[expando] ||
+													(node[expando] = {});
 
-                                                // Support: IE <9 only
-                                                // Defend against cloned attroperties (jQuery gh-1709)
-                                                uniqueCache = outerCache[node.uniqueID] ||
-                                                    (outerCache[node.uniqueID] = {});
+												// Support: IE <9 only
+												// Defend against cloned attroperties (jQuery gh-1709)
+												uniqueCache = outerCache[node.uniqueID] ||
+													(outerCache[node.uniqueID] = {});
 
-                                                uniqueCache[type] = [dirruns, diff];
-                                            }
+												uniqueCache[type] = [dirruns, diff];
+											}
 
-                                            if (node === elem) {
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+											if (node === elem) {
+												break;
+											}
+										}
+									}
+								}
+							}
 
-                            // Incorporate the offset, then check against cycle size
-                            diff -= last;
-                            return diff === first || (diff % first === 0 && diff / first >= 0);
-                        }
-                    }
+							// Incorporate the offset, then check against cycle size
+							diff -= last;
+							return diff === first || (diff % first === 0 && diff / first >= 0);
+						}
+					}
 				};
 		},
 
@@ -2607,11 +2607,11 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 						elem : wgt.$n())) {
 					// don't use cache in this case
 					if (matcher(elem, context, xml, wgt)) {
-                        elem[zk.Widget._CURRENT_TARGET] = wgt; // assign to the given wgt
-                        return true;
-                    } else {
-                        return false;
-                    }
+						elem[zk.Widget._CURRENT_TARGET] = wgt; // assign to the given wgt
+						return true;
+					} else {
+						return false;
+					}
 				}
 			} else {
 				elem = elem[dir];
@@ -2650,9 +2650,9 @@ function addCombinator( matcher, combinator, base, selector/* Jumper Chen, Potix
 						wgt.$n() : elem)) {
 					// don't use cache in this case
 					if (matcher(elem, context, xml, wgt)) {
-                        elem[zk.Widget._CURRENT_TARGET] = wgt; // assign to the given wgt
-                        return true;
-                    }
+						elem[zk.Widget._CURRENT_TARGET] = wgt; // assign to the given wgt
+						return true;
+					}
 				}
 			} else if (xml) {// We can't set arbitrary data on XML nodes, so they don't benefit from combinator caching
 				while ( ( elem = elem[ dir ] ) ) {
@@ -2710,8 +2710,8 @@ function elementMatcher( matchers ) {
 				if ( !matchers[ i ]( elem, context, xml, wgt/*added by Potix 10/09/2013*/) ) {
 					return false;
 				}
-                //added by Potix 2021/11/2
-                wgt = elem[zk.Widget._CURRENT_TARGET] || wgt
+				//added by Potix 2021/11/2
+				wgt = elem[zk.Widget._CURRENT_TARGET] || wgt
 			}
 			return true;
 		} :
@@ -2922,17 +2922,17 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 				setMatched = [],
 				contextBackup = outermostContext,
 				elems;
-				/* Jumper Chen, Potix, 20211029*/
-				if (context[zk.Widget._TARGET]) {
-				    // Treechildren and Treeitem has not DOM element.
-				    elems = seed || byElement && Expr.find["ZCHILD"]("*", outermost);
-				} else {
-				    // We must always have either seed elements or outermost context
-				    elems = seed || byElement && Expr.find["TAG"]("*", outermost);
-				}
+			/* Jumper Chen, Potix, 20211029*/
+			if (context[zk.Widget._TARGET]) {
+				// Treechildren and Treeitem has not DOM element.
+				elems = seed || byElement && Expr.find["ZCHILD"]("*", outermost);
+			} else {
+				// We must always have either seed elements or outermost context
+				elems = seed || byElement && Expr.find["TAG"]("*", outermost);
+			}
 
-				// Use integer dirruns iff this is the outermost matcher
-		    var dirrunsUnique = ( dirruns += contextBackup == null ? 1 : Math.random() || 0.1 ),
+			// Use integer dirruns iff this is the outermost matcher
+			var dirrunsUnique = (dirruns += contextBackup == null ? 1 : Math.random() || 0.1),
 				len = elems.length;
 
 			if ( outermost ) {
