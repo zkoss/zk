@@ -16,9 +16,14 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 <zk xmlns:h="client">
     <script><![CDATA[
 		function testcase() {
+
 			var t1 = jq('@tree > @treechildren @treeitem:nth-child(3)'),
 				failure = false;
 			if (!(t1.length == 2 && t1.find('.z-treecell-text').html() == 'Root.0.2'))
+				failure = true;
+
+			t1 = zk.$('$tree > @treechildren > @treeitem:nth-child(3)');
+			if (!(t1 && jq(t1.$n()).find('.z-treecell-text').html() == 'Root.2'))
 				failure = true;
 
 			t1 = jq('@tree > @treechildren > @treeitem:nth-child(3)');

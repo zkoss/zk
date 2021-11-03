@@ -4792,14 +4792,18 @@ _doFooSelect: function (evt) {
 		if (typeof n == 'string') {
 			//Don't look for DOM (there might be some non-ZK node with same ID)
 			let query = n;
-			if ((id = n.charAt(0)) == '#') n = n.substring(1);
-			else if (id == '$') {
-				id = _globals[n.substring(1)];
-				return id ? id[0] : null;
+
+			// fix zk.$("$tree @treeitem") case
+			if (query.indexOf(' ') == -1) {
+				if ((id = n.charAt(0)) == '#') n = n.substring(1);
+				else if (id == '$') {
+					id = _globals[n.substring(1)];
+					return id ? id[0] : null;
+				}
+				wgt = _binds[n]; //try first (since ZHTML might use -)
+				if (!wgt)
+					wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)] : null;
 			}
-			wgt = _binds[n]; //try first (since ZHTML might use -)
-			if (!wgt)
-				wgt = (id = n.indexOf('-')) >= 0 ? _binds[n.substring(0, id)] : null;
 
 			if (!wgt)
 				return jq(query).zk.$();
