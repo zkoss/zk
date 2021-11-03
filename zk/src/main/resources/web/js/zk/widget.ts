@@ -5102,6 +5102,7 @@ zk.Widget.getClass('combobox');
 		}
 	},
 	_TARGET: '__target__', // used for storing the query widget target
+	_CURRENT_TARGET: '__ctarget__', // used for storing the current query widget target
 });
 /**	@partial zk
  */
