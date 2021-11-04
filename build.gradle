@@ -183,8 +183,7 @@ subprojects {
 			} else if ("${project.name}" == 'zweb-dsp') {
 				def fragmentHostVersion = "${version}"
 				// Fragment-Host not support version with suffix e.g. x.x.x-FL
-				if (fragmentHostVersion.contains('-'))
-					fragmentHostVersion = fragmentHostVersion.split('-')[0]
+				fragmentHostVersion = fragmentHostVersion.split(/[\.-][a-zA-Z]/)[0]
 				bndContent += "\nFragment-Host:zweb;bundle-version=$fragmentHostVersion"
 			}
 			new File("$buildDir/libs", "${project.name}.bnd").text = bndContent
